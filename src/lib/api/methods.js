@@ -22,7 +22,7 @@ const get = (path) =>
   });
 
 const post = (path, csrf, json, method="POST") =>
-  fetch(getUrl("/user/new/"), {
+  fetch(getUrl(path), {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
