@@ -24,9 +24,14 @@
     "preact-cli": "^1.4.1"
   },
   "dependencies": {
+    "core-decorators": "^0.20.0",
     "isomorphic-fetch": "^2.2.1",
     "preact": "^8.2.5",
     "preact-compat": "^3.17.0",
-    "preact-router": "^2.5.7"
+    "preact-redux": "^2.0.2",
+    "preact-router": "^2.5.7",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0"
   }
 }

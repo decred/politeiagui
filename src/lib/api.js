@@ -36,10 +36,6 @@ const post = (path, csrf, json, method="POST") =>
 export const apiInfo = () =>
   get("/")
     .then(parseResponse)
-    .then(response => {
-      console.log("response:", response);
-      return response;
-    })
     .then(({ csrfToken, response: { version, route }}) => ({
       csrfToken, version, route
     }));
@@ -47,24 +43,26 @@ export const apiInfo = () =>
 export const newUser = (csrf, email, password) =>
   post("/user/new/", csrf, { email, password })
     .then(parseResponse)
-    .then(({ verificationtoken }) => ({ verificationtoken }));
+    .then(({ response: { verificationtoken }}) => ({ verificationtoken }));
 
 export const verifyNewUser = (csrf, email, verificationtoken) =>
   post("/user/verify/", csrf, { email, verificationtoken })
-    .then(parseResponse);
+    .then(() => ({ email }));
 
 export const login = (csrf, email, password) =>
   post("/login/", csrf, { email, password })
-    .then(parseResponse);
+    .then(() => ({ email }));
 
 export const secret = (csrf) =>
   post("/secret/", csrf, {})
-    .then(parseResponse);
+    .then(parseResponse)
+    .then(({ response }) => response);
 
 export const logout = (csrf) =>
   post("/logout/", csrf, {})
-    .then(parseResponse);
+    .then(() => ({ }));
 
 export const assets = () =>
   get("/assets/")
-    .then(parseResponse);
+    .then(parseResponse)
+    .then(({ response }) => response);
