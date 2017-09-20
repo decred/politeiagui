@@ -17,6 +17,7 @@
     "extends": "eslint-config-synacor"
   },
   "devDependencies": {
+    "connect-api-mocker": "^1.3.3",
     "eslint": "^4.6.1",
     "eslint-config-standard-preact": "^1.1.6",
     "eslint-config-synacor": "^1.1.1",
