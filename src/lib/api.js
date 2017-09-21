@@ -59,17 +59,17 @@ export const secret = (csrf) =>
     .then(({ response }) => response);
 
 export const vetted = () =>
-  get("/v1/vetted/")
+  get("/v1/proposals/vetted/")
     .then(parseResponse)
     .then(({ response }) => response);
 
 export const unvetted = () =>
-  get("/unvetted/")
+  get("/v1/proposals/unvetted/")
     .then(parseResponse)
     .then(({ response }) => response);
 
 export const proposal = (token) =>
-  get(`/v1/proposal/${token}`)
+  get(`/v1/proposals/${token}`)
     .then(parseResponse)
     .then(({ response }) => response);
 
