@@ -15,9 +15,9 @@ const SignupForm = ({
   onSignup,
   onCancelSignup
 }) => isApiRequestingVerifyNewUser ? (
-  <div>Verifying {email}...</div>
+  <fieldset className={"signup-form"}>Verifying {email}...</fieldset>
 ) : isApiRequestingNewUser ? (
-  <div>Signing up {email}...</div>
+  <fieldset className={"signup-form"}>Signing up {email}...</fieldset>
 ) : (
   <fieldset className={"signup-form"}>
     <input

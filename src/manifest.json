@@ -1,6 +1,6 @@
 {
-  "name": "Preact PWA",
-  "short_name": "Preact PWA",
+  "name": "Politeia",
+  "short_name": "Politeia",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",

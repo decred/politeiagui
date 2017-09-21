@@ -3,10 +3,10 @@ html, body {
 	width: 100%;
 	padding: 0;
 	margin: 0;
-	background: #FAFAFA;
-	font-family: 'Helvetica Neue', arial, sans-serif;
+	background: #f4f7f9;
+	font-family: "Source Sans Pro", "Helvetica Neue", arial, sans-serif;
 	font-weight: 400;
-	color: #444;
+	color: #132f4b;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -17,4 +17,13 @@ html, body {
 
 #app {
 	height: 100%;
+}
+
+a {
+	color: #2970ff;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
 }

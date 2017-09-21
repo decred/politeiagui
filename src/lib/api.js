@@ -58,6 +58,21 @@ export const secret = (csrf) =>
     .then(parseResponse)
     .then(({ response }) => response);
 
+export const vetted = () =>
+  get("/v1/vetted/")
+    .then(parseResponse)
+    .then(({ response }) => response);
+
+export const unvetted = () =>
+  get("/unvetted/")
+    .then(parseResponse)
+    .then(({ response }) => response);
+
+export const proposal = (token) =>
+  get(`/v1/proposal/${token}`)
+    .then(parseResponse)
+    .then(({ response }) => response);
+
 export const logout = (csrf) =>
   post("/logout/", csrf, {})
     .then(() => ({ }));

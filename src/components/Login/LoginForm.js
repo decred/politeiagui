@@ -11,14 +11,14 @@ const LoginForm = ({
   onShowSignup,
   onLogin
 }) => isApiRequestingLogin ? (
-  <div>Logging In {email}...</div>
+  <fieldset className={"login-form"}>Logging In {email}...</fieldset>
 ) : (
   <fieldset className={"login-form"}>
     <input
       type={"text"}
       placeholder={"Email Address"}
       value={email}
-      onInput={evt => onSetEmail(evt.target.value)}
+      onChange={evt => onSetEmail(evt.target.value)}
     />
     <input
       type={"password"}

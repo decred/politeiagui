@@ -53,3 +53,16 @@ export const csrf = state => {
   const response = apiInitResponse(state);
   return response ? response.csrfToken : null;
 };
+
+export const vettedProposals = state =>
+  (state.api.vetted.response || {}).proposals || [];
+
+export const vettedProposalsIsRequesting = state =>
+  state.api.vetted.isRequesting;
+
+export const vettedProposalsError = state =>
+  state.api.vetted.error;
+
+export const proposal = state => state.api.proposal.response || {};
+export const proposalIsRequesting = state => state.api.proposal.isRequesting;
+export const proposalError = state => state.api.proposal.error;

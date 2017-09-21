@@ -2,13 +2,14 @@ import * as act from "../actions";
 
 const DEFAULT_REQUEST_STATE = { isRequesting: false, response: null, error: null };
 export const DEFAULT_STATE = {
-  requests: {
-    init: DEFAULT_REQUEST_STATE,
-    newUser: DEFAULT_REQUEST_STATE,
-    verifyNewUser: DEFAULT_REQUEST_STATE,
-    login: DEFAULT_REQUEST_STATE,
-    logout: DEFAULT_REQUEST_STATE
-  },
+  init: DEFAULT_REQUEST_STATE,
+  newUser: DEFAULT_REQUEST_STATE,
+  verifyNewUser: DEFAULT_REQUEST_STATE,
+  login: DEFAULT_REQUEST_STATE,
+  logout: DEFAULT_REQUEST_STATE,
+  vetted: DEFAULT_REQUEST_STATE,
+  unvetted: DEFAULT_REQUEST_STATE,
+  proposal: DEFAULT_REQUEST_STATE,
   email: ""
 };
 
@@ -45,6 +46,12 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_VERIFY_NEW_USER]: () => receive("verifyNewUser", state, action),
   [act.REQUEST_LOGIN]: () => request("login", state, action),
   [act.RECEIVE_LOGIN]: () => receive("login", state, action),
+  [act.REQUEST_VETTED]: () => request("vetted", state, action),
+  [act.RECEIVE_VETTED]: () => receive("vetted", state, action),
+  [act.REQUEST_UNVETTED]: () => request("unvetted", state, action),
+  [act.RECEIVE_UNVETTED]: () => receive("unvetted", state, action),
+  [act.REQUEST_PROPOSAL]: () => request("proposal", state, action),
+  [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
   [act.REQUEST_LOGOUT]: () => request("logout", state, action),
   [act.RECEIVE_LOGOUT]: () => {
     state = receive("logout", state, action);

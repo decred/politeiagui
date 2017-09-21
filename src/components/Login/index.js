@@ -4,6 +4,7 @@ import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
 import CurrentUser from "./CurrentUser";
 import loginConnector from "../../connectors/login";
+import style from "./style";
 
 @autobind
 class Login extends Component {
@@ -17,22 +18,26 @@ class Login extends Component {
   }
 
   render() {
-    return this.props.loggedInAs ? (
-      <CurrentUser />
-    ) : this.props.isShowingSignup ? (
-      <SignupForm {...{
-        password: this.state.password,
-        passwordVerify: this.state.passwordVerify,
-        onSetPassword: this.onSetPassword,
-        onSetPasswordVerify: this.onSetPasswordVerify,
-        onSignup: this.onSignup,
-      }} />
-    ) : (
-      <LoginForm {...{
-        password: this.state.password,
-        onSetPassword: this.onSetPassword,
-        onLogin: this.onLogin
-      }} />
+    return (
+      <div class={style.loginForm}>
+        {this.props.loggedInAs ? (
+          <CurrentUser />
+        ) : this.props.isShowingSignup ? (
+          <SignupForm {...{
+            password: this.state.password,
+            passwordVerify: this.state.passwordVerify,
+            onSetPassword: this.onSetPassword,
+            onSetPasswordVerify: this.onSetPasswordVerify,
+            onSignup: this.onSignup,
+          }} />
+        ) : (
+          <LoginForm {...{
+            password: this.state.password,
+            onSetPassword: this.onSetPassword,
+            onLogin: this.onLogin
+          }} />
+        )}
+      </div>
     );
   }
 

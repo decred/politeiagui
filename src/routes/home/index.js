@@ -1,13 +1,11 @@
-import { h, Component } from "preact";
+import { h } from "preact";
 import style from "./style";
 
-export default class Home extends Component {
-  render() {
-    return (
-      <div class={style.home}>
-        <h1>Home</h1>
-        <p>This is the Home component.</p>
-      </div>
-    );
-  }
-}
+const Home = () => (
+  <div class={style.home}>
+    <h1>Welcome to Politeia</h1>
+    <p>We should describe Decred and the proposal system here</p>
+  </div>
+);
+
+export default Home;

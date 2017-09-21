@@ -14,6 +14,12 @@ export const REQUEST_LOGOUT = "API_REQUEST_LOGOUT";
 export const RECEIVE_LOGOUT = "API_RECEIVE_LOGOUT";
 export const REQUEST_SECRET = "API_REQUEST_SECRET";
 export const RECEIVE_SECRET = "API_RECEIVE_SECRET";
+export const REQUEST_VETTED = "API_REQUEST_VETTED";
+export const RECEIVE_VETTED = "API_RECEIVE_VETTED";
+export const REQUEST_UNVETTED = "API_REQUEST_UNVETTED";
+export const RECEIVE_UNVETTED = "API_RECEIVE_UNVETTED";
+export const REQUEST_PROPOSAL = "API_REQUEST_PROPOSAL";
+export const RECEIVE_PROPOSAL = "API_RECEIVE_PROPOSAL";
 
 const basicAction = type =>
   (payload, error) => ({
@@ -32,6 +38,12 @@ const onRequestLogin = basicAction(REQUEST_LOGIN);
 const onReceiveLogin = basicAction(RECEIVE_LOGIN);
 const onRequestLogout = basicAction(REQUEST_LOGOUT);
 const onReceiveLogout = basicAction(RECEIVE_LOGOUT);
+const onRequestVetted = basicAction(REQUEST_VETTED);
+const onReceiveVetted = basicAction(RECEIVE_VETTED);
+const onRequestUnvetted = basicAction(REQUEST_UNVETTED);
+const onReceiveUnvetted = basicAction(RECEIVE_UNVETTED);
+const onRequestProposal = basicAction(REQUEST_PROPOSAL);
+const onReceiveProposal = basicAction(RECEIVE_PROPOSAL);
 
 export const onSetEmail = (payload) => ({ type: SET_EMAIL, payload });
 
@@ -39,7 +51,7 @@ export const onInit = () =>
   dispatch => {
     dispatch(onRequestInitSession());
     return api.apiInfo()
-      .then(api => dispatch(onReceiveInitSession(api)))
+      .then(response => dispatch(onReceiveInitSession(response)))
       .catch(error => dispatch(onReceiveInitSession(null, error)));
   };
 
@@ -57,7 +69,7 @@ export const onCreateNewUser = password =>
     dispatch(onRequestNewUser({ email }));
     return api
       .newUser(csrf, email, password)
-      .then(api => dispatch(onReceiveNewUser(api)))
+      .then(response => dispatch(onReceiveNewUser(response)))
       .catch(error => dispatch(onReceiveNewUser(null, error)));
   });
 
@@ -67,7 +79,7 @@ export const onVerifyNewUser = verificationtoken =>
     dispatch(onRequestVerifyNewUser({ email, verificationtoken }));
     return api
       .verifyNewUser(csrf, email, verificationtoken)
-      .then(api => dispatch(onReceiveVerifyNewUser(api)))
+      .then(response => dispatch(onReceiveVerifyNewUser(response)))
       .catch(error => dispatch(onReceiveVerifyNewUser(null, error)));
   });
 
@@ -87,7 +99,7 @@ export const onLogin = password =>
     dispatch(onRequestLogin({ email }));
     return api
       .login(csrf, email, password)
-      .then(api => dispatch(onReceiveLogin(api)))
+      .then(response => dispatch(onReceiveLogin(response)))
       .catch(error => dispatch(onReceiveLogin(null, error)));
   });
 
@@ -96,9 +108,36 @@ export const onLogout = () =>
     dispatch(onRequestLogout());
     return api
       .logout(csrf)
-      .then(api => {
-        dispatch(onReceiveLogout(api));
+      .then(response => {
+        dispatch(onReceiveLogout(response));
         dispatch(onSetEmail(""));
       })
       .catch(error => dispatch(onReceiveLogout(null, error)));
   });
+
+export const onFetchVetted = () =>
+  (dispatch) => {
+    dispatch(onRequestVetted());
+    return api
+      .vetted()
+      .then(response => dispatch(onReceiveVetted(response)))
+      .catch(error => dispatch(onReceiveVetted(null, error)));
+  };
+
+export const onFetchUnvetted = () =>
+  (dispatch) => {
+    dispatch(onRequestUnvetted());
+    return api
+      .unvetted()
+      .then(response => dispatch(onReceiveUnvetted(response)))
+      .catch(error => dispatch(onReceiveUnvetted(null, error)));
+  };
+
+export const onFetchProposal = (token) =>
+  (dispatch) => {
+    dispatch(onRequestProposal(token));
+    return api
+      .proposal(token)
+      .then(response => dispatch(onReceiveProposal(response)))
+      .catch(error => dispatch(onReceiveProposal(null, error)));
+  };
