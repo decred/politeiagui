@@ -1,9 +1,5 @@
 .submitProposal {
-	padding: 56px 20px;
-	min-height: 100%;
-	width: 100%;
-}
-
-.submitProposal h2 input {
+  padding: 56px 20px;
+  min-height: 100%;
   width: 100%;
 }

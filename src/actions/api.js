@@ -1,5 +1,6 @@
 import * as sel from "../selectors";
 import * as api from "../lib/api";
+import { basicAction } from "./lib";
 
 export const SET_EMAIL = "API_SET_EMAIL";
 export const REQUEST_INIT_SESSION = "API_REQUEST_INIT_SESSION";
@@ -20,13 +21,6 @@ export const REQUEST_UNVETTED = "API_REQUEST_UNVETTED";
 export const RECEIVE_UNVETTED = "API_RECEIVE_UNVETTED";
 export const REQUEST_PROPOSAL = "API_REQUEST_PROPOSAL";
 export const RECEIVE_PROPOSAL = "API_RECEIVE_PROPOSAL";
-
-const basicAction = type =>
-  (payload, error) => ({
-    type,
-    error: !!error,
-    payload: error ? error : payload,
-  });
 
 const onRequestInitSession = basicAction(REQUEST_INIT_SESSION);
 const onReceiveInitSession = basicAction(RECEIVE_INIT_SESSION);

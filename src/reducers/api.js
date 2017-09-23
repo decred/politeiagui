@@ -10,6 +10,7 @@ export const DEFAULT_STATE = {
   vetted: DEFAULT_REQUEST_STATE,
   unvetted: DEFAULT_REQUEST_STATE,
   proposal: DEFAULT_REQUEST_STATE,
+  newProposal: DEFAULT_REQUEST_STATE,
   email: ""
 };
 

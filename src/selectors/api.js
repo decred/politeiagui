@@ -66,3 +66,4 @@ export const vettedProposalsError = state =>
 export const proposal = state => (state.api.proposal.response || {}).proposal || {};
 export const proposalIsRequesting = state => state.api.proposal.isRequesting;
 export const proposalError = state => state.api.proposal.error;
+export const newProposalIsRequesting = state => state.api.newProposal.isRequesting;

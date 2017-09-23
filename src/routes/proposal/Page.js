@@ -3,7 +3,7 @@ import LoadingPage from "../../components/LoadingPage";
 import ErrorPage from "../../components/ErrorPage";
 import { Link } from "preact-router/match";
 import style from "./style";
-import { Markdown } from "react-showdown";
+import Markdown from "../../components/MarkdownRenderer";
 
 const ProposalPage = ({
   isLoading,
@@ -17,7 +17,7 @@ const ProposalPage = ({
         Created {(new Date(proposal.timestamp * 1000)).toString()}
       </div>
       <hr />
-      <Markdown markup={proposal.description} />
+      <Markdown value={proposal.description} />
     </div>
   );
 

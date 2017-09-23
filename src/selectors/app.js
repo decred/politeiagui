@@ -8,3 +8,6 @@ export const isShowingSignup = or(
   api.apiNewUserError,
   api.apiVerifyNewUserError
 );
+
+export const newProposalName = ({ app: { newProposal: { name }}}) => name;
+export const newProposalDescription = ({ app: { newProposal: { description }}}) => description;
