@@ -53,6 +53,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_UNVETTED]: () => receive("unvetted", state, action),
   [act.REQUEST_PROPOSAL]: () => request("proposal", state, action),
   [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
+  [act.REQUEST_NEW_PROPOSAL]: () => request("newProposal", state, action),
+  [act.RECEIVE_NEW_PROPOSAL]: () => receive("newProposal", state, action),
   [act.REQUEST_LOGOUT]: () => request("logout", state, action),
   [act.RECEIVE_LOGOUT]: () => {
     state = receive("logout", state, action);

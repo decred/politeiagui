@@ -7,10 +7,18 @@ export default connect(
   sel.selectorMap({
     name: sel.newProposalName,
     description: sel.newProposalDescription,
-    isSaving: sel.newProposalIsRequesting
+    nameIsInvalid: sel.newProposalNameIsInvalid,
+    descriptionIsInvalid: sel.newProposalDescriptionIsInvalid,
+    isInvalid: sel.newProposalIsInvalid,
+    isSaving: sel.newProposalIsRequesting,
+    error: sel.newProposalError,
+    merkle: sel.newProposalMerkle,
+    token: sel.newProposalToken,
+    signature: sel.newProposalSignature
   }),
   dispatch => bindActionCreators({
     onSetName: act.onSetNewProposalName,
-    onSetDescription: act.onSetNewProposalDescription
+    onSetDescription: act.onSetNewProposalDescription,
+    onSave: act.onSaveNewProposal
   }, dispatch)
 );

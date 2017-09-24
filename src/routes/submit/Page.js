@@ -6,10 +6,11 @@ import MarkdownEditor from "../../components/MarkdownEditor";
 const SubmitPage = ({
   name,
   description,
+  isSaving,
+  error,
   onSetName,
   onSetDescription,
-  isSaving,
-  error
+  onSave
 }) => isSaving ? <LoadingPage /> : (
   <div class={style.submitProposal}>
     <h2>
@@ -18,12 +19,13 @@ const SubmitPage = ({
         value: name,
         onChange: e => onSetName(e.target.value)
       }} />
-      <button className={"submit"}>Save</button>
+      <button className={"submit"} onClick={onSave}>Save</button>
     </h2>
     {error ? (
       <div className={"error"}>
-        Error: {error.toJS()}
-        <pre>{JSON.stringify(error, null, 2)}</pre>
+        {(typeof error === "string") ? error : (
+          <pre>{JSON.stringify(error, null, 2)}</pre>
+        )}
       </div>
     ) : null}
     <MarkdownEditor {...{

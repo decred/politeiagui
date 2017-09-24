@@ -81,3 +81,9 @@ export const assets = () =>
   get("/assets/")
     .then(parseResponse)
     .then(({ response }) => response);
+
+export const newProposal = (csrf, name, description) =>
+  post("/proposals/new/", csrf, { name, description })
+    .then(parseResponse)
+    .then(({ response: { censorshiprecord: { token, merkle, signature }}}) =>
+      ({ token, merkle, signature }));

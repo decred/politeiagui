@@ -21,6 +21,8 @@ export const REQUEST_UNVETTED = "API_REQUEST_UNVETTED";
 export const RECEIVE_UNVETTED = "API_RECEIVE_UNVETTED";
 export const REQUEST_PROPOSAL = "API_REQUEST_PROPOSAL";
 export const RECEIVE_PROPOSAL = "API_RECEIVE_PROPOSAL";
+export const REQUEST_NEW_PROPOSAL = "API_REQUEST_NEW_PROPOSAL";
+export const RECEIVE_NEW_PROPOSAL = "API_RECEIVE_NEW_PROPOSAL";
 
 const onRequestInitSession = basicAction(REQUEST_INIT_SESSION);
 const onReceiveInitSession = basicAction(RECEIVE_INIT_SESSION);
@@ -38,6 +40,8 @@ const onRequestUnvetted = basicAction(REQUEST_UNVETTED);
 const onReceiveUnvetted = basicAction(RECEIVE_UNVETTED);
 const onRequestProposal = basicAction(REQUEST_PROPOSAL);
 const onReceiveProposal = basicAction(RECEIVE_PROPOSAL);
+export const onRequestNewProposal = basicAction(REQUEST_NEW_PROPOSAL);
+const onReceiveNewProposal = basicAction(RECEIVE_NEW_PROPOSAL);
 
 export const onSetEmail = (payload) => ({ type: SET_EMAIL, payload });
 
@@ -49,7 +53,7 @@ export const onInit = () =>
       .catch(error => dispatch(onReceiveInitSession(null, error)));
   };
 
-const withCsrf = fn =>
+export const withCsrf = fn =>
   (dispatch, getState) => {
     const csrf = sel.csrf(getState());
     return csrf
@@ -135,3 +139,15 @@ export const onFetchProposal = (token) =>
       .then(response => dispatch(onReceiveProposal(response)))
       .catch(error => dispatch(onReceiveProposal(null, error)));
   };
+
+export const onSubmitProposal = (name, description) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(onRequestNewProposal({ name, description }));
+    return api
+      .newProposal(csrf, name, description)
+      .then(response => dispatch(onReceiveNewProposal(response)))
+      .catch(error => {
+        dispatch(onReceiveLogout(null, error));
+        throw error;
+      });
+  });

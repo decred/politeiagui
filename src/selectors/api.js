@@ -1,4 +1,6 @@
-import { or } from "../lib/fp";
+import get from "lodash/fp/get";
+import compose from "lodash/fp/compose";
+import { or, bool, constant } from "../lib/fp";
 
 
 const getIsApiRequesting = key => state =>
@@ -49,21 +51,15 @@ export const email = state => {
   return loggedIn ? loggedIn : state.api.email;
 };
 
-export const csrf = state => {
-  const response = apiInitResponse(state);
-  return response ? response.csrfToken : null;
-};
-
-export const vettedProposals = state =>
-  (state.api.vetted.response || {}).proposals || [];
-
-export const vettedProposalsIsRequesting = state =>
-  state.api.vetted.isRequesting;
-
-export const vettedProposalsError = state =>
-  state.api.vetted.error;
-
-export const proposal = state => (state.api.proposal.response || {}).proposal || {};
-export const proposalIsRequesting = state => state.api.proposal.isRequesting;
-export const proposalError = state => state.api.proposal.error;
-export const newProposalIsRequesting = state => state.api.newProposal.isRequesting;
+export const csrf = compose(get("csrfToken"), apiInitResponse);
+export const vettedProposals = or(get(["api", "vetted", "response", "proposals"]), constant([]));
+export const vettedProposalsIsRequesting = bool(get(["api", "vetted", "isRequesting"]));
+export const vettedProposalsError = get(["api", "vetted", "error"]);
+export const proposal = or(get(["api", "proposal", "response", "proposal"]), constant({}));
+export const proposalIsRequesting = bool(get(["api", "proposal", "isRequesting"]));
+export const proposalError = get(["api", "proposal", "error"]);
+export const newProposalIsRequesting = bool(get(["api", "newProposal", "isRequesting"]));
+export const newProposalError = get(["api", "newProposal", "error"]);
+export const newProposalMerkle = get(["api", "newProposal", "response", "merkle"]);
+export const newProposalToken = get(["api", "newProposal", "response", "token"]);
+export const newProposalSignature = get(["api", "newProposal", "response", "signature"]);
