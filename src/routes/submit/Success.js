@@ -1,5 +1,4 @@
 import { h } from "preact";
-import style from "./style";
 import Markdown from "../../components/MarkdownRenderer";
 
 const SuccessPage = ({
@@ -9,7 +8,7 @@ const SuccessPage = ({
   token,
   signature
 }) => (
-  <div class={style.submitProposal}>
+  <div>
     <div>
       <h2>Successfully Submitted Proposal</h2>
       <div>Merkle: <span>{merkle}</span></div>

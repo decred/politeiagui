@@ -1,5 +1,4 @@
 import { h } from "preact";
-import style from "./style";
 import LoadingPage from "../../components/LoadingPage";
 import MarkdownEditor from "../../components/MarkdownEditor";
 
@@ -12,7 +11,7 @@ const SubmitPage = ({
   onSetDescription,
   onSave
 }) => isSaving ? <LoadingPage /> : (
-  <div class={style.submitProposal}>
+  <div>
     <h2>
       <input {...{
         placeholder: "Proposal Name",
