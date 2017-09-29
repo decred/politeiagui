@@ -41,30 +41,30 @@ export const apiInfo = () =>
     }));
 
 export const newUser = (csrf, email, password) =>
-  post("/user/new/", csrf, { email, password })
+  post("/user/new", csrf, { email, password })
     .then(parseResponse)
     .then(({ response: { verificationtoken }}) => ({ verificationtoken }));
 
 export const verifyNewUser = (csrf, email, verificationtoken) =>
-  post("/user/verify/", csrf, { email, verificationtoken })
+  post("/user/verify", csrf, { email, verificationtoken })
     .then(() => ({ email }));
 
 export const login = (csrf, email, password) =>
-  post("/login/", csrf, { email, password })
+  post("/login", csrf, { email, password })
     .then(() => ({ email }));
 
 export const secret = (csrf) =>
-  post("/secret/", csrf, {})
+  post("/secret", csrf, {})
     .then(parseResponse)
     .then(({ response }) => response);
 
 export const vetted = () =>
-  get("/v1/proposals/vetted/")
+  get("/v1/proposals/vetted")
     .then(parseResponse)
     .then(({ response }) => response);
 
 export const unvetted = () =>
-  get("/v1/proposals/unvetted/")
+  get("/v1/proposals/unvetted")
     .then(parseResponse)
     .then(({ response }) => response);
 
@@ -74,16 +74,22 @@ export const proposal = (token) =>
     .then(({ response }) => response);
 
 export const logout = (csrf) =>
-  post("/logout/", csrf, {})
+  post("/logout", csrf, {})
     .then(() => ({ }));
 
 export const assets = () =>
-  get("/assets/")
+  get("/assets")
     .then(parseResponse)
     .then(({ response }) => response);
 
 export const newProposal = (csrf, name, description) =>
-  post("/proposals/new/", csrf, { name, description })
+  post("/proposals/new", csrf, {
+    name,
+    files: [{
+      name: "index.md",
+      mime: "text/plain; charset=utf-8",
+      payload: btoa(description)
+    }]})
     .then(parseResponse)
     .then(({ response: { censorshiprecord: { token, merkle, signature }}}) =>
       ({ token, merkle, signature }));

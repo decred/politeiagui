@@ -1,6 +1,6 @@
 var apiMocker = require("connect-api-mocker");
 
-const USE_MOCKS = true;
+const USE_MOCKS = false;
 
 export default config => {
   config.resolve.alias.react = "preact-compat";

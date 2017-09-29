@@ -12,12 +12,12 @@ const ProposalPage = ({
 }) =>
   isLoading ? <LoadingPage /> : error ? <ErrorPage {...{ error }} /> : (
     <div class={style.proposalDetail}>
-      <h2><Link href={`/proposals/${proposal.token}`}>{proposal.name}</Link></h2>
+      <h2>{proposal.name}</h2>
       <div>
         Created {(new Date(proposal.timestamp * 1000)).toString()}
       </div>
       <hr />
-      <Markdown value={proposal.description} />
+      <Markdown value={proposal.files && proposal.files.length > 0 ? atob(proposal.files[0].payload) : ""} />
     </div>
   );
 

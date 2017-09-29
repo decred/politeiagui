@@ -5,7 +5,9 @@ const ProposalSummary = ({
   proposal: {
     name,
     timestamp,
-    token
+    censorshiprecord: {
+      token
+    }
   }
 }) => (
   <div className={"proposal-summary"}>

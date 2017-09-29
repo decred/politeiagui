@@ -30,9 +30,9 @@ export default class App extends Component {
           <Header />
           <Router onChange={this.handleRoute}>
             <Home path='/' />
-            <Proposals path='/proposals/' />
+            <Proposals path='/proposals/vetted' />
             <Proposal path='/proposals/:token' />
-            <Submit path='/submit' />
+            <Submit path='/proposals/new' />
           </Router>
         </div>
       </Provider>
