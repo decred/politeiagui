@@ -1,0 +1,29 @@
+html, body {
+	height: 100%;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	background: #f4f7f9;
+	font-family: "Source Sans Pro", "Helvetica Neue", arial, sans-serif;
+	font-weight: 400;
+	color: #132f4b;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+#app {
+	height: 100%;
+}
+
+a {
+	color: #2970ff;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
