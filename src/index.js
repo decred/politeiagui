@@ -1,6 +1,8 @@
-import "../node_modules/normalize.css/normalize.css";
-import "./style";
-import App from "./components/app";
-import "./lib/api";
+import React from "react";
+import ReactDOM from "react-dom";
+import "./style/index.css";
+import App from "./App";
+import registerServiceWorker from "./registerServiceWorker";
 
-export default App;
+ReactDOM.render(<App />, document.getElementById("root"));
+registerServiceWorker();

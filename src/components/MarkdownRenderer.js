@@ -1,4 +1,4 @@
-import { h } from "preact";
+import React from "react";
 import { Markdown } from "react-showdown";
 
 const MarkdownRenderer = ({ value }) => (

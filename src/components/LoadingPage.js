@@ -1,8 +1,7 @@
-import { h } from "preact";
-import style from "./style";
+import React from "react";
 
 const LoadingPage = () => (
-  <div class={style.loadingPage}>
+  <div className="page loading-page">
     <h3>Loading...</h3>
   </div>
 );

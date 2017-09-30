@@ -1,8 +1,7 @@
-import { h, Component } from "preact";
+import React, { Component } from "react";
 import { autobind } from "core-decorators";
 import Markdown from "./MarkdownRenderer";
 
-@autobind
 class MarkdownEditor extends Component {
   constructor(props) {
     super(props);
@@ -10,7 +9,7 @@ class MarkdownEditor extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.value != nextProps.value) {
+    if (this.props.value !== nextProps.value) {
       this.setState({ value: nextProps.value });
     }
   }
@@ -26,7 +25,7 @@ class MarkdownEditor extends Component {
 
     return (
       <div className={`markdown-editor ${className}`}>
-        <div className={"editor"}>
+        <div className="editor">
           <textarea {...{
             placeholder,
             value,
@@ -36,7 +35,7 @@ class MarkdownEditor extends Component {
             onChange: this.onChange
           }} />
         </div>
-        <div className={"preview"}>
+        <div className="preview">
           <Markdown value={value} />
         </div>
       </div>
@@ -50,5 +49,6 @@ class MarkdownEditor extends Component {
   }
 }
 
+autobind(MarkdownEditor);
 
 export default MarkdownEditor;

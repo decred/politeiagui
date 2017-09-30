@@ -50,7 +50,10 @@ export const onInit = () =>
     dispatch(onRequestInitSession());
     return api.apiInfo()
       .then(response => dispatch(onReceiveInitSession(response)))
-      .catch(error => dispatch(onReceiveInitSession(null, error)));
+      .catch(error => {
+        dispatch(onReceiveInitSession(null, error));
+        throw error;
+      });
   };
 
 export const withCsrf = fn =>

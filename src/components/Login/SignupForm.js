@@ -1,4 +1,5 @@
-import { h } from "preact";
+import React from "react";
+import ErrorMsg from "../ErrorMsg";
 import signupFormConnector from "../../connectors/signupForm";
 
 const SignupForm = ({
@@ -15,26 +16,26 @@ const SignupForm = ({
   onSignup,
   onCancelSignup
 }) => isApiRequestingVerifyNewUser ? (
-  <fieldset className={"signup-form"}>Verifying {email}...</fieldset>
+  <fieldset className="signup-form">Verifying {email}...</fieldset>
 ) : isApiRequestingNewUser ? (
-  <fieldset className={"signup-form"}>Signing up {email}...</fieldset>
+  <fieldset className="signup-form">Signing up {email}...</fieldset>
 ) : (
-  <fieldset className={"signup-form"}>
+  <fieldset className="signup-form">
     <input
-      type={"text"}
-      placeholder={"Email Address"}
+      type="text"
+      placeholder="Email Address"
       value={email}
       onInput={evt => onSetEmail(evt.target.value)}
     />
     <input
-      type={"password"}
-      placeholder={"Password"}
+      type="password"
+      placeholder="Password"
       value={password}
       onInput={evt => onSetPassword(evt.target.value)}
     />
     <input
-      type={"password"}
-      placeholder={"Verify Password"}
+      type="password"
+      placeholder="Verify Password"
       value={passwordVerify}
       onInput={evt => onSetPasswordVerify(evt.target.value)}
     />
@@ -44,16 +45,16 @@ const SignupForm = ({
       onClick={onSignup}
     >Signup</button>
     {password === passwordVerify ? null : (
-      <div className={"error"}>Passwords do not match</div>
+      <div className="error">Passwords do not match</div>
     )}
     {apiNewUserError ? (
       <div>
-        Signup Error: {apiNewUserError}
+        Signup Error: <ErrorMsg error={apiNewUserError} />
       </div>
     ) : null}
     {apiVerifyNewUserError ? (
       <div>
-        Signup Verify Error: {apiVerifyNewUserError}
+        Signup Verify Error: <ErrorMsg error={apiVerifyNewUserError} />
       </div>
     ) : null}
   </fieldset>

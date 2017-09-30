@@ -1,5 +1,5 @@
-import { h } from "preact";
-import Markdown from "../../components/MarkdownRenderer";
+import React from "react";
+import Markdown from "../MarkdownRenderer";
 
 const SuccessPage = ({
   name,

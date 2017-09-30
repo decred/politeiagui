@@ -1,8 +1,7 @@
-import { h } from "preact";
-import style from "./style";
+import React from "react";
 
 const ErrorPage = (error) => (
-  <div class={style.errorPage}>
+  <div className="page error-page">
     <h3>Error</h3>
     <pre>{JSON.stringify(error, null, 2)}</pre>
   </div>

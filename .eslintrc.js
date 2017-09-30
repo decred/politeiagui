@@ -3,8 +3,11 @@ module.exports = {
     "browser": true,
     "node": true
   },
+  "plugins": [
+    "react"
+  ],
   "parser": "babel-eslint",
-  "extends": ["eslint:recommended", "standard-preact"],
+  "extends": "eslint:recommended",
   "rules": {
     "indent": [
       "error",
@@ -31,7 +34,9 @@ module.exports = {
     "eol-last": [
       "error",
       "always"
-    ]
+    ],
+    "react/jsx-uses-vars":1,
+    "react/jsx-uses-react":1,
   },
   "globals": {
     "Uint8Array": true

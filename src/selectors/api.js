@@ -39,8 +39,7 @@ export const apiError = or(
   apiNewUserError,
   apiVerifyNewUserError,
   apiLoginError,
-  apiLogoutError,
-  apiError
+  apiLogoutError
 );
 
 export const loggedInAs = state =>

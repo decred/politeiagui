@@ -1,3 +1,4 @@
+export const arg = idx => (...args) => args[idx];
 export const constant = x => () => x;
 export const not = fn => (...args) => !fn(...args);
 export const bool = fn => (...args) => !!fn(...args);

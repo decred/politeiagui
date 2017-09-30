@@ -1,6 +1,6 @@
-import { h } from "preact";
-import LoadingPage from "../../components/LoadingPage";
-import MarkdownEditor from "../../components/MarkdownEditor";
+import React from "react";
+import LoadingPage from "../LoadingPage";
+import MarkdownEditor from "../MarkdownEditor";
 
 const SubmitPage = ({
   name,

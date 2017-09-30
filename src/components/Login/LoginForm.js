@@ -1,4 +1,5 @@
-import { h } from "preact";
+import React from "react";
+import ErrorMsg from "../ErrorMsg";
 import loginFormConnector from "../../connectors/loginForm";
 
 const LoginForm = ({
@@ -11,18 +12,18 @@ const LoginForm = ({
   onShowSignup,
   onLogin
 }) => isApiRequestingLogin ? (
-  <fieldset className={"login-form"}>Logging In {email}...</fieldset>
+  <fieldset className="login-form">Logging In {email}...</fieldset>
 ) : (
-  <fieldset className={"login-form"}>
+  <fieldset className="login-form">
     <input
-      type={"text"}
-      placeholder={"Email Address"}
+      type="text"
+      placeholder="Email Address"
       value={email}
       onChange={evt => onSetEmail(evt.target.value)}
     />
     <input
-      type={"password"}
-      placeholder={"Password"}
+      type="password"
+      placeholder="Password"
       value={password}
       onInput={evt => onSetPassword(evt.target.value)}
     />
@@ -30,7 +31,7 @@ const LoginForm = ({
     <button onClick={onShowSignup}>Signup</button>
     {apiLoginError ? (
       <div>
-        Login Error: {apiLoginError}
+        Login Error: <ErrorMsg error={apiLoginError} />
       </div>
     ) : null}
   </fieldset>

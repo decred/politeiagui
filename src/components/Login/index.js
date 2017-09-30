@@ -1,12 +1,10 @@
-import { h, Component } from "preact";
+import React, { Component } from "react";
 import { autobind } from "core-decorators";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
 import CurrentUser from "./CurrentUser";
 import loginConnector from "../../connectors/login";
-import style from "./style";
 
-@autobind
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +17,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div class={style.loginForm}>
+      <div className="login-form">
         {this.props.loggedInAs ? (
           <CurrentUser />
         ) : this.props.isShowingSignup ? (
@@ -61,5 +59,7 @@ class Login extends Component {
     this.setState({ password: "", passwordVerify: "" });
   }
 }
+
+autobind(Login);
 
 export default loginConnector(Login);

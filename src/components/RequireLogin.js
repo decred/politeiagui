@@ -1,4 +1,4 @@
-import { h } from "preact";
+import React from "react";
 import Login from "./Login";
 import requireLoginConnector from "../connectors/requireLogin";
 
@@ -9,6 +9,5 @@ const RequireLogin = ({ loggedInAs, children, message="A login is required" }) =
       <Login />
     </div>
   );
-
 
 export default requireLoginConnector(RequireLogin);

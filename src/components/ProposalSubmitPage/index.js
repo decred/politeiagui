@@ -1,12 +1,11 @@
-import { h } from "preact";
+import React from "react";
 import submitConnector from "../../connectors/submitProposal";
 import SubmitPage from "./Page";
 import SuccessPage from "./Success";
-import RequireLogin from "../../components/RequireLogin";
-import style from "./style";
+import RequireLogin from "../RequireLogin";
 
 const Submit = ({ token, ...props }) =>
-  <div class={style.submitProposal}>
+  <div className="page proposal-submit-page">
     <RequireLogin>
       {token
         ? <SuccessPage {...{ ...props, token }} />
