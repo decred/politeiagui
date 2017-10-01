@@ -15,7 +15,7 @@ class Proposals extends Component {
       <article className="page vetted-proposals-page">
         <h2>Proposals</h2>
         <ol className={"proposals-list"}>
-          {proposals.map(proposal => (
+          {proposals.map(proposal => console.log("proposal", proposal) || (
             <li className={"proposal"}>
               <ProposalSummary {...{ proposal }} />
             </li>

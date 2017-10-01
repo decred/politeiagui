@@ -1,3 +1,19 @@
+# Politeia GUI
+
+## Development
+
+    yarn install
+    yarn mockapi // (optional)
+    yarn start
+
+## Production
+
+    yarn install && yarn build
+    ls build
+
+---
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>

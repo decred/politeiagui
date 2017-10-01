@@ -1,7 +1,6 @@
 {
   "name": "politeiagui",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
     "core-decorators": "^0.20.0",
     "lodash": "^4.17.4",
@@ -27,6 +26,16 @@
     "connect": "^3.6.5",
     "connect-api-mocker": "^1.3.3",
     "eslint-config-standard-react": "^5.0.0",
-    "http": "0.0.0"
+    "https": "^1.0.0",
+    "pem": "^1.12.0"
+  },
+  "proxy": {
+    "/api": {
+      "target": "https://localhost:4443",
+      "secure": false,
+      "pathRewrite": {
+        "/api": ""
+      }
+    }
   }
 }
