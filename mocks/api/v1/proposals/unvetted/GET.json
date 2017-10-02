@@ -1,0 +1,13 @@
+{
+  "proposals": [
+    {
+      "name": "This is an example proposal",
+      "status": 0,
+      "timestamp": 1505940196,
+      "censorshiprecord": {
+        "token": "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8"
+      },
+      "files": []
+    }
+  ]
+}
