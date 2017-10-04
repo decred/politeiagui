@@ -85,14 +85,8 @@ export const onVerifyNewUser = verificationtoken =>
   });
 
 export const onSignup = password =>
-  (dispatch, getState) =>
-    dispatch(onCreateNewUser(password))
-      .then(() => {
-        const state = getState();
-        const verificationtoken = state.api.newUser.response.verificationtoken;
-        return dispatch(onVerifyNewUser(verificationtoken))
-          .then(() => dispatch(onLogin(password)));
-      });
+  (dispatch) =>
+    dispatch(onCreateNewUser(password));
 
 export const onLogin = password =>
   withCsrf((dispatch, getState, csrf) => {

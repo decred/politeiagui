@@ -43,7 +43,7 @@ export const apiInfo = () =>
 export const newUser = (csrf, email, password) =>
   post("/user/new", csrf, { email, password })
     .then(parseResponse)
-    .then(({ response: { verificationtoken }}) => ({ verificationtoken }));
+    .then(({ response }) => response || {});
 
 export const verifyNewUser = (csrf, email, verificationtoken) =>
   post("/user/verify", csrf, { email, verificationtoken })

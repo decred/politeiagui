@@ -57,6 +57,7 @@ export const vettedProposalsError = get(["api", "vetted", "error"]);
 export const proposal = or(get(["api", "proposal", "response", "proposal"]), constant({}));
 export const proposalIsRequesting = bool(get(["api", "proposal", "isRequesting"]));
 export const proposalError = get(["api", "proposal", "error"]);
+export const newUserResponse = bool(get(["api", "newUser", "response"]));
 export const newProposalIsRequesting = bool(get(["api", "newProposal", "isRequesting"]));
 export const newProposalError = get(["api", "newProposal", "error"]);
 export const newProposalMerkle = get(["api", "newProposal", "response", "merkle"]);

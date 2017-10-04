@@ -10,6 +10,7 @@ const SignupForm = ({
   isApiRequestingVerifyNewUser,
   apiNewUserError,
   apiVerifyNewUserError,
+  hideCancel,
   onSetEmail,
   onSetPassword,
   onSetPasswordVerify,
@@ -21,6 +22,7 @@ const SignupForm = ({
   <fieldset className="signup-form">Signing up {email}...</fieldset>
 ) : (
   <fieldset className="signup-form">
+    <h2>Signup</h2>
     <input
       type="text"
       placeholder="Email Address"
@@ -39,7 +41,7 @@ const SignupForm = ({
       value={passwordVerify}
       onInput={evt => onSetPasswordVerify(evt.target.value)}
     />
-    <button onClick={onCancelSignup}>Cancel</button>
+    {hideCancel ? null : <button onClick={onCancelSignup}>Cancel</button>}
     <button
       disabled={!email || !password || (password !== passwordVerify)}
       onClick={onSignup}

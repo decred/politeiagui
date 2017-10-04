@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { autobind } from "core-decorators";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
+import SignupNextStep from "./SignupNextStep";
 import CurrentUser from "./CurrentUser";
 import loginConnector from "../../connectors/login";
 
@@ -20,13 +21,16 @@ class Login extends Component {
       <div className="login-form">
         {this.props.loggedInAs ? (
           <CurrentUser />
-        ) : this.props.isShowingSignup ? (
+        ) : this.props.newUserResponse ? (
+          <SignupNextStep email={this.props.email} />
+        ) : this.props.signup || this.props.isShowingSignup ? (
           <SignupForm {...{
             password: this.state.password,
             passwordVerify: this.state.passwordVerify,
             onSetPassword: this.onSetPassword,
             onSetPasswordVerify: this.onSetPasswordVerify,
             onSignup: this.onSignup,
+            hideCancel: this.props.signup
           }} />
         ) : (
           <LoginForm {...{

@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Login from "./Login";
 
 const Header = () => (
   <header className="header">
@@ -17,8 +16,8 @@ const Header = () => (
       <Link to="/">Home</Link>
       <Link to="/proposals/vetted">Proposals</Link>
       <Link to="/proposals/new">Submit</Link>
+      <Link to="/user/login">Login</Link>
     </nav>
-    <Login />
   </header>
 );
 
