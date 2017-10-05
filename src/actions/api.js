@@ -7,6 +7,7 @@ export const REQUEST_INIT_SESSION = "API_REQUEST_INIT_SESSION";
 export const RECEIVE_INIT_SESSION = "API_RECEIVE_INIT_SESSION";
 export const REQUEST_NEW_USER = "API_REQUEST_NEW_USER";
 export const RECEIVE_NEW_USER = "API_RECEIVE_NEW_USER";
+export const RESET_NEW_USER = "API_RESET_NEW_USER";
 export const REQUEST_VERIFY_NEW_USER = "API_REQUEST_VERIFY_NEW_USER";
 export const RECEIVE_VERIFY_NEW_USER = "API_RECEIVE_VERIFY_NEW_USER";
 export const REQUEST_LOGIN = "API_REQUEST_LOGIN";
@@ -73,6 +74,8 @@ export const onCreateNewUser = password =>
       .then(response => dispatch(onReceiveNewUser(response)))
       .catch(error => dispatch(onReceiveNewUser(null, error)));
   });
+
+export const onResetNewUser = () => ({ type: RESET_NEW_USER });
 
 export const onVerifyNewUser = verificationtoken =>
   withCsrf((dispatch, getState, csrf) => {

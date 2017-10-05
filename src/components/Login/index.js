@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { autobind } from "core-decorators";
+import { withRouter } from "react-router";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
-import SignupNextStep from "./SignupNextStep";
 import CurrentUser from "./CurrentUser";
 import loginConnector from "../../connectors/login";
 
@@ -14,6 +14,13 @@ class Login extends Component {
 
   componentWillUnmount() {
     this.setState({ password: "", passwordVerify: "" });
+    this.props.onResetNewUser();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.newUserResponse) {
+      nextProps.history.push("/user/signup/next");
+    }
   }
 
   render() {
@@ -21,8 +28,6 @@ class Login extends Component {
       <div className="login-form">
         {this.props.loggedInAs ? (
           <CurrentUser />
-        ) : this.props.newUserResponse ? (
-          <SignupNextStep email={this.props.email} />
         ) : this.props.signup || this.props.isShowingSignup ? (
           <SignupForm {...{
             password: this.state.password,
@@ -66,4 +71,4 @@ class Login extends Component {
 
 autobind(Login);
 
-export default loginConnector(Login);
+export default loginConnector(withRouter(Login));

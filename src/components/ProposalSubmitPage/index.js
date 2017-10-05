@@ -6,11 +6,9 @@ import RequireLogin from "../RequireLogin";
 
 const Submit = ({ token, ...props }) =>
   <div className="page proposal-submit-page">
-    <RequireLogin>
       {token
         ? <SuccessPage {...{ ...props, token }} />
         : <SubmitPage {...props} />}
-    </RequireLogin>
   </div>;
 
 export default submitConnector(Submit);

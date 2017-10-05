@@ -12,7 +12,8 @@ const loginConnector = connect(
   }),
   dispatch => bindActionCreators({
     onLogin: act.onLogin,
-    onSignup: act.onSignup
+    onSignup: act.onSignup,
+    onResetNewUser: act.onResetNewUser
   }, dispatch)
 );
 
