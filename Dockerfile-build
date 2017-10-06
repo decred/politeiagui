@@ -1,0 +1,14 @@
+FROM node:8.6.0
+
+LABEL description="politeiagui build"
+LABEL version="1.0"
+LABEL maintainer "holdstockjamie@gmail.com"
+
+USER root
+WORKDIR /root
+
+COPY ./ /root/
+
+RUN yarn install
+
+CMD yarn build && chmod -R a+rw build

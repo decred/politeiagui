@@ -13,6 +13,21 @@
 
 ---
 
+## Docker
+
+`politeia` can be hosted in a docker container. To build the site and the docker container:
+
+```bash
+$ ./build_docker.sh
+```
+
+The container can then be run with
+
+```bash
+$ docker run -d --rm -p <local port>:80 decred/politeiagui-serve:latest
+```
+
+---
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
