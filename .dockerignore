@@ -1,4 +1,4 @@
+build_docker.sh
+build/
 node_modules
 npm-debug.log
-build
-docker-build
