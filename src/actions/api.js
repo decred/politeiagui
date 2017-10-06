@@ -7,6 +7,7 @@ export const REQUEST_INIT_SESSION = "API_REQUEST_INIT_SESSION";
 export const RECEIVE_INIT_SESSION = "API_RECEIVE_INIT_SESSION";
 export const REQUEST_NEW_USER = "API_REQUEST_NEW_USER";
 export const RECEIVE_NEW_USER = "API_RECEIVE_NEW_USER";
+export const RESET_NEW_USER = "API_RESET_NEW_USER";
 export const REQUEST_VERIFY_NEW_USER = "API_REQUEST_VERIFY_NEW_USER";
 export const RECEIVE_VERIFY_NEW_USER = "API_RECEIVE_VERIFY_NEW_USER";
 export const REQUEST_LOGIN = "API_REQUEST_LOGIN";
@@ -74,6 +75,8 @@ export const onCreateNewUser = password =>
       .catch(error => dispatch(onReceiveNewUser(null, error)));
   });
 
+export const onResetNewUser = () => ({ type: RESET_NEW_USER });
+
 export const onVerifyNewUser = verificationtoken =>
   withCsrf((dispatch, getState, csrf) => {
     const email = sel.email(getState());
@@ -85,14 +88,8 @@ export const onVerifyNewUser = verificationtoken =>
   });
 
 export const onSignup = password =>
-  (dispatch, getState) =>
-    dispatch(onCreateNewUser(password))
-      .then(() => {
-        const state = getState();
-        const verificationtoken = state.api.newUser.response.verificationtoken;
-        return dispatch(onVerifyNewUser(verificationtoken))
-          .then(() => dispatch(onLogin(password)));
-      });
+  (dispatch) =>
+    dispatch(onCreateNewUser(password));
 
 export const onLogin = password =>
   withCsrf((dispatch, getState, csrf) => {

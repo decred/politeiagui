@@ -4,6 +4,9 @@ import { Provider } from "react-redux";
 import configureStore from "./configureStore";
 import Header from "./components/Header";
 import Home from "./components/HomePage";
+import Login from "./components/LoginPage";
+import SignupNext from "./components/SignupNextStepPage";
+import Signup from "./components/SignupPage";
 import VettedProposals from "./components/VettedProposalsPage";
 import ProposalDetail from "./components/ProposalDetailPage";
 import ProposalSubmit from "./components/ProposalSubmitPage";
@@ -19,6 +22,9 @@ export default class App extends Component {
             <Header />
             <Switch>
               <Route path="/" component={Home} exact={true} />
+              <Route path="/user/signup/next" component={SignupNext} />
+              <Route path="/user/login" component={Login} />
+              <Route path="/user/signup" component={Signup} />
               <Route path="/proposals/vetted" component={VettedProposals} />
               <Route path="/proposals/new" component={ProposalSubmit} />
               <Route path="/proposals/:token" component={ProposalDetail} />

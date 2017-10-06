@@ -7,11 +7,13 @@ const loginConnector = connect(
   sel.selectorMap({
     email: sel.email,
     loggedInAs: sel.loggedInAs,
-    isShowingSignup: sel.isShowingSignup
+    isShowingSignup: sel.isShowingSignup,
+    newUserResponse: sel.newUserResponse
   }),
   dispatch => bindActionCreators({
     onLogin: act.onLogin,
-    onSignup: act.onSignup
+    onSignup: act.onSignup,
+    onResetNewUser: act.onResetNewUser
   }, dispatch)
 );
 

@@ -37,12 +37,15 @@ const receive = (key, state, { payload, error }) =>
     }
   });
 
+const reset = (key, state) => ({ ...state, [key]: DEFAULT_REQUEST_STATE });
+
 const api = (state = DEFAULT_STATE, action) => (({
   [act.SET_EMAIL]: () => ({ ...state, email: action.payload }),
   [act.REQUEST_INIT_SESSION]: () => request("init", state, action),
   [act.RECEIVE_INIT_SESSION]: () => receive("init", state, action),
   [act.REQUEST_NEW_USER]: () => request("newUser", state, action),
   [act.RECEIVE_NEW_USER]: () => receive("newUser", state, action),
+  [act.RESET_NEW_USER]: () => reset("newUser", state),
   [act.REQUEST_VERIFY_NEW_USER]: () => request("verifyNewUser", state, action),
   [act.RECEIVE_VERIFY_NEW_USER]: () => receive("verifyNewUser", state, action),
   [act.REQUEST_LOGIN]: () => request("login", state, action),
