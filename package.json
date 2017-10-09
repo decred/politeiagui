@@ -5,6 +5,7 @@
     "core-decorators": "^0.20.0",
     "lodash": "^4.17.4",
     "normalize.css": "^7.0.0",
+    "query-string": "^5.0.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",

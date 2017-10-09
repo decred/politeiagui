@@ -1,4 +1,5 @@
 import "isomorphic-fetch";
+import queryString from "query-string";
 
 const apiBase = "/api";
 const getUrl = (path, version="v1") => `${apiBase}/${version}${path}`;
@@ -58,13 +59,13 @@ export const secret = (csrf) =>
     .then(parseResponse)
     .then(({ response }) => response);
 
-export const vetted = () =>
-  get("/v1/proposals/vetted")
+export const vetted = (params = {}) =>
+  get(`/v1/proposals/vetted?${queryString.stringify(params)}`)
     .then(parseResponse)
     .then(({ response }) => response);
 
-export const unvetted = () =>
-  get("/v1/proposals/unvetted")
+export const unvetted = (params = {}) =>
+  get(`/v1/proposals/unvetted?${queryString.stringify(params)}`)
     .then(parseResponse)
     .then(({ response }) => response);
 

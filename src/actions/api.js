@@ -113,20 +113,20 @@ export const onLogout = () =>
       .catch(error => dispatch(onReceiveLogout(null, error)));
   });
 
-export const onFetchVetted = () =>
+export const onFetchVetted = (payload) =>
   (dispatch) => {
-    dispatch(onRequestVetted());
+    dispatch(onRequestVetted(payload));
     return api
-      .vetted()
+      .vetted(payload)
       .then(response => dispatch(onReceiveVetted(response)))
       .catch(error => dispatch(onReceiveVetted(null, error)));
   };
 
-export const onFetchUnvetted = () =>
+export const onFetchUnvetted = (payload) =>
   (dispatch) => {
-    dispatch(onRequestUnvetted());
+    dispatch(onRequestUnvetted(payload));
     return api
-      .unvetted()
+      .unvetted(payload)
       .then(response => dispatch(onReceiveUnvetted(response)))
       .catch(error => dispatch(onReceiveUnvetted(null, error)));
   };
