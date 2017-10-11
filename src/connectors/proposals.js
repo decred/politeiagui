@@ -5,7 +5,7 @@ import * as act from "../actions";
 
 export default connect(
   sel.selectorMap({
-    proposals: sel.vettedProposals,
+    items: sel.vettedProposals,
     error: sel.vettedProposalsError,
     isLoading: sel.vettedProposalsIsRequesting
   }),
