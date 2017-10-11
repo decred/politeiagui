@@ -1,8 +1,8 @@
 import React from "react";
-import { Markdown } from "react-showdown";
+import ReactMarkdown from "react-markdown";
 
 const MarkdownRenderer = ({ value }) => (
-  <Markdown markup={value} />
+  <ReactMarkdown source={value} />
 );
 
 export default MarkdownRenderer;
