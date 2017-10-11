@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import Markdown from "../../MarkdownRenderer";
 
 const MarkdownEditorField = ({ placeholder, input, rows, cols, touched, error, disabled }) => (
