@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import configureStore from "./configureStore";
 import Header from "./components/Header";
-import Home from "./components/HomePage";
+import About from "./components/AboutPage";
 import Login from "./components/LoginPage";
 import SignupNext from "./components/SignupNextStepPage";
 import Signup from "./components/SignupPage";
@@ -21,7 +21,8 @@ export default class App extends Component {
           <div id="app">
             <Header />
             <Switch>
-              <Route path="/" component={Home} exact={true} />
+              <Route path="/" component={VettedProposals} exact={true} />
+              <Route path="/about" component={About} />
               <Route path="/user/signup/next" component={SignupNext} />
               <Route path="/user/login" component={Login} />
               <Route path="/user/signup" component={Signup} />

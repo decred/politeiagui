@@ -15,7 +15,6 @@ const LoginForm = ({
   <fieldset className="login-form">Logging In {email}...</fieldset>
 ) : (
   <fieldset className="login-form">
-    <h2>Login</h2>
     <input
       type="text"
       placeholder="Email Address"
