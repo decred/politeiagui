@@ -1,6 +1,10 @@
+/*!
+ * react-markdown-editor-hybrid v0.3.0 (https://github.com/jaszhix/react-markdown-editor-hybrid)
+ * Thanks to react-markdown-editor-hybrid for this package, unfortunately was in conflict with react 16.0
+ * Licensed under MIT (https://github.com/jaszhix/react-markdown-editor-hybrid/blob/master/LICENSE)
+ */
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactMarkdown from 'react-markdown';
 import objectAssign from 'object-assign';
 
 class MDEditor extends React.Component {
@@ -11,10 +15,10 @@ class MDEditor extends React.Component {
     buttonContainerStyle: {}
   }
   static propTypes = {
-    value: PropTypes.string.isRequired,
     placeholder: PropTypes.string.isRequired,
     cols: PropTypes.number.isRequired,
     rows: PropTypes.number.isRequired,
+    value: PropTypes.string.isRequired,
     enableHTML: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
     textAreaStyle: PropTypes.object,
@@ -196,25 +200,20 @@ class MDEditor extends React.Component {
           </button>
         </div>
         <div>
-          {s.preview ?
-            <ReactMarkdown
-              source={p.value}
-              escapeHtml={!p.enableHTML}/>
-            :
-            <textarea
-              ref="text"
-              placeholder={this.props.placeholder}
-              rows={this.props.rows}
-              cols={this.props.cols}
-              style={textAreaStyle}
-              value={p.value}
-              onChange={this.handleTextChange}
-            />}
+          <textarea
+            ref="text"
+            placeholder={this.props.placeholder}
+            rows={this.props.rows}
+            cols={this.props.cols}
+            style={textAreaStyle}
+            value={p.value}
+            onChange={this.handleTextChange}
+          />
         </div>
       </div>
     );
   }
-};
+}
 
 window.MDEditor = MDEditor;
 export default MDEditor;
