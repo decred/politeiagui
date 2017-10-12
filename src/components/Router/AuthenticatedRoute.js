@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect, Route } from "react-router-dom";
 import requireLoginConnector from "../../connectors/requireLogin";
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
+const AuthenticatedRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
     rest.loggedInAs ? (
       <Component {...props} />
@@ -15,4 +15,4 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   )} />
 );
 
-export default requireLoginConnector(PrivateRoute);
+export default requireLoginConnector(AuthenticatedRoute);
