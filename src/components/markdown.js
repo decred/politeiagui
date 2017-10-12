@@ -107,7 +107,6 @@ class MDEditor extends React.Component {
   }
   render(){
     let p = this.props;
-    let s = this.state;
     const textAreaStyle = {
       width: '100%',
       outline: '0',

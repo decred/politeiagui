@@ -3,7 +3,8 @@ import * as sel from "../selectors";
 
 const requireLoginConnector = connect(
   sel.selectorMap({
-    loggedInAs: sel.loggedInAs
+    loggedInAs: sel.loggedInAs,
+    isAdmin: sel.isAdmin,
   })
 );
 
