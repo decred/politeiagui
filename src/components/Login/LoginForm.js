@@ -1,40 +1,40 @@
 import React from "react";
+import { reduxForm, Field } from "redux-form";
 import ErrorMsg from "../ErrorMsg";
 import loginFormConnector from "../../connectors/loginForm";
 
 const LoginForm = ({
-  email,
-  password,
   isApiRequestingLogin,
   apiLoginError,
-  onSetEmail,
-  onSetPassword,
   onShowSignup,
-  onLogin
+  onLogin,
+  handleSubmit
 }) => isApiRequestingLogin ? (
-  <fieldset className="login-form">Logging In {email}...</fieldset>
+  <fieldset className="login-form">Logging In...</fieldset>
 ) : (
-  <fieldset className="login-form">
-    <input
-      type="text"
-      placeholder="Email Address"
-      value={email}
-      onChange={evt => onSetEmail(evt.target.value)}
-    />
-    <input
-      type="password"
-      placeholder="Password"
-      value={password}
-      onInput={evt => onSetPassword(evt.target.value)}
-    />
-    <button disabled={!email || !password} onClick={onLogin}>Login</button>
-    <button onClick={onShowSignup}>Signup</button>
-    {apiLoginError ? (
-      <div>
-        Login Error: <ErrorMsg error={apiLoginError} />
-      </div>
-    ) : null}
-  </fieldset>
+  <form onSubmit={handleSubmit(onLogin)}>
+    <fieldset className="login-form">
+      <Field
+        name="email"
+        component="input"
+        type="text"
+        placeholder="Email Address"
+      />
+      <Field
+        name="password"
+        component="input"
+        type="password"
+        placeholder="Password"
+      />
+      <input type="submit" value="Login" />
+      <button onClick={onShowSignup}>Signup</button>
+      {apiLoginError ? (
+        <div>
+          Login Error: <ErrorMsg error={apiLoginError} />
+        </div>
+      ) : null}
+    </fieldset>
+  </form>
 );
 
-export default loginFormConnector(LoginForm);
+export default reduxForm({ form: "form/login" })(loginFormConnector(LoginForm));

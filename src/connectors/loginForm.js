@@ -6,7 +6,6 @@ import { or } from "../lib/fp";
 
 const loginFormConnector = connect(
   sel.selectorMap({
-    email: sel.email,
     isApiRequestingLogin: or(sel.isApiRequestingInit, sel.isApiRequestingLogin),
     apiLoginError: sel.apiLoginError
   }),

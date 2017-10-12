@@ -7,13 +7,7 @@ import CurrentUser from "./CurrentUser";
 import loginConnector from "../../connectors/login";
 
 class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { password: "", passwordVerify: "" };
-  }
-
   componentWillUnmount() {
-    this.setState({ password: "", passwordVerify: "" });
     this.props.onResetNewUser();
   }
 
@@ -30,30 +24,16 @@ class Login extends Component {
           <CurrentUser />
         ) : this.props.signup || this.props.isShowingSignup ? (
           <SignupForm {...{
-            password: this.state.password,
-            passwordVerify: this.state.passwordVerify,
-            onSetPassword: this.onSetPassword,
-            onSetPasswordVerify: this.onSetPasswordVerify,
             onSignup: this.onSignup,
             hideCancel: this.props.signup
           }} />
         ) : (
           <LoginForm {...{
-            password: this.state.password,
-            onSetPassword: this.onSetPassword,
             onLogin: this.onLogin
           }} />
         )}
       </div>
     );
-  }
-
-  onSetPassword(password) {
-    this.setState({ password });
-  }
-
-  onSetPasswordVerify(passwordVerify) {
-    this.setState({ passwordVerify });
   }
 
   onSignup() {
@@ -63,9 +43,8 @@ class Login extends Component {
     this.setState({ password: "", passwordVerify: "" });
   }
 
-  onLogin() {
-    this.props.onLogin(this.state.password);
-    this.setState({ password: "", passwordVerify: "" });
+  onLogin(props) {
+    this.props.onLogin(props);
   }
 }
 

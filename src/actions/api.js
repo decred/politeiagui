@@ -91,9 +91,8 @@ export const onSignup = password =>
   (dispatch) =>
     dispatch(onCreateNewUser(password));
 
-export const onLogin = password =>
+export const onLogin = ({ email, password }) =>
   withCsrf((dispatch, getState, csrf) => {
-    const email = sel.email(getState());
     dispatch(onRequestLogin({ email }));
     return api
       .login(csrf, email, password)
