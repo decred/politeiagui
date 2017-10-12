@@ -1,12 +1,12 @@
 import React from "react";
 import { reduxForm, Field } from "redux-form";
+import { Link } from "react-router-dom";
 import ErrorMsg from "../ErrorMsg";
 import loginFormConnector from "../../connectors/loginForm";
 
 const LoginForm = ({
   isApiRequestingLogin,
   apiLoginError,
-  onShowSignup,
   onLogin,
   handleSubmit
 }) => isApiRequestingLogin ? (
@@ -27,7 +27,7 @@ const LoginForm = ({
         placeholder="Password"
       />
       <input type="submit" value="Login" />
-      <button onClick={onShowSignup}>Signup</button>
+      <Link to="/user/signup">Signup</Link>
       {apiLoginError ? (
         <div>
           Login Error: <ErrorMsg error={apiLoginError} />

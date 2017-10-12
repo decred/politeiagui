@@ -11,7 +11,6 @@ const loginFormConnector = connect(
   }),
   dispatch => bindActionCreators({
     onSetEmail: act.onSetEmail,
-    onShowSignup: act.onShowSignup
   }, dispatch)
 );
 
