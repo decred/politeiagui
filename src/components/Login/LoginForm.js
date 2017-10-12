@@ -3,6 +3,8 @@ import { reduxForm, Field } from "redux-form";
 import { Link } from "react-router-dom";
 import ErrorMsg from "../ErrorMsg";
 import loginFormConnector from "../../connectors/loginForm";
+import ErrorField from "../Form/Fields/ErrorField";
+import validate from "./LoginValidator";
 
 const LoginForm = ({
   isApiRequestingLogin,
@@ -14,6 +16,10 @@ const LoginForm = ({
 ) : (
   <form onSubmit={handleSubmit(onLogin)}>
     <fieldset className="login-form">
+      <Field
+        name="global"
+        component={ErrorField}
+      />
       <Field
         name="email"
         component="input"
@@ -37,4 +43,4 @@ const LoginForm = ({
   </form>
 );
 
-export default reduxForm({ form: "form/login" })(loginFormConnector(LoginForm));
+export default reduxForm({ form: "form/login", validate })(loginFormConnector(LoginForm));
