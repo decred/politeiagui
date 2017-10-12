@@ -10,6 +10,7 @@ import Signup from "./components/SignupPage";
 import VettedProposals from "./components/VettedProposalsPage";
 import ProposalDetail from "./components/ProposalDetailPage";
 import ProposalSubmit from "./components/ProposalSubmitPage";
+import PrivateRoute from "./components/Router/PrivateRoute";
 
 const store = configureStore();
 
@@ -26,9 +27,9 @@ export default class App extends Component {
               <Route path="/user/signup/next" component={SignupNext} />
               <Route path="/user/login" component={Login} />
               <Route path="/user/signup" component={Signup} />
-              <Route path="/proposals/vetted" component={VettedProposals} />
-              <Route path="/proposals/new" component={ProposalSubmit} />
-              <Route path="/proposals/:token" component={ProposalDetail} />
+              <PrivateRoute path="/proposals/vetted" component={VettedProposals} />
+              <PrivateRoute path="/proposals/new" component={ProposalSubmit} />
+              <PrivateRoute path="/proposals/:token" component={ProposalDetail} />
             </Switch>
           </div>
         </Router>
