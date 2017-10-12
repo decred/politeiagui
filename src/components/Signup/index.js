@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import { autobind } from "core-decorators";
 import { withRouter } from "react-router";
-import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
-import CurrentUser from "./CurrentUser";
 import loginConnector from "../../connectors/login";
 
-class Login extends Component {
+class Signup extends Component {
   componentWillUnmount() {
     this.props.onResetNewUser();
   }
@@ -20,34 +18,19 @@ class Login extends Component {
   render() {
     return (
       <div className="login-form">
-        {this.props.loggedInAs ? (
-          <CurrentUser />
-        ) : this.props.signup || this.props.isShowingSignup ? (
-          <SignupForm {...{
-            onSignup: this.onSignup,
-            hideCancel: this.props.signup
-          }} />
-        ) : (
-          <LoginForm {...{
-            onLogin: this.onLogin
-          }} />
-        )}
+        <SignupForm {...{
+          onSignup: this.onSignup,
+          hideCancel: this.props.signup
+        }} />
       </div>
     );
   }
 
-  onSignup() {
-    const { password, passwordVerify } = this.state;
-    if (!password || password !== passwordVerify || !this.props.email) return;
-    this.props.onSignup(this.state.password);
-    this.setState({ password: "", passwordVerify: "" });
-  }
-
-  onLogin(props) {
-    this.props.onLogin(props);
+  onSignup(props) {
+    this.props.onSignup(props);
   }
 }
 
-autobind(Login);
+autobind(Signup);
 
-export default loginConnector(withRouter(Login));
+export default loginConnector(withRouter(Signup));

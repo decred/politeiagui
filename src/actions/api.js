@@ -65,9 +65,8 @@ export const withCsrf = fn =>
       : dispatch(onInit()).then(() => withCsrf(fn)(dispatch, getState));
   };
 
-export const onCreateNewUser = password =>
+export const onCreateNewUser = ({ email, password }) =>
   withCsrf((dispatch, getState, csrf) => {
-    const email = sel.email(getState());
     dispatch(onRequestNewUser({ email }));
     return api
       .newUser(csrf, email, password)
@@ -87,9 +86,9 @@ export const onVerifyNewUser = verificationtoken =>
       .catch(error => dispatch(onReceiveVerifyNewUser(null, error)));
   });
 
-export const onSignup = password =>
+export const onSignup = (props) =>
   (dispatch) =>
-    dispatch(onCreateNewUser(password));
+    dispatch(onCreateNewUser(props));
 
 export const onLogin = ({ email, password }) =>
   withCsrf((dispatch, getState, csrf) => {

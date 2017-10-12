@@ -1,9 +1,9 @@
 import React from "react";
-import Login from "./Login";
+import Signup from "./Signup";
 
 const SignupPage = () => (
   <div className="page signup-page">
-    <Login signup />
+    <Signup signup />
   </div>
 );
 
