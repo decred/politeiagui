@@ -51,7 +51,8 @@ export const verifyNewUser = (csrf, email, verificationtoken) =>
 
 export const login = (csrf, email, password) =>
   post("/login", csrf, { email, password })
-    .then(() => ({ email }));
+    .then(parseResponse)
+    .then(({ response }) => response);
 
 export const secret = (csrf) =>
   post("/secret", csrf, {})

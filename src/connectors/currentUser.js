@@ -5,7 +5,8 @@ import * as act from "../actions";
 
 const currentUserConnector = connect(
   sel.selectorMap({
-    loggedInAs: sel.loggedInAs
+    loggedInAs: sel.loggedInAs,
+    isAdmin: sel.isAdmin,
   }),
   dispatch => bindActionCreators({
     onLogout: act.onLogout

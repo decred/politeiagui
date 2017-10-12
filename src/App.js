@@ -7,10 +7,12 @@ import About from "./components/AboutPage";
 import Login from "./components/LoginPage";
 import SignupNext from "./components/SignupNextStepPage";
 import Signup from "./components/SignupPage";
+import AdminLanding from "./components/AdminLanding";
 import VettedProposals from "./components/VettedProposalsPage";
 import ProposalDetail from "./components/ProposalDetailPage";
 import ProposalSubmit from "./components/ProposalSubmitPage";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
+import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
 
 const store = configureStore();
 
@@ -30,6 +32,7 @@ export default class App extends Component {
               <AuthenticatedRoute path="/proposals/vetted" component={VettedProposals} />
               <AuthenticatedRoute path="/proposals/new" component={ProposalSubmit} />
               <AuthenticatedRoute path="/proposals/:token" component={ProposalDetail} />
+              <AdminAuthenticatedRoute path="/admin" component={AdminLanding} />
             </Switch>
           </div>
         </Router>

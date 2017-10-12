@@ -43,11 +43,14 @@ export const apiError = or(
 );
 
 export const loggedInAs = state =>
-  apiLoginResponse(state) ? state.api.login.payload.email : null;
+  apiLoginResponse(state) ? state.api.login.response.email : null;
+
+export const isAdmin = state =>
+  apiLoginResponse(state) ? state.api.login.response.admin : null;
 
 export const email = state => {
   const loggedIn = loggedInAs(state);
-  return loggedIn ? loggedIn : state.api.email;
+  return loggedIn ? loggedIn : state.api.login.response.email;
 };
 
 export const csrf = compose(get("csrfToken"), apiInitResponse);

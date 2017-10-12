@@ -26,8 +26,9 @@ const request = (key, state, { payload, error }) =>
     }
   });
 
-const receive = (key, state, { payload, error }) =>
-  ({
+const receive = (key, state, { payload, error }) => {
+  console.log(key, state, payload, error);
+  return ({
     ...state,
     [key]: {
       ...state[key],
@@ -36,6 +37,7 @@ const receive = (key, state, { payload, error }) =>
       error: error ? payload : null
     }
   });
+};
 
 const reset = (key, state) => ({ ...state, [key]: DEFAULT_REQUEST_STATE });
 
