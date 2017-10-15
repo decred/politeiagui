@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, withRouter } from "react-router-dom";
 import currentUserConnector from "../connectors/currentUser";
 
 const Header = ({ isAdmin }) => (
@@ -16,10 +16,11 @@ const Header = ({ isAdmin }) => (
     <nav>
       <NavLink to="/about">About</NavLink>
       <NavLink to="/proposals/new">Submit</NavLink>
+      <NavLink to="/proposals/find">Find</NavLink>
       {isAdmin ? <NavLink to="/admin">Admin</NavLink> : null}
       <NavLink to="/user/login">Login</NavLink>
     </nav>
   </header>
 );
 
-export default currentUserConnector(Header);
+export default withRouter(currentUserConnector(Header));
