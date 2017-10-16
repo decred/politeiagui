@@ -45,9 +45,9 @@ export const newUser = (csrf, email, password) =>
     .then(parseResponse)
     .then(({ response }) => response || {});
 
-export const verifyNewUser = (csrf, email, verificationtoken) =>
-  post("/user/verify", csrf, { email, verificationtoken })
-    .then(() => ({ email }));
+export const verifyNewUser = (searchQuery) => {
+  window.location = apiBase + "/user/verify" + searchQuery;
+};
 
 export const login = (csrf, email, password) =>
   post("/login", csrf, { email, password })
