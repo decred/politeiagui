@@ -2,10 +2,12 @@ import React from "react";
 import { reduxForm, Field } from "redux-form";
 import LoadingPage from "../LoadingPage";
 import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
+import FilesField from "../Form/Fields/FilesField";
 import ErrorField from "../Form/Fields/ErrorField";
 import validate from "./validator";
 
 const SubmitPage = ({
+  //policy,
   isSaving,
   error,
   onSave,
@@ -26,6 +28,7 @@ const SubmitPage = ({
           placeholder="Proposal Name"
         />
       </h2>
+
       {error ? (
         <div className={"error"}>
           {(typeof error === "string") ? error : (
@@ -40,6 +43,11 @@ const SubmitPage = ({
         placeholder="Markdown Entry"
         rows={20}
         cols={80}
+      />
+      <Field
+        name="files"
+        component={FilesField}
+        placeholder="Select Files"
       />
       <input type="submit" value="Save" />
     </form>

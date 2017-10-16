@@ -1,9 +1,11 @@
 import React from "react";
 import Markdown from "../MarkdownRenderer";
+import ProposalImages from "../ProposalImages";
 
 const SuccessPage = ({
   name,
   description,
+  files,
   merkle,
   token,
   signature
@@ -18,6 +20,8 @@ const SuccessPage = ({
     <h2>{name}</h2>
     <hr />
     <Markdown value={description} />
+    <hr/>
+    <ProposalImages files={files} />
   </div>
 );
 

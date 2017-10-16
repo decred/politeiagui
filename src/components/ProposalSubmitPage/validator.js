@@ -4,6 +4,10 @@ const validate = values => {
     errors.global = "All fields are required";
   }
 
+  if (values.files && values.files.length > 5) {
+    errors.global = "Only 5 attachments are allowed";
+  }
+
   return errors;
 };
 

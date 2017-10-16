@@ -28,9 +28,9 @@ class Routes extends Component {
         <Route path="/user/verify/success" component={VerifySuccess} />
         <Route path="/user/verify/failure" component={VerifyFailure} />
         <Route path="/user/verify" component={Verify} />
-        <AuthenticatedRoute path="/proposals/vetted" component={VettedProposals} />
+        <Route path="/proposals/vetted" component={VettedProposals} />
         <AuthenticatedRoute path="/proposals/new" component={ProposalSubmit} />
-        <AuthenticatedRoute path="/proposals/:token" component={ProposalDetail} />
+        <Route path="/proposals/:token" component={ProposalDetail} />
         <AdminAuthenticatedRoute path="/admin" component={AdminLanding} />
       </Switch>
     );

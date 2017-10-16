@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import LoadingPage from "./LoadingPage";
+import ProposalImages from "./ProposalImages";
 import ErrorPage from "./ErrorPage";
 import Markdown from "./MarkdownRenderer";
 import proposalConnector from "../connectors/proposal";
@@ -26,6 +27,8 @@ class ProposalDetailPage extends Component {
         </div>
         <hr />
         <Markdown value={proposal.files && proposal.files.length > 0 ? atob(proposal.files[0].payload) : ""} />
+        <hr/>
+        <ProposalImages files={proposal && proposal.files ? proposal.files.slice(1) : []} />
       </div>
     );
   }

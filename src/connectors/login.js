@@ -6,7 +6,6 @@ import * as act from "../actions";
 const loginConnector = connect(
   sel.selectorMap({
     loggedInAs: sel.loggedInAs,
-    isShowingSignup: sel.isShowingSignup,
     newUserResponse: sel.newUserResponse
   }),
   dispatch => bindActionCreators({
