@@ -25,7 +25,8 @@
     "start": "cross-env HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "./node_modules/.bin/eslint src"
   },
   "devDependencies": {
     "connect": "^3.6.5",
