@@ -2,70 +2,80 @@ import get from "lodash/fp/get";
 import compose from "lodash/fp/compose";
 import { or, bool, constant } from "../lib/fp";
 
-
-const getIsApiRequesting = key => state =>
-  state.api[key] ? state.api[key].isRequesting : null;
-const getApiResponse = key => state =>
-  state.api[key] ? state.api[key].response : null;
-const getApiError = key => state =>
-  state.api[key] ? state.api[key].error : null;
+const getIsApiRequesting = key => bool(get(["api", key, "isRequesting"]));
+const getApiPayload = key => get(["api", key, "payload"]);
+const getApiResponse = key => get(["api", key, "response"]);
+const getApiError = key => get(["api", key, "error"]);
 
 export const isApiRequestingInit = getIsApiRequesting("init");
+const isApiRequestingPolicy = getIsApiRequesting("policy");
 export const isApiRequestingNewUser = getIsApiRequesting("newUser");
 export const isApiRequestingVerifyNewUser = getIsApiRequesting("verifyNewUser");
 export const isApiRequestingLogin = getIsApiRequesting("login");
-export const isApiRequestingLogout = getIsApiRequesting("logout");
+const isApiRequestingLogout = getIsApiRequesting("logout");
+const isApiRequestingVetted = getIsApiRequesting("vetted");
+const isApiRequestingProposal = getIsApiRequesting("proposal");
+const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
 export const isApiRequesting = or(
   isApiRequestingInit,
+  isApiRequestingPolicy,
   isApiRequestingNewUser,
   isApiRequestingVerifyNewUser,
   isApiRequestingLogin,
-  isApiRequestingLogout
+  isApiRequestingLogout,
+  isApiRequestingVetted,
+  isApiRequestingProposal,
+  isApiRequestingNewProposal
 );
 
-export const apiInitResponse = getApiResponse("init");
-export const apiNewUserResponse = getApiResponse("newUser");
-export const apiVerifyNewUserResponse = getApiResponse("verifyNewUser");
-export const apiLoginResponse = getApiResponse("login");
-export const apiLogoutResponse = getApiResponse("logout");
+const apiNewUserPayload = getApiPayload("newUser");
+const apiNewProposalPayload = getApiPayload("newProposal");
 
-export const apiInitError = getApiError("init");
+const apiInitResponse = getApiResponse("init");
+const apiPolicyResponse = getApiResponse("policy");
+const apiNewUserResponse = getApiResponse("newUser");
+const apiLoginResponse = getApiResponse("login");
+const apiVettedResponse = getApiResponse("vetted");
+const apiProposalResponse = getApiResponse("proposal");
+const apiNewProposalResponse = getApiResponse("newProposal");
+
+const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
 export const apiVerifyNewUserError = or(apiInitError, getApiError("verifyNewUser"));
 export const apiLoginError = or(apiInitError, getApiError("login"));
-export const apiLogoutError = or(apiInitError, getApiError("logout"));
+const apiLogoutError = or(apiInitError, getApiError("logout"));
+const apiVettedError = getApiError("vetted");
+const apiProposalError = getApiError("proposal");
+const apiNewProposalError = getApiError("newProposal");
 export const apiError = or(
   apiInitError,
   apiNewUserError,
   apiVerifyNewUserError,
   apiLoginError,
-  apiLogoutError
+  apiLogoutError,
+  apiVettedError,
+  apiProposalError,
+  apiNewProposalError
 );
 
-export const loggedInAs = state =>
-  apiLoginResponse(state) ? state.api.login.response.email : null;
-
-export const isAdmin = state =>
-  apiLoginResponse(state) ? state.api.login.response.admin : null;
-
-export const email = state => {
-  const loggedIn = loggedInAs(state);
-  return loggedIn ? loggedIn : state.api.login.response.email;
-};
-
 export const csrf = compose(get("csrfToken"), apiInitResponse);
-export const vettedProposals = or(get(["api", "vetted", "response", "proposals"]), constant([]));
-export const vettedProposalsIsRequesting = bool(get(["api", "vetted", "isRequesting"]));
-export const vettedProposalsError = get(["api", "vetted", "error"]);
-export const proposal = or(get(["api", "proposal", "response", "proposal"]), constant({}));
-export const proposalIsRequesting = bool(get(["api", "proposal", "isRequesting"]));
-export const proposalError = get(["api", "proposal", "error"]);
-export const newUserResponse = bool(get(["api", "newUser", "response"]));
-export const newProposalIsRequesting = bool(get(["api", "newProposal", "isRequesting"]));
-export const newProposalError = get(["api", "newProposal", "error"]);
-export const newProposalMerkle = get(["api", "newProposal", "response", "merkle"]);
-export const newProposalToken = get(["api", "newProposal", "response", "token"]);
-export const newProposalSignature = get(["api", "newProposal", "response", "signature"]);
-export const newProposalName = get(["api", "newProposal", "payload", "name"]);
-export const newProposalDescription = get(["api", "newProposal", "payload", "description"]);
-export const newProposalFiles = get(["api", "newProposal", "payload", "files"]);
+export const loggedInAs = compose(get("email"), apiLoginResponse);
+export const email = or(loggedInAs, compose(get("email"), apiNewUserPayload));
+export const isAdmin = bool(compose(get("admin"), apiLoginResponse));
+export const policy = apiPolicyResponse;
+export const policyIsRequesting = isApiRequestingPolicy;
+export const vettedProposals = or(compose(get("proposals"), apiVettedResponse), constant([]));
+export const vettedProposalsIsRequesting = or(isApiRequestingInit, isApiRequestingVetted);
+export const vettedProposalsError = or(apiInitError, apiVettedError);
+export const proposal = or(compose(get("proposal"), apiProposalResponse), constant({}));
+export const proposalIsRequesting = or(isApiRequestingInit, isApiRequestingProposal);
+export const proposalError = or(apiInitError, apiProposalError);
+export const newUserResponse = bool(apiNewUserResponse);
+export const newProposalIsRequesting = isApiRequestingNewProposal;
+export const newProposalError = apiNewProposalError;
+export const newProposalMerkle = compose(get("merkle"), apiNewProposalResponse);
+export const newProposalToken = compose(get("token"), apiNewProposalResponse);
+export const newProposalSignature = compose(get("signature"), apiNewProposalResponse);
+export const newProposalName = compose(get("name"), apiNewProposalPayload);
+export const newProposalDescription = compose(get("description"), apiNewProposalPayload);
+export const newProposalFiles = compose(get("files"), apiNewProposalPayload);

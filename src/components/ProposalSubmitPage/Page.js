@@ -7,6 +7,7 @@ import ErrorField from "../Form/Fields/ErrorField";
 import validate from "./validator";
 
 const SubmitPage = ({
+  //policy,
   isSaving,
   error,
   onSave,

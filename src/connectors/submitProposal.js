@@ -4,6 +4,8 @@ import * as act from "../actions";
 
 export default connect(
   sel.selectorMap({
+    isLoading: sel.policyIsRequesting,
+    policy: sel.policy,
     name: sel.newProposalName,
     description: sel.newProposalDescription,
     files: sel.newProposalFiles,
@@ -13,5 +15,8 @@ export default connect(
     token: sel.newProposalToken,
     signature: sel.newProposalSignature
   }),
-  { onSave: act.onSaveNewProposal }
+  {
+    onFetchData: act.onGetPolicy,
+    onSave: act.onSaveNewProposal
+  }
 );

@@ -1,0 +1,14 @@
+{
+  "maximages":5,
+  "maximagesize":524288,
+  "maxmds":1,
+  "maxmdsize":524288,
+  "validmimetypes":[
+    "image/jpeg",
+    "image/png",
+    "image/svg+xml",
+    "text/plain",
+    "text/plain; charset=utf-8"
+  ],
+  "errorcode":1
+}

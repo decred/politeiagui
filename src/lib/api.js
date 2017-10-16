@@ -40,6 +40,11 @@ export const apiInfo = () =>
       csrfToken, version, route
     }));
 
+export const policy = () =>
+  get("/v1/policy")
+    .then(parseResponse)
+    .then(({ response }) => response);
+
 export const newUser = (csrf, email, password) =>
   post("/user/new", csrf, { email, password })
     .then(parseResponse)
