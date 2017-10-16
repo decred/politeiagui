@@ -1,5 +1,5 @@
 import React from "react";
-import { getProposalStatus } from '../../selectors/api';
+import { getProposalStatus } from "../../helpers";
 
 const UnvettedListItem = ({
   name,
