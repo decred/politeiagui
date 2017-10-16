@@ -40,6 +40,11 @@ export const apiInfo = () =>
       csrfToken, version, route
     }));
 
+export const policy = () =>
+  get("/v1/policy")
+    .then(parseResponse)
+    .then(({ response }) => response);
+
 export const newUser = (csrf, email, password) =>
   post("/user/new", csrf, { email, password })
     .then(parseResponse)
@@ -83,14 +88,20 @@ export const assets = () =>
     .then(parseResponse)
     .then(({ response }) => response);
 
-export const newProposal = (csrf, name, description) =>
+export const newProposal = (csrf, name, description, files) =>
   post("/proposals/new", csrf, {
     name,
-    files: [{
-      name: "index.md",
-      mime: "text/plain; charset=utf-8",
-      payload: btoa(description)
-    }]})
+    files: [
+      {
+        name: "index.md",
+        mime: "text/plain; charset=utf-8",
+        payload: btoa(description)
+      },
+      ...(files || []).map(({ name, mime, payload }) => ({
+        name, mime, payload // TODO: digest
+      }))
+    ]
+  })
     .then(parseResponse)
     .then(({ response: { censorshiprecord: { token, merkle, signature }}}) =>
       ({ token, merkle, signature }));

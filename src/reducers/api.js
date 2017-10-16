@@ -3,6 +3,7 @@ import * as act from "../actions";
 const DEFAULT_REQUEST_STATE = { isRequesting: false, response: null, error: null };
 export const DEFAULT_STATE = {
   init: DEFAULT_REQUEST_STATE,
+  policy: DEFAULT_REQUEST_STATE,
   newUser: DEFAULT_REQUEST_STATE,
   verifyNewUser: DEFAULT_REQUEST_STATE,
   login: DEFAULT_REQUEST_STATE,
@@ -26,18 +27,15 @@ const request = (key, state, { payload, error }) =>
     }
   });
 
-const receive = (key, state, { payload, error }) => {
-  console.log(key, state, payload, error);
-  return ({
-    ...state,
-    [key]: {
-      ...state[key],
-      isRequesting: false,
-      response: error ? null : payload,
-      error: error ? payload : null
-    }
-  });
-};
+const receive = (key, state, { payload, error }) => ({
+  ...state,
+  [key]: {
+    ...state[key],
+    isRequesting: false,
+    response: error ? null : payload,
+    error: error ? payload : null
+  }
+});
 
 const reset = (key, state) => ({ ...state, [key]: DEFAULT_REQUEST_STATE });
 
@@ -45,6 +43,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.SET_EMAIL]: () => ({ ...state, email: action.payload }),
   [act.REQUEST_INIT_SESSION]: () => request("init", state, action),
   [act.RECEIVE_INIT_SESSION]: () => receive("init", state, action),
+  [act.REQUEST_POLICY]: () => request("policy", state, action),
+  [act.RECEIVE_POLICY]: () => receive("policy", state, action),
   [act.REQUEST_NEW_USER]: () => request("newUser", state, action),
   [act.RECEIVE_NEW_USER]: () => receive("newUser", state, action),
   [act.RESET_NEW_USER]: () => reset("newUser", state),

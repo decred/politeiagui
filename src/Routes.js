@@ -22,9 +22,9 @@ class Routes extends Component {
         <Route path="/user/signup/next" component={SignupNext} />
         <Route path="/user/login" component={Login} />
         <Route path="/user/signup" component={Signup} />
-        <AuthenticatedRoute path="/proposals/vetted" component={VettedProposals} />
+        <Route path="/proposals/vetted" component={VettedProposals} />
         <AuthenticatedRoute path="/proposals/new" component={ProposalSubmit} />
-        <AuthenticatedRoute path="/proposals/:token" component={ProposalDetail} />
+        <Route path="/proposals/:token" component={ProposalDetail} />
         <AdminAuthenticatedRoute path="/admin" component={AdminLanding} />
       </Switch>
     );

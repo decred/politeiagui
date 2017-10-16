@@ -5,6 +5,8 @@ import { basicAction } from "./lib";
 export const SET_EMAIL = "API_SET_EMAIL";
 export const REQUEST_INIT_SESSION = "API_REQUEST_INIT_SESSION";
 export const RECEIVE_INIT_SESSION = "API_RECEIVE_INIT_SESSION";
+export const REQUEST_POLICY = "API_REQUEST_POLICY";
+export const RECEIVE_POLICY = "API_RECEIVE_POLICY";
 export const REQUEST_NEW_USER = "API_REQUEST_NEW_USER";
 export const RECEIVE_NEW_USER = "API_RECEIVE_NEW_USER";
 export const RESET_NEW_USER = "API_RESET_NEW_USER";
@@ -27,6 +29,8 @@ export const RECEIVE_NEW_PROPOSAL = "API_RECEIVE_NEW_PROPOSAL";
 
 const onRequestInitSession = basicAction(REQUEST_INIT_SESSION);
 const onReceiveInitSession = basicAction(RECEIVE_INIT_SESSION);
+const onRequestPolicy = basicAction(REQUEST_POLICY);
+const onReceivePolicy = basicAction(RECEIVE_POLICY);
 const onRequestNewUser = basicAction(REQUEST_NEW_USER);
 const onReceiveNewUser = basicAction(RECEIVE_NEW_USER);
 const onRequestVerifyNewUser = basicAction(REQUEST_VERIFY_NEW_USER);
@@ -53,6 +57,17 @@ export const onInit = () =>
       .then(response => dispatch(onReceiveInitSession(response)))
       .catch(error => {
         dispatch(onReceiveInitSession(null, error));
+        throw error;
+      });
+  };
+
+export const onGetPolicy = () =>
+  dispatch => {
+    dispatch(onRequestPolicy());
+    return api.policy()
+      .then(response => dispatch(onReceivePolicy(response)))
+      .catch(error => {
+        dispatch(onReceivePolicy(null, error));
         throw error;
       });
   };
@@ -138,11 +153,11 @@ export const onFetchProposal = (token) =>
       .catch(error => dispatch(onReceiveProposal(null, error)));
   };
 
-export const onSubmitProposal = (name, description) =>
+export const onSubmitProposal = (name, description, files) =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(onRequestNewProposal({ name, description }));
+    dispatch(onRequestNewProposal({ name, description, files }));
     return api
-      .newProposal(csrf, name, description)
+      .newProposal(csrf, name, description, files)
       .then(response => dispatch(onReceiveNewProposal(response)))
       .catch(error => {
         dispatch(onReceiveLogout(null, error));

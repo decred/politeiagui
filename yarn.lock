@@ -5285,7 +5285,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.1, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.5.9, prop-types@^15.6.0:
+prop-types@^15.5.0, prop-types@^15.5.1, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.5.9, prop-types@^15.6.0:
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.0.tgz#ceaf083022fc46b4a35f69e13ef75aed0d639856"
   dependencies:
@@ -5440,6 +5440,13 @@ react-error-overlay@^2.0.2:
     react-dom "^15 || ^16"
     settle-promise "1.0.0"
     source-map "0.5.6"
+
+react-file-reader@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-file-reader/-/react-file-reader-1.1.2.tgz#78df60a28d2ac008d445b5f049905d647dcd4e9c"
+  dependencies:
+    prop-types "^15.5.0"
+    uuid4 "^1.0.0"
 
 react-markdown@^2.5.0:
   version "2.5.0"
@@ -6668,6 +6675,10 @@ utila@~0.4:
 utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
+
+uuid4@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/uuid4/-/uuid4-1.0.0.tgz#813aaeaf11ea2f68909c5ad57d894f83202d6720"
 
 uuid@^2.0.1, uuid@^2.0.2:
   version "2.0.3"
