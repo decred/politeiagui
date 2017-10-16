@@ -6,6 +6,7 @@ export default connect(
   sel.selectorMap({
     name: sel.newProposalName,
     description: sel.newProposalDescription,
+    files: sel.newProposalFiles,
     isSaving: sel.newProposalIsRequesting,
     error: sel.newProposalError,
     merkle: sel.newProposalMerkle,

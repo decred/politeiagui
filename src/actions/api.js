@@ -138,11 +138,11 @@ export const onFetchProposal = (token) =>
       .catch(error => dispatch(onReceiveProposal(null, error)));
   };
 
-export const onSubmitProposal = (name, description) =>
+export const onSubmitProposal = (name, description, files) =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(onRequestNewProposal({ name, description }));
+    dispatch(onRequestNewProposal({ name, description, files }));
     return api
-      .newProposal(csrf, name, description)
+      .newProposal(csrf, name, description, files)
       .then(response => dispatch(onReceiveNewProposal(response)))
       .catch(error => {
         dispatch(onReceiveLogout(null, error));

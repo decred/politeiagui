@@ -68,3 +68,4 @@ export const newProposalToken = get(["api", "newProposal", "response", "token"])
 export const newProposalSignature = get(["api", "newProposal", "response", "signature"]);
 export const newProposalName = get(["api", "newProposal", "payload", "name"]);
 export const newProposalDescription = get(["api", "newProposal", "payload", "description"]);
+export const newProposalFiles = get(["api", "newProposal", "payload", "files"]);
