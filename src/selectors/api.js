@@ -7,14 +7,6 @@ const getApiPayload = key => get(["api", key, "payload"]);
 const getApiResponse = key => get(["api", key, "response"]);
 const getApiError = key => get(["api", key, "error"]);
 
-export const getProposalStatus = (proposalStatus) => get(proposalStatus, [
-  "Invalid",
-  "NotFound",
-  "NotReviewed",
-  "Censored",
-  "Public",
-]);
-
 export const isApiRequestingInit = getIsApiRequesting("init");
 const isApiRequestingPolicy = getIsApiRequesting("policy");
 export const isApiRequestingNewUser = getIsApiRequesting("newUser");
@@ -48,6 +40,7 @@ const apiVettedResponse = getApiResponse("vetted");
 const apiUnvettedResponse = getApiResponse("unvetted");
 const apiProposalResponse = getApiResponse("proposal");
 const apiNewProposalResponse = getApiResponse("newProposal");
+const apiSetStatusProposalResponse = getApiResponse("setStatusProposal");
 
 const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
@@ -93,3 +86,4 @@ export const newProposalSignature = compose(get("signature"), apiNewProposalResp
 export const newProposalName = compose(get("name"), apiNewProposalPayload);
 export const newProposalDescription = compose(get("description"), apiNewProposalPayload);
 export const newProposalFiles = compose(get("files"), apiNewProposalPayload);
+export const setStatusProposal = compose(get("status"), apiSetStatusProposalResponse);

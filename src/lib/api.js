@@ -79,6 +79,11 @@ export const proposal = (token) =>
     .then(parseResponse)
     .then(({ response }) => response);
 
+export const proposalSetStatus = (csrf, token, status) =>
+  post(`/proposals/${token}/setstatus`, csrf, { Status: status })
+    .then(parseResponse)
+    .then(({ response }) => response);
+
 export const logout = (csrf) =>
   post("/logout", csrf, {})
     .then(() => ({ }));

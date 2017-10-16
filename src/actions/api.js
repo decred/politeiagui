@@ -26,6 +26,8 @@ export const REQUEST_PROPOSAL = "API_REQUEST_PROPOSAL";
 export const RECEIVE_PROPOSAL = "API_RECEIVE_PROPOSAL";
 export const REQUEST_NEW_PROPOSAL = "API_REQUEST_NEW_PROPOSAL";
 export const RECEIVE_NEW_PROPOSAL = "API_RECEIVE_NEW_PROPOSAL";
+export const REQUEST_SETSTATUS_PROPOSAL = "API_REQUEST_SETSTATUS_PROPOSAL";
+export const RECEIVE_SETSTATUS_PROPOSAL = "API_RECEIVE_SETSTATUS_PROPOSAL";
 
 const onRequestInitSession = basicAction(REQUEST_INIT_SESSION);
 const onReceiveInitSession = basicAction(RECEIVE_INIT_SESSION);
@@ -34,7 +36,7 @@ const onReceivePolicy = basicAction(RECEIVE_POLICY);
 const onRequestNewUser = basicAction(REQUEST_NEW_USER);
 const onReceiveNewUser = basicAction(RECEIVE_NEW_USER);
 const onRequestVerifyNewUser = basicAction(REQUEST_VERIFY_NEW_USER);
-const onReceiveVerifyNewUser = basicAction(RECEIVE_VERIFY_NEW_USER);
+// const onReceiveVerifyNewUser = basicAction(RECEIVE_VERIFY_NEW_USER);
 const onRequestLogin = basicAction(REQUEST_LOGIN);
 const onReceiveLogin = basicAction(RECEIVE_LOGIN);
 const onRequestLogout = basicAction(REQUEST_LOGOUT);
@@ -47,6 +49,8 @@ const onRequestProposal = basicAction(REQUEST_PROPOSAL);
 const onReceiveProposal = basicAction(RECEIVE_PROPOSAL);
 export const onRequestNewProposal = basicAction(REQUEST_NEW_PROPOSAL);
 const onReceiveNewProposal = basicAction(RECEIVE_NEW_PROPOSAL);
+export const onRequestSetStatusProposal = basicAction(REQUEST_SETSTATUS_PROPOSAL);
+const onReceiveSetStatusProposal = basicAction(RECEIVE_SETSTATUS_PROPOSAL);
 
 export const onSetEmail = (payload) => ({ type: SET_EMAIL, payload });
 
@@ -156,6 +160,18 @@ export const onSubmitProposal = (name, description, files) =>
     return api
       .newProposal(csrf, name, description, files)
       .then(response => dispatch(onReceiveNewProposal(response)))
+      .catch(error => {
+        dispatch(onReceiveLogout(null, error));
+        throw error;
+      });
+  });
+
+export const onSubmitStatusProposal = (status) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(onRequestSetStatusProposal({ status }));
+    return api
+      .proposalSetStatus(csrf, status)
+      .then(response => dispatch(onReceiveSetStatusProposal(response)))
       .catch(error => {
         dispatch(onReceiveLogout(null, error));
         throw error;
