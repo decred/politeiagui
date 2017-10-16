@@ -7,6 +7,14 @@ const getApiPayload = key => get(["api", key, "payload"]);
 const getApiResponse = key => get(["api", key, "response"]);
 const getApiError = key => get(["api", key, "error"]);
 
+export const getProposalStatus = (proposalStatus) => get(proposalStatus, [
+  "Invalid",
+  "NotFound",
+  "NotReviewed",
+  "Censored",
+  "Public",
+]);
+
 export const isApiRequestingInit = getIsApiRequesting("init");
 const isApiRequestingPolicy = getIsApiRequesting("policy");
 export const isApiRequestingNewUser = getIsApiRequesting("newUser");
@@ -14,6 +22,7 @@ export const isApiRequestingVerifyNewUser = getIsApiRequesting("verifyNewUser");
 export const isApiRequestingLogin = getIsApiRequesting("login");
 const isApiRequestingLogout = getIsApiRequesting("logout");
 const isApiRequestingVetted = getIsApiRequesting("vetted");
+const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
 const isApiRequestingProposal = getIsApiRequesting("proposal");
 const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
 export const isApiRequesting = or(
@@ -36,6 +45,7 @@ const apiPolicyResponse = getApiResponse("policy");
 const apiNewUserResponse = getApiResponse("newUser");
 const apiLoginResponse = getApiResponse("login");
 const apiVettedResponse = getApiResponse("vetted");
+const apiUnvettedResponse = getApiResponse("unvetted");
 const apiProposalResponse = getApiResponse("proposal");
 const apiNewProposalResponse = getApiResponse("newProposal");
 
@@ -45,6 +55,7 @@ export const apiVerifyNewUserError = or(apiInitError, getApiError("verifyNewUser
 export const apiLoginError = or(apiInitError, getApiError("login"));
 const apiLogoutError = or(apiInitError, getApiError("logout"));
 const apiVettedError = getApiError("vetted");
+const apiUnvettedError = getApiError("unvetted");
 const apiProposalError = getApiError("proposal");
 const apiNewProposalError = getApiError("newProposal");
 export const apiError = or(
@@ -61,12 +72,15 @@ export const apiError = or(
 export const csrf = compose(get("csrfToken"), apiInitResponse);
 export const loggedInAs = compose(get("email"), apiLoginResponse);
 export const email = or(loggedInAs, compose(get("email"), apiNewUserPayload));
-export const isAdmin = bool(compose(get("isAdmin"), apiLoginResponse));
+export const isAdmin = bool(compose(get("isadmin"), apiLoginResponse));
 export const policy = apiPolicyResponse;
 export const policyIsRequesting = isApiRequestingPolicy;
 export const vettedProposals = or(compose(get("proposals"), apiVettedResponse), constant([]));
 export const vettedProposalsIsRequesting = or(isApiRequestingInit, isApiRequestingVetted);
 export const vettedProposalsError = or(apiInitError, apiVettedError);
+export const unvettedProposals = or(compose(get("proposals"), apiUnvettedResponse), constant([]));
+export const unvettedProposalsIsRequesting = or(isApiRequestingInit, isApiRequestingUnvetted);
+export const unvettedProposalsError = or(apiInitError, apiUnvettedError);
 export const proposal = or(compose(get("proposal"), apiProposalResponse), constant({}));
 export const proposalIsRequesting = or(isApiRequestingInit, isApiRequestingProposal);
 export const proposalError = or(apiInitError, apiProposalError);
