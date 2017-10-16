@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { getProposalStatus } from "../../helpers";
 
 const UnvettedListItem = ({
@@ -9,9 +10,9 @@ const UnvettedListItem = ({
   },
 }) => (
   <tr>
-    <td>{name}</td>
+    <td><Link to={`/proposals/${token}/status`}>{name}</Link></td>
     <td>{getProposalStatus(status)}</td>
-    <td>{token}</td>
+    <td><Link to={`/proposals/${token}/status`}>{token}</Link></td>
   </tr>
 );
 

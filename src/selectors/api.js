@@ -40,6 +40,7 @@ const apiVettedResponse = getApiResponse("vetted");
 const apiUnvettedResponse = getApiResponse("unvetted");
 const apiProposalResponse = getApiResponse("proposal");
 const apiNewProposalResponse = getApiResponse("newProposal");
+const apiSetStatusProposalResponse = getApiResponse("setStatusProposal");
 
 const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
@@ -85,3 +86,4 @@ export const newProposalSignature = compose(get("signature"), apiNewProposalResp
 export const newProposalName = compose(get("name"), apiNewProposalPayload);
 export const newProposalDescription = compose(get("description"), apiNewProposalPayload);
 export const newProposalFiles = compose(get("files"), apiNewProposalPayload);
+export const setStatusProposal = compose(get("status"), apiSetStatusProposalResponse);
