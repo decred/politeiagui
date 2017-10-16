@@ -91,15 +91,12 @@ export const onCreateNewUser = ({ email, password }) =>
 
 export const onResetNewUser = () => ({ type: RESET_NEW_USER });
 
-export const onVerifyNewUser = verificationtoken =>
-  withCsrf((dispatch, getState, csrf) => {
-    const email = sel.email(getState());
-    dispatch(onRequestVerifyNewUser({ email, verificationtoken }));
+export const onVerifyNewUser = (searchQuery) =>
+  (dispatch) => {
+    dispatch(onRequestVerifyNewUser(searchQuery));
     return api
-      .verifyNewUser(csrf, email, verificationtoken)
-      .then(response => dispatch(onReceiveVerifyNewUser(response)))
-      .catch(error => dispatch(onReceiveVerifyNewUser(null, error)));
-  });
+      .verifyNewUser(searchQuery);
+  };
 
 export const onSignup = (props) =>
   (dispatch) =>
