@@ -7,6 +7,14 @@ const getApiPayload = key => get(["api", key, "payload"]);
 const getApiResponse = key => get(["api", key, "response"]);
 const getApiError = key => get(["api", key, "error"]);
 
+export const getProposalStatus = (proposalStatus) => get(proposalStatus, [
+  "Invalid",
+  "NotFound",
+  "NotReviewed",
+  "Censored",
+  "Public",
+]);
+
 export const isApiRequestingInit = getIsApiRequesting("init");
 const isApiRequestingPolicy = getIsApiRequesting("policy");
 export const isApiRequestingNewUser = getIsApiRequesting("newUser");
