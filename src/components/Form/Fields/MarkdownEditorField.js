@@ -19,6 +19,6 @@ const MarkdownEditorField = ({ placeholder, input, rows, cols, touched, error, d
       </div>
     </div>
   );
-}
+};
 
 export default MarkdownEditorField;
