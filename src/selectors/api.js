@@ -46,7 +46,7 @@ export const loggedInAs = state =>
   apiLoginResponse(state) ? state.api.login.response.email : null;
 
 export const isAdmin = state =>
-  apiLoginResponse(state) ? state.api.login.response.admin : null;
+  apiLoginResponse(state) ? state.api.login.response.isadmin : null;
 
 export const email = state => {
   const loggedIn = loggedInAs(state);
