@@ -2,7 +2,9 @@ import React from "react";
 
 const VerifySuccess = () => (
   <div className="page verification-page">
-    Signup succeed
+    <div className="success">
+      Signup succeeded
+    </div>
   </div>
 );
 
