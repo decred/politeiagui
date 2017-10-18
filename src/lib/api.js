@@ -88,7 +88,7 @@ export const proposal = (token) =>
     .then(({ response }) => response);
 
 export const proposalSetStatus = (csrf, token, status) =>
-  post(`/proposals/${token}/setstatus`, csrf, { proposalstatus: status })
+  post(`/proposals/${token}/setstatus`, csrf, { proposalstatus: status, token })
     .then(parseResponse)
     .then(({ response }) => response);
 
