@@ -163,11 +163,12 @@ export const onSubmitProposal = (name, description, files) =>
       .catch(error => dispatch(onReceiveNewProposal(null, error)));
   });
 
-export const onSubmitStatusProposal = (status) =>
+export const onSubmitStatusProposal = (token, status) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(onRequestSetStatusProposal({ status }));
+
     return api
-      .proposalSetStatus(csrf, status)
+      .proposalSetStatus(csrf, token, status)
       .then(response => dispatch(onReceiveSetStatusProposal(response)))
       .catch(error => dispatch(onReceiveSetStatusProposal(null, error)));
   });
