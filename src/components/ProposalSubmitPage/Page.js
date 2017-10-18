@@ -5,6 +5,8 @@ import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
 import FilesField from "../Form/Fields/FilesField";
 import ErrorField from "../Form/Fields/ErrorField";
 import validate from "./validator";
+import proposalNewConnector from "../../connectors/proposalNew";
+import ErrorMsg from "../ErrorMsg";
 
 const SubmitPage = ({
   //policy,
@@ -12,8 +14,14 @@ const SubmitPage = ({
   error,
   onSave,
   handleSubmit,
+  newProposalError,
 }) => isSaving ? <LoadingPage /> : (
   <div>
+    {newProposalError ? (
+      <div className="error">
+        Proposal Error: <ErrorMsg error={newProposalError} />
+      </div>
+    ) : null}
     <form onSubmit={handleSubmit(onSave)}>
       {error ? <div className="error">{error}</div> : null}
       <Field
@@ -54,4 +62,4 @@ const SubmitPage = ({
   </div>
 );
 
-export default reduxForm({ form: "form/proposal", validate })(SubmitPage);
+export default reduxForm({ form: "form/proposal", validate })(proposalNewConnector(SubmitPage));

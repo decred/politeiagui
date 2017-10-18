@@ -1,4 +1,5 @@
 {
+  "errorcode": 1,
   "censorshiprecord": {
     "token": "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8",
     "merkle": "8e125a9c791634f6f68672c7bc3b71dc50f986a0525e3e7361ad180cadbf6347",
