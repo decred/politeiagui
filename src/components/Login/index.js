@@ -17,15 +17,11 @@ class Login extends Component {
           <CurrentUser />
         ) : (
           <LoginForm {...{
-            onLogin: this.onLogin
+            onLogin: this.props.onLogin
           }} />
         )}
       </div>
     );
-  }
-
-  onLogin(props) {
-    this.props.onLogin(props);
   }
 }
 
