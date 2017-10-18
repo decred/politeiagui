@@ -35,7 +35,7 @@ const LoginForm = ({
       <input type="submit" value="Login" />
       <Link to="/user/signup">Signup</Link>
       {apiLoginError ? (
-        <div>
+        <div className="error">
           Login Error: <ErrorMsg error={apiLoginError} />
         </div>
       ) : null}

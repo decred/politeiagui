@@ -1,4 +1,5 @@
 import "isomorphic-fetch";
+import { getHumanReadableError } from "../helpers";
 
 const apiBase = "/api";
 const getUrl = (path, version="v1") => `${apiBase}/${version}${path}`;
@@ -7,14 +8,21 @@ const parseResponseBody = response => {
   if (response.status >= 400) {
     throw new Error("Bad response from server");
   }
+
   return response.json();
 };
 
 const parseResponse = response => parseResponseBody(response)
-  .then(json => ({
-    response: json,
-    csrfToken: response.headers.get("X-Csrf-Token")
-  }));
+  .then(json => {
+    if (json.errorcode && json.errorcode !== 1) {
+      throw new Error(getHumanReadableError(json.errorcode));
+    }
+
+    return {
+      response: json,
+      csrfToken: response.headers.get("X-Csrf-Token")
+    };
+  });
 
 const get = (path) =>
   fetch(apiBase + path, {

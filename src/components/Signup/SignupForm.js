@@ -47,12 +47,12 @@ const SignupForm = ({
       {hideCancel ? null : <button onClick={onCancelSignup}>Cancel</button>}
       <input type="submit" value="Signup" />
       {apiNewUserError ? (
-        <div>
+        <div className="error">
           Signup Error: <ErrorMsg error={apiNewUserError} />
         </div>
       ) : null}
       {apiVerifyNewUserError ? (
-        <div>
+        <div className="error">
           Signup Verify Error: <ErrorMsg error={apiVerifyNewUserError} />
         </div>
       ) : null}

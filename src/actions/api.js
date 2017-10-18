@@ -160,10 +160,7 @@ export const onSubmitProposal = (name, description, files) =>
     return api
       .newProposal(csrf, name, description, files)
       .then(response => dispatch(onReceiveNewProposal(response)))
-      .catch(error => {
-        dispatch(onReceiveLogout(null, error));
-        throw error;
-      });
+      .catch(error => dispatch(onReceiveNewProposal(null, error)));
   });
 
 export const onSubmitStatusProposal = (status) =>
@@ -172,8 +169,5 @@ export const onSubmitStatusProposal = (status) =>
     return api
       .proposalSetStatus(csrf, status)
       .then(response => dispatch(onReceiveSetStatusProposal(response)))
-      .catch(error => {
-        dispatch(onReceiveLogout(null, error));
-        throw error;
-      });
+      .catch(error => dispatch(onReceiveSetStatusProposal(null, error)));
   });
