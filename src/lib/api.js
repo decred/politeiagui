@@ -45,7 +45,7 @@ export const apiInfo = () =>
   get("/")
     .then(parseResponse)
     .then(({ csrfToken, response: { version, route }}) => ({
-      csrfToken, version, route
+      csrfToken: "itsafake", version, route
     }));
 
 export const policy = () =>
