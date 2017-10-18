@@ -1,6 +1,7 @@
 import get from "lodash/fp/get";
+import eq from "lodash/fp/eq";
 import compose from "lodash/fp/compose";
-import { or, bool, constant } from "../lib/fp";
+import { and, or, bool, constant } from "../lib/fp";
 
 const getIsApiRequesting = key => bool(get(["api", key, "isRequesting"]));
 const getApiPayload = key => get(["api", key, "payload"]);
@@ -30,6 +31,7 @@ export const isApiRequesting = or(
 );
 
 const apiNewUserPayload = getApiPayload("newUser");
+const apiLoginPayload = getApiPayload("login");
 const apiNewProposalPayload = getApiPayload("newProposal");
 
 const apiInitResponse = getApiResponse("init");
@@ -63,8 +65,13 @@ export const apiError = or(
 );
 
 export const csrf = compose(get("csrfToken"), apiInitResponse);
-export const loggedInAs = compose(get("email"), apiLoginResponse);
-export const email = or(loggedInAs, compose(get("email"), apiNewUserPayload));
+export const email = or(
+  compose(get("email"), apiLoginPayload),
+  compose(get("email"), apiNewUserPayload)
+);
+export const loggedIn = compose(eq(1), get("errorcode"), apiLoginResponse);
+export const loggedInAs = and(email, loggedIn);
+
 export const isAdmin = bool(compose(get("isadmin"), apiLoginResponse));
 export const policy = apiPolicyResponse;
 export const policyIsRequesting = isApiRequestingPolicy;

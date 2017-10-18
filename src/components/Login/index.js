@@ -11,6 +11,7 @@ class Login extends Component {
   }
 
   render() {
+    console.log("this.props", this.props);
     return (
       <div className="login-form">
         {this.props.loggedInAs ? (
