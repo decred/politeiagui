@@ -6,11 +6,11 @@ const Message = ({
   body,
   error
 }) => (
-  <div class={"message-ct message-" + type}>
-    <div class="message-icon">{type === "success" ? "✔" : "✖"}</div>
-    <div class="message-text">
-      <div class="message-header">{header}</div>
-      <div class="message-body">{error ? (
+  <div className={"message-ct message-" + type}>
+    <div className="message-icon">{type === "success" ? "✔" : "✖"}</div>
+    <div className="message-text">
+      <div className="message-header">{header}</div>
+      <div className="message-body">{error ? (
         (error instanceof Error) ? (
           error.message
         ) : (

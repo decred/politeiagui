@@ -5,8 +5,24 @@ const apiBase = "/api";
 const getUrl = (path, version="v1") => `${apiBase}/${version}${path}`;
 
 const parseResponseBody = response => {
-  if (response.status >= 400) {
+  if (response.status === 400) {
     throw new Error("Bad response from server");
+  }
+
+  if (response.status === 401) {
+    throw new Error("Not authorized");
+  }
+
+  if (response.status === 403) {
+    throw new Error("Forbidden");
+  }
+
+  if (response.status === 404) {
+    throw new Error("Not found");
+  }
+
+  if (response.status === 500) {
+    throw new Error("Interval server error");
   }
 
   return response.json();
