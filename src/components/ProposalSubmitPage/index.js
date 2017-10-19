@@ -1,24 +1,29 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import submitConnector from "../../connectors/submitProposal";
 import LoadingPage from "../LoadingPage";
 import SubmitPage from "./Page";
-import SuccessPage from "./Success";
 
 class ProposalSubmit extends Component {
   componentDidMount() {
     this.props.onFetchData();
   }
 
+  componentWillReceiveProps({ token }) {
+    if (token) {
+      return this.props.history.push("/proposals/success");
+    }
+  }
+
   render() {
-    const { token, isLoading, ...props } = this.props;
+    const { isLoading, ...props } = this.props;
+
     return isLoading ? <LoadingPage /> : (
       <div className="page proposal-submit-page">
-        {token
-          ? <SuccessPage {...{ ...props, token }} />
-          : <SubmitPage {...props} />}
+        {<SubmitPage {...props} />}
       </div>
     );
   }
 }
 
-export default submitConnector(ProposalSubmit);
+export default withRouter(submitConnector(ProposalSubmit));

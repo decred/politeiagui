@@ -13,6 +13,7 @@ import VettedProposals from "./components/VettedProposalsPage";
 import ProposalStatus from "./components/ProposalStatusPage";
 import ProposalDetail from "./components/ProposalDetailPage";
 import ProposalSubmit from "./components/ProposalSubmitPage";
+import ProposalSubmitSuccess from "./components/ProposalSubmitSuccessPage";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
 import { CensoredProposals, UnreviewedProposals, UnvettedProposals } from "./components/UnvettedProposals";
@@ -33,6 +34,7 @@ class Routes extends Component {
         <Route path="/user/verify" component={Verify} exact={true} />
         <Route path="/proposals/vetted" component={VettedProposals} />
         <AuthenticatedRoute path="/proposals/new" component={ProposalSubmit} />
+        <AuthenticatedRoute path="/proposals/success" component={ProposalSubmitSuccess} />
         <AdminAuthenticatedRoute path="/proposals/:token/status" component={ProposalStatus} />
         <Route path="/proposals/:token" component={ProposalDetail} />
         <AdminAuthenticatedRoute path="/admin/censored" component={CensoredProposals} />

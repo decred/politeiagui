@@ -8,7 +8,7 @@ const SuccessPage = ({
   files,
   merkle,
   token,
-  signature
+  signature,
 }) => (
   <div>
     <div>
