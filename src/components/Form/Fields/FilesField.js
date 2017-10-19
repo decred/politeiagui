@@ -2,9 +2,11 @@ import React from "react";
 import ReactFileReader from "react-file-reader";
 import ProposalImages from "../../ProposalImages";
 
-const FilesField = ({ placeholder="Upload", input, touched, error, disabled }) => (
+const FilesField = ({ placeholder="Upload", input, touched, error, disabled, policy }) => (
   <div className="files-field">
-    <ReactFileReader base64 multipleFiles
+    <ReactFileReader
+      base64
+      multipleFiles
       handleFiles={({ base64, fileList }) =>
         input.onChange(Array.from(fileList).map(({ name, size, type: mime }, idx) => ({
           name, mime, size, payload: base64[idx].split("base64,").pop()
@@ -12,7 +14,7 @@ const FilesField = ({ placeholder="Upload", input, touched, error, disabled }) =
       }
     ><span>{placeholder}</span></ReactFileReader>
     {touched && error && !disabled && <span className="error">{error}</span>}
-    <ProposalImages files={input.value || []} />
+    <ProposalImages files={input.value || []} onChange={input.onChange} policy={policy} />
   </div>
 );
 

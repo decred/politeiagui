@@ -9,13 +9,13 @@ import proposalNewConnector from "../../connectors/proposalNew";
 import Message from "../Message";
 
 const SubmitPage = ({
-  //policy,
+  policy,
   isSaving,
   error,
   onSave,
   handleSubmit,
   newProposalError,
-}) => isSaving ? <LoadingPage /> : (
+}) => isSaving || !policy ? <LoadingPage /> : (
   <div>
     {newProposalError ? (
       <Message
@@ -57,6 +57,7 @@ const SubmitPage = ({
         name="files"
         component={FilesField}
         placeholder="Select Files"
+        policy={policy}
       />
       <input type="submit" value="Save" />
     </form>
