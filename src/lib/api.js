@@ -21,6 +21,10 @@ const parseResponseBody = response => {
     throw new Error("Not found");
   }
 
+  if (response.status === 500) {
+    throw new Error("Interval server error");
+  }
+
   return response.json();
 };
 
