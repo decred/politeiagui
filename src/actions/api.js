@@ -173,6 +173,7 @@ export const onSubmitStatusProposal = (token, status) =>
       return api
         .proposalSetStatus(csrf, token, status)
         .then(response => dispatch(onReceiveSetStatusProposal(response)))
-        .catch(error => dispatch(onReceiveSetStatusProposal(null, error)));
+        .catch(error => dispatch(onReceiveSetStatusProposal(null, error)))
+        .then(() => dispatch(onFetchUnvetted()));
     })
     : {type: "NOOP"};

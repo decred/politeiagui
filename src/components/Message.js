@@ -7,7 +7,7 @@ const Message = ({
   error
 }) => (
   <div class={"message-ct message-" + type}>
-    <div class="message-icon">{type == "success" ? "✔" : "✖"}</div>
+    <div class="message-icon">{type === "success" ? "✔" : "✖"}</div>
     <div class="message-text">
       <div class="message-header">{header}</div>
       <div class="message-body">{error ? (
