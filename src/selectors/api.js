@@ -67,7 +67,10 @@ export const apiError = or(
   apiNewProposalError
 );
 
-export const csrf = compose(get("csrfToken"), apiInitResponse);
+export const csrf = or(
+  compose(get("csrfToken"), apiMeResponse),
+  compose(get("csrfToken"), apiInitResponse)
+);
 export const email = or(
   compose(get("email"), apiMeResponse),
   compose(get("email"), apiLoginPayload),
