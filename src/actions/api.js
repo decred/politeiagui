@@ -5,6 +5,8 @@ import { basicAction } from "./lib";
 export const SET_EMAIL = "API_SET_EMAIL";
 export const REQUEST_INIT_SESSION = "API_REQUEST_INIT_SESSION";
 export const RECEIVE_INIT_SESSION = "API_RECEIVE_INIT_SESSION";
+export const REQUEST_ME = "API_REQUEST_ME";
+export const RECEIVE_ME = "API_RECEIVE_ME";
 export const REQUEST_POLICY = "API_REQUEST_POLICY";
 export const RECEIVE_POLICY = "API_RECEIVE_POLICY";
 export const REQUEST_NEW_USER = "API_REQUEST_NEW_USER";
@@ -29,6 +31,8 @@ export const RECEIVE_NEW_PROPOSAL = "API_RECEIVE_NEW_PROPOSAL";
 export const REQUEST_SETSTATUS_PROPOSAL = "API_REQUEST_SETSTATUS_PROPOSAL";
 export const RECEIVE_SETSTATUS_PROPOSAL = "API_RECEIVE_SETSTATUS_PROPOSAL";
 
+export const onRequestMe = basicAction(REQUEST_ME);
+export const onReceiveMe = basicAction(RECEIVE_ME);
 const onRequestInitSession = basicAction(REQUEST_INIT_SESSION);
 const onReceiveInitSession = basicAction(RECEIVE_INIT_SESSION);
 const onRequestPolicy = basicAction(REQUEST_POLICY);
@@ -56,12 +60,17 @@ export const onSetEmail = (payload) => ({ type: SET_EMAIL, payload });
 
 export const onInit = () =>
   dispatch => {
-    dispatch(onRequestInitSession());
-    return api.apiInfo()
-      .then(response => dispatch(onReceiveInitSession(response)))
-      .catch(error => {
-        dispatch(onReceiveInitSession(null, error));
-        throw error;
+    dispatch(onRequestMe());
+    return api.me()
+      .then(response => dispatch(onReceiveMe(response)))
+      .catch(() => {
+        dispatch(onRequestInitSession());
+        return api.apiInfo()
+          .then(response => dispatch(onReceiveInitSession(response)))
+          .catch(error => {
+            dispatch(onReceiveInitSession(null, error));
+            throw error;
+          });
       });
   };
 

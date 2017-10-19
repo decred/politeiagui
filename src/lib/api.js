@@ -41,6 +41,13 @@ const post = (path, csrf, json, method="POST") =>
     body: JSON.stringify(json)
   });
 
+export const me = () =>
+  get("/v1/user/me")
+    .then(parseResponse)
+    .then(({ csrfToken, response: { email, isadmin }}) => ({
+      csrfToken: csrfToken || "itsafake", email, isadmin
+    }));
+
 export const apiInfo = () =>
   get("/")
     .then(parseResponse)
