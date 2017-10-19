@@ -6,9 +6,10 @@ export default connect(
   sel.selectorMap({
     proposals: sel.unvettedProposals,
     error: sel.unvettedProposalsError,
+    isLoading: sel.unvettedProposalsIsRequesting
   }),
   {
-    onFetchUnvetted: act.onFetchUnvetted,
+    onFetchData: act.onFetchUnvetted,
     onSubmitStatusProposal: act.onSubmitStatusProposal
   }
 );

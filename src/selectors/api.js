@@ -1,7 +1,9 @@
 import get from "lodash/fp/get";
 import eq from "lodash/fp/eq";
+import filter from "lodash/fp/filter";
 import compose from "lodash/fp/compose";
 import { and, or, bool, constant } from "../lib/fp";
+import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED } from "../constants";
 
 const getIsApiRequesting = key => bool(get(["api", key, "isRequesting"]));
 const getApiPayload = key => get(["api", key, "payload"]);
@@ -79,6 +81,9 @@ export const vettedProposals = or(compose(get("proposals"), apiVettedResponse), 
 export const vettedProposalsIsRequesting = or(isApiRequestingInit, isApiRequestingVetted);
 export const vettedProposalsError = or(apiInitError, apiVettedError);
 export const unvettedProposals = or(compose(get("proposals"), apiUnvettedResponse), constant([]));
+const filtered = status => compose(filter(compose(eq(status), get("status"))), unvettedProposals);
+export const unreviewedProposals = filtered(PROPOSAL_STATUS_UNREVIEWED);
+export const censoredProposals = filtered(PROPOSAL_STATUS_CENSORED);
 export const unvettedProposalsIsRequesting = or(isApiRequestingInit, isApiRequestingUnvetted);
 export const unvettedProposalsError = or(apiInitError, apiUnvettedError);
 export const proposal = or(compose(get("proposal"), apiProposalResponse), constant({}));
