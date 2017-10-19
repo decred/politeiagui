@@ -16,7 +16,7 @@ class ProposalImages extends Component {
   }
 
   render() {
-    const { files, policy } = this.props;
+    const { files, policy, readOnly } = this.props;
 
     return (
       <div>
@@ -24,7 +24,7 @@ class ProposalImages extends Component {
           <div key={digest || idx}>
             <h5>{name}{isFileValid({ size, mime }, policy) ? null :  <span className="error">&nbsp;Errored</span>}</h5>
             <img alt={name} src={`data:${mime};base64,${payload}`} />
-            <span onClick={() => this.onRemove(idx)}>REMOVE</span>
+            {readOnly ? null : <span onClick={() => this.onRemove(idx)}>REMOVE</span>}
           </div>
         ))}
       </div>
