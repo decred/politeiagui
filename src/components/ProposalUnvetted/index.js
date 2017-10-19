@@ -16,9 +16,9 @@ class ProposalUnvetted extends Component {
     }
 
     return (
-      <UnvettedList proposals={this.props.proposals} />
+      <UnvettedList {...this.props} />
     );
   }
 }
 
-export default unvettedConnector(withRouter(ProposalUnvetted));
+export default withRouter(unvettedConnector(ProposalUnvetted));

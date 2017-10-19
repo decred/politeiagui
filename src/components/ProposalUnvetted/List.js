@@ -4,6 +4,7 @@ import ProposalListItem from "./ListItem";
 
 const UnvettedList = ({
   proposals,
+  onSubmitStatusProposal,
 }) => (
   <table>
     <thead>
@@ -11,10 +12,16 @@ const UnvettedList = ({
         <th>Proposal name</th>
         <th>Status</th>
         <th>Censorship token</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      {map(proposals, (proposal, key) => <ProposalListItem {...proposal} key={key} />)}
+      {map(proposals, (proposal, key) => (
+        <ProposalListItem
+          {...proposal}
+          key={key}
+          onSubmitStatusProposal={onSubmitStatusProposal} />
+      ))}
     </tbody>
   </table>
 );

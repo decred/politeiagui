@@ -7,5 +7,8 @@ export default connect(
     proposals: sel.unvettedProposals,
     error: sel.unvettedProposalsError,
   }),
-  { onFetchUnvetted: act.onFetchUnvetted }
+  {
+    onFetchUnvetted: act.onFetchUnvetted,
+    onSubmitStatusProposal: act.onSubmitStatusProposal
+  }
 );
