@@ -1,9 +1,12 @@
 import React from "react";
+import Message from "./Message";
 
 const ErrorPage = ({ error }) => (
   <div className="page error-page">
-    <h3>Error</h3>
-    <pre>{(error instanceof Error) ? error.message : JSON.stringify(error, null, 2)}</pre>
+    <Message
+      type="error"
+      header="Server error"
+      error={error} />
   </div>
 );
 

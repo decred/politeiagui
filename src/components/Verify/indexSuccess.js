@@ -1,10 +1,12 @@
 import React from "react";
+import Message from "../Message";
 
 const VerifySuccess = () => (
   <div className="page verification-page">
-    <div className="success">
-      Signup succeeded
-    </div>
+    <Message
+      type="success"
+      header="Verification successful"
+      body="You have successfully verified your email and may now log in." />
   </div>
 );
 

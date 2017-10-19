@@ -6,7 +6,7 @@ import FilesField from "../Form/Fields/FilesField";
 import ErrorField from "../Form/Fields/ErrorField";
 import validate from "./validator";
 import proposalNewConnector from "../../connectors/proposalNew";
-import ErrorMsg from "../ErrorMsg";
+import Message from "../Message";
 
 const SubmitPage = ({
   //policy,
@@ -18,9 +18,10 @@ const SubmitPage = ({
 }) => isSaving ? <LoadingPage /> : (
   <div>
     {newProposalError ? (
-      <div className="error">
-        Proposal Error: <ErrorMsg error={newProposalError} />
-      </div>
+      <Message
+        type="error"
+        header="Error creating proposal"
+        error={newProposalError} />
     ) : null}
     <form onSubmit={handleSubmit(onSave)}>
       {error ? <div className="error">{error}</div> : null}

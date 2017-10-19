@@ -105,3 +105,53 @@ a:hover {
   flex-direction: row;
   margin: 0 50px;
 }
+
+.signup-link {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.message-ct {
+  height: 64px;
+  margin: 16px 0;
+  position: relative;
+}
+.message-icon {
+  height: 62px;
+  width: 64px;
+  text-align: center;
+  line-height: 62px;
+  font-size: 24px;
+  color: #ffffff;
+}
+.message-text {
+  position: absolute;
+  left: 84px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.message-header {
+  font-size: 18px;
+  vertical-align: middle;
+}
+.message-body {
+  vertical-align: middle;
+}
+.message-success {
+  border: 1px solid #41bf53;
+}
+.message-success .message-icon {
+  background: #41bf53;
+}
+.message-success .message-header {
+  color: #41bf53;
+}
+.message-error {
+  border: 1px solid #bf4153;
+}
+.message-error .message-icon {
+  background: #bf4153;
+}
+.message-error .message-header {
+  color: #bf4153;
+}
