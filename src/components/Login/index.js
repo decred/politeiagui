@@ -11,18 +11,22 @@ class Login extends Component {
   }
 
   render() {
-    console.log("this.props", this.props);
     return (
       <div className="login-form">
         {this.props.loggedInAs ? (
           <CurrentUser />
         ) : (
           <LoginForm {...{
-            onLogin: this.props.onLogin
+            onLogin: this.onLogin
           }} />
         )}
       </div>
     );
+  }
+
+  onLogin(...args) {
+    this.props.onLogin(...args)
+      .then(() => this.props.history.push("/proposals/new"));
   }
 }
 
