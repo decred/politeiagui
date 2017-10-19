@@ -1,15 +1,18 @@
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
 
 export default connect(
   sel.selectorMap({
-    proposals: sel.unvettedProposals,
-    error: sel.unvettedProposalsError,
-    isLoading: sel.unvettedProposalsIsRequesting
+    proposals: sel.unreviewedProposals,
+    error: sel.vettedProposalsError,
+    isLoading: sel.vettedProposalsIsRequesting
   }),
-  {
+  dispatch => bindActionCreators({
     onFetchData: act.onFetchUnvetted,
     onSubmitStatusProposal: act.onSubmitStatusProposal
-  }
+  }, dispatch)
 );
+
+

@@ -8,13 +8,13 @@ import Verify from "./components/Verify";
 import VerifySuccess from "./components/Verify/indexSuccess";
 import VerifyFailure from "./components/Verify/indexFailure";
 import ProposalFind from "./components/ProposalFind";
-import AdminLanding from "./components/AdminLanding";
 import VettedProposals from "./components/VettedProposalsPage";
 import ProposalStatus from "./components/ProposalStatusPage";
 import ProposalDetail from "./components/ProposalDetailPage";
 import ProposalSubmit from "./components/ProposalSubmitPage";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
+import { CensoredProposals, UnreviewedProposals, UnvettedProposals } from "./components/UnvettedProposals";
 
 class Routes extends Component {
   render() {
@@ -33,7 +33,9 @@ class Routes extends Component {
         <AuthenticatedRoute path="/proposals/new" component={ProposalSubmit} />
         <AdminAuthenticatedRoute path="/proposals/:token/status" component={ProposalStatus} />
         <Route path="/proposals/:token" component={ProposalDetail} />
-        <AdminAuthenticatedRoute path="/admin" component={AdminLanding} />
+        <AdminAuthenticatedRoute path="/admin/censored" component={CensoredProposals} />
+        <AdminAuthenticatedRoute path="/admin/unreviewed" component={UnreviewedProposals} />
+        <AdminAuthenticatedRoute path="/admin" component={UnvettedProposals} />
       </Switch>
     );
   }

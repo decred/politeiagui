@@ -5,6 +5,7 @@ import LoadingPage from "./LoadingPage";
 import ErrorPage from "./ErrorPage";
 import proposalStatusConnector from "../connectors/proposalStatus";
 import proposalConnector from "../connectors/proposal";
+import { PROPOSAL_STATUS_CENSORED, PROPOSAL_STATUS_PUBLIC } from "../constants";
 
 class ProposalStatusPage extends Component {
   componentWillMount() {
@@ -27,8 +28,12 @@ class ProposalStatusPage extends Component {
         <div className="page proposal-status-page">
           {proposal.name}
           <h4>Change status to</h4>
-          <button onClick={() => this.props.onSubmitStatusProposal(proposal.censorshiprecord.token, 3)}>Censored</button>
-          <button onClick={() => this.props.onSubmitStatusProposal(proposal.censorshiprecord.token, 4)}>Publish</button>
+          <button onClick={() => this.props
+            .onSubmitStatusProposal(proposal.censorshiprecord.token, PROPOSAL_STATUS_CENSORED)}
+          >Censored</button>
+          <button onClick={() => this.props
+            .onSubmitStatusProposal(proposal.censorshiprecord.token, PROPOSAL_STATUS_PUBLIC)}
+          >Publish</button>
         </div>
       </div>
     );

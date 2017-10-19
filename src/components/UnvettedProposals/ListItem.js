@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { getProposalStatus } from "../../helpers";
+import { PROPOSAL_STATUS_CENSORED, PROPOSAL_STATUS_PUBLIC, PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
 
 const UnvettedListItem = ({
   name,
@@ -14,10 +15,10 @@ const UnvettedListItem = ({
     <td><Link to={`/proposals/${token}/status`}>{name}</Link></td>
     <td>{getProposalStatus(status)}</td>
     <td><Link to={`/proposals/${token}/status`}>{token.substring(0, 7) + "..."}</Link></td>
-    {status == 2 ? (
+    {status === PROPOSAL_STATUS_UNREVIEWED ? (
       <td>
-        <button onClick={() => onSubmitStatusProposal(token, 3)}>Censored</button>
-        <button onClick={() => onSubmitStatusProposal(token, 4)}>Publish</button>
+        <button onClick={() => onSubmitStatusProposal(token, PROPOSAL_STATUS_CENSORED)}>Censored</button>
+        <button onClick={() => onSubmitStatusProposal(token, PROPOSAL_STATUS_PUBLIC)}>Publish</button>
       </td>
     ) : <td></td>}
 
