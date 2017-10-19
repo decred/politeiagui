@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React, { Component } from "react"
+import PropTypes from "prop-types";
 import { cloneDeep } from "lodash";
 import { isFileValid } from "./helpers";
 
@@ -31,5 +32,11 @@ class ProposalImages extends Component {
     );
   }
 }
+
+ProposalImages.propTypes = {
+  files: PropTypes.array.isRequired,
+  policy: PropTypes.object.isRequired,
+  readOnly: PropTypes.bool.isRequired,
+};
 
 export default ProposalImages;

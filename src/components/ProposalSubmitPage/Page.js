@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { reduxForm, Field } from "redux-form";
 import LoadingPage from "../LoadingPage";
 import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
@@ -63,5 +64,14 @@ const SubmitPage = ({
     </form>
   </div>
 );
+
+SubmitPage.propTypes = {
+  policy: PropTypes.object,
+  isSaving: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+  onSave: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  newProposalError: PropTypes.string,
+};
 
 export default reduxForm({ form: "form/proposal", validate })(proposalNewConnector(SubmitPage));
