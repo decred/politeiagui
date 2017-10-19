@@ -15,7 +15,7 @@ const Header = ({ loggedInAs, isAdmin }) => (
     </h1>
     <nav>
       <NavLink to="/about">About</NavLink>
-      <NavLink to="/proposals/new">Submit</NavLink>
+      {isAdmin ? <NavLink to="/proposals/new">Submit</NavLink> : null}
       <NavLink to="/proposals/find">Find</NavLink>
       {isAdmin ? <NavLink to="/admin/censored">Censored</NavLink> : null}
       {isAdmin ? <NavLink to="/admin/unreviewed">Unreviewed</NavLink> : null}
