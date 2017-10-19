@@ -63,6 +63,7 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
   [act.REQUEST_NEW_PROPOSAL]: () => request("newProposal", state, action),
   [act.RECEIVE_NEW_PROPOSAL]: () => receive("newProposal", state, action),
+  [act.RESET_PROPOSAL]: () => reset("newProposal", state),
   [act.REQUEST_SETSTATUS_PROPOSAL]: () => request("setStatusProposal", state, action),
   [act.RECEIVE_SETSTATUS_PROPOSAL]: () => receive("setStatusProposal", state, action),
   [act.REQUEST_LOGOUT]: () => request("logout", state, action),

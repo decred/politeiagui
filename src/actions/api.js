@@ -28,6 +28,7 @@ export const REQUEST_PROPOSAL = "API_REQUEST_PROPOSAL";
 export const RECEIVE_PROPOSAL = "API_RECEIVE_PROPOSAL";
 export const REQUEST_NEW_PROPOSAL = "API_REQUEST_NEW_PROPOSAL";
 export const RECEIVE_NEW_PROPOSAL = "API_RECEIVE_NEW_PROPOSAL";
+export const RESET_PROPOSAL = "API_RESET_PROPOSAL";
 export const REQUEST_SETSTATUS_PROPOSAL = "API_REQUEST_SETSTATUS_PROPOSAL";
 export const RECEIVE_SETSTATUS_PROPOSAL = "API_RECEIVE_SETSTATUS_PROPOSAL";
 
@@ -53,6 +54,7 @@ const onRequestProposal = basicAction(REQUEST_PROPOSAL);
 const onReceiveProposal = basicAction(RECEIVE_PROPOSAL);
 export const onRequestNewProposal = basicAction(REQUEST_NEW_PROPOSAL);
 const onReceiveNewProposal = basicAction(RECEIVE_NEW_PROPOSAL);
+export const onResetProposal = basicAction(RESET_PROPOSAL);
 export const onRequestSetStatusProposal = basicAction(REQUEST_SETSTATUS_PROPOSAL);
 const onReceiveSetStatusProposal = basicAction(RECEIVE_SETSTATUS_PROPOSAL);
 

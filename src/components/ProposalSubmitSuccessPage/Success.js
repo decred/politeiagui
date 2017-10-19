@@ -3,13 +3,13 @@ import Markdown from "../MarkdownRenderer";
 import ProposalImages from "../ProposalImages";
 
 const SuccessPage = ({
-  name,
-  description,
-  files,
-  merkle,
-  token,
-  signature
-}) => (
+                       name,
+                       description,
+                       files,
+                       merkle,
+                       token,
+                       signature
+                     }) => (
   <div>
     <div>
       <h2>Successfully Submitted Proposal</h2>
