@@ -155,3 +155,22 @@ a:hover {
 .message-error .message-header {
   color: #bf4153;
 }
+
+.proposal-meta-data {
+  margin-bottom: 8px;
+}
+.proposal-meta-data:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.proposal-meta-data-name {
+  width: 120px;
+  margin-right: 8px;
+  text-align: right;
+  font-weight: bold;
+  float: left;
+}
+.proposal-meta-data-value {
+  float: left;
+}
