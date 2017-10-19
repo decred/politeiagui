@@ -163,12 +163,16 @@ export const onSubmitProposal = (name, description, files) =>
       .catch(error => dispatch(onReceiveNewProposal(null, error)));
   });
 
-export const onSubmitStatusProposal = (token, status) =>
-  withCsrf((dispatch, getState, csrf) => {
-    dispatch(onRequestSetStatusProposal({ status }));
+const statusName = key => ({3: "censor", 4: "publish"}[key]);
 
-    return api
-      .proposalSetStatus(csrf, token, status)
-      .then(response => dispatch(onReceiveSetStatusProposal(response)))
-      .catch(error => dispatch(onReceiveSetStatusProposal(null, error)));
-  });
+export const onSubmitStatusProposal = (token, status) =>
+  window.confirm(`Are you sure you want to ${statusName(status)} this proposal?`)
+    ?  withCsrf((dispatch, getState, csrf) => {
+      dispatch(onRequestSetStatusProposal({ status }));
+
+      return api
+        .proposalSetStatus(csrf, token, status)
+        .then(response => dispatch(onReceiveSetStatusProposal(response)))
+        .catch(error => dispatch(onReceiveSetStatusProposal(null, error)));
+    })
+    : {type: "NOOP"};
