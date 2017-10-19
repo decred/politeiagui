@@ -10,7 +10,8 @@ export default connect(
     isLoading: sel.vettedProposalsIsRequesting
   }),
   dispatch => bindActionCreators({
-    onFetchData: act.onFetchUnvetted
+    onFetchData: act.onFetchUnvetted,
+    onSubmitStatusProposal: act.onSubmitStatusProposal
   }, dispatch)
 );
 
