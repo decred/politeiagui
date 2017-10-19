@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import About from "./components/AboutPage";
 import Login from "./components/LoginPage";
+import Logout from "./components/LogoutPage";
 import SignupNext from "./components/SignupNextStepPage";
 import Signup from "./components/SignupPage";
 import Verify from "./components/Verify";
@@ -25,6 +26,7 @@ class Routes extends Component {
         <Route path="/proposals/find" component={ProposalFind} />
         <Route path="/user/signup/next" component={SignupNext} />
         <Route path="/user/login" component={Login} />
+        <Route path="/user/logout" component={Logout} />
         <Route path="/user/signup" component={Signup} />
         <Route path="/user/verify/success" component={VerifySuccess} />
         <Route path="/user/verify/failure" component={VerifyFailure} />

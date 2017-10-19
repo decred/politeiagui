@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink, Link, withRouter } from "react-router-dom";
 import headerConnector from "../connectors/currentUser";
 
-const Header = ({ loggedInAs, isAdmin, onLogout }) => (
+const Header = ({ loggedInAs, isAdmin }) => (
   <header className="header">
     <h1>
       <Link to="/">
@@ -19,7 +19,7 @@ const Header = ({ loggedInAs, isAdmin, onLogout }) => (
       <NavLink to="/proposals/find">Find</NavLink>
       {isAdmin ? <NavLink to="/admin">Admin</NavLink> : null}
       {loggedInAs
-        ? <a onClick={onLogout}>Logout</a>
+        ? <NavLink to="/user/logout">Logout</NavLink>
         : <NavLink to="/user/login">Login</NavLink>}
     </nav>
   </header>
