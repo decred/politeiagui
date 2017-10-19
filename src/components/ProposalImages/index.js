@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types";
-import { cloneDeep } from "lodash";
+import { slice } from "lodash";
 import { isFileValid } from "./helpers";
 
 class ProposalImages extends Component {
@@ -11,7 +11,7 @@ class ProposalImages extends Component {
   }
 
   onRemove(idx) {
-    const files = cloneDeep(this.props.files);
+    const files = slice(this.props.files);
     files.splice(idx, 1);
     this.props.onChange(files);
   }
@@ -36,7 +36,7 @@ class ProposalImages extends Component {
 ProposalImages.propTypes = {
   files: PropTypes.array.isRequired,
   policy: PropTypes.object.isRequired,
-  readOnly: PropTypes.bool.isRequired,
+  readOnly: PropTypes.bool,
 };
 
 export default ProposalImages;
