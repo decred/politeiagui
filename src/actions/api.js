@@ -1,4 +1,3 @@
-import Promise from "promise";
 import * as sel from "../selectors";
 import * as api from "../lib/api";
 import { basicAction } from "./lib";
@@ -176,4 +175,4 @@ export const onSubmitStatusProposal = (token, status) =>
         .then(response => dispatch(onReceiveSetStatusProposal(response)))
         .catch(error => dispatch(onReceiveSetStatusProposal(null, error)));
     })
-    : Promise.resolve();
+    : {type: "NOOP"};
