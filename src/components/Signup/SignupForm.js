@@ -1,6 +1,6 @@
 import React from "react";
 import { reduxForm, Field } from "redux-form";
-import ErrorMsg from "../ErrorMsg";
+import Message from "../Message";
 import signupFormConnector from "../../connectors/signupForm";
 import validate from "./SignupValidator";
 import ErrorField from "../Form/Fields/ErrorField";
@@ -21,7 +21,7 @@ const SignupForm = ({
 ) : (
   <form onSubmit={handleSubmit(onSignup)}>
     <fieldset className="signup-form">
-      <h2>Signup</h2>
+      <h2>Sign up</h2>
       <Field
         name="global"
         component={ErrorField}
@@ -46,15 +46,11 @@ const SignupForm = ({
       />
       {hideCancel ? null : <button onClick={onCancelSignup}>Cancel</button>}
       <input type="submit" value="Signup" />
-      {apiNewUserError ? (
-        <div className="error">
-          Signup Error: <ErrorMsg error={apiNewUserError} />
-        </div>
-      ) : null}
-      {apiVerifyNewUserError ? (
-        <div className="error">
-          Signup Verify Error: <ErrorMsg error={apiVerifyNewUserError} />
-        </div>
+      {apiNewUserError || apiVerifyNewUserError ? (
+        <Message
+          type="error"
+          header="Signup error"
+          error={apiNewUserError || apiVerifyNewUserError} />
       ) : null}
     </fieldset>
   </form>

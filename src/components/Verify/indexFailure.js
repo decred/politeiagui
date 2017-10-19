@@ -1,10 +1,12 @@
 import React from "react";
+import Message from "../Message";
 
 const VerifyFailure = () => (
   <div className="page verification-page">
-    <div className="error">
-      This is not a valid Signup Token
-    </div>
+    <Message
+      type="error"
+      header="Verification failed"
+      body="This verification token is not valid for this email." />
   </div>
 );
 

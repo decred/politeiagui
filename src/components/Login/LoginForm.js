@@ -1,7 +1,7 @@
 import React from "react";
 import { reduxForm, Field } from "redux-form";
 import { Link } from "react-router-dom";
-import ErrorMsg from "../ErrorMsg";
+import Message from "../Message";
 import loginFormConnector from "../../connectors/loginForm";
 import ErrorField from "../Form/Fields/ErrorField";
 import validate from "./LoginValidator";
@@ -16,6 +16,12 @@ const LoginForm = ({
 ) : (
   <form onSubmit={handleSubmit(onLogin)}>
     <fieldset className="login-form">
+      {apiLoginError ? (
+        <Message
+          type="error"
+          header="Login error"
+          error={apiLoginError} />
+      ) : null}
       <Field
         name="global"
         component={ErrorField}
@@ -33,12 +39,7 @@ const LoginForm = ({
         placeholder="Password"
       />
       <input type="submit" value="Login" />
-      <Link to="/user/signup">Signup</Link>
-      {apiLoginError ? (
-        <div className="error">
-          Login Error: <ErrorMsg error={apiLoginError} />
-        </div>
-      ) : null}
+      <Link className="signup-link" to="/user/signup">Sign up</Link>
     </fieldset>
   </form>
 );
