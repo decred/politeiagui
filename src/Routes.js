@@ -9,6 +9,7 @@ import Verify from "./components/Verify";
 import VerifySuccess from "./components/Verify/indexSuccess";
 import VerifyFailure from "./components/Verify/indexFailure";
 import ProposalFind from "./components/ProposalFind";
+import NotFound from "./components/NotFoundPage";
 import VettedProposals from "./components/VettedProposalsPage";
 import ProposalStatus from "./components/ProposalStatusPage";
 import ProposalDetail from "./components/ProposalDetailPage";
@@ -38,6 +39,7 @@ class Routes extends Component {
         <AdminAuthenticatedRoute path="/admin/censored" component={CensoredProposals} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={UnreviewedProposals} />
         <AdminAuthenticatedRoute path="/admin" component={UnvettedProposals} />
+        <Route path="*" component={NotFound}/>
       </Switch>
     );
   }
