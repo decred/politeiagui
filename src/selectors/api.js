@@ -36,6 +36,7 @@ const apiNewUserPayload = getApiPayload("newUser");
 const apiLoginPayload = getApiPayload("login");
 const apiNewProposalPayload = getApiPayload("newProposal");
 
+const apiMeResponse = getApiResponse("me");
 const apiInitResponse = getApiResponse("init");
 const apiPolicyResponse = getApiResponse("policy");
 const apiNewUserResponse = getApiResponse("newUser");
@@ -68,17 +69,23 @@ export const apiError = or(
 
 export const csrf = compose(get("csrfToken"), apiInitResponse);
 export const email = or(
+  compose(get("email"), apiMeResponse),
   compose(get("email"), apiLoginPayload),
   compose(get("email"), apiNewUserPayload)
 );
-export const loggedIn = compose(eq(1), get("errorcode"), apiLoginResponse);
+export const loggedIn = or(
+  compose(get("email"), apiMeResponse),
+  compose(eq(1), get("errorcode"), apiLoginResponse)
+);
 export const loggedInAs = and(email, loggedIn);
-
-export const isAdmin = bool(compose(get("isadmin"), apiLoginResponse));
+export const isAdmin = bool(or(
+  compose(get("isadmin"), apiMeResponse),
+  compose(get("isadmin"), apiLoginResponse)
+));
 export const policy = apiPolicyResponse;
 export const policyIsRequesting = isApiRequestingPolicy;
 export const vettedProposals = or(compose(get("proposals"), apiVettedResponse), constant([]));
-export const vettedProposalsIsRequesting = or(isApiRequestingInit, isApiRequestingVetted);
+export const vettedProposalsIsRequesting = isApiRequestingVetted;
 export const vettedProposalsError = or(apiInitError, apiVettedError);
 export const unvettedProposals = or(compose(get("proposals"), apiUnvettedResponse), constant([]));
 const filtered = status => compose(filter(compose(eq(status), get("status"))), unvettedProposals);

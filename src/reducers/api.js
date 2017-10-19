@@ -2,6 +2,7 @@ import * as act from "../actions";
 
 const DEFAULT_REQUEST_STATE = { isRequesting: false, response: null, error: null };
 export const DEFAULT_STATE = {
+  me: DEFAULT_REQUEST_STATE,
   init: DEFAULT_REQUEST_STATE,
   policy: DEFAULT_REQUEST_STATE,
   newUser: DEFAULT_REQUEST_STATE,
@@ -41,6 +42,8 @@ const reset = (key, state) => ({ ...state, [key]: DEFAULT_REQUEST_STATE });
 
 const api = (state = DEFAULT_STATE, action) => (({
   [act.SET_EMAIL]: () => ({ ...state, email: action.payload }),
+  [act.REQUEST_ME]: () => request("me", state, action),
+  [act.RECEIVE_ME]: () => receive("me", state, action),
   [act.REQUEST_INIT_SESSION]: () => request("init", state, action),
   [act.RECEIVE_INIT_SESSION]: () => receive("init", state, action),
   [act.REQUEST_POLICY]: () => request("policy", state, action),
@@ -67,7 +70,8 @@ const api = (state = DEFAULT_STATE, action) => (({
     state = receive("logout", state, action);
     return {
       ...state,
-      login: { ...state.login, response: null }
+      login: { ...state.login, response: null },
+      me: { ...state.me, response: null }
     };
   }
 })[action.type] || (() => state))();
