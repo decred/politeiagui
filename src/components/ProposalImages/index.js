@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { cloneDeep } from "lodash";
-import { isFileValid } from "./validator";
+import { isFileValid } from "./helpers";
 
 class ProposalImages extends Component {
   constructor(props) {
