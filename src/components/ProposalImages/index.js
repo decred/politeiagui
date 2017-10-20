@@ -17,11 +17,7 @@ class ProposalImages extends Component {
   }
 
   render() {
-    const { policy } = this.props;
-    let { files, readOnly } = this.props;
-
-    readOnly = readOnly || false;
-    files = files || [];
+    const { files, readOnly, policy } = this.props;
 
     return (
       <div>
@@ -40,7 +36,12 @@ class ProposalImages extends Component {
 ProposalImages.propTypes = {
   files: PropTypes.array.isRequired,
   policy: PropTypes.object,
-  readOnly: PropTypes.bool,
+  readOnly: PropTypes.bool.isRequired,
+};
+
+ProposalImages.defaultProps = {
+  readOnly: false,
+  files: [],
 };
 
 export default ProposalImages;
