@@ -11,7 +11,9 @@ export default connect(
     token: compose(get(["match", "params", "token"]), arg(1)),
     proposal: sel.proposal,
     error: sel.proposalError,
-    isLoading: sel.proposalIsRequesting
+    isLoading: sel.proposalIsRequesting,
+    markdownFile: sel.getMarkdownFile,
+    otherFiles: sel.getNotMarkdownFile,
   }),
   dispatch => bindActionCreators({
     onFetchData: act.onFetchProposal

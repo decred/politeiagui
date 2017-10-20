@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { slice } from "lodash";
 import { isFileValid } from "./helpers";
