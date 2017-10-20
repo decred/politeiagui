@@ -17,13 +17,17 @@ class ProposalImages extends Component {
   }
 
   render() {
-    const { files, policy, readOnly } = this.props;
+    const { policy } = this.props;
+    let { files, readOnly } = this.props;
+
+    readOnly = readOnly || false;
+    files = files || [];
 
     return (
       <div>
         {(files || []).map(({ name, mime, digest, payload, size }, idx) => (
           <div key={digest || idx}>
-            <h5>{name}{isFileValid({ size, mime }, policy) ? null :  <span className="error">&nbsp;Errored</span>}</h5>
+            <h5>{name}{readOnly ? null : isFileValid({ size, mime }, policy) ? null :  <span className="error">&nbsp;Errored</span> }</h5>
             <img alt={name} src={`data:${mime};base64,${payload}`} />
             {readOnly ? null : <span onClick={() => this.onRemove(idx)}>REMOVE</span>}
           </div>
@@ -35,7 +39,7 @@ class ProposalImages extends Component {
 
 ProposalImages.propTypes = {
   files: PropTypes.array.isRequired,
-  policy: PropTypes.object.isRequired,
+  policy: PropTypes.object,
   readOnly: PropTypes.bool,
 };
 
