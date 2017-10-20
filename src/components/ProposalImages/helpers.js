@@ -1,5 +1,5 @@
 export function isFileValid(file, policy) {
-  if (file.size < policy.maximagesize) {
+  if (file.size > policy.maximagesize) {
     return false;
   }
 
