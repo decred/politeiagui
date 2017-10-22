@@ -3,7 +3,7 @@ export function isFileValid(file, policy) {
     return false;
   }
 
-  if (policy.validmimetypes.indexOf(file.mime) !== -1) {
+  if (policy.validmimetypes.indexOf(file.mime) < 0) {
     return false;
   }
 

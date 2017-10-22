@@ -21,7 +21,7 @@ const SuccessPage = ({
     <hr />
     <Markdown value={description} />
     <hr/>
-    <ProposalImages files={files} />
+    <ProposalImages readOnly files={files} />
   </div>
 );
 
