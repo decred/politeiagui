@@ -17,11 +17,11 @@ class ProposalDetailPage extends Component {
     return isLoading ? <LoadingPage /> : error ? <ErrorPage {...{ error }} /> : (
       <div className="page proposal-detail-page">
         <h2>{proposal.name}</h2>
-        <div className="proposal-meta-data">
+        <div className="proposal-meta-data clearfloat">
           <div className="proposal-meta-data-name">Created:</div>
           <div className="proposal-meta-data-value">{(new Date(proposal.timestamp * 1000)).toString()}</div>
         </div>
-        <div className="proposal-meta-data">
+        <div className="proposal-meta-data clearfloat">
           <div className="proposal-meta-data-name">Status:</div>
           <div className="proposal-meta-data-value">{getProposalStatus(proposal.status)}</div>
         </div>
