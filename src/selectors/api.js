@@ -1,8 +1,9 @@
 import get from "lodash/fp/get";
 import eq from "lodash/fp/eq";
 import filter from "lodash/fp/filter";
+import find from "lodash/fp/find";
 import compose from "lodash/fp/compose";
-import { and, or, bool, constant } from "../lib/fp";
+import { and, or, bool, constant, not } from "../lib/fp";
 import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED } from "../constants";
 
 const getIsApiRequesting = key => bool(get(["api", key, "isRequesting"]));
@@ -109,3 +110,7 @@ export const newProposalName = compose(get("name"), apiNewProposalPayload);
 export const newProposalDescription = compose(get("description"), apiNewProposalPayload);
 export const newProposalFiles = compose(get("files"), apiNewProposalPayload);
 export const setStatusProposal = compose(get("status"), apiSetStatusProposalResponse);
+export const getProposalFiles = compose(get("files"), proposal);
+export const isMarkdown = compose(eq("index.md"), get("name"));
+export const getMarkdownFile = compose(find((isMarkdown)), getProposalFiles);
+export const getNotMarkdownFile = compose(filter(not(isMarkdown)), getProposalFiles);

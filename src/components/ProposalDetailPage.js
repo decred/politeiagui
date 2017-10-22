@@ -11,14 +11,8 @@ class ProposalDetailPage extends Component {
     this.props.onFetchData(this.props.token);
   }
 
-  willReceiveProps(nextProps) {
-    if (nextProps.token !== this.props.token) {
-      nextProps.onFetchData(nextProps.token);
-    }
-  }
-
   render() {
-    const { isLoading, error, proposal } = this.props;
+    const { isLoading, error, proposal, markdownFile, otherFiles } = this.props;
 
     return isLoading ? <LoadingPage /> : error ? <ErrorPage {...{ error }} /> : (
       <div className="page proposal-detail-page">
@@ -32,9 +26,9 @@ class ProposalDetailPage extends Component {
           <div className="proposal-meta-data-value">{getProposalStatus(proposal.status)}</div>
         </div>
         <hr />
-        <Markdown value={proposal.files && proposal.files.length > 0 ? atob(proposal.files[0].payload) : ""} />
+        <Markdown value={markdownFile ? atob(markdownFile.payload) : ""} />
         <hr/>
-        <ProposalImages files={proposal && proposal.files ? proposal.files.slice(1) : []} />
+        <ProposalImages readOnly files={otherFiles} />
       </div>
     );
   }
