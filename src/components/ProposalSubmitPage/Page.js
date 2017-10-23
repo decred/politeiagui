@@ -22,13 +22,12 @@ const SubmitPage = ({
       <Message
         type="error"
         header="Error creating proposal"
-        error={newProposalError} />
+        body={newProposalError} />
     ) : null}
     <form onSubmit={handleSubmit(onSave)}>
-      {error ? <div className="error">{error}</div> : null}
       <Field
         name="global"
-        component={ErrorField}
+        component={props => <ErrorField title="Cannot submit proposal" {...props} />}
       />
       <h2>
         <Field

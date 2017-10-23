@@ -20,11 +20,11 @@ const LoginForm = ({
         <Message
           type="error"
           header="Login error"
-          error={apiLoginError} />
+          body={apiLoginError} />
       ) : null}
       <Field
         name="global"
-        component={ErrorField}
+        component={props => <ErrorField title="Cannot login" {...props} />}
       />
       <Field
         name="email"
