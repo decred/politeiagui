@@ -11,6 +11,8 @@ export const REQUEST_POLICY = "API_REQUEST_POLICY";
 export const RECEIVE_POLICY = "API_RECEIVE_POLICY";
 export const REQUEST_NEW_USER = "API_REQUEST_NEW_USER";
 export const RECEIVE_NEW_USER = "API_RECEIVE_NEW_USER";
+export const REQUEST_CHANGE_PASSWORD = "API_REQUEST_CHANGE_PASSWORD";
+export const RECEIVE_CHANGE_PASSWORD = "API_RECEIVE_CHANGE_PASSWORD";
 export const RESET_NEW_USER = "API_RESET_NEW_USER";
 export const REQUEST_VERIFY_NEW_USER = "API_REQUEST_VERIFY_NEW_USER";
 export const RECEIVE_VERIFY_NEW_USER = "API_RECEIVE_VERIFY_NEW_USER";
@@ -44,6 +46,8 @@ const onRequestPolicy = basicAction(REQUEST_POLICY);
 const onReceivePolicy = basicAction(RECEIVE_POLICY);
 const onRequestNewUser = basicAction(REQUEST_NEW_USER);
 const onReceiveNewUser = basicAction(RECEIVE_NEW_USER);
+const onRequestChangePassword = basicAction(REQUEST_CHANGE_PASSWORD);
+const onReceiveChangePassword = basicAction(RECEIVE_CHANGE_PASSWORD);
 const onRequestVerifyNewUser = basicAction(REQUEST_VERIFY_NEW_USER);
 // const onReceiveVerifyNewUser = basicAction(RECEIVE_VERIFY_NEW_USER);
 const onRequestLogin = basicAction(REQUEST_LOGIN);
@@ -140,6 +144,15 @@ export const onLogout = () =>
         dispatch(onSetEmail(""));
       })
       .catch(error => dispatch(onReceiveLogout(null, error)));
+  });
+
+export const onChangePassword = ( password, newPassword ) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(onRequestChangePassword());
+    return api
+      .changePassword(csrf,  password, newPassword)
+      .then(response => dispatch(onReceiveChangePassword(response)))
+      .catch(error => dispatch(onReceiveChangePassword(null, error)));
   });
 
 export const onFetchVetted = () =>

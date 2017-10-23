@@ -14,6 +14,7 @@ const getApiError = key => get(["api", key, "error"]);
 export const isApiRequestingInit = getIsApiRequesting("init");
 const isApiRequestingPolicy = getIsApiRequesting("policy");
 export const isApiRequestingNewUser = getIsApiRequesting("newUser");
+export const isApiRequestingChangePassword = getIsApiRequesting("changePassword");
 export const isApiRequestingVerifyNewUser = getIsApiRequesting("verifyNewUser");
 export const isApiRequestingLogin = getIsApiRequesting("login");
 export const isApiRequestingLogout = getIsApiRequesting("logout");
@@ -41,6 +42,7 @@ const apiMeResponse = getApiResponse("me");
 const apiInitResponse = getApiResponse("init");
 const apiPolicyResponse = getApiResponse("policy");
 const apiNewUserResponse = getApiResponse("newUser");
+export const apiChangePasswordResponse = getApiResponse("changePassword");
 const apiLoginResponse = getApiResponse("login");
 const apiVettedResponse = getApiResponse("vetted");
 const apiUnvettedResponse = getApiResponse("unvetted");
@@ -50,6 +52,7 @@ const apiSetStatusProposalResponse = getApiResponse("setStatusProposal");
 
 const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
+export const apiChangePasswordError = or(apiInitError, getApiError("changePassword"));
 export const apiVerifyNewUserError = or(apiInitError, getApiError("verifyNewUser"));
 export const apiLoginError = or(apiInitError, getApiError("login"));
 export const apiLogoutError = or(apiInitError, getApiError("logout"));
@@ -60,6 +63,7 @@ const apiNewProposalError = getApiError("newProposal");
 export const apiError = or(
   apiInitError,
   apiNewUserError,
+  apiChangePasswordError,
   apiVerifyNewUserError,
   apiLoginError,
   apiLogoutError,

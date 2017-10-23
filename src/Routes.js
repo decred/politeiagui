@@ -5,6 +5,7 @@ import Login from "./components/LoginPage";
 import Logout from "./components/LogoutPage";
 import SignupNext from "./components/SignupNextStepPage";
 import Signup from "./components/SignupPage";
+import UserProfile from "./components/UserProfile";
 import Verify from "./components/Verify";
 import VerifySuccess from "./components/Verify/indexSuccess";
 import VerifyFailure from "./components/Verify/indexFailure";
@@ -27,6 +28,7 @@ class Routes extends Component {
         <Route path="/about" component={About} />
         <Route path="/proposals/find" component={ProposalFind} />
         <Route path="/user/signup/next" component={SignupNext} />
+        <Route path="/user/profile" component={UserProfile} />
         <Route path="/user/login" component={Login} />
         <Route path="/user/logout" component={Logout} />
         <Route path="/user/signup" component={Signup} />
