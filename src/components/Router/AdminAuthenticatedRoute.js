@@ -1,18 +1,13 @@
-import React from "react";
-import { Redirect, Route } from "react-router-dom";
-import requireLoginConnector from "../../connectors/requireLogin";
+import AuthenticatedRoute from "./AuthenticatedRoute";
 
-const AdminAuthenticatedRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={props => (
-    rest.loggedInAs && rest.isAdmin ? (
-      <Component {...props} />
-    ) : (
-      <Redirect to={{
-        pathname: "/",
-        state: { from: props.location },
-      }} />
-    )
-  )} />
-);
+class AdminAuthenticatedRoute extends AuthenticatedRoute {
+  componentDidMount() {
+    if (!this.props.isAdmin) {
+      return;
+    }
 
-export default requireLoginConnector(AdminAuthenticatedRoute);
+    super.componentDidMount();
+  }
+}
+
+export default AdminAuthenticatedRoute;

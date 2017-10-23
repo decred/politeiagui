@@ -31,11 +31,15 @@ export const RECEIVE_NEW_PROPOSAL = "API_RECEIVE_NEW_PROPOSAL";
 export const RESET_PROPOSAL = "API_RESET_PROPOSAL";
 export const REQUEST_SETSTATUS_PROPOSAL = "API_REQUEST_SETSTATUS_PROPOSAL";
 export const RECEIVE_SETSTATUS_PROPOSAL = "API_RECEIVE_SETSTATUS_PROPOSAL";
+export const REDIRECTED_FROM = "REDIRECTED_FROM";
+export const RESET_REDIRECTED_FROM = "RESET_REDIRECTED_FROM";
 
 export const onRequestMe = basicAction(REQUEST_ME);
 export const onReceiveMe = basicAction(RECEIVE_ME);
 const onRequestInitSession = basicAction(REQUEST_INIT_SESSION);
 const onReceiveInitSession = basicAction(RECEIVE_INIT_SESSION);
+const onRedirectedFrom = basicAction(REDIRECTED_FROM);
+export const onResetRedirectedFrom = basicAction(RESET_REDIRECTED_FROM);
 const onRequestPolicy = basicAction(REQUEST_POLICY);
 const onReceivePolicy = basicAction(RECEIVE_POLICY);
 const onRequestNewUser = basicAction(REQUEST_NEW_USER);
@@ -188,3 +192,11 @@ export const onSubmitStatusProposal = (token, status) =>
         .then(() => dispatch(onFetchUnvetted()));
     })
     : {type: "NOOP"};
+
+export const redirectedFrom = location => dispatch => {
+  dispatch(onRedirectedFrom(location));
+};
+
+export const resetRedirectedFrom = () => dispatch => {
+  dispatch(onResetRedirectedFrom());
+};

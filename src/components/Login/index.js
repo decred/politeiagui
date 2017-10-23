@@ -6,6 +6,13 @@ import CurrentUser from "./CurrentUser";
 import loginConnector from "../../connectors/login";
 
 class Login extends Component {
+  componentWillReceiveProps({ loggedInAs, redirectedFrom, resetRedirectedFrom, history }) {
+    if (loggedInAs && redirectedFrom) {
+      resetRedirectedFrom();
+      history.push(redirectedFrom);
+    }
+  }
+
   componentWillUnmount() {
     this.props.onResetNewUser();
   }

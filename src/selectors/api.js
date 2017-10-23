@@ -114,3 +114,4 @@ export const getProposalFiles = compose(get("files"), proposal);
 export const isMarkdown = compose(eq("index.md"), get("name"));
 export const getMarkdownFile = compose(find((isMarkdown)), getProposalFiles);
 export const getNotMarkdownFile = compose(filter(not(isMarkdown)), getProposalFiles);
+export const redirectedFrom = get(["api", "login", "redirectedFrom"]);
