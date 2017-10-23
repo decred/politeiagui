@@ -9,12 +9,14 @@ const loginConnector = connect(
     loggedIn: sel.loggedIn,
     email: sel.email,
     isAdmin: sel.isAdmin,
-    newUserResponse: sel.newUserResponse
+    newUserResponse: sel.newUserResponse,
+    redirectedFrom: sel.redirectedFrom,
   }),
   dispatch => bindActionCreators({
     onLogin: act.onLogin,
     onSignup: act.onSignup,
-    onResetNewUser: act.onResetNewUser
+    onResetNewUser: act.onResetNewUser,
+    resetRedirectedFrom: act.resetRedirectedFrom,
   }, dispatch)
 );
 

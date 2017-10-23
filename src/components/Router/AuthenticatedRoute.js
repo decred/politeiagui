@@ -1,18 +1,31 @@
-import React from "react";
-import { Redirect, Route } from "react-router-dom";
+import React, { Component } from "react";
+import { Redirect, Route, withRouter } from "react-router-dom";
 import requireLoginConnector from "../../connectors/requireLogin";
 
-const AuthenticatedRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={props => (
-    rest.loggedInAs ? (
-      <Component {...props} />
-    ) : (
-      <Redirect to={{
-        pathname: "/user/login",
-        state: { from: props.location },
-      }} />
-    )
-  )} />
-);
+class AuthenticatedRoute extends Component {
+  componentDidMount() {
+    if (this.props.loggedInAs) {
+      return;
+    }
 
-export default requireLoginConnector(AuthenticatedRoute);
+    this.props.redirectedFrom(this.props.location.pathname);
+  }
+
+  render() {
+    const { component: Component, ...rest } = this.props;
+    return (
+      <Route {...rest} render={props => (
+        rest.loggedInAs ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to={{
+            pathname: "/user/login",
+            state: { from: props.location },
+          }} />
+        )
+      )} />
+    );
+  }
+}
+
+export default requireLoginConnector(withRouter(AuthenticatedRoute));

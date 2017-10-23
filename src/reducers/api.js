@@ -64,6 +64,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.REQUEST_NEW_PROPOSAL]: () => request("newProposal", state, action),
   [act.RECEIVE_NEW_PROPOSAL]: () => receive("newProposal", state, action),
   [act.RESET_PROPOSAL]: () => reset("newProposal", state),
+  [act.REDIRECTED_FROM]: () => ({ ...state, login: { ...state.login, redirectedFrom: action.payload } }),
+  [act.RESET_REDIRECTED_FROM]: () => reset("login", state),
   [act.REQUEST_SETSTATUS_PROPOSAL]: () => request("setStatusProposal", state, action),
   [act.RECEIVE_SETSTATUS_PROPOSAL]: () => receive("setStatusProposal", state, action),
   [act.REQUEST_LOGOUT]: () => request("logout", state, action),
