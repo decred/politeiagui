@@ -6,6 +6,7 @@ import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
 import FilesField from "../Form/Fields/FilesField";
 import ErrorField from "../Form/Fields/ErrorField";
 import validate from "./validator";
+import normalizer from "./normalizer";
 import proposalNewConnector from "../../connectors/proposalNew";
 import Message from "../Message";
 
@@ -58,6 +59,7 @@ const SubmitPage = ({
         component={FilesField}
         placeholder="Attach files"
         policy={policy}
+        normalize={normalizer}
       />
       <div className="proposal-save"><input type="submit" value="Save" /></div>
     </form>

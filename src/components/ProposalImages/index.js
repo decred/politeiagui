@@ -11,9 +11,7 @@ class ProposalImages extends Component {
   }
 
   onRemove(idx) {
-    const files = slice(this.props.files);
-    files.splice(idx, 1);
-    this.props.onChange(files);
+    this.props.onChange({ remove: idx });
   }
 
   render() {
