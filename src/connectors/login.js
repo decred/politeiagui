@@ -8,6 +8,7 @@ const loginConnector = connect(
     loggedInAs: sel.loggedInAs,
     loggedIn: sel.loggedIn,
     email: sel.email,
+    isAdmin: sel.isAdmin,
     newUserResponse: sel.newUserResponse
   }),
   dispatch => bindActionCreators({
