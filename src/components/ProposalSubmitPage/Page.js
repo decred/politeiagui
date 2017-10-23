@@ -57,10 +57,10 @@ const SubmitPage = ({
       <Field
         name="files"
         component={FilesField}
-        placeholder="Select Files"
+        placeholder="Attach files"
         policy={policy}
       />
-      <input type="submit" value="Save" />
+      <div className="proposal-save"><input type="submit" value="Save" /></div>
     </form>
   </div>
 );

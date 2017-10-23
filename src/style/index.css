@@ -33,6 +33,12 @@ a:hover {
   text-decoration: underline;
 }
 
+.clearfloat:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 
 .header {
   position: fixed;
@@ -159,11 +165,6 @@ a:hover {
 .proposal-meta-data {
   margin-bottom: 8px;
 }
-.proposal-meta-data:after {
-  content: "";
-  display: table;
-  clear: both;
-}
 .proposal-meta-data-name {
   width: 120px;
   margin-right: 8px;
@@ -173,4 +174,34 @@ a:hover {
 }
 .proposal-meta-data-value {
   float: left;
+}
+
+.react-file-reader {
+  margin-top: 16px;
+}
+
+.attached-image {
+  display: block;
+  float: left;
+}
+.attached-image-remove {
+  display: block;
+  float: left;
+  cursor: pointer;
+  background: #bf4153;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  margin-left: 8px;
+  color: #ffffff;
+  border-radius: 2px;
+}
+.attached-image-remove:hover {
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.proposal-save {
+  margin-top: 16px;
 }
