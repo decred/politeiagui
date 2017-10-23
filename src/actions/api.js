@@ -193,7 +193,7 @@ export const onSubmitStatusProposal = (token, status) =>
     })
     : {type: "NOOP"};
 
-export const redirectedFrom = (location) => dispatch => {
+export const redirectedFrom = location => dispatch => {
   dispatch(onRedirectedFrom(location));
 };
 
