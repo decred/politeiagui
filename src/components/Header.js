@@ -19,6 +19,7 @@ const Header = ({ loggedInAs, isAdmin }) => (
       <NavLink to="/proposals/find">Find</NavLink>
       {isAdmin ? <NavLink to="/admin/censored">Censored</NavLink> : null}
       {isAdmin ? <NavLink to="/admin/unreviewed">Unreviewed</NavLink> : null}
+      {loggedInAs ? <NavLink to="/user/profile">Profile</NavLink> : null}
       {loggedInAs
         ? <NavLink to="/user/logout">Logout</NavLink>
         : <NavLink to="/user/login">Login</NavLink>}
