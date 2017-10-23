@@ -24,7 +24,7 @@ const SignupForm = ({
       <h2>Sign up</h2>
       <Field
         name="global"
-        component={ErrorField}
+        component={props => <ErrorField title="Cannot sign up" {...props} />}
       />
       <Field
         name="email"
@@ -49,8 +49,8 @@ const SignupForm = ({
       {apiNewUserError || apiVerifyNewUserError ? (
         <Message
           type="error"
-          header="Signup error"
-          error={apiNewUserError || apiVerifyNewUserError} />
+          header="Signup failed"
+          body={apiNewUserError || apiVerifyNewUserError} />
       ) : null}
     </fieldset>
   </form>

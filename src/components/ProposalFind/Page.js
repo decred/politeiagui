@@ -2,6 +2,7 @@ import React from "react";
 import { reduxForm, Field } from "redux-form";
 import LoadingPage from "../LoadingPage";
 import ErrorField from "../Form/Fields/ErrorField";
+import validate from "./validator";
 
 const FindPage = ({
   isSaving,
@@ -11,10 +12,9 @@ const FindPage = ({
 }) => isSaving ? <LoadingPage /> : (
   <div>
     <form onSubmit={handleSubmit(onFind)}>
-      {error ? <div className="error">{error}</div> : null}
       <Field
         name="global"
-        component={ErrorField}
+        component={props => <ErrorField title="Cannot search for proposal" {...props} />}
       />
       <h2>
         <Field
@@ -22,11 +22,12 @@ const FindPage = ({
           component="input"
           type="text"
           placeholder="Censorship token"
+          size={80}
         />
       </h2>
-      <input type="submit" value="OK" />
+      <input type="submit" value="Search" />
     </form>
   </div>
 );
 
-export default reduxForm({ form: "form/proposal-find" })(FindPage);
+export default reduxForm({ form: "form/proposal-find", validate })(FindPage);

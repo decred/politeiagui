@@ -22,7 +22,7 @@ const parseResponseBody = response => {
   }
 
   if (response.status === 500) {
-    throw new Error("Interval server error");
+    throw new Error("Internal server error");
   }
 
   return response.json();

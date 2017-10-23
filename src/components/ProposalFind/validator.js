@@ -1,7 +1,7 @@
 const validate = values => {
   const errors = {};
-  if (!values.name || !values.description) {
-    errors.global = "All fields are required";
+  if (!values.censorship) {
+    errors.global = "Please enter a censorship token";
   }
 
   return errors;

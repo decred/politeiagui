@@ -1,10 +1,17 @@
 import React from "react";
+import Message from "../../Message";
 
-const ErrorField = ({ meta: { error } }) => {
+const ErrorField = ({ title, meta: { error } }) => {
   if (!error) {
     return null;
   }
-  return <div className="error">{error}</div>;
+
+  return (
+    <Message
+      type="error"
+      header={title}
+      body={error} />
+  );
 };
 
 export default ErrorField;

@@ -6,7 +6,7 @@ const ErrorPage = ({ error }) => (
     <Message
       type="error"
       header="Server error"
-      error={error} />
+      body={error} />
   </div>
 );
 
