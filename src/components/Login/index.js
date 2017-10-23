@@ -26,7 +26,14 @@ class Login extends Component {
 
   onLogin(...args) {
     this.props.onLogin(...args)
-      .then(() => this.props.history.push("/proposals/new"));
+      .then(() => {
+        if(this.props.isAdmin) {
+          this.props.history.push("/admin/unreviewed");
+        }
+        else {
+          this.props.history.push("/proposals/new");
+        }
+      });
   }
 }
 
