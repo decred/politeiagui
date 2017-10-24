@@ -13,6 +13,8 @@ export const DEFAULT_STATE = {
   unvetted: DEFAULT_REQUEST_STATE,
   proposal: DEFAULT_REQUEST_STATE,
   newProposal: DEFAULT_REQUEST_STATE,
+  forgottenPassword: DEFAULT_REQUEST_STATE,
+  passwordReset: DEFAULT_REQUEST_STATE,
   email: ""
 };
 
@@ -65,6 +67,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_NEW_PROPOSAL]: () => receive("newProposal", state, action),
   [act.REQUEST_FORGOTTEN_PASSWORD_REQUEST]: () => request("forgottenPassword", state, action),
   [act.RECEIVE_FORGOTTEN_PASSWORD_REQUEST]: () => receive("forgottenPassword", state, action),
+  [act.REQUEST_PASSWORD_RESET_REQUEST]: () => request("passwordReset", state, action),
+  [act.RECEIVE_PASSWORD_RESET_REQUEST]: () => receive("passwordReset", state, action),
   [act.RESET_PROPOSAL]: () => reset("newProposal", state),
   [act.REDIRECTED_FROM]: () => ({ ...state, login: { ...state.login, redirectedFrom: action.payload } }),
   [act.RESET_REDIRECTED_FROM]: () => reset("login", state),
