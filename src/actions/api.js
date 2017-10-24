@@ -16,6 +16,9 @@ export const REQUEST_VERIFY_NEW_USER = "API_REQUEST_VERIFY_NEW_USER";
 export const RECEIVE_VERIFY_NEW_USER = "API_RECEIVE_VERIFY_NEW_USER";
 export const REQUEST_LOGIN = "API_REQUEST_LOGIN";
 export const RECEIVE_LOGIN = "API_RECEIVE_LOGIN";
+export const REQUEST_FORGOTTEN_PASSWORD_REQUEST = "API_REQUEST_FORGOTTEN_PASSWORD_REQUEST";
+export const RECEIVE_FORGOTTEN_PASSWORD_REQUEST = "API_RECEIVE_FORGOTTEN_PASSWORD_REQUEST";
+export const RESET_FORGOTTEN_PASSWORD_REQUEST = "RESET_FORGOTTEN_PASSWORD_REQUEST";
 export const REQUEST_LOGOUT = "API_REQUEST_LOGOUT";
 export const RECEIVE_LOGOUT = "API_RECEIVE_LOGOUT";
 export const REQUEST_SECRET = "API_REQUEST_SECRET";
@@ -48,6 +51,9 @@ const onRequestVerifyNewUser = basicAction(REQUEST_VERIFY_NEW_USER);
 // const onReceiveVerifyNewUser = basicAction(RECEIVE_VERIFY_NEW_USER);
 const onRequestLogin = basicAction(REQUEST_LOGIN);
 const onReceiveLogin = basicAction(RECEIVE_LOGIN);
+const onRequestForgottenPasswordRequest = basicAction(REQUEST_FORGOTTEN_PASSWORD_REQUEST);
+const onReceiveForgottenPasswordRequest = basicAction(RECEIVE_FORGOTTEN_PASSWORD_REQUEST);
+const onResetForgottenPassword = basicAction(RESET_FORGOTTEN_PASSWORD_REQUEST);
 const onRequestLogout = basicAction(REQUEST_LOGOUT);
 const onReceiveLogout = basicAction(RECEIVE_LOGOUT);
 const onRequestVetted = basicAction(REQUEST_VETTED);
@@ -199,4 +205,17 @@ export const redirectedFrom = location => dispatch => {
 
 export const resetRedirectedFrom = () => dispatch => {
   dispatch(onResetRedirectedFrom());
+};
+
+export const onForgottenPasswordRequest = ({ email }) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(onRequestForgottenPasswordRequest({ email }));
+    return api
+      .forgottenPasswordRequest(csrf, email)
+      .then(response => dispatch(onReceiveForgottenPasswordRequest(response)))
+      .catch(error => dispatch(onReceiveForgottenPasswordRequest(null, error)));
+  });
+
+export const resetForgottenPassword = () => dispatch => {
+  dispatch(onResetForgottenPassword());
 };
