@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
+import { Content as ProposalListing } from "./components/snew";
+import vetted from "./connectors/proposals";
+
 import About from "./components/AboutPage";
 import Login from "./components/LoginPage";
 import Logout from "./components/LogoutPage";
@@ -27,7 +30,7 @@ class Routes extends Component {
   render() {
     return (
       <Switch>
-        <Route path="/" component={VettedProposals} exact={true} />
+        <Route path="/" component={vetted(ProposalListing)} exact={true} />
         <Route path="/about" component={About} />
         <Route path="/proposals/find" component={ProposalFind} />
         <Route path="/user/signup/next" component={SignupNext} />
