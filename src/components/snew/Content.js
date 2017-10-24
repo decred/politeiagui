@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { Content } from "snew-classic-ui";
 import { proposalToT3 } from "../../lib/snew";
+import Loading from "./Loading";
 
 export const CustomContent = ({ listings, proposals, isLoading, ...props }) => (
   <Content {...{
     ...props,
+    Loading,
     isLoading,
     listings: listings || [
       {
@@ -16,7 +18,6 @@ export const CustomContent = ({ listings, proposals, isLoading, ...props }) => (
 
 class Loader extends Component {
   componentDidMount() {
-    console.log("props", this.props);
     this.props.onFetchData && this.props.onFetchData();
   }
 

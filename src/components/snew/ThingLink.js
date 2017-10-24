@@ -93,7 +93,6 @@ const ThingLink = ({
       <p className="tagline">
         submitted {created_utc}
       </p>
-      {console.log({ expanded, is_self, selftext, selftext_html })}
       <Expando {...{ expanded, is_self, selftext, selftext_html }} />
 
       <ProposalImages readOnly files={otherFiles} />

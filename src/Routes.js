@@ -3,6 +3,8 @@ import { Switch, Route } from "react-router-dom";
 import { Content as ProposalListing } from "./components/snew";
 import vetted from "./connectors/proposals";
 import proposalDetail from "./connectors/proposal";
+import censored from "./connectors/censoredProposals";
+import unreviewed from "./connectors/unreviewedProposals";
 
 import About from "./components/AboutPage";
 import Login from "./components/LoginPage";
@@ -25,7 +27,6 @@ import ProposalSubmit from "./components/ProposalSubmitPage";
 import ProposalSubmitSuccess from "./components/ProposalSubmitSuccessPage";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
-import { CensoredProposals, UnreviewedProposals, UnvettedProposals } from "./components/UnvettedProposals";
 
 class Routes extends Component {
   render() {
@@ -50,9 +51,9 @@ class Routes extends Component {
         <AuthenticatedRoute path="/proposals/success" component={ProposalSubmitSuccess} />
         <AdminAuthenticatedRoute path="/proposals/:token/status" component={ProposalStatus} />
         <Route path="/proposals/:token" component={proposalDetail(ProposalDetail)} />
-        <AdminAuthenticatedRoute path="/admin/censored" component={CensoredProposals} />
-        <AdminAuthenticatedRoute path="/admin/unreviewed" component={UnreviewedProposals} />
-        <AdminAuthenticatedRoute path="/admin" component={UnvettedProposals} />
+        <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />
+        <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />
+        <AdminAuthenticatedRoute path="/admin" component={unreviewed(ProposalListing)} />
         <Route path="*" component={NotFound}/>
       </Switch>
     );
