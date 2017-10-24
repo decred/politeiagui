@@ -10,10 +10,33 @@ module.exports = function (request, response) {
       // do whatever we need to in order to respond to this request.
       const bodyParsed = JSON.parse(body);
       response.writeHead(200);
-      if (bodyParsed.email === "test@error.com") {
-        return response.end(JSON.stringify({ "errorcode": 3 }));
+
+      if (bodyParsed.email && bodyParsed.verificationtoken && bodyParsed.newpassword) {
+        return handlePasswordReset(bodyParsed, response);
       }
 
-      return response.end(JSON.stringify({ "errorcode": 1 }));
+      return handleForgottenPassword(bodyParsed, response);
     });
 };
+
+function handleForgottenPassword(body, response) {
+  if (body.email === "test@error.com") {
+    return response.end(JSON.stringify({ "errorcode": 3 }));
+  }
+
+  return response.end(JSON.stringify({ "errorcode": 1 }));
+}
+
+function handlePasswordReset(body, response) {
+  if (body.email === "test@error.com") {
+    return response.end(JSON.stringify({ "errorcode": 3 }));
+  }
+  if (body.verificationtoken === "1234") {
+    return response.end(JSON.stringify({ "errorcode": 4 }));
+  }
+  if (body.verificationtoken === "0000") {
+    return response.end(JSON.stringify({ "errorcode": 5 }));
+  }
+
+  return response.end(JSON.stringify({ "errorcode": 1 }));
+}
