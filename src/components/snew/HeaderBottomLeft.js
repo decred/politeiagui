@@ -34,13 +34,8 @@ export const HeaderBottomLeft = ({
         </Link>
       </li>
       {isAdmin ? <li>
-        <Link className="choice" href="/admin/censored">
-          Censored
-        </Link>
-      </li> : null}
-      {isAdmin ? <li>
-        <Link className="choice" href="/admin/unreviewed">
-          Unreviewed
+        <Link className="choice" href="/admin/">
+          Admin
         </Link>
       </li> : null}
     </ul>

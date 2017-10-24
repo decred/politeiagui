@@ -4,7 +4,7 @@ import { proposalToT3 } from "../lib/snew";
 
 const ProposalDetail = ({
   isLoading, proposal, token, error, markdownFile, otherFiles, onFetchData, ...props
-}) => console.log("markdownFile", markdownFile) || (
+}) => (
   <Content  {...{
     isLoading,
     error,

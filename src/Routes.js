@@ -5,6 +5,7 @@ import vetted from "./connectors/proposals";
 import proposalDetail from "./connectors/proposal";
 import censored from "./connectors/censoredProposals";
 import unreviewed from "./connectors/unreviewedProposals";
+import admin from "./connectors/admin";
 
 import About from "./components/AboutPage";
 import Login from "./components/LoginPage";
@@ -53,7 +54,7 @@ class Routes extends Component {
         <Route path="/proposals/:token" component={proposalDetail(ProposalDetail)} />
         <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />
-        <AdminAuthenticatedRoute path="/admin" component={unreviewed(ProposalListing)} />
+        <AdminAuthenticatedRoute path="/admin" component={admin(ProposalListing)} />
         <Route path="*" component={NotFound}/>
       </Switch>
     );

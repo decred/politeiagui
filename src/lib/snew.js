@@ -1,5 +1,5 @@
 export const proposalToT3 = ({
-  name, timestamp, censorshiprecord = {}
+  name, timestamp, status, censorshiprecord = {}
 }, idx) => ({
   kind: "t3",
   data: {
@@ -7,6 +7,7 @@ export const proposalToT3 = ({
     title: name,
     id: censorshiprecord.token,
     name: "t3_"+censorshiprecord.token,
+    review_status: status,
     created_utc: timestamp,
     permalink: `/proposals/${censorshiprecord.token}/`,
     url: `/proposals/${censorshiprecord.token}/`,

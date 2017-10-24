@@ -1,5 +1,7 @@
 import React from "react";
 import ProposalImages from "../ProposalImages";
+import actions from "../../connectors/login";
+import { PROPOSAL_STATUS_CENSORED, PROPOSAL_STATUS_PUBLIC, PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
 
 const ThingLink = ({
   Link,
@@ -18,15 +20,18 @@ const ThingLink = ({
   created_utc,
   title,
   url,
+  permalink,
   is_self,
   selftext,
   selftext_html,
   thumbnail,
-  banned_by,
-  otherFiles
+  otherFiles,
+  review_status,
+  isAdmin,
+  onChangeStatus
 }) => (
   <div
-    className={`thing id-${id} odd link ${banned_by ? "spam" : null}`}
+    className={`thing id-${id} odd link ${(review_status === PROPOSAL_STATUS_CENSORED) ? "spam" : null}`}
     data-author={author}
     data-author-fullname=""
     data-domain={domain}
@@ -97,42 +102,42 @@ const ThingLink = ({
 
       <ProposalImages readOnly files={otherFiles} />
 
-      {/*<ul className="flat-list buttons">
+      <ul className="flat-list buttons">
         <li className="first">
           <Link
             className="bylink comments may-blank"
             data-event-action="comments"
             href={permalink}
-            rel="nofollow"
-          >{num_comments} comments</Link>
+          >permalink</Link>
         </li>
-        <li className="share">
-          <a className="post-sharing-button">share</a>
-        </li>
-        <li className="link-save-button save-button">
-          <a>save</a>
-        </li>
-        <li>
-          <form className="state-button hide-button" >
-            <input name="executed" type="hidden" defaultValue="hidden" />
-            <span>
-              <a data-event-action="hide" >hide</a>
-            </span>
-          </form>
-        </li>
-        <li className="report-button">
-          <a className="action-thing reportbtn access-required" data-event-action="report" >
-            report
-          </a>
-        </li>
+        {isAdmin ? (
+          (review_status === PROPOSAL_STATUS_UNREVIEWED) ? [
+            <li key="spam">
+              <form className="toggle remove-button">
+                <a
+                  className="togglebutton access-required"
+                  data-event-action="spam"
+                  onClick={() => onChangeStatus(id, PROPOSAL_STATUS_CENSORED)}
+                >spam</a>
+              </form>
+            </li>,
+            <li key="approve">
+              <form className="toggle approve-button">
+                <a
+                  className="togglebutton access-required"
+                  data-event-action="approve"
+                  onClick={() => onChangeStatus(id, PROPOSAL_STATUS_PUBLIC)}
+                >approve</a>
+              </form>
+            </li>
+          ] : null
+        ) : null}
       </ul>
-      <div className="reportform" />
-      */}
     </div>
     <div className="child" />
     <div className="clearleft" />
   </div>
 );
 
-export default ThingLink;
+export default actions(ThingLink);
 
