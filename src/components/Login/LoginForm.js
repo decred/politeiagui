@@ -40,6 +40,7 @@ const LoginForm = ({
       />
       <input type="submit" value="Login" />
       <Link className="signup-link" to="/user/signup">Sign up</Link>
+      <Link className="forgotten-password-link" to="/user/forgotten/password">Forgot your password?</Link>
     </fieldset>
   </form>
 );

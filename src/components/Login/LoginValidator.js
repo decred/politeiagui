@@ -1,10 +1,13 @@
+import { emailValidator, isRequiredValidator } from "../../validators";
+
 const validate = values => {
   const errors = {};
-  if (!values.email || !values.password) {
+
+  if (!isRequiredValidator(values.email) || !isRequiredValidator(values.password)) {
     errors.global = "All fields are required";
   }
 
-  if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+  if (!emailValidator(values.email)) {
     errors.global = "Invalid email address";
   }
 

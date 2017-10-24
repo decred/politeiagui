@@ -1,6 +1,8 @@
+import { isRequiredValidator } from "../../validators";
+
 const validate = values => {
   const errors = {};
-  if (!values.censorship) {
+  if (!isRequiredValidator(values.censorship)) {
     errors.global = "Please enter a censorship token";
   }
 

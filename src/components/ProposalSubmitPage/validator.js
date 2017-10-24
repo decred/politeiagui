@@ -1,9 +1,10 @@
 import { forEach } from "lodash";
 import { isFileValid } from "../ProposalImages/helpers";
+import { isRequiredValidator } from "../../validators";
 
 const validate = (values, { policy }) => {
   const errors = {};
-  if (!values.name || !values.description) {
+  if (!isRequiredValidator(values.name) || !isRequiredValidator(values.description)) {
     errors.global = "All fields are required";
   }
 
