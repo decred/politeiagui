@@ -53,6 +53,7 @@ const apiSetStatusProposalResponse = getApiResponse("setStatusProposal");
 const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
 export const apiVerifyNewUserError = or(apiInitError, getApiError("verifyNewUser"));
+export const apiForgottenPasswordError = or(apiInitError, getApiError("forgottenPassword"));
 export const apiLoginError = or(apiInitError, getApiError("login"));
 export const apiLogoutError = or(apiInitError, getApiError("logout"));
 const apiVettedError = getApiError("vetted");

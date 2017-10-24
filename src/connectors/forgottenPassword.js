@@ -4,6 +4,7 @@ import * as act from "../actions";
 
 const forgottenPasswordConnector = connect(
   sel.selectorMap({
+    apiForgottenPasswordError: sel.apiForgottenPasswordError,
     forgottenPasswordResponse: sel.forgottenPasswordResponse,
     isRequesting: sel.isApiRequestingForgottenPassword, // ???
   }),
