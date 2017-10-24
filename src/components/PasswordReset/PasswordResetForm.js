@@ -7,7 +7,7 @@ import Message from "../Message";
 
 const PasswordResetForm = ({ handleSubmit, onPasswordReset, isRequesting, apiPasswordResetError }) => {
   if (isRequesting) {
-    return <fieldset className="signup-form">resetting up...</fieldset>;
+    return <fieldset className="signup-form">Loading...</fieldset>;
   }
 
   return (
@@ -19,7 +19,7 @@ const PasswordResetForm = ({ handleSubmit, onPasswordReset, isRequesting, apiPas
           body={apiPasswordResetError} />
       ) : null}
       <fieldset className="password-reset-form">
-        <h2>Forgotten password</h2>
+        <h2>Reset your password</h2>
         <Field
           name="global"
           component={ErrorField}
