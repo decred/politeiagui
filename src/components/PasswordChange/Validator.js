@@ -1,10 +1,12 @@
+import { isRequiredValidator, passwordVerifyValidator } from "../../validators";
+
 const validate = values => {
   const errors = {};
-  if (!values.existingPassword || !values.password || !values.password_verify) {
+  if (!isRequiredValidator(values.existingPassword) || !isRequiredValidator(values.password) || !isRequiredValidator(values.password_verify)) {
     errors.global = "All fields are required";
   }
 
-  if (values.password !== values.password_verify) {
+  if (!passwordVerifyValidator(values.password, values.password_verify)) {
     errors.global = "Passwords do not match";
   }
 

@@ -6,6 +6,7 @@ import { or } from "../lib/fp";
 const changePasswordConnector = connect(
   sel.selectorMap({
     isApiRequestingChangePassword: or(sel.isApiRequestingInit, sel.isApiRequestingChangePassword),
+    changePasswordResponse: sel.apiChangePasswordResponse,
     apiChangePasswordError: sel.apiChangePasswordError
   }),
   { onChangePassword: act.onSaveChangePassword }

@@ -1,16 +1,13 @@
 import React from "react";
 import { reduxForm, Field } from "redux-form";
 import Message from "../Message";
-import changePasswordConnector from "../../connectors/changePassword";
 import validate from "./Validator";
 import ErrorField from "../Form/Fields/ErrorField";
 
 const ChangePasswordForm = ({
   isApiRequestingChangePassword,
   apiChangePasswordError,
-  hideCancel,
   onChangePassword,
-  onCancelChangePassword,
   handleSubmit
 }) => isApiRequestingChangePassword ? (
   <fieldset className="change-password-form">Changing password</fieldset>
@@ -50,4 +47,4 @@ const ChangePasswordForm = ({
   </form>
 );
 
-export default reduxForm({ form: "form/change-password", validate })(changePasswordConnector(ChangePasswordForm));
+export default reduxForm({ form: "form/change-password", validate })(ChangePasswordForm);
