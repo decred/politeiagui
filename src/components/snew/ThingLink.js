@@ -1,16 +1,15 @@
 import React from "react";
-import ExpandoComponent from "./Expando";
-import LinkComponent from "./Link";
+import ProposalImages from "../ProposalImages";
 
 const ThingLink = ({
-  Link=LinkComponent,
-  Expando=ExpandoComponent,
+  Link,
+  Expando,
   id,
   expanded = false,
   name,
   author,
   domain,
-  rank,
+  rank=0,
   //score,
   //downs,
   //ups,
@@ -23,7 +22,8 @@ const ThingLink = ({
   selftext,
   selftext_html,
   thumbnail,
-  banned_by
+  banned_by,
+  otherFiles
 }) => (
   <div
     className={`thing id-${id} odd link ${banned_by ? "spam" : null}`}
@@ -93,7 +93,11 @@ const ThingLink = ({
       <p className="tagline">
         submitted {created_utc}
       </p>
+      {console.log({ expanded, is_self, selftext, selftext_html })}
       <Expando {...{ expanded, is_self, selftext, selftext_html }} />
+
+      <ProposalImages readOnly files={otherFiles} />
+
       {/*<ul className="flat-list buttons">
         <li className="first">
           <Link

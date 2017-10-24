@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import { Content as ProposalListing } from "./components/snew";
 import vetted from "./connectors/proposals";
+import proposalDetail from "./connectors/proposal";
 
 import About from "./components/AboutPage";
 import Login from "./components/LoginPage";
@@ -19,7 +20,7 @@ import ProposalFind from "./components/ProposalFind";
 import NotFound from "./components/NotFoundPage";
 import VettedProposals from "./components/VettedProposalsPage";
 import ProposalStatus from "./components/ProposalStatusPage";
-import ProposalDetail from "./components/ProposalDetailPage";
+import ProposalDetail from "./components/ProposalDetail";
 import ProposalSubmit from "./components/ProposalSubmitPage";
 import ProposalSubmitSuccess from "./components/ProposalSubmitSuccessPage";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
@@ -48,7 +49,7 @@ class Routes extends Component {
         <AuthenticatedRoute path="/proposals/new" component={ProposalSubmit} />
         <AuthenticatedRoute path="/proposals/success" component={ProposalSubmitSuccess} />
         <AdminAuthenticatedRoute path="/proposals/:token/status" component={ProposalStatus} />
-        <Route path="/proposals/:token" component={ProposalDetail} />
+        <Route path="/proposals/:token" component={proposalDetail(ProposalDetail)} />
         <AdminAuthenticatedRoute path="/admin/censored" component={CensoredProposals} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={UnreviewedProposals} />
         <AdminAuthenticatedRoute path="/admin" component={UnvettedProposals} />

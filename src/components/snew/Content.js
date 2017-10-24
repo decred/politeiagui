@@ -1,26 +1,14 @@
 import React, { Component } from "react";
 import { Content } from "snew-classic-ui";
-import connector from "../../connectors/proposals";
+import { proposalToT3 } from "../../lib/snew";
 
-export const CustomContent = ({ proposals, isLoading, ...props }) => (
+export const CustomContent = ({ listings, proposals, isLoading, ...props }) => (
   <Content {...{
     ...props,
     isLoading,
-    listings: [
+    listings: listings || [
       {
-        allChildren: proposals.map(({ name, timestamp, censorshiprecord: { token } }, idx) => ({
-          kind: "t3",
-          data: {
-            rank: idx + 1,
-            title: name,
-            id: token,
-            name: "t3_"+token,
-            created_utc: timestamp,
-            permalink: `/proposals/${token}/`,
-            url: `/proposals/${token}/`,
-            is_self: true
-          }
-        }))
+        allChildren: proposals.map(proposalToT3)
       }
     ]
   }} />
@@ -28,7 +16,8 @@ export const CustomContent = ({ proposals, isLoading, ...props }) => (
 
 class Loader extends Component {
   componentDidMount() {
-    this.props.onFetchData();
+    console.log("props", this.props);
+    this.props.onFetchData && this.props.onFetchData();
   }
 
   render() {
@@ -36,4 +25,4 @@ class Loader extends Component {
   }
 }
 
-export default connector(Loader);
+export default Loader;

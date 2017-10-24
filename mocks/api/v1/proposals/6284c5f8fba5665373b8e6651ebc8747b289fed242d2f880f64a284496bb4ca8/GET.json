@@ -8,6 +8,7 @@
     },
     "files": [
       {
+        "name": "index.md",
         "payload": "IyBNYXJrZG93biBUaXRsZQoKClRoaXMgaXMgc29tZSAKCiBhbmQgc29tZSBtb3JlIHRleHQ="
       }, {
         "name": "example.jpeg",
