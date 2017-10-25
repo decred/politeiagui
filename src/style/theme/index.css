@@ -99,7 +99,6 @@ button:active {
     margin: 0;
     height: 196px;
     border: none;
-    /*background: url(%%headerimg%%) 50% 50%/cover no-repeat;*/
 background-image:
   	-webkit-repeating-linear-gradient(315deg, rgba(0, 0, 255, .03) 9%, rgba(0, 198, 96, .03) 13%),
   	-webkit-repeating-linear-gradient(315deg, rgba(44, 212, 126, .05) 23%, rgba(8, 8, 61, .04) 38%),
@@ -241,7 +240,7 @@ body:not(.loggedin) #header-bottom-right {
     margin-left: -16px;
     width: 16px;
     height: 16px;
-    background: url(%%spritesheet%%) -48px -32px no-repeat
+    background: url("./spritesheet.png") -48px -32px no-repeat
 }
 .user a {
     max-width: 120px;
@@ -265,7 +264,7 @@ body:not(.loggedin) #header-bottom-right {
 #modmail {
     width: 16px;
     height: 14px;
-    background-image: url(%%spritesheet%%)!important;
+    background-image: url("./spritesheet.png")!important;
     background-repeat: no-repeat!important;
     background-color: transparent;
     transition: all .25s ease
@@ -291,7 +290,7 @@ body:not(.loggedin) #header-bottom-right {
     padding: 16px 24px;
     bottom: 24px;
     z-index: 100;
-    background: url(%%spritesheet%%) 269px -120px no-repeat #EA4848;
+    background: url("./spritesheet.png") 269px -120px no-repeat #EA4848;
     border-radius: 2px;
     box-shadow: 0 1px 5px rgba(0, 0, 0, .24);
     color: #fff;
@@ -327,7 +326,7 @@ body:not(.loggedin) #header-bottom-right {
 #header-bottom-right a.pref-lang,
 .loggedin .logout a {
     background-position: -32px 0;
-    background-image: url(%%spritesheet%%);
+    background-image: url("./spritesheet.png");
     width: 16px;
     height: 14px;
     display: inline-block;
@@ -348,7 +347,7 @@ body:not(.loggedin) #header-bottom-right {
 #header-img,
 #header-img.default-header {
     padding-left: 42px;
-    background: url(%%spritesheet%%) -80px 0;
+    background: url("./spritesheet.png") -80px 0;
     margin: 0 8px 0 0;
     vertical-align: top
 }
@@ -435,7 +434,7 @@ body>.content .link .rank {
 }
 .arrow {
     margin: 0;
-    background-image: url(%%spritesheet%%)!important;
+    background-image: url("./spritesheet.png")!important;
     width: 33px;
     border-radius: 2px
 }
@@ -527,19 +526,19 @@ body>.content .link .rank {
     border-radius: 28px
 }
 .thumbnail.default {
-    background: url(%%spritesheet%%) -152px -48px #d2dbe0
+    background: url("./spritesheet.png") -152px -48px #d2dbe0
 }
 .thumbnail.self {
-    background: url(%%spritesheet%%) -96px -48px #d2dbe0
+    background: url("./spritesheet.png") -96px -48px #d2dbe0
 }
 .thumbnail.image {
-    background: url(%%spritesheet%%) -208px -48px #d2dbe0
+    background: url("./spritesheet.png") -208px -48px #d2dbe0
 }
 .thumbnail.nsfw {
-    background: url(%%spritesheet%%) -96px -104px #e85881
+    background: url("./spritesheet.png") -96px -104px #e85881
 }
 .thumbnail[data-href-url*="reddit.com"] {
-    background: url(%%spritesheet%%) -152px -104px #2971ff
+    background: url("./spritesheet.png") -152px -104px #2971ff
 }
 .thumbnail[data-href-url*="reddit.com"] img {
     display: none
@@ -617,7 +616,7 @@ body .content .sitetable .link .title a:hover {
     height: 16px!important;
     border-radius: 2px;
     background-color: transparent;
-    background-image: url(%%spritesheet%%)!important;
+    background-image: url("./spritesheet.png")!important;
     border: 1px solid #e9e9e9;
     cursor: pointer
 }
@@ -749,7 +748,7 @@ body .content .sitetable .link .title a:hover {
     vertical-align: top;
     height: 10px;
     width: 16px;
-    background-image: url(%%spritesheet%%);
+    background-image: url("./spritesheet.png"");
     background-position: -32px -101px;
     opacity: .25;
     margin-left: 2px;
@@ -881,7 +880,7 @@ body .content .sitetable .link .title a:hover {
 }
 .linkflair-mod .thumbnail.default,
 .linkflair-mod .thumbnail.self {
-    background: url(%%spritesheet%%) -208px -104px #41bf53
+    background: url("./spritesheet.png"") -208px -104px #41bf53
 }
 body .content .thing.spam {
     background-color: #FFE9E6
@@ -1378,7 +1377,7 @@ div.commentarea div.RES-keyNav-activeElement .md {
     margin: 0;
     width: 100%;
     height: 416px;
-    background: url(%%noresults%%) 50% 50% no-repeat;
+    background: url("./noresults.png") 50% 50% no-repeat;
     text-indent: -9999px;
     font-size: 0;
     display: block
@@ -1412,7 +1411,7 @@ div.commentarea div.RES-keyNav-activeElement .md {
 }
 .side:before {
     height: 192px;
-    background: url(%%sidebarimg%%);
+    background: url("./sidebarimg.png");
     content: "";
     display: block;
     position: absolute;
@@ -1464,7 +1463,7 @@ div.titlebox span.number:after {
     height: 9px;
     display: inline-block;
     margin-right: 8px;
-    background: url(%%spritesheet%%) -64px -36px
+    background: url("./spritesheet.png") -64px -36px
 }
 .titlebox .users-online .number:after {
     content: " currently online"
@@ -1580,13 +1579,13 @@ div.titlebox span.number:after {
     height: 32px;
     width: 32px;
     margin-left: -38px;
-    background: url(%%spritesheet%%) -64px -96px no-repeat;
+    background: url("./spritesheet.png") -64px -96px no-repeat;
     border: none!important;
     border-radius: 16px;
     transition: background .2s cubic-bezier(.4, 0, .2, 1)
 }
 #search input[type=submit]:hover {
-    background: url(%%spritesheet%%) -64px -96px no-repeat rgba(158, 158, 158, .2)
+    background: url("./spritesheet.png") -64px -96px no-repeat rgba(158, 158, 158, .2)
 }
 #search #searchexpando {
     background: #edf1f3;
@@ -1931,7 +1930,7 @@ div.titlebox span.number:after {
     width: 100%
 }
 .commentarea>.usertext textarea:not(:focus) {
-    background: url(%%commentboxbg%%) 50% 50% no-repeat
+    background: url("./commentboxbg.png") 50% 50% no-repeat
 }
 .usertext .bottom-area {
     width: 504px
@@ -1964,7 +1963,7 @@ div.titlebox span.number:after {
     margin: 0
 }
 .gilded-icon:before {
-    background: url(%%spritesheet%%) -112px -160px;
+    background: url("./spritesheet.png") -112px -160px;
     height: 16px;
     width: 16px
 }
@@ -2354,7 +2353,7 @@ body #newlink-with-image-upload .file-upload-button {
     height: 32px;
     margin: 0;
     padding: 0;
-    background: url(%%spritesheet%%) -64px -96px;
+    background: url("./spritesheet.png") -64px -96px;
     box-shadow: none;
     border-radius: 50%;
     transition: background-color .2s cubic-bezier(.4, 0, .2, 1)
@@ -2379,7 +2378,7 @@ body #newlink-with-image-upload .file-upload-button {
     top: 8px;
     width: 22px;
     height: 24px;
-    background: url(%%spritesheet%%) -49px -168px no-repeat;
+    background: url("./spritesheet.png") -49px -168px no-repeat;
     overflow: hidden;
     font-size: 0
 }
@@ -2707,7 +2706,6 @@ ul.image-preview-list li {
     height: 800px;
     z-index: 100;
     margin-top: 40px;
-    background: url(%%faq%%) 50% 50% no-repeat
 }
 .flair {
     border: none;
@@ -2749,7 +2747,7 @@ ul.image-preview-list li {
 }
 .footer-parent {
     margin-top: 192px;
-    background: url(%%footer%%) 50% 0/cover no-repeat
+    background: url("./footer.png") 50% 0/cover no-repeat
 }
 .footer {
     border: 0 solid;
@@ -2812,7 +2810,6 @@ ul.image-preview-list li {
 }
 .pinHeader-sub #sr-header-area,
 .pinHeader-subanduser #sr-header-area {
-    /*background-image: url(%%headerimg%%);*/
 background-image:
   	-webkit-repeating-linear-gradient(315deg, rgba(0, 0, 255, .03) 9%, rgba(0, 198, 96, .03) 13%),
   	-webkit-repeating-linear-gradient(315deg, rgba(44, 212, 126, .05) 23%, rgba(8, 8, 61, .04) 38%),
@@ -2843,7 +2840,6 @@ background-image:
 }
 .pinHeader-header #header {
     top: 0;
-    /*background-image: url(%%headerimg%%);*/
 background-image:
   	-webkit-repeating-linear-gradient(315deg, rgba(0, 0, 255, .03) 9%, rgba(0, 198, 96, .03) 13%),
   	-webkit-repeating-linear-gradient(315deg, rgba(44, 212, 126, .05) 23%, rgba(8, 8, 61, .04) 38%),
@@ -2992,7 +2988,7 @@ html.res-commentBoxes .comment {
     padding-bottom: 8px
 }
 .gearIcon {
-    background: url(%%spritesheet%%) -64px 0!important;
+    background: url("./spritesheet.png") -64px 0!important;
     position: relative;
     top: 2px;
     transition: all .25s ease
@@ -3323,7 +3319,7 @@ a.thumbnail.may-blank {
     margin-left: auto;
     margin-right: auto;
     margin-top: -18px;
-    background-image: url(%%decredHeaderLogo%%);
+    background-image: url("./decredHeaderLogo.png");
     background-position: 50% 50%;
     background-size: contain;
     background-repeat: no-repeat;
@@ -3338,7 +3334,7 @@ a.thumbnail.may-blank {
     height: 114px;
     bottom: 0;
     margin-left: 229px;
-    background-image: url(%%headerDude%%);
+    background-image: url("./headerDude.png");
     background-position: 100% 100%;
     background-size: 155px;
     background-repeat: no-repeat;
@@ -3395,7 +3391,6 @@ a.thumbnail.may-blank {
     background-size: contain;
     background-repeat: repeat-y;
     background-attachment: fixed;
-    /*background-image: url(%%headerimg%%);*/
 background-image:
   	-webkit-repeating-linear-gradient(315deg, rgba(0, 0, 255, .03) 9%, rgba(0, 198, 96, .03) 13%),
   	-webkit-repeating-linear-gradient(315deg, rgba(44, 212, 126, .05) 23%, rgba(8, 8, 61, .04) 38%),
