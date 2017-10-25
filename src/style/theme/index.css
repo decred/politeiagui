@@ -3319,7 +3319,6 @@ a.thumbnail.may-blank {
     margin-left: auto;
     margin-right: auto;
     margin-top: -18px;
-    background-image: url("./decredHeaderLogo.png");
     background-position: 50% 50%;
     background-size: contain;
     background-repeat: no-repeat;
@@ -3328,28 +3327,20 @@ a.thumbnail.may-blank {
 #header-img,
 #header-img.default-header {
     position: absolute;
-    left: 49%;
     display: block;
-    width: 156px;
-    height: 114px;
-    bottom: 0;
-    margin-left: 229px;
-    background-image: url("./headerDude.png");
-    background-position: 100% 100%;
+    top: 0;
+    height: 72px;
+    background-image: url("./logo.svg");
+    background-position: 100% 50%;
     background-size: 155px;
     background-repeat: no-repeat;
-    z-index: 99;
+    z-index: 999;
     font-size: 0
-}
-#header-img.default-header:hover,
-#header-img:hover {
-    background-position: 100% 0;
-    background-size: 155px
 }
 #header .tabmenu {
     position: absolute;
     bottom: 2px;
-    margin: 0 0 0 80px
+    margin: 0 0 0 180px
 }
 #header .tabmenu::before {
     background: rgba(0, 0, 0, 0)
@@ -3522,3 +3513,24 @@ margin-right: 15px;
    color: #0c1e3e ;
 }
 
+
+
+/* Addon: Small Header */
+#header{height:72px}
+#header-bottom-left,body:not(.search-page) .side:before{top:48px}
+body:not(.search-page) .side .titlebox h1.redditname{top:156px}
+body:not(.search-page) .titlebox .fancy-toggle-button{top:162px}
+body:not(.search-page) .titlebox span.subscribers{top:184px}
+#search{top:16px}
+body:not(.search-page) .morelink{top:390px}
+.comments-page .side .linkinfo{top:442px}
+/* End Addon */
+
+#header-bottom-left {
+  height: 72px;
+  top: 0;
+}
+
+#header-image.default-header,
+#header-image {
+}

@@ -10,7 +10,7 @@ const UserInfo = ({
   <div id="header-bottom-right">
     <span className="user">
       <Link href="/user/me/">{loggedInAs}</Link> {isAdmin
-        ? (<span className="userkarma" title="post karma" >admin</span>) : null}
+        ? (<Link href="/admin"><span className="userkarma" title="post karma" >admin</span></Link>) : null}
     </span>
     <span className="separator">|</span>
     <form className="logout hover" >

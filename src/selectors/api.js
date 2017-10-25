@@ -93,7 +93,7 @@ export const isAdmin = bool(or(
   compose(get("isadmin"), apiLoginResponse)
 ));
 export const policy = apiPolicyResponse;
-export const policyIsRequesting = isApiRequestingPolicy;
+export const isLoadingSubmit = or(isApiRequestingPolicy, isApiRequestingInit);
 export const vettedProposals = or(compose(get("proposals"), apiVettedResponse), constant([]));
 export const vettedProposalsIsRequesting = isApiRequestingVetted;
 export const vettedProposalsError = or(apiInitError, apiVettedError);

@@ -9,13 +9,14 @@ import { Field } from "redux-form";
 
 const SubmitPage = ({
   isSaving,
+  isLoading,
   Loading,
   policy,
   error,
   onSave,
   handleSubmit,
   newProposalError,
-}) => isSaving ? <Loading /> : (
+}) => isSaving || isLoading ? <Loading /> : (
   <div className="content" role="main">
     <ReactBody className="submit-page" />
     <h1>
@@ -30,18 +31,15 @@ const SubmitPage = ({
     <form
       className="submit content warn-on-unload"
       id="newlink"
-      onSubmit={handleSubmit(onSave)}
     >
       <div className="formtabs-content">
         <div className="spacer">
           <div className="roundfield" id="title-field">
-            <span className="title">title</span>
             <div className="roundfield-content">
               <Field
                 name="name"
                 component="textarea"
                 type="text"
-                rows={2}
                 placeholder="Proposal Name"
               />
             </div>
@@ -60,7 +58,6 @@ const SubmitPage = ({
             id="text-field"
             style={{ display: "block" }}
           >
-            <span className="title">Proposal body</span>{" "}
             <div className="roundfield-content">
               <input name="kind" type="hidden" defaultValue="self" />
               <div className="usertext">
@@ -88,7 +85,7 @@ const SubmitPage = ({
           </div>
         </div>
         <div className="spacer">
-          <button className="btn" name="submit" type="submit" value="form">
+          <button className="btn" name="submit" type="submit" value="form" onClick={handleSubmit(onSave)}>
             submit
           </button>
         </div>

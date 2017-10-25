@@ -19,7 +19,7 @@ export const RecentlyViewedLinks = Blank;
 export { default as RegisterForm } from "./RegisterForm";
 export { default as Sidebar } from "./Sidebar";
 export const SidebarAd = Blank;
-export const SidebarSearch = Blank;
+export { default as SidebarSearch } from "./SidebarSearch";
 export { default as SidebarTitlebox } from "./SidebarTitlebox";
 export { default as SiteTable } from "./SiteTable";
 //export { default as SrHeaderArea } from "./SrHeaderArea";

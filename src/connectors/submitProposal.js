@@ -8,7 +8,7 @@ import { withRouter } from "react-router-dom";
 
 const submitConnector = connect(
   sel.selectorMap({
-    isLoading: sel.policyIsRequesting,
+    isLoading: sel.isLoadingSubmit,
     policy: sel.policy,
     name: sel.newProposalName,
     description: sel.newProposalDescription,
