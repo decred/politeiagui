@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { Content } from "snew-classic-ui";
 import { proposalToT3 } from "../../lib/snew";
+import ReactBody from "react-body";
 import Loading from "./Loading";
 
-export const CustomContent = ({ listings, proposals, isLoading, ...props }) => (
+export const CustomContent = ({ listings, proposals, isLoading, ...props }) => [
+  <ReactBody className="listing-page" />,
   <Content {...{
     ...props,
     Loading,
@@ -14,7 +16,7 @@ export const CustomContent = ({ listings, proposals, isLoading, ...props }) => (
       }
     ]
   }} />
-);
+];
 
 class Loader extends Component {
   componentDidMount() {

@@ -1,8 +1,12 @@
 import { connect } from "react-redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
+import compose from "lodash/fp/compose";
+import { reduxForm } from "redux-form";
+import validate from "../components/ProposalSubmitPage/validator";
+import { withRouter } from "react-router-dom";
 
-export default connect(
+const submitConnector = connect(
   sel.selectorMap({
     isLoading: sel.policyIsRequesting,
     policy: sel.policy,
@@ -20,3 +24,5 @@ export default connect(
     onSave: act.onSaveNewProposal
   }
 );
+
+export default compose(reduxForm({ form: "form/proposal", validate }), submitConnector, withRouter);

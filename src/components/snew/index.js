@@ -28,6 +28,7 @@ export const SidebarTitlebox = comps.SidebarTitlebox = snew(comps.SidebarTitlebo
 export const SiteTable = comps.SiteTable = snew(comps.SiteTable);
 export const SrHeaderArea = comps.SrHeaderArea = snew(comps.SrHeaderArea);
 export const SubmitLinkSidebox = comps.SubmitLinkSidebox = snew(comps.SubmitLinkSidebox);
+export const SubmitPage = comps.SubmitPage = snew(comps.SubmitPage);
 export const SubmitTextSidebox = comps.SubmitTextSidebox = snew(comps.SubmitTextSidebox);
 export const Subreddit = comps.Subreddit = snew(comps.Subreddit);
 export const Thing = comps.Thing = snew(comps.Thing);

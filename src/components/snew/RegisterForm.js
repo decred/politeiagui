@@ -88,15 +88,6 @@ const RegisterForm = ({
           ? <span className="c-form-control-feedback c-form-control-feedback-error" title={passwd2Error} />
           : null}
       </div>
-    </div>
-    <div className="c-clearfix c-submit-group">
-      <button
-        className="c-btn c-btn-primary c-pull-right"
-        tabIndex={2}
-      >sign up</button>
-    </div>
-    <div>
-      <div className="c-alert c-alert-danger" />
       <Field
         name="global"
         component={props => <ErrorField title="Cannot sign up" {...props} />}
@@ -107,6 +98,15 @@ const RegisterForm = ({
           header="Signup failed"
           body={apiNewUserError || apiVerifyNewUserError} />
       ) : null}
+    </div>
+    <div className="c-clearfix c-submit-group">
+      <button
+        className="c-btn c-btn-primary c-pull-right"
+        tabIndex={2}
+      >sign up</button>
+    </div>
+    <div>
+      <div className="c-alert c-alert-danger" />
     </div>
   </form>
 );

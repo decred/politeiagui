@@ -42,16 +42,6 @@ const LoginForm = ({
         placeholder="Email Address"
         tabIndex={3}
       />
-      {apiLoginError ? (
-        <Message
-          type="error"
-          header="Login error"
-          body={apiLoginError} />
-      ) : null}
-      <Field
-        name="global"
-        component={props => <ErrorField title="Cannot login" {...props} />}
-      />
     </div>
     <div className="c-form-group">
       <label className="screenreader-only" htmlFor="passwd_login">
@@ -65,6 +55,16 @@ const LoginForm = ({
         component="input"
         type="password"
         placeholder="Password"
+      />
+      {apiLoginError ? (
+        <Message
+          type="error"
+          header="Login error"
+          body={apiLoginError} />
+      ) : null}
+      <Field
+        name="global"
+        component={props => <ErrorField title="Cannot login" {...props} />}
       />
     </div>
     <div className="c-checkbox">
