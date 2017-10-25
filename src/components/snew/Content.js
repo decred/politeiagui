@@ -5,9 +5,10 @@ import ReactBody from "react-body";
 import Loading from "./Loading";
 
 export const CustomContent = ({ listings, proposals, isLoading, ...props }) => [
-  <ReactBody className="listing-page" />,
+  <ReactBody className="listing-page" key="body" />,
   <Content {...{
     ...props,
+    key: "content",
     Loading,
     isLoading,
     listings: listings || [
