@@ -1,8 +1,9 @@
 import React from "react";
+import connector from "../../connectors/actions";
 
 const SubmitTextSidebox = ({
-  Link
-}) => (
+  Link, loggedInAs
+}) => loggedInAs ? (
   <div className="spacer">
     <div className="sidebox submit submit-text">
       <div className="morelink">
@@ -19,7 +20,7 @@ const SubmitTextSidebox = ({
       </div>
     </div>
   </div>
-);
+) : null;
 
-export default SubmitTextSidebox;
+export default connector(SubmitTextSidebox);
 

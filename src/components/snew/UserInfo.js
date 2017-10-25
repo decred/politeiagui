@@ -6,7 +6,7 @@ const UserInfo = ({
   Link = LinkComponent,
   loggedInAs,
   isAdmin
-}) => (
+}) => loggedInAs ? (
   <div id="header-bottom-right">
     <span className="user">
       <Link href="/user/me/">{loggedInAs}</Link> {isAdmin
@@ -16,6 +16,10 @@ const UserInfo = ({
     <form className="logout hover" >
       <Link href="/user/logout">logout</Link>
     </form>
+  </div>
+) : (
+  <div id="header-bottom-right">
+    <Link href="/user/signup" className="login-required">Log in or sign up</Link>
   </div>
 );
 

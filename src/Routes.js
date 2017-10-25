@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
-import { Content as ProposalListing } from "./components/snew";
+import { LoginSignupPage, Content as ProposalListing } from "./components/snew";
 import vetted from "./connectors/proposals";
 import proposalDetail from "./connectors/proposal";
 import censored from "./connectors/censoredProposals";
@@ -11,7 +11,6 @@ import About from "./components/AboutPage";
 import Login from "./components/LoginPage";
 import Logout from "./components/LogoutPage";
 import SignupNext from "./components/SignupNextStepPage";
-import Signup from "./components/SignupPage";
 import ForgottenPassword from "./components/ForgottenPasswordPage";
 import ForgottenPasswordSuccess from "./components/ForgottenPassword/SuccessPage";
 import PasswordReset from "./components/PasswordResetPage";
@@ -39,7 +38,7 @@ class Routes extends Component {
         <Route path="/user/signup/next" component={SignupNext} />
         <Route path="/user/login" component={Login} />
         <Route path="/user/logout" component={Logout} />
-        <Route path="/user/signup" component={Signup} />
+        <Route path="/user/signup" component={LoginSignupPage} />
         <Route exact path="/user/forgotten/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password/next" component={ForgottenPasswordSuccess} />
         <Route exact path="/user/password/reset" component={PasswordReset} />
