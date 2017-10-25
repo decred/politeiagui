@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import "snew-classic-ui/static/css/reddit.css";
 import "font-awesome/css/font-awesome.min.css";
 import "./style/index.css";
+import "./style/theme/index.css";
 import App from "./App";
 //import registerServiceWorker from "./registerServiceWorker";
 import { unregister } from "./registerServiceWorker";
