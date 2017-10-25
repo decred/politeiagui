@@ -5,7 +5,6 @@ import Message from "../Message";
 
 const FindPage = ({
   isSaving,
-  error,
   onFind,
   handleSubmit,
 }) => isSaving ? <LoadingPage /> : (

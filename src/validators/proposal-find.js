@@ -1,5 +1,5 @@
 import { SubmissionError } from "redux-form";
-import { isRequiredValidator } from "../../validators";
+import { isRequiredValidator } from "./util";
 
 const validate = values => {
   if (!isRequiredValidator(values.censorship)) {

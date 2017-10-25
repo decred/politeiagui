@@ -1,8 +1,9 @@
 import React from "react";
-import ReactMarkdown from "react-markdown";
+import Snudownd from "../snudownd";
+const parser = Snudownd.getParser();
 
 const MarkdownRenderer = ({ value }) => (
-  <ReactMarkdown source={value} />
+  <div className="md" dangerouslySetInnerHTML={{__html: parser.render(value || "")}} />
 );
 
 export default MarkdownRenderer;

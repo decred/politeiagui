@@ -1,5 +1,5 @@
 import { SubmissionError } from "redux-form";
-import { emailValidator, isRequiredValidator } from "../../validators";
+import { emailValidator, isRequiredValidator } from "./util";
 
 const validate = values => {
   if (!isRequiredValidator(values.email) || !isRequiredValidator(values.password)) {

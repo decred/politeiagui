@@ -1,7 +1,7 @@
 import { forEach } from "lodash";
 import { SubmissionError } from "redux-form";
-import { isFileValid } from "../ProposalImages/helpers";
-import { isRequiredValidator } from "../../validators";
+import { isFileValid } from "../components/ProposalImages/helpers";
+import { isRequiredValidator } from "./util";
 
 const validate = (values, policy) => {
   if (!isRequiredValidator(values.name) || !isRequiredValidator(values.description)) {

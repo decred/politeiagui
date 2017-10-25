@@ -2,3 +2,5 @@ node_modules
 npm-debug.log
 build
 docker-build
+*.DS_Store
+*.swp

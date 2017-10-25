@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
 import { autobind } from "core-decorators";
 import { SubmissionError } from "redux-form";
 import submitConnector from "../../connectors/submitProposal";
@@ -49,4 +48,4 @@ class ProposalSubmit extends Component {
 
 autobind(ProposalSubmit);
 
-export default withRouter(submitConnector(ProposalSubmit));
+export default submitConnector(ProposalSubmit);

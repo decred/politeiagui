@@ -20,6 +20,10 @@ html, body {
   font-weight: bold;
 }
 
+.CodeMirror {
+  min-height: 200px;
+}
+
 #app {
   height: 100%;
 }
@@ -206,6 +210,3 @@ a:hover {
   margin-top: 16px;
 }
 
-.about-page {
-  width: 600px;
-}
