@@ -20,6 +20,10 @@ html, body {
   font-weight: bold;
 }
 
+.CodeMirror {
+  min-height: 200px;
+}
+
 #app {
   height: 100%;
 }
@@ -205,3 +209,4 @@ a:hover {
 .proposal-save {
   margin-top: 16px;
 }
+
