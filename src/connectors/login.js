@@ -4,21 +4,7 @@ import * as act from "../actions";
 import { or } from "../lib/fp";
 import compose from "lodash/fp/compose";
 import { reduxForm } from "redux-form";
-import { emailValidator, isRequiredValidator } from "../validators";
-
-const validate = values => {
-  const errors = {};
-
-  if (!isRequiredValidator(values.email) || !isRequiredValidator(values.password)) {
-    errors.global = "All fields are required";
-  }
-
-  if (!emailValidator(values.email)) {
-    errors.global = "Invalid email address";
-  }
-
-  return errors;
-};
+import validate from "../components/Login/LoginValidator";
 
 const loginConnector = connect(
   sel.selectorMap({
@@ -39,4 +25,4 @@ const loginConnector = connect(
   }
 );
 
-export default compose(reduxForm({ form: "form/login", validate}), loginConnector);
+export default compose(reduxForm({ form: "form/login", validate }), loginConnector);

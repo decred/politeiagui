@@ -20,6 +20,7 @@ export const NavButtons = comps.NavButtons = snew(comps.NavButtons);
 export const NestedListing = comps.NestedListing = snew(comps.NestedListing);
 export const OrganicListing = comps.OrganicListing = snew(comps.OrganicListing);
 export const RecentlyViewedLinks = comps.RecentlyViewedLinks = snew(comps.RecentlyViewedLinks);
+export const RegisterForm = comps.RegisterForm = snew(comps.RegisterForm);
 export const Sidebar = comps.Sidebar = snew(comps.Sidebar);
 export const SidebarAd = comps.SidebarAd = snew(comps.SidebarAd);
 export const SidebarSearch = comps.SidebarSearch = snew(comps.SidebarSearch);

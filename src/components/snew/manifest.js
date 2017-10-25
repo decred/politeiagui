@@ -16,6 +16,7 @@ export const NavButtons = Blank;
 export const NestedListing = Blank;
 export const OrganicListing = Blank;
 export const RecentlyViewedLinks = Blank;
+export { default as RegisterForm } from "./RegisterForm";
 export { default as Sidebar } from "./Sidebar";
 export const SidebarAd = Blank;
 export const SidebarSearch = Blank;
