@@ -1,4 +1,5 @@
 import React from "react";
+import TimeAgo from "timeago-react";
 import ProposalImages from "../ProposalImages";
 import actions from "../../connectors/actions";
 import { PROPOSAL_STATUS_CENSORED, PROPOSAL_STATUS_PUBLIC, PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
@@ -96,45 +97,47 @@ const ThingLink = ({
         className={`expando-button ${expanded ? "expanded" : "collapsed"} selftext`}
       />*/}
       <p className="tagline">
-        submitted {created_utc}
+        submitted <TimeAgo datetime={created_utc*1000} />
       </p>
       <Expando {...{ expanded, is_self, selftext, selftext_html }} />
 
       <ProposalImages readOnly files={otherFiles} />
 
-      <ul className="flat-list buttons">
-        <li className="first">
-          <Link
-            className="bylink comments may-blank"
-            data-event-action="comments"
-            href={permalink}
-          >permalink</Link>
-        </li>
-        {isAdmin ? (
-          (review_status === PROPOSAL_STATUS_UNREVIEWED) ? [
-            <li key="spam">
-              <form className="toggle remove-button" onSubmit={(e) =>
-                onChangeStatus(id, PROPOSAL_STATUS_CENSORED) && e.preventDefault()}>
-                <button
-                  className="togglebutton access-required"
-                  data-event-action="spam"
-                  type="submit"
-                >spam</button>
-              </form>
-            </li>,
-            <li key="approve">
-              <form className="toggle approve-button" onSubmit={(e) =>
-                onChangeStatus(id, PROPOSAL_STATUS_PUBLIC) && e.preventDefault()}>
-                <button
-                  className="togglebutton access-required"
-                  data-event-action="approve"
-                  type="submit"
-                >approve</button>
-              </form>
-            </li>
-          ] : null
-        ) : null}
-      </ul>
+      {review_status === PROPOSAL_STATUS_UNREVIEWED && isAdmin ? (
+        <ul className="flat-list buttons">
+          <li className="first">
+            <Link
+              className="bylink comments may-blank"
+              data-event-action="comments"
+              href={permalink}
+            >permalink</Link>
+          </li>
+          {isAdmin ? (
+            (review_status === PROPOSAL_STATUS_UNREVIEWED) ? [
+              <li key="spam">
+                <form className="toggle remove-button" onSubmit={(e) =>
+                  onChangeStatus(id, PROPOSAL_STATUS_CENSORED) && e.preventDefault()}>
+                  <button
+                    className="togglebutton access-required"
+                    data-event-action="spam"
+                    type="submit"
+                  >spam</button>
+                </form>
+              </li>,
+              <li key="approve">
+                <form className="toggle approve-button" onSubmit={(e) =>
+                  onChangeStatus(id, PROPOSAL_STATUS_PUBLIC) && e.preventDefault()}>
+                  <button
+                    className="togglebutton access-required"
+                    data-event-action="approve"
+                    type="submit"
+                  >approve</button>
+                </form>
+              </li>
+            ] : null
+          ) : null}
+        </ul>
+      ) : null}
     </div>
     <div className="child" />
     <div className="clearleft" />
