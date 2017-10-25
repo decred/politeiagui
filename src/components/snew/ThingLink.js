@@ -1,6 +1,6 @@
 import React from "react";
 import ProposalImages from "../ProposalImages";
-import actions from "../../connectors/login";
+import actions from "../../connectors/actions";
 import { PROPOSAL_STATUS_CENSORED, PROPOSAL_STATUS_PUBLIC, PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
 
 const ThingLink = ({
@@ -113,21 +113,23 @@ const ThingLink = ({
         {isAdmin ? (
           (review_status === PROPOSAL_STATUS_UNREVIEWED) ? [
             <li key="spam">
-              <form className="toggle remove-button">
-                <a
+              <form className="toggle remove-button" onSubmit={(e) =>
+                onChangeStatus(id, PROPOSAL_STATUS_CENSORED) && e.preventDefault()}>
+                <button
                   className="togglebutton access-required"
                   data-event-action="spam"
-                  onClick={() => onChangeStatus(id, PROPOSAL_STATUS_CENSORED)}
-                >spam</a>
+                  type="submit"
+                >spam</button>
               </form>
             </li>,
             <li key="approve">
-              <form className="toggle approve-button">
-                <a
+              <form className="toggle approve-button" onSubmit={(e) =>
+                onChangeStatus(id, PROPOSAL_STATUS_PUBLIC) && e.preventDefault()}>
+                <button
                   className="togglebutton access-required"
                   data-event-action="approve"
-                  onClick={() => onChangeStatus(id, PROPOSAL_STATUS_PUBLIC)}
-                >approve</a>
+                  type="submit"
+                >approve</button>
               </form>
             </li>
           ] : null
