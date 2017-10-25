@@ -1,5 +1,5 @@
 import { basicAction } from "./lib";
-import { onSubmitProposal } from "./api";
+import { onSubmitProposal, onChangePassword } from "./api";
 import { onLogin as onLoginApi } from "./api";
 import * as sel from "../selectors";
 
@@ -13,3 +13,8 @@ export const onSaveNewProposal = ({ name, description, files }) =>
   };
 
 export const onLogin = (params) => onLoginApi(params);
+export const onSaveChangePassword = ({ existingPassword, password }) =>
+  (dispatch, getState) => {
+    return dispatch(onChangePassword(existingPassword, password))
+      .then(() => sel.newProposalToken(getState()));
+  };

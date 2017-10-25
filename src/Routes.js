@@ -11,6 +11,8 @@ import About from "./components/AboutPage";
 import Login from "./components/LoginPage";
 import Logout from "./components/LogoutPage";
 import SignupNext from "./components/SignupNextStepPage";
+import Signup from "./components/SignupPage";
+import UserProfile from "./components/UserProfile";
 import ForgottenPassword from "./components/ForgottenPasswordPage";
 import ForgottenPasswordSuccess from "./components/ForgottenPassword/SuccessPage";
 import PasswordReset from "./components/PasswordResetPage";
@@ -36,6 +38,7 @@ class Routes extends Component {
         <Route path="/about" component={About} />
         <Route path="/proposals/find" component={ProposalFind} />
         <Route path="/user/signup/next" component={SignupNext} />
+        <Route path="/user/profile" component={UserProfile} />
         <Route path="/user/login" component={Login} />
         <Route path="/user/logout" component={Logout} />
         <Route path="/user/signup" component={LoginSignupPage} />

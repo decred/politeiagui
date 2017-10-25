@@ -6,7 +6,7 @@ const forgottenPasswordConnector = connect(
   sel.selectorMap({
     apiForgottenPasswordError: sel.apiForgottenPasswordError,
     forgottenPasswordResponse: sel.forgottenPasswordResponse,
-    isRequesting: sel.isApiRequestingForgottenPassword, // ???
+    isRequesting: sel.isApiRequestingForgottenPassword,
   }),
   {
     resetForgottenPassword: act.resetForgottenPassword,

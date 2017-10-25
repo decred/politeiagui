@@ -57,6 +57,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_VERIFY_NEW_USER]: () => receive("verifyNewUser", state, action),
   [act.REQUEST_LOGIN]: () => request("login", state, action),
   [act.RECEIVE_LOGIN]: () => receive("login", state, action),
+  [act.REQUEST_CHANGE_PASSWORD]: () => request("changePassword", state, action),
+  [act.RECEIVE_CHANGE_PASSWORD]: () => receive("changePassword", state, action),
   [act.REQUEST_VETTED]: () => request("vetted", state, action),
   [act.RECEIVE_VETTED]: () => receive("vetted", state, action),
   [act.REQUEST_UNVETTED]: () => request("unvetted", state, action),
