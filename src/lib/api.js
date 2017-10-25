@@ -90,6 +90,11 @@ export const login = (csrf, email, password) =>
     .then(parseResponse)
     .then(({ response }) => response);
 
+export const changePassword = (csrf, currentpassword, newpassword) =>
+  post("/user/password/change", csrf, { currentpassword, newpassword })
+    .then(parseResponse)
+    .then(({ response }) => response || {});
+
 export const forgottenPasswordRequest = (csrf, email) =>
   post("/user/password/reset", csrf, { email })
     .then(parseResponse)
