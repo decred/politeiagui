@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { autobind } from "core-decorators";
 import { withRouter } from "react-router";
+import { SubmissionError } from "redux-form";
 import SignupForm from "./SignupForm";
-import loginConnector from "../../connectors/login";
+import signupConnector from "../../connectors/signup";
+import validate from "./SignupValidator";
 
 class Signup extends Component {
   componentWillUnmount() {
@@ -19,18 +21,26 @@ class Signup extends Component {
     return (
       <div className="login-form">
         <SignupForm {...{
+          ...this.props,
           onSignup: this.onSignup,
-          hideCancel: this.props.signup
         }} />
       </div>
     );
   }
 
   onSignup(props) {
-    this.props.onSignup(props);
+    validate(props);
+    return this
+      .props
+      .onSignup(props)
+      .catch((error) => {
+        throw new SubmissionError({
+          _error: error.message,
+        });
+      });
   }
 }
 
 autobind(Signup);
 
-export default loginConnector(withRouter(Signup));
+export default signupConnector(withRouter(Signup));

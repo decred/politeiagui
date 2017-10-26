@@ -121,7 +121,10 @@ export const onCreateNewUser = ({ email, password }) =>
     return api
       .newUser(csrf, email, password)
       .then(response => dispatch(onReceiveNewUser(response)))
-      .catch(error => dispatch(onReceiveNewUser(null, error)));
+      .catch(error => {
+        dispatch(onReceiveNewUser(null, error));
+        throw error;
+      });
   });
 
 export const onResetNewUser = () => ({ type: RESET_NEW_USER });
