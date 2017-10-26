@@ -9,6 +9,7 @@ import * as act from "../actions";
 export default connect(
   sel.selectorMap({
     token: compose(get(["match", "params", "token"]), arg(1)),
+    isAdmin: sel.isAdmin,
     proposal: sel.proposal,
     error: sel.proposalError,
     isLoading: sel.proposalIsRequesting,

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import LoadingPage from "./LoadingPage";
 import ProposalImages from "./ProposalImages";
+import ProposalStatus from "./ProposalStatus";
 import ErrorPage from "./ErrorPage";
 import Markdown from "./MarkdownRenderer";
 import proposalConnector from "../connectors/proposal";
@@ -12,10 +13,11 @@ class ProposalDetailPage extends Component {
   }
 
   render() {
-    const { isLoading, error, proposal, markdownFile, otherFiles } = this.props;
+    const { isLoading, isAdmin, error, proposal, markdownFile, otherFiles } = this.props;
 
     return isLoading ? <LoadingPage /> : error ? <ErrorPage {...{ error }} /> : (
       <div className="page proposal-detail-page">
+        {isAdmin && <ProposalStatus proposal={proposal} />}
         <h2>{proposal.name}</h2>
         <div className="proposal-meta-data clearfloat">
           <div className="proposal-meta-data-name">Created:</div>

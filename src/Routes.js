@@ -16,7 +16,6 @@ import VerifyFailure from "./components/Verify/indexFailure";
 import ProposalFind from "./components/ProposalFind";
 import NotFound from "./components/NotFoundPage";
 import VettedProposals from "./components/VettedProposalsPage";
-import ProposalStatus from "./components/ProposalStatusPage";
 import ProposalDetail from "./components/ProposalDetailPage";
 import ProposalSubmit from "./components/ProposalSubmitPage";
 import ProposalSubmitSuccess from "./components/ProposalSubmitSuccessPage";
@@ -46,7 +45,6 @@ class Routes extends Component {
         <Route path="/proposals/vetted" component={VettedProposals} />
         <AuthenticatedRoute path="/proposals/new" component={ProposalSubmit} />
         <AuthenticatedRoute path="/proposals/success" component={ProposalSubmitSuccess} />
-        <AdminAuthenticatedRoute path="/proposals/:token/status" component={ProposalStatus} />
         <Route path="/proposals/:token" component={ProposalDetail} />
         <AdminAuthenticatedRoute path="/admin/censored" component={CensoredProposals} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={UnreviewedProposals} />
