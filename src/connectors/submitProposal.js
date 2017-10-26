@@ -22,7 +22,8 @@ const submitConnector = connect(
   }),
   {
     onFetchData: act.onGetPolicy,
-    onSave: act.onSaveNewProposal
+    onSave: act.onSaveNewProposal,
+    onResetProposal: act.onResetProposal
   }
 );
 
@@ -34,6 +35,7 @@ class SubmitWrapper extends Component {
 
   componentWillReceiveProps({ token }) {
     if (token) {
+      this.props.onResetProposal();
       return this.props.history.push("/proposals/" + token);
     }
   }

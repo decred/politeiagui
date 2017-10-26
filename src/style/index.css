@@ -1,3 +1,8 @@
+.thumbnail.self, #header-img.default-header {
+  display: none;
+}
+
+
 html, body {
   height: 100%;
   width: 100%;
