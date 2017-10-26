@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { autobind } from "core-decorators";
 import { withRouter } from "react-router";
+import { SubmissionError } from "redux-form";
 import ForgottenPasswordForm from "./ForgottenPasswordForm";
 import forgottenPasswordConnector from "../../connectors/forgottenPassword";
+import validate from "./ForgottenPasswordValidator";
 
 class ForgottenPassword extends Component {
   componentWillUnmount() {
@@ -27,7 +29,15 @@ class ForgottenPassword extends Component {
   }
 
   onForgottenPassword(props) {
-    this.props.onForgottenPasswordRequest(props);
+    validate(props);
+    return this
+      .props
+      .onForgottenPasswordRequest(props)
+      .catch((error) => {
+        throw new SubmissionError({
+          _error: error.message,
+        });
+      });
   }
 }
 

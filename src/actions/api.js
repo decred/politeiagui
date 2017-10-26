@@ -232,7 +232,10 @@ export const onForgottenPasswordRequest = ({ email }) =>
     return api
       .forgottenPasswordRequest(csrf, email)
       .then(response => dispatch(onReceiveForgottenPasswordRequest(response)))
-      .catch(error => dispatch(onReceiveForgottenPasswordRequest(null, error)));
+      .catch(error => {
+        dispatch(onReceiveForgottenPasswordRequest(null, error));
+        throw error;
+      });
   });
 
 export const resetForgottenPassword = () => dispatch => {
