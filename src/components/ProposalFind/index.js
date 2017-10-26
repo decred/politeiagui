@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import SubmitPage from "./Page";
+import validate from "./validator";
 
 class FindProposal extends Component {
   constructor() {
@@ -9,8 +10,9 @@ class FindProposal extends Component {
     this.onFind = this.onFind.bind(this);
   }
 
-  onFind({ censorship }) {
-    this.props.history.push(`/proposals/${censorship}`);
+  onFind(props) {
+    validate(props);
+    this.props.history.push(`/proposals/${props.censorship}`);
   }
 
   render() {
