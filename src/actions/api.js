@@ -245,7 +245,10 @@ export const onPasswordResetRequest = ({ email, verificationtoken, password }) =
     return api
       .passwordResetRequest(csrf, email, verificationtoken, password)
       .then(response => dispatch(onReceivePasswordResetRequest(response)))
-      .catch(error => dispatch(onReceivePasswordResetRequest(null, error)));
+      .catch(error => {
+        dispatch(onReceivePasswordResetRequest(null, error));
+        throw error;
+      });
   });
 
 export const resetPasswordReset = () => dispatch => {

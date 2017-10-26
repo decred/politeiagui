@@ -6,6 +6,8 @@ import { assign } from "lodash";
 import { isRequiredValidator } from "../../validators";
 import PasswordResetForm from "./PasswordResetForm";
 import passwordResetConnector from "../../connectors/passwordReset";
+import validate from "./PasswordResetValidator";
+import { SubmissionError } from "redux-form";
 
 class PasswordReset extends Component {
   componentWillMount() {
@@ -43,8 +45,17 @@ class PasswordReset extends Component {
     return qs.parse(this.props.location.search);
   }
 
-  onPasswordReset({ password }) {
-    this.props.onPasswordResetRequest(assign({ password }, this.getQueryParams()));
+  onPasswordReset(props) {
+    validate(props);
+
+    return this
+      .props
+      .onPasswordResetRequest(assign({ password: props.password }, this.getQueryParams()))
+      .catch((error) => {
+        throw new SubmissionError({
+          _error: error.message,
+        });
+      });
   }
 }
 

@@ -1,13 +1,10 @@
 import { passwordVerifyValidator } from "../../validators";
+import { SubmissionError } from "redux-form";
 
 const validate = values => {
-  const errors = {};
-
   if (!passwordVerifyValidator(values.password, values.password_verify)) {
-    errors.global = "Passwords do not match";
+    throw new SubmissionError({ _error: "Passwords do not match" });
   }
-
-  return errors;
 };
 
 export default validate;
