@@ -146,7 +146,10 @@ export const onLogin = ({ email, password }) =>
     return api
       .login(csrf, email, password)
       .then(response => dispatch(onReceiveLogin(response)))
-      .catch(error => dispatch(onReceiveLogin(null, error)));
+      .catch(error => {
+        dispatch(onReceiveLogin(null, error));
+        throw error;
+      });
   });
 
 export const onLogout = () =>

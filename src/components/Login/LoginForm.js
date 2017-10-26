@@ -2,30 +2,22 @@ import React from "react";
 import { reduxForm, Field } from "redux-form";
 import { Link } from "react-router-dom";
 import Message from "../Message";
-import loginFormConnector from "../../connectors/loginForm";
-import ErrorField from "../Form/Fields/ErrorField";
-import validate from "./LoginValidator";
 
 const LoginForm = ({
-  isApiRequestingLogin,
-  apiLoginError,
+  error,
+  isRequesting,
   onLogin,
   handleSubmit
-}) => isApiRequestingLogin ? (
+}) => isRequesting ? (
   <fieldset className="login-form">Logging In...</fieldset>
 ) : (
   <form onSubmit={handleSubmit(onLogin)}>
+    {error && <Message
+      type="error"
+      header="Login error"
+      body={error}
+    />}
     <fieldset className="login-form">
-      {apiLoginError ? (
-        <Message
-          type="error"
-          header="Login error"
-          body={apiLoginError} />
-      ) : null}
-      <Field
-        name="global"
-        component={props => <ErrorField title="Cannot login" {...props} />}
-      />
       <Field
         name="email"
         component="input"
@@ -45,4 +37,4 @@ const LoginForm = ({
   </form>
 );
 
-export default reduxForm({ form: "form/login", validate })(loginFormConnector(LoginForm));
+export default reduxForm({ form: "form/login" })(LoginForm);
