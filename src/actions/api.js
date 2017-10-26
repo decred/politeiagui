@@ -170,7 +170,10 @@ export const onChangePassword = ( password, newPassword ) =>
     return api
       .changePassword(csrf,  password, newPassword)
       .then(response => dispatch(onReceiveChangePassword(response)))
-      .catch(error => dispatch(onReceiveChangePassword(null, error)));
+      .catch(error => {
+        dispatch(onReceiveChangePassword(null, error));
+        throw error;
+      });
   });
 
 export const onFetchVetted = () =>
