@@ -9,7 +9,7 @@ export default connect(
     name: sel.newProposalName,
     description: sel.newProposalDescription,
     files: sel.newProposalFiles,
-    isSaving: sel.newProposalIsRequesting,
+    isRequesting: sel.newProposalIsRequesting,
     error: sel.newProposalError,
     merkle: sel.newProposalMerkle,
     token: sel.newProposalToken,

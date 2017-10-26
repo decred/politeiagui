@@ -206,7 +206,10 @@ export const onSubmitProposal = (name, description, files) =>
     return api
       .newProposal(csrf, name, description, files)
       .then(response => dispatch(onReceiveNewProposal(response)))
-      .catch(error => dispatch(onReceiveNewProposal(null, error)));
+      .catch(error => {
+        dispatch(onReceiveNewProposal(null, error));
+        throw error;
+      });
   });
 
 const statusName = key => ({3: "censor", 4: "publish"}[key]);
