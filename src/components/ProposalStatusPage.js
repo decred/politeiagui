@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { isEmpty } from "lodash";
 import { withRouter } from "react-router";
 import LoadingPage from "./LoadingPage";
 import ErrorPage from "./ErrorPage";
@@ -9,9 +8,7 @@ import { PROPOSAL_STATUS_CENSORED, PROPOSAL_STATUS_PUBLIC } from "../constants";
 
 class ProposalStatusPage extends Component {
   componentWillMount() {
-    if (isEmpty(this.props.proposal)) {
-      this.props.onFetchData(this.props.token);
-    }
+    this.props.onFetchData(this.props.token);
   }
 
   componentWillReceiveProps(nextProps) {

@@ -16,6 +16,6 @@ export default connect(
     otherFiles: sel.getNotMarkdownFile,
   }),
   dispatch => bindActionCreators({
-    onFetchData: act.onFetchProposal
+    onFetchData: act.onFetchProposal,
   }, dispatch)
 );
