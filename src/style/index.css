@@ -1,6 +1,10 @@
 .thumbnail.self, #header-img.default-header {
-  background-image: none;
+  background-image: url("./logo.svg");
+  background-repeat: no-repeat;
+  background-position: center left;
 }
+
+#header .redditname { display: none; }
 
 
 html, body {
