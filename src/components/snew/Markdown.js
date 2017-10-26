@@ -1,13 +1,9 @@
 import React from "react";
-import ReactMarkdown from "react-markdown";
+import Snudownd from "../../snudownd";
+const parser = Snudownd.getParser();
 
-const Markdown = ({ body, className="usertext usertext-body may-black-within md-container" }) =>
-  body ? (
-    <div className={className}>
-      <ReactMarkdown source={body} className="md" />
-    </div>
-  ) : null;
+const MarkdownRenderer = ({ body }) => (
+  <div className="md" dangerouslySetInnerHTML={{__html: parser.render(body || "")}} />
+);
 
-export default Markdown;
-
-
+export default MarkdownRenderer;

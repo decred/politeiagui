@@ -1,5 +1,5 @@
 import React from "react";
-import Markdown from "../../MarkdownRenderer";
+import Markdown from "../../snew/Markdown";
 //import MDEditor from "../../markdown";
 import Markmirror from "react-markmirror";
 
@@ -30,7 +30,7 @@ const MarkdownEditorField = ({ placeholder, input, touched, error, disabled }) =
       </div>
       {touched && error && !disabled && <span className="error">{error}</span>}
       <div className="preview">
-        <Markdown value={input.value} />
+        <Markdown body={input.value} />
       </div>
     </div>
   );
