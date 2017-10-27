@@ -9,7 +9,7 @@ const UserInfo = ({
 }) => loggedInAs ? (
   <div id="header-bottom-right">
     <span className="user">
-      <Link href="/user/me/">{loggedInAs}</Link> {isAdmin
+      <Link href="/user/profile/">{loggedInAs}</Link> {isAdmin
         ? (<Link href="/admin"><span className="userkarma" title="post karma" >admin</span></Link>) : null}
     </span>
     <span className="separator">|</span>
