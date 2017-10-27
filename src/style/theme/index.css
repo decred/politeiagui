@@ -2746,7 +2746,7 @@ ul.image-preview-list li {
 }
 .footer-parent {
     margin-top: 192px;
-    background: url("./footer.png") 50% 0/cover no-repeat
+    /*background: url("./footer.png") 50% 0/cover no-repeat*/
 }
 .footer {
     border: 0 solid;
@@ -3534,4 +3534,14 @@ body:not(.search-page) .morelink{top:390px}
 
 #header-image.default-header,
 #header-image {
+}
+
+.footer-parent,
+#header {
+  background-image: none;
+  background-color: #586D82;
+}
+
+.link .thumbnail.self {
+  display: none;
 }
