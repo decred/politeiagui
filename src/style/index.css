@@ -11,10 +11,12 @@
 }
 
 #header .redditname { display: none; }
-
 #login-form .c-checkbox input,
 #login-form .c-checkbox label,
-#remember-me { display: none; }
+#remember-me input,
+#remember-me label {
+  display: none;
+}
 
 .login-form-side .status { display: block }
 
