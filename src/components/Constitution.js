@@ -2,7 +2,7 @@ import React from "react";
 import Markdown from "./snew/Markdown";
 
 const constitution = `
-#  <i class="fa fa-gavel"></i> Decred Constitution
+# Decred Constitution
 
 ---
 
