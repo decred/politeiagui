@@ -1,20 +1,20 @@
+import { SubmissionError } from "redux-form";
 import { emailValidator, isRequiredValidator, passwordVerifyValidator } from "../../validators";
 
 const validate = values => {
-  const errors = {};
   if (!isRequiredValidator(values.email) || !isRequiredValidator(values.password) || !isRequiredValidator(values.password_verify)) {
-    errors.global = "All fields are required";
+    throw new SubmissionError({ _error: "All fields are required" });
   }
 
   if (!passwordVerifyValidator(values.password, values.password_verify)) {
-    errors.global = "Passwords do not match";
+    throw new SubmissionError({ _error: "Passwords do not match" });
   }
+
+  console.log(values);
 
   if (!emailValidator(values.email)) {
-    errors.global = "Invalid email address";
+    throw new SubmissionError({ _error: "Invalid email address" });
   }
-
-  return errors;
 };
 
 export default validate;

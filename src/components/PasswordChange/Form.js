@@ -1,23 +1,22 @@
 import React from "react";
 import { reduxForm, Field } from "redux-form";
 import Message from "../Message";
-import validate from "./Validator";
-import ErrorField from "../Form/Fields/ErrorField";
 
 const ChangePasswordForm = ({
+  error,
   isApiRequestingChangePassword,
-  apiChangePasswordError,
   onChangePassword,
   handleSubmit
 }) => isApiRequestingChangePassword ? (
   <fieldset className="change-password-form">Changing password</fieldset>
 ) : (
   <form onSubmit={handleSubmit(onChangePassword)}>
+    {error && <Message
+      type="error"
+      header="Cannot change password"
+      body={error}
+    />}
     <fieldset className="change-password-form">
-      <Field
-        name="global"
-        component={props => <ErrorField title="Cannot change password" {...props} />}
-      />
       <Field
         name="existingPassword"
         placeholder="Existing Password"
@@ -37,14 +36,8 @@ const ChangePasswordForm = ({
         type="password"
       />
       <input type="submit" value="Change Password" />
-      {apiChangePasswordError ? (
-        <Message
-          type="error"
-          header="Change Password failed"
-          body={apiChangePasswordError} />
-      ) : null}
     </fieldset>
   </form>
 );
 
-export default reduxForm({ form: "form/change-password", validate })(ChangePasswordForm);
+export default reduxForm({ form: "form/change-password" })(ChangePasswordForm);

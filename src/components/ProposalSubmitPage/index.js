@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
+import { autobind } from "core-decorators";
+import { SubmissionError } from "redux-form";
 import submitConnector from "../../connectors/submitProposal";
 import LoadingPage from "../LoadingPage";
-import SubmitPage from "./Page";
+import Form from "./Form";
+import validate from "./validator";
 
 class ProposalSubmit extends Component {
   componentDidMount() {
@@ -15,15 +18,35 @@ class ProposalSubmit extends Component {
     }
   }
 
+  onSave(props) {
+    validate(props, this.props.policy);
+
+    return this
+      .props
+      .onSave(props)
+      .catch((error) => {
+        throw new SubmissionError({
+          _error: error.message,
+        });
+      });
+  }
+
   render() {
-    const { isLoading, ...props } = this.props;
+    const { isLoading } = this.props;
 
     return isLoading ? <LoadingPage /> : (
       <div className="page proposal-submit-page">
-        {<SubmitPage {...props} />}
+        <Form
+          {...{
+            ...this.props,
+            onSave: this.onSave
+          }}
+        />
       </div>
     );
   }
 }
+
+autobind(ProposalSubmit);
 
 export default withRouter(submitConnector(ProposalSubmit));

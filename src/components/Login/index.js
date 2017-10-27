@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { autobind } from "core-decorators";
 import { withRouter } from "react-router";
+import { SubmissionError } from "redux-form";
 import LoginForm from "./LoginForm";
 import CurrentUser from "./CurrentUser";
 import loginConnector from "../../connectors/login";
+import validate from "./LoginValidator";
 
 class Login extends Component {
   componentWillReceiveProps({ loggedInAs, redirectedFrom, resetRedirectedFrom, history }) {
@@ -13,10 +15,6 @@ class Login extends Component {
     }
   }
 
-  componentWillUnmount() {
-    this.props.onResetNewUser();
-  }
-
   render() {
     return (
       <div className="login-form">
@@ -24,6 +22,7 @@ class Login extends Component {
           <CurrentUser />
         ) : (
           <LoginForm {...{
+            ...this.props,
             onLogin: this.onLogin
           }} />
         )}
@@ -32,7 +31,8 @@ class Login extends Component {
   }
 
   onLogin(...args) {
-    this.props.onLogin(...args)
+    validate(...args);
+    return this.props.onLogin(...args)
       .then(() => {
         if(this.props.isAdmin) {
           this.props.history.push("/admin/unreviewed");
@@ -40,6 +40,11 @@ class Login extends Component {
         else {
           this.props.history.push("/proposals/new");
         }
+      })
+      .catch((error) => {
+        throw new SubmissionError({
+          _error: error.message,
+        });
       });
   }
 }

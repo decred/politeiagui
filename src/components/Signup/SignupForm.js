@@ -1,31 +1,25 @@
 import React from "react";
 import { reduxForm, Field } from "redux-form";
 import Message from "../Message";
-import signupFormConnector from "../../connectors/signupForm";
-import validate from "./SignupValidator";
-import ErrorField from "../Form/Fields/ErrorField";
 
 const SignupForm = ({
-  isApiRequestingNewUser,
-  isApiRequestingVerifyNewUser,
-  apiNewUserError,
-  apiVerifyNewUserError,
+  error,
+  isRequesting,
   hideCancel,
   onSignup,
   onCancelSignup,
   handleSubmit
-}) => isApiRequestingVerifyNewUser ? (
-  <fieldset className="signup-form">Verifying...</fieldset>
-) : isApiRequestingNewUser ? (
+}) => isRequesting ? (
   <fieldset className="signup-form">Signing up...</fieldset>
 ) : (
   <form onSubmit={handleSubmit(onSignup)}>
+    {error && <Message
+      type="error"
+      header="Cannot sign up"
+      body={error}
+    />}
     <fieldset className="signup-form">
       <h2>Sign up</h2>
-      <Field
-        name="global"
-        component={props => <ErrorField title="Cannot sign up" {...props} />}
-      />
       <Field
         name="email"
         placeholder="Email Address"
@@ -46,14 +40,12 @@ const SignupForm = ({
       />
       {hideCancel ? null : <button onClick={onCancelSignup}>Cancel</button>}
       <input type="submit" value="Signup" />
-      {apiNewUserError || apiVerifyNewUserError ? (
-        <Message
-          type="error"
-          header="Signup failed"
-          body={apiNewUserError || apiVerifyNewUserError} />
-      ) : null}
     </fieldset>
   </form>
 );
 
-export default reduxForm({ form: "form/signup", validate })(signupFormConnector(SignupForm));
+SignupForm.defaultProps = {
+  hideCancel: true,
+};
+
+export default reduxForm({ form: "form/signup" })(SignupForm);

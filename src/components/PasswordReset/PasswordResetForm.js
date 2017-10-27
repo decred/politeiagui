@@ -1,23 +1,20 @@
 import React from "react";
 import { Field, reduxForm } from "redux-form";
-import passwordResetConnector from "../../connectors/passwordReset";
-import validate from "./PasswordResetValidator";
 import ErrorField from "../Form/Fields/ErrorField";
 import Message from "../Message";
 
-const PasswordResetForm = ({ handleSubmit, onPasswordReset, isRequesting, apiPasswordResetError }) => {
+const PasswordResetForm = ({ error, handleSubmit, onPasswordReset, isRequesting }) => {
   if (isRequesting) {
     return <fieldset className="signup-form">Loading...</fieldset>;
   }
 
   return (
     <form onSubmit={handleSubmit(onPasswordReset)}>
-      {apiPasswordResetError ? (
-        <Message
-          type="error"
-          header="Password reset error"
-          body={apiPasswordResetError} />
-      ) : null}
+      {error && <Message
+        type="error"
+        header="Password reset error"
+        body={error}
+      />}
       <fieldset className="password-reset-form">
         <h2>Reset your password</h2>
         <Field
@@ -42,4 +39,4 @@ const PasswordResetForm = ({ handleSubmit, onPasswordReset, isRequesting, apiPas
   );
 };
 
-export default reduxForm({ form: "form/passwordReset", validate })(passwordResetConnector(PasswordResetForm));
+export default reduxForm({ form: "form/passwordReset" })(PasswordResetForm);

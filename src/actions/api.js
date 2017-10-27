@@ -121,7 +121,10 @@ export const onCreateNewUser = ({ email, password }) =>
     return api
       .newUser(csrf, email, password)
       .then(response => dispatch(onReceiveNewUser(response)))
-      .catch(error => dispatch(onReceiveNewUser(null, error)));
+      .catch(error => {
+        dispatch(onReceiveNewUser(null, error));
+        throw error;
+      });
   });
 
 export const onResetNewUser = () => ({ type: RESET_NEW_USER });
@@ -143,7 +146,10 @@ export const onLogin = ({ email, password }) =>
     return api
       .login(csrf, email, password)
       .then(response => dispatch(onReceiveLogin(response)))
-      .catch(error => dispatch(onReceiveLogin(null, error)));
+      .catch(error => {
+        dispatch(onReceiveLogin(null, error));
+        throw error;
+      });
   });
 
 export const onLogout = () =>
@@ -164,7 +170,10 @@ export const onChangePassword = ( password, newPassword ) =>
     return api
       .changePassword(csrf,  password, newPassword)
       .then(response => dispatch(onReceiveChangePassword(response)))
-      .catch(error => dispatch(onReceiveChangePassword(null, error)));
+      .catch(error => {
+        dispatch(onReceiveChangePassword(null, error));
+        throw error;
+      });
   });
 
 export const onFetchVetted = () =>
@@ -200,7 +209,10 @@ export const onSubmitProposal = (name, description, files) =>
     return api
       .newProposal(csrf, name, description, files)
       .then(response => dispatch(onReceiveNewProposal(response)))
-      .catch(error => dispatch(onReceiveNewProposal(null, error)));
+      .catch(error => {
+        dispatch(onReceiveNewProposal(null, error));
+        throw error;
+      });
   });
 
 const statusName = key => ({3: "censor", 4: "publish"}[key]);
@@ -232,7 +244,10 @@ export const onForgottenPasswordRequest = ({ email }) =>
     return api
       .forgottenPasswordRequest(csrf, email)
       .then(response => dispatch(onReceiveForgottenPasswordRequest(response)))
-      .catch(error => dispatch(onReceiveForgottenPasswordRequest(null, error)));
+      .catch(error => {
+        dispatch(onReceiveForgottenPasswordRequest(null, error));
+        throw error;
+      });
   });
 
 export const resetForgottenPassword = () => dispatch => {
@@ -245,7 +260,10 @@ export const onPasswordResetRequest = ({ email, verificationtoken, password }) =
     return api
       .passwordResetRequest(csrf, email, verificationtoken, password)
       .then(response => dispatch(onReceivePasswordResetRequest(response)))
-      .catch(error => dispatch(onReceivePasswordResetRequest(null, error)));
+      .catch(error => {
+        dispatch(onReceivePasswordResetRequest(null, error));
+        throw error;
+      });
   });
 
 export const resetPasswordReset = () => dispatch => {

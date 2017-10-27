@@ -6,7 +6,6 @@ const passwordResetConnector = connect(
   sel.selectorMap({
     passwordResetResponse: sel.passwordResetResponse,
     isRequesting: sel.isApiRequestingPasswordReset,
-    apiPasswordResetError: sel.apiPasswordResetError,
   }),
   {
     resetPasswordReset: act.resetPasswordReset,
