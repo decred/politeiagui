@@ -1,7 +1,13 @@
+#header {
+  background-color: #2971FF;
+}
 .thumbnail.self, #header-img.default-header {
   background-image: url("./logo.svg");
   background-repeat: no-repeat;
   background-position: center left;
+}
+.thumbnail.self {
+  background-color: #0C1E3E;
 }
 
 #header .redditname { display: none; }
