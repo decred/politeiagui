@@ -5,11 +5,13 @@ import * as act from "../actions";
 
 export default connect(
   sel.selectorMap({
+    isAdmin: sel.isAdmin,
     proposals: sel.vettedProposals,
     error: sel.vettedProposalsError,
     isLoading: sel.vettedProposalsIsRequesting
   }),
   dispatch => bindActionCreators({
-    onFetchData: act.onFetchVetted
+    onFetchData: act.onFetchVetted,
+    onChangeStatus: act.onSubmitStatusProposal
   }, dispatch)
 );

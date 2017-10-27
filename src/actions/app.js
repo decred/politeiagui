@@ -1,5 +1,6 @@
 import { basicAction } from "./lib";
 import { onSubmitProposal, onChangePassword } from "./api";
+import { onLogin as onLoginApi } from "./api";
 import * as sel from "../selectors";
 
 export const CANCEL_SIGNUP = "CANCEL_SIGNUP";
@@ -16,3 +17,5 @@ export const onSaveChangePassword = ({ existingPassword, password }) =>
     return dispatch(onChangePassword(existingPassword, password))
       .then(() => sel.newProposalToken(getState()));
   };
+
+export const onLogin = (params) => onLoginApi(params);

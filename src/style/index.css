@@ -1,3 +1,26 @@
+#header {
+  background-color: #2971FF;
+}
+.thumbnail.self, #header-img.default-header {
+  background-image: url("./logo.svg");
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+.thumbnail.self {
+  background-color: #0C1E3E;
+}
+
+#header .redditname { display: none; }
+#login-form .c-checkbox input,
+#login-form .c-checkbox label,
+#remember-me input,
+#remember-me label {
+  display: none;
+}
+
+.login-form-side .status { display: block }
+
+
 html, body {
   height: 100%;
   width: 100%;
@@ -18,6 +41,10 @@ html, body {
 .error {
   color: red;
   font-weight: bold;
+}
+
+.CodeMirror {
+  min-height: 200px;
 }
 
 #app {
@@ -206,6 +233,3 @@ a:hover {
   margin-top: 16px;
 }
 
-.about-page {
-  width: 600px;
-}
