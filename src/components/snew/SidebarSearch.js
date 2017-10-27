@@ -1,9 +1,10 @@
 import React from "react";
 import { Field } from "redux-form";
-import ErrorField from "../Form/Fields/ErrorField";
+import Message from "../Message";
 import connector from "../../connectors/search";
 
 const SidebarSearch = ({
+  error,
   Loading,
   isSaving,
   onFind,
@@ -20,10 +21,9 @@ const SidebarSearch = ({
         tabIndex={20}
       />
       <input tabIndex={22} type="submit" defaultValue />
-      <Field
-        name="global"
-        component={props => <ErrorField title="Cannot search for proposal" {...props} />}
-      />
+      {error && (
+        <Message type="error" header="Cannot search for proposal" body={error} />
+      )}
       <div className="infobar" id="searchexpando">
         <div id="moresearchinfo">
         </div>

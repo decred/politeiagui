@@ -11,11 +11,12 @@ class SearchWrapper extends Component {
     return <Component {...{...this.props, onFind: this.onFind.bind(this) }} />;
   }
 
-  onFind({ censorship }) {
-    this.props.history.push(`/proposals/${censorship}`);
+  onFind(...args) {
+    validate(...args);
+    this.props.history.push(`/proposals/${args[0].censorship}`);
   }
 }
 
 const wrapSearch = (Component) => (props) => <SearchWrapper {...{...props, Component }} />;
 
-export default compose(withRouter, wrapSearch, reduxForm({ form: "form/proposal-find", validate }));
+export default compose(withRouter, reduxForm({ form: "form/proposal-find" }), wrapSearch);

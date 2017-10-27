@@ -56,6 +56,12 @@ const SubmitPage = ({
             name="global"
             component={props => <ErrorField title="Cannot submit proposal" {...props} />}
           />
+          {error ? (
+            <Message
+              type="error"
+              header="Error creating proposal"
+              body={error} />
+          ) : null}
           <div className="roundfield" id="title-field">
             <div className="roundfield-content">
               <Field

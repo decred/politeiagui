@@ -8,12 +8,13 @@ const LoginFormSide = ({
   Link,
   Loading,
   isApiRequestingLogin,
+  error,
   apiLoginError,
   loggedInAs,
   formAction="/post/login",
   onLogin,
   handleSubmit,
-}) => isApiRequestingLogin ? <Loading /> : loggedInAs ? null : (
+}) => console.log("error", error) || isApiRequestingLogin ? <Loading /> : loggedInAs ? null : (
   <div className="spacer">
     <form
       action={formAction}
@@ -46,6 +47,12 @@ const LoginFormSide = ({
             type="error"
             header="Login error"
             body={apiLoginError} />
+        ) : null}
+        {error ? (
+          <Message
+            type="error"
+            header="Cannot login"
+            body={error} />
         ) : null}
         <Field
           name="global"

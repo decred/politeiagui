@@ -12,6 +12,12 @@
 
 #header .redditname { display: none; }
 
+#login-form .c-checkbox input,
+#login-form .c-checkbox label,
+#remember-me { display: none; }
+
+.login-form-side .status { display: block }
+
 
 html, body {
   height: 100%;

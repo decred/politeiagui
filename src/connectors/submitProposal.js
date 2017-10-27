@@ -15,7 +15,7 @@ const submitConnector = connect(
     description: sel.newProposalDescription,
     files: sel.newProposalFiles,
     isRequesting: sel.newProposalIsRequesting,
-    error: sel.newProposalError,
+    newProposalError: sel.newProposalError,
     merkle: sel.newProposalMerkle,
     token: sel.newProposalToken,
     signature: sel.newProposalSignature
@@ -42,10 +42,15 @@ class SubmitWrapper extends Component {
 
   render() {
     const Component = this.props.Component;
-    return <Component {...this.props}  />;
+    return <Component {...{...this.props, onSave: this.onSave.bind(this) }}  />;
+  }
+
+  onSave(...args) {
+    validate(...args);
+    return this.props.onSave(...args);
   }
 }
 
 const wrapSubmit = (Component) => (props) => <SubmitWrapper {...{...props, Component }} />;
 
-export default compose(withRouter, submitConnector, wrapSubmit, reduxForm({ form: "form/proposal", validate }));
+export default compose(withRouter, submitConnector, reduxForm({ form: "form/proposal" }), wrapSubmit);

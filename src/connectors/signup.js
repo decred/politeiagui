@@ -44,10 +44,16 @@ class Wrapper extends Component {
 
   render() {
     const Component = this.props.Component;
-    return <Component {...{ ...this.props }} />;
+    return <Component {...{ ...this.props, onSignup: this.onSignup.bind(this) }} />;
+  }
+
+  onSignup(...args) {
+    console.log("args", args);
+    validate(...args);
+    this.props.onSignup(...args);
   }
 }
 
 const wrap = (Component) => signupFormConnector((props) => <Wrapper {...{...props, Component }} />);
 
-export default compose(reduxForm({ form: "form/signup", validate }), withRouter, wrap);
+export default compose(reduxForm({ form: "form/signup" }), withRouter, wrap);

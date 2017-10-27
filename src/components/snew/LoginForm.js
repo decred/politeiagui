@@ -8,6 +8,7 @@ const LoginForm = ({
   Link,
   Loading,
   formAction="/post/login",
+  error,
   isApiRequestingLogin,
   loggedInAs,
   apiLoginError,
@@ -61,6 +62,12 @@ const LoginForm = ({
           type="error"
           header="Login error"
           body={apiLoginError} />
+      ) : null}
+      {error ? (
+        <Message
+          type="error"
+          header="Cannot login"
+          body={error} />
       ) : null}
       <Field
         name="global"

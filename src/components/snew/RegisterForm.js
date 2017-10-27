@@ -6,6 +6,7 @@ import ErrorField from "../Form/Fields/ErrorField";
 
 const RegisterForm = ({
   Loading,
+  error,
   isApiRequestingNewUser,
   apiNewUserError,
   apiVerifyNewUserError,
@@ -92,11 +93,11 @@ const RegisterForm = ({
         name="global"
         component={props => <ErrorField title="Cannot sign up" {...props} />}
       />
-      {apiNewUserError || apiVerifyNewUserError ? (
+      {error || apiNewUserError || apiVerifyNewUserError ? (
         <Message
           type="error"
           header="Signup failed"
-          body={apiNewUserError || apiVerifyNewUserError} />
+          body={error || apiNewUserError || apiVerifyNewUserError} />
       ) : null}
     </div>
     <div className="c-clearfix c-submit-group">

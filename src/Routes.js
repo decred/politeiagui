@@ -18,8 +18,7 @@ import Verify from "./components/Verify";
 import VerifySuccess from "./components/Verify/indexSuccess";
 import VerifyFailure from "./components/Verify/indexFailure";
 import NotFound from "./components/NotFoundPage";
-import ProposalDetail from "./components/ProposalDetailPage";
-import ProposalStatus from "./components/ProposalStatusPage";
+import ProposalDetail from "./components/ProposalDetail";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
 
@@ -43,7 +42,6 @@ class Routes extends Component {
         <Route path="/user/verify/failure" component={VerifyFailure} />
         <Route path="/user/verify" component={Verify} exact={true} />
         <AuthenticatedRoute path="/proposals/new" component={SubmitPage} />
-        <AdminAuthenticatedRoute path="/proposals/:token/status" component={ProposalStatus} />
         <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin" component={admin(ProposalListing)} />

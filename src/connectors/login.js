@@ -20,6 +20,7 @@ const loginConnector = connect(
   }),
   {
     onLogin: act.onLogin,
+    onResetNewUser: act.onResetNewUser,
     resetRedirectedFrom: act.resetRedirectedFrom,
   }
 );
@@ -42,6 +43,7 @@ class Wrapper extends Component {
   }
 
   onLogin(...args) {
+    validate(...args);
     this.props.onLogin(...args).then(() => {
       if (this.props.isAdmin) {
         this.props.history.push("/admin/");
@@ -54,4 +56,4 @@ class Wrapper extends Component {
 
 const wrap = (Component) => loginConnector((props) => <Wrapper {...{...props, Component }} />);
 
-export default compose(withRouter, wrap, reduxForm({ form: "form/login", validate }));
+export default compose(withRouter, reduxForm({ form: "form/login" }), wrap);
