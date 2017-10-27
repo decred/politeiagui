@@ -31,8 +31,8 @@ class Routes extends Component {
         <Route path="/login" component={LoginSignupPage} />
         <Route path="/user/login" component={LoginSignupPage} />
         <Route path="/user/logout" component={Logout} />
-        <Route path="/user/signup" component={LoginSignupPage} />
         <Route path="/user/signup/next" component={SignupNext} />
+        <Route path="/user/signup" component={LoginSignupPage} />
         <Route path="/user/profile" component={UserProfile} />
         <Route exact path="/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password" component={ForgottenPassword} />
