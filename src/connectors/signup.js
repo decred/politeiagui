@@ -1,3 +1,4 @@
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
@@ -5,10 +6,12 @@ import { or } from "../lib/fp";
 import compose from "lodash/fp/compose";
 import { reduxForm } from "redux-form";
 import validate from "../validators/signup";
+import { withRouter } from "react-router-dom";
 
 const signupFormConnector = connect(
   sel.selectorMap({
     loggedInAs: sel.loggedInAs,
+    isAdmin: sel.isAdmin,
     newUserResponse: sel.newUserResponse,
     isApiRequestingNewUser: or(sel.isApiRequestingInit, sel.isApiRequestingNewUser),
     isApiRequestingVerifyNewUser: sel.isApiRequestingVerifyNewUser,
@@ -17,8 +20,34 @@ const signupFormConnector = connect(
   }),
   {
     onSignup: act.onSignup,
+    onResetNewUser: act.onResetNewUser,
     onCancelSignup: act.onCancelSignup
   }
 );
 
-export default compose(reduxForm({ form: "form/signup", validate }), signupFormConnector);
+class Wrapper extends Component {
+  componentWillUnmount() {
+    this.props.onResetNewUser();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.loggedInAs) {
+      if (this.props.isAdmin) {
+        this.props.history.push("/admin/");
+      } else {
+        this.props.history.push("/proposals/new");
+      }
+    } else if (nextProps.newUserResponse) {
+      nextProps.history.push("/user/signup/next");
+    }
+  }
+
+  render() {
+    const Component = this.props.Component;
+    return <Component {...{ ...this.props }} />;
+  }
+}
+
+const wrap = (Component) => signupFormConnector((props) => <Wrapper {...{...props, Component }} />);
+
+export default compose(reduxForm({ form: "form/signup", validate }), withRouter, wrap);

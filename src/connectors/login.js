@@ -1,3 +1,4 @@
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
@@ -5,6 +6,7 @@ import { or } from "../lib/fp";
 import compose from "lodash/fp/compose";
 import { reduxForm } from "redux-form";
 import validate from "../validators/login";
+import { withRouter } from "react-router-dom";
 
 const loginConnector = connect(
   sel.selectorMap({
@@ -22,4 +24,34 @@ const loginConnector = connect(
   }
 );
 
-export default compose(reduxForm({ form: "form/login", validate }), loginConnector);
+class Wrapper extends Component {
+  componentWillReceiveProps({ loggedInAs, redirectedFrom, resetRedirectedFrom, history }) {
+    if (loggedInAs && redirectedFrom) {
+      resetRedirectedFrom();
+      history.push(redirectedFrom);
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.onResetNewUser();
+  }
+
+  render() {
+    const Component = this.props.Component;
+    return <Component {...{ ...this.props, onLogin: this.onLogin.bind(this) }} />;
+  }
+
+  onLogin(...args) {
+    this.props.onLogin(...args).then(() => {
+      if (this.props.isAdmin) {
+        this.props.history.push("/admin/");
+      } else {
+        this.props.history.push("/proposals/new");
+      }
+    });
+  }
+}
+
+const wrap = (Component) => loginConnector((props) => <Wrapper {...{...props, Component }} />);
+
+export default compose(withRouter, wrap, reduxForm({ form: "form/login", validate }));
