@@ -12,9 +12,9 @@ const UnvettedListItem = ({
   onSubmitStatusProposal,
 }) => (
   <tr>
-    <td><Link to={`/proposals/${token}/status`}>{name}</Link></td>
+    <td><Link to={`/proposals/${token}`}>{name}</Link></td>
     <td>{getProposalStatus(status)}</td>
-    <td><Link to={`/proposals/${token}/status`}>{token.substring(0, 7) + "..."}</Link></td>
+    <td><Link to={`/proposals/${token}`}>{token.substring(0, 7) + "..."}</Link></td>
     {status === PROPOSAL_STATUS_UNREVIEWED ? (
       <td>
         <button onClick={() => onSubmitStatusProposal(token, PROPOSAL_STATUS_CENSORED)}>Censored</button>
