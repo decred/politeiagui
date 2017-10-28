@@ -46,7 +46,7 @@ const SubmitPage = ({
         header="Error creating proposal"
         body={newProposalError} />
     ) : null}
-    <form
+    <div
       className="submit content warn-on-unload"
       id="newlink"
     >
@@ -122,15 +122,11 @@ const SubmitPage = ({
           <div className="roundfield">
             <div className="markhelp" >
               <p>
-                reddit uses a slightly-customized version of{" "}
+                We use a slightly-customized version of{" "}
                 <a href="http://daringfireball.net/projects/markdown/syntax">
                   Markdown
                 </a>{" "}
-                for formatting. See below for some basics, or check{" "}
-                <a href="/wiki/commenting">
-                  the commenting wiki page
-                </a>{" "}
-                for more detailed help and solutions to common issues.
+                for formatting. See below for some basics
               </p>
               <table className="md">
                 <tbody>
@@ -221,7 +217,7 @@ const SubmitPage = ({
         </div>
       </div>
       <div className="roundfield info-notice"> </div>
-    </form>
+    </div>
   </div>
 );
 

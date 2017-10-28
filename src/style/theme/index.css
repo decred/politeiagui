@@ -3547,3 +3547,21 @@ body:not(.search-page) .morelink{top:390px}
 .link .thumbnail.self {
   display: none;
 }
+
+.ffmarkdown-editor .markmirror {
+  background-color: #8997A5;
+  padding: 0.25em 0.25em 0.25em 0.25em;
+}
+.ffmarkdown-editor .markmirror .markmirror__toolbar {
+  margin-bottom: 0.1em;
+}
+.markmirror .markmirror__toolbar button {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  font-size: 16px;
+  width: 28px;
+  height: 24px;
+  line-height: 24px;
+  border-radius: none;
+  box-shadow: none;
+}
