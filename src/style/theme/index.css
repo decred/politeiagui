@@ -3550,10 +3550,11 @@ body:not(.search-page) .morelink{top:390px}
 
 .ffmarkdown-editor .markmirror {
   background-color: #8997A5;
-  padding: 0.25em 0.25em 0.25em 0.25em;
+  padding: 0 0 0 0;
 }
 .ffmarkdown-editor .markmirror .markmirror__toolbar {
-  margin-bottom: 0.1em;
+  padding-top: 0.25em;
+  margin: 0.25em 0.25em 0.25em 0.25em;
 }
 .markmirror .markmirror__toolbar button {
   margin: 0 0 0 0;
@@ -3564,4 +3565,9 @@ body:not(.search-page) .morelink{top:390px}
   line-height: 24px;
   border-radius: none;
   box-shadow: none;
+}
+.markmirror .markmirror__toolbar button:focus,
+.markmirror .markmirror__toolbar button:active,
+.markmirror .markmirror__toolbar button:hover {
+  color: #8997A5;
 }
