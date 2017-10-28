@@ -1,5 +1,5 @@
 import React from "react";
-import Snudownd from "../../snudownd";
+import Snudownd from "snuownd";
 const parser = Snudownd.getParser();
 
 const MarkdownRenderer = ({ body, className }) => (

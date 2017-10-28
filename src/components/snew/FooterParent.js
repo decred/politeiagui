@@ -14,7 +14,7 @@ const FooterParent = () => (
         border: "1px solid black"
       }}
     >
-      <h3 style={{ color: "black" }}><a href="https://github.com/decred/snew-classic-ui" style={{ color: "black" }}>Interface Design</a></h3>
+      <h3 style={{ color: "black" }}>Interface Design</h3>
       <img
         alt="Interface Design Powered by reddit."
         src="https://s3.amazonaws.com/sp.reddit.com/powered_by_reddit.png"

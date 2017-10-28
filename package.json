@@ -23,6 +23,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "snew-classic-ui": "https://github.com/decred/snew-classic-ui",
+    "snuownd": "https://github.com/JordanMilne/snuownd",
     "timeago-react": "^1.2.2"
   },
   "scripts": {
