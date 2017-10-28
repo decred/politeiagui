@@ -363,6 +363,7 @@ body:not(.loggedin) #header-bottom-right {
 #header .tabmenu {
     display: block;
     height: 42px;
+    left: 32px;
     line-height: 42px;
     border: none
 }
@@ -3532,8 +3533,9 @@ body:not(.search-page) .morelink{top:390px}
   top: 0;
 }
 
-#header-image.default-header,
-#header-image {
+#header-img.default-header {
+  width: 188px;
+  padding-left: 32px;
 }
 
 .footer-parent,

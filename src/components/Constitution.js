@@ -33,31 +33,8 @@ const constitution = `
 * The votes themselves decide by majority decision whether the general transaction tree of the previous block, including the PoW subsidy, is valid. Thus, if PoS voters vote against a particular PoW block, it destroys the PoW subsidy (and development subsidy) and invalidates any regular transactions within that block.
 * Additional vote bits may be set when stakeholders submit votes, allowing stakeholders to vote on matters besides the previous block.
 
----
+[more](https://docs.decred.org/getting-started/constitution/)
 
-## Project Governance
-
-* Off-chain decision-making shall be used to resolve disputes related to development and voted on by the *Decred Assembly* as they arise, as an effective proof-of-assembly ("PoA"), until such time PoA is integrated into the blockchain.
-* The *Decred Assembly* shall be composed of diverse Assembly members who are selected for membership by the *Admission Council* from the project ecosystem for representation.
-* Councils that are composed of Assembly members shall be formed to address ongoing and episodic matters. The initial Councils shall serve the separate functions of admission (*Admission Council*), creation (*Creation Council*), and attrition (*Attrition Council*).
-* The *Admission Council* shall vote on the inclusion of new members into the Assembly. All additional Councils shall be created by the *Creation Council*. The *Attrition Council* shall be responsible for deactivating both Councils and Assembly members as necessary.
-* Membership of the *Decred Assembly* shall consist of Assembly members who have been confirmed by a 60% or greater affirmative vote by the *Admission Council*. There is no restriction on the age or nationality of Assembly members, the only requirement is that of merit as judged by the *Admission Council*. Merit is judged on the basis of two characteristics: (1) the amount of time over which one has been involved with the project, and (2) one's body of work and its impact in the context of the project.
-* Attrition is embraced by temporarily deactivating or actively expelling Assembly members by a 60% or greater affirmative vote by the *Attrition Council* on the basis of: (1) substantial non-fulfillment of duties for one or more Councils or the Assembly, and/or (2) counterproductive behaviour that goes against the framework set forth in the Constitution without constructive action toward solutions.
-* All matters formally presented to a Council shall be resolved by a vote in 365 days or less.
-
----
-
-## Funding
-
-* Sustainability and longevity require that a subsidy of 10% of all block rewards be given to a development organization on an ongoing basis. The initial development organization shall be *Decred Holdings Group* LLC ("DHG"), a Nevis LLC that is responsible for funding work related to the development of the project, such as software development, infrastructure, and awareness.
-* DHG shall only fund work that adheres to the guiding principles.
-* DHG shall issue public financial statements every six months, starting March 8th, 2016. The frequency of financial statements may increase with activity, but it shall not occur more often than quarterly.
-* DHG shall put forth a budget proposal each year on March 8th, after the corresponding public financial statement has been issued.
-* The *Funding Council* shall review, propose changes, make changes, and ultimately approve the proposal by April 8th, one month from the initial budget proposal.
-* Final approval of the budget via PoA vote shall occur after *Funding Council* approval by April 18th, two months from the initial proposal.
-* DHG shall make public requests for proposals ("RFPs") for projects that are to be completed by parties on a contractual basis. RFPs shall include a scope and an explanation of how the work shall benefit the project. Parties that submit proposals shall be required to include: (1) a detailed description of the work to be performed, (2) a series of milestones that can be verified as work is completed, and (3) a quote for the work, itemized by milestone, in U.S. Dollars ("USD").
-* All proposals, both submitted and accepted, shall be made public one week after a proposal has been selected. Once the selection occurs, the associated RFP shall be removed. Contracted parties shall be paid exclusively in *decred* ("DCR") at the current effective DCR/USD rate at the time of payment, unless specifically noted otherwise.
-* In the future, the development organization may need to change from DHG to another entity that serves an identical function. If and when this occurs, DHG shall transfer all assets to the new entity and the development subsidy shall be directed to the new entity.
 `;
 
 const Constitution = (props) => <Markdown body={constitution} {...props} />;
