@@ -157,9 +157,9 @@ const SubmitPage = ({
                     </td>
                   </tr>
                   <tr>
-                    <td>[reddit!](https://reddit.com)</td>
+                    <td>[decred!](https://decred.org)</td>
                     <td>
-                      <a href="https://reddit.com">reddit!</a>
+                      <a href="https://decred.org">decred!</a>
                     </td>
                   </tr>
                   <tr>
