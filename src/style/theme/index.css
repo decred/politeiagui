@@ -3527,6 +3527,8 @@ body:not(.search-page) .morelink{top:390px}
 .comments-page .side .linkinfo{top:442px}
 /* End Addon */
 
+/* Begin Politeia customization */
+
 .submit-page #header-bottom-left,
 #header-bottom-left {
   height: 72px;
@@ -3574,4 +3576,10 @@ body:not(.search-page) .morelink{top:390px}
 .markmirror .markmirror__toolbar button:active,
 .markmirror .markmirror__toolbar button:hover {
   color: #8997A5;
+}
+
+
+a.attached-image-remove {
+  color: #fff;
+  background-color: #8997A5;
 }
