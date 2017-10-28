@@ -3554,9 +3554,12 @@ body:not(.search-page) .morelink{top:390px}
   font-family: "Source Sans Pro", "Helvetica Neue", arial, sans-serif;
 }
 
+
+
 .ffmarkdown-editor .markmirror {
   background-color: #8997A5;
-  padding: 0 0 0 0;
+  padding: 1px 1px 1px 1px;
+  margin-right: 7px;
 }
 .ffmarkdown-editor .markmirror .markmirror__toolbar {
   padding-top: 0.25em;
@@ -3582,4 +3585,8 @@ body:not(.search-page) .morelink{top:390px}
 a.attached-image-remove {
   color: #fff;
   background-color: #8997A5;
+}
+
+.submit-page #title-field textarea {
+  border: 1px solid #8997A5;
 }
