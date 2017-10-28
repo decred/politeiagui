@@ -30,7 +30,7 @@ const submitConnector = connect(
 
 class SubmitWrapper extends Component {
   componentDidMount() {
-    this.props.policy && this.props.onFetchData();
+    this.props.policy || this.props.onFetchData();
   }
 
   componentWillReceiveProps({ token }) {
