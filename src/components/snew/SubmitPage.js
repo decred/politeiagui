@@ -70,23 +70,24 @@ const SubmitPage = ({
                 type="text"
                 placeholder="Proposal Name"
               />
+              {error ? (
+                <div className={"error"}>
+                  {(typeof error === "string") ? error : (
+                    <pre>{JSON.stringify(error, null, 2)}</pre>
+                  )}
+                </div>
+              ) : null}
+              {/*
             </div>
           </div>
         </div>
-        {error ? (
-          <div className={"error"}>
-            {(typeof error === "string") ? error : (
-              <pre>{JSON.stringify(error, null, 2)}</pre>
-            )}
-          </div>
-        ) : null}
         <div className="spacer">
           <div
             className="roundfield"
             id="text-field"
             style={{ display: "block" }}
           >
-            <div className="roundfield-content">
+            <div className="roundfield-content">*/}
               <input name="kind" type="hidden" defaultValue="self" />
               <div className="usertext">
                 <input name="thing_id" type="hidden" defaultValue />
