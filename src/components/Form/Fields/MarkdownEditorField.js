@@ -26,7 +26,7 @@ const renderToolbar = children => (markmirror, renderButton) => (
 const MarkdownEditorField = ({ placeholder, input, touched, error, disabled, children }) => {
   return console.log("input", input) || (
     <div className="ffmarkdown-editor">
-      <div className="ffeditor">
+      <div className="ffeditor usertext">
         <Markmirror theme="light" {...{
           value: input.value,
           onChange: input.onChange,
@@ -34,7 +34,7 @@ const MarkdownEditorField = ({ placeholder, input, touched, error, disabled, chi
           renderToolbar: renderToolbar(children),
           children,
           onPreview(body) {
-            return parser.render(body);
+            return `<div class="md md-preview">${parser.render(body)}`;
           }
         }} />
       </div>

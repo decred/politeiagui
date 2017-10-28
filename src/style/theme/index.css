@@ -3548,6 +3548,10 @@ body:not(.search-page) .morelink{top:390px}
   display: none;
 }
 
+.markmirror .md-preview {
+  font-family: "Source Sans Pro", "Helvetica Neue", arial, sans-serif;
+}
+
 .ffmarkdown-editor .markmirror {
   background-color: #8997A5;
   padding: 0 0 0 0;
