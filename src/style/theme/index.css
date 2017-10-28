@@ -363,6 +363,7 @@ body:not(.loggedin) #header-bottom-right {
 #header .tabmenu {
     display: block;
     height: 42px;
+    left: 32px;
     line-height: 42px;
     border: none
 }
@@ -3526,14 +3527,17 @@ body:not(.search-page) .morelink{top:390px}
 .comments-page .side .linkinfo{top:442px}
 /* End Addon */
 
+/* Begin Politeia customization */
+
 .submit-page #header-bottom-left,
 #header-bottom-left {
   height: 72px;
   top: 0;
 }
 
-#header-image.default-header,
-#header-image {
+#header-img.default-header {
+  width: 188px;
+  padding-left: 32px;
 }
 
 .footer-parent,
@@ -3544,4 +3548,45 @@ body:not(.search-page) .morelink{top:390px}
 
 .link .thumbnail.self {
   display: none;
+}
+
+.markmirror .md-preview {
+  font-family: "Source Sans Pro", "Helvetica Neue", arial, sans-serif;
+}
+
+
+
+.ffmarkdown-editor .markmirror {
+  background-color: #8997A5;
+  padding: 1px 1px 1px 1px;
+  margin-right: 7px;
+}
+.ffmarkdown-editor .markmirror .markmirror__toolbar {
+  padding-top: 0.25em;
+  margin: 0.25em 0.25em 0.25em 0.25em;
+}
+.markmirror .markmirror__toolbar button {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  font-size: 16px;
+  width: 28px;
+  height: 24px;
+  line-height: 24px;
+  border-radius: none;
+  box-shadow: none;
+}
+.markmirror .markmirror__toolbar button:focus,
+.markmirror .markmirror__toolbar button:active,
+.markmirror .markmirror__toolbar button:hover {
+  color: #8997A5;
+}
+
+
+a.attached-image-remove {
+  color: #fff;
+  background-color: #8997A5;
+}
+
+.submit-page #title-field textarea {
+  border: 1px solid #8997A5;
 }

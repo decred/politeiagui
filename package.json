@@ -1,8 +1,9 @@
 {
   "name": "politeiagui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "dependencies": {
     "babel-cli": "^6.26.0",
+    "concurrently": "^3.5.0",
     "core-decorators": "^0.20.0",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.4",
@@ -23,11 +24,13 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "snew-classic-ui": "https://github.com/decred/snew-classic-ui",
+    "snuownd": "https://github.com/JordanMilne/snuownd",
     "timeago-react": "^1.2.2"
   },
   "scripts": {
     "mockapi": "node mockapi.js",
     "start": "cross-env HTTPS=true react-scripts start",
+    "uidev": "concurrently \"node mockapi.js\" \"react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",

@@ -46,7 +46,7 @@ const SubmitPage = ({
         header="Error creating proposal"
         body={newProposalError} />
     ) : null}
-    <form
+    <div
       className="submit content warn-on-unload"
       id="newlink"
     >
@@ -70,23 +70,24 @@ const SubmitPage = ({
                 type="text"
                 placeholder="Proposal Name"
               />
+              {error ? (
+                <div className={"error"}>
+                  {(typeof error === "string") ? error : (
+                    <pre>{JSON.stringify(error, null, 2)}</pre>
+                  )}
+                </div>
+              ) : null}
+              {/*
             </div>
           </div>
         </div>
-        {error ? (
-          <div className={"error"}>
-            {(typeof error === "string") ? error : (
-              <pre>{JSON.stringify(error, null, 2)}</pre>
-            )}
-          </div>
-        ) : null}
         <div className="spacer">
           <div
             className="roundfield"
             id="text-field"
             style={{ display: "block" }}
           >
-            <div className="roundfield-content">
+            <div className="roundfield-content">*/}
               <input name="kind" type="hidden" defaultValue="self" />
               <div className="usertext">
                 <input name="thing_id" type="hidden" defaultValue />
@@ -122,15 +123,11 @@ const SubmitPage = ({
           <div className="roundfield">
             <div className="markhelp" >
               <p>
-                reddit uses a slightly-customized version of{" "}
+                We use a slightly-customized version of{" "}
                 <a href="http://daringfireball.net/projects/markdown/syntax">
                   Markdown
                 </a>{" "}
-                for formatting. See below for some basics, or check{" "}
-                <a href="/wiki/commenting">
-                  the commenting wiki page
-                </a>{" "}
-                for more detailed help and solutions to common issues.
+                for formatting. See below for some basics
               </p>
               <table className="md">
                 <tbody>
@@ -221,7 +218,7 @@ const SubmitPage = ({
         </div>
       </div>
       <div className="roundfield info-notice"> </div>
-    </form>
+    </div>
   </div>
 );
 

@@ -7,7 +7,6 @@ import validate from "../validators/proposal-find";
 class SearchWrapper extends Component {
   render() {
     const Component = this.props.Component;
-    console.log("props", this.props);
     return <Component {...{...this.props, onFind: this.onFind.bind(this) }} />;
   }
 

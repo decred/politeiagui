@@ -13,7 +13,7 @@ const FilesField = ({ placeholder="Upload", input, touched, error, disabled, pol
           name, mime, size, payload: base64[idx].split("base64,").pop()
         })))
       }
-    ><span>{placeholder}</span></ReactFileReader>
+    ><button>{placeholder}</button></ReactFileReader>
     {touched && error && !disabled && <span className="error">{error}</span>}
     <ProposalImages files={input.value || []} onChange={input.onChange} policy={policy} />
   </div>
