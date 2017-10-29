@@ -195,13 +195,13 @@ export const onFetchUnvetted = () =>
       .catch(error => dispatch(onReceiveUnvetted(null, error)));
   };
 
-export const onFetchProposal = (token) =>
+export const onFetchProposal = (token, key="viewing") =>
   (dispatch) => {
-    dispatch(onRequestProposal(token));
+    dispatch(onRequestProposal(token, null, key));
     return api
       .proposal(token)
-      .then(response => dispatch(onReceiveProposal(response)))
-      .catch(error => dispatch(onReceiveProposal(null, error)));
+      .then(response => dispatch(onReceiveProposal(response, null, key)))
+      .catch(error => dispatch(onReceiveProposal(null, error, key)));
   };
 
 export const onSubmitProposal = (name, description, files) =>

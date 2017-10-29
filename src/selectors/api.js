@@ -22,7 +22,8 @@ export const isApiRequestingForgottenPassword = getIsApiRequesting("forgottenPas
 export const isApiRequestingPasswordReset = getIsApiRequesting("passwordReset");
 const isApiRequestingVetted = getIsApiRequesting("vetted");
 const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
-const isApiRequestingProposal = getIsApiRequesting("proposal");
+const isApiRequestingProposal = bool(get(["api", "proposals", "viewing", "isRequesting"]));
+
 const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
 export const isApiRequesting = or(
   isApiRequestingInit,
@@ -50,7 +51,7 @@ export const forgottenPasswordResponse = getApiResponse("forgottenPassword");
 export const passwordResetResponse = getApiResponse("passwordReset");
 const apiVettedResponse = getApiResponse("vetted");
 const apiUnvettedResponse = getApiResponse("unvetted");
-const apiProposalResponse = getApiResponse("proposal");
+const apiProposalResponse = get(["api", "proposals", "viewing", "response"]);
 const apiNewProposalResponse = getApiResponse("newProposal");
 const apiSetStatusProposalResponse = getApiResponse("setStatusProposal");
 
@@ -64,7 +65,7 @@ export const apiLoginError = or(apiInitError, getApiError("login"));
 export const apiLogoutError = or(apiInitError, getApiError("logout"));
 const apiVettedError = getApiError("vetted");
 const apiUnvettedError = getApiError("unvetted");
-const apiProposalError = getApiError("proposal");
+const apiProposalError = get(["api", "proposals", "viewing", "error"]);
 const apiNewProposalError = getApiError("newProposal");
 export const apiError = or(
   apiInitError,

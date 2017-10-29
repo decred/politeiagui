@@ -15,6 +15,7 @@ export const DEFAULT_STATE = {
   newProposal: DEFAULT_REQUEST_STATE,
   forgottenPassword: DEFAULT_REQUEST_STATE,
   passwordReset: DEFAULT_REQUEST_STATE,
+  proposals: {},
   email: ""
 };
 
@@ -40,6 +41,14 @@ const receive = (key, state, { payload, error }) => ({
   }
 });
 
+const requestProposal = (key, state, action) => ({
+  ...state, proposals: request(key, state.proposals, action)
+});
+
+const receiveProposal = (key, state, action) => ({
+  ...state, proposals: receive(key, state.proposals, action)
+});
+
 const reset = (key, state) => ({ ...state, [key]: DEFAULT_REQUEST_STATE });
 
 const api = (state = DEFAULT_STATE, action) => (({
@@ -63,8 +72,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_VETTED]: () => receive("vetted", state, action),
   [act.REQUEST_UNVETTED]: () => request("unvetted", state, action),
   [act.RECEIVE_UNVETTED]: () => receive("unvetted", state, action),
-  [act.REQUEST_PROPOSAL]: () => request("proposal", state, action),
-  [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
+  [act.REQUEST_PROPOSAL]: () => requestProposal(action.meta || "viewing", state, action),
+  [act.RECEIVE_PROPOSAL]: () => receiveProposal(action.meta || "viewing", state, action),
   [act.REQUEST_NEW_PROPOSAL]: () => request("newProposal", state, action),
   [act.RECEIVE_NEW_PROPOSAL]: () => receive("newProposal", state, action),
   [act.REQUEST_FORGOTTEN_PASSWORD_REQUEST]: () => request("forgottenPassword", state, action),
