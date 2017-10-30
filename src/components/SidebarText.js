@@ -1,32 +1,18 @@
 import React from "react";
-import Markdown from "./snew/Markdown";
+import { Markdown, Loading } from "./snew";
+import connector from "../connectors/sidebar";
 
 const text = `
-# About Politeia
+# Error there was an error loading the sidebar text.
 
-Decred is an autonomous digital currency. With a hybrid consensus system,
-it is built to be a decentralized, sustainable, and self-ruling currency
-where stakeholders make the rules.
+You should set an environment variable to point to the correct proposal
 
-Politeia (Pi) is a censorship-resistant blockchain-anchored public proposal
-system, which empowers users to submit their own projects for self-funding
-from DCR's block subsidy. Pi ensures the ecosystem remains sustainable and
-thrives.
+    set REACT_APP_SIDEBAR="censorshiptoken"
 
-[Read  more](https://blog.decred.org/2017/10/25/Politeia/)
 
-## Resources
-
- * [Website](https://decred.org/) & [Blog](https://blog.decred.org/)
- * [Decred Constitution](https://docs.decred.org/getting-started/constitution/)
- * [Whitepaper/Technical Brief (pdf)](https://coss.io/documents/white-papers/decred.pdf)
- * [Documentation](https://docs.decred.org/)
- * [Getting Started](https://decred.org/#guide)
- * [Source Code on Github](https://github.com/decred/)
- * [Network Status](https://stats.decred.org/) & [Block Explorer](https://mainnet.decred.org/)
- * [Voting Status](https://voting.decred.org/)
- * [Downloads Overview](https://decred.org/downloads/)
 `;
 
-const SidebarText = (props) => <Markdown body={text} {...props} />;
+const SidebarText = connector((props) => props.isLoading ? <Loading /> : (
+  <Markdown body={props.markdown || text} {...props} />)
+);
 export default SidebarText;
