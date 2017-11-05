@@ -31,10 +31,11 @@ function handlePasswordReset(body, response) {
   if (body.email === "test@error.com") {
     return response.end(JSON.stringify({ "errorcode": 3 }));
   }
-  if (body.verificationtoken === "1234") {
+  console.log(body.verificationtoken);
+  if (body.verificationtoken === "invalid") {
     return response.end(JSON.stringify({ "errorcode": 4 }));
   }
-  if (body.verificationtoken === "0000") {
+  if (body.verificationtoken === "expired") {
     return response.end(JSON.stringify({ "errorcode": 5 }));
   }
 
