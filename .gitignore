@@ -5,4 +5,6 @@ docker-build
 *.DS_Store
 *.swp
 
+selenium-debug.log
+
 test/e2e/reports
