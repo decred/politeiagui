@@ -1,4 +1,6 @@
 import * as act from "../actions";
+import get from "lodash/fp/get";
+import map from "lodash/fp/map";
 
 const DEFAULT_REQUEST_STATE = { isRequesting: false, response: null, error: null };
 export const DEFAULT_STATE = {
@@ -42,6 +44,45 @@ const receive = (key, state, { payload, error }) => ({
 
 const reset = (key, state) => ({ ...state, [key]: DEFAULT_REQUEST_STATE });
 
+const onReceiveSetStatus = (state, action) => {
+  state = receive("setStatusProposal", state, action);
+  const token = get(["setStatusProposal", "payload", "token"], state);
+  const status = get(["setStatusProposal", "payload", "status"], state);
+  const viewedProposal = get(["proposal", "response", "proposal"], state);
+  const updateProposalStatus = proposal => {
+    if (token === get(["censorshiprecord", "token"], proposal)) {
+      return { ...proposal, status };
+    } else {
+      return proposal;
+    }
+  };
+  const updatedViewed = viewedProposal && updateProposalStatus(viewedProposal);
+
+  console.log("onReceiveSetStatus", { state, action, token, status });
+
+  return {
+    ...state,
+    proposal: (viewedProposal && viewedProposal !== updatedViewed)
+      ? ({
+        ...state.proposal,
+        response: {
+          ...state.proposal.response,
+          proposal: updateProposalStatus(viewedProposal)
+        }
+      }) : state.proposal,
+    unvetted: {
+      ...state.unvetted,
+      response: {
+        ...state.unvetted.response,
+        proposals: map(
+          updateProposalStatus,
+          (get(["unvetted", "response", "proposals"], state) || [])
+        )
+      }
+    }
+  };
+};
+
 const api = (state = DEFAULT_STATE, action) => (({
   [act.SET_EMAIL]: () => ({ ...state, email: action.payload }),
   [act.REQUEST_ME]: () => request("me", state, action),
@@ -75,7 +116,7 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.REDIRECTED_FROM]: () => ({ ...state, login: { ...state.login, redirectedFrom: action.payload } }),
   [act.RESET_REDIRECTED_FROM]: () => reset("login", state),
   [act.REQUEST_SETSTATUS_PROPOSAL]: () => request("setStatusProposal", state, action),
-  [act.RECEIVE_SETSTATUS_PROPOSAL]: () => receive("setStatusProposal", state, action),
+  [act.RECEIVE_SETSTATUS_PROPOSAL]: () => onReceiveSetStatus(state, action),
   [act.REQUEST_LOGOUT]: () => request("logout", state, action),
   [act.RECEIVE_LOGOUT]: () => {
     state = receive("logout", state, action);
