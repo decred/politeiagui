@@ -50,7 +50,7 @@ class Wrapper extends Component {
   onSignup(...args) {
     console.log("args", args);
     validate(...args);
-    this.props.onSignup(...args);
+    return this.props.onSignup(...args);
   }
 }
 

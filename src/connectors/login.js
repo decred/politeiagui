@@ -44,7 +44,7 @@ class Wrapper extends Component {
 
   onLogin(...args) {
     validate(...args);
-    this.props.onLogin(...args).then(() => {
+    return this.props.onLogin(...args).then(() => {
       if (this.props.isAdmin) {
         this.props.history.push("/admin/");
       } else {

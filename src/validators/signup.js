@@ -10,8 +10,6 @@ const validate = values => {
     throw new SubmissionError({ _error: "Passwords do not match" });
   }
 
-  console.log(values);
-
   if (!emailValidator(values.email)) {
     throw new SubmissionError({ _error: "Invalid email address" });
   }
