@@ -1,10 +1,20 @@
 import "isomorphic-fetch";
-import { getHumanReadableError } from "../helpers";
+import CryptoJS from "crypto-js";
+import {
+  getHumanReadableError,
+  base64ToArrayBuffer,
+  arrayBufferToWordArray
+} from "../helpers";
 
 const apiBase = "/api";
 const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
 
 const parseResponseBody = response => {
+  var contentType = response.headers.get("content-type");
+  if(contentType && contentType.includes("application/json")) {
+    return response.json();
+  }
+
   if (response.status === 400) {
     throw new Error("Bad response from server");
   }
@@ -21,17 +31,13 @@ const parseResponseBody = response => {
     throw new Error("Not found");
   }
 
-  if (response.status === 500) {
-    throw new Error("Internal server error");
-  }
-
-  return response.json();
+  throw new Error("Internal server error");
 };
 
-const parseResponse = response =>
-  parseResponseBody(response).then(json => {
-    if (json.errorcode && json.errorcode !== 1) {
-      throw new Error(getHumanReadableError(json.errorcode));
+const parseResponse = response => parseResponseBody(response)
+  .then(json => {
+    if (json.errorcode) {
+      throw new Error(getHumanReadableError(json.errorcode, json.errorcontext));
     }
 
     return {
@@ -146,27 +152,28 @@ export const assets = () =>
     .then(parseResponse)
     .then(({ response }) => response);
 
-export const newProposal = (csrf, name, description, files) =>
-  post("/proposals/new", csrf, {
+export const newProposal = (csrf, name, description, files) => {
+  if(files) {
+    files.forEach(file => {
+      file.digest = CryptoJS.SHA256(arrayBufferToWordArray(base64ToArrayBuffer(file.payload))).toString(CryptoJS.enc.Hex);
+    });
+  }
+
+  return post("/proposals/new", csrf, {
     name,
     files: [
       {
         name: "index.md",
         mime: "text/plain; charset=utf-8",
+        digest: CryptoJS.SHA256(description).toString(CryptoJS.enc.Hex),
         payload: btoa(description)
       },
-      ...(files || []).map(({ name, mime, payload }) => ({
-        name,
-        mime,
-        payload // TODO: digest
+      ...(files || []).map(({ name, mime, digest, payload }) => ({
+        name, mime, digest, payload
       }))
     ]
   })
     .then(parseResponse)
-    .then(
-      ({ response: { censorshiprecord: { token, merkle, signature } } }) => ({
-        token,
-        merkle,
-        signature
-      })
-    );
+    .then(({ response: { censorshiprecord: { token, merkle, signature }}}) =>
+      ({ token, merkle, signature }));
+}

@@ -2173,6 +2173,10 @@ crypto-browserify@^3.11.0:
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
 
+crypto-js@^3.1.9-1:
+  version "3.1.9-1"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.1.9-1.tgz#fda19e761fc077e01ffbfdc6e9fdfc59e8806cd8"
+
 css-color-names@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/css-color-names/-/css-color-names-0.0.4.tgz#808adc2e79cf84738069b646cb20ec27beb629e0"
@@ -4575,6 +4579,10 @@ jetpack-id@1.0.0:
 js-base64@^2.1.9:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.3.2.tgz#a79a923666372b580f8e27f51845c6f7e8fbfbaf"
+
+js-sha256@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/js-sha256/-/js-sha256-0.7.1.tgz#929c4244ecf19d535404c338b19ab693f5cf4b1b"
 
 js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
