@@ -77,7 +77,7 @@ const LoginForm = ({
     <div className="c-checkbox">
       <input id="rem_login" name="rem" tabIndex={3} type="checkbox" />
       <label htmlFor="rem_login">remember me</label>
-      <Link className="c-pull-right" href="/password">
+      <Link className="c-pull-right reset-password-link" href="/password">
         reset password
       </Link>
     </div>

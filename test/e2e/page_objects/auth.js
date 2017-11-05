@@ -1,0 +1,109 @@
+// The pageObject is prepared but we currently can't logout with the mock
+
+const Commands = {
+  logout: function() {
+    return this.waitForElementVisible("@logoutLink", 3000)
+      .click("@logoutLink")
+      .waitForElementVisible("@logoutPage", 3000)
+      .waitForElementVisible("@signupLoginLink", 3000);
+  },
+  goToLoginSignupPage: function() {
+    return this.waitForElementVisible("@signupLoginLink", 3000)
+      .click("@signupLoginLink")
+      .waitForElementVisible("@signupLoginPage", 3000);
+  },
+  loginWithErrorAllFieldsRequired: function () {
+    return this.waitForElementVisible("@signupLoginPage", 3000)
+      .clearValue("@loginInputEmail")
+      .clearValue("@loginInputPassword")
+      .setValue("@loginInputEmail", "test@test.com")
+      .click("@loginSubmitButton")
+      .waitForElementVisible("@error", 3000);
+  },
+  loginWithErrorInvalidEmailAddress: function () {
+    return this.waitForElementVisible("@signupLoginPage", 3000)
+      .clearValue("@loginInputEmail")
+      .setValue("@loginInputEmail", "test")
+      .clearValue("@loginInputPassword")
+      .setValue("@loginInputPassword", "test")
+      .click("@loginSubmitButton")
+      .waitForElementVisible("@error", 3000);
+  },
+  login: function () {
+    return this.waitForElementVisible("@signupLoginPage", 3000)
+      .clearValue("@loginInputEmail")
+      .setValue("@loginInputEmail", "test@test.com")
+      .clearValue("@loginInputPassword")
+      .setValue("@loginInputPassword", "test")
+      .click("@loginSubmitButton")
+      .waitForElementVisible("@loggedIn", 3000);
+  },
+  signupWithErrorAllFieldsRequired: function () {
+    return this.waitForElementVisible("@signupLoginPage", 3000)
+      .clearValue("@signupInputEmail")
+      .clearValue("@signupInputPassword")
+      .clearValue("@signupInputPasswordVerify")
+      .setValue("@signupInputEmail", "test@test.com")
+      .click("@signupSubmitButton")
+      .waitForElementVisible("@error", 3000);
+  },
+  signupWithErrorInvalidEmailAddress: function () {
+    return this.waitForElementVisible("@signupLoginPage", 3000)
+      .clearValue("@signupInputEmail")
+      .setValue("@signupInputEmail", "test")
+      .clearValue("@signupInputPassword")
+      .setValue("@signupInputPassword", "test")
+      .click("@signupSubmitButton")
+      .waitForElementVisible("@error", 3000);
+  },
+  signupWithErrorPasswordNotMatch: function () {
+    return this.waitForElementVisible("@signupLoginPage", 3000)
+      .clearValue("@signupInputEmail")
+      .setValue("@signupInputEmail", "test")
+      .clearValue("@signupInputPassword")
+      .setValue("@signupInputPassword", "test")
+      .clearValue("@signupInputPasswordVerify")
+      .setValue("@signupInputPasswordVerify", "test2")
+      .click("@signupSubmitButton")
+      .waitForElementVisible("@error", 3000);
+  },
+  /**
+   * TODO: Can't test it more with the /me
+   * eg: the signup process call the /me mock endpoint to get the CSRF token
+   * the /me mock endpoint always return an user
+   */
+  signup: function () {
+    return this.waitForElementVisible("@signupLoginPage", 3000)
+      .clearValue("@signupInputEmail")
+      .setValue("@signupInputEmail", "test@test.com")
+      .clearValue("@signupInputPassword")
+      .setValue("@signupInputPassword", "test")
+      .clearValue("@signupInputPasswordVerify")
+      .setValue("@signupInputPasswordVerify", "test")
+      .click("@signupSubmitButton")
+      .waitForElementVisible("@loggedIn", 3000);
+  },
+};
+
+module.exports = {
+  commands: [Commands],
+  url: function () {
+    return this.api.launchUrl;
+  },
+  elements: {
+    logoutLink: ".logout.hover a",
+    logoutPage: ".page.logout-page",
+    signupLoginLink: ".login-required",
+    signupLoginPage: "#login",
+    loginInputEmail: "#login-form input[name='email']",
+    loginInputPassword: "#login-form input[name='password']",
+    loginSubmitButton: "#login-form button[type='submit']",
+    loggedIn: "#header-bottom-right .user",
+    signupInputEmail: "#register-form input[name='email']",
+    signupInputPassword: "#register-form input[name='password']",
+    signupInputPasswordVerify: "#register-form input[name='password_verify']",
+    signupSubmitButton: "#register-form button",
+    signupSuccess: ".page.signup-next-step-page",
+    error: ".message-ct.message-error"
+  },
+};

@@ -4,3 +4,5 @@ build
 docker-build
 *.DS_Store
 *.swp
+
+test/e2e/reports
