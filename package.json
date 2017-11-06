@@ -2,7 +2,6 @@
   "name": "politeiagui",
   "version": "0.1.1",
   "dependencies": {
-    "babel-cli": "^6.26.0",
     "concurrently": "^3.5.0",
     "core-decorators": "^0.20.0",
     "font-awesome": "^4.7.0",
