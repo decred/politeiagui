@@ -9,10 +9,12 @@ addons:
 language: node_js
 node_js:
   - 6
+install:
+  - yarn install
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-install:
-  - yarn install
+  - npm run uidev &
+  - scripts/serverUpChecker.sh
 script:
   - yarn test:e2e
