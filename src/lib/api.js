@@ -2,7 +2,7 @@ import "isomorphic-fetch";
 import { getHumanReadableError } from "../helpers";
 
 const apiBase = "/api";
-const getUrl = (path, version="v1") => `${apiBase}/${version}${path}`;
+const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
 
 const parseResponseBody = response => {
   if (response.status === 400) {
@@ -28,8 +28,8 @@ const parseResponseBody = response => {
   return response.json();
 };
 
-const parseResponse = response => parseResponseBody(response)
-  .then(json => {
+const parseResponse = response =>
+  parseResponseBody(response).then(json => {
     if (json.errorcode && json.errorcode !== 1) {
       throw new Error(getHumanReadableError(json.errorcode));
     }
@@ -40,15 +40,15 @@ const parseResponse = response => parseResponseBody(response)
     };
   });
 
-const get = (path) =>
+const get = path =>
   fetch(apiBase + path, {
     credentials: "same-origin"
   });
 
-const post = (path, csrf, json, method="POST") =>
+const post = (path, csrf, json, method = "POST") =>
   fetch(getUrl(path), {
     headers: {
-      "Accept": "application/json",
+      Accept: "application/json",
       "Content-Type": "application/json",
       "X-Csrf-Token": csrf
     },
@@ -60,15 +60,19 @@ const post = (path, csrf, json, method="POST") =>
 export const me = () =>
   get("/v1/user/me")
     .then(parseResponse)
-    .then(({ csrfToken, response: { email, isadmin }}) => ({
-      csrfToken: csrfToken || "itsafake", email, isadmin
+    .then(({ csrfToken, response: { email, isadmin } }) => ({
+      csrfToken: csrfToken || "itsafake",
+      email,
+      isadmin
     }));
 
 export const apiInfo = () =>
   get("/")
     .then(parseResponse)
-    .then(({ csrfToken, response: { version, route }}) => ({
-      csrfToken: csrfToken || "itsafake", version, route
+    .then(({ csrfToken, response: { version, route } }) => ({
+      csrfToken: csrfToken || "itsafake",
+      version,
+      route
     }));
 
 export const policy = () =>
@@ -81,7 +85,7 @@ export const newUser = (csrf, email, password) =>
     .then(parseResponse)
     .then(({ response }) => response || {});
 
-export const verifyNewUser = (searchQuery) => {
+export const verifyNewUser = searchQuery => {
   window.location = apiBase + "/user/verify" + searchQuery;
 };
 
@@ -100,12 +104,17 @@ export const forgottenPasswordRequest = (csrf, email) =>
     .then(parseResponse)
     .then(({ response }) => response);
 
-export const passwordResetRequest = (csrf, email, verificationtoken, newpassword) =>
+export const passwordResetRequest = (
+  csrf,
+  email,
+  verificationtoken,
+  newpassword
+) =>
   post("/user/password/reset", csrf, { email, verificationtoken, newpassword })
     .then(parseResponse)
     .then(({ response }) => response);
 
-export const secret = (csrf) =>
+export const secret = csrf =>
   post("/secret", csrf, {})
     .then(parseResponse)
     .then(({ response }) => response);
@@ -120,19 +129,17 @@ export const unvetted = () =>
     .then(parseResponse)
     .then(({ response }) => response);
 
-export const proposal = (token) =>
+export const proposal = token =>
   get(`/v1/proposals/${token}`)
     .then(parseResponse)
     .then(({ response }) => response);
 
 export const proposalSetStatus = (csrf, token, status) =>
-  post(`/proposals/${token}/setstatus`, csrf, { proposalstatus: status, token })
+  post(`/proposals/${token}/status`, csrf, { proposalstatus: status, token })
     .then(parseResponse)
     .then(({ response }) => response);
 
-export const logout = (csrf) =>
-  post("/logout", csrf, {})
-    .then(() => ({ }));
+export const logout = csrf => post("/logout", csrf, {}).then(() => ({}));
 
 export const assets = () =>
   get("/assets")
@@ -149,10 +156,17 @@ export const newProposal = (csrf, name, description, files) =>
         payload: btoa(description)
       },
       ...(files || []).map(({ name, mime, payload }) => ({
-        name, mime, payload // TODO: digest
+        name,
+        mime,
+        payload // TODO: digest
       }))
     ]
   })
     .then(parseResponse)
-    .then(({ response: { censorshiprecord: { token, merkle, signature }}}) =>
-      ({ token, merkle, signature }));
+    .then(
+      ({ response: { censorshiprecord: { token, merkle, signature } } }) => ({
+        token,
+        merkle,
+        signature
+      })
+    );
