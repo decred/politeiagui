@@ -8,6 +8,13 @@ module.exports = {
     "react"
   ],
   "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+        "jsx": true
+    }
+  },
   "extends": "eslint:recommended",
   "rules": {
     "indent": [

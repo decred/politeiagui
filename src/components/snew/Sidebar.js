@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import { Sidebar } from "snew-classic-ui";
 import connector from "../../connectors/actions";
 

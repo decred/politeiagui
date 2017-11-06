@@ -221,13 +221,12 @@ const statusName = key => ({3: "censor", 4: "publish"}[key]);
 export const onSubmitStatusProposal = (token, status) =>
   window.confirm(`Are you sure you want to ${statusName(status)} this proposal?`)
     ?  withCsrf((dispatch, getState, csrf) => {
-      dispatch(onRequestSetStatusProposal({ status }));
+      dispatch(onRequestSetStatusProposal({ status, token }));
 
       return api
         .proposalSetStatus(csrf, token, status)
         .then(response => dispatch(onReceiveSetStatusProposal(response)))
-        .catch(error => dispatch(onReceiveSetStatusProposal(null, error)))
-        .then(() => dispatch(onFetchUnvetted()));
+        .catch(error => dispatch(onReceiveSetStatusProposal(null, error)));
     })
     : {type: "NOOP"};
 
