@@ -51,6 +51,7 @@ export const passwordResetResponse = getApiResponse("passwordReset");
 const apiVettedResponse = getApiResponse("vetted");
 const apiUnvettedResponse = getApiResponse("unvetted");
 const apiProposalResponse = getApiResponse("proposal");
+const apiProposalCommentsResponse = getApiResponse("proposalComments");
 const apiNewProposalResponse = getApiResponse("newProposal");
 const apiSetStatusProposalResponse = getApiResponse("setStatusProposal");
 
@@ -108,6 +109,7 @@ export const censoredProposals = filtered(PROPOSAL_STATUS_CENSORED);
 export const unvettedProposalsIsRequesting = or(isApiRequestingInit, isApiRequestingUnvetted);
 export const unvettedProposalsError = or(apiInitError, apiUnvettedError);
 export const proposal = or(compose(get("proposal"), apiProposalResponse), constant({}));
+export const proposalComments = or(compose(get("comments"), apiProposalCommentsResponse), constant([]));
 export const proposalIsRequesting = or(isApiRequestingInit, isApiRequestingProposal);
 export const proposalError = or(apiInitError, apiProposalError);
 export const newUserResponse = bool(apiNewUserResponse);

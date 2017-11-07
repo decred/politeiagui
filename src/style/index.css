@@ -10,6 +10,8 @@
   background-color: #0C1E3E;
 }
 
+.score,
+.midcol.unvoted,
 #header .redditname { display: none; }
 #login-form .c-checkbox input,
 #login-form .c-checkbox label,

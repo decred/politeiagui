@@ -1,6 +1,6 @@
 const Blank = () => null;
 export const AccountActivityBox = Blank;
-export const CommentArea = Blank;
+export { default as CommentArea } from "./CommentArea";
 export { default as Content } from "./Content";
 export { default as Expando } from "./Expando";
 export { default as FooterParent } from "./FooterParent";
@@ -13,7 +13,7 @@ export { default as LoginFormSide } from "./LoginFormSide";
 export { default as LoginSignupPage } from "./LoginSignupPage";
 export { default as Markdown } from "./Markdown";
 export const NavButtons = Blank;
-export const NestedListing = Blank;
+export { default as NestedListing } from "./NestedListing";
 export const OrganicListing = Blank;
 export const RecentlyViewedLinks = Blank;
 export { default as RegisterForm } from "./RegisterForm";
@@ -29,7 +29,7 @@ export const SubmitLinkSidebox = Blank;
 export { default as SubmitTextSidebox } from "./SubmitTextSidebox";
 export { default as Subreddit } from "./Subreddit";
 export { default as Thing } from "./Thing";
-export const ThingComment = Blank;
+export { default as ThingComment } from "./ThingComment";
 export { default as ThingLink } from "./ThingLink";
 export { default as UserInfo } from "./UserInfo";
 

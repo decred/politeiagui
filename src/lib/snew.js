@@ -1,3 +1,8 @@
+import get from "lodash/fp/get";
+import map from "lodash/fp/map";
+import reduce from "lodash/fp/reduce";
+import compose from "lodash/fp/compose";
+
 export const proposalToT3 = ({
   name, timestamp, status, censorshiprecord = {}
 }, idx) => ({
@@ -14,3 +19,49 @@ export const proposalToT3 = ({
     is_self: true
   }
 });
+
+const getChildComments = ({ tree, comments }, parentid) => map(
+  compose(
+    data => ({
+      kind: "t1",
+      data: {
+        ...data,
+        replies: {
+          data: {
+            children: getChildComments({ tree, comments }, data.id)
+          }
+        }
+      }
+    }),
+    id => comments[id]
+  ),
+  get(parentid || 0, tree) || []
+);
+
+export const commentsToT1 = compose(
+  getChildComments,
+  reduce(
+    (r, { commentid, userid, parentid, token, comment, timestamp }) => ({
+      ...r,
+      comments: {
+        ...r.comments,
+        [commentid]: {
+          id: commentid,
+          author: userid,
+          parent_id: parentid || 0,
+          name: `t1_${token}${commentid}`,
+          body: comment,
+          created_utc: timestamp
+        }
+      },
+      tree: {
+        ...r.tree,
+        [parentid || 0]: [
+          ...(get(["tree", parentid || 0], r) || []),
+          commentid
+        ]
+      }
+    }),
+    { tree: {}, comments: {} }
+  )
+);

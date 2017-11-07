@@ -1,9 +1,9 @@
 import React from "react";
 import { Content } from "./snew";
-import { proposalToT3 } from "../lib/snew";
+import { proposalToT3, commentsToT1 } from "../lib/snew";
 
 const ProposalDetail = ({
-  isLoading, proposal, token, error, markdownFile, otherFiles, onFetchData, ...props
+  isLoading, proposal, comments, token, error, markdownFile, otherFiles, onFetchData, ...props
 }) => (
   <Content  {...{
     isLoading,
@@ -21,7 +21,7 @@ const ProposalDetail = ({
           }
         }]
       },
-      { allChildren: [] }
+      { allChildren: commentsToT1(comments) }
     ],
     ...props
   }} />

@@ -11,6 +11,7 @@ export default connect(
     token: compose(get(["match", "params", "token"]), arg(1)),
     isAdmin: sel.isAdmin,
     proposal: sel.proposal,
+    comments: sel.proposalComments,
     error: sel.proposalError,
     isLoading: sel.proposalIsRequesting,
     markdownFile: sel.getMarkdownFile,
