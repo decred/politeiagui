@@ -14,7 +14,9 @@ export const DEFAULT_STATE = {
   vetted: DEFAULT_REQUEST_STATE,
   unvetted: DEFAULT_REQUEST_STATE,
   proposal: DEFAULT_REQUEST_STATE,
+  proposalComments: DEFAULT_REQUEST_STATE,
   newProposal: DEFAULT_REQUEST_STATE,
+  newComment: DEFAULT_REQUEST_STATE,
   forgottenPassword: DEFAULT_REQUEST_STATE,
   passwordReset: DEFAULT_REQUEST_STATE,
   email: ""
@@ -83,6 +85,27 @@ const onReceiveSetStatus = (state, action) => {
   };
 };
 
+const onReceiveNewComment = (state, action) => {
+  state = receive("newComment", state, action);
+  if (action.error) return state;
+  return {
+    ...state,
+    proposalComments: {
+      ...state.proposalComments,
+      response: {
+        ...state.proposalComments.response,
+        comments: [
+          ...state.proposalComments.response.comments,
+          {
+            ...state.newComment.payload,
+            commentid: state.newComment.response.commentid
+          }
+        ]
+      }
+    }
+  };
+};
+
 const api = (state = DEFAULT_STATE, action) => (({
   [act.SET_EMAIL]: () => ({ ...state, email: action.payload }),
   [act.REQUEST_ME]: () => request("me", state, action),
@@ -106,8 +129,12 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_UNVETTED]: () => receive("unvetted", state, action),
   [act.REQUEST_PROPOSAL]: () => request("proposal", state, action),
   [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
+  [act.REQUEST_PROPOSAL_COMMENTS]: () => request("proposalComments", state, action),
+  [act.RECEIVE_PROPOSAL_COMMENTS]: () => receive("proposalComments", state, action),
   [act.REQUEST_NEW_PROPOSAL]: () => request("newProposal", state, action),
   [act.RECEIVE_NEW_PROPOSAL]: () => receive("newProposal", state, action),
+  [act.REQUEST_NEW_COMMENT]: () => onReceiveNewComment(state, action),
+  [act.RECEIVE_NEW_COMMENT]: () => receive("newComment", state, action),
   [act.REQUEST_FORGOTTEN_PASSWORD_REQUEST]: () => request("forgottenPassword", state, action),
   [act.RECEIVE_FORGOTTEN_PASSWORD_REQUEST]: () => receive("forgottenPassword", state, action),
   [act.REQUEST_PASSWORD_RESET_REQUEST]: () => request("passwordReset", state, action),
