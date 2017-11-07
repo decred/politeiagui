@@ -140,6 +140,11 @@ export const proposal = token =>
     .then(parseResponse)
     .then(({ response }) => response);
 
+export const proposalComments = token =>
+  get(`/v1/proposals/${token}/comments`)
+    .then(parseResponse)
+    .then(({ response }) => response);
+
 export const proposalSetStatus = (csrf, token, status) =>
   post(`/proposals/${token}/status`, csrf, { proposalstatus: status, token })
     .then(parseResponse)
@@ -174,6 +179,16 @@ export const newProposal = (csrf, name, description, files) => {
     ]
   })
     .then(parseResponse)
-    .then(({ response: { censorshiprecord: { token, merkle, signature }}}) =>
-      ({ token, merkle, signature }));
-}
+    .then(
+      ({ response: { censorshiprecord: { token, merkle, signature } } }) => ({
+        token,
+        merkle,
+        signature
+      })
+    );
+};
+
+export const newComment = (csrf, token, comment, parentid=0) =>
+  post("/comments/new", csrf, { token, parentid: parentid || 0, comment })
+    .then(parseResponse)
+    .then(({ response }) => response);
