@@ -35,3 +35,4 @@ export const Thing = comps.Thing = snew(comps.Thing);
 export const ThingComment = comps.ThingComment = snew(comps.ThingComment);
 export const ThingLink = comps.ThingLink = snew(comps.ThingLink);
 export const UserInfo = comps.UserInfo = snew(comps.UserInfo);
+export const Timestamp = comps.Timestamp;
