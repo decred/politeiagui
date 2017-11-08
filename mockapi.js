@@ -10,6 +10,7 @@ pem.createCertificate({days:365, selfSigned:true}, function(err, keys){
   });
   app.use(function(req, res, next) {
     res.setHeader("X-Csrf-Token", "itsafake");
+    res.setHeader("Content-Type", "application/json");
     next();
   });
   app.use(apiMocker("/", "mocks/api"));

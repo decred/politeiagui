@@ -21,23 +21,23 @@ module.exports = function (request, response) {
 
 function handleForgottenPassword(body, response) {
   if (body.email === "test@error.com") {
-    return response.end(JSON.stringify({ "errorcode": 3 }));
+    return response.end(JSON.stringify({ "errorcode": 2 }));
   }
 
-  return response.end(JSON.stringify({ "errorcode": 1 }));
+  return response.end(JSON.stringify({}));
 }
 
 function handlePasswordReset(body, response) {
   if (body.email === "test@error.com") {
-    return response.end(JSON.stringify({ "errorcode": 3 }));
+    return response.end(JSON.stringify({ "errorcode": 2 }));
   }
   console.log(body.verificationtoken);
   if (body.verificationtoken === "invalid") {
-    return response.end(JSON.stringify({ "errorcode": 4 }));
+    return response.end(JSON.stringify({ "errorcode": 3 }));
   }
   if (body.verificationtoken === "expired") {
-    return response.end(JSON.stringify({ "errorcode": 5 }));
+    return response.end(JSON.stringify({ "errorcode": 4 }));
   }
 
-  return response.end(JSON.stringify({ "errorcode": 1 }));
+  return response.end(JSON.stringify({}));
 }

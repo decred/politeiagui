@@ -12,9 +12,9 @@ module.exports = function (request, response) {
       response.writeHead(200);
 
       if (bodyParsed.currentpassword === "error") {
-        return response.end(JSON.stringify({ "errorcode": 2 }));
+        return response.end(JSON.stringify({ "errorcode": 1 }));
       }
 
-      return response.end(JSON.stringify({ "errorcode": 1 }));
+      return response.end(JSON.stringify({}));
     });
 };

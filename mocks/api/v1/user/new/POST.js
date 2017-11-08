@@ -12,9 +12,9 @@ module.exports = function (request, response) {
       response.writeHead(200);
 
       if (bodyParsed.email === "test@error.com") {
-        return response.end(JSON.stringify({ "errorcode": 3 }));
+        return response.end(JSON.stringify({ "errorcode": 2 }));
       }
 
-      return response.end(JSON.stringify({ "errorcode": 1 }));
+      return response.end(JSON.stringify({}));
     });
 };
