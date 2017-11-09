@@ -7033,8 +7033,8 @@ smart-buffer@^1.0.13:
   resolved "https://registry.yarnpkg.com/smart-buffer/-/smart-buffer-1.1.15.tgz#7f114b5b65fab3e2a35aa775bb12f0d1c649bf16"
 
 "snew-classic-ui@https://github.com/decred/snew-classic-ui":
-  version "0.1.5"
-  resolved "https://github.com/decred/snew-classic-ui#5aea01f3a926dd3a4f05d9022b733822aa6f1ef2"
+  version "0.1.7"
+  resolved "https://github.com/decred/snew-classic-ui#9f01a7824ce6e50c51ee67870bd530884a56a4d1"
   dependencies:
     babel-cli "^6.26.0"
     babel-core "^6.26.0"

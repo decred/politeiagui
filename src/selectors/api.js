@@ -24,6 +24,7 @@ const isApiRequestingVetted = getIsApiRequesting("vetted");
 const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
 const isApiRequestingProposal = getIsApiRequesting("proposal");
 const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
+export const isApiRequestingNewComment = getIsApiRequesting("newComment");
 export const isApiRequesting = or(
   isApiRequestingInit,
   isApiRequestingPolicy,
@@ -33,7 +34,8 @@ export const isApiRequesting = or(
   isApiRequestingLogout,
   isApiRequestingVetted,
   isApiRequestingProposal,
-  isApiRequestingNewProposal
+  isApiRequestingNewProposal,
+  isApiRequestingNewComment
 );
 
 const apiNewUserPayload = getApiPayload("newUser");

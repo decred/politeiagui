@@ -11,8 +11,12 @@
 }
 
 .score,
+.reddiquette,
 .midcol.unvoted,
-#header .redditname { display: none; }
+.entry .buttons li.save-button,
+.entry .buttons li.give-gold-button,
+.entry .buttons li.report-button,
+#header .redditname,
 #login-form .c-checkbox input,
 #login-form .c-checkbox label,
 #remember-me input,

@@ -28,7 +28,7 @@ const getChildComments = ({ tree, comments }, parentid) => map(
         ...data,
         replies: {
           data: {
-            children: getChildComments({ tree, comments }, data.id)
+            children: (data.id && getChildComments({ tree, comments }, data.id)) || []
           }
         }
       }
@@ -49,9 +49,10 @@ export const commentsToT1 = compose(
           id: commentid,
           author: userid,
           parent_id: parentid || 0,
-          name: `t1_${token}${commentid}`,
+          name: commentid,
           body: comment,
-          created_utc: timestamp
+          created_utc: timestamp,
+          permalink: `/proposals/${token}/comments/${commentid}`
         }
       },
       tree: {

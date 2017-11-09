@@ -98,7 +98,10 @@ const onReceiveNewComment = (state, action) => {
           ...state.proposalComments.response.comments,
           {
             ...state.newComment.payload,
-            commentid: state.newComment.response.commentid
+            token: state.proposal.payload,
+            userid: "me",
+            commentid: state.newComment.response.commentid,
+            timestamp: Date.now() / 1000
           }
         ]
       }
@@ -133,8 +136,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_PROPOSAL_COMMENTS]: () => receive("proposalComments", state, action),
   [act.REQUEST_NEW_PROPOSAL]: () => request("newProposal", state, action),
   [act.RECEIVE_NEW_PROPOSAL]: () => receive("newProposal", state, action),
-  [act.REQUEST_NEW_COMMENT]: () => onReceiveNewComment(state, action),
-  [act.RECEIVE_NEW_COMMENT]: () => receive("newComment", state, action),
+  [act.REQUEST_NEW_COMMENT]: () => request("newComment", state, action),
+  [act.RECEIVE_NEW_COMMENT]: () => onReceiveNewComment(state, action),
   [act.REQUEST_FORGOTTEN_PASSWORD_REQUEST]: () => request("forgottenPassword", state, action),
   [act.RECEIVE_FORGOTTEN_PASSWORD_REQUEST]: () => receive("forgottenPassword", state, action),
   [act.REQUEST_PASSWORD_RESET_REQUEST]: () => request("passwordReset", state, action),

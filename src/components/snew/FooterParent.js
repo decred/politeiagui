@@ -24,9 +24,6 @@ const FooterParent = () => (
         }}
       />
     </a>
-    <p className="bottommenu">
-      REDDIT and the ALIEN Logo are registered trademarks of reddit inc.
-    </p>
   </div>
 );
 

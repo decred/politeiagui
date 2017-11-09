@@ -1,3 +1,4 @@
+export * from "./app";
 export * from "./api";
 
 export const selectorMap = fns => (...args) => Object.keys(fns)

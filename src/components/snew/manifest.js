@@ -1,6 +1,7 @@
 const Blank = () => null;
 export const AccountActivityBox = Blank;
 export { default as CommentArea } from "./CommentArea";
+export { default as CommentForm } from "./CommentForm";
 export { default as Content } from "./Content";
 export { default as Expando } from "./Expando";
 export { default as FooterParent } from "./FooterParent";
