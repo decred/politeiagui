@@ -1,5 +1,6 @@
 import React from "react";
 import LinkComponent from "./Link";
+import ReactBody from "react-body";
 import connector from "../../connectors/currentUser";
 
 const UserInfo = ({
@@ -8,6 +9,7 @@ const UserInfo = ({
   isAdmin
 }) => loggedInAs ? (
   <div id="header-bottom-right">
+    <ReactBody className="loggedin" />
     <span className="user">
       <Link href="/user/profile/">{loggedInAs}</Link> {isAdmin
         ? (<Link href="/admin"><span className="userkarma" title="post karma" >admin</span></Link>) : null}

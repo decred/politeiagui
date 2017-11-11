@@ -34,8 +34,12 @@ export const REQUEST_UNVETTED = "API_REQUEST_UNVETTED";
 export const RECEIVE_UNVETTED = "API_RECEIVE_UNVETTED";
 export const REQUEST_PROPOSAL = "API_REQUEST_PROPOSAL";
 export const RECEIVE_PROPOSAL = "API_RECEIVE_PROPOSAL";
+export const REQUEST_PROPOSAL_COMMENTS = "API_REQUEST_PROPOSAL_COMMENTS";
+export const RECEIVE_PROPOSAL_COMMENTS = "API_RECEIVE_PROPOSAL_COMMENTS";
 export const REQUEST_NEW_PROPOSAL = "API_REQUEST_NEW_PROPOSAL";
 export const RECEIVE_NEW_PROPOSAL = "API_RECEIVE_NEW_PROPOSAL";
+export const REQUEST_NEW_COMMENT = "API_REQUEST_NEW_COMMENT";
+export const RECEIVE_NEW_COMMENT = "API_RECEIVE_NEW_COMMENT";
 export const RESET_PROPOSAL = "API_RESET_PROPOSAL";
 export const REQUEST_SETSTATUS_PROPOSAL = "API_REQUEST_SETSTATUS_PROPOSAL";
 export const RECEIVE_SETSTATUS_PROPOSAL = "API_RECEIVE_SETSTATUS_PROPOSAL";
@@ -72,8 +76,12 @@ const onRequestUnvetted = basicAction(REQUEST_UNVETTED);
 const onReceiveUnvetted = basicAction(RECEIVE_UNVETTED);
 const onRequestProposal = basicAction(REQUEST_PROPOSAL);
 const onReceiveProposal = basicAction(RECEIVE_PROPOSAL);
+const onRequestProposalComments = basicAction(REQUEST_PROPOSAL_COMMENTS);
+const onReceiveProposalComments = basicAction(RECEIVE_PROPOSAL_COMMENTS);
 export const onRequestNewProposal = basicAction(REQUEST_NEW_PROPOSAL);
 const onReceiveNewProposal = basicAction(RECEIVE_NEW_PROPOSAL);
+const onRequestNewComment = basicAction(REQUEST_NEW_COMMENT);
+const onReceiveNewComment = basicAction(RECEIVE_NEW_COMMENT);
 export const onResetProposal = basicAction(RESET_PROPOSAL);
 export const onRequestSetStatusProposal = basicAction(REQUEST_SETSTATUS_PROPOSAL);
 const onReceiveSetStatusProposal = basicAction(RECEIVE_SETSTATUS_PROPOSAL);
@@ -204,6 +212,15 @@ export const onFetchProposal = (token) =>
       .catch(error => dispatch(onReceiveProposal(null, error)));
   };
 
+export const onFetchProposalComments = (token) =>
+  (dispatch) => {
+    dispatch(onRequestProposalComments(token));
+    return api
+      .proposalComments(token)
+      .then(response => dispatch(onReceiveProposalComments(response)))
+      .catch(error => dispatch(onReceiveProposalComments(null, error)));
+  };
+
 export const onSubmitProposal = (name, description, files) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(onRequestNewProposal({ name, description, files }));
@@ -212,6 +229,18 @@ export const onSubmitProposal = (name, description, files) =>
       .then(response => dispatch(onReceiveNewProposal(response)))
       .catch(error => {
         dispatch(onReceiveNewProposal(null, error));
+        throw error;
+      });
+  });
+
+export const onSubmitComment = (token, comment, parentid) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(onRequestNewComment({ token, comment, parentid }));
+    return api
+      .newComment(csrf, token, comment, parentid)
+      .then(response => dispatch(onReceiveNewComment(response)))
+      .catch(error => {
+        dispatch(onReceiveNewComment(null, error));
         throw error;
       });
   });

@@ -1,9 +1,13 @@
 import React from "react";
+import get from "lodash/fp/get";
+import orderBy from "lodash/fp/orderBy";
 import { Content } from "./snew";
-import { proposalToT3 } from "../lib/snew";
+import { proposalToT3, commentsToT1 } from "../lib/snew";
+
+const newSort = orderBy([get("timestamp")], ["desc"]);
 
 const ProposalDetail = ({
-  isLoading, proposal, token, error, markdownFile, otherFiles, onFetchData, ...props
+  isLoading, proposal, comments, token, error, markdownFile, otherFiles, onFetchData, ...props
 }) => (
   <Content  {...{
     isLoading,
@@ -21,7 +25,7 @@ const ProposalDetail = ({
           }
         }]
       },
-      { allChildren: [] }
+      { allChildren: commentsToT1(newSort(comments)) }
     ],
     ...props
   }} />
