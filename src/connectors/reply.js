@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 
 const replyConnector = connect(
   sel.selectorMap({
+    token: sel.proposalToken,
     replyTo: sel.replyTo,
     isPostingComment: sel.isApiRequestingNewComment
   }),
