@@ -7,7 +7,7 @@ const NestedListing = ({ replyTo, ...props }) => (
     ...props,
     replyTo,
     name: props.name || 0,
-    showReplyForm: (replyTo == props.name) || (!props.name && !replyTo && !props.locked)
+    showReplyForm: (replyTo === props.name) || (!props.name && !replyTo && !props.locked)
   }} />
 );
 
