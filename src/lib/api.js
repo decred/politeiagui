@@ -164,8 +164,9 @@ export const newProposal = (csrf, name, description, files) => {
     });
   }
 
+  description = name + "\n" + description;
+
   return post("/proposals/new", csrf, {
-    name,
     files: [
       {
         name: "index.md",

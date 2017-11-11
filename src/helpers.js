@@ -9,6 +9,17 @@ export const getProposalStatus = (proposalStatus) => get(proposalStatus, [
   "Public",
 ]);
 
+// This function extracts the content of index.md's payload. The payload is
+// formatted as:
+//
+//  <proposal name>\n
+//  <proposal description>
+//
+export const getTextFromIndexMd = file => {
+  let text = atob(file.payload);
+  return text.substring(text.indexOf("\n") + 1);
+};
+
 export const getHumanReadableError = (errorCode, errorContext) => get(errorCode, [
   "The operation returned an invalid status.",
   "The provided email address or password was invalid.",

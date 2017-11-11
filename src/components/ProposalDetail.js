@@ -3,6 +3,7 @@ import get from "lodash/fp/get";
 import orderBy from "lodash/fp/orderBy";
 import { Content } from "./snew";
 import { proposalToT3, commentsToT1 } from "../lib/snew";
+import { getTextFromIndexMd } from "../helpers";
 
 const newSort = orderBy([get("timestamp")], ["desc"]);
 
@@ -20,8 +21,8 @@ const ProposalDetail = ({
           data: {
             ...proposalToT3(proposal).data,
             otherFiles,
-            selftext: markdownFile ? atob(markdownFile.payload) : null,
-            selftext_html: markdownFile ? atob(markdownFile.payload) : null
+            selftext: markdownFile ? getTextFromIndexMd(markdownFile) : null,
+            selftext_html: markdownFile ? getTextFromIndexMd(markdownFile) : null
           }
         }]
       },
