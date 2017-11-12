@@ -10,19 +10,6 @@
 
     yarn && yarn start
 
-### Building on Windows
-
-This repo depends on `snew-classic-ui` which uses symlinks, so Windows users
-will run into issues when attempting to build. To build on Windows:
-
-    git clone -c core.symlinks=true git@github.com:decred/snew-classic-ui.git
-    cd snew-classic-ui
-    yarn && yarn build && yarn link
-    cd ..
-    git clone git@github.com:decred/politeiagui.git
-    cd politeiagui
-    yarn && yarn link snew-classic-ui && yarn start
-
 ## Production
 
     yarn && yarn build
