@@ -20,20 +20,21 @@ export const getTextFromIndexMd = file => {
   return text.substring(text.indexOf("\n") + 1);
 };
 
-export const getHumanReadableError = (errorCode, errorContext) => get(errorCode, [
+export const getHumanReadableError = (errorCode, errorContext = []) => get(errorCode, [
   "The operation returned an invalid status.",
   "The provided email address or password was invalid.",
-  "The provided email address was malformed.",
+  "The provided email address is invalid.",
   "The provided user activation token is invalid.",
   "The provided user activation token is expired.",
-  "The provided proposal does not have a name.",
-  "The provided proposal does not have a description.",
+  `The provided proposal is missing the following file(s): ${errorContext.join(", ")}`,
   "The requested proposal does not exist.",
+  `The provided proposal has duplicate files: ${errorContext.join(", ")}`,
+  "The provided proposal does not have a valid title.",
   "The submitted proposal has too many markdown files.",
   "The submitted proposal has too many images.",
   "The submitted proposal markdown is too large.",
   "The submitted proposal has one or more images that are too large.",
-  "The provided password was malformed.",
+  "The provided password is invalid.",
   "The requested comment does not exist.",
   "The provided proposal name was invalid.",
   "The SHA256 checksum for one of the files was incorrect.",
