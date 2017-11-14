@@ -4,8 +4,14 @@ import { proposalToT3 } from "../../lib/snew";
 import ReactBody from "react-body";
 import Loading from "./Loading";
 
-export const CustomContent = ({ listings, proposals, isLoading, ...props }) => [
-  <ReactBody className="listing-page" key="body" />,
+export const CustomContent = ({
+  bodyClassName="listing-page",
+  listings,
+  proposals,
+  isLoading,
+  ...props
+}) => [
+  <ReactBody className={bodyClassName} key="body" />,
   <Content {...{
     ...props,
     key: "content",
