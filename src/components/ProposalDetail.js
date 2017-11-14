@@ -13,6 +13,7 @@ const ProposalDetail = ({
   <Content  {...{
     isLoading,
     error,
+    bodyClassName: "single-page comments-page",
     onFetchData: () => onFetchData(token),
     listings: isLoading || !proposal.name ? [] : [
       {
