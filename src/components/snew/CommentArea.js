@@ -5,9 +5,10 @@ import { PROPOSAL_STATUS_CENSORED, PROPOSAL_STATUS_UNREVIEWED } from "../../cons
 
 
 const CommentArea = ({ comments, loggedIn, proposal, ...props }) => (
-  !loggedIn || proposal.status === PROPOSAL_STATUS_UNREVIEWED || proposal.status === PROPOSAL_STATUS_CENSORED ? null :
+  proposal.status === PROPOSAL_STATUS_UNREVIEWED || proposal.status === PROPOSAL_STATUS_CENSORED ? null :
     <CommentAreaBase {...{
       ...props,
+      locked: !loggedIn,
       num_comments: comments.length,
       currentSort: "new",
       sortOptions: ["new"]
