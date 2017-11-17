@@ -10,33 +10,63 @@ const ChangePasswordForm = ({
 }) => isApiRequestingChangePassword ? (
   <fieldset className="change-password-form">Changing password</fieldset>
 ) : (
-  <form onSubmit={handleSubmit(onChangePassword)}>
+  <form className="change-password-form" onSubmit={handleSubmit(onChangePassword)}>
     {error && <Message
       type="error"
       header="Cannot change password"
       body={error}
     />}
-    <fieldset className="change-password-form">
+    <div className="c-form-group">
+      <label className="screenreader-only" htmlFor="existingPassword">
+        Current Password:
+      </label>
       <Field
+        autoFocus
+        className="c-form-control"
+        id="existingPassword"
         name="existingPassword"
-        placeholder="Existing Password"
         component="input"
         type="password"
-      />
+        placeholder="Current Password"
+        tabIndex={3} />
+    </div>
+    <div className="c-form-group">
+      <label className="screenreader-only" htmlFor="password">
+        New Password:
+      </label>
       <Field
+        autoFocus
+        className="c-form-control"
+        id="password"
         name="password"
+        component="input"
+        type="password"
         placeholder="New Password"
-        component="input"
-        type="password"
-      />
+        tabIndex={3} />
+    </div>
+    <div className="c-form-group">
+      <label className="screenreader-only" htmlFor="password_verify">
+        Verify Password:
+      </label>
       <Field
+        autoFocus
+        className="c-form-control"
+        id="password_verify"
         name="password_verify"
-        placeholder="Verify Password"
         component="input"
         type="password"
-      />
-      <input type="submit" value="Change Password" />
-    </fieldset>
+        placeholder="Verify Password"
+        tabIndex={3} />
+    </div>
+    <div className="c-clearfix c-submit-group">
+      <button
+        className="c-btn c-btn-primary c-pull-right"
+        tabIndex={3}
+        type="submit"
+      >
+        Change Password
+      </button>
+    </div>
   </form>
 );
 

@@ -32,12 +32,10 @@ class PasswordReset extends Component {
 
   render() {
     return (
-      <div className="password-reset-form">
-        <PasswordResetForm {...{
-          onPasswordReset: this.onPasswordReset,
-          isRequesting: this.props.isRequesting,
-        }} />
-      </div>
+      <PasswordResetForm {...{
+        onPasswordReset: this.onPasswordReset,
+        isRequesting: this.props.isRequesting,
+      }} />
     );
   }
 

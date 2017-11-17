@@ -150,6 +150,12 @@ a:hover {
   margin-left: 8px;
 }
 
+.change-password-form,
+.forgotten-password-form,
+.reset-password-form {
+  width: 600px;
+}
+
 .message-ct {
   height: 64px;
   margin: 16px 0;

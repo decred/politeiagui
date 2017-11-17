@@ -45,12 +45,12 @@ module.exports = {
   elements: {
     resetLinkFromSignupLoginPage: ".reset-password-link",
     resetLinkFromSide: ".login-form.login-form-side .recover-password",
-    forgottenPasswordPage: ".page.forgottenPassword-page",
+    forgottenPasswordPage: ".page.forgotten-password-page",
     forgottenPasswordNextPage: ".page.forgotten-password-next-step-page",
     signupLoginLink: ".login-required",
     signupLoginPage: "#login",
-    inputEmail: ".forgottenPassword-form input[name='email']",
-    submitButton: ".forgotten-password-form input[type='submit']",
+    inputEmail: ".forgotten-password-form input[name='email']",
+    submitButton: ".forgotten-password-form button[type='submit']",
     error: ".message-ct.message-error"
   },
 };

@@ -2,8 +2,11 @@ import React from "react";
 import PasswordReset from "./PasswordReset";
 
 const PasswordResetPage = () => (
-  <div className="page password-reset-page">
-    <PasswordReset />
+  <div className="content" role="main">
+    <div className="page reset-password-page">
+      <h1>Reset Password</h1>
+      <PasswordReset />
+    </div>
   </div>
 );
 

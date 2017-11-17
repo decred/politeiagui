@@ -16,11 +16,11 @@ module.exports = {
     return this.api.launchUrl + "/user/password/reset?" + query;
   },
   elements: {
-    changePasswordPage: ".password-reset-form",
-    changePasswordNextPage: ".page.password-reset-next-step-page",
-    inputPassword: ".password-reset-form input[name='password']",
-    inputPasswordVerify: ".password-reset-form input[name='password_verify']",
-    submitButton: ".password-reset-form input[type='submit']",
+    changePasswordPage: ".reset-password-form",
+    changePasswordNextPage: ".page.reset-password-next-step-page",
+    inputPassword: ".reset-password-form input[name='password']",
+    inputPasswordVerify: ".reset-password-form input[name='password_verify']",
+    submitButton: ".reset-password-form button[type='submit']",
     error: ".message-ct.message-error"
   },
 };
