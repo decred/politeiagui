@@ -19,7 +19,7 @@ thrives.
 
  * [Website](https://decred.org/) & [Blog](https://blog.decred.org/)
  * [Decred Constitution](https://docs.decred.org/getting-started/constitution/)
- * [Whitepaper/Technical Brief (pdf)](https://coss.io/documents/white-papers/decred.pdf)
+ * [Whitepaper/Technical Brief (pdf)](https://decred.org/dtb001.pdf)
  * [Documentation](https://docs.decred.org/)
  * [Getting Started](https://decred.org/#guide)
  * [Source Code on Github](https://github.com/decred/)
