@@ -233,7 +233,7 @@ export const onSubmitProposal = (name, description, files) =>
       .then(response => {
         const proposal = {
           censorshiprecord: { token: response.token },
-          files,
+          files: response.files,
           name,
           description,
           timestamp: Date.now() / 1000,
