@@ -6,11 +6,18 @@ export const DEFAULT_STATE = {
   newProposal: {
     name: "",
     description: ""
-  }
+  },
+  submittedProposals: {}
 };
 
 const app = (state = DEFAULT_STATE, action) => (({
   [act.SET_REPLY_PARENT]: () => ({ ...state, replyParent: action.payload || 0}),
+  [act.SUBMIT_PROPOSAL]: () => ({ ...state, submittedProposals: {
+    ...state.submittedProposals,
+    lastSubmitted: action.payload.censorshiprecord.token,
+    [action.payload.censorshiprecord.token]: action.payload
+  }
+  }),
   [act.CANCEL_SIGNUP]: () => ({ ...state, isShowingSignup: false })
 })[action.type] || (() => state))();
 
