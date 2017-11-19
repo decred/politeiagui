@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import { SubmitPage, LoginSignupPage, Content as ProposalListing } from "./components/snew";
 import vetted from "./connectors/proposals";
 import proposalDetail from "./connectors/proposal";
+import proposalSuccess from "./connectors/proposalSuccess";
 import censored from "./connectors/censoredProposals";
 import unreviewed from "./connectors/unreviewedProposals";
 import admin from "./connectors/admin";
@@ -41,7 +42,8 @@ class Routes extends Component {
         <Route path="/user/verify/success" component={VerifySuccess} />
         <Route path="/user/verify/failure" component={VerifyFailure} />
         <Route path="/user/verify" component={Verify} exact={true} />
-        <AuthenticatedRoute path="/proposals/new" component={SubmitPage} />
+        <AuthenticatedRoute exact path="/proposals/new" component={SubmitPage} />
+        <AuthenticatedRoute exact path="/proposals/new/success/:token" component={proposalSuccess(ProposalDetail)} />
         <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin" component={admin(ProposalListing)} />
