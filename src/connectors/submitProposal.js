@@ -36,7 +36,7 @@ class SubmitWrapper extends Component {
   componentWillReceiveProps({ token }) {
     if (token) {
       this.props.onResetProposal();
-      return this.props.history.push("/proposals/new/success/" + token);
+      return this.props.history.push("/proposals/" + token);
     }
   }
 

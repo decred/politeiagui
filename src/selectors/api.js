@@ -110,7 +110,10 @@ export const unreviewedProposals = filtered(PROPOSAL_STATUS_UNREVIEWED);
 export const censoredProposals = filtered(PROPOSAL_STATUS_CENSORED);
 export const unvettedProposalsIsRequesting = or(isApiRequestingInit, isApiRequestingUnvetted);
 export const unvettedProposalsError = or(apiInitError, apiUnvettedError);
-export const proposal = or(compose(get("proposal"), apiProposalResponse), constant({}));
+export const proposal = or(compose(get("proposal"), apiProposalResponse), (state) => {
+  const submittedProposals = state.app.submittedProposals;
+  return submittedProposals[submittedProposals.lastSubmitted];
+}, constant({}));
 export const proposalToken = compose(get(["censorshiprecord", "token"]), proposal);
 export const proposalComments = or(compose(get("comments"), apiProposalCommentsResponse), constant([]));
 export const proposalIsRequesting = or(isApiRequestingInit, isApiRequestingProposal);
