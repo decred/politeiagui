@@ -1,6 +1,7 @@
 import * as sel from "../selectors";
 import * as api from "../lib/api";
 import { basicAction } from "./lib";
+import { PROPOSAL_STATUS_UNREVIEWED } from '../constants';
 
 export const SET_EMAIL = "API_SET_EMAIL";
 export const REQUEST_INIT_SESSION = "API_REQUEST_INIT_SESSION";
@@ -38,6 +39,7 @@ export const REQUEST_PROPOSAL_COMMENTS = "API_REQUEST_PROPOSAL_COMMENTS";
 export const RECEIVE_PROPOSAL_COMMENTS = "API_RECEIVE_PROPOSAL_COMMENTS";
 export const REQUEST_NEW_PROPOSAL = "API_REQUEST_NEW_PROPOSAL";
 export const RECEIVE_NEW_PROPOSAL = "API_RECEIVE_NEW_PROPOSAL";
+export const SUBMIT_PROPOSAL = "SUBMIT_PROPOSAL";
 export const REQUEST_NEW_COMMENT = "API_REQUEST_NEW_COMMENT";
 export const RECEIVE_NEW_COMMENT = "API_RECEIVE_NEW_COMMENT";
 export const RESET_PROPOSAL = "API_RESET_PROPOSAL";
@@ -221,12 +223,26 @@ export const onFetchProposalComments = (token) =>
       .catch(error => dispatch(onReceiveProposalComments(null, error)));
   };
 
+const onSubmitProposalSuccess = (proposal) => ({type: SUBMIT_PROPOSAL, payload: proposal});
+
 export const onSubmitProposal = (name, description, files) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(onRequestNewProposal({ name, description, files }));
     return api
       .newProposal(csrf, name, description, files)
-      .then(response => dispatch(onReceiveNewProposal(response)))
+      .then(response => {
+        const proposal = {
+          censorshiprecord: { token: response.token },
+          files,
+          name,
+          description,
+          timestamp: Date.now() / 1000,
+          status: PROPOSAL_STATUS_UNREVIEWED
+        };
+        console.log("proposal: ", proposal);
+        dispatch(onSubmitProposalSuccess(proposal));
+        return dispatch(onReceiveNewProposal(response));
+      })
       .catch(error => {
         dispatch(onReceiveNewProposal(null, error));
         throw error;
