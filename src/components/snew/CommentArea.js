@@ -5,7 +5,9 @@ import { PROPOSAL_STATUS_CENSORED, PROPOSAL_STATUS_UNREVIEWED } from "../../cons
 
 
 const CommentArea = ({ comments, loggedIn, proposal, ...props }) => (
-  proposal.status === PROPOSAL_STATUS_UNREVIEWED || proposal.status === PROPOSAL_STATUS_CENSORED ? null :
+  Object.keys(proposal).length === 0 ||
+  proposal.status === PROPOSAL_STATUS_UNREVIEWED ||
+  proposal.status === PROPOSAL_STATUS_CENSORED ? null :
     <CommentAreaBase {...{
       ...props,
       locked: !loggedIn,

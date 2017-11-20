@@ -157,6 +157,15 @@ export const assets = () =>
     .then(parseResponse)
     .then(({ response }) => response);
 
+export const convertStringToMarkdown = (string) => (
+  {
+    name: "index.md",
+    mime: "text/plain; charset=utf-8",
+    digest: CryptoJS.SHA256(string).toString(CryptoJS.enc.Hex),
+    payload: btoa(string)
+  }
+);
+
 export const newProposal = (csrf, name, description, files) => {
   if(files) {
     files.forEach(file => {
@@ -166,25 +175,23 @@ export const newProposal = (csrf, name, description, files) => {
 
   description = name + "\n" + description;
 
+  const postFiles = [
+    convertStringToMarkdown(description),
+    ...(files || []).map(({ name, mime, digest, payload }) => ({
+      name, mime, digest, payload
+    }))
+  ];
+
   return post("/proposals/new", csrf, {
-    files: [
-      {
-        name: "index.md",
-        mime: "text/plain; charset=utf-8",
-        digest: CryptoJS.SHA256(description).toString(CryptoJS.enc.Hex),
-        payload: btoa(description)
-      },
-      ...(files || []).map(({ name, mime, digest, payload }) => ({
-        name, mime, digest, payload
-      }))
-    ]
+    files: postFiles
   })
     .then(parseResponse)
     .then(
       ({ response: { censorshiprecord: { token, merkle, signature } } }) => ({
         token,
         merkle,
-        signature
+        signature,
+        files: postFiles
       })
     );
 };
