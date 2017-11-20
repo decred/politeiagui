@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import get from "lodash/fp/get";
 import compose from "lodash/fp/compose";
-import { arg } from "../lib/fp";
+import { arg, or } from "../lib/fp";
 import * as sel from "../selectors";
 import * as act from "../actions";
 
@@ -15,7 +15,7 @@ const proposalConnector = connect(
     proposal: sel.proposal,
     comments: sel.proposalComments,
     error: sel.proposalError,
-    isLoading: sel.proposalIsRequesting,
+    isLoading: or(sel.proposalIsRequesting, sel.setStatusProposalIsRequesting),
     markdownFile: sel.getMarkdownFile,
     otherFiles: sel.getNotMarkdownFile,
   }),

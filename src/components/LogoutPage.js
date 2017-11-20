@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import LoadingPage from "./LoadingPage";
+import Loading from "./snew/Loading";
 import ErrorPage from "./ErrorPage";
 import logoutConnector from "../connectors/logout";
 
@@ -10,7 +10,7 @@ class LogoutPage extends Component {
 
   render() {
     const { isLoading, error } = this.props;
-    return isLoading ? <LoadingPage /> : error ? <ErrorPage {...{ error }} /> : (
+    return isLoading ? <Loading /> : error ? <ErrorPage {...{ error }} /> : (
       <article className="page logout-page">
         <h2>Successfully Logged Out</h2>
       </article>

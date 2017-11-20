@@ -29,7 +29,6 @@ const normalizer = (value, previousValue) => {
 };
 
 const SubmitPage = ({
-  isSaving,
   isLoading,
   Loading,
   policy,
@@ -37,7 +36,7 @@ const SubmitPage = ({
   onSave,
   handleSubmit,
   newProposalError,
-}) => !policy || isSaving || isLoading ? <Loading /> : (
+}) => !policy || isLoading ? <Loading /> : (
   <div className="content" role="main">
     <ReactBody className="submit-page" />
     {newProposalError ? (
