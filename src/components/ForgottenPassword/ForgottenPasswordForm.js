@@ -9,22 +9,35 @@ const ForgottenPasswordForm = ({ error, handleSubmit, isRequesting, onForgottenP
   }
 
   return (
-    <form onSubmit={handleSubmit(onForgottenPassword)}>
+    <form className="forgotten-password-form" onSubmit={handleSubmit(onForgottenPassword)}>
       {error && <Message
         type="error"
         header="Forgotten password error"
         body={error}
       />}
-      <fieldset className="forgottenPassword-form">
-        <h2>Reset your password</h2>
+      <div className="c-form-group">
+        <label className="screenreader-only" htmlFor="email">
+          Email Address:
+        </label>
         <Field
+          autoFocus
+          className="c-form-control"
+          id="email"
           name="email"
-          placeholder="Email Address"
           component="input"
           type="text"
-        />
-        <input type="submit" value="Reset password" />
-      </fieldset>
+          placeholder="Email Address"
+          tabIndex={3} />
+      </div>
+      <div className="c-clearfix c-submit-group">
+        <button
+          className="c-btn c-btn-primary c-pull-right"
+          tabIndex={3}
+          type="submit"
+        >
+          Reset Password
+        </button>
+      </div>
     </form>
   );
 };
