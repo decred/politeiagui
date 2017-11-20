@@ -8,6 +8,7 @@ const FilesField = ({ placeholder="Upload", input, touched, error, disabled, pol
     <ReactFileReader
       base64
       multipleFiles
+      fileTypes={policy.validmimetypes}
       handleFiles={({ base64, fileList }) =>
         input.onChange(Array.from(fileList).map(({ name, size, type: mime }, idx) => ({
           name, mime, size, payload: base64[idx].split("base64,").pop()
