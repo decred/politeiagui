@@ -239,7 +239,6 @@ export const onSubmitProposal = (name, description, files) =>
           timestamp: Date.now() / 1000,
           status: PROPOSAL_STATUS_UNREVIEWED
         };
-        console.log("proposal: ", proposal);
         dispatch(onSubmitProposalSuccess(proposal));
         return dispatch(onReceiveNewProposal(response));
       })
