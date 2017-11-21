@@ -3,18 +3,18 @@ import { connect } from "react-redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
 import compose from "lodash/fp/compose";
+import { or } from "../lib/fp";
 import { reduxForm } from "redux-form";
 import validate from "../validators/proposal";
 import { withRouter } from "react-router-dom";
 
 const submitConnector = connect(
   sel.selectorMap({
-    isLoading: sel.isLoadingSubmit,
+    isLoading: or(sel.isLoadingSubmit, sel.newProposalIsRequesting),
     policy: sel.policy,
     name: sel.newProposalName,
     description: sel.newProposalDescription,
     files: sel.newProposalFiles,
-    isRequesting: sel.newProposalIsRequesting,
     newProposalError: sel.newProposalError,
     merkle: sel.newProposalMerkle,
     token: sel.newProposalToken,

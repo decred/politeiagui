@@ -244,3 +244,42 @@ a:hover {
 .proposal-save {
   margin-top: 16px;
 }
+
+/* loading */
+
+@keyframes spin {
+  30% {
+    transform: rotate(182deg);
+  }
+  40% {
+    transform: rotate(180deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  80% {
+    transform: rotate(362deg);
+  }
+  90% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loading {
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.logo {
+  position: absolute;
+  height: 200px;
+  width: 200px;
+  background-image: url("./spinner.svg");
+  background-position: 0px 0px;
+  background-repeat: no-repeat;
+}
+.spin {
+  animation: spin 3s ease-in-out infinite;
+}

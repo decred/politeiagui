@@ -24,6 +24,7 @@ const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
 const isApiRequestingProposal = getIsApiRequesting("proposal");
 const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
 export const isApiRequestingNewComment = getIsApiRequesting("newComment");
+export const isApiRequestingSetStatusProposal = getIsApiRequesting("setStatusProposal");
 export const isApiRequesting = or(
   isApiRequestingInit,
   isApiRequestingPolicy,
@@ -34,7 +35,8 @@ export const isApiRequesting = or(
   isApiRequestingVetted,
   isApiRequestingProposal,
   isApiRequestingNewProposal,
-  isApiRequestingNewComment
+  isApiRequestingNewComment,
+  isApiRequestingSetStatusProposal
 );
 
 const apiNewUserPayload = getApiPayload("newUser");
@@ -124,4 +126,5 @@ export const newProposalName = compose(get("name"), apiNewProposalPayload);
 export const newProposalDescription = compose(get("description"), apiNewProposalPayload);
 export const newProposalFiles = compose(get("files"), apiNewProposalPayload);
 export const setStatusProposal = compose(get("status"), apiSetStatusProposalResponse);
+export const setStatusProposalIsRequesting = isApiRequestingSetStatusProposal;
 export const redirectedFrom = get(["api", "login", "redirectedFrom"]);
