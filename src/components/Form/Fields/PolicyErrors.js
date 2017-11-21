@@ -1,11 +1,12 @@
 import React from 'react';
+import Message from "../../Message";
 
 const PolicyErrors = ({errors}) => (
-  <ul>
+  <div>
     {
-      errors.map((error, idx) => <li key={idx} className="error">{error}</li>)
+      errors.map((error, idx) => <Message key={idx} body={error} type='error' />)
     }
-  </ul>
+  </div>
 );
 
 export default PolicyErrors;
