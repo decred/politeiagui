@@ -46,7 +46,7 @@ function validateMaxImages({errors, files}, policy) {
   if (files.length > policy.maximages) {
     errors.push(getErrorMessage(policy, errorTypes.MAX_IMAGES));
     return ({
-      files: files.splice(0, policy.maximages - 1),
+      files: files.slice(0, policy.maximages - 1),
       errors
     });
   }

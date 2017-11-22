@@ -17,7 +17,8 @@ class FilesField extends React.Component {
   handleFilesChange = (files) => {
     const { input, policy, meta: { dispatch } } = this.props;
     const formatedFiles = getFormattedFiles(files);
-    const validation = validateFiles(formatedFiles.concat(input.value), policy);
+    const inputAndNewFiles = input.value ? formatedFiles.concat(input.value) : formatedFiles;
+    const validation = validateFiles(inputAndNewFiles, policy);
 
     this.setState({
       policyErrors: validation.errors ? validation.errors : []
