@@ -13,7 +13,7 @@ class ProposalImages extends Component {
   }
 
   render() {
-    const { files, readOnly, policy } = this.props;
+    const { files, readOnly } = this.props;
 
     return (
       <div>
@@ -35,7 +35,6 @@ class ProposalImages extends Component {
 
 ProposalImages.propTypes = {
   files: PropTypes.array.isRequired,
-  policy: PropTypes.object,
   readOnly: PropTypes.bool.isRequired,
 };
 

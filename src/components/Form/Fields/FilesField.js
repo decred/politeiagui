@@ -4,23 +4,13 @@ import ReactFileReader from "react-file-reader";
 import { change } from 'redux-form';
 import ProposalImages from "../../ProposalImages";
 import PolicyErrors from './PolicyErrors';
-import { errorTypes, validateFiles, getFormattedFiles } from '../../ProposalImages/helpers';
+import { validateFiles, getFormattedFiles } from '../../ProposalImages/helpers';
 
 class FilesField extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       policyErrors: []
-    }
-  }
-
-  validateFileList = (fileList) => {
-    const { policy } = this.props;
-    const validateMaxImages = (fileList) => {
-      if (fileList.length > policy.maximages) {
-        return true
-      }
-      return false;
     }
   }
 
@@ -50,7 +40,7 @@ class FilesField extends React.Component {
         ><button>{placeholder}</button></ReactFileReader>
         {touched && error && !disabled && <span className="error">{error}</span>}
         { policyErrors.length > 0 && <PolicyErrors errors={policyErrors} />}
-        <ProposalImages files={input.value || []} onChange={input.onChange} policy={policy} />
+        <ProposalImages files={input.value || []} onChange={input.onChange} />
       </div>
     )
   }
