@@ -34,7 +34,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => get(error
   "The submitted proposal has too many images.",
   "The submitted proposal markdown is too large.",
   "The submitted proposal has one or more images that are too large.",
-  "The provided password is invalid.",
+  `The provided password is invalid: ${errorContext.join(", ")}`,
   "The requested comment does not exist.",
   "The provided proposal name was invalid.",
   "The SHA256 checksum for one of the files was incorrect.",
