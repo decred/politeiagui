@@ -11,19 +11,34 @@ class AuthenticatedRoute extends Component {
     this.props.redirectedFrom(this.props.location.pathname);
   }
 
+  componentWillMount() {
+    this.checkAuthentication(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location !== this.props.location) {
+      this.checkAuthentication(nextProps);
+    }
+  }
+
+  checkAuthentication(params) {
+    const { location, loggedInAs, history } = params;
+    if (!loggedInAs) {
+      history.replace({
+        pathname: "/user/login",
+        state: { from: location }
+      });
+    }
+  }
+
   render() {
     const { component: Component, ...rest } = this.props;
     return (
-      <Route {...rest} render={props => (
-        rest.loggedInAs ? (
+      <Route {...rest}
+        render={props => (
           <Component {...props} />
-        ) : (
-          <Redirect to={{
-            pathname: "/user/login",
-            state: { from: props.location },
-          }} />
-        )
-      )} />
+        )}
+      />
     );
   }
 }
