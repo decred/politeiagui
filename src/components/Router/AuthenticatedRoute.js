@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect, Route, withRouter } from "react-router-dom";
+import { Route, withRouter } from "react-router-dom";
 import requireLoginConnector from "../../connectors/requireLogin";
 
 class AuthenticatedRoute extends Component {
