@@ -1,7 +1,11 @@
 import "isomorphic-fetch";
 import CryptoJS from "crypto-js";
+import * as pki from "./pki";
+import _get from "lodash/fp/get";
+import MerkleTree from "mtree";
 import {
   getHumanReadableError,
+  hexToArray,
   base64ToArrayBuffer,
   arrayBufferToWordArray
 } from "../helpers";
@@ -61,6 +65,34 @@ const post = (path, csrf, json, method = "POST") =>
     credentials: "include", // Include cookies
     method,
     body: JSON.stringify(json)
+  });
+
+const digestPayload = payload => CryptoJS
+  .SHA256(arrayBufferToWordArray(base64ToArrayBuffer(payload)))
+  .toString(CryptoJS.enc.Hex);
+
+export const convertMarkdownToFile = (string) => (
+  {
+    name: "index.md",
+    mime: "text/plain; charset=utf-8",
+    payload: btoa(string)
+  }
+);
+
+export const makeProposal = (name, markdown, attachments=[]) => ({
+  files: [ convertMarkdownToFile(name + "\n" + markdown), ...(attachments || []) ]
+    .map(({ name, mime, payload}) => ({ name, mime, payload, digest: digestPayload(payload) }))
+});
+
+export const signProposal = proposal => pki.myPublicKey()
+  .then(pubKey => Buffer.from(pubKey).toString("hex"))
+  .then(pubKey => {
+    const tree = new MerkleTree(proposal.files.map(_get("digest")).sort());
+    const root = tree.root();
+    console.log("merkle root", root);
+    return pki.sign(hexToArray(root))
+      .then(signature => Buffer.from(signature).toString("hex"))
+      .then(signature => ({ ...proposal, authorPublicKey: pubKey, signature }));
   });
 
 export const me = () =>
@@ -157,44 +189,16 @@ export const assets = () =>
     .then(parseResponse)
     .then(({ response }) => response);
 
-export const convertStringToMarkdown = (string) => (
-  {
-    name: "index.md",
-    mime: "text/plain; charset=utf-8",
-    digest: CryptoJS.SHA256(string).toString(CryptoJS.enc.Hex),
-    payload: btoa(string)
-  }
-);
-
-export const newProposal = (csrf, name, description, files) => {
-  if(files) {
-    files.forEach(file => {
-      file.digest = CryptoJS.SHA256(arrayBufferToWordArray(base64ToArrayBuffer(file.payload))).toString(CryptoJS.enc.Hex);
-    });
-  }
-
-  description = name + "\n" + description;
-
-  const postFiles = [
-    convertStringToMarkdown(description),
-    ...(files || []).map(({ name, mime, digest, payload }) => ({
-      name, mime, digest, payload
-    }))
-  ];
-
-  return post("/proposals/new", csrf, {
-    files: postFiles
-  })
-    .then(parseResponse)
-    .then(
-      ({ response: { censorshiprecord: { token, merkle, signature } } }) => ({
+export const newProposal = (csrf, name, description, files) =>
+  signProposal(makeProposal(name, description, files)).then(proposal => console.log("proposal", proposal) ||
+    post("/proposals/new", csrf, proposal).then(parseResponse)
+      .then(({ response: { censorshiprecord: { token, merkle, signature } } }) => ({
         token,
         merkle,
         signature,
-        files: postFiles
-      })
-    );
-};
+        files: proposal.files
+      }))
+  );
 
 export const newComment = (csrf, token, comment, parentid=0) =>
   post("/comments/new", csrf, { token, parentid: parentid || 0, comment })

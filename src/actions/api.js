@@ -1,7 +1,7 @@
 import * as sel from "../selectors";
 import * as api from "../lib/api";
 import { basicAction } from "./lib";
-import { PROPOSAL_STATUS_UNREVIEWED } from '../constants';
+import { PROPOSAL_STATUS_UNREVIEWED } from "../constants";
 
 export const SET_EMAIL = "API_SET_EMAIL";
 export const REQUEST_INIT_SESSION = "API_REQUEST_INIT_SESSION";

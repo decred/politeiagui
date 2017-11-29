@@ -44,16 +44,19 @@ export const getHumanReadableError = (errorCode, errorContext = []) => get(error
   "The proposal cannot be set to that status."
 ]);
 
+// Copied from https://stackoverflow.com/a/43131635
+export const hexToArray = hex => (new Uint8Array(hex.match(/[\da-f]{2}/gi).map(h => parseInt(h, 16))));
+
 // Copied from https://stackoverflow.com/a/21797381
 export const base64ToArrayBuffer = base64 => {
   var binary_string =  window.atob(base64);
   var len = binary_string.length;
   var bytes = new Uint8Array( len );
   for (var i = 0; i < len; i++)        {
-      bytes[i] = binary_string.charCodeAt(i);
+    bytes[i] = binary_string.charCodeAt(i);
   }
   return bytes.buffer;
-}
+};
 
 // Copied from https://stackoverflow.com/a/33918579
 export const arrayBufferToWordArray = ab => {
@@ -64,4 +67,4 @@ export const arrayBufferToWordArray = ab => {
     a.push(i8a[i] << 24 | i8a[i + 1] << 16 | i8a[i + 2] << 8 | i8a[i + 3]);
   }
   return CryptoJS.lib.WordArray.create(a, i8a.length);
-}
+};
