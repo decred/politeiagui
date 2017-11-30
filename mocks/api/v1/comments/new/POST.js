@@ -6,7 +6,7 @@ module.exports = function (request, response) {
     })
     .on("end", () => {
       response.writeHead(200);
-      const commentid = Math.floor(Math.random()*100000000);
+      const commentid = Math.floor(Math.random()*100000000) + "";
       return response.end(JSON.stringify({ commentid }));
     });
 };

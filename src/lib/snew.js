@@ -48,7 +48,7 @@ export const commentsToT1 = compose(
         [commentid]: {
           id: commentid,
           author: userid,
-          parent_id: parentid || 0,
+          parent_id: parentid || "0",
           name: commentid,
           body: comment,
           created_utc: timestamp,
@@ -57,8 +57,8 @@ export const commentsToT1 = compose(
       },
       tree: {
         ...r.tree,
-        [parentid || 0]: [
-          ...(get(["tree", parentid || 0], r) || []),
+        [parentid || "0"]: [
+          ...(get(["tree", parentid || "0"], r) || []),
           commentid
         ]
       }
