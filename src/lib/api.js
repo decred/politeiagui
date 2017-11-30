@@ -3,6 +3,7 @@ import CryptoJS from "crypto-js";
 import * as pki from "./pki";
 import get from "lodash/fp/get";
 import MerkleTree from "mtree";
+import qs from "query-string";
 import { PROPOSAL_STATUS_UNREVIEWED } from "../constants";
 import {
   getHumanReadableError,
@@ -41,8 +42,7 @@ export const signProposal = proposal => pki.myPubKeyHex().then(pubKey => {
   const tree = new MerkleTree(proposal.files.map(get("digest")).sort());
   const root = tree.root();
   console.log("merkle root", root);
-  return pki.sign(hexToArray(root))
-    .then(signature => Buffer.from(signature).toString("hex"))
+  return pki.signHex(hexToArray(root))
     .then(signature => ({ ...proposal, authorPublicKey: pubKey, signature }));
 });
 
@@ -80,7 +80,12 @@ export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, ro
 export const newUser = (csrf, email, password) => pki.myPubKeyHex().then(publickey =>
   POST("/user/new", csrf, { email, password, publickey }).then(getResponse));
 
-export const verifyNewUser = query => (window.location = apiBase + "/user/verify" + query);
+export const verifyNewUser = searchQuery => {
+  const { email, verificationtoken } = qs.parse(searchQuery);
+  return pki.signHex(hexToArray(verificationtoken))
+    .then(signature => GET("/user/verify?" + qs.stringify({ email, verificationtoken, signature })))
+    .then(getResponse);
+};
 
 export const login = (csrf, email, password) =>
   POST("/login", csrf, { email, password }).then(getResponse);
@@ -95,13 +100,11 @@ export const passwordResetRequest = ( csrf, email, verificationtoken, newpasswor
   POST("/user/password/reset", csrf, { email, verificationtoken, newpassword }).then(getResponse);
 
 export const policy = () => GET("/v1/policy").then(getResponse);
-export const secret = csrf => POST("/secret", csrf, {}).then(getResponse);
 export const vetted = () => GET("/v1/proposals/vetted").then(getResponse);
 export const unvetted = () => GET("/v1/proposals/unvetted").then(getResponse);
 export const proposal = token => GET(`/v1/proposals/${token}`).then(getResponse);
 export const proposalComments = token => GET(`/v1/proposals/${token}/comments`).then(getResponse);
 export const logout = csrf => POST("/logout", csrf, {}).then(() => ({}));
-export const assets = () => GET("/assets").then(getResponse);
 
 export const proposalSetStatus = (csrf, token, status) =>
   POST(`/proposals/${token}/status`, csrf, { proposalstatus: status, token })

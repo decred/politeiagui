@@ -55,7 +55,12 @@ export const onResetNewUser = act.RESET_NEW_USER;
 
 export const onVerifyNewUser = (searchQuery) => (dispatch) => {
   dispatch(act.REQUEST_VERIFY_NEW_USER(searchQuery));
-  return api.verifyNewUser(searchQuery);
+  return api.verifyNewUser(searchQuery)
+    .then(res => dispatch(act.RECEIVE_VERIFY_NEW_USER(res)))
+    .catch(err => {
+      dispatch(act.RECEIVE_VERIFY_NEW_USER(null, err));
+      throw err;
+    });
 };
 
 export const onSignup = (props) => (dispatch) => dispatch(onCreateNewUser(props));
