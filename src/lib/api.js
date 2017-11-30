@@ -6,10 +6,7 @@ import MerkleTree from "mtree";
 import qs from "query-string";
 import { PROPOSAL_STATUS_UNREVIEWED } from "../constants";
 import {
-  getHumanReadableError,
-  hexToArray,
-  base64ToArrayBuffer,
-  arrayBufferToWordArray
+  getHumanReadableError, hexToArray, base64ToArrayBuffer, arrayBufferToWordArray
 } from "../helpers";
 
 const STATUS_ERR = {
@@ -39,9 +36,7 @@ export const makeProposal = (name, markdown, attachments=[]) => ({
 });
 
 export const makeComment = (token, comment, parentid) => ({
-  token,
-  parentid: parentid || "0",
-  comment
+  token, parentid: parentid || "0", comment
 });
 
 export const signProposal = proposal => pki.myPubKeyHex().then(publickey => {
