@@ -1,8 +1,9 @@
 import "isomorphic-fetch";
 import CryptoJS from "crypto-js";
 import * as pki from "./pki";
-import _get from "lodash/fp/get";
+import get from "lodash/fp/get";
 import MerkleTree from "mtree";
+import { PROPOSAL_STATUS_UNREVIEWED } from "../constants";
 import {
   getHumanReadableError,
   hexToArray,
@@ -10,197 +11,107 @@ import {
   arrayBufferToWordArray
 } from "../helpers";
 
-const apiBase = "/api";
-const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
-
-const parseResponseBody = response => {
-  var contentType = response.headers.get("content-type");
-  if(contentType && contentType.includes("application/json")) {
-    return response.json();
-  }
-
-  if (response.status === 400) {
-    throw new Error("Bad response from server");
-  }
-
-  if (response.status === 401) {
-    throw new Error("Not authorized");
-  }
-
-  if (response.status === 403) {
-    throw new Error("Forbidden");
-  }
-
-  if (response.status === 404) {
-    throw new Error("Not found");
-  }
-
-  throw new Error("Internal server error");
+const STATUS_ERR = {
+  400: "Bad response from server",
+  401: "Not authorized",
+  403: "Forbidden",
+  404: "Not found"
 };
 
-const parseResponse = response => parseResponseBody(response)
-  .then(json => {
-    if (json.errorcode) {
-      throw new Error(getHumanReadableError(json.errorcode, json.errorcontext));
-    }
-
-    return {
-      response: json,
-      csrfToken: response.headers.get("X-Csrf-Token")
-    };
-  });
-
-const get = path =>
-  fetch(apiBase + path, {
-    credentials: "same-origin"
-  });
-
-const post = (path, csrf, json, method = "POST") =>
-  fetch(getUrl(path), {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "X-Csrf-Token": csrf
-    },
-    credentials: "include", // Include cookies
-    method,
-    body: JSON.stringify(json)
-  });
+const apiBase = "/api";
+const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
+const getResponse = get("response");
 
 const digestPayload = payload => CryptoJS
   .SHA256(arrayBufferToWordArray(base64ToArrayBuffer(payload)))
   .toString(CryptoJS.enc.Hex);
 
-export const convertMarkdownToFile = (string) => (
-  {
-    name: "index.md",
-    mime: "text/plain; charset=utf-8",
-    payload: btoa(string)
-  }
-);
+export const convertMarkdownToFile = markdown => ({
+  name: "index.md",
+  mime: "text/plain; charset=utf-8",
+  payload: btoa(markdown)
+});
 
 export const makeProposal = (name, markdown, attachments=[]) => ({
   files: [ convertMarkdownToFile(name + "\n" + markdown), ...(attachments || []) ]
     .map(({ name, mime, payload}) => ({ name, mime, payload, digest: digestPayload(payload) }))
 });
 
-export const signProposal = proposal => pki.myPublicKey()
-  .then(pubKey => Buffer.from(pubKey).toString("hex"))
-  .then(pubKey => {
-    const tree = new MerkleTree(proposal.files.map(_get("digest")).sort());
-    const root = tree.root();
-    console.log("merkle root", root);
-    return pki.sign(hexToArray(root))
-      .then(signature => Buffer.from(signature).toString("hex"))
-      .then(signature => ({ ...proposal, authorPublicKey: pubKey, signature }));
-  });
+export const signProposal = proposal => pki.myPubKeyHex().then(pubKey => {
+  const tree = new MerkleTree(proposal.files.map(get("digest")).sort());
+  const root = tree.root();
+  console.log("merkle root", root);
+  return pki.sign(hexToArray(root))
+    .then(signature => Buffer.from(signature).toString("hex"))
+    .then(signature => ({ ...proposal, authorPublicKey: pubKey, signature }));
+});
 
-export const me = () =>
-  get("/v1/user/me")
-    .then(parseResponse)
-    .then(({ csrfToken, response: { email, isadmin } }) => ({
-      csrfToken: csrfToken || "itsafake",
-      email,
-      isadmin
-    }));
-
-export const apiInfo = () =>
-  get("/")
-    .then(parseResponse)
-    .then(({ csrfToken, response: { version, route } }) => ({
-      csrfToken: csrfToken || "itsafake",
-      version,
-      route
-    }));
-
-export const policy = () =>
-  get("/v1/policy")
-    .then(parseResponse)
-    .then(({ response }) => response);
-
-export const newUser = (csrf, email, password) =>
-  post("/user/new", csrf, { email, password })
-    .then(parseResponse)
-    .then(({ response }) => response || {});
-
-export const verifyNewUser = searchQuery => {
-  window.location = apiBase + "/user/verify" + searchQuery;
+const parseResponseBody = response => {
+  const contentType = response.headers.get("content-type");
+  if(contentType && contentType.includes("application/json")) return response.json();
+  throw new Error(STATUS_ERR[response.status] || "Internal server error");
 };
 
+const parseResponse = response => parseResponseBody(response).then(json => {
+  if (json.errorcode) throw new Error(getHumanReadableError(json.errorcode, json.errorcontext));
+  return { response: json, csrfToken: response.headers.get("X-Csrf-Token") };
+});
+
+const GET = path => fetch(apiBase + path, { credentials: "same-origin" }).then(parseResponse);
+const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
+  headers: {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "X-Csrf-Token": csrf
+  },
+  credentials: "include", // Include cookies
+  method,
+  body: JSON.stringify(json)
+}).then(parseResponse);
+
+export const me = () => GET("/v1/user/me").then(({ csrfToken, response: { email, isadmin } }) => ({
+  csrfToken: csrfToken || "itsafake", email, isadmin
+}));
+
+export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, route } }) => ({
+  csrfToken: csrfToken || "itsafake", version, route
+}));
+
+export const newUser = (csrf, email, password) => pki.myPubKeyHex().then(publickey =>
+  POST("/user/new", csrf, { email, password, publickey }).then(getResponse));
+
+export const verifyNewUser = query => (window.location = apiBase + "/user/verify" + query);
+
 export const login = (csrf, email, password) =>
-  post("/login", csrf, { email, password })
-    .then(parseResponse)
-    .then(({ response }) => response);
+  POST("/login", csrf, { email, password }).then(getResponse);
 
 export const changePassword = (csrf, currentpassword, newpassword) =>
-  post("/user/password/change", csrf, { currentpassword, newpassword })
-    .then(parseResponse)
-    .then(({ response }) => response || {});
+  POST("/user/password/change", csrf, { currentpassword, newpassword }).then(getResponse);
 
 export const forgottenPasswordRequest = (csrf, email) =>
-  post("/user/password/reset", csrf, { email })
-    .then(parseResponse)
-    .then(({ response }) => response);
+  POST("/user/password/reset", csrf, { email }).then(getResponse);
 
-export const passwordResetRequest = (
-  csrf,
-  email,
-  verificationtoken,
-  newpassword
-) =>
-  post("/user/password/reset", csrf, { email, verificationtoken, newpassword })
-    .then(parseResponse)
-    .then(({ response }) => response);
+export const passwordResetRequest = ( csrf, email, verificationtoken, newpassword ) =>
+  POST("/user/password/reset", csrf, { email, verificationtoken, newpassword }).then(getResponse);
 
-export const secret = csrf =>
-  post("/secret", csrf, {})
-    .then(parseResponse)
-    .then(({ response }) => response);
-
-export const vetted = () =>
-  get("/v1/proposals/vetted")
-    .then(parseResponse)
-    .then(({ response }) => response);
-
-export const unvetted = () =>
-  get("/v1/proposals/unvetted")
-    .then(parseResponse)
-    .then(({ response }) => response);
-
-export const proposal = token =>
-  get(`/v1/proposals/${token}`)
-    .then(parseResponse)
-    .then(({ response }) => response);
-
-export const proposalComments = token =>
-  get(`/v1/proposals/${token}/comments`)
-    .then(parseResponse)
-    .then(({ response }) => response);
+export const policy = () => GET("/v1/policy").then(getResponse);
+export const secret = csrf => POST("/secret", csrf, {}).then(getResponse);
+export const vetted = () => GET("/v1/proposals/vetted").then(getResponse);
+export const unvetted = () => GET("/v1/proposals/unvetted").then(getResponse);
+export const proposal = token => GET(`/v1/proposals/${token}`).then(getResponse);
+export const proposalComments = token => GET(`/v1/proposals/${token}/comments`).then(getResponse);
+export const logout = csrf => POST("/logout", csrf, {}).then(() => ({}));
+export const assets = () => GET("/assets").then(getResponse);
 
 export const proposalSetStatus = (csrf, token, status) =>
-  post(`/proposals/${token}/status`, csrf, { proposalstatus: status, token })
-    .then(parseResponse)
-    .then(({ response }) => response);
+  POST(`/proposals/${token}/status`, csrf, { proposalstatus: status, token })
+    .then(getResponse);
 
-export const logout = csrf => post("/logout", csrf, {}).then(() => ({}));
-
-export const assets = () =>
-  get("/assets")
-    .then(parseResponse)
-    .then(({ response }) => response);
-
-export const newProposal = (csrf, name, description, files) =>
-  signProposal(makeProposal(name, description, files)).then(proposal => console.log("proposal", proposal) ||
-    post("/proposals/new", csrf, proposal).then(parseResponse)
-      .then(({ response: { censorshiprecord: { token, merkle, signature } } }) => ({
-        token,
-        merkle,
-        signature,
-        files: proposal.files
-      }))
-  );
+export const newProposal = (csrf, proposal) =>
+  POST("/proposals/new", csrf, proposal).then(({ response: { censorshiprecord }}) => ({
+    ...proposal, censorshiprecord, timestamp: Date.now() / 1000, status: PROPOSAL_STATUS_UNREVIEWED
+  }));
 
 export const newComment = (csrf, token, comment, parentid=0) =>
-  post("/comments/new", csrf, { token, parentid: parentid || 0, comment })
-    .then(parseResponse)
+  POST("/comments/new", csrf, { token, parentid: parentid || 0, comment })
     .then(({ response }) => response);
