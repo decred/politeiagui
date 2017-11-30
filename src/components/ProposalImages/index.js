@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { isFileValid } from "./helpers";
 
 class ProposalImages extends Component {
   constructor(props) {
@@ -14,13 +13,13 @@ class ProposalImages extends Component {
   }
 
   render() {
-    const { files, readOnly, policy } = this.props;
+    const { files, readOnly } = this.props;
 
     return (
       <div>
         {(files || []).map(({ name, mime, digest, payload, size }, idx) => (
           <div key={digest || idx}>
-            <h5>{name}{readOnly ? null : isFileValid({ size, mime }, policy) ? null :  <span className="error">&nbsp;Errored</span> }</h5>
+            <h5>{name}</h5>
             <div className="attached-image-ct clearfloat">
               <img className="attached-image" alt={name} src={`data:${mime};base64,${payload}`} />
               {readOnly ? null : (
@@ -36,7 +35,6 @@ class ProposalImages extends Component {
 
 ProposalImages.propTypes = {
   files: PropTypes.array.isRequired,
-  policy: PropTypes.object,
   readOnly: PropTypes.bool.isRequired,
 };
 

@@ -15,7 +15,7 @@
     "react": "^16.0.0",
     "react-body": "^0.2.0",
     "react-dom": "^16.0.0",
-    "react-file-reader": "^1.1.2",
+    "react-file-reader": "^1.1.3",
     "react-markmirror": "^0.4.16",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
