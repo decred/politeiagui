@@ -29,7 +29,8 @@
     "snew-classic-ui": "https://github.com/decred/snew-classic-ui",
     "snuownd": "https://github.com/JordanMilne/snuownd",
     "timeago-react": "^1.2.2",
-    "tweetnacl": "^1.0.0"
+    "tweetnacl": "^1.0.0",
+    "tweetnacl-util": "^0.15.0"
   },
   "scripts": {
     "mockapi": "node mockapi.js",

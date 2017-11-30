@@ -38,13 +38,23 @@ export const makeProposal = (name, markdown, attachments=[]) => ({
     .map(({ name, mime, payload}) => ({ name, mime, payload, digest: digestPayload(payload) }))
 });
 
-export const signProposal = proposal => pki.myPubKeyHex().then(pubKey => {
+export const makeComment = (token, comment, parentid) => ({
+  token,
+  parentid: parentid || "0",
+  comment
+});
+
+export const signProposal = proposal => pki.myPubKeyHex().then(publickey => {
   const tree = new MerkleTree(proposal.files.map(get("digest")).sort());
   const root = tree.root();
   console.log("merkle root", root);
   return pki.signHex(hexToArray(root))
-    .then(signature => ({ ...proposal, authorPublicKey: pubKey, signature }));
+    .then(signature => ({ ...proposal, publickey, signature }));
 });
+
+export const signComment = comment => pki.myPubKeyHex().then(publickey =>
+  pki.signStringHex([comment.token, comment.parentid, comment.comment].join(""))
+    .then(signature => ({ ...comment, publickey, signature })));
 
 const parseResponseBody = response => {
   const contentType = response.headers.get("content-type");
@@ -115,6 +125,4 @@ export const newProposal = (csrf, proposal) =>
     ...proposal, censorshiprecord, timestamp: Date.now() / 1000, status: PROPOSAL_STATUS_UNREVIEWED
   }));
 
-export const newComment = (csrf, token, comment, parentid=0) =>
-  POST("/comments/new", csrf, { token, parentid: parentid || 0, comment })
-    .then(({ response }) => response);
+export const newComment = (csrf, comment) => POST("/comments/new", csrf, comment).then(getResponse);

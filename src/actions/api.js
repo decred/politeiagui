@@ -146,8 +146,8 @@ export const onSubmitProposal = (name, description, files) =>
 export const onSubmitComment = (token, comment, parentid) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
-    return api
-      .newComment(csrf, token, comment, parentid)
+    return Promise.resolve(api.makeComment(token, comment, parentid))
+      .then(api.signComment).then(comment => api.newComment(csrf, comment))
       .then(response => dispatch(act.RECEIVE_NEW_COMMENT(response)))
       .catch(error => {
         dispatch(act.RECEIVE_NEW_COMMENT(null, error));
