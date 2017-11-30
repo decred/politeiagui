@@ -9,6 +9,8 @@ import {
   getHumanReadableError, hexToArray, base64ToArrayBuffer, arrayBufferToWordArray
 } from "../helpers";
 
+export const TOP_LEVEL_COMMENT_PARENTID = "";
+
 const STATUS_ERR = {
   400: "Bad response from server",
   401: "Not authorized",
@@ -36,7 +38,7 @@ export const makeProposal = (name, markdown, attachments=[]) => ({
 });
 
 export const makeComment = (token, comment, parentid) => ({
-  token, parentid: parentid || "0", comment
+  token, parentid: parentid || TOP_LEVEL_COMMENT_PARENTID, comment
 });
 
 export const signProposal = proposal => pki.myPubKeyHex().then(publickey => {
