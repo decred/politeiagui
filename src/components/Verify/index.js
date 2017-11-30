@@ -10,7 +10,12 @@ class Verify extends Component {
       return;
     }
 
-    this.props.onVerify(this.props.location.search);
+    this.props.onVerify(this.props.location.search)
+      .then(() => this.props.history.push("/user/verify/success"))
+      .catch(err => {
+        console.error(err.stack || err);
+        this.props.history.push("/user/verify/failure");
+      });
   }
 
   render() {

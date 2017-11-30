@@ -2,6 +2,7 @@ import get from "lodash/fp/get";
 import map from "lodash/fp/map";
 import reduce from "lodash/fp/reduce";
 import compose from "lodash/fp/compose";
+import { TOP_LEVEL_COMMENT_PARENTID } from "./api";
 
 export const proposalToT3 = ({
   name, timestamp, status, censorshiprecord = {}
@@ -35,7 +36,7 @@ const getChildComments = ({ tree, comments }, parentid) => map(
     }),
     id => comments[id]
   ),
-  get(parentid || 0, tree) || []
+  get(parentid || TOP_LEVEL_COMMENT_PARENTID, tree) || []
 );
 
 export const commentsToT1 = compose(
@@ -48,7 +49,7 @@ export const commentsToT1 = compose(
         [commentid]: {
           id: commentid,
           author: userid,
-          parent_id: parentid || 0,
+          parent_id: parentid || TOP_LEVEL_COMMENT_PARENTID,
           name: commentid,
           body: comment,
           created_utc: timestamp,
@@ -57,8 +58,8 @@ export const commentsToT1 = compose(
       },
       tree: {
         ...r.tree,
-        [parentid || 0]: [
-          ...(get(["tree", parentid || 0], r) || []),
+        [parentid || TOP_LEVEL_COMMENT_PARENTID]: [
+          ...(get(["tree", parentid || TOP_LEVEL_COMMENT_PARENTID], r) || []),
           commentid
         ]
       }

@@ -1,4 +1,4 @@
-import * as act from "../actions";
+import * as act from "../actions/types";
 import get from "lodash/fp/get";
 import map from "lodash/fp/map";
 
