@@ -11,5 +11,19 @@
     "image/svg+xml",
     "text/plain",
     "text/plain; charset=utf-8"
+  ],
+  "supportedcharacters": [
+    "A-z",
+    "0-9",
+    "&",
+    ".",
+    ":",
+    ";",
+    ",",
+    "-",
+    " ",
+    "@",
+    "+",
+    "#"
   ]
 }
