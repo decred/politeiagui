@@ -2,6 +2,8 @@
   "maximages":5,
   "maximagesize":524288,
   "maxmds":1,
+  "minnamelength": 8,
+  "maxnamelength": 80,
   "maxmdsize":524288,
   "validmimetypes":[
     "image/jpeg",

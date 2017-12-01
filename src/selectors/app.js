@@ -8,10 +8,10 @@ import { proposal as apiProposal } from "./api";
 
 export const replyTo = or(get(["app", "replyParent"]), constant(0));
 
-export const proposal = or(apiProposal, (state) => {
+export const proposal = or((state) => {
   const submittedProposals = state.app.submittedProposals;
   return submittedProposals[submittedProposals.lastSubmitted];
-}, constant({}));
+}, apiProposal, constant({}));
 
 export const isMarkdown = compose(eq("index.md"), get("name"));
 export const getProposalFiles = compose(get("files"), proposal);
