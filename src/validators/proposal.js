@@ -8,6 +8,13 @@ const validate = (values, dispatch, props) => {
     throw new SubmissionError({ _error: "All fields are required" });
   }
 
+  if (props.policy.minnamelength && (values.name.length < props.policy.minnamelength)) {
+    throw new SubmissionError({ _error: `Name must be at least ${props.policy.minnamelength} characters` });
+  }
+  if (props.policy.maxnamelength && (values.name.length > props.policy.maxnamelength)) {
+    throw new SubmissionError({ _error: `Name must be less than ${props.policy.maxnamelength} characters` });
+  }
+
   if (values.files) {
     if(values.files.length > props.policy.maximages) {
       throw new SubmissionError({ _error: "Only 5 attachments are allowed" });
