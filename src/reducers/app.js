@@ -13,7 +13,7 @@ export const DEFAULT_STATE = {
 
 const app = (state = DEFAULT_STATE, action) => (({
   [act.SET_REPLY_PARENT]: () => ({ ...state, replyParent: action.payload || TOP_LEVEL_COMMENT_PARENTID}),
-  [act.RECEIVE_NEW_PROPOSAL]: () => ({ ...state, submittedProposals: {
+  [act.RECEIVE_NEW_PROPOSAL]: () => action.error ? state : ({ ...state, submittedProposals: {
     ...state.submittedProposals,
     lastSubmitted: action.payload.censorshiprecord.token,
     [action.payload.censorshiprecord.token]: action.payload
