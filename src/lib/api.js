@@ -7,7 +7,7 @@ import qs from "query-string";
 import { PROPOSAL_STATUS_UNREVIEWED } from "../constants";
 import { getHumanReadableError, base64ToArrayBuffer, arrayBufferToWordArray } from "../helpers";
 
-export const TOP_LEVEL_COMMENT_PARENTID = "";
+export const TOP_LEVEL_COMMENT_PARENTID = "0";
 
 const STATUS_ERR = {
   400: "Bad response from server",
