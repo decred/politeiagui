@@ -111,8 +111,10 @@ export const proposalComments = token => GET(`/v1/proposals/${token}/comments`).
 export const logout = csrf => POST("/logout", csrf, {}).then(() => ({}));
 
 export const proposalSetStatus = (csrf, token, status) =>
-  POST(`/proposals/${token}/status`, csrf, { proposalstatus: status, token })
-    .then(getResponse);
+  pki.signStringHex(token + status).then(signature => POST(
+    `/proposals/${token}/status`, csrf,
+    { proposalstatus: status, token, signature }
+  )).then(getResponse);
 
 export const newProposal = (csrf, proposal) =>
   POST("/proposals/new", csrf, proposal).then(({ response: { censorshiprecord }}) => ({
