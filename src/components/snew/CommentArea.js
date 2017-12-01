@@ -1,6 +1,7 @@
 import React from "react";
 import { CommentArea as CommentAreaBase } from "snew-classic-ui";
 import connector from "../../connectors/proposal";
+import { TOP_LEVEL_COMMENT_PARENTID } from "../../lib/api";
 import { PROPOSAL_STATUS_CENSORED, PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
 
 
@@ -11,6 +12,7 @@ const CommentArea = ({ comments, loggedIn, proposal, ...props }) => (
     <CommentAreaBase {...{
       ...props,
       locked: !loggedIn,
+      name: TOP_LEVEL_COMMENT_PARENTID,
       num_comments: comments.length,
       currentSort: "new",
       sortOptions: ["new"]

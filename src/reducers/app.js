@@ -1,8 +1,9 @@
 import * as act from "../actions/types";
+import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 
 export const DEFAULT_STATE = {
   isShowingSignup: false,
-  replyParent: 0,
+  replyParent: TOP_LEVEL_COMMENT_PARENTID,
   newProposal: {
     name: "",
     description: ""
@@ -11,7 +12,7 @@ export const DEFAULT_STATE = {
 };
 
 const app = (state = DEFAULT_STATE, action) => (({
-  [act.SET_REPLY_PARENT]: () => ({ ...state, replyParent: action.payload || 0}),
+  [act.SET_REPLY_PARENT]: () => ({ ...state, replyParent: action.payload || TOP_LEVEL_COMMENT_PARENTID}),
   [act.RECEIVE_NEW_PROPOSAL]: () => ({ ...state, submittedProposals: {
     ...state.submittedProposals,
     lastSubmitted: action.payload.censorshiprecord.token,
