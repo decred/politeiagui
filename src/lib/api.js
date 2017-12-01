@@ -89,7 +89,7 @@ export const newUser = (csrf, email, password) => pki.myPubKeyHex().then(publick
 
 export const verifyNewUser = searchQuery => {
   const { email, verificationtoken } = qs.parse(searchQuery);
-  return pki.signHex(hexToArray(verificationtoken))
+  return pki.signStringHex(verificationtoken)
     .then(signature => GET("/v1/user/verify?" + qs.stringify({ email, verificationtoken, signature })))
     .then(getResponse);
 };
