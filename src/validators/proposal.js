@@ -1,7 +1,7 @@
 import { forEach } from "lodash";
 import { SubmissionError } from "redux-form";
 import { isFileValid } from "../components/ProposalImages/helpers";
-import { isRequiredValidator } from "./util";
+import { isRequiredValidator, proposalNameValidator } from "./util";
 
 const validate = (values, dispatch, props) => {
   if (!isRequiredValidator(values.name) || !isRequiredValidator(values.description)) {
@@ -13,6 +13,12 @@ const validate = (values, dispatch, props) => {
   }
   if (props.policy.maxnamelength && (values.name.length > props.policy.maxnamelength)) {
     throw new SubmissionError({ _error: `Name must be less than ${props.policy.maxnamelength} characters` });
+  }
+
+  if (props.policy.supportedcharacters && !proposalNameValidator(values.name, props.policy.supportedcharacters)) {
+    throw new SubmissionError({
+      _error: "Proposal name has an invalid character"
+    });
   }
 
   if (values.files) {
