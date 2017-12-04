@@ -5,6 +5,7 @@ import { Content } from "./snew";
 import { proposalToT3, commentsToT1 } from "../lib/snew";
 import { getTextFromIndexMd } from "../helpers";
 import Message from "./Message";
+import Loading from "./snew/Loading";
 
 const newSort = orderBy([get("timestamp")], ["desc"]);
 
@@ -18,9 +19,10 @@ const ProposalDetail = ({
           type="error"
           header="Proposal not found"
           body={error} />
+      ) : isLoading ? (
+          <Loading style={{minHeight: "500px"}} />
       ) : (
         <Content  {...{
-          isLoading,
           error,
           bodyClassName: "single-page comments-page",
           onFetchData: () => onFetchData(token),
@@ -38,8 +40,7 @@ const ProposalDetail = ({
             },
             { allChildren: commentsToT1(newSort(comments)) }
           ],
-          ...props
-        }} />
+          ...props}} />
       )}
     </div>
   </div>

@@ -9,7 +9,7 @@ const SidebarSearch = ({
   isSaving,
   onFind,
   handleSubmit
-}) => isSaving ? <Loading /> : (
+}) => isSaving ? <Loading style={{minHeight: "200px"}} /> : (
   <div className="spacer">
     <form id="search" role="search" onSubmit={handleSubmit(onFind)}>
       <Field

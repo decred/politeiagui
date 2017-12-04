@@ -36,7 +36,7 @@ const SubmitPage = ({
   onSave,
   handleSubmit,
   newProposalError,
-}) => !policy || isLoading ? <Loading /> : (
+}) => !policy || isLoading ? <Loading style={{minHeight: "500px"}} /> : (
   <div className="content" role="main">
     <ReactBody className="submit-page" />
     {newProposalError ? (

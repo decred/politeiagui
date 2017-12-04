@@ -101,8 +101,10 @@ const ThingLink = ({
         className={`expando-button ${expanded ? "expanded" : "collapsed"} selftext`}
       />*/}
       <p className="tagline">
-        <div><Link href={permalink}>submitted <TimeAgo datetime={created_utc*1000} /></Link></div>
-        <div>{id} • {getProposalStatus(review_status)}</div>
+        <Link href={permalink}>submitted <TimeAgo datetime={created_utc*1000} /></Link>
+      </p>
+      <p className="tagline">
+        {id} • {getProposalStatus(review_status)}
       </p>
       <Expando {...{ expanded, is_self, selftext, selftext_html }} />
 
