@@ -20,7 +20,7 @@ const SidebarSearch = ({
         size={80}
         tabIndex={20}
       />
-      <input tabIndex={22} type="submit" defaultValue />
+      <input tabIndex={22} type="submit" value="" />
       {error && (
         <Message type="error" header="Cannot search for proposal" body={error} />
       )}

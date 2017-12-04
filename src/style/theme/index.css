@@ -33,9 +33,6 @@ body .content input[type=password],
 body .content input[type=text],
 body .content input[type=url],
 body .content textarea {
-    background: #fff;
-    border: 1px solid #c3cfd6;
-    color: #e2e2e2;
     box-shadow: none;
     transition: border-color .15s ease, color .15s ease;
     padding: 6px 12px
@@ -49,6 +46,7 @@ body .content textarea:hover {
     border-color: #e2e2e2
 }
 .side .spacer input:active,
+.side .spacer input:focus,
 body .content .text:focus,
 body .content input[type=password]:focus,
 body .content input[type=text]:focus,

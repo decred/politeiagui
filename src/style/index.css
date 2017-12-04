@@ -153,7 +153,9 @@ a:hover {
 
 .login-form a {
   display: inline-block;
-  margin-left: 8px;
+}
+.login-form-side .recover-password {
+  margin-left: 0;
 }
 
 .change-password-form,
