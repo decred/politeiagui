@@ -179,7 +179,8 @@ a:hover {
 }
 .message-text {
   position: absolute;
-  left: 84px;
+  left: 80px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
 }
