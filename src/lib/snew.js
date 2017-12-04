@@ -10,7 +10,7 @@ export const proposalToT3 = ({
   kind: "t3",
   data: {
     rank: idx + 1,
-    title: name,
+    title: name || "(Proposal name hidden)",
     id: censorshiprecord.token,
     name: "t3_"+censorshiprecord.token,
     review_status: status,

@@ -4,6 +4,7 @@ import ProposalImages from "../ProposalImages";
 import Message from "../Message";
 import actions from "../../connectors/actions";
 import { PROPOSAL_STATUS_CENSORED, PROPOSAL_STATUS_PUBLIC, PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
+import { getProposalStatus } from "../../helpers";
 
 const ThingLink = ({
   Link,
@@ -100,7 +101,8 @@ const ThingLink = ({
         className={`expando-button ${expanded ? "expanded" : "collapsed"} selftext`}
       />*/}
       <p className="tagline">
-        <Link href={permalink}>submitted <TimeAgo datetime={created_utc*1000} /></Link> {id}
+        <div><Link href={permalink}>submitted <TimeAgo datetime={created_utc*1000} /></Link></div>
+        <div>{id} • {getProposalStatus(review_status)}</div>
       </p>
       <Expando {...{ expanded, is_self, selftext, selftext_html }} />
 
@@ -140,15 +142,15 @@ const ThingLink = ({
             ] : null
           ) : null}
         </ul>
-      ) : <div>{review_status}</div>}
+      ) : null}
 
-      {!setStatusProposalError ? null : (
+      {setStatusProposalError ? (
         <Message
           key="error"
           type="error"
           header="Error setting proposal status"
           body={setStatusProposalError} />
-      )}
+      ) : null}
     </div>
     <div className="child" />
     <div className="clearleft" />

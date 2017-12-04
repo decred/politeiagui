@@ -3,8 +3,8 @@ import CryptoJS from "crypto-js";
 
 export const getProposalStatus = (proposalStatus) => get(proposalStatus, [
   "Invalid",
-  "NotFound",
-  "NotReviewed",
+  "Not found",
+  "Not reviewed",
   "Censored",
   "Public",
 ]);

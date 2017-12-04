@@ -129,6 +129,7 @@ a:hover {
   width: 100%;
 }
 
+.proposal-page,
 .error-page,
 .verification-page {
   padding: 10px 0;
@@ -190,6 +191,7 @@ a:hover {
 }
 .message-body {
   vertical-align: middle;
+  white-space: normal;
 }
 .message-success {
   border: 1px solid #41bf53;
