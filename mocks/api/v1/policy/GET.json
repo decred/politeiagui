@@ -12,6 +12,7 @@
     "text/plain",
     "text/plain; charset=utf-8"
   ],
+  "maxcommentlength": 8000,
   "supportedcharacters": [
     "A-z",
     "0-9",

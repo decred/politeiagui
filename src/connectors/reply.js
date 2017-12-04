@@ -11,9 +11,11 @@ const replyConnector = connect(
   sel.selectorMap({
     token: sel.proposalToken,
     replyTo: sel.replyTo,
+    policy: sel.policy,
     isPostingComment: sel.isApiRequestingNewComment
   }),
   {
+    onFetchData: act.onGetPolicy,
     onSubmitComment: act.onSubmitComment,
     onSetReplyParent: act.onSetReplyParent
   }
@@ -25,6 +27,10 @@ class Wrapper extends Component {
     this.state = { isShowingMarkdownHelp: false };
   }
 
+  componentDidMount() {
+    this.props.policy || this.props.onFetchData();
+  }
+
   render () {
     const { Component, ...props } = this.props;
     return <Component {...{ ...props, ...this.state,
@@ -33,10 +39,10 @@ class Wrapper extends Component {
     }} />;
   }
 
-  onSave(props, ...args) {
-    validate(props, ...args);
-    const { token, replyTo } = this.props;
-    const { comment } = props;
+  onSave(values) {
+    const { token, replyTo, policy } = this.props;
+    validate(values, policy);
+    const { comment } = values;
     return this.props.onSubmitComment(token, comment, replyTo)
       .then(() => this.props.onSetReplyParent());
   }
