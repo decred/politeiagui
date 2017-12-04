@@ -13,6 +13,7 @@ const signupFormConnector = connect(
     loggedInAs: sel.loggedInAs,
     isAdmin: sel.isAdmin,
     newUserResponse: sel.newUserResponse,
+    isApiRequestingLogin: sel.isApiRequestingLogin,
     isApiRequestingNewUser: or(sel.isApiRequestingInit, sel.isApiRequestingNewUser),
     isApiRequestingVerifyNewUser: sel.isApiRequestingVerifyNewUser,
     apiNewUserError: sel.apiNewUserError,

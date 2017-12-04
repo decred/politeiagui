@@ -284,9 +284,15 @@ a:hover {
   position: absolute;
   height: 150px;
   width: 200px;
-  background-image: url("./spinner.svg");
-  background-position: 0px 0px;
-  background-repeat: no-repeat;
+  background-image: url("./spinner.svg") 0px 0px no-repeat;
+}
+button .logo {
+  position: static;
+  height: 15px;
+  width: 20px;
+  background: url("./spinner_white.svg") 0px 0px no-repeat;
+  margin-top: 10px;
+  margin-right: 10px;
 }
 .spin {
   animation: spin 3s ease-in-out infinite;
