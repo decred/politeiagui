@@ -284,7 +284,7 @@ a:hover {
   position: absolute;
   height: 150px;
   width: 200px;
-  background-image: url("./spinner.svg") 0px 0px no-repeat;
+  background: url("./spinner.svg") 0px 0px no-repeat;
 }
 button .logo {
   position: static;

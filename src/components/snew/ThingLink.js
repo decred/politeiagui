@@ -1,6 +1,7 @@
 import React from "react";
 import TimeAgo from "timeago-react";
 import ProposalImages from "../ProposalImages";
+import Message from "../Message";
 import actions from "../../connectors/actions";
 import { PROPOSAL_STATUS_CENSORED, PROPOSAL_STATUS_PUBLIC, PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
 
@@ -29,7 +30,8 @@ const ThingLink = ({
   otherFiles,
   review_status,
   isAdmin,
-  onChangeStatus
+  onChangeStatus,
+  setStatusProposalError
 }) => (
   <div
     className={`thing id-${id} odd link ${(review_status === PROPOSAL_STATUS_CENSORED) ? "spam" : null}`}
@@ -138,7 +140,15 @@ const ThingLink = ({
             ] : null
           ) : null}
         </ul>
-      ) : null}
+      ) : <div>{review_status}</div>}
+
+      {!setStatusProposalError ? null : (
+        <Message
+          key="error"
+          type="error"
+          header="Error setting proposal status"
+          body={setStatusProposalError} />
+      )}
     </div>
     <div className="child" />
     <div className="clearleft" />

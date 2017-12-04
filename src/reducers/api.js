@@ -48,6 +48,8 @@ const reset = (key, state) => ({ ...state, [key]: DEFAULT_REQUEST_STATE });
 
 const onReceiveSetStatus = (state, action) => {
   state = receive("setStatusProposal", state, action);
+  if (action.error) return state;
+
   const token = get(["setStatusProposal", "payload", "token"], state);
   const status = get(["setStatusProposal", "payload", "status"], state);
   const viewedProposal = get(["proposal", "response", "proposal"], state);
