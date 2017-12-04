@@ -1,12 +1,12 @@
 import React from "react";
 import { Field } from "redux-form";
 import Message from "../Message";
+import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
 import ErrorField from "../Form/Fields/ErrorField";
 import loginConnector from "../../connectors/login";
 
 const LoginForm = ({
   Link,
-  Loading,
   formAction="/post/login",
   error,
   isApiRequestingLogin,
@@ -14,7 +14,7 @@ const LoginForm = ({
   apiLoginError,
   onLogin,
   handleSubmit,
-}) =>  isApiRequestingLogin ? <Loading /> : loggedInAs ? null : (
+}) =>  loggedInAs ? null : (
   <form
     action={formAction}
     className="form-v2"
@@ -82,13 +82,11 @@ const LoginForm = ({
       </Link>
     </div>
     <div className="c-clearfix c-submit-group">
-      <button
+      <ButtonWithLoadingIcon
         className="c-btn c-btn-primary c-pull-right"
         tabIndex={3}
-        type="submit"
-      >
-        log in
-      </button>
+        text="Log in"
+        isLoading={isApiRequestingLogin} />
     </div>
     <div>
       <div className="c-alert c-alert-danger" />

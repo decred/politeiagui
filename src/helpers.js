@@ -3,8 +3,8 @@ import CryptoJS from "crypto-js";
 
 export const getProposalStatus = (proposalStatus) => get(proposalStatus, [
   "Invalid",
-  "NotFound",
-  "NotReviewed",
+  "Not found",
+  "Not reviewed",
   "Censored",
   "Public",
 ]);
@@ -41,7 +41,13 @@ export const getHumanReadableError = (errorCode, errorContext = []) => get(error
   "The Base64 encoding for one of the files was incorrect.",
   `The MIME type detected for ${errorContext[0]} did not match the provided MIME type. MIME type: ${errorContext[1]}`,
   "The MIME type for one of the files is not supported.",
-  "The proposal cannot be set to that status."
+  "The proposal cannot be set to that status.",
+  "The public key provided was invalid.",
+  "No active public key was found for your account.",
+  "The provided signature was invalid.",
+  "The provided parameters were invalid.",
+  "The key used for signing was invalid.",
+  "This comment is too long."
 ]);
 
 // Copied from https://stackoverflow.com/a/43131635

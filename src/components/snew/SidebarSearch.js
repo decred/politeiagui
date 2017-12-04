@@ -9,7 +9,7 @@ const SidebarSearch = ({
   isSaving,
   onFind,
   handleSubmit
-}) => isSaving ? <Loading /> : (
+}) => isSaving ? <Loading style={{minHeight: "200px"}} /> : (
   <div className="spacer">
     <form id="search" role="search" onSubmit={handleSubmit(onFind)}>
       <Field
@@ -20,7 +20,7 @@ const SidebarSearch = ({
         size={80}
         tabIndex={20}
       />
-      <input tabIndex={22} type="submit" defaultValue />
+      <input tabIndex={22} type="submit" value="" />
       {error && (
         <Message type="error" header="Cannot search for proposal" body={error} />
       )}

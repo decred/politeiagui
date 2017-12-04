@@ -70,6 +70,7 @@ const apiVettedError = getApiError("vetted");
 const apiUnvettedError = getApiError("unvetted");
 const apiProposalError = getApiError("proposal");
 const apiNewProposalError = getApiError("newProposal");
+const apiSetStatusProposalError = getApiError("setStatusProposal");
 export const apiError = or(
   apiInitError,
   apiNewUserError,
@@ -79,7 +80,8 @@ export const apiError = or(
   apiLogoutError,
   apiVettedError,
   apiProposalError,
-  apiNewProposalError
+  apiNewProposalError,
+  apiSetStatusProposalError
 );
 
 export const csrf = or(
@@ -127,4 +129,5 @@ export const newProposalDescription = compose(get("description"), apiNewProposal
 export const newProposalFiles = compose(get("files"), apiNewProposalPayload);
 export const setStatusProposal = compose(get("status"), apiSetStatusProposalResponse);
 export const setStatusProposalIsRequesting = isApiRequestingSetStatusProposal;
+export const setStatusProposalError = apiSetStatusProposalError;
 export const redirectedFrom = get(["api", "login", "redirectedFrom"]);

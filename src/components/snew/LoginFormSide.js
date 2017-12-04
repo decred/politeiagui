@@ -2,6 +2,7 @@ import React from "react";
 import { Field } from "redux-form";
 import ErrorField from "../Form/Fields/ErrorField";
 import Message from "../Message";
+import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
 import loginConnector from "../../connectors/login";
 
 const LoginFormSide = ({
@@ -14,7 +15,7 @@ const LoginFormSide = ({
   formAction="/post/login",
   onLogin,
   handleSubmit,
-}) => console.log("error", error) || isApiRequestingLogin ? <Loading /> : loggedInAs ? null : (
+}) => loggedInAs ? null : (
   <div className="spacer">
     <form
       action={formAction}
@@ -63,13 +64,14 @@ const LoginFormSide = ({
         <input id="rem-login-main" name="rem" tabIndex={1} type="checkbox" />
         <label htmlFor="rem-login-main">remember me</label>
         <Link className="recover-password" href="/password">
-          reset password
+          Reset Password
         </Link>
       </div>
       <div className="submit">
-        <button className="btn" tabIndex={1} type="submit">
-          login
-        </button>
+        <ButtonWithLoadingIcon
+          tabIndex={1}
+          isLoading={isApiRequestingLogin}
+          text="Login" />
       </div>
       <div className="clear" />
     </form>

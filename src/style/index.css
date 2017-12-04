@@ -35,6 +35,7 @@ html, body {
   background: #f4f7f9;
   font-family: "Source Sans Pro", "Helvetica Neue", arial, sans-serif;
   font-weight: 400;
+  font-size: 14px;
   color: #132f4b;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -128,6 +129,12 @@ a:hover {
   width: 100%;
 }
 
+.proposal-page,
+.error-page,
+.verification-page {
+  padding: 0;
+}
+
 .login-form fieldset {
   background-color: white;
 }
@@ -147,7 +154,9 @@ a:hover {
 
 .login-form a {
   display: inline-block;
-  margin-left: 8px;
+}
+.login-form-side .recover-password {
+  margin-left: 0;
 }
 
 .change-password-form,
@@ -171,7 +180,8 @@ a:hover {
 }
 .message-text {
   position: absolute;
-  left: 84px;
+  left: 80px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -181,6 +191,7 @@ a:hover {
 }
 .message-body {
   vertical-align: middle;
+  white-space: normal;
 }
 .message-success {
   border: 1px solid #41bf53;
@@ -276,9 +287,15 @@ a:hover {
   position: absolute;
   height: 150px;
   width: 200px;
-  background-image: url("./spinner.svg");
-  background-position: 0px 0px;
-  background-repeat: no-repeat;
+  background: url("./spinner.svg") 0px 0px no-repeat;
+}
+button .logo {
+  position: static;
+  height: 15px;
+  width: 20px;
+  background: url("./spinner_white.svg") 0px 0px no-repeat;
+  margin-top: 10px;
+  margin-right: 10px;
 }
 .spin {
   animation: spin 3s ease-in-out infinite;

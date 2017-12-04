@@ -2,10 +2,10 @@ import React from "react";
 import signupConnector from "../../connectors/signup";
 import { Field } from "redux-form";
 import Message from "../Message";
+import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
 import ErrorField from "../Form/Fields/ErrorField";
 
 const RegisterForm = ({
-  Loading,
   error,
   isApiRequestingNewUser,
   apiNewUserError,
@@ -16,7 +16,7 @@ const RegisterForm = ({
   passwd2Error,
   onSignup,
   handleSubmit
-}) => isApiRequestingNewUser ? <Loading /> : loggedInAs ? null : (
+}) => loggedInAs ? null : (
   <form
     action="/post/reg"
     className="form-v2"
@@ -58,7 +58,7 @@ const RegisterForm = ({
       </label>
       <Field
         name="password"
-        placeholder="password"
+        placeholder="Password"
         component="input"
         type="password"
         className="c-form-control"
@@ -81,7 +81,7 @@ const RegisterForm = ({
         type="password"
         className="c-form-control"
         id="passwd2_reg"
-        placeholder="verify password"
+        placeholder="Verify password"
         tabIndex={2}
       />
       <div className="c-form-control-feedback-wrapper">
@@ -101,10 +101,11 @@ const RegisterForm = ({
       ) : null}
     </div>
     <div className="c-clearfix c-submit-group">
-      <button
+      <ButtonWithLoadingIcon
         className="c-btn c-btn-primary c-pull-right"
         tabIndex={2}
-      >sign up</button>
+        text="Sign up"
+        isLoading={isApiRequestingNewUser} />
     </div>
     <div>
       <div className="c-alert c-alert-danger" />

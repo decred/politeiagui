@@ -1,8 +1,10 @@
 import React from "react";
 import TimeAgo from "timeago-react";
 import ProposalImages from "../ProposalImages";
+import Message from "../Message";
 import actions from "../../connectors/actions";
 import { PROPOSAL_STATUS_CENSORED, PROPOSAL_STATUS_PUBLIC, PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
+import { getProposalStatus } from "../../helpers";
 
 const ThingLink = ({
   Link,
@@ -29,7 +31,8 @@ const ThingLink = ({
   otherFiles,
   review_status,
   isAdmin,
-  onChangeStatus
+  onChangeStatus,
+  setStatusProposalError
 }) => (
   <div
     className={`thing id-${id} odd link ${(review_status === PROPOSAL_STATUS_CENSORED) ? "spam" : null}`}
@@ -98,7 +101,10 @@ const ThingLink = ({
         className={`expando-button ${expanded ? "expanded" : "collapsed"} selftext`}
       />*/}
       <p className="tagline">
-        <Link href={permalink}>submitted <TimeAgo datetime={created_utc*1000} /></Link> {id}
+        <Link href={permalink}>submitted <TimeAgo datetime={created_utc*1000} /></Link>
+      </p>
+      <p className="tagline">
+        {id} • {getProposalStatus(review_status)}
       </p>
       <Expando {...{ expanded, is_self, selftext, selftext_html }} />
 
@@ -138,6 +144,14 @@ const ThingLink = ({
             ] : null
           ) : null}
         </ul>
+      ) : null}
+
+      {setStatusProposalError ? (
+        <Message
+          key="error"
+          type="error"
+          header="Error setting proposal status"
+          body={setStatusProposalError} />
       ) : null}
     </div>
     <div className="child" />

@@ -10,7 +10,11 @@ class LogoutPage extends Component {
 
   render() {
     const { isLoading, error } = this.props;
-    return isLoading ? <Loading /> : error ? <ErrorPage {...{ error }} /> : (
+    return isLoading ? (
+      <Loading style={{minHeight: "500px"}} />
+    ) : error ? (
+      <ErrorPage {...{ error }} />
+    ) : (
       <article className="page logout-page">
         <h2>Successfully Logged Out</h2>
       </article>
