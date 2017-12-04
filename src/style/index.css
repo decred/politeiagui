@@ -132,7 +132,7 @@ a:hover {
 .proposal-page,
 .error-page,
 .verification-page {
-  padding: 10px 0;
+  padding: 0;
 }
 
 .login-form fieldset {

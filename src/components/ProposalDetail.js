@@ -19,10 +19,10 @@ const ProposalDetail = ({
           type="error"
           header="Proposal not found"
           body={error} />
-      ) : isLoading ? (
-          <Loading style={{minHeight: "500px"}} />
-      ) : (
+      ) : [
+        <Loading style={{minHeight: "500px"}} hidden={!isLoading} />,
         <Content  {...{
+          isLoading: false,
           error,
           bodyClassName: "single-page comments-page",
           onFetchData: () => onFetchData(token),
@@ -41,7 +41,7 @@ const ProposalDetail = ({
             { allChildren: commentsToT1(newSort(comments)) }
           ],
           ...props}} />
-      )}
+      ]}
     </div>
   </div>
 );
