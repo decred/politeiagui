@@ -8,7 +8,6 @@ export function arrayToRegex(arr) {
     return acc + char;
   }, "");
   re = `[${re}]`;
-  console.log(re);
   return new RegExp(re, "g");
 }
 
