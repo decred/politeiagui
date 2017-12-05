@@ -10,10 +10,10 @@ const MarkdownPreview = ({body}) => (
       <MarkdownHelp />
     </div>
   </div>
-)
+);
 
 MarkdownPreview.propTypes = {
   body: PropTypes.string.isRequired
-}
+};
 
 export default MarkdownPreview;

@@ -1,9 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const MarkdownHelp = (props) => {
-    const { helpText, markdownReferenceUrl } = props;
-    return (
+const MarkdownHelp = ({ helpText, markdownReferenceUrl }) => (
         <a className="markdown-help" href={markdownReferenceUrl} target="_blank" rel="noopener noreferrer">
             <svg aria-hidden="true" className="markdown-help-svg" height="16" version="1.1" viewBox="0 0 16 16" width="16">
                 <path
@@ -16,8 +14,7 @@ const MarkdownHelp = (props) => {
             </svg>
             <span className="markdown-help-text">{helpText}</span>
         </a>
-    );
-};
+);
 
 MarkdownHelp.propTypes = {
   helpText: PropTypes.string,
