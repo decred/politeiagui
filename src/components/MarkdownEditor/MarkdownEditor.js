@@ -25,7 +25,6 @@ export default class MarkdownEditor extends React.Component {
 
   render() {
     const {
-      commands,
       value,
       showdownOptions
     } = this.props;
