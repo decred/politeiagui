@@ -5,7 +5,7 @@ const MarkdownEditorField = ({ placeholder, input, touched, error, disabled, chi
   return console.log("input", input) || (
     <div className="ffmarkdown-editor">
       <div className="ffeditor usertext">
-        <MarkdownEditor value={input.value} onChange={input.onChange} />
+        <MarkdownEditor value={input.value ? input.value : { text: "" }} onChange={input.onChange} />
       </div>
       {touched && error && !disabled && <span className="error">{error}</span>}
     </div>
