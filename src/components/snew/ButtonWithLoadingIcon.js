@@ -1,4 +1,5 @@
 import React from "react";
+import LoadingIcon from "./LoadingIcon";
 
 const ButtonWithLoadingIcon = ({
   className,
@@ -8,9 +9,15 @@ const ButtonWithLoadingIcon = ({
 }) => {
   return (
     <button className={className || "btn"} type="submit" {...props}>
-      {!isLoading ? null : (
-        <div className="logo spin" style={{float: "left"}} />
-      )}
+      {isLoading ? (
+        <LoadingIcon
+          width={20}
+          style={{
+            display: "block",
+            float: "left",
+            marginRight: "8px",
+          }} />
+      ) : null}
       <div style={{float: "right"}}>{text}</div>
       <div style={{clear: "both"}} />
     </button>

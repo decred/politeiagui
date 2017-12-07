@@ -2,10 +2,11 @@ import React from "react";
 import { Field, reduxForm } from "redux-form";
 import { autobind } from "core-decorators";
 import Message from "../Message";
+import { PageLoadingIcon } from "../snew";
 
 const ForgottenPasswordForm = ({ error, handleSubmit, isRequesting, onForgottenPassword }) => {
   if (isRequesting) {
-    return <fieldset className="signup-form">Loading...</fieldset>;
+    return <PageLoadingIcon />;
   }
 
   return (

@@ -1,5 +1,7 @@
 sudo: required
 dist: trusty
+services:
+  - docker
 addons:
   apt:
     sources:
@@ -8,6 +10,7 @@ addons:
       - google-chrome-stable
 language: node_js
 node_js:
+  - 8
   - 6
 install:
   - yarn install
@@ -18,3 +21,4 @@ before_script:
   - scripts/serverUpChecker.sh
 script:
   - yarn test:e2e
+  - sh build_docker.sh

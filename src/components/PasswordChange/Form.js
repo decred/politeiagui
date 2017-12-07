@@ -1,6 +1,7 @@
 import React from "react";
 import { reduxForm, Field } from "redux-form";
 import Message from "../Message";
+import { PageLoadingIcon } from "../snew";
 
 const ChangePasswordForm = ({
   error,
@@ -8,7 +9,7 @@ const ChangePasswordForm = ({
   onChangePassword,
   handleSubmit
 }) => isApiRequestingChangePassword ? (
-  <fieldset className="change-password-form">Changing password</fieldset>
+  <PageLoadingIcon />
 ) : (
   <form className="change-password-form" onSubmit={handleSubmit(onChangePassword)}>
     {error && <Message

@@ -2210,7 +2210,7 @@ div.titlebox span.number:after {
     margin-left: 0;
 }
 .submit-page[class] .content {
-    margin: 32px auto 0
+    margin: auto 0
 }
 #suggested-reddits,
 .submit-page .side {
