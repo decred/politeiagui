@@ -46,7 +46,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => get(error
   "No active public key was found for your account.",
   "The provided signature was invalid.",
   "The provided parameters were invalid.",
-  "The key used for signing was invalid.",
+  "The private key used for signing was invalid.",
   "This comment is too long."
 ]);
 

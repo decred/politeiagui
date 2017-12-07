@@ -134,6 +134,7 @@ a:hover {
 .forgotten-password-page,
 .forgotten-password-next-step-page,
 .signup-next-step-page,
+.submit-proposal-page,
 .logout-page {
   padding: 20px;
 }
@@ -298,4 +299,16 @@ button .logo {
 }
 .spin {
   animation: spin 3s ease-in-out infinite;
+}
+
+.private-key-identity {
+  height: 50px;
+  margin-bottom: 20px;
+}
+.private-key-identity>a,
+.private-key-identity>div {
+  float: left;
+}
+.private-key-identity .react-file-reader {
+  margin-top: 0px;
 }
