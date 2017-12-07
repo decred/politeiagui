@@ -124,15 +124,18 @@ a:hover {
 }
 
 .page {
-  padding: 56px 20px;
   min-height: 100%;
   width: 100%;
 }
 
-.proposal-page,
-.error-page,
-.verification-page {
-  padding: 0;
+.user-profile-page,
+.reset-password-page,
+.reset-password-next-step-page,
+.forgotten-password-page,
+.forgotten-password-next-step-page,
+.signup-next-step-page,
+.logout-page {
+  padding: 20px;
 }
 
 .login-form fieldset {
@@ -285,14 +288,10 @@ a:hover {
 }
 .logo {
   position: absolute;
-  height: 150px;
-  width: 200px;
   background: url("./spinner.svg") 0px 0px no-repeat;
 }
 button .logo {
   position: static;
-  height: 15px;
-  width: 20px;
   background: url("./spinner_white.svg") 0px 0px no-repeat;
   margin-top: 10px;
   margin-right: 10px;

@@ -1,15 +1,15 @@
 import React from "react";
 import { Field } from "redux-form";
 import Message from "../Message";
+import LoadingIcon from "./LoadingIcon";
 import connector from "../../connectors/search";
 
 const SidebarSearch = ({
   error,
-  Loading,
   isSaving,
   onFind,
   handleSubmit
-}) => isSaving ? <Loading style={{minHeight: "200px"}} /> : (
+}) => (
   <div className="spacer">
     <form id="search" role="search" onSubmit={handleSubmit(onFind)}>
       <Field
@@ -20,7 +20,22 @@ const SidebarSearch = ({
         size={80}
         tabIndex={20}
       />
-      <input tabIndex={22} type="submit" value="" />
+      {isSaving ? (
+        <LoadingIcon
+          width={20}
+          style={{
+            display: "block",
+            position: "absolute",
+            top: "14px",
+            right: "12px"
+          }} />
+      ) : (
+        <input
+          tabIndex={22}
+          type="submit"
+          value="" />
+      )}
+
       {error && (
         <Message type="error" header="Cannot search for proposal" body={error} />
       )}

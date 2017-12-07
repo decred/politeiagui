@@ -30,13 +30,13 @@ const normalizer = (value, previousValue) => {
 
 const SubmitPage = ({
   isLoading,
-  Loading,
+  PageLoadingIcon,
   policy,
   error,
   onSave,
   handleSubmit,
   newProposalError,
-}) => !policy || isLoading ? <Loading style={{minHeight: "500px"}} /> : (
+}) => !policy || isLoading ? <PageLoadingIcon /> : (
   <div className="content" role="main">
     <ReactBody className="submit-page" />
     {newProposalError ? (

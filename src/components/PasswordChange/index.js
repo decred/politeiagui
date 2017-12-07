@@ -21,7 +21,7 @@ class ChangePassword extends Component {
   }
   render() {
     return (
-      <div className="change-password-form">
+      <div>
         {this.props.changePasswordResponse && <Message
           type="success"
           header="Change Password success"

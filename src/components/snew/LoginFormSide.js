@@ -7,7 +7,6 @@ import loginConnector from "../../connectors/login";
 
 const LoginFormSide = ({
   Link,
-  Loading,
   isApiRequestingLogin,
   error,
   apiLoginError,
@@ -42,24 +41,16 @@ const LoginFormSide = ({
         placeholder="Password"
       />
       <div className="status" />
-      <div className="status">
-        {apiLoginError ? (
-          <Message
-            type="error"
-            header="Login error"
-            body={apiLoginError} />
-        ) : null}
-        {error ? (
-          <Message
-            type="error"
-            header="Cannot login"
-            body={error} />
-        ) : null}
-        <Field
-          name="global"
-          component={props => <ErrorField title="Cannot login" {...props} />}
-        />
-      </div>
+      {(error || apiLoginError) ? (
+        <Message
+          type="error"
+          header="Login error"
+          body={error || apiLoginError} />
+      ) : null}
+      <Field
+        name="global"
+        component={props => <ErrorField title="Cannot login" {...props} />}
+      />
       <div id="remember-me">
         <input id="rem-login-main" name="rem" tabIndex={1} type="checkbox" />
         <label htmlFor="rem-login-main">remember me</label>
