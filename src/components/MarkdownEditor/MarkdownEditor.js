@@ -35,13 +35,13 @@ class MarkdownEditor extends React.Component {
 
   handleValueChange = (value) => {
       const {onChange} = this.props;
-      onChange(value);
+      onChange(value.text);
   }
 
   handleCommand = (command) => {
-      const {value: {text}, onChange} = this.props;
-      const newValue = command.execute(text, getSelection(this.textArea));
-      onChange(newValue);
+      const {value, onChange} = this.props;
+      const newValue = command.execute(value, getSelection(this.textArea));
+      onChange(newValue.text);
   }
 
   render() {
@@ -54,17 +54,17 @@ class MarkdownEditor extends React.Component {
         />
         <ReactMdeTextArea
             onChange={this.handleValueChange}
-            value={value}
+            value={{ text: value }}
             textAreaRef={(c) => this.textArea = c}
         />
-        <MarkdownPreview body={value.text} />
+        <MarkdownPreview body={value} />
       </div>
     );
   }
 }
 
 MarkdownEditor.propTypes = {
-  value: PropTypes.object.isRequired,
+  value: PropTypes.string.isRequired,
 };
 
 export default MarkdownEditor;
