@@ -301,6 +301,31 @@ button .logo {
   animation: spin 3s ease-in-out infinite;
 }
 
+
+/* Override conflitant styles for react-mde */
+.mde-header-item button {
+   text-align: left;
+   cursor: pointer;
+   padding: .25rem;
+   margin: 0;
+   border: none !important;
+   box-shadow: none !important;
+   background: none;
+   color: black !important;
+ }
+
+li p.header-1 {
+    font-size: 20px !important;
+}
+
+li p.header-2 {
+    font-size: 18px !important;
+}
+
+li p.header-3 {
+    font-size: 14px !important;
+}
+
 .private-key-identity {
   height: 50px;
   margin-bottom: 20px;
