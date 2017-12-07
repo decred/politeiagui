@@ -10,7 +10,7 @@ class PrivateKeyIdentityManager extends Component {
 
   render() {
     return (
-      <div className="private-key-identity">
+      <div className="private-key-identity clearfloat">
         {this.state && this.state.keyData && (
           <FileDownloadLink
             filename="politeia-pki.json"
