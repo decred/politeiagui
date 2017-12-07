@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { isEmpty } from "lodash";
+import PageLoadingIcon from "../snew/PageLoadingIcon";
 import verifyConnector from "../../connectors/verify";
 
 class Verify extends Component {
@@ -21,7 +22,7 @@ class Verify extends Component {
   render() {
     return (
       <div className="verification-page">
-        Processing...
+        <PageLoadingIcon />
       </div>
     );
   }

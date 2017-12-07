@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Loading from "./snew/Loading";
+import PageLoadingIcon from "./snew/PageLoadingIcon";
 import ErrorPage from "./ErrorPage";
 import logoutConnector from "../connectors/logout";
 
@@ -11,7 +11,7 @@ class LogoutPage extends Component {
   render() {
     const { isLoading, error } = this.props;
     return isLoading ? (
-      <Loading style={{minHeight: "500px"}} />
+      <PageLoadingIcon />
     ) : error ? (
       <ErrorPage {...{ error }} />
     ) : (

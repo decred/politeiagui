@@ -2,10 +2,11 @@ import React from "react";
 import { Field, reduxForm } from "redux-form";
 import ErrorField from "../Form/Fields/ErrorField";
 import Message from "../Message";
+import { PageLoadingIcon } from "../snew";
 
 const PasswordResetForm = ({ error, handleSubmit, onPasswordReset, isRequesting }) => {
   if (isRequesting) {
-    return <fieldset className="signup-form">Loading...</fieldset>;
+    return <PageLoadingIcon />;
   }
 
   return (
