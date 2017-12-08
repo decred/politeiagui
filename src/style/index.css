@@ -173,6 +173,7 @@ a:hover {
   height: 64px;
   margin: 16px 0;
   position: relative;
+  background-color: #ffffff;
 }
 .message-icon {
   height: 62px;
