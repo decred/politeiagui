@@ -7090,9 +7090,9 @@ shellwords@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
 
-showdown@^1.8.3:
-  version "1.8.3"
-  resolved "https://registry.yarnpkg.com/showdown/-/showdown-1.8.3.tgz#644dd3c8f9432c7744c49b45e9a198a01719435e"
+showdown@^1.8.4:
+  version "1.8.4"
+  resolved "https://registry.yarnpkg.com/showdown/-/showdown-1.8.4.tgz#f0e82567f15f3e40b92d886c071b55386cb0e2ce"
   dependencies:
     yargs "^10.0.3"
 
@@ -7143,10 +7143,6 @@ sntp@2.x.x:
   resolved "https://registry.yarnpkg.com/sntp/-/sntp-2.0.2.tgz#5064110f0af85f7cfdb7d6b67a40028ce52b4b2b"
   dependencies:
     hoek "4.x.x"
-
-"snuownd@https://github.com/JordanMilne/snuownd":
-  version "1.1.1"
-  resolved "https://github.com/JordanMilne/snuownd#06a1abc16ad06a1a6eff14afb7f9bcdb34e8ad01"
 
 sockjs-client@1.1.4:
   version "1.1.4"

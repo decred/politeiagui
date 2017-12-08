@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import MarkdownHelp from './MarkdownHelp';
-import Markdown from '../snew/Markdown';
+import React from "react";
+import PropTypes from "prop-types";
+import MarkdownHelp from "./MarkdownHelp";
+import Markdown from "../snew/Markdown";
 
-const MarkdownPreview = ({body}) => (
+const MarkdownPreview = ({body, showdownOptions}) => (
   <div className="mde-preview">
-    <Markdown body={body} className="mde-preview-content"/>
+    <Markdown className="mde-preview-content" showdownOptions={showdownOptions} body={body} />
     <div className="mde-help">
       <MarkdownHelp />
     </div>
