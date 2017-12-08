@@ -7,6 +7,7 @@ const actions = connect(
     loggedInAs: sel.loggedInAs,
     email: sel.email,
     isAdmin: sel.isAdmin,
+    setStatusProposalToken: sel.setStatusProposalToken,
     setStatusProposalError: sel.setStatusProposalError,
   }),
   {
