@@ -42,6 +42,7 @@ export const isApiRequesting = or(
 const apiNewUserPayload = getApiPayload("newUser");
 const apiLoginPayload = getApiPayload("login");
 const apiNewProposalPayload = getApiPayload("newProposal");
+const apiSetStatusProposalPayload = getApiPayload("setStatusProposal");
 
 const apiMeResponse = getApiResponse("me");
 const apiInitResponse = getApiResponse("init");
@@ -129,5 +130,6 @@ export const newProposalDescription = compose(get("description"), apiNewProposal
 export const newProposalFiles = compose(get("files"), apiNewProposalPayload);
 export const setStatusProposal = compose(get("status"), apiSetStatusProposalResponse);
 export const setStatusProposalIsRequesting = isApiRequestingSetStatusProposal;
+export const setStatusProposalToken = compose(get("token"), apiSetStatusProposalPayload);
 export const setStatusProposalError = apiSetStatusProposalError;
 export const redirectedFrom = get(["api", "login", "redirectedFrom"]);

@@ -32,6 +32,7 @@ const ThingLink = ({
   review_status,
   isAdmin,
   onChangeStatus,
+  setStatusProposalToken,
   setStatusProposalError
 }) => (
   <div
@@ -146,7 +147,7 @@ const ThingLink = ({
         </ul>
       ) : null}
 
-      {setStatusProposalError ? (
+      {(setStatusProposalError && setStatusProposalToken == id) ? (
         <Message
           key="error"
           type="error"
