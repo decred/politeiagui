@@ -22,7 +22,7 @@ export const CustomContent = ({
     </div>
   ) : isLoading ? (
     <PageLoadingIcon key="content" />
-  ) : (
+  ) : (listings && listings.length > 0) || proposals.length > 0 ? (
     <Content {...{
       ...props,
       key: "content",
@@ -32,6 +32,10 @@ export const CustomContent = ({
         }
       ]
     }} />
+  ) : (
+    <h1 style={{ margin: "300px auto 0 auto", textAlign: "center" }}>
+      There are no proposals yet
+    </h1>
   );
 
   return [
