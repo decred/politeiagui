@@ -1,16 +1,27 @@
-import React from "react";
+import React, { Component } from "react";
 import { Subreddit } from "snew-classic-ui";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, withRouter } from "react-router-dom";
+import routeChangeConnector from "../../connectors/routeChange";
 
 const noSidebar = (p1) => (p2) => <Subreddit {...{...p2, ...p1}} useSidebar={false} />;
 const withSidebar = (p1) => (p2) => <Subreddit {...{...p2, ...p1}} useSidebar={true} />;
 
-const CustomSubreddit = (props) => (
-  <Switch>
-    <Route path="/user/signup" component={noSidebar(props)}  />
-    <Route path="*" component={withSidebar(props)}/>
-  </Switch>
-);
+class CustomSubreddit extends Component {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location.pathname !== this.props.location.pathname) {
+      this.props.onRouteChange();
+    }
+  }
 
-export default CustomSubreddit;
+  render() {
+    return (
+      <Switch>
+        <Route path="/user/signup" component={noSidebar(this.props)} />
+        <Route path="*" component={withSidebar(this.props)} />
+      </Switch>
+    );
+  }
+}
+
+export default withRouter(routeChangeConnector(CustomSubreddit));
 
