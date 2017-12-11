@@ -21,6 +21,10 @@ export const onInit = () => dispatch => {
     });
 };
 
+export const onRouteChange = () => dispatch => {
+  dispatch(act.CLEAN_ERRORS());
+};
+
 export const onGetPolicy = () =>
   dispatch => {
     dispatch(act.REQUEST_POLICY());

@@ -113,6 +113,16 @@ const onReceiveNewComment = (state, action) => {
 
 const api = (state = DEFAULT_STATE, action) => (({
   [act.SET_EMAIL]: () => ({ ...state, email: action.payload }),
+  [act.CLEAN_ERRORS]: () => (
+    Object.keys(state).reduce((acc, curr) => {
+      if (curr === "email") {
+        acc[curr] = state[curr];
+      } else {
+        acc[curr] = Object.assign({}, state[curr], { error: null });
+      }
+      return acc;
+    }, {})
+  ),
   [act.REQUEST_ME]: () => request("me", state, action),
   [act.RECEIVE_ME]: () => receive("me", state, action),
   [act.REQUEST_INIT_SESSION]: () => request("init", state, action),
