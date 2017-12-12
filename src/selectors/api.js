@@ -115,6 +115,7 @@ export const censoredProposals = filtered(PROPOSAL_STATUS_CENSORED);
 export const unvettedProposalsIsRequesting = or(isApiRequestingInit, isApiRequestingUnvetted);
 export const unvettedProposalsError = or(apiInitError, apiUnvettedError);
 export const proposal = compose(get("proposal"), apiProposalResponse);
+export const proposalPayload = (state) => state.api.proposal.payload;
 export const proposalToken = compose(get(["censorshiprecord", "token"]), proposal);
 export const proposalComments = or(compose(get("comments"), apiProposalCommentsResponse), constant([]));
 export const proposalIsRequesting = or(isApiRequestingInit, isApiRequestingProposal);
