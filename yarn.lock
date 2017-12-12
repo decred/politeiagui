@@ -7244,10 +7244,6 @@ sntp@2.x.x:
   dependencies:
     hoek "4.x.x"
 
-"snuownd@https://github.com/JordanMilne/snuownd":
-  version "1.1.1"
-  resolved "https://github.com/JordanMilne/snuownd#06a1abc16ad06a1a6eff14afb7f9bcdb34e8ad01"
-
 sockjs-client@1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/sockjs-client/-/sockjs-client-1.1.4.tgz#5babe386b775e4cf14e7520911452654016c8b12"
