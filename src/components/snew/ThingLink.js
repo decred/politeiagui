@@ -147,7 +147,7 @@ const ThingLink = ({
         </ul>
       ) : null}
 
-      {(setStatusProposalError && setStatusProposalToken == id) ? (
+      {(setStatusProposalError && setStatusProposalToken === id) ? (
         <Message
           key="error"
           type="error"

@@ -40,7 +40,7 @@ class PrivateKeyIdentityManager extends Component {
     try {
       const data = atob(base64.split(",").pop());
       const json = JSON.parse(data);
-      if (!json || !json.publicKey || !json.secretKey) throw "Invalid keyfile";
+      if (!json || !json.publicKey || !json.secretKey) throw new Error("Invalid keyfile");
       pki.importKeys(json)
         .then(() => alert("Successfully loaded Private Key Identity"))
         .catch(e => {
