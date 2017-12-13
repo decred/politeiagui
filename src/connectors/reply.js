@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 const replyConnector = connect(
   sel.selectorMap({
     token: sel.proposalToken,
+    loggedIn: sel.loggedIn,
     replyTo: sel.replyTo,
     policy: sel.policy,
     isPostingComment: sel.isApiRequestingNewComment
