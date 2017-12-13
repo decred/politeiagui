@@ -18,6 +18,23 @@ const app = (state = DEFAULT_STATE, action) => (({
     lastSubmitted: action.payload.censorshiprecord.token,
     [action.payload.censorshiprecord.token]: action.payload
   }}),
+  [act.REQUEST_SETSTATUS_PROPOSAL]: () => {
+    if (action.error) return state;
+    const { status, token } = action.payload;
+    if (!(token in state.submittedProposals)) return state;
+    else {
+      return {
+        ...state,
+        submittedProposals: {
+          ...state.submittedProposals,
+          [token]: {
+            ...state.submittedProposals[token],
+            status
+          }
+        }
+      };
+    }
+  },
   [act.CANCEL_SIGNUP]: () => ({ ...state, isShowingSignup: false })
 })[action.type] || (() => state))();
 
