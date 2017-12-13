@@ -6,7 +6,6 @@ const customRenderers = {
     return <a rel="nofollow" href={src}>{alt}</a>
   },
   link: ({href, children}) => {
-    console.log('props', children)
     return <a rel="nofollow" href={href}>{children[0]}</a>;
   }
 }
