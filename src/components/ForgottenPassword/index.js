@@ -7,10 +7,6 @@ import forgottenPasswordConnector from "../../connectors/forgottenPassword";
 import validate from "./ForgottenPasswordValidator";
 
 class ForgottenPassword extends Component {
-  componentWillUnmount() {
-    this.props.resetForgottenPassword();
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.forgottenPasswordResponse) {
       nextProps.history.push("/user/forgotten/password/next");

@@ -41,6 +41,7 @@ export const isApiRequesting = or(
 
 const apiNewUserPayload = getApiPayload("newUser");
 const apiLoginPayload = getApiPayload("login");
+const apiForgottenPasswordPayload = getApiPayload("forgottenPassword");
 const apiNewProposalPayload = getApiPayload("newProposal");
 const apiSetStatusProposalPayload = getApiPayload("setStatusProposal");
 
@@ -92,7 +93,8 @@ export const csrf = or(
 export const email = or(
   compose(get("email"), apiMeResponse),
   compose(get("email"), apiLoginPayload),
-  compose(get("email"), apiNewUserPayload)
+  compose(get("email"), apiNewUserPayload),
+  compose(get("email"), apiForgottenPasswordPayload)
 );
 export const loggedIn = or(
   compose(get("email"), apiMeResponse),

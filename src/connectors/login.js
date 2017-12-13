@@ -20,7 +20,6 @@ const loginConnector = connect(
   }),
   {
     onLogin: act.onLogin,
-    onResetNewUser: act.onResetNewUser,
     resetRedirectedFrom: act.resetRedirectedFrom,
   }
 );
@@ -31,10 +30,6 @@ class Wrapper extends Component {
       resetRedirectedFrom();
       history.push(redirectedFrom);
     }
-  }
-
-  componentWillUnmount() {
-    this.props.onResetNewUser();
   }
 
   render() {

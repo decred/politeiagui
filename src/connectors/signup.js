@@ -10,6 +10,7 @@ import { withRouter } from "react-router-dom";
 
 const signupFormConnector = connect(
   sel.selectorMap({
+    email: sel.email,
     loggedInAs: sel.loggedInAs,
     isAdmin: sel.isAdmin,
     newUserResponse: sel.newUserResponse,
@@ -21,15 +22,11 @@ const signupFormConnector = connect(
   }),
   {
     onSignup: act.onSignup,
-    onResetNewUser: act.onResetNewUser,
     onCancelSignup: act.onCancelSignup
   }
 );
 
 class Wrapper extends Component {
-  componentWillUnmount() {
-    this.props.onResetNewUser();
-  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.loggedInAs) {

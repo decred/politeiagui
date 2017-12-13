@@ -338,3 +338,25 @@ li p.header-3 {
 .private-key-identity .react-file-reader {
   margin-top: 0px;
 }
+
+.signup-next-step-page,
+.forgotten-password-next-step-page {
+  width: 600px;
+}
+.signup-next-step-page h3,
+.forgotten-password-next-step-page h3 {
+  margin-bottom: 16px;
+}
+.signup-next-step-page ul,
+.forgotten-password-next-step-page ul {
+  margin: 16px 0 16px 24px;
+  list-style-type: disc;
+}
+.signup-next-step-page li,
+.forgotten-password-next-step-page li {
+  margin: 8px 0;
+}
+.signup-next-step-page .email-address,
+.forgotten-password-next-step-page .email-address {
+  font-weight: bold;
+}

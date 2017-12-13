@@ -8,7 +8,6 @@ const forgottenPasswordConnector = connect(
     isRequesting: sel.isApiRequestingForgottenPassword,
   }),
   {
-    resetForgottenPassword: act.resetForgottenPassword,
     onForgottenPasswordRequest: act.onForgottenPasswordRequest,
   }
 );
