@@ -1,19 +1,17 @@
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
-import { ReactMdeToolbar, ReactMdeTextArea, ReactMdeCommands } from 'react-mde';
+import { ReactMdeToolbar, ReactMdeTextArea, ReactMdeCommands } from "react-mde";
 import {
     getSelection,
 } from "react-mde/lib/js/helpers/ReactMdeSelectionHelper";
-import 'react-mde/lib/styles/css/react-mde.css';
-import 'react-mde/lib/styles/css/react-mde-toolbar.css';
-import 'react-mde/lib/styles/css/react-mde-textarea.css';
-import 'react-mde/lib/styles/css/react-mde-preview.css';
-import MarkdownPreview from './MarkdownPreview';
+import "react-mde/lib/styles/css/react-mde.css";
+import "react-mde/lib/styles/css/react-mde-toolbar.css";
+import "react-mde/lib/styles/css/react-mde-textarea.css";
+import "react-mde/lib/styles/css/react-mde-preview.css";
+import MarkdownPreview from "./MarkdownPreview";
+import MarkdownLiveHelper from "./MarkdownLiveHelper";
 
 class MarkdownEditor extends React.Component {
-  textArea: HTMLTextAreaElement;
-  preview: HTMLDivElement;
-
   getCustomCommands = () => {
     const {
       makeHeaderCommand,
@@ -57,6 +55,7 @@ class MarkdownEditor extends React.Component {
             value={{ text: value }}
             textAreaRef={(c) => this.textArea = c}
         />
+        <MarkdownLiveHelper classToSelect="mde-preview-content" />
         <MarkdownPreview body={value} />
       </div>
     );
