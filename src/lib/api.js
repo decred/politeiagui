@@ -5,7 +5,7 @@ import get from "lodash/fp/get";
 import MerkleTree from "mtree";
 import qs from "query-string";
 import { PROPOSAL_STATUS_UNREVIEWED } from "../constants";
-import { getHumanReadableError, base64ToArrayBuffer, arrayBufferToWordArray } from "../helpers";
+import { getHumanReadableError, base64ToArrayBuffer, arrayBufferToWordArray, utoa } from "../helpers";
 
 export const TOP_LEVEL_COMMENT_PARENTID = "0";
 
@@ -27,7 +27,7 @@ const digestPayload = payload => CryptoJS
 export const convertMarkdownToFile = markdown => ({
   name: "index.md",
   mime: "text/plain; charset=utf-8",
-  payload: btoa(markdown)
+  payload: utoa(markdown)
 });
 
 export const makeProposal = (name, markdown, attachments=[]) => ({
