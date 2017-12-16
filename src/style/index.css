@@ -324,6 +324,39 @@ button .logo {
    color: black !important;
  }
 
+.md textarea {
+  font-size: 1rem !important;
+  padding-bottom: 22px !important;
+  resize: none;
+  height: 100%;
+} 
+
+.mde-text {
+  min-width: calc(50% - 8px);
+}
+
+.mde-preview {
+  max-width: calc(50% - 8px);
+  width: 100%;
+  margin-right: 6px;
+} 
+
+.mde-preview-content {
+  width: 100%;
+  margin-top: 0px !important;
+  height: 100%;
+}
+
+.markdown-help {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.markdown-help-text {
+  margin-left: 3px;
+}
+
 li p.header-1 {
     font-size: 20px !important;
 }

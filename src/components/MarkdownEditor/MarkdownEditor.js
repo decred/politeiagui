@@ -50,13 +50,17 @@ class MarkdownEditor extends React.Component {
             commands={this.getCustomCommands()}
             onCommand={this.handleCommand}
         />
-        <ReactMdeTextArea
-            onChange={this.handleValueChange}
-            value={{ text: value }}
-            textAreaRef={(c) => this.textArea = c}
-        />
-        <MarkdownLiveHelper classToSelect="mde-preview-content" />
-        <MarkdownPreview body={value} />
+        <div style={{display: "flex", justifyContent: "space-between" }}>
+          <ReactMdeTextArea
+              onChange={this.handleValueChange}
+              value={{ text: value }}
+              textAreaRef={(c) => this.textArea = c}
+          />
+          <MarkdownPreview body={value} />
+        </div>
+        <div className="mde-help">
+          <MarkdownLiveHelper classToSelect="mde-preview-content" />
+        </div>
       </div>
     );
   }
