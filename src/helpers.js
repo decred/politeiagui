@@ -9,6 +9,9 @@ export const getProposalStatus = (proposalStatus) => get(proposalStatus, [
   "Public",
 ]);
 
+export const utoa = (str) => window.btoa(unescape(encodeURIComponent(str)));
+export const atou = (str) => decodeURIComponent(escape(window.atob(str)));
+
 // This function extracts the content of index.md's payload. The payload is
 // formatted as:
 //
@@ -16,7 +19,7 @@ export const getProposalStatus = (proposalStatus) => get(proposalStatus, [
 //  <proposal description>
 //
 export const getTextFromIndexMd = file => {
-  let text = atob(file.payload);
+  let text = atou(file.payload);
   return text.substring(text.indexOf("\n") + 1);
 };
 
