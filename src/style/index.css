@@ -216,6 +216,15 @@ a:hover {
 .message-error .message-header {
   color: #bf4153;
 }
+.message-info {
+  border: 1px solid #2971FF;
+}
+.message-info .message-icon {
+  background: #2971FF;
+}
+.message-info .message-header {
+  color: #2971FF;
+}
 
 .proposal-meta-data {
   margin-bottom: 8px;
