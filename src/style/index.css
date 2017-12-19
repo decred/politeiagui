@@ -327,6 +327,7 @@ button .logo {
 .md textarea {
   font-size: 1rem !important;
   padding-bottom: 22px !important;
+  line-height: 18px !important;
   resize: none;
   height: 100%;
   overflow-y: hidden;
