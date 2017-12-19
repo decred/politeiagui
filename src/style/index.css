@@ -329,6 +329,7 @@ button .logo {
   padding-bottom: 22px !important;
   resize: none;
   height: 100%;
+  overflow-y: hidden;
 } 
 
 .mde-text {
