@@ -5,6 +5,7 @@ import * as act from "../actions";
 
 export default connect(
   sel.selectorMap({
+    loggedInAs: sel.loggedInAs,
     isAdmin: sel.isAdmin,
     proposals: sel.vettedProposals,
     error: sel.vettedProposalsError,

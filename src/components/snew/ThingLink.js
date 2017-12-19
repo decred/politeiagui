@@ -30,6 +30,7 @@ const ThingLink = ({
   thumbnail,
   otherFiles,
   review_status,
+  loggedInAs,
   isAdmin,
   onChangeStatus,
   setStatusProposalToken,
@@ -124,7 +125,7 @@ const ThingLink = ({
             (review_status === PROPOSAL_STATUS_UNREVIEWED) ? [
               <li key="spam">
                 <form className="toggle remove-button" onSubmit={(e) =>
-                  onChangeStatus(id, PROPOSAL_STATUS_CENSORED) && e.preventDefault()}>
+                  onChangeStatus(loggedInAs, id, PROPOSAL_STATUS_CENSORED) && e.preventDefault()}>
                   <button
                     className="togglebutton access-required"
                     data-event-action="spam"
@@ -134,7 +135,7 @@ const ThingLink = ({
               </li>,
               <li key="approve">
                 <form className="toggle approve-button" onSubmit={(e) =>
-                  onChangeStatus(id, PROPOSAL_STATUS_PUBLIC) && e.preventDefault()}>
+                  onChangeStatus(loggedInAs, id, PROPOSAL_STATUS_PUBLIC) && e.preventDefault()}>
                   <button
                     className="togglebutton access-required"
                     data-event-action="approve"

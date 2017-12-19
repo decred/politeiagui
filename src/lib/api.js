@@ -39,15 +39,15 @@ export const makeComment = (token, comment, parentid) => ({
   token, parentid: parentid || TOP_LEVEL_COMMENT_PARENTID, comment
 });
 
-export const signProposal = proposal => pki.myPubKeyHex().then(publickey => {
+export const signProposal = (email, proposal) => pki.myPubKeyHex(email).then(publickey => {
   const tree = new MerkleTree(proposal.files.map(x => Buffer(get("digest", x), "hex")).sort());
   const root = tree.root().toString("hex");
   console.log("merkle root", root);
-  return pki.signStringHex(root).then(signature => ({ ...proposal, publickey, signature }));
+  return pki.signStringHex(email, root).then(signature => ({ ...proposal, publickey, signature }));
 });
 
-export const signComment = comment => pki.myPubKeyHex().then(publickey =>
-  pki.signStringHex([comment.token, comment.parentid, comment.comment].join(""))
+export const signComment = (email, comment) => pki.myPubKeyHex(email).then(publickey =>
+  pki.signStringHex(email, [comment.token, comment.parentid, comment.comment].join(""))
     .then(signature => ({ ...comment, publickey, signature })));
 
 const parseResponseBody = response => {
@@ -81,12 +81,12 @@ export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, ro
   csrfToken: csrfToken || "itsafake", version, route
 }));
 
-export const newUser = (csrf, email, password) => pki.myPubKeyHex().then(publickey =>
+export const newUser = (csrf, email, password) => pki.myPubKeyHex(email).then(publickey =>
   POST("/user/new", csrf, { email, password, publickey }).then(getResponse));
 
 export const verifyNewUser = searchQuery => {
   const { email, verificationtoken } = qs.parse(searchQuery);
-  return pki.signStringHex(verificationtoken)
+  return pki.signStringHex(email, verificationtoken)
     .then(signature => GET("/v1/user/verify?" + qs.stringify({ email, verificationtoken, signature })))
     .then(getResponse);
 };
@@ -110,8 +110,8 @@ export const proposal = token => GET(`/v1/proposals/${token}`).then(getResponse)
 export const proposalComments = token => GET(`/v1/proposals/${token}/comments`).then(getResponse);
 export const logout = csrf => POST("/logout", csrf, {}).then(() => ({}));
 
-export const proposalSetStatus = (csrf, token, status) =>
-  pki.signStringHex(token + status).then(signature => POST(
+export const proposalSetStatus = (email, csrf, token, status) =>
+  pki.signStringHex(email, token + status).then(signature => POST(
     `/proposals/${token}/status`, csrf,
     { proposalstatus: status, token, signature }
   )).then(getResponse);

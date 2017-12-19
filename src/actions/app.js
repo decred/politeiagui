@@ -15,9 +15,9 @@ export const onSetReplyParent = (parentId = TOP_LEVEL_COMMENT_PARENTID) =>
     dispatch(act.SET_REPLY_PARENT(parentId)),
     dispatch(reset("form/reply"))
   ]);
-export const onSaveNewProposal = ({ name, description, files }) =>
+export const onSaveNewProposal = ({ name, description, files }, _, props) =>
   (dispatch, getState) =>
-    dispatch(onSubmitProposal(name, description, files))
+    dispatch(onSubmitProposal(props.loggedInAs, name, description, files))
       .then(() => sel.newProposalToken(getState()));
 
 export const onSaveChangePassword = ({ existingPassword, password }) =>
