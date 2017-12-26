@@ -10,5 +10,42 @@
 
 .app-modal {
   position: fixed;
-  background-color: #fff;
+  z-index: 200;
+}
+
+.paywall-modal-content {
+  left: 10%;
+  right: 10%;
+  top: 10%;
+  bottom: 10%;
+  border-radius: 5px;
+  overflow-y: auto;
+  width: 500px;
+  background: #fff;
+  line-height: normal;
+  text-align: left;
+}
+
+.modal-paywall-header {
+  border-bottom: 1px solid rgb(182, 182, 182);
+  padding: 1em;
+  padding-bottom: 2em;
+}
+
+.modal-paywall-header-title {
+  float: left;
+}
+
+.modal-paywall-header-close {
+  float: right;
+}
+
+.modal-paywall-content {
+  padding: 2em;
+  border-bottom: 1px solid rgb(182, 182, 182);
+}
+
+.modal-paywall-footer {
+  padding: 1em;
+  float: right;
 }
