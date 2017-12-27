@@ -6,7 +6,7 @@ const Modal = ({
   onSubmit,
   isHidden
 }) => (
-  <div className="paywall-modal-content">
+  <div className="paywall-modal-wrapper">
     <div className="modal-paywall-header">
       <h2 className="modal-paywall-header-title">Paywall</h2>
       <a href="#" className="modal-paywall-header-close" aria-hidden="true">×</a>

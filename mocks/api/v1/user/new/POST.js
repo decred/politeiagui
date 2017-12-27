@@ -15,6 +15,10 @@ module.exports = function (request, response) {
         return response.end(JSON.stringify({ "errorcode": 2 }));
       }
 
-      return response.end(JSON.stringify({}));
+      return response.end(JSON.stringify({
+        "paywallAddress":"TsRBnD2mnZX1upPMFNoQ1ckYr9Y4TZyuGTV",
+        "PaywallAmount":"0.1",
+        "VerificationToken":"77b9bb7d23272cddc9a8b613c915c95a5dc9a7dbd84be01ea67d73edd4238d89"
+      }));
     });
 };
