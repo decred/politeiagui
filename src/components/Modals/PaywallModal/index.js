@@ -2,6 +2,7 @@ import React from "react";
 import {autobind} from "core-decorators";
 import Modal from "../Modal";
 import Paywall from "./Paywall";
+import paywallConnector from "../../../connectors/paywall";
 
 class PayWallModal extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class PayWallModal extends React.Component {
         children={Paywall}
         isHidden={false}
         {...{
+          ...this.props,
           hasAttemptedSubmit,
           onSubmit
         }}
@@ -47,4 +49,4 @@ class PayWallModal extends React.Component {
 
 autobind(PayWallModal);
 
-export default PayWallModal;
+export default paywallConnector(PayWallModal);

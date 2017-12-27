@@ -4,7 +4,8 @@ import "../../../style/Modals.css";
 const Modal = ({
   hasAttemptedSubmit,
   onSubmit,
-  isHidden
+  isHidden,
+  ...props
 }) => (
   <div className="paywall-modal-wrapper">
     <div className="modal-paywall-header">
@@ -13,9 +14,10 @@ const Modal = ({
     </div>
     <div className="modal-paywall-content">
       <p>This is the paywall</p>
+      <p>{props.paywallAmount}</p>
     </div>
     <div className="modal-paywall-footer">
-      <a href="#" class="btn">Pay!</a>
+      <a className="btn">Pay!</a>
     </div>
   </div>
 );

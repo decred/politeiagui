@@ -136,3 +136,6 @@ export const setStatusProposalIsRequesting = isApiRequestingSetStatusProposal;
 export const setStatusProposalToken = compose(get("token"), apiSetStatusProposalPayload);
 export const setStatusProposalError = apiSetStatusProposalError;
 export const redirectedFrom = get(["api", "login", "redirectedFrom"]);
+export const paywallAddress = compose(get("paywallAddress"), apiNewUserResponse);
+export const paywallAmount = compose(get("paywallAmount"), apiNewUserResponse);
+export const VerificationToken = compose(get("verificationToken"), apiNewUserResponse);

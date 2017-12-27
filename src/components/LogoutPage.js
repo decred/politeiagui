@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import PageLoadingIcon from "./snew/PageLoadingIcon";
 import ErrorPage from "./ErrorPage";
 import logoutConnector from "../connectors/logout";
-import {PaywallModal} from "./Modals";
 
 class LogoutPage extends Component {
   componentDidMount() {
@@ -18,9 +17,6 @@ class LogoutPage extends Component {
     ) : (
       <article className="page logout-page">
         <h2>Successfully Logged Out</h2>
-        {/* temp */}
-        <PaywallModal/>
-        <button>trigger</button>
       </article>
     );
   }
