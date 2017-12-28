@@ -324,6 +324,41 @@ button .logo {
    color: black !important;
  }
 
+.md textarea {
+  font-size: 1rem !important;
+  padding-bottom: 22px !important;
+  line-height: 18px !important;
+  resize: none;
+  height: 100%;
+  overflow-y: hidden;
+} 
+
+.mde-text {
+  min-width: calc(50% - 8px);
+}
+
+.mde-preview {
+  max-width: calc(50% - 8px);
+  width: 100%;
+  margin-right: 6px;
+} 
+
+.mde-preview-content {
+  width: 100%;
+  margin-top: 0px !important;
+  height: 100%;
+}
+
+.markdown-help {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.markdown-help-text {
+  margin-left: 3px;
+}
+
 li p.header-1 {
     font-size: 20px !important;
 }
@@ -368,4 +403,39 @@ li p.header-3 {
 .signup-next-step-page .email-address,
 .forgotten-password-next-step-page .email-address {
   font-weight: bold;
+}
+
+.markhelp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.markhelp > table {
+    margin-top: 10px;
+}
+
+.submit-page #newlink.submit.content {
+  width: 900px !important;
+}
+
+.submit-page .formtabs-content {
+    width: 100%;
+}
+.submit-page .roundfield {
+    width: 100% !important;
+}
+
+.submit-page .roundfield .usertext-edit {
+    width: 100%;
+}
+
+.submit-page .roundfield textarea {
+    width: 100%;
+    border: none;
+}
+
+.submit-page .roundfield .usertext-edit .md {
+  width: 100%;
+  max-width: 100%;
 }

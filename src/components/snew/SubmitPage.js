@@ -77,7 +77,6 @@ const SubmitPage = ({
                     <div className="md">
                       <Field
                         name="description"
-                        //component={MarkdownEditorField}
                         component={MarkdownEditorField}
                         placeholder="Markdown Entry"
                         rows={20}

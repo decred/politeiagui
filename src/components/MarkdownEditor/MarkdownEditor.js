@@ -32,14 +32,23 @@ class MarkdownEditor extends React.Component {
   }
 
   handleValueChange = (value) => {
-      const {onChange} = this.props;
-      onChange(value.text);
+    this.textArea.style.height = "auto";
+    this.textArea.style.height = (this.textArea.scrollHeight) + "px";
+    const {onChange} = this.props;
+    onChange(value.text);
   }
 
   handleCommand = (command) => {
       const {value, onChange} = this.props;
       const newValue = command.execute(value, getSelection(this.textArea));
       onChange(newValue.text);
+  }
+
+  componentDidMount() {
+    const tx = this.textArea;
+    for (let i = 0; i < tx.length; i++) {
+      tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;");
+    }
   }
 
   render() {
@@ -50,13 +59,17 @@ class MarkdownEditor extends React.Component {
             commands={this.getCustomCommands()}
             onCommand={this.handleCommand}
         />
-        <ReactMdeTextArea
-            onChange={this.handleValueChange}
-            value={{ text: value }}
-            textAreaRef={(c) => this.textArea = c}
-        />
-        <MarkdownLiveHelper classToSelect="mde-preview-content" />
-        <MarkdownPreview body={value} />
+        <div style={{display: "flex", justifyContent: "space-between" }}>
+          <ReactMdeTextArea
+              onChange={this.handleValueChange}
+              value={{ text: value }}
+              textAreaRef={(c) => this.textArea = c}
+          />
+          <MarkdownPreview body={value} />
+        </div>
+        <div className="mde-help">
+          <MarkdownLiveHelper classToSelect="mde-preview-content" />
+        </div>
       </div>
     );
   }
