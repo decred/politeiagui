@@ -8,7 +8,7 @@ const actions = connect(
     email: sel.email,
     isAdmin: sel.isAdmin,
     setStatusProposalToken: sel.setStatusProposalToken,
-    setStatusProposalError: sel.setStatusProposalError,
+    setStatusProposalError: sel.setStatusProposalError
   }),
   {
     onChangeStatus: act.onSubmitStatusProposal
@@ -16,4 +16,3 @@ const actions = connect(
 );
 
 export default actions;
-
