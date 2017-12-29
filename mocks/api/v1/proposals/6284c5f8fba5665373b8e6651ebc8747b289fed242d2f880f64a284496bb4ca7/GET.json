@@ -4,7 +4,12 @@
     "status": 2,
     "timestamp": 1505940196,
     "censorshiprecord": {
-      "token": "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca7"
+      "token":
+        "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca7",
+      "merkle":
+        "0dd10219cd79342198085cbe6f737bd54efe119b24c84cbc053023ed6b7da4c8",
+      "signature":
+        "f5ea17d547d8347a2f2d77edcb7e89fcc96613d7aaff1f2a26761779763d77688b57b423f1e7d2da8cd433ef2cfe6f58c7cf1c43065fa6716a03a3726d902d0a"
     }
   }
 }
