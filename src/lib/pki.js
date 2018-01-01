@@ -37,4 +37,4 @@ const keysFromHex = ({ publicKey, secretKey }) => ({
 });
 
 export const getKeys = email => myKeyPair(email).then(keysToHex);
-export const importKeys = compose(loadKeys, keysFromHex);
+export const importKeys = (email, keys) => Promise.resolve(keysFromHex(keys)).then(decodedKeys => loadKeys(email, decodedKeys));

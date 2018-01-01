@@ -1,15 +1,15 @@
 import React from "react";
-import connector from "../connectors/submitProposal";
+import connector from "../connectors/userProfile";
 import PasswordChange from "./PasswordChange";
 import PrivateKeyIdentityManager from "./PrivateKeyIdentityManager";
 
 const UserProfile = ({
-  email
+  loggedInAs
 }) => (
   <div className="content" role="main">
     <div className="page user-profile-page">
       <h1>User Profile</h1>
-      <PrivateKeyIdentityManager email={email} />
+      <PrivateKeyIdentityManager loggedInAs={loggedInAs} />
       <PasswordChange />
     </div>
   </div>
