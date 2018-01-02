@@ -14,7 +14,8 @@ const Modal = ({
     </div>
     <div className="modal-paywall-content">
       <p>This is the paywall</p>
-      <p>{props.paywallAmount}</p>
+      <p>{props.paywallAmount}</p><br/>
+      <p>{props.paywallAddress}</p>
     </div>
     <div className="modal-paywall-footer">
       <a className="btn">Pay!</a>

@@ -17,7 +17,7 @@ class PayWallModal extends React.Component {
   }
 
   componentWillMount() {
-    this.props.getPaymentsByAddress();
+    this.props.getPaymentsByAddress("TsRBnD2mnZX1upPMFNoQ1ckYr9Y4TZyuGTV", 0.1);
   }
 
   componentWillUnmount() {
