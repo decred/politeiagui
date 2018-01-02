@@ -8,7 +8,13 @@ export const getPaymentsByAddress = (address, amount) => dispatch => {
   return external_api.getPaymentsByAddress(address)
     .then(response => {
       dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT(response));
-      checkForPayment(response, address, amount);      
+      const isPaid = checkForPayment(response, address, amount);
+      if(isPaid) {
+        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS());
+      }
+      else {
+        dispatch(act.DENY_SUBMIT_PROPOSAL_ACCESS());
+      }
     })
     .catch(error => {
       dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT(null, error));
@@ -17,9 +23,11 @@ export const getPaymentsByAddress = (address, amount) => dispatch => {
 };
 
 const checkForPayment = (poll, addressToMatch, amount) => {
+  let isPaid;
   poll.forEach((transaction) => {
-    checkTransaction(transaction, addressToMatch, amount);
+    isPaid = checkTransaction(transaction, addressToMatch, amount);
   });
+  return isPaid;
 };
 
 const checkTransaction = (transaction, addressToMatch, amount) => {
