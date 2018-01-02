@@ -131,6 +131,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_POLICY]: () => receive("policy", state, action),
   [act.REQUEST_NEW_USER]: () => request("newUser", state, action),
   [act.RECEIVE_NEW_USER]: () => receive("newUser", state, action),
+  [act.REQUEST_VERIFY_PAYWALL_PAYMENT]: () => request("verifyPaywallPayment", state, action),
+  [act.RECEIVE_VERIFY_PAYWALL_PAYMENT]: () => receive("verifyPaywallPayment", state, action),
   [act.RESET_NEW_USER]: () => reset("newUser", state),
   [act.REQUEST_VERIFY_NEW_USER]: () => request("verifyNewUser", state, action),
   [act.RECEIVE_VERIFY_NEW_USER]: () => receive("verifyNewUser", state, action),

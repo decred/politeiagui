@@ -10,6 +10,6 @@ export default connect(
     VerificationToken: sel.VerificationToken,
   }),
   dispatch => bindActionCreators({
-    onLogout: act.onLogout,
+    getPaymentsByAddress: act.getPaymentsByAddress,
   }, dispatch)
 );
