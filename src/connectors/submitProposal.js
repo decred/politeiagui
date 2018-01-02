@@ -11,6 +11,7 @@ import { withRouter } from "react-router-dom";
 const submitConnector = connect(
   sel.selectorMap({
     isLoading: or(sel.isLoadingSubmit, sel.newProposalIsRequesting),
+    loggedInAs: sel.loggedInAs,
     policy: sel.policy,
     name: sel.newProposalName,
     description: sel.newProposalDescription,

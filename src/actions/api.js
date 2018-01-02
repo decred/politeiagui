@@ -138,20 +138,21 @@ export const onFetchProposalComments = (token) => (dispatch) => {
     .catch(error => dispatch(act.RECEIVE_PROPOSAL_COMMENTS(null, error)));
 };
 
-export const onSubmitProposal = (name, description, files) =>
+export const onSubmitProposal = (loggedInAs, name, description, files) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_PROPOSAL({ name, description, files }));
     return Promise.resolve(api.makeProposal(name, description, files))
-      .then(api.signProposal).then(proposal => api.newProposal(csrf, proposal))
+      .then(proposal => api.signProposal(loggedInAs, proposal)).then(proposal => api.newProposal(csrf, proposal))
       .then(proposal => dispatch(act.RECEIVE_NEW_PROPOSAL({ ...proposal, name, description })))
       .catch(error => { dispatch(act.RECEIVE_NEW_PROPOSAL(null, error)); throw error; });
   });
 
-export const onSubmitComment = (token, comment, parentid) =>
+export const onSubmitComment = (loggedInAs, token, comment, parentid) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
     return Promise.resolve(api.makeComment(token, comment, parentid))
-      .then(api.signComment).then(comment => api.newComment(csrf, comment))
+      .then(comment => api.signComment(loggedInAs, comment))
+      .then(comment => api.newComment(csrf, comment))
       .then(response => dispatch(act.RECEIVE_NEW_COMMENT(response)))
       .catch(error => {
         dispatch(act.RECEIVE_NEW_COMMENT(null, error));
@@ -161,12 +162,12 @@ export const onSubmitComment = (token, comment, parentid) =>
 
 const statusName = key => ({3: "censor", 4: "publish"}[key]);
 
-export const onSubmitStatusProposal = (token, status) =>
+export const onSubmitStatusProposal = (loggedInAs, token, status) =>
   window.confirm(`Are you sure you want to ${statusName(status)} this proposal?`)
     ?  withCsrf((dispatch, getState, csrf) => {
       dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
       return api
-        .proposalSetStatus(csrf, token, status)
+        .proposalSetStatus(loggedInAs, csrf, token, status)
         .then(response => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(response)))
         .catch(error => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error)));
     })

@@ -5,7 +5,7 @@ import util from "tweetnacl-util";
 import get from "lodash/fp/get";
 import compose from "lodash/fp/compose";
 
-const STORAGE_KEY = "ed255191";
+const STORAGE_PREFIX = "ed255191~";
 const toHex = x => Buffer.from(x).toString("hex");
 const toByteArray = str => {
   const bytes = new Uint8Array(Math.ceil(str.length / 2));
@@ -13,25 +13,28 @@ const toByteArray = str => {
   return bytes;
 };
 
-const loadKeys = keys => localforage.setItem(STORAGE_KEY, keys).then(() => keys);
-export const generateKeys = () => Promise.resolve(nacl.sign.keyPair()).then(loadKeys);
-export const existing = () => localforage.getItem(STORAGE_KEY).catch(e => console.warn(e || e.stack));
-const myKeyPair = () => existing().then(res => (res && res.secretKey && res) || generateKeys());
-export const myPublicKey = () => myKeyPair().then(get("publicKey"));
-export const myPubKeyHex = () => myPublicKey().then(toHex);
-export const sign = msg => myKeyPair().then(({ secretKey }) => nacl.sign.detached(msg, secretKey));
-export const signString = msg => sign(util.decodeUTF8(msg));
-export const signHex = msg => sign(msg).then(toHex);
-export const signStringHex = msg => signString(msg).then(toHex);
+const loadKeys = (email, keys) => localforage.setItem(STORAGE_PREFIX + email, keys).then(() => keys);
+export const generateKeys = email => {
+  return Promise.resolve(nacl.sign.keyPair()).then(keys => loadKeys(email, keys));
+};
+export const existing = email => localforage.getItem(STORAGE_PREFIX + email).catch(e => console.warn(e || e.stack));
+const myKeyPair = email => existing(email).then(res => (res && res.secretKey && res) || generateKeys(email));
+export const myPublicKey = email => myKeyPair(email).then(get("publicKey"));
+export const myPubKeyHex = email => myPublicKey(email).then(toHex);
+export const sign = (email, msg) => myKeyPair(email).then(({ secretKey }) => nacl.sign.detached(msg, secretKey));
+export const signString = (email, msg) => sign(email, util.decodeUTF8(msg));
+export const signHex = (email, msg) => sign(email, msg).then(toHex);
+export const signStringHex = (email, msg) => signString(email, msg).then(toHex);
 export const verify = (msg, sig, pubKey) => nacl.sign.detached.verify(msg, sig, pubKey);
 
 const keysToHex = ({ publicKey, secretKey }) => ({
-  publicKey: toHex(publicKey), secretKey: toHex(secretKey)
+  publicKey: toHex(publicKey),
+  secretKey: toHex(secretKey)
 });
 
 const keysFromHex = ({ publicKey, secretKey }) => ({
   publicKey: toByteArray(publicKey), secretKey: toByteArray(secretKey)
 });
 
-export const getKeys = () => myKeyPair().then(keysToHex);
-export const importKeys = compose(loadKeys, keysFromHex);
+export const getKeys = email => myKeyPair(email).then(keysToHex);
+export const importKeys = (email, keys) => Promise.resolve(keysFromHex(keys)).then(decodedKeys => loadKeys(email, decodedKeys));
