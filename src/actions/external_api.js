@@ -8,12 +8,13 @@ export const getPaymentsByAddress = (address, amount) => dispatch => {
   return external_api.getPaymentsByAddress(address)
     .then(response => {
       dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT(response));
-      const isPaid = checkForPayment(response, address, amount);
-      if(isPaid) {
-        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS());
+      const txid = checkForPayment(response, address, amount);
+      if (txid) {
+        dispatch(act.GET_PAYWALL_TXID({txid}));
+        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS({grant_access: true}));
       }
       else {
-        dispatch(act.DENY_SUBMIT_PROPOSAL_ACCESS());
+        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS({grant_access: false}));
       }
     })
     .catch(error => {
@@ -23,11 +24,11 @@ export const getPaymentsByAddress = (address, amount) => dispatch => {
 };
 
 const checkForPayment = (poll, addressToMatch, amount) => {
-  let isPaid;
+  let txid;
   poll.forEach((transaction) => {
-    isPaid = checkTransaction(transaction, addressToMatch, amount);
+    txid = checkTransaction(transaction, addressToMatch, amount);
   });
-  return isPaid;
+  return txid;
 };
 
 const checkTransaction = (transaction, addressToMatch, amount) => {
@@ -46,7 +47,7 @@ const checkTransaction = (transaction, addressToMatch, amount) => {
     if (addressSeen &&
       addressValue >= amount &&
       transaction["confirmations"] >= CONFIRMATIONS_REQUIRED) {
-      return true;
+      return transaction["txid"];
     }
   }
 
