@@ -11,10 +11,10 @@ export const getPaymentsByAddress = (address, amount) => dispatch => {
       const txid = checkForPayment(response, address, amount);
       if (txid) {
         dispatch(act.GET_PAYWALL_TXID({txid}));
-        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS({grant_access: true}));
+        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS({grantAccess: true}));
       }
       else {
-        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS({grant_access: false}));
+        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS({grantAccess: false}));
       }
     })
     .catch(error => {

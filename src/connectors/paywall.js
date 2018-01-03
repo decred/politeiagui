@@ -8,6 +8,8 @@ export default connect(
     paywallAddress: sel.paywallAddress,
     paywallAmount: sel.paywallAmount,
     VerificationToken: sel.VerificationToken,
+    grantAccess: sel.grantAccess,
+    paywallPaymentTxid: sel.paywallPaymentTxid
   }),
   dispatch => bindActionCreators({
     getPaymentsByAddress: act.getPaymentsByAddress,

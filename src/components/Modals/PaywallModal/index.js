@@ -1,5 +1,4 @@
 import React from "react";
-import {autobind} from "core-decorators";
 import Modal from "../Modal";
 import Paywall from "./Paywall";
 import paywallConnector from "../../../connectors/paywall";
@@ -18,9 +17,21 @@ class PayWallModal extends React.Component {
   }
 
   componentWillMount() {
-    setInterval( () => {
-      this.props.getPaymentsByAddress("TsRBnD2mnZX1upPMFNoQ1ckYr9Y4TZyuGTV", 0.1);
-    }, 60000);
+    const {paywallAddress, paywallAmount} = this.props;
+    this.props.getPaymentsByAddress(paywallAddress, paywallAmount);
+  }
+
+  componentWillUpdate(nextProps) {
+    if(nextProps.paywallPaymentTxid) {
+      console.log(nextProps)
+      return false;
+    }
+    console.log('aqui')
+    const {paywallAddress, paywallAmount} = nextProps;
+
+    setTimeout( () => {
+      this.props.getPaymentsByAddress(paywallAddress, paywallAmount);
+    }, 3*1000);
   }
 
   componentWillUnmount() {
@@ -28,8 +39,9 @@ class PayWallModal extends React.Component {
   }
 
   render() {
-    const { hasAttemptedSubmit, isHidden } = this.state;
-    const { onSubmit, onCloseModal } = this;
+    const { hasAttemptedSubmit } = this.state;
+    const { onSubmit } = this;
+    const {isHidden, onCloseModal} = this.props;
 
     return (
       <Modal
@@ -53,12 +65,6 @@ class PayWallModal extends React.Component {
 
   }
 
-  onCloseModal() {
-    this.setState({isHidden: true});
-  }
-
 }
-
-autobind(PayWallModal);
 
 export default paywallConnector(PayWallModal);

@@ -4,6 +4,7 @@ import "../../../style/Modals.css";
 const Modal = ({
   hasAttemptedSubmit,
   onSubmit,
+  grantAccess,
   isHidden,
   onCloseModal,
   ...props
@@ -14,9 +15,10 @@ const Modal = ({
       <a className="modal-paywall-header-close" aria-hidden="true" onClick={onCloseModal}>×</a>
     </div>
     <div className="modal-paywall-content">
-      <p>This is the paywall</p>
-      <p>{props.paywallAmount}</p><br/>
-      <p>{props.paywallAddress}</p>
+      <p>Please send exaclty {props.paywallAmount}DCR to <br/>{props.paywallAddress}</p>
+    </div>
+    <div>
+      Status: {}
     </div>
     <div className="modal-paywall-footer">
       <a className="btn">Pay!</a>

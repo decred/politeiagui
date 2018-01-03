@@ -139,3 +139,5 @@ export const redirectedFrom = get(["api", "login", "redirectedFrom"]);
 export const paywallAddress = compose(get("paywallAddress"), apiNewUserResponse);
 export const paywallAmount = compose(get("paywallAmount"), apiNewUserResponse);
 export const VerificationToken = compose(get("verificationToken"), apiNewUserResponse);
+export const grantAccess = getApiResponse("grantAccess");
+export const paywallPaymentTxid = getApiResponse("verifyPaywallPayment");

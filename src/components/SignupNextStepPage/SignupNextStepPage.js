@@ -1,10 +1,10 @@
 import React from "react";
-import signupNext from "../connectors/signupNext";
-import PaywallModal from "./Modals/PaywallModal";
+import signupNext from "../../connectors/signupNext";
+import PaywallModal from "../Modals/PaywallModal";
 
-const SignupNextStepPage = ({ email }) => (
+const SignupNextStepPage = ({ email, onCloseModal, onOpenModal, modalIsHidden}) => (
   <div>
-    <PaywallModal />
+    <PaywallModal {...{isHidden: modalIsHidden, onCloseModal}}/>
     <div className="page signup-next-step-page">
       <h3>Please check your inbox to verify your registration.</h3>
       <p>
@@ -32,7 +32,7 @@ const SignupNextStepPage = ({ email }) => (
         Slack</a> to get assistance from Politeia administrators.
       </p>
     </div>
-    <button>Open Paywall Modal</button>
+    <button onClick={onOpenModal}>Open Paywall Modal</button>
   </div>
 );
 
