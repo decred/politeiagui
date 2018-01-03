@@ -32,6 +32,7 @@ const SignupNextStepPage = ({ email }) => (
         Slack</a> to get assistance from Politeia administrators.
       </p>
     </div>
+    <button>Open Paywall Modal</button>
   </div>
 );
 

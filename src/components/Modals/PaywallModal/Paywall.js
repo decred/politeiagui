@@ -5,12 +5,13 @@ const Modal = ({
   hasAttemptedSubmit,
   onSubmit,
   isHidden,
+  onCloseModal,
   ...props
 }) => (
-  <div className="paywall-modal-wrapper">
+  <div hidden={isHidden} className="paywall-modal-wrapper">
     <div className="modal-paywall-header">
       <h2 className="modal-paywall-header-title">Paywall</h2>
-      <a href="#" className="modal-paywall-header-close" aria-hidden="true">×</a>
+      <a className="modal-paywall-header-close" aria-hidden="true" onClick={onCloseModal}>×</a>
     </div>
     <div className="modal-paywall-content">
       <p>This is the paywall</p>

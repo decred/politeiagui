@@ -12,12 +12,15 @@ class PayWallModal extends React.Component {
 
   getInitialState() {
     return {
-      hasAttemptedSubmit: false
+      hasAttemptedSubmit: false,
+      isHidden: false
     };
   }
 
   componentWillMount() {
-    this.props.getPaymentsByAddress("TsRBnD2mnZX1upPMFNoQ1ckYr9Y4TZyuGTV", 0.1);
+    setInterval( () => {
+      this.props.getPaymentsByAddress("TsRBnD2mnZX1upPMFNoQ1ckYr9Y4TZyuGTV", 0.1);
+    }, 60000);
   }
 
   componentWillUnmount() {
@@ -25,17 +28,18 @@ class PayWallModal extends React.Component {
   }
 
   render() {
-    const { hasAttemptedSubmit } = this.state;
-    const { onSubmit } = this;
+    const { hasAttemptedSubmit, isHidden } = this.state;
+    const { onSubmit, onCloseModal } = this;
 
     return (
       <Modal
         children={Paywall}
-        isHidden={false}
+        isHidden={isHidden}
         {...{
           ...this.props,
           hasAttemptedSubmit,
-          onSubmit
+          onSubmit,
+          onCloseModal
         }}
       />
     );
@@ -47,6 +51,10 @@ class PayWallModal extends React.Component {
 
   onSubmit() {
 
+  }
+
+  onCloseModal() {
+    this.setState({isHidden: true});
   }
 
 }

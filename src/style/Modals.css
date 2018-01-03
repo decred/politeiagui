@@ -38,6 +38,8 @@
 
 .modal-paywall-header-close {
   float: right;
+  background: #fff;
+  cursor: pointer;
 }
 
 .modal-paywall-content {
