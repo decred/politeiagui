@@ -68,8 +68,6 @@
     "firefox-profile": "^1.0.3",
     "geckodriver": "^1.9.0",
     "https": "^1.0.0",
-    "less": "^2.7.3",
-    "less-loader": "^4.0.5",
     "nightwatch": "^0.9.16",
     "pem": "^1.12.0",
     "redux-devtools-extension": "^2.13.2",

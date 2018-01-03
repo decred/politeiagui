@@ -11,15 +11,17 @@ export const getPaymentsByAddress = (address, amount) => dispatch => {
       const txid = checkForPayment(response, address, amount);
       if (txid) {
         dispatch(act.GET_PAYWALL_TXID({txid}));
-        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS({grantAccess: true}));
+        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS(true));
       }
       else {
-        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS({grantAccess: false}));
-        setTimeout(()=> dispatch(getPaymentsByAddress(address, amount)), 60*1000);
+        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS(false));
+        setTimeout(()=> dispatch(getPaymentsByAddress(address, amount)), 10*1000);
       }
     })
     .catch(error => {
+      dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS(false));
       dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT(null, error));
+      setTimeout(()=> dispatch(getPaymentsByAddress(address, amount)), 10*1000);
       throw error;
     });
 };

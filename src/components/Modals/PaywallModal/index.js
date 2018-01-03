@@ -28,7 +28,7 @@ class PayWallModal extends React.Component {
   render() {
     const { hasAttemptedSubmit } = this.state;
     const { onSubmit } = this;
-    const {isHidden, onCloseModal} = this.props;
+    const {isHidden, onCloseModal, grantAccess} = this.props;
 
     return (
       <Modal
@@ -36,6 +36,7 @@ class PayWallModal extends React.Component {
         isHidden={isHidden}
         {...{
           ...this.props,
+          grantAccess,
           hasAttemptedSubmit,
           onSubmit,
           onCloseModal

@@ -2,9 +2,9 @@ import React from "react";
 import signupNext from "../../connectors/signupNext";
 import PaywallModal from "../Modals/PaywallModal";
 
-const SignupNextStepPage = ({ email, onCloseModal, onOpenModal, modalIsHidden}) => (
+const SignupNextStepPage = ({ email, onCloseModal, onOpenModal, modalIsHidden, ...props}) => (
   <div>
-    <PaywallModal {...{isHidden: modalIsHidden, onCloseModal}}/>
+    <PaywallModal {...{isHidden: modalIsHidden, onCloseModal, ...props}}/>
     <div className="page signup-next-step-page">
       <h3>Please check your inbox to verify your registration.</h3>
       <p>

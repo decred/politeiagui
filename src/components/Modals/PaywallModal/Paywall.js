@@ -18,7 +18,9 @@ const Modal = ({
       <p>Please send exaclty {props.paywallAmount}DCR to <br/>{props.paywallAddress}</p>
     </div>
     <div>
-      Status: {}
+      Status: {
+        grantAccess ?  <p>Approved</p> : <p>Waiting for blocks to get mined</p>
+      }
     </div>
     <div className="modal-paywall-footer">
       <a className="btn">Pay!</a>
