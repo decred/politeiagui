@@ -15,6 +15,7 @@ export const getPaymentsByAddress = (address, amount) => dispatch => {
       }
       else {
         dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS({grantAccess: false}));
+        setTimeout(()=> dispatch(getPaymentsByAddress(address, amount)), 60*1000);
       }
     })
     .catch(error => {

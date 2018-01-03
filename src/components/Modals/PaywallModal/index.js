@@ -21,19 +21,6 @@ class PayWallModal extends React.Component {
     this.props.getPaymentsByAddress(paywallAddress, paywallAmount);
   }
 
-  componentWillUpdate(nextProps) {
-    if(nextProps.paywallPaymentTxid) {
-      console.log(nextProps)
-      return false;
-    }
-    console.log('aqui')
-    const {paywallAddress, paywallAmount} = nextProps;
-
-    setTimeout( () => {
-      this.props.getPaymentsByAddress(paywallAddress, paywallAmount);
-    }, 3*1000);
-  }
-
   componentWillUnmount() {
     this.resetState();
   }
