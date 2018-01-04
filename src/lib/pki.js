@@ -3,7 +3,6 @@ import localforage from "localforage";
 import nacl from "tweetnacl";
 import util from "tweetnacl-util";
 import get from "lodash/fp/get";
-import compose from "lodash/fp/compose";
 
 const STORAGE_PREFIX = "ed255191~";
 const toHex = x => Buffer.from(x).toString("hex");
