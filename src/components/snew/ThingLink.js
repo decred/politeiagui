@@ -110,7 +110,7 @@ const ThingLink = ({
       <p className="tagline">
         {id} • {getProposalStatus(review_status)}
       </p>
-      <DownloadBundle />
+      {expanded && <DownloadBundle />}
       <Expando {...{ expanded, is_self, selftext, selftext_html }} />
       <ProposalImages readOnly files={otherFiles} />
       {review_status === PROPOSAL_STATUS_UNREVIEWED && isAdmin ? (
