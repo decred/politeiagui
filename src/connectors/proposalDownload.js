@@ -4,7 +4,7 @@ import * as sel from "../selectors";
 const proposalDownloadConnector = connect(
   sel.selectorMap({
     proposal: sel.proposal,
-    serverIdentity: sel.serverIdentity
+    serverPubkey: sel.serverPubkey
   })
 );
 

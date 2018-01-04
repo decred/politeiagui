@@ -9,9 +9,9 @@ class DownloadBundle extends Component {
   }
 
   handleDownloadClick() {
-    const { proposal, serverIdentity } = this.props;
+    const { proposal, serverPubkey } = this.props;
     const bundle = proposal;
-    bundle.serverIdentity = serverIdentity;
+    bundle.serverPubkey = serverPubkey;
     const data = JSON.stringify(bundle, null, 2);
     fileDownload(data, `${proposal.censorshiprecord.token}.json`);
   }

@@ -106,7 +106,7 @@ export const isAdmin = bool(or(
   compose(get("isadmin"), apiLoginResponse)
 ));
 
-export const serverIdentity = state => state.api.init.response && state.api.init.response.identity;
+export const serverPubkey = state => state.api.init.response && state.api.init.response.pubkey;
 export const policy = apiPolicyResponse;
 export const isLoadingSubmit = or(isApiRequestingPolicy, isApiRequestingInit);
 export const vettedProposals = or(compose(get("proposals"), apiVettedResponse), constant([]));
