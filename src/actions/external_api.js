@@ -7,6 +7,10 @@ export const getPaymentsByAddress = (address, amount) => dispatch => {
   dispatch(act.REQUEST_VERIFY_PAYWALL_PAYMENT());
   return external_api.getPaymentsByAddress(address)
     .then(response => {
+      if(response === null) {
+        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS(false));
+        return;
+      }
       dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT(response));
       const txid = checkForPayment(response, address, amount);
       if (txid) {

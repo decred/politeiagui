@@ -16,7 +16,7 @@ module.exports = function (request, response) {
       }
 
       return response.end(JSON.stringify({
-        "paywallAddress":"TsTDpyrcuKpVTzoVDmvQexooKTaTc8uv3xC",
+        "paywallAddress":"Tsce8nFa7o2pz9hBPByuGpzyjJfiFYMakzC",
         "paywallAmount":"0.1",
         "verificationToken":"77b9bb7d23272cddc9a8b613c915c95a5dc9a7dbd84be01ea67d73edd4238d89"
       }));
