@@ -1,9 +1,14 @@
 import React from "react";
 import TimeAgo from "timeago-react";
 import ProposalImages from "../ProposalImages";
+import DownloadBundle from "../DownloadBundle";
 import Message from "../Message";
 import actions from "../../connectors/actions";
-import { PROPOSAL_STATUS_CENSORED, PROPOSAL_STATUS_PUBLIC, PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
+import {
+  PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_STATUS_PUBLIC,
+  PROPOSAL_STATUS_UNREVIEWED
+} from "../../constants";
 import { getProposalStatus } from "../../helpers";
 
 const ThingLink = ({
@@ -14,7 +19,7 @@ const ThingLink = ({
   name,
   author,
   domain,
-  rank=0,
+  rank = 0,
   //score,
   //downs,
   //ups,
@@ -37,7 +42,9 @@ const ThingLink = ({
   setStatusProposalError
 }) => (
   <div
-    className={`thing id-${id} odd link ${(review_status === PROPOSAL_STATUS_CENSORED) ? "spam" : null}`}
+    className={`thing id-${id} odd link ${
+      review_status === PROPOSAL_STATUS_CENSORED ? "spam" : null
+    }`}
     data-author={author}
     data-author-fullname=""
     data-domain={domain}
@@ -73,45 +80,39 @@ const ThingLink = ({
       />
     </div>
     */}
-    {(thumbnail && !["image", "default", "nsfw", "self"].find((sub => sub === thumbnail))) ? (
-      <Link
-        className="thumbnail may-blank loggedin"
-        href={url}
-      >
-        <img
-          alt="Thumb"
-          height={70}
-          src={thumbnail}
-          width={70}
-        />
+    {thumbnail &&
+    !["image", "default", "nsfw", "self"].find(sub => sub === thumbnail) ? (
+      <Link className="thumbnail may-blank loggedin" href={url}>
+        <img alt="Thumb" height={70} src={thumbnail} width={70} />
       </Link>
     ) : null}
-    {is_self ? <Link className="thumbnail self may-blank" href={url}/> : null}
+    {is_self ? <Link className="thumbnail self may-blank" href={url} /> : null}
     <div className="entry unvoted">
       <p className="title">
-        <Link
-          className="title may-blank loggedin"
-          href={url}
-          tabIndex={rank}
-        >{title}</Link>{" "}
-        {domain ? <span className="domain">
-          (<Link href={`/domain/${domain}/`}>{domain}</Link>)
-        </span> : null}
+        <Link className="title may-blank loggedin" href={url} tabIndex={rank}>
+          {title}
+        </Link>{" "}
+        {domain ? (
+          <span className="domain">
+            (<Link href={`/domain/${domain}/`}>{domain}</Link>)
+          </span>
+        ) : null}
       </p>
       {/*<div
         title="toggle"
         className={`expando-button ${expanded ? "expanded" : "collapsed"} selftext`}
       />*/}
       <p className="tagline">
-        <Link href={permalink}>submitted <TimeAgo datetime={created_utc*1000} /></Link>
+        <Link href={permalink}>
+          submitted <TimeAgo datetime={created_utc * 1000} />
+        </Link>
       </p>
       <p className="tagline">
         {id} • {getProposalStatus(review_status)}
       </p>
+      {expanded && <DownloadBundle />}
       <Expando {...{ expanded, is_self, selftext, selftext_html }} />
-
       <ProposalImages readOnly files={otherFiles} />
-
       {review_status === PROPOSAL_STATUS_UNREVIEWED && isAdmin ? (
         <ul className="flat-list buttons">
           <li className="first">
@@ -119,7 +120,9 @@ const ThingLink = ({
               className="bylink comments may-blank"
               data-event-action="comments"
               href={permalink}
-            >permalink</Link>
+            >
+              permalink
+            </Link>
           </li>
           {isAdmin ? (
             (review_status === PROPOSAL_STATUS_UNREVIEWED) ? [
@@ -147,13 +150,13 @@ const ThingLink = ({
           ) : null}
         </ul>
       ) : null}
-
-      {(setStatusProposalError && setStatusProposalToken === id) ? (
+      {setStatusProposalError && setStatusProposalToken === id ? (
         <Message
           key="error"
           type="error"
           header="Error setting proposal status"
-          body={setStatusProposalError} />
+          body={setStatusProposalError}
+        />
       ) : null}
     </div>
     <div className="child" />
@@ -162,4 +165,3 @@ const ThingLink = ({
 );
 
 export default actions(ThingLink);
-
