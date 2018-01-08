@@ -59,6 +59,10 @@ const apiProposalResponse = getApiResponse("proposal");
 const apiProposalCommentsResponse = getApiResponse("proposalComments");
 const apiNewProposalResponse = getApiResponse("newProposal");
 const apiSetStatusProposalResponse = getApiResponse("setStatusProposal");
+export const updateUserKey = getApiResponse("updateUserKey");
+export const verifyUserKey = getApiResponse("verifyUserKey");
+export const updateUserKeyError = getApiError("updateUserKey");
+export const verifyUserKeyError = getApiError("verifyUserKey");
 
 const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
