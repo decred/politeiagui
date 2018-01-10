@@ -47,18 +47,20 @@ const checkTransaction = (transaction, addressToMatch, amount) => {
   let addressValue = 0;
   for (let voutData of transaction["vout"]) {
     const addresses = voutData["scriptPubKey"]["addresses"];
-    addresses.forEach(address => {
-      if (address === addressToMatch) {
-        addressSeen = true;
-        addressValue = voutData["value"];
-        return;
-      }
-    });
+    if (addresses) {
+      addresses.forEach(address => {
+        if (address === addressToMatch) {
+          addressSeen = true;
+          addressValue = voutData["value"];
+          return;
+        }
+      });
 
-    if (addressSeen &&
-      addressValue >= amount &&
-      transaction["confirmations"] >= CONFIRMATIONS_REQUIRED) {
-      return transaction["txid"];
+      if (addressSeen &&
+        addressValue >= amount &&
+        transaction["confirmations"] >= CONFIRMATIONS_REQUIRED) {
+        return transaction["txid"];
+      }
     }
   }
 
