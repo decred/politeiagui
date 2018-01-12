@@ -106,6 +106,11 @@ export const isAdmin = bool(or(
   compose(get("isadmin"), apiLoginResponse)
 ));
 
+export const hasPaid = bool(or(
+  compose(get("haspaid"), apiMeResponse),
+  compose(get("haspaid"), apiLoginResponse)
+));
+
 export const serverPubkey = state => state.api.init.response && state.api.init.response.pubkey;
 export const policy = apiPolicyResponse;
 export const isLoadingSubmit = or(isApiRequestingPolicy, isApiRequestingInit);

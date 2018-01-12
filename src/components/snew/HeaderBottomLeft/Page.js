@@ -1,8 +1,8 @@
 import React from "react";
-import connector from "../../connectors/currentUser";
+import Link from "../Link";
+import connector from "../../../connectors/currentUser";
 
-export const HeaderBottomLeft = ({
-  Link,
+const HeaderBottomLeft = ({
   subredditData,
   useStyle,
   isAdmin
@@ -24,7 +24,8 @@ export const HeaderBottomLeft = ({
       >
         Decred
       </Link>
-    )} <span className="hover pagename redditname">
+    )}
+    <span className="hover pagename redditname">
       <Link href="/">Politeia</Link>
     </span>
     <ul className="tabmenu">
