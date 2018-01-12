@@ -145,6 +145,5 @@ export const setStatusProposalError = apiSetStatusProposalError;
 export const redirectedFrom = get(["api", "login", "redirectedFrom"]);
 export const paywallAddress = compose(get("paywalladdress"), apiNewUserResponse);
 export const paywallAmount = compose(get("paywallamount"), apiNewUserResponse);
-export const VerificationToken = compose(get("verificationToken"), apiNewUserResponse);
+export const verificationToken = compose(get("verificationtoken"), apiNewUserResponse);
 export const grantAccess = getApiResponse("grantAccess");
-export const paywallPaymentTxid = getApiResponse("verifyPaywallPayment");

@@ -12,9 +12,6 @@ class HeaderBottomLeft extends React.Component {
     const {hasPaid, paywallAddress, paywallAmount} = this.props;
     if (hasPaid === false)
       this.props.getPaymentsByAddress(paywallAddress, paywallAmount);
-    // console.log(this.props)
-    // const {paywallAddress, paywallAmount} = this.props;
-    // 
   }
 
   render() {

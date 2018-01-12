@@ -8,6 +8,8 @@ export default connect(
     loggedInAs: sel.loggedInAs,
     isAdmin: sel.isAdmin,
     hasPaid: sel.hasPaid,
+    paywallAddress: sel.paywallAddress,
+    paywallAmount: sel.paywallAmount,
   }),
   dispatch => bindActionCreators({
     getPaymentsByAddress: act.getPaymentsByAddress,

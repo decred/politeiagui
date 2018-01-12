@@ -16,9 +16,9 @@ module.exports = function (request, response) {
       }
 
       return response.end(JSON.stringify({
-        "paywallAddress":"TsjVuA79gsSaoG1uVaBfDQF6wo1wwD3AJTH",
-        "paywallAmount":"0.1",
-        "verificationToken":"77b9bb7d23272cddc9a8b613c915c95a5dc9a7dbd84be01ea67d73edd4238d89"
+        "paywalladdress":"TsjVuA79gsSaoG1uVaBfDQF6wo1wwD3AJTH",
+        "paywallamount":"0.1",
+        "verificationtoken":"77b9bb7d23272cddc9a8b613c915c95a5dc9a7dbd84be01ea67d73edd4238d89"
       }));
     });
 };

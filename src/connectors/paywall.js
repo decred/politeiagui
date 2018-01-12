@@ -7,9 +7,8 @@ export default connect(
   sel.selectorMap({
     paywallAddress: sel.paywallAddress,
     paywallAmount: sel.paywallAmount,
-    VerificationToken: sel.VerificationToken,
+    VerificationToken: sel.verificationToken,
     grantAccess: sel.grantAccess,
-    paywallPaymentTxid: sel.paywallPaymentTxid
   }),
   dispatch => bindActionCreators({
     getPaymentsByAddress: act.getPaymentsByAddress,
