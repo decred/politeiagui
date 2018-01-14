@@ -119,6 +119,14 @@ export const onChangePassword = (password, newPassword) =>
       });
   });
 
+export const onFetchUserProposals = userid => dispatch => {
+  dispatch(act.REQUEST_USER_PROPOSALS());
+  return api
+    .userProposals(userid)
+    .then(response => dispatch(act.RECEIVE_USER_PROPOSALS(response)))
+    .catch(error => dispatch(act.RECEIVE_USER_PROPOSALS(null, error)));
+};
+
 export const onFetchVetted = () => dispatch => {
   dispatch(act.REQUEST_VETTED());
   return api

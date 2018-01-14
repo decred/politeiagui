@@ -73,8 +73,8 @@ const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
   body: JSON.stringify(json)
 }).then(parseResponse);
 
-export const me = () => GET("/v1/user/me").then(({ csrfToken, response: { email, isadmin } }) => ({
-  csrfToken: csrfToken || "itsafake", email, isadmin
+export const me = () => GET("/v1/user/me").then(({ csrfToken, response: { email, isadmin, userid } }) => ({
+  csrfToken: csrfToken || "itsafake", email, isadmin, userid
 }));
 
 export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, route, pubkey } }) => ({
@@ -90,6 +90,9 @@ export const verifyNewUser = searchQuery => {
     .then(signature => GET("/v1/user/verify?" + qs.stringify({ email, verificationtoken, signature })))
     .then(getResponse);
 };
+
+export const userProposals = userid =>
+  GET("/v1/user/proposals?userid=" + userid).then(getResponse);
 
 export const login = (csrf, email, password) =>
   POST("/login", csrf, { email, password }).then(getResponse);

@@ -46,7 +46,9 @@ export const CustomContent = ({
 
 class Loader extends Component {
   componentDidMount() {
-    this.props.onFetchData && this.props.onFetchData();
+    const { userid } = this.props;
+    userid ? this.props.onFetchData && this.props.onFetchData(userid)
+      : this.props.onFetchData && this.props.onFetchData();
   }
 
   render() {
