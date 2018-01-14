@@ -14,6 +14,7 @@ export const proposal = or((state) => {
   return submittedProposals[payload];
 }, apiProposal, constant({}));
 
+export const getLastSubmittedProposal = state => state.app.submittedProposals.lastSubmitted;
 export const isMarkdown = compose(eq("index.md"), get("name"));
 export const getProposalFiles = compose(get("files"), proposal);
 export const getMarkdownFile = compose(find((isMarkdown)), getProposalFiles);

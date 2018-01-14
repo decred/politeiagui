@@ -35,6 +35,7 @@ const ThingLink = ({
   thumbnail,
   otherFiles,
   review_status,
+  lastSubmitted,
   loggedInAs,
   isAdmin,
   onChangeStatus,
@@ -110,7 +111,24 @@ const ThingLink = ({
       <p className="tagline">
         {id} • {getProposalStatus(review_status)}
       </p>
-      {expanded && <DownloadBundle />}
+      {expanded && (lastSubmitted === id ? (
+        <Message
+          body={
+            <span>
+              We highly reccommend that you
+              <DownloadBundle message=" download the proposal bundle " />
+              now because it will not be available until it is reviewed and you
+              will never be able to download it again if the proposal is
+              censored.
+            </span>
+          }
+          type="info"
+        />
+      ) : (
+        <div style={{ marginTop: "15px", marginBottom: "15px" }}>
+          <DownloadBundle />
+        </div>
+      ))}
       <Expando {...{ expanded, is_self, selftext, selftext_html }} />
       <ProposalImages readOnly files={otherFiles} />
       {review_status === PROPOSAL_STATUS_UNREVIEWED && isAdmin ? (
@@ -124,30 +142,52 @@ const ThingLink = ({
               permalink
             </Link>
           </li>
-          {isAdmin ? (
-            (review_status === PROPOSAL_STATUS_UNREVIEWED) ? [
-              <li key="spam">
-                <form className="toggle remove-button" onSubmit={(e) =>
-                  onChangeStatus(loggedInAs, id, PROPOSAL_STATUS_CENSORED) && e.preventDefault()}>
-                  <button
-                    className="togglebutton access-required"
-                    data-event-action="spam"
-                    type="submit"
-                  >spam</button>
-                </form>
-              </li>,
-              <li key="approve">
-                <form className="toggle approve-button" onSubmit={(e) =>
-                  onChangeStatus(loggedInAs, id, PROPOSAL_STATUS_PUBLIC) && e.preventDefault()}>
-                  <button
-                    className="togglebutton access-required"
-                    data-event-action="approve"
-                    type="submit"
-                  >approve</button>
-                </form>
-              </li>
-            ] : null
-          ) : null}
+          {isAdmin
+            ? review_status === PROPOSAL_STATUS_UNREVIEWED
+              ? [
+                  <li key="spam">
+                    <form
+                      className="toggle remove-button"
+                      onSubmit={e =>
+                        onChangeStatus(
+                          loggedInAs,
+                          id,
+                          PROPOSAL_STATUS_CENSORED
+                        ) && e.preventDefault()
+                      }
+                    >
+                      <button
+                        className="togglebutton access-required"
+                        data-event-action="spam"
+                        type="submit"
+                      >
+                        spam
+                      </button>
+                    </form>
+                  </li>,
+                  <li key="approve">
+                    <form
+                      className="toggle approve-button"
+                      onSubmit={e =>
+                        onChangeStatus(
+                          loggedInAs,
+                          id,
+                          PROPOSAL_STATUS_PUBLIC
+                        ) && e.preventDefault()
+                      }
+                    >
+                      <button
+                        className="togglebutton access-required"
+                        data-event-action="approve"
+                        type="submit"
+                      >
+                        approve
+                      </button>
+                    </form>
+                  </li>
+                ]
+              : null
+            : null}
         </ul>
       ) : null}
       {setStatusProposalError && setStatusProposalToken === id ? (
