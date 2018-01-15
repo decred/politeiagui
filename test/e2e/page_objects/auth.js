@@ -81,7 +81,7 @@ const Commands = {
       .clearValue("@signupInputPasswordVerify")
       .setValue("@signupInputPasswordVerify", "test")
       .click("@signupSubmitButton")
-      .waitForElementVisible("@loggedIn", 3000);
+      .waitForElementVisible("@loggedIn", 10000);
   },
 };
 
