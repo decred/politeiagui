@@ -111,24 +111,51 @@ const ThingLink = ({
       <p className="tagline">
         {id} • {getProposalStatus(review_status)}
       </p>
-      {expanded && (lastSubmitted === id ? (
-        <Message
-          body={
-            <span>
-              We highly reccommend that you
-              <DownloadBundle message=" download the proposal bundle " />
-              now because it will not be available until it is reviewed and you
-              will never be able to download it again if the proposal is
-              censored.
-            </span>
-          }
-          type="info"
-        />
-      ) : (
-        <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-          <DownloadBundle />
-        </div>
-      ))}
+      {expanded &&
+        (lastSubmitted === id ? (
+          <Message
+            height={"120px"}
+            body={
+              <span>
+                <p
+                  style={{
+                    marginTop: "0.4166667em",
+                    marginBottom: "0.4166667em"
+                  }}
+                >
+                  Your proposal has been created, but it will not be public
+                  until an admin approves it. You can
+                  <DownloadBundle message=" download your proposal " /> and use
+                  the{" "}
+                  <a href="https://github.com/decred/politeia/tree/master/politeiad/cmd/politeia_verify">
+                    politeia_verify tool
+                  </a>{" "}
+                  to prove that your submission has been accepted for review by
+                  Politeia.
+                </p>
+                <p
+                  style={{
+                    marginTop: "0.4166667em",
+                    marginBottom: "0.4166667em"
+                  }}
+                >
+                  <b>Note:</b> You will not have access to your proposal content
+                  after you close this page, so it's highly recommended that you
+                  download your proposal if you think it could be unfairly
+                  censored by Politeia admins. We highly reccommend that you now
+                  because it will not be available until it is reviewed and you
+                  will never be able to download it again if the proposal is
+                  censored.
+                </p>
+              </span>
+            }
+            type="info"
+          />
+        ) : (
+          <div style={{ marginTop: "15px", marginBottom: "15px" }}>
+            <DownloadBundle />
+          </div>
+        ))}
       <Expando {...{ expanded, is_self, selftext, selftext_html }} />
       <ProposalImages readOnly files={otherFiles} />
       {review_status === PROPOSAL_STATUS_UNREVIEWED && isAdmin ? (
