@@ -124,13 +124,11 @@ const ThingLink = ({
                   }}
                 >
                   Your proposal has been created, but it will not be public
-                  until an admin approves it. You can
-                  <DownloadBundle message=" download your proposal " /> and use
-                  the{" "}
-                  <a href="https://github.com/decred/politeia/tree/master/politeiad/cmd/politeia_verify">
+                  until an admin approves it. You can{" "}
+                  <DownloadBundle message="download your proposal" /> and use the{" "}
+                  <a href="https://github.com/decred/politeia/tree/master/politeiad/cmd/politeia_verify" target="_blank" rel="noopener noreferrer">
                     politeia_verify tool
-                  </a>{" "}
-                  to prove that your submission has been accepted for review by
+                  </a> to prove that your submission has been accepted for review by
                   Politeia.
                 </p>
                 <p
@@ -139,13 +137,10 @@ const ThingLink = ({
                     marginBottom: "0.4166667em"
                   }}
                 >
-                  <b>Note:</b> You will not have access to your proposal content
-                  after you close this page, so it's highly recommended that you
-                  download your proposal if you think it could be unfairly
-                  censored by Politeia admins. We highly reccommend that you now
-                  because it will not be available until it is reviewed and you
-                  will never be able to download it again if the proposal is
-                  censored.
+                  <span style={{fontWeight: "bold"}}>Note:</span> You will not have
+                  access to your proposal content after you close this page, so
+                  it's highly recommended that you download your proposal if you
+                  think it could be unfairly censored by Politeia admins.
                 </p>
               </span>
             }
