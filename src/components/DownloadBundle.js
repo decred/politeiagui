@@ -18,11 +18,9 @@ class DownloadBundle extends Component {
 
   render() {
     return (
-      <div style={{ marginTop: "15px" }}>
-        <a style={{ cursor: "pointer" }} onClick={this.handleDownloadClick}>
-          Download Proposal Bundle
-        </a>
-      </div>
+      <a style={{ cursor: "pointer" }} onClick={this.handleDownloadClick}>
+        {this.props.message || "Download Proposal Bundle"}
+      </a>
     );
   }
 }

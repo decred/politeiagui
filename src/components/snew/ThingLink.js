@@ -35,6 +35,7 @@ const ThingLink = ({
   thumbnail,
   otherFiles,
   review_status,
+  lastSubmitted,
   loggedInAs,
   isAdmin,
   onChangeStatus,
@@ -110,7 +111,46 @@ const ThingLink = ({
       <p className="tagline">
         {id} • {getProposalStatus(review_status)}
       </p>
-      {expanded && <DownloadBundle />}
+      {expanded &&
+        (lastSubmitted === id ? (
+          <Message
+            height={"120px"}
+            body={
+              <span>
+                <p
+                  style={{
+                    marginTop: "0.4166667em",
+                    marginBottom: "0.4166667em"
+                  }}
+                >
+                  Your proposal has been created, but it will not be public
+                  until an admin approves it. You can{" "}
+                  <DownloadBundle message="download your proposal" /> and use the{" "}
+                  <a href="https://github.com/decred/politeia/tree/master/politeiad/cmd/politeia_verify" target="_blank" rel="noopener noreferrer">
+                    politeia_verify tool
+                  </a> to prove that your submission has been accepted for review by
+                  Politeia.
+                </p>
+                <p
+                  style={{
+                    marginTop: "0.4166667em",
+                    marginBottom: "0.4166667em"
+                  }}
+                >
+                  <span style={{fontWeight: "bold"}}>Note:</span> You will not have
+                  access to your proposal content after you close this page, so
+                  it's highly recommended that you download your proposal if you
+                  think it could be unfairly censored by Politeia admins.
+                </p>
+              </span>
+            }
+            type="info"
+          />
+        ) : (
+          <div style={{ marginTop: "15px", marginBottom: "15px" }}>
+            <DownloadBundle />
+          </div>
+        ))}
       <Expando {...{ expanded, is_self, selftext, selftext_html }} />
       <ProposalImages readOnly files={otherFiles} />
       {review_status === PROPOSAL_STATUS_UNREVIEWED && isAdmin ? (
@@ -124,30 +164,52 @@ const ThingLink = ({
               permalink
             </Link>
           </li>
-          {isAdmin ? (
-            (review_status === PROPOSAL_STATUS_UNREVIEWED) ? [
-              <li key="spam">
-                <form className="toggle remove-button" onSubmit={(e) =>
-                  onChangeStatus(loggedInAs, id, PROPOSAL_STATUS_CENSORED) && e.preventDefault()}>
-                  <button
-                    className="togglebutton access-required"
-                    data-event-action="spam"
-                    type="submit"
-                  >spam</button>
-                </form>
-              </li>,
-              <li key="approve">
-                <form className="toggle approve-button" onSubmit={(e) =>
-                  onChangeStatus(loggedInAs, id, PROPOSAL_STATUS_PUBLIC) && e.preventDefault()}>
-                  <button
-                    className="togglebutton access-required"
-                    data-event-action="approve"
-                    type="submit"
-                  >approve</button>
-                </form>
-              </li>
-            ] : null
-          ) : null}
+          {isAdmin
+            ? review_status === PROPOSAL_STATUS_UNREVIEWED
+              ? [
+                  <li key="spam">
+                    <form
+                      className="toggle remove-button"
+                      onSubmit={e =>
+                        onChangeStatus(
+                          loggedInAs,
+                          id,
+                          PROPOSAL_STATUS_CENSORED
+                        ) && e.preventDefault()
+                      }
+                    >
+                      <button
+                        className="togglebutton access-required"
+                        data-event-action="spam"
+                        type="submit"
+                      >
+                        spam
+                      </button>
+                    </form>
+                  </li>,
+                  <li key="approve">
+                    <form
+                      className="toggle approve-button"
+                      onSubmit={e =>
+                        onChangeStatus(
+                          loggedInAs,
+                          id,
+                          PROPOSAL_STATUS_PUBLIC
+                        ) && e.preventDefault()
+                      }
+                    >
+                      <button
+                        className="togglebutton access-required"
+                        data-event-action="approve"
+                        type="submit"
+                      >
+                        approve
+                      </button>
+                    </form>
+                  </li>
+                ]
+              : null
+            : null}
         </ul>
       ) : null}
       {setStatusProposalError && setStatusProposalToken === id ? (
