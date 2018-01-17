@@ -4,9 +4,6 @@ import Page from "./Page";
 import headerConnector from "../../../connectors/header";
 
 class HeaderBottomLeft extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   componentWillMount() {
     const {hasPaid, paywallAddress, paywallAmount} = this.props;
