@@ -10,6 +10,8 @@ class HeaderBottomLeft extends React.Component {
 
   componentWillMount() {
     const {hasPaid, paywallAddress, paywallAmount} = this.props;
+    if(!paywallAddress)
+      return;
     if (hasPaid === false)
       this.props.getPaymentsByAddress(paywallAddress, paywallAmount);
   }
