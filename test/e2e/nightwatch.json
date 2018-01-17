@@ -5,7 +5,7 @@
   "page_objects_path": "test/e2e/page_objects",
   "test_workers": {
     "enabled": true,
-    "workers": "auto"
+    "workers": 1
   },
   "selenium" : {
     "start_process" : true,

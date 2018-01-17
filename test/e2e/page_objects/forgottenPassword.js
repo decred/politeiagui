@@ -2,38 +2,38 @@
 
 const Commands = {
   goToPageFromSide: function() {
-    return this.waitForElementVisible("@resetLinkFromSide", 3000)
+    return this.waitForElementVisible("@resetLinkFromSide", 10000)
       .click("@resetLinkFromSide")
-      .waitForElementVisible("@forgottenPasswordPage", 3000);
+      .waitForElementVisible("@forgottenPasswordPage", 10000);
   },
   goToPageFromSignupLoginPage: function() {
-    return this.waitForElementVisible("@signupLoginLink", 3000)
+    return this.waitForElementVisible("@signupLoginLink", 10000)
       .click("@signupLoginLink")
-      .waitForElementVisible("@signupLoginPage", 3000)
-      .waitForElementVisible("@resetLinkFromSignupLoginPage", 3000)
+      .waitForElementVisible("@signupLoginPage", 10000)
+      .waitForElementVisible("@resetLinkFromSignupLoginPage", 10000)
       .click("@resetLinkFromSignupLoginPage")
-      .waitForElementVisible("@forgottenPasswordPage", 3000);
+      .waitForElementVisible("@forgottenPasswordPage", 10000);
   },
   resetPasswordWithErrorMalformedEmailAddress: function () {
-    return this.waitForElementVisible("@forgottenPasswordPage", 3000)
+    return this.waitForElementVisible("@forgottenPasswordPage", 10000)
       .clearValue("@inputEmail")
       .setValue("@inputEmail", "test@error.com")
       .click("@submitButton")
-      .waitForElementVisible("@error", 3000);
+      .waitForElementVisible("@error", 10000);
   },
   resetPasswordWithErrorInvalidEmailAddress: function () {
-    return this.waitForElementVisible("@forgottenPasswordPage", 3000)
+    return this.waitForElementVisible("@forgottenPasswordPage", 10000)
       .clearValue("@inputEmail")
       .setValue("@inputEmail", "test")
       .click("@submitButton")
-      .waitForElementVisible("@error", 3000);
+      .waitForElementVisible("@error", 10000);
   },
   resetPassword: function () {
-    return this.waitForElementVisible("@forgottenPasswordPage", 3000)
+    return this.waitForElementVisible("@forgottenPasswordPage", 10000)
       .clearValue("@inputEmail")
       .setValue("@inputEmail", "test@decred.com")
       .click("@submitButton")
-      .waitForElementVisible("@forgottenPasswordNextPage", 3000);
+      .waitForElementVisible("@forgottenPasswordNextPage", 10000);
   },
 };
 

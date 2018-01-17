@@ -17,7 +17,7 @@ const proposalConnector = connect(
     error: sel.proposalError,
     isLoading: or(sel.proposalIsRequesting, sel.setStatusProposalIsRequesting),
     markdownFile: sel.getMarkdownFile,
-    otherFiles: sel.getNotMarkdownFile,
+    otherFiles: sel.getNotMarkdownFile
   }),
   dispatch => bindActionCreators({
     onFetchData: act.onFetchProposal,
