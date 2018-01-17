@@ -103,6 +103,17 @@ export const forgottenPasswordRequest = (csrf, email) =>
 export const passwordResetRequest = ( csrf, email, verificationtoken, newpassword ) =>
   POST("/user/password/reset", csrf, { email, verificationtoken, newpassword }).then(getResponse);
 
+export const updateKeyRequest = (csrf, email) => pki.generateKeys(email).then(
+  () => pki.myPubKeyHex(email).then(
+     publickey => POST('/user/key', csrf, { publickey }).then(getResponse)
+    )
+);
+
+export const verifyKeyRequest = (csrf, email, verificationtoken) => 
+  pki.signStringHex(email, verificationtoken).then(
+    signature => POST('/user/key/verify', csrf, { signature, verificationtoken }).then(getResponse)
+  );
+
 export const policy = () => GET("/v1/policy").then(getResponse);
 export const vetted = () => GET("/v1/proposals/vetted").then(getResponse);
 export const unvetted = () => GET("/v1/proposals/unvetted").then(getResponse);

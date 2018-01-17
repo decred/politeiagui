@@ -19,6 +19,8 @@ export const DEFAULT_STATE = {
   newComment: DEFAULT_REQUEST_STATE,
   forgottenPassword: DEFAULT_REQUEST_STATE,
   passwordReset: DEFAULT_REQUEST_STATE,
+  updateUserKey: DEFAULT_REQUEST_STATE,
+  verifyUserKey: DEFAULT_REQUEST_STATE,
   email: ""
 };
 
@@ -164,6 +166,10 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RESET_REDIRECTED_FROM]: () => reset("login", state),
   [act.REQUEST_SETSTATUS_PROPOSAL]: () => request("setStatusProposal", state, action),
   [act.RECEIVE_SETSTATUS_PROPOSAL]: () => onReceiveSetStatus(state, action),
+  [act.REQUEST_UPDATED_KEY]: () => request("updateUserKey", state, action),
+  [act.RECEIVE_UPDATED_KEY]: () => receive("updateUserKey", state, action),
+  [act.REQUEST_VERIFIED_KEY]: () => request("verifyUserKey", state, action),
+  [act.RECEIVE_VERIFIED_KEY]: () => receive("verifyUserKey", state, action),
   [act.REQUEST_LOGOUT]: () => request("logout", state, action),
   [act.RECEIVE_LOGOUT]: () => {
     state = receive("logout", state, action);
