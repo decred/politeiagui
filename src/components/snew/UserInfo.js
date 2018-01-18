@@ -1,30 +1,59 @@
 import React from "react";
-import LinkComponent from "./Link";
+import { withRouter } from "react-router-dom";
 import ReactBody from "react-body";
 import connector from "../../connectors/currentUser";
+import Dropdown from "../Dropdown";
+import Link from "./Link";
 
-const UserInfo = ({
-  Link = LinkComponent,
-  loggedInAs,
-  isAdmin
-}) => loggedInAs ? (
-  <div id="header-bottom-right">
-    <ReactBody className="loggedin" />
-    <span className="user">
-      <Link href="/user/profile/">{loggedInAs}</Link> {isAdmin
-        ? (<Link href="/admin"><span className="userkarma" title="post karma" >admin</span></Link>) : null}
-    </span>
-    <span className="separator">|</span>
-    <form className="logout hover" >
-      <Link href="/user/logout">logout</Link>
-    </form>
-  </div>
-) : (
-  <div id="header-bottom-right">
-    <Link href="/user/signup" className="login-required">Log in or sign up</Link>
-  </div>
-);
+const UserInfo = ({ history, loggedInAs }) =>
+  loggedInAs ? (
+    <div id="header-bottom-right" style={{ display: "flex" }}>
+      <ReactBody className="loggedin" />
+      <span className="user">
+        <Dropdown
+          DropdownTrigger={<div>{loggedInAs}</div>}
+          DropdownContent={
+            <div>
+              <ul>
+                <li
+                  className="dropdown-list-item"
+                  onClick={() => history.push("/user/profile")}
+                >
+                  My proposals
+                </li>
+                <li
+                  className="dropdown-list-item"
+                  onClick={() => history.push("/user/key/update")}
+                >
+                  Update Key Pair
+                </li>
+                <li
+                  className="dropdown-list-item"
+                  onClick={() => history.push("/user/password/change")}
+                >
+                  Change Password
+                </li>
+                <li
+                  className="dropdown-list-item"
+                  onClick={() => history.push("/user/logout")}
+                >
+                  <form className="logout hover" />
+                  Log out
+                </li>
+              </ul>
+            </div>
+          }
+        />
+      </span>
+    </div>
+  ) : (
+    <div id="header-bottom-right">
+      <Link href="/user/signup" className="login-required">
+        Log in or sign up
+      </Link>
+    </div>
+  );
 
-export default connector(UserInfo);
+export default withRouter(connector(UserInfo));
 
 
