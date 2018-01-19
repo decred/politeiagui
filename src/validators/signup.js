@@ -6,8 +6,8 @@ const validate = (policy, values) => {
     throw new SubmissionError({ _error: "All fields are required" });
   }
 
-  if (!passwordLengthValidator(values.password, policy.minpasswordlength)){
-    throw new SubmissionError({ _error: "Password must be at least 8 digits." });
+  if (!passwordLengthValidator(values.password, policy.passwordminchars)){
+    throw new SubmissionError({ _error: "Password must be at least "+policy.passwordminchars+" digits." });
   }
 
   if (!passwordVerifyValidator(values.password, values.password_verify)) {

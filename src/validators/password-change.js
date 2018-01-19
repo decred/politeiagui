@@ -10,8 +10,8 @@ const validate = (values, policy) => {
     throw new SubmissionError({ _error: "Passwords do not match" });
   }
 
-  if (!passwordLengthValidator(values.password, policy.minpasswordlength)){
-    throw new SubmissionError({ _error: "Password must be at least 8 digits." });
+  if (!passwordLengthValidator(values.password, policy.passwordminchars)){
+    throw new SubmissionError({ _error: "Password must be at least "+policy.passwordminchars+" digits." });
   }
 };
 
