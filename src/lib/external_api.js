@@ -8,7 +8,7 @@ const getRawAddresses = (network, address) => fetch(dcrdataURL(network, address)
 });
 
 export const getPaymentsByAddress = address => {
-  const network = process.env.NODE_ENV === "development" || !process.env.NODE_ENV ?
+  const network = address[0] === "T" ?
     "testnet" : "explorer";
   return getRawAddresses(network, address);
 };

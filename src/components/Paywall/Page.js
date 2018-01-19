@@ -1,5 +1,4 @@
 import React from "react";
-import "../../style/Modals.css";
 
 const Modal = ({
   hasAttemptedSubmit,
