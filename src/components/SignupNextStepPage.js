@@ -1,6 +1,6 @@
 import React from "react";
-import signupNext from "../../connectors/signupNext";
-import Paywall from "../Paywall";
+import signupNext from "../connectors/signupNext";
+import Paywall from "./Paywall";
 
 const SignupNextStepPage = ({ email, ...props}) => (
   <div>
