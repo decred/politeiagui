@@ -19,11 +19,11 @@ const UserInfo = ({ history, loggedInAs }) =>
                   className="dropdown-list-item"
                   onClick={() => history.push("/user/profile")}
                 >
-                  My proposals
+                  My Proposals
                 </li>
                 <li
                   className="dropdown-list-item"
-                  onClick={() => history.push("/user/key/update")}
+                  onClick={() => history.push("/user/key")}
                 >
                   Update Key Pair
                 </li>

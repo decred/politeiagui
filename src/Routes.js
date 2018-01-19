@@ -9,6 +9,7 @@ import unreviewed from "./connectors/unreviewedProposals";
 import admin from "./connectors/admin";
 
 import Logout from "./components/LogoutPage";
+import PasswordChange from "./components/PasswordChangePage";
 import SignupNext from "./components/SignupNextStepPage";
 import UserProfile from "./components/UserProfile";
 import ForgottenPassword from "./components/ForgottenPasswordPage";
@@ -18,6 +19,7 @@ import PasswordResetSuccess from "./components/PasswordReset/SuccessPage";
 import Verify from "./components/Verify";
 import VerifySuccess from "./components/Verify/indexSuccess";
 import VerifyFailure from "./components/Verify/indexFailure";
+import PrivateKey from "./components/PrivateKeyPage";
 import VerifyKey from "./components/VerifyKey";
 import NotFound from "./components/NotFoundPage";
 import ProposalDetail from "./components/ProposalDetail";
@@ -46,7 +48,7 @@ class Routes extends Component {
         <Route path="/user/verify/failure" component={VerifyFailure} />
         <Route path="/user/verify" component={Verify} exact />
         <Route path="/user/key/verify" component={VerifyKey} exact />
-        <Route path="/user/key/update" component={UserProfile} exact />
+        <Route path="/user/key" component={PrivateKey} exact />
         <AuthenticatedRoute path="/proposals/new" component={SubmitPage} />
         <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />
