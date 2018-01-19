@@ -13,7 +13,6 @@ const loginConnector = connect(
     loggedInAs: sel.loggedInAs,
     loggedIn: sel.loggedIn,
     email: sel.email,
-    userid: sel.userid,
     isAdmin: sel.isAdmin,
     redirectedFrom: sel.redirectedFrom,
     isApiRequestingLogin: or(sel.isApiRequestingInit, sel.isApiRequestingLogin),
@@ -44,7 +43,7 @@ class Wrapper extends Component {
       if (this.props.isAdmin) {
         this.props.history.push("/admin/");
       } else {
-        this.props.history.push(`/user/${this.props.userid}/proposals`);
+        this.props.history.push("/user/proposals");
       }
     });
   }

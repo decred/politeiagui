@@ -12,7 +12,6 @@ const signupFormConnector = connect(
   sel.selectorMap({
     email: sel.email,
     loggedInAs: sel.loggedInAs,
-    userid: sel.userid,
     isAdmin: sel.isAdmin,
     newUserResponse: sel.newUserResponse,
     isApiRequestingLogin: sel.isApiRequestingLogin,
@@ -34,7 +33,7 @@ class Wrapper extends Component {
       if (this.props.isAdmin) {
         this.props.history.push("/admin/");
       } else {
-        this.props.history.push(`/user/${this.props.userid}/proposals`);
+        this.props.history.push("/user/proposals");
       }
     } else if (nextProps.newUserResponse) {
       nextProps.history.push("/user/signup/next");
