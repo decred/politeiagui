@@ -331,7 +331,7 @@ button .logo {
   resize: none;
   height: 100%;
   overflow-y: hidden;
-} 
+}
 
 .mde-text {
   min-width: calc(50% - 8px);
@@ -341,12 +341,13 @@ button .logo {
   max-width: calc(50% - 8px);
   width: 100%;
   margin-right: 6px;
-} 
+}
 
 .mde-preview-content {
   width: 100%;
   margin-top: 0px !important;
   height: 100%;
+  overflow: auto;
 }
 
 .markdown-help {
