@@ -17,6 +17,10 @@ export function proposalNameValidator(name, supportedCharacters) {
   return matches.length === name.length;
 }
 
+export function passwordLengthValidator(password, minLength) {
+  return password.length > minLength
+}
+
 export function passwordVerifyValidator(password, passwordVerify) {
   return password === passwordVerify;
 }
@@ -24,4 +28,3 @@ export function passwordVerifyValidator(password, passwordVerify) {
 export function isRequiredValidator(value) {
   return !!value;
 }
-

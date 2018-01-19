@@ -4,11 +4,18 @@ import { SubmissionError } from "redux-form";
 import ChangePasswordForm from "./Form";
 import changePasswordConnector from "../../connectors/changePassword";
 import Message from "../Message";
-import validate from "./Validator";
+import validate from "../../validators/password-change";
 
 class ChangePassword extends Component {
+
+  componentDidMount() {
+    this.props.policy || this.props.onFetchData();
+  }
+
   onChangePassword(props) {
-    validate(props);
+    const policy = this.props.policy;
+    
+    validate(props, policy);
 
     return this
       .props
@@ -19,6 +26,7 @@ class ChangePassword extends Component {
         });
       });
   }
+
   render() {
     return (
       <div>
