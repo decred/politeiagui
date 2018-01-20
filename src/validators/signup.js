@@ -7,7 +7,7 @@ const validate = (policy, values) => {
   }
 
   if (!passwordLengthValidator(values.password, policy.passwordminchars)){
-    throw new SubmissionError({ _error: "Password must be at least "+policy.passwordminchars+" digits." });
+    throw new SubmissionError({ _error: "Your password must be at least "+policy.passwordminchars+" characters." });
   }
 
   if (!passwordVerifyValidator(values.password, values.password_verify)) {
