@@ -18,7 +18,7 @@ export function proposalNameValidator(name, supportedCharacters) {
 }
 
 export function passwordLengthValidator(password, minLength) {
-  return password.length >= minLength
+  return password.length >= minLength;
 }
 
 export function passwordVerifyValidator(password, passwordVerify) {
