@@ -1,8 +1,6 @@
 import React from "react";
 
 const Modal = ({
-  hasAttemptedSubmit,
-  onSubmit,
   grantAccess,
   ...props
 }) => (
@@ -11,15 +9,14 @@ const Modal = ({
       <h2 className="paywall-header-title">Paywall</h2>
     </div>
     <div className="paywall-content">
-      <p>Please send exaclty {props.paywallAmount}DCR to <br/>{props.paywallAddress}</p>
+      <p>Please send exactly {props.paywallAmount}DCR to <br/>{props.paywallAddress}</p>
     </div>
     <div>
       Status: {
-        grantAccess ?  <p>Approved</p> : <p>Waiting for blocks to get mined</p>
+        grantAccess ?  <p>Payment received</p> : <p>Waiting for payment</p>
       }
     </div>
     <div className="paywall-footer">
-      <a className="btn">Pay!</a>
     </div>
   </div>
 );

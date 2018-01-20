@@ -5,11 +5,7 @@ import paywallConnector from "../../connectors/paywall";
 class Paywall extends React.Component {
   constructor(props) {
     super(props);
-    this.state = this.getInitialState();
-  }
-
-  getInitialState() {
-    return {
+    this.state = {
       hasAttemptedSubmit: false,
       isHidden: false
     };
@@ -39,14 +35,6 @@ class Paywall extends React.Component {
         }}
       />
     );
-  }
-
-  resetState() {
-    this.setState(this.getInitialState());
-  }
-
-  onSubmit() {
-
   }
 
 }
