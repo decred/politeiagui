@@ -16,10 +16,6 @@ class Paywall extends React.Component {
     this.props.getPaymentsByAddress(paywallAddress, paywallAmount);
   }
 
-  componentWillUnmount() {
-    this.resetState();
-  }
-
   render() {
     const { hasAttemptedSubmit } = this.state;
     const { onSubmit } = this;
