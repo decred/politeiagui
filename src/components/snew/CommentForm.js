@@ -4,6 +4,7 @@ import { Field } from "redux-form";
 import Message from "../Message";
 import ErrorField from "../Form/Fields/ErrorField";
 import connector from "../../connectors/reply";
+import WarningPaywallNotPaid from "./WarningPaywallNotPaid";
 
 const CommentForm = ({
   Link = LinkComponent,
@@ -18,7 +19,8 @@ const CommentForm = ({
   handleSubmit,
   onToggleMarkdownHelp,
   onSetReplyParent,
-  loggedIn
+  loggedIn,
+  grantAccess,
 }) => (
   loggedIn ?
     <form className="usertext cloneable warn-on-unload"  onSubmit={handleSubmit(onSave)}>
@@ -77,18 +79,23 @@ const CommentForm = ({
             >
             content policy
             </Link>
-            <div className="usertext-buttons">
-              <button className="save" type="submit">
-              save
-              </button>
-              {(thingId && (<button
-                className="cancel"
-                onClick={() => onSetReplyParent()}
-                type="button"
-              >
-              cancel
-              </button>)) || null}
-            </div>
+            {
+              !grantAccess ? <WarningPaywallNotPaid
+                message="You can not Comment on proposals before paying the paywall" /> : (
+                <div className="usertext-buttons">
+                  <button className="save" type="submit">
+                  save
+                  </button>
+                  {(thingId && (<button
+                    className="cancel"
+                    onClick={() => onSetReplyParent()}
+                    type="button"
+                  >
+                  cancel
+                  </button>)) || null}
+                </div>
+              )
+            }
           </div>
         )}
         {isShowingMarkdownHelp && (

@@ -1,6 +1,6 @@
 import React from "react";
 
-const WarningPaywallNotPaid = () => (<div className="spacer">
+const WarningPaywallNotPaid = ({message}) => (<div className="spacer">
   <div className="titlebox">
     <form
       action="#"
@@ -8,7 +8,7 @@ const WarningPaywallNotPaid = () => (<div className="spacer">
       id="form-t4_5rve"
     >
       <p>
-        You can not send Proposals before paying The Paywall
+        {message}
       </p>
     </form>
     <div className="clear" />

@@ -22,7 +22,8 @@ const SubmitTextSidebox = ({
         </div>
       </div>
     </div>
-  ) : <WarningPaywallNotPaid />
+  ) : <WarningPaywallNotPaid
+    message="You can not send Proposals before paying The Paywall" />
   : null;
 
 export default connector(SubmitTextSidebox);
