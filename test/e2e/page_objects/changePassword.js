@@ -1,7 +1,7 @@
 // The pageObject is prepared but we currently can't logout with the mock
 const Commands = {
   changePassword: function () {
-    return this.waitForElementVisible("@changePasswordPage", 3000)
+    return this.waitForElementVisible("@changePasswordPage", 10000)
       .clearValue("@inputPassword")
       .clearValue("@inputPasswordVerify")
       .setValue("@inputPassword", "Qwerty123*")

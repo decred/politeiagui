@@ -2,62 +2,62 @@
 
 const Commands = {
   logout: function() {
-    return this.waitForElementVisible("@logoutLink", 3000)
+    return this.waitForElementVisible("@logoutLink", 10000)
       .click("@logoutLink")
-      .waitForElementVisible("@logoutPage", 3000)
-      .waitForElementVisible("@signupLoginLink", 3000);
+      .waitForElementVisible("@logoutPage", 10000)
+      .waitForElementVisible("@signupLoginLink", 10000);
   },
   goToLoginSignupPage: function() {
-    return this.waitForElementVisible("@signupLoginLink", 3000)
+    return this.waitForElementVisible("@signupLoginLink", 10000)
       .click("@signupLoginLink")
-      .waitForElementVisible("@signupLoginPage", 3000);
+      .waitForElementVisible("@signupLoginPage", 10000);
   },
   loginWithErrorAllFieldsRequired: function () {
-    return this.waitForElementVisible("@signupLoginPage", 3000)
+    return this.waitForElementVisible("@signupLoginPage", 10000)
       .clearValue("@loginInputEmail")
       .clearValue("@loginInputPassword")
       .setValue("@loginInputEmail", "test@test.com")
       .click("@loginSubmitButton")
-      .waitForElementVisible("@error", 3000);
+      .waitForElementVisible("@error", 10000);
   },
   loginWithErrorInvalidEmailAddress: function () {
-    return this.waitForElementVisible("@signupLoginPage", 3000)
+    return this.waitForElementVisible("@signupLoginPage", 10000)
       .clearValue("@loginInputEmail")
       .setValue("@loginInputEmail", "test")
       .clearValue("@loginInputPassword")
       .setValue("@loginInputPassword", "test")
       .click("@loginSubmitButton")
-      .waitForElementVisible("@error", 3000);
+      .waitForElementVisible("@error", 10000);
   },
   login: function () {
-    return this.waitForElementVisible("@signupLoginPage", 3000)
+    return this.waitForElementVisible("@signupLoginPage", 10000)
       .clearValue("@loginInputEmail")
       .setValue("@loginInputEmail", "test@test.com")
       .clearValue("@loginInputPassword")
       .setValue("@loginInputPassword", "test")
       .click("@loginSubmitButton")
-      .waitForElementVisible("@loggedIn", 3000);
+      .waitForElementVisible("@loggedIn", 10000);
   },
   signupWithErrorAllFieldsRequired: function () {
-    return this.waitForElementVisible("@signupLoginPage", 3000)
+    return this.waitForElementVisible("@signupLoginPage", 10000)
       .clearValue("@signupInputEmail")
       .clearValue("@signupInputPassword")
       .clearValue("@signupInputPasswordVerify")
       .setValue("@signupInputEmail", "test@test.com")
       .click("@signupSubmitButton")
-      .waitForElementVisible("@error", 3000);
+      .waitForElementVisible("@error", 10000);
   },
   signupWithErrorInvalidEmailAddress: function () {
-    return this.waitForElementVisible("@signupLoginPage", 3000)
+    return this.waitForElementVisible("@signupLoginPage", 10000)
       .clearValue("@signupInputEmail")
       .setValue("@signupInputEmail", "test")
       .clearValue("@signupInputPassword")
       .setValue("@signupInputPassword", "test")
       .click("@signupSubmitButton")
-      .waitForElementVisible("@error", 3000);
+      .waitForElementVisible("@error", 10000);
   },
   signupWithErrorPasswordNotMatch: function () {
-    return this.waitForElementVisible("@signupLoginPage", 3000)
+    return this.waitForElementVisible("@signupLoginPage", 10000)
       .clearValue("@signupInputEmail")
       .setValue("@signupInputEmail", "test")
       .clearValue("@signupInputPassword")
@@ -65,7 +65,7 @@ const Commands = {
       .clearValue("@signupInputPasswordVerify")
       .setValue("@signupInputPasswordVerify", "test2")
       .click("@signupSubmitButton")
-      .waitForElementVisible("@error", 3000);
+      .waitForElementVisible("@error", 10000);
   },
   /**
    * TODO: Can't test it more with the /me
@@ -73,7 +73,7 @@ const Commands = {
    * the /me mock endpoint always return an user
    */
   signup: function () {
-    return this.waitForElementVisible("@signupLoginPage", 3000)
+    return this.waitForElementVisible("@signupLoginPage", 10000)
       .clearValue("@signupInputEmail")
       .setValue("@signupInputEmail", "test@test.com")
       .clearValue("@signupInputPassword")
@@ -81,7 +81,7 @@ const Commands = {
       .clearValue("@signupInputPasswordVerify")
       .setValue("@signupInputPasswordVerify", "test")
       .click("@signupSubmitButton")
-      .waitForElementVisible("@loggedIn", 3000);
+      .waitForElementVisible("@signupSuccess", 10000);
   },
 };
 

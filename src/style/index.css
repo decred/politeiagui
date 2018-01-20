@@ -331,7 +331,7 @@ button .logo {
   resize: none;
   height: 100%;
   overflow-y: hidden;
-} 
+}
 
 .mde-text {
   min-width: calc(50% - 8px);
@@ -341,12 +341,13 @@ button .logo {
   max-width: calc(50% - 8px);
   width: 100%;
   margin-right: 6px;
-} 
+}
 
 .mde-preview-content {
   width: 100%;
   margin-top: 0px !important;
   height: 100%;
+  overflow: auto;
 }
 
 .markdown-help {
@@ -388,16 +389,21 @@ li p.header-3 {
   width: 600px;
 }
 .signup-next-step-page h3,
-.forgotten-password-next-step-page h3 {
+.forgotten-password-next-step-page h3,
+.logout-page h3 {
   margin-bottom: 16px;
 }
+
 .signup-next-step-page ul,
-.forgotten-password-next-step-page ul {
+.forgotten-password-next-step-page ul,
+.logout-page ul {
   margin: 16px 0 16px 24px;
   list-style-type: disc;
 }
+
 .signup-next-step-page li,
-.forgotten-password-next-step-page li {
+.forgotten-password-next-step-page li,
+.logout-page li {
   margin: 8px 0;
 }
 .signup-next-step-page .email-address,
