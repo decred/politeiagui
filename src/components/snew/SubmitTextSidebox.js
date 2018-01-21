@@ -4,27 +4,24 @@ import WarningPaywallNotPaid from "./WarningPaywallNotPaid";
 
 const SubmitTextSidebox = ({
   Link, loggedInAs, grantAccess
-}) => loggedInAs ?
-  grantAccess ? (
-    <div className="spacer">
-      <div className="sidebox submit submit-text">
-        <div className="morelink">
-          <Link
-            className="login-required access-required"
-            data-event-action="submit"
-            data-event-detail="self"
-            data-type="subreddit"
-            href="/proposals/new"
-          >
-            Submit a new Proposal
-          </Link>
-          <div className="nub" />
-        </div>
+}) => loggedInAs ? (
+  <div className="spacer">
+    <div className={`sidebox submit submit-text ${!grantAccess ? "not-active" : null}`}>
+      <div className="morelink">
+        <Link
+          className="login-required access-required"
+          data-event-action="submit"
+          data-event-detail="self"
+          data-type="subreddit"
+          href="/proposals/new"
+        />
+        <div className="nub" />
       </div>
     </div>
-  ) : <WarningPaywallNotPaid
-    message="You can not send Proposals before paying The Paywall" />
-  : null;
+    {!grantAccess && <WarningPaywallNotPaid
+      message="You must pay the registration fee before you can submit a proposal." />}
+  </div>
+) : null;
 
 export default connector(SubmitTextSidebox);
 

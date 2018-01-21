@@ -1643,6 +1643,9 @@ div.titlebox span.number:after {
     font-size: 14px;
     content: "Submit Proposal"
 }
+.not-active {
+    pointer-events: none;
+}
 .submit-link .morelink a:before {
     font-size: 14px;
     content: "Submit Link"

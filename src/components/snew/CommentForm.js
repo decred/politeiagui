@@ -79,23 +79,21 @@ const CommentForm = ({
             >
             content policy
             </Link>
-            {
-              !grantAccess ? <WarningPaywallNotPaid
-                message="You can not Comment on proposals before paying the paywall" /> : (
-                <div className="usertext-buttons">
-                  <button className="save" type="submit">
-                  save
-                  </button>
-                  {(thingId && (<button
-                    className="cancel"
-                    onClick={() => onSetReplyParent()}
-                    type="button"
-                  >
-                  cancel
-                  </button>)) || null}
-                </div>
-              )
-            }
+            <WarningPaywallNotPaid
+              message="You must pay the registration fee before you can comment on proposals" />
+            <div className="usertext-buttons">
+              <button className="save" type="submit" disabled={!grantAccess}>
+              save
+              </button>
+              {(thingId && (<button
+                className="cancel"
+                onClick={() => onSetReplyParent()}
+                type="button"
+                disabled={!grantAccess}
+              >
+              cancel
+              </button>)) || null}
+            </div>
           </div>
         )}
         {isShowingMarkdownHelp && (
