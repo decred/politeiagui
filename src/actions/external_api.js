@@ -48,13 +48,14 @@ const checkTransaction = (transaction, addressToMatch, amount) => {
   for (let voutData of transaction["vout"]) {
     const addresses = voutData["scriptPubKey"]["addresses"];
     if (addresses) {
-      addresses.forEach(address => {
+      for(let i=0; i<addresses.length; i++) {
+        let address = addresses[i];
         if (address === addressToMatch) {
           addressSeen = true;
           addressValue = voutData["value"];
-          return;
+          break;
         }
-      });
+      }
 
       if (addressSeen &&
         addressValue >= amount &&
