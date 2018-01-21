@@ -2,6 +2,7 @@
   "maximages":5,
   "maximagesize":524288,
   "maxmds":1,
+  "passwordminchars": 8,
   "minnamelength": 8,
   "maxnamelength": 80,
   "maxmdsize":524288,

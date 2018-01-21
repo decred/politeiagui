@@ -13,6 +13,7 @@ const signupFormConnector = connect(
     email: sel.email,
     loggedInAs: sel.loggedInAs,
     isAdmin: sel.isAdmin,
+    policy: sel.policy,
     newUserResponse: sel.newUserResponse,
     isApiRequestingLogin: sel.isApiRequestingLogin,
     isApiRequestingNewUser: or(sel.isApiRequestingInit, sel.isApiRequestingNewUser),
@@ -21,12 +22,17 @@ const signupFormConnector = connect(
     apiVerifyNewUserError: sel.apiVerifyNewUserError
   }),
   {
+    onFetchData: act.onGetPolicy,
     onSignup: act.onSignup,
     onCancelSignup: act.onCancelSignup
   }
 );
 
 class Wrapper extends Component {
+
+  componentDidMount() {
+    this.props.policy || this.props.onFetchData();
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.loggedInAs) {
@@ -46,8 +52,8 @@ class Wrapper extends Component {
   }
 
   onSignup(...args) {
-    console.log("args", args);
-    validate(...args);
+    const policy = this.props.policy;
+    validate(policy, ...args);
     return this.props.onSignup(...args);
   }
 }

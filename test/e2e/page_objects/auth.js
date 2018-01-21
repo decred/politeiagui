@@ -67,6 +67,17 @@ const Commands = {
       .click("@signupSubmitButton")
       .waitForElementVisible("@error", 10000);
   },
+  signupWithErrorPasswordMinChars: function () {
+    return this.waitForElementVisible("@signupLoginPage", 10000)
+      .clearValue("@signupInputEmail")
+      .setValue("@signupInputEmail", "test")
+      .clearValue("@signupInputPassword")
+      .setValue("@signupInputPassword", "test")
+      .clearValue("@signupInputPasswordVerify")
+      .setValue("@signupInputPasswordVerify", "test")
+      .click("@signupSubmitButton")
+      .waitForElementVisible("@error", 10000);
+  },
   /**
    * TODO: Can't test it more with the /me
    * eg: the signup process call the /me mock endpoint to get the CSRF token
@@ -77,9 +88,9 @@ const Commands = {
       .clearValue("@signupInputEmail")
       .setValue("@signupInputEmail", "test@test.com")
       .clearValue("@signupInputPassword")
-      .setValue("@signupInputPassword", "test")
+      .setValue("@signupInputPassword", "validpwdtest")
       .clearValue("@signupInputPasswordVerify")
-      .setValue("@signupInputPasswordVerify", "test")
+      .setValue("@signupInputPasswordVerify", "validpwdtest")
       .click("@signupSubmitButton")
       .waitForElementVisible("@signupSuccess", 10000);
   },
