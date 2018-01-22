@@ -92,7 +92,7 @@ export const verifyNewUser = searchQuery => {
 };
 
 export const userProposals = userid =>
-  GET("/v1/user/proposals?userid=" + userid).then(getResponse);
+  GET(`/v1/user/proposals?${qs.stringify({userid})}`).then(getResponse);
 
 export const login = (csrf, email, password) =>
   POST("/login", csrf, { email, password }).then(getResponse);
