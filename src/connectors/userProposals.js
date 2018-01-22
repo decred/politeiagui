@@ -1,10 +1,12 @@
+import React, {Component} from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
 
-export default connect(
+const userProposalsConnector = connect(
   sel.selectorMap({
+    userid: sel.userid,
     loggedInAs: sel.loggedInAs,
     isAdmin: sel.isAdmin,
     proposals: sel.userProposals,
@@ -19,3 +21,32 @@ export default connect(
       dispatch
     )
 );
+
+class Wrapper extends Component {
+  componentDidUpdate(prevProps) {
+    const { userid, onFetchData } = this.props;
+    try {
+      if (userid && prevProps.userid !== userid) onFetchData(userid);
+    }
+    catch(e) {
+      throw(e);
+    }
+  }
+
+  render() {
+    const Component = this.props.Component;
+    const {loggedInAs, isAdmin, proposals, error, isLoading} = this.props;
+    return <Component
+      loggedInAs={loggedInAs}
+      isAdmin={isAdmin}
+      proposals={proposals}
+      error={error}
+      isLoading={isLoading}
+    />;
+  }
+}
+
+const wrap = Component =>
+  userProposalsConnector(props => <Wrapper {...{ ...props, Component }} />);
+
+export default wrap;
