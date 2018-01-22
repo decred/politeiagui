@@ -115,11 +115,7 @@ export const isAdmin = bool(or(
   compose(get("isadmin"), apiLoginResponse)
 ));
 
-export const userid = or(
-  compose(get("userid"), apiMeResponse),
-  compose(get("userid"), apiLoginResponse)
-);
-
+export const userid = state => state.api.me.response && state.api.me.response.userid;
 export const serverPubkey = state => state.api.init.response && state.api.init.response.pubkey;
 export const policy = apiPolicyResponse;
 export const isLoadingSubmit = or(isApiRequestingPolicy, isApiRequestingInit);
