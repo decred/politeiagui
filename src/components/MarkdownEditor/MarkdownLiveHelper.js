@@ -49,7 +49,7 @@ class MarkdownLiveHelper extends React.Component {
     render() {
       const { show, findersResults } = this.state;
       return show ? (
-        <Message body={this.renderMessages(findersResults)} type='info' />
+        <Message body={this.renderMessages(findersResults)} type="info" />
       ) : null;
     }
 }

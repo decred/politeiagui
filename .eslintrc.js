@@ -28,6 +28,10 @@ module.exports = {
       "error",
       "unix"
     ],
+    "jsx-quotes": [
+      "error",
+      "prefer-double"
+    ],
     "quotes": [
       "error",
       "double"
