@@ -1,5 +1,5 @@
 {
-  "presets": ["es2015", "react", "flow"],
+  "presets": ["es2017", "react", "flow", "stage-2"],
   "plugins": [
     "transform-promise-to-bluebird",
     "transform-class-properties",

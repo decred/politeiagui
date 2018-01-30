@@ -105,13 +105,13 @@ export const passwordResetRequest = ( csrf, email, verificationtoken, newpasswor
 
 export const updateKeyRequest = (csrf, email) => pki.generateKeys(email).then(
   () => pki.myPubKeyHex(email).then(
-     publickey => POST('/user/key', csrf, { publickey }).then(getResponse)
-    )
+    publickey => POST("/user/key", csrf, { publickey }).then(getResponse)
+  )
 );
 
-export const verifyKeyRequest = (csrf, email, verificationtoken) => 
+export const verifyKeyRequest = (csrf, email, verificationtoken) =>
   pki.signStringHex(email, verificationtoken).then(
-    signature => POST('/user/key/verify', csrf, { signature, verificationtoken }).then(getResponse)
+    signature => POST("/user/key/verify", csrf, { signature, verificationtoken }).then(getResponse)
   );
 
 export const policy = () => GET("/v1/policy").then(getResponse);
