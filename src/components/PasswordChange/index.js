@@ -14,7 +14,7 @@ class ChangePassword extends Component {
 
   onChangePassword(props) {
     const policy = this.props.policy;
-    
+
     validate(props, policy);
 
     return this

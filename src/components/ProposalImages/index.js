@@ -17,7 +17,7 @@ class ProposalImages extends Component {
 
     return (
       <div>
-        {(files || []).map(({ name, mime, digest, payload, size }, idx) => (
+        {(files || []).map(({ name, mime, digest, payload }, idx) => (
           <div key={digest || idx}>
             <h5>{name}</h5>
             <div className="attached-image-ct clearfloat">

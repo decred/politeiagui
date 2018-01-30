@@ -28,18 +28,18 @@ class VerifyKey extends Component {
       <div className="content" role="main">
         <div className="page verification-page">
           {!verifyUserKey && !verifyUserKeyError && <PageLoadingIcon />}
-          {verifyUserKeyError && 
+          {verifyUserKeyError &&
             <Message
               type="error"
               header="Verification failed"
-              body={verifyUserKeyError.message} 
+              body={verifyUserKeyError.message}
             />
           }
-          {verifyUserKey  && verifyUserKey.success && 
+          {verifyUserKey  && verifyUserKey.success &&
             <Message
               type="success"
               header="Verification successful"
-              body="You have successfully verified your new key and may continue to use Politeia normally." 
+              body="You have successfully verified your new key and may continue to use Politeia normally."
             />
           }
         </div>

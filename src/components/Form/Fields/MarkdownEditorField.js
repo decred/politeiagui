@@ -1,7 +1,7 @@
 import React from "react";
-import MarkdownEditor from '../../MarkdownEditor';
+import MarkdownEditor from "../../MarkdownEditor";
 
-const MarkdownEditorField = ({ placeholder, input, touched, error, disabled, children }) => {
+const MarkdownEditorField = ({ input, touched, error, disabled }) => {
   return console.log("input", input) || (
     <div className="ffmarkdown-editor">
       <div className="ffeditor usertext">

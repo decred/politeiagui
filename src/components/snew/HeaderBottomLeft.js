@@ -28,11 +28,6 @@ export const HeaderBottomLeft = ({
       <Link href="/">Politeia</Link>
     </span>
     <ul className="tabmenu">
-      {/*<li>
-        <Link className="choice" href="/">
-          Proposals
-        </Link>
-      </li>*/}
       {isAdmin ? <li>
         <Link className="choice" href="/admin/">
           Admin

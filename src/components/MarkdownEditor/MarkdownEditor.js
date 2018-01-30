@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { ReactMdeToolbar, ReactMdeTextArea, ReactMdeCommands } from "react-mde";
 import {
-    getSelection,
+  getSelection,
 } from "react-mde/lib/js/helpers/ReactMdeSelectionHelper";
 import "react-mde/lib/styles/css/react-mde.css";
 import "react-mde/lib/styles/css/react-mde-toolbar.css";
@@ -27,7 +27,7 @@ class MarkdownEditor extends React.Component {
       [makeHeaderCommand, makeBoldCommand, makeItalicCommand],
       [makeLinkCommand, makeQuoteCommand, makeCodeCommand],
       [makeUnorderedListCommand, makeOrderedListCommand]
-    ]
+    ];
     return customCommands;
   }
 
@@ -39,9 +39,9 @@ class MarkdownEditor extends React.Component {
   }
 
   handleCommand = (command) => {
-      const {value, onChange} = this.props;
-      const newValue = command.execute(value, getSelection(this.textArea));
-      onChange(newValue.text);
+    const {value, onChange} = this.props;
+    const newValue = command.execute(value, getSelection(this.textArea));
+    onChange(newValue.text);
   }
 
   componentDidMount() {
@@ -56,14 +56,14 @@ class MarkdownEditor extends React.Component {
     return (
       <div className="react-mde">
         <ReactMdeToolbar
-            commands={this.getCustomCommands()}
-            onCommand={this.handleCommand}
+          commands={this.getCustomCommands()}
+          onCommand={this.handleCommand}
         />
         <div style={{display: "flex", justifyContent: "space-between" }}>
           <ReactMdeTextArea
-              onChange={this.handleValueChange}
-              value={{ text: value }}
-              textAreaRef={(c) => this.textArea = c}
+            onChange={this.handleValueChange}
+            value={{ text: value }}
+            textAreaRef={(c) => this.textArea = c}
           />
           <MarkdownPreview body={value} />
         </div>

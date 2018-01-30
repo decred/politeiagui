@@ -63,7 +63,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
   }
 
   return get(errorCode, errorMessages);
-}
+};
 
 // Copied from https://stackoverflow.com/a/43131635
 export const hexToArray = hex => (new Uint8Array(hex.match(/[\da-f]{2}/gi).map(h => parseInt(h, 16))));

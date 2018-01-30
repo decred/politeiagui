@@ -15,10 +15,10 @@ class ForgottenPassword extends Component {
 
   render() {
     return (
-        <ForgottenPasswordForm {...{
-          onForgottenPassword: this.onForgottenPassword,
-          isRequesting: this.props.isRequesting
-        }} />
+      <ForgottenPasswordForm {...{
+        onForgottenPassword: this.onForgottenPassword,
+        isRequesting: this.props.isRequesting
+      }} />
     );
   }
 

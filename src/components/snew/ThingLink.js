@@ -83,10 +83,10 @@ const ThingLink = ({
     */}
     {thumbnail &&
     !["image", "default", "nsfw", "self"].find(sub => sub === thumbnail) ? (
-      <Link className="thumbnail may-blank loggedin" href={url}>
-        <img alt="Thumb" height={70} src={thumbnail} width={70} />
-      </Link>
-    ) : null}
+        <Link className="thumbnail may-blank loggedin" href={url}>
+          <img alt="Thumb" height={70} src={thumbnail} width={70} />
+        </Link>
+      ) : null}
     {is_self ? <Link className="thumbnail self may-blank" href={url} /> : null}
     <div className="entry unvoted">
       <p className="title">
@@ -99,13 +99,9 @@ const ThingLink = ({
           </span>
         ) : null}
       </p>
-      {/*<div
-        title="toggle"
-        className={`expando-button ${expanded ? "expanded" : "collapsed"} selftext`}
-      />*/}
       <p className="tagline">
         <Link href={permalink}>
-          submitted <TimeAgo datetime={created_utc * 1000} />
+          submitted <TimeAgo style={{cursor: "pointer"}} datetime={created_utc * 1000} />
         </Link>
       </p>
       <p className="tagline">
@@ -167,47 +163,47 @@ const ThingLink = ({
           {isAdmin
             ? review_status === PROPOSAL_STATUS_UNREVIEWED
               ? [
-                  <li key="spam">
-                    <form
-                      className="toggle remove-button"
-                      onSubmit={e =>
-                        onChangeStatus(
-                          loggedInAs,
-                          id,
-                          PROPOSAL_STATUS_CENSORED
-                        ) && e.preventDefault()
-                      }
+                <li key="spam">
+                  <form
+                    className="toggle remove-button"
+                    onSubmit={e =>
+                      onChangeStatus(
+                        loggedInAs,
+                        id,
+                        PROPOSAL_STATUS_CENSORED
+                      ) && e.preventDefault()
+                    }
+                  >
+                    <button
+                      className="togglebutton access-required"
+                      data-event-action="spam"
+                      type="submit"
                     >
-                      <button
-                        className="togglebutton access-required"
-                        data-event-action="spam"
-                        type="submit"
-                      >
                         spam
-                      </button>
-                    </form>
-                  </li>,
-                  <li key="approve">
-                    <form
-                      className="toggle approve-button"
-                      onSubmit={e =>
-                        onChangeStatus(
-                          loggedInAs,
-                          id,
-                          PROPOSAL_STATUS_PUBLIC
-                        ) && e.preventDefault()
-                      }
+                    </button>
+                  </form>
+                </li>,
+                <li key="approve">
+                  <form
+                    className="toggle approve-button"
+                    onSubmit={e =>
+                      onChangeStatus(
+                        loggedInAs,
+                        id,
+                        PROPOSAL_STATUS_PUBLIC
+                      ) && e.preventDefault()
+                    }
+                  >
+                    <button
+                      className="togglebutton access-required"
+                      data-event-action="approve"
+                      type="submit"
                     >
-                      <button
-                        className="togglebutton access-required"
-                        data-event-action="approve"
-                        type="submit"
-                      >
                         approve
-                      </button>
-                    </form>
-                  </li>
-                ]
+                    </button>
+                  </form>
+                </li>
+              ]
               : null
             : null}
         </ul>

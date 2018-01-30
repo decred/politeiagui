@@ -2,15 +2,15 @@
   { files: [file1, file2], validationErrors: ['message1', 'message2']}
 */
 export const errorTypes = {
-  MAX_SIZE: 'max_size',
-  MAX_IMAGES: 'max_length'
-}
+  MAX_SIZE: "max_size",
+  MAX_IMAGES: "max_length"
+};
 
 export function validateFiles(files, policy) {
   const validation = {
     files,
     errors: []
-  }
+  };
   const validatedMaxImages = validateMaxImages(validation, policy);
   const validatedMaxSize = validateMaxSize(validatedMaxImages, policy);
   return validatedMaxSize;
@@ -19,7 +19,7 @@ export function validateFiles(files, policy) {
 export function getFormattedFiles({ base64, fileList }) {
   return Array.from(fileList).map(({ name, size, type: mime }, idx) => ({
     name, mime, size, payload: base64[idx].split("base64,").pop()
-  }))
+  }));
 }
 
 export function isFileValid(file, policy) {
@@ -34,11 +34,11 @@ export function isFileValid(file, policy) {
   return true;
 }
 
-function getErrorMessage(policy, errorType, filename = '') {
+function getErrorMessage(policy, errorType, filename = "") {
   const errors = {
     [errorTypes.MAX_SIZE]: `The file ${filename} exceeds the maximum size`,
     [errorTypes.MAX_IMAGES]: `You can upload a maximum of ${policy.maximages} images per proposal`
-  }
+  };
   return errors[errorType];
 }
 
@@ -60,7 +60,7 @@ function validateMaxSize({errors, files}, policy) {
       return false;
     }
     return true;
-  })
+  });
   return ({
     files: newFiles,
     errors
