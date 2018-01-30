@@ -23,12 +23,19 @@ const userProposalsConnector = connect(
 );
 
 class Wrapper extends Component {
-  componentWillReceiveProps() {
+  componentWillReceiveProps(nextProps) {
     const { userid, onFetchData } = this.props;
-    userid && onFetchData(userid);
+    console.log('I am here');
+    try {
+      if (nextProps.userid !== userid) onFetchData(userid);
+    } catch (e) {
+      throw e;
+    }
+
   }
   componentDidUpdate(prevProps) {
     const { userid, onFetchData } = this.props;
+    console.log("userid: ", prevProps.userid, userid);
     try {
       if (prevProps.userid !== userid) onFetchData(userid);
     }
