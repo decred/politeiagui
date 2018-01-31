@@ -14,7 +14,6 @@ export const CustomContent = ({
   header,
   ...props
 }) => {
-  console.log(header);
   let content = error ? (
     <div className="content" role="main">
       <Message
