@@ -26,7 +26,7 @@ class Wrapper extends Component {
   componentWillReceiveProps(nextProps) {
     const { userid, onFetchData } = this.props;
     try {
-      if (nextProps.userid !== userid) onFetchData(userid);
+      if (nextProps.userid !== userid) onFetchData(nextProps.userid);
     } catch (e) {
       throw e;
     }
