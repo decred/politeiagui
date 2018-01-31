@@ -7,7 +7,8 @@ export default connect(
   sel.selectorMap({
     proposals: sel.unvettedProposals,
     error: sel.unvettedProposalsError,
-    isLoading: or(sel.unvettedProposalsIsRequesting, sel.setStatusProposalIsRequesting)
+    isLoading: or(sel.unvettedProposalsIsRequesting, sel.setStatusProposalIsRequesting),
+    header: () => "Unvetted Proposals"
   }),
   {
     onFetchData: act.onFetchUnvetted,

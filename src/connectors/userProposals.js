@@ -11,7 +11,8 @@ const userProposalsConnector = connect(
     isAdmin: sel.isAdmin,
     proposals: sel.userProposals,
     error: sel.userProposalsError,
-    isLoading: sel.userProposalsIsRequesting
+    isLoading: sel.userProposalsIsRequesting,
+    header: () => "Your Proposals"
   }),
   dispatch =>
     bindActionCreators(
@@ -44,13 +45,14 @@ class Wrapper extends Component {
 
   render() {
     const Component = this.props.Component;
-    const {loggedInAs, isAdmin, proposals, error, isLoading} = this.props;
+    const {loggedInAs, isAdmin, proposals, error, isLoading, header} = this.props;
     return <Component
       loggedInAs={loggedInAs}
       isAdmin={isAdmin}
       proposals={proposals}
       error={error}
       isLoading={isLoading}
+      header={header}
     />;
   }
 }
