@@ -11,7 +11,6 @@ import admin from "./connectors/admin";
 import Logout from "./components/LogoutPage";
 import PasswordChange from "./components/PasswordChangePage";
 import SignupNext from "./components/SignupNextStepPage";
-import UserProfile from "./components/UserProfile";
 import ForgottenPassword from "./components/ForgottenPasswordPage";
 import ForgottenPasswordSuccess from "./components/ForgottenPassword/SuccessPage";
 import PasswordReset from "./components/PasswordResetPage";
@@ -36,9 +35,13 @@ class Routes extends Component {
         <Route path="/user/logout" component={Logout} />
         <Route path="/user/signup/next" component={SignupNext} />
         <Route path="/user/signup" component={LoginSignupPage} />
+<<<<<<< HEAD
         <Route path="/user/profile" component={UserProfile} />
         <Route path="/user/proposals" component={userProposals(ProposalListing)} />
         <Route path="/user/password/change" component={UserProfile} exact />
+=======
+        <Route path="/user/password/change" component={PasswordChange} exact />
+>>>>>>> Remove UserProfile
         <Route exact path="/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password/next" component={ForgottenPasswordSuccess} />

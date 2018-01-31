@@ -17,7 +17,7 @@ const UserInfo = ({ history, loggedInAs }) =>
               <ul>
                 <li
                   className="dropdown-list-item"
-                  onClick={() => history.push("/user/profile")}
+                  onClick={() => history.push("/")}
                 >
                   My Proposals
                 </li>
