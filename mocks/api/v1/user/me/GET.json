@@ -1,4 +1,5 @@
 {
   "email": "foo@foo.com",
-  "isadmin": true
+  "isadmin": true,
+  "userid": 0
 }
