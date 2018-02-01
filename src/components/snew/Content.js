@@ -25,7 +25,7 @@ export const CustomContent = ({
     <PageLoadingIcon key="content" />
   ) : (listings && listings.length > 0) || proposals.length > 0 ? (
     [
-      <h1 style={{margin: "16px 352px 0 16px", textAlign: "center"}}>
+      <h1 style={{margin: "16px 352px 0 24px"}}>
         {header}
       </h1>,
       <Content {...{
