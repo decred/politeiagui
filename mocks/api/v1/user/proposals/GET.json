@@ -1,0 +1,34 @@
+{
+  "proposals": [
+    {
+      "name": "My Proposal",
+      "status": 0,
+      "timestamp": 1508296860781,
+      "censorshiprecord": {
+        "token": "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8",
+        "merkle": "0dd10219cd79342198085cbe6f737bd54efe119b24c84cbc053023ed6b7da4c8",
+        "signature": "fcc92e26b8f38b90c2887259d88ce614654f32ecd76ade1438a0def40d360e461d995c796f16a17108fad226793fd4f52ff013428eda3b39cd504ed5f1811d0d"
+      }
+    },
+    {
+      "name": "My Nice Proposal",
+      "status": 0,
+      "timestamp": 1508296860782,
+      "censorshiprecord": {
+        "token": "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8",
+        "merkle": "0dd10219cd79342198085cbe6f737bd54efe119b24c84cbc053023ed6b7da4c8",
+        "signature": "fcc92e26b8f38b90c2887259d88ce614654f32ecd76ade1438a0def40d360e461d995c796f16a17108fad226793fd4f52ff013428eda3b39cd504ed5f1811d0d"
+      }
+    },
+    {
+      "name": "My Awesome Proposal!",
+      "status": 0,
+      "timestamp": 1508296860783,
+      "censorshiprecord": {
+        "token": "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8",
+        "merkle": "0dd10219cd79342198085cbe6f737bd54efe119b24c84cbc053023ed6b7da4c8",
+        "signature": "fcc92e26b8f38b90c2887259d88ce614654f32ecd76ade1438a0def40d360e461d995c796f16a17108fad226793fd4f52ff013428eda3b39cd504ed5f1811d0d"
+      }
+    }
+  ]
+}

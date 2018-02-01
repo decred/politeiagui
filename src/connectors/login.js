@@ -43,7 +43,7 @@ class Wrapper extends Component {
       if (this.props.isAdmin) {
         this.props.history.push("/admin/");
       } else {
-        this.props.history.push("/proposals/new");
+        this.props.history.push("/user/proposals");
       }
     });
   }
