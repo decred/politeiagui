@@ -43,6 +43,11 @@ class Wrapper extends Component {
     }
   }
 
+  componentWillMount() {
+    const { userid, onFetchData, proposals } = this.props;
+    if (userid && !proposals) onFetchData(userid);
+  }
+
   render() {
     const Component = this.props.Component;
     const {loggedInAs, isAdmin, proposals, error, isLoading, header} = this.props;

@@ -31,7 +31,7 @@ class Dropdown extends Component {
     const dropdownContentStyle = {
       position: "absolute",
       top: "41px",
-      left: "-69px",
+      right: "-16px",
       border: "1px solid rgba(255, 255, 255, .8)",
       backgroundColor: "#586D82",
       width: "200px"
