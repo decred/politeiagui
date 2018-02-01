@@ -35,13 +35,8 @@ class Routes extends Component {
         <Route path="/user/logout" component={Logout} />
         <Route path="/user/signup/next" component={SignupNext} />
         <Route path="/user/signup" component={LoginSignupPage} />
-<<<<<<< HEAD
-        <Route path="/user/profile" component={UserProfile} />
         <Route path="/user/proposals" component={userProposals(ProposalListing)} />
-        <Route path="/user/password/change" component={UserProfile} exact />
-=======
         <Route path="/user/password/change" component={PasswordChange} exact />
->>>>>>> Remove UserProfile
         <Route exact path="/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password/next" component={ForgottenPasswordSuccess} />
@@ -57,7 +52,7 @@ class Routes extends Component {
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin" component={admin(ProposalListing)} />
         <Route path="/proposals/:token" component={proposalDetail(ProposalDetail)} />
-        <Route path="*" component={NotFound}/>
+        <Route path="*" component={NotFound} />
       </Switch>
     );
   }
