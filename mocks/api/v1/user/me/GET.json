@@ -1,5 +1,8 @@
 {
   "email": "foo@foo.com",
   "isadmin": true,
-  "userid": 0
+  "userid": 0,
+  "haspaid": true,
+  "paywalladdress":"TsjVuA79gsSaoG1uVaBfDQF6wo1wwD3AJTH",
+  "paywallamount":"0.1"
 }

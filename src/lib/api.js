@@ -73,8 +73,9 @@ const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
   body: JSON.stringify(json)
 }).then(parseResponse);
 
-export const me = () => GET("/v1/user/me").then(({ csrfToken, response: { email, isadmin, userid } }) => ({
-  csrfToken: csrfToken || "itsafake", email, isadmin, userid
+export const me = () => GET("/v1/user/me").then(({ csrfToken, response:
+  { email, isadmin, haspaid, paywalladdress, paywallamount, userid } }) => ({
+  csrfToken: csrfToken || "itsafake", email, isadmin, haspaid, paywalladdress, paywallamount, userid
 }));
 
 export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, route, pubkey } }) => ({

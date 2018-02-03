@@ -115,7 +115,23 @@ export const isAdmin = bool(or(
   compose(get("isadmin"), apiLoginResponse)
 ));
 
+export const hasPaid = bool(or(
+  compose(get("haspaid"), apiMeResponse),
+  compose(get("haspaid"), apiLoginResponse)
+));
+
+export const paywallAddress = or(
+  compose(get("paywalladdress"), apiNewUserResponse),
+  compose(get("paywalladdress"), apiMeResponse),
+);
+
+export const paywallAmount = or(
+  compose(get("paywallamount"), apiNewUserResponse),
+  compose(get("paywallamount"), apiMeResponse),
+);
+
 export const userid = state => state.api.me.response && state.api.me.response.userid;
+
 export const serverPubkey = state => state.api.init.response && state.api.init.response.pubkey;
 export const policy = apiPolicyResponse;
 export const isLoadingSubmit = or(isApiRequestingPolicy, isApiRequestingInit);
@@ -151,3 +167,5 @@ export const setStatusProposalIsRequesting = isApiRequestingSetStatusProposal;
 export const setStatusProposalToken = compose(get("token"), apiSetStatusProposalPayload);
 export const setStatusProposalError = apiSetStatusProposalError;
 export const redirectedFrom = get(["api", "login", "redirectedFrom"]);
+export const verificationToken = compose(get("verificationtoken"), apiNewUserResponse);
+export const grantAccess = getApiResponse("grantAccess");
