@@ -13,35 +13,27 @@ const UserInfo = ({ history, loggedInAs }) =>
         <Dropdown
           DropdownTrigger={<div>{loggedInAs}</div>}
           DropdownContent={
-            <div>
-              <ul>
-                <li
-                  className="dropdown-list-item"
-                  onClick={() => history.push("/user/proposals")}
-                >
-                  Your Proposals
-                </li>
-                <li
-                  className="dropdown-list-item"
-                  onClick={() => history.push("/user/key")}
-                >
-                  Update Key Pair
-                </li>
-                <li
-                  className="dropdown-list-item"
-                  onClick={() => history.push("/user/password/change")}
-                >
-                  Change Password
-                </li>
-                <li
-                  className="dropdown-list-item"
-                  onClick={() => history.push("/user/logout")}
-                >
-                  <form className="logout hover" />
-                  Log out
-                </li>
-              </ul>
-            </div>
+            <ul>
+              <li
+                className="dropdown-list-item"
+                onClick={() => history.push("/user/proposals")}
+              >
+                Proposals
+              </li>
+              <li
+                className="dropdown-list-item"
+                onClick={() => history.push("/user/account")}
+              >
+                Account
+              </li>
+              <li
+                className="dropdown-list-item"
+                onClick={() => history.push("/user/logout")}
+              >
+                <form className="logout hover" />
+                Log out
+              </li>
+            </ul>
           }
         />
       </span>

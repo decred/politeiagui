@@ -43,10 +43,6 @@ class Dropdown extends Component {
       marginLeft: "5px",
       position: "relative"
     };
-    const angleStyleUp = {
-      transform: "rotate(180deg)",
-      top: "2px"
-    };
     const DropdownTriggerWithProps = React.cloneElement(
       DropdownTrigger, {
         onClick: this.handleTriggerClick,
@@ -59,9 +55,7 @@ class Dropdown extends Component {
     return <div style={{ position: "relative" }}>
       <div style={{ display: "flex", fontSize: "larger" }}>
         {DropdownTriggerWithProps}
-        {isopen ?
-          <span style={{...angleStyle, ...angleStyleUp}}>&#9662;</span>
-          : <span style={angleStyle}>&#9662;</span>}
+        <span style={angleStyle}>&#9662;</span>
       </div>
       {isopen && DropdownContentWithProps}
     </div>;

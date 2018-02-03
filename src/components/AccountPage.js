@@ -1,5 +1,6 @@
 import React from "react";
 import PrivateKeyIdentityManager from "./PrivateKeyIdentityManager";
+import PasswordChange from "./PasswordChange";
 import Message from "./Message";
 import connector from "../connectors/updateKey";
 
@@ -41,6 +42,8 @@ const KeyPage = ({
         loggedInAs={loggedInAs}
         onUpdateUserKey={onUpdateUserKey}
       />
+      <h1>Change Password</h1>
+      <PasswordChange />
     </div>
   </div>
 );

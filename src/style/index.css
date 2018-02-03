@@ -459,7 +459,7 @@ li p.header-3 {
 
 .dropdown-list-item {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   font-size: larger;
   border-bottom: 1px solid rgba(255, 255, 255, .8);
   padding: 12px;
