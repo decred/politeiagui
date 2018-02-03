@@ -2,8 +2,10 @@
 
 const Commands = {
   logout: function() {
-    return this.waitForElementVisible("@logoutLink", 10000)
-      .click("@logoutLink")
+    return this.waitForElementVisible("@dropdownButton", 10000)
+      .click("@dropdownButton")
+      .waitForElementVisible("@logoutButton", 10000)
+      .click("@logoutButton")
       .waitForElementVisible("@logoutPage", 10000)
       .waitForElementVisible("@signupLoginLink", 10000);
   },
@@ -98,11 +100,12 @@ const Commands = {
 
 module.exports = {
   commands: [Commands],
-  url: function () {
+  url: function() {
     return this.api.launchUrl;
   },
   elements: {
-    logoutLink: ".logout.hover a",
+    dropdownButton: ".dropdown-trigger",
+    logoutButton: ".logout-button",
     logoutPage: ".page.logout-page",
     signupLoginLink: ".login-required",
     signupLoginPage: "#login",
@@ -116,5 +119,5 @@ module.exports = {
     signupSubmitButton: "#register-form button",
     signupSuccess: ".page.signup-next-step-page",
     error: ".message-ct.message-error"
-  },
+  }
 };

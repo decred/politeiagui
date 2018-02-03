@@ -11,7 +11,7 @@ const UserInfo = ({ history, loggedInAs }) =>
       <ReactBody className="loggedin" />
       <span className="user">
         <Dropdown
-          DropdownTrigger={<div>{loggedInAs}</div>}
+          DropdownTrigger={<div className="dropdown-trigger">{loggedInAs}</div>}
           DropdownContent={
             <ul>
               <li
@@ -27,7 +27,7 @@ const UserInfo = ({ history, loggedInAs }) =>
                 Account
               </li>
               <li
-                className="dropdown-list-item"
+                className="dropdown-list-item logout-button"
                 onClick={() => history.push("/user/logout")}
               >
                 <form className="logout hover" />
