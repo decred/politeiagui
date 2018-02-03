@@ -79,8 +79,8 @@ const CommentForm = ({
             >
             content policy
             </Link>
-            <WarningPaywallNotPaid
-              message="You must pay the registration fee before you can comment on proposals" />
+            {!grantAccess && <WarningPaywallNotPaid
+              message="You must pay the registration fee before you can comment on proposals" />}
             <div className="usertext-buttons">
               <button className="save" type="submit" disabled={!grantAccess}>
               save
