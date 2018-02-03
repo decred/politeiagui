@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 
 const customRenderers = {
   image: ({src, alt}) => {
-    return <a rel="nofollow" href={src}>{alt}</a>
+    return <a rel="nofollow" href={src}>{alt}</a>;
   },
   link: ({href, children}) => {
     return <a rel="nofollow" href={href}>{children[0]}</a>;
@@ -12,8 +12,8 @@ const customRenderers = {
 
 const MarkdownRenderer = ({ body, className }) => (
   <div className={className}>
-    <ReactMarkdown 
-      className="md" 
+    <ReactMarkdown
+      className="md"
       renderers={customRenderers}
       source={body}
     />

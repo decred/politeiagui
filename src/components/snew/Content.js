@@ -11,6 +11,7 @@ export const CustomContent = ({
   proposals,
   isLoading,
   error,
+  header,
   ...props
 }) => {
   let content = error ? (
@@ -23,15 +24,20 @@ export const CustomContent = ({
   ) : isLoading ? (
     <PageLoadingIcon key="content" />
   ) : (listings && listings.length > 0) || proposals.length > 0 ? (
-    <Content {...{
-      ...props,
-      key: "content",
-      listings: listings || [
-        {
-          allChildren: proposals.map(proposalToT3)
-        }
-      ]
-    }} />
+    [
+      <h1 style={{margin: "16px 352px 0 24px"}}>
+        {header}
+      </h1>,
+      <Content {...{
+        ...props,
+        key: "content",
+        listings: listings || [
+          {
+            allChildren: proposals.map(proposalToT3)
+          }
+        ]
+      }} />
+    ]
   ) : (
     <h1 style={{ margin: "300px auto 0 auto", textAlign: "center" }}>
       There are no proposals yet

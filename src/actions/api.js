@@ -119,6 +119,14 @@ export const onChangePassword = (password, newPassword) =>
       });
   });
 
+export const onFetchUserProposals = userid => dispatch => {
+  dispatch(act.REQUEST_USER_PROPOSALS());
+  return api
+    .userProposals(userid)
+    .then(response => dispatch(act.RECEIVE_USER_PROPOSALS(response)))
+    .catch(error => dispatch(act.RECEIVE_USER_PROPOSALS(null, error)));
+};
+
 export const onFetchVetted = () => dispatch => {
   dispatch(act.REQUEST_VETTED());
   return api
@@ -179,16 +187,16 @@ export const onUpdateUserKey = (loggedInAs) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_UPDATED_KEY());
     api.updateKeyRequest(csrf, loggedInAs)
-    .then(response => dispatch(act.RECEIVE_UPDATED_KEY({...response, success: true })))
-    .catch(error =>{ dispatch(act.RECEIVE_UPDATED_KEY(null, error)); throw error; })
+      .then(response => dispatch(act.RECEIVE_UPDATED_KEY({...response, success: true })))
+      .catch(error =>{ dispatch(act.RECEIVE_UPDATED_KEY(null, error)); throw error; });
   });
 
 export const onVerifyUserKey = (loggedInAs, verificationtoken) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_VERIFIED_KEY());
     api.verifyKeyRequest(csrf, loggedInAs, verificationtoken)
-    .then(response => dispatch(act.RECEIVE_VERIFIED_KEY({...response, success: true})))
-    .catch(error => dispatch(act.RECEIVE_VERIFIED_KEY(null, error)));
+      .then(response => dispatch(act.RECEIVE_VERIFIED_KEY({...response, success: true})))
+      .catch(error => dispatch(act.RECEIVE_VERIFIED_KEY(null, error)));
   });
 
 export const onSubmitStatusProposal = (loggedInAs, token, status) =>

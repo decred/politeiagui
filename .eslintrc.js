@@ -2,20 +2,23 @@ module.exports = {
   "env": {
     "browser": true,
     "node": true,
-    "jest": true
+    "jest": true,
+    "es6": true
   },
   "plugins": [
     "react"
   ],
   "parser": "babel-eslint",
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 2017,
     "sourceType": "module",
     "ecmaFeatures": {
         "jsx": true
     }
   },
-  "extends": "eslint:recommended",
+  "extends": [
+    "eslint:recommended"
+  ],
   "rules": {
     "indent": [
       "error",
@@ -24,6 +27,10 @@ module.exports = {
     "linebreak-style": [
       "error",
       "unix"
+    ],
+    "jsx-quotes": [
+      "error",
+      "prefer-double"
     ],
     "quotes": [
       "error",

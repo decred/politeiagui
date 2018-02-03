@@ -45,7 +45,7 @@ class Wrapper extends Component {
         this.props.history.push("/admin/");
       } else {
         this.props.grantAccess ?
-          this.props.history.push("/proposals/new") : this.props.history.push("/");
+          this.props.history.push("/user/proposals") : this.props.history.push("/");
       }
     });
   }

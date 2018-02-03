@@ -74,8 +74,8 @@ const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
 }).then(parseResponse);
 
 export const me = () => GET("/v1/user/me").then(({ csrfToken, response:
-  { email, isadmin, haspaid, paywalladdress, paywallamount } }) => ({
-  csrfToken: csrfToken || "itsafake", email, isadmin, haspaid, paywalladdress, paywallamount
+  { email, isadmin, haspaid, paywalladdress, paywallamount, userid } }) => ({
+  csrfToken: csrfToken || "itsafake", email, isadmin, haspaid, paywalladdress, paywallamount, userid
 }));
 
 export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, route, pubkey } }) => ({
@@ -92,6 +92,9 @@ export const verifyNewUser = searchQuery => {
     .then(getResponse);
 };
 
+export const userProposals = userid =>
+  GET(`/v1/user/proposals?${qs.stringify({userid})}`).then(getResponse);
+
 export const login = (csrf, email, password) =>
   POST("/login", csrf, { email, password }).then(getResponse);
 
@@ -106,13 +109,13 @@ export const passwordResetRequest = ( csrf, email, verificationtoken, newpasswor
 
 export const updateKeyRequest = (csrf, email) => pki.generateKeys(email).then(
   () => pki.myPubKeyHex(email).then(
-     publickey => POST('/user/key', csrf, { publickey }).then(getResponse)
-    )
+    publickey => POST("/user/key", csrf, { publickey }).then(getResponse)
+  )
 );
 
-export const verifyKeyRequest = (csrf, email, verificationtoken) => 
+export const verifyKeyRequest = (csrf, email, verificationtoken) =>
   pki.signStringHex(email, verificationtoken).then(
-    signature => POST('/user/key/verify', csrf, { signature, verificationtoken }).then(getResponse)
+    signature => POST("/user/key/verify", csrf, { signature, verificationtoken }).then(getResponse)
   );
 
 export const policy = () => GET("/v1/policy").then(getResponse);

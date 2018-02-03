@@ -20,6 +20,7 @@ export const isApiRequestingLogout = getIsApiRequesting("logout");
 export const isApiRequestingForgottenPassword = getIsApiRequesting("forgottenPassword");
 export const isApiRequestingPasswordReset = getIsApiRequesting("passwordReset");
 const isApiRequestingVetted = getIsApiRequesting("vetted");
+const isApiRequestingUserProposals = getIsApiRequesting("userProposals");
 const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
 const isApiRequestingProposal = getIsApiRequesting("proposal");
 const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
@@ -33,6 +34,7 @@ export const isApiRequesting = or(
   isApiRequestingLogin,
   isApiRequestingLogout,
   isApiRequestingVetted,
+  isApiRequestingUserProposals,
   isApiRequestingProposal,
   isApiRequestingNewProposal,
   isApiRequestingNewComment,
@@ -54,6 +56,7 @@ const apiLoginResponse = getApiResponse("login");
 export const forgottenPasswordResponse = getApiResponse("forgottenPassword");
 export const passwordResetResponse = getApiResponse("passwordReset");
 const apiVettedResponse = getApiResponse("vetted");
+const apiUserProposalsResponse = getApiResponse("userProposals");
 const apiUnvettedResponse = getApiResponse("unvetted");
 const apiProposalResponse = getApiResponse("proposal");
 const apiProposalCommentsResponse = getApiResponse("proposalComments");
@@ -73,6 +76,7 @@ export const apiPasswordResetError = or(apiInitError, getApiError("passwordReset
 export const apiLoginError = or(apiInitError, getApiError("login"));
 export const apiLogoutError = or(apiInitError, getApiError("logout"));
 const apiVettedError = getApiError("vetted");
+const apiUserProposalsError = getApiError("userProposals");
 const apiUnvettedError = getApiError("unvetted");
 const apiProposalError = getApiError("proposal");
 const apiNewProposalError = getApiError("newProposal");
@@ -85,6 +89,7 @@ export const apiError = or(
   apiLoginError,
   apiLogoutError,
   apiVettedError,
+  apiUserProposalsError,
   apiProposalError,
   apiNewProposalError,
   apiSetStatusProposalError
@@ -125,12 +130,17 @@ export const paywallAmount = or(
   compose(get("paywallamount"), apiMeResponse),
 );
 
+export const userid = state => state.api.me.response && state.api.me.response.userid;
+
 export const serverPubkey = state => state.api.init.response && state.api.init.response.pubkey;
 export const policy = apiPolicyResponse;
 export const isLoadingSubmit = or(isApiRequestingPolicy, isApiRequestingInit);
 export const vettedProposals = or(compose(get("proposals"), apiVettedResponse), constant([]));
 export const vettedProposalsIsRequesting = isApiRequestingVetted;
 export const vettedProposalsError = or(apiInitError, apiVettedError);
+export const userProposals = or(compose(get("proposals"), apiUserProposalsResponse), constant([]));
+export const userProposalsIsRequesting = isApiRequestingUserProposals;
+export const userProposalsError = or(apiInitError, apiUserProposalsError);
 export const unvettedProposals = or(compose(get("proposals"), apiUnvettedResponse), constant([]));
 const filtered = status => compose(filter(compose(eq(status), get("status"))), unvettedProposals);
 export const unreviewedProposals = filtered(PROPOSAL_STATUS_UNREVIEWED);

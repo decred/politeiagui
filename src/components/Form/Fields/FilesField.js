@@ -1,17 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ReactFileReader from "react-file-reader";
-import { change } from 'redux-form';
+import { change } from "redux-form";
 import ProposalImages from "../../ProposalImages";
-import PolicyErrors from './PolicyErrors';
-import { validateFiles, getFormattedFiles } from '../../ProposalImages/helpers';
+import PolicyErrors from "./PolicyErrors";
+import { validateFiles, getFormattedFiles } from "../../ProposalImages/helpers";
 
 class FilesField extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       policyErrors: []
-    }
+    };
   }
 
   handleFilesChange = (files) => {
@@ -22,9 +22,9 @@ class FilesField extends React.Component {
 
     this.setState({
       policyErrors: validation.errors ? validation.errors : []
-    })
+    });
 
-    return dispatch(change('form/proposal','files', validation.files));
+    return dispatch(change("form/proposal","files", validation.files));
   }
 
   render() {
@@ -43,7 +43,7 @@ class FilesField extends React.Component {
         { policyErrors.length > 0 && <PolicyErrors errors={policyErrors} />}
         <ProposalImages files={input.value || []} onChange={input.onChange} />
       </div>
-    )
+    );
   }
 }
 

@@ -2,7 +2,7 @@ import React from "react";
 import connector from "../connectors/userProfile";
 import PasswordChange from "./PasswordChange";
 import PrivateKeyIdentityManager from "./PrivateKeyIdentityManager";
-import Message from './Message';
+import Message from "./Message";
 
 const UpdatedKeyMessage = ({email}) => (
   <span>

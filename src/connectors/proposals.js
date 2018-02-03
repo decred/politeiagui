@@ -9,7 +9,8 @@ export default connect(
     isAdmin: sel.isAdmin,
     proposals: sel.vettedProposals,
     error: sel.vettedProposalsError,
-    isLoading: sel.vettedProposalsIsRequesting
+    isLoading: sel.vettedProposalsIsRequesting,
+    header: () => "Active Proposals"
   }),
   dispatch => bindActionCreators({
     onFetchData: act.onFetchVetted,

@@ -24,7 +24,6 @@ export const SidebarAd = Blank;
 export { default as SidebarSearch } from "./SidebarSearch";
 export { default as SidebarTitlebox } from "./SidebarTitlebox";
 export { default as SiteTable } from "./SiteTable";
-//export { default as SrHeaderArea } from "./SrHeaderArea";
 export const SrHeaderArea = Blank;
 export { default as SubmitPage } from "./SubmitPage";
 export const SubmitLinkSidebox = Blank;

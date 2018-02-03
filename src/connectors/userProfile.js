@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import * as sel from "../selectors";
-import { onUpdateUserKey } from '../actions/api';
+import { onUpdateUserKey } from "../actions/api";
 
 export default connect(
   sel.selectorMap({
