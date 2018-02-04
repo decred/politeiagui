@@ -13,6 +13,7 @@ const submitConnector = connect(
     isLoading: or(sel.isLoadingSubmit, sel.newProposalIsRequesting),
     loggedInAs: sel.loggedInAs,
     policy: sel.policy,
+    keyMismatch: sel.getKeyMismatch,
     name: sel.newProposalName,
     description: sel.newProposalDescription,
     files: sel.newProposalFiles,
