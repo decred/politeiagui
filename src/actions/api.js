@@ -33,6 +33,8 @@ export const onInit = () => dispatch => {
     });
 };
 
+export const updateMe = (payload) => dispatch => dispatch(act.UPDATE_ME(payload));
+
 export const onRouteChange = () => dispatch => {
   dispatch(act.CLEAN_ERRORS());
 };
@@ -249,6 +251,8 @@ export const onPasswordResetRequest = ({
         throw error;
       });
   });
+
+export const keyMismatch = (payload) => dispatch => dispatch(act.KEY_MISMATCH(payload));
 
 export const resetPasswordReset = () => dispatch =>
   dispatch(act.RESET_PASSWORD_RESET_REQUEST);

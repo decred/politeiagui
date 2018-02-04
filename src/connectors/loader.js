@@ -1,10 +1,16 @@
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as act from "../actions";
+import * as sel from "../selectors";
 
 export default connect(
-  (state, ownProps) => ownProps,
+  sel.selectorMap({
+    serverPubkey: sel.serverPubkey,
+    loggedInAs: sel.loggedInAs,
+    keyMismatch: sel.getKeyMismatch,
+  }),
   dispatch => bindActionCreators({
-    onInit: act.onInit
+    onInit: act.onInit,
+    keyMismatchAction: act.keyMismatch,
   }, dispatch)
 );
