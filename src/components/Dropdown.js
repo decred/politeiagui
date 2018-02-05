@@ -1,5 +1,6 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 
 class Dropdown extends Component {
   constructor(props) {
@@ -26,8 +27,8 @@ class Dropdown extends Component {
     document.removeEventListener("click", this.handleClick, false);
   }
   render() {
-    const {DropdownTrigger, DropdownContent} = this.props;
-    const {isopen} = this.state;
+    const { DropdownTrigger, DropdownContent } = this.props;
+    const { isopen } = this.state;
     const dropdownContentStyle = {
       position: "absolute",
       top: "41px",
@@ -45,21 +46,30 @@ class Dropdown extends Component {
     };
     const DropdownTriggerWithProps = React.cloneElement(
       DropdownTrigger, {
-        onClick: this.handleTriggerClick,
         style: dropdownTriggerStyle
       });
     const DropdownContentWithProps = React.cloneElement(
       DropdownContent,
       { style: dropdownContentStyle }
     );
-    return <div style={{ position: "relative" }}>
-      <div style={{ display: "flex", fontSize: "larger" }}>
-        {DropdownTriggerWithProps}
-        <span style={angleStyle}>&#9662;</span>
+    return (
+      <div style={{ position: "relative" }}>
+        <div
+          style={{ display: "flex", fontSize: "larger", cursor: "pointer" }}
+          onClick={this.handleTriggerClick}
+        >
+          {DropdownTriggerWithProps}
+          <span style={angleStyle}>&#9662;</span>
+        </div>
+        {isopen && DropdownContentWithProps}
       </div>
-      {isopen && DropdownContentWithProps}
-    </div>;
+    );
   }
 }
+
+Dropdown.propTypes = {
+  DropdownTrigger: PropTypes.element.isRequired,
+  DropdownContent: PropTypes.element.isRequired
+};
 
 export default Dropdown;
