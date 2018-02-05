@@ -10,7 +10,6 @@ import admin from "./connectors/admin";
 
 import Logout from "./components/LogoutPage";
 import SignupNext from "./components/SignupNextStepPage";
-import UserProfile from "./components/UserProfile";
 import ForgottenPassword from "./components/ForgottenPasswordPage";
 import ForgottenPasswordSuccess from "./components/ForgottenPassword/SuccessPage";
 import PasswordReset from "./components/PasswordResetPage";
@@ -18,6 +17,7 @@ import PasswordResetSuccess from "./components/PasswordReset/SuccessPage";
 import Verify from "./components/Verify";
 import VerifySuccess from "./components/Verify/indexSuccess";
 import VerifyFailure from "./components/Verify/indexFailure";
+import Account from "./components/AccountPage";
 import VerifyKey from "./components/VerifyKey";
 import NotFound from "./components/NotFoundPage";
 import ProposalDetail from "./components/ProposalDetail";
@@ -34,7 +34,6 @@ class Routes extends Component {
         <Route path="/user/logout" component={Logout} />
         <Route path="/user/signup/next" component={SignupNext} />
         <Route path="/user/signup" component={LoginSignupPage} />
-        <Route path="/user/profile" component={UserProfile} />
         <Route path="/user/proposals" component={userProposals(ProposalListing)} />
         <Route exact path="/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password" component={ForgottenPassword} />
@@ -45,12 +44,13 @@ class Routes extends Component {
         <Route path="/user/verify/failure" component={VerifyFailure} />
         <Route path="/user/verify" component={Verify} exact />
         <Route path="/user/key/verify" component={VerifyKey} exact />
+        <Route path="/user/account" component={Account} exact />
         <AuthenticatedRoute path="/proposals/new" component={SubmitPage} />
         <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin" component={admin(ProposalListing)} />
         <Route path="/proposals/:token" component={proposalDetail(ProposalDetail)} />
-        <Route path="*" component={NotFound}/>
+        <Route path="*" component={NotFound} />
       </Switch>
     );
   }

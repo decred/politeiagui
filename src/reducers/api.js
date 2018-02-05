@@ -15,6 +15,7 @@ export const DEFAULT_STATE = {
   unvetted: DEFAULT_REQUEST_STATE,
   proposal: DEFAULT_REQUEST_STATE,
   proposalComments: DEFAULT_REQUEST_STATE,
+  userProposals: DEFAULT_REQUEST_STATE,
   newProposal: DEFAULT_REQUEST_STATE,
   newComment: DEFAULT_REQUEST_STATE,
   forgottenPassword: DEFAULT_REQUEST_STATE,

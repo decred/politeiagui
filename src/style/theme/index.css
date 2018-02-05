@@ -110,7 +110,6 @@ background-image:
   background-position: 0px 0px, 0px 0px, 0px 0px;
   background-size: auto, auto, auto;
   background-repeat: repeat, repeat, repeat;
-    z-index: 1;
     box-shadow: 0 2px 1.5px 0 rgba(0, 0, 0, .12), 0 0 4px 0 rgba(0, 0, 0, .12)
 }
 #sr-header-area {
@@ -203,27 +202,11 @@ a.random.choice {
     background: #e2e2e2;
     color: #0c1e3e
 }
-#header-bottom-right {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: auto;
-    max-width: 300px;
-    height: 24px;
-    background: 0 0;
-    font-size: 11px;
-    padding: 5px 8px 4px 2px
-}
 body:not(.loggedin) #header-bottom-right {
     max-width: 340px
 }
 #header-bottom-right a {
     color: rgba(255, 255, 255, .7)
-}
-.separator,
-.user,
-.user .userkarma {
-    color: rgba(255, 255, 255, .4)
 }
 #header-bottom-right a:hover {
     text-decoration: underline
@@ -332,7 +315,7 @@ body:not(.loggedin) #header-bottom-right {
     margin: 0;
     position: relative;
     top: -1px;
-    transition: all .25s ease
+    transition: all .25s ease;
 }
 .arrow,
 .arrow.down,
