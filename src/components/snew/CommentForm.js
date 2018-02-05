@@ -5,6 +5,7 @@ import Message from "../Message";
 import ErrorField from "../Form/Fields/ErrorField";
 import connector from "../../connectors/reply";
 import WarningPaywallNotPaid from "./WarningPaywallNotPaid";
+import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
 
 const CommentForm = ({
   Link = LinkComponent,
@@ -40,8 +41,9 @@ const CommentForm = ({
         {!isPostingComment && (
           <div className="md">
             <Field
+              component={MarkdownEditorField}
+              toggledStyle
               name="comment"
-              component="textarea"
               autoFocus={!!thingId}
               type="text"
               cols={1}
@@ -56,10 +58,11 @@ const CommentForm = ({
         )}
         {!isPostingComment && (
           <div className="bottom-area">
-            <span className="help-toggle toggle" style={{}}>
+            <span className="help-toggle toggle">
               <a
                 className="option active"
                 tabIndex={100}
+                style={{ cursor: "pointer" }}
                 onClick={e => {
                   onToggleMarkdownHelp();
                   e.preventDefault();
@@ -79,8 +82,12 @@ const CommentForm = ({
             >
             content policy
             </Link>
-            {!grantAccess && <WarningPaywallNotPaid
-              message="You must pay the registration fee before you can comment on proposals" />}
+            {!grantAccess &&
+              <div style={{width: "70%", padding: "5px 0" }}>
+                <WarningPaywallNotPaid
+                  message="You must pay the registration fee before you can comment on proposals" />
+              </div>
+            }
             <div className="usertext-buttons">
               <button className="save" type="submit" disabled={!grantAccess}>
               save

@@ -347,7 +347,11 @@ button .logo {
   width: 100%;
   margin-top: 0px !important;
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
+}
+
+.react-mde-dropdown {
+  z-index: 9;
 }
 
 .markdown-help {
@@ -502,4 +506,8 @@ li p.header-3 {
 .paywall-address {
   font-weight: bold;
   padding:5px;
+}
+.fullwidth {
+  width: 100%;
+  max-width: 100% !important;
 }
