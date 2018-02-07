@@ -67,7 +67,7 @@ const Commands = {
       .clearValue("@signupInputPasswordVerify")
       .setValue("@signupInputPasswordVerify", "test2")
       .click("@signupSubmitButton")
-      .waitForElementVisible("@error", 10000);
+      .waitForElementVisible("@error", 15000);
   },
   signupWithErrorPasswordMinChars: function () {
     return this.waitForElementVisible("@signupLoginPage", 10000)
