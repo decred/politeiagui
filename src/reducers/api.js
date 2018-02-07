@@ -136,6 +136,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_NEW_USER]: () => receive("newUser", state, action),
   [act.REQUEST_VERIFY_PAYWALL_PAYMENT]: () => request("verifyPaywallPayment", state, action),
   [act.RECEIVE_VERIFY_PAYWALL_PAYMENT]: () => receive("verifyPaywallPayment", state, action),
+  [act.REQUEST_PAYWALL_PAYMENT_WITH_FAUCET]: () => request("verifyPaywallPayment", state, action),
+  [act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET]: () => receive("verifyPaywallPayment", state, action),
   [act.GRANT_SUBMIT_PROPOSAL_ACCESS]: () => receive("grantAccess", state, action),
   [act.GET_PAYWALL_TXID]: () => receive("verifyPaywallPayment", state, action),
   [act.RESET_NEW_USER]: () => reset("newUser", state),
