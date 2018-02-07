@@ -13,5 +13,6 @@ export default connect(
   }),
   dispatch => bindActionCreators({
     getPaymentsByAddress: act.getPaymentsByAddress,
+    payWithFaucet: act.payWithFaucet,
   }, dispatch)
 );

@@ -67,3 +67,10 @@ const checkTransaction = (transaction, addressToMatch, amount) => {
 
   return false;
 };
+
+export const payWithFaucet = (address, amount) => dispatch => {
+  external_api.payWithFaucet(address, amount).then(response => {
+    dispatch("PAY_WITH_FAUCET");
+    console.log(response);
+  });
+};
