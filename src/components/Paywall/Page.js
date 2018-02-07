@@ -4,7 +4,7 @@ const Modal = ({
   grantAccess,
   ...props
 }) => (
-  <div className="modal-wrapper">
+  <div className="paywall-wrapper">
     <div className="paywall-header">
       <h2 className="paywall-header-title">Paywall</h2>
     </div>

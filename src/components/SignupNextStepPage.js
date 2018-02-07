@@ -3,7 +3,7 @@ import signupNext from "../connectors/signupNext";
 import Paywall from "./Paywall";
 
 const SignupNextStepPage = ({ email, ...props}) => (
-  <div>
+  <div className="signup-next-step-wrapper">
     <div className="page signup-next-step-page">
       <h3>Please check your inbox to verify your registration.</h3>
       <p>

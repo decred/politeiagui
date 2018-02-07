@@ -4,6 +4,8 @@ import act from "./methods";
 const CONFIRMATIONS_REQUIRED = 2;
 const TIME_IN_SECONDS = 60;
 export const getPaymentsByAddress = (address, amount) => dispatch => {
+  if(!address)
+    return;
   dispatch(act.REQUEST_VERIFY_PAYWALL_PAYMENT());
   return external_api.getPaymentsByAddress(address)
     .then(response => {

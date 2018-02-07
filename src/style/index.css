@@ -465,3 +465,11 @@ li p.header-3 {
   padding: 12px;
   cursor: pointer;
 }
+
+.signup-next-step-wrapper {
+  display: flex;
+  flex-direction: row
+}
+.paywall-wrapper {
+  margin: 56px 0 0 56px;
+}
