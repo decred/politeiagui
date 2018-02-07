@@ -2,7 +2,7 @@ import get from "lodash/fp/get";
 import eq from "lodash/fp/eq";
 import filter from "lodash/fp/filter";
 import compose from "lodash/fp/compose";
-import { and, or, bool, constant } from "../lib/fp";
+import { and, or, bool, constant, not } from "../lib/fp";
 import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED } from "../constants";
 
 const getIsApiRequesting = key => bool(get(["api", key, "isRequesting"]));
@@ -129,6 +129,14 @@ export const paywallAmount = or(
   compose(get("paywallamount"), apiNewUserResponse),
   compose(get("paywallamount"), apiMeResponse),
 );
+
+export const isTestNet = bool(
+  (state) => {
+    if(!state.api.me.response)
+      return null;
+    return state.api.me.response.paywalladdress[0] === "T" ? true : false;
+  });
+export const isMainNet = not(isTestNet);
 
 export const userid = state => state.api.me.response && state.api.me.response.userid;
 

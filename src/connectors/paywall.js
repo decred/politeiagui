@@ -9,6 +9,7 @@ export default connect(
     paywallAmount: sel.paywallAmount,
     VerificationToken: sel.verificationToken,
     grantAccess: sel.grantAccess,
+    isTestnet: sel.isTestNet
   }),
   dispatch => bindActionCreators({
     getPaymentsByAddress: act.getPaymentsByAddress,

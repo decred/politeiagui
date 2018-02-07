@@ -4,7 +4,8 @@ const Modal = ({
   grantAccess,
   paywallAddress,
   paywallAmount,
-  payWithFaucet
+  payWithFaucet,
+  isTestnet
 }) => (
   <div className="paywall-wrapper">
     <div className="paywall-header">
@@ -19,9 +20,12 @@ const Modal = ({
       }
     </div>
     <div className="paywall-footer">
-      <button onClick={() => payWithFaucet(paywallAddress)}>
-        Pay with Faucet
-      </button>
+      {
+        isTestnet === true ? (
+          <button onClick={() => payWithFaucet(paywallAddress)}>
+            Pay with Faucet
+          </button>) : null
+      }
     </div>
   </div>
 );
