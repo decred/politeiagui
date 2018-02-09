@@ -81,7 +81,7 @@ const RegisterForm = ({
         type="password"
         className="c-form-control"
         id="passwd2_reg"
-        placeholder="Verify password"
+        placeholder="Verify Password"
         tabIndex={2}
       />
       <div className="c-form-control-feedback-wrapper">
