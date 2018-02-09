@@ -78,14 +78,14 @@ const LoginForm = ({
       <input id="rem_login" name="rem" tabIndex={3} type="checkbox" />
       <label htmlFor="rem_login">remember me</label>
       <Link className="c-pull-right reset-password-link" href="/password">
-        reset password
+        Reset Password
       </Link>
     </div>
     <div className="c-clearfix c-submit-group">
       <ButtonWithLoadingIcon
         className="c-btn c-btn-primary c-pull-right"
         tabIndex={3}
-        text="Log in"
+        text="LOGIN"
         isLoading={isApiRequestingLogin} />
     </div>
     <div>
