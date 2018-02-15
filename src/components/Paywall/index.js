@@ -28,13 +28,13 @@ class Paywall extends React.Component {
   render() {
     const { hasAttemptedSubmit } = this.state;
     const { onSubmit } = this;
-    const { grantAccess} = this.props;
+    const { hasPaid} = this.props;
 
     return (
       <PaywallPage
         {...{
           ...this.props,
-          grantAccess,
+          hasPaid,
           hasAttemptedSubmit,
           onSubmit,
         }}

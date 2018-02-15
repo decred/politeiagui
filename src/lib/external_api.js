@@ -1,4 +1,5 @@
 const dcrdataURL = (network, address) => `https://${network}.dcrdata.org/api/address/${address}/raw`;
+const insightURL = (network, address) => `https://${network}.decred.org/api/addr/${address}/utxo?noCache=1`;
 const FAUCET_URL = "https://faucet.decred.org/requestfaucet";
 
 const POST = (path, params, method = "POST") => {
@@ -20,18 +21,27 @@ const POST = (path, params, method = "POST") => {
   });
 };
 
-const getRawAddresses = (network, address) => fetch(dcrdataURL(network, address)).then(r => {
-  // work around when transactions are not paid and dcrdata api returns Unprocessable Entity
-  if (r.statusText === "Unprocessable Entity") {
-    return null;
-  }
-  return r.json();
-});
+const getRawTransactions = (network, address) => {
+  return fetch(dcrdataURL(network === "mainnet" ? "explorer" : network, address))
+    .then(r => {
+      // work around when transactions are not paid and dcrdata api returns Unprocessable Entity
+      if (r.statusText === "Unprocessable Entity") {
+        return null;
+      }
+      return r.json();
+    })
+    .catch(e => {
+      console.error("Could not reach dcrdata: " + e);
+
+      // Try with the backup url next.
+      return fetch(insightURL(network, address)).then(r => r.json());
+    });
+};
 
 export const getPaymentsByAddress = address => {
   const network = address[0] === "T" ?
-    "testnet" : "explorer";
-  return getRawAddresses(network, address);
+    "testnet" : "mainnet";
+  return getRawTransactions(network, address);
 };
 
 export const payWithFaucet = (address, amount) => {

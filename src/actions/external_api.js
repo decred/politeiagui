@@ -1,32 +1,28 @@
 import * as external_api from "../lib/external_api";
+import { verifyUserPayment } from "./api";
 import act from "./methods";
 
 const CONFIRMATIONS_REQUIRED = 2;
 const TIME_IN_SECONDS = 60;
 export const getPaymentsByAddress = (address, amount) => dispatch => {
-  dispatch(act.REQUEST_VERIFY_PAYWALL_PAYMENT());
+  dispatch(act.REQUEST_VERIFY_PAYWALL_PAYMENT_EXPLORER());
   return external_api.getPaymentsByAddress(address)
     .then(response => {
       if(response === null) {
-        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS(false));
         setTimeout(()=> dispatch(getPaymentsByAddress(address, amount)), TIME_IN_SECONDS*1000);
       } else {
-        dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT(response));
+        dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT_EXPLORER(response));
         const txid = checkForPayment(response, address, amount);
         if (txid) {
-          dispatch(act.GET_PAYWALL_TXID({txid}));
-          dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS(true));
-          return;
+          return verifyUserPayment(dispatch, txid);
         }
         else {
-          dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS(false));
           setTimeout(()=> dispatch(getPaymentsByAddress(address, amount)), TIME_IN_SECONDS*1000);
         }
       }
     })
     .catch(error => {
-      dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS(false));
-      dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT(null, error));
+      dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT_EXPLORER(null, error));
       setTimeout(()=> dispatch(getPaymentsByAddress(address, amount)), TIME_IN_SECONDS*1000);
       throw error;
     });
@@ -36,8 +32,9 @@ const checkForPayment = (poll, addressToMatch, amount) => {
   if (!poll)
     return;
   let txid;
-  poll.forEach((transaction) => {
+  poll.every((transaction) => {
     txid = checkTransaction(transaction, addressToMatch, amount);
+    return !txid;
   });
   return txid;
 };
@@ -45,6 +42,14 @@ const checkForPayment = (poll, addressToMatch, amount) => {
 const checkTransaction = (transaction, addressToMatch, amount) => {
   let addressSeen = false;
   let addressValue = 0;
+
+  if (transaction.amount > amount &&
+    transaction.confirmations >= CONFIRMATIONS_REQUIRED) {
+    return transaction["txid"];
+  }
+
+  return false;
+  /*
   for (let voutData of transaction["vout"]) {
     const addresses = voutData["scriptPubKey"]["addresses"];
     if (addresses) {
@@ -66,6 +71,7 @@ const checkTransaction = (transaction, addressToMatch, amount) => {
   }
 
   return false;
+  */
 };
 
 export const payWithFaucet = (address, amount) => dispatch => {

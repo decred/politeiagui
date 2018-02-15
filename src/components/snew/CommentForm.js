@@ -21,7 +21,7 @@ const CommentForm = ({
   onToggleMarkdownHelp,
   onSetReplyParent,
   loggedIn,
-  grantAccess,
+  hasPaid,
 }) => (
   loggedIn ?
     <form className="usertext cloneable warn-on-unload"  onSubmit={handleSubmit(onSave)}>
@@ -82,21 +82,21 @@ const CommentForm = ({
             >
             content policy
             </Link>
-            {!grantAccess &&
+            {!hasPaid &&
               <div style={{width: "70%", padding: "5px 0" }}>
                 <WarningPaywallNotPaid
                   message="You must pay the registration fee before you can comment on proposals" />
               </div>
             }
             <div className="usertext-buttons">
-              <button className="save" type="submit" disabled={!grantAccess}>
+              <button className="save" type="submit" disabled={!hasPaid}>
               save
               </button>
               {(thingId && (<button
                 className="cancel"
                 onClick={() => onSetReplyParent()}
                 type="button"
-                disabled={!grantAccess}
+                disabled={!hasPaid}
               >
               cancel
               </button>)) || null}

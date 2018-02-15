@@ -51,6 +51,7 @@ export const apiMeResponse = getApiResponse("me");
 const apiInitResponse = getApiResponse("init");
 const apiPolicyResponse = getApiResponse("policy");
 const apiNewUserResponse = getApiResponse("newUser");
+const apiVerifyUserPaymentResponse = getApiResponse("verifyPaywallPaymentServer");
 export const apiChangePasswordResponse = getApiResponse("changePassword");
 const apiLoginResponse = getApiResponse("login");
 export const forgottenPasswordResponse = getApiResponse("forgottenPassword");
@@ -115,10 +116,19 @@ export const isAdmin = bool(or(
   compose(get("isadmin"), apiLoginResponse)
 ));
 
-export const hasPaid = bool(or(
-  compose(get("haspaid"), apiMeResponse),
-  compose(get("haspaid"), apiLoginResponse)
-));
+export const hasPaid = bool(state => {
+  if(state.api.me.response) {
+    return state.api.me.response.paywalladdress === "";
+  }
+  if(state.api.login.response) {
+    return state.api.login.response.paywalladdress === "";
+  }
+  if(state.api.verifyPaywallPaymentServer) {
+    return state.api.verifyPaywallPaymentServer.response.haspaid === true;
+  }
+
+  return false;
+});
 
 export const paywallAddress = or(
   compose(get("paywalladdress"), apiNewUserResponse),
@@ -131,10 +141,20 @@ export const paywallAmount = or(
 );
 
 export const isTestNet = bool(
-  (state) => {
-    if(!state.api.me.response || !state.api.me.response.paywalladdress)
-      return null;
-    return state.api.me.response.paywalladdress[0] === "T" ? true : false;
+  state => {
+    if(state.api.me.response && state.api.me.response.paywalladdress) {
+      return state.api.me.response.paywalladdress[0] === "T";
+    }
+
+    if(state.api.login.response && state.api.login.response.paywalladdress) {
+      return state.api.login.response.paywalladdress[0] === "T";
+    }
+
+    if(state.api.newUser.response && state.api.newUser.response.paywalladdress) {
+      return state.api.newUser.response.paywalladdress[0] === "T";
+    }
+
+    return null;
   });
 export const isMainNet = not(isTestNet);
 
@@ -176,5 +196,4 @@ export const setStatusProposalToken = compose(get("token"), apiSetStatusProposal
 export const setStatusProposalError = apiSetStatusProposalError;
 export const redirectedFrom = get(["api", "login", "redirectedFrom"]);
 export const verificationToken = compose(get("verificationtoken"), apiNewUserResponse);
-export const grantAccess = getApiResponse("grantAccess");
 export const getKeyMismatch = state => state.api.keyMismatch;

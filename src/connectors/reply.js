@@ -18,7 +18,7 @@ const replyConnector = connect(
     replyTo: sel.replyTo,
     policy: sel.policy,
     isPostingComment: sel.isApiRequestingNewComment,
-    grantAccess: sel.grantAccess,
+    hasPaid: sel.hasPaid,
   }),
   {
     onFetchData: act.onGetPolicy,

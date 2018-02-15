@@ -256,3 +256,13 @@ export const keyMismatch = (payload) => dispatch => dispatch(act.KEY_MISMATCH(pa
 
 export const resetPasswordReset = () => dispatch =>
   dispatch(act.RESET_PASSWORD_RESET_REQUEST);
+
+export const verifyUserPayment = (dispatch, txid) => {
+  dispatch(act.REQUEST_VERIFY_PAYWALL_PAYMENT_SERVER);
+  api.verifyUserPayment(txid)
+    .then(response => dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT_SERVER(response)))
+    .catch(error => {
+      dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT_SERVER(null, error));
+      throw error;
+    });
+};
