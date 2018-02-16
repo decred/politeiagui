@@ -67,3 +67,13 @@ const checkTransaction = (transaction, addressToMatch, amount) => {
 
   return false;
 };
+
+export const payWithFaucet = (address, amount) => dispatch => {
+  dispatch(act.REQUEST_PAYWALL_PAYMENT_WITH_FAUCET());
+  external_api.payWithFaucet(address, amount)
+    .then(dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET({faucetPayment: true})))
+    .catch(error => {
+      dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(false, error));
+      throw error;
+    });
+};

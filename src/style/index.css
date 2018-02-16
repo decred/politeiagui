@@ -465,3 +465,41 @@ li p.header-3 {
   padding: 12px;
   cursor: pointer;
 }
+
+.signup-next-step-wrapper {
+  display: flex;
+  flex-direction: row
+}
+
+.paywall-header-title {
+  font-size: 16pt;
+}
+
+.paywall-wrapper {
+  margin: 56px 0 0 56px;
+}
+
+.paywall-payment-received {
+  background: #41bf53;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+.paywall-waiting-payment {
+  background: #bf4153;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+.paywall-content {
+  padding: 8px;
+}
+
+.paywall-address {
+  font-weight: bold;
+  padding:5px;
+}
