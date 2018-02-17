@@ -1,5 +1,6 @@
 import * as act from "../actions/types";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
+import { PROPOSAL_STATUS_UNREVIEWED } from "../constants";
 
 export const DEFAULT_STATE = {
   isShowingSignup: false,
@@ -8,6 +9,7 @@ export const DEFAULT_STATE = {
     name: "",
     description: ""
   },
+  adminProposalsShow: PROPOSAL_STATUS_UNREVIEWED,
   submittedProposals: {}
 };
 
@@ -35,7 +37,8 @@ const app = (state = DEFAULT_STATE, action) => (({
       };
     }
   },
-  [act.CANCEL_SIGNUP]: () => ({ ...state, isShowingSignup: false })
+  [act.CANCEL_SIGNUP]: () => ({ ...state, isShowingSignup: false }),
+  [act.CHANGE_FILTER_VALUE]: () => ({ ...state,  adminProposalsShow: action.payload })
 })[action.type] || (() => state))();
 
 export default app;

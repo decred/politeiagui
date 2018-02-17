@@ -8,9 +8,11 @@ export default connect(
     proposals: sel.unvettedProposals,
     error: sel.unvettedProposalsError,
     isLoading: or(sel.unvettedProposalsIsRequesting, sel.setStatusProposalIsRequesting),
+    filterValue: sel.getAdminFilterValue,
     header: () => "Unvetted Proposals"
   }),
   {
     onFetchData: act.onFetchUnvetted,
+    onChangeFilter: act.onChangeFilter,
   }
 );
