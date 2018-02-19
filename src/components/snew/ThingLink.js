@@ -35,6 +35,7 @@ const ThingLink = ({
   thumbnail,
   otherFiles,
   review_status,
+  numcomments,
   lastSubmitted,
   loggedInAs,
   isAdmin,
@@ -59,28 +60,6 @@ const ThingLink = ({
     id={`thing_${name}`}
   >
     <p className="parent" />
-    {/*
-    <span className="rank">{rank}</span>
-    <div className="midcol unvoted">
-      <div
-        aria-label="upvote"
-        className="arrow up login-required access-required"
-        data-event-action="upvote"
-        role="button"
-        tabIndex={0}
-      />
-      <div className="score dislikes">{downs > 10000 ? (downs/1000.0).toFixed(1)+"k" : downs}</div>
-      <div className="score unvoted">{score  > 10000 ? (score/1000.0).toFixed(1)+"k" : score}</div>
-      <div className="score likes">{ups > 10000 ? (ups/1000.0).toFixed(1)+"k" : ups}</div>
-      <div
-        aria-label="downvote"
-        className="arrow down login-required access-required"
-        data-event-action="downvote"
-        role="button"
-        tabIndex={0}
-      />
-    </div>
-    */}
     {thumbnail &&
     !["image", "default", "nsfw", "self"].find(sub => sub === thumbnail) ? (
         <Link className="thumbnail may-blank loggedin" href={url}>
@@ -101,7 +80,12 @@ const ThingLink = ({
       </p>
       <p className="tagline">
         <Link href={permalink}>
-          submitted <TimeAgo style={{cursor: "pointer"}} datetime={created_utc * 1000} />
+          submitted{" "}
+          <TimeAgo
+            style={{ cursor: "pointer" }}
+            datetime={created_utc * 1000}
+          />{" "}-{" "}
+          {numcomments} comments
         </Link>
       </p>
       <p className="tagline">
@@ -121,10 +105,16 @@ const ThingLink = ({
                 >
                   Your proposal has been created, but it will not be public
                   until an admin approves it. You can{" "}
-                  <DownloadBundle message="download your proposal" /> and use the{" "}
-                  <a href="https://github.com/decred/politeia/tree/master/politeiad/cmd/politeia_verify" target="_blank" rel="noopener noreferrer">
+                  <DownloadBundle message="download your proposal" /> and use
+                  the{" "}
+                  <a
+                    href="https://github.com/decred/politeia/tree/master/politeiad/cmd/politeia_verify"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     politeia_verify tool
-                  </a> to prove that your submission has been accepted for review by
+                  </a>{" "}
+                  to prove that your submission has been accepted for review by
                   Politeia.
                 </p>
                 <p
@@ -133,10 +123,11 @@ const ThingLink = ({
                     marginBottom: "0.4166667em"
                   }}
                 >
-                  <span style={{fontWeight: "bold"}}>Note:</span> You will not have
-                  access to your proposal content after you close this page, so
-                  it's highly recommended that you download your proposal if you
-                  think it could be unfairly censored by Politeia admins.
+                  <span style={{ fontWeight: "bold" }}>Note:</span> You will not
+                  have access to your proposal content after you close this
+                  page, so it's highly recommended that you download your
+                  proposal if you think it could be unfairly censored by
+                  Politeia admins.
                 </p>
               </span>
             }

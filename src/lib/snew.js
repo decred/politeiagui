@@ -5,10 +5,11 @@ import compose from "lodash/fp/compose";
 import { TOP_LEVEL_COMMENT_PARENTID } from "./api";
 
 export const proposalToT3 = ({
-  name, timestamp, status, censorshiprecord = {}
+  name, timestamp, status, numcomments, censorshiprecord = {}
 }, idx) => ({
   kind: "t3",
   data: {
+    numcomments: numcomments,
     rank: idx + 1,
     title: name || "(Proposal name hidden)",
     id: censorshiprecord.token,
