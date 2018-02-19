@@ -3,6 +3,7 @@
     {
       "name": "This is an example proposal",
       "status": 2,
+      "numcomments": 0,
       "timestamp": 1505940196,
       "censorshiprecord": {
         "token":
@@ -17,6 +18,7 @@
     {
       "name": "This is a censored example proposal",
       "status": 3,
+      "numcomments": 0,
       "timestamp": 1505940196,
       "censorshiprecord": {
         "token":

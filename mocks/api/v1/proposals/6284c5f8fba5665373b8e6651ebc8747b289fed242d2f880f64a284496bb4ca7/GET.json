@@ -2,6 +2,7 @@
   "proposal": {
     "name": "This is an example proposal",
     "status": 2,
+    "numcomments": 0,
     "timestamp": 1505940196,
     "censorshiprecord": {
       "token":
