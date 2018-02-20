@@ -40,10 +40,10 @@ const checkForPayment = (poll, addressToMatch, amount) => {
 };
 
 const checkTransaction = (transaction, addressToMatch, amount) => {
-  let addressSeen = false;
-  let addressValue = 0;
+  //let addressSeen = false;
+  //let addressValue = 0;
 
-  if (transaction.amount > amount &&
+  if (transaction.amount >= amount &&
     transaction.confirmations >= CONFIRMATIONS_REQUIRED) {
     return transaction["txid"];
   }

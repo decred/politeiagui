@@ -51,7 +51,6 @@ export const apiMeResponse = getApiResponse("me");
 const apiInitResponse = getApiResponse("init");
 const apiPolicyResponse = getApiResponse("policy");
 const apiNewUserResponse = getApiResponse("newUser");
-const apiVerifyUserPaymentResponse = getApiResponse("verifyPaywallPaymentServer");
 export const apiChangePasswordResponse = getApiResponse("changePassword");
 const apiLoginResponse = getApiResponse("login");
 export const forgottenPasswordResponse = getApiResponse("forgottenPassword");
@@ -124,7 +123,7 @@ export const hasPaid = bool(state => {
     return state.api.login.response.paywalladdress === "";
   }
   if(state.api.verifyPaywallPaymentServer) {
-    return state.api.verifyPaywallPaymentServer.response.haspaid === true;
+    return state.api.verifyPaywallPaymentServer.response.haspaid;
   }
 
   return false;
@@ -142,19 +141,11 @@ export const paywallAmount = or(
 
 export const isTestNet = bool(
   state => {
-    if(state.api.me.response && state.api.me.response.paywalladdress) {
-      return state.api.me.response.paywalladdress[0] === "T";
-    }
+    let checkAddr = r => r && r.paywalladdress ? r.paywalladdress[0] === "T" : false;
 
-    if(state.api.login.response && state.api.login.response.paywalladdress) {
-      return state.api.login.response.paywalladdress[0] === "T";
-    }
-
-    if(state.api.newUser.response && state.api.newUser.response.paywalladdress) {
-      return state.api.newUser.response.paywalladdress[0] === "T";
-    }
-
-    return null;
+    return checkAddr(state.api.me.response)
+        || checkAddr(state.api.login.response)
+        || checkAddr(state.api.newUser.response);
   });
 export const isMainNet = not(isTestNet);
 
