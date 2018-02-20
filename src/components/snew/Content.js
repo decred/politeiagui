@@ -4,6 +4,7 @@ import { proposalToT3 } from "../../lib/snew";
 import ReactBody from "react-body";
 import PageLoadingIcon from "./PageLoadingIcon";
 import Message from "../Message";
+import ProposalFilter from "../ProposalFilter";
 
 export const CustomContent = ({
   bodyClassName="listing-page",
@@ -12,6 +13,8 @@ export const CustomContent = ({
   isLoading,
   error,
   header,
+  onChangeFilter,
+  filterValue,
   ...props
 }) => {
   let content = error ? (
@@ -28,12 +31,22 @@ export const CustomContent = ({
       <h1 style={{margin: "16px 352px 0 24px"}}>
         {header}
       </h1>,
+      <ProposalFilter
+        header={header}
+        handleChangeFilterValue={onChangeFilter}
+        filterValue={filterValue}
+      />,
       <Content {...{
         ...props,
         key: "content",
         listings: listings || [
           {
-            allChildren: proposals.map(proposalToT3)
+            allChildren:
+            proposals.filter(
+              proposal =>
+                !filterValue || proposal.status === filterValue
+            )
+              .map(proposalToT3)
           }
         ]
       }} />

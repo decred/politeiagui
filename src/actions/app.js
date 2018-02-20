@@ -31,6 +31,8 @@ export const onFetchProposal = (token) =>
     dispatch(onFetchProposalComments(token))
   ]);
 
+export const onChangeFilter = (option) => act.CHANGE_FILTER_VALUE(option);
+
 export const onSubmitComment = (...args) =>
   (dispatch) =>
     dispatch(onSubmitCommentApi(...args))
