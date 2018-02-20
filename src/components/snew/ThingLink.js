@@ -85,7 +85,7 @@ const ThingLink = ({
             style={{ cursor: "pointer" }}
             datetime={created_utc * 1000}
           />{" "}-{" "}
-          {numcomments} comments
+          {numcomments}{numcomments === 1 ? " comment" : " comments"}
         </Link>
       </p>
       <p className="tagline">
