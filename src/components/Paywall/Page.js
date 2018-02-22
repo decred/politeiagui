@@ -22,10 +22,11 @@ const Modal = ({
     </div>
     <div className="paywall-footer">
       {
-        isTestnet === true ? (
+        isTestnet ? (
           <button onClick={() => payWithFaucet(paywallAddress, paywallAmount)}>
             Pay with Faucet
-          </button>) : null
+          </button>
+        ) : null
       }
     </div>
   </div>

@@ -21,27 +21,25 @@ const POST = (path, params, method = "POST") => {
   });
 };
 
-const getRawTransactions = (network, address) => {
-  return fetch(dcrdataURL(network === "mainnet" ? "explorer" : network, address))
+const getRawTransactions = url => {
+  return fetch(url)
     .then(r => {
       // work around when transactions are not paid and dcrdata api returns Unprocessable Entity
       if (r.statusText === "Unprocessable Entity") {
         return null;
       }
       return r.json();
-    })
-    .catch(e => {
-      console.error("Could not reach dcrdata: " + e);
-
-      // Try with the backup url next.
-      return fetch(insightURL(network, address)).then(r => r.json());
     });
 };
 
-export const getPaymentsByAddress = address => {
-  const network = address[0] === "T" ?
-    "testnet" : "mainnet";
-  return getRawTransactions(network, address);
+export const getPaymentsByAddressDcrdata = address => {
+  const network = address[0] === "T" ? "testnet" : "explorer";
+  return getRawTransactions(dcrdataURL(network, address));
+};
+
+export const getPaymentsByAddressInsight = address => {
+  const network = address[0] === "T" ? "testnet" : "mainnet";
+  return getRawTransactions(insightURL(network, address));
 };
 
 export const payWithFaucet = (address, amount) => {

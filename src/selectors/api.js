@@ -122,8 +122,8 @@ export const hasPaid = bool(state => {
   if(state.api.login.response) {
     return state.api.login.response.paywalladdress === "";
   }
-  if(state.api.verifyPaywallPaymentServer) {
-    return state.api.verifyPaywallPaymentServer.response.haspaid;
+  if(state.api.verifyPaywallPaymentPoliteia) {
+    return state.api.verifyPaywallPaymentPoliteia.response.haspaid;
   }
 
   return false;
@@ -137,6 +137,11 @@ export const paywallAddress = or(
 export const paywallAmount = or(
   compose(get("paywallamount"), apiNewUserResponse),
   compose(get("paywallamount"), apiMeResponse),
+);
+
+export const paywallTxNotBefore = or(
+  compose(get("paywalltxnotbefore"), apiNewUserResponse),
+  compose(get("paywalltxnotbefore"), apiMeResponse),
 );
 
 export const isTestNet = bool(

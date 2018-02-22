@@ -77,7 +77,7 @@ export const me = () => GET("/v1/user/me").then(({ csrfToken, response:
   { email, isadmin, haspaid, paywalladdress, paywallamount, userid, publickey } }) => ({
   csrfToken: csrfToken || "itsafake",
   email, isadmin, haspaid, paywalladdress,
-  paywallamount, userid,
+  paywallamount, paywallTxNotBefore, userid,
   pubkey: publickey,
 }));
 
