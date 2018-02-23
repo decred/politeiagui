@@ -116,13 +116,13 @@ export const isAdmin = bool(or(
 ));
 
 export const hasPaid = bool(state => {
-  if(state.api.me.response) {
+  if(state.api.me && state.api.me.response) {
     return state.api.me.response.paywalladdress === "";
   }
-  if(state.api.login.response) {
+  if(state.api.login && state.api.login.response) {
     return state.api.login.response.paywalladdress === "";
   }
-  if(state.api.verifyPaywallPaymentPoliteia) {
+  if(state.api.verifyPaywallPaymentPoliteia && state.api.verifyPaywallPaymentPoliteia.response) {
     return state.api.verifyPaywallPaymentPoliteia.response.haspaid;
   }
 
