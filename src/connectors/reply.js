@@ -6,9 +6,11 @@ import { reduxForm } from "redux-form";
 import { withRouter } from "react-router-dom";
 import validate from "../validators/reply";
 import { connect } from "react-redux";
+import { getNewCommentData } from "../lib/localData";
 
 const replyConnector = connect(
   sel.selectorMap({
+    initialValues: getNewCommentData,
     token: sel.proposalToken,
     loggedIn: sel.loggedIn,
     loggedInAs: sel.loggedInAs,

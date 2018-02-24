@@ -7,9 +7,11 @@ import { or } from "../lib/fp";
 import { reduxForm } from "redux-form";
 import validate from "../validators/proposal";
 import { withRouter } from "react-router-dom";
+import { getNewProposalData } from "../lib/localData";
 
 const submitConnector = connect(
   sel.selectorMap({
+    initialValues: getNewProposalData,
     isLoading: or(sel.isLoadingSubmit, sel.newProposalIsRequesting),
     loggedInAs: sel.loggedInAs,
     policy: sel.policy,
