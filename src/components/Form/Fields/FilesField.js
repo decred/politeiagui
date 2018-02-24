@@ -30,15 +30,22 @@ class FilesField extends React.Component {
   render() {
     const { placeholder="Upload", input, touched, error, disabled, policy } = this.props;
     const { policyErrors } = this.state;
-
+    const buttonStyle = {
+      margin: 0
+    };
+    const wrapperStyle = {
+      width: "118px"
+    };
     return (
-      <div className="files-field">
+      <div style={wrapperStyle}>
         <ReactFileReader
           base64
           multipleFiles
           fileTypes={policy.validmimetypes}
           handleFiles={this.handleFilesChange}
-        ><button>{placeholder}</button></ReactFileReader>
+        >
+          <button style={buttonStyle}>{placeholder}</button>
+        </ReactFileReader>
         {touched && error && !disabled && <span className="error">{error}</span>}
         { policyErrors.length > 0 && <PolicyErrors errors={policyErrors} />}
         <ProposalImages files={input.value || []} onChange={input.onChange} />
