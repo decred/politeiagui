@@ -1,9 +1,10 @@
+const GLOBAL_TIMEOUT = require("../constants").GLOBAL_TIMEOUT;
 const Commands = {
   submitProposal: function () {
     return this
-      .waitForElementVisible("@submitProposalLink", 10000)
+      .waitForElementVisible("@submitProposalLink", GLOBAL_TIMEOUT)
       .click("@submitProposalLink")
-      .waitForElementVisible("@submitProposalPage", 10000);
+      .waitForElementVisible("@submitProposalPage", GLOBAL_TIMEOUT);
   },
 };
 

@@ -1,65 +1,65 @@
 // The pageObject is prepared but we currently can't logout with the mock
-
+const GLOBAL_TIMEOUT = require("../constants").GLOBAL_TIMEOUT;
 const Commands = {
   logout: function() {
-    return this.waitForElementVisible("@dropdownButton", 10000)
+    return this.waitForElementVisible("@dropdownButton", GLOBAL_TIMEOUT)
       .click("@dropdownButton")
-      .waitForElementVisible("@logoutButton", 10000)
+      .waitForElementVisible("@logoutButton", GLOBAL_TIMEOUT)
       .click("@logoutButton")
-      .waitForElementVisible("@logoutPage", 10000)
-      .waitForElementVisible("@signupLoginLink", 10000);
+      .waitForElementVisible("@logoutPage", GLOBAL_TIMEOUT)
+      .waitForElementVisible("@signupLoginLink", GLOBAL_TIMEOUT);
   },
   goToLoginSignupPage: function() {
-    return this.waitForElementVisible("@signupLoginLink", 10000)
+    return this.waitForElementVisible("@signupLoginLink", GLOBAL_TIMEOUT)
       .click("@signupLoginLink")
-      .waitForElementVisible("@signupLoginPage", 10000);
+      .waitForElementVisible("@signupLoginPage", GLOBAL_TIMEOUT);
   },
   loginWithErrorAllFieldsRequired: function () {
-    return this.waitForElementVisible("@signupLoginPage", 10000)
+    return this.waitForElementVisible("@signupLoginPage", GLOBAL_TIMEOUT)
       .clearValue("@loginInputEmail")
       .clearValue("@loginInputPassword")
       .setValue("@loginInputEmail", "test@test.com")
       .click("@loginSubmitButton")
-      .waitForElementVisible("@error", 10000);
+      .waitForElementVisible("@error", GLOBAL_TIMEOUT);
   },
   loginWithErrorInvalidEmailAddress: function () {
-    return this.waitForElementVisible("@signupLoginPage", 10000)
+    return this.waitForElementVisible("@signupLoginPage", GLOBAL_TIMEOUT)
       .clearValue("@loginInputEmail")
       .setValue("@loginInputEmail", "test")
       .clearValue("@loginInputPassword")
       .setValue("@loginInputPassword", "test")
       .click("@loginSubmitButton")
-      .waitForElementVisible("@error", 10000);
+      .waitForElementVisible("@error", GLOBAL_TIMEOUT);
   },
   login: function () {
-    return this.waitForElementVisible("@signupLoginPage", 10000)
+    return this.waitForElementVisible("@signupLoginPage", GLOBAL_TIMEOUT)
       .clearValue("@loginInputEmail")
       .setValue("@loginInputEmail", "test@test.com")
       .clearValue("@loginInputPassword")
       .setValue("@loginInputPassword", "test")
       .click("@loginSubmitButton")
-      .waitForElementVisible("@loggedIn", 10000);
+      .waitForElementVisible("@loggedIn", GLOBAL_TIMEOUT);
   },
   signupWithErrorAllFieldsRequired: function () {
-    return this.waitForElementVisible("@signupLoginPage", 10000)
+    return this.waitForElementVisible("@signupLoginPage", GLOBAL_TIMEOUT)
       .clearValue("@signupInputEmail")
       .clearValue("@signupInputPassword")
       .clearValue("@signupInputPasswordVerify")
       .setValue("@signupInputEmail", "test@test.com")
       .click("@signupSubmitButton")
-      .waitForElementVisible("@error", 10000);
+      .waitForElementVisible("@error", GLOBAL_TIMEOUT);
   },
   signupWithErrorInvalidEmailAddress: function () {
-    return this.waitForElementVisible("@signupLoginPage", 10000)
+    return this.waitForElementVisible("@signupLoginPage", GLOBAL_TIMEOUT)
       .clearValue("@signupInputEmail")
       .setValue("@signupInputEmail", "test")
       .clearValue("@signupInputPassword")
       .setValue("@signupInputPassword", "test")
       .click("@signupSubmitButton")
-      .waitForElementVisible("@error", 10000);
+      .waitForElementVisible("@error", GLOBAL_TIMEOUT);
   },
   signupWithErrorPasswordNotMatch: function () {
-    return this.waitForElementVisible("@signupLoginPage", 10000)
+    return this.waitForElementVisible("@signupLoginPage", GLOBAL_TIMEOUT)
       .clearValue("@signupInputEmail")
       .setValue("@signupInputEmail", "test")
       .clearValue("@signupInputPassword")
@@ -67,7 +67,7 @@ const Commands = {
       .clearValue("@signupInputPasswordVerify")
       .setValue("@signupInputPasswordVerify", "test2")
       .click("@signupSubmitButton")
-      .waitForElementVisible("@error", 10000);
+      .waitForElementVisible("@error", GLOBAL_TIMEOUT);
   },
   /**
    * TODO: Can't test it more with the /me
@@ -75,7 +75,7 @@ const Commands = {
    * the /me mock endpoint always return an user
    */
   signup: function () {
-    return this.waitForElementVisible("@signupLoginPage", 10000)
+    return this.waitForElementVisible("@signupLoginPage", GLOBAL_TIMEOUT)
       .clearValue("@signupInputEmail")
       .setValue("@signupInputEmail", "test@test.com")
       .clearValue("@signupInputPassword")
@@ -83,7 +83,7 @@ const Commands = {
       .clearValue("@signupInputPasswordVerify")
       .setValue("@signupInputPasswordVerify", "test")
       .click("@signupSubmitButton")
-      .waitForElementVisible("@loggedIn", 10000);
+      .waitForElementVisible("@loggedIn", GLOBAL_TIMEOUT);
   },
 };
 

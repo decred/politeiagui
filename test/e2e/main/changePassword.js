@@ -1,3 +1,4 @@
+const GLOBAL_TIMEOUT = require("../constants").GLOBAL_TIMEOUT;
 module.exports = {
   before: browser => {
     browser.maximizeWindow();
@@ -15,7 +16,7 @@ module.exports = {
       .navigate(uri)
       .changePassword();
 
-    client.expect.element("@error").to.be.present.before(10000);
+    client.expect.element("@error").to.be.present.before(GLOBAL_TIMEOUT);
   },
   "Go to the change password page with an invalid token": browser => {
     const uri = browser.page.changePassword().url("email=test@test.com&verificationtoken=invalid");
@@ -26,7 +27,7 @@ module.exports = {
       .navigate(uri)
       .changePassword();
 
-    client.expect.element("@error").to.be.present.before(10000);
+    client.expect.element("@error").to.be.present.before(GLOBAL_TIMEOUT);
   },
   "Go to the change password page with an expired token": browser => {
     const uri = browser.page.changePassword().url("email=test@test.com&verificationtoken=expired");
@@ -37,7 +38,7 @@ module.exports = {
       .navigate(uri)
       .changePassword();
 
-    client.expect.element("@error").to.be.present.before(10000);
+    client.expect.element("@error").to.be.present.before(GLOBAL_TIMEOUT);
   },
   "Change password": browser => {
     const uri = browser.page.changePassword().url("email=test@test.com&verificationtoken=validtoken");
@@ -48,6 +49,6 @@ module.exports = {
       .navigate(uri)
       .changePassword();
 
-    client.expect.element("@changePasswordNextPage").to.be.present.before(10000);
+    client.expect.element("@changePasswordNextPage").to.be.present.before(GLOBAL_TIMEOUT);
   },
 };

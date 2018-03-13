@@ -1,39 +1,39 @@
 // The pageObject is prepared but we currently can't logout with the mock
-
+const GLOBAL_TIMEOUT = require("../constants").GLOBAL_TIMEOUT;
 const Commands = {
   goToPageFromSide: function() {
-    return this.waitForElementVisible("@resetLinkFromSide", 10000)
+    return this.waitForElementVisible("@resetLinkFromSide", GLOBAL_TIMEOUT)
       .click("@resetLinkFromSide")
-      .waitForElementVisible("@forgottenPasswordPage", 10000);
+      .waitForElementVisible("@forgottenPasswordPage", GLOBAL_TIMEOUT);
   },
   goToPageFromSignupLoginPage: function() {
-    return this.waitForElementVisible("@signupLoginLink", 10000)
+    return this.waitForElementVisible("@signupLoginLink", GLOBAL_TIMEOUT)
       .click("@signupLoginLink")
-      .waitForElementVisible("@signupLoginPage", 10000)
-      .waitForElementVisible("@resetLinkFromSignupLoginPage", 10000)
+      .waitForElementVisible("@signupLoginPage", GLOBAL_TIMEOUT)
+      .waitForElementVisible("@resetLinkFromSignupLoginPage", GLOBAL_TIMEOUT)
       .click("@resetLinkFromSignupLoginPage")
-      .waitForElementVisible("@forgottenPasswordPage", 10000);
+      .waitForElementVisible("@forgottenPasswordPage", GLOBAL_TIMEOUT);
   },
   resetPasswordWithErrorMalformedEmailAddress: function () {
-    return this.waitForElementVisible("@forgottenPasswordPage", 10000)
+    return this.waitForElementVisible("@forgottenPasswordPage", GLOBAL_TIMEOUT)
       .clearValue("@inputEmail")
       .setValue("@inputEmail", "test@error.com")
       .click("@submitButton")
-      .waitForElementVisible("@error", 10000);
+      .waitForElementVisible("@error", GLOBAL_TIMEOUT);
   },
   resetPasswordWithErrorInvalidEmailAddress: function () {
-    return this.waitForElementVisible("@forgottenPasswordPage", 10000)
+    return this.waitForElementVisible("@forgottenPasswordPage", GLOBAL_TIMEOUT)
       .clearValue("@inputEmail")
       .setValue("@inputEmail", "test")
       .click("@submitButton")
-      .waitForElementVisible("@error", 10000);
+      .waitForElementVisible("@error", GLOBAL_TIMEOUT);
   },
   resetPassword: function () {
-    return this.waitForElementVisible("@forgottenPasswordPage", 10000)
+    return this.waitForElementVisible("@forgottenPasswordPage", GLOBAL_TIMEOUT)
       .clearValue("@inputEmail")
       .setValue("@inputEmail", "test@decred.com")
       .click("@submitButton")
-      .waitForElementVisible("@forgottenPasswordNextPage", 10000);
+      .waitForElementVisible("@forgottenPasswordNextPage", GLOBAL_TIMEOUT);
   },
 };
 
