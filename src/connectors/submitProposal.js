@@ -7,7 +7,7 @@ import { or } from "../lib/fp";
 import { reduxForm } from "redux-form";
 import validate from "../validators/proposal";
 import { withRouter } from "react-router-dom";
-import { getNewProposalData } from "../lib/localData";
+import { getNewProposalData, resetNewProposalData } from "../lib/localData";
 
 const submitConnector = connect(
   sel.selectorMap({
@@ -49,6 +49,7 @@ class SubmitWrapper extends Component {
   }
 
   onSave(...args) {
+    resetNewProposalData();
     validate(...args);
     return this.props.onSave(...args);
   }

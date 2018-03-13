@@ -14,11 +14,21 @@ const updateFormData = (store) => {
   );
 };
 
+export const resetNewProposalData = () => {
+  sessionStorage.setItem("new-proposal-name", "");
+  sessionStorage.setItem("new-proposal-description", "");
+};
+
 export const getNewProposalData = () => {
   return {
     name: sessionStorage.getItem("new-proposal-name") || "",
     description: sessionStorage.getItem("new-proposal-description") || "",
   };
+};
+
+export const resetNewCommentData = () => {
+  const { pathname } = window.location;
+  sessionStorage.setItem(`new-comment::${pathname}`, "");
 };
 
 export const getNewCommentData = () => {
