@@ -1,8 +1,7 @@
 // The pageObject is prepared but we currently can't logout with the mock
-const GLOBAL_TIMEOUT = require("../constants").GLOBAL_TIMEOUT;
 const Commands = {
   changePassword: function () {
-    return this.waitForElementVisible("@changePasswordPage", GLOBAL_TIMEOUT)
+    return this.waitForElementVisible("@changePasswordPage", 10000)
       .clearValue("@inputPassword")
       .clearValue("@inputPasswordVerify")
       .setValue("@inputPassword", "Qwerty123*")
