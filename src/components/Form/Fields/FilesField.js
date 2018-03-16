@@ -37,15 +37,17 @@ class FilesField extends React.Component {
       width: "118px"
     };
     return (
-      <div style={wrapperStyle}>
-        <ReactFileReader
-          base64
-          multipleFiles
-          fileTypes={policy.validmimetypes}
-          handleFiles={this.handleFilesChange}
-        >
-          <button style={buttonStyle}>{placeholder}</button>
-        </ReactFileReader>
+      <div>
+        <div style={wrapperStyle}>
+          <ReactFileReader
+            base64
+            multipleFiles
+            fileTypes={policy.validmimetypes}
+            handleFiles={this.handleFilesChange}
+          >
+            <button style={buttonStyle}>{placeholder}</button>
+          </ReactFileReader>
+        </div>
         {touched && error && !disabled && <span className="error">{error}</span>}
         { policyErrors.length > 0 && <PolicyErrors errors={policyErrors} />}
         <ProposalImages files={input.value || []} onChange={input.onChange} />
