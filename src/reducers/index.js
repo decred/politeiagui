@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { reducer as form } from "redux-form";
+import form from "./form";
 import app from "./app";
 import api from "./api";
 

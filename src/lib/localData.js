@@ -22,7 +22,7 @@ export const resetNewProposalData = () => {
 export const getNewProposalData = () => {
   return {
     name: sessionStorage.getItem("new-proposal-name") || "",
-    description: sessionStorage.getItem("new-proposal-description") || "",
+    description: sessionStorage.getItem("new-proposal-description") || ""
   };
 };
 

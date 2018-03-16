@@ -6,7 +6,7 @@ import { reduxForm } from "redux-form";
 import { withRouter } from "react-router-dom";
 import validate from "../validators/reply";
 import { connect } from "react-redux";
-import { getNewCommentData, resetNewCommentData } from "../lib/localData";
+import { getNewCommentData } from "../lib/localData";
 
 const replyConnector = connect(
   sel.selectorMap({
@@ -49,10 +49,7 @@ class Wrapper extends Component {
     validate(values, policy);
     const { comment } = values;
     return this.props.onSubmitComment(loggedInAs, token, comment, replyTo)
-      .then(() => {
-        resetNewCommentData();
-        this.props.onSetReplyParent();
-      });
+      .then(() =>  this.props.onSetReplyParent());
   }
 
   onToggleMarkdownHelp() {
