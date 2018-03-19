@@ -52,7 +52,7 @@ class Wrapper extends Component {
   }
 
   onSignup(...args) {
-    const policy = this.props.policy;
+    const policy = this.props.policy || {};
     validate(policy, ...args);
     return this.props.onSignup(...args);
   }

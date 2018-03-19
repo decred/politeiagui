@@ -5,8 +5,14 @@ import configureStore from "./configureStore";
 import { Subreddit } from "./components/snew";
 import Routes from "./Routes";
 import loaderConnector from "./connectors/loader";
+import throttle from "lodash/throttle";
+import { handleSaveState } from "./lib/localData";
 
 const store = configureStore();
+
+store.subscribe(throttle(() => {
+  handleSaveState(store);
+}, 1000));
 
 class Loader extends Component {
   componentDidMount() {

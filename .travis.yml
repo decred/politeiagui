@@ -19,5 +19,4 @@ before_script:
   - npm run uidev &
   - scripts/serverUpChecker.sh
 script:
-  - yarn test:e2e
   - sh build_docker.sh
