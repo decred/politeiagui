@@ -10,7 +10,8 @@ import Message from "../Message";
 
 class VerifyKey extends Component {
   componentWillMount() {
-    if (isEmpty(this.props.location.search)) {
+    const { verificationtoken } = qs.parse(this.props.location.search);
+    if (isEmpty(this.props.location.search) || !verificationtoken || typeof(verificationtoken) !== "string") {
       this.props.history.push("/user/login");
     }
   }
