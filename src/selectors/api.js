@@ -47,7 +47,7 @@ const apiForgottenPasswordPayload = getApiPayload("forgottenPassword");
 const apiNewProposalPayload = getApiPayload("newProposal");
 const apiSetStatusProposalPayload = getApiPayload("setStatusProposal");
 
-const apiMeResponse = getApiResponse("me");
+export const apiMeResponse = getApiResponse("me");
 const apiInitResponse = getApiResponse("init");
 const apiPolicyResponse = getApiResponse("policy");
 const apiNewUserResponse = getApiResponse("newUser");
@@ -140,7 +140,7 @@ export const isMainNet = not(isTestNet);
 
 export const userid = state => state.api.me.response && state.api.me.response.userid;
 
-export const serverPubkey = state => state.api.init.response && state.api.init.response.pubkey;
+export const serverPubkey = state => state.api.me.response && state.api.me.response.pubkey;
 export const policy = apiPolicyResponse;
 export const isLoadingSubmit = or(isApiRequestingPolicy, isApiRequestingInit);
 export const vettedProposals = or(compose(get("proposals"), apiVettedResponse), constant([]));
@@ -177,3 +177,4 @@ export const setStatusProposalError = apiSetStatusProposalError;
 export const redirectedFrom = get(["api", "login", "redirectedFrom"]);
 export const verificationToken = compose(get("verificationtoken"), apiNewUserResponse);
 export const grantAccess = getApiResponse("grantAccess");
+export const getKeyMismatch = state => state.api.keyMismatch;
