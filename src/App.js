@@ -41,7 +41,13 @@ class Loader extends Component {
       <Message
         type="error"
         header="Key mismatch"
-        body="Key mismatch, please update your key on profile screen to proceed with actions"
+        body={
+          <span>
+            Key mismatch, please update your key on &nbsp;
+            <a href="/user/account">account page</a>&nbsp;
+            to proceed with actions
+          </span>
+        }
       />
     </TopModal>
 
