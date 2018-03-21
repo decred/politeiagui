@@ -132,7 +132,7 @@ export const paywallAmount = or(
 
 export const isTestNet = bool(
   (state) => {
-    if(!state.api.me.response)
+    if(!state.api.me.response || !state.api.me.response.paywalladdress)
       return null;
     return state.api.me.response.paywalladdress[0] === "T" ? true : false;
   });
