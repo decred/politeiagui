@@ -3,8 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import configureStore from "./configureStore";
 import { Subreddit } from "./components/snew";
-import TopModal from "./components/Modals/TopModal";
-import Message from "./components/Message";
+import HeaderAlert from "./components/HeaderAlert";
 import Routes from "./Routes";
 import * as pki from "./lib/pki";
 import loaderConnector from "./connectors/loader";
@@ -37,19 +36,11 @@ class Loader extends Component {
   renderMismatchKeyModal = () =>
     typeof this.props.keyMismatch === "boolean"
     && this.props.keyMismatch && this.props.loggedInAs &&
-    <TopModal className="key-mismatch">
-      <Message
-        type="error"
-        header="Key mismatch"
-        body={
-          <span>
-            Key mismatch, please update your key on &nbsp;
-            <a href="/user/account">account page</a>&nbsp;
-            to proceed with actions
-          </span>
-        }
-      />
-    </TopModal>
+    <HeaderAlert className="key-mismatch">
+      You cannot currently submit proposals or comments, please visit your
+      &nbsp;<a href="/user/account">account page</a>&nbsp;
+      to correct this problem.
+    </HeaderAlert>
 
   render() {
     return (
