@@ -14,6 +14,7 @@ const replyConnector = connect(
     token: sel.proposalToken,
     loggedIn: sel.loggedIn,
     loggedInAs: sel.loggedInAs,
+    keyMismatch: sel.getKeyMismatch,
     replyTo: sel.replyTo,
     policy: sel.policy,
     isPostingComment: sel.isApiRequestingNewComment,
@@ -46,7 +47,7 @@ class Wrapper extends Component {
 
   onSave(values) {
     const { loggedInAs, token, replyTo, policy } = this.props;
-    validate(values, policy);
+    validate({ values, ...this.props}, policy);
     const { comment } = values;
     return this.props.onSubmitComment(loggedInAs, token, comment, replyTo)
       .then(() =>  this.props.onSetReplyParent());

@@ -172,23 +172,23 @@ a:hover {
 .message-ct {
   height: 64px;
   margin: 16px 0;
-  position: relative;
+  display: flex;
   background-color: #ffffff;
 }
 .message-icon {
   height: 62px;
   width: 64px;
-  text-align: center;
   line-height: 62px;
   font-size: 24px;
   color: #ffffff;
+  display: flex;
+  justify-content: center;  
 }
 .message-text {
-  position: absolute;
-  left: 80px;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
+  padding: 18px;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
 }
 .message-header {
   font-size: 18px;
@@ -510,4 +510,17 @@ li p.header-3 {
 .fullwidth {
   width: 100%;
   max-width: 100% !important;
+}
+
+.top-modal {
+  position: fixed;
+  min-height: 50px;
+  top: 0px;
+  left: 50%; 
+  z-index: 9999;
+  transform: translateX(-50%);
+}
+
+.key-mismatch>div{
+  margin: 0px !important;
 }

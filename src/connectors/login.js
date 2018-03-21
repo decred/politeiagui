@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
 import { or } from "../lib/fp";
+import * as pki from "../lib/pki";
 import compose from "lodash/fp/compose";
 import { reduxForm } from "redux-form";
 import validate from "../validators/login";
@@ -11,11 +12,11 @@ import { withRouter } from "react-router-dom";
 const loginConnector = connect(
   sel.selectorMap({
     loggedInAs: sel.loggedInAs,
-    loggedIn: sel.loggedIn,
+    keyMismatch: sel.getKeyMismatch,
+    serverPubkey: sel.serverPubkey,
     email: sel.email,
     isAdmin: sel.isAdmin,
     redirectedFrom: sel.redirectedFrom,
-    grantAccess: sel.grantAccess,
     isApiRequestingLogin: or(sel.isApiRequestingInit, sel.isApiRequestingLogin),
     apiLoginError: sel.apiLoginError
   }),
@@ -44,8 +45,11 @@ class Wrapper extends Component {
       if (this.props.isAdmin) {
         this.props.history.push("/admin/");
       } else {
-        this.props.grantAccess ?
-          this.props.history.push("/user/proposals") : this.props.history.push("/");
+        pki.getKeys(this.props.loggedInAs).then(keys => {
+          const redirectPath = keys.publicKey === this.props.serverPubkey
+            ? "/proposals/new" : "/user/account";
+          this.props.history.push(redirectPath);
+        });
       }
     });
   }

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 import { isEmpty } from "lodash";
+import * as pki from "../../lib/pki";
 import PageLoadingIcon from "../snew/PageLoadingIcon";
 import verifyKeyConnector from "../../connectors/verifyKey";
 import qs from "query-string";
@@ -9,7 +10,8 @@ import Message from "../Message";
 
 class VerifyKey extends Component {
   componentWillMount() {
-    if (isEmpty(this.props.location.search)) {
+    const { verificationtoken } = qs.parse(this.props.location.search);
+    if (isEmpty(this.props.location.search) || !verificationtoken || typeof(verificationtoken) !== "string") {
       this.props.history.push("/user/login");
     }
   }
@@ -19,6 +21,14 @@ class VerifyKey extends Component {
       const { verificationtoken } = qs.parse(this.props.location.search);
       const { email } = nextProps;
       this.props.onVerify(email, verificationtoken);
+    }
+    const { verifyUserKey, apiMeResponse, loggedInAs } = nextProps;
+    if(verifyUserKey && verifyUserKey.success && apiMeResponse && loggedInAs) {
+      pki.myPubKeyHex(loggedInAs).then((pubkey) => {
+        if(pubkey !== apiMeResponse.pubkey) {
+          this.props.updateMe({ ...nextProps.apiMeResponse, pubkey });
+        }
+      });
     }
   }
 
@@ -35,7 +45,7 @@ class VerifyKey extends Component {
               body={verifyUserKeyError.message}
             />
           }
-          {verifyUserKey  && verifyUserKey.success &&
+          {verifyUserKey && verifyUserKey.success &&
             <Message
               type="success"
               header="Verification successful"

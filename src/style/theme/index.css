@@ -28,30 +28,30 @@ a {
     outline: 0!important
 }
 .side .spacer input,
-body .content .text,
-body .content input[type=password],
-body .content input[type=text],
-body .content input[type=url],
-body .content textarea {
+body .appWrapper .text,
+body .appWrapper input[type=password],
+body .appWrapper input[type=text],
+body .appWrapper input[type=url],
+body .appWrapper textarea {
     box-shadow: none;
     transition: border-color .15s ease, color .15s ease;
     padding: 6px 12px
 }
 .side .spacer input:hover,
-body .content .text:hover,
-body .content input[type=password]:hover,
-body .content input[type=text]:hover,
-body .content input[type=url]:hover,
-body .content textarea:hover {
+body .appWrapper .text:hover,
+body .appWrapper input[type=password]:hover,
+body .appWrapper input[type=text]:hover,
+body .appWrapper input[type=url]:hover,
+body .appWrapper textarea:hover {
     border-color: #e2e2e2
 }
 .side .spacer input:active,
 .side .spacer input:focus,
-body .content .text:focus,
-body .content input[type=password]:focus,
-body .content input[type=text]:focus,
-body .content input[type=url]:focus,
-body .content textarea:focus {
+body .appWrapper .text:focus,
+body .appWrapper input[type=password]:focus,
+body .appWrapper input[type=text]:focus,
+body .appWrapper input[type=url]:focus,
+body .appWrapper textarea:focus {
     border-color: #2971ff;
     color: #0c1e3e
 }
@@ -384,7 +384,7 @@ body:not(.loggedin) #header-bottom-right {
     display: none!important
 }
 body.listing-page[class]>.content,
-body[class]>.content {
+body[class]>.appWrapper>.content {
     margin: 16px 352px 64px 16px;
     padding: 0;
 }
@@ -394,7 +394,7 @@ body[class]>.content {
     position: relative
 }
 .rank-spacer,
-body>.content .link .rank {
+body>.appWrapper>.content .link .rank {
     display: none
 }
 .link .midcol {
@@ -538,7 +538,7 @@ body>.content .link .rank {
     font: 13.5pt 'Source Sans Pro', Lato, Arial, sans-serif;
     transition: all .15s ease
 }
-body .content .sitetable .link .title a:hover {
+body .appWrapper .content .sitetable .link .title a:hover {
     color: #2971ff;
 }
 .content .thing .title:visited,
@@ -864,7 +864,7 @@ body .content .sitetable .link .title a:hover {
 .linkflair-mod .thumbnail.self {
     background: url("./spritesheet.png") -208px -104px #41bf53
 }
-body .content .thing.spam {
+body .appWrapper .content .thing.spam {
     background-color: #FFE9E6
 }
 .entry .buttons li.reported-stamp {
@@ -969,8 +969,10 @@ b {
 .stickied.comment>.entry a {
     color: #41bf53
 }
-.content .spacer {
-    margin: 0
+.appWrapper .content .spacer {
+    margin: 0;
+    background: white;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .14);
 }
 .link.promotedlink.promoted {
     background-color: #EFF7FF;
@@ -1020,7 +1022,7 @@ b {
 .link.compressed .title {
     margin: 0
 }
-body>.content .link.compressed .midcol {
+body>.appWrapper>.content .link.compressed .midcol {
     height: auto;
     margin: 8px 4px 0 0
 }
@@ -1228,7 +1230,7 @@ div.commentarea div.RES-keyNav-activeElement .md {
 #userTaggerToolTip input[type=submit] {
     bottom: 10px!important
 }
-.content>.menuarea {
+.appWrapper .content>.menuarea {
     margin: 0;
     padding: 0 20px;
     border: none;
@@ -1298,7 +1300,7 @@ div.commentarea div.RES-keyNav-activeElement .md {
 .x_button:hover {
     box-shadow: 0 1px 4px rgba(0, 0, 0, .15)
 }
-.content .infobar {
+.appWrapper .content .infobar {
     margin: 0 0 16px;
     padding: 8px 16px;
     line-height: 26px;
@@ -1310,11 +1312,11 @@ div.commentarea div.RES-keyNav-activeElement .md {
 .infobar .md {
     color: #fff
 }
-.content .infobar.welcome {
+.appWrapper .content .infobar.welcome {
     line-height: inherit;
     height: 86px
 }
-.content .infobar.welcome h1 {
+.appWrapper .content .infobar.welcome h1 {
     color: #4d5763
 }
 .commentarea .infobar {
@@ -1787,7 +1789,7 @@ div.titlebox span.number:after {
 }
 .gadget .reddit-entry .linkflairlabel,
 .sidebox .spacer {
-    display: none
+    display: none;
 }
 .side .titlebox h4 a:hover {
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2)
@@ -2195,8 +2197,8 @@ div.titlebox span.number:after {
     left: 50%;
     margin-left: 0;
 }
-.submit-page[class] .content {
-    margin: auto 0
+.submit-page[class] .appWrapper .content {
+    margin: auto 0;
 }
 #suggested-reddits,
 .submit-page .side {
