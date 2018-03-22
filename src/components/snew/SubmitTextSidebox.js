@@ -3,10 +3,10 @@ import connector from "../../connectors/actions";
 import WarningPaywallNotPaid from "./WarningPaywallNotPaid";
 
 const SubmitTextSidebox = ({
-  Link, loggedInAs, grantAccess
+  Link, loggedInAs, hasPaid
 }) => loggedInAs ? (
   <div className="spacer">
-    <div className={`sidebox submit submit-text ${!grantAccess ? "not-active" : null}`}>
+    <div className={`sidebox submit submit-text ${!hasPaid ? "not-active" : null}`}>
       <div className="morelink">
         <Link
           className="login-required access-required"
@@ -18,7 +18,7 @@ const SubmitTextSidebox = ({
         <div className="nub" />
       </div>
     </div>
-    {!grantAccess && <WarningPaywallNotPaid
+    {!hasPaid && <WarningPaywallNotPaid
       message="You must pay the registration fee before you can submit a proposal." />}
   </div>
 ) : null;

@@ -6,11 +6,11 @@ import headerConnector from "../../../connectors/header";
 class HeaderBottomLeft extends React.Component {
 
   componentWillMount() {
-    const {hasPaid, paywallAddress, paywallAmount} = this.props;
+    const {hasPaid, paywallAddress, paywallAmount, paywallTxNotBefore} = this.props;
     if(!paywallAddress)
       return;
     if (hasPaid === false)
-      this.props.getPaymentsByAddress(paywallAddress, paywallAmount);
+      this.props.verifyUserPayment(paywallAddress, paywallAmount, paywallTxNotBefore);
   }
 
   render() {

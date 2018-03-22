@@ -115,26 +115,50 @@ export const isAdmin = bool(or(
   compose(get("isadmin"), apiLoginResponse)
 ));
 
-export const hasPaid = bool(or(
-  compose(get("haspaid"), apiMeResponse),
-  compose(get("haspaid"), apiLoginResponse)
-));
+export const hasPaid = bool(state => {
+  if(state.api.me && state.api.me.response) {
+    return state.api.me.response.paywalladdress === "";
+  }
+  if(state.api.login && state.api.login.response) {
+    return state.api.login.response.paywalladdress === "";
+  }
+  if(state.api.verifyPaywallPaymentPoliteia && state.api.verifyPaywallPaymentPoliteia.response) {
+    return state.api.verifyPaywallPaymentPoliteia.response.haspaid;
+  }
+
+  return false;
+});
 
 export const paywallAddress = or(
   compose(get("paywalladdress"), apiNewUserResponse),
   compose(get("paywalladdress"), apiMeResponse),
 );
 
-export const paywallAmount = or(
-  compose(get("paywallamount"), apiNewUserResponse),
-  compose(get("paywallamount"), apiMeResponse),
+export const paywallAmount = state => {
+  let paywallAmount = 0;
+  if(state.api.newUser && state.api.newUser.response) {
+    paywallAmount = state.api.newUser.response.paywallamount;
+  }
+  else if(state.api.me && state.api.me.response) {
+    paywallAmount = state.api.me.response.paywallamount;
+  }
+
+  // Amount returned from the server is in atoms, so convert to dcr.
+  return paywallAmount / 100000000;
+};
+
+export const paywallTxNotBefore = or(
+  compose(get("paywalltxnotbefore"), apiNewUserResponse),
+  compose(get("paywalltxnotbefore"), apiMeResponse),
 );
 
 export const isTestNet = bool(
-  (state) => {
-    if(!state.api.me.response || !state.api.me.response.paywalladdress)
-      return null;
-    return state.api.me.response.paywalladdress[0] === "T" ? true : false;
+  state => {
+    let checkAddr = r => r && r.paywalladdress ? r.paywalladdress[0] === "T" : false;
+
+    return checkAddr(state.api.me.response)
+        || checkAddr(state.api.login.response)
+        || checkAddr(state.api.newUser.response);
   });
 export const isMainNet = not(isTestNet);
 
@@ -176,5 +200,4 @@ export const setStatusProposalToken = compose(get("token"), apiSetStatusProposal
 export const setStatusProposalError = apiSetStatusProposalError;
 export const redirectedFrom = get(["api", "login", "redirectedFrom"]);
 export const verificationToken = compose(get("verificationtoken"), apiNewUserResponse);
-export const grantAccess = getApiResponse("grantAccess");
 export const getKeyMismatch = state => state.api.keyMismatch;

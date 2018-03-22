@@ -1,7 +1,7 @@
 import React from "react";
 
 const Modal = ({
-  grantAccess,
+  hasPaid,
   paywallAddress,
   paywallAmount,
   payWithFaucet,
@@ -15,17 +15,18 @@ const Modal = ({
       Please send exactly {paywallAmount}DCR to <br/>
       <div className="paywall-address">{paywallAddress}</div>
     </div>
-    <div className={grantAccess ? "paywall-payment-received" : "paywall-waiting-payment"}>
+    <div className={hasPaid ? "paywall-payment-received" : "paywall-waiting-payment"}>
       Status: {
-        grantAccess ?  <p>Payment received</p> : <p>Waiting for payment</p>
+        hasPaid ?  <p>Payment received</p> : <p>Waiting for payment</p>
       }
     </div>
     <div className="paywall-footer">
       {
-        isTestnet === true ? (
+        isTestnet ? (
           <button onClick={() => payWithFaucet(paywallAddress, paywallAmount)}>
             Pay with Faucet
-          </button>) : null
+          </button>
+        ) : null
       }
     </div>
   </div>

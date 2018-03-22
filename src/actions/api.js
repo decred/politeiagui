@@ -256,3 +256,16 @@ export const keyMismatch = (payload) => dispatch => dispatch(act.KEY_MISMATCH(pa
 
 export const resetPasswordReset = () => dispatch =>
   dispatch(act.RESET_PASSWORD_RESET_REQUEST);
+
+export const verifyUserPaymentWithPoliteia = (dispatch, txid) => {
+  dispatch(act.REQUEST_VERIFY_PAYWALL_PAYMENT_POLITEIA);
+  api.verifyUserPayment(txid)
+    .then(response => {
+      dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT_POLITEIA(response));
+      return response.haspaid;
+    })
+    .catch(error => {
+      dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT_POLITEIA(null, error));
+      throw error;
+    });
+};

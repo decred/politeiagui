@@ -1,71 +1,101 @@
 import * as external_api from "../lib/external_api";
+import { verifyUserPaymentWithPoliteia } from "./api";
 import act from "./methods";
 
 const CONFIRMATIONS_REQUIRED = 2;
-const TIME_IN_SECONDS = 60;
-export const getPaymentsByAddress = (address, amount) => dispatch => {
-  dispatch(act.REQUEST_VERIFY_PAYWALL_PAYMENT());
-  return external_api.getPaymentsByAddress(address)
+const POLL_INTERVAL = 60 * 1000;
+export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
+  dispatch(act.REQUEST_VERIFY_PAYWALL_PAYMENT_EXPLORER());
+
+  // Check dcrdata first.
+  return external_api.getPaymentsByAddressDcrdata(address)
     .then(response => {
       if(response === null) {
-        dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS(false));
-        setTimeout(()=> dispatch(getPaymentsByAddress(address, amount)), TIME_IN_SECONDS*1000);
-      } else {
-        dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT(response));
-        const txid = checkForPayment(response, address, amount);
-        if (txid) {
-          dispatch(act.GET_PAYWALL_TXID({txid}));
-          dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS(true));
-          return;
-        }
-        else {
-          dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS(false));
-          setTimeout(()=> dispatch(getPaymentsByAddress(address, amount)), TIME_IN_SECONDS*1000);
-        }
+        return null;
+      }
+
+      dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT_EXPLORER(response));
+      return checkForPayment(checkDcrdataHandler, response, address, amount, txNotBefore);
+    })
+    .then(txid => {
+      if(txid) {
+        return txid;
+      }
+
+      // If that fails, then try insight.
+      return external_api.getPaymentsByAddressInsight(address)
+        .then(response => {
+          if(response === null) {
+            return null;
+          }
+
+          dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT_EXPLORER(response));
+          return checkForPayment(checkInsightHandler, response, address, amount, txNotBefore);
+        });
+    })
+    .then(txid => {
+      if (!txid) {
+        return false;
+      }
+
+      return verifyUserPaymentWithPoliteia(dispatch, txid);
+    })
+    .then(verified => {
+      if(!verified) {
+        setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
       }
     })
     .catch(error => {
-      dispatch(act.GRANT_SUBMIT_PROPOSAL_ACCESS(false));
-      dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT(null, error));
-      setTimeout(()=> dispatch(getPaymentsByAddress(address, amount)), TIME_IN_SECONDS*1000);
+      dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT_EXPLORER(null, error));
+      setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
       throw error;
     });
 };
 
-const checkForPayment = (poll, addressToMatch, amount) => {
-  if (!poll)
-    return;
-  let txid;
-  poll.forEach((transaction) => {
-    txid = checkTransaction(transaction, addressToMatch, amount);
-  });
-  return txid;
+const checkForPayment = (handler, transactions, addressToMatch, amount, txNotBefore) => {
+  for(let transaction of transactions) {
+    let txid = handler(transaction, addressToMatch, amount, txNotBefore);
+    if(txid) {
+      return txid;
+    }
+  }
 };
 
-const checkTransaction = (transaction, addressToMatch, amount) => {
-  let addressSeen = false;
-  let addressValue = 0;
-  for (let voutData of transaction["vout"]) {
-    const addresses = voutData["scriptPubKey"]["addresses"];
-    if (addresses) {
-      for(let i=0; i<addresses.length; i++) {
-        let address = addresses[i];
-        if (address === addressToMatch) {
-          addressSeen = true;
-          addressValue = voutData["value"];
-          break;
-        }
-      }
+const checkDcrdataHandler = (transaction, addressToMatch, amount, txNotBefore) => {
+  if (!transaction.vout) {
+    return null;
+  }
+  if (transaction.confirmations < CONFIRMATIONS_REQUIRED) {
+    return null;
+  }
+  if (transaction.time < txNotBefore) {
+    return null;
+  }
 
-      if (addressSeen &&
-        addressValue >= amount &&
-        transaction["confirmations"] >= CONFIRMATIONS_REQUIRED) {
-        return transaction["txid"];
+  for (let voutData of transaction.vout) {
+    const addresses = voutData.scriptPubKey.addresses;
+    if (!addresses) {
+      continue;
+    }
+
+    for (let address of addresses) {
+      if (address === addressToMatch && voutData.value >= amount) {
+        return transaction.txid;
       }
     }
   }
 
-  return false;
+  return null;
+};
+
+const checkInsightHandler = (transaction, addressToMatch, amount, txNotBefore) => {
+  if (transaction.confirmations >= CONFIRMATIONS_REQUIRED
+    && transaction.amount >= amount
+    && transaction.ts >= txNotBefore) {
+    return transaction.txid;
+  }
+
+  return null;
 };
 
 export const payWithFaucet = (address, amount) => dispatch => {

@@ -7,7 +7,7 @@ const actions = connect(
     loggedInAs: sel.loggedInAs,
     email: sel.email,
     isAdmin: sel.isAdmin,
-    grantAccess: sel.grantAccess,
+    hasPaid: sel.hasPaid,
     lastSubmitted: sel.getLastSubmittedProposal,
     setStatusProposalToken: sel.setStatusProposalToken,
     setStatusProposalError: sel.setStatusProposalError

@@ -10,8 +10,9 @@ export default connect(
     hasPaid: sel.hasPaid,
     paywallAddress: sel.paywallAddress,
     paywallAmount: sel.paywallAmount,
+    paywallTxNotBefore: sel.paywallTxNotBefore,
   }),
   dispatch => bindActionCreators({
-    getPaymentsByAddress: act.getPaymentsByAddress,
+    verifyUserPayment: act.verifyUserPayment,
   }, dispatch)
 );
