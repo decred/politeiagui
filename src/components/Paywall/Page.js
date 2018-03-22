@@ -12,7 +12,7 @@ const Modal = ({
       <h2 className="paywall-header-title">Paywall</h2>
     </div>
     <div className="paywall-content">
-      Please send exactly {paywallAmount}DCR to <br/>
+      Please send exactly {paywallAmount} DCR to <br/>
       <div className="paywall-address">{paywallAddress}</div>
     </div>
     <div className={hasPaid ? "paywall-payment-received" : "paywall-waiting-payment"}>

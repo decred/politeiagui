@@ -3,7 +3,7 @@ import Message from "../Message";
 
 const VerifyFailure = () => (
   <div className="content" role="main">
-    <div className="page verification-page">
+    <div className="page verification-failure-page">
       <Message
         type="error"
         header="Verification failed"

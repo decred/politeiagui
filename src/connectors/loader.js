@@ -8,6 +8,7 @@ export default connect(
     serverPubkey: sel.serverPubkey,
     loggedInAs: sel.loggedInAs,
     keyMismatch: sel.getKeyMismatch,
+    paywallAddress: sel.paywallAddress,
   }),
   dispatch => bindActionCreators({
     onInit: act.onInit,
