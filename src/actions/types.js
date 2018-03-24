@@ -60,3 +60,6 @@ export const CHANGE_FILTER_VALUE = "CHANGE_FILTER_VALUE";
 export const CLEAN_ERRORS = "CLEAN_ERRORS";
 export const CANCEL_SIGNUP = "CANCEL_SIGNUP";
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
+
+export const OPEN_MODAL = "OPEN_MODAL";
+export const CLOSE_MODAL = "CLOSE_MODAL";
