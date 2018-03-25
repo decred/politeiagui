@@ -559,3 +559,20 @@ li p.header-3 {
   max-width: 60%;
   z-index: 2;
 }
+
+.modal-content-header {
+  padding: 10px 8px;
+  display: flex;
+  align-items: center;
+}
+
+.modal-content-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 8px;
+}
+
+.modal-content-actions > .btn {
+  margin-right: 0;
+  margin-left: 16px;
+}

@@ -22,8 +22,10 @@ const ModalContentWrapper = ({ onClose, onCancel, onSubmit, title, children }) =
   return (
     <div className="modal-content" style={{ minWidth: "700px" }}>
       <div className="modal-content-header">
-        <span>{title}</span>
-        <span onClick={onClose}>CLOSE</span>
+        <h2 style={{ fontSize: "18px" }} >{title}</h2>
+        <div style={{ display: "flex", justifyContent: "flex-end", flex: 1 }}>
+          {onClose && <span style={{ fontSize: "18px", cursor: "pointer" }} onClick={onClose}>✖</span>}
+        </div>
       </div>
       {children}
       <div className="modal-content-actions">

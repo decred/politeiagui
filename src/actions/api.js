@@ -1,6 +1,7 @@
 import Promise from "promise";
 import * as sel from "../selectors";
 import * as api from "../lib/api";
+import { confirmWithModal } from "./modal";
 import act from "./methods";
 
 export const onResetProposal = act.RESET_PROPOSAL;
@@ -189,28 +190,35 @@ export const onUpdateUserKey = (loggedInAs) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_UPDATED_KEY());
     api.updateKeyRequest(csrf, loggedInAs)
-      .then(response => dispatch(act.RECEIVE_UPDATED_KEY({...response, success: true })))
-      .catch(error =>{ dispatch(act.RECEIVE_UPDATED_KEY(null, error)); throw error; });
+      .then(response => dispatch(act.RECEIVE_UPDATED_KEY({ ...response, success: true })))
+      .catch(error => { dispatch(act.RECEIVE_UPDATED_KEY(null, error)); throw error; });
   });
 
 export const onVerifyUserKey = (loggedInAs, verificationtoken) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_VERIFIED_KEY());
     api.verifyKeyRequest(csrf, loggedInAs, verificationtoken)
-      .then(response => dispatch(act.RECEIVE_VERIFIED_KEY({...response, success: true})))
+      .then(response => dispatch(act.RECEIVE_VERIFIED_KEY({ ...response, success: true })))
       .catch(error => dispatch(act.RECEIVE_VERIFIED_KEY(null, error)));
   });
 
 export const onSubmitStatusProposal = (loggedInAs, token, status) =>
-  window.confirm(`Are you sure you want to ${statusName(status)} this proposal?`)
-    ?  withCsrf((dispatch, getState, csrf) => {
-      dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
-      return api
-        .proposalSetStatus(loggedInAs, csrf, token, status)
-        .then(response => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(response)))
-        .catch(error => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error)));
-    })
-    : {type: "NOOP"};
+  withCsrf((dispatch, getState, csrf) => {
+    return dispatch(confirmWithModal("CONFIRM_ACTION",
+      { message: `Are you sure you want to ${statusName(status)} this proposal?` }))
+      .then(
+        (confirm) => {
+          if (confirm) {
+            dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
+            return api
+              .proposalSetStatus(loggedInAs, csrf, token, status)
+              .then(response => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(response)))
+              .catch(error => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error)));
+          }
+        }
+      );
+  });
+
 
 export const redirectedFrom = location => dispatch =>
   dispatch(act.REDIRECTED_FROM(location));

@@ -10,7 +10,7 @@ const modal = (state = DEFAULT_STATE, action) => (({
     opennedModals: state.opennedModals.concat([{
       type: action.modalType,
       payload: action.payload,
-      callback: action.payload
+      callback: action.callback
     }])
   }),
   [act.CLOSE_MODAL]: () => ({
