@@ -347,7 +347,7 @@ button .logo {
   width: 100%;
   margin-top: 0px !important;
   height: 100%;
-  overflow: hidden;
+  overflow-x: scroll;
 }
 
 .react-mde-dropdown {
@@ -523,4 +523,10 @@ li p.header-3 {
 
 .key-mismatch>div{
   margin: 0px !important;
+}
+
+/* mde */
+
+.commentarea > .usertext textarea:not(:focus):empty  {
+    background: url("./theme/commentboxbg.png") 50% 50% no-repeat
 }

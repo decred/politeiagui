@@ -1915,9 +1915,7 @@ div.titlebox span.number:after {
     z-index: 0;
     width: 100%
 }
-.commentarea>.usertext textarea:not(:focus) {
-    background: url("./commentboxbg.png") 50% 50% no-repeat
-}
+
 .usertext .bottom-area {
     width: 504px
 }
