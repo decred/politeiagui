@@ -122,9 +122,6 @@ export const hasPaid = bool(state => {
   if(state.api.login && state.api.login.response) {
     return state.api.login.response.paywalladdress === "";
   }
-  if(state.api.verifyPaywallPaymentPoliteia && state.api.verifyPaywallPaymentPoliteia.response) {
-    return state.api.verifyPaywallPaymentPoliteia.response.haspaid;
-  }
 
   return false;
 });

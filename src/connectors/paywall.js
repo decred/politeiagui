@@ -9,12 +9,11 @@ export default connect(
     paywallAddress: sel.paywallAddress,
     paywallAmount: sel.paywallAmount,
     paywallTxNotBefore: sel.paywallTxNotBefore,
-    VerificationToken: sel.verificationToken,
-    hasPaid: sel.hasPaid,
+    userPaywallStatus: sel.getUserPaywallStatus,
+    verificationToken: sel.verificationToken,
     isTestnet: sel.isTestNet
   }),
   dispatch => bindActionCreators({
-    verifyUserPayment: act.verifyUserPayment,
     payWithFaucet: act.payWithFaucet,
   }, dispatch)
 );

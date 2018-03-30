@@ -1,52 +1,60 @@
 import * as external_api from "../lib/external_api";
 import { verifyUserPaymentWithPoliteia } from "./api";
 import act from "./methods";
+import { PAYWALL_STATUS_LACKING_CONFIRMATIONS, PAYWALL_STATUS_PAID } from "../constants";
 
 const CONFIRMATIONS_REQUIRED = 2;
-const POLL_INTERVAL = 60 * 1000;
+const POLL_INTERVAL = 10 * 1000;
 export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
-  dispatch(act.REQUEST_VERIFY_PAYWALL_PAYMENT_EXPLORER());
-
   // Check dcrdata first.
   return external_api.getPaymentsByAddressDcrdata(address)
     .then(response => {
+      console.log("dcrdata response: " + response);
       if(response === null) {
         return null;
       }
 
-      dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT_EXPLORER(response));
       return checkForPayment(checkDcrdataHandler, response, address, amount, txNotBefore);
     })
-    .then(txid => {
-      if(txid) {
-        return txid;
+    .then(txn => {
+      console.log("dcrdata txn: " + txn);
+      if(txn) {
+        return txn;
       }
 
       // If that fails, then try insight.
       return external_api.getPaymentsByAddressInsight(address)
         .then(response => {
+          console.log("insight response: " + response);
           if(response === null) {
             return null;
           }
 
-          dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT_EXPLORER(response));
           return checkForPayment(checkInsightHandler, response, address, amount, txNotBefore);
         });
     })
-    .then(txid => {
-      if (!txid) {
+    .then(txn => {
+      console.log("insight txn: " + txn);
+      if (!txn) {
         return false;
       }
 
-      return verifyUserPaymentWithPoliteia(dispatch, txid);
+      if(txn.confirmations < CONFIRMATIONS_REQUIRED) {
+        dispatch(act.UPDATE_USER_PAYWALL_STATUS({ status: PAYWALL_STATUS_LACKING_CONFIRMATIONS }));
+        return false;
+      }
+
+      return verifyUserPaymentWithPoliteia(dispatch, txn.id);
     })
     .then(verified => {
-      if(!verified) {
+      if(verified) {
+        dispatch(act.UPDATE_USER_PAYWALL_STATUS({ status: PAYWALL_STATUS_PAID }));
+      }
+      else {
         setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
       }
     })
     .catch(error => {
-      dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT_EXPLORER(null, error));
       setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
       throw error;
     });
@@ -54,18 +62,15 @@ export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
 
 const checkForPayment = (handler, transactions, addressToMatch, amount, txNotBefore) => {
   for(let transaction of transactions) {
-    let txid = handler(transaction, addressToMatch, amount, txNotBefore);
-    if(txid) {
-      return txid;
+    let txn = handler(transaction, addressToMatch, amount, txNotBefore);
+    if(txn) {
+      return txn;
     }
   }
 };
 
 const checkDcrdataHandler = (transaction, addressToMatch, amount, txNotBefore) => {
   if (!transaction.vout) {
-    return null;
-  }
-  if (transaction.confirmations < CONFIRMATIONS_REQUIRED) {
     return null;
   }
   if (transaction.time < txNotBefore) {
@@ -80,7 +85,10 @@ const checkDcrdataHandler = (transaction, addressToMatch, amount, txNotBefore) =
 
     for (let address of addresses) {
       if (address === addressToMatch && voutData.value >= amount) {
-        return transaction.txid;
+        return {
+          id: transaction.txid,
+          confirmations: transaction.confirmations
+        };
       }
     }
   }
@@ -89,10 +97,11 @@ const checkDcrdataHandler = (transaction, addressToMatch, amount, txNotBefore) =
 };
 
 const checkInsightHandler = (transaction, addressToMatch, amount, txNotBefore) => {
-  if (transaction.confirmations >= CONFIRMATIONS_REQUIRED
-    && transaction.amount >= amount
-    && transaction.ts >= txNotBefore) {
-    return transaction.txid;
+  if (transaction.amount >= amount && transaction.ts >= txNotBefore) {
+    return {
+      id: transaction.txid,
+      confirmations: transaction.confirmations
+    };
   }
 
   return null;

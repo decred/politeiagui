@@ -6,8 +6,8 @@ const VerifySuccess = () => (
       <h3>Your email has been successfully verified.</h3>
       <p>
         To complete your registration and to be able to submit proposals and
-        comments, you must pay a small fee in DCR, which is required to help
-        deter spam.
+        comments, you must pay a small fee in DCR, which is used to help
+        deter spam in Politeia.
       </p>
       <p>
         Please log in to find instructions on how to pay the registration fee.

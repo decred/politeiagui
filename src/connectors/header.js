@@ -1,7 +1,5 @@
 import { connect } from "react-redux";
 import * as sel from "../selectors";
-import { bindActionCreators } from "redux";
-import * as act from "../actions";
 
 export default connect(
   sel.selectorMap({
@@ -11,8 +9,5 @@ export default connect(
     paywallAddress: sel.paywallAddress,
     paywallAmount: sel.paywallAmount,
     paywallTxNotBefore: sel.paywallTxNotBefore,
-  }),
-  dispatch => bindActionCreators({
-    verifyUserPayment: act.verifyUserPayment,
-  }, dispatch)
+  })
 );

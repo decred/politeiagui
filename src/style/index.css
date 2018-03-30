@@ -390,7 +390,8 @@ li p.header-3 {
 
 .signup-next-step-page,
 .forgotten-password-next-step-page,
-.verification-success-page {
+.verification-success-page,
+.user-profile-page {
   width: 600px;
 }
 .signup-next-step-page h3,
@@ -481,37 +482,33 @@ li p.header-3 {
   flex-direction: row
 }
 
-.paywall-header-title {
-  font-size: 16pt;
+.paywall-payment-status {
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 10px;
+  width: 300px;
 }
 
-.paywall-wrapper {
-  margin: 56px 0 0 56px;
-}
-
-.paywall-payment-received {
+.paywall-payment-status-received {
   background: #41bf53;
-  color: white;
-  padding: 10px;
-  border-radius: 10px;
-  margin: 10px;
 }
 
-.paywall-waiting-payment {
+.paywall-payment-status-confirmations {
+  background: #c98301;
+}
+
+.paywall-payment-status-waiting {
   background: #bf4153;
-  color: white;
-  padding: 10px;
-  border-radius: 10px;
-  margin: 10px;
 }
 
-.paywall-content {
-  padding: 8px;
+.paywall-faucet p {
+  margin-bottom: 10px;
 }
 
-.paywall-address {
+.paywall-address,
+.paywall-amount {
   font-weight: bold;
-  padding:5px;
 }
 .fullwidth {
   width: 100%;

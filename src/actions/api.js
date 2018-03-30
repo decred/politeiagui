@@ -1,12 +1,13 @@
 import Promise from "promise";
 import * as sel from "../selectors";
 import * as api from "../lib/api";
+import * as external_api_actions from "./external_api";
 import act from "./methods";
 
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onSetEmail = act.SET_EMAIL;
 
-export const onInit = () => dispatch => {
+export const onInit = () => (dispatch, getState) => {
   dispatch(act.REQUEST_ME());
   return api
     .me()
@@ -16,6 +17,15 @@ export const onInit = () => dispatch => {
       return api
         .apiInfo()
         .then(response => dispatch(act.RECEIVE_INIT_SESSION(response)))
+        .then(() => {
+          // Start polling for the user paywall tx, if applicable.
+          const paywallAddress = sel.paywallAddress(getState());
+          if(paywallAddress) {
+            const paywallAmount = sel.paywallAmount(getState());
+            const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
+            dispatch(external_api_actions.verifyUserPayment(paywallAddress, paywallAmount, paywallTxNotBefore));
+          }
+        })
         .catch(error => {
           dispatch(act.RECEIVE_INIT_SESSION(null, error));
           throw error;
@@ -258,14 +268,8 @@ export const resetPasswordReset = () => dispatch =>
   dispatch(act.RESET_PASSWORD_RESET_REQUEST);
 
 export const verifyUserPaymentWithPoliteia = (dispatch, txid) => {
-  dispatch(act.REQUEST_VERIFY_PAYWALL_PAYMENT_POLITEIA);
-  api.verifyUserPayment(txid)
+  return api.verifyUserPayment(txid)
     .then(response => {
-      dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT_POLITEIA(response));
       return response.haspaid;
-    })
-    .catch(error => {
-      dispatch(act.RECEIVE_VERIFY_PAYWALL_PAYMENT_POLITEIA(null, error));
-      throw error;
     });
 };
