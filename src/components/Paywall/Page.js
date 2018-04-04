@@ -1,34 +1,66 @@
 import React from "react";
+import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
+import {
+  PAYWALL_STATUS_WAITING,
+  PAYWALL_STATUS_LACKING_CONFIRMATIONS,
+  PAYWALL_STATUS_PAID
+} from "../../constants";
+
 
 const Modal = ({
-  grantAccess,
   paywallAddress,
   paywallAmount,
   payWithFaucet,
-  isTestnet
-}) => (
-  <div className="paywall-wrapper">
-    <div className="paywall-header">
-      <h2 className="paywall-header-title">Paywall</h2>
+  userPaywallStatus,
+  isTestnet,
+  isApiRequestingPayWithFaucet
+}) => {
+  let userPaywallStatusCls;
+  let userPaywallStatusText;
+  switch(userPaywallStatus) {
+  case PAYWALL_STATUS_WAITING:
+    userPaywallStatusCls = "paywall-payment-status-waiting";
+    userPaywallStatusText = "Waiting for payment";
+    break;
+  case PAYWALL_STATUS_LACKING_CONFIRMATIONS:
+    userPaywallStatusCls = "paywall-payment-status-confirmations";
+    userPaywallStatusText = "Waiting for more confirmations";
+    break;
+  case PAYWALL_STATUS_PAID:
+    userPaywallStatusCls = "paywall-payment-status-received";
+    userPaywallStatusText = "Payment received";
+    break;
+  default:
+    //throw new Error("User paywall status " + userPaywallStatus + " not supported");
+  }
+
+  return (
+    <div className="paywall-wrapper">
+      <div className="paywall-content">
+        Please send exactly <span className="paywall-amount">{paywallAmount} DCR</span> to{" "}
+        <span className="paywall-address">{paywallAddress}</span> to complete your
+        account registration. Politeia automatically checks for a transaction with
+        this amount sent to this address. After you send it and it reaches 2 confirmations, you
+        will be approved to submit proposals and comments.
+      </div>
+      <div className={"paywall-payment-status " + userPaywallStatusCls}>
+        Status: {userPaywallStatusText}
+      </div>
+      {isTestnet ? (
+        <div className="paywall-faucet">
+          <p>
+            Politeia is currently running on Testnet, which means you can pay
+            automatically with the Decred faucet:
+          </p>
+          <ButtonWithLoadingIcon
+            className="c-btn c-btn-primary"
+            text="Pay with Faucet"
+            isLoading={isApiRequestingPayWithFaucet}
+            onClick={() => payWithFaucet(paywallAddress, paywallAmount)} />
+        </div>
+      ) : null}
     </div>
-    <div className="paywall-content">
-      Please send exactly {paywallAmount}DCR to <br/>
-      <div className="paywall-address">{paywallAddress}</div>
-    </div>
-    <div className={grantAccess ? "paywall-payment-received" : "paywall-waiting-payment"}>
-      Status: {
-        grantAccess ?  <p>Payment received</p> : <p>Waiting for payment</p>
-      }
-    </div>
-    <div className="paywall-footer">
-      {
-        isTestnet === true ? (
-          <button onClick={() => payWithFaucet(paywallAddress, paywallAmount)}>
-            Pay with Faucet
-          </button>) : null
-      }
-    </div>
-  </div>
-);
+  );
+};
 
 export default Modal;

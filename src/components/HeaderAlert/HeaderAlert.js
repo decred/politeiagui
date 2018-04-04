@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Message from "../Message";
 
 const HeaderAlert = (props) =>
-  <div className={`top-modal ${props.className}`} style={props.style}>
+  <div className={`header-alert ${props.className}`} style={props.style}>
     <Message
       type="error"
       header="Action Needed"

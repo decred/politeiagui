@@ -33,20 +33,26 @@ class Loader extends Component {
     }
   }
 
-  renderMismatchKeyModal = () =>
-    typeof this.props.keyMismatch === "boolean"
-    && this.props.keyMismatch && this.props.loggedInAs &&
-    <HeaderAlert className="key-mismatch">
-      You cannot currently submit proposals or comments, please visit your
-      &nbsp;<a href="/user/account">account page</a>&nbsp;
-      to correct this problem.
-    </HeaderAlert>
+  renderHeaderAlert = () => {
+    if(!this.props.loggedInAs) {
+      return null;
+    }
+
+    if(this.props.paywallAddress || this.props.keyMismatch === true) {
+      return (
+        <HeaderAlert className="action-needed-alert">
+          You cannot currently submit proposals or comments, please visit your{" "}
+          <a href="/user/account">account page</a> to correct this problem.
+        </HeaderAlert>
+      );
+    }
+  }
 
   render() {
     return (
       <Router>
         <div className="appWrapper">
-          {this.renderMismatchKeyModal()}
+          {this.renderHeaderAlert()}
           {this.props.children}
         </div>
       </Router>

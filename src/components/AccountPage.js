@@ -2,7 +2,8 @@ import React from "react";
 import PrivateKeyIdentityManager from "./PrivateKeyIdentityManager";
 import PasswordChange from "./PasswordChange";
 import Message from "./Message";
-import connector from "../connectors/updateKey";
+import Paywall from "./Paywall";
+import accountConnector from "../connectors/account";
 
 const UpdatedKeyMessage = ({ email }) => (
   <span>
@@ -13,12 +14,20 @@ const UpdatedKeyMessage = ({ email }) => (
 
 const KeyPage = ({
   loggedInAs,
+  hasPaid,
+  keyMismatch,
   onUpdateUserKey,
   updateUserKey,
   updateUserKeyError
 }) => (
   <div className="content" role="main">
     <div className="page user-profile-page">
+      {!hasPaid ? (
+        <div>
+          <h1>Payment Required</h1>
+          <Paywall />
+        </div>
+      ) : null}
       <h1>Private Key</h1>
       {updateUserKey &&
         updateUserKey.success && (
@@ -35,6 +44,9 @@ const KeyPage = ({
           body={updateUserKeyError.message}
         />
       )}
+      {keyMismatch === true ? (
+        <div>TODO: enter user-friendly explanation for key mismatch here</div>
+      ) : null}
       <button onClick={() => onUpdateUserKey(loggedInAs)}>
         Update Key Pair
       </button>
@@ -48,4 +60,4 @@ const KeyPage = ({
   </div>
 );
 
-export default connector(KeyPage);
+export default accountConnector(KeyPage);

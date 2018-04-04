@@ -74,10 +74,10 @@ const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
 }).then(parseResponse);
 
 export const me = () => GET("/v1/user/me").then(({ csrfToken, response:
-  { email, isadmin, haspaid, paywalladdress, paywallamount, userid, publickey } }) => ({
+  { email, isadmin, haspaid, paywalladdress, paywallamount, paywalltxnotbefore, userid, publickey } }) => ({
   csrfToken: csrfToken || "itsafake",
   email, isadmin, haspaid, paywalladdress,
-  paywallamount, userid,
+  paywallamount, paywalltxnotbefore, userid,
   pubkey: publickey,
 }));
 
@@ -94,6 +94,9 @@ export const verifyNewUser = searchQuery => {
     .then(signature => GET("/v1/user/verify?" + qs.stringify({ email, verificationtoken, signature })))
     .then(getResponse);
 };
+
+export const verifyUserPayment = txid =>
+  GET(`/v1/user/verifypaymenttx?${qs.stringify({txid})}`).then(getResponse);
 
 export const userProposals = userid =>
   GET(`/v1/user/proposals?${qs.stringify({userid})}`).then(getResponse);

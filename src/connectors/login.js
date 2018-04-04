@@ -17,6 +17,7 @@ const loginConnector = connect(
     email: sel.email,
     isAdmin: sel.isAdmin,
     redirectedFrom: sel.redirectedFrom,
+    hasPaid: sel.hasPaid,
     isApiRequestingLogin: or(sel.isApiRequestingInit, sel.isApiRequestingLogin),
     apiLoginError: sel.apiLoginError
   }),
@@ -44,12 +45,14 @@ class Wrapper extends Component {
     return this.props.onLogin(...args).then(() => {
       if (this.props.isAdmin) {
         this.props.history.push("/admin/");
-      } else {
+      } else if(this.props.hasPaid) {
         pki.getKeys(this.props.loggedInAs).then(keys => {
           const redirectPath = keys.publicKey === this.props.serverPubkey
             ? "/proposals/new" : "/user/account";
           this.props.history.push(redirectPath);
         });
+      } else {
+        this.props.history.push("/");
       }
     });
   }
