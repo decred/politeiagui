@@ -9,7 +9,7 @@ import {
   proposalPayload,
   hasPaid
 } from "./api";
-import { PAYWALL_STATUS_PAID } from "../constants";
+import { PAYWALL_STATUS_PAID, PAYWALL_STATUS_WAITING } from "../constants";
 
 export const replyTo = or(get(["app", "replyParent"]), constant(0));
 
@@ -30,5 +30,5 @@ export const getUserPaywallStatus = state => {
     return PAYWALL_STATUS_PAID;
   }
 
-  return state.app.userPaywallStatus;
+  return state.app.userPaywallStatus || PAYWALL_STATUS_WAITING;
 };

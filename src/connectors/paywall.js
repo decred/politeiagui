@@ -11,7 +11,8 @@ export default connect(
     paywallTxNotBefore: sel.paywallTxNotBefore,
     userPaywallStatus: sel.getUserPaywallStatus,
     verificationToken: sel.verificationToken,
-    isTestnet: sel.isTestNet
+    isTestnet: sel.isTestNet,
+    isApiRequestingPayWithFaucet: sel.isApiRequestingPayWithFaucet
   }),
   dispatch => bindActionCreators({
     payWithFaucet: act.payWithFaucet,

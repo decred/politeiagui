@@ -1,4 +1,5 @@
 import React from "react";
+import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
 import {
   PAYWALL_STATUS_WAITING,
   PAYWALL_STATUS_LACKING_CONFIRMATIONS,
@@ -11,7 +12,8 @@ const Modal = ({
   paywallAmount,
   payWithFaucet,
   userPaywallStatus,
-  isTestnet
+  isTestnet,
+  isApiRequestingPayWithFaucet
 }) => {
   let userPaywallStatusCls;
   let userPaywallStatusText;
@@ -28,6 +30,8 @@ const Modal = ({
     userPaywallStatusCls = "paywall-payment-status-received";
     userPaywallStatusText = "Payment received";
     break;
+  default:
+    //throw new Error("User paywall status " + userPaywallStatus + " not supported");
   }
 
   return (
@@ -48,9 +52,11 @@ const Modal = ({
             Politeia is currently running on Testnet, which means you can pay
             automatically with the Decred faucet:
           </p>
-          <button onClick={() => payWithFaucet(paywallAddress, paywallAmount)}>
-            Pay with Faucet
-          </button>
+          <ButtonWithLoadingIcon
+            className="c-btn c-btn-primary"
+            text="Pay with Faucet"
+            isLoading={isApiRequestingPayWithFaucet}
+            onClick={() => payWithFaucet(paywallAddress, paywallAmount)} />
         </div>
       ) : null}
     </div>
