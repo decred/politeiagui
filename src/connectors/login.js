@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
 import { or } from "../lib/fp";
-import * as pki from "../lib/pki";
 import compose from "lodash/fp/compose";
 import { reduxForm } from "redux-form";
 import validate from "../validators/login";
@@ -45,11 +44,7 @@ class Wrapper extends Component {
       if (this.props.isAdmin) {
         this.props.history.push("/admin/");
       } else {
-        pki.getKeys(this.props.loggedInAs).then(keys => {
-          const redirectPath = keys.publicKey === this.props.serverPubkey
-            ? "/proposals/new" : "/user/account";
-          this.props.history.push(redirectPath);
-        });
+        this.props.history.push("/");
       }
     });
   }
