@@ -170,18 +170,17 @@ a:hover {
 }
 
 .message-ct {
-  height: 64px;
   margin: 16px 0;
   display: flex;
   background-color: #ffffff;
 }
 .message-icon {
-  height: 62px;
-  width: 64px;
+  min-width: 64px;
   line-height: 62px;
   font-size: 24px;
   color: #ffffff;
   display: flex;
+  align-items: center;
   justify-content: center;  
 }
 .message-text {
