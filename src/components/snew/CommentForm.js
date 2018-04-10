@@ -4,7 +4,6 @@ import { Field } from "redux-form";
 import Message from "../Message";
 import ErrorField from "../Form/Fields/ErrorField";
 import connector from "../../connectors/reply";
-import WarningPaywallNotPaid from "./WarningPaywallNotPaid";
 import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
 
 const CommentForm = ({
@@ -82,14 +81,8 @@ const CommentForm = ({
             >
             content policy
             </Link>
-            {!grantAccess &&
-              <div style={{width: "70%", padding: "5px 0" }}>
-                <WarningPaywallNotPaid
-                  message="You must pay the registration fee before you can comment on proposals" />
-              </div>
-            }
             <div className="usertext-buttons">
-              <button className="save" type="submit" disabled={!grantAccess}>
+              <button className="save" type="submit">
               save
               </button>
               {(thingId && (<button
