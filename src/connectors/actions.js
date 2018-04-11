@@ -13,7 +13,8 @@ const actions = connect(
     setStatusProposalError: sel.setStatusProposalError
   }),
   {
-    onChangeStatus: act.onSubmitStatusProposal
+    onChangeStatus: act.onSubmitStatusProposal,
+    onStartVote: act.onStartVote,
   }
 );
 
