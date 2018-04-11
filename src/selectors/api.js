@@ -125,10 +125,18 @@ export const paywallAddress = or(
   compose(get("paywalladdress"), apiMeResponse),
 );
 
-export const paywallAmount = or(
-  compose(get("paywallamount"), apiNewUserResponse),
-  compose(get("paywallamount"), apiMeResponse),
-);
+export const paywallAmount = state => {
+  let paywallAmount = 0;
+  if(state.api.newUser && state.api.newUser.response) {
+    paywallAmount = state.api.newUser.response.paywallamount;
+  }
+  else if(state.api.me && state.api.me.response) {
+    paywallAmount = state.api.me.response.paywallamount;
+  }
+
+  // Amount returned from the server is in atoms, so convert to dcr.
+  return paywallAmount / 100000000;
+};
 
 export const isTestNet = bool(
   (state) => {
