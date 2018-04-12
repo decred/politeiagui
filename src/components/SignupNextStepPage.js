@@ -1,8 +1,7 @@
 import React from "react";
 import signupNext from "../connectors/signupNext";
-import Paywall from "./Paywall";
 
-const SignupNextStepPage = ({ email, ...props}) => (
+const SignupNextStepPage = ({ email }) => (
   <div className="signup-next-step-wrapper">
     <div className="page signup-next-step-page">
       <h3>Please check your inbox to verify your registration.</h3>
@@ -31,7 +30,6 @@ const SignupNextStepPage = ({ email, ...props}) => (
         Slack</a> to get assistance from Politeia administrators.
       </p>
     </div>
-    <Paywall {...{...props}}/>
   </div>
 );
 

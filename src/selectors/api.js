@@ -115,10 +115,16 @@ export const isAdmin = bool(or(
   compose(get("isadmin"), apiLoginResponse)
 ));
 
-export const hasPaid = bool(or(
-  compose(get("haspaid"), apiMeResponse),
-  compose(get("haspaid"), apiLoginResponse)
-));
+export const hasPaid = bool(state => {
+  if(state.api.me && state.api.me.response) {
+    return state.api.me.response.paywalladdress === "";
+  }
+  if(state.api.login && state.api.login.response) {
+    return state.api.login.response.paywalladdress === "";
+  }
+
+  return false;
+});
 
 export const paywallAddress = or(
   compose(get("paywalladdress"), apiNewUserResponse),
@@ -138,11 +144,18 @@ export const paywallAmount = state => {
   return paywallAmount / 100000000;
 };
 
+export const paywallTxNotBefore = or(
+  compose(get("paywalltxnotbefore"), apiNewUserResponse),
+  compose(get("paywalltxnotbefore"), apiMeResponse),
+);
+
 export const isTestNet = bool(
-  (state) => {
-    if(!state.api.me.response || !state.api.me.response.paywalladdress)
-      return null;
-    return state.api.me.response.paywalladdress[0] === "T" ? true : false;
+  state => {
+    let checkAddr = r => r && r.paywalladdress ? r.paywalladdress[0] === "T" : false;
+
+    return checkAddr(state.api.me.response)
+        || checkAddr(state.api.login.response)
+        || checkAddr(state.api.newUser.response);
   });
 export const isMainNet = not(isTestNet);
 
@@ -184,5 +197,4 @@ export const setStatusProposalToken = compose(get("token"), apiSetStatusProposal
 export const setStatusProposalError = apiSetStatusProposalError;
 export const redirectedFrom = get(["api", "login", "redirectedFrom"]);
 export const verificationToken = compose(get("verificationtoken"), apiNewUserResponse);
-export const grantAccess = getApiResponse("grantAccess");
 export const getKeyMismatch = state => state.api.keyMismatch;

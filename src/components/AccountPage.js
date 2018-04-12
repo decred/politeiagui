@@ -2,8 +2,9 @@ import React from "react";
 import PrivateKeyIdentityManager from "./PrivateKeyIdentityManager";
 import PasswordChange from "./PasswordChange";
 import Message from "./Message";
-import connector from "../connectors/updateKey";
-import { myPubKeyHex  } from "../lib/pki";
+import { myPubKeyHex } from "../lib/pki";
+import Paywall from "./Paywall";
+import accountConnector from "../connectors/account";
 
 const UpdatedKeyMessage = ({ email }) => (
   <span>
@@ -34,7 +35,9 @@ class KeyPage extends React.Component {
       loggedInAs,
       onUpdateUserKey,
       updateUserKey,
-      updateUserKeyError
+      updateUserKeyError,
+      keyMismatch,
+      hasPaid
     } = this.props;
     const { pubkey } = this.state;
     return (
@@ -42,8 +45,14 @@ class KeyPage extends React.Component {
         <div
           style={{ display: "flex", flexDirection: "column" }}
           className="page user-profile-page">
+          {!hasPaid ? (
+            <div>
+              <h1>Payment Required</h1>
+              <Paywall />
+            </div>
+          ) : null}
           <h1>Key management</h1>
-          { pubkey && <span>Current Public key: {pubkey}</span>}
+          {pubkey && <span>Current Public key: {pubkey}</span>}
           {updateUserKey &&
             updateUserKey.success && (
               <Message
@@ -59,6 +68,9 @@ class KeyPage extends React.Component {
               body={updateUserKeyError.message}
             />
           )}
+          {keyMismatch === true ? (
+            <div>Your local key and the server key don't match. Please, update your key pair and check your email to confirm the change.</div>
+          ) : null}
           <button
             style={{ maxWidth: "144px" }}
             onClick={() => onUpdateUserKey(loggedInAs)}>
@@ -76,4 +88,4 @@ class KeyPage extends React.Component {
   }
 }
 
-export default connector(KeyPage);
+export default accountConnector(KeyPage);

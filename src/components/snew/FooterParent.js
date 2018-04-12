@@ -14,15 +14,6 @@ const FooterParent = () => (
         border: "1px solid black"
       }}
     >
-      <h3 style={{ color: "black" }}>Interface Design</h3>
-      <img
-        alt="Interface Design Powered by reddit."
-        src="https://s3.amazonaws.com/sp.reddit.com/powered_by_reddit.png"
-        style={{
-          width: 140,
-          height: 47
-        }}
-      />
     </a>
   </div>
 );

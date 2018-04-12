@@ -11,7 +11,10 @@ const verifyKeyConnector = connect(
     loggedInAs: sel.loggedInAs,
     verifyUserKeyError: sel.verifyUserKeyError
   }),
-  dispatch => bindActionCreators({ onVerify: act.onVerifyUserKey, updateMe: act.updateMe }, dispatch)
+  dispatch => bindActionCreators({
+    onVerify: act.onVerifyUserKey,
+    updateMe: act.updateMe
+  }, dispatch)
 );
 
 export default verifyKeyConnector;

@@ -5,8 +5,13 @@ import { onUpdateUserKey } from "../actions/api";
 export default connect(
   sel.selectorMap({
     loggedInAs: sel.loggedInAs,
+    hasPaid: sel.hasPaid,
+    paywallAddress: sel.paywallAddress,
+    paywallAmount: sel.paywallAmount,
+    paywallTxNotBefore: sel.paywallTxNotBefore,
+    keyMismatch: sel.getKeyMismatch,
     updateUserKey: sel.updateUserKey,
-    updateUserKeyError: sel.updateUserKeyError
+    updateUserKeyError: sel.updateUserKeyError,
   }),
   { onUpdateUserKey }
 );

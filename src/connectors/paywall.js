@@ -5,14 +5,17 @@ import * as act from "../actions";
 
 export default connect(
   sel.selectorMap({
+    loggedIn: sel.loggedIn,
     paywallAddress: sel.paywallAddress,
     paywallAmount: sel.paywallAmount,
-    VerificationToken: sel.verificationToken,
-    grantAccess: sel.grantAccess,
-    isTestnet: sel.isTestNet
+    paywallTxNotBefore: sel.paywallTxNotBefore,
+    userPaywallStatus: sel.getUserPaywallStatus,
+    userPaywallConfirmations: sel.getUserPaywallConfirmations,
+    verificationToken: sel.verificationToken,
+    isTestnet: sel.isTestNet,
+    isApiRequestingPayWithFaucet: sel.isApiRequestingPayWithFaucet
   }),
   dispatch => bindActionCreators({
-    getPaymentsByAddress: act.getPaymentsByAddress,
     payWithFaucet: act.payWithFaucet,
   }, dispatch)
 );

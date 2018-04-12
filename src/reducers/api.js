@@ -1,8 +1,8 @@
 import * as act from "../actions/types";
 import get from "lodash/fp/get";
 import map from "lodash/fp/map";
+import { DEFAULT_REQUEST_STATE, request, receive, reset } from "./util";
 
-const DEFAULT_REQUEST_STATE = { isRequesting: false, response: null, error: null };
 export const DEFAULT_STATE = {
   me: DEFAULT_REQUEST_STATE,
   init: DEFAULT_REQUEST_STATE,
@@ -25,30 +25,6 @@ export const DEFAULT_STATE = {
   email: "",
   keyMismatch: false,
 };
-
-const request = (key, state, { payload, error }) =>
-  ({
-    ...state,
-    [key]: {
-      ...state[key],
-      payload: error ? null : payload,
-      isRequesting: error ? false : true,
-      response: null,
-      error: error ? payload : null
-    }
-  });
-
-const receive = (key, state, { payload, error }) => ({
-  ...state,
-  [key]: {
-    ...state[key],
-    isRequesting: false,
-    response: error ? null : payload,
-    error: error ? payload : null
-  }
-});
-
-const reset = (key, state) => ({ ...state, [key]: DEFAULT_REQUEST_STATE });
 
 const onReceiveSetStatus = (state, action) => {
   state = receive("setStatusProposal", state, action);
@@ -136,12 +112,6 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_POLICY]: () => receive("policy", state, action),
   [act.REQUEST_NEW_USER]: () => request("newUser", state, action),
   [act.RECEIVE_NEW_USER]: () => receive("newUser", state, action),
-  [act.REQUEST_VERIFY_PAYWALL_PAYMENT]: () => request("verifyPaywallPayment", state, action),
-  [act.RECEIVE_VERIFY_PAYWALL_PAYMENT]: () => receive("verifyPaywallPayment", state, action),
-  [act.REQUEST_PAYWALL_PAYMENT_WITH_FAUCET]: () => request("verifyPaywallPayment", state, action),
-  [act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET]: () => receive("verifyPaywallPayment", state, action),
-  [act.GRANT_SUBMIT_PROPOSAL_ACCESS]: () => receive("grantAccess", state, action),
-  [act.GET_PAYWALL_TXID]: () => receive("verifyPaywallPayment", state, action),
   [act.RESET_NEW_USER]: () => reset("newUser", state),
   [act.REQUEST_VERIFY_NEW_USER]: () => request("verifyNewUser", state, action),
   [act.RECEIVE_VERIFY_NEW_USER]: () => receive("verifyNewUser", state, action),
