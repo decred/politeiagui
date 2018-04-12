@@ -529,3 +529,49 @@ li p.header-3 {
 .commentarea > .usertext textarea:not(:focus):empty  {
     background: url("./theme/commentboxbg.png") 50% 50% no-repeat
 }
+.modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1;
+}
+
+.modal-container {
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding-top: 80px;
+}
+
+.modal-content {
+  background: white;
+  box-shadow: 0 9px 46px 8px rgba(0,0,0,.14),0 11px 15px -7px rgba(0,0,0,.12),0 24px 38px 3px rgba(0,0,0,.2);
+  max-width: 60%;
+  z-index: 2;
+}
+
+.modal-content-header {
+  padding: 10px 8px;
+  display: flex;
+  align-items: center;
+}
+
+.modal-content-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 8px;
+}
+
+.modal-content-actions > .btn {
+  margin-right: 0;
+  margin-left: 16px;
+}

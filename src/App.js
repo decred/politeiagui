@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
+import throttle from "lodash/throttle";
 import configureStore from "./configureStore";
 import { Subreddit } from "./components/snew";
 import HeaderAlert from "./components/HeaderAlert";
 import Routes from "./Routes";
 import * as pki from "./lib/pki";
 import loaderConnector from "./connectors/loader";
-import throttle from "lodash/throttle";
 import { handleSaveState } from "./lib/localData";
+import ModalStack from "./components/Modal/ModalStack";
 
 const store = configureStore();
 
@@ -46,6 +47,7 @@ class Loader extends Component {
     return (
       <Router>
         <div className="appWrapper">
+          <ModalStack />
           {this.renderMismatchKeyModal()}
           {this.props.children}
         </div>
