@@ -3,6 +3,7 @@
   "isadmin": true,
   "userid": 0,
   "haspaid": true,
-  "paywalladdress":"TsgN9uAYfKdv3JKcqgGrFNjq7vUNZ4UDeu3",
-  "paywallamount":"10000000"
+  "paywalladdress": "TsgN9uAYfKdv3JKcqgGrFNjq7vUNZ4UDeu3",
+  "paywallamount": "10000000",
+  "paywalltxnotbefore":0
 }

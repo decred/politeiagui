@@ -22,7 +22,6 @@ const ChangePasswordForm = ({
         Current Password:
       </label>
       <Field
-        autoFocus
         className="c-form-control"
         id="existingPassword"
         name="existingPassword"
@@ -36,7 +35,6 @@ const ChangePasswordForm = ({
         New Password:
       </label>
       <Field
-        autoFocus
         className="c-form-control"
         id="password"
         name="password"
@@ -50,7 +48,6 @@ const ChangePasswordForm = ({
         Verify Password:
       </label>
       <Field
-        autoFocus
         className="c-form-control"
         id="password_verify"
         name="password_verify"
