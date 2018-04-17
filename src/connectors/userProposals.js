@@ -46,7 +46,8 @@ class Wrapper extends Component {
   }
 
   componentDidMount() {
-    const { userid, onFetchData, proposals } = this.props;
+    const { userid, loggedInAs, onFetchData, proposals, history } = this.props;
+    if (!loggedInAs) history.push("/login");
     if (userid >= 0 && !proposals) onFetchData(userid);
   }
 
