@@ -68,7 +68,7 @@ export const CustomContent = ({
 
 class Loader extends Component {
   componentDidMount() {
-    this.props.onFetchActiveVotes();
+    this.props.onFetchActiveVotes && this.props.onFetchActiveVotes();
     this.props.onFetchData && this.props.onFetchData();
   }
 
