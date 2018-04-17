@@ -21,4 +21,3 @@ const SubmitTextSidebox = ({
 ) : null;
 
 export default connector(SubmitTextSidebox);
-

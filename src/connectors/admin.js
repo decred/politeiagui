@@ -14,5 +14,6 @@ export default connect(
   {
     onFetchData: act.onFetchUnvetted,
     onChangeFilter: act.onChangeFilter,
+    onStartVote: act.onStartVote,
   }
 );

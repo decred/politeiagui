@@ -30,9 +30,9 @@ export const convertMarkdownToFile = markdown => ({
   payload: utoa(markdown)
 });
 
-export const makeProposal = (name, markdown, attachments=[]) => ({
-  files: [ convertMarkdownToFile(name + "\n" + markdown), ...(attachments || []) ]
-    .map(({ name, mime, payload}) => ({ name, mime, payload, digest: digestPayload(payload) }))
+export const makeProposal = (name, markdown, attachments = []) => ({
+  files: [convertMarkdownToFile(name + "\n" + markdown), ...(attachments || [])]
+    .map(({ name, mime, payload }) => ({ name, mime, payload, digest: digestPayload(payload) }))
 });
 
 export const makeComment = (token, comment, parentid) => ({
@@ -52,7 +52,7 @@ export const signComment = (email, comment) => pki.myPubKeyHex(email).then(publi
 
 const parseResponseBody = response => {
   const contentType = response.headers.get("content-type");
-  if(contentType && contentType.includes("application/json")) return response.json();
+  if (contentType && contentType.includes("application/json")) return response.json();
   throw new Error(STATUS_ERR[response.status] || "Internal server error");
 };
 
@@ -102,7 +102,7 @@ export const verifyUserPayment = txid =>
   GET(`/v1/user/verifypaymenttx?${qs.stringify({txid})}`).then(getResponse);
 
 export const userProposals = userid =>
-  GET(`/v1/user/proposals?${qs.stringify({userid})}`).then(getResponse);
+  GET(`/v1/user/proposals?${qs.stringify({ userid })}`).then(getResponse);
 
 export const login = (csrf, email, password) =>
   POST("/login", csrf, { email, password }).then(getResponse);
@@ -113,7 +113,7 @@ export const changePassword = (csrf, currentpassword, newpassword) =>
 export const forgottenPasswordRequest = (csrf, email) =>
   POST("/user/password/reset", csrf, { email }).then(getResponse);
 
-export const passwordResetRequest = ( csrf, email, verificationtoken, newpassword ) =>
+export const passwordResetRequest = (csrf, email, verificationtoken, newpassword) =>
   POST("/user/password/reset", csrf, { email, verificationtoken, newpassword }).then(getResponse);
 
 export const updateKeyRequest = (csrf, email) => pki.generateKeys(email).then(
@@ -142,10 +142,36 @@ export const proposalSetStatus = (email, csrf, token, status) =>
     ))).then(getResponse);
 
 export const newProposal = (csrf, proposal) =>
-  POST("/proposals/new", csrf, proposal).then(({ response: { censorshiprecord }}) => ({
+  POST("/proposals/new", csrf, proposal).then(({ response: { censorshiprecord } }) => ({
     ...proposal, censorshiprecord, timestamp: Date.now() / 1000, status: PROPOSAL_STATUS_UNREVIEWED
   }));
 
 export const newComment = (csrf, comment) => POST("/comments/new", csrf, comment).then(getResponse);
 
 export const activeVotes = () => GET("/v1/proposals/activevote").then(getResponse);
+
+export const startVote = (email, csrf, token, status) =>
+  pki.myPubKeyHex(email).then(publickey =>
+    pki.signStringHex(email, token + status).then(signature => POST(
+      "/proposals/startvote", csrf,
+      {
+        vote: {
+          token,
+          mask: 3,
+          duration: 2016, // 1 week
+          options: [{
+            id: "no",
+            description: "Don't approve proposal",
+            bits: 1,
+          },
+          {
+            id: "yes",
+            description: "Approve proposal",
+            bits: 2,
+          }]
+        }, signature, publickey
+      }
+    ))).then(getResponse => {
+    console.log("******************************************");
+    console.log(getResponse);
+  });

@@ -290,3 +290,13 @@ export const onFetchActiveVotes = () => (dispatch) => {
     error => dispatch(act.RECEIVE_ACTIVE_VOTES(null, error))
   );
 };
+
+export const onStartVote = (loggedInAs, token, vote) => {
+  return withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_START_VOTE({ token }));
+    return api
+      .startVote(loggedInAs, csrf, token, vote)
+      .then(response => dispatch(act.RECEIVE_START_VOTE(response)))
+      .catch(error => dispatch(act.RECEIVE_START_VOTE(null, error)));
+  });
+}

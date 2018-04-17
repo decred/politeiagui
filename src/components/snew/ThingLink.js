@@ -41,6 +41,7 @@ const ThingLink = ({
   loggedInAs,
   isAdmin,
   onChangeStatus,
+  onStartVote,
   setStatusProposalToken,
   setStatusProposalError
 }) => (
@@ -151,7 +152,7 @@ const ThingLink = ({
         ))}
       <Expando {...{ expanded, is_self, selftext, selftext_html }} />
       <ProposalImages readOnly files={otherFiles} />
-      {review_status === PROPOSAL_STATUS_UNREVIEWED && isAdmin ? (
+      {isAdmin ? (
         <ul className="flat-list buttons">
           <li className="first">
             <Link
@@ -204,9 +205,29 @@ const ThingLink = ({
                         approve
                     </button>
                   </form>
-                </li>
+                </li>,
               ]
-              : null
+              : review_status === PROPOSAL_STATUS_PUBLIC ?
+                <li key="start-vote">
+                  <form
+                    className="toggle remove-button"
+                    onSubmit={e =>
+                      onStartVote(
+                        loggedInAs,
+                        id,
+                        PROPOSAL_STATUS_CENSORED
+                      ) && e.preventDefault()
+                    }
+                  >
+                    <button
+                      className="togglebutton access-required"
+                      data-event-action="spam"
+                      type="submit"
+                    >
+                      Start Vote
+                    </button>
+                  </form>
+                </li> : null
             : null}
         </ul>
       ) : null}
