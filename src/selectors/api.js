@@ -25,6 +25,7 @@ const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
 const isApiRequestingProposal = getIsApiRequesting("proposal");
 const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
 export const isApiRequestingActiveVotes = getIsApiRequesting("activeVotes");
+export const isApiRequestingVoteResults = getIsApiRequesting("voteResults");
 export const isApiRequestingNewComment = getIsApiRequesting("newComment");
 export const isApiRequestingSetStatusProposal = getIsApiRequesting("setStatusProposal");
 export const isApiRequestingStartVote = getIsApiRequesting("startVote");
@@ -72,6 +73,8 @@ export const verifyUserKeyError = getApiError("verifyUserKey");
 const apiActiveVotesResponse = getApiResponse("activeVotes");
 const apiActiveVotesError = getApiError("activeVotes");
 const apiSetStartVoteResponse = getApiResponse("startVote");
+const apiVoteResultsResponse = getApiResponse("voteResults");
+const apiVoteResultsError = getApiError("voteResults");
 
 const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
@@ -207,3 +210,8 @@ export const getKeyMismatch = state => state.api.keyMismatch;
 export const activeVotes = or(compose(get("votes"), apiActiveVotesResponse), constant([]));
 export const activeVotesError = apiActiveVotesError;
 export const setStartVote = compose(get("startvote"), apiSetStartVoteResponse);
+export const voteResultsVote = or(compose(get("vote"), apiVoteResultsResponse), constant({}));
+export const voteResultsCastVotes = or(compose(get("castvotes"), apiVoteResultsResponse), constant({}));
+export const voteResultsError = apiVoteResultsError;
+
+export const isProposalActive = or(compose(get("token"), voteResultsVote), constant(false));

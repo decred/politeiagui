@@ -152,6 +152,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.KEY_MISMATCH]: () => ({ ...state, keyMismatch: action.payload }),
   [act.REQUEST_ACTIVE_VOTES]: () => request("activeVotes", state, action),
   [act.RECEIVE_ACTIVE_VOTES]: () => receive("activeVotes", state, action),
+  [act.REQUEST_VOTE_RESULTS]: () => request("voteResults", state, action),
+  [act.RECEIVE_VOTE_RESULTS]: () => receive("voteResults", state, action),
   [act.REQUEST_LOGOUT]: () => request("logout", state, action),
   [act.RECEIVE_LOGOUT]: () => {
     state = receive("logout", state, action);

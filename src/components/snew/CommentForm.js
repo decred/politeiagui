@@ -21,6 +21,7 @@ const CommentForm = ({
   onSetReplyParent,
   loggedIn,
   grantAccess,
+  isActive
 }) => (
   loggedIn ?
     <form className="usertext cloneable warn-on-unload"  onSubmit={handleSubmit(onSave)}>
@@ -37,7 +38,7 @@ const CommentForm = ({
       <input name="parentid" type="hidden" defaultValue={thingId} />
       <div className="usertext-edit md-container">
         {isPostingComment && (<h2>Posting comment...</h2>)}
-        {!isPostingComment && (
+        {!isPostingComment && !isActive  && (
           <div className="md">
             <Field
               component={MarkdownEditorField}
@@ -55,7 +56,7 @@ const CommentForm = ({
             />
           </div>
         )}
-        {!isPostingComment && (
+        {!isPostingComment && !isActive && (
           <div className="bottom-area">
             <span className="help-toggle toggle">
               <a
