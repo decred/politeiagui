@@ -21,7 +21,8 @@ class KeyPage extends React.Component {
     };
   }
   componentDidMount() {
-    const { loggedInAs } = this.props;
+    const { loggedInAs, history } = this.props;
+    if (!loggedInAs) history.push("/login");
     myPubKeyHex(loggedInAs).then(
       (pubkey) => {
         this.setState({
