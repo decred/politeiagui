@@ -29,7 +29,7 @@ const validate = (values, dispatch, props) => {
     });
   }
   if (props.keyMismatch) {
-    throw new SubmissionError({ _error: "Your local key does not match the one in our server, please generate a new one at profile settings." });
+    throw new SubmissionError({ _error: "Your local key does not match the one on the server.  Please generate a new one under account settings." });
   }
 };
 
