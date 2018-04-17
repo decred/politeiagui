@@ -61,7 +61,10 @@ const parseResponse = response => parseResponseBody(response).then(json => {
   return { response: json, csrfToken: response.headers.get("X-Csrf-Token") };
 });
 
-const GET = path => fetch(apiBase + path, { credentials: "same-origin" }).then(parseResponse);
+const GET = (path, includeCookie) =>
+  fetch(apiBase + path, includeCookie ? { credentials: "include" } : null)
+    .then(parseResponse);
+
 const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
   headers: {
     "Accept": "application/json",
@@ -73,7 +76,7 @@ const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
   body: JSON.stringify(json)
 }).then(parseResponse);
 
-export const me = () => GET("/v1/user/me").then(({ csrfToken, response:
+export const me = () => GET("/v1/user/me", true).then(({ csrfToken, response:
   { email, isadmin, haspaid, paywalladdress, paywallamount, userid, publickey } }) => ({
   csrfToken: csrfToken,
   email, isadmin, haspaid, paywalladdress,
@@ -81,7 +84,7 @@ export const me = () => GET("/v1/user/me").then(({ csrfToken, response:
   pubkey: publickey,
 }));
 
-export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, route, pubkey } }) => ({
+export const apiInfo = () => GET("/", true).then(({ csrfToken, response: { version, route, pubkey } }) => ({
   csrfToken: csrfToken || "itsafake", version, route, pubkey
 }));
 
