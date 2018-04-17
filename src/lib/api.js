@@ -144,3 +144,5 @@ export const newProposal = (csrf, proposal) =>
   }));
 
 export const newComment = (csrf, comment) => POST("/comments/new", csrf, comment).then(getResponse);
+
+export const activeVotes = () => GET("/v1/proposals/activevote").then(getResponse);

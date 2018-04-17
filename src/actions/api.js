@@ -281,3 +281,12 @@ export const verifyUserPaymentWithPoliteia = (dispatch, txid) => {
       return response.haspaid;
     });
 };
+
+export const onFetchActiveVotes = () => (dispatch) => {
+  dispatch(act.REQUEST_ACTIVE_VOTES());
+  return api.activeVotes().then(
+    response => dispatch(act.RECEIVE_ACTIVE_VOTES({ ...response, success: true }))
+  ).catch(
+    error => dispatch(act.RECEIVE_ACTIVE_VOTES(null, error))
+  );
+};

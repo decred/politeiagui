@@ -28,6 +28,7 @@ const ThingLink = ({
   created_utc,
   title,
   url,
+  vote,
   permalink,
   is_self,
   selftext,
@@ -72,6 +73,16 @@ const ThingLink = ({
         <Link className="title may-blank loggedin" href={url} tabIndex={rank}>
           {title}
         </Link>{" "}
+        {vote &&
+          <span style={{
+            padding: "4px 8px",
+            borderRadius: "8px",
+            fontSize: "12px",
+            color: "green"
+          }}>
+          Proposal active for voting
+          </span>
+        }
         {domain ? (
           <span className="domain">
             (<Link href={`/domain/${domain}/`}>{domain}</Link>)
