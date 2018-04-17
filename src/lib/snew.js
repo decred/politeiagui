@@ -11,6 +11,8 @@ const setVotePayload = (proposal, activeVotes) => {
   const findProp = activeVotes.filter(aV =>
     aV.proposal &&
     aV.proposal.censorshiprecord &&
+    proposal &&
+    proposal.censorshiprecord &&
     aV.proposal.censorshiprecord.token === proposal.censorshiprecord.token
   )[0];
   if(!findProp)
