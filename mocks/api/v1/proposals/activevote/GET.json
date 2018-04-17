@@ -1,0 +1,50 @@
+{  
+  "votes":[  
+     {  
+        "proposal": {
+          "name":
+            "Interaction design investor validation social media hypotheses value proposition entrepreneur iteration partner network technology crowdsource research & development paradigm shift.",
+          "status": 0,
+          "numcomments": 3,
+          "timestamp": 1505940196,
+          "censorshiprecord": {
+            "token":
+              "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca11",
+            "merkle":
+              "0dd10219cd79342198085cbe6f737bd54efe119b24c84cbc053023ed6b7da4c8",
+            "signature":
+              "f5ea17d547d8347a2f2d77edcb7e89fcc96613d7aaff1f2a26761779763d77688b57b423f1e7d2da8cd433ef2cfe6f58c7cf1c43065fa6716a03a3726d902d0a"
+          },
+          "files": []
+        },
+        "vote":{  
+           "token":"76634a8f96a943f6d52fc94b20818578b16d73e675021b398b65295af45b1bf5",
+           "mask":3,
+           "duration":2016,
+           "Options":[  
+              {  
+                 "id":"no",
+                 "description":"Don't approve proposal",
+                 "bits":1
+              },
+              {  
+                 "id":"yes",
+                 "description":"Approve proposal",
+                 "bits":2
+              }
+           ]
+        },
+        "votedetails":{  
+           "startblockheight":"283085",
+           "startblockhash":"00000000055de89cb8a6d2d3eba3130549e44284fdab814d727b672e5cdfbc5e",
+           "endheight":"285101",
+           "eligibletickets":[  
+              "000011e329fe0359ea1d2070d927c93971232c1118502dddf0b7f1014bf38d97",
+              "0004b0f8b2883a2150749b2c8ba05652b02220e98895999fd96df790384888f9",
+              "00107166c5fc5c322ecda3748a1896f4a2de6672aae25014123d2cedc83e8f42",
+              "002272cf4788c3f726c30472f9c97d2ce66b997b5762ff4df6a05c4761272413"
+           ]
+        }
+     }
+  ]
+}

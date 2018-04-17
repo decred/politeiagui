@@ -15,13 +15,15 @@ const proposalConnector = connect(
     proposal: sel.proposal,
     comments: sel.proposalComments,
     error: sel.proposalError,
-    isLoading: or(sel.proposalIsRequesting, sel.setStatusProposalIsRequesting),
+    isLoading: or(sel.proposalIsRequesting, sel.setStatusProposalIsRequesting, sel.isApiRequestingActiveVotes),
     markdownFile: sel.getMarkdownFile,
-    otherFiles: sel.getNotMarkdownFile
+    otherFiles: sel.getNotMarkdownFile,
+    activeVotes: sel.activeVotes,
   }),
   dispatch => bindActionCreators({
     onFetchData: act.onFetchProposal,
-    onSetReplyParent: act.onSetReplyParent
+    onSetReplyParent: act.onSetReplyParent,
+    onFetchActiveVotes: act.onFetchActiveVotes
   }, dispatch)
 );
 

@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { Content } from "snew-classic-ui";
-import { proposalToT3 } from "../../lib/snew";
+import { formatProposalData } from "../../lib/snew";
 import ReactBody from "react-body";
 import PageLoadingIcon from "./PageLoadingIcon";
 import Message from "../Message";
 import ProposalFilter from "../ProposalFilter";
+
+
 
 export const CustomContent = ({
   bodyClassName="listing-page",
@@ -15,6 +17,7 @@ export const CustomContent = ({
   header,
   onChangeFilter,
   filterValue,
+  activeVotes,
   ...props
 }) => {
   let content = error ? (
@@ -46,7 +49,7 @@ export const CustomContent = ({
               proposal =>
                 !filterValue || proposal.status === filterValue
             )
-              .map(proposalToT3)
+              .map((proposal, idx) => formatProposalData(proposal, idx, activeVotes))
           }
         ]
       }} />
@@ -65,6 +68,7 @@ export const CustomContent = ({
 
 class Loader extends Component {
   componentDidMount() {
+    this.props.onFetchActiveVotes();
     this.props.onFetchData && this.props.onFetchData();
   }
 

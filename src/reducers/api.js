@@ -148,6 +148,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.REQUEST_VERIFIED_KEY]: () => request("verifyUserKey", state, action),
   [act.RECEIVE_VERIFIED_KEY]: () => receive("verifyUserKey", state, action),
   [act.KEY_MISMATCH]: () => ({ ...state, keyMismatch: action.payload }),
+  [act.REQUEST_ACTIVE_VOTES]: () => request("activeVotes", state, action),
+  [act.RECEIVE_ACTIVE_VOTES]: () => receive("activeVotes", state, action),
   [act.REQUEST_LOGOUT]: () => request("logout", state, action),
   [act.RECEIVE_LOGOUT]: () => {
     state = receive("logout", state, action);

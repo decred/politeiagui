@@ -2,14 +2,14 @@ import React from "react";
 import get from "lodash/fp/get";
 import orderBy from "lodash/fp/orderBy";
 import { Content } from "./snew";
-import { proposalToT3, commentsToT1 } from "../lib/snew";
+import { formatProposalData, commentsToT1 } from "../lib/snew";
 import { getTextFromIndexMd } from "../helpers";
 import Message from "./Message";
 
 const newSort = orderBy([get("timestamp")], ["desc"]);
 
 const ProposalDetail = ({
-  isLoading, proposal, comments, token, error, markdownFile, otherFiles, onFetchData, ...props
+  isLoading, proposal, comments, token, error, markdownFile, otherFiles, onFetchData, activeVotes, ...props
 }) => (
   <div className="content" role="main">
     <div className="page proposal-page">
@@ -29,7 +29,7 @@ const ProposalDetail = ({
               allChildren: [{
                 kind: "t3",
                 data: {
-                  ...proposalToT3(proposal).data,
+                  ...formatProposalData(proposal, 0, activeVotes).data,
                   otherFiles,
                   selftext: markdownFile ? getTextFromIndexMd(markdownFile) : null,
                   selftext_html: markdownFile ? getTextFromIndexMd(markdownFile) : null
