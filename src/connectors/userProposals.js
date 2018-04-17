@@ -12,12 +12,14 @@ const userProposalsConnector = connect(
     proposals: sel.userProposals,
     error: sel.userProposalsError,
     isLoading: sel.userProposalsIsRequesting,
+    activeVotes: sel.activeVotes,
     header: () => "Your Proposals"
   }),
   dispatch =>
     bindActionCreators(
       {
-        onFetchData: act.onFetchUserProposals
+        onFetchData: act.onFetchUserProposals,
+        onFetchActiveVotes: act.onFetchActiveVotes
       },
       dispatch
     )
