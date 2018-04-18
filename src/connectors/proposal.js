@@ -14,16 +14,19 @@ const proposalConnector = connect(
     isAdmin: sel.isAdmin,
     proposal: sel.proposal,
     comments: sel.proposalComments,
-    error: or(sel.proposalError, sel.activeVotesError),
-    isLoading: or(sel.proposalIsRequesting, sel.setStatusProposalIsRequesting, sel.isApiRequestingActiveVotes),
+    error: sel.proposalError,
+    isLoading: or(sel.proposalIsRequesting, sel.setStatusProposalIsRequesting, sel.isApiRequestingActiveVotes, sel.isApiRequestingVoteResults),
     markdownFile: sel.getMarkdownFile,
     otherFiles: sel.getNotMarkdownFile,
     activeVotes: sel.activeVotes,
+    voteDetails: sel.voteResultsVote,
+    castedVotes: sel.voteResultsCastVotes
   }),
   dispatch => bindActionCreators({
     onFetchData: act.onFetchProposal,
     onSetReplyParent: act.onSetReplyParent,
-    onFetchActiveVotes: act.onFetchActiveVotes
+    onFetchActiveVotes: act.onFetchActiveVotes,
+    onFetchVoteResults: act.onFetchVoteResults
   }, dispatch)
 );
 

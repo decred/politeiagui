@@ -172,3 +172,6 @@ export const startVote = (email, csrf, token, status) =>
         }, signature, publickey
       }
     ))).then(getResponse);
+
+export const voteResults = (vote) => POST("/proposals/voteresults",null, vote).then(getResponse);
+

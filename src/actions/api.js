@@ -307,3 +307,13 @@ export const onStartVote = (loggedInAs, token, status) =>
         }
       );
   });
+
+
+export const onFetchVoteResults = (vote) => (dispatch) => {
+  dispatch(act.REQUEST_VOTE_RESULTS({ vote }));
+  return api.voteResults({ vote }).then(
+    response => dispatch(act.RECEIVE_VOTE_RESULTS({ ...response, success: true }))
+  ).catch(
+    error => dispatch(act.RECEIVE_ACTIVE_VOTES(null, error))
+  );
+};

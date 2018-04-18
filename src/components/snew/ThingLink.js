@@ -10,6 +10,7 @@ import {
   PROPOSAL_STATUS_UNREVIEWED
 } from "../../constants";
 import { getProposalStatus } from "../../helpers";
+import VoteStats from "../VoteStats";
 
 const ThingLink = ({
   Link,
@@ -30,6 +31,8 @@ const ThingLink = ({
   url,
   vote,
   userid,
+  voteDetails,
+  castedVotes,
   permalink,
   is_self,
   selftext,
@@ -107,6 +110,9 @@ const ThingLink = ({
       <p className="tagline">
         {id} • {getProposalStatus(review_status)}
       </p>
+      {voteDetails && voteDetails.token &&
+        <VoteStats voteDetails={voteDetails} castedVotes={castedVotes}/>
+      }
       {expanded &&
         (lastSubmitted === id ? (
           <Message
@@ -223,13 +229,13 @@ const ThingLink = ({
                       ) && e.preventDefault()
                     }
                   >
-                    <button
+                    {!vote && <button
                       className="togglebutton access-required"
                       data-event-action="start-vote"
                       type="submit"
                     >
                       Start Vote
-                    </button>
+                    </button>}
                   </form>
                 </li> : null
             : null}

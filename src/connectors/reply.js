@@ -18,6 +18,7 @@ const replyConnector = connect(
     policy: sel.policy,
     isPostingComment: sel.isApiRequestingNewComment,
     hasPaid: sel.hasPaid,
+    isActive: sel.isProposalActive
   }),
   {
     initialize: (data) => initialize("form/reply", data),
