@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, withRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import throttle from "lodash/throttle";
 import configureStore from "./configureStore";
@@ -18,6 +18,9 @@ store.subscribe(throttle(() => {
 }, 1000));
 
 class Loader extends Component {
+  componentWillMount(){
+    this.props.onInit();
+  }
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.loggedInAs) {
@@ -27,25 +30,9 @@ class Loader extends Component {
   }
 
   componentDidMount() {
-    this.props.onInit();
     if(this.props.loggedInAs) {
       pki.getKeys(this.props.loggedInAs).then(keys =>
         this.props.keyMismatchAction(keys.publicKey !== this.props.serverPubkey));
-    }
-  }
-
-  renderHeaderAlert = () => {
-    if(!this.props.loggedInAs) {
-      return null;
-    }
-
-    if(this.props.paywallAddress || this.props.keyMismatch === true) {
-      return (
-        <HeaderAlert className="action-needed-alert">
-          You cannot currently submit proposals or comments, please visit your{" "}
-          <a href="/user/account">account page</a> to correct this problem.
-        </HeaderAlert>
-      );
     }
   }
 
@@ -54,7 +41,6 @@ class Loader extends Component {
       <Router>
         <div className="appWrapper">
           <ModalStack />
-          {this.renderHeaderAlert()}
           {this.props.children}
         </div>
       </Router>
@@ -64,11 +50,31 @@ class Loader extends Component {
 
 const LoaderComponent = loaderConnector(Loader);
 
+const HeaderAlertComponent = withRouter(loaderConnector(({
+  loggedInAs,
+  paywallAddress,
+  keyMismatch,
+  history
+}) => {
+  if (!loggedInAs) return null;
+  if(paywallAddress || keyMismatch === true) {
+    return (
+      <HeaderAlert className="action-needed-alert">
+        You cannot currently submit proposals or comments, please visit your{" "}
+        <a style={{cursor: "pointer"}} onClick={() => history.push("/user/account")}>account page</a>{" "}
+        to correct this problem.
+      </HeaderAlert>
+    );
+  }
+  return null;
+}));
+
 export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
         <LoaderComponent>
+          <HeaderAlertComponent/>
           <Subreddit>
             <Routes />
           </Subreddit>

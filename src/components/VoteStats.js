@@ -3,7 +3,7 @@ import React from "react";
 class VoteStats extends React.Component {
   getOptionVoteInfo = (votes, options) => {
     const result = options.map(op => {
-      const votesReiceved = votes.filter(v => parseInt(v.votebit) === parseInt(op.bits)).length;
+      const votesReiceved = votes.filter(v => parseInt(v.votebit, 10) === parseInt(op.bits, 10)).length;
       const percentage = (votesReiceved/votes.length).toFixed(2)*100;
       return {
         id: op.id,
