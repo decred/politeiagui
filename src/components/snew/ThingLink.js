@@ -43,7 +43,7 @@ const ThingLink = ({
   onChangeStatus,
   onStartVote,
   setStatusProposalToken,
-  setStatusProposalError
+  setStatusProposalError,
 }) => (
   <div
     className={`thing id-${id} odd link ${
@@ -207,7 +207,7 @@ const ThingLink = ({
                   </form>
                 </li>,
               ]
-              : review_status === PROPOSAL_STATUS_PUBLIC ?
+              : review_status === PROPOSAL_STATUS_PUBLIC && !vote ?
                 <li key="start-vote">
                   <form
                     className="toggle remove-button"
@@ -215,13 +215,13 @@ const ThingLink = ({
                       onStartVote(
                         loggedInAs,
                         id,
-                        PROPOSAL_STATUS_CENSORED
+                        PROPOSAL_STATUS_UNREVIEWED
                       ) && e.preventDefault()
                     }
                   >
                     <button
                       className="togglebutton access-required"
-                      data-event-action="spam"
+                      data-event-action="start-vote"
                       type="submit"
                     >
                       Start Vote

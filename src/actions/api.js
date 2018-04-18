@@ -291,12 +291,19 @@ export const onFetchActiveVotes = () => (dispatch) => {
   );
 };
 
-export const onStartVote = (loggedInAs, token, vote) => {
-  return withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_START_VOTE({ token }));
-    return api
-      .startVote(loggedInAs, csrf, token, vote)
-      .then(response => dispatch(act.RECEIVE_START_VOTE(response)))
-      .catch(error => dispatch(act.RECEIVE_START_VOTE(null, error)));
+export const onStartVote = (loggedInAs, token, status) =>
+  withCsrf((dispatch, getState, csrf) => {
+    return dispatch(confirmWithModal("CONFIRM_ACTION",
+      { message: "Are you sure you want to start voting this proposal?" }))
+      .then(
+        (confirm) => {
+          if (confirm) {
+            dispatch(act.REQUEST_START_VOTE({token, status}));
+            return api
+              .startVote(loggedInAs, csrf, token, status)
+              .then(response => dispatch(act.RECEIVE_START_VOTE({...response, success: true})))
+              .catch(error => dispatch(act.RECEIVE_START_VOTE(null, error)));
+          }
+        }
+      );
   });
-}

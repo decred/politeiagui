@@ -10,7 +10,7 @@ export default connect(
     isAdmin: sel.isAdmin,
     proposals: sel.vettedProposals,
     error: sel.vettedProposalsError,
-    isLoading: or(sel.vettedProposalsIsRequesting, sel.isApiRequestingActiveVotes),
+    isLoading: or(sel.vettedProposalsIsRequesting, sel.isApiRequestingActiveVotes, sel.isApiRequestingStartVote),
     activeVotes: sel.activeVotes,
     header: () => "Active Proposals"
   }),

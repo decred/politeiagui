@@ -129,7 +129,7 @@ export const verifyKeyRequest = (csrf, email, verificationtoken) =>
 
 export const policy = () => GET("/v1/policy").then(getResponse);
 export const vetted = () => GET("/v1/proposals/vetted").then(getResponse);
-export const unvetted = () => GET("/v1/proposals/unvetted").then(getResponse);
+export const unvetted = () => GET("/v1/proposals/unvetted", true).then(getResponse);
 export const proposal = token => GET(`/v1/proposals/${token}`).then(getResponse);
 export const proposalComments = token => GET(`/v1/proposals/${token}/comments`).then(getResponse);
 export const logout = csrf => POST("/logout", csrf, {}).then(() => ({}));
@@ -171,7 +171,4 @@ export const startVote = (email, csrf, token, status) =>
           }]
         }, signature, publickey
       }
-    ))).then(getResponse => {
-    console.log("******************************************");
-    console.log(getResponse);
-  });
+    ))).then(getResponse);
