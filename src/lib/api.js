@@ -61,8 +61,8 @@ const parseResponse = response => parseResponseBody(response).then(json => {
   return { response: json, csrfToken: response.headers.get("X-Csrf-Token") };
 });
 
-const GET = (path, includeCookie) =>
-  fetch(apiBase + path, includeCookie ? { credentials: "include" } : null)
+const GET = (path) =>
+  fetch(apiBase + path, { credentials: "include" })
     .then(parseResponse);
 
 const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
@@ -76,15 +76,15 @@ const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
   body: JSON.stringify(json)
 }).then(parseResponse);
 
-export const me = () => GET("/v1/user/me", true).then(({ csrfToken, response:
+export const me = () => GET("/v1/user/me").then(({ csrfToken, response:
   { email, isadmin, haspaid, paywalladdress, paywallamount, userid, publickey } }) => ({
-  csrfToken: csrfToken,
+  csrfToken: csrfToken || "itsafake",
   email, isadmin, haspaid, paywalladdress,
   paywallamount, userid,
   pubkey: publickey,
 }));
 
-export const apiInfo = () => GET("/", true).then(({ csrfToken, response: { version, route, pubkey } }) => ({
+export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, route, pubkey } }) => ({
   csrfToken: csrfToken || "itsafake", version, route, pubkey
 }));
 
@@ -129,7 +129,7 @@ export const verifyKeyRequest = (csrf, email, verificationtoken) =>
 
 export const policy = () => GET("/v1/policy").then(getResponse);
 export const vetted = () => GET("/v1/proposals/vetted").then(getResponse);
-export const unvetted = () => GET("/v1/proposals/unvetted", true).then(getResponse);
+export const unvetted = () => GET("/v1/proposals/unvetted").then(getResponse);
 export const proposal = token => GET(`/v1/proposals/${token}`).then(getResponse);
 export const proposalComments = token => GET(`/v1/proposals/${token}/comments`).then(getResponse);
 export const logout = csrf => POST("/logout", csrf, {}).then(() => ({}));
