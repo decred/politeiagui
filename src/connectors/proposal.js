@@ -14,7 +14,7 @@ const proposalConnector = connect(
     isAdmin: sel.isAdmin,
     proposal: sel.proposal,
     comments: sel.proposalComments,
-    error: sel.proposalError,
+    error: or(sel.proposalError, sel.activeVotesError),
     isLoading: or(sel.proposalIsRequesting, sel.setStatusProposalIsRequesting, sel.isApiRequestingActiveVotes),
     markdownFile: sel.getMarkdownFile,
     otherFiles: sel.getNotMarkdownFile,
