@@ -33,6 +33,8 @@ export const onFetchProposal = (token) =>
 
 export const onChangeFilter = (option) => act.CHANGE_FILTER_VALUE(option);
 
+export const onChangeProposalStatusApproved = (status) => act.SET_PROPOSAL_APPROVED(status);
+
 export const onSubmitComment = (...args) =>
   (dispatch) =>
     dispatch(onSubmitCommentApi(...args))

@@ -5,8 +5,7 @@ import ReactBody from "react-body";
 import PageLoadingIcon from "./PageLoadingIcon";
 import Message from "../Message";
 import ProposalFilter from "../ProposalFilter";
-
-
+import ThingLink from "../../connectors/thingLink";
 
 export const CustomContent = ({
   bodyClassName="listing-page",
@@ -70,6 +69,9 @@ class Loader extends Component {
   componentDidMount() {
     this.props.onFetchActiveVotes && this.props.onFetchActiveVotes();
     this.props.onFetchData && this.props.onFetchData();
+    if(this.props.isProposalStatusApproved){
+      this.props.onChangeProposalStatusApproved(false);
+    }
   }
 
   render() {
@@ -77,4 +79,4 @@ class Loader extends Component {
   }
 }
 
-export default Loader;
+export default ThingLink(Loader);

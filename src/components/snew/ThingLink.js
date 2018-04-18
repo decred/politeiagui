@@ -4,6 +4,7 @@ import ProposalImages from "../ProposalImages";
 import DownloadBundle from "../DownloadBundle";
 import Message from "../Message";
 import actions from "../../connectors/actions";
+import connector from "../../connectors/thingLink";
 import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
@@ -11,8 +12,9 @@ import {
 } from "../../constants";
 import { getProposalStatus } from "../../helpers";
 import VoteStats from "../VoteStats";
+import { withRouter } from "react-router";
 
-const ThingLink = ({
+const ThingLinkComp = ({
   Link,
   Expando,
   id,
@@ -255,4 +257,19 @@ const ThingLink = ({
   </div>
 );
 
-export default actions(ThingLink);
+export const Comp = actions(ThingLinkComp);
+
+class ThingLink extends React.Component {
+
+  componentDidMount(){
+    const {isProposalStatusApproved, history} = this.props;
+    if(isProposalStatusApproved)
+      history.push("/");
+  }
+
+  render() {
+    return <Comp {...this.props} />;
+  }
+}
+
+export default connector(withRouter(ThingLink));
