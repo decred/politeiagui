@@ -27,6 +27,7 @@ const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
 export const isApiRequestingActiveVotes = getIsApiRequesting("activeVotes");
 export const isApiRequestingNewComment = getIsApiRequesting("newComment");
 export const isApiRequestingSetStatusProposal = getIsApiRequesting("setStatusProposal");
+export const isApiRequestingStartVote = getIsApiRequesting("startVote");
 export const isApiRequesting = or(
   isApiRequestingInit,
   isApiRequestingPolicy,
@@ -39,7 +40,8 @@ export const isApiRequesting = or(
   isApiRequestingProposal,
   isApiRequestingNewProposal,
   isApiRequestingNewComment,
-  isApiRequestingSetStatusProposal
+  isApiRequestingSetStatusProposal,
+  isApiRequestingStartVote,
 );
 
 const apiNewUserPayload = getApiPayload("newUser");
@@ -69,6 +71,7 @@ export const updateUserKeyError = getApiError("updateUserKey");
 export const verifyUserKeyError = getApiError("verifyUserKey");
 const apiActiveVotesResponse = getApiResponse("activeVotes");
 const apiActiveVotesError = getApiError("activeVotes");
+const apiSetStartVoteResponse = getApiResponse("startVote");
 
 const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
@@ -203,3 +206,4 @@ export const verificationToken = compose(get("verificationtoken"), apiNewUserRes
 export const getKeyMismatch = state => state.api.keyMismatch;
 export const activeVotes = or(compose(get("votes"), apiActiveVotesResponse), constant([]));
 export const activeVotesError = apiActiveVotesError;
+export const setStartVote = compose(get("startvote"), apiSetStartVoteResponse);
