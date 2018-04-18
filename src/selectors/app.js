@@ -39,3 +39,5 @@ export const getUserPaywallConfirmations = state => {
   }
   return state.app.userPaywallConfirmations;
 };
+
+export const isProposalStatusApproved = state => state.app.isProposalStatusApproved;

@@ -37,6 +37,7 @@ const app = (state = DEFAULT_STATE, action) => (({
       };
     }
   },
+  [act.SET_PROPOSAL_APPROVED]: () => ({...state, isProposalStatusApproved: action.payload}),
   [act.CANCEL_SIGNUP]: () => ({ ...state, isShowingSignup: false }),
   [act.CHANGE_FILTER_VALUE]: () => ({ ...state, adminProposalsShow: action.payload }),
   [act.UPDATE_USER_PAYWALL_STATUS]: () => ({

@@ -220,6 +220,9 @@ export const onSubmitStatusProposal = (loggedInAs, token, status) =>
         (confirm) => {
           if (confirm) {
             dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
+            if(status === 4) {
+              dispatch(act.SET_PROPOSAL_APPROVED(true));
+            }
             return api
               .proposalSetStatus(loggedInAs, csrf, token, status)
               .then(response => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(response)))
