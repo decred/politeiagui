@@ -29,6 +29,7 @@ const ThingLink = ({
   title,
   url,
   vote,
+  userid,
   permalink,
   is_self,
   selftext,
@@ -96,7 +97,10 @@ const ThingLink = ({
           <TimeAgo
             style={{ cursor: "pointer" }}
             datetime={created_utc * 1000}
-          />{" "}-{" "}
+          />
+          {" "}-{" "}
+          {"Author id: "}{userid}
+          {" "}-{" "}
           {numcomments}{numcomments === 1 ? " comment" : " comments"}
         </Link>
       </p>
