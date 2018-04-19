@@ -304,7 +304,10 @@ export const onStartVote = (loggedInAs, token, status) =>
             dispatch(act.REQUEST_START_VOTE({token, status}));
             return api
               .startVote(loggedInAs, csrf, token, status)
-              .then(response => dispatch(act.RECEIVE_START_VOTE({...response, success: true})))
+              .then(response => {
+                dispatch(act.RECEIVE_START_VOTE({...response, success: true}));
+                dispatch(onFetchActiveVotes());
+              })
               .catch(error => dispatch(act.RECEIVE_START_VOTE(null, error)));
           }
         }

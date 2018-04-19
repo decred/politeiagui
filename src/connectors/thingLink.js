@@ -5,6 +5,7 @@ import * as act from "../actions";
 const proposalDownloadConnector = connect(
   sel.selectorMap({
     isProposalStatusApproved: sel.isProposalStatusApproved,
+    tokenFromStartingVoteProp: sel.getPropTokenIfIsStartingVote
   }),
   {
     onChangeProposalStatusApproved: act.onChangeProposalStatusApproved,

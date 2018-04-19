@@ -168,6 +168,13 @@ export const isTestNet = bool(
   });
 export const isMainNet = not(isTestNet);
 
+export const getPropTokenIfIsStartingVote = (state) => {
+  if(state.api.startVote && state.api.startVote.isRequesting) {
+    return state.api.startVote.payload && state.api.startVote.payload.token;
+  }
+  return undefined;
+};
+
 export const userid = state => state.api.me.response && state.api.me.response.userid;
 
 export const serverPubkey = state => state.api.me.response && state.api.me.response.pubkey;
