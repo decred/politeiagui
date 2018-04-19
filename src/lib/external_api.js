@@ -1,5 +1,13 @@
-const dcrdataURL = (network, address) => `https://${network}.dcrdata.org/api/address/${address}/raw`;
-const insightURL = (network, address) => `https://${network}.decred.org/api/addr/${address}/utxo?noCache=1`;
+import { NETWORK } from "../constants";
+
+const dcrdataURL = (network) => `https://${network}.dcrdata.org/api`;
+const insightURL = (network) => `https://${network}.decred.org/api`;
+
+const dcrddataBlockHeightURL = network => `${dcrdataURL(network)}/block/best/height`;
+const insightBlockHeightURL = network => `${insightURL(network)}/status`;
+
+const dcrdataAddressURL = (network, address) => `${dcrdataURL(network)}/address/${address}/raw`;
+const insightAddressURL = (network, address) => `${insightURL(network)}/addr/${address}/utxo?noCache=1`;
 const FAUCET_URL = "https://faucet.decred.org/requestfaucet";
 
 const POST = (path, params, method = "POST") => {
@@ -32,14 +40,24 @@ const getRawTransactions = url => {
     });
 };
 
+export const getHeightByDcrdata = () => {
+  const network = NETWORK ? "testnet" : "explorer";
+  return getRawTransactions(dcrddataBlockHeightURL(network));
+};
+
+export const getHeightByInsight = () => {
+  const network = NETWORK ? "testnet" : "explorer";
+  return getRawTransactions(insightBlockHeightURL(network));
+};
+
 export const getPaymentsByAddressDcrdata = address => {
   const network = address[0] === "T" ? "testnet" : "explorer";
-  return getRawTransactions(dcrdataURL(network, address));
+  return getRawTransactions(dcrdataAddressURL(network, address));
 };
 
 export const getPaymentsByAddressInsight = address => {
   const network = address[0] === "T" ? "testnet" : "mainnet";
-  return getRawTransactions(insightURL(network, address));
+  return getRawTransactions(insightAddressURL(network, address));
 };
 
 export const payWithFaucet = (address, amount) => {

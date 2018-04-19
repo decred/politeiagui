@@ -214,7 +214,7 @@ export const setStatusProposalError = apiSetStatusProposalError;
 export const redirectedFrom = get(["api", "login", "redirectedFrom"]);
 export const verificationToken = compose(get("verificationtoken"), apiNewUserResponse);
 export const getKeyMismatch = state => state.api.keyMismatch;
-export const activeVotes = or(compose(get("votes"), apiActiveVotesResponse), constant([]));
+export const activeVotes = compose(get("votes"), apiActiveVotesResponse);
 export const activeVotesError = apiActiveVotesError;
 export const setStartVote = compose(get("startvote"), apiSetStartVoteResponse);
 export const voteResultsVote = or(compose(get("vote"), apiVoteResultsResponse), constant({}));

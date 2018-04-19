@@ -51,7 +51,9 @@ const ThingLinkComp = ({
   onStartVote,
   setStatusProposalToken,
   setStatusProposalError,
-  tokenFromStartingVoteProp
+  tokenFromStartingVoteProp,
+  lastBlockHeight,
+  activeVotesEndHeight,
 }) => (
   <div
     className={`thing id-${id} odd link ${
@@ -82,15 +84,26 @@ const ThingLinkComp = ({
         <Link className="title may-blank loggedin" href={url} tabIndex={rank}>
           {title}
         </Link>{" "}
-        {vote &&
-          <span style={{
-            padding: "4px 8px",
-            borderRadius: "8px",
-            fontSize: "12px",
-            color: "green"
-          }}>
-          Proposal active for voting
-          </span>
+        {
+          vote && activeVotesEndHeight ?
+            activeVotesEndHeight[vote.token] >= lastBlockHeight ?
+              (<span style={{
+                padding: "4px 8px",
+                borderRadius: "8px",
+                fontSize: "12px",
+                color: "green"
+              }}>
+                  Proposal active for voting
+              </span>) :
+              (<span style={{
+                padding: "4px 8px",
+                borderRadius: "8px",
+                fontSize: "12px",
+                color: "gray"
+              }}>
+                  Proposal finished voting
+              </span>)
+            : null
         }
         {domain ? (
           <span className="domain">

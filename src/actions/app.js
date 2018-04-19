@@ -35,6 +35,8 @@ export const onChangeFilter = (option) => act.CHANGE_FILTER_VALUE(option);
 
 export const onChangeProposalStatusApproved = (status) => act.SET_PROPOSAL_APPROVED(status);
 
+export const setActiveVotesEndHeight = (obj) => act.SET_ACTIVE_VOTES_END_HEIGHT(obj);
+
 export const onSubmitComment = (...args) =>
   (dispatch) =>
     dispatch(onSubmitCommentApi(...args))

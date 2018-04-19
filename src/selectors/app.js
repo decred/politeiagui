@@ -41,3 +41,5 @@ export const getUserPaywallConfirmations = state => {
 };
 
 export const isProposalStatusApproved = state => state.app.isProposalStatusApproved;
+
+export const activeVotesEndHeight = state => state.app.activeVotesEndHeight;

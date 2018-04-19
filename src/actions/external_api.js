@@ -119,3 +119,14 @@ export const payWithFaucet = (address, amount) => dispatch => {
       throw error;
     });
 };
+
+export const getLastBlockHeight = () => dispatch => {
+  dispatch(act.REQUEST_GET_LAST_BLOCK_HEIGHT());
+  // try with dcrData if fail we try with insight api
+  external_api.getHeightByDcrdata().then(response => {
+    dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(response));
+  }).catch(err=> {
+    // ToDo try with insight
+    console.log(err);
+  });
+};
