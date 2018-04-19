@@ -320,6 +320,6 @@ export const onFetchVoteResults = (vote) => (dispatch) => {
   return api.voteResults({ vote }).then(
     response => dispatch(act.RECEIVE_VOTE_RESULTS({ ...response, success: true }))
   ).catch(
-    error => dispatch(act.RECEIVE_ACTIVE_VOTES(null, error))
+    error => dispatch(act.RECEIVE_VOTE_RESULTS(null, error))
   );
 };

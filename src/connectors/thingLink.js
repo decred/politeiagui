@@ -5,10 +5,14 @@ import * as act from "../actions";
 const proposalDownloadConnector = connect(
   sel.selectorMap({
     isProposalStatusApproved: sel.isProposalStatusApproved,
-    tokenFromStartingVoteProp: sel.getPropTokenIfIsStartingVote
+    tokenFromStartingVoteProp: sel.getPropTokenIfIsStartingVote,
+    lastBlockHeight: sel.lastBlockHeight,
+    activeVotesEndHeight: sel.activeVotesEndHeight,
   }),
   {
     onChangeProposalStatusApproved: act.onChangeProposalStatusApproved,
+    setActiveVotesEndHeight: act.setActiveVotesEndHeight,
+    getLastBlockHeight: act.getLastBlockHeight,
   }
 );
 
