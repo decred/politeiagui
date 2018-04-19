@@ -10,7 +10,8 @@ const newSort = orderBy([get("timestamp")], ["desc"]);
 class ProposalDetail extends React.Component {
   componentWillReceiveProps(nextProps) {
     if((!this.props.proposal || Object.keys(this.props.proposal).length === 0 ) &&
-      nextProps.proposal && Object.keys(nextProps.proposal).length > 0 ){
+      nextProps.proposal && Object.keys(nextProps.proposal).length > 0 &&
+      nextProps.proposal.status === 4 ){
       this.props.onFetchVoteResults({ token: this.props.token });
     }
   }

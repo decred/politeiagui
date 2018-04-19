@@ -13,6 +13,7 @@ import {
 import { getProposalStatus } from "../../helpers";
 import VoteStats from "../VoteStats";
 import { withRouter } from "react-router";
+import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
 
 const ThingLinkComp = ({
   Link,
@@ -50,6 +51,7 @@ const ThingLinkComp = ({
   onStartVote,
   setStatusProposalToken,
   setStatusProposalError,
+  tokenFromStartingVoteProp
 }) => (
   <div
     className={`thing id-${id} odd link ${
@@ -231,13 +233,11 @@ const ThingLinkComp = ({
                       ) && e.preventDefault()
                     }
                   >
-                    {!vote && <button
-                      className="togglebutton access-required"
+                    {!vote && <ButtonWithLoadingIcon
+                      className="c-btn c-btn-primary"
+                      text="Start Vote"
                       data-event-action="start-vote"
-                      type="submit"
-                    >
-                      Start Vote
-                    </button>}
+                      isLoading={tokenFromStartingVoteProp === id}/>}
                   </form>
                 </li> : null
             : null}
