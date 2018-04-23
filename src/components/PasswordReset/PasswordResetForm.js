@@ -39,7 +39,6 @@ const PasswordResetForm = ({ error, handleSubmit, onPasswordReset, isRequesting 
           Verify Password:
         </label>
         <Field
-          autoFocus
           className="c-form-control"
           id="password_verify"
           name="password_verify"
