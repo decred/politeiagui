@@ -1,24 +1,32 @@
 import React from "react";
 
-const CancelButton = ({ onClick }) => (
+const CancelButton = ({ onClick, text }) => (
   <button
     className="btn"
     onClick={onClick}
   >
-    Cancel
+    {text}
   </button>
 );
 
-const SubmitButton = ({ onClick }) => (
+const SubmitButton = ({ onClick, text }) => (
   <button
     className="btn"
     onClick={onClick}
   >
-    Ok
+    {text}
   </button>
 );
 
-const ModalContentWrapper = ({ onClose, onCancel, onSubmit, title, children }) => {
+const ModalContentWrapper = ({
+  onClose,
+  onCancel,
+  onSubmit,
+  title,
+  submitText = "OK",
+  cancelText = "Cancel",
+  children
+}) => {
   return (
     <div className="modal-content" style={{ minWidth: "700px" }}>
       <div className="modal-content-header">
@@ -29,8 +37,8 @@ const ModalContentWrapper = ({ onClose, onCancel, onSubmit, title, children }) =
       </div>
       {children}
       <div className="modal-content-actions">
-        {onCancel && <CancelButton onClick={onCancel} />}
-        {onSubmit && <SubmitButton onClick={onSubmit} />}
+        {onCancel && <CancelButton onClick={onCancel} text={cancelText} />}
+        {onSubmit && <SubmitButton onClick={onSubmit} text={submitText} />}
       </div>
     </div>
   );

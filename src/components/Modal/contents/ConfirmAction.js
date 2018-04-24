@@ -20,6 +20,8 @@ class ConfirmAction extends React.Component {
     return (
       <ModalContentWrapper
         title={"Confirm Action"}
+        submitText="Yes"
+        cancelText="No"
         onCancel={this.handleCancel}
         onSubmit={this.handleConfirm}
       >
