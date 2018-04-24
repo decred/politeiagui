@@ -6,6 +6,7 @@ const actions = connect(
   sel.selectorMap({
     loggedInAs: sel.loggedInAs,
     email: sel.email,
+    userid: sel.userid,
     isAdmin: sel.isAdmin,
     hasPaid: sel.hasPaid,
     lastSubmitted: sel.getLastSubmittedProposal,
