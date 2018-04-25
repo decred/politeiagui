@@ -55,12 +55,13 @@ const Modal = ({
       {isTestnet ? (
         <div className="paywall-faucet">
           <p>
-            Politeia is currently running on Testnet, which means you can pay
+            This Politeia instance is running on Testnet, which means you can pay
             automatically with the Decred faucet:
           </p>
           <ButtonWithLoadingIcon
             className="c-btn c-btn-primary"
             text="Pay with Faucet"
+            disabled={userPaywallStatus === PAYWALL_STATUS_PAID}
             isLoading={isApiRequestingPayWithFaucet}
             onClick={() => payWithFaucet(paywallAddress, paywallAmount)} />
         </div>

@@ -95,10 +95,11 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.SET_EMAIL]: () => ({ ...state, email: action.payload }),
   [act.CLEAN_ERRORS]: () => (
     Object.keys(state).reduce((acc, curr) => {
-      if (curr === "email") {
-        acc[curr] = state[curr];
-      } else {
+      if (typeof state[curr] === "object") {
         acc[curr] = Object.assign({}, state[curr], { error: null });
+      }
+      else {
+        acc[curr] = state[curr];
       }
       return acc;
     }, {})

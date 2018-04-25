@@ -5,7 +5,7 @@ export default connect(
   sel.selectorMap({
     loggedInAs: sel.loggedInAs,
     isAdmin: sel.isAdmin,
-    hasPaid: sel.hasPaid,
+    userHasPaid: sel.userHasPaid,
     paywallAddress: sel.paywallAddress,
     paywallAmount: sel.paywallAmount,
     paywallTxNotBefore: sel.paywallTxNotBefore,

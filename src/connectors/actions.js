@@ -8,7 +8,8 @@ const actions = connect(
     email: sel.email,
     userid: sel.userid,
     isAdmin: sel.isAdmin,
-    hasPaid: sel.hasPaid,
+    userHasPaid: sel.userHasPaid,
+    userCanExecuteActions: sel.userCanExecuteActions,
     lastSubmitted: sel.getLastSubmittedProposal,
     setStatusProposalToken: sel.setStatusProposalToken,
     setStatusProposalError: sel.setStatusProposalError

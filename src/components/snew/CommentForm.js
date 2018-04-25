@@ -20,7 +20,7 @@ const CommentForm = ({
   onToggleMarkdownHelp,
   onSetReplyParent,
   loggedIn,
-  grantAccess,
+  userCanExecuteActions,
   isActive
 }) => (
   loggedIn ?
@@ -90,7 +90,7 @@ const CommentForm = ({
                 className="cancel"
                 onClick={() => onSetReplyParent()}
                 type="button"
-                disabled={!grantAccess}
+                disabled={!userCanExecuteActions}
               >
               cancel
               </button>)) || null}

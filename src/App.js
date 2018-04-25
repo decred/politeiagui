@@ -52,12 +52,11 @@ const LoaderComponent = loaderConnector(Loader);
 
 const HeaderAlertComponent = withRouter(loaderConnector(({
   loggedInAs,
-  paywallAddress,
-  keyMismatch,
+  userCanExecuteActions,
   history
 }) => {
   if (!loggedInAs) return null;
-  if(paywallAddress || keyMismatch === true) {
+  if(!userCanExecuteActions) {
     return (
       <HeaderAlert className="action-needed-alert">
         You cannot currently submit proposals or comments, please visit your{" "}

@@ -9,7 +9,6 @@ export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
   // Check dcrdata first.
   return external_api.getPaymentsByAddressDcrdata(address)
     .then(response => {
-      console.log("dcrdata response: " + response);
       if(response === null) {
         return null;
       }
@@ -17,7 +16,6 @@ export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
       return checkForPayment(checkDcrdataHandler, response, address, amount, txNotBefore);
     })
     .then(txn => {
-      console.log("dcrdata txn: " + txn);
       if(txn) {
         return txn;
       }
@@ -25,7 +23,6 @@ export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
       // If that fails, then try insight.
       return external_api.getPaymentsByAddressInsight(address)
         .then(response => {
-          console.log("insight response: " + response);
           if(response === null) {
             return null;
           }
@@ -34,7 +31,6 @@ export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
         });
     })
     .then(txn => {
-      console.log("insight txn: " + txn);
       if (!txn) {
         return false;
       }
@@ -47,7 +43,7 @@ export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
         return false;
       }
 
-      return verifyUserPaymentWithPoliteia(dispatch, txn.id);
+      return verifyUserPaymentWithPoliteia(txn.id);
     })
     .then(verified => {
       if(verified) {

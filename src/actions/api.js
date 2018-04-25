@@ -278,11 +278,9 @@ export const keyMismatch = (payload) => dispatch => dispatch(act.KEY_MISMATCH(pa
 export const resetPasswordReset = () => dispatch =>
   dispatch(act.RESET_PASSWORD_RESET_REQUEST);
 
-export const verifyUserPaymentWithPoliteia = (dispatch, txid) => {
+export const verifyUserPaymentWithPoliteia = txid => {
   return api.verifyUserPayment(txid)
-    .then(response => {
-      return response.haspaid;
-    });
+    .then(response => response.haspaid);
 };
 
 export const onFetchActiveVotes = () => (dispatch) => {
@@ -313,7 +311,6 @@ export const onStartVote = (loggedInAs, token, status) =>
         }
       );
   });
-
 
 export const onFetchVoteResults = (vote) => (dispatch) => {
   dispatch(act.REQUEST_VOTE_RESULTS({ vote }));
