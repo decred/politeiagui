@@ -14,23 +14,28 @@ const UpdatedKeyMessage = ({ email }) => (
 );
 
 class KeyPage extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
       pubkey: ""
     };
   }
+
   componentDidMount() {
     const { loggedInAs, history } = this.props;
     if (!loggedInAs) history.push("/login");
-    myPubKeyHex(loggedInAs).then(
-      (pubkey) => {
-        this.setState({
-          pubkey
-        });
+    myPubKeyHex(loggedInAs).then(pubkey => {
+      if(!this.unmounting) {
+        this.setState({ pubkey });
       }
-    );
+    });
   }
+
+  componentWillUnmount() {
+    this.unmounting = true;
+  }
+
   render() {
     const {
       loggedInAs,
@@ -56,12 +61,12 @@ class KeyPage extends React.Component {
           {pubkey && <span>Current Public key: {pubkey}</span>}
           {updateUserKey &&
             updateUserKey.success && (
-              <Message
-                type="success"
-                header="Key Updated"
-                body={<UpdatedKeyMessage email={loggedInAs} />}
-              />
-            )}
+            <Message
+              type="success"
+              header="Key Updated"
+              body={<UpdatedKeyMessage email={loggedInAs} />}
+            />
+          )}
           {updateUserKeyError && (
             <Message
               type="error"
