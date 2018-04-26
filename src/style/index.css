@@ -181,7 +181,7 @@ a:hover {
   color: #ffffff;
   display: flex;
   align-items: center;
-  justify-content: center;  
+  justify-content: center;
 }
 .message-text {
   padding: 18px;
@@ -598,8 +598,9 @@ li p.header-3 {
 }
 
 .modal-content-actions > .btn {
-  margin-right: 0;
-  margin-left: 16px;
+  margin-right: 16px;
+  margin-left: 0;
+  min-width: 70px;
 }
 
 .receive-content-nest-qrimage {
