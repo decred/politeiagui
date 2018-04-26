@@ -4,8 +4,17 @@ import FileDownloadLink from "./FileDownloadLink";
 import * as pki from "../lib/pki";
 
 class PrivateKeyIdentityManager extends Component {
+
   componentDidMount() {
-    this.fetchKeys().then(keyData => this.setState({ keyData }));
+    this.fetchKeys().then(keyData => {
+      if(!this.unmounting) {
+        this.setState({ keyData });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.unmounting = true;
   }
 
   render() {

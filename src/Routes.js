@@ -34,7 +34,7 @@ class Routes extends Component {
         <Route path="/user/logout" component={Logout} />
         <Route path="/user/signup/next" component={SignupNext} />
         <Route path="/user/signup" component={LoginSignupPage} />
-        <Route path="/user/proposals" component={userProposals(ProposalListing)} />
+        <AuthenticatedRoute path="/user/proposals" component={userProposals(ProposalListing)} />
         <Route exact path="/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password/next" component={ForgottenPasswordSuccess} />
@@ -44,7 +44,7 @@ class Routes extends Component {
         <Route path="/user/verify/failure" component={VerifyFailure} />
         <Route path="/user/verify" component={Verify} exact />
         <Route path="/user/key/verify" component={VerifyKey} exact />
-        <Route path="/user/account" component={Account} exact />
+        <AuthenticatedRoute path="/user/account" component={Account} exact />
         <AuthenticatedRoute path="/proposals/new" component={SubmitPage} />
         <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />
