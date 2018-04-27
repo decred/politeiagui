@@ -43,7 +43,7 @@ class KeyPage extends React.Component {
       updateUserKey,
       updateUserKeyError,
       keyMismatch,
-      hasPaid
+      userAlreadyPaid,
     } = this.props;
     const { pubkey } = this.state;
     return (
@@ -51,7 +51,7 @@ class KeyPage extends React.Component {
         <div
           style={{ display: "flex", flexDirection: "column" }}
           className="page user-profile-page">
-          {!hasPaid ? (
+          {!userAlreadyPaid ? (
             <div>
               <h1>Payment Required</h1>
               <Paywall />

@@ -76,12 +76,20 @@ const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
   body: JSON.stringify(json)
 }).then(parseResponse);
 
-export const me = () => GET("/v1/user/me").then(({ csrfToken, response:
-  { email, isadmin, haspaid, paywalladdress, paywallamount, userid, publickey } }) => ({
+export const me = () => GET("/v1/user/me").then(({
+  csrfToken,
+  response: {
+    email, isadmin,
+    paywalladdress, paywallamount, paywalltxnotbefore,
+    userid,
+    publickey
+  }
+}) => ({
   csrfToken: csrfToken || "itsafake",
-  email, isadmin, haspaid, paywalladdress,
-  paywallamount, userid,
-  pubkey: publickey,
+  email, isadmin,
+  paywalladdress, paywallamount, paywalltxnotbefore,
+  userid,
+  pubkey: publickey
 }));
 
 export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, route, pubkey } }) => ({

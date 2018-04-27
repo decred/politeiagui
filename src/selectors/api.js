@@ -124,7 +124,7 @@ export const isAdmin = bool(or(
   compose(get("isadmin"), apiLoginResponse)
 ));
 
-export const hasPaid = bool(state => {
+export const userAlreadyPaid = bool(state => {
   if(state.api.me && state.api.me.response) {
     return state.api.me.response.paywalladdress === "";
   }
@@ -153,10 +153,16 @@ export const paywallAmount = state => {
   return paywallAmount / 100000000;
 };
 
-export const paywallTxNotBefore = or(
-  compose(get("paywalltxnotbefore"), apiNewUserResponse),
-  compose(get("paywalltxnotbefore"), apiMeResponse),
-);
+export const paywallTxNotBefore = state => {
+  if(state.api.newUser && state.api.newUser.response) {
+    return state.api.newUser.response.paywalltxnotbefore;
+  }
+  if(state.api.me && state.api.me.response) {
+    return state.api.me.response.paywalltxnotbefore;
+  }
+
+  return null;
+};
 
 export const isTestNet = bool(
   state => {

@@ -14,10 +14,11 @@ const replyConnector = connect(
     loggedIn: sel.loggedIn,
     loggedInAs: sel.loggedInAs,
     keyMismatch: sel.getKeyMismatch,
+    userCanExecuteActions: sel.userCanExecuteActions,
     replyTo: sel.replyTo,
     policy: sel.policy,
     isPostingComment: sel.isApiRequestingNewComment,
-    hasPaid: sel.hasPaid,
+    userHasPaid: sel.userHasPaid,
     isActive: sel.isProposalActive
   }),
   {

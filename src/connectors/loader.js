@@ -7,8 +7,7 @@ export default connect(
   sel.selectorMap({
     serverPubkey: sel.serverPubkey,
     loggedInAs: sel.loggedInAs,
-    keyMismatch: sel.getKeyMismatch,
-    paywallAddress: sel.paywallAddress,
+    userCanExecuteActions: sel.userCanExecuteActions,
   }),
   dispatch => bindActionCreators({
     onInit: act.onInit,
