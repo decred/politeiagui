@@ -5,7 +5,7 @@ const SubmitTextSidebox = ({
   Link, loggedInAs, userCanExecuteActions
 }) => loggedInAs ? (
   <div className="spacer">
-    <div className={`sidebox submit submit-text ${!userCanExecuteActions ? "not-active" : null}`}>
+    <div className={`sidebox submit submit-text ${!userCanExecuteActions ? "not-active disabled" : null}`}>
       <div className="morelink">
         <Link
           className="login-required access-required"
