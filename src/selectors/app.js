@@ -44,6 +44,7 @@ export const getUserPaywallConfirmations = state => {
 export const userHasPaid = state => {
   return getUserPaywallStatus(state) === PAYWALL_STATUS_PAID;
 };
+
 export const userCanExecuteActions = state => {
   return userHasPaid(state) && !getKeyMismatch(state);
 };

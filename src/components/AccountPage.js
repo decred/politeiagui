@@ -42,8 +42,7 @@ class KeyPage extends React.Component {
       onUpdateUserKey,
       updateUserKey,
       updateUserKeyError,
-      keyMismatch,
-      userAlreadyPaid,
+      keyMismatch
     } = this.props;
     const { pubkey } = this.state;
     return (
@@ -51,22 +50,21 @@ class KeyPage extends React.Component {
         <div
           style={{ display: "flex", flexDirection: "column" }}
           className="page user-profile-page">
-          {!userAlreadyPaid ? (
-            <div>
-              <h1>Payment Required</h1>
-              <Paywall />
-            </div>
-          ) : null}
+          <div>
+            <h1>Paywall</h1>
+            <span>The paywall fee is used to help deter spam in Politeia</span>
+            <Paywall />
+          </div>
           <h1>Key management</h1>
           {pubkey && <span>Current Public key: {pubkey}</span>}
           {updateUserKey &&
             updateUserKey.success && (
-            <Message
-              type="success"
-              header="Key Updated"
-              body={<UpdatedKeyMessage email={loggedInAs} />}
-            />
-          )}
+              <Message
+                type="success"
+                header="Key Updated"
+                body={<UpdatedKeyMessage email={loggedInAs} />}
+              />
+            )}
           {updateUserKeyError && (
             <Message
               type="error"
