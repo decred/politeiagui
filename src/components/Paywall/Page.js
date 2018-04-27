@@ -7,6 +7,23 @@ import {
   PAYWALL_STATUS_PAID
 } from "../../constants";
 
+const getTextContent = (paywallStatus) => {
+  const mapStatusToContent = {
+    [PAYWALL_STATUS_WAITING]: () => ({
+      serPaywallStatusCls: "paywall-payment-status-waiting",
+      userPaywallStatusText: "Waiting for payment",
+    }),
+    [PAYWALL_STATUS_LACKING_CONFIRMATIONS]: () => ({
+      userPaywallStatusCls: "paywall-payment-status-confirmations",
+      userPaywallStatusText: "Waiting for more confirmations"
+    }),
+    [PAYWALL_STATUS_PAID]: () => ({
+      userPaywallStatusCls: "paywall-payment-status-received",
+      userPaywallStatusText: "Payment received"
+    })
+  };
+  return mapStatusToContent[paywallStatus]();
+};
 
 const Modal = ({
   paywallAddress,
@@ -15,48 +32,36 @@ const Modal = ({
   userPaywallStatus,
   userPaywallConfirmations,
   isTestnet,
-  isApiRequestingPayWithFaucet
+  isApiRequestingPayWithFaucet,
+  userHasPaid
 }) => {
-  let userPaywallStatusCls;
-  let userPaywallStatusText;
-  switch(userPaywallStatus) {
-  case PAYWALL_STATUS_WAITING:
-    userPaywallStatusCls = "paywall-payment-status-waiting";
-    userPaywallStatusText = "Waiting for payment";
-    break;
-  case PAYWALL_STATUS_LACKING_CONFIRMATIONS:
-    userPaywallStatusCls = "paywall-payment-status-confirmations";
-    userPaywallStatusText = "Waiting for more confirmations";
-    break;
-  case PAYWALL_STATUS_PAID:
-    userPaywallStatusCls = "paywall-payment-status-received";
-    userPaywallStatusText = "Payment received";
-    break;
-  default:
-    //throw new Error("User paywall status " + userPaywallStatus + " not supported");
-  }
+  const { userPaywallStatusCls, userPaywallStatusText } = getTextContent(userHasPaid ? PAYWALL_STATUS_PAID : userPaywallStatus);
 
-  return (
+  const statusIndicator =(
+    <div className={"paywall-payment-status " + userPaywallStatusCls}>
+        Status: {userPaywallStatusText}
+      {userPaywallStatus === PAYWALL_STATUS_LACKING_CONFIRMATIONS &&
+        <span>{` (${userPaywallConfirmations}/2)`}</span>
+      }
+    </div>
+  );
+
+  const notPaidContent =(
     <div className="paywall-wrapper">
       <div className="paywall-content">
-        Please send exactly <span className="paywall-amount">{paywallAmount} DCR</span> to{" "}
+      Please send exactly <span className="paywall-amount">{paywallAmount} DCR</span> to{" "}
         <span className="paywall-address">{paywallAddress}</span> to complete your
-        account registration. Politeia automatically checks for a transaction with
-        this amount sent to this address. After you send it and it reaches 2 confirmations, you
-        will be approved to submit proposals and comments.
+      account registration. Politeia automatically checks for a transaction with
+      this amount sent to this address. After you send it and it reaches 2 confirmations, you
+      will be approved to submit proposals and comments.
       </div>
       <QRCode addr={paywallAddress} />
-      <div className={"paywall-payment-status " + userPaywallStatusCls}>
-        Status: {userPaywallStatusText}
-        {userPaywallStatus === PAYWALL_STATUS_LACKING_CONFIRMATIONS &&
-          <span>{` (${userPaywallConfirmations}/2)`}</span>
-        }
-      </div>
+      {statusIndicator}
       {isTestnet ? (
         <div className="paywall-faucet">
           <p>
-            This Politeia instance is running on Testnet, which means you can pay
-            automatically with the Decred faucet:
+          This Politeia instance is running on Testnet, which means you can pay
+          automatically with the Decred faucet:
           </p>
           <ButtonWithLoadingIcon
             className="c-btn c-btn-primary"
@@ -68,6 +73,8 @@ const Modal = ({
       ) : null}
     </div>
   );
+
+  return userHasPaid ? statusIndicator : notPaidContent;
 };
 
 export default Modal;

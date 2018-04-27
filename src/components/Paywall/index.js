@@ -14,8 +14,8 @@ class Paywall extends React.Component {
   render() {
     const { hasAttemptedSubmit } = this.state;
     const { onSubmit } = this;
-    const { paywallAddress, paywallAmount } = this.props;
-    return paywallAddress && paywallAmount && (
+
+    return (
       <PaywallPage
         {...{
           ...this.props,
