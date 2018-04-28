@@ -400,7 +400,8 @@ li p.header-3 {
   margin-bottom: 16px;
 }
 
-.verification-success-page p {
+.verification-success-page p,
+.user-profile-page p {
   margin-bottom: 8px;
 }
 
@@ -410,10 +411,35 @@ li p.header-3 {
   margin: 16px 0 16px 24px;
   list-style-type: disc;
 }
+.user-profile-page ul {
+  margin: 0 0 8px 24px;
+}
+
+.user-profile-page a {
+  cursor: pointer;
+}
+.user-profile-page b {
+  padding-left: 0;
+}
+
+.user-profile-page .identity-help {
+  border-top: 1px solid #bbb;
+  border-bottom: 1px solid #bbb;
+  padding: 8px;
+  margin-bottom: 16px;
+}
+
+.user-profile-page .public-key {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 16px;
+}
 
 .signup-next-step-page li,
 .forgotten-password-next-step-page li,
-.logout-page li {
+.logout-page li,
+.user-profile-page li {
   margin: 8px 0;
 }
 .signup-next-step-page .email-address,

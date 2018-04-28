@@ -26,7 +26,7 @@ class PrivateKeyIdentityManager extends Component {
             mime="application/json;charset=utf-8"
             data={this.state.keyData}
           >
-            <button>Save Private Key</button>
+            <button>Download Identity</button>
           </FileDownloadLink>
         )}
         <ReactFileReader
@@ -35,7 +35,7 @@ class PrivateKeyIdentityManager extends Component {
           multipleFiles={false}
           fileTypes="json"
         >
-          <button>Import Private Key</button>
+          <button>Import Identity</button>
         </ReactFileReader>
       </div>
     );
