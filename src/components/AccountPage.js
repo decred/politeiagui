@@ -46,20 +46,38 @@ class KeyPage extends React.Component {
       updateUserKey,
       updateUserKeyError,
       keyMismatch,
-      userAlreadyPaid,
+      userAlreadyPaid
     } = this.props;
     const { pubkey, showIdentityHelpText } = this.state;
     return (
       <div className="content" role="main">
+        {!userAlreadyPaid ? (
+          <Paywall />
+        ) : null}
+        {keyMismatch ? (
+          <Message
+            type="error"
+            className="account-page-message"
+            header="Action Needed"
+            body={(
+              <div>
+                <p>
+                  The Politeia server has a different public key for your account
+                  than the one you have on this browser. This usually means you're
+                  using a different browser than the one you registered your account
+                  with.
+                </p>
+                <p>
+                  You can either create a new identity (which discards the old identity),
+                  or log in with your original browser to download your original identity
+                  and import it here.
+                </p>
+              </div>
+            )} />
+        ) : null}
         <div
           style={{ display: "flex", flexDirection: "column" }}
           className="page user-profile-page">
-          {!userAlreadyPaid ? (
-            <div>
-              <h1>Payment Required</h1>
-              <Paywall />
-            </div>
-          ) : null}
           <h1>Manage Your Identity</h1>
           <p>
             {showIdentityHelpText ? (
@@ -91,7 +109,7 @@ class KeyPage extends React.Component {
                 An identity was generated automatically for you when you created an
                 account, and signatures are created automatically when you submit
                 new proposals. Still, it's important to understand how it works,
-                because it's integral to Politeia's anti-censorship features.
+                because it's integral to Politeia's censorship-resistant features.
               </p>
               <p>
                 <b>Note:</b> Your identity is stored in the browser, so it will be lost when you
@@ -117,16 +135,6 @@ class KeyPage extends React.Component {
               body={updateUserKeyError.message}
             />
           )}
-          {keyMismatch === true ? (
-            <p>
-              The Politeia server has a different public key for your account
-              than the one you have on this browser. This usually means you're
-              using a different browser than the one you registered your account
-              with. You can either create a new identity (which discards the old identity),
-              or log in with your original browser to download your original identity
-              and import it here.
-            </p>
-          ) : null}
           <button
             style={{ maxWidth: "250px" }}
             onClick={() => onUpdateUserKey(loggedInAs)}>

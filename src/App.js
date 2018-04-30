@@ -51,12 +51,13 @@ class Loader extends Component {
 const LoaderComponent = loaderConnector(Loader);
 
 const HeaderAlertComponent = withRouter(loaderConnector(({
+  location,
   loggedInAs,
   userCanExecuteActions,
   history
 }) => {
   if (!loggedInAs) return null;
-  if(!userCanExecuteActions) {
+  if(!userCanExecuteActions && location.pathname !== "/user/account") {
     return (
       <HeaderAlert className="action-needed-alert">
         You cannot currently submit proposals or comments, please visit your{" "}

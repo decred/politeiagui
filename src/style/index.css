@@ -180,11 +180,11 @@ a:hover {
   font-size: 24px;
   color: #ffffff;
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
 }
 .message-text {
-  padding: 18px;
+  padding: 22px;
   flex-direction: column;
   display: flex;
   justify-content: center;
@@ -192,10 +192,14 @@ a:hover {
 .message-header {
   font-size: 18px;
   vertical-align: middle;
+  margin-bottom: 8px;
 }
 .message-body {
   vertical-align: middle;
   white-space: normal;
+}
+.message-body p {
+  margin-bottom: 8px;
 }
 .message-success {
   border: 1px solid #41bf53;
@@ -515,18 +519,6 @@ li p.header-3 {
   width: 300px;
 }
 
-.paywall-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  margin-top: 20px;
-  max-width: 400px;
-  background: white;
-  border: 1px solid;
-  border-radius: 8px;
-}
-
 .paywall-payment-status-received {
   background: #41bf53;
 }
@@ -539,15 +531,33 @@ li p.header-3 {
   background: #bf4153;
 }
 
-.paywall-content {
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .paywall-footer > button {
   margin: 0px;
+}
+
+.paywall-payment-status,
+.paywall-faucet {
+  float: left;
+}
+
+.paywall-faucet {
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 24px 16px 16px 16px;
+  margin-top: 8px;
+  position: relative;
+}
+
+.paywall-faucet-testnet {
+  position: absolute;
+  background: #999;
+  border-bottom-right-radius: 3px;
+  color: #fff;
+  top: 0;
+  left: 0;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  font-size: 0.75em;
 }
 
 .paywall-faucet p {

@@ -49,16 +49,16 @@ class PrivateKeyIdentityManager extends Component {
     try {
       const data = atob(base64.split(",").pop());
       const json = JSON.parse(data);
-      if (!json || !json.publicKey || !json.secretKey) throw new Error("Invalid keyfile");
+      if (!json || !json.publicKey || !json.secretKey) throw new Error("Invalid identity file");
       pki.importKeys(this.props.loggedInAs, json)
-        .then(() => alert("Successfully loaded Private Key Identity"))
+        .then(() => alert("Successfully loaded identity"))
         .catch(e => {
           console.error(e.stack);
-          alert("Error importing keyfile");
+          alert("Error importing identity file");
         });
     } catch(e) {
       console.error(e.stack);
-      alert("This is not a valid keyfile");
+      alert("This is not a valid identity file");
     }
   }
 }
