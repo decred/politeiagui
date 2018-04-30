@@ -4,7 +4,8 @@ const Message = ({
   type,
   header,
   body,
-  height
+  height,
+  className
 }) => {
   const mapTypeToIcon = {
     success: "✔",
@@ -12,8 +13,15 @@ const Message = ({
     info: "ℹ︎"
   };
   const icon = mapTypeToIcon[type] ? mapTypeToIcon[type] : mapTypeToIcon.error;
+
+  if(className) {
+    className = " " + className;
+  } else {
+    className = "";
+  }
+
   return (
-    <div className={"message-ct message-" + type} style={{height: height}}>
+    <div className={"message-ct message-" + type + className} style={{height: height}}>
       <div className="message-icon" style={{height, lineHeight: height}}>{icon}</div>
       <div className="message-text">
         <div className="message-header">{header}</div>
