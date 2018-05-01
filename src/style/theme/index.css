@@ -1663,6 +1663,10 @@ div.titlebox span.number:after {
 .morelink .nub {
     display: none
 }
+button.disabled {
+    background: rgba(0, 0, 0, .08);
+    color: #bbb;
+}
 .submit.mod-override .morelink a:after {
     position: relative;
     margin: 10px 10px 10px -16px;

@@ -22,6 +22,7 @@ const ThingLinkComp = ({
   expanded = false,
   name,
   author,
+  authorid,
   domain,
   rank = 0,
   //score,
@@ -33,7 +34,6 @@ const ThingLinkComp = ({
   title,
   url,
   vote,
-  userid,
   voteDetails,
   castedVotes,
   permalink,
@@ -47,6 +47,7 @@ const ThingLinkComp = ({
   lastSubmitted,
   loggedInAs,
   isAdmin,
+  userCanExecuteActions,
   onChangeStatus,
   onStartVote,
   setStatusProposalToken,
@@ -119,7 +120,7 @@ const ThingLinkComp = ({
             datetime={created_utc * 1000}
           />
           {" "}-{" "}
-          {"Author id: "}{userid}
+          {"Author id: "}{authorid}
           {" "}-{" "}
           {numcomments}{numcomments === 1 ? " comment" : " comments"}
         </Link>
@@ -205,7 +206,7 @@ const ThingLinkComp = ({
                     }
                   >
                     <button
-                      className="togglebutton access-required"
+                      className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
                       data-event-action="spam"
                       type="submit"
                     >
@@ -225,9 +226,10 @@ const ThingLinkComp = ({
                     }
                   >
                     <button
-                      className="togglebutton access-required"
+                      className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
                       data-event-action="approve"
                       type="submit"
+                      disabled={!userCanExecuteActions}
                     >
                         approve
                     </button>
@@ -247,7 +249,7 @@ const ThingLinkComp = ({
                     }
                   >
                     {!vote && <ButtonWithLoadingIcon
-                      className="c-btn c-btn-primary"
+                      className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
                       text="Start Vote"
                       data-event-action="start-vote"
                       isLoading={tokenFromStartingVoteProp === id}/>}
