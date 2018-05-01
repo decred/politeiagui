@@ -49,8 +49,7 @@ class VerifyKey extends Component {
             <Message
               type="success"
               header="Verification successful"
-              body="You have successfully verified your new key and may continue to use Politeia normally."
-            />
+              body="You have verified and activated your new identity." />
           }
         </div>
       </div>

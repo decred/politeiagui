@@ -9,8 +9,8 @@ import accountConnector from "../connectors/account";
 
 const UpdatedKeyMessage = ({ email }) => (
   <span>
-    Successfully updated your key! Please check your email at{" "}
-    <b>{email}</b> to activate your new key.
+    Your new identity has been requested, please check your email at{" "}
+    <b>{email}</b> to verify and activate it.
   </span>
 );
 
@@ -122,8 +122,8 @@ class KeyPage extends React.Component {
           {updateUserKey &&
             updateUserKey.success && (
             <Message
-              type="success"
-              header="Key Updated"
+              type="info"
+              header="Verification Required"
               body={<UpdatedKeyMessage email={loggedInAsEmail} />}
             />
           )}

@@ -38,9 +38,7 @@ const Modal = ({
       body={(
         <div className="paywall-wrapper">
           <div className="paywall-content">
-            <p>
-              Your payment was received and your registration has been completed!
-            </p>
+            <p>Thank you for your payment, your registration is complete!</p>
           </div>
         </div>
       )} />
