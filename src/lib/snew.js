@@ -26,11 +26,11 @@ const setVotePayload = (proposal, activeVotes) => {
 };
 
 export const proposalToT3 = ({
-  vote, votedetail, name, timestamp, status, userid, numcomments, censorshiprecord  = {}
+  vote, votedetail, name, timestamp, status, userid, numcomments, censorshiprecord = {}
 }, idx) => ({
   kind: "t3",
   data: {
-    userid,
+    authorid: userid,
     numcomments,
     rank: idx + 1,
     title: name || "(Proposal name hidden)",
