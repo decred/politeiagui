@@ -26,29 +26,10 @@ const userProposalsConnector = connect(
 );
 
 class Wrapper extends Component {
-  componentWillReceiveProps(nextProps) {
-    const { userid, onFetchData } = this.props;
-    try {
-      if (nextProps.userid !== userid) onFetchData(nextProps.userid);
-    } catch (e) {
-      throw e;
-    }
-
-  }
-  componentDidUpdate(prevProps) {
-    const { userid, onFetchData } = this.props;
-    try {
-      if (prevProps.userid !== userid) onFetchData(userid);
-    }
-    catch(e) {
-      throw(e);
-    }
-  }
-
   componentDidMount() {
-    const { userid, loggedInAs, onFetchData, proposals, history } = this.props;
+    const { userid, loggedInAs, onFetchData, history } = this.props;
     if (!loggedInAs) history.push("/login");
-    if (userid >= 0 && !proposals) onFetchData(userid);
+    if (userid !== null) onFetchData(userid);
   }
 
   render() {
