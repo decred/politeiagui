@@ -20,15 +20,14 @@ const Modal = ({
 }) => {
   let userPaywallStatusCls;
   let userPaywallStatusText;
-  switch(userPaywallStatus) {
-  case PAYWALL_STATUS_WAITING:
+
+  if (userPaywallStatus === PAYWALL_STATUS_WAITING) {
     userPaywallStatusCls = "paywall-payment-status-waiting";
     userPaywallStatusText = "Waiting for payment";
-    break;
-  case PAYWALL_STATUS_LACKING_CONFIRMATIONS:
+  }
+  else if (userPaywallStatus === PAYWALL_STATUS_LACKING_CONFIRMATIONS) {
     userPaywallStatusCls = "paywall-payment-status-confirmations";
     userPaywallStatusText = "Waiting for more confirmations";
-    break;
   }
 
   return userPaywallStatus === PAYWALL_STATUS_PAID ? (
