@@ -5,7 +5,8 @@ const Message = ({
   header,
   body,
   height,
-  className
+  className,
+  onDismissClick
 }) => {
   const mapTypeToIcon = {
     success: "✔",
@@ -21,14 +22,46 @@ const Message = ({
   }
 
   return (
-    <div className={"message-ct message-" + type + className} style={{height: height}}>
-      <div className="message-icon" style={{height, lineHeight: height}}>{icon}</div>
-      <div className="message-text">
+    <div className={"message-ct message-" + type + className} style={{height: height, zIndex: "9999"}}>
+      <div
+        className="message-icon"
+        style={{height, display: "flex", alignItems: "center"}}
+      >
+        <i style={{padding: "0 10px"}}>
+          {icon}
+        </i>
+      </div>
+      <div className="message-text" style={{flexGrow: "1"}}>
         <div className="message-header">{header}</div>
         <div className="message-body">
-          {(body instanceof Error) ? body.message : body}
+          {(body instanceof Error) ?
+            body.message :
+            Array.isArray(body) ?
+              <ul>
+                {body.map((error, i) =>
+                  <li key={i} style={{padding: "3px 0px"}}>
+                    {error}
+                  </li>
+                )}
+              </ul>
+              :
+              body
+          }
         </div>
       </div>
+      {onDismissClick &&
+        <span style={{padding: "10px"}}>
+          <i
+            style={{
+              cursor: "pointer",
+              fontSize: "18px"
+            }}
+            onClick={onDismissClick}
+          >
+              x
+          </i>
+        </span>
+      }
     </div>
   );
 };
