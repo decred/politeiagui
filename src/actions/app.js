@@ -31,6 +31,8 @@ export const onFetchProposal = (token) =>
     dispatch(onFetchProposalComments(token))
   ]);
 
+export const onLoadMe = me => dispatch => dispatch(act.LOAD_ME(me));
+
 export const onChangeFilter = (option) => act.CHANGE_FILTER_VALUE(option);
 
 export const onChangeProposalStatusApproved = (status) => act.SET_PROPOSAL_APPROVED(status);
