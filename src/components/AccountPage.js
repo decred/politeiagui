@@ -62,15 +62,14 @@ class KeyPage extends React.Component {
             body={(
               <div>
                 <p>
-                  The Politeia server has a different public key for your account
-                  than the one you have on this browser. This usually means you're
-                  using a different browser than the one you registered your account
-                  with.
+                  The public key on the Politeia server differs from the key
+                  on your browser.  This is usually caused from the local data
+                  on your browser being cleared or by using a different browser.
                 </p>
                 <p>
-                  You can either create a new identity (which discards the old identity),
-                  or log in with your original browser to download your original identity
-                  and import it here.
+                  You can fix this by importing your old identity, logging in
+                  with the proper browser, or by creating a new identity
+                  (destroying your old identity).
                 </p>
               </div>
             )} />
