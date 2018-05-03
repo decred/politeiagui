@@ -31,10 +31,6 @@ const normalizer = (value, previousValue) => {
 };
 
 class SubmitPage extends React.Component {
-  state = {
-    showInfo: true
-  }
-  handleMessageDismissClick = () => this.setState({showInfo: false})
   render() {
     const {
       isLoading,
@@ -53,15 +49,11 @@ class SubmitPage extends React.Component {
             className="submit content warn-on-unload"
             id="newlink"
           >
-            {
-              this.state.showInfo &&
-              <Message
-                onDismissClick={this.handleMessageDismissClick}
-                type="info"
-                header="Important information about proposals"
-                body={<ProposalInfo policy={policy} />}
-              />
-            }
+            <Message
+              type="info"
+              header="Important information about proposals"
+              body={<ProposalInfo policy={policy} />}
+            />
             <div className="formtabs-content">
               <div className="spacer">
                 <Field

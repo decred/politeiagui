@@ -18,7 +18,7 @@ const validate = (values, dispatch, props) => {
 
   if (values.files) {
     if(values.files.length > props.policy.maximages) {
-      throw new SubmissionError({ _error: "Only 5 attachments are allowed." });
+      throw new SubmissionError({ _error: `Only ${props.policy.maximages} attachments are allowed.` });
     }
 
     const errors = values.files.reduce((acc, file) => {

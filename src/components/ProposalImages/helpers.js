@@ -52,9 +52,9 @@ export function isFileValid(file, policy) {
 
 function getErrorMessage(policy, errorType, filename = "") {
   const errors = {
-    [errorTypes.MAX_SIZE]: `The file ${filename} exceeds the maximum size.`,
+    [errorTypes.MAX_SIZE]: `The file "${filename}" exceeds the maximum size.`,
     [errorTypes.MAX_IMAGES]: `You can upload a maximum of ${policy.maximages} images per proposal.`,
-    [errorTypes.INVALID_MIME]: `The file ${filename} has an invalid mime type.`
+    [errorTypes.INVALID_MIME]: `The file "${filename}" has an invalid mime type.`
   };
   return errors[errorType];
 }
