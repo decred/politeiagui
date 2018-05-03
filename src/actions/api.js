@@ -172,12 +172,12 @@ export const onFetchProposalComments = token => dispatch => {
     .catch(error => dispatch(act.RECEIVE_PROPOSAL_COMMENTS(null, error)));
 };
 
-export const onSubmitProposal = (loggedInAs, name, description, files) =>
+export const onSubmitProposal = (loggedInAs, userid, name, description, files) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_PROPOSAL({ name, description, files }));
     return Promise.resolve(api.makeProposal(name, description, files))
       .then(proposal => api.signProposal(loggedInAs, proposal)).then(proposal => api.newProposal(csrf, proposal))
-      .then(proposal => dispatch(act.RECEIVE_NEW_PROPOSAL({ ...proposal, name, description })))
+      .then(proposal => dispatch(act.RECEIVE_NEW_PROPOSAL({ ...proposal, numcomments: 0, userid, name, description })))
       .catch(error => { dispatch(act.RECEIVE_NEW_PROPOSAL(null, error)); throw error; });
   });
 
