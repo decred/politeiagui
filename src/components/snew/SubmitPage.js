@@ -5,6 +5,7 @@ import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
 import FilesField from "../Form/Fields/FilesField";
 import ErrorField from "../Form/Fields/ErrorField";
 import Message from "../Message";
+import MultipleItemsBodyMessage from "../MultipleItemsBodyMessage";
 import ProposalInfo from "../ProposalInfo";
 import { isArray, isUndefined, concat, cloneDeep } from "lodash";
 import { Field } from "redux-form";
@@ -108,13 +109,13 @@ class SubmitPage extends React.Component {
                   <Message
                     type="error"
                     header="Error creating proposal"
-                    body={newProposalError} />
+                    body={<MultipleItemsBodyMessage items={newProposalError} />} />
                 ) : null}
                 {error ? (
                   <Message
                     type="error"
                     header="Error creating proposal"
-                    body={error} />
+                    body={<MultipleItemsBodyMessage items={error} />} />
                 ) : null}
               </div>
               <div className="spacer">
