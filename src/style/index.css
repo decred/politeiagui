@@ -486,6 +486,16 @@ li p.header-3 {
   max-width: 100%;
 }
 
+.submit-page #newlink.submit.content .btn {
+    width: 100%;
+    height: auto;
+    margin-top: 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font: 17px 'Source Sans Pro', Lato, Arial, sans-serif;
+    padding: 16px;
+}
+
 #header-bottom-right {
   background-color: #586D82;
   position: absolute;

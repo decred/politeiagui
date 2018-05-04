@@ -2288,16 +2288,7 @@ button.disabled {
     padding-bottom: 0!important;
     padding-top: 15px
 }
-.submit-page #newlink.submit.content .btn {
-    width: 100%;
-    height: auto;
-    margin-top: 16px;
-    cursor: pointer;
-    text-transform: capitalize;
-    font: 17px 'Source Sans Pro', Lato, Arial, sans-serif;
-    padding: 16px;
-    margin-bottom: 48px
-}
+
 .submit-page #newlink.submit.content .btn:hover {
     box-shadow: 0 2px 12px rgba(0, 0, 0, .48)
 }

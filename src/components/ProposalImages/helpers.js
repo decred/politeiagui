@@ -3,7 +3,8 @@
 */
 export const errorTypes = {
   MAX_SIZE: "max_size",
-  MAX_IMAGES: "max_length"
+  MAX_IMAGES: "max_length",
+  INVALID_MIME: "invalid_mime"
 };
 
 export function validateFiles(files, policy) {
@@ -22,22 +23,38 @@ export function getFormattedFiles({ base64, fileList }) {
   }));
 }
 
+/*
+  Receive Object: file and Object: policy and returns an Object with the
+  bool: valid and string: errorMsg fields. Can be used to verify if a file is
+  valid and to print the appropriate errorMsg
+*/
 export function isFileValid(file, policy) {
   if (file.size > policy.maximagesize) {
-    return false;
+    return ({
+      valid: false,
+      errorMsg: getErrorMessage(policy, errorTypes.MAX_SIZE, file.name)
+    });
   }
 
   if (policy.validmimetypes.indexOf(file.mime) < 0) {
-    return false;
+    return ({
+      valid: false,
+      errorMsg: getErrorMessage(policy, errorTypes.INVALID_MIME, file.name)
+    });
   }
 
-  return true;
+  return ({
+    valid: true,
+    errorMsg: null
+  });
 }
+
 
 function getErrorMessage(policy, errorType, filename = "") {
   const errors = {
-    [errorTypes.MAX_SIZE]: `The file ${filename} exceeds the maximum size`,
-    [errorTypes.MAX_IMAGES]: `You can upload a maximum of ${policy.maximages} images per proposal`
+    [errorTypes.MAX_SIZE]: `The file "${filename}" exceeds the maximum size.`,
+    [errorTypes.MAX_IMAGES]: `You can upload a maximum of ${policy.maximages} images per proposal.`,
+    [errorTypes.INVALID_MIME]: `The file "${filename}" has an invalid mime type.`
   };
   return errors[errorType];
 }
