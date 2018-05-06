@@ -16,6 +16,8 @@ const STATUS_ERR = {
   404: "Not found"
 };
 
+const promiseLoadMe = () => new Promise((resolve) => setTimeout(resolve, 1));
+
 const apiBase = "/api";
 const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
 const getResponse = get("response");
@@ -76,21 +78,38 @@ const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
   body: JSON.stringify(json)
 }).then(parseResponse);
 
-export const me = () => GET("/v1/user/me").then(({
-  csrfToken,
-  response: {
-    email, isadmin,
-    paywalladdress, paywallamount, paywalltxnotbefore,
-    userid,
-    publickey
-  }
-}) => ({
-  csrfToken: csrfToken || "itsafake",
-  email, isadmin,
-  paywalladdress, paywallamount, paywalltxnotbefore,
-  userid,
-  pubkey: publickey
-}));
+export const me = () => {
+  const meResponse = localStorage.getItem("state") ? JSON.parse(localStorage.getItem("state")).api.me.response : null;
+  return !meResponse ?
+    GET("/v1/user/me").then(
+      ({
+        csrfToken,
+        response: {
+          email,
+          isadmin,
+          paywalladdress,
+          paywallamount,
+          paywalltxnotbefore,
+          userid,
+          publickey
+        }
+      }) => ({
+        csrfToken: csrfToken || "itsafake",
+        email,
+        isadmin,
+        paywalladdress,
+        paywallamount,
+        paywalltxnotbefore,
+        userid,
+        pubkey: publickey
+      })
+    )
+    :
+    promiseLoadMe().then(() => ({
+      ...meResponse
+    }))
+  ;
+};
 
 export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, route, pubkey } }) => ({
   csrfToken: csrfToken || "itsafake", version, route, pubkey
@@ -140,7 +159,10 @@ export const vetted = () => GET("/v1/proposals/vetted").then(getResponse);
 export const unvetted = () => GET("/v1/proposals/unvetted").then(getResponse);
 export const proposal = token => GET(`/v1/proposals/${token}`).then(getResponse);
 export const proposalComments = token => GET(`/v1/proposals/${token}/comments`).then(getResponse);
-export const logout = csrf => POST("/logout", csrf, {}).then(() => ({}));
+export const logout = csrf => POST("/logout", csrf, {}).then(() => {
+  localStorage.removeItem("state");
+  return ({});
+});
 
 export const proposalSetStatus = (email, csrf, token, status) =>
   pki.myPubKeyHex(email).then(publickey =>

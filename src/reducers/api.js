@@ -104,6 +104,12 @@ const api = (state = DEFAULT_STATE, action) => (({
       return acc;
     }, {})
   ),
+  [act.LOAD_ME]: () => {
+    return ({
+      ...state,
+      me: action.payload
+    });
+  },
   [act.REQUEST_ME]: () => request("me", state, action),
   [act.RECEIVE_ME]: () => receive("me", state, action),
   [act.UPDATE_ME]: () => receive("me", state, action),
