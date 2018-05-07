@@ -162,14 +162,7 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.REQUEST_VOTE_RESULTS]: () => request("voteResults", state, action),
   [act.RECEIVE_VOTE_RESULTS]: () => receive("voteResults", state, action),
   [act.REQUEST_LOGOUT]: () => request("logout", state, action),
-  [act.RECEIVE_LOGOUT]: () => {
-    state = receive("logout", state, action);
-    return {
-      ...state,
-      login: { ...state.login, response: null },
-      me: { ...state.me, response: null }
-    };
-  }
+  [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
 })[action.type] || (() => state))();
 
 export default api;
