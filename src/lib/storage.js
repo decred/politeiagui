@@ -16,3 +16,9 @@ export const saveStateLocalStorage = state => {
     console.log(err);
   }
 };
+
+export const clearStateLocalStorage = () => {
+  if(localStorage.getItem("state")){
+    localStorage.setItem("state", "");
+  }
+};

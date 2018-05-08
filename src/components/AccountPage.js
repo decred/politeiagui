@@ -26,8 +26,7 @@ class KeyPage extends React.Component {
   }
 
   componentDidMount() {
-    const { loggedInAs, history } = this.props;
-    if (!loggedInAs) history.push("/login");
+    const { loggedInAs } = this.props;
     myPubKeyHex(loggedInAs).then(pubkey => {
       if(!this.unmounting) {
         this.setState({ pubkey });
@@ -121,12 +120,12 @@ class KeyPage extends React.Component {
           <div className="public-key">Your public key: {pubkey || "none"}</div>
           {updateUserKey &&
             updateUserKey.success && (
-            <Message
-              type="success"
-              header="Key Updated"
-              body={<UpdatedKeyMessage email={loggedInAs} />}
-            />
-          )}
+              <Message
+                type="success"
+                header="Key Updated"
+                body={<UpdatedKeyMessage email={loggedInAs} />}
+              />
+            )}
           {updateUserKeyError && (
             <Message
               type="error"

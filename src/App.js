@@ -10,27 +10,29 @@ import * as pki from "./lib/pki";
 import loaderConnector from "./connectors/loader";
 import { handleSaveState } from "./lib/localData";
 import { saveStateLocalStorage } from "./lib/storage";
+import { onLogout } from "./actions/api";
 import ModalStack from "./components/Modal/ModalStack";
 
 const store = configureStore();
 
-store.subscribe(() => {
+store.subscribe(throttle(() => {
+  handleSaveState(store);
   store.getState().api.me.response && saveStateLocalStorage({
     api: {
       me: store.getState().api.me
     }
   });
-});
-
-store.subscribe(throttle(() => {
-  handleSaveState(store);
 }, 1000));
 
 const createStorageListener = store => {
   return event => {
-    const state = JSON.parse(event.newValue);
-    if (state && !state.api.me.response) store.dispatch({type: "API_RECEIVE_LOGOUT"});
-    else if (!state) store.dispatch({type: "API_RECEIVE_LOGOUT"});
+    try {
+      const state = JSON.parse(event.newValue);
+      if (state && !state.api.me.response) store.dispatch(onLogout());
+      else if(!state) store.dispatch(onLogout());
+    } catch(e) {
+      store.dispatch(onLogout());
+    }
   };
 };
 

@@ -3,6 +3,7 @@ import * as sel from "../selectors";
 import * as api from "../lib/api";
 import { confirmWithModal } from "./modal";
 import * as external_api_actions from "./external_api";
+import { clearStateLocalStorage } from "../lib/storage";
 import act from "./methods";
 
 export const onResetProposal = act.RESET_PROPOSAL;
@@ -116,6 +117,7 @@ export const onLogout = () =>
       .then(response => {
         dispatch(act.RECEIVE_LOGOUT(response));
         dispatch(onSetEmail(""));
+        clearStateLocalStorage();
       })
       .catch(error => dispatch(act.RECEIVE_LOGOUT(null, error)));
   });
