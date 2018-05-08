@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Route, withRouter } from "react-router-dom";
 import requireLoginConnector from "../../connectors/requireLogin";
+import { loadStateLocalStorage } from "../../lib/storage";
 
 class AuthenticatedRoute extends Component {
   componentDidMount() {
@@ -23,7 +24,14 @@ class AuthenticatedRoute extends Component {
 
   checkAuthentication(params) {
     const { location, loggedInAs, history } = params;
-    if (!loggedInAs) {
+    const stateFromLocalStorage = loadStateLocalStorage();
+    if(loggedInAs || (stateFromLocalStorage
+      && stateFromLocalStorage.api
+      && stateFromLocalStorage.api.me
+      && stateFromLocalStorage.api.me.response)
+    ) {
+      return true;
+    } else {
       history.replace({
         pathname: "/user/login",
         state: { from: location }
