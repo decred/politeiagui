@@ -164,14 +164,7 @@ export const paywallTxNotBefore = state => {
   return null;
 };
 
-export const isTestNet = bool(
-  state => {
-    let checkAddr = r => r && r.paywalladdress ? r.paywalladdress[0] === "T" : false;
-
-    return checkAddr(state.api.me.response)
-        || checkAddr(state.api.login.response)
-        || checkAddr(state.api.newUser.response);
-  });
+export const isTestNet = bool(compose(get("testnet"), apiInitResponse));
 export const isMainNet = not(isTestNet);
 
 export const getPropTokenIfIsStartingVote = (state) => {

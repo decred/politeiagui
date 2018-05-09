@@ -25,6 +25,7 @@ const ThingLinkComp = ({
   authorid,
   domain,
   rank = 0,
+  userid,
   //score,
   //downs,
   //ups,
@@ -55,6 +56,7 @@ const ThingLinkComp = ({
   tokenFromStartingVoteProp,
   lastBlockHeight,
   activeVotesEndHeight,
+  isTestnet
 }) => (
   <div
     className={`thing id-${id} odd link ${
@@ -193,49 +195,51 @@ const ThingLinkComp = ({
           </li>
           {isAdmin
             ? review_status === PROPOSAL_STATUS_UNREVIEWED
-              ? [
-                <li key="spam">
-                  <form
-                    className="toggle remove-button"
-                    onSubmit={e =>
-                      onChangeStatus(
-                        loggedInAs,
-                        id,
-                        PROPOSAL_STATUS_CENSORED
-                      ) && e.preventDefault()
-                    }
-                  >
-                    <button
-                      className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                      data-event-action="spam"
-                      type="submit"
+              ? (authorid !== userid) || isTestnet
+                ? [
+                  <li key="spam">
+                    <form
+                      className="toggle remove-button"
+                      onSubmit={e =>
+                        onChangeStatus(
+                          loggedInAs,
+                          id,
+                          PROPOSAL_STATUS_CENSORED
+                        ) && e.preventDefault()
+                      }
                     >
+                      <button
+                        className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                        data-event-action="spam"
+                        type="submit"
+                      >
                         spam
-                    </button>
-                  </form>
-                </li>,
-                <li key="approve">
-                  <form
-                    className="toggle approve-button"
-                    onSubmit={e =>
-                      onChangeStatus(
-                        loggedInAs,
-                        id,
-                        PROPOSAL_STATUS_PUBLIC
-                      ) && e.preventDefault()
-                    }
-                  >
-                    <button
-                      className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                      data-event-action="approve"
-                      type="submit"
-                      disabled={!userCanExecuteActions}
+                      </button>
+                    </form>
+                  </li>,
+                  <li key="approve">
+                    <form
+                      className="toggle approve-button"
+                      onSubmit={e =>
+                        onChangeStatus(
+                          loggedInAs,
+                          id,
+                          PROPOSAL_STATUS_PUBLIC
+                        ) && e.preventDefault()
+                      }
                     >
+                      <button
+                        className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                        data-event-action="approve"
+                        type="submit"
+                        disabled={!userCanExecuteActions}
+                      >
                         approve
-                    </button>
-                  </form>
-                </li>,
-              ]
+                      </button>
+                    </form>
+                  </li>,
+                ]
+                : <Message type="info" header="Third party review required" body="Your proposal must be reviewed by another admin."/>
               : review_status === PROPOSAL_STATUS_PUBLIC && !vote ?
                 <li key="start-vote">
                   <form
