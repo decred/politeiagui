@@ -7,7 +7,7 @@ import * as act from "../actions";
 const userProposalsConnector = connect(
   sel.selectorMap({
     userid: sel.userid,
-    loggedInAs: sel.loggedInAs,
+    loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
     proposals: sel.userProposals,
     error: sel.userProposalsError,
@@ -27,16 +27,16 @@ const userProposalsConnector = connect(
 
 class Wrapper extends Component {
   componentDidMount() {
-    const { userid, loggedInAs, onFetchData, history } = this.props;
-    if (!loggedInAs) history.push("/login");
+    const { userid, loggedInAsEmail, onFetchData, history } = this.props;
+    if (!loggedInAsEmail) history.push("/login");
     if (userid !== null) onFetchData(userid);
   }
 
   render() {
     const Component = this.props.Component;
-    const {loggedInAs, isAdmin, proposals, error, isLoading, header} = this.props;
+    const {loggedInAsEmail, isAdmin, proposals, error, isLoading, header} = this.props;
     return <Component
-      loggedInAs={loggedInAs}
+      loggedInAsEmail={loggedInAsEmail}
       isAdmin={isAdmin}
       proposals={proposals}
       error={error}

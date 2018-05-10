@@ -6,13 +6,13 @@ import Message from "./Message";
 
 const UpdatedKeyMessage = ({email}) => (
   <span>
-    Your new key pair has been requested, please check your email at
+    Your new key pair has been requested, please check your email at{" "}
     <b>{email}</b> to verify and activate it.
   </span>
 );
 
 const UserProfile = ({
-  loggedInAs,
+  loggedInAsEmail,
   onUpdateUserKey,
   updateUserKey,
   updateUserKeyError
@@ -24,7 +24,7 @@ const UserProfile = ({
         <Message
           type="success"
           header="Key Verification Required"
-          body={<UpdatedKeyMessage email={loggedInAs} />}
+          body={<UpdatedKeyMessage email={loggedInAsEmail} />}
         />
       }
       {updateUserKeyError &&
@@ -34,8 +34,8 @@ const UserProfile = ({
           body={updateUserKeyError.message}
         />
       }
-      <button onClick={() => onUpdateUserKey(loggedInAs)}>Update Key Pair</button>
-      <PrivateKeyIdentityManager loggedInAs={loggedInAs} onUpdateUserKey={onUpdateUserKey} />
+      <button onClick={() => onUpdateUserKey(loggedInAsEmail)}>Update Key Pair</button>
+      <PrivateKeyIdentityManager loggedInAsEmail={loggedInAsEmail} onUpdateUserKey={onUpdateUserKey} />
       <PasswordChange />
     </div>
   </div>

@@ -15,6 +15,10 @@ export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
 
       return checkForPayment(checkDcrdataHandler, response, address, amount, txNotBefore);
     })
+    .catch(() => {
+      // Failed to fetch from dcrdata.
+      return null;
+    })
     .then(txn => {
       if(txn) {
         return txn;

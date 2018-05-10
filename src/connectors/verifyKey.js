@@ -5,10 +5,10 @@ import * as sel from "../selectors";
 
 const verifyKeyConnector = connect(
   sel.selectorMap({
-    email: sel.loggedInAs,
+    email: sel.loggedInAsEmail,
     verifyUserKey: sel.verifyUserKey,
     apiMeResponse: sel.apiMeResponse,
-    loggedInAs: sel.loggedInAs,
+    loggedInAsEmail: sel.loggedInAsEmail,
     verifyUserKeyError: sel.verifyUserKeyError
   }),
   dispatch => bindActionCreators({

@@ -5,7 +5,7 @@ import * as act from "../actions";
 
 export default connect(
   sel.selectorMap({
-    loggedIn: sel.loggedIn,
+    loggedInAsEmail: sel.loggedInAsEmail,
     paywallAddress: sel.paywallAddress,
     paywallAmount: sel.paywallAmount,
     paywallTxNotBefore: sel.paywallTxNotBefore,

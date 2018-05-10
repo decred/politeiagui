@@ -4,7 +4,7 @@ import { onUpdateUserKey } from "../actions/api";
 
 export default connect(
   sel.selectorMap({
-    loggedInAs: sel.loggedInAs,
+    loggedInAsEmail: sel.loggedInAsEmail,
     userAlreadyPaid: sel.userAlreadyPaid,
     paywallAddress: sel.paywallAddress,
     paywallAmount: sel.paywallAmount,

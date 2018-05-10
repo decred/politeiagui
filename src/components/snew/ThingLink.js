@@ -22,7 +22,7 @@ const ThingLinkComp = ({
   expanded = false,
   name,
   author,
-  authorid,
+  //authorid,
   domain,
   rank = 0,
   userid,
@@ -46,7 +46,7 @@ const ThingLinkComp = ({
   review_status,
   numcomments,
   lastSubmitted,
-  loggedInAs,
+  loggedInAsEmail,
   isAdmin,
   userCanExecuteActions,
   onChangeStatus,
@@ -121,9 +121,8 @@ const ThingLinkComp = ({
             style={{ cursor: "pointer" }}
             datetime={created_utc * 1000}
           />
-          {" "}-{" "}
-          {"Author id: "}{authorid}
-          {" "}-{" "}
+          {" by "}{author}
+          {" - "}
           {numcomments}{numcomments === 1 ? " comment" : " comments"}
         </Link>
       </p>
@@ -202,7 +201,7 @@ const ThingLinkComp = ({
                       className="toggle remove-button"
                       onSubmit={e =>
                         onChangeStatus(
-                          loggedInAs,
+                          loggedInAsEmail,
                           id,
                           PROPOSAL_STATUS_CENSORED
                         ) && e.preventDefault()
@@ -222,7 +221,7 @@ const ThingLinkComp = ({
                       className="toggle approve-button"
                       onSubmit={e =>
                         onChangeStatus(
-                          loggedInAs,
+                          loggedInAsEmail,
                           id,
                           PROPOSAL_STATUS_PUBLIC
                         ) && e.preventDefault()
@@ -246,7 +245,7 @@ const ThingLinkComp = ({
                     className="toggle remove-button"
                     onSubmit={e =>
                       onStartVote(
-                        loggedInAs,
+                        loggedInAsEmail,
                         id,
                         PROPOSAL_STATUS_UNREVIEWED
                       ) && e.preventDefault()

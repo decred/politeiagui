@@ -2,8 +2,8 @@ import React from "react";
 import connector from "../../connectors/actions";
 
 const SubmitTextSidebox = ({
-  Link, loggedInAs, userCanExecuteActions
-}) => loggedInAs ? (
+  Link, loggedInAsEmail, userCanExecuteActions
+}) => loggedInAsEmail ? (
   <div className="spacer">
     <div className={`sidebox submit submit-text ${!userCanExecuteActions ? "not-active disabled" : null}`}>
       <div className="morelink">

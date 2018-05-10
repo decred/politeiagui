@@ -38,7 +38,7 @@ const Commands = {
       .clearValue("@loginInputPassword")
       .setValue("@loginInputPassword", "test")
       .click("@loginSubmitButton")
-      .waitForElementVisible("@loggedIn", 10000);
+      .waitForElementVisible("@loggedInAsEmail", 10000);
   },
   signupWithErrorAllFieldsRequired: function () {
     return this.waitForElementVisible("@signupLoginPage", 10000)
@@ -83,7 +83,7 @@ const Commands = {
       .clearValue("@signupInputPasswordVerify")
       .setValue("@signupInputPasswordVerify", "test")
       .click("@signupSubmitButton")
-      .waitForElementVisible("@loggedIn", 10000);
+      .waitForElementVisible("@loggedInAsEmail", 10000);
   },
 };
 
@@ -100,7 +100,7 @@ module.exports = {
     loginInputEmail: "#login-form input[name='email']",
     loginInputPassword: "#login-form input[name='password']",
     loginSubmitButton: "#login-form button[type='submit']",
-    loggedIn: "#header-bottom-right .user",
+    loggedInAsEmail: "#header-bottom-right .user",
     signupInputEmail: "#register-form input[name='email']",
     signupInputPassword: "#register-form input[name='password']",
     signupInputPasswordVerify: "#register-form input[name='password_verify']",

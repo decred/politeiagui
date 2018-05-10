@@ -11,14 +11,18 @@ export function arrayToRegex(arr) {
   return new RegExp(re, "g");
 }
 
-export function proposalNameValidator(name, supportedCharacters) {
-  const re = arrayToRegex(supportedCharacters);
+export function proposalNameValidator(name, supportedChars) {
+  const re = arrayToRegex(supportedChars);
   const matches = name.match(re);
   return matches.length === name.length;
 }
 
-export function passwordLengthValidator(password, minLength) {
-  return password.length >= minLength;
+export function lengthValidator(str, minLength, maxLength) {
+  let v = str.length >= minLength;
+  if(maxLength) {
+    v &= str.length <= maxLength;
+  }
+  return v;
 }
 
 export function passwordVerifyValidator(password, passwordVerify) {

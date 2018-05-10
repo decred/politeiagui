@@ -10,7 +10,7 @@ import { withRouter } from "react-router-dom";
 
 const loginConnector = connect(
   sel.selectorMap({
-    loggedInAs: sel.loggedInAs,
+    loggedInAsEmail: sel.loggedInAsEmail,
     keyMismatch: sel.getKeyMismatch,
     serverPubkey: sel.serverPubkey,
     email: sel.email,
@@ -26,8 +26,8 @@ const loginConnector = connect(
 );
 
 class Wrapper extends Component {
-  componentWillReceiveProps({ loggedInAs, redirectedFrom, resetRedirectedFrom, history }) {
-    if (loggedInAs && redirectedFrom) {
+  componentWillReceiveProps({ loggedInAsEmail, redirectedFrom, resetRedirectedFrom, history }) {
+    if (loggedInAsEmail && redirectedFrom) {
       resetRedirectedFrom();
       history.push(redirectedFrom);
     }

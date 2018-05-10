@@ -18,8 +18,8 @@ module.exports = {
   elements: {
     changePasswordPage: ".reset-password-form",
     changePasswordNextPage: ".page.reset-password-next-step-page",
-    inputPassword: ".reset-password-form input[name='password']",
-    inputPasswordVerify: ".reset-password-form input[name='password_verify']",
+    inputPassword: ".reset-password-form input[name='newPassword']",
+    inputPasswordVerify: ".reset-password-form input[name='newPasswordVerify']",
     submitButton: ".reset-password-form button[type='submit']",
     error: ".message-ct.message-error"
   },

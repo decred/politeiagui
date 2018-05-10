@@ -4,7 +4,7 @@ import * as act from "../actions";
 
 const actions = connect(
   sel.selectorMap({
-    loggedInAs: sel.loggedInAs,
+    loggedInAsEmail: sel.loggedInAsEmail,
     email: sel.email,
     userid: sel.userid,
     isAdmin: sel.isAdmin,

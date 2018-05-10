@@ -6,7 +6,7 @@ import * as sel from "../selectors";
 export default connect(
   sel.selectorMap({
     serverPubkey: sel.serverPubkey,
-    loggedInAs: sel.loggedInAs,
+    loggedInAsEmail: sel.loggedInAsEmail,
     userCanExecuteActions: sel.userCanExecuteActions,
   }),
   dispatch => bindActionCreators({

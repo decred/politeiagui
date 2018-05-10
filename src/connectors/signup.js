@@ -11,7 +11,7 @@ import { withRouter } from "react-router-dom";
 const signupFormConnector = connect(
   sel.selectorMap({
     email: sel.email,
-    loggedInAs: sel.loggedInAs,
+    loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
     policy: sel.policy,
     newUserResponse: sel.newUserResponse,
@@ -35,7 +35,7 @@ class Wrapper extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.loggedInAs) {
+    if (nextProps.loggedInAsEmail) {
       if (this.props.isAdmin) {
         this.props.history.push("/admin/");
       } else {

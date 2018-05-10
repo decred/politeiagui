@@ -5,7 +5,7 @@ import { loadStateLocalStorage } from "../../lib/storage";
 
 class AuthenticatedRoute extends Component {
   componentDidMount() {
-    if (this.props.loggedInAs) {
+    if (this.props.loggedInAsEmail) {
       return;
     }
 
@@ -17,15 +17,15 @@ class AuthenticatedRoute extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.loggedInAs || nextProps.location !== this.props.location) {
+    if (!nextProps.loggedInAsEmail || nextProps.location !== this.props.location) {
       this.checkAuthentication(nextProps);
     }
   }
 
   checkAuthentication(params) {
-    const { location, loggedInAs, history } = params;
+    const { location, loggedInAsEmail, history } = params;
     const stateFromLocalStorage = loadStateLocalStorage();
-    if(loggedInAs || (stateFromLocalStorage
+    if(loggedInAsEmail || (stateFromLocalStorage
       && stateFromLocalStorage.api
       && stateFromLocalStorage.api.me
       && stateFromLocalStorage.api.me.response)

@@ -7,12 +7,12 @@ const validate = (values, dispatch, props) => {
     throw new SubmissionError({ _error: "You must provide both a proposal name and description." });
   }
 
-  if ((props.policy.minnamelength && (values.name.length < props.policy.minnamelength)) ||
-     (props.policy.maxnamelength && (values.name.length > props.policy.maxnamelength)) ||
-     (props.policy.supportedcharacters && !proposalNameValidator(values.name, props.policy.supportedcharacters))) {
+  if ((props.policy.minproposalnamelength && (values.name.length < props.policy.minproposalnamelength)) ||
+     (props.policy.maxproposalnamelength && (values.name.length > props.policy.maxproposalnamelength)) ||
+     (props.policy.proposalnamesupportedchars && !proposalNameValidator(values.name, props.policy.proposalnamesupportedchars))) {
     throw new SubmissionError({
-      _error: `The proposal name must be between ${props.policy.minnamelength} and ${props.policy.maxnamelength} characters long ` +
-        `and only contain the following characters: ${props.policy.supportedcharacters.join(" ")}`
+      _error: `The proposal name must be between ${props.policy.minproposalnamelength} and ${props.policy.maxproposalnamelength} characters long ` +
+        `and only contain the following characters: ${props.policy.proposalnamesupportedchars.join(" ")}`
     });
   }
 

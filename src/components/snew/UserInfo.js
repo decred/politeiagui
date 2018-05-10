@@ -5,13 +5,13 @@ import connector from "../../connectors/currentUser";
 import Dropdown from "../Dropdown";
 import Link from "./Link";
 
-const UserInfo = ({ history, loggedInAs }) =>
-  loggedInAs ? (
+const UserInfo = ({ history, loggedInAsEmail, loggedInAsUsername }) =>
+  loggedInAsEmail ? (
     <div id="header-bottom-right" style={{ display: "flex" }}>
       <ReactBody className="loggedin" />
       <span className="user">
         <Dropdown
-          DropdownTrigger={<div className="dropdown-trigger">{loggedInAs}</div>}
+          DropdownTrigger={<div className="dropdown-trigger">{loggedInAsUsername}</div>}
           DropdownContent={
             <ul>
               <li
