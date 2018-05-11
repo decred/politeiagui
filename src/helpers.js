@@ -24,6 +24,7 @@ export const getTextFromIndexMd = file => {
 };
 
 export const getHumanReadableError = (errorCode, errorContext = []) => {
+  const genericContactMsg = "please contact Politeia administrators";
   let errorMessages = [
     "The operation returned an invalid status.",
     "The provided email address or password was invalid.",
@@ -38,7 +39,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     "The submitted proposal has too many images.",
     "The submitted proposal markdown is too large.",
     "The submitted proposal has one or more images that are too large.",
-    "The provided password is invalid.",
+    "The password you provided is invalid; it's either too short, too long, or has unsupported characters.",
     "The requested comment does not exist.",
     "The provided proposal name was invalid.",
     "The SHA256 checksum for one of the files was incorrect.",
@@ -46,12 +47,19 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     `The MIME type detected for ${errorContext[0]} did not match the provided MIME type. MIME type: ${errorContext[1]}`,
     "The MIME type for one of the files is not supported.",
     "The proposal cannot be set to that status.",
-    "The public key provided was invalid.",
-    "No active public key was found for your account.",
+    "The provided public key was invalid.",
+    "No active public key was found for your account, please visit your account page to resolve this issue.",
     "The provided signature was invalid.",
     "The provided parameters were invalid.",
     "The private key used for signing was invalid.",
-    "This comment is too long."
+    "Your comment is too long.",
+    "The user was not found.",
+    `The proposal is in an unexpected state, ${genericContactMsg}.`,
+    "You must be logged in to perform this action.",
+    "You must pay the registration fee to perform this action.",
+    "You cannot change the status of your own proposal, please have another admin review it!",
+    "The username you provided is invalid; it's either too short, too long, or has unsupported characters.",
+    "Another user already has that username, please choose another."
   ];
 
   if(errorCode > errorMessages.length) {

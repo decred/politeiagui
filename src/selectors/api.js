@@ -123,9 +123,9 @@ export const loggedInAsEmail = or(
   compose(get("email"), apiLoginPayload)
 );
 export const loggedInAsUsername = or(
+  compose(get("username"), apiChangeUsernameResponse),
   compose(get("username"), apiMeResponse),
-  compose(get("username"), apiLoginPayload),
-  compose(get("username"), apiChangeUsernameResponse)
+  compose(get("username"), apiLoginPayload)
 );
 export const isAdmin = bool(or(
   compose(get("isadmin"), apiMeResponse),

@@ -27,8 +27,7 @@ class KeyPage extends React.Component {
   }
 
   componentDidMount() {
-    const { loggedInAsEmail, history } = this.props;
-    if (!loggedInAsEmail) history.push("/login");
+    const { loggedInAsEmail } = this.props;
     myPubKeyHex(loggedInAsEmail).then(pubkey => {
       if(!this.unmounting) {
         this.setState({ pubkey });
