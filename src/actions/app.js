@@ -1,6 +1,6 @@
 import Promise from "promise";
 import { reset } from "redux-form";
-import { onSubmitProposal, onChangePassword, onFetchProposalComments } from "./api";
+import { onSubmitProposal, onChangeUsername, onChangePassword, onFetchProposalComments } from "./api";
 import { onFetchProposal as onFetchProposalApi, onSubmitComment as onSubmitCommentApi } from "./api";
 import * as sel from "../selectors";
 import act from "./methods";
@@ -17,12 +17,17 @@ export const onSetReplyParent = (parentId = TOP_LEVEL_COMMENT_PARENTID) =>
   ]);
 export const onSaveNewProposal = ({ name, description, files }, _, props) =>
   (dispatch, getState) =>
-    dispatch(onSubmitProposal(props.loggedInAs, props.userid, name, description, files))
+    dispatch(onSubmitProposal(props.loggedInAsEmail, props.userid, props.username, name, description, files))
       .then(() => sel.newProposalToken(getState()));
 
-export const onSaveChangePassword = ({ existingPassword, password }) =>
+export const onSaveChangeUsername = ({ password, newUsername }) =>
   (dispatch, getState) =>
-    dispatch(onChangePassword(existingPassword, password))
+    dispatch(onChangeUsername(password, newUsername))
+      .then(() => sel.newProposalToken(getState()));
+
+export const onSaveChangePassword = ({ existingPassword, newPassword }) =>
+  (dispatch, getState) =>
+    dispatch(onChangePassword(existingPassword, newPassword))
       .then(() => sel.newProposalToken(getState()));
 
 export const onFetchProposal = (token) =>

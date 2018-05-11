@@ -19,7 +19,7 @@ module.exports = {
     page.signupWithErrorInvalidEmailAddress();
     page.signupWithErrorAllFieldsRequired();
     page.signupWithErrorPasswordNotMatch();
-    page.signupWithErrorPasswordMinChars();
+    page.signupWithErrorMinPasswordLength();
     page.signup();
   },
 };

@@ -3,7 +3,7 @@ import * as sel from "../selectors";
 
 export default connect(
   sel.selectorMap({
-    loggedInAs: sel.loggedInAs,
+    loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
     userHasPaid: sel.userHasPaid,
     paywallAddress: sel.paywallAddress,

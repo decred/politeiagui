@@ -19,11 +19,11 @@ const CommentForm = ({
   handleSubmit,
   onToggleMarkdownHelp,
   onSetReplyParent,
-  loggedIn,
+  loggedInAsEmail,
   userCanExecuteActions,
   isActive
 }) => (
-  loggedIn ?
+  loggedInAsEmail ?
     <form className="usertext cloneable warn-on-unload"  onSubmit={handleSubmit(onSave)}>
       <Field
         name="global"

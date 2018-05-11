@@ -11,8 +11,7 @@ import { getNewCommentData } from "../lib/localData";
 const replyConnector = connect(
   sel.selectorMap({
     token: sel.proposalToken,
-    loggedIn: sel.loggedIn,
-    loggedInAs: sel.loggedInAs,
+    loggedInAsEmail: sel.loggedInAsEmail,
     keyMismatch: sel.getKeyMismatch,
     userCanExecuteActions: sel.userCanExecuteActions,
     replyTo: sel.replyTo,
@@ -49,10 +48,10 @@ class Wrapper extends Component {
   }
 
   onSave(values) {
-    const { loggedInAs, token, replyTo, policy } = this.props;
+    const { loggedInAsEmail, token, replyTo, policy } = this.props;
     validate({ values, ...this.props}, policy);
     const { comment } = values;
-    return this.props.onSubmitComment(loggedInAs, token, comment, replyTo)
+    return this.props.onSubmitComment(loggedInAsEmail, token, comment, replyTo)
       .then(() =>  this.props.onSetReplyParent());
   }
 

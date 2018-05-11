@@ -10,11 +10,11 @@ const LoginForm = ({
   formAction="/post/login",
   error,
   isApiRequestingLogin,
-  loggedInAs,
+  loggedInAsEmail,
   apiLoginError,
   onLogin,
   handleSubmit,
-}) =>  loggedInAs ? null : (
+}) =>  loggedInAsEmail ? null : (
   <form
     action={formAction}
     className="form-v2"

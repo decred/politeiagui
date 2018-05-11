@@ -42,16 +42,16 @@ class Loader extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.loggedInAs) {
-      pki.getKeys(nextProps.loggedInAs).then(keys =>
+    if(nextProps.loggedInAsEmail) {
+      pki.getKeys(nextProps.loggedInAsEmail).then(keys =>
         this.props.keyMismatchAction(keys.publicKey !== nextProps.serverPubkey));
     }
   }
 
   componentDidMount() {
     window.addEventListener("storage", createStorageListener(store));
-    if(this.props.loggedInAs) {
-      pki.getKeys(this.props.loggedInAs).then(keys =>
+    if(this.props.loggedInAsEmail) {
+      pki.getKeys(this.props.loggedInAsEmail).then(keys =>
         this.props.keyMismatchAction(keys.publicKey !== this.props.serverPubkey));
     }
   }
@@ -76,11 +76,11 @@ const LoaderComponent = loaderConnector(Loader);
 
 const HeaderAlertComponent = withRouter(loaderConnector(({
   location,
-  loggedInAs,
+  loggedInAsEmail,
   userCanExecuteActions,
   history
 }) => {
-  if (!loggedInAs) return null;
+  if (!loggedInAsEmail) return null;
   if(!userCanExecuteActions && location.pathname !== "/user/account") {
     return (
       <HeaderAlert className="action-needed-alert">

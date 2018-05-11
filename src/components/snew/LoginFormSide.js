@@ -10,11 +10,11 @@ const LoginFormSide = ({
   isApiRequestingLogin,
   error,
   apiLoginError,
-  loggedInAs,
+  loggedInAsEmail,
   formAction="/post/login",
   onLogin,
   handleSubmit,
-}) => loggedInAs ? null : (
+}) => loggedInAsEmail ? null : (
   <div className="spacer">
     <form
       action={formAction}

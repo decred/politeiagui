@@ -13,9 +13,10 @@ const submitConnector = connect(
   sel.selectorMap({
     initialValues: getNewProposalData,
     isLoading: or(sel.isLoadingSubmit, sel.newProposalIsRequesting),
-    loggedInAs: sel.loggedInAs,
+    loggedInAsEmail: sel.loggedInAsEmail,
     policy: sel.policy,
     userid: sel.userid,
+    username: sel.loggedInAsUsername,
     keyMismatch: sel.getKeyMismatch,
     name: sel.newProposalName,
     description: sel.newProposalDescription,

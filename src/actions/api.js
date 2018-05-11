@@ -69,11 +69,11 @@ export const withCsrf = fn => (dispatch, getState) => {
     : dispatch(onInit()).then(() => withCsrf(fn)(dispatch, getState));
 };
 
-export const onCreateNewUser = ({ email, password }) =>
+export const onCreateNewUser = ({ email, username, password }) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_USER({ email }));
     return api
-      .newUser(csrf, email, password)
+      .newUser(csrf, email, username, password)
       .then(response => dispatch(act.RECEIVE_NEW_USER(response)))
       .catch(error => {
         dispatch(act.RECEIVE_NEW_USER(null, error));
@@ -120,6 +120,18 @@ export const onLogout = () =>
         clearStateLocalStorage();
       })
       .catch(error => dispatch(act.RECEIVE_LOGOUT(null, error)));
+  });
+
+export const onChangeUsername = (password, newUsername) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_CHANGE_USERNAME());
+    return api
+      .changeUsername(csrf, password, newUsername)
+      .then(response => dispatch(act.RECEIVE_CHANGE_USERNAME({ ...response, username: newUsername })))
+      .catch(error => {
+        dispatch(act.RECEIVE_CHANGE_USERNAME(null, error));
+        throw error;
+      });
   });
 
 export const onChangePassword = (password, newPassword) =>
@@ -174,20 +186,20 @@ export const onFetchProposalComments = token => dispatch => {
     .catch(error => dispatch(act.RECEIVE_PROPOSAL_COMMENTS(null, error)));
 };
 
-export const onSubmitProposal = (loggedInAs, userid, name, description, files) =>
+export const onSubmitProposal = (loggedInAsEmail, userid, username, name, description, files) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_PROPOSAL({ name, description, files }));
     return Promise.resolve(api.makeProposal(name, description, files))
-      .then(proposal => api.signProposal(loggedInAs, proposal)).then(proposal => api.newProposal(csrf, proposal))
-      .then(proposal => dispatch(act.RECEIVE_NEW_PROPOSAL({ ...proposal, numcomments: 0, userid, name, description })))
+      .then(proposal => api.signProposal(loggedInAsEmail, proposal)).then(proposal => api.newProposal(csrf, proposal))
+      .then(proposal => dispatch(act.RECEIVE_NEW_PROPOSAL({ ...proposal, numcomments: 0, userid, username, name, description })))
       .catch(error => { dispatch(act.RECEIVE_NEW_PROPOSAL(null, error)); throw error; });
   });
 
-export const onSubmitComment = (loggedInAs, token, comment, parentid) =>
+export const onSubmitComment = (loggedInAsEmail, token, comment, parentid) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
     return Promise.resolve(api.makeComment(token, comment, parentid))
-      .then(comment => api.signComment(loggedInAs, comment))
+      .then(comment => api.signComment(loggedInAsEmail, comment))
       .then(comment => api.newComment(csrf, comment))
       .then(response => dispatch(act.RECEIVE_NEW_COMMENT(response)))
       .catch(error => {
@@ -198,23 +210,23 @@ export const onSubmitComment = (loggedInAs, token, comment, parentid) =>
 
 const statusName = key => ({ 3: "censor", 4: "publish" }[key]);
 
-export const onUpdateUserKey = (loggedInAs) =>
+export const onUpdateUserKey = (loggedInAsEmail) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_UPDATED_KEY());
-    api.updateKeyRequest(csrf, loggedInAs)
+    api.updateKeyRequest(csrf, loggedInAsEmail)
       .then(response => dispatch(act.RECEIVE_UPDATED_KEY({ ...response, success: true })))
       .catch(error => { dispatch(act.RECEIVE_UPDATED_KEY(null, error)); throw error; });
   });
 
-export const onVerifyUserKey = (loggedInAs, verificationtoken) =>
+export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_VERIFIED_KEY());
-    api.verifyKeyRequest(csrf, loggedInAs, verificationtoken)
+    api.verifyKeyRequest(csrf, loggedInAsEmail, verificationtoken)
       .then(response => dispatch(act.RECEIVE_VERIFIED_KEY({ ...response, success: true })))
       .catch(error => dispatch(act.RECEIVE_VERIFIED_KEY(null, error)));
   });
 
-export const onSubmitStatusProposal = (loggedInAs, token, status) =>
+export const onSubmitStatusProposal = (loggedInAsEmail, token, status) =>
   withCsrf((dispatch, getState, csrf) => {
     return dispatch(confirmWithModal("CONFIRM_ACTION",
       { message: `Are you sure you want to ${statusName(status)} this proposal?` }))
@@ -226,7 +238,7 @@ export const onSubmitStatusProposal = (loggedInAs, token, status) =>
               dispatch(act.SET_PROPOSAL_APPROVED(true));
             }
             return api
-              .proposalSetStatus(loggedInAs, csrf, token, status)
+              .proposalSetStatus(loggedInAsEmail, csrf, token, status)
               .then(response => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(response)))
               .catch(error => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error)));
           }
@@ -294,7 +306,7 @@ export const onFetchActiveVotes = () => (dispatch) => {
   );
 };
 
-export const onStartVote = (loggedInAs, token, status) =>
+export const onStartVote = (loggedInAsEmail, token, status) =>
   withCsrf((dispatch, getState, csrf) => {
     return dispatch(confirmWithModal("CONFIRM_ACTION",
       { message: "Are you sure you want to start voting this proposal?" }))
@@ -303,7 +315,7 @@ export const onStartVote = (loggedInAs, token, status) =>
           if (confirm) {
             dispatch(act.REQUEST_START_VOTE({token, status}));
             return api
-              .startVote(loggedInAs, csrf, token, status)
+              .startVote(loggedInAsEmail, csrf, token, status)
               .then(response => {
                 dispatch(act.RECEIVE_START_VOTE({...response, success: true}));
                 dispatch(onFetchActiveVotes());

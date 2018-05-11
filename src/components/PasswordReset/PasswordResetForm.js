@@ -27,21 +27,21 @@ const PasswordResetForm = ({ error, handleSubmit, onPasswordReset, isRequesting 
         <Field
           autoFocus
           className="c-form-control"
-          id="password"
-          name="password"
+          id="newPassword"
+          name="newPassword"
           component="input"
           type="password"
           placeholder="Password"
           tabIndex={3} />
       </div>
       <div className="c-form-group">
-        <label className="screenreader-only" htmlFor="password_verify">
+        <label className="screenreader-only" htmlFor="newPasswordVerify">
           Verify Password:
         </label>
         <Field
           className="c-form-control"
-          id="password_verify"
-          name="password_verify"
+          id="newPasswordVerify"
+          name="newPasswordVerify"
           component="input"
           type="password"
           placeholder="Verify Password"

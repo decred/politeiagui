@@ -10,13 +10,12 @@ const RegisterForm = ({
   isApiRequestingNewUser,
   apiNewUserError,
   apiVerifyNewUserError,
-  loggedInAs,
-  usernameError,
+  loggedInAsEmail,
   passwdError,
   passwd2Error,
   onSignup,
   handleSubmit
-}) => loggedInAs ? null : (
+}) => loggedInAsEmail ? null : (
   <form
     action="/post/reg"
     className="form-v2"
@@ -33,7 +32,7 @@ const RegisterForm = ({
     />
     <div className="c-form-group">
       <label className="screenreader-only" htmlFor="user_reg">
-        username:
+        email address:
       </label>
       <Field
         name="email"
@@ -41,16 +40,23 @@ const RegisterForm = ({
         component="input"
         type="text"
         className="c-form-control"
-        data-validate-min={3}
-        data-validate-url="/api/check_username.json"
         id="user_reg"
         tabIndex={2}
       />
-      <div className="c-form-control-feedback-wrapper">
-        {usernameError
-          ? <span className="c-form-control-feedback c-form-control-feedback-error" title={usernameError} />
-          : null}
-      </div>
+    </div>
+    <div className="c-form-group">
+      <label className="screenreader-only" htmlFor="user_reg">
+        username:
+      </label>
+      <Field
+        name="username"
+        placeholder="Username"
+        component="input"
+        type="text"
+        className="c-form-control"
+        id="username_reg"
+        tabIndex={2}
+      />
     </div>
     <div className="c-form-group">
       <label className="screenreader-only" htmlFor="passwd_reg">

@@ -8,8 +8,8 @@ const ProposalInfo = ({policy}) => (
   <ul style={{listStyle: "disc", marginLeft: "20px"}}>
     <li style={liStyle}>You must provide both a proposal name and description.</li>
     <li style={liStyle}>
-      The proposal name must be between {policy.minnamelength} and {policy.maxnamelength} characters long{" "}
-      and only contain the following characters: {policy.supportedcharacters.join(" ")}
+      The proposal name must be between {policy.minproposalnamelength} and {policy.maxproposalnamelength} characters long{" "}
+      and only contain the following characters: {policy.proposalnamesupportedchars.join(" ")}
     </li>
     <li style={liStyle}>Only 5 attachments are allowed.</li>
     <li style={liStyle}>The maximum size of an attached image is {policy.maximagesize} b.</li>

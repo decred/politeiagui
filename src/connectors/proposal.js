@@ -10,7 +10,7 @@ import * as act from "../actions";
 const proposalConnector = connect(
   sel.selectorMap({
     token: compose(get(["match", "params", "token"]), arg(1)),
-    loggedIn: sel.loggedIn,
+    loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
     proposal: sel.proposal,
     comments: sel.proposalComments,

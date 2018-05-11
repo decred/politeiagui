@@ -31,26 +31,26 @@ const ChangePasswordForm = ({
         tabIndex={3} />
     </div>
     <div className="c-form-group">
-      <label className="screenreader-only" htmlFor="password">
+      <label className="screenreader-only" htmlFor="newPassword">
         New Password:
       </label>
       <Field
         className="c-form-control"
-        id="password"
-        name="password"
+        id="newPassword"
+        name="newPassword"
         component="input"
         type="password"
         placeholder="New Password"
         tabIndex={3} />
     </div>
     <div className="c-form-group">
-      <label className="screenreader-only" htmlFor="password_verify">
+      <label className="screenreader-only" htmlFor="newPasswordVerify">
         Verify Password:
       </label>
       <Field
         className="c-form-control"
-        id="password_verify"
-        name="password_verify"
+        id="newPasswordVerify"
+        name="newPasswordVerify"
         component="input"
         type="password"
         placeholder="Verify Password"

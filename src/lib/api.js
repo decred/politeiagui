@@ -44,7 +44,6 @@ export const makeComment = (token, comment, parentid) => ({
 export const signProposal = (email, proposal) => pki.myPubKeyHex(email).then(publickey => {
   const tree = new MerkleTree(proposal.files.map(x => Buffer(get("digest", x), "hex")).sort());
   const root = tree.root().toString("hex");
-  console.log("merkle root", root);
   return pki.signStringHex(email, root).then(signature => ({ ...proposal, publickey, signature }));
 });
 
@@ -91,7 +90,8 @@ export const me = () => {
           paywallamount,
           paywalltxnotbefore,
           userid,
-          publickey
+          publickey,
+          username
         }
       }) => ({
         csrfToken: csrfToken || "itsafake",
@@ -101,7 +101,8 @@ export const me = () => {
         paywallamount,
         paywalltxnotbefore,
         userid,
-        pubkey: publickey
+        pubkey: publickey,
+        username
       })
     )
     :
@@ -115,8 +116,8 @@ export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, ro
   csrfToken: csrfToken || "itsafake", version, route, pubkey, testnet
 }));
 
-export const newUser = (csrf, email, password) => pki.myPubKeyHex(email).then(publickey =>
-  POST("/user/new", csrf, { email, password, publickey }).then(getResponse));
+export const newUser = (csrf, email, username, password) => pki.myPubKeyHex(email).then(publickey =>
+  POST("/user/new", csrf, { email, username, password, publickey }).then(getResponse));
 
 export const verifyNewUser = searchQuery => {
   const { email, verificationtoken } = qs.parse(searchQuery);
@@ -133,6 +134,9 @@ export const userProposals = userid =>
 
 export const login = (csrf, email, password) =>
   POST("/login", csrf, { email, password }).then(getResponse);
+
+export const changeUsername = (csrf, password, newusername) =>
+  POST("/user/username/change", csrf, { password, newusername }).then(getResponse);
 
 export const changePassword = (csrf, currentpassword, newpassword) =>
   POST("/user/password/change", csrf, { currentpassword, newpassword }).then(getResponse);

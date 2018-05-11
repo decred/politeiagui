@@ -1,6 +1,7 @@
 import React from "react";
 import PrivateKeyIdentityManager from "./PrivateKeyIdentityManager";
 import PasswordChange from "./PasswordChange";
+import UsernameChange from "./UsernameChange";
 import Message from "./Message";
 import { myPubKeyHex } from "../lib/pki";
 import Paywall from "./Paywall";
@@ -8,7 +9,7 @@ import accountConnector from "../connectors/account";
 
 const UpdatedKeyMessage = ({ email }) => (
   <span>
-    Successfully updated your key! Please check your email at
+    Successfully updated your key! Please check your email at{" "}
     <b>{email}</b> to activate your new key.
   </span>
 );
@@ -26,8 +27,8 @@ class KeyPage extends React.Component {
   }
 
   componentDidMount() {
-    const { loggedInAs } = this.props;
-    myPubKeyHex(loggedInAs).then(pubkey => {
+    const { loggedInAsEmail } = this.props;
+    myPubKeyHex(loggedInAsEmail).then(pubkey => {
       if(!this.unmounting) {
         this.setState({ pubkey });
       }
@@ -40,7 +41,7 @@ class KeyPage extends React.Component {
 
   render() {
     const {
-      loggedInAs,
+      loggedInAsEmail,
       onUpdateUserKey,
       updateUserKey,
       updateUserKeyError,
@@ -120,12 +121,12 @@ class KeyPage extends React.Component {
           <div className="public-key">Your public key: {pubkey || "none"}</div>
           {updateUserKey &&
             updateUserKey.success && (
-              <Message
-                type="success"
-                header="Key Updated"
-                body={<UpdatedKeyMessage email={loggedInAs} />}
-              />
-            )}
+            <Message
+              type="success"
+              header="Key Updated"
+              body={<UpdatedKeyMessage email={loggedInAsEmail} />}
+            />
+          )}
           {updateUserKeyError && (
             <Message
               type="error"
@@ -135,13 +136,15 @@ class KeyPage extends React.Component {
           )}
           <button
             style={{ maxWidth: "250px" }}
-            onClick={() => onUpdateUserKey(loggedInAs)}>
+            onClick={() => onUpdateUserKey(loggedInAsEmail)}>
             Generate New Identity
           </button>
           <PrivateKeyIdentityManager
-            loggedInAs={loggedInAs}
+            loggedInAsEmail={loggedInAsEmail}
             onUpdateUserKey={onUpdateUserKey}
           />
+          <h1>Change Username</h1>
+          <UsernameChange />
           <h1>Change Password</h1>
           <PasswordChange />
         </div>

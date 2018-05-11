@@ -17,9 +17,7 @@ class ChangePassword extends Component {
 
     validate(props, policy);
 
-    return this
-      .props
-      .onChangePassword(props)
+    return this.props.onChangePassword(props)
       .catch((error) => {
         throw new SubmissionError({
           _error: error.message,

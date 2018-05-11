@@ -22,9 +22,9 @@ class VerifyKey extends Component {
       const { email } = nextProps;
       this.props.onVerify(email, verificationtoken);
     }
-    const { verifyUserKey, apiMeResponse, loggedInAs } = nextProps;
-    if(verifyUserKey && verifyUserKey.success && apiMeResponse && loggedInAs) {
-      pki.myPubKeyHex(loggedInAs).then((pubkey) => {
+    const { verifyUserKey, apiMeResponse, loggedInAsEmail } = nextProps;
+    if(verifyUserKey && verifyUserKey.success && apiMeResponse && loggedInAsEmail) {
+      pki.myPubKeyHex(loggedInAsEmail).then((pubkey) => {
         if(pubkey !== apiMeResponse.pubkey) {
           this.props.updateMe({ ...nextProps.apiMeResponse, pubkey });
         }

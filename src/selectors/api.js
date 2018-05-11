@@ -2,7 +2,7 @@ import get from "lodash/fp/get";
 import eq from "lodash/fp/eq";
 import filter from "lodash/fp/filter";
 import compose from "lodash/fp/compose";
-import { and, or, bool, constant, not } from "../lib/fp";
+import { or, bool, constant, not } from "../lib/fp";
 import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED } from "../constants";
 
 const getIsApiRequesting = key => bool(get(["api", key, "isRequesting"]));
@@ -14,6 +14,7 @@ export const isApiRequestingInit = getIsApiRequesting("init");
 const isApiRequestingPolicy = getIsApiRequesting("policy");
 export const isApiRequestingNewUser = getIsApiRequesting("newUser");
 export const isApiRequestingChangePassword = getIsApiRequesting("changePassword");
+export const isApiRequestingChangeUsername = getIsApiRequesting("changeUsername");
 export const isApiRequestingVerifyNewUser = getIsApiRequesting("verifyNewUser");
 export const isApiRequestingLogin = getIsApiRequesting("login");
 export const isApiRequestingLogout = getIsApiRequesting("logout");
@@ -56,6 +57,7 @@ const apiInitResponse = getApiResponse("init");
 const apiPolicyResponse = getApiResponse("policy");
 const apiNewUserResponse = getApiResponse("newUser");
 export const apiChangePasswordResponse = getApiResponse("changePassword");
+export const apiChangeUsernameResponse = getApiResponse("changeUsername");
 const apiLoginResponse = getApiResponse("login");
 export const forgottenPasswordResponse = getApiResponse("forgottenPassword");
 export const passwordResetResponse = getApiResponse("passwordReset");
@@ -79,6 +81,7 @@ const apiVoteResultsError = getApiError("voteResults");
 const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
 export const apiChangePasswordError = or(apiInitError, getApiError("changePassword"));
+export const apiChangeUsernameError = or(apiInitError, getApiError("changeUsername"));
 export const apiVerifyNewUserError = or(apiInitError, getApiError("verifyNewUser"));
 export const apiForgottenPasswordError = or(apiInitError, getApiError("forgottenPassword"));
 export const apiPasswordResetError = or(apiInitError, getApiError("passwordReset"));
@@ -94,6 +97,7 @@ export const apiError = or(
   apiInitError,
   apiNewUserError,
   apiChangePasswordError,
+  apiChangeUsernameError,
   apiVerifyNewUserError,
   apiLoginError,
   apiLogoutError,
@@ -114,11 +118,15 @@ export const email = or(
   compose(get("email"), apiNewUserPayload),
   compose(get("email"), apiForgottenPasswordPayload)
 );
-export const loggedIn = or(
+export const loggedInAsEmail = or(
   compose(get("email"), apiMeResponse),
-  compose(eq(1), get("errorcode"), apiLoginResponse)
+  compose(get("email"), apiLoginPayload)
 );
-export const loggedInAs = and(email, loggedIn);
+export const loggedInAsUsername = or(
+  compose(get("username"), apiChangeUsernameResponse),
+  compose(get("username"), apiMeResponse),
+  compose(get("username"), apiLoginPayload)
+);
 export const isAdmin = bool(or(
   compose(get("isadmin"), apiMeResponse),
   compose(get("isadmin"), apiLoginResponse)

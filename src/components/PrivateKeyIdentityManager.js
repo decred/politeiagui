@@ -42,7 +42,7 @@ class PrivateKeyIdentityManager extends Component {
   }
 
   fetchKeys() {
-    return pki.getKeys(this.props.loggedInAs).then(keys => JSON.stringify(keys, null, 2));
+    return pki.getKeys(this.props.loggedInAsEmail).then(keys => JSON.stringify(keys, null, 2));
   }
 
   onSelectFiles({ base64 }) {
@@ -50,7 +50,7 @@ class PrivateKeyIdentityManager extends Component {
       const data = atob(base64.split(",").pop());
       const json = JSON.parse(data);
       if (!json || !json.publicKey || !json.secretKey) throw new Error("Invalid identity file");
-      pki.importKeys(this.props.loggedInAs, json)
+      pki.importKeys(this.props.loggedInAsEmail, json)
         .then(() => alert("Successfully loaded identity"))
         .catch(e => {
           console.error(e.stack);
