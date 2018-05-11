@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, withRouter } from "react-router-dom";
 import requireLoginConnector from "../../connectors/requireLogin";
-import { loadStateLocalStorage } from "../../lib/storage";
+import { loadStateLocalStorage } from "../../lib/local_storage";
 
 class AuthenticatedRoute extends Component {
   componentDidMount() {

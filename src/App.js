@@ -8,36 +8,18 @@ import HeaderAlert from "./components/HeaderAlert";
 import Routes from "./Routes";
 import * as pki from "./lib/pki";
 import loaderConnector from "./connectors/loader";
-import { handleSaveState } from "./lib/localData";
-import { saveStateLocalStorage } from "./lib/storage";
-import { onLogout } from "./actions/api";
+import { handleSaveTextEditorsContent } from "./lib/editors_content_backup";
+import { handleSaveStateToLocalStorage, handleStorageChange } from "./lib/local_storage";
 import ModalStack from "./components/Modal/ModalStack";
 
 const store = configureStore();
 
-store.subscribe(
-  throttle(() => {
-    handleSaveState(store);
-    store.getState().api.me.response &&
-    saveStateLocalStorage({
-      api: {
-        me: store.getState().api.me
-      }
-    });
-  }, 1000)
-);
+store.subscribe(throttle(() => {
+  handleSaveTextEditorsContent(store);
+  handleSaveStateToLocalStorage(store);
+}, 1000));
 
-const createStorageListener = store => {
-  return event => {
-    try {
-      const state = JSON.parse(event.newValue);
-      if (state && !state.api.me.response) store.dispatch(onLogout());
-      else if (!state) store.dispatch(onLogout());
-    } catch (e) {
-      store.dispatch(onLogout());
-    }
-  };
-};
+const createStorageListener = store => event => handleStorageChange(store, event);
 
 class Loader extends Component {
   componentWillMount() {

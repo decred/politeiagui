@@ -3,7 +3,7 @@ import * as sel from "../selectors";
 import * as api from "../lib/api";
 import { confirmWithModal } from "./modal";
 import * as external_api_actions from "./external_api";
-import { clearStateLocalStorage } from "../lib/storage";
+import { clearStateLocalStorage } from "../lib/local_storage";
 import act from "./methods";
 
 export const onResetProposal = act.RESET_PROPOSAL;
