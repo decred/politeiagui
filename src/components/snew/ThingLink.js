@@ -22,7 +22,7 @@ const ThingLinkComp = ({
   expanded = false,
   name,
   author,
-  //authorid,
+  authorid,
   domain,
   rank = 0,
   userid,
