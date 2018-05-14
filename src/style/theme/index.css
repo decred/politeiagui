@@ -93,25 +93,7 @@ button:active {
 .c-btn-primary:active {
     margin-top: 4px
 }
-#header {
-    margin: 0;
-    height: 196px;
-    border: none;
-background-image:
-  	-webkit-repeating-linear-gradient(315deg, rgba(0, 0, 255, .03) 9%, rgba(0, 198, 96, .03) 13%),
-  	-webkit-repeating-linear-gradient(315deg, rgba(44, 212, 126, .05) 23%, rgba(8, 8, 61, .04) 38%),
-  	-webkit-linear-gradient(45deg, #11203a 15%, #305180 70%, #142550 95%);
 
-  background-image:
-  	repeating-linear-gradient(135deg, rgba(0, 0, 255, .03) 9%, rgba(0, 198, 96, .03) 13%),
-  	repeating-linear-gradient(135deg, rgba(44, 212, 126, .05) 23%, rgba(8, 8, 61, .04) 38%),
-  	linear-gradient(45deg, #11203a 15%, #305180 70%, #142550 95%);
-
-  background-position: 0px 0px, 0px 0px, 0px 0px;
-  background-size: auto, auto, auto;
-  background-repeat: repeat, repeat, repeat;
-    box-shadow: 0 2px 1.5px 0 rgba(0, 0, 0, .12), 0 0 4px 0 rgba(0, 0, 0, .12)
-}
 #sr-header-area {
     background: rgba(0, 0, 0, .08);
     border: none;
@@ -1385,11 +1367,7 @@ div.commentarea div.RES-keyNav-activeElement .md {
     text-decoration: none;
     background-color: rgba(0, 0, 0, .05)
 }
-.side {
-    padding: 0;
-    background: 0 0;
-    width: 320px
-}
+
 .side .spacer {
     margin: 0 0 16px
 }
