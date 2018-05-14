@@ -602,7 +602,7 @@ li p.header-3 {
     background: url("./theme/commentboxbg.png") 50% 50% no-repeat
 }
 .modal {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   display: flex;
