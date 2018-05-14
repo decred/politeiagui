@@ -4,9 +4,9 @@ import nacl from "tweetnacl";
 import util from "tweetnacl-util";
 import get from "lodash/fp/get";
 
-const STORAGE_PREFIX = "ed255191~";
-const toHex = x => Buffer.from(x).toString("hex");
-const toByteArray = str => {
+export const STORAGE_PREFIX = "ed255191~";
+export const toHex = x => Buffer.from(x).toString("hex");
+export const toByteArray = str => {
   const bytes = new Uint8Array(Math.ceil(str.length / 2));
   for (var i = 0; i < bytes.length; i++) bytes[i] = parseInt(str.substr(i * 2, 2), 16);
   return bytes;
@@ -19,7 +19,7 @@ export const generateKeys = email => {
 export const existing = email => localforage.getItem(STORAGE_PREFIX + email).catch(e => console.warn(e || e.stack));
 const myKeyPair = email => existing(email).then(res => (res && res.secretKey && res) || generateKeys(email));
 export const myPublicKey = email => myKeyPair(email).then(get("publicKey"));
-export const myPubKeyHex = email => myPublicKey(email).then(toHex);
+export const myPubKeyHex = email => myPublicKey(email).then(key => {console.log(key); return toHex(key);});
 export const sign = (email, msg) => myKeyPair(email).then(({ secretKey }) => nacl.sign.detached(msg, secretKey));
 export const signString = (email, msg) => sign(email, util.decodeUTF8(msg));
 export const signHex = (email, msg) => sign(email, msg).then(toHex);
