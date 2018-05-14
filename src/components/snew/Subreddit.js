@@ -22,6 +22,7 @@ class CustomSubreddit extends Component {
     return (
       <Switch>
         <Route path="/user/signup" component={noSidebar(this.props)} />
+        <Route path="/user/login" component={noSidebar(this.props)} />
         <Route path="*" component={withSidebar(this.props)} />
       </Switch>
     );
