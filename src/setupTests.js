@@ -1,5 +1,3 @@
-import indexedDB from "fake-indexeddb";
-
 class MockedLocalStorage {
   constructor() {
     this.keyValue = {};
@@ -27,9 +25,5 @@ describe("setup tests", () => {
   });
 });
 
-
-
-// Create an IDBFactory at window.indexedDB so your code can use IndexedDB.
-global.indexedDB = indexedDB;
 
 

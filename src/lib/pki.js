@@ -19,14 +19,14 @@ export const generateKeys = email => {
 export const existing = email => localforage.getItem(STORAGE_PREFIX + email).catch(e => console.warn(e || e.stack));
 const myKeyPair = email => existing(email).then(res => (res && res.secretKey && res) || generateKeys(email));
 export const myPublicKey = email => myKeyPair(email).then(get("publicKey"));
-export const myPubKeyHex = email => myPublicKey(email).then(key => {console.log(key); return toHex(key);});
+export const myPubKeyHex = email => myPublicKey(email).then(toHex);
 export const sign = (email, msg) => myKeyPair(email).then(({ secretKey }) => nacl.sign.detached(msg, secretKey));
 export const signString = (email, msg) => sign(email, util.decodeUTF8(msg));
 export const signHex = (email, msg) => sign(email, msg).then(toHex);
 export const signStringHex = (email, msg) => signString(email, msg).then(toHex);
 export const verify = (msg, sig, pubKey) => nacl.sign.detached.verify(msg, sig, pubKey);
 
-const keysToHex = ({ publicKey, secretKey }) => ({
+export const keysToHex = ({ publicKey, secretKey }) => ({
   publicKey: toHex(publicKey),
   secretKey: toHex(secretKey)
 });
