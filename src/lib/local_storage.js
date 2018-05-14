@@ -1,7 +1,7 @@
 /* 
   This lib is designed to handle persisting state data into local storage
 */
-import isEqual from "lodash/lang/isEqual";
+import isEqual from "lodash/isEqual";
 import get from "lodash/get";
 import { onLoadMe } from "../actions/app";
 import { onLogout } from "../actions/api";
