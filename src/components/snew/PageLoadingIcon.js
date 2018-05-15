@@ -28,7 +28,7 @@ class PageLoadingIcon extends React.Component {
       <LoadingIcon
         hidden={!show}
         width={200}
-        style={{ margin: "300px auto 0 auto" }} />
+        style={{ paddingTop: "300px", margin: "0 auto" }} />
     );
   }
 }
