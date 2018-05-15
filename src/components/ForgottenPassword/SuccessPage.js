@@ -2,7 +2,7 @@ import React from "react";
 import forgottenPasswordNext from "../../connectors/forgottenPasswordNext";
 
 const SuccessPage = ({ email }) => (
-  <div className="page forgotten-password-next-step-page">
+  <div className="page forgotten-password-next-step-page content">
     <h3>Please check your inbox to reset your password.</h3>
     <p>
       Note that for privacy reasons, Politeia does not disclose whether
