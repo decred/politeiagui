@@ -119,13 +119,11 @@ export const email = or(
   compose(get("email"), apiForgottenPasswordPayload)
 );
 export const loggedInAsEmail = or(
-  compose(get("email"), apiMeResponse),
-  compose(get("email"), apiLoginPayload)
+  compose(get("email"), apiMeResponse)
 );
 export const loggedInAsUsername = or(
   compose(get("username"), apiChangeUsernameResponse),
-  compose(get("username"), apiMeResponse),
-  compose(get("username"), apiLoginPayload)
+  compose(get("username"), apiMeResponse)
 );
 export const isAdmin = bool(or(
   compose(get("isadmin"), apiMeResponse),
