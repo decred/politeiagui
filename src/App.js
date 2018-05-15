@@ -40,9 +40,14 @@ const createStorageListener = store => {
   };
 };
 
+function getScrollTop () {
+  const el = document.scrollingElement || document.documentElement;
+  return el.scrollTop;
+}
+
 function lockSideOnScroll() {
   const html = document.querySelector("html");
-  const htmlScroll = html.scrollTop;
+  const htmlScroll = getScrollTop();
   const htmlHeight = html.scrollHeight;
   const side = document.querySelector(".side");
   const contentHeight = document.querySelector(".content").scrollHeight;
@@ -50,7 +55,7 @@ function lockSideOnScroll() {
   if (htmlHeight - htmlScroll <= 1022) {
     sideTop = sideTop === null ? htmlScroll : sideTop;
     side.style.position = "absolute";
-    side.style.top = `${contentHeight - 495}px`;
+    side.style.top = `${contentHeight - 488}px`;
   } else {
     sideTop = null;
     side.style.position = "fixed";
