@@ -27,8 +27,8 @@ class ModalStack extends React.Component {
     }
     if(modalChanged) this.setState({ modals }, () => {
       if (modals.length !== 0)
-        document.querySelector("html").style.overflow = "hidden";
-      else document.querySelector("html").style.overflow = "scroll";
+        document.querySelector("html").style.overflowY = "hidden";
+      else document.querySelector("html").style.overflowY = "scroll";
     });
   }
   renderModalContent = (modalData) => (
