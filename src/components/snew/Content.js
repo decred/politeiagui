@@ -54,14 +54,14 @@ export const CustomContent = ({
       }} />
     ]
   ) : (
-    <h1 style={{ margin: "300px auto 0 auto", textAlign: "center" }}>
+    <h1 style={{ textAlign: "center", paddingTop: "300px" }}>
       There are no proposals yet
     </h1>
   );
 
   return [
     <ReactBody className={bodyClassName} key="body" />,
-    <div className="content" role="main" style={{marginTop: "92px"}}>
+    <div className="content" role="main">
       {content}
     </div>
   ];

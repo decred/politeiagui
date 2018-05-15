@@ -689,3 +689,7 @@ li p.header-3 {
   cursor: not-allowed;
   user-select: none;
 }
+
+.appWrapper>.content {
+  margin-top: 92px !important;
+}
