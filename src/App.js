@@ -14,7 +14,6 @@ import { onLogout } from "./actions/api";
 import ModalStack from "./components/Modal/ModalStack";
 
 const store = configureStore();
-let sideTop = null;
 
 store.subscribe(
   throttle(() => {
@@ -40,29 +39,6 @@ const createStorageListener = store => {
   };
 };
 
-function getScrollTop () {
-  const el = document.scrollingElement || document.documentElement;
-  return el.scrollTop;
-}
-
-function lockSideOnScroll() {
-  const html = document.querySelector("html");
-  const htmlScroll = getScrollTop();
-  const htmlHeight = html.scrollHeight;
-  const side = document.querySelector(".side");
-  const contentHeight = document.querySelector(".content").scrollHeight;
-
-  if (htmlHeight - htmlScroll <= 1022) {
-    sideTop = sideTop === null ? htmlScroll : sideTop;
-    side.style.position = "absolute";
-    side.style.top = `${contentHeight - 488}px`;
-  } else {
-    sideTop = null;
-    side.style.position = "fixed";
-    side.style.top = null;
-  }
-}
-
 class Loader extends Component {
   componentWillMount() {
     this.props.onInit();
@@ -82,7 +58,6 @@ class Loader extends Component {
 
   componentDidMount() {
     window.addEventListener("storage", createStorageListener(store));
-    window.addEventListener("scroll", lockSideOnScroll);
 
     if (this.props.loggedInAsEmail) {
       pki
@@ -97,7 +72,6 @@ class Loader extends Component {
 
   componentWillUnmount() {
     window.removeEventListener("storage");
-    window.addEventListener("scroll", lockSideOnScroll);
   }
 
   render() {

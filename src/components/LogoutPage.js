@@ -15,7 +15,7 @@ class LogoutPage extends Component {
     ) : error ? (
       <ErrorPage {...{ error }} />
     ) : (
-      <article className="page logout-page">
+      <article className="page logout-page content">
         <h3>You are now logged out. Thanks for stopping by, and have a great day.</h3>
         <p>Here are some links that might be useful for you:</p>
         <ul>

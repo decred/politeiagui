@@ -50,7 +50,7 @@ class KeyPage extends React.Component {
     } = this.props;
     const { pubkey, showIdentityHelpText } = this.state;
     return (
-      <div className="content" role="main">
+      <div className="content" role="main" >
         {!userAlreadyPaid ? (
           <Paywall />
         ) : null}
