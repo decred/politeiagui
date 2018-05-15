@@ -20,12 +20,10 @@ export const CustomContent = ({
   ...props
 }) => {
   let content = error ? (
-    <div className="content" role="main">
-      <Message
-        type="error"
-        header="Error loading proposals"
-        body={error} />
-    </div>
+    <Message
+      type="error"
+      header="Error loading proposals"
+      body={error} />
   ) : isLoading ? (
     <PageLoadingIcon key="content" />
   ) : (listings && listings.length > 0) || proposals.length > 0 ? (
@@ -63,7 +61,9 @@ export const CustomContent = ({
 
   return [
     <ReactBody className={bodyClassName} key="body" />,
-    content
+    <div className="content" role="main" style={{marginTop: "92px"}}>
+      {content}
+    </div>
   ];
 };
 
