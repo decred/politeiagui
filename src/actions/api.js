@@ -9,39 +9,40 @@ import act from "./methods";
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onSetEmail = act.SET_EMAIL;
 
-export const onInit = () => (dispatch, getState) => {
+export const requestApiInfo = (poolPaywall = false) => (dispatch, getState) => {
+  return api
+    .apiInfo()
+    .then(response => dispatch(act.RECEIVE_INIT_SESSION(response)))
+    .then(() => {
+      // Start polling for the user paywall tx, if applicable.
+      if(poolPaywall) {
+        const paywallAddress = sel.paywallAddress(getState());
+        if(paywallAddress) {
+          const paywallAmount = sel.paywallAmount(getState());
+          const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
+          dispatch(external_api_actions.verifyUserPayment(paywallAddress, paywallAmount, paywallTxNotBefore));
+        }
+      }
+    })
+    .catch(error => {
+      dispatch(act.RECEIVE_INIT_SESSION(null, error));
+      throw error;
+    });
+};
+
+export const onInit = () => (dispatch) => {
   dispatch(act.REQUEST_ME());
   return api
     .me()
     .then(response => {
       dispatch(act.RECEIVE_ME(response));
       dispatch(act.REQUEST_INIT_SESSION());
-      return api
-        .apiInfo()
-        .then(response => dispatch(act.RECEIVE_INIT_SESSION(response)))
-        .then(() => {
-          // Start polling for the user paywall tx, if applicable.
-          const paywallAddress = sel.paywallAddress(getState());
-          if(paywallAddress) {
-            const paywallAmount = sel.paywallAmount(getState());
-            const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
-            dispatch(external_api_actions.verifyUserPayment(paywallAddress, paywallAmount, paywallTxNotBefore));
-          }
-        })
-        .catch(error => {
-          dispatch(act.RECEIVE_INIT_SESSION(null, error));
-          throw error;
-        });
+      return dispatch(requestApiInfo(true));
     })
     .catch(() => {
+      clearStateLocalStorage();
       dispatch(act.REQUEST_INIT_SESSION());
-      return api
-        .apiInfo()
-        .then(response => dispatch(act.RECEIVE_INIT_SESSION(response)))
-        .catch(error => {
-          dispatch(act.RECEIVE_INIT_SESSION(null, error));
-          throw error;
-        });
+      return dispatch(requestApiInfo());
     });
 };
 
@@ -117,7 +118,6 @@ export const onLogout = () =>
       .then(response => {
         dispatch(act.RECEIVE_LOGOUT(response));
         dispatch(onSetEmail(""));
-        clearStateLocalStorage();
       })
       .catch(error => dispatch(act.RECEIVE_LOGOUT(null, error)));
   });
