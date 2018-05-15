@@ -7,6 +7,7 @@ import compose from "lodash/fp/compose";
 import { reduxForm } from "redux-form";
 import validate from "../validators/login";
 import { withRouter } from "react-router-dom";
+import { SubmissionError } from "redux-form";
 
 const loginConnector = connect(
   sel.selectorMap({
@@ -46,6 +47,10 @@ class Wrapper extends Component {
       } else {
         this.props.history.push("/");
       }
+    }).catch(e => {
+      throw new SubmissionError({
+        _error: e.message,
+      });
     });
   }
 }
