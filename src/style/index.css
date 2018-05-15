@@ -48,7 +48,6 @@
 
 .side {
   padding: 0;
-  position: fixed;
   right: 0;
   background: 0 0;
   width: 320px
@@ -99,7 +98,6 @@ a:hover {
   display: table;
   clear: both;
 }
-
 
 .header {
   position: fixed;
@@ -683,4 +681,11 @@ li p.header-3 {
   background-position: 50% 50%;
   background-size: contain;
   background-repeat: no-repeat;
+}
+
+.disabled {
+  background: rgba(0, 0, 0, .08);
+  color: #bbb;
+  cursor: not-allowed;
+  user-select: none;
 }

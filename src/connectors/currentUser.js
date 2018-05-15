@@ -8,6 +8,7 @@ const currentUserConnector = connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     loggedInAsUsername: sel.loggedInAsUsername,
     isAdmin: sel.isAdmin,
+    userCanExecuteActions: sel.userCanExecuteActions
   }),
   dispatch => bindActionCreators({
     onLogout: act.onLogout
