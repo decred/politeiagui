@@ -12,6 +12,7 @@ class CustomSubreddit extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.location.pathname !== this.props.location.pathname) {
       this.props.onRouteChange();
+      window.scrollTo(0,0);
     }
     const stateFromLocalStorage = loadStateLocalStorage();
     if (stateFromLocalStorage) this.props.onLoadMe(stateFromLocalStorage.api.me);
