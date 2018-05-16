@@ -57,17 +57,11 @@ const LoginForm = ({
         type="password"
         placeholder="Password"
       />
-      {apiLoginError ? (
+      {(error || apiLoginError) ? (
         <Message
           type="error"
           header="Login error"
-          body={apiLoginError} />
-      ) : null}
-      {error ? (
-        <Message
-          type="error"
-          header="Cannot login"
-          body={error} />
+          body={error || apiLoginError} />
       ) : null}
       <Field
         name="global"
@@ -83,6 +77,7 @@ const LoginForm = ({
     </div>
     <div className="c-clearfix c-submit-group">
       <ButtonWithLoadingIcon
+        style={{ marginRight: "0px" }}
         className="c-btn c-btn-primary c-pull-right"
         tabIndex={3}
         text="LOGIN"

@@ -7,6 +7,7 @@ import compose from "lodash/fp/compose";
 import { reduxForm } from "redux-form";
 import validate from "../validators/signup";
 import { withRouter } from "react-router-dom";
+import { SubmissionError } from "redux-form";
 
 const signupFormConnector = connect(
   sel.selectorMap({
@@ -54,7 +55,11 @@ class Wrapper extends Component {
   onSignup(...args) {
     const policy = this.props.policy || {};
     validate(policy, ...args);
-    return this.props.onSignup(...args);
+    return this.props.onSignup(...args).catch(e => {
+      throw new SubmissionError({
+        _error: e.message,
+      });
+    });
   }
 }
 

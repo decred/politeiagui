@@ -108,6 +108,7 @@ const RegisterForm = ({
     </div>
     <div className="c-clearfix c-submit-group">
       <ButtonWithLoadingIcon
+        style={{ marginRight: "0px" }}
         className="c-btn c-btn-primary c-pull-right"
         tabIndex={2}
         text="Sign up"
