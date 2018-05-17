@@ -16,7 +16,7 @@ const loadKeys = (email, keys) => localforage.setItem(STORAGE_PREFIX + email, ke
 export const generateKeys = email => {
   return Promise.resolve(nacl.sign.keyPair()).then(keys => loadKeys(email, keys));
 };
-export const existing = email => localforage.getItem(STORAGE_PREFIX + email).catch(e => console.warn(e || e.stack));
+export const existing = email => localforage.getItem(STORAGE_PREFIX + email).catch(e => console.warn(e));
 const myKeyPair = email => existing(email).then(res => (res && res.secretKey && res) || generateKeys(email));
 export const myPublicKey = email => myKeyPair(email).then(get("publicKey"));
 export const myPubKeyHex = email => myPublicKey(email).then(toHex);

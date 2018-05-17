@@ -20,7 +20,7 @@ const apiBase = "/api";
 const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
 const getResponse = get("response");
 
-const digestPayload = payload => CryptoJS
+export const digestPayload = payload => CryptoJS
   .SHA256(arrayBufferToWordArray(base64ToArrayBuffer(payload)))
   .toString(CryptoJS.enc.Hex);
 
@@ -55,7 +55,7 @@ const parseResponseBody = response => {
   throw new Error(STATUS_ERR[response.status] || "Internal server error");
 };
 
-const parseResponse = response => parseResponseBody(response).then(json => {
+export const parseResponse = response => parseResponseBody(response).then(json => {
   if (json.errorcode) throw new Error(getHumanReadableError(json.errorcode, json.errorcontext));
   return { response: json, csrfToken: response.headers.get("X-Csrf-Token") };
 });

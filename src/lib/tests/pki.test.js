@@ -1,20 +1,9 @@
 import * as pki from "../pki.js";
 import localforage from "localforage";
-import dummyStorageDriver from "./dummyStorageDriver";
 import util from "tweetnacl-util";
 import nacl from "tweetnacl";
 
-describe("Key pair handlers (pki.js)", () => {
-
-  beforeEach(() => {
-    //define the dummy driver before each testing execution
-    localforage.defineDriver(dummyStorageDriver, function() {
-      localforage.setDriver(dummyStorageDriver._driver, function() {
-        //ok
-        localforage.clear();
-      });
-    });
-  });
+describe("Key pair generation and storage handlers (lib/pki.js)", () => {
 
   test("converts an object/array/string to hex representation as a string", () => {
     expect(pki.toHex([4, 34, 54])).toBe("042236");
