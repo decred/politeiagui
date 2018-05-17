@@ -2,7 +2,7 @@ import React from "react";
 import signupNext from "../connectors/signupNext";
 
 const SignupNextStepPage = ({ email }) => (
-  <div className="content" role="main" style={{ minHeight: "calc(100vh - 350px)" }}>
+  <div className="content page signup-next-step-page" role="main" style={{ minHeight: "calc(100vh - 350px)" }}>
     <h3>Please check your inbox to verify your registration.</h3>
     <p>
       Note that for privacy reasons, Politeia does not disclose whether an
