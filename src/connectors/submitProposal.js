@@ -7,7 +7,7 @@ import { or } from "../lib/fp";
 import { reduxForm } from "redux-form";
 import validate from "../validators/proposal";
 import { withRouter } from "react-router-dom";
-import { getNewProposalData } from "../lib/localData";
+import { getNewProposalData } from "../lib/editors_content_backup";
 
 const submitConnector = connect(
   sel.selectorMap({

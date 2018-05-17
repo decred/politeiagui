@@ -1,7 +1,6 @@
 /* 
-This lib is designed to handle persisting data for the text editors
+This lib is designed to handle persisting data for the text editors using session storage
 */
-
 const updateFormData = (store) => {
   const newProposalData = (store.getState().form["form/proposal"] && store.getState().form["form/proposal"].values) || {};
   const newCommentData = (store.getState().form["form/reply"] && store.getState().form["form/reply"].values) || {};
@@ -38,6 +37,6 @@ export const getNewCommentData = () => {
   };
 };
 
-export const handleSaveState = (store) => {
+export const handleSaveTextEditorsContent = (store) => {
   updateFormData(store);
 };

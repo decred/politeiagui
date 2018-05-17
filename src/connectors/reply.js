@@ -6,7 +6,7 @@ import { reduxForm, initialize } from "redux-form";
 import { withRouter } from "react-router-dom";
 import validate from "../validators/reply";
 import { connect } from "react-redux";
-import { getNewCommentData } from "../lib/localData";
+import { getNewCommentData } from "../lib/editors_content_backup";
 
 const replyConnector = connect(
   sel.selectorMap({

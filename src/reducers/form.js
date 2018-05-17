@@ -1,5 +1,5 @@
 import { reducer } from "redux-form";
-import { resetNewProposalData, resetNewCommentData } from "../lib/localData";
+import { resetNewProposalData, resetNewCommentData } from "../lib/editors_content_backup";
 import * as act from "../actions/types";
 
 

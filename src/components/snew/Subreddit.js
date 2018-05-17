@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Subreddit } from "snew-classic-ui";
 import { Switch, Route, withRouter } from "react-router-dom";
 import routeChangeConnector from "../../connectors/routeChange";
-import { loadStateLocalStorage } from "../../lib/storage";
+import { loadStateLocalStorage } from "../../lib/local_storage";
 
 
 const noSidebar = (p1) => (p2) => <Subreddit {...{...p2, ...p1}} useSidebar={false} />;
@@ -22,6 +22,7 @@ class CustomSubreddit extends Component {
     return (
       <Switch>
         <Route path="/user/signup" component={noSidebar(this.props)} />
+        <Route path="/user/login" component={noSidebar(this.props)} />
         <Route path="*" component={withSidebar(this.props)} />
       </Switch>
     );

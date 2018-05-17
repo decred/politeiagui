@@ -16,8 +16,6 @@ const STATUS_ERR = {
   404: "Not found"
 };
 
-const promiseLoadMe = () => new Promise((resolve) => setTimeout(resolve, 1));
-
 const apiBase = "/api";
 const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
 const getResponse = get("response");
@@ -78,8 +76,7 @@ const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
 }).then(parseResponse);
 
 export const me = () => {
-  const meResponse = localStorage.getItem("state") ? JSON.parse(localStorage.getItem("state")).api.me.response : null;
-  return !meResponse ?
+  return (
     GET("/v1/user/me").then(
       ({
         csrfToken,
@@ -105,11 +102,7 @@ export const me = () => {
         username
       })
     )
-    :
-    promiseLoadMe().then(() => ({
-      ...meResponse
-    }))
-  ;
+  );
 };
 
 export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, route, pubkey, testnet } }) => ({
