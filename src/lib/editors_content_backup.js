@@ -1,9 +1,9 @@
-/* 
+/*
 This lib is designed to handle persisting data for the text editors using session storage
 */
-const updateFormData = (store) => {
-  const newProposalData = (store.getState().form["form/proposal"] && store.getState().form["form/proposal"].values) || {};
-  const newCommentData = (store.getState().form["form/reply"] && store.getState().form["form/reply"].values) || {};
+const updateFormData = (state) => {
+  const newProposalData = (state.form["form/proposal"] && state.form["form/proposal"].values) || {};
+  const newCommentData = (state.form["form/reply"] && state.form["form/reply"].values) || {};
   const path = window.location.pathname;
   Object.keys(newProposalData).forEach(key =>
     sessionStorage.setItem(`new-proposal-${key}`, newProposalData[key])
@@ -37,6 +37,6 @@ export const getNewCommentData = () => {
   };
 };
 
-export const handleSaveTextEditorsContent = (store) => {
-  updateFormData(store);
+export const handleSaveTextEditorsContent = (state) => {
+  updateFormData(state);
 };

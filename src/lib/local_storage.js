@@ -1,10 +1,8 @@
-/* 
+/*
   This lib is designed to handle persisting state data into local storage
 */
 import isEqual from "lodash/isEqual";
 import get from "lodash/get";
-import { onLoadMe } from "../actions/app";
-import { onLogout } from "../actions/api";
 import { loggedInAsUsername, loggedInAsEmail } from "../selectors/api";
 
 export const loadStateLocalStorage = () => {
@@ -32,15 +30,15 @@ export const clearStateLocalStorage = () => {
   }
 };
 
-const handleSaveApiMe = (store) => {
+const handleSaveApiMe = (state) => {
   const apiMeFromStorage = get(loadStateLocalStorage(), ["api", "me"], undefined);
   const apiMeResponseFromStorage = get(apiMeFromStorage, "response", undefined);
-  const apiMe = get(store.getState(), ["api", "me"], undefined);
+  const apiMe = get(state, ["api", "me"], undefined);
   const apiMeResponse = get(apiMe, "response", undefined);
   const customResponse = {
     ...apiMeResponse,
-    username: loggedInAsUsername(store.getState()),
-    email: loggedInAsEmail(store.getState())
+    username: loggedInAsUsername(state),
+    email: loggedInAsEmail(state)
   };
   if(apiMeResponse && !isEqual(apiMeResponseFromStorage, customResponse)) {
     saveStateLocalStorage({
@@ -54,22 +52,6 @@ const handleSaveApiMe = (store) => {
   }
 };
 
-export const handleSaveStateToLocalStorage = (store) => {
-  handleSaveApiMe(store);
-};
-
-export const handleStorageChange = (store, event) => {
-  const apiMe = get(store.getState(), ["api", "me"], undefined);
-  const apiMeResponse = get(apiMe, "response", undefined);
-  try {
-    const state = JSON.parse(event.newValue);
-    const apiMeFromStorage = get(loadStateLocalStorage(), ["api", "me"], undefined);
-    const apiMeResponseFromStorage = get(apiMeFromStorage, "response", undefined);
-    if(apiMeResponseFromStorage && !isEqual(apiMeResponseFromStorage, apiMeResponse)) {
-      store.dispatch(onLoadMe(apiMeFromStorage));
-    }
-    else if (!state || (state && !state.api.me.response)) store.dispatch(onLogout());
-  } catch(e) {
-    store.dispatch(onLogout());
-  }
+export const handleSaveStateToLocalStorage = (state) => {
+  handleSaveApiMe(state);
 };

@@ -9,17 +9,19 @@ import Routes from "./Routes";
 import * as pki from "./lib/pki";
 import loaderConnector from "./connectors/loader";
 import { handleSaveTextEditorsContent } from "./lib/editors_content_backup";
-import { handleSaveStateToLocalStorage, handleStorageChange } from "./lib/local_storage";
+import { handleSaveStateToLocalStorage } from "./lib/local_storage";
+import { onLocalStorageChange } from "./actions/app";
 import ModalStack from "./components/Modal/ModalStack";
 
 const store = configureStore();
 
 store.subscribe(throttle(() => {
-  handleSaveTextEditorsContent(store);
-  handleSaveStateToLocalStorage(store);
+  const state = store.getState();
+  handleSaveTextEditorsContent(state);
+  handleSaveStateToLocalStorage(state);
 }, 1000));
 
-const createStorageListener = store => event => handleStorageChange(store, event);
+const createStorageListener = store => event => store.dispatch(onLocalStorageChange(event));
 
 class Loader extends Component {
   componentWillMount() {
