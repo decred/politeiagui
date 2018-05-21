@@ -1,5 +1,5 @@
 import localforage from "localforage";
-import dummyStorageDriver from "./lib/tests/dummyStorageDriver";
+import dummyStorageDriver from "./lib/tests/support/dummyStorageDriver";
 
 class MockedLocalStorage {
   constructor() {

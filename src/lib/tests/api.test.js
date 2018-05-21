@@ -3,6 +3,10 @@ import qs from "query-string";
 import * as api from "../api";
 import * as pki from "../pki.js";
 import { getHumanReadableError } from "../../helpers";
+import {
+  assertGETOnRouteIsCalled,
+  assertRouteIsCalledWithQueryParams,
+  assertPOSTOnRouteIsCalled } from "./support/helpers";
 import { PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
 
 describe("api integration modules (lib/api.js)", () => {
@@ -393,27 +397,5 @@ describe("api integration modules (lib/api.js)", () => {
       ["fake_vote"]
     );
   });
-
-  const assertRouteIsCalledWithQueryParams = async (path, query, func, args, mockResult = {}) => {
-    const OPTIONS = { query };
-    fetchMock.getOnce(path, mockResult, OPTIONS);
-    const result = await func.apply(null, args);
-    expect(fetchMock.called(path)).toBeTruthy();
-    return result;
-  };
-
-  const assertPOSTOnRouteIsCalled = async (path, func, args, mockResult = {}) => {
-    fetchMock.post(path, mockResult);
-    const result = await func.apply(null, args);
-    expect(fetchMock.called(path)).toBeTruthy();
-    return result;
-  };
-
-  const assertGETOnRouteIsCalled = async (path, func, args, mockResult = {}) => {
-    fetchMock.getOnce(path, mockResult);
-    const result = await func.apply(null, args);
-    expect(fetchMock.called(path)).toBeTruthy();
-    return result;
-  };
 
 });
