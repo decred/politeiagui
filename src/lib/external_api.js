@@ -40,13 +40,13 @@ const getRawTransactions = url => {
     });
 };
 
-export const getHeightByDcrdata = () => {
-  const network = NETWORK ? "testnet" : "explorer";
+export const getHeightByDcrdata = (network = NETWORK) => {
+  network = network ? "testnet" : "explorer";
   return getRawTransactions(dcrddataBlockHeightURL(network));
 };
 
-export const getHeightByInsight = () => {
-  const network = NETWORK ? "testnet" : "explorer";
+export const getHeightByInsight = (network = NETWORK) => {
+  network = network ? "testnet" : "mainnet";
   return getRawTransactions(insightBlockHeightURL(network));
 };
 
