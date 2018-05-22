@@ -1,5 +1,8 @@
 import localforage from "localforage";
 import dummyStorageDriver from "./lib/tests/support/dummyStorageDriver";
+import { registerAssertions } from "redux-actions-assertions/jest";
+import { registerMiddlewares } from "redux-actions-assertions";
+import thunk from "redux-thunk";
 
 class MockedLocalStorage {
   constructor() {
@@ -37,7 +40,12 @@ beforeEach(() => {
       localforage.clear();
     });
   });
+  registerMiddlewares([
+    thunk
+  ]);
 });
+
+beforeEach(registerAssertions);
 
 describe("setup tests", () => {
   test("mock local storage works", () => {
@@ -50,5 +58,15 @@ describe("setup tests", () => {
   });
 });
 
-
+describe("test redux actions assertions", () => {
+  test("test actinos dispatched", () => {
+    const testAction = () => ({
+      type: "TEST_ACTION"
+    });
+    const someAction = () => (dispatch) => {
+      dispatch(testAction());
+    };
+    expect(someAction()).toDispatchActions({ type: "TEST_ACTION" }, true);
+  });
+});
 
