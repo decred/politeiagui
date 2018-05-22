@@ -3,8 +3,9 @@ import * as app from "../app";
 import * as act from "../types";
 import { onSubmitProposal, onChangeUsername, onChangePassword, onFetchProposalComments, onLogout } from "../api";
 import { onFetchProposal as onFetchProposalApi, onSubmitComment as onSubmitCommentApi } from "../api";
+import { done } from "./helpers";
 
-describe("test app actions", () => {
+describe("test app actions (actions/app.js)", () => {
   const FAKE_CSRF = "fake_csrf_token";
   const MOCK_STATE = {
     api: {
@@ -31,10 +32,6 @@ describe("test app actions", () => {
     email: "foo@bar.com",
     username: "foobar",
     password: "foobar1234"
-  };
-  const done = (...args) => {
-    console.log("HEY", args);
-    expect(args[0]).toEqual(undefined);
   };
   beforeEach(() => {
     //send status 200 to every unmatched request
