@@ -8,3 +8,4 @@ docker-build
 selenium-debug.log
 
 test/e2e/reports
+coverage
