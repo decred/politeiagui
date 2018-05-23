@@ -151,7 +151,10 @@ export const onFetchUserProposals = userid => dispatch => {
   return api
     .userProposals(userid)
     .then(response => dispatch(act.RECEIVE_USER_PROPOSALS(response)))
-    .catch(error => dispatch(act.RECEIVE_USER_PROPOSALS(null, error)));
+    .catch(error => {
+      dispatch(act.RECEIVE_USER_PROPOSALS(null, error));
+      throw error;
+    });
 };
 
 export const onFetchVetted = () => dispatch => {
@@ -159,7 +162,10 @@ export const onFetchVetted = () => dispatch => {
   return api
     .vetted()
     .then(response => dispatch(act.RECEIVE_VETTED(response)))
-    .catch(error => dispatch(act.RECEIVE_VETTED(null, error)));
+    .catch(error => {
+      dispatch(act.RECEIVE_VETTED(null, error));
+      throw error;
+    });
 };
 
 export const onFetchUnvetted = () => dispatch => {
@@ -167,7 +173,10 @@ export const onFetchUnvetted = () => dispatch => {
   return api
     .unvetted()
     .then(response => dispatch(act.RECEIVE_UNVETTED(response)))
-    .catch(error => dispatch(act.RECEIVE_UNVETTED(null, error)));
+    .catch(error => {
+      dispatch(act.RECEIVE_UNVETTED(null, error));
+      throw error;
+    });
 };
 
 export const onFetchProposal = token => dispatch => {
@@ -175,7 +184,10 @@ export const onFetchProposal = token => dispatch => {
   return api
     .proposal(token)
     .then(response => dispatch(act.RECEIVE_PROPOSAL(response)))
-    .catch(error => dispatch(act.RECEIVE_PROPOSAL(null, error)));
+    .catch(error => {
+      dispatch(act.RECEIVE_PROPOSAL(null, error));
+      throw error;
+    });
 };
 
 export const onFetchProposalComments = token => dispatch => {
@@ -183,7 +195,10 @@ export const onFetchProposalComments = token => dispatch => {
   return api
     .proposalComments(token)
     .then(response => dispatch(act.RECEIVE_PROPOSAL_COMMENTS(response)))
-    .catch(error => dispatch(act.RECEIVE_PROPOSAL_COMMENTS(null, error)));
+    .catch(error => {
+      dispatch(act.RECEIVE_PROPOSAL_COMMENTS(null, error));
+      throw error;
+    });
 };
 
 export const onSubmitProposal = (loggedInAsEmail, userid, username, name, description, files) =>
@@ -223,7 +238,10 @@ export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
     dispatch(act.REQUEST_VERIFIED_KEY());
     api.verifyKeyRequest(csrf, loggedInAsEmail, verificationtoken)
       .then(response => dispatch(act.RECEIVE_VERIFIED_KEY({ ...response, success: true })))
-      .catch(error => dispatch(act.RECEIVE_VERIFIED_KEY(null, error)));
+      .catch(error => {
+        dispatch(act.RECEIVE_VERIFIED_KEY(null, error));
+        throw error;
+      });
   });
 
 export const onSubmitStatusProposal = (loggedInAsEmail, token, status) =>
@@ -240,7 +258,10 @@ export const onSubmitStatusProposal = (loggedInAsEmail, token, status) =>
             return api
               .proposalSetStatus(loggedInAsEmail, csrf, token, status)
               .then(response => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(response)))
-              .catch(error => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error)));
+              .catch(error => {
+                dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
+                throw error;
+              });
           }
         }
       );
@@ -302,7 +323,10 @@ export const onFetchActiveVotes = () => (dispatch) => {
   return api.activeVotes().then(
     response => dispatch(act.RECEIVE_ACTIVE_VOTES({ ...response, success: true }))
   ).catch(
-    error => dispatch(act.RECEIVE_ACTIVE_VOTES(null, error))
+    error => {
+      dispatch(act.RECEIVE_ACTIVE_VOTES(null, error));
+      throw error;
+    }
   );
 };
 
@@ -320,7 +344,10 @@ export const onStartVote = (loggedInAsEmail, token, status) =>
                 dispatch(act.RECEIVE_START_VOTE({...response, success: true}));
                 dispatch(onFetchActiveVotes());
               })
-              .catch(error => dispatch(act.RECEIVE_START_VOTE(null, error)));
+              .catch(error => {
+                dispatch(act.RECEIVE_START_VOTE(null, error));
+                throw error;
+              });
           }
         }
       );
@@ -331,6 +358,9 @@ export const onFetchVoteResults = (vote) => (dispatch) => {
   return api.voteResults({ vote }).then(
     response => dispatch(act.RECEIVE_VOTE_RESULTS({ ...response, success: true }))
   ).catch(
-    error => dispatch(act.RECEIVE_VOTE_RESULTS(null, error))
+    error => {
+      dispatch(act.RECEIVE_VOTE_RESULTS(null, error));
+      throw error;
+    }
   );
 };
