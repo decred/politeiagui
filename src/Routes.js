@@ -15,8 +15,6 @@ import ForgottenPasswordSuccess from "./components/ForgottenPassword/SuccessPage
 import PasswordReset from "./components/PasswordResetPage";
 import PasswordResetSuccess from "./components/PasswordReset/SuccessPage";
 import Verify from "./components/Verify";
-import VerifySuccess from "./components/Verify/indexSuccess";
-import VerifyFailure from "./components/Verify/indexFailure";
 import Account from "./components/AccountPage";
 import VerifyKey from "./components/VerifyKey";
 import NotFound from "./components/NotFoundPage";
@@ -40,8 +38,6 @@ class Routes extends Component {
         <Route exact path="/user/forgotten/password/next" component={ForgottenPasswordSuccess} />
         <Route exact path="/user/password/reset" component={PasswordReset} />
         <Route exact path="/user/password/reset/next" component={PasswordResetSuccess} />
-        <Route path="/user/verify/success" component={VerifySuccess} />
-        <Route path="/user/verify/failure" component={VerifyFailure} />
         <Route path="/user/verify" component={Verify} exact />
         <Route path="/user/key/verify" component={VerifyKey} exact />
         <AuthenticatedRoute path="/user/account" component={Account} exact />

@@ -9,7 +9,7 @@ import {
 } from "../../constants";
 
 
-const Modal = ({
+const Paywall = ({
   paywallAddress,
   paywallAmount,
   payWithFaucet,
@@ -88,4 +88,4 @@ const Modal = ({
   );
 };
 
-export default Modal;
+export default Paywall;
