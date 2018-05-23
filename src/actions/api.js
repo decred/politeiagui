@@ -228,7 +228,7 @@ const statusName = key => ({ 3: "censor", 4: "publish" }[key]);
 export const onUpdateUserKey = (loggedInAsEmail) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_UPDATED_KEY());
-    api.updateKeyRequest(csrf, loggedInAsEmail)
+    return api.updateKeyRequest(csrf, loggedInAsEmail)
       .then(response => dispatch(act.RECEIVE_UPDATED_KEY({ ...response, success: true })))
       .catch(error => { dispatch(act.RECEIVE_UPDATED_KEY(null, error)); throw error; });
   });
@@ -236,7 +236,7 @@ export const onUpdateUserKey = (loggedInAsEmail) =>
 export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_VERIFIED_KEY());
-    api.verifyKeyRequest(csrf, loggedInAsEmail, verificationtoken)
+    return api.verifyKeyRequest(csrf, loggedInAsEmail, verificationtoken)
       .then(response => dispatch(act.RECEIVE_VERIFIED_KEY({ ...response, success: true })))
       .catch(error => {
         dispatch(act.RECEIVE_VERIFIED_KEY(null, error));
@@ -311,7 +311,7 @@ export const onPasswordResetRequest = ({
 export const keyMismatch = (payload) => dispatch => dispatch(act.KEY_MISMATCH(payload));
 
 export const resetPasswordReset = () => dispatch =>
-  dispatch(act.RESET_PASSWORD_RESET_REQUEST);
+  dispatch(act.RESET_PASSWORD_RESET_REQUEST());
 
 export const verifyUserPaymentWithPoliteia = txid => {
   return api.verifyUserPayment(txid)
