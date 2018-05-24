@@ -59,7 +59,8 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     "You must pay the registration fee to perform this action.",
     "You cannot change the status of your own proposal, please have another admin review it!",
     "The username you provided is invalid; it's either too short, too long, or has unsupported characters.",
-    "Another user already has that username, please choose another."
+    "Another user already has that username, please choose another.",
+    `A verification email has already been sent recently. Please check your email, or wait until it expires and send another one. Your verification email is set to expire at ${new Date(parseInt(errorContext[0] + "000", 10))}. If you did not receive an email, please contact Politeia administrators.`
   ];
 
   if(errorCode > errorMessages.length) {

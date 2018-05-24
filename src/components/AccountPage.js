@@ -130,13 +130,14 @@ class KeyPage extends React.Component {
           {updateUserKeyError && (
             <Message
               type="error"
-              header="Error"
+              header="Error generating new identity"
               body={updateUserKeyError.message}
             />
           )}
           <button
             style={{ maxWidth: "250px" }}
-            onClick={() => onUpdateUserKey(loggedInAsEmail)}>
+            onClick={() => onUpdateUserKey(loggedInAsEmail)}
+            disabled={updateUserKey && updateUserKey.success}>
             Generate New Identity
           </button>
           <PrivateKeyIdentityManager
