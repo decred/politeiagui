@@ -5,7 +5,15 @@ import thunk from "redux-thunk";
 import * as api from "../api";
 import * as ea  from "../external_api";
 import * as act from "../types";
-import { done } from "./helpers";
+import {
+  done,
+  setGetErrorResponse,
+  setPostErrorResponse,
+  setPostSuccessResponse,
+  setGetSuccessResponse,
+  methods,
+  RANDOM_SUCCESS_RESPONSE
+} from "./helpers";
 
 const mockStore = configureStore([thunk]);
 
@@ -39,36 +47,6 @@ describe("test api actions (actions/api.js)", () => {
     }
   };
 
-  const RANDOM_SUCCESS_RESPONSE = {
-    success: true
-  };
-  const RANDOM_ERROR_RESPOSNE = {
-    errorcode: 29
-  };
-  const setGetSuccessResponse = (path, options = {}, response = RANDOM_SUCCESS_RESPONSE) =>
-    fetchMock.get(path, response, {
-      overwriteRoutes: true,
-      ...options
-    });
-  const setGetErrorResponse = (path, options = {}, response = RANDOM_ERROR_RESPOSNE) =>
-    fetchMock.get(path, response, {
-      overwriteRoutes: true,
-      ...options
-    });
-  const setPostSuccessResponse = (path, options = {}, response = RANDOM_SUCCESS_RESPONSE) =>
-    fetchMock.post(path, response, {
-      overwriteRoutes: true,
-      ...options
-    });
-  const setPostErrorResponse = (path, options = {}, response = RANDOM_ERROR_RESPOSNE) =>
-    fetchMock.post(path, response, {
-      overwriteRoutes: true,
-      ...options
-    });
-  const methods = {
-    GET: "get",
-    POST: "post"
-  };
   const getMockedStore = () => mockStore(MOCK_STATE);
   const assertApiActionOnSuccess = async (path, fn, params, expectedActions, options = {}, method = methods.GET) => {
     switch(method) {
@@ -101,8 +79,6 @@ describe("test api actions (actions/api.js)", () => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   };
-
-
 
   beforeEach(() => {
     //send status 200 to every unmatched request
