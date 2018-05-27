@@ -134,6 +134,12 @@ class KeyPage extends React.Component {
               body={updateUserKeyError.message}
             />
           )}
+          <p>
+            If you've lost your identity (because you've switched browsers
+            or cleared your cookies, for example), you can generate a new one. This
+            new identity will replace your existing one, but note that Politeia keeps
+            a record of all your past public keys.
+          </p>
           <button
             style={{ maxWidth: "250px" }}
             onClick={() => onUpdateUserKey(loggedInAsEmail)}

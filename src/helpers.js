@@ -98,3 +98,17 @@ export const arrayBufferToWordArray = ab => {
   }
   return CryptoJS.lib.WordArray.create(a, i8a.length);
 };
+
+export const getUsernameFieldLabel = (policy, defaultText = "Username") => {
+  if(policy) {
+    return `${defaultText} (${policy.minusernamelength} - ${policy.maxusernamelength} characters)`;
+  }
+  return defaultText;
+};
+
+export const getPasswordFieldLabel = (policy, defaultText = "Password") => {
+  if(policy) {
+    return `${defaultText} (at least ${policy.minpasswordlength} characters)`;
+  }
+  return defaultText;
+};
