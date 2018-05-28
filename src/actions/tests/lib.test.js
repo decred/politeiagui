@@ -18,7 +18,7 @@ describe("test action/lib.js", () => {
 
   test("reduce types", () => {
     const types = {
-      TYPE_1: "TYPE_2",
+      TYPE_1: "TYPE_1",
       TYPE_2: "TYPE_2"
     };
     const reducedTypes = lib.reduceTypes(types);
