@@ -6,6 +6,7 @@ import Message from "./Message";
 import { myPubKeyHex } from "../lib/pki";
 import Paywall from "./Paywall";
 import accountConnector from "../connectors/account";
+import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "../constants";
 
 const UpdatedKeyMessage = ({ email }) => (
   <span>
@@ -22,17 +23,26 @@ class KeyPage extends React.Component {
     this.identityHelpPrompt = "What is an identity?";
     this.state = {
       pubkey: "",
+      pubkeyStatus: PUB_KEY_STATUS_LOADING,
       showIdentityHelpText: false
     };
   }
+  resolvePubkey = () => {
+    if(!this.state.pubkey && this.props.loggedInAsEmail) {
+      myPubKeyHex(this.props.loggedInAsEmail).then(pubkey => {
+        if(!this.unmounting) {
+          this.setState({ pubkey, pubkeyStatus: PUB_KEY_STATUS_LOADED });
+        }
+      });
+    }
+  }
 
   componentDidMount() {
-    const { loggedInAsEmail } = this.props;
-    myPubKeyHex(loggedInAsEmail).then(pubkey => {
-      if(!this.unmounting) {
-        this.setState({ pubkey });
-      }
-    });
+    this.resolvePubkey();
+  }
+
+  componentDidUpdate() {
+    this.resolvePubkey();
   }
 
   componentWillUnmount() {
@@ -48,7 +58,7 @@ class KeyPage extends React.Component {
       keyMismatch,
       userAlreadyPaid
     } = this.props;
-    const { pubkey, showIdentityHelpText } = this.state;
+    const { pubkey, pubkeyStatus, showIdentityHelpText } = this.state;
     return (
       <div className="content" role="main" >
         {!userAlreadyPaid ? (
@@ -118,7 +128,7 @@ class KeyPage extends React.Component {
               </p>
             </div>
           ) : null}
-          <div className="public-key">Your public key: {pubkey || "none"}</div>
+          <div className="public-key">Your public key: {pubkeyStatus === PUB_KEY_STATUS_LOADED ? (pubkey || "none") : "Loading public key..." }</div>
           {updateUserKey &&
             updateUserKey.success && (
             <Message
