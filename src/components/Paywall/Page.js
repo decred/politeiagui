@@ -9,7 +9,7 @@ import {
 } from "../../constants";
 
 
-const Modal = ({
+const Paywall = ({
   paywallAddress,
   paywallAmount,
   payWithFaucet,
@@ -38,9 +38,7 @@ const Modal = ({
       body={(
         <div className="paywall-wrapper">
           <div className="paywall-content">
-            <p>
-              Your payment was received and your registration has been completed!
-            </p>
+            <p>Thank you for your payment, your registration is complete!</p>
           </div>
         </div>
       )} />
@@ -62,32 +60,35 @@ const Modal = ({
               this address. After you send it and it reaches 2 confirmations, you will
               be approved to submit proposals and comments.
             </p>
-            <div className={"paywall-payment-status " + userPaywallStatusCls}>
-              Status: {userPaywallStatusText}
-              {userPaywallStatus === PAYWALL_STATUS_LACKING_CONFIRMATIONS &&
-                <span>{` (${userPaywallConfirmations}/2)`}</span>
-              }
+            <div className="paywall-payment-section">
+              <div className={"paywall-payment-status " + userPaywallStatusCls}>
+                Status: {userPaywallStatusText}
+                {userPaywallStatus === PAYWALL_STATUS_LACKING_CONFIRMATIONS &&
+                  <span>{` (${userPaywallConfirmations}/2)`}</span>
+                }
+              </div>
+              {isTestnet ? (
+                <div className="paywall-faucet">
+                  <div className="paywall-faucet-testnet">Testnet</div>
+                  <p>
+                    This Politeia instance is running on Testnet, which means you can pay
+                    with the Decred faucet:
+                  </p>
+                  <ButtonWithLoadingIcon
+                    className="c-btn c-btn-primary"
+                    text="Pay with Faucet"
+                    disabled={userPaywallStatus === PAYWALL_STATUS_PAID}
+                    isLoading={isApiRequestingPayWithFaucet}
+                    onClick={() => payWithFaucet(paywallAddress, paywallAmount)} />
+                </div>
+              ) : null}
             </div>
             <QRCode addr={paywallAddress} />
-            {isTestnet ? (
-              <div className="paywall-faucet">
-                <div className="paywall-faucet-testnet">Testnet</div>
-                <p>
-                  This Politeia instance is running on Testnet, which means you can pay
-                  with the Decred faucet:
-                </p>
-                <ButtonWithLoadingIcon
-                  className="c-btn c-btn-primary"
-                  text="Pay with Faucet"
-                  disabled={userPaywallStatus === PAYWALL_STATUS_PAID}
-                  isLoading={isApiRequestingPayWithFaucet}
-                  onClick={() => payWithFaucet(paywallAddress, paywallAmount)} />
-              </div>
-            ) : null}
+            <div style={{clear:"both"}}></div>
           </div>
         </div>
       )} />
   );
 };
 
-export default Modal;
+export default Paywall;

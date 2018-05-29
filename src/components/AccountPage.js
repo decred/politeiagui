@@ -10,8 +10,8 @@ import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "../constants";
 
 const UpdatedKeyMessage = ({ email }) => (
   <span>
-    Successfully updated your key! Please check your email at{" "}
-    <b>{email}</b> to activate your new key.
+    Your new identity has been requested, please check your email at{" "}
+    <b>{email}</b> to verify and activate it.
   </span>
 );
 
@@ -132,21 +132,28 @@ class KeyPage extends React.Component {
           {updateUserKey &&
             updateUserKey.success && (
             <Message
-              type="success"
-              header="Key Updated"
+              type="info"
+              header="Verification Required"
               body={<UpdatedKeyMessage email={loggedInAsEmail} />}
             />
           )}
           {updateUserKeyError && (
             <Message
               type="error"
-              header="Error"
+              header="Error generating new identity"
               body={updateUserKeyError.message}
             />
           )}
+          <p>
+            If you've lost your identity (because you've switched browsers
+            or cleared your cookies, for example), you can generate a new one. This
+            new identity will replace your existing one, but note that Politeia keeps
+            a record of all your past public keys.
+          </p>
           <button
             style={{ maxWidth: "250px" }}
-            onClick={() => onUpdateUserKey(loggedInAsEmail)}>
+            onClick={() => onUpdateUserKey(loggedInAsEmail)}
+            disabled={updateUserKey && updateUserKey.success}>
             Generate New Identity
           </button>
           <PrivateKeyIdentityManager

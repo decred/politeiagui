@@ -4,12 +4,14 @@ import { Field } from "redux-form";
 import Message from "../Message";
 import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
 import ErrorField from "../Form/Fields/ErrorField";
+import { getUsernameFieldLabel, getPasswordFieldLabel } from "../../helpers";
 
 const RegisterForm = ({
   error,
   isApiRequestingNewUser,
   apiNewUserError,
   apiVerifyNewUserError,
+  policy,
   loggedInAsEmail,
   passwdError,
   passwd2Error,
@@ -50,7 +52,7 @@ const RegisterForm = ({
       </label>
       <Field
         name="username"
-        placeholder="Username"
+        placeholder={getUsernameFieldLabel(policy)}
         component="input"
         type="text"
         className="c-form-control"
@@ -64,7 +66,7 @@ const RegisterForm = ({
       </label>
       <Field
         name="password"
-        placeholder="Password"
+        placeholder={getPasswordFieldLabel(policy)}
         component="input"
         type="password"
         className="c-form-control"
