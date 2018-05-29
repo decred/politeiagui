@@ -8,7 +8,6 @@ const Page = ({
   isRequestingVerifyNewUser,
   verifyNewUserError,
 }) => {
-  console.log(verifyNewUser);
   return isRequestingVerifyNewUser ? (
     <PageLoadingIcon />
   ) : verifyNewUserError ? (
