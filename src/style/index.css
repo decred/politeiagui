@@ -342,15 +342,24 @@ button .logo {
 
 /* Override conflitant styles for react-mde */
 .mde-header-item button {
-   text-align: left;
-   cursor: pointer;
-   padding: .25rem;
-   margin: 0;
-   border: none !important;
-   box-shadow: none !important;
-   background: none;
-   color: black !important;
- }
+  text-align: left;
+  cursor: pointer;
+  padding: .25rem;
+  margin: 0;
+  border: none !important;
+  box-shadow: none !important;
+  background: none;
+  color: #000;
+  height: 28px;
+  line-height: 24px;
+}
+.mde-header ul.mde-header-group li.mde-header-item button:focus {
+   background-color: #2971FF;
+}
+.mde-header ul.mde-header-group li.mde-header-item button:focus .fa {
+  color: #fff;
+}
+
 
 .md textarea {
   font-size: 1rem !important;

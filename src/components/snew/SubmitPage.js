@@ -65,6 +65,7 @@ class SubmitPage extends React.Component {
                     <Field
                       name="name"
                       component="textarea"
+                      tabIndex={1}
                       type="text"
                       placeholder="Proposal Name"
                     />
@@ -76,6 +77,7 @@ class SubmitPage extends React.Component {
                           <Field
                             name="description"
                             component={MarkdownEditorField}
+                            tabIndex={2}
                             placeholder="Markdown Entry"
                             rows={20}
                             cols={80}
