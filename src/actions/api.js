@@ -293,14 +293,14 @@ export const resetForgottenPassword = () => dispatch =>
 export const onPasswordResetRequest = ({
   email,
   verificationtoken,
-  password
+  newpassword
 }) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(
-      act.REQUEST_PASSWORD_RESET_REQUEST({ email, verificationtoken, password })
+      act.REQUEST_PASSWORD_RESET_REQUEST({ email, verificationtoken, newpassword })
     );
     return api
-      .passwordResetRequest(csrf, email, verificationtoken, password)
+      .passwordResetRequest(csrf, email, verificationtoken, newpassword)
       .then(response => dispatch(act.RECEIVE_PASSWORD_RESET_REQUEST(response)))
       .catch(error => {
         dispatch(act.RECEIVE_PASSWORD_RESET_REQUEST(null, error));

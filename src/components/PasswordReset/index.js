@@ -48,7 +48,7 @@ class PasswordReset extends Component {
 
     return this
       .props
-      .onPasswordResetRequest(assign({ password: props.password }, this.getQueryParams()))
+      .onPasswordResetRequest(assign({ newpassword: props.newPassword }, this.getQueryParams()))
       .catch((error) => {
         throw new SubmissionError({
           _error: error.message,
