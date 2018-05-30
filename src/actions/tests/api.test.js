@@ -660,14 +660,14 @@ describe("test api actions (actions/api.js)", () => {
       );
   });
 
-  test("on passwrod reset request action", async () => {
+  test("on password reset request action", async () => {
     const path = "/api/v1/user/password/reset";
     const verificationtoken = "any";
     const { email, password } = FAKE_USER;
     const params = [{
       email,
       verificationtoken,
-      password
+      newpassword: password
     }];
 
     await assertApiActionOnSuccess(
@@ -690,7 +690,7 @@ describe("test api actions (actions/api.js)", () => {
         {
           type: act.REQUEST_PASSWORD_RESET_REQUEST,
           error: false,
-          payload: { email, verificationtoken, password }
+          payload: { email, verificationtoken, newpassword: password }
         },
         { type: act.RECEIVE_PASSWORD_RESET_REQUEST, error: true, payload: e }
       ],
