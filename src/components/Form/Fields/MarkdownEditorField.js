@@ -1,11 +1,22 @@
 import React from "react";
 import MarkdownEditor from "../../MarkdownEditor";
 
-const MarkdownEditorField = ({ input, touched, error, disabled, toggledStyle }) => {
+const MarkdownEditorField = ({
+  input,
+  touched,
+  error,
+  disabled,
+  tabIndex,
+  toggledStyle
+}) => {
   return console.log("input", input) || (
     <div className="ffmarkdown-editor">
       <div className="ffeditor usertext">
-        <MarkdownEditor value={input.value} onChange={input.onChange} toggledStyle={toggledStyle} />
+        <MarkdownEditor
+          value={input.value}
+          onChange={input.onChange}
+          tabIndex={tabIndex}
+          toggledStyle={toggledStyle} />
       </div>
       {touched && error && !disabled && <span className="error">{error}</span>}
     </div>

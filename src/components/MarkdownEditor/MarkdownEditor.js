@@ -117,6 +117,9 @@ class MarkdownEditor extends React.Component {
         tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;");
       }
     }
+    if(typeof this.props.tabIndex !== "undefined") {
+      this.textArea.setAttribute("tabindex", this.props.tabIndex);
+    }
   }
 
   render() {
