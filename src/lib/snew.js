@@ -17,7 +17,7 @@ const setVotePayload = (proposal, activeVotes) => {
   )[0];
   if(!findProp)
     return proposal;
-  delete activeVotes.proposal;
+  delete findProp.proposal;
   const obj = {
     ...proposal,
     ...findProp
@@ -26,7 +26,7 @@ const setVotePayload = (proposal, activeVotes) => {
 };
 
 export const proposalToT3 = ({
-  vote, votedetail, name, timestamp, status, userid, username, numcomments, censorshiprecord = {}
+  vote, votedetails, name, timestamp, status, userid, username, numcomments, censorshiprecord = {}
 }, idx) => ({
   kind: "t3",
   data: {
@@ -43,7 +43,7 @@ export const proposalToT3 = ({
     url: `/proposals/${censorshiprecord.token}/`,
     is_self: true,
     vote,
-    votedetail
+    votedetails
   }
 });
 

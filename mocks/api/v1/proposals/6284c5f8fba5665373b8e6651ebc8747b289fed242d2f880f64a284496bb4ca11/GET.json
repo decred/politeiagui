@@ -1,6 +1,8 @@
 {
   "proposal": {
     "name": "This is an example proposal",
+    "userid": 1,
+    "username": "foo",
     "status": 0,
     "timestamp": 1505940196,
     "numcomments": 3,

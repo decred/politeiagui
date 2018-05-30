@@ -3428,6 +3428,14 @@ fd-slicer@~1.0.1:
   dependencies:
     pend "~1.2.0"
 
+fetch-mock@^6.4.2:
+  version "6.4.2"
+  resolved "https://registry.yarnpkg.com/fetch-mock/-/fetch-mock-6.4.2.tgz#cb0ff7dc3baf5d3bc8628f73fca73bf862fbaa43"
+  dependencies:
+    babel-polyfill "^6.26.0"
+    glob-to-regexp "^0.4.0"
+    path-to-regexp "^2.2.1"
+
 figures@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-1.7.0.tgz#cbe1e3affcf1cd44b80cadfed28dc793a9701d2e"
@@ -3792,6 +3800,10 @@ glob-parent@^3.1.0:
   dependencies:
     is-glob "^3.1.0"
     path-dirname "^1.0.0"
+
+glob-to-regexp@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/glob-to-regexp/-/glob-to-regexp-0.4.0.tgz#49bd677b1671022bd10921c3788f23cdebf9c7e6"
 
 glob@7.0.5:
   version "7.0.5"
@@ -5484,6 +5496,10 @@ lodash.clone@3.0.3:
     lodash._bindcallback "^3.0.0"
     lodash._isiterateecall "^3.0.0"
 
+lodash.clonedeep@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+
 lodash.cond@^4.3.0:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/lodash.cond/-/lodash.cond-4.5.2.tgz#f471a1da486be60f6ab955d17115523dd1d255d5"
@@ -5511,6 +5527,14 @@ lodash.defaultsdeep@4.3.2:
     lodash.mergewith "^4.0.0"
     lodash.rest "^4.0.0"
 
+lodash.findindex@^4.4.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.findindex/-/lodash.findindex-4.6.0.tgz#a3245dee61fb9b6e0624b535125624bb69c11106"
+
+lodash.flattendeep@^4.2.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/lodash.flattendeep/-/lodash.flattendeep-4.4.0.tgz#fb030917f86a3134e5bc9bec0d69e0013ddfedb2"
+
 lodash.isarguments@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/lodash.isarguments/-/lodash.isarguments-3.1.0.tgz#2f573d85c6a24289ff00663b491c1d338ff3458a"
@@ -5519,7 +5543,7 @@ lodash.isarray@^3.0.0:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-3.0.4.tgz#79e4eb88c36a8122af86f844aa9bcd851b5fbb55"
 
-lodash.isplainobject@^4.0.0:
+lodash.isplainobject@^4.0.0, lodash.isplainobject@^4.0.6:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
 
@@ -6477,6 +6501,10 @@ path-to-regexp@^1.0.1, path-to-regexp@^1.7.0:
   dependencies:
     isarray "0.0.1"
 
+path-to-regexp@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-2.2.1.tgz#90b617025a16381a879bc82a38d4e8bdeb2bcf45"
+
 path-type@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-1.1.0.tgz#59c44f7ee491da704da415da5a4070ba4f8fe441"
@@ -7339,6 +7367,22 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
+redux-actions-assertions-js@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/redux-actions-assertions-js/-/redux-actions-assertions-js-1.1.0.tgz#01d3a42d1a1315f0c3d94d29deba57678d3928de"
+  dependencies:
+    lodash.clonedeep "^4.5.0"
+    lodash.findindex "^4.4.0"
+    lodash.flattendeep "^4.2.0"
+    redux "^3.5.2"
+    redux-mock-store "^1.0.2"
+
+redux-actions-assertions@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/redux-actions-assertions/-/redux-actions-assertions-1.3.0.tgz#208fa60cbb5817303c8b38ef2c8ed3662092cf7a"
+  dependencies:
+    redux-actions-assertions-js "^1.1.0"
+
 redux-devtools-extension@^2.13.2:
   version "2.13.2"
   resolved "https://registry.yarnpkg.com/redux-devtools-extension/-/redux-devtools-extension-2.13.2.tgz#e0f9a8e8dfca7c17be92c7124958a3b94eb2911d"
@@ -7362,11 +7406,17 @@ redux-logger@^3.0.6:
   dependencies:
     deep-diff "^0.3.5"
 
+redux-mock-store@^1.0.2, redux-mock-store@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/redux-mock-store/-/redux-mock-store-1.5.1.tgz#fca4335392e66605420b5559fe02fc5b8bb6d63c"
+  dependencies:
+    lodash.isplainobject "^4.0.6"
+
 redux-thunk@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.2.0.tgz#e615a16e16b47a19a515766133d1e3e99b7852e5"
 
-redux@^3.7.2:
+redux@^3.5.2, redux@^3.7.2:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/redux/-/redux-3.7.2.tgz#06b73123215901d25d065be342eb026bc1c8537b"
   dependencies:

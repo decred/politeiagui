@@ -20,7 +20,7 @@ const apiBase = "/api";
 const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
 const getResponse = get("response");
 
-const digestPayload = payload => CryptoJS
+export const digestPayload = payload => CryptoJS
   .SHA256(arrayBufferToWordArray(base64ToArrayBuffer(payload)))
   .toString(CryptoJS.enc.Hex);
 
@@ -58,7 +58,7 @@ const parseResponseBody = response => {
   throw err;
 };
 
-const parseResponse = response => parseResponseBody(response).then(json => {
+export const parseResponse = response => parseResponseBody(response).then(json => {
   if (json.errorcode) {
     let err = new Error(getHumanReadableError(json.errorcode, json.errorcontext));
     err.internalError = false;

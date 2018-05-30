@@ -26,6 +26,11 @@ const POST = (path, params, method = "POST") => {
     },
     method,
     body: formBody
+  }).then(function(response) {
+    if (response.status >= 400) {
+      throw new Error("Bad response from server");
+    }
+    return response.json();
   });
 };
 
@@ -40,13 +45,13 @@ const getRawTransactions = url => {
     });
 };
 
-export const getHeightByDcrdata = () => {
-  const network = NETWORK ? "testnet" : "explorer";
+export const getHeightByDcrdata = (network = NETWORK) => {
+  network = network ? "testnet" : "explorer";
   return getRawTransactions(dcrddataBlockHeightURL(network));
 };
 
-export const getHeightByInsight = () => {
-  const network = NETWORK ? "testnet" : "explorer";
+export const getHeightByInsight = (network = NETWORK) => {
+  network = network ? "testnet" : "mainnet";
   return getRawTransactions(insightBlockHeightURL(network));
 };
 

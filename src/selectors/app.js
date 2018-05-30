@@ -5,7 +5,7 @@ import filter from "lodash/fp/filter";
 import find from "lodash/fp/find";
 import { or, constant, not } from "../lib/fp";
 import {
-  proposal as apiProposal,
+  apiProposal,
   proposalPayload,
   userAlreadyPaid,
   getKeyMismatch
