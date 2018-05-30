@@ -32,7 +32,8 @@ export const keysToHex = ({ publicKey, secretKey }) => ({
 });
 
 const keysFromHex = ({ publicKey, secretKey }) => ({
-  publicKey: toByteArray(publicKey), secretKey: toByteArray(secretKey)
+  publicKey: toByteArray(publicKey),
+  secretKey: toByteArray(secretKey)
 });
 
 export const getKeys = email => myKeyPair(email).then(keysToHex);

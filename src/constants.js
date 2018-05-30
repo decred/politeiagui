@@ -8,3 +8,6 @@ export const PROPOSAL_STATUS_PUBLIC = 4;
 export const PAYWALL_STATUS_WAITING = 0;
 export const PAYWALL_STATUS_LACKING_CONFIRMATIONS = 1;
 export const PAYWALL_STATUS_PAID = 2;
+
+export const PUB_KEY_STATUS_LOADING = 0;
+export const PUB_KEY_STATUS_LOADED = 1;

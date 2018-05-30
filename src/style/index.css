@@ -570,8 +570,7 @@ li p.header-3 {
   margin: 0px;
 }
 
-.paywall-payment-status,
-.paywall-faucet {
+.paywall-payment-section {
   float: left;
 }
 
@@ -579,7 +578,7 @@ li p.header-3 {
   border: 1px solid #999;
   border-radius: 3px;
   padding: 24px 16px 16px 16px;
-  margin-top: 8px;
+  margin-top: 16px;
   position: relative;
 }
 

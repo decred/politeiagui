@@ -2,10 +2,12 @@ import React from "react";
 import { reduxForm, Field } from "redux-form";
 import Message from "../Message";
 import { PageLoadingIcon } from "../snew";
+import { getPasswordFieldLabel } from "../../helpers";
 
 const ChangePasswordForm = ({
   error,
   isApiRequestingChangePassword,
+  policy,
   onChangePassword,
   handleSubmit
 }) => isApiRequestingChangePassword ? (
@@ -40,7 +42,7 @@ const ChangePasswordForm = ({
         name="newPassword"
         component="input"
         type="password"
-        placeholder="New Password"
+        placeholder={getPasswordFieldLabel(policy, "New Password")}
         tabIndex={3} />
     </div>
     <div className="c-form-group">

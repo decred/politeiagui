@@ -52,11 +52,20 @@ export const signComment = (email, comment) => pki.myPubKeyHex(email).then(publi
 const parseResponseBody = response => {
   const contentType = response.headers.get("content-type");
   if (contentType && contentType.includes("application/json")) return response.json();
-  throw new Error(STATUS_ERR[response.status] || "Internal server error");
+  let err = new Error(STATUS_ERR[response.status] || "Internal server error");
+  err.internalError = true;
+  err.statusCode = response.status;
+  throw err;
 };
 
 export const parseResponse = response => parseResponseBody(response).then(json => {
-  if (json.errorcode) throw new Error(getHumanReadableError(json.errorcode, json.errorcontext));
+  if (json.errorcode) {
+    let err = new Error(getHumanReadableError(json.errorcode, json.errorcontext));
+    err.internalError = false;
+    err.errorCode = json.errorcode;
+    err.errorContext = json.errorcontext;
+    throw err;
+  }
   return { response: json, csrfToken: response.headers.get("X-Csrf-Token") };
 });
 

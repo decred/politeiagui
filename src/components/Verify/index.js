@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { isEmpty } from "lodash";
-import PageLoadingIcon from "../snew/PageLoadingIcon";
+import VerifyPage from "./Page";
 import verifyConnector from "../../connectors/verify";
 
 class Verify extends Component {
@@ -12,17 +12,15 @@ class Verify extends Component {
     }
 
     this.props.onVerify(this.props.location.search)
-      .then(() => this.props.history.push("/user/verify/success"))
       .catch(err => {
         console.error(err.stack || err);
-        this.props.history.push("/user/verify/failure");
       });
   }
 
   render() {
     return (
-      <div className="verification-page">
-        <PageLoadingIcon />
+      <div className="content" role="main">
+        <VerifyPage {...this.props} />
       </div>
     );
   }

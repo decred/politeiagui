@@ -2,10 +2,12 @@ import React from "react";
 import { reduxForm, Field } from "redux-form";
 import Message from "../Message";
 import { PageLoadingIcon } from "../snew";
+import { getUsernameFieldLabel } from "../../helpers";
 
 const ChangeUsernameForm = ({
   error,
   isApiRequestingChangeUsername,
+  policy,
   onChangeUsername,
   handleSubmit
 }) => isApiRequestingChangeUsername ? (
@@ -40,7 +42,7 @@ const ChangeUsernameForm = ({
         name="newUsername"
         component="input"
         type="username"
-        placeholder="New Username"
+        placeholder={getUsernameFieldLabel(policy, "New Username")}
         tabIndex={3} />
     </div>
     <div className="c-clearfix c-submit-group">

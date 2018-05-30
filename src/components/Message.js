@@ -22,7 +22,7 @@ const Message = ({
   }
 
   return (
-    <div className={"message-ct message-" + type + className} style={{height: height, zIndex: "9999"}}>
+    <div className={"message-ct message-" + type + className} style={{height: height}}>
       <div className="message-icon" style={{height, lineHeight: height}}>
         {icon}
       </div>
