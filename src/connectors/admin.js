@@ -2,6 +2,10 @@ import { connect } from "react-redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
 import { or } from "../lib/fp";
+import {
+  PROPOSAL_STATUS_UNREVIEWED,
+  PROPOSAL_STATUS_CENSORED
+} from "../constants";
 
 export default connect(
   sel.selectorMap({
@@ -9,7 +13,17 @@ export default connect(
     error: sel.unvettedProposalsError,
     isLoading: or(sel.unvettedProposalsIsRequesting, sel.setStatusProposalIsRequesting),
     filterValue: sel.getAdminFilterValue,
-    header: () => "Unvetted Proposals"
+    header: () => "Unvetted Proposals",
+    emptyProposalsMessage: (state) => {
+      switch(sel.getAdminFilterValue(state)) {
+      case PROPOSAL_STATUS_UNREVIEWED:
+        return "There are no proposals to review";
+      case PROPOSAL_STATUS_CENSORED:
+        return "There are no censored proposals, yay!";
+      default:
+        return "There are no unvetted proposals";
+      }
+    }
   }),
   {
     onFetchData: act.onFetchUnvetted,

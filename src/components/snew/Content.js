@@ -11,6 +11,7 @@ export const CustomContent = ({
   bodyClassName="listing-page",
   listings,
   proposals,
+  emptyProposalsMessage = "There are no proposals yet",
   isLoading,
   error,
   header,
@@ -26,37 +27,41 @@ export const CustomContent = ({
       body={error} />
   ) : isLoading ? (
     <PageLoadingIcon key="content" />
-  ) : (listings && listings.length > 0) || proposals.length > 0 ? (
-    [
+  ) : (
+    <div>
       <h1 style={{margin: "16px 352px 0 24px"}}>
         {header}
-      </h1>,
+      </h1>
       <ProposalFilter
         header={header}
         handleChangeFilterValue={onChangeFilter}
         filterValue={filterValue}
-      />,
-      <Content {...{
-        ...props,
-        key: "content",
-        activeVotesEndHeight: props.activeVotesEndHeight,
-        lastBlockHeight: props.lastBlockHeight,
-        listings: listings || [
-          {
-            allChildren:
-            proposals.filter(
-              proposal =>
-                !filterValue || proposal.status === filterValue
-            )
-              .map((proposal, idx) => formatProposalData(proposal, idx, activeVotes))
-          }
-        ]
-      }} />
-    ]
-  ) : (
-    <h1 style={{ textAlign: "center", paddingTop: "300px" }}>
-      There are no proposals yet
-    </h1>
+      />
+      {
+        (listings && listings.length > 0) || proposals.length > 0 ? (
+          <Content {...{
+            ...props,
+            key: "content",
+            activeVotesEndHeight: props.activeVotesEndHeight,
+            lastBlockHeight: props.lastBlockHeight,
+            listings: listings || [
+              {
+                allChildren:
+                proposals.filter(
+                  proposal =>
+                    !filterValue || proposal.status === filterValue
+                )
+                  .map((proposal, idx) => formatProposalData(proposal, idx, activeVotes))
+              }
+            ]
+          }} />
+        ) : (
+          <h1 style={{ textAlign: "center", paddingTop: "125px", color: "#777" }}>
+            {emptyProposalsMessage}
+          </h1>
+        )
+      }
+    </div>
   );
 
   return [
