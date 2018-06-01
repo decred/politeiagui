@@ -12,7 +12,8 @@ export default connect(
     isLoading: or(sel.vettedProposalsIsRequesting, sel.isApiRequestingActiveVotes),
     error: or(sel.vettedProposalsError, sel.activeVotesError),
     activeVotes: sel.activeVotes,
-    header: () => "Active Proposals"
+    header: () => "Active Proposals",
+    emptyProposalsMessage: () => "There are no active proposals"
   }),
   dispatch => bindActionCreators({
     onFetchData: act.onFetchVetted,

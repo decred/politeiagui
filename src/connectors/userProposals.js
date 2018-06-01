@@ -13,7 +13,8 @@ const userProposalsConnector = connect(
     error: sel.userProposalsError,
     isLoading: sel.userProposalsIsRequesting,
     activeVotes: sel.activeVotes,
-    header: () => "Your Proposals"
+    header: () => "Your Proposals",
+    emptyProposalsMessage: () => "You have not created any proposals yet"
   }),
   dispatch =>
     bindActionCreators(
@@ -34,7 +35,7 @@ class Wrapper extends Component {
 
   render() {
     const Component = this.props.Component;
-    const {loggedInAsEmail, isAdmin, proposals, error, isLoading, header} = this.props;
+    const {loggedInAsEmail, isAdmin, proposals, error, isLoading, header, emptyProposalsMessage} = this.props;
     return <Component
       loggedInAsEmail={loggedInAsEmail}
       isAdmin={isAdmin}
@@ -42,6 +43,7 @@ class Wrapper extends Component {
       error={error}
       isLoading={isLoading}
       header={header}
+      emptyProposalsMessage={emptyProposalsMessage}
     />;
   }
 }
