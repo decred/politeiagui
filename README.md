@@ -2,7 +2,12 @@
 
 ## Development
 
+### Requirements
+- node (only versions 4 to 9 works right now)
+- yarn
+
 ### With mock APIs
+
 
     yarn && yarn uidev
 
