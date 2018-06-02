@@ -99,13 +99,12 @@ export const onFetchUsernamesById = (userIds) => (dispatch, getState) => {
     .then(() => {
       const apiUsernamesByIdResponse = get(getState(), ["api", "usernamesById", "response"], undefined);
       if(apiUsernamesByIdResponse) {
-        for(let i = 0; i < userIdsToFetch.length; i++) {
-          let userId = userIdsToFetch[i];
-          let username = apiUsernamesByIdResponse.usernames[i];
+        userIdsToFetch.forEach((userId, idx) => {
+          let username = apiUsernamesByIdResponse.usernames[idx];
           if(username) {
             usernamesById[userId] = globalUsernamesById[userId] = username;
           }
-        }
+        });
       }
 
       return dispatch(act.RECEIVE_USERNAMES({ usernamesById }));

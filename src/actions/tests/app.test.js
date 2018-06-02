@@ -1,8 +1,17 @@
 import fetchMock from "fetch-mock";
 import * as app from "../app";
 import * as act from "../types";
-import { onSubmitProposal, onChangeUsername, onChangePassword, onFetchProposalComments, onLogout } from "../api";
-import { onFetchProposal as onFetchProposalApi, onSubmitComment as onSubmitCommentApi } from "../api";
+import {
+  onSubmitProposal,
+  onChangeUsername,
+  onChangePassword,
+  onFetchProposalComments,
+  onLogout
+} from "../api";
+import {
+  onFetchProposal as onFetchProposalApi,
+  onSubmitComment as onSubmitCommentApi
+} from "../api";
 import { done } from "./helpers";
 
 describe("test app actions (actions/app.js)", () => {
@@ -89,7 +98,8 @@ describe("test app actions (actions/app.js)", () => {
     await expect(app.onFetchProposal(token))
       .toDispatchActionsWithState(MOCK_STATE, [
         onFetchProposalApi(token),
-        onFetchProposalComments(token)
+        onFetchProposalComments(token),
+        app.onFetchUsernamesById([])
       ], done);
   });
 

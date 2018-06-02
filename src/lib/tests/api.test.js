@@ -265,6 +265,15 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
+  test("usernames by id (api/usernames)", async () => {
+    const USER_ID = "0";
+    await assertPOSTOnRouteIsCalled(
+      "/api/v1/usernames",
+      api.usernamesById,
+      [[USER_ID]]
+    );
+  });
+
   test("reset password (api/v1/user/password/reset)", async () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/password/reset",
@@ -273,7 +282,7 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
-  test("verify reseted password (api/v1/user/password/reset)", async () => {
+  test("verify reset password (api/v1/user/password/reset)", async () => {
     fetchMock.restore();
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/password/reset",
