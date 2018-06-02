@@ -3,11 +3,10 @@
 ## Development
 
 ### Requirements
-- node (only versions 4 to 9 works right now)
-- yarn
+- [node](https://nodejs.org/en/download/)
+- [yarn](https://yarnpkg.com/en/)
 
 ### With mock APIs
-
 
     yarn && yarn uidev
 
