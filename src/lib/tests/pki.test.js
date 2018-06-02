@@ -16,16 +16,18 @@ describe("Key pair generation and storage handlers (lib/pki.js)", () => {
   test("generate a key pair and save it with localforage", async () => {
     expect.assertions(1);
     const EMAIL = "foo@bar.com";
-    await pki.generateKeys(EMAIL);
-    const keys = await localforage.getItem(pki.STORAGE_PREFIX + EMAIL);
+    let keys = await pki.generateKeys();
+    await pki.loadKeys(EMAIL, keys);
+    keys = await localforage.getItem(pki.STORAGE_PREFIX + EMAIL);
     expect(keys).toBeTruthy();
   });
 
-  test("returns a existing keypair saved with locaforage", async () => {
+  test("returns an existing keypair saved with localforage", async () => {
     expect.assertions(2);
     const EMAIL = "foo@bar.com";
-    await pki.generateKeys(EMAIL);
-    const keys = await pki.existing(EMAIL);
+    let keys = await pki.generateKeys();
+    await pki.loadKeys(EMAIL, keys);
+    keys = await pki.existing(EMAIL);
     const pubKey = await pki.myPublicKey(EMAIL);
     expect(keys).toBeTruthy();
     expect(pubKey).toBeTruthy();
@@ -35,7 +37,8 @@ describe("Key pair generation and storage handlers (lib/pki.js)", () => {
     expect.assertions(1);
     const EMAIL = "foo@bar.com";
     const MSG = "hey";
-    await pki.generateKeys(EMAIL);
+    let keys = await pki.generateKeys();
+    await pki.loadKeys(EMAIL, keys);
     const pubKey = await pki.myPublicKey(EMAIL);
     const signature = await pki.signString(EMAIL, MSG);
     const verification = await pki.verify(util.decodeUTF8(MSG), signature, pubKey);

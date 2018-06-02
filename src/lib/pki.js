@@ -12,12 +12,10 @@ export const toByteArray = str => {
   return bytes;
 };
 
-const loadKeys = (email, keys) => localforage.setItem(STORAGE_PREFIX + email, keys).then(() => keys);
-export const generateKeys = email => {
-  return Promise.resolve(nacl.sign.keyPair()).then(keys => loadKeys(email, keys));
-};
+export const loadKeys = (email, keys) => localforage.setItem(STORAGE_PREFIX + email, keys).then(() => keys);
+export const generateKeys = () => Promise.resolve(nacl.sign.keyPair());
 export const existing = email => localforage.getItem(STORAGE_PREFIX + email).catch(e => console.warn(e));
-const myKeyPair = email => existing(email).then(res => (res && res.secretKey && res) || generateKeys(email));
+const myKeyPair = email => existing(email).then(res => (res && res.secretKey && res) || generateKeys().then(keys => loadKeys(email, keys)));
 export const myPublicKey = email => myKeyPair(email).then(get("publicKey"));
 export const myPubKeyHex = email => myPublicKey(email).then(toHex);
 export const sign = (email, msg) => myKeyPair(email).then(({ secretKey }) => nacl.sign.detached(msg, secretKey));
