@@ -5,7 +5,6 @@ export const done = (...args) => {
 };
 
 export const doneWithError = (...args) => {
-  console.log("error", args[0]);
   expect(args[0]).toBeTruthy();
 };
 
