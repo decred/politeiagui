@@ -34,8 +34,8 @@ const ThingLinkComp = ({
   created_utc,
   title,
   url,
-  vote,
-  voteDetails,
+  startvote,
+  startvotereply,
   castedVotes,
   permalink,
   is_self,
@@ -55,7 +55,6 @@ const ThingLinkComp = ({
   setStatusProposalError,
   tokenFromStartingVoteProp,
   lastBlockHeight,
-  activeVotesEndHeight,
   isTestnet
 }) => (
   <div
@@ -88,8 +87,8 @@ const ThingLinkComp = ({
           {title}
         </Link>{" "}
         {
-          vote && activeVotesEndHeight ?
-            activeVotesEndHeight[vote.token] >= lastBlockHeight ?
+          startvote && startvotereply ?
+            startvotereply.endheight >= lastBlockHeight ?
               (<span style={{
                 padding: "4px 8px",
                 borderRadius: "8px",
@@ -129,8 +128,8 @@ const ThingLinkComp = ({
       <p className="tagline">
         {id} • {getProposalStatus(review_status)}
       </p>
-      {voteDetails && voteDetails.token &&
-        <VoteStats voteDetails={voteDetails} castedVotes={castedVotes}/>
+      {startvote && castedVotes &&
+        <VoteStats voteDetails={startvote.vote} castedVotes={castedVotes}/>
       }
       {expanded &&
         (lastSubmitted === id ? (
@@ -239,19 +238,18 @@ const ThingLinkComp = ({
                   </li>,
                 ]
                 : <Message type="info" header="Third party review required" body="Your proposal must be reviewed by another admin."/>
-              : review_status === PROPOSAL_STATUS_PUBLIC && !vote ?
+              : review_status === PROPOSAL_STATUS_PUBLIC && !startvote ?
                 <li key="start-vote">
                   <form
                     className="toggle remove-button"
                     onSubmit={e =>
                       onStartVote(
                         loggedInAsEmail,
-                        id,
-                        PROPOSAL_STATUS_UNREVIEWED
+                        id
                       ) && e.preventDefault()
                     }
                   >
-                    {!vote && <ButtonWithLoadingIcon
+                    {!startvote && <ButtonWithLoadingIcon
                       className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
                       text="Start Vote"
                       data-event-action="start-vote"

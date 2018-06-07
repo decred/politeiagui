@@ -337,23 +337,22 @@ export const onFetchActiveVotes = () => (dispatch) => {
   );
 };
 
-export const onStartVote = (loggedInAsEmail, token, status) =>
+export const onStartVote = (loggedInAsEmail, token) =>
   withCsrf((dispatch, getState, csrf) => {
     return dispatch(confirmWithModal("CONFIRM_ACTION",
       { message: "Are you sure you want to start voting this proposal?" }))
       .then(
         (confirm) => {
           if (confirm) {
-            dispatch(act.REQUEST_START_VOTE({token, status}));
+            dispatch(act.REQUEST_START_VOTE({ token }));
             return api
-              .startVote(loggedInAsEmail, csrf, token, status)
+              .startVote(loggedInAsEmail, csrf, token)
               .then(response => {
-                dispatch(act.RECEIVE_START_VOTE({...response, success: true}));
+                dispatch(act.RECEIVE_START_VOTE({ ...response, success: true}));
                 dispatch(onFetchActiveVotes());
               })
               .catch(error => {
                 dispatch(act.RECEIVE_START_VOTE(null, error));
-                throw error;
               });
           }
         }

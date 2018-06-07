@@ -183,9 +183,9 @@ export const newComment = (csrf, comment) => POST("/comments/new", csrf, comment
 
 export const activeVotes = () => GET("/v1/proposals/activevote").then(getResponse);
 
-export const startVote = (email, csrf, token, status) =>
+export const startVote = (email, csrf, token) =>
   pki.myPubKeyHex(email).then(publickey =>
-    pki.signStringHex(email, token + status).then(signature => POST(
+    pki.signStringHex(email, token).then(signature => POST(
       "/proposals/startvote", csrf,
       {
         vote: {

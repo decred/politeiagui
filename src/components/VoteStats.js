@@ -30,7 +30,7 @@ class VoteStats extends React.Component {
   };
   render() {
     const { castedVotes, voteDetails } = this.props;
-    const voteStats = this.getOptionVoteInfo(castedVotes, voteDetails.Options);
+    const voteStats = this.getOptionVoteInfo(castedVotes, voteDetails.options);
     const wrapperStyle = {
       display: "flex",
       flexDirection: "column",

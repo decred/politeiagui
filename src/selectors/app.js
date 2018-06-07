@@ -60,6 +60,7 @@ export const userCanExecuteActions = state => {
 };
 
 export const isProposalStatusApproved = state => state.app.isProposalStatusApproved;
+<<<<<<< HEAD
 
 export const activeVotesEndHeight = state => state.app.activeVotesEndHeight;
 
@@ -93,3 +94,5 @@ export const vettedProposals = state => {
   }
   return vettedProposals;
 };
+=======
+>>>>>>> Update voting code for active votes and start vote

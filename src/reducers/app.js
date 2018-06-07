@@ -40,8 +40,11 @@ const app = (state = DEFAULT_STATE, action) => (({
     }
   },
   [act.SET_PROPOSAL_APPROVED]: () => ({...state, isProposalStatusApproved: action.payload}),
+<<<<<<< HEAD
   [act.SET_ACTIVE_VOTES_END_HEIGHT]: () => ({...state, activeVotesEndHeight: action.payload}),
   [act.RECEIVE_USERNAMES]: () => ({...state, usernamesById: action.payload.usernamesById }),
+=======
+>>>>>>> Update voting code for active votes and start vote
   [act.CANCEL_SIGNUP]: () => ({ ...state, isShowingSignup: false }),
   [act.CHANGE_FILTER_VALUE]: () => ({ ...state, adminProposalsShow: action.payload }),
   [act.UPDATE_USER_PAYWALL_STATUS]: () => ({

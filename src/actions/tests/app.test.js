@@ -130,15 +130,6 @@ describe("test app actions (actions/app.js)", () => {
       );
   });
 
-  test("set active votes end height action", () => {
-    const obj = "any";
-    expect(app.setActiveVotesEndHeight(obj))
-      .toDispatchActions(
-        { type: act.SET_ACTIVE_VOTES_END_HEIGHT, payload: obj },
-        done
-      );
-  });
-
   test("on submit comment action", async () => {
     const { token, comment, parentid } = FAKE_COMMENT;
     const { email } = FAKE_USER;
