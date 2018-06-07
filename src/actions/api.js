@@ -230,13 +230,11 @@ export const onUpdateUserKey = (loggedInAsEmail) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_UPDATED_KEY());
     return pki.generateKeys().then(
-      keys => pki.myPubKeyHex(loggedInAsEmail).then(
-        publickey => api.updateKeyRequest(csrf, publickey)
-          .then(response => {
-            pki.loadKeys(loggedInAsEmail, keys);
-            return dispatch(act.RECEIVE_UPDATED_KEY({ ...response, success: true }));
-          })
-      )
+      keys => api.updateKeyRequest(csrf, pki.toHex(keys.publicKey)).then(
+        response => {
+          pki.loadKeys(loggedInAsEmail, keys);
+          return dispatch(act.RECEIVE_UPDATED_KEY({ ...response, success: true }));
+        })
     ).catch(error => {
       dispatch(act.RECEIVE_UPDATED_KEY(null, error));
       throw error;
