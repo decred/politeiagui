@@ -13,7 +13,7 @@ import {
   setGetSuccessResponse,
   methods,
   RANDOM_SUCCESS_RESPONSE,
-  RANDOM_ERROR_RESPOSNE,
+  RANDOM_ERROR_RESPONSE,
 } from "./helpers";
 import { getHumanReadableError } from "../../helpers";
 
@@ -77,7 +77,7 @@ describe("test api actions (actions/api.js)", () => {
     }
 
     const store = getMockedStore();
-    const expectedError = new Error(getHumanReadableError(RANDOM_ERROR_RESPOSNE.errorcode));
+    const expectedError = new Error(getHumanReadableError(RANDOM_ERROR_RESPONSE.errorcode));
 
     try {
       await store.dispatch(fn.apply(null, params));
