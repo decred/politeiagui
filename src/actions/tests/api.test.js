@@ -12,8 +12,10 @@ import {
   setPostSuccessResponse,
   setGetSuccessResponse,
   methods,
-  RANDOM_SUCCESS_RESPONSE
+  RANDOM_SUCCESS_RESPONSE,
+  RANDOM_ERROR_RESPONSE,
 } from "./helpers";
+import { getHumanReadableError } from "../../helpers";
 
 const mockStore = configureStore([thunk]);
 
@@ -73,11 +75,19 @@ describe("test api actions (actions/api.js)", () => {
     default:
       setGetErrorResponse(path, options);
     }
+
     const store = getMockedStore();
-    await store.dispatch(fn.apply(null, params)).catch(e => {
+    const expectedError = new Error(getHumanReadableError(RANDOM_ERROR_RESPONSE.errorcode));
+
+    try {
+      await store.dispatch(fn.apply(null, params));
+      const expectedActions = callbackWithError(expectedError);
+      expect(store.getActions()).toEqual(expectedActions);
+    } catch(e) {
       const expectedActions = callbackWithError(e);
       expect(store.getActions()).toEqual(expectedActions);
-    });
+    }
+
   };
 
   beforeEach(() => {
@@ -199,27 +209,27 @@ describe("test api actions (actions/api.js)", () => {
   });
 
   test("on create a new user action", async () => {
-    const path = "api/v1/user/new";
-
+    const path = "/api/v1/user/new";
+    // fetchMock.restore();
     //test it handles a successfull response
-    await assertApiActionOnSuccess(
-      path,
-      api.onCreateNewUser,
-      [FAKE_USER],
-      [
-        { type: act.REQUEST_NEW_USER, payload: { email: FAKE_USER.email  }},
-        { type: act.RECEIVE_NEW_USER, error: false }
-      ],
-      {},
-      methods.POST
-    );
     await assertApiActionOnError(
       path,
       api.onCreateNewUser,
       [FAKE_USER],
       (e) => [
-        { type: act.REQUEST_NEW_USER, payload: { email: FAKE_USER.email  }},
-        { type: act.RECEIVE_NEW_USER, error: false, payload: e }
+        { type: act.REQUEST_NEW_USER, payload: { email: FAKE_USER.email }, error: false },
+        { type: act.RECEIVE_NEW_USER, error: true, payload: e }
+      ],
+      {},
+      methods.POST
+    );
+    await assertApiActionOnSuccess(
+      path,
+      api.onCreateNewUser,
+      [FAKE_USER],
+      [
+        { type: act.REQUEST_NEW_USER, payload: { email: FAKE_USER.email } },
+        { type: act.RECEIVE_NEW_USER, error: false }
       ],
       {},
       methods.POST
