@@ -1,6 +1,7 @@
 import Promise from "promise";
 import * as sel from "../selectors";
 import * as api from "../lib/api";
+import * as pki from "../lib/pki";
 import { confirmWithModal } from "./modal";
 import * as external_api_actions from "./external_api";
 import { clearStateLocalStorage } from "../lib/local_storage";
@@ -228,9 +229,16 @@ const statusName = key => ({ 3: "censor", 4: "publish" }[key]);
 export const onUpdateUserKey = (loggedInAsEmail) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_UPDATED_KEY());
-    return api.updateKeyRequest(csrf, loggedInAsEmail)
-      .then(response => dispatch(act.RECEIVE_UPDATED_KEY({ ...response, success: true })))
-      .catch(error => { dispatch(act.RECEIVE_UPDATED_KEY(null, error)); throw error; });
+    return pki.generateKeys().then(
+      keys => api.updateKeyRequest(csrf, pki.toHex(keys.publicKey)).then(
+        response => {
+          pki.loadKeys(loggedInAsEmail, keys);
+          return dispatch(act.RECEIVE_UPDATED_KEY({ ...response, success: true }));
+        })
+    ).catch(error => {
+      dispatch(act.RECEIVE_UPDATED_KEY(null, error));
+      throw error;
+    });
   });
 
 export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
