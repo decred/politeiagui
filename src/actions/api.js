@@ -359,9 +359,9 @@ export const onStartVote = (loggedInAsEmail, token) =>
       );
   });
 
-export const onFetchVoteResults = (vote) => (dispatch) => {
-  dispatch(act.REQUEST_VOTE_RESULTS({ vote }));
-  return api.voteResults({ vote }).then(
+export const onFetchVoteResults = (token) => (dispatch) => {
+  dispatch(act.REQUEST_VOTE_RESULTS({ token}));
+  return api.voteResults({ token }).then(
     response => dispatch(act.RECEIVE_VOTE_RESULTS({ ...response, success: true }))
   ).catch(
     error => {

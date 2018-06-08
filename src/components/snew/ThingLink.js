@@ -87,7 +87,7 @@ const ThingLinkComp = ({
           {title}
         </Link>{" "}
         {
-          startvote && startvotereply ?
+          startvotereply && startvotereply.endheight ?
             startvotereply.endheight >= lastBlockHeight ?
               (<span style={{
                 padding: "4px 8px",
@@ -129,7 +129,7 @@ const ThingLinkComp = ({
         {id} • {getProposalStatus(review_status)}
       </p>
       {startvote && castedVotes &&
-        <VoteStats voteDetails={startvote.vote} castedVotes={castedVotes}/>
+        <VoteStats voteDetails={startvotereply} castedVotes={castedVotes}/>
       }
       {expanded &&
         (lastSubmitted === id ? (
@@ -238,7 +238,7 @@ const ThingLinkComp = ({
                   </li>,
                 ]
                 : <Message type="info" header="Third party review required" body="Your proposal must be reviewed by another admin."/>
-              : review_status === PROPOSAL_STATUS_PUBLIC && !startvote ?
+              : review_status === PROPOSAL_STATUS_PUBLIC && !startvotereply ?
                 <li key="start-vote">
                   <form
                     className="toggle remove-button"
@@ -249,11 +249,12 @@ const ThingLinkComp = ({
                       ) && e.preventDefault()
                     }
                   >
-                    {!startvote && <ButtonWithLoadingIcon
+                    <ButtonWithLoadingIcon
                       className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
                       text="Start Vote"
                       data-event-action="start-vote"
-                      isLoading={tokenFromStartingVoteProp === id}/>}
+                      isLoading={tokenFromStartingVoteProp === id}
+                    />
                   </form>
                 </li> : null
             : null}

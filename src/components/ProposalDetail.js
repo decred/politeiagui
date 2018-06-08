@@ -2,7 +2,7 @@ import React from "react";
 import get from "lodash/fp/get";
 import orderBy from "lodash/fp/orderBy";
 import { Content } from "./snew";
-import { formatProposalData, commentsToT1 } from "../lib/snew";
+import { commentsToT1, proposalToT3 } from "../lib/snew";
 import { getTextFromIndexMd } from "../helpers";
 import Message from "./Message";
 
@@ -12,7 +12,7 @@ class ProposalDetail extends React.Component {
     if((!this.props.proposal || Object.keys(this.props.proposal).length === 0 ) &&
       nextProps.proposal && Object.keys(nextProps.proposal).length > 0 &&
       nextProps.proposal.status === 4 ){
-      this.props.onFetchVoteResults({ token: this.props.token });
+      this.props.onFetchVoteResults(this.props.token);
     }
   }
   render() {
@@ -25,7 +25,6 @@ class ProposalDetail extends React.Component {
       markdownFile,
       otherFiles,
       onFetchData,
-      activeVotes,
       voteDetails,
       castedVotes,
       ...props
@@ -50,8 +49,8 @@ class ProposalDetail extends React.Component {
                   allChildren: [{
                     kind: "t3",
                     data: {
-                      ...formatProposalData(proposal, 0, activeVotes).data,
-                      voteDetails,
+                      ...proposalToT3(proposal, 0).data,
+                      startvotereply: voteDetails,
                       castedVotes,
                       otherFiles,
                       selftext: markdownFile ? getTextFromIndexMd(markdownFile) : null,
