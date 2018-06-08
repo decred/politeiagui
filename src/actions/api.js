@@ -7,6 +7,7 @@ import * as external_api_actions from "./external_api";
 import { clearStateLocalStorage } from "../lib/local_storage";
 import act from "./methods";
 import { globalUsernamesById } from "./app";
+import { updateVotesEndHeightFromActiveVotes, setVotesEndHeight } from "./app";
 
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onSetEmail = act.SET_EMAIL;
@@ -329,7 +330,10 @@ export const verifyUserPaymentWithPoliteia = txid => {
 export const onFetchActiveVotes = () => (dispatch) => {
   dispatch(act.REQUEST_ACTIVE_VOTES());
   return api.activeVotes().then(
-    response => dispatch(act.RECEIVE_ACTIVE_VOTES({ ...response, success: true }))
+    response => {
+      dispatch(act.RECEIVE_ACTIVE_VOTES({ ...response, success: true }));
+      dispatch(updateVotesEndHeightFromActiveVotes(response));
+    }
   ).catch(
     error => {
       dispatch(act.RECEIVE_ACTIVE_VOTES(null, error));
@@ -349,7 +353,7 @@ export const onStartVote = (loggedInAsEmail, token) =>
               .startVote(loggedInAsEmail, csrf, token)
               .then(response => {
                 dispatch(act.RECEIVE_START_VOTE({ ...response, success: true}));
-                dispatch(onFetchActiveVotes());
+                dispatch(setVotesEndHeight(token, response.endheight));
               })
               .catch(error => {
                 dispatch(act.RECEIVE_START_VOTE(null, error));
@@ -362,7 +366,10 @@ export const onStartVote = (loggedInAsEmail, token) =>
 export const onFetchVoteResults = (token) => (dispatch) => {
   dispatch(act.REQUEST_VOTE_RESULTS({ token}));
   return api.voteResults({ token }).then(
-    response => dispatch(act.RECEIVE_VOTE_RESULTS({ ...response, success: true }))
+    response => {
+      dispatch(act.RECEIVE_VOTE_RESULTS({ ...response, success: true }));
+      dispatch(setVotesEndHeight(token, response.startvotereply.endheight));
+    }
   ).catch(
     error => {
       dispatch(act.RECEIVE_VOTE_RESULTS(null, error));

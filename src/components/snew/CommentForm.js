@@ -21,7 +21,8 @@ const CommentForm = ({
   onSetReplyParent,
   loggedInAsEmail,
   userCanExecuteActions,
-  isActive
+  votesEndHeight,
+  token
 }) => (
   loggedInAsEmail ?
     <form className="usertext cloneable warn-on-unload"  onSubmit={handleSubmit(onSave)}>
@@ -38,7 +39,7 @@ const CommentForm = ({
       <input name="parentid" type="hidden" defaultValue={thingId} />
       <div className="usertext-edit md-container">
         {isPostingComment && (<h2>Posting comment...</h2>)}
-        {!isPostingComment && !isActive  && (
+        {!isPostingComment && !votesEndHeight[token] && (
           <div className="md">
             <Field
               component={MarkdownEditorField}
@@ -56,7 +57,7 @@ const CommentForm = ({
             />
           </div>
         )}
-        {!isPostingComment && !isActive && (
+        {!isPostingComment && !votesEndHeight[token] && (
           <div className="bottom-area">
             <span className="help-toggle toggle">
               <a

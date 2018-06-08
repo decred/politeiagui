@@ -3,6 +3,7 @@ import configureStore from "redux-mock-store";
 import qs from "query-string";
 import thunk from "redux-thunk";
 import * as api from "../api";
+import * as app from "../app";
 import * as ea  from "../external_api";
 import * as act from "../types";
 import {
@@ -732,15 +733,14 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on fetch active votes", async () => {
     const path = "/api/v1/proposals/activevote";
-    await assertApiActionOnSuccess(
-      path,
-      api.onFetchActiveVotes,
-      [],
-      [
-        { type: act.REQUEST_ACTIVE_VOTES },
-        { type: act.RECEIVE_ACTIVE_VOTES, error: false }
-      ]
-    );
+    const mockedResponse = { votes: [] };
+
+    fetchMock.get(path, mockedResponse);
+    expect(api.onFetchActiveVotes()).toDispatchActionsWithState(MOCK_STATE,[
+      { type: act.REQUEST_ACTIVE_VOTES },
+      { type: act.RECEIVE_ACTIVE_VOTES, error: false },
+      app.updateVotesEndHeightFromActiveVotes(mockedResponse)
+    ], done);
 
     await assertApiActionOnError(
       path,
@@ -757,17 +757,18 @@ describe("test api actions (actions/api.js)", () => {
     const path = "/api/v1/proposals/voteresults";
     const token = "any";
     const params = [token];
-    await assertApiActionOnSuccess(
-      path,
-      api.onFetchVoteResults,
-      params,
-      [
-        { type: act.REQUEST_VOTE_RESULTS },
-        { type: act.RECEIVE_VOTE_RESULTS, error: false }
-      ],
-      {},
-      methods.POST
-    );
+    const mockedResponse = {
+      startvotereply: {
+        endheight: 303322
+      }
+    };
+    //set custom response
+    fetchMock.post(path, mockedResponse);
+    expect(api.onFetchVoteResults(token)).toDispatchActions([
+      { type: act.REQUEST_VOTE_RESULTS },
+      { type: act.RECEIVE_VOTE_RESULTS, error: false },
+      app.setVotesEndHeight(token, mockedResponse.startvotereply.endheight)
+    ], done);
 
     await assertApiActionOnError(
       path,

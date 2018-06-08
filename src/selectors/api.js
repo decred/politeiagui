@@ -226,5 +226,3 @@ export const setStartVote = compose(get("startvote"), apiSetStartVoteResponse);
 export const voteResultsStartVoteReply = or(compose(get("startvotereply"), apiVoteResultsResponse), constant({}));
 export const voteResultsCastVotes = or(compose(get("castvotes"), apiVoteResultsResponse), constant({}));
 export const voteResultsError = apiVoteResultsError;
-
-export const isProposalActive = or(compose(get("endheight"), voteResultsStartVoteReply), constant(false));

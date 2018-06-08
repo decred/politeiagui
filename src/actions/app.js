@@ -53,6 +53,22 @@ export const onChangeFilter = (option) => act.CHANGE_FILTER_VALUE(option);
 
 export const onChangeProposalStatusApproved = (status) => act.SET_PROPOSAL_APPROVED(status);
 
+export const updateVotesEndHeightFromActiveVotes = ({ votes }) =>
+  (dispatch, getState) => {
+    if(!votes || votes.length === 0)
+      return;
+    const votesEndHeight = sel.votesEndHeight(getState());
+    votes.forEach(vote => {
+      const { token } = vote.proposal.censorshiprecord;
+      const { endheight } = vote.startvotereply;
+      if(!votesEndHeight[token] && endheight) {
+        dispatch(setVotesEndHeight(token, endheight));
+      }
+    });
+  };
+
+export const setVotesEndHeight = (token, endheight) => act.SET_VOTES_END_HEIGHT({ token, endheight });
+
 export const onSubmitComment = (...args) =>
   (dispatch) =>
     dispatch(onSubmitCommentApi(...args))

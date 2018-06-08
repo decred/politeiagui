@@ -36,6 +36,7 @@ const ThingLinkComp = ({
   url,
   startvote,
   startvotereply,
+  votesEndHeight,
   castedVotes,
   permalink,
   is_self,
@@ -87,8 +88,8 @@ const ThingLinkComp = ({
           {title}
         </Link>{" "}
         {
-          startvotereply && startvotereply.endheight ?
-            startvotereply.endheight >= lastBlockHeight ?
+          votesEndHeight[id] ?
+            votesEndHeight[id] >= lastBlockHeight ?
               (<span style={{
                 padding: "4px 8px",
                 borderRadius: "8px",
@@ -238,7 +239,7 @@ const ThingLinkComp = ({
                   </li>,
                 ]
                 : <Message type="info" header="Third party review required" body="Your proposal must be reviewed by another admin."/>
-              : review_status === PROPOSAL_STATUS_PUBLIC && !startvotereply ?
+              : review_status === PROPOSAL_STATUS_PUBLIC && !votesEndHeight[id] ?
                 <li key="start-vote">
                   <form
                     className="toggle remove-button"

@@ -7,7 +7,8 @@ const proposalDownloadConnector = connect(
     isProposalStatusApproved: sel.isProposalStatusApproved,
     tokenFromStartingVoteProp: sel.getPropTokenIfIsStartingVote,
     lastBlockHeight: sel.lastBlockHeight,
-    isTestnet: sel.isTestNet
+    isTestnet: sel.isTestNet,
+    votesEndHeight: sel.votesEndHeight,
   }),
   {
     onChangeProposalStatusApproved: act.onChangeProposalStatusApproved,
