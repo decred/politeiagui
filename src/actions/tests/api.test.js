@@ -755,8 +755,8 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on fetch vote results", async () => {
     const path = "/api/v1/proposals/voteresults";
-    const vote = "any";
-    const params = [vote];
+    const token = "any";
+    const params = [token];
     await assertApiActionOnSuccess(
       path,
       api.onFetchVoteResults,
@@ -774,7 +774,7 @@ describe("test api actions (actions/api.js)", () => {
       api.onFetchVoteResults,
       params,
       (e) => [
-        { type: act.REQUEST_VOTE_RESULTS, error: false, payload: { vote } },
+        { type: act.REQUEST_VOTE_RESULTS, error: false, payload: { token } },
         { type: act.RECEIVE_VOTE_RESULTS, error: true, payload: e }
       ],
       {},
