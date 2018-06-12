@@ -10,8 +10,8 @@ describe("snew tests (lib/snew)", () => {
     let result = snew.formatProposalData(proposal, index, votes);
     let { data, kind } = result;
     expect(kind).toEqual("t3");
-    expect(data.vote).toBeTruthy();
-    expect(data.votedetails).toBeTruthy();
+    expect(data.startvote).toBeTruthy();
+    expect(data.startvotereply).toBeTruthy();
     expect(data.rank).toEqual(index + 1);
     expect(data.name).toEqual(`t3_${PROPOSAL_TOKEN}`);
     expect(data.author).toEqual(proposal.username);
@@ -24,15 +24,15 @@ describe("snew tests (lib/snew)", () => {
     delete proposal.name;
     result = snew.formatProposalData(proposal, index);
     data = result.data;
-    expect(data.vote).toBeFalsy();
-    expect(data.votedetails).toBeFalsy();
+    expect(data.startvote).toBeFalsy();
+    expect(data.startvotereply).toBeFalsy();
     expect(data.title).toEqual("(Proposal name hidden)");
     //test case when activevotes doesn't contain the given proposal
     const { proposal: anotherProposal } = await import(`../../../mocks/api/v1/proposals/${PROPOSAL_TOKEN_2}/GET.json`);
     result = snew.formatProposalData(anotherProposal, index, votes);
     data = result.data;
-    expect(data.vote).toBeFalsy();
-    expect(data.votedetails).toBeFalsy();
+    expect(data.startvote).toBeFalsy();
+    expect(data.startvotereply).toBeFalsy();
   });
 
   test("comments to T1", async() => {

@@ -42,7 +42,6 @@ export const CustomContent = ({
           <Content {...{
             ...props,
             key: "content",
-            activeVotesEndHeight: props.activeVotesEndHeight,
             lastBlockHeight: props.lastBlockHeight,
             listings: listings || [
               {
@@ -82,19 +81,6 @@ class Loader extends Component {
     this.props.getLastBlockHeight();
   }
 
-  componentWillReceiveProps(nextProps){
-    if (!nextProps.activeVotes)
-      return;
-    const {activeVotes} = nextProps;
-    const endHeightByToken = {};
-    activeVotes.forEach((value) => {
-      const token = value.vote.token;
-      endHeightByToken[token] = value.votedetails.endheight;
-      return;
-    });
-    if(!this.props.activeVotesEndHeight)
-      this.props.setActiveVotesEndHeight(endHeightByToken);
-  }
   render() {
     return <CustomContent {...this.props} />;
   }

@@ -223,8 +223,7 @@ export const getKeyMismatch = state => state.api.keyMismatch;
 export const activeVotes = compose(get("votes"), apiActiveVotesResponse);
 export const activeVotesError = apiActiveVotesError;
 export const setStartVote = compose(get("startvote"), apiSetStartVoteResponse);
-export const voteResultsVote = or(compose(get("vote"), apiVoteResultsResponse), constant({}));
+export const voteResultsStartVoteReply = or(compose(get("startvotereply"), apiVoteResultsResponse), constant({}));
+export const voteResultsStartVote = or(compose(get("startvote"), apiVoteResultsResponse), constant({}));
 export const voteResultsCastVotes = or(compose(get("castvotes"), apiVoteResultsResponse), constant({}));
 export const voteResultsError = apiVoteResultsError;
-
-export const isProposalActive = or(compose(get("token"), voteResultsVote), constant(false));

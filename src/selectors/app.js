@@ -60,7 +60,6 @@ export const userCanExecuteActions = state => {
 };
 
 export const isProposalStatusApproved = state => state.app.isProposalStatusApproved;
-
 export const activeVotesEndHeight = state => state.app.activeVotesEndHeight;
 
 export const proposalComments = state => {
@@ -93,3 +92,6 @@ export const vettedProposals = state => {
   }
   return vettedProposals;
 };
+
+export const votesEndHeight = (state) => state.app.votesEndHeight || {};
+

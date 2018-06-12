@@ -7,6 +7,7 @@ import * as external_api_actions from "./external_api";
 import { clearStateLocalStorage } from "../lib/local_storage";
 import act from "./methods";
 import { globalUsernamesById } from "./app";
+import { updateVotesEndHeightFromActiveVotes, setVotesEndHeight } from "./app";
 
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onSetEmail = act.SET_EMAIL;
@@ -329,7 +330,10 @@ export const verifyUserPaymentWithPoliteia = txid => {
 export const onFetchActiveVotes = () => (dispatch) => {
   dispatch(act.REQUEST_ACTIVE_VOTES());
   return api.activeVotes().then(
-    response => dispatch(act.RECEIVE_ACTIVE_VOTES({ ...response, success: true }))
+    response => {
+      dispatch(act.RECEIVE_ACTIVE_VOTES({ ...response, success: true }));
+      dispatch(updateVotesEndHeightFromActiveVotes(response));
+    }
   ).catch(
     error => {
       dispatch(act.RECEIVE_ACTIVE_VOTES(null, error));
@@ -337,33 +341,35 @@ export const onFetchActiveVotes = () => (dispatch) => {
   );
 };
 
-export const onStartVote = (loggedInAsEmail, token, status) =>
+export const onStartVote = (loggedInAsEmail, token) =>
   withCsrf((dispatch, getState, csrf) => {
     return dispatch(confirmWithModal("CONFIRM_ACTION",
       { message: "Are you sure you want to start voting this proposal?" }))
       .then(
         (confirm) => {
           if (confirm) {
-            dispatch(act.REQUEST_START_VOTE({token, status}));
+            dispatch(act.REQUEST_START_VOTE({ token }));
             return api
-              .startVote(loggedInAsEmail, csrf, token, status)
+              .startVote(loggedInAsEmail, csrf, token)
               .then(response => {
-                dispatch(act.RECEIVE_START_VOTE({...response, success: true}));
-                dispatch(onFetchActiveVotes());
+                dispatch(act.RECEIVE_START_VOTE({ ...response, success: true}));
+                dispatch(setVotesEndHeight(token, response.endheight));
               })
               .catch(error => {
                 dispatch(act.RECEIVE_START_VOTE(null, error));
-                throw error;
               });
           }
         }
       );
   });
 
-export const onFetchVoteResults = (vote) => (dispatch) => {
-  dispatch(act.REQUEST_VOTE_RESULTS({ vote }));
-  return api.voteResults({ vote }).then(
-    response => dispatch(act.RECEIVE_VOTE_RESULTS({ ...response, success: true }))
+export const onFetchVoteResults = (token) => (dispatch) => {
+  dispatch(act.REQUEST_VOTE_RESULTS({ token}));
+  return api.voteResults({ token }).then(
+    response => {
+      dispatch(act.RECEIVE_VOTE_RESULTS({ ...response, success: true }));
+      dispatch(setVotesEndHeight(token, response.startvotereply.endheight));
+    }
   ).catch(
     error => {
       dispatch(act.RECEIVE_VOTE_RESULTS(null, error));
