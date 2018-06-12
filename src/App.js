@@ -41,7 +41,8 @@ class Loader extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener("storage", createStorageListener(store));
+    this.storageListener = createStorageListener(store);
+    window.addEventListener("storage", this.storageListener);
 
     if (this.props.loggedInAsEmail) {
       pki
@@ -55,7 +56,7 @@ class Loader extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener("storage");
+    window.removeEventListener("storage", this.storageListener);
   }
 
   render() {
