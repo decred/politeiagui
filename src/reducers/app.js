@@ -40,7 +40,6 @@ const app = (state = DEFAULT_STATE, action) => (({
     }
   },
   [act.SET_PROPOSAL_APPROVED]: () => ({...state, isProposalStatusApproved: action.payload}),
-  [act.SET_ACTIVE_VOTES_END_HEIGHT]: () => ({...state, activeVotesEndHeight: action.payload}),
   [act.RECEIVE_USERNAMES]: () => ({...state, usernamesById: action.payload.usernamesById }),
   [act.SET_VOTES_END_HEIGHT]: () => ({...state, votesEndHeight: { ...state.votesEndHeight, [action.payload.token]: action.payload.endheight }}),
   [act.CANCEL_SIGNUP]: () => ({ ...state, isShowingSignup: false }),

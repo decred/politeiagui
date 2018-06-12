@@ -19,7 +19,7 @@ const proposalConnector = connect(
     markdownFile: sel.getMarkdownFile,
     otherFiles: sel.getNotMarkdownFile,
     activeVotes: sel.activeVotes,
-    voteDetails: sel.voteResultsStartVoteReply,
+    voteDetails: sel.voteResultsStartVote,
     castedVotes: sel.voteResultsCastVotes
   }),
   dispatch => bindActionCreators({

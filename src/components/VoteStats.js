@@ -1,7 +1,7 @@
 import React from "react";
 
 class VoteStats extends React.Component {
-  getOptionVoteInfo = (votes, options) => {
+  getOptionVoteInfo = (votes, options = []) => {
     const result = options.map(op => {
       const votesReiceved = votes.filter(v => parseInt(v.votebit, 10) === parseInt(op.bits, 10)).length;
       const percentage = (votesReiceved/votes.length).toFixed(2)*100;
@@ -29,8 +29,8 @@ class VoteStats extends React.Component {
     );
   };
   render() {
-    const { castedVotes, voteDetails } = this.props;
-    const voteStats = this.getOptionVoteInfo(castedVotes, voteDetails.options);
+    const { castedVotes, voteOptions } = this.props;
+    const voteStats = this.getOptionVoteInfo(castedVotes, voteOptions);
     const wrapperStyle = {
       display: "flex",
       flexDirection: "column",

@@ -34,10 +34,9 @@ const ThingLinkComp = ({
   created_utc,
   title,
   url,
-  startvote,
-  startvotereply,
   votesEndHeight,
   castedVotes,
+  voteDetails,
   permalink,
   is_self,
   selftext,
@@ -129,8 +128,8 @@ const ThingLinkComp = ({
       <p className="tagline">
         {id} • {getProposalStatus(review_status)}
       </p>
-      {startvote && castedVotes &&
-        <VoteStats voteDetails={startvotereply} castedVotes={castedVotes}/>
+      {votesEndHeight[id] && voteDetails && voteDetails.vote && castedVotes &&
+        <VoteStats voteOptions={voteDetails.vote.options} castedVotes={castedVotes}/>
       }
       {expanded &&
         (lastSubmitted === id ? (

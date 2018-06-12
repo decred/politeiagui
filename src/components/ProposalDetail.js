@@ -52,6 +52,7 @@ class ProposalDetail extends React.Component {
                       ...proposalToT3(proposal, 0).data,
                       startvotereply: voteDetails,
                       castedVotes,
+                      voteDetails,
                       otherFiles,
                       selftext: markdownFile ? getTextFromIndexMd(markdownFile) : null,
                       selftext_html: markdownFile ? getTextFromIndexMd(markdownFile) : null
