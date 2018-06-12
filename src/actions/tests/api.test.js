@@ -142,7 +142,7 @@ describe("test api actions (actions/api.js)", () => {
     // test it successfully handles the response and dispatch actions
     setGetSuccessResponse(path, {}, successfullResponse);
     await expect(api.onInit())
-      .toDispatchActions([
+      .toDispatchActionsWithState(MOCK_STATE,[
         { type: act.REQUEST_ME },
         { type: act.RECEIVE_ME,
           payload: { email: FAKE_USER.email, username: FAKE_USER.username, csrfToken : "itsafake" }
