@@ -165,6 +165,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_ACTIVE_VOTES]: () => receive("activeVotes", state, action),
   [act.REQUEST_VOTE_RESULTS]: () => request("voteResults", state, action),
   [act.RECEIVE_VOTE_RESULTS]: () => receive("voteResults", state, action),
+  [act.REQUEST_USERNAMES_BY_ID]: () => request("usernamesById", state, action),
+  [act.RECEIVE_USERNAMES_BY_ID]: () => receive("usernamesById", state, action),
   [act.REQUEST_LOGOUT]: () => request("logout", state, action),
   [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
 })[action.type] || (() => state))();

@@ -207,3 +207,7 @@ export const startVote = (email, csrf, token, status) =>
     ))).then(getResponse);
 
 export const voteResults = (vote) => POST("/proposals/voteresults",null, vote).then(getResponse);
+
+export const usernamesById = (userids) => {
+  return POST("/usernames", null, { userids }).then(getResponse);
+};

@@ -6,6 +6,7 @@ import { confirmWithModal } from "./modal";
 import * as external_api_actions from "./external_api";
 import { clearStateLocalStorage } from "../lib/local_storage";
 import act from "./methods";
+import { globalUsernamesById } from "./app";
 
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onSetEmail = act.SET_EMAIL;
@@ -23,6 +24,12 @@ export const requestApiInfo = (poolPaywall = false) => (dispatch, getState) => {
           const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
           dispatch(external_api_actions.verifyUserPayment(paywallAddress, paywallAmount, paywallTxNotBefore));
         }
+      }
+
+      // Set the current username in the map.
+      let userId = sel.userid(getState());
+      if(userId) {
+        globalUsernamesById[userId] = sel.loggedInAsUsername(getState());
       }
     })
     .catch(error => {
@@ -360,6 +367,18 @@ export const onFetchVoteResults = (vote) => (dispatch) => {
   ).catch(
     error => {
       dispatch(act.RECEIVE_VOTE_RESULTS(null, error));
+      throw error;
+    }
+  );
+};
+
+export const onFetchUsernamesById = (userIds) => (dispatch) => {
+  dispatch(act.REQUEST_USERNAMES_BY_ID());
+  return api.usernamesById(userIds).then(
+    response => dispatch(act.RECEIVE_USERNAMES_BY_ID({ ...response, success: true }))
+  ).catch(
+    error => {
+      dispatch(act.RECEIVE_USERNAMES_BY_ID(null, error));
       throw error;
     }
   );

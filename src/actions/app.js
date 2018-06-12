@@ -4,6 +4,7 @@ import get from "lodash/get";
 import isEqual from "lodash/isEqual";
 import { onSubmitProposal, onChangeUsername, onChangePassword, onFetchProposalComments } from "./api";
 import { onFetchProposal as onFetchProposalApi, onSubmitComment as onSubmitCommentApi } from "./api";
+import { onFetchUsernamesById as onFetchUsernamesByIdApi } from "./api";
 import * as sel from "../selectors";
 import act from "./methods";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
@@ -34,11 +35,17 @@ export const onSaveChangePassword = ({ existingPassword, newPassword }) =>
     dispatch(onChangePassword(existingPassword, newPassword))
       .then(() => sel.newProposalToken(getState()));
 
-export const onFetchProposal = (token) =>
-  (dispatch) => Promise.all([
-    dispatch(onFetchProposalApi(token)),
-    dispatch(onFetchProposalComments(token))
-  ]);
+export const onFetchProposal = (token) => (dispatch, getState) =>
+  dispatch(onFetchProposalApi(token))
+    .then(() => dispatch(onFetchProposalComments(token)))
+    .then(() => {
+      let userIds = [];
+      let comments = sel.apiProposalComments(getState());
+      if(comments) {
+        userIds = comments.map(comment => comment.userid);
+      }
+      return dispatch(onFetchUsernamesById(userIds));
+    });
 
 export const onLoadMe = me => dispatch => dispatch(act.LOAD_ME(me));
 
@@ -67,4 +74,39 @@ export const onLocalStorageChange = (event) => (dispatch, getState) => {
   } catch(e) {
     dispatch(onLogout());
   }
+};
+
+export const globalUsernamesById = {};
+export const onFetchUsernamesById = (userIds) => (dispatch, getState) => {
+  let usernamesById = {};
+  let userIdsToFetch = [];
+  for(let userId of userIds) {
+    if(userId in globalUsernamesById) {
+      usernamesById[userId] = globalUsernamesById[userId];
+    }
+    else {
+      userIdsToFetch.push(userId);
+    }
+  }
+
+  // All usernames were found in the global cache, so no need
+  // to make a server request.
+  if(userIdsToFetch.length === 0) {
+    return dispatch(act.RECEIVE_USERNAMES({ usernamesById }));
+  }
+
+  return dispatch(onFetchUsernamesByIdApi(userIdsToFetch))
+    .then(() => {
+      const apiUsernamesByIdResponse = get(getState(), ["api", "usernamesById", "response"], undefined);
+      if(apiUsernamesByIdResponse) {
+        userIdsToFetch.forEach((userId, idx) => {
+          let username = apiUsernamesByIdResponse.usernames[idx];
+          if(username) {
+            usernamesById[userId] = globalUsernamesById[userId] = username;
+          }
+        });
+      }
+
+      return dispatch(act.RECEIVE_USERNAMES({ usernamesById }));
+    });
 };
