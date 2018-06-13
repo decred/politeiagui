@@ -46,11 +46,7 @@ export const CustomContent = ({
             listings: listings || [
               {
                 allChildren:
-                proposals.filter(
-                  proposal =>
-                    !filterValue || proposal.status === filterValue
-                )
-                  .map((proposal, idx) => formatProposalData(proposal, idx, activeVotes))
+                proposals.map((proposal, idx) => formatProposalData(proposal, idx, activeVotes))
               }
             ]
           }} />

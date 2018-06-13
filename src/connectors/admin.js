@@ -9,7 +9,15 @@ import {
 
 export default connect(
   sel.selectorMap({
-    proposals: sel.unvettedProposals,
+    proposals: (state) => {
+      let filterValue = sel.getAdminFilterValue(state);
+      let proposals = sel.unvettedProposals(state);
+
+      if(!filterValue) {
+        return proposals;
+      }
+      return proposals.filter(proposal => proposal.status === filterValue);
+    },
     error: sel.unvettedProposalsError,
     isLoading: or(sel.unvettedProposalsIsRequesting, sel.setStatusProposalIsRequesting),
     filterValue: sel.getAdminFilterValue,
