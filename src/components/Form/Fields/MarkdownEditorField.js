@@ -9,7 +9,7 @@ const MarkdownEditorField = ({
   tabIndex,
   toggledStyle
 }) => {
-  return console.log("input", input) || (
+  return (
     <div className="ffmarkdown-editor">
       <div className="ffeditor usertext">
         <MarkdownEditor

@@ -61,7 +61,7 @@ export const CustomContent = ({
 
   return [
     <ReactBody className={bodyClassName} key="body" />,
-    <div className="content" role="main">
+    <div className="content" role="main" key="content">
       {content}
     </div>
   ];
