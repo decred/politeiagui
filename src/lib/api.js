@@ -40,7 +40,7 @@ export const makeComment = (token, comment, parentid) => ({
 });
 
 export const signProposal = (email, proposal) => pki.myPubKeyHex(email).then(publickey => {
-  const tree = new MerkleTree(proposal.files.map(x => Buffer(get("digest", x), "hex")).sort());
+  const tree = new MerkleTree(proposal.files.map(x => Buffer.from(get("digest", x), "hex")).sort());
   const root = tree.root().toString("hex");
   return pki.signStringHex(email, root).then(signature => ({ ...proposal, publickey, signature }));
 });
