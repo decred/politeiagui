@@ -220,7 +220,7 @@ export const onSubmitComment = (loggedInAsEmail, token, comment, parentid) =>
     return Promise.resolve(api.makeComment(token, comment, parentid))
       .then(comment => api.signComment(loggedInAsEmail, comment))
       .then(comment => api.newComment(csrf, comment))
-      .then(response => dispatch(act.RECEIVE_NEW_COMMENT(response)))
+      .then(response => dispatch(act.RECEIVE_NEW_COMMENT(response.comment)))
       .catch(error => {
         dispatch(act.RECEIVE_NEW_COMMENT(null, error));
         throw error;
