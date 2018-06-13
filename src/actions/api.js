@@ -214,6 +214,18 @@ export const onSubmitProposal = (loggedInAsEmail, userid, username, name, descri
       .catch(error => { dispatch(act.RECEIVE_NEW_PROPOSAL(null, error)); throw error; });
   });
 
+export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
+  withCsrf((dispatch, getState, csrf) => {
+    return Promise.resolve(api.makeLikeComment(token, action, commentid))
+      .then(comment => api.signLikeComment(loggedInAsEmail, comment))
+      .then(comment => api.likeComment(csrf, comment))
+      .then(response => dispatch(act.RECEIVE_LIKE_COMMENT({...response, commentid})))
+      .catch(error => {
+        dispatch(act.RECEIVE_LIKE_COMMENT(null, error));
+        throw error;
+      });
+  });
+
 export const onSubmitComment = (loggedInAsEmail, token, comment, parentid) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));

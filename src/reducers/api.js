@@ -93,6 +93,27 @@ const onReceiveNewComment = (state, action) => {
   };
 };
 
+const onReceiveNewCommentLike = (state, action) => {
+  if (action.error) return state;
+  const index = state.proposalComments.response.comments.findIndex(element =>
+    element.commentid === action.payload.commentid
+  );
+  return {
+    ...state,
+    proposalComments: {
+      ...state.proposalComments,
+      response: {
+        ...state.proposalComments.response,
+        comments: state.proposalComments.response.comments.map((el, i) => i === index ? {
+          ...el,
+          totalvotes: action.payload.total,
+          resultvotes: action.payload.result
+        } : el)
+      }
+    }
+  };
+};
+
 const api = (state = DEFAULT_STATE, action) => (({
   [act.SET_EMAIL]: () => ({ ...state, email: action.payload }),
   [act.CLEAN_ERRORS]: () => (
@@ -140,6 +161,7 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
   [act.REQUEST_PROPOSAL_COMMENTS]: () => request("proposalComments", state, action),
   [act.RECEIVE_PROPOSAL_COMMENTS]: () => receive("proposalComments", state, action),
+  [act.RECEIVE_LIKE_COMMENT]: () => onReceiveNewCommentLike(state, action),
   [act.REQUEST_NEW_PROPOSAL]: () => request("newProposal", state, action),
   [act.RECEIVE_NEW_PROPOSAL]: () => receive("newProposal", state, action),
   [act.REQUEST_NEW_COMMENT]: () => request("newComment", state, action),
