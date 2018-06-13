@@ -240,22 +240,18 @@ const ThingLinkComp = ({
                 : <Message type="info" header="Third party review required" body="Your proposal must be reviewed by another admin."/>
               : review_status === PROPOSAL_STATUS_PUBLIC && !votesEndHeight[id] ?
                 <li key="start-vote">
-                  <form
-                    className="toggle remove-button"
-                    onSubmit={e =>
+                  <ButtonWithLoadingIcon
+                    className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                    onClick={e =>
                       onStartVote(
                         loggedInAsEmail,
                         id
                       ) && e.preventDefault()
                     }
-                  >
-                    <ButtonWithLoadingIcon
-                      className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                      text="Start Vote"
-                      data-event-action="start-vote"
-                      isLoading={tokenFromStartingVoteProp === id}
-                    />
-                  </form>
+                    text="Start Vote"
+                    data-event-action="start-vote"
+                    isLoading={tokenFromStartingVoteProp === id}
+                  />
                 </li> : null
             : null}
         </ul>

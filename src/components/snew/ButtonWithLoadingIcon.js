@@ -8,7 +8,12 @@ const ButtonWithLoadingIcon = ({
   ...props
 }) => {
   return (
-    <button className={className || "btn"} type="submit" {...props}>
+    <button
+      className={className || "btn"}
+      type="submit"
+      {...props}
+      onClick={isLoading ? () => null : props.onClick}
+    >
       {isLoading ? (
         <LoadingIcon
           width={20}
