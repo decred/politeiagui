@@ -94,7 +94,7 @@ const onReceiveNewComment = (state, action) => {
 };
 
 const onReceiveNewCommentLike = (state, action) => {
-  if (action.error) return state;
+  if (action.error || action.payload.error) return state;
   const index = state.proposalComments.response.comments.findIndex(element =>
     element.commentid === action.payload.commentid
   );

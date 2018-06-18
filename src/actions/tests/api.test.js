@@ -564,6 +564,33 @@ describe("test api actions (actions/api.js)", () => {
     );
   });
 
+  test("on like comment action", async () => {
+    const path = "/api/v1/comments/like";
+    const commentid = 0;
+    const up_action = 1;
+    //const down_action = -1;
+    const params = [FAKE_USER.email, FAKE_PROPOSAL_TOKEN, up_action, commentid ];
+
+    // this needs a custom assertion for success response as the common one doesn't work for this case
+    setPostSuccessResponse(path);
+    const store = getMockedStore();
+    await store.dispatch(api.onLikeComment.apply(null, params));
+    const dispatchedActions = store.getActions();
+    expect(dispatchedActions[0].type).toEqual(act.RECEIVE_LIKE_COMMENT);
+    expect(dispatchedActions[0].error).toBeFalsy();
+
+    await assertApiActionOnError(
+      path,
+      api.onLikeComment,
+      params,
+      (e) => [
+        { type: act.RECEIVE_LIKE_COMMENT, error: true, payload: e }
+      ],
+      {},
+      methods.POST
+    );
+  });
+
   test("on update user key", async () => {
     const path = "/api/v1/user/key";
     const params = [FAKE_USER.email];
