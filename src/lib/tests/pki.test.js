@@ -13,6 +13,18 @@ describe("Key pair generation and storage handlers (lib/pki.js)", () => {
     expect(pki.toByteArray("042236")).toEqual(new Uint8Array([4, 34, 54]));
   });
 
+  test("converts and object to a uint8Array", () => {
+    const obj = {
+      0: 234,
+      1: 126,
+      2: 328
+    };
+    const uint8 = Uint8Array.from([234, 126, 328]);
+    expect(pki.toUnint8Array(obj)).toEqual(uint8);
+    //test it doesn't change an already Uint8array object
+    expect(pki.toUnint8Array(uint8)).toEqual(uint8);
+  });
+
   test("generate a key pair and save it with localforage", async () => {
     expect.assertions(1);
     const EMAIL = "foo@bar.com";

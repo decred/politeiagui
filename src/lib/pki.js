@@ -5,12 +5,17 @@ import util from "tweetnacl-util";
 import get from "lodash/fp/get";
 
 export const STORAGE_PREFIX = "ed255191~";
-export const toHex = x => Buffer.from(x).toString("hex");
+export const toHex = x => Buffer.from(toUnint8Array(x)).toString("hex");
+
 export const toByteArray = str => {
   const bytes = new Uint8Array(Math.ceil(str.length / 2));
   for (var i = 0; i < bytes.length; i++) bytes[i] = parseInt(str.substr(i * 2, 2), 16);
   return bytes;
 };
+
+export const toUnint8Array = (obj) =>
+  obj.constructor === Uint8Array ? obj :
+    Uint8Array.from(Object.keys(obj).map(key => obj[key]));
 
 export const loadKeys = (email, keys) => localforage.setItem(STORAGE_PREFIX + email, keys).then(() => keys);
 export const generateKeys = () => Promise.resolve(nacl.sign.keyPair());
