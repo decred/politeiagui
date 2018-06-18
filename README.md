@@ -26,6 +26,18 @@
 
     This way it is possible to determine when a vote has finished or not.
 ---
+
+## Testing 
+
+This code has currently unit tests for the core logic. Currently covering lib files (`/src/lib/*`) and actions files (`/src/actions/*`).
+Relevant libraries/modules used for testing are:
+ - [Jest](https://facebook.github.io/jest/docs/en/getting-started.html) - Javascript testing
+ - [fetch-mock](http://www.wheresrhys.co.uk/fetch-mock/api) - Mock http requests
+ - [redux-mock-store](https://github.com/dmitry-zaets/redux-mock-store) and [redux-actions-assertions](https://github.com/redux-things/redux-actions-assertions) for testing redux actions.
+
+There is more testing to be done, you can check it on this opened issue: https://github.com/decred/politeiagui/issues/376
+
+
 ## Docker
 
 `politeia` can be hosted in a docker container. To build the site and the docker container:
