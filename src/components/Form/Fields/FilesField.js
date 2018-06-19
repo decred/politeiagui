@@ -28,7 +28,15 @@ class FilesField extends React.Component {
   }
 
   render() {
-    const { placeholder="Upload", input, touched, error, disabled, policy } = this.props;
+    const {
+      placeholder="Upload",
+      input,
+      touched,
+      error,
+      disabled,
+      policy,
+      userCanExecuteActions
+    } = this.props;
     const { policyErrors } = this.state;
     const buttonStyle = {
       margin: 0
@@ -45,7 +53,10 @@ class FilesField extends React.Component {
             fileTypes={policy.validmimetypes}
             handleFiles={this.handleFilesChange}
           >
-            <button style={buttonStyle}>{placeholder}</button>
+            <button
+              className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
+              style={buttonStyle}
+            >{placeholder}</button>
           </ReactFileReader>
         </div>
         {touched && error && !disabled && <span className="error">{error}</span>}

@@ -14,6 +14,7 @@ const submitConnector = connect(
     initialValues: getNewProposalData,
     isLoading: or(sel.isLoadingSubmit, sel.newProposalIsRequesting),
     loggedInAsEmail: sel.loggedInAsEmail,
+    userCanExecuteActions: sel.userCanExecuteActions,
     policy: sel.policy,
     userid: sel.userid,
     username: sel.loggedInAsUsername,

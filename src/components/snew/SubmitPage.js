@@ -40,6 +40,7 @@ class SubmitPage extends React.Component {
       onSave,
       handleSubmit,
       newProposalError,
+      userCanExecuteActions
     } = this.props;
     return !policy || isLoading ? <PageLoadingIcon /> : (
       <div className="content" role="main">
@@ -85,6 +86,7 @@ class SubmitPage extends React.Component {
                           <Field
                             name="files"
                             component={FilesField}
+                            userCanExecuteActions={userCanExecuteActions}
                             placeholder="Attach files"
                             policy={policy}
                             normalize={normalizer}
@@ -96,7 +98,12 @@ class SubmitPage extends React.Component {
                 </div>
               </div>
               <div className="spacer">
-                <button className="btn" name="submit" type="submit" value="form" onClick={handleSubmit(onSave)}>
+                <button
+                  className={`btn togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                  name="submit"
+                  type="submit"
+                  value="form"
+                  onClick={handleSubmit(onSave)}>
                   submit
                 </button>
                 {newProposalError ? (
