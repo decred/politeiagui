@@ -5,7 +5,7 @@ import * as sel from "../selectors";
 
 export default connect(
   sel.selectorMap({
-    serverPubkey: sel.serverPubkey,
+    userPubkey: sel.userPubkey,
     loggedInAsEmail: sel.loggedInAsEmail,
     userCanExecuteActions: sel.userCanExecuteActions,
   }),

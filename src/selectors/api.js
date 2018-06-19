@@ -183,7 +183,8 @@ export const getPropTokenIfIsStartingVote = (state) => {
 
 export const userid = state => state.api.me.response && state.api.me.response.userid;
 
-export const serverPubkey = state => state.api.me.response && state.api.me.response.pubkey;
+export const serverPubkey = compose(get("pubkey"), apiInitResponse);
+export const userPubkey = compose(get("pubkey"), apiMeResponse);
 export const policy = apiPolicyResponse;
 export const isLoadingSubmit = or(isApiRequestingPolicy, isApiRequestingInit);
 export const apiVettedProposals = or(compose(get("proposals"), apiVettedResponse), constant([]));
