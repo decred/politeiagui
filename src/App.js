@@ -28,30 +28,26 @@ class Loader extends Component {
     this.props.onInit();
   }
 
+  verifyUserPubkey = (email, keyToBeMatched) =>
+    pki
+      .getKeys(email)
+      .then(keys =>
+        this.props.keyMismatchAction(
+          keys.publicKey !== keyToBeMatched
+        )
+      );
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.loggedInAsEmail) {
-      pki
-        .getKeys(nextProps.loggedInAsEmail)
-        .then(keys =>
-          this.props.keyMismatchAction(
-            keys.publicKey !== nextProps.serverPubkey
-          )
-        );
+      this.verifyUserPubkey(nextProps.loggedInAsEmail, nextProps.userPubkey);
     }
   }
 
   componentDidMount() {
     this.storageListener = createStorageListener(store);
     window.addEventListener("storage", this.storageListener);
-
     if (this.props.loggedInAsEmail) {
-      pki
-        .getKeys(this.props.loggedInAsEmail)
-        .then(keys =>
-          this.props.keyMismatchAction(
-            keys.publicKey !== this.props.serverPubkey
-          )
-        );
+      this.verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey);
     }
   }
 
