@@ -7,6 +7,7 @@ const ThingComment = ({
   onLikeComment,
   loggedInAsEmail,
   token,
+  keyMismatch,
   ...props
 }) => (
   <BaseComment {...{ ...props,
@@ -15,6 +16,7 @@ const ThingComment = ({
       e && e.preventDefault && e.preventDefault();
     },
     user: loggedInAsEmail,
+    blockvote: keyMismatch,
     handleVote: onLikeComment,
     token
   }} />

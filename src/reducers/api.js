@@ -83,7 +83,10 @@ const onReceiveNewComment = (state, action) => {
           {
             ...state.newComment.payload,
             token: state.proposal.payload,
-            userid: "me",
+            userid: state.newComment.response.userid,
+            username: state.me.response.username,
+            totalvotes: 0,
+            resultvotes: 0,
             commentid: state.newComment.response.commentid,
             timestamp: Date.now() / 1000
           }

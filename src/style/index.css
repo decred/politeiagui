@@ -43,11 +43,11 @@
 
 .score.likes {
     color: #2971ff;
-    display: inline-block !important;
+    display: none;
 }
 .score.dislikes {
     color: #fd714a;
-    display: inline-block !important;
+    display: none;
 }
 
 .login-form-side .status { display: block }

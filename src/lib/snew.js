@@ -79,8 +79,6 @@ export const commentsToT1 = compose(
           id: commentid,
           author: username || userid,
           score: resultvotes,
-          ups: 3,
-          downs: 15,
           score_hidden: false,
           parent_id: parentid || TOP_LEVEL_COMMENT_PARENTID,
           name: commentid,
