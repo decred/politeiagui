@@ -71,13 +71,15 @@ const getChildComments = ({ tree, comments }, parentid) => map(
 export const commentsToT1 = compose(
   getChildComments,
   reduce(
-    (r, { commentid, userid, username, parentid, token, comment, timestamp }) => ({
+    (r, { commentid, userid, username, parentid, token, comment, timestamp, resultvotes }) => ({
       ...r,
       comments: {
         ...r.comments,
         [commentid]: {
           id: commentid,
           author: username || userid,
+          score: resultvotes,
+          score_hidden: false,
           parent_id: parentid || TOP_LEVEL_COMMENT_PARENTID,
           name: commentid,
           body: comment,

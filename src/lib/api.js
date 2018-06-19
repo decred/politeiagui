@@ -39,6 +39,10 @@ export const makeComment = (token, comment, parentid) => ({
   token, parentid: parentid || TOP_LEVEL_COMMENT_PARENTID, comment
 });
 
+export const makeLikeComment = (token, action, commentid) => ({
+  token, commentid, action
+});
+
 export const signProposal = (email, proposal) => pki.myPubKeyHex(email).then(publickey => {
   const tree = new MerkleTree(proposal.files.map(x => Buffer.from(get("digest", x), "hex")).sort());
   const root = tree.root().toString("hex");
@@ -47,6 +51,10 @@ export const signProposal = (email, proposal) => pki.myPubKeyHex(email).then(pub
 
 export const signComment = (email, comment) => pki.myPubKeyHex(email).then(publickey =>
   pki.signStringHex(email, [comment.token, comment.parentid, comment.comment].join(""))
+    .then(signature => ({ ...comment, publickey, signature })));
+
+export const signLikeComment = (email, comment) => pki.myPubKeyHex(email).then(publickey =>
+  pki.signStringHex(email, [comment.token, comment.commentid, comment.action].join(""))
     .then(signature => ({ ...comment, publickey, signature })));
 
 const parseResponseBody = response => {
@@ -136,6 +144,8 @@ export const userProposals = userid =>
 
 export const login = (csrf, email, password) =>
   POST("/login", csrf, { email, password }).then(getResponse);
+
+export const likeComment = (csrf, comment) => POST("/comments/like", csrf, comment).then(getResponse);
 
 export const changeUsername = (csrf, password, newusername) =>
   POST("/user/username/change", csrf, { password, newusername }).then(getResponse);

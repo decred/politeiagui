@@ -30,9 +30,6 @@
   background-color: #0C1E3E;
 }
 
-.score,
-.reddiquette,
-.midcol.unvoted,
 .entry .buttons li.save-button,
 .entry .buttons li.give-gold-button,
 .entry .buttons li.report-button,
@@ -42,6 +39,15 @@
 #remember-me input,
 #remember-me label {
   display: none;
+}
+
+.score.likes {
+    color: #2971ff;
+    display: none;
+}
+.score.dislikes {
+    color: #fd714a;
+    display: none;
 }
 
 .login-form-side .status { display: block }

@@ -21,10 +21,11 @@ const replyConnector = connect(
     votesEndHeight: sel.votesEndHeight
   }),
   {
-    initialize: (data) => initialize("form/reply", data),
+    initialize: data => initialize("form/reply", data),
     onFetchData: act.onGetPolicy,
     onSubmitComment: act.onSubmitComment,
-    onSetReplyParent: act.onSetReplyParent
+    onSetReplyParent: act.onSetReplyParent,
+    onLikeComment: act.onLikeComment
   }
 );
 
@@ -39,26 +40,38 @@ class Wrapper extends Component {
     this.props.initialize(getNewCommentData());
   }
 
-  render () {
+  render() {
     const { Component, ...props } = this.props;
-    return <Component {...{ ...props, ...this.state,
-      onSave: this.onSave.bind(this),
-      onToggleMarkdownHelp: this.onToggleMarkdownHelp.bind(this)
-    }} />;
+    return (
+      <Component
+        {...{
+          ...props,
+          ...this.state,
+          onSave: this.onSave.bind(this),
+          onToggleMarkdownHelp: this.onToggleMarkdownHelp.bind(this)
+        }}
+      />
+    );
   }
 
   onSave(values) {
     const { loggedInAsEmail, token, replyTo, policy } = this.props;
-    validate({ values, ...this.props}, policy);
+    validate({ values, ...this.props }, policy);
     const { comment } = values;
-    return this.props.onSubmitComment(loggedInAsEmail, token, comment, replyTo)
-      .then(() =>  this.props.onSetReplyParent());
+    return this.props
+      .onSubmitComment(loggedInAsEmail, token, comment, replyTo)
+      .then(() => this.props.onSetReplyParent());
   }
 
   onToggleMarkdownHelp() {
-    this.setState({ isShowingMarkdownHelp: !this.state.isShowingMarkdownHelp});
+    this.setState({ isShowingMarkdownHelp: !this.state.isShowingMarkdownHelp });
   }
 }
 
-const wrap = (Component) => replyConnector(props => <Wrapper {...{...props, Component}} />);
-export default compose(withRouter, reduxForm({ form: "form/reply" }), wrap);
+const wrap = Component =>
+  replyConnector(props => <Wrapper {...{ ...props, Component }} />);
+export default compose(
+  withRouter,
+  reduxForm({ form: "form/reply" }),
+  wrap
+);

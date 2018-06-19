@@ -102,6 +102,18 @@ describe("api integration modules (lib/api.js)", () => {
     });
   });
 
+  test("like a comment", () => {
+    expect.assertions(1);
+    const COMMENT_ID = 3;
+    // make a comment with a parent Id
+    let comment = api.makeLikeComment(COMMENT_TOKEN, 1, COMMENT_ID);
+    expect(comment).toEqual({
+      token: COMMENT_TOKEN,
+      action: 1,
+      commentid: COMMENT_ID
+    });
+  });
+
   test("signs a proposal", async () => {
     expect.assertions(3);
     const proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE]);

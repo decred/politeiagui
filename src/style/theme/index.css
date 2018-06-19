@@ -382,20 +382,15 @@ body>.appWrapper>.content .link .rank {
 .link .midcol {
     width: 32px!important;
     margin: 0 16px 0 0;
-    height: 56px
+    height: 56px;
 }
 .link .score {
     line-height: 16px;
     font-size: 12px;
     text-align: center;
-    margin: 1px -100%
+    margin: 1px -100%;
 }
-.link .score.likes {
-    color: #2971ff
-}
-.link .score.dislikes {
-    color: #fd714a
-}
+
 .arrow {
     margin: 0;
     background-image: url("./spritesheet.png")!important;
@@ -436,24 +431,7 @@ body>.appWrapper>.content .link .rank {
     height: 20px;
     background-position: 0 -100px
 }
-.arrow.down:after {
-    display: block;
-    visibility: hidden;
-    position: absolute;
-    z-index: 1000;
-    margin: -6px 0 0 32px;
-    padding: 12px;
-    background: rgba(79, 77, 192, 0);
-    border-radius: 2px;
-    color: rgba(255, 255, 255, 0);
-    content: "For content that does not contribute to any discussion.";
-    text-align: center;
-    letter-spacing: 1px;
-    font-weight: 400;
-    font-size: 13px;
-    transition: all .25s ease;
-    pointer-events: none
-}
+
 .flairoptionpane,
 .flairselector .error,
 .flairselector form .flairselection,
