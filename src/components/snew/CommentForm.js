@@ -84,11 +84,15 @@ const CommentForm = ({
             content policy
             </Link>
             <div className="usertext-buttons">
-              <button className="save" type="submit">
+              <button
+                className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                type="submit"
+                disabled={!userCanExecuteActions}
+              >
               save
               </button>
               {(thingId && (<button
-                className="cancel"
+                className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
                 onClick={() => onSetReplyParent()}
                 type="button"
                 disabled={!userCanExecuteActions}
