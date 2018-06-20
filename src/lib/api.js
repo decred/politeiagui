@@ -128,8 +128,8 @@ export const verifyNewUser = searchQuery => {
     .then(getResponse);
 };
 
-export const verifyUserPayment = txid =>
-  GET(`/v1/user/verifypaymenttx?${qs.stringify({txid})}`).then(getResponse);
+export const verifyUserPayment = () =>
+  GET("/v1/user/verifypayment").then(getResponse);
 
 export const userProposals = userid =>
   GET(`/v1/user/proposals?${qs.stringify({ userid })}`).then(getResponse);
