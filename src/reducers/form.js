@@ -21,6 +21,22 @@ const formReducer = reducer.plugin({
     default:
       return state;
     }
+  },
+  "form/change-username": (state, action) => {
+    switch(action.type) {
+    case act.RECEIVE_CHANGE_USERNAME:
+      return !action.error ? undefined : state;
+    default:
+      return state;
+    }
+  },
+  "form/change-password": (state, action) => {
+    switch(action.type) {
+    case act.RECEIVE_CHANGE_PASSWORD:
+      return !action.error ? undefined : state;
+    default:
+      return state;
+    }
   }
 });
 

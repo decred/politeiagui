@@ -39,9 +39,13 @@ class Wrapper extends Component {
     return <Component {...{ ...this.props, onLogin: this.onLogin.bind(this) }} />;
   }
 
-  onLogin(...args) {
-    validate(...args);
-    return this.props.onLogin(...args).then(() => {
+  onLogin(args) {
+    args = {
+      ...args,
+      email: args.email.trim()
+    };
+    validate(args);
+    return this.props.onLogin(args).then(() => {
       if (this.props.isAdmin) {
         this.props.history.push("/admin/");
       } else {

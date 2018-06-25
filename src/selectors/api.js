@@ -113,12 +113,15 @@ export const csrf = or(
   compose(get("csrfToken"), apiMeResponse),
   compose(get("csrfToken"), apiInitResponse)
 );
+
+export const newUserEmail = compose(get("email"), apiNewUserPayload);
+export const forgottenPassEmail = compose(get("email"), apiForgottenPasswordPayload);
+
 export const email = or(
   compose(get("email"), apiMeResponse),
-  compose(get("email"), apiLoginPayload),
-  compose(get("email"), apiNewUserPayload),
-  compose(get("email"), apiForgottenPasswordPayload)
+  compose(get("email"), apiLoginPayload)
 );
+
 export const loggedInAsEmail = or(
   compose(get("email"), apiMeResponse)
 );
