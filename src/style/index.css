@@ -607,11 +607,6 @@ li p.header-3 {
   margin-bottom: 10px;
 }
 
-.paywall-faucet-error {
-  color: #bf4153;
-  padding-top: 8px;
-}
-
 .paywall-address,
 .paywall-amount {
   font-weight: bold;
