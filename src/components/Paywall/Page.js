@@ -16,7 +16,8 @@ const Paywall = ({
   userPaywallStatus,
   userPaywallConfirmations,
   isTestnet,
-  isApiRequestingPayWithFaucet
+  isApiRequestingPayWithFaucet,
+  payWithFaucetError
 }) => {
   let userPaywallStatusCls;
   let userPaywallStatusText;
@@ -80,6 +81,12 @@ const Paywall = ({
                     disabled={userPaywallStatus === PAYWALL_STATUS_PAID}
                     isLoading={isApiRequestingPayWithFaucet}
                     onClick={() => payWithFaucet(paywallAddress, paywallAmount)} />
+                  {payWithFaucetError ? (
+                    <Message
+                      type="error"
+                      header="Faucet Error"
+                      body={payWithFaucetError} />
+                  ) : null }
                 </div>
               ) : null}
             </div>

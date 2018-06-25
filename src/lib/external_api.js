@@ -68,7 +68,8 @@ export const getPaymentsByAddressInsight = address => {
 export const payWithFaucet = (address, amount) => {
   const data = {
     address,
-    amount
+    amount,
+    json: true
   };
 
   return POST(FAUCET_URL, data);
