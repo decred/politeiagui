@@ -14,7 +14,9 @@ class ChangeUsername extends Component {
 
   onChangeUsername(props) {
     const policy = this.props.policy;
-
+    props = { ...props,
+      newUsername: props.newUsername.trim()
+    };
     validate(props, policy);
 
     return this.props.onChangeUsername(props)

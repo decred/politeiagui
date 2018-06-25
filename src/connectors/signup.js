@@ -52,10 +52,14 @@ class Wrapper extends Component {
     return <Component {...{ ...this.props, onSignup: this.onSignup.bind(this) }} />;
   }
 
-  onSignup(...args) {
+  onSignup(args) {
+    args = {
+      ...args,
+      email: args.email.trim()
+    };
     const policy = this.props.policy || {};
-    validate(policy, ...args);
-    return this.props.onSignup(...args).catch(e => {
+    validate(policy, args);
+    return this.props.onSignup(args).catch(e => {
       throw new SubmissionError({
         _error: e.message,
       });
