@@ -6,7 +6,7 @@ import * as act from "../actions";
 
 const forgottenPasswordNextConnector = connect(
   sel.selectorMap({
-    email: sel.email,
+    email: sel.forgottenPassEmail,
   }),
   dispatch => bindActionCreators({
     resetForgottenPassword: act.resetForgottenPassword,

@@ -6,7 +6,7 @@ import * as act from "../actions";
 
 const signupNextConnector = connect(
   sel.selectorMap({
-    email: sel.email,
+    email: sel.newUserEmail,
   }),
   dispatch => bindActionCreators({
     onResetNewUser: act.onResetNewUser,
