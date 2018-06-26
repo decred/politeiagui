@@ -577,15 +577,23 @@ describe("test api actions (actions/api.js)", () => {
     await store.dispatch(api.onLikeComment.apply(null, params));
     const dispatchedActions = store.getActions();
     expect(dispatchedActions[0].type).toEqual(act.RECEIVE_LIKE_COMMENT);
-    expect(dispatchedActions[0].error).toBeFalsy();
 
     await assertApiActionOnError(
       path,
       api.onLikeComment,
       params,
       (e) => [
-        { type: act.RECEIVE_LIKE_COMMENT, error: true, payload: e }
-      ],
+        {
+          "callback": null,
+          "modalType": "LOGIN",
+          "payload": {},
+          "type": "OPEN_MODAL"
+        },
+        {
+          "error": true,
+          "payload": e,
+          "type": "API_RECEIVE_LIKE_COMMENT"
+        }],
       {},
       methods.POST
     );

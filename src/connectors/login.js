@@ -46,10 +46,15 @@ class Wrapper extends Component {
     };
     validate(args);
     return this.props.onLogin(args).then(() => {
-      if (this.props.isAdmin) {
-        this.props.history.push("/admin/");
+      const redirectedFrom = this.props.redirectedFrom;
+      if (redirectedFrom) {
+        this.props.history.push(redirectedFrom);
       } else {
-        this.props.history.push("/");
+        if (this.props.isAdmin) {
+          this.props.history.push("/admin/");
+        } else {
+          this.props.history.push("/");
+        }
       }
     }).catch(e => {
       throw new SubmissionError({
