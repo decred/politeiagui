@@ -13,7 +13,9 @@ export default connect(
     userPaywallConfirmations: sel.getUserPaywallConfirmations,
     verificationToken: sel.verificationToken,
     isTestnet: sel.isTestNet,
-    isApiRequestingPayWithFaucet: sel.isApiRequestingPayWithFaucet
+    isApiRequestingPayWithFaucet: sel.isApiRequestingPayWithFaucet,
+    payWithFaucetTxId: sel.payWithFaucetTxId,
+    payWithFaucetError: sel.payWithFaucetError
   }),
   dispatch => bindActionCreators({
     payWithFaucet: act.payWithFaucet,

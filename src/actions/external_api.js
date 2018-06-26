@@ -113,9 +113,14 @@ const checkInsightHandler = (transaction, addressToMatch, amount, txNotBefore) =
 export const payWithFaucet = (address, amount) => dispatch => {
   dispatch(act.REQUEST_PAYWALL_PAYMENT_WITH_FAUCET());
   return external_api.payWithFaucet(address, amount)
-    .then(() => dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET({faucetPayment: true})))
+    .then(json => {
+      if(json.Error) {
+        return dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(null, new Error(json.Error)));
+      }
+      return dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(json));
+    })
     .catch(error => {
-      dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(false, error));
+      dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(null, error));
       throw error;
     });
 };

@@ -235,28 +235,28 @@ a:hover {
 .message-success {
   border: 1px solid #41bf53;
 }
-.message-success .message-icon {
+.message-success > .message-icon {
   background: #41bf53;
 }
-.message-success .message-header {
+.message-success > .message-text > .message-header {
   color: #41bf53;
 }
 .message-error {
   border: 1px solid #bf4153;
 }
-.message-error .message-icon {
+.message-error > .message-icon {
   background: #bf4153;
 }
-.message-error .message-header {
+.message-error > .message-text > .message-header {
   color: #bf4153;
 }
 .message-info {
   border: 1px solid #2971FF;
 }
-.message-info .message-icon {
+.message-info > .message-icon {
   background: #2971FF;
 }
-.message-info .message-header {
+.message-info > .message-text > .message-header {
   color: #2971FF;
 }
 
@@ -611,6 +611,13 @@ li p.header-3 {
 
 .paywall-faucet p {
   margin-bottom: 10px;
+}
+
+.paywall-faucet-success {
+  height: 44px;
+  line-height: 44px;
+  font-size: 16px;
+  color: #41bf53;
 }
 
 .paywall-address,

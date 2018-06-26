@@ -19,6 +19,7 @@ beforeEach(() => {
 describe("test actions/external_api", () => {
   // const verifyResponseSuccess =
   const FAKE_ADDRESS = "TsUMTGNMHNqivWpWAbWHvPfoG5GuefF9zWt";
+  const FAKE_TRANSACTION = "ed4bac11c56cb7a8ceb9dc03278c5abb3ff482e08597e4774e534107c7705f4d";
   const AMOUNT = 0.1;
   const FAKE_TX_NOT_BEFORE = "1527263799";
 
@@ -70,7 +71,7 @@ describe("test actions/external_api", () => {
 
     //test payment succeed
     store.clearActions();
-    setPostSuccessResponse(faucetPath);
+    setPostSuccessResponse(faucetPath, {}, { TxId: FAKE_TRANSACTION, Error: "" });
     await store.dispatch(ea.payWithFaucet.apply(null, params));
     expect(store.getActions()).toEqual([
       {
@@ -81,7 +82,7 @@ describe("test actions/external_api", () => {
       {
         type: act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET,
         error: false,
-        payload: { faucetPayment: true }
+        payload: { TxId: FAKE_TRANSACTION, Error: "" }
       }
     ]);
     //test when payment fails

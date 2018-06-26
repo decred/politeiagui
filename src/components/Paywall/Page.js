@@ -16,7 +16,9 @@ const Paywall = ({
   userPaywallStatus,
   userPaywallConfirmations,
   isTestnet,
-  isApiRequestingPayWithFaucet
+  isApiRequestingPayWithFaucet,
+  payWithFaucetTxId,
+  payWithFaucetError
 }) => {
   let userPaywallStatusCls;
   let userPaywallStatusText;
@@ -80,6 +82,19 @@ const Paywall = ({
                     disabled={userPaywallStatus === PAYWALL_STATUS_PAID}
                     isLoading={isApiRequestingPayWithFaucet}
                     onClick={() => payWithFaucet(paywallAddress, paywallAmount)} />
+                  {payWithFaucetError ? (
+                    <Message
+                      type="error"
+                      header="Faucet Error"
+                      body={payWithFaucetError} />
+                  ) : null }
+                  {payWithFaucetTxId ? (
+                    <Message
+                      type="info"
+                      header="Sent Payment">
+                      Sent transaction <a href={"https://testnet.dcrdata.org/explorer/tx/" + payWithFaucetTxId}>{payWithFaucetTxId}</a> to the address; it may take a few minutes to be confirmed.
+                    </Message>
+                  ) : null}
                 </div>
               ) : null}
             </div>
