@@ -4,6 +4,7 @@ const Message = ({
   type,
   header,
   body,
+  children,
   height,
   className,
   onDismissClick
@@ -29,7 +30,8 @@ const Message = ({
       <div className="message-text" style={{flexGrow: "1"}}>
         <div className="message-header">{header}</div>
         <div className="message-body">
-          {(body instanceof Error) ? body.message : body}
+          {body ? (body instanceof Error) ? body.message : body : null}
+          {children ? children : null}
         </div>
       </div>
       {onDismissClick &&

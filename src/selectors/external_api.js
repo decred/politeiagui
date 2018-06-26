@@ -11,9 +11,7 @@ export const isApiRequestingPayWithFaucet = or(
   getIsApiRequesting("blockHeight"),
 );
 
-export const payWithFaucetError = or(
-  compose(get("Error"), getApiResponse("payWithFaucet")),
-  getApiError("payWithFaucet")
-);
+export const payWithFaucetError = getApiError("payWithFaucet");
+export const payWithFaucetTxId = compose(get("Txid"), getApiResponse("payWithFaucet"));
 
 export const lastBlockHeight = getApiResponse("blockHeight");

@@ -17,6 +17,7 @@ const Paywall = ({
   userPaywallConfirmations,
   isTestnet,
   isApiRequestingPayWithFaucet,
+  payWithFaucetTxId,
   payWithFaucetError
 }) => {
   let userPaywallStatusCls;
@@ -87,6 +88,13 @@ const Paywall = ({
                       header="Faucet Error"
                       body={payWithFaucetError} />
                   ) : null }
+                  {payWithFaucetTxId ? (
+                    <Message
+                      type="info"
+                      header="Sent Payment">
+                      Sent transaction <a href={"https://testnet.dcrdata.org/explorer/tx/" + payWithFaucetTxId}>{payWithFaucetTxId}</a> to the address; it may take a few minutes to be confirmed.
+                    </Message>
+                  ) : null}
                 </div>
               ) : null}
             </div>
