@@ -18,6 +18,7 @@ export default connect(
   dispatch => bindActionCreators({
     onFetchData: act.onFetchVetted,
     onChangeStatus: act.onSubmitStatusProposal,
-    onFetchActiveVotes: act.onFetchActiveVotes
+    onFetchActiveVotes: act.onFetchActiveVotes,
+    onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus
   }, dispatch)
 );

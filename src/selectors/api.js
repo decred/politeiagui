@@ -30,6 +30,8 @@ export const isApiRequestingVoteResults = getIsApiRequesting("voteResults");
 export const isApiRequestingNewComment = getIsApiRequesting("newComment");
 export const isApiRequestingSetStatusProposal = getIsApiRequesting("setStatusProposal");
 export const isApiRequestingStartVote = getIsApiRequesting("startVote");
+export const isApiRequestingPropsVoteStatus = getIsApiRequesting("proposalsVoteStatus");
+export const isApiRequestingPropVoteStatus = getIsApiRequesting("proposalVoteStatus");
 export const isApiRequesting = or(
   isApiRequestingInit,
   isApiRequestingPolicy,
@@ -78,6 +80,12 @@ const apiActiveVotesError = getApiError("activeVotes");
 const apiSetStartVoteResponse = getApiResponse("startVote");
 const apiVoteResultsResponse = getApiResponse("voteResults");
 const apiVoteResultsError = getApiError("voteResults");
+
+export const apiPropsVoteStatusResponse = getApiResponse("proposalsVoteStatus");
+export const apiPropsVoteStatusError = getApiError("proposalsVoteStatus");
+
+export const apiPropVoteStatusResponse = getApiResponse("proposalVoteStatus");
+export const apiPropVoteStatusError = getApiError("proposalVoteStatusError");
 
 const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
@@ -182,6 +190,20 @@ export const getPropTokenIfIsStartingVote = (state) => {
     return state.api.startVote.payload && state.api.startVote.payload.token;
   }
   return undefined;
+};
+
+export const getPropVoteStatus = state => token => {
+  // try to get it from single prop response (proposal detail)
+  let vsResponse = apiPropVoteStatusResponse(state);
+  if(vsResponse && vsResponse.token === token)
+    return vsResponse;
+  // otherwise try to get it from the all vote status response (public props)
+  vsResponse = apiPropsVoteStatusResponse(state);
+  if (vsResponse && vsResponse.votesstatus) {
+    const voteStatus = vsResponse.votesstatus.filter(vs => vs.token === token)[0];
+    return voteStatus || {};
+  }
+  return {};
 };
 
 export const userid = state => state.api.me.response && state.api.me.response.userid;

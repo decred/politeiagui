@@ -13,6 +13,7 @@ class ProposalDetail extends React.Component {
       nextProps.proposal && Object.keys(nextProps.proposal).length > 0 &&
       nextProps.proposal.status === 4 ){
       this.props.onFetchVoteResults(this.props.token);
+      this.props.onFetchProposalVoteStatus(this.props.token);
     }
   }
   render() {

@@ -221,3 +221,7 @@ export const voteResults = (token) => GET(`/v1/proposals/${token}/votes`).then(g
 export const usernamesById = (userids) => {
   return POST("/usernames", null, { userids }).then(getResponse);
 };
+
+export const proposalsVoteStatus = () => GET("/v1/proposals/votestatus").then(getResponse);
+export const proposalVoteStatus = (token) => GET(`/v1/proposals/${token}/votestatus`).then(getResponse);
+

@@ -70,6 +70,7 @@ export const CustomContent = ({
 class Loader extends Component {
   componentDidMount() {
     this.props.onFetchActiveVotes && this.props.onFetchActiveVotes();
+    this.props.onFetchProposalsVoteStatus && this.props.onFetchProposalsVoteStatus();
     this.props.onFetchData && this.props.onFetchData();
     if(this.props.isProposalStatusApproved){
       this.props.onChangeProposalStatusApproved(false);

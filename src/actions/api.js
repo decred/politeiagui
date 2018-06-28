@@ -452,3 +452,27 @@ export const onFetchUsernamesById = userIds => dispatch => {
       throw error;
     });
 };
+
+export const onFetchProposalsVoteStatus = () => (dispatch) => {
+  dispatch(act.REQUEST_PROPOSALS_VOTE_STATUS());
+  return api.proposalsVoteStatus().then(
+    response => dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS({ ...response, success: true }))
+  ).catch(
+    error => {
+      dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS(null, error));
+      throw error;
+    }
+  );
+};
+
+export const onFetchProposalVoteStatus = (token) => (dispatch) => {
+  dispatch(act.REQUEST_PROPOSALS_VOTE_STATUS({ token }));
+  return api.proposalVoteStatus(token).then(
+    response => dispatch(act.RECEIVE_PROPOSAL_VOTE_STATUS({ ...response, success: true }))
+  ).catch(
+    error => {
+      dispatch(act.RECEIVE_PROPOSAL_VOTE_STATUS(null, error));
+      throw error;
+    }
+  );
+};

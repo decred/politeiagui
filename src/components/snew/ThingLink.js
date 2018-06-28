@@ -35,8 +35,6 @@ const ThingLinkComp = ({
   title,
   url,
   votesEndHeight,
-  castedVotes,
-  voteDetails,
   permalink,
   is_self,
   selftext,
@@ -54,8 +52,7 @@ const ThingLinkComp = ({
   setStatusProposalToken,
   setStatusProposalError,
   tokenFromStartingVoteProp,
-  lastBlockHeight,
-  isTestnet
+  isTestnet,
 }) => (
   <div
     className={`thing id-${id} odd link ${
@@ -86,27 +83,6 @@ const ThingLinkComp = ({
         <Link className="title may-blank loggedin" href={url} tabIndex={rank}>
           {title}
         </Link>{" "}
-        {
-          votesEndHeight[id] ?
-            votesEndHeight[id] >= lastBlockHeight ?
-              (<span style={{
-                padding: "4px 8px",
-                borderRadius: "8px",
-                fontSize: "12px",
-                color: "green"
-              }}>
-                  Proposal active for voting
-              </span>) :
-              (<span style={{
-                padding: "4px 8px",
-                borderRadius: "8px",
-                fontSize: "12px",
-                color: "gray"
-              }}>
-                  Proposal finished voting
-              </span>)
-            : null
-        }
         {domain ? (
           <span className="domain">
             (<Link href={`/domain/${domain}/`}>{domain}</Link>)
@@ -128,8 +104,9 @@ const ThingLinkComp = ({
       <p className="tagline proposal-token">
         {id} • {getProposalStatus(review_status)}
       </p>
-      {votesEndHeight[id] && voteDetails && voteDetails.vote && castedVotes &&
-        <VoteStats voteOptions={voteDetails.vote.options} castedVotes={castedVotes}/>
+      {
+        review_status === 4 &&
+        <VoteStats token={id} />
       }
       {expanded &&
         (lastSubmitted === id ? (
