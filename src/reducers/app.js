@@ -41,6 +41,7 @@ const app = (state = DEFAULT_STATE, action) => (({
     }
   },
   [act.SET_PROPOSAL_APPROVED]: () => ({...state, isProposalStatusApproved: action.payload}),
+  [act.SET_NETWORK]: () => ({...state, isTestNet: action.payload}),
   [act.RECEIVE_USERNAMES]: () => ({...state, usernamesById: action.payload.usernamesById }),
   [act.SET_VOTES_END_HEIGHT]: () => ({...state, votesEndHeight: { ...state.votesEndHeight, [action.payload.token]: action.payload.endheight }}),
   [act.REQUEST_SIGNUP_CONFIRMATION]: () => ({ ...state, isShowingSignupConfirmation: true }),
