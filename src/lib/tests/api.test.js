@@ -226,17 +226,10 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
-  test("verify user payment (api/v1/user/verifypaymenttx)", async () => {
-    const PATH = "/api/v1/user/verifypaymenttx";
-    const TXID = 10;
-    await assertRouteIsCalledWithQueryParams(
-      PATH,
-      {
-        txid: TXID.toString()
-      },
-      api.verifyUserPayment,
-      [TXID]
-    );
+  test("verify user payment (api/v1/user/verifypayment)", async () => {
+    const PATH = "/api/v1/user/verifypayment";
+    const MOCK_RESULT = await import(`${MOCKS_PATH}/v1/user/verifypayment/GET.json`);
+    await assertGETOnRouteIsCalled(PATH, api.verifyUserPayment, [], MOCK_RESULT);
   });
 
   test("fetch user proposals (api/v1/user/proposals)", async () => {
