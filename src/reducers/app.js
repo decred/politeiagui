@@ -57,7 +57,8 @@ const app = (state = DEFAULT_STATE, action) => (({
   [act.CLEAN_SLATE]: () => ({
     ...state,
     isShowingSignupConfirmation: false
-  })
+  }),
+  [act.SHOULD_AUTO_VERIFY_KEY]: () => ({ ...state, shouldVerifyKey: action.payload }),
 })[action.type] || (() => state))();
 
 export default app;

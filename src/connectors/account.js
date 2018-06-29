@@ -12,6 +12,8 @@ export default connect(
     keyMismatch: sel.getKeyMismatch,
     updateUserKey: sel.updateUserKey,
     updateUserKeyError: sel.updateUserKeyError,
+    verificationToken: sel.verificationToken,
+    shouldAutoVerifyKey: sel.shouldAutoVerifyKey,
   }),
   { onUpdateUserKey }
 );
