@@ -104,7 +104,7 @@ const RegisterForm = ({
       {error || apiNewUserError || apiVerifyNewUserError ? (
         <Message
           type="error"
-          header="Signup failed"
+          header="Signup error"
           body={error || apiNewUserError || apiVerifyNewUserError} />
       ) : null}
     </div>

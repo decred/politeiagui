@@ -21,11 +21,9 @@ const UserProfile = ({
     <div className="page user-profile-page">
       <h1>User Profile</h1>
       {updateUserKey && updateUserKey.success &&
-        <Message
-          type="success"
-          header="Key Verification Required"
-          body={<UpdatedKeyMessage email={loggedInAsEmail} />}
-        />
+        <Message type="success" header="Email verification required">
+          <UpdatedKeyMessage email={loggedInAsEmail} />
+        </Message>
       }
       {updateUserKeyError &&
         <Message

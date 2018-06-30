@@ -20,19 +20,6 @@ const ChangeUsernameForm = ({
       body={error}
     />}
     <div className="c-form-group">
-      <label className="screenreader-only" htmlFor="password">
-        Password:
-      </label>
-      <Field
-        className="c-form-control"
-        id="password"
-        name="password"
-        component="input"
-        type="password"
-        placeholder="Password"
-        tabIndex={3} />
-    </div>
-    <div className="c-form-group">
       <label className="screenreader-only" htmlFor="username">
         New Username:
       </label>
@@ -43,6 +30,19 @@ const ChangeUsernameForm = ({
         component="input"
         type="username"
         placeholder={getUsernameFieldLabel(policy, "New Username")}
+        tabIndex={3} />
+    </div>
+    <div className="c-form-group">
+      <label className="screenreader-only" htmlFor="password">
+        Current Password:
+      </label>
+      <Field
+        className="c-form-control"
+        id="password"
+        name="password"
+        component="input"
+        type="password"
+        placeholder="Current Password"
         tabIndex={3} />
     </div>
     <div className="c-clearfix c-submit-group">

@@ -30,7 +30,11 @@ const Message = ({
       <div className="message-text" style={{flexGrow: "1"}}>
         <div className="message-header">{header}</div>
         <div className="message-body">
-          {body ? (body instanceof Error) ? body.message : body : null}
+          {body ? (
+            <span style={{whiteSpace: "pre-wrap"}}>
+              {(body instanceof Error) ? body.message : body }
+            </span>
+          ) : null}
           {children ? children : null}
         </div>
       </div>

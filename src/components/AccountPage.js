@@ -68,7 +68,7 @@ class KeyPage extends React.Component {
           <Message
             type="error"
             className="account-page-message"
-            header="Action Needed"
+            header="Action needed"
             body={(
               <div>
                 <p>
@@ -133,7 +133,7 @@ class KeyPage extends React.Component {
             updateUserKey.success && (
             <Message
               type="info"
-              header="Verification Required"
+              header="Verification required"
               body={<UpdatedKeyMessage email={loggedInAsEmail} />}
             />
           )}

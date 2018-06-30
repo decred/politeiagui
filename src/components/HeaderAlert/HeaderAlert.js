@@ -6,7 +6,7 @@ const HeaderAlert = (props) =>
   <div className={`header-alert ${props.className}`} style={props.style}>
     <Message
       type="error"
-      header="Action Needed"
+      header="Action needed"
       body={props.children}
     />
   </div>;

@@ -13,22 +13,17 @@ const Page = ({
   ) : verifyNewUserError ? (
     <div className="page verification-failure-page">
       {verifyNewUserError.errorCode === 23 ? (
-        <Message
-          type="error"
-          header="Verification failed"
-          body={(
-            <div>
-              <p>
-                The provided signature was invalid, which is usually caused from
-                the local data on your browser being cleared or by using a
-                different browser from the one you registered with.
-              </p>
-              <p>
-                Please open the link from your verification email in the same
-                browser that you used to register.
-              </p>
-            </div>
-          )} />
+        <Message type="error" header="Verification failed">
+          <p>
+            The provided signature was invalid, which is usually caused from
+            the local data on your browser being cleared or by using a
+            different browser from the one you registered with.
+          </p>
+          <p>
+            Please open the link from your verification email in the same
+            browser that you used to register.
+          </p>
+        </Message>
       ) : (
         <Message
           type="error"

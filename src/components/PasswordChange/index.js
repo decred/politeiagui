@@ -30,8 +30,8 @@ class ChangePassword extends Component {
       <div>
         {this.props.changePasswordResponse && <Message
           type="success"
-          header="Change Password success"
-          body="The password was successfully updated" />}
+          header="Password changed"
+          body="Your password was successfully changed." />}
         <ChangePasswordForm
           {...{
             ...this.props,
