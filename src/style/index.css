@@ -69,7 +69,7 @@ html, body {
   width: 100%;
   padding: 0;
   margin: 0;
-  background: #f4f7f9;
+  background: #586D82;
   font-family: "Source Sans Pro", "Helvetica Neue", arial, sans-serif;
   font-weight: 400;
   font-size: 14px;
@@ -716,6 +716,6 @@ li p.header-3 {
   user-select: none;
 }
 
-.appWrapper>.content {
-  margin-top: 92px !important;
+.appWrapper {
+  background: #f4f7f9;
 }
