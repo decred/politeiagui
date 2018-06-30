@@ -2065,9 +2065,7 @@ button.disabled {
 .morecomments a {
     color: #e2e2e2
 }
-.comments-page .side {
-    margin-top: auto; /*custom side*/
-}
+
 .comments-page .side .linkinfo {
     position: absolute;
     top: 494px;
@@ -3279,10 +3277,10 @@ a.thumbnail.may-blank {
     background: rgba(0, 0, 0, 0)
 }
 .side {
-    margin: 92px 16px 108px 0
+    margin: 92px 16px 108px 0;
 }
 .submit .morelink {
-    top: 0
+    top: 0;
 }
 .spacer {
     position: relative
