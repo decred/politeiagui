@@ -30,6 +30,11 @@
   background-color: #0C1E3E;
 }
 
+/* Ensure the first letter of the proposal token is not capitalized */
+.link .entry .proposal-token:first-letter {
+  text-transform: none !important;
+}
+
 .entry .buttons li.save-button,
 .entry .buttons li.give-gold-button,
 .entry .buttons li.report-button,

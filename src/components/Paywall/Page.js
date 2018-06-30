@@ -48,7 +48,7 @@ const Paywall = ({
     <Message
       type="error"
       className="account-page-message"
-      header="Action Needed"
+      header="Action needed"
       body={(
         <div className="paywall-wrapper">
           <div className="paywall-content">
@@ -85,13 +85,13 @@ const Paywall = ({
                   {payWithFaucetError ? (
                     <Message
                       type="error"
-                      header="Faucet Error"
+                      header="Faucet error"
                       body={payWithFaucetError} />
                   ) : null }
                   {payWithFaucetTxId ? (
                     <Message
                       type="info"
-                      header="Sent Payment">
+                      header="Sent payment">
                       Sent transaction <a href={"https://testnet.dcrdata.org/explorer/tx/" + payWithFaucetTxId}>{payWithFaucetTxId}</a> to the address; it may take a few minutes to be confirmed.
                     </Message>
                   ) : null}

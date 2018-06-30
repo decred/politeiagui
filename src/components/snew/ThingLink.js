@@ -125,7 +125,7 @@ const ThingLinkComp = ({
           {numcomments}{numcomments === 1 ? " comment" : " comments"}
         </Link>
       </p>
-      <p className="tagline">
+      <p className="tagline proposal-token">
         {id} • {getProposalStatus(review_status)}
       </p>
       {votesEndHeight[id] && voteDetails && voteDetails.vote && castedVotes &&
@@ -133,46 +133,42 @@ const ThingLinkComp = ({
       }
       {expanded &&
         (lastSubmitted === id ? (
-          <Message
-            height={"120px"}
-            body={
-              <span>
-                <p
-                  style={{
-                    marginTop: "0.4166667em",
-                    marginBottom: "0.4166667em"
-                  }}
+          <Message height="120px" type="info">
+            <span>
+              <p
+                style={{
+                  marginTop: "0.4166667em",
+                  marginBottom: "0.4166667em"
+                }}
+              >
+                Your proposal has been created, but it will not be public
+                until an admin approves it. You can{" "}
+                <DownloadBundle message="download your proposal" /> and use
+                the{" "}
+                <a
+                  href="https://github.com/decred/politeia/tree/master/politeiad/cmd/politeia_verify"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  Your proposal has been created, but it will not be public
-                  until an admin approves it. You can{" "}
-                  <DownloadBundle message="download your proposal" /> and use
-                  the{" "}
-                  <a
-                    href="https://github.com/decred/politeia/tree/master/politeiad/cmd/politeia_verify"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    politeia_verify tool
-                  </a>{" "}
-                  to prove that your submission has been accepted for review by
-                  Politeia.
-                </p>
-                <p
-                  style={{
-                    marginTop: "0.4166667em",
-                    marginBottom: "0.4166667em"
-                  }}
-                >
-                  <span style={{ fontWeight: "bold" }}>Note:</span> You will not
-                  have access to your proposal content after you close this
-                  page, so it's highly recommended that you download your
-                  proposal if you think it could be unfairly censored by
-                  Politeia admins.
-                </p>
-              </span>
-            }
-            type="info"
-          />
+                  politeia_verify tool
+                </a>{" "}
+                to prove that your submission has been accepted for review by
+                Politeia.
+              </p>
+              <p
+                style={{
+                  marginTop: "0.4166667em",
+                  marginBottom: "0.4166667em"
+                }}
+              >
+                <span style={{ fontWeight: "bold" }}>Note:</span> You will not
+                have access to your proposal content after you close this
+                page, so it's highly recommended that you download your
+                proposal if you think it could be unfairly censored by
+                Politeia admins.
+              </p>
+            </span>
+          </Message>
         ) : (
           <div style={{ marginTop: "15px", marginBottom: "15px" }}>
             <DownloadBundle />

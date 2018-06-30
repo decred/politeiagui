@@ -50,11 +50,9 @@ class SubmitPage extends React.Component {
             className="submit content warn-on-unload"
             id="newlink"
           >
-            <Message
-              type="info"
-              header="Important information about proposals"
-              body={<ProposalInfo policy={policy} />}
-            />
+            <Message type="info" header="Important information about proposals">
+              <ProposalInfo policy={policy} />
+            </Message>
             <div className="formtabs-content">
               <div className="spacer">
                 <Field
@@ -106,18 +104,16 @@ class SubmitPage extends React.Component {
                   onClick={handleSubmit(onSave)}>
                   submit
                 </button>
-                {newProposalError ? (
-                  <Message
-                    type="error"
-                    header="Error creating proposal"
-                    body={<MultipleItemsBodyMessage items={newProposalError} />} />
-                ) : null}
-                {error ? (
-                  <Message
-                    type="error"
-                    header="Error creating proposal"
-                    body={<MultipleItemsBodyMessage items={error} />} />
-                ) : null}
+                {newProposalError && (
+                  <Message type="error" header="Error creating proposal">
+                    <MultipleItemsBodyMessage items={newProposalError} />
+                  </Message>
+                )}
+                {error && (
+                  <Message type="error" header="Error creating proposal">
+                    <MultipleItemsBodyMessage items={error} />
+                  </Message>
+                )}
               </div>
               <div className="spacer">
                 <div className="roundfield">

@@ -32,8 +32,8 @@ class ChangeUsername extends Component {
       <div>
         {this.props.changeUsernameResponse && <Message
           type="success"
-          header="Updated Username"
-          body="The username was successfully updated" />}
+          header="Username changed"
+          body="Your username was successfully changed." />}
         <ChangeUsernameForm
           {...{
             ...this.props,
