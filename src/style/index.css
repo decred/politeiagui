@@ -286,6 +286,8 @@ a:hover {
 .attached-image {
   display: block;
   float: left;
+  position: relative;
+  width: 100%;
 }
 .attached-image-remove {
   display: block;
