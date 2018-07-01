@@ -443,7 +443,7 @@ li p.header-3 {
 .verification-success-page,
 .user-profile-page {
   width: 600px;
-  box-sizing: content-box;
+  padding-right: 0px !important;
 }
 .signup-next-step-page h3,
 .forgotten-password-next-step-page h3,
