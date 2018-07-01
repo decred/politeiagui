@@ -283,15 +283,22 @@ a:hover {
   margin-top: 16px;
 }
 
+.attached-image-ct {
+  margin-top: 16px;
+}
 .attached-image {
   display: block;
-  float: left;
   position: relative;
   width: 100%;
 }
+.attached-image-title {
+  display: inline-block;
+  height: 24px;
+  line-height: 24px;
+  margin: 0;
+}
 .attached-image-remove {
-  display: block;
-  float: left;
+  display: inline-block;
   cursor: pointer;
   background: #bf4153;
   width: 24px;

@@ -18,14 +18,15 @@ class ProposalImages extends Component {
     return (
       <div>
         {(files || []).map(({ name, mime, digest, payload }, idx) => (
-          <div key={digest || idx}>
-            <h5>{name}</h5>
-            <div className="attached-image-ct clearfloat">
-              <img className="attached-image" alt={name} src={`data:${mime};base64,${payload}`} />
-              {readOnly ? null : (
-                <a className="attached-image-remove" onClick={() => this.onRemove(idx)} title="Remove image">✖</a>
-              )}
-            </div>
+          <div key={digest || idx} className="attached-image-ct">
+            <h5 className="attached-image-title">{name}</h5>
+            {!readOnly && (
+              <a
+                className="attached-image-remove"
+                onClick={() => this.onRemove(idx)}
+                title="Remove image">✖</a>
+            )}
+            <img className="attached-image" alt={name} src={`data:${mime};base64,${payload}`} />
           </div>
         ))}
       </div>
