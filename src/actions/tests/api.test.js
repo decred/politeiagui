@@ -781,7 +781,7 @@ describe("test api actions (actions/api.js)", () => {
   });
 
   test("on fetch vote results", async () => {
-    const path = "/api/v1/proposals/voteresults";
+    const path = "/api/v1/proposals/any/votes";
     const token = "any";
     const params = [token];
     const mockedResponse = {
@@ -790,7 +790,7 @@ describe("test api actions (actions/api.js)", () => {
       }
     };
     //set custom response
-    fetchMock.post(path, mockedResponse);
+    fetchMock.get(path, mockedResponse);
     expect(api.onFetchVoteResults(token)).toDispatchActions([
       { type: act.REQUEST_VOTE_RESULTS },
       { type: act.RECEIVE_VOTE_RESULTS, error: false },
@@ -804,9 +804,7 @@ describe("test api actions (actions/api.js)", () => {
       (e) => [
         { type: act.REQUEST_VOTE_RESULTS, error: false, payload: { token } },
         { type: act.RECEIVE_VOTE_RESULTS, error: true, payload: e }
-      ],
-      {},
-      methods.POST
+      ]
     );
   });
 

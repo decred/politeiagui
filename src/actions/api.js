@@ -377,7 +377,7 @@ export const onStartVote = (loggedInAsEmail, token) =>
 
 export const onFetchVoteResults = (token) => (dispatch) => {
   dispatch(act.REQUEST_VOTE_RESULTS({ token}));
-  return api.voteResults({ token }).then(
+  return api.voteResults(token).then(
     response => {
       dispatch(act.RECEIVE_VOTE_RESULTS({ ...response, success: true }));
       dispatch(setVotesEndHeight(token, response.startvotereply.endheight));
