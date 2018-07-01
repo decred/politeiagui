@@ -9,7 +9,7 @@ export default connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
     proposals: sel.vettedProposals,
-    isLoading: or(sel.vettedProposalsIsRequesting, sel.isApiRequestingActiveVotes),
+    isLoading: or(sel.vettedProposalsIsRequesting, sel.isApiRequestingPropsVoteStatus),
     error: or(sel.vettedProposalsError, sel.activeVotesError),
     activeVotes: sel.activeVotes,
     header: () => "Active Proposals",
