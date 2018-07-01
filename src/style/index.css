@@ -436,12 +436,6 @@ li p.header-3 {
   margin-top: 0px;
 }
 
-.signup-next-step-page,
-.forgotten-password-next-step-page,
-.verification-success-page,
-.user-profile-page {
-  width: 600px;
-}
 .signup-next-step-page h3,
 .forgotten-password-next-step-page h3,
 .verification-success-page h3,
