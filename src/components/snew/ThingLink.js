@@ -8,7 +8,8 @@ import connector from "../../connectors/thingLink";
 import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
-  PROPOSAL_STATUS_UNREVIEWED
+  PROPOSAL_STATUS_UNREVIEWED,
+  PROPOSAL_VOTING_NOT_STARTED,
 } from "../../constants";
 import { getProposalStatus } from "../../helpers";
 import VoteStats from "../VoteStats";
@@ -34,7 +35,6 @@ const ThingLinkComp = ({
   created_utc,
   title,
   url,
-  votesEndHeight,
   permalink,
   is_self,
   selftext,
@@ -53,6 +53,7 @@ const ThingLinkComp = ({
   setStatusProposalError,
   tokenFromStartingVoteProp,
   isTestnet,
+  getVoteStatus
 }) => (
   <div
     className={`thing id-${id} odd link ${
@@ -211,7 +212,8 @@ const ThingLinkComp = ({
                   </li>,
                 ]
                 : <Message type="info" header="Third party review required" body="Your proposal must be reviewed by another admin."/>
-              : review_status === PROPOSAL_STATUS_PUBLIC && !votesEndHeight[id] ?
+              : review_status === PROPOSAL_STATUS_PUBLIC && getVoteStatus(id) &&
+                getVoteStatus(id).status === PROPOSAL_VOTING_NOT_STARTED ?
                 <li key="start-vote">
                   <ButtonWithLoadingIcon
                     className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}

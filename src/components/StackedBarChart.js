@@ -22,8 +22,9 @@ const StackedBarChart = ({ data, style }) => (
     }}
   >
     {
-      data.map(dr => (
+      data.map((dr, idx) => (
         <span
+          key={`data-${idx}`}
           style={{
             ...barStyle,
             background: dr.color,

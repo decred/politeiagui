@@ -3,7 +3,6 @@ import configureStore from "redux-mock-store";
 import qs from "query-string";
 import thunk from "redux-thunk";
 import * as api from "../api";
-import * as app from "../app";
 import * as ea  from "../external_api";
 import * as act from "../types";
 import {
@@ -766,52 +765,52 @@ describe("test api actions (actions/api.js)", () => {
     // as all other api request actions currently do
   });
 
-  test("on fetch active votes", async () => {
-    const path = "/api/v1/proposals/activevote";
-    const mockedResponse = { votes: [] };
+  test("on fetch votes status", async () => {
+    const path = "/api/v1/proposals/votestatus";
 
-    fetchMock.get(path, mockedResponse);
-    expect(api.onFetchActiveVotes()).toDispatchActionsWithState(MOCK_STATE,[
-      { type: act.REQUEST_ACTIVE_VOTES },
-      { type: act.RECEIVE_ACTIVE_VOTES, error: false },
-      app.updateVotesEndHeightFromActiveVotes(mockedResponse)
-    ], done);
+    await assertApiActionOnSuccess(
+      path,
+      api.onFetchProposalsVoteStatus,
+      [],
+      [
+        { type: act.REQUEST_PROPOSALS_VOTE_STATUS },
+        { type: act.RECEIVE_PROPOSALS_VOTE_STATUS, error: false }
+      ]
+    );
 
     await assertApiActionOnError(
       path,
-      api.onFetchActiveVotes,
+      api.onFetchProposalsVoteStatus,
       [],
       (e) => [
-        { type: act.REQUEST_ACTIVE_VOTES, error: false, payload: undefined },
-        { type: act.RECEIVE_ACTIVE_VOTES, error: true, payload: e }
+        { type: act.REQUEST_PROPOSALS_VOTE_STATUS, error: false, payload: undefined },
+        { type: act.RECEIVE_PROPOSALS_VOTE_STATUS, error: true, payload: e }
       ]
     );
   });
 
-  test("on fetch vote results", async () => {
-    const path = "/api/v1/proposals/any/votes";
+  test("on fetch vote status for a single proposal", async () => {
+    const path = "/api/v1/proposals/any/votestatus";
     const token = "any";
     const params = [token];
-    const mockedResponse = {
-      startvotereply: {
-        endheight: 303322
-      }
-    };
-    //set custom response
-    fetchMock.get(path, mockedResponse);
-    expect(api.onFetchVoteResults(token)).toDispatchActions([
-      { type: act.REQUEST_VOTE_RESULTS },
-      { type: act.RECEIVE_VOTE_RESULTS, error: false },
-      app.setVotesEndHeight(token, mockedResponse.startvotereply.endheight)
-    ], done);
+
+    await assertApiActionOnSuccess(
+      path,
+      api.onFetchProposalVoteStatus,
+      params,
+      [
+        { type: act.REQUEST_PROPOSAL_VOTE_STATUS },
+        { type: act.RECEIVE_PROPOSAL_VOTE_STATUS, error: false }
+      ]
+    );
 
     await assertApiActionOnError(
       path,
-      api.onFetchVoteResults,
+      api.onFetchProposalVoteStatus,
       params,
       (e) => [
-        { type: act.REQUEST_VOTE_RESULTS, error: false, payload: { token } },
-        { type: act.RECEIVE_VOTE_RESULTS, error: true, payload: e }
+        { type: act.REQUEST_PROPOSAL_VOTE_STATUS, error: false, payload: { token } },
+        { type: act.RECEIVE_PROPOSAL_VOTE_STATUS, error: true, payload: e }
       ]
     );
   });

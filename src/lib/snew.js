@@ -4,30 +4,8 @@ import reduce from "lodash/fp/reduce";
 import compose from "lodash/fp/compose";
 import { TOP_LEVEL_COMMENT_PARENTID } from "./api";
 
-const setVotePayload = (proposal, activeVotes) => {
-  if(!activeVotes || activeVotes.length === 0) {
-    return proposal;
-  }
-  const findProp = activeVotes.filter(aV =>
-    aV.proposal &&
-    aV.proposal.censorshiprecord &&
-    proposal &&
-    proposal.censorshiprecord &&
-    aV.proposal.censorshiprecord.token === proposal.censorshiprecord.token
-  )[0];
-  if(!findProp)
-    return proposal;
-
-  const obj = {
-    ...proposal,
-    ...findProp
-  };
-  delete obj.proposal;
-  return obj;
-};
-
 export const proposalToT3 = ({
-  startvote, startvotereply, name, timestamp, status, userid, username, numcomments, censorshiprecord = {}
+  name, timestamp, status, userid, username, numcomments, censorshiprecord = {}
 }, idx) => ({
   kind: "t3",
   data: {
@@ -43,12 +21,10 @@ export const proposalToT3 = ({
     permalink: `/proposals/${censorshiprecord.token}/`,
     url: `/proposals/${censorshiprecord.token}/`,
     is_self: true,
-    startvote,
-    startvotereply
   }
 });
 
-export const formatProposalData = (proposal, idx, activeVote = null) => proposalToT3(setVotePayload(proposal, activeVote), idx);
+export const formatProposalData = (proposal, idx) => proposalToT3(proposal, idx);
 
 const getChildComments = ({ tree, comments }, parentid) => map(
   compose(

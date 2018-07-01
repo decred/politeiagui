@@ -10,15 +10,13 @@ export default connect(
     isAdmin: sel.isAdmin,
     proposals: sel.vettedProposals,
     isLoading: or(sel.vettedProposalsIsRequesting, sel.isApiRequestingPropsVoteStatus),
-    error: or(sel.vettedProposalsError, sel.activeVotesError),
-    activeVotes: sel.activeVotes,
+    error: or(sel.vettedProposalsError, sel.apiPropsVoteStatusError),
     header: () => "Active Proposals",
     emptyProposalsMessage: () => "There are no active proposals"
   }),
   dispatch => bindActionCreators({
     onFetchData: act.onFetchVetted,
     onChangeStatus: act.onSubmitStatusProposal,
-    onFetchActiveVotes: act.onFetchActiveVotes,
     onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus
   }, dispatch)
 );

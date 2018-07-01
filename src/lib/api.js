@@ -191,8 +191,6 @@ export const newProposal = (csrf, proposal) =>
 
 export const newComment = (csrf, comment) => POST("/comments/new", csrf, comment).then(getResponse);
 
-export const activeVotes = () => GET("/v1/proposals/activevote").then(getResponse);
-
 export const startVote = (email, csrf, token) =>
   pki.myPubKeyHex(email).then(publickey =>
     pki.signStringHex(email, token).then(signature => POST(
@@ -215,8 +213,6 @@ export const startVote = (email, csrf, token) =>
         }, signature, publickey
       }
     ))).then(getResponse);
-
-export const voteResults = (token) => GET(`/v1/proposals/${token}/votes`).then(getResponse);
 
 export const usernamesById = (userids) => {
   return POST("/usernames", null, { userids }).then(getResponse);

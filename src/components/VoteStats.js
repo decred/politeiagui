@@ -128,7 +128,6 @@ class VoteStats extends React.Component {
   render() {
     const { token, getVoteStatus } = this.props;
     const { optionsresult, status, totalvotes } = getVoteStatus(token);
-    console.log(getVoteStatus(token));
     const wrapperStyle = {
       display: "flex",
       flexDirection: "column",
