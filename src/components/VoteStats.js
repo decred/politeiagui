@@ -91,7 +91,7 @@ class Stats extends React.Component {
   renderOptionsStats = (totalVotes, optionsResult) => {
     const { status } = this.props;
     const showStats = this.canShowStats(status);
-    const options = this.transformOptionsResult(totalVotes, optionsResult);
+    const options = optionsResult ? this.transformOptionsResult(totalVotes, optionsResult) : [];
     return (
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div
@@ -110,7 +110,9 @@ class Stats extends React.Component {
               style={{ maxWidth: "400px" }}
               data={this.getCharData(options)}
             /> :
-            <span>This proposal has not received any votes</span>
+            status !== PROPOSAL_VOTING_NOT_STARTED ?
+              <span>This proposal has not received any votes</span>
+              : null
           }
         </div>
       </div>

@@ -2,6 +2,7 @@ import * as act from "../actions/types";
 import get from "lodash/fp/get";
 import map from "lodash/fp/map";
 import { DEFAULT_REQUEST_STATE, request, receive, reset } from "./util";
+import { PROPOSAL_VOTING_ACTIVE } from "../constants";
 
 export const DEFAULT_STATE = {
   me: DEFAULT_REQUEST_STATE,
@@ -117,6 +118,29 @@ const onReceiveNewCommentLike = (state, action) => {
   };
 };
 
+const onReceiveStartVote = (state, action) => {
+  state = receive("startVote", state, action);
+  const newVoteStatus = {
+    token: state.startVote.payload.token,
+    status: PROPOSAL_VOTING_ACTIVE,
+    optionsresult: null,
+    totalvotes: 0
+  };
+  return {
+    ...state,
+    proposalsVoteStatus: {
+      ...state.proposalsVoteStatus,
+      response: {
+        ...state.proposalsVoteStatus.response,
+        votesstatus: state.proposalsVoteStatus.response.votesstatus ?
+          state.proposalsVoteStatus.response.votesstatus
+            .map(vs => newVoteStatus.token === vs.token ?
+              newVoteStatus : vs) : [newVoteStatus]
+      }
+    }
+  };
+};
+
 const api = (state = DEFAULT_STATE, action) => (({
   [act.SET_EMAIL]: () => ({ ...state, email: action.payload }),
   [act.CLEAN_ERRORS]: () => (
@@ -179,7 +203,7 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RESET_REDIRECTED_FROM]: () => reset("login", state),
   [act.REQUEST_SETSTATUS_PROPOSAL]: () => request("setStatusProposal", state, action),
   [act.RECEIVE_SETSTATUS_PROPOSAL]: () => onReceiveSetStatus(state, action),
-  [act.RECEIVE_START_VOTE]: () => receive("startVote", state, action),
+  [act.RECEIVE_START_VOTE]: () => onReceiveStartVote(state, action),
   [act.REQUEST_START_VOTE]: () => request("startVote", state, action),
   [act.REQUEST_UPDATED_KEY]: () => request("updateUserKey", state, action),
   [act.RECEIVE_UPDATED_KEY]: () => receive("updateUserKey", state, action),
