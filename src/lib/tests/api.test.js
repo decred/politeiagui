@@ -405,10 +405,10 @@ describe("api integration modules (lib/api.js)", () => {
   });
 
   test("get proposal vote results", async () => {
-    await assertPOSTOnRouteIsCalled(
-      "/api/v1/proposals/voteresults",
+    await assertGETOnRouteIsCalled(
+      "/api/v1/proposals/token/votes",
       api.voteResults,
-      ["fake_vote"]
+      ["token"]
     );
   });
 
