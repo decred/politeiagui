@@ -29,13 +29,13 @@ export default connect(
     emptyProposalsMessage: (state) => {
       switch(sel.getPublicFilterValue(state)) {
       case PROPOSAL_VOTING_ACTIVE:
-        return "There are no proposals currently on voting";
+        return "There are no voting open proposals";
       case PROPOSAL_VOTING_FINISHED:
-        return "There are no proposals with voting finished";
+        return "There are no voting finished proposals";
       case PROPOSAL_VOTING_NOT_STARTED:
-        return "There are no proposals with voting not started";
+        return "There are no pre-voting proposals";
       default:
-        return "There are no public proposals";
+        return "There are no proposals";
       }
     }
   }),
