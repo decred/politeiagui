@@ -35,7 +35,12 @@ export const requestApiInfo = (poolPaywall = false) => (dispatch, getState) => {
     })
     .catch(error => {
       dispatch(act.RECEIVE_INIT_SESSION(null, error));
-      throw error;
+      if(process.env.NODE_ENV === "development") {
+        console.error("Error thrown", error);
+        alert("Could not connect to the server. Is politeiawww running?");
+      } else {
+        throw error;
+      }
     });
 };
 
