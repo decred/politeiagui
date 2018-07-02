@@ -82,7 +82,7 @@ class Stats extends React.Component {
       </div>
     );
   };
-  getCharData = (options) =>
+  getChartData = (options) =>
     options.map(op => ({
       label: op.id,
       value: op.percentage,
@@ -109,7 +109,7 @@ class Stats extends React.Component {
         {showStats && totalVotes > 0 ?
           <StackedBarChart
             style={{ ...bodyStyle, maxWidth: "400px" }}
-            data={this.getCharData(options)}
+            data={this.getChartData(options)}
           /> :
           status !== PROPOSAL_VOTING_NOT_STARTED ?
             <div

@@ -23,12 +23,12 @@ const adminFilterOptions = [
 ];
 const publicFilterOptions = [
   {
-    label: "voting open",
-    value: PROPOSAL_VOTING_ACTIVE
-  },
-  {
     label: "pre-voting",
     value: PROPOSAL_VOTING_NOT_STARTED
+  },
+  {
+    label: "voting open",
+    value: PROPOSAL_VOTING_ACTIVE
   },
   {
     label: "voting finished",
@@ -40,8 +40,8 @@ const publicFilterOptions = [
   }
 ];
 const mapHeaderToOptions = {
-  ["Unvetted Proposals"]: adminFilterOptions,
-  ["Active Proposals"]: publicFilterOptions
+  "Unvetted Proposals": adminFilterOptions,
+  "Active Proposals": publicFilterOptions
 };
 
 const ProposalFilter = ({ handleChangeFilterValue, header, filterValue }) => (

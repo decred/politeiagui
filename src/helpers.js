@@ -115,8 +115,8 @@ export const getPasswordFieldLabel = (policy, defaultText = "Password") => {
 
 export const getRandomColor = () => {
   const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (var i = 0; i < 6; i++) {
+  let color = "#3F";
+  for (var i = 0; i < 4; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
