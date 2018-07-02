@@ -35,7 +35,7 @@ export default connect(
   }),
   {
     onFetchData: act.onFetchUnvetted,
-    onChangeFilter: act.onChangeFilter,
+    onChangeFilter: act.onChangeAdminFilter,
     onStartVote: act.onStartVote,
   }
 );

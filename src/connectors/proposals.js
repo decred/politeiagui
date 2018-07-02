@@ -8,15 +8,25 @@ export default connect(
   sel.selectorMap({
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
-    proposals: sel.vettedProposals,
+    proposals: (state) => {
+      const vettedProps = sel.vettedProposals(state);
+      const filterValue = sel.getPublicFilterValue(state);
+      if (!filterValue)
+        return vettedProps;
+      return vettedProps.filter(prop => {
+        return filterValue === sel.getPropVoteStatus(state)(prop.censorshiprecord.token).status;
+      });
+    },
     isLoading: or(sel.vettedProposalsIsRequesting, sel.isApiRequestingPropsVoteStatus),
     error: or(sel.vettedProposalsError, sel.apiPropsVoteStatusError),
+    filterValue: sel.getPublicFilterValue,
     header: () => "Active Proposals",
     emptyProposalsMessage: () => "There are no active proposals"
   }),
   dispatch => bindActionCreators({
     onFetchData: act.onFetchVetted,
     onChangeStatus: act.onSubmitStatusProposal,
-    onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus
+    onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
+    onChangeFilter: act.onChangePublicFilter
   }, dispatch)
 );

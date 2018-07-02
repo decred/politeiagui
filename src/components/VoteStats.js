@@ -92,29 +92,33 @@ class Stats extends React.Component {
     const { status } = this.props;
     const showStats = this.canShowStats(status);
     const options = optionsResult ? this.transformOptionsResult(totalVotes, optionsResult) : [];
+    const headerStyle = {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between"
+    };
+    const bodyStyle = { marginTop: "5px" };
     return (
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div>
         <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            padding: "0 0 5px 0",
-            justifyContent: "space-between"
-          }}>
+          style={headerStyle}
+        >
           <VoteStatusLabel status={status} />
           {showStats && totalVotes > 0 && options.map(op => this.renderStats(op))}
         </div>
-        <div>
-          {showStats && totalVotes > 0 ?
-            <StackedBarChart
-              style={{ maxWidth: "400px" }}
-              data={this.getCharData(options)}
-            /> :
-            status !== PROPOSAL_VOTING_NOT_STARTED ?
-              <span>This proposal has not received any votes</span>
-              : null
-          }
-        </div>
+        {showStats && totalVotes > 0 ?
+          <StackedBarChart
+            style={{ ...bodyStyle, maxWidth: "400px" }}
+            data={this.getCharData(options)}
+          /> :
+          status !== PROPOSAL_VOTING_NOT_STARTED ?
+            <div
+              style={bodyStyle}
+            >
+              This proposal has not received any votes
+            </div>
+            : null
+        }
       </div>
     );
   }

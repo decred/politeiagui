@@ -49,7 +49,8 @@ export const onFetchProposal = (token) => (dispatch, getState) =>
 
 export const onLoadMe = me => dispatch => dispatch(act.LOAD_ME(me));
 
-export const onChangeFilter = (option) => act.CHANGE_FILTER_VALUE(option);
+export const onChangeAdminFilter = (option) => act.CHANGE_ADMIN_FILTER_VALUE(option);
+export const onChangePublicFilter = (option) => act.CHANGE_PUBLIC_FILTER_VALUE(option);
 
 export const onChangeProposalStatusApproved = (status) => act.SET_PROPOSAL_APPROVED(status);
 
