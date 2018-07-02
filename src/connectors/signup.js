@@ -59,11 +59,13 @@ class Wrapper extends Component {
     };
     const policy = this.props.policy || {};
     validate(policy, args);
-    return this.props.onSignup(args).catch(e => {
-      throw new SubmissionError({
-        _error: e.message,
+    if (this.props.onSignup(args)) {
+      return this.props.onSignup(args).catch(e => {
+        throw new SubmissionError({
+          _error: e.message,
+        });
       });
-    });
+    }
   }
 }
 
