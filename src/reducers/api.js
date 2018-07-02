@@ -2,6 +2,7 @@ import * as act from "../actions/types";
 import get from "lodash/fp/get";
 import map from "lodash/fp/map";
 import { DEFAULT_REQUEST_STATE, request, receive, reset } from "./util";
+import { PROPOSAL_VOTING_ACTIVE } from "../constants";
 
 export const DEFAULT_STATE = {
   me: DEFAULT_REQUEST_STATE,
@@ -117,6 +118,29 @@ const onReceiveNewCommentLike = (state, action) => {
   };
 };
 
+const onReceiveStartVote = (state, action) => {
+  state = receive("startVote", state, action);
+  const newVoteStatus = {
+    token: state.startVote.payload.token,
+    status: PROPOSAL_VOTING_ACTIVE,
+    optionsresult: null,
+    totalvotes: 0
+  };
+  return {
+    ...state,
+    proposalsVoteStatus: {
+      ...state.proposalsVoteStatus,
+      response: {
+        ...state.proposalsVoteStatus.response,
+        votesstatus: state.proposalsVoteStatus.response.votesstatus ?
+          state.proposalsVoteStatus.response.votesstatus
+            .map(vs => newVoteStatus.token === vs.token ?
+              newVoteStatus : vs) : [newVoteStatus]
+      }
+    }
+  };
+};
+
 const api = (state = DEFAULT_STATE, action) => (({
   [act.SET_EMAIL]: () => ({ ...state, email: action.payload }),
   [act.CLEAN_ERRORS]: () => (
@@ -179,20 +203,20 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RESET_REDIRECTED_FROM]: () => reset("login", state),
   [act.REQUEST_SETSTATUS_PROPOSAL]: () => request("setStatusProposal", state, action),
   [act.RECEIVE_SETSTATUS_PROPOSAL]: () => onReceiveSetStatus(state, action),
-  [act.RECEIVE_START_VOTE]: () => receive("startVote", state, action),
+  [act.RECEIVE_START_VOTE]: () => onReceiveStartVote(state, action),
   [act.REQUEST_START_VOTE]: () => request("startVote", state, action),
   [act.REQUEST_UPDATED_KEY]: () => request("updateUserKey", state, action),
   [act.RECEIVE_UPDATED_KEY]: () => receive("updateUserKey", state, action),
   [act.REQUEST_VERIFIED_KEY]: () => request("verifyUserKey", state, action),
   [act.RECEIVE_VERIFIED_KEY]: () => receive("verifyUserKey", state, action),
   [act.KEY_MISMATCH]: () => ({ ...state, keyMismatch: action.payload }),
-  [act.REQUEST_ACTIVE_VOTES]: () => request("activeVotes", state, action),
-  [act.RECEIVE_ACTIVE_VOTES]: () => receive("activeVotes", state, action),
-  [act.REQUEST_VOTE_RESULTS]: () => request("voteResults", state, action),
-  [act.RECEIVE_VOTE_RESULTS]: () => receive("voteResults", state, action),
   [act.REQUEST_USERNAMES_BY_ID]: () => request("usernamesById", state, action),
   [act.RECEIVE_USERNAMES_BY_ID]: () => receive("usernamesById", state, action),
   [act.REQUEST_LOGOUT]: () => request("logout", state, action),
+  [act.REQUEST_PROPOSALS_VOTE_STATUS]: () => request("proposalsVoteStatus", state, action),
+  [act.RECEIVE_PROPOSALS_VOTE_STATUS]: () => receive("proposalsVoteStatus", state, action),
+  [act.REQUEST_PROPOSAL_VOTE_STATUS]: () => request("proposalVoteStatus", state, action),
+  [act.RECEIVE_PROPOSAL_VOTE_STATUS]: () => receive("proposalVoteStatus", state, action),
   [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
 })[action.type] || (() => state))();
 

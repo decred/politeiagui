@@ -112,3 +112,12 @@ export const getPasswordFieldLabel = (policy, defaultText = "Password") => {
   }
   return defaultText;
 };
+
+export const getRandomColor = () => {
+  const letters = "0123456789ABCDEF";
+  let color = "#3F";
+  for (var i = 0; i < 4; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};

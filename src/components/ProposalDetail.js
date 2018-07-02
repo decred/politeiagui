@@ -12,7 +12,7 @@ class ProposalDetail extends React.Component {
     if((!this.props.proposal || Object.keys(this.props.proposal).length === 0 ) &&
       nextProps.proposal && Object.keys(nextProps.proposal).length > 0 &&
       nextProps.proposal.status === 4 ){
-      this.props.onFetchVoteResults(this.props.token);
+      this.props.onFetchProposalVoteStatus(this.props.token);
     }
   }
   render() {
@@ -25,8 +25,6 @@ class ProposalDetail extends React.Component {
       markdownFile,
       otherFiles,
       onFetchData,
-      voteDetails,
-      castedVotes,
       ...props
     } = this.props;
 
@@ -50,9 +48,6 @@ class ProposalDetail extends React.Component {
                     kind: "t3",
                     data: {
                       ...proposalToT3(proposal, 0).data,
-                      startvotereply: voteDetails,
-                      castedVotes,
-                      voteDetails,
                       otherFiles,
                       selftext: markdownFile ? getTextFromIndexMd(markdownFile) : null,
                       selftext_html: markdownFile ? getTextFromIndexMd(markdownFile) : null

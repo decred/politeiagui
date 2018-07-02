@@ -25,11 +25,11 @@ const isApiRequestingUserProposals = getIsApiRequesting("userProposals");
 const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
 const isApiRequestingProposal = getIsApiRequesting("proposal");
 const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
-export const isApiRequestingActiveVotes = getIsApiRequesting("activeVotes");
-export const isApiRequestingVoteResults = getIsApiRequesting("voteResults");
 export const isApiRequestingNewComment = getIsApiRequesting("newComment");
 export const isApiRequestingSetStatusProposal = getIsApiRequesting("setStatusProposal");
 export const isApiRequestingStartVote = getIsApiRequesting("startVote");
+export const isApiRequestingPropsVoteStatus = getIsApiRequesting("proposalsVoteStatus");
+export const isApiRequestingPropVoteStatus = getIsApiRequesting("proposalVoteStatus");
 export const isApiRequesting = or(
   isApiRequestingInit,
   isApiRequestingPolicy,
@@ -73,11 +73,13 @@ export const updateUserKey = getApiResponse("updateUserKey");
 export const verifyUserKey = getApiResponse("verifyUserKey");
 export const updateUserKeyError = getApiError("updateUserKey");
 export const verifyUserKeyError = getApiError("verifyUserKey");
-const apiActiveVotesResponse = getApiResponse("activeVotes");
-const apiActiveVotesError = getApiError("activeVotes");
 const apiSetStartVoteResponse = getApiResponse("startVote");
-const apiVoteResultsResponse = getApiResponse("voteResults");
-const apiVoteResultsError = getApiError("voteResults");
+
+export const apiPropsVoteStatusResponse = getApiResponse("proposalsVoteStatus");
+export const apiPropsVoteStatusError = getApiError("proposalsVoteStatus");
+
+export const apiPropVoteStatusResponse = getApiResponse("proposalVoteStatus");
+export const apiPropVoteStatusError = getApiError("proposalVoteStatusError");
 
 const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
@@ -184,6 +186,20 @@ export const getPropTokenIfIsStartingVote = (state) => {
   return undefined;
 };
 
+export const getPropVoteStatus = state => token => {
+  // try to get it from single prop response (proposal detail)
+  let vsResponse = apiPropVoteStatusResponse(state);
+  if(vsResponse && vsResponse.token === token)
+    return vsResponse;
+  // otherwise try to get it from the all vote status response (public props)
+  vsResponse = apiPropsVoteStatusResponse(state);
+  if (vsResponse && vsResponse.votesstatus) {
+    const voteStatus = vsResponse.votesstatus.filter(vs => vs.token === token)[0];
+    return voteStatus || {};
+  }
+  return {};
+};
+
 export const userid = state => state.api.me.response && state.api.me.response.userid;
 
 export const serverPubkey = compose(get("pubkey"), apiInitResponse);
@@ -224,10 +240,4 @@ export const setStatusProposalError = apiSetStatusProposalError;
 export const redirectedFrom = get(["api", "login", "redirectedFrom"]);
 export const verificationToken = compose(get("verificationtoken"), apiNewUserResponse);
 export const getKeyMismatch = state => state.api.keyMismatch;
-export const activeVotes = compose(get("votes"), apiActiveVotesResponse);
-export const activeVotesError = apiActiveVotesError;
 export const setStartVote = compose(get("startvote"), apiSetStartVoteResponse);
-export const voteResultsStartVoteReply = or(compose(get("startvotereply"), apiVoteResultsResponse), constant({}));
-export const voteResultsStartVote = or(compose(get("startvote"), apiVoteResultsResponse), constant({}));
-export const voteResultsCastVotes = or(compose(get("castvotes"), apiVoteResultsResponse), constant({}));
-export const voteResultsError = apiVoteResultsError;

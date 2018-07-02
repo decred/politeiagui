@@ -7,7 +7,6 @@ import * as external_api_actions from "./external_api";
 import { clearStateLocalStorage } from "../lib/local_storage";
 import act from "./methods";
 import { globalUsernamesById } from "./app";
-import { updateVotesEndHeightFromActiveVotes, setVotesEndHeight } from "./app";
 
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onSetEmail = act.SET_EMAIL;
@@ -391,56 +390,28 @@ export const verifyUserPaymentWithPoliteia = txid => {
   return api.verifyUserPayment(txid).then(response => response.haspaid);
 };
 
-export const onFetchActiveVotes = () => dispatch => {
-  dispatch(act.REQUEST_ACTIVE_VOTES());
-  return api
-    .activeVotes()
-    .then(response => {
-      dispatch(act.RECEIVE_ACTIVE_VOTES({ ...response, success: true }));
-      dispatch(updateVotesEndHeightFromActiveVotes(response));
-    })
-    .catch(error => {
-      dispatch(act.RECEIVE_ACTIVE_VOTES(null, error));
-    });
-};
-
 export const onStartVote = (loggedInAsEmail, token) =>
   withCsrf((dispatch, getState, csrf) => {
-    return dispatch(
-      confirmWithModal("CONFIRM_ACTION", {
-        message: "Are you sure you want to start voting this proposal?"
-      })
-    ).then(confirm => {
-      if (confirm) {
-        dispatch(act.REQUEST_START_VOTE({ token }));
-        return api
-          .startVote(loggedInAsEmail, csrf, token)
-          .then(response => {
-            dispatch(act.RECEIVE_START_VOTE({ ...response, success: true }));
-            dispatch(setVotesEndHeight(token, response.endheight));
-          })
-          .catch(error => {
-            dispatch(act.RECEIVE_START_VOTE(null, error));
-          });
-      }
-    });
+    return dispatch(confirmWithModal("CONFIRM_ACTION",
+      { message: "Are you sure you want to start voting this proposal?" }))
+      .then(
+        (confirm) => {
+          if (confirm) {
+            dispatch(act.REQUEST_START_VOTE({ token }));
+            return api
+              .startVote(loggedInAsEmail, csrf, token)
+              .then(response => {
+                dispatch(act.RECEIVE_START_VOTE({ ...response, success: true}));
+              })
+              .catch(error => {
+                dispatch(act.RECEIVE_START_VOTE(null, error));
+              });
+          }
+        }
+      );
   });
 
-export const onFetchVoteResults = (token) => (dispatch) => {
-  dispatch(act.REQUEST_VOTE_RESULTS({ token}));
-  return api
-    .voteResults(token).then(
-      response => {
-        dispatch(act.RECEIVE_VOTE_RESULTS({ ...response, success: true }));
-        dispatch(setVotesEndHeight(token, response.startvotereply.endheight));
-      })
-    .catch(error => {
-      dispatch(act.RECEIVE_VOTE_RESULTS(null, error));
-      throw error;
-    });
-};
-
-export const onFetchUsernamesById = userIds => dispatch => {
+export const onFetchUsernamesById = (userIds) => (dispatch) => {
   dispatch(act.REQUEST_USERNAMES_BY_ID());
   return api
     .usernamesById(userIds)
@@ -451,4 +422,28 @@ export const onFetchUsernamesById = userIds => dispatch => {
       dispatch(act.RECEIVE_USERNAMES_BY_ID(null, error));
       throw error;
     });
+};
+
+export const onFetchProposalsVoteStatus = () => (dispatch) => {
+  dispatch(act.REQUEST_PROPOSALS_VOTE_STATUS());
+  return api.proposalsVoteStatus().then(
+    response => dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS({ ...response, success: true }))
+  ).catch(
+    error => {
+      dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS(null, error));
+      throw error;
+    }
+  );
+};
+
+export const onFetchProposalVoteStatus = (token) => (dispatch) => {
+  dispatch(act.REQUEST_PROPOSAL_VOTE_STATUS({ token }));
+  return api.proposalVoteStatus(token).then(
+    response => dispatch(act.RECEIVE_PROPOSAL_VOTE_STATUS({ ...response, success: true }))
+  ).catch(
+    error => {
+      dispatch(act.RECEIVE_PROPOSAL_VOTE_STATUS(null, error));
+      throw error;
+    }
+  );
 };

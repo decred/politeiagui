@@ -5,6 +5,7 @@ import Message from "../Message";
 import ErrorField from "../Form/Fields/ErrorField";
 import connector from "../../connectors/reply";
 import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
+import { PROPOSAL_VOTING_NOT_STARTED } from "../../constants";
 
 const CommentForm = ({
   Link = LinkComponent,
@@ -21,7 +22,7 @@ const CommentForm = ({
   onSetReplyParent,
   loggedInAsEmail,
   userCanExecuteActions,
-  votesEndHeight,
+  getVoteStatus,
   token
 }) => (
   loggedInAsEmail ?
@@ -39,7 +40,9 @@ const CommentForm = ({
       <input name="parentid" type="hidden" defaultValue={thingId} />
       <div className="usertext-edit md-container">
         {isPostingComment && (<h2>Posting comment...</h2>)}
-        {!isPostingComment && !votesEndHeight[token] && (
+        {!isPostingComment &&
+          getVoteStatus(token) &&
+          getVoteStatus(token).status === PROPOSAL_VOTING_NOT_STARTED && (
           <div className="md">
             <Field
               component={MarkdownEditorField}
@@ -57,7 +60,8 @@ const CommentForm = ({
             />
           </div>
         )}
-        {!isPostingComment && !votesEndHeight[token] && (
+        {!isPostingComment && getVoteStatus(token) &&
+          getVoteStatus(token).status === PROPOSAL_VOTING_NOT_STARTED && (
           <div className="bottom-area">
             <span className="help-toggle toggle">
               <a

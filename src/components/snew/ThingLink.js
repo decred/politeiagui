@@ -8,7 +8,8 @@ import connector from "../../connectors/thingLink";
 import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
-  PROPOSAL_STATUS_UNREVIEWED
+  PROPOSAL_STATUS_UNREVIEWED,
+  PROPOSAL_VOTING_NOT_STARTED,
 } from "../../constants";
 import { getProposalStatus } from "../../helpers";
 import VoteStats from "../VoteStats";
@@ -34,9 +35,6 @@ const ThingLinkComp = ({
   created_utc,
   title,
   url,
-  votesEndHeight,
-  castedVotes,
-  voteDetails,
   permalink,
   is_self,
   selftext,
@@ -54,8 +52,8 @@ const ThingLinkComp = ({
   setStatusProposalToken,
   setStatusProposalError,
   tokenFromStartingVoteProp,
-  lastBlockHeight,
-  isTestnet
+  isTestnet,
+  getVoteStatus
 }) => (
   <div
     className={`thing id-${id} odd link ${
@@ -86,27 +84,6 @@ const ThingLinkComp = ({
         <Link className="title may-blank loggedin" href={url} tabIndex={rank}>
           {title}
         </Link>{" "}
-        {
-          votesEndHeight[id] ?
-            votesEndHeight[id] >= lastBlockHeight ?
-              (<span style={{
-                padding: "4px 8px",
-                borderRadius: "8px",
-                fontSize: "12px",
-                color: "green"
-              }}>
-                  Proposal active for voting
-              </span>) :
-              (<span style={{
-                padding: "4px 8px",
-                borderRadius: "8px",
-                fontSize: "12px",
-                color: "gray"
-              }}>
-                  Proposal finished voting
-              </span>)
-            : null
-        }
         {domain ? (
           <span className="domain">
             (<Link href={`/domain/${domain}/`}>{domain}</Link>)
@@ -128,8 +105,9 @@ const ThingLinkComp = ({
       <p className="tagline proposal-token">
         {id} • {getProposalStatus(review_status)}
       </p>
-      {votesEndHeight[id] && voteDetails && voteDetails.vote && castedVotes &&
-        <VoteStats voteOptions={voteDetails.vote.options} castedVotes={castedVotes}/>
+      {
+        review_status === 4 &&
+        <VoteStats token={id} />
       }
       {expanded &&
         (lastSubmitted === id ? (
@@ -234,7 +212,8 @@ const ThingLinkComp = ({
                   </li>,
                 ]
                 : <Message type="info" header="Third party review required" body="Your proposal must be reviewed by another admin."/>
-              : review_status === PROPOSAL_STATUS_PUBLIC && !votesEndHeight[id] ?
+              : review_status === PROPOSAL_STATUS_PUBLIC && getVoteStatus(id) &&
+                getVoteStatus(id).status === PROPOSAL_VOTING_NOT_STARTED ?
                 <li key="start-vote">
                   <ButtonWithLoadingIcon
                     className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}

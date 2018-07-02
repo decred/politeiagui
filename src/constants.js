@@ -11,3 +11,7 @@ export const PAYWALL_STATUS_PAID = 2;
 
 export const PUB_KEY_STATUS_LOADING = 0;
 export const PUB_KEY_STATUS_LOADED = 1;
+
+export const PROPOSAL_VOTING_NOT_STARTED = 1;
+export const PROPOSAL_VOTING_ACTIVE = 2;
+export const PROPOSAL_VOTING_FINISHED = 3;

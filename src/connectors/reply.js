@@ -18,7 +18,7 @@ const replyConnector = connect(
     policy: sel.policy,
     isPostingComment: sel.isApiRequestingNewComment,
     userHasPaid: sel.userHasPaid,
-    votesEndHeight: sel.votesEndHeight
+    getVoteStatus: sel.getPropVoteStatus
   }),
   {
     initialize: data => initialize("form/reply", data),
