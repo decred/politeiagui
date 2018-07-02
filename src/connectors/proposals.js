@@ -1,6 +1,11 @@
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { or } from "../lib/fp";
+import {
+  PROPOSAL_VOTING_ACTIVE,
+  PROPOSAL_VOTING_FINISHED,
+  PROPOSAL_VOTING_NOT_STARTED
+} from "../constants";
 import * as sel from "../selectors";
 import * as act from "../actions";
 
@@ -21,7 +26,18 @@ export default connect(
     error: or(sel.vettedProposalsError, sel.apiPropsVoteStatusError),
     filterValue: sel.getPublicFilterValue,
     header: () => "Active Proposals",
-    emptyProposalsMessage: () => "There are no active proposals"
+    emptyProposalsMessage: (state) => {
+      switch(sel.getPublicFilterValue(state)) {
+      case PROPOSAL_VOTING_ACTIVE:
+        return "There are no proposals currently on voting";
+      case PROPOSAL_VOTING_FINISHED:
+        return "There are no proposals with voting finished";
+      case PROPOSAL_VOTING_NOT_STARTED:
+        return "There are no proposals with voting not started";
+      default:
+        return "There are no public proposals";
+      }
+    }
   }),
   dispatch => bindActionCreators({
     onFetchData: act.onFetchVetted,
