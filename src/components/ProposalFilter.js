@@ -55,12 +55,13 @@ const ProposalFilter = ({ handleChangeFilterValue, header, filterValue }) => (
             key={`radio-option-${idx}`}
             id={`proposal-filter-${op.value}`}
             name="proposals-filter"
+            style={{ cursor: "pointer" }}
             value={op.value}
             checked={filterValue === op.value}
             onChange={e => handleChangeFilterValue(e.target.value)} />
           <label
-            for="admin-proposals-filter-unreviewed"
-            style={{margin: "0 16px 0 4px"}}>
+            for={`proposal-filter-${op.value}`}
+            style={{ margin: "0 16px 0 4px", cursor: "pointer" }}>
             {op.label}
           </label>
         </div>
