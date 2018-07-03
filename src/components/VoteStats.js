@@ -97,13 +97,14 @@ class Stats extends React.Component {
     const { status } = this.props;
     const showStats = this.canShowStats(status, totalVotes);
     const options = optionsResult ? this.transformOptionsResult(totalVotes, optionsResult) : [];
-    console.log(options);
+
     const headerStyle = {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between"
     };
     const bodyStyle = { marginTop: "5px" };
+
     return (
       <div>
         <div
