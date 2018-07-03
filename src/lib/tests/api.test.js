@@ -344,6 +344,14 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
+  test("get comments votes (api/v1/user/proposals/:token/commentsvotes)", async () => {
+    await assertGETOnRouteIsCalled(
+      "express:/api/v1/user/proposals/:token/commentsvotes",
+      api.likedComments,
+      [PROPOSAL_TOKEN]
+    );
+  });
+
   test("get proposal comments (api/v1/proposals/:token)", async () => {
     await assertGETOnRouteIsCalled(
       "express:/api/v1/proposals/:token/comments",

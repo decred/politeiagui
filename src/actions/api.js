@@ -223,12 +223,12 @@ export const onFetchProposalComments = token => dispatch => {
 };
 
 export const onFetchLikedComments = token => dispatch => {
-  dispatch(act.REQUEST_LIKED_COMMENT(token));
+  dispatch(act.REQUEST_LIKED_COMMENTS(token));
   return api
     .likedComments(token)
-    .then(response => dispatch(act.RECEIVE_LIKED_COMMENT(response)))
+    .then(response => dispatch(act.RECEIVE_LIKED_COMMENTS(response)))
     .catch(error => {
-      dispatch(act.RECEIVE_LIKED_COMMENT(null, error));
+      dispatch(act.RECEIVE_LIKED_COMMENTS(null, error));
     });
 };
 
