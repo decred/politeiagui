@@ -91,7 +91,7 @@ class Stats extends React.Component {
   getChartData = (options) =>
     options.map(op => ({
       label: op.id,
-      value: 50,
+      value: op.percentage,
       color: op.color
     }))
   renderOptionsStats = (totalVotes, optionsResult) => {
