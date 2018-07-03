@@ -17,6 +17,10 @@ const SuccessPage = ({ email }) => (
         </li>
       ) : null}
       <li>Check your spam folder!</li>
+      <li>
+        The verification link needs to be open with the same browser
+        that you used to sign up.
+      </li>
     </ul>
     <p>
       If you're sure you should have received an email, join the <code>#support</code> channel

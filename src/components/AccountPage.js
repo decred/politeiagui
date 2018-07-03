@@ -12,6 +12,9 @@ const UpdatedKeyMessage = ({ email }) => (
   <span>
     Your new identity has been requested, please check your email at{" "}
     <b>{email}</b> to verify and activate it.
+    <br />
+    The verification link needs to be open with the same browser
+    that you used to sign up.
   </span>
 );
 
