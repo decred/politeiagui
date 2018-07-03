@@ -189,6 +189,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.REQUEST_PROPOSAL_COMMENTS]: () => request("proposalComments", state, action),
   [act.RECEIVE_PROPOSAL_COMMENTS]: () => receive("proposalComments", state, action),
   [act.RECEIVE_LIKE_COMMENT]: () => onReceiveNewCommentLike(state, action),
+  [act.REQUEST_LIKED_COMMENT]: () => request("commentsvotes", state, action),
+  [act.RECEIVE_LIKED_COMMENT]: () => receive("commentsvotes", state, action),
   [act.REQUEST_NEW_PROPOSAL]: () => request("newProposal", state, action),
   [act.RECEIVE_NEW_PROPOSAL]: () => receive("newProposal", state, action),
   [act.REQUEST_NEW_COMMENT]: () => request("newComment", state, action),

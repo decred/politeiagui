@@ -18,6 +18,7 @@ const proposalConnector = connect(
     isAdmin: sel.isAdmin,
     proposal: sel.proposal,
     comments: sel.proposalComments,
+    commentsvotes: sel.commentsVotes,
     error: or(sel.proposalError, sel.apiPropVoteStatusError),
     isLoading: or(sel.proposalIsRequesting, sel.setStatusProposalIsRequesting, sel.isApiRequestingPropVoteStatus),
     markdownFile: sel.getMarkdownFile,
@@ -27,6 +28,7 @@ const proposalConnector = connect(
     onFetchData: act.onFetchProposal,
     onSetReplyParent: act.onSetReplyParent,
     onFetchProposalVoteStatus: act.onFetchProposalVoteStatus,
+    onFetchLikedComments: act.onFetchLikedComments
   }, dispatch)
 );
 
