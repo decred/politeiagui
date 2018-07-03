@@ -44,16 +44,16 @@ const VoteStatusLabel = ({ status }) => {
   return mapVoteStatusToLabel[status] || null;
 };
 
-const getPercentage = (received, total) => Number.parseFloat(received/total).toFixed(4)*100;
-const sortOptionYesFirst = (a) => a.id === "yes" ? -1 : 1;
+const getPercentage = (received, total) => Number.parseFloat((received/total)*100).toFixed(2);
+const sortOptionYesFirst = a => a.id === "yes" ? -1 : 1;
 
 class Stats extends React.Component {
   getColor = optionId => {
     switch(optionId) {
     case "yes":
-      return "#2dd8a3";
+      return "#def9f7";
     case "no":
-      return "#091440";
+      return "#FFF";
     default:
       return getRandomColor();
     }
@@ -63,14 +63,13 @@ class Stats extends React.Component {
     totalVotes > 0
   transformOptionsResult = (totalVotes, optionsResult = []) =>
     optionsResult
-      .sort(sortOptionYesFirst)
       .map(({ option, votesreceived }) => ({
         id: option.id,
         description: option.description,
         votesReceived: votesreceived,
         percentage: getPercentage(votesreceived, totalVotes),
         color: this.getColor(option.id)
-      }))
+      })).sort(sortOptionYesFirst)
   renderStats = (option) => {
     const optionStyle = {
       display: "flex",
@@ -98,12 +97,14 @@ class Stats extends React.Component {
     const { status } = this.props;
     const showStats = this.canShowStats(status, totalVotes);
     const options = optionsResult ? this.transformOptionsResult(totalVotes, optionsResult) : [];
+
     const headerStyle = {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between"
     };
     const bodyStyle = { marginTop: "5px" };
+
     return (
       <div>
         <div

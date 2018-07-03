@@ -12,7 +12,7 @@ const labelStyle = {
   position: "relative",
   height: 0,
   width: 0,
-  top: "4px",
+  top: "3px",
   left: "10px",
   fontWeight: "bold",
   textTransform: "uppercase",
@@ -23,7 +23,8 @@ const wrapperStyle = {
   display: "flex",
   width: "100%",
   height: "24px",
-  color: "#fff",
+  color: "grey",
+  border: "1px solid #D6D6D6",
   borderRadius: "8px",
   overflow: "hidden"
 };
