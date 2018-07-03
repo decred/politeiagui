@@ -45,7 +45,7 @@ const VoteStatusLabel = ({ status }) => {
 };
 
 const getPercentage = (received, total) => Number.parseFloat(received/total).toFixed(4)*100;
-const sortOptionYesFirst = (a) => a.id === "yes" ? -1 : 1;
+const sortOptionYesFirst = a => a.id === "yes" ? -1 : 1;
 
 class Stats extends React.Component {
   getColor = optionId => {
@@ -63,14 +63,13 @@ class Stats extends React.Component {
     totalVotes > 0
   transformOptionsResult = (totalVotes, optionsResult = []) =>
     optionsResult
-      .sort(sortOptionYesFirst)
       .map(({ option, votesreceived }) => ({
         id: option.id,
         description: option.description,
         votesReceived: votesreceived,
         percentage: getPercentage(votesreceived, totalVotes),
         color: this.getColor(option.id)
-      }))
+      })).sort(sortOptionYesFirst)
   renderStats = (option) => {
     const optionStyle = {
       display: "flex",
@@ -98,6 +97,7 @@ class Stats extends React.Component {
     const { status } = this.props;
     const showStats = this.canShowStats(status, totalVotes);
     const options = optionsResult ? this.transformOptionsResult(totalVotes, optionsResult) : [];
+    console.log(options);
     const headerStyle = {
       display: "flex",
       alignItems: "center",
