@@ -3,41 +3,62 @@ import React from "react";
 const barStyle = {
   display: "flex",
   height: "100%",
-  padding: "10px",
   fontWeight: "bold",
   textTransform: "uppercase",
   alignItems: "center"
 };
 
-const StackedBarChart = ({ data, style }) => (
-  <div
-    style={{
-      display: "flex",
-      width: "100%",
-      height: "24px",
-      color: "#fff",
-      borderRadius: "8px",
-      overflow: "hidden",
-      ...style
-    }}
-  >
-    {
-      data.map((dr, idx) => (
-        <span
-          key={`data-${idx}`}
-          style={{
-            ...barStyle,
-            background: dr.color,
-            width: `${dr.value}%`,
-            display: dr.value > 0 ? "flex" : "none"
-          }}
-        >
-          {dr.label && `${dr.label}: `}
-          {`${dr.value}%`}
+const labelStyle = {
+  position: "relative",
+  height: 0,
+  width: 0,
+  top: "4px",
+  left: "10px",
+  fontWeight: "bold",
+  textTransform: "uppercase",
+  whiteSpace: "nowrap"
+};
+
+const wrapperStyle = {
+  display: "flex",
+  width: "100%",
+  height: "24px",
+  color: "#fff",
+  borderRadius: "8px",
+  overflow: "hidden"
+};
+const StackedBarChart = ({ data, style, displayValuesForLabel }) => {
+  const dataToDisplay = displayValuesForLabel &&
+    data.filter(d => d.label === displayValuesForLabel)[0];
+  const labelToDisplay = dataToDisplay && `${dataToDisplay.label}: ${dataToDisplay.value}%`;
+
+  return (
+    <div
+      style={{
+        ...wrapperStyle,
+        ...style
+      }}
+    >
+      {labelToDisplay &&
+        <span style={labelStyle} >
+          {labelToDisplay}
         </span>
-      ))
-    }
-  </div>
-);
+      }
+      {
+        data.map((dr, idx) => (
+          <span
+            key={`data-${idx}`}
+            style={{
+              ...barStyle,
+              background: dr.color,
+              width: `${dr.value}%`,
+            }}
+          >
+          </span>
+        ))
+      }
+    </div>
+  );
+};
 
 export default StackedBarChart;
