@@ -44,6 +44,9 @@ const VoteStatusLabel = ({ status }) => {
   return mapVoteStatusToLabel[status] || null;
 };
 
+const getPercentage = (received, total) => Number.parseFloat(received/total).toFixed(4)*100;
+const sortOptionYesFirst = (a) => a.id === "yes" ? -1 : 1;
+
 class Stats extends React.Component {
   getColor = optionId => {
     switch(optionId) {
@@ -55,16 +58,19 @@ class Stats extends React.Component {
       return getRandomColor();
     }
   }
-  canShowStats = status =>
-    status === PROPOSAL_VOTING_ACTIVE || status === PROPOSAL_VOTING_FINISHED
+  canShowStats = (status, totalVotes) =>
+    (status === PROPOSAL_VOTING_ACTIVE || status === PROPOSAL_VOTING_FINISHED) &&
+    totalVotes > 0
   transformOptionsResult = (totalVotes, optionsResult = []) =>
-    optionsResult.map(({ option, votesreceived }) => ({
-      id: option.id,
-      description: option.description,
-      votesReceived: votesreceived,
-      percentage: (votesreceived/totalVotes).toFixed(2)*100,
-      color: this.getColor(option.id)
-    }))
+    optionsResult
+      .sort(sortOptionYesFirst)
+      .map(({ option, votesreceived }) => ({
+        id: option.id,
+        description: option.description,
+        votesReceived: votesreceived,
+        percentage: getPercentage(votesreceived, totalVotes),
+        color: this.getColor(option.id)
+      }))
   renderStats = (option) => {
     const optionStyle = {
       display: "flex",
@@ -90,7 +96,7 @@ class Stats extends React.Component {
     }))
   renderOptionsStats = (totalVotes, optionsResult) => {
     const { status } = this.props;
-    const showStats = this.canShowStats(status);
+    const showStats = this.canShowStats(status, totalVotes);
     const options = optionsResult ? this.transformOptionsResult(totalVotes, optionsResult) : [];
     const headerStyle = {
       display: "flex",
@@ -104,10 +110,11 @@ class Stats extends React.Component {
           style={headerStyle}
         >
           <VoteStatusLabel status={status} />
-          {showStats && totalVotes > 0 && options.map(op => this.renderStats(op))}
+          {showStats && options.map(op => this.renderStats(op))}
         </div>
-        {showStats && totalVotes > 0 ?
+        {showStats ?
           <StackedBarChart
+            displayValuesForLabel="yes"
             style={{ ...bodyStyle, maxWidth: "400px" }}
             data={this.getChartData(options)}
           /> :
