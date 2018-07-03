@@ -96,7 +96,6 @@ export const me = () => {
   return (
     GET("/v1/user/me").then(
       ({
-        csrfToken,
         response: {
           email,
           isadmin,
@@ -108,7 +107,6 @@ export const me = () => {
           username
         }
       }) => ({
-        csrfToken: csrfToken || "itsafake",
         email,
         isadmin,
         paywalladdress,
@@ -123,7 +121,7 @@ export const me = () => {
 };
 
 export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, route, pubkey, testnet } }) => ({
-  csrfToken: csrfToken || "itsafake", version, route, pubkey, testnet
+  csrfToken: csrfToken, version, route, pubkey, testnet
 }));
 
 export const newUser = (csrf, email, username, password) => pki.myPubKeyHex(email).then(publickey =>
