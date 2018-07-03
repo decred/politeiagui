@@ -45,6 +45,7 @@ const VoteStatusLabel = ({ status }) => {
 };
 
 const getPercentage = (received, total) => Number.parseFloat(received/total).toFixed(4)*100;
+const sortOptionYesFirst = (a) => a.id === "yes" ? -1 : 1;
 
 class Stats extends React.Component {
   getColor = optionId => {
@@ -61,13 +62,15 @@ class Stats extends React.Component {
     (status === PROPOSAL_VOTING_ACTIVE || status === PROPOSAL_VOTING_FINISHED) &&
     totalVotes > 0
   transformOptionsResult = (totalVotes, optionsResult = []) =>
-    optionsResult.map(({ option, votesreceived }) => ({
-      id: option.id,
-      description: option.description,
-      votesReceived: votesreceived,
-      percentage: getPercentage(votesreceived, totalVotes),
-      color: this.getColor(option.id)
-    }))
+    optionsResult
+      .sort(sortOptionYesFirst)
+      .map(({ option, votesreceived }) => ({
+        id: option.id,
+        description: option.description,
+        votesReceived: votesreceived,
+        percentage: getPercentage(votesreceived, totalVotes),
+        color: this.getColor(option.id)
+      }))
   renderStats = (option) => {
     const optionStyle = {
       display: "flex",
@@ -88,9 +91,9 @@ class Stats extends React.Component {
   getChartData = (options) =>
     options.map(op => ({
       label: op.id,
-      value: op.percentage,
+      value: 50,
       color: op.color
-    })).sort((a) => a.label === "yes" ? -1 : 1)
+    }))
   renderOptionsStats = (totalVotes, optionsResult) => {
     const { status } = this.props;
     const showStats = this.canShowStats(status, totalVotes);
