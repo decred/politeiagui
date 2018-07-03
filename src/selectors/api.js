@@ -74,6 +74,7 @@ export const verifyUserKey = getApiResponse("verifyUserKey");
 export const updateUserKeyError = getApiError("updateUserKey");
 export const verifyUserKeyError = getApiError("verifyUserKey");
 const apiSetStartVoteResponse = getApiResponse("startVote");
+const apiCommentsVotesResponse = getApiResponse("commentsvotes");
 
 export const apiPropsVoteStatusResponse = getApiResponse("proposalsVoteStatus");
 export const apiPropsVoteStatusError = getApiError("proposalsVoteStatus");
@@ -96,6 +97,7 @@ const apiUnvettedError = getApiError("unvetted");
 const apiProposalError = getApiError("proposal");
 const apiNewProposalError = getApiError("newProposal");
 const apiSetStatusProposalError = getApiError("setStatusProposal");
+const apiCommentsVotesError = getApiError("commentsvotes");
 export const apiError = or(
   apiInitError,
   apiNewUserError,
@@ -108,6 +110,7 @@ export const apiError = or(
   apiUserProposalsError,
   apiProposalError,
   apiNewProposalError,
+  apiCommentsVotesError,
   apiSetStatusProposalError
 );
 
@@ -204,6 +207,7 @@ export const userid = state => state.api.me.response && state.api.me.response.us
 
 export const serverPubkey = compose(get("pubkey"), apiInitResponse);
 export const userPubkey = compose(get("pubkey"), apiMeResponse);
+export const commentsVotes = or(compose(get("commentsvotes"), apiCommentsVotesResponse), constant(null));
 export const policy = apiPolicyResponse;
 export const isLoadingSubmit = or(isApiRequestingPolicy, isApiRequestingInit);
 export const apiVettedProposals = or(compose(get("proposals"), apiVettedResponse), constant([]));

@@ -136,6 +136,9 @@ export const verifyNewUser = searchQuery => {
     .then(getResponse);
 };
 
+export const likedComments = token =>
+  GET(`/v1/user/proposals/${token}/commentsvotes`).then(getResponse);
+
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);
 

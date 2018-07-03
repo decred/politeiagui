@@ -455,6 +455,29 @@ describe("test api actions (actions/api.js)", () => {
     );
   });
 
+  test("on fetch liked comments action", async () => {
+    const path = `/api/v1/proposals/${FAKE_PROPOSAL_TOKEN}/commentsvotes`;
+    const params = [FAKE_PROPOSAL_TOKEN];
+    await assertApiActionOnSuccess(
+      path,
+      api.onFetchLikedComments,
+      params,
+      [
+        { type: act.REQUEST_LIKED_COMMENTS },
+        { type: act.RECEIVE_LIKED_COMMENTS, error: false, payload: {} }
+      ]
+    );
+    await assertApiActionOnError(
+      path,
+      api.onFetchLikedComments,
+      params,
+      () => [
+        { type: act.REQUEST_LIKED_COMMENTS, error: false, payload: FAKE_PROPOSAL_TOKEN },
+        { type: act.RECEIVE_LIKED_COMMENTS, error: false, payload: {} }
+      ]
+    );
+  });
+
   test("on fetch proposal action", async () => {
     const path = `/api/v1/proposals/${FAKE_PROPOSAL_TOKEN}`;
     const params = [FAKE_PROPOSAL_TOKEN];

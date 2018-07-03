@@ -222,6 +222,16 @@ export const onFetchProposalComments = token => dispatch => {
     });
 };
 
+export const onFetchLikedComments = token => dispatch => {
+  dispatch(act.REQUEST_LIKED_COMMENTS(token));
+  return api
+    .likedComments(token)
+    .then(response => dispatch(act.RECEIVE_LIKED_COMMENTS(response)))
+    .catch(error => {
+      dispatch(act.RECEIVE_LIKED_COMMENTS(null, error));
+    });
+};
+
 export const onSubmitProposal = (
   loggedInAsEmail,
   userid,
