@@ -44,16 +44,16 @@ const VoteStatusLabel = ({ status }) => {
   return mapVoteStatusToLabel[status] || null;
 };
 
-const getPercentage = (received, total) => Number.parseFloat(received/total).toFixed(4)*100;
+const getPercentage = (received, total) => Number.parseFloat((received/total)*100).toFixed(2);
 const sortOptionYesFirst = a => a.id === "yes" ? -1 : 1;
 
 class Stats extends React.Component {
   getColor = optionId => {
     switch(optionId) {
     case "yes":
-      return "#2dd8a3";
+      return "#def9f7";
     case "no":
-      return "#091440";
+      return "#FFF";
     default:
       return getRandomColor();
     }
