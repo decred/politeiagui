@@ -79,7 +79,7 @@ const apiSetStartVoteResponse = getApiResponse("startVote");
 const apiVoteResultsResponse = getApiResponse("voteResults");
 const apiVoteResultsError = getApiError("voteResults");
 
-const apiInitError = getApiError("init");
+export const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
 export const apiChangePasswordError = or(apiInitError, getApiError("changePassword"));
 export const apiChangeUsernameError = or(apiInitError, getApiError("changeUsername"));

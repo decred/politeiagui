@@ -6,8 +6,25 @@ const ErrorPage = ({ error }) => (
     <div className="page error-page">
       <Message
         type="error"
-        header="Server error"
-        body={error} />
+        header="Internal Server Error"
+        children={
+          <div>
+            <p>
+              Something is wrong with the server.
+            </p>
+            {error && (
+              <p>
+                {{error}}
+              </p>
+            )}
+            <p>
+              You can try reloading the page. If the error persists, please try again in a few minutes.
+            </p>
+            <button onclick={() => window.location.reload()}>
+              Refresh Page
+            </button>
+          </div>
+        } />
     </div>
   </div>
 );

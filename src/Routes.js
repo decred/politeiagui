@@ -18,6 +18,7 @@ import Verify from "./components/Verify";
 import Account from "./components/AccountPage";
 import VerifyKey from "./components/VerifyKey";
 import NotFound from "./components/NotFoundPage";
+import ErrorPage from "./components/ErrorPage";
 import ProposalDetail from "./components/ProposalDetail";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
@@ -46,6 +47,7 @@ class Routes extends Component {
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin" component={admin(ProposalListing)} />
         <Route path="/proposals/:token" component={proposalDetail(ProposalDetail)} />
+        <Route path="/500" component={ErrorPage} />
         <Route path="*" component={NotFound} />
       </Switch>
     );
