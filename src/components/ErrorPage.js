@@ -20,7 +20,7 @@ const ErrorPage = ({ error }) => (
             <p>
               You can try reloading the page. If the error persists, please try again in a few minutes.
             </p>
-            <button onClick={() => window.location.reload()}>
+            <button onClick={() => window.location.href = "/"}>
               Refresh Page
             </button>
           </div>
