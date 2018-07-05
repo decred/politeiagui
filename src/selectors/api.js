@@ -114,10 +114,7 @@ export const apiError = or(
   apiSetStatusProposalError
 );
 
-export const csrf = or(
-  compose(get("csrfToken"), apiMeResponse),
-  compose(get("csrfToken"), apiInitResponse)
-);
+export const csrf = compose(get("csrfToken"), apiInitResponse);
 
 export const newUserEmail = compose(get("email"), apiNewUserPayload);
 export const forgottenPassEmail = compose(get("email"), apiForgottenPasswordPayload);
