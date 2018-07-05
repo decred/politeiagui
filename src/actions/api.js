@@ -11,32 +11,13 @@ import { globalUsernamesById } from "./app";
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onSetEmail = act.SET_EMAIL;
 
-export const requestApiInfo = (poolPaywall = false) => (dispatch, getState) => {
+export const requestApiInfo = () => (dispatch) => {
+  dispatch(act.REQUEST_INIT_SESSION());
   return api
     .apiInfo()
-    .then(response => dispatch(act.RECEIVE_INIT_SESSION(response)))
-    .then(() => {
-      // Start polling for the user paywall tx, if applicable.
-      if (poolPaywall) {
-        const paywallAddress = sel.paywallAddress(getState());
-        if (paywallAddress) {
-          const paywallAmount = sel.paywallAmount(getState());
-          const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
-          dispatch(
-            external_api_actions.verifyUserPayment(
-              paywallAddress,
-              paywallAmount,
-              paywallTxNotBefore
-            )
-          );
-        }
-      }
-
-      // Set the current username in the map.
-      let userId = sel.userid(getState());
-      if (userId) {
-        globalUsernamesById[userId] = sel.loggedInAsUsername(getState());
-      }
+    .then(response => {
+      dispatch(act.RECEIVE_INIT_SESSION(response));
+      dispatch(onRequestMe());
     })
     .catch(error => {
       dispatch(act.RECEIVE_INIT_SESSION(null, error));
@@ -44,19 +25,34 @@ export const requestApiInfo = (poolPaywall = false) => (dispatch, getState) => {
     });
 };
 
-export const onInit = () => dispatch => {
+export const onRequestMe = () => (dispatch,getState) => {
   dispatch(act.REQUEST_ME());
   return api
     .me()
     .then(response => {
       dispatch(act.RECEIVE_ME(response));
-      dispatch(act.REQUEST_INIT_SESSION());
-      return dispatch(requestApiInfo(true));
+      // Start polling for the user paywall tx, if applicable.
+      const paywallAddress = sel.paywallAddress(getState());
+      if (paywallAddress) {
+        const paywallAmount = sel.paywallAmount(getState());
+        const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
+        dispatch(
+          external_api_actions.verifyUserPayment(
+            paywallAddress,
+            paywallAmount,
+            paywallTxNotBefore
+          )
+        );
+      }
+      // Set the current username in the map.
+      let userId = sel.userid(getState());
+      if (userId) {
+        globalUsernamesById[userId] = sel.loggedInAsUsername(getState());
+      }
     })
-    .catch(() => {
+    .catch((error) => {
+      dispatch(act.RECEIVE_ME(null, error));
       clearStateLocalStorage();
-      dispatch(act.REQUEST_INIT_SESSION());
-      return dispatch(requestApiInfo());
     });
 };
 
@@ -79,9 +75,11 @@ export const onGetPolicy = () => dispatch => {
 
 export const withCsrf = fn => (dispatch, getState) => {
   const csrf = sel.csrf(getState());
-  return csrf
-    ? fn(dispatch, getState, csrf)
-    : dispatch(onInit()).then(() => withCsrf(fn)(dispatch, getState));
+  if (csrf)
+    return fn(dispatch, getState, csrf);
+
+  dispatch(act.CSRF_NEEDED(true));
+  return dispatch(requestApiInfo()).then(() => withCsrf(fn)(dispatch, getState));
 };
 
 export const onCreateNewUser = ({ email, username, password }) =>
@@ -125,7 +123,7 @@ export const onLogin = ({ email, password }) =>
         dispatch(act.RECEIVE_LOGIN(response));
         dispatch(closeModal());
       })
-      .then(() => dispatch(onInit()))
+      .then(() => dispatch(onRequestMe()))
       .catch(error => {
         dispatch(act.RECEIVE_LOGIN(null, error));
         throw error;

@@ -50,7 +50,8 @@ const app = (state = DEFAULT_STATE, action) => (({
     ...state,
     userPaywallStatus: action.payload.status,
     userPaywallConfirmations: action.payload.currentNumberOfConfirmations
-  })
+  }),
+  [act.CSRF_NEEDED]: () => ({ ...state, csrfIsNeeded: action.payload }),
 })[action.type] || (() => state))();
 
 export default app;
