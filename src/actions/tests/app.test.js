@@ -22,6 +22,11 @@ describe("test app actions (actions/app.js)", () => {
         response: {
           csrfToken: FAKE_CSRF
         }
+      },
+      init: {
+        response: {
+          csrfToken: FAKE_CSRF
+        }
       }
     }
   };
