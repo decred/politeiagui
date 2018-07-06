@@ -29,11 +29,11 @@ const publicFilterOptions = [
     value: PROPOSAL_VOTING_NOT_STARTED
   },
   {
-    label: "voting active",
+    label: "active voting",
     value: PROPOSAL_VOTING_ACTIVE
   },
   {
-    label: "voting finished",
+    label: "finished voting",
     value: PROPOSAL_VOTING_FINISHED
   },
   {
