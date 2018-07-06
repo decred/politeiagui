@@ -68,11 +68,29 @@ export const CustomContent = ({
 };
 
 class Loader extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isFetched: false,
+    };
+  }
+
   componentDidMount() {
-    this.props.onFetchProposalsVoteStatus && this.props.onFetchProposalsVoteStatus();
-    this.props.onFetchData && this.props.onFetchData();
     if(this.props.isProposalStatusApproved){
       this.props.onChangeProposalStatusApproved(false);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { isFetched } = this.state;
+    if (isFetched)
+      return;
+    const { csrf } = nextProps;
+    if (csrf) {
+      this.setState({ isFetched: true });
+      this.props.onFetchProposalsVoteStatus && this.props.onFetchProposalsVoteStatus();
+      this.props.onFetchData && this.props.onFetchData();
     }
   }
 
