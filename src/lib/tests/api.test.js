@@ -188,7 +188,7 @@ describe("api integration modules (lib/api.js)", () => {
     fetchMock.restore();
     fetchMock.getOnce(PATH, { body: MOCK_RESULT, headers: {} });
     result = await api.apiInfo();
-    expect(result).toEqual({ ...MOCK_RESULT, csrfToken: FAKE_CSRF });
+    expect(result).toEqual({ ...MOCK_RESULT, csrfToken: null });
   });
 
   test("fetches current info user (api/user/me) - CSRF token disabled", async () => {
@@ -198,10 +198,10 @@ describe("api integration modules (lib/api.js)", () => {
     const result = await assertGETOnRouteIsCalled(PATH, api.me, [], MOCK_RESULT);
     const publickey = MOCK_RESULT.publickey;
     delete MOCK_RESULT.publickey;
+    delete MOCK_RESULT.csrfToken;
     expect(result).toEqual({
       ...MOCK_RESULT,
-      pubkey: publickey,
-      csrfToken: FAKE_CSRF
+      pubkey: publickey
     });
   });
 
