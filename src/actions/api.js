@@ -75,7 +75,8 @@ export const onGetPolicy = () => dispatch => {
 
 export const withCsrf = fn => (dispatch, getState) => {
   const csrf = sel.csrf(getState());
-  if (csrf)
+  const csrfIsNeeded = sel.getCsrfIsNeeded(getState());
+  if (csrf || csrfIsNeeded)
     return fn(dispatch, getState, csrf);
 
   dispatch(act.CSRF_NEEDED(true));
