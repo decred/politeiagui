@@ -41,7 +41,7 @@ class Loader extends Component {
     if (nextProps.loggedInAsEmail) {
       this.verifyUserPubkey(nextProps.loggedInAsEmail, nextProps.userPubkey);
     }
-    if (nextProps.apiInitError) {
+    if (!this.props.apiInitError && nextProps.apiInitError) {
       this.props.history.push("/500");
     }
   }
@@ -68,7 +68,7 @@ class Loader extends Component {
   }
 }
 
-const LoaderComponent = loaderConnector(withRouter(Loader));
+const LoaderComponent = withRouter(loaderConnector(Loader));
 
 const HeaderAlertComponent = withRouter(
   loaderConnector(
