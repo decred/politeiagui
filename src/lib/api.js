@@ -157,6 +157,12 @@ export const changePassword = (csrf, currentpassword, newpassword) =>
 export const forgottenPasswordRequest = (csrf, email) =>
   POST("/user/password/reset", csrf, { email }).then(getResponse);
 
+export const resendVerificationEmailRequest = (csrf, email) =>
+  pki.generateKeys().then(keys =>
+    pki.loadKeys(email, keys)).then(() =>
+    pki.myPubKeyHex(email)).then(publickey =>
+    POST("/user/new/resend", csrf, { email, publickey }).then(getResponse));
+
 export const passwordResetRequest = (csrf, email, verificationtoken, newpassword) =>
   POST("/user/password/reset", csrf, { email, verificationtoken, newpassword }).then(getResponse);
 

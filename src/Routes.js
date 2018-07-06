@@ -14,6 +14,8 @@ import ForgottenPassword from "./components/ForgottenPasswordPage";
 import ForgottenPasswordSuccess from "./components/ForgottenPassword/SuccessPage";
 import PasswordReset from "./components/PasswordResetPage";
 import PasswordResetSuccess from "./components/PasswordReset/SuccessPage";
+import ResendVerificationEmail from "./components/ResendVerificationEmailPage";
+import ResendVerificationEmailSuccess from "./components/ResendVerificationEmail/SuccessPage";
 import Verify from "./components/Verify";
 import Account from "./components/AccountPage";
 import VerifyKey from "./components/VerifyKey";
@@ -40,6 +42,8 @@ class Routes extends Component {
         <Route exact path="/user/password/reset/next" component={PasswordResetSuccess} />
         <Route path="/user/verify" component={Verify} exact />
         <Route path="/user/key/verify" component={VerifyKey} exact />
+        <Route path="/user/resend" component={ResendVerificationEmail} exact />
+        <Route path="/user/resend/next" component={ResendVerificationEmailSuccess} />
         <AuthenticatedRoute path="/user/account" component={Account} exact />
         <AuthenticatedRoute path="/proposals/new" component={SubmitPage} />
         <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />

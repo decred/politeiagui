@@ -367,6 +367,26 @@ export const onForgottenPasswordRequest = ({ email }) =>
 export const resetForgottenPassword = () => dispatch =>
   dispatch(act.RESET_FORGOTTEN_PASSWORD_REQUEST());
 
+export const resendVerificationEmail = () => dispatch =>
+  dispatch(act.REQUEST_RESEND_VERIFICATION_EMAIL());
+
+export const onResendVerificationEmailRequest = ({ email }) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_RESEND_VERIFICATION_EMAIL({ email }));
+    return api
+      .resendVerificationEmailRequest(csrf, email)
+      .then(response =>
+        dispatch(act.RECEIVE_RESEND_VERIFICATION_EMAIL(response))
+      )
+      .catch(error => {
+        dispatch(act.RECEIVE_RESEND_VERIFICATION_EMAIL(null, error));
+        throw error;
+      });
+  });
+
+export const resetResendVerificationEmail = () => dispatch =>
+  dispatch(act.RESET_RESEND_VERIFICATION_EMAIL());
+
 export const onPasswordResetRequest = ({
   email,
   verificationtoken,

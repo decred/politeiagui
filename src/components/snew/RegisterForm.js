@@ -7,6 +7,7 @@ import ErrorField from "../Form/Fields/ErrorField";
 import { getUsernameFieldLabel, getPasswordFieldLabel } from "../../helpers";
 
 const RegisterForm = ({
+  Link,
   error,
   isApiRequestingNewUser,
   apiNewUserError,
@@ -112,9 +113,12 @@ const RegisterForm = ({
       <ButtonWithLoadingIcon
         style={{ marginRight: "0px" }}
         className="c-btn c-btn-primary c-pull-right"
-        tabIndex={2}
+        tabIndex={3}
         text="Sign up"
         isLoading={isApiRequestingNewUser} />
+      <Link className="c-pull-right resend-verification-link" href="/user/resend" tabIndex={2}>
+        Resend verification email
+      </Link>
     </div>
     <div>
       <div className="c-alert c-alert-danger" />

@@ -41,7 +41,7 @@ const LoginForm = ({
         component="input"
         type="text"
         placeholder="Email Address"
-        tabIndex={3}
+        tabIndex={4}
       />
     </div>
     <div className="c-form-group">
@@ -51,7 +51,7 @@ const LoginForm = ({
       <Field
         className="c-form-control"
         id="passwd_login"
-        tabIndex={3}
+        tabIndex={4}
         name="password"
         component="input"
         type="password"
@@ -69,19 +69,19 @@ const LoginForm = ({
       />
     </div>
     <div className="c-checkbox">
-      <input id="rem_login" name="rem" tabIndex={3} type="checkbox" />
+      <input id="rem_login" name="rem" tabIndex={4} type="checkbox" />
       <label htmlFor="rem_login">remember me</label>
-      <Link className="c-pull-right reset-password-link" href="/password">
-        Reset Password
-      </Link>
     </div>
     <div className="c-clearfix c-submit-group">
       <ButtonWithLoadingIcon
         style={{ marginRight: "0px" }}
         className="c-btn c-btn-primary c-pull-right"
-        tabIndex={3}
+        tabIndex={5}
         text="LOGIN"
         isLoading={isApiRequestingLogin} />
+      <Link className="c-pull-right reset-password-link" href="/password" tabIndex={4}>
+        Reset Password
+      </Link>
     </div>
     <div>
       <div className="c-alert c-alert-danger" />

@@ -46,6 +46,14 @@
   display: none;
 }
 
+#login-form .reset-password-link,
+#register-form .resend-verification-link {
+  float: right;
+  height: 36px;
+  line-height: 36px;
+  margin: 4px 16px 4px 0;
+}
+
 .score.likes {
     color: #2971ff;
     display: none;
@@ -100,7 +108,7 @@ a {
   text-decoration: none;
 }
 
-a:hover {
+a:hover, a:focus {
   text-decoration: underline;
 }
 
@@ -169,6 +177,8 @@ a:hover {
 .reset-password-next-step-page,
 .forgotten-password-page,
 .forgotten-password-next-step-page,
+.resend-verification-page,
+.resend-verification-next-step-page,
 .signup-next-step-page,
 .submit-proposal-page,
 .logout-page {
@@ -201,6 +211,7 @@ a:hover {
 
 .change-password-form,
 .forgotten-password-form,
+.resend-verification-form,
 .reset-password-form {
   width: 600px;
 }
@@ -447,6 +458,7 @@ li p.header-3 {
 
 .signup-next-step-page,
 .forgotten-password-next-step-page,
+.resend-verification-next-step-page,
 .verification-success-page,
 .user-profile-page {
   width: 600px;
@@ -454,6 +466,7 @@ li p.header-3 {
 }
 .signup-next-step-page h3,
 .forgotten-password-next-step-page h3,
+.resend-verification-next-step-page h3,
 .verification-success-page h3,
 .logout-page h3 {
   margin-bottom: 16px;
@@ -466,6 +479,7 @@ li p.header-3 {
 
 .signup-next-step-page ul,
 .forgotten-password-next-step-page ul,
+.resend-verification-next-step-page ul,
 .logout-page ul {
   margin: 16px 0 16px 24px;
   list-style-type: disc;
@@ -497,12 +511,14 @@ li p.header-3 {
 
 .signup-next-step-page li,
 .forgotten-password-next-step-page li,
+.resend-verification-next-step-page li,
 .logout-page li,
 .user-profile-page li {
   margin: 8px 0;
 }
 .signup-next-step-page .email-address,
-.forgotten-password-next-step-page .email-address {
+.forgotten-password-next-step-page .email-address,
+.resend-verification-next-step-page .email-address {
   font-weight: bold;
 }
 
