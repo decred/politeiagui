@@ -5,7 +5,7 @@ import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_VOTING_NOT_STARTED,
-  LIST_HEADER_PUBLICS
+  LIST_HEADER_PUBLIC
 } from "../constants";
 import * as sel from "../selectors";
 import * as act from "../actions";
@@ -26,7 +26,7 @@ export default connect(
     isLoading: or(sel.vettedProposalsIsRequesting, sel.isApiRequestingPropsVoteStatus),
     error: or(sel.vettedProposalsError, sel.apiPropsVoteStatusError),
     filterValue: sel.getPublicFilterValue,
-    header: () => LIST_HEADER_PUBLICS,
+    header: () => LIST_HEADER_PUBLIC,
     emptyProposalsMessage: (state) => {
       switch(sel.getPublicFilterValue(state)) {
       case PROPOSAL_VOTING_ACTIVE:

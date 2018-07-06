@@ -5,7 +5,7 @@ import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_NOT_STARTED,
   PROPOSAL_VOTING_FINISHED,
-  LIST_HEADER_PUBLICS,
+  LIST_HEADER_PUBLIC,
   LIST_HEADER_UNVETTED
 } from "../constants";
 
@@ -43,7 +43,7 @@ const publicFilterOptions = [
 ];
 const mapHeaderToOptions = {
   [LIST_HEADER_UNVETTED]: adminFilterOptions,
-  [LIST_HEADER_PUBLICS]: publicFilterOptions
+  [LIST_HEADER_PUBLIC]: publicFilterOptions
 };
 
 const ProposalFilter = ({ handleChangeFilterValue, header, filterValue }) => (
