@@ -96,3 +96,5 @@ export const vettedProposals = state => {
 
 export const votesEndHeight = (state) => state.app.votesEndHeight || {};
 
+export const getCsrfIsNeeded = state => state.app ? state.app.csrfIsNeeded : null;
+

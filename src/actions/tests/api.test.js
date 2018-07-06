@@ -45,6 +45,11 @@ describe("test api actions (actions/api.js)", () => {
           paywalltxnotbefore: FAKE_PAYWALL.txNotBefore,
           csrfToken: FAKE_CSRF
         }
+      },
+      init: {
+        response: {
+          csrfToken: FAKE_CSRF
+        }
       }
     }
   };
@@ -102,23 +107,17 @@ describe("test api actions (actions/api.js)", () => {
 
   test("request api info action", async () => {
     const path = "/api/";
-    const poolPaywall = true;
-    const { address, amount, txNotBefore } = FAKE_PAYWALL;
 
     //test it handles a success response
     setGetSuccessResponse(path);
     // test without pooling paywall flag
     await expect(api.requestApiInfo())
       .toDispatchActionsWithState(MOCK_STATE, [
-        { type: act.RECEIVE_INIT_SESSION, error: false, payload: { csrfToken : "itsafake" } }
+        { type: act.REQUEST_INIT_SESSION, error: false },
+        { type: act.RECEIVE_INIT_SESSION, error: false, payload: { csrfToken : null } },
+        { type: act.REQUEST_ME, error: false }
       ], done);
 
-    // test it does pool paywall and dispatch actions
-    await expect(api.requestApiInfo(poolPaywall))
-      .toDispatchActionsWithState(MOCK_STATE, [
-        { type: act.RECEIVE_INIT_SESSION, payload: { csrfToken : "itsafake" } },
-        ea.verifyUserPayment(address, amount, txNotBefore)
-      ], done);
 
     // test it handles an error and dispatch an action
     const store = mockStore(MOCK_STATE);
@@ -127,27 +126,29 @@ describe("test api actions (actions/api.js)", () => {
     await store.dispatch(api.requestApiInfo())
       .catch((e) => {
         expect(store.getActions()).toEqual([
+          { type: act.REQUEST_INIT_SESSION, error: false },
           { type: act.RECEIVE_INIT_SESSION, error: true, payload: e },
         ]);
       });
 
   });
 
-  test("on init action", async () => {
+
+  test("on request me action", async () => {
     const successfullResponse = { ...FAKE_USER };
     const path = "/api/v1/user/me";
     fetchMock.get("/api/v1/user/me", successfullResponse);
+    const { address, amount, txNotBefore } = FAKE_PAYWALL;
 
     // test it successfully handles the response and dispatch actions
     setGetSuccessResponse(path, {}, successfullResponse);
-    await expect(api.onInit())
+    await expect(api.onRequestMe())
       .toDispatchActionsWithState(MOCK_STATE,[
         { type: act.REQUEST_ME },
         { type: act.RECEIVE_ME,
-          payload: { email: FAKE_USER.email, username: FAKE_USER.username, csrfToken : "itsafake" }
+          payload: { email: FAKE_USER.email, username: FAKE_USER.username }
         },
-        { type: act.REQUEST_INIT_SESSION },
-        api.requestApiInfo(true)
+        ea.verifyUserPayment(address, amount, txNotBefore)
       ], done);
 
     //test it successfully handles the error response
@@ -156,11 +157,11 @@ describe("test api actions (actions/api.js)", () => {
     setGetErrorResponse(path);
     localStorage.setItem("state", "any");
     expect(localStorage.getItem("state")).toBeTruthy();
-    await store.dispatch(api.onInit())
-      .catch(() => {
+    await store.dispatch(api.onRequestMe())
+      .catch((e) => {
         expect(store.getActions()).toBeEqual([
-          { type: act.REQUEST_INIT_SESSION },
-          api.requestApiInfo()
+          { type: act.REQUEST_ME, error: false },
+          { type: act.RECEIVE_ME, error: e }
         ]);
         expect(localStorage.getItem("state")).toBeFalsy();
       });
@@ -289,8 +290,7 @@ describe("test api actions (actions/api.js)", () => {
       [FAKE_USER],
       [
         { type: act.REQUEST_LOGIN },
-        { type: act.RECEIVE_LOGIN, error: false },
-        api.onInit()
+        { type: act.RECEIVE_LOGIN, error: false }
       ],
       {},
       methods.POST
