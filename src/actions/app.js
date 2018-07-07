@@ -2,7 +2,7 @@ import Promise from "promise";
 import { reset } from "redux-form";
 import get from "lodash/get";
 import isEqual from "lodash/isEqual";
-import { onSubmitProposal, onChangeUsername, onChangePassword, onFetchProposalComments } from "./api";
+import { onCreateNewUser, onSubmitProposal, onChangeUsername, onChangePassword, onFetchProposalComments } from "./api";
 import { onFetchProposal as onFetchProposalApi, onSubmitComment as onSubmitCommentApi } from "./api";
 import { onFetchUsernamesById as onFetchUsernamesByIdApi } from "./api";
 import * as sel from "../selectors";
@@ -11,10 +11,13 @@ import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 import { onLogout } from "./api";
 import { loadStateLocalStorage } from "../lib/local_storage";
 
-export const CANCEL_SIGNUP = "CANCEL_SIGNUP";
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
 
-export const onCancelSignup = act.CANCEL_SIGNUP;
+export const onSignup = act.REQUEST_SIGNUP_CONFIRMATION;
+export const onSignupConfirm = props => dispatch => {
+  dispatch(onCreateNewUser(props));
+};
+
 export const onSetReplyParent = (parentId = TOP_LEVEL_COMMENT_PARENTID) =>
   (dispatch) => Promise.all([
     dispatch(act.SET_REPLY_PARENT(parentId)),

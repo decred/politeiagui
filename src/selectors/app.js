@@ -98,3 +98,5 @@ export const votesEndHeight = (state) => state.app.votesEndHeight || {};
 
 export const getCsrfIsNeeded = state => state.app ? state.app.csrfIsNeeded : null;
 
+export const isShowingSignupConfirmation = state => state.app.isShowingSignupConfirmation;
+

@@ -43,7 +43,8 @@ const app = (state = DEFAULT_STATE, action) => (({
   [act.SET_PROPOSAL_APPROVED]: () => ({...state, isProposalStatusApproved: action.payload}),
   [act.RECEIVE_USERNAMES]: () => ({...state, usernamesById: action.payload.usernamesById }),
   [act.SET_VOTES_END_HEIGHT]: () => ({...state, votesEndHeight: { ...state.votesEndHeight, [action.payload.token]: action.payload.endheight }}),
-  [act.CANCEL_SIGNUP]: () => ({ ...state, isShowingSignup: false }),
+  [act.REQUEST_SIGNUP_CONFIRMATION]: () => ({ ...state, isShowingSignupConfirmation: true }),
+  [act.RESET_SIGNUP_CONFIRMATION]: () => ({ ...state, isShowingSignupConfirmation: false }),
   [act.CHANGE_ADMIN_FILTER_VALUE]: () => ({ ...state, adminProposalsShow: action.payload }),
   [act.CHANGE_PUBLIC_FILTER_VALUE]: () => ({ ...state, publicProposalsShow: action.payload }),
   [act.UPDATE_USER_PAYWALL_STATUS]: () => ({

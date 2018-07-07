@@ -275,13 +275,6 @@ describe("test api actions (actions/api.js)", () => {
     );
   });
 
-  test("on signup action", async () => {
-    await expect(api.onSignup(FAKE_USER))
-      .toDispatchActionsWithState(MOCK_STATE, [
-        api.onCreateNewUser(FAKE_USER)
-      ], done);
-  });
-
   test("on login action", async () => {
     const path = "/api/v1/login";
     await assertApiActionOnSuccess(

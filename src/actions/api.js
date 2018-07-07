@@ -111,10 +111,6 @@ export const onVerifyNewUser = searchQuery => dispatch => {
     });
 };
 
-export const onSignup = props => dispatch => {
-  dispatch(onCreateNewUser(props));
-};
-
 export const onLogin = ({ email, password }) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_LOGIN({ email }));

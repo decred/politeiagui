@@ -2,6 +2,7 @@ import fetchMock from "fetch-mock";
 import * as app from "../app";
 import * as act from "../types";
 import {
+  onCreateNewUser,
   onSubmitProposal,
   onChangeUsername,
   onChangePassword,
@@ -52,6 +53,14 @@ describe("test app actions (actions/app.js)", () => {
     fetchMock.restore();
     fetchMock.post("/", {}).catch({});
   });
+
+  test("on signup action", async () => {
+    await expect(app.onSignupConfirm(FAKE_USER))
+      .toDispatchActionsWithState(MOCK_STATE, [
+        onCreateNewUser(FAKE_USER)
+      ], done);
+  });
+
   test("set reply parent and reset form reply", async () => {
     await expect(app.onSetReplyParent(0)).toDispatchActions([
       { type: act.SET_REPLY_PARENT },

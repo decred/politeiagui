@@ -20,12 +20,12 @@ const signupFormConnector = connect(
     isApiRequestingNewUser: or(sel.isApiRequestingInit, sel.isApiRequestingNewUser),
     isApiRequestingVerifyNewUser: sel.isApiRequestingVerifyNewUser,
     apiNewUserError: sel.apiNewUserError,
-    apiVerifyNewUserError: sel.apiVerifyNewUserError
+    apiVerifyNewUserError: sel.apiVerifyNewUserError,
+    isShowingSignupConfirmation: sel.isShowingSignupConfirmation,
   }),
   {
     onFetchData: act.onGetPolicy,
     onSignup: act.onSignup,
-    onCancelSignup: act.onCancelSignup
   }
 );
 
@@ -49,24 +49,32 @@ class Wrapper extends Component {
 
   render() {
     const Component = this.props.Component;
-    return <Component {...{ ...this.props, onSignup: this.onSignup.bind(this) }} />;
+    return <Component {...{
+      ...this.props,
+      onSignup: this.onSignup.bind(this)
+    }} />;
   }
 
   onSignup(args) {
     args = {
       ...args,
-      email: args.email.trim()
+      email: (args.email || "").trim()
     };
+
     const policy = this.props.policy || {};
     validate(policy, args);
-    if (this.props.onSignup(args)) {
-      return this.props.onSignup(args).catch(e => {
-        throw new SubmissionError({
-          _error: e.message,
-        });
-      });
+
+    if (!this.props.isShowingSignupConfirmation) {
+      return this.props.onSignup();
     }
+
+    return this.props.onSignupConfirm(args).catch(e => {
+      throw new SubmissionError({
+        _error: e.message,
+      });
+    });
   }
+
 }
 
 const wrap = (Component) => signupFormConnector((props) => <Wrapper {...{...props, Component }} />);
