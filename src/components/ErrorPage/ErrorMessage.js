@@ -1,7 +1,7 @@
 import React from "react";
-import Message from "./Message";
+import Message from "../Message";
 
-const ErrorPage = ({ error }) => (
+const ErrorMessage = ({ error }) => (
   <div className="content" role="main">
     <div className="page error-page">
       <Message
@@ -26,4 +26,4 @@ const ErrorPage = ({ error }) => (
   </div>
 );
 
-export default ErrorPage;
+export default ErrorMessage;
