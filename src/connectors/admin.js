@@ -4,7 +4,8 @@ import * as act from "../actions";
 import { or } from "../lib/fp";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_STATUS_CENSORED
+  PROPOSAL_STATUS_CENSORED,
+  LIST_HEADER_UNVETTED
 } from "../constants";
 
 export default connect(
@@ -21,7 +22,7 @@ export default connect(
     error: sel.unvettedProposalsError,
     isLoading: or(sel.unvettedProposalsIsRequesting, sel.setStatusProposalIsRequesting),
     filterValue: sel.getAdminFilterValue,
-    header: () => "Unvetted Proposals",
+    header: () => LIST_HEADER_UNVETTED,
     emptyProposalsMessage: (state) => {
       switch(sel.getAdminFilterValue(state)) {
       case PROPOSAL_STATUS_UNREVIEWED:
@@ -35,7 +36,7 @@ export default connect(
   }),
   {
     onFetchData: act.onFetchUnvetted,
-    onChangeFilter: act.onChangeFilter,
+    onChangeFilter: act.onChangeAdminFilter,
     onStartVote: act.onStartVote,
   }
 );

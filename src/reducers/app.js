@@ -1,6 +1,6 @@
 import * as act from "../actions/types";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
-import { PROPOSAL_STATUS_UNREVIEWED } from "../constants";
+import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_VOTING_ACTIVE } from "../constants";
 
 export const DEFAULT_STATE = {
   isShowingSignup: false,
@@ -10,6 +10,7 @@ export const DEFAULT_STATE = {
     description: ""
   },
   adminProposalsShow: PROPOSAL_STATUS_UNREVIEWED,
+  publicProposalsShow: PROPOSAL_VOTING_ACTIVE,
   submittedProposals: {}
 };
 
@@ -43,12 +44,14 @@ const app = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_USERNAMES]: () => ({...state, usernamesById: action.payload.usernamesById }),
   [act.SET_VOTES_END_HEIGHT]: () => ({...state, votesEndHeight: { ...state.votesEndHeight, [action.payload.token]: action.payload.endheight }}),
   [act.CANCEL_SIGNUP]: () => ({ ...state, isShowingSignup: false }),
-  [act.CHANGE_FILTER_VALUE]: () => ({ ...state, adminProposalsShow: action.payload }),
+  [act.CHANGE_ADMIN_FILTER_VALUE]: () => ({ ...state, adminProposalsShow: action.payload }),
+  [act.CHANGE_PUBLIC_FILTER_VALUE]: () => ({ ...state, publicProposalsShow: action.payload }),
   [act.UPDATE_USER_PAYWALL_STATUS]: () => ({
     ...state,
     userPaywallStatus: action.payload.status,
     userPaywallConfirmations: action.payload.currentNumberOfConfirmations
-  })
+  }),
+  [act.CSRF_NEEDED]: () => ({ ...state, csrfIsNeeded: action.payload }),
 })[action.type] || (() => state))();
 
 export default app;

@@ -18,6 +18,10 @@ const SignupNextStepPage = ({ email }) => (
       ) : null}
       <li>Check your spam folder!</li>
       <li>
+        The verification link needs to be open with the same browser
+        that you used to sign up.
+      </li>
+      <li>
         Make sure you don't already have an account on Politeia with this
         email address. If you do, you should{" "}
         <a href="/password">reset your account</a> instead.

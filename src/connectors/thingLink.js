@@ -8,11 +8,11 @@ const proposalDownloadConnector = connect(
     tokenFromStartingVoteProp: sel.getPropTokenIfIsStartingVote,
     lastBlockHeight: sel.lastBlockHeight,
     isTestnet: sel.isTestNet,
-    votesEndHeight: sel.votesEndHeight,
+    getVoteStatus: sel.getPropVoteStatus,
+    csrf: sel.csrf,
   }),
   {
     onChangeProposalStatusApproved: act.onChangeProposalStatusApproved,
-    getLastBlockHeight: act.getLastBlockHeight,
   }
 );
 

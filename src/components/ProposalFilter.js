@@ -2,51 +2,72 @@ import React from "react";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_VOTING_ACTIVE,
+  PROPOSAL_VOTING_NOT_STARTED,
+  PROPOSAL_VOTING_FINISHED,
+  LIST_HEADER_PUBLIC,
+  LIST_HEADER_UNVETTED
 } from "../constants";
 
-const ProposalFilter = ({handleChangeFilterValue, header, filterValue}) => (
-  header === "Unvetted Proposals" ?
-    <div style={{margin: "16px 352px 0 24px"}}>
+const adminFilterOptions = [
+  {
+    label: "only unreviewed",
+    value: PROPOSAL_STATUS_UNREVIEWED
+  },
+  {
+    label: "only censored",
+    value: PROPOSAL_STATUS_CENSORED
+  },
+  {
+    label: "all",
+    value: 0
+  }
+];
+const publicFilterOptions = [
+  {
+    label: "pre-voting",
+    value: PROPOSAL_VOTING_NOT_STARTED
+  },
+  {
+    label: "active voting",
+    value: PROPOSAL_VOTING_ACTIVE
+  },
+  {
+    label: "finished voting",
+    value: PROPOSAL_VOTING_FINISHED
+  },
+  {
+    label: "all proposals",
+    value: 0
+  }
+];
+const mapHeaderToOptions = {
+  [LIST_HEADER_UNVETTED]: adminFilterOptions,
+  [LIST_HEADER_PUBLIC]: publicFilterOptions
+};
+
+const ProposalFilter = ({ handleChangeFilterValue, header, filterValue }) => (
+  mapHeaderToOptions[header] ?
+    <div style={{ display: "flex", margin: "16px 0px 0 24px", flexWrap: "wrap", alignItems: "center" }}>
       <span style={{marginRight: "16px"}}>Show:</span>
-
-      <input
-        type="radio"
-        id="admin-proposals-filter-unreviewed"
-        name="admin-proposals-filter"
-        value={PROPOSAL_STATUS_UNREVIEWED}
-        checked={filterValue === PROPOSAL_STATUS_UNREVIEWED}
-        onChange={e => handleChangeFilterValue(e.target.value)} />
-      <label
-        for="admin-proposals-filter-unreviewed"
-        style={{margin: "0 16px 0 4px"}}>
-        Only unreviewed
-      </label>
-
-      <input
-        type="radio"
-        id="admin-proposals-filter-censored"
-        name="admin-proposals-filter"
-        value={PROPOSAL_STATUS_CENSORED}
-        checked={filterValue === PROPOSAL_STATUS_CENSORED}
-        onChange={e => handleChangeFilterValue(e.target.value)} />
-      <label
-        for="admin-proposals-filter-censored"
-        style={{margin: "0 16px 0 4px"}}>
-        Only censored
-      </label>
-
-      <input
-        type="radio"
-        id="admin-proposals-filter-all"
-        name="admin-proposals-filter"
-        value={0}
-        checked={filterValue === 0}
-        onChange={e => handleChangeFilterValue(e.target.value)} />
-      <label
-        for="admin-proposals-filter-all"
-        style={{margin: "0 16px 0 4px"}}>
-        All
-      </label>
+      {mapHeaderToOptions[header].map((op, idx) => (
+        <div>
+          <input
+            type="radio"
+            key={`radio-option-${idx}`}
+            id={`proposal-filter-${op.value}`}
+            name="proposals-filter"
+            style={{ cursor: "pointer" }}
+            value={op.value}
+            checked={filterValue === op.value}
+            onChange={e => handleChangeFilterValue(e.target.value)} />
+          <label
+            for={`proposal-filter-${op.value}`}
+            style={{ margin: "0 16px 0 4px", cursor: "pointer" }}>
+            {op.label}
+          </label>
+        </div>
+      ))}
     </div>
     : null
 );

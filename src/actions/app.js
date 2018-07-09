@@ -49,25 +49,10 @@ export const onFetchProposal = (token) => (dispatch, getState) =>
 
 export const onLoadMe = me => dispatch => dispatch(act.LOAD_ME(me));
 
-export const onChangeFilter = (option) => act.CHANGE_FILTER_VALUE(option);
+export const onChangeAdminFilter = (option) => act.CHANGE_ADMIN_FILTER_VALUE(option);
+export const onChangePublicFilter = (option) => act.CHANGE_PUBLIC_FILTER_VALUE(option);
 
 export const onChangeProposalStatusApproved = (status) => act.SET_PROPOSAL_APPROVED(status);
-
-export const updateVotesEndHeightFromActiveVotes = ({ votes }) =>
-  (dispatch, getState) => {
-    if(!votes || votes.length === 0)
-      return;
-    const votesEndHeight = sel.votesEndHeight(getState());
-    votes.forEach(vote => {
-      const { token } = vote.proposal.censorshiprecord;
-      const { endheight } = vote.startvotereply;
-      if(!votesEndHeight[token] && endheight) {
-        dispatch(setVotesEndHeight(token, endheight));
-      }
-    });
-  };
-
-export const setVotesEndHeight = (token, endheight) => act.SET_VOTES_END_HEIGHT({ token, endheight });
 
 export const onSubmitComment = (...args) =>
   (dispatch) =>

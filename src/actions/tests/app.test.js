@@ -22,6 +22,11 @@ describe("test app actions (actions/app.js)", () => {
         response: {
           csrfToken: FAKE_CSRF
         }
+      },
+      init: {
+        response: {
+          csrfToken: FAKE_CSRF
+        }
       }
     }
   };
@@ -112,11 +117,20 @@ describe("test app actions (actions/app.js)", () => {
       );
   });
 
-  test("on change filter action", () => {
+  test("on change admin filter action", () => {
     const option = "any";
-    expect(app.onChangeFilter(option))
+    expect(app.onChangeAdminFilter(option))
       .toDispatchActions(
-        { type: act.CHANGE_FILTER_VALUE, payload: option },
+        { type: act.CHANGE_ADMIN_FILTER_VALUE, payload: option },
+        done
+      );
+  });
+
+  test("on change public filter action", () => {
+    const option = "any";
+    expect(app.onChangePublicFilter(option))
+      .toDispatchActions(
+        { type: act.CHANGE_PUBLIC_FILTER_VALUE, payload: option },
         done
       );
   });

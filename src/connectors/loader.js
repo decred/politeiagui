@@ -11,7 +11,7 @@ export default connect(
     userCanExecuteActions: sel.userCanExecuteActions,
   }),
   dispatch => bindActionCreators({
-    onInit: act.onInit,
+    onInit: act.requestApiInfo,
     keyMismatchAction: act.keyMismatch,
   }, dispatch)
 );

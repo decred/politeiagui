@@ -33,6 +33,7 @@ export const proposal = state => {
 
 export const getLastSubmittedProposal = state => state.app.submittedProposals.lastSubmitted;
 export const getAdminFilterValue = state => parseInt(state.app.adminProposalsShow, 10);
+export const getPublicFilterValue = state =>  parseInt(state.app.publicProposalsShow, 10);
 export const isMarkdown = compose(eq("index.md"), get("name"));
 export const getProposalFiles = compose(get("files"), proposal);
 export const getMarkdownFile = compose(find((isMarkdown)), getProposalFiles);
@@ -94,4 +95,6 @@ export const vettedProposals = state => {
 };
 
 export const votesEndHeight = (state) => state.app.votesEndHeight || {};
+
+export const getCsrfIsNeeded = state => state.app ? state.app.csrfIsNeeded : null;
 

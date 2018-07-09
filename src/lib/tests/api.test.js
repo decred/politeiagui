@@ -188,7 +188,7 @@ describe("api integration modules (lib/api.js)", () => {
     fetchMock.restore();
     fetchMock.getOnce(PATH, { body: MOCK_RESULT, headers: {} });
     result = await api.apiInfo();
-    expect(result).toEqual({ ...MOCK_RESULT, csrfToken: FAKE_CSRF });
+    expect(result).toEqual({ ...MOCK_RESULT, csrfToken: null });
   });
 
   test("fetches current info user (api/user/me) - CSRF token disabled", async () => {
@@ -198,10 +198,10 @@ describe("api integration modules (lib/api.js)", () => {
     const result = await assertGETOnRouteIsCalled(PATH, api.me, [], MOCK_RESULT);
     const publickey = MOCK_RESULT.publickey;
     delete MOCK_RESULT.publickey;
+    delete MOCK_RESULT.csrfToken;
     expect(result).toEqual({
       ...MOCK_RESULT,
-      pubkey: publickey,
-      csrfToken: FAKE_CSRF
+      pubkey: publickey
     });
   });
 
@@ -344,6 +344,14 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
+  test("get comments votes (api/v1/user/proposals/:token/commentsvotes)", async () => {
+    await assertGETOnRouteIsCalled(
+      "express:/api/v1/user/proposals/:token/commentsvotes",
+      api.likedComments,
+      [PROPOSAL_TOKEN]
+    );
+  });
+
   test("get proposal comments (api/v1/proposals/:token)", async () => {
     await assertGETOnRouteIsCalled(
       "express:/api/v1/proposals/:token/comments",
@@ -404,11 +412,19 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
-  test("get proposal vote results", async () => {
+  test("get proposal vote status (api/v1/proposals/token/votestatus)", async () => {
     await assertGETOnRouteIsCalled(
-      "/api/v1/proposals/token/votes",
-      api.voteResults,
+      "/api/v1/proposals/token/votestatus",
+      api.proposalVoteStatus,
       ["token"]
+    );
+  });
+
+  test("get proposals vote status (api/v1/proposals/votestatus)", async () => {
+    await assertGETOnRouteIsCalled(
+      "/api/v1/proposals/votestatus",
+      api.proposalsVoteStatus,
+      []
     );
   });
 

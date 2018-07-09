@@ -12,7 +12,6 @@ const userProposalsConnector = connect(
     proposals: sel.userProposals,
     error: sel.userProposalsError,
     isLoading: sel.userProposalsIsRequesting,
-    activeVotes: sel.activeVotes,
     header: () => "Your Proposals",
     emptyProposalsMessage: () => "You have not created any proposals yet"
   }),
@@ -20,7 +19,6 @@ const userProposalsConnector = connect(
     bindActionCreators(
       {
         onFetchData: act.onFetchUserProposals,
-        onFetchActiveVotes: act.onFetchActiveVotes
       },
       dispatch
     )

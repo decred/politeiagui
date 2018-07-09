@@ -3,7 +3,6 @@ import configureStore from "redux-mock-store";
 import qs from "query-string";
 import thunk from "redux-thunk";
 import * as api from "../api";
-import * as app from "../app";
 import * as ea  from "../external_api";
 import * as act from "../types";
 import {
@@ -44,6 +43,11 @@ describe("test api actions (actions/api.js)", () => {
           paywalladdress: FAKE_PAYWALL.address,
           paywallamount: FAKE_PAYWALL.amount,
           paywalltxnotbefore: FAKE_PAYWALL.txNotBefore,
+          csrfToken: FAKE_CSRF
+        }
+      },
+      init: {
+        response: {
           csrfToken: FAKE_CSRF
         }
       }
@@ -103,23 +107,17 @@ describe("test api actions (actions/api.js)", () => {
 
   test("request api info action", async () => {
     const path = "/api/";
-    const poolPaywall = true;
-    const { address, amount, txNotBefore } = FAKE_PAYWALL;
 
     //test it handles a success response
     setGetSuccessResponse(path);
     // test without pooling paywall flag
     await expect(api.requestApiInfo())
       .toDispatchActionsWithState(MOCK_STATE, [
-        { type: act.RECEIVE_INIT_SESSION, error: false, payload: { csrfToken : "itsafake" } }
+        { type: act.REQUEST_INIT_SESSION, error: false },
+        { type: act.RECEIVE_INIT_SESSION, error: false, payload: { csrfToken : null } },
+        { type: act.REQUEST_ME, error: false }
       ], done);
 
-    // test it does pool paywall and dispatch actions
-    await expect(api.requestApiInfo(poolPaywall))
-      .toDispatchActionsWithState(MOCK_STATE, [
-        { type: act.RECEIVE_INIT_SESSION, payload: { csrfToken : "itsafake" } },
-        ea.verifyUserPayment(address, amount, txNotBefore)
-      ], done);
 
     // test it handles an error and dispatch an action
     const store = mockStore(MOCK_STATE);
@@ -128,27 +126,29 @@ describe("test api actions (actions/api.js)", () => {
     await store.dispatch(api.requestApiInfo())
       .catch((e) => {
         expect(store.getActions()).toEqual([
+          { type: act.REQUEST_INIT_SESSION, error: false },
           { type: act.RECEIVE_INIT_SESSION, error: true, payload: e },
         ]);
       });
 
   });
 
-  test("on init action", async () => {
+
+  test("on request me action", async () => {
     const successfullResponse = { ...FAKE_USER };
     const path = "/api/v1/user/me";
     fetchMock.get("/api/v1/user/me", successfullResponse);
+    const { address, amount, txNotBefore } = FAKE_PAYWALL;
 
     // test it successfully handles the response and dispatch actions
     setGetSuccessResponse(path, {}, successfullResponse);
-    await expect(api.onInit())
+    await expect(api.onRequestMe())
       .toDispatchActionsWithState(MOCK_STATE,[
         { type: act.REQUEST_ME },
         { type: act.RECEIVE_ME,
-          payload: { email: FAKE_USER.email, username: FAKE_USER.username, csrfToken : "itsafake" }
+          payload: { email: FAKE_USER.email, username: FAKE_USER.username }
         },
-        { type: act.REQUEST_INIT_SESSION },
-        api.requestApiInfo(true)
+        ea.verifyUserPayment(address, amount, txNotBefore)
       ], done);
 
     //test it successfully handles the error response
@@ -157,11 +157,11 @@ describe("test api actions (actions/api.js)", () => {
     setGetErrorResponse(path);
     localStorage.setItem("state", "any");
     expect(localStorage.getItem("state")).toBeTruthy();
-    await store.dispatch(api.onInit())
-      .catch(() => {
+    await store.dispatch(api.onRequestMe())
+      .catch((e) => {
         expect(store.getActions()).toBeEqual([
-          { type: act.REQUEST_INIT_SESSION },
-          api.requestApiInfo()
+          { type: act.REQUEST_ME, error: false },
+          { type: act.RECEIVE_ME, error: e }
         ]);
         expect(localStorage.getItem("state")).toBeFalsy();
       });
@@ -290,8 +290,7 @@ describe("test api actions (actions/api.js)", () => {
       [FAKE_USER],
       [
         { type: act.REQUEST_LOGIN },
-        { type: act.RECEIVE_LOGIN, error: false },
-        api.onInit()
+        { type: act.RECEIVE_LOGIN, error: false }
       ],
       {},
       methods.POST
@@ -456,6 +455,29 @@ describe("test api actions (actions/api.js)", () => {
     );
   });
 
+  test("on fetch liked comments action", async () => {
+    const path = `/api/v1/proposals/${FAKE_PROPOSAL_TOKEN}/commentsvotes`;
+    const params = [FAKE_PROPOSAL_TOKEN];
+    await assertApiActionOnSuccess(
+      path,
+      api.onFetchLikedComments,
+      params,
+      [
+        { type: act.REQUEST_LIKED_COMMENTS },
+        { type: act.RECEIVE_LIKED_COMMENTS, error: false, payload: {} }
+      ]
+    );
+    await assertApiActionOnError(
+      path,
+      api.onFetchLikedComments,
+      params,
+      () => [
+        { type: act.REQUEST_LIKED_COMMENTS, error: false, payload: FAKE_PROPOSAL_TOKEN },
+        { type: act.RECEIVE_LIKED_COMMENTS, error: false, payload: {} }
+      ]
+    );
+  });
+
   test("on fetch proposal action", async () => {
     const path = `/api/v1/proposals/${FAKE_PROPOSAL_TOKEN}`;
     const params = [FAKE_PROPOSAL_TOKEN];
@@ -577,15 +599,23 @@ describe("test api actions (actions/api.js)", () => {
     await store.dispatch(api.onLikeComment.apply(null, params));
     const dispatchedActions = store.getActions();
     expect(dispatchedActions[0].type).toEqual(act.RECEIVE_LIKE_COMMENT);
-    expect(dispatchedActions[0].error).toBeFalsy();
 
     await assertApiActionOnError(
       path,
       api.onLikeComment,
       params,
       (e) => [
-        { type: act.RECEIVE_LIKE_COMMENT, error: true, payload: e }
-      ],
+        {
+          "callback": null,
+          "modalType": "LOGIN",
+          "payload": {},
+          "type": "OPEN_MODAL"
+        },
+        {
+          "error": true,
+          "payload": e,
+          "type": "API_RECEIVE_LIKE_COMMENT"
+        }],
       {},
       methods.POST
     );
@@ -758,52 +788,52 @@ describe("test api actions (actions/api.js)", () => {
     // as all other api request actions currently do
   });
 
-  test("on fetch active votes", async () => {
-    const path = "/api/v1/proposals/activevote";
-    const mockedResponse = { votes: [] };
+  test("on fetch votes status", async () => {
+    const path = "/api/v1/proposals/votestatus";
 
-    fetchMock.get(path, mockedResponse);
-    expect(api.onFetchActiveVotes()).toDispatchActionsWithState(MOCK_STATE,[
-      { type: act.REQUEST_ACTIVE_VOTES },
-      { type: act.RECEIVE_ACTIVE_VOTES, error: false },
-      app.updateVotesEndHeightFromActiveVotes(mockedResponse)
-    ], done);
+    await assertApiActionOnSuccess(
+      path,
+      api.onFetchProposalsVoteStatus,
+      [],
+      [
+        { type: act.REQUEST_PROPOSALS_VOTE_STATUS },
+        { type: act.RECEIVE_PROPOSALS_VOTE_STATUS, error: false }
+      ]
+    );
 
     await assertApiActionOnError(
       path,
-      api.onFetchActiveVotes,
+      api.onFetchProposalsVoteStatus,
       [],
       (e) => [
-        { type: act.REQUEST_ACTIVE_VOTES, error: false, payload: undefined },
-        { type: act.RECEIVE_ACTIVE_VOTES, error: true, payload: e }
+        { type: act.REQUEST_PROPOSALS_VOTE_STATUS, error: false, payload: undefined },
+        { type: act.RECEIVE_PROPOSALS_VOTE_STATUS, error: true, payload: e }
       ]
     );
   });
 
-  test("on fetch vote results", async () => {
-    const path = "/api/v1/proposals/any/votes";
+  test("on fetch vote status for a single proposal", async () => {
+    const path = "/api/v1/proposals/any/votestatus";
     const token = "any";
     const params = [token];
-    const mockedResponse = {
-      startvotereply: {
-        endheight: 303322
-      }
-    };
-    //set custom response
-    fetchMock.get(path, mockedResponse);
-    expect(api.onFetchVoteResults(token)).toDispatchActions([
-      { type: act.REQUEST_VOTE_RESULTS },
-      { type: act.RECEIVE_VOTE_RESULTS, error: false },
-      app.setVotesEndHeight(token, mockedResponse.startvotereply.endheight)
-    ], done);
+
+    await assertApiActionOnSuccess(
+      path,
+      api.onFetchProposalVoteStatus,
+      params,
+      [
+        { type: act.REQUEST_PROPOSAL_VOTE_STATUS },
+        { type: act.RECEIVE_PROPOSAL_VOTE_STATUS, error: false }
+      ]
+    );
 
     await assertApiActionOnError(
       path,
-      api.onFetchVoteResults,
+      api.onFetchProposalVoteStatus,
       params,
       (e) => [
-        { type: act.REQUEST_VOTE_RESULTS, error: false, payload: { token } },
-        { type: act.RECEIVE_VOTE_RESULTS, error: true, payload: e }
+        { type: act.REQUEST_PROPOSAL_VOTE_STATUS, error: false, payload: { token } },
+        { type: act.RECEIVE_PROPOSAL_VOTE_STATUS, error: true, payload: e }
       ]
     );
   });

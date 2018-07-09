@@ -96,7 +96,6 @@ export const me = () => {
   return (
     GET("/v1/user/me").then(
       ({
-        csrfToken,
         response: {
           email,
           isadmin,
@@ -108,7 +107,6 @@ export const me = () => {
           username
         }
       }) => ({
-        csrfToken: csrfToken || "itsafake",
         email,
         isadmin,
         paywalladdress,
@@ -123,7 +121,7 @@ export const me = () => {
 };
 
 export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, route, pubkey, testnet } }) => ({
-  csrfToken: csrfToken || "itsafake", version, route, pubkey, testnet
+  csrfToken: csrfToken, version, route, pubkey, testnet
 }));
 
 export const newUser = (csrf, email, username, password) => pki.myPubKeyHex(email).then(publickey =>
@@ -135,6 +133,9 @@ export const verifyNewUser = searchQuery => {
     .then(signature => GET("/v1/user/verify?" + qs.stringify({ email, verificationtoken, signature })))
     .then(getResponse);
 };
+
+export const likedComments = token =>
+  GET(`/v1/user/proposals/${token}/commentsvotes`).then(getResponse);
 
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);
@@ -191,8 +192,6 @@ export const newProposal = (csrf, proposal) =>
 
 export const newComment = (csrf, comment) => POST("/comments/new", csrf, comment).then(getResponse);
 
-export const activeVotes = () => GET("/v1/proposals/activevote").then(getResponse);
-
 export const startVote = (email, csrf, token) =>
   pki.myPubKeyHex(email).then(publickey =>
     pki.signStringHex(email, token).then(signature => POST(
@@ -216,8 +215,10 @@ export const startVote = (email, csrf, token) =>
       }
     ))).then(getResponse);
 
-export const voteResults = (token) => GET(`/v1/proposals/${token}/votes`).then(getResponse);
-
 export const usernamesById = (userids) => {
   return POST("/usernames", null, { userids }).then(getResponse);
 };
+
+export const proposalsVoteStatus = () => GET("/v1/proposals/votestatus").then(getResponse);
+export const proposalVoteStatus = (token) => GET(`/v1/proposals/${token}/votestatus`).then(getResponse);
+
