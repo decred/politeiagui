@@ -202,7 +202,9 @@ const ThingLinkComp = ({
                       onSubmit={e =>
                         openModal(
                           CONFIRM_ACTION,
-                          {},
+                          {
+                            message: "Are you sure you want to publish this proposal?"
+                          },
                           (ok) => ok && onChangeStatus(
                             loggedInAsEmail,
                             id,
