@@ -178,11 +178,11 @@ export const logout = csrf => POST("/logout", csrf, {}).then(() => {
   return ({});
 });
 
-export const proposalSetStatus = (email, csrf, token, status) =>
+export const proposalSetStatus = (email, csrf, token, status, message = "") =>
   pki.myPubKeyHex(email).then(publickey =>
-    pki.signStringHex(email, token + status).then(signature => POST(
+    pki.signStringHex(email, token + status + message).then(signature => POST(
       `/proposals/${token}/status`, csrf,
-      { proposalstatus: status, token, signature, publickey }
+      { proposalstatus: status, token, signature, publickey, message }
     ))).then(getResponse);
 
 export const newProposal = (csrf, proposal) =>

@@ -289,7 +289,7 @@ export const onSubmitComment = (loggedInAsEmail, token, comment, parentid) =>
       });
   });
 
-const statusName = key => ({ 3: "censor", 4: "publish" }[key]);
+// const statusName = key => ({ 3: "censor", 4: "publish" }[key]);
 
 export const onUpdateUserKey = loggedInAsEmail =>
   withCsrf((dispatch, getState, csrf) => {
@@ -323,26 +323,18 @@ export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
       });
   });
 
-export const onSubmitStatusProposal = (loggedInAsEmail, token, status) =>
+export const onSubmitStatusProposal = (loggedInAsEmail, token, status, message = "") =>
   withCsrf((dispatch, getState, csrf) => {
-    return dispatch(
-      confirmWithModal("CONFIRM_ACTION", {
-        message: `Are you sure you want to ${statusName(status)} this proposal?`
-      })
-    ).then(confirm => {
-      if (confirm) {
-        dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
-        if (status === 4) {
-          dispatch(act.SET_PROPOSAL_APPROVED(true));
-        }
-        return api
-          .proposalSetStatus(loggedInAsEmail, csrf, token, status)
-          .then(response => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(response)))
-          .catch(error => {
-            dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
-          });
-      }
-    });
+    dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token, message }));
+    if (status === 4) {
+      dispatch(act.SET_PROPOSAL_APPROVED(true));
+    }
+    return api
+      .proposalSetStatus(loggedInAsEmail, csrf, token, status, message)
+      .then(response => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(response)))
+      .catch(error => {
+        dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
+      });
   });
 
 export const redirectedFrom = location => dispatch =>
