@@ -1,6 +1,7 @@
 import React from "react";
 import ModalContentWrapper from "../ModalContentWrapper";
 import connector from "../../../connectors/modal";
+import MardownEditor from "../../MarkdownEditor";
 
 class ConfirmCensor extends React.Component {
   constructor(props){
@@ -23,9 +24,9 @@ class ConfirmCensor extends React.Component {
   render() {
     return (
       <ModalContentWrapper
-        title={"Confirm Action"}
-        submitText="Yes"
-        cancelText="No"
+        title={"Confirm proposal censor"}
+        submitText="Censor proposal"
+        cancelText="Cancel"
         onCancel={this.handleCancel}
         onSubmit={this.handleConfirm}
       >
@@ -38,9 +39,10 @@ class ConfirmCensor extends React.Component {
           alignItems: "center"
         }}>
           <span style={{ fontSize: "16px" }}>{"Why are you censoring this proposal?"}</span>
-          <textarea
+          <MardownEditor
             style={{ width: "100%" }}
-            onChange={e => this.setState({ reason: e.target.value })}
+            toggledStyle
+            onChange={v => this.setState({ reason: v })}
             value={this.state.reason}
           />
         </div>
