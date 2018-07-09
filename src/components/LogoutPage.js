@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PageLoadingIcon from "./snew/PageLoadingIcon";
-import ErrorMessage from "./ErrorPage/ErrorMessage";
+import InternalServerErrorMessage from "./ErrorPage/InternalServerErrorMessage";
 import logoutConnector from "../connectors/logout";
 
 class LogoutPage extends Component {
@@ -13,7 +13,7 @@ class LogoutPage extends Component {
     return isLoading ? (
       <PageLoadingIcon />
     ) : error ? (
-      <ErrorMessage {...{ error }} />
+      <InternalServerErrorMessage {...{ error }} />
     ) : (
       <article className="page logout-page content">
         <h3>You are now logged out. Thanks for stopping by, and have a great day.</h3>

@@ -1,12 +1,12 @@
 import React from "react";
 import Message from "../Message";
 
-const ErrorMessage = ({ error }) => (
+const InternalServerErrorMessage = ({ error }) => (
   <div className="content" role="main">
     <div className="page error-page">
       <Message
         type="error"
-        header="internal server error"
+        header="Internal server error"
         children={
           <div>
             {error && (
@@ -26,4 +26,4 @@ const ErrorMessage = ({ error }) => (
   </div>
 );
 
-export default ErrorMessage;
+export default InternalServerErrorMessage;

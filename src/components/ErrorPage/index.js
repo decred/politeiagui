@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { autobind } from "core-decorators";
-import ErrorMessage from "./ErrorMessage";
-import changePasswordConnector from "../../connectors/changePassword";
+import InternalServerErrorMessage from "./InternalServerErrorMessage";
+import errorPageConnector from "../../connectors/errorPage";
 
 class ErrorPage extends Component {
 
   render() {
     const { error } = this.props;
     return (
-      <ErrorMessage {...{ error }} />
+      <InternalServerErrorMessage {...{ error }} />
     );
   }
 }
 
 autobind(ErrorPage);
 
-export default changePasswordConnector(ErrorPage);
+export default errorPageConnector(ErrorPage);

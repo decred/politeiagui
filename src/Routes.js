@@ -18,7 +18,7 @@ import Verify from "./components/Verify";
 import Account from "./components/AccountPage";
 import VerifyKey from "./components/VerifyKey";
 import NotFound from "./components/NotFoundPage";
-import ErrorPage from "./components/ErrorPage";
+import ErrorPage from "./components/ErrorPage/";
 import ProposalDetail from "./components/ProposalDetail";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
