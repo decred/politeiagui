@@ -19,6 +19,7 @@ export const isApiRequestingVerifyNewUser = getIsApiRequesting("verifyNewUser");
 export const isApiRequestingLogin = getIsApiRequesting("login");
 export const isApiRequestingLogout = getIsApiRequesting("logout");
 export const isApiRequestingForgottenPassword = getIsApiRequesting("forgottenPassword");
+export const isApiRequestingResendVerificationEmail = getIsApiRequesting("resendVerificationEmail");
 export const isApiRequestingPasswordReset = getIsApiRequesting("passwordReset");
 const isApiRequestingVetted = getIsApiRequesting("vetted");
 const isApiRequestingUserProposals = getIsApiRequesting("userProposals");
@@ -49,6 +50,7 @@ export const isApiRequesting = or(
 const apiNewUserPayload = getApiPayload("newUser");
 const apiLoginPayload = getApiPayload("login");
 const apiForgottenPasswordPayload = getApiPayload("forgottenPassword");
+const apiResendVerificationEmailPayload = getApiPayload("resendVerificationEmail");
 const apiNewProposalPayload = getApiPayload("newProposal");
 const apiSetStatusProposalPayload = getApiPayload("setStatusProposal");
 
@@ -60,6 +62,7 @@ export const apiChangePasswordResponse = getApiResponse("changePassword");
 export const apiChangeUsernameResponse = getApiResponse("changeUsername");
 export const apiLoginResponse = getApiResponse("login");
 export const forgottenPasswordResponse = getApiResponse("forgottenPassword");
+export const resendVerificationEmailResponse = getApiResponse("resendVerificationEmail");
 export const passwordResetResponse = getApiResponse("passwordReset");
 const apiVettedResponse = getApiResponse("vetted");
 const apiUserProposalsResponse = getApiResponse("userProposals");
@@ -118,6 +121,7 @@ export const csrf = compose(get("csrfToken"), apiInitResponse);
 
 export const newUserEmail = compose(get("email"), apiNewUserPayload);
 export const forgottenPassEmail = compose(get("email"), apiForgottenPasswordPayload);
+export const emailForResendVerification = compose(get("email"), apiResendVerificationEmailPayload);
 
 export const email = or(
   compose(get("email"), apiMeResponse),

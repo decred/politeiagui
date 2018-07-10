@@ -11,6 +11,11 @@ import { globalUsernamesById } from "./app";
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onSetEmail = act.SET_EMAIL;
 
+export const onSignup = act.REQUEST_SIGNUP_CONFIRMATION;
+export const onSignupConfirm = props => dispatch => {
+  dispatch(onCreateNewUser(props));
+};
+
 export const requestApiInfo = () => (dispatch) => {
   dispatch(act.REQUEST_INIT_SESSION());
   return api
@@ -58,9 +63,7 @@ export const onRequestMe = () => (dispatch,getState) => {
 
 export const updateMe = payload => dispatch => dispatch(act.UPDATE_ME(payload));
 
-export const onRouteChange = () => dispatch => {
-  dispatch(act.CLEAN_ERRORS());
-};
+export const cleanErrors = act.CLEAN_ERRORS;
 
 export const onGetPolicy = () => dispatch => {
   dispatch(act.REQUEST_POLICY());
@@ -109,10 +112,6 @@ export const onVerifyNewUser = searchQuery => dispatch => {
       dispatch(act.RECEIVE_VERIFY_NEW_USER(null, err));
       throw err;
     });
-};
-
-export const onSignup = props => dispatch => {
-  dispatch(onCreateNewUser(props));
 };
 
 export const onLogin = ({ email, password }) =>
@@ -366,6 +365,24 @@ export const onForgottenPasswordRequest = ({ email }) =>
 
 export const resetForgottenPassword = () => dispatch =>
   dispatch(act.RESET_FORGOTTEN_PASSWORD_REQUEST());
+
+export const onResendVerificationEmail = act.REQUEST_SIGNUP_CONFIRMATION;
+export const onResendVerificationEmailConfirm = ({ email }) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_RESEND_VERIFICATION_EMAIL({ email }));
+    return api
+      .resendVerificationEmailRequest(csrf, email)
+      .then(response =>
+        dispatch(act.RECEIVE_RESEND_VERIFICATION_EMAIL(response))
+      )
+      .catch(error => {
+        dispatch(act.RECEIVE_RESEND_VERIFICATION_EMAIL(null, error));
+        throw error;
+      });
+  });
+
+export const resetResendVerificationEmail = () => dispatch =>
+  dispatch(act.RESET_RESEND_VERIFICATION_EMAIL());
 
 export const onPasswordResetRequest = ({
   email,

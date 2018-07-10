@@ -296,6 +296,23 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
+  test("resend verification email (api/v1/user/new/resend)", async () => {
+    await assertPOSTOnRouteIsCalled(
+      "/api/v1/user/new/resend",
+      api.resendVerificationEmailRequest,
+      [FAKE_CSRF, EMAIL]
+    );
+  });
+
+  test("verify resend verification email (api/v1/user/new/resend)", async () => {
+    fetchMock.restore();
+    await assertPOSTOnRouteIsCalled(
+      "/api/v1/user/new/resend",
+      api.resendVerificationEmailRequest,
+      [FAKE_CSRF, EMAIL, VERIFICATION_TOKEN]
+    );
+  });
+
   test("update key (api/v1/user/key", async () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/key",

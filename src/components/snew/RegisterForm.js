@@ -2,11 +2,13 @@ import React from "react";
 import signupConnector from "../../connectors/signup";
 import { Field } from "redux-form";
 import Message from "../Message";
+import SignupWarning from "../SignupWarning";
 import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
 import ErrorField from "../Form/Fields/ErrorField";
 import { getUsernameFieldLabel, getPasswordFieldLabel } from "../../helpers";
 
 const RegisterForm = ({
+  Link,
   error,
   isApiRequestingNewUser,
   apiNewUserError,
@@ -15,6 +17,7 @@ const RegisterForm = ({
   loggedInAsEmail,
   passwdError,
   passwd2Error,
+  isShowingSignupConfirmation,
   onSignup,
   handleSubmit
 }) => loggedInAsEmail ? null : (
@@ -108,14 +111,31 @@ const RegisterForm = ({
           body={error || apiNewUserError || apiVerifyNewUserError} />
       ) : null}
     </div>
-    <div className="c-clearfix c-submit-group">
-      <ButtonWithLoadingIcon
-        style={{ marginRight: "0px" }}
-        className="c-btn c-btn-primary c-pull-right"
-        tabIndex={2}
-        text="Sign up"
-        isLoading={isApiRequestingNewUser} />
-    </div>
+    {!isShowingSignupConfirmation ? (
+      <div className="c-clearfix c-submit-group">
+        <ButtonWithLoadingIcon
+          style={{ marginRight: "0px" }}
+          className="c-btn c-btn-primary c-pull-right"
+          tabIndex={3}
+          text="Sign up"
+          isLoading={false} />
+        <Link className="c-pull-right resend-verification-link" href="/user/resend" tabIndex={2}>
+          Resend verification email
+        </Link>
+      </div>
+    ) : (
+      <Message
+        type="info"
+        header="Before you sign up...">
+        <SignupWarning />
+        <ButtonWithLoadingIcon
+          style={{ marginRight: "0px" }}
+          className="c-btn c-btn-primary c-pull-right"
+          tabIndex={3}
+          text="I understand, sign me up"
+          isLoading={isApiRequestingNewUser} />
+      </Message>
+    )}
     <div>
       <div className="c-alert c-alert-danger" />
     </div>

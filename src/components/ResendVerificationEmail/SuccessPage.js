@@ -1,9 +1,9 @@
 import React from "react";
-import forgottenPasswordNext from "../../connectors/forgottenPasswordNext";
+import resendVerificationEmailNext from "../../connectors/resendVerificationEmailNext";
 
 const SuccessPage = ({ email }) => (
-  <div className="page forgotten-password-next-step-page content">
-    <h3>Please check your inbox to reset your password.</h3>
+  <div className="page resend-verification-next-step-page content">
+    <h3>Please check your inbox for your verification email.</h3>
     <p>
       Note that, for privacy reasons, Politeia does not disclose whether
       an email address has been registered. If you don't receive
@@ -26,4 +26,4 @@ const SuccessPage = ({ email }) => (
   </div>
 );
 
-export default forgottenPasswordNext(SuccessPage);
+export default resendVerificationEmailNext(SuccessPage);

@@ -8,13 +8,16 @@ import { onFetchUsernamesById as onFetchUsernamesByIdApi } from "./api";
 import * as sel from "../selectors";
 import act from "./methods";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
-import { onLogout } from "./api";
+import { onLogout, cleanErrors } from "./api";
 import { loadStateLocalStorage } from "../lib/local_storage";
 
-export const CANCEL_SIGNUP = "CANCEL_SIGNUP";
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
 
-export const onCancelSignup = act.CANCEL_SIGNUP;
+export const onRouteChange = () => dispatch => {
+  dispatch(cleanErrors());
+  dispatch(act.CLEAN_SLATE());
+};
+
 export const onSetReplyParent = (parentId = TOP_LEVEL_COMMENT_PARENTID) =>
   (dispatch) => Promise.all([
     dispatch(act.SET_REPLY_PARENT(parentId)),

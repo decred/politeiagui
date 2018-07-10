@@ -5,7 +5,7 @@ const SignupNextStepPage = ({ email }) => (
   <div className="content page signup-next-step-page" role="main" style={{ minHeight: "calc(100vh - 350px)" }}>
     <h3>Please check your inbox to verify your registration.</h3>
     <p>
-      Note that for privacy reasons, Politeia does not disclose whether an
+      Note that, for privacy reasons, Politeia does not disclose whether an
       email address has already been registered. If you don't receive an
       email:
     </p>
@@ -18,7 +18,7 @@ const SignupNextStepPage = ({ email }) => (
       ) : null}
       <li>Check your spam folder!</li>
       <li>
-        The verification link needs to be open with the same browser
+        The verification link needs to be opened with the same browser
         that you used to sign up.
       </li>
       <li>

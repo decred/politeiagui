@@ -3,7 +3,7 @@ import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_VOTING_ACTIVE } from "../constants";
 
 export const DEFAULT_STATE = {
-  isShowingSignup: false,
+  isShowingSignupConfirmation: false,
   replyParent: TOP_LEVEL_COMMENT_PARENTID,
   newProposal: {
     name: "",
@@ -43,7 +43,8 @@ const app = (state = DEFAULT_STATE, action) => (({
   [act.SET_PROPOSAL_APPROVED]: () => ({...state, isProposalStatusApproved: action.payload}),
   [act.RECEIVE_USERNAMES]: () => ({...state, usernamesById: action.payload.usernamesById }),
   [act.SET_VOTES_END_HEIGHT]: () => ({...state, votesEndHeight: { ...state.votesEndHeight, [action.payload.token]: action.payload.endheight }}),
-  [act.CANCEL_SIGNUP]: () => ({ ...state, isShowingSignup: false }),
+  [act.REQUEST_SIGNUP_CONFIRMATION]: () => ({ ...state, isShowingSignupConfirmation: true }),
+  [act.RESET_SIGNUP_CONFIRMATION]: () => ({ ...state, isShowingSignupConfirmation: false }),
   [act.CHANGE_ADMIN_FILTER_VALUE]: () => ({ ...state, adminProposalsShow: action.payload }),
   [act.CHANGE_PUBLIC_FILTER_VALUE]: () => ({ ...state, publicProposalsShow: action.payload }),
   [act.UPDATE_USER_PAYWALL_STATUS]: () => ({
@@ -52,6 +53,10 @@ const app = (state = DEFAULT_STATE, action) => (({
     userPaywallConfirmations: action.payload.currentNumberOfConfirmations
   }),
   [act.CSRF_NEEDED]: () => ({ ...state, csrfIsNeeded: action.payload }),
+  [act.CLEAN_SLATE]: () => ({
+    ...state,
+    isShowingSignupConfirmation: false
+  })
 })[action.type] || (() => state))();
 
 export default app;
