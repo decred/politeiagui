@@ -2,7 +2,6 @@ import fetchMock from "fetch-mock";
 import * as app from "../app";
 import * as act from "../types";
 import {
-  onCreateNewUser,
   onSubmitProposal,
   onChangeUsername,
   onChangePassword,
@@ -54,11 +53,13 @@ describe("test app actions (actions/app.js)", () => {
     fetchMock.post("/", {}).catch({});
   });
 
-  test("on signup action", async () => {
-    await expect(app.onSignupConfirm(FAKE_USER))
-      .toDispatchActionsWithState(MOCK_STATE, [
-        onCreateNewUser(FAKE_USER)
-      ], done);
+  test("on route change action", () => {
+    expect(app.onRouteChange())
+      .toDispatchActions(
+        { type: act.CLEAN_ERRORS },
+        { type: act.CLEAN_SLATE },
+        done
+      );
   });
 
   test("set reply parent and reset form reply", async () => {

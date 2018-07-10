@@ -11,6 +11,11 @@ import { globalUsernamesById } from "./app";
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onSetEmail = act.SET_EMAIL;
 
+export const onSignup = act.REQUEST_SIGNUP_CONFIRMATION;
+export const onSignupConfirm = props => dispatch => {
+  dispatch(onCreateNewUser(props));
+};
+
 export const requestApiInfo = () => (dispatch) => {
   dispatch(act.REQUEST_INIT_SESSION());
   return api

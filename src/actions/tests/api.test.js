@@ -176,14 +176,6 @@ describe("test api actions (actions/api.js)", () => {
       );
   });
 
-  test("on route change action", () => {
-    expect(api.onRouteChange())
-      .toDispatchActions(
-        { type: act.CLEAN_ERRORS },
-        done
-      );
-  });
-
   test("on get policy action", async () => {
     const path = "/api/v1/policy";
     //test it handles a successfull response
@@ -273,6 +265,13 @@ describe("test api actions (actions/api.js)", () => {
         }
       }
     );
+  });
+
+  test("on signup action", async () => {
+    await expect(api.onSignupConfirm(FAKE_USER))
+      .toDispatchActionsWithState(MOCK_STATE, [
+        api.onCreateNewUser(FAKE_USER)
+      ], done);
   });
 
   test("on login action", async () => {
