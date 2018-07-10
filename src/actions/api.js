@@ -58,9 +58,7 @@ export const onRequestMe = () => (dispatch,getState) => {
 
 export const updateMe = payload => dispatch => dispatch(act.UPDATE_ME(payload));
 
-export const onRouteChange = () => dispatch => {
-  dispatch(act.CLEAN_ERRORS());
-};
+export const cleanErrors = act.CLEAN_ERRORS;
 
 export const onGetPolicy = () => dispatch => {
   dispatch(act.REQUEST_POLICY());

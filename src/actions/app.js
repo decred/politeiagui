@@ -8,10 +8,15 @@ import { onFetchUsernamesById as onFetchUsernamesByIdApi } from "./api";
 import * as sel from "../selectors";
 import act from "./methods";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
-import { onLogout } from "./api";
+import { onLogout, cleanErrors } from "./api";
 import { loadStateLocalStorage } from "../lib/local_storage";
 
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
+
+export const onRouteChange = () => dispatch => {
+  dispatch(cleanErrors());
+  dispatch(act.CLEAN_SLATE());
+};
 
 export const onSignup = act.REQUEST_SIGNUP_CONFIRMATION;
 export const onSignupConfirm = props => dispatch => {

@@ -3,7 +3,7 @@ import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_VOTING_ACTIVE } from "../constants";
 
 export const DEFAULT_STATE = {
-  isShowingSignup: false,
+  isShowingSignupConfirmation: false,
   replyParent: TOP_LEVEL_COMMENT_PARENTID,
   newProposal: {
     name: "",
@@ -53,6 +53,10 @@ const app = (state = DEFAULT_STATE, action) => (({
     userPaywallConfirmations: action.payload.currentNumberOfConfirmations
   }),
   [act.CSRF_NEEDED]: () => ({ ...state, csrfIsNeeded: action.payload }),
+  [act.CLEAN_SLATE]: () => ({
+    ...state,
+    isShowingSignupConfirmation: false
+  })
 })[action.type] || (() => state))();
 
 export default app;

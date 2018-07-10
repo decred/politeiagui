@@ -1,6 +1,5 @@
 import { connect } from "react-redux";
-import { onRouteChange } from "../actions/api";
-import { onLoadMe } from "../actions/app";
+import { onRouteChange, onLoadMe } from "../actions/app";
 
 const routeChangeConnector = connect(
   null,
