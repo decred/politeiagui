@@ -26,6 +26,7 @@ const signupFormConnector = connect(
   {
     onFetchData: act.onGetPolicy,
     onSignup: act.onSignup,
+    onSignupConfirm: act.onSignupConfirm,
   }
 );
 
