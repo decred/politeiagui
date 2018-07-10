@@ -17,6 +17,7 @@ class ResendVerificationEmail extends Component {
     return (
       <ResendVerificationEmailForm {...{
         onResendVerificationEmail: this.onResendVerificationEmail,
+        isShowingConfirmation: this.props.isShowingConfirmation,
         isRequesting: this.props.isRequesting
       }} />
     );
@@ -24,14 +25,16 @@ class ResendVerificationEmail extends Component {
 
   onResendVerificationEmail(props) {
     validate(props);
-    return this
-      .props
-      .onResendVerificationEmailRequest(props)
-      .catch((error) => {
-        throw new SubmissionError({
-          _error: error.message,
-        });
+
+    if (!this.props.isShowingConfirmation) {
+      return this.props.onResendVerificationEmail();
+    }
+
+    return this.props.onResendVerificationEmailConfirm(props).catch(e => {
+      throw new SubmissionError({
+        _error: e.message,
       });
+    });
   }
 }
 

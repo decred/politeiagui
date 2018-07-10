@@ -6,9 +6,11 @@ const resendVerificationEmailConnector = connect(
   sel.selectorMap({
     resendVerificationEmailResponse: sel.resendVerificationEmailResponse,
     isRequesting: sel.isApiRequestingResendVerificationEmail,
+    isShowingConfirmation: sel.isShowingSignupConfirmation
   }),
   {
-    onResendVerificationEmailRequest: act.onResendVerificationEmailRequest,
+    onResendVerificationEmail: act.onResendVerificationEmail,
+    onResendVerificationEmailConfirm: act.onResendVerificationEmailConfirm,
   }
 );
 
