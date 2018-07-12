@@ -3,9 +3,10 @@ import signupNext from "../connectors/signupNext";
 
 class SignupNextStepPage extends React.Component {
   componentDidMount () {
-    const { isTestnet } = this.props;
-    if (isTestnet) {
-      this.props.onUpdateUserKey();
+    const { isTestnet, email, verificationToken } = this.props;
+    if (isTestnet && email && verificationToken) {
+      const win = window.open(`/user/verify?email=${email}&verificationtoken=${verificationToken}`, "_blank");
+      win.focus();
     }
   }
 

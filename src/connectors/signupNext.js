@@ -7,10 +7,11 @@ const signupNextConnector = connect(
   sel.selectorMap({
     email: sel.newUserEmail,
     isTestnet: sel.isTestNet,
+    verificationToken: sel.verificationToken,
+    isRequestingVerifyNewUser: sel.isApiRequestingVerifyNewUser,
   }),
   dispatch => bindActionCreators({
     onResetNewUser: act.onResetNewUser,
-    onUpdateUserKey: act.onUpdateUserKey,
   }, dispatch)
 );
 
