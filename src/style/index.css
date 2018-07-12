@@ -72,18 +72,22 @@
   width: 320px
 }
 
-html, body {
+body, html {
+  font-size: 14px;
+  font-family: "Source Sans Pro", "Helvetica Neue", arial, sans-serif;
   height: 100%;
   width: 100%;
   padding: 0;
   margin: 0;
-  background: #586D82;
-  font-family: "Source Sans Pro", "Helvetica Neue", arial, sans-serif;
-  font-weight: 400;
-  font-size: 14px;
-  color: #132f4b;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  background: #586D82;
+  font-weight: 400;
+  color: #132f4b;
+  
 }
 
 * {

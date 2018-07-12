@@ -22,34 +22,62 @@
     <title>Politeia</title>
     <style>
       .nojs {
-        font-size: 1em;
+        font-size: 1.14em;
         margin: 15px auto;
         max-width: 920px;
         font-family: "Source Sans Pro", "Helvetica Neue", arial, sans-serif;
       }
-      .nojs p::first-letter {
-        margin-left: 1em;
-      }
-      .nojs p {
-        text-align: justify;
-      }
-      .nojs h1, h2 {
+      .nojs h1 {
         text-align: center;
-        -webkit-font-smoothing: antialiased;
+        display: block;
+        font-size: 2em;
+        margin-top: 0.67em;
+        margin-bottom: 0.67em;
+        margin-left: 0;
+        margin-right: 0;
+        font-weight: 500;
       }
       .nojs h2 {
+        text-align: center;
+        display: block;
+        font-size: 1.5em;
+        margin-top: 0.83em;
+        margin-bottom: 0.83em;
+        margin-left: 0;
+        margin-right: 0;
         font-weight: 500;
       }
       .nojs h3 {
+        display: block;
+        font-size: 1.17em;
+        margin-top: 1em;
         margin-bottom: 0;
+        margin-left: 0;
+        margin-right: 0;
         font-weight: 500;
-        -webkit-font-smoothing: antialiased;
-      } 
+      }
+      .nojs p {
+        display: block;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        margin-left: 0;
+        margin-right: 0;
+        text-align: justify;
+      }
+      .nojs p::first-letter {
+        margin-left: 1em;
+      }
       .nojs ul {
-        margin-top: 7px;
+        display: block;
+        list-style-type: disc;
+        margin-bottom: 1 em;
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 0.5em;
         padding-left: 35px;
       }
       .nojs li {
+        display: list-item;
         padding: 2px;
       }
       .nojs a {
@@ -62,10 +90,10 @@
       }
     </style>
   </head>
-  <body class="subscriber">
+  <body>
     <noscript>
-      <div class="usertext-body may-blank-within md-container nojs">
-        <div class="md">
+      <div class="nojs">
+        <div>
           <h1>About Politeia</h1>
           <h2>JavaScript is currently required to use Politeia, support for non-js browsers is planned</h2>
 
