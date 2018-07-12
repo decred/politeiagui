@@ -437,18 +437,19 @@ export const onStartVote = (loggedInAsEmail, token) =>
       );
   });
 
-export const onFetchUsernamesById = (userIds) => (dispatch) => {
-  dispatch(act.REQUEST_USERNAMES_BY_ID());
-  return api
-    .usernamesById(userIds)
-    .then(response =>
-      dispatch(act.RECEIVE_USERNAMES_BY_ID({ ...response, success: true }))
-    )
-    .catch(error => {
-      dispatch(act.RECEIVE_USERNAMES_BY_ID(null, error));
-      throw error;
-    });
-};
+export const onFetchUsernamesById = (userIds) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_USERNAMES_BY_ID());
+    return api
+      .usernamesById(csrf, userIds)
+      .then(response =>
+        dispatch(act.RECEIVE_USERNAMES_BY_ID({ ...response, success: true }))
+      )
+      .catch(error => {
+        dispatch(act.RECEIVE_USERNAMES_BY_ID(null, error));
+        throw error;
+      });
+  });
 
 export const onFetchProposalsVoteStatus = () => (dispatch) => {
   dispatch(act.REQUEST_PROPOSALS_VOTE_STATUS());
