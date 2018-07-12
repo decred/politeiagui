@@ -180,7 +180,7 @@ export const paywallTxNotBefore = state => {
   return null;
 };
 
-export const isTestNet = bool(compose(get("testnet"), apiInitResponse));
+export const isTestNet = compose(get("testnet"), apiInitResponse);
 export const isMainNet = not(isTestNet);
 
 export const getPropTokenIfIsStartingVote = (state) => {

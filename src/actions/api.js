@@ -299,8 +299,8 @@ export const onUpdateUserKey = loggedInAsEmail =>
         api.updateKeyRequest(csrf, pki.toHex(keys.publicKey)).then(response => {
           const { verificationtoken } = response;
           if (verificationtoken) {
-            const { isTestNet } = getState().app;
-            if (isTestNet) {
+            const { testnet } = getState().api.init.response;
+            if (testnet) {
               dispatch(act.SHOULD_AUTO_VERIFY_KEY(true));
             }
           }
