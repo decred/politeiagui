@@ -221,8 +221,8 @@ export const startVote = (email, csrf, token) =>
       }
     ))).then(getResponse);
 
-export const usernamesById = (userids) => {
-  return POST("/usernames", null, { userids }).then(getResponse);
+export const usernamesById = (csrf, userids) => {
+  return POST("/usernames", csrf, { userids }).then(getResponse);
 };
 
 export const proposalsVoteStatus = () => GET("/v1/proposals/votestatus").then(getResponse);
