@@ -23,7 +23,8 @@ const CommentForm = ({
   loggedInAsEmail,
   userCanExecuteActions,
   getVoteStatus,
-  token
+  token,
+  showContentPolicy=false
 }) => (
   loggedInAsEmail ?
     <form className="usertext cloneable warn-on-unload"  onSubmit={handleSubmit(onSave)}>
@@ -79,14 +80,16 @@ const CommentForm = ({
               hide help
               </a>
             </span>
-            <Link
-              className="reddiquette"
-              href="/help/contentpolicy"
-              tabIndex={100}
-              target="_blank"
-            >
-            content policy
-            </Link>
+            {showContentPolicy &&
+              <Link
+                className="reddiquette"
+                href="/help/contentpolicy"
+                tabIndex={100}
+                target="_blank"
+              >
+                content policy
+              </Link>
+            }
             <div className="usertext-buttons">
               <button
                 className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
