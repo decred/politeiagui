@@ -20,10 +20,51 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Politeia</title>
+    <style>
+      .nojs {
+        font-size: 1em;
+        margin: 15px auto;
+        max-width: 920px;
+        font-family: "Source Sans Pro", "Helvetica Neue", arial, sans-serif;
+      }
+      .nojs p::first-letter {
+        margin-left: 1em;
+      }
+      .nojs p {
+        text-align: justify;
+      }
+      .nojs h1, h2 {
+        text-align: center;
+        -webkit-font-smoothing: antialiased;
+      }
+      .nojs h2 {
+        font-weight: 500;
+      }
+      .nojs h3 {
+        margin-bottom: 0;
+        font-weight: 500;
+        -webkit-font-smoothing: antialiased;
+      } 
+      .nojs ul {
+        margin-top: 7px;
+        padding-left: 35px;
+      }
+      .nojs li {
+        padding: 2px;
+      }
+      .nojs a {
+        color: #2971ff;
+        text-decoration: none;
+      }
+      .nojs a:hover {
+        color: #2971ff;
+        text-decoration: underline;
+      }
+    </style>
   </head>
   <body class="subscriber">
     <noscript>
-      <div class="usertext-body may-blank-within md-container">
+      <div class="usertext-body may-blank-within md-container nojs">
         <div class="md">
           <h1>About Politeia</h1>
           <h2>JavaScript is currently required to use Politeia, support for non-js browsers is planned</h2>
@@ -39,7 +80,7 @@
 
           <p><a href="https://blog.decred.org/2017/10/25/Politeia/">Read  more</a></p>
 
-          <h2>Resources</h2>
+          <h3>Resources</h3>
 
           <ul>
           <li><a href="https://decred.org/">Website</a> &amp; <a href="https://blog.decred.org/">Blog</a></li>
