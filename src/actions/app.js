@@ -10,6 +10,12 @@ import act from "./methods";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 import { onLogout, cleanErrors } from "./api";
 import { loadStateLocalStorage } from "../lib/local_storage";
+import {
+  PROPOSAL_VOTING_ACTIVE,
+  PROPOSAL_VOTING_NOT_STARTED,
+  PROPOSAL_STATUS_UNREVIEWED,
+  PROPOSAL_FILTER_ALL
+} from "../constants";
 
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
 
@@ -111,4 +117,32 @@ export const onFetchUsernamesById = (userIds) => (dispatch, getState) => {
 
       return dispatch(act.RECEIVE_USERNAMES({ usernamesById }));
     });
+};
+
+export const selectDefaultPublicFilterValue = (dispatch, getState) => {
+  const filterValue = selectDefaultFilterValue(sel.getVettedProposalFilterCounts(getState()), [
+    PROPOSAL_VOTING_ACTIVE,
+    PROPOSAL_VOTING_NOT_STARTED,
+    PROPOSAL_FILTER_ALL
+  ]);
+  dispatch(onChangePublicFilter(filterValue));
+};
+
+export const selectDefaultAdminFilterValue = (dispatch, getState) => {
+  const filterValue = selectDefaultFilterValue(sel.getUnvettedProposalFilterCounts(getState()), [
+    PROPOSAL_STATUS_UNREVIEWED,
+    PROPOSAL_FILTER_ALL
+  ]);
+  dispatch(onChangeAdminFilter(filterValue));
+};
+
+// Chooses a sensible default filter - don't pick a filter with 0 proposals.
+const selectDefaultFilterValue = (proposalFilterCounts, defaultFilterPreferences) => {
+  for(let filterPreference of defaultFilterPreferences) {
+    if((proposalFilterCounts[filterPreference] || 0) > 0) {
+      return filterPreference;
+    }
+  }
+
+  return defaultFilterPreferences[defaultFilterPreferences.length - 1];
 };

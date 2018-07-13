@@ -6,7 +6,11 @@ import { confirmWithModal, openModal, closeModal } from "./modal";
 import * as external_api_actions from "./external_api";
 import { clearStateLocalStorage } from "../lib/local_storage";
 import act from "./methods";
-import { globalUsernamesById } from "./app";
+import {
+  globalUsernamesById,
+  selectDefaultPublicFilterValue,
+  selectDefaultAdminFilterValue
+} from "./app";
 
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onSetEmail = act.SET_EMAIL;
@@ -180,21 +184,23 @@ export const onFetchUserProposals = userid => dispatch => {
     });
 };
 
-export const onFetchVetted = () => dispatch => {
+export const onFetchVetted = () => (dispatch, getState) => {
   dispatch(act.REQUEST_VETTED());
   return api
     .vetted()
     .then(response => dispatch(act.RECEIVE_VETTED(response)))
+    .then(() => selectDefaultPublicFilterValue(dispatch, getState))
     .catch(error => {
       dispatch(act.RECEIVE_VETTED(null, error));
     });
 };
 
-export const onFetchUnvetted = () => dispatch => {
+export const onFetchUnvetted = () => (dispatch, getState) => {
   dispatch(act.REQUEST_UNVETTED());
   return api
     .unvetted()
     .then(response => dispatch(act.RECEIVE_UNVETTED(response)))
+    .then(() => selectDefaultAdminFilterValue(dispatch, getState))
     .catch(error => {
       dispatch(act.RECEIVE_UNVETTED(null, error));
     });
@@ -451,16 +457,20 @@ export const onFetchUsernamesById = (userIds) =>
       });
   });
 
-export const onFetchProposalsVoteStatus = () => (dispatch) => {
+export const onFetchProposalsVoteStatus = () => (dispatch, getState) => {
   dispatch(act.REQUEST_PROPOSALS_VOTE_STATUS());
-  return api.proposalsVoteStatus().then(
-    response => dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS({ ...response, success: true }))
-  ).catch(
-    error => {
-      dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS(null, error));
-      throw error;
-    }
-  );
+  return api
+    .proposalsVoteStatus()
+    .then(response =>
+      dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS({ ...response, success: true }))
+    )
+    .then(() => selectDefaultPublicFilterValue(dispatch, getState))
+    .catch(
+      error => {
+        dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS(null, error));
+        throw error;
+      }
+    );
 };
 
 export const onFetchProposalVoteStatus = (token) => (dispatch) => {

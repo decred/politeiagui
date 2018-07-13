@@ -11,6 +11,7 @@ export const CustomContent = ({
   bodyClassName="listing-page",
   listings,
   proposals,
+  proposalCounts,
   emptyProposalsMessage = "There are no proposals yet",
   isLoading,
   error,
@@ -36,6 +37,7 @@ export const CustomContent = ({
         header={header}
         handleChangeFilterValue={onChangeFilter}
         filterValue={filterValue}
+        proposalCounts={proposalCounts}
       />
       {
         (listings && listings.length > 0) || proposals.length > 0 ? (
