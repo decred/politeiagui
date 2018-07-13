@@ -364,8 +364,8 @@ body:not(.loggedin) #header-bottom-right {
 .wiki-page .tabmenu li>a[href$="/ads/"] {
     display: none!important
 }
-body.listing-page[class]>.content,
-body[class]>.appWrapper>.content {
+body.listing-page>.content,
+body>.appWrapper>.content {
     padding: 92px 352px 64px 16px;
     margin: 0;
 }

@@ -5,7 +5,7 @@ import util from "tweetnacl-util";
 import get from "lodash/fp/get";
 
 export const STORAGE_PREFIX = "ed255191~";
-export const toHex = x => Buffer.from(toUnint8Array(x)).toString("hex");
+export const toHex = x => Buffer.from(toUint8Array(x)).toString("hex");
 
 export const toByteArray = str => {
   const bytes = new Uint8Array(Math.ceil(str.length / 2));
@@ -13,8 +13,8 @@ export const toByteArray = str => {
   return bytes;
 };
 
-export const toUnint8Array = (obj) =>
-  obj.constructor === Uint8Array ? obj :
+export const toUint8Array = obj =>
+  Object.prototype.toString.call(obj) !== "[object Object]" ? obj :
     Uint8Array.from(Object.keys(obj).map(key => obj[key]));
 
 export const loadKeys = (email, keys) => localforage.setItem(STORAGE_PREFIX + email, keys).then(() => keys);
@@ -23,11 +23,11 @@ export const existing = email => localforage.getItem(STORAGE_PREFIX + email).cat
 const myKeyPair = email => existing(email).then(res => (res && res.secretKey && res) || generateKeys().then(keys => loadKeys(email, keys)));
 export const myPublicKey = email => myKeyPair(email).then(get("publicKey"));
 export const myPubKeyHex = email => myPublicKey(email).then(toHex);
-export const sign = (email, msg) => myKeyPair(email).then(({ secretKey }) => nacl.sign.detached(msg, secretKey));
+export const sign = (email, msg) => myKeyPair(email).then(({ secretKey }) => nacl.sign.detached(toUint8Array(msg), toUint8Array(secretKey)));
 export const signString = (email, msg) => sign(email, util.decodeUTF8(msg));
 export const signHex = (email, msg) => sign(email, msg).then(toHex);
 export const signStringHex = (email, msg) => signString(email, msg).then(toHex);
-export const verify = (msg, sig, pubKey) => nacl.sign.detached.verify(msg, sig, pubKey);
+export const verify = (msg, sig, pubKey) => nacl.sign.detached.verify(toUint8Array(msg), toUint8Array(sig), toUint8Array(pubKey));
 
 export const keysToHex = ({ publicKey, secretKey }) => ({
   publicKey: toHex(publicKey),
