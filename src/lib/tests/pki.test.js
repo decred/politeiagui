@@ -20,9 +20,9 @@ describe("Key pair generation and storage handlers (lib/pki.js)", () => {
       2: 328
     };
     const uint8 = Uint8Array.from([234, 126, 328]);
-    expect(pki.toUnint8Array(obj)).toEqual(uint8);
+    expect(pki.toUint8Array(obj)).toEqual(uint8);
     //test it doesn't change an already Uint8array object
-    expect(pki.toUnint8Array(uint8)).toEqual(uint8);
+    expect(pki.toUint8Array(uint8)).toEqual(uint8);
   });
 
   test("generate a key pair and save it with localforage", async () => {
