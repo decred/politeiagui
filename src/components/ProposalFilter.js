@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  PROPOSAL_FILTER_ALL,
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_VOTING_ACTIVE,
@@ -20,7 +21,7 @@ const adminFilterOptions = [
   },
   {
     label: "all",
-    value: 0
+    value: PROPOSAL_FILTER_ALL
   }
 ];
 const publicFilterOptions = [
@@ -38,7 +39,7 @@ const publicFilterOptions = [
   },
   {
     label: "all proposals",
-    value: 0
+    value: PROPOSAL_FILTER_ALL
   }
 ];
 const mapHeaderToOptions = {
@@ -46,7 +47,7 @@ const mapHeaderToOptions = {
   [LIST_HEADER_PUBLIC]: publicFilterOptions
 };
 
-const ProposalFilter = ({ handleChangeFilterValue, header, filterValue }) => (
+const ProposalFilter = ({ handleChangeFilterValue, header, filterValue, proposalCounts }) => (
   mapHeaderToOptions[header] ?
     <div style={{ display: "flex", margin: "16px 0px 0 24px", flexWrap: "wrap", alignItems: "center" }}>
       <span style={{marginRight: "16px"}}>Show:</span>
@@ -64,7 +65,8 @@ const ProposalFilter = ({ handleChangeFilterValue, header, filterValue }) => (
           <label
             for={`proposal-filter-${op.value}`}
             style={{ margin: "0 16px 0 4px", cursor: "pointer" }}>
-            {op.label}
+            <span className="proposal-filter-label">{op.label}</span>{" "}
+            <span className="proposal-filter-count">{`(${proposalCounts[op.value] || 0})`}</span>
           </label>
         </div>
       ))}
