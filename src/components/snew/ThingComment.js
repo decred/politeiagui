@@ -1,6 +1,7 @@
 import React from "react";
 import { ThingComment as BaseComment } from "snew-classic-ui";
 import connector from "../../connectors/reply";
+import { PROPOSAL_VOTING_NOT_STARTED } from "../../constants";
 
 const ThingComment = ({
   onSetReplyParent,
@@ -8,6 +9,7 @@ const ThingComment = ({
   loggedInAsEmail,
   token,
   keyMismatch,
+  getVoteStatus,
   ...props
 }) => (
   <BaseComment {...{ ...props,
@@ -16,7 +18,7 @@ const ThingComment = ({
       e && e.preventDefault && e.preventDefault();
     },
     user: loggedInAsEmail,
-    blockvote: keyMismatch,
+    blockvote: keyMismatch || (getVoteStatus(token).status !== PROPOSAL_VOTING_NOT_STARTED),
     handleVote: onLikeComment,
     token
   }} />
