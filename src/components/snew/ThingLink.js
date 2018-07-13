@@ -16,6 +16,7 @@ import VoteStats from "../VoteStats";
 import { withRouter } from "react-router";
 import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
 import { CONFIRM_CENSOR, CONFIRM_ACTION } from "../Modal/modalTypes";
+import MarkdownPreview from "../MarkdownEditor/MarkdownPreview";
 
 const ThingLinkComp = ({
   Link,
@@ -55,7 +56,8 @@ const ThingLinkComp = ({
   tokenFromStartingVoteProp,
   isTestnet,
   getVoteStatus,
-  openModal
+  openModal,
+  censorMessage
 }) => (
   <div
     className={`thing id-${id} odd link ${
@@ -154,6 +156,15 @@ const ThingLinkComp = ({
             <DownloadBundle />
           </div>
         ))}
+      {censorMessage &&
+        <div>
+          <span>Censorhip reason:</span>
+          <MarkdownPreview
+            body={censorMessage}
+            fullWidth
+          />
+        </div>
+      }
       <Expando {...{ expanded, is_self, selftext, selftext_html }} />
       <ProposalImages readOnly files={otherFiles} />
       {isAdmin ? (

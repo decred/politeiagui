@@ -11,7 +11,7 @@ const customRenderers = {
 };
 
 const MarkdownRenderer = ({ body, className }) => (
-  <div className={className}>
+  <div className={className} style={{ overflowX: "hidden" }}>
     <ReactMarkdown
       className="md"
       renderers={customRenderers}
