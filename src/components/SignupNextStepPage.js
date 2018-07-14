@@ -3,10 +3,9 @@ import signupNext from "../connectors/signupNext";
 
 class SignupNextStepPage extends React.Component {
   componentDidMount () {
-    const { isTestnet, email, verificationToken } = this.props;
+    const { isTestnet, email, verificationToken, history } = this.props;
     if (isTestnet && email && verificationToken) {
-      const win = window.open(`/user/verify?email=${email}&verificationtoken=${verificationToken}`, "_blank");
-      win.focus();
+      history.push(`/user/verify?email=${encodeURIComponent(email)}&verificationtoken=${verificationToken}`);
     }
   }
 
