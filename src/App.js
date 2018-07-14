@@ -41,6 +41,14 @@ class Loader extends Component {
     if (nextProps.loggedInAsEmail) {
       this.verifyUserPubkey(nextProps.loggedInAsEmail, nextProps.userPubkey);
     }
+    if (!this.props.apiError && nextProps.apiError) {
+      // Unrecoverable error
+      if (nextProps.apiError.internalError) {
+        this.props.history.push(`/500?error=${nextProps.apiError.message}`);
+      } else {
+        console.error("ERROR:", nextProps.apiError.message);
+      }
+    }
   }
 
   componentDidMount() {
@@ -57,17 +65,15 @@ class Loader extends Component {
 
   render() {
     return (
-      <Router>
-        <div className="appWrapper">
-          <ModalStack />
-          {this.props.children}
-        </div>
-      </Router>
+      <div className="appWrapper">
+        <ModalStack />
+        {this.props.children}
+      </div>
     );
   }
 }
 
-const LoaderComponent = loaderConnector(Loader);
+const LoaderComponent = withRouter(loaderConnector(Loader));
 
 const HeaderAlertComponent = withRouter(
   loaderConnector(
@@ -96,12 +102,14 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <LoaderComponent>
-          <HeaderAlertComponent />
-          <Subreddit>
-            <Routes />
-          </Subreddit>
-        </LoaderComponent>
+        <Router>
+          <LoaderComponent>
+            <HeaderAlertComponent />
+            <Subreddit>
+              <Routes />
+            </Subreddit>
+          </LoaderComponent>
+        </Router>
       </Provider>
     );
   }

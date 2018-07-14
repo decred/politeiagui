@@ -85,7 +85,7 @@ export const apiPropsVoteStatusError = getApiError("proposalsVoteStatus");
 export const apiPropVoteStatusResponse = getApiResponse("proposalVoteStatus");
 export const apiPropVoteStatusError = getApiError("proposalVoteStatusError");
 
-const apiInitError = getApiError("init");
+export const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
 export const apiChangePasswordError = or(apiInitError, getApiError("changePassword"));
 export const apiChangeUsernameError = or(apiInitError, getApiError("changeUsername"));

@@ -30,7 +30,6 @@ export const requestApiInfo = () => (dispatch) => {
     })
     .catch(error => {
       dispatch(act.RECEIVE_INIT_SESSION(null, error));
-      throw error;
     });
 };
 
