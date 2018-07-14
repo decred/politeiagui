@@ -11,7 +11,6 @@ class ThingComment extends React.PureComponent {
     };
   }
   toggleCommentForm = (e, forceValue = null) => {
-    console.log("got here");
     e && e.preventDefault && e.preventDefault();
     this.setState({
       showCommentForm: forceValue != null ? forceValue : !this.state.showCommentForm
