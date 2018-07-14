@@ -41,8 +41,13 @@ class Loader extends Component {
     if (nextProps.loggedInAsEmail) {
       this.verifyUserPubkey(nextProps.loggedInAsEmail, nextProps.userPubkey);
     }
-    if (!this.props.apiInitError && nextProps.apiInitError) {
-      this.props.history.push(`/500?error=${nextProps.apiInitError.message}`);
+    if (!this.props.apiError && nextProps.apiError) {
+      // Unrecoverable error
+      if (nextProps.apiError.internalError) {
+        this.props.history.push(`/500?error=${nextProps.apiError.message}`);
+      } else {
+        console.error("ERROR:", nextProps.apiError.message);
+      }
     }
   }
 

@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { autobind } from "core-decorators";
 import InternalServerErrorMessage from "./InternalServerErrorMessage";
-import errorPageConnector from "../../connectors/errorPage";
 
 class ErrorPage extends Component {
 
   render() {
     const params = this.props.location && new URLSearchParams(this.props.location.search);
-    const error = this.props.error || params.get("error");
+    const error = params.get("error");
     return (
       <InternalServerErrorMessage error={error} />
     );
@@ -16,4 +15,4 @@ class ErrorPage extends Component {
 
 autobind(ErrorPage);
 
-export default errorPageConnector(ErrorPage);
+export default ErrorPage;

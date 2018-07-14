@@ -7,7 +7,7 @@ export default connect(
   sel.selectorMap({
     userPubkey: sel.userPubkey,
     loggedInAsEmail: sel.loggedInAsEmail,
-    apiInitError: sel.apiInitError,
+    apiError: sel.apiError,
     userCanExecuteActions: sel.userCanExecuteActions,
   }),
   dispatch => bindActionCreators({
