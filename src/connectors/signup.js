@@ -22,6 +22,7 @@ const signupFormConnector = connect(
     apiNewUserError: sel.apiNewUserError,
     apiVerifyNewUserError: sel.apiVerifyNewUserError,
     isShowingSignupConfirmation: sel.isShowingSignupConfirmation,
+    csrf: sel.csrf,
   }),
   {
     onFetchData: act.onGetPolicy,
@@ -31,9 +32,18 @@ const signupFormConnector = connect(
 );
 
 class Wrapper extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      hasFetchedPolicy: false,
+    };
+  }
 
   componentDidMount() {
-    this.props.policy || this.props.onFetchData();
+    if (this.props.csrf) {
+      this.props.policy || this.props.onFetchData();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,6 +55,15 @@ class Wrapper extends Component {
       }
     } else if (nextProps.newUserResponse) {
       nextProps.history.push("/user/signup/next");
+    }
+
+    const { hasFetchedPolicy } = this.state;
+    if (hasFetchedPolicy)
+      return;
+
+    if (nextProps.csrf) {
+      this.setState({ hasFetchedPolicy: true });
+      this.props.policy || this.props.onFetchData();
     }
   }
 
