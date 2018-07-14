@@ -42,7 +42,7 @@ class Loader extends Component {
       this.verifyUserPubkey(nextProps.loggedInAsEmail, nextProps.userPubkey);
     }
     if (!this.props.apiInitError && nextProps.apiInitError) {
-      this.props.history.push("/500");
+      this.props.history.push(`/500?error=${nextProps.apiInitError.message}`);
     }
   }
 

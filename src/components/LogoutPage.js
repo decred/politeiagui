@@ -13,7 +13,7 @@ class LogoutPage extends Component {
     return isLoading ? (
       <PageLoadingIcon />
     ) : error ? (
-      <InternalServerErrorMessage {...{ error }} />
+      <InternalServerErrorMessage error={error.message} />
     ) : (
       <article className="page logout-page content">
         <h3>You are now logged out. Thanks for stopping by, and have a great day.</h3>

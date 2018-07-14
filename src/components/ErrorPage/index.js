@@ -6,9 +6,10 @@ import errorPageConnector from "../../connectors/errorPage";
 class ErrorPage extends Component {
 
   render() {
-    const { error } = this.props;
+    const params = this.props.location && new URLSearchParams(this.props.location.search);
+    const error = this.props.error || params.get("error");
     return (
-      <InternalServerErrorMessage {...{ error }} />
+      <InternalServerErrorMessage error={error} />
     );
   }
 }
