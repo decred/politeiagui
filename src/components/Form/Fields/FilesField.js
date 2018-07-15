@@ -41,26 +41,30 @@ class FilesField extends React.Component {
     const buttonStyle = {
       margin: 0
     };
-    const wrapperStyle = {
-      width: "118px"
-    };
     return (
-      <div>
-        <div style={wrapperStyle}>
+      <div className="attach-wrapper">
+        { policyErrors.length > 0 && <PolicyErrors errors={policyErrors} />}
+        <div>
           <ReactFileReader
             base64
             multipleFiles
             fileTypes={policy.validmimetypes}
             handleFiles={this.handleFilesChange}
           >
-            <button
-              className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
-              style={buttonStyle}
-            >{placeholder}</button>
+            <div className="button-wrapper">
+              <button
+                className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                style={buttonStyle}
+              >{placeholder}</button>
+              <div className="attach-requirements">
+                <div> Max number of files: <span>{policy.maximages}.</span> </div>
+                <div> Max file size: <span>{Math.floor(policy.maximagesize / 1024)} Kb. </span> </div>
+                <div> Valid MIME types: <span>{policy.validmimetypes.join(", ")}</span> </div>
+              </div>
+            </div>
           </ReactFileReader>
         </div>
         {touched && error && !disabled && <span className="error">{error}</span>}
-        { policyErrors.length > 0 && <PolicyErrors errors={policyErrors} />}
         <ProposalImages files={input.value || []} onChange={input.onChange} />
       </div>
     );

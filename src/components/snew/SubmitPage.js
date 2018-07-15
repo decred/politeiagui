@@ -37,6 +37,7 @@ class SubmitPage extends React.Component {
       policy,
       error,
       warning,
+      anyTouched,
       onSave,
       submitting,
       handleSubmit,
@@ -57,7 +58,7 @@ class SubmitPage extends React.Component {
                 <MultipleItemsBodyMessage items={newProposalError} />
               </Message>
             )}
-            {error && (
+            {anyTouched && error && (
               <Message type="error" header="Invalid proposal. Please review the fields">
                 <MultipleItemsBodyMessage items={error} />
               </Message>
@@ -95,22 +96,15 @@ class SubmitPage extends React.Component {
                             rows={20}
                             cols={80}
                           />
-                          <div className="attach-wrapper">
-                            <Field
-                              name="files"
-                              className="attach-button greenprimary"
-                              component={FilesField}
-                              userCanExecuteActions={userCanExecuteActions}
-                              placeholder="Attach a file"
-                              policy={policy}
-                              normalize={normalizer}
-                            />
-                            <div className="attach-requirements">
-                              <div> Max number of files: <span>{policy.maximages}.</span> </div>
-                              <div> Max file size: <span>{Math.floor(policy.maximagesize / 1024)} Kb. </span> </div>
-                              <div> Valid MIME types: <span>{policy.validmimetypes.join(", ")}</span> </div>
-                            </div>
-                          </div>
+                          <Field
+                            name="files"
+                            className="attach-button greenprimary"
+                            component={FilesField}
+                            userCanExecuteActions={userCanExecuteActions}
+                            placeholder="Attach a file"
+                            policy={policy}
+                            normalize={normalizer}
+                          />
                         </div>
                       </div>
                     </div>

@@ -193,15 +193,28 @@ a:hover, a:focus {
   margin: 20px 0;
 }
 
-.submit-proposal-page .attach-wrapper {
+.attach-wrapper {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  flex-flow: column wrap;
   margin: 20px 0;
 }
 
-.submit-proposal-page .attach-wrapper div:first-child {
-  width: 200px;
+.attach-wrapper div:first-child {
+  width: auto;
+}
+
+.attach-wrapper .button-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.attached-images {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .submit-proposal-page .attach-wrapper .attach-requirements {
@@ -341,7 +354,7 @@ a:hover, a:focus {
 }
 
 .attached-image-ct {
-  margin-top: 16px;
+  margin: 16px;
 }
 .attached-image {
   display: block;

@@ -60,4 +60,4 @@ class SubmitWrapper extends Component {
 
 const wrapSubmit = (Component) => (props) => <SubmitWrapper {...{...props, Component }} />;
 
-export default compose(withRouter, submitConnector, reduxForm({ form: "form/proposal", validate: synchronousValidation, warn }), wrapSubmit);
+export default compose(withRouter, submitConnector, reduxForm({ form: "form/proposal", touchOnChange: true, validate: synchronousValidation, warn }), wrapSubmit);

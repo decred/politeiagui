@@ -16,7 +16,7 @@ class ProposalImages extends Component {
     const { files, readOnly } = this.props;
 
     return (
-      <div>
+      <div className="attached-images">
         {(files || []).map(({ name, mime, digest, payload }, idx) => (
           <div key={digest || idx} className="attached-image-ct">
             <h5 className="attached-image-title">{name}</h5>
