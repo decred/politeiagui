@@ -281,13 +281,13 @@ a:hover, a:focus {
 }
 
 .message-warn {
-  border: 1px solid #ffc107;
+  border: 1px solid #d05a15;
 }
 .message-warn > .message-icon {
-  background: #ffc107;
+  background: #d05a15;
 }
 .message-warn > .message-text > .message-header {
-  color: #ffc107;
+  color: #d05a15;
 }
 
 .proposal-meta-data {
