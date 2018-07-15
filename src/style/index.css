@@ -189,6 +189,38 @@ a:hover, a:focus {
   padding: 20px;
 }
 
+.submit-proposal-page .submit-wrapper {
+  margin: 20px 0;
+}
+
+.submit-proposal-page .attach-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin: 20px 0;
+}
+
+.submit-proposal-page .attach-wrapper div:first-child {
+  width: 200px;
+}
+
+.submit-proposal-page .attach-wrapper .attach-requirements {
+  display: flex;
+  margin-left: 40px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  color: #777;
+  padding: 20px;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.submit-proposal-page .attach-wrapper .attach-requirements span {
+  color: #000;
+}
+
+
 .login-form fieldset {
   background-color: white;
 }
