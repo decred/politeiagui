@@ -58,7 +58,7 @@ class SubmitPage extends React.Component {
               </Message>
             )}
             {error && (
-              <Message type="error" header="Error creating proposal">
+              <Message type="error" header="Invalid proposal. Please review the fields">
                 <MultipleItemsBodyMessage items={error} />
               </Message>
             )}
