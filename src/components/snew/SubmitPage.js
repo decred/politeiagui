@@ -6,7 +6,6 @@ import FilesField from "../Form/Fields/FilesField";
 import ErrorField from "../Form/Fields/ErrorField";
 import Message from "../Message";
 import MultipleItemsBodyMessage from "../MultipleItemsBodyMessage";
-import ProposalInfo from "../ProposalInfo";
 import { isArray, isUndefined, concat, cloneDeep } from "lodash";
 import { Field } from "redux-form";
 
@@ -37,11 +36,14 @@ class SubmitPage extends React.Component {
       PageLoadingIcon,
       policy,
       error,
+      warning,
       onSave,
+      submitting,
       handleSubmit,
       newProposalError,
       userCanExecuteActions
     } = this.props;
+    const submitEnabled = !submitting && !error && userCanExecuteActions;
     return !policy || isLoading ? <PageLoadingIcon /> : (
       <div className="content" role="main">
         <div className="page submit-proposal-page">
@@ -50,9 +52,21 @@ class SubmitPage extends React.Component {
             className="submit content warn-on-unload"
             id="newlink"
           >
-            <Message type="info" header="Important information about proposals">
-              <ProposalInfo policy={policy} />
-            </Message>
+            {newProposalError && (
+              <Message type="error" header="Error creating proposal">
+                <MultipleItemsBodyMessage items={newProposalError} />
+              </Message>
+            )}
+            {error && (
+              <Message type="error" header="Error creating proposal">
+                <MultipleItemsBodyMessage items={error} />
+              </Message>
+            )}
+            {!error && warning && (
+              <Message type="warn" header="Warning">
+                <MultipleItemsBodyMessage items={warning} />
+              </Message>
+            )}
             <div className="formtabs-content">
               <div className="spacer">
                 <Field
@@ -81,39 +95,37 @@ class SubmitPage extends React.Component {
                             rows={20}
                             cols={80}
                           />
-                          <Field
-                            name="files"
-                            component={FilesField}
-                            userCanExecuteActions={userCanExecuteActions}
-                            placeholder="Attach files"
-                            policy={policy}
-                            normalize={normalizer}
-                          />
+                          <div className="attach-wrapper">
+                            <Field
+                              name="files"
+                              className="attach-button greenprimary"
+                              component={FilesField}
+                              userCanExecuteActions={userCanExecuteActions}
+                              placeholder="Attach a file"
+                              policy={policy}
+                              normalize={normalizer}
+                            />
+                            <div className="attach-requirements">
+                              <div> Max number of files: <span>{policy.maximages}.</span> </div>
+                              <div> Max file size: <span>{Math.floor(policy.maximagesize / 1024)} Kb. </span> </div>
+                              <div> Valid MIME types: <span>{policy.validmimetypes.join(", ")}</span> </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
+                    <div className="submit-wrapper">
+                      <button
+                        className={`togglebutton access-required${!submitEnabled && " not-active disabled"}`}
+                        name="submit"
+                        type="submit"
+                        value="form"
+                        onClick={handleSubmit(onSave)}>
+                        submit
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="spacer">
-                <button
-                  className={`btn togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                  name="submit"
-                  type="submit"
-                  value="form"
-                  onClick={handleSubmit(onSave)}>
-                  submit
-                </button>
-                {newProposalError && (
-                  <Message type="error" header="Error creating proposal">
-                    <MultipleItemsBodyMessage items={newProposalError} />
-                  </Message>
-                )}
-                {error && (
-                  <Message type="error" header="Error creating proposal">
-                    <MultipleItemsBodyMessage items={error} />
-                  </Message>
-                )}
               </div>
               <div className="spacer">
                 <div className="roundfield">
