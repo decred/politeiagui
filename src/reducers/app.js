@@ -1,6 +1,6 @@
 import * as act from "../actions/types";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
-import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_VOTING_ACTIVE } from "../constants";
+import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_VOTING_ACTIVE, PAYWALL_STATUS_PAID } from "../constants";
 
 export const DEFAULT_STATE = {
   isShowingSignupConfirmation: false,
@@ -50,6 +50,7 @@ const app = (state = DEFAULT_STATE, action) => (({
   [act.UPDATE_USER_PAYWALL_STATUS]: () => ({
     ...state,
     userPaywallStatus: action.payload.status,
+    userAlreadyPaid: action.payload.status === PAYWALL_STATUS_PAID,
     userPaywallConfirmations: action.payload.currentNumberOfConfirmations
   }),
   [act.CSRF_NEEDED]: () => ({ ...state, csrfIsNeeded: action.payload }),
