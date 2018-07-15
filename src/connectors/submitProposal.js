@@ -5,7 +5,7 @@ import * as act from "../actions";
 import compose from "lodash/fp/compose";
 import { or } from "../lib/fp";
 import { reduxForm } from "redux-form";
-import validate from "../validators/proposal";
+import { validate, synchronousValidation, warn } from "../validators/proposal";
 import { withRouter } from "react-router-dom";
 import { getNewProposalData } from "../lib/editors_content_backup";
 
@@ -60,4 +60,4 @@ class SubmitWrapper extends Component {
 
 const wrapSubmit = (Component) => (props) => <SubmitWrapper {...{...props, Component }} />;
 
-export default compose(withRouter, submitConnector, reduxForm({ form: "form/proposal" }), wrapSubmit);
+export default compose(withRouter, submitConnector, reduxForm({ form: "form/proposal", validate: synchronousValidation, warn }), wrapSubmit);
