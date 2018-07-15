@@ -280,6 +280,16 @@ a:hover, a:focus {
   color: #2971FF;
 }
 
+.message-warn {
+  border: 1px solid #ffc107;
+}
+.message-warn > .message-icon {
+  background: #ffc107;
+}
+.message-warn > .message-text > .message-header {
+  color: #ffc107;
+}
+
 .proposal-meta-data {
   margin-bottom: 8px;
 }
