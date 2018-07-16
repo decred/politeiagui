@@ -223,7 +223,11 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_PROPOSALS_VOTE_STATUS]: () => receive("proposalsVoteStatus", state, action),
   [act.REQUEST_PROPOSAL_VOTE_STATUS]: () => request("proposalVoteStatus", state, action),
   [act.RECEIVE_PROPOSAL_VOTE_STATUS]: () => receive("proposalVoteStatus", state, action),
-  [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
+  [act.RECEIVE_LOGOUT]: () => {
+    const tempState = DEFAULT_STATE;
+    tempState.init = state.init;
+    return tempState;
+  }
 })[action.type] || (() => state))();
 
 export default api;
