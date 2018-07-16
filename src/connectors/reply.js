@@ -2,11 +2,9 @@ import React, { Component } from "react";
 import * as act from "../actions";
 import * as sel from "../selectors";
 import compose from "lodash/fp/compose";
-import { reduxForm, initialize } from "redux-form";
 import { withRouter } from "react-router-dom";
 import validate from "../validators/reply";
 import { connect } from "react-redux";
-import { getNewCommentData } from "../lib/editors_content_backup";
 
 const replyConnector = connect(
   sel.selectorMap({
@@ -21,7 +19,6 @@ const replyConnector = connect(
     getVoteStatus: sel.getPropVoteStatus
   }),
   {
-    initialize: data => initialize("form/reply", data),
     onFetchData: act.onGetPolicy,
     onSubmitComment: act.onSubmitComment,
     onSetReplyParent: act.onSetReplyParent,
@@ -32,35 +29,57 @@ const replyConnector = connect(
 class Wrapper extends Component {
   constructor(props) {
     super(props);
-    this.state = { isShowingMarkdownHelp: false };
+    this.state = {
+      isShowingMarkdownHelp: false,
+      commentValue: "",
+      validationError: ""
+    };
   }
 
   componentDidMount() {
     this.props.policy || this.props.onFetchData();
-    this.props.initialize(getNewCommentData());
+    // this.props.initialize(getNewCommentData());
   }
 
   render() {
-    const { Component, ...props } = this.props;
+    const { Component, error, ...props } = this.props;
+    const { validationError } = this.state;
     return (
       <Component
         {...{
           ...props,
           ...this.state,
+          onChange: this.onChange,
+          error: error || validationError,
+          value: this.state.commentValue,
           onSave: this.onSave.bind(this),
-          onToggleMarkdownHelp: this.onToggleMarkdownHelp.bind(this)
+          onToggleMarkdownHelp: this.onToggleMarkdownHelp.bind(this),
+          showComentForm: this.state.showComentForm
         }}
       />
     );
   }
 
-  onSave(values) {
-    const { loggedInAsEmail, token, replyTo, policy } = this.props;
-    validate({ values, ...this.props }, policy);
-    const { comment } = values;
+  onChange = value => this.setState({ commentValue: value })
+  resetForm = () => {
+    this.setState({ commentValue: "" });
+    this.props.onClose && this.props.onClose();
+  }
+
+  onSave(e) {
+    e && e.preventDefault && e.preventDefault();
+    const { loggedInAsEmail, token, thingId: replyTo, policy } = this.props;
+    const { commentValue: comment } = this.state;
+    try {
+      validate({ values: { comment }, ...this.props }, policy);
+    } catch(e) {
+      console.log("got error", e);
+      this.setState({ validationError: e.errors._error });
+      return;
+    }
     return this.props
       .onSubmitComment(loggedInAsEmail, token, comment, replyTo)
-      .then(() => this.props.onSetReplyParent());
+      .then(() => this.resetForm());
   }
 
   onToggleMarkdownHelp() {
@@ -72,6 +91,5 @@ const wrap = Component =>
   replyConnector(props => <Wrapper {...{ ...props, Component }} />);
 export default compose(
   withRouter,
-  reduxForm({ form: "form/reply" }),
   wrap
 );

@@ -27,7 +27,8 @@ class KeyPage extends React.Component {
     this.state = {
       pubkey: "",
       pubkeyStatus: PUB_KEY_STATUS_LOADING,
-      showIdentityHelpText: false
+      showIdentityHelpText: false,
+      openedVerification: false,
     };
   }
   resolvePubkey = () => {
@@ -50,6 +51,18 @@ class KeyPage extends React.Component {
 
   componentWillUnmount() {
     this.unmounting = true;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.state.openedVerification)
+      return;
+    const { shouldAutoVerifyKey, updateUserKey } = nextProps;
+    if (shouldAutoVerifyKey && updateUserKey) {
+      this.setState({ openedVerification: true });
+      const { verificationtoken } = updateUserKey;
+      this.props.history.push(`/user/key/verify/?verificationtoken=${verificationtoken}`);
+      return;
+    }
   }
 
   render() {

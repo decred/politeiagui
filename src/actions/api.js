@@ -302,21 +302,28 @@ export const onUpdateUserKey = loggedInAsEmail =>
       .generateKeys()
       .then(keys =>
         api.updateKeyRequest(csrf, pki.toHex(keys.publicKey)).then(response => {
-          pki.loadKeys(loggedInAsEmail, keys);
-          return dispatch(
-            act.RECEIVE_UPDATED_KEY({ ...response, success: true })
+          const { verificationtoken } = response;
+          if (verificationtoken) {
+            const { testnet } = getState().api.init.response;
+            if (testnet) {
+              dispatch(act.SHOULD_AUTO_VERIFY_KEY(true));
+            }
+          }
+          return pki.loadKeys(loggedInAsEmail, keys).then(
+            () => dispatch(act.RECEIVE_UPDATED_KEY({ ...response, success: true }))
           );
+          // return dispatch(act.RECEIVE_UPDATED_KEY({ ...response, success: true }));
         })
-      )
-      .catch(error => {
+      ).catch(error => {
         dispatch(act.RECEIVE_UPDATED_KEY(null, error));
         throw error;
       });
   });
 
+
 export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_VERIFIED_KEY());
+    dispatch(act.REQUEST_VERIFIED_KEY({ email: loggedInAsEmail, verificationtoken }));
     return api
       .verifyKeyRequest(csrf, loggedInAsEmail, verificationtoken)
       .then(response =>

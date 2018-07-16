@@ -12,7 +12,7 @@ const verifyKeyConnector = connect(
     verifyUserKeyError: sel.verifyUserKeyError
   }),
   dispatch => bindActionCreators({
-    onVerify: act.onVerifyUserKey,
+    onVerifyUserKey: act.onVerifyUserKey,
     updateMe: act.updateMe
   }, dispatch)
 );
