@@ -44,20 +44,6 @@ const CommentForm = ({
               }}
               toggledStyle
             />
-            {/* <Field
-              component={MarkdownEditorField}
-              toggledStyle
-              name={`comment-${thingId}`}
-              autoFocus={!!thingId}
-              type="text"
-              cols={1}
-              data-event-action="comment"
-              data-type="link"
-              rows={1}
-              defaultValue={defaultBody}
-              body={body}
-              onChange={onChangeBody && ((e) => onChangeBody(e.target.value))}
-            /> */}
           </div>
         )}
         {!isPostingComment && getVoteStatus(token) &&
