@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+import propTypes from "prop-types";
 import { withRouter } from "react-router";
 import { isEmpty } from "lodash";
 import * as pki from "../../lib/pki";
@@ -14,13 +14,17 @@ class VerifyKey extends Component {
     if (isEmpty(this.props.location.search) || !verificationtoken || typeof(verificationtoken) !== "string") {
       this.props.history.push("/user/login");
     }
+    const { email } = this.props;
+    if(email && verificationtoken) {
+      this.props.onVerifyUserKey(email, verificationtoken);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     if(!this.props.email && nextProps.email) {
       const { verificationtoken } = qs.parse(this.props.location.search);
       const { email } = nextProps;
-      this.props.onVerify(email, verificationtoken);
+      this.props.onVerifyUserKey(email, verificationtoken);
     }
     const { verifyUserKey, apiMeResponse, loggedInAsEmail } = nextProps;
     if(verifyUserKey && verifyUserKey.success && apiMeResponse && loggedInAsEmail) {
@@ -57,11 +61,11 @@ class VerifyKey extends Component {
   }
 }
 
-VerifyKey.PropTypes = {
-  email: PropTypes.string.isRequired,
-  verifyUserKey: PropTypes.object,
-  verifyUserKeyError: PropTypes.object,
-  onVerify: PropTypes.func.isRequired
+VerifyKey.propTypes = {
+  email: propTypes.string.isRequired,
+  verifyUserKey: propTypes.object,
+  verifyUserKeyError: propTypes.object,
+  onVerify: propTypes.func.isRequired
 };
 
 export default verifyKeyConnector(withRouter(VerifyKey));

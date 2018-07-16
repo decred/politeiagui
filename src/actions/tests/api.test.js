@@ -658,7 +658,11 @@ describe("test api actions (actions/api.js)", () => {
       api.onVerifyUserKey,
       params,
       (e) => [
-        { type: act.REQUEST_VERIFIED_KEY, error: false, payload: undefined },
+        {
+          type: act.REQUEST_VERIFIED_KEY,
+          error: false,
+          payload: { email: FAKE_USER.email, verificationtoken }
+        },
         { type: act.RECEIVE_VERIFIED_KEY, error: true, payload: e }
       ],
       {},
