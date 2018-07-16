@@ -171,9 +171,7 @@ export const updateKeyRequest = (csrf, publickey) =>
 
 export const verifyKeyRequest = (csrf, email, verificationtoken) =>
   pki.signStringHex(email, verificationtoken).then(
-    signature => {
-      POST("/user/key/verify", csrf, { signature, verificationtoken }).then(getResponse);
-    }
+    signature => POST("/user/key/verify", csrf, { signature, verificationtoken }).then(getResponse)
   );
 
 export const policy = () => GET("/v1/policy").then(getResponse);

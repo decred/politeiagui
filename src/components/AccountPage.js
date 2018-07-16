@@ -60,7 +60,7 @@ class KeyPage extends React.Component {
     if (shouldAutoVerifyKey && updateUserKey) {
       this.setState({ openedVerification: true });
       const { verificationtoken } = updateUserKey;
-      this.props.history.push(`/user/key/verify?emaill=${this.props.loggedInAsEmail}&verificationtoken=${verificationtoken}`);
+      this.props.history.push(`/user/key/verify/?verificationtoken=${verificationtoken}`);
       return;
     }
   }

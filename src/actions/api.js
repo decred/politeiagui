@@ -304,8 +304,10 @@ export const onUpdateUserKey = loggedInAsEmail =>
               dispatch(act.SHOULD_AUTO_VERIFY_KEY(true));
             }
           }
-          pki.loadKeys(loggedInAsEmail, keys);
-          return dispatch(act.RECEIVE_UPDATED_KEY({ ...response, success: true }));
+          return pki.loadKeys(loggedInAsEmail, keys).then(
+            () => dispatch(act.RECEIVE_UPDATED_KEY({ ...response, success: true }))
+          );
+          // return dispatch(act.RECEIVE_UPDATED_KEY({ ...response, success: true }));
         })
       ).catch(error => {
         dispatch(act.RECEIVE_UPDATED_KEY(null, error));
@@ -316,7 +318,7 @@ export const onUpdateUserKey = loggedInAsEmail =>
 
 export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_VERIFIED_KEY());
+    dispatch(act.REQUEST_VERIFIED_KEY({ email: loggedInAsEmail, verificationtoken }));
     return api
       .verifyKeyRequest(csrf, loggedInAsEmail, verificationtoken)
       .then(response =>
