@@ -8037,9 +8037,8 @@ snapdragon@^0.8.1:
     source-map-resolve "^0.5.0"
     use "^3.1.0"
 
-"snew-classic-ui@https://github.com/decred/snew-classic-ui":
+"snew-classic-ui@file:../snew-classic-ui":
   version "0.1.9"
-  resolved "https://github.com/decred/snew-classic-ui#391995c7160635f1d3493babf2af6f654ac12d3c"
   dependencies:
     babel-cli "^6.26.0"
     babel-core "^6.26.0"
