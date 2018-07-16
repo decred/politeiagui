@@ -1,37 +1,29 @@
 import React from "react";
 import LinkComponent from "./Link";
-import { Field } from "redux-form";
 import Message from "../Message";
-import ErrorField from "../Form/Fields/ErrorField";
 import connector from "../../connectors/reply";
 import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
 import { PROPOSAL_VOTING_NOT_STARTED } from "../../constants";
 
 const CommentForm = ({
   Link = LinkComponent,
-  body,
   isPostingComment,
   isShowingMarkdownHelp,
   error,
   thingId,
-  defaultBody,
-  onChangeBody,
   onSave,
-  handleSubmit,
   onToggleMarkdownHelp,
-  onSetReplyParent,
   loggedInAsEmail,
   userCanExecuteActions,
   getVoteStatus,
   token,
-  showContentPolicy=false
+  showContentPolicy=false,
+  value,
+  onChange,
+  onClose
 }) => (
   loggedInAsEmail ?
-    <form className="usertext cloneable warn-on-unload"  onSubmit={handleSubmit(onSave)}>
-      <Field
-        name="global"
-        component={props => <ErrorField title="Cannot create comment" {...props} />}
-      />
+    <form className="usertext cloneable warn-on-unload"  onSubmit={onSave}>
       {error ? (
         <Message
           type="error"
@@ -45,19 +37,12 @@ const CommentForm = ({
           getVoteStatus(token) &&
           getVoteStatus(token).status === PROPOSAL_VOTING_NOT_STARTED && (
           <div className="md">
-            <Field
-              component={MarkdownEditorField}
+            <MarkdownEditorField
+              input={{
+                value: value,
+                onChange: onChange
+              }}
               toggledStyle
-              name="comment"
-              autoFocus={!!thingId}
-              type="text"
-              cols={1}
-              data-event-action="comment"
-              data-type="link"
-              rows={1}
-              defaultValue={defaultBody}
-              body={body}
-              onChange={onChangeBody && ((e) => onChangeBody(e.target.value))}
             />
           </div>
         )}
@@ -98,9 +83,9 @@ const CommentForm = ({
               >
               save
               </button>
-              {(thingId && (<button
+              {(onClose && (<button
                 className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                onClick={() => onSetReplyParent()}
+                onClick={() => onClose()}
                 type="button"
                 disabled={!userCanExecuteActions}
               >
