@@ -5,7 +5,7 @@ import * as act from "../actions";
 
 export default connect(
   sel.selectorMap({
-    opennedModals: sel.getOpennedModals,
+    openedModals: sel.getopenedModals,
   }),
   dispatch => bindActionCreators({
     closeModal: act.closeModal

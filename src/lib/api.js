@@ -118,6 +118,9 @@ export const proposalPaywallDetails = () =>
 export const userProposalCredits = () =>
   GET("/v1/user/proposals/credits").then(getResponse);
 
+export const editUser = (csrf, userid, action, reason) =>
+  POST("/user/edit", csrf, { userid, action, reason }).then(getResponse);
+
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);
 
@@ -159,6 +162,7 @@ export const policy = () => GET("/v1/policy").then(getResponse);
 export const vetted = () => GET("/v1/proposals/vetted").then(getResponse);
 export const unvetted = () => GET("/v1/proposals/unvetted").then(getResponse);
 export const proposal = token => GET(`/v1/proposals/${token}`).then(getResponse);
+export const user = userId => GET(`/v1/user/${userId}`).then(getResponse);
 export const proposalComments = token => GET(`/v1/proposals/${token}/comments`).then(getResponse);
 export const logout = csrf => POST("/logout", csrf, {}).then(() => {
   localStorage.removeItem("state");

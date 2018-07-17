@@ -5,6 +5,7 @@ import compose from "lodash/fp/compose";
 import { or, bool, constant, not } from "../lib/fp";
 import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED } from "../constants";
 
+
 const getIsApiRequesting = key => bool(get(["api", key, "isRequesting"]));
 const getApiPayload = key => get(["api", key, "payload"]);
 const getApiResponse = key => get(["api", key, "response"]);
@@ -22,15 +23,17 @@ export const isApiRequestingForgottenPassword = getIsApiRequesting("forgottenPas
 export const isApiRequestingResendVerificationEmail = getIsApiRequesting("resendVerificationEmail");
 export const isApiRequestingPasswordReset = getIsApiRequesting("passwordReset");
 const isApiRequestingVetted = getIsApiRequesting("vetted");
-const isApiRequestingUserProposals = getIsApiRequesting("userProposals");
 const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
+const isApiRequestingUserProposals = getIsApiRequesting("userProposals");
 const isApiRequestingProposal = getIsApiRequesting("proposal");
 const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
+export const isApiRequestingUser = getIsApiRequesting("user");
 export const isApiRequestingNewComment = getIsApiRequesting("newComment");
 export const isApiRequestingSetStatusProposal = getIsApiRequesting("setStatusProposal");
 export const isApiRequestingStartVote = getIsApiRequesting("startVote");
 export const isApiRequestingPropsVoteStatus = getIsApiRequesting("proposalsVoteStatus");
 export const isApiRequestingPropVoteStatus = getIsApiRequesting("proposalVoteStatus");
+export const isApiRequestingEditUser = getIsApiRequesting("editUser");
 export const isApiRequesting = or(
   isApiRequestingInit,
   isApiRequestingPolicy,
@@ -38,13 +41,21 @@ export const isApiRequesting = or(
   isApiRequestingVerifyNewUser,
   isApiRequestingLogin,
   isApiRequestingLogout,
+  isApiRequestingForgottenPassword,
+  isApiRequestingResendVerificationEmail,
+  isApiRequestingPasswordReset,
   isApiRequestingVetted,
+  isApiRequestingUnvetted,
   isApiRequestingUserProposals,
   isApiRequestingProposal,
   isApiRequestingNewProposal,
+  isApiRequestingUser,
   isApiRequestingNewComment,
   isApiRequestingSetStatusProposal,
   isApiRequestingStartVote,
+  isApiRequestingPropsVoteStatus,
+  isApiRequestingPropVoteStatus,
+  isApiRequestingEditUser,
 );
 
 const apiNewUserPayload = getApiPayload("newUser");
@@ -53,11 +64,13 @@ const apiForgottenPasswordPayload = getApiPayload("forgottenPassword");
 const apiResendVerificationEmailPayload = getApiPayload("resendVerificationEmail");
 const apiNewProposalPayload = getApiPayload("newProposal");
 const apiSetStatusProposalPayload = getApiPayload("setStatusProposal");
+const apiEditUserPayload = getApiPayload("editUser");
 
 export const apiMeResponse = getApiResponse("me");
 const apiInitResponse = getApiResponse("init");
 const apiPolicyResponse = getApiResponse("policy");
 const apiNewUserResponse = getApiResponse("newUser");
+const apiUserResponse = getApiResponse("user");
 export const apiChangePasswordResponse = getApiResponse("changePassword");
 export const apiChangeUsernameResponse = getApiResponse("changeUsername");
 export const apiLoginResponse = getApiResponse("login");
@@ -78,6 +91,7 @@ export const updateUserKeyError = getApiError("updateUserKey");
 export const verifyUserKeyError = getApiError("verifyUserKey");
 const apiSetStartVoteResponse = getApiResponse("startVote");
 const apiCommentsVotesResponse = getApiResponse("commentsvotes");
+export const editUserResponse = getApiResponse("editUser");
 
 export const apiLikeCommentResponse = getApiResponse("likeComment");
 export const apiLikeCommentError = getApiError("likeComment");
@@ -136,6 +150,7 @@ export const userProposalCreditsError = getApiError("userProposalCredits");
 
 export const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
+export const apiUserError = getApiError("user");
 export const apiChangePasswordError = or(apiInitError, getApiError("changePassword"));
 export const apiChangeUsernameError = or(apiInitError, getApiError("changeUsername"));
 export const apiVerifyNewUserError = or(apiInitError, getApiError("verifyNewUser"));
@@ -278,6 +293,7 @@ export const proposalToken = compose(get(["censorshiprecord", "token"]), apiProp
 export const apiProposalComments = or(compose(get("comments"), apiProposalCommentsResponse), constant([]));
 export const proposalIsRequesting = or(isApiRequestingInit, isApiRequestingProposal);
 export const proposalError = or(apiInitError, apiProposalError);
+export const user = compose(get("user"), apiUserResponse);
 export const newUserResponse = bool(apiNewUserResponse);
 export const newProposalIsRequesting = isApiRequestingNewProposal;
 export const newProposalError = apiNewProposalError;
@@ -295,3 +311,4 @@ export const redirectedFrom = get(["api", "login", "redirectedFrom"]);
 export const verificationToken = compose(get("verificationtoken"), apiNewUserResponse);
 export const getKeyMismatch = state => state.api.keyMismatch;
 export const setStartVote = compose(get("startvote"), apiSetStartVoteResponse);
+export const editUserAction = compose(get("action"), apiEditUserPayload);

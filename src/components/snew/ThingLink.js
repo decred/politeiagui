@@ -91,16 +91,16 @@ const ThingLinkComp = ({
         ) : null}
       </p>
       <p className="tagline">
-        <Link href={permalink}>
+        <span className="submitted-by">
           submitted{" "}
-          <TimeAgo
-            style={{ cursor: "pointer" }}
-            datetime={created_utc * 1000}
-          />
-          {" by "}{author}
+          <TimeAgo datetime={created_utc * 1000} />
+          {" by "}
+          {isAdmin ? (
+            <Link href={`/user/${authorid}`}>{author}</Link>
+          ) : author}
           {" - "}
           {numcomments}{numcomments === 1 ? " comment" : " comments"}
-        </Link>
+        </span>
       </p>
       <p className="tagline proposal-token">
         {id} • {getProposalStatus(review_status)}

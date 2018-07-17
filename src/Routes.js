@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import { SubmitPage, LoginSignupPage, Content as ProposalListing } from "./components/snew";
 import vetted from "./connectors/proposals";
 import userProposals from "./connectors/userProposals";
+import userDetail from "./connectors/user";
 import proposalDetail from "./connectors/proposal";
 import censored from "./connectors/censoredProposals";
 import unreviewed from "./connectors/unreviewedProposals";
@@ -22,6 +23,7 @@ import VerifyKey from "./components/VerifyKey";
 import NotFound from "./components/NotFoundPage";
 import ErrorPage from "./components/ErrorPage/";
 import ProposalDetail from "./components/ProposalDetail";
+import UserDetail from "./components/UserDetail";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
 
@@ -50,6 +52,7 @@ class Routes extends Component {
         <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin" component={admin(ProposalListing)} />
+        <AdminAuthenticatedRoute path="/user/:userId" component={userDetail(UserDetail)} />
         <Route path="/proposals/:token" component={proposalDetail(ProposalDetail)} />
         <Route path="/500" component={ErrorPage} />
         <Route path="*" component={NotFound} />

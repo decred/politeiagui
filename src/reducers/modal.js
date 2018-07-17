@@ -1,13 +1,13 @@
 import * as act from "../actions/types";
 
 const DEFAULT_STATE = {
-  opennedModals: []
+  openedModals: []
 };
 
 const modal = (state = DEFAULT_STATE, action) => (({
   [act.OPEN_MODAL]: () => ({
     ...state,
-    opennedModals: state.opennedModals.concat([{
+    openedModals: state.openedModals.concat([{
       type: action.modalType,
       payload: action.payload,
       callback: action.callback
@@ -15,7 +15,7 @@ const modal = (state = DEFAULT_STATE, action) => (({
   }),
   [act.CLOSE_MODAL]: () => ({
     ...state,
-    opennedModals: state.opennedModals.filter((obj, idx) => idx !== state.opennedModals.length - 1)
+    openedModals: state.openedModals.filter((obj, idx) => idx !== state.openedModals.length - 1)
   })
 })[action.type] || (() => state))();
 
