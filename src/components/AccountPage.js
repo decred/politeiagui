@@ -6,6 +6,7 @@ import Message from "./Message";
 import { myPubKeyHex } from "../lib/pki";
 import Paywall from "./Paywall";
 import accountConnector from "../connectors/account";
+import { CONFIRM_ACTION } from "../components/Modal/modalTypes";
 import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "../constants";
 
 const UpdatedKeyMessage = ({ email }) => (
@@ -74,6 +75,15 @@ class KeyPage extends React.Component {
     if (!this.props.identityImportSuccess && nextProps.identityImportSuccess) {
       this.refreshPubKey();
     }
+  }
+
+  onGenerateNewIdentity = () => {
+    const { onUpdateUserKey, loggedInAsEmail, confirmWithModal } = this.props;
+    confirmWithModal(CONFIRM_ACTION, {
+      message: "Are you sure you want to generate a new identity?"
+    }).then(
+      (confirm) => confirm && onUpdateUserKey(loggedInAsEmail)
+    );
   }
 
   render() {
@@ -196,7 +206,7 @@ class KeyPage extends React.Component {
           </p>
           <button
             style={{ maxWidth: "250px" }}
-            onClick={() => onUpdateUserKey(loggedInAsEmail)}
+            onClick={this.onGenerateNewIdentity}
             disabled={updateUserKey && updateUserKey.success}>
             Generate New Identity
           </button>
