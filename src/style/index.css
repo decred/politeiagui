@@ -217,7 +217,7 @@ a:hover, a:focus {
 .forgotten-password-form,
 .resend-verification-form,
 .reset-password-form {
-  width: 600px;
+  width: calc(100% -320px);
 }
 
 .message-ct {
@@ -465,7 +465,7 @@ li p.header-3 {
 .resend-verification-next-step-page,
 .verification-success-page,
 .user-profile-page {
-  width: 600px;
+  width: calc(100% - 320px);
   padding-right: 0px !important;
 }
 .signup-next-step-page h3,
@@ -524,6 +524,30 @@ li p.header-3 {
 .forgotten-password-next-step-page .email-address,
 .resend-verification-next-step-page .email-address {
   font-weight: bold;
+}
+
+.text-wrapper {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  text-align: left;
+  font-size: 16px;
+  margin: 40px;
+}
+
+.text-wrapper > .centered {
+  max-width: 800px;
+  width: 100%;
+  text-align: left;
+  background: white;
+  padding: 40px;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .14);
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .14);
+}
+
+.text-wrapper > .centered h3 {
+  font-size: 20px;
 }
 
 .markhelp {
