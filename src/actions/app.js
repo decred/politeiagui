@@ -63,6 +63,8 @@ export const onChangePublicFilter = (option) => act.CHANGE_PUBLIC_FILTER_VALUE(o
 
 export const onChangeProposalStatusApproved = (status) => act.SET_PROPOSAL_APPROVED(status);
 
+export const onIdentityImported = (successMsg, errorMsg = "") => act.IDENTITY_IMPORTED({ errorMsg, successMsg });
+
 export const onSubmitComment = (...args) =>
   (dispatch) =>
     dispatch(onSubmitCommentApi(...args))

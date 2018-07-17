@@ -31,14 +31,19 @@ class KeyPage extends React.Component {
       openedVerification: false,
     };
   }
+
   resolvePubkey = () => {
     if(!this.state.pubkey && this.props.loggedInAsEmail) {
-      myPubKeyHex(this.props.loggedInAsEmail).then(pubkey => {
-        if(!this.unmounting) {
-          this.setState({ pubkey, pubkeyStatus: PUB_KEY_STATUS_LOADED });
-        }
-      });
+      this.refreshPubKey();
     }
+  }
+
+  refreshPubKey = () => {
+    myPubKeyHex(this.props.loggedInAsEmail).then(pubkey => {
+      if(!this.unmounting) {
+        this.setState({ pubkey, pubkeyStatus: PUB_KEY_STATUS_LOADED });
+      }
+    });
   }
 
   componentDidMount() {
@@ -51,6 +56,7 @@ class KeyPage extends React.Component {
 
   componentWillUnmount() {
     this.unmounting = true;
+    this.props.onIdentityImported(null);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -63,6 +69,11 @@ class KeyPage extends React.Component {
       this.props.history.push(`/user/key/verify/?verificationtoken=${verificationtoken}`);
       return;
     }
+
+    // update displayed public key when the identity is successfully imported
+    if (!this.props.identityImportSuccess && nextProps.identityImportSuccess) {
+      this.refreshPubKey();
+    }
   }
 
   render() {
@@ -72,7 +83,11 @@ class KeyPage extends React.Component {
       updateUserKey,
       updateUserKeyError,
       keyMismatch,
-      userAlreadyPaid
+      userAlreadyPaid,
+      onIdentityImported,
+      identityImportError,
+      identityImportSuccess,
+      userPubkey
     } = this.props;
     const { pubkey, pubkeyStatus, showIdentityHelpText } = this.state;
     return (
@@ -80,7 +95,7 @@ class KeyPage extends React.Component {
         {!userAlreadyPaid ? (
           <Paywall />
         ) : null}
-        {keyMismatch ? (
+        {keyMismatch && !identityImportSuccess ? (
           <Message
             type="error"
             className="account-page-message"
@@ -160,6 +175,19 @@ class KeyPage extends React.Component {
               body={updateUserKeyError.message}
             />
           )}
+          {identityImportError && (
+            <Message
+              type="error"
+              header="Error importing identity"
+              body={identityImportError}
+            />
+          )}
+          {identityImportSuccess && (
+            <Message
+              type="success"
+              header={identityImportSuccess}
+            />
+          )}
           <p>
             If you've lost your identity (because you've switched browsers
             or cleared your cookies, for example), you can generate a new one. This
@@ -175,6 +203,8 @@ class KeyPage extends React.Component {
           <PrivateKeyIdentityManager
             loggedInAsEmail={loggedInAsEmail}
             onUpdateUserKey={onUpdateUserKey}
+            onIdentityImported={onIdentityImported}
+            userPubkey={userPubkey}
           />
           <h1>Change Username</h1>
           <UsernameChange />

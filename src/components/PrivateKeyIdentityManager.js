@@ -3,6 +3,12 @@ import ReactFileReader from "react-file-reader";
 import FileDownloadLink from "./FileDownloadLink";
 import * as pki from "../lib/pki";
 
+// Import key errors
+const PUBLIC_KEY_MISMATCH = "The provided public key doesn't match the key stored in the server.";
+const INVALID_KEY_PAIR = "The provided key par is not valid.";
+const INVALID_FILE = "This is not a valid identity file. The indentity has to be a JSON file containing the publicKey and the secretKey values.";
+const LOAD_KEY_FAILED = "Sorry, something went wrong while importing the identity file. Please, try again. If the error persist contact the Politeia support.";
+
 class PrivateKeyIdentityManager extends Component {
 
   componentDidMount() {
@@ -45,20 +51,47 @@ class PrivateKeyIdentityManager extends Component {
     return pki.getKeys(this.props.loggedInAsEmail).then(keys => JSON.stringify(keys, null, 2));
   }
 
-  onSelectFiles({ base64 }) {
+  auditIdentity = (keys) => {
+    const { userPubkey } = this.props;
+
+    // check that the pubkey matches with the server one
+    if(keys.publicKey !== userPubkey)
+      throw new Error(PUBLIC_KEY_MISMATCH);
+
+    // check that the key pair is valid
+    if(!pki.verifyKeyPair(keys)) {
+      throw new Error(INVALID_KEY_PAIR);
+    }
+  }
+
+  getJsonData = (base64) => {
+    const data = atob(base64.split(",").pop());
     try {
-      const data = atob(base64.split(",").pop());
       const json = JSON.parse(data);
-      if (!json || !json.publicKey || !json.secretKey) throw new Error("Invalid identity file");
+      if (!json || !json.publicKey || !json.secretKey)
+        throw new Error(INVALID_FILE);
+      return json;
+    } catch(e) {
+      throw new Error(INVALID_FILE);
+    }
+  }
+
+  onSelectFiles = ({ base64 }) => {
+    const {  onIdentityImported } = this.props;
+    try {
+      const json = this.getJsonData(base64);
+      this.auditIdentity(json);
       pki.importKeys(this.props.loggedInAsEmail, json)
-        .then(() => alert("Successfully loaded identity"))
+        .then(() => {
+          onIdentityImported("Successfully imported identity");
+        })
         .catch(e => {
           console.error(e.stack);
-          alert("Error importing identity file");
+          onIdentityImported(null, LOAD_KEY_FAILED);
         });
     } catch(e) {
       console.error(e.stack);
-      alert("This is not a valid identity file");
+      onIdentityImported(null, e);
     }
   }
 }

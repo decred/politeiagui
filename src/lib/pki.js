@@ -29,6 +29,13 @@ export const signHex = (email, msg) => sign(email, msg).then(toHex);
 export const signStringHex = (email, msg) => signString(email, msg).then(toHex);
 export const verify = (msg, sig, pubKey) => nacl.sign.detached.verify(toUint8Array(msg), toUint8Array(sig), toUint8Array(pubKey));
 
+export const verifyKeyPair = (keys) => {
+  const msg = util.decodeUTF8("any");
+  const { publicKey, secretKey } = keysFromHex(keys);
+  const signature = nacl.sign.detached(toUint8Array(msg), toUint8Array(secretKey));
+  return verify(msg, signature, publicKey);
+};
+
 export const keysToHex = ({ publicKey, secretKey }) => ({
   publicKey: toHex(publicKey),
   secretKey: toHex(secretKey)

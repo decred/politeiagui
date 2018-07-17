@@ -172,3 +172,7 @@ export const getCsrfIsNeeded = state => state.app ? state.app.csrfIsNeeded : nul
 export const isShowingSignupConfirmation = state => state.app.isShowingSignupConfirmation;
 
 export const shouldAutoVerifyKey = (state) => state.app.shouldVerifyKey;
+
+export const identityImportError = (state) => state.app.identityImportResult && state.app.identityImportResult.errorMsg;
+
+export const identityImportSuccess = (state) => state.app.identityImportResult && state.app.identityImportResult.successMsg;
