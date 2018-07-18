@@ -42,7 +42,7 @@ class Wrapper extends Component {
   onLogin(args) {
     args = {
       ...args,
-      email: args.email.trim()
+      email: args.email === undefined ? null : args.email.trim()
     };
     validate(args);
     return this.props.onLogin(args).then(() => {
