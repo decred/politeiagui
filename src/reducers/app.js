@@ -11,7 +11,8 @@ export const DEFAULT_STATE = {
   },
   adminProposalsShow: PROPOSAL_STATUS_UNREVIEWED,
   publicProposalsShow: PROPOSAL_VOTING_ACTIVE,
-  submittedProposals: {}
+  submittedProposals: {},
+  identityImportResult: { errorMsg: "", successMsg: "" }
 };
 
 const app = (state = DEFAULT_STATE, action) => (({
@@ -59,6 +60,7 @@ const app = (state = DEFAULT_STATE, action) => (({
     isShowingSignupConfirmation: false
   }),
   [act.SHOULD_AUTO_VERIFY_KEY]: () => ({ ...state, shouldVerifyKey: action.payload }),
+  [act.IDENTITY_IMPORTED]: () => ({ ...state, identityImportResult: action.payload })
 })[action.type] || (() => state))();
 
 export default app;
