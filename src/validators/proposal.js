@@ -44,12 +44,15 @@ const validate = (values, dispatch, props) => {
 
 const synchronousValidation = (values, props) => {
   const errors = {};
+  errors._error = "Errors found";
   if (!isRequiredValidator(values.name)) {
     errors.name = "You must provide a proposal name.";
   } else if (props.policy && checkProposalName(props, values)) {
     errors.name = "The proposal name must be between 8 and 80 characters long and only contain the following characters: A-z 0-9 & . , : ; - @ + # / ( ) !.";
   } else if (!isRequiredValidator(values.description)) {
     errors.description = "You must provide a description.";
+  } else {
+    errors._error = null;
   }
   return errors;
 };
