@@ -87,7 +87,7 @@ body, html {
   background: #586D82;
   font-weight: 400;
   color: #132f4b;
-  
+
 }
 
 * {
@@ -233,6 +233,30 @@ a:hover, a:focus {
   color: #000;
 }
 
+.input-with-error {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.input-with-error .ffeditor {
+  width: 100%;
+}
+
+.input-subline {
+  font-size: 12px;
+  margin-top: 3px;
+  min-height: 15px;
+}
+
+.input-error {
+  color: #bf4153;
+}
+
+input-warning {
+  color: #d05a15;
+}
 
 .login-form fieldset {
   background-color: white;

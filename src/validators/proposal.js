@@ -45,11 +45,11 @@ const validate = (values, dispatch, props) => {
 const synchronousValidation = (values, props) => {
   const errors = {};
   if (!isRequiredValidator(values.name)) {
-    errors._error = "You must provide a proposal name.";
+    errors.name = "You must provide a proposal name.";
   } else if (props.policy && checkProposalName(props, values)) {
-    errors._error = "The proposal name must be between 8 and 80 characters long and only contain the following characters: A-z 0-9 & . , : ; - @ + # / ( ) !.";
+    errors.name = "The proposal name must be between 8 and 80 characters long and only contain the following characters: A-z 0-9 & . , : ; - @ + # / ( ) !.";
   } else if (!isRequiredValidator(values.description)) {
-    errors._error = "You must provide a description";
+    errors.description = "You must provide a description.";
   }
   return errors;
 };
@@ -59,7 +59,7 @@ const warn = (values, props) => {
   if (props.policy) {
     const nameLengthLimit = props.policy.maxproposalnamelength - 10;
     if (values.name.length > nameLengthLimit) {
-      warnings._warning = `The proposal name is close to the limit of ${nameLengthLimit} characters. Current Length: ${values.name.length}`;
+      warnings.name = `The proposal name is close to the limit of ${nameLengthLimit} characters. Current Length: ${values.name.length}.`;
     }
   }
   return warnings;

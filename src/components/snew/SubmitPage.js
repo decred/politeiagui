@@ -4,6 +4,7 @@ import connector from "../../connectors/submitProposal";
 import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
 import FilesField from "../Form/Fields/FilesField";
 import ErrorField from "../Form/Fields/ErrorField";
+import InputFieldWithError from "../Form/Fields/InputFieldWithError";
 import Message from "../Message";
 import MultipleItemsBodyMessage from "../MultipleItemsBodyMessage";
 import { isArray, isUndefined, concat, cloneDeep } from "lodash";
@@ -37,7 +38,6 @@ class SubmitPage extends React.Component {
       policy,
       error,
       warning,
-      anyTouched,
       onSave,
       submitting,
       handleSubmit,
@@ -58,11 +58,6 @@ class SubmitPage extends React.Component {
                 <MultipleItemsBodyMessage items={newProposalError} />
               </Message>
             )}
-            {anyTouched && error && (
-              <Message type="error" header="Invalid proposal. Please review the fields">
-                <MultipleItemsBodyMessage items={error} />
-              </Message>
-            )}
             {!error && warning && (
               <Message type="warn" header="Warning">
                 <MultipleItemsBodyMessage items={warning} />
@@ -78,7 +73,7 @@ class SubmitPage extends React.Component {
                   <div className="roundfield-content">
                     <Field
                       name="name"
-                      component="textarea"
+                      component={InputFieldWithError}
                       tabIndex={1}
                       type="text"
                       placeholder="Proposal Name"
