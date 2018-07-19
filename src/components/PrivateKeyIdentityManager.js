@@ -5,9 +5,9 @@ import * as pki from "../lib/pki";
 
 // Import key errors
 const PUBLIC_KEY_MISMATCH = "The provided public key doesn't match the key stored in the server.";
-const INVALID_KEY_PAIR = "The provided key par is not valid.";
-const INVALID_FILE = "This is not a valid identity file. The indentity has to be a JSON file containing the publicKey and the secretKey values.";
-const LOAD_KEY_FAILED = "Sorry, something went wrong while importing the identity file. Please, try again. If the error persist contact the Politeia support.";
+const INVALID_KEY_PAIR = "The provided key pair is not valid.";
+const INVALID_FILE = "This is not a valid identity file. The identity has to be a JSON file containing the publicKey and the secretKey values.";
+const LOAD_KEY_FAILED = "Sorry, something went wrong while importing the identity file, please try again. If the error persists, contact the Politeia support.";
 
 class PrivateKeyIdentityManager extends Component {
 
