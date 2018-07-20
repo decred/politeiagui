@@ -5,7 +5,7 @@ import compose from "lodash/fp/compose";
 import { TOP_LEVEL_COMMENT_PARENTID } from "./api";
 
 export const proposalToT3 = ({
-  name, timestamp, status, userid, username, numcomments, censorshiprecord = {}
+  name, timestamp, status, userid, username, numcomments, censorshiprecord = {}, message
 }, idx) => ({
   kind: "t3",
   data: {
@@ -18,6 +18,7 @@ export const proposalToT3 = ({
     name: "t3_"+censorshiprecord.token,
     review_status: status,
     created_utc: timestamp,
+    censorMessage: message,
     permalink: `/proposals/${censorshiprecord.token}/`,
     url: `/proposals/${censorshiprecord.token}/`,
     is_self: true,

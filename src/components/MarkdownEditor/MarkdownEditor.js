@@ -11,8 +11,8 @@ import "react-mde/lib/styles/css/react-mde-preview.css";
 import MarkdownPreview from "./MarkdownPreview";
 import MarkdownLiveHelper from "./MarkdownLiveHelper";
 
-const DefaultLayout = ({ Toolbar, TextArea, Preview, LiveHelper }) => (
-  <div className="react-mde">
+const DefaultLayout = ({ Toolbar, TextArea, Preview, LiveHelper, style }) => (
+  <div className="react-mde" style={{ ...style }}>
     {Toolbar}
     <div style={{ display: "flex", justifyContent: "space-between" }}>
       {TextArea}
@@ -29,14 +29,14 @@ class TogglerLayout extends React.Component {
     previewActive: false
   }
   render() {
-    const { Preview, TextArea, Toolbar, value } = this.props;
+    const { Preview, TextArea, Toolbar, value, style } = this.props;
     const { previewActive } = this.state;
     const toggleContainerStyle = {
       position: "absolute",
       top: "14px",
       right: "10px",
       cursor: "pointer",
-      fontSize: "18px",
+      fontSize: "18px"
     };
     const toggleWriteStyle = {
       color: previewActive ? "#767676" : "#0079d3",
@@ -56,7 +56,7 @@ class TogglerLayout extends React.Component {
       textAlign: "center"
     };
     return (
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", ...style }}>
         <div style={toggleContainerStyle}>
           <span style={toggleWriteStyle} onClick={() => this.setState({ previewActive: false })} >Write</span>
           <span style={togglePreviewStyle} onClick={() => this.setState({ previewActive: true })}>Preview</span>
@@ -123,7 +123,7 @@ class MarkdownEditor extends React.Component {
   }
 
   render() {
-    const { value, toggledStyle } = this.props;
+    const { value, toggledStyle, style } = this.props;
     const Toolbar = (
       <ReactMdeToolbar
         commands={this.getCustomCommands()}
@@ -147,6 +147,7 @@ class MarkdownEditor extends React.Component {
     return (
       toggledStyle ?
         <TogglerLayout
+          style={style}
           Toolbar={Toolbar}
           TextArea={
             <ReactMdeTextArea
@@ -164,6 +165,7 @@ class MarkdownEditor extends React.Component {
         />
         :
         <DefaultLayout
+          style={style}
           Toolbar={Toolbar}
           TextArea={TextArea}
           Preview={Preview}

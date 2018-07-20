@@ -15,6 +15,8 @@ import { getProposalStatus } from "../../helpers";
 import VoteStats from "../VoteStats";
 import { withRouter } from "react-router";
 import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
+import { CONFIRM_CENSOR, CONFIRM_ACTION } from "../Modal/modalTypes";
+import MarkdownPreview from "../MarkdownEditor/MarkdownPreview";
 
 const ThingLinkComp = ({
   Link,
@@ -53,7 +55,9 @@ const ThingLinkComp = ({
   setStatusProposalError,
   tokenFromStartingVoteProp,
   isTestnet,
-  getVoteStatus
+  getVoteStatus,
+  openModal,
+  censorMessage
 }) => (
   <div
     className={`thing id-${id} odd link ${
@@ -152,6 +156,15 @@ const ThingLinkComp = ({
             <DownloadBundle />
           </div>
         ))}
+      {censorMessage &&
+        <div>
+          <span>Censorhip reason:</span>
+          <MarkdownPreview
+            body={censorMessage}
+            fullWidth
+          />
+        </div>
+      }
       <Expando {...{ expanded, is_self, selftext, selftext_html }} />
       <ProposalImages readOnly files={otherFiles} />
       {isAdmin ? (
@@ -173,10 +186,15 @@ const ThingLinkComp = ({
                     <form
                       className="toggle remove-button"
                       onSubmit={e =>
-                        onChangeStatus(
-                          loggedInAsEmail,
-                          id,
-                          PROPOSAL_STATUS_CENSORED
+                        openModal(
+                          CONFIRM_CENSOR,
+                          {},
+                          (reason) => reason && onChangeStatus(
+                            loggedInAsEmail,
+                            id,
+                            PROPOSAL_STATUS_CENSORED,
+                            reason
+                          )
                         ) && e.preventDefault()
                       }
                     >
@@ -193,10 +211,16 @@ const ThingLinkComp = ({
                     <form
                       className="toggle approve-button"
                       onSubmit={e =>
-                        onChangeStatus(
-                          loggedInAsEmail,
-                          id,
-                          PROPOSAL_STATUS_PUBLIC
+                        openModal(
+                          CONFIRM_ACTION,
+                          {
+                            message: "Are you sure you want to publish this proposal?"
+                          },
+                          (ok) => ok && onChangeStatus(
+                            loggedInAsEmail,
+                            id,
+                            PROPOSAL_STATUS_PUBLIC
+                          )
                         ) && e.preventDefault()
                       }
                     >
