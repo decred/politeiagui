@@ -12,7 +12,6 @@
     "js-sha256": "^0.7.1",
     "localforage": "^1.5.4",
     "lodash": "^4.17.4",
-    "merkletreejs": "^0.0.6",
     "node-less-chokidar": "^0.1.2",
     "normalize.css": "^7.0.0",
     "prop-types": "^15.6.0",
