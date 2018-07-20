@@ -18,7 +18,7 @@ export function validateFiles(files, policy) {
 }
 
 export function getFormattedFiles({ base64, fileList }) {
-  return Array.from(fileList).sort((a, b) => a.size - b.size).map(({ name, size, type: mime }, idx) => ({
+  return Array.from(fileList).map(({ name, size, type: mime }, idx) => ({
     name, mime, size, payload: base64[idx].split("base64,").pop()
   }));
 }
