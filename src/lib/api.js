@@ -2,7 +2,7 @@ import "isomorphic-fetch";
 import CryptoJS from "crypto-js";
 import * as pki from "./pki";
 import get from "lodash/fp/get";
-import MerkleTree from "mtree";
+import MerkleTree from "./merkle";
 import qs from "query-string";
 import { PROPOSAL_STATUS_UNREVIEWED } from "../constants";
 import { getHumanReadableError, base64ToArrayBuffer, arrayBufferToWordArray, utoa } from "../helpers";
@@ -44,9 +44,9 @@ export const makeLikeComment = (token, action, commentid) => ({
 });
 
 export const signProposal = (email, proposal) => pki.myPubKeyHex(email).then(publickey => {
-  let digests = proposal.files.map(x => Buffer.from(get("digest", x), "hex"));
-  const tree = new MerkleTree(digests.sort(Buffer.compare));
-  const root = tree.root().toString("hex");
+  let digests = proposal.files.map(x => Buffer.from(get("digest", x), "hex")).sort(Buffer.compare);
+  const tree = new MerkleTree(digests);
+  const root = tree.getRoot().toString("hex");
   return pki.signStringHex(email, root).then(signature => ({ ...proposal, publickey, signature }));
 });
 

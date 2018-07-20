@@ -2390,6 +2390,10 @@ crypto-random-string@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/crypto-random-string/-/crypto-random-string-1.0.0.tgz#a230f64f568310e1498009940790ec99545bca7e"
 
+crypto@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/crypto/-/crypto-1.0.1.tgz#2af1b7cad8175d24c8a1b0778255794a21803037"
+
 css-color-names@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/css-color-names/-/css-color-names-0.0.4.tgz#808adc2e79cf84738069b646cb20ec27beb629e0"
@@ -5860,6 +5864,12 @@ merge@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/merge/-/merge-1.2.0.tgz#7531e39d4949c281a66b8c5a6e0265e8b05894da"
 
+merkletreejs@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/merkletreejs/-/merkletreejs-0.0.6.tgz#fc050431385cbe2758c89bcbb9c4f974d0bb98e4"
+  dependencies:
+    buffer-reverse "^1.0.1"
+
 methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
@@ -6022,10 +6032,6 @@ ms@0.7.1:
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
-
-mtree@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/mtree/-/mtree-1.0.0.tgz#59af6d316866a2822d2f71bbea2928f6ac698f81"
 
 multicast-dns-service-types@^1.1.0:
   version "1.1.0"
