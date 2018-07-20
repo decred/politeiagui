@@ -4,9 +4,9 @@ import connector from "../../connectors/submitProposal";
 import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
 import FilesField from "../Form/Fields/FilesField";
 import ErrorField from "../Form/Fields/ErrorField";
+import InputFieldWithError from "../Form/Fields/InputFieldWithError";
 import Message from "../Message";
 import MultipleItemsBodyMessage from "../MultipleItemsBodyMessage";
-import ProposalInfo from "../ProposalInfo";
 import { isArray, isUndefined, concat, cloneDeep } from "lodash";
 import { Field } from "redux-form";
 import MarkdownHelp from "../MarkdownHelp";
@@ -38,11 +38,14 @@ class SubmitPage extends React.Component {
       PageLoadingIcon,
       policy,
       error,
+      warning,
       onSave,
+      submitting,
       handleSubmit,
       newProposalError,
       userCanExecuteActions
     } = this.props;
+    const submitEnabled = !submitting && !error && userCanExecuteActions;
     return !policy || isLoading ? <PageLoadingIcon /> : (
       <div className="content" role="main">
         <div className="page submit-proposal-page">
@@ -51,9 +54,16 @@ class SubmitPage extends React.Component {
             className="submit content warn-on-unload"
             id="newlink"
           >
-            <Message type="info" header="Important information about proposals">
-              <ProposalInfo policy={policy} />
-            </Message>
+            {newProposalError && (
+              <Message type="error" header="Error creating proposal">
+                <MultipleItemsBodyMessage items={newProposalError} />
+              </Message>
+            )}
+            {!error && warning && (
+              <Message type="warn" header="Warning">
+                <MultipleItemsBodyMessage items={warning} />
+              </Message>
+            )}
             <div className="formtabs-content">
               <div className="spacer">
                 <Field
@@ -64,7 +74,7 @@ class SubmitPage extends React.Component {
                   <div className="roundfield-content">
                     <Field
                       name="name"
-                      component="textarea"
+                      component={InputFieldWithError}
                       tabIndex={1}
                       type="text"
                       placeholder="Proposal Name"
@@ -84,37 +94,28 @@ class SubmitPage extends React.Component {
                           />
                           <Field
                             name="files"
+                            className="attach-button greenprimary"
                             component={FilesField}
                             userCanExecuteActions={userCanExecuteActions}
-                            placeholder="Attach files"
+                            placeholder="Attach a file"
                             policy={policy}
                             normalize={normalizer}
                           />
                         </div>
                       </div>
                     </div>
+                    <div className="submit-wrapper">
+                      <button
+                        className={`togglebutton access-required${!submitEnabled && " not-active disabled"}`}
+                        name="submit"
+                        type="submit"
+                        value="form"
+                        onClick={handleSubmit(onSave)}>
+                        submit
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="spacer">
-                <button
-                  className={`btn togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                  name="submit"
-                  type="submit"
-                  value="form"
-                  onClick={handleSubmit(onSave)}>
-                  submit
-                </button>
-                {newProposalError && (
-                  <Message type="error" header="Error creating proposal">
-                    <MultipleItemsBodyMessage items={newProposalError} />
-                  </Message>
-                )}
-                {error && (
-                  <Message type="error" header="Error creating proposal">
-                    <MultipleItemsBodyMessage items={error} />
-                  </Message>
-                )}
               </div>
               <div className="spacer">
                 <div className="roundfield">

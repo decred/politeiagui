@@ -3,12 +3,15 @@ import MarkdownEditor from "../../MarkdownEditor";
 
 const MarkdownEditorField = ({
   input,
-  touched,
-  error,
   disabled,
+  error,
+  touched,
   tabIndex,
-  toggledStyle
+  toggledStyle,
+  meta
 }) => {
+  const hasError = (error && touched && !disabled) || (meta.error && meta.touched);
+  const { warning } = meta;
   return (
     <div className="ffmarkdown-editor">
       <div className="ffeditor usertext">
@@ -18,7 +21,10 @@ const MarkdownEditorField = ({
           tabIndex={tabIndex}
           toggledStyle={toggledStyle} />
       </div>
-      {touched && error && !disabled && <span className="error">{error}</span>}
+      <div className="input-subline">
+        {(hasError && <div className="input-error">{meta.error || error}</div>) ||
+            (warning && <div className="input-warning">{warning}</div>)}
+      </div>
     </div>
   );
 };

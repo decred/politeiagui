@@ -87,7 +87,7 @@ body, html {
   background: #586D82;
   font-weight: 400;
   color: #132f4b;
-  
+
 }
 
 * {
@@ -189,6 +189,75 @@ a:hover, a:focus {
   padding: 20px;
 }
 
+.submit-proposal-page .submit-wrapper {
+  margin: 20px 0;
+}
+
+.attach-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-flow: column wrap;
+  margin: 20px 0;
+}
+
+.attach-wrapper div:first-child {
+  width: auto;
+}
+
+.attach-wrapper .button-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.attached-images {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.submit-proposal-page .attach-wrapper .attach-requirements {
+  display: flex;
+  margin-left: 40px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  color: #777;
+  padding: 20px;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.submit-proposal-page .attach-wrapper .attach-requirements span {
+  color: #000;
+}
+
+.input-with-error {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.input-with-error .ffeditor {
+  width: 100%;
+}
+
+.input-subline {
+  font-size: 12px;
+  margin-top: 3px;
+  min-height: 15px;
+}
+
+.input-error {
+  color: #bf4153;
+}
+
+input-warning {
+  color: #d05a15;
+}
+
 .login-form fieldset {
   background-color: white;
 }
@@ -280,6 +349,16 @@ a:hover, a:focus {
   color: #2971FF;
 }
 
+.message-warn {
+  border: 1px solid #d05a15;
+}
+.message-warn > .message-icon {
+  background: #d05a15;
+}
+.message-warn > .message-text > .message-header {
+  color: #d05a15;
+}
+
 .proposal-meta-data {
   margin-bottom: 8px;
 }
@@ -299,7 +378,7 @@ a:hover, a:focus {
 }
 
 .attached-image-ct {
-  margin-top: 16px;
+  margin: 16px;
 }
 .attached-image {
   display: block;
