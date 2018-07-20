@@ -5,62 +5,44 @@ import { PAYWALL_STATUS_LACKING_CONFIRMATIONS, PAYWALL_STATUS_PAID } from "../co
 
 const CONFIRMATIONS_REQUIRED = 2;
 const POLL_INTERVAL = 10 * 1000;
-export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
-  // Check dcrdata first.
-  return external_api.getPaymentsByAddressDcrdata(address)
-    .then(response => {
-      if(response === null) {
-        return null;
-      }
 
-      return checkForPayment(checkDcrdataHandler, response, address, amount, txNotBefore);
-    })
-    .catch(() => {
-      // Failed to fetch from dcrdata.
-      return null;
-    })
-    .then(txn => {
-      if(txn) {
-        return txn;
-      }
+export const verifyUserPayment = (address, amount, txNotBefore) => {
+  return async (dispatch, getState) => {
+    let paymentsResp, txnResp, verifyResp = {};
+    try {
+      // fetch from dcrdata
+      paymentsResp = await external_api.getPaymentsByAddressDcrdata(address);
 
-      // If that fails, then try insight.
-      return external_api.getPaymentsByAddressInsight(address)
-        .then(response => {
-          if(response === null) {
-            return null;
-          }
-
-          return checkForPayment(checkInsightHandler, response, address, amount, txNotBefore);
-        });
-    })
-    .then(txn => {
-      if (!txn) {
-        return false;
-      }
-
-      if(txn.confirmations < CONFIRMATIONS_REQUIRED) {
-        dispatch(act.UPDATE_USER_PAYWALL_STATUS({
-          status: PAYWALL_STATUS_LACKING_CONFIRMATIONS,
-          currentNumberOfConfirmations: txn.confirmations
-        }));
-        return false;
-      }
-
-      return verifyUserPaymentWithPoliteia(txn.id);
-    })
-    .then(verified => {
-      if(verified) {
-        dispatch(act.UPDATE_USER_PAYWALL_STATUS({ status: PAYWALL_STATUS_PAID }));
+      if (paymentsResp === null) {
+        // fetch from insight
+        paymentsResp = await external_api.getPaymentsByAddressInsight(address);
+        txnResp      = checkForPayment(checkInsightHandler, paymentsResp, address, amount, txNotBefore);
       }
       else {
-        setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
+        txnResp = checkForPayment(checkDcrdataHandler, paymentsResp, address, amount, txNotBefore);
       }
-    })
-    .catch(error => {
-      setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
-      throw error;
-    });
+
+      // Confirm payment or keep polling
+      if (txnResp.confirmations === CONFIRMATIONS_REQUIRED) {
+        verifyResp = await verifyUserPaymentWithPoliteia(txnResp.id);
+        if (verifyResp) {
+          dispatch(act.UPDATE_USER_PAYWALL_STATUS({ status: PAYWALL_STATUS_PAID }));
+        }
+      }
+      else {
+        dispatch(act.UPDATE_USER_PAYWALL_STATUS({
+          status: PAYWALL_STATUS_LACKING_CONFIRMATIONS,
+          currentNumberOfConfirmations: txnResp.confirmations
+        }));
+        // Check if user is logged
+        if (getState().api.me.response) {
+          setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
+        }
+      }
+    } catch (e) {
+      // throw e;
+    }
+  };
 };
 
 const checkForPayment = (handler, transactions, addressToMatch, amount, txNotBefore) => {
