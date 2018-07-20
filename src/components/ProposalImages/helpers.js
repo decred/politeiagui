@@ -10,13 +10,18 @@ export const errorTypes = {
 export function validateFiles(files, policy) {
   const validation = {
     files,
-    errors: []
+    errors: [],
+    policy: policy
   };
 
   const validated =
-    validateMimeTypes(validateMaxSize(validateMaxImages(validation,policy)));
+    validatePipe(
+      validateMaxImages,
+      validateMaxSize,
+      validateMimeTypes
+    );
 
-  return validated;
+  return validated(validation, policy);
 }
 
 export function getFormattedFiles({ base64, fileList }) {
@@ -61,7 +66,9 @@ function getErrorMessage(policy, errorType, filename = "") {
   return errors[errorType];
 }
 
-function validateMaxImages({errors, files}, policy) {
+const validatePipe = (...fs) => x => fs.reduce((v, f) => f(v), x);
+
+function validateMaxImages({files, errors, policy}) {
   if (files.length > policy.maximages) {
     errors.push(getErrorMessage(policy, errorTypes.MAX_IMAGES));
     return ({
@@ -69,10 +76,10 @@ function validateMaxImages({errors, files}, policy) {
       errors
     });
   }
-  return ({errors, files});
+  return ({files, errors, policy});
 }
 
-function validateMaxSize({errors, files}, policy) {
+function validateMaxSize({files, errors, policy}) {
   const newFiles = files.filter(file => {
     if (file.size > policy.maximagesize) {
       errors.push(getErrorMessage(policy, errorTypes.MAX_SIZE, file.name));
@@ -82,11 +89,12 @@ function validateMaxSize({errors, files}, policy) {
   });
   return ({
     files: newFiles,
-    errors
+    errors,
+    policy
   });
 }
 
-function validateMimeTypes({errors, files}, policy) {
+function validateMimeTypes({files, errors, policy}) {
   const newFiles = files.filter(file => {
     if (policy.validmimetypes.indexOf(file.mime) < 0) {
       errors.push(getErrorMessage(policy, errorTypes.INVALID_MIME, file.name));
