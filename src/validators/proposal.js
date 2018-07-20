@@ -62,7 +62,7 @@ const warn = (values, props) => {
   if (props.policy) {
     const nameLengthLimit = props.policy.maxproposalnamelength - 10;
     if (values.name.length > nameLengthLimit) {
-      warnings.name = `The proposal name is close to the limit of ${nameLengthLimit} characters. Current Length: ${values.name.length}.`;
+      warnings.name = `The proposal name is close to the limit of ${props.policy.maxproposalnamelength} characters. Current Length: ${values.name.length}.`;
     }
   }
   return warnings;
