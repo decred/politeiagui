@@ -12,9 +12,11 @@ export function validateFiles(files, policy) {
     files,
     errors: []
   };
-  const validatedMaxImages = validateMaxImages(validation, policy);
-  const validatedMaxSize = validateMaxSize(validatedMaxImages, policy);
-  return validatedMaxSize;
+
+  const validated =
+    validateMimeTypes(validateMaxSize(validateMaxImages(validation,policy)));
+
+  return validated;
 }
 
 export function getFormattedFiles({ base64, fileList }) {
@@ -74,6 +76,20 @@ function validateMaxSize({errors, files}, policy) {
   const newFiles = files.filter(file => {
     if (file.size > policy.maximagesize) {
       errors.push(getErrorMessage(policy, errorTypes.MAX_SIZE, file.name));
+      return false;
+    }
+    return true;
+  });
+  return ({
+    files: newFiles,
+    errors
+  });
+}
+
+function validateMimeTypes({errors, files}, policy) {
+  const newFiles = files.filter(file => {
+    if (policy.validmimetypes.indexOf(file.mime) < 0) {
+      errors.push(getErrorMessage(policy, errorTypes.INVALID_MIME, file.name));
       return false;
     }
     return true;
