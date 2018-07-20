@@ -8,7 +8,7 @@ const MarkdownEditorField = ({
   touched,
   tabIndex,
   toggledStyle,
-  meta
+  meta = {},
 }) => {
   const hasError = (error && touched && !disabled) || (meta.error && meta.touched);
   const { warning } = meta;
