@@ -10,11 +10,18 @@ export const errorTypes = {
 export function validateFiles(files, policy) {
   const validation = {
     files,
-    errors: []
+    errors: [],
+    policy: policy
   };
-  const validatedMaxImages = validateMaxImages(validation, policy);
-  const validatedMaxSize = validateMaxSize(validatedMaxImages, policy);
-  return validatedMaxSize;
+
+  const validated =
+    validatePipe(
+      validateMaxImages,
+      validateMaxSize,
+      validateMimeTypes
+    );
+
+  return validated(validation, policy);
 }
 
 export function getFormattedFiles({ base64, fileList }) {
@@ -54,12 +61,14 @@ function getErrorMessage(policy, errorType, filename = "") {
   const errors = {
     [errorTypes.MAX_SIZE]: `The file "${filename}" exceeds the maximum size.`,
     [errorTypes.MAX_IMAGES]: `You can upload a maximum of ${policy.maximages} images per proposal.`,
-    [errorTypes.INVALID_MIME]: `The file "${filename}" has an invalid mime type.`
+    [errorTypes.INVALID_MIME]: `The file "${filename}" has an invalid MIME type.`
   };
   return errors[errorType];
 }
 
-function validateMaxImages({errors, files}, policy) {
+const validatePipe = (...fs) => x => fs.reduce((v, f) => f(v), x);
+
+function validateMaxImages({files, errors, policy}) {
   if (files.length > policy.maximages) {
     errors.push(getErrorMessage(policy, errorTypes.MAX_IMAGES));
     return ({
@@ -67,13 +76,28 @@ function validateMaxImages({errors, files}, policy) {
       errors
     });
   }
-  return ({errors, files});
+  return ({files, errors, policy});
 }
 
-function validateMaxSize({errors, files}, policy) {
+function validateMaxSize({files, errors, policy}) {
   const newFiles = files.filter(file => {
     if (file.size > policy.maximagesize) {
       errors.push(getErrorMessage(policy, errorTypes.MAX_SIZE, file.name));
+      return false;
+    }
+    return true;
+  });
+  return ({
+    files: newFiles,
+    errors,
+    policy
+  });
+}
+
+function validateMimeTypes({files, errors, policy}) {
+  const newFiles = files.filter(file => {
+    if (policy.validmimetypes.indexOf(file.mime) < 0) {
+      errors.push(getErrorMessage(policy, errorTypes.INVALID_MIME, file.name));
       return false;
     }
     return true;
