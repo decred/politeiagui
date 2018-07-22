@@ -12,6 +12,7 @@ export const DEFAULT_STATE = {
   adminProposalsShow: PROPOSAL_STATUS_UNREVIEWED,
   publicProposalsShow: PROPOSAL_VOTING_ACTIVE,
   submittedProposals: {},
+  draftProposals: {},
   identityImportResult: { errorMsg: "", successMsg: "" }
 };
 
@@ -24,6 +25,15 @@ const app = (state = DEFAULT_STATE, action) => (({
       [action.payload.censorshiprecord.token]: action.payload
     }
   }),
+  [act.SAVE_DRAFT_PROPOSAL]: () => (
+    { ...state,
+      draftProposals: {
+        ...state.draftProposals,
+        lastSubmitted: action.payload.id,
+        [action.payload.id]: action.payload
+      }
+    }
+  ),
   [act.REQUEST_SETSTATUS_PROPOSAL]: () => {
     if (action.error) return state;
     const { status, token } = action.payload;

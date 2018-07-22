@@ -52,6 +52,26 @@ const handleSaveApiMe = (state) => {
   }
 };
 
+const getProposalFormData = (state) => {
+  return (state.form["form/proposal"] && state.form["form/proposal"].values) || {};
+};
+
+const handleSaveDraftProposal = (state) => {
+  const draftProposals = get(loadStateLocalStorage(), ["app", "draftProposals"], undefined);
+  const newDraftProposal = getProposalFormData(state);
+  if(draftProposals && !isEqual(newDraftProposal, draftProposals[newDraftProposal.id])) {
+    saveStateLocalStorage({
+      app: {
+        draftProposals: {
+          ...draftProposals,
+          newDraftProposal
+        }
+      }
+    });
+  }
+};
+
 export const handleSaveStateToLocalStorage = (state) => {
   handleSaveApiMe(state);
+  handleSaveDraftProposal(state);
 };

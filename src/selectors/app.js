@@ -33,6 +33,7 @@ export const proposal = state => {
 };
 
 export const getLastSubmittedProposal = state => state.app.submittedProposals.lastSubmitted;
+export const getLastSubmittedDraftProposal = state => state.app.draftProposals.lastSubmitted;
 export const getAdminFilterValue = state => parseInt(state.app.adminProposalsShow, 10);
 export const getPublicFilterValue = state =>  parseInt(state.app.publicProposalsShow, 10);
 export const isMarkdown = compose(eq("index.md"), get("name"));
@@ -113,6 +114,10 @@ export const getVettedFilteredProposals = (state) => {
   return vettedProps.filter(prop => {
     return filterValue === getPropVoteStatus(state)(prop.censorshiprecord.token).status;
   });
+};
+
+export const getDraftProposals = (state) => {
+  return state.app.draftProposals;
 };
 
 export const getUnvettedProposalFilterCounts = (state) => {
