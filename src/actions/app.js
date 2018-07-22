@@ -37,6 +37,9 @@ export const onSaveNewProposal = ({ name, description, files }, _, props) =>
 export const onSaveDraftProposal = ({ name, description, files }) =>
   act.SAVE_DRAFT_PROPOSAL({ name, description, files });
 
+export const onLoadDraft = (name) =>
+  act.LOAD_DRAFT_PROPOSAL(name);
+
 export const onSaveChangeUsername = ({ password, newUsername }) =>
   (dispatch, getState) =>
     dispatch(onChangeUsername(password, newUsername))

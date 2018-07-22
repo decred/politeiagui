@@ -17,9 +17,10 @@ export const proposalToT3 = ({
     id: censorshiprecord.token,
     name: "t3_"+censorshiprecord.token,
     review_status: status,
+    draftLocal: censorshiprecord.token ? false : true,
     created_utc: timestamp,
-    permalink: `/proposals/${censorshiprecord.token}/`,
-    url: `/proposals/${censorshiprecord.token}/`,
+    permalink: `/proposals/${censorshiprecord.token || ("new/" + name)}/`,
+    url: `/proposals/${censorshiprecord.token || ("new/" + name)}/`,
     is_self: true,
   }
 });

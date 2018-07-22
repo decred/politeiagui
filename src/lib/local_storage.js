@@ -91,6 +91,14 @@ export const getDraftsProposalsFromLocalStorage = () => {
   return get(loadStateLocalStorage(), ["app", "draftProposals"], {});
 };
 
+export const getDraftByNameFromLocalStorage = () => {
+  if (window.location.href.split("/new/").length > 1) {
+    const draftName = window.location.href.split("/new/")[1].split("/")[0];
+    return getDraftsProposalsFromLocalStorage()[draftName];
+  }
+  return {name : "", description: ""};
+};
+
 export const handleSaveStateToLocalStorage = (state) => {
   handleSaveApiMe(state);
   handleSaveDraftProposal(state);

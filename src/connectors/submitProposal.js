@@ -8,10 +8,11 @@ import { reduxForm } from "redux-form";
 import { validate, synchronousValidation, warn } from "../validators/proposal";
 import { withRouter } from "react-router-dom";
 import { getNewProposalData } from "../lib/editors_content_backup";
+import { getDraftByNameFromLocalStorage } from "../lib/local_storage";
 
 const submitConnector = connect(
   sel.selectorMap({
-    initialValues: getNewProposalData,
+    initialValues: or(getDraftByNameFromLocalStorage, getNewProposalData),
     isLoading: or(sel.isLoadingSubmit, sel.newProposalIsRequesting),
     loggedInAsEmail: sel.loggedInAsEmail,
     userCanExecuteActions: sel.userCanExecuteActions,
@@ -32,6 +33,7 @@ const submitConnector = connect(
     onFetchData: act.onGetPolicy,
     onSave: act.onSaveNewProposal,
     onResetProposal: act.onResetProposal,
+    onLoadDraft: act.onLoadDraft,
     onSaveDraft: act.onSaveDraftProposal,
     onResetDraftProposal: act.onResetDraftProposal,
   }
@@ -39,6 +41,13 @@ const submitConnector = connect(
 
 
 class SubmitWrapper extends Component {
+
+  componentWillMount() {
+    if (this.props.match && this.props.match.params.draftname) {
+      this.props.onLoadDraft(this.props.match.params.draftname);
+    }
+  }
+
   componentDidMount() {
     this.props.policy || this.props.onFetchData();
   }

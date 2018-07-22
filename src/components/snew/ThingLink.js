@@ -9,7 +9,7 @@ import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_VOTING_NOT_STARTED,
+  PROPOSAL_VOTING_NOT_STARTED
 } from "../../constants";
 import { getProposalStatus } from "../../helpers";
 import VoteStats from "../VoteStats";
@@ -27,6 +27,7 @@ const ThingLinkComp = ({
   domain,
   rank = 0,
   userid,
+  draftLocal,
   //score,
   //downs,
   //ups,
@@ -102,9 +103,16 @@ const ThingLinkComp = ({
           {numcomments}{numcomments === 1 ? " comment" : " comments"}
         </Link>
       </p>
-      <p className="tagline proposal-token">
-        {id} • {getProposalStatus(review_status)}
-      </p>
+      {!draftLocal && (
+        <p className="tagline proposal-token">
+          {id} • {getProposalStatus(review_status)}
+        </p>
+      )}
+      {draftLocal && (
+        <p className="tagline proposal-draft">
+          Saved as draft
+        </p>
+      )}
       {
         review_status === 4 &&
         <VoteStats token={id} />
@@ -251,6 +259,7 @@ class ThingLink extends React.Component {
 
   componentDidMount(){
     const {isProposalStatusApproved, history} = this.props;
+    console.log("this.props", this.props);
     if(isProposalStatusApproved)
       history.push("/");
   }

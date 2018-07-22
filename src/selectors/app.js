@@ -35,6 +35,7 @@ export const proposal = state => {
 
 export const getLastSubmittedProposal = state => state.app.submittedProposals.lastSubmitted;
 export const getLastSubmittedDraftProposal = state => state.app.draftProposals.lastSubmitted;
+export const newProposalInitialValues = state => state.app.draftProposals.initialValues || {};
 export const newDraftSaved = state => state.app.draftProposals.newDraft;
 export const getAdminFilterValue = state => parseInt(state.app.adminProposalsShow, 10);
 export const getPublicFilterValue = state =>  parseInt(state.app.publicProposalsShow, 10);
