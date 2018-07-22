@@ -54,7 +54,7 @@ const handleSaveApiMe = (state) => {
 };
 
 const getProposalFormData = (state) => {
-  return (state.form["form/proposal"] && state.form["form/proposal"].values) || {};
+  return (state.form && state.form["form/proposal"] && state.form["form/proposal"].values) || {};
 };
 
 const handleSaveDraftProposal = (state) => {
