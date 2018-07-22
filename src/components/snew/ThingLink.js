@@ -259,7 +259,6 @@ class ThingLink extends React.Component {
 
   componentDidMount(){
     const {isProposalStatusApproved, history} = this.props;
-    console.log("this.props", this.props);
     if(isProposalStatusApproved)
       history.push("/");
   }
