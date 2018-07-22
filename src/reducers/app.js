@@ -29,8 +29,17 @@ const app = (state = DEFAULT_STATE, action) => (({
     { ...state,
       draftProposals: {
         ...state.draftProposals,
+        newDraft: true,
         lastSubmitted: action.payload.name,
         [action.payload.name]: action.payload
+      }
+    }
+  ),
+  [act.RESET_DRAFT_PROPOSAL]: () => (
+    { ...state,
+      draftProposals: {
+        ...state.draftProposals,
+        newDraft: false
       }
     }
   ),
