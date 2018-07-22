@@ -3,6 +3,7 @@ import {
   PROPOSAL_FILTER_ALL,
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_STATUS_DRAFT,
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_NOT_STARTED,
   PROPOSAL_VOTING_FINISHED,
@@ -38,6 +39,10 @@ const publicFilterOptions = [
     value: PROPOSAL_VOTING_FINISHED
   },
   {
+    label: "saved as draft",
+    value: PROPOSAL_STATUS_DRAFT
+  },
+  {
     label: "all proposals",
     value: PROPOSAL_FILTER_ALL
   }
@@ -52,7 +57,7 @@ const ProposalFilter = ({ handleChangeFilterValue, header, filterValue, proposal
     <div style={{ display: "flex", margin: "16px 0px 0 24px", flexWrap: "wrap", alignItems: "center" }}>
       <span style={{marginRight: "16px"}}>Show:</span>
       {mapHeaderToOptions[header].map((op, idx) => (
-        <div>
+        <div key={op.value}>
           <input
             type="radio"
             key={`radio-option-${idx}`}
