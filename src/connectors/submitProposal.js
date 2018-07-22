@@ -30,6 +30,7 @@ const submitConnector = connect(
   {
     onFetchData: act.onGetPolicy,
     onSave: act.onSaveNewProposal,
+    onSaveDraft: act.onSaveDraftProposal,
     onResetProposal: act.onResetProposal
   }
 );
@@ -49,12 +50,20 @@ class SubmitWrapper extends Component {
 
   render() {
     const Component = this.props.Component;
-    return <Component {...{...this.props, onSave: this.onSave.bind(this) }}  />;
+    return <Component {...{...this.props,
+      onSave: this.onSave.bind(this),
+      onSaveDraft: this.onSaveDraft.bind(this)
+    }}  />;
   }
 
   onSave(...args) {
     validate(...args);
     return this.props.onSave(...args);
+  }
+
+  onSaveDraft(...args) {
+    validate(...args);
+    return this.props.onSaveDraft(...args);
   }
 }
 

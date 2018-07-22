@@ -40,6 +40,7 @@ class SubmitPage extends React.Component {
       error,
       warning,
       onSave,
+      onSaveDraft,
       submitting,
       handleSubmit,
       newProposalError,
@@ -112,6 +113,14 @@ class SubmitPage extends React.Component {
                         value="form"
                         onClick={handleSubmit(onSave)}>
                         submit
+                      </button>
+                      <button
+                        className={`togglebutton access-required${!submitEnabled && " not-active disabled"}`}
+                        name="submit"
+                        type="submit"
+                        value="form"
+                        onClick={handleSubmit(onSaveDraft)}>
+                        Save as Draft
                       </button>
                     </div>
                   </div>
