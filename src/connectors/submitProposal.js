@@ -25,13 +25,15 @@ const submitConnector = connect(
     newProposalError: sel.newProposalError,
     merkle: sel.newProposalMerkle,
     token: sel.newProposalToken,
+    savedDraft: sel.newDraftSaved,
     signature: sel.newProposalSignature
   }),
   {
     onFetchData: act.onGetPolicy,
     onSave: act.onSaveNewProposal,
+    onResetProposal: act.onResetProposal,
     onSaveDraft: act.onSaveDraftProposal,
-    onResetProposal: act.onResetProposal
+    onResetDraftProposal: act.onResetDraftProposal,
   }
 );
 
@@ -41,10 +43,15 @@ class SubmitWrapper extends Component {
     this.props.policy || this.props.onFetchData();
   }
 
-  componentWillReceiveProps({ token }) {
+  componentWillReceiveProps({ token, savedDraft }) {
     if (token) {
       this.props.onResetProposal();
       return this.props.history.push("/proposals/" + token);
+    }
+    if (savedDraft) {
+      this.props.onResetProposal();
+      this.props.onResetDraftProposal();
+      return this.props.history.push("/proposals/");
     }
   }
 
