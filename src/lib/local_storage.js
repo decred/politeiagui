@@ -87,6 +87,10 @@ export const deleteDraftProposalFromLocalStorage = (name) => {
   }
 };
 
+export const getDraftsProposalsFromLocalStorage = () => {
+  return get(loadStateLocalStorage(), ["app", "draftProposals"], {});
+};
+
 export const handleSaveStateToLocalStorage = (state) => {
   handleSaveApiMe(state);
   handleSaveDraftProposal(state);
