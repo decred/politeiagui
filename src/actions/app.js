@@ -34,6 +34,9 @@ export const onSaveNewProposal = ({ name, description, files }, _, props) =>
     dispatch(onSubmitProposal(props.loggedInAsEmail, props.userid, props.username, name, description, files))
       .then(() => sel.newProposalToken(getState()));
 
+export const onSaveDraftProposal = ({ name, description, files }, _, props) =>
+  act.SAVE_DRAFT_PROPOSAL({ id: props.userid + name, name, description, files });
+
 export const onSaveChangeUsername = ({ password, newUsername }) =>
   (dispatch, getState) =>
     dispatch(onChangeUsername(password, newUsername))
