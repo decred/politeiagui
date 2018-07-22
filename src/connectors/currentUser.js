@@ -8,10 +8,13 @@ const currentUserConnector = connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     loggedInAsUsername: sel.loggedInAsUsername,
     isAdmin: sel.isAdmin,
-    userCanExecuteActions: sel.userCanExecuteActions
+    userCanExecuteActions: sel.userCanExecuteActions,
+    proposalCredits: sel.proposalCredits,
+    isApiRequestingUpdateProposalCredits: sel.isApiRequestingUpdateProposalCredits
   }),
   dispatch => bindActionCreators({
-    onLogout: act.onLogout
+    onLogout: act.onLogout,
+    onUpdateProposalCredits: act.onUpdateProposalCredits
   }, dispatch)
 );
 

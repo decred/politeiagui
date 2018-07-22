@@ -11,6 +11,7 @@ export const DEFAULT_STATE = {
   },
   adminProposalsShow: PROPOSAL_STATUS_UNREVIEWED,
   publicProposalsShow: PROPOSAL_VOTING_ACTIVE,
+  proposalCredits: 0,
   submittedProposals: {},
   identityImportResult: { errorMsg: "", successMsg: "" }
 };
@@ -53,6 +54,14 @@ const app = (state = DEFAULT_STATE, action) => (({
     userPaywallStatus: action.payload.status,
     userAlreadyPaid: action.payload.status === PAYWALL_STATUS_PAID,
     userPaywallConfirmations: action.payload.currentNumberOfConfirmations
+  }),
+  [act.SET_PROPOSAL_CREDITS]: () => ({
+    ...state,
+    proposalCredits: (action.payload || 0)
+  }),
+  [act.SUBTRACT_PROPOSAL_CREDITS]: () => ({
+    ...state,
+    proposalCredits: state.proposalCredits - (action.payload || 0)
   }),
   [act.CSRF_NEEDED]: () => ({ ...state, csrfIsNeeded: action.payload }),
   [act.CLEAN_SLATE]: () => ({

@@ -39,6 +39,8 @@ export const onRequestMe = () => (dispatch,getState) => {
     .me()
     .then(response => {
       dispatch(act.RECEIVE_ME(response));
+      dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
+
       // Start polling for the user paywall tx, if applicable.
       const paywallAddress = sel.paywallAddress(getState());
       if (paywallAddress) {
@@ -52,6 +54,7 @@ export const onRequestMe = () => (dispatch,getState) => {
           )
         );
       }
+
       // Set the current username in the map.
       let userId = sel.userid(getState());
       if (userId) {
@@ -124,6 +127,7 @@ export const onLogin = ({ email, password }) =>
       .login(csrf, email, password)
       .then(response => {
         dispatch(act.RECEIVE_LOGIN(response));
+        dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
         dispatch(closeModal());
       })
       .then(() => dispatch(onRequestMe()))
@@ -260,6 +264,9 @@ export const onSubmitProposal = (
           })
         )
       )
+      .then(() => {
+        dispatch(act.SUBTRACT_PROPOSAL_CREDITS(1));
+      })
       .catch(error => {
         dispatch(act.RECEIVE_NEW_PROPOSAL(null, error));
         throw error;
@@ -462,6 +469,42 @@ export const onFetchUsernamesById = (userIds) =>
         throw error;
       });
   });
+
+export const onFetchProposalPaywallDetails = () => dispatch => {
+  dispatch(act.REQUEST_PROPOSAL_PAYWALL_DETAILS());
+  return api
+    .proposalPaywallDetails()
+    .then(response => dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS(response)))
+    .catch(error => {
+      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS(null, error));
+    });
+};
+
+export const onUpdateProposalCredits = () => dispatch => {
+  dispatch(act.REQUEST_UPDATE_PROPOSAL_CREDITS());
+  return api
+    .me()
+    .then(response => {
+      dispatch(act.RECEIVE_UPDATE_PROPOSAL_CREDITS(response));
+      dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
+    })
+    .catch(error => {
+      dispatch(act.RECEIVE_UPDATE_PROPOSAL_CREDITS(null, error));
+    });
+};
+
+export const onUserProposalCredits = () => dispatch => {
+  dispatch(act.REQUEST_USER_PROPOSAL_CREDITS());
+  return api
+    .userProposalCredits()
+    .then(response => {
+      dispatch(act.RECEIVE_USER_PROPOSAL_CREDITS(response));
+      dispatch(act.SET_PROPOSAL_CREDITS(response.unspentcredits.length));
+    })
+    .catch(error => {
+      dispatch(act.RECEIVE_USER_PROPOSAL_CREDITS(null, error));
+    });
+};
 
 export const onFetchProposalsVoteStatus = () => (dispatch, getState) => {
   dispatch(act.REQUEST_PROPOSALS_VOTE_STATUS());

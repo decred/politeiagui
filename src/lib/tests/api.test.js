@@ -201,7 +201,7 @@ describe("api integration modules (lib/api.js)", () => {
     delete MOCK_RESULT.csrfToken;
     expect(result).toEqual({
       ...MOCK_RESULT,
-      pubkey: publickey
+      publickey
     });
   });
 

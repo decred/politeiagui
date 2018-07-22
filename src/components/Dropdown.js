@@ -53,9 +53,9 @@ class Dropdown extends Component {
       { style: dropdownContentStyle }
     );
     return (
-      <div style={{ position: "relative" }}>
+      <div className="dropdown-ct">
         <div
-          style={{ display: "flex", fontSize: "larger", cursor: "pointer" }}
+          className="dropdown"
           onClick={this.handleTriggerClick}
         >
           {DropdownTriggerWithProps}
