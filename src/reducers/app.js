@@ -29,8 +29,8 @@ const app = (state = DEFAULT_STATE, action) => (({
     { ...state,
       draftProposals: {
         ...state.draftProposals,
-        lastSubmitted: action.payload.id,
-        [action.payload.id]: action.payload
+        lastSubmitted: action.payload.name,
+        [action.payload.name]: action.payload
       }
     }
   ),

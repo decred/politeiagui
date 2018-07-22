@@ -42,6 +42,7 @@ const handleSaveApiMe = (state) => {
   };
   if(apiMeResponse && !isEqual(apiMeResponseFromStorage, customResponse)) {
     saveStateLocalStorage({
+      ...loadStateLocalStorage(),
       api: {
         me: {
           ...apiMe,
@@ -57,15 +58,30 @@ const getProposalFormData = (state) => {
 };
 
 const handleSaveDraftProposal = (state) => {
-  const draftProposals = get(loadStateLocalStorage(), ["app", "draftProposals"], undefined);
+  const draftProposalsLocalStorage = get(loadStateLocalStorage(), ["app", "draftProposals"], {});
   const newDraftProposal = getProposalFormData(state);
-  if(draftProposals && !isEqual(newDraftProposal, draftProposals[newDraftProposal.id])) {
+  if(newDraftProposal && newDraftProposal.name && !isEqual(newDraftProposal, draftProposalsLocalStorage[newDraftProposal.name])) {
     saveStateLocalStorage({
+      ...loadStateLocalStorage(),
       app: {
         draftProposals: {
-          ...draftProposals,
-          newDraftProposal
+          ...draftProposalsLocalStorage,
+          [newDraftProposal.name]: newDraftProposal
         }
+      }
+    });
+  }
+};
+
+export const deleteDraftProposalFromLocalStorage = (name) => {
+  const draftProposalsLocalStorage = get(loadStateLocalStorage(), ["app", "draftProposals"], {});
+  const localStorageState = loadStateLocalStorage();
+  if (draftProposalsLocalStorage[name]) {
+    delete draftProposalsLocalStorage[name];
+    saveStateLocalStorage({
+      localStorageState,
+      app: {
+        draftProposals: draftProposalsLocalStorage
       }
     });
   }

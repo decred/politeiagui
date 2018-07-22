@@ -97,6 +97,25 @@ button:active {
   min-width: 200px;
 }
 
+
+body .btn.secondary,
+body button.secondary {
+  color: #fff;
+  background: #6c757d;
+}
+
+body .btn.secondary:hover,
+body button.secondary:hover {
+  background: #828e98;
+}
+
+.react-file-reader-button button
+{
+  color: #fff;
+  background: #28a745;
+  min-width: 200px;
+}
+
 .c-btn-primary:active {
     margin-top: 4px
 }

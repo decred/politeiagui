@@ -115,7 +115,7 @@ class SubmitPage extends React.Component {
                         submit
                       </button>
                       <button
-                        className={`togglebutton access-required${!submitEnabled && " not-active disabled"}`}
+                        className={`togglebutton secondary access-required${!submitEnabled && " not-active disabled"}`}
                         name="submit"
                         type="submit"
                         value="form"
