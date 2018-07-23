@@ -42,15 +42,7 @@ export const onRequestMe = () => (dispatch,getState) => {
       // Start polling for the user paywall tx, if applicable.
       const paywallAddress = sel.paywallAddress(getState());
       if (paywallAddress) {
-        const paywallAmount = sel.paywallAmount(getState());
-        const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
-        dispatch(
-          external_api_actions.verifyUserPayment(
-            paywallAddress,
-            paywallAmount,
-            paywallTxNotBefore
-          )
-        );
+        dispatch(external_api_actions.verifyUserPayment());
       }
       // Set the current username in the map.
       let userId = sel.userid(getState());
