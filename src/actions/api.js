@@ -275,7 +275,7 @@ export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
     dispatch(act.REQUEST_LIKE_COMMENT({ commentid, token }));
     dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({ token, commentid, action}));
     return Promise.resolve(api.makeLikeComment(token, action, commentid))
-      .then(comment => api.signLikeComment("loggedInAsEmail", comment))
+      .then(comment => api.signLikeComment(loggedInAsEmail, comment))
       .then(comment => api.likeComment(csrf, comment))
       .catch(error => {
         dispatch(act.RESET_SYNC_LIKE_COMMENT());

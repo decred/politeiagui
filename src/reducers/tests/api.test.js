@@ -10,6 +10,11 @@ describe("test api reducer", () => {
             action: "0",
             commentid: "1",
             token: "token_1"
+          },
+          {
+            action: "0",
+            commentid: "2",
+            token: "token_1"
           }
         ]
       }
@@ -24,6 +29,20 @@ describe("test api reducer", () => {
             signature: "sign",
             publickey: "pubkey",
             commentid: "1",
+            receipt: "receipt",
+            timestamp: 1532180179,
+            totalvotes: 0,
+            resultvotes: 0,
+            userid: "0",
+            username: "admin"
+          },
+          {
+            token: "token_1",
+            parentid: "0",
+            comment: "This is a comment",
+            signature: "sign",
+            publickey: "pubkey",
+            commentid: "2",
             receipt: "receipt",
             timestamp: 1532180179,
             totalvotes: 0,
@@ -58,7 +77,7 @@ describe("test api reducer", () => {
 
   test("correctly updates the state for onReceiveSyncLikeComment", () => {
     const token = "token_1";
-    const commentid = "1";
+    let commentid = "1";
     const actionPayload = { token, commentid };
     const initialState = cloneDeep(MOCK_STATE);
 
@@ -81,6 +100,10 @@ describe("test api reducer", () => {
     actionPayload.action = -1;
     state = assertStateAfterCommentVote(state, actionPayload, -1, 1, -1);
 
+    actionPayload.action = 1;
+    state = assertStateAfterCommentVote(state, actionPayload, 1, 1, 1);
+
+    actionPayload.commentid = "2";
     actionPayload.action = 1;
     state = assertStateAfterCommentVote(state, actionPayload, 1, 1, 1);
 

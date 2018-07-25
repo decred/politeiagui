@@ -133,16 +133,28 @@ export const onReceiveSyncLikeComment = (state, action) => {
   const comments = state.proposalComments.response &&
     state.proposalComments.response.comments;
 
-  let reducedVotes = commentsvotes ? commentsvotes.reduce(
-    (acc, cv) => {
-      if (cv.commentid === commentid && cv.token === token) {
-        const currentAction = parseInt(cv.action, 10);
-        acc.oldAction = currentAction;
-        cv.action = newAction === currentAction ? 0 : newAction;
-      }
-      return { ...acc, cvs: acc.cvs.concat([cv])};
-    }, { cvs: [], oldAction: null }) :
-    { cvs: [{ token, commentid, action: cAction }], oldAction: 0 };
+  let reducedVotes = null;
+  const cvfound = commentsvotes && commentsvotes.find(
+    cv => cv.commentid === commentid && cv.token === token
+  );
+
+  if (cvfound) {
+    reducedVotes = commentsvotes.reduce(
+      (acc, cv) => {
+        if (cv.commentid === commentid && cv.token === token) {
+          const currentAction = parseInt(cv.action, 10);
+          acc.oldAction = currentAction;
+          cv.action = newAction === currentAction ? 0 : newAction;
+        }
+        return { ...acc, cvs: acc.cvs.concat([cv])};
+      }, { cvs: [], oldAction: null });
+  } else {
+    const newCommentVote = { token, commentid, action: newAction };
+    reducedVotes = {
+      cvs: commentsvotes ? commentsvotes.concat([newCommentVote]) : [newCommentVote],
+      oldAction: 0
+    };
+  }
 
   const { cvs: newCommentsVotes, oldAction } = reducedVotes;
 
