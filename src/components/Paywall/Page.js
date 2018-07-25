@@ -12,6 +12,7 @@ import {
 const Paywall = ({
   paywallAddress,
   paywallAmount,
+  paywallTxNotBefore,
   payWithFaucet,
   userPaywallStatus,
   userPaywallConfirmations,
@@ -81,7 +82,7 @@ const Paywall = ({
                     text="Pay with Faucet"
                     disabled={userPaywallStatus === PAYWALL_STATUS_PAID}
                     isLoading={isApiRequestingPayWithFaucet}
-                    onClick={() => payWithFaucet(paywallAddress, paywallAmount)} />
+                    onClick={() => { payWithFaucet(paywallAddress, paywallAmount, paywallTxNotBefore); }} />
                   {payWithFaucetError ? (
                     <Message
                       type="error"

@@ -1,5 +1,4 @@
 import * as external_api from "../lib/external_api";
-import * as sel from "../selectors";
 import { verifyUserPaymentWithPoliteia } from "./api";
 import act from "./methods";
 import { PAYWALL_STATUS_LACKING_CONFIRMATIONS, PAYWALL_STATUS_PAID } from "../constants";
@@ -7,20 +6,16 @@ import { PAYWALL_STATUS_LACKING_CONFIRMATIONS, PAYWALL_STATUS_PAID } from "../co
 const CONFIRMATIONS_REQUIRED = 2;
 const POLL_INTERVAL = 10 * 1000;
 
-export const verifyUserPayment = () => {
+export const verifyUserPayment = (address, amount, txNotBefore) => {
   return async (dispatch, getState) => {
-    const address     = sel.paywallAddress(getState());
-    const amount      = sel.paywallAmount(getState());
-    const txNotBefore = sel.paywallTxNotBefore(getState());
     let paymentsResp, txnResp, verifyResp;
     try {
       // fetch from dcrdata
       paymentsResp = await external_api.getPaymentsByAddressDcrdata(address);
-
       if (paymentsResp === null) {
         // fetch from insight
         paymentsResp = await external_api.getPaymentsByAddressInsight(address);
-        txnResp      = checkForPayment(checkInsightHandler, paymentsResp, address, amount, txNotBefore);
+        txnResp = checkForPayment(checkInsightHandler, paymentsResp, address, amount, txNotBefore);
       }
       else {
         txnResp = checkForPayment(checkDcrdataHandler, paymentsResp, address, amount, txNotBefore);
@@ -39,7 +34,7 @@ export const verifyUserPayment = () => {
             status: PAYWALL_STATUS_LACKING_CONFIRMATIONS,
             currentNumberOfConfirmations: confirmations
           }));
-          setTimeout(() => dispatch(verifyUserPayment()), POLL_INTERVAL);
+          setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
         }
       }
     } catch (e) {
@@ -95,40 +90,26 @@ const checkInsightHandler = (transaction, addressToMatch, amount, txNotBefore) =
   return null;
 };
 
-export const payWithFaucet = (address, amount) => {
+export const payWithFaucet = (address, amount, txNotBefore) => {
   return async (dispatch) => {
     dispatch(act.REQUEST_PAYWALL_PAYMENT_WITH_FAUCET());
     try {
       const resp = await external_api.payWithFaucet(address, amount);
       if (resp.Error) {
-        return dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(null, new Error(resp.Error)));
+        throw new Error(resp.Error);
       }
       dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(resp));
       dispatch(act.UPDATE_USER_PAYWALL_STATUS({
         status: PAYWALL_STATUS_LACKING_CONFIRMATIONS,
         currentNumberOfConfirmations: 0
       }));
-      dispatch(verifyUserPayment());
-    } catch (e) {
-      throw e;
+      dispatch(verifyUserPayment(address, amount, txNotBefore));
+    } catch (err) {
+      dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(null, err));
+      throw err;
     }
   };
 };
-
-// export const payWithFaucet = (address, amount) => dispatch => {
-//   dispatch(act.REQUEST_PAYWALL_PAYMENT_WITH_FAUCET());
-//   return external_api.payWithFaucet(address, amount)
-//     .then(json => {
-//       if(json.Error) {
-//         return dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(null, new Error(json.Error)));
-//       }
-//       return dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(json));
-//     })
-//     .catch(error => {
-//       dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(null, error));
-//       throw error;
-//     });
-// };
 
 export const getLastBlockHeight = () => dispatch => {
   dispatch(act.REQUEST_GET_LAST_BLOCK_HEIGHT());

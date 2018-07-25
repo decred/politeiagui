@@ -39,15 +39,22 @@ export const onRequestMe = () => (dispatch,getState) => {
     .me()
     .then(response => {
       dispatch(act.RECEIVE_ME(response));
-      // Start polling for the user paywall tx, if applicable.
       const paywallAddress = sel.paywallAddress(getState());
-      if (paywallAddress) {
-        dispatch(external_api_actions.verifyUserPayment());
-      }
+      const userId = sel.userid(getState());
+
       // Set the current username in the map.
-      let userId = sel.userid(getState());
       if (userId) {
         globalUsernamesById[userId] = sel.loggedInAsUsername(getState());
+      }
+
+      // Start polling for the user paywall tx, if applicable.
+      if (paywallAddress) {
+        const paywallAmount      = sel.paywallAmount(getState());
+        const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
+        dispatch(
+          external_api_actions
+            .verifyUserPayment(paywallAddress, paywallAmount, paywallTxNotBefore)
+        );
       }
     })
     .catch((error) => {
