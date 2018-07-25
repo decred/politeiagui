@@ -14,11 +14,19 @@ class ForgottenPassword extends Component {
   }
 
   render() {
+    const { email } = this.props;
+    const initialValues = {
+      initialValues: {
+        email,
+      }
+    };
     return (
-      <ForgottenPasswordForm {...{
-        onForgottenPassword: this.onForgottenPassword,
-        isRequesting: this.props.isRequesting
-      }} />
+      <ForgottenPasswordForm
+        {...initialValues}
+        {...{
+          onForgottenPassword: this.onForgottenPassword,
+          isRequesting: this.props.isRequesting,
+        }} />
     );
   }
 
