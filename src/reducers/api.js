@@ -1,6 +1,7 @@
 import * as act from "../actions/types";
 import get from "lodash/fp/get";
 import map from "lodash/fp/map";
+import cloneDeep from "lodash/cloneDeep";
 import { DEFAULT_REQUEST_STATE, request, receive, reset } from "./util";
 import { PROPOSAL_VOTING_ACTIVE } from "../constants";
 
@@ -26,6 +27,7 @@ export const DEFAULT_STATE = {
   changePassword: DEFAULT_REQUEST_STATE,
   updateUserKey: DEFAULT_REQUEST_STATE,
   verifyUserKey: DEFAULT_REQUEST_STATE,
+  likeComment: DEFAULT_REQUEST_STATE,
   email: "",
   keyMismatch: false,
 };
@@ -98,21 +100,70 @@ const onReceiveNewComment = (state, action) => {
   };
 };
 
-const onReceiveNewCommentLike = (state, action) => {
-  if (action.error || action.payload.error) return state;
-  const index = state.proposalComments.response.comments.findIndex(element =>
-    element.commentid === action.payload.commentid
-  );
+export const onResetSyncLikeComment = (state) => {
+  const { backup: commentsVotesBackup } = state.commentsvotes;
+  const { backup: proposalCommentsBackup } = state.proposalComments;
   return {
     ...state,
+    commentsvotes: {
+      ...state.commentsvotes,
+      backup: null,
+      response: {
+        commentsvotes: commentsVotesBackup
+      }
+    },
     proposalComments: {
       ...state.proposalComments,
+      backup: null,
       response: {
         ...state.proposalComments.response,
-        comments: state.proposalComments.response.comments.map((el, i) => i === index ? {
+        comments: proposalCommentsBackup
+      }
+    }
+  };
+};
+
+export const onReceiveSyncLikeComment = (state, action) => {
+  const { token, action: cAction, commentid } = action.payload;
+  const newAction = parseInt(cAction, 10);
+
+  const commentsvotes = state.commentsvotes.response &&
+    state.commentsvotes.response.commentsvotes;
+  const backupCV = cloneDeep(commentsvotes);
+  const comments = state.proposalComments.response &&
+    state.proposalComments.response.comments;
+
+  let reducedVotes = commentsvotes ? commentsvotes.reduce(
+    (acc, cv) => {
+      if (cv.commentid === commentid && cv.token === token) {
+        const currentAction = parseInt(cv.action, 10);
+        acc.oldAction = currentAction;
+        cv.action = newAction === currentAction ? 0 : newAction;
+      }
+      return { ...acc, cvs: acc.cvs.concat([cv])};
+    }, { cvs: [], oldAction: null }) :
+    { cvs: [{ token, commentid, action: cAction }], oldAction: 0 };
+
+  const { cvs: newCommentsVotes, oldAction } = reducedVotes;
+
+  return {
+    ...state,
+    commentsvotes: {
+      ...state.commentsvotes,
+      backup: backupCV,
+      response: {
+        commentsvotes: newCommentsVotes
+      }
+    },
+    proposalComments: {
+      ...state.proposalComments,
+      backup: comments,
+      response: {
+        ...state.proposalComments.response,
+        comments: state.proposalComments.response.comments.map(el => el.commentid === commentid ? {
           ...el,
-          totalvotes: action.payload.total,
-          resultvotes: action.payload.result
+          totalvotes: el.totalvotes + (oldAction === newAction ? -1 : oldAction === 0 ? 1 : 0),
+          resultvotes: el.resultvotes + (oldAction === newAction ? (-oldAction) : newAction - oldAction)
         } : el)
       }
     }
@@ -189,7 +240,10 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
   [act.REQUEST_PROPOSAL_COMMENTS]: () => request("proposalComments", state, action),
   [act.RECEIVE_PROPOSAL_COMMENTS]: () => receive("proposalComments", state, action),
-  [act.RECEIVE_LIKE_COMMENT]: () => onReceiveNewCommentLike(state, action),
+  [act.REQUEST_LIKE_COMMENT]: () => request("likeComment", state, action),
+  [act.RECEIVE_LIKE_COMMENT]: () => receive("likeComment", state, action),
+  [act.RECEIVE_SYNC_LIKE_COMMENT]: () => onReceiveSyncLikeComment(state, action),
+  [act.RESET_SYNC_LIKE_COMMENT]: () => onResetSyncLikeComment(state),
   [act.REQUEST_LIKED_COMMENTS]: () => request("commentsvotes", state, action),
   [act.RECEIVE_LIKED_COMMENTS]: () => receive("commentsvotes", state, action),
   [act.REQUEST_NEW_PROPOSAL]: () => request("newProposal", state, action),

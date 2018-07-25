@@ -16,7 +16,9 @@ const replyConnector = connect(
     policy: sel.policy,
     isPostingComment: sel.isApiRequestingNewComment,
     userHasPaid: sel.userHasPaid,
-    getVoteStatus: sel.getPropVoteStatus
+    getVoteStatus: sel.getPropVoteStatus,
+    likeCommentError: sel.apiLikeCommentError,
+    likeCommentPayload: sel.apiLikeCommentPayload
   }),
   {
     onFetchData: act.onGetPolicy,

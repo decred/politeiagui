@@ -79,6 +79,10 @@ export const verifyUserKeyError = getApiError("verifyUserKey");
 const apiSetStartVoteResponse = getApiResponse("startVote");
 const apiCommentsVotesResponse = getApiResponse("commentsvotes");
 
+export const apiLikeCommentResponse = getApiResponse("likeComment");
+export const apiLikeCommentError = getApiError("likeComment");
+export const apiLikeCommentPayload = getApiPayload("likeComment");
+
 export const apiPropsVoteStatusResponse = getApiResponse("proposalsVoteStatus");
 export const apiPropsVoteStatusError = getApiError("proposalsVoteStatus");
 

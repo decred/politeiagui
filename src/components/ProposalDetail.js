@@ -14,9 +14,9 @@ class ProposalDetail extends React.Component {
       nextProps.proposal.status === 4 ){
       this.props.onFetchProposalVoteStatus(this.props.token);
     }
-    if (this.props.comments !== nextProps.comments) {
-      this.props.onFetchLikedComments(this.props.token);
-    }
+  }
+  componentDidMount() {
+    this.props.onFetchLikedComments(this.props.token);
   }
   mergeCommentsAndVotes() {
     const votes = this.props.commentsvotes;
