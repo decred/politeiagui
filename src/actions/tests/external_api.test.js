@@ -5,6 +5,8 @@ import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { PAYWALL_STATUS_LACKING_CONFIRMATIONS, PAYWALL_STATUS_PAID } from "../../constants";
 import {
+  done,
+  doneWithError,
   setPostSuccessResponse,
   setGetSuccessResponse,
   setPostErrorResponse,
@@ -26,8 +28,8 @@ describe("test actions/external_api", () => {
   const MOCK_STATE = {
     app: {},
     api: {
-      response: {
-        me: {
+      me: {
+        response: {
           paywalladdress: FAKE_ADDRESS,
           paywallamount: AMOUNT,
           paywalltxnotbefore: FAKE_TX_NOT_BEFORE,
@@ -65,7 +67,7 @@ describe("test actions/external_api", () => {
             status: PAYWALL_STATUS_PAID
           }
         }
-      ], (...args) => console.log("THIS:" + args));
+      ], done);
 
     //test with lack of confirmation by the network
     store.clearActions();
@@ -81,7 +83,7 @@ describe("test actions/external_api", () => {
             currentNumberOfConfirmations: 0
           }
         }
-      ], (...args) => console.log("THIS22:" + args));
+      ], done);
   });
 
   test("pay with faucet action", async () => {
@@ -91,42 +93,45 @@ describe("test actions/external_api", () => {
     //test payment succeed
     store.clearActions();
     setPostSuccessResponse(faucetPath, {}, { TxId: FAKE_TRANSACTION, Error: "" });
-    await store.dispatch(ea.payWithFaucet.apply(null, params));
-    expect(store.getActions()).toEqual([
-      {
-        type: act.REQUEST_PAYWALL_PAYMENT_WITH_FAUCET,
-        error: false,
-        payload: undefined
-      },
-      {
-        type: act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET,
-        error: false,
-        payload: { TxId: FAKE_TRANSACTION, Error: "" }
-      },
-      {
-        type: act.UPDATE_USER_PAYWALL_STATUS,
-        error: false,
-        payload: { currentNumberOfConfirmations: 0, status: 1}
-      }
-    ]);
+    setGetSuccessResponse(mockDcrDataPath, {}, mockDcrDataResponseComplete);
+
+    await expect(ea.payWithFaucet.apply(null, params))
+      .toDispatchActionsWithState(MOCK_STATE, [
+        {
+          type: act.REQUEST_PAYWALL_PAYMENT_WITH_FAUCET,
+          error: false,
+          payload: undefined
+        },
+        {
+          type: act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET,
+          error: false,
+          payload: { TxId: FAKE_TRANSACTION, Error: "" }
+        },
+        {
+          type: act.UPDATE_USER_PAYWALL_STATUS,
+          error: false,
+          payload: { currentNumberOfConfirmations: 0, status: 1}
+        }
+      ], done);
+
     //test when payment fails
     store.clearActions();
     setPostErrorResponse(faucetPath, {}, { status: 404 });
-    await store.dispatch(ea.payWithFaucet.apply(null, params))
-      .catch(e => {
-        expect(store.getActions()).toEqual([
-          {
-            type: act.REQUEST_PAYWALL_PAYMENT_WITH_FAUCET,
-            error: false,
-            payload: undefined
-          },
-          {
-            type: act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET,
-            error: true,
-            payload: e
-          }
-        ]);
-      });
+    setGetSuccessResponse(mockDcrDataPath, {}, mockDcrDataResponseLackingConfirmation);
+
+    await expect(ea.payWithFaucet.apply(null, params))
+      .toDispatchActionsWithState(MOCK_STATE, [
+        {
+          type: act.REQUEST_PAYWALL_PAYMENT_WITH_FAUCET,
+          error: false,
+          payload: undefined
+        },
+        {
+          type: act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET,
+          error: true,
+          payload: {}
+        }
+      ], doneWithError);
   });
 
 
