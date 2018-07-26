@@ -85,6 +85,51 @@ export const apiPropsVoteStatusError = getApiError("proposalsVoteStatus");
 export const apiPropVoteStatusResponse = getApiResponse("proposalVoteStatus");
 export const apiPropVoteStatusError = getApiError("proposalVoteStatusError");
 
+const apiProposalPaywallDetailsResponse = getApiResponse("proposalPaywallDetails");
+export const proposalPaywallAddress = compose(get("paywalladdress"), apiProposalPaywallDetailsResponse);
+export const proposalCreditPrice = state => {
+  let creditPrice = 0;
+  if(state.api.proposalPaywallDetails && state.api.proposalPaywallDetails.response) {
+    creditPrice = state.api.proposalPaywallDetails.response.creditprice;
+  }
+
+  // Amount returned from the server is in atoms, so convert to dcr.
+  return creditPrice / 100000000;
+};
+export const proposalPaywallTxNotBefore = compose(get("paywalltxnotbefore"), apiProposalPaywallDetailsResponse);
+export const isApiRequestingProposalPaywall = getIsApiRequesting("proposalPaywallDetails");
+export const proposalPaywallError = getApiError("proposalPaywallDetails");
+
+export const isApiRequestingUpdateProposalCredits = getIsApiRequesting("updateProposalCredits");
+export const updateProposalCreditsError = getApiError("updateProposalCredits");
+const apiUserProposalCreditsResponse = getApiResponse("userProposalCredits");
+export const proposalCreditPurchases = state => {
+  let r = apiUserProposalCreditsResponse(state);
+  if(!r) {
+    return [];
+  }
+
+  let purchasesMap = {};
+  [...r.spentcredits, ...r.unspentcredits].forEach(credit => {
+    if(credit.paywallid in purchasesMap) {
+      purchasesMap[credit.paywallid].numberPurchased++;
+    }
+    else {
+      purchasesMap[credit.paywallid] = {
+        price: credit.price / 100000000,
+        datePurchased: credit.datepurchased,
+        numberPurchased: 1,
+        txId: credit.txid
+      };
+    }
+  });
+
+  let purchases = Object.values(purchasesMap);
+  return purchases.sort((a, b) => a.datepurchased - b.datepurchased);
+};
+export const isApiRequestingUserProposalCredits = getIsApiRequesting("userProposalCredits");
+export const userProposalCreditsError = getApiError("userProposalCredits");
+
 export const apiInitError = getApiError("init");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
 export const apiChangePasswordError = or(apiInitError, getApiError("changePassword"));
@@ -207,7 +252,7 @@ export const getPropVoteStatus = state => token => {
 export const userid = state => state.api.me.response && state.api.me.response.userid;
 
 export const serverPubkey = compose(get("pubkey"), apiInitResponse);
-export const userPubkey = compose(get("pubkey"), apiMeResponse);
+export const userPubkey = compose(get("publickey"), apiMeResponse);
 export const commentsVotes = or(compose(get("commentsvotes"), apiCommentsVotesResponse), constant(null));
 export const policy = apiPolicyResponse;
 export const isLoadingSubmit = or(isApiRequestingPolicy, isApiRequestingInit);

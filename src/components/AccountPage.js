@@ -1,5 +1,6 @@
 import React from "react";
 import PrivateKeyIdentityManager from "./PrivateKeyIdentityManager";
+import ProposalCreditsManager from "./ProposalCreditsManager";
 import PasswordChange from "./PasswordChange";
 import UsernameChange from "./UsernameChange";
 import Message from "./Message";
@@ -216,6 +217,7 @@ class KeyPage extends React.Component {
             onIdentityImported={onIdentityImported}
             userPubkey={userPubkey}
           />
+          <ProposalCreditsManager />
           <h1>Change Username</h1>
           <UsernameChange />
           <h1>Change Password</h1>

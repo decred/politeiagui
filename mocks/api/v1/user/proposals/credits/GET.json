@@ -1,0 +1,14 @@
+{
+  "unspentcredits": [{
+    "paywallid": 2,
+    "price": 10000000,
+    "datepurchased": 1532438228,
+    "txid": "ff0207a03b761cb409c7677c5b5521562302653d2236c92d016dd47e0ae37bf7"
+  }],
+  "spentcredits": [{
+    "paywallid": 1,
+    "price": 10000000,
+    "datepurchased": 1532437363,
+    "txid": "1b6df077a0a745314dab58887c56c4261270bb7a809692fad8157a99a0c46477"
+  }]
+}

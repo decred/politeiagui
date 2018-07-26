@@ -93,33 +93,7 @@ const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
   body: JSON.stringify(json)
 }).then(parseResponse);
 
-export const me = () => {
-  return (
-    GET("/v1/user/me").then(
-      ({
-        response: {
-          email,
-          isadmin,
-          paywalladdress,
-          paywallamount,
-          paywalltxnotbefore,
-          userid,
-          publickey,
-          username
-        }
-      }) => ({
-        email,
-        isadmin,
-        paywalladdress,
-        paywallamount,
-        paywalltxnotbefore,
-        userid,
-        pubkey: publickey,
-        username
-      })
-    )
-  );
-};
+export const me = () => GET("/v1/user/me").then(getResponse);
 
 export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, route, pubkey, testnet } }) => ({
   csrfToken: csrfToken, version, route, pubkey, testnet
@@ -137,6 +111,12 @@ export const verifyNewUser = searchQuery => {
 
 export const likedComments = token =>
   GET(`/v1/user/proposals/${token}/commentsvotes`).then(getResponse);
+
+export const proposalPaywallDetails = () =>
+  GET("/v1/proposals/paywall").then(getResponse);
+
+export const userProposalCredits = () =>
+  GET("/v1/user/proposals/credits").then(getResponse);
 
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);

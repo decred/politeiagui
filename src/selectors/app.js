@@ -32,6 +32,8 @@ export const proposal = state => {
   return proposal;
 };
 
+export const proposalCredits = state => state.app.proposalCredits;
+
 export const getLastSubmittedProposal = state => state.app.submittedProposals.lastSubmitted;
 export const getAdminFilterValue = state => parseInt(state.app.adminProposalsShow, 10);
 export const getPublicFilterValue = state =>  parseInt(state.app.publicProposalsShow, 10);

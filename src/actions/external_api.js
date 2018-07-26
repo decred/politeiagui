@@ -125,6 +125,21 @@ export const payWithFaucet = (address, amount) => dispatch => {
     });
 };
 
+export const payProposalWithFaucet = (address, amount) => dispatch => {
+  dispatch(act.REQUEST_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET());
+  return external_api.payWithFaucet(address, amount)
+    .then(json => {
+      if(json.Error) {
+        return dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null, new Error(json.Error)));
+      }
+      return dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(json));
+    })
+    .catch(error => {
+      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null, error));
+      throw error;
+    });
+};
+
 export const getLastBlockHeight = () => dispatch => {
   dispatch(act.REQUEST_GET_LAST_BLOCK_HEIGHT());
   // try with dcrData if fail we try with insight api

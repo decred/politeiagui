@@ -112,7 +112,7 @@ module.exports = {
     loginInputEmail: "#login-form input[name='email']",
     loginInputPassword: "#login-form input[name='password']",
     loginSubmitButton: "#login-form button[type='submit']",
-    loggedInAsEmail: "#header-bottom-right .user",
+    loggedInAsEmail: "#header-right .user",
     signupInputEmail: "#register-form input[name='email']",
     signupInputPassword: "#register-form input[name='password']",
     signupInputPasswordVerify: "#register-form input[name='password_verify']",

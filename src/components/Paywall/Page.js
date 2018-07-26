@@ -92,7 +92,14 @@ const Paywall = ({
                     <Message
                       type="info"
                       header="Sent payment">
-                      Sent transaction <a href={"https://testnet.dcrdata.org/explorer/tx/" + payWithFaucetTxId}>{payWithFaucetTxId}</a> to the address; it may take a few minutes to be confirmed.
+                      Sent transaction{" "}
+                      <a
+                        className="paywall-payment-sent"
+                        href={"https://testnet.dcrdata.org/explorer/tx/" + payWithFaucetTxId}
+                        target="_blank">
+                        {payWithFaucetTxId}
+                      </a>{" "}
+                      to the address; it may take a few minutes to be confirmed.
                     </Message>
                   ) : null}
                 </div>

@@ -52,7 +52,7 @@ const ProposalFilter = ({ handleChangeFilterValue, header, filterValue, proposal
     <div style={{ display: "flex", margin: "16px 0px 0 24px", flexWrap: "wrap", alignItems: "center" }}>
       <span style={{marginRight: "16px"}}>Show:</span>
       {mapHeaderToOptions[header].map((op, idx) => (
-        <div>
+        <div key={op.value}>
           <input
             type="radio"
             key={`radio-option-${idx}`}
@@ -63,7 +63,7 @@ const ProposalFilter = ({ handleChangeFilterValue, header, filterValue, proposal
             checked={filterValue === op.value}
             onChange={e => handleChangeFilterValue(e.target.value)} />
           <label
-            for={`proposal-filter-${op.value}`}
+            htmlFor={`proposal-filter-${op.value}`}
             style={{ margin: "0 16px 0 4px", cursor: "pointer" }}>
             <span className="proposal-filter-label">{op.label}</span>{" "}
             <span className="proposal-filter-count">{`(${proposalCounts[op.value] || 0})`}</span>
