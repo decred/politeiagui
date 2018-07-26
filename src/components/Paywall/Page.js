@@ -3,8 +3,9 @@ import Message from "../Message";
 import QRCode from "../QRCode";
 import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
 import {
-  PAYWALL_STATUS_WAITING,
+  PAYWALL_STATUS_NOT_PAID,
   PAYWALL_STATUS_LACKING_CONFIRMATIONS,
+  PAYWALL_STATUS_WAITING_CONFIRMATION,
   PAYWALL_STATUS_PAID
 } from "../../constants";
 
@@ -24,13 +25,17 @@ const Paywall = ({
   let userPaywallStatusCls;
   let userPaywallStatusText;
 
-  if (userPaywallStatus === PAYWALL_STATUS_WAITING) {
+  if (userPaywallStatus === PAYWALL_STATUS_NOT_PAID) {
     userPaywallStatusCls = "paywall-payment-status-waiting";
     userPaywallStatusText = "Waiting for payment";
   }
   else if (userPaywallStatus === PAYWALL_STATUS_LACKING_CONFIRMATIONS) {
     userPaywallStatusCls = "paywall-payment-status-confirmations";
     userPaywallStatusText = "Waiting for more confirmations";
+  }
+  else if (userPaywallStatus === PAYWALL_STATUS_WAITING_CONFIRMATION) {
+    userPaywallStatusCls = "paywall-payment-status-waiting";
+    userPaywallStatusText = "Verifying payment, please hold";
   }
 
   return userPaywallStatus === PAYWALL_STATUS_PAID ? (

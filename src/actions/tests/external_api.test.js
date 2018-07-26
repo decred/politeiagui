@@ -3,7 +3,7 @@ import * as act from "../types";
 import fetchMock from "fetch-mock";
 import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import { PAYWALL_STATUS_LACKING_CONFIRMATIONS, PAYWALL_STATUS_PAID } from "../../constants";
+import { PAYWALL_STATUS_LACKING_CONFIRMATIONS, PAYWALL_STATUS_PAID, PAYWALL_STATUS_WAITING_CONFIRMATION } from "../../constants";
 import {
   done,
   doneWithError,
@@ -110,7 +110,7 @@ describe("test actions/external_api", () => {
         {
           type: act.UPDATE_USER_PAYWALL_STATUS,
           error: false,
-          payload: { currentNumberOfConfirmations: 0, status: 1}
+          payload: { status: PAYWALL_STATUS_WAITING_CONFIRMATION }
         }
       ], done);
 
