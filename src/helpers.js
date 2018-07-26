@@ -65,8 +65,6 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     "The public key provided is already taken by another user.",
     "The proposal cannot be set to that voting status.",
     "Your account has been locked due to too many login attempts.",
-    "You have not generated any instructions to purchase proposal credits yet.",
-    "Your proposal payment instructions have expired, please generate new ones first.",
     "You do not have any proposal credits; you must purchase one before you can submit a proposal."
   ];
 
