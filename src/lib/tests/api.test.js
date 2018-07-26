@@ -445,4 +445,20 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
+  test("fetch proposal paywall details (api/v1/proposals/paywall)", async () => {
+    await assertGETOnRouteIsCalled(
+      "/api/v1/proposals/paywall",
+      api.proposalPaywallDetails,
+      []
+    );
+  });
+
+  test("fetch user proposal credits (api/v1/user/proposals/credits)", async () => {
+    await assertGETOnRouteIsCalled(
+      "/api/v1/user/proposals/credits",
+      api.userProposalCredits,
+      []
+    );
+  });
+
 });

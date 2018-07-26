@@ -124,9 +124,6 @@ export const verifyUserPayment = () =>
 export const userProposals = userid =>
   GET(`/v1/user/proposals?${qs.stringify({ userid })}`).then(getResponse);
 
-export const userProposalPayments = () =>
-  GET("/v1/user/proposals/payments").then(getResponse);
-
 export const login = (csrf, email, password) =>
   POST("/login", csrf, { email, password }).then(getResponse);
 

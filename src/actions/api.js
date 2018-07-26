@@ -5,6 +5,7 @@ import * as pki from "../lib/pki";
 import { confirmWithModal, openModal, closeModal } from "./modal";
 import * as external_api_actions from "./external_api";
 import { clearStateLocalStorage } from "../lib/local_storage";
+import { callAfterMinimumWait } from "./lib";
 import act from "./methods";
 import {
   globalUsernamesById,
@@ -482,12 +483,15 @@ export const onFetchProposalPaywallDetails = () => dispatch => {
 
 export const onUpdateProposalCredits = () => dispatch => {
   dispatch(act.REQUEST_UPDATE_PROPOSAL_CREDITS());
+
+  let dispatchAfterWaitFn = callAfterMinimumWait(response => {
+    dispatch(act.RECEIVE_UPDATE_PROPOSAL_CREDITS(response));
+    dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
+  }, 500);
+
   return api
     .me()
-    .then(response => {
-      dispatch(act.RECEIVE_UPDATE_PROPOSAL_CREDITS(response));
-      dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
-    })
+    .then(dispatchAfterWaitFn)
     .catch(error => {
       dispatch(act.RECEIVE_UPDATE_PROPOSAL_CREDITS(null, error));
     });
@@ -495,12 +499,15 @@ export const onUpdateProposalCredits = () => dispatch => {
 
 export const onUserProposalCredits = () => dispatch => {
   dispatch(act.REQUEST_USER_PROPOSAL_CREDITS());
+
+  let dispatchAfterWaitFn = callAfterMinimumWait(response => {
+    dispatch(act.RECEIVE_USER_PROPOSAL_CREDITS(response));
+    dispatch(act.SET_PROPOSAL_CREDITS(response.unspentcredits.length));
+  }, 500);
+
   return api
     .userProposalCredits()
-    .then(response => {
-      dispatch(act.RECEIVE_USER_PROPOSAL_CREDITS(response));
-      dispatch(act.SET_PROPOSAL_CREDITS(response.unspentcredits.length));
-    })
+    .then(dispatchAfterWaitFn)
     .catch(error => {
       dispatch(act.RECEIVE_USER_PROPOSAL_CREDITS(null, error));
     });

@@ -11,3 +11,26 @@ export const basicAction = type =>
 export const reduceTypes = types => compose(
   reduce((t, name) => ({ ...t, [name]: basicAction(types[name]) }), {}), Object.keys
 )(types);
+
+export const callAfterMinimumWait = (callback, waitTimeMs) => {
+  let args = null;
+  let timedOut = false;
+
+  let revisedCallback = function() {
+    if(!timedOut) {
+      args = arguments;
+      return;
+    }
+
+    callback.apply(this, arguments);
+  };
+
+  setTimeout(() => {
+    timedOut = true;
+    if(args) {
+      revisedCallback.apply(this, args);
+    }
+  }, waitTimeMs);
+
+  return revisedCallback;
+};
