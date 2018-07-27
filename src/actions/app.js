@@ -35,7 +35,7 @@ export const onSaveNewProposal = ({ name, description, files }, _, props) =>
       .then(() => sel.newProposalToken(getState()));
 
 export const onSaveDraftProposal = ({ name, description, files }) =>
-  act.SAVE_DRAFT_PROPOSAL({ name, description, files });
+  act.SAVE_DRAFT_PROPOSAL({ name, description, files, timestamp: Date.now() / 1000 });
 
 export const onSaveChangeUsername = ({ password, newUsername }) =>
   (dispatch, getState) =>
