@@ -18,15 +18,21 @@ class LogoutPage extends Component {
     return isLoading ? (
       <PageLoadingIcon />
     ) : (
-      <article className="page logout-page content">
-        <h3>You are now logged out. Thanks for stopping by, and have a great day.</h3>
-        <p>Here are some links that might be useful for you:</p>
-        <ul>
-          <li><a href="/user/signup">Log back in</a></li>
-          <li><a href="https://www.decred.org/">decred.org</a></li>
-          <li><a href="https://github.com/decred/politeia">Politeia</a> and <a href="https://github.com/decred/politeiagui">PoliteiaGUI</a> on Github</li>
-        </ul>
-      </article>
+      <div className="content" role="main">
+        <div className="page logout-page">
+          <h1>Logged out</h1>
+          <h3>Thanks for stopping by, and have a great day.</h3>
+          <p>Here are some links that might be useful for you:</p>
+          <div className="logout-links">
+            <ul>
+              <li><span class="fa fa-user fa-2x" aria-hidden="true"></span><a href="/user/signup"> log back in</a></li>
+              <li><span class="fa fa-home fa-2x" aria-hidden="true"></span><a href="https://www.decred.org/"> decred.org</a></li>
+              <li><span class="fa fa-github fa-2x" aria-hidden="true"></span><a href="https://github.com/decred/politeia"> politeia</a> and <a href="https://github.com/decred/politeiagui">politeiagui</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
     );
   }
 }

@@ -1,9 +1,23 @@
 import React from "react";
+import Message from "../Message";
 
 const SuccessPage = () => (
   <div className="page reset-password-next-step-page content">
-    <p>Your password has been changed. You can now login with your new password.</p>
+    <Message
+      type="success"
+      className="account-page-message"
+      header="Password reset completed"
+      body={(
+        <div className="paywall-wrapper">
+          <div className="paywall-content">
+            <p>Your password has been changed. You can now <a href="/user/signup">login</a> with your new password.</p>
+          </div>
+        </div>
+      )}
+    />
   </div>
+
+
 );
 
 export default SuccessPage;
