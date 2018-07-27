@@ -41,21 +41,18 @@ export const onRequestMe = () => (dispatch,getState) => {
     .then(response => {
       dispatch(act.RECEIVE_ME(response));
       dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
-
+  
       // Start polling for the user paywall tx, if applicable.
       const paywallAddress = sel.paywallAddress(getState());
       if (paywallAddress) {
-        const paywallAmount = sel.paywallAmount(getState());
+        const paywallAmount      = sel.paywallAmount(getState());
         const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
         dispatch(
-          external_api_actions.verifyUserPayment(
-            paywallAddress,
-            paywallAmount,
-            paywallTxNotBefore
-          )
+          external_api_actions
+            .verifyUserPayment(paywallAddress, paywallAmount, paywallTxNotBefore)
         );
       }
-
+    
       // Set the current username in the map.
       let userId = sel.userid(getState());
       if (userId) {

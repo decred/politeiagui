@@ -51,7 +51,8 @@ describe("test api actions (actions/api.js)", () => {
           csrfToken: FAKE_CSRF
         }
       }
-    }
+    },
+    app: {}
   };
 
   const getMockedStore = () => mockStore(MOCK_STATE);

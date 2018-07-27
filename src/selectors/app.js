@@ -15,7 +15,7 @@ import {
   getPropVoteStatus
 } from "./api";
 import { globalUsernamesById } from "../actions/app";
-import { PAYWALL_STATUS_PAID, PAYWALL_STATUS_WAITING, PROPOSAL_FILTER_ALL, PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED, PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED } from "../constants";
+import { PAYWALL_STATUS_PAID, PAYWALL_STATUS_NOT_PAID, PROPOSAL_FILTER_ALL, PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED, PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED } from "../constants";
 
 export const replyTo = or(get(["app", "replyParent"]), constant(0));
 
@@ -47,7 +47,7 @@ export const getUserPaywallStatus = state => {
     return PAYWALL_STATUS_PAID;
   }
 
-  return state.app.userPaywallStatus || PAYWALL_STATUS_WAITING;
+  return state.app.userPaywallStatus || PAYWALL_STATUS_NOT_PAID;
 };
 export const getUserPaywallConfirmations = state => {
   if(userAlreadyPaid(state)) {

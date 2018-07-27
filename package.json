@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "network": "testnet",
   "dependencies": {
+    "babel-plugin-syntax-async-functions": "^6.13.0",
     "concurrently": "^3.5.0",
     "core-decorators": "^0.20.0",
     "crypto": "^1.0.1",
