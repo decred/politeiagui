@@ -119,7 +119,13 @@ export const getVettedFilteredProposals = (state) => {
 };
 
 export const getDraftProposals = (state) => {
-  return state.app.draftProposals;
+  const draftProposals = [];
+  Object.keys(state.app.draftProposals).forEach(key => {
+    if (["newDraft", "lastSubmitted"].indexOf(key) === -1) {
+      draftProposals.push(state.app.draftProposals[key]);
+    }
+  });
+  return draftProposals;
 };
 
 export const getUnvettedProposalFilterCounts = (state) => {

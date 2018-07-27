@@ -57,7 +57,7 @@ class Wrapper extends Component {
         <Component
           loggedInAsEmail={loggedInAsEmail}
           isAdmin={isAdmin}
-          proposals={this.state.filter === "active" ? proposals : Object.values(draftProposals)}
+          proposals={this.state.filter === "active" ? proposals : draftProposals}
           error={error}
           isLoading={isLoading}
           header={header}
