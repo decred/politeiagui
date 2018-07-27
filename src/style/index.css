@@ -1061,7 +1061,12 @@ li p.header-3 {
 }
 .credit-purchase-tx {
   width: 150px;
-.proposal-filter-count,
+}
+
+.proposal-filter-count {
+  color: #bbb;
+}
+
 .user-page .detail-tab-count {
   display: inline-block;
   margin-left: 8px;

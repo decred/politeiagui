@@ -637,16 +637,13 @@ body .appWrapper .content .sitetable .link .title a:hover {
     font: 12px 'Source Sans Pro', Lato, Arial, sans-serif
 }
 .link .entry .tagline a {
-    color: #0c1e3e
+    color: #2971ff;
 }
 .link .entry .tagline:first-letter {
     text-transform: capitalize
 }
 .link .entry .tagline time {
     cursor: help
-}
-.link .entry .tagline a:hover {
-    color: #2971ff
 }
 .link .entry .tagline a.author {
     margin-right: inherit
@@ -1976,8 +1973,10 @@ button.disabled {
     margin-right: 0;
     font-weight: 700
 }
-.comment .author:hover {
+.comment a.author[href] {
     color: #2971ff;
+}
+.comment a.author:hover {
     text-decoration: none
 }
 .green {
