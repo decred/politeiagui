@@ -8,10 +8,8 @@ const SuccessPage = () => (
       className="account-page-message"
       header="Password reset completed"
       body={(
-        <div className="paywall-wrapper">
-          <div className="paywall-content">
-            <p>Your password has been changed. You can now <a href="/user/signup">login</a> with your new password.</p>
-          </div>
+        <div>
+          <p>Your password has been changed. You can now <a href="/user/signup">login</a> with your new password.</p>
         </div>
       )}
     />
