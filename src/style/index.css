@@ -254,8 +254,16 @@ a:hover, a:focus {
   color: #bf4153;
 }
 
-input-warning {
+.input-warning {
   color: #d05a15;
+}
+
+.submit-button-error {
+  color: #bf4153;
+  font-size: 14px;
+  display: inline-block;
+  height: 36px;
+  line-height: 36px;
 }
 
 .login-form fieldset {
@@ -448,6 +456,17 @@ button .logo {
   background: url("./spinner_white.svg") 0px 0px no-repeat;
   margin-top: 10px;
   margin-right: 10px;
+}
+.user-proposal-credits .logo {
+  background: url("./spinner_white.svg") 0px 0px no-repeat;
+  margin-top: 2px;
+  height: 12px;
+  width: 16px;
+}
+.available-credits .logo {
+  margin-top: 1px;
+  height: 12px;
+  width: 16px;
 }
 .spin {
   animation: spin 3s ease-in-out infinite;
@@ -674,15 +693,94 @@ li p.header-3 {
     padding: 16px;
 }
 
-#header-bottom-right {
+#header-right {
   background-color: #586D82;
   position: absolute;
-  top: calc(50% - 10px);
-  padding: 5px 16px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding-right: 16px;
 }
 
-.user {
+#header-right-content {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: right;
+  display: block;
+}
+
+#header-right-content .dropdown {
+  justify-content: flex-end;
+}
+
+#header-right .user {
   color: rgba(255, 255, 255, .8);
+}
+
+#header-right .user-proposal-credits {
+  color: rgba(255, 255, 255, .4);
+  cursor: pointer;
+}
+
+#header-right .user-proposal-credits a.refresh {
+  visibility: hidden;
+  transition: 0s visibility;
+  color: #fff;
+  position: relative;
+  display: inline-block;
+  margin-right: 16px;
+}
+
+#header-right .user-proposal-credits .refreshing {
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  height: 12px;
+  margin-right: 16px;
+}
+
+#header-right .user-proposal-credits .proposal-credits-text {
+  display: inline-block;
+}
+
+#header-right .user-proposal-credits .tip {
+  visibility: hidden;
+  transition: 0s visibility;
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background-color: rgba(0, 0, 0, .6);
+  color: #fff;
+  border-radius: 3px;
+  padding: 8px;
+  width: 220px;
+  text-align: left;
+}
+
+#header-right .user-proposal-credits:hover a.refresh {
+  visibility: visible;
+  transition-delay: .3s;
+}
+#header-right .user-proposal-credits:hover .tip {
+  visibility: visible;
+  transition-delay: .7s;
+}
+
+#header-right .user-proposal-credits .tip:hover {
+  background-color: rgba(255, 255, 255, .4);
+  color: rgba(255, 255, 255, .6);
+  text-decoration: none;
+}
+
+.dropdown-ct {
+  position: relative;
+}
+
+.dropdown {
+  display: flex;
+  font-size: larger;
+  cursor: pointer;
 }
 
 .dropdown-list-item {
@@ -758,10 +856,29 @@ li p.header-3 {
   color: #41bf53;
 }
 
+.proposal-credits-input {
+  height: 36px;
+  width: 64px;
+  line-height: 36px;
+  margin-right: 16px;
+  text-align: center;
+}
+
 .paywall-address,
 .paywall-amount {
   font-weight: bold;
 }
+
+.paywall-payment-sent {
+  cursor: pointer;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 84px;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
 .fullwidth {
   width: 100%;
   max-width: 100% !important;
@@ -851,4 +968,70 @@ li p.header-3 {
 
 .appWrapper {
   background: #f4f7f9;
+}
+
+.available-credits {
+  margin: 16px;
+}
+
+.available-credits a.refresh {
+  text-decoration: none;
+  display: inline-block;
+  margin-left: 16px;
+}
+
+.available-credits .refreshing {
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  height: 12px;
+  margin-left: 16px;
+}
+
+.credit-purchase-table {
+  border: 1px solid #999;
+  margin-bottom: 16px;
+}
+
+.credit-purchase-row {
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.credit-purchase-header .credit-purchase-row {
+  border-bottom-color: #999;
+}
+
+.credit-purchase-cell {
+  float: left;
+  padding: 4px;
+  margin: 0 8px;
+}
+
+.credit-purchase-header .credit-purchase-cell {
+  font-weight: bold;
+}
+
+.credit-purchase-body .credit-purchase-cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.credit-purchase-date {
+  width: 225px;
+}
+.credit-purchase-number {
+  width: 90px;
+  text-align: right;
+}
+.credit-purchase-price {
+  width: 100px;
+  text-align: right;
+}
+.credit-purchase-tx {
+  width: 150px;
 }

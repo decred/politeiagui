@@ -32,6 +32,8 @@ export const proposal = state => {
   return proposal;
 };
 
+export const proposalCredits = state => state.app.proposalCredits;
+
 export const getLastSubmittedProposal = state => state.app.submittedProposals.lastSubmitted;
 export const getLastSubmittedDraftProposal = state => state.app.draftProposals.lastSubmitted;
 export const newProposalInitialValues = state => state.app.draftProposals.initialValues || {};

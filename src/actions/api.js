@@ -5,6 +5,7 @@ import * as pki from "../lib/pki";
 import { confirmWithModal, openModal, closeModal } from "./modal";
 import * as external_api_actions from "./external_api";
 import { clearStateLocalStorage } from "../lib/local_storage";
+import { callAfterMinimumWait } from "./lib";
 import act from "./methods";
 import {
   globalUsernamesById,
@@ -40,6 +41,8 @@ export const onRequestMe = () => (dispatch,getState) => {
     .me()
     .then(response => {
       dispatch(act.RECEIVE_ME(response));
+      dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
+
       // Start polling for the user paywall tx, if applicable.
       const paywallAddress = sel.paywallAddress(getState());
       if (paywallAddress) {
@@ -53,6 +56,7 @@ export const onRequestMe = () => (dispatch,getState) => {
           )
         );
       }
+
       // Set the current username in the map.
       let userId = sel.userid(getState());
       if (userId) {
@@ -125,6 +129,7 @@ export const onLogin = ({ email, password }) =>
       .login(csrf, email, password)
       .then(response => {
         dispatch(act.RECEIVE_LOGIN(response));
+        dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
         dispatch(closeModal());
       })
       .then(() => dispatch(onRequestMe()))
@@ -261,6 +266,9 @@ export const onSubmitProposal = (
           })
         )
       )
+      .then(() => {
+        dispatch(act.SUBTRACT_PROPOSAL_CREDITS(1));
+      })
       .catch(error => {
         dispatch(act.RECEIVE_NEW_PROPOSAL(null, error));
         throw error;
@@ -463,6 +471,48 @@ export const onFetchUsernamesById = (userIds) =>
         throw error;
       });
   });
+
+export const onFetchProposalPaywallDetails = () => dispatch => {
+  dispatch(act.REQUEST_PROPOSAL_PAYWALL_DETAILS());
+  return api
+    .proposalPaywallDetails()
+    .then(response => dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS(response)))
+    .catch(error => {
+      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS(null, error));
+    });
+};
+
+export const onUpdateProposalCredits = () => dispatch => {
+  dispatch(act.REQUEST_UPDATE_PROPOSAL_CREDITS());
+
+  let dispatchAfterWaitFn = callAfterMinimumWait(response => {
+    dispatch(act.RECEIVE_UPDATE_PROPOSAL_CREDITS(response));
+    dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
+  }, 500);
+
+  return api
+    .me()
+    .then(dispatchAfterWaitFn)
+    .catch(error => {
+      dispatch(act.RECEIVE_UPDATE_PROPOSAL_CREDITS(null, error));
+    });
+};
+
+export const onUserProposalCredits = () => dispatch => {
+  dispatch(act.REQUEST_USER_PROPOSAL_CREDITS());
+
+  let dispatchAfterWaitFn = callAfterMinimumWait(response => {
+    dispatch(act.RECEIVE_USER_PROPOSAL_CREDITS(response));
+    dispatch(act.SET_PROPOSAL_CREDITS(response.unspentcredits.length));
+  }, 500);
+
+  return api
+    .userProposalCredits()
+    .then(dispatchAfterWaitFn)
+    .catch(error => {
+      dispatch(act.RECEIVE_USER_PROPOSAL_CREDITS(null, error));
+    });
+};
 
 export const onFetchProposalsVoteStatus = () => (dispatch, getState) => {
   dispatch(act.REQUEST_PROPOSALS_VOTE_STATUS());

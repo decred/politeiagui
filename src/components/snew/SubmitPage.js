@@ -6,6 +6,7 @@ import FilesField from "../Form/Fields/FilesField";
 import ErrorField from "../Form/Fields/ErrorField";
 import InputFieldWithError from "../Form/Fields/InputFieldWithError";
 import Message from "../Message";
+import Link from "../snew/Link";
 import MultipleItemsBodyMessage from "../MultipleItemsBodyMessage";
 import { isArray, isUndefined, concat, cloneDeep } from "lodash";
 import { Field } from "redux-form";
@@ -44,9 +45,10 @@ class SubmitPage extends React.Component {
       submitting,
       handleSubmit,
       newProposalError,
-      userCanExecuteActions
+      userCanExecuteActions,
+      proposalCredits
     } = this.props;
-    const submitEnabled = !submitting && !error && userCanExecuteActions;
+    const submitEnabled = !submitting && !error && userCanExecuteActions && proposalCredits > 0;
     return !policy || isLoading ? <PageLoadingIcon /> : (
       <div className="content" role="main">
         <div className="page submit-proposal-page">
@@ -122,6 +124,13 @@ class SubmitPage extends React.Component {
                         onClick={handleSubmit(onSaveDraft)}>
                         Save as Draft
                       </button>
+                      {proposalCredits === 0 && (
+                        <div className="submit-button-error">
+                          To submit a proposal, you must purchase a proposal credit,
+                          see your <Link href="/user/account">account page</Link>{" "}
+                          for more information.
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

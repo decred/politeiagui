@@ -60,7 +60,12 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     "You cannot change the status of your own proposal, please have another admin review it!",
     "The username you provided is invalid; it's either too short, too long, or has unsupported characters.",
     "Another user already has that username, please choose another.",
-    `A verification email has already been sent recently. Please check your email, or wait until it expires and send another one.\n\nYour verification email is set to expire on ${new Date(parseInt(errorContext[0] + "000", 10))}. If you did not receive an email, please contact Politeia administrators.`
+    `A verification email has already been sent recently. Please check your email, or wait until it expires and send another one.\n\nYour verification email is set to expire on ${new Date(parseInt(errorContext[0] + "000", 10))}. If you did not receive an email, please contact Politeia administrators.`,
+    "The server cannot verify the payment at this time, please try again later or contact Politeia administrators.",
+    "The public key provided is already taken by another user.",
+    "The proposal cannot be set to that voting status.",
+    "Your account has been locked due to too many login attempts.",
+    "You do not have any proposal credits; you must purchase one before you can submit a proposal."
   ];
 
   if(errorCode > errorMessages.length) {

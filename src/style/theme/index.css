@@ -210,13 +210,13 @@ a.random.choice {
     background: #e2e2e2;
     color: #0c1e3e
 }
-body:not(.loggedin) #header-bottom-right {
+body:not(.loggedin) #header-right {
     max-width: 340px
 }
-#header-bottom-right a {
+#header-right a {
     color: rgba(255, 255, 255, .7)
 }
-#header-bottom-right a:hover {
+#header-right a:hover {
     text-decoration: underline
 }
 .link .domain a:hover,
@@ -312,7 +312,7 @@ body:not(.loggedin) #header-bottom-right {
     background-position: -16px -32px;
     opacity: 1
 }
-#header-bottom-right a.pref-lang,
+#header-right a.pref-lang,
 .loggedin .logout a {
     background-position: -32px 0;
     background-image: url("./spritesheet.png");
@@ -2756,7 +2756,7 @@ ul.image-preview-list li {
     padding: 1px 4px;
     border-radius: 1px
 }
-#header-bottom-right #userbarToggle+* {
+#header-right #userbarToggle+* {
     margin-left: 0!important
 }
 .res .srSep {
@@ -2829,12 +2829,12 @@ background-image:
 height: 84px;
     box-shadow: 0 1px 5px rgba(0, 0, 0, .24)
 }
-.res #header-bottom-right .user .userkarma,
+.res #header-right .user .userkarma,
 .res #searchexpando .searchexpando-submit,
 .res .comment.collapsed a.expand:after {
     display: none
 }
-.res #header-bottom-right {
+.res #header-right {
     top: 1px;
     border-radius: 0;
     height: 18px;
@@ -2850,10 +2850,10 @@ height: 84px;
 .res a.beta-link {
     top: 4px
 }
-.res #header-bottom-right .user {
+.res #header-right .user {
     font-size: 0!important
 }
-.res #header-bottom-right .user a {
+.res #header-right .user a {
     font-size: 11px
 }
 .res #RESSubredditGroupDropdown .RESShortcutsCurrentSub a,

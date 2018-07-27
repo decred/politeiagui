@@ -27,7 +27,8 @@ const submitConnector = connect(
     merkle: sel.newProposalMerkle,
     token: sel.newProposalToken,
     savedDraft: sel.newDraftSaved,
-    signature: sel.newProposalSignature
+    signature: sel.newProposalSignature,
+    proposalCredits: sel.proposalCredits
   }),
   {
     onFetchData: act.onGetPolicy,
@@ -78,4 +79,14 @@ class SubmitWrapper extends Component {
 
 const wrapSubmit = (Component) => (props) => <SubmitWrapper {...{...props, Component }} />;
 
-export default compose(withRouter, submitConnector, reduxForm({ form: "form/proposal", touchOnChange: true, validate: synchronousValidation, warn }), wrapSubmit);
+export default compose(
+  withRouter,
+  submitConnector,
+  reduxForm({
+    form: "form/proposal",
+    touchOnChange: true,
+    validate: synchronousValidation,
+    warn
+  }),
+  wrapSubmit
+);
