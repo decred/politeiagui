@@ -1,5 +1,6 @@
 import * as act from "../actions/types";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
+import { getDraftsProposalsFromLocalStorage } from "../lib/local_storage";
 import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_VOTING_ACTIVE, PAYWALL_STATUS_PAID } from "../constants";
 
 export const DEFAULT_STATE = {
@@ -12,7 +13,7 @@ export const DEFAULT_STATE = {
   adminProposalsShow: PROPOSAL_STATUS_UNREVIEWED,
   publicProposalsShow: PROPOSAL_VOTING_ACTIVE,
   submittedProposals: {},
-  draftProposals: {},
+  draftProposals: getDraftsProposalsFromLocalStorage(),
   identityImportResult: { errorMsg: "", successMsg: "" }
 };
 

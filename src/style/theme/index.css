@@ -1372,6 +1372,21 @@ div.commentarea div.RES-keyNav-activeElement .md {
     background-color: rgba(0, 0, 0, .05)
 }
 
+.user-proposals-filter {
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 10px 0;
+}
+
+.user-proposal-option {
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+.user-proposal-option:hover {
+  text-decoration: underline;
+}
+
 .side .spacer {
     margin: 0 0 16px
 }

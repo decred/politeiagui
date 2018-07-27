@@ -4,7 +4,6 @@ import eq from "lodash/fp/eq";
 import filter from "lodash/fp/filter";
 import find from "lodash/fp/find";
 import { or, constant, not } from "../lib/fp";
-import { getDraftsProposalsFromLocalStorage } from "../lib/local_storage";
 import {
   apiProposal,
   apiProposalComments,
@@ -16,7 +15,7 @@ import {
   getPropVoteStatus
 } from "./api";
 import { globalUsernamesById } from "../actions/app";
-import { PAYWALL_STATUS_PAID, PAYWALL_STATUS_WAITING, PROPOSAL_FILTER_ALL, PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED, PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_STATUS_DRAFT, PROPOSAL_VOTING_NOT_STARTED } from "../constants";
+import { PAYWALL_STATUS_PAID, PAYWALL_STATUS_WAITING, PROPOSAL_FILTER_ALL, PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED, PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED } from "../constants";
 
 export const replyTo = or(get(["app", "replyParent"]), constant(0));
 
@@ -114,9 +113,6 @@ export const getVettedFilteredProposals = (state) => {
   const filterValue = getPublicFilterValue(state);
   if (!filterValue)
     return vettedProps;
-  if (filterValue === PROPOSAL_STATUS_DRAFT) {
-    return Object.values(getDraftsProposalsFromLocalStorage());
-  }
   return vettedProps.filter(prop => {
     return filterValue === getPropVoteStatus(state)(prop.censorshiprecord.token).status;
   });
@@ -140,16 +136,12 @@ export const getUnvettedProposalFilterCounts = (state) => {
 
 export const getVettedProposalFilterCounts = (state) => {
   let proposals = vettedProposals(state);
-  const draftProposals = getDraftsProposalsFromLocalStorage();
   let proposalFilterCounts = {};
 
   proposals.forEach(proposal => {
     let propVoteStatus = getPropVoteStatus(state)(proposal.censorshiprecord.token);
     let status = propVoteStatus.status;
     proposalFilterCounts[status] = 1 + (proposalFilterCounts[status] || 0);
-  });
-  Object.values(draftProposals).forEach(() => {
-    proposalFilterCounts[PROPOSAL_STATUS_DRAFT] = 1 + (proposalFilterCounts[PROPOSAL_STATUS_DRAFT] || 0);
   });
   proposalFilterCounts[PROPOSAL_FILTER_ALL] = proposals.length;
 
@@ -175,8 +167,6 @@ export const getVettedEmptyProposalsMessage = (state) => {
     return "There are no proposals that have finished voting";
   case PROPOSAL_VOTING_NOT_STARTED:
     return "There are no pre-voting proposals";
-  case PROPOSAL_STATUS_DRAFT:
-    return "There are no draft proposals";
   default:
     return "There are no proposals";
   }

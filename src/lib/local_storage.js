@@ -57,7 +57,7 @@ const getProposalFormData = (state) => {
   return (state.form && state.form["form/proposal"] && state.form["form/proposal"].values) || {};
 };
 
-const handleSaveDraftProposal = (state) => {
+const handleSaveAppDraftProposals = (state) => {
   const draftProposalsLocalStorage = get(loadStateLocalStorage(), ["app", "draftProposals"], {});
   const newDraftProposal = getProposalFormData(state);
   if(newDraftProposal && newDraftProposal.name && !isEqual(newDraftProposal, draftProposalsLocalStorage[newDraftProposal.name])) {
@@ -101,5 +101,5 @@ export const getDraftByNameFromLocalStorage = () => {
 
 export const handleSaveStateToLocalStorage = (state) => {
   handleSaveApiMe(state);
-  handleSaveDraftProposal(state);
+  handleSaveAppDraftProposals(state);
 };
