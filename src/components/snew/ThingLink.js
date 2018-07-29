@@ -51,6 +51,7 @@ const ThingLinkComp = ({
   onChangeStatus,
   onStartVote,
   setStatusProposalToken,
+  onDeleteDraftProposal,
   setStatusProposalError,
   tokenFromStartingVoteProp,
   isTestnet,
@@ -112,9 +113,19 @@ const ThingLinkComp = ({
         </p>
       )}
       {draftLocal && (
-        <p className="tagline proposal-draft">
+        <div className="tagline proposal-draft">
           Saved as draft
-        </p>
+          <span
+            className="delete-draft"
+            onClick={() => {
+              if (window.confirm("Are you sure you want to delete this draft?")) {
+                onDeleteDraftProposal({name: title});
+              }
+            }}>
+            <i className="fa fa-trash" />
+            Delete
+          </span>
+        </div>
       )}
       {
         review_status === 4 &&

@@ -3534,3 +3534,23 @@ a.attached-image-remove {
 .proposal-filter-count {
   color: #bbb;
 }
+
+.proposal-draft {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.proposal-draft .delete-draft {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.proposal-draft .delete-draft:hover {
+  color: #c32a2a;
+  text-decoration: underline;
+}
+
+.proposal-draft .delete-draft i {
+  margin-right: 3px;
+}
