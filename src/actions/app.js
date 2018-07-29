@@ -31,7 +31,7 @@ export const onSetReplyParent = (parentId = TOP_LEVEL_COMMENT_PARENTID) =>
   ]);
 export const onSaveNewProposal = ({ name, description, files }, _, props) =>
   (dispatch, getState) =>
-    dispatch(onSubmitProposal(props.loggedInAsEmail, props.userid, props.username, name, description, files))
+    dispatch(onSubmitProposal(props.loggedInAsEmail, props.userid, props.username, name.trim(), description, files))
       .then(() => sel.newProposalToken(getState()));
 
 export const onSaveDraftProposal = ({ name, description, files }) =>
