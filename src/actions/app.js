@@ -37,6 +37,9 @@ export const onSaveNewProposal = ({ name, description, files }, _, props) =>
 export const onSaveDraftProposal = ({ name, description, files }) =>
   act.SAVE_DRAFT_PROPOSAL({ name: name.trim(), description, files, timestamp: Date.now() / 1000 });
 
+export const onDeleteDraftProposal = ({ name }) =>
+  act.DELETE_DRAFT_PROPOSAL({ name });
+
 export const onSaveChangeUsername = ({ password, newUsername }) =>
   (dispatch, getState) =>
     dispatch(onChangeUsername(password, newUsername))

@@ -1,6 +1,6 @@
 import * as act from "../actions/types";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
-import { getDraftsProposalsFromLocalStorage } from "../lib/local_storage";
+import { getDraftsProposalsFromLocalStorage, deleteDraftProposalFromLocalStorage } from "../lib/local_storage";
 import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_VOTING_ACTIVE, PAYWALL_STATUS_PAID } from "../constants";
 
 export const DEFAULT_STATE = {
@@ -45,6 +45,17 @@ const app = (state = DEFAULT_STATE, action) => (({
       }
     }
   ),
+  [act.DELETE_DRAFT_PROPOSAL]: () => {
+    if (!state.draftProposals[action.payload.name]) {
+      return state;
+    }
+    const newDraftProposals = state.draftProposals;
+    delete newDraftProposals[action.payload.name];
+    deleteDraftProposalFromLocalStorage(action.payload.name);
+    return { ...state,
+      draftProposals: newDraftProposals
+    };
+  },
   [act.REQUEST_SETSTATUS_PROPOSAL]: () => {
     if (action.error) return state;
     const { status, token } = action.payload;
