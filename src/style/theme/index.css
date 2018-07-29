@@ -1364,10 +1364,18 @@ div.commentarea div.RES-keyNav-activeElement .md {
     background-color: rgba(0, 0, 0, .05)
 }
 
+.proposals-listing-header {
+  margin: 16px 352px 0 24px;
+}
+
+.user-proposals-page .proposals-listing-header {
+  margin-left: 10px;
+}
 .user-proposals-filter {
   display: flex;
   flex-flow: row nowrap;
-  margin: 10px 0;
+  align-items: center;
+  margin: 10px 20px;
 }
 
 .user-proposal-option {

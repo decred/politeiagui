@@ -41,8 +41,9 @@ class Wrapper extends Component {
     const Component = this.props.Component;
     const {loggedInAsEmail, isAdmin, draftProposals, proposals, error, isLoading, header, emptyProposalsMessage} = this.props;
     return (
-      <div className="page content">
+      <div className="page content user-proposals-page">
         <div className="user-proposals-filter">
+          <span> Show: </span>
           <div
             onClick={() => this.setState({ filter: "active" })}
             className={`user-proposal-option ${this.state.filter === "active" && "selected"}`}>
