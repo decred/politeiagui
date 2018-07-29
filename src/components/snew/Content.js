@@ -30,9 +30,11 @@ export const CustomContent = ({
     <PageLoadingIcon key="content" />
   ) : (
     <div>
-      <h1 style={{margin: "16px 352px 0 24px"}}>
-        {header}
-      </h1>
+      {header &&
+        <h1 className="proposals-listing-header">
+          {header}
+        </h1>
+      }
       <ProposalFilter
         header={header}
         handleChangeFilterValue={onChangeFilter}
