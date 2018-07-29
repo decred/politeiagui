@@ -109,6 +109,11 @@ body button.secondary:hover {
   background: #828e98;
 }
 
+body button.secondary.disabled {
+  background: rgba(0, 0, 0, .08);
+  color: #bbb;
+}
+
 .react-file-reader-button button
 {
   color: #fff;
