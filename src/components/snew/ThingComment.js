@@ -2,6 +2,7 @@ import React from "react";
 import { ThingComment as BaseComment } from "snew-classic-ui";
 import connector from "../../connectors/reply";
 import { PROPOSAL_VOTING_NOT_STARTED } from "../../constants";
+import Message from "../Message";
 
 class ThingComment extends React.PureComponent {
   constructor(props) {
@@ -24,19 +25,33 @@ class ThingComment extends React.PureComponent {
       token,
       keyMismatch,
       getVoteStatus,
+      likeCommentError,
+      likeCommentPayload,
       ...props
     } = this.props;
     const { showCommentForm } = this.state;
     return (
-      <BaseComment {...{ ...props,
-        onShowReply: this.toggleCommentForm,
-        onCloseCommentForm: this.onCloseCommentForm,
-        showCommentForm,
-        user: loggedInAsEmail,
-        blockvote: keyMismatch || (getVoteStatus(token).status !== PROPOSAL_VOTING_NOT_STARTED),
-        handleVote: onLikeComment,
-        token
-      }} />
+      <div>
+        {likeCommentError && likeCommentPayload.token === token
+          && likeCommentPayload.commentid === props.id &&
+          <Message
+            key="comment-vote-error"
+            type="error"
+            header="Comment vote failed"
+            body={likeCommentError}
+          />
+        }
+        <BaseComment {...{
+          ...props,
+          onShowReply: this.toggleCommentForm,
+          onCloseCommentForm: this.onCloseCommentForm,
+          showCommentForm,
+          user: loggedInAsEmail,
+          blockvote: keyMismatch || (getVoteStatus(token).status !== PROPOSAL_VOTING_NOT_STARTED),
+          handleVote: onLikeComment,
+          token
+        }} />
+      </div>
     );
   }
 }

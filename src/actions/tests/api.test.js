@@ -583,14 +583,15 @@ describe("test api actions (actions/api.js)", () => {
     const commentid = 0;
     const up_action = 1;
     //const down_action = -1;
-    const params = [FAKE_USER.email, FAKE_PROPOSAL_TOKEN, up_action, commentid ];
+    const params = [FAKE_USER.email, FAKE_PROPOSAL_TOKEN, commentid, up_action ];
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
     const store = getMockedStore();
     await store.dispatch(api.onLikeComment.apply(null, params));
     const dispatchedActions = store.getActions();
-    expect(dispatchedActions[0].type).toEqual(act.RECEIVE_LIKE_COMMENT);
+    expect(dispatchedActions[0].type).toEqual(act.REQUEST_LIKE_COMMENT);
+    expect(dispatchedActions[1].type).toEqual(act.RECEIVE_SYNC_LIKE_COMMENT);
 
     await assertApiActionOnError(
       path,
@@ -598,15 +599,24 @@ describe("test api actions (actions/api.js)", () => {
       params,
       (e) => [
         {
-          "callback": null,
-          "modalType": "LOGIN",
-          "payload": {},
-          "type": "OPEN_MODAL"
+          type: act.REQUEST_LIKE_COMMENT,
+          error: false,
+          payload: { commentid, token: FAKE_PROPOSAL_TOKEN }
         },
         {
-          "error": true,
-          "payload": e,
-          "type": "API_RECEIVE_LIKE_COMMENT"
+          type: act.RECEIVE_SYNC_LIKE_COMMENT,
+          error: false,
+          payload: { commentid, token: FAKE_PROPOSAL_TOKEN, action: up_action }
+        },
+        {
+          type: act.RESET_SYNC_LIKE_COMMENT,
+          error: false,
+          payload: undefined
+        },
+        {
+          error: true,
+          payload: e,
+          type: act.RECEIVE_LIKE_COMMENT
         }],
       {},
       methods.POST
