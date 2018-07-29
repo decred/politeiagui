@@ -3,13 +3,14 @@ import { isFileValid } from "../components/ProposalImages/helpers";
 import { isRequiredValidator, proposalNameValidator } from "./util";
 
 function checkProposalName(props, values) {
-  return (props.policy.minproposalnamelength && (values.name.length < props.policy.minproposalnamelength)) ||
-     (props.policy.maxproposalnamelength && (values.name.length > props.policy.maxproposalnamelength)) ||
-     (props.policy.proposalnamesupportedchars && !proposalNameValidator(values.name, props.policy.proposalnamesupportedchars));
+  const name = values.name.trim();
+  return (props.policy.minproposalnamelength && (name.length < props.policy.minproposalnamelength)) ||
+     (props.policy.maxproposalnamelength && (name.length > props.policy.maxproposalnamelength)) ||
+     (props.policy.proposalnamesupportedchars && !proposalNameValidator(name, props.policy.proposalnamesupportedchars));
 }
 
 const validate = (values, dispatch, props) => {
-  if (!isRequiredValidator(values.name) || !isRequiredValidator(values.description)) {
+  if (!isRequiredValidator(values.name && values.name.trim()) || !isRequiredValidator(values.description)) {
     throw new SubmissionError({ _error: "You must provide both a proposal name and description." });
   }
 
@@ -45,7 +46,7 @@ const validate = (values, dispatch, props) => {
 const synchronousValidation = (values, props) => {
   const errors = {};
   errors._error = "Errors found";
-  if (!isRequiredValidator(values.name)) {
+  if (!isRequiredValidator(values.name && values.name.trim())) {
     errors.name = "You must provide a proposal name.";
   } else if (props.policy && checkProposalName(props, values)) {
     errors.name = "The proposal name must be between 8 and 80 characters long and only contain the following characters: A-z 0-9 & . , : ; - @ + # / ( ) !.";
@@ -61,7 +62,7 @@ const warn = (values, props) => {
   const warnings = {};
   if (props.policy) {
     const nameLengthLimit = props.policy.maxproposalnamelength - 10;
-    if (values.name.length > nameLengthLimit) {
+    if (values.name && values.name.trim().length > nameLengthLimit) {
       warnings.name = `The proposal name is close to the limit of ${props.policy.maxproposalnamelength} characters. Current Length: ${values.name.length}.`;
     }
   }
