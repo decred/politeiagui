@@ -461,4 +461,24 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
+  test("get user details (api/v1/user/:userId)", async () => {
+    const USER_ID = 0;
+    await assertGETOnRouteIsCalled(
+      "express:/api/v1/user/:userId",
+      api.user,
+      [USER_ID.toString()]
+    );
+  });
+
+  test("edit user (api/user/edit)", async () => {
+    const USER_ID = 0;
+    const ACTION = "FAKE_ACTION";
+    const REASON = "FAKE_REASON";
+    await assertPOSTOnRouteIsCalled(
+      "/api/v1/user/edit",
+      api.editUser,
+      [FAKE_CSRF, USER_ID, ACTION, REASON]
+    );
+  });
+
 });
