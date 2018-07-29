@@ -54,7 +54,7 @@ class SubmitWrapper extends Component {
     if (savedDraft) {
       this.props.onResetProposal();
       this.props.onResetDraftProposal();
-      return this.props.history.push("/");
+      return this.props.history.push("/user/proposals");
     }
   }
 
