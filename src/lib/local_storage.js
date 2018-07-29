@@ -75,9 +75,10 @@ const handleSaveAppDraftProposals = (state) => {
 
 export const deleteDraftProposalFromLocalStorage = (name) => {
   const draftProposalsLocalStorage = get(loadStateLocalStorage(), ["app", "draftProposals"], {});
+  const nameOrLastName = name || draftProposalsLocalStorage.lastSubmitted;
   const localStorageState = loadStateLocalStorage();
-  if (draftProposalsLocalStorage[name]) {
-    delete draftProposalsLocalStorage[name];
+  if (draftProposalsLocalStorage[nameOrLastName]) {
+    delete draftProposalsLocalStorage[nameOrLastName];
     saveStateLocalStorage({
       localStorageState,
       app: {
