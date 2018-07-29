@@ -506,7 +506,7 @@ export const onUserProposalCredits = () => dispatch => {
 
   let dispatchAfterWaitFn = callAfterMinimumWait(response => {
     dispatch(act.RECEIVE_USER_PROPOSAL_CREDITS(response));
-    dispatch(act.SET_PROPOSAL_CREDITS(response.unspentcredits.length));
+    dispatch(act.SET_PROPOSAL_CREDITS(response.unspentcredits ? response.unspentcredits.length : 0));
   }, 500);
 
   return api
