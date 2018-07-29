@@ -98,9 +98,12 @@ const ThingLinkComp = ({
             style={{ cursor: "pointer" }}
             datetime={created_utc * 1000}
           />
-          {" by "}{author}
-          {" - "}
-          {numcomments}{numcomments === 1 ? " comment" : " comments"}
+          {author &&
+            <span>{" by "}{author}</span>
+          }
+          {numcomments > 0 &&
+            <span> - {numcomments}{numcomments === 1 ? " comment" : " comments"} </span>
+          }
         </Link>
       </p>
       {!draftLocal && (
