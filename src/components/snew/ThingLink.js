@@ -55,7 +55,8 @@ const ThingLinkComp = ({
   setStatusProposalError,
   tokenFromStartingVoteProp,
   isTestnet,
-  getVoteStatus
+  getVoteStatus,
+  confirmWithModal
 }) => (
   <div
     className={`thing id-${id} odd link ${
@@ -118,9 +119,10 @@ const ThingLinkComp = ({
           <span
             className="delete-draft"
             onClick={() => {
-              if (window.confirm("Are you sure you want to delete this draft?")) {
-                onDeleteDraftProposal({name: title});
-              }
+              confirmWithModal("CONFIRM_ACTION",
+                { message: "Are you sure you want to delete this draft?" }).then(
+                ok => ok && onDeleteDraftProposal({name: title})
+              );
             }}>
             <i className="fa fa-trash" />
             Delete
