@@ -10,6 +10,7 @@ const currentUserConnector = connect(
     isAdmin: sel.isAdmin,
     userCanExecuteActions: sel.userCanExecuteActions,
     proposalCredits: sel.proposalCredits,
+    notifications: sel.notifications,
     isApiRequestingUpdateProposalCredits: sel.isApiRequestingUpdateProposalCredits
   }),
   dispatch => bindActionCreators({

@@ -23,6 +23,7 @@ export const isApiRequestingLogout = getIsApiRequesting("logout");
 export const isApiRequestingForgottenPassword = getIsApiRequesting("forgottenPassword");
 export const isApiRequestingResendVerificationEmail = getIsApiRequesting("resendVerificationEmail");
 export const isApiRequestingPasswordReset = getIsApiRequesting("passwordReset");
+export const isApiRequestingNotifications = getIsApiRequesting("notifications");
 const isApiRequestingVetted = getIsApiRequesting("vetted");
 const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
 const isApiRequestingUserProposals = getIsApiRequesting("userProposals");
@@ -68,6 +69,7 @@ const apiSetStatusProposalPayload = getApiPayload("setStatusProposal");
 const apiEditUserPayload = getApiPayload("editUser");
 
 export const apiMeResponse = getApiResponse("me");
+export const apiNotificationsResponse = getApiResponse("notifications");
 const apiInitResponse = getApiResponse("init");
 const apiPolicyResponse = getApiResponse("policy");
 const apiNewUserResponse = getApiResponse("newUser");
@@ -149,6 +151,7 @@ export const isApiRequestingUserProposalCredits = getIsApiRequesting("userPropos
 export const userProposalCreditsError = getApiError("userProposalCredits");
 
 export const apiInitError = getApiError("init");
+export const apiNotificationsError = getApiError("notifications");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
 export const apiUserError = getApiError("user");
 export const apiChangePasswordError = or(apiInitError, getApiError("changePassword"));
@@ -272,6 +275,7 @@ export const userid = state => state.api.me.response && state.api.me.response.us
 
 export const serverPubkey = compose(get("pubkey"), apiInitResponse);
 export const userPubkey = compose(get("publickey"), apiMeResponse);
+export const notifications = compose(get("notifications"), apiNotificationsResponse);
 export const commentsVotes = or(compose(get("commentsvotes"), apiCommentsVotesResponse), constant(null));
 export const policy = apiPolicyResponse;
 export const isLoadingSubmit = or(isApiRequestingPolicy, isApiRequestingInit);

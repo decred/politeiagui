@@ -29,6 +29,7 @@ export const requestApiInfo = () => (dispatch) => {
     .then(response => {
       dispatch(act.RECEIVE_INIT_SESSION(response));
       dispatch(onRequestMe());
+      dispatch(onGetNotifications());
     })
     .catch(error => {
       dispatch(act.RECEIVE_INIT_SESSION(null, error));
@@ -136,6 +137,31 @@ export const onLogin = ({ email, password }) =>
       .catch(error => {
         dispatch(act.RECEIVE_LOGIN(null, error));
         throw error;
+      });
+  });
+
+export const onGetNotifications = () => dispatch => {
+  dispatch(act.REQUEST_NOTIFICATIONS());
+  return api
+    .notifications()
+    .then(response => {
+      dispatch(act.RECEIVE_NOTIFICATIONS(response));
+    })
+    .catch(error => {
+      dispatch(act.RECEIVE_NOTIFICATIONS(null, error));
+    });
+};
+
+export const onCheckNotifications = (notificationids) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_CHECK_NOTIFICATIONS());
+    return api
+      .checkNotifications(csrf, notificationids)
+      .then(response => {
+        dispatch(act.RECEIVE_CHECK_NOTIFICATIONS(response));
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_CHECK_NOTIFICATIONS(null, error));
       });
   });
 

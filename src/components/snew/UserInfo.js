@@ -5,11 +5,13 @@ import currentUserConnector from "../../connectors/currentUser";
 import Dropdown from "../Dropdown";
 import Link from "./Link";
 import Tooltip from "../Tooltip";
+import { areAllNotificationsViewed } from "../../helpers";
 
 const UserInfo = ({
   history,
   loggedInAsEmail,
   loggedInAsUsername,
+  notifications,
   userCanExecuteActions,
   proposalCredits,
   isApiRequestingUpdateProposalCredits,
@@ -22,10 +24,26 @@ const UserInfo = ({
         <div className="user">
           <Dropdown
             DropdownTrigger={
-              <div className="dropdown-trigger">{loggedInAsUsername}</div>
+              <React.Fragment>
+                <div className="dropdown-trigger">{loggedInAsUsername}</div>
+                {
+                  notifications && notifications.length > 0 && !areAllNotificationsViewed(notifications) &&
+                  <div className="has-notification"></div>
+                }
+              </React.Fragment>
             }
             DropdownContent={
               <ul>
+                <li
+                  className="dropdown-list-item"
+                  onClick={() => history.push("/user/notifications")}
+                >
+                  Notifications
+                  {
+                    notifications && notifications.length > 0 && !areAllNotificationsViewed(notifications) &&
+                    <div className="has-notification"></div>
+                  }
+                </li>
                 <li
                   className="dropdown-list-item"
                   onClick={() => history.push("/user/proposals")}

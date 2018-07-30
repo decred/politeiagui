@@ -8,7 +8,7 @@ import { onFetchUsernamesById as onFetchUsernamesByIdApi } from "./api";
 import * as sel from "../selectors";
 import act from "./methods";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
-import { onLogout, cleanErrors } from "./api";
+import { onLogout, cleanErrors, onGetNotifications } from "./api";
 import { loadStateLocalStorage, loggedInStateKey } from "../lib/local_storage";
 import {
   PROPOSAL_VOTING_ACTIVE,
@@ -22,6 +22,7 @@ export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
 export const onRouteChange = () => dispatch => {
   dispatch(cleanErrors());
   dispatch(act.CLEAN_STATE());
+  dispatch(onGetNotifications());
 };
 
 export const onSetReplyParent = (parentId = TOP_LEVEL_COMMENT_PARENTID) =>

@@ -3,6 +3,8 @@ import { Switch, Route } from "react-router-dom";
 import { SubmitPage, LoginSignupPage, Content as ProposalListing } from "./components/snew";
 import vetted from "./connectors/proposals";
 import userDetail from "./connectors/user";
+import userProposals from "./connectors/userProposals";
+import notifications from "./connectors/notifications";
 import proposalDetail from "./connectors/proposal";
 import censored from "./connectors/censoredProposals";
 import unreviewed from "./connectors/unreviewedProposals";
@@ -11,6 +13,7 @@ import newProposal from "./connectors/newProposal";
 import editProposal from "./connectors/editProposal";
 
 import Logout from "./components/LogoutPage";
+import Notifications from "./components/Notifications/Page";
 import SignupNext from "./components/SignupNextStepPage";
 import ForgottenPassword from "./components/ForgottenPasswordPage";
 import ForgottenPasswordSuccess from "./components/ForgottenPassword/SuccessPage";
@@ -40,6 +43,8 @@ class Routes extends Component {
         <Route path="/user/signup/next" component={SignupNext} />
         <Route path="/user/signup" component={LoginSignupPage} />
         <AuthenticatedRoute path="/user/proposals/:filter?" component={UserProposals} />
+        <AuthenticatedRoute path="/user/proposals" component={userProposals(ProposalListing)} />
+        <AuthenticatedRoute path="/user/notifications" component={notifications(Notifications)} />
         <Route exact path="/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password/next" component={ForgottenPasswordSuccess} />

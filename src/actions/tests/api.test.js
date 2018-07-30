@@ -471,6 +471,52 @@ describe("test api actions (actions/api.js)", () => {
     );
   });
 
+  test("on fetch notifications", async () => {
+    const path = "/api/v1/user/notifications";
+    const params = {};
+    await assertApiActionOnSuccess(
+      path,
+      api.onGetNotifications,
+      params,
+      [
+        { type: act.REQUEST_NOTIFICATIONS },
+        { type: act.RECEIVE_NOTIFICATIONS, error: false, payload: {} }
+      ]
+    );
+    await assertApiActionOnError(
+      path,
+      api.onGetNotifications,
+      params,
+      (e) => [
+        { type: act.REQUEST_NOTIFICATIONS, error: false, payload: undefined },
+        { type: act.RECEIVE_NOTIFICATIONS, error: true, payload: e }
+      ]
+    );
+  });
+
+  test("on check notification", async () => {
+    const path = "/api/v1/user/notifications";
+    const params = [FAKE_CSRF, [0]];
+    await assertApiActionOnSuccess(
+      path,
+      api.onCheckNotifications,
+      params,
+      [
+        { type: act.REQUEST_CHECK_NOTIFICATIONS },
+        { type: act.RECEIVE_CHECK_NOTIFICATIONS, error: false, payload: {} }
+      ]
+    );
+    await assertApiActionOnError(
+      path,
+      api.onCheckNotifications,
+      params,
+      () => [
+        { type: act.REQUEST_CHECK_NOTIFICATIONS, error: false, payload: undefined },
+        { type: act.RECEIVE_CHECK_NOTIFICATIONS, error: false, payload: {} }
+      ]
+    );
+  });
+
   test("on fetch proposal action", async () => {
     const path = `/api/v1/proposals/${FAKE_PROPOSAL_TOKEN}`;
     const params = [FAKE_PROPOSAL_TOKEN];
