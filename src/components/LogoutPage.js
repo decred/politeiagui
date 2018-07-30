@@ -24,13 +24,19 @@ class LogoutPage extends Component {
           <h3>Thanks for stopping by, and have a great day.</h3>
           <p>Here are some links that might be useful for you:</p>
           <div className="logout-links">
-            <ul>
-              <li><span class="fa fa-user fa-2x" aria-hidden="true"></span><a href="/user/signup"> log back in</a></li>
-              <li><span class="fa fa-home fa-2x" aria-hidden="true"></span><a href="https://www.decred.org/"> decred.org</a></li>
-              <li><span class="fa fa-github fa-2x" aria-hidden="true"></span><a href="https://github.com/decred/politeia"> politeia</a> and <a href="https://github.com/decred/politeiagui">politeiagui</a></li>
-            </ul>
+            <div className="item-link">
+              <div><span class="fa fa-user fa-2x" aria-hidden="true"></span></div>
+              <div><a href="/user/signup"> log back in</a></div>
+            </div>
+            <div className="item-link">
+              <div><span class="fa fa-home fa-2x" aria-hidden="true"></span></div>
+              <div><a href="https://www.decred.org/"> decred.org</a></div>
+            </div>
+            <div className="item-link">
+              <div><span class="fa fa-github fa-2x" aria-hidden="true"></span></div>
+              <div><a href="https://github.com/decred/politeia"> politeia</a> and <a href="https://github.com/decred/politeiagui">politeiagui</a></div>
+            </div>
           </div>
-
         </div>
       </div>
     );

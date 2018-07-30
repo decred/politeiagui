@@ -594,6 +594,15 @@ li p.header-3 {
 
 .logout-links { 
   margin: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.logout-links > .item-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .verification-success-page p,
