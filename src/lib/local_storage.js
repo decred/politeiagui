@@ -4,6 +4,7 @@
 import isEqual from "lodash/isEqual";
 import get from "lodash/get";
 import { loggedInAsUsername, loggedInAsEmail } from "../selectors/api";
+import { getLastSubmittedDraftProposal } from "../selectors/app";
 
 export const loadStateLocalStorage = () => {
   try {
@@ -53,14 +54,13 @@ const handleSaveApiMe = (state) => {
   }
 };
 
-const getProposalFormData = (state) => {
-  return (state.form && state.form["form/proposal"] && state.form["form/proposal"].values) || {};
-};
-
 const handleSaveAppDraftProposals = (state) => {
+  const draftProposalsFromStore = state.app.draftProposals;
   const draftProposalsLocalStorage = get(loadStateLocalStorage(), ["app", "draftProposals"], {});
-  const newDraftProposal = getProposalFormData(state);
-  if(newDraftProposal && newDraftProposal.name && !isEqual(newDraftProposal, draftProposalsLocalStorage[newDraftProposal.name])) {
+  const newDraftName = getLastSubmittedDraftProposal(state);
+  const newDraftProposal = draftProposalsFromStore[newDraftName];
+  if (newDraftName &&
+    !isEqual(newDraftProposal, draftProposalsLocalStorage[newDraftName])) {
     saveStateLocalStorage({
       ...loadStateLocalStorage(),
       app: {
@@ -94,7 +94,7 @@ export const getDraftsProposalsFromLocalStorage = () => {
 
 export const getDraftByNameFromLocalStorage = () => {
   if (window.location.href.split("/new/").length > 1) {
-    const draftName = window.location.href.split("/new/")[1].split("/")[0];
+    const draftName = decodeURIComponent(window.location.href).split("/new/")[1].split("/")[0];
     return getDraftsProposalsFromLocalStorage()[draftName];
   }
   return {name : "", description: ""};

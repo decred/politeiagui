@@ -102,6 +102,7 @@ body .btn.secondary,
 body button.secondary {
   color: #fff;
   background: #6c757d;
+  min-width: 150px;
 }
 
 body .btn.secondary:hover,
