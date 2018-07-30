@@ -30,6 +30,7 @@ const UserDetailPage = ({
   error,
   tabIndex,
   onTabChange,
+  dcrdataTxUrl
 }) => (
   <div className="content" role="main">
     <div className="page user-page">
@@ -75,7 +76,7 @@ const UserDetailPage = ({
             </div>
           </div>
           <div className="detail-tab-body">
-            {tabIndex === USER_DETAIL_TAB_GENERAL && <GeneralTab />}
+            {tabIndex === USER_DETAIL_TAB_GENERAL && <GeneralTab dcrdataTxUrl={dcrdataTxUrl} />}
             {tabIndex === USER_DETAIL_TAB_PROPOSALS && <ProposalsTab />}
             {tabIndex === USER_DETAIL_TAB_COMMENTS && <CommentsTab />}
           </div>
