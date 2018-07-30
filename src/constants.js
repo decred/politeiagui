@@ -35,3 +35,7 @@ export const EDIT_USER_UNLOCK = 5;
 export const LIST_HEADER_PUBLIC = "Public Proposals";
 export const LIST_HEADER_UNVETTED = "Unvetted Proposals";
 export const LIST_HEADER_USER = "Your Proposals";
+
+export const SORT_BY_OLD = "OLD";
+export const SORT_BY_NEW = "NEW";
+export const SORT_BY_TOP = "TOP";

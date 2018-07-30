@@ -220,3 +220,5 @@ export const identityImportError = (state) => state.app.identityImportResult && 
 export const identityImportSuccess = (state) => state.app.identityImportResult && state.app.identityImportResult.successMsg;
 
 export const onboardViewed = (state) => state.app.onboardViewed;
+
+export const commentsSortOption = (state) => state.app.commentsSortOption;
