@@ -1,0 +1,22 @@
+{
+  "id": 0,
+  "email": "foo@foo.com",
+  "username": "foo",
+  "isadmin": true,
+  "newuserpaywalladdress": "TsgN9uAYfKdv3JKcqgGrFNjq7vUNZ4UDeu3",
+  "newuserpaywallamount": 10000000,
+  "newuserpaywalltx": "",
+  "newuserpaywalltxnotbefore": 0,
+  "newuserpaywallpollexpiry": 0,
+  "newuserverificationtoken": "",
+  "newuserverificationexpiry": 0,
+  "updatekeyverificationtoken": "",
+  "updatekeyverificationexpiry": 0,
+  "resetpasswordverificationtoken": "",
+  "resetpasswordverificationexpiry": 0,
+  "identities": [{
+    "pubkey": "ec88b934fd9f334a9ed6d2e719da2bdb2061de5370ff20a38b0e1e3c9538199a",
+    "isactive": true
+  }],
+  "proposals": []
+}

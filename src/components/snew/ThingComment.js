@@ -27,6 +27,7 @@ class ThingComment extends React.PureComponent {
       getVoteStatus,
       likeCommentError,
       likeCommentPayload,
+      isAdmin,
       ...props
     } = this.props;
     const { showCommentForm } = this.state;
@@ -47,6 +48,7 @@ class ThingComment extends React.PureComponent {
           onCloseCommentForm: this.onCloseCommentForm,
           showCommentForm,
           user: loggedInAsEmail,
+          authorHref: isAdmin ? `/user/${props.authorid}` : null,
           blockvote: keyMismatch || (getVoteStatus(token).status !== PROPOSAL_VOTING_NOT_STARTED),
           handleVote: onLikeComment,
           token

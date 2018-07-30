@@ -3,6 +3,7 @@ import * as sel from "../selectors";
 import * as api from "../lib/api";
 import * as pki from "../lib/pki";
 import { confirmWithModal, openModal, closeModal } from "./modal";
+import * as modalTypes from "../components/Modal/modalTypes";
 import * as external_api_actions from "./external_api";
 import { clearStateLocalStorage } from "../lib/local_storage";
 import { callAfterMinimumWait } from "./lib";
@@ -220,6 +221,16 @@ export const onFetchProposal = token => dispatch => {
     });
 };
 
+export const onFetchUser = userId => dispatch => {
+  dispatch(act.REQUEST_USER(userId));
+  return api
+    .user(userId)
+    .then(response => dispatch(act.RECEIVE_USER(response)))
+    .catch(error => {
+      dispatch(act.RECEIVE_USER(null, error));
+    });
+};
+
 export const onFetchProposalComments = token => dispatch => {
   dispatch(act.REQUEST_PROPOSAL_COMMENTS(token));
   return api
@@ -239,6 +250,22 @@ export const onFetchLikedComments = token => dispatch => {
       dispatch(act.RECEIVE_LIKED_COMMENTS(null, error));
     });
 };
+
+export const onEditUser = (userId, action) =>
+  withCsrf((dispatch, getState, csrf) => {
+    return dispatch(confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {}))
+      .then(({ confirm, reason }) => {
+        if (confirm) {
+          dispatch(act.REQUEST_EDIT_USER({ userId, action, reason }));
+          return api
+            .editUser(csrf, userId, action, reason)
+            .then(response => dispatch(act.RECEIVE_EDIT_USER(response)))
+            .catch(error => {
+              dispatch(act.RECEIVE_EDIT_USER(null, error));
+            });
+        }
+      });
+  });
 
 export const onSubmitProposal = (
   loggedInAsEmail,
@@ -348,7 +375,7 @@ export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
 export const onSubmitStatusProposal = (loggedInAsEmail, token, status) =>
   withCsrf((dispatch, getState, csrf) => {
     return dispatch(
-      confirmWithModal("CONFIRM_ACTION", {
+      confirmWithModal(modalTypes.CONFIRM_ACTION, {
         message: `Are you sure you want to ${statusName(status)} this proposal?`
       })
     ).then(confirm => {
@@ -441,7 +468,7 @@ export const verifyUserPaymentWithPoliteia = txid => {
 
 export const onStartVote = (loggedInAsEmail, token) =>
   withCsrf((dispatch, getState, csrf) => {
-    return dispatch(confirmWithModal("CONFIRM_ACTION",
+    return dispatch(confirmWithModal(modalTypes.CONFIRM_ACTION,
       { message: "Are you sure you want to start voting this proposal?" }))
       .then(
         (confirm) => {

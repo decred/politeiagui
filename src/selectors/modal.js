@@ -1,3 +1,3 @@
 import get from "lodash/fp/get";
 
-export const getOpennedModals = state => get(["modal", "opennedModals"], state);
+export const getopenedModals = state => get(["modal", "openedModals"], state);

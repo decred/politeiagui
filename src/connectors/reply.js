@@ -10,6 +10,7 @@ const replyConnector = connect(
   sel.selectorMap({
     token: sel.proposalToken,
     loggedInAsEmail: sel.loggedInAsEmail,
+    isAdmin: sel.isAdmin,
     keyMismatch: sel.getKeyMismatch,
     userCanExecuteActions: sel.userCanExecuteActions,
     replyTo: sel.replyTo,

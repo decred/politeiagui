@@ -55,6 +55,7 @@ export const commentsToT1 = compose(
           id: commentid,
           uservote: String(vote),
           author: username || userid,
+          authorid: userid,
           score: resultvotes,
           score_hidden: false,
           parent_id: parentid || TOP_LEVEL_COMMENT_PARENTID,

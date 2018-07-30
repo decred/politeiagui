@@ -472,6 +472,10 @@ button .logo {
   animation: spin 3s ease-in-out infinite;
 }
 
+.submitted-by {
+  cursor: default;
+  color: #000;
+}
 
 /* Override conflitant styles for react-mde */
 .mde-header-item button {
@@ -950,6 +954,29 @@ li p.header-3 {
   min-width: 70px;
 }
 
+.modal-content textarea.modal-reason {
+  margin: 12px 0 12px 36px;
+  padding: 8px 42px 8px 8px;
+  border: 0 solid;
+  border-radius: 2px;
+  width: 100%;
+  height: 72px;
+  line-height: 24px;
+  background: #fff;
+  color: rgba(0, 0, 0, .7);
+  -webkit-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .14);
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .14);
+  -webkit-transition: background .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1), -webkit-box-shadow .2s cubic-bezier(.4, 0, 1, 1);
+  transition: background .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1), -webkit-box-shadow .2s cubic-bezier(.4, 0, 1, 1);
+  -o-transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+  transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+  transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1), -webkit-box-shadow .2s cubic-bezier(.4, 0, 1, 1);
+}
+
+.modal-content .message-ct {
+  margin: 16px;
+}
+
 .receive-content-nest-qrimage {
   width: 140px;
   height: 140px;
@@ -1034,4 +1061,121 @@ li p.header-3 {
 }
 .credit-purchase-tx {
   width: 150px;
+}
+
+.proposal-filter-count {
+  color: #bbb;
+}
+
+.user-page .detail-tab-count {
+  display: inline-block;
+  margin-left: 8px;
+  color: #555;
+  background-color: #ddd;
+  height: 16px;
+  line-height: 16px;
+  width: 16px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.user-page .detail-tab-selected .detail-tab-count {
+  color: #2971FF;
+}
+
+.user-page {
+  margin: 0 auto;
+  width: 800px;
+}
+.user-page .detail-header {
+  margin-bottom: 16px;
+}
+.user-page .detail-username {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+.user-page .detail-email {
+  margin-bottom: 16px;
+  color: #555;
+}
+.user-page .detail-admin {
+  display: inline-block;
+  margin-left: 8px;
+  color: #39740a;
+}
+.user-page .detail-form .field {
+  line-height: 24px;
+}
+.user-page .detail-form .field .clear {
+  clear: left;
+}
+.user-page .detail-form .field .field-label {
+  float: left;
+  text-align: right;
+  width: 160px;
+  margin-right: 4px;
+  color: #777;
+}
+.user-page .detail-form .field .field-value {
+  float: left;
+  width: 600px;
+  line-height: 24px;
+}
+.user-page .detail-form .field-separator {
+  height: 16px;
+}
+.user-page .detail-form .field-value .mark-link {
+  margin-left: 8px;
+}
+.user-page .detail-tabs {
+  height: 36px;
+}
+.user-page .detail-tabs .clear {
+  clear: left;
+}
+.user-page .detail-tab {
+  display: block;
+  float: left;
+  color: #000;
+  padding: 0 12px;
+  height: 36px;
+  line-height: 36px;
+  margin-right: 3px;
+  bottom: -1px;
+  position: relative;
+  cursor: pointer;
+}
+.user-page .detail-tab:hover {
+  text-decoration: none;
+}
+.user-page .detail-tab:first-child {
+  margin-left: 16px;
+}
+.user-page .detail-tab-selected {
+  border-bottom: 2px solid #2971FF;
+  color: #2971FF;
+  cursor: default;
+}
+.user-page .detail-tab-border {
+  height: 1px;
+  background: #999;
+}
+.user-page .detail-tab-body {
+  padding: 0 8px;
+}
+.user-page .detail-proposals > .content {
+  margin: 0;
+}
+
+button.button-small {
+  height: 22px;
+  line-height: 22px;
+  margin: 0 0 0 16px;
+  padding: 0 12px;
+}
+button.button-small:active {
+  margin-top: 0;
+}
+button.button-small .loading .logo {
+  margin-top: 3px;
 }
