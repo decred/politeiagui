@@ -276,14 +276,17 @@ export const onSubmitProposal = (
 
 export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
   withCsrf((dispatch, getState, csrf) => {
+    if (!loggedInAsEmail) {
+      dispatch(openModal("LOGIN", {}, null));
+      return;
+    }
+    dispatch(act.REQUEST_LIKE_COMMENT({ commentid, token }));
+    dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({ token, commentid, action}));
     return Promise.resolve(api.makeLikeComment(token, action, commentid))
       .then(comment => api.signLikeComment(loggedInAsEmail, comment))
       .then(comment => api.likeComment(csrf, comment))
-      .then(response =>
-        dispatch(act.RECEIVE_LIKE_COMMENT({ ...response, commentid }))
-      )
       .catch(error => {
-        dispatch(openModal("LOGIN", {}, null));
+        dispatch(act.RESET_SYNC_LIKE_COMMENT());
         dispatch(act.RECEIVE_LIKE_COMMENT(null, error));
       });
   });
