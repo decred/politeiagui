@@ -186,7 +186,9 @@ a:hover, a:focus {
 .signup-next-step-page,
 .submit-proposal-page,
 .logout-page {
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
 }
 
 .submit-proposal-page .submit-wrapper {
@@ -291,10 +293,26 @@ a:hover, a:focus {
 }
 
 .change-password-form,
-.forgotten-password-form,
 .resend-verification-form,
+.forgotten-password-form,
 .reset-password-form {
   width: calc(100% -320px);
+}
+
+.forgotten-password-form {
+  margin-right: 250px;
+}
+
+.icon::before {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+.login::before {
+  font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f007";
 }
 
 .message-ct {
@@ -576,6 +594,19 @@ li p.header-3 {
 .verification-success-page h3,
 .logout-page h3 {
   margin-bottom: 16px;
+}
+
+.logout-links { 
+  margin: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.logout-links > .item-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .verification-success-page p,
