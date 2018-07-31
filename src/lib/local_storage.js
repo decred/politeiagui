@@ -80,7 +80,7 @@ export const deleteDraftProposalFromLocalStorage = (name) => {
   if (draftProposalsLocalStorage[nameOrLastName]) {
     delete draftProposalsLocalStorage[nameOrLastName];
     saveStateLocalStorage({
-      localStorageState,
+      ...localStorageState,
       app: {
         draftProposals: draftProposalsLocalStorage
       }
@@ -92,9 +92,10 @@ export const getDraftsProposalsFromLocalStorage = () => {
   return get(loadStateLocalStorage(), ["app", "draftProposals"], {});
 };
 
-export const getDraftByNameFromLocalStorage = () => {
-  if (window.location.href.split("/new/").length > 1) {
-    const draftName = decodeURIComponent(window.location.href).split("/new/")[1].split("/")[0];
+export const getDraftByNameFromLocalStorage = (name) => {
+  const draftName = name || window.location.href.split("/new/").length > 1 &&
+    decodeURIComponent(window.location.href).split("/new/")[1].split("/")[0];
+  if (draftName) {
     return getDraftsProposalsFromLocalStorage()[draftName];
   }
   return {name : "", description: ""};
