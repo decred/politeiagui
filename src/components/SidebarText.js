@@ -4,6 +4,8 @@ import modalConnector from "../connectors/modal";
 import { ONBOARD } from "./Modal/modalTypes";
 
 const text = `
+# About Politeia
+
 Decred is an autonomous digital currency. With a hybrid consensus system,
 it is built to be a decentralized, sustainable, and self-ruling currency
 where stakeholders make the rules.
@@ -30,7 +32,6 @@ thrives.
 
 const SidebarText = (props) => (
   <div>
-    <b style={{ fontSize: "18px" }}>About Politeia</b>
     <Markdown body={text} {...props} />
     <div style={{ display: "flex",  justifyContent: "center", paddingTop: "10px" }}>
       <button
