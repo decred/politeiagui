@@ -11,16 +11,16 @@ class ModalStack extends React.Component {
       modals: []
     };
   }
-  componentWillReceiveProps({ opennedModals }) {
+  componentWillReceiveProps({ openedModals }) {
     const { modals } = this.state;
     let modalChanged = false;
-    if(modals.length > opennedModals.length) {
+    if(modals.length > openedModals.length) {
       modalChanged = true;
       modals.pop();
-    } else if(modals.length < opennedModals.length){
+    } else if(modals.length < openedModals.length){
       modalChanged = true;
-      const lastPosition = opennedModals.length - 1;
-      const lastInsertedModal = opennedModals[lastPosition];
+      const lastPosition = openedModals.length - 1;
+      const lastInsertedModal = openedModals[lastPosition];
       modals.push(
         this.renderModalContent(lastInsertedModal)
       );
@@ -42,7 +42,7 @@ class ModalStack extends React.Component {
 }
 
 ModalStack.propTypes = {
-  opennedModals: PropTypes.array.isRequired
+  openedModals: PropTypes.array.isRequired
 };
 
 export default connector(ModalStack);

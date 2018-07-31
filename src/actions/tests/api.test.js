@@ -16,6 +16,7 @@ import {
   RANDOM_ERROR_RESPONSE,
 } from "./helpers";
 import { getHumanReadableError } from "../../helpers";
+import { EDIT_USER_CLEAR_USER_PAYWALL } from "../../constants";
 
 const mockStore = configureStore([thunk]);
 
@@ -135,13 +136,13 @@ describe("test api actions (actions/api.js)", () => {
 
 
   test("on request me action", async () => {
-    const successfullResponse = { ...FAKE_USER };
+    const successfulResponse = { ...FAKE_USER };
     const path = "/api/v1/user/me";
-    fetchMock.get("/api/v1/user/me", successfullResponse);
+    fetchMock.get("/api/v1/user/me", successfulResponse);
     const { address, amount, txNotBefore } = FAKE_PAYWALL;
 
     // test it successfully handles the response and dispatch actions
-    setGetSuccessResponse(path, {}, successfullResponse);
+    setGetSuccessResponse(path, {}, successfulResponse);
     await expect(api.onRequestMe())
       .toDispatchActionsWithState(MOCK_STATE,[
         { type: act.REQUEST_ME },
@@ -178,7 +179,7 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on get policy action", async () => {
     const path = "/api/v1/policy";
-    //test it handles a successfull response
+    //test it handles a successful response
     await assertApiActionOnSuccess(
       path,
       api.onGetPolicy,
@@ -204,7 +205,7 @@ describe("test api actions (actions/api.js)", () => {
   test("on create a new user action", async () => {
     const path = "/api/v1/user/new";
     // fetchMock.restore();
-    //test it handles a successfull response
+    //test it handles a successful response
     await assertApiActionOnError(
       path,
       api.onCreateNewUser,
@@ -841,6 +842,45 @@ describe("test api actions (actions/api.js)", () => {
         { type: act.REQUEST_PROPOSAL_VOTE_STATUS, error: false, payload: { token } },
         { type: act.RECEIVE_PROPOSAL_VOTE_STATUS, error: true, payload: e }
       ]
+    );
+  });
+
+  test("on fetch user details action", async () => {
+    const USER_ID = 0;
+    const path = `/api/v1/user/${USER_ID}`;
+
+    //test it handles a successful response
+    await assertApiActionOnSuccess(
+      path,
+      api.onFetchUser,
+      [USER_ID.toString()],
+      [
+        { type: act.REQUEST_USER },
+        { type: act.RECEIVE_USER, error: false, payload: RANDOM_SUCCESS_RESPONSE }
+      ]
+    );
+  });
+
+  test("on edit user action", async () => {
+    const path = "/api/v1/user/edit";
+
+    //test it handles a successful response
+    await assertApiActionOnSuccess(
+      path,
+      api.onEditUser,
+      [FAKE_USER.id, EDIT_USER_CLEAR_USER_PAYWALL],
+      [
+        {
+          type: act.REQUEST_EDIT_USER,
+          payload: {
+            userId: FAKE_USER.id,
+            action: EDIT_USER_CLEAR_USER_PAYWALL
+          }
+        },
+        { type: act.RECEIVE_EDIT_USER, error: false }
+      ],
+      {},
+      methods.POST
     );
   });
 
