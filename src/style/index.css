@@ -1165,6 +1165,11 @@ button.button-small .loading .logo {
   margin-top: 3px;
 }
 
+button.inverse {
+  color: #0079d3;
+  background: none;
+}
+
 .tabs {
   height: 36px;
   margin-bottom: 24px;

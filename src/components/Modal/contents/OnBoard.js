@@ -14,10 +14,7 @@ class OnBoard extends React.Component {
   render() {
     const { closeModal } = this.props;
     const { tab } = this.state;
-    const buttonStyle = {
-      color: "#0079d3",
-      background: "none"
-    };
+
     return (
       <ModalContentWrapper
         title={"Welcome to Politeia!"}
@@ -45,7 +42,7 @@ class OnBoard extends React.Component {
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             {tab !== 0 ?
               <button
-                style={buttonStyle}
+                className="inverse"
                 onClick={() => this.setState({ tab: tab - 1 })}
               >
                 ← {onBoardingContent[tab - 1].title}
@@ -53,7 +50,7 @@ class OnBoard extends React.Component {
             }
             {tab < onBoardingContent.length - 1 &&
               <button
-                style={{ ...buttonStyle, alignSelf: "flex-end" }}
+                className="inverse"
                 onClick={() => this.setState({ tab: tab + 1 })}
               >
                 {onBoardingContent[tab + 1].title} →

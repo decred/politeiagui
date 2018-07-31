@@ -1,4 +1,4 @@
 export const CONFIRM_ACTION = "CONFIRM_ACTION";
 export const CONFIRM_ACTION_WITH_REASON = "CONFIRM_ACTION_WITH_REASON";
 export const LOGIN = "LOGIN";
-export const ON_BOARD = "ON_BOARD";
+export const ONBOARD = "ONBOARD";

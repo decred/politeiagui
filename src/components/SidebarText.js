@@ -1,9 +1,9 @@
 import React from "react";
 import Markdown from "./snew/Markdown";
+import modalConnector from "../connectors/modal";
+import { ONBOARD } from "./Modal/modalTypes";
 
 const text = `
-# About Politeia
-
 Decred is an autonomous digital currency. With a hybrid consensus system,
 it is built to be a decentralized, sustainable, and self-ruling currency
 where stakeholders make the rules.
@@ -28,5 +28,16 @@ thrives.
  * [Downloads Overview](https://decred.org/downloads/)
 `;
 
-const SidebarText = (props) => <Markdown body={text} {...props} />;
-export default SidebarText;
+const SidebarText = (props) => (
+  <div>
+    <b style={{ fontSize: "18px" }}>About Politeia</b>
+    <Markdown body={text} {...props} />
+    <div style={{ display: "flex",  justifyContent: "center", paddingTop: "10px" }}>
+      <button
+        onClick={(e) => {e.preventDefault(); props.openModal(ONBOARD);}}
+        className="inverse"
+      >Beginner's guide</button>
+    </div>
+  </div>
+);
+export default modalConnector(SidebarText);

@@ -12,6 +12,7 @@ import { handleSaveTextEditorsContent } from "./lib/editors_content_backup";
 import { handleSaveStateToLocalStorage } from "./lib/local_storage";
 import { onLocalStorageChange } from "./actions/app";
 import ModalStack from "./components/Modal/ModalStack";
+import { ONBOARD } from "./components/Modal/modalTypes";
 
 const store = configureStore();
 
@@ -40,6 +41,7 @@ class Loader extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.loggedInAsEmail) {
       this.verifyUserPubkey(nextProps.loggedInAsEmail, nextProps.userPubkey);
+      this.handleDisplayOnboardModal(nextProps.loggedInAsEmail);
     }
     if (!this.props.apiError && nextProps.apiError) {
       // Unrecoverable error
@@ -51,11 +53,21 @@ class Loader extends Component {
     }
   }
 
+  handleDisplayOnboardModal(email) {
+    const key = email + "-seen";
+    const seen = localStorage.getItem(key);
+    if (!seen) {
+      this.props.openModal(ONBOARD);
+      localStorage.setItem(key, true);
+    }
+  }
+
   componentDidMount() {
     this.storageListener = createStorageListener(store);
     window.addEventListener("storage", this.storageListener);
     if (this.props.loggedInAsEmail) {
       this.verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey);
+      this.handleDisplayOnboardModal(this.props.loggedInAsEmail);
     }
   }
 

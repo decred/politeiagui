@@ -13,5 +13,6 @@ export default connect(
   dispatch => bindActionCreators({
     onInit: act.requestApiInfo,
     keyMismatchAction: act.keyMismatch,
+    openModal: act.openModal
   }, dispatch)
 );

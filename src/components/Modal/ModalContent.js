@@ -10,7 +10,7 @@ const mapModalTypeToContent = {
   [modalTypes.CONFIRM_ACTION]: ({ modalData }) => <ConfirmAction me={modalData} />,
   [modalTypes.CONFIRM_ACTION_WITH_REASON]: ({ modalData }) => <ConfirmActionWithReason me={modalData} />,
   [modalTypes.LOGIN]: ({ location }) => <Login pathname={location.pathname} />,
-  [modalTypes.ON_BOARD]: () => <OnBoard />
+  [modalTypes.ONBOARD]: () => <OnBoard />
 };
 
 const ModalContent = ({ modalData, location }) => {
