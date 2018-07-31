@@ -3,70 +3,62 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
+import { LIST_HEADER_USER, PROPOSAL_USER_FILTER_SUBMITTED, PROPOSAL_USER_FILTER_DRAFT } from "../constants";
 
 const userProposalsConnector = connect(
   sel.selectorMap({
     userid: sel.userid,
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
-    proposals: sel.userProposals,
-    draftProposals: sel.getDraftProposals,
     error: sel.userProposalsError,
     isLoading: sel.userProposalsIsRequesting,
-    header: () => "Your Proposals",
+    proposals: sel.getUserProposals,
+    proposalCounts: sel.getUserProposalFilterCounts,
+    filterValue: sel.getUserFilterValue,
+    header: () => LIST_HEADER_USER,
     emptyProposalsMessage: () => "You have not created any proposals yet"
   }),
   dispatch =>
     bindActionCreators(
       {
-        onFetchData: act.onFetchUserProposals,
+        onFetchUserProposals: act.onFetchUserProposals,
+        onChangeFilter: act.onChangeUserFilter,
       },
       dispatch
     )
 );
 
 class Wrapper extends Component {
-  constructor(props) {
-    super();
-    this.state = { filter: props.match.params && props.match.params.filter || "active" };
-  }
 
   componentDidMount() {
-    const { userid, loggedInAsEmail, onFetchData, history } = this.props;
+    const {
+      userid,
+      loggedInAsEmail,
+      history,
+      match,
+      onFetchUserProposals,
+      onChangeFilter,
+    } = this.props;
+
     if (!loggedInAsEmail) history.push("/login");
-    if (userid !== null) onFetchData(userid);
+    if (userid !== null) onFetchUserProposals(userid);
+    if (match.params && typeof match.params.filter !== "undefined") {
+      onChangeFilter({
+        "submitted": PROPOSAL_USER_FILTER_SUBMITTED,
+        "drafts": PROPOSAL_USER_FILTER_DRAFT,
+      }[match.params.filter]);
+    }
   }
 
-  render() {
-    const Component = this.props.Component;
-    const {loggedInAsEmail, isAdmin, draftProposals, proposals, error, isLoading, header, emptyProposalsMessage} = this.props;
+  render () {
+    const { Component, ...props } = this.props;
     return (
       <div className="page content user-proposals-page">
-        <div className="user-proposals-filter">
-          <span> Show: </span>
-          <div
-            onClick={() => this.setState({ filter: "active" })}
-            className={`user-proposal-option ${this.state.filter === "active" && "selected"}`}>
-            Active
-          </div>
-          <div
-            onClick={() => this.setState({ filter: "draft" })}
-            className={`user-proposal-option ${this.state.filter === "draft" && "selected"}`}>
-            Draft
-          </div>
-        </div>
-        <Component
-          loggedInAsEmail={loggedInAsEmail}
-          isAdmin={isAdmin}
-          proposals={this.state.filter === "active" ? proposals : draftProposals}
-          error={error}
-          isLoading={isLoading}
-          header={header}
-          emptyProposalsMessage={emptyProposalsMessage}
-        />
+        <Component {...{ ...props }} />
       </div>
     );
   }
+
 }
 
 const wrap = Component =>

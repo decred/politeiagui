@@ -1200,10 +1200,11 @@ button.button-small .loading .logo {
   margin-left: 8px;
   color: #555;
   background-color: #ddd;
-  height: 16px;
-  line-height: 16px;
-  width: 16px;
-  border-radius: 16px;
+  height: 18px;
+  line-height: 18px;
+  min-width: 18px;
+  padding: 0 4px;
+  border-radius: 18px;
   text-align: center;
 }
 

@@ -15,7 +15,9 @@ class CustomSubreddit extends Component {
       window.scrollTo(0,0);
     }
     const stateFromLocalStorage = loadStateLocalStorage();
-    if (stateFromLocalStorage) this.props.onLoadMe(stateFromLocalStorage.api.me);
+    if (stateFromLocalStorage && stateFromLocalStorage.api && stateFromLocalStorage.api.me) {
+      this.props.onLoadMe(stateFromLocalStorage.api.me);
+    }
   }
 
   render() {

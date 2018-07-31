@@ -4,11 +4,14 @@ import {
   PROPOSAL_FILTER_ALL,
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_USER_FILTER_SUBMITTED,
+  PROPOSAL_USER_FILTER_DRAFT,
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_NOT_STARTED,
   PROPOSAL_VOTING_FINISHED,
   LIST_HEADER_PUBLIC,
-  LIST_HEADER_UNVETTED
+  LIST_HEADER_UNVETTED,
+  LIST_HEADER_USER
 } from "../constants";
 
 const adminFilterOptions = [
@@ -21,7 +24,7 @@ const adminFilterOptions = [
     value: PROPOSAL_STATUS_CENSORED
   },
   {
-    label: "all",
+    label: "all proposals",
     value: PROPOSAL_FILTER_ALL
   }
 ];
@@ -43,9 +46,20 @@ const publicFilterOptions = [
     value: PROPOSAL_FILTER_ALL
   }
 ];
+const userFilterOptions = [
+  {
+    label: "submitted",
+    value: PROPOSAL_USER_FILTER_SUBMITTED
+  },
+  {
+    label: "drafts",
+    value: PROPOSAL_USER_FILTER_DRAFT
+  }
+];
 const mapHeaderToOptions = {
   [LIST_HEADER_UNVETTED]: adminFilterOptions,
-  [LIST_HEADER_PUBLIC]: publicFilterOptions
+  [LIST_HEADER_PUBLIC]: publicFilterOptions,
+  [LIST_HEADER_USER]: userFilterOptions,
 };
 
 const ProposalFilter = ({ handleChangeFilterValue, header, filterValue, proposalCounts }) => (

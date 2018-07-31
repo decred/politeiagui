@@ -1,7 +1,7 @@
 import * as act from "../actions/types";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 import { getDraftsProposalsFromLocalStorage, deleteDraftProposalFromLocalStorage } from "../lib/local_storage";
-import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_VOTING_ACTIVE, PAYWALL_STATUS_PAID } from "../constants";
+import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_VOTING_ACTIVE, PAYWALL_STATUS_PAID, PROPOSAL_USER_FILTER_SUBMITTED } from "../constants";
 
 export const DEFAULT_STATE = {
   isShowingSignupConfirmation: false,
@@ -12,6 +12,7 @@ export const DEFAULT_STATE = {
   },
   adminProposalsShow: PROPOSAL_STATUS_UNREVIEWED,
   publicProposalsShow: PROPOSAL_VOTING_ACTIVE,
+  userProposalsShow: PROPOSAL_USER_FILTER_SUBMITTED,
   proposalCredits: 0,
   submittedProposals: {},
   draftProposals: getDraftsProposalsFromLocalStorage(),
@@ -95,6 +96,7 @@ const app = (state = DEFAULT_STATE, action) => (({
   [act.RESET_SIGNUP_CONFIRMATION]: () => ({ ...state, isShowingSignupConfirmation: false }),
   [act.CHANGE_ADMIN_FILTER_VALUE]: () => ({ ...state, adminProposalsShow: action.payload }),
   [act.CHANGE_PUBLIC_FILTER_VALUE]: () => ({ ...state, publicProposalsShow: action.payload }),
+  [act.CHANGE_USER_FILTER_VALUE]: () => ({ ...state, userProposalsShow: action.payload }),
   [act.UPDATE_USER_PAYWALL_STATUS]: () => ({
     ...state,
     userPaywallStatus: action.payload.status,

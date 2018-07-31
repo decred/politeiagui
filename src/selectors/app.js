@@ -12,10 +12,11 @@ import {
   getKeyMismatch,
   apiUnvettedProposals,
   apiVettedProposals,
-  getPropVoteStatus
+  getPropVoteStatus,
+  apiUserProposals,
 } from "./api";
 import { globalUsernamesById } from "../actions/app";
-import { PAYWALL_STATUS_PAID, PAYWALL_STATUS_WAITING, PROPOSAL_FILTER_ALL, PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED, PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED } from "../constants";
+import { PAYWALL_STATUS_PAID, PAYWALL_STATUS_WAITING, PROPOSAL_FILTER_ALL, PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED, PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED, PROPOSAL_USER_FILTER_SUBMITTED, PROPOSAL_USER_FILTER_DRAFT } from "../constants";
 
 export const replyTo = or(get(["app", "replyParent"]), constant(0));
 
@@ -40,6 +41,7 @@ export const newProposalInitialValues = state => state.app.draftProposals.initia
 export const newDraftSaved = state => state.app.draftProposals.newDraft;
 export const getAdminFilterValue = state => parseInt(state.app.adminProposalsShow, 10);
 export const getPublicFilterValue = state =>  parseInt(state.app.publicProposalsShow, 10);
+export const getUserFilterValue = state =>  parseInt(state.app.userProposalsShow, 10);
 export const isMarkdown = compose(eq("index.md"), get("name"));
 export const getProposalFiles = compose(get("files"), proposal);
 export const getMarkdownFile = compose(find((isMarkdown)), getProposalFiles);
@@ -120,7 +122,7 @@ export const getVettedFilteredProposals = (state) => {
   });
 };
 
-export const getDraftProposals = (state) => {
+const getDraftProposals = (state) => {
   const draftProposals = [];
   Object.keys(state.app.draftProposals).forEach(key => {
     if (["newDraft", "lastSubmitted", "originalName"].indexOf(key) === -1) {
@@ -128,6 +130,31 @@ export const getDraftProposals = (state) => {
     }
   });
   return draftProposals;
+};
+
+export const getUserProposals = (state) => {
+  const userFilterValue = getUserFilterValue(state);
+  if (userFilterValue === PROPOSAL_USER_FILTER_SUBMITTED) {
+    return apiUserProposals(state);
+  }
+  else if (userFilterValue === PROPOSAL_USER_FILTER_DRAFT) {
+    return getDraftProposals(state);
+  }
+
+  return [];
+};
+
+export const getUserProposalFilterCounts = (state) => {
+  let proposalFilterCounts = {
+    [PROPOSAL_USER_FILTER_SUBMITTED]: apiUserProposals(state).length,
+    [PROPOSAL_USER_FILTER_DRAFT]: getDraftProposals(state).length,
+  };
+
+  proposalFilterCounts[PROPOSAL_FILTER_ALL] =
+    Object.keys(proposalFilterCounts).reduce((total, filterValue) =>
+      total + proposalFilterCounts[filterValue]);
+
+  return proposalFilterCounts;
 };
 
 export const getUnvettedProposalFilterCounts = (state) => {
