@@ -35,7 +35,7 @@ class Routes extends Component {
         <Route path="/user/logout" component={Logout} />
         <Route path="/user/signup/next" component={SignupNext} />
         <Route path="/user/signup" component={LoginSignupPage} />
-        <AuthenticatedRoute path="/user/proposals" component={UserProposals} />
+        <AuthenticatedRoute path="/user/proposals/:filter?" component={UserProposals} />
         <Route exact path="/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password/next" component={ForgottenPasswordSuccess} />

@@ -26,9 +26,9 @@ const userProposalsConnector = connect(
 );
 
 class Wrapper extends Component {
-  constructor() {
+  constructor(props) {
     super();
-    this.state = { filter: "active" };
+    this.state = { filter: props.match.params && props.match.params.filter || "active" };
   }
 
   componentDidMount() {
