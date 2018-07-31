@@ -7,6 +7,9 @@ const formReducer = reducer.plugin({
   "form/proposal": (state, action) => {
     switch(action.type) {
     case act.RECEIVE_NEW_PROPOSAL:
+      if (action.error) {
+        return state;
+      }
       resetNewProposalData();
       return undefined;
     default:
