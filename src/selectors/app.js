@@ -123,7 +123,7 @@ export const getVettedFilteredProposals = (state) => {
 export const getDraftProposals = (state) => {
   const draftProposals = [];
   Object.keys(state.app.draftProposals).forEach(key => {
-    if (["newDraft", "lastSubmitted"].indexOf(key) === -1) {
+    if (["newDraft", "lastSubmitted", "originalName"].indexOf(key) === -1) {
       draftProposals.push(state.app.draftProposals[key]);
     }
   });

@@ -27,20 +27,35 @@ const app = (state = DEFAULT_STATE, action) => (({
       [action.payload.censorshiprecord.token]: action.payload
     }
   }),
-  [act.SAVE_DRAFT_PROPOSAL]: () => (
+  [act.SET_DRAFT_PROPOSAL]: () => (
     { ...state,
       draftProposals: {
         ...state.draftProposals,
+        originalName: action.payload.name
+      }
+    }
+  ),
+  [act.SAVE_DRAFT_PROPOSAL]: () => {
+    const newDraftProposals = state.draftProposals;
+    const originalName = newDraftProposals.originalName;
+    if (originalName !== action.payload.name) {
+      deleteDraftProposalFromLocalStorage(originalName);
+      delete newDraftProposals[originalName];
+    }
+    return { ...state,
+      draftProposals: {
+        ...newDraftProposals,
         newDraft: true,
         lastSubmitted: action.payload.name,
         [action.payload.name]: action.payload
       }
-    }
-  ),
+    };
+  },
   [act.RESET_DRAFT_PROPOSAL]: () => (
     { ...state,
       draftProposals: {
         ...state.draftProposals,
+        originalName: false,
         newDraft: false
       }
     }

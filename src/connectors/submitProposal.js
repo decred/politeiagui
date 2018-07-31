@@ -34,11 +34,11 @@ const submitConnector = connect(
     onFetchData: act.onGetPolicy,
     onSave: act.onSaveNewProposal,
     onResetProposal: act.onResetProposal,
+    onSetDraftProposal: act.onSetDraftProposal,
     onSaveDraft: act.onSaveDraftProposal,
     onResetDraftProposal: act.onResetDraftProposal,
   }
 );
-
 
 class SubmitWrapper extends Component {
 
@@ -46,7 +46,10 @@ class SubmitWrapper extends Component {
     this.props.policy || this.props.onFetchData();
   }
 
-  componentWillReceiveProps({ token, savedDraft }) {
+  componentWillReceiveProps({ token, savedDraft, initialValues }) {
+    if (initialValues && initialValues.name) {
+      this.props.onSetDraftProposal({ name: initialValues.name });
+    }
     if (token) {
       this.props.onResetProposal();
       return this.props.history.push("/proposals/" + token);

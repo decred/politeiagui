@@ -93,8 +93,8 @@ export const getDraftsProposalsFromLocalStorage = () => {
 };
 
 export const getDraftByNameFromLocalStorage = (name) => {
-  const draftName = name || window.location.href.split("/new/").length > 1 &&
-    decodeURIComponent(window.location.href).split("/new/")[1].split("/")[0];
+  const draftName = (window.location.href.split("/new/").length > 1 &&
+    decodeURIComponent(window.location.href).split("/new/")[1].split("/")[0]) || name;
   if (draftName) {
     return getDraftsProposalsFromLocalStorage()[draftName];
   }
