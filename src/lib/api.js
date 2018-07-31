@@ -124,8 +124,9 @@ export const editUser = (csrf, userid, action, reason) =>
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);
 
-export const userProposals = userid =>
-  GET(`/v1/user/proposals?${qs.stringify({ userid })}`).then(getResponse);
+export const userProposals = userid => {
+  return GET(`/v1/user/proposals?${qs.stringify({ userid })}`).then(getResponse);
+};
 
 export const login = (csrf, email, password) =>
   POST("/login", csrf, { email, password }).then(getResponse);

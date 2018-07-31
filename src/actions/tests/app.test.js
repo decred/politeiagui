@@ -145,6 +145,15 @@ describe("test app actions (actions/app.js)", () => {
       );
   });
 
+  test("on change user filter action", () => {
+    const option = "any";
+    expect(app.onChangeUserFilter(option))
+      .toDispatchActions(
+        { type: act.CHANGE_USER_FILTER_VALUE, payload: option },
+        done
+      );
+  });
+
   test("on change proposal status to approved action", () => {
     const status = "any";
     expect(app.onChangeProposalStatusApproved(status))

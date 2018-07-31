@@ -7,7 +7,9 @@ export const PROPOSAL_FILTER_ALL = 0;
 export const PROPOSAL_STATUS_UNREVIEWED = 2;
 export const PROPOSAL_STATUS_CENSORED = 3;
 export const PROPOSAL_STATUS_PUBLIC = 4;
-export const PROPOSAL_STATUS_DRAFT = 5;
+
+export const PROPOSAL_USER_FILTER_SUBMITTED = 1;
+export const PROPOSAL_USER_FILTER_DRAFT = 2;
 
 export const PAYWALL_STATUS_WAITING = 0;
 export const PAYWALL_STATUS_LACKING_CONFIRMATIONS = 1;
@@ -32,3 +34,4 @@ export const EDIT_USER_UNLOCK = 5;
 
 export const LIST_HEADER_PUBLIC = "Public Proposals";
 export const LIST_HEADER_UNVETTED = "Unvetted Proposals";
+export const LIST_HEADER_USER = "Your Proposals";

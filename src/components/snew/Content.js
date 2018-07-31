@@ -30,11 +30,6 @@ export const CustomContent = ({
     <PageLoadingIcon key="content" />
   ) : (
     <div>
-      {header &&
-        <h1 className="proposals-listing-header">
-          {header}
-        </h1>
-      }
       <ProposalFilter
         header={header}
         handleChangeFilterValue={onChangeFilter}

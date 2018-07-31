@@ -1,6 +1,7 @@
 import React from "react";
 import LoadingIcon from "../snew/LoadingIcon";
 import Message from "../Message";
+import { Tabs, Tab } from "../Tabs";
 import GeneralTab from "./GeneralTab";
 import ProposalsTab from "./ProposalsTab";
 import CommentsTab from "./CommentsTab";
@@ -11,24 +12,11 @@ import {
 } from "../../constants";
 
 
-const Tab = ({
-  tabIndex,
-  selectedTabIndex,
-  onTabChange,
-  children,
-}) => (
-  <a
-    className={"detail-tab" + (selectedTabIndex === tabIndex ? " detail-tab-selected" : "")}
-    onClick={() => onTabChange(tabIndex)}>
-    {children}
-  </a>
-);
-
 const UserDetailPage = ({
   isLoading,
   user,
   error,
-  tabIndex,
+  tabId,
   onTabChange,
   dcrdataTxUrl
 }) => (
@@ -52,33 +40,30 @@ const UserDetailPage = ({
               )}
             </div>
             <div className="detail-email">{user.email}</div>
-            <div className="detail-tabs">
+            <Tabs>
               <Tab
-                tabIndex={USER_DETAIL_TAB_GENERAL}
-                selectedTabIndex={tabIndex}
-                onTabChange={onTabChange}>
-                General
-              </Tab>
+                title="General"
+                selected={tabId === USER_DETAIL_TAB_GENERAL}
+                tabId={USER_DETAIL_TAB_GENERAL}
+                onTabChange={onTabChange} />
               <Tab
-                tabIndex={USER_DETAIL_TAB_PROPOSALS}
-                selectedTabIndex={tabIndex}
-                onTabChange={onTabChange}>
-                Proposals <div className="detail-tab-count">{(user.proposals && user.proposals.length) || 0}</div>
-              </Tab>
+                title="Proposals"
+                count={(user.proposals && user.proposals.length) || 0}
+                selected={tabId === USER_DETAIL_TAB_PROPOSALS}
+                tabId={USER_DETAIL_TAB_PROPOSALS}
+                onTabChange={onTabChange} />
               <Tab
-                tabIndex={USER_DETAIL_TAB_COMMENTS}
-                selectedTabIndex={tabIndex}
-                onTabChange={onTabChange}>
-                Comments <div className="detail-tab-count">{(user.comments && user.comments.length) || 0}</div>
-              </Tab>
-              <div className="clear"></div>
-              <div className="detail-tab-border"></div>
-            </div>
+                title={"Comments"}
+                count={(user.comments && user.comments.length) || 0}
+                selected={tabId === USER_DETAIL_TAB_COMMENTS}
+                tabId={USER_DETAIL_TAB_COMMENTS}
+                onTabChange={onTabChange} />
+            </Tabs>
           </div>
           <div className="detail-tab-body">
-            {tabIndex === USER_DETAIL_TAB_GENERAL && <GeneralTab dcrdataTxUrl={dcrdataTxUrl} />}
-            {tabIndex === USER_DETAIL_TAB_PROPOSALS && <ProposalsTab />}
-            {tabIndex === USER_DETAIL_TAB_COMMENTS && <CommentsTab />}
+            {tabId === USER_DETAIL_TAB_GENERAL && <GeneralTab dcrdataTxUrl={dcrdataTxUrl} />}
+            {tabId === USER_DETAIL_TAB_PROPOSALS && <ProposalsTab />}
+            {tabId === USER_DETAIL_TAB_COMMENTS && <CommentsTab />}
           </div>
         </div>
       )}

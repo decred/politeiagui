@@ -10,7 +10,7 @@ class UserDetail extends Component {
     super(props);
 
     this.state = {
-      tabIndex: USER_DETAIL_TAB_GENERAL,
+      tabId: USER_DETAIL_TAB_GENERAL,
     };
   }
 
@@ -24,8 +24,8 @@ class UserDetail extends Component {
     }
   }
 
-  onTabChange(tabIndex) {
-    this.setState({ tabIndex: tabIndex });
+  onTabChange(tabId) {
+    this.setState({ tabId: tabId });
   }
 
   render() {
@@ -43,7 +43,7 @@ class UserDetail extends Component {
         {...{
           ...this.props,
           dcrdataTxUrl,
-          tabIndex: this.state.tabIndex,
+          tabId: this.state.tabId,
           onTabChange: this.onTabChange
         }}
       />
