@@ -8,10 +8,11 @@ import { reduxForm } from "redux-form";
 import { validate, synchronousValidation, warn } from "../validators/proposal";
 import { withRouter } from "react-router-dom";
 import { getNewProposalData } from "../lib/editors_content_backup";
+import { getDraftByNameFromLocalStorage } from "../lib/local_storage";
 
 const submitConnector = connect(
   sel.selectorMap({
-    initialValues: getNewProposalData,
+    initialValues: or(getDraftByNameFromLocalStorage, getNewProposalData),
     isLoading: or(sel.isLoadingSubmit, sel.newProposalIsRequesting),
     loggedInAsEmail: sel.loggedInAsEmail,
     userCanExecuteActions: sel.userCanExecuteActions,
@@ -25,37 +26,57 @@ const submitConnector = connect(
     newProposalError: sel.newProposalError,
     merkle: sel.newProposalMerkle,
     token: sel.newProposalToken,
+    savedDraft: sel.newDraftSaved,
     signature: sel.newProposalSignature,
     proposalCredits: sel.proposalCredits
   }),
   {
     onFetchData: act.onGetPolicy,
     onSave: act.onSaveNewProposal,
-    onResetProposal: act.onResetProposal
+    onResetProposal: act.onResetProposal,
+    onSetDraftProposal: act.onSetDraftProposal,
+    onSaveDraft: act.onSaveDraftProposal,
+    onResetDraftProposal: act.onResetDraftProposal,
   }
 );
 
-
 class SubmitWrapper extends Component {
+
   componentDidMount() {
     this.props.policy || this.props.onFetchData();
   }
 
-  componentWillReceiveProps({ token }) {
+  componentWillReceiveProps({ token, savedDraft, initialValues }) {
+    if (initialValues && initialValues.name) {
+      this.props.onSetDraftProposal({ name: initialValues.name });
+    }
     if (token) {
       this.props.onResetProposal();
       return this.props.history.push("/proposals/" + token);
+    }
+    if (savedDraft) {
+      this.props.onResetProposal();
+      this.props.onResetDraftProposal();
+      return this.props.history.push("/user/proposals/draft");
     }
   }
 
   render() {
     const Component = this.props.Component;
-    return <Component {...{...this.props, onSave: this.onSave.bind(this) }}  />;
+    return <Component {...{...this.props,
+      onSave: this.onSave.bind(this),
+      onSaveDraft: this.onSaveDraft.bind(this)
+    }}  />;
   }
 
   onSave(...args) {
     validate(...args);
     return this.props.onSave(...args);
+  }
+
+  onSaveDraft(...args) {
+    validate(...args);
+    return this.props.onSaveDraft(...args);
   }
 }
 

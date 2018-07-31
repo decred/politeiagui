@@ -123,7 +123,7 @@ export const updateProposalCreditsError = getApiError("updateProposalCredits");
 const apiUserProposalCreditsResponse = getApiResponse("userProposalCredits");
 export const proposalCreditPurchases = state => {
   let r = apiUserProposalCreditsResponse(state);
-  if(!r) {
+  if(!r || !r.spentcredits || !r.unspentcredits) {
     return [];
   }
 

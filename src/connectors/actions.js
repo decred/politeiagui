@@ -16,6 +16,7 @@ const actions = connect(
   }),
   {
     onChangeStatus: act.onSubmitStatusProposal,
+    onDeleteDraftProposal: act.onDeleteDraftProposal,
     onStartVote: act.onStartVote,
   }
 );

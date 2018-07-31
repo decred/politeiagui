@@ -41,6 +41,7 @@ class SubmitPage extends React.Component {
       error,
       warning,
       onSave,
+      onSaveDraft,
       submitting,
       handleSubmit,
       newProposalError,
@@ -48,6 +49,7 @@ class SubmitPage extends React.Component {
       proposalCredits
     } = this.props;
     const submitEnabled = !submitting && !error && userCanExecuteActions && proposalCredits > 0;
+    const draftEnabled = !submitting && !error && userCanExecuteActions;
     return !policy || isLoading ? <PageLoadingIcon /> : (
       <div className="content" role="main">
         <div className="page submit-proposal-page">
@@ -114,6 +116,14 @@ class SubmitPage extends React.Component {
                         value="form"
                         onClick={handleSubmit(onSave)}>
                         submit
+                      </button>
+                      <button
+                        className={`togglebutton secondary access-required${!draftEnabled && " not-active disabled"}`}
+                        name="submit"
+                        type="submit"
+                        value="form"
+                        onClick={handleSubmit(onSaveDraft)}>
+                        Save as Draft
                       </button>
                       {proposalCredits === 0 && (
                         <div className="submit-button-error">

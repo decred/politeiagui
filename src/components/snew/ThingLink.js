@@ -9,7 +9,7 @@ import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_VOTING_NOT_STARTED,
+  PROPOSAL_VOTING_NOT_STARTED
 } from "../../constants";
 import { getProposalStatus } from "../../helpers";
 import VoteStats from "../VoteStats";
@@ -27,6 +27,7 @@ const ThingLinkComp = ({
   domain,
   rank = 0,
   userid,
+  draftLocal,
   //score,
   //downs,
   //ups,
@@ -50,10 +51,12 @@ const ThingLinkComp = ({
   onChangeStatus,
   onStartVote,
   setStatusProposalToken,
+  onDeleteDraftProposal,
   setStatusProposalError,
   tokenFromStartingVoteProp,
   isTestnet,
-  getVoteStatus
+  getVoteStatus,
+  confirmWithModal
 }) => (
   <div
     className={`thing id-${id} odd link ${
@@ -93,18 +96,45 @@ const ThingLinkComp = ({
       <p className="tagline">
         <span className="submitted-by">
           submitted{" "}
-          <TimeAgo datetime={created_utc * 1000} />
-          {" by "}
-          {isAdmin ? (
-            <Link href={`/user/${authorid}`}>{author}</Link>
-          ) : author}
-          {" - "}
-          {numcomments}{numcomments === 1 ? " comment" : " comments"}
+          <TimeAgo
+            style={{ cursor: "pointer" }}
+            datetime={created_utc * 1000}
+          />
+          {author &&
+            <span>
+              {" by "}
+              {isAdmin && (
+                <Link href={`/user/${authorid}`}>{author}</Link>
+              )}
+              {!isAdmin && <span> {author} </span>}
+            </span>
+          }
+          {numcomments > 0 &&
+            <span> - {numcomments}{numcomments === 1 ? " comment" : " comments"} </span>
+          }
         </span>
       </p>
-      <p className="tagline proposal-token">
-        {id} • {getProposalStatus(review_status)}
-      </p>
+      {!draftLocal && (
+        <p className="tagline proposal-token">
+          {id} • {getProposalStatus(review_status)}
+        </p>
+      )}
+      {draftLocal && (
+        <div className="tagline proposal-draft">
+          Saved as draft
+          <span
+            className="delete-draft"
+            onClick={() => {
+              confirmWithModal("CONFIRM_ACTION",
+                { message: "Are you sure you want to delete this draft?" }).then(
+                ok => ok && onDeleteDraftProposal({name: title})
+              );
+            }}>
+            <i className="fa fa-trash" />
+            Delete
+          </span>
+        </div>
+      )}
       {
         review_status === 4 &&
         <VoteStats token={id} />

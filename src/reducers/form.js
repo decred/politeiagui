@@ -1,12 +1,16 @@
 import { reducer } from "redux-form";
 import { resetNewProposalData, resetNewCommentData } from "../lib/editors_content_backup";
+import { deleteDraftProposalFromLocalStorage } from "../lib/local_storage";
 import * as act from "../actions/types";
-
 
 const formReducer = reducer.plugin({
   "form/proposal": (state, action) => {
     switch(action.type) {
     case act.RECEIVE_NEW_PROPOSAL:
+      resetNewProposalData();
+      deleteDraftProposalFromLocalStorage();
+      return undefined;
+    case act.SAVE_DRAFT_PROPOSAL:
       resetNewProposalData();
       return undefined;
     default:

@@ -1,5 +1,6 @@
 import * as act from "../actions/types";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
+import { getDraftsProposalsFromLocalStorage, deleteDraftProposalFromLocalStorage } from "../lib/local_storage";
 import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_VOTING_ACTIVE, PAYWALL_STATUS_PAID } from "../constants";
 
 export const DEFAULT_STATE = {
@@ -13,6 +14,7 @@ export const DEFAULT_STATE = {
   publicProposalsShow: PROPOSAL_VOTING_ACTIVE,
   proposalCredits: 0,
   submittedProposals: {},
+  draftProposals: getDraftsProposalsFromLocalStorage(),
   identityImportResult: { errorMsg: "", successMsg: "" }
 };
 
@@ -25,6 +27,50 @@ const app = (state = DEFAULT_STATE, action) => (({
       [action.payload.censorshiprecord.token]: action.payload
     }
   }),
+  [act.SET_DRAFT_PROPOSAL]: () => (
+    { ...state,
+      draftProposals: {
+        ...state.draftProposals,
+        originalName: action.payload.name
+      }
+    }
+  ),
+  [act.SAVE_DRAFT_PROPOSAL]: () => {
+    const newDraftProposals = state.draftProposals;
+    const originalName = newDraftProposals.originalName;
+    if (originalName !== action.payload.name) {
+      deleteDraftProposalFromLocalStorage(originalName);
+      delete newDraftProposals[originalName];
+    }
+    return { ...state,
+      draftProposals: {
+        ...newDraftProposals,
+        newDraft: true,
+        lastSubmitted: action.payload.name,
+        [action.payload.name]: action.payload
+      }
+    };
+  },
+  [act.RESET_DRAFT_PROPOSAL]: () => (
+    { ...state,
+      draftProposals: {
+        ...state.draftProposals,
+        originalName: false,
+        newDraft: false
+      }
+    }
+  ),
+  [act.DELETE_DRAFT_PROPOSAL]: () => {
+    if (!state.draftProposals[action.payload.name]) {
+      return state;
+    }
+    const newDraftProposals = state.draftProposals;
+    delete newDraftProposals[action.payload.name];
+    deleteDraftProposalFromLocalStorage(action.payload.name);
+    return { ...state,
+      draftProposals: newDraftProposals
+    };
+  },
   [act.REQUEST_SETSTATUS_PROPOSAL]: () => {
     if (action.error) return state;
     const { status, token } = action.payload;

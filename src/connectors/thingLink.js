@@ -12,7 +12,8 @@ const proposalDownloadConnector = connect(
     csrf: sel.csrf,
   }),
   {
-    onChangeProposalStatusApproved: act.onChangeProposalStatusApproved,
+    confirmWithModal: act.confirmWithModal,
+    onChangeProposalStatusApproved: act.onChangeProposalStatusApproved
   }
 );
 

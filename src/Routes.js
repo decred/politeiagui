@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import { SubmitPage, LoginSignupPage, Content as ProposalListing } from "./components/snew";
 import vetted from "./connectors/proposals";
-import userProposals from "./connectors/userProposals";
 import userDetail from "./connectors/user";
 import proposalDetail from "./connectors/proposal";
 import censored from "./connectors/censoredProposals";
@@ -18,6 +17,7 @@ import PasswordResetSuccess from "./components/PasswordReset/SuccessPage";
 import ResendVerificationEmail from "./components/ResendVerificationEmailPage";
 import ResendVerificationEmailSuccess from "./components/ResendVerificationEmail/SuccessPage";
 import Verify from "./components/Verify";
+import UserProposals from "./components/UserProposals";
 import Account from "./components/AccountPage";
 import VerifyKey from "./components/VerifyKey";
 import NotFound from "./components/NotFoundPage";
@@ -37,7 +37,7 @@ class Routes extends Component {
         <Route path="/user/logout" component={Logout} />
         <Route path="/user/signup/next" component={SignupNext} />
         <Route path="/user/signup" component={LoginSignupPage} />
-        <AuthenticatedRoute path="/user/proposals" component={userProposals(ProposalListing)} />
+        <AuthenticatedRoute path="/user/proposals/:filter?" component={UserProposals} />
         <Route exact path="/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password" component={ForgottenPassword} />
         <Route exact path="/user/forgotten/password/next" component={ForgottenPasswordSuccess} />
@@ -48,6 +48,7 @@ class Routes extends Component {
         <Route path="/user/resend" component={ResendVerificationEmail} exact />
         <Route path="/user/resend/next" component={ResendVerificationEmailSuccess} />
         <AuthenticatedRoute path="/user/account" component={Account} exact />
+        <AuthenticatedRoute path="/proposals/new/:draftname" component={SubmitPage} />
         <AuthenticatedRoute path="/proposals/new" component={SubmitPage} />
         <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />

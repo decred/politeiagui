@@ -15,6 +15,7 @@ import {
 } from "./app";
 
 export const onResetProposal = act.RESET_PROPOSAL;
+export const onResetDraftProposal = act.RESET_DRAFT_PROPOSAL;
 export const onSetEmail = act.SET_EMAIL;
 
 export const onSignup = act.REQUEST_SIGNUP_CONFIRMATION;
@@ -532,7 +533,7 @@ export const onUserProposalCredits = () => dispatch => {
 
   let dispatchAfterWaitFn = callAfterMinimumWait(response => {
     dispatch(act.RECEIVE_USER_PROPOSAL_CREDITS(response));
-    dispatch(act.SET_PROPOSAL_CREDITS(response.unspentcredits.length));
+    dispatch(act.SET_PROPOSAL_CREDITS(response.unspentcredits ? response.unspentcredits.length : 0));
   }, 500);
 
   return api

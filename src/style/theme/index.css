@@ -97,6 +97,31 @@ button:active {
   min-width: 200px;
 }
 
+
+body .btn.secondary,
+body button.secondary {
+  color: #fff;
+  background: #6c757d;
+  min-width: 150px;
+}
+
+body .btn.secondary:hover,
+body button.secondary:hover {
+  background: #828e98;
+}
+
+body button.secondary.disabled {
+  background: rgba(0, 0, 0, .08);
+  color: #bbb;
+}
+
+.react-file-reader-button button
+{
+  color: #fff;
+  background: #28a745;
+  min-width: 200px;
+}
+
 .c-btn-primary:active {
     margin-top: 4px
 }
@@ -1335,6 +1360,29 @@ div.commentarea div.RES-keyNav-activeElement .md {
 .nav-buttons .nextprev a:hover {
     text-decoration: none;
     background-color: rgba(0, 0, 0, .05)
+}
+
+.proposals-listing-header {
+  margin: 16px 352px 0 24px;
+}
+
+.user-proposals-page .proposals-listing-header {
+  margin-left: 10px;
+}
+.user-proposals-filter {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  margin: 10px 20px;
+}
+
+.user-proposal-option {
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+.user-proposal-option:hover {
+  text-decoration: underline;
 }
 
 .side .spacer {
@@ -3481,4 +3529,28 @@ a.attached-image-remove {
 
 .submit-page #title-field textarea {
   border: 1px solid #8997A5;
+}
+
+.proposal-filter-count {
+  color: #bbb;
+}
+
+.proposal-draft {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.proposal-draft .delete-draft {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.proposal-draft .delete-draft:hover {
+  color: #c32a2a;
+  text-decoration: underline;
+}
+
+.proposal-draft .delete-draft i {
+  margin-right: 3px;
 }
