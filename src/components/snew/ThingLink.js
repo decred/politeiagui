@@ -11,10 +11,11 @@ import {
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_VOTING_NOT_STARTED
 } from "../../constants";
-import { getProposalStatus } from "../../helpers";
+import { getProposalStatus, dateConverter } from "../../helpers";
 import VoteStats from "../VoteStats";
 import { withRouter } from "react-router";
 import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
+import Tooltip from "../Tooltip";
 
 const ThingLinkComp = ({
   Link,
@@ -96,10 +97,22 @@ const ThingLinkComp = ({
       <p className="tagline">
         <span className="submitted-by">
           submitted{" "}
-          <TimeAgo
-            style={{ cursor: "pointer" }}
-            datetime={created_utc * 1000}
-          />
+          <Tooltip
+            text={dateConverter(created_utc)}
+            wrapperStyle={{
+              display: "inline"
+            }}
+            tipStyle={{
+              right: "-10px",
+              top: "20px",
+              width: "100px",
+              textAlign: "center"
+            }}>
+            <TimeAgo
+              style={{ cursor: "pointer" }}
+              datetime={created_utc * 1000}
+            />
+          </Tooltip>
           {author &&
             <span>
               {" by "}

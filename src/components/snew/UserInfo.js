@@ -4,6 +4,7 @@ import ReactBody from "react-body";
 import connector from "../../connectors/currentUser";
 import Dropdown from "../Dropdown";
 import Link from "./Link";
+import Tooltip from "../Tooltip";
 
 const UserInfo = ({
   history,
@@ -54,18 +55,20 @@ const UserInfo = ({
             }
           />
         </div>
-        <div className="user-proposal-credits">
-          <div className="tip">
-            Proposal credits are purchased to submit proposals. For more information,
-            please visit your account page.
+        <Tooltip
+          text="Proposal credits are purchased to submit proposals. For more information,
+          please visit your account page."
+          position="bottom"
+        >
+          <div className="user-proposal-credits">
+            {isApiRequestingUpdateProposalCredits ? (
+              <div className="refreshing"><div className="logo spin"></div></div>
+            ) : (
+              <a className="refresh" onClick={onUpdateProposalCredits}>(refresh)</a>
+            )}
+            <div className="proposal-credits-text">{(proposalCredits || 0) + " proposal credit" + (proposalCredits !== 1 ? "s" : "")}</div>
           </div>
-          {isApiRequestingUpdateProposalCredits ? (
-            <div className="refreshing"><div className="logo spin"></div></div>
-          ) : (
-            <a className="refresh" onClick={onUpdateProposalCredits}>(refresh)</a>
-          )}
-          <div className="proposal-credits-text">{(proposalCredits || 0) + " proposal credit" + (proposalCredits !== 1 ? "s" : "")}</div>
-        </div>
+        </Tooltip>
       </div>
     </div>
   ) : (

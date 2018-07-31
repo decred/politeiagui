@@ -781,12 +781,19 @@ li p.header-3 {
   display: inline-block;
 }
 
-#header-right .user-proposal-credits .tip {
+#header-right .user-proposal-credits:hover a.refresh {
+  visibility: visible;
+  transition-delay: .3s;
+}
+
+.tooltip-wrapper {
+  position: relative;
+}
+
+.tip {
   visibility: hidden;
   transition: 0s visibility;
   position: absolute;
-  top: 48px;
-  right: 0;
   background-color: rgba(0, 0, 0, .6);
   color: #fff;
   border-radius: 3px;
@@ -795,16 +802,17 @@ li p.header-3 {
   text-align: left;
 }
 
-#header-right .user-proposal-credits:hover a.refresh {
-  visibility: visible;
-  transition-delay: .3s;
-}
-#header-right .user-proposal-credits:hover .tip {
-  visibility: visible;
-  transition-delay: .7s;
+.tip-bottom {
+  top: 25px;
+  right: 0;
 }
 
-#header-right .user-proposal-credits .tip:hover {
+.tooltip-wrapper:hover .tip {
+  visibility: visible;
+  transition-delay: .5s;
+}
+
+.tip:hover {
   background-color: rgba(255, 255, 255, .4);
   color: rgba(255, 255, 255, .6);
   text-decoration: none;
