@@ -100,10 +100,10 @@ const GeneralTab = ({
       <div>
         <Field label="Address">{" " + user.newuserpaywalladdress + " "}</Field>
         <Field label="Amount">{user.newuserpaywallamount / 100000000} DCR</Field>
-        {!user.newuserpaywalltx && (
-          <Field label="Pay after"><UTCDate time={user.newuserpaywalltxnotbefore} /></Field>
-        )}
-        <FieldSeparator />
+        {!user.newuserpaywalltx && ([
+          <Field label="Pay after"><UTCDate time={user.newuserpaywalltxnotbefore} /></Field>,
+          <FieldSeparator />
+        ])}
       </div>
     )}
     {user.newuserpaywalltx && ([
