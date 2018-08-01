@@ -36,10 +36,10 @@ const ModalContentWrapper = ({
         </div>
       </div>
       {children}
-      <div className="modal-content-actions">
+      {(onCancel || onSubmit) && <div className="modal-content-actions">
         {onCancel && <CancelButton onClick={onCancel} text={cancelText} />}
         {onSubmit && <SubmitButton onClick={onSubmit} text={submitText} />}
-      </div>
+      </div>}
     </div>
   );
 };

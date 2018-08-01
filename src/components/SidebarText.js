@@ -3,7 +3,7 @@ import Markdown from "./snew/Markdown";
 import modalConnector from "../connectors/modal";
 import { ONBOARD } from "./Modal/modalTypes";
 
-const text = `
+const aboutText = `
 # About Politeia
 
 Decred is an autonomous digital currency. With a hybrid consensus system,
@@ -14,12 +14,13 @@ Politeia (Pi) is a censorship-resistant blockchain-anchored public proposal
 system, which empowers users to submit their own projects for self-funding
 from DCR's block subsidy. Pi ensures the ecosystem remains sustainable and
 thrives.
+`;
 
-[Read  more](https://blog.decred.org/2017/10/25/Politeia/)
-
+const resourcesText = `
 ## Resources
 
  * [Website](https://decred.org/) & [Blog](https://blog.decred.org/)
+ * [Politeia blog post](https://blog.decred.org/2017/10/25/Politeia/)
  * [Decred Constitution](https://docs.decred.org/getting-started/constitution/)
  * [Whitepaper/Technical Brief (pdf)](https://decred.org/dtb001.pdf)
  * [Documentation](https://docs.decred.org/)
@@ -31,14 +32,13 @@ thrives.
 `;
 
 const SidebarText = (props) => (
-  <div>
-    <Markdown body={text} {...props} />
-    <div style={{ display: "flex",  justifyContent: "center", paddingTop: "10px" }}>
-      <button
-        onClick={(e) => {e.preventDefault(); props.openModal(ONBOARD);}}
-        className="inverse"
-      >Beginner's guide</button>
-    </div>
+  <div style={{ display: "flex", flexDirection: "column" }}>
+    <Markdown body={aboutText} {...props} />
+    <span
+      style={{ cursor: "pointer", color: "#2971FF"}}
+      onClick={(e) => {e.preventDefault(); props.openModal(ONBOARD);}}
+    >Read more</span>
+    <Markdown body={resourcesText} {...props} />
   </div>
 );
 export default modalConnector(SidebarText);

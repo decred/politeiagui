@@ -14,17 +14,28 @@ class OnBoard extends React.Component {
   render() {
     const { closeModal } = this.props;
     const { tab } = this.state;
+    const contentWrapperStyle = {
+      display: "flex",
+      flexDirection: "column",
+      padding: "10px"
+    };
+    const bodyWrapperStyle = {
+      padding: "10px",
+      height: "400px",
+      overflow: "auto"
+    };
+    const buttonsWrapperStyle = {
+      display: "flex",
+      justifyContent: "space-between",
+      padding: "10px"
+    };
 
     return (
       <ModalContentWrapper
         title={"Welcome to Politeia!"}
         onClose={closeModal}
       >
-        <div style={{
-          display: "flex",
-          flexDirection: "column",
-          padding: "10px"
-        }}>
+        <div style={contentWrapperStyle}>
           <Tabs>
             {onBoardingContent.map(
               ({ title }, idx) =>
@@ -36,27 +47,28 @@ class OnBoard extends React.Component {
                 />
             )}
           </Tabs>
-          <div style={{ padding: "10px" }}>
+          <div style={bodyWrapperStyle}>
             <Markdown body={onBoardingContent[this.state.tab].body} />
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            {tab !== 0 ?
-              <button
-                className="inverse"
-                onClick={() => this.setState({ tab: tab - 1 })}
-              >
-                ← {onBoardingContent[tab - 1].title}
-              </button> : <div></div>
-            }
-            {tab < onBoardingContent.length - 1 &&
-              <button
-                className="inverse"
-                onClick={() => this.setState({ tab: tab + 1 })}
-              >
-                {onBoardingContent[tab + 1].title} →
-              </button>
-            }
-          </div>
+        </div>
+        <div style={buttonsWrapperStyle}>
+          {tab !== 0 ?
+            <button
+              className="inverse"
+              onClick={() => this.setState({ tab: tab - 1 })}
+            >
+              ← {onBoardingContent[tab - 1].title}
+            </button> : <div></div>
+          }
+          {tab < onBoardingContent.length - 1 &&
+            <button
+              className="inverse"
+              style={{ margin: 0 }}
+              onClick={() => this.setState({ tab: tab + 1 })}
+            >
+              {onBoardingContent[tab + 1].title} →
+            </button>
+          }
         </div>
       </ModalContentWrapper>
     );
@@ -121,7 +133,7 @@ demonstrating that your submissions have been censored.
 `
   },
   {
-    title: "Submmiting and approving proposals",
+    title: "Submitting and approving proposals",
     body: `
 **Submitting and approving proposals**
 
