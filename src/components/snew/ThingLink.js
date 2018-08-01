@@ -11,7 +11,7 @@ import {
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_VOTING_NOT_STARTED
 } from "../../constants";
-import { getProposalStatus, dateConverter } from "../../helpers";
+import { getProposalStatus } from "../../helpers";
 import VoteStats from "../VoteStats";
 import { withRouter } from "react-router";
 import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
@@ -98,7 +98,7 @@ const ThingLinkComp = ({
         <span className="submitted-by">
           submitted{" "}
           <Tooltip
-            text={dateConverter(created_utc)}
+            text={new Date(created_utc * 1000).toLocaleString()}
             wrapperStyle={{
               display: "inline"
             }}
