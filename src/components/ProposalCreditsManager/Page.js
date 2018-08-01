@@ -10,6 +10,7 @@ const ProposalCreditsPage = ({
   proposalPaywallError,
   isApiRequestingProposalPaywall,
   onPurchaseProposalCredits,
+  userCanExecuteActions,
 
   // Testnet only
   isTestnet,
@@ -33,7 +34,7 @@ const ProposalCreditsPage = ({
         <ButtonWithLoadingIcon
           className="c-btn c-btn-primary"
           text="Purchase credits"
-          disabled={-isApiRequestingProposalPaywall}
+          disabled={isApiRequestingProposalPaywall || !userCanExecuteActions}
           isLoading={isApiRequestingProposalPaywall}
           onClick={onPurchaseProposalCredits} />
       )}
@@ -73,13 +74,13 @@ const ProposalCreditsPage = ({
                     <input
                       className="proposal-credits-input"
                       type="number"
-                      disabled={isApiRequestingPayWithFaucet || payWithFaucetTxId}
+                      disabled={isApiRequestingPayWithFaucet || payWithFaucetTxId || !userCanExecuteActions}
                       value={numCreditsToPurchase}
                       onChange={onUpdateCreditsToPurchase} />
                     <ButtonWithLoadingIcon
                       className="c-btn c-btn-primary"
                       text="Buy credits with faucet"
-                      disabled={isApiRequestingPayWithFaucet || payWithFaucetTxId}
+                      disabled={isApiRequestingPayWithFaucet || payWithFaucetTxId || !userCanExecuteActions}
                       isLoading={isApiRequestingPayWithFaucet}
                       onClick={() => payWithFaucet(proposalPaywallAddress, numCreditsToPurchase * proposalCreditPrice)} />
                   </div>

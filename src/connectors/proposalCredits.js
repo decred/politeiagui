@@ -12,6 +12,7 @@ export default connect(
     proposalCredits: sel.proposalCredits,
     proposalCreditPurchases: sel.proposalCreditPurchases,
     isApiRequestingUserProposalCredits: sel.isApiRequestingUserProposalCredits,
+    userCanExecuteActions: sel.userCanExecuteActions,
     isTestnet: sel.isTestNet,
     isApiRequestingPayWithFaucet: sel.isApiRequestingPayProposalWithFaucet,
     payWithFaucetTxId: sel.payProposalWithFaucetTxId,
