@@ -953,7 +953,7 @@ li p.header-3 {
   left: 0;
   display: flex;
   justify-content: center;
-  z-index: 999;
+  z-index: 99999;
 }
 
 .modal-overlay {
@@ -968,6 +968,10 @@ li p.header-3 {
   overflow-y: auto;
   box-sizing: border-box;
   padding-top: 80px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .modal-content {
@@ -975,6 +979,7 @@ li p.header-3 {
   box-shadow: 0 9px 46px 8px rgba(0,0,0,.14),0 11px 15px -7px rgba(0,0,0,.12),0 24px 38px 3px rgba(0,0,0,.2);
   max-width: 60%;
   z-index: 2;
+  margin-bottom: 40px;
 }
 
 .modal-content-header {
@@ -1166,6 +1171,11 @@ button.button-small:active {
 }
 button.button-small .loading .logo {
   margin-top: 3px;
+}
+
+button.inverse {
+  color: #0079d3;
+  background: none;
 }
 
 .tabs {

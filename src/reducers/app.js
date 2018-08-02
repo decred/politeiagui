@@ -16,7 +16,8 @@ export const DEFAULT_STATE = {
   proposalCredits: 0,
   submittedProposals: {},
   draftProposals: getDraftsProposalsFromLocalStorage(),
-  identityImportResult: { errorMsg: "", successMsg: "" }
+  identityImportResult: { errorMsg: "", successMsg: "" },
+  onboardViewed: false
 };
 
 const app = (state = DEFAULT_STATE, action) => (({
@@ -117,7 +118,8 @@ const app = (state = DEFAULT_STATE, action) => (({
     isShowingSignupConfirmation: false
   }),
   [act.SHOULD_AUTO_VERIFY_KEY]: () => ({ ...state, shouldVerifyKey: action.payload }),
-  [act.IDENTITY_IMPORTED]: () => ({ ...state, identityImportResult: action.payload })
+  [act.IDENTITY_IMPORTED]: () => ({ ...state, identityImportResult: action.payload }),
+  [act.SET_ONBOARD_AS_VIEWED]: () => ({ ...state, onboardViewed: true })
 })[action.type] || (() => state))();
 
 export default app;

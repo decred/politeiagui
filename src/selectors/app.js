@@ -218,3 +218,5 @@ export const shouldAutoVerifyKey = (state) => state.app.shouldVerifyKey;
 export const identityImportError = (state) => state.app.identityImportResult && state.app.identityImportResult.errorMsg;
 
 export const identityImportSuccess = (state) => state.app.identityImportResult && state.app.identityImportResult.successMsg;
+
+export const onboardViewed = (state) => state.app.onboardViewed;

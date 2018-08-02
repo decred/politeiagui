@@ -158,3 +158,5 @@ const selectDefaultFilterValue = (proposalFilterCounts, defaultFilterPreferences
 
   return defaultFilterPreferences[defaultFilterPreferences.length - 1];
 };
+
+export const setOnboardAsViewed = () => act.SET_ONBOARD_AS_VIEWED();

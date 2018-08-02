@@ -25,10 +25,11 @@ const ModalContentWrapper = ({
   title,
   submitText = "OK",
   cancelText = "Cancel",
-  children
+  children,
+  style
 }) => {
   return (
-    <div className="modal-content" style={{ minWidth: "700px" }}>
+    <div className="modal-content" style={{ minWidth: "700px", ...style }}>
       <div className="modal-content-header">
         <h2 style={{ fontSize: "18px" }} >{title}</h2>
         <div style={{ display: "flex", justifyContent: "flex-end", flex: 1 }}>
@@ -36,10 +37,10 @@ const ModalContentWrapper = ({
         </div>
       </div>
       {children}
-      <div className="modal-content-actions">
+      {(onCancel || onSubmit) && <div className="modal-content-actions">
         {onCancel && <CancelButton onClick={onCancel} text={cancelText} />}
         {onSubmit && <SubmitButton onClick={onSubmit} text={submitText} />}
-      </div>
+      </div>}
     </div>
   );
 };

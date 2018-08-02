@@ -12,6 +12,7 @@ import { handleSaveTextEditorsContent } from "./lib/editors_content_backup";
 import { handleSaveStateToLocalStorage } from "./lib/local_storage";
 import { onLocalStorageChange } from "./actions/app";
 import ModalStack from "./components/Modal/ModalStack";
+import { ONBOARD } from "./components/Modal/modalTypes";
 
 const store = configureStore();
 
@@ -41,6 +42,13 @@ class Loader extends Component {
     if (nextProps.loggedInAsEmail) {
       this.verifyUserPubkey(nextProps.loggedInAsEmail, nextProps.userPubkey);
     }
+
+    if(!this.props.onboardViewed && nextProps.lastLoginTime === 0){
+      this.props.setOnboardAsViewed();
+      this.props.openModal(ONBOARD);
+    }
+
+
     if (!this.props.apiError && nextProps.apiError) {
       // Unrecoverable error
       if (nextProps.apiError.internalError) {
