@@ -37,6 +37,6 @@ export const updateSortedComments = (comments = [], sortOption, votes, needsSort
   const votesandcomments = votes ? mergeCommentsAndVotes(comments, votes) : comments;
   const sorter = getSort(sortOption);
   const sortedComments = needsSorting ? sorter(votesandcomments) : votesandcomments;
-  return sortedComments;
+  return sortedComments || [];
 };
 

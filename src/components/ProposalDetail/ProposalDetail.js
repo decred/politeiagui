@@ -27,6 +27,9 @@ class ProposalDetail extends React.Component {
   handleUpdateOfComments = (currentProps, nextProps) => {
     let sortedComments;
 
+    if(!nextProps.comments || nextProps.comments.length === 0) {
+      return;
+    }
     // sort option changed
     if(currentProps.commentsSortOption !== nextProps.commentsSortOption) {
       sortedComments = updateSortedComments(
@@ -51,7 +54,7 @@ class ProposalDetail extends React.Component {
     }
 
     // commentsvotes changed
-    if(!isEqual(currentProps.commentsvotes, nextProps.commentsvotes)) {
+    if(nextProps.commentsvotes && !isEqual(currentProps.commentsvotes, nextProps.commentsvotes)) {
       const updatedComments = getUpdatedComments(nextProps.commentsvotes, nextProps.comments);
       const newComments = mergeNewComments(this.state.sortedComments, updatedComments);
       sortedComments = updateSortedComments(

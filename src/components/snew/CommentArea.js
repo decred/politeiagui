@@ -27,7 +27,7 @@ const CommentArea = ({
       locked: !loggedInAsEmail,
       name: TOP_LEVEL_COMMENT_PARENTID,
       num_comments: comments.length,
-      SorterComponent: () => (
+      SorterComponent: () => comments && comments.length > 0 ? (
         <div className="comments-sort" >
           <span className="">Sort by:</span>
           <Select
@@ -43,7 +43,7 @@ const CommentArea = ({
             }
           />
         </div>
-      ),
+      ) : null,
       hideSortOptions: false
     }} />
 );
