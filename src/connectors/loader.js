@@ -9,10 +9,13 @@ export default connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     apiError: sel.apiError,
     userCanExecuteActions: sel.userCanExecuteActions,
+    lastLoginTime: sel.lastLoginTimeFromLoginResponse,
+    onboardViewed: sel.onboardViewed
   }),
   dispatch => bindActionCreators({
     onInit: act.requestApiInfo,
     keyMismatchAction: act.keyMismatch,
-    openModal: act.openModal
+    openModal: act.openModal,
+    setOnboardAsViewed: act.setOnboardAsViewed
   }, dispatch)
 );

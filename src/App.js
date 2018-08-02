@@ -41,8 +41,14 @@ class Loader extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.loggedInAsEmail) {
       this.verifyUserPubkey(nextProps.loggedInAsEmail, nextProps.userPubkey);
-      this.handleDisplayOnboardModal(nextProps.loggedInAsEmail);
     }
+
+    if(!this.props.onboardViewed && nextProps.lastLoginTime === 0){
+      this.props.setOnboardAsViewed();
+      this.props.openModal(ONBOARD);
+    }
+
+
     if (!this.props.apiError && nextProps.apiError) {
       // Unrecoverable error
       if (nextProps.apiError.internalError) {
@@ -53,21 +59,11 @@ class Loader extends Component {
     }
   }
 
-  handleDisplayOnboardModal(email) {
-    const key = email + "-seen";
-    const seen = localStorage.getItem(key);
-    if (!seen) {
-      this.props.openModal(ONBOARD);
-      localStorage.setItem(key, true);
-    }
-  }
-
   componentDidMount() {
     this.storageListener = createStorageListener(store);
     window.addEventListener("storage", this.storageListener);
     if (this.props.loggedInAsEmail) {
       this.verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey);
-      this.handleDisplayOnboardModal(this.props.loggedInAsEmail);
     }
   }
 

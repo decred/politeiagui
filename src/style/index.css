@@ -945,7 +945,7 @@ li p.header-3 {
   left: 0;
   display: flex;
   justify-content: center;
-  z-index: 999;
+  z-index: 99999;
 }
 
 .modal-overlay {
