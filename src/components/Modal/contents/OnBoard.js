@@ -17,23 +17,27 @@ class OnBoard extends React.Component {
     const contentWrapperStyle = {
       display: "flex",
       flexDirection: "column",
-      padding: "10px"
+      padding: "10px",
+      height: "calc(100% - 103px)"
     };
     const bodyWrapperStyle = {
       padding: "10px",
-      height: "400px",
-      overflow: "auto"
+      overflow: "auto",
+      flex: "1"
     };
     const buttonsWrapperStyle = {
       display: "flex",
       justifyContent: "space-between",
-      padding: "10px"
+      alignItems: "center",
+      height: "60px",
+      padding: "0 10px 0 10px"
     };
 
     return (
       <ModalContentWrapper
         title={"Welcome to Politeia!"}
         onClose={closeModal}
+        style={{ height: "calc(100vh - 100px)" }}
       >
         <div style={contentWrapperStyle}>
           <Tabs>

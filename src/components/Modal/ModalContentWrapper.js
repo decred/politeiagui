@@ -25,10 +25,11 @@ const ModalContentWrapper = ({
   title,
   submitText = "OK",
   cancelText = "Cancel",
-  children
+  children,
+  style
 }) => {
   return (
-    <div className="modal-content" style={{ minWidth: "700px" }}>
+    <div className="modal-content" style={{ minWidth: "700px", ...style }}>
       <div className="modal-content-header">
         <h2 style={{ fontSize: "18px" }} >{title}</h2>
         <div style={{ display: "flex", justifyContent: "flex-end", flex: 1 }}>
