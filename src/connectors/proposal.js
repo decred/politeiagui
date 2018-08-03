@@ -23,12 +23,14 @@ const proposalConnector = connect(
     isLoading: or(sel.proposalIsRequesting, sel.setStatusProposalIsRequesting, sel.isApiRequestingPropVoteStatus),
     markdownFile: sel.getMarkdownFile,
     otherFiles: sel.getNotMarkdownFile,
+    commentsSortOption: sel.commentsSortOption
   }),
   dispatch => bindActionCreators({
     onFetchData: act.onFetchProposal,
     onSetReplyParent: act.onSetReplyParent,
     onFetchProposalVoteStatus: act.onFetchProposalVoteStatus,
-    onFetchLikedComments: act.onFetchLikedComments
+    onFetchLikedComments: act.onFetchLikedComments,
+    onSetCommentsSortOption: act.onSetCommentsSortOption
   }, dispatch)
 );
 

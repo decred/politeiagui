@@ -1,7 +1,13 @@
 import * as act from "../actions/types";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 import { getDraftsProposalsFromLocalStorage, deleteDraftProposalFromLocalStorage } from "../lib/local_storage";
-import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_VOTING_ACTIVE, PAYWALL_STATUS_PAID, PROPOSAL_USER_FILTER_SUBMITTED } from "../constants";
+import {
+  PROPOSAL_STATUS_UNREVIEWED,
+  PROPOSAL_VOTING_ACTIVE,
+  PAYWALL_STATUS_PAID,
+  PROPOSAL_USER_FILTER_SUBMITTED,
+  SORT_BY_NEW
+} from "../constants";
 
 export const DEFAULT_STATE = {
   isShowingSignupConfirmation: false,
@@ -17,7 +23,8 @@ export const DEFAULT_STATE = {
   submittedProposals: {},
   draftProposals: getDraftsProposalsFromLocalStorage(),
   identityImportResult: { errorMsg: "", successMsg: "" },
-  onboardViewed: false
+  onboardViewed: false,
+  commentsSortOption: { value: SORT_BY_NEW, label: SORT_BY_NEW }
 };
 
 const app = (state = DEFAULT_STATE, action) => (({
@@ -119,7 +126,8 @@ const app = (state = DEFAULT_STATE, action) => (({
   }),
   [act.SHOULD_AUTO_VERIFY_KEY]: () => ({ ...state, shouldVerifyKey: action.payload }),
   [act.IDENTITY_IMPORTED]: () => ({ ...state, identityImportResult: action.payload }),
-  [act.SET_ONBOARD_AS_VIEWED]: () => ({ ...state, onboardViewed: true })
+  [act.SET_ONBOARD_AS_VIEWED]: () => ({ ...state, onboardViewed: true }),
+  [act.SET_COMMENTS_SORT_OPTION]: () => ({ ...state, commentsSortOption: action.payload })
 })[action.type] || (() => state))();
 
 export default app;

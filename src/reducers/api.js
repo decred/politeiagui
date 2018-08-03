@@ -145,7 +145,10 @@ export const onReceiveSyncLikeComment = (state, action) => {
         if (cv.commentid === commentid && cv.token === token) {
           const currentAction = parseInt(cv.action, 10);
           acc.oldAction = currentAction;
-          cv.action = newAction === currentAction ? 0 : newAction;
+          cv = {
+            ...cv,
+            action: newAction === currentAction ? 0 : newAction
+          };
         }
         return { ...acc, cvs: acc.cvs.concat([cv])};
       }, { cvs: [], oldAction: null });

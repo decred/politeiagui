@@ -1229,3 +1229,19 @@ button.inverse {
 .tab-selected .tab-count {
   color: #2971FF;
 }
+
+.comments-sort {
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+}
+.sort-select__control {
+  width: 80px;
+  background-color: #FFF !important;
+  margin-left: 5px;
+  min-height: 20px !important;
+}
+
+.sort-select__dropdown-indicator {
+  padding: 2px !important;
+}
