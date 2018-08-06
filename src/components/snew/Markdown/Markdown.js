@@ -1,20 +1,13 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
+import { customRenderers } from "./helpers";
 
-const customRenderers = {
-  image: ({src, alt}) => {
-    return <a rel="nofollow" href={src}>{alt}</a>;
-  },
-  link: ({href, children}) => {
-    return <a rel="nofollow" href={href}>{children[0]}</a>;
-  }
-};
 
-const MarkdownRenderer = ({ body, className }) => (
+const MarkdownRenderer = ({ body, className, filterXss = true }) => (
   <div className={className}>
     <ReactMarkdown
       className="md"
-      renderers={customRenderers}
+      renderers={customRenderers(filterXss)}
       source={body}
     />
   </div>

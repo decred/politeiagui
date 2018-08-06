@@ -33,12 +33,12 @@ const resourcesText = `
 
 const SidebarText = (props) => (
   <div style={{ display: "flex", flexDirection: "column" }}>
-    <Markdown body={aboutText} {...props} />
+    <Markdown body={aboutText} filterXss={false} {...props} />
     <span
       style={{ cursor: "pointer", color: "#2971FF"}}
       onClick={(e) => {e.preventDefault(); props.openModal(ONBOARD);}}
     >Read more</span>
-    <Markdown body={resourcesText} {...props} />
+    <Markdown body={resourcesText} filterXss={false} {...props} />
   </div>
 );
 export default modalConnector(SidebarText);
