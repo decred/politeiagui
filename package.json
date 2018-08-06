@@ -35,7 +35,8 @@
     "snew-classic-ui": "https://github.com/decred/snew-classic-ui",
     "timeago-react": "^1.2.2",
     "tweetnacl": "^1.0.0",
-    "tweetnacl-util": "^0.15.0"
+    "tweetnacl-util": "^0.15.0",
+    "xss-filters": "^1.2.7"
   },
   "scripts": {
     "mockapi": "node mockapi.js",
