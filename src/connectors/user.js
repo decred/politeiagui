@@ -19,6 +19,7 @@ export default connect(
       get(["match", "params", "userId"]),
       arg(1)
     ),
+    loggedInAsUserId: sel.userid,
     user: sel.user,
     error: sel.apiUserError,
     isLoading: sel.isApiRequestingUser,

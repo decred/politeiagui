@@ -53,7 +53,7 @@ class Routes extends Component {
         <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin" component={admin(ProposalListing)} />
-        <AdminAuthenticatedRoute path="/user/:userId" component={userDetail(UserDetail)} />
+        <Route path="/user/:userId" component={userDetail(UserDetail)} />
         <Route path="/proposals/:token" component={proposalDetail(ProposalDetail)} />
         <Route path="/500" component={ErrorPage} />
         <Route path="*" component={NotFound} />
