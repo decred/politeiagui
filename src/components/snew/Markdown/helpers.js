@@ -1,9 +1,10 @@
 import React from "react";
 import xssFilters from "xss-filters";
 
-export const transverseChildrens = (el, cb) => {
-  const children = el.children || (el.props && el.props.children);
-  const filterChildren = (c) => c.map(child => transverseChildrens(child, cb));
+export const traverseChildren = (el, cb) => {
+  const filterChildren = (c) => React.Children.map(c,
+    child => traverseChildren(child, cb)
+  );
   let newProps = null;
   let newElement = null;
   if(el.children) {
@@ -14,11 +15,10 @@ export const transverseChildrens = (el, cb) => {
   } else if (el.props && el.props.children) {
     newProps = {
       ...el.props,
-      children: filterChildren(children)
+      children: filterChildren(el.props.children)
     };
     newElement = React.cloneElement(el, newProps);
   }
-
   return newElement ? cb(newElement) : cb(el);
 };
 
@@ -48,7 +48,7 @@ export const customRenderers = (filterXss) => ({
   },
   root: (el) => {
     if(filterXss) {
-      el = transverseChildrens(el, handleFilterXss);
+      el = traverseChildren(el, handleFilterXss);
     }
     const {
       children,
