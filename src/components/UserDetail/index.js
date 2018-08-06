@@ -2,15 +2,14 @@ import React, { Component } from "react";
 import { autobind } from "core-decorators";
 import UserDetailPage from "./Page";
 import userConnector from "../../connectors/user";
-import { USER_DETAIL_TAB_GENERAL } from "../../constants";
+import { USER_DETAIL_TAB_GENERAL, USER_DETAIL_TAB_PROPOSALS } from "../../constants";
 
 class UserDetail extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
-      tabId: USER_DETAIL_TAB_GENERAL
+      tabId: this.isAdminOrTheUser(props) ? USER_DETAIL_TAB_GENERAL : USER_DETAIL_TAB_PROPOSALS
     };
   }
 
@@ -18,10 +17,19 @@ class UserDetail extends Component {
     this.props.onFetchData(this.props.userId);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.editUserResponse) {
+  isAdminOrTheUser({ user, loggedInAsUserId }) {
+    return user && (user.isadmin || user.id === loggedInAsUserId);
+  }
+
+  componentWillReceiveProps({ editUserResponse, ...props }) {
+    if(editUserResponse) {
       window.location.reload();
     }
+
+    if(this.isAdminOrTheUser(props)) {
+      this.setState({ tabId: USER_DETAIL_TAB_GENERAL });
+    }
+
   }
 
   onTabChange(tabId) {

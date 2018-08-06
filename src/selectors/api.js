@@ -12,6 +12,7 @@ const getApiResponse = key => get([ "api", key, "response" ]);
 const getApiError = key => get([ "api", key, "error" ]);
 
 export const isApiRequestingInit = getIsApiRequesting("init");
+export const isApiRequestingMe = getIsApiRequesting("me");
 const isApiRequestingPolicy = getIsApiRequesting("policy");
 export const isApiRequestingNewUser = getIsApiRequesting("newUser");
 export const isApiRequestingChangePassword = getIsApiRequesting("changePassword");

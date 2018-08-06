@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import get from "lodash/fp/get";
 import compose from "lodash/fp/compose";
-import { arg } from "../lib/fp";
+import { arg, or } from "../lib/fp";
 import * as sel from "../selectors";
 import * as act from "../actions";
 import {
@@ -19,9 +19,10 @@ export default connect(
       get([ "match", "params", "userId" ]),
       arg(1)
     ),
+    loggedInAsUserId: sel.userid,
     user: sel.user,
     error: sel.apiUserError,
-    isLoading: sel.isApiRequestingUser,
+    isLoading: or(sel.isApiRequestingUser, sel.isApiRequestingMe),
     isTestnet: sel.isTestNet,
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
