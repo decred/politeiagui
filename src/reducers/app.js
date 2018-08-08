@@ -1,6 +1,6 @@
 import * as act from "../actions/types";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
-import { getDraftsProposalsFromLocalStorage, deleteDraftProposalFromLocalStorage } from "../lib/local_storage";
+import { uniqueID } from "../helpers";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_VOTING_ACTIVE,
@@ -21,7 +21,7 @@ export const DEFAULT_STATE = {
   userProposalsShow: PROPOSAL_USER_FILTER_SUBMITTED,
   proposalCredits: 0,
   submittedProposals: {},
-  draftProposals: getDraftsProposalsFromLocalStorage(),
+  draftProposals: null,
   identityImportResult: { errorMsg: "", successMsg: "" },
   onboardViewed: false,
   commentsSortOption: { value: SORT_BY_NEW, label: SORT_BY_NEW }
@@ -46,17 +46,21 @@ const app = (state = DEFAULT_STATE, action) => (({
   ),
   [act.SAVE_DRAFT_PROPOSAL]: () => {
     const newDraftProposals = state.draftProposals;
-    const originalName = newDraftProposals.originalName;
-    if (originalName !== action.payload.name) {
-      deleteDraftProposalFromLocalStorage(originalName);
-      delete newDraftProposals[originalName];
-    }
+    const draftId = uniqueID("draft");
+    // const originalName = newDraftProposals.originalName;
+    // if (originalName !== action.payload.name) {
+    //   deleteDraftProposalFromLocalStorage(originalName);
+    //   delete newDraftProposals[originalName];
+    // }
     return { ...state,
       draftProposals: {
         ...newDraftProposals,
         newDraft: true,
         lastSubmitted: action.payload.name,
-        [action.payload.name]: action.payload
+        [draftId]: {
+          ...action.payload,
+          draftId
+        }
       }
     };
   },
@@ -75,11 +79,11 @@ const app = (state = DEFAULT_STATE, action) => (({
     }
     const newDraftProposals = state.draftProposals;
     delete newDraftProposals[action.payload.name];
-    deleteDraftProposalFromLocalStorage(action.payload.name);
     return { ...state,
       draftProposals: newDraftProposals
     };
   },
+  [act.LOAD_DRAFT_PROPOSALS]: () => ({ ...state, draftProposals: action.payload }),
   [act.REQUEST_SETSTATUS_PROPOSAL]: () => {
     if (action.error) return state;
     const { status, token } = action.payload;

@@ -8,11 +8,10 @@ import { reduxForm } from "redux-form";
 import { validate, synchronousValidation, warn } from "../validators/proposal";
 import { withRouter } from "react-router-dom";
 import { getNewProposalData } from "../lib/editors_content_backup";
-import { getDraftByNameFromLocalStorage } from "../lib/local_storage";
 
 const submitConnector = connect(
   sel.selectorMap({
-    initialValues: or(getDraftByNameFromLocalStorage, getNewProposalData),
+    initialValues: or(sel.draftProposalById, getNewProposalData),
     isLoading: or(sel.isLoadingSubmit, sel.newProposalIsRequesting),
     loggedInAsEmail: sel.loggedInAsEmail,
     userCanExecuteActions: sel.userCanExecuteActions,

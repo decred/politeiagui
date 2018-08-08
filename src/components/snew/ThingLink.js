@@ -28,7 +28,7 @@ const ThingLinkComp = ({
   domain,
   rank = 0,
   userid,
-  draftLocal,
+  draftId,
   //score,
   //downs,
   //ups,
@@ -127,12 +127,12 @@ const ThingLinkComp = ({
           }
         </span>
       </p>
-      {!draftLocal && (
+      {!draftId && (
         <p className="tagline proposal-token">
           {id} • {getProposalStatus(review_status)}
         </p>
       )}
-      {draftLocal && (
+      {draftId && (
         <div className="tagline proposal-draft">
           Saved as draft
           <span

@@ -3,6 +3,7 @@ import compose from "lodash/fp/compose";
 import eq from "lodash/fp/eq";
 import filter from "lodash/fp/filter";
 import find from "lodash/fp/find";
+import qs from "query-string";
 import { or, constant, not } from "../lib/fp";
 import {
   apiProposal,
@@ -39,6 +40,12 @@ export const getLastSubmittedProposal = state => state.app.submittedProposals.la
 export const getLastSubmittedDraftProposal = state => state.app.draftProposals.lastSubmitted;
 export const newProposalInitialValues = state => state.app.draftProposals.initialValues || {};
 export const newDraftSaved = state => state.app.draftProposals.newDraft;
+export const draftProposals = state => state && state.app && state.app.draftProposals;
+export const draftProposalById = state => {
+  const drafts = draftProposals(state);
+  const { draftid } = qs.parse(window.location.search);
+  return (draftid && drafts[draftid]) || false;
+};
 export const getAdminFilterValue = state => parseInt(state.app.adminProposalsShow, 10);
 export const getPublicFilterValue = state =>  parseInt(state.app.publicProposalsShow, 10);
 export const getUserFilterValue = state =>  parseInt(state.app.userProposalsShow, 10);
@@ -123,13 +130,14 @@ export const getVettedFilteredProposals = (state) => {
 };
 
 const getDraftProposals = (state) => {
-  const draftProposals = [];
-  Object.keys(state.app.draftProposals).forEach(key => {
-    if (["newDraft", "lastSubmitted", "originalName"].indexOf(key) === -1) {
-      draftProposals.push(state.app.draftProposals[key]);
-    }
-  });
-  return draftProposals;
+  const draftsObj = draftProposals(state) || {};
+  const drafts = Object.keys(draftsObj)
+    .filter(key =>
+      ["newDraft", "lastSubmitted", "originalName"].indexOf(key) === -1
+    )
+    .map(key => draftsObj[key]);
+
+  return drafts;
 };
 
 export const getUserProposals = (state) => {

@@ -9,7 +9,7 @@ import * as sel from "../selectors";
 import act from "./methods";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 import { onLogout, cleanErrors } from "./api";
-import { loadStateLocalStorage } from "../lib/local_storage";
+import { loadStateLocalStorage, stateKey } from "../lib/local_storage";
 import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_NOT_STARTED,
@@ -39,6 +39,12 @@ export const onSaveDraftProposal = ({ name, description, files }) =>
 
 export const onSetDraftProposal = ({ name }) =>
   act.SET_DRAFT_PROPOSAL({ name: name.trim() });
+
+export const onLoadDraftProposals = (email) => {
+  const stateFromLS = loadStateLocalStorage(email);
+  const drafts = sel.draftProposals(stateFromLS) || {};
+  return act.LOAD_DRAFT_PROPOSALS(drafts);
+};
 
 export const onDeleteDraftProposal = ({ name }) =>
   act.DELETE_DRAFT_PROPOSAL({ name });
@@ -81,16 +87,24 @@ export const onSubmitComment = (...args) =>
       .then(() => dispatch(onSetReplyParent()));
 
 export const onLocalStorageChange = (event) => (dispatch, getState) => {
-  const apiMe = get(getState(), ["api", "me"], undefined);
-  const apiMeResponse = get(apiMe, "response", undefined);
+  const state = getState();
+  const email = sel.loggedInAsEmail(state);
+
+  if(!email || event.key !== stateKey(email)) {
+    return;
+  }
+
+  const apiMeResponse =  sel.apiMeResponse(state);
+
   try {
-    const state = JSON.parse(event.newValue);
-    const apiMeFromStorage = get(loadStateLocalStorage(), ["api", "me"], undefined);
-    const apiMeResponseFromStorage = get(apiMeFromStorage, "response", undefined);
+    const stateFromStorage = JSON.parse(event.newValue);
+    const apiMeFromStorage = get(stateFromStorage, ["api", "me"], undefined);
+    const apiMeResponseFromStorage = sel.apiMeResponse(stateFromStorage);
+
     if(apiMeResponseFromStorage && !isEqual(apiMeResponseFromStorage, apiMeResponse)) {
       dispatch(onLoadMe(apiMeFromStorage));
     }
-    else if (!state || (state && !state.api.me.response)) dispatch(onLogout());
+    else if (!stateFromStorage || (stateFromStorage && !apiMeFromStorage)) dispatch(onLogout());
   } catch(e) {
     dispatch(onLogout());
   }

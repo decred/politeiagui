@@ -16,6 +16,7 @@ export default connect(
     onInit: act.requestApiInfo,
     keyMismatchAction: act.keyMismatch,
     openModal: act.openModal,
-    setOnboardAsViewed: act.setOnboardAsViewed
+    setOnboardAsViewed: act.setOnboardAsViewed,
+    onLoadDraftProposals: act.onLoadDraftProposals
   }, dispatch)
 );
