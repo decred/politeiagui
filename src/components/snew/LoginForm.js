@@ -4,6 +4,7 @@ import Message from "../Message";
 import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
 import ErrorField from "../Form/Fields/ErrorField";
 import loginConnector from "../../connectors/login";
+import PrivacyPolicy from "./PrivacyPolicy";
 
 const LoginForm = ({
   Link,
@@ -14,6 +15,9 @@ const LoginForm = ({
   apiLoginError,
   onLogin,
   handleSubmit,
+  onShowPrivacyPolicy,
+  onHidePrivacyPolicy,
+  showPrivacyPolicy
 }) =>  loggedInAsEmail ? null : (
   <form
     action={formAction}
@@ -76,13 +80,21 @@ const LoginForm = ({
       <ButtonWithLoadingIcon
         style={{ marginRight: "0px" }}
         className="c-btn c-btn-primary c-pull-right"
-        tabIndex={5}
+        tabIndex={7}
         text="LOGIN"
         isLoading={isApiRequestingLogin} />
       <Link className="c-pull-right reset-password-link" href="/password" tabIndex={4}>
         Reset Password
       </Link>
+      <a
+        className="c-pull-right reset-password-link"
+        tabIndex={5}
+        onClick={onShowPrivacyPolicy}
+        style={{cursor: "pointer"}}>
+      Privacy Policy
+      </a>
     </div>
+    {showPrivacyPolicy && <PrivacyPolicy onHidePrivacyPolicy={onHidePrivacyPolicy} />}
     <div>
       <div className="c-alert c-alert-danger" />
     </div>
