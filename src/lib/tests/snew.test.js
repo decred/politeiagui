@@ -13,8 +13,8 @@ describe("snew tests (lib/snew)", () => {
     expect(data.author).toEqual(proposal.username);
     expect(data.authorid).toEqual(proposal.userid);
     expect(data.title).toEqual(proposal.name);
-    expect(data.permalink).toEqual(`/proposals/${PROPOSAL_TOKEN}/`);
-    expect(data.url).toEqual(`/proposals/${PROPOSAL_TOKEN}/`);
+    expect(data.permalink).toEqual(`/proposals/${PROPOSAL_TOKEN}`);
+    expect(data.url).toEqual(`/proposals/${PROPOSAL_TOKEN}`);
     expect(data.is_self).toBeTruthy();
     //test case when the proposal hasn't a name
     delete proposal.name;

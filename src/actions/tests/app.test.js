@@ -1,6 +1,7 @@
 import fetchMock from "fetch-mock";
 import * as app from "../app";
 import * as act from "../types";
+import * as ls from "../../lib/local_storage";
 import {
   onSubmitProposal,
   onChangeUsername,
@@ -20,12 +21,25 @@ describe("test app actions (actions/app.js)", () => {
     api: {
       me: {
         response: {
-          csrfToken: FAKE_CSRF
+          csrfToken: FAKE_CSRF,
+          email: "foo@bar.com",
+          username: "foobar"
         }
       },
       init: {
         response: {
           csrfToken: FAKE_CSRF
+        }
+      }
+    },
+    app: {
+      draftProposals: {
+        draft_id: {
+          draftid: "draft_id",
+          name: "test",
+          description: "Description",
+          files: [],
+          timestamp: Date.now() / 1000
         }
       }
     }
@@ -172,12 +186,37 @@ describe("test app actions (actions/app.js)", () => {
       ], done);
   });
 
-  test("on local storage change action", async () => {
-    //invalid local storage event leads to logout
-    expect(app.onLocalStorageChange(undefined))
-      .toDispatchActionsWithState(MOCK_STATE, [
-        onLogout()
+  test("on save draft proposal action", () => {
+    expect(app.onSaveDraftProposal(FAKE_PROPOSAL))
+      .toDispatchActions([
+        {
+          type: act.SAVE_DRAFT_PROPOSAL,
+          payload: { name: FAKE_PROPOSAL.name }
+        }
       ], done);
+  });
+
+  test("on load draft proposals", () => {
+    const { email } = MOCK_STATE.api.me.response;
+    ls.handleSaveStateToLocalStorage(MOCK_STATE);
+    expect(app.onLoadDraftProposals(email))
+      .toDispatchActions([
+        {
+          type: act.LOAD_DRAFT_PROPOSALS,
+          payload: MOCK_STATE.app.draftProposals
+        }
+      ], done);
+  });
+
+  test("on delete draft proposal", () => {
+    const id = "draft_id";
+    expect(app.onDeleteDraftProposal(id))
+      .toDispatchActions([
+        { type: act.DELETE_DRAFT_PROPOSAL, payload: id }
+      ], done);
+  });
+
+  test("on local storage change action", async () => {
 
     //save if values aren't equal
     const mockedNewStorageStateValue = {
@@ -190,25 +229,37 @@ describe("test app actions (actions/app.js)", () => {
       }
     };
     localStorage.setItem("state", JSON.stringify(mockedNewStorageStateValue));
-    const mockedEvent = {
-      newValue: JSON.stringify(mockedNewStorageStateValue)
-    };
+
+    const generateLSChangeEvent = (newValue, key = ls.loggedInStateKey) => ({
+      newValue,
+      key
+    });
+    let mockedEvent = generateLSChangeEvent(JSON.stringify(mockedNewStorageStateValue));
     expect(app.onLocalStorageChange(mockedEvent))
       .toDispatchActionsWithState(MOCK_STATE, [
         app.onLoadMe(mockedNewStorageStateValue.api.me)
       ], done);
 
     //equal values and undefined/falsy local storage values leads to logout
-    localStorage.removeItem("state");
-    expect(app.onLocalStorageChange({ newValue: JSON.stringify({}) }))
+    localStorage.removeItem(ls.loggedInStateKey);
+    mockedEvent = generateLSChangeEvent(JSON.stringify({}));
+    expect(app.onLocalStorageChange(mockedEvent))
       .toDispatchActionsWithState(MOCK_STATE, [
         onLogout()
       ], done);
 
-    localStorage.removeItem("state");
-    expect(app.onLocalStorageChange({ newValue: JSON.stringify(false) }))
+    localStorage.removeItem(ls.loggedInStateKey);
+    mockedEvent = generateLSChangeEvent(JSON.stringify(false));
+    expect(app.onLocalStorageChange(mockedEvent))
       .toDispatchActionsWithState(MOCK_STATE, [
         onLogout()
       ], done);
+
+    // Actions are not dispatched when the local storage event key
+    // is different from ls.loggedInStateKey
+    localStorage.removeItem(ls.loggedInStateKey);
+    mockedEvent = generateLSChangeEvent(JSON.stringify(mockedNewStorageStateValue),"any");
+    expect(app.onLocalStorageChange(mockedEvent))
+      .toDispatchActionsWithState(MOCK_STATE, [], done);
   });
 });
