@@ -25,7 +25,6 @@ const submitConnector = connect(
     newProposalError: sel.newProposalError,
     merkle: sel.newProposalMerkle,
     token: sel.newProposalToken,
-    savedDraft: sel.newDraftSaved,
     signature: sel.newProposalSignature,
     proposalCredits: sel.proposalCredits
   }),
@@ -33,9 +32,7 @@ const submitConnector = connect(
     onFetchData: act.onGetPolicy,
     onSave: act.onSaveNewProposal,
     onResetProposal: act.onResetProposal,
-    onSetDraftProposal: act.onSetDraftProposal,
     onSaveDraft: act.onSaveDraftProposal,
-    onResetDraftProposal: act.onResetDraftProposal,
   }
 );
 
@@ -45,18 +42,10 @@ class SubmitWrapper extends Component {
     this.props.policy || this.props.onFetchData();
   }
 
-  componentWillReceiveProps({ token, savedDraft, initialValues }) {
-    if (initialValues && initialValues.name) {
-      this.props.onSetDraftProposal({ name: initialValues.name });
-    }
+  componentWillReceiveProps({ token }) {
     if (token) {
       this.props.onResetProposal();
       return this.props.history.push("/proposals/" + token);
-    }
-    if (savedDraft) {
-      this.props.onResetProposal();
-      this.props.onResetDraftProposal();
-      return this.props.history.push("/user/proposals/drafts");
     }
   }
 
@@ -64,7 +53,7 @@ class SubmitWrapper extends Component {
     const Component = this.props.Component;
     return <Component {...{...this.props,
       onSave: this.onSave.bind(this),
-      onSaveDraft: this.onSaveDraft.bind(this)
+      onSaveDraft: this.onSaveDraft
     }}  />;
   }
 
@@ -73,9 +62,10 @@ class SubmitWrapper extends Component {
     return this.props.onSave(...args);
   }
 
-  onSaveDraft(...args) {
+  onSaveDraft = (...args) => {
     validate(...args);
-    return this.props.onSaveDraft(...args);
+    this.props.onSaveDraft(...args);
+    this.props.history.push("/user/proposals/drafts");
   }
 }
 

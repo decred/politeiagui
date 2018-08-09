@@ -36,22 +36,9 @@ const app = (state = DEFAULT_STATE, action) => (({
       [action.payload.censorshiprecord.token]: action.payload
     }
   }),
-  [act.SET_DRAFT_PROPOSAL]: () => (
-    { ...state,
-      draftProposals: {
-        ...state.draftProposals,
-        originalName: action.payload.name
-      }
-    }
-  ),
   [act.SAVE_DRAFT_PROPOSAL]: () => {
     const newDraftProposals = state.draftProposals;
     const draftId = uniqueID("draft");
-    // const originalName = newDraftProposals.originalName;
-    // if (originalName !== action.payload.name) {
-    //   deleteDraftProposalFromLocalStorage(originalName);
-    //   delete newDraftProposals[originalName];
-    // }
     return { ...state,
       draftProposals: {
         ...newDraftProposals,
@@ -64,21 +51,13 @@ const app = (state = DEFAULT_STATE, action) => (({
       }
     };
   },
-  [act.RESET_DRAFT_PROPOSAL]: () => (
-    { ...state,
-      draftProposals: {
-        ...state.draftProposals,
-        originalName: false,
-        newDraft: false
-      }
-    }
-  ),
   [act.DELETE_DRAFT_PROPOSAL]: () => {
-    if (!state.draftProposals[action.payload.name]) {
+    const draftId = action.payload;
+    if (!state.draftProposals[draftId]) {
       return state;
     }
     const newDraftProposals = state.draftProposals;
-    delete newDraftProposals[action.payload.name];
+    delete newDraftProposals[draftId];
     return { ...state,
       draftProposals: newDraftProposals
     };

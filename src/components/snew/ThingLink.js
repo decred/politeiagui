@@ -140,7 +140,7 @@ const ThingLinkComp = ({
             onClick={() => {
               confirmWithModal("CONFIRM_ACTION",
                 { message: "Are you sure you want to delete this draft?" }).then(
-                ok => ok && onDeleteDraftProposal({name: title})
+                ok => ok && onDeleteDraftProposal(draftId)
               );
             }}>
             <i className="fa fa-trash" />

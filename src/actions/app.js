@@ -46,8 +46,8 @@ export const onLoadDraftProposals = (email) => {
   return act.LOAD_DRAFT_PROPOSALS(drafts);
 };
 
-export const onDeleteDraftProposal = ({ name }) =>
-  act.DELETE_DRAFT_PROPOSAL({ name });
+export const onDeleteDraftProposal = (draftId) =>
+  act.DELETE_DRAFT_PROPOSAL(draftId);
 
 export const onSaveChangeUsername = ({ password, newUsername }) =>
   (dispatch, getState) =>
