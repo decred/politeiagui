@@ -71,38 +71,6 @@ const handleSaveAppDraftProposals = (state) => {
   }
 };
 
-export const deleteDraftProposalFromLocalStorage = (name) => {
-  const draftProposalsLocalStorage = get(loadStateLocalStorage(), ["app", "draftProposals"], {});
-  const nameOrLastName = name || draftProposalsLocalStorage.lastSubmitted;
-  const localStorageState = loadStateLocalStorage();
-  if (draftProposalsLocalStorage[nameOrLastName]) {
-    delete draftProposalsLocalStorage[nameOrLastName];
-    saveStateLocalStorage({
-      ...localStorageState,
-      app: {
-        draftProposals: draftProposalsLocalStorage
-      }
-    });
-  }
-};
-
-export const getDraftsProposalsFromLocalStorage = () => {
-  return get(loadStateLocalStorage(), ["app", "draftProposals"], {});
-};
-
-export const getDraftByNameFromLocalStorage = (state) => {
-  const email = loggedInAsEmail(state);
-  if(!email) {
-    return;
-  }
-  const draftName = (window.location.href.split("/new/").length > 1 &&
-    decodeURIComponent(window.location.href).split("/new/")[1].split("/")[0]);
-  if (draftName) {
-    return getDraftsProposalsFromLocalStorage()[draftName];
-  }
-  return {name : "", description: ""};
-};
-
 export const handleSaveStateToLocalStorage = (state) => {
   handleSaveApiMe(state);
   handleSaveAppDraftProposals(state);
