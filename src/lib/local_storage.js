@@ -6,7 +6,15 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { loggedInAsUsername, loggedInAsEmail } from "../selectors/api";
 
-export const stateKey = (email) => `state-${email}`;
+// Logged in state key refers to the chunck of the state which will be stored
+// in the local storage only while the user stills logged in
+export const loggedInStateKey = "state";
+
+// Persistent state key refers to the chunck of state which will persist
+// in the local storage even if the user logs out
+export const persistentStateKey = (email) => `state-${email}`;
+
+export const stateKey = (email) => email ? persistentStateKey(email) : loggedInStateKey;
 
 export const loadStateLocalStorage = (email) => {
   try {
@@ -18,7 +26,7 @@ export const loadStateLocalStorage = (email) => {
   }
 };
 
-export const saveStateLocalStorage = (state, email) => {
+export const saveStateLocalStorage = (state, email = "") => {
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem(stateKey(email), serializedState);
@@ -37,7 +45,7 @@ export const clearStateLocalStorage = (email) => {
 const handleSaveApiMe = (state) => {
   const email = loggedInAsEmail(state);
   const username = loggedInAsUsername(state);
-  const stateFromLs = loadStateLocalStorage(email) || {};
+  const stateFromLs = loadStateLocalStorage() || {};
   const apiMeFromStorage = get(stateFromLs, ["api", "me"], undefined);
   const apiMeResponseFromStorage = get(apiMeFromStorage, "response", undefined);
   const apiMe = get(state, ["api", "me"], undefined);
@@ -49,14 +57,16 @@ const handleSaveApiMe = (state) => {
   };
   if(apiMeResponse && !isEqual(apiMeResponseFromStorage, customResponse)) {
     saveStateLocalStorage(
-      set(stateFromLs, ["api", "me", "response"], customResponse),
-      email
+      set(stateFromLs, ["api", "me", "response"], customResponse)
     );
   }
 };
 
 const handleSaveAppDraftProposals = (state) => {
   const email = loggedInAsEmail(state);
+  if(!email) {
+    return;
+  }
   const stateFromLs = loadStateLocalStorage(email) || {};
   const draftProposalsFromStore = state.app.draftProposals;
   const draftProposalsLocalStorage = get(stateFromLs, ["app", "draftProposals"], {});

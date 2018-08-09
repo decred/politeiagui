@@ -9,7 +9,7 @@ import * as sel from "../selectors";
 import act from "./methods";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 import { onLogout, cleanErrors } from "./api";
-import { loadStateLocalStorage, stateKey } from "../lib/local_storage";
+import { loadStateLocalStorage, loggedInStateKey } from "../lib/local_storage";
 import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_NOT_STARTED,
@@ -88,9 +88,8 @@ export const onSubmitComment = (...args) =>
 
 export const onLocalStorageChange = (event) => (dispatch, getState) => {
   const state = getState();
-  const email = sel.loggedInAsEmail(state);
 
-  if(!email || event.key !== stateKey(email)) {
+  if(event.key !== loggedInStateKey) {
     return;
   }
 
