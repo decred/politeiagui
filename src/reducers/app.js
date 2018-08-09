@@ -38,7 +38,7 @@ const app = (state = DEFAULT_STATE, action) => (({
   }),
   [act.SAVE_DRAFT_PROPOSAL]: () => {
     const newDraftProposals = state.draftProposals;
-    const draftId = uniqueID("draft");
+    const draftId = action.payload.draftId || uniqueID("draft");
     return { ...state,
       draftProposals: {
         ...newDraftProposals,

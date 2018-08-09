@@ -34,8 +34,8 @@ export const onSaveNewProposal = ({ name, description, files }, _, props) =>
     dispatch(onSubmitProposal(props.loggedInAsEmail, props.userid, props.username, name.trim(), description, files))
       .then(() => sel.newProposalToken(getState()));
 
-export const onSaveDraftProposal = ({ name, description, files }) =>
-  act.SAVE_DRAFT_PROPOSAL({ name: name.trim(), description, files, timestamp: Date.now() / 1000 });
+export const onSaveDraftProposal = ({ name, description, files, draftId }) =>
+  act.SAVE_DRAFT_PROPOSAL({ name: name.trim(), description, files, timestamp: Date.now() / 1000, draftId });
 
 export const onSetDraftProposal = ({ name }) =>
   act.SET_DRAFT_PROPOSAL({ name: name.trim() });

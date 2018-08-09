@@ -18,7 +18,7 @@ export const proposalToT3 = ({
     name: "t3_"+censorshiprecord.token,
     review_status: status,
     created_utc: timestamp,
-    permalink: `/proposals/${censorshiprecord.token || ("new/" + name)}/`,
+    permalink: `/proposals/${censorshiprecord.token || (draftId ? `new?draftid=${draftId}` : "")}`,
     url: `/proposals/${censorshiprecord.token || (draftId ? `new?draftid=${draftId}` : "")}`,
     is_self: true,
     draftId
