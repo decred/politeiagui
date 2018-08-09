@@ -27,6 +27,14 @@ const loginConnector = connect(
 );
 
 class Wrapper extends Component {
+  state = {
+    showPrivacyPolicy: false
+  }
+
+  onTogglePrivacyPolicy  = () => this.setState({showPrivacyPolicy: !this.state.showPrivacyPolicy});
+
+  onHidePrivacyPolicy  = () => this.setState({showPrivacyPolicy: false});
+
   componentWillReceiveProps({ loggedInAsEmail, redirectedFrom, resetRedirectedFrom, history }) {
     if (loggedInAsEmail && redirectedFrom) {
       resetRedirectedFrom();
@@ -36,7 +44,14 @@ class Wrapper extends Component {
 
   render() {
     const Component = this.props.Component;
-    return <Component {...{ ...this.props, onLogin: this.onLogin.bind(this) }} />;
+    return (
+      <Component
+        {...this.state}
+        {...{ ...this.props, onLogin: this.onLogin.bind(this) }}
+        onTogglePrivacyPolicy={this.onTogglePrivacyPolicy}
+        onHidePrivacyPolicy={this.onHidePrivacyPolicy}
+      />
+    );
   }
 
   onLogin(args) {
