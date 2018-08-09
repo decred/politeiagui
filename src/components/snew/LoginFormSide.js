@@ -15,7 +15,7 @@ const LoginFormSide = ({
   formAction = "/post/login",
   onLogin,
   handleSubmit,
-  onShowPrivacyPolicy,
+  onTogglePrivacyPolicy,
   onHidePrivacyPolicy,
   showPrivacyPolicy
 }) =>
@@ -68,7 +68,7 @@ const LoginFormSide = ({
           />
           <label htmlFor="rem-login-main">remember me</label>
           <a
-            onClick={onShowPrivacyPolicy}
+            onClick={onTogglePrivacyPolicy}
             style={{marginRight: "10px", cursor: "pointer"}}>
             Privacy Policy
           </a>

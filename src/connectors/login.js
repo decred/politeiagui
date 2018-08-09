@@ -31,7 +31,7 @@ class Wrapper extends Component {
     showPrivacyPolicy: false
   }
 
-  onShowPrivacyPolicy  = () => this.setState({showPrivacyPolicy: true});
+  onTogglePrivacyPolicy  = () => this.setState({showPrivacyPolicy: !this.state.showPrivacyPolicy});
 
   onHidePrivacyPolicy  = () => this.setState({showPrivacyPolicy: false});
 
@@ -48,7 +48,7 @@ class Wrapper extends Component {
       <Component
         {...this.state}
         {...{ ...this.props, onLogin: this.onLogin.bind(this) }}
-        onShowPrivacyPolicy={this.onShowPrivacyPolicy}
+        onTogglePrivacyPolicy={this.onTogglePrivacyPolicy}
         onHidePrivacyPolicy={this.onHidePrivacyPolicy}
       />
     );

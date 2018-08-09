@@ -15,7 +15,7 @@ const LoginForm = ({
   apiLoginError,
   onLogin,
   handleSubmit,
-  onShowPrivacyPolicy,
+  onTogglePrivacyPolicy,
   onHidePrivacyPolicy,
   showPrivacyPolicy
 }) =>  loggedInAsEmail ? null : (
@@ -89,7 +89,7 @@ const LoginForm = ({
       <a
         className="c-pull-right reset-password-link"
         tabIndex={5}
-        onClick={onShowPrivacyPolicy}
+        onClick={onTogglePrivacyPolicy}
         style={{cursor: "pointer"}}>
       Privacy Policy
       </a>
