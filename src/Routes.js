@@ -48,7 +48,6 @@ class Routes extends Component {
         <Route path="/user/resend" component={ResendVerificationEmail} exact />
         <Route path="/user/resend/next" component={ResendVerificationEmailSuccess} />
         <AuthenticatedRoute path="/user/account" component={Account} exact />
-        <AuthenticatedRoute path="/proposals/new/:draftname" component={SubmitPage} />
         <AuthenticatedRoute path="/proposals/new" component={SubmitPage} />
         <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />

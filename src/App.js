@@ -43,6 +43,10 @@ class Loader extends Component {
       this.verifyUserPubkey(nextProps.loggedInAsEmail, nextProps.userPubkey);
     }
 
+    if (!this.props.loggedInAsEmail && nextProps.loggedInAsEmail) {
+      this.props.onLoadDraftProposals(nextProps.loggedInAsEmail);
+    }
+
     if(!this.props.onboardViewed && nextProps.lastLoginTime === 0){
       this.props.setOnboardAsViewed();
       this.props.openModal(ONBOARD);

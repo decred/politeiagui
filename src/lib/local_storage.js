@@ -3,12 +3,22 @@
 */
 import isEqual from "lodash/isEqual";
 import get from "lodash/get";
+import set from "lodash/set";
 import { loggedInAsUsername, loggedInAsEmail } from "../selectors/api";
-import { getLastSubmittedDraftProposal } from "../selectors/app";
 
-export const loadStateLocalStorage = () => {
+// Logged in state key refers to the chunck of the state which will be stored
+// in the local storage only while the user stills logged in
+export const loggedInStateKey = "state";
+
+// Persistent state key refers to the chunck of state which will persist
+// in the local storage even if the user logs out
+export const persistentStateKey = (email) => `state-${email}`;
+
+export const stateKey = (email) => email ? persistentStateKey(email) : loggedInStateKey;
+
+export const loadStateLocalStorage = (email) => {
   try {
-    const serializedState = localStorage.getItem("state");
+    const serializedState = localStorage.getItem(stateKey(email));
     if (!serializedState) return undefined;
     else return JSON.parse(serializedState);
   } catch (err) {
@@ -16,89 +26,59 @@ export const loadStateLocalStorage = () => {
   }
 };
 
-export const saveStateLocalStorage = state => {
+export const saveStateLocalStorage = (state, email = "") => {
   try {
     const serializedState = JSON.stringify(state);
-    localStorage.setItem("state", serializedState);
+    localStorage.setItem(stateKey(email), serializedState);
   } catch (err) {
     console.log(err);
   }
 };
 
-export const clearStateLocalStorage = () => {
-  if(localStorage.getItem("state")){
-    localStorage.setItem("state", "");
+export const clearStateLocalStorage = (email) => {
+  const key = stateKey(email);
+  if(localStorage.getItem(key)){
+    localStorage.setItem(key, "");
   }
 };
 
 const handleSaveApiMe = (state) => {
-  const apiMeFromStorage = get(loadStateLocalStorage(), ["api", "me"], undefined);
+  const email = loggedInAsEmail(state);
+  const username = loggedInAsUsername(state);
+  const stateFromLs = loadStateLocalStorage() || {};
+  const apiMeFromStorage = get(stateFromLs, ["api", "me"], undefined);
   const apiMeResponseFromStorage = get(apiMeFromStorage, "response", undefined);
   const apiMe = get(state, ["api", "me"], undefined);
   const apiMeResponse = get(apiMe, "response", undefined);
   const customResponse = {
     ...apiMeResponse,
-    username: loggedInAsUsername(state),
-    email: loggedInAsEmail(state)
+    username,
+    email
   };
   if(apiMeResponse && !isEqual(apiMeResponseFromStorage, customResponse)) {
-    saveStateLocalStorage({
-      ...loadStateLocalStorage(),
-      api: {
-        me: {
-          ...apiMe,
-          response: customResponse
-        }
-      }
-    });
+    saveStateLocalStorage(
+      set(stateFromLs, ["api", "me", "response"], customResponse)
+    );
   }
 };
 
 const handleSaveAppDraftProposals = (state) => {
+  const email = loggedInAsEmail(state);
+  if(!email) {
+    return;
+  }
+  const stateFromLs = loadStateLocalStorage(email) || {};
   const draftProposalsFromStore = state.app.draftProposals;
-  const draftProposalsLocalStorage = get(loadStateLocalStorage(), ["app", "draftProposals"], {});
-  const newDraftName = getLastSubmittedDraftProposal(state);
-  const newDraftProposal = draftProposalsFromStore[newDraftName];
-  if (newDraftName &&
-    !isEqual(newDraftProposal, draftProposalsLocalStorage[newDraftName])) {
-    saveStateLocalStorage({
-      ...loadStateLocalStorage(),
-      app: {
-        draftProposals: {
-          ...draftProposalsLocalStorage,
-          [newDraftProposal.name]: newDraftProposal
-        }
-      }
-    });
-  }
-};
+  const draftProposalsLocalStorage = get(stateFromLs, ["app", "draftProposals"], {});
 
-export const deleteDraftProposalFromLocalStorage = (name) => {
-  const draftProposalsLocalStorage = get(loadStateLocalStorage(), ["app", "draftProposals"], {});
-  const nameOrLastName = name || draftProposalsLocalStorage.lastSubmitted;
-  const localStorageState = loadStateLocalStorage();
-  if (draftProposalsLocalStorage[nameOrLastName]) {
-    delete draftProposalsLocalStorage[nameOrLastName];
-    saveStateLocalStorage({
-      ...localStorageState,
-      app: {
-        draftProposals: draftProposalsLocalStorage
-      }
-    });
+  if (draftProposalsFromStore &&
+    !isEqual(draftProposalsFromStore, draftProposalsLocalStorage)) {
+    const newValue = set(stateFromLs, ["app", "draftProposals"], draftProposalsFromStore);
+    saveStateLocalStorage(
+      newValue,
+      email
+    );
   }
-};
-
-export const getDraftsProposalsFromLocalStorage = () => {
-  return get(loadStateLocalStorage(), ["app", "draftProposals"], {});
-};
-
-export const getDraftByNameFromLocalStorage = (name) => {
-  const draftName = (window.location.href.split("/new/").length > 1 &&
-    decodeURIComponent(window.location.href).split("/new/")[1].split("/")[0]) || name;
-  if (draftName) {
-    return getDraftsProposalsFromLocalStorage()[draftName];
-  }
-  return {name : "", description: ""};
 };
 
 export const handleSaveStateToLocalStorage = (state) => {

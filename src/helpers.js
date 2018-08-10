@@ -126,3 +126,6 @@ export const getRandomColor = () => {
   }
   return color;
 };
+
+export const uniqueID = prefix =>
+  prefix + "_" + Math.random().toString(36).substr(2, 9);

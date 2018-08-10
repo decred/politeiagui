@@ -16,8 +16,8 @@ describe("save state chunks to local storage (lib/local_storage.js", () => {
     },
     app: {
       draftProposals: {
-        lastSubmitted: "test",
-        test: {
+        draft_id: {
+          draftid: "draft_id",
           name: "test",
           description: "Description",
           files: [],
@@ -27,42 +27,52 @@ describe("save state chunks to local storage (lib/local_storage.js", () => {
     }
   };
   const getFromLS = (key) => localStorage.getItem(key);
-  test("save state to local storage", () => {
+  test("save state to local storage without passing email as parameter", () => {
     ls.handleSaveStateToLocalStorage(mockState);
-    expect(getFromLS("state")).toBeTruthy();
+    expect(getFromLS(ls.loggedInStateKey)).toBeTruthy();
   });
 
   test("save draft proposal to local storage", () => {
+    const { email } = mockState.api.me.response;
+    const lsKey = ls.stateKey(email);
+
     ls.handleSaveStateToLocalStorage(mockState);
-    const drafts = ls.getDraftsProposalsFromLocalStorage();
-    expect(drafts).toBeTruthy();
-    expect(drafts["test"]).toBeTruthy();
+    expect(getFromLS(lsKey)).toBeTruthy();
+    expect(ls.loadStateLocalStorage(email)).toEqual({
+      app: mockState.app
+    });
+
+    localStorage.setItem(lsKey, "");
+    // test that without passing the email nothing will be saved
+    const copyState = JSON.parse(JSON.stringify(mockState));
+    delete copyState.api.me.response;
+    ls.handleSaveStateToLocalStorage(copyState);
+    expect(getFromLS(lsKey)).toBeFalsy();
   });
 
-  test("deletes draft proposal from local storage", () => {
-    ls.handleSaveStateToLocalStorage(mockState);
-    let drafts = ls.getDraftsProposalsFromLocalStorage();
-    expect(drafts).toBeTruthy();
-    expect(drafts["test"]).toBeTruthy();
-    ls.deleteDraftProposalFromLocalStorage("test");
-    drafts = ls.getDraftsProposalsFromLocalStorage();
-    expect(drafts["test"]).toBeFalsy();
-  });
+  test("save user info (api.me) to local storage", () => {
+    const lsKey = ls.loggedInStateKey;
 
-  test("gets draft fields from local storage", () => {
     ls.handleSaveStateToLocalStorage(mockState);
-    const draft = ls.getDraftByNameFromLocalStorage("test");
-    expect(draft).toBeTruthy();
-    expect(draft.name).toEqual("test");
-    expect(draft.description).toEqual("Description");
-    expect(draft.files.length).toEqual(0);
-    expect(draft.timestamp).toBeTruthy();
+    expect(getFromLS(lsKey)).toBeTruthy();
+    expect(ls.loadStateLocalStorage()).toEqual({
+      api: {
+        me: mockState.api.me
+      }
+    });
   });
 
   test("clear state from local storage", () => {
+    const { email } = mockState.api.me.response;
+    const lsKey1 = ls.loggedInStateKey;
+    const lsKey2 = ls.stateKey(email);
     ls.handleSaveStateToLocalStorage(mockState);
-    expect(getFromLS("state")).toBeTruthy();
+    expect(getFromLS(lsKey1)).toBeTruthy();
     ls.clearStateLocalStorage();
-    expect(getFromLS("state")).toBeFalsy();
+    expect(getFromLS(lsKey1)).toBeFalsy();
+
+    expect(getFromLS(lsKey2)).toBeTruthy();
+    ls.clearStateLocalStorage(email);
+    expect(getFromLS(lsKey2)).toBeFalsy();
   });
 });

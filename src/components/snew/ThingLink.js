@@ -28,7 +28,7 @@ const ThingLinkComp = ({
   domain,
   rank = 0,
   userid,
-  draftLocal,
+  draftId,
   //score,
   //downs,
   //ups,
@@ -127,12 +127,12 @@ const ThingLinkComp = ({
           }
         </span>
       </p>
-      {!draftLocal && (
+      {!draftId && (
         <p className="tagline proposal-token">
           {id} • {getProposalStatus(review_status)}
         </p>
       )}
-      {draftLocal && (
+      {draftId && (
         <div className="tagline proposal-draft">
           Saved as draft
           <span
@@ -140,7 +140,7 @@ const ThingLinkComp = ({
             onClick={() => {
               confirmWithModal("CONFIRM_ACTION",
                 { message: "Are you sure you want to delete this draft?" }).then(
-                ok => ok && onDeleteDraftProposal({name: title})
+                ok => ok && onDeleteDraftProposal(draftId)
               );
             }}>
             <i className="fa fa-trash" />

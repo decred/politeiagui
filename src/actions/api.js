@@ -15,7 +15,6 @@ import {
 } from "./app";
 
 export const onResetProposal = act.RESET_PROPOSAL;
-export const onResetDraftProposal = act.RESET_DRAFT_PROPOSAL;
 export const onSetEmail = act.SET_EMAIL;
 
 export const onSignup = act.REQUEST_SIGNUP_CONFIRMATION;

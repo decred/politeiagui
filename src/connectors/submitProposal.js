@@ -8,11 +8,10 @@ import { reduxForm } from "redux-form";
 import { validate, synchronousValidation, warn } from "../validators/proposal";
 import { withRouter } from "react-router-dom";
 import { getNewProposalData } from "../lib/editors_content_backup";
-import { getDraftByNameFromLocalStorage } from "../lib/local_storage";
 
 const submitConnector = connect(
   sel.selectorMap({
-    initialValues: or(getDraftByNameFromLocalStorage, getNewProposalData),
+    initialValues: or(sel.draftProposalById, getNewProposalData),
     isLoading: or(sel.isLoadingSubmit, sel.newProposalIsRequesting),
     loggedInAsEmail: sel.loggedInAsEmail,
     userCanExecuteActions: sel.userCanExecuteActions,
@@ -26,17 +25,16 @@ const submitConnector = connect(
     newProposalError: sel.newProposalError,
     merkle: sel.newProposalMerkle,
     token: sel.newProposalToken,
-    savedDraft: sel.newDraftSaved,
     signature: sel.newProposalSignature,
-    proposalCredits: sel.proposalCredits
+    proposalCredits: sel.proposalCredits,
+    draftProposalById: sel.draftProposalById
   }),
   {
     onFetchData: act.onGetPolicy,
     onSave: act.onSaveNewProposal,
     onResetProposal: act.onResetProposal,
-    onSetDraftProposal: act.onSetDraftProposal,
     onSaveDraft: act.onSaveDraftProposal,
-    onResetDraftProposal: act.onResetDraftProposal,
+    onDeleteDraft: act.onDeleteDraftProposal
   }
 );
 
@@ -46,18 +44,13 @@ class SubmitWrapper extends Component {
     this.props.policy || this.props.onFetchData();
   }
 
-  componentWillReceiveProps({ token, savedDraft, initialValues }) {
-    if (initialValues && initialValues.name) {
-      this.props.onSetDraftProposal({ name: initialValues.name });
-    }
+  componentWillReceiveProps({ token }) {
     if (token) {
+      if (this.props.draftProposalById) {
+        this.props.onDeleteDraft(this.props.draftProposalById.draftId);
+      }
       this.props.onResetProposal();
       return this.props.history.push("/proposals/" + token);
-    }
-    if (savedDraft) {
-      this.props.onResetProposal();
-      this.props.onResetDraftProposal();
-      return this.props.history.push("/user/proposals/drafts");
     }
   }
 
@@ -65,7 +58,7 @@ class SubmitWrapper extends Component {
     const Component = this.props.Component;
     return <Component {...{...this.props,
       onSave: this.onSave.bind(this),
-      onSaveDraft: this.onSaveDraft.bind(this)
+      onSaveDraft: this.onSaveDraft
     }}  />;
   }
 
@@ -74,9 +67,10 @@ class SubmitWrapper extends Component {
     return this.props.onSave(...args);
   }
 
-  onSaveDraft(...args) {
+  onSaveDraft = (...args) => {
     validate(...args);
-    return this.props.onSaveDraft(...args);
+    this.props.onSaveDraft(...args);
+    this.props.history.push("/user/proposals/drafts");
   }
 }
 
@@ -89,6 +83,7 @@ export default compose(
     form: "form/proposal",
     touchOnChange: true,
     validate: synchronousValidation,
+    enableReinitialize: true,
     warn
   }),
   wrapSubmit
