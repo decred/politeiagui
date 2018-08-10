@@ -83,6 +83,7 @@ export default compose(
     form: "form/proposal",
     touchOnChange: true,
     validate: synchronousValidation,
+    enableReinitialize: true,
     warn
   }),
   wrapSubmit

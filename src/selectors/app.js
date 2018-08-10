@@ -42,7 +42,7 @@ export const draftProposals = state => state && state.app && state.app.draftProp
 export const draftProposalById = state => {
   const drafts = draftProposals(state);
   const { draftid } = qs.parse(window.location.search);
-  return (draftid && drafts[draftid]) || false;
+  return (draftid && drafts && drafts[draftid]) || false;
 };
 export const getAdminFilterValue = state => parseInt(state.app.adminProposalsShow, 10);
 export const getPublicFilterValue = state =>  parseInt(state.app.publicProposalsShow, 10);
