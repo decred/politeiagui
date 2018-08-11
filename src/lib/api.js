@@ -1,6 +1,7 @@
 import "isomorphic-fetch";
 import CryptoJS from "crypto-js";
 import * as pki from "./pki";
+import { sha3_256 } from "js-sha3";
 import get from "lodash/fp/get";
 import MerkleTree from "./merkle";
 import qs from "query-string";
@@ -23,6 +24,8 @@ const getResponse = get("response");
 export const digestPayload = payload => CryptoJS
   .SHA256(arrayBufferToWordArray(base64ToArrayBuffer(payload)))
   .toString(CryptoJS.enc.Hex);
+
+export const digest = payload => sha3_256(payload);
 
 export const convertMarkdownToFile = markdown => ({
   name: "index.md",
@@ -100,7 +103,9 @@ export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, ro
 }));
 
 export const newUser = (csrf, email, username, password) => pki.myPubKeyHex(email).then(publickey =>
-  POST("/user/new", csrf, { email, username, password, publickey }).then(getResponse));
+  POST("/user/new", csrf,
+    { email, username, password: digest(password) , publickey })
+    .then(getResponse));
 
 export const verifyNewUser = searchQuery => {
   const { email, verificationtoken } = qs.parse(searchQuery);
@@ -129,15 +134,19 @@ export const userProposals = userid => {
 };
 
 export const login = (csrf, email, password) =>
-  POST("/login", csrf, { email, password }).then(getResponse);
+  POST("/login", csrf, { email, password: digest(password) }).then(getResponse);
 
 export const likeComment = (csrf, comment) => POST("/comments/like", csrf, comment).then(getResponse);
 
 export const changeUsername = (csrf, password, newusername) =>
-  POST("/user/username/change", csrf, { password, newusername }).then(getResponse);
+  POST("/user/username/change", csrf,
+    { password: digest(password), newusername }).then(getResponse);
 
 export const changePassword = (csrf, currentpassword, newpassword) =>
-  POST("/user/password/change", csrf, { currentpassword, newpassword }).then(getResponse);
+  POST("/user/password/change", csrf,
+    { currentpassword: digest(currentpassword),
+      newpassword: digest(newpassword)
+    }).then(getResponse);
 
 export const forgottenPasswordRequest = (csrf, email) =>
   POST("/user/password/reset", csrf, { email }).then(getResponse);
@@ -149,7 +158,9 @@ export const resendVerificationEmailRequest = (csrf, email) =>
     POST("/user/new/resend", csrf, { email, publickey }).then(getResponse));
 
 export const passwordResetRequest = (csrf, email, verificationtoken, newpassword) =>
-  POST("/user/password/reset", csrf, { email, verificationtoken, newpassword }).then(getResponse);
+  POST("/user/password/reset", csrf,
+    { email, verificationtoken, newpassword: digest(newpassword) })
+    .then(getResponse);
 
 export const updateKeyRequest = (csrf, publickey) =>
   POST("/user/key", csrf, { publickey }).then(getResponse);
