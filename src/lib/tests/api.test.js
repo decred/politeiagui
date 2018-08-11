@@ -481,4 +481,10 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
+  test("it correctly returns the hex encoded SHA3-256 of a string", () => {
+    expect(
+      api.digest("password")
+    ).toEqual("c0067d4af4e87f00dbac63b6156828237059172d1bbeac67427345d6a9fda484");
+  });
+
 });
