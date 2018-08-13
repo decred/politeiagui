@@ -32,7 +32,7 @@ export const DEFAULT_STATE = {
   keyMismatch: false,
 };
 
-const onReceiveSetStatus = (state, action) => {
+export const onReceiveSetStatus = (state, action) => {
   state = receive("setStatusProposal", state, action);
   if (action.error) return state;
 
@@ -73,7 +73,7 @@ const onReceiveSetStatus = (state, action) => {
   };
 };
 
-const onReceiveNewComment = (state, action) => {
+export const onReceiveNewComment = (state, action) => {
   state = receive("newComment", state, action);
   if (action.error) return state;
   return {
@@ -186,7 +186,7 @@ export const onReceiveSyncLikeComment = (state, action) => {
   };
 };
 
-const onReceiveStartVote = (state, action) => {
+export const onReceiveStartVote = (state, action) => {
   state = receive("startVote", state, action);
   const newVoteStatus = {
     token: state.startVote.payload.token,
