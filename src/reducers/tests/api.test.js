@@ -1,6 +1,7 @@
 import * as api from "../api";
 import * as act from "../../actions/types";
 import cloneDeep from "lodash/cloneDeep";
+import { DEFAULT_REQUEST_STATE } from "../util";
 import { PROPOSAL_VOTING_ACTIVE } from "../../constants";
 import { request, receive } from "../util";
 import { testReceiveReducer, testRequestReducer, testResetReducer } from "./helpers";
@@ -136,6 +137,56 @@ describe("test api reducer", () => {
     }, action));
   };
 
+  test("default tests for api reducer", () => {
+    expect(api.DEFAULT_STATE).toEqual({
+      me: DEFAULT_REQUEST_STATE,
+      init: DEFAULT_REQUEST_STATE,
+      policy: DEFAULT_REQUEST_STATE,
+      newUser: DEFAULT_REQUEST_STATE,
+      verifyNewUser: DEFAULT_REQUEST_STATE,
+      login: DEFAULT_REQUEST_STATE,
+      logout: DEFAULT_REQUEST_STATE,
+      vetted: DEFAULT_REQUEST_STATE,
+      unvetted: DEFAULT_REQUEST_STATE,
+      proposal: DEFAULT_REQUEST_STATE,
+      proposalComments: DEFAULT_REQUEST_STATE,
+      commentsvotes: DEFAULT_REQUEST_STATE,
+      userProposals: DEFAULT_REQUEST_STATE,
+      newProposal: DEFAULT_REQUEST_STATE,
+      newComment: DEFAULT_REQUEST_STATE,
+      forgottenPassword: DEFAULT_REQUEST_STATE,
+      passwordReset: DEFAULT_REQUEST_STATE,
+      changeUsername: DEFAULT_REQUEST_STATE,
+      changePassword: DEFAULT_REQUEST_STATE,
+      updateUserKey: DEFAULT_REQUEST_STATE,
+      verifyUserKey: DEFAULT_REQUEST_STATE,
+      likeComment: DEFAULT_REQUEST_STATE,
+      email: "",
+      keyMismatch: false,
+    });
+
+    expect(api.default(undefined, { type: "" })).toEqual(api.DEFAULT_STATE);
+
+    // logout action
+
+    let action = {
+      type: act.RECEIVE_LOGOUT
+    };
+
+    expect(api.default(undefined, action)).toEqual(api.DEFAULT_STATE);
+
+    // redirect from action
+
+    action = {
+      type: act.REDIRECTED_FROM,
+      payload: "account page"
+    };
+
+    expect(api.default({}, action)).toEqual({
+      login: { redirectedFrom: action.payload }
+    });
+  });
+
   test("correctly updates the state for onReceiveSyncLikeComment", () => {
     const token = "token_1";
     let commentid = "1";
@@ -227,10 +278,18 @@ describe("test api reducer", () => {
     newState = api.onReceiveNewComment(state, action);
     expectedState = addNewCommentToState(state, action);
     expect(expectedState).toEqual(newState);
+
+    const action2 = {
+      payload: "",
+      error: true
+    };
+
+    expect(api.onReceiveNewComment({}, action2)).toEqual(receive("newComment", {}, action2));
   });
 
   test("correcly updates status state for onReceiveSetStatus", () => {
     let action = {
+      type: act.RECEIVE_SETSTATUS_PROPOSAL,
       payload: {
         token: "censortoken",
         status: "vetted"
@@ -240,6 +299,13 @@ describe("test api reducer", () => {
 
     let state = request("setStatusProposal", MOCK_STATE, action);
     let newState = api.onReceiveSetStatus(state, action);
+
+    expect(api.default(state, action).proposal.response.proposal).toEqual({
+      censorshiprecord: {
+        token: "censortoken"
+      },
+      status: "vetted"
+    });
 
     // updates status to 'vetted' for the proposal with token 'censortoken'
     expect(newState.proposal.response.proposal).toEqual({
@@ -271,6 +337,7 @@ describe("test api reducer", () => {
     // doesn't update any proposal status
     expect(newState.proposal).toEqual(MOCK_STATE.proposal);
     expect(newState.unvetted.response.proposals).toEqual(MOCK_STATE.unvetted.response.proposals);
+
   });
 
   test("correcly updates state for onReceiveStartVote", () => {
@@ -415,4 +482,5 @@ describe("test api reducer", () => {
       }
     });
   });
+
 });

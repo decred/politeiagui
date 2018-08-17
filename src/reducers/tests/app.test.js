@@ -1,8 +1,7 @@
-import app from "../app";
+import app, { DEFAULT_STATE } from "../app";
 import * as act from "../../actions/types";
-import {
-  PAYWALL_STATUS_PAID
-} from "../../constants";
+import { TOP_LEVEL_COMMENT_PARENTID } from "../../lib/api";
+import { PAYWALL_STATUS_PAID } from "../../constants";
 
 describe("test app reducer", () => {
 
@@ -32,6 +31,26 @@ describe("test app reducer", () => {
 
     expect(newstate).toEqual(assertion);
   };
+
+  test("default tests for app reducer", () => {
+    let action = {
+      type: act.SET_REPLY_PARENT,
+      payload: "parentid",
+      error: false
+    };
+
+    let state = app({}, action);
+
+    expect(state.replyParent).toEqual(action.payload);
+
+    delete action.payload;
+
+    state = app({}, action);
+
+    expect(state.replyParent).toEqual(TOP_LEVEL_COMMENT_PARENTID);
+
+    expect(app(undefined, { type: "" })).toEqual(DEFAULT_STATE);
+  });
 
   test("correctly updates state for receiving new proposals", () => {
 
@@ -76,6 +95,12 @@ describe("test app reducer", () => {
       }
     });
 
+    const act3 = {
+      ...act1,
+      error: true
+    };
+
+    expect(app(MOCK_STATE, act3)).toEqual(MOCK_STATE);
   });
 
   test("correctly saves or overwrites draft proposals to state", () => {
@@ -135,7 +160,7 @@ describe("test app reducer", () => {
       error: false
     };
 
-    const state = app(MOCK_STATE, action);
+    let state = app(MOCK_STATE, action);
 
     expect(state).toEqual({
       draftProposals: {
@@ -143,10 +168,12 @@ describe("test app reducer", () => {
         lastSubmitted: "draft"
       }
     });
+
+    expect(app(state, action)).toEqual(state);
   });
 
   test("correctly set proposal status", () => {
-    const action = {
+    let action = {
       type: act.REQUEST_SETSTATUS_PROPOSAL,
       payload: {
         token: "draft",
@@ -174,6 +201,15 @@ describe("test app reducer", () => {
         }
       }
     });
+
+    action.payload.token = "random";
+
+    expect(app(state, action)).toEqual(state);
+
+    action.error = true;
+
+    expect(app(state, action)).toEqual(state);
+
   });
 
   test("correctly deals with proposal credit reducers", () => {
@@ -196,6 +232,18 @@ describe("test app reducer", () => {
     const state2 = app(state, action2);
 
     expect(state2).toEqual({ proposalCredits: action.payload - action2.payload });
+
+    const action3 = {
+      type: act.SUBTRACT_PROPOSAL_CREDITS
+    };
+
+    expect(app(state2, action3)).toEqual(state2);
+
+    const action4 = {
+      type: act.SET_PROPOSAL_CREDITS,
+    };
+
+    expect(app({}, action4)).toEqual({ proposalCredits: 0 });
   });
 
   test("correctly updates paywall status", () => {
@@ -257,6 +305,7 @@ describe("test app reducer", () => {
 
   test("correctly test reducers that only sets payload to informed key", () => {
     const reducers = [
+      { action: act.LOAD_DRAFT_PROPOSALS, key: "draftProposals" },
       { action: act.SET_PROPOSAL_APPROVED, key: "isProposalStatusApproved" },
       { action: act.CHANGE_ADMIN_FILTER_VALUE, key: "adminProposalsShow" },
       { action: act.CHANGE_PUBLIC_FILTER_VALUE, key: "publicProposalsShow" },
@@ -273,9 +322,19 @@ describe("test app reducer", () => {
         payload: { data: "any" },
         error: false
       };
-
       assertKeyEqualsPayload({}, act, obj.key);
     });
+
+    const action = {
+      type: act.RECEIVE_USERNAMES,
+      payload: { usernamesById: "many" },
+      error: false
+    };
+
+    expect(app({}, action)).toEqual({
+      usernamesById: action.payload.usernamesById
+    });
+
   });
 
 

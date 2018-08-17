@@ -58,8 +58,7 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/actions/*.{js,jsx}",
-      "src/lib/*.{js,jsx}",
+      "src/reducers/*.{js,jsx}",
       "!<rootDir>/node_modules/",
       "!<rootDir>/path/to/dir/"
     ]
