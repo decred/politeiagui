@@ -7,6 +7,8 @@ import proposalDetail from "./connectors/proposal";
 import censored from "./connectors/censoredProposals";
 import unreviewed from "./connectors/unreviewedProposals";
 import admin from "./connectors/admin";
+import newProposal from "./connectors/newProposal";
+import editProposal from "./connectors/editProposal";
 
 import Logout from "./components/LogoutPage";
 import SignupNext from "./components/SignupNextStepPage";
@@ -48,7 +50,8 @@ class Routes extends Component {
         <Route path="/user/resend" component={ResendVerificationEmail} exact />
         <Route path="/user/resend/next" component={ResendVerificationEmailSuccess} />
         <AuthenticatedRoute path="/user/account" component={Account} exact />
-        <AuthenticatedRoute path="/proposals/new" component={SubmitPage} />
+        <AuthenticatedRoute path="/proposals/new" component={newProposal(SubmitPage)} />
+        <AuthenticatedRoute path="/proposals/:token/edit" component={editProposal(SubmitPage)} />
         <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin" component={admin(ProposalListing)} />

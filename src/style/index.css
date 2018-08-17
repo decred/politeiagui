@@ -1251,3 +1251,16 @@ button.inverse {
 form div.usertext-body.may-blank-within.md-container {
   width: 100%;
 }
+
+/* helper classes */
+.right-margin-5 {
+  margin-right: 5px !important;
+}
+
+.warning-color {
+  color: #d05a15 !important;
+}
+
+.font-12 {
+  font-size: 12px !important;
+}

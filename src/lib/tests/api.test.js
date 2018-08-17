@@ -487,4 +487,17 @@ describe("api integration modules (lib/api.js)", () => {
     ).toEqual("c0067d4af4e87f00dbac63b6156828237059172d1bbeac67427345d6a9fda484");
   });
 
+
+  test("edit a proposal (api/v1/proposals/edit)", async () => {
+    const proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE]);
+    await assertPOSTOnRouteIsCalled(
+      "/api/v1/proposals/edit",
+      api.editProposal,
+      [ FAKE_CSRF, proposal ],
+      {
+        proposal
+      }
+    );
+  });
+
 });

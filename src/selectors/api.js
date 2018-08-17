@@ -199,6 +199,7 @@ export const loggedInAsUsername = or(
   compose(get("username"), apiChangeUsernameResponse),
   compose(get("username"), apiMeResponse)
 );
+
 export const isAdmin = bool(or(
   compose(get("isadmin"), apiMeResponse),
   compose(get("isadmin"), apiLoginResponse)
@@ -312,3 +313,9 @@ export const getKeyMismatch = state => state.api.keyMismatch;
 export const setStartVote = compose(get("startvote"), apiSetStartVoteResponse);
 export const editUserAction = compose(get("action"), apiEditUserPayload);
 export const lastLoginTimeFromLoginResponse = compose(get("lastlogintime"), apiLoginResponse);
+
+
+export const apiEditProposalResponse = getApiResponse("editProposal");
+export const apiEditProposalError = getApiError("editProposal");
+export const apiEditProposalPayload = getApiPayload("editProposal");
+export const editProposalToken = compose(get([ "proposal", "censorshiprecord", "token" ]), apiEditProposalResponse);

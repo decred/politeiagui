@@ -301,6 +301,29 @@ export const onSubmitProposal = (
       });
   });
 
+export const onSubmitEditedProposal = (
+  loggedInAsEmail,
+  name,
+  description,
+  files,
+  token
+) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_EDIT_PROPOSAL({ name, description, files }));
+    return Promise.resolve(api.makeProposal(name, description, files))
+      .then(proposal => api.signProposal(loggedInAsEmail, proposal))
+      .then(proposal => api.editProposal(csrf, { ...proposal, token }))
+      .then(proposal =>
+        dispatch(
+          act.RECEIVE_EDIT_PROPOSAL(proposal)
+        )
+      )
+      .catch(error => {
+        dispatch(act.RECEIVE_EDIT_PROPOSAL(null, error));
+        throw error;
+      });
+  });
+
 export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
   withCsrf((dispatch, getState, csrf) => {
     if (!loggedInAsEmail) {

@@ -1,4 +1,4 @@
-import { DEFAULT_REQUEST_STATE, request, receive, reset } from "../util";
+import { DEFAULT_REQUEST_STATE, request, receive, reset, resetMultiple } from "../util";
 
 
 export const testRequestReducer = (reducer, key, state, action) => {
@@ -45,5 +45,18 @@ export const testResetReducer = (reducer, key, state, action) => {
     [key]: DEFAULT_REQUEST_STATE
   });
 
+  expect(resetted_state).toEqual(action_state);
+};
+
+export const testResetMultipleReducer = (reducer, keys, state, action) => {
+  const resetted_state = resetMultiple(keys, state, action);
+  const action_state = reducer(state, action);
+
+  const expected_state = keys.reduce((acc, key) => ({
+    ...acc,
+    [key]: DEFAULT_REQUEST_STATE
+  }), {});
+
+  expect(resetted_state).toEqual(expected_state);
   expect(resetted_state).toEqual(action_state);
 };

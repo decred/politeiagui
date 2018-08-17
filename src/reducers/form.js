@@ -11,6 +11,12 @@ const formReducer = reducer.plugin({
       }
       resetNewProposalData();
       return undefined;
+    case act.RECEIVE_EDIT_PROPOSAL:
+      if (action.error) {
+        return state;
+      }
+      resetNewProposalData();
+      return undefined;
     case act.SAVE_DRAFT_PROPOSAL:
       resetNewProposalData();
       return undefined;

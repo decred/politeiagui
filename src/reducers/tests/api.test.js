@@ -4,7 +4,7 @@ import cloneDeep from "lodash/cloneDeep";
 import { DEFAULT_REQUEST_STATE } from "../util";
 import { PROPOSAL_VOTING_ACTIVE } from "../../constants";
 import { request, receive } from "../util";
-import { testReceiveReducer, testRequestReducer, testResetReducer } from "./helpers";
+import { testReceiveReducer, testRequestReducer, testResetReducer, testResetMultipleReducer } from "./helpers";
 
 describe("test api reducer", () => {
   const MOCK_STATE = {
@@ -159,9 +159,12 @@ describe("test api reducer", () => {
       unvetted: DEFAULT_REQUEST_STATE,
       proposal: DEFAULT_REQUEST_STATE,
       proposalComments: DEFAULT_REQUEST_STATE,
+      proposalsVoteStatus: DEFAULT_REQUEST_STATE,
+      proposalVoteStatus: DEFAULT_REQUEST_STATE,
       commentsvotes: DEFAULT_REQUEST_STATE,
       userProposals: DEFAULT_REQUEST_STATE,
       newProposal: DEFAULT_REQUEST_STATE,
+      editProposal: DEFAULT_REQUEST_STATE,
       newComment: DEFAULT_REQUEST_STATE,
       forgottenPassword: DEFAULT_REQUEST_STATE,
       passwordReset: DEFAULT_REQUEST_STATE,
@@ -522,6 +525,8 @@ describe("test api reducer", () => {
       { action: act.RECEIVE_EDIT_USER, key: "editUser", type: "receive" },
       { action: act.REQUEST_NEW_PROPOSAL, key: "newProposal", type: "request" },
       { action: act.RECEIVE_NEW_PROPOSAL, key: "newProposal", type: "receive" },
+      { action: act.REQUEST_EDIT_PROPOSAL, key: "editProposal", type: "request" },
+      { action: act.RECEIVE_EDIT_PROPOSAL, key: "editProposal", type: "receive" },
       { action: act.REQUEST_NEW_COMMENT, key: "newComment", type: "request" },
       { action: act.REQUEST_PROPOSAL_PAYWALL_DETAILS, key: "proposalPaywallDetails", type: "request" },
       { action: act.RECEIVE_PROPOSAL_PAYWALL_DETAILS, key: "proposalPaywallDetails", type: "receive" },
@@ -537,7 +542,7 @@ describe("test api reducer", () => {
       { action: act.RESET_RESEND_VERIFICATION_EMAIL, key: "resendVerificationEmail", type: "reset" },
       { action: act.REQUEST_PASSWORD_RESET_REQUEST, key: "passwordReset", type: "request" },
       { action: act.RECEIVE_PASSWORD_RESET_REQUEST, key: "passwordReset", type: "receive" },
-      { action: act.RESET_PROPOSAL, key: "newProposal", type: "reset" },
+      { action: act.RESET_PROPOSAL, key: [ "newProposal", "editProposal" ], type: "resetMultiple" },
       { action: act.RESET_REDIRECTED_FROM, key: "login", type: "reset" },
       { action: act.REQUEST_SETSTATUS_PROPOSAL, key: "setStatusProposal", type: "request" },
       { action: act.REQUEST_START_VOTE, key: "startVote", type: "request" },
@@ -554,7 +559,7 @@ describe("test api reducer", () => {
       { action: act.RECEIVE_PROPOSAL_VOTE_STATUS, key: "proposalVoteStatus", type: "receive" }
     ];
 
-    reducers.map( ({ action, key, type }) => {
+    reducers.map(({ action, key, type }) => {
       const MOCK_ACTION = {
         type: action,
         payload: "data",
@@ -570,6 +575,9 @@ describe("test api reducer", () => {
         break;
       case "reset":
         testResetReducer(api.default, key, {}, MOCK_ACTION);
+        break;
+      case "resetMultiple":
+        testResetMultipleReducer(api.default, key, {}, MOCK_ACTION);
         break;
       default:
         break;
