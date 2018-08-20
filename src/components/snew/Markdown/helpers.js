@@ -61,7 +61,7 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
 
 export const customRenderers = (filterXss, confirmWithModal) => ({
   image: ({ src, alt }) => {
-    return <a rel="nofollow" href={src}>{alt}</a>;
+    return <a rel="nofollow" onClick={(e) => verifyExternalLink(e, src, confirmWithModal)} href={src}>{alt}</a>;
   },
   link: ({ href, children }) => {
     return <a rel="nofollow" onClick={(e) => verifyExternalLink(e, href, confirmWithModal)} href={href}>{children[0]}</a>;
