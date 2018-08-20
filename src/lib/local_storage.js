@@ -46,9 +46,9 @@ const handleSaveApiMe = (state) => {
   const email = loggedInAsEmail(state);
   const username = loggedInAsUsername(state);
   const stateFromLs = loadStateLocalStorage() || {};
-  const apiMeFromStorage = get(stateFromLs, ["api", "me"], undefined);
+  const apiMeFromStorage = get(stateFromLs, [ "api", "me" ], undefined);
   const apiMeResponseFromStorage = get(apiMeFromStorage, "response", undefined);
-  const apiMe = get(state, ["api", "me"], undefined);
+  const apiMe = get(state, [ "api", "me" ], undefined);
   const apiMeResponse = get(apiMe, "response", undefined);
   const customResponse = {
     ...apiMeResponse,
@@ -57,7 +57,7 @@ const handleSaveApiMe = (state) => {
   };
   if(apiMeResponse && !isEqual(apiMeResponseFromStorage, customResponse)) {
     saveStateLocalStorage(
-      set(stateFromLs, ["api", "me", "response"], customResponse)
+      set(stateFromLs, [ "api", "me", "response" ], customResponse)
     );
   }
 };
@@ -69,11 +69,11 @@ const handleSaveAppDraftProposals = (state) => {
   }
   const stateFromLs = loadStateLocalStorage(email) || {};
   const draftProposalsFromStore = state.app.draftProposals;
-  const draftProposalsLocalStorage = get(stateFromLs, ["app", "draftProposals"], {});
+  const draftProposalsLocalStorage = get(stateFromLs, [ "app", "draftProposals" ], {});
 
   if (draftProposalsFromStore &&
     !isEqual(draftProposalsFromStore, draftProposalsLocalStorage)) {
-    const newValue = set(stateFromLs, ["app", "draftProposals"], draftProposalsFromStore);
+    const newValue = set(stateFromLs, [ "app", "draftProposals" ], draftProposalsFromStore);
     saveStateLocalStorage(
       newValue,
       email

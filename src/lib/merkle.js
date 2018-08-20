@@ -54,9 +54,9 @@ class MerkleTree {
       const right = nodes[i+1];
       let data = null;
 
-      data = Buffer.concat([left, right]);
+      data = Buffer.concat([ left, right ]);
 
-      let hash = this.hashAlgo(data);
+      const hash = this.hashAlgo(data);
 
 
       this.layers[layerIndex].push(hash);
@@ -66,7 +66,7 @@ class MerkleTree {
     if (nodes.length % 2 === 1) {
       let data = nodes[nodes.length-1];
       let hash = data;
-      data = Buffer.concat([data, data]);
+      data = Buffer.concat([ data, data ]);
       hash = this.hashAlgo(data);
 
       this.layers[layerIndex].push(hash);

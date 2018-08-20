@@ -6,7 +6,7 @@ class ForgottenPasswordPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
+      email: ""
     };
   }
 

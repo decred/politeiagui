@@ -20,11 +20,11 @@ const ButtonWithLoadingIcon = ({
           style={{
             display: "block",
             float: "left",
-            marginRight: "8px",
+            marginRight: "8px"
           }} />
       ) : null}
-      <div style={{float: "right"}}>{text}</div>
-      <div style={{clear: "both"}} />
+      <div style={{ float: "right" }}>{text}</div>
+      <div style={{ clear: "both" }} />
     </button>
   );
 };

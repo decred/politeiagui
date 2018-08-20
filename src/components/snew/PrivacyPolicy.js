@@ -1,7 +1,7 @@
 import React from "react";
 import Message from "../Message";
 
-const PrivacyPolicy = ({onHidePrivacyPolicy}) => (
+const PrivacyPolicy = ({ onHidePrivacyPolicy }) => (
   <div>
     <Message
       type="info"
@@ -16,7 +16,7 @@ const PrivacyPolicy = ({onHidePrivacyPolicy}) => (
       <a
         onClick={onHidePrivacyPolicy}
         tabIndex={6}
-        style={{cursor: "pointer"}}>
+        style={{ cursor: "pointer" }}>
         Hide
       </a>
     </Message>

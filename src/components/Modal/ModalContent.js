@@ -15,7 +15,7 @@ const mapModalTypeToContent = {
 
 const ModalContent = ({ modalData, location }) => {
   const mappedModal = mapModalTypeToContent[modalData.type];
-  return mappedModal ? mappedModal({modalData, location}) : console.log("modal not mapped");
+  return mappedModal ? mappedModal({ modalData, location }) : console.log("modal not mapped");
 };
 
 export default withRouter(ModalContent);

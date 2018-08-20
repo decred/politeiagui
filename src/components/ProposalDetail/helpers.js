@@ -5,7 +5,7 @@ const getSort = (sortOption) => {
   const mapOptionToSort = {
     [SORT_BY_NEW]: orderBy(["timestamp"], ["desc"]),
     [SORT_BY_OLD]: orderBy(["timestamp"], ["asc"]),
-    [SORT_BY_TOP]: orderBy(["resultvotes", "timestamp"], ["desc", "desc"])
+    [SORT_BY_TOP]: orderBy([ "resultvotes", "timestamp" ], [ "desc", "desc" ])
   };
 
   return mapOptionToSort[sortOption.value] || mapOptionToSort[SORT_BY_NEW];
@@ -14,7 +14,7 @@ const getSort = (sortOption) => {
 const mergeCommentsAndVotes = (comments, votes) => {
   return votes ? comments.map(c => {
     const found = votes.find((element) => element.commentid === c.commentid);
-    return found ? {...c, vote: found.action} : {...c, vote: 0};
+    return found ? { ...c, vote: found.action } : { ...c, vote: 0 };
   }) : comments;
 };
 

@@ -23,7 +23,7 @@ describe("test actions/modal.js", () => {
       });
   });
 
-  test("confirm with modal", async () => {
+  test("confirm with modal", () => {
     expect(modals.confirmWithModal(MODAL_TYPE, PAYLOAD))
       .toDispatchActions([modals.openModal()], done);
   });

@@ -90,7 +90,7 @@ const LoginForm = ({
         className="c-pull-right reset-password-link"
         tabIndex={5}
         onClick={onTogglePrivacyPolicy}
-        style={{cursor: "pointer"}}>
+        style={{ cursor: "pointer" }}>
       Privacy Policy
       </a>
     </div>

@@ -7,7 +7,7 @@ import validate from "../validators/proposal-find";
 class SearchWrapper extends Component {
   render() {
     const Component = this.props.Component;
-    return <Component {...{...this.props, onFind: this.onFind.bind(this) }} />;
+    return <Component {...{ ...this.props, onFind: this.onFind.bind(this) }} />;
   }
 
   onFind(...args) {
@@ -16,6 +16,6 @@ class SearchWrapper extends Component {
   }
 }
 
-const wrapSearch = (Component) => (props) => <SearchWrapper {...{...props, Component }} />;
+const wrapSearch = (Component) => (props) => <SearchWrapper {...{ ...props, Component }} />;
 
 export default compose(withRouter, reduxForm({ form: "form/proposal-find" }), wrapSearch);

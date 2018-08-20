@@ -1,12 +1,12 @@
-var dummyStorage = {};
+const dummyStorage = {};
 
 // Config the localStorage backend, using options set in the config.
 function _initStorage(options) {
-  var self = this;
+  const self = this;
 
-  var dbInfo = {};
+  const dbInfo = {};
   if (options) {
-    for (var i in options) {
+    for (const i in options) {
       dbInfo[i] = options[i];
     }
   }
@@ -19,14 +19,14 @@ function _initStorage(options) {
 
 
 function clear(callback) {
-  var self = this;
-  var promise = new Promise(function(resolve, reject) {
+  const self = this;
+  const promise = new Promise(function(resolve, reject) {
     self
       .ready()
       .then(function() {
-        var db = self._dbInfo.db;
+        const db = self._dbInfo.db;
 
-        for (var key in db) {
+        for (const key in db) {
           if (db.hasOwnProperty(key)) {
             delete db[key];
             // db[key] = undefined;
@@ -43,7 +43,7 @@ function clear(callback) {
 }
 
 function getItem(key, callback) {
-  var self = this;
+  const self = this;
 
   // Cast the key to a string, as that's all we can set as a key.
   if (typeof key !== "string") {
@@ -53,13 +53,13 @@ function getItem(key, callback) {
     key = String(key);
   }
 
-  var promise = new Promise(function(resolve, reject) {
+  const promise = new Promise(function(resolve, reject) {
     self
       .ready()
       .then(function() {
         try {
-          var db = self._dbInfo.db;
-          var result = db[key];
+          const db = self._dbInfo.db;
+          const result = db[key];
           resolve(result);
         } catch (e) {
           reject(e);
@@ -73,17 +73,17 @@ function getItem(key, callback) {
 }
 
 function iterate(callback) {
-  var self = this;
+  const self = this;
 
-  var promise = new Promise(function(resolve, reject) {
+  const promise = new Promise(function(resolve, reject) {
     self
       .ready()
       .then(function() {
         try {
-          var db = self._dbInfo.db;
+          const db = self._dbInfo.db;
 
-          for (var key in db) {
-            var result = db[key];
+          for (const key in db) {
+            const result = db[key];
             callback(result, key);
           }
 
@@ -100,16 +100,16 @@ function iterate(callback) {
 }
 
 function key(n, callback) {
-  var self = this;
-  var promise = new Promise(function(resolve, reject) {
+  const self = this;
+  const promise = new Promise(function(resolve, reject) {
     self
       .ready()
       .then(function() {
-        var db = self._dbInfo.db;
-        var result = null;
-        var index = 0;
+        const db = self._dbInfo.db;
+        let result = null;
+        let index = 0;
 
-        for (var key in db) {
+        for (const key in db) {
           if (db.hasOwnProperty(key) && db[key] !== undefined) {
             if (n === index) {
               result = key;
@@ -129,15 +129,15 @@ function key(n, callback) {
 }
 
 function keys(callback) {
-  var self = this;
-  var promise = new Promise(function(resolve, reject) {
+  const self = this;
+  const promise = new Promise(function(resolve, reject) {
     self
       .ready()
       .then(function() {
-        var db = self._dbInfo.db;
-        var keys = [];
+        const db = self._dbInfo.db;
+        const keys = [];
 
-        for (var key in db) {
+        for (const key in db) {
           if (db.hasOwnProperty(key)) {
             keys.push(key);
           }
@@ -153,8 +153,8 @@ function keys(callback) {
 }
 
 function length(callback) {
-  var self = this;
-  var promise = new Promise(function(resolve, reject) {
+  const self = this;
+  const promise = new Promise(function(resolve, reject) {
     self
       .keys()
       .then(function(keys) {
@@ -168,7 +168,7 @@ function length(callback) {
 }
 
 function removeItem(key, callback) {
-  var self = this;
+  const self = this;
 
   // Cast the key to a string, as that's all we can set as a key.
   if (typeof key !== "string") {
@@ -178,11 +178,11 @@ function removeItem(key, callback) {
     key = String(key);
   }
 
-  var promise = new Promise(function(resolve, reject) {
+  const promise = new Promise(function(resolve, reject) {
     self
       .ready()
       .then(function() {
-        var db = self._dbInfo.db;
+        const db = self._dbInfo.db;
         if (db.hasOwnProperty(key)) {
           delete db[key];
           // db[key] = undefined;
@@ -198,7 +198,7 @@ function removeItem(key, callback) {
 }
 
 function setItem(key, value, callback) {
-  var self = this;
+  const self = this;
 
   // Cast the key to a string, as that's all we can set as a key.
   if (typeof key !== "string") {
@@ -208,7 +208,7 @@ function setItem(key, value, callback) {
     key = String(key);
   }
 
-  var promise = new Promise(function(resolve, reject) {
+  const promise = new Promise(function(resolve, reject) {
     self
       .ready()
       .then(function() {
@@ -219,8 +219,8 @@ function setItem(key, value, callback) {
         }
 
         // Save the original value to pass to the callback.
-        var originalValue = value;
-        var db = self._dbInfo.db;
+        const originalValue = value;
+        const db = self._dbInfo.db;
         db[key] = value;
         resolve(originalValue);
       })
@@ -246,7 +246,7 @@ function executeCallback(promise, callback) {
   }
 }
 
-var dummyStorageDriver = {
+const dummyStorageDriver = {
   _driver: "dummyStorageDriver",
   _initStorage: _initStorage,
   // _supports: function() { return true; }

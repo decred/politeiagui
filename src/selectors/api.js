@@ -6,10 +6,10 @@ import { or, bool, constant, not } from "../lib/fp";
 import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED } from "../constants";
 
 
-const getIsApiRequesting = key => bool(get(["api", key, "isRequesting"]));
-const getApiPayload = key => get(["api", key, "payload"]);
-const getApiResponse = key => get(["api", key, "response"]);
-const getApiError = key => get(["api", key, "error"]);
+const getIsApiRequesting = key => bool(get([ "api", key, "isRequesting" ]));
+const getApiPayload = key => get([ "api", key, "payload" ]);
+const getApiResponse = key => get([ "api", key, "response" ]);
+const getApiError = key => get([ "api", key, "error" ]);
 
 export const isApiRequestingInit = getIsApiRequesting("init");
 const isApiRequestingPolicy = getIsApiRequesting("policy");
@@ -122,17 +122,16 @@ export const isApiRequestingUpdateProposalCredits = getIsApiRequesting("updatePr
 export const updateProposalCreditsError = getApiError("updateProposalCredits");
 const apiUserProposalCreditsResponse = getApiResponse("userProposalCredits");
 export const proposalCreditPurchases = state => {
-  let r = apiUserProposalCreditsResponse(state);
+  const r = apiUserProposalCreditsResponse(state);
   if(!r || !r.spentcredits || !r.unspentcredits) {
     return [];
   }
 
-  let purchasesMap = {};
-  [...r.spentcredits, ...r.unspentcredits].forEach(credit => {
+  const purchasesMap = {};
+  [ ...r.spentcredits, ...r.unspentcredits ].forEach(credit => {
     if(credit.paywallid in purchasesMap) {
       purchasesMap[credit.paywallid].numberPurchased++;
-    }
-    else {
+    } else {
       purchasesMap[credit.paywallid] = {
         price: credit.price / 100000000,
         datePurchased: credit.datepurchased,
@@ -142,7 +141,7 @@ export const proposalCreditPurchases = state => {
     }
   });
 
-  let purchases = Object.values(purchasesMap);
+  const purchases = Object.values(purchasesMap);
   return purchases.sort((a, b) => a.datepurchased - b.datepurchased);
 };
 export const isApiRequestingUserProposalCredits = getIsApiRequesting("userProposalCredits");
@@ -224,8 +223,7 @@ export const paywallAmount = state => {
   let paywallAmount = 0;
   if(state.api.newUser && state.api.newUser.response) {
     paywallAmount = state.api.newUser.response.paywallamount;
-  }
-  else if(state.api.me && state.api.me.response) {
+  } else if(state.api.me && state.api.me.response) {
     paywallAmount = state.api.me.response.paywallamount;
   }
 
@@ -289,7 +287,7 @@ export const unvettedProposalsIsRequesting = or(isApiRequestingInit, isApiReques
 export const unvettedProposalsError = or(apiInitError, apiUnvettedError);
 export const apiProposal = compose(get("proposal"), apiProposalResponse);
 export const proposalPayload = (state) => state.api.proposal.payload;
-export const proposalToken = compose(get(["censorshiprecord", "token"]), apiProposal);
+export const proposalToken = compose(get([ "censorshiprecord", "token" ]), apiProposal);
 export const apiProposalComments = or(compose(get("comments"), apiProposalCommentsResponse), constant([]));
 export const proposalIsRequesting = or(isApiRequestingInit, isApiRequestingProposal);
 export const proposalError = or(apiInitError, apiProposalError);
@@ -297,9 +295,9 @@ export const user = compose(get("user"), apiUserResponse);
 export const newUserResponse = bool(apiNewUserResponse);
 export const newProposalIsRequesting = isApiRequestingNewProposal;
 export const newProposalError = apiNewProposalError;
-export const newProposalMerkle = compose(get(["censorshiprecord", "merkle"]), apiNewProposalResponse);
-export const newProposalToken = compose(get(["censorshiprecord", "token"]), apiNewProposalResponse);
-export const newProposalSignature = compose(get(["censorshiprecord", "signature"]), apiNewProposalResponse);
+export const newProposalMerkle = compose(get([ "censorshiprecord", "merkle" ]), apiNewProposalResponse);
+export const newProposalToken = compose(get([ "censorshiprecord", "token" ]), apiNewProposalResponse);
+export const newProposalSignature = compose(get([ "censorshiprecord", "signature" ]), apiNewProposalResponse);
 export const newProposalName = compose(get("name"), apiNewProposalPayload);
 export const newProposalDescription = compose(get("description"), apiNewProposalPayload);
 export const newProposalFiles = compose(get("files"), apiNewProposalPayload);
@@ -307,7 +305,7 @@ export const setStatusProposal = compose(get("status"), apiSetStatusProposalResp
 export const setStatusProposalIsRequesting = isApiRequestingSetStatusProposal;
 export const setStatusProposalToken = compose(get("token"), apiSetStatusProposalPayload);
 export const setStatusProposalError = apiSetStatusProposalError;
-export const redirectedFrom = get(["api", "login", "redirectedFrom"]);
+export const redirectedFrom = get([ "api", "login", "redirectedFrom" ]);
 export const verificationToken = compose(get("verificationtoken"), apiNewUserResponse);
 export const getKeyMismatch = state => state.api.keyMismatch;
 export const setStartVote = compose(get("startvote"), apiSetStartVoteResponse);

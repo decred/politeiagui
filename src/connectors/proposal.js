@@ -11,7 +11,7 @@ const proposalConnector = connect(
   sel.selectorMap({
     token: compose(
       t => t ? t.toLowerCase() : t,
-      get(["match", "params", "token"]),
+      get([ "match", "params", "token" ]),
       arg(1)
     ),
     loggedInAsEmail: sel.loggedInAsEmail,
@@ -45,6 +45,6 @@ class Wrapper extends Component {
   }
 }
 
-const wrap = (Component) => proposalConnector(props => <Wrapper {...{...props, Component}} />);
+const wrap = (Component) => proposalConnector(props => <Wrapper {...{ ...props, Component }} />);
 export default wrap;
 

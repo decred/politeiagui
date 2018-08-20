@@ -21,7 +21,7 @@ export const CustomContent = ({
   activeVotes,
   ...props
 }) => {
-  let content = error ? (
+  const content = error ? (
     <Message
       type="error"
       header="Error loading proposals"
@@ -76,7 +76,7 @@ class Loader extends Component {
     super(props);
 
     this.state = {
-      isFetched: false,
+      isFetched: false
     };
   }
 

@@ -6,7 +6,8 @@ describe("snew tests (lib/snew)", () => {
     const { proposal } = await import(`../../../mocks/api/v1/proposals/${PROPOSAL_TOKEN}/GET.json`);
     const index = 1;
     let result = snew.formatProposalData(proposal, index);
-    let { data, kind } = result;
+    let { data } = result;
+    const { kind } = result;
     expect(kind).toEqual("t3");
     expect(data.rank).toEqual(index + 1);
     expect(data.name).toEqual(`t3_${PROPOSAL_TOKEN}`);
@@ -26,7 +27,7 @@ describe("snew tests (lib/snew)", () => {
   test("comments to T1", async() => {
     const { comments } = await import(`../../../mocks/api/v1/proposals/${PROPOSAL_TOKEN}/comments/GET.json`);
     let result = snew.commentsToT1(comments);
-    let comment = comments[0];
+    const comment = comments[0];
     let resultComment = result[0];
     const { kind, data } = resultComment;
     expect(kind).toEqual("t1");

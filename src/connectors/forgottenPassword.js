@@ -5,10 +5,10 @@ import * as act from "../actions";
 const forgottenPasswordConnector = connect(
   sel.selectorMap({
     forgottenPasswordResponse: sel.forgottenPasswordResponse,
-    isRequesting: sel.isApiRequestingForgottenPassword,
+    isRequesting: sel.isApiRequestingForgottenPassword
   }),
   {
-    onForgottenPasswordRequest: act.onForgottenPasswordRequest,
+    onForgottenPasswordRequest: act.onForgottenPasswordRequest
   }
 );
 

@@ -6,7 +6,7 @@ describe("test functional programming lib (lib/fp.js)", () => {
   const falsyFunc = () => false;
   const notFunc = (a) => !a;
   test("arg", () => {
-    const result = fp.arg(2)("a","b","c");
+    const result = fp.arg(2)("a", "b", "c");
     expect(result).toEqual("c");
   });
   test("constant", () => {
@@ -14,8 +14,8 @@ describe("test functional programming lib (lib/fp.js)", () => {
     expect(result).toEqual("a");
   });
   test("not", () => {
-    const equal = (a,b) => a === b;
-    const result = fp.not(equal)(2,2);
+    const equal = (a, b) => a === b;
+    const result = fp.not(equal)(2, 2);
     expect(result).toEqual(false);
   });
   test("bool", () => {

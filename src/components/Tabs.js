@@ -2,7 +2,7 @@ import React from "react";
 
 
 export const Tabs = ({
-  children,
+  children
 }) => (
   <div className={"tabs"}>
     {children}
@@ -16,7 +16,7 @@ export const Tab = ({
   count,
   tabId,
   selected,
-  onTabChange,
+  onTabChange
 }) => {
   let countIcon;
   if(typeof count !== "undefined") {

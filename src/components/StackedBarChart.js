@@ -52,7 +52,7 @@ const StackedBarChart = ({ data, style, displayValuesForLabel }) => {
             style={{
               ...barStyle,
               background: dr.color,
-              width: `${dr.value}%`,
+              width: `${dr.value}%`
             }}
           >
           </span>

@@ -1,7 +1,7 @@
 import React from "react";
 import Message from "../../Message";
 
-const PolicyErrors = ({errors}) => (
+const PolicyErrors = ({ errors }) => (
   <div>
     {
       errors.map((error, idx) => <Message key={idx} body={error} type="error" />)

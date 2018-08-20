@@ -7,7 +7,7 @@ const changeUsernameConnector = connect(
   sel.selectorMap({
     policy: sel.policy,
     isApiRequestingChangeUsername: or(sel.isApiRequestingInit, sel.isApiRequestingChangeUsername),
-    changeUsernameResponse: sel.apiChangeUsernameResponse,
+    changeUsernameResponse: sel.apiChangeUsernameResponse
   }),
   {
     onChangeUsername: act.onSaveChangeUsername,

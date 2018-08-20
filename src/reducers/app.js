@@ -28,7 +28,7 @@ export const DEFAULT_STATE = {
 };
 
 const app = (state = DEFAULT_STATE, action) => (({
-  [act.SET_REPLY_PARENT]: () => ({ ...state, replyParent: action.payload || TOP_LEVEL_COMMENT_PARENTID}),
+  [act.SET_REPLY_PARENT]: () => ({ ...state, replyParent: action.payload || TOP_LEVEL_COMMENT_PARENTID }),
   [act.RECEIVE_NEW_PROPOSAL]: () => action.error ? state : ({ ...state,
     submittedProposals: {
       ...state.submittedProposals,
@@ -80,9 +80,9 @@ const app = (state = DEFAULT_STATE, action) => (({
       };
     }
   },
-  [act.SET_PROPOSAL_APPROVED]: () => ({...state, isProposalStatusApproved: action.payload}),
-  [act.RECEIVE_USERNAMES]: () => ({...state, usernamesById: action.payload.usernamesById }),
-  [act.SET_VOTES_END_HEIGHT]: () => ({...state, votesEndHeight: { ...state.votesEndHeight, [action.payload.token]: action.payload.endheight }}),
+  [act.SET_PROPOSAL_APPROVED]: () => ({ ...state, isProposalStatusApproved: action.payload }),
+  [act.RECEIVE_USERNAMES]: () => ({ ...state, usernamesById: action.payload.usernamesById }),
+  [act.SET_VOTES_END_HEIGHT]: () => ({ ...state, votesEndHeight: { ...state.votesEndHeight, [action.payload.token]: action.payload.endheight } }),
   [act.REQUEST_SIGNUP_CONFIRMATION]: () => ({ ...state, isShowingSignupConfirmation: true }),
   [act.RESET_SIGNUP_CONFIRMATION]: () => ({ ...state, isShowingSignupConfirmation: false }),
   [act.CHANGE_ADMIN_FILTER_VALUE]: () => ({ ...state, adminProposalsShow: action.payload }),

@@ -69,7 +69,7 @@ export const commentsToT1 = compose(
       tree: {
         ...r.tree,
         [parentid || TOP_LEVEL_COMMENT_PARENTID]: [
-          ...(get(["tree", parentid || TOP_LEVEL_COMMENT_PARENTID], r) || []),
+          ...(get([ "tree", parentid || TOP_LEVEL_COMMENT_PARENTID ], r) || []),
           commentid
         ]
       }

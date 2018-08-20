@@ -6,10 +6,10 @@ import * as act from "../actions";
 
 const forgottenPasswordNextConnector = connect(
   sel.selectorMap({
-    email: sel.forgottenPassEmail,
+    email: sel.forgottenPassEmail
   }),
   dispatch => bindActionCreators({
-    resetForgottenPassword: act.resetForgottenPassword,
+    resetForgottenPassword: act.resetForgottenPassword
   }, dispatch)
 );
 
@@ -25,6 +25,6 @@ class Wrapper extends Component {
   }
 }
 
-const wrap = (Component) => forgottenPasswordNextConnector(props => <Wrapper {...{...props, Component}} />);
+const wrap = (Component) => forgottenPasswordNextConnector(props => <Wrapper {...{ ...props, Component }} />);
 export default wrap;
 
