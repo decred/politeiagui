@@ -18,6 +18,7 @@ before_script:
   - sh -e /etc/init.d/xvfb start
   - yarn run uidev &
   - yarn test
+  - yarn lint
   - scripts/serverUpChecker.sh
 script:
   - sh build_docker.sh
