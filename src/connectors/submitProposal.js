@@ -56,7 +56,7 @@ class SubmitWrapper extends Component {
 
   render() {
     const Component = this.props.Component;
-    return <Component {...{...this.props,
+    return <Component {...{ ...this.props,
       onSave: this.onSave.bind(this),
       onSaveDraft: this.onSaveDraft
     }}  />;
@@ -74,7 +74,7 @@ class SubmitWrapper extends Component {
   }
 }
 
-const wrapSubmit = (Component) => (props) => <SubmitWrapper {...{...props, Component }} />;
+const wrapSubmit = (Component) => (props) => <SubmitWrapper {...{ ...props, Component }} />;
 
 export default compose(
   withRouter,

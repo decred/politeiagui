@@ -10,10 +10,10 @@ const signupNextConnector = connect(
     email: sel.newUserEmail,
     isTestnet: sel.isTestNet,
     verificationToken: sel.verificationToken,
-    isRequestingVerifyNewUser: sel.isApiRequestingVerifyNewUser,
+    isRequestingVerifyNewUser: sel.isApiRequestingVerifyNewUser
   }),
   dispatch => bindActionCreators({
-    onResetNewUser: act.onResetNewUser,
+    onResetNewUser: act.onResetNewUser
   }, dispatch)
 );
 

@@ -29,7 +29,7 @@ const validate = (values, dispatch, props) => {
     const errors = values.files.reduce((acc, file) => {
       const fileValidation = isFileValid(file, props.policy);
       if (!fileValidation.valid) {
-        return [...acc, fileValidation.errorMsg];
+        return [ ...acc, fileValidation.errorMsg ];
       }
       return acc;
     }, []);

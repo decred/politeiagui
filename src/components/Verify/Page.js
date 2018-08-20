@@ -6,7 +6,7 @@ import PageLoadingIcon from "../snew/PageLoadingIcon";
 const Page = ({
   verifyNewUser,
   isRequestingVerifyNewUser,
-  verifyNewUserError,
+  verifyNewUserError
 }) => {
   return isRequestingVerifyNewUser ? (
     <PageLoadingIcon />

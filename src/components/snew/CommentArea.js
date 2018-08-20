@@ -38,7 +38,7 @@ const CommentArea = ({
             escapeClearsValue={false}
             value={commentsSortOption}
             onChange={onSetCommentsSortOption}
-            options={[SORT_BY_NEW, SORT_BY_OLD, SORT_BY_TOP]
+            options={[ SORT_BY_NEW, SORT_BY_OLD, SORT_BY_TOP ]
               .map(op => ({ value: op, label: op }))
             }
           />

@@ -5,7 +5,7 @@ export const basicAction = type =>
   (payload, error) => ({
     type,
     error: !!error,
-    payload: error ? error : payload,
+    payload: error ? error : payload
   });
 
 export const reduceTypes = types => compose(
@@ -16,7 +16,7 @@ export const callAfterMinimumWait = (callback, waitTimeMs) => {
   let args = null;
   let timedOut = false;
 
-  let revisedCallback = function() {
+  const revisedCallback = function() {
     if(!timedOut) {
       args = arguments;
       return;

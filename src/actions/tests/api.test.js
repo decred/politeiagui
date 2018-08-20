@@ -13,7 +13,7 @@ import {
   setGetSuccessResponse,
   methods,
   RANDOM_SUCCESS_RESPONSE,
-  RANDOM_ERROR_RESPONSE,
+  RANDOM_ERROR_RESPONSE
 } from "./helpers";
 import { getHumanReadableError } from "../../helpers";
 import { EDIT_USER_CLEAR_USER_PAYWALL } from "../../constants";
@@ -115,7 +115,7 @@ describe("test api actions (actions/api.js)", () => {
     await expect(api.requestApiInfo())
       .toDispatchActionsWithState(MOCK_STATE, [
         { type: act.REQUEST_INIT_SESSION, error: false },
-        { type: act.RECEIVE_INIT_SESSION, error: false, payload: { csrfToken : null } },
+        { type: act.RECEIVE_INIT_SESSION, error: false, payload: { csrfToken: null } },
         { type: act.REQUEST_ME, error: false }
       ], done);
 
@@ -128,7 +128,7 @@ describe("test api actions (actions/api.js)", () => {
       .catch((e) => {
         expect(store.getActions()).toEqual([
           { type: act.REQUEST_INIT_SESSION, error: false },
-          { type: act.RECEIVE_INIT_SESSION, error: true, payload: e },
+          { type: act.RECEIVE_INIT_SESSION, error: true, payload: e }
         ]);
       });
 
@@ -144,7 +144,7 @@ describe("test api actions (actions/api.js)", () => {
     // test it successfully handles the response and dispatch actions
     setGetSuccessResponse(path, {}, successfulResponse);
     await expect(api.onRequestMe())
-      .toDispatchActionsWithState(MOCK_STATE,[
+      .toDispatchActionsWithState(MOCK_STATE, [
         { type: act.REQUEST_ME },
         { type: act.RECEIVE_ME,
           payload: { email: FAKE_USER.email, username: FAKE_USER.username }
@@ -319,7 +319,7 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on change username action", async () => {
     const path = "/api/v1/user/username/change";
-    const params = [FAKE_USER.password, FAKE_USER.username];
+    const params = [ FAKE_USER.password, FAKE_USER.username ];
     await assertApiActionOnSuccess(
       path,
       api.onChangeUsername,
@@ -346,7 +346,7 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on change password action", async () => {
     const path = "/api/v1/user/password/change";
-    const params = [ FAKE_USER.password, "any"];
+    const params = [ FAKE_USER.password, "any" ];
     await assertApiActionOnSuccess(
       path,
       api.onChangePassword,
@@ -519,7 +519,7 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on submit proposal", async () => {
     const path = "/api/v1/proposals/new";
-    const params = [FAKE_USER.email, FAKE_USER.id, FAKE_USER.username, FAKE_PROPOSAL_NAME, FAKE_PROPOSAL_DESCRIPTION, []];
+    const params = [ FAKE_USER.email, FAKE_USER.id, FAKE_USER.username, FAKE_PROPOSAL_NAME, FAKE_PROPOSAL_DESCRIPTION, [] ];
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -551,7 +551,7 @@ describe("test api actions (actions/api.js)", () => {
   test("on submit comment action", async () => {
     const path = "/api/v1/comments/new";
     const parentId= 0;
-    const params = [FAKE_USER.email, FAKE_PROPOSAL_TOKEN, FAKE_COMMENT, parentId];
+    const params = [ FAKE_USER.email, FAKE_PROPOSAL_TOKEN, FAKE_COMMENT, parentId ];
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -584,7 +584,7 @@ describe("test api actions (actions/api.js)", () => {
     const commentid = 0;
     const up_action = 1;
     //const down_action = -1;
-    const params = [FAKE_USER.email, FAKE_PROPOSAL_TOKEN, commentid, up_action ];
+    const params = [ FAKE_USER.email, FAKE_PROPOSAL_TOKEN, commentid, up_action ];
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -618,7 +618,8 @@ describe("test api actions (actions/api.js)", () => {
           error: true,
           payload: e,
           type: act.RECEIVE_LIKE_COMMENT
-        }],
+        }
+      ],
       {},
       methods.POST
     );
@@ -653,7 +654,7 @@ describe("test api actions (actions/api.js)", () => {
   test("on verify user key", async () => {
     const path = "/api/v1/user/key/verify";
     const verificationtoken = "any";
-    const params = [FAKE_USER.email, verificationtoken];
+    const params = [ FAKE_USER.email, verificationtoken ];
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -868,7 +869,7 @@ describe("test api actions (actions/api.js)", () => {
     await assertApiActionOnSuccess(
       path,
       api.onEditUser,
-      [FAKE_USER.id, EDIT_USER_CLEAR_USER_PAYWALL],
+      [ FAKE_USER.id, EDIT_USER_CLEAR_USER_PAYWALL ],
       [
         {
           type: act.REQUEST_EDIT_USER,

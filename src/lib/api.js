@@ -34,7 +34,7 @@ export const convertMarkdownToFile = markdown => ({
 });
 
 export const makeProposal = (name, markdown, attachments = []) => ({
-  files: [convertMarkdownToFile(name + "\n" + markdown), ...(attachments || [])]
+  files: [ convertMarkdownToFile(name + "\n" + markdown), ...(attachments || []) ]
     .map(({ name, mime, payload }) => ({ name, mime, payload, digest: digestPayload(payload) }))
 });
 
@@ -47,24 +47,24 @@ export const makeLikeComment = (token, action, commentid) => ({
 });
 
 export const signProposal = (email, proposal) => pki.myPubKeyHex(email).then(publickey => {
-  let digests = proposal.files.map(x => Buffer.from(get("digest", x), "hex")).sort(Buffer.compare);
+  const digests = proposal.files.map(x => Buffer.from(get("digest", x), "hex")).sort(Buffer.compare);
   const tree = new MerkleTree(digests);
   const root = tree.getRoot().toString("hex");
   return pki.signStringHex(email, root).then(signature => ({ ...proposal, publickey, signature }));
 });
 
 export const signComment = (email, comment) => pki.myPubKeyHex(email).then(publickey =>
-  pki.signStringHex(email, [comment.token, comment.parentid, comment.comment].join(""))
+  pki.signStringHex(email, [ comment.token, comment.parentid, comment.comment ].join(""))
     .then(signature => ({ ...comment, publickey, signature })));
 
 export const signLikeComment = (email, comment) => pki.myPubKeyHex(email).then(publickey =>
-  pki.signStringHex(email, [comment.token, comment.commentid, comment.action].join(""))
+  pki.signStringHex(email, [ comment.token, comment.commentid, comment.action ].join(""))
     .then(signature => ({ ...comment, publickey, signature })));
 
 const parseResponseBody = response => {
   const contentType = response.headers.get("content-type");
   if (contentType && contentType.includes("application/json")) return response.json();
-  let err = new Error(STATUS_ERR[response.status] || "Internal server error");
+  const err = new Error(STATUS_ERR[response.status] || "Internal server error");
   err.internalError = true;
   err.statusCode = response.status;
   throw err;
@@ -72,7 +72,7 @@ const parseResponseBody = response => {
 
 export const parseResponse = response => parseResponseBody(response).then(json => {
   if (json.errorcode) {
-    let err = new Error(getHumanReadableError(json.errorcode, json.errorcontext));
+    const err = new Error(getHumanReadableError(json.errorcode, json.errorcontext));
     err.internalError = false;
     err.errorCode = json.errorcode;
     err.errorContext = json.errorcontext;
@@ -104,7 +104,7 @@ export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, ro
 
 export const newUser = (csrf, email, username, password) => pki.myPubKeyHex(email).then(publickey =>
   POST("/user/new", csrf,
-    { email, username, password: digest(password) , publickey })
+    { email, username, password: digest(password), publickey })
     .then(getResponse));
 
 export const verifyNewUser = searchQuery => {
@@ -204,16 +204,16 @@ export const startVote = (email, csrf, token) =>
           token,
           mask: 3,
           duration: 2016, // 1 week
-          options: [{
+          options: [ {
             id: "no",
             description: "Don't approve proposal",
-            bits: 1,
+            bits: 1
           },
           {
             id: "yes",
             description: "Approve proposal",
-            bits: 2,
-          }]
+            bits: 2
+          } ]
         }, signature, publickey
       }
     ))).then(getResponse);

@@ -52,8 +52,7 @@ export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
     .then(verified => {
       if(verified) {
         dispatch(act.UPDATE_USER_PAYWALL_STATUS({ status: PAYWALL_STATUS_PAID }));
-      }
-      else {
+      } else {
         setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
       }
     })
@@ -64,8 +63,8 @@ export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
 };
 
 const checkForPayment = (handler, transactions, addressToMatch, amount, txNotBefore) => {
-  for(let transaction of transactions) {
-    let txn = handler(transaction, addressToMatch, amount, txNotBefore);
+  for(const transaction of transactions) {
+    const txn = handler(transaction, addressToMatch, amount, txNotBefore);
     if(txn) {
       return txn;
     }
@@ -80,13 +79,13 @@ const checkDcrdataHandler = (transaction, addressToMatch, amount, txNotBefore) =
     return null;
   }
 
-  for (let voutData of transaction.vout) {
+  for (const voutData of transaction.vout) {
     const addresses = voutData.scriptPubKey.addresses;
     if (!addresses) {
       continue;
     }
 
-    for (let address of addresses) {
+    for (const address of addresses) {
       if (address === addressToMatch && voutData.value >= amount) {
         return {
           id: transaction.txid,
@@ -145,7 +144,7 @@ export const getLastBlockHeight = () => dispatch => {
   // try with dcrData if fail we try with insight api
   external_api.getHeightByDcrdata().then(response => {
     dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(response));
-  }).catch(err=> {
+  }).catch(err => {
     // ToDo try with insight
     console.log(err);
   });

@@ -34,7 +34,7 @@ class PasswordReset extends Component {
     return (
       <PasswordResetForm {...{
         onPasswordReset: this.onPasswordReset,
-        isRequesting: this.props.isRequesting,
+        isRequesting: this.props.isRequesting
       }} />
     );
   }
@@ -51,7 +51,7 @@ class PasswordReset extends Component {
       .onPasswordResetRequest(assign({ newpassword: props.newPassword }, this.getQueryParams()))
       .catch((error) => {
         throw new SubmissionError({
-          _error: error.message,
+          _error: error.message
         });
       });
   }

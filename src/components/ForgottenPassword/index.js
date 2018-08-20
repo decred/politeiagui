@@ -17,7 +17,7 @@ class ForgottenPassword extends Component {
     const { email } = this.props;
     const initialValues = {
       initialValues: {
-        email,
+        email
       }
     };
     return (
@@ -25,7 +25,7 @@ class ForgottenPassword extends Component {
         {...initialValues}
         {...{
           onForgottenPassword: this.onForgottenPassword,
-          isRequesting: this.props.isRequesting,
+          isRequesting: this.props.isRequesting
         }} />
     );
   }
@@ -37,7 +37,7 @@ class ForgottenPassword extends Component {
       .onForgottenPasswordRequest(props)
       .catch((error) => {
         throw new SubmissionError({
-          _error: error.message,
+          _error: error.message
         });
       });
   }

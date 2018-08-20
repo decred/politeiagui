@@ -18,12 +18,12 @@ const MarkdownHelp = ({ helpText, markdownReferenceUrl }) => (
 
 MarkdownHelp.propTypes = {
   helpText: PropTypes.string,
-  markdownReferenceUrl: PropTypes.string,
+  markdownReferenceUrl: PropTypes.string
 };
 
 MarkdownHelp.defaultProps = {
   helpText: "Markdown styling is supported",
-  markdownReferenceUrl: "http://commonmark.org/help/",
+  markdownReferenceUrl: "http://commonmark.org/help/"
 };
 
 export default MarkdownHelp;

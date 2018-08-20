@@ -5,14 +5,14 @@ import routeChangeConnector from "../../connectors/routeChange";
 import { loadStateLocalStorage } from "../../lib/local_storage";
 
 
-const noSidebar = (p1) => (p2) => <Subreddit {...{...p2, ...p1}} useSidebar={false} />;
-const withSidebar = (p1) => (p2) => <Subreddit {...{...p2, ...p1}} useSidebar={true} />;
+const noSidebar = (p1) => (p2) => <Subreddit {...{ ...p2, ...p1 }} useSidebar={false} />;
+const withSidebar = (p1) => (p2) => <Subreddit {...{ ...p2, ...p1 }} useSidebar={true} />;
 
 class CustomSubreddit extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.location.pathname !== this.props.location.pathname) {
       this.props.onRouteChange();
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
     }
     const stateFromLocalStorage = loadStateLocalStorage();
     if (stateFromLocalStorage && stateFromLocalStorage.api && stateFromLocalStorage.api.me) {

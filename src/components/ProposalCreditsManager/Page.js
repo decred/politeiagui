@@ -63,7 +63,7 @@ const ProposalCreditsPage = ({
                 the number of proposal credits you paid for, but <b>you will have to refresh
                 the browser to see them.</b>
               </p>
-              <p style={{marginTop: "24px"}}>
+              <p style={{ marginTop: "24px" }}>
                 <b>Note:</b> Make sure to only send 1 transaction to the address, and
                 also send an exact amount. Any amount that is not a multiple of{" "}
                 {proposalCreditPrice} DCR will be rounded down to the closest number

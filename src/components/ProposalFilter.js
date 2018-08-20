@@ -59,7 +59,7 @@ const userFilterOptions = [
 const mapHeaderToOptions = {
   [LIST_HEADER_UNVETTED]: adminFilterOptions,
   [LIST_HEADER_PUBLIC]: publicFilterOptions,
-  [LIST_HEADER_USER]: userFilterOptions,
+  [LIST_HEADER_USER]: userFilterOptions
 };
 
 const ProposalFilter = ({ handleChangeFilterValue, header, filterValue, proposalCounts }) => (

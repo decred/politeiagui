@@ -20,7 +20,7 @@ class ChangePassword extends Component {
     return this.props.onChangePassword(props)
       .catch((error) => {
         throw new SubmissionError({
-          _error: error.message,
+          _error: error.message
         });
       });
   }
@@ -35,7 +35,7 @@ class ChangePassword extends Component {
         <ChangePasswordForm
           {...{
             ...this.props,
-            onChangePassword: this.onChangePassword,
+            onChangePassword: this.onChangePassword
           }}
         />
       </div>

@@ -14,17 +14,17 @@ import {
   apiUnvettedProposals,
   apiVettedProposals,
   getPropVoteStatus,
-  apiUserProposals,
+  apiUserProposals
 } from "./api";
 import { globalUsernamesById } from "../actions/app";
 import { PAYWALL_STATUS_PAID, PAYWALL_STATUS_WAITING, PROPOSAL_FILTER_ALL, PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED, PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED, PROPOSAL_USER_FILTER_SUBMITTED, PROPOSAL_USER_FILTER_DRAFT } from "../constants";
 
-export const replyTo = or(get(["app", "replyParent"]), constant(0));
+export const replyTo = or(get([ "app", "replyParent" ]), constant(0));
 
 export const proposal = state => {
   const payload = proposalPayload(state);
   const submittedProposals = state.app.submittedProposals;
-  let proposal = submittedProposals[payload] || apiProposal(state) || {};
+  const proposal = submittedProposals[payload] || apiProposal(state) || {};
 
   // Cache the username for the proposal author.
   if(proposal.userid) {
@@ -77,8 +77,8 @@ export const isProposalStatusApproved = state => state.app.isProposalStatusAppro
 export const activeVotesEndHeight = state => state.app.activeVotesEndHeight;
 
 export const proposalComments = state => {
-  let comments = apiProposalComments(state);
-  for(let comment of comments) {
+  const comments = apiProposalComments(state);
+  for(const comment of comments) {
     if(comment.userid in globalUsernamesById) {
       comment.username = globalUsernamesById[comment.userid];
     }
@@ -88,9 +88,9 @@ export const proposalComments = state => {
 };
 
 export const unvettedProposals = state => {
-  let unvettedProposals = apiUnvettedProposals(state);
+  const unvettedProposals = apiUnvettedProposals(state);
   if(unvettedProposals) {
-    for(let proposal of unvettedProposals) {
+    for(const proposal of unvettedProposals) {
       globalUsernamesById[proposal.userid] = proposal.username;
     }
   }
@@ -98,9 +98,9 @@ export const unvettedProposals = state => {
 };
 
 export const vettedProposals = state => {
-  let vettedProposals = apiVettedProposals(state);
+  const vettedProposals = apiVettedProposals(state);
   if(vettedProposals) {
-    for(let proposal of vettedProposals) {
+    for(const proposal of vettedProposals) {
       globalUsernamesById[proposal.userid] = proposal.username;
     }
   }
@@ -108,8 +108,8 @@ export const vettedProposals = state => {
 };
 
 export const getUnvettedFilteredProposals = (state) => {
-  let filterValue = getAdminFilterValue(state);
-  let proposals = unvettedProposals(state);
+  const filterValue = getAdminFilterValue(state);
+  const proposals = unvettedProposals(state);
 
   if(!filterValue) {
     return proposals;
@@ -131,7 +131,7 @@ const getDraftProposals = (state) => {
   const draftsObj = draftProposals(state) || {};
   const drafts = Object.keys(draftsObj)
     .filter(key =>
-      ["newDraft", "lastSubmitted", "originalName"].indexOf(key) === -1
+      [ "newDraft", "lastSubmitted", "originalName" ].indexOf(key) === -1
     )
     .map(key => draftsObj[key]);
 
@@ -142,8 +142,7 @@ export const getUserProposals = (state) => {
   const userFilterValue = getUserFilterValue(state);
   if (userFilterValue === PROPOSAL_USER_FILTER_SUBMITTED) {
     return apiUserProposals(state);
-  }
-  else if (userFilterValue === PROPOSAL_USER_FILTER_DRAFT) {
+  } else if (userFilterValue === PROPOSAL_USER_FILTER_DRAFT) {
     return getDraftProposals(state);
   }
 
@@ -151,9 +150,9 @@ export const getUserProposals = (state) => {
 };
 
 export const getUserProposalFilterCounts = (state) => {
-  let proposalFilterCounts = {
+  const proposalFilterCounts = {
     [PROPOSAL_USER_FILTER_SUBMITTED]: apiUserProposals(state).length,
-    [PROPOSAL_USER_FILTER_DRAFT]: getDraftProposals(state).length,
+    [PROPOSAL_USER_FILTER_DRAFT]: getDraftProposals(state).length
   };
 
   proposalFilterCounts[PROPOSAL_FILTER_ALL] =
@@ -164,8 +163,8 @@ export const getUserProposalFilterCounts = (state) => {
 };
 
 export const getUnvettedProposalFilterCounts = (state) => {
-  let proposals = unvettedProposals(state);
-  let proposalFilterCounts = {};
+  const proposals = unvettedProposals(state);
+  const proposalFilterCounts = {};
 
   proposals.forEach(proposal => {
     proposalFilterCounts[proposal.status] = 1 + (proposalFilterCounts[proposal.status] || 0);
@@ -176,12 +175,12 @@ export const getUnvettedProposalFilterCounts = (state) => {
 };
 
 export const getVettedProposalFilterCounts = (state) => {
-  let proposals = vettedProposals(state);
-  let proposalFilterCounts = {};
+  const proposals = vettedProposals(state);
+  const proposalFilterCounts = {};
 
   proposals.forEach(proposal => {
-    let propVoteStatus = getPropVoteStatus(state)(proposal.censorshiprecord.token);
-    let status = propVoteStatus.status;
+    const propVoteStatus = getPropVoteStatus(state)(proposal.censorshiprecord.token);
+    const status = propVoteStatus.status;
     proposalFilterCounts[status] = 1 + (proposalFilterCounts[status] || 0);
   });
   proposalFilterCounts[PROPOSAL_FILTER_ALL] = proposals.length;

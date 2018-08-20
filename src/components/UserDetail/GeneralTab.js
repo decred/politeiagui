@@ -6,13 +6,13 @@ import {
   EDIT_USER_EXPIRE_NEW_USER_VERIFICATION,
   EDIT_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
   EDIT_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
-  EDIT_USER_UNLOCK,
+  EDIT_USER_UNLOCK
 } from "../../constants";
 
 
 const Field = ({
   label,
-  children,
+  children
 }) => (
   <div className="field">
     <label className="field-label">{label + ":"}</label>
@@ -22,7 +22,7 @@ const Field = ({
 );
 
 const UTCDate = ({
-  time,
+  time
 }) => (
   <span>{new Date(time * 1000).toUTCString()}</span>
 );
@@ -38,7 +38,7 @@ const TokenFields = ({
   userId,
   action,
   isRequesting,
-  onEditUser,
+  onEditUser
 }) => (
   <div>
     <Field label={tokenLabel}>{token}</Field>
@@ -66,7 +66,7 @@ const GeneralTab = ({
   isApiRequestingMarkUpdateKeyAsExpired,
   isApiRequestingMarkResetPasswordAsExpired,
   isApiRequestingUnlockUser,
-  onEditUser,
+  onEditUser
 }) => (
   <div className="detail-form">
     {!user.newuserverificationtoken ? (

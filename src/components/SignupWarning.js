@@ -9,7 +9,7 @@ const SignupWarning = () => {
       </p>
       <p>
         Politeia will send you a link to verify your email address, and{" "}
-        <span style={{fontWeight: "bold"}}>you must open this link in this
+        <span style={{ fontWeight: "bold" }}>you must open this link in this
         same browser</span>, because your new identity will be used
         to help verify it.
       </p>

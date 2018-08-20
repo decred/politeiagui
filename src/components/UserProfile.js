@@ -4,7 +4,7 @@ import PasswordChange from "./PasswordChange";
 import PrivateKeyIdentityManager from "./PrivateKeyIdentityManager";
 import Message from "./Message";
 
-const UpdatedKeyMessage = ({email}) => (
+const UpdatedKeyMessage = ({ email }) => (
   <span>
     Your new key pair has been requested, please check your email at{" "}
     <b>{email}</b> to verify and activate it.

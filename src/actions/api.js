@@ -35,7 +35,7 @@ export const requestApiInfo = () => (dispatch) => {
     });
 };
 
-export const onRequestMe = () => (dispatch,getState) => {
+export const onRequestMe = () => (dispatch, getState) => {
   dispatch(act.REQUEST_ME());
   return api
     .me()
@@ -58,7 +58,7 @@ export const onRequestMe = () => (dispatch,getState) => {
       }
 
       // Set the current username in the map.
-      let userId = sel.userid(getState());
+      const userId = sel.userid(getState());
       if (userId) {
         globalUsernamesById[userId] = sel.loggedInAsUsername(getState());
       }
@@ -308,7 +308,7 @@ export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
       return;
     }
     dispatch(act.REQUEST_LIKE_COMMENT({ commentid, token }));
-    dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({ token, commentid, action}));
+    dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({ token, commentid, action }));
     return Promise.resolve(api.makeLikeComment(token, action, commentid))
       .then(comment => api.signLikeComment(loggedInAsEmail, comment))
       .then(comment => api.likeComment(csrf, comment))
@@ -477,7 +477,7 @@ export const onStartVote = (loggedInAsEmail, token) =>
             return api
               .startVote(loggedInAsEmail, csrf, token)
               .then(response => {
-                dispatch(act.RECEIVE_START_VOTE({ ...response, success: true}));
+                dispatch(act.RECEIVE_START_VOTE({ ...response, success: true }));
               })
               .catch(error => {
                 dispatch(act.RECEIVE_START_VOTE(null, error));
@@ -514,7 +514,7 @@ export const onFetchProposalPaywallDetails = () => dispatch => {
 export const onUpdateProposalCredits = () => dispatch => {
   dispatch(act.REQUEST_UPDATE_PROPOSAL_CREDITS());
 
-  let dispatchAfterWaitFn = callAfterMinimumWait(response => {
+  const dispatchAfterWaitFn = callAfterMinimumWait(response => {
     dispatch(act.RECEIVE_UPDATE_PROPOSAL_CREDITS(response));
     dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
   }, 500);
@@ -530,7 +530,7 @@ export const onUpdateProposalCredits = () => dispatch => {
 export const onUserProposalCredits = () => dispatch => {
   dispatch(act.REQUEST_USER_PROPOSAL_CREDITS());
 
-  let dispatchAfterWaitFn = callAfterMinimumWait(response => {
+  const dispatchAfterWaitFn = callAfterMinimumWait(response => {
     dispatch(act.RECEIVE_USER_PROPOSAL_CREDITS(response));
     dispatch(act.SET_PROPOSAL_CREDITS(response.unspentcredits ? response.unspentcredits.length : 0));
   }, 500);

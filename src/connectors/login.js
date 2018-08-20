@@ -22,7 +22,7 @@ const loginConnector = connect(
   }),
   {
     onLogin: act.onLogin,
-    resetRedirectedFrom: act.resetRedirectedFrom,
+    resetRedirectedFrom: act.resetRedirectedFrom
   }
 );
 
@@ -31,9 +31,9 @@ class Wrapper extends Component {
     showPrivacyPolicy: false
   }
 
-  onTogglePrivacyPolicy  = () => this.setState({showPrivacyPolicy: !this.state.showPrivacyPolicy});
+  onTogglePrivacyPolicy  = () => this.setState({ showPrivacyPolicy: !this.state.showPrivacyPolicy });
 
-  onHidePrivacyPolicy  = () => this.setState({showPrivacyPolicy: false});
+  onHidePrivacyPolicy  = () => this.setState({ showPrivacyPolicy: false });
 
   componentWillReceiveProps({ loggedInAsEmail, redirectedFrom, resetRedirectedFrom, history }) {
     if (loggedInAsEmail && redirectedFrom) {
@@ -64,21 +64,19 @@ class Wrapper extends Component {
       const redirectedFrom = this.props.redirectedFrom;
       if (redirectedFrom) {
         this.props.history.push(redirectedFrom);
+      } else if (this.props.isAdmin) {
+        this.props.history.push("/admin/");
       } else {
-        if (this.props.isAdmin) {
-          this.props.history.push("/admin/");
-        } else {
-          this.props.history.push("/");
-        }
+        this.props.history.push("/");
       }
     }).catch(e => {
       throw new SubmissionError({
-        _error: e.message,
+        _error: e.message
       });
     });
   }
 }
 
-const wrap = (Component) => loginConnector((props) => <Wrapper {...{...props, Component }} />);
+const wrap = (Component) => loginConnector((props) => <Wrapper {...{ ...props, Component }} />);
 
 export default compose(withRouter, reduxForm({ form: "form/login" }), wrap);
