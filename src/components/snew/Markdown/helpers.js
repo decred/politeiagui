@@ -48,7 +48,20 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
   // if this is an external link, show confirmation dialog
   if (externalLink) {
     confirmWithModal(modalTypes.CONFIRM_ACTION, {
-      message: "This link will take you to an external website. Are you sure you want to proceed?"
+      title: "External Link Warning",
+      message: (
+        <React.Fragment>
+          <p style={{ marginBottom: "10px" }}>
+            This link will take you to an external website!
+          </p>
+          <p>
+            <strong>External link: {link}</strong>
+          </p>
+          <p style={{ marginTop: "10px" }}>
+            Are you sure you want to proceed?
+          </p>
+        </React.Fragment>
+      )
     }).then(confirm => {
       if (confirm) {
         window.location.href = link;
