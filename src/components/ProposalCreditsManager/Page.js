@@ -29,6 +29,12 @@ const ProposalCreditsPage = ({
         1 credit. Click the button below to receive instructions on how to pay for
         proposal credits.
       </p>
+      {(isApiRequestingPayWithFaucet || payWithFaucetTxId || !userCanExecuteActions) &&
+      <p>
+        <b>Note:</b> You must pay the registration fee and the public key on
+        the Politeia server must be the same from the key on your browser before you
+        can purchase proposal credits.
+      </p>}
       <ProposalCreditsSummary />
       {!proposalPaywallAddress && (
         <ButtonWithLoadingIcon
