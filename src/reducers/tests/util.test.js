@@ -7,7 +7,7 @@ describe("test util reducers (request, receive, reset)", () => {
   };
 
   test("request reducer behaving as expected", () => {
-    let action = {
+    const action = {
       payload: {
         data: "requesting data",
         status: "test"
@@ -27,10 +27,7 @@ describe("test util reducers (request, receive, reset)", () => {
       }
     });
 
-    action = {
-      ...action,
-      error: true
-    };
+    action.error = true;
 
     newState = request("apiRequestTest", MOCK_STATE, action);
 
@@ -46,7 +43,7 @@ describe("test util reducers (request, receive, reset)", () => {
   });
 
   test("receive reducer behaving as expected", () => {
-    let action = {
+    const action = {
       payload: {
         data: "receiving data",
         status: "test"
@@ -99,7 +96,7 @@ describe("test util reducers (request, receive, reset)", () => {
   });
 
   test("chained reducers updating state as expected", () => {
-    let action = {
+    const action = {
       payload: {
         data: "data",
         status: "test"

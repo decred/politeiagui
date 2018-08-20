@@ -422,7 +422,7 @@ describe("test api reducer", () => {
     const action = {
       type: act.RECEIVE_START_VOTE,
       payload: {
-        token: "token",
+        token: "token"
       },
       error: false
     };
@@ -544,7 +544,7 @@ describe("test api reducer", () => {
       { action: act.RECEIVE_PROPOSAL_VOTE_STATUS, key: "proposalVoteStatus", type: "receive" }
     ];
 
-    reducers.map( ({action, key, type}) => {
+    reducers.map( ({ action, key, type }) => {
       const MOCK_ACTION = {
         type: action,
         payload: "data",
