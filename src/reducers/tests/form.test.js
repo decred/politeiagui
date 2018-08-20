@@ -5,7 +5,7 @@ import formReducer from "../form";
 describe("test redux form reducers", () => {
 
   test("form/proposal behaving correctly", () => {
-    let action = {
+    const action = {
       type: act.RECEIVE_NEW_PROPOSAL,
       error: false
     };
@@ -23,7 +23,7 @@ describe("test redux form reducers", () => {
   });
 
   test("form/reply behaving correctly", () => {
-    let action = {
+    const action = {
       type: act.RECEIVE_NEW_COMMENT,
       error: false
     };
@@ -32,7 +32,7 @@ describe("test redux form reducers", () => {
   });
 
   test("form/change-username behaving correctly", () => {
-    let action = {
+    const action = {
       type: act.RECEIVE_CHANGE_USERNAME,
       error: false
     };
@@ -45,7 +45,7 @@ describe("test redux form reducers", () => {
   });
 
   test("form/change-password behaving correctly", () => {
-    let action = {
+    const action = {
       type: act.RECEIVE_CHANGE_PASSWORD,
       error: false
     };

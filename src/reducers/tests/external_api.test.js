@@ -64,7 +64,7 @@ describe("test external_api reducer", () => {
   });
 
   test("default tests on external_api reducer", () => {
-    expect(DEFAULT_STATE).toEqual({ payWithFaucet: { isRequesting: false, response: null, error: null }});
+    expect(DEFAULT_STATE).toEqual({ payWithFaucet: { isRequesting: false, response: null, error: null } });
 
     expect(external_api(MOCK_STATE, {})).toEqual(MOCK_STATE);
 

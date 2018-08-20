@@ -26,7 +26,10 @@ describe("test modal reducer", () => {
       }]
     });
 
-    action.type = act.CLOSE_MODAL;
+    action = {
+      ...action,
+      type: act.CLOSE_MODAL
+    };
 
     expect(modal(state, action)).toEqual({ openedModals: [] });
   });

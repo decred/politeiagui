@@ -33,7 +33,7 @@ describe("test app reducer", () => {
   };
 
   test("default tests for app reducer", () => {
-    let action = {
+    const action = {
       type: act.SET_REPLY_PARENT,
       payload: "parentid",
       error: false
@@ -160,7 +160,7 @@ describe("test app reducer", () => {
       error: false
     };
 
-    let state = app(MOCK_STATE, action);
+    const state = app(MOCK_STATE, action);
 
     expect(state).toEqual({
       draftProposals: {
@@ -173,7 +173,7 @@ describe("test app reducer", () => {
   });
 
   test("correctly set proposal status", () => {
-    let action = {
+    const action = {
       type: act.REQUEST_SETSTATUS_PROPOSAL,
       payload: {
         token: "draft",
@@ -240,7 +240,7 @@ describe("test app reducer", () => {
     expect(app(state2, action3)).toEqual(state2);
 
     const action4 = {
-      type: act.SET_PROPOSAL_CREDITS,
+      type: act.SET_PROPOSAL_CREDITS
     };
 
     expect(app({}, action4)).toEqual({ proposalCredits: 0 });

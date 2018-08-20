@@ -171,7 +171,7 @@ describe("test api reducer", () => {
       verifyUserKey: DEFAULT_REQUEST_STATE,
       likeComment: DEFAULT_REQUEST_STATE,
       email: "",
-      keyMismatch: false,
+      keyMismatch: false
     });
 
     expect(api.default(undefined, { type: "" })).toEqual(api.DEFAULT_STATE);
@@ -403,7 +403,12 @@ describe("test api reducer", () => {
       }
     ]);
 
-    action.payload.token = "misctoken";
+    action = {
+      ...action,
+      payload: {
+        token: "misctoken"
+      }
+    };
 
     state = request("setStatusProposal", MOCK_STATE, action);
     newState = api.onReceiveSetStatus(state, action);
@@ -411,11 +416,10 @@ describe("test api reducer", () => {
     // doesn't update any proposal status
     expect(newState.proposal).toEqual(MOCK_STATE.proposal);
     expect(newState.unvetted.response.proposals).toEqual(MOCK_STATE.unvetted.response.proposals);
-
   });
 
   test("correcly updates state for onReceiveStartVote", () => {
-    let action = {
+    const action = {
       type: act.RECEIVE_START_VOTE,
       payload: {
         token: "token",

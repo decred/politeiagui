@@ -10,7 +10,7 @@ describe("test reducers combination on index", () => {
 
   // smoke test for root reducer
   test("checking if all reducers needed are being combined", () => {
-    let store = createStore(rootReducer);
+    const store = createStore(rootReducer);
 
     // checks if the default state returned by a reducer on rootReducer
     // is equal to the direct return of that reducer

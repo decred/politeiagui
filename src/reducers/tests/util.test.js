@@ -27,7 +27,10 @@ describe("test util reducers (request, receive, reset)", () => {
       }
     });
 
-    action.error = true;
+    action = {
+      ...action,
+      error: true
+    };
 
     newState = request("apiRequestTest", MOCK_STATE, action);
 
