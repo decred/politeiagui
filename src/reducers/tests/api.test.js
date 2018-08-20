@@ -108,6 +108,16 @@ describe("test api reducer", () => {
     expect(newComment.resultvotes).toEqual(expResult);
     expect(newState.commentsvotes.backup).toEqual(initialState.commentsvotes.response.commentsvotes);
     expect(newState.proposalComments.backup).toEqual(initialState.proposalComments.response.comments);
+
+    const reducerState = api.default(state, { type: act.RECEIVE_SYNC_LIKE_COMMENT, payload: actionPayload });
+    const newCommentVoteR = getCommentVoteFromState(reducerState, token, commentid);
+    const newCommentR = getProposalCommentFromState(reducerState, token, commentid);
+    expect(newCommentVoteR).toEqual({ token, commentid, action: expAction });
+    expect(newCommentR.totalvotes).toEqual(expTotal);
+    expect(newCommentR.resultvotes).toEqual(expResult);
+    expect(reducerState.commentsvotes.backup).toEqual(initialState.commentsvotes.response.commentsvotes);
+    expect(reducerState.proposalComments.backup).toEqual(initialState.proposalComments.response.comments);
+
     return newState;
   };
 
@@ -168,7 +178,6 @@ describe("test api reducer", () => {
     expect(api.default(undefined, { type: "" })).toEqual(api.DEFAULT_STATE);
 
     // logout action
-
     let action = {
       type: act.RECEIVE_LOGOUT
     };
@@ -176,7 +185,6 @@ describe("test api reducer", () => {
     expect(api.default(undefined, action)).toEqual(api.DEFAULT_STATE);
 
     // redirect from action
-
     action = {
       type: act.REDIRECTED_FROM,
       payload: "account page"
@@ -184,6 +192,55 @@ describe("test api reducer", () => {
 
     expect(api.default({}, action)).toEqual({
       login: { redirectedFrom: action.payload }
+    });
+
+    // key mismatch action
+    action = {
+      type: act.KEY_MISMATCH,
+      payload: "warning msg"
+    };
+
+    expect(api.default({}, action)).toEqual({ keyMismatch: action.payload });
+
+    // load me action
+    action = {
+      type: act.LOAD_ME,
+      payload: "me data"
+    };
+
+    expect(api.default({}, action)).toEqual({ me: action.payload });
+
+    // set email action
+    action = {
+      type: act.SET_EMAIL,
+      payload: "any@any.com"
+    };
+
+    expect(api.default({}, action)).toEqual({ email: action.payload });
+
+    // clean errors action
+    action = {
+      type: act.CLEAN_ERRORS
+    };
+
+    const state = {
+      me: {
+        error: true
+      },
+      api: {
+        error: true
+      },
+      app: "test"
+    };
+
+    expect(api.default(state, action)).toEqual({
+      me: {
+        error: null
+      },
+      api: {
+        error: null
+      },
+      app: "test"
     });
   });
 
@@ -230,14 +287,17 @@ describe("test api reducer", () => {
     actionPayload.action = 1;
     let state = assertStateAfterCommentVote(MOCK_STATE, actionPayload, 1, 1, 1);
     const stateAfterReset = api.onResetSyncLikeComment(state);
-
+    const stateAfterResetR = api.default(state, { type: act.RESET_SYNC_LIKE_COMMENT });
     expect(stateAfterReset.commentsvotes.response.commentsvotes).toEqual(initialState.commentsvotes.response.commentsvotes);
     expect(stateAfterReset.proposalComments.response.comments).toEqual(initialState.proposalComments.response.comments);
+    expect(stateAfterResetR.commentsvotes.response.commentsvotes).toEqual(initialState.commentsvotes.response.commentsvotes);
+    expect(stateAfterResetR.proposalComments.response.comments).toEqual(initialState.proposalComments.response.comments);
   });
 
   test("correctly updates state for onReceiveNewComment, adds new comment and nothing else", () => {
 
     const action = {
+      type: act.RECEIVE_NEW_COMMENT,
       payload: {
         userid: "1",
         commentid: "3"
@@ -261,6 +321,9 @@ describe("test api reducer", () => {
     let newState = api.onReceiveNewComment(state, action);
     let expectedState = addNewCommentToState(state, action);
     expect(expectedState).toEqual(newState);
+
+    const reducerState = api.default(state, action);
+    expect(expectedState).toEqual(reducerState);
 
     state = {
       ...expectedState,
@@ -342,6 +405,7 @@ describe("test api reducer", () => {
 
   test("correcly updates state for onReceiveStartVote", () => {
     let action = {
+      type: act.RECEIVE_START_VOTE,
       payload: {
         token: "token",
       },
@@ -380,6 +444,11 @@ describe("test api reducer", () => {
 
     let newState = api.onReceiveStartVote(stateWithoutVotes, action);
     expect(newState.proposalsVoteStatus.response.votesstatus[0]).toEqual(newVoteStatus);
+    const reducerState = api.default(stateWithVotes, action);
+    expect(reducerState.proposalsVoteStatus.response.votesstatus).toEqual([
+      { token: "anothertoken" },
+      newVoteStatus
+    ]);
     newState = api.onReceiveStartVote(stateWithVotes, action);
     expect(newState.proposalsVoteStatus.response.votesstatus).toEqual([
       { token: "anothertoken" },
