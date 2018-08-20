@@ -138,8 +138,7 @@ describe("test api reducer", () => {
               isadmin: state.me.response.isadmin,
               totalvotes: 0,
               resultvotes: 0,
-              commentid: "3",
-              timestamp: Date.now() / 1000
+              commentid: "3"
             }
           ]
         }
@@ -320,9 +319,17 @@ describe("test api reducer", () => {
 
     let newState = api.onReceiveNewComment(state, action);
     let expectedState = addNewCommentToState(state, action);
+    for (let i = 0; i < newState.proposalComments.response.comments.length; i++) {
+      if (newState.proposalComments.response.comments[i])
+        delete newState.proposalComments.response.comments[i].timestamp;
+    }
     expect(expectedState).toEqual(newState);
 
     const reducerState = api.default(state, action);
+    for (let i = 0; i < reducerState.proposalComments.response.comments.length; i++) {
+      if (reducerState.proposalComments.response.comments[i])
+        delete reducerState.proposalComments.response.comments[i].timestamp;
+    }
     expect(expectedState).toEqual(reducerState);
 
     state = {
@@ -340,6 +347,10 @@ describe("test api reducer", () => {
 
     newState = api.onReceiveNewComment(state, action);
     expectedState = addNewCommentToState(state, action);
+    for (let i = 0; i < newState.proposalComments.response.comments.length; i++) {
+      if (newState.proposalComments.response.comments[i])
+        delete newState.proposalComments.response.comments[i].timestamp;
+    }
     expect(expectedState).toEqual(newState);
 
     const action2 = {
