@@ -48,8 +48,6 @@ export const onReceiveSetStatus = (state, action) => {
   };
   const updatedViewed = viewedProposal && updateProposalStatus(viewedProposal);
 
-  console.log("onReceiveSetStatus", { state, action, token, status });
-
   return {
     ...state,
     proposal: (viewedProposal && viewedProposal !== updatedViewed)
