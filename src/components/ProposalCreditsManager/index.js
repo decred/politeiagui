@@ -18,7 +18,7 @@ class ProposalCreditsManager extends Component {
   }
 
   onUpdateCreditsToPurchase = (event) => {
-    let numCreditsToPurchase = parseInt(event.target.value, 10);
+    const numCreditsToPurchase = parseInt(event.target.value, 10);
     if (numCreditsToPurchase < 1) {
       return;
     }
@@ -34,7 +34,7 @@ class ProposalCreditsManager extends Component {
         {...{
           ...this.props,
           numCreditsToPurchase,
-          onUpdateCreditsToPurchase,
+          onUpdateCreditsToPurchase
         }}
       />
     );

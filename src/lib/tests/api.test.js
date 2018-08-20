@@ -106,7 +106,7 @@ describe("api integration modules (lib/api.js)", () => {
     expect.assertions(1);
     const COMMENT_ID = 3;
     // make a comment with a parent Id
-    let comment = api.makeLikeComment(COMMENT_TOKEN, 1, COMMENT_ID);
+    const comment = api.makeLikeComment(COMMENT_TOKEN, 1, COMMENT_ID);
     expect(comment).toEqual({
       token: COMMENT_TOKEN,
       action: 1,
@@ -179,7 +179,7 @@ describe("api integration modules (lib/api.js)", () => {
     const PATH = "/api/";
     const MOCK_RESULT = await import(`${MOCKS_PATH}/GET.json`);
     // set csrf token header
-    fetchMock.getOnce(PATH, { body: MOCK_RESULT, headers: {"X-Csrf-Token": "notafake"} });
+    fetchMock.getOnce(PATH, { body: MOCK_RESULT, headers: { "X-Csrf-Token": "notafake" } });
     let result = await api.apiInfo();
     expect(fetchMock.called(PATH)).toBeTruthy();
     expect(result).toEqual({ ...MOCK_RESULT, csrfToken: "notafake" });
@@ -209,7 +209,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/new",
       api.newUser,
-      [FAKE_CSRF, EMAIL, USERNAME, PASSWORD]
+      [ FAKE_CSRF, EMAIL, USERNAME, PASSWORD ]
     );
   });
 
@@ -250,7 +250,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/login",
       api.login,
-      [FAKE_CSRF, EMAIL, PASSWORD]
+      [ FAKE_CSRF, EMAIL, PASSWORD ]
     );
   });
 
@@ -258,7 +258,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/username/change",
       api.changeUsername,
-      [FAKE_CSRF, PASSWORD, USERNAME]
+      [ FAKE_CSRF, PASSWORD, USERNAME ]
     );
   });
 
@@ -266,7 +266,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/password/change",
       api.changePassword,
-      [FAKE_CSRF, PASSWORD, "some_new_password"]
+      [ FAKE_CSRF, PASSWORD, "some_new_password" ]
     );
   });
 
@@ -283,7 +283,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/password/reset",
       api.forgottenPasswordRequest,
-      [FAKE_CSRF, EMAIL]
+      [ FAKE_CSRF, EMAIL ]
     );
   });
 
@@ -292,7 +292,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/password/reset",
       api.passwordResetRequest,
-      [FAKE_CSRF, EMAIL, VERIFICATION_TOKEN, "mynewpassword"]
+      [ FAKE_CSRF, EMAIL, VERIFICATION_TOKEN, "mynewpassword" ]
     );
   });
 
@@ -300,7 +300,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/new/resend",
       api.resendVerificationEmailRequest,
-      [FAKE_CSRF, EMAIL]
+      [ FAKE_CSRF, EMAIL ]
     );
   });
 
@@ -309,7 +309,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/new/resend",
       api.resendVerificationEmailRequest,
-      [FAKE_CSRF, EMAIL, VERIFICATION_TOKEN]
+      [ FAKE_CSRF, EMAIL, VERIFICATION_TOKEN ]
     );
   });
 
@@ -317,7 +317,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/key",
       api.updateKeyRequest,
-      [FAKE_CSRF, EMAIL]
+      [ FAKE_CSRF, EMAIL ]
     );
   });
 
@@ -325,7 +325,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/key/verify",
       api.verifyKeyRequest,
-      [FAKE_CSRF, EMAIL, VERIFICATION_TOKEN]
+      [ FAKE_CSRF, EMAIL, VERIFICATION_TOKEN ]
     );
   });
 
@@ -392,7 +392,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "express:/api/v1/proposals/:token/status",
       api.proposalSetStatus,
-      [EMAIL, FAKE_CSRF, PROPOSAL_TOKEN, 2]
+      [ EMAIL, FAKE_CSRF, PROPOSAL_TOKEN, 2 ]
     );
   });
 
@@ -400,7 +400,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/comments/new",
       api.newComment,
-      [FAKE_CSRF, COMMENT]
+      [ FAKE_CSRF, COMMENT ]
     );
   });
 
@@ -410,7 +410,7 @@ describe("api integration modules (lib/api.js)", () => {
     const result = await assertPOSTOnRouteIsCalled(
       "/api/v1/proposals/new",
       api.newProposal,
-      [FAKE_CSRF, proposal],
+      [ FAKE_CSRF, proposal ],
       {
         censorshiprecord: CENSORSHIP_RECORD
       }
@@ -425,7 +425,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/proposals/startvote",
       api.startVote,
-      [EMAIL, FAKE_CSRF, PROPOSAL_TOKEN, 2]
+      [ EMAIL, FAKE_CSRF, PROPOSAL_TOKEN, 2 ]
     );
   });
 
@@ -477,7 +477,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/edit",
       api.editUser,
-      [FAKE_CSRF, USER_ID, ACTION, REASON]
+      [ FAKE_CSRF, USER_ID, ACTION, REASON ]
     );
   });
 

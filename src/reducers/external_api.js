@@ -11,7 +11,7 @@ const external_api = (state = DEFAULT_STATE, action) => (({
   [act.REQUEST_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET]: () => request("payProposalWithFaucet", state, action),
   [act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET]: () => receive("payProposalWithFaucet", state, action),
   [act.REQUEST_GET_LAST_BLOCK_HEIGHT]: () => request("blockHeight", state, action),
-  [act.RECEIVE_GET_LAST_BLOCK_HEIGHT]: () => receive("blockHeight", state, action),
+  [act.RECEIVE_GET_LAST_BLOCK_HEIGHT]: () => receive("blockHeight", state, action)
 })[action.type] || (() => state))();
 
 export default external_api;

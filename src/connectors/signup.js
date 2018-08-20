@@ -22,12 +22,12 @@ const signupFormConnector = connect(
     apiNewUserError: sel.apiNewUserError,
     apiVerifyNewUserError: sel.apiVerifyNewUserError,
     isShowingSignupConfirmation: sel.isShowingSignupConfirmation,
-    csrf: sel.csrf,
+    csrf: sel.csrf
   }),
   {
     onFetchData: act.onGetPolicy,
     onSignup: act.onSignup,
-    onSignupConfirm: act.onSignupConfirm,
+    onSignupConfirm: act.onSignupConfirm
   }
 );
 
@@ -36,7 +36,7 @@ class Wrapper extends Component {
     super(props);
 
     this.state = {
-      hasFetchedPolicy: false,
+      hasFetchedPolicy: false
     };
   }
 
@@ -93,7 +93,7 @@ class Wrapper extends Component {
     if(promise) {
       return promise.catch(e => {
         throw new SubmissionError({
-          _error: e.message,
+          _error: e.message
         });
       });
     }
@@ -101,6 +101,6 @@ class Wrapper extends Component {
 
 }
 
-const wrap = (Component) => signupFormConnector((props) => <Wrapper {...{...props, Component }} />);
+const wrap = (Component) => signupFormConnector((props) => <Wrapper {...{ ...props, Component }} />);
 
 export default compose(reduxForm({ form: "form/signup" }), withRouter, wrap);

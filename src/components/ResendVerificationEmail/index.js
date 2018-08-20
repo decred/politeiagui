@@ -34,7 +34,7 @@ class ResendVerificationEmail extends Component {
     if(promise) {
       return promise.catch(e => {
         throw new SubmissionError({
-          _error: e.message,
+          _error: e.message
         });
       });
     }

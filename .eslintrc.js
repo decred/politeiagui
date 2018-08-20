@@ -50,6 +50,63 @@ module.exports = {
       "error",
       "always"
     ],
+    "no-alert": "error",
+    "no-eval": "error",
+    "no-implied-eval": "error",
+    "require-await": "error",
+    "array-bracket-newline": [
+      "error",
+      "consistent"
+    ],
+    "array-bracket-spacing": [
+      "error",
+      "always",
+      { "singleValue": false }
+    ],
+    "block-spacing": "error",
+    "brace-style": [
+      "error",
+      "1tbs",
+      { "allowSingleLine": true }
+    ],
+    "comma-dangle": [
+      "error",
+      "never"
+    ],
+    "comma-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "comma-style": [
+      "error",
+      "last"
+    ],
+    "computed-property-spacing": [
+      "error",
+      "never"
+    ],
+    "func-call-spacing": [
+      "error",
+      "never"
+    ],
+    "key-spacing": [
+      "error",
+      {
+        "beforeColon": false,
+        "afterColon": true
+      }
+    ],
+    "no-lonely-if": "error",
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "no-var": "error",
+    "prefer-const": "error",
+    "arrow-spacing": "error",
     "react/jsx-uses-vars":1,
     "react/jsx-uses-react":1,
   },

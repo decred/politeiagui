@@ -27,7 +27,7 @@ class MarkdownLiveHelper extends React.Component {
     lookForMistakes = () => {
       const { classToSelect } = this.props;
       const value = getPreviewContent(classToSelect);
-      const {findersResults, anyMistake} = applyMistakeFinders(value);
+      const { findersResults, anyMistake } = applyMistakeFinders(value);
       this.setState({
         show: anyMistake,
         findersResults
@@ -36,7 +36,7 @@ class MarkdownLiveHelper extends React.Component {
 
     renderMessages = (findersResults) => {
       return (
-        <ul style={{paddingLeft: "20px"}}>
+        <ul style={{ paddingLeft: "20px" }}>
           {
             findersResults.map((result, i) =>
               <li key={`rm-${i}`}>{result.message}</li>

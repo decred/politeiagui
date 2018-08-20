@@ -77,7 +77,7 @@ describe("test api reducer", () => {
 
   test("correctly updates the state for onReceiveSyncLikeComment", () => {
     const token = "token_1";
-    let commentid = "1";
+    const commentid = "1";
     const actionPayload = { token, commentid };
     const initialState = cloneDeep(MOCK_STATE);
 
@@ -86,7 +86,7 @@ describe("test api reducer", () => {
 
     // note: stateAux is being used only to bypass eslint
     actionPayload.action = 1;
-    let stateAux = assertStateAfterCommentVote(state, actionPayload, 0, 0, 0);
+    const stateAux = assertStateAfterCommentVote(state, actionPayload, 0, 0, 0);
 
     actionPayload.action = 1;
     state = assertStateAfterCommentVote(stateAux, actionPayload, 1, 1, 1);
@@ -109,14 +109,14 @@ describe("test api reducer", () => {
 
   });
 
-  test("correctly reset the state for onResetSyncLikeComment" , () => {
+  test("correctly reset the state for onResetSyncLikeComment", () => {
     const token = "token_1";
     const commentid = "1";
     const actionPayload = { token, commentid };
     const initialState = cloneDeep(MOCK_STATE);
 
     actionPayload.action = 1;
-    let state = assertStateAfterCommentVote(MOCK_STATE, actionPayload, 1, 1, 1);
+    const state = assertStateAfterCommentVote(MOCK_STATE, actionPayload, 1, 1, 1);
     const stateAfterReset = api.onResetSyncLikeComment(state);
 
     expect(stateAfterReset.commentsvotes.response.commentsvotes).toEqual(initialState.commentsvotes.response.commentsvotes);

@@ -9,7 +9,7 @@ const proposalDownloadConnector = connect(
     lastBlockHeight: sel.lastBlockHeight,
     isTestnet: sel.isTestNet,
     getVoteStatus: sel.getPropVoteStatus,
-    csrf: sel.csrf,
+    csrf: sel.csrf
   }),
   {
     confirmWithModal: act.confirmWithModal,

@@ -6,7 +6,7 @@ export const getProposalStatus = (proposalStatus) => get(proposalStatus, [
   "Not found",
   "Not reviewed",
   "Censored",
-  "Public",
+  "Public"
 ]);
 
 export const utoa = (str) => window.btoa(unescape(encodeURIComponent(str)));
@@ -19,13 +19,13 @@ export const atou = (str) => decodeURIComponent(escape(window.atob(str)));
 //  <proposal description>
 //
 export const getTextFromIndexMd = file => {
-  let text = atou(file.payload);
+  const text = atou(file.payload);
   return text.substring(text.indexOf("\n") + 1);
 };
 
 export const getHumanReadableError = (errorCode, errorContext = []) => {
   const genericContactMsg = "please contact Politeia administrators";
-  let errorMessages = [
+  const errorMessages = [
     "The operation returned an invalid status.",
     "The provided email address or password was invalid.",
     "The provided email address is invalid.",
@@ -84,10 +84,10 @@ export const hexToArray = hex => (new Uint8Array(hex.match(/[\da-f]{2}/gi).map(h
 
 // Copied from https://stackoverflow.com/a/21797381
 export const base64ToArrayBuffer = base64 => {
-  var binary_string =  window.atob(base64);
-  var len = binary_string.length;
-  var bytes = new Uint8Array( len );
-  for (var i = 0; i < len; i++)        {
+  const binary_string =  window.atob(base64);
+  const len = binary_string.length;
+  const bytes = new Uint8Array( len );
+  for (let i = 0; i < len; i++)        {
     bytes[i] = binary_string.charCodeAt(i);
   }
   return bytes.buffer;
@@ -95,9 +95,9 @@ export const base64ToArrayBuffer = base64 => {
 
 // Copied from https://stackoverflow.com/a/33918579
 export const arrayBufferToWordArray = ab => {
-  var i8a = new Uint8Array(ab);
-  var a = [];
-  for (var i = 0; i < i8a.length; i += 4) {
+  const i8a = new Uint8Array(ab);
+  const a = [];
+  for (let i = 0; i < i8a.length; i += 4) {
     // eslint-disable-next-line
     a.push(i8a[i] << 24 | i8a[i + 1] << 16 | i8a[i + 2] << 8 | i8a[i + 3]);
   }
@@ -121,7 +121,7 @@ export const getPasswordFieldLabel = (policy, defaultText = "Password") => {
 export const getRandomColor = () => {
   const letters = "0123456789ABCDEF";
   let color = "#3F";
-  for (var i = 0; i < 4; i++) {
+  for (let i = 0; i < 4; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;

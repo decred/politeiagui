@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as sel from "../selectors";
@@ -22,7 +22,7 @@ const userProposalsConnector = connect(
     bindActionCreators(
       {
         onFetchUserProposals: act.onFetchUserProposals,
-        onChangeFilter: act.onChangeUserFilter,
+        onChangeFilter: act.onChangeUserFilter
       },
       dispatch
     )
@@ -37,7 +37,7 @@ class Wrapper extends Component {
       history,
       match,
       onFetchUserProposals,
-      onChangeFilter,
+      onChangeFilter
     } = this.props;
 
     if (!loggedInAsEmail) history.push("/login");
@@ -45,7 +45,7 @@ class Wrapper extends Component {
     if (match.params && typeof match.params.filter !== "undefined") {
       onChangeFilter({
         "submitted": PROPOSAL_USER_FILTER_SUBMITTED,
-        "drafts": PROPOSAL_USER_FILTER_DRAFT,
+        "drafts": PROPOSAL_USER_FILTER_DRAFT
       }[match.params.filter]);
     }
   }

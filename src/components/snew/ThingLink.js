@@ -77,7 +77,7 @@ const ThingLinkComp = ({
   >
     <p className="parent" />
     {thumbnail &&
-    !["image", "default", "nsfw", "self"].find(sub => sub === thumbnail) ? (
+    ![ "image", "default", "nsfw", "self" ].find(sub => sub === thumbnail) ? (
         <Link className="thumbnail may-blank loggedin" href={url}>
           <img alt="Thumb" height={70} src={thumbnail} width={70} />
         </Link>
@@ -252,7 +252,7 @@ const ThingLinkComp = ({
                         approve
                       </button>
                     </form>
-                  </li>,
+                  </li>
                 ]
                 : <Message type="info" header="Third party review required" body="Your proposal must be reviewed by another admin."/>
               : review_status === PROPOSAL_STATUS_PUBLIC && getVoteStatus(id) &&
@@ -293,7 +293,7 @@ export const Comp = actions(ThingLinkComp);
 class ThingLink extends React.Component {
 
   componentDidMount(){
-    const {isProposalStatusApproved, history} = this.props;
+    const { isProposalStatusApproved, history } = this.props;
     if(isProposalStatusApproved)
       history.push("/");
   }

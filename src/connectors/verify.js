@@ -7,7 +7,7 @@ const verifyConnector = connect(
   sel.selectorMap({
     verifyNewUser: sel.verifyNewUser,
     isRequestingVerifyNewUser: sel.isApiRequestingVerifyNewUser,
-    verifyNewUserError: sel.apiVerifyNewUserError,
+    verifyNewUserError: sel.apiVerifyNewUserError
   }),
   dispatch => bindActionCreators({
     onVerify: act.onVerifyNewUser

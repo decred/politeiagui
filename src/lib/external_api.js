@@ -11,10 +11,10 @@ const insightAddressURL = (network, address) => `${insightURL(network)}/addr/${a
 const FAUCET_URL = "https://faucet.decred.org/requestfaucet";
 
 const POST = (path, params, method = "POST") => {
-  var formBody = [];
-  for (var key in params) {
-    var encodedKey = encodeURIComponent(key);
-    var encodedValue = encodeURIComponent(params[key]);
+  let formBody = [];
+  for (const key in params) {
+    const encodedKey = encodeURIComponent(key);
+    const encodedValue = encodeURIComponent(params[key]);
     formBody.push(encodedKey + "=" + encodedValue);
   }
   formBody = formBody.join("&");
@@ -22,7 +22,7 @@ const POST = (path, params, method = "POST") => {
   return fetch(path, {
     mode: "cors",
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
     },
     method,
     body: formBody

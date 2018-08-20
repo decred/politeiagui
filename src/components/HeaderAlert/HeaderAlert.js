@@ -14,7 +14,7 @@ const HeaderAlert = (props) =>
 HeaderAlert.prototypes = {
   children: PropTypes.any,
   style: PropTypes.object,
-  className: PropTypes.string,
+  className: PropTypes.string
 };
 
 export default HeaderAlert;

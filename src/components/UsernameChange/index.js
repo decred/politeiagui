@@ -22,7 +22,7 @@ class ChangeUsername extends Component {
     return this.props.onChangeUsername(props)
       .catch((error) => {
         throw new SubmissionError({
-          _error: error.message,
+          _error: error.message
         });
       });
   }
@@ -37,7 +37,7 @@ class ChangeUsername extends Component {
         <ChangeUsernameForm
           {...{
             ...this.props,
-            onChangeUsername: this.onChangeUsername,
+            onChangeUsername: this.onChangeUsername
           }}
         />
       </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const Link = ({ href, ...props}) => {
+const Link = ({ href, ...props }) => {
   props = Object.keys(props)
     .filter(key => key[0] === key[0].toLowerCase())
     .reduce((r, key) => {

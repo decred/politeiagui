@@ -20,7 +20,7 @@ class Paywall extends React.Component {
         {...{
           ...this.props,
           hasAttemptedSubmit,
-          onSubmit,
+          onSubmit
         }}
       />
     );

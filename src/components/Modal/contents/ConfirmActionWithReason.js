@@ -30,7 +30,7 @@ class ConfirmActionWithReason extends React.Component {
   }
 
   handleConfirm = () => {
-    let reason = (this.state.reason || "").trim();
+    const reason = (this.state.reason || "").trim();
     if(reason.length === 0) {
       this.setState({ error: "You must provide a reason for this action." });
       return;

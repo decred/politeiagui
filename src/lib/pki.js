@@ -9,7 +9,7 @@ export const toHex = x => Buffer.from(toUint8Array(x)).toString("hex");
 
 export const toByteArray = str => {
   const bytes = new Uint8Array(Math.ceil(str.length / 2));
-  for (var i = 0; i < bytes.length; i++) bytes[i] = parseInt(str.substr(i * 2, 2), 16);
+  for (let i = 0; i < bytes.length; i++) bytes[i] = parseInt(str.substr(i * 2, 2), 16);
   return bytes;
 };
 

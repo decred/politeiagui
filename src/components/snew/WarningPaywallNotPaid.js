@@ -1,6 +1,6 @@
 import React from "react";
 
-const WarningPaywallNotPaid = ({message}) => (<div className="spacer">
+const WarningPaywallNotPaid = ({ message }) => (<div className="spacer">
   <div className="titlebox">
     <form
       action="#"

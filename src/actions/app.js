@@ -61,7 +61,7 @@ export const onFetchProposal = (token) => (dispatch, getState) =>
     .then(() => dispatch(onFetchProposalComments(token)))
     .then(() => {
       let userIds = [];
-      let comments = sel.apiProposalComments(getState());
+      const comments = sel.apiProposalComments(getState());
       if(comments) {
         userIds = comments.map(comment => comment.userid);
       }
@@ -94,13 +94,12 @@ export const onLocalStorageChange = (event) => (dispatch, getState) => {
 
   try {
     const stateFromStorage = JSON.parse(event.newValue);
-    const apiMeFromStorage = get(stateFromStorage, ["api", "me"], undefined);
+    const apiMeFromStorage = get(stateFromStorage, [ "api", "me" ], undefined);
     const apiMeResponseFromStorage = sel.apiMeResponse(stateFromStorage);
 
     if(apiMeResponseFromStorage && !isEqual(apiMeResponseFromStorage, apiMeResponse)) {
       dispatch(onLoadMe(apiMeFromStorage));
-    }
-    else if (!stateFromStorage || (stateFromStorage && !apiMeFromStorage)) dispatch(onLogout());
+    } else if (!stateFromStorage || (stateFromStorage && !apiMeFromStorage)) dispatch(onLogout());
   } catch(e) {
     dispatch(onLogout());
   }
@@ -108,13 +107,12 @@ export const onLocalStorageChange = (event) => (dispatch, getState) => {
 
 export const globalUsernamesById = {};
 export const onFetchUsernamesById = (userIds) => (dispatch, getState) => {
-  let usernamesById = {};
-  let userIdsToFetch = [];
-  for(let userId of userIds) {
+  const usernamesById = {};
+  const userIdsToFetch = [];
+  for(const userId of userIds) {
     if(userId in globalUsernamesById) {
       usernamesById[userId] = globalUsernamesById[userId];
-    }
-    else {
+    } else {
       userIdsToFetch.push(userId);
     }
   }
@@ -127,10 +125,10 @@ export const onFetchUsernamesById = (userIds) => (dispatch, getState) => {
 
   return dispatch(onFetchUsernamesByIdApi(userIdsToFetch))
     .then(() => {
-      const apiUsernamesByIdResponse = get(getState(), ["api", "usernamesById", "response"], undefined);
+      const apiUsernamesByIdResponse = get(getState(), [ "api", "usernamesById", "response" ], undefined);
       if(apiUsernamesByIdResponse) {
         userIdsToFetch.forEach((userId, idx) => {
-          let username = apiUsernamesByIdResponse.usernames[idx];
+          const username = apiUsernamesByIdResponse.usernames[idx];
           if(username) {
             usernamesById[userId] = globalUsernamesById[userId] = username;
           }
@@ -160,7 +158,7 @@ export const selectDefaultAdminFilterValue = (dispatch, getState) => {
 
 // Chooses a sensible default filter - don't pick a filter with 0 proposals.
 const selectDefaultFilterValue = (proposalFilterCounts, defaultFilterPreferences) => {
-  for(let filterPreference of defaultFilterPreferences) {
+  for(const filterPreference of defaultFilterPreferences) {
     if((proposalFilterCounts[filterPreference] || 0) > 0) {
       return filterPreference;
     }

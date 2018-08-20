@@ -27,7 +27,7 @@ const LoginFormSide = ({
         id="login_login-main"
         method="post"
         onSubmit={handleSubmit(({ emailSide, passwordSide }) =>
-          onLogin({email: emailSide, password: passwordSide})
+          onLogin({ email: emailSide, password: passwordSide })
         )}
       >
         <input name="op" type="hidden" defaultValue="login-main" />
@@ -69,7 +69,7 @@ const LoginFormSide = ({
           <label htmlFor="rem-login-main">remember me</label>
           <a
             onClick={onTogglePrivacyPolicy}
-            style={{marginRight: "10px", cursor: "pointer"}}>
+            style={{ marginRight: "10px", cursor: "pointer" }}>
             Privacy Policy
           </a>
           <Link className="recover-password" href="/password">

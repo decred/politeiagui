@@ -24,7 +24,7 @@ class FilesField extends React.Component {
       policyErrors: validation.errors ? validation.errors : []
     });
 
-    return dispatch(change("form/proposal","files", validation.files));
+    return dispatch(change("form/proposal", "files", validation.files));
   }
 
   render() {
@@ -77,7 +77,7 @@ FilesField.propTypes = {
   touched: PropTypes.bool,
   error: PropTypes.bool,
   disabled: PropTypes.bool,
-  policy: PropTypes.object.isRequired,
+  policy: PropTypes.object.isRequired
 };
 
 export default FilesField;

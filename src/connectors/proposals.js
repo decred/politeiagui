@@ -15,7 +15,7 @@ export default connect(
     error: or(sel.vettedProposalsError, sel.apiPropsVoteStatusError),
     filterValue: sel.getPublicFilterValue,
     header: () => LIST_HEADER_PUBLIC,
-    emptyProposalsMessage: sel.getVettedEmptyProposalsMessage,
+    emptyProposalsMessage: sel.getVettedEmptyProposalsMessage
   }),
   dispatch => bindActionCreators({
     onFetchData: act.onFetchVetted,

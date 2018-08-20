@@ -40,10 +40,10 @@ export const handleFilterXss = (el) => {
 };
 
 export const customRenderers = (filterXss) => ({
-  image: ({src, alt}) => {
+  image: ({ src, alt }) => {
     return <a rel="nofollow" href={src}>{alt}</a>;
   },
-  link: ({href, children}) => {
+  link: ({ href, children }) => {
     return <a rel="nofollow" href={href}>{children[0]}</a>;
   },
   root: (el) => {

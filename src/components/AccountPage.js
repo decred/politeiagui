@@ -30,7 +30,7 @@ class KeyPage extends React.Component {
       pubkey: "",
       pubkeyStatus: PUB_KEY_STATUS_LOADING,
       showIdentityHelpText: false,
-      openedVerification: false,
+      openedVerification: false
     };
   }
 
@@ -133,7 +133,7 @@ class KeyPage extends React.Component {
           <p>
             {showIdentityHelpText ? (
               <div>
-                <span style={{fontWeight: "bold"}}>{this.identityHelpPrompt}</span>{" "}
+                <span style={{ fontWeight: "bold" }}>{this.identityHelpPrompt}</span>{" "}
                 <a onClick={() => this.setState({ showIdentityHelpText: false })}>
                   (hide)
                 </a>

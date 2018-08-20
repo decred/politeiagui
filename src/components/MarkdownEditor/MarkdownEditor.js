@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { ReactMdeToolbar, ReactMdeTextArea, ReactMdeCommands } from "react-mde";
 import {
-  getSelection,
+  getSelection
 } from "react-mde/lib/js/helpers/ReactMdeSelectionHelper";
 import "react-mde/lib/styles/css/react-mde.css";
 import "react-mde/lib/styles/css/react-mde-toolbar.css";
@@ -36,7 +36,7 @@ class TogglerLayout extends React.Component {
       top: "14px",
       right: "10px",
       cursor: "pointer",
-      fontSize: "18px",
+      fontSize: "18px"
     };
     const toggleWriteStyle = {
       color: previewActive ? "#767676" : "#0079d3",
@@ -88,9 +88,9 @@ class MarkdownEditor extends React.Component {
       makeOrderedListCommand
     } = ReactMdeCommands;
     const customCommands = [
-      [makeHeaderCommand, makeBoldCommand, makeItalicCommand],
-      [makeLinkCommand, makeQuoteCommand, makeCodeCommand],
-      [makeUnorderedListCommand, makeOrderedListCommand]
+      [ makeHeaderCommand, makeBoldCommand, makeItalicCommand ],
+      [ makeLinkCommand, makeQuoteCommand, makeCodeCommand ],
+      [ makeUnorderedListCommand, makeOrderedListCommand ]
     ];
     return customCommands;
   }

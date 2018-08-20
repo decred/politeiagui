@@ -36,12 +36,12 @@ class ProposalImages extends Component {
 
 ProposalImages.propTypes = {
   files: PropTypes.array.isRequired,
-  readOnly: PropTypes.bool.isRequired,
+  readOnly: PropTypes.bool.isRequired
 };
 
 ProposalImages.defaultProps = {
   readOnly: false,
-  files: [],
+  files: []
 };
 
 export default ProposalImages;

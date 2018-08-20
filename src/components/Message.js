@@ -23,15 +23,15 @@ const Message = ({
   }
 
   return (
-    <div className={"message-ct message-" + type + className} style={{height: height}}>
-      <div className="message-icon" style={{height, lineHeight: height}}>
+    <div className={"message-ct message-" + type + className} style={{ height: height }}>
+      <div className="message-icon" style={{ height, lineHeight: height }}>
         {icon}
       </div>
-      <div className="message-text" style={{flexGrow: "1"}}>
+      <div className="message-text" style={{ flexGrow: "1" }}>
         <div className="message-header">{header}</div>
         <div className="message-body">
           {body ? (
-            <span style={{whiteSpace: "pre-wrap"}}>
+            <span style={{ whiteSpace: "pre-wrap" }}>
               {(body instanceof Error) ? body.message : body }
             </span>
           ) : null}
@@ -39,7 +39,7 @@ const Message = ({
         </div>
       </div>
       {onDismissClick &&
-        <span style={{padding: "10px"}}>
+        <span style={{ padding: "10px" }}>
           <i
             style={{
               cursor: "pointer",

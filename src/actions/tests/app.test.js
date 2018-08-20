@@ -90,7 +90,7 @@ describe("test app actions (actions/app.js)", () => {
     };
     const proposal = FAKE_PROPOSAL;
     await expect(app.onSaveNewProposal(proposal, null, props))
-      .toDispatchActionsWithState(MOCK_STATE,[
+      .toDispatchActionsWithState(MOCK_STATE, [
         onSubmitProposal(
           props.loggedInAsEmail,
           props.userid,
@@ -108,7 +108,7 @@ describe("test app actions (actions/app.js)", () => {
       newUsername: FAKE_USER.username
     };
     await expect(app.onSaveChangeUsername(params))
-      .toDispatchActionsWithState(MOCK_STATE,[
+      .toDispatchActionsWithState(MOCK_STATE, [
         onChangeUsername(params.password, params.newUsername)
       ], done);
   });
@@ -117,7 +117,7 @@ describe("test app actions (actions/app.js)", () => {
     const existingPassword = FAKE_USER.password;
     const newPassword = "new_pass";
     await expect(app.onSaveChangePassword({ existingPassword, newPassword }))
-      .toDispatchActionsWithState(MOCK_STATE,[
+      .toDispatchActionsWithState(MOCK_STATE, [
         onChangePassword(existingPassword, newPassword)
       ], done);
   });
@@ -216,7 +216,7 @@ describe("test app actions (actions/app.js)", () => {
       ], done);
   });
 
-  test("on local storage change action", async () => {
+  test("on local storage change action", () => {
 
     //save if values aren't equal
     const mockedNewStorageStateValue = {
@@ -258,7 +258,7 @@ describe("test app actions (actions/app.js)", () => {
     // Actions are not dispatched when the local storage event key
     // is different from ls.loggedInStateKey
     localStorage.removeItem(ls.loggedInStateKey);
-    mockedEvent = generateLSChangeEvent(JSON.stringify(mockedNewStorageStateValue),"any");
+    mockedEvent = generateLSChangeEvent(JSON.stringify(mockedNewStorageStateValue), "any");
     expect(app.onLocalStorageChange(mockedEvent))
       .toDispatchActionsWithState(MOCK_STATE, [], done);
   });

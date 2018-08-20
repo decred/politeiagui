@@ -8,6 +8,6 @@ export default connect(
     userHasPaid: sel.userHasPaid,
     paywallAddress: sel.paywallAddress,
     paywallAmount: sel.paywallAmount,
-    paywallTxNotBefore: sel.paywallTxNotBefore,
+    paywallTxNotBefore: sel.paywallTxNotBefore
   })
 );

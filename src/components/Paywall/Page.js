@@ -26,8 +26,7 @@ const Paywall = ({
   if (userPaywallStatus === PAYWALL_STATUS_WAITING) {
     userPaywallStatusCls = "paywall-payment-status-waiting";
     userPaywallStatusText = "Waiting for payment";
-  }
-  else if (userPaywallStatus === PAYWALL_STATUS_LACKING_CONFIRMATIONS) {
+  } else if (userPaywallStatus === PAYWALL_STATUS_LACKING_CONFIRMATIONS) {
     userPaywallStatusCls = "paywall-payment-status-confirmations";
     userPaywallStatusText = "Waiting for more confirmations";
   }
@@ -106,7 +105,7 @@ const Paywall = ({
               ) : null}
             </div>
             <QRCode addr={paywallAddress} />
-            <div style={{clear:"both"}}></div>
+            <div style={{ clear: "both" }}></div>
           </div>
         </div>
       )} />

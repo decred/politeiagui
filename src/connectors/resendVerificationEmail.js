@@ -10,7 +10,7 @@ const resendVerificationEmailConnector = connect(
   }),
   {
     onResendVerificationEmail: act.onResendVerificationEmail,
-    onResendVerificationEmailConfirm: act.onResendVerificationEmailConfirm,
+    onResendVerificationEmailConfirm: act.onResendVerificationEmailConfirm
   }
 );
 

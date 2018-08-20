@@ -7,7 +7,7 @@ const changePasswordConnector = connect(
   sel.selectorMap({
     policy: sel.policy,
     isApiRequestingChangePassword: or(sel.isApiRequestingInit, sel.isApiRequestingChangePassword),
-    changePasswordResponse: sel.apiChangePasswordResponse,
+    changePasswordResponse: sel.apiChangePasswordResponse
   }),
   {
     onChangePassword: act.onSaveChangePassword,

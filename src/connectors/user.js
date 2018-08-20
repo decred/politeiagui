@@ -10,13 +10,13 @@ import {
   EDIT_USER_EXPIRE_NEW_USER_VERIFICATION,
   EDIT_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
   EDIT_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
-  EDIT_USER_UNLOCK,
+  EDIT_USER_UNLOCK
 } from "../constants";
 
 export default connect(
   sel.selectorMap({
     userId: compose(
-      get(["match", "params", "userId"]),
+      get([ "match", "params", "userId" ]),
       arg(1)
     ),
     user: sel.user,
@@ -44,6 +44,6 @@ export default connect(
   }),
   dispatch => bindActionCreators({
     onFetchData: act.onFetchUser,
-    onEditUser: act.onEditUser,
+    onEditUser: act.onEditUser
   }, dispatch)
 );

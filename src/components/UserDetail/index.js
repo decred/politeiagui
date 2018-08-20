@@ -10,7 +10,7 @@ class UserDetail extends Component {
     super(props);
 
     this.state = {
-      tabId: USER_DETAIL_TAB_GENERAL,
+      tabId: USER_DETAIL_TAB_GENERAL
     };
   }
 
@@ -33,8 +33,7 @@ class UserDetail extends Component {
     let dcrdataTxUrl;
     if(isTestnet) {
       dcrdataTxUrl = "https://testnet.dcrdata.org/tx/";
-    }
-    else {
+    } else {
       dcrdataTxUrl = "https://explorer.dcrdata.org/tx/";
     }
 

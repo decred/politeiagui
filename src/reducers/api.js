@@ -29,18 +29,18 @@ export const DEFAULT_STATE = {
   verifyUserKey: DEFAULT_REQUEST_STATE,
   likeComment: DEFAULT_REQUEST_STATE,
   email: "",
-  keyMismatch: false,
+  keyMismatch: false
 };
 
 const onReceiveSetStatus = (state, action) => {
   state = receive("setStatusProposal", state, action);
   if (action.error) return state;
 
-  const token = get(["setStatusProposal", "payload", "token"], state);
-  const status = get(["setStatusProposal", "payload", "status"], state);
-  const viewedProposal = get(["proposal", "response", "proposal"], state);
+  const token = get([ "setStatusProposal", "payload", "token" ], state);
+  const status = get([ "setStatusProposal", "payload", "status" ], state);
+  const viewedProposal = get([ "proposal", "response", "proposal" ], state);
   const updateProposalStatus = proposal => {
-    if (token === get(["censorshiprecord", "token"], proposal)) {
+    if (token === get([ "censorshiprecord", "token" ], proposal)) {
       return { ...proposal, status };
     } else {
       return proposal;
@@ -66,7 +66,7 @@ const onReceiveSetStatus = (state, action) => {
         ...state.unvetted.response,
         proposals: map(
           updateProposalStatus,
-          (get(["unvetted", "response", "proposals"], state) || [])
+          (get([ "unvetted", "response", "proposals" ], state) || [])
         )
       }
     }
@@ -150,7 +150,7 @@ export const onReceiveSyncLikeComment = (state, action) => {
             action: newAction === currentAction ? 0 : newAction
           };
         }
-        return { ...acc, cvs: acc.cvs.concat([cv])};
+        return { ...acc, cvs: acc.cvs.concat([cv]) };
       }, { cvs: [], oldAction: null });
   } else {
     const newCommentVote = { token, commentid, action: newAction };
@@ -215,8 +215,7 @@ const api = (state = DEFAULT_STATE, action) => (({
     Object.keys(state).reduce((acc, curr) => {
       if (typeof state[curr] === "object") {
         acc[curr] = Object.assign({}, state[curr], { error: null });
-      }
-      else {
+      } else {
         acc[curr] = state[curr];
       }
       return acc;
