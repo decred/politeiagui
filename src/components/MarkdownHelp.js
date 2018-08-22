@@ -2,7 +2,7 @@ import React from "react";
 
 const MarkdownHelp = () => (
   <div className="markhelp" >
-    <p>
+    <p style={{ width: "100%" }}>
       We use a slightly-customized version of{" "}
       <a href="http://daringfireball.net/projects/markdown/syntax">
         Markdown

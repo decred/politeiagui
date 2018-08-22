@@ -32,9 +32,8 @@ class TogglerLayout extends React.Component {
     const { Preview, TextArea, Toolbar, value } = this.props;
     const { previewActive } = this.state;
     const toggleContainerStyle = {
-      position: "absolute",
-      top: "14px",
-      right: "10px",
+      marginTop: "12px",
+      float: "right",
       cursor: "pointer",
       fontSize: "18px"
     };
