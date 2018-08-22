@@ -36,17 +36,23 @@ const CommentForm = ({
         {isPostingComment && (<h2>Posting comment...</h2>)}
         {!isPostingComment &&
           getVoteStatus(token) &&
-          getVoteStatus(token).status === PROPOSAL_VOTING_NOT_STARTED && (
-          <div className="md">
-            <MarkdownEditorField
-              input={{
-                value: value,
-                onChange: onChange
-              }}
-              toggledStyle
-            />
-          </div>
-        )}
+          getVoteStatus(token).status === PROPOSAL_VOTING_NOT_STARTED ? (
+            <div className="md">
+              <MarkdownEditorField
+                input={{
+                  value: value,
+                  onChange: onChange
+                }}
+                toggledStyle
+              />
+            </div>
+          ):
+          <Message height="70px" type="info">
+            <span>
+                Proposals which voting has started can not receive further comments. However, you can still leave your comment on proposals which voting is unstarted.
+            </span>
+          </Message>
+        }
         {!isPostingComment && getVoteStatus(token) &&
           getVoteStatus(token).status === PROPOSAL_VOTING_NOT_STARTED && (
           <div className="bottom-area">

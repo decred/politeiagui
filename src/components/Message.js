@@ -24,11 +24,11 @@ const Message = ({
 
   return (
     <div className={"message-ct message-" + type + className} style={{ height: height }}>
-      <div className="message-icon" style={{ height, lineHeight: height }}>
+      <div className="message-icon" style={{ lineHeight: height }}>
         {icon}
       </div>
       <div className="message-text" style={{ flexGrow: "1" }}>
-        <div className="message-header">{header}</div>
+        {header ? <div className="message-header">{header}</div> : null}
         <div className="message-body">
           {body ? (
             <span style={{ whiteSpace: "pre-wrap" }}>
