@@ -87,6 +87,7 @@ const CommentForm = ({
                 <button
                   className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
                   type="submit"
+                  style={{ marginBottom: "5px" }}
                   disabled={!userCanExecuteActions}
                 >
                 save
