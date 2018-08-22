@@ -688,11 +688,13 @@ li p.header-3 {
 .markhelp {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    width: 100%;
 }
 
 .markhelp > table {
     margin-top: 10px;
+    background-color: white;
 }
 
 .submit-page #newlink.submit.content {
@@ -1244,4 +1246,8 @@ button.inverse {
 
 .sort-select__dropdown-indicator {
   padding: 2px !important;
+}
+
+form div.usertext-body.may-blank-within.md-container {
+  width: 100%;
 }
