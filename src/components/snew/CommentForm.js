@@ -49,7 +49,7 @@ const CommentForm = ({
           ):
           <Message height="70px" type="info">
             <span>
-                Proposals which voting has started can not receive further comments. However, you can still leave your comment on proposals which voting is unstarted.
+                Proposals which voting has started can not receive further comments. However, you can still leave your comments on proposals which voting is unstarted.
             </span>
           </Message>
         }
