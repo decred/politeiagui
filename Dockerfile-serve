@@ -5,4 +5,4 @@ LABEL version="1.0"
 LABEL maintainer "holdstockjamie@gmail.com"
 
 COPY ./docker-build/ /usr/local/apache2/htdocs/
-RUN sed -i -e "$ a #CSP Headers\nHeader set Content-Security-Policy \"default-src 'self' *.decred.org *.dcrdata.org;\"" /usr/local/apache2/conf/httpd.conf
+RUN sed -i -e "$ a #CSP Headers\nHeader set Content-Security-Policy \"default-src 'self' *.decred.org *.dcrdata.org; img-src 'self' data:;\"" /usr/local/apache2/conf/httpd.conf
