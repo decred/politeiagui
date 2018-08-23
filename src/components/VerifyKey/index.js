@@ -20,17 +20,17 @@ class VerifyKey extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if(!this.props.email && nextProps.email) {
+  componentDidUpdate(prevProps) {
+    if(!prevProps.email && this.props.email) {
       const { verificationtoken } = qs.parse(this.props.location.search);
-      const { email } = nextProps;
+      const { email } = this.props;
       this.props.onVerifyUserKey(email, verificationtoken);
     }
-    const { verifyUserKey, apiMeResponse, loggedInAsEmail } = nextProps;
+    const { verifyUserKey, apiMeResponse, loggedInAsEmail } = this.props;
     if(verifyUserKey && verifyUserKey.success && apiMeResponse && loggedInAsEmail) {
       pki.myPubKeyHex(loggedInAsEmail).then((pubkey) => {
         if(pubkey !== apiMeResponse.publickey) {
-          this.props.updateMe({ ...nextProps.apiMeResponse, publickey: pubkey });
+          this.props.updateMe({ ...this.props.apiMeResponse, publickey: pubkey });
         }
       });
     }

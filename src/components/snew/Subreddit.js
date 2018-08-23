@@ -9,8 +9,8 @@ const noSidebar = (p1) => (p2) => <Subreddit {...{ ...p2, ...p1 }} useSidebar={f
 const withSidebar = (p1) => (p2) => <Subreddit {...{ ...p2, ...p1 }} useSidebar={true} />;
 
 class CustomSubreddit extends Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.location.pathname !== this.props.location.pathname) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.pathname !== this.props.location.pathname) {
       this.props.onRouteChange();
       window.scrollTo(0, 0);
     }

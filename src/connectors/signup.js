@@ -46,22 +46,22 @@ class Wrapper extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.loggedInAsEmail) {
+  componentDidUpdate() {
+    if (this.props.loggedInAsEmail) {
       if (this.props.isAdmin) {
         this.props.history.push("/admin/");
       } else {
         this.props.history.push("/user/proposals");
       }
-    } else if (nextProps.newUserResponse) {
-      nextProps.history.push("/user/signup/next");
+    } else if (this.props.newUserResponse) {
+      this.props.history.push("/user/signup/next");
     }
 
     const { hasFetchedPolicy } = this.state;
     if (hasFetchedPolicy)
       return;
 
-    if (nextProps.csrf) {
+    if (this.props.csrf) {
       this.setState({ hasFetchedPolicy: true });
       this.props.policy || this.props.onFetchData();
     }

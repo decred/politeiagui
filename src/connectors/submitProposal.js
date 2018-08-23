@@ -31,6 +31,17 @@ class SubmitWrapper extends Component {
     this.props.policy || this.props.onFetchData();
   }
 
+  // componentDidUpdate() {
+  //   const { token } = this.props;
+  //   if (token) {
+  //     if (this.props.draftProposalById) {
+  //       this.props.onDeleteDraft(this.props.draftProposalById.draftId);
+  //     }
+  //     this.props.onResetProposal();
+  //     return this.props.history.push("/proposals/" + token);
+  //   }
+  // }
+
   render() {
     const Component = this.props.Component;
     return <Component { ...{ ...this.props,

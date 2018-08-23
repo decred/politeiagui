@@ -7,9 +7,9 @@ import resendVerificationEmailConnector from "../../connectors/resendVerificatio
 import validate from "./ResendVerificationEmailValidator";
 
 class ResendVerificationEmail extends Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.resendVerificationEmailResponse) {
-      nextProps.history.push("/user/resend/next");
+  componentDidUpdate() {
+    if (this.props.resendVerificationEmailResponse) {
+      this.props.history.push("/user/resend/next");
     }
   }
 

@@ -86,11 +86,11 @@ class Loader extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate() {
     const { isFetched } = this.state;
     if (isFetched)
       return;
-    const { csrf } = nextProps;
+    const { csrf } = this.props;
     if (csrf) {
       this.setState({ isFetched: true });
       this.props.onFetchProposalsVoteStatus && this.props.onFetchProposalsVoteStatus();

@@ -16,9 +16,9 @@ class AuthenticatedRoute extends Component {
     this.checkAuthentication(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.loggedInAsEmail || nextProps.location !== this.props.location) {
-      this.checkAuthentication(nextProps);
+  componentDidUpate(prevProps) {
+    if (!this.props.loggedInAsEmail || this.props.location !== prevProps.location) {
+      this.checkAuthentication(this.props);
     }
   }
 

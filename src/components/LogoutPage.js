@@ -7,9 +7,9 @@ class LogoutPage extends Component {
     this.props.onLogout();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.error && nextProps.error) {
-      this.props.history.push(`/500?error=${nextProps.error.message}`);
+  componentDidUpdate(prevProps) {
+    if (!prevProps.error && this.props.error) {
+      this.props.history.push(`/500?error=${this.props.error.message}`);
     }
   }
 

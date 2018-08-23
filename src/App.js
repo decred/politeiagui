@@ -38,32 +38,32 @@ class Loader extends Component {
         )
       );
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.loggedInAsEmail) {
-      this.verifyUserPubkey(nextProps.loggedInAsEmail, nextProps.userPubkey);
+  componentDidUpdate(prevProps) {
+    if (!prevProps.loggedInAsEmail && this.props.loggedInAsEmail) {
+      this.props.onLoadDraftProposals(this.props.loggedInAsEmail);
     }
 
-    if (!this.props.loggedInAsEmail && nextProps.loggedInAsEmail) {
-      this.props.onLoadDraftProposals(nextProps.loggedInAsEmail);
-    }
-
-    if(!this.props.onboardViewed && nextProps.lastLoginTime === 0){
+    if(!prevProps.onboardViewed && this.props.lastLoginTime === 0){
       this.props.setOnboardAsViewed();
       this.props.openModal(ONBOARD);
     }
 
 
-    if (!this.props.apiError && nextProps.apiError) {
+    if (!prevProps.apiError && this.props.apiError) {
       // Unrecoverable error
-      if (nextProps.apiError.internalError) {
-        this.props.history.push(`/500?error=${nextProps.apiError.message}`);
+      if (this.props.apiError.internalError) {
+        this.props.history.push(`/500?error=${this.props.apiError.message}`);
       } else {
-        console.error("ERROR:", nextProps.apiError.message);
+        console.error("ERROR:", this.props.apiError.message);
       }
     }
   }
 
   componentDidMount() {
+    if (this.props.loggedInAsEmail) {
+      this.verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey);
+    }
+
     this.storageListener = createStorageListener(store);
     window.addEventListener("storage", this.storageListener);
     if (this.props.loggedInAsEmail) {

@@ -24,9 +24,9 @@ class PasswordReset extends Component {
     this.props.resetPasswordReset();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.passwordResetResponse) {
-      nextProps.history.push("/user/password/reset/next");
+  componentDidUpdate() {
+    if (this.props.passwordResetResponse) {
+      this.props.history.push("/user/password/reset/next");
     }
   }
 
