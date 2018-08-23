@@ -6,17 +6,18 @@ import VerifyPage from "./Page";
 import verifyConnector from "../../connectors/verify";
 
 class Verify extends Component {
-  componentWillMount() {
-    const { verificationtoken, email } = qs.parse(this.props.location.search);
-    if (isEmpty(this.props.location.search)
+  constructor(props) {
+    super();
+    const { verificationtoken, email } = qs.parse(props.location.search);
+    if (isEmpty(props.location.search)
       || !email || !verificationtoken
       || typeof(email) !== "string" || typeof(verificationtoken) !== "string"
     ) {
-      this.props.history.push("/user/login");
+      props.history.push("/user/login");
       return;
     }
 
-    this.props.onVerify(this.props.location.search)
+    props.onVerify(props.location.search)
       .catch(err => {
         console.error(err.stack || err);
       });

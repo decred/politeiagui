@@ -4,16 +4,16 @@ import requireLoginConnector from "../../connectors/requireLogin";
 import { loadStateLocalStorage } from "../../lib/local_storage";
 
 class AuthenticatedRoute extends Component {
+  constructor(props) {
+    super();
+    this.checkAuthentication(props);
+  }
   componentDidMount() {
     if (this.props.loggedInAsEmail) {
       return;
     }
 
     this.props.redirectedFrom(this.props.location.pathname);
-  }
-
-  componentWillMount() {
-    this.checkAuthentication(this.props);
   }
 
   componentDidUpate(prevProps) {

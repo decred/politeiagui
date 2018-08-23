@@ -9,14 +9,15 @@ import qs from "query-string";
 import Message from "../Message";
 
 class VerifyKey extends Component {
-  componentWillMount() {
-    const { verificationtoken } = qs.parse(this.props.location.search);
-    if (isEmpty(this.props.location.search) || !verificationtoken || typeof(verificationtoken) !== "string") {
-      this.props.history.push("/user/login");
+  constructor(props) {
+    super();
+    const { verificationtoken } = qs.parse(props.location.search);
+    if (isEmpty(props.location.search) || !verificationtoken || typeof(verificationtoken) !== "string") {
+      props.history.push("/user/login");
     }
-    const { email } = this.props;
+    const { email } = props;
     if(email && verificationtoken) {
-      this.props.onVerifyUserKey(email, verificationtoken);
+      props.onVerifyUserKey(email, verificationtoken);
     }
   }
 

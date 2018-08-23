@@ -25,8 +25,9 @@ store.subscribe(throttle(() => {
 const createStorageListener = store => event => store.dispatch(onLocalStorageChange(event));
 
 class Loader extends Component {
-  componentWillMount() {
-    this.props.onInit();
+  constructor(props) {
+    super();
+    props.onInit();
   }
 
   verifyUserPubkey = (email, keyToBeMatched) =>
