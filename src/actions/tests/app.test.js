@@ -71,7 +71,7 @@ describe("test app actions (actions/app.js)", () => {
     expect(app.onRouteChange())
       .toDispatchActions(
         { type: act.CLEAN_ERRORS },
-        { type: act.CLEAN_SLATE },
+        { type: act.CLEAN_STATE },
         done
       );
   });

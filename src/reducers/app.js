@@ -103,7 +103,7 @@ const app = (state = DEFAULT_STATE, action) => (({
     proposalCredits: state.proposalCredits - (action.payload || 0)
   }),
   [act.CSRF_NEEDED]: () => ({ ...state, csrfIsNeeded: action.payload }),
-  [act.CLEAN_SLATE]: () => ({
+  [act.CLEAN_STATE]: () => ({
     ...state,
     isShowingSignupConfirmation: false
   }),
