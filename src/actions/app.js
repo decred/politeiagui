@@ -21,7 +21,7 @@ export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
 
 export const onRouteChange = () => dispatch => {
   dispatch(cleanErrors());
-  dispatch(act.CLEAN_SLATE());
+  dispatch(act.CLEAN_STATE());
 };
 
 export const onSetReplyParent = (parentId = TOP_LEVEL_COMMENT_PARENTID) =>

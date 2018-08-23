@@ -288,7 +288,7 @@ describe("test app reducer", () => {
     const reducers = [
       { action: act.REQUEST_SIGNUP_CONFIRMATION, assertion: { isShowingSignupConfirmation: true } },
       { action: act.RESET_SIGNUP_CONFIRMATION, assertion: { isShowingSignupConfirmation: false } },
-      { action: act.CLEAN_SLATE, assertion: { isShowingSignupConfirmation: false } },
+      { action: act.CLEAN_STATE, assertion: { isShowingSignupConfirmation: false } },
       { action: act.SET_ONBOARD_AS_VIEWED, assertion: { onboardViewed: true } }
     ];
 
