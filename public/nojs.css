@@ -1,0 +1,67 @@
+.nojs {
+  font-size: 1.14em;
+  margin: 15px auto;
+  max-width: 920px;
+  font-family: "Source Sans Pro", "Helvetica Neue", arial, sans-serif;
+}
+.nojs h1 {
+  text-align: center;
+  display: block;
+  font-size: 2em;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: 500;
+}
+.nojs h2 {
+  text-align: center;
+  display: block;
+  font-size: 1.5em;
+  margin-top: 0.83em;
+  margin-bottom: 0.83em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: 500;
+}
+.nojs h3 {
+  display: block;
+  font-size: 1.17em;
+  margin-top: 1em;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: 500;
+}
+.nojs p {
+  display: block;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 0;
+  margin-right: 0;
+  text-align: justify;
+}
+.nojs p::first-letter {
+  margin-left: 1em;
+}
+.nojs ul {
+  display: block;
+  list-style-type: disc;
+  margin-bottom: 1 em;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0.5em;
+  padding-left: 35px;
+}
+.nojs li {
+  display: list-item;
+  padding: 2px;
+}
+.nojs a {
+  color: #2971ff;
+  text-decoration: none;
+}
+.nojs a:hover {
+  color: #2971ff;
+  text-decoration: underline;
+}
