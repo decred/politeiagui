@@ -442,6 +442,11 @@ describe("test api reducer", () => {
         response: {
           votesstatus: null
         }
+      },
+      proposalVoteStatus: {
+        response: {
+          newVoteStatus: null
+        }
       }
     };
 
@@ -453,6 +458,11 @@ describe("test api reducer", () => {
             { token: "anothertoken" },
             { token: action.payload.token }
           ]
+        }
+      },
+      proposalVoteStatus: {
+        response: {
+          newVoteStatus: newVoteStatus
         }
       }
     };
