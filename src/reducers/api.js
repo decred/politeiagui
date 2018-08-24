@@ -203,6 +203,13 @@ export const onReceiveStartVote = (state, action) => {
             .map(vs => newVoteStatus.token === vs.token ?
               newVoteStatus : vs) : [newVoteStatus]
       }
+    },
+    proposalVoteStatus: {
+      ...state.proposalsVoteStatus,
+      response: {
+        ...state.proposalVoteStatus.response,
+        newVoteStatus: newVoteStatus
+      }
     }
   };
 };
