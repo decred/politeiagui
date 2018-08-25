@@ -209,7 +209,7 @@ class KeyPage extends React.Component {
             style={{ maxWidth: "250px" }}
             className="c-btn c-btn-primary"
             onClick={this.onGenerateNewIdentity}
-            disabled={updateUserKey && updateUserKey.success || this.state.openedVerification}>
+            disabled={(updateUserKey && updateUserKey.success) || this.state.openedVerification}>
             Generate New Identity
           </button>
           <PrivateKeyIdentityManager
