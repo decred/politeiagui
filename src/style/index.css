@@ -1257,10 +1257,18 @@ form div.usertext-body.may-blank-within.md-container {
   margin-right: 5px !important;
 }
 
+.left-margin-5 {
+  margin-left: 5px !important;
+}
+
 .warning-color {
   color: #d05a15 !important;
 }
 
 .font-12 {
   font-size: 12px !important;
+}
+
+.spacer {
+  max-width: 1000px !important;
 }
