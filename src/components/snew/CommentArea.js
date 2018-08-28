@@ -8,7 +8,8 @@ import {
   PROPOSAL_STATUS_UNREVIEWED,
   SORT_BY_TOP,
   SORT_BY_OLD,
-  SORT_BY_NEW
+  SORT_BY_NEW,
+  PROPOSAL_STATUS_UNREVIEWED_CHANGES
 } from "../../constants";
 
 const CommentArea = ({
@@ -21,6 +22,7 @@ const CommentArea = ({
 }) => (
   Object.keys(proposal).length === 0 ||
   proposal.status === PROPOSAL_STATUS_UNREVIEWED ||
+  proposal.status === PROPOSAL_STATUS_UNREVIEWED_CHANGES ||
   proposal.status === PROPOSAL_STATUS_CENSORED ? null :
     <CommentAreaBase {...{
       ...props,

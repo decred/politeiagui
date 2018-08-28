@@ -62,6 +62,7 @@ const ThingLinkComp = ({
   userId
 }) => {
   const voteStatus = getVoteStatus(id) && getVoteStatus(id).status;
+  const displayVersion = review_status === PROPOSAL_STATUS_PUBLIC;
   const isVotingActiveOrFinished = voteStatus === PROPOSAL_VOTING_ACTIVE || voteStatus === PROPOSAL_VOTING_FINISHED;
   const isEditable = authorid === userId && !isVotingActiveOrFinished && review_status !== PROPOSAL_STATUS_CENSORED;
   return (
@@ -139,7 +140,7 @@ const ThingLinkComp = ({
                 {!isAdmin && <span> {author} </span>}
               </span>
             }
-            {version ? ` - version ${version}` : null}
+            {displayVersion && version ? ` - version ${version}` : null}
             {numcomments > 0 &&
               <span> - {numcomments}{numcomments === 1 ? " comment" : " comments"} </span>
             }
