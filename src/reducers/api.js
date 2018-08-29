@@ -2,7 +2,7 @@ import * as act from "../actions/types";
 import get from "lodash/fp/get";
 import map from "lodash/fp/map";
 import cloneDeep from "lodash/cloneDeep";
-import { DEFAULT_REQUEST_STATE, request, receive, reset } from "./util";
+import { DEFAULT_REQUEST_STATE, request, receive, reset, resetMultiple } from "./util";
 import { PROPOSAL_VOTING_ACTIVE } from "../constants";
 
 export const DEFAULT_STATE = {
@@ -17,9 +17,12 @@ export const DEFAULT_STATE = {
   unvetted: DEFAULT_REQUEST_STATE,
   proposal: DEFAULT_REQUEST_STATE,
   proposalComments: DEFAULT_REQUEST_STATE,
+  proposalsVoteStatus: DEFAULT_REQUEST_STATE,
+  proposalVoteStatus: DEFAULT_REQUEST_STATE,
   commentsvotes: DEFAULT_REQUEST_STATE,
   userProposals: DEFAULT_REQUEST_STATE,
   newProposal: DEFAULT_REQUEST_STATE,
+  editProposal: DEFAULT_REQUEST_STATE,
   newComment: DEFAULT_REQUEST_STATE,
   forgottenPassword: DEFAULT_REQUEST_STATE,
   passwordReset: DEFAULT_REQUEST_STATE,
@@ -208,7 +211,7 @@ export const onReceiveStartVote = (state, action) => {
       ...state.proposalsVoteStatus,
       response: {
         ...state.proposalVoteStatus.response,
-        newVoteStatus: newVoteStatus
+        ...newVoteStatus
       }
     }
   };
@@ -272,6 +275,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_EDIT_USER]: () => receive("editUser", state, action),
   [act.REQUEST_NEW_PROPOSAL]: () => request("newProposal", state, action),
   [act.RECEIVE_NEW_PROPOSAL]: () => receive("newProposal", state, action),
+  [act.REQUEST_EDIT_PROPOSAL]: () => request("editProposal", state, action),
+  [act.RECEIVE_EDIT_PROPOSAL]: () => receive("editProposal", state, action),
   [act.REQUEST_NEW_COMMENT]: () => request("newComment", state, action),
   [act.RECEIVE_NEW_COMMENT]: () => onReceiveNewComment(state, action),
   [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () => request("proposalPaywallDetails", state, action),
@@ -288,7 +293,7 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RESET_RESEND_VERIFICATION_EMAIL]: () => reset("resendVerificationEmail", state),
   [act.REQUEST_PASSWORD_RESET_REQUEST]: () => request("passwordReset", state, action),
   [act.RECEIVE_PASSWORD_RESET_REQUEST]: () => receive("passwordReset", state, action),
-  [act.RESET_PROPOSAL]: () => reset("newProposal", state),
+  [act.RESET_PROPOSAL]: () => resetMultiple([ "newProposal", "editProposal" ], state),
   [act.REDIRECTED_FROM]: () => ({ ...state, login: { ...state.login, redirectedFrom: action.payload } }),
   [act.RESET_REDIRECTED_FROM]: () => reset("login", state),
   [act.REQUEST_SETSTATUS_PROPOSAL]: () => request("setStatusProposal", state, action),

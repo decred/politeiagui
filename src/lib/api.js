@@ -193,6 +193,9 @@ export const newProposal = (csrf, proposal) =>
     ...proposal, censorshiprecord, timestamp: Date.now() / 1000, status: PROPOSAL_STATUS_UNREVIEWED
   }));
 
+export const editProposal = (csrf, proposal) =>
+  POST("/proposals/edit", csrf, proposal).then(getResponse);
+
 export const newComment = (csrf, comment) => POST("/comments/new", csrf, comment).then(getResponse);
 
 export const startVote = (email, csrf, token) =>

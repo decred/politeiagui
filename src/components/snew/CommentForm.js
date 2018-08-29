@@ -48,11 +48,14 @@ const CommentForm = ({
                 />
               </div>
             ):
-            <Message height="70px" type="info">
-              <span>
-                  Proposals which voting has started can not receive further comments. However, you can still leave your comments on proposals which voting is unstarted.
-              </span>
-            </Message>
+            getVoteStatus(token) && getVoteStatus(token).status !== PROPOSAL_VOTING_NOT_STARTED ?
+              <Message height="70px" type="info">
+                <span>
+                    Proposals which voting has started can not receive further comments. However, you can still leave your comments on proposals which voting is unstarted.
+                </span>
+              </Message>
+              :
+              null
           }
           {!isPostingComment && getVoteStatus(token) &&
             getVoteStatus(token).status === PROPOSAL_VOTING_NOT_STARTED && (

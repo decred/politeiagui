@@ -2,7 +2,7 @@ import Promise from "promise";
 import { reset } from "redux-form";
 import get from "lodash/get";
 import isEqual from "lodash/isEqual";
-import { onSubmitProposal, onChangeUsername, onChangePassword, onFetchProposalComments } from "./api";
+import { onSubmitProposal, onChangeUsername, onChangePassword, onFetchProposalComments, onSubmitEditedProposal } from "./api";
 import { onFetchProposal as onFetchProposalApi, onSubmitComment as onSubmitCommentApi } from "./api";
 import { onFetchUsernamesById as onFetchUsernamesByIdApi } from "./api";
 import * as sel from "../selectors";
@@ -33,6 +33,10 @@ export const onSaveNewProposal = ({ name, description, files }, _, props) =>
   (dispatch, getState) =>
     dispatch(onSubmitProposal(props.loggedInAsEmail, props.userid, props.username, name.trim(), description, files))
       .then(() => sel.newProposalToken(getState()));
+
+export const onEditProposal = ({ name, description, files }, _, props) =>
+  (dispatch) =>
+    dispatch(onSubmitEditedProposal(props.loggedInAsEmail, name.trim(), description, files, props.token));
 
 export const onSaveDraftProposal = ({ name, description, files, draftId }) =>
   act.SAVE_DRAFT_PROPOSAL({ name: name.trim(), description, files, timestamp: Date.now() / 1000, draftId });

@@ -23,3 +23,5 @@ export const receive = (key, state, { payload, error }) => ({
 });
 
 export const reset = (key, state) => ({ ...state, [key]: DEFAULT_REQUEST_STATE });
+
+export const resetMultiple = (keys, state) => keys.reduce((acc, key) => ({ ...acc, [key]: DEFAULT_REQUEST_STATE }), state);

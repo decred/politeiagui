@@ -46,9 +46,10 @@ class SubmitPage extends React.Component {
       handleSubmit,
       newProposalError,
       userCanExecuteActions,
-      proposalCredits
+      proposalCredits,
+      editingMode
     } = this.props;
-    const submitEnabled = !submitting && !error && userCanExecuteActions && proposalCredits > 0;
+    const submitEnabled = !submitting && !error && userCanExecuteActions && (proposalCredits > 0 || editingMode);
     return !policy || isLoading ? <PageLoadingIcon /> : (
       <div className="content" role="main">
         <div className="page submit-proposal-page">
@@ -75,13 +76,26 @@ class SubmitPage extends React.Component {
                 />
                 <div className="roundfield" id="title-field">
                   <div className="roundfield-content">
-                    <Field
-                      name="name"
-                      component={InputFieldWithError}
-                      tabIndex={1}
-                      type="text"
-                      placeholder="Proposal Name"
-                    />
+                    <div style={{ display: "flex", width: "100%" }}>
+                      <Field
+                        name="name"
+                        component={InputFieldWithError}
+                        tabIndex={1}
+                        type="text"
+                        placeholder="Proposal Name"
+                      />
+                      {editingMode ? <div
+                        style={{
+                          flex: "1",
+                          display: "flex",
+                          justifyContent: "flex-end"
+                        }}>
+                        <span style={{ color: "#777" }}>
+                          <i className="fa fa-edit right-margin-5" />
+                          Editing
+                        </span>
+                      </div> : null}
+                    </div>
                     <input name="kind" type="hidden" defaultValue="self" />
                     <div className="usertext">
                       <input name="thing_id" type="hidden" defaultValue />
@@ -114,7 +128,7 @@ class SubmitPage extends React.Component {
                         type="submit"
                         value="form"
                         onClick={handleSubmit(onSave)}>
-                        submit
+                        {!editingMode ? "submit" : "update"}
                       </button>
                       <button
                         className={"togglebutton secondary access-required"}
@@ -124,7 +138,7 @@ class SubmitPage extends React.Component {
                         onClick={handleSubmit(onSaveDraft)}>
                         Save as Draft
                       </button>
-                      {proposalCredits === 0 && (
+                      {(proposalCredits === 0 && !editingMode) && (
                         <div className="submit-button-error">
                           To submit a proposal, you must purchase a proposal credit,
                           see your <Link href="/user/account">account page</Link>{" "}

@@ -885,6 +885,37 @@ describe("test api actions (actions/api.js)", () => {
     );
   });
 
+  test("on edit proposal action", async () => {
+    const path = "/api/v1/proposals/edit";
+    const params = [ FAKE_USER.email, FAKE_PROPOSAL_NAME, FAKE_PROPOSAL_DESCRIPTION, [], FAKE_PROPOSAL_TOKEN ];
+
+    // this needs a custom assertion for success response as the common one doesn't work for this case
+    setPostSuccessResponse(path);
+    const store = getMockedStore();
+    await store.dispatch(api.onSubmitEditedProposal.apply(null, params));
+    const dispatchedActions = store.getActions();
+    expect(dispatchedActions[0].type).toEqual(act.REQUEST_EDIT_PROPOSAL);
+    expect(dispatchedActions[1].type).toEqual(act.RECEIVE_EDIT_PROPOSAL);
+    expect(dispatchedActions[1].error).toBeFalsy();
+
+    await assertApiActionOnError(
+      path,
+      api.onSubmitEditedProposal,
+      params,
+      (e) => [
+        {
+          type: act.REQUEST_EDIT_PROPOSAL,
+          error: false,
+          payload: { name: FAKE_PROPOSAL_NAME, description: FAKE_PROPOSAL_DESCRIPTION, files: [] }
+        },
+        { type: act.RECEIVE_EDIT_PROPOSAL, error: true, payload: e }
+      ],
+      {},
+      methods.POST
+    );
+
+  });
+
   // TODO: for the following tests
   // needs to decouple modal confirmation from the
   // actions so it can be tested

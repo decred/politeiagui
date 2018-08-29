@@ -8,7 +8,6 @@ import { or, constant, not } from "../lib/fp";
 import {
   apiProposal,
   apiProposalComments,
-  proposalPayload,
   userAlreadyPaid,
   getKeyMismatch,
   apiUnvettedProposals,
@@ -17,14 +16,13 @@ import {
   apiUserProposals
 } from "./api";
 import { globalUsernamesById } from "../actions/app";
-import { PAYWALL_STATUS_PAID, PAYWALL_STATUS_WAITING, PROPOSAL_FILTER_ALL, PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED, PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED, PROPOSAL_USER_FILTER_SUBMITTED, PROPOSAL_USER_FILTER_DRAFT } from "../constants";
+import { PAYWALL_STATUS_PAID, PAYWALL_STATUS_WAITING, PROPOSAL_FILTER_ALL, PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_UNREVIEWED_CHANGES, PROPOSAL_STATUS_CENSORED, PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED, PROPOSAL_USER_FILTER_SUBMITTED, PROPOSAL_USER_FILTER_DRAFT } from "../constants";
+import { getTextFromIndexMd } from "../helpers";
 
 export const replyTo = or(get([ "app", "replyParent" ]), constant(0));
 
 export const proposal = state => {
-  const payload = proposalPayload(state);
-  const submittedProposals = state.app.submittedProposals;
-  const proposal = submittedProposals[payload] || apiProposal(state) || {};
+  const proposal =  apiProposal(state) || {};
 
   // Cache the username for the proposal author.
   if(proposal.userid) {
@@ -51,6 +49,19 @@ export const isMarkdown = compose(eq("index.md"), get("name"));
 export const getProposalFiles = compose(get("files"), proposal);
 export const getMarkdownFile = compose(find((isMarkdown)), getProposalFiles);
 export const getNotMarkdownFile = compose(filter(not(isMarkdown)), getProposalFiles);
+
+export const getEditProposalValues = state => {
+  const { name } = proposal(state);
+
+  const files = name ? getNotMarkdownFile(state) : [];
+  const description = name ? getTextFromIndexMd(getMarkdownFile(state)) : "";
+  return {
+    name,
+    description,
+    files
+  };
+};
+
 
 export const getUserPaywallStatus = state => {
   if(userAlreadyPaid(state)) {
@@ -114,7 +125,14 @@ export const getUnvettedFilteredProposals = (state) => {
   if(!filterValue) {
     return proposals;
   }
-  return proposals.filter(proposal => proposal.status === filterValue);
+
+  return proposals.filter(proposal => {
+    // alow propos with status of unreviewed changes be filtered along with general unreviewed props
+    if(proposal.status === PROPOSAL_STATUS_UNREVIEWED_CHANGES && filterValue === PROPOSAL_STATUS_UNREVIEWED) {
+      return true;
+    }
+    return filterValue === proposal.status;
+  });
 };
 
 export const getVettedFilteredProposals = (state) => {
