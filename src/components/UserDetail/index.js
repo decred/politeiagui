@@ -21,15 +21,15 @@ class UserDetail extends Component {
     return user && (user.isadmin || user.id === loggedInAsUserId);
   }
 
-  componentWillReceiveProps({ editUserResponse, ...props }) {
+  componentDidUpdate() {
+    const { editUserResponse } = this.props;
     if(editUserResponse) {
       window.location.reload();
     }
 
-    if(this.isAdminOrTheUser(props)) {
+    if(this.isAdminOrTheUser(this.props)) {
       this.setState({ tabId: USER_DETAIL_TAB_GENERAL });
     }
-
   }
 
   onTabChange(tabId) {

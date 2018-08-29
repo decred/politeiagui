@@ -4,6 +4,10 @@ import requireLoginConnector from "../../connectors/requireLogin";
 import { loadStateLocalStorage } from "../../lib/local_storage";
 
 class AuthenticatedRoute extends Component {
+  constructor(props) {
+    super();
+    this.checkAuthentication(props);
+  }
   componentDidMount() {
     if (this.props.loggedInAsEmail) {
       return;
@@ -12,13 +16,9 @@ class AuthenticatedRoute extends Component {
     this.props.redirectedFrom(this.props.location.pathname);
   }
 
-  componentWillMount() {
-    this.checkAuthentication(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.loggedInAsEmail || nextProps.location !== this.props.location) {
-      this.checkAuthentication(nextProps);
+  componentDidUpate(prevProps) {
+    if (!this.props.loggedInAsEmail || this.props.location !== prevProps.location) {
+      this.checkAuthentication(this.props);
     }
   }
 

@@ -46,7 +46,8 @@ class SubmitWrapper extends Component {
     this.props.onFetchProposal && this.props.onFetchProposal(token);
   }
 
-  componentWillReceiveProps({ editedProposalToken, proposal }){
+  componentDidUpdate(){
+    const { editedProposalToken, proposal } = this.props;
     if (editedProposalToken) {
       this.props.onResetProposal();
       return this.props.history.push("/proposals/" + editedProposalToken);

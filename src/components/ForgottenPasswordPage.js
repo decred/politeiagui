@@ -5,14 +5,10 @@ import qs from "query-string";
 class ForgottenPasswordPage extends Component {
   constructor(props) {
     super(props);
+    const { email } = qs.parse(props.location.search);
     this.state = {
-      email: ""
+      email: email
     };
-  }
-
-  componentWillMount() {
-    const { email } = qs.parse(this.props.location.search);
-    this.setState({ email });
   }
 
   render() {

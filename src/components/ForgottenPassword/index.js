@@ -7,9 +7,9 @@ import forgottenPasswordConnector from "../../connectors/forgottenPassword";
 import validate from "./ForgottenPasswordValidator";
 
 class ForgottenPassword extends Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.forgottenPasswordResponse) {
-      nextProps.history.push("/user/forgotten/password/next");
+  componentDidUpdate() {
+    if (this.props.forgottenPasswordResponse) {
+      this.props.history.push("/user/forgotten/password/next");
     }
   }
 

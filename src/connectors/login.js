@@ -35,7 +35,8 @@ class Wrapper extends Component {
 
   onHidePrivacyPolicy  = () => this.setState({ showPrivacyPolicy: false });
 
-  componentWillReceiveProps({ loggedInAsEmail, redirectedFrom, resetRedirectedFrom, history }) {
+  componentDidUpdate() {
+    const { loggedInAsEmail, redirectedFrom, resetRedirectedFrom, history } = this.props;
     if (loggedInAsEmail && redirectedFrom) {
       resetRedirectedFrom();
       history.push(redirectedFrom);

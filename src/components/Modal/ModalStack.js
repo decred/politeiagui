@@ -11,7 +11,8 @@ class ModalStack extends React.Component {
       modals: []
     };
   }
-  componentWillReceiveProps({ openedModals }) {
+  componentDidUpdate() {
+    const { openedModals } = this.props;
     const { modals } = this.state;
     let modalChanged = false;
     if(modals.length > openedModals.length) {

@@ -40,6 +40,18 @@ class KeyPage extends React.Component {
     }
   }
 
+  updatePubkey = (shouldAutoVerifyKey, prevUpdateUserKey, updateUserKey) => {
+    if (shouldAutoVerifyKey && updateUserKey) {
+      const { verificationtoken } = updateUserKey;
+      if ((prevUpdateUserKey && (verificationtoken !== prevUpdateUserKey.verificationtoken))
+        || (!prevUpdateUserKey && verificationtoken)) {
+        this.setState({ openedVerification: true });
+        this.props.history.push(`/user/key/verify/?verificationtoken=${verificationtoken}`);
+        return;
+      }
+    }
+  }
+
   refreshPubKey = () => {
     myPubKeyHex(this.props.loggedInAsEmail).then(pubkey => {
       if(!this.unmounting) {
@@ -52,28 +64,19 @@ class KeyPage extends React.Component {
     this.resolvePubkey();
   }
 
-  componentDidUpdate() {
-    this.resolvePubkey();
-  }
-
   componentWillUnmount() {
     this.unmounting = true;
     this.props.onIdentityImported(null);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
+    this.resolvePubkey();
     if (this.state.openedVerification)
       return;
-    const { shouldAutoVerifyKey, updateUserKey } = nextProps;
-    if (shouldAutoVerifyKey && updateUserKey) {
-      this.setState({ openedVerification: true });
-      const { verificationtoken } = updateUserKey;
-      this.props.history.push(`/user/key/verify/?verificationtoken=${verificationtoken}`);
-      return;
-    }
+    this.updatePubkey(this.props.shouldAutoVerifyKey, prevProps.updateUserKey, this.props.updateUserKey);
 
     // update displayed public key when the identity is successfully imported
-    if (!this.props.identityImportSuccess && nextProps.identityImportSuccess) {
+    if (!prevProps.identityImportSuccess && this.props.identityImportSuccess) {
       this.refreshPubKey();
     }
   }

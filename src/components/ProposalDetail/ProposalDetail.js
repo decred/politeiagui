@@ -13,13 +13,13 @@ class ProposalDetail extends React.Component {
       sortedComments: []
     };
   }
-  componentWillReceiveProps(nextProps) {
-    if((!this.props.proposal || Object.keys(this.props.proposal).length === 0 ) &&
-      nextProps.proposal && Object.keys(nextProps.proposal).length > 0 &&
-      nextProps.proposal.status === 4 ){
-      this.props.onFetchProposalVoteStatus(this.props.token);
+  componentDidUpdate(prevProps) {
+    if((!prevProps.proposal || Object.keys(prevProps.proposal).length === 0 ) &&
+      this.props.proposal && Object.keys(this.props.proposal).length > 0 &&
+      this.props.proposal.status === 4 ){
+      prevProps.onFetchProposalVoteStatus(prevProps.token);
     }
-    this.handleUpdateOfComments(this.props, nextProps);
+    this.handleUpdateOfComments(prevProps, this.props);
   }
   componentDidMount() {
     this.props.onFetchLikedComments(this.props.token);

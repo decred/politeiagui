@@ -10,23 +10,22 @@ import validate from "./PasswordResetValidator";
 import { SubmissionError } from "redux-form";
 
 class PasswordReset extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super();
     const query = this.getQueryParams();
-
     if (isRequiredValidator(query.email) && isRequiredValidator(query.verificationtoken)) {
       return;
     }
-
-    this.props.history.push("/");
+    props.history.push("/");
   }
 
   componentWillUnmount() {
     this.props.resetPasswordReset();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.passwordResetResponse) {
-      nextProps.history.push("/user/password/reset/next");
+  componentDidUpdate() {
+    if (this.props.passwordResetResponse) {
+      this.props.history.push("/user/password/reset/next");
     }
   }
 
