@@ -36,7 +36,8 @@ const newProposalConnector = connect(
 
 class NewProposalWrapper extends Component {
 
-  componentWillReceiveProps({ token }) {
+  componentDidUpdate() {
+    const { token } = this.props;
     if (token) {
       if (this.props.draftProposalById) {
         this.props.onDeleteDraft(this.props.draftProposalById.draftId);
