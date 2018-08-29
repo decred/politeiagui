@@ -44,9 +44,8 @@ class KeyPage extends React.Component {
     if (shouldAutoVerifyKey && updateUserKey) {
       const { verificationtoken } = updateUserKey;
       if ((prevUpdateUserKey && (verificationtoken !== prevUpdateUserKey.verificationtoken))
-        || !prevUpdateUserKey && verificationtoken) {
+        || (!prevUpdateUserKey && verificationtoken)) {
         this.setState({ openedVerification: true });
-        console.log("FIRE");
         this.props.history.push(`/user/key/verify/?verificationtoken=${verificationtoken}`);
         return;
       }
