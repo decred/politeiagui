@@ -19,9 +19,10 @@ const UserDetailPage = ({
   error,
   tabId,
   onTabChange,
-  dcrdataTxUrl
+  dcrdataTxUrl,
+  isAdmin
 }) => {
-  const isAdminOrTheUser = user && (user.isAdmin || loggedInAsUserId === user.id);
+  const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
   return (
     <div className="content" role="main">
       <div className="page user-page">
