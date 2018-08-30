@@ -134,9 +134,7 @@ const ThingLinkComp = ({
             {author &&
               <span>
                 {" by "}
-                {isAdmin && (
-                  <Link href={`/user/${authorid}`}>{author}</Link>
-                )}
+                <Link href={`/user/${authorid}`}>{author}</Link>
                 {!isAdmin && <span> {author} </span>}
               </span>
             }
