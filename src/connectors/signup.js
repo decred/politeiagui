@@ -83,7 +83,10 @@ class Wrapper extends Component {
 
     const policy = this.props.policy || {};
     validate(policy, args);
-
+    const { error } = this.props;
+    if(error) {
+      this.props.clearSubmitErrors();
+    }
 
     if (!this.props.isShowingSignupConfirmation) {
       return this.props.onSignup();
