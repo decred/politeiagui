@@ -160,6 +160,7 @@ describe("test api reducer", () => {
       proposal: DEFAULT_REQUEST_STATE,
       proposalComments: DEFAULT_REQUEST_STATE,
       proposalsVoteStatus: DEFAULT_REQUEST_STATE,
+      notifications: DEFAULT_REQUEST_STATE,
       proposalVoteStatus: DEFAULT_REQUEST_STATE,
       commentsvotes: DEFAULT_REQUEST_STATE,
       userProposals: DEFAULT_REQUEST_STATE,
