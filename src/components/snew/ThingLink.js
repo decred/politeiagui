@@ -173,7 +173,7 @@ const ThingLinkComp = ({
         }
         {expanded &&
           (lastSubmitted === id ? (
-            <Message height="120px" type="info">
+            <Message height="80px" type="info">
               <span>
                 <p
                   style={{
@@ -194,18 +194,6 @@ const ThingLinkComp = ({
                   </a>{" "}
                   to prove that your submission has been accepted for review by
                   Politeia.
-                </p>
-                <p
-                  style={{
-                    marginTop: "0.4166667em",
-                    marginBottom: "0.4166667em"
-                  }}
-                >
-                  <span style={{ fontWeight: "bold" }}>Note:</span> You will not
-                  have access to your proposal content after you close this
-                  page, so it's highly recommended that you download your
-                  proposal if you think it could be unfairly censored by
-                  Politeia admins.
                 </p>
               </span>
             </Message>
