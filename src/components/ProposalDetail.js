@@ -23,7 +23,7 @@ class ProposalDetail extends React.Component {
     const comments = this.props.comments;
     return votes ? comments.map(c => {
       const found = votes.find((element) => element.commentid === c.commentid);
-      return found ? {...c, vote: found.action} : {...c, vote: 0};
+      return found ? { ...c, vote: found.action } : { ...c, vote: 0 };
     }) : comments;
   }
   render() {

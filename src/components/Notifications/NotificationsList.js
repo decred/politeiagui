@@ -21,7 +21,7 @@ export const NotificationsList = ({
         You don't have any notification
       </h1>
       :
-      <ul style={{border: "1px solid #ccc", borderBottom: "0", borderRadius: "3px"}}>
+      <ul style={{ border: "1px solid #ccc", borderBottom: "0", borderRadius: "3px" }}>
         {
           <React.Fragment>
             <div style={{
@@ -33,7 +33,7 @@ export const NotificationsList = ({
               padding: "12px 10px 12px 10px",
               borderRadius: "3px 3px 0 0"
             }}>
-              <h3 style={{color: "#333"}}>Proposals</h3>
+              <h3 style={{ color: "#333" }}>Proposals</h3>
               {!areAllNotificationsViewed(notifications) ?
                 <a style={{
                   cursor: "pointer",
@@ -59,7 +59,7 @@ export const NotificationsList = ({
                     backgroundColor: notification.viewed ? "transparent" : "#ddd"
                   }}>
                   <a
-                    style={{maxWidth: "328px", cursor: "pointer"}}
+                    style={{ maxWidth: "328px", cursor: "pointer" }}
                     onClick={() => markOneAsRead(notification.notificationid)}
                     href={getNotificationURL(notification.notificationtype, getContext(notification))}>
                     {getNotificationIdentifier(notification.notificationtype, getContext(notification))}

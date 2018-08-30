@@ -6,7 +6,7 @@ const notificationsConnector = connect(
   sel.selectorMap({
     notifications: sel.notifications,
     isRequesting: sel.isApiRequestingNotifications,
-    error: sel.apiNotificationsError,
+    error: sel.apiNotificationsError
   }),
   {
     checkNotifications: act.onCheckNotifications

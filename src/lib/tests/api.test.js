@@ -381,7 +381,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "express:/api/v1/user/notifications/check",
       api.checkNotifications,
-      [FAKE_CSRF, [0]]
+      [ FAKE_CSRF, [0] ]
     );
   });
 

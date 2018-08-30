@@ -140,7 +140,7 @@ export const login = (csrf, email, password) =>
   POST("/login", csrf, { email, password: digest(password) }).then(getResponse);
 
 export const checkNotifications = (csrf, notificationids) =>
-  POST("/user/notifications/check", csrf, {notificationids}).then(getResponse);
+  POST("/user/notifications/check", csrf, { notificationids }).then(getResponse);
 
 export const likeComment = (csrf, comment) => POST("/comments/like", csrf, comment).then(getResponse);
 

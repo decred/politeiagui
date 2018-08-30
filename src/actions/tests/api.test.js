@@ -496,7 +496,7 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on check notification", async () => {
     const path = "/api/v1/user/notifications";
-    const params = [FAKE_CSRF, [0]];
+    const params = [ FAKE_CSRF, [0] ];
     await assertApiActionOnSuccess(
       path,
       api.onCheckNotifications,
