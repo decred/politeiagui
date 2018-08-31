@@ -64,10 +64,6 @@ class SubmitWrapper extends Component {
     const Component = this.props.Component;
     return <Component { ...{ ...this.props,
       editingMode: true,
-      initialValues: {
-        ...this.props.initialValues,
-        editing: true
-      },
       onSave: this.onSave
     }}  />;
   }
