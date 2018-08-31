@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 import { isEmpty } from "lodash";
 import qs from "query-string";
 import VerifyPage from "./Page";

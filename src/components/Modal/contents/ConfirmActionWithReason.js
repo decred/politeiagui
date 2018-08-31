@@ -1,7 +1,7 @@
 import React from "react";
 import ModalContentWrapper from "../ModalContentWrapper";
 import Message from "../../Message";
-import connector from "../../../connectors/modal";
+import modalConnector from "../../../connectors/modal";
 
 class ConfirmActionWithReason extends React.Component {
 
@@ -74,4 +74,4 @@ class ConfirmActionWithReason extends React.Component {
   }
 }
 
-export default connector(ConfirmActionWithReason);
+export default modalConnector(ConfirmActionWithReason);

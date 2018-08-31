@@ -1,6 +1,6 @@
 import React from "react";
 import { ThingComment as BaseComment } from "snew-classic-ui";
-import connector from "../../connectors/reply";
+import replyConnector from "../../connectors/reply";
 import { PROPOSAL_VOTING_NOT_STARTED } from "../../constants";
 import Message from "../Message";
 
@@ -57,4 +57,4 @@ class ThingComment extends React.PureComponent {
   }
 }
 
-export default connector(ThingComment);
+export default replyConnector(ThingComment);

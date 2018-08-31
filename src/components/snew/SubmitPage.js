@@ -1,6 +1,6 @@
 import React from "react";
 import ReactBody from "react-body";
-import connector from "../../connectors/submitProposal";
+import submitProposalConnector from "../../connectors/submitProposal";
 import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
 import FilesField from "../Form/Fields/FilesField";
 import ErrorField from "../Form/Fields/ErrorField";
@@ -163,4 +163,4 @@ class SubmitPage extends React.Component {
   }
 }
 
-export default connector(SubmitPage);
+export default submitProposalConnector(SubmitPage);

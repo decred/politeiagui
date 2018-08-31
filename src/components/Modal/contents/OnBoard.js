@@ -1,6 +1,6 @@
 import React from "react";
 import ModalContentWrapper from "../ModalContentWrapper";
-import connector from "../../../connectors/modal";
+import modalConnector from "../../../connectors/modal";
 import { Tabs, Tab } from "../../Tabs";
 import Markdown from "../../snew/Markdown";
 
@@ -303,4 +303,4 @@ votes should be less than a week.
 ];
 
 
-export default connector(OnBoard);
+export default modalConnector(OnBoard);

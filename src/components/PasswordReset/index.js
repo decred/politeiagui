@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { autobind } from "core-decorators";
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 import qs from "query-string";
 import { assign } from "lodash";
 import { isRequiredValidator } from "../../validators";

@@ -1,7 +1,7 @@
 import React from "react";
 import LinkComponent from "./Link";
 import Message from "../Message";
-import connector from "../../connectors/reply";
+import replyConnector from "../../connectors/reply";
 import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
 import { PROPOSAL_VOTING_NOT_STARTED } from "../../constants";
 import MarkdownHelp from "../MarkdownHelp";
@@ -114,4 +114,4 @@ const CommentForm = ({
     </React.Fragment> : null
 );
 
-export default connector(CommentForm);
+export default replyConnector(CommentForm);

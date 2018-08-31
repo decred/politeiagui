@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import ReactBody from "react-body";
-import connector from "../../connectors/currentUser";
+import currentUserConnector from "../../connectors/currentUser";
 import Dropdown from "../Dropdown";
 import Link from "./Link";
 import Tooltip from "../Tooltip";
@@ -81,4 +81,4 @@ const UserInfo = ({
     </div>
   );
 
-export default withRouter(connector(UserInfo));
+export default withRouter(currentUserConnector(UserInfo));
