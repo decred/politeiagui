@@ -175,11 +175,12 @@ for good proposals and policies for censoring proposals will be iterated once Po
 ## How to submit a Politeia (Pi) proposal
 
 When authoring a request using Pi one must answer the following 5 questions:
-1.  What
-2.  Why
-3.  How
-4.  Who
-5.  When
+
+1. What
+2. Why
+3. How
+4. Who
+5. When
 
 In the following paragraphs we are going to explore some examples. We'll use a
 software feature as the example.
