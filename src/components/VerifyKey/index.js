@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import propTypes from "prop-types";
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 import { isEmpty } from "lodash";
 import * as pki from "../../lib/pki";
 import PageLoadingIcon from "../snew/PageLoadingIcon";

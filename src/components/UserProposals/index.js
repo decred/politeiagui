@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { autobind } from "core-decorators";
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 import userProposalsConnector from "../../connectors/userProposals";
 import { Content as ProposalListing } from "../../components/snew";
 

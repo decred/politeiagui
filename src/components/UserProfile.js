@@ -1,5 +1,5 @@
 import React from "react";
-import connector from "../connectors/userProfile";
+import userProfileConnector from "../connectors/userProfile";
 import PasswordChange from "./PasswordChange";
 import PrivateKeyIdentityManager from "./PrivateKeyIdentityManager";
 import Message from "./Message";
@@ -39,4 +39,4 @@ const UserProfile = ({
   </div>
 );
 
-export default connector(UserProfile);
+export default userProfileConnector(UserProfile);

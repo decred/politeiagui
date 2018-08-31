@@ -1,6 +1,6 @@
 import React from "react";
 import ModalContentWrapper from "../ModalContentWrapper";
-import connector from "../../../connectors/modal";
+import modalConnector from "../../../connectors/modal";
 
 class ConfirmAction extends React.Component {
   handleCancel = () => {
@@ -39,4 +39,4 @@ class ConfirmAction extends React.Component {
   }
 }
 
-export default connector(ConfirmAction);
+export default modalConnector(ConfirmAction);

@@ -4,7 +4,7 @@ import ProposalImages from "../ProposalImages";
 import DownloadBundle from "../DownloadBundle";
 import Message from "../Message";
 import actions from "../../connectors/actions";
-import connector from "../../connectors/thingLink";
+import thingLinkConnector from "../../connectors/thingLink";
 import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
@@ -16,7 +16,7 @@ import {
 } from "../../constants";
 import { getProposalStatus } from "../../helpers";
 import VoteStats from "../VoteStats";
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
 import Tooltip from "../Tooltip";
 
@@ -308,4 +308,4 @@ class ThingLink extends React.Component {
   }
 }
 
-export default connector(withRouter(ThingLink));
+export default thingLinkConnector(withRouter(ThingLink));

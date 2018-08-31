@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "../Link";
-import connector from "../../../connectors/currentUser";
+import currentUserConnector from "../../../connectors/currentUser";
 
 const HeaderBottomLeft = ({
   subredditData,
@@ -38,4 +38,4 @@ const HeaderBottomLeft = ({
   </div>
 );
 
-export default connector(HeaderBottomLeft);
+export default currentUserConnector(HeaderBottomLeft);
