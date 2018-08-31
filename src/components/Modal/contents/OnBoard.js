@@ -245,7 +245,7 @@ votes should be less than a week.
     4. 2 hours to add RPC to politeiawwwcli
 
     In addition allow for 1 hour of overhead (going back and forth on slack/github
-    etc). This will bring the grand total to 17 hours at a rate of $40/h. This
+    etc). This will bring the grand total to 17 hours at a rate of $40/hr. This
     proposal will therefore be capped at $680.
 
     The proposed schedule is to do this work over 2 weeks in order to allow back
