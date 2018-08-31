@@ -21,3 +21,13 @@ export const assertGETOnRouteIsCalled = async (path, func, args, mockResult = {}
   expect(fetchMock.called(path)).toBeTruthy();
   return result;
 };
+
+export const setMockUrl = (props) => {
+  Object.keys(props).forEach(key => {
+    Object.defineProperty(window.location, key, {
+      writable: true,
+      value: props[key]
+    });
+  });
+};
+
