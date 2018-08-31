@@ -11,7 +11,7 @@ import { SubmissionError } from "redux-form";
 
 class PasswordReset extends Component {
   constructor(props) {
-    super();
+    super(props);
     const query = this.getQueryParams();
     if (isRequiredValidator(query.email) && isRequiredValidator(query.verificationtoken)) {
       return;
