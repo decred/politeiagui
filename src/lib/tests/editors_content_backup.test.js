@@ -1,4 +1,5 @@
 import * as ecb from "../editors_content_backup";
+import { setMockUrl } from "./support/helpers";
 
 describe("Persist editors content on session storage", () => {
   const NAME = "test title";
@@ -21,44 +22,31 @@ describe("Persist editors content on session storage", () => {
   };
 
   const getFromSS = (key) => sessionStorage.getItem(key);
-  test("save editor content from state to session storage", () => {
-    ecb.handleSaveTextEditorsContent(mockState);
-    expect(getFromSS("new-proposal-name")).toEqual(NAME);
-    expect(getFromSS("new-proposal-description")).toEqual(DESCRIPTION);
-    expect(getFromSS("new-comment::/")).toEqual(COMMENT);
 
-    sessionStorage.clear();
-    const copyMockState = JSON.parse(JSON.stringify(mockState));
-    delete copyMockState.form["form/proposal"].values;
-    delete copyMockState.form["form/reply"].values;
-    ecb.handleSaveTextEditorsContent(copyMockState);
-    expect(getFromSS("new-proposal-title")).toBeFalsy();
-    expect(getFromSS("new-proposal-description")).toBeFalsy();
-    expect(getFromSS("new-comment::/")).toBeFalsy();
+  test("backup new proposal content into to session storage", () => {
+    const path = ecb.NEW_PROPOSAL_PATH;
+    setMockUrl({ pathname: path });
+    ecb.handleSaveTextEditorsContent(mockState);
+    const nameKey = ecb.getProposalBackupKey(ecb.PROPOSAL_FORM_NAME, path);
+    const descKey = ecb.getProposalBackupKey(ecb.PROPOSAL_FORM_DESC, path);
+
+    // retrieve data from session storage
+    expect(ecb.getNewProposalData()).toEqual({ name: NAME, description: DESCRIPTION });
+    // clear saved data
+    ecb.resetNewProposalData();
+    expect(getFromSS(nameKey)).toBeFalsy();
+    expect(getFromSS(descKey)).toBeFalsy();
+
+    // make sure data saved under other paths won't affect the new proposal path
+    setMockUrl({ pathname: "any/path" });
+    ecb.handleSaveTextEditorsContent(mockState);
+    expect(getFromSS(nameKey)).toBeFalsy();
+    expect(getFromSS(descKey)).toBeFalsy();
   });
 
-  test("clear proposals and comments content from session storage", () => {
+  test("backup draft proposal content into session storage", () => {
+    const path = ecb.NEW_PROPOSAL_PATH;
+    setMockUrl({ pathname: path, search: "?draftid=draft_96x4t0pp2" });
     ecb.handleSaveTextEditorsContent(mockState);
-    expect(getFromSS("new-proposal-name")).toEqual(NAME);
-    expect(getFromSS("new-proposal-description")).toEqual(DESCRIPTION);
-    expect(getFromSS("new-comment::/")).toEqual(COMMENT);
-
-    ecb.resetNewProposalData();
-    ecb.resetNewCommentData();
-    expect(getFromSS("new-proposal-title")).toBeFalsy();
-    expect(getFromSS("new-proposal-description")).toBeFalsy();
-    expect(getFromSS("new-comment::/")).toBeFalsy();
-  });
-
-  test("get proposals and comments from session storage", () => {
-    ecb.handleSaveTextEditorsContent(mockState);
-    expect(ecb.getNewProposalData().name).toEqual(NAME);
-    expect(ecb.getNewProposalData().description).toEqual(DESCRIPTION);
-    expect(ecb.getNewCommentData().comment).toEqual(COMMENT);
-    ecb.resetNewCommentData();
-    ecb.resetNewProposalData();
-    expect(ecb.getNewProposalData().name).toEqual("");
-    expect(ecb.getNewProposalData().description).toEqual("");
-    expect(ecb.getNewCommentData().comment).toEqual("");
   });
 });
