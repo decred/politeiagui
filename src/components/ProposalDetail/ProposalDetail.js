@@ -24,6 +24,9 @@ class ProposalDetail extends React.Component {
   componentDidMount() {
     this.props.onFetchLikedComments(this.props.token);
   }
+  componentWillUnmount() {
+    this.props.resetLastSubmittedProposal();
+  }
   handleUpdateOfComments = (currentProps, nextProps) => {
     let sortedComments;
 

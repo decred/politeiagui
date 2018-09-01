@@ -191,7 +191,8 @@ const ThingLinkComp = ({
                     politeia_verify tool
                   </a>{" "}
                   to prove that your submission has been accepted for review by
-                  Politeia.
+                  Politeia. If your proposal is censored by an admin, you won't be
+                  able to access it's contents.
                 </p>
               </span>
             </Message>

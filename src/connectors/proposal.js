@@ -30,7 +30,8 @@ const proposalConnector = connect(
     onSetReplyParent: act.onSetReplyParent,
     onFetchProposalVoteStatus: act.onFetchProposalVoteStatus,
     onFetchLikedComments: act.onFetchLikedComments,
-    onSetCommentsSortOption: act.onSetCommentsSortOption
+    onSetCommentsSortOption: act.onSetCommentsSortOption,
+    resetLastSubmittedProposal: act.resetLastSubmittedProposal
   }, dispatch)
 );
 
