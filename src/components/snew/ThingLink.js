@@ -91,7 +91,7 @@ const ThingLinkComp = ({
         ) : null}
       {is_self ? <Link className="thumbnail self may-blank" href={url} /> : null}
       <div className="entry unvoted">
-        <p className="title" style={{ display: "flex" }}>
+        <span className="title" style={{ display: "flex" }}>
           <Link className="title may-blank loggedin" href={url} tabIndex={rank}>
             {title} {review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES ?
               <span className="font-12 warning-color">(edited)</span> : null}
@@ -111,8 +111,8 @@ const ThingLinkComp = ({
                 Edit
               </Link>
             </div> : null}
-        </p>
-        <p className="tagline">
+        </span>
+        <span className="tagline">
           <span className="submitted-by">
             submitted{" "}
             <Tooltip
@@ -143,7 +143,7 @@ const ThingLinkComp = ({
               <span> - {numcomments}{numcomments === 1 ? " comment" : " comments"} </span>
             }
           </span>
-        </p>
+        </span>
         {!draftId && (
           <p className="tagline proposal-token">
             {id} • {getProposalStatus(review_status)}

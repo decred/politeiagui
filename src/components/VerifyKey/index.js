@@ -66,7 +66,7 @@ VerifyKey.propTypes = {
   email: propTypes.string.isRequired,
   verifyUserKey: propTypes.object,
   verifyUserKeyError: propTypes.object,
-  onVerify: propTypes.func.isRequired
+  onVerify: propTypes.func
 };
 
 export default verifyKeyConnector(withRouter(VerifyKey));

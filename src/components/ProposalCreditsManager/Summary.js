@@ -41,8 +41,8 @@ const ProposalCreditsSummary = ({
           </div>
         </div>
         <div className="credit-purchase-body">
-          {proposalCreditPurchases.map(creditPurchase => (
-            <div className="credit-purchase-row">
+          {proposalCreditPurchases.map((creditPurchase, i) => (
+            <div className="credit-purchase-row" key={i}>
               <div className="credit-purchase-cell credit-purchase-date">
                 {new Date(creditPurchase.datePurchased * 1000).toUTCString()}
               </div>
