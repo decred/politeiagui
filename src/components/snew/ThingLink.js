@@ -4,7 +4,7 @@ import ProposalImages from "../ProposalImages";
 import DownloadBundle from "../DownloadBundle";
 import Message from "../Message";
 import actions from "../../connectors/actions";
-import connector from "../../connectors/thingLink";
+import thingLinkConnector from "../../connectors/thingLink";
 import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
@@ -16,7 +16,7 @@ import {
 } from "../../constants";
 import { getProposalStatus } from "../../helpers";
 import VoteStats from "../VoteStats";
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
 import Tooltip from "../Tooltip";
 
@@ -134,9 +134,7 @@ const ThingLinkComp = ({
             {author &&
               <span>
                 {" by "}
-                {isAdmin && (
-                  <Link href={`/user/${authorid}`}>{author}</Link>
-                )}
+                <Link href={`/user/${authorid}`}>{author}</Link>
                 {!isAdmin && <span> {author} </span>}
               </span>
             }
@@ -173,7 +171,7 @@ const ThingLinkComp = ({
         }
         {expanded &&
           (lastSubmitted === id ? (
-            <Message height="120px" type="info">
+            <Message height="80px" type="info">
               <span>
                 <p
                   style={{
@@ -193,19 +191,8 @@ const ThingLinkComp = ({
                     politeia_verify tool
                   </a>{" "}
                   to prove that your submission has been accepted for review by
-                  Politeia.
-                </p>
-                <p
-                  style={{
-                    marginTop: "0.4166667em",
-                    marginBottom: "0.4166667em"
-                  }}
-                >
-                  <span style={{ fontWeight: "bold" }}>Note:</span> You will not
-                  have access to your proposal content after you close this
-                  page, so it's highly recommended that you download your
-                  proposal if you think it could be unfairly censored by
-                  Politeia admins.
+                  Politeia. If your proposal is censored by an admin, you won't be
+                  able to access it's contents.
                 </p>
               </span>
             </Message>
@@ -322,4 +309,4 @@ class ThingLink extends React.Component {
   }
 }
 
-export default connector(withRouter(ThingLink));
+export default thingLinkConnector(withRouter(ThingLink));

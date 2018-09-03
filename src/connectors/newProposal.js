@@ -9,7 +9,7 @@ import { getNewProposalData } from "../lib/editors_content_backup";
 
 const newProposalConnector = connect(
   sel.selectorMap({
-    initialValues: or(sel.draftProposalById, getNewProposalData),
+    draftProposal: sel.draftProposalById,
     isLoading: or(sel.isLoadingSubmit, sel.newProposalIsRequesting),
     policy: sel.policy,
     userid: sel.userid,
@@ -35,9 +35,15 @@ const newProposalConnector = connect(
 );
 
 class NewProposalWrapper extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      initialValues: props.draftProposal || getNewProposalData()
+    };
+  }
 
-  componentDidUpdate() {
-    const { token } = this.props;
+  componentDidUpdate(prevProps) {
+    const { token, draftProposal } = this.props;
     if (token) {
       if (this.props.draftProposalById) {
         this.props.onDeleteDraft(this.props.draftProposalById.draftId);
@@ -45,12 +51,20 @@ class NewProposalWrapper extends Component {
       this.props.onResetProposal();
       return this.props.history.push("/proposals/" + token);
     }
+
+    const draftProposalDataAvailable = !prevProps.draftProposal && draftProposal;
+    if(draftProposalDataAvailable) {
+      this.setState({
+        initialValues: draftProposal
+      });
+    }
   }
 
   render() {
     const Component = this.props.Component;
     return <Component { ...{ ...this.props,
-      onSave: this.onSave
+      onSave: this.onSave,
+      initialValues: this.state.initialValues
     }}
     />;
   }

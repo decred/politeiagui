@@ -173,4 +173,6 @@ const selectDefaultFilterValue = (proposalFilterCounts, defaultFilterPreferences
 
 export const setOnboardAsViewed = () => act.SET_ONBOARD_AS_VIEWED();
 
+export const resetLastSubmittedProposal = () => act.RESET_LAST_SUBMITTED();
+
 export const onSetCommentsSortOption = (option) => act.SET_COMMENTS_SORT_OPTION(option);

@@ -1,5 +1,5 @@
 import React from "react";
-import connector from "../../connectors/actions";
+import actionsConnector from "../../connectors/actions";
 
 const SubmitTextSidebox = ({
   Link, loggedInAsEmail
@@ -20,4 +20,4 @@ const SubmitTextSidebox = ({
   </div>
 ) : null;
 
-export default connector(SubmitTextSidebox);
+export default actionsConnector(SubmitTextSidebox);

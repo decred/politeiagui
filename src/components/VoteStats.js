@@ -1,5 +1,5 @@
 import React from "react";
-import connector from "../connectors/voteStats";
+import voteStatsConnector from "../connectors/voteStats";
 import StackedBarChart from "./StackedBarChart";
 import { getRandomColor } from "../helpers";
 import { PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED } from "../constants";
@@ -157,4 +157,4 @@ class VoteStats extends React.Component {
   }
 }
 
-export default connector(VoteStats);
+export default voteStatsConnector(VoteStats);

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { autobind } from "core-decorators";
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 import { SubmissionError } from "redux-form";
 import ForgottenPasswordForm from "./ForgottenPasswordForm";
 import forgottenPasswordConnector from "../../connectors/forgottenPassword";

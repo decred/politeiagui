@@ -8,6 +8,7 @@ class MockedLocalStorage {
   constructor() {
     this.keyValue = {};
   }
+  inspectValues = () => this.keyValue
   setItem = (key, value) => {
     this.keyValue = {
       ...this.keyValue,

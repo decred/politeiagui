@@ -2,7 +2,7 @@ import React from "react";
 import { Field } from "redux-form";
 import Message from "../Message";
 import LoadingIcon from "./LoadingIcon";
-import connector from "../../connectors/search";
+import searchConnector from "../../connectors/search";
 
 const SidebarSearch = ({
   error,
@@ -47,4 +47,4 @@ const SidebarSearch = ({
   </div>
 );
 
-export default connector(SidebarSearch);
+export default searchConnector(SidebarSearch);

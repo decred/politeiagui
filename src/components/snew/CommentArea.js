@@ -1,7 +1,7 @@
 import React from "react";
 import Select from "react-select";
 import { CommentArea as CommentAreaBase } from "snew-classic-ui";
-import connector from "../../connectors/proposal";
+import proposalConnector from "../../connectors/proposal";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../../lib/api";
 import {
   PROPOSAL_STATUS_CENSORED,
@@ -50,4 +50,4 @@ const CommentArea = ({
     }} />
 );
 
-export default connector(CommentArea);
+export default proposalConnector(CommentArea);

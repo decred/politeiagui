@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Modal from "./Modal";
 import ModalContent from "./ModalContent";
-import connector from "../../connectors/modalStack";
+import modalStackConnector from "../../connectors/modalStack";
 
 class ModalStack extends React.Component {
   constructor(props) {
@@ -46,4 +46,4 @@ ModalStack.propTypes = {
   openedModals: PropTypes.array.isRequired
 };
 
-export default connector(ModalStack);
+export default modalStackConnector(ModalStack);

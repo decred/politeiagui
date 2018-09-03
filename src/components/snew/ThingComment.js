@@ -1,7 +1,7 @@
 import React from "react";
 import { ThingComment as BaseComment } from "snew-classic-ui";
-import connector from "../../connectors/reply";
-import { PROPOSAL_VOTING_NOT_STARTED } from "../../constants";
+import replyConnector from "../../connectors/reply";
+import { PROPOSAL_VOTING_FINISHED } from "../../constants";
 import Message from "../Message";
 
 class ThingComment extends React.PureComponent {
@@ -48,7 +48,7 @@ class ThingComment extends React.PureComponent {
           showCommentForm,
           user: loggedInAsEmail,
           authorHref: `/user/${props.authorid}`,
-          blockvote: keyMismatch || (getVoteStatus(token).status !== PROPOSAL_VOTING_NOT_STARTED),
+          blockvote: keyMismatch || (getVoteStatus(token).status === PROPOSAL_VOTING_FINISHED),
           handleVote: onLikeComment,
           token
         }} />
@@ -57,4 +57,4 @@ class ThingComment extends React.PureComponent {
   }
 }
 
-export default connector(ThingComment);
+export default replyConnector(ThingComment);
