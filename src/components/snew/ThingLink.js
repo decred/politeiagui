@@ -19,6 +19,8 @@ import VoteStats from "../VoteStats";
 import { withRouter } from "react-router-dom";
 import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
 import Tooltip from "../Tooltip";
+import * as modalTypes from "../Modal/modalTypes";
+import CensorMessage from "../CensorMessage";
 
 const ThingLinkComp = ({
   Link,
@@ -28,6 +30,7 @@ const ThingLinkComp = ({
   name,
   author,
   authorid,
+  censormessage,
   domain,
   rank = 0,
   userid,
@@ -155,7 +158,7 @@ const ThingLinkComp = ({
             <span
               className="delete-draft"
               onClick={() => {
-                confirmWithModal("CONFIRM_ACTION",
+                confirmWithModal(modalTypes.CONFIRM_ACTION,
                   { message: "Are you sure you want to delete this draft?" }).then(
                   ok => ok && onDeleteDraftProposal(draftId)
                 );
@@ -201,6 +204,7 @@ const ThingLinkComp = ({
               <DownloadBundle />
             </div>
           ))}
+        {censormessage && <CensorMessage message={censormessage} />}
         <Expando {...{ expanded, is_self, selftext, selftext_html }} />
         <ProposalImages readOnly files={otherFiles} />
         {isAdmin ? (
@@ -221,13 +225,16 @@ const ThingLinkComp = ({
                     <li key="spam">
                       <form
                         className="toggle remove-button"
-                        onSubmit={e =>
-                          onChangeStatus(
+                        onSubmit={e => confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
+                          reasonPlaceholder: "Please provide a reason to censor this proposal"
+                        }).then(
+                          ({ reason, confirm }) => confirm && onChangeStatus(
                             loggedInAsEmail,
                             id,
-                            PROPOSAL_STATUS_CENSORED
-                          ) && e.preventDefault()
-                        }
+                            PROPOSAL_STATUS_CENSORED,
+                            reason
+                          )
+                        ) && e.preventDefault()}
                       >
                         <button
                           className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
@@ -242,10 +249,15 @@ const ThingLinkComp = ({
                       <form
                         className="toggle approve-button"
                         onSubmit={e =>
-                          onChangeStatus(
-                            loggedInAsEmail,
-                            id,
-                            PROPOSAL_STATUS_PUBLIC
+                          confirmWithModal(modalTypes.CONFIRM_ACTION, {
+                            message: "Are you sure you want to publish this proposal?"
+                          }).then(
+                            confirm => confirm &&
+                              onChangeStatus(
+                                loggedInAsEmail,
+                                id,
+                                PROPOSAL_STATUS_PUBLIC
+                              )
                           ) && e.preventDefault()
                         }
                       >
