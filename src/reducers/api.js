@@ -42,7 +42,7 @@ export const onReceiveSetStatus = (state, action) => {
   const { proposal: updatedProposal } = action.payload;
   const viewedProposal = get([ "proposal", "response", "proposal" ], state);
   const updateProposalStatus = proposal => {
-    if (updatedProposal.token === get([ "censorshiprecord", "token" ], proposal)) {
+    if (get([ "censorshiprecord", "token" ], updatedProposal) === get([ "censorshiprecord", "token" ], proposal)) {
       return updatedProposal;
     } else {
       return proposal;
