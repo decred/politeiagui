@@ -30,7 +30,7 @@ const ThingLinkComp = ({
   name,
   author,
   authorid,
-  censormessage,
+  censorMessage,
   domain,
   rank = 0,
   userid,
@@ -204,7 +204,7 @@ const ThingLinkComp = ({
               <DownloadBundle />
             </div>
           ))}
-        {censormessage && <CensorMessage message={censormessage} />}
+        {censorMessage && <CensorMessage message={censorMessage} />}
         <Expando {...{ expanded, is_self, selftext, selftext_html }} />
         <ProposalImages readOnly files={otherFiles} />
         {isAdmin ? (

@@ -396,7 +396,6 @@ export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
 
 export const onSubmitStatusProposal = (loggedInAsEmail, token, status, censorMessage = "") =>
   withCsrf((dispatch, getState, csrf) => {
-    console.log("hey ma", censorMessage);
     dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
     if (status === 4) {
       dispatch(act.SET_PROPOSAL_APPROVED(true));

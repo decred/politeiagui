@@ -185,7 +185,7 @@ export const proposalSetStatus = (email, csrf, token, status, censorMsg) =>
   pki.myPubKeyHex(email).then(publickey =>
     pki.signStringHex(email, token + status + censorMsg).then(signature => POST(
       `/proposals/${token}/status`, csrf,
-      { proposalstatus: status, token, signature, publickey, censormessage: censorMsg }
+      { proposalstatus: status, token, signature, publickey, statuschangemessage: censorMsg }
     ))).then(getResponse);
 
 export const newProposal = (csrf, proposal) =>
