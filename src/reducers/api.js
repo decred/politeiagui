@@ -39,26 +39,24 @@ export const onReceiveSetStatus = (state, action) => {
   state = receive("setStatusProposal", state, action);
   if (action.error) return state;
 
-  const token = get([ "setStatusProposal", "payload", "token" ], state);
-  const status = get([ "setStatusProposal", "payload", "status" ], state);
+  const { proposal: updatedProposal } = action.payload;
   const viewedProposal = get([ "proposal", "response", "proposal" ], state);
   const updateProposalStatus = proposal => {
-    if (token === get([ "censorshiprecord", "token" ], proposal)) {
-      return { ...proposal, status };
+    if (get([ "censorshiprecord", "token" ], updatedProposal) === get([ "censorshiprecord", "token" ], proposal)) {
+      return updatedProposal;
     } else {
       return proposal;
     }
   };
-  const updatedViewed = viewedProposal && updateProposalStatus(viewedProposal);
 
   return {
     ...state,
-    proposal: (viewedProposal && viewedProposal !== updatedViewed)
+    proposal: viewedProposal
       ? ({
         ...state.proposal,
         response: {
           ...state.proposal.response,
-          proposal: updateProposalStatus(viewedProposal)
+          proposal: updatedProposal
         }
       }) : state.proposal,
     unvetted: {

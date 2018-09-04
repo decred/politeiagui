@@ -365,11 +365,17 @@ describe("test api reducer", () => {
   });
 
   test("correcly updates status state for onReceiveSetStatus", () => {
+    const proposalUpdated = {
+      censorshiprecord: {
+        token: "censortoken"
+      },
+      status: 3
+    };
+
     let action = {
       type: act.RECEIVE_SETSTATUS_PROPOSAL,
       payload: {
-        token: "censortoken",
-        status: "vetted"
+        proposal: proposalUpdated
       },
       error: false
     };
@@ -377,35 +383,20 @@ describe("test api reducer", () => {
     let state = request("setStatusProposal", MOCK_STATE, action);
     let newState = api.onReceiveSetStatus(state, action);
 
-    expect(api.default(state, action).proposal.response.proposal).toEqual({
-      censorshiprecord: {
-        token: "censortoken"
-      },
-      status: "vetted"
-    });
+    expect(api.default(state, action).proposal.response.proposal)
+      .toEqual(proposalUpdated);
 
     // updates status to 'vetted' for the proposal with token 'censortoken'
-    expect(newState.proposal.response.proposal).toEqual({
-      censorshiprecord: {
-        token: "censortoken"
-      },
-      status: "vetted"
-    });
+    expect(newState.proposal.response.proposal).toEqual(proposalUpdated);
 
     expect(newState.unvetted.response.proposals).toEqual([
-      {
-        censorshiprecord: {
-          token: "censortoken"
-        },
-        status: "vetted"
-      },
+      proposalUpdated,
       {
         censorshiprecord: {
           token: "anothertoken"
         }
       }
     ]);
-
     action = {
       ...action,
       payload: {
@@ -417,7 +408,6 @@ describe("test api reducer", () => {
     newState = api.onReceiveSetStatus(state, action);
 
     // doesn't update any proposal status
-    expect(newState.proposal).toEqual(MOCK_STATE.proposal);
     expect(newState.unvetted.response.proposals).toEqual(MOCK_STATE.unvetted.response.proposals);
   });
 
