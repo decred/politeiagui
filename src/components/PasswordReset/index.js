@@ -29,7 +29,12 @@ class PasswordReset extends Component {
     }
   }
 
+  componentDidMount() {
+    this.props.onFetchData();
+  }
+
   render() {
+    console.log(this.props);
     return (
       <PasswordResetForm {...{
         onPasswordReset: this.onPasswordReset,
