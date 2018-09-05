@@ -1269,3 +1269,7 @@ form div.usertext-body.may-blank-within.md-container {
 .spacer {
   max-width: 1000px !important;
 }
+
+.thing-proposal {
+  border-bottom: 0.5px solid #d6d6d6;
+}

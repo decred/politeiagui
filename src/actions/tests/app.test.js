@@ -6,8 +6,7 @@ import {
   onSubmitProposal,
   onChangeUsername,
   onChangePassword,
-  onFetchProposalComments,
-  onLogout
+  onFetchProposalComments
 } from "../api";
 import {
   onFetchProposal as onFetchProposalApi,
@@ -245,14 +244,20 @@ describe("test app actions (actions/app.js)", () => {
     mockedEvent = generateLSChangeEvent(JSON.stringify({}));
     expect(app.onLocalStorageChange(mockedEvent))
       .toDispatchActionsWithState(MOCK_STATE, [
-        onLogout()
+        {
+          type: act.RECEIVE_LOGOUT,
+          payload: {}
+        }
       ], done);
 
     localStorage.removeItem(ls.loggedInStateKey);
     mockedEvent = generateLSChangeEvent(JSON.stringify(false));
     expect(app.onLocalStorageChange(mockedEvent))
       .toDispatchActionsWithState(MOCK_STATE, [
-        onLogout()
+        {
+          type: act.RECEIVE_LOGOUT,
+          payload: {}
+        }
       ], done);
 
     // Actions are not dispatched when the local storage event key

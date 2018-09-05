@@ -103,7 +103,7 @@ export const onLocalStorageChange = (event) => (dispatch, getState) => {
 
     if(apiMeResponseFromStorage && !isEqual(apiMeResponseFromStorage, apiMeResponse)) {
       dispatch(onLoadMe(apiMeFromStorage));
-    } else if (!stateFromStorage || (stateFromStorage && !apiMeFromStorage)) dispatch(onLogout());
+    } else if (!stateFromStorage || (stateFromStorage && !apiMeFromStorage)) dispatch(act.RECEIVE_LOGOUT({}));
   } catch(e) {
     dispatch(onLogout());
   }
