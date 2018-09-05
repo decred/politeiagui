@@ -9,6 +9,7 @@ import Paywall from "./Paywall";
 import accountConnector from "../connectors/account";
 import { CONFIRM_ACTION } from "../components/Modal/modalTypes";
 import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "../constants";
+import { verifyUserPubkey } from "../helpers";
 
 const UpdatedKeyMessage = ({ email }) => (
   <span>
@@ -61,6 +62,9 @@ class KeyPage extends React.Component {
   }
 
   componentDidMount() {
+    if (this.props.loggedInAsEmail) {
+      verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey, this.props.keyMismatchAction);
+    }
     this.resolvePubkey();
   }
 
@@ -70,6 +74,9 @@ class KeyPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (!prevProps.loggedInAsEmail && this.props.loggedInAsEmail) {
+      verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey, this.props.keyMismatchAction);
+    }
     this.resolvePubkey();
     if (this.state.openedVerification)
       return;
@@ -91,6 +98,7 @@ class KeyPage extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     const {
       loggedInAsEmail,
       onUpdateUserKey,
