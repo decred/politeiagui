@@ -4,6 +4,7 @@ import map from "lodash/fp/map";
 import cloneDeep from "lodash/cloneDeep";
 import { DEFAULT_REQUEST_STATE, request, receive, reset, resetMultiple } from "./util";
 import { PROPOSAL_VOTING_ACTIVE } from "../constants";
+import { clearStateLocalStorage } from "../lib/local_storage";
 
 export const DEFAULT_STATE = {
   me: DEFAULT_REQUEST_STATE,
@@ -313,6 +314,7 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_LOGOUT]: () => {
     const tempState = DEFAULT_STATE;
     tempState.init = state.init;
+    clearStateLocalStorage();
     return tempState;
   }
 })[action.type] || (() => state))();

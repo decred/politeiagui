@@ -70,7 +70,7 @@ const ThingLinkComp = ({
   const isEditable = authorid === userId && !isVotingActiveOrFinished && review_status !== PROPOSAL_STATUS_CENSORED;
   return (
     <div
-      className={`thing id-${id} odd link ${
+      className={`thing thing-proposal id-${id} odd link ${
         review_status === PROPOSAL_STATUS_CENSORED ? "spam" : null
       }`}
       data-author={author}
