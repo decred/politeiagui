@@ -43,7 +43,8 @@ class PasswordReset extends Component {
   }
 
   onPasswordReset(props) {
-    validate(props);
+    const policy = this.props.policy;
+    validate(props, policy);
 
     return this
       .props
