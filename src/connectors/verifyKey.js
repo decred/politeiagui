@@ -9,11 +9,14 @@ const verifyKeyConnector = connect(
     verifyUserKey: sel.verifyUserKey,
     apiMeResponse: sel.apiMeResponse,
     loggedInAsEmail: sel.loggedInAsEmail,
-    verifyUserKeyError: sel.verifyUserKeyError
+    verifyUserKeyError: sel.verifyUserKeyError,
+    keyMismatch: sel.getKeyMismatch,
+    userPubkey: sel.userPubkey
   }),
   dispatch => bindActionCreators({
     onVerifyUserKey: act.onVerifyUserKey,
-    updateMe: act.updateMe
+    updateMe: act.updateMe,
+    keyMismatchAction: act.keyMismatch
   }, dispatch)
 );
 

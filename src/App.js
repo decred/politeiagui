@@ -6,13 +6,13 @@ import configureStore from "./configureStore";
 import { Subreddit } from "./components/snew";
 import HeaderAlert from "./components/HeaderAlert";
 import Routes from "./Routes";
-import * as pki from "./lib/pki";
 import loaderConnector from "./connectors/loader";
 import { handleSaveTextEditorsContent } from "./lib/editors_content_backup";
 import { handleSaveStateToLocalStorage } from "./lib/local_storage";
 import { onLocalStorageChange } from "./actions/app";
 import ModalStack from "./components/Modal/ModalStack";
 import { ONBOARD } from "./components/Modal/modalTypes";
+import { verifyUserPubkey } from "./helpers";
 
 const store = configureStore();
 
@@ -30,17 +30,9 @@ class Loader extends Component {
     props.onInit();
   }
 
-  verifyUserPubkey = (email, keyToBeMatched) =>
-    pki
-      .getKeys(email)
-      .then(keys =>
-        this.props.keyMismatchAction(
-          keys.publicKey !== keyToBeMatched
-        )
-      );
-
   componentDidUpdate(prevProps) {
     if (!prevProps.loggedInAsEmail && this.props.loggedInAsEmail) {
+      verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey, this.props.keyMismatchAction);
       this.props.onLoadDraftProposals(this.props.loggedInAsEmail);
     }
 
@@ -62,14 +54,11 @@ class Loader extends Component {
 
   componentDidMount() {
     if (this.props.loggedInAsEmail) {
-      this.verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey);
+      verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey, this.props.keyMismatchAction);
     }
 
     this.storageListener = createStorageListener(store);
     window.addEventListener("storage", this.storageListener);
-    if (this.props.loggedInAsEmail) {
-      this.verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey);
-    }
   }
 
   componentWillUnmount() {
