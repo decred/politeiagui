@@ -314,7 +314,7 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_LOGOUT]: () => {
     const tempState = DEFAULT_STATE;
     tempState.init = state.init;
-    clearStateLocalStorage();
+    clearStateLocalStorage(); // TODO: move to keep reducers as pure functions
     return tempState;
   }
 })[action.type] || (() => state))();
