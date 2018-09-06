@@ -1271,5 +1271,7 @@ form div.usertext-body.may-blank-within.md-container {
 }
 
 .thing-proposal {
-  border-bottom: 0.5px solid #d6d6d6;
+  -webkit-box-shadow: 1px 1px 1px 6px #f4f7f9;
+	-moz-box-shadow: 1px 1px 1px 6px #f4f7f9;
+	box-shadow: 1px 1px 1px 6px #f4f7f9;
 }
