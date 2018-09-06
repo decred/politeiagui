@@ -139,7 +139,6 @@ const ThingLinkComp = ({
               <span>
                 {" by "}
                 <Link href={`/user/${authorid}`}>{author}</Link>
-                {!isAdmin && <span> {author} </span>}
               </span>
             }
             {displayVersion && version ? ` - version ${version}` : null}
