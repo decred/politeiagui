@@ -127,13 +127,13 @@ const GeneralTab = ({
         </div>
       ) : null}
       {user.newuserpaywalltx && ([
-        <Field label="Transaction">
+        <Field label="Transaction" key={0}>
           {user.newuserpaywalltx === "cleared_by_admin" ?
             <span>Cleared by admin</span> :
             <a href={dcrdataTxUrl + user.newuserpaywalltx} target="_blank">{user.newuserpaywalltx}</a>
           }
         </Field>,
-        <FieldSeparator />
+        <FieldSeparator key={2} />
       ])}
       <Field label="Failed login attempts">{user.failedloginattempts}</Field>
       <Field label="Locked">

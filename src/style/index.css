@@ -1269,3 +1269,9 @@ form div.usertext-body.may-blank-within.md-container {
 .spacer {
   max-width: 1000px !important;
 }
+
+.thing-proposal {
+  -webkit-box-shadow: 1px 1px 1px 6px #f4f7f9;
+	-moz-box-shadow: 1px 1px 1px 6px #f4f7f9;
+	box-shadow: 1px 1px 1px 6px #f4f7f9;
+}

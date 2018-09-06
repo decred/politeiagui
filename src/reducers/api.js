@@ -4,6 +4,7 @@ import map from "lodash/fp/map";
 import cloneDeep from "lodash/cloneDeep";
 import { DEFAULT_REQUEST_STATE, request, receive, reset, resetMultiple } from "./util";
 import { PROPOSAL_VOTING_ACTIVE } from "../constants";
+import { clearStateLocalStorage } from "../lib/local_storage";
 
 export const DEFAULT_STATE = {
   me: DEFAULT_REQUEST_STATE,
@@ -39,26 +40,24 @@ export const onReceiveSetStatus = (state, action) => {
   state = receive("setStatusProposal", state, action);
   if (action.error) return state;
 
-  const token = get([ "setStatusProposal", "payload", "token" ], state);
-  const status = get([ "setStatusProposal", "payload", "status" ], state);
+  const { proposal: updatedProposal } = action.payload;
   const viewedProposal = get([ "proposal", "response", "proposal" ], state);
   const updateProposalStatus = proposal => {
-    if (token === get([ "censorshiprecord", "token" ], proposal)) {
-      return { ...proposal, status };
+    if (get([ "censorshiprecord", "token" ], updatedProposal) === get([ "censorshiprecord", "token" ], proposal)) {
+      return updatedProposal;
     } else {
       return proposal;
     }
   };
-  const updatedViewed = viewedProposal && updateProposalStatus(viewedProposal);
 
   return {
     ...state,
-    proposal: (viewedProposal && viewedProposal !== updatedViewed)
+    proposal: viewedProposal
       ? ({
         ...state.proposal,
         response: {
           ...state.proposal.response,
-          proposal: updateProposalStatus(viewedProposal)
+          proposal: updatedProposal
         }
       }) : state.proposal,
     unvetted: {
@@ -315,6 +314,7 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_LOGOUT]: () => {
     const tempState = DEFAULT_STATE;
     tempState.init = state.init;
+    clearStateLocalStorage(); // TODO: move to keep reducers as pure functions
     return tempState;
   }
 })[action.type] || (() => state))();

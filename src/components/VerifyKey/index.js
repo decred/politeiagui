@@ -7,6 +7,7 @@ import PageLoadingIcon from "../snew/PageLoadingIcon";
 import verifyKeyConnector from "../../connectors/verifyKey";
 import qs from "query-string";
 import Message from "../Message";
+import { verifyUserPubkey } from "../../helpers";
 
 class VerifyKey extends Component {
   constructor(props) {
@@ -27,8 +28,14 @@ class VerifyKey extends Component {
       const { email } = this.props;
       this.props.onVerifyUserKey(email, verificationtoken);
     }
-    const { verifyUserKey, apiMeResponse, loggedInAsEmail } = this.props;
+    const {
+      verifyUserKey,
+      apiMeResponse,
+      loggedInAsEmail,
+      userPubkey,
+      keyMismatchAction } = this.props;
     if(verifyUserKey && verifyUserKey.success && apiMeResponse && loggedInAsEmail) {
+      verifyUserPubkey(loggedInAsEmail, userPubkey, keyMismatchAction);
       pki.myPubKeyHex(loggedInAsEmail).then((pubkey) => {
         if(pubkey !== apiMeResponse.publickey) {
           this.props.updateMe({ ...this.props.apiMeResponse, publickey: pubkey });
@@ -66,7 +73,7 @@ VerifyKey.propTypes = {
   email: propTypes.string.isRequired,
   verifyUserKey: propTypes.object,
   verifyUserKeyError: propTypes.object,
-  onVerify: propTypes.func.isRequired
+  onVerify: propTypes.func
 };
 
 export default verifyKeyConnector(withRouter(VerifyKey));

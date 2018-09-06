@@ -19,6 +19,8 @@ import VoteStats from "../VoteStats";
 import { withRouter } from "react-router-dom";
 import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
 import Tooltip from "../Tooltip";
+import * as modalTypes from "../Modal/modalTypes";
+import CensorMessage from "../CensorMessage";
 
 const ThingLinkComp = ({
   Link,
@@ -28,6 +30,7 @@ const ThingLinkComp = ({
   name,
   author,
   authorid,
+  censorMessage,
   domain,
   rank = 0,
   userid,
@@ -65,9 +68,10 @@ const ThingLinkComp = ({
   const displayVersion = review_status === PROPOSAL_STATUS_PUBLIC;
   const isVotingActiveOrFinished = voteStatus === PROPOSAL_VOTING_ACTIVE || voteStatus === PROPOSAL_VOTING_FINISHED;
   const isEditable = authorid === userId && !isVotingActiveOrFinished && review_status !== PROPOSAL_STATUS_CENSORED;
+  const hasBeenUpdated = review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES || parseInt(version) > 1;
   return (
     <div
-      className={`thing id-${id} odd link ${
+      className={`thing thing-proposal id-${id} odd link ${
         review_status === PROPOSAL_STATUS_CENSORED ? "spam" : null
       }`}
       data-author={author}
@@ -91,7 +95,7 @@ const ThingLinkComp = ({
         ) : null}
       {is_self ? <Link className="thumbnail self may-blank" href={url} /> : null}
       <div className="entry unvoted">
-        <p className="title" style={{ display: "flex" }}>
+        <span className="title" style={{ display: "flex" }}>
           <Link className="title may-blank loggedin" href={url} tabIndex={rank}>
             {title} {review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES ?
               <span className="font-12 warning-color">(edited)</span> : null}
@@ -111,10 +115,10 @@ const ThingLinkComp = ({
                 Edit
               </Link>
             </div> : null}
-        </p>
-        <p className="tagline">
+        </span>
+        <span className="tagline">
           <span className="submitted-by">
-            submitted{" "}
+            {hasBeenUpdated ? "updated " : "submitted "}
             <Tooltip
               text={new Date(created_utc * 1000).toLocaleString()}
               wrapperStyle={{
@@ -143,7 +147,7 @@ const ThingLinkComp = ({
               <span> - {numcomments}{numcomments === 1 ? " comment" : " comments"} </span>
             }
           </span>
-        </p>
+        </span>
         {!draftId && (
           <p className="tagline proposal-token">
             {id} • {getProposalStatus(review_status)}
@@ -155,7 +159,7 @@ const ThingLinkComp = ({
             <span
               className="delete-draft"
               onClick={() => {
-                confirmWithModal("CONFIRM_ACTION",
+                confirmWithModal(modalTypes.CONFIRM_ACTION,
                   { message: "Are you sure you want to delete this draft?" }).then(
                   ok => ok && onDeleteDraftProposal(draftId)
                 );
@@ -201,6 +205,7 @@ const ThingLinkComp = ({
               <DownloadBundle />
             </div>
           ))}
+        {censorMessage && <CensorMessage message={censorMessage} />}
         <Expando {...{ expanded, is_self, selftext, selftext_html }} />
         <ProposalImages readOnly files={otherFiles} />
         {isAdmin ? (
@@ -221,13 +226,16 @@ const ThingLinkComp = ({
                     <li key="spam">
                       <form
                         className="toggle remove-button"
-                        onSubmit={e =>
-                          onChangeStatus(
+                        onSubmit={e => confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
+                          reasonPlaceholder: "Please provide a reason to censor this proposal"
+                        }).then(
+                          ({ reason, confirm }) => confirm && onChangeStatus(
                             loggedInAsEmail,
                             id,
-                            PROPOSAL_STATUS_CENSORED
-                          ) && e.preventDefault()
-                        }
+                            PROPOSAL_STATUS_CENSORED,
+                            reason
+                          )
+                        ) && e.preventDefault()}
                       >
                         <button
                           className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
@@ -242,10 +250,15 @@ const ThingLinkComp = ({
                       <form
                         className="toggle approve-button"
                         onSubmit={e =>
-                          onChangeStatus(
-                            loggedInAsEmail,
-                            id,
-                            PROPOSAL_STATUS_PUBLIC
+                          confirmWithModal(modalTypes.CONFIRM_ACTION, {
+                            message: "Are you sure you want to publish this proposal?"
+                          }).then(
+                            confirm => confirm &&
+                              onChangeStatus(
+                                loggedInAsEmail,
+                                id,
+                                PROPOSAL_STATUS_PUBLIC
+                              )
                           ) && e.preventDefault()
                         }
                       >

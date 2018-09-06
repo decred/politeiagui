@@ -1,5 +1,6 @@
 import get from "lodash/fp/get";
 import CryptoJS from "crypto-js";
+import * as pki from "./lib/pki";
 
 export const getProposalStatus = (proposalStatus) => get(proposalStatus, [
   "Invalid",
@@ -129,3 +130,12 @@ export const getRandomColor = () => {
 
 export const uniqueID = prefix =>
   prefix + "_" + Math.random().toString(36).substr(2, 9);
+
+export const verifyUserPubkey = (email, keyToBeMatched, keyMismatchAction) =>
+  pki
+    .getKeys(email)
+    .then(keys =>
+      keyMismatchAction(
+        keys.publicKey !== keyToBeMatched
+      )
+    );

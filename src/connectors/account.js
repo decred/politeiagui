@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import * as sel from "../selectors";
+import * as act from "../actions";
 import { withRouter } from "react-router-dom";
 import { onUpdateUserKey } from "../actions/api";
 import { onIdentityImported } from "../actions/app";
@@ -23,6 +24,7 @@ const accountConnector = connect(sel.selectorMap({
   userPubkey: sel.userPubkey
 }), dispatch => bindActionCreators({
   onUpdateUserKey,
+  keyMismatchAction: act.keyMismatch,
   onIdentityImported,
   confirmWithModal
 }, dispatch)
