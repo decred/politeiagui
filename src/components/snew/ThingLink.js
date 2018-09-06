@@ -68,6 +68,7 @@ const ThingLinkComp = ({
   const displayVersion = review_status === PROPOSAL_STATUS_PUBLIC;
   const isVotingActiveOrFinished = voteStatus === PROPOSAL_VOTING_ACTIVE || voteStatus === PROPOSAL_VOTING_FINISHED;
   const isEditable = authorid === userId && !isVotingActiveOrFinished && review_status !== PROPOSAL_STATUS_CENSORED;
+  const hasBeenUpdated = review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES || parseInt(version) > 1;
   return (
     <div
       className={`thing thing-proposal id-${id} odd link ${
@@ -117,7 +118,7 @@ const ThingLinkComp = ({
         </span>
         <span className="tagline">
           <span className="submitted-by">
-            submitted{" "}
+            {hasBeenUpdated ? "updated " : "submitted "}
             <Tooltip
               text={new Date(created_utc * 1000).toLocaleString()}
               wrapperStyle={{
