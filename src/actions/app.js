@@ -112,15 +112,15 @@ export const onLocalStorageChange = (event) => (dispatch, getState) => {
 export const globalUsernamesById = {};
 export const onFetchUsernamesById = (userIds) => (dispatch, getState) => {
   const usernamesById = {};
-  const userIdsToFetch = [];
+  let userIdsToFetch = {};
   for(const userId of userIds) {
     if(userId in globalUsernamesById) {
       usernamesById[userId] = globalUsernamesById[userId];
     } else {
-      userIdsToFetch.push(userId);
+      userIdsToFetch[userId] = true;
     }
   }
-
+  userIdsToFetch = Object.keys(userIdsToFetch).map(id => id);
   // All usernames were found in the global cache, so no need
   // to make a server request.
   if(userIdsToFetch.length === 0) {
