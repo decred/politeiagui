@@ -1,5 +1,5 @@
 import React from "react";
-import LoadingIcon from "../snew/LoadingIcon";
+import PageLoadingIcon from "../snew/PageLoadingIcon";
 import Message from "../Message";
 import { Tabs, Tab } from "../Tabs";
 import GeneralTab from "./GeneralTab";
@@ -26,7 +26,7 @@ const UserDetailPage = ({
   return (
     <div className="content" role="main">
       <div className="page user-page">
-        {isLoading && <LoadingIcon />}
+        {isLoading && <PageLoadingIcon />}
         {error && (
           <Message
             type="error"
