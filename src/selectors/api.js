@@ -6,10 +6,10 @@ import { or, bool, constant, not } from "../lib/fp";
 import { PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED } from "../constants";
 
 
-const getIsApiRequesting = key => bool(get([ "api", key, "isRequesting" ]));
-const getApiPayload = key => get([ "api", key, "payload" ]);
-const getApiResponse = key => get([ "api", key, "response" ]);
-const getApiError = key => get([ "api", key, "error" ]);
+export const getIsApiRequesting = key => bool(get([ "api", key, "isRequesting" ]));
+export const getApiPayload = key => get([ "api", key, "payload" ]);
+export const getApiResponse = key => get([ "api", key, "response" ]);
+export const getApiError = key => get([ "api", key, "error" ]);
 
 export const isApiRequestingInit = getIsApiRequesting("init");
 export const isApiRequestingMe = getIsApiRequesting("me");
