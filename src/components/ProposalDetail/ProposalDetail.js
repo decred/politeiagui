@@ -56,6 +56,17 @@ class ProposalDetail extends React.Component {
       );
     }
 
+    // usernames aren't fully merged into comments
+    const commentWithoutAnUsername = comments => comments.filter(c => !c.username)[0];
+    if (commentWithoutAnUsername(this.state.sortedComments) && !commentWithoutAnUsername(nextProps.comments)) {
+      sortedComments = updateSortedComments(
+        nextProps.comments,
+        currentProps.commentsSortOption,
+        nextProps.commentsvotes,
+        false
+      );
+    }
+
     // commentsvotes changed
     if(nextProps.commentsvotes && !isEqual(currentProps.commentsvotes, nextProps.commentsvotes)) {
       const updatedComments = getUpdatedComments(nextProps.commentsvotes, nextProps.comments);
