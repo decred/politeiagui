@@ -49,7 +49,7 @@ const synchronousValidation = (values, props) => {
   if (!isRequiredValidator(values.name && values.name.trim())) {
     errors.name = "You must provide a proposal name.";
   } else if (props.policy && checkProposalName(props, values)) {
-    errors.name = "The proposal name must be between 8 and 80 characters long and only contain the following characters: A-z 0-9 & . , : ; - @ + # / ( ) !.";
+    errors.name = "The proposal name must be between 8 and 80 characters long and only contain the following characters: a-z A-Z 0-9 & . , : ; - @ + # / \\ ^ _ ` ( ) ! [ ].";
   } else if (!isRequiredValidator(values.description)) {
     errors.description = "You must provide a description.";
   } else {
