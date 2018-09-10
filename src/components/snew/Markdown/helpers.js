@@ -6,7 +6,6 @@ export const traverseChildren = (el, cb) => {
   const filterChildren = (c) => React.Children.map(c,
     child => traverseChildren(child, cb)
   );
-  let newProps = null;
   let newElement = null;
   if(el.children) {
     newElement = {
@@ -14,11 +13,10 @@ export const traverseChildren = (el, cb) => {
       children: filterChildren(el.children)
     };
   } else if (el.props && el.props.children) {
-    newProps = {
-      ...el.props,
+    newElement = {
+      ...el,
       children: filterChildren(el.props.children)
     };
-    newElement = React.cloneElement(el, newProps);
   }
   return newElement ? cb(newElement) : cb(el);
 };
@@ -37,7 +35,10 @@ export const handleFilterXss = (el) => {
   if (newProps.src) {
     newProps.src = xssFilters.uriInDoubleQuotedAttr(props.src);
   }
-  return React.cloneElement(el, newProps);
+  return {
+    ...el,
+    props: newProps
+  };
 };
 
 const verifyExternalLink = (e, link, confirmWithModal) => {
