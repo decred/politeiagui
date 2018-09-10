@@ -2,12 +2,14 @@ import Promise from "promise";
 import * as sel from "../selectors";
 import * as api from "../lib/api";
 import * as pki from "../lib/pki";
+import get from "lodash/fp/get";
 import { confirmWithModal, openModal, closeModal } from "./modal";
 import * as modalTypes from "../components/Modal/modalTypes";
 import * as external_api_actions from "./external_api";
 import { clearStateLocalStorage } from "../lib/local_storage";
 import { callAfterMinimumWait } from "./lib";
 import act from "./methods";
+import cloneDeep from "lodash/cloneDeep";
 import {
   globalUsernamesById,
   selectDefaultPublicFilterValue,
@@ -142,6 +144,7 @@ export const onLogin = ({ email, password }) =>
 export const onLogout = () =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_LOGOUT());
+    clearStateLocalStorage();
     return api
       .logout(csrf)
       .then(response => {
@@ -330,8 +333,21 @@ export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
       dispatch(openModal("LOGIN", {}, null));
       return;
     }
+    const state = getState();
+    const newAction = parseInt(action, 10);
+    const commentsvotes = state.api.commentsvotes.response &&
+      state.api.commentsvotes.response.commentsvotes;
+    const backupCV = cloneDeep(commentsvotes);
+    const comments = state.api.proposalComments.response &&
+      state.api.proposalComments.response.comments;
+
+    const { cvs: newCommentsVotes, oldAction }
+      = api.reduceCommentLikes(commentsvotes, commentid, token, newAction);
+
     dispatch(act.REQUEST_LIKE_COMMENT({ commentid, token }));
-    dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({ token, commentid, action }));
+    dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({
+      backupCV, comments, newCommentsVotes, oldAction, newAction, commentid
+    }));
     return Promise.resolve(api.makeLikeComment(token, action, commentid))
       .then(comment => api.signLikeComment(loggedInAsEmail, comment))
       .then(comment => api.likeComment(csrf, comment))
@@ -400,9 +416,21 @@ export const onSubmitStatusProposal = (loggedInAsEmail, token, status, censorMes
     if (status === 4) {
       dispatch(act.SET_PROPOSAL_APPROVED(true));
     }
+    const state = getState();
+    const viewedProposal = get([ "proposal", "response", "proposal" ], state.api);
     return api
       .proposalSetStatus(loggedInAsEmail, csrf, token, status, censorMessage)
-      .then(response => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(response)))
+      .then(response => {
+        const { proposal: updatedProposal } = response;
+        const updateProposalStatus = proposal => {
+          if (get([ "censorshiprecord", "token" ], updatedProposal) === get([ "censorshiprecord", "token" ], proposal)) {
+            return updatedProposal;
+          } else {
+            return proposal;
+          }
+        };
+        dispatch(act.RECEIVE_SETSTATUS_PROPOSAL({ viewedProposal, updatedProposal, updateProposalStatus }));
+      })
       .catch(error => {
         dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
       });

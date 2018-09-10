@@ -228,3 +228,33 @@ export const usernamesById = (csrf, userids) => {
 export const proposalsVoteStatus = () => GET("/v1/proposals/votestatus").then(getResponse);
 export const proposalVoteStatus = (token) => GET(`/v1/proposals/${token}/votestatus`).then(getResponse);
 
+
+export const reduceCommentLikes = (commentsvotes, commentid, token, newAction) => {
+  let reducedVotes = null;
+  const cvfound = commentsvotes && commentsvotes.find(
+    cv => cv.commentid === commentid && cv.token === token
+  );
+
+  if (cvfound) {
+    reducedVotes = commentsvotes.reduce(
+      (acc, cv) => {
+        if (cv.commentid === commentid && cv.token === token) {
+          const currentAction = parseInt(cv.action, 10);
+          acc.oldAction = currentAction;
+          cv = {
+            ...cv,
+            action: newAction === currentAction ? 0 : newAction
+          };
+        }
+        return { ...acc, cvs: acc.cvs.concat([cv]) };
+      }, { cvs: [], oldAction: null });
+  } else {
+    const newCommentVote = { token, commentid, action: newAction };
+    reducedVotes = {
+      cvs: commentsvotes ? commentsvotes.concat([newCommentVote]) : [newCommentVote],
+      oldAction: 0
+    };
+  }
+
+  return reducedVotes;
+};

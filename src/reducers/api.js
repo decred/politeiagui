@@ -1,10 +1,8 @@
 import * as act from "../actions/types";
 import get from "lodash/fp/get";
 import map from "lodash/fp/map";
-import cloneDeep from "lodash/cloneDeep";
 import { DEFAULT_REQUEST_STATE, request, receive, reset, resetMultiple } from "./util";
 import { PROPOSAL_VOTING_ACTIVE } from "../constants";
-import { clearStateLocalStorage } from "../lib/local_storage";
 
 export const DEFAULT_STATE = {
   me: DEFAULT_REQUEST_STATE,
@@ -39,17 +37,7 @@ export const DEFAULT_STATE = {
 export const onReceiveSetStatus = (state, action) => {
   state = receive("setStatusProposal", state, action);
   if (action.error) return state;
-
-  const { proposal: updatedProposal } = action.payload;
-  const viewedProposal = get([ "proposal", "response", "proposal" ], state);
-  const updateProposalStatus = proposal => {
-    if (get([ "censorshiprecord", "token" ], updatedProposal) === get([ "censorshiprecord", "token" ], proposal)) {
-      return updatedProposal;
-    } else {
-      return proposal;
-    }
-  };
-
+  const { viewedProposal, updatedProposal, updateProposalStatus } = action.payload;
   return {
     ...state,
     proposal: viewedProposal
@@ -125,43 +113,8 @@ export const onResetSyncLikeComment = (state) => {
 };
 
 export const onReceiveSyncLikeComment = (state, action) => {
-  const { token, action: cAction, commentid } = action.payload;
-  const newAction = parseInt(cAction, 10);
-
-  const commentsvotes = state.commentsvotes.response &&
-    state.commentsvotes.response.commentsvotes;
-  const backupCV = cloneDeep(commentsvotes);
-  const comments = state.proposalComments.response &&
-    state.proposalComments.response.comments;
-
-  let reducedVotes = null;
-  const cvfound = commentsvotes && commentsvotes.find(
-    cv => cv.commentid === commentid && cv.token === token
-  );
-
-  if (cvfound) {
-    reducedVotes = commentsvotes.reduce(
-      (acc, cv) => {
-        if (cv.commentid === commentid && cv.token === token) {
-          const currentAction = parseInt(cv.action, 10);
-          acc.oldAction = currentAction;
-          cv = {
-            ...cv,
-            action: newAction === currentAction ? 0 : newAction
-          };
-        }
-        return { ...acc, cvs: acc.cvs.concat([cv]) };
-      }, { cvs: [], oldAction: null });
-  } else {
-    const newCommentVote = { token, commentid, action: newAction };
-    reducedVotes = {
-      cvs: commentsvotes ? commentsvotes.concat([newCommentVote]) : [newCommentVote],
-      oldAction: 0
-    };
-  }
-
-  const { cvs: newCommentsVotes, oldAction } = reducedVotes;
-
+  const { backupCV, comments, newCommentsVotes,
+    oldAction, newAction, commentid } = action.payload;
   return {
     ...state,
     commentsvotes: {
@@ -314,7 +267,6 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_LOGOUT]: () => {
     const tempState = DEFAULT_STATE;
     tempState.init = state.init;
-    clearStateLocalStorage(); // TODO: move to keep reducers as pure functions
     return tempState;
   }
 })[action.type] || (() => state))();
