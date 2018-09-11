@@ -341,6 +341,23 @@ export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
       });
   });
 
+export const onCensorComment = (loggedInAsEmail, token, commentid) =>
+  withCsrf((dispatch, getState, csrf) => {
+    return dispatch(confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {}))
+      .then(({ confirm, reason }) => {
+        if (confirm) {
+          dispatch(act.REQUEST_CENSOR_COMMENT({ commentid, token }));
+          return Promise.resolve(api.makeCensoredComment(token, reason, commentid))
+            .then(comment => api.signCensorComment(loggedInAsEmail, comment))
+            .then(comment => api.censorComment(csrf, comment))
+            .then(response => console.log(response))
+            .catch(error => {
+              dispatch(act.RECEIVE_CENSOR_COMMENT(null, error));
+            });
+        }
+      });
+  });
+
 export const onSubmitComment = (loggedInAsEmail, token, comment, parentid) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));

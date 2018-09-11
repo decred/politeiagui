@@ -25,7 +25,8 @@ const replyConnector = connect(
     onFetchData: act.onGetPolicy,
     onSubmitComment: act.onSubmitComment,
     onSetReplyParent: act.onSetReplyParent,
-    onLikeComment: act.onLikeComment
+    onLikeComment: act.onLikeComment,
+    onCensorComment: act.onCensorComment
   }
 );
 

@@ -266,6 +266,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_PROPOSAL_COMMENTS]: () => receive("proposalComments", state, action),
   [act.REQUEST_LIKE_COMMENT]: () => request("likeComment", state, action),
   [act.RECEIVE_LIKE_COMMENT]: () => receive("likeComment", state, action),
+  [act.REQUEST_CENSOR_COMMENT]: () => request("censorComment", state, action),
+  [act.RECEIVE_CENSOR_COMMENT]: () => receive("censorComment", state, action),
   [act.RECEIVE_SYNC_LIKE_COMMENT]: () => onReceiveSyncLikeComment(state, action),
   [act.RESET_SYNC_LIKE_COMMENT]: () => onResetSyncLikeComment(state),
   [act.REQUEST_LIKED_COMMENTS]: () => request("commentsvotes", state, action),
