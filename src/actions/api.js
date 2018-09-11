@@ -350,7 +350,11 @@ export const onCensorComment = (loggedInAsEmail, token, commentid) =>
           return Promise.resolve(api.makeCensoredComment(token, reason, commentid))
             .then(comment => api.signCensorComment(loggedInAsEmail, comment))
             .then(comment => api.censorComment(csrf, comment))
-            .then(response => console.log(response))
+            .then(response => {
+              if (response.receipt) {
+                dispatch(act.RECEIVE_CENSOR_COMMENT(commentid, null));
+              }
+            })
             .catch(error => {
               dispatch(act.RECEIVE_CENSOR_COMMENT(null, error));
             });

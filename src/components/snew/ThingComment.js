@@ -47,7 +47,10 @@ class ThingComment extends React.PureComponent {
         }
         <BaseComment {...{
           ...props,
-          showCensorLink: !!props.isAdmin,
+          showCensorLink: !!props.isAdmin && !props.censored,
+          showArrows: !props.censored,
+          grayBody: props.censored,
+          showReply: !props.censored,
           onShowReply: this.toggleCommentForm,
           onCensorComment: this.handleCommentCensor,
           onCloseCommentForm: this.onCloseCommentForm,

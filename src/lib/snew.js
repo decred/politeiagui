@@ -47,16 +47,10 @@ const getChildComments = ({ tree, comments }, parentid) => map(
   get(parentid || TOP_LEVEL_COMMENT_PARENTID, tree) || []
 );
 
-const commentsIds = new Set();
-const parentsIds = new Set();
-
-const hasParent = (parentid) =>
-  parentid ? commentsIds.has(parentid) : false;
-
 export const commentsToT1 = compose(
   getChildComments,
   reduce(
-    (r, { commentid, userid, username, parentid, token, comment, timestamp, resultvotes, vote }) => ({
+    (r, { commentid, userid, username, parentid, token, comment, timestamp, resultvotes, vote, censored }) => ({
       ...r,
       comments: {
         ...r.comments,
@@ -65,9 +59,10 @@ export const commentsToT1 = compose(
           uservote: String(vote),
           author: username || userid,
           authorid: userid,
+          censored,
           score: resultvotes,
           score_hidden: false,
-          parent_id: hasParent(parentid) ? parentid : TOP_LEVEL_COMMENT_PARENTID,
+          parent_id: parentid || TOP_LEVEL_COMMENT_PARENTID,
           name: commentid,
           body: comment,
           created_utc: timestamp,
@@ -76,19 +71,12 @@ export const commentsToT1 = compose(
       },
       tree: {
         ...r.tree,
-        [hasParent(parentid) ? parentid : TOP_LEVEL_COMMENT_PARENTID]: [
-          ...(get([ "tree", hasParent(parentid) ? parentid : TOP_LEVEL_COMMENT_PARENTID ], r) || []),
+        [parentid || TOP_LEVEL_COMMENT_PARENTID]: [
+          ...(get([ "tree", parentid || TOP_LEVEL_COMMENT_PARENTID ], r) || []),
           commentid
         ]
       }
     }),
     { tree: {}, comments: {} }
-  ),
-  (comments) => {
-    comments.forEach(c => {
-      commentsIds.add(c.commentid);
-      parentsIds.add(c.parentid);
-    });
-    return comments;
-  }
+  )
 );
