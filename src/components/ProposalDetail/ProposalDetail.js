@@ -85,7 +85,7 @@ class ProposalDetail extends React.Component {
         nextProps.comments,
         currentProps.commentsSortOption,
         nextProps.commentsvotes,
-        false
+        true
       );
     }
 
