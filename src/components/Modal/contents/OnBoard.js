@@ -86,7 +86,7 @@ const onBoardingContent = [
     body: `
 **What is Politeia?**
 
-Politeia, or Pi, is a platform which is being developed to support Decred’s governance.
+Politeia is a platform which is being developed to support Decred’s governance.
 It facilitates the submission, tracking, and discussion of Decred governance proposals by the stakeholder community.
 
 Decred’s approach to decision-making is grounded in the principle of stakeholder voting.
@@ -101,8 +101,7 @@ each open Politeia proposal.
 
 There are two broad types of proposal:
 
-1. Proposals that aim to establish Voter support for a course of action, e.g. direction of software development,
-adopting or changing some policy.
+1. Proposals that aim to establish Voter support for a course of action, e.g. adopting or changing some policy.
 2. Proposals that commit to spending Project Treasury DCR, creating a budget that some entity can draw down against
 as they demonstrate progress towards the proposal's aim.
 
@@ -123,15 +122,14 @@ Ticket-voting on proposals doesn’t happen directly on Politeia, but from withi
 When proposals are submitted, they are checked by Politeia administrators. Proposals that are deemed spam or invalid
 will be censored.
 
-Politeia is _censor-proof_, using ***dcrtime***. Users cannot be silently censored, they can prove that censorship
-has occurred. When a proposal/comment is submitted, a censorship token is generated. Content creators can use these
+Politeia is built around the concept of _transparent censorship_, using ***dcrtime***. Users cannot be silently censored, they can prove 
+that censorship has occurred. When a proposal/comment is submitted, a censorship token is generated. Content creators can use these
 tokens to demonstrate that their specific proposal/comment was submitted, in a particular form, at a particular point in time.
 
-To access this censor-proof feature, **Politeia users have cryptographic identities** (pub/priv key pairs) to go with
-their accounts. When you register for a Politeia account, a key-pair identity will be generated for you, this is stored
-in your browser by default.
+**Politeia users have cryptographic identities** (pub/priv key pairs) that can be used to demonstrate censorship of one's submissions.
+When you register for a Politeia account, a key-pair identity will be generated for you, this is stored in your browser by default.
 
-If you change browser/device you can import your Pi identity key or generate a new one, but for now it is important to
+If you change browser/device you can import your Politeia identity key or generate a new one, but for now it is important to
 *verify your account from the same browser you used to sign up*. The cryptographic Pi identity is only used for
 demonstrating that your submissions have been censored.
 `
@@ -172,9 +170,9 @@ for good proposals and policies for censoring proposals will be iterated once Po
     title: "Proposal guidelines",
     body: `
 **Proposal guidelines**
-## How to submit a Politeia (Pi) proposal
+## How to submit a Politeia proposal
 
-When authoring a request using Pi one must answer the following 5 questions:
+When authoring a Politeia proposal one must answer the following 5 questions:
 
 1. What
 2. Why
@@ -221,12 +219,12 @@ a good idea.
 
 ### Who
 
-In the *Who* section, describe the entity that is making the proposal, will complete the work, and will draw down on the proposal's budget.
+In the *Who* section, describe the entity that is making the proposal, will 
+complete the work, and will draw down on the proposal's budget.
 
 ### When
 
-In the *When* section we try to answer what will be delivered when and when the
-stakeholders get to vote on the milestones.
+In the *When* section we describe the milestones and when they will be delivered.
 
 Create some sort of draw schedule that explains what milestones will be
 delivered when. In this example we do the design and documentation first and
@@ -268,11 +266,16 @@ votes should be less than a week.
 
 ###  What
 
-    This proposal would fund a Decred presence at Real Blockchain Conference 2018, in Dublin, Ireland, November 11-13. It would cover costs for a booth, swag, and people to staff the booth.
+    This proposal would fund a Decred presence at Real Blockchain Conference 2018, 
+	in Dublin, Ireland, November 11-13. It would cover costs for a booth, swag, and 
+	people to staff the booth.
 
 ### Why
 
-    Real Blockchain Conference is a top cryptocurrency conference and totally not made up. Last year's conference had 5,000 attendees and they seemed cool, good solid Decred stakeholder material. With epic swag and a physical embodiment of Stakey in attendance, a presence at this conference would raise awareness of Decred.
+    Real Blockchain Conference is a top cryptocurrency conference and totally not made up. 
+	Last year's conference had 5,000 attendees and they seemed cool, good solid Decred 
+	stakeholder material. With epic swag and a physical embodiment of Stakey in attendance, 
+	a presence at this conference would raise awareness of Decred.
 
 ### How (much)
 
@@ -284,20 +287,26 @@ votes should be less than a week.
     Stakey costume: $500
     Stakey costume occupant: 3 (10 hour) days at $40/hr (that suit is warm!): $1,200
     Travel expenses for booth staff: Up to $2,000
-    Accomodation for booth staff. We will stay at the conference hotel costing $200/night, it is unlikely that all booth staff need accomodation, but the maximum would be 200 x 3 nights x 4 staff = $2,400
+    Accomodation for booth staff. We will stay at the conference hotel costing $200/night, it is unlikely 
+	that all booth staff need accomodation, but the maximum would be 200 x 3 nights x 4 staff = $2,400
 
     Maximum total budget: $15,600
 
 ### Who
 
-    This proposal is submitted by @AllYourStake (on Slack, /u/StakeGovernor2000 on reddit). You may remember me as the organizer of Decred's presence at such blockchain events as Real Blockchain Conference 2017 and Buckets of Blockchain 2018.
-    I don't know exactly who the 3 booth staff and 1 Stakey suit wearer will be, I will be one of the staff and @Contributor1 is also interested.
+    This proposal is submitted by @AllYourStake (on Slack, /u/StakeGovernor2000 on reddit). You may 
+	remember me as the organizer of Decred's presence at such blockchain events as Real Blockchain 
+	Conference 2017 and Buckets of Blockchain 2018.
+    I don't know exactly who the 3 booth staff and 1 Stakey suit wearer will be, I will be one of the
+	staff and @Contributor1 is also interested.
 
 ### When
 
-    Registration fees are due by September 30th, I will pay these up-front and request full reimbursement immediately.
-    I will front the cost of the swag and Stakey suit, and claim this along with my travel/accomodation expenses and payment for my work, after the event.
-    Booth staff who are already Decred contributors will bill for their hours and expenses directly, I will serve as intermediary for any staff costs not associated with established contributors.
+    Registration fees are due by September 30th, I will pay these up-front and request full reimbursement 
+	immediately. I will front the cost of the swag and Stakey suit, and claim this along with my 
+	travel/accomodation expenses and payment for my work, after the event.
+    Booth staff who are already Decred contributors will bill for their hours and expenses directly, 
+	I will serve as intermediary for any staff costs not associated with established contributors.
 `
   }
 ];
