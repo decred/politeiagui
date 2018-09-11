@@ -155,6 +155,7 @@ describe("test api reducer", () => {
       verifyNewUser: DEFAULT_REQUEST_STATE,
       login: DEFAULT_REQUEST_STATE,
       logout: DEFAULT_REQUEST_STATE,
+      censorComment: DEFAULT_REQUEST_STATE,
       vetted: DEFAULT_REQUEST_STATE,
       unvetted: DEFAULT_REQUEST_STATE,
       proposal: DEFAULT_REQUEST_STATE,
