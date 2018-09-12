@@ -3,7 +3,7 @@ import voteStatsConnector from "../connectors/voteStats";
 import StackedBarChart from "./StackedBarChart";
 import { getRandomColor } from "../helpers";
 import { PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED } from "../constants";
-
+import { NETWORK } from "../constants";
 
 const mapVoteStatusToMessage = {
   [PROPOSAL_VOTING_ACTIVE]: "Proposal voting active",
@@ -93,6 +93,20 @@ class Stats extends React.Component {
       value: op.percentage,
       color: op.color
     }))
+
+  getTimeInBlocks = (blocks) => {
+    const blockTime = NETWORK === "testnet" ? blocks*2 : blocks*5 ;
+    const date = {
+      hours: blockTime / 60,
+      minutes: (blockTime % 60)
+    };
+    const element =
+    <span>
+      {date.hours > 0 ? date.hours.toFixed(0) + "h " : null}
+      {date.minutes + "m left"}
+    </span>;
+    return blockTime > 0 ? element : null;
+  };
   renderOptionsStats = (totalVotes, optionsResult, endHeight, currentHeight) => {
 
     const { status } = this.props;
@@ -104,16 +118,24 @@ class Stats extends React.Component {
       alignItems: "center",
       justifyContent: "space-between"
     };
-    const bodyStyle = { marginTop: "5px" };
+    const detailStyle = {
+      color: "gray"
+    };
 
+    const bodyStyle = { marginTop: "5px" };
     return (
       <div>
         <div
           style={headerStyle}
         >
           <VoteStatusLabel status={status} />
-          {endHeight && currentHeight ? (endHeight - currentHeight +  " Blocks Left") : null}
+          {endHeight && currentHeight ? this.getTimeInBlocks(endHeight - currentHeight) : null}
           {showStats && options.map(op => this.renderStats(op))}
+        </div>
+        <div
+          style={detailStyle}
+        >
+          <p>{endHeight > currentHeight ? `Voting ends at block #${endHeight}` : null}</p>
         </div>
         {showStats ?
           <StackedBarChart
