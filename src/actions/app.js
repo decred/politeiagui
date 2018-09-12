@@ -5,6 +5,7 @@ import isEqual from "lodash/isEqual";
 import { onSubmitProposal, onChangeUsername, onChangePassword, onFetchProposalComments, onSubmitEditedProposal } from "./api";
 import { onFetchProposal as onFetchProposalApi, onSubmitComment as onSubmitCommentApi } from "./api";
 import { onFetchUsernamesById as onFetchUsernamesByIdApi } from "./api";
+import { resetNewProposalData } from "../lib/editors_content_backup";
 import * as sel from "../selectors";
 import act from "./methods";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
@@ -38,8 +39,10 @@ export const onEditProposal = ({ name, description, files }, _, props) =>
   (dispatch) =>
     dispatch(onSubmitEditedProposal(props.loggedInAsEmail, name.trim(), description, files, props.token));
 
-export const onSaveDraftProposal = ({ name, description, files, draftId }) =>
-  act.SAVE_DRAFT_PROPOSAL({ name: name.trim(), description, files, timestamp: Date.now() / 1000, draftId });
+export const onSaveDraftProposal = ({ name, description, files, draftId }) => {
+  resetNewProposalData();
+  return act.SAVE_DRAFT_PROPOSAL({ name: name.trim(), description, files, timestamp: Date.now() / 1000, draftId });
+};
 
 export const onLoadDraftProposals = (email) => {
   const stateFromLS = loadStateLocalStorage(email);
