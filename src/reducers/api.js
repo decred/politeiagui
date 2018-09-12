@@ -1,6 +1,7 @@
 import * as act from "../actions/types";
 import get from "lodash/fp/get";
 import map from "lodash/fp/map";
+import cloneDeep from "lodash/cloneDeep";
 import { DEFAULT_REQUEST_STATE, request, receive, reset, resetMultiple } from "./util";
 import { PROPOSAL_VOTING_ACTIVE } from "../constants";
 
@@ -123,8 +124,43 @@ export const onResetSyncLikeComment = (state) => {
 };
 
 export const onReceiveSyncLikeComment = (state, action) => {
-  const { backupCV, comments, newCommentsVotes,
-    oldAction, newAction, commentid } = action.payload;
+  const { token, action: cAction, commentid } = action.payload;
+  const newAction = parseInt(cAction, 10);
+
+  const commentsvotes = state.commentsvotes.response &&
+    state.commentsvotes.response.commentsvotes;
+  const backupCV = cloneDeep(commentsvotes);
+  const comments = state.proposalComments.response &&
+    state.proposalComments.response.comments;
+
+  let reducedVotes = null;
+  const cvfound = commentsvotes && commentsvotes.find(
+    cv => cv.commentid === commentid && cv.token === token
+  );
+
+  if (cvfound) {
+    reducedVotes = commentsvotes.reduce(
+      (acc, cv) => {
+        if (cv.commentid === commentid && cv.token === token) {
+          const currentAction = parseInt(cv.action, 10);
+          acc.oldAction = currentAction;
+          cv = {
+            ...cv,
+            action: newAction === currentAction ? 0 : newAction
+          };
+        }
+        return { ...acc, cvs: acc.cvs.concat([cv]) };
+      }, { cvs: [], oldAction: null });
+  } else {
+    const newCommentVote = { token, commentid, action: newAction };
+    reducedVotes = {
+      cvs: commentsvotes ? commentsvotes.concat([newCommentVote]) : [newCommentVote],
+      oldAction: 0
+    };
+  }
+
+  const { cvs: newCommentsVotes, oldAction } = reducedVotes;
+
   return {
     ...state,
     commentsvotes: {

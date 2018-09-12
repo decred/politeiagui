@@ -8,7 +8,6 @@ import * as external_api_actions from "./external_api";
 import { clearStateLocalStorage } from "../lib/local_storage";
 import { callAfterMinimumWait } from "./lib";
 import act from "./methods";
-import cloneDeep from "lodash/cloneDeep";
 import {
   globalUsernamesById,
   selectDefaultPublicFilterValue,
@@ -332,21 +331,8 @@ export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
       dispatch(openModal("LOGIN", {}, null));
       return;
     }
-    const state = getState();
-    const newAction = parseInt(action, 10);
-    const commentsvotes = state.api.commentsvotes.response &&
-      state.api.commentsvotes.response.commentsvotes;
-    const backupCV = cloneDeep(commentsvotes);
-    const comments = state.api.proposalComments.response &&
-      state.api.proposalComments.response.comments;
-
-    const { cvs: newCommentsVotes, oldAction }
-      = api.reduceCommentLikes(commentsvotes, commentid, token, newAction);
-
     dispatch(act.REQUEST_LIKE_COMMENT({ commentid, token }));
-    dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({
-      backupCV, comments, newCommentsVotes, oldAction, newAction, commentid
-    }));
+    dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({ token, commentid, action }));
     return Promise.resolve(api.makeLikeComment(token, action, commentid))
       .then(comment => api.signLikeComment(loggedInAsEmail, comment))
       .then(comment => api.likeComment(csrf, comment))
