@@ -2,7 +2,6 @@ import Promise from "promise";
 import * as sel from "../selectors";
 import * as api from "../lib/api";
 import * as pki from "../lib/pki";
-import get from "lodash/fp/get";
 import { confirmWithModal, openModal, closeModal } from "./modal";
 import * as modalTypes from "../components/Modal/modalTypes";
 import * as external_api_actions from "./external_api";
@@ -416,21 +415,9 @@ export const onSubmitStatusProposal = (loggedInAsEmail, token, status, censorMes
     if (status === 4) {
       dispatch(act.SET_PROPOSAL_APPROVED(true));
     }
-    const state = getState();
-    const viewedProposal = get([ "proposal", "response", "proposal" ], state.api);
     return api
       .proposalSetStatus(loggedInAsEmail, csrf, token, status, censorMessage)
-      .then(response => {
-        const { proposal: updatedProposal } = response;
-        const updateProposalStatus = proposal => {
-          if (get([ "censorshiprecord", "token" ], updatedProposal) === get([ "censorshiprecord", "token" ], proposal)) {
-            return updatedProposal;
-          } else {
-            return proposal;
-          }
-        };
-        dispatch(act.RECEIVE_SETSTATUS_PROPOSAL({ viewedProposal, updatedProposal, updateProposalStatus }));
-      })
+      .then(response => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(response)))
       .catch(error => {
         dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
       });
