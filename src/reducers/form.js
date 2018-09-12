@@ -1,5 +1,4 @@
 import { reducer } from "redux-form";
-import { resetNewProposalData } from "../lib/editors_content_backup";
 import * as act from "../actions/types";
 
 const formReducer = reducer.plugin({
@@ -9,16 +8,13 @@ const formReducer = reducer.plugin({
       if (action.error) {
         return state;
       }
-      resetNewProposalData();
       return undefined;
     case act.RECEIVE_EDIT_PROPOSAL:
       if (action.error) {
         return state;
       }
-      resetNewProposalData();
       return undefined;
     case act.SAVE_DRAFT_PROPOSAL:
-      resetNewProposalData();
       return undefined;
     default:
       return state;
