@@ -1275,3 +1275,22 @@ form div.usertext-body.may-blank-within.md-container {
 	-moz-box-shadow: 1px 1px 1px 6px #f4f7f9;
 	box-shadow: 1px 1px 1px 6px #f4f7f9;
 }
+
+.comment > .entry > .usertext {
+	max-height: 500px;
+	overflow: hidden;
+}
+
+.collapsed {
+	max-height: 500px;
+	overflow: hidden;
+}
+
+.expanded {
+	max-height: none;
+}
+
+.readMore {
+	clear: both;
+	cursor: pointer;
+}
