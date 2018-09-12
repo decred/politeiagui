@@ -369,6 +369,22 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
+  test("get notifications (api/v1/user/notifications)", async () => {
+    await assertGETOnRouteIsCalled(
+      "express:/api/v1/user/notifications",
+      api.notifications,
+      []
+    );
+  });
+
+  test("check notifications (api/v1/user/notifications/check)", async () => {
+    await assertPOSTOnRouteIsCalled(
+      "express:/api/v1/user/notifications/check",
+      api.checkNotifications,
+      [ FAKE_CSRF, [0] ]
+    );
+  });
+
   test("get proposal comments (api/v1/proposals/:token)", async () => {
     await assertGETOnRouteIsCalled(
       "express:/api/v1/proposals/:token/comments",

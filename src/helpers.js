@@ -10,6 +10,18 @@ export const getProposalStatus = (proposalStatus) => get(proposalStatus, [
   "Public"
 ]);
 
+export const getNotificationIdentifier = (type, qtd) => {
+  const notificationIdentifier = {
+    0: "Notification type invalid.",
+    1: "Your payment has been received and your registration is complete.",
+    3: "Your proposal has been censored.",
+    4: "Your proposal has been published!",
+    5: "Voting has started for your proposal!"
+  };
+  return type === 2 ? `Your payment has been received, you've purchased ${qtd} credits.`
+    : notificationIdentifier[type];
+};
+
 export const utoa = (str) => window.btoa(unescape(encodeURIComponent(str)));
 export const atou = (str) => decodeURIComponent(escape(window.atob(str)));
 
@@ -139,3 +151,10 @@ export const verifyUserPubkey = (email, keyToBeMatched, keyMismatchAction) =>
         keys.publicKey !== keyToBeMatched
       )
     );
+
+// notifications
+export const areAllNotificationsViewed = (notifications) => {
+  let allViewed = true;
+  notifications.forEach(n => { if (!n.viewed) allViewed = false; });
+  return allViewed;
+};

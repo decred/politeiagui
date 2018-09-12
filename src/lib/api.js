@@ -114,6 +114,9 @@ export const verifyNewUser = searchQuery => {
     .then(getResponse);
 };
 
+export const notifications = () =>
+  GET("/v1/user/notifications").then(getResponse);
+
 export const likedComments = token =>
   GET(`/v1/user/proposals/${token}/commentsvotes`).then(getResponse);
 
@@ -135,6 +138,9 @@ export const userProposals = userid => {
 
 export const login = (csrf, email, password) =>
   POST("/login", csrf, { email, password: digest(password) }).then(getResponse);
+
+export const checkNotifications = (csrf, notificationids) =>
+  POST("/user/notifications/check", csrf, { notificationids }).then(getResponse);
 
 export const likeComment = (csrf, comment) => POST("/comments/like", csrf, comment).then(getResponse);
 

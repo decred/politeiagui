@@ -1217,11 +1217,10 @@ button.inverse {
   margin-left: 8px;
   color: #555;
   background-color: #ddd;
-  height: 18px;
-  line-height: 18px;
-  min-width: 18px;
-  padding: 0 4px;
-  border-radius: 18px;
+  height: 16px;
+  line-height: 16px;
+  width: 16px;
+  border-radius: 16px;
   text-align: center;
 }
 
@@ -1234,6 +1233,7 @@ button.inverse {
   align-items: center;
   padding-left: 16px;
 }
+
 .sort-select__control {
   width: 80px;
   background-color: #FFF !important;
@@ -1274,4 +1274,10 @@ form div.usertext-body.may-blank-within.md-container {
   -webkit-box-shadow: 1px 1px 1px 6px #f4f7f9;
 	-moz-box-shadow: 1px 1px 1px 6px #f4f7f9;
 	box-shadow: 1px 1px 1px 6px #f4f7f9;
+}
+.has-notification {
+  width: 7px;
+  height: 7px;
+  background-color: red;
+  border-radius: 50%;
 }
