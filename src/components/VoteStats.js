@@ -93,7 +93,8 @@ class Stats extends React.Component {
       value: op.percentage,
       color: op.color
     }))
-  renderOptionsStats = (totalVotes, optionsResult) => {
+  renderOptionsStats = (totalVotes, optionsResult, endHeight, currentHeight) => {
+
     const { status } = this.props;
     const showStats = this.canShowStats(status, totalVotes);
     const options = optionsResult ? this.transformOptionsResult(totalVotes, optionsResult) : [];
@@ -111,6 +112,7 @@ class Stats extends React.Component {
           style={headerStyle}
         >
           <VoteStatusLabel status={status} />
+          {endHeight && currentHeight ? (endHeight - currentHeight +  " Blocks Left") : null}
           {showStats && options.map(op => this.renderStats(op))}
         </div>
         {showStats ?
@@ -131,15 +133,20 @@ class Stats extends React.Component {
     );
   }
   render() {
-    const { totalVotes, optionsResult } = this.props;
-    return this.renderOptionsStats(totalVotes, optionsResult);
+    const { totalVotes, optionsResult, endHeight, currentHeight } = this.props;
+    return this.renderOptionsStats(totalVotes, optionsResult, endHeight, currentHeight);
   }
 }
 
 class VoteStats extends React.Component {
+  componentDidMount() {
+    // Calls the function to get the last block height
+    const { getLastBlockHeight } = this.props;
+    getLastBlockHeight && getLastBlockHeight();
+  }
   render() {
-    const { token, getVoteStatus } = this.props;
-    const { optionsresult, status, totalvotes } = getVoteStatus(token);
+    const { token, getVoteStatus, lastBlockHeight } = this.props;
+    const { optionsresult, status, totalvotes, endheight } = getVoteStatus(token);
     const wrapperStyle = {
       display: "flex",
       flexDirection: "column",
@@ -151,7 +158,7 @@ class VoteStats extends React.Component {
     };
     return(
       <div style={wrapperStyle}>
-        <Stats status={status} optionsResult={optionsresult} totalVotes={totalvotes} />
+        <Stats status={status} optionsResult={optionsresult} totalVotes={totalvotes} endHeight={endheight} currentHeight={lastBlockHeight}/>
       </div>
     );
   }
