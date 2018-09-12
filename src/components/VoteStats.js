@@ -94,6 +94,7 @@ class Stats extends React.Component {
       value: op.percentage,
       color: op.color
     }))
+<<<<<<< HEAD
 
   getTimeInBlocks = (blocks) => {
     const blockTimeMinutes = NETWORK === "testnet" ? blocks*2 : blocks*5 ;
@@ -110,6 +111,8 @@ class Stats extends React.Component {
     ;
     return blockTimeMinutes > 0 ? element : <span>expired</span>;
   };
+=======
+>>>>>>> added lastBlockHeight and endHeight prop on component to show how many blocks are left
   renderOptionsStats = (totalVotes, optionsResult, endHeight, currentHeight) => {
 
     const { status } = this.props;
@@ -131,7 +134,11 @@ class Stats extends React.Component {
           style={headerStyle}
         >
           <VoteStatusLabel status={status} />
+<<<<<<< HEAD
           {endHeight && currentHeight ? this.getTimeInBlocks(endHeight - currentHeight) : null}
+=======
+          {endHeight && currentHeight ? (endHeight - currentHeight +  " Blocks Left") : null}
+>>>>>>> added lastBlockHeight and endHeight prop on component to show how many blocks are left
           {showStats && options.map(op => this.renderStats(op))}
         </div>
         {showStats ?
@@ -163,6 +170,11 @@ class Stats extends React.Component {
 }
 
 class VoteStats extends React.Component {
+  componentDidMount() {
+    // Calls the function to get the last block height
+    const { getLastBlockHeight } = this.props;
+    getLastBlockHeight && getLastBlockHeight();
+  }
   render() {
     const { token, getVoteStatus, lastBlockHeight } = this.props;
     const { optionsresult, status, totalvotes, endheight } = getVoteStatus(token);
