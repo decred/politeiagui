@@ -11,6 +11,10 @@ class ThingComment extends React.PureComponent {
       showCommentForm: false
     };
   }
+  handleCommentCensor = (e) => {
+    e && e.preventDefault && e.preventDefault();
+    this.props.onCensorComment(this.props.loggedInAsEmail, this.props.token, this.props.id);
+  }
   toggleCommentForm = (e, forceValue = null) => {
     e && e.preventDefault && e.preventDefault();
     this.setState({
@@ -43,7 +47,12 @@ class ThingComment extends React.PureComponent {
         }
         <BaseComment {...{
           ...props,
+          showCensorLink: !!props.isAdmin && !props.censored,
+          showArrows: !props.censored,
+          grayBody: props.censored,
+          showReply: !props.censored,
           onShowReply: this.toggleCommentForm,
+          onCensorComment: this.handleCommentCensor,
           onCloseCommentForm: this.onCloseCommentForm,
           showCommentForm,
           user: loggedInAsEmail,

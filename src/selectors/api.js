@@ -149,6 +149,7 @@ export const isApiRequestingUserProposalCredits = getIsApiRequesting("userPropos
 export const userProposalCreditsError = getApiError("userProposalCredits");
 
 export const apiInitError = getApiError("init");
+export const apiCensorCommentError = getApiError("censorComment");
 export const apiNewUserError = or(apiInitError, getApiError("newUser"));
 export const apiUserError = getApiError("user");
 export const apiChangePasswordError = or(apiInitError, getApiError("changePassword"));
@@ -171,6 +172,7 @@ export const apiError = or(
   apiChangePasswordError,
   apiChangeUsernameError,
   apiVerifyNewUserError,
+  apiCensorCommentError,
   apiLoginError,
   apiLogoutError,
   apiVettedError,
@@ -269,6 +271,7 @@ export const getPropVoteStatus = state => token => {
 };
 
 export const userid = state => state.api.me.response && state.api.me.response.userid;
+export const censoredComment = state => state.api.censorComment.response;
 
 export const serverPubkey = compose(get("pubkey"), apiInitResponse);
 export const userPubkey = compose(get("publickey"), apiMeResponse);

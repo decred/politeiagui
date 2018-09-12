@@ -79,6 +79,16 @@ class ProposalDetail extends React.Component {
       );
     }
 
+    // comment gets censored
+    if(nextProps.censoredComment && !isEqual(currentProps.censoredComment, nextProps.censoredComment)) {
+      sortedComments = updateSortedComments(
+        nextProps.comments,
+        currentProps.commentsSortOption,
+        nextProps.commentsvotes,
+        true
+      );
+    }
+
     if(sortedComments) {
       this.setState({ sortedComments });
     }
@@ -95,7 +105,6 @@ class ProposalDetail extends React.Component {
       ...props
     } = this.props;
     const comments = this.state.sortedComments;
-
     return (
       <div className="content" role="main">
         <div className="page proposal-page">

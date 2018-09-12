@@ -16,6 +16,7 @@ export const DEFAULT_STATE = {
   logout: DEFAULT_REQUEST_STATE,
   vetted: DEFAULT_REQUEST_STATE,
   unvetted: DEFAULT_REQUEST_STATE,
+  censorComment: DEFAULT_REQUEST_STATE,
   proposal: DEFAULT_REQUEST_STATE,
   proposalComments: DEFAULT_REQUEST_STATE,
   proposalsVoteStatus: DEFAULT_REQUEST_STATE,
@@ -68,6 +69,25 @@ export const onReceiveSetStatus = (state, action) => {
           updateProposalStatus,
           (get([ "unvetted", "response", "proposals" ], state) || [])
         )
+      }
+    }
+  };
+};
+
+const onReceiveCensoredComment = (state, action) => {
+  state = receive("censorComment", state, action);
+  if (action.error) return state;
+
+  return {
+    ...state,
+    proposalComments: {
+      ...state.proposalComments,
+      response: {
+        ...state.proposalComments.response,
+        comments: state.proposalComments.response.comments.map(c => {
+          return c.commentid === action.payload ?
+            { ...c, comment: "", censored: true } : c;
+        })
       }
     }
   };
@@ -266,6 +286,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_PROPOSAL_COMMENTS]: () => receive("proposalComments", state, action),
   [act.REQUEST_LIKE_COMMENT]: () => request("likeComment", state, action),
   [act.RECEIVE_LIKE_COMMENT]: () => receive("likeComment", state, action),
+  [act.REQUEST_CENSOR_COMMENT]: () => request("censorComment", state, action),
+  [act.RECEIVE_CENSOR_COMMENT]: () => onReceiveCensoredComment(state, action),
   [act.RECEIVE_SYNC_LIKE_COMMENT]: () => onReceiveSyncLikeComment(state, action),
   [act.RESET_SYNC_LIKE_COMMENT]: () => onResetSyncLikeComment(state),
   [act.REQUEST_LIKED_COMMENTS]: () => request("commentsvotes", state, action),
