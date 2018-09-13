@@ -1,6 +1,7 @@
 import React from "react";
 import voteStatsConnector from "../connectors/voteStats";
 import StackedBarChart from "./StackedBarChart";
+import Moment from "react-moment";
 import { getRandomColor } from "../helpers";
 import { PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED } from "../constants";
 import { NETWORK } from "../constants";
@@ -95,24 +96,21 @@ class Stats extends React.Component {
     }))
 
   getTimeInBlocks = (blocks) => {
-    const blockTime = NETWORK === "testnet" ? blocks*2 : blocks*5 ;
-    const date = {
-      hours: blockTime / 60,
-      minutes: (blockTime % 60)
-    };
+    const blockTimeMinutes = NETWORK === "testnet" ? blocks*2 : blocks*5 ;
+    const mili = blockTimeMinutes * 60000;
+    const dateMs = new Date(mili + Date.now()); // gets time in ms
     const element =
     <span>
-      {date.hours > 0 ? date.hours.toFixed(0) + "h " : null}
-      {date.minutes + "m left"}
-    </span>;
-    return blockTime > 0 ? element : null;
+      expires <Moment fromNowDuring>{dateMs}</Moment>
+    </span>
+    ;
+    return blockTimeMinutes > 0 ? element : null;
   };
   renderOptionsStats = (totalVotes, optionsResult, endHeight, currentHeight) => {
 
     const { status } = this.props;
     const showStats = this.canShowStats(status, totalVotes);
     const options = optionsResult ? this.transformOptionsResult(totalVotes, optionsResult) : [];
-
     const headerStyle = {
       display: "flex",
       alignItems: "center",
