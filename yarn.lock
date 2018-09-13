@@ -7549,6 +7549,10 @@ react-mde@^2.1.2:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/react-mde/-/react-mde-2.3.4.tgz#cd8243facb1f5d68ae841a3b6b9cad6db280f958"
 
+react-moment@^0.7.9:
+  version "0.7.9"
+  resolved "https://registry.yarnpkg.com/react-moment/-/react-moment-0.7.9.tgz#fc6b5bf8952d27f134a42abfd7f42df2c839c1d7"
+
 react-redux@^5.0.6:
   version "5.0.7"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.0.7.tgz#0dc1076d9afb4670f993ffaef44b8f8c1155a4c8"
