@@ -75,7 +75,10 @@ export const onFetchProposal = (token) => (dispatch, getState) =>
       return dispatch(onFetchUsernamesById(userIds));
     });
 
-export const onLoadMe = me => dispatch => dispatch(act.LOAD_ME(me));
+export const onLoadMe = me => dispatch => {
+  dispatch(act.LOAD_ME(me));
+  dispatch(act.SET_PROPOSAL_CREDITS(me.response.proposalcredits));
+};
 
 export const onChangeAdminFilter = (option) => act.CHANGE_ADMIN_FILTER_VALUE(option);
 export const onChangePublicFilter = (option) => act.CHANGE_PUBLIC_FILTER_VALUE(option);
