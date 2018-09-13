@@ -60,7 +60,7 @@ body .btn,
 body button {
     margin: 4px 16px 4px 0;
     padding: 0 16px;
-    background: #0079d3;
+    background: #091440;
     border: none;
     border-radius: 2px;
     color: #fff;
@@ -78,7 +78,8 @@ body button {
 .wiki-page .wiki-page-content .wiki_button,
 button:hover {
     color: #fff;
-    background: #5e91bb;
+    background: #2d3c72;
+    opacity: 1;
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2)
 }
 .btn:active,
@@ -86,10 +87,15 @@ button:hover {
 .wiki-page .wiki-page-content .wiki_button,
 button:active {
     color: #fff;
-    background: #0066b2;
+    background: #5981ab;
     box-shadow: 0 2px 1.5px 0 rgba(0, 0, 0, .12), 0 0 4px 0 rgba(0, 0, 0, .12)
 }
-
+.btn:active,
+.c-btn-primary:active,
+.wiki-page .wiki-page-content .wiki_button,
+button:visited {
+background: #5981ab;
+}
 .react-file-reader-button button
 {
   color: #fff;
@@ -1594,7 +1600,7 @@ div.titlebox span.number:after {
     display: none!important
 }
 .morelink {
-    background: #0079d3;
+    background: #091440;
     height: 36px;
     border-radius: 2px;
     font-size: 14px;
@@ -1604,12 +1610,15 @@ div.titlebox span.number:after {
     box-shadow: 0 2px 1.5px 0 rgba(0, 0, 0, .12), 0 0 4px 0 rgba(0, 0, 0, .12)
 }
 .morelink:hover {
-    background: #158be2;
+    background: #2d3c72;
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2)
 }
 .morelink:active {
-    background: #0066b2;
+    background: #445286;
     box-shadow: 0 2px 1.5px 0 rgba(0, 0, 0, .12), 0 0 4px 0 rgba(0, 0, 0, .12)
+}
+.morelink:visited{
+	background-color: green;
 }
 .sidebox.submit.submit-text .morelink {
     margin-left: 168px
@@ -3512,7 +3521,7 @@ body:not(.search-page) .morelink{top:390px}
 .footer-parent,
 #header {
   background-image: none;
-  background-color: #586D82;
+  background-color: #091440;
 }
 
 .link .thumbnail.self {
