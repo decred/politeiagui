@@ -1,7 +1,7 @@
 import React from "react";
 import voteStatsConnector from "../connectors/voteStats";
 import StackedBarChart from "./StackedBarChart";
-import Moment from "react-moment";
+import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 import { getRandomColor } from "../helpers";
 import { PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED } from "../constants";
 import { NETWORK } from "../constants";
@@ -99,12 +99,16 @@ class Stats extends React.Component {
     const blockTimeMinutes = NETWORK === "testnet" ? blocks*2 : blocks*5 ;
     const mili = blockTimeMinutes * 60000;
     const dateMs = new Date(mili + Date.now()); // gets time in ms
+    const distance = distanceInWordsToNow(
+      dateMs,
+      { addSuffix: true }
+    );
     const element =
     <span>
-      expires <Moment fromNowDuring>{dateMs}</Moment>
+      expires {distance}
     </span>
     ;
-    return blockTimeMinutes > 0 ? element : null;
+    return blockTimeMinutes > 0 ? element : <span>expired</span>;
   };
   renderOptionsStats = (totalVotes, optionsResult, endHeight, currentHeight) => {
 
@@ -159,11 +163,6 @@ class Stats extends React.Component {
 }
 
 class VoteStats extends React.Component {
-  componentDidMount() {
-    // Calls the function to get the last block height
-    const { getLastBlockHeight } = this.props;
-    getLastBlockHeight && getLastBlockHeight();
-  }
   render() {
     const { token, getVoteStatus, lastBlockHeight } = this.props;
     const { optionsresult, status, totalvotes, endheight } = getVoteStatus(token);
