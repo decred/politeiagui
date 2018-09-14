@@ -13,7 +13,7 @@ import { onLogout, cleanErrors } from "./api";
 import { loadStateLocalStorage, loggedInStateKey } from "../lib/local_storage";
 import {
   PROPOSAL_VOTING_ACTIVE,
-  PROPOSAL_VOTING_NOT_STARTED,
+  PROPOSAL_VOTING_NOT_AUTHORIZED,
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_FILTER_ALL
 } from "../constants";
@@ -153,7 +153,7 @@ export const onFetchUsernamesById = (userIds) => (dispatch, getState) => {
 export const selectDefaultPublicFilterValue = (dispatch, getState) => {
   const filterValue = selectDefaultFilterValue(sel.getVettedProposalFilterCounts(getState()), [
     PROPOSAL_VOTING_ACTIVE,
-    PROPOSAL_VOTING_NOT_STARTED,
+    PROPOSAL_VOTING_NOT_AUTHORIZED,
     PROPOSAL_FILTER_ALL
   ]);
   dispatch(onChangePublicFilter(filterValue));

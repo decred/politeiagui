@@ -30,6 +30,7 @@ describe("test api actions (actions/api.js)", () => {
   const FAKE_PROPOSAL_NAME = "Fake prop name";
   const FAKE_PROPOSAL_DESCRIPTION = "Fake prop description";
   const FAKE_PROPOSAL_TOKEN = "fake_prop_token";
+  const FAKE_PROPOSAL_VERSION = "2";
   const FAKE_COMMENT = "fake comment text";
   const FAKE_USER = {
     id: "2",
@@ -909,6 +910,41 @@ describe("test api actions (actions/api.js)", () => {
           payload: { name: FAKE_PROPOSAL_NAME, description: FAKE_PROPOSAL_DESCRIPTION, files: [] }
         },
         { type: act.RECEIVE_EDIT_PROPOSAL, error: true, payload: e }
+      ],
+      {},
+      methods.POST
+    );
+
+  });
+
+  test("on authorize vote on proposal action", async () => {
+    const path = "/api/v1/proposals/authorizevote";
+    const params = [ FAKE_USER.email, FAKE_PROPOSAL_TOKEN, FAKE_PROPOSAL_VERSION ];
+
+    const requestAction =
+      {
+        type: act.REQUEST_AUTHORIZE_VOTE,
+        error: false,
+        payload: {
+          token: FAKE_PROPOSAL_TOKEN
+        }
+      };
+
+    setPostSuccessResponse(path);
+    const store = getMockedStore();
+    await store.dispatch(api.onAuthorizeVote.apply(null, params));
+    const dispatchedActions = store.getActions();
+    expect(dispatchedActions[0]).toEqual(requestAction);
+    expect(dispatchedActions[1].type).toEqual(act.RECEIVE_AUTHORIZE_VOTE);
+    expect(dispatchedActions[1].error).toBeFalsy();
+
+    await assertApiActionOnError(
+      path,
+      api.onAuthorizeVote,
+      params,
+      (e) => [
+        requestAction,
+        { type: act.RECEIVE_AUTHORIZE_VOTE, error: true, payload: e }
       ],
       {},
       methods.POST

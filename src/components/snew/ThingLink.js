@@ -9,7 +9,8 @@ import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_VOTING_NOT_STARTED,
+  PROPOSAL_VOTING_NOT_AUTHORIZED,
+  PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_FINISHED
@@ -55,27 +56,49 @@ const ThingLinkComp = ({
   userCanExecuteActions,
   onChangeStatus,
   onStartVote,
+  onAuthorizeVote,
   setStatusProposalToken,
   onDeleteDraftProposal,
   setStatusProposalError,
-  tokenFromStartingVoteProp,
   isTestnet,
   getVoteStatus,
   confirmWithModal,
   userId,
-  comments
+  comments,
+  authorizeVoteToken,
+  isRequestingAuthorizeVote,
+  authorizeVoteError,
+  isRequestingStartVote,
+  startVoteToken,
+  startVoteError
 }) => {
   const voteStatus = getVoteStatus(id) && getVoteStatus(id).status;
+  const isUnvetted = review_status === PROPOSAL_STATUS_UNREVIEWED || review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES;
   const displayVersion = review_status === PROPOSAL_STATUS_PUBLIC;
   const isVotingActiveOrFinished = voteStatus === PROPOSAL_VOTING_ACTIVE || voteStatus === PROPOSAL_VOTING_FINISHED;
   const isEditable = authorid === userId && !isVotingActiveOrFinished && review_status !== PROPOSAL_STATUS_CENSORED;
   const hasBeenUpdated = review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES || parseInt(version, 10) > 1;
+  const currentUserIsTheAuthor = authorid === userId;
+  const userCanAuthorizeTheVote = currentUserIsTheAuthor && voteStatus === PROPOSAL_VOTING_NOT_AUTHORIZED;
+  const adminCanStartTheVote = isAdmin && voteStatus === PROPOSAL_VOTING_AUTHORIZED && ((authorid !== userid) || isTestnet);
+  const enableAdminActionsForUnvetted = isAdmin && isUnvetted && ((authorid !== userid) || isTestnet);
   const hasAuthoredComment = () => {
     for (const c of comments) {
       if (c.userid === userId) return true;
     }
     return false;
   };
+
+  // errors
+  const errorSetStatus = (setStatusProposalToken === id && setStatusProposalError);
+  const errorAuthorizeVote = (authorizeVoteToken === id && authorizeVoteError);
+  const errorStartVote =  (startVoteToken === id && startVoteError);
+  const allErrors = [ errorSetStatus, errorAuthorizeVote, errorStartVote ];
+
+  // loading flags
+  const loadingStartVote = isRequestingStartVote && startVoteToken === id;
+  const loadingAuthorizeVote = isRequestingAuthorizeVote && authorizeVoteToken === id;
+
   return (
     <div
       className={`thing thing-proposal id-${id} odd link ${
@@ -225,98 +248,117 @@ const ThingLinkComp = ({
         {censorMessage && <CensorMessage message={censorMessage} />}
         <Expando {...{ expanded, is_self, selftext, selftext_html }} />
         <ProposalImages readOnly files={otherFiles} />
-        {isAdmin ? (
-          <ul className="flat-list buttons">
-            <li className="first">
-              <Link
-                className="bylink comments may-blank"
-                data-event-action="comments"
-                href={permalink}
-              >
-                permalink
-              </Link>
-            </li>
-            {isAdmin
-              ? review_status === PROPOSAL_STATUS_UNREVIEWED || review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES
-                ? (authorid !== userid) || isTestnet
-                  ? [
-                    <li key="spam">
-                      <form
-                        className="toggle remove-button"
-                        onSubmit={e => confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
-                          reasonPlaceholder: "Please provide a reason to censor this proposal"
-                        }).then(
-                          ({ reason, confirm }) => confirm && onChangeStatus(
-                            loggedInAsEmail,
-                            id,
-                            PROPOSAL_STATUS_CENSORED,
-                            reason
-                          )
-                        ) && e.preventDefault()}
-                      >
-                        <button
-                          className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                          data-event-action="spam"
-                          type="submit"
-                        >
-                          spam
-                        </button>
-                      </form>
-                    </li>,
-                    <li key="approve">
-                      <form
-                        className="toggle approve-button"
-                        onSubmit={e =>
-                          confirmWithModal(modalTypes.CONFIRM_ACTION, {
-                            message: "Are you sure you want to publish this proposal?"
-                          }).then(
-                            confirm => confirm &&
-                              onChangeStatus(
-                                loggedInAsEmail,
-                                id,
-                                PROPOSAL_STATUS_PUBLIC
-                              )
-                          ) && e.preventDefault()
-                        }
-                      >
-                        <button
-                          className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                          data-event-action="approve"
-                          type="submit"
-                          disabled={!userCanExecuteActions}
-                        >
-                          approve
-                        </button>
-                      </form>
-                    </li>
-                  ]
-                  : <Message type="info" header="Third party review required" body="Your proposal must be reviewed by another admin." />
-                : review_status === PROPOSAL_STATUS_PUBLIC && voteStatus === PROPOSAL_VOTING_NOT_STARTED ?
-                  <li key="start-vote">
-                    <ButtonWithLoadingIcon
-                      className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                      onClick={e =>
-                        onStartVote(
+        <ul className="flat-list buttons">
+          <li className="first">
+            <Link
+              className="bylink comments may-blank"
+              data-event-action="comments"
+              href={permalink}
+            >
+              permalink
+            </Link>
+          </li>
+          {enableAdminActionsForUnvetted ?
+            [
+              <li key="spam">
+                <form
+                  className="toggle remove-button"
+                  onSubmit={e => confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
+                    reasonPlaceholder: "Please provide a reason to censor this proposal"
+                  }).then(
+                    ({ reason, confirm }) => confirm && onChangeStatus(
+                      loggedInAsEmail,
+                      id,
+                      PROPOSAL_STATUS_CENSORED,
+                      reason
+                    )
+                  ) && e.preventDefault()}
+                >
+                  <button
+                    className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                    data-event-action="spam"
+                    type="submit"
+                  >
+                    spam
+                  </button>
+                </form>
+              </li>,
+              <li key="approve">
+                <form
+                  className="toggle approve-button"
+                  onSubmit={e =>
+                    confirmWithModal(modalTypes.CONFIRM_ACTION, {
+                      message: "Are you sure you want to publish this proposal?"
+                    }).then(
+                      confirm => confirm &&
+                        onChangeStatus(
                           loggedInAsEmail,
-                          id
-                        ) && e.preventDefault()
-                      }
-                      text="Start Vote"
-                      data-event-action="start-vote"
-                      isLoading={tokenFromStartingVoteProp === id}
-                    />
-                  </li> : null
-              : null}
-          </ul>
-        ) : null}
-        {setStatusProposalError && setStatusProposalToken === id ? (
+                          id,
+                          PROPOSAL_STATUS_PUBLIC
+                        )
+                    ) && e.preventDefault()
+                  }
+                >
+                  <button
+                    className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                    data-event-action="approve"
+                    type="submit"
+                    disabled={!userCanExecuteActions}
+                  >
+                    approve
+                  </button>
+                </form>
+              </li>
+            ] : null
+          }
+          {adminCanStartTheVote ?
+            <li key="start-vote">
+              <ButtonWithLoadingIcon
+                className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                onClick={e =>
+                  onStartVote(
+                    loggedInAsEmail,
+                    id
+                  ) && e.preventDefault()
+                }
+                text="Start Vote"
+                data-event-action="start-vote"
+                isLoading={loadingStartVote}
+              />
+            </li> : null
+          }
+          {
+            userCanAuthorizeTheVote ?
+              <li key="start-vote">
+                <ButtonWithLoadingIcon
+                  className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                  onClick={e =>
+                    confirmWithModal(modalTypes.CONFIRM_ACTION, {
+                      message: "Are you sure you want to authorize the admins to start the voting for this proposal?"
+                    }).then(
+                      confirm => confirm &&
+                        onAuthorizeVote(
+                          loggedInAsEmail,
+                          id,
+                          version
+                        )
+                    ) && e.preventDefault()
+                  }
+                  text="Authorize voting to start"
+                  data-event-action="authorize-vote"
+                  isLoading={loadingAuthorizeVote}
+                />
+              </li> : null
+          }
+        </ul>
+        {allErrors.map((error, idx) => error ?
           <Message
-            key="error"
+            key={`error-${idx}`}
             type="error"
             header="Error setting proposal status"
-            body={setStatusProposalError}
-          />
-        ) : null}
+            body={error}
+          /> : null
+        )}
       </div>
       <div className="child" />
       <div className="clearleft" />

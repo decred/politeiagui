@@ -31,33 +31,9 @@ const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
 export const isApiRequestingUser = getIsApiRequesting("user");
 export const isApiRequestingNewComment = getIsApiRequesting("newComment");
 export const isApiRequestingSetStatusProposal = getIsApiRequesting("setStatusProposal");
-export const isApiRequestingStartVote = getIsApiRequesting("startVote");
 export const isApiRequestingPropsVoteStatus = getIsApiRequesting("proposalsVoteStatus");
 export const isApiRequestingPropVoteStatus = getIsApiRequesting("proposalVoteStatus");
 export const isApiRequestingEditUser = getIsApiRequesting("editUser");
-export const isApiRequesting = or(
-  isApiRequestingInit,
-  isApiRequestingPolicy,
-  isApiRequestingNewUser,
-  isApiRequestingVerifyNewUser,
-  isApiRequestingLogin,
-  isApiRequestingLogout,
-  isApiRequestingForgottenPassword,
-  isApiRequestingResendVerificationEmail,
-  isApiRequestingPasswordReset,
-  isApiRequestingVetted,
-  isApiRequestingUnvetted,
-  isApiRequestingUserProposals,
-  isApiRequestingProposal,
-  isApiRequestingNewProposal,
-  isApiRequestingUser,
-  isApiRequestingNewComment,
-  isApiRequestingSetStatusProposal,
-  isApiRequestingStartVote,
-  isApiRequestingPropsVoteStatus,
-  isApiRequestingPropVoteStatus,
-  isApiRequestingEditUser,
-);
 
 const apiNewUserPayload = getApiPayload("newUser");
 const apiLoginPayload = getApiPayload("login");
@@ -90,7 +66,6 @@ export const updateUserKey = getApiResponse("updateUserKey");
 export const verifyUserKey = getApiResponse("verifyUserKey");
 export const updateUserKeyError = getApiError("updateUserKey");
 export const verifyUserKeyError = getApiError("verifyUserKey");
-const apiSetStartVoteResponse = getApiResponse("startVote");
 const apiCommentsVotesResponse = getApiResponse("commentsvotes");
 export const editUserResponse = getApiResponse("editUser");
 
@@ -103,6 +78,19 @@ export const apiPropsVoteStatusError = getApiError("proposalsVoteStatus");
 
 export const apiPropVoteStatusResponse = getApiResponse("proposalVoteStatus");
 export const apiPropVoteStatusError = getApiError("proposalVoteStatusError");
+
+export const apiAuthorizeVoteResponse = getApiResponse("authorizeVote");
+export const apiAuthorizeVotePayload = getApiPayload("authorizeVote");
+export const apiAuthorizeVoteError = getApiError("authorizeVote");
+export const isApiRequestingAuthorizeVote = getIsApiRequesting("authorizeVote");
+export const apiAuthorizeVoteToken = compose(get("token"), apiAuthorizeVotePayload);
+
+export const apiStartVoteResponse = getApiResponse("startVote");
+export const apiStartVotePayload = getApiPayload("startVote");
+export const apiStartVoteError = getApiError("startVote");
+export const isApiRequestingStartVote = getIsApiRequesting("startVote");
+export const apiStartVoteToken = compose(get("token"), apiStartVotePayload);
+
 
 const apiProposalPaywallDetailsResponse = getApiResponse("proposalPaywallDetails");
 export const proposalPaywallAddress = compose(get("paywalladdress"), apiProposalPaywallDetailsResponse);
@@ -249,13 +237,6 @@ export const paywallTxNotBefore = state => {
 export const isTestNet = compose(get("testnet"), apiInitResponse);
 export const isMainNet = not(isTestNet);
 
-export const getPropTokenIfIsStartingVote = (state) => {
-  if(state.api.startVote && state.api.startVote.isRequesting) {
-    return state.api.startVote.payload && state.api.startVote.payload.token;
-  }
-  return undefined;
-};
-
 export const getPropVoteStatus = state => token => {
   // try to get it from single prop response (proposal detail)
   let vsResponse = apiPropVoteStatusResponse(state);
@@ -313,7 +294,6 @@ export const setStatusProposalError = apiSetStatusProposalError;
 export const redirectedFrom = get([ "api", "login", "redirectedFrom" ]);
 export const verificationToken = compose(get("verificationtoken"), apiNewUserResponse);
 export const getKeyMismatch = state => state.api.keyMismatch;
-export const setStartVote = compose(get("startvote"), apiSetStartVoteResponse);
 export const editUserAction = compose(get("action"), apiEditUserPayload);
 export const lastLoginTimeFromLoginResponse = compose(get("lastlogintime"), apiLoginResponse);
 
@@ -322,3 +302,28 @@ export const apiEditProposalResponse = getApiResponse("editProposal");
 export const apiEditProposalError = getApiError("editProposal");
 export const apiEditProposalPayload = getApiPayload("editProposal");
 export const editProposalToken = compose(get([ "proposal", "censorshiprecord", "token" ]), apiEditProposalResponse);
+
+
+export const isApiRequesting = or(
+  isApiRequestingInit,
+  isApiRequestingPolicy,
+  isApiRequestingNewUser,
+  isApiRequestingVerifyNewUser,
+  isApiRequestingLogin,
+  isApiRequestingLogout,
+  isApiRequestingForgottenPassword,
+  isApiRequestingResendVerificationEmail,
+  isApiRequestingPasswordReset,
+  isApiRequestingVetted,
+  isApiRequestingUnvetted,
+  isApiRequestingUserProposals,
+  isApiRequestingProposal,
+  isApiRequestingNewProposal,
+  isApiRequestingUser,
+  isApiRequestingNewComment,
+  isApiRequestingSetStatusProposal,
+  isApiRequestingStartVote,
+  isApiRequestingPropsVoteStatus,
+  isApiRequestingPropVoteStatus,
+  isApiRequestingEditUser,
+);

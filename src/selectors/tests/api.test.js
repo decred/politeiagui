@@ -88,12 +88,7 @@ describe("test api selectors", () => {
 
     expect(sel.paywallTxNotBefore(state)).toEqual(null);
 
-    // getPropTokenIfIsStartingVote
-    expect(sel.getPropTokenIfIsStartingVote(MOCK_STATE)).toEqual("fake_token");
-
     state = { api: { ...MOCK_STATE.api, startVote: {} } };
-
-    expect(sel.getPropTokenIfIsStartingVote(state)).toEqual(undefined);
 
     // getPropVoteStatus
     expect(sel.getPropVoteStatus(MOCK_STATE)("6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8"))
@@ -160,8 +155,6 @@ describe("test api selectors", () => {
     expect(sel.setStatusProposalToken(MOCK_STATE)).toEqual(MOCK_STATE.api.setStatusProposal.payload.token);
 
     expect(sel.verificationToken(MOCK_STATE)).toEqual(MOCK_STATE.api.newUser.response.verificationtoken);
-
-    expect(sel.setStartVote(MOCK_STATE)).toEqual(MOCK_STATE.api.startVote.response.startvote);
 
     expect(sel.editUserAction(MOCK_STATE)).toEqual(MOCK_STATE.api.editUser.payload.action);
 

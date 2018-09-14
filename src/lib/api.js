@@ -237,3 +237,10 @@ export const usernamesById = (csrf, userids) => {
 
 export const proposalsVoteStatus = () => GET("/v1/proposals/votestatus").then(getResponse);
 export const proposalVoteStatus = (token) => GET(`/v1/proposals/${token}/votestatus`).then(getResponse);
+
+export const proposalAuthorizeVote = (csrf, token, email, version) =>
+  pki.myPubKeyHex(email).then(publickey =>
+    pki.signStringHex(email, token + version).then(signature => POST(
+      "/proposals/authorizevote", csrf,
+      { token, signature, publickey }
+    ))).then(getResponse);

@@ -3,13 +3,20 @@ import voteStatsConnector from "../connectors/voteStats";
 import StackedBarChart from "./StackedBarChart";
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 import { getRandomColor } from "../helpers";
-import { PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED } from "../constants";
-import { NETWORK } from "../constants";
+import {
+  PROPOSAL_VOTING_ACTIVE,
+  PROPOSAL_VOTING_FINISHED,
+  PROPOSAL_VOTING_NOT_AUTHORIZED,
+  PROPOSAL_VOTING_AUTHORIZED,
+  NETWORK
+} from "../constants";
+
 
 const mapVoteStatusToMessage = {
   [PROPOSAL_VOTING_ACTIVE]: "Proposal voting active",
   [PROPOSAL_VOTING_FINISHED]: "Proposal voting finished",
-  [PROPOSAL_VOTING_NOT_STARTED]: "Proposal voting not started"
+  [PROPOSAL_VOTING_NOT_AUTHORIZED]: "Author has not yet authorized the start of voting",
+  [PROPOSAL_VOTING_AUTHORIZED]: "Waiting for administrator approval to start voting"
 };
 
 const VoteStatusLabel = ({ status }) => {
@@ -33,10 +40,18 @@ const VoteStatusLabel = ({ status }) => {
         {mapVoteStatusToMessage[status]}
       </span>
     ),
-    [PROPOSAL_VOTING_NOT_STARTED]: (
+    [PROPOSAL_VOTING_NOT_AUTHORIZED]: (
       <span style={{
         ...spanStyle,
         color: "#586D82"
+      }}>
+        {mapVoteStatusToMessage[status]}
+      </span>
+    ),
+    [PROPOSAL_VOTING_AUTHORIZED]: (
+      <span style={{
+        ...spanStyle,
+        color: "rgb(202, 184, 42)"
       }}>
         {mapVoteStatusToMessage[status]}
       </span>
@@ -115,6 +130,7 @@ class Stats extends React.Component {
     const { status } = this.props;
     const showStats = this.canShowStats(status, totalVotes);
     const options = optionsResult ? this.transformOptionsResult(totalVotes, optionsResult) : [];
+    const isPreVoting = status === PROPOSAL_VOTING_NOT_AUTHORIZED || status === PROPOSAL_VOTING_AUTHORIZED;
     const headerStyle = {
       display: "flex",
       alignItems: "center",
@@ -140,7 +156,7 @@ class Stats extends React.Component {
             style={{ ...bodyStyle, maxWidth: "400px" }}
             data={this.getChartData(options)}
           /> :
-          status !== PROPOSAL_VOTING_NOT_STARTED ?
+          !isPreVoting ?
             <div
               style={bodyStyle}
             >

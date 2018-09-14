@@ -15,7 +15,6 @@ export const confirmWithModal = (modalType, payload) =>
   (dispatch) =>
     new Promise((resolve) => {
       dispatch(openModal(modalType, payload, function(a, b) {
-        console.log(a + ", " + b);
         resolve(a, b);
       }));
     });

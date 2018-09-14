@@ -3,7 +3,7 @@ import get from "lodash/fp/get";
 import map from "lodash/fp/map";
 import cloneDeep from "lodash/cloneDeep";
 import { DEFAULT_REQUEST_STATE, request, receive, reset, resetMultiple } from "./util";
-import { PROPOSAL_VOTING_ACTIVE } from "../constants";
+import { PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_AUTHORIZED } from "../constants";
 
 export const DEFAULT_STATE = {
   me: DEFAULT_REQUEST_STATE,
@@ -236,6 +236,39 @@ export const onReceiveStartVote = (state, action) => {
   };
 };
 
+export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
+  state = receive(key, state, action);
+  if (action.error) return state;
+
+  const newVoteStatus = {
+    token: state[key].payload.token,
+    status: newStatus,
+    optionsresult: null,
+    totalvotes: 0
+  };
+  return {
+    ...state,
+    proposalsVoteStatus: {
+      ...state.proposalsVoteStatus,
+      response: {
+        ...state.proposalsVoteStatus.response,
+        votesstatus: (state.proposalsVoteStatus.response &&
+        state.proposalsVoteStatus.response.votesstatus) ?
+          state.proposalsVoteStatus.response.votesstatus
+            .map(vs => newVoteStatus.token === vs.token ?
+              newVoteStatus : vs) : [newVoteStatus]
+      }
+    },
+    proposalVoteStatus: {
+      ...state.proposalsVoteStatus,
+      response: {
+        ...state.proposalVoteStatus.response,
+        ...newVoteStatus
+      }
+    }
+  };
+};
+
 const api = (state = DEFAULT_STATE, action) => (({
   [act.SET_EMAIL]: () => ({ ...state, email: action.payload }),
   [act.CLEAN_ERRORS]: () => (
@@ -319,7 +352,7 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RESET_REDIRECTED_FROM]: () => reset("login", state),
   [act.REQUEST_SETSTATUS_PROPOSAL]: () => request("setStatusProposal", state, action),
   [act.RECEIVE_SETSTATUS_PROPOSAL]: () => onReceiveSetStatus(state, action),
-  [act.RECEIVE_START_VOTE]: () => onReceiveStartVote(state, action),
+  [act.RECEIVE_START_VOTE]: () => onReceiveVoteStatusChange("startVote", PROPOSAL_VOTING_ACTIVE, state, action),
   [act.REQUEST_START_VOTE]: () => request("startVote", state, action),
   [act.REQUEST_UPDATED_KEY]: () => request("updateUserKey", state, action),
   [act.RECEIVE_UPDATED_KEY]: () => receive("updateUserKey", state, action),
@@ -333,6 +366,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_PROPOSALS_VOTE_STATUS]: () => receive("proposalsVoteStatus", state, action),
   [act.REQUEST_PROPOSAL_VOTE_STATUS]: () => request("proposalVoteStatus", state, action),
   [act.RECEIVE_PROPOSAL_VOTE_STATUS]: () => receive("proposalVoteStatus", state, action),
+  [act.REQUEST_AUTHORIZE_VOTE]: () => request("authorizeVote", state, action),
+  [act.RECEIVE_AUTHORIZE_VOTE]: () => onReceiveVoteStatusChange("authorizeVote", PROPOSAL_VOTING_AUTHORIZED, state, action),
   [act.RECEIVE_LOGOUT]: () => {
     const tempState = DEFAULT_STATE;
     tempState.init = state.init;
