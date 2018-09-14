@@ -14,7 +14,8 @@ const proposalDownloadConnector = connect(
   }),
   {
     confirmWithModal: act.confirmWithModal,
-    onChangeProposalStatusApproved: act.onChangeProposalStatusApproved
+    onChangeProposalStatusApproved: act.onChangeProposalStatusApproved,
+    getLastBlockHeight: act.getLastBlockHeight
   }
 );
 
