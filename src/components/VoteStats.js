@@ -134,11 +134,6 @@ class Stats extends React.Component {
           {endHeight && currentHeight ? this.getTimeInBlocks(endHeight - currentHeight) : null}
           {showStats && options.map(op => this.renderStats(op))}
         </div>
-        <div
-          style={detailStyle}
-        >
-          <p>{endHeight > currentHeight ? `Voting ends at block #${endHeight}` : null}</p>
-        </div>
         {showStats ?
           <StackedBarChart
             displayValuesForLabel="yes"
