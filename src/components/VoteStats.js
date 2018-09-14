@@ -168,11 +168,6 @@ class Stats extends React.Component {
 }
 
 class VoteStats extends React.Component {
-  componentDidMount() {
-    // Calls the function to get the last block height
-    const { getLastBlockHeight } = this.props;
-    getLastBlockHeight && getLastBlockHeight();
-  }
   render() {
     const { token, getVoteStatus, lastBlockHeight } = this.props;
     const { optionsresult, status, totalvotes, endheight } = getVoteStatus(token);
