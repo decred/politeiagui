@@ -139,3 +139,17 @@ export const verifyUserPubkey = (email, keyToBeMatched, keyMismatchAction) =>
         keys.publicKey !== keyToBeMatched
       )
     );
+
+export const multiplyFloatingNumbers = (num1, num2) => {
+  let cont1 = 0;
+  let cont2 = 0;
+  while (num1 < 1) {
+    num1 *= 10;
+    cont1++;
+  }
+  while (num2 < 1) {
+    num2 *= 10;
+    cont2++;
+  }
+  return (num1*num2)/(Math.pow(10, cont1+cont2));
+};
