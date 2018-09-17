@@ -5,7 +5,6 @@ import PasswordChange from "./PasswordChange";
 import UsernameChange from "./UsernameChange";
 import Message from "./Message";
 import { myPubKeyHex } from "../lib/pki";
-import Paywall from "./Paywall";
 import accountConnector from "../connectors/account";
 import { CONFIRM_ACTION } from "../components/Modal/modalTypes";
 import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "../constants";
@@ -98,14 +97,12 @@ class KeyPage extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const {
       loggedInAsEmail,
       onUpdateUserKey,
       updateUserKey,
       updateUserKeyError,
       keyMismatch,
-      userAlreadyPaid,
       onIdentityImported,
       identityImportError,
       identityImportSuccess,
@@ -114,9 +111,6 @@ class KeyPage extends React.Component {
     const { pubkey, pubkeyStatus, showIdentityHelpText } = this.state;
     return (
       <div className="content" role="main" >
-        {!userAlreadyPaid ? (
-          <Paywall />
-        ) : null}
         {keyMismatch && !identityImportSuccess ? (
           <Message
             type="error"

@@ -870,7 +870,18 @@ li p.header-3 {
 }
 
 .paywall-payment-section {
-  float: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.paywall-content {
+  padding: 20px;
+}
+
+.paywall-content .highlight {
+  font-weight: bold;
+  color: #0079d3;
 }
 
 .paywall-faucet {
@@ -904,6 +915,10 @@ li p.header-3 {
   color: #41bf53;
 }
 
+.paywall-paragraph {
+  text-align: justify;
+}
+
 .proposal-credits-input {
   height: 36px;
   width: 64px;
@@ -912,9 +927,42 @@ li p.header-3 {
   text-align: center;
 }
 
-.paywall-address,
+.address-viewer {
+  padding: 4px 8px 8px 8px;
+  border: 1px solid #777;
+  border-radius: 8px;
+  background: #d6d6d6;
+  margin-right: 20px;
+}
+
+.address-viewer_menu {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.address-viewer_menu_option { 
+  margin-right: 5px;
+  margin-bottom: 4px;
+  cursor: pointer;
+}
+
+.address-viewer_menu_option:hover {
+  color: #0079d3;
+}
+
+.address-viewer_text,
 .paywall-amount {
   font-weight: bold;
+}
+
+.paywall-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.paywall-content > p {
+  margin-bottom: 5px;
 }
 
 .paywall-payment-sent {
@@ -1294,4 +1342,9 @@ form div.usertext-body.may-blank-within.md-container {
 .readMore {
 	clear: both;
 	cursor: pointer;
+}
+
+.linkish {
+  color: #2971FF;
+  cursor: pointer;
 }
