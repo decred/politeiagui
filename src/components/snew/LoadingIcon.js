@@ -10,14 +10,14 @@ const LoadingIcon = ({
     className={"loading" + (className ? (" " + className) : "")}
     style={Object.assign({
       display: hidden ? "none" : "flex",
-      width: width + "px",
-      height: (width * 0.75) + "px"
+      width: (width * 1.4) + "px",
+      height: (width * 1.25) + "px"
     }, style)}>
     <div
       className="logo spin"
       style={{
-        width: width + "px",
-        height: (width * 0.75) + "px"
+        width: (width * 1.4) + "px",
+        height: (width * 1.25) + "px"
       }} />
   </div>
 );

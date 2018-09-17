@@ -84,7 +84,7 @@ body, html {
 }
 
 #app {
-  background: #586D82;
+  background: #091440;
   font-weight: 400;
   color: #132f4b;
 
@@ -368,13 +368,13 @@ a:hover, a:focus {
   color: #bf4153;
 }
 .message-info {
-  border: 1px solid #2971FF;
+  border: 1px solid #5981ab;
 }
 .message-info > .message-icon {
-  background: #2971FF;
+  background: #5981ab;
 }
 .message-info > .message-text > .message-header {
-  color: #2971FF;
+  color: #5981ab;
 }
 
 .message-warn {
@@ -469,29 +469,30 @@ a:hover, a:focus {
 }
 .logo {
   position: absolute;
-  background: url("./spinner.svg") 0px 0px no-repeat;
+  background: url("./politeia-loading.gif") 0px 0px no-repeat;
 }
-button .logo {
-  position: static;
-  background: url("./spinner_white.svg") 0px 0px no-repeat;
-  margin-top: 10px;
-  margin-right: 10px;
-}
-.user-proposal-credits .logo {
-  background: url("./spinner_white.svg") 0px 0px no-repeat;
-  margin-top: 2px;
-  height: 12px;
-  width: 16px;
+button .logo {		
+   position: static;		
+   background: url("./spinner_white.svg") 0px 0px no-repeat;		
+   margin-top: 7px;		
+   margin-right: 10px;
+ }		
+ .user-proposal-credits .logo {		
+   background: url("./spinner_white.svg") 0px 0px no-repeat;		
+   height: 12px;		
+   width: 16px;
+ }
+ button .spin {		
+   animation: spin 3s ease-in-out infinite;		
+ }
+.user-proposal-credits .spin{
+	animation: spin 3s ease-in-out infinite;
 }
 .available-credits .logo {
   margin-top: 1px;
   height: 12px;
   width: 16px;
 }
-.spin {
-  animation: spin 3s ease-in-out infinite;
-}
-
 .submitted-by {
   cursor: default;
   color: #000;
@@ -733,7 +734,7 @@ li p.header-3 {
 }
 
 #header-right {
-  background-color: #586D82;
+  background-color: #091440;
   position: absolute;
   top: 0;
   right: 0;
@@ -1042,7 +1043,7 @@ li p.header-3 {
 }
 
 .appWrapper {
-  background: #f4f7f9;
+  background: #f3f5f6;
 }
 
 .available-credits {
@@ -1274,4 +1275,23 @@ form div.usertext-body.may-blank-within.md-container {
   -webkit-box-shadow: 1px 1px 1px 6px #f4f7f9;
 	-moz-box-shadow: 1px 1px 1px 6px #f4f7f9;
 	box-shadow: 1px 1px 1px 6px #f4f7f9;
+}
+
+.comment > .entry > .usertext {
+	max-height: 500px;
+	overflow: hidden;
+}
+
+.collapsed {
+	max-height: 500px;
+	overflow: hidden;
+}
+
+.expanded {
+	max-height: none;
+}
+
+.readMore {
+	clear: both;
+	cursor: pointer;
 }

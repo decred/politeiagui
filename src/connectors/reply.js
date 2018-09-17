@@ -25,7 +25,8 @@ const replyConnector = connect(
     onFetchData: act.onGetPolicy,
     onSubmitComment: act.onSubmitComment,
     onSetReplyParent: act.onSetReplyParent,
-    onLikeComment: act.onLikeComment
+    onLikeComment: act.onLikeComment,
+    onCensorComment: act.onCensorComment
   }
 );
 
@@ -63,7 +64,10 @@ class Wrapper extends Component {
     );
   }
 
-  onChange = value => this.setState({ commentValue: value })
+  onChange = value => {
+    this.setState({ commentValue: value, validationError: "" });
+  }
+
   resetForm = () => {
     this.setState({ commentValue: "" });
     this.props.onClose && this.props.onClose();
@@ -72,11 +76,11 @@ class Wrapper extends Component {
   onSave(e) {
     e && e.preventDefault && e.preventDefault();
     const { loggedInAsEmail, token, thingId: replyTo, policy } = this.props;
-    const { commentValue: comment } = this.state;
+    const { commentValue } = this.state;
+    const comment = commentValue.trim();
     try {
       validate({ values: { comment }, ...this.props }, policy);
     } catch(e) {
-      console.log("got error", e);
       this.setState({ validationError: e.errors._error });
       return;
     }

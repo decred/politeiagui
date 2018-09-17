@@ -34,7 +34,7 @@ class Dropdown extends Component {
       top: "41px",
       right: "-16px",
       border: "1px solid rgba(255, 255, 255, .8)",
-      backgroundColor: "#586D82",
+      backgroundColor: "#091440",
       width: "200px"
     };
     const dropdownTriggerStyle = {

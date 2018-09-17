@@ -62,7 +62,6 @@ export const getEditProposalValues = state => {
   };
 };
 
-
 export const getUserPaywallStatus = state => {
   if(userAlreadyPaid(state)) {
     return PAYWALL_STATUS_PAID;
@@ -145,14 +144,13 @@ export const getVettedFilteredProposals = (state) => {
   });
 };
 
-const getDraftProposals = (state) => {
+export const getDraftProposals = (state) => {
   const draftsObj = draftProposals(state) || {};
   const drafts = Object.keys(draftsObj)
     .filter(key =>
       [ "newDraft", "lastSubmitted", "originalName" ].indexOf(key) === -1
     )
     .map(key => draftsObj[key]);
-
   return drafts;
 };
 

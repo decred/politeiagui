@@ -5,6 +5,7 @@ import isEqual from "lodash/isEqual";
 import { onSubmitProposal, onChangeUsername, onChangePassword, onFetchProposalComments, onSubmitEditedProposal } from "./api";
 import { onFetchProposal as onFetchProposalApi, onSubmitComment as onSubmitCommentApi } from "./api";
 import { onFetchUsernamesById as onFetchUsernamesByIdApi } from "./api";
+import { resetNewProposalData } from "../lib/editors_content_backup";
 import * as sel from "../selectors";
 import act from "./methods";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
@@ -38,8 +39,10 @@ export const onEditProposal = ({ name, description, files }, _, props) =>
   (dispatch) =>
     dispatch(onSubmitEditedProposal(props.loggedInAsEmail, name.trim(), description, files, props.token));
 
-export const onSaveDraftProposal = ({ name, description, files, draftId }) =>
-  act.SAVE_DRAFT_PROPOSAL({ name: name.trim(), description, files, timestamp: Date.now() / 1000, draftId });
+export const onSaveDraftProposal = ({ name, description, files, draftId }) => {
+  resetNewProposalData();
+  return act.SAVE_DRAFT_PROPOSAL({ name: name.trim(), description, files, timestamp: Date.now() / 1000, draftId });
+};
 
 export const onLoadDraftProposals = (email) => {
   const stateFromLS = loadStateLocalStorage(email);
@@ -72,7 +75,10 @@ export const onFetchProposal = (token) => (dispatch, getState) =>
       return dispatch(onFetchUsernamesById(userIds));
     });
 
-export const onLoadMe = me => dispatch => dispatch(act.LOAD_ME(me));
+export const onLoadMe = me => dispatch => {
+  dispatch(act.LOAD_ME(me));
+  dispatch(act.SET_PROPOSAL_CREDITS(me.response.proposalcredits));
+};
 
 export const onChangeAdminFilter = (option) => act.CHANGE_ADMIN_FILTER_VALUE(option);
 export const onChangePublicFilter = (option) => act.CHANGE_PUBLIC_FILTER_VALUE(option);

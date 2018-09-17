@@ -11,6 +11,31 @@ class ThingComment extends React.PureComponent {
       showCommentForm: false
     };
   }
+  handleCommentCensor = (e) => {
+    e && e.preventDefault && e.preventDefault();
+    this.props.onCensorComment(this.props.loggedInAsEmail, this.props.token, this.props.id);
+  }
+  handleCommentMaxHeight = () => {
+    const insertAfter = (newNode, referenceNode) => referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    const commentsDiv = Array.prototype.slice.call(document.querySelectorAll(".comment > .entry > .usertext"));
+    const overflowDivs = commentsDiv.filter(function isOverflown(element) {
+      return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+    });
+    overflowDivs.forEach((overflowDiv) => {
+      const readMore = document.createElement("a");
+      readMore.innerHTML = "Read More";
+      overflowDiv.className = "collapsed";
+      readMore.className += "readMore";
+      insertAfter(readMore, overflowDiv);
+      readMore.addEventListener("click", (() => { overflowDiv.classList.toggle("expanded"); }));
+      readMore.addEventListener("click", (() => {
+        (readMore.innerHTML === "Read More") ? readMore.innerHTML = "Read less" : readMore.innerHTML = "Read More";
+      }));
+    });
+  }
+  componentDidMount(){
+    this.handleCommentMaxHeight();
+  }
   toggleCommentForm = (e, forceValue = null) => {
     e && e.preventDefault && e.preventDefault();
     this.setState({
@@ -43,7 +68,12 @@ class ThingComment extends React.PureComponent {
         }
         <BaseComment {...{
           ...props,
+          showCensorLink: !!props.isAdmin && !props.censored,
+          showArrows: !props.censored,
+          grayBody: props.censored,
+          showReply: !props.censored,
           onShowReply: this.toggleCommentForm,
+          onCensorComment: this.handleCommentCensor,
           onCloseCommentForm: this.onCloseCommentForm,
           showCommentForm,
           user: loggedInAsEmail,

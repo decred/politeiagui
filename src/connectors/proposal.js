@@ -14,6 +14,7 @@ const proposalConnector = connect(
       get([ "match", "params", "token" ]),
       arg(1)
     ),
+    censoredComment: sel.censoredComment,
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
     proposal: sel.proposal,

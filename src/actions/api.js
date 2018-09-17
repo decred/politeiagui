@@ -7,6 +7,7 @@ import * as modalTypes from "../components/Modal/modalTypes";
 import * as external_api_actions from "./external_api";
 import { clearStateLocalStorage } from "../lib/local_storage";
 import { callAfterMinimumWait } from "./lib";
+import { resetNewProposalData } from "../lib/editors_content_backup";
 import act from "./methods";
 import {
   globalUsernamesById,
@@ -142,6 +143,7 @@ export const onLogin = ({ email, password }) =>
 export const onLogout = () =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_LOGOUT());
+    clearStateLocalStorage();
     return api
       .logout(csrf)
       .then(response => {
@@ -280,7 +282,7 @@ export const onSubmitProposal = (
     return Promise.resolve(api.makeProposal(name, description, files))
       .then(proposal => api.signProposal(loggedInAsEmail, proposal))
       .then(proposal => api.newProposal(csrf, proposal))
-      .then(proposal =>
+      .then(proposal => {
         dispatch(
           act.RECEIVE_NEW_PROPOSAL({
             ...proposal,
@@ -290,13 +292,15 @@ export const onSubmitProposal = (
             name,
             description
           })
-        )
-      )
+        );
+        resetNewProposalData();
+      })
       .then(() => {
         dispatch(act.SUBTRACT_PROPOSAL_CREDITS(1));
       })
       .catch(error => {
         dispatch(act.RECEIVE_NEW_PROPOSAL(null, error));
+        resetNewProposalData();
         throw error;
       });
   });
@@ -313,13 +317,13 @@ export const onSubmitEditedProposal = (
     return Promise.resolve(api.makeProposal(name, description, files))
       .then(proposal => api.signProposal(loggedInAsEmail, proposal))
       .then(proposal => api.editProposal(csrf, { ...proposal, token }))
-      .then(proposal =>
-        dispatch(
-          act.RECEIVE_EDIT_PROPOSAL(proposal)
-        )
-      )
+      .then(proposal => {
+        dispatch(act.RECEIVE_EDIT_PROPOSAL(proposal));
+        resetNewProposalData();
+      })
       .catch(error => {
         dispatch(act.RECEIVE_EDIT_PROPOSAL(null, error));
+        resetNewProposalData();
         throw error;
       });
   });
@@ -338,6 +342,27 @@ export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
       .catch(error => {
         dispatch(act.RESET_SYNC_LIKE_COMMENT());
         dispatch(act.RECEIVE_LIKE_COMMENT(null, error));
+      });
+  });
+
+export const onCensorComment = (loggedInAsEmail, token, commentid) =>
+  withCsrf((dispatch, getState, csrf) => {
+    return dispatch(confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {}))
+      .then(({ confirm, reason }) => {
+        if (confirm) {
+          dispatch(act.REQUEST_CENSOR_COMMENT({ commentid, token }));
+          return Promise.resolve(api.makeCensoredComment(token, reason, commentid))
+            .then(comment => api.signCensorComment(loggedInAsEmail, comment))
+            .then(comment => api.censorComment(csrf, comment))
+            .then(response => {
+              if (response.receipt) {
+                dispatch(act.RECEIVE_CENSOR_COMMENT(commentid, null));
+              }
+            })
+            .catch(error => {
+              dispatch(act.RECEIVE_CENSOR_COMMENT(null, error));
+            });
+        }
       });
   });
 
