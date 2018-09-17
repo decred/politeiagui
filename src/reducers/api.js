@@ -211,7 +211,8 @@ export const onReceiveStartVote = (state, action) => {
     token: state.startVote.payload.token,
     status: PROPOSAL_VOTING_ACTIVE,
     optionsresult: null,
-    totalvotes: 0
+    totalvotes: 0,
+    endheight: state.startVote.response.endheight
   };
   return {
     ...state,

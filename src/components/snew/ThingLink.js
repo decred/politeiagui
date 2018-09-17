@@ -62,13 +62,20 @@ const ThingLinkComp = ({
   isTestnet,
   getVoteStatus,
   confirmWithModal,
-  userId
+  userId,
+  comments
 }) => {
   const voteStatus = getVoteStatus(id) && getVoteStatus(id).status;
   const displayVersion = review_status === PROPOSAL_STATUS_PUBLIC;
   const isVotingActiveOrFinished = voteStatus === PROPOSAL_VOTING_ACTIVE || voteStatus === PROPOSAL_VOTING_FINISHED;
   const isEditable = authorid === userId && !isVotingActiveOrFinished && review_status !== PROPOSAL_STATUS_CENSORED;
   const hasBeenUpdated = review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES || parseInt(version, 10) > 1;
+  const hasAuthoredComment = () => {
+    for (const c of comments) {
+      if (c.userid === userId) return true;
+    }
+    return false;
+  };
   return (
     <div
       className={`thing thing-proposal id-${id} odd link ${
@@ -184,7 +191,7 @@ const ThingLinkComp = ({
                 >
                   Your proposal has been created, but it will not be public
                 until an admin approves it. You can{" "}
-                  <DownloadBundle message="download your proposal" /> and use
+                  <DownloadBundle message="download your proposal" type="proposal"/> and use
                 the{" "}
                   <a
                     href="https://github.com/decred/politeia/tree/master/politeiad/cmd/politeia_verify"
@@ -196,14 +203,25 @@ const ThingLinkComp = ({
                   to prove that your submission has been accepted for review by
                   Politeia. If your proposal is censored by an admin, you won't be
                   able to access it's contents.
+                  and use
+
                 </p>
               </span>
             </Message>
-          ) : (
-            <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-              <DownloadBundle />
-            </div>
-          ))}
+          ) : hasAuthoredComment() ? (
+            <div>
+              <div style={{ marginTop: "15px", marginBottom: "15px" }}>
+                <DownloadBundle type="proposal" />
+              </div>
+              <div style={{ marginTop: "15px", marginBottom: "15px" }}>
+                <DownloadBundle type="comments" />
+              </div>
+            </div>)
+            : (
+              <div style={{ marginTop: "15px", marginBottom: "15px" }}>
+                <DownloadBundle type="proposal" /> <br></br>
+              </div>
+            ))}
         {censorMessage && <CensorMessage message={censorMessage} />}
         <Expando {...{ expanded, is_self, selftext, selftext_html }} />
         <ProposalImages readOnly files={otherFiles} />

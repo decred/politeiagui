@@ -2,7 +2,7 @@ import React from "react";
 import Message from "../Message";
 import ProposalCreditsSummary from "./Summary";
 import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
-
+import { multiplyFloatingNumbers } from "../../helpers";
 
 const ProposalCreditsPage = ({
   proposalPaywallAddress,
@@ -95,7 +95,7 @@ const ProposalCreditsPage = ({
                       text="Buy credits with faucet"
                       disabled={isApiRequestingPayWithFaucet || payWithFaucetTxId || !userCanExecuteActions}
                       isLoading={isApiRequestingPayWithFaucet}
-                      onClick={() => payWithFaucet(proposalPaywallAddress, numCreditsToPurchase * proposalCreditPrice)} />
+                      onClick={() => payWithFaucet(proposalPaywallAddress, multiplyFloatingNumbers(numCreditsToPurchase, proposalCreditPrice))} />
                   </div>
                   {payWithFaucetError ? (
                     <Message

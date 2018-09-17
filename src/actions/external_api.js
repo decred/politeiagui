@@ -1,7 +1,10 @@
 import * as external_api from "../lib/external_api";
 import { verifyUserPaymentWithPoliteia, onUserProposalCredits } from "./api";
 import act from "./methods";
-import { PAYWALL_STATUS_LACKING_CONFIRMATIONS, PAYWALL_STATUS_PAID } from "../constants";
+import {
+  PAYWALL_STATUS_LACKING_CONFIRMATIONS,
+  PAYWALL_STATUS_PAID
+} from "../constants";
 
 const CONFIRMATIONS_REQUIRED = 2;
 const POLL_INTERVAL = 10 * 1000;
@@ -9,7 +12,7 @@ export const verifyUserPayment = (address, amount, txNotBefore, credits = false)
   // Check dcrdata first.
   return external_api.getPaymentsByAddressDcrdata(address)
     .then(response => {
-      if(response === null) {
+      if (response === null) {
         return null;
       }
       return checkForPayment(checkDcrdataHandler, response, address, amount, txNotBefore);
@@ -19,14 +22,14 @@ export const verifyUserPayment = (address, amount, txNotBefore, credits = false)
       return null;
     })
     .then(txn => {
-      if(txn) {
+      if (txn) {
         return txn;
       }
 
       // If that fails, then try insight.
       return external_api.getPaymentsByAddressInsight(address)
         .then(response => {
-          if(response === null) {
+          if (response === null) {
             return null;
           }
 
@@ -69,9 +72,9 @@ export const verifyUserPayment = (address, amount, txNotBefore, credits = false)
 };
 
 const checkForPayment = (handler, transactions, addressToMatch, amount, txNotBefore) => {
-  for(const transaction of transactions) {
+  for (const transaction of transactions) {
     const txn = handler(transaction, addressToMatch, amount, txNotBefore);
-    if(txn) {
+    if (txn) {
       return txn;
     }
   }
@@ -119,7 +122,7 @@ export const payWithFaucet = (address, amount) => dispatch => {
   dispatch(act.REQUEST_PAYWALL_PAYMENT_WITH_FAUCET());
   return external_api.payWithFaucet(address, amount)
     .then(json => {
-      if(json.Error) {
+      if (json.Error) {
         return dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(null, new Error(json.Error)));
       }
       return dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(json));
@@ -134,7 +137,7 @@ export const payProposalWithFaucet = (address, amount) => dispatch => {
   dispatch(act.REQUEST_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET());
   return external_api.payWithFaucet(address, amount)
     .then(json => {
-      if(json.Error) {
+      if (json.Error) {
         return dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null, new Error(json.Error)));
       }
       dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET({ txid: json.Txid, confirmations: 0 }));
@@ -147,11 +150,11 @@ export const payProposalWithFaucet = (address, amount) => dispatch => {
     });
 };
 
-export const getLastBlockHeight = () => dispatch => {
+export const getLastBlockHeight = () => (dispatch) => {
   dispatch(act.REQUEST_GET_LAST_BLOCK_HEIGHT());
   // try with dcrData if fail we try with insight api
   external_api.getHeightByDcrdata().then(response => {
-    dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(response));
+    return dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(response));
   }).catch(err => {
     // ToDo try with insight
     console.log(err);

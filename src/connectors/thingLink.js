@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
 
-const proposalDownloadConnector = connect(
+const thingLinkConnector = connect(
   sel.selectorMap({
     isProposalStatusApproved: sel.isProposalStatusApproved,
     tokenFromStartingVoteProp: sel.getPropTokenIfIsStartingVote,
@@ -10,12 +10,14 @@ const proposalDownloadConnector = connect(
     lastBlockHeight: sel.lastBlockHeight,
     isTestnet: sel.isTestNet,
     getVoteStatus: sel.getPropVoteStatus,
+    comments: sel.proposalComments,
     csrf: sel.csrf
   }),
   {
     confirmWithModal: act.confirmWithModal,
-    onChangeProposalStatusApproved: act.onChangeProposalStatusApproved
+    onChangeProposalStatusApproved: act.onChangeProposalStatusApproved,
+    getLastBlockHeight: act.getLastBlockHeight
   }
 );
 
-export default proposalDownloadConnector;
+export default thingLinkConnector;
