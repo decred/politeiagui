@@ -19,7 +19,8 @@ const ProposalCreditsPage = ({
   payWithFaucet,
   isApiRequestingPayWithFaucet,
   payWithFaucetTxId,
-  payWithFaucetError
+  payWithFaucetError,
+  lastPayment
 }) => {
   return (
     <div className="proposal-paywall-section">
@@ -40,10 +41,16 @@ const ProposalCreditsPage = ({
         <ButtonWithLoadingIcon
           className="c-btn c-btn-primary"
           text="Purchase credits"
-          disabled={isApiRequestingProposalPaywall || !userCanExecuteActions}
+          disabled={isApiRequestingProposalPaywall || !userCanExecuteActions || lastPayment}
           isLoading={isApiRequestingProposalPaywall}
           onClick={onPurchaseProposalCredits} />
       )}
+      { lastPayment ? (
+        <div className="available-credits">
+          <div className="refreshing"><div className="logo spin"></div></div>
+          <b> Confirmations from last payment: </b> {lastPayment.confirmations}
+        </div>
+      ) : null }
       {proposalPaywallAddress && (
         <Message
           type="info"

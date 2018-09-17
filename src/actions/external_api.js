@@ -1,18 +1,17 @@
 import * as external_api from "../lib/external_api";
-import { verifyUserPaymentWithPoliteia } from "./api";
+import { verifyUserPaymentWithPoliteia, onUserProposalCredits } from "./api";
 import act from "./methods";
 import { PAYWALL_STATUS_LACKING_CONFIRMATIONS, PAYWALL_STATUS_PAID } from "../constants";
 
 const CONFIRMATIONS_REQUIRED = 2;
 const POLL_INTERVAL = 10 * 1000;
-export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
+export const verifyUserPayment = (address, amount, txNotBefore, credits = false) => dispatch => {
   // Check dcrdata first.
   return external_api.getPaymentsByAddressDcrdata(address)
     .then(response => {
       if(response === null) {
         return null;
       }
-
       return checkForPayment(checkDcrdataHandler, response, address, amount, txNotBefore);
     })
     .catch(() => {
@@ -40,20 +39,27 @@ export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
       }
 
       if(txn.confirmations < CONFIRMATIONS_REQUIRED) {
-        dispatch(act.UPDATE_USER_PAYWALL_STATUS({
-          status: PAYWALL_STATUS_LACKING_CONFIRMATIONS,
-          currentNumberOfConfirmations: txn.confirmations
-        }));
+        if (credits) {
+          dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET({ txid: txn.id, confirmations: txn.confirmations }));
+        } else {
+          dispatch(act.UPDATE_USER_PAYWALL_STATUS({
+            status: PAYWALL_STATUS_LACKING_CONFIRMATIONS,
+            currentNumberOfConfirmations: txn.confirmations
+          }));
+        }
         return false;
       }
 
       return verifyUserPaymentWithPoliteia(txn.id);
     })
     .then(verified => {
-      if(verified) {
+      if(verified && credits) {
+        dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null));
+        setTimeout(() => dispatch(onUserProposalCredits()), 1000);
+      } else if (verified) {
         dispatch(act.UPDATE_USER_PAYWALL_STATUS({ status: PAYWALL_STATUS_PAID }));
       } else {
-        setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
+        setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore, credits)), POLL_INTERVAL);
       }
     })
     .catch(error => {
@@ -131,7 +137,9 @@ export const payProposalWithFaucet = (address, amount) => dispatch => {
       if(json.Error) {
         return dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null, new Error(json.Error)));
       }
-      return dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(json));
+      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET({ txid: json.Txid, confirmations: 0 }));
+      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS(null));
+      return dispatch(verifyUserPayment(address, amount, json.Txid, true));
     })
     .catch(error => {
       dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null, error));

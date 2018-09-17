@@ -98,7 +98,6 @@ class KeyPage extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const {
       loggedInAsEmail,
       onUpdateUserKey,
