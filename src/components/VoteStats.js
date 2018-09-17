@@ -147,7 +147,7 @@ class Stats extends React.Component {
               <div
                 style={detailStyle}
               >
-                <p>Voting {endHeight > currentHeight ? "ends" : "ended"} at block #{endHeight}</p>
+                {currentHeight && endHeight ? <p>Voting {endHeight > currentHeight ? "ends" : "ended"} at block #{endHeight}</p> : null}
               </div>
               This proposal has not received any votes
             </div>
