@@ -1,9 +1,10 @@
 import React from "react";
 import voteStatsConnector from "../connectors/voteStats";
 import StackedBarChart from "./StackedBarChart";
+import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 import { getRandomColor } from "../helpers";
 import { PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED } from "../constants";
-
+import { NETWORK } from "../constants";
 
 const mapVoteStatusToMessage = {
   [PROPOSAL_VOTING_ACTIVE]: "Proposal voting active",
@@ -93,24 +94,44 @@ class Stats extends React.Component {
       value: op.percentage,
       color: op.color
     }))
-  renderOptionsStats = (totalVotes, optionsResult) => {
+
+  getTimeInBlocks = (blocks) => {
+    const blockTimeMinutes = NETWORK === "testnet" ? blocks*2 : blocks*5 ;
+    const mili = blockTimeMinutes * 60000;
+    const dateMs = new Date(mili + Date.now()); // gets time in ms
+    const distance = distanceInWordsToNow(
+      dateMs,
+      { addSuffix: true }
+    );
+    const element =
+    <span>
+      expires {distance}
+    </span>
+    ;
+    return blockTimeMinutes > 0 ? element : <span>expired</span>;
+  };
+  renderOptionsStats = (totalVotes, optionsResult, endHeight, currentHeight) => {
+
     const { status } = this.props;
     const showStats = this.canShowStats(status, totalVotes);
     const options = optionsResult ? this.transformOptionsResult(totalVotes, optionsResult) : [];
-
     const headerStyle = {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between"
     };
-    const bodyStyle = { marginTop: "5px" };
+    const detailStyle = {
+      color: "gray"
+    };
 
+    const bodyStyle = { marginTop: "5px" };
     return (
       <div>
         <div
           style={headerStyle}
         >
           <VoteStatusLabel status={status} />
+          {endHeight && currentHeight ? this.getTimeInBlocks(endHeight - currentHeight) : null}
           {showStats && options.map(op => this.renderStats(op))}
         </div>
         {showStats ?
@@ -123,6 +144,11 @@ class Stats extends React.Component {
             <div
               style={bodyStyle}
             >
+              <div
+                style={detailStyle}
+              >
+                <p>Voting {endHeight > currentHeight ? "ends" : "ended"} at block #{endHeight}</p>
+              </div>
               This proposal has not received any votes
             </div>
             : null
@@ -131,15 +157,15 @@ class Stats extends React.Component {
     );
   }
   render() {
-    const { totalVotes, optionsResult } = this.props;
-    return this.renderOptionsStats(totalVotes, optionsResult);
+    const { totalVotes, optionsResult, endHeight, currentHeight } = this.props;
+    return this.renderOptionsStats(totalVotes, optionsResult, endHeight, currentHeight);
   }
 }
 
 class VoteStats extends React.Component {
   render() {
-    const { token, getVoteStatus } = this.props;
-    const { optionsresult, status, totalvotes } = getVoteStatus(token);
+    const { token, getVoteStatus, lastBlockHeight } = this.props;
+    const { optionsresult, status, totalvotes, endheight } = getVoteStatus(token);
     const wrapperStyle = {
       display: "flex",
       flexDirection: "column",
@@ -151,7 +177,7 @@ class VoteStats extends React.Component {
     };
     return(
       <div style={wrapperStyle}>
-        <Stats status={status} optionsResult={optionsresult} totalVotes={totalvotes} />
+        <Stats status={status} optionsResult={optionsresult} totalVotes={totalvotes} endHeight={endheight} currentHeight={lastBlockHeight}/>
       </div>
     );
   }

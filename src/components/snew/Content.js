@@ -81,6 +81,8 @@ class Loader extends Component {
   }
 
   componentDidMount() {
+    const { getLastBlockHeight } = this.props;
+    getLastBlockHeight && getLastBlockHeight();
     if(this.props.isProposalStatusApproved){
       this.props.onChangeProposalStatusApproved(false);
     }
