@@ -151,8 +151,11 @@ export const getLastBlockHeight = () => (dispatch) => {
   // try with dcrData if fail we try with insight api
   external_api.getHeightByDcrdata().then(response => {
     return dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(response));
-  }).catch(err => {
-    // ToDo try with insight
-    console.log(err);
+  }).catch(() => {
+    external_api.getHeightByInsight().then(response => {
+      return dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(response.info.blocks));
+    }).catch(() => {
+      return dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(null));
+    });
   });
 };

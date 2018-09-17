@@ -212,7 +212,7 @@ export const onReceiveStartVote = (state, action) => {
     status: PROPOSAL_VOTING_ACTIVE,
     optionsresult: null,
     totalvotes: 0,
-    endheight: state.startVote.response.endheight
+    endheight: state.startVote.response ? state.startVote.response.endheight : null
   };
   return {
     ...state,
