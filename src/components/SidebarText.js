@@ -2,6 +2,7 @@ import React from "react";
 import Markdown from "./snew/Markdown";
 import modalConnector from "../connectors/modal";
 import { ONBOARD } from "./Modal/modalTypes";
+import PaywallAlert from  "./Paywall/PaywallAlert";
 
 const aboutText = `
 # About Politeia
@@ -33,6 +34,7 @@ const resourcesText = `
 
 const SidebarText = (props) => (
   <div style={{ display: "flex", flexDirection: "column" }}>
+    <PaywallAlert />
     <Markdown body={aboutText} filterXss={false} {...props} />
     <span
       style={{ cursor: "pointer", color: "#2971FF" }}
