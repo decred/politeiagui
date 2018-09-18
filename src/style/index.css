@@ -915,10 +915,6 @@ li p.header-3 {
   color: #41bf53;
 }
 
-.paywall-paragraph {
-  text-align: justify;
-}
-
 .proposal-credits-input {
   height: 36px;
   width: 64px;
@@ -963,6 +959,8 @@ li p.header-3 {
 
 .paywall-content > p {
   margin-bottom: 5px;
+  text-align: left;
+  width: 100%;
 }
 
 .paywall-payment-sent {

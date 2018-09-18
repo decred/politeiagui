@@ -33,21 +33,18 @@ const Paywall = ({
       <div className="paywall-wrapper" style={{ padding: "10px" }}>
         <div className="paywall-content">
           <p className="paywall-paragraph">
-           To submit your own proposal, comment on a proposal, up/down vote comments on proposals,
-           or vote on a proposal, Politeia requires you to pay a small registration fee ({paywallAmount} DCR).
-           This is to prevent proposal spamming and to prevent users from creating multiple
-           “sock puppet” accounts to manipulate up/down voting on comments.
+          To participate on proposals and to submit your own, Politeia requires you to pay a small
+          registration fee. This helps keep Politeia free of things like spam and vote manipulation.
           </p>
           <p className="paywall-paragraph highlight">
-            To complete your registration and to be able to submit proposals and comments,
-            please send exactly <span className="paywall-amount">{paywallAmount} DCR</span>{" "}
-            to
+            To complete your registration please send exactly
+            <span className="paywall-amount">{paywallAmount} DCR</span>{" "}
+            to:
           </p>
           <AddressViewer paywallAddress={paywallAddress} />
           <p className="paywall-paragraph">
-            Politeia automatically checks for a transaction with this amount sent to
-            this address. After you send it and it reaches 2 confirmations, you will
-            be approved to submit proposals and comments.
+            When the transaction to the address above reaches 2 confirmations, you will have
+            access to participate on and submit proposals.
           </p>
           <PaywallStatus
             { ...{ userPaywallStatus, userPaywallConfirmations } }
