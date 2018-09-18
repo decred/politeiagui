@@ -9,9 +9,10 @@ import { PAYWALL_MODAL } from "../Modal/modalTypes";
 
 const PaywallAlert = ({
   userPaywallStatus,
-  openModal
+  openModal,
+  loggedInAsEmail
 }) => {
-  return (
+  return !loggedInAsEmail ? null : (
     userPaywallStatus === PAYWALL_STATUS_PAID ?
       null :
       <React.Fragment>
@@ -32,9 +33,10 @@ const PaywallAlert = ({
           /> :
           <Message
             type="info"
-            header="Complete your registration"
+            header="Registration payment detected"
             body={<div>
-              Your payment was detected and its waiting the required amount of confirmations.
+              Your payment was detected and your registration will be complete once it
+              reaches the required amount of confirmations.
               <br />
               <span
                 className="linkish"

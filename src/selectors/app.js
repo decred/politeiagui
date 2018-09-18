@@ -93,7 +93,7 @@ export const userHasPaid = state => {
   return getUserPaywallStatus(state) === PAYWALL_STATUS_PAID;
 };
 export const userCanExecuteActions = state => {
-  return !getKeyMismatch(state);
+  return userHasPaid(state) && !getKeyMismatch(state);
 };
 
 export const isProposalStatusApproved = state => state.app.isProposalStatusApproved;

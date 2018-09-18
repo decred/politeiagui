@@ -7,6 +7,7 @@ export default connect(
   sel.selectorMap({
     userPubkey: sel.userPubkey,
     loggedInAsEmail: sel.loggedInAsEmail,
+    keyMismatch: sel.getKeyMismatch,
     apiError: sel.apiError,
     userCanExecuteActions: sel.userCanExecuteActions,
     lastLoginTime: sel.lastLoginTimeFromLoginResponse,

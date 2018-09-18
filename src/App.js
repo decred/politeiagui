@@ -79,9 +79,9 @@ const LoaderComponent = withRouter(loaderConnector(Loader));
 
 const HeaderAlertComponent = withRouter(
   loaderConnector(
-    ({ location, loggedInAsEmail, userCanExecuteActions, history }) => {
+    ({ location, loggedInAsEmail, keyMismatch, history }) => {
       if (!loggedInAsEmail) return null;
-      if (!userCanExecuteActions && location.pathname !== "/user/account") {
+      if (keyMismatch && location.pathname !== "/user/account") {
         return (
           <HeaderAlert className="action-needed-alert">
 						You cannot currently submit proposals or comments, please visit your{" "}
