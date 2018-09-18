@@ -12,12 +12,19 @@ const actions = connect(
     userCanExecuteActions: sel.userCanExecuteActions,
     lastSubmitted: sel.getLastSubmittedProposal,
     setStatusProposalToken: sel.setStatusProposalToken,
-    setStatusProposalError: sel.setStatusProposalError
+    setStatusProposalError: sel.setStatusProposalError,
+    authorizeVoteError: sel.apiAuthorizeVoteError,
+    authorizeVoteToken: sel.apiAuthorizeVoteToken,
+    isRequestingAuthorizeVote: sel.isApiRequestingAuthorizeVote,
+    startVoteToken: sel.apiStartVoteToken,
+    isRequestingStartVote: sel.isApiRequestingStartVote,
+    startVoteError: sel.apiStartVoteError
   }),
   {
     onChangeStatus: act.onSubmitStatusProposal,
     onDeleteDraftProposal: act.onDeleteDraftProposal,
-    onStartVote: act.onStartVote
+    onStartVote: act.onStartVote,
+    onAuthorizeVote: act.onAuthorizeVote
   }
 );
 

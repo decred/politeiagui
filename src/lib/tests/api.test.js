@@ -18,6 +18,7 @@ describe("api integration modules (lib/api.js)", () => {
   const VERIFICATION_TOKEN = "thisIsAVerificationToken";
   const PROPOSAL_NAME = "Test prop";
   const PROPOSAL_TOKEN = "FAKE_TOKEN";
+  const PROPOSAL_VERSION = "2";
   const MARKDOWN = "# This is a test proposal";
   const FILE = {
     name: "example.jpeg",
@@ -497,6 +498,14 @@ describe("api integration modules (lib/api.js)", () => {
       {
         proposal
       }
+    );
+  });
+
+  test("authorize vote to start (api/v1/proposals/authorizevote)", async () => {
+    await assertPOSTOnRouteIsCalled(
+      "/api/v1/proposals/authorizevote",
+      api.proposalAuthorizeVote,
+      [ FAKE_CSRF, PROPOSAL_TOKEN, EMAIL, PROPOSAL_VERSION ]
     );
   });
 

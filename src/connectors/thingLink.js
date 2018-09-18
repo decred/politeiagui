@@ -5,7 +5,6 @@ import * as act from "../actions";
 const thingLinkConnector = connect(
   sel.selectorMap({
     isProposalStatusApproved: sel.isProposalStatusApproved,
-    tokenFromStartingVoteProp: sel.getPropTokenIfIsStartingVote,
     userId: sel.userid,
     lastBlockHeight: sel.lastBlockHeight,
     isTestnet: sel.isTestNet,

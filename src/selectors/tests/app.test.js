@@ -1,7 +1,7 @@
 import * as sel from "../app";
 import { MOCK_STATE } from "./mock_state";
 import { getTextFromIndexMd } from "../../helpers";
-import { PAYWALL_STATUS_PAID, PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED, PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED, PROPOSAL_USER_FILTER_DRAFT, PAYWALL_STATUS_LACKING_CONFIRMATIONS } from "../../constants";
+import { PAYWALL_STATUS_PAID, PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED, PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_AUTHORIZED, PROPOSAL_USER_FILTER_DRAFT, PAYWALL_STATUS_LACKING_CONFIRMATIONS } from "../../constants";
 import { globalUsernamesById } from "../../actions/app";
 
 describe("test app selector", () => {
@@ -136,7 +136,7 @@ describe("test app selector", () => {
     expect(sel.getVettedEmptyProposalsMessage({ app: { publicProposalsShow: PROPOSAL_VOTING_FINISHED } }))
       .toBeDefined();
 
-    expect(sel.getVettedEmptyProposalsMessage({ app: { publicProposalsShow: PROPOSAL_VOTING_NOT_STARTED } }))
+    expect(sel.getVettedEmptyProposalsMessage({ app: { publicProposalsShow: PROPOSAL_VOTING_NOT_AUTHORIZED } }))
       .toBeDefined();
 
 

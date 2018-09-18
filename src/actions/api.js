@@ -609,3 +609,16 @@ export const onFetchProposalVoteStatus = (token) => (dispatch) => {
     }
   );
 };
+
+export const onAuthorizeVote = (email, token, version) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_AUTHORIZE_VOTE({ token }));
+    return api.proposalAuthorizeVote(csrf, token, email, version).then(
+      response => dispatch(act.RECEIVE_AUTHORIZE_VOTE({ ...response, succes: true }))
+    ).catch(
+      error => {
+        dispatch(act.RECEIVE_AUTHORIZE_VOTE(null, error));
+        throw error;
+      }
+    );
+  });

@@ -16,7 +16,20 @@ import {
   apiUserProposals
 } from "./api";
 import { globalUsernamesById } from "../actions/app";
-import { PAYWALL_STATUS_PAID, PAYWALL_STATUS_WAITING, PROPOSAL_FILTER_ALL, PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_UNREVIEWED_CHANGES, PROPOSAL_STATUS_CENSORED, PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_STARTED, PROPOSAL_USER_FILTER_SUBMITTED, PROPOSAL_USER_FILTER_DRAFT } from "../constants";
+import {
+  PAYWALL_STATUS_PAID,
+  PAYWALL_STATUS_WAITING,
+  PROPOSAL_FILTER_ALL,
+  PROPOSAL_STATUS_UNREVIEWED,
+  PROPOSAL_STATUS_UNREVIEWED_CHANGES,
+  PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_VOTING_NOT_AUTHORIZED,
+  PROPOSAL_VOTING_AUTHORIZED,
+  PROPOSAL_VOTING_ACTIVE,
+  PROPOSAL_VOTING_FINISHED,
+  PROPOSAL_USER_FILTER_SUBMITTED,
+  PROPOSAL_USER_FILTER_DRAFT
+} from "../constants";
 import { getTextFromIndexMd } from "../helpers";
 
 export const replyTo = or(get([ "app", "replyParent" ]), constant(0));
@@ -140,6 +153,10 @@ export const getVettedFilteredProposals = (state) => {
   if (!filterValue)
     return vettedProps;
   return vettedProps.filter(prop => {
+    const propVoteStatus = getPropVoteStatus(state)(prop.censorshiprecord.token).status;
+    if (filterValue === PROPOSAL_VOTING_NOT_AUTHORIZED && propVoteStatus === PROPOSAL_VOTING_AUTHORIZED) {
+      return true;
+    }
     return filterValue === getPropVoteStatus(state)(prop.censorshiprecord.token).status;
   });
 };
@@ -221,7 +238,7 @@ export const getVettedEmptyProposalsMessage = (state) => {
     return "There are no proposals being actively voted on";
   case PROPOSAL_VOTING_FINISHED:
     return "There are no proposals that have finished voting";
-  case PROPOSAL_VOTING_NOT_STARTED:
+  case PROPOSAL_VOTING_NOT_AUTHORIZED:
     return "There are no pre-voting proposals";
   default:
     return "There are no proposals";
