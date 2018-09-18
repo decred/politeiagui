@@ -34,7 +34,7 @@ const Paywall = ({
         <div className="paywall-content">
           <p className="paywall-paragraph">
            To submit your own proposal, comment on a proposal, up/down vote comments on proposals,
-           or vote on a proposal, Politeia requires you to pay a small registration fee (0.1 DCR).
+           or vote on a proposal, Politeia requires you to pay a small registration fee ({paywallAmount} DCR).
            This is to prevent proposal spamming and to prevent users from creating multiple
            “sock puppet” accounts to manipulate up/down voting on comments.
           </p>
