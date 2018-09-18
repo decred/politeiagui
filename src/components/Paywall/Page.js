@@ -38,7 +38,7 @@ const Paywall = ({
           </p>
           <p className="paywall-paragraph highlight">
             To complete your registration please send exactly
-            <span className="paywall-amount">{paywallAmount} DCR</span>{" "}
+            <span className="paywall-amount"> {paywallAmount} DCR</span>{" "}
             to:
           </p>
           <AddressViewer paywallAddress={paywallAddress} />
