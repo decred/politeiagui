@@ -81,7 +81,22 @@ const handleSaveAppDraftProposals = (state) => {
   }
 };
 
+const handlePaymentPollingQueue = (state) => {
+  const email = loggedInAsEmail(state);
+  if(!email) {
+    return;
+  }
+  const stateFromLs = loadStateLocalStorage(email) || {};
+  const queueFromStore = state.app.paymentPollingQueue || [];
+
+  saveStateLocalStorage(
+    set(stateFromLs, [ "app", "paymentPollingQueue" ], queueFromStore),
+    email
+  );
+};
+
 export const handleSaveStateToLocalStorage = (state) => {
   handleSaveApiMe(state);
   handleSaveAppDraftProposals(state);
+  handlePaymentPollingQueue(state);
 };

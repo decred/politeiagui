@@ -1,5 +1,6 @@
 import * as external_api from "../lib/external_api";
 import { verifyUserPaymentWithPoliteia, onUserProposalCredits } from "./api";
+import { onUpdatePaymentPollingQueue, onConfirmPollingPayment } from "./app";
 import act from "./methods";
 import {
   PAYWALL_STATUS_LACKING_CONFIRMATIONS,
@@ -43,7 +44,7 @@ export const verifyUserPayment = (address, amount, txNotBefore, credits = false)
 
       if(txn.confirmations < CONFIRMATIONS_REQUIRED) {
         if (credits) {
-          dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET({ txid: txn.id, confirmations: txn.confirmations }));
+          dispatch(onUpdatePaymentPollingQueue({ txid: txn.id, confirmations: txn.confirmations }));
         } else {
           dispatch(act.UPDATE_USER_PAYWALL_STATUS({
             status: PAYWALL_STATUS_LACKING_CONFIRMATIONS,
@@ -58,6 +59,7 @@ export const verifyUserPayment = (address, amount, txNotBefore, credits = false)
     .then(verified => {
       if(verified && credits) {
         dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null));
+        dispatch(onConfirmPollingPayment({ address, txNotBefore }));
         setTimeout(() => dispatch(onUserProposalCredits()), 1000);
       } else if (verified) {
         dispatch(act.UPDATE_USER_PAYWALL_STATUS({ status: PAYWALL_STATUS_PAID }));
@@ -140,8 +142,10 @@ export const payProposalWithFaucet = (address, amount) => dispatch => {
       if (json.Error) {
         return dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null, new Error(json.Error)));
       }
-      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET({ txid: json.Txid, confirmations: 0 }));
+      const payload = { txid: json.Txid, address, amount, confirmations: 0, credits: true };
+      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(payload));
       dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS(null));
+      dispatch(act.SAVE_PAYMENT_POLLING_QUEUE(payload));
       return dispatch(verifyUserPayment(address, amount, json.Txid, true));
     })
     .catch(error => {
