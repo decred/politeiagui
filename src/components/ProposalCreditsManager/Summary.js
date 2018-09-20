@@ -1,6 +1,4 @@
 import React from "react";
-import proposalCreditsConnector from "../../connectors/proposalCredits";
-
 
 const DcrdataTxLink = ({
   isTestnet,
@@ -25,6 +23,7 @@ const formatDate = (date) => {
 
 const ProposalCreditsSummary = ({
   proposalCredits,
+  proposalCreditPrice,
   proposalCreditPurchases,
   isTestnet,
   lastPaymentNotConfirmed
@@ -33,11 +32,12 @@ const ProposalCreditsSummary = ({
     const transaction = {
       numberPurchased: lastPaymentNotConfirmed.amount * 10,
       txId: lastPaymentNotConfirmed.txid,
-      price: 0.1,
+      price: proposalCreditPrice,
       confirming: true
     };
     proposalCreditPurchases.push(transaction);
   }
+  const reverseProposalCreditPurchases = proposalCreditPurchases.slice(0).reverse();
   return (
     <div className="proposal-credits-summary">
       <div className="available-credits">
@@ -56,29 +56,26 @@ const ProposalCreditsSummary = ({
             </div>
           </div>
           <div className="credit-purchase-body">
-            {proposalCreditPurchases.reverse().map((creditPurchase, i) => {
-              console.log("creditin: ", creditPurchase);
-              return (
-                <div className="credit-purchase-row" key={i}>
-                  <div className="credit-purchase-cell credit-purchase-number">{creditPurchase.numberPurchased}</div>
-                  <div className="credit-purchase-cell credit-purchase-price">{creditPurchase.price} DCR</div>
-                  <div className="credit-purchase-cell credit-purchase-tx">
-                    <DcrdataTxLink isTestnet={isTestnet} txId={creditPurchase.txId} />
-                  </div>
-                  <div className="credit-purchase-cell credit-purchase-status">
-                    { creditPurchase.confirming ?
-                      (<div className="user-proposal-credits-cell"><div className="logo"></div></div>)
-                      : "✔"
-                    }
-                  </div>
-                  <div className="credit-purchase-cell credit-purchase-date-text">
-                    {/* {new Date(creditPurchase.datePurchased * 1000).toUTCString()} */}
-                    { creditPurchase.datePurchased ? formatDate(creditPurchase.datePurchased) : "" }
-                  </div>
-                  <div className="clear"></div>
+            {reverseProposalCreditPurchases.map((creditPurchase, i) => (
+              <div className="credit-purchase-row" key={i}>
+                <div className="credit-purchase-cell credit-purchase-number">{creditPurchase.numberPurchased}</div>
+                <div className="credit-purchase-cell credit-purchase-price">{creditPurchase.price} DCR</div>
+                <div className="credit-purchase-cell credit-purchase-tx">
+                  <DcrdataTxLink isTestnet={isTestnet} txId={creditPurchase.txId} />
                 </div>
-              );
-            })}
+                <div className="credit-purchase-cell credit-purchase-status">
+                  { creditPurchase.confirming ?
+                    (<div className="user-proposal-credits-cell"><div className="logo"></div></div>)
+                    : "✔"
+                  }
+                </div>
+                <div className="credit-purchase-cell credit-purchase-date-text">
+                  {/* {new Date(creditPurchase.datePurchased * 1000).toUTCString()} */}
+                  { creditPurchase.datePurchased ? formatDate(creditPurchase.datePurchased) : "" }
+                </div>
+                <div className="clear"></div>
+              </div>
+            ))}
           </div>
         </div>
       ) : null}
@@ -86,4 +83,4 @@ const ProposalCreditsSummary = ({
   );
 };
 
-export default proposalCreditsConnector(ProposalCreditsSummary);
+export default ProposalCreditsSummary;

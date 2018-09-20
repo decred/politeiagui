@@ -144,7 +144,6 @@ export const payProposalWithFaucet = (address, amount) => dispatch => {
       }
       const payload = { txid: json.Txid, address, amount, confirmations: 0, credits: true };
       dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(payload));
-      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS(null));
       dispatch(act.SAVE_PAYMENT_POLLING_QUEUE(payload));
       return dispatch(verifyUserPayment(address, amount, json.Txid, true));
     })
