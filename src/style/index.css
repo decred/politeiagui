@@ -471,27 +471,27 @@ a:hover, a:focus {
   position: absolute;
   background: url("./politeia-loading.gif") 0px 0px no-repeat;
 }
-button .logo {		
-   position: static;		
-   background: url("./spinner_white.svg") 0px 0px no-repeat;		
-   margin-top: 7px;		
+button .logo {
+   position: static;
+   background: url("./spinner_white.svg") 0px 0px no-repeat;
+   margin-top: 7px;
    margin-right: 10px;
- }		
- .user-proposal-credits .logo {		
-   background: url("./spinner_white.svg") 0px 0px no-repeat;		
-   height: 12px;		
+ }
+ .user-proposal-credits .logo {
+   background: url("./spinner_white.svg") 0px 0px no-repeat;
+   height: 12px;
    width: 16px;
  }
- .user-proposal-credits-cell .logo {		
-  background: url("./spinner.svg") 0px 0px no-repeat;		
+ .user-proposal-credits-cell .logo {
+  background: url("./spinner.svg") 0px 0px no-repeat;
   position: relative;
   display: inline-block;
   width: 16px;
   height: 12px;
 	animation: spin 3s ease-in-out infinite;
 }
- button .spin {		
-   animation: spin 3s ease-in-out infinite;		
+ button .spin {
+   animation: spin 3s ease-in-out infinite;
  }
 .user-proposal-credits .spin{
 	animation: spin 3s ease-in-out infinite;
@@ -773,30 +773,15 @@ li p.header-3 {
   cursor: pointer;
 }
 
-#header-right .user-proposal-credits a.refresh {
-  visibility: hidden;
-  transition: 0s visibility;
+#header-right .user-proposal-credits a.buy-proposals-credits {
   color: #fff;
   position: relative;
   display: inline-block;
   margin-right: 16px;
 }
 
-#header-right .user-proposal-credits .refreshing {
-  position: relative;
-  display: inline-block;
-  width: 16px;
-  height: 12px;
-  margin-right: 16px;
-}
-
 #header-right .user-proposal-credits .proposal-credits-text {
   display: inline-block;
-}
-
-#header-right .user-proposal-credits:hover a.refresh {
-  visibility: visible;
-  transition-delay: .3s;
 }
 
 .tooltip-wrapper {
@@ -946,7 +931,7 @@ li p.header-3 {
   justify-content: flex-end;
 }
 
-.address-viewer_menu_option { 
+.address-viewer_menu_option {
   margin-right: 5px;
   margin-bottom: 4px;
   cursor: pointer;
@@ -1106,20 +1091,6 @@ li p.header-3 {
   margin: 16px;
 }
 
-.available-credits a.refresh {
-  text-decoration: none;
-  display: inline-block;
-  margin-left: 16px;
-}
-
-.available-credits .refreshing {
-  position: relative;
-  display: inline-block;
-  width: 16px;
-  height: 12px;
-  /* margin-left: 16px; */
-}
-
 .credit-purchase-table {
   border: 1px solid #999;
   margin-bottom: 16px;
@@ -1182,7 +1153,7 @@ li p.header-3 {
 }
 .credit-purchase-status-font {
   font-weight: 500;
-  
+
 }
 .user-page {
   margin: 0 auto;
@@ -1371,4 +1342,8 @@ form div.usertext-body.may-blank-within.md-container {
 .linkish {
   color: #2971FF;
   cursor: pointer;
+}
+
+.proposal-paywall-section {
+  padding: 15px;
 }

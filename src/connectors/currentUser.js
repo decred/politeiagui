@@ -9,12 +9,11 @@ const currentUserConnector = connect(
     loggedInAsUsername: sel.loggedInAsUsername,
     isAdmin: sel.isAdmin,
     userCanExecuteActions: sel.userCanExecuteActions,
-    proposalCredits: sel.proposalCredits,
-    isApiRequestingUpdateProposalCredits: sel.isApiRequestingUpdateProposalCredits
+    proposalCredits: sel.proposalCredits
   }),
   dispatch => bindActionCreators({
     onLogout: act.onLogout,
-    onUpdateProposalCredits: act.onUpdateProposalCredits
+    openModal: act.openModal
   }, dispatch)
 );
 

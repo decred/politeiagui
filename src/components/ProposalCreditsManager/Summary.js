@@ -1,6 +1,4 @@
 import React from "react";
-import proposalCreditsConnector from "../../connectors/proposalCredits";
-
 
 const DcrdataTxLink = ({
   isTestnet,
@@ -24,30 +22,26 @@ const formatDate = (date) => {
 };
 
 const ProposalCreditsSummary = ({
-  isApiRequestingUserProposalCredits,
-  onUserProposalCredits,
   proposalCredits,
+  proposalCreditPrice,
   proposalCreditPurchases,
   isTestnet,
   lastPaymentNotConfirmed
 }) => {
   if (lastPaymentNotConfirmed) {
     const transaction = {
-      numberPurchased: lastPaymentNotConfirmed.amount * 100,
+      numberPurchased: lastPaymentNotConfirmed.amount * 10,
       txId: lastPaymentNotConfirmed.txid,
-      price: lastPaymentNotConfirmed.amount,
+      price: proposalCreditPrice,
       confirming: true
     };
     proposalCreditPurchases.push(transaction);
   }
+  const reverseProposalCreditPurchases = proposalCreditPurchases.slice(0).reverse();
   return (
     <div className="proposal-credits-summary">
       <div className="available-credits">
-        <b>Available credits:</b> {proposalCredits} {isApiRequestingUserProposalCredits ? (
-          <div className="refreshing"><div className="logo spin"></div></div>
-        ) : (
-          <a className="refresh" onClick={onUserProposalCredits}>(refresh)</a>
-        )}
+        <b>Available credits:</b> {proposalCredits}
       </div>
       {proposalCreditPurchases && proposalCreditPurchases.length ? (
         <div className="credit-purchase-table">
@@ -62,7 +56,7 @@ const ProposalCreditsSummary = ({
             </div>
           </div>
           <div className="credit-purchase-body">
-            {proposalCreditPurchases.reverse().map((creditPurchase, i) => (
+            {reverseProposalCreditPurchases.map((creditPurchase, i) => (
               <div className="credit-purchase-row" key={i}>
                 <div className="credit-purchase-cell credit-purchase-number">{creditPurchase.numberPurchased}</div>
                 <div className="credit-purchase-cell credit-purchase-price">{creditPurchase.price} DCR</div>
@@ -89,4 +83,4 @@ const ProposalCreditsSummary = ({
   );
 };
 
-export default proposalCreditsConnector(ProposalCreditsSummary);
+export default ProposalCreditsSummary;
