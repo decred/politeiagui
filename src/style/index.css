@@ -482,6 +482,14 @@ button .logo {
    height: 12px;		
    width: 16px;
  }
+ .user-proposal-credits-cell .logo {		
+  background: url("./spinner.svg") 0px 0px no-repeat;		
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  height: 12px;
+	animation: spin 3s ease-in-out infinite;
+}
  button .spin {		
    animation: spin 3s ease-in-out infinite;		
  }
@@ -497,6 +505,7 @@ button .logo {
   cursor: default;
   color: #000;
 }
+
 
 /* Override conflitant styles for react-mde */
 .mde-header-item button {
@@ -590,6 +599,7 @@ li p.header-3 {
 .user-profile-page {
   width: calc(100% - 320px);
   padding-right: 0px !important;
+  justify-content: center;
 }
 .signup-next-step-page h3,
 .forgotten-password-next-step-page h3,
@@ -1061,7 +1071,7 @@ li p.header-3 {
   display: inline-block;
   width: 16px;
   height: 12px;
-  margin-left: 16px;
+  /* margin-left: 16px; */
 }
 
 .credit-purchase-table {
@@ -1098,20 +1108,36 @@ li p.header-3 {
 }
 
 .credit-purchase-date {
-  width: 225px;
+  width: 180px;
+  text-align: center;
 }
+
+.credit-purchase-date-text {
+  width: 180px;
+  text-align: left;
+}
+
 .credit-purchase-number {
-  width: 90px;
-  text-align: right;
+  width: 40px;
+  text-align: center;
 }
 .credit-purchase-price {
   width: 100px;
-  text-align: right;
+  text-align: center;
 }
 .credit-purchase-tx {
-  width: 150px;
-}
+  width: 250px;
+  text-align: center;
 
+}
+.credit-purchase-status {
+  width: 80px;
+  text-align: center;
+}
+.credit-purchase-status-font {
+  font-weight: 500;
+  
+}
 .user-page {
   margin: 0 auto;
   width: 800px;

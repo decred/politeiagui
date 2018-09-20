@@ -216,11 +216,11 @@ class KeyPage extends React.Component {
             a record of all your past public keys.
           </p>
           <button
-            style={{ maxWidth: "250px" }}
+            style={{ maxWidth: "184px" }}
             className="c-btn c-btn-primary"
             onClick={this.onGenerateNewIdentity}
             disabled={(updateUserKey && updateUserKey.success) || this.state.openedVerification}>
-            Generate New Identity
+            Create New Identity
           </button>
           <PrivateKeyIdentityManager
             loggedInAsEmail={loggedInAsEmail}
