@@ -24,7 +24,6 @@ const ProposalCreditsPage = ({
 }) => {
   return (
     <div className="proposal-paywall-section">
-      <h1>Proposal Credits</h1>
       <p>
         Proposal credits are needed to submit proposals, and each proposal requires
         1 credit. Click the button below to receive instructions on how to pay for
@@ -61,8 +60,7 @@ const ProposalCreditsPage = ({
               <p>
                 Politeia automatically checks for a transaction sent to this address.
                 After you send it and it reaches 2 confirmations, you will be granted
-                the number of proposal credits you paid for, but <b>you will have to refresh
-                the browser to see them.</b>
+                the number of proposal credits you paid for.
               </p>
               <p style={{ marginTop: "24px" }}>
                 <b>Note:</b> Make sure to only send 1 transaction to the address, and

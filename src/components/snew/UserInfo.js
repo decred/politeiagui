@@ -5,6 +5,8 @@ import currentUserConnector from "../../connectors/currentUser";
 import Dropdown from "../Dropdown";
 import Link from "./Link";
 import Tooltip from "../Tooltip";
+import { PROPOSAL_CREDITS_MODAL } from "../Modal/modalTypes";
+
 
 const UserInfo = ({
   history,
@@ -12,8 +14,7 @@ const UserInfo = ({
   loggedInAsUsername,
   userCanExecuteActions,
   proposalCredits,
-  isApiRequestingUpdateProposalCredits,
-  onUpdateProposalCredits
+  openModal
 }) =>
   loggedInAsEmail ? (
     <div id="header-right">
@@ -61,11 +62,7 @@ const UserInfo = ({
           position="bottom"
         >
           <div className="user-proposal-credits">
-            {isApiRequestingUpdateProposalCredits ? (
-              <div className="refreshing"><div className="logo spin"></div></div>
-            ) : (
-              <a className="refresh" onClick={onUpdateProposalCredits}>(refresh)</a>
-            )}
+            <a className="buy-proposals-credits" onClick={() => openModal(PROPOSAL_CREDITS_MODAL)}>(Manage proposal credits)</a>
             <div className="proposal-credits-text">{(proposalCredits || 0) + " proposal credit" + (proposalCredits !== 1 ? "s" : "")}</div>
           </div>
         </Tooltip>

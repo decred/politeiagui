@@ -5,6 +5,7 @@ import ConfirmActionWithReason from "./contents/ConfirmActionWithReason";
 import Login from "./contents/Login";
 import OnBoard from "./contents/OnBoard";
 import PaywallModal from "./contents/PaywallModal";
+import ProposalCreditsModal from "./contents/ProposalCreditsModal";
 import { withRouter } from "react-router-dom";
 
 const mapModalTypeToContent = {
@@ -12,7 +13,8 @@ const mapModalTypeToContent = {
   [modalTypes.CONFIRM_ACTION_WITH_REASON]: ({ modalData }) => <ConfirmActionWithReason me={modalData} />,
   [modalTypes.LOGIN]: ({ location }) => <Login pathname={location.pathname} />,
   [modalTypes.ONBOARD]: () => <OnBoard />,
-  [modalTypes.PAYWALL_MODAL]: () => <PaywallModal />
+  [modalTypes.PAYWALL_MODAL]: () => <PaywallModal />,
+  [modalTypes.PROPOSAL_CREDITS_MODAL]: () => <ProposalCreditsModal />
 };
 
 const ModalContent = ({ modalData, location }) => {
