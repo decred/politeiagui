@@ -39,7 +39,7 @@ const SidebarText = (props) => (
     <span
       style={{ cursor: "pointer", color: "#2971FF" }}
       onClick={(e) => { e.preventDefault(); props.openModal(ONBOARD); }}
-    >Read more</span>
+    >Learn More about Politiea</span>
     <Markdown body={resourcesText} filterXss={false} {...props} />
   </div>
 );

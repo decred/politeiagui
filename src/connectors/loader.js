@@ -17,6 +17,7 @@ export default connect(
     onInit: act.requestApiInfo,
     keyMismatchAction: act.keyMismatch,
     openModal: act.openModal,
+    confirmWithModal: act.confirmWithModal,
     setOnboardAsViewed: act.setOnboardAsViewed,
     onLoadDraftProposals: act.onLoadDraftProposals,
     onLoadPaymentPollingQueue: act.onLoadPaymentPollingQueue
