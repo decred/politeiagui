@@ -11,7 +11,7 @@ import { handleSaveTextEditorsContent } from "./lib/editors_content_backup";
 import { handleSaveStateToLocalStorage } from "./lib/local_storage";
 import { onLocalStorageChange } from "./actions/app";
 import ModalStack from "./components/Modal/ModalStack";
-import { ONBOARD } from "./components/Modal/modalTypes";
+import { ONBOARD, CONFIRM_ACTION } from "./components/Modal/modalTypes";
 import { verifyUserPubkey } from "./helpers";
 
 const store = configureStore();
@@ -38,10 +38,26 @@ class Loader extends Component {
     }
 
     if(!prevProps.onboardViewed && this.props.lastLoginTime === 0){
-      this.props.setOnboardAsViewed();
-      this.props.openModal(ONBOARD);
+      const { openModal, setOnboardAsViewed } = this.props;
+      setOnboardAsViewed();
+      this.props.confirmWithModal(CONFIRM_ACTION, {
+        title: "Welcome to Politeia!",
+        message: (
+          <React.Fragment>
+            <strong style={{ fontSize: "1.05em", marginBottom: "10px", fontWeight: "1.2em" }}>
+							Are you new to Politeia? Would you like to read more on how all of this works?
+            </strong>
+            <br />
+            <p style={{ marginTop: "10px", fontStyle: "italic" }}>
+							The following information can be reviewed by clicking 'Learn More about Politiea' in the sidebar.
+            </p>
+          </React.Fragment>
+        ),
+        cancelText: "Maybe later",
+        submitText: "Yes, show me more"
+      })
+        .then((confirm) => confirm && openModal(ONBOARD));
     }
-
 
     if (!prevProps.apiError && this.props.apiError) {
       // Unrecoverable error
