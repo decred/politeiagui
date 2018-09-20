@@ -18,6 +18,7 @@ export default connect(
     keyMismatchAction: act.keyMismatch,
     openModal: act.openModal,
     setOnboardAsViewed: act.setOnboardAsViewed,
-    onLoadDraftProposals: act.onLoadDraftProposals
+    onLoadDraftProposals: act.onLoadDraftProposals,
+    onLoadPaymentPollingQueue: act.onLoadPaymentPollingQueue
   }, dispatch)
 );

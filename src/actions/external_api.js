@@ -1,7 +1,6 @@
 import * as external_api from "../lib/external_api";
-import {
-  verifyUserPaymentWithPoliteia
-} from "./api";
+import { verifyUserPaymentWithPoliteia, onUserProposalCredits } from "./api";
+import { onUpdatePaymentPollingQueue, onConfirmPollingPayment } from "./app";
 import act from "./methods";
 import {
   PAYWALL_STATUS_LACKING_CONFIRMATIONS,
@@ -10,14 +9,13 @@ import {
 
 const CONFIRMATIONS_REQUIRED = 2;
 const POLL_INTERVAL = 10 * 1000;
-export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
+export const verifyUserPayment = (address, amount, txNotBefore, credits = false) => dispatch => {
   // Check dcrdata first.
   return external_api.getPaymentsByAddressDcrdata(address)
     .then(response => {
       if (response === null) {
         return null;
       }
-
       return checkForPayment(checkDcrdataHandler, response, address, amount, txNotBefore);
     })
     .catch(() => {
@@ -44,23 +42,29 @@ export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
         return false;
       }
 
-      if (txn.confirmations < CONFIRMATIONS_REQUIRED) {
-        dispatch(act.UPDATE_USER_PAYWALL_STATUS({
-          status: PAYWALL_STATUS_LACKING_CONFIRMATIONS,
-          currentNumberOfConfirmations: txn.confirmations
-        }));
+      if(txn.confirmations < CONFIRMATIONS_REQUIRED) {
+        if (credits) {
+          dispatch(onUpdatePaymentPollingQueue({ txid: txn.id, confirmations: txn.confirmations }));
+        } else {
+          dispatch(act.UPDATE_USER_PAYWALL_STATUS({
+            status: PAYWALL_STATUS_LACKING_CONFIRMATIONS,
+            currentNumberOfConfirmations: txn.confirmations
+          }));
+        }
         return false;
       }
 
       return verifyUserPaymentWithPoliteia(txn.id);
     })
     .then(verified => {
-      if (verified) {
-        dispatch(act.UPDATE_USER_PAYWALL_STATUS({
-          status: PAYWALL_STATUS_PAID
-        }));
+      if(verified && credits) {
+        dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null));
+        dispatch(onConfirmPollingPayment({ address, txNotBefore }));
+        setTimeout(() => dispatch(onUserProposalCredits()), 1000);
+      } else if (verified) {
+        dispatch(act.UPDATE_USER_PAYWALL_STATUS({ status: PAYWALL_STATUS_PAID }));
       } else {
-        setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
+        setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore, credits)), POLL_INTERVAL);
       }
     })
     .catch(error => {
@@ -138,7 +142,11 @@ export const payProposalWithFaucet = (address, amount) => dispatch => {
       if (json.Error) {
         return dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null, new Error(json.Error)));
       }
-      return dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(json));
+      const payload = { txid: json.Txid, address, amount, confirmations: 0, credits: true };
+      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(payload));
+      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS(null));
+      dispatch(act.SAVE_PAYMENT_POLLING_QUEUE(payload));
+      return dispatch(verifyUserPayment(address, amount, json.Txid, true));
     })
     .catch(error => {
       dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null, error));

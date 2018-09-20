@@ -47,7 +47,7 @@ const ChangeUsernameForm = ({
     </div>
     <div className="c-clearfix c-submit-group">
       <button
-        className="c-btn c-btn-primary c-pull-right"
+        className="c-btn c-btn-primary c-pull-left"
         tabIndex={3}
         type="submit"
       >

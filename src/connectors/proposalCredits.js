@@ -16,7 +16,8 @@ export default connect(
     isTestnet: sel.isTestNet,
     isApiRequestingPayWithFaucet: sel.isApiRequestingPayProposalWithFaucet,
     payWithFaucetTxId: sel.payProposalWithFaucetTxId,
-    payWithFaucetError: sel.payProposalWithFaucetError
+    payWithFaucetError: sel.payProposalWithFaucetError,
+    lastPaymentNotConfirmed: sel.lastPaymentFromPollingQueue
   }),
   dispatch => bindActionCreators({
     onUserProposalCredits: act.onUserProposalCredits,

@@ -34,6 +34,7 @@ class Loader extends Component {
     if (!prevProps.loggedInAsEmail && this.props.loggedInAsEmail) {
       verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey, this.props.keyMismatchAction);
       this.props.onLoadDraftProposals(this.props.loggedInAsEmail);
+      this.props.onLoadPaymentPollingQueue(this.props.loggedInAsEmail);
     }
 
     if(!prevProps.onboardViewed && this.props.lastLoginTime === 0){

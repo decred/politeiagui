@@ -80,6 +80,19 @@ const app = (state = DEFAULT_STATE, action) => (({
       };
     }
   },
+  [act.UPDATE_PAYMENT_POLLING_QUEUE]: () => {
+    const p = action.payload;
+    const queue = state.paymentPollingQueue || [];
+    const newQueue = queue.map( payment => {
+      payment.confirmations = payment.txid === p.txid ? p.confirmations : payment.confirmations;
+      return payment;
+    });
+    return { ...state, paymentPollingQueue: newQueue };
+  },
+
+  [act.SAVE_PAYMENT_POLLING_QUEUE]:
+    () => ({ ...state, paymentPollingQueue: state.paymentPollingQueue ? [ ...state.paymentPollingQueue, action.payload ] : [action.payload] }),
+  [act.SET_PAYMENT_POLLING_QUEUE]: () => ({ ...state, paymentPollingQueue: action.payload }),
   [act.RESET_LAST_SUBMITTED]: () => ({ ...state, submittedProposals: { ...state.submittedProposals, lastSubmitted: false } }),
   [act.SET_PROPOSAL_APPROVED]: () => ({ ...state, isProposalStatusApproved: action.payload }),
   [act.RECEIVE_USERNAMES]: () => ({ ...state, usernamesById: action.payload.usernamesById }),

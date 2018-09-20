@@ -14,50 +14,79 @@ const DcrdataTxLink = ({
   );
 };
 
+const formatDate = (date) => {
+  const d = new Date(date * 1000);
+  const day = d.getUTCDate();
+  const year = d.getUTCFullYear();
+  const month = d.getUTCMonth();
+  const time = d.getUTCHours() + ":" + d.getUTCMinutes();
+  return year + "-" + month + "-" + day + "  |  " + time;
+};
+
 const ProposalCreditsSummary = ({
   isApiRequestingUserProposalCredits,
   onUserProposalCredits,
   proposalCredits,
   proposalCreditPurchases,
-  isTestnet
-}) => (
-  <div className="proposal-credits-summary">
-    <div className="available-credits">
-      <b>Available credits:</b> {proposalCredits} {isApiRequestingUserProposalCredits ? (
-        <div className="refreshing"><div className="logo spin"></div></div>
-      ) : (
-        <a className="refresh" onClick={onUserProposalCredits}>(refresh)</a>
-      )}
-    </div>
-    {proposalCreditPurchases && proposalCreditPurchases.length ? (
-      <div className="credit-purchase-table">
-        <div className="credit-purchase-header">
-          <div className="credit-purchase-row">
-            <div className="credit-purchase-cell credit-purchase-date">Date purchased</div>
-            <div className="credit-purchase-cell credit-purchase-number">Number purchased</div>
-            <div className="credit-purchase-cell credit-purchase-price">Price per credit</div>
-            <div className="credit-purchase-cell credit-purchase-tx">Transaction</div>
-            <div className="clear"></div>
-          </div>
-        </div>
-        <div className="credit-purchase-body">
-          {proposalCreditPurchases.map((creditPurchase, i) => (
-            <div className="credit-purchase-row" key={i}>
-              <div className="credit-purchase-cell credit-purchase-date">
-                {new Date(creditPurchase.datePurchased * 1000).toUTCString()}
-              </div>
-              <div className="credit-purchase-cell credit-purchase-number">{creditPurchase.numberPurchased}</div>
-              <div className="credit-purchase-cell credit-purchase-price">{creditPurchase.price} DCR</div>
-              <div className="credit-purchase-cell credit-purchase-tx">
-                <DcrdataTxLink isTestnet={isTestnet} txId={creditPurchase.txId} />
-              </div>
+  isTestnet,
+  lastPaymentNotConfirmed
+}) => {
+  if (lastPaymentNotConfirmed) {
+    const transaction = {
+      numberPurchased: lastPaymentNotConfirmed.amount * 100,
+      txId: lastPaymentNotConfirmed.txid,
+      price: lastPaymentNotConfirmed.amount,
+      confirming: true
+    };
+    proposalCreditPurchases.push(transaction);
+  }
+  return (
+    <div className="proposal-credits-summary">
+      <div className="available-credits">
+        <b>Available credits:</b> {proposalCredits} {isApiRequestingUserProposalCredits ? (
+          <div className="refreshing"><div className="logo spin"></div></div>
+        ) : (
+          <a className="refresh" onClick={onUserProposalCredits}>(refresh)</a>
+        )}
+      </div>
+      {proposalCreditPurchases && proposalCreditPurchases.length ? (
+        <div className="credit-purchase-table">
+          <div className="credit-purchase-header">
+            <div className="credit-purchase-row">
+              <div className="credit-purchase-cell credit-purchase-number">#</div>
+              <div className="credit-purchase-cell credit-purchase-price">DCR per credit</div>
+              <div className="credit-purchase-cell credit-purchase-tx">Transaction</div>
+              <div className="credit-purchase-cell credit-purchase-status">Status</div>
+              <div className="credit-purchase-cell credit-purchase-date">Date</div>
               <div className="clear"></div>
             </div>
-          ))}
+          </div>
+          <div className="credit-purchase-body">
+            {proposalCreditPurchases.reverse().map((creditPurchase, i) => (
+              <div className="credit-purchase-row" key={i}>
+                <div className="credit-purchase-cell credit-purchase-number">{creditPurchase.numberPurchased}</div>
+                <div className="credit-purchase-cell credit-purchase-price">{creditPurchase.price} DCR</div>
+                <div className="credit-purchase-cell credit-purchase-tx">
+                  <DcrdataTxLink isTestnet={isTestnet} txId={creditPurchase.txId} />
+                </div>
+                <div className="credit-purchase-cell credit-purchase-status">
+                  { creditPurchase.confirming ?
+                    (<div className="user-proposal-credits-cell"><div className="logo"></div></div>)
+                    : "✔"
+                  }
+                </div>
+                <div className="credit-purchase-cell credit-purchase-date-text">
+                  {/* {new Date(creditPurchase.datePurchased * 1000).toUTCString()} */}
+                  { creditPurchase.datePurchased ? formatDate(creditPurchase.datePurchased) : "" }
+                </div>
+                <div className="clear"></div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    ) : null}
-  </div>
-);
+      ) : null}
+    </div>
+  );
+};
 
 export default proposalCreditsConnector(ProposalCreditsSummary);

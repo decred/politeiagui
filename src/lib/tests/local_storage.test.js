@@ -23,7 +23,8 @@ describe("save state chunks to local storage (lib/local_storage.js", () => {
           files: [],
           timestamp: Date.now() / 1000
         }
-      }
+      },
+      paymentPollingQueue: []
     }
   };
   const getFromLS = (key) => localStorage.getItem(key);
