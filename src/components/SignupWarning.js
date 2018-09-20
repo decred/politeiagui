@@ -3,11 +3,6 @@ const SignupWarning = () => {
   return (
     <div>
       <p>
-        When you sign up, an identity will be created for you which is tied
-        to your browser. This identity is required for things like submitting
-        proposals and leaving comments.
-      </p>
-      <p>
         Politeia will send you a link to verify your email address.
         <span style={{ fontWeight: "bold" }}> You must open this link in the same browser.
         </span> After verifying your email, Politeia will create your Politeia “identity”,
