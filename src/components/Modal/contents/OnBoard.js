@@ -86,12 +86,10 @@ const onBoardingContent = [
     body: `
 **What is Politeia?**
 
-Politeia is a platform which is being developed to support Decred’s governance.
-It facilitates the submission, tracking, and discussion of Decred governance proposals by the stakeholder community.
+Politeia is a platform that supports Decred’s governance model. It facilitates the submission, tracking, and discussion of Decred governance proposals by the stakeholder community.
 
-Decred’s approach to decision-making is grounded in the principle of stakeholder voting.
-Proof of Stake Voters lock DCR to buy tickets, while tickets are live they can be used to cast a vote for or against
-each open Politeia proposal.
+Decred’s approach to decision-making is grounded in the principle of stakeholder voting. To vote, stakeholders must buy “tickets” that lock their DCR until they are called to vote. Stakeholders can vote on any open proposal. 
+
     `
   },
   {
@@ -99,15 +97,12 @@ each open Politeia proposal.
     body: `
 **Politeia proposals**
 
-There are two broad types of proposal:
+There are two types of proposals:
 
-1. Proposals that aim to establish Voter support for a course of action, e.g. adopting or changing some policy.
-2. Proposals that commit to spending Project Treasury DCR, creating a budget that some entity can draw down against
-as they demonstrate progress towards the proposal's aim.
+1. Proposals that aim to establish Voter support for a course of action (e.g. adopting or changing some policy).
+2. Proposals that commit to spending Project Treasury DCR. These proposals will have a budget, which proposal owners can draw down against as they demonstrate progress towards the proposal's aim.
 
-There is a fee for submitting a proposal (0.1 DCR), to limit the potential for proposal spamming. There is also a
-fee for registering a Politeia account (0.1 DCR), to limit comment spam and up/down voting sock-puppetry. Fees may be altered
-if a) they are not a sufficient spam-deterrent, or b) the price of DCR changes considerably.
+To prevent proposal spamming, there is a 0.1 DCR fee for submitting a proposal. There is also a 0.1 DCR fee for registering a Politeia account, to limit comment spam and up/down voting sock-puppetry. Fees may be altered in the future if they are determined insufficient to deter spam, or if the price of DCR changes considerably.
 
 Reddit-style **up/down voting** is used for **proposal and comment sorting only**. Up/down votes are not anonymous.
 
@@ -119,18 +114,15 @@ Ticket-voting on proposals doesn’t happen directly on Politeia, but from withi
     body: `
 **Censorship**
 
-When proposals are submitted, they are checked by Politeia administrators. Proposals that are deemed spam or invalid
-will be censored.
+Politeia is built around the concept of _transparent censorship_. Users cannot be silently censored. When proposals 
+are submitted, they are checked by Politeia administrators, and proposals that are deemed spam or invalid will be 
+censored. If a user believes they have been unfairly censored, they can prove that their proposal was censored using 
+a “censorship token”; a token automatically generated upon proposal submission using the user’s unique 
+cryptographic identity (pub/priv key pair). This token can be used to demonstrate to the community that the user's specific 
+proposal/comment was submitted, the time it was submitted, and in what form. 
 
-Politeia is built around the concept of _transparent censorship_, using ***dcrtime***. Users cannot be silently censored, they can prove 
-that censorship has occurred. When a proposal/comment is submitted, a censorship token is generated. Content creators can use these
-tokens to demonstrate that their specific proposal/comment was submitted, in a particular form, at a particular point in time.
-
-**Politeia users have cryptographic identities** (pub/priv key pairs) that can be used to demonstrate censorship of one's submissions.
-When you register for a Politeia account, a key-pair identity will be generated for you, this is stored in your browser by default.
-
-If you change browser/device you can import your Politeia identity key or generate a new one, but for now it is important to
-*verify your account from the same browser you used to sign up*. The cryptographic Pi identity is only used for
+If you change browser/device, you can import your existing Politeia identity key or generate a new one, but for now it is important to
+*verify your account from the same browser you used to sign up*. Your cryptographic Pi identity is only used for
 demonstrating that your submissions have been censored.
 `
   },
@@ -139,10 +131,9 @@ demonstrating that your submissions have been censored.
     body: `
 **Submitting and approving proposals**
 
-Politeia's aim is to serve as the decision-making force behind the Decred Decentralized Autonomous Entity (DAE). This is
-an ambitious aim, Politeia and its accompanying processes are in an experimental stage and thus subject to change.
 
-For now, the process is something like this:
+The basic process for submitting and approving proposals is outlined below. Note that as Politeia is still in an experimental stage,
+ this process is subject to change as the system iterates.
 
 1. Submit proposal.
 2. Proposal reviewed by Politeia admins, spam is censored.
@@ -158,9 +149,11 @@ against that budget as deliverables are completed.
 8. Payment claims will be handled manually by Decred Holdings Group until such times as this process can be adequately
 decentralized.
 
-Proposal voting works, initially, as a robust signalling mechanism from the Decred stakeholders to the Decred Holdings Group,
-who control the project fund wallet. Over time, this will be iterated towards a DAE that decentralizes the functions
-currently performed by trusted humans. When the DAE is ready, it will control the project treasury wallet directly.
+Politeia's aim is to serve as the decision-making force behind the Decred Decentralized Autonomous Entity (DAE). This is an ambitious aim. 
+Because Politeia and its accompanying processes are still in an experimental stage, Politeia will serve initially as a robust 
+signaling mechanism from Decred shareholders to the community members controlling the project fund wallet. Over time, this will 
+be iterated towards a DAE that decentralizes the functions currently performed by trusted humans, and the DAE will control the 
+project fund wallet directly. 
 
 For proposals that request funding, an initial set of guidelines and examples has been prepared. Guidelines
 for good proposals and policies for censoring proposals will be iterated once Politeia is live.
@@ -172,7 +165,7 @@ for good proposals and policies for censoring proposals will be iterated once Po
 **Proposal guidelines**
 ## How to submit a Politeia proposal
 
-When authoring a Politeia proposal one must answer the following 5 questions:
+When authoring a Politeia proposal, one must answer the following 5 questions:
 
 1. What
 2. Why
@@ -180,8 +173,9 @@ When authoring a Politeia proposal one must answer the following 5 questions:
 4. Who
 5. When
 
-In the following paragraphs we are going to explore some examples. We'll use a
-software feature as the example.
+Below we present two examples: a proposal for devleoping a software feature, and a proposal for a marketing initiative. 
+
+## Software Feature Example
 
 ### What
 
