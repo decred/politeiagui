@@ -6,10 +6,14 @@ import Dropdown from "../Dropdown";
 import Link from "./Link";
 import Tooltip from "../Tooltip";
 import { PROPOSAL_CREDITS_MODAL } from "../Modal/modalTypes";
-
+import {
+  PAYWALL_STATUS_PAID
+} from "../../constants";
+import { PAYWALL_MODAL } from "../Modal/modalTypes";
 
 const UserInfo = ({
   history,
+  userPaywallStatus,
   loggedInAsEmail,
   loggedInAsUsername,
   userCanExecuteActions,
@@ -31,26 +35,26 @@ const UserInfo = ({
                   className="dropdown-list-item"
                   onClick={() => history.push("/user/proposals")}
                 >
-                  Proposals
+									Proposals
                 </li>
                 <li
                   className="dropdown-list-item"
                   onClick={() => history.push("/user/account")}
                 >
-                  Account
+									Account
                 </li>
                 <li
                   className={`dropdown-list-item ${!userCanExecuteActions ? "disabled" : ""}`}
                   onClick={() => userCanExecuteActions ? history.push("/proposals/new") : null}
                 >
-                  Submit Proposal
+									Submit Proposal
                 </li>
                 <li
                   className="dropdown-list-item logout-button"
                   onClick={() => history.push("/user/logout")}
                 >
                   <form className="logout hover" />
-                  Log out
+									Log out
                 </li>
               </ul>
             }
@@ -58,11 +62,13 @@ const UserInfo = ({
         </div>
         <Tooltip
           text="Proposal credits are purchased to submit proposals. For more information,
-          please visit your account page."
+					please visit your account page."
           position="bottom"
         >
           <div className="user-proposal-credits">
-            <a className="buy-proposals-credits" onClick={() => openModal(PROPOSAL_CREDITS_MODAL)}>(Manage proposal credits)</a>
+            <a className="buy-proposals-credits" onClick={() => userPaywallStatus !== PAYWALL_STATUS_PAID
+              ? openModal(PAYWALL_MODAL)
+              : openModal(PROPOSAL_CREDITS_MODAL)}>(Manage proposal credits)</a>
             <div className="proposal-credits-text">{(proposalCredits || 0) + " proposal credit" + (proposalCredits !== 1 ? "s" : "")}</div>
           </div>
         </Tooltip>
@@ -72,7 +78,7 @@ const UserInfo = ({
     <div id="header-right">
       <div id="header-right-content">
         <Link href="/user/signup" className="login-required">
-          Log in or sign up
+					Log in or sign up
         </Link>
       </div>
     </div>
