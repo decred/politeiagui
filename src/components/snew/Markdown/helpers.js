@@ -58,7 +58,7 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
           <p>
             External link: {link}
           </p>
-	  <p style={{ marginTop: "10px" }}>
+          <p>
             External domain: <strong className="red">{tmpLink.hostname}</strong>
           </p>
           <p style={{ marginTop: "10px" }}>
