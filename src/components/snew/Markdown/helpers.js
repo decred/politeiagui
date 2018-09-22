@@ -53,10 +53,13 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
       message: (
         <React.Fragment>
           <p style={{ marginBottom: "10px" }}>
-            This link will take you to an external website!
+            You are about to be sent to an external website! <strong className="red">Do not</strong> enter your Politeia credentials or reveal any other sensitive information.
           </p>
           <p>
-            <strong>External link: {link}</strong>
+            External link: {link}
+          </p>
+	  <p style={{ marginTop: "10px" }}>
+            External domain: <strong className="red">{tmpLink.hostname}</strong>
           </p>
           <p style={{ marginTop: "10px" }}>
             Are you sure you want to proceed?
