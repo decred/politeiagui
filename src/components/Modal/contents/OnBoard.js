@@ -86,9 +86,11 @@ const onBoardingContent = [
     body: `
 **What is Politeia?**
 
-Politeia is a platform that supports Decred’s governance model. It facilitates the submission, tracking, and discussion of Decred governance proposals by the stakeholder community.
 
-Decred’s approach to decision-making is grounded in the principle of stakeholder voting. To vote, stakeholders must buy “tickets” that lock their DCR until they are called to vote. Stakeholders can vote on any open proposal. 
+Politeia is a platform that supports Decred’s governance. It facilitates the submission, tracking, and discussion of Decred governance proposals by the stakeholder community.
+
+Decred’s approach to decision-making is grounded in the principle of stakeholder voting. To vote, stakeholders must time-lock DCR to buy tickets. While tickets are live they 
+can be used to cast a vote for or against each open Politeia proposal.
 
     `
   },
