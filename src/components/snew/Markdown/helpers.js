@@ -13,9 +13,14 @@ export const traverseChildren = (el, cb) => {
       children: filterChildren(el.children)
     };
   } else if (el.props && el.props.children) {
+    const filteredChildren = filterChildren(el.props.children);
     newElement = {
       ...el,
-      children: filterChildren(el.props.children)
+      props: {
+        ...el.props,
+        children: filteredChildren
+      },
+      children: filterChildren
     };
   }
   return newElement ? cb(newElement) : cb(el);
@@ -78,10 +83,10 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
 
 export const customRenderers = (filterXss, confirmWithModal) => ({
   image: ({ src, alt }) => {
-    return <a rel="nofollow" onClick={(e) => verifyExternalLink(e, src, confirmWithModal)} href={src}>{alt}</a>;
+    return <a rel="nofollow" onClick={(e) => confirmWithModal && verifyExternalLink(e, src, confirmWithModal)} href={src}>{alt}</a>;
   },
   link: ({ href, children }) => {
-    return <a rel="nofollow" onClick={(e) => verifyExternalLink(e, href, confirmWithModal)} href={href}>{children[0]}</a>;
+    return <a rel="nofollow" onClick={(e) => confirmWithModal && verifyExternalLink(e, href, confirmWithModal)} href={href}>{children[0]}</a>;
   },
   root: (el) => {
     if(filterXss) {
