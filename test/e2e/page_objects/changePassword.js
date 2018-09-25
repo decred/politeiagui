@@ -7,7 +7,7 @@ const Commands = {
       .setValue("@inputPassword", "Qwerty123*")
       .setValue("@inputPasswordVerify", "Qwerty123*")
       .click("@submitButton");
-  },
+  }
 };
 
 module.exports = {
@@ -22,5 +22,5 @@ module.exports = {
     inputPasswordVerify: ".reset-password-form input[name='newPasswordVerify']",
     submitButton: ".reset-password-form button[type='submit']",
     error: ".message-ct.message-error"
-  },
+  }
 };

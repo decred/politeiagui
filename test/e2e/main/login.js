@@ -19,5 +19,5 @@ module.exports = {
     page.loginWithErrorInvalidEmailAddress();
     page.loginWithErrorAllFieldsRequired();
     page.login();
-  },
+  }
 };

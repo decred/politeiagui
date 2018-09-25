@@ -21,5 +21,5 @@ module.exports = {
     page.signupWithErrorPasswordNotMatch();
     page.signupWithErrorMinPasswordLength();
     page.signup();
-  },
+  }
 };

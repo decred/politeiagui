@@ -34,7 +34,7 @@ const Commands = {
       .setValue("@inputEmail", "test@decred.com")
       .click("@submitButton")
       .waitForElementVisible("@forgottenPasswordNextPage", 10000);
-  },
+  }
 };
 
 module.exports = {
@@ -52,5 +52,5 @@ module.exports = {
     inputEmail: ".forgotten-password-form input[name='email']",
     submitButton: ".forgotten-password-form button[type='submit']",
     error: ".message-ct.message-error"
-  },
+  }
 };

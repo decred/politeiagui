@@ -95,7 +95,7 @@ const Commands = {
       .setValue("@signupInputPasswordVerify", "validpwdtest")
       .click("@signupSubmitButton")
       .waitForElementVisible("@signupSuccess", 10000);
-  },
+  }
 };
 
 module.exports = {

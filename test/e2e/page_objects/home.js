@@ -4,7 +4,7 @@ const Commands = {
       .waitForElementVisible("@submitProposalLink", 10000)
       .click("@submitProposalLink")
       .waitForElementVisible("@submitProposalPage", 10000);
-  },
+  }
 };
 
 module.exports = {
@@ -18,6 +18,6 @@ module.exports = {
     proposalSchema: ".proposals-list li",
     menu: ".header nav",
     submitProposalLink: ".header nav .submit",
-    submitProposalPage: ".page.proposal-submit-page",
-  },
+    submitProposalPage: ".page.proposal-submit-page"
+  }
 };
