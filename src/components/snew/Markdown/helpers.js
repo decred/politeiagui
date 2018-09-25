@@ -19,8 +19,7 @@ export const traverseChildren = (el, cb) => {
       props: {
         ...el.props,
         children: filteredChildren
-      },
-      children: filteredChildren
+      }
     };
   }
   return newElement ? cb(newElement) : cb(el);
