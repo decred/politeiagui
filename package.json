@@ -70,7 +70,6 @@
     "babel-cli": "^6.10.1",
     "babel-core": "^6.9.1",
     "babel-eslint": "8.0.0",
-    "babel-loader": "^6.2.4",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-promise-to-bluebird": "^1.1.1",
