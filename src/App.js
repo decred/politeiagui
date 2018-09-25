@@ -5,6 +5,7 @@ import throttle from "lodash/throttle";
 import configureStore from "./configureStore";
 import { Subreddit } from "./components/snew";
 import HeaderAlert from "./components/HeaderAlert";
+import SessionExpiresIndicator from "./components/SessionExpiresIndicator";
 import Routes from "./Routes";
 import loaderConnector from "./connectors/loader";
 import { handleSaveTextEditorsContent } from "./lib/editors_content_backup";
@@ -123,6 +124,7 @@ export default class App extends Component {
       <Provider store={store}>
         <Router>
           <LoaderComponent>
+            <SessionExpiresIndicator />
             <HeaderAlertComponent />
             <Subreddit>
               <Routes />

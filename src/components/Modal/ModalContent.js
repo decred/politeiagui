@@ -11,7 +11,7 @@ import { withRouter } from "react-router-dom";
 const mapModalTypeToContent = {
   [modalTypes.CONFIRM_ACTION]: ({ modalData }) => <ConfirmAction me={modalData} />,
   [modalTypes.CONFIRM_ACTION_WITH_REASON]: ({ modalData }) => <ConfirmActionWithReason me={modalData} />,
-  [modalTypes.LOGIN]: ({ location }) => <Login pathname={location.pathname} />,
+  [modalTypes.LOGIN]: ({ location, modalData }) => <Login  me={modalData} pathname={location.pathname} />,
   [modalTypes.ONBOARD]: () => <OnBoard />,
   [modalTypes.PAYWALL_MODAL]: () => <PaywallModal />,
   [modalTypes.PROPOSAL_CREDITS_MODAL]: () => <ProposalCreditsModal />

@@ -1347,3 +1347,15 @@ form div.usertext-body.may-blank-within.md-container {
 .proposal-paywall-section {
   padding: 15px;
 }
+
+.session-expiration {
+  position: fixed;
+  top: 0px;
+  right: calc(50% - 108px);
+  background: #bf4153;
+  color: white;
+  padding: 2px 4px;
+  border-radius: 0 0 6px 6px;
+  display: inline-block;
+  z-index: 999;
+}

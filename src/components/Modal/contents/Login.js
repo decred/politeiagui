@@ -12,9 +12,11 @@ componentDidMount() {
   this.props.redirectedFrom(this.props.pathname);
 }
 render() {
+  const { me: { payload } } = this.props;
+  const title = payload.title || "You must be logged in to perform this action";
   return (
     <ModalContentWrapper
-      title={"You must be logged in to perform this action"}
+      title={title}
       cancelText="Close"
       onCancel={this.handleCancel}
     >
