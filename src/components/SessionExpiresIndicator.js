@@ -12,8 +12,6 @@ class SessionExpiresIndicator extends React.Component {
     };
   }
   finishInterval = () => {
-    clearInterval(this.interval);
-    this.interval = null;
     this.props.onLogout();
     this.setState({ timer: null });
     this.props.openModal(modalTypes.LOGIN, {
@@ -22,9 +20,13 @@ class SessionExpiresIndicator extends React.Component {
   }
   intervalProcedure = () => {
     let { timer } = this.state;
-    const { sessionTimeLeft } = this.props;
+    const { sessionMaxAge, lastLoginTime } = this.props;
+    const expiration = lastLoginTime + sessionMaxAge;
+    const sessionTimeLeft = (expiration - Date.now()/1000);
+    const validSessionTimeLeft = !isNaN(sessionTimeLeft);
+    const lessThan10MinutesLeft = sessionTimeLeft < 600;
 
-    if (timer != null) { // timer is running
+    if (timer != null && validSessionTimeLeft) { // timer is running
       // decrease timer
       const newTimer = --timer;
       return newTimer < 1 ?
@@ -32,25 +34,21 @@ class SessionExpiresIndicator extends React.Component {
         this.setState({ timer: newTimer });
     }
 
-    this.setState({ timer: sessionTimeLeft });
+    if (validSessionTimeLeft && lessThan10MinutesLeft) {
+      this.setState({ timer: sessionTimeLeft });
+    } else if (!validSessionTimeLeft) {
+      this.setState({ timer: null });
+    }
   }
   startInterval = () => {
     const intervalPeriod = 1000; // 1 second
     this.interval = setInterval(this.intervalProcedure, intervalPeriod);
   }
-  componentDidUpdate() {
-    const { sessionTimeLeft, loggedInAsEmail } = this.props;
-    const { timer } = this.state;
-    const lessThan10MinutesLeft = sessionTimeLeft <= 600;
-    const moreThan1SecondLeft = sessionTimeLeft >= 1;
-    const shouldStartInterval = (
-      loggedInAsEmail && lessThan10MinutesLeft && moreThan1SecondLeft
-      && this.interval === null && timer === null
-    );
-
-    if (shouldStartInterval) {
-      this.startInterval();
-    }
+  componentDidMount() {
+    this.startInterval();
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
   render() {
     const { timer } = this.state;

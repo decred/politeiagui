@@ -13,9 +13,7 @@ import {
   apiUnvettedProposals,
   apiVettedProposals,
   getPropVoteStatus,
-  apiUserProposals,
-  lastLoginTimeFromMeResponse,
-  sessionMaxAge
+  apiUserProposals
 } from "./api";
 import { globalUsernamesById } from "../actions/app";
 import {
@@ -250,14 +248,6 @@ export const getVettedEmptyProposalsMessage = (state) => {
   default:
     return "There are no proposals";
   }
-};
-
-export const sessionTimeLeft = (state) => {
-  const sessionTime = sessionMaxAge(state);
-  const lastLoginTime = lastLoginTimeFromMeResponse(state);
-  const expiration = lastLoginTime + sessionTime;
-  const timeLeft = (expiration - Date.now()/1000);
-  return timeLeft;
 };
 
 export const votesEndHeight = (state) => state.app.votesEndHeight || {};
