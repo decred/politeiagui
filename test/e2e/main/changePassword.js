@@ -49,5 +49,5 @@ module.exports = {
       .changePassword();
 
     client.expect.element("@changePasswordNextPage").to.be.present.before(10000);
-  },
+  }
 };

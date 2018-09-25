@@ -51,5 +51,5 @@ module.exports = {
       .page
       .forgottenPassword()
       .resetPassword();
-  },
+  }
 };

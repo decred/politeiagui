@@ -1,5 +1,5 @@
 module.exports = function (request, response) {
-  let body = [];
+  const body = [];
   request
     .on("data", (chunk) => {
       body.push(chunk);

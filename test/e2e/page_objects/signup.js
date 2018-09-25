@@ -84,7 +84,7 @@ const Commands = {
       .setValue("@signupInputPasswordVerify", "test")
       .click("@signupSubmitButton")
       .waitForElementVisible("@loggedInAsEmail", 10000);
-  },
+  }
 };
 
 module.exports = {
