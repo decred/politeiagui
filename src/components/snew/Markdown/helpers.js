@@ -49,7 +49,7 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
   e.preventDefault();
   const tmpLink = document.createElement("a");
   tmpLink.href = link;
-  const externalLink = (tmpLink.hostname !== window.top.location.hostname);
+  const externalLink = (tmpLink.hostname && tmpLink.hostname !== window.top.location.hostname);
   // if this is an external link, show confirmation dialog
   if (externalLink) {
     confirmWithModal(modalTypes.CONFIRM_ACTION, {
@@ -72,11 +72,13 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
       )
     }).then(confirm => {
       if (confirm) {
-        window.location.href = link;
+        window.open(link, "_newtab");
       }
     });
-  } else {
+  } else if(tmpLink.hostname) {
     window.location.href = link;
+  } else {
+    console.log("Blocked potentially malicious link: ", link);
   }
 };
 
