@@ -551,7 +551,7 @@ button .logo {
   width: 100%;
   margin-top: 0px !important;
   height: 100%;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 .react-mde-dropdown {
