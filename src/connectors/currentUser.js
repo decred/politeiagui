@@ -10,7 +10,9 @@ const currentUserConnector = connect(
     isAdmin: sel.isAdmin,
     userPaywallStatus: sel.getUserPaywallStatus,
     userCanExecuteActions: sel.userCanExecuteActions,
-    proposalCredits: sel.proposalCredits
+    proposalCredits: sel.proposalCredits,
+    lastLoginTime: sel.lastLoginTimeFromMeResponse,
+    sessionMaxAge: sel.sessionMaxAge
   }),
   dispatch => bindActionCreators({
     onLogout: act.onLogout,

@@ -296,6 +296,8 @@ export const verificationToken = compose(get("verificationtoken"), apiNewUserRes
 export const getKeyMismatch = state => state.api.keyMismatch;
 export const editUserAction = compose(get("action"), apiEditUserPayload);
 export const lastLoginTimeFromLoginResponse = compose(get("lastlogintime"), apiLoginResponse);
+export const lastLoginTimeFromMeResponse = compose(get("lastlogintime"), apiMeResponse);
+export const sessionMaxAge = compose(get("sessionmaxage"), apiMeResponse);
 
 
 export const apiEditProposalResponse = getApiResponse("editProposal");
