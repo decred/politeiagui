@@ -72,7 +72,10 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
       )
     }).then(confirm => {
       if (confirm) {
-        window.open(link, "_newtab");
+        const newWindow = window.open();
+        newWindow.opener = null;
+        newWindow.location = link;
+        newWindow.target = "_blank";
       }
     });
   } else if(tmpLink.hostname) {
@@ -86,7 +89,7 @@ export const customRenderers = (filterXss, confirmWithModal) => ({
   image: ({ src, alt }) => {
     return <a
       target="_blank"
-      rel="nofollow"
+      rel="nofollow noopener noreferrer"
       onClick={(e) => confirmWithModal && verifyExternalLink(e, src, confirmWithModal)}
       href={src}>{alt}
     </a>;
@@ -94,7 +97,7 @@ export const customRenderers = (filterXss, confirmWithModal) => ({
   link: ({ href, children }) => {
     return <a
       target="_blank"
-      rel="nofollow"
+      rel="nofollow noopener noreferrer"
       onClick={(e) => confirmWithModal && verifyExternalLink(e, href, confirmWithModal)}
       href={href}
     >{children[0]}</a>;

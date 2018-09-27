@@ -6,7 +6,7 @@ const DcrdataTxLink = ({
 }) => {
   const network = isTestnet ? "testnet" : "explorer";
   return (
-    <a href={`https://${network}.dcrdata.org/tx/${txId}`} target="_blank">
+    <a href={`https://${network}.dcrdata.org/tx/${txId}`} target="_blank" rel="noopener noreferrer">
       {txId}
     </a>
   );

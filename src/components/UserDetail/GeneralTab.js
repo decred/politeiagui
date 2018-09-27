@@ -130,7 +130,7 @@ const GeneralTab = ({
         <Field label="Transaction" key={0}>
           {user.newuserpaywalltx === "cleared_by_admin" ?
             <span>Cleared by admin</span> :
-            <a href={dcrdataTxUrl + user.newuserpaywalltx} target="_blank">{user.newuserpaywalltx}</a>
+            <a href={dcrdataTxUrl + user.newuserpaywalltx} target="_blank" rel="noopener noreferrer">{user.newuserpaywalltx}</a>
           }
         </Field>,
         <FieldSeparator key={2} />
