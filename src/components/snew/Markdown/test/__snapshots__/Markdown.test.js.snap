@@ -6,7 +6,7 @@ exports[`filter potencial 'XSS' attackers 1`] = `
     <a
       href="x-javascript:alert('XSS')"
       onClick={[Function]}
-      rel="nofollow"
+      rel="nofollow noopener noreferrer"
       target="_blank"
     >
       clickforxss
@@ -15,7 +15,7 @@ exports[`filter potencial 'XSS' attackers 1`] = `
     <a
       href="javascript:void(0)"
       onClick={[Function]}
-      rel="nofollow"
+      rel="nofollow noopener noreferrer"
       target="_blank"
     >
       clickforxss

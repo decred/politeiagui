@@ -77,7 +77,7 @@ const Paywall = ({
                     <a
                       className="paywall-payment-sent"
                       href={"https://testnet.dcrdata.org/explorer/tx/" + payWithFaucetTxId}
-                      target="_blank">
+                      target="_blank" rel="noopener noreferrer">
                       {payWithFaucetTxId}
                     </a>{" "}
                     to the address; it may take a few minutes to be confirmed.
