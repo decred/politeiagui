@@ -21,7 +21,7 @@
     "react": "^16.0.0",
     "react-body": "^0.2.0",
     "react-dom": "^16.0.0",
-    "react-file-reader": "^1.1.3",
+    "react-file-reader": "https://github.com/pgonzalez-santiago/react-file-reader",
     "react-markdown": "^3.1.1",
     "react-mde": "^2.1.2",
     "react-redux": "^5.0.6",
