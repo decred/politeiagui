@@ -12,9 +12,11 @@ export default connect(
     isLoading: or(sel.unvettedProposalsIsRequesting, sel.setStatusProposalIsRequesting),
     filterValue: sel.getAdminFilterValue,
     header: () => LIST_HEADER_UNVETTED,
-    emptyProposalsMessage: sel.getUnvettedEmptyProposalsMessage
+    emptyProposalsMessage: sel.getUnvettedEmptyProposalsMessage,
+    lastLoadedProposal: sel.lastLoadedUnvettedProposal
   }),
   {
+    onFetchStatus: act.onFetchUnvettedStatus,
     onFetchData: act.onFetchUnvetted,
     onChangeFilter: act.onChangeAdminFilter,
     onStartVote: act.onStartVote

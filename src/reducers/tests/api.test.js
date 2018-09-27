@@ -149,6 +149,7 @@ describe("test api reducer", () => {
   test("default tests for api reducer", () => {
     expect(api.DEFAULT_STATE).toEqual({
       me: DEFAULT_REQUEST_STATE,
+      unvettedStatus: DEFAULT_REQUEST_STATE,
       init: DEFAULT_REQUEST_STATE,
       policy: DEFAULT_REQUEST_STATE,
       newUser: DEFAULT_REQUEST_STATE,

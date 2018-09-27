@@ -32,8 +32,52 @@ export const DEFAULT_STATE = {
   updateUserKey: DEFAULT_REQUEST_STATE,
   verifyUserKey: DEFAULT_REQUEST_STATE,
   likeComment: DEFAULT_REQUEST_STATE,
+  unvettedStatus: DEFAULT_REQUEST_STATE,
   email: "",
   keyMismatch: false
+};
+
+export const onReceiveProposals = (key, state, { payload, error }) => {
+  if (state[key] && state[key].response && state[key].response.proposals) {
+    const proposalsObj = state[key].response.proposals.reduce((acc, cur) => {
+      return {
+        ...acc,
+        [cur.censorshiprecord.token]: cur
+      };
+    }, {});
+    const payloadProposalsObj = payload.proposals.reduce((acc, cur) => {
+      return {
+        ...acc,
+        [cur.censorshiprecord.token]: cur
+      };
+    }, {});
+    const mergedProposalsObj = {
+      ...proposalsObj,
+      ...payloadProposalsObj
+    };
+    const cleanProposals = Object.keys(mergedProposalsObj).map(prop => mergedProposalsObj[prop]);
+    return ({
+      ...state,
+      [key]: {
+        ...state[key],
+        isRequesting: false,
+        response: error ? null : {
+          numofproposals: payload.numofproposals,
+          proposals: cleanProposals
+        },
+        error: error ? payload : null
+      }
+    });
+  }
+  return ({
+    ...state,
+    [key]: {
+      ...state[key],
+      isRequesting: false,
+      response: error ? null : payload,
+      error: error ? payload : null
+    }
+  });
 };
 
 export const onReceiveSetStatus = (state, action) => {
@@ -308,11 +352,13 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.REQUEST_CHANGE_PASSWORD]: () => request("changePassword", state, action),
   [act.RECEIVE_CHANGE_PASSWORD]: () => receive("changePassword", state, action),
   [act.REQUEST_USER_PROPOSALS]: () => request("userProposals", state, action),
-  [act.RECEIVE_USER_PROPOSALS]: () => receive("userProposals", state, action),
+  [act.RECEIVE_USER_PROPOSALS]: () => onReceiveProposals("userProposals", state, action),
   [act.REQUEST_VETTED]: () => request("vetted", state, action),
-  [act.RECEIVE_VETTED]: () => receive("vetted", state, action),
+  [act.RECEIVE_VETTED]: () => onReceiveProposals("vetted", state, action),
   [act.REQUEST_UNVETTED]: () => request("unvetted", state, action),
-  [act.RECEIVE_UNVETTED]: () => receive("unvetted", state, action),
+  [act.RECEIVE_UNVETTED]: () => onReceiveProposals("unvetted", state, action),
+  [act.REQUEST_UNVETTED_STATUS]: () => request("unvettedStatus", state, action),
+  [act.RECEIVE_UNVETTED_STATUS]: () => receive("unvettedStatus", state, action),
   [act.REQUEST_PROPOSAL]: () => request("proposal", state, action),
   [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
   [act.REQUEST_PROPOSAL_COMMENTS]: () => request("proposalComments", state, action),

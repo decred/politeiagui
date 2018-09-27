@@ -10,9 +10,7 @@ import { callAfterMinimumWait } from "./lib";
 import { resetNewProposalData } from "../lib/editors_content_backup";
 import act from "./methods";
 import {
-  globalUsernamesById,
-  selectDefaultPublicFilterValue,
-  selectDefaultAdminFilterValue
+  globalUsernamesById
 } from "./app";
 
 export const onResetProposal = act.RESET_PROPOSAL;
@@ -195,33 +193,41 @@ export const onChangePassword = (password, newPassword) =>
       });
   });
 
-export const onFetchUserProposals = userid => dispatch => {
+export const onFetchUserProposals = (userid, token) => dispatch => {
   dispatch(act.REQUEST_USER_PROPOSALS());
   return api
-    .userProposals(userid)
+    .userProposals(userid, token)
     .then(response => dispatch(act.RECEIVE_USER_PROPOSALS(response)))
     .catch(error => {
       dispatch(act.RECEIVE_USER_PROPOSALS(null, error));
     });
 };
 
-export const onFetchVetted = () => (dispatch, getState) => {
+export const onFetchVetted = token => (dispatch) => {
   dispatch(act.REQUEST_VETTED());
   return api
-    .vetted()
+    .vetted(token)
     .then(response => dispatch(act.RECEIVE_VETTED(response)))
-    .then(() => selectDefaultPublicFilterValue(dispatch, getState))
     .catch(error => {
       dispatch(act.RECEIVE_VETTED(null, error));
     });
 };
 
-export const onFetchUnvetted = () => (dispatch, getState) => {
+export const onFetchUnvettedStatus = () => (dispatch) => {
+  dispatch(act.REQUEST_UNVETTED_STATUS());
+  return api
+    .status()
+    .then(response => dispatch(act.RECEIVE_UNVETTED_STATUS(response)))
+    .catch(error => {
+      dispatch(act.RECEIVE_UNVETTED_STATUS(null, error));
+    });
+};
+
+export const onFetchUnvetted = token => (dispatch) => {
   dispatch(act.REQUEST_UNVETTED());
   return api
-    .unvetted()
+    .unvetted(token)
     .then(response => dispatch(act.RECEIVE_UNVETTED(response)))
-    .then(() => selectDefaultAdminFilterValue(dispatch, getState))
     .catch(error => {
       dispatch(act.RECEIVE_UNVETTED(null, error));
     });
@@ -439,9 +445,13 @@ export const onSubmitStatusProposal = (loggedInAsEmail, token, status, censorMes
     if (status === 4) {
       dispatch(act.SET_PROPOSAL_APPROVED(true));
     }
+
     return api
       .proposalSetStatus(loggedInAsEmail, csrf, token, status, censorMessage)
-      .then(response => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(response)))
+      .then(response => {
+        dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(response));
+        dispatch(onFetchUnvettedStatus());
+      })
       .catch(error => {
         dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
       });
@@ -601,14 +611,13 @@ export const onUserProposalCredits = () => dispatch => {
     });
 };
 
-export const onFetchProposalsVoteStatus = () => (dispatch, getState) => {
+export const onFetchProposalsVoteStatus = () => (dispatch) => {
   dispatch(act.REQUEST_PROPOSALS_VOTE_STATUS());
   return api
     .proposalsVoteStatus()
     .then(response =>
       dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS({ ...response, success: true }))
     )
-    .then(() => selectDefaultPublicFilterValue(dispatch, getState))
     .catch(
       error => {
         dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS(null, error));

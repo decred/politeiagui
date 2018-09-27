@@ -15,6 +15,7 @@ const userProposalsConnector = connect(
     proposals: sel.getUserProposals,
     proposalCounts: sel.getUserProposalFilterCounts,
     filterValue: sel.getUserFilterValue,
+    lastLoadedProposal: sel.lastLoadedUserProposal,
     header: () => LIST_HEADER_USER,
     emptyProposalsMessage: () => "You have not created any proposals yet"
   }),

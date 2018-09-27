@@ -15,10 +15,14 @@ export const CustomContent = ({
   emptyProposalsMessage = "There are no proposals yet",
   isLoading,
   error,
+  userid,
   header,
+  lastLoadedProposal,
   onChangeFilter,
   filterValue,
   activeVotes,
+  onFetchData,
+  onFetchUserProposals,
   ...props
 }) => {
   const content = error ? (
@@ -42,18 +46,36 @@ export const CustomContent = ({
         proposalCounts={proposalCounts}
       />
       {
-        (listings && listings.length > 0) || proposals.length > 0 ? (
-          <Content {...{
-            ...props,
-            key: "content",
-            lastBlockHeight: props.lastBlockHeight,
-            listings: listings || [
-              {
-                allChildren:
-                proposals.map((proposal, idx) => formatProposalData(proposal, idx, activeVotes))
-              }
-            ]
-          }} />
+        (listings && listings.length > 0) || proposals.length > 0 || proposalCounts[filterValue] !== 0 ? (
+          <React.Fragment>
+            <Content {...{
+              ...props,
+              key: "content",
+              lastBlockHeight: props.lastBlockHeight,
+              listings: listings || [
+                {
+                  allChildren:
+                  proposals ? proposals.map((proposal, idx) => formatProposalData(proposal, idx, activeVotes)) : []
+                }
+              ]
+            }} />
+            {
+              proposals &&
+              <div style={{ width: "100%", textAlign: "center" }}>
+                <button
+                  style={{ marginTop: "15px" }}
+                  className="c-btn c-btn-primary"
+                  onClick={() => onFetchData ?
+                    onFetchData(lastLoadedProposal ? lastLoadedProposal.censorshiprecord.token : null)
+                    :
+                    onFetchUserProposals(userid, lastLoadedProposal ? lastLoadedProposal.censorshiprecord.token : null)
+                  }
+                  disabled={proposalCounts && proposalCounts[filterValue] <= proposals.length}>
+                  Load More
+                </button>
+              </div>
+            }
+          </React.Fragment>
         ) : (
           <h1 style={{ textAlign: "center", paddingTop: "125px", color: "#777" }}>
             {emptyProposalsMessage}
@@ -89,14 +111,15 @@ class Loader extends Component {
   }
 
   componentDidUpdate() {
+    const { csrf } = this.props;
     const { isFetched } = this.state;
     if (isFetched)
       return;
-    const { csrf } = this.props;
-    if (csrf) {
+    else if (csrf) {
       this.setState({ isFetched: true });
       this.props.onFetchProposalsVoteStatus && this.props.onFetchProposalsVoteStatus();
       this.props.onFetchData && this.props.onFetchData();
+      this.props.onFetchStatus && this.props.onFetchStatus();
     }
   }
 
