@@ -246,6 +246,44 @@ describe("test app reducer", () => {
     expect(app({}, action4)).toEqual({ proposalCredits: 0 });
   });
 
+  test("add proposal credits", () => {
+    const action = {
+      type: act.ADD_PROPOSAL_CREDITS,
+      payload: {
+        amount: 5,
+        txid: "ff0207a03b761cb409c7677c5b5521562302653d2236c92d016dd47e0ae37bf7"
+      },
+      error: false
+    };
+
+    const action2 = {
+      type: act.ADD_PROPOSAL_CREDITS,
+      payload: {
+        amount: 10,
+        txid: "ff0207a03b761cb409c7677c5b5521562302653d2236c92d016dd47e0ae37bf8"
+      },
+      error: false
+    };
+
+    const state = app({ proposalCredits: 0 }, action);
+
+    expect(state).toEqual({ proposalCredits: action.payload.amount, recentPayments: [action.payload] });
+
+    const state2 = app({ proposalCredits: 5, recentPayments: [{
+      amount: 5,
+      txid: "ff0207a03b761cb409c7677c5b5521562302653d2236c92d016dd47e0ae37bf7"
+    }] }, action2);
+
+    expect(state2).toEqual({ proposalCredits: 5 + action2.payload.amount, recentPayments: [
+      {
+        amount: 5,
+        txid: "ff0207a03b761cb409c7677c5b5521562302653d2236c92d016dd47e0ae37bf7"
+      },
+      action2.payload
+    ] });
+
+  });
+
   test("correctly updates paywall status", () => {
     const action = {
       type: act.UPDATE_USER_PAYWALL_STATUS,

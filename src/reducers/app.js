@@ -20,6 +20,7 @@ export const DEFAULT_STATE = {
   publicProposalsShow: PROPOSAL_VOTING_ACTIVE,
   userProposalsShow: PROPOSAL_USER_FILTER_SUBMITTED,
   proposalCredits: 0,
+  recentPayments: [],
   submittedProposals: {},
   draftProposals: null,
   identityImportResult: { errorMsg: "", successMsg: "" },
@@ -115,6 +116,29 @@ const app = (state = DEFAULT_STATE, action) => (({
   [act.SUBTRACT_PROPOSAL_CREDITS]: () => ({
     ...state,
     proposalCredits: state.proposalCredits - (action.payload || 0)
+  }),
+  [act.ADD_PROPOSAL_CREDITS]: () => ({
+    ...state,
+    recentPayments: state.recentPayments ?
+      !state.recentPayments.find((el) =>
+        el.txid === action.payload.txid
+      ) ? [
+          ...state.recentPayments,
+          {
+            txid: action.payload.txid,
+            amount: action.payload.amount
+          }
+        ] :
+        [
+          ...state.recentPayments
+        ]
+      : [
+        {
+          txid: action.payload.txid,
+          amount: action.payload.amount
+        }
+      ],
+    proposalCredits: state.proposalCredits + (action.payload.amount || 0)
   }),
   [act.CSRF_NEEDED]: () => ({ ...state, csrfIsNeeded: action.payload }),
   [act.CLEAN_STATE]: () => ({

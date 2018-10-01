@@ -13,7 +13,8 @@ import {
   apiUnvettedProposals,
   apiVettedProposals,
   getPropVoteStatus,
-  apiUserProposals
+  apiUserProposals,
+  proposalCreditPurchases
 } from "./api";
 import { globalUsernamesById } from "../actions/app";
 import {
@@ -46,6 +47,10 @@ export const proposal = state => {
 };
 
 export const proposalCredits = state => state.app.proposalCredits;
+export const recentPayments = state => {
+  const res = proposalCreditPurchases(state);
+  return state.app.recentPayments && state.app.recentPayments.length > 0 ? state.app.recentPayments.filter(payment => payment.txid !== res.txId) : [];
+};
 
 export const getLastSubmittedProposal = state => state.app.submittedProposals.lastSubmitted;
 export const newProposalInitialValues = state => state.app.draftProposals.initialValues || {};

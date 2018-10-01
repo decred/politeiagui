@@ -42,7 +42,8 @@ class ProposalCreditsPage extends React.Component {
       isApiRequestingPayWithFaucet,
       payWithFaucetTxId,
       payWithFaucetError,
-      lastPaymentNotConfirmed
+      lastPaymentNotConfirmed,
+      recentPaymentsConfirmed
     } = this.props;
     return isApiRequestingProposalPaywall ?
       <PageLoadingIcon />
@@ -59,13 +60,13 @@ class ProposalCreditsPage extends React.Component {
           the Politeia server must be the same from the key on your browser before you
           can purchase proposal credits.
         </p>}
-          {console.log("pc: ", proposalCreditPrice)}
           <ProposalCreditsSummary
             proposalCreditPrice={proposalCreditPrice}
             proposalCredits={proposalCredits}
             proposalCreditPurchases={proposalCreditPurchases}
             isTestnet={isTestnet}
             lastPaymentNotConfirmed={lastPaymentNotConfirmed}
+            recentPaymentsConfirmed={recentPaymentsConfirmed}
           />
           {!this.state.showBuyingMessage && (
             <ButtonWithLoadingIcon

@@ -130,8 +130,7 @@ export const proposalCreditPurchases = state => {
     }
   });
 
-  const purchases = Object.values(purchasesMap);
-  return purchases.sort((a, b) => a.datepurchased - b.datepurchased);
+  return Object.values(purchasesMap).sort((a, b) => a.datePurchased - b.datePurchased);
 };
 export const isApiRequestingUserProposalCredits = getIsApiRequesting("userProposalCredits");
 export const userProposalCreditsError = getApiError("userProposalCredits");
