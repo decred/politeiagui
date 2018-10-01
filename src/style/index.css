@@ -473,22 +473,21 @@ a:hover, a:focus {
 }
 button .logo {
    position: static;
-   background: url("./spinner_white.svg") 0px 0px no-repeat;
+   background: url("./politeia-loading-icon-dark.gif") 0px 0px no-repeat;
    margin-top: 7px;
    margin-right: 10px;
  }
  .user-proposal-credits .logo {
-   background: url("./spinner_white.svg") 0px 0px no-repeat;
+   background: url("./politeia-loading-icon-dark.gif") 0px 0px no-repeat;
    height: 12px;
    width: 16px;
  }
  .user-proposal-credits-cell .logo {
-  background: url("./spinner.svg") 0px 0px no-repeat;
+  background: url("./politeia-loading-icon.gif") 0px 0px no-repeat;
   position: relative;
   display: inline-block;
-  width: 16px;
-  height: 12px;
-	animation: spin 3s ease-in-out infinite;
+  width: 20px;
+  height: 20px;
 }
  button .spin {
    animation: spin 3s ease-in-out infinite;

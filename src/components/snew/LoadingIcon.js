@@ -14,7 +14,7 @@ const LoadingIcon = ({
       height: (width * 1.25) + "px"
     }, style)}>
     <div
-      className="logo spin"
+      className="logo"
       style={{
         width: (width * 1.4) + "px",
         height: (width * 1.25) + "px"
