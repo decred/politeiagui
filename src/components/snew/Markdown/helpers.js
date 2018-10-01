@@ -2,6 +2,17 @@ import React from "react";
 import xssFilters from "xss-filters";
 import * as modalTypes from "../../Modal/modalTypes";
 
+function extractHostname(url) {
+  //find & remove protocol (http, ftp, etc.) and get hostname
+  let hostname = url.indexOf("//") > -1 ? url.split("/")[2] : url.split("/")[0];
+  //find & remove port number
+  hostname = hostname.split(":")[0];
+  //find & remove "?"
+  hostname = hostname.split("?")[0];
+
+  return hostname;
+}
+
 export const traverseChildren = (el, cb) => {
   const filterChildren = (c) => React.Children.map(c,
     child => traverseChildren(child, cb)
@@ -47,9 +58,8 @@ export const handleFilterXss = (el) => {
 
 const verifyExternalLink = (e, link, confirmWithModal) => {
   e.preventDefault();
-  const tmpLink = document.createElement("a");
-  tmpLink.href = link;
-  const externalLink = (tmpLink.hostname && tmpLink.hostname !== window.top.location.hostname);
+  const hostname = extractHostname(link);
+  const externalLink = (hostname && hostname !== window.top.location.hostname);
   // if this is an external link, show confirmation dialog
   if (externalLink) {
     confirmWithModal(modalTypes.CONFIRM_ACTION, {
@@ -63,7 +73,7 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
             External link: {link}
           </p>
           <p>
-            External domain: <strong className="red">{tmpLink.hostname}</strong>
+            External domain: <strong className="red">{hostname}</strong>
           </p>
           <p style={{ marginTop: "10px" }}>
             Are you sure you want to proceed?
@@ -74,11 +84,11 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
       if (confirm) {
         const newWindow = window.open();
         newWindow.opener = null;
-        newWindow.location = link;
+        newWindow.location.href = "//" + link;
         newWindow.target = "_blank";
       }
     });
-  } else if(tmpLink.hostname) {
+  } else if(hostname) {
     window.location.href = link;
   } else {
     console.log("Blocked potentially malicious link: ", link);
