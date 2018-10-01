@@ -3,13 +3,16 @@ import xssFilters from "xss-filters";
 import * as modalTypes from "../../Modal/modalTypes";
 
 function extractHostname(url) {
+  console.log("HOSTNAME 1", url, typeof url);
   //find & remove protocol (http, ftp, etc.) and get hostname
   let hostname = url.indexOf("//") > -1 ? url.split("/")[2] : url.split("/")[0];
+  console.log("HOSTNAME 2", url, hostname);
   //find & remove port number
   hostname = hostname.split(":")[0];
+  console.log("HOSTNAME 3", hostname);
   //find & remove "?"
   hostname = hostname.split("?")[0];
-
+  console.log("HOSTNAME 4", hostname);
   return hostname;
 }
 
@@ -59,6 +62,7 @@ export const handleFilterXss = (el) => {
 const verifyExternalLink = (e, link, confirmWithModal) => {
   e.preventDefault();
   const hostname = extractHostname(link);
+  console.log("HOSTNAME", hostname);
   const externalLink = (hostname && hostname !== window.top.location.hostname);
   // if this is an external link, show confirmation dialog
   if (externalLink) {
@@ -82,9 +86,12 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
       )
     }).then(confirm => {
       if (confirm) {
+        // Creates a new element to check the hostname
+        const tmpLink = document.createElement("a");
+        tmpLink.href = link;
         const newWindow = window.open();
         newWindow.opener = null;
-        newWindow.location.href = "//" + link;
+        newWindow.location.href = tmpLink.hostname === hostname ? link : "//" + link;
         newWindow.target = "_blank";
       }
     });
@@ -105,6 +112,7 @@ export const customRenderers = (filterXss, confirmWithModal) => ({
     </a>;
   },
   link: ({ href, children }) => {
+    console.log("HOSTNAME HREF", href);
     return <a
       target="_blank"
       rel="nofollow noopener noreferrer"
