@@ -472,11 +472,20 @@ a:hover, a:focus {
   background: url("./politeia-loading.gif") 0px 0px no-repeat;
 }
 button .logo {
-   position: static;
-   background: url("./politeia-loading-icon-dark.gif") 0px 0px no-repeat;
-   margin-top: 7px;
-   margin-right: 10px;
- }
+  position: static;
+  background: url("./politeia-loading-icon-dark.gif") 0px 0px no-repeat;
+  margin-top: 7px;
+  margin-right: 10px;
+}
+.c-btn:hover .hoverimage {
+  background-color: rgba(255, 255, 255, 0.16777);
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  margin-top: 7px;
+  margin-right: 10px;
+  transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1), -webkit-box-shadow .2s cubic-bezier(.4, 0, 1, 1);
+}
  .user-proposal-credits .logo {
    background: url("./politeia-loading-icon-dark.gif") 0px 0px no-repeat;
    height: 12px;
