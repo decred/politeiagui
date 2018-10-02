@@ -2209,7 +2209,6 @@ button.disabled {
 }
 .submit-page #newlink.submit.content {
     width: 524px;
-    margin: 0 auto
 }
 .submit-page #newlink.submit.content form .spacer+.spacer {
     margin: 0
@@ -2254,7 +2253,8 @@ button.disabled {
 }
 .submit-page .formtabs-content {
     border-top: 0;
-    padding-top: 0
+    padding-top: 0;
+    margin-left: calc((100vw - 975px)/2);
 }
 .submit-page .roundfield {
     width: 524px;
