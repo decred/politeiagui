@@ -1,5 +1,5 @@
 import * as external_api from "../lib/external_api";
-import { verifyUserPaymentWithPoliteia, onUserProposalCredits } from "./api";
+import { verifyUserPaymentWithPoliteia, onAddProposalCredits } from "./api";
 import { onUpdatePaymentPollingQueue, onConfirmPollingPayment } from "./app";
 import act from "./methods";
 import {
@@ -60,7 +60,7 @@ export const verifyUserPayment = (address, amount, txNotBefore, credits = false)
       if(verified && credits) {
         dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null));
         dispatch(onConfirmPollingPayment({ address, txNotBefore }));
-        setTimeout(() => dispatch(onUserProposalCredits()), 1000);
+        dispatch(onAddProposalCredits({ amount, txNotBefore }));
       } else if (verified) {
         dispatch(act.UPDATE_USER_PAYWALL_STATUS({ status: PAYWALL_STATUS_PAID }));
       } else {

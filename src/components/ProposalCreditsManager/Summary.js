@@ -17,7 +17,8 @@ const formatDate = (date) => {
   const day = d.getUTCDate();
   const year = d.getUTCFullYear();
   const month = d.getUTCMonth();
-  const time = d.getUTCHours() + ":" + d.getUTCMinutes();
+  const minutes = d.getUTCMinutes() < 10 ? `0${d.getUTCMinutes()}` : d.getUTCMinutes();
+  const time = d.getUTCHours() + ":" + minutes;
   return year + "-" + month + "-" + day + "  |  " + time;
 };
 
@@ -26,11 +27,24 @@ const ProposalCreditsSummary = ({
   proposalCreditPrice,
   proposalCreditPurchases,
   isTestnet,
-  lastPaymentNotConfirmed
+  lastPaymentNotConfirmed,
+  recentPaymentsConfirmed
 }) => {
+  if (recentPaymentsConfirmed && recentPaymentsConfirmed.length > 0) {
+    recentPaymentsConfirmed.forEach(payment => {
+      const transaction = {
+        numberPurchased: payment.amount,
+        txId: payment.txid,
+        price: proposalCreditPrice,
+        confirming: false,
+        datePurchased: "just now"
+      };
+      if (!proposalCreditPurchases.find(el => el.txId === transaction.txId)) proposalCreditPurchases.push(transaction);
+    });
+  }
   if (lastPaymentNotConfirmed) {
     const transaction = {
-      numberPurchased: lastPaymentNotConfirmed.amount * 10,
+      numberPurchased: Math.round(lastPaymentNotConfirmed.amount * 1/proposalCreditPrice),
       txId: lastPaymentNotConfirmed.txid,
       price: proposalCreditPrice,
       confirming: true
@@ -70,8 +84,12 @@ const ProposalCreditsSummary = ({
                   }
                 </div>
                 <div className="credit-purchase-cell credit-purchase-date-text">
-                  {/* {new Date(creditPurchase.datePurchased * 1000).toUTCString()} */}
-                  { creditPurchase.datePurchased ? formatDate(creditPurchase.datePurchased) : "" }
+                  {
+                    creditPurchase.datePurchased ?
+                      creditPurchase.datePurchased === "just now" ? "just now" :
+                        formatDate(creditPurchase.datePurchased)
+                      : ""
+                  }
                 </div>
                 <div className="clear"></div>
               </div>

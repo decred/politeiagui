@@ -5,6 +5,7 @@ docker-build
 *.DS_Store
 *.swp
 
+yarn-error.log
 selenium-debug.log
 
 test/e2e/reports

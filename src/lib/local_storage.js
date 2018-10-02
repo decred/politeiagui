@@ -44,6 +44,7 @@ export const clearStateLocalStorage = (email) => {
 
 const handleSaveApiMe = (state) => {
   const email = loggedInAsEmail(state);
+  const proposalcredits = state.app.proposalCredits;
   const username = loggedInAsUsername(state);
   const stateFromLs = loadStateLocalStorage() || {};
   const apiMeFromStorage = get(stateFromLs, [ "api", "me" ], undefined);
@@ -53,7 +54,8 @@ const handleSaveApiMe = (state) => {
   const customResponse = {
     ...apiMeResponse,
     username,
-    email
+    email,
+    proposalcredits
   };
   if(apiMeResponse && !isEqual(apiMeResponseFromStorage, customResponse)) {
     saveStateLocalStorage(
