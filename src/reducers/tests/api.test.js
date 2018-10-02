@@ -2,7 +2,7 @@ import * as api from "../api";
 import * as act from "../../actions/types";
 import cloneDeep from "lodash/cloneDeep";
 import { DEFAULT_REQUEST_STATE } from "../util";
-import { PROPOSAL_VOTING_ACTIVE } from "../../constants";
+import { PROPOSAL_VOTING_ACTIVE, PROPOSAL_STATUS_PUBLIC, PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
 import { request, receive } from "../util";
 import { testReceiveReducer, testReceiveProposalsReducer, testRequestReducer, testResetReducer, testResetMultipleReducer } from "./helpers";
 
@@ -88,8 +88,30 @@ describe("test api reducer", () => {
           }
         ]
       }
-    }
+    },
+    vetted: DEFAULT_REQUEST_STATE
   };
+
+  const MOCK_PROPOSALS_LOAD = [
+    {
+      censorshiprecord: {
+        token: "censortoken"
+      },
+      status: PROPOSAL_STATUS_UNREVIEWED
+    },
+    {
+      censorshiprecord: {
+        token: "randomtoken"
+      },
+      status: PROPOSAL_STATUS_UNREVIEWED
+    },
+    {
+      censorshiprecord: {
+        token: "randomtoken2"
+      },
+      status: PROPOSAL_STATUS_PUBLIC
+    }
+  ];
 
   const getCommentVoteFromState = (state, token, commentid) =>
     state.commentsvotes.response.commentsvotes.filter(cv => cv.token === token && cv.commentid === commentid)[0];
@@ -176,7 +198,8 @@ describe("test api reducer", () => {
       verifyUserKey: DEFAULT_REQUEST_STATE,
       likeComment: DEFAULT_REQUEST_STATE,
       email: "",
-      keyMismatch: false
+      keyMismatch: false,
+      lastLoaded: {}
     });
 
     expect(api.default(undefined, { type: "" })).toEqual(api.DEFAULT_STATE);
@@ -402,7 +425,11 @@ describe("test api reducer", () => {
     action = {
       ...action,
       payload: {
-        token: "misctoken"
+        proposal: {
+          censorshiprecord: {
+            token: "misctoken"
+          }
+        }
       }
     };
 
@@ -476,6 +503,52 @@ describe("test api reducer", () => {
     ]);
   });
 
+  test("correctly updates the state for onReceiveProposals", () => {
+    const key = "userProposals";
+
+    const action = {
+      type: act.RECEIVE_USER_PROPOSALS,
+      payload: {
+        proposals: MOCK_PROPOSALS_LOAD
+      }
+    };
+    const state = api.onReceiveProposals(key, MOCK_STATE, action);
+
+    // check if the unvetted proposals were correctly updated
+    const { proposals: unvettedResult } = state.unvetted.response;
+    expect(unvettedResult.length).toEqual(3);
+    expect(unvettedResult[0].censorshiprecord.token).toEqual("censortoken");
+
+    // check if the vetted proposals were correctly updated
+    const { proposals: vettedResult } = state.vetted.response;
+    expect(vettedResult.length).toEqual(1);
+    expect(vettedResult[0].censorshiprecord.token).toEqual("randomtoken2");
+
+  });
+
+  test("correctly updates the state for onReceiveUser", () => {
+    const action = {
+      type: act.RECEIVE_USER,
+      payload: {
+        user: {
+          proposals: MOCK_PROPOSALS_LOAD
+        }
+      }
+    };
+
+    const state = api.onReceiveUser(MOCK_STATE, action);
+
+    // check if the unvetted proposals were correctly updated
+    const { proposals: unvettedResult } = state.unvetted.response;
+    expect(unvettedResult.length).toEqual(3);
+    expect(unvettedResult[0].censorshiprecord.token).toEqual("censortoken");
+
+    // check if the vetted proposals were correctly updated
+    const { proposals: vettedResult } = state.vetted.response;
+    expect(vettedResult.length).toEqual(1);
+    expect(vettedResult[0].censorshiprecord.token).toEqual("randomtoken2");
+  });
+
   test("correctly updates state for reducers using request/receive/reset", () => {
 
     const reducers = [
@@ -492,7 +565,6 @@ describe("test api reducer", () => {
       { action: act.REQUEST_VERIFY_NEW_USER, key: "verifyNewUser", type: "request" },
       { action: act.RECEIVE_VERIFY_NEW_USER, key: "verifyNewUser", type: "receive" },
       { action: act.REQUEST_USER, key: "user", type: "request" },
-      { action: act.RECEIVE_USER, key: "user", type: "receive" },
       { action: act.REQUEST_LOGIN, key: "login", type: "request" },
       { action: act.RECEIVE_LOGIN, key: "login", type: "receive" },
       { action: act.REQUEST_CHANGE_USERNAME, key: "changeUsername", type: "request" },
@@ -500,11 +572,8 @@ describe("test api reducer", () => {
       { action: act.REQUEST_CHANGE_PASSWORD, key: "changePassword", type: "request" },
       { action: act.RECEIVE_CHANGE_PASSWORD, key: "changePassword", type: "receive" },
       { action: act.REQUEST_USER_PROPOSALS, key: "userProposals", type: "request" },
-      { action: act.RECEIVE_USER_PROPOSALS, key: "userProposals", type: "receiveProposals" },
       { action: act.REQUEST_VETTED, key: "vetted", type: "request" },
-      { action: act.RECEIVE_VETTED, key: "vetted", type: "receiveProposals" },
       { action: act.REQUEST_UNVETTED, key: "unvetted", type: "request" },
-      { action: act.RECEIVE_UNVETTED, key: "unvetted", type: "receiveProposals" },
       { action: act.REQUEST_PROPOSAL, key: "proposal", type: "request" },
       { action: act.RECEIVE_PROPOSAL, key: "proposal", type: "receive" },
       { action: act.REQUEST_PROPOSAL_COMMENTS, key: "proposalComments", type: "request" },

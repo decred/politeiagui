@@ -1,29 +1,28 @@
 import React from "react";
 import userConnector from "../../connectors/user";
 import { Content as ProposalListing } from "../../components/snew";
-import { removeProposalsDuplicates } from "../../helpers";
 
 const ProposalsTab = ({
   user,
   loggedInAsEmail,
   isAdmin,
   onFetchUserProposals,
-  loggedInAsUserId,
-  userProposals,
   count,
   lastLoadedProposal,
-  lastLoadedUserDetailProposal
+  lastLoadedUserDetailProposal,
+  getSubmittedUserProposals,
+  isLoadingProposals
 }) => {
-  const proposals = removeProposalsDuplicates(user.proposals, userProposals);
   return (
     <div className="detail-proposals">
       <ProposalListing
+        isLoading={isLoadingProposals}
         loggedInAsEmail={loggedInAsEmail}
         isAdmin={isAdmin}
         count={count}
-        userid={loggedInAsUserId}
+        userid={user.id}
         lastLoadedProposal={lastLoadedProposal && Object.keys(lastLoadedProposal).length > 0 ? lastLoadedProposal : lastLoadedUserDetailProposal}
-        proposals={proposals}
+        proposals={getSubmittedUserProposals(user.id)}
         onFetchUserProposals={onFetchUserProposals}
         emptyProposalsMessage={"This user has not submitted any proposals"} />
     </div>

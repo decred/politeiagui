@@ -123,9 +123,9 @@ class Loader extends Component {
       return;
     else if (csrf) {
       this.setState({ isFetched: true });
-      this.props.onFetchProposalsVoteStatus && this.props.onFetchProposalsVoteStatus();
       this.props.onFetchData && this.props.onFetchData();
       this.props.onFetchStatus && this.props.onFetchStatus();
+      this.props.onFetchProposalsVoteStatus && this.props.onFetchProposalsVoteStatus();
     }
   }
 

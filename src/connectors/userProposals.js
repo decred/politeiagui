@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
+import { or } from "../lib/fp";
 import { LIST_HEADER_USER, PROPOSAL_USER_FILTER_SUBMITTED, PROPOSAL_USER_FILTER_DRAFT } from "../constants";
 
 const userProposalsConnector = connect(
@@ -11,7 +12,7 @@ const userProposalsConnector = connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
     error: sel.userProposalsError,
-    isLoading: sel.userProposalsIsRequesting,
+    isLoading: or(sel.userProposalsIsRequesting, sel.isApiRequestingPropsVoteStatus),
     proposals: sel.getUserProposals,
     proposalCounts: sel.getUserProposalFilterCounts,
     filterValue: sel.getUserFilterValue,
@@ -23,7 +24,8 @@ const userProposalsConnector = connect(
     bindActionCreators(
       {
         onFetchUserProposals: act.onFetchUserProposals,
-        onChangeFilter: act.onChangeUserFilter
+        onChangeFilter: act.onChangeUserFilter,
+        onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus
       },
       dispatch
     )
