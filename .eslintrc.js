@@ -109,6 +109,7 @@ module.exports = {
     "arrow-spacing": "error",
     "react/jsx-uses-vars":1,
     "react/jsx-uses-react":1,
+    "react/jsx-no-target-blank": [ 2, { "enforceDynamicLinks": "always" }],
   },
   "globals": {
     "Uint8Array": true
