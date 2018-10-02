@@ -13,8 +13,9 @@ const LoadingIcon = ({
       width: (width * 1.4) + "px",
       height: (width * 1.25) + "px"
     }, style)}>
+    <div className="hoverimage"></div>
     <div
-      className="logo spin"
+      className="logo"
       style={{
         width: (width * 1.4) + "px",
         height: (width * 1.25) + "px"
