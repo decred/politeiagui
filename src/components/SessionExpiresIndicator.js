@@ -35,11 +35,13 @@ class SessionExpiresIndicator extends React.Component {
     }
   }
   finishInterval = () => {
-    this.props.onLogout();
-    this.setState({ timer: null });
-    this.props.openModal(modalTypes.LOGIN, {
-      title: "Your session has expired. Please log in again."
-    }, null);
+    if (this.props.loggedInAsEmail) {
+      this.props.onLogout();
+      this.setState({ timer: null });
+      this.props.openModal(modalTypes.LOGIN, {
+        title: "Your session has expired. Please log in again."
+      }, null);
+    }
   }
   componentDidUpdate(prevProps) {
     const { loggedInAsEmail } = this.props;
