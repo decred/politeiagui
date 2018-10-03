@@ -27,7 +27,8 @@ export default connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     userProposals: sel.getUserProposals,
     isAdmin: sel.isAdmin,
-    lastLoadedProposal: sel.lastLoadedUserDetailProposal,
+    lastLoadedUserDetailProposal: sel.lastLoadedUserDetailProposal,
+    lastLoadedProposal: sel.lastLoadedUserProposal,
     isApiRequestingMarkAsPaid: state => (
       sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_CLEAR_USER_PAYWALL
     ),

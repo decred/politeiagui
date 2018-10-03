@@ -26,6 +26,12 @@ export const CustomContent = ({
   count,
   ...props
 }) => {
+  const showList = (listings && listings.length > 0)||
+    proposals.length > 0 ||
+    proposalCounts[filterValue] !== 0;
+  const showLoadMore = (proposals) &&
+    ((count && count >= proposals.length) ||
+    (proposalCounts && proposalCounts[filterValue] >= proposals.length));
   const content = error ? (
     <Message
       type="error"
@@ -47,7 +53,7 @@ export const CustomContent = ({
         proposalCounts={proposalCounts}
       />
       {
-        (listings && listings.length > 0) || proposals.length > 0 || proposalCounts[filterValue] !== 0 ? (
+        showList ? (
           <React.Fragment>
             <Content {...{
               ...props,
@@ -61,8 +67,8 @@ export const CustomContent = ({
               ]
             }} />
             {
-              proposals &&
-              <div style={{ width: "100%", maxWidth: "1000px", textAlign: "center" }}>
+              showLoadMore &&
+              (<div style={{ width: "100%", maxWidth: "1000px", textAlign: "center" }}>
                 <button
                   style={{ marginTop: "15px" }}
                   className="c-btn c-btn-primary"
@@ -70,14 +76,10 @@ export const CustomContent = ({
                     onFetchData(lastLoadedProposal ? lastLoadedProposal.censorshiprecord.token : null)
                     :
                     onFetchUserProposals(userid, lastLoadedProposal ? lastLoadedProposal.censorshiprecord.token : null)
-                  }
-                  disabled={
-                    (count && count <= proposals.length) ||
-                    (proposalCounts && proposalCounts[filterValue] <= proposals.length)
                   }>
                   Load More
                 </button>
-              </div>
+              </div>)
             }
           </React.Fragment>
         ) : (

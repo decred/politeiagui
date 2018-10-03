@@ -180,3 +180,18 @@ export const countPublicProposals = (proposals) => {
   }, defaultObj) : defaultObj;
 };
 
+export const proposalsArrayToObject = arr =>
+  arr ? arr.reduce((acc, cur) => {
+    return {
+      ...acc,
+      [cur.censorshiprecord.token]: cur
+    };
+  }, {}) : {};
+
+export const removeProposalsDuplicates = (arr1, arr2) => {
+  const mergedObj = {
+    ...proposalsArrayToObject(arr1),
+    ...proposalsArrayToObject(arr2)
+  };
+  return Object.keys(mergedObj).map(item => mergedObj[item]);
+};

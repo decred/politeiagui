@@ -255,27 +255,18 @@ export const getPropVoteStatus = state => token => {
 export const userid = state => state.api.me.response && state.api.me.response.userid;
 export const censoredComment = state => state.api.censorComment.response;
 
+const lastLoaded = (func, state) => func(state) ? func(state).lastloaded : {};
 
-export const lastLoadedUnvettedProposal = state => {
-  const uvp = apiUnvettedProposals(state);
-  const last = Object.keys(uvp).length - 1;
-  return last > -1 ? uvp[last] : {};
-};
-export const lastLoadedVettedProposal = state => {
-  const vp = apiVettedProposals(state);
-  const last = Object.keys(vp).length - 1;
-  return last > -1 ? vp[last] : {};
-};
+export const lastLoadedUnvettedProposal = state => lastLoaded(apiUnvettedResponse, state);
+export const lastLoadedVettedProposal = state => lastLoaded(apiVettedResponse, state);
+export const lastLoadedUserProposal = state => lastLoaded(apiUserProposalsResponse, state);
+
 export const lastLoadedUserDetailProposal = state => {
   const vp = user(state) ? user(state).proposals : [];
   const last = Object.keys(vp).length - 1;
   return last > -1 ? vp[last] : {};
 };
-export const lastLoadedUserProposal = state => {
-  const vp = apiUserProposals(state);
-  const last = Object.keys(vp).length - 1;
-  return last > -1 ? vp[last] : {};
-};
+
 export const serverPubkey = compose(get("pubkey"), apiInitResponse);
 export const userPubkey = compose(get("publickey"), apiMeResponse);
 export const commentsVotes = or(compose(get("commentsvotes"), apiCommentsVotesResponse), constant(null));

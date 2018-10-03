@@ -4,6 +4,7 @@ import map from "lodash/fp/map";
 import cloneDeep from "lodash/cloneDeep";
 import { DEFAULT_REQUEST_STATE, request, receive, reset, resetMultiple } from "./util";
 import { PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_AUTHORIZED, PROPOSAL_VOTING_NOT_AUTHORIZED } from "../constants";
+import { removeProposalsDuplicates } from "../helpers";
 
 export const DEFAULT_STATE = {
   me: DEFAULT_REQUEST_STATE,
@@ -39,25 +40,11 @@ export const DEFAULT_STATE = {
 
 export const onReceiveProposals = (key, state, { payload, error }) => {
   if (state[key] && state[key].response && state[key].response.proposals) {
-    const proposalsObj = state[key].response.proposals.reduce((acc, cur) => {
-      return {
-        ...acc,
-        [cur.censorshiprecord.token]: cur
-      };
-    }, {});
-    const payloadProposalsObj = payload.proposals.reduce((acc, cur) => {
-      return {
-        ...acc,
-        [cur.censorshiprecord.token]: cur
-      };
-    }, {});
-    const mergedProposalsObj = {
-      ...proposalsObj,
-      ...payloadProposalsObj
-    };
-    const cleanProposals =
-      Object.keys(mergedProposalsObj).map(prop => mergedProposalsObj[prop])
-        .sort((a, b) => b.timestamp - a.timestamp);
+
+    const newProposoalArray = removeProposalsDuplicates(state[key].response.proposals, payload.proposals)
+      .sort((a, b) => b.timestamp - a.timestamp);
+
+    const lastloaded = payload.proposals.length > 0 ? payload.proposals[payload.proposals.length - 1] : null;
     return ({
       ...state,
       [key]: {
@@ -65,7 +52,8 @@ export const onReceiveProposals = (key, state, { payload, error }) => {
         isRequesting: false,
         response: error ? null : {
           numofproposals: payload.numofproposals,
-          proposals: cleanProposals
+          proposals: newProposoalArray,
+          lastloaded: lastloaded
         },
         error: error ? payload : null
       }
@@ -76,7 +64,10 @@ export const onReceiveProposals = (key, state, { payload, error }) => {
     [key]: {
       ...state[key],
       isRequesting: false,
-      response: error ? null : payload,
+      response: error ? null : {
+        ...payload,
+        lastloaded: payload.proposals[payload.proposals.length - 1]
+      },
       error: error ? payload : null
     }
   });
