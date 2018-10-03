@@ -26,7 +26,6 @@ export const CustomContent = ({
   count,
   ...props
 }) => {
-  console.log(proposalCounts ? proposalCounts[filterValue] : null, count, proposals.length);
   const showList = (listings && listings.length > 0)||
     proposals.length > 0 ||
     proposalCounts[filterValue] !== 0;
