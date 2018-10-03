@@ -266,6 +266,11 @@ export const lastLoadedVettedProposal = state => {
   const last = Object.keys(vp).length - 1;
   return last > -1 ? vp[last] : {};
 };
+export const lastLoadedUserDetailProposal = state => {
+  const vp = user(state) ? user(state).proposals : [];
+  const last = Object.keys(vp).length - 1;
+  return last > -1 ? vp[last] : {};
+};
 export const lastLoadedUserProposal = state => {
   const vp = apiUserProposals(state);
   const last = Object.keys(vp).length - 1;

@@ -55,7 +55,9 @@ export const onReceiveProposals = (key, state, { payload, error }) => {
       ...proposalsObj,
       ...payloadProposalsObj
     };
-    const cleanProposals = Object.keys(mergedProposalsObj).map(prop => mergedProposalsObj[prop]);
+    const cleanProposals =
+      Object.keys(mergedProposalsObj).map(prop => mergedProposalsObj[prop])
+        .sort((a, b) => b.timestamp - a.timestamp);
     return ({
       ...state,
       [key]: {

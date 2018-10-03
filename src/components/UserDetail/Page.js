@@ -52,7 +52,7 @@ const UserDetailPage = ({
                   onTabChange={onTabChange} /> : null}
                 <Tab
                   title="Proposals"
-                  count={(user.proposals && user.proposals.length) || 0}
+                  count={user.numofproposals}
                   selected={tabId === USER_DETAIL_TAB_PROPOSALS}
                   tabId={USER_DETAIL_TAB_PROPOSALS}
                   onTabChange={onTabChange} />
@@ -66,7 +66,7 @@ const UserDetailPage = ({
             </div>
             <div className="detail-tab-body">
               {tabId === USER_DETAIL_TAB_GENERAL && <GeneralTab dcrdataTxUrl={dcrdataTxUrl} />}
-              {tabId === USER_DETAIL_TAB_PROPOSALS && <ProposalsTab />}
+              {tabId === USER_DETAIL_TAB_PROPOSALS && <ProposalsTab count={user.numofproposals} />}
               {tabId === USER_DETAIL_TAB_COMMENTS && <CommentsTab />}
             </div>
           </div>

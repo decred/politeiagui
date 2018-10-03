@@ -23,6 +23,7 @@ export const CustomContent = ({
   activeVotes,
   onFetchData,
   onFetchUserProposals,
+  count,
   ...props
 }) => {
   const content = error ? (
@@ -61,7 +62,7 @@ export const CustomContent = ({
             }} />
             {
               proposals &&
-              <div style={{ width: "100%", textAlign: "center" }}>
+              <div style={{ width: "100%", maxWidth: "1000px", textAlign: "center" }}>
                 <button
                   style={{ marginTop: "15px" }}
                   className="c-btn c-btn-primary"
@@ -70,7 +71,10 @@ export const CustomContent = ({
                     :
                     onFetchUserProposals(userid, lastLoadedProposal ? lastLoadedProposal.censorshiprecord.token : null)
                   }
-                  disabled={proposalCounts && proposalCounts[filterValue] <= proposals.length}>
+                  disabled={
+                    (count && count <= proposals.length) ||
+                    (proposalCounts && proposalCounts[filterValue] <= proposals.length)
+                  }>
                   Load More
                 </button>
               </div>
