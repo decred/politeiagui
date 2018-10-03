@@ -1,4 +1,5 @@
 import React from "react";
+import { CONFIRMATIONS_REQUIRED } from "../../constants";
 
 const DcrdataTxLink = ({
   isTestnet,
@@ -17,7 +18,8 @@ const formatDate = (date) => {
   const day = d.getUTCDate();
   const year = d.getUTCFullYear();
   const month = d.getUTCMonth();
-  const minutes = d.getUTCMinutes() < 10 ? `0${d.getUTCMinutes()}` : d.getUTCMinutes();
+  const _minutes = d.getUTCMinutes();
+  const minutes = _minutes < 10 ? `0${_minutes}` : _minutes;
   const time = d.getUTCHours() + ":" + minutes;
   return year + "-" + month + "-" + day + "  |  " + time;
 };
@@ -47,6 +49,7 @@ const ProposalCreditsSummary = ({
       numberPurchased: Math.round(lastPaymentNotConfirmed.amount * 1/proposalCreditPrice),
       txId: lastPaymentNotConfirmed.txid,
       price: proposalCreditPrice,
+      confirmations: lastPaymentNotConfirmed.confirmations,
       confirming: true
     };
     proposalCreditPurchases.push(transaction);
@@ -79,8 +82,9 @@ const ProposalCreditsSummary = ({
                 </div>
                 <div className="credit-purchase-cell credit-purchase-status">
                   { creditPurchase.confirming ?
-                    (<div className="user-proposal-credits-cell"><div className="logo"></div></div>)
-                    : "✔"
+                    (<div className="user-proposal-credits-cell" style={{ color: "#ff8100", fontWeight: "bold" }}><div>
+											Awaiting confirmations: </div>({creditPurchase.confirmations} of {CONFIRMATIONS_REQUIRED })</div>)
+                    : <div style={{ fontWeight: "bold", color: "green" }}>Confirmed</div>
                   }
                 </div>
                 <div className="credit-purchase-cell credit-purchase-date-text">

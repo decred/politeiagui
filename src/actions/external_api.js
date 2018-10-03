@@ -4,10 +4,10 @@ import { onUpdatePaymentPollingQueue, onConfirmPollingPayment } from "./app";
 import act from "./methods";
 import {
   PAYWALL_STATUS_LACKING_CONFIRMATIONS,
-  PAYWALL_STATUS_PAID
+  PAYWALL_STATUS_PAID,
+  CONFIRMATIONS_REQUIRED
 } from "../constants";
 
-const CONFIRMATIONS_REQUIRED = 2;
 const POLL_INTERVAL = 10 * 1000;
 export const verifyUserPayment = (address, amount, txNotBefore, credits = false) => dispatch => {
   // Check dcrdata first.

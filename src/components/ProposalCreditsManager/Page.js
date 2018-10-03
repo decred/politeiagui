@@ -4,6 +4,7 @@ import ProposalCreditsSummary from "./Summary";
 import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
 import { multiplyFloatingNumbers } from "../../helpers";
 import { PageLoadingIcon } from "../snew";
+import { CONFIRMATIONS_REQUIRED } from "../../constants";
 
 class ProposalCreditsPage extends React.Component {
   state = { showBuyingMessage: false }
@@ -91,7 +92,7 @@ class ProposalCreditsPage extends React.Component {
                   </p>
                   <p>
                   Politeia automatically checks for a transaction sent to this address.
-                  After you send it and it reaches 2 confirmations, you will be granted
+                  After you send it and it reaches {CONFIRMATIONS_REQUIRED} confirmations, you will be granted
                   the number of proposal credits you paid for.
                   </p>
                   <p style={{ marginTop: "24px" }}>
