@@ -66,7 +66,7 @@ export const onReceiveProposals = (key, state, { payload, error }) => {
       isRequesting: false,
       response: error ? null : {
         ...payload,
-        lastloaded: payload.proposals[payload.proposals.length - 1]
+        lastloaded: payload.proposals ? payload.proposals[payload.proposals.length - 1] : {}
       },
       error: error ? payload : null
     }
