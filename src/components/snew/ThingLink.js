@@ -57,6 +57,7 @@ const ThingLinkComp = ({
   onChangeStatus,
   onStartVote,
   onAuthorizeVote,
+  onRevokeVote,
   setStatusProposalToken,
   onDeleteDraftProposal,
   setStatusProposalError,
@@ -76,10 +77,12 @@ const ThingLinkComp = ({
   const isUnvetted = review_status === PROPOSAL_STATUS_UNREVIEWED || review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES;
   const displayVersion = review_status === PROPOSAL_STATUS_PUBLIC;
   const isVotingActiveOrFinished = voteStatus === PROPOSAL_VOTING_ACTIVE || voteStatus === PROPOSAL_VOTING_FINISHED;
-  const isEditable = authorid === userId && !isVotingActiveOrFinished && review_status !== PROPOSAL_STATUS_CENSORED;
+  const isEditable = authorid === userId && !isVotingActiveOrFinished && review_status !== PROPOSAL_STATUS_CENSORED && voteStatus !== PROPOSAL_VOTING_AUTHORIZED;
+  const disableEditButton = authorid === userId && voteStatus === PROPOSAL_VOTING_AUTHORIZED;
   const hasBeenUpdated = review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES || parseInt(version, 10) > 1;
   const currentUserIsTheAuthor = authorid === userId;
   const userCanAuthorizeTheVote = currentUserIsTheAuthor && voteStatus === PROPOSAL_VOTING_NOT_AUTHORIZED;
+  const userCanRevokeVote = currentUserIsTheAuthor && voteStatus === PROPOSAL_VOTING_AUTHORIZED;
   const adminCanStartTheVote = isAdmin && voteStatus === PROPOSAL_VOTING_AUTHORIZED && ((authorid !== userid) || isTestnet);
   const enableAdminActionsForUnvetted = isAdmin && isUnvetted && ((authorid !== userid) || isTestnet);
   const hasAuthoredComment = () => {
@@ -135,8 +138,8 @@ const ThingLinkComp = ({
               (<Link href={`/domain/${domain}/`}>{domain}</Link>)
             </span>
           ) : null}
-          {isEditable ?
-            <div style={{ flex: "1", display: "flex", justifyContent: "flex-end" }}>
+          <div style={{ flex: "1", display: "flex", justifyContent: "flex-end" }}>
+            {isEditable ?
               <Link
                 href={`/proposals/${id}/edit`}
                 className="edit-proposal"
@@ -144,7 +147,18 @@ const ThingLinkComp = ({
                 <i className="fa fa-edit right-margin-5" />
                 Edit
               </Link>
-            </div> : null}
+              : disableEditButton ?
+                <Tooltip
+                  text="Revoke vote authorization to edit your proposal again."
+                  position="bottom"
+                >
+                  <span style={{ color: "#777" }}>
+                    <i className="fa fa-edit right-margin-5" />
+                  Edit
+                  </span>
+                </Tooltip>
+                : null}
+          </div>
         </span>
         <span className="tagline">
           <span className="submitted-by">
@@ -333,7 +347,7 @@ const ThingLinkComp = ({
                   className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
                   onClick={e =>
                     confirmWithModal(modalTypes.CONFIRM_ACTION, {
-                      message: "Are you sure you want to authorize the admins to start the voting for this proposal?"
+                      message: (<span>Are you sure you want to <b>authorize</b> the admins to start the voting for this proposal?</span>)
                     }).then(
                       confirm => confirm &&
                         onAuthorizeVote(
@@ -347,7 +361,29 @@ const ThingLinkComp = ({
                   data-event-action="authorize-vote"
                   isLoading={loadingAuthorizeVote}
                 />
-              </li> : null
+              </li>
+              : userCanRevokeVote ?
+                <li key="start-vote">
+                  <ButtonWithLoadingIcon
+                    className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                    onClick={e =>
+                      confirmWithModal(modalTypes.CONFIRM_ACTION, {
+                        message: (<span>Are you sure you want to <b>revoke</b> the admins to start the voting for this proposal?</span>)
+                      }).then(
+                        confirm => confirm &&
+                        onRevokeVote(
+                          loggedInAsEmail,
+                          id,
+                          version
+                        )
+                      ) && e.preventDefault()
+                    }
+                    text="Revoke voting auth"
+                    data-event-action="revoke-vote"
+                    isLoading={loadingAuthorizeVote}
+                  />
+                </li>
+                : null
           }
         </ul>
         {allErrors.map((error, idx) => error ?
