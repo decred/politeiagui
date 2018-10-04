@@ -342,7 +342,7 @@ const ThingLinkComp = ({
           }
           {
             userCanAuthorizeTheVote ?
-              <li key="start-vote">
+              <li>
                 <ButtonWithLoadingIcon
                   className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
                   onClick={e =>
@@ -363,7 +363,7 @@ const ThingLinkComp = ({
                 />
               </li>
               : userCanRevokeVote ?
-                <li key="start-vote">
+                <li>
                   <ButtonWithLoadingIcon
                     className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
                     onClick={e =>
