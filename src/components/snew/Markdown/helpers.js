@@ -2,15 +2,14 @@ import React from "react";
 import xssFilters from "xss-filters";
 import * as modalTypes from "../../Modal/modalTypes";
 
-function extractHostname(url) {
-  //find & remove protocol (http, ftp, etc.) and get hostname
-  let hostname = url.indexOf("//") > -1 ? url.split("/")[2] : url.split("/")[0];
-  //find & remove port number
-  hostname = hostname.split(":")[0];
-  //find & remove "?"
-  hostname = hostname.split("?")[0];
-  return hostname;
-}
+export const testLink = (link) => {
+  try {
+    new URL(link);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
 
 export const traverseChildren = (el, cb) => {
   const filterChildren = (c) => React.Children.map(c,
@@ -57,11 +56,10 @@ export const handleFilterXss = (el) => {
 
 const verifyExternalLink = (e, link, confirmWithModal) => {
   e.preventDefault();
-  const hostname = extractHostname(link);
   // Does this to prevent xss attacks
   const tmpLink = document.createElement("a");
   tmpLink.href = link;
-  const externalLink = (tmpLink.hostname && hostname && hostname !== window.top.location.hostname);
+  const externalLink = (tmpLink.hostname && tmpLink.hostname !== window.top.location.hostname);
   // if this is an external link, show confirmation dialog
   if (externalLink) {
     confirmWithModal(modalTypes.CONFIRM_ACTION, {
@@ -75,7 +73,7 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
             External link: {link}
           </p>
           <p>
-            External domain: <strong className="red">{hostname}</strong>
+            External domain: <strong className="red">{tmpLink.hostname}</strong>
           </p>
           <p style={{ marginTop: "10px" }}>
             Are you sure you want to proceed?
@@ -86,11 +84,11 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
       if (confirm) {
         const newWindow = window.open();
         newWindow.opener = null;
-        newWindow.location.href = tmpLink.hostname === hostname ? link : "//" + link;
+        newWindow.location.href = link;
         newWindow.target = "_blank";
       }
     });
-  } else if(hostname) {
+  } else if(tmpLink.hostname) {
     window.location.href = link;
   } else {
     console.log("Blocked potentially malicious link: ", link);
@@ -107,12 +105,12 @@ export const customRenderers = (filterXss, confirmWithModal) => ({
     </a>;
   },
   link: ({ href, children }) => {
-    return <a
+    return( <a
       target="_blank"
       rel="nofollow noopener noreferrer"
       onClick={(e) => confirmWithModal && verifyExternalLink(e, href, confirmWithModal)}
       href={href}
-    >{children[0]}</a>;
+    >{children[0]}</a>);
   },
   root: (el) => {
     if(filterXss) {

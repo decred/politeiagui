@@ -1,7 +1,8 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import { customRenderers } from "./helpers";
+import { customRenderers, testLink } from "./helpers";
 import modalConnector from "../../../connectors/modal";
+
 
 const MarkdownRenderer = ({
   body,
@@ -9,14 +10,23 @@ const MarkdownRenderer = ({
   confirmWithModal,
   filterXss = true,
   displayExternalLikWarning = true
-}) => (
-  <div className={className}>
-    <ReactMarkdown
-      className="md"
-      renderers={customRenderers(filterXss, displayExternalLikWarning && confirmWithModal)}
-      source={body}
-    />
-  </div>
-);
+}) => {
+  const allowNode = (args) => {
+    if (args.type === "link") {
+      return testLink(args.url, confirmWithModal);
+    }
+    return true;
+  };
+  return (
+    <div className={className}>
+      <ReactMarkdown
+        className="md"
+        renderers={customRenderers(filterXss, displayExternalLikWarning && confirmWithModal)}
+        allowNode={allowNode}
+        source={body}
+      />
+    </div>
+  );
+};
 
 export default modalConnector(MarkdownRenderer);
