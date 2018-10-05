@@ -591,7 +591,19 @@ export const onUpdateProposalCredits = () => dispatch => {
 };
 
 export const onAddProposalCredits = ({ amount, txNotBefore }) => (dispatch, getState) => {
-  const creditPrice = getState().api.proposalPaywallDetails.response.creditprice / 100000000;
+  const propPaywallDetails = getState().api.proposalPaywallDetails;
+  let creditPrice = 0.1;
+  if (propPaywallDetails) {
+    creditPrice = propPaywallDetails.response.creditprice / 100000000;
+  } else {
+    api
+      .proposalPaywallDetails()
+      .then(response => {
+        dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS(response));
+        creditPrice = response.creditprice / 100000000;
+      });
+  }
+
   return amount ? dispatch(act.ADD_PROPOSAL_CREDITS({ amount: Math.round(amount * 1/creditPrice), txid: txNotBefore })) : null;
 };
 
