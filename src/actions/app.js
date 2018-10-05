@@ -97,7 +97,6 @@ export const onFetchProposal = (token) => (dispatch, getState) =>
 
 export const onLoadMe = me => dispatch => {
   dispatch(act.LOAD_ME(me));
-  dispatch(act.SET_PROPOSAL_CREDITS(me.response.proposalcredits));
 };
 
 export const onChangeAdminFilter = (option) => act.CHANGE_ADMIN_FILTER_VALUE(option);

@@ -117,6 +117,13 @@ const app = (state = DEFAULT_STATE, action) => (({
     ...state,
     proposalCredits: state.proposalCredits - (action.payload || 0)
   }),
+  [act.LOAD_ME]: () => {
+    const proposalCredits = action.payload.response.proposalcredits;
+    return ({
+      ...state,
+      proposalCredits: proposalCredits || state.proposalCredits
+    });
+  },
   [act.ADD_PROPOSAL_CREDITS]: () => ({
     ...state,
     recentPayments: state.recentPayments ?
