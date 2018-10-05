@@ -4,7 +4,7 @@ import cloneDeep from "lodash/cloneDeep";
 import { DEFAULT_REQUEST_STATE } from "../util";
 import { PROPOSAL_VOTING_ACTIVE } from "../../constants";
 import { request, receive } from "../util";
-import { testReceiveReducer, testRequestReducer, testResetReducer, testResetMultipleReducer } from "./helpers";
+import { testReceiveReducer, testReceiveProposalsReducer, testRequestReducer, testResetReducer, testResetMultipleReducer } from "./helpers";
 
 describe("test api reducer", () => {
   const MOCK_STATE = {
@@ -149,6 +149,7 @@ describe("test api reducer", () => {
   test("default tests for api reducer", () => {
     expect(api.DEFAULT_STATE).toEqual({
       me: DEFAULT_REQUEST_STATE,
+      unvettedStatus: DEFAULT_REQUEST_STATE,
       init: DEFAULT_REQUEST_STATE,
       policy: DEFAULT_REQUEST_STATE,
       newUser: DEFAULT_REQUEST_STATE,
@@ -499,11 +500,11 @@ describe("test api reducer", () => {
       { action: act.REQUEST_CHANGE_PASSWORD, key: "changePassword", type: "request" },
       { action: act.RECEIVE_CHANGE_PASSWORD, key: "changePassword", type: "receive" },
       { action: act.REQUEST_USER_PROPOSALS, key: "userProposals", type: "request" },
-      { action: act.RECEIVE_USER_PROPOSALS, key: "userProposals", type: "receive" },
+      { action: act.RECEIVE_USER_PROPOSALS, key: "userProposals", type: "receiveProposals" },
       { action: act.REQUEST_VETTED, key: "vetted", type: "request" },
-      { action: act.RECEIVE_VETTED, key: "vetted", type: "receive" },
+      { action: act.RECEIVE_VETTED, key: "vetted", type: "receiveProposals" },
       { action: act.REQUEST_UNVETTED, key: "unvetted", type: "request" },
-      { action: act.RECEIVE_UNVETTED, key: "unvetted", type: "receive" },
+      { action: act.RECEIVE_UNVETTED, key: "unvetted", type: "receiveProposals" },
       { action: act.REQUEST_PROPOSAL, key: "proposal", type: "request" },
       { action: act.RECEIVE_PROPOSAL, key: "proposal", type: "receive" },
       { action: act.REQUEST_PROPOSAL_COMMENTS, key: "proposalComments", type: "request" },
@@ -557,12 +558,23 @@ describe("test api reducer", () => {
         error: false
       };
 
+      const MOCK_PROPOSALS_ACTION = {
+        type: action,
+        payload: {
+          proposals: []
+        },
+        error: false
+      };
+
       switch (type) {
       case "request":
         testRequestReducer(api.default, key, {}, MOCK_ACTION);
         break;
       case "receive":
         testReceiveReducer(api.default, key, {}, MOCK_ACTION);
+        break;
+      case "receiveProposals":
+        testReceiveProposalsReducer(api.default, key, {}, MOCK_PROPOSALS_ACTION);
         break;
       case "reset":
         testResetReducer(api.default, key, {}, MOCK_ACTION);

@@ -4,6 +4,7 @@ import map from "lodash/fp/map";
 import cloneDeep from "lodash/cloneDeep";
 import { DEFAULT_REQUEST_STATE, request, receive, reset, resetMultiple } from "./util";
 import { PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_AUTHORIZED, PROPOSAL_VOTING_NOT_AUTHORIZED } from "../constants";
+import { removeProposalsDuplicates } from "../helpers";
 
 export const DEFAULT_STATE = {
   me: DEFAULT_REQUEST_STATE,
@@ -32,8 +33,44 @@ export const DEFAULT_STATE = {
   updateUserKey: DEFAULT_REQUEST_STATE,
   verifyUserKey: DEFAULT_REQUEST_STATE,
   likeComment: DEFAULT_REQUEST_STATE,
+  unvettedStatus: DEFAULT_REQUEST_STATE,
   email: "",
   keyMismatch: false
+};
+
+export const onReceiveProposals = (key, state, { payload, error }) => {
+  if (state[key] && state[key].response && state[key].response.proposals) {
+
+    const newProposoalArray = removeProposalsDuplicates(state[key].response.proposals, payload.proposals)
+      .sort((a, b) => b.timestamp - a.timestamp);
+
+    const lastloaded = payload.proposals.length > 0 ? payload.proposals[payload.proposals.length - 1] : null;
+    return ({
+      ...state,
+      [key]: {
+        ...state[key],
+        isRequesting: false,
+        response: error ? null : {
+          numofproposals: payload.numofproposals,
+          proposals: newProposoalArray,
+          lastloaded: lastloaded
+        },
+        error: error ? payload : null
+      }
+    });
+  }
+  return ({
+    ...state,
+    [key]: {
+      ...state[key],
+      isRequesting: false,
+      response: error ? null : {
+        ...payload,
+        lastloaded: payload.proposals ? payload.proposals[payload.proposals.length - 1] : {}
+      },
+      error: error ? payload : null
+    }
+  });
 };
 
 export const onReceiveSetStatus = (state, action) => {
@@ -308,11 +345,13 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.REQUEST_CHANGE_PASSWORD]: () => request("changePassword", state, action),
   [act.RECEIVE_CHANGE_PASSWORD]: () => receive("changePassword", state, action),
   [act.REQUEST_USER_PROPOSALS]: () => request("userProposals", state, action),
-  [act.RECEIVE_USER_PROPOSALS]: () => receive("userProposals", state, action),
+  [act.RECEIVE_USER_PROPOSALS]: () => onReceiveProposals("userProposals", state, action),
   [act.REQUEST_VETTED]: () => request("vetted", state, action),
-  [act.RECEIVE_VETTED]: () => receive("vetted", state, action),
+  [act.RECEIVE_VETTED]: () => onReceiveProposals("vetted", state, action),
   [act.REQUEST_UNVETTED]: () => request("unvetted", state, action),
-  [act.RECEIVE_UNVETTED]: () => receive("unvetted", state, action),
+  [act.RECEIVE_UNVETTED]: () => onReceiveProposals("unvetted", state, action),
+  [act.REQUEST_UNVETTED_STATUS]: () => request("unvettedStatus", state, action),
+  [act.RECEIVE_UNVETTED_STATUS]: () => receive("unvettedStatus", state, action),
   [act.REQUEST_PROPOSAL]: () => request("proposal", state, action),
   [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
   [act.REQUEST_PROPOSAL_COMMENTS]: () => request("proposalComments", state, action),

@@ -12,6 +12,7 @@ export const getApiResponse = key => get([ "api", key, "response" ]);
 export const getApiError = key => get([ "api", key, "error" ]);
 
 export const isApiRequestingInit = getIsApiRequesting("init");
+export const isApiRequestingUnvettedStatus = getIsApiRequesting("unvettedStatus");
 export const isApiRequestingMe = getIsApiRequesting("me");
 const isApiRequestingPolicy = getIsApiRequesting("policy");
 export const isApiRequestingNewUser = getIsApiRequesting("newUser");
@@ -44,6 +45,7 @@ const apiSetStatusProposalPayload = getApiPayload("setStatusProposal");
 const apiEditUserPayload = getApiPayload("editUser");
 
 export const apiMeResponse = getApiResponse("me");
+export const apiUnvettedStatusResponse = getApiResponse("unvettedStatus");
 const apiInitResponse = getApiResponse("init");
 const apiPolicyResponse = getApiResponse("policy");
 const apiNewUserResponse = getApiResponse("newUser");
@@ -253,6 +255,18 @@ export const getPropVoteStatus = state => token => {
 export const userid = state => state.api.me.response && state.api.me.response.userid;
 export const censoredComment = state => state.api.censorComment.response;
 
+const lastLoaded = (func, state) => func(state) ? func(state).lastloaded : {};
+
+export const lastLoadedUnvettedProposal = state => lastLoaded(apiUnvettedResponse, state);
+export const lastLoadedVettedProposal = state => lastLoaded(apiVettedResponse, state);
+export const lastLoadedUserProposal = state => lastLoaded(apiUserProposalsResponse, state);
+
+export const lastLoadedUserDetailProposal = state => {
+  const vp = user(state) ? user(state).proposals : [];
+  const last = Object.keys(vp).length - 1;
+  return last > -1 ? vp[last] : {};
+};
+
 export const serverPubkey = compose(get("pubkey"), apiInitResponse);
 export const userPubkey = compose(get("publickey"), apiMeResponse);
 export const commentsVotes = or(compose(get("commentsvotes"), apiCommentsVotesResponse), constant(null));
@@ -262,6 +276,7 @@ export const apiVettedProposals = or(compose(get("proposals"), apiVettedResponse
 export const vettedProposalsIsRequesting = isApiRequestingVetted;
 export const vettedProposalsError = or(apiInitError, apiVettedError);
 export const apiUserProposals = or(compose(get("proposals"), apiUserProposalsResponse), constant(null));
+export const numOfUserProposals = or(compose(get("numofproposals"), apiUserProposalsResponse), constant(0));
 export const userProposalsIsRequesting = isApiRequestingUserProposals;
 export const userProposalsError = or(apiInitError, apiUserProposalsError);
 export const apiUnvettedProposals = or(compose(get("proposals"), apiUnvettedResponse), constant([]));
@@ -307,6 +322,7 @@ export const editProposalToken = compose(get([ "proposal", "censorshiprecord", "
 
 export const isApiRequesting = or(
   isApiRequestingInit,
+  isApiRequestingUnvettedStatus,
   isApiRequestingPolicy,
   isApiRequestingNewUser,
   isApiRequestingVerifyNewUser,

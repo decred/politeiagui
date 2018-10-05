@@ -10,11 +10,14 @@ import {
   apiProposalComments,
   userAlreadyPaid,
   getKeyMismatch,
+  apiPropsVoteStatusResponse,
   apiUnvettedProposals,
   apiVettedProposals,
   getPropVoteStatus,
   apiUserProposals,
-  proposalCreditPurchases
+  proposalCreditPurchases,
+  apiUnvettedStatusResponse,
+  numOfUserProposals
 } from "./api";
 import { globalUsernamesById } from "../actions/app";
 import {
@@ -31,7 +34,7 @@ import {
   PROPOSAL_USER_FILTER_SUBMITTED,
   PROPOSAL_USER_FILTER_DRAFT
 } from "../constants";
-import { getTextFromIndexMd } from "../helpers";
+import { getTextFromIndexMd, countPublicProposals } from "../helpers";
 
 export const replyTo = or(get([ "app", "replyParent" ]), constant(0));
 
@@ -154,7 +157,7 @@ export const getUnvettedFilteredProposals = (state) => {
       return true;
     }
     return filterValue === proposal.status;
-  });
+  }).sort((a, b) => b.timestamp - a.timestamp);
 };
 
 export const getVettedFilteredProposals = (state) => {
@@ -168,7 +171,7 @@ export const getVettedFilteredProposals = (state) => {
       return true;
     }
     return filterValue === getPropVoteStatus(state)(prop.censorshiprecord.token).status;
-  });
+  }).sort((a, b) => b.timestamp - a.timestamp);
 };
 
 export const getDraftProposals = (state) => {
@@ -194,7 +197,7 @@ export const getUserProposals = (state) => {
 
 export const getUserProposalFilterCounts = (state) => {
   const proposalFilterCounts = {
-    [PROPOSAL_USER_FILTER_SUBMITTED]: apiUserProposals(state).length,
+    [PROPOSAL_USER_FILTER_SUBMITTED]: numOfUserProposals(state),
     [PROPOSAL_USER_FILTER_DRAFT]: getDraftProposals(state).length
   };
 
@@ -206,29 +209,18 @@ export const getUserProposalFilterCounts = (state) => {
 };
 
 export const getUnvettedProposalFilterCounts = (state) => {
-  const proposals = unvettedProposals(state);
-  const proposalFilterCounts = {};
-
-  proposals.forEach(proposal => {
-    proposalFilterCounts[proposal.status] = 1 + (proposalFilterCounts[proposal.status] || 0);
-  });
-  proposalFilterCounts[PROPOSAL_FILTER_ALL] = proposals.length;
-
-  return proposalFilterCounts;
+  const usResponse = apiUnvettedStatusResponse(state);
+  console.log("us: ", usResponse);
+  return usResponse ? {
+    [PROPOSAL_STATUS_UNREVIEWED]: usResponse.numofunvetted + usResponse.numofunvettedchanges,
+    [PROPOSAL_STATUS_CENSORED]: usResponse.numofcensored,
+    [PROPOSAL_FILTER_ALL]: usResponse.numofunvetted + usResponse.numofunvettedchanges + usResponse.numofcensored
+  } : {};
 };
 
 export const getVettedProposalFilterCounts = (state) => {
-  const proposals = vettedProposals(state);
-  const proposalFilterCounts = {};
-
-  proposals.forEach(proposal => {
-    const propVoteStatus = getPropVoteStatus(state)(proposal.censorshiprecord.token);
-    const status = propVoteStatus.status;
-    proposalFilterCounts[status] = 1 + (proposalFilterCounts[status] || 0);
-  });
-  proposalFilterCounts[PROPOSAL_FILTER_ALL] = proposals.length;
-
-  return proposalFilterCounts;
+  const vsResponse = apiPropsVoteStatusResponse(state);
+  return vsResponse ? countPublicProposals(vsResponse.votesstatus) : {};
 };
 
 export const getUnvettedEmptyProposalsMessage = (state) => {
