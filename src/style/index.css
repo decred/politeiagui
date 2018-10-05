@@ -1124,12 +1124,13 @@ li p.header-3 {
 
 .credit-purchase-header .credit-purchase-cell {
   font-weight: bold;
+  width: 100%;
 }
 
 .credit-purchase-body .credit-purchase-cell {
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  width: 100%;
 }
 
 .credit-purchase-date {
@@ -1138,30 +1139,25 @@ li p.header-3 {
 }
 
 .credit-purchase-date-text {
-  width: 180px;
-  text-align: left;
+  text-align: center;
 }
 
 .credit-purchase-number {
-  width: 40px;
+	width: 40% !important;
   text-align: center;
 }
 .credit-purchase-price {
-  width: 100px;
   text-align: center;
 }
 .credit-purchase-tx {
-  width: 250px;
   text-align: center;
-
 }
 .credit-purchase-status {
-  width: 80px;
+  width: 100px;
   text-align: center;
 }
 .credit-purchase-status-font {
   font-weight: 500;
-
 }
 .user-page {
   margin: 0 auto;
