@@ -368,7 +368,7 @@ const ThingLinkComp = ({
                     className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
                     onClick={e =>
                       confirmWithModal(modalTypes.CONFIRM_ACTION, {
-                        message: (<span>Are you sure you want to <b>revoke</b> the admins to start the voting for this proposal?</span>)
+                        message: (<span>Are you sure you want to <b>revoke</b> the start voting authorization for this proposal?</span>)
                       }).then(
                         confirm => confirm &&
                         onRevokeVote(
@@ -378,7 +378,7 @@ const ThingLinkComp = ({
                         )
                       ) && e.preventDefault()
                     }
-                    text="Revoke voting auth"
+                    text="Revoke voting authorization"
                     data-event-action="revoke-vote"
                     isLoading={loadingAuthorizeVote}
                   />
