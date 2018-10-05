@@ -28,7 +28,7 @@ export const CustomContent = ({
 }) => {
   const showList = (listings && listings.length > 0) ||
     (proposals && proposals.length > 0) ||
-    proposalCounts && filterValue >= 0 && proposalCounts[filterValue] !== 0;
+    (proposalCounts && filterValue >= 0 && proposalCounts[filterValue]) !== 0;
   const showLoadMore = proposals &&
     ((count && count > proposals.length) ||
     (proposalCounts && filterValue >= 0 && proposalCounts[filterValue] > proposals.length));
