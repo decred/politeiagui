@@ -632,11 +632,24 @@ export const onFetchProposalVoteStatus = (token) => (dispatch) => {
 export const onAuthorizeVote = (email, token, version) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_AUTHORIZE_VOTE({ token }));
-    return api.proposalAuthorizeVote(csrf, token, email, version).then(
-      response => dispatch(act.RECEIVE_AUTHORIZE_VOTE({ ...response, succes: true }))
+    return api.proposalAuthorizeOrRevokeVote(csrf, "authorize", token, email, version).then(
+      response => dispatch(act.RECEIVE_AUTHORIZE_VOTE({ ...response, success: true }))
     ).catch(
       error => {
         dispatch(act.RECEIVE_AUTHORIZE_VOTE(null, error));
+        throw error;
+      }
+    );
+  });
+
+export const onRevokeVote = (email, token, version) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_AUTHORIZE_VOTE({ token }));
+    return api.proposalAuthorizeOrRevokeVote(csrf, "revoke", token, email, version).then(
+      response => dispatch(act.RECEIVE_REVOKE_AUTH_VOTE({ ...response, success: true }))
+    ).catch(
+      error => {
+        dispatch(act.RECEIVE_REVOKE_AUTH_VOTE(null, error));
         throw error;
       }
     );

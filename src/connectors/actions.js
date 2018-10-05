@@ -25,6 +25,7 @@ const actions = connect(
     onDeleteDraftProposal: act.onDeleteDraftProposal,
     onStartVote: act.onStartVote,
     onAuthorizeVote: act.onAuthorizeVote,
+    onRevokeVote: act.onRevokeVote,
     openModal: act.openModal
   }
 );

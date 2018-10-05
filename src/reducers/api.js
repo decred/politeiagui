@@ -3,7 +3,7 @@ import get from "lodash/fp/get";
 import map from "lodash/fp/map";
 import cloneDeep from "lodash/cloneDeep";
 import { DEFAULT_REQUEST_STATE, request, receive, reset, resetMultiple } from "./util";
-import { PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_AUTHORIZED } from "../constants";
+import { PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_AUTHORIZED, PROPOSAL_VOTING_NOT_AUTHORIZED } from "../constants";
 
 export const DEFAULT_STATE = {
   me: DEFAULT_REQUEST_STATE,
@@ -368,6 +368,7 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_PROPOSAL_VOTE_STATUS]: () => receive("proposalVoteStatus", state, action),
   [act.REQUEST_AUTHORIZE_VOTE]: () => request("authorizeVote", state, action),
   [act.RECEIVE_AUTHORIZE_VOTE]: () => onReceiveVoteStatusChange("authorizeVote", PROPOSAL_VOTING_AUTHORIZED, state, action),
+  [act.RECEIVE_REVOKE_AUTH_VOTE]: () => onReceiveVoteStatusChange("authorizeVote", PROPOSAL_VOTING_NOT_AUTHORIZED, state, action),
   [act.RECEIVE_LOGOUT]: () => {
     const tempState = DEFAULT_STATE;
     tempState.init = state.init;

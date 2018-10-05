@@ -504,8 +504,8 @@ describe("api integration modules (lib/api.js)", () => {
   test("authorize vote to start (api/v1/proposals/authorizevote)", async () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/proposals/authorizevote",
-      api.proposalAuthorizeVote,
-      [ FAKE_CSRF, PROPOSAL_TOKEN, EMAIL, PROPOSAL_VERSION ]
+      api.proposalAuthorizeOrRevokeVote,
+      [ FAKE_CSRF, "authorize", PROPOSAL_TOKEN, EMAIL, PROPOSAL_VERSION ]
     );
   });
 
