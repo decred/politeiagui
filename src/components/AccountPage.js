@@ -105,7 +105,8 @@ class KeyPage extends React.Component {
       onIdentityImported,
       identityImportError,
       identityImportSuccess,
-      userPubkey
+      userPubkey,
+      userID
     } = this.props;
     const { pubkey, pubkeyStatus, showIdentityHelpText } = this.state;
     return (
@@ -174,7 +175,8 @@ class KeyPage extends React.Component {
               </p>
             </div>
           ) : null}
-          <div className="public-key">Your public key: {pubkeyStatus === PUB_KEY_STATUS_LOADED ? (pubkey || "none") : "Loading public key..." }</div>
+          <div className="account-info"><b>Your public key:</b> {pubkeyStatus === PUB_KEY_STATUS_LOADED ? (pubkey || "none") : "Loading public key..." }</div>
+          <div className="account-info"><b>Your user ID:</b> {userID}</div>
           {updateUserKey &&
             updateUserKey.success && (
             <Message
