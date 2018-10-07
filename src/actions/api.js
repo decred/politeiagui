@@ -439,7 +439,7 @@ export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
       });
   });
 
-export const onSubmitStatusProposal = (loggedInAsEmail, token, status, censorMessage = "") =>
+export const onSubmitStatusProposal = (authorid, loggedInAsEmail, token, status, censorMessage = "") =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
     if (status === 4) {
@@ -448,8 +448,13 @@ export const onSubmitStatusProposal = (loggedInAsEmail, token, status, censorMes
 
     return api
       .proposalSetStatus(loggedInAsEmail, csrf, token, status, censorMessage)
-      .then(response => {
-        dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(response));
+      .then(({ proposal }) => {
+        dispatch(act.RECEIVE_SETSTATUS_PROPOSAL({
+          proposal: {
+            ...proposal,
+            userid: authorid
+          }
+        }));
         dispatch(onFetchUnvettedStatus());
       })
       .catch(error => {

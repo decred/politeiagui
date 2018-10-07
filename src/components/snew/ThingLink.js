@@ -285,6 +285,7 @@ const ThingLinkComp = ({
                     reasonPlaceholder: "Please provide a reason to censor this proposal"
                   }).then(
                     ({ reason, confirm }) => confirm && onChangeStatus(
+                      authorid,
                       loggedInAsEmail,
                       id,
                       PROPOSAL_STATUS_CENSORED,
@@ -305,6 +306,7 @@ const ThingLinkComp = ({
                     }).then(
                       confirm => confirm &&
                         onChangeStatus(
+                          authorid,
                           loggedInAsEmail,
                           id,
                           PROPOSAL_STATUS_PUBLIC

@@ -390,15 +390,13 @@ describe("test api reducer", () => {
     expect(api.onReceiveNewComment({}, action2)).toEqual(receive("newComment", {}, action2));
   });
 
-  test("correcly updates status state for onReceiveSetStatus", () => {
+  test("correcly updates status state for onReceiveSetStatus (unvetted -> vetted)", () => {
     const proposalUpdated = {
-      censorshiprecord: {
-        token: "censortoken"
-      },
-      status: 3
+      ...MOCK_STATE.unvetted.response.proposals[0],
+      status: 4
     };
 
-    let action = {
+    const action = {
       type: act.RECEIVE_SETSTATUS_PROPOSAL,
       payload: {
         proposal: proposalUpdated
@@ -407,38 +405,51 @@ describe("test api reducer", () => {
     };
 
     let state = request("setStatusProposal", MOCK_STATE, action);
-    let newState = api.onReceiveSetStatus(state, action);
+    state= api.onReceiveSetStatus(state, action);
 
     expect(api.default(state, action).proposal.response.proposal)
       .toEqual(proposalUpdated);
 
     // updates status to 'vetted' for the proposal with token 'censortoken'
-    expect(newState.proposal.response.proposal).toEqual(proposalUpdated);
+    expect(state.proposal.response.proposal).toEqual(proposalUpdated);
 
-    expect(newState.unvetted.response.proposals).toEqual([
-      proposalUpdated,
-      {
-        censorshiprecord: {
-          token: "anothertoken"
-        }
-      }
-    ]);
-    action = {
-      ...action,
-      payload: {
-        proposal: {
-          censorshiprecord: {
-            token: "misctoken"
-          }
-        }
-      }
+    // make sure the proposal was removed from the unvetted list
+    expect(state.unvetted.response.proposals).toEqual(
+      MOCK_STATE.unvetted.response.proposals.filter((_, i) => i !== 0)
+    );
+
+    // make sure the proposal was added to the vetted list
+    expect(state.vetted.response.proposals).toEqual([proposalUpdated]);
+  });
+
+  test("correcly updates status state for onReceiveSetStatus (unvetted -> censored)", () => {
+    const proposalUpdated = {
+      ...MOCK_STATE.unvetted.response.proposals[0],
+      status: 3
     };
 
-    state = request("setStatusProposal", MOCK_STATE, action);
-    newState = api.onReceiveSetStatus(state, action);
+    const action = {
+      type: act.RECEIVE_SETSTATUS_PROPOSAL,
+      payload: {
+        proposal: proposalUpdated
+      },
+      error: false
+    };
 
-    // doesn't update any proposal status
-    expect(newState.unvetted.response.proposals).toEqual(MOCK_STATE.unvetted.response.proposals);
+    let state = request("setStatusProposal", MOCK_STATE, action);
+    state= api.onReceiveSetStatus(state, action);
+
+    expect(api.default(state, action).proposal.response.proposal)
+      .toEqual(proposalUpdated);
+
+    // updates status to 'censored' for the proposal with token 'censortoken'
+    expect(state.proposal.response.proposal).toEqual(proposalUpdated);
+
+    // make sure the proposal was updated and kept in the unvetted list
+    expect(state.unvetted.response.proposals[0]).toEqual(proposalUpdated);
+
+    // make sure vetted list is still the same
+    expect(state.vetted.response.proposals).toEqual([]);
   });
 
   test("correcly updates state for onReceiveStartVote", () => {
