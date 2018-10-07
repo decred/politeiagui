@@ -89,7 +89,8 @@ describe("test api reducer", () => {
         ]
       }
     },
-    vetted: DEFAULT_REQUEST_STATE
+    vetted: DEFAULT_REQUEST_STATE,
+    userProposals: DEFAULT_REQUEST_STATE
   };
 
   const MOCK_PROPOSALS_LOAD = [

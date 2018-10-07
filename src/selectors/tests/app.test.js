@@ -84,7 +84,7 @@ describe("test app selector", () => {
 
   it("test selector getUnvettedFilteredProposals", () => {
     expect(sel.getUnvettedFilteredProposals(MOCK_STATE))
-      .toEqual([ MOCK_STATE.api.unvetted.response.proposals[0], MOCK_STATE.api.unvetted.response.proposals[2] ]);
+      .toEqual([ MOCK_STATE.api.unvetted.response.proposals[2], MOCK_STATE.api.unvetted.response.proposals[0] ]);
 
     const state = { ...MOCK_STATE, app: { ...MOCK_STATE.app, adminProposalsShow: 0 } };
 
