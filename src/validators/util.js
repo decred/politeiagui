@@ -17,6 +17,12 @@ export function proposalNameValidator(name, supportedChars) {
   return matches.length === name.length;
 }
 
+export function urlValidator(text) {
+  const regexp = /\[(.*?)\]\((.*?)\)/gi;
+  const links = text.match(regexp);
+  console.log("LINKES", links, text, regexp);
+}
+
 export function lengthValidator(str, minLength, maxLength) {
   let v = str.length >= minLength;
   if(maxLength) {
