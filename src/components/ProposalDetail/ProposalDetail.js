@@ -33,6 +33,7 @@ class ProposalDetail extends React.Component {
     if(!nextProps.comments || nextProps.comments.length === 0) {
       return;
     }
+
     // sort option changed
     if(currentProps.commentsSortOption !== nextProps.commentsSortOption) {
       sortedComments = updateSortedComments(
@@ -53,6 +54,17 @@ class ProposalDetail extends React.Component {
         currentProps.commentsSortOption,
         nextProps.commentsvotes,
         isEmpty
+      );
+    }
+
+    /* Shallow comparison to verify if arrays are different.
+    It means they are not pointing to the same object,
+    not that their values are different */
+    if (currentProps.comments !== nextProps.comments) {
+      sortedComments = updateSortedComments(
+        nextProps.comments,
+        currentProps.commentsSortOption,
+        nextProps.commentsvotes,
       );
     }
 
