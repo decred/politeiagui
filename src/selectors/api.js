@@ -93,6 +93,9 @@ export const apiStartVoteError = getApiError("startVote");
 export const isApiRequestingStartVote = getIsApiRequesting("startVote");
 export const apiStartVoteToken = compose(get("token"), apiStartVotePayload);
 
+export const isApiRequestingSetProposalStatusByToken = state => token => {
+  return setStatusProposalIsRequesting(state) && setStatusProposalToken(state) === token && setStatusProposalStatus(state);
+};
 
 const apiProposalPaywallDetailsResponse = getApiResponse("proposalPaywallDetails");
 export const proposalPaywallAddress = compose(get("paywalladdress"), apiProposalPaywallDetailsResponse);
@@ -255,17 +258,23 @@ export const getPropVoteStatus = state => token => {
 export const userid = state => state.api.me.response && state.api.me.response.userid;
 export const censoredComment = state => state.api.censorComment.response;
 
-const lastLoaded = (func, state) => func(state) ? func(state).lastloaded : {};
+// const lastLoaded = (func, state) => func(state) ? func(state).lastloaded : {};
+// export const lastLoadedUnvettedProposal = state => lastLoaded(apiUnvettedResponse, state);
+// export const lastLoadedVettedProposal = state => lastLoaded(apiVettedResponse, state);
+// export const lastLoadedUserProposal = state => lastLoaded(apiUserProposalsResponse, state);
 
-export const lastLoadedUnvettedProposal = state => lastLoaded(apiUnvettedResponse, state);
-export const lastLoadedVettedProposal = state => lastLoaded(apiVettedResponse, state);
-export const lastLoadedUserProposal = state => lastLoaded(apiUserProposalsResponse, state);
+export const getApiLastLoaded = key => get([ "api", "lastLoaded", key ]);
 
-export const lastLoadedUserDetailProposal = state => {
-  const vp = user(state) ? user(state).proposals : [];
-  const last = Object.keys(vp).length - 1;
-  return last > -1 ? vp[last] : {};
-};
+export const lastLoadedUnvettedProposal = getApiLastLoaded("unvetted");
+export const lastLoadedVettedProposal = getApiLastLoaded("vetted");
+export const lastLoadedUserProposal = getApiLastLoaded("userProposals");
+export const lastLoadedUserDetailProposal = getApiLastLoaded("user");
+
+// export const lastLoadedUserDetailProposal = state => {
+//   const vp = user(state) ? user(state).proposals : [];
+//   const last = Object.keys(vp).length - 1;
+//   return last > -1 ? vp[last] : {};
+// };
 
 export const serverPubkey = compose(get("pubkey"), apiInitResponse);
 export const userPubkey = compose(get("publickey"), apiMeResponse);
@@ -275,8 +284,8 @@ export const isLoadingSubmit = or(isApiRequestingPolicy, isApiRequestingInit);
 export const apiVettedProposals = or(compose(get("proposals"), apiVettedResponse), constant([]));
 export const vettedProposalsIsRequesting = isApiRequestingVetted;
 export const vettedProposalsError = or(apiInitError, apiVettedError);
-export const apiUserProposals = or(compose(get("proposals"), apiUserProposalsResponse), constant(null));
 export const numOfUserProposals = or(compose(get("numofproposals"), apiUserProposalsResponse), constant(0));
+export const apiUserProposals = or(compose(get("proposals"), apiUserProposalsResponse), constant([]));
 export const userProposalsIsRequesting = isApiRequestingUserProposals;
 export const userProposalsError = or(apiInitError, apiUserProposalsError);
 export const apiUnvettedProposals = or(compose(get("proposals"), apiUnvettedResponse), constant([]));
@@ -304,6 +313,7 @@ export const newProposalFiles = compose(get("files"), apiNewProposalPayload);
 export const setStatusProposal = compose(get("status"), apiSetStatusProposalResponse);
 export const setStatusProposalIsRequesting = isApiRequestingSetStatusProposal;
 export const setStatusProposalToken = compose(get("token"), apiSetStatusProposalPayload);
+export const setStatusProposalStatus = compose(get("status"), apiSetStatusProposalPayload);
 export const setStatusProposalError = apiSetStatusProposalError;
 export const redirectedFrom = get([ "api", "login", "redirectedFrom" ]);
 export const verificationToken = compose(get("verificationtoken"), apiNewUserResponse);

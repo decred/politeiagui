@@ -71,7 +71,8 @@ const ThingLinkComp = ({
   authorizeVoteError,
   isRequestingStartVote,
   startVoteToken,
-  startVoteError
+  startVoteError,
+  isApiRequestingSetProposalStatusByToken
 }) => {
   const voteStatus = getVoteStatus(id) && getVoteStatus(id).status;
   const isUnvetted = review_status === PROPOSAL_STATUS_UNREVIEWED || review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES;
@@ -101,6 +102,10 @@ const ThingLinkComp = ({
   // loading flags
   const loadingStartVote = isRequestingStartVote && startVoteToken === id;
   const loadingAuthorizeVote = isRequestingAuthorizeVote && authorizeVoteToken === id;
+
+  const status = isApiRequestingSetProposalStatusByToken(id);
+  const loadingCensor = status && status === PROPOSAL_STATUS_CENSORED;
+  const loadingApprove = status && status === PROPOSAL_STATUS_PUBLIC;
 
   return (
     <div
@@ -274,53 +279,44 @@ const ThingLinkComp = ({
           {enableAdminActionsForUnvetted ?
             [
               <li key="spam">
-                <form
-                  className="toggle remove-button"
-                  onSubmit={e => confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
+                <ButtonWithLoadingIcon
+                  className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                  onClick={e => confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
                     reasonPlaceholder: "Please provide a reason to censor this proposal"
                   }).then(
                     ({ reason, confirm }) => confirm && onChangeStatus(
+                      authorid,
                       loggedInAsEmail,
                       id,
                       PROPOSAL_STATUS_CENSORED,
                       reason
                     )
                   ) && e.preventDefault()}
-                >
-                  <button
-                    className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                    data-event-action="spam"
-                    type="submit"
-                  >
-                    spam
-                  </button>
-                </form>
+                  text="Spam"
+                  data-event-action="spam"
+                  isLoading={loadingCensor}
+                />
               </li>,
               <li key="approve">
-                <form
-                  className="toggle approve-button"
-                  onSubmit={e =>
+                <ButtonWithLoadingIcon
+                  className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                  onClick={e =>
                     confirmWithModal(modalTypes.CONFIRM_ACTION, {
                       message: "Are you sure you want to publish this proposal?"
                     }).then(
                       confirm => confirm &&
                         onChangeStatus(
+                          authorid,
                           loggedInAsEmail,
                           id,
                           PROPOSAL_STATUS_PUBLIC
                         )
                     ) && e.preventDefault()
                   }
-                >
-                  <button
-                    className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                    data-event-action="approve"
-                    type="submit"
-                    disabled={!userCanExecuteActions}
-                  >
-                    approve
-                  </button>
-                </form>
+                  text="approve"
+                  data-event-action="approve"
+                  isLoading={loadingApprove}
+                />
               </li>
             ] : null
           }
@@ -401,19 +397,6 @@ const ThingLinkComp = ({
   );
 };
 
-export const Comp = actions(ThingLinkComp);
-
-class ThingLink extends React.Component {
-
-  componentDidMount() {
-    const { isProposalStatusApproved, history } = this.props;
-    if (isProposalStatusApproved)
-      history.push("/");
-  }
-
-  render() {
-    return <Comp {...this.props} />;
-  }
-}
+export const ThingLink = actions(ThingLinkComp);
 
 export default thingLinkConnector(withRouter(ThingLink));

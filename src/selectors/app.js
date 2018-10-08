@@ -4,6 +4,7 @@ import eq from "lodash/fp/eq";
 import filter from "lodash/fp/filter";
 import find from "lodash/fp/find";
 import qs from "query-string";
+import orderBy from "lodash/fp/orderBy";
 import { or, constant, not } from "../lib/fp";
 import {
   apiProposal,
@@ -14,11 +15,12 @@ import {
   apiUnvettedProposals,
   apiVettedProposals,
   getPropVoteStatus,
-  apiUserProposals,
   proposalCreditPurchases,
   apiUnvettedStatusResponse,
-  numOfUserProposals
+  numOfUserProposals,
+  userid
 } from "./api";
+
 import { globalUsernamesById } from "../actions/app";
 import {
   PAYWALL_STATUS_PAID,
@@ -184,10 +186,22 @@ export const getDraftProposals = (state) => {
   return drafts;
 };
 
+export const getSubmittedUserProposals = (state) => (userID) => {
+  const isUserProp = prop => prop.userid === userID;
+  const vettedProps = vettedProposals(state).filter(isUserProp);
+  const unvettedProps = unvettedProposals(state).filter(isUserProp);
+
+  const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
+
+  return sortByNewestFirst(vettedProps.concat(unvettedProps));
+};
+
 export const getUserProposals = (state) => {
   const userFilterValue = getUserFilterValue(state);
+  const userID = userid(state);
+
   if (userFilterValue === PROPOSAL_USER_FILTER_SUBMITTED) {
-    return apiUserProposals(state);
+    return getSubmittedUserProposals(state)(userID);
   } else if (userFilterValue === PROPOSAL_USER_FILTER_DRAFT) {
     return getDraftProposals(state);
   }
@@ -246,6 +260,7 @@ export const getVettedEmptyProposalsMessage = (state) => {
     return "There are no proposals";
   }
 };
+
 
 export const votesEndHeight = (state) => state.app.votesEndHeight || {};
 

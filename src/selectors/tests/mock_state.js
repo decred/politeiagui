@@ -12,6 +12,26 @@ const FAKE_PUBKEY = "fake_pub_key";
 const FAKE_CSRF   = "fake_csrf_token";
 const FAKE_TOKEN  = "fake_token";
 
+const MOCK_USER_PROPS = [
+  {
+    name:
+      "Proposal to mitigate risks regarding identity theft and forgery",
+    status: 2,
+    numcomments: 3,
+    timestamp: 1505940194,
+    censorshiprecord: {
+      token:
+        "6284c5f8fba5664453b8e6651ebc8747b289fed242d2f880f64a284496bb4ca11",
+      merkle:
+        "0dd10219cd79342166085cbe6f737bd54efe119b24c84cbc053023ed6b7da4c8",
+      signature:
+        "f5ea17d547d8347a2f2d009dcb7e89fcc96613d7aaff1f2a26761779763d77688b57b423f1e7d2da8cd433ef2cfe6f58c7cf1c43065fa6716a03a3726d902d0a"
+    },
+    files: [],
+    userid: "fake_id"
+  }
+];
+
 export const MOCK_STATE = {
   api: {
     user: {
@@ -21,22 +41,7 @@ export const MOCK_STATE = {
     },
     userProposals: {
       response: {
-        proposals: [{
-          name:
-            "Proposal to mitigate risks regarding identity theft and forgery",
-          status: 0,
-          numcomments: 3,
-          timestamp: 1505940194,
-          censorshiprecord: {
-            token:
-              "6284c5f8fba5664453b8e6651ebc8747b289fed242d2f880f64a284496bb4ca11",
-            merkle:
-              "0dd10219cd79342166085cbe6f737bd54efe119b24c84cbc053023ed6b7da4c8",
-            signature:
-              "f5ea17d547d8347a2f2d009dcb7e89fcc96613d7aaff1f2a26761779763d77688b57b423f1e7d2da8cd433ef2cfe6f58c7cf1c43065fa6716a03a3726d902d0a"
-          },
-          files: []
-        }]
+        proposals: MOCK_USER_PROPS
       }
     },
     login: {
@@ -87,6 +92,7 @@ export const MOCK_STATE = {
         email: "testme@email.com",
         username: "testusername",
         isadmin: true,
+        userid: "fake_id",
         paywalladdress: FAKE_PAYWALL.address,
         paywallamount: FAKE_PAYWALL.amount,
         paywalltxnotbefore: FAKE_PAYWALL.txNotBefore,
@@ -111,6 +117,7 @@ export const MOCK_STATE = {
     unvetted: {
       response: {
         proposals: [
+          ...MOCK_USER_PROPS,
           {
             name: "This is an example proposal",
             status: 3,

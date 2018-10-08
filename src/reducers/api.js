@@ -1,10 +1,19 @@
 import * as act from "../actions/types";
 import get from "lodash/fp/get";
 import map from "lodash/fp/map";
+import unionWith from "lodash/unionWith";
 import cloneDeep from "lodash/cloneDeep";
 import { DEFAULT_REQUEST_STATE, request, receive, reset, resetMultiple } from "./util";
-import { PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_AUTHORIZED, PROPOSAL_VOTING_NOT_AUTHORIZED } from "../constants";
-import { removeProposalsDuplicates } from "../helpers";
+import {
+  PROPOSAL_VOTING_ACTIVE,
+  PROPOSAL_VOTING_AUTHORIZED,
+  PROPOSAL_VOTING_NOT_AUTHORIZED,
+  PROPOSAL_STATUS_UNREVIEWED,
+  PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_STATUS_UNREVIEWED_CHANGES,
+  PROPOSAL_STATUS_PUBLIC
+} from "../constants";
+
 
 export const DEFAULT_STATE = {
   me: DEFAULT_REQUEST_STATE,
@@ -35,57 +44,35 @@ export const DEFAULT_STATE = {
   likeComment: DEFAULT_REQUEST_STATE,
   unvettedStatus: DEFAULT_REQUEST_STATE,
   email: "",
-  keyMismatch: false
-};
-
-export const onReceiveProposals = (key, state, { payload, error }) => {
-  if (state[key] && state[key].response && state[key].response.proposals) {
-
-    const newProposoalArray = removeProposalsDuplicates(state[key].response.proposals, payload.proposals)
-      .sort((a, b) => b.timestamp - a.timestamp);
-
-    const lastloaded = payload.proposals.length > 0 ? payload.proposals[payload.proposals.length - 1] : null;
-    return ({
-      ...state,
-      [key]: {
-        ...state[key],
-        isRequesting: false,
-        response: error ? null : {
-          numofproposals: payload.numofproposals,
-          proposals: newProposoalArray,
-          lastloaded: lastloaded
-        },
-        error: error ? payload : null
-      }
-    });
-  }
-  return ({
-    ...state,
-    [key]: {
-      ...state[key],
-      isRequesting: false,
-      response: error ? null : {
-        ...payload,
-        lastloaded: payload.proposals ? payload.proposals[payload.proposals.length - 1] : {}
-      },
-      error: error ? payload : null
-    }
-  });
+  keyMismatch: false,
+  lastLoaded: {}
 };
 
 export const onReceiveSetStatus = (state, action) => {
   state = receive("setStatusProposal", state, action);
   if (action.error) return state;
+  const getProposalToken = prop => get([ "censorshiprecord", "token" ], prop);
 
   const { proposal: updatedProposal } = action.payload;
   const viewedProposal = get([ "proposal", "response", "proposal" ], state);
-  const updateProposalStatus = proposal => {
-    if (get([ "censorshiprecord", "token" ], updatedProposal) === get([ "censorshiprecord", "token" ], proposal)) {
-      return updatedProposal;
-    } else {
-      return proposal;
-    }
-  };
+
+  const updateProposalStatus = proposal =>
+    getProposalToken(updatedProposal) === getProposalToken(proposal) ?
+      updatedProposal : proposal;
+
+  let unvettedProps = get([ "unvetted", "response", "proposals" ], state) || [];
+  let vettedProps = get([ "vetted", "response", "proposals" ], state) || [];
+
+  if(updatedProposal.status === PROPOSAL_STATUS_PUBLIC) {
+    // remove from unvetted list
+    unvettedProps = unvettedProps.filter(proposal =>
+      getProposalToken(updatedProposal) !== getProposalToken(proposal)
+    );
+    // add to vetted list
+    vettedProps = [updatedProposal].concat(vettedProps);
+  } else {
+    unvettedProps = map(updateProposalStatus, unvettedProps);
+  }
 
   return {
     ...state,
@@ -101,10 +88,14 @@ export const onReceiveSetStatus = (state, action) => {
       ...state.unvetted,
       response: {
         ...state.unvetted.response,
-        proposals: map(
-          updateProposalStatus,
-          (get([ "unvetted", "response", "proposals" ], state) || [])
-        )
+        proposals: unvettedProps
+      }
+    },
+    vetted: {
+      ...state.vetted,
+      response: {
+        ...state.vetted.response,
+        proposals: vettedProps
       }
     }
   };
@@ -306,6 +297,78 @@ export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
   };
 };
 
+export const receiveProposals = (key, proposals, state) => {
+
+  const isUnvetted = (prop) =>
+    prop.status === PROPOSAL_STATUS_UNREVIEWED || prop.status === PROPOSAL_STATUS_CENSORED
+    || prop.status === PROPOSAL_STATUS_UNREVIEWED_CHANGES;
+
+  const lastLoaded = proposals.length > 0 ? proposals[proposals.length - 1] : null;
+
+  const unvettedProps = (state.unvetted.response && state.unvetted.response.proposals) || [];
+  const vettedProps = (state.vetted.response && state.vetted.response.proposals) || [];
+  const incomingUnvettedProps = proposals.filter(isUnvetted);
+  const incomingVettedProps = proposals.filter(prop => !isUnvetted(prop));
+
+  return {
+    ...state,
+    lastLoaded: {
+      ...state.lastLoaded,
+      [key]: lastLoaded
+    },
+    vetted: {
+      ...state.vetted,
+      response: {
+        ...state.vetted.response,
+        proposals: unionWith(vettedProps, incomingVettedProps, (a, b) => {
+          return a.censorshiprecord.token === b.censorshiprecord.token;
+        })
+      }
+    },
+    unvetted: {
+      ...state.unvetted,
+      response: {
+        ...state.vetted.response,
+        proposals: unionWith(unvettedProps, incomingUnvettedProps, (a, b) => {
+          return a.censorshiprecord.token === b.censorshiprecord.token;
+        })
+      }
+    }
+  };
+};
+
+export const onReceiveProposals = (key, state, { payload, error }) => {
+
+  const auxPayload = cloneDeep(payload);
+  if (auxPayload.proposals) {
+    delete auxPayload.proposals;
+  }
+
+  state = {
+    ...state,
+    [key]: {
+      ...state[key],
+      response: {
+        ...state[key].response,
+        ...auxPayload
+      },
+      isRequesting: false,
+      error: error ? payload : null
+    }
+  };
+
+  const proposals =  payload.proposals || [];
+  return receiveProposals(key, proposals, state);
+};
+
+export const onReceiveUser = (state, action) => {
+  state = receive("user", state, action);
+  if (action.error) return state;
+
+  const userProps = action.payload.user.proposals || [];
+  return receiveProposals("user", userProps, state);
+};
+
 const api = (state = DEFAULT_STATE, action) => (({
   [act.SET_EMAIL]: () => ({ ...state, email: action.payload }),
   [act.CLEAN_ERRORS]: () => (
@@ -337,7 +400,7 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.REQUEST_VERIFY_NEW_USER]: () => request("verifyNewUser", state, action),
   [act.RECEIVE_VERIFY_NEW_USER]: () => receive("verifyNewUser", state, action),
   [act.REQUEST_USER]: () => request("user", state, action),
-  [act.RECEIVE_USER]: () => receive("user", state, action),
+  [act.RECEIVE_USER]: () => onReceiveUser(state, action),
   [act.REQUEST_LOGIN]: () => request("login", state, action),
   [act.RECEIVE_LOGIN]: () => receive("login", state, action),
   [act.REQUEST_CHANGE_USERNAME]: () => request("changeUsername", state, action),
