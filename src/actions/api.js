@@ -42,20 +42,6 @@ export const onRequestMe = () => (dispatch, getState) => {
       dispatch(act.RECEIVE_ME(response));
       dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
 
-      const paymentPollingQueue = sel.paymentPollingQueue(getState());
-
-      if (paymentPollingQueue.length > 0) {
-        paymentPollingQueue.forEach( p => {
-          dispatch(
-            external_api_actions.verifyUserPayment(
-              p.address,
-              p.amount,
-              p.txid,
-              p.credits
-            )
-          );
-        });
-      }
       // Start polling for the user paywall tx, if applicable.
       const paywallAddress = sel.paywallAddress(getState());
       if (paywallAddress) {
@@ -680,3 +666,17 @@ export const onRevokeVote = (email, token, version) =>
       }
     );
   });
+
+export const onFetchProposalPaywallPayment = () =>
+  dispatch => {
+    dispatch(act.REQUEST_PROPOSAL_PAYWALL_PAYMENT());
+    return api.proposalPaywallPayment().then(
+      response => dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(response))
+    ).catch(
+      error => {
+        dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(null, error));
+        throw error;
+      }
+    );
+  };
+

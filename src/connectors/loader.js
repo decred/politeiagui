@@ -19,7 +19,6 @@ export default connect(
     openModal: act.openModal,
     confirmWithModal: act.confirmWithModal,
     setOnboardAsViewed: act.setOnboardAsViewed,
-    onLoadDraftProposals: act.onLoadDraftProposals,
-    onLoadPaymentPollingQueue: act.onLoadPaymentPollingQueue
+    onLoadDraftProposals: act.onLoadDraftProposals
   }, dispatch)
 );

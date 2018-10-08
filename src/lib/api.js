@@ -257,3 +257,6 @@ export const proposalAuthorizeOrRevokeVote = (csrf, action, token, email, versio
       "/proposals/authorizevote", csrf,
       { action, token, signature, publickey }
     ))).then(getResponse);
+
+export const proposalPaywallPayment = () =>
+  GET("v1/proposals/paywallpayment").then(getResponse);

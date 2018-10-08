@@ -215,6 +215,13 @@ describe("test app actions (actions/app.js)", () => {
       ], done);
   });
 
+  test("toggleCreditsPaymentPolling action", () => {
+    expect(app.toggleCreditsPaymentPolling(true))
+      .toDispatchActions([
+        { type: act.TOGGLE_CREDITS_PAYMENT_POLLING, payload: true }
+      ], done);
+  });
+
   test("on local storage change action", () => {
 
     //save if values aren't equal

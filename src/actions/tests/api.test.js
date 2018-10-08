@@ -952,6 +952,24 @@ describe("test api actions (actions/api.js)", () => {
 
   });
 
+  test("test onFetchProposalPaywallPayment action", async () => {
+    const path =  "/api/v1/proposals/paywallpayment";
+
+    //test it handles a successful response
+    await assertApiActionOnSuccess(
+      path,
+      api.onFetchProposalPaywallPayment,
+      [],
+      [
+        { type: act.REQUEST_PROPOSAL_PAYWALL_PAYMENT },
+        {
+          type: act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT,
+          error: false
+        }
+      ]
+    );
+  });
+
   // TODO: for the following tests
   // needs to decouple modal confirmation from the
   // actions so it can be tested

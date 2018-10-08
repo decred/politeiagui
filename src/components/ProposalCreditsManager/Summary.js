@@ -29,8 +29,12 @@ const ProposalCreditsSummary = ({
   proposalCreditPrice,
   proposalCreditPurchases,
   isTestnet,
-  lastPaymentNotConfirmed,
-  recentPaymentsConfirmed
+  recentPaymentsConfirmed,
+  proposalPaywallPaymentTxid,
+  proposalPaywallPaymentAmount,
+  proposalPaywallPaymentConfirmations,
+  pollingCreditsPayment,
+  toggleCreditsPaymentPolling
 }) => {
   if (recentPaymentsConfirmed && recentPaymentsConfirmed.length > 0) {
     recentPaymentsConfirmed.forEach(payment => {
@@ -44,12 +48,12 @@ const ProposalCreditsSummary = ({
       if (!proposalCreditPurchases.find(el => el.txId === transaction.txId)) proposalCreditPurchases.push(transaction);
     });
   }
-  if (lastPaymentNotConfirmed) {
+  if (proposalPaywallPaymentTxid) {
     const transaction = {
-      numberPurchased: Math.round(lastPaymentNotConfirmed.amount * 1/proposalCreditPrice),
-      txId: lastPaymentNotConfirmed.txid,
+      numberPurchased: Math.round(proposalPaywallPaymentAmount * 1/(proposalCreditPrice * 100000000)),
+      txId: proposalPaywallPaymentTxid,
       price: proposalCreditPrice,
-      confirmations: lastPaymentNotConfirmed.confirmations,
+      confirmations: proposalPaywallPaymentConfirmations,
       confirming: true
     };
     proposalCreditPurchases.push(transaction);
@@ -58,7 +62,18 @@ const ProposalCreditsSummary = ({
   return (
     <div className="proposal-credits-summary">
       <div className="available-credits">
-        <b>Available credits:</b> {proposalCredits}
+        <span> <b>Available credits:</b> {proposalCredits}</span>
+        {pollingCreditsPayment ? <div className="searching-credits">
+          <i className="fa fa-circle-o-notch fa-spin right-margin-5" style={{ fontSize: "12px" }}></i>
+          {proposalPaywallPaymentTxid ? "Checking for payment confirmation" : "Checking for new payments"}
+        </div> :
+          <button
+            className="inverse"
+            onClick={() => toggleCreditsPaymentPolling(true)}
+          >
+            {"Check for payments"}
+          </button>
+        }
       </div>
       {proposalCreditPurchases && proposalCreditPurchases.length ? (
         <div className="credit-purchase-table">

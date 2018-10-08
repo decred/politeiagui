@@ -765,7 +765,8 @@ li p.header-3 {
   top: 50%;
   transform: translateY(-50%);
   text-align: right;
-  display: block;
+  display: flex;
+  align-content: center;
 }
 
 #header-right-content .dropdown {
@@ -777,20 +778,33 @@ li p.header-3 {
 }
 
 #header-right .user-proposal-credits {
-  color: rgba(255, 255, 255, .4);
   cursor: pointer;
+  background: white;
+  margin-right: 20px;
+  border-radius: 8px;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
 }
 
 #header-right .user-proposal-credits a.buy-proposals-credits {
-  color: #fff;
   position: relative;
   display: inline-block;
   margin-right: 16px;
+  color: #2971FF;
 }
 
 #header-right .user-proposal-credits .proposal-credits-text {
   display: inline-block;
+  color: #2971FF;
+  font-weight: bold;
 }
+
+
+#header-right .proposalc-credits-click-here-text {
+  font-size: 11px;
+}
+
 
 .tooltip-wrapper {
   position: relative;
@@ -809,7 +823,7 @@ li p.header-3 {
 }
 
 .tip-bottom {
-  top: 25px;
+  top: 40px;
   right: 0;
 }
 
@@ -819,9 +833,13 @@ li p.header-3 {
 }
 
 .tip:hover {
-  background-color: rgba(255, 255, 255, .4);
-  color: rgba(255, 255, 255, .6);
+  background-color: rgba(0, 0, 0, .6) !important;
   text-decoration: none;
+}
+
+.dropdown-trigger {
+  font-weight: bold;
+  color: white;
 }
 
 .dropdown-ct {
@@ -1097,6 +1115,16 @@ li p.header-3 {
 
 .available-credits {
   margin: 16px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.searching-credits {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-right: 20px;
 }
 
 .credit-purchase-table {
@@ -1109,7 +1137,7 @@ li p.header-3 {
   border-bottom: 1px solid #ccc;
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .credit-purchase-header .credit-purchase-row {

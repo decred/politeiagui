@@ -185,4 +185,8 @@ describe("test app selector", () => {
     expect(sel.getUserProposals(state)).toEqual([]);
   });
 
+  it("test pollingCreditsPayment selector", () => {
+    expect(sel.pollingCreditsPayment(MOCK_STATE)).toBeFalsy();
+  });
+
 });

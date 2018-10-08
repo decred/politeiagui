@@ -43,6 +43,7 @@ export const DEFAULT_STATE = {
   verifyUserKey: DEFAULT_REQUEST_STATE,
   likeComment: DEFAULT_REQUEST_STATE,
   unvettedStatus: DEFAULT_REQUEST_STATE,
+  proposalPaywallPayment: DEFAULT_REQUEST_STATE,
   email: "",
   keyMismatch: false,
   lastLoaded: {}
@@ -471,6 +472,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.REQUEST_AUTHORIZE_VOTE]: () => request("authorizeVote", state, action),
   [act.RECEIVE_AUTHORIZE_VOTE]: () => onReceiveVoteStatusChange("authorizeVote", PROPOSAL_VOTING_AUTHORIZED, state, action),
   [act.RECEIVE_REVOKE_AUTH_VOTE]: () => onReceiveVoteStatusChange("authorizeVote", PROPOSAL_VOTING_NOT_AUTHORIZED, state, action),
+  [act.REQUEST_PROPOSAL_PAYWALL_PAYMENT]: () => request("proposalPaywallPayment", state, action),
+  [act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT]: () => receive("proposalPaywallPayment", state, action),
   [act.RECEIVE_LOGOUT]: () => {
     const tempState = DEFAULT_STATE;
     tempState.init = state.init;

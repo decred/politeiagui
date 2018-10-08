@@ -295,6 +295,7 @@ export const MOCK_STATE = {
     userProposalsShow: 1,
     csrfIsNeeded: true,
     proposalCredits: 2,
+    pollingCreditsPayment: false,
     identityImportResult: {
       errorMsg: "invalid identity",
       successMsg: "successfull identity"
