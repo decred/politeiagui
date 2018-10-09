@@ -20,6 +20,9 @@ export function proposalNameValidator(name, supportedChars) {
 export function urlValidator(text) {
   const regexp = /\[([^\][]*?)\]([ ]*)\((.*?)\)/gi;
   const urlArray = text.match(regexp);
+  if (!urlArray) {
+    return { error: false };
+  }
   for (const urlMarkdown of urlArray) {
     let url =  urlMarkdown.match(/\(([^()]*)\)/gi)[0];
     url = url.slice(1, url.length - 1);

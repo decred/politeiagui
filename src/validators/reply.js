@@ -13,7 +13,7 @@ const validate = ({ values, keyMismatch }, policy) => {
   }
   const validUrl = urlValidator(values.comment);
   if (validUrl.error) {
-    throw new SubmissionError({ _error: `The link "${validUrl.url}" is invalid. Please fix it.` });
+    throw new SubmissionError({ _error: `The link "${validUrl.url}" is invalid. Make sure that it is a valid URL.` });
   }
   if (keyMismatch) {
     throw new SubmissionError({ _error: "Your local key does not match the one on the server.  Please generate a new one under account settings." });
