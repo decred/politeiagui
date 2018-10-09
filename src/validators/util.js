@@ -18,9 +18,23 @@ export function proposalNameValidator(name, supportedChars) {
 }
 
 export function urlValidator(text) {
-  const regexp = /\[(.*?)\]\((.*?)\)/gi;
-  const links = text.match(regexp);
-  console.log("LINKES", links, text, regexp);
+  const regexp = /\[([^\][]*?)\]([ ]*)\((.*?)\)/gi;
+  const urlArray = text.match(regexp);
+  for (const urlMarkdown of urlArray) {
+    let url =  urlMarkdown.match(/\(([^()]*)\)/gi)[0];
+    url = url.slice(1, url.length - 1);
+    try {
+      new URL(url);
+      const link = document.createElement("a");
+      link.href = url;
+      if(!link.hostname){
+        return { url: url, error: true };
+      }
+    } catch (error) {
+      return { url: url, error: true };
+    }
+  }
+  return { error: false };
 }
 
 export function lengthValidator(str, minLength, maxLength) {

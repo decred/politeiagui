@@ -2,10 +2,10 @@ import React from "react";
 import xssFilters from "xss-filters";
 import * as modalTypes from "../../Modal/modalTypes";
 
-export const testLink = (link) => {
+export const isValidUrl = (url) => {
   try {
-    new URL(link);
-    return true;
+    const obj = new URL(url);
+    return obj.origin === "null" ? false : !!obj.origin;
   } catch (error) {
     return false;
   }
@@ -109,6 +109,7 @@ export const customRenderers = (filterXss, confirmWithModal) => ({
       target="_blank"
       rel="nofollow noopener noreferrer"
       onClick={(e) => confirmWithModal && verifyExternalLink(e, href, confirmWithModal)}
+      className={isValidUrl(href) ? null : "broken-link" }
       href={href}
     >{children[0]}</a>);
   },

@@ -704,6 +704,12 @@ li p.header-3 {
   font-size: 20px;
 }
 
+.broken-link {
+  pointer-events: none;
+  cursor: default;
+  text-decoration: none !important;
+}
+
 .markhelp {
     display: flex;
     flex-direction: column;
