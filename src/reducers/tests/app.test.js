@@ -351,7 +351,8 @@ describe("test app reducer", () => {
       { action: act.CSRF_NEEDED, key: "csrfIsNeeded" },
       { action: act.SHOULD_AUTO_VERIFY_KEY, key: "shouldVerifyKey" },
       { action: act.IDENTITY_IMPORTED, key: "identityImportResult" },
-      { action: act.SET_COMMENTS_SORT_OPTION, key: "commentsSortOption" }
+      { action: act.SET_COMMENTS_SORT_OPTION, key: "commentsSortOption" },
+      { action: act.TOGGLE_CREDITS_PAYMENT_POLLING, key: "pollingCreditsPayment" }
     ];
 
     reducers.map( obj => {

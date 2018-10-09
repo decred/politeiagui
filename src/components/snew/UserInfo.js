@@ -4,26 +4,19 @@ import ReactBody from "react-body";
 import currentUserConnector from "../../connectors/currentUser";
 import Dropdown from "../Dropdown";
 import Link from "./Link";
-import Tooltip from "../Tooltip";
-import { PROPOSAL_CREDITS_MODAL } from "../Modal/modalTypes";
-import {
-  PAYWALL_STATUS_PAID
-} from "../../constants";
-import { PAYWALL_MODAL } from "../Modal/modalTypes";
+import ProposalCreditsIndicator from "../ProposalCreditsManager/ProposalCreditsIndicator";
 
 const UserInfo = ({
   history,
-  userPaywallStatus,
   loggedInAsEmail,
   loggedInAsUsername,
-  userCanExecuteActions,
-  proposalCredits,
-  openModal
+  userCanExecuteActions
 }) =>
   loggedInAsEmail ? (
     <div id="header-right">
       <div id="header-right-content">
         <ReactBody className="loggedin" />
+        <ProposalCreditsIndicator />
         <div className="user">
           <Dropdown
             DropdownTrigger={
@@ -60,18 +53,6 @@ const UserInfo = ({
             }
           />
         </div>
-        <Tooltip
-          text="Proposal credits are purchased to submit proposals. For more information,
-					please visit your account page."
-          position="bottom"
-        >
-          <div className="user-proposal-credits">
-            <a className="buy-proposals-credits" onClick={() => userPaywallStatus !== PAYWALL_STATUS_PAID
-              ? openModal(PAYWALL_MODAL)
-              : openModal(PROPOSAL_CREDITS_MODAL)}>(Manage proposal credits)</a>
-            <div className="proposal-credits-text">{(proposalCredits || 0) + " proposal credit" + (proposalCredits !== 1 ? "s" : "")}</div>
-          </div>
-        </Tooltip>
       </div>
     </div>
   ) : (

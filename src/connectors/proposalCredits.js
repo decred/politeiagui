@@ -17,12 +17,17 @@ export default connect(
     isApiRequestingPayWithFaucet: sel.isApiRequestingPayProposalWithFaucet,
     payWithFaucetTxId: sel.payProposalWithFaucetTxId,
     payWithFaucetError: sel.payProposalWithFaucetError,
-    lastPaymentNotConfirmed: sel.lastPaymentFromPollingQueue,
-    recentPaymentsConfirmed: sel.recentPayments
+    recentPaymentsConfirmed: sel.recentPayments,
+    proposalPaywallPaymentTxid: sel.apiProposalPaywallPaymentTxid,
+    proposalPaywallPaymentAmount: sel.apiProposalPaywallPaymentAmount,
+    proposalPaywallPaymentConfirmations: sel.apiProposalPaywallPaymentConfirmations,
+    pollingCreditsPayment: sel.pollingCreditsPayment
   }),
   dispatch => bindActionCreators({
     onUserProposalCredits: act.onUserProposalCredits,
     payWithFaucet: act.payProposalWithFaucet,
-    onPurchaseProposalCredits: act.onFetchProposalPaywallDetails
+    onPurchaseProposalCredits: act.onFetchProposalPaywallDetails,
+    onFetchProposalPaywallPayment: act.onFetchProposalPaywallPayment,
+    toggleCreditsPaymentPolling: act.toggleCreditsPaymentPolling
   }, dispatch)
 );

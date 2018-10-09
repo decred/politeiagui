@@ -25,7 +25,8 @@ export const DEFAULT_STATE = {
   draftProposals: null,
   identityImportResult: { errorMsg: "", successMsg: "" },
   onboardViewed: false,
-  commentsSortOption: { value: SORT_BY_NEW, label: SORT_BY_NEW }
+  commentsSortOption: { value: SORT_BY_NEW, label: SORT_BY_NEW },
+  pollingCreditsPayment: false
 };
 
 const app = (state = DEFAULT_STATE, action) => (({
@@ -81,19 +82,6 @@ const app = (state = DEFAULT_STATE, action) => (({
       };
     }
   },
-  [act.UPDATE_PAYMENT_POLLING_QUEUE]: () => {
-    const p = action.payload;
-    const queue = state.paymentPollingQueue || [];
-    const newQueue = queue.map( payment => {
-      payment.confirmations = payment.txid === p.txid ? p.confirmations : payment.confirmations;
-      return payment;
-    });
-    return { ...state, paymentPollingQueue: newQueue };
-  },
-
-  [act.SAVE_PAYMENT_POLLING_QUEUE]:
-    () => ({ ...state, paymentPollingQueue: state.paymentPollingQueue ? [ ...state.paymentPollingQueue, action.payload ] : [action.payload] }),
-  [act.SET_PAYMENT_POLLING_QUEUE]: () => ({ ...state, paymentPollingQueue: action.payload }),
   [act.RESET_LAST_SUBMITTED]: () => ({ ...state, submittedProposals: { ...state.submittedProposals, lastSubmitted: false } }),
   [act.SET_PROPOSAL_APPROVED]: () => ({ ...state, isProposalStatusApproved: action.payload }),
   [act.RECEIVE_USERNAMES]: () => ({ ...state, usernamesById: action.payload.usernamesById }),
@@ -155,7 +143,8 @@ const app = (state = DEFAULT_STATE, action) => (({
   [act.SHOULD_AUTO_VERIFY_KEY]: () => ({ ...state, shouldVerifyKey: action.payload }),
   [act.IDENTITY_IMPORTED]: () => ({ ...state, identityImportResult: action.payload }),
   [act.SET_ONBOARD_AS_VIEWED]: () => ({ ...state, onboardViewed: true }),
-  [act.SET_COMMENTS_SORT_OPTION]: () => ({ ...state, commentsSortOption: action.payload })
+  [act.SET_COMMENTS_SORT_OPTION]: () => ({ ...state, commentsSortOption: action.payload }),
+  [act.TOGGLE_CREDITS_PAYMENT_POLLING]: () => ({ ...state, pollingCreditsPayment: action.payload })
 })[action.type] || (() => state))();
 
 export default app;

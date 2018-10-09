@@ -73,11 +73,6 @@ export const getProposalFiles = compose(get("files"), proposal);
 export const getMarkdownFile = compose(find((isMarkdown)), getProposalFiles);
 export const getNotMarkdownFile = compose(filter(not(isMarkdown)), getProposalFiles);
 
-export const paymentPollingQueue = state => state && state.app && state.app.paymentPollingQueue;
-
-export const lastPaymentFromPollingQueue = state =>
-  state.app.paymentPollingQueue && state.app.paymentPollingQueue.length > 0 && state.app.paymentPollingQueue[state.app.paymentPollingQueue.length-1];
-
 export const getEditProposalValues = state => {
   const { name } = proposal(state);
 
@@ -277,3 +272,5 @@ export const identityImportSuccess = (state) => state.app.identityImportResult &
 export const onboardViewed = (state) => state.app.onboardViewed;
 
 export const commentsSortOption = (state) => state.app.commentsSortOption;
+
+export const pollingCreditsPayment = state => state.app.pollingCreditsPayment;

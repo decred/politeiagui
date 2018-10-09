@@ -329,6 +329,12 @@ export const apiEditProposalError = getApiError("editProposal");
 export const apiEditProposalPayload = getApiPayload("editProposal");
 export const editProposalToken = compose(get([ "proposal", "censorshiprecord", "token" ]), apiEditProposalResponse);
 
+export const apiProposalPaywallPaymentResponse = getApiResponse("proposalPaywallPayment");
+export const apiProposalPaywallPaymentError = getApiError("proposalPaywallPayment");
+export const apiProposalPaywallPaymentTxid = compose(get("txid"), apiProposalPaywallPaymentResponse);
+export const apiProposalPaywallPaymentAmount = compose(get("amount"), apiProposalPaywallPaymentResponse);
+export const apiProposalPaywallPaymentConfirmations = compose(get("confirmations"), apiProposalPaywallPaymentResponse);
+
 
 export const isApiRequesting = or(
   isApiRequestingInit,

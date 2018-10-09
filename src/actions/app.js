@@ -53,26 +53,6 @@ export const onLoadDraftProposals = (email) => {
 export const onDeleteDraftProposal = (draftId) =>
   act.DELETE_DRAFT_PROPOSAL(draftId);
 
-
-export const onLoadPaymentPollingQueue = (email) => {
-  const stateFromLS = loadStateLocalStorage(email);
-  const queue = sel.paymentPollingQueue(stateFromLS) || [];
-  return act.SET_PAYMENT_POLLING_QUEUE(queue);
-};
-
-export const onUpdatePaymentPollingQueue = ({ txid, confirmations }) =>
-  act.UPDATE_PAYMENT_POLLING_QUEUE({ txid, confirmations });
-
-export const onConfirmPollingPayment = ({ address, txNotBefore }) => {
-  return (dispatch, getState) => {
-    const queue = getState().app.paymentPollingQueue || [];
-    const newQueue = queue.filter( payment => {
-      return (payment.address !== address) && (payment.txid !== txNotBefore);
-    });
-    dispatch(act.SET_PAYMENT_POLLING_QUEUE(newQueue));
-  };
-};
-
 export const onSaveChangeUsername = ({ password, newUsername }) =>
   (dispatch, getState) =>
     dispatch(onChangeUsername(password, newUsername))
@@ -202,3 +182,5 @@ export const setOnboardAsViewed = () => act.SET_ONBOARD_AS_VIEWED();
 export const resetLastSubmittedProposal = () => act.RESET_LAST_SUBMITTED();
 
 export const onSetCommentsSortOption = (option) => act.SET_COMMENTS_SORT_OPTION(option);
+
+export const toggleCreditsPaymentPolling = (bool) => act.TOGGLE_CREDITS_PAYMENT_POLLING(bool);
