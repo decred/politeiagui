@@ -2,15 +2,6 @@ import React from "react";
 import xssFilters from "xss-filters";
 import * as modalTypes from "../../Modal/modalTypes";
 
-export const isValidUrl = (url) => {
-  try {
-    const obj = new URL(url);
-    return obj.origin === "null" ? false : !!obj.origin;
-  } catch (error) {
-    return false;
-  }
-};
-
 export const traverseChildren = (el, cb) => {
   const filterChildren = (c) => React.Children.map(c,
     child => traverseChildren(child, cb)
@@ -109,7 +100,6 @@ export const customRenderers = (filterXss, confirmWithModal) => ({
       target="_blank"
       rel="nofollow noopener noreferrer"
       onClick={(e) => confirmWithModal && verifyExternalLink(e, href, confirmWithModal)}
-      className={isValidUrl(href) ? null : "broken-link" }
       href={href}
     >{children[0]}</a>);
   },
