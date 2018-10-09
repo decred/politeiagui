@@ -72,7 +72,7 @@ const ProposalCreditsSummary = ({
             </div> :
             <div className="searching-credits__text">
               <span>Searching for a new payment</span>
-              <span className="font-12">The payment can take a few minutes to be confirmed</span>
+              <span className="font-12">The payment can take a few minutes to be detected</span>
             </div>
           }
         </div> :
