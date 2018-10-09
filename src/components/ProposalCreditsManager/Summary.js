@@ -64,8 +64,17 @@ const ProposalCreditsSummary = ({
       <div className="available-credits">
         <span> <b>Available credits:</b> {proposalCredits}</span>
         {pollingCreditsPayment ? <div className="searching-credits">
-          <i className="fa fa-circle-o-notch fa-spin right-margin-5" style={{ fontSize: "12px" }}></i>
-          {proposalPaywallPaymentTxid ? "Checking for payment confirmation" : "Checking for new payments"}
+          <i className="fa fa-circle-o-notch fa-spin right-margin-5" style={{ fontSize: "14px" }}></i>
+          {proposalPaywallPaymentTxid ?
+            <div className="searching-credits__text">
+              <span>Checking for payment confirmation</span>
+              <span className="font-12">The payment can take a few minutes to be confirmed</span>
+            </div> :
+            <div className="searching-credits__text">
+              <span>Searching for a new payment</span>
+              <span className="font-12">The payment can take a few minutes to be confirmed</span>
+            </div>
+          }
         </div> :
           <button
             className="inverse"

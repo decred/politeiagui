@@ -1124,7 +1124,14 @@ li p.header-3 {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding-right: 20px;
+  margin-right: 20px;
+  padding: 4px;
+}
+
+.searching-credits__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 18px;
 }
 
 .credit-purchase-table {
