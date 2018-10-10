@@ -19,9 +19,9 @@ export function proposalNameValidator(name, supportedChars) {
   return matches.length === name.length;
 }
 
-export const validateURL = (validator, text) => {
-  const validUrl = validator(text);
-  if(validUrl) {
+export const validateURL = (text) => {
+  const validUrl = urlValidator(text);
+  if(validUrl.error) {
     throw new SubmissionError({ _error: `The link "${validUrl.url}" is invalid. Make sure that it is a valid URL.` });
   }
 };

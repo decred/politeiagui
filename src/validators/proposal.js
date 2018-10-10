@@ -1,6 +1,6 @@
 import { SubmissionError } from "redux-form";
 import { isFileValid } from "../components/ProposalImages/helpers";
-import { isRequiredValidator, proposalNameValidator, validateURL, urlValidator } from "./util";
+import { isRequiredValidator, proposalNameValidator, validateURL } from "./util";
 
 function checkProposalName(props, values) {
   const name = values.name.trim();
@@ -20,7 +20,7 @@ const validate = (values, dispatch, props) => {
         `and only contain the following characters: ${props.policy.proposalnamesupportedchars.join(" ")}`
     });
   }
-  validateURL(urlValidator, values.description);
+  validateURL(values.description);
 
   if (values.files) {
     if(values.files.length > props.policy.maximages) {
