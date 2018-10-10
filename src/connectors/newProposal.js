@@ -38,7 +38,8 @@ class NewProposalWrapper extends Component {
   constructor(props){
     super(props);
     this.state = {
-      initialValues: props.draftProposal || getNewProposalData()
+      initialValues: props.draftProposal || getNewProposalData(),
+      validationError: ""
     };
   }
 
@@ -61,17 +62,29 @@ class NewProposalWrapper extends Component {
   }
 
   render() {
-    const Component = this.props.Component;
-    return <Component { ...{ ...this.props,
-      onSave: this.onSave,
-      initialValues: this.state.initialValues
-    }}
+    const { Component } = this.props;
+    const { validationError } = this.state;
+    return <Component
+      { ...{ ...this.props,
+        onSave: this.onSave.bind(this),
+        initialValues: this.state.initialValues,
+        newProposalError: validationError,
+        onChange: this.onChange
+      }}
     />;
   }
 
+  onChange = () => {
+    this.setState({ validationError: "" });
+  }
 
   onSave = (...args) => {
-    validate(...args);
+    try {
+      validate(...args);
+    } catch (e) {
+      this.setState({ validationError: e.errors._error });
+      return;
+    }
     return this.props.onSave(...args);
   }
 }
