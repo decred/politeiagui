@@ -109,8 +109,6 @@ class Loader extends Component {
   }
 
   componentDidMount() {
-    const { getLastBlockHeight } = this.props;
-    getLastBlockHeight && getLastBlockHeight();
     if(this.props.isProposalStatusApproved){
       this.props.onChangeProposalStatusApproved(false);
     }
@@ -119,6 +117,7 @@ class Loader extends Component {
   componentDidUpdate() {
     const { csrf } = this.props;
     const { isFetched } = this.state;
+    const { getLastBlockHeight } = this.props;
     if (isFetched)
       return;
     else if (csrf) {
@@ -126,6 +125,7 @@ class Loader extends Component {
       this.props.onFetchData && this.props.onFetchData();
       this.props.onFetchStatus && this.props.onFetchStatus();
       this.props.onFetchProposalsVoteStatus && this.props.onFetchProposalsVoteStatus();
+      getLastBlockHeight && getLastBlockHeight();
     }
   }
 
