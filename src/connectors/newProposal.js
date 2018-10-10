@@ -38,7 +38,6 @@ class NewProposalWrapper extends Component {
   constructor(props){
     super(props);
     this.state = {
-      // initialValues: "props.draftProposal || getNewProposalData()",
       initialValues: props.draftProposal || getNewProposalData(),
       validationError: ""
     };

@@ -1,3 +1,5 @@
+import { SubmissionError } from "redux-form";
+
 export function emailValidator(email) {
   return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 }
@@ -16,6 +18,13 @@ export function proposalNameValidator(name, supportedChars) {
   const matches = name.match(re);
   return matches.length === name.length;
 }
+
+export const validateURL = (validator, text) => {
+  const validUrl = validator(text);
+  if(validUrl) {
+    throw new SubmissionError({ _error: `The link "${validUrl.url}" is invalid. Make sure that it is a valid URL.` });
+  }
+};
 
 export function urlValidator(text) {
   const regexp = /\[([^\][]*?)\]([ ]*)\((.*?)\)/gi;

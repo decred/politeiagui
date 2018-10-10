@@ -1,5 +1,5 @@
 import { SubmissionError } from "redux-form";
-import { isRequiredValidator, urlValidator } from "./util";
+import { isRequiredValidator, urlValidator, validateURL } from "./util";
 
 const validate = ({ values, keyMismatch }, policy) => {
   if (!isRequiredValidator(values.comment)) {
@@ -11,10 +11,8 @@ const validate = ({ values, keyMismatch }, policy) => {
       _error: `The comment must be less than ${policy.maxcommentlength} characters long`
     });
   }
-  const validUrl = urlValidator(values.comment);
-  if (validUrl.error) {
-    throw new SubmissionError({ _error: `The link "${validUrl.url}" is invalid. Make sure that it is a valid URL.` });
-  }
+  validateURL(urlValidator, values.comment);
+
   if (keyMismatch) {
     throw new SubmissionError({ _error: "Your local key does not match the one on the server.  Please generate a new one under account settings." });
   }
