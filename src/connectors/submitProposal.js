@@ -32,6 +32,7 @@ class SubmitWrapper extends Component {
   }
 
   render() {
+    console.log("LINKES PEGA", this.props);
     const Component = this.props.Component;
     return <Component { ...{ ...this.props,
       onSaveDraft: this.onSaveDraft

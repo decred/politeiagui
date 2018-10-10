@@ -1,6 +1,6 @@
 import { SubmissionError } from "redux-form";
 import { isFileValid } from "../components/ProposalImages/helpers";
-import { isRequiredValidator, proposalNameValidator } from "./util";
+import { isRequiredValidator, proposalNameValidator, urlValidator } from "./util";
 
 function checkProposalName(props, values) {
   const name = values.name.trim();
@@ -19,6 +19,10 @@ const validate = (values, dispatch, props) => {
       _error: `The proposal name must be between ${props.policy.minproposalnamelength} and ${props.policy.maxproposalnamelength} characters long ` +
         `and only contain the following characters: ${props.policy.proposalnamesupportedchars.join(" ")}`
     });
+  }
+  const validUrl = urlValidator(values.description);
+  if (validUrl.error) {
+    throw new SubmissionError({ _error: `The link "${validUrl.url}" is invalid. Make sure that it is a valid URL.` });
   }
 
   if (values.files) {

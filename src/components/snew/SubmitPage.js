@@ -49,7 +49,7 @@ class SubmitPage extends React.Component {
       proposalCredits,
       editingMode
     } = this.props;
-    const submitEnabled = !submitting && !error && userCanExecuteActions && (proposalCredits > 0 || editingMode);
+    const submitEnabled = !submitting && !error && !newProposalError && userCanExecuteActions && (proposalCredits > 0 || editingMode);
     return !policy || isLoading ? <PageLoadingIcon /> : (
       <div className="content" role="main">
         <div className="page submit-proposal-page">
