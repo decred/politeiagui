@@ -660,7 +660,7 @@ li p.header-3 {
   margin-bottom: 16px;
 }
 
-.user-profile-page .public-key {
+.user-profile-page .account-info {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -765,7 +765,8 @@ li p.header-3 {
   top: 50%;
   transform: translateY(-50%);
   text-align: right;
-  display: block;
+  display: flex;
+  align-content: center;
 }
 
 #header-right-content .dropdown {
@@ -777,20 +778,33 @@ li p.header-3 {
 }
 
 #header-right .user-proposal-credits {
-  color: rgba(255, 255, 255, .4);
   cursor: pointer;
+  background: white;
+  margin-right: 20px;
+  border-radius: 8px;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
 }
 
 #header-right .user-proposal-credits a.buy-proposals-credits {
-  color: #fff;
   position: relative;
   display: inline-block;
   margin-right: 16px;
+  color: #2971FF;
 }
 
 #header-right .user-proposal-credits .proposal-credits-text {
   display: inline-block;
+  color: #2971FF;
+  font-weight: bold;
 }
+
+
+#header-right .proposalc-credits-click-here-text {
+  font-size: 11px;
+}
+
 
 .tooltip-wrapper {
   position: relative;
@@ -809,7 +823,7 @@ li p.header-3 {
 }
 
 .tip-bottom {
-  top: 25px;
+  top: 40px;
   right: 0;
 }
 
@@ -819,9 +833,13 @@ li p.header-3 {
 }
 
 .tip:hover {
-  background-color: rgba(255, 255, 255, .4);
-  color: rgba(255, 255, 255, .6);
+  background-color: rgba(0, 0, 0, .6) !important;
   text-decoration: none;
+}
+
+.dropdown-trigger {
+  font-weight: bold;
+  color: white;
 }
 
 .dropdown-ct {
@@ -1097,6 +1115,23 @@ li p.header-3 {
 
 .available-credits {
   margin: 16px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.searching-credits {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-right: 20px;
+  padding: 4px;
+}
+
+.searching-credits__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 18px;
 }
 
 .credit-purchase-table {
@@ -1109,7 +1144,7 @@ li p.header-3 {
   border-bottom: 1px solid #ccc;
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .credit-purchase-header .credit-purchase-row {
@@ -1124,12 +1159,13 @@ li p.header-3 {
 
 .credit-purchase-header .credit-purchase-cell {
   font-weight: bold;
+  width: 100%;
 }
 
 .credit-purchase-body .credit-purchase-cell {
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  width: 100%;
 }
 
 .credit-purchase-date {
@@ -1138,30 +1174,25 @@ li p.header-3 {
 }
 
 .credit-purchase-date-text {
-  width: 180px;
-  text-align: left;
+  text-align: center;
 }
 
 .credit-purchase-number {
-  width: 40px;
+	width: 40% !important;
   text-align: center;
 }
 .credit-purchase-price {
-  width: 100px;
   text-align: center;
 }
 .credit-purchase-tx {
-  width: 250px;
   text-align: center;
-
 }
 .credit-purchase-status {
-  width: 80px;
+  width: 100px;
   text-align: center;
 }
 .credit-purchase-status-font {
   font-weight: 500;
-
 }
 .user-page {
   margin: 0 auto;

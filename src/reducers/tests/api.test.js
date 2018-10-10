@@ -2,9 +2,9 @@ import * as api from "../api";
 import * as act from "../../actions/types";
 import cloneDeep from "lodash/cloneDeep";
 import { DEFAULT_REQUEST_STATE } from "../util";
-import { PROPOSAL_VOTING_ACTIVE } from "../../constants";
+import { PROPOSAL_VOTING_ACTIVE, PROPOSAL_STATUS_PUBLIC, PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
 import { request, receive } from "../util";
-import { testReceiveReducer, testRequestReducer, testResetReducer, testResetMultipleReducer } from "./helpers";
+import { testReceiveReducer, testReceiveProposalsReducer, testRequestReducer, testResetReducer, testResetMultipleReducer } from "./helpers";
 
 describe("test api reducer", () => {
   const MOCK_STATE = {
@@ -88,8 +88,31 @@ describe("test api reducer", () => {
           }
         ]
       }
-    }
+    },
+    vetted: DEFAULT_REQUEST_STATE,
+    userProposals: DEFAULT_REQUEST_STATE
   };
+
+  const MOCK_PROPOSALS_LOAD = [
+    {
+      censorshiprecord: {
+        token: "censortoken"
+      },
+      status: PROPOSAL_STATUS_UNREVIEWED
+    },
+    {
+      censorshiprecord: {
+        token: "randomtoken"
+      },
+      status: PROPOSAL_STATUS_UNREVIEWED
+    },
+    {
+      censorshiprecord: {
+        token: "randomtoken2"
+      },
+      status: PROPOSAL_STATUS_PUBLIC
+    }
+  ];
 
   const getCommentVoteFromState = (state, token, commentid) =>
     state.commentsvotes.response.commentsvotes.filter(cv => cv.token === token && cv.commentid === commentid)[0];
@@ -149,6 +172,7 @@ describe("test api reducer", () => {
   test("default tests for api reducer", () => {
     expect(api.DEFAULT_STATE).toEqual({
       me: DEFAULT_REQUEST_STATE,
+      unvettedStatus: DEFAULT_REQUEST_STATE,
       init: DEFAULT_REQUEST_STATE,
       policy: DEFAULT_REQUEST_STATE,
       newUser: DEFAULT_REQUEST_STATE,
@@ -174,8 +198,10 @@ describe("test api reducer", () => {
       updateUserKey: DEFAULT_REQUEST_STATE,
       verifyUserKey: DEFAULT_REQUEST_STATE,
       likeComment: DEFAULT_REQUEST_STATE,
+      proposalPaywallPayment: DEFAULT_REQUEST_STATE,
       email: "",
-      keyMismatch: false
+      keyMismatch: false,
+      lastLoaded: {}
     });
 
     expect(api.default(undefined, { type: "" })).toEqual(api.DEFAULT_STATE);
@@ -365,15 +391,13 @@ describe("test api reducer", () => {
     expect(api.onReceiveNewComment({}, action2)).toEqual(receive("newComment", {}, action2));
   });
 
-  test("correcly updates status state for onReceiveSetStatus", () => {
+  test("correcly updates status state for onReceiveSetStatus (unvetted -> vetted)", () => {
     const proposalUpdated = {
-      censorshiprecord: {
-        token: "censortoken"
-      },
-      status: 3
+      ...MOCK_STATE.unvetted.response.proposals[0],
+      status: 4
     };
 
-    let action = {
+    const action = {
       type: act.RECEIVE_SETSTATUS_PROPOSAL,
       payload: {
         proposal: proposalUpdated
@@ -382,34 +406,51 @@ describe("test api reducer", () => {
     };
 
     let state = request("setStatusProposal", MOCK_STATE, action);
-    let newState = api.onReceiveSetStatus(state, action);
+    state= api.onReceiveSetStatus(state, action);
 
     expect(api.default(state, action).proposal.response.proposal)
       .toEqual(proposalUpdated);
 
     // updates status to 'vetted' for the proposal with token 'censortoken'
-    expect(newState.proposal.response.proposal).toEqual(proposalUpdated);
+    expect(state.proposal.response.proposal).toEqual(proposalUpdated);
 
-    expect(newState.unvetted.response.proposals).toEqual([
-      proposalUpdated,
-      {
-        censorshiprecord: {
-          token: "anothertoken"
-        }
-      }
-    ]);
-    action = {
-      ...action,
-      payload: {
-        token: "misctoken"
-      }
+    // make sure the proposal was removed from the unvetted list
+    expect(state.unvetted.response.proposals).toEqual(
+      MOCK_STATE.unvetted.response.proposals.filter((_, i) => i !== 0)
+    );
+
+    // make sure the proposal was added to the vetted list
+    expect(state.vetted.response.proposals).toEqual([proposalUpdated]);
+  });
+
+  test("correcly updates status state for onReceiveSetStatus (unvetted -> censored)", () => {
+    const proposalUpdated = {
+      ...MOCK_STATE.unvetted.response.proposals[0],
+      status: 3
     };
 
-    state = request("setStatusProposal", MOCK_STATE, action);
-    newState = api.onReceiveSetStatus(state, action);
+    const action = {
+      type: act.RECEIVE_SETSTATUS_PROPOSAL,
+      payload: {
+        proposal: proposalUpdated
+      },
+      error: false
+    };
 
-    // doesn't update any proposal status
-    expect(newState.unvetted.response.proposals).toEqual(MOCK_STATE.unvetted.response.proposals);
+    let state = request("setStatusProposal", MOCK_STATE, action);
+    state= api.onReceiveSetStatus(state, action);
+
+    expect(api.default(state, action).proposal.response.proposal)
+      .toEqual(proposalUpdated);
+
+    // updates status to 'censored' for the proposal with token 'censortoken'
+    expect(state.proposal.response.proposal).toEqual(proposalUpdated);
+
+    // make sure the proposal was updated and kept in the unvetted list
+    expect(state.unvetted.response.proposals[0]).toEqual(proposalUpdated);
+
+    // make sure vetted list is still the same
+    expect(state.vetted.response.proposals).toEqual([]);
   });
 
   test("correcly updates state for onReceiveStartVote", () => {
@@ -475,6 +516,52 @@ describe("test api reducer", () => {
     ]);
   });
 
+  test("correctly updates the state for onReceiveProposals", () => {
+    const key = "userProposals";
+
+    const action = {
+      type: act.RECEIVE_USER_PROPOSALS,
+      payload: {
+        proposals: MOCK_PROPOSALS_LOAD
+      }
+    };
+    const state = api.onReceiveProposals(key, MOCK_STATE, action);
+
+    // check if the unvetted proposals were correctly updated
+    const { proposals: unvettedResult } = state.unvetted.response;
+    expect(unvettedResult.length).toEqual(3);
+    expect(unvettedResult[0].censorshiprecord.token).toEqual("censortoken");
+
+    // check if the vetted proposals were correctly updated
+    const { proposals: vettedResult } = state.vetted.response;
+    expect(vettedResult.length).toEqual(1);
+    expect(vettedResult[0].censorshiprecord.token).toEqual("randomtoken2");
+
+  });
+
+  test("correctly updates the state for onReceiveUser", () => {
+    const action = {
+      type: act.RECEIVE_USER,
+      payload: {
+        user: {
+          proposals: MOCK_PROPOSALS_LOAD
+        }
+      }
+    };
+
+    const state = api.onReceiveUser(MOCK_STATE, action);
+
+    // check if the unvetted proposals were correctly updated
+    const { proposals: unvettedResult } = state.unvetted.response;
+    expect(unvettedResult.length).toEqual(3);
+    expect(unvettedResult[0].censorshiprecord.token).toEqual("censortoken");
+
+    // check if the vetted proposals were correctly updated
+    const { proposals: vettedResult } = state.vetted.response;
+    expect(vettedResult.length).toEqual(1);
+    expect(vettedResult[0].censorshiprecord.token).toEqual("randomtoken2");
+  });
+
   test("correctly updates state for reducers using request/receive/reset", () => {
 
     const reducers = [
@@ -491,7 +578,6 @@ describe("test api reducer", () => {
       { action: act.REQUEST_VERIFY_NEW_USER, key: "verifyNewUser", type: "request" },
       { action: act.RECEIVE_VERIFY_NEW_USER, key: "verifyNewUser", type: "receive" },
       { action: act.REQUEST_USER, key: "user", type: "request" },
-      { action: act.RECEIVE_USER, key: "user", type: "receive" },
       { action: act.REQUEST_LOGIN, key: "login", type: "request" },
       { action: act.RECEIVE_LOGIN, key: "login", type: "receive" },
       { action: act.REQUEST_CHANGE_USERNAME, key: "changeUsername", type: "request" },
@@ -499,11 +585,8 @@ describe("test api reducer", () => {
       { action: act.REQUEST_CHANGE_PASSWORD, key: "changePassword", type: "request" },
       { action: act.RECEIVE_CHANGE_PASSWORD, key: "changePassword", type: "receive" },
       { action: act.REQUEST_USER_PROPOSALS, key: "userProposals", type: "request" },
-      { action: act.RECEIVE_USER_PROPOSALS, key: "userProposals", type: "receive" },
       { action: act.REQUEST_VETTED, key: "vetted", type: "request" },
-      { action: act.RECEIVE_VETTED, key: "vetted", type: "receive" },
       { action: act.REQUEST_UNVETTED, key: "unvetted", type: "request" },
-      { action: act.RECEIVE_UNVETTED, key: "unvetted", type: "receive" },
       { action: act.REQUEST_PROPOSAL, key: "proposal", type: "request" },
       { action: act.RECEIVE_PROPOSAL, key: "proposal", type: "receive" },
       { action: act.REQUEST_PROPOSAL_COMMENTS, key: "proposalComments", type: "request" },
@@ -547,7 +630,9 @@ describe("test api reducer", () => {
       { action: act.REQUEST_PROPOSALS_VOTE_STATUS, key: "proposalsVoteStatus", type: "request" },
       { action: act.RECEIVE_PROPOSALS_VOTE_STATUS, key: "proposalsVoteStatus", type: "receive" },
       { action: act.REQUEST_PROPOSAL_VOTE_STATUS, key: "proposalVoteStatus", type: "request" },
-      { action: act.RECEIVE_PROPOSAL_VOTE_STATUS, key: "proposalVoteStatus", type: "receive" }
+      { action: act.RECEIVE_PROPOSAL_VOTE_STATUS, key: "proposalVoteStatus", type: "receive" },
+      { action: act.REQUEST_PROPOSAL_PAYWALL_PAYMENT, key: "proposalPaywallPayment", type: "request" },
+      { action: act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT, key: "proposalPaywallPayment", type: "receive" }
     ];
 
     reducers.map(({ action, key, type }) => {
@@ -557,12 +642,23 @@ describe("test api reducer", () => {
         error: false
       };
 
+      const MOCK_PROPOSALS_ACTION = {
+        type: action,
+        payload: {
+          proposals: []
+        },
+        error: false
+      };
+
       switch (type) {
       case "request":
         testRequestReducer(api.default, key, {}, MOCK_ACTION);
         break;
       case "receive":
         testReceiveReducer(api.default, key, {}, MOCK_ACTION);
+        break;
+      case "receiveProposals":
+        testReceiveProposalsReducer(api.default, key, {}, MOCK_PROPOSALS_ACTION);
         break;
       case "reset":
         testResetReducer(api.default, key, {}, MOCK_ACTION);

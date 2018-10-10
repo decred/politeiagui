@@ -1,4 +1,5 @@
 import React from "react";
+import { CONFIRMATIONS_REQUIRED } from "../../constants";
 
 const DcrdataTxLink = ({
   isTestnet,
@@ -17,7 +18,8 @@ const formatDate = (date) => {
   const day = d.getUTCDate();
   const year = d.getUTCFullYear();
   const month = d.getUTCMonth();
-  const minutes = d.getUTCMinutes() < 10 ? `0${d.getUTCMinutes()}` : d.getUTCMinutes();
+  const _minutes = d.getUTCMinutes();
+  const minutes = _minutes < 10 ? `0${_minutes}` : _minutes;
   const time = d.getUTCHours() + ":" + minutes;
   return year + "-" + month + "-" + day + "  |  " + time;
 };
@@ -27,8 +29,12 @@ const ProposalCreditsSummary = ({
   proposalCreditPrice,
   proposalCreditPurchases,
   isTestnet,
-  lastPaymentNotConfirmed,
-  recentPaymentsConfirmed
+  recentPaymentsConfirmed,
+  proposalPaywallPaymentTxid,
+  proposalPaywallPaymentAmount,
+  proposalPaywallPaymentConfirmations,
+  pollingCreditsPayment,
+  toggleCreditsPaymentPolling
 }) => {
   if (recentPaymentsConfirmed && recentPaymentsConfirmed.length > 0) {
     recentPaymentsConfirmed.forEach(payment => {
@@ -42,11 +48,12 @@ const ProposalCreditsSummary = ({
       if (!proposalCreditPurchases.find(el => el.txId === transaction.txId)) proposalCreditPurchases.push(transaction);
     });
   }
-  if (lastPaymentNotConfirmed) {
+  if (proposalPaywallPaymentTxid) {
     const transaction = {
-      numberPurchased: Math.round(lastPaymentNotConfirmed.amount * 1/proposalCreditPrice),
-      txId: lastPaymentNotConfirmed.txid,
+      numberPurchased: Math.round(proposalPaywallPaymentAmount * 1/(proposalCreditPrice * 100000000)),
+      txId: proposalPaywallPaymentTxid,
       price: proposalCreditPrice,
+      confirmations: proposalPaywallPaymentConfirmations,
       confirming: true
     };
     proposalCreditPurchases.push(transaction);
@@ -55,7 +62,27 @@ const ProposalCreditsSummary = ({
   return (
     <div className="proposal-credits-summary">
       <div className="available-credits">
-        <b>Available credits:</b> {proposalCredits}
+        <span> <b>Available credits:</b> {proposalCredits}</span>
+        {pollingCreditsPayment ? <div className="searching-credits">
+          <i className="fa fa-circle-o-notch fa-spin right-margin-5" style={{ fontSize: "14px" }}></i>
+          {proposalPaywallPaymentTxid ?
+            <div className="searching-credits__text">
+              <span>Checking for payment confirmation</span>
+              <span className="font-12">The payment can take a few minutes to be confirmed</span>
+            </div> :
+            <div className="searching-credits__text">
+              <span>Searching for a new payment</span>
+              <span className="font-12">The payment can take a few minutes to be detected</span>
+            </div>
+          }
+        </div> :
+          <button
+            className="inverse"
+            onClick={() => toggleCreditsPaymentPolling(true)}
+          >
+            {"Check for payments"}
+          </button>
+        }
       </div>
       {proposalCreditPurchases && proposalCreditPurchases.length ? (
         <div className="credit-purchase-table">
@@ -79,8 +106,9 @@ const ProposalCreditsSummary = ({
                 </div>
                 <div className="credit-purchase-cell credit-purchase-status">
                   { creditPurchase.confirming ?
-                    (<div className="user-proposal-credits-cell"><div className="logo"></div></div>)
-                    : "✔"
+                    (<div className="user-proposal-credits-cell" style={{ color: "#ff8100", fontWeight: "bold" }}><div>
+											Awaiting confirmations: </div>({creditPurchase.confirmations} of {CONFIRMATIONS_REQUIRED })</div>)
+                    : <div style={{ fontWeight: "bold", color: "green" }}>Confirmed</div>
                   }
                 </div>
                 <div className="credit-purchase-cell credit-purchase-date-text">

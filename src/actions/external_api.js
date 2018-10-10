@@ -1,15 +1,14 @@
 import * as external_api from "../lib/external_api";
-import { verifyUserPaymentWithPoliteia, onAddProposalCredits } from "./api";
-import { onUpdatePaymentPollingQueue, onConfirmPollingPayment } from "./app";
+import { verifyUserPaymentWithPoliteia } from "./api";
 import act from "./methods";
 import {
   PAYWALL_STATUS_LACKING_CONFIRMATIONS,
-  PAYWALL_STATUS_PAID
+  PAYWALL_STATUS_PAID,
+  CONFIRMATIONS_REQUIRED
 } from "../constants";
 
-const CONFIRMATIONS_REQUIRED = 2;
 const POLL_INTERVAL = 10 * 1000;
-export const verifyUserPayment = (address, amount, txNotBefore, credits = false) => dispatch => {
+export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
   // Check dcrdata first.
   return external_api.getPaymentsByAddressDcrdata(address)
     .then(response => {
@@ -43,28 +42,20 @@ export const verifyUserPayment = (address, amount, txNotBefore, credits = false)
       }
 
       if(txn.confirmations < CONFIRMATIONS_REQUIRED) {
-        if (credits) {
-          dispatch(onUpdatePaymentPollingQueue({ txid: txn.id, confirmations: txn.confirmations }));
-        } else {
-          dispatch(act.UPDATE_USER_PAYWALL_STATUS({
-            status: PAYWALL_STATUS_LACKING_CONFIRMATIONS,
-            currentNumberOfConfirmations: txn.confirmations
-          }));
-        }
+        dispatch(act.UPDATE_USER_PAYWALL_STATUS({
+          status: PAYWALL_STATUS_LACKING_CONFIRMATIONS,
+          currentNumberOfConfirmations: txn.confirmations
+        }));
         return false;
       }
 
       return verifyUserPaymentWithPoliteia(txn.id);
     })
     .then(verified => {
-      if(verified && credits) {
-        dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null));
-        dispatch(onConfirmPollingPayment({ address, txNotBefore }));
-        dispatch(onAddProposalCredits({ amount, txNotBefore }));
-      } else if (verified) {
+      if (verified) {
         dispatch(act.UPDATE_USER_PAYWALL_STATUS({ status: PAYWALL_STATUS_PAID }));
       } else {
-        setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore, credits)), POLL_INTERVAL);
+        setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
       }
     })
     .catch(error => {
@@ -145,7 +136,6 @@ export const payProposalWithFaucet = (address, amount) => dispatch => {
       const payload = { txid: json.Txid, address, amount, confirmations: 0, credits: true };
       dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(payload));
       dispatch(act.SAVE_PAYMENT_POLLING_QUEUE(payload));
-      return dispatch(verifyUserPayment(address, amount, json.Txid, true));
     })
     .catch(error => {
       dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null, error));

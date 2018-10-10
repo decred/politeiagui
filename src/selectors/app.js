@@ -4,18 +4,23 @@ import eq from "lodash/fp/eq";
 import filter from "lodash/fp/filter";
 import find from "lodash/fp/find";
 import qs from "query-string";
+import orderBy from "lodash/fp/orderBy";
 import { or, constant, not } from "../lib/fp";
 import {
   apiProposal,
   apiProposalComments,
   userAlreadyPaid,
   getKeyMismatch,
+  apiPropsVoteStatusResponse,
   apiUnvettedProposals,
   apiVettedProposals,
   getPropVoteStatus,
-  apiUserProposals,
-  proposalCreditPurchases
+  proposalCreditPurchases,
+  apiUnvettedStatusResponse,
+  numOfUserProposals,
+  userid
 } from "./api";
+
 import { globalUsernamesById } from "../actions/app";
 import {
   PAYWALL_STATUS_PAID,
@@ -31,7 +36,7 @@ import {
   PROPOSAL_USER_FILTER_SUBMITTED,
   PROPOSAL_USER_FILTER_DRAFT
 } from "../constants";
-import { getTextFromIndexMd } from "../helpers";
+import { getTextFromIndexMd, countPublicProposals } from "../helpers";
 
 export const replyTo = or(get([ "app", "replyParent" ]), constant(0));
 
@@ -67,11 +72,6 @@ export const isMarkdown = compose(eq("index.md"), get("name"));
 export const getProposalFiles = compose(get("files"), proposal);
 export const getMarkdownFile = compose(find((isMarkdown)), getProposalFiles);
 export const getNotMarkdownFile = compose(filter(not(isMarkdown)), getProposalFiles);
-
-export const paymentPollingQueue = state => state && state.app && state.app.paymentPollingQueue;
-
-export const lastPaymentFromPollingQueue = state =>
-  state.app.paymentPollingQueue && state.app.paymentPollingQueue.length > 0 && state.app.paymentPollingQueue[state.app.paymentPollingQueue.length-1];
 
 export const getEditProposalValues = state => {
   const { name } = proposal(state);
@@ -154,7 +154,7 @@ export const getUnvettedFilteredProposals = (state) => {
       return true;
     }
     return filterValue === proposal.status;
-  });
+  }).sort((a, b) => b.timestamp - a.timestamp);
 };
 
 export const getVettedFilteredProposals = (state) => {
@@ -168,7 +168,7 @@ export const getVettedFilteredProposals = (state) => {
       return true;
     }
     return filterValue === getPropVoteStatus(state)(prop.censorshiprecord.token).status;
-  });
+  }).sort((a, b) => b.timestamp - a.timestamp);
 };
 
 export const getDraftProposals = (state) => {
@@ -181,10 +181,22 @@ export const getDraftProposals = (state) => {
   return drafts;
 };
 
+export const getSubmittedUserProposals = (state) => (userID) => {
+  const isUserProp = prop => prop.userid === userID;
+  const vettedProps = vettedProposals(state).filter(isUserProp);
+  const unvettedProps = unvettedProposals(state).filter(isUserProp);
+
+  const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
+
+  return sortByNewestFirst(vettedProps.concat(unvettedProps));
+};
+
 export const getUserProposals = (state) => {
   const userFilterValue = getUserFilterValue(state);
+  const userID = userid(state);
+
   if (userFilterValue === PROPOSAL_USER_FILTER_SUBMITTED) {
-    return apiUserProposals(state);
+    return getSubmittedUserProposals(state)(userID);
   } else if (userFilterValue === PROPOSAL_USER_FILTER_DRAFT) {
     return getDraftProposals(state);
   }
@@ -194,7 +206,7 @@ export const getUserProposals = (state) => {
 
 export const getUserProposalFilterCounts = (state) => {
   const proposalFilterCounts = {
-    [PROPOSAL_USER_FILTER_SUBMITTED]: apiUserProposals(state).length,
+    [PROPOSAL_USER_FILTER_SUBMITTED]: numOfUserProposals(state),
     [PROPOSAL_USER_FILTER_DRAFT]: getDraftProposals(state).length
   };
 
@@ -206,29 +218,18 @@ export const getUserProposalFilterCounts = (state) => {
 };
 
 export const getUnvettedProposalFilterCounts = (state) => {
-  const proposals = unvettedProposals(state);
-  const proposalFilterCounts = {};
-
-  proposals.forEach(proposal => {
-    proposalFilterCounts[proposal.status] = 1 + (proposalFilterCounts[proposal.status] || 0);
-  });
-  proposalFilterCounts[PROPOSAL_FILTER_ALL] = proposals.length;
-
-  return proposalFilterCounts;
+  const usResponse = apiUnvettedStatusResponse(state);
+  console.log("us: ", usResponse);
+  return usResponse ? {
+    [PROPOSAL_STATUS_UNREVIEWED]: usResponse.numofunvetted + usResponse.numofunvettedchanges,
+    [PROPOSAL_STATUS_CENSORED]: usResponse.numofcensored,
+    [PROPOSAL_FILTER_ALL]: usResponse.numofunvetted + usResponse.numofunvettedchanges + usResponse.numofcensored
+  } : {};
 };
 
 export const getVettedProposalFilterCounts = (state) => {
-  const proposals = vettedProposals(state);
-  const proposalFilterCounts = {};
-
-  proposals.forEach(proposal => {
-    const propVoteStatus = getPropVoteStatus(state)(proposal.censorshiprecord.token);
-    const status = propVoteStatus.status;
-    proposalFilterCounts[status] = 1 + (proposalFilterCounts[status] || 0);
-  });
-  proposalFilterCounts[PROPOSAL_FILTER_ALL] = proposals.length;
-
-  return proposalFilterCounts;
+  const vsResponse = apiPropsVoteStatusResponse(state);
+  return vsResponse ? countPublicProposals(vsResponse.votesstatus) : {};
 };
 
 export const getUnvettedEmptyProposalsMessage = (state) => {
@@ -255,6 +256,7 @@ export const getVettedEmptyProposalsMessage = (state) => {
   }
 };
 
+
 export const votesEndHeight = (state) => state.app.votesEndHeight || {};
 
 export const getCsrfIsNeeded = state => state.app ? state.app.csrfIsNeeded : null;
@@ -270,3 +272,5 @@ export const identityImportSuccess = (state) => state.app.identityImportResult &
 export const onboardViewed = (state) => state.app.onboardViewed;
 
 export const commentsSortOption = (state) => state.app.commentsSortOption;
+
+export const pollingCreditsPayment = state => state.app.pollingCreditsPayment;

@@ -19,6 +19,23 @@ export const testRequestReducer = (reducer, key, state, action) => {
   expect(action_state).toEqual(func_state);
 };
 
+export const testReceiveProposalsReducer = (reducer, key, state, action) => {
+  const func_state = receive(key, state, action);
+  const action_state = reducer(state, action);
+
+  expect(func_state).toEqual({
+    ...state,
+    [key]: {
+      ...state[key],
+      isRequesting: false,
+      response: action.error ? null : { ...action.payload },
+      error: action.error ? action.payload : null
+    }
+  });
+
+  expect(action_state).toEqual(func_state);
+};
+
 export const testReceiveReducer = (reducer, key, state, action) => {
   const func_state = receive(key, state, action);
   const action_state = reducer(state, action);

@@ -26,9 +26,7 @@ export const traverseChildren = (el, cb) => {
 };
 
 export const handleFilterXss = (el) => {
-  if (typeof(el) === "string") {
-    return xssFilters.inHTMLData(el);
-  }
+  if (typeof(el) === "string") return el;
   const props = el.props;
   if(!props) {
     return el;

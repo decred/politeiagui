@@ -21,7 +21,8 @@ const accountConnector = connect(sel.selectorMap({
   shouldAutoVerifyKey: sel.shouldAutoVerifyKey,
   identityImportError: sel.identityImportError,
   identityImportSuccess: sel.identityImportSuccess,
-  userPubkey: sel.userPubkey
+  userPubkey: sel.userPubkey,
+  userID: sel.userid
 }), dispatch => bindActionCreators({
   onUpdateUserKey,
   keyMismatchAction: act.keyMismatch,

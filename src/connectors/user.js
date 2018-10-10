@@ -23,9 +23,14 @@ export default connect(
     user: sel.user,
     error: sel.apiUserError,
     isLoading: or(sel.isApiRequestingUser, sel.isApiRequestingMe),
+    isLoadingProposals: or(sel.userProposalsIsRequesting, sel.isApiRequestingPropsVoteStatus),
     isTestnet: sel.isTestNet,
     loggedInAsEmail: sel.loggedInAsEmail,
+    userProposals: sel.getUserProposals,
     isAdmin: sel.isAdmin,
+    lastLoadedUserDetailProposal: sel.lastLoadedUserDetailProposal,
+    lastLoadedProposal: sel.lastLoadedUserProposal,
+    getSubmittedUserProposals: sel.getSubmittedUserProposals,
     isApiRequestingMarkAsPaid: state => (
       sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_CLEAR_USER_PAYWALL
     ),
@@ -44,6 +49,8 @@ export default connect(
     editUserResponse: sel.editUserResponse
   }),
   dispatch => bindActionCreators({
+    onFetchUserProposals: act.onFetchUserProposals,
+    onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
     onFetchData: act.onFetchUser,
     onEditUser: act.onEditUser
   }, dispatch)

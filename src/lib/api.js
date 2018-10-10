@@ -137,10 +137,6 @@ export const editUser = (csrf, userid, action, reason) =>
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);
 
-export const userProposals = userid => {
-  return GET(`/v1/user/proposals?${qs.stringify({ userid })}`).then(getResponse);
-};
-
 export const login = (csrf, email, password) =>
   POST("/login", csrf, { email, password: digest(password) }).then(getResponse);
 
@@ -181,8 +177,25 @@ export const verifyKeyRequest = (csrf, email, verificationtoken) =>
   );
 
 export const policy = () => GET("/v1/policy").then(getResponse);
-export const vetted = () => GET("/v1/proposals/vetted").then(getResponse);
-export const unvetted = () => GET("/v1/proposals/unvetted").then(getResponse);
+export const vetted = (after) => {
+  return !after ?
+    GET("/v1/proposals/vetted").then(getResponse) :
+    GET(`/v1/proposals/vetted?${qs.stringify({ after })}`).then(getResponse);
+};
+
+export const unvetted = (after) => {
+  return !after ?
+    GET("/v1/proposals/unvetted").then(getResponse) :
+    GET(`/v1/proposals/unvetted?${qs.stringify({ after })}`).then(getResponse);
+};
+
+export const userProposals = (userid, after) => {
+  return !after ?
+    GET(`/v1/user/proposals?${qs.stringify({ userid })}`).then(getResponse) :
+    GET(`/v1/user/proposals?${qs.stringify({ userid, after })}`).then(getResponse);
+};
+
+export const status = () => GET("/v1/proposals/stats").then(getResponse);
 export const proposal = token => GET(`/v1/proposals/${token}`).then(getResponse);
 export const user = userId => GET(`/v1/user/${userId}`).then(getResponse);
 export const proposalComments = token => GET(`/v1/proposals/${token}/comments`).then(getResponse);
@@ -238,9 +251,12 @@ export const usernamesById = (csrf, userids) => {
 export const proposalsVoteStatus = () => GET("/v1/proposals/votestatus").then(getResponse);
 export const proposalVoteStatus = (token) => GET(`/v1/proposals/${token}/votestatus`).then(getResponse);
 
-export const proposalAuthorizeVote = (csrf, token, email, version) =>
+export const proposalAuthorizeOrRevokeVote = (csrf, action, token, email, version) =>
   pki.myPubKeyHex(email).then(publickey =>
-    pki.signStringHex(email, token + version).then(signature => POST(
+    pki.signStringHex(email, token + version + action).then(signature => POST(
       "/proposals/authorizevote", csrf,
-      { token, signature, publickey }
+      { action, token, signature, publickey }
     ))).then(getResponse);
+
+export const proposalPaywallPayment = () =>
+  GET("/v1/proposals/paywallpayment").then(getResponse);

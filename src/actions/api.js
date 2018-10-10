@@ -10,9 +10,7 @@ import { callAfterMinimumWait } from "./lib";
 import { resetNewProposalData } from "../lib/editors_content_backup";
 import act from "./methods";
 import {
-  globalUsernamesById,
-  selectDefaultPublicFilterValue,
-  selectDefaultAdminFilterValue
+  globalUsernamesById
 } from "./app";
 
 export const onResetProposal = act.RESET_PROPOSAL;
@@ -44,20 +42,6 @@ export const onRequestMe = () => (dispatch, getState) => {
       dispatch(act.RECEIVE_ME(response));
       dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
 
-      const paymentPollingQueue = sel.paymentPollingQueue(getState());
-
-      if (paymentPollingQueue.length > 0) {
-        paymentPollingQueue.forEach( p => {
-          dispatch(
-            external_api_actions.verifyUserPayment(
-              p.address,
-              p.amount,
-              p.txid,
-              p.credits
-            )
-          );
-        });
-      }
       // Start polling for the user paywall tx, if applicable.
       const paywallAddress = sel.paywallAddress(getState());
       if (paywallAddress) {
@@ -195,33 +179,41 @@ export const onChangePassword = (password, newPassword) =>
       });
   });
 
-export const onFetchUserProposals = userid => dispatch => {
+export const onFetchUserProposals = (userid, token) => dispatch => {
   dispatch(act.REQUEST_USER_PROPOSALS());
   return api
-    .userProposals(userid)
+    .userProposals(userid, token)
     .then(response => dispatch(act.RECEIVE_USER_PROPOSALS(response)))
     .catch(error => {
       dispatch(act.RECEIVE_USER_PROPOSALS(null, error));
     });
 };
 
-export const onFetchVetted = () => (dispatch, getState) => {
+export const onFetchVetted = token => (dispatch) => {
   dispatch(act.REQUEST_VETTED());
   return api
-    .vetted()
+    .vetted(token)
     .then(response => dispatch(act.RECEIVE_VETTED(response)))
-    .then(() => selectDefaultPublicFilterValue(dispatch, getState))
     .catch(error => {
       dispatch(act.RECEIVE_VETTED(null, error));
     });
 };
 
-export const onFetchUnvetted = () => (dispatch, getState) => {
+export const onFetchUnvettedStatus = () => (dispatch) => {
+  dispatch(act.REQUEST_UNVETTED_STATUS());
+  return api
+    .status()
+    .then(response => dispatch(act.RECEIVE_UNVETTED_STATUS(response)))
+    .catch(error => {
+      dispatch(act.RECEIVE_UNVETTED_STATUS(null, error));
+    });
+};
+
+export const onFetchUnvetted = token => (dispatch) => {
   dispatch(act.REQUEST_UNVETTED());
   return api
-    .unvetted()
+    .unvetted(token)
     .then(response => dispatch(act.RECEIVE_UNVETTED(response)))
-    .then(() => selectDefaultAdminFilterValue(dispatch, getState))
     .catch(error => {
       dispatch(act.RECEIVE_UNVETTED(null, error));
     });
@@ -433,15 +425,24 @@ export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
       });
   });
 
-export const onSubmitStatusProposal = (loggedInAsEmail, token, status, censorMessage = "") =>
+export const onSubmitStatusProposal = (authorid, loggedInAsEmail, token, status, censorMessage = "") =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
     if (status === 4) {
       dispatch(act.SET_PROPOSAL_APPROVED(true));
     }
+
     return api
       .proposalSetStatus(loggedInAsEmail, csrf, token, status, censorMessage)
-      .then(response => dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(response)))
+      .then(({ proposal }) => {
+        dispatch(act.RECEIVE_SETSTATUS_PROPOSAL({
+          proposal: {
+            ...proposal,
+            userid: authorid
+          }
+        }));
+        dispatch(onFetchUnvettedStatus());
+      })
       .catch(error => {
         dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
       });
@@ -581,7 +582,19 @@ export const onUpdateProposalCredits = () => dispatch => {
 };
 
 export const onAddProposalCredits = ({ amount, txNotBefore }) => (dispatch, getState) => {
-  const creditPrice = getState().api.proposalPaywallDetails.response.creditprice / 100000000;
+  const propPaywallDetails = getState().api.proposalPaywallDetails;
+  let creditPrice = 0.1;
+  if (propPaywallDetails) {
+    creditPrice = propPaywallDetails.response.creditprice / 100000000;
+  } else {
+    api
+      .proposalPaywallDetails()
+      .then(response => {
+        dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS(response));
+        creditPrice = response.creditprice / 100000000;
+      });
+  }
+
   return amount ? dispatch(act.ADD_PROPOSAL_CREDITS({ amount: Math.round(amount * 1/creditPrice), txid: txNotBefore })) : null;
 };
 
@@ -601,14 +614,13 @@ export const onUserProposalCredits = () => dispatch => {
     });
 };
 
-export const onFetchProposalsVoteStatus = () => (dispatch, getState) => {
+export const onFetchProposalsVoteStatus = () => (dispatch) => {
   dispatch(act.REQUEST_PROPOSALS_VOTE_STATUS());
   return api
     .proposalsVoteStatus()
     .then(response =>
       dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS({ ...response, success: true }))
     )
-    .then(() => selectDefaultPublicFilterValue(dispatch, getState))
     .catch(
       error => {
         dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS(null, error));
@@ -632,8 +644,8 @@ export const onFetchProposalVoteStatus = (token) => (dispatch) => {
 export const onAuthorizeVote = (email, token, version) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_AUTHORIZE_VOTE({ token }));
-    return api.proposalAuthorizeVote(csrf, token, email, version).then(
-      response => dispatch(act.RECEIVE_AUTHORIZE_VOTE({ ...response, succes: true }))
+    return api.proposalAuthorizeOrRevokeVote(csrf, "authorize", token, email, version).then(
+      response => dispatch(act.RECEIVE_AUTHORIZE_VOTE({ ...response, success: true }))
     ).catch(
       error => {
         dispatch(act.RECEIVE_AUTHORIZE_VOTE(null, error));
@@ -641,3 +653,30 @@ export const onAuthorizeVote = (email, token, version) =>
       }
     );
   });
+
+export const onRevokeVote = (email, token, version) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_AUTHORIZE_VOTE({ token }));
+    return api.proposalAuthorizeOrRevokeVote(csrf, "revoke", token, email, version).then(
+      response => dispatch(act.RECEIVE_REVOKE_AUTH_VOTE({ ...response, success: true }))
+    ).catch(
+      error => {
+        dispatch(act.RECEIVE_REVOKE_AUTH_VOTE(null, error));
+        throw error;
+      }
+    );
+  });
+
+export const onFetchProposalPaywallPayment = () =>
+  dispatch => {
+    dispatch(act.REQUEST_PROPOSAL_PAYWALL_PAYMENT());
+    return api.proposalPaywallPayment().then(
+      response => dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(response))
+    ).catch(
+      error => {
+        dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(null, error));
+        throw error;
+      }
+    );
+  };
+

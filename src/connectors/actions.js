@@ -18,6 +18,7 @@ const actions = connect(
     isRequestingAuthorizeVote: sel.isApiRequestingAuthorizeVote,
     startVoteToken: sel.apiStartVoteToken,
     isRequestingStartVote: sel.isApiRequestingStartVote,
+    isApiRequestingSetProposalStatusByToken: sel.isApiRequestingSetProposalStatusByToken,
     startVoteError: sel.apiStartVoteError
   }),
   {
@@ -25,6 +26,7 @@ const actions = connect(
     onDeleteDraftProposal: act.onDeleteDraftProposal,
     onStartVote: act.onStartVote,
     onAuthorizeVote: act.onAuthorizeVote,
+    onRevokeVote: act.onRevokeVote,
     openModal: act.openModal
   }
 );

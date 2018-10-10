@@ -4,13 +4,14 @@ import ProposalCreditsSummary from "./Summary";
 import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
 import { multiplyFloatingNumbers } from "../../helpers";
 import { PageLoadingIcon } from "../snew";
+import { CONFIRMATIONS_REQUIRED } from "../../constants";
 
 class ProposalCreditsPage extends React.Component {
   state = { showBuyingMessage: false }
   componentDidMount() {
     this.props.onPurchaseProposalCredits();
   }
-  handlePurchaseCreditsClick = () => this.setState({ showBuyingMessage: true })
+  handlePurchaseCreditsClick = () => this.setState({ showBuyingMessage: !this.state.showBuyingMessage })
   handleBuyWithFaucetClick = () => {
     const {
       payWithFaucet,
@@ -42,8 +43,8 @@ class ProposalCreditsPage extends React.Component {
       isApiRequestingPayWithFaucet,
       payWithFaucetTxId,
       payWithFaucetError,
-      lastPaymentNotConfirmed,
-      recentPaymentsConfirmed
+      proposalPaywallPaymentTxid,
+      ...props
     } = this.props;
     return isApiRequestingProposalPaywall ?
       <PageLoadingIcon />
@@ -65,18 +66,20 @@ class ProposalCreditsPage extends React.Component {
             proposalCredits={proposalCredits}
             proposalCreditPurchases={proposalCreditPurchases}
             isTestnet={isTestnet}
-            lastPaymentNotConfirmed={lastPaymentNotConfirmed}
-            recentPaymentsConfirmed={recentPaymentsConfirmed}
+            { ...{ ...props, proposalPaywallPaymentTxid }}
           />
-          {!this.state.showBuyingMessage && (
-            <ButtonWithLoadingIcon
-              className="c-btn c-btn-primary"
-              text="Purchase credits"
-              disabled={isApiRequestingProposalPaywall || !userCanExecuteActions || lastPaymentNotConfirmed}
-              isLoading={isApiRequestingProposalPaywall}
-              onClick={this.handlePurchaseCreditsClick} />
-          )}
-          {proposalPaywallAddress && this.state.showBuyingMessage && (
+          <ButtonWithLoadingIcon
+            className="c-btn c-btn-primary"
+            text="Purchase credits"
+            disabled={isApiRequestingProposalPaywall || proposalPaywallPaymentTxid}
+            isLoading={isApiRequestingProposalPaywall}
+            onClick={this.handlePurchaseCreditsClick}
+          />
+          {proposalPaywallPaymentTxid ?
+            <span>Do not send any other transactions until the current payment is confirmed</span>
+            : null
+          }
+          {proposalPaywallAddress && this.state.showBuyingMessage && !proposalPaywallPaymentTxid && (
             <Message
               type="info"
               className="proposal-paywall-message"
@@ -91,11 +94,11 @@ class ProposalCreditsPage extends React.Component {
                   </p>
                   <p>
                   Politeia automatically checks for a transaction sent to this address.
-                  After you send it and it reaches 2 confirmations, you will be granted
+                  After you send it and it reaches {CONFIRMATIONS_REQUIRED} confirmations, you will be granted
                   the number of proposal credits you paid for.
                   </p>
                   <p style={{ marginTop: "24px" }}>
-                    <b>Note:</b> Make sure to only send 1 transaction to the address, and
+                    <b>Note:</b> Make sure to only send<b> 1 transaction to the address per time</b>, and
                   also send an exact amount. Any amount that is not a multiple of{" "}
                     {proposalCreditPrice} DCR will be rounded down to the closest number
                   of proposal credits.

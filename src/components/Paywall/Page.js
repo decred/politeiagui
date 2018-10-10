@@ -2,7 +2,8 @@ import React from "react";
 import Message from "../Message";
 import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
 import {
-  PAYWALL_STATUS_PAID
+  PAYWALL_STATUS_PAID,
+  CONFIRMATIONS_REQUIRED
 } from "../../constants";
 import PaywallStatus from "./Status";
 import AddressViewer from "../AddressViewer";
@@ -43,7 +44,7 @@ const Paywall = ({
           </p>
           <AddressViewer paywallAddress={paywallAddress} />
           <p className="paywall-paragraph">
-            When the transaction to the address above reaches 2 confirmations, you will have
+            When the transaction to the address above reaches {CONFIRMATIONS_REQUIRED} confirmations, you will have
             access to participate on and submit proposals.
           </p>
           <PaywallStatus
