@@ -57,7 +57,6 @@ const PaymentFaucet = ({
 
 class Wrapper extends React.Component {
   componentWillUnmount() {
-    console.log("got here");
     this.props.resetFaucet();
   }
   render () {
