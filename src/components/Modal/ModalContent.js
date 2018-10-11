@@ -5,7 +5,9 @@ import ConfirmActionWithReason from "./contents/ConfirmActionWithReason";
 import Login from "./contents/Login";
 import OnBoard from "./contents/OnBoard";
 import PaywallModal from "./contents/PaywallModal";
-import ProposalCreditsModal from "./contents/ProposalCreditsModal";
+import CreditsHistoryModal from "./contents/CreditsHistoryModal";
+import ManageCreditsModal  from "./contents/ManageCreditsModal";
+import PurchaseCreditsModal from "./contents/PurchaseCreditsModal";
 import { withRouter } from "react-router-dom";
 
 const mapModalTypeToContent = {
@@ -14,7 +16,9 @@ const mapModalTypeToContent = {
   [modalTypes.LOGIN]: ({ location, modalData }) => <Login  me={modalData} pathname={location.pathname} />,
   [modalTypes.ONBOARD]: () => <OnBoard />,
   [modalTypes.PAYWALL_MODAL]: () => <PaywallModal />,
-  [modalTypes.PROPOSAL_CREDITS_MODAL]: () => <ProposalCreditsModal />
+  [modalTypes.CREDITS_HISTORY_MODAL]: () => <CreditsHistoryModal />,
+  [modalTypes.MANAGE_CREDITS_MODAL]: () => <ManageCreditsModal />,
+  [modalTypes.PURCHASE_CREDITS_MODAL]: () => <PurchaseCreditsModal />
 };
 
 const ModalContent = ({ modalData, location }) => {

@@ -5,7 +5,7 @@ import ProposalCredits from "../../ProposalCreditsManager";
 
 const ProposalCreditsModal = ({ closeModal }) => (
   <ModalContentWrapper
-    title={"Proposal Credits"}
+    title={"Proposal Credits History"}
     onClose={closeModal}
   >
     <ProposalCredits />

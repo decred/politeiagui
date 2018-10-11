@@ -27,24 +27,6 @@ describe("test external_api reducer", () => {
     testReceiveReducer(external_api, "payWithFaucet", MOCK_STATE, receive_action);
   });
 
-  test("tests proposal paywall payment reducers, involving request and receive", () => {
-
-    const request_action = {
-      type: act.REQUEST_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET,
-      payload: "data",
-      error: false
-    };
-
-    const receive_action = {
-      type: act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET,
-      payload: "data",
-      error: false
-    };
-
-    testRequestReducer(external_api, "payProposalWithFaucet", MOCK_STATE, request_action);
-    testReceiveReducer(external_api, "payProposalWithFaucet", MOCK_STATE, receive_action);
-  });
-
   test("tests last block height reducers, involving request and receive", () => {
 
     const request_action = {

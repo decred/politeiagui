@@ -59,7 +59,8 @@ describe("test actions/external_api", () => {
           error: false,
           payload: {
             status: PAYWALL_STATUS_LACKING_CONFIRMATIONS,
-            currentNumberOfConfirmations: 0
+            currentNumberOfConfirmations: 0,
+            txid: "997a39549ed7ec5cb64f90753c6c69c6db8a84b06c2908cc0aea3c4a4d5e0805"
           }
         }
       ]);

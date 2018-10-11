@@ -184,3 +184,5 @@ export const resetLastSubmittedProposal = () => act.RESET_LAST_SUBMITTED();
 export const onSetCommentsSortOption = (option) => act.SET_COMMENTS_SORT_OPTION(option);
 
 export const toggleCreditsPaymentPolling = (bool) => act.TOGGLE_CREDITS_PAYMENT_POLLING(bool);
+
+export const toggleProposalPaymentReceived = (bool) => act.TOGGLE_PROPOSAL_PAYMENT_RECEIVED(bool);

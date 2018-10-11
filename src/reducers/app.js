@@ -94,6 +94,7 @@ const app = (state = DEFAULT_STATE, action) => (({
   [act.UPDATE_USER_PAYWALL_STATUS]: () => ({
     ...state,
     userPaywallStatus: action.payload.status,
+    userPaywallTxid: action.payload.txid,
     userAlreadyPaid: action.payload.status === PAYWALL_STATUS_PAID,
     userPaywallConfirmations: action.payload.currentNumberOfConfirmations
   }),
@@ -144,7 +145,8 @@ const app = (state = DEFAULT_STATE, action) => (({
   [act.IDENTITY_IMPORTED]: () => ({ ...state, identityImportResult: action.payload }),
   [act.SET_ONBOARD_AS_VIEWED]: () => ({ ...state, onboardViewed: true }),
   [act.SET_COMMENTS_SORT_OPTION]: () => ({ ...state, commentsSortOption: action.payload }),
-  [act.TOGGLE_CREDITS_PAYMENT_POLLING]: () => ({ ...state, pollingCreditsPayment: action.payload })
+  [act.TOGGLE_CREDITS_PAYMENT_POLLING]: () => ({ ...state, pollingCreditsPayment: action.payload }),
+  [act.TOGGLE_PROPOSAL_PAYMENT_RECEIVED]: () => ({ ...state, proposalPaymentReceived: action.payload })
 })[action.type] || (() => state))();
 
 export default app;
