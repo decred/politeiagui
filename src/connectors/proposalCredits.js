@@ -14,20 +14,18 @@ export default connect(
     isApiRequestingUserProposalCredits: sel.isApiRequestingUserProposalCredits,
     userCanExecuteActions: sel.userCanExecuteActions,
     isTestnet: sel.isTestNet,
-    isApiRequestingPayWithFaucet: sel.isApiRequestingPayProposalWithFaucet,
-    payWithFaucetTxId: sel.payProposalWithFaucetTxId,
-    payWithFaucetError: sel.payProposalWithFaucetError,
     recentPaymentsConfirmed: sel.recentPayments,
     proposalPaywallPaymentTxid: sel.apiProposalPaywallPaymentTxid,
     proposalPaywallPaymentAmount: sel.apiProposalPaywallPaymentAmount,
     proposalPaywallPaymentConfirmations: sel.apiProposalPaywallPaymentConfirmations,
-    pollingCreditsPayment: sel.pollingCreditsPayment
+    pollingCreditsPayment: sel.pollingCreditsPayment,
+    proposalPaymentReceived: sel.proposalPaymentReceived
   }),
   dispatch => bindActionCreators({
     onUserProposalCredits: act.onUserProposalCredits,
-    payWithFaucet: act.payProposalWithFaucet,
     onPurchaseProposalCredits: act.onFetchProposalPaywallDetails,
     onFetchProposalPaywallPayment: act.onFetchProposalPaywallPayment,
-    toggleCreditsPaymentPolling: act.toggleCreditsPaymentPolling
+    toggleCreditsPaymentPolling: act.toggleCreditsPaymentPolling,
+    toggleProposalPaymentReceived: act.toggleProposalPaymentReceived
   }, dispatch)
 );

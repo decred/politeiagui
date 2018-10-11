@@ -40,11 +40,11 @@ export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
       if (!txn) {
         return false;
       }
-
       if(txn.confirmations < CONFIRMATIONS_REQUIRED) {
         dispatch(act.UPDATE_USER_PAYWALL_STATUS({
           status: PAYWALL_STATUS_LACKING_CONFIRMATIONS,
-          currentNumberOfConfirmations: txn.confirmations
+          currentNumberOfConfirmations: txn.confirmations,
+          txid: txn.id
         }));
         return false;
       }
@@ -126,23 +126,6 @@ export const payWithFaucet = (address, amount) => dispatch => {
     });
 };
 
-export const payProposalWithFaucet = (address, amount) => dispatch => {
-  dispatch(act.REQUEST_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET());
-  return external_api.payWithFaucet(address, amount)
-    .then(json => {
-      if (json.Error) {
-        return dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null, new Error(json.Error)));
-      }
-      const payload = { txid: json.Txid, address, amount, confirmations: 0, credits: true };
-      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(payload));
-      dispatch(act.SAVE_PAYMENT_POLLING_QUEUE(payload));
-    })
-    .catch(error => {
-      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT_WITH_FAUCET(null, error));
-      throw error;
-    });
-};
-
 export const getLastBlockHeight = () => (dispatch) => {
   dispatch(act.REQUEST_GET_LAST_BLOCK_HEIGHT());
   // try with dcrData if fail we try with insight api
@@ -156,3 +139,5 @@ export const getLastBlockHeight = () => (dispatch) => {
     });
   });
 };
+
+export const resetPaywallPaymentWithFaucet = () => act.RESET_PAYWALL_PAYMENT_WITH_FAUCET();

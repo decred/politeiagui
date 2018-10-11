@@ -1,17 +1,6 @@
 import React from "react";
 import { CONFIRMATIONS_REQUIRED } from "../../constants";
-
-const DcrdataTxLink = ({
-  isTestnet,
-  txId
-}) => {
-  const network = isTestnet ? "testnet" : "explorer";
-  return (
-    <a href={`https://${network}.dcrdata.org/tx/${txId}`} target="_blank" rel="noopener noreferrer">
-      {txId}
-    </a>
-  );
-};
+import DcrdataTxLink from "../DcrdataTxLink";
 
 const formatDate = (date) => {
   const d = new Date(date * 1000);
@@ -32,9 +21,7 @@ const ProposalCreditsSummary = ({
   recentPaymentsConfirmed,
   proposalPaywallPaymentTxid,
   proposalPaywallPaymentAmount,
-  proposalPaywallPaymentConfirmations,
-  pollingCreditsPayment,
-  toggleCreditsPaymentPolling
+  proposalPaywallPaymentConfirmations
 }) => {
   if (recentPaymentsConfirmed && recentPaymentsConfirmed.length > 0) {
     recentPaymentsConfirmed.forEach(payment => {
@@ -63,26 +50,6 @@ const ProposalCreditsSummary = ({
     <div className="proposal-credits-summary">
       <div className="available-credits">
         <span> <b>Available credits:</b> {proposalCredits}</span>
-        {pollingCreditsPayment ? <div className="searching-credits">
-          <i className="fa fa-circle-o-notch fa-spin right-margin-5" style={{ fontSize: "14px" }}></i>
-          {proposalPaywallPaymentTxid ?
-            <div className="searching-credits__text">
-              <span>Checking for payment confirmation</span>
-              <span className="font-12">The payment can take a few minutes to be confirmed</span>
-            </div> :
-            <div className="searching-credits__text">
-              <span>Searching for a new payment</span>
-              <span className="font-12">The payment can take a few minutes to be detected</span>
-            </div>
-          }
-        </div> :
-          <button
-            className="inverse"
-            onClick={() => toggleCreditsPaymentPolling(true)}
-          >
-            {"Check for payments"}
-          </button>
-        }
       </div>
       {proposalCreditPurchases && proposalCreditPurchases.length ? (
         <div className="credit-purchase-table">

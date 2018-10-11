@@ -14,8 +14,4 @@ export const isApiRequestingPayWithFaucet = or(
 export const payWithFaucetError = getExtApiError("payWithFaucet");
 export const payWithFaucetTxId = compose(get("Txid"), getExtApiResponse("payWithFaucet"));
 
-export const isApiRequestingPayProposalWithFaucet = getIsExtApiRequesting("payProposalWithFaucet");
-export const payProposalWithFaucetError = getExtApiError("payProposalWithFaucet");
-export const payProposalWithFaucetTxId = compose(get("Txid"), getExtApiResponse("payProposalWithFaucet"));
-
 export const lastBlockHeight = getExtApiResponse("blockHeight");

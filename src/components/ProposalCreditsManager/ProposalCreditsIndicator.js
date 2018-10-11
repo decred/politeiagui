@@ -3,7 +3,7 @@ import proposalCreditsConnector from "../../connectors/proposalCredits";
 import currentUserConnector from "../../connectors/currentUser";
 import IntervalComponent from "../IntervalComponent";
 import Tooltip from "../Tooltip";
-import { PROPOSAL_CREDITS_MODAL, PAYWALL_MODAL } from "../Modal/modalTypes";
+import { PAYWALL_MODAL, MANAGE_CREDITS_MODAL } from "../Modal/modalTypes";
 import {
   PAYWALL_STATUS_PAID
 } from "../../constants";
@@ -15,20 +15,16 @@ import {
 class ProposalCreditsIndicator extends React.Component {
   componentDidUpdate(prevProps) {
     const {
-      proposalPaywallPaymentTxid,
-      proposalPaywallAddress
+      proposalPaywallPaymentTxid
     } = this.props;
 
     if (prevProps.proposalPaywallPaymentTxid && !proposalPaywallPaymentTxid) {
       // a transaction has been confirmed
       // request the user proposal credits to get it updated
       this.props.onUserProposalCredits();
+      this.props.toggleProposalPaymentReceived(true);
       // stop polling
       this.props.toggleCreditsPaymentPolling(false);
-    }
-    if (!prevProps.proposalPaywallAddress && proposalPaywallAddress) {
-      // start polling
-      this.props.toggleCreditsPaymentPolling(true);
     }
   }
   onFinishInterval = () => {
@@ -42,16 +38,10 @@ class ProposalCreditsIndicator extends React.Component {
       proposalCredits,
       userPaywallStatus,
       pollingCreditsPayment,
-      proposalPaywallPaymentTxid,
       openModal
     } = this.props;
 
     const pollingInterval = 5 * 1000; // 5 seconds
-    const awaitingConfirmations = proposalPaywallPaymentTxid;
-
-    // if its awaiting confirmations, the polling will be up until the payment
-    // is confirmed. Otherwise, it will do 12 attempts to check for new payments
-    const numberOfAttempts = awaitingConfirmations ? null : 12;
 
     return (
       <IntervalComponent
@@ -59,7 +49,6 @@ class ProposalCreditsIndicator extends React.Component {
         onInterval={onFetchProposalPaywallPayment}
         active={pollingCreditsPayment}
         executeOnIntervalBeforeFirstInterval={true}
-        maxNumberOfExecutions={numberOfAttempts}
         onFinishInterval={this.onFinishInterval}
       >
         <Tooltip
@@ -68,7 +57,7 @@ class ProposalCreditsIndicator extends React.Component {
         >
           <div className="user-proposal-credits" onClick={() => userPaywallStatus !== PAYWALL_STATUS_PAID
             ? openModal(PAYWALL_MODAL)
-            : openModal(PROPOSAL_CREDITS_MODAL)}>
+            : openModal(MANAGE_CREDITS_MODAL)}>
             <div className="proposal-credits-text">{(proposalCredits || 0) + " proposal credit" + (proposalCredits !== 1 ? "s" : "")}</div>
             <span className="proposalc-credits-click-here-text">Click here to buy and update credits</span>
           </div>

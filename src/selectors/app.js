@@ -99,6 +99,13 @@ export const getUserPaywallConfirmations = state => {
   return state.app.userPaywallConfirmations;
 };
 
+export const getUserPaywallTxid = state => {
+  if(userAlreadyPaid(state)) {
+    return null;
+  }
+  return state.app.userPaywallTxid;
+};
+
 export const userHasPaid = state => {
   return getUserPaywallStatus(state) === PAYWALL_STATUS_PAID;
 };
@@ -274,3 +281,5 @@ export const onboardViewed = (state) => state.app.onboardViewed;
 export const commentsSortOption = (state) => state.app.commentsSortOption;
 
 export const pollingCreditsPayment = state => state.app.pollingCreditsPayment;
+
+export const proposalPaymentReceived = state => state.app.proposalPaymentReceived;

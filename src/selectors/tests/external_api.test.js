@@ -48,8 +48,6 @@ describe("test external_api selector", () => {
     expect(sel.payWithFaucetTxId(MOCK_STATE))
       .toEqual(MOCK_STATE.external_api.payWithFaucet.response.Txid);
 
-    expect(sel.payProposalWithFaucetTxId(MOCK_STATE))
-      .toEqual(MOCK_STATE.external_api.payProposalWithFaucet.response.Txid);
   });
 
 });
