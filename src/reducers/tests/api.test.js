@@ -69,7 +69,9 @@ describe("test api reducer", () => {
         proposal: {
           censorshiprecord: {
             token: "censortoken"
-          }
+          },
+          files: [],
+          username: ""
         }
       }
     },
@@ -394,7 +396,9 @@ describe("test api reducer", () => {
   test("correcly updates status state for onReceiveSetStatus (unvetted -> vetted)", () => {
     const proposalUpdated = {
       ...MOCK_STATE.unvetted.response.proposals[0],
-      status: 4
+      status: 4,
+      files: [],
+      username: ""
     };
 
     const action = {
@@ -426,7 +430,9 @@ describe("test api reducer", () => {
   test("correcly updates status state for onReceiveSetStatus (unvetted -> censored)", () => {
     const proposalUpdated = {
       ...MOCK_STATE.unvetted.response.proposals[0],
-      status: 3
+      status: 3,
+      files: [],
+      username: ""
     };
 
     const action = {
@@ -438,7 +444,7 @@ describe("test api reducer", () => {
     };
 
     let state = request("setStatusProposal", MOCK_STATE, action);
-    state= api.onReceiveSetStatus(state, action);
+    state = api.onReceiveSetStatus(state, action);
 
     expect(api.default(state, action).proposal.response.proposal)
       .toEqual(proposalUpdated);
