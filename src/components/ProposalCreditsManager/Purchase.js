@@ -170,7 +170,7 @@ class Purchase extends React.Component {
           }
         </div>
         <div className="purchase-credits__buttons">
-          {isPaymentInfoStep ?
+          {isPaymentInfoStep && !proposalPaymentReceived ?
             <button
               className={`left ${awaitingConfirmations ? "disabled" : ""}`}
               disabled={awaitingConfirmations}
