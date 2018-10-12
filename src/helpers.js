@@ -195,3 +195,29 @@ export const removeProposalsDuplicates = (arr1, arr2) => {
   };
   return Object.keys(mergedObj).map(item => mergedObj[item]);
 };
+
+export const exportToCsv = (data, fields) => {
+  const csvContent = data.reduce((acc, info) => {
+    let row = "";
+    fields.forEach(f => row += `"${info[f]}",`);
+    return acc + row + "\n";
+  }, "");
+  const titles = fields.reduce((acc, f) => acc + `"${f}",`, "");
+  const csv = "data:text/csv;charset=utf-8," + titles + "\n" + csvContent;
+  const content = encodeURI(csv);
+  const link = document.createElement("a");
+  link.setAttribute("href", content);
+  link.setAttribute("download", "payment_history");
+  link.click();
+};
+
+export const formatDate = (date) => {
+  const d = new Date(date * 1000);
+  const day = d.getUTCDate();
+  const year = d.getUTCFullYear();
+  const month = d.getUTCMonth();
+  const _minutes = d.getUTCMinutes();
+  const minutes = _minutes < 10 ? `0${_minutes}` : _minutes;
+  const time = d.getUTCHours() + ":" + minutes;
+  return year + "-" + month + "-" + day + "  |  " + time;
+};

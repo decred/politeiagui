@@ -1,16 +1,16 @@
 import React from "react";
 import { CONFIRMATIONS_REQUIRED } from "../../constants";
+import { exportToCsv, formatDate } from "../../helpers";
 import DcrdataTxLink from "../DcrdataTxLink";
 
-const formatDate = (date) => {
-  const d = new Date(date * 1000);
-  const day = d.getUTCDate();
-  const year = d.getUTCFullYear();
-  const month = d.getUTCMonth();
-  const _minutes = d.getUTCMinutes();
-  const minutes = _minutes < 10 ? `0${_minutes}` : _minutes;
-  const time = d.getUTCHours() + ":" + minutes;
-  return year + "-" + month + "-" + day + "  |  " + time;
+const exportData = (data) => {
+  data = data.filter(d => !d.confirming)
+    .map(d => ({
+      ...d,
+      datePurchased: formatDate(d.datePurchased)
+    }));
+  const fields = [ "numberPurchased", "price", "txId", "datePurchased" ];
+  exportToCsv(data, fields);
 };
 
 const ProposalCreditsSummary = ({
@@ -18,30 +18,18 @@ const ProposalCreditsSummary = ({
   proposalCreditPrice,
   proposalCreditPurchases,
   isTestnet,
-  recentPaymentsConfirmed,
   proposalPaywallPaymentTxid,
   proposalPaywallPaymentAmount,
   proposalPaywallPaymentConfirmations
 }) => {
-  if (recentPaymentsConfirmed && recentPaymentsConfirmed.length > 0) {
-    recentPaymentsConfirmed.forEach(payment => {
-      const transaction = {
-        numberPurchased: payment.amount,
-        txId: payment.txid,
-        price: proposalCreditPrice,
-        confirming: false,
-        datePurchased: "just now"
-      };
-      if (!proposalCreditPurchases.find(el => el.txId === transaction.txId)) proposalCreditPurchases.push(transaction);
-    });
-  }
   if (proposalPaywallPaymentTxid) {
     const transaction = {
       numberPurchased: Math.round(proposalPaywallPaymentAmount * 1/(proposalCreditPrice * 100000000)),
       txId: proposalPaywallPaymentTxid,
       price: proposalCreditPrice,
       confirmations: proposalPaywallPaymentConfirmations,
-      confirming: true
+      confirming: true,
+      datePurchased: "just now"
     };
     proposalCreditPurchases.push(transaction);
   }
@@ -50,6 +38,20 @@ const ProposalCreditsSummary = ({
     <div className="proposal-credits-summary">
       <div className="available-credits">
         <span> <b>Available credits:</b> {proposalCredits}</span>
+        <div>
+          <button
+            className="inverse"
+            onClick={() => exportData(proposalCreditPurchases)}
+          >
+            {"Export to CSV"}
+          </button>
+          <button
+            className="inverse"
+            onClick={() => null}
+          >
+            {"Scan"}
+          </button>
+        </div>
       </div>
       {proposalCreditPurchases && proposalCreditPurchases.length ? (
         <div className="credit-purchase-table">
