@@ -54,7 +54,12 @@ export const onReceiveSetStatus = (state, action) => {
   if (action.error) return state;
   const getProposalToken = prop => get([ "censorshiprecord", "token" ], prop);
 
-  const { proposal: updatedProposal } = action.payload;
+  const updatedProposal = {
+    ...action.payload.proposal,
+    files: get([ "proposal",  "response", "proposal", "files" ], state) || [],
+    username: get([ "proposal",  "response", "proposal", "username" ], state) || ""
+  };
+
   const viewedProposal = get([ "proposal", "response", "proposal" ], state);
 
   const updateProposalStatus = proposal =>
