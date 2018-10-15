@@ -7,6 +7,11 @@ import {
   CONFIRMATIONS_REQUIRED
 } from "../constants";
 
+let globalpollingpointer = null;
+
+export const clearPollingPointer = () => clearTimeout(globalpollingpointer);
+export const setPollingPointer = (paymentpolling) => { globalpollingpointer = paymentpolling; };
+
 const POLL_INTERVAL = 10 * 1000;
 export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
   // Check dcrdata first.
@@ -55,11 +60,13 @@ export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
       if (verified) {
         dispatch(act.UPDATE_USER_PAYWALL_STATUS({ status: PAYWALL_STATUS_PAID }));
       } else {
-        setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
+        const paymentpolling = setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
+        setPollingPointer(paymentpolling);
       }
     })
     .catch(error => {
-      setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
+      const paymentpolling = setTimeout(() => dispatch(verifyUserPayment(address, amount, txNotBefore)), POLL_INTERVAL);
+      setPollingPointer(paymentpolling);
       throw error;
     });
 };
