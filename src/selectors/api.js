@@ -35,6 +35,7 @@ export const isApiRequestingSetStatusProposal = getIsApiRequesting("setStatusPro
 export const isApiRequestingPropsVoteStatus = getIsApiRequesting("proposalsVoteStatus");
 export const isApiRequestingPropVoteStatus = getIsApiRequesting("proposalVoteStatus");
 export const isApiRequestingEditUser = getIsApiRequesting("editUser");
+export const isApiRequestingEditProposal = getIsApiRequesting("editProposal");
 
 const apiNewUserPayload = getApiPayload("newUser");
 const apiLoginPayload = getApiPayload("login");
@@ -272,7 +273,7 @@ export const serverPubkey = compose(get("pubkey"), apiInitResponse);
 export const userPubkey = compose(get("publickey"), apiMeResponse);
 export const commentsVotes = or(compose(get("commentsvotes"), apiCommentsVotesResponse), constant(null));
 export const policy = apiPolicyResponse;
-export const isLoadingSubmit = or(isApiRequestingPolicy, isApiRequestingInit);
+export const isLoadingSubmit = or(isApiRequestingPolicy, isApiRequestingInit, isApiRequestingEditProposal);
 export const apiVettedProposals = or(compose(get("proposals"), apiVettedResponse), constant([]));
 export const vettedProposalsIsRequesting = isApiRequestingVetted;
 export const vettedProposalsError = or(apiInitError, apiVettedError);
