@@ -16,6 +16,10 @@ const modal = (state = DEFAULT_STATE, action) => (({
   [act.CLOSE_MODAL]: () => ({
     ...state,
     openedModals: state.openedModals.filter((obj, idx) => idx !== state.openedModals.length - 1)
+  }),
+  [act.CLOSE_ALL_MODALS]: () => ({
+    ...state,
+    openedModals: []
   })
 })[action.type] || (() => state))();
 

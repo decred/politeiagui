@@ -22,6 +22,9 @@ const ProposalCreditsSummary = ({
   proposalPaywallPaymentAmount,
   proposalPaywallPaymentConfirmations
 }) => {
+
+  const isThereAnyCompletedPurchase = proposalCreditPurchases && proposalCreditPurchases.length > 0;
+
   if (proposalPaywallPaymentTxid) {
     const transaction = {
       numberPurchased: Math.round(proposalPaywallPaymentAmount * 1/(proposalCreditPrice * 100000000)),
@@ -33,25 +36,21 @@ const ProposalCreditsSummary = ({
     };
     proposalCreditPurchases.push(transaction);
   }
+
   const reverseProposalCreditPurchases = proposalCreditPurchases.slice(0).reverse();
+
   return (
     <div className="proposal-credits-summary">
       <div className="available-credits">
         <span> <b>Available credits:</b> {proposalCredits}</span>
-        <div>
+        {isThereAnyCompletedPurchase ? <div>
           <button
             className="inverse"
             onClick={() => exportData(proposalCreditPurchases)}
           >
             {"Export to CSV"}
           </button>
-          <button
-            className="inverse"
-            onClick={() => null}
-          >
-            {"Scan"}
-          </button>
-        </div>
+        </div> : null}
       </div>
       {proposalCreditPurchases && proposalCreditPurchases.length ? (
         <div className="credit-purchase-table">

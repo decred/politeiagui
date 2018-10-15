@@ -9,6 +9,7 @@ export default connect(
   }),
   dispatch => bindActionCreators({
     closeModal: act.closeModal,
+    closeAllModals: act.closeAllModals,
     openModal: act.openModal,
     confirmWithModal: confirmWithModal
   }, dispatch)

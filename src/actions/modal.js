@@ -1,4 +1,4 @@
-import { OPEN_MODAL, CLOSE_MODAL } from "./types";
+import { OPEN_MODAL, CLOSE_MODAL, CLOSE_ALL_MODALS } from "./types";
 
 export const openModal = (modalType, payload, callback) => ({
   type: OPEN_MODAL,
@@ -9,6 +9,10 @@ export const openModal = (modalType, payload, callback) => ({
 
 export const closeModal = () => ({
   type: CLOSE_MODAL
+});
+
+export const closeAllModals = () => ({
+  type: CLOSE_ALL_MODALS
 });
 
 export const confirmWithModal = (modalType, payload) =>
