@@ -89,7 +89,7 @@ const onBoardingContent = [
 
 Politeia is a platform that supports Decred’s governance. It facilitates the submission, tracking, and discussion of Decred governance proposals by the stakeholder community.
 
-Decred’s approach to decision-making is grounded in the principle of stakeholder voting. To vote, stakeholders must time-lock DCR to buy tickets. While tickets are live they 
+Decred’s approach to decision-making is grounded in the principle of stakeholder voting. To vote, stakeholders must time-lock DCR to buy tickets. While tickets are live they
 can be used to cast a vote for or against each open Politeia proposal.
 
     `
@@ -116,12 +116,12 @@ Ticket-voting on proposals doesn’t happen directly on Politeia, but from withi
     body: `
 **Censorship**
 
-Politeia is built around the concept of _transparent censorship_. Users cannot be silently censored. When proposals 
-are submitted, they are checked by Politeia administrators, and proposals that are deemed spam or invalid will be 
-censored. If a user believes they have been unfairly censored, they can prove that their proposal was censored using 
-a “censorship token”; a token automatically generated upon proposal submission using the user’s unique 
-cryptographic identity (pub/priv key pair). This token can be used to demonstrate to the community that the user's specific 
-proposal/comment was submitted, the time it was submitted, and in what form. 
+Politeia is built around the concept of _transparent censorship_. Users cannot be silently censored. When proposals
+are submitted, they are checked by Politeia administrators, and proposals that are deemed spam or invalid will be
+censored. If a user believes they have been unfairly censored, they can prove that their proposal was censored using
+a “censorship token”; a token automatically generated upon proposal submission using the user’s unique
+cryptographic identity (pub/priv key pair). This token can be used to demonstrate to the community that the user's specific
+proposal/comment was submitted, the time it was submitted, and in what form.
 
 If you change browser/device, you can import your existing Politeia identity key or generate a new one, but for now it is important to
 *verify your account from the same browser you used to sign up*. Your cryptographic Pi identity is only used for
@@ -151,11 +151,11 @@ against that budget as deliverables are completed.
 8. Payment claims will be handled manually by Decred Holdings Group until such times as this process can be adequately
 decentralized.
 
-Politeia's aim is to serve as the decision-making force behind the Decred Decentralized Autonomous Entity (DAE). This is an ambitious aim. 
-Because Politeia and its accompanying processes are still in an experimental stage, Politeia will serve initially as a robust 
-signaling mechanism from Decred shareholders to the community members controlling the project fund wallet. Over time, this will 
-be iterated towards a DAE that decentralizes the functions currently performed by trusted humans, and the DAE will control the 
-project fund wallet directly. 
+Politeia's aim is to serve as the decision-making force behind the Decred Decentralized Autonomous Entity (DAE). This is an ambitious aim.
+Because Politeia and its accompanying processes are still in an experimental stage, Politeia will serve initially as a robust
+signaling mechanism from Decred shareholders to the community members controlling the project fund wallet. Over time, this will
+be iterated towards a DAE that decentralizes the functions currently performed by trusted humans, and the DAE will control the
+project fund wallet directly.
 
 For proposals that request funding, an initial set of guidelines and examples has been prepared. Guidelines
 for good proposals and policies for censoring proposals will be iterated once Politeia is live.
@@ -175,7 +175,7 @@ When authoring a Politeia proposal, one must answer the following 5 questions:
 4. Who
 5. When
 
-Below we present two examples: a proposal for devleoping a software feature, and a proposal for a marketing initiative. 
+Below we present two examples: a proposal for devleoping a software feature, and a proposal for a marketing initiative.
 
 ## Software Feature Example
 
@@ -215,7 +215,7 @@ a good idea.
 
 ### Who
 
-In the *Who* section, describe the entity that is making the proposal, will 
+In the *Who* section, describe the entity that is making the proposal, will
 complete the work, and will draw down on the proposal's budget.
 
 ### When
@@ -262,15 +262,15 @@ votes should be less than a week.
 
 ###  What
 
-    This proposal would fund a Decred presence at Real Blockchain Conference 2018, 
-	in Dublin, Ireland, November 11-13. It would cover costs for a booth, swag, and 
+    This proposal would fund a Decred presence at Real Blockchain Conference 2018,
+	in Dublin, Ireland, November 11-13. It would cover costs for a booth, swag, and
 	people to staff the booth.
 
 ### Why
 
-    Real Blockchain Conference is a top cryptocurrency conference and totally not made up. 
-	Last year's conference had 5,000 attendees and they seemed cool, good solid Decred 
-	stakeholder material. With epic swag and a physical embodiment of Stakey in attendance, 
+    Real Blockchain Conference is a top cryptocurrency conference and totally not made up.
+	Last year's conference had 5,000 attendees and they seemed cool, good solid Decred
+	stakeholder material. With epic swag and a physical embodiment of Stakey in attendance,
 	a presence at this conference would raise awareness of Decred.
 
 ### How (much)
@@ -283,25 +283,26 @@ votes should be less than a week.
     Stakey costume: $500
     Stakey costume occupant: 3 (10 hour) days at $40/hr (that suit is warm!): $1,200
     Travel expenses for booth staff: Up to $2,000
-    Accomodation for booth staff. We will stay at the conference hotel costing $200/night, it is unlikely 
+    Accomodation for booth staff. We will stay at the conference hotel costing $200/night, it is unlikely
 	that all booth staff need accomodation, but the maximum would be 200 x 3 nights x 4 staff = $2,400
 
     Maximum total budget: $15,600
 
 ### Who
 
-    This proposal is submitted by @AllYourStake (on Slack, /u/StakeGovernor2000 on reddit). You may 
-	remember me as the organizer of Decred's presence at such blockchain events as Real Blockchain 
+    This proposal is submitted by @AllYourStake (on Slack, /u/StakeGovernor2000 on reddit). You may
+	remember me as the organizer of Decred's presence at such blockchain events as Real Blockchain
 	Conference 2017 and Buckets of Blockchain 2018.
     I don't know exactly who the 3 booth staff and 1 Stakey suit wearer will be, I will be one of the
 	staff and @Contributor1 is also interested.
 
 ### When
 
-    Registration fees are due by September 30th, I will pay these up-front and request full reimbursement 
-	immediately. I will front the cost of the swag and Stakey suit, and claim this along with my 
+    Registration fees are due by September 30th, I will pay these up-front and request full reimbursement
+  immediately.
+  I will front the cost of the swag and Stakey suit, and claim this along with my
 	travel/accomodation expenses and payment for my work, after the event.
-    Booth staff who are already Decred contributors will bill for their hours and expenses directly, 
+    Booth staff who are already Decred contributors will bill for their hours and expenses directly,
 	I will serve as intermediary for any staff costs not associated with established contributors.
 `
   }

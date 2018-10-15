@@ -326,7 +326,16 @@ describe("test app reducer", () => {
     const reducers = [
       { action: act.REQUEST_SIGNUP_CONFIRMATION, assertion: { isShowingSignupConfirmation: true } },
       { action: act.RESET_SIGNUP_CONFIRMATION, assertion: { isShowingSignupConfirmation: false } },
-      { action: act.CLEAN_STATE, assertion: { isShowingSignupConfirmation: false } },
+      { action: act.CLEAN_STATE, assertion: {
+        isShowingSignupConfirmation: false,
+        proposalCredits: 0,
+        userPaywallStatus: null,
+        userPaywallTxid: null,
+        userAlreadyPaid: false,
+        userPaywallConfirmations: null,
+        recentPayments: [],
+        pollingCreditsPayment: false
+      } },
       { action: act.SET_ONBOARD_AS_VIEWED, assertion: { onboardViewed: true } }
     ];
 

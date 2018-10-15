@@ -253,7 +253,7 @@ describe("test api selectors", () => {
       me: { response: { paywalladdress: null } }
     } };
 
-    expect(sel.paywallAddress(state)).toEqual(false);
+    expect(sel.paywallAddress(state)).toEqual(null);
 
   });
 });

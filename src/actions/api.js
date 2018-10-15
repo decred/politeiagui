@@ -146,6 +146,7 @@ export const onLogout = (cb) =>
       .then(response => {
         dispatch(act.RECEIVE_LOGOUT(response));
         clearStateLocalStorage();
+        external_api_actions.clearPollingPointer();
         dispatch(onSetEmail(""));
         cb("/user/logout");
       })
