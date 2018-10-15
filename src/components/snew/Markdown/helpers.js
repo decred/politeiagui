@@ -84,31 +84,45 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
   }
 };
 
-export const customRenderers = (filterXss, confirmWithModal) => ({
-  image: ({ src, alt }) => {
-    return <a
-      target="_blank"
-      rel="nofollow noopener noreferrer"
-      onClick={(e) => confirmWithModal && verifyExternalLink(e, src, confirmWithModal)}
-      href={src}>{alt}
-    </a>;
-  },
-  link: ({ href, children }) => {
-    return( <a
-      target="_blank"
-      rel="nofollow noopener noreferrer"
-      onClick={(e) => confirmWithModal && verifyExternalLink(e, href, confirmWithModal)}
-      href={href}
-    >{children[0]}</a>);
-  },
-  root: (el) => {
-    if(filterXss) {
-      el = traverseChildren(el, handleFilterXss);
-    }
-    const {
-      children,
-      ...props
-    } = el;
-    return <div {...props}>{children}</div>;
+const imageHandler = (confirmWithModal) => ({ src, alt }) => {
+  return <a
+    target="_blank"
+    rel="nofollow noopener noreferrer"
+    onClick={(e) => confirmWithModal && verifyExternalLink(e, src, confirmWithModal)}
+    href={src}>{alt}
+  </a>;
+};
+
+const linkHandler = (confirmWithModal) => ({ href, children }) => {
+  return( <a
+    target="_blank"
+    rel="nofollow noopener noreferrer"
+    onClick={(e) => confirmWithModal && verifyExternalLink(e, href, confirmWithModal)}
+    href={href}
+  >{children[0]}</a>);
+};
+
+const rootHandler = (filterXss) => (el) => {
+  if(filterXss) {
+    el = traverseChildren(el, handleFilterXss);
   }
-});
+  const {
+    children,
+    ...props
+  } = el;
+  return <div {...props}>{children}</div>;
+};
+
+export const customRenderers = (filterXss, confirmWithModal) => {
+  const imageRenderer = imageHandler(confirmWithModal);
+  const linkRenderer = linkHandler(confirmWithModal);
+  const rootRenderer = rootHandler(filterXss);
+
+  return {
+    image: imageRenderer,
+    imageReference: imageRenderer,
+    link: linkRenderer,
+    linkReference: linkRenderer,
+    root: rootRenderer
+  };
+};
