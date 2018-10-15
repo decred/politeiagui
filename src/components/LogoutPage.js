@@ -3,16 +3,6 @@ import PageLoadingIcon from "./snew/PageLoadingIcon";
 import logoutConnector from "../connectors/logout";
 
 class LogoutPage extends Component {
-  componentDidMount() {
-    this.props.onLogout();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (!prevProps.error && this.props.error) {
-      this.props.history.push(`/500?error=${this.props.error.message}`);
-    }
-  }
-
   render() {
     const { isLoading } = this.props;
     return isLoading ? (
