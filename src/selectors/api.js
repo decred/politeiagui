@@ -210,16 +210,11 @@ export const userAlreadyPaid = bool(state => {
   return false;
 });
 
-export const paywallAddress = or(
-  compose(get("paywalladdress"), apiNewUserResponse),
-  compose(get("paywalladdress"), apiMeResponse),
-);
+export const paywallAddress = compose(get("paywalladdress"), apiMeResponse);
 
 export const paywallAmount = state => {
   let paywallAmount = 0;
-  if(state.api.newUser && state.api.newUser.response) {
-    paywallAmount = state.api.newUser.response.paywallamount;
-  } else if(state.api.me && state.api.me.response) {
+  if(state.api.me && state.api.me.response) {
     paywallAmount = state.api.me.response.paywallamount;
   }
 
@@ -228,9 +223,6 @@ export const paywallAmount = state => {
 };
 
 export const paywallTxNotBefore = state => {
-  if(state.api.newUser && state.api.newUser.response) {
-    return state.api.newUser.response.paywalltxnotbefore;
-  }
   if(state.api.me && state.api.me.response) {
     return state.api.me.response.paywalltxnotbefore;
   }
