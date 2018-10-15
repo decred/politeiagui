@@ -14,7 +14,6 @@ export default connect(
     isApiRequestingUserProposalCredits: sel.isApiRequestingUserProposalCredits,
     userCanExecuteActions: sel.userCanExecuteActions,
     isTestnet: sel.isTestNet,
-    recentPaymentsConfirmed: sel.recentPayments,
     proposalPaywallPaymentTxid: sel.apiProposalPaywallPaymentTxid,
     proposalPaywallPaymentAmount: sel.apiProposalPaywallPaymentAmount,
     proposalPaywallPaymentConfirmations: sel.apiProposalPaywallPaymentConfirmations,

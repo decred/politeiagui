@@ -3,10 +3,10 @@ import ModalContentWrapper from "../ModalContentWrapper";
 import modalConnector from "../../../connectors/modal";
 import ProposalCredits from "../../ProposalCreditsManager";
 
-const ProposalCreditsModal = ({ closeModal }) => (
+const ProposalCreditsModal = ({ closeAllModals }) => (
   <ModalContentWrapper
     title={"Proposal Credits History"}
-    onClose={closeModal}
+    onClose={closeAllModals}
   >
     <ProposalCredits />
   </ModalContentWrapper>

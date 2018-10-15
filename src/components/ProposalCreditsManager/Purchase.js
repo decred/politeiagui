@@ -43,7 +43,7 @@ const PaymentInfoContent = ({
     <React.Fragment>
       <span style={{ alignSelft: "left", fontSize: "16px", width: "100%", marginBottom: "20px" }}>
         {!isWaitingConfirmation ?
-          `To complete the purchase of ${numCreditsToPurchase} credis, please follow the instructions below:` :
+          `To complete the purchase of ${numCreditsToPurchase} credit(s), please follow the instructions below:` :
           "Your payment has been detected. You proposal credits will be updated once it reaches the required number of confirmations."
         }
       </span>
@@ -170,7 +170,7 @@ class Purchase extends React.Component {
           }
         </div>
         <div className="purchase-credits__buttons">
-          {isPaymentInfoStep ?
+          {isPaymentInfoStep && !proposalPaymentReceived ?
             <button
               className={`left ${awaitingConfirmations ? "disabled" : ""}`}
               disabled={awaitingConfirmations}
