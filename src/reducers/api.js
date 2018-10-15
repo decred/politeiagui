@@ -480,9 +480,22 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.REQUEST_PROPOSAL_PAYWALL_PAYMENT]: () => request("proposalPaywallPayment", state, action),
   [act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT]: () => receive("proposalPaywallPayment", state, action),
   [act.RECEIVE_LOGOUT]: () => {
-    const tempState = DEFAULT_STATE;
-    tempState.init = state.init;
-    return tempState;
+    if (!action.error) {
+      const tempState = DEFAULT_STATE;
+      tempState.init = state.init;
+      return tempState;
+    }
+    return {
+      ...state,
+      logout: {
+        ...state.logout,
+        response: null,
+        isRequesting: false,
+        error: {
+          message: "Log out failed"
+        }
+      }
+    };
   }
 })[action.type] || (() => state))();
 

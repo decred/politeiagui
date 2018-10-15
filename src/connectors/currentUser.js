@@ -8,6 +8,7 @@ const currentUserConnector = connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     loggedInAsUsername: sel.loggedInAsUsername,
     isAdmin: sel.isAdmin,
+    error: sel.apiLogoutError,
     userPaywallStatus: sel.getUserPaywallStatus,
     userCanExecuteActions: sel.userCanExecuteActions,
     proposalCredits: sel.proposalCredits,

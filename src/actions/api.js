@@ -138,17 +138,20 @@ export const onLogin = ({ email, password }) =>
       });
   });
 
-export const onLogout = () =>
+export const onLogout = (cb) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_LOGOUT());
-    clearStateLocalStorage();
     return api
       .logout(csrf)
       .then(response => {
         dispatch(act.RECEIVE_LOGOUT(response));
+        clearStateLocalStorage();
         dispatch(onSetEmail(""));
+        cb("/user/logout");
       })
-      .catch(error => dispatch(act.RECEIVE_LOGOUT(null, error)));
+      .catch(error => {
+        dispatch(act.RECEIVE_LOGOUT(null, error));
+      });
   });
 
 export const onChangeUsername = (password, newUsername) =>
