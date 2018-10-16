@@ -137,17 +137,6 @@ const app = (state = DEFAULT_STATE, action) => (({
     proposalCredits: state.proposalCredits + (action.payload.amount || 0)
   }),
   [act.CSRF_NEEDED]: () => ({ ...state, csrfIsNeeded: action.payload }),
-  [act.CLEAN_STATE]: () => ({
-    ...state,
-    proposalCredits: 0,
-    userPaywallStatus: null,
-    userPaywallTxid: null,
-    userAlreadyPaid: false,
-    userPaywallConfirmations: null,
-    recentPayments: [],
-    pollingCreditsPayment: false,
-    isShowingSignupConfirmation: false
-  }),
   [act.SHOULD_AUTO_VERIFY_KEY]: () => ({ ...state, shouldVerifyKey: action.payload }),
   [act.IDENTITY_IMPORTED]: () => ({ ...state, identityImportResult: action.payload }),
   [act.SET_ONBOARD_AS_VIEWED]: () => ({ ...state, onboardViewed: true }),

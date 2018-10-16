@@ -212,6 +212,7 @@ export const userAlreadyPaid = bool(state => {
 });
 
 export const paywallAddress = compose(get("paywalladdress"), apiMeResponse);
+export const paywallTxid = compose(get("paywalltxid"), apiMeResponse);
 
 export const paywallAmount = state => {
   let paywallAmount = 0;

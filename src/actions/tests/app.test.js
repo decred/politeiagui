@@ -66,15 +66,6 @@ describe("test app actions (actions/app.js)", () => {
     fetchMock.post("/", {}).catch({});
   });
 
-  test("on route change action", () => {
-    expect(app.onRouteChange())
-      .toDispatchActions(
-        { type: act.CLEAN_ERRORS },
-        { type: act.CLEAN_STATE },
-        done
-      );
-  });
-
   test("set reply parent and reset form reply", async () => {
     await expect(app.onSetReplyParent(0)).toDispatchActions([
       { type: act.SET_REPLY_PARENT },
