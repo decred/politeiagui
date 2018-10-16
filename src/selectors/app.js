@@ -60,6 +60,8 @@ export const draftProposalById = state => {
   const { draftid } = qs.parse(window.location.search);
   return (draftid && drafts && drafts[draftid]) || false;
 };
+
+export const getUserAlreadyPaid = state => state.app.userAlreadyPaid;
 export const getAdminFilterValue = state => parseInt(state.app.adminProposalsShow, 10);
 export const getPublicFilterValue = state =>  parseInt(state.app.publicProposalsShow, 10);
 export const getUserFilterValue = state =>  parseInt(state.app.userProposalsShow, 10);
