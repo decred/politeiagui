@@ -99,7 +99,7 @@ class Stats extends React.Component {
     return (
       <div key={`option-${option.id}`} style={optionStyle} >
         <span style={optionIdStyle} >{`${option.id}:`}</span>
-        <span>{`${option.votesReceived} votes    `}</span>
+        <span>{`${option.votesReceived} votes`}</span>
       </div>
     );
   };
@@ -119,11 +119,11 @@ class Stats extends React.Component {
       { addSuffix: true }
     );
     const element =
-    <span>
+    <span style={{ fontSize: "12px" }}>
       expires {distance}
     </span>
     ;
-    return blockTimeMinutes > 0 ? element : <span>expired</span>;
+    return blockTimeMinutes > 0 ? element : <span style={{ fontSize: "12px" }}>expired</span>;
   };
   renderOptionsStats = (totalVotes, optionsResult, endHeight, currentHeight) => {
 
@@ -134,7 +134,8 @@ class Stats extends React.Component {
     const headerStyle = {
       display: "flex",
       alignItems: "center",
-      justifyContent: "space-between"
+      justifyContent: "space-between",
+      padding: "5px"
     };
     const detailStyle = {
       color: "gray"
@@ -188,8 +189,9 @@ class VoteStats extends React.Component {
       padding: "10px",
       border: "1px solid #bbb",
       marginTop: "10px",
+      marginBottom: "10px",
       borderRadius: "8px",
-      maxWidth: "400px"
+      maxWidth: "500px"
     };
     return(
       <div style={wrapperStyle}>
