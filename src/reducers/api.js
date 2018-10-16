@@ -326,7 +326,7 @@ export const receiveProposals = (key, proposals, state) => {
       ...state.vetted,
       response: {
         ...state.vetted.response,
-        proposals: unionWith(vettedProps, incomingVettedProps, (a, b) => {
+        proposals: unionWith(incomingVettedProps, vettedProps, (a, b) => {
           return a.censorshiprecord.token === b.censorshiprecord.token;
         })
       }
@@ -335,7 +335,7 @@ export const receiveProposals = (key, proposals, state) => {
       ...state.unvetted,
       response: {
         ...state.vetted.response,
-        proposals: unionWith(unvettedProps, incomingUnvettedProps, (a, b) => {
+        proposals: unionWith(incomingUnvettedProps, unvettedProps, (a, b) => {
           return a.censorshiprecord.token === b.censorshiprecord.token;
         })
       }
