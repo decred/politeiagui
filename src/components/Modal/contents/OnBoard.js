@@ -122,10 +122,6 @@ censored. If a user believes they have been unfairly censored, they can prove th
 a “censorship token”; a token automatically generated upon proposal submission using the user’s unique
 cryptographic identity (pub/priv key pair). This token can be used to demonstrate to the community that the user's specific
 proposal/comment was submitted, the time it was submitted, and in what form.
-
-If you change browser/device, you can import your existing Politeia identity key or generate a new one, but for now it is important to
-*verify your account from the same browser you used to sign up*. Your cryptographic Pi identity is only used for
-demonstrating that your submissions have been censored.
 `
   },
   {
@@ -299,8 +295,7 @@ votes should be less than a week.
 ### When
 
     Registration fees are due by September 30th, I will pay these up-front and request full reimbursement
-  immediately.
-  I will front the cost of the swag and Stakey suit, and claim this along with my
+	immediately. I will front the cost of the swag and Stakey suit, and claim this along with my
 	travel/accomodation expenses and payment for my work, after the event.
     Booth staff who are already Decred contributors will bill for their hours and expenses directly,
 	I will serve as intermediary for any staff costs not associated with established contributors.
