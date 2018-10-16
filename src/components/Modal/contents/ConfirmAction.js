@@ -32,7 +32,7 @@ class ConfirmAction extends React.Component {
           minHeight: "80px",
           alignItems: "center"
         }}>
-          <span style={{ fontSize: "16px", textAlign: "center", maxWidth: "100%", wordBreak: "break-all" }}>{me.payload.message ||  "Do you confirm this action?"}</span>
+          <span style={{ fontSize: "16px", textAlign: "center", maxWidth: "100%", wordBreak: "break-word" }}>{me.payload.message ||  "Do you confirm this action?"}</span>
         </div>
       </ModalContentWrapper>
     );
