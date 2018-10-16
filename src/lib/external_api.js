@@ -46,12 +46,12 @@ const getRawTransactions = url => {
 };
 
 export const getHeightByDcrdata = (network = NETWORK) => {
-  network = network ? "testnet" : "explorer";
+  network = network === "testnet" ? "testnet" : "explorer";
   return getRawTransactions(dcrddataBlockHeightURL(network));
 };
 
 export const getHeightByInsight = (network = NETWORK) => {
-  network = network ? "testnet" : "mainnet";
+  network = network === "testnet" ? "testnet" : "mainnet";
   return getRawTransactions(insightBlockHeightURL(network));
 };
 
