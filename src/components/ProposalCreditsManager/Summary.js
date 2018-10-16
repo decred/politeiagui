@@ -14,15 +14,14 @@ const exportData = (data) => {
 };
 
 const ProposalCreditsSummary = ({
-  proposalCredits,
   proposalCreditPrice,
   proposalCreditPurchases,
   isTestnet,
   proposalPaywallPaymentTxid,
   proposalPaywallPaymentAmount,
-  proposalPaywallPaymentConfirmations
+  proposalPaywallPaymentConfirmations,
+  paywallTxid
 }) => {
-
   const isThereAnyCompletedPurchase = proposalCreditPurchases && proposalCreditPurchases.length > 0;
 
   if (proposalPaywallPaymentTxid) {
@@ -42,16 +41,19 @@ const ProposalCreditsSummary = ({
   return (
     <div className="proposal-credits-summary">
       <div className="available-credits">
-        <span> <b>Available credits:</b> {proposalCredits}</span>
-        {isThereAnyCompletedPurchase ? <div>
+        <div>
+          <span><b>Register fee payment:</b> <DcrdataTxLink isTestnet={isTestnet} txId={paywallTxid} /> </span>
+        </div>
+      </div>
+      {isThereAnyCompletedPurchase ?
+        <div className="credits-purchase-menu">
           <button
-            className="inverse"
+            className="inverse credits-purchase-menu__button"
             onClick={() => exportData(proposalCreditPurchases)}
           >
             {"Export to CSV"}
           </button>
         </div> : null}
-      </div>
       {proposalCreditPurchases && proposalCreditPurchases.length ? (
         <div className="credit-purchase-table">
           <div className="credit-purchase-header">
