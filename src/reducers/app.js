@@ -3,7 +3,7 @@ import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 import { uniqueID } from "../helpers";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_VOTING_ACTIVE,
+  PROPOSAL_FILTER_ALL,
   PAYWALL_STATUS_PAID,
   PROPOSAL_USER_FILTER_SUBMITTED,
   SORT_BY_NEW
@@ -17,7 +17,7 @@ export const DEFAULT_STATE = {
     description: ""
   },
   adminProposalsShow: PROPOSAL_STATUS_UNREVIEWED,
-  publicProposalsShow: PROPOSAL_VOTING_ACTIVE,
+  publicProposalsShow: PROPOSAL_FILTER_ALL,
   userProposalsShow: PROPOSAL_USER_FILTER_SUBMITTED,
   proposalCredits: 0,
   recentPayments: [],
