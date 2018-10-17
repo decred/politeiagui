@@ -266,6 +266,111 @@ const ThingLinkComp = ({
         {censorMessage && <CensorMessage message={censorMessage} />}
         <Expando {...{ expanded, is_self, selftext, selftext_html }} />
         <ProposalImages readOnly files={otherFiles} />
+        {enableAdminActionsForUnvetted ?
+          [
+            <li key="spam">
+              <ButtonWithLoadingIcon
+                className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                onClick={e => confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
+                  reasonPlaceholder: "Please provide a reason to censor this proposal"
+                }).then(
+                  ({ reason, confirm }) => confirm && onChangeStatus(
+                    authorid,
+                    loggedInAsEmail,
+                    id,
+                    PROPOSAL_STATUS_CENSORED,
+                    reason
+                  )
+                ) && e.preventDefault()}
+                text="Spam"
+                data-event-action="spam"
+                isLoading={loadingCensor}
+              />
+            </li>,
+            <li key="approve">
+              <ButtonWithLoadingIcon
+                className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                onClick={e =>
+                  confirmWithModal(modalTypes.CONFIRM_ACTION, {
+                    message: "Are you sure you want to publish this proposal?"
+                  }).then(
+                    confirm => confirm &&
+                      onChangeStatus(
+                        authorid,
+                        loggedInAsEmail,
+                        id,
+                        PROPOSAL_STATUS_PUBLIC
+                      )
+                  ) && e.preventDefault()
+                }
+                text="approve"
+                data-event-action="approve"
+                isLoading={loadingApprove}
+              />
+            </li>
+          ] : null
+        }
+        {adminCanStartTheVote ?
+          <li key="start-vote">
+            <ButtonWithLoadingIcon
+              className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
+              onClick={e =>
+                onStartVote(
+                  loggedInAsEmail,
+                  id
+                ) && e.preventDefault()
+              }
+              text="Start Vote"
+              data-event-action="start-vote"
+              isLoading={loadingStartVote}
+            />
+          </li> : null
+        }
+        {
+          userCanAuthorizeTheVote ?
+            <li>
+              <ButtonWithLoadingIcon
+                className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                onClick={e =>
+                  confirmWithModal(modalTypes.CONFIRM_ACTION, {
+                    message: (<span>Are you sure you want to <b>authorize</b> the admins to start the voting for this proposal?</span>)
+                  }).then(
+                    confirm => confirm &&
+                      onAuthorizeVote(
+                        loggedInAsEmail,
+                        id,
+                        version
+                      )
+                  ) && e.preventDefault()
+                }
+                text="Authorize voting to start"
+                data-event-action="authorize-vote"
+                isLoading={loadingAuthorizeVote}
+              />
+            </li>
+            : userCanRevokeVote ?
+              <li>
+                <ButtonWithLoadingIcon
+                  className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                  onClick={e =>
+                    confirmWithModal(modalTypes.CONFIRM_ACTION, {
+                      message: (<span>Are you sure you want to <b>revoke</b> the start voting authorization for this proposal?</span>)
+                    }).then(
+                      confirm => confirm &&
+                      onRevokeVote(
+                        loggedInAsEmail,
+                        id,
+                        version
+                      )
+                    ) && e.preventDefault()
+                  }
+                  text="Revoke voting authorization"
+                  data-event-action="revoke-vote"
+                  isLoading={loadingAuthorizeVote}
+                />
+              </li>
+              : null
+        }
         <ul className="flat-list buttons">
           <li className="first">
             <Link
@@ -276,120 +381,20 @@ const ThingLinkComp = ({
               permalink
             </Link>
           </li>
-          <li>
+          <li style={{ textAlign: "right", width: "100%" }}>
             <a
               href={isTestnet ? `https://github.com/decred-proposals/testnet3/tree/master/${id}/1` : `https://github.com/decred-proposals/mainnet/tree/master/${id}/1`}
               target="_blank"
+              className="blue-link"
               rel="noopener noreferrer"
             >
-              Get this Proposal on GitHub
+              <i className="fa fa-github right-margin-5" />
+              See on GitHub
             </a>
+            <Tooltip
+              text="Check this proposal’s content on our GitHub repository. There you can find proposal's metadata and its comments journals."
+            />
           </li>
-          {enableAdminActionsForUnvetted ?
-            [
-              <li key="spam">
-                <ButtonWithLoadingIcon
-                  className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                  onClick={e => confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
-                    reasonPlaceholder: "Please provide a reason to censor this proposal"
-                  }).then(
-                    ({ reason, confirm }) => confirm && onChangeStatus(
-                      authorid,
-                      loggedInAsEmail,
-                      id,
-                      PROPOSAL_STATUS_CENSORED,
-                      reason
-                    )
-                  ) && e.preventDefault()}
-                  text="Spam"
-                  data-event-action="spam"
-                  isLoading={loadingCensor}
-                />
-              </li>,
-              <li key="approve">
-                <ButtonWithLoadingIcon
-                  className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                  onClick={e =>
-                    confirmWithModal(modalTypes.CONFIRM_ACTION, {
-                      message: "Are you sure you want to publish this proposal?"
-                    }).then(
-                      confirm => confirm &&
-                        onChangeStatus(
-                          authorid,
-                          loggedInAsEmail,
-                          id,
-                          PROPOSAL_STATUS_PUBLIC
-                        )
-                    ) && e.preventDefault()
-                  }
-                  text="approve"
-                  data-event-action="approve"
-                  isLoading={loadingApprove}
-                />
-              </li>
-            ] : null
-          }
-          {adminCanStartTheVote ?
-            <li key="start-vote">
-              <ButtonWithLoadingIcon
-                className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                onClick={e =>
-                  onStartVote(
-                    loggedInAsEmail,
-                    id
-                  ) && e.preventDefault()
-                }
-                text="Start Vote"
-                data-event-action="start-vote"
-                isLoading={loadingStartVote}
-              />
-            </li> : null
-          }
-          {
-            userCanAuthorizeTheVote ?
-              <li>
-                <ButtonWithLoadingIcon
-                  className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                  onClick={e =>
-                    confirmWithModal(modalTypes.CONFIRM_ACTION, {
-                      message: (<span>Are you sure you want to <b>authorize</b> the admins to start the voting for this proposal?</span>)
-                    }).then(
-                      confirm => confirm &&
-                        onAuthorizeVote(
-                          loggedInAsEmail,
-                          id,
-                          version
-                        )
-                    ) && e.preventDefault()
-                  }
-                  text="Authorize voting to start"
-                  data-event-action="authorize-vote"
-                  isLoading={loadingAuthorizeVote}
-                />
-              </li>
-              : userCanRevokeVote ?
-                <li>
-                  <ButtonWithLoadingIcon
-                    className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                    onClick={e =>
-                      confirmWithModal(modalTypes.CONFIRM_ACTION, {
-                        message: (<span>Are you sure you want to <b>revoke</b> the start voting authorization for this proposal?</span>)
-                      }).then(
-                        confirm => confirm &&
-                        onRevokeVote(
-                          loggedInAsEmail,
-                          id,
-                          version
-                        )
-                      ) && e.preventDefault()
-                    }
-                    text="Revoke voting authorization"
-                    data-event-action="revoke-vote"
-                    isLoading={loadingAuthorizeVote}
-                  />
-                </li>
-                : null
-          }
         </ul>
         {allErrors.map((error, idx) => error ?
           <Message

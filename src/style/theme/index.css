@@ -724,7 +724,8 @@ body .appWrapper .content .sitetable .link .title a:hover {
 }
 .link .flat-list {
     padding: 0;
-    margin-top: 3px
+    margin-top: 3px;
+    display: flex;
 }
 .entry .buttons li {
     line-height: normal
@@ -734,6 +735,9 @@ body .appWrapper .content .sitetable .link .title a:hover {
     color: #98abba;
     font: 13px 'Source Sans Pro', Lato, Arial, sans-serif;
     transition: all .15s ease
+}
+.entry .buttons li .blue-link {
+    color: #2971ff;
 }
 .link .entry .buttons li a:hover {
     color: #2971ff;
