@@ -17,6 +17,7 @@ export const onResetProposal = act.RESET_PROPOSAL;
 export const onSetEmail = act.SET_EMAIL;
 
 export const onSignup = act.REQUEST_SIGNUP_CONFIRMATION;
+export const onResetSignup = act.RESET_SIGNUP_CONFIRMATION;
 export const onSignupConfirm = props => dispatch => {
   dispatch(onCreateNewUser(props));
 };
