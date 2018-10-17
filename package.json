@@ -34,6 +34,7 @@
     "redux-thunk": "^2.2.0",
     "showdown": "^1.8.3",
     "snew-classic-ui": "https://github.com/decred/snew-classic-ui",
+    "source-map-explorer": "^1.6.0",
     "timeago-react": "^1.2.2",
     "tweetnacl": "^1.0.0",
     "tweetnacl-util": "^0.15.0",
@@ -41,6 +42,7 @@
   },
   "scripts": {
     "mockapi": "node mockapi.js",
+    "analyze": "source-map-explorer build/static/js/main.*",
     "start": "cross-env HTTPS=true react-scripts start",
     "uidev": "concurrently \"node mockapi.js\" \"react-scripts start\"",
     "build": "react-scripts build",

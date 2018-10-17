@@ -34,6 +34,7 @@ class TogglerLayout extends React.Component {
     const toggleContainerStyle = {
       marginTop: "12px",
       float: "right",
+      marginBottom: "10px",
       cursor: "pointer",
       fontSize: "18px"
     };

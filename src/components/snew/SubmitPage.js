@@ -8,7 +8,10 @@ import InputFieldWithError from "../Form/Fields/InputFieldWithError";
 import Message from "../Message";
 import Link from "../snew/Link";
 import MultipleItemsBodyMessage from "../MultipleItemsBodyMessage";
-import { isArray, isUndefined, concat, cloneDeep } from "lodash";
+import isArray from "lodash/isArray";
+import isUndefined from "lodash/isUndefined";
+import concat from "lodash/concat";
+import cloneDeep from "lodash/cloneDeep";
 import { Field } from "redux-form";
 import MarkdownHelp from "../MarkdownHelp";
 
@@ -155,7 +158,6 @@ class SubmitPage extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="roundfield info-notice"> </div>
           </div>
         </div>
       </div>

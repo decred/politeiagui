@@ -1,38 +1,54 @@
-#header {
-  background-color: #2971FF;
-  position: fixed;
-  top: 0;
-  height: 196px;
-  width: 100%;
-  border: none;
-  background-image:
-  	-webkit-repeating-linear-gradient(315deg, rgba(0, 0, 255, .03) 9%, rgba(0, 198, 96, .03) 13%),
-  	-webkit-repeating-linear-gradient(315deg, rgba(44, 212, 126, .05) 23%, rgba(8, 8, 61, .04) 38%),
-  	-webkit-linear-gradient(45deg, #11203a 15%, #305180 70%, #142550 95%);
-
-  background-image:
-  	repeating-linear-gradient(135deg, rgba(0, 0, 255, .03) 9%, rgba(0, 198, 96, .03) 13%),
-  	repeating-linear-gradient(135deg, rgba(44, 212, 126, .05) 23%, rgba(8, 8, 61, .04) 38%),
-  	linear-gradient(45deg, #11203a 15%, #305180 70%, #142550 95%);
-
-  background-position: 0px 0px, 0px 0px, 0px 0px;
-  background-size: auto, auto, auto;
-  background-repeat: repeat, repeat, repeat;
-  box-shadow: 0 2px 1.5px 0 rgba(0, 0, 0, .12), 0 0 4px 0 rgba(0, 0, 0, .12)
-}
-
-.thumbnail.self, #header-img.default-header {
-  background-image: url("./logo.svg");
-  background-repeat: no-repeat;
-  background-position: center left;
-}
-.thumbnail.self {
-  background-color: #0C1E3E;
-}
-
 /* Ensure the first letter of the proposal token is not capitalized */
 .link .entry .proposal-token:first-letter {
   text-transform: none !important;
+}
+
+.submit-page #header-bottom-left,
+#header-bottom-left {
+  height: 72px;
+  top: 0;
+}
+
+#header-img.default-header {
+  width: 188px;
+  padding-left: 32px;
+}
+
+.link .thumbnail.self {
+  display: none;
+}
+
+a.attached-image-remove {
+  color: #fff !important;
+  background-color: #8997A5;
+}
+
+.submit-page #title-field textarea {
+  border: 1px solid #8997A5;
+}
+
+.proposal-filter-count {
+  color: #bbb;
+}
+
+.proposal-draft {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.proposal-draft .delete-draft {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.proposal-draft .delete-draft:hover {
+  color: #c32a2a;
+  text-decoration: underline;
+}
+
+.proposal-draft .delete-draft i {
+  margin-right: 3px;
 }
 
 .entry .buttons li.save-button,
@@ -58,12 +74,11 @@
     color: #2971ff;
     display: none;
 }
+
 .score.dislikes {
     color: #fd714a;
     display: none;
 }
-
-.login-form-side .status { display: block }
 
 .side {
   padding: 0;
@@ -79,6 +94,8 @@ body, html {
   width: 100%;
   padding: 0;
   margin: 0;
+  min-height: 100vh;
+  background: #f3f5f6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -87,11 +104,7 @@ body, html {
   background: #091440;
   font-weight: 400;
   color: #132f4b;
-
-}
-
-* {
-  box-sizing: border-box;
+  height: 100%;
 }
 
 .error {
@@ -101,10 +114,6 @@ body, html {
 
 .CodeMirror {
   min-height: 200px;
-}
-
-#app {
-  height: 100%;
 }
 
 a {
@@ -249,8 +258,6 @@ a:hover, a:focus {
 
 .input-subline {
   font-size: 12px;
-  margin-top: 3px;
-  min-height: 15px;
 }
 
 .input-error {
@@ -514,8 +521,63 @@ button .logo {
   color: #000;
 }
 
-
 /* Override conflitant styles for react-mde */
+table.md {
+  width: 100%;
+}
+
+.md textarea {
+  font-size: 1rem !important;
+  padding-bottom: 22px !important;
+  line-height: 18px !important;
+  resize: none;
+  height: 100%;
+  overflow-y: hidden;
+}
+
+.infobar .md {
+  color: #fff;
+}
+
+.comment .usertext .md {
+  color: #0c1e3e;
+}
+
+.md a {
+  color: #2971ff;
+}
+.md a:visited {
+  color: #7D5D8A;
+}
+.md pre {
+  padding: 8px;
+}
+.md blockquote {
+  border-left: 2px solid #edf1f3;
+}
+.md h1,
+.md h2 {
+  margin: .5em 0 .25em;
+  border: none;
+  color: #0c1e3e;
+}
+.md h3 {
+  color: #0c1e3e;
+  margin: 16px 0 0;
+}
+
+.link .usertext .md {
+  margin-top: 12px;
+  margin-bottom: -12px;
+  padding-top: 12px;
+  padding-left: 0;
+  background-color: transparent;
+  border: 0 solid;
+  border-top: 1px solid #edf1f3;
+  border-radius: 0;
+  color: #0c1e3e
+}
+
 .mde-header-item button {
   text-align: left;
   cursor: pointer;
@@ -533,16 +595,6 @@ button .logo {
 }
 .mde-header ul.mde-header-group li.mde-header-item button:focus .fa {
   color: #fff;
-}
-
-
-.md textarea {
-  font-size: 1rem !important;
-  padding-bottom: 22px !important;
-  line-height: 18px !important;
-  resize: none;
-  height: 100%;
-  overflow-y: hidden;
 }
 
 .mde-text {
@@ -704,11 +756,16 @@ li p.header-3 {
   font-size: 20px;
 }
 
-.markhelp {
+.usertext .markhelp {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
+    padding: 10px;
+}
+
+.usertext .markhelp .spaces {
+  background-color: #fff;
 }
 
 .markhelp > table {
@@ -722,6 +779,7 @@ li p.header-3 {
 
 .submit-page .formtabs-content {
     width: 100%;
+    box-shadow: 3px 4px 6px 1px #e9e9e9;
 }
 .submit-page .roundfield {
     width: 100% !important;
@@ -752,11 +810,6 @@ li p.header-3 {
 }
 
 #header-right {
-  background-color: #091440;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
   padding-right: 16px;
 }
 
@@ -766,7 +819,7 @@ li p.header-3 {
   transform: translateY(-50%);
   text-align: right;
   display: flex;
-  align-content: center;
+  align-items: center;
 }
 
 #header-right-content .dropdown {
@@ -802,7 +855,6 @@ li p.header-3 {
 #header-right .proposalc-credits-click-here-text {
   font-size: 11px;
 }
-
 
 .tooltip-wrapper {
   position: relative;
@@ -1169,6 +1221,7 @@ li p.header-3 {
 
 .appWrapper {
   background: #f3f5f6;
+  min-height: 100%;
 }
 
 .available-credits {
@@ -1426,12 +1479,6 @@ form div.usertext-body.may-blank-within.md-container {
   float: right;
 }
 
-.thing-proposal {
-  -webkit-box-shadow: 1px 1px 1px 6px #f4f7f9;
-	-moz-box-shadow: 1px 1px 1px 6px #f4f7f9;
-	box-shadow: 1px 1px 1px 6px #f4f7f9;
-}
-
 .comment > .entry > .usertext {
 	max-height: 500px;
 	overflow: hidden;
@@ -1470,4 +1517,18 @@ form div.usertext-body.may-blank-within.md-container {
   border-radius: 0 0 6px 6px;
   display: inline-block;
   z-index: 999;
+}
+
+.thing-proposal {
+  margin: 15px 0;
+  background-color: #fff;
+  box-shadow: 3px 4px 6px 1px #e9e9e9;
+}
+
+.thing.spam {
+  background-color: #FFE9E6;
+}
+
+.togglebutton {
+  text-transform: uppercase;
 }
