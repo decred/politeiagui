@@ -371,7 +371,7 @@ const ThingLinkComp = ({
               </li>
               : null
         }
-        <ul className="flat-list buttons">
+        <ul className="flat-list buttons" style={{ display: "flex" }}>
           <li className="first">
             <Link
               className="bylink comments may-blank"
