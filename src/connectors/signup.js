@@ -27,7 +27,8 @@ const signupFormConnector = connect(
   {
     onFetchData: act.onGetPolicy,
     onSignup: act.onSignup,
-    onSignupConfirm: act.onSignupConfirm
+    onSignupConfirm: act.onSignupConfirm,
+    onResetSignup: act.onResetSignup
   }
 );
 
@@ -64,6 +65,12 @@ class Wrapper extends Component {
     if (this.props.csrf) {
       this.setState({ hasFetchedPolicy: true });
       this.props.policy || this.props.onFetchData();
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.props.isShowingSignupConfirmation) {
+      this.props.onResetSignup();
     }
   }
 
