@@ -1498,6 +1498,15 @@ form div.usertext-body.may-blank-within.md-container {
   cursor: pointer;
 }
 
+.linkish-modal {
+	color: #2971FF;
+  cursor: pointer;
+  margin: 0 .5em 0 .5em;
+  max-height: 100%;
+  float: right;
+  clear: both;
+}
+
 .proposal-paywall-section {
   padding: 15px;
 }

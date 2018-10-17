@@ -8,7 +8,7 @@ class OnBoard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tab: 0
+      tab: this.props.me.payload && this.props.me.payload.tab ? this.props.me.payload.tab : 0
     };
   }
   render() {
