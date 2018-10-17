@@ -340,6 +340,18 @@ describe("test app reducer", () => {
     });
   });
 
+  test("reset redirectFrom action", () => {
+    const action = {
+      type: act.RESET_REDIRECTED_FROM
+    };
+
+    const state = app({}, action);
+
+    expect(state).toEqual({
+      redirectedFrom: null
+    });
+  });
+
   test("correctly test reducers that only sets payload to informed key", () => {
     const reducers = [
       { action: act.LOAD_DRAFT_PROPOSALS, key: "draftProposals" },
@@ -351,7 +363,8 @@ describe("test app reducer", () => {
       { action: act.SHOULD_AUTO_VERIFY_KEY, key: "shouldVerifyKey" },
       { action: act.IDENTITY_IMPORTED, key: "identityImportResult" },
       { action: act.SET_COMMENTS_SORT_OPTION, key: "commentsSortOption" },
-      { action: act.TOGGLE_CREDITS_PAYMENT_POLLING, key: "pollingCreditsPayment" }
+      { action: act.TOGGLE_CREDITS_PAYMENT_POLLING, key: "pollingCreditsPayment" },
+      { action: act.REDIRECTED_FROM, key: "redirectedFrom" }
     ];
 
     reducers.map( obj => {

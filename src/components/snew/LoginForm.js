@@ -95,9 +95,6 @@ const LoginForm = ({
       </a>
     </div>
     {showPrivacyPolicy && <PrivacyPolicy onHidePrivacyPolicy={onHidePrivacyPolicy} />}
-    <div>
-      <div className="c-alert c-alert-danger" />
-    </div>
   </form>
 );
 

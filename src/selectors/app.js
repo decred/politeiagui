@@ -221,7 +221,6 @@ export const getUserProposalFilterCounts = (state) => {
 
 export const getUnvettedProposalFilterCounts = (state) => {
   const usResponse = apiUnvettedStatusResponse(state);
-  console.log("us: ", usResponse);
   return usResponse ? {
     [PROPOSAL_STATUS_UNREVIEWED]: usResponse.numofunvetted + usResponse.numofunvettedchanges,
     [PROPOSAL_STATUS_CENSORED]: usResponse.numofcensored,
@@ -278,3 +277,5 @@ export const commentsSortOption = (state) => state.app.commentsSortOption;
 export const pollingCreditsPayment = state => state.app.pollingCreditsPayment;
 
 export const proposalPaymentReceived = state => state.app.proposalPaymentReceived;
+
+export const redirectedFrom = state => state.app.redirectedFrom;
