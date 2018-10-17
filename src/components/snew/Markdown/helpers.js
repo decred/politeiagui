@@ -59,10 +59,10 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
             You are about to be sent to an external website! <strong className="red">Do not</strong> enter your Politeia credentials or reveal any other sensitive information.
           </p>
           <p>
-            External link: {link}
+            <b>External link:</b> {link}
           </p>
-          <p>
-            External domain: <strong className="red">{tmpLink.hostname}</strong>
+          <p style={{ marginTop: "10px" }}>
+            <b>External domain:</b> <strong className="red">{tmpLink.hostname}</strong>
           </p>
           <p style={{ marginTop: "10px" }}>
             Are you sure you want to proceed?
