@@ -155,7 +155,6 @@ class SubmitPage extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="roundfield info-notice"> </div>
           </div>
         </div>
       </div>

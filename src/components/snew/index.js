@@ -8,7 +8,6 @@ export const CommentArea = comps.CommentArea = snew(comps.CommentArea);
 export const CommentForm = comps.CommentForm = snew(comps.CommentForm);
 export const Content = comps.Content = snew(comps.Content);
 export const Expando = comps.Expando = snew(comps.Expando);
-export const FooterParent = comps.FooterParent = snew(comps.FooterParent);
 export const Header = comps.Header = snew(comps.Header);
 export const HeaderBottomLeft = comps.HeaderBottomLeft = snew(comps.HeaderBottomLeft);
 export const Link = comps.Link = snew(comps.Link);
