@@ -37,37 +37,36 @@ a:hover {
 }
 
 .side .spacer input,
-.appWrapper .text,
-.appWrapper input[type=password],
-.appWrapper input[type=text],
-.appWrapper input[type=url],
-.appWrapper textarea {
+body .appWrapper .text,
+body .appWrapper input[type=password],
+body .appWrapper input[type=text],
+body .appWrapper input[type=url],
+body .appWrapper textarea {
     box-shadow: none;
     transition: border-color .15s ease, color .15s ease;
     padding: 6px 12px;
 }
 .side .spacer input:hover,
-.appWrapper .text:hover,
-.appWrapper input[type=password]:hover,
-.appWrapper input[type=text]:hover,
-.appWrapper input[type=url]:hover,
-.appWrapper textarea:hover {
+body .appWrapper .text:hover,
+body .appWrapper input[type=password]:hover,
+body .appWrapper input[type=text]:hover,
+body .appWrapper input[type=url]:hover,
+body .appWrapper textarea:hover {
     border-color: #e2e2e2;
 }
 .side .spacer input:active,
 .side .spacer input:focus,
-.appWrapper .text:focus,
-.appWrapper input[type=password]:focus,
-.appWrapper input[type=text]:focus,
-.appWrapper input[type=url]:focus,
-.appWrapper textarea:focus {
+body .appWrapper .text:focus,
+body .appWrapper input[type=password]:focus,
+body .appWrapper input[type=text]:focus,
+body .appWrapper input[type=url]:focus,
+body .appWrapper textarea:focus {
     border-color: #2971ff;
     color: #0c1e3e;
 }
 .c-btn-primary,
 .wiki-page .wiki-page-content .wiki_button,
-.btn,
-button {
+.btn, body button {
     margin: 4px 16px 4px 0;
     padding: 0 16px;
     background: #091440;
@@ -440,6 +439,7 @@ button.disabled {
     display: flex;
     flex-direction: column;
     background: #fff;
+    box-shadow: 3px 4px 6px 1px #e9e9e9;
 }
 .comments-page .link .usertext .md {
     margin-bottom: 0;
@@ -482,13 +482,14 @@ button.disabled {
     font-size: x-small;
 }
 .commentarea>.usertext {
-    background: #FAFAFA;
     margin: 0;
     padding: 16px;
     overflow: visible;
-    -webkit-order: -1;
-    -ms-flex-order: -1;
     order: -1;
+}
+
+.commentarea .usertext-edit {
+    max-width: 500px;
 }
 
 .commentarea .usertext-edit textarea {
@@ -708,7 +709,6 @@ body.other-discussions-page>.content {
     background: #fff;
     padding: 16px;
     border-radius: 2px;
-    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .14);
 }
 
 #bottom-comments>.sitetable>.comment,
@@ -767,6 +767,8 @@ form div.usertext-body.may-blank-within.md-container {
     width: 100%;
     background-image: none;
     background-color: #091440;
+    display: flex;
+    justify-content: space-between;
 }
 
 #header-right a {
@@ -783,6 +785,10 @@ form div.usertext-body.may-blank-within.md-container {
     left: 32px;
     line-height: 42px;
     border: none
+}
+
+#header .tabmenu li {
+    margin: 0;
 }
 
 #header .tabmenu li a {
@@ -804,6 +810,9 @@ form div.usertext-body.may-blank-within.md-container {
     border-bottom: 2px solid
 }
 
+#header-img {
+    margin: 0;
+}
 
 #header-img,
 #header-img.default-header {

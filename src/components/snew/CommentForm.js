@@ -105,10 +105,10 @@ const CommentForm = ({
             </div>
           </div> : null}
       </div>
+      {isShowingMarkdownHelp && (
+        <MarkdownHelp />
+      )}
     </form>
-    {isShowingMarkdownHelp && (
-      <MarkdownHelp />
-    )}
   </React.Fragment> : null);
 };
 
