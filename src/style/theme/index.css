@@ -717,7 +717,7 @@ body.other-discussions-page>.content {
 }
 
 .side {
-    margin: 92px 16px 108px 0;
+    margin: 92px 16px 0 0;
 }
 
 .submit .morelink {
@@ -767,6 +767,7 @@ form div.usertext-body.may-blank-within.md-container {
     width: 100%;
     background-image: none;
     background-color: #091440;
+    border-bottom: #091440;
     display: flex;
     justify-content: space-between;
 }
