@@ -276,6 +276,15 @@ const ThingLinkComp = ({
               permalink
             </Link>
           </li>
+          <li>
+            <a
+              href={isTestnet ? `https://github.com/decred-proposals/testnet3/tree/master/${id}/1` : `https://github.com/decred-proposals/mainnet/tree/master/${id}/1`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Get this Proposal on GitHub
+            </a>
+          </li>
           {enableAdminActionsForUnvetted ?
             [
               <li key="spam">
