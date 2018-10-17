@@ -381,20 +381,24 @@ const ThingLinkComp = ({
               permalink
             </Link>
           </li>
-          <li style={{ textAlign: "right", width: "100%" }}>
-            <a
-              href={isTestnet ? `https://github.com/decred-proposals/testnet3/tree/master/${id}/1` : `https://github.com/decred-proposals/mainnet/tree/master/${id}/1`}
-              target="_blank"
-              className="blue-link"
-              rel="noopener noreferrer"
-            >
-              <i className="fa fa-github right-margin-5" />
-              See on GitHub
-            </a>
-            <Tooltip
-              text="Check this proposal’s content on our GitHub repository. There you can find proposal's metadata and its comments journals."
-            />
-          </li>
+          <Tooltip
+            wrapperStyle={{ width: "100%", textAlign: "right" }}
+            text="Check this proposal’s content on our GitHub repository. There you can find proposal's metadata and its comments journals."
+            position="top"
+          >
+            <li>
+              <a
+                href={isTestnet ? `https://github.com/decred-proposals/testnet3/tree/master/${id}/1` : `https://github.com/decred-proposals/mainnet/tree/master/${id}/1`}
+                target="_blank"
+                className="blue-link"
+                rel="noopener noreferrer"
+                title=""
+              >
+                <i className="fa fa-github right-margin-5" />
+                See on GitHub
+              </a>
+            </li>
+          </Tooltip>
         </ul>
         {allErrors.map((error, idx) => error ?
           <Message

@@ -825,6 +825,11 @@ li p.header-3 {
   right: 0;
 }
 
+.tip-top {
+  bottom: 40px;
+  right: 0;
+}
+
 .tooltip-wrapper:hover .tip {
   visibility: visible;
   transition-delay: .5s;
