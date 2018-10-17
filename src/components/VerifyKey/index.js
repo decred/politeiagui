@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import propTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
 import * as pki from "../../lib/pki";
 import PageLoadingIcon from "../snew/PageLoadingIcon";
 import verifyKeyConnector from "../../connectors/verifyKey";

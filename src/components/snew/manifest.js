@@ -4,7 +4,6 @@ export { default as CommentArea } from "./CommentArea";
 export { default as CommentForm } from "./CommentForm";
 export { default as Content } from "./Content";
 export { default as Expando } from "./Expando";
-export { default as FooterParent } from "./FooterParent";
 export { default as Header } from "./Header";
 export { default as HeaderBottomLeft } from "./HeaderBottomLeft";
 export { default as Link } from "./Link";

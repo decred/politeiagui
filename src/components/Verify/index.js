@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
 import qs from "query-string";
 import VerifyPage from "./Page";
 import verifyConnector from "../../connectors/verify";
