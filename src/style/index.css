@@ -254,12 +254,6 @@ a:hover, a:focus {
   width: 100%;
 }
 
-.input-subline {
-  font-size: 12px;
-  margin-top: 3px;
-  min-height: 15px;
-}
-
 .input-error {
   color: #bf4153;
 }
@@ -1471,9 +1465,9 @@ form div.usertext-body.may-blank-within.md-container {
 }
 
 .thing-proposal {
-  -webkit-box-shadow: 1px 1px 1px 6px #f4f7f9;
-	-moz-box-shadow: 1px 1px 1px 6px #f4f7f9;
-	box-shadow: 1px 1px 1px 6px #f4f7f9;
+  margin: 15px 0;
+  background-color: #fff;
+  box-shadow: 5px 5px 4px #e9e9e9;
 }
 
 .comment > .entry > .usertext {
@@ -1516,7 +1510,10 @@ form div.usertext-body.may-blank-within.md-container {
   z-index: 999;
 }
 
-.spam {
-  background-color: #FA8072;
-  opacity: 0.9;
+.thing.spam {
+  background-color: #FFE9E6;
+}
+
+.togglebutton {
+  text-transform: uppercase;
 }

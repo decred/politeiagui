@@ -149,7 +149,6 @@ body>.appWrapper>.content {
 }
 
 .link {
-    margin: 0;
     padding: 16px;
     position: relative
 }
@@ -222,12 +221,6 @@ body>.appWrapper>.content {
     margin-top: 3px;
     color: #98abba;
     font: 12px 'Source Sans Pro', Lato, Arial, sans-serif
-}
-
-.appWrapper .content .spacer {
-    margin: 0;
-    background: white;
-    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .14);
 }
 
 .appWrapper .content .infobar {
@@ -444,12 +437,9 @@ button.disabled {
 }
 
 .commentarea {
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
     flex-direction: column;
+    background: #fff;
 }
 .comments-page .link .usertext .md {
     margin-bottom: 0;
@@ -521,7 +511,7 @@ button.disabled {
 }
 .commentarea .child .thing {
     box-shadow: none;
-    padding: 8px 8px 8px 2px;
+    padding: 8px 0px 0px 2px;
     margin: 8px 0 0;
 }
 .commentarea .comment .midcol {
