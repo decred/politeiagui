@@ -1207,7 +1207,7 @@ li p.header-3 {
   background-repeat: no-repeat;
 }
 
-.disabled {
+.disabled, div.disabled {
   background: rgba(0, 0, 0, .08);
   color: #bbb;
   cursor: not-allowed;
@@ -1496,6 +1496,14 @@ form div.usertext-body.may-blank-within.md-container {
 .linkish {
   color: #2971FF;
   cursor: pointer;
+}
+
+.linkish-modal {
+	color: #2971FF;
+	font-size: .8em;
+  cursor: pointer;
+  margin: 5px 5px 0 0;
+  float: right;
 }
 
 .proposal-paywall-section {

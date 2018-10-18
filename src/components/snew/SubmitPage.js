@@ -6,7 +6,6 @@ import FilesField from "../Form/Fields/FilesField";
 import ErrorField from "../Form/Fields/ErrorField";
 import InputFieldWithError from "../Form/Fields/InputFieldWithError";
 import Message from "../Message";
-import Link from "../snew/Link";
 import MultipleItemsBodyMessage from "../MultipleItemsBodyMessage";
 import isArray from "lodash/isArray";
 import isUndefined from "lodash/isUndefined";
@@ -14,6 +13,7 @@ import concat from "lodash/concat";
 import cloneDeep from "lodash/cloneDeep";
 import { Field } from "redux-form";
 import MarkdownHelp from "../MarkdownHelp";
+import { MANAGE_CREDITS_MODAL, ONBOARD } from "../Modal/modalTypes";
 
 const normalizer = (value, previousValue) => {
   let files = [];
@@ -49,6 +49,7 @@ class SubmitPage extends React.Component {
       handleSubmit,
       newProposalError,
       userCanExecuteActions,
+      openModal,
       proposalCredits,
       editingMode
     } = this.props;
@@ -112,6 +113,7 @@ class SubmitPage extends React.Component {
                             rows={20}
                             cols={80}
                           />
+                          <a className="linkish-modal" onClick={() => openModal(ONBOARD, { tab: 4 })}>Learn How to Format your Proposal</a>
                           <Field
                             name="files"
                             className="attach-button greenprimary"
@@ -143,9 +145,9 @@ class SubmitPage extends React.Component {
                       </button>
                       {(proposalCredits === 0 && !editingMode) && (
                         <div className="submit-button-error">
-                          To submit a proposal, you must purchase a proposal credit,
-                          see your <Link href="/user/account">account page</Link>{" "}
-                          for more information.
+                          To submit a proposal, you must purchase a proposal credit.
+                          <a className="linkish" onClick={() => openModal(MANAGE_CREDITS_MODAL)}> Click here</a>{" "}
+                          to open the proposal credits manager.
                         </div>
                       )}
                     </div>

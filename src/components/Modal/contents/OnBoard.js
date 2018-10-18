@@ -3,12 +3,13 @@ import ModalContentWrapper from "../ModalContentWrapper";
 import modalConnector from "../../../connectors/modal";
 import { Tabs, Tab } from "../../Tabs";
 import Markdown from "../../snew/Markdown";
+import get from "lodash/fp/get";
 
 class OnBoard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tab: 0
+      tab: get([ "me", "payload", "tab" ], this.props) || 0
     };
   }
   render() {
