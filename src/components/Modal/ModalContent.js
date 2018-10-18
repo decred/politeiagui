@@ -14,7 +14,7 @@ const mapModalTypeToContent = {
   [modalTypes.CONFIRM_ACTION]: ({ modalData }) => <ConfirmAction me={modalData} />,
   [modalTypes.CONFIRM_ACTION_WITH_REASON]: ({ modalData }) => <ConfirmActionWithReason me={modalData} />,
   [modalTypes.LOGIN]: ({ location, modalData }) => <Login  me={modalData} pathname={location.pathname} />,
-  [modalTypes.ONBOARD]: () => <OnBoard />,
+  [modalTypes.ONBOARD]: ({ modalData }) => <OnBoard me={modalData} />,
   [modalTypes.PAYWALL_MODAL]: () => <PaywallModal />,
   [modalTypes.CREDITS_HISTORY_MODAL]: () => <CreditsHistoryModal />,
   [modalTypes.MANAGE_CREDITS_MODAL]: () => <ManageCreditsModal />,

@@ -23,7 +23,9 @@ const newProposalConnector = connect(
     token: sel.newProposalToken,
     signature: sel.newProposalSignature,
     proposalCredits: sel.proposalCredits,
-    draftProposalById: sel.draftProposalById
+    draftProposalById: sel.draftProposalById,
+    userPaywallStatus: sel.getUserPaywallStatus,
+    userHasPaid: sel.userHasPaid
   }),
   {
     onFetchData: act.onGetPolicy,
@@ -43,6 +45,10 @@ class NewProposalWrapper extends Component {
     };
   }
 
+  componentDidMount(){
+    this.checkPaywallNewProposal();
+  }
+
   componentDidUpdate(prevProps) {
     const { token, draftProposal } = this.props;
     if (token) {
@@ -57,6 +63,16 @@ class NewProposalWrapper extends Component {
     if(draftProposalDataAvailable) {
       this.setState({
         initialValues: draftProposal
+      });
+    }
+  }
+
+  checkPaywallNewProposal = () => {
+    const { location, history, userHasPaid } = this.props;
+    if (!userHasPaid) {
+      history.replace({
+        pathname: "/",
+        state: { from: location }
       });
     }
   }
