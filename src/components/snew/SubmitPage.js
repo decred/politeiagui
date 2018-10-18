@@ -80,8 +80,6 @@ class SubmitPage extends React.Component {
                 />
                 <div className="roundfield" id="title-field">
                   <div className="roundfield-content">
-                    <a className="linkish-modal" onClick={() => openModal(ONBOARD, { tab: 4 })}>How to Format Your Proposal</a>
-
                     <div style={{ display: "flex", width: "100%" }}>
                       <Field
                         name="name"
@@ -127,6 +125,7 @@ class SubmitPage extends React.Component {
                         </div>
                       </div>
                     </div>
+                    <a className="linkish-modal" onClick={() => openModal(ONBOARD, { tab: 4 })}>Learn How to Format your Proposal</a>
                     <div className="submit-wrapper">
                       <button
                         className={`togglebutton access-required${!submitEnabled && " not-active disabled"}`}

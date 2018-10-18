@@ -6,8 +6,6 @@ import compose from "lodash/fp/compose";
 import { or } from "../lib/fp";
 import { validate } from "../validators/proposal";
 import { getNewProposalData } from "../lib/editors_content_backup";
-import { loadStateLocalStorage } from "../lib/local_storage";
-
 
 const newProposalConnector = connect(
   sel.selectorMap({
@@ -26,7 +24,8 @@ const newProposalConnector = connect(
     signature: sel.newProposalSignature,
     proposalCredits: sel.proposalCredits,
     draftProposalById: sel.draftProposalById,
-    userPaywallStatus: sel.getUserPaywallStatus
+    userPaywallStatus: sel.getUserPaywallStatus,
+    userHasPaid: sel.userHasPaid
   }),
   {
     onFetchData: act.onGetPolicy,
@@ -47,9 +46,7 @@ class NewProposalWrapper extends Component {
   }
 
   componentDidMount(){
-    if (!this.props.userCanPropose){
-      return this.checkPaywallNewProposal(this.props);
-    }
+    this.checkPaywallNewProposal();
   }
 
   componentDidUpdate(prevProps) {
@@ -70,22 +67,13 @@ class NewProposalWrapper extends Component {
     }
   }
 
-  checkPaywallNewProposal() {
-    const { location, history } = this.props;
-    const stateFromLocalStorage = loadStateLocalStorage();
-    const userCanPropose = (stateFromLocalStorage
-      && stateFromLocalStorage.api
-      && stateFromLocalStorage.api.me
-      && stateFromLocalStorage.api.me.response
-      && stateFromLocalStorage.api.me.response.paywallamount === 0);
-    if (userCanPropose){
-      return true;
-    } else {
+  checkPaywallNewProposal = () => {
+    const { location, history, userHasPaid } = this.props;
+    if (!userHasPaid) {
       history.replace({
         pathname: "/",
         state: { from: location }
       });
-      return;
     }
   }
 
