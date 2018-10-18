@@ -113,6 +113,7 @@ class SubmitPage extends React.Component {
                             rows={20}
                             cols={80}
                           />
+                          <a className="linkish-modal" onClick={() => openModal(ONBOARD, { tab: 4 })}>Learn How to Format your Proposal</a>
                           <Field
                             name="files"
                             className="attach-button greenprimary"
@@ -125,7 +126,6 @@ class SubmitPage extends React.Component {
                         </div>
                       </div>
                     </div>
-                    <a className="linkish-modal" onClick={() => openModal(ONBOARD, { tab: 4 })}>Learn How to Format your Proposal</a>
                     <div className="submit-wrapper">
                       <button
                         className={`togglebutton access-required${!submitEnabled && " not-active disabled"}`}

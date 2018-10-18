@@ -1502,7 +1502,7 @@ form div.usertext-body.may-blank-within.md-container {
 	color: #2971FF;
 	font-size: .8em;
   cursor: pointer;
-  margin: .75em 5.2em 0 0em;
+  margin: 5px 5px 0 0;
   float: right;
 }
 
