@@ -6,7 +6,8 @@ import {
   EDIT_USER_EXPIRE_NEW_USER_VERIFICATION,
   EDIT_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
   EDIT_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
-  EDIT_USER_UNLOCK
+  EDIT_USER_UNLOCK,
+  EDIT_USER_LOCK
 } from "../../constants";
 
 
@@ -82,6 +83,7 @@ const GeneralTab = ({
   isApiRequestingMarkUpdateKeyAsExpired,
   isApiRequestingMarkResetPasswordAsExpired,
   isApiRequestingUnlockUser,
+  isApiRequestingLockUser,
   onEditUser,
   isAdmin
 }) => {
@@ -137,7 +139,7 @@ const GeneralTab = ({
       ])}
       <Field label="Failed login attempts">{user.failedloginattempts}</Field>
       <Field label="Locked">
-        {!user.islocked ? "No" : ([
+        {user.islocked ? ([
           <span>Yes</span>,
           <ButtonWithLoadingIcon
             className="c-btn c-btn-primary button-small"
@@ -145,6 +147,14 @@ const GeneralTab = ({
             disabled={isApiRequestingUnlockUser}
             isLoading={isApiRequestingUnlockUser}
             onClick={() => onEditUser(user.id, EDIT_USER_UNLOCK)} />
+        ]) : ([
+          <span>No</span>,
+          <ButtonWithLoadingIcon
+            className="c-btn c-btn-primary button-small"
+            text="Lock user"
+            disabled={isApiRequestingLockUser}
+            isLoading={isApiRequestingLockUser}
+            onClick={() => onEditUser(user.id, EDIT_USER_LOCK)} />
         ])}
       </Field>
       <FieldSeparator />

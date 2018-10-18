@@ -10,7 +10,8 @@ import {
   EDIT_USER_EXPIRE_NEW_USER_VERIFICATION,
   EDIT_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
   EDIT_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
-  EDIT_USER_UNLOCK
+  EDIT_USER_UNLOCK,
+  EDIT_USER_LOCK
 } from "../constants";
 
 export default connect(
@@ -45,6 +46,9 @@ export default connect(
     ),
     isApiRequestingUnlockUser: state => (
       sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_UNLOCK
+    ),
+    isApiRequestingLockUser: state => (
+      sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_LOCK
     ),
     editUserResponse: sel.editUserResponse
   }),

@@ -71,7 +71,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     "The server cannot verify the payment at this time, please try again later or contact Politeia administrators.",
     "The public key provided is already taken by another user.",
     "The proposal cannot be set to that voting status.",
-    "Your account has been locked due to too many login attempts.",
+    "Your account has been locked, most likely due to too many failed login attempts.",
     "You do not have any proposal credits; you must purchase one before you can submit a proposal."
   ];
 
