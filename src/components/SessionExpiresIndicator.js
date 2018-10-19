@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 import IntervalComponent from "./IntervalComponent";
 import currentUserConnector from "../connectors/currentUser";
@@ -35,11 +36,22 @@ class SessionExpiresIndicator extends React.Component {
     }
   }
   finishInterval = () => {
-    if (this.props.loggedInAsEmail) {
-      this.props.onLogout();
-      this.setState({ timer: null });
-      this.props.openModal(modalTypes.LOGIN, {
-        title: "Your session has expired. Please log in again."
+    const {
+      loggedInAsEmail,
+      onLogout,
+      openModal,
+      history,
+      location
+    } = this.props;
+    this.setState({ timer: null });
+    if (loggedInAsEmail) {
+      onLogout(
+        () => history.push("/user/logout")
+      );
+      console.log("ma location", location);
+      openModal(modalTypes.LOGIN, {
+        title: "Your session has expired. Please log in again.",
+        redirectAfterLogin: location.pathname
       }, null);
     }
   }
@@ -84,4 +96,4 @@ class SessionExpiresIndicator extends React.Component {
 
 }
 
-export default currentUserConnector(SessionExpiresIndicator);
+export default withRouter(currentUserConnector(SessionExpiresIndicator));

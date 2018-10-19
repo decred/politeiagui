@@ -52,7 +52,9 @@ class UserInfo extends React.Component {
                   </li>
                   <li
                     className="dropdown-list-item logout-button"
-                    onClick={() => onLogout(history.push)}
+                    onClick={() => onLogout(
+                      () => history.push("/user/logout")
+                    )}
                   >
                     <form className="logout hover" />
                     Log out

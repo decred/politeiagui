@@ -309,7 +309,6 @@ export const setStatusProposalIsRequesting = isApiRequestingSetStatusProposal;
 export const setStatusProposalToken = compose(get("token"), apiSetStatusProposalPayload);
 export const setStatusProposalStatus = compose(get("status"), apiSetStatusProposalPayload);
 export const setStatusProposalError = apiSetStatusProposalError;
-export const redirectedFrom = get([ "api", "login", "redirectedFrom" ]);
 export const verificationToken = compose(get("verificationtoken"), apiNewUserResponse);
 export const getKeyMismatch = state => state.api.keyMismatch;
 export const editUserAction = compose(get("action"), apiEditUserPayload);
