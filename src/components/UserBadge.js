@@ -6,9 +6,10 @@ import {
 } from "../constants";
 
 const UserBadge = ({
-  userPaywallStatus
+  userPaywallStatus,
+  loggedInAsEmail
 }) => {
-  return userPaywallStatus === PAYWALL_STATUS_WAITING ? (
+  return !loggedInAsEmail ? null : userPaywallStatus === PAYWALL_STATUS_WAITING ? (
     <div style={{ display: "flex", flexDirection: "row",         justifyContent: "center" }}>
       <div class="col-sm-1">
         <Tooltip

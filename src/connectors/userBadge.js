@@ -5,7 +5,8 @@ import * as sel from "../selectors";
 
 const userBadgeConnector = connect(
   sel.selectorMap({
-    userPaywallStatus: sel.getUserPaywallStatus
+    userPaywallStatus: sel.getUserPaywallStatus,
+    loggedInAsEmail: sel.loggedInAsEmail
   }),
   dispatch => bindActionCreators({
   }, dispatch)
