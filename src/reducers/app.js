@@ -92,6 +92,7 @@ const app = (state = DEFAULT_STATE, action) => (({
   [act.CHANGE_ADMIN_FILTER_VALUE]: () => ({ ...state, adminProposalsShow: action.payload }),
   [act.CHANGE_PUBLIC_FILTER_VALUE]: () => ({ ...state, publicProposalsShow: action.payload }),
   [act.CHANGE_USER_FILTER_VALUE]: () => ({ ...state, userProposalsShow: action.payload }),
+  [act.RESET_PAYWALL_INFO]: () => ({ ...state, userAlreadyPaid: null }),
   [act.UPDATE_USER_PAYWALL_STATUS]: () => ({
     ...state,
     userPaywallStatus: action.payload.status,

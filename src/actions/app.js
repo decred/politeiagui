@@ -78,6 +78,7 @@ export const onLoadMe = me => dispatch => {
   dispatch(act.LOAD_ME(me));
 };
 
+export const onResetPaywallInfo = () => act.RESET_PAYWALL_INFO();
 export const onChangeAdminFilter = (option) => act.CHANGE_ADMIN_FILTER_VALUE(option);
 export const onChangePublicFilter = (option) => act.CHANGE_PUBLIC_FILTER_VALUE(option);
 export const onChangeUserFilter = (option) => act.CHANGE_USER_FILTER_VALUE(option);
