@@ -3,6 +3,7 @@ import Markdown from "./snew/Markdown";
 import modalConnector from "../connectors/modal";
 import { ONBOARD } from "./Modal/modalTypes";
 import PaywallAlert from  "./Paywall/PaywallAlert";
+import UserBadge from "./UserBadge";
 
 const aboutText = `
 # About Politeia
@@ -34,12 +35,13 @@ const resourcesText = `
 
 const SidebarText = (props) => (
   <div style={{ display: "flex", flexDirection: "column" }}>
+    <UserBadge />
     <PaywallAlert />
     <Markdown body={aboutText} filterXss={false} confirmWithModal={null} displayExternalLikWarning={false} {...props} />
     <span
       style={{ cursor: "pointer", color: "#2971FF" }}
       onClick={(e) => { e.preventDefault(); props.openModal(ONBOARD); }}
-    >Learn More about Politiea</span>
+    >Learn More about Politeia</span>
     <Markdown body={resourcesText} filterXss={false} displayExternalLikWarning={false} {...props} />
   </div>
 );

@@ -40,15 +40,15 @@ const Message = ({
       </div>
       {onDismissClick &&
         <span style={{ padding: "10px" }}>
-          <i
+          <span
             style={{
               cursor: "pointer",
-              fontSize: "18px"
+              fontSize: "15px"
             }}
             onClick={onDismissClick}
           >
-              x
-          </i>
+              ✖
+          </span>
         </span>
       }
     </div>

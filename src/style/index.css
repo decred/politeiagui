@@ -1540,3 +1540,103 @@ form div.usertext-body.may-blank-within.md-container {
 .togglebutton {
   text-transform: uppercase;
 }
+
+/* USER BADGE CSS */
+
+
+@keyframes blinkingText{
+  0%  { color: #c0c0c0; }
+  25% { color: rgb(206, 206, 206); }
+  50% { color: #c0c0c0; }
+  75% { color:   rgb(206, 206, 206); }
+  100%{ color: #c0c0c0; }
+}
+
+
+.roundbadge-grey {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  background-color: #FFF;    
+  color: #c0c0c0;
+  text-align: center;
+  animation: blinkingText 2s infinite;  
+}
+.roundbadge-grey.hollow {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  background-color: #FFF;    
+  color: rgb(206, 206, 206);
+  text-align: center;
+  -webkit-box-shadow: 0px 0px 0px 2px rgb(206, 206, 206);
+  -moz-box-shadow: 0px 0px 0px 2px rgb(206, 206, 206);
+  box-shadow: 0px 0px 0px 2px rgb(206, 206, 206);
+}
+
+@keyframes blinkingTextWaiting {
+  0%  { color: #c98301; }
+  25% { color: #fab331; }
+  50% { color: #c98301; }
+  75% { color: #fab331; }
+  100%{ color: #c98301; }
+}
+
+.roundbadge-waiting {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  background-color: #FFF;    
+  color: #c98301;
+  text-align: center;
+  animation: blinkingTextWaiting 2s infinite;  
+}
+.roundbadge-waiting.hollow {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  background-color: #FFF;    
+  color: #c98301;
+  text-align: center;
+  -webkit-box-shadow: 0px 0px 0px 2px #c98301;
+  -moz-box-shadow: 0px 0px 0px 2px #c98301;
+  box-shadow: 0px 0px 0px 2px #c98301;
+}
+
+.roundbadge-paid {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  background-color: #FFF;    
+  color: #091440;
+  text-align: center;
+}
+.roundbadge-paid.hollow {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  background-color: #FFF;    
+  color: #091440;
+  text-align: center;
+  -webkit-box-shadow: 0px 0px 0px 2px #091440;
+  -moz-box-shadow: 0px 0px 0px 2px #091440;
+  box-shadow: 0px 0px 0px 2px #091440;
+}
