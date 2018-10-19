@@ -202,6 +202,7 @@ describe("test api reducer", () => {
       likeComment: DEFAULT_REQUEST_STATE,
       userSearch: DEFAULT_REQUEST_STATE,
       proposalPaywallPayment: DEFAULT_REQUEST_STATE,
+      rescanUserPayments: DEFAULT_REQUEST_STATE,
       email: "",
       keyMismatch: false,
       lastLoaded: {}
@@ -628,7 +629,9 @@ describe("test api reducer", () => {
       { action: act.REQUEST_PROPOSAL_PAYWALL_PAYMENT, key: "proposalPaywallPayment", type: "request" },
       { action: act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT, key: "proposalPaywallPayment", type: "receive" },
       { action: act.REQUEST_USER_SEARCH, key: "userSearch", type: "request" },
-      { action: act.RECEIVE_USER_SEARCH, key: "userSearch", type: "receive" }
+      { action: act.RECEIVE_USER_SEARCH, key: "userSearch", type: "receive" },
+      { action: act.REQUEST_RESCAN_USER_PAYMENTS, key: "rescanUserPayments", type: "request" },
+      { action: act.RECEIVE_RESCAN_USER_PAYMENTS, key: "rescanUserPayments", type: "receive" }
     ];
 
     reducers.map(({ action, key, type }) => {

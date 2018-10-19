@@ -321,6 +321,11 @@ export const apiProposalPaywallPaymentTxid = compose(get("txid"), apiProposalPay
 export const apiProposalPaywallPaymentAmount = compose(get("amount"), apiProposalPaywallPaymentResponse);
 export const apiProposalPaywallPaymentConfirmations = compose(get("confirmations"), apiProposalPaywallPaymentResponse);
 
+const rescanUserPaymentsKey = "rescanUserPayments";
+export const apiRescanUserPaymentsResponse = getApiResponse(rescanUserPaymentsKey);
+export const apiRescanUserPaymentsError = getApiError(rescanUserPaymentsKey);
+export const isApiRequestingRescanUserPayments = getIsApiRequesting(rescanUserPaymentsKey);
+
 
 export const isApiRequesting = or(
   isApiRequestingInit,
