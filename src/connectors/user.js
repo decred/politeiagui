@@ -24,6 +24,8 @@ export default connect(
     loggedInAsUserId: sel.userid,
     user: sel.user,
     error: sel.apiUserError,
+    errorRescan: sel.apiRescanUserPaymentsError,
+    isLoadingRescan: sel.isApiRequestingRescanUserPayments,
     isLoading: or(sel.isApiRequestingUser, sel.isApiRequestingMe),
     isLoadingProposals: or(sel.userProposalsIsRequesting, sel.isApiRequestingPropsVoteStatus),
     isTestnet: sel.isTestNet,
@@ -60,6 +62,7 @@ export default connect(
     onFetchUserProposals: act.onFetchUserProposals,
     onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
     onFetchData: act.onFetchUser,
-    onEditUser: act.onEditUser
+    onEditUser: act.onEditUser,
+    onRescan: act.onRescanUserPayments
   }, dispatch)
 );

@@ -87,7 +87,9 @@ const GeneralTab = ({
   isApiRequestingDeactivateUser,
   isApiRequestingReactivateUser,
   onEditUser,
-  isAdmin
+  isAdmin,
+  isLoadingRescan,
+  onRescan
 }) => {
   const userHasActivePaywall = user && user.newuserpaywalladdress && user.newuserpaywallamount;
   return (
@@ -175,6 +177,11 @@ const GeneralTab = ({
       ])}
       <FieldSeparator />
       <Field label="Proposal credits">{user.proposalcredits}</Field>
+      <ButtonWithLoadingIcon
+        isLoading={isLoadingRescan}
+        onClick={() => onRescan(user.id)}
+        text="rescan"
+      />
       <FieldSeparator />
       {user.updatekeyverificationtoken && ([
         <TokenFields

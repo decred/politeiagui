@@ -93,7 +93,7 @@ const GET = (path) =>
   fetch(apiBase + path, { credentials: "include" })
     .then(parseResponse);
 
-const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
+const getOptions = (csrf, json, method) => ({
   headers: {
     "Accept": "application/json",
     "Content-Type": "application/json",
@@ -102,7 +102,16 @@ const POST = (path, csrf, json, method = "POST") => fetch(getUrl(path), {
   credentials: "include", // Include cookies
   method,
   body: JSON.stringify(json)
-}).then(parseResponse);
+});
+
+const POST = (path, csrf, json) =>
+  fetch(getUrl(path), getOptions(csrf, json, "POST"))
+    .then(parseResponse);
+
+const PUT = (path, csrf, json) =>
+  fetch(getUrl(path), getOptions(csrf, json, "PUT"))
+    .then(parseResponse);
+
 
 export const me = () => GET("/v1/user/me").then(getResponse);
 
@@ -260,3 +269,6 @@ export const proposalAuthorizeOrRevokeVote = (csrf, action, token, email, versio
 
 export const proposalPaywallPayment = () =>
   GET("/v1/proposals/paywallpayment").then(getResponse);
+
+export const rescanUserPayments = (csrf, userid) =>
+  PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);

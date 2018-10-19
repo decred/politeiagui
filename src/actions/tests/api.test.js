@@ -10,6 +10,8 @@ import {
   setGetErrorResponse,
   setPostErrorResponse,
   setPostSuccessResponse,
+  setPutSuccessResponse,
+  setPutErrorResponse,
   setGetSuccessResponse,
   methods,
   RANDOM_SUCCESS_RESPONSE,
@@ -65,6 +67,9 @@ describe("test api actions (actions/api.js)", () => {
     case methods.POST:
       setPostSuccessResponse(path, options);
       break;
+    case methods.PUT:
+      setPutSuccessResponse(path, options);
+      break;
     default:
       setGetSuccessResponse(path, options);
     }
@@ -78,6 +83,9 @@ describe("test api actions (actions/api.js)", () => {
       break;
     case methods.POST:
       setPostErrorResponse(path, options);
+      break;
+    case methods.PUT:
+      setPutErrorResponse(path, options);
       break;
     default:
       setGetErrorResponse(path, options);
@@ -967,6 +975,56 @@ describe("test api actions (actions/api.js)", () => {
           error: false
         }
       ]
+    );
+  });
+
+  test("test onRescanUserPayments", async () => {
+    const path = "/api/v1/user/payments/rescan";
+    const userid = "any";
+
+    const requestAction = {
+      type: act.REQUEST_RESCAN_USER_PAYMENTS,
+      payload: userid,
+      error: false
+    };
+
+    const mockSuccessResponse = {
+      newcredits: [
+        { paywallid: "any" }
+      ]
+    };
+    setPutSuccessResponse(path, {}, mockSuccessResponse);
+    const store = getMockedStore();
+    await store.dispatch(api.onRescanUserPayments(userid));
+    const dispatchedActions = store.getActions();
+    expect(dispatchedActions[0]).toEqual(requestAction);
+    expect(dispatchedActions[1]).toEqual({
+      type: act.RECEIVE_RESCAN_USER_PAYMENTS,
+      error: false,
+      payload: mockSuccessResponse
+    });
+    // make sure the user info is refetched in case new credits
+    // are returned from this endpoint
+    expect(dispatchedActions[2]).toEqual({
+      type: act.REQUEST_USER,
+      error: false,
+      payload: userid
+    });
+
+    assertApiActionOnError(
+      path,
+      api.onRescanUserPayments,
+      [userid],
+      (e) => [
+        requestAction,
+        {
+          type: act.RECEIVE_RESCAN_USER_PAYMENTS,
+          error: true,
+          payload: e
+        }
+      ],
+      {},
+      methods.PUT
     );
   });
 

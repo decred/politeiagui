@@ -36,7 +36,20 @@ export const setPostErrorResponse = (path, options = {}, response = RANDOM_ERROR
     ...options
   });
 
+export const setPutSuccessResponse = (path, options = {}, response = RANDOM_SUCCESS_RESPONSE) =>
+  fetchMock.put(path, response, {
+    overwriteRoutes: true,
+    ...options
+  });
+
+export const setPutErrorResponse = (path, options = {}, response = RANDOM_ERROR_RESPONSE) =>
+  fetchMock.put(path, response, {
+    overwriteRoutes: true,
+    ...options
+  });
+
 export const methods = {
   GET: "get",
-  POST: "post"
+  POST: "post",
+  PUT: "put"
 };
