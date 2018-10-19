@@ -456,8 +456,6 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.REQUEST_PASSWORD_RESET_REQUEST]: () => request("passwordReset", state, action),
   [act.RECEIVE_PASSWORD_RESET_REQUEST]: () => receive("passwordReset", state, action),
   [act.RESET_PROPOSAL]: () => resetMultiple([ "newProposal", "editProposal" ], state),
-  [act.REDIRECTED_FROM]: () => ({ ...state, login: { ...state.login, redirectedFrom: action.payload } }),
-  [act.RESET_REDIRECTED_FROM]: () => reset("login", state),
   [act.REQUEST_SETSTATUS_PROPOSAL]: () => request("setStatusProposal", state, action),
   [act.RECEIVE_SETSTATUS_PROPOSAL]: () => onReceiveSetStatus(state, action),
   [act.RECEIVE_START_VOTE]: () => onReceiveVoteStatusChange("startVote", PROPOSAL_VOTING_ACTIVE, state, action),

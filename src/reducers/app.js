@@ -26,7 +26,8 @@ export const DEFAULT_STATE = {
   identityImportResult: { errorMsg: "", successMsg: "" },
   onboardViewed: false,
   commentsSortOption: { value: SORT_BY_NEW, label: SORT_BY_NEW },
-  pollingCreditsPayment: false
+  pollingCreditsPayment: false,
+  redirectedFrom: null
 };
 
 const app = (state = DEFAULT_STATE, action) => (({
@@ -142,7 +143,9 @@ const app = (state = DEFAULT_STATE, action) => (({
   [act.SET_ONBOARD_AS_VIEWED]: () => ({ ...state, onboardViewed: true }),
   [act.SET_COMMENTS_SORT_OPTION]: () => ({ ...state, commentsSortOption: action.payload }),
   [act.TOGGLE_CREDITS_PAYMENT_POLLING]: () => ({ ...state, pollingCreditsPayment: action.payload }),
-  [act.TOGGLE_PROPOSAL_PAYMENT_RECEIVED]: () => ({ ...state, proposalPaymentReceived: action.payload })
+  [act.TOGGLE_PROPOSAL_PAYMENT_RECEIVED]: () => ({ ...state, proposalPaymentReceived: action.payload }),
+  [act.REDIRECTED_FROM]: () => ({ ...state, redirectedFrom: action.payload  }),
+  [act.RESET_REDIRECTED_FROM]: () => ({ ...state, redirectedFrom: null })
 })[action.type] || (() => state))();
 
 export default app;

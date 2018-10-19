@@ -215,16 +215,6 @@ describe("test api reducer", () => {
 
     expect(api.default(undefined, action)).toEqual(api.DEFAULT_STATE);
 
-    // redirect from action
-    action = {
-      type: act.REDIRECTED_FROM,
-      payload: "account page"
-    };
-
-    expect(api.default({}, action)).toEqual({
-      login: { redirectedFrom: action.payload }
-    });
-
     // key mismatch action
     action = {
       type: act.KEY_MISMATCH,
@@ -623,7 +613,6 @@ describe("test api reducer", () => {
       { action: act.REQUEST_PASSWORD_RESET_REQUEST, key: "passwordReset", type: "request" },
       { action: act.RECEIVE_PASSWORD_RESET_REQUEST, key: "passwordReset", type: "receive" },
       { action: act.RESET_PROPOSAL, key: [ "newProposal", "editProposal" ], type: "resetMultiple" },
-      { action: act.RESET_REDIRECTED_FROM, key: "login", type: "reset" },
       { action: act.REQUEST_SETSTATUS_PROPOSAL, key: "setStatusProposal", type: "request" },
       { action: act.REQUEST_START_VOTE, key: "startVote", type: "request" },
       { action: act.REQUEST_UPDATED_KEY, key: "updateUserKey", type: "request" },
