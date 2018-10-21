@@ -72,7 +72,20 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     "The public key provided is already taken by another user.",
     "The proposal cannot be set to that voting status.",
     "Your account has been locked due to too many login attempts.",
-    "You do not have any proposal credits; you must purchase one before you can submit a proposal."
+    "You do not have any proposal credits; you must purchase one before you can submit a proposal.",
+    "That is an invalid user edit action.",
+    "You are not authorized to perform this action.",
+    "This proposal is in the wrong state for that action.",
+    "Commenting is not allowed on this proposal.",
+    "You cannot vote on this comment.",
+    "You must provide a reason for censoring the proposal.",
+    "You must provide a reason for censoring the comment.",
+    "You cannot censor this comment.",
+    "Only the proposal author may perform this action.",
+    "The author has not yet authorized a vote for this proposal.",
+    "The vote has already been authorized for this proposal.",
+    "That is an invalid vote authorization action.",
+    "This account has been deactivated."
   ];
 
   if(errorCode > errorMessages.length) {
