@@ -19,8 +19,6 @@ import {
   numOfUserProposals,
   userid
 } from "./api";
-
-import { globalUsernamesById } from "../actions/app";
 import {
   PAYWALL_STATUS_PAID,
   PAYWALL_STATUS_WAITING,
@@ -41,11 +39,6 @@ export const replyTo = or(get([ "app", "replyParent" ]), constant(0));
 
 export const proposal = state => {
   const proposal =  apiProposal(state) || {};
-
-  // Cache the username for the proposal author.
-  if(proposal.userid) {
-    globalUsernamesById[proposal.userid] = proposal.username;
-  }
 
   return proposal;
 };
@@ -112,34 +105,16 @@ export const userCanExecuteActions = state => {
 export const isProposalStatusApproved = state => state.app.isProposalStatusApproved;
 export const activeVotesEndHeight = state => state.app.activeVotesEndHeight;
 
-export const proposalComments = state => {
-  const comments = apiProposalComments(state);
-  for(const comment of comments) {
-    if(comment.userid in globalUsernamesById) {
-      comment.username = globalUsernamesById[comment.userid];
-    }
-  }
+export const proposalComments = state => apiProposalComments(state);
 
-  return comments;
-};
 
 export const unvettedProposals = state => {
   const unvettedProposals = apiUnvettedProposals(state);
-  if(unvettedProposals) {
-    for(const proposal of unvettedProposals) {
-      globalUsernamesById[proposal.userid] = proposal.username;
-    }
-  }
   return unvettedProposals;
 };
 
 export const vettedProposals = state => {
   const vettedProposals = apiVettedProposals(state);
-  if(vettedProposals) {
-    for(const proposal of vettedProposals) {
-      globalUsernamesById[proposal.userid] = proposal.username;
-    }
-  }
   return vettedProposals;
 };
 

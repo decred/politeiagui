@@ -376,16 +376,6 @@ describe("test app reducer", () => {
       assertKeyEqualsPayload({}, act, obj.key);
     });
 
-    const action = {
-      type: act.RECEIVE_USERNAMES,
-      payload: { usernamesById: "many" },
-      error: false
-    };
-
-    expect(app({}, action)).toEqual({
-      usernamesById: action.payload.usernamesById
-    });
-
   });
 
 

@@ -117,8 +117,7 @@ describe("test app actions (actions/app.js)", () => {
     await expect(app.onFetchProposal(token))
       .toDispatchActionsWithState(MOCK_STATE, [
         onFetchProposalApi(token),
-        onFetchProposalComments(token),
-        app.onFetchUsernamesById([])
+        onFetchProposalComments(token)
       ], done);
   });
 

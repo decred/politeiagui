@@ -465,8 +465,6 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.REQUEST_VERIFIED_KEY]: () => request("verifyUserKey", state, action),
   [act.RECEIVE_VERIFIED_KEY]: () => receive("verifyUserKey", state, action),
   [act.KEY_MISMATCH]: () => ({ ...state, keyMismatch: action.payload }),
-  [act.REQUEST_USERNAMES_BY_ID]: () => request("usernamesById", state, action),
-  [act.RECEIVE_USERNAMES_BY_ID]: () => receive("usernamesById", state, action),
   [act.REQUEST_LOGOUT]: () => request("logout", state, action),
   [act.REQUEST_PROPOSALS_VOTE_STATUS]: () => request("proposalsVoteStatus", state, action),
   [act.RECEIVE_PROPOSALS_VOTE_STATUS]: () => receive("proposalsVoteStatus", state, action),
