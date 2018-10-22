@@ -31,14 +31,12 @@ describe("snew tests (lib/snew)", () => {
     let resultComment = result[0];
     const { kind, data } = resultComment;
     expect(kind).toEqual("t1");
-    expect(data.author).toEqual(comment.userid);
+    expect(data.author).toEqual(comment.username);
     expect(data.parent_id).toEqual("0");
     expect(data.name).toEqual(comment.commentid);
     expect(data.body).toEqual(comment.comment);
     expect(data.permalink).toEqual(`/proposals/${comment.token}/comments/${comment.commentid}`);
 
-    // Test the username display.
-    comment.username = "foobar";
     result = snew.commentsToT1([comment]);
     resultComment = result[0];
     expect(resultComment.data.author).toEqual(comment.username);

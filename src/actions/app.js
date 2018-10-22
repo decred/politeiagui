@@ -4,7 +4,6 @@ import get from "lodash/get";
 import isEqual from "lodash/isEqual";
 import { onSubmitProposal, onChangeUsername, onChangePassword, onFetchProposalComments, onSubmitEditedProposal } from "./api";
 import { onFetchProposal as onFetchProposalApi, onSubmitComment as onSubmitCommentApi } from "./api";
-import { onFetchUsernamesById as onFetchUsernamesByIdApi } from "./api";
 import { resetNewProposalData } from "../lib/editors_content_backup";
 import * as sel from "../selectors";
 import act from "./methods";
@@ -62,17 +61,9 @@ export const onSaveChangePassword = ({ existingPassword, newPassword }) =>
     dispatch(onChangePassword(existingPassword, newPassword))
       .then(() => sel.newProposalToken(getState()));
 
-export const onFetchProposal = (token) => (dispatch, getState) =>
+export const onFetchProposal = (token) => (dispatch) =>
   dispatch(onFetchProposalApi(token))
-    .then(() => dispatch(onFetchProposalComments(token)))
-    .then(() => {
-      let userIds = [];
-      const comments = sel.apiProposalComments(getState());
-      if(comments) {
-        userIds = comments.map(comment => comment.userid);
-      }
-      return dispatch(onFetchUsernamesById(userIds));
-    });
+    .then(() => dispatch(onFetchProposalComments(token)));
 
 export const onLoadMe = me => dispatch => {
   dispatch(act.LOAD_ME(me));
@@ -112,41 +103,6 @@ export const onLocalStorageChange = (event) => (dispatch, getState) => {
   } catch(e) {
     dispatch(onLogout());
   }
-};
-
-export const globalUsernamesById = {};
-export const onFetchUsernamesById = (userIds) => (dispatch, getState) => {
-  const usernamesById = {};
-  const setOfUserIdsToFetch = new Set();
-  for(const userId of userIds) {
-    if(userId in globalUsernamesById) {
-      usernamesById[userId] = globalUsernamesById[userId];
-    } else {
-      setOfUserIdsToFetch.add(userId);
-    }
-  }
-
-  const userIdsToFetch = Array.from(setOfUserIdsToFetch);
-  // All usernames were found in the global cache, so no need
-  // to make a server request.
-  if(userIdsToFetch.length === 0) {
-    return dispatch(act.RECEIVE_USERNAMES({ usernamesById }));
-  }
-
-  return dispatch(onFetchUsernamesByIdApi(userIdsToFetch))
-    .then(() => {
-      const apiUsernamesByIdResponse = get(getState(), [ "api", "usernamesById", "response" ], undefined);
-      if(apiUsernamesByIdResponse) {
-        userIdsToFetch.forEach((userId, idx) => {
-          const username = apiUsernamesByIdResponse.usernames[idx];
-          if(username) {
-            usernamesById[userId] = globalUsernamesById[userId] = username;
-          }
-        });
-      }
-
-      return dispatch(act.RECEIVE_USERNAMES({ usernamesById }));
-    });
 };
 
 export const selectDefaultPublicFilterValue = (dispatch, getState) => {

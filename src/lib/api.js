@@ -244,10 +244,6 @@ export const startVote = (email, csrf, token) =>
       }
     ))).then(getResponse);
 
-export const usernamesById = (csrf, userids) => {
-  return POST("/usernames", csrf, { userids }).then(getResponse);
-};
-
 export const proposalsVoteStatus = () => GET("/v1/proposals/votestatus").then(getResponse);
 export const proposalVoteStatus = (token) => GET(`/v1/proposals/${token}/votestatus`).then(getResponse);
 

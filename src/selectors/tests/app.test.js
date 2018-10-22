@@ -2,16 +2,11 @@ import * as sel from "../app";
 import { MOCK_STATE } from "./mock_state";
 import { getTextFromIndexMd } from "../../helpers";
 import { PAYWALL_STATUS_PAID, PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_STATUS_CENSORED, PROPOSAL_VOTING_ACTIVE, PROPOSAL_VOTING_FINISHED, PROPOSAL_VOTING_NOT_AUTHORIZED, PROPOSAL_USER_FILTER_DRAFT, PAYWALL_STATUS_LACKING_CONFIRMATIONS } from "../../constants";
-import { globalUsernamesById } from "../../actions/app";
 
 describe("test app selector", () => {
 
   it("test selector proposal", () => {
     expect(sel.proposal(MOCK_STATE)).toEqual(MOCK_STATE.api.proposal.response.proposal);
-  });
-
-  it("test const globalUsernamesById", () => {
-    expect(globalUsernamesById[2]).toEqual(MOCK_STATE.api.proposal.response.proposal.username);
   });
 
   it("test selector getEditProposalsValues", () => {
@@ -59,27 +54,16 @@ describe("test app selector", () => {
   });
 
   it("test selector proposalComments", () => {
-    globalUsernamesById[2] = "username";
     expect(sel.proposalComments(MOCK_STATE)).toEqual(MOCK_STATE.api.proposalComments.response.comments);
   });
 
   it("test selector unvettedProposals", () => {
     expect(sel.unvettedProposals(MOCK_STATE)).toEqual(MOCK_STATE.api.unvetted.response.proposals);
-
-    for (const p of MOCK_STATE.api.unvetted.response.proposals) {
-      expect(globalUsernamesById[p.userid]).toEqual(p.username);
-    }
-
   });
 
   it("test selector vettedProposals", () => {
     // vettedProposals
     expect(sel.vettedProposals(MOCK_STATE)).toEqual(MOCK_STATE.api.vetted.response.proposals);
-
-    for (const p of MOCK_STATE.api.vetted.response.proposals) {
-      expect(globalUsernamesById[p.userid]).toEqual(p.username);
-    }
-
   });
 
   it("test selector getUnvettedFilteredProposals", () => {
