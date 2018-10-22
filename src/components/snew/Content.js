@@ -54,7 +54,7 @@ export const CustomContent = ({
               href="/admin/users"
               onClick={() => null}>
               <i className="fa fa-search right-margin-5" />
-              Look up users
+              Search users
             </Link>
           }
         </div>
