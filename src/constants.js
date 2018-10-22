@@ -35,6 +35,8 @@ export const EDIT_USER_EXPIRE_UPDATE_KEY_VERIFICATION = 2;
 export const EDIT_USER_EXPIRE_RESET_PASSWORD_VERIFICATION = 3;
 export const EDIT_USER_CLEAR_USER_PAYWALL = 4;
 export const EDIT_USER_UNLOCK = 5;
+export const EDIT_USER_DEACTIVATE = 6;
+export const EDIT_USER_REACTIVATE = 7;
 
 export const LIST_HEADER_PUBLIC = "Public Proposals";
 export const LIST_HEADER_UNVETTED = "Unvetted Proposals";
