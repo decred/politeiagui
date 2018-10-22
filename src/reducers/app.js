@@ -85,7 +85,6 @@ const app = (state = DEFAULT_STATE, action) => (({
   },
   [act.RESET_LAST_SUBMITTED]: () => ({ ...state, submittedProposals: { ...state.submittedProposals, lastSubmitted: false } }),
   [act.SET_PROPOSAL_APPROVED]: () => ({ ...state, isProposalStatusApproved: action.payload }),
-  [act.RECEIVE_USERNAMES]: () => ({ ...state, usernamesById: action.payload.usernamesById }),
   [act.SET_VOTES_END_HEIGHT]: () => ({ ...state, votesEndHeight: { ...state.votesEndHeight, [action.payload.token]: action.payload.endheight } }),
   [act.REQUEST_SIGNUP_CONFIRMATION]: () => ({ ...state, isShowingSignupConfirmation: true }),
   [act.RESET_SIGNUP_CONFIRMATION]: () => ({ ...state, isShowingSignupConfirmation: false }),

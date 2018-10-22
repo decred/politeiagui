@@ -9,9 +9,6 @@ import { clearStateLocalStorage } from "../lib/local_storage";
 import { callAfterMinimumWait } from "./lib";
 import { resetNewProposalData } from "../lib/editors_content_backup";
 import act from "./methods";
-import {
-  globalUsernamesById
-} from "./app";
 
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onSetEmail = act.SET_EMAIL;
@@ -55,12 +52,6 @@ export const onRequestMe = () => (dispatch, getState) => {
             paywallTxNotBefore
           )
         );
-      }
-
-      // Set the current username in the map.
-      const userId = sel.userid(getState());
-      if (userId) {
-        globalUsernamesById[userId] = sel.loggedInAsUsername(getState());
       }
     })
     .catch((error) => {
@@ -544,20 +535,6 @@ export const onStartVote = (loggedInAsEmail, token) =>
           }
         }
       );
-  });
-
-export const onFetchUsernamesById = (userIds) =>
-  withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_USERNAMES_BY_ID());
-    return api
-      .usernamesById(csrf, userIds)
-      .then(response =>
-        dispatch(act.RECEIVE_USERNAMES_BY_ID({ ...response, success: true }))
-      )
-      .catch(error => {
-        dispatch(act.RECEIVE_USERNAMES_BY_ID(null, error));
-        throw error;
-      });
   });
 
 export const onFetchProposalPaywallDetails = () => dispatch => {

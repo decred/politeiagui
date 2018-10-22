@@ -619,8 +619,6 @@ describe("test api reducer", () => {
       { action: act.RECEIVE_UPDATED_KEY, key: "updateUserKey", type: "receive" },
       { action: act.REQUEST_VERIFIED_KEY, key: "verifyUserKey", type: "request" },
       { action: act.RECEIVE_VERIFIED_KEY, key: "verifyUserKey", type: "receive" },
-      { action: act.REQUEST_USERNAMES_BY_ID, key: "usernamesById", type: "request" },
-      { action: act.RECEIVE_USERNAMES_BY_ID, key: "usernamesById", type: "receive" },
       { action: act.REQUEST_LOGOUT, key: "logout", type: "request" },
       { action: act.REQUEST_PROPOSALS_VOTE_STATUS, key: "proposalsVoteStatus", type: "request" },
       { action: act.RECEIVE_PROPOSALS_VOTE_STATUS, key: "proposalsVoteStatus", type: "receive" },

@@ -57,7 +57,7 @@ export const commentsToT1 = compose(
         [commentid]: {
           id: commentid,
           uservote: String(vote),
-          author: username || userid,
+          author: username,
           authorid: userid,
           censored,
           score: resultvotes,
