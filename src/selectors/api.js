@@ -29,6 +29,7 @@ const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
 const isApiRequestingUserProposals = getIsApiRequesting("userProposals");
 const isApiRequestingProposal = getIsApiRequesting("proposal");
 const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
+export const isApiRequestingUserSearch = getIsApiRequesting("userSearch");
 export const isApiRequestingUser = getIsApiRequesting("user");
 export const isApiRequestingNewComment = getIsApiRequesting("newComment");
 export const isApiRequestingSetStatusProposal = getIsApiRequesting("setStatusProposal");
@@ -64,6 +65,7 @@ const apiProposalResponse = getApiResponse("proposal");
 const apiProposalCommentsResponse = getApiResponse("proposalComments");
 const apiNewProposalResponse = getApiResponse("newProposal");
 const apiSetStatusProposalResponse = getApiResponse("setStatusProposal");
+export const apiUserSearchResponse = getApiResponse("userSearch");
 export const verifyNewUser = getApiResponse("verifyNewUser");
 export const updateUserKey = getApiResponse("updateUserKey");
 export const verifyUserKey = getApiResponse("verifyUserKey");
@@ -152,6 +154,7 @@ export const apiForgottenPasswordError = or(apiInitError, getApiError("forgotten
 export const apiPasswordResetError = or(apiInitError, getApiError("passwordReset"));
 export const apiLoginError = or(apiInitError, getApiError("login"));
 export const apiLogoutError = or(apiInitError, getApiError("logout"));
+export const apiUserSearchError = getApiError("userSearch");
 const apiVettedError = getApiError("vetted");
 const apiUserProposalsError = getApiError("userProposals");
 const apiUnvettedError = getApiError("unvetted");
@@ -171,6 +174,7 @@ export const apiError = or(
   apiVettedError,
   apiUserProposalsError,
   apiProposalError,
+  apiUserSearchError,
   apiNewProposalError,
   apiCommentsVotesError,
   apiSetStatusProposalError
@@ -252,23 +256,12 @@ export const getPropVoteStatus = state => token => {
 export const userid = state => state.api.me.response && state.api.me.response.userid;
 export const censoredComment = state => state.api.censorComment.response;
 
-// const lastLoaded = (func, state) => func(state) ? func(state).lastloaded : {};
-// export const lastLoadedUnvettedProposal = state => lastLoaded(apiUnvettedResponse, state);
-// export const lastLoadedVettedProposal = state => lastLoaded(apiVettedResponse, state);
-// export const lastLoadedUserProposal = state => lastLoaded(apiUserProposalsResponse, state);
-
 export const getApiLastLoaded = key => get([ "api", "lastLoaded", key ]);
 
 export const lastLoadedUnvettedProposal = getApiLastLoaded("unvetted");
 export const lastLoadedVettedProposal = getApiLastLoaded("vetted");
 export const lastLoadedUserProposal = getApiLastLoaded("userProposals");
 export const lastLoadedUserDetailProposal = getApiLastLoaded("user");
-
-// export const lastLoadedUserDetailProposal = state => {
-//   const vp = user(state) ? user(state).proposals : [];
-//   const last = Object.keys(vp).length - 1;
-//   return last > -1 ? vp[last] : {};
-// };
 
 export const serverPubkey = compose(get("pubkey"), apiInitResponse);
 export const userPubkey = compose(get("publickey"), apiMeResponse);

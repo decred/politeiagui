@@ -1565,10 +1565,10 @@ form div.usertext-body.may-blank-within.md-container {
   line-height: 30px;
   -moz-border-radius: 15px;
   border-radius: 15px;
-  background-color: #FFF;    
+  background-color: #FFF;
   color: #c0c0c0;
   text-align: center;
-  animation: blinkingText 2s infinite;  
+  animation: blinkingText 2s infinite;
 }
 .roundbadge-grey.hollow {
   display: inline-block;
@@ -1577,7 +1577,7 @@ form div.usertext-body.may-blank-within.md-container {
   line-height: 30px;
   -moz-border-radius: 15px;
   border-radius: 15px;
-  background-color: #FFF;    
+  background-color: #FFF;
   color: rgb(206, 206, 206);
   text-align: center;
   -webkit-box-shadow: 0px 0px 0px 2px rgb(206, 206, 206);
@@ -1600,10 +1600,10 @@ form div.usertext-body.may-blank-within.md-container {
   line-height: 30px;
   -moz-border-radius: 15px;
   border-radius: 15px;
-  background-color: #FFF;    
+  background-color: #FFF;
   color: #c98301;
   text-align: center;
-  animation: blinkingTextWaiting 2s infinite;  
+  animation: blinkingTextWaiting 2s infinite;
 }
 .roundbadge-waiting.hollow {
   display: inline-block;
@@ -1612,7 +1612,7 @@ form div.usertext-body.may-blank-within.md-container {
   line-height: 30px;
   -moz-border-radius: 15px;
   border-radius: 15px;
-  background-color: #FFF;    
+  background-color: #FFF;
   color: #c98301;
   text-align: center;
   -webkit-box-shadow: 0px 0px 0px 2px #c98301;
@@ -1627,7 +1627,7 @@ form div.usertext-body.may-blank-within.md-container {
   line-height: 30px;
   -moz-border-radius: 15px;
   border-radius: 15px;
-  background-color: #FFF;    
+  background-color: #FFF;
   color: #091440;
   text-align: center;
 }
@@ -1638,10 +1638,38 @@ form div.usertext-body.may-blank-within.md-container {
   line-height: 30px;
   -moz-border-radius: 15px;
   border-radius: 15px;
-  background-color: #FFF;    
+  background-color: #FFF;
   color: #091440;
   text-align: center;
   -webkit-box-shadow: 0px 0px 0px 2px #091440;
   -moz-box-shadow: 0px 0px 0px 2px #091440;
   box-shadow: 0px 0px 0px 2px #091440;
+}
+
+.user-search-results h3 {
+  text-align: center;
+}
+
+.user-search-results table {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 900px;
+  margin-top: 10px;
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+.user-search-results th {
+  font-weight: 600;
+  height: 50px;
+  padding: 5px;
+}
+
+.user-search-results td {
+  padding: 10px 5px;
+}
+
+.user-search-results td, .user-search-results th {
+  text-align: center;
+  border: 1px solid black;
 }

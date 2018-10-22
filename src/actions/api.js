@@ -113,6 +113,17 @@ export const onVerifyNewUser = searchQuery => dispatch => {
     });
 };
 
+export const onSearchUser = query => dispatch => {
+  dispatch(act.REQUEST_USER_SEARCH());
+  return api
+    .searchUser(query)
+    .then(res => dispatch(act.RECEIVE_USER_SEARCH(res)))
+    .catch(err => {
+      dispatch(act.RECEIVE_USER_SEARCH(null, err));
+      throw err;
+    });
+};
+
 export const onLogin = ({ email, password }) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_LOGIN({ email }));

@@ -203,6 +203,21 @@ describe("test api actions (actions/api.js)", () => {
     );
   });
 
+  test("on search users action", async () => {
+    const path = "/api/v1/users";
+    const searchQuery = qs.stringify({ email: FAKE_USER.email });
+    //test it handles a successful response
+    await assertApiActionOnSuccess(
+      path,
+      api.onSearchUser,
+      [searchQuery],
+      [
+        { type: act.REQUEST_USER_SEARCH, error: false },
+        { type: act.RECEIVE_USER_SEARCH, error: false, payload: {} }
+      ]
+    );
+  });
+
   test("on create a new user action", async () => {
     const path = "/api/v1/user/new";
     // fetchMock.restore();

@@ -11,7 +11,7 @@ const SidebarSearch = ({
   handleSubmit
 }) => (
   <div className="spacer">
-    <form id="search" role="search" onSubmit={handleSubmit(onFind)}>
+    <form className="search-form" id="search" role="search" onSubmit={handleSubmit(onFind)}>
       <Field
         name="censorship"
         component="input"

@@ -11,6 +11,7 @@ import newProposal from "./connectors/newProposal";
 import editProposal from "./connectors/editProposal";
 
 import Logout from "./components/LogoutPage";
+import UserLookup from "./components/UserLookupPage";
 import SignupNext from "./components/SignupNextStepPage";
 import ForgottenPassword from "./components/ForgottenPasswordPage";
 import ForgottenPasswordSuccess from "./components/ForgottenPassword/SuccessPage";
@@ -52,7 +53,8 @@ class Routes extends Component {
         <AuthenticatedRoute path="/proposals/:token/edit" component={editProposal(SubmitPage)} />
         <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />
         <AdminAuthenticatedRoute path="/admin/unreviewed" component={unreviewed(ProposalListing)} />
-        <AdminAuthenticatedRoute path="/admin" component={admin(ProposalListing)} />
+        <AdminAuthenticatedRoute path="/admin" component={admin(ProposalListing)} exact />
+        <AdminAuthenticatedRoute path="/admin/users" component={UserLookup} />
         <Route path="/user/:userId" component={userDetail(UserDetail)} />
         <Route path="/proposals/:token" component={proposalDetail(ProposalDetail)} />
         <Route path="/500" component={ErrorPage} />

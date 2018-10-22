@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Content } from "snew-classic-ui";
 import { formatProposalData } from "../../lib/snew";
+import Link from "./Link";
 import ReactBody from "react-body";
 import PageLoadingIcon from "./PageLoadingIcon";
 import Message from "../Message";
@@ -24,6 +25,7 @@ export const CustomContent = ({
   onFetchData,
   onFetchUserProposals,
   count,
+  showLookUp,
   ...props
 }) => {
   const showList = (listings && listings.length > 0) ||
@@ -42,9 +44,20 @@ export const CustomContent = ({
   ) : (
     <div>
       {header &&
-        <h1 className="proposals-listing-header">
-          {header}
-        </h1>
+        <div style={showLookUp ? { display: "flex", justifyContent: "space-between", alignItems: "center" } : {}}>
+          <h1 className="proposals-listing-header">
+            {header}
+          </h1>
+          {showLookUp &&
+            <Link
+              style={{ marginRight: "24px" }}
+              href="/admin/users"
+              onClick={() => null}>
+              <i className="fa fa-search right-margin-5" />
+              Search users
+            </Link>
+          }
+        </div>
       }
       <ProposalFilter
         header={header}
