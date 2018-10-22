@@ -8,6 +8,8 @@ import PaywallModal from "./contents/PaywallModal";
 import CreditsHistoryModal from "./contents/CreditsHistoryModal";
 import ManageCreditsModal  from "./contents/ManageCreditsModal";
 import PurchaseCreditsModal from "./contents/PurchaseCreditsModal";
+import ChangeUsernameModal from "./contents/ChangeUsernameModal";
+import ChangePasswordModal from "./contents/ChangePasswordModal";
 import { withRouter } from "react-router-dom";
 
 const mapModalTypeToContent = {
@@ -18,7 +20,9 @@ const mapModalTypeToContent = {
   [modalTypes.PAYWALL_MODAL]: () => <PaywallModal />,
   [modalTypes.CREDITS_HISTORY_MODAL]: () => <CreditsHistoryModal />,
   [modalTypes.MANAGE_CREDITS_MODAL]: () => <ManageCreditsModal />,
-  [modalTypes.PURCHASE_CREDITS_MODAL]: () => <PurchaseCreditsModal />
+  [modalTypes.PURCHASE_CREDITS_MODAL]: () => <PurchaseCreditsModal />,
+  [modalTypes.CHANGE_USERNAME_MODAL]: () => <ChangeUsernameModal />,
+  [modalTypes.CHANGE_PASSWORD_MODAL]: () => <ChangePasswordModal />
 };
 
 const ModalContent = ({ modalData, location }) => {

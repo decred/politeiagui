@@ -20,7 +20,6 @@ import ResendVerificationEmail from "./components/ResendVerificationEmailPage";
 import ResendVerificationEmailSuccess from "./components/ResendVerificationEmail/SuccessPage";
 import Verify from "./components/Verify";
 import UserProposals from "./components/UserProposals";
-import Account from "./components/AccountPage";
 import VerifyKey from "./components/VerifyKey";
 import NotFound from "./components/NotFoundPage";
 import ErrorPage from "./components/ErrorPage/";
@@ -49,7 +48,6 @@ class Routes extends Component {
         <Route path="/user/key/verify" component={VerifyKey} exact />
         <Route path="/user/resend" component={ResendVerificationEmail} exact />
         <Route path="/user/resend/next" component={ResendVerificationEmailSuccess} />
-        <AuthenticatedRoute path="/user/account" component={Account} exact />
         <AuthenticatedRoute path="/proposals/new" component={newProposal(SubmitPage)} />
         <AuthenticatedRoute path="/proposals/:token/edit" component={editProposal(SubmitPage)} />
         <AdminAuthenticatedRoute path="/admin/censored" component={censored(ProposalListing)} />

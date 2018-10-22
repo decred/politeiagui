@@ -10,19 +10,23 @@ import {
   USER_DETAIL_TAB_PROPOSALS,
   USER_DETAIL_TAB_COMMENTS
 } from "../../constants";
-
+import { CHANGE_USERNAME_MODAL } from "../Modal/modalTypes";
+import userConnector from "../../connectors/user";
 
 const UserDetailPage = ({
   isLoading,
   user,
   loggedInAsUserId,
+  loggedInAsUsername,
   error,
   tabId,
   onTabChange,
   dcrdataTxUrl,
-  isAdmin
+  isAdmin,
+  openModal
 }) => {
   const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
+  console.log(loggedInAsUsername);
   return (
     <div className="content" role="main">
       <div className="page user-page">
@@ -38,10 +42,13 @@ const UserDetailPage = ({
           <div>
             <div className="detail-header">
               <div className="detail-username">
-                {user.username}
+                {loggedInAsUsername}
                 {user.isadmin && (
                   <span className="detail-admin">(admin user)</span>
                 )}
+                {isAdminOrTheUser ?
+                  <a style={{ marginLeft: "1.25em", marginTop: ".5em", fontSize: ".75em" }} className="linkish"
+                    onClick={() => openModal(CHANGE_USERNAME_MODAL)}>Change Username</a> : null}
               </div>
               <div className="detail-email">{user.email}</div>
               <Tabs>
@@ -76,5 +83,4 @@ const UserDetailPage = ({
   );
 };
 
-export default UserDetailPage;
-
+export default userConnector(UserDetailPage);

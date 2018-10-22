@@ -1,10 +1,13 @@
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { withRouter } from "react-router-dom";
 import get from "lodash/fp/get";
 import compose from "lodash/fp/compose";
 import { arg, or } from "../lib/fp";
 import * as sel from "../selectors";
 import * as act from "../actions";
+import { confirmWithModal } from "../actions/modal";
+import { onUpdateUserKey } from "../actions/api";
 import {
   EDIT_USER_CLEAR_USER_PAYWALL,
   EDIT_USER_EXPIRE_NEW_USER_VERIFICATION,
@@ -15,7 +18,7 @@ import {
   EDIT_USER_REACTIVATE
 } from "../constants";
 
-export default connect(
+const userConnector = connect(
   sel.selectorMap({
     userId: compose(
       get([ "match", "params", "userId" ]),
@@ -33,6 +36,15 @@ export default connect(
     lastLoadedUserDetailProposal: sel.lastLoadedUserDetailProposal,
     lastLoadedProposal: sel.lastLoadedUserProposal,
     getSubmittedUserProposals: sel.getSubmittedUserProposals,
+    identityImportError: sel.identityImportError,
+    identityImportSuccess: sel.identityImportSuccess,
+    keyMismatch: sel.getKeyMismatch,
+    updateUserKey: sel.updateUserKey,
+    updateUserKeyError: sel.updateUserKeyError,
+    shouldAutoVerifyKey: sel.shouldAutoVerifyKey,
+    verificationToken: sel.verificationToken,
+    userPubkey: sel.userPubkey,
+    loggedInAsUsername: sel.loggedInAsUsername,
     isApiRequestingMarkAsPaid: state => (
       sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_CLEAR_USER_PAYWALL
     ),
@@ -60,6 +72,13 @@ export default connect(
     onFetchUserProposals: act.onFetchUserProposals,
     onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
     onFetchData: act.onFetchUser,
+    openModal: act.openModal,
+    keyMismatchAction: act.keyMismatch,
+    onIdentityImported: act.onIdentityImported,
+    confirmWithModal,
+    onUpdateUserKey,
     onEditUser: act.onEditUser
   }, dispatch)
 );
+
+export default compose(withRouter, userConnector);
