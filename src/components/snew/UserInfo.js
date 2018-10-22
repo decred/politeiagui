@@ -18,7 +18,8 @@ class UserInfo extends React.Component {
       loggedInAsEmail,
       loggedInAsUsername,
       userCanExecuteActions,
-      onLogout
+      onLogout,
+      loggedInAsUserId
     } = this.props;
     return loggedInAsEmail ? (
       <div id="header-right">
@@ -40,7 +41,7 @@ class UserInfo extends React.Component {
                   </li>
                   <li
                     className="dropdown-list-item"
-                    onClick={() => history.push("/user/account")}
+                    onClick={() => history.push(`/user/${loggedInAsUserId}`)}
                   >
                     Account
                   </li>
