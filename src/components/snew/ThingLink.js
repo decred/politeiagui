@@ -267,7 +267,7 @@ const ThingLinkComp = ({
         <Expando {...{ expanded, is_self, selftext, selftext_html }} />
         <ProposalImages readOnly files={otherFiles} />
         {enableAdminActionsForUnvetted ?
-          [
+          <ul style={{ display: "flex" }}>
             <li key="spam">
               <ButtonWithLoadingIcon
                 className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
@@ -286,7 +286,7 @@ const ThingLinkComp = ({
                 data-event-action="spam"
                 isLoading={loadingCensor}
               />
-            </li>,
+            </li>
             <li key="approve">
               <ButtonWithLoadingIcon
                 className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
@@ -308,7 +308,7 @@ const ThingLinkComp = ({
                 isLoading={loadingApprove}
               />
             </li>
-          ] : null
+          </ul> : null
         }
         {adminCanStartTheVote ?
           <li key="start-vote">
