@@ -96,15 +96,15 @@ const LoaderComponent = withRouter(loaderConnector(Loader));
 
 const HeaderAlertComponent = withRouter(
   loaderConnector(
-    ({ location, loggedInAsEmail, keyMismatch, history }) => {
+    ({ location, loggedInAsEmail, keyMismatch, history, loggedInAsUserId }) => {
       if (!loggedInAsEmail) return null;
-      if (keyMismatch && location.pathname !== "/user/account") {
+      if (keyMismatch && location.pathname !== `/user/${loggedInAsUserId}`) {
         return (
           <HeaderAlert className="action-needed-alert">
 						You cannot currently submit proposals or comments, please visit your{" "}
             <a
               style={{ cursor: "pointer" }}
-              onClick={() => history.push("/user/account")}
+              onClick={() => history.push(`/user/${loggedInAsUserId}`)}
             >
 							account page
             </a>{" "}

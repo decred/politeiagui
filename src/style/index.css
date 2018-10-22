@@ -302,6 +302,9 @@ a:hover, a:focus {
 }
 
 .change-password-form,
+.change-username-form {
+	padding: 1em;
+}
 .resend-verification-form,
 .forgotten-password-form,
 .reset-password-form {
@@ -647,6 +650,8 @@ li p.header-3 {
 .private-key-identity>a,
 .private-key-identity>div {
   float: left;
+  margin-left: 5em;
+  display: flex;
 }
 .private-key-identity .react-file-reader {
   margin-top: 0px;
@@ -1344,8 +1349,8 @@ li p.header-3 {
 }
 .user-page .detail-form .field .field-label {
   float: left;
-  text-align: right;
   width: 160px;
+  font-size: 1.05em;
   margin-right: 4px;
   color: #777;
 }

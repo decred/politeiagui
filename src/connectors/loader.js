@@ -9,6 +9,7 @@ export default connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     keyMismatch: sel.getKeyMismatch,
     apiError: sel.apiError,
+    loggedInAsUserId: sel.userid,
     userCanExecuteActions: sel.userCanExecuteActions,
     lastLoginTime: sel.lastLoginTimeFromLoginResponse,
     onboardViewed: sel.onboardViewed
