@@ -382,7 +382,7 @@ const ThingLinkComp = ({
             </Link>
           </li>
           <Tooltip
-            wrapperStyle={{ width: "100%", textAlign: "right" }}
+            wrapperStyle={{ width: "100%", textAlign: "right", padding: "5px" }}
             text="Check this proposal’s content on our GitHub repository. There you can find proposal's metadata and its comments journals."
             position="top"
           >

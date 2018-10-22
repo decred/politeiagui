@@ -45,6 +45,7 @@ export const DEFAULT_STATE = {
   unvettedStatus: DEFAULT_REQUEST_STATE,
   proposalPaywallPayment: DEFAULT_REQUEST_STATE,
   email: "",
+  userSearch: DEFAULT_REQUEST_STATE,
   keyMismatch: false,
   lastLoaded: {}
 };
@@ -437,6 +438,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RECEIVE_EDIT_USER]: () => receive("editUser", state, action),
   [act.REQUEST_NEW_PROPOSAL]: () => request("newProposal", state, action),
   [act.RECEIVE_NEW_PROPOSAL]: () => receive("newProposal", state, action),
+  [act.REQUEST_USER_SEARCH]: () => request("userSearch", state, action),
+  [act.RECEIVE_USER_SEARCH]: () => receive("userSearch", state, action),
   [act.REQUEST_EDIT_PROPOSAL]: () => request("editProposal", state, action),
   [act.RECEIVE_EDIT_PROPOSAL]: () => receive("editProposal", state, action),
   [act.REQUEST_NEW_COMMENT]: () => request("newComment", state, action),

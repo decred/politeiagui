@@ -42,7 +42,6 @@ body .appWrapper input[type=password],
 body .appWrapper input[type=text],
 body .appWrapper input[type=url],
 body .appWrapper textarea {
-    box-shadow: none;
     transition: border-color .15s ease, color .15s ease;
     padding: 6px 12px;
 }
@@ -242,7 +241,7 @@ body>.appWrapper>.content {
 }
 
 .proposals-listing-header {
-  margin: 8px 352px 8px 24px;
+  margin: 8px 0px 8px 24px;
 }
 
 .user-proposals-page .proposals-listing-header {
@@ -268,7 +267,7 @@ body>.appWrapper>.content {
     margin: 0 0 16px;
 }
 
-#search input[type=text] {
+.search-form input[type=text], #search input[type=text] {
     padding: 0 42px 0 16px;
     border: 0 solid;
     border-radius: 2px;
@@ -280,37 +279,21 @@ body>.appWrapper>.content {
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .14);
     transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
 }
-#search input[type=text]:hover {
+.search-form input[type=text]:hover, #search input[type=text]:hover {
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2);
 }
-#search input[type=text]:focus {
+.search-form input[type=text]:focus, #search input[type=text]:focus {
     border-radius: 2px 2px 0 0;
 }
-#search input[type=text]:focus:hover {
+.search-form input[type=text]:focus:hover, #search input[type=text]:focus:hover {
     box-shadow: 0 1px 5px rgba(0, 0, 0, .28) !important;
 }
-#search input[type=text]:-moz-placeholder {
+
+.search-form input[type=text]::placeholder, #search input[type=text]::placeholder {
     font-size: 14px;
     text-transform: capitalize;
     top: 1px;
     position: relative;
-    color: #B3B3B3;
-}
-#search input[type=text]::-webkit-input-placeholder {
-    font-size: 14px;
-    text-transform: capitalize;
-    top: 1px;
-    position: relative;
-    color: #B3B3B3;
-}
-#search input[type=text]:-ms-input-placeholder {
-    font-size: 14px;
-    text-transform: capitalize;
-    top: 1px;
-    position: relative;
-    color: #B3B3B3;
-}
-#search input[type=text]::-moz-placeholder {
     color: #B3B3B3;
 }
 
@@ -728,7 +711,7 @@ body.other-discussions-page>.content {
     position: relative;
 }
 
-#search {
+.search-form {
     position: relative;
     top: 16px;
     z-index: 1;
