@@ -6,7 +6,9 @@ import {
   EDIT_USER_EXPIRE_NEW_USER_VERIFICATION,
   EDIT_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
   EDIT_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
-  EDIT_USER_UNLOCK
+  EDIT_USER_UNLOCK,
+  EDIT_USER_DEACTIVATE,
+  EDIT_USER_REACTIVATE
 } from "../../constants";
 
 
@@ -82,6 +84,8 @@ const GeneralTab = ({
   isApiRequestingMarkUpdateKeyAsExpired,
   isApiRequestingMarkResetPasswordAsExpired,
   isApiRequestingUnlockUser,
+  isApiRequestingDeactivateUser,
+  isApiRequestingReactivateUser,
   onEditUser,
   isAdmin
 }) => {
@@ -147,6 +151,28 @@ const GeneralTab = ({
             onClick={() => onEditUser(user.id, EDIT_USER_UNLOCK)} />
         ])}
       </Field>
+      {isAdmin && ([
+        <FieldSeparator />,
+        <Field label="Deactivated">
+          {user.isdeactivated ? ([
+            <span style={{ fontWeight: "bold", color: "red" }}>Yes</span>,
+            <ButtonWithLoadingIcon
+              className="c-btn c-btn-primary button-small"
+              text="Re-activate account"
+              disabled={isApiRequestingReactivateUser}
+              isLoading={isApiRequestingReactivateUser}
+              onClick={() => onEditUser(user.id, EDIT_USER_REACTIVATE)} />
+          ]) : ([
+            <span>No</span>,
+            <ButtonWithLoadingIcon
+              className="c-btn c-btn-primary button-small"
+              text="Deactivate account"
+              disabled={isApiRequestingDeactivateUser}
+              isLoading={isApiRequestingDeactivateUser}
+              onClick={() => onEditUser(user.id, EDIT_USER_DEACTIVATE)} />
+          ])}
+        </Field>
+      ])}
       <FieldSeparator />
       <Field label="Proposal credits">{user.proposalcredits}</Field>
       <FieldSeparator />
