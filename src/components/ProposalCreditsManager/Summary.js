@@ -1,5 +1,6 @@
 import React from "react";
 import { exportToCsv, formatDate } from "../../helpers";
+import { CONFIRMATIONS_REQUIRED } from "../../constants";
 import DcrdataTxLink from "../DcrdataTxLink";
 
 const exportData = (data) => {
@@ -73,7 +74,8 @@ const ProposalCreditsSummary = ({
                 </div>
                 <div className="credit-purchase-cell credit-purchase-status">
                   { creditPurchase.confirming ?
-                    (<div className="user-proposal-credits-cell"><div className="logo"></div></div>)
+                    (<div className="user-proposal-credits-cell" ><div>
+                    confirming: </div>({creditPurchase.confirmations} of {CONFIRMATIONS_REQUIRED })</div>)
                     :
                     <div className="user-proposal-credits-cell"> ✔ </div>
                   }

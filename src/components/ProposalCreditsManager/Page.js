@@ -1,6 +1,7 @@
 import React from "react";
 import ProposalCreditsSummary from "./Summary";
 import { PageLoadingIcon } from "../snew";
+import { PAYWALL_REGISTER_FEE_AMOUNT } from "../../constants";
 
 class ProposalCreditsPage extends React.Component {
   componentDidMount() {
@@ -20,7 +21,7 @@ class ProposalCreditsPage extends React.Component {
 
     const proposalCreditPurchases = this.props.proposalCreditPurchases.unshift({
       numberPurchased: 1,
-      price: 0.1,
+      price: PAYWALL_REGISTER_FEE_AMOUNT,
       confirming: false,
       amount: 1,
       type: "fee",
