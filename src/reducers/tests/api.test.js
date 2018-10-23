@@ -658,8 +658,7 @@ describe("test api reducer", () => {
       { action: act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT, key: "proposalPaywallPayment", type: "receive" },
       { action: act.REQUEST_USER_SEARCH, key: "userSearch", type: "request" },
       { action: act.RECEIVE_USER_SEARCH, key: "userSearch", type: "receive" },
-      { action: act.REQUEST_RESCAN_USER_PAYMENTS, key: "rescanUserPayments", type: "request" },
-      { action: act.RECEIVE_RESCAN_USER_PAYMENTS, key: "rescanUserPayments", type: "receive" }
+      { action: act.REQUEST_RESCAN_USER_PAYMENTS, key: "rescanUserPayments", type: "request" }
     ];
 
     reducers.map(({ action, key, type }) => {
