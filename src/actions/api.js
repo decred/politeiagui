@@ -15,6 +15,7 @@ export const onSetEmail = act.SET_EMAIL;
 
 export const onSignup = act.REQUEST_SIGNUP_CONFIRMATION;
 export const onResetSignup = act.RESET_SIGNUP_CONFIRMATION;
+export const onResetRescanUserPayments = act.RESET_RESCAN_USER_PAYMENTS;
 export const onSignupConfirm = props => dispatch => {
   dispatch(onCreateNewUser(props));
 };
@@ -682,9 +683,9 @@ export const onRescanUserPayments = (userid) =>
 
         // if the rescan returns new credits we need to refetch the user details
         // so the user credis are correclty updated
-        if(response.newcredits && response.newcredits.length > 0) {
-          dispatch(onFetchUser(userid));
-        }
+        // if(response.newcredits && response.newcredits.length > 0) {
+        //   dispatch(onFetchUser(userid));
+        // }
       }
     ).catch(
       error => {

@@ -1018,13 +1018,6 @@ describe("test api actions (actions/api.js)", () => {
       error: false,
       payload: mockSuccessResponse
     });
-    // make sure the user info is refetched in case new credits
-    // are returned from this endpoint
-    expect(dispatchedActions[2]).toEqual({
-      type: act.REQUEST_USER,
-      error: false,
-      payload: userid
-    });
 
     assertApiActionOnError(
       path,

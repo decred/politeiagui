@@ -91,6 +91,13 @@ describe("test api reducer", () => {
         ]
       }
     },
+    user: {
+      response: {
+        user: {
+          proposalcredits: 3
+        }
+      }
+    },
     vetted: DEFAULT_REQUEST_STATE,
     userProposals: DEFAULT_REQUEST_STATE
   };
@@ -558,6 +565,27 @@ describe("test api reducer", () => {
     const { proposals: vettedResult } = state.vetted.response;
     expect(vettedResult.length).toEqual(1);
     expect(vettedResult[0].censorshiprecord.token).toEqual("randomtoken2");
+  });
+
+  test("correctly updates the state for for onReceiveRescanUserPayments", () => {
+    const action = {
+      type: act.RECEIVE_RESCAN_USER_PAYMENTS,
+      payload: {
+        newcredits: [ { paywallid: 1 }, { paywallid: 2 } ]
+      }
+    };
+
+    const getUserFromState = (state) => state.user.response.user;
+
+    const state = api.onReceiveRescanUserPayments(MOCK_STATE, action);
+
+    // make sure the user credits are updated
+    const { user } = state.user.response;
+    expect(user.proposalcredits).toEqual(getUserFromState(MOCK_STATE).proposalcredits + 2);
+
+    // make sure the state has received the entire response from the request
+    expect(state.rescanUserPayments.response.newcredits).toBeTruthy();
+
   });
 
   test("correctly updates state for reducers using request/receive/reset", () => {

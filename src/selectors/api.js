@@ -323,8 +323,15 @@ export const apiProposalPaywallPaymentConfirmations = compose(get("confirmations
 
 const rescanUserPaymentsKey = "rescanUserPayments";
 export const apiRescanUserPaymentsResponse = getApiResponse(rescanUserPaymentsKey);
+export const apiRescanUserPaymentsUserId = getApiPayload(rescanUserPaymentsKey);
 export const apiRescanUserPaymentsError = getApiError(rescanUserPaymentsKey);
 export const isApiRequestingRescanUserPayments = getIsApiRequesting(rescanUserPaymentsKey);
+export const apiRescanUserPaymentsNewCredits = compose(get("newcredits"), apiRescanUserPaymentsResponse);
+
+export const amountOfCreditsAddedOnRescan = (state) => {
+  const newCredits = apiRescanUserPaymentsNewCredits(state);
+  return newCredits && newCredits.length;
+};
 
 
 export const isApiRequesting = or(

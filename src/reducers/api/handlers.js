@@ -336,3 +336,24 @@ export const onReceiveUser = (state, action) => {
   const userProps = action.payload.user.proposals || [];
   return receiveProposals("user", userProps, state);
 };
+
+export const onReceiveRescanUserPayments = (state, action) => {
+  state = receive("rescanUserPayments", state, action);
+  if (action.error) return state;
+
+  const creditsAdded = action.payload.newcredits.length;
+  const user = get([ "user", "response", "user" ], state) || {};
+  return {
+    ...state,
+    user: {
+      ...state.user,
+      response: {
+        ...state.user.response,
+        user: {
+          ...user,
+          proposalcredits: user.proposalcredits + creditsAdded
+        }
+      }
+    }
+  };
+};

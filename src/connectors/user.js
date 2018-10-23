@@ -47,6 +47,8 @@ const userConnector = connect(
     verificationToken: sel.verificationToken,
     userPubkey: sel.userPubkey,
     loggedInAsUsername: sel.loggedInAsUsername,
+    amountOfCreditsAddedOnRescan: sel.amountOfCreditsAddedOnRescan,
+    rescanUserId: sel.apiRescanUserPaymentsUserId,
     isApiRequestingMarkAsPaid: state => (
       sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_CLEAR_USER_PAYWALL
     ),
@@ -80,7 +82,8 @@ const userConnector = connect(
     confirmWithModal,
     onUpdateUserKey,
     onEditUser: act.onEditUser,
-    onRescan: act.onRescanUserPayments
+    onRescan: act.onRescanUserPayments,
+    onResetRescan: act.onResetRescanUserPayments
   }, dispatch)
 );
 

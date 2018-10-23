@@ -13,7 +13,8 @@ import {
   onReceiveSyncLikeComment,
   onResetSyncLikeComment,
   onReceiveUser,
-  onReceiveVoteStatusChange
+  onReceiveVoteStatusChange,
+  onReceiveRescanUserPayments
 } from "./handlers";
 
 export const DEFAULT_STATE = {
@@ -158,7 +159,8 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.REQUEST_PROPOSAL_PAYWALL_PAYMENT]: () => request("proposalPaywallPayment", state, action),
   [act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT]: () => receive("proposalPaywallPayment", state, action),
   [act.REQUEST_RESCAN_USER_PAYMENTS]: () => request("rescanUserPayments", state, action),
-  [act.RECEIVE_RESCAN_USER_PAYMENTS]: () => receive("rescanUserPayments", state, action),
+  [act.RECEIVE_RESCAN_USER_PAYMENTS]: () => onReceiveRescanUserPayments(state, action),
+  [act.RESET_RESCAN_USER_PAYMENTS]: () => reset("rescanUserPayments", state, action),
   [act.RECEIVE_LOGOUT]: () => {
     if (!action.error) {
       const tempState = DEFAULT_STATE;
