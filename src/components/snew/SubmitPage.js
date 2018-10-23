@@ -50,7 +50,6 @@ class SubmitPage extends React.Component {
       newProposalError,
       userCanExecuteActions,
       openModal,
-      userid,
       proposalCredits,
       editingMode
     } = this.props;
@@ -149,9 +148,6 @@ class SubmitPage extends React.Component {
                           To submit a proposal, you must purchase a proposal credit.
                           <a className="linkish" onClick={() => openModal(MANAGE_CREDITS_MODAL)}> Click here</a>{" "}
                           to open the proposal credits manager.
-                          To submit a proposal, you must purchase a proposal credit,
-                          see your <a href={`/user/${userid}`}>account page</a>{" "}
-                          for more information.
                         </div>
                       )}
                     </div>
