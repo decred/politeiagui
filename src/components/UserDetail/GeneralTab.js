@@ -227,7 +227,7 @@ class GeneralTab extends React.Component {
               body={<div>
                 {amountOfCreditsAddedOnRescan === 0 ?
                   <span>User credits are up to date.</span> :
-                  <span><b>{amountOfCreditsAddedOnRescan} proposal credits </b>were found by the rescan.</span>
+                  <span><b>{amountOfCreditsAddedOnRescan} proposal credits </b>were found by the rescan and added to the user account.</span>
                 }
               </div>}
               onDismissClick={onResetRescan}
