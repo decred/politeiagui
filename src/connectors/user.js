@@ -27,6 +27,8 @@ const userConnector = connect(
     loggedInAsUserId: sel.userid,
     user: sel.user,
     error: sel.apiUserError,
+    errorRescan: sel.apiRescanUserPaymentsError,
+    isLoadingRescan: sel.isApiRequestingRescanUserPayments,
     isLoading: or(sel.isApiRequestingUser, sel.isApiRequestingMe),
     isLoadingProposals: or(sel.userProposalsIsRequesting, sel.isApiRequestingPropsVoteStatus),
     isTestnet: sel.isTestNet,
@@ -45,6 +47,8 @@ const userConnector = connect(
     verificationToken: sel.verificationToken,
     userPubkey: sel.userPubkey,
     loggedInAsUsername: sel.loggedInAsUsername,
+    amountOfCreditsAddedOnRescan: sel.amountOfCreditsAddedOnRescan,
+    rescanUserId: sel.apiRescanUserPaymentsUserId,
     isApiRequestingMarkAsPaid: state => (
       sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_CLEAR_USER_PAYWALL
     ),
@@ -77,7 +81,9 @@ const userConnector = connect(
     onIdentityImported: act.onIdentityImported,
     confirmWithModal,
     onUpdateUserKey,
-    onEditUser: act.onEditUser
+    onEditUser: act.onEditUser,
+    onRescan: act.onRescanUserPayments,
+    onResetRescan: act.onResetRescanUserPayments
   }, dispatch)
 );
 

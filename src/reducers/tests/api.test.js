@@ -91,6 +91,13 @@ describe("test api reducer", () => {
         ]
       }
     },
+    user: {
+      response: {
+        user: {
+          proposalcredits: 3
+        }
+      }
+    },
     vetted: DEFAULT_REQUEST_STATE,
     userProposals: DEFAULT_REQUEST_STATE
   };
@@ -202,6 +209,7 @@ describe("test api reducer", () => {
       likeComment: DEFAULT_REQUEST_STATE,
       userSearch: DEFAULT_REQUEST_STATE,
       proposalPaywallPayment: DEFAULT_REQUEST_STATE,
+      rescanUserPayments: DEFAULT_REQUEST_STATE,
       email: "",
       keyMismatch: false,
       lastLoaded: {}
@@ -559,6 +567,27 @@ describe("test api reducer", () => {
     expect(vettedResult[0].censorshiprecord.token).toEqual("randomtoken2");
   });
 
+  test("correctly updates the state for for onReceiveRescanUserPayments", () => {
+    const action = {
+      type: act.RECEIVE_RESCAN_USER_PAYMENTS,
+      payload: {
+        newcredits: [ { paywallid: 1 }, { paywallid: 2 } ]
+      }
+    };
+
+    const getUserFromState = (state) => state.user.response.user;
+
+    const state = api.onReceiveRescanUserPayments(MOCK_STATE, action);
+
+    // make sure the user credits are updated
+    const { user } = state.user.response;
+    expect(user.proposalcredits).toEqual(getUserFromState(MOCK_STATE).proposalcredits + 2);
+
+    // make sure the state has received the entire response from the request
+    expect(state.rescanUserPayments.response.newcredits).toBeTruthy();
+
+  });
+
   test("correctly updates state for reducers using request/receive/reset", () => {
 
     const reducers = [
@@ -628,7 +657,8 @@ describe("test api reducer", () => {
       { action: act.REQUEST_PROPOSAL_PAYWALL_PAYMENT, key: "proposalPaywallPayment", type: "request" },
       { action: act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT, key: "proposalPaywallPayment", type: "receive" },
       { action: act.REQUEST_USER_SEARCH, key: "userSearch", type: "request" },
-      { action: act.RECEIVE_USER_SEARCH, key: "userSearch", type: "receive" }
+      { action: act.RECEIVE_USER_SEARCH, key: "userSearch", type: "receive" },
+      { action: act.REQUEST_RESCAN_USER_PAYMENTS, key: "rescanUserPayments", type: "request" }
     ];
 
     reducers.map(({ action, key, type }) => {

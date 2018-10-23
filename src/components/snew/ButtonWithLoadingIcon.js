@@ -1,10 +1,10 @@
 import React from "react";
-import LoadingIcon from "./LoadingIcon";
 
 const ButtonWithLoadingIcon = ({
   className,
   isLoading,
   text,
+  loadingIconStyle = {},
   ...props
 }) => {
   return (
@@ -15,13 +15,9 @@ const ButtonWithLoadingIcon = ({
       onClick={isLoading ? () => null : props.onClick}
     >
       {isLoading ? (
-        <LoadingIcon
-          width={20}
-          style={{
-            display: "block",
-            float: "left",
-            marginRight: "8px"
-          }} />
+        <i
+          className="fa fa-circle-o-notch fa-spin right-margin-5"
+          style={{ fontSize: "14px", ...loadingIconStyle }}></i>
       ) : null}
       <div style={{ float: "right" }}>{text}</div>
       <div style={{ clear: "both" }} />

@@ -126,10 +126,10 @@ export const proposalCreditPurchases = state => {
 
   const purchasesMap = {};
   [ ...r.spentcredits, ...r.unspentcredits ].forEach(credit => {
-    if(credit.paywallid in purchasesMap) {
-      purchasesMap[credit.paywallid].numberPurchased++;
+    if(credit.txid in purchasesMap) {
+      purchasesMap[credit.txid].numberPurchased++;
     } else {
-      purchasesMap[credit.paywallid] = {
+      purchasesMap[credit.txid] = {
         price: credit.price / 100000000,
         datePurchased: credit.datepurchased,
         numberPurchased: 1,
@@ -320,6 +320,18 @@ export const apiProposalPaywallPaymentError = getApiError("proposalPaywallPaymen
 export const apiProposalPaywallPaymentTxid = compose(get("txid"), apiProposalPaywallPaymentResponse);
 export const apiProposalPaywallPaymentAmount = compose(get("amount"), apiProposalPaywallPaymentResponse);
 export const apiProposalPaywallPaymentConfirmations = compose(get("confirmations"), apiProposalPaywallPaymentResponse);
+
+const rescanUserPaymentsKey = "rescanUserPayments";
+export const apiRescanUserPaymentsResponse = getApiResponse(rescanUserPaymentsKey);
+export const apiRescanUserPaymentsUserId = getApiPayload(rescanUserPaymentsKey);
+export const apiRescanUserPaymentsError = getApiError(rescanUserPaymentsKey);
+export const isApiRequestingRescanUserPayments = getIsApiRequesting(rescanUserPaymentsKey);
+export const apiRescanUserPaymentsNewCredits = compose(get("newcredits"), apiRescanUserPaymentsResponse);
+
+export const amountOfCreditsAddedOnRescan = (state) => {
+  const newCredits = apiRescanUserPaymentsNewCredits(state);
+  return newCredits && newCredits.length;
+};
 
 
 export const isApiRequesting = or(

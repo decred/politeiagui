@@ -15,6 +15,7 @@ export const onSetEmail = act.SET_EMAIL;
 
 export const onSignup = act.REQUEST_SIGNUP_CONFIRMATION;
 export const onResetSignup = act.RESET_SIGNUP_CONFIRMATION;
+export const onResetRescanUserPayments = act.RESET_RESCAN_USER_PAYMENTS;
 export const onSignupConfirm = props => dispatch => {
   dispatch(onCreateNewUser(props));
 };
@@ -673,3 +674,23 @@ export const onFetchProposalPaywallPayment = () =>
     );
   };
 
+export const onRescanUserPayments = (userid) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_RESCAN_USER_PAYMENTS(userid));
+    return api.rescanUserPayments(csrf, userid).then(
+      response => {
+        dispatch(act.RECEIVE_RESCAN_USER_PAYMENTS(response));
+
+        // if the rescan returns new credits we need to refetch the user details
+        // so the user credis are correclty updated
+        // if(response.newcredits && response.newcredits.length > 0) {
+        //   dispatch(onFetchUser(userid));
+        // }
+      }
+    ).catch(
+      error => {
+        dispatch(act.RECEIVE_RESCAN_USER_PAYMENTS(null, error));
+        throw error;
+      }
+    );
+  });
