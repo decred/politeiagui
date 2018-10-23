@@ -364,6 +364,10 @@ button.disabled {
     margin-left: 0;
 }
 
+.titlebox {
+    box-shadow: 3px 4px 6px 1px #e9e9e9;
+}
+
 .titlebox .tagline {
     font-size: 12px;
 }
@@ -374,8 +378,20 @@ button.disabled {
     display: block;
 }
 
+.side .md p {
+    color: #0c1e3e;
+    font: 13px/1.45 Source Sans Pro,Lato,Arial,sans-serif;
+    text-rendering: optimizelegibility;
+    letter-spacing: .03em;
+}
+
 .side .titlebox .md h1 {
     line-height: 18px;
+}
+
+.side .titlebox .md ul > li {
+    line-height: 18px;
+    font: 13px/1.45 Source Sans Pro,Lato,Arial,sans-serif;
 }
 
 .side .titlebox .md h3 a,
