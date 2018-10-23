@@ -11,13 +11,22 @@ class ProposalCreditsPage extends React.Component {
       proposalCreditPrice,
       isApiRequestingProposalPaywall,
       proposalCredits,
-      proposalCreditPurchases,
 
       // Testnet only
       isTestnet,
       proposalPaywallPaymentTxid,
       ...props
     } = this.props;
+
+    // adds registration fee to history table
+    const proposalCreditPurchases = this.props.proposalCreditPurchases.unshift({
+      numberPurchased: "N/A",
+      price: "click on the transaction link for more information",
+      confirming: false,
+      type: "fee",
+      txId: this.props.paywallTxid
+    });
+
     return isApiRequestingProposalPaywall ?
       <PageLoadingIcon />
       : (

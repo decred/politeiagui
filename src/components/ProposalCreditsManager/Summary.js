@@ -1,6 +1,6 @@
 import React from "react";
-import { CONFIRMATIONS_REQUIRED } from "../../constants";
 import { exportToCsv, formatDate } from "../../helpers";
+import { CONFIRMATIONS_REQUIRED } from "../../constants";
 import DcrdataTxLink from "../DcrdataTxLink";
 
 const exportData = (data) => {
@@ -19,8 +19,7 @@ const ProposalCreditsSummary = ({
   isTestnet,
   proposalPaywallPaymentTxid,
   proposalPaywallPaymentAmount,
-  proposalPaywallPaymentConfirmations,
-  paywallTxid
+  proposalPaywallPaymentConfirmations
 }) => {
   const isThereAnyCompletedPurchase = proposalCreditPurchases && proposalCreditPurchases.length > 0;
 
@@ -40,11 +39,7 @@ const ProposalCreditsSummary = ({
 
   return (
     <div className="proposal-credits-summary">
-      <div className="available-credits">
-        <div>
-          <span><b>Register fee payment:</b> <DcrdataTxLink isTestnet={isTestnet} txId={paywallTxid} /> </span>
-        </div>
-      </div>
+
       {isThereAnyCompletedPurchase ?
         <div className="credits-purchase-menu">
           <button
@@ -58,11 +53,12 @@ const ProposalCreditsSummary = ({
         <div className="credit-purchase-table">
           <div className="credit-purchase-header">
             <div className="credit-purchase-row">
-              <div className="credit-purchase-cell credit-purchase-number">#</div>
-              <div className="credit-purchase-cell credit-purchase-price">DCR per credit</div>
+              <div className="credit-purchase-cell credit-purchase-number">Amount</div>
+              <div className="credit-purchase-cell credit-purchase-price">DCRs</div>
               <div className="credit-purchase-cell credit-purchase-tx">Transaction</div>
               <div className="credit-purchase-cell credit-purchase-status">Status</div>
               <div className="credit-purchase-cell credit-purchase-date">Date</div>
+              <div className="credit-purchase-cell credit-purchase-type">Type</div>
               <div className="clear"></div>
             </div>
           </div>
@@ -70,15 +66,22 @@ const ProposalCreditsSummary = ({
             {reverseProposalCreditPurchases.map((creditPurchase, i) => (
               <div className="credit-purchase-row" key={i}>
                 <div className="credit-purchase-cell credit-purchase-number">{creditPurchase.numberPurchased}</div>
-                <div className="credit-purchase-cell credit-purchase-price">{creditPurchase.price} DCR</div>
+                <div className="credit-purchase-cell credit-purchase-price">
+                  {
+                    creditPurchase.numberPurchased === "N/A" ?
+                      creditPurchase.price
+                      :
+                      (creditPurchase.numberPurchased*creditPurchase.price).toFixed(2) + " DCR"
+                  }
+                </div>
                 <div className="credit-purchase-cell credit-purchase-tx">
                   <DcrdataTxLink isTestnet={isTestnet} txId={creditPurchase.txId} />
                 </div>
                 <div className="credit-purchase-cell credit-purchase-status">
                   { creditPurchase.confirming ?
-                    (<div className="user-proposal-credits-cell" style={{ color: "#ff8100", fontWeight: "bold" }}><div>
-											Awaiting confirmations: </div>({creditPurchase.confirmations} of {CONFIRMATIONS_REQUIRED })</div>)
-                    : <div style={{ fontWeight: "bold", color: "green" }}>Confirmed</div>
+                    (<div className="user-proposal-credits-cell" style={{ color: "#ff8100" }}><div>
+											waiting confirmations: </div>({creditPurchase.confirmations} of {CONFIRMATIONS_REQUIRED})</div>)
+                    : <div style={{ color: "green" }}>confirmed</div>
                   }
                 </div>
                 <div className="credit-purchase-cell credit-purchase-date-text">
@@ -87,6 +90,12 @@ const ProposalCreditsSummary = ({
                       creditPurchase.datePurchased === "just now" ? "just now" :
                         formatDate(creditPurchase.datePurchased)
                       : ""
+                  }
+                </div>
+                <div className="credit-purchase-cell credit-purchase-type">
+                  { creditPurchase.type === "fee" ?
+                    "registration fee" :
+                    "credits"
                   }
                 </div>
                 <div className="clear"></div>

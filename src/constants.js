@@ -17,7 +17,6 @@ export const PAYWALL_STATUS_LACKING_CONFIRMATIONS = 1;
 export const PAYWALL_STATUS_PAID = 2;
 export const CONFIRMATIONS_REQUIRED = 2;
 
-
 export const PUB_KEY_STATUS_LOADING = 0;
 export const PUB_KEY_STATUS_LOADED = 1;
 
