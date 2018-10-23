@@ -67,17 +67,21 @@ const ProposalCreditsSummary = ({
               <div className="credit-purchase-row" key={i}>
                 <div className="credit-purchase-cell credit-purchase-number">{creditPurchase.numberPurchased}</div>
                 <div className="credit-purchase-cell credit-purchase-price">
-                  {(creditPurchase.numberPurchased*creditPurchase.price).toFixed(2)} DCR
+                  {
+                    creditPurchase.numberPurchased === "N/A" ?
+                      creditPurchase.price
+                      :
+                      (creditPurchase.numberPurchased*creditPurchase.price).toFixed(2) + " DCR"
+                  }
                 </div>
                 <div className="credit-purchase-cell credit-purchase-tx">
                   <DcrdataTxLink isTestnet={isTestnet} txId={creditPurchase.txId} />
                 </div>
                 <div className="credit-purchase-cell credit-purchase-status">
                   { creditPurchase.confirming ?
-                    (<div className="user-proposal-credits-cell" ><div>
-                    confirming: </div>({creditPurchase.confirmations} of {CONFIRMATIONS_REQUIRED })</div>)
-                    :
-                    <div className="user-proposal-credits-cell"> ✔ </div>
+                    (<div className="user-proposal-credits-cell" style={{ color: "#ff8100" }}><div>
+											waiting confirmations: </div>({creditPurchase.confirmations} of {CONFIRMATIONS_REQUIRED})</div>)
+                    : <div style={{ color: "green" }}>confirmed</div>
                   }
                 </div>
                 <div className="credit-purchase-cell credit-purchase-date-text">

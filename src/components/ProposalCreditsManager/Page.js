@@ -1,7 +1,6 @@
 import React from "react";
 import ProposalCreditsSummary from "./Summary";
 import { PageLoadingIcon } from "../snew";
-import { PAYWALL_REGISTER_FEE_AMOUNT } from "../../constants";
 
 class ProposalCreditsPage extends React.Component {
   componentDidMount() {
@@ -19,11 +18,11 @@ class ProposalCreditsPage extends React.Component {
       ...props
     } = this.props;
 
+    // adds registration fee to history table
     const proposalCreditPurchases = this.props.proposalCreditPurchases.unshift({
-      numberPurchased: 1,
-      price: PAYWALL_REGISTER_FEE_AMOUNT,
+      numberPurchased: "N/A",
+      price: "click on the transaction link for more information",
       confirming: false,
-      amount: 1,
       type: "fee",
       txId: this.props.paywallTxid
     });
