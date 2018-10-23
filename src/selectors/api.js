@@ -126,10 +126,10 @@ export const proposalCreditPurchases = state => {
 
   const purchasesMap = {};
   [ ...r.spentcredits, ...r.unspentcredits ].forEach(credit => {
-    if(credit.paywallid in purchasesMap) {
-      purchasesMap[credit.paywallid].numberPurchased++;
+    if(credit.txid in purchasesMap) {
+      purchasesMap[credit.txid].numberPurchased++;
     } else {
-      purchasesMap[credit.paywallid] = {
+      purchasesMap[credit.txid] = {
         price: credit.price / 100000000,
         datePurchased: credit.datepurchased,
         numberPurchased: 1,
