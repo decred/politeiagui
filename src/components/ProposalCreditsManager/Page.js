@@ -11,13 +11,22 @@ class ProposalCreditsPage extends React.Component {
       proposalCreditPrice,
       isApiRequestingProposalPaywall,
       proposalCredits,
-      proposalCreditPurchases,
 
       // Testnet only
       isTestnet,
       proposalPaywallPaymentTxid,
       ...props
     } = this.props;
+
+    const proposalCreditPurchases = this.props.proposalCreditPurchases.unshift({
+      numberPurchased: 1,
+      price: 0.1,
+      confirming: false,
+      amount: 1,
+      type: "fee",
+      txId: this.props.paywallTxid
+    });
+
     return isApiRequestingProposalPaywall ?
       <PageLoadingIcon />
       : (
