@@ -334,11 +334,10 @@ a:hover, a:focus {
 }
 .message-icon {
   min-width: 64px;
-  line-height: 62px;
   font-size: 24px;
   color: #ffffff;
   display: flex;
-  align-items: start;
+  align-items: center;
   justify-content: center;
 }
 .message-text {
@@ -350,7 +349,6 @@ a:hover, a:focus {
 .message-header {
   font-size: 18px;
   vertical-align: middle;
-  margin-bottom: 8px;
 }
 .message-body {
   vertical-align: middle;
