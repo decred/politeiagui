@@ -31,7 +31,7 @@ const ModalContentWrapper = ({
   return (
     <div className="modal-content" style={{ minWidth: "700px", ...style }}>
       <div className="modal-content-header">
-        <h2 style={{ fontSize: "18px" }} >{title}</h2>
+        <h2 style={{ fontSize: "18px", textTransform: "uppercase" }} >{title}</h2>
         <div style={{ display: "flex", justifyContent: "flex-end", flex: 1 }}>
           {onClose && <span style={{ fontSize: "18px", cursor: "pointer" }} onClick={onClose}>✖</span>}
         </div>

@@ -528,25 +528,24 @@ export const verifyUserPaymentWithPoliteia = txid => {
   return api.verifyUserPayment(txid).then(response => response.haspaid);
 };
 
-export const onStartVote = (loggedInAsEmail, token) =>
+export const onStartVote = (
+  loggedInAsEmail,
+  token,
+  duration,
+  quorum,
+  pass
+) =>
   withCsrf((dispatch, getState, csrf) => {
-    return dispatch(confirmWithModal(modalTypes.CONFIRM_ACTION,
-      { message: "Are you sure you want to start voting this proposal?" }))
-      .then(
-        (confirm) => {
-          if (confirm) {
-            dispatch(act.REQUEST_START_VOTE({ token }));
-            return api
-              .startVote(loggedInAsEmail, csrf, token)
-              .then(response => {
-                dispatch(act.RECEIVE_START_VOTE({ ...response, success: true }));
-              })
-              .catch(error => {
-                dispatch(act.RECEIVE_START_VOTE(null, error));
-              });
-          }
-        }
-      );
+    console.log("got here");
+    dispatch(act.REQUEST_START_VOTE({ token }));
+    return api
+      .startVote(loggedInAsEmail, csrf, token, duration, quorum, pass)
+      .then(response => {
+        dispatch(act.RECEIVE_START_VOTE({ ...response, success: true }));
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_START_VOTE(null, error));
+      });
   });
 
 export const onFetchProposalPaywallDetails = () => dispatch => {

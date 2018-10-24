@@ -56,6 +56,7 @@ const ThingLinkComp = ({
   userCanExecuteActions,
   onChangeStatus,
   onStartVote,
+  openModal,
   onAuthorizeVote,
   onRevokeVote,
   setStatusProposalToken,
@@ -315,10 +316,11 @@ const ThingLinkComp = ({
             <ButtonWithLoadingIcon
               className={`c-btn c-btn-primary${!userCanExecuteActions ? " not-active disabled" : ""}`}
               onClick={e =>
-                onStartVote(
-                  loggedInAsEmail,
-                  id
-                ) && e.preventDefault()
+                openModal(
+                  modalTypes.START_VOTE_MODAL,
+                  {},
+                  (d, q, p) => onStartVote(loggedInAsEmail, id, d, q, p) && e.preventDefault()
+                )
               }
               text="Start Vote"
               data-event-action="start-vote"

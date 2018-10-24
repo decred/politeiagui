@@ -1675,3 +1675,36 @@ form div.usertext-body.may-blank-within.md-container {
   text-align: center;
   border: 1px solid black;
 }
+
+.f-radio {
+  display: flex;
+}
+
+.f-radio label {
+  border: 1px solid white;
+  background: #e9e9e9;
+  color: #0079d3;
+  cursor: pointer;
+  border-left: 0px;
+  padding: 8px 10px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.f-radio label:hover{
+  background: #bbb;
+}
+
+.f-radio label.first {
+  border-left: 1px solid white;
+  border-radius: 8px 0 0 8px;
+}
+
+.f-radio label.last, .f-radio label.last.selected {
+  border-radius: 0 8px 8px 0;
+}
+
+.f-radio label.selected {
+  background: #0079d3;
+  color: white;
+}

@@ -233,7 +233,7 @@ export const editProposal = (csrf, proposal) =>
 
 export const newComment = (csrf, comment) => POST("/comments/new", csrf, comment).then(getResponse);
 
-export const startVote = (email, csrf, token) =>
+export const startVote = (email, csrf, token, duration, quorumpercentage, passpercentage) =>
   pki.myPubKeyHex(email).then(publickey =>
     pki.signStringHex(email, token).then(signature => POST(
       "/proposals/startvote", csrf,
@@ -241,7 +241,9 @@ export const startVote = (email, csrf, token) =>
         vote: {
           token,
           mask: 3,
-          duration: 2016, // 1 week
+          duration,
+          quorumpercentage,
+          passpercentage,
           options: [ {
             id: "no",
             description: "Don't approve proposal",
