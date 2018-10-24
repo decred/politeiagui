@@ -536,7 +536,6 @@ export const onStartVote = (
   pass
 ) =>
   withCsrf((dispatch, getState, csrf) => {
-    console.log("got here");
     dispatch(act.REQUEST_START_VOTE({ token }));
     return api
       .startVote(loggedInAsEmail, csrf, token, duration, quorum, pass)

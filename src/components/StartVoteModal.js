@@ -3,20 +3,14 @@ import ModalWrapper from "./Modal/ModalContentWrapper";
 import modalConnector from "../connectors/modal";
 import FancyRadioButton from "./FancyRadioButton";
 
-const durationOptions = [
-  {
-    value: 2016,
-    text: "1 week"
-  },
-  {
-    value: 2880,
-    text: "10 days"
-  },
-  {
-    value: 4032,
-    text: "2 weeks"
-  }
-];
+const preDefinedDurations = [ 2016, 2880, 4032 ];
+const getDurationOptions = (isTesnet) => {
+  const blockDuration = isTesnet ? 2 : 5;
+  return preDefinedDurations.map(nb => ({
+    value: nb,
+    text: `${Math.round(nb*blockDuration/60/24)} days`
+  }));
+};
 
 const MIN_QUORUM = 50;
 const MAX_QUORUM = 100;
@@ -27,7 +21,7 @@ class StartVoteModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      duration: durationOptions[0].value,
+      duration: preDefinedDurations[0],
       quorumPercentage: 75,
       passPercentage: 10
     };
@@ -62,7 +56,7 @@ class StartVoteModal extends React.Component {
   }
 
   render() {
-    const { closeModal } = this.props;
+    const { closeModal, isTestnet } = this.props;
     const { duration, quorumPercentage, passPercentage } = this.state;
     const fieldWrapper = {
       display: "flex",
@@ -83,7 +77,7 @@ class StartVoteModal extends React.Component {
           <label>Duration:</label>
           <FancyRadioButton
             style={{ marginTop: "5px" }}
-            options={durationOptions}
+            options={getDurationOptions(isTestnet)}
             value={duration}
             onChange={this.onChangeDuration}
           />
