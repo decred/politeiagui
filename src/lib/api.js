@@ -416,3 +416,4 @@ export const proposalPaywallPayment = () =>
 
 export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
+
