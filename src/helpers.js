@@ -85,7 +85,8 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     "The author has not yet authorized a vote for this proposal.",
     "The vote has already been authorized for this proposal.",
     "That is an invalid vote authorization action.",
-    "This account has been deactivated."
+    "This account has been deactivated.",
+    "Your email address has not yet been verified."
   ];
 
   if(errorCode > errorMessages.length) {
