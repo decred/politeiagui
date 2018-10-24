@@ -7,6 +7,7 @@ const FileDownloadLink = ({
   data
 }) => (
   <a
+    className="download-link"
     href={`data:${mime},${encodeURIComponent(data)}`}
     download={filename}
   >

@@ -153,7 +153,7 @@ class MarkdownEditor extends React.Component {
               onChange={this.handleValueChange}
               value={{ text: value }}
               textAreaProps={{
-                style: { overflowY: "auto" }
+                style: { overflowY: "auto", resize: "vertical" }
               }}
               textAreaRef={(c) => this.textArea = c}
             />
