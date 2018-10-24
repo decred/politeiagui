@@ -23,7 +23,9 @@ class StartVoteModal extends React.Component {
     this.state = {
       duration: preDefinedDurations[0],
       quorumPercentage: 75,
-      passPercentage: 10
+      passPercentage: 10,
+      quorumError: "",
+      passError: ""
     };
   }
   onChangeDuration = duration =>
@@ -31,18 +33,26 @@ class StartVoteModal extends React.Component {
 
   onChangeQuorumPercentage = event => {
     const quorumPercentage = parseInt(event.target.value, 10);
-    if (quorumPercentage < MIN_QUORUM || quorumPercentage > MAX_QUORUM) {
+    if (quorumPercentage > MAX_QUORUM || quorumPercentage < 0) {
       return;
     }
-    this.setState({ quorumPercentage });
+    this.setState({
+      quorumPercentage,
+      quorumError: quorumPercentage < MIN_QUORUM || !quorumPercentage ?
+        `Quorum percentage must be a value between ${MIN_QUORUM} and ${MAX_QUORUM}` : ""
+    });
   }
 
   onChangePassPercentage = event => {
     const passPercentage = parseInt(event.target.value, 10);
-    if (passPercentage < MIN_PASS || passPercentage > MAX_PASS) {
+    if (passPercentage > MAX_PASS || passPercentage < 0) {
       return;
     }
-    this.setState({ passPercentage });
+    this.setState({
+      passPercentage,
+      passError: passPercentage < MIN_PASS || !passPercentage ?
+        `Pass percentage must be a value between ${MIN_PASS} and ${MAX_PASS}` : ""
+    });
   }
 
   handleSubmit = () => {
@@ -55,9 +65,17 @@ class StartVoteModal extends React.Component {
     this.props.closeModal();
   }
 
+
+
   render() {
     const { closeModal, isTestnet } = this.props;
-    const { duration, quorumPercentage, passPercentage } = this.state;
+    const {
+      duration,
+      quorumPercentage,
+      passPercentage,
+      quorumError,
+      passError
+    } = this.state;
     const fieldWrapper = {
       display: "flex",
       width: "220px",
@@ -66,11 +84,16 @@ class StartVoteModal extends React.Component {
       marginTop: "10px"
     };
 
+    const validQuorum = quorumPercentage >= MIN_QUORUM && quorumPercentage <= MAX_QUORUM;
+    const validPass = passPercentage >= MIN_PASS && passPercentage <= MAX_PASS;
+    const canStartVote = validQuorum && validPass;
+
     return (
       <ModalWrapper
         title="Start Vote"
         onClose={closeModal}
         onSubmit={this.handleSubmit}
+        submitDisabled={!canStartVote}
         submitText="Start Vote"
       >
         <form style={{ padding: "10px", display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -90,6 +113,7 @@ class StartVoteModal extends React.Component {
               onChange={this.onChangeQuorumPercentage}
             />
           </div>
+          {quorumError ? <span className="input-error">{quorumError}</span> : null}
           <div style={fieldWrapper}>
             <label>Pass percentage:</label>
             <input
@@ -99,7 +123,7 @@ class StartVoteModal extends React.Component {
               onChange={this.onChangePassPercentage}
             />
           </div>
-
+          {passError ? <span className="input-error">{passError}</span> : null}
         </form>
       </ModalWrapper>
     );

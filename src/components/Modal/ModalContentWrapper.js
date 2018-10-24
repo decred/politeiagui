@@ -9,10 +9,11 @@ const CancelButton = ({ onClick, text }) => (
   </button>
 );
 
-const SubmitButton = ({ onClick, text }) => (
+const SubmitButton = ({ onClick, text, disabled }) => (
   <button
-    className="btn"
+    className={`btn ${disabled ? "not-active disabled" : ""}`}
     onClick={onClick}
+    disabled={disabled}
   >
     {text}
   </button>
@@ -22,6 +23,7 @@ const ModalContentWrapper = ({
   onClose,
   onCancel,
   onSubmit,
+  submitDisabled = false,
   title,
   submitText = "OK",
   cancelText = "Cancel",
@@ -39,7 +41,7 @@ const ModalContentWrapper = ({
       {children}
       {(onCancel || onSubmit) && <div className="modal-content-actions">
         {onCancel && <CancelButton onClick={onCancel} text={cancelText} />}
-        {onSubmit && <SubmitButton onClick={onSubmit} text={submitText} />}
+        {onSubmit && <SubmitButton onClick={onSubmit} text={submitText} disabled={submitDisabled} />}
       </div>}
     </div>
   );
