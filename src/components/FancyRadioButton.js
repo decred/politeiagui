@@ -23,7 +23,7 @@ const FancyRadioButton = ({ options, value, onChange, style = {} }) => {
 // validateOption make sure every supplied option has the key "value" in it
 const validateOption = (propValue, key, componentName, location, propFullName) => {
   if (!propValue[key].hasOwnProperty("value")) {
-    return new Error(`Invalid prop ${propFullName} suplied to ${componentName}`);
+    return new Error(`Invalid prop ${propFullName} passed to ${componentName}`);
   }
 };
 
