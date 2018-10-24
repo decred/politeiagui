@@ -3,6 +3,10 @@
   text-transform: none !important;
 }
 
+.download-link:hover {
+  text-decoration: unset;
+}
+
 .submit-page #header-bottom-left,
 #header-bottom-left {
   height: 72px;
