@@ -86,11 +86,8 @@ const ThingLinkComp = ({
   const userCanRevokeVote = currentUserIsTheAuthor && voteStatus === PROPOSAL_VOTING_AUTHORIZED;
   const adminCanStartTheVote = isAdmin && voteStatus === PROPOSAL_VOTING_AUTHORIZED && ((authorid !== userid) || isTestnet);
   const enableAdminActionsForUnvetted = isAdmin && isUnvetted && ((authorid !== userid) || isTestnet);
-  const hasAuthoredComment = () => {
-    for (const c of comments) {
-      if (c.userid === userId) return true;
-    }
-    return false;
+  const hasComment = () => {
+    return comments.length > 0;
   };
 
   // errors
@@ -249,7 +246,7 @@ const ThingLinkComp = ({
                 </p>
               </span>
             </Message>
-          ) : hasAuthoredComment() ? (
+          ) : hasComment() ? (
             <div>
               <div style={{ marginTop: "15px", marginBottom: "15px" }}>
                 <DownloadBundle type="proposal" />
