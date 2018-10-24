@@ -190,6 +190,11 @@ export const email = or(
 export const loggedInAsEmail = or(
   compose(get("email"), apiMeResponse)
 );
+
+export const lastLoginTime = or(
+  compose(get("lastlogintime"), apiMeResponse)
+);
+
 export const loggedInAsUsername = or(
   compose(get("username"), apiChangeUsernameResponse),
   compose(get("username"), apiMeResponse)

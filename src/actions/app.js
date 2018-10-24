@@ -49,6 +49,10 @@ export const onLoadDraftProposals = (email) => {
   return act.LOAD_DRAFT_PROPOSALS(drafts);
 };
 
+export const onVisitedProposal = (proposalId) => {
+  return act.SAVE_VISITED_PROPOSAL({ [proposalId]: Date.now() / 1000 });
+};
+
 export const onDeleteDraftProposal = (draftId) =>
   act.DELETE_DRAFT_PROPOSAL(draftId);
 
@@ -77,6 +81,8 @@ export const onFetchProposal = (token) => (dispatch, getState) =>
 export const onLoadMe = me => dispatch => {
   dispatch(act.LOAD_ME(me));
 };
+
+
 
 export const onResetPaywallInfo = () => act.RESET_PAYWALL_INFO();
 export const onChangeAdminFilter = (option) => act.CHANGE_ADMIN_FILTER_VALUE(option);

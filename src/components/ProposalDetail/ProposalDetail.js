@@ -26,6 +26,7 @@ class ProposalDetail extends React.Component {
   }
   componentWillUnmount() {
     this.props.resetLastSubmittedProposal();
+    this.props.onVisitedProposal(this.props.token);
   }
   handleUpdateOfComments = (currentProps, nextProps) => {
     let sortedComments;

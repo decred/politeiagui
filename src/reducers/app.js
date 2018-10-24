@@ -39,6 +39,15 @@ const app = (state = DEFAULT_STATE, action) => (({
       [action.payload.censorshiprecord.token]: action.payload
     }
   }),
+  [act.SAVE_VISITED_PROPOSAL]: () => {
+    const visitedProposals = state.visitedProposals;
+    return { ...state,
+      visitedProposals: {
+        ...visitedProposals,
+        ...action.payload
+      }
+    };
+  },
   [act.SAVE_DRAFT_PROPOSAL]: () => {
     const newDraftProposals = state.draftProposals;
     const draftId = action.payload.draftId || uniqueID("draft");

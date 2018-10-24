@@ -199,7 +199,8 @@ export const status = () => GET("/v1/proposals/stats").then(getResponse);
 export const proposal = token => GET(`/v1/proposals/${token}`).then(getResponse);
 export const user = userId => GET(`/v1/user/${userId}`).then(getResponse);
 export const proposalComments = token => GET(`/v1/proposals/${token}/comments`).then(getResponse);
-export const logout = csrf => POST("/logout", csrf, {}).then(() => {
+export const logout = csrf => POST("/logout", csrf, {}).then((response) => {
+  console.log("RESPONSE", response);
   localStorage.removeItem("state");
   return ({});
 });

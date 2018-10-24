@@ -54,6 +54,10 @@ export const proposalCredits = state => state.app.proposalCredits;
 
 export const getLastSubmittedProposal = state => state.app.submittedProposals.lastSubmitted;
 export const newProposalInitialValues = state => state.app.draftProposals.initialValues || {};
+export const visitedProposalById = state => {
+  const proposalId = window.location.pathname.split("/")[2];
+  return (state && state.app && state.app.visitedProposals && state.app.visitedProposals[proposalId]) || null;
+};
 export const draftProposals = state => state && state.app && state.app.draftProposals;
 export const draftProposalById = state => {
   const drafts = draftProposals(state);

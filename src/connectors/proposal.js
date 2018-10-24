@@ -32,7 +32,8 @@ const proposalConnector = connect(
     onFetchProposalVoteStatus: act.onFetchProposalVoteStatus,
     onFetchLikedComments: act.onFetchLikedComments,
     onSetCommentsSortOption: act.onSetCommentsSortOption,
-    resetLastSubmittedProposal: act.resetLastSubmittedProposal
+    resetLastSubmittedProposal: act.resetLastSubmittedProposal,
+    onVisitedProposal: act.onVisitedProposal
   }, dispatch)
 );
 

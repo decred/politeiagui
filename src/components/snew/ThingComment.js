@@ -35,6 +35,7 @@ class ThingComment extends React.PureComponent {
   }
   componentDidMount(){
     this.handleCommentMaxHeight();
+    console.log("LastVisit", this.props);
   }
   toggleCommentForm = (e, forceValue = null) => {
     e && e.preventDefault && e.preventDefault();
@@ -52,6 +53,8 @@ class ThingComment extends React.PureComponent {
       getVoteStatus,
       likeCommentError,
       likeCommentPayload,
+      userAccessTime,
+      lastVisit,
       ...props
     } = this.props;
     const { showCommentForm } = this.state;
@@ -77,6 +80,7 @@ class ThingComment extends React.PureComponent {
           onCloseCommentForm: this.onCloseCommentForm,
           showCommentForm,
           user: loggedInAsEmail,
+          userAccessTime: lastVisit ? lastVisit : userAccessTime,
           authorHref: `/user/${props.authorid}`,
           blockvote: keyMismatch || (getVoteStatus(token).status === PROPOSAL_VOTING_FINISHED),
           handleVote: onLikeComment,
