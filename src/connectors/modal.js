@@ -6,6 +6,7 @@ import { confirmWithModal } from "../actions/modal";
 
 export default connect(
   sel.selectorMap({
+    isTestnet: sel.isTestNet
   }),
   dispatch => bindActionCreators({
     closeModal: act.closeModal,
