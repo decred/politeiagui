@@ -163,9 +163,20 @@ const api = (state = DEFAULT_STATE, action) => (({
   [act.RESET_RESCAN_USER_PAYMENTS]: () => reset("rescanUserPayments", state, action),
   [act.RECEIVE_LOGOUT]: () => {
     if (!action.error) {
-      const tempState = DEFAULT_STATE;
-      tempState.init = state.init;
-      return tempState;
+      return ({
+        ...state,
+        me: DEFAULT_REQUEST_STATE,
+        logout: DEFAULT_REQUEST_STATE,
+        login: DEFAULT_REQUEST_STATE,
+        init: DEFAULT_REQUEST_STATE,
+        policy: DEFAULT_REQUEST_STATE,
+        verifyNewUser: DEFAULT_REQUEST_STATE,
+        passwordReset: DEFAULT_REQUEST_STATE,
+        changePassword: DEFAULT_REQUEST_STATE,
+        verifyUserKey: DEFAULT_REQUEST_STATE,
+        proposalPaywallPayment: DEFAULT_REQUEST_STATE,
+        rescanUserPayments: DEFAULT_REQUEST_STATE
+      });
     }
     return {
       ...state,
