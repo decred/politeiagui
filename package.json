@@ -46,6 +46,7 @@
     "start": "cross-env HTTPS=true react-scripts start",
     "uidev": "concurrently \"node mockapi.js\" \"react-scripts start\"",
     "build": "react-scripts build",
+    "build-staging": "REACT_APP_STAGING=true react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "./node_modules/.bin/eslint src",

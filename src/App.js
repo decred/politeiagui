@@ -94,10 +94,9 @@ class Loader extends Component {
 
 const LoaderComponent = withRouter(loaderConnector(Loader));
 
-const StagingAlert = () => process.env.NODE_ENV === "staging" ?
+const StagingAlert = () => process.env.REACT_APP_STAGING  ?
   <div className="staging-alert">
-    This is the staging environment for Politeia.
-    This is meant only for testing purposes in a near-production context.
+    This is the politeia staging environment. DO NOT USE, YOU WILL LOSE YOUR DECRED.
   </div> : null;
 
 const HeaderAlertComponent = withRouter(
