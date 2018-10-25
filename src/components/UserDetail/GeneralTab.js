@@ -140,6 +140,7 @@ class GeneralTab extends React.Component {
   componentWillUnmount() {
     this.unmounting = true;
     this.props.onIdentityImported(null);
+    this.props.onResetRescan();
   }
 
   componentDidUpdate(prevProps) {
