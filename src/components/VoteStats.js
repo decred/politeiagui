@@ -3,6 +3,7 @@ import voteStatsConnector from "../connectors/voteStats";
 import StackedBarChart from "./StackedBarChart";
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 import { getRandomColor } from "../helpers";
+import Tooltip from "./Tooltip";
 import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_FINISHED,
@@ -34,7 +35,7 @@ const VoteStatusLabel = ({ status }) => {
     [PROPOSAL_VOTING_FINISHED]: (
       <span style={{
         ...spanStyle,
-        color: "#bf4153"
+        color: "#091440"
       }}>
         {mapVoteStatusToMessage[status]}
       </span>
@@ -42,7 +43,7 @@ const VoteStatusLabel = ({ status }) => {
     [PROPOSAL_VOTING_NOT_AUTHORIZED]: (
       <span style={{
         ...spanStyle,
-        color: "#586D82"
+        color: "#8997a5"
       }}>
         {mapVoteStatusToMessage[status]}
       </span>
@@ -50,7 +51,7 @@ const VoteStatusLabel = ({ status }) => {
     [PROPOSAL_VOTING_AUTHORIZED]: (
       <span style={{
         ...spanStyle,
-        color: "rgb(202, 184, 42)"
+        color: "#FFC84E"
       }}>
         {mapVoteStatusToMessage[status]}
       </span>
@@ -74,8 +75,8 @@ class Stats extends React.Component {
     }
   }
   canShowStats = (status, totalVotes) =>
-    (status === PROPOSAL_VOTING_ACTIVE || status === PROPOSAL_VOTING_FINISHED) &&
-    totalVotes > 0
+    (status === PROPOSAL_VOTING_ACTIVE || status === PROPOSAL_VOTING_FINISHED) && totalVotes > 0;
+
   transformOptionsResult = (totalVotes, optionsResult = []) =>
     optionsResult
       .map(({ option, votesreceived }) => ({
@@ -92,14 +93,37 @@ class Stats extends React.Component {
     };
     const optionIdStyle = {
       textTransform: "uppercase",
-      fontWeight: "bold",
+      fontWeight: "semibold",
       marginRight: "4px"
     };
     return (
-      <div key={`option-${option.id}`} style={optionStyle} >
-        <span style={optionIdStyle} >{`${option.id}:`}</span>
-        <span>{`${option.votesReceived} votes    `}</span>
-      </div>
+      <span key={`option-${option.id}`} style={optionStyle} >
+        { option.id === "yes" ?
+          (
+            <Tooltip
+              tipStyle={{ fontSize: "11px", top: "20px", left: "20px", width: "36px" }}
+              text="Yes"
+              position="bottom"
+            >
+              <span>
+                <span style={optionIdStyle} >{` ✔ ${option.votesReceived}`}</span>
+              </span>
+            </Tooltip>
+          ) :
+          (
+            <Tooltip
+              tipStyle={{ fontSize: "11px", top: "20px", left: "20px", width: "29px" }}
+              text="No"
+              position="bottom"
+            >
+              <span style={{ marginRight: "25px" }}>
+                <span style={optionIdStyle} >{` ✖ ${option.votesReceived}`}</span>
+              </span>
+            </Tooltip>
+          )
+        }
+
+      </span>
     );
   };
   getChartData = (options) =>
@@ -107,21 +131,29 @@ class Stats extends React.Component {
       label: op.id,
       value: op.percentage,
       color: op.color
-    }))
+    }));
 
-  getTimeInBlocks = (blocks) => {
-    const blockTimeMinutes = this.props.isTestnet ? blocks*2 : blocks*5;
+  getTimeInBlocks = (endHeight, currentHeight) => {
+    const blocks = endHeight - currentHeight;
+    const blockTimeMinutes = NETWORK === "testnet" ? blocks*2 : blocks*5 ;
     const mili = blockTimeMinutes * 60000;
     const dateMs = new Date(mili + Date.now()); // gets time in ms
     const distance = distanceInWordsToNow(
       dateMs,
       { addSuffix: true }
     );
-    const element =
-    <span>
-      expires {distance}
-    </span>
-    ;
+    const element = (
+      <Tooltip
+        tipStyle={{ fontSize: "11px", top: "20px", left: "20px", width: "90px" }}
+        text={"Voting ends at block #"+endHeight}
+        position="bottom"
+      >
+        <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
+          <span>{blocks === 0 ? "last block left" : blocks + " blocks left"}</span>
+          <span style={{ fontSize: "11px" }}>expires {distance}</span>
+        </div>
+      </Tooltip>
+    );
     return blockTimeMinutes > 0 ? element : <span>expired</span>;
   };
   renderOptionsStats = (totalVotes, optionsResult, endHeight, currentHeight) => {
@@ -139,34 +171,27 @@ class Stats extends React.Component {
       color: "gray"
     };
 
-    const bodyStyle = { marginTop: "5px" };
+    const bodyStyle = { marginTop: "10px" };
     return (
-      <div>
-        <div
-          style={headerStyle}
-        >
+      <div >
+        <div style={headerStyle}>
           <VoteStatusLabel status={status} />
-          {endHeight && currentHeight ? this.getTimeInBlocks(endHeight - currentHeight) : null}
+          {showStats && <span style={{ marginLeft: "20px" }}>Votes: </span>}
+          {!isPreVoting && !showStats ?
+            (<div style={detailStyle}><p>zero votes</p></div>)
+            : null }
           {showStats && options.map(op => this.renderStats(op))}
+          {endHeight && currentHeight ? this.getTimeInBlocks(endHeight, currentHeight) : null}
+
         </div>
         {showStats ?
-          <StackedBarChart
-            displayValuesForLabel="yes"
-            style={{ ...bodyStyle, maxWidth: "400px" }}
-            data={this.getChartData(options)}
-          /> :
-          !isPreVoting ?
-            <div
-              style={bodyStyle}
-            >
-              <div
-                style={detailStyle}
-              >
-                {currentHeight && endHeight ? <p>Voting {endHeight > currentHeight ? "ends" : "ended"} at block #{endHeight}</p> : null}
-              </div>
-              This proposal has not received any votes
-            </div>
-            : null
+          <div style={bodyStyle}>
+            <StackedBarChart
+              displayValuesForLabel="yes"
+              style={{ ...bodyStyle, maxWidth: "500px" }}
+              data={this.getChartData(options)}
+            />
+          </div> : null
         }
       </div>
     );
@@ -188,8 +213,9 @@ class VoteStats extends React.Component {
       border: "1px solid #bbb",
       marginTop: "10px",
       borderRadius: "8px",
-      maxWidth: "400px"
+      width: "500px"
     };
+
     return(
       <div style={wrapperStyle}>
         <Stats
