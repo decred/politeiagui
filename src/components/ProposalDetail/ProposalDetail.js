@@ -106,6 +106,9 @@ class ProposalDetail extends React.Component {
       ...props
     } = this.props;
     const comments = this.state.sortedComments;
+    const permalinkComments = comments.filter(comment =>
+      ((comment.commentid === this.props.match.params.commentid) || comment.parentid === this.props.match.params.commentid));
+    const isNotPermalink = this.props.match.path !== "/proposals/:token/comments/:commentid";
     return (
       <div className="content" role="main">
         <div className="page proposal-page">
@@ -132,7 +135,7 @@ class ProposalDetail extends React.Component {
                     }
                   }]
                 },
-                { allChildren: commentsToT1(comments) }
+                { allChildren: commentsToT1(isNotPermalink ? comments : permalinkComments ) }
               ],
               ...props
             }} />

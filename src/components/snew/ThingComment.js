@@ -66,22 +66,29 @@ class ThingComment extends React.PureComponent {
             body={likeCommentError}
           />
         }
-        <BaseComment {...{
-          ...props,
-          showCensorLink: !!props.isAdmin && !props.censored,
-          showArrows: !props.censored,
-          grayBody: props.censored,
-          showReply: !props.censored,
-          onShowReply: this.toggleCommentForm,
-          onCensorComment: this.handleCommentCensor,
-          onCloseCommentForm: this.onCloseCommentForm,
-          showCommentForm,
-          user: loggedInAsEmail,
-          authorHref: `/user/${props.authorid}`,
-          blockvote: keyMismatch || (getVoteStatus(token).status === PROPOSAL_VOTING_FINISHED),
-          handleVote: onLikeComment,
-          token
-        }} />
+        <div>
+          {this.props.match.params.commentid === props.id ? <h2 style={{ width: "50%", fontSize: "1.2em", margin: ".8em", background: "#e5efff" }}
+          >You are viewing a single comment's thread. View the
+            <a style={{ color: "#2971FF" }}className="linkish" href={`/proposals/${token}`}> rest here</a></h2> : null}
+          <BaseComment {...{
+            ...props,
+            showCensorLink: !!props.isAdmin && !props.censored,
+            showArrows: !props.censored,
+            grayBody: props.censored,
+            showReply: !props.censored,
+            onShowReply: this.toggleCommentForm,
+            onCensorComment: this.handleCommentCensor,
+            onCloseCommentForm: this.onCloseCommentForm,
+            showCommentForm,
+            user: loggedInAsEmail,
+            authorHref: `/user/${props.authorid}`,
+            blockvote: keyMismatch || (getVoteStatus(token).status === PROPOSAL_VOTING_FINISHED),
+            handleVote: onLikeComment,
+            showPermalink: true,
+            permalink: `/proposals/${token}/comments/${props.id}`,
+            token
+          }} />
+        </div>
       </div>
     );
   }
