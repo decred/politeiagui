@@ -7,9 +7,10 @@ const exportData = (data) => {
   data = data.filter(d => !d.confirming)
     .map(d => ({
       ...d,
-      datePurchased: formatDate(d.datePurchased)
+      datePurchased: d.datePurchased ? formatDate(d.datePurchased) : "",
+      price: d.type === "fee" ? "" : d.price
     }));
-  const fields = [ "numberPurchased", "price", "txId", "datePurchased" ];
+  const fields = [ "numberPurchased", "price", "txId", "datePurchased", "type" ];
   exportToCsv(data, fields);
 };
 
@@ -89,7 +90,7 @@ const ProposalCreditsSummary = ({
                     creditPurchase.datePurchased ?
                       creditPurchase.datePurchased === "just now" ? "just now" :
                         formatDate(creditPurchase.datePurchased)
-                      : ""
+                      : "-"
                   }
                 </div>
                 <div className="credit-purchase-cell credit-purchase-type">
