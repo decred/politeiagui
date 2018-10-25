@@ -226,12 +226,13 @@ export const exportToCsv = (data, fields) => {
 };
 
 export const formatDate = (date) => {
+  const twoChars = (v) => v < 10 ? `0${v}` : v;
   const d = new Date(date * 1000);
-  const day = d.getUTCDate();
   const year = d.getUTCFullYear();
-  const month = d.getUTCMonth();
-  const _minutes = d.getUTCMinutes();
-  const minutes = _minutes < 10 ? `0${_minutes}` : _minutes;
-  const time = d.getUTCHours() + ":" + minutes;
-  return year + "-" + month + "-" + day + "  |  " + time;
+  const month = twoChars(d.getUTCMonth());
+  const day= twoChars(d.getUTCDate());
+  const hours = twoChars(d.getUTCHours());
+  const minutes = twoChars(d.getUTCMinutes());
+  const seconds = twoChars(d.getUTCSeconds());
+  return `${year}-${month}-${day}-${hours}:${minutes}:${seconds}`;
 };
