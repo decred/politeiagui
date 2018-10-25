@@ -94,6 +94,12 @@ class Loader extends Component {
 
 const LoaderComponent = withRouter(loaderConnector(Loader));
 
+const StagingAlert = () => process.env.NODE_ENV === "staging" ?
+  <div className="staging-alert">
+    This is the staging environment for Politeia.
+    This is meant only for testing purposes in a near-production context.
+  </div> : null;
+
 const HeaderAlertComponent = withRouter(
   loaderConnector(
     ({ location, loggedInAsEmail, keyMismatch, history, loggedInAsUserId }) => {
@@ -123,6 +129,7 @@ export default class App extends Component {
       <Provider store={store}>
         <Router>
           <LoaderComponent>
+            <StagingAlert />
             <SessionExpiresIndicator />
             <HeaderAlertComponent />
             <Subreddit>
