@@ -5,7 +5,7 @@ import rootReducer from "./reducers";
 import { loadStateLocalStorage } from "./lib/local_storage";
 
 const configureStore = preloadedState => {
-  if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging") {
+  if (process.env.NODE_ENV === "production") {
     return createStore(
       rootReducer,
       {
