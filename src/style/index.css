@@ -1712,3 +1712,15 @@ form div.usertext-body.may-blank-within.md-container {
   background: #0079d3;
   color: white;
 }
+
+.staging-alert {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 1px;
+  font-weight: bold;
+  background: #bf4153;
+  color: white;
+  z-index: 99999;
+  text-align: center;
+}
