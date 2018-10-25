@@ -77,6 +77,7 @@ const ThingLinkComp = ({
 }) => {
   const voteStatus = getVoteStatus(id) && getVoteStatus(id).status;
   const isUnvetted = review_status === PROPOSAL_STATUS_UNREVIEWED || review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES;
+  const isVetted = review_status === PROPOSAL_STATUS_PUBLIC;
   const displayVersion = review_status === PROPOSAL_STATUS_PUBLIC;
   const isVotingActiveOrFinished = voteStatus === PROPOSAL_VOTING_ACTIVE || voteStatus === PROPOSAL_VOTING_FINISHED;
   const isEditable = authorid === userId && !isVotingActiveOrFinished && review_status !== PROPOSAL_STATUS_CENSORED && voteStatus !== PROPOSAL_VOTING_AUTHORIZED;
@@ -380,7 +381,7 @@ const ThingLinkComp = ({
               permalink
             </Link>
           </li>
-          <Tooltip
+          {isVetted ? <Tooltip
             wrapperStyle={{ width: "100%", textAlign: "right", padding: "5px" }}
             text="Check this proposal’s content on our GitHub repository. There you can find proposal's metadata and its comments journals."
             position="top"
@@ -397,7 +398,7 @@ const ThingLinkComp = ({
                 See on GitHub
               </a>
             </li>
-          </Tooltip>
+          </Tooltip> : null}
         </ul>
         {allErrors.map((error, idx) => error ?
           <Message
