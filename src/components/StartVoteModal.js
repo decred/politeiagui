@@ -12,9 +12,9 @@ const getDurationOptions = (isTesnet) => {
   }));
 };
 
-const MIN_QUORUM = 50;
+const MIN_QUORUM = 20;
 const MAX_QUORUM = 100;
-const MIN_PASS = 10;
+const MIN_PASS = 60;
 const MAX_PASS = 100;
 
 class StartVoteModal extends React.Component {
@@ -22,8 +22,8 @@ class StartVoteModal extends React.Component {
     super(props);
     this.state = {
       duration: preDefinedDurations[0],
-      quorumPercentage: 75,
-      passPercentage: 10,
+      quorumPercentage: 20,
+      passPercentage: 60,
       quorumError: "",
       passError: ""
     };
