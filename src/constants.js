@@ -1,6 +1,7 @@
-import packageJson from "../package.json";
+export const MAINNET = "mainnet";
+export const TESTNET = "testnet";
 
-export const NETWORK = packageJson.network;
+export const EXPLORER = "explorer";
 
 export const PROPOSAL_FILTER_ALL = 0;
 

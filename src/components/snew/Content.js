@@ -130,7 +130,7 @@ class Loader extends Component {
   componentDidUpdate() {
     const { csrf } = this.props;
     const { isFetched } = this.state;
-    const { getLastBlockHeight } = this.props;
+    const { getLastBlockHeight, isTestnet } = this.props;
     if (isFetched)
       return;
     else if (csrf) {
@@ -138,7 +138,7 @@ class Loader extends Component {
       this.props.onFetchData && this.props.onFetchData();
       this.props.onFetchStatus && this.props.onFetchStatus();
       this.props.onFetchProposalsVoteStatus && this.props.onFetchProposalsVoteStatus();
-      getLastBlockHeight && getLastBlockHeight();
+      getLastBlockHeight && getLastBlockHeight(isTestnet);
     }
   }
 

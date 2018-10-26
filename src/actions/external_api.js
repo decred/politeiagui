@@ -133,13 +133,13 @@ export const payWithFaucet = (address, amount) => dispatch => {
     });
 };
 
-export const getLastBlockHeight = () => (dispatch) => {
+export const getLastBlockHeight = (isTestnet) => (dispatch) => {
   dispatch(act.REQUEST_GET_LAST_BLOCK_HEIGHT());
   // try with dcrData if fail we try with insight api
-  external_api.getHeightByDcrdata().then(response => {
+  external_api.getHeightByDcrdata(isTestnet).then(response => {
     return dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(response));
   }).catch(() => {
-    external_api.getHeightByInsight().then(response => {
+    external_api.getHeightByInsight(isTestnet).then(response => {
       return dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(response.info.blocks));
     }).catch(() => {
       return dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(null));
