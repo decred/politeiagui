@@ -135,7 +135,7 @@ class Stats extends React.Component {
 
   getTimeInBlocks = (endHeight, currentHeight) => {
     const blocks = endHeight - currentHeight;
-    const blockTimeMinutes = NETWORK === "testnet" ? blocks*2 : blocks*5 ;
+    const blockTimeMinutes = this.props.isTestnet ? blocks*2 : blocks*5 ;
     const mili = blockTimeMinutes * 60000;
     const dateMs = new Date(mili + Date.now()); // gets time in ms
     const distance = distanceInWordsToNow(
