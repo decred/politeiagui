@@ -110,7 +110,6 @@ class Stats extends React.Component {
     }))
 
   getTimeInBlocks = (blocks) => {
-    console.log("is testnet", this.props.isTestnet);
     const blockTimeMinutes = this.props.isTestnet ? blocks*2 : blocks*5;
     const mili = blockTimeMinutes * 60000;
     const dateMs = new Date(mili + Date.now()); // gets time in ms

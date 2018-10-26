@@ -48,7 +48,6 @@ class SessionExpiresIndicator extends React.Component {
       onLogout(
         () => history.push("/user/logout")
       );
-      console.log("ma location", location);
       openModal(modalTypes.LOGIN, {
         title: "Your session has expired. Please log in again.",
         redirectAfterLogin: location.pathname
