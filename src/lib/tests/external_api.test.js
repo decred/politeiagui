@@ -17,7 +17,7 @@ describe("test external api lib (lib/api.js)", () => {
     await assertGETOnRouteIsCalled(
       `${dcrdataTestnetUrl}/block/best/height`,
       ea.getHeightByDcrdata,
-      []
+      [true]
     );
     // console.log(fetchMock.spy());
     await assertGETOnRouteIsCalled(
@@ -31,7 +31,7 @@ describe("test external api lib (lib/api.js)", () => {
     await assertGETOnRouteIsCalled(
       `${insightTestnetUrl}/status`,
       ea.getHeightByInsight,
-      []
+      [true]
     );
     await assertGETOnRouteIsCalled(
       `${insightMainnetUrl}/status`,

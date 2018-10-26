@@ -7,8 +7,7 @@ import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_VOTING_NOT_AUTHORIZED,
-  PROPOSAL_VOTING_AUTHORIZED,
-  NETWORK
+  PROPOSAL_VOTING_AUTHORIZED
 } from "../constants";
 
 
@@ -111,7 +110,8 @@ class Stats extends React.Component {
     }))
 
   getTimeInBlocks = (blocks) => {
-    const blockTimeMinutes = NETWORK === "testnet" ? blocks*2 : blocks*5 ;
+    console.log("is testnet", this.props.isTestnet);
+    const blockTimeMinutes = this.props.isTestnet ? blocks*2 : blocks*5;
     const mili = blockTimeMinutes * 60000;
     const dateMs = new Date(mili + Date.now()); // gets time in ms
     const distance = distanceInWordsToNow(
@@ -180,7 +180,7 @@ class Stats extends React.Component {
 
 class VoteStats extends React.Component {
   render() {
-    const { token, getVoteStatus, lastBlockHeight } = this.props;
+    const { token, getVoteStatus, lastBlockHeight, ...props } = this.props;
     const { optionsresult, status, totalvotes, endheight } = getVoteStatus(token);
     const wrapperStyle = {
       display: "flex",
@@ -193,7 +193,14 @@ class VoteStats extends React.Component {
     };
     return(
       <div style={wrapperStyle}>
-        <Stats status={status} optionsResult={optionsresult} totalVotes={totalvotes} endHeight={endheight} currentHeight={lastBlockHeight}/>
+        <Stats
+          status={status}
+          optionsResult={optionsresult}
+          totalVotes={totalvotes}
+          endHeight={endheight}
+          currentHeight={lastBlockHeight}
+          { ...props }
+        />
       </div>
     );
   }
