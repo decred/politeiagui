@@ -103,6 +103,7 @@ class ProposalDetail extends React.Component {
       markdownFile,
       otherFiles,
       onFetchData,
+      commentid,
       ...props
     } = this.props;
     const comments = this.state.sortedComments;
@@ -118,6 +119,8 @@ class ProposalDetail extends React.Component {
             <Content  {...{
               isLoading,
               error,
+              commentid,
+              comments,
               bodyClassName: "single-page comments-page",
               onFetchData: () => onFetchData(token),
               listings: isLoading ? [] : [

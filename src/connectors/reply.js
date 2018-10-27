@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import * as act from "../actions";
 import * as sel from "../selectors";
+import get from "lodash/fp/get";
+import { arg } from "../lib/fp";
 import compose from "lodash/fp/compose";
 import { withRouter } from "react-router-dom";
 import validate from "../validators/reply";
@@ -8,6 +10,11 @@ import { connect } from "react-redux";
 
 const replyConnector = connect(
   sel.selectorMap({
+    commentid: compose(
+      t => t ? t.toLowerCase() : t,
+      get([ "match", "params", "commentid" ]),
+      arg(1)
+    ),
     token: sel.proposalToken,
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,

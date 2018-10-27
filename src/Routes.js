@@ -9,6 +9,7 @@ import unreviewed from "./connectors/unreviewedProposals";
 import admin from "./connectors/admin";
 import newProposal from "./connectors/newProposal";
 import editProposal from "./connectors/editProposal";
+import singleComment from "./connectors/singleComment";
 
 import Logout from "./components/LogoutPage";
 import UserLookup from "./components/UserLookupPage";
@@ -56,7 +57,8 @@ class Routes extends Component {
         <AdminAuthenticatedRoute path="/admin" component={admin(ProposalListing)} exact />
         <AdminAuthenticatedRoute path="/admin/users" component={UserLookup} />
         <Route path="/user/:userId" component={userDetail(UserDetail)} />
-        <Route path="/proposals/:token" component={proposalDetail(ProposalDetail)} />
+        <Route path="/proposals/:token" component={proposalDetail(ProposalDetail)} exact />
+        <Route path="/proposals/:token/comments/:commentid" component={singleComment(ProposalDetail)} />
         <Route path="/500" component={ErrorPage} />
         <Route path="*" component={NotFound} />
       </Switch>

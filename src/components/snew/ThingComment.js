@@ -11,6 +11,10 @@ class ThingComment extends React.PureComponent {
       showCommentForm: false
     };
   }
+  handlePermalinkClick = (e) => {
+    e && e.preventDefault && e.preventDefault();
+    this.props.history.push(`/proposals/${this.props.token}/comments/${this.props.id}`);
+  }
   handleCommentCensor = (e) => {
     e && e.preventDefault && e.preventDefault();
     this.props.onCensorComment(this.props.loggedInAsEmail, this.props.token, this.props.id);
@@ -52,6 +56,7 @@ class ThingComment extends React.PureComponent {
       getVoteStatus,
       likeCommentError,
       likeCommentPayload,
+      commentid,
       ...props
     } = this.props;
     const { showCommentForm } = this.state;
@@ -71,6 +76,7 @@ class ThingComment extends React.PureComponent {
           showCensorLink: !!props.isAdmin && !props.censored,
           showArrows: !props.censored,
           grayBody: props.censored,
+          highlightcomment: commentid === props.id,
           showReply: !props.censored,
           onShowReply: this.toggleCommentForm,
           onCensorComment: this.handleCommentCensor,
