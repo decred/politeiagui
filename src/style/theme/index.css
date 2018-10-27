@@ -449,7 +449,10 @@ button.disabled {
 .commentarea .panestack-title {
     margin: 16px 0 0;
     border-bottom: 0;
-    padding-left: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
 }
 .commentarea .panestack-title .title {
     color: #4D5763;
