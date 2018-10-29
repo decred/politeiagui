@@ -388,7 +388,7 @@ const ThingLinkComp = ({
           >
             <li>
               <a
-                href={isTestnet ? `https://github.com/decred-proposals/testnet3/tree/master/${id}/1` : `https://github.com/decred-proposals/mainnet/tree/master/${id}/1`}
+                href={isTestnet ? `https://github.com/decred-proposals/testnet3/tree/master/${id}/` : `https://github.com/decred-proposals/mainnet/tree/master/${id}/`}
                 target="_blank"
                 className="blue-link"
                 rel="noopener noreferrer"
