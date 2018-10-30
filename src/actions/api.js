@@ -142,17 +142,25 @@ export const onLogin = ({ email, password }) =>
       });
   });
 
+// handleLogout handles all the procedure to be done once the user is logged out
+// it can be called either when the logout request has been successful or when the
+// session has already expired
+export const handleLogout = (response, cb) =>
+  dispatch => {
+    dispatch(act.RECEIVE_LOGOUT(response));
+    clearStateLocalStorage();
+    external_api_actions.clearPollingPointer();
+    dispatch(onSetEmail(""));
+    if(cb) cb();
+  };
+
 export const onLogout = (cb) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_LOGOUT());
     return api
       .logout(csrf)
       .then(response => {
-        dispatch(act.RECEIVE_LOGOUT(response));
-        clearStateLocalStorage();
-        external_api_actions.clearPollingPointer();
-        dispatch(onSetEmail(""));
-        if(cb) cb();
+        dispatch(handleLogout(response, cb));
       })
       .catch(error => {
         dispatch(act.RECEIVE_LOGOUT(null, error));

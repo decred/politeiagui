@@ -168,8 +168,6 @@ const api = (state = DEFAULT_STATE, action) => (({
         me: DEFAULT_REQUEST_STATE,
         logout: DEFAULT_REQUEST_STATE,
         login: DEFAULT_REQUEST_STATE,
-        init: DEFAULT_REQUEST_STATE,
-        policy: DEFAULT_REQUEST_STATE,
         verifyNewUser: DEFAULT_REQUEST_STATE,
         passwordReset: DEFAULT_REQUEST_STATE,
         changePassword: DEFAULT_REQUEST_STATE,
