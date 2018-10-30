@@ -13,18 +13,21 @@ class SessionExpiresIndicator extends React.Component {
       activateInterval: false
     };
   }
+
+  getTimeLeft = (sessionMaxAge, lastLoginTime) =>
+    (lastLoginTime + sessionMaxAge) - Date.now()/1000;
+
   intervalProcedure = () => {
     let { timer } = this.state;
     const { sessionMaxAge, lastLoginTime } = this.props;
-    const expiration = lastLoginTime + sessionMaxAge;
-    const sessionTimeLeft = (expiration - Date.now()/1000);
+    const sessionTimeLeft = this.getTimeLeft(sessionMaxAge, lastLoginTime);
     const validSessionTimeLeft = !isNaN(sessionTimeLeft);
     const lessThan10MinutesLeft = sessionTimeLeft < 20;
 
     if (timer != null && validSessionTimeLeft) { // timer is running
       // decrease timer
       const newTimer = --timer;
-      return newTimer < 1 ?
+      return newTimer <= 0 ?
         this.setState({ activateInterval: false }) :
         this.setState({ timer: newTimer });
     }
@@ -38,21 +41,28 @@ class SessionExpiresIndicator extends React.Component {
   finishInterval = () => {
     const {
       loggedInAsEmail,
-      onLogout,
+      handleLogout,
       openModal,
       history,
       location
     } = this.props;
+
+    const redirectToLogoutPage = () => history.push("/user/logout");
+    const openSessionExpiredModal = () => openModal(modalTypes.LOGIN, {
+      title: "Your session has expired. Please log in again.",
+      redirectAfterLogin: location.pathname
+    }, null);
+
     this.setState({ timer: null });
-    if (loggedInAsEmail) {
-      onLogout(
-        () => history.push("/user/logout")
-      );
-      openModal(modalTypes.LOGIN, {
-        title: "Your session has expired. Please log in again.",
-        redirectAfterLogin: location.pathname
-      }, null);
+
+    // if user is logged in, perform the logout procedure
+    // there is no need to triger the logout request b/c the session has
+    // already expired
+    if(loggedInAsEmail) {
+      handleLogout({}, redirectToLogoutPage());
+      openSessionExpiredModal();
     }
+
   }
   componentDidUpdate(prevProps) {
     const { loggedInAsEmail } = this.props;

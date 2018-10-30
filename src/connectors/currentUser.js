@@ -18,6 +18,7 @@ const currentUserConnector = connect(
   }),
   dispatch => bindActionCreators({
     onLogout: act.onLogout,
+    handleLogout: act.handleLogout,
     openModal: act.openModal
   }, dispatch)
 );
