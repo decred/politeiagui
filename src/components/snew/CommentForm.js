@@ -21,61 +21,63 @@ const CommentForm = ({
   showContentPolicy = false,
   value,
   onChange,
-  onClose
+  onClose,
+  commentid
 }) => {
   const isVotingFinished = getVoteStatus(token) && getVoteStatus(token).status === PROPOSAL_VOTING_FINISHED;
-  return (loggedInAsEmail ? <React.Fragment>
-    <form className="usertext cloneable warn-on-unload" onSubmit={onSave}>
-      {error ? (
-        <Message
-          type="error"
-          header="Error creating comment"
-          body={error} />
-      ) : null}
-      <input name="parentid" type="hidden" defaultValue={thingId} />
-      <div className="usertext-edit md-container">
-        {isPostingComment && (<h2>Posting comment...</h2>)}
-        {!isPostingComment &&
+  return (loggedInAsEmail ?
+    <React.Fragment>
+      <form className="usertext cloneable warn-on-unload" style={commentid >= 0 ? { display: "none" } : {}} onSubmit={onSave}>
+        {error ? (
+          <Message
+            type="error"
+            header="Error creating comment"
+            body={error} />
+        ) : null}
+        <input name="parentid" type="hidden" defaultValue={thingId} />
+        <div className="usertext-edit md-container">
+          {isPostingComment && (<h2>Posting comment...</h2>)}
+          {!isPostingComment &&
           !isVotingFinished ? (
-            <div className="md">
-              <MarkdownEditorField
-                input={{
-                  value: value,
-                  onChange: onChange
-                }}
-                toggledStyle
-              />
-            </div>
-          ) :
-          isVotingFinished ?
-            <Message height="70px" type="info">
-              <span>
+              <div className="md">
+                <MarkdownEditorField
+                  input={{
+                    value: value,
+                    onChange: onChange
+                  }}
+                  toggledStyle
+                />
+              </div>
+            ) :
+            isVotingFinished ?
+              <Message height="70px" type="info">
+                <span>
                 Proposals which voting has finished can not receive further comments.
-              </span>
-            </Message>
-            :
-            null
-        }
-        {!isPostingComment && getVoteStatus(token) &&
+                </span>
+              </Message>
+              :
+              null
+          }
+          {!isPostingComment && getVoteStatus(token) &&
           !isVotingFinished ?
-          <div className="bottom-area">
-            <span className="help-toggle toggle">
-              <a
-                className="option active"
-                tabIndex={100}
-                style={{ cursor: "pointer" }}
-                onClick={e => {
-                  onToggleMarkdownHelp();
-                  e.preventDefault();
-                }}
-              >
+            <div className="bottom-area">
+              <span className="help-toggle toggle">
+                <a
+                  className="option active"
+                  tabIndex={100}
+                  style={{ cursor: "pointer" }}
+                  onClick={e => {
+                    onToggleMarkdownHelp();
+                    e.preventDefault();
+                  }}
+                >
                   formatting help
-              </a>
-              <a className="option">
+                </a>
+                <a className="option">
                   hide help
-              </a>
-            </span>
-            {showContentPolicy &&
+                </a>
+              </span>
+              {showContentPolicy &&
                 <Link
                   className="reddiquette"
                   href="/help/contentpolicy"
@@ -84,32 +86,32 @@ const CommentForm = ({
                 >
                   content policy
                 </Link>
-            }
-            <div className="usertext-buttons">
-              <button
-                className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                type="submit"
-                style={{ marginBottom: "5px" }}
-                disabled={!userCanExecuteActions}
-              >
+              }
+              <div className="usertext-buttons">
+                <button
+                  className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                  type="submit"
+                  style={{ marginBottom: "5px" }}
+                  disabled={!userCanExecuteActions}
+                >
                   save
-              </button>
-              {(onClose && (<button
-                className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
-                onClick={() => onClose()}
-                type="button"
-                disabled={!userCanExecuteActions}
-              >
+                </button>
+                {(onClose && (<button
+                  className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                  onClick={() => onClose()}
+                  type="button"
+                  disabled={!userCanExecuteActions}
+                >
                   cancel
-              </button>)) || null}
-            </div>
-          </div> : null}
-      </div>
-      {isShowingMarkdownHelp && (
-        <MarkdownHelp />
-      )}
-    </form>
-  </React.Fragment> : null);
+                </button>)) || null}
+              </div>
+            </div> : null}
+        </div>
+        {isShowingMarkdownHelp && (
+          <MarkdownHelp />
+        )}
+      </form>
+    </React.Fragment> : null);
 };
 
 export default replyConnector(CommentForm);
