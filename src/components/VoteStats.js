@@ -150,7 +150,7 @@ class Stats extends React.Component {
       >
         <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
           <span>{blocks === 0 ? "last block left" : blocks + " blocks left"}</span>
-          <span style={{ fontSize: "11px" }}>expires {distance}</span>
+          <span style={{ fontSize: "11px" }}>vote ends {distance}</span>
         </div>
       </Tooltip>
     );
