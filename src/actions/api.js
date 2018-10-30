@@ -239,6 +239,10 @@ export const onFetchProposal = token => dispatch => {
 
 export const onFetchUser = userId => dispatch => {
   dispatch(act.REQUEST_USER(userId));
+  const regexp = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  const valid = regexp.test(userId);
+  if (!valid)
+    return dispatch(act.RECEIVE_USER(null, "This is not a valid user ID."));
   return api
     .user(userId)
     .then(response => dispatch(act.RECEIVE_USER(response)))

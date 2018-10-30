@@ -871,14 +871,14 @@ describe("test api actions (actions/api.js)", () => {
   });
 
   test("on fetch user details action", async () => {
-    const USER_ID = 0;
+    const USER_ID = "6193b76b-4834-48c3-886e-f201af6dae7d";
     const path = `/api/v1/user/${USER_ID}`;
 
     //test it handles a successful response
     await assertApiActionOnSuccess(
       path,
       api.onFetchUser,
-      [USER_ID.toString()],
+      [USER_ID],
       [
         { type: act.REQUEST_USER },
         { type: act.RECEIVE_USER, error: false, payload: RANDOM_SUCCESS_RESPONSE }
