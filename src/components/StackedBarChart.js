@@ -1,4 +1,5 @@
 import React from "react";
+import Tooltip from "./Tooltip";
 
 const barStyle = {
   display: "flex",
@@ -20,6 +21,7 @@ const labelStyle = {
 };
 
 const wrapperStyle = {
+  position: "relative",
   display: "flex",
   width: "100%",
   height: "24px",
@@ -28,7 +30,32 @@ const wrapperStyle = {
   borderRadius: "8px",
   overflow: "hidden"
 };
-const StackedBarChart = ({ data, style, displayValuesForLabel }) => {
+
+const threesholdStyle = {
+  borderRight: "1px solid",
+  position: "absolute",
+  display: "flex",
+  justifyContent: "flex-end",
+  left: "0px",
+  fontSize: "11px",
+  fontWeight: "normal"
+};
+
+const threesholdTextStyle = {
+  position: "absolute",
+  right: "-30px",
+  borderRadius: "8px",
+  height: "20px",
+  width: "30px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  color: "green",
+  fontWeight: "bold",
+  fontSize: "12px"
+};
+
+const StackedBarChart = ({ data, style, displayValuesForLabel, threeshold }) => {
   const dataToDisplay = displayValuesForLabel &&
     data.filter(d => d.label === displayValuesForLabel)[0];
   const labelToDisplay = dataToDisplay && `${dataToDisplay.label}: ${dataToDisplay.value}%`;
@@ -46,17 +73,31 @@ const StackedBarChart = ({ data, style, displayValuesForLabel }) => {
         </span>
       }
       {
-        data.map((dr, idx) => (
+        data.filter(dr => dr.label === displayValuesForLabel).map((dr, idx) => (
           <span
             key={`data-${idx}`}
             style={{
               ...barStyle,
-              background: dr.color,
+              background: dr.value < threeshold ? "linear-gradient(90deg, #FFA07A 20%, #def9f7)" : "#def9f7",
               width: `${dr.value}%`
             }}
           >
           </span>
         ))
+      }
+      {threeshold ?
+        <span style={{
+          ...barStyle,
+          ...threesholdStyle,
+          width: `${threeshold}%`
+        }}>
+          <span
+            style={threesholdTextStyle}
+          >
+            <Tooltip
+              tipStyle={{ left: "24px", maxWidth: "105px", padding: "1px", fontWeight: "normal" }}
+              text="pass percentage" position="right">{threeshold}%</Tooltip></span>
+        </span> : null
       }
     </div>
   );

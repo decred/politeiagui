@@ -8,7 +8,7 @@ const Tooltip = ({
   children
 }) =>
   <div className="tooltip-wrapper" style={wrapperStyle}>
-    <div className={`tip tip-${position}`} style={tipStyle}>
+    <div className={`tip tip-${position}`} style={{ ...tipStyle, zIndex: "999" }}>
       {text}
     </div>
     {children}
