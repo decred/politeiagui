@@ -50,7 +50,6 @@ class ThingComment extends React.PureComponent {
       onCloseCommentForm,
       ...props
     } = this.props;
-    console.log("commentform", showCommentForm);
     return (
       <div>
         {likeCommentError && likeCommentPayload.token === token

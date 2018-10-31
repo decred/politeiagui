@@ -81,7 +81,6 @@ const getTree = ({ tree, comments }, commentid, tempThreadTree) => {
         };
       });
     }
-    console.log(newTree);
     return ({ tree: newTree, comments });
   }
   return({ tree, comments });

@@ -88,8 +88,7 @@ class Wrapper extends Component {
   }
 
   resetForm = () => {
-    console.log("to aqui tio");
-    this.setState({ commentValue: "", showCommentForm: false }, () => console.log(this.state));
+    this.setState({ commentValue: "", showCommentForm: false });
     this.props.onClose && this.props.onClose();
   }
 
