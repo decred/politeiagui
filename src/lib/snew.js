@@ -47,6 +47,7 @@ const getChildComments = ({ tree, comments }, parentid) => map(
   get(parentid || TOP_LEVEL_COMMENT_PARENTID, tree) || []
 );
 
+// get filtered thread tree if commentid exists, returns the existing tree if not
 const getTree = ({ tree, comments }, commentid) => {
   let newTree = {};
   if (commentid) {
@@ -77,6 +78,7 @@ const getTree = ({ tree, comments }, commentid) => {
 };
 
 
+// compose reduce and getTree, will return a {tree, comments} object
 export const buildCommentsTree = (comments, commentid) =>
   compose(
     (obj) => getTree(obj, commentid),

@@ -136,7 +136,7 @@ class ProposalDetail extends React.Component {
                     }
                   }]
                 },
-                { allChildren: commentsToT1(comments, commentid, this.state.permalinkComments) }
+                { allChildren: commentsToT1(comments, commentid) }
               ],
               ...props
             }} />
