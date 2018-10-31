@@ -172,7 +172,7 @@ When authoring a Politeia proposal, one must answer the following 5 questions:
 4. Who
 5. When
 
-Below we present two examples: a proposal for devleoping a software feature, and a proposal for a marketing initiative.
+Below we present two examples: a proposal for developing a software feature, and a proposal for a marketing initiative.
 
 ## Software Feature Example
 
