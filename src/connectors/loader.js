@@ -12,7 +12,8 @@ export default connect(
     loggedInAsUserId: sel.userid,
     userCanExecuteActions: sel.userCanExecuteActions,
     lastLoginTime: sel.lastLoginTimeFromLoginResponse,
-    onboardViewed: sel.onboardViewed
+    onboardViewed: sel.onboardViewed,
+    identityImportSuccess: sel.identityImportSuccess
   }),
   dispatch => bindActionCreators({
     onInit: act.requestApiInfo,

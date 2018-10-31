@@ -8,6 +8,7 @@ import {
   EDIT_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
   EDIT_USER_UNLOCK,
   PUB_KEY_STATUS_LOADED,
+  PUB_KEY_STATUS_LOADING,
   EDIT_USER_DEACTIVATE,
   EDIT_USER_REACTIVATE
 } from "../../constants";
@@ -98,7 +99,9 @@ class GeneralTab extends React.Component {
     this.identityHelpPrompt = "Manage Identity";
     this.state = {
       showIdentityHelpText: false,
-      openedVerification: false
+      openedVerification: false,
+      pubkey: "",
+      pubkeyStatus: PUB_KEY_STATUS_LOADING
 
     };
   }
@@ -138,6 +141,7 @@ class GeneralTab extends React.Component {
   }
 
   componentWillUnmount() {
+    verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey, this.props.keyMismatchAction);
     this.unmounting = true;
     this.props.onIdentityImported(null);
     this.props.onResetRescan();
@@ -240,111 +244,112 @@ class GeneralTab extends React.Component {
             /> : null}
           <FieldSeparator />
         </div>
-        <IdentityField identities={user.identities}>
-          {(isUserPageOwner) ?
-            <p>
-              {showIdentityHelpText && isUserPageOwner ? (
-                <div>
-                  <span style={{ fontWeight: "bold", maxWidth: "7em" }}>{this.identityHelpPrompt}</span>{" "}
-                  <a className="linkish" onClick={() => this.setState({ showIdentityHelpText: false })}>
+        {keyMismatch && !identityImportSuccess ?
+          <Field label="Active Identity"><div style={{ color: "red" }}>Identity Missing. Please see 'Manage Identity'</div></Field> :
+          <IdentityField identities={user.identities} />}
+        {(isUserPageOwner) ?
+          <div>
+            {showIdentityHelpText && isUserPageOwner ? (
+              <div>
+                <span style={{ fontWeight: "bold", maxWidth: "7em" }}>{this.identityHelpPrompt}</span>{" "}
+                <a className="linkish" onClick={() => this.setState({ showIdentityHelpText: false })}>
                 (hide)
-                  </a>
-                </div>
-              ) : (
-                <a className="linkish" style={{ maxWidth: "7em" }} onClick={() => this.setState({ showIdentityHelpText: true })}>
-                  {this.identityHelpPrompt}
                 </a>
-              )}
-            </p> : null }
-          {showIdentityHelpText && isUserPageOwner ? (
-            <div className="identity-help">
-              <p>
-                <br />
-                <b>What is an Identity:</b> Each user has a unique <i>identity</i> which is necessary
+              </div>
+            ) : (
+              <a className="linkish" style={{ maxWidth: "7em" }} onClick={() => this.setState({ showIdentityHelpText: true })}>
+                {this.identityHelpPrompt}
+              </a>
+            )}
+          </div> : null }
+        {showIdentityHelpText && isUserPageOwner ? (
+          <div className="identity-help">
+            <p>
+              <br />
+              <b>What is an Identity:</b> Each user has a unique <i>identity</i> which is necessary
               for proving who the author of a proposal is. An identity was generated automatically for you when you created an
               account. Every identity is made up of a pair of keys: one public &amp; one private.
-              </p>
+            </p>
+            <br />
+            <ul>
+              <li><b>Private key:</b> A key only you have access to that is used for creating a "signature" whenever you submit a proposal.</li>
               <br />
-              <ul>
-                <li><b>Private key:</b> A key only you have access to that is used for creating a "signature" whenever you submit a proposal.</li>
-                <br />
-                <li><b>Public key:</b> A key that you share with others (and Politeia) which proves your proposal was signed with your private key.</li>
-              </ul>
-              <br />
-              <p>
-                <b>Note:</b> If you've lost your identity (because you've switched browsers
+              <li><b>Public key:</b> A key that you share with others (and Politeia) which proves your proposal was signed with your private key.</li>
+            </ul>
+            <br />
+            <p>
+              <b>Note:</b> If you've lost your identity (because you've switched browsers
               or cleared your cookies, for example), you can create a new one. This
               new identity will replace your existing one, but note that Politeia keeps
               a record of all your past public keys. You can also download your current
               identity for future use or import an existing one.
-              </p>
-              <br />
-              {keyMismatch && !identityImportSuccess ? (
-                <Message
-                  type="error"
-                  className="account-page-message"
-                  header="Action needed"
-                  body={(
-                    <div>
-                      <p>
+            </p>
+            <br />
+            {keyMismatch && !identityImportSuccess ? (
+              <Message
+                type="error"
+                className="account-page-message"
+                header="Action needed"
+                body={(
+                  <div>
+                    <p>
                         The public key on the Politeia server differs from the key
                         on your browser.  This is usually caused from the local data
                         on your browser being cleared or by using a different browser.
-                      </p>
-                      <p>
+                    </p>
+                    <p>
                         You can fix this by importing your old identity, logging in
                         with the proper browser, or by creating a new identity
                         (destroying your old identity).
-                      </p>
-                    </div>
-                  )} />
-              ) : null}
-              {updateUserKey &&
+                    </p>
+                  </div>
+                )} />
+            ) : null}
+            {updateUserKey &&
               updateUserKey.success && (
-                <Message
-                  type="info"
-                  header="Verification required"
-                  body={<UpdatedKeyMessage email={loggedInAsEmail} />}
-                />
-              )}
-              {updateUserKeyError && (
-                <Message
-                  type="error"
-                  header="Error generating new identity"
-                  body={updateUserKeyError.message}
-                />
-              )}
-              {identityImportError && (
-                <Message
-                  type="error"
-                  header="Error importing identity"
-                  body={identityImportError}
-                />
-              )}
-              {identityImportSuccess && (
-                <Message
-                  type="success"
-                  header={identityImportSuccess}
-                />
-              )}
-              <div style={{ display: "flex", flexDirection: "row" }}>
-                <button
-                  className="c-btn c-btn-primary"
-                  onClick={this.onGenerateNewIdentity}
-                  disabled={(updateUserKey && updateUserKey.success) || this.state.openedVerification}>
+              <Message
+                type="info"
+                header="Verification required"
+                body={<UpdatedKeyMessage email={loggedInAsEmail} />}
+              />
+            )}
+            {updateUserKeyError && (
+              <Message
+                type="error"
+                header="Error generating new identity"
+                body={updateUserKeyError.message}
+              />
+            )}
+            {identityImportError && (
+              <Message
+                type="error"
+                header="Error importing identity"
+                body={identityImportError}
+              />
+            )}
+            {identityImportSuccess && (
+              <Message
+                type="success"
+                header={identityImportSuccess}
+              />
+            )}
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <button
+                className="c-btn c-btn-primary"
+                onClick={this.onGenerateNewIdentity}
+                disabled={(updateUserKey && updateUserKey.success) || this.state.openedVerification}>
               Create New Identity
-                </button>
-                <PrivateKeyIdentityManager
-                  loggedInAsEmail={loggedInAsEmail}
-                  onUpdateUserKey={onUpdateUserKey}
-                  onIdentityImported={onIdentityImported}
-                  userPubkey={userPubkey}
-                />
-              </div>
-              <FieldSeparator />
+              </button>
+              <PrivateKeyIdentityManager
+                loggedInAsEmail={loggedInAsEmail}
+                onUpdateUserKey={onUpdateUserKey}
+                onIdentityImported={onIdentityImported}
+                userPubkey={userPubkey}
+              />
             </div>
-          ) : null}
-        </IdentityField>
+            <FieldSeparator />
+          </div>
+        ) : null}
         <FieldSeparator />
         {!user.newuserverificationtoken ? (
           <Field label="Verified email">Yes</Field>
