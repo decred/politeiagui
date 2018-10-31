@@ -47,36 +47,76 @@ const getChildComments = ({ tree, comments }, parentid) => map(
   get(parentid || TOP_LEVEL_COMMENT_PARENTID, tree) || []
 );
 
-export const commentsToT1 = compose(
-  getChildComments,
-  reduce(
-    (r, { commentid, userid, username, parentid, token, comment, timestamp, resultvotes, vote, censored }) => ({
-      ...r,
-      comments: {
-        ...r.comments,
-        [commentid]: {
-          id: commentid,
-          uservote: String(vote),
-          author: username,
-          authorid: userid,
-          censored,
-          score: resultvotes,
-          score_hidden: false,
-          parent_id: parentid || TOP_LEVEL_COMMENT_PARENTID,
-          name: commentid,
-          body: comment,
-          created_utc: timestamp,
-          permalink: `/proposals/${token}/comments/${commentid}`
+const getTree = ({ tree, comments }, commentid) => {
+  let newTree = {};
+  if (commentid) {
+    const getChildren = (tree, commentid) => {
+      newTree = {
+        ...newTree,
+        [commentid]: tree[commentid]
+      };
+      tree[commentid] && tree[commentid].forEach(item => getChildren(tree, item));
+    };
+    const getParents = (tree, commentid) => {
+      const firstlevel = Object.keys(tree);
+      firstlevel.forEach(key => {
+        if (tree[key].find(item => item === commentid)) { // find the comment parent
+          newTree = {
+            ...newTree,
+            [key]: [commentid]
+          };
+          getParents(tree, key);
         }
-      },
-      tree: {
-        ...r.tree,
-        [parentid || TOP_LEVEL_COMMENT_PARENTID]: [
-          ...(get([ "tree", parentid || TOP_LEVEL_COMMENT_PARENTID ], r) || []),
-          commentid
-        ]
-      }
-    }),
-    { tree: {}, comments: {} }
-  )
-);
+      });
+    };
+    getChildren(tree, commentid);
+    getParents(tree, commentid);
+    return ({ tree: newTree, comments });
+  }
+  return({ tree, comments });
+};
+
+
+export const buildCommentsTree = (comments, commentid) =>
+  compose(
+    (obj) => getTree(obj, commentid),
+    reduce(
+      (r, { commentid, userid, username, parentid, token, comment, timestamp, resultvotes, vote, censored }) => ({
+        ...r,
+        comments: {
+          ...r.comments,
+          [commentid]: {
+            id: commentid,
+            uservote: String(vote),
+            author: username,
+            authorid: userid,
+            censored,
+            score: resultvotes,
+            score_hidden: false,
+            parent_id: parentid || TOP_LEVEL_COMMENT_PARENTID,
+            name: commentid,
+            body: comment,
+            created_utc: timestamp,
+            permalink: `/proposals/${token}/comments/${commentid}`
+          }
+        },
+        tree: {
+          ...r.tree,
+          [parentid || TOP_LEVEL_COMMENT_PARENTID]: [
+            ...(get([ "tree", parentid || TOP_LEVEL_COMMENT_PARENTID ], r) || []),
+            commentid
+          ]
+        }
+      }),
+      { tree: {}, comments: {} }
+    )
+  )(comments);
+
+
+
+export const commentsToT1 = (comments, commentid) => {
+  return compose(
+    getChildComments,
+    comments => buildCommentsTree(comments, commentid)
+  )(comments);
+};

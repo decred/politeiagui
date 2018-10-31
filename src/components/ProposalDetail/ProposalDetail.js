@@ -94,6 +94,7 @@ class ProposalDetail extends React.Component {
       this.setState({ sortedComments });
     }
   }
+
   render() {
     const {
       isLoading,
@@ -135,7 +136,7 @@ class ProposalDetail extends React.Component {
                     }
                   }]
                 },
-                { allChildren: commentsToT1(comments) }
+                { allChildren: commentsToT1(comments, commentid, this.state.permalinkComments) }
               ],
               ...props
             }} />

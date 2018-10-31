@@ -7,6 +7,7 @@ import compose from "lodash/fp/compose";
 import { arg, or } from "../lib/fp";
 import * as sel from "../selectors";
 import * as act from "../actions";
+import { buildCommentsTree } from "../lib/snew";
 
 const proposalConnector = connect(
   sel.selectorMap({
@@ -20,6 +21,7 @@ const proposalConnector = connect(
       get([ "match", "params", "commentid" ]),
       arg(1)
     ),
+    userid: sel.userid,
     censoredComment: sel.censoredComment,
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
@@ -52,41 +54,20 @@ class Wrapper extends Component {
     this.props.history.push(`/proposals/${this.props.token}`);
   }
 
-  getCommentsOnThread = () => {
-    const { comments, commentid } = this.props;
-    const commentsonthread = [];
-
-    const getParent = (comments, commentid) => {
-      comments.forEach((comment, i) => {
-        if (comment.commentid === commentid) { //found comment
-          const parentid = comment.parentid;
-          commentsonthread.push(comment);
-          comments.slice(0, i);
-          if (parentid === "0") return; //doesn't have parent
-          getParent(comments, parentid);
-        }
-      });
-    };
-
-    const getChild = (comments, commentid) => {
-      for(let i=0; i<comments.length; i++) {
-        if (comments[i].parentid === commentid) { //found child
-          const childid = comments[i].commentid;
-          commentsonthread.push(comments[i]);
-          getChild(comments, childid);
-        }
-      }
-    };
-
-    getParent(comments, commentid);
-    getChild(comments, commentid);
-
-    return commentsonthread;
-  };
+  buildSetOfComments = (tree) => {
+    const set = new Set();
+    Object.keys(tree).forEach(key => {
+      tree[key] && tree[key].forEach(item => item && set.add(item));
+      key && key !== "0" && set.add(key);
+    });
+    return set;
+  }
 
   render () {
     const { Component, ...props } = this.props;
-    return <Component {...{ ...props, onViewAllClick: this.handleViewAllClick, comments: props.commentid >= 0 ? this.getCommentsOnThread() : props.comments }} />;
+    const { tree } = buildCommentsTree(props.comments, props.commentid);
+    const commentsSet = this.buildSetOfComments(tree);
+    return <Component {...{ ...props, onViewAllClick: this.handleViewAllClick, numofcomments: commentsSet.size }} />;
   }
 }
 

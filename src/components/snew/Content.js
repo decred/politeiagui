@@ -30,7 +30,7 @@ export const CustomContent = ({
   comments,
   ...props
 }) => {
-  const invalidcomment = !isLoading && (commentid >= 0 && comments && !comments.find(c => c.commentid === commentid));
+  const invalidcomment = !isLoading && (commentid && comments && !comments.find(c => c.commentid === commentid));
   const showList = (listings && listings.length > 0) ||
     (proposals && proposals.length > 0) ||
     (proposalCounts && filterValue >= 0 && proposalCounts[filterValue]) !== 0;

@@ -22,12 +22,16 @@ const CommentForm = ({
   value,
   onChange,
   onClose,
-  commentid
+  hide = false
 }) => {
   const isVotingFinished = getVoteStatus(token) && getVoteStatus(token).status === PROPOSAL_VOTING_FINISHED;
   return (loggedInAsEmail ?
     <React.Fragment>
-      <form className="usertext cloneable warn-on-unload" style={commentid >= 0 ? { display: "none" } : {}} onSubmit={onSave}>
+      <form
+        className="usertext cloneable warn-on-unload"
+        style={hide ? { display: "none" } : {}}
+        onSubmit={onSave}
+      >
         {error ? (
           <Message
             type="error"

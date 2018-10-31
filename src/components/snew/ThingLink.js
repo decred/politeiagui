@@ -31,7 +31,7 @@ class ThingLinkComp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: !(this.props.commentid >= 0)
+      expanded: !this.props.commentid
     };
   }
   hanldeExpandToggle = (e) => {
@@ -282,7 +282,7 @@ class ThingLinkComp extends React.Component {
           {censorMessage && <CensorMessage message={censorMessage} />}
           <Expando {...{
             expanded: this.state.expanded,
-            collapseContent: commentid >= 0,
+            collapseContent: !!commentid,
             is_self,
             selftext,
             selftext_html,
