@@ -21,6 +21,7 @@ const proposalConnector = connect(
       get([ "match", "params", "commentid" ]),
       arg(1)
     ),
+    tempThreadTree: sel.getTempThreadTree,
     userid: sel.userid,
     censoredComment: sel.censoredComment,
     loggedInAsEmail: sel.loggedInAsEmail,
@@ -54,6 +55,7 @@ class Wrapper extends Component {
     this.props.history.push(`/proposals/${this.props.token}`);
   }
 
+  // create data structure with all the comments on thread uniquely
   buildSetOfComments = (tree) => {
     const set = new Set();
     Object.keys(tree).forEach(key => {

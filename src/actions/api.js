@@ -380,7 +380,7 @@ export const onCensorComment = (loggedInAsEmail, token, commentid) =>
       });
   });
 
-export const onSubmitComment = (loggedInAsEmail, token, comment, parentid, commentid, cb) =>
+export const onSubmitComment = (loggedInAsEmail, token, comment, parentid, commentid) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
     return Promise.resolve(api.makeComment(token, comment, parentid))
@@ -389,7 +389,8 @@ export const onSubmitComment = (loggedInAsEmail, token, comment, parentid, comme
       .then(response => {
         const responsecomment = response.comment;
         dispatch(act.RECEIVE_NEW_COMMENT(responsecomment));
-        commentid && cb(responsecomment);
+        commentid && dispatch(act.RECEIVE_NEW_THREAD_COMMENT({ id: commentid, comment: responsecomment }));
+        return;
       })
       .catch(error => {
         dispatch(act.RECEIVE_NEW_COMMENT(null, error));

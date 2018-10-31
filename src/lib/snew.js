@@ -2,6 +2,7 @@ import get from "lodash/fp/get";
 import map from "lodash/fp/map";
 import reduce from "lodash/fp/reduce";
 import compose from "lodash/fp/compose";
+import union from "lodash/fp/union";
 import { TOP_LEVEL_COMMENT_PARENTID } from "./api";
 
 export const proposalToT3 = ({
@@ -48,7 +49,7 @@ const getChildComments = ({ tree, comments }, parentid) => map(
 );
 
 // get filtered thread tree if commentid exists, returns the existing tree if not
-const getTree = ({ tree, comments }, commentid) => {
+const getTree = ({ tree, comments }, commentid, tempThreadTree) => {
   let newTree = {};
   if (commentid) {
     const getChildren = (tree, commentid) => {
@@ -72,16 +73,25 @@ const getTree = ({ tree, comments }, commentid) => {
     };
     getChildren(tree, commentid);
     getParents(tree, commentid);
+    if (tempThreadTree) {
+      Object.keys(tempThreadTree).forEach(newKey => {
+        newTree = {
+          ...newTree,
+          [newKey]: union(newTree[newKey], tempThreadTree[newKey])
+        };
+      });
+    }
+    console.log(newTree);
     return ({ tree: newTree, comments });
   }
   return({ tree, comments });
 };
 
 
-// compose reduce and getTree, will return a {tree, comments} object
-export const buildCommentsTree = (comments, commentid) =>
+// compose JS reduce and getTree, will return a {tree, comments} object
+export const buildCommentsTree = (comments, commentid, tempThreadTree) =>
   compose(
-    (obj) => getTree(obj, commentid),
+    (obj) => getTree(obj, commentid, tempThreadTree),
     reduce(
       (r, { commentid, userid, username, parentid, token, comment, timestamp, resultvotes, vote, censored }) => ({
         ...r,
@@ -116,9 +126,9 @@ export const buildCommentsTree = (comments, commentid) =>
 
 
 
-export const commentsToT1 = (comments, commentid) => {
+export const commentsToT1 = (comments, commentid, tempThreadTree) => {
   return compose(
     getChildComments,
-    comments => buildCommentsTree(comments, commentid)
+    comments => buildCommentsTree(comments, commentid, tempThreadTree)
   )(comments);
 };

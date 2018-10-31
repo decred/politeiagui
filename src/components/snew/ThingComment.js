@@ -5,12 +5,6 @@ import { PROPOSAL_VOTING_FINISHED } from "../../constants";
 import Message from "../Message";
 
 class ThingComment extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showCommentForm: false
-    };
-  }
   handlePermalinkClick = (e) => {
     e && e.preventDefault && e.preventDefault();
     this.props.history.push(`/proposals/${this.props.token}/comments/${this.props.id}`);
@@ -40,13 +34,7 @@ class ThingComment extends React.PureComponent {
   componentDidMount(){
     this.handleCommentMaxHeight();
   }
-  toggleCommentForm = (e, forceValue = null) => {
-    e && e.preventDefault && e.preventDefault();
-    this.setState({
-      showCommentForm: forceValue != null ? forceValue : !this.state.showCommentForm
-    });
-  }
-  onCloseCommentForm = () => this.toggleCommentForm(null, false)
+
   render() {
     const {
       onLikeComment,
@@ -57,9 +45,12 @@ class ThingComment extends React.PureComponent {
       likeCommentError,
       likeCommentPayload,
       commentid,
+      showCommentForm,
+      toggleCommentForm,
+      onCloseCommentForm,
       ...props
     } = this.props;
-    const { showCommentForm } = this.state;
+    console.log("commentform", showCommentForm);
     return (
       <div>
         {likeCommentError && likeCommentPayload.token === token
@@ -78,9 +69,9 @@ class ThingComment extends React.PureComponent {
           grayBody: props.censored,
           highlightcomment: commentid === props.id,
           showReply: !props.censored,
-          onShowReply: this.toggleCommentForm,
+          onShowReply: toggleCommentForm,
           onCensorComment: this.handleCommentCensor,
-          onCloseCommentForm: this.onCloseCommentForm,
+          onCloseCommentForm,
           showCommentForm,
           user: loggedInAsEmail,
           authorHref: `/user/${props.authorid}`,

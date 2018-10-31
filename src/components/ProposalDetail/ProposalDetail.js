@@ -105,9 +105,11 @@ class ProposalDetail extends React.Component {
       otherFiles,
       onFetchData,
       commentid,
+      tempThreadTree,
       ...props
     } = this.props;
     const comments = this.state.sortedComments;
+    const tempTree = tempThreadTree[commentid];
     return (
       <div className="content" role="main">
         <div className="page proposal-page">
@@ -136,7 +138,7 @@ class ProposalDetail extends React.Component {
                     }
                   }]
                 },
-                { allChildren: commentsToT1(comments, commentid) }
+                { allChildren: commentsToT1(comments, commentid, tempTree) }
               ],
               ...props
             }} />
