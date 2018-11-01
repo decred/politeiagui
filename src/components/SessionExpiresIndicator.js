@@ -38,6 +38,7 @@ class SessionExpiresIndicator extends React.Component {
       this.setState({ timer: null });
     }
   }
+
   finishInterval = () => {
     const {
       loggedInAsEmail,
@@ -56,14 +57,14 @@ class SessionExpiresIndicator extends React.Component {
     this.setState({ timer: null });
 
     // if user is logged in, perform the logout procedure
-    // there is no need to triger the logout request b/c the session has
+    // there is no need to trigger the logout request b/c the session has
     // already expired
     if(loggedInAsEmail) {
       handleLogout({}, redirectToLogoutPage());
       openSessionExpiredModal();
     }
-
   }
+
   componentDidUpdate(prevProps) {
     const { loggedInAsEmail } = this.props;
     if(!prevProps.loggedInAsEmail && loggedInAsEmail) {
@@ -80,6 +81,7 @@ class SessionExpiresIndicator extends React.Component {
       });
     }
   }
+
   render() {
     const { timer } = this.state;
     return (
@@ -102,7 +104,6 @@ class SessionExpiresIndicator extends React.Component {
       </IntervalComponent>
     );
   }
-
 }
 
 export default withRouter(currentUserConnector(SessionExpiresIndicator));

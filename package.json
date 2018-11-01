@@ -38,7 +38,8 @@
     "timeago-react": "^1.2.2",
     "tweetnacl": "^1.0.0",
     "tweetnacl-util": "^0.15.0",
-    "xss-filters": "^1.2.7"
+    "xss-filters": "^1.2.7",
+    "yarn": "^1.12.1"
   },
   "scripts": {
     "mockapi": "node mockapi.js",
