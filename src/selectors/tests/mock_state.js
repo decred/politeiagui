@@ -298,7 +298,7 @@ export const MOCK_STATE = {
     pollingCreditsPayment: false,
     identityImportResult: {
       errorMsg: "invalid identity",
-      successMsg: "successfull identity"
+      successMsg: "successful identity"
     },
     draftProposals: {
       newDraft: {
