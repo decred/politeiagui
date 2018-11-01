@@ -75,24 +75,6 @@ const UpdatedKeyMessage = ({ email }) => (
   </span>
 );
 
-const IdentityField = ({ identities, children }) => (
-  identities && identities.length ? (
-    <React.Fragment>
-      {identities.map(id => {
-        if (id.isactive) {
-          return (
-            <Field key={id.pubkey} label="Active identity">
-              <div key={id.pubkey}>{" " + id.pubkey + " "}</div>
-              {children}
-            </Field>
-          );
-        }
-        return null;
-      })}
-    </React.Fragment>
-  ) : null
-);
-
 class GeneralTab extends React.Component {
   constructor(props) {
     super(props);
@@ -209,7 +191,7 @@ class GeneralTab extends React.Component {
       onResetRescan,
       rescanUserId
     } = this.props;
-    const { showIdentityHelpText } = this.state;
+    const { showIdentityHelpText, pubkey, pubkeyStatus } = this.state;
     const userHasActivePaywall = user && user.newuserpaywalladdress && user.newuserpaywallamount;
     const isUserPageOwner = loggedInAsUserId === user.id;
     const hasTheRescanResult = amountOfCreditsAddedOnRescan !== undefined && rescanUserId === user.id;
@@ -246,7 +228,7 @@ class GeneralTab extends React.Component {
         </div>
         {keyMismatch && !identityImportSuccess ?
           <Field label="Active Identity"><div style={{ color: "red" }}>Identity Missing. Please see 'Manage Identity'</div></Field> :
-          <IdentityField identities={user.identities} />}
+          <Field className="account-info" label="Your public key"><div>{pubkeyStatus === PUB_KEY_STATUS_LOADED ? (pubkey || "none") : "Loading public key..." }</div></Field>}
         {(isUserPageOwner) ?
           <div>
             {showIdentityHelpText && isUserPageOwner ? (
