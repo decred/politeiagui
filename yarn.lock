@@ -7802,7 +7802,7 @@ snapdragon@^0.8.1:
 
 "snew-classic-ui@https://github.com/decred/snew-classic-ui":
   version "0.1.9"
-  resolved "https://github.com/decred/snew-classic-ui#7d160103be04a8686d9c6a4f8f4e4cb8307bc34e"
+  resolved "https://github.com/decred/snew-classic-ui#364f14b79f586dc3365929c696b94c885c8b8da0"
   dependencies:
     babel-cli "^6.26.0"
     babel-core "6.26.3"
