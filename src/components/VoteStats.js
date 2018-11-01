@@ -215,7 +215,7 @@ class Stats extends React.Component {
                 <span
                   style={{
                     marginLeft: "5px",
-                    color: totalVotes < quorumInVotes ? "red" : "green"
+                    color: totalVotes < quorumInVotes ? "#FFA07A" : "green"
                   }}
                 >{`${totalVotes}/${quorumInVotes} votes`}
                 </span>
