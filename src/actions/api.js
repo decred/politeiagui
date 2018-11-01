@@ -687,8 +687,8 @@ export const onRescanUserPayments = (userid) =>
       response => {
         dispatch(act.RECEIVE_RESCAN_USER_PAYMENTS(response));
 
-        // if the rescan returns new credits we need to refetch the user details
-        // so the user credis are correclty updated
+        // if the rescan returns new credits, a refetch of the user details
+        // is needed to update the user credits.
         // if(response.newcredits && response.newcredits.length > 0) {
         //   dispatch(onFetchUser(userid));
         // }

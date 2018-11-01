@@ -280,8 +280,8 @@ votes should be less than a week.
     Stakey costume: $500
     Stakey costume occupant: 3 (10 hour) days at $40/hr (that suit is warm!): $1,200
     Travel expenses for booth staff: Up to $2,000
-    Accomodation for booth staff. We will stay at the conference hotel costing $200/night, it is unlikely
-	that all booth staff need accomodation, but the maximum would be 200 x 3 nights x 4 staff = $2,400
+    Accommodation for booth staff. We will stay at the conference hotel costing $200/night, it is unlikely
+	that all booth staff need accommodation, but the maximum would be 200 x 3 nights x 4 staff = $2,400
 
     Maximum total budget: $15,600
 
@@ -297,7 +297,7 @@ votes should be less than a week.
 
     Registration fees are due by September 30th, I will pay these up-front and request full reimbursement
 	immediately. I will front the cost of the swag and Stakey suit, and claim this along with my
-	travel/accomodation expenses and payment for my work, after the event.
+	travel/accommodation expenses and payment for my work, after the event.
     Booth staff who are already Decred contributors will bill for their hours and expenses directly,
 	I will serve as intermediary for any staff costs not associated with established contributors.
 `
