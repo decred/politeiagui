@@ -156,12 +156,23 @@ class Stats extends React.Component {
     );
     return blockTimeMinutes > 0 ? element : <span>expired</span>;
   };
-  renderOptionsStats = (totalVotes, optionsResult, endHeight, currentHeight) => {
-
-    const { status } = this.props;
+  renderOptionsStats = () => {
+    const {
+      status,
+      totalVotes,
+      optionsResult,
+      endHeight,
+      currentHeight,
+      quorumPercentage,
+      passPercentage,
+      numOfEligibleVotes
+    } = this.props;
     const showStats = this.canShowStats(status, totalVotes);
     const options = optionsResult ? this.transformOptionsResult(totalVotes, optionsResult) : [];
     const isPreVoting = status === PROPOSAL_VOTING_NOT_AUTHORIZED || status === PROPOSAL_VOTING_AUTHORIZED;
+    const currentQuorumPercentage = getPercentage(totalVotes, numOfEligibleVotes);
+    const quorumInVotes = Math.round(numOfEligibleVotes * quorumPercentage/100);
+
     const headerStyle = {
       display: "flex",
       alignItems: "center",
@@ -190,22 +201,48 @@ class Stats extends React.Component {
               displayValuesForLabel="yes"
               style={{ ...bodyStyle, maxWidth: "500px" }}
               data={this.getChartData(options)}
+              threeshold={passPercentage}
             />
+            <div
+              style={{ marginTop: "10px", display: "flex" }}
+            >
+              Quorum:
+              <Tooltip
+                tipStyle={{ left: "80px", maxWidth: "70px", padding: "2px", textAlign: "center" }}
+                text={`${currentQuorumPercentage}/${quorumPercentage} %`}
+                position="right"
+              >
+                <span
+                  style={{
+                    marginLeft: "5px",
+                    color: totalVotes < quorumInVotes ? "#FFA07A" : "green"
+                  }}
+                >{`${totalVotes}/${quorumInVotes} votes`}
+                </span>
+              </Tooltip>
+            </div>
           </div> : null
         }
       </div>
     );
   }
   render() {
-    const { totalVotes, optionsResult, endHeight, currentHeight } = this.props;
-    return this.renderOptionsStats(totalVotes, optionsResult, endHeight, currentHeight);
+    return this.renderOptionsStats();
   }
 }
 
 class VoteStats extends React.Component {
   render() {
     const { token, getVoteStatus, lastBlockHeight, ...props } = this.props;
-    const { optionsresult, status, totalvotes, endheight } = getVoteStatus(token);
+    const {
+      optionsresult,
+      status,
+      totalvotes,
+      endheight,
+      quorumpercentage,
+      passpercentage,
+      numofeligiblevotes
+    } = getVoteStatus(token);
     const wrapperStyle = {
       display: "flex",
       flexDirection: "column",
@@ -213,7 +250,8 @@ class VoteStats extends React.Component {
       border: "1px solid #bbb",
       marginTop: "10px",
       borderRadius: "8px",
-      width: "500px"
+      width: "500px",
+      cursor: "default"
     };
 
     return(
@@ -223,6 +261,9 @@ class VoteStats extends React.Component {
           optionsResult={optionsresult}
           totalVotes={totalvotes}
           endHeight={endheight}
+          quorumPercentage={quorumpercentage}
+          passPercentage={passpercentage}
+          numOfEligibleVotes={numofeligiblevotes}
           currentHeight={lastBlockHeight}
           { ...props }
         />

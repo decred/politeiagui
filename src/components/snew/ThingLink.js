@@ -396,7 +396,12 @@ class ThingLinkComp extends React.Component {
                 </li>
                 : null
           }
-          <ul className="flat-list buttons" style={{ display: "flex" }}>
+          <ul className="flat-list buttons"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between"
+            }}>
             <li className="first">
               <Link
                 className="bylink comments may-blank proposal-permalink"
@@ -407,7 +412,8 @@ class ThingLinkComp extends React.Component {
               </Link>
             </li>
             {isVetted ? <Tooltip
-              wrapperStyle={{ width: "100%", textAlign: "right", padding: "5px" }}
+              wrapperStyle={{ padding: "5px" }}
+              tipStyle={{ bottom: "30px", right: "10px" }}
               text="Check this proposal’s content on our GitHub repository. There you can find proposal's metadata and its comments journals."
               position="top"
             >
