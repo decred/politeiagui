@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import * as act from "../actions";
 import * as sel from "../selectors";
+import get from "lodash/fp/get";
+import { arg } from "../lib/fp";
 import compose from "lodash/fp/compose";
 import { withRouter } from "react-router-dom";
 import validate from "../validators/reply";
@@ -8,6 +10,11 @@ import { connect } from "react-redux";
 
 const replyConnector = connect(
   sel.selectorMap({
+    commentid: compose(
+      t => t ? t.toLowerCase() : t,
+      get([ "match", "params", "commentid" ]),
+      arg(1)
+    ),
     token: sel.proposalToken,
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
@@ -36,7 +43,8 @@ class Wrapper extends Component {
     this.state = {
       isShowingMarkdownHelp: false,
       commentValue: "",
-      validationError: ""
+      validationError: "",
+      showCommentForm: false
     };
   }
 
@@ -44,6 +52,15 @@ class Wrapper extends Component {
     this.props.policy || this.props.onFetchData();
     // this.props.initialize(getNewCommentData());
   }
+
+  toggleCommentForm = (e, forceValue = null) => {
+    e && e.preventDefault && e.preventDefault();
+    this.setState({
+      showCommentForm: forceValue != null ? forceValue : !this.state.showCommentForm
+    });
+  }
+
+  onCloseCommentForm = () => this.toggleCommentForm(null, false);
 
   render() {
     const { Component, error, ...props } = this.props;
@@ -58,7 +75,9 @@ class Wrapper extends Component {
           value: this.state.commentValue,
           onSave: this.onSave.bind(this),
           onToggleMarkdownHelp: this.onToggleMarkdownHelp.bind(this),
-          showComentForm: this.state.showComentForm
+          showCommentForm: this.state.showCommentForm,
+          toggleCommentForm: this.toggleCommentForm,
+          onCloseCommentForm: this.onCloseCommentForm
         }}
       />
     );
@@ -69,13 +88,13 @@ class Wrapper extends Component {
   }
 
   resetForm = () => {
-    this.setState({ commentValue: "" });
+    this.setState({ commentValue: "", showCommentForm: false });
     this.props.onClose && this.props.onClose();
   }
 
   onSave(e) {
     e && e.preventDefault && e.preventDefault();
-    const { loggedInAsEmail, token, thingId: replyTo, policy } = this.props;
+    const { loggedInAsEmail, token, thingId: replyTo, policy, commentid } = this.props;
     const { commentValue } = this.state;
     const comment = commentValue.trim();
     try {
@@ -85,7 +104,7 @@ class Wrapper extends Component {
       return;
     }
     return this.props
-      .onSubmitComment(loggedInAsEmail, token, comment, replyTo)
+      .onSubmitComment(loggedInAsEmail, token, comment, replyTo, commentid)
       .then(() => this.resetForm());
   }
 

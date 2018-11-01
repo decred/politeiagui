@@ -107,6 +107,7 @@ export const activeVotesEndHeight = state => state.app.activeVotesEndHeight;
 
 export const proposalComments = state => apiProposalComments(state);
 
+export const getTempThreadTree = state => state.app.replyThreadTree;
 
 export const unvettedProposals = state => {
   const unvettedProposals = apiUnvettedProposals(state);

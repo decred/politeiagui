@@ -1724,3 +1724,19 @@ form div.usertext-body.may-blank-within.md-container {
   z-index: 99999;
   text-align: center;
 }
+
+.collapse-icon-button {
+  background: #bcbcbc;
+  margin: 4px 16px 4px 0;
+  padding: 0 6px;
+  height: 22px;
+  line-height: 22px;
+}
+
+.collapse-icon-button:hover {
+  background: #909090;
+}
+
+.collapse-icon-button:active {
+  background: #909090;
+}

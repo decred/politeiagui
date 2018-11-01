@@ -94,6 +94,7 @@ class ProposalDetail extends React.Component {
       this.setState({ sortedComments });
     }
   }
+
   render() {
     const {
       isLoading,
@@ -103,9 +104,12 @@ class ProposalDetail extends React.Component {
       markdownFile,
       otherFiles,
       onFetchData,
+      commentid,
+      tempThreadTree,
       ...props
     } = this.props;
     const comments = this.state.sortedComments;
+    const tempTree = tempThreadTree[commentid];
     return (
       <div className="content" role="main">
         <div className="page proposal-page">
@@ -118,6 +122,8 @@ class ProposalDetail extends React.Component {
             <Content  {...{
               isLoading,
               error,
+              commentid,
+              comments,
               bodyClassName: "single-page comments-page",
               onFetchData: () => onFetchData(token),
               listings: isLoading ? [] : [
@@ -132,7 +138,7 @@ class ProposalDetail extends React.Component {
                     }
                   }]
                 },
-                { allChildren: commentsToT1(comments) }
+                { allChildren: commentsToT1(comments, commentid, tempTree) }
               ],
               ...props
             }} />

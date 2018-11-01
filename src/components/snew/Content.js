@@ -26,8 +26,11 @@ export const CustomContent = ({
   onFetchUserProposals,
   count,
   showLookUp,
+  commentid,
+  comments,
   ...props
 }) => {
+  const invalidcomment = !isLoading && (commentid && comments && !comments.find(c => c.commentid === commentid));
   const showList = (listings && listings.length > 0) ||
     (proposals && proposals.length > 0) ||
     (proposalCounts && filterValue >= 0 && proposalCounts[filterValue]) !== 0;
@@ -41,6 +44,11 @@ export const CustomContent = ({
       body={error} />
   ) : isLoading ? (
     <PageLoadingIcon key="content" />
+  ) : invalidcomment ? (
+    <Message
+      type="error"
+      header="Comment not found"
+      body={`Could not find comment ${commentid}`} />
   ) : (
     <div>
       {header &&
@@ -70,6 +78,7 @@ export const CustomContent = ({
           <React.Fragment>
             <Content {...{
               ...props,
+              highlightcomment: commentid,
               key: "content",
               lastBlockHeight: props.lastBlockHeight,
               listings: listings || [

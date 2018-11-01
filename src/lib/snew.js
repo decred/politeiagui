@@ -2,6 +2,7 @@ import get from "lodash/fp/get";
 import map from "lodash/fp/map";
 import reduce from "lodash/fp/reduce";
 import compose from "lodash/fp/compose";
+import union from "lodash/fp/union";
 import { TOP_LEVEL_COMMENT_PARENTID } from "./api";
 
 export const proposalToT3 = ({
@@ -47,36 +48,86 @@ const getChildComments = ({ tree, comments }, parentid) => map(
   get(parentid || TOP_LEVEL_COMMENT_PARENTID, tree) || []
 );
 
-export const commentsToT1 = compose(
-  getChildComments,
-  reduce(
-    (r, { commentid, userid, username, parentid, token, comment, timestamp, resultvotes, vote, censored }) => ({
-      ...r,
-      comments: {
-        ...r.comments,
-        [commentid]: {
-          id: commentid,
-          uservote: String(vote),
-          author: username,
-          authorid: userid,
-          censored,
-          score: resultvotes,
-          score_hidden: false,
-          parent_id: parentid || TOP_LEVEL_COMMENT_PARENTID,
-          name: commentid,
-          body: comment,
-          created_utc: timestamp,
-          permalink: `/proposals/${token}/comments/${commentid}`
+// get filtered thread tree if commentid exists, returns the existing tree if not
+const getTree = ({ tree, comments }, commentid, tempThreadTree) => {
+  let newTree = {};
+  if (commentid) {
+    const getChildren = (tree, commentid) => {
+      newTree = {
+        ...newTree,
+        [commentid]: tree[commentid]
+      };
+      tree[commentid] && tree[commentid].forEach(item => getChildren(tree, item));
+    };
+    const getParents = (tree, commentid) => {
+      const firstlevel = Object.keys(tree);
+      firstlevel.forEach(key => {
+        if (tree[key].find(item => item === commentid)) { // find the comment parent
+          newTree = {
+            ...newTree,
+            [key]: [commentid]
+          };
+          getParents(tree, key);
         }
-      },
-      tree: {
-        ...r.tree,
-        [parentid || TOP_LEVEL_COMMENT_PARENTID]: [
-          ...(get([ "tree", parentid || TOP_LEVEL_COMMENT_PARENTID ], r) || []),
-          commentid
-        ]
-      }
-    }),
-    { tree: {}, comments: {} }
-  )
-);
+      });
+    };
+    getChildren(tree, commentid);
+    getParents(tree, commentid);
+    if (tempThreadTree) {
+      Object.keys(tempThreadTree).forEach(newKey => {
+        newTree = {
+          ...newTree,
+          [newKey]: union(newTree[newKey], tempThreadTree[newKey])
+        };
+      });
+    }
+    return ({ tree: newTree, comments });
+  }
+  return({ tree, comments });
+};
+
+
+// compose JS reduce and getTree, will return a {tree, comments} object
+export const buildCommentsTree = (comments, commentid, tempThreadTree) =>
+  compose(
+    (obj) => getTree(obj, commentid, tempThreadTree),
+    reduce(
+      (r, { commentid, userid, username, parentid, token, comment, timestamp, resultvotes, vote, censored }) => ({
+        ...r,
+        comments: {
+          ...r.comments,
+          [commentid]: {
+            id: commentid,
+            uservote: String(vote),
+            author: username,
+            authorid: userid,
+            censored,
+            score: resultvotes,
+            score_hidden: false,
+            parent_id: parentid || TOP_LEVEL_COMMENT_PARENTID,
+            name: commentid,
+            body: comment,
+            created_utc: timestamp,
+            permalink: `/proposals/${token}/comments/${commentid}`
+          }
+        },
+        tree: {
+          ...r.tree,
+          [parentid || TOP_LEVEL_COMMENT_PARENTID]: [
+            ...(get([ "tree", parentid || TOP_LEVEL_COMMENT_PARENTID ], r) || []),
+            commentid
+          ]
+        }
+      }),
+      { tree: {}, comments: {} }
+    )
+  )(comments);
+
+
+
+export const commentsToT1 = (comments, commentid, tempThreadTree) => {
+  return compose(
+    getChildComments,
+    comments => buildCommentsTree(comments, commentid, tempThreadTree)
+  )(comments);
+};

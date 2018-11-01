@@ -25,14 +25,17 @@ a:hover {
 }
 
 .flat-list .first a {
-    color: #2971ff !important;
-    font-weight: 700 !important;
     font: 13px Source Sans Pro,Lato,Arial,sans-serif;
     padding: 0 1px;
     text-decoration: none !important;
 }
 
-.flat-list .first a:hover {
+.proposal-permalink {
+    color: #2971ff !important;
+    font-weight: 700 !important;
+}
+
+.proposal-permalink:hover {
     color: #2971ff;
 }
 
@@ -446,7 +449,10 @@ button.disabled {
 .commentarea .panestack-title {
     margin: 16px 0 0;
     border-bottom: 0;
-    padding-left: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
 }
 .commentarea .panestack-title .title {
     color: #4D5763;
@@ -507,11 +513,11 @@ button.disabled {
 }
 .commentarea .thing {
     margin: 0 0 16px;
-    padding: 8px 16px 8px 0;
+    padding: 8px 0px 0px 0;
 }
 .commentarea .child .thing {
     box-shadow: none;
-    padding: 8px 0px 0px 2px;
+    padding: 8px 0px 0px 0px;
     margin: 8px 0 0;
 }
 .commentarea .comment .midcol {
@@ -522,10 +528,13 @@ button.disabled {
 }
 .comment .child,
 .comment .showreplies {
-    border-left: 1px solid #edf1f3;
     margin-top: 0;
-    margin-left: 20px;
+    margin-left: 0;
+    padding-left: 20px;
+    background: #fff;
+    border-left: 0;
 }
+
 .comment .midcol {
     width: 24px;
     margin-right: 0;
