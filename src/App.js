@@ -33,8 +33,10 @@ class Loader extends Component {
 
   componentDidUpdate(prevProps) {
     if (!prevProps.loggedInAsEmail && this.props.loggedInAsEmail) {
-      verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey, this.props.keyMismatchAction);
       this.props.onLoadDraftProposals(this.props.loggedInAsEmail);
+    }
+    if (prevProps.userPubkey && this.props.userPubkey) {
+      verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey, this.props.keyMismatchAction);
     }
 
     if(!prevProps.onboardViewed && this.props.lastLoginTime === 0){
@@ -45,11 +47,11 @@ class Loader extends Component {
         message: (
           <React.Fragment>
             <strong style={{ fontSize: "1.05em", marginBottom: "10px", fontWeight: "1.2em" }}>
-							Are you new to Politeia? Would you like to read more on how all of this works?
+              Are you new to Politeia? Would you like to read more on how all of this works?
             </strong>
             <br />
             <p style={{ marginTop: "10px", fontStyle: "italic" }}>
-							The following information can be reviewed by clicking 'Learn More about Politiea' in the sidebar.
+              The following information can be reviewed by clicking 'Learn More about Politiea' in the sidebar.
             </p>
           </React.Fragment>
         ),
@@ -101,19 +103,19 @@ const StagingAlert = () => process.env.REACT_APP_STAGING  ?
 
 const HeaderAlertComponent = withRouter(
   loaderConnector(
-    ({ location, loggedInAsEmail, keyMismatch, history, loggedInAsUserId }) => {
+    ({ location, loggedInAsEmail, keyMismatch, history, loggedInAsUserId, identityImportSuccess }) => {
       if (!loggedInAsEmail) return null;
-      if (keyMismatch && location.pathname !== `/user/${loggedInAsUserId}`) {
+      if (keyMismatch && !identityImportSuccess && location.pathname !== `/user/${loggedInAsUserId}`) {
         return (
           <HeaderAlert className="action-needed-alert">
-						You cannot currently submit proposals or comments, please visit your{" "}
+            You cannot currently submit proposals or comments, please visit your{" "}
             <a
               style={{ cursor: "pointer" }}
               onClick={() => history.push(`/user/${loggedInAsUserId}`)}
             >
-							account page
+              account page
             </a>{" "}
-						to correct this problem.
+            to correct this problem.
           </HeaderAlert>
         );
       }
