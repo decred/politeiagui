@@ -22,8 +22,8 @@ class UserDetail extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { loggedInAsUserId, editUserResponse, user, isAdmin } = this.props;
-    if (editUserResponse) {
+    const { loggedInAsUserId, manageUserResponse, user, isAdmin } = this.props;
+    if (manageUserResponse) {
       window.location.reload();
     }
 

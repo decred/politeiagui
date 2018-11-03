@@ -2,15 +2,15 @@ import React from "react";
 import userConnector from "../../connectors/user";
 import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
 import {
-  EDIT_USER_CLEAR_USER_PAYWALL,
-  EDIT_USER_EXPIRE_NEW_USER_VERIFICATION,
-  EDIT_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
-  EDIT_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
-  EDIT_USER_UNLOCK,
+  MANAGE_USER_CLEAR_USER_PAYWALL,
+  MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
+  MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
+  MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
+  MANAGE_USER_UNLOCK,
+  MANAGE_USER_DEACTIVATE,
+  MANAGE_USER_REACTIVATE,
   PUB_KEY_STATUS_LOADED,
-  PUB_KEY_STATUS_LOADING,
-  EDIT_USER_DEACTIVATE,
-  EDIT_USER_REACTIVATE
+  PUB_KEY_STATUS_LOADING
 } from "../../constants";
 import { CHANGE_PASSWORD_MODAL, CONFIRM_ACTION } from "../Modal/modalTypes";
 import PrivateKeyIdentityManager from "../PrivateKeyIdentityManager";
@@ -39,7 +39,7 @@ const TokenFields = ({
   userId,
   action,
   isRequesting,
-  onEditUser
+  onManageUser
 }) => (
   <div>
     <Field label={tokenLabel}>{token}</Field>
@@ -53,7 +53,7 @@ const TokenFields = ({
           text="Mark as expired"
           disabled={isRequesting}
           isLoading={isRequesting}
-          onClick={() => onEditUser(userId, action)}
+          onClick={() => onManageUser(userId, action)}
         />
       </Field>
     )}
@@ -191,7 +191,7 @@ class GeneralTab extends React.Component {
       isApiRequestingMarkUpdateKeyAsExpired,
       isApiRequestingMarkResetPasswordAsExpired,
       isApiRequestingUnlockUser,
-      onEditUser,
+      onManageUser,
       isAdmin,
       openModal,
       loggedInAsEmail,
@@ -409,9 +409,9 @@ class GeneralTab extends React.Component {
               token={" " + user.newuserverificationtoken + " "}
               expiry={user.newuserverificationexpiry}
               userId={user.id}
-              action={EDIT_USER_EXPIRE_NEW_USER_VERIFICATION}
+              action={MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION}
               isRequesting={isApiRequestingMarkNewUserAsExpired}
-              onEditUser={onEditUser}
+              onManageUser={onManageUser}
             />
           </div>
         )}
@@ -438,7 +438,7 @@ class GeneralTab extends React.Component {
                     disabled={isApiRequestingMarkAsPaid}
                     isLoading={isApiRequestingMarkAsPaid}
                     onClick={() =>
-                      onEditUser(user.id, EDIT_USER_CLEAR_USER_PAYWALL)
+                      onManageUser(user.id, MANAGE_USER_CLEAR_USER_PAYWALL)
                     }
                   />
                 )
@@ -490,7 +490,7 @@ class GeneralTab extends React.Component {
                   text="Unlock user"
                   disabled={isApiRequestingUnlockUser}
                   isLoading={isApiRequestingUnlockUser}
-                  onClick={() => onEditUser(user.id, EDIT_USER_UNLOCK)}
+                  onClick={() => onManageUser(user.id, MANAGE_USER_UNLOCK)}
                 />
               ]}
         </Field>
@@ -506,7 +506,7 @@ class GeneralTab extends React.Component {
                     text="Re-activate account"
                     disabled={isApiRequestingReactivateUser}
                     isLoading={isApiRequestingReactivateUser}
-                    onClick={() => onEditUser(user.id, EDIT_USER_REACTIVATE)}
+                    onClick={() => onManageUser(user.id, MANAGE_USER_REACTIVATE)}
                   />
                 </React.Fragment>
               ) : (
@@ -517,7 +517,7 @@ class GeneralTab extends React.Component {
                     text="Deactivate account"
                     disabled={isApiRequestingDeactivateUser}
                     isLoading={isApiRequestingDeactivateUser}
-                    onClick={() => onEditUser(user.id, EDIT_USER_DEACTIVATE)}
+                    onClick={() => onManageUser(user.id, MANAGE_USER_DEACTIVATE)}
                   />
                 </React.Fragment>
               )}
@@ -531,9 +531,9 @@ class GeneralTab extends React.Component {
             token={" " + user.updatekeyverificationtoken + " "}
             expiry={user.updatekeyverificationexpiry}
             userId={user.id}
-            action={EDIT_USER_EXPIRE_UPDATE_KEY_VERIFICATION}
+            action={MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION}
             isRequesting={isApiRequestingMarkUpdateKeyAsExpired}
-            onEditUser={onEditUser}
+            onManageUser={onManageUser}
           />,
           <FieldSeparator />
         ]}
@@ -543,9 +543,9 @@ class GeneralTab extends React.Component {
             token={" " + user.resetpasswordverificationtoken + " "}
             expiry={user.resetpasswordverificationexpiry}
             userId={user.id}
-            action={EDIT_USER_EXPIRE_RESET_PASSWORD_VERIFICATION}
+            action={MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION}
             isRequesting={isApiRequestingMarkResetPasswordAsExpired}
-            onEditUser={onEditUser}
+            onManageUser={onManageUser}
           />,
           <FieldSeparator />
         ]}

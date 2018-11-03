@@ -17,7 +17,10 @@ import {
   getPropVoteStatus,
   apiUnvettedStatusResponse,
   numOfUserProposals,
-  userid
+  userid,
+  apiUserResponse,
+  apiEditUserResponse,
+  apiEditUserPayload
 } from "./api";
 import {
   PAYWALL_STATUS_PAID,
@@ -31,7 +34,14 @@ import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_USER_FILTER_SUBMITTED,
-  PROPOSAL_USER_FILTER_DRAFT
+  PROPOSAL_USER_FILTER_DRAFT,
+  NOTIFICATION_MY_PROPOSAL_STATUS_CHANGE,
+  NOTIFICATION_MY_PROPOSAL_VOTE_STARTED,
+  NOTIFICATION_ADMIN_PROPOSAL_NEW,
+  NOTIFICATION_ADMIN_PROPOSAL_VOTE_AUTHORIZED,
+  NOTIFICATION_REGULAR_PROPOSAL_VETTED,
+  NOTIFICATION_REGULAR_PROPOSAL_EDITED,
+  NOTIFICATION_REGULAR_PROPOSAL_VOTE_STARTED
 } from "../constants";
 import { getTextFromIndexMd, countPublicProposals } from "../helpers";
 
@@ -89,6 +99,63 @@ export const getEditProposalValues = state => {
     name,
     description,
     files
+  };
+};
+
+export const getEditUserValues = state => {
+  let myproposalnotifications,
+    regularproposalnotifications,
+    adminproposalnotifications;
+
+  if (apiEditUserResponse(state)) {
+    const editUserPayload = apiEditUserPayload(state);
+    myproposalnotifications = editUserPayload.myproposalnotifications;
+    regularproposalnotifications = editUserPayload.regularproposalnotifications;
+    adminproposalnotifications = editUserPayload.adminproposalnotifications;
+  } else {
+    const userResponse = apiUserResponse(state) || { user: {} };
+    myproposalnotifications = userResponse.user.myproposalnotifications || 0;
+    regularproposalnotifications = userResponse.user.regularproposalnotifications || 0;
+    adminproposalnotifications = userResponse.user.adminproposalnotifications || 0;
+  }
+
+  return {
+    "myproposalnotifications-statuschange": !!(myproposalnotifications &
+      NOTIFICATION_MY_PROPOSAL_STATUS_CHANGE),
+    "myproposalnotifications-votestarted": !!(myproposalnotifications &
+      NOTIFICATION_MY_PROPOSAL_VOTE_STARTED),
+    "regularproposalnotifications-vetted": !!(regularproposalnotifications &
+      NOTIFICATION_REGULAR_PROPOSAL_VETTED),
+    "regularproposalnotifications-edited": !!(regularproposalnotifications &
+      NOTIFICATION_REGULAR_PROPOSAL_EDITED),
+    "regularproposalnotifications-votestarted": !!(regularproposalnotifications &
+      NOTIFICATION_REGULAR_PROPOSAL_VOTE_STARTED),
+    "adminproposalnotifications-new": !!(adminproposalnotifications &
+      NOTIFICATION_ADMIN_PROPOSAL_NEW),
+    "adminproposalnotifications-voteauthorized": !!(adminproposalnotifications &
+      NOTIFICATION_ADMIN_PROPOSAL_VOTE_AUTHORIZED)
+  };
+};
+
+export const resolveEditUserValues = prefs => {
+  return {
+    myproposalnotifications: (
+      prefs["myproposalnotifications-statuschange"] ? NOTIFICATION_MY_PROPOSAL_STATUS_CHANGE : 0
+    ) | (
+      prefs["myproposalnotifications-votestarted"] ? NOTIFICATION_MY_PROPOSAL_VOTE_STARTED : 0
+    ),
+    regularproposalnotifications: (
+      prefs["regularproposalnotifications-vetted"] ? NOTIFICATION_REGULAR_PROPOSAL_VETTED : 0
+    ) | (
+      prefs["regularproposalnotifications-edited"] ? NOTIFICATION_REGULAR_PROPOSAL_EDITED : 0
+    ) | (
+      prefs["regularproposalnotifications-votestarted"] ? NOTIFICATION_REGULAR_PROPOSAL_VOTE_STARTED : 0
+    ),
+    adminproposalnotifications: (
+      prefs["adminproposalnotifications-new"] ? NOTIFICATION_ADMIN_PROPOSAL_NEW : 0
+    ) | (
+      prefs["adminproposalnotifications-voteauthorized"] ? NOTIFICATION_ADMIN_PROPOSAL_VOTE_AUTHORIZED : 0
+    )
   };
 };
 

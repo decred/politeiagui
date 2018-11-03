@@ -1359,6 +1359,7 @@ li p.header-3 {
   font-size: 1.05em;
   margin-right: 4px;
   color: #777;
+  text-align: right;
 }
 
 .user-page .detail-form .ident-value {
