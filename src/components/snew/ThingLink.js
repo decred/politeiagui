@@ -419,7 +419,7 @@ class ThingLinkComp extends React.Component {
             >
               <li>
                 <a
-                  href={isTestnet ? `https://github.com/decred-proposals/testnet3/tree/master/${id}/` : `https://github.com/decred-proposals/mainnet/tree/master/${id}/`}
+                  href={isTestnet ? `https://github.com/decred-proposals/testnet3/tree/master/${id}/${version}` : `https://github.com/decred-proposals/mainnet/tree/master/${id}/${version}`}
                   target="_blank"
                   className="blue-link"
                   rel="noopener noreferrer"
