@@ -227,7 +227,7 @@ class GeneralTab extends React.Component {
           <FieldSeparator />
         </div>
         {keyMismatch && !identityImportSuccess ?
-          <Field label="Active Identity"><div style={{ color: "red" }}>Identity Missing. Please see 'Manage Identity'</div></Field> :
+          <Field label="Active Identity"><div style={{ color: "red" }}>{`${pubkey} is invalid. Please see 'Manage Identity'`}</div></Field> :
           <Field className="account-info" label="Your public key"><div>{pubkeyStatus === PUB_KEY_STATUS_LOADED ? (pubkey || "none") : "Loading public key..." }</div></Field>}
         {(isUserPageOwner) ?
           <div>
