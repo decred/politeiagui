@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { uniqueID } from "../../helpers";
 
 const CancelButton = ({ onClick, text }) => (
   <button
@@ -21,6 +22,12 @@ const SubmitButton = ({ onClick, text, disabled }) => (
 );
 
 class ModalContentWrapper extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      modalID: uniqueID("modal")
+    };
+  }
   handleKeyUp = (e) => {
     if (e.keyCode === 27 && !this.props.disableCloseOnEsc) {
       if(this.props.onClose) {
@@ -30,11 +37,21 @@ class ModalContentWrapper extends React.Component {
       }
     }
   }
+  focusFirstInputOnModal = () => {
+    const modal = document.getElementById(this.state.modalID);
+    const inputs = modal && modal.querySelectorAll("input");
+    if (inputs && inputs.length) {
+      inputs[0].focus();
+    }
+  }
   componentWillMount(){
     window.addEventListener("keyup", this.handleKeyUp);
   }
   componentWillUnmount() {
     window.removeEventListener("keyup", this.handleKeyUp);
+  }
+  componentDidMount() {
+    this.focusFirstInputOnModal();
   }
   render() {
     const {
@@ -50,7 +67,7 @@ class ModalContentWrapper extends React.Component {
     } = this.props;
 
     return (
-      <div className="modal-content" style={{ minWidth: "700px", ...style }}>
+      <div id={this.state.modalID} className="modal-content" style={{ minWidth: "700px", ...style }}>
         <div className="modal-content-header">
           <h2 style={{ fontSize: "18px", textTransform: "uppercase" }} >{title}</h2>
           <div style={{ display: "flex", justifyContent: "flex-end", flex: 1 }}>
