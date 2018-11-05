@@ -1490,14 +1490,17 @@ form div.usertext-body.may-blank-within.md-container {
   float: right;
 }
 
-.comment > .entry > .usertext {
-	max-height: 500px;
+/* Max height is (line-height * 25)  */
+.entry > .usertext {
+	max-height: 35.71428575em;
 	overflow: hidden;
 }
 
+/* Max height is (line-height * 25)  */
 .collapsed {
-	max-height: 500px;
+	max-height: 35.71428575em;
 	overflow: hidden;
+	margin-bottom: 7.5px;
 }
 
 .expanded {
