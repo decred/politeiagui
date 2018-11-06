@@ -1740,3 +1740,7 @@ form div.usertext-body.may-blank-within.md-container {
 .collapse-icon-button:active {
   background: #909090;
 }
+
+.monospace {
+  font-family: monospace;
+}

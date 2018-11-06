@@ -227,8 +227,8 @@ class GeneralTab extends React.Component {
           <FieldSeparator />
         </div>
         {keyMismatch && !identityImportSuccess ?
-          <Field label="Active Identity"><div style={{ color: "red" }}>{`${pubkey} is invalid. Please see 'Manage Identity'`}</div></Field> :
-          <Field className="account-info" label="Your public key"><div>{pubkeyStatus === PUB_KEY_STATUS_LOADED ? (pubkey || "none") : "Loading public key..." }</div></Field>}
+          <Field label="Active Identity"><div style={{ color: "red" }} className="monospace">{`${pubkey} is invalid. Please see 'Manage Identity'`}</div></Field> :
+          <Field className="account-info" label="Your public key"><div className="monospace">{pubkeyStatus === PUB_KEY_STATUS_LOADED ? (pubkey || "none") : "Loading public key..." }</div></Field>}
         {(isUserPageOwner) ?
           <div>
             {showIdentityHelpText && isUserPageOwner ? (
@@ -364,7 +364,7 @@ class GeneralTab extends React.Component {
         </Field>
         {userHasActivePaywall ? (
           <div>
-            <Field label="Address">{" " + user.newuserpaywalladdress + " "}</Field>
+            <Field label="Address"><div className="monospace">{" " + user.newuserpaywalladdress + " "}</div></Field>
             <Field label="Amount">{user.newuserpaywallamount / 100000000} DCR</Field>
             {!user.newuserpaywalltx && ([
               <Field label="Pay after"><UTCDate time={user.newuserpaywalltxnotbefore} /></Field>,
@@ -376,7 +376,7 @@ class GeneralTab extends React.Component {
           <Field label="Transaction" key={0}>
             {user.newuserpaywalltx === "cleared_by_admin" ?
               <span>Cleared by admin</span> :
-              <a href={dcrdataTxUrl + user.newuserpaywalltx} target="_blank" rel="noopener noreferrer">{user.newuserpaywalltx}</a>
+              <a href={dcrdataTxUrl + user.newuserpaywalltx} target="_blank" className="monospace" rel="noopener noreferrer">{user.newuserpaywalltx}</a>
             }
           </Field>,
           <FieldSeparator key={2} />
