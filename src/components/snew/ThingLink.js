@@ -248,9 +248,9 @@ class ThingLinkComp extends React.Component {
                   }}
                 >
                   Your proposal has been created, but it will not be public
-                until an admin approves it. You can{" "}
+                  until an admin approves it. You can{" "}
                   <DownloadBundle message="download your proposal" type="proposal"/> and use
-                the{" "}
+                  the{" "}
                   <a
                     href="https://github.com/decred/politeia/tree/master/politeiad/cmd/politeia_verify"
                     target="_blank"
@@ -259,9 +259,7 @@ class ThingLinkComp extends React.Component {
                     politeia_verify tool
                   </a>{" "}
                   to prove that your submission has been accepted for review by
-                  Politeia. If your proposal is censored by an admin, you won't be
-                  able to access it's contents.
-
+                  Politeia.
                 </p>
               </span>
             </Message>

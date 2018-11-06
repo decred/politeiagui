@@ -154,7 +154,7 @@ class Stats extends React.Component {
         </div>
       </Tooltip>
     );
-    return blockTimeMinutes > 0 ? element : <span>expired</span>;
+    return blockTimeMinutes > 0 ? element : <span>finished</span>;
   };
   renderOptionsStats = () => {
     const {

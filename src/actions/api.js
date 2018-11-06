@@ -96,7 +96,11 @@ export const onCreateNewUser = ({ email, username, password }) =>
         dispatch(closeModal());
       })
       .catch(error => {
-        dispatch(act.RECEIVE_NEW_USER(null, error));
+        if (error.toString() === "Error: No available storage method found.") { //local storage error
+          dispatch(act.RECEIVE_NEW_USER(null, new Error("Politeia requires local storage to work.")));
+        } else {
+          dispatch(act.RECEIVE_NEW_USER(null, error));
+        }
         throw error;
       });
   });
