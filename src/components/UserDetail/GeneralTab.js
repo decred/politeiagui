@@ -233,7 +233,6 @@ class GeneralTab extends React.Component {
           <div>
             {showIdentityHelpText && isUserPageOwner ? (
               <div>
-
                 <span style={{ fontWeight: "bold", maxWidth: "7em" }} className="ident-value">{this.identityHelpPrompt}</span>{" "}
                 <a className="linkish" onClick={() => this.setState({ showIdentityHelpText: false })}>
                 (hide)
