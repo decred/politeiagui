@@ -45,10 +45,6 @@ class NewProposalWrapper extends Component {
     };
   }
 
-  componentDidMount(){
-    this.checkPaywallNewProposal();
-  }
-
   componentDidUpdate(prevProps) {
     const { token, draftProposal } = this.props;
     if (token) {
@@ -63,16 +59,6 @@ class NewProposalWrapper extends Component {
     if(draftProposalDataAvailable) {
       this.setState({
         initialValues: draftProposal
-      });
-    }
-  }
-
-  checkPaywallNewProposal = () => {
-    const { location, history, userHasPaid } = this.props;
-    if (!userHasPaid) {
-      history.replace({
-        pathname: "/",
-        state: { from: location }
       });
     }
   }
