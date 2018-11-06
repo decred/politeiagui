@@ -16,38 +16,25 @@ const configureStore = preloadedState => {
       compose(applyMiddleware(thunkMiddleware))
     );
   } else {
-    const composeEnhancers =
-    typeof window === "object" &&
+    const composeEnhancers = typeof window === "object" &&
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
       window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
         // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
       }) : compose;
+    const loggerMiddleware = createLogger();
 
-    if (process.env.REACT_APP_USE_REDUX_LOGGER) {
-      const loggerMiddleware = createLogger();
-      return createStore(
-        rootReducer,
-        {
-          ...loadStateLocalStorage,
-          ...preloadedState
-        },
-        composeEnhancers(applyMiddleware(
-          thunkMiddleware,
-          loggerMiddleware
-        ))
-      );
-    } else {
-      return createStore(
-        rootReducer,
-        {
-          ...loadStateLocalStorage,
-          ...preloadedState
-        },
-        composeEnhancers(applyMiddleware(
-          thunkMiddleware
-        ))
-      );
-    }
+    const middlewares = [
+      thunkMiddleware,
+      process.env.REACT_APP_USE_REDUX_LOGGER && loggerMiddleware
+    ].filter(Boolean);
+
+    return createStore(
+      rootReducer,
+      { ...loadStateLocalStorage,
+        ...preloadedState
+      },
+      composeEnhancers(applyMiddleware(...middlewares))
+    );
   }
 };
 
