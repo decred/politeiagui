@@ -132,6 +132,10 @@
   dependencies:
     any-observable "^0.3.0"
 
+"@types/jquery@^2.0.40":
+  version "2.0.51"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-2.0.51.tgz#d0c728663de8905457a26c8891ac08ad2b3539c9"
+
 abab@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.4.tgz#5faad9c2c07f60dd76770f71cf025b62a63cfd4e"
@@ -7802,7 +7806,7 @@ snapdragon@^0.8.1:
 
 "snew-classic-ui@https://github.com/decred/snew-classic-ui":
   version "0.1.9"
-  resolved "https://github.com/decred/snew-classic-ui#2087d0493f3c840c07d59d2c493d010092852db2"
+  resolved "https://github.com/decred/snew-classic-ui#673765e200c18d683c4cfc36f88707e3682b4c38"
   dependencies:
     babel-cli "^6.26.0"
     babel-core "6.26.3"
@@ -7812,6 +7816,7 @@ snapdragon@^0.8.1:
     babel-preset-react "^6.24.1"
     node-less "^1.0.0"
     node-less-chokidar "^0.3.1"
+    timeago-react "^2.0.0"
 
 sockjs-client@1.1.5:
   version "1.1.5"
@@ -8285,6 +8290,18 @@ thunky@^1.0.2:
 time-stamp@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/time-stamp/-/time-stamp-2.1.0.tgz#6c5c0b2bc835a244616abcfddf81ce13a1975c9f"
+
+timeago-react@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/timeago-react/-/timeago-react-2.0.0.tgz#01ed7cea809a0e03706c6ec5602bfd29f76d8e49"
+  dependencies:
+    timeago.js "^3.0.1"
+
+timeago.js@^3.0.1:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/timeago.js/-/timeago.js-3.0.2.tgz#32a67e7c0d887ea42ca588d3aae26f77de5e76cc"
+  dependencies:
+    "@types/jquery" "^2.0.40"
 
 timed-out@^4.0.0:
   version "4.0.1"
