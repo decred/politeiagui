@@ -15,9 +15,9 @@ class ThingComment extends React.PureComponent {
   }
   handleCommentMaxHeight = () => {
     const insertAfter = (newNode, referenceNode) => referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-    const commentsDiv = Array.prototype.slice.call(document.querySelectorAll(".comment > .entry > .usertext"));
+    const commentsDiv = Array.prototype.slice.call(document.querySelectorAll(".entry > .usertext "));
     const overflowDivs = commentsDiv.filter(function isOverflown(element) {
-      return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+      return element.scrollHeight > element.clientHeight && element.scrollHeight > 530;
     });
     overflowDivs.forEach((overflowDiv) => {
       const readMore = document.createElement("a");
