@@ -29,13 +29,11 @@ class ModalContentWrapper extends React.Component {
     };
   }
   handleKeyUp = (e) => {
-    if (e.keyCode === 27 && !this.props.disableCloseOnEsc) {
-      if(this.props.onClose) {
-        this.props.onClose();
-      } else if(this.props.onCancel) {
-        this.props.onCancel();
-      }
-    }
+    const ESC_KEY = 27;
+    const pressedEscKey = e.keyCode === ESC_KEY && !this.props.disableCloseOnEsc;
+    const action = this.props.onClose || this.props.onCancel;
+    if(pressedEscKey && action)
+      action();
   }
   focusFirstInputOnModal = () => {
     const modal = document.getElementById(this.state.modalID);
