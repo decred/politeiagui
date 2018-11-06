@@ -14,6 +14,9 @@ class ProposalDetail extends React.Component {
     };
   }
   componentDidUpdate(prevProps) {
+    if (prevProps.proposal && this.props && prevProps.proposal.name !== this.props.proposal.name) {
+      document.title = this.props.proposal.name;
+    }
     if((!prevProps.proposal || Object.keys(prevProps.proposal).length === 0 ) &&
       this.props.proposal && Object.keys(this.props.proposal).length > 0 &&
       this.props.proposal.status === 4 ){
@@ -21,12 +24,16 @@ class ProposalDetail extends React.Component {
     }
     this.handleUpdateOfComments(prevProps, this.props);
   }
+
   componentDidMount() {
     this.props.onFetchLikedComments(this.props.token);
   }
+
   componentWillUnmount() {
     this.props.resetLastSubmittedProposal();
+    document.title = "Politeia";
   }
+
   handleUpdateOfComments = (currentProps, nextProps) => {
     let sortedComments;
 
