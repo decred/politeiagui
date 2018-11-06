@@ -119,10 +119,12 @@ export const apiInfo = () => GET("/").then(({ csrfToken, response: { version, ro
   csrfToken: csrfToken, version, route, pubkey, testnet
 }));
 
-export const newUser = (csrf, email, username, password) => pki.myPubKeyHex(email).then(publickey =>
-  POST("/user/new", csrf,
-    { email, username, password: digest(password), publickey })
-    .then(getResponse));
+export const newUser = (csrf, email, username, password) =>
+  pki.myPubKeyHex(email)
+    .then(publickey =>
+      POST("/user/new", csrf,
+        { email, username, password: digest(password), publickey })
+        .then(getResponse));
 
 export const verifyNewUser = searchQuery => {
   const { email, verificationtoken } = qs.parse(searchQuery);
