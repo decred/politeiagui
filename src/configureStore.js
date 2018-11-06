@@ -16,8 +16,6 @@ const configureStore = preloadedState => {
       compose(applyMiddleware(thunkMiddleware))
     );
   } else {
-    const loggerMiddleware = createLogger();
-
     const composeEnhancers =
     typeof window === "object" &&
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
@@ -25,18 +23,31 @@ const configureStore = preloadedState => {
         // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
       }) : compose;
 
-    return createStore(
-      rootReducer,
-      {
-        ...loadStateLocalStorage,
-        ...preloadedState
-      }
-      ,
-      composeEnhancers(applyMiddleware(
-        thunkMiddleware,
-        loggerMiddleware
-      ))
-    );
+    if (process.env.REACT_APP_USE_REDUX_LOGGER) {
+      const loggerMiddleware = createLogger();
+      return createStore(
+        rootReducer,
+        {
+          ...loadStateLocalStorage,
+          ...preloadedState
+        },
+        composeEnhancers(applyMiddleware(
+          thunkMiddleware,
+          loggerMiddleware
+        ))
+      );
+    } else {
+      return createStore(
+        rootReducer,
+        {
+          ...loadStateLocalStorage,
+          ...preloadedState
+        },
+        composeEnhancers(applyMiddleware(
+          thunkMiddleware
+        ))
+      );
+    }
   }
 };
 
