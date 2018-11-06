@@ -3,6 +3,7 @@ import isEqual from "lodash/isEqual";
 import { Content } from "../snew";
 import { commentsToT1, proposalToT3 } from "../../lib/snew";
 import { getTextFromIndexMd } from "../../helpers";
+import { DEFAULT_TAB_TITLE } from "../../constants";
 import Message from "../Message";
 import { updateSortedComments, mergeNewComments, getUpdatedComments } from "./helpers";
 
@@ -31,7 +32,7 @@ class ProposalDetail extends React.Component {
 
   componentWillUnmount() {
     this.props.resetLastSubmittedProposal();
-    document.title = "Politeia";
+    document.title = DEFAULT_TAB_TITLE;
   }
 
   handleUpdateOfComments = (currentProps, nextProps) => {
