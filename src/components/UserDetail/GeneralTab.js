@@ -239,7 +239,7 @@ class GeneralTab extends React.Component {
                 </a>
               </div>
             ) : (
-              <a className="linkish ident-value" style={{ maxWidth: "7em", marginLeft: "164px" }} onClick={() => this.setState({ showIdentityHelpText: true })}>
+              <a className="linkish ident-value" style={{ maxWidth: "7em" }} onClick={() => this.setState({ showIdentityHelpText: true })}>
                 {this.identityHelpPrompt}
               </a>
             )}
