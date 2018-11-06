@@ -6,15 +6,11 @@ import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
 import Message from "../Message";
 
 
-const FieldGroup = ({
-  children
-}) => (
+const FieldGroup = ({ children }) => (
   <div style={{ marginBottom: 24 }}>{children}</div>
 );
 
-const FieldGroupHeader = ({
-  children
-}) => (
+const FieldGroupHeader = ({ children }) => (
   <h3 style={{ marginBottom: 8 }}>{children}</h3>
 );
 
@@ -24,7 +20,7 @@ const FieldContainer = ({
   children
 }) => (
   <div className="field">
-    <label className="field-label" style={{ width: 220 }}>{label + ":"}</label>
+    <label className="field-label" style={{ minHeight: 1, width: 220 }}>{label && (label + ":")}</label>
     <div className="field-value" style={{ width: fieldWidth }}>{children}</div>
     <div className="clear"></div>
   </div>
@@ -36,14 +32,20 @@ class PreferencesTab extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.formRef = React.createRef();
     this.state = {
-      showEditUserMessage: false
+      showEditUserMessage: false,
+      formChanged: false
     };
   }
 
   onEditUser = (...args) => {
     this.setState({ showEditUserMessage: true });
     return this.props.onEditUser(...args);
+  }
+
+  onChange = () => {
+    this.setState({ formChanged: true });
   }
 
   render() {
@@ -82,14 +84,16 @@ class PreferencesTab extends React.Component {
               name="myproposalnotifications-statuschange"
               component="input"
               type="checkbox"
-              disabled={!isUserPageOwner} />
+              disabled={!isUserPageOwner}
+              onChange={this.onChange} />
           </FieldContainer>
           <FieldContainer label="Voting started for proposal">
             <Field
               name="myproposalnotifications-votestarted"
               component="input"
               type="checkbox"
-              disabled={!isUserPageOwner} />
+              disabled={!isUserPageOwner}
+              onChange={this.onChange} />
           </FieldContainer>
         </FieldGroup>
         <FieldGroup>
@@ -99,21 +103,24 @@ class PreferencesTab extends React.Component {
               name="regularproposalnotifications-vetted"
               component="input"
               type="checkbox"
-              disabled={!isUserPageOwner} />
+              disabled={!isUserPageOwner}
+              onChange={this.onChange} />
           </FieldContainer>
           <FieldContainer label="Proposal edited">
             <Field
               name="regularproposalnotifications-edited"
               component="input"
               type="checkbox"
-              disabled={!isUserPageOwner} />
+              disabled={!isUserPageOwner}
+              onChange={this.onChange} />
           </FieldContainer>
           <FieldContainer label="Voting started for proposal">
             <Field
               name="regularproposalnotifications-votestarted"
               component="input"
               type="checkbox"
-              disabled={!isUserPageOwner} />
+              disabled={!isUserPageOwner}
+              onChange={this.onChange} />
           </FieldContainer>
         </FieldGroup>
         {isAdmin && isUserPageOwner && (
@@ -123,22 +130,24 @@ class PreferencesTab extends React.Component {
               <Field
                 name="adminproposalnotifications-new"
                 component="input"
-                type="checkbox" />
+                type="checkbox"
+                onChange={this.onChange} />
             </FieldContainer>
             <FieldContainer label="Voting authorized for proposal">
               <Field
                 name="adminproposalnotifications-voteauthorized"
                 component="input"
-                type="checkbox" />
+                type="checkbox"
+                onChange={this.onChange} />
             </FieldContainer>
           </FieldGroup>
         )}
         {isUserPageOwner && (
-          <FieldContainer label="" fieldWidth={250}>
+          <FieldContainer fieldWidth={250}>
             <ButtonWithLoadingIcon
               className="c-btn c-btn-primary c-pull-left"
               type="submit"
-              disabled={isApiRequestingEditUser}
+              disabled={isApiRequestingEditUser || !this.state.formChanged}
               isLoading={isApiRequestingEditUser}
               text="Save preferences" />
           </FieldContainer>
