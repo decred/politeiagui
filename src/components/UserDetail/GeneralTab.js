@@ -233,13 +233,14 @@ class GeneralTab extends React.Component {
           <div>
             {showIdentityHelpText && isUserPageOwner ? (
               <div>
-                <span style={{ fontWeight: "bold", maxWidth: "7em" }}>{this.identityHelpPrompt}</span>{" "}
+
+                <span style={{ fontWeight: "bold", maxWidth: "7em" }} className="ident-value">{this.identityHelpPrompt}</span>{" "}
                 <a className="linkish" onClick={() => this.setState({ showIdentityHelpText: false })}>
                 (hide)
                 </a>
               </div>
             ) : (
-              <a className="linkish" style={{ maxWidth: "7em" }} onClick={() => this.setState({ showIdentityHelpText: true })}>
+              <a className="linkish ident-value" style={{ maxWidth: "7em", marginLeft: "164px" }} onClick={() => this.setState({ showIdentityHelpText: true })}>
                 {this.identityHelpPrompt}
               </a>
             )}
