@@ -1,5 +1,5 @@
 import React from "react";
-import TimeAgo from "timeago-react";
+import { DateTooltip } from "snew-classic-ui";
 import ProposalImages from "../ProposalImages";
 import DownloadBundle from "../DownloadBundle";
 import Message from "../Message";
@@ -184,22 +184,7 @@ class ThingLinkComp extends React.Component {
           <span className="tagline">
             <span className="submitted-by">
               {hasBeenUpdated ? "updated " : "submitted "}
-              <Tooltip
-                text={new Date(created_utc * 1000).toLocaleString()}
-                wrapperStyle={{
-                  display: "inline"
-                }}
-                tipStyle={{
-                  right: "-10px",
-                  top: "20px",
-                  width: "100px",
-                  textAlign: "center"
-                }}>
-                <TimeAgo
-                  style={{ cursor: "pointer" }}
-                  datetime={created_utc * 1000}
-                />
-              </Tooltip>
+              <DateTooltip createdAt={created_utc} />
               {author &&
               <span>
                 {" by "}
