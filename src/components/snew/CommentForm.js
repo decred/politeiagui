@@ -56,7 +56,7 @@ const CommentForm = ({
             isVotingFinished ?
               <Message height="70px" type="info">
                 <span>
-                Proposals which voting has finished can not receive further comments.
+                  Voting has finished for this proposal. New comments and comment votes are not allowed.
                 </span>
               </Message>
               :
