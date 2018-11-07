@@ -129,7 +129,7 @@ const RegisterForm = ({
         header="Before you sign up...">
         <SignupWarning />
         <ButtonWithLoadingIcon
-          style={{ marginRight: "0px" }}
+          style={{ marginRight: "0px", overflow: "hidden" }}
           className="c-btn c-btn-primary c-pull-right"
           tabIndex={3}
           text="I understand, sign me up"
