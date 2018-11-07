@@ -93,17 +93,29 @@ const mapHeaderToCount = {
 class ProposalFilter extends React.Component {
   constructor(props) {
     super(props);
+    this.handleUpdateFilterValueForQueryValue(props);
+  }
+  componentDidUpdate(prevProps) {
+    this.handleUpdateQueryForFilterValueChange(prevProps);
+  }
+  handleUpdateFilterValueForQueryValue = (props) => {
     const { location, header, handleChangeFilterValue } = props;
     const { tab } = qs.parse(location.search);
     const tabOptions = mapHeaderToOptions[header];
-    const tabValueIsValidForHeader = tab && tabOptions.find(op => op.value.toString() === tab);
-    if (tabValueIsValidForHeader) {
-      handleChangeFilterValue(parseInt(tab, 10));
+    const validTabOption = tab && tabOptions.find(op => op.label === tab);
+    if (validTabOption) {
+      handleChangeFilterValue(validTabOption.value);
     }
   }
-  componentDidUpdate(prevProps) {
-    if(prevProps.filterValue !== this.props.filterValue) {
-      setQueryStringWithoutPageReload(`?tab=${this.props.filterValue}`);
+  handleUpdateQueryForFilterValueChange = (prevProps) => {
+    const { header } = this.props;
+    const filterValueTabHasChanged = prevProps.filterValue !== this.props.filterValue;
+    const tabOptions = mapHeaderToOptions[header];
+    const selectedOption = tabOptions.find(op => op.value === this.props.filterValue);
+    const optionLabel = selectedOption.label;
+
+    if(filterValueTabHasChanged) {
+      setQueryStringWithoutPageReload(`?tab=${optionLabel}`);
     }
   }
   render() {
