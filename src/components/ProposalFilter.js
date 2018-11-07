@@ -1,4 +1,6 @@
 import React from "react";
+import qs from "query-string";
+import { withRouter } from "react-router-dom";
 import { Tabs, Tab } from "./Tabs";
 import {
   PROPOSAL_FILTER_ALL,
@@ -15,6 +17,8 @@ import {
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   PROPOSAL_VOTING_AUTHORIZED
 } from "../constants";
+import { setQueryStringWithoutPageReload } from "../helpers";
+
 
 const adminFilterOptions = [
   {
@@ -86,19 +90,39 @@ const mapHeaderToCount = {
   [LIST_HEADER_USER]: (proposalCounts, status) => proposalCounts[status] || 0
 };
 
-const ProposalFilter = ({ handleChangeFilterValue, header, filterValue, proposalCounts }) => (
-  mapHeaderToOptions[header] ?
-    <Tabs>
-      {mapHeaderToOptions[header].map((op) => (
-        <Tab
-          key={op.value}
-          title={op.label}
-          count={mapHeaderToCount[header](proposalCounts, op.value)}
-          selected={filterValue === op.value}
-          onTabChange={() => handleChangeFilterValue(op.value)} />
-      ))}
-    </Tabs>
-    : null
-);
+class ProposalFilter extends React.Component {
+  constructor(props) {
+    super(props);
+    const { location, header, handleChangeFilterValue } = props;
+    const { tab } = qs.parse(location.search);
+    const tabOptions = mapHeaderToOptions[header];
+    const tabValueIsValidForHeader = tab && tabOptions.find(op => op.value.toString() === tab);
+    if (tabValueIsValidForHeader) {
+      handleChangeFilterValue(parseInt(tab, 10));
+    }
+  }
+  componentDidUpdate(prevProps) {
+    if(prevProps.filterValue !== this.props.filterValue) {
+      setQueryStringWithoutPageReload(`?tab=${this.props.filterValue}`);
+    }
+  }
+  render() {
+    const { handleChangeFilterValue, header, filterValue, proposalCounts } = this.props;
+    return (
+      mapHeaderToOptions[header] ?
+        <Tabs>
+          {mapHeaderToOptions[header].map((op) => (
+            <Tab
+              key={op.value}
+              title={op.label}
+              count={mapHeaderToCount[header](proposalCounts, op.value)}
+              selected={filterValue === op.value}
+              onTabChange={() => handleChangeFilterValue(op.value)} />
+          ))}
+        </Tabs>
+        : null
+    );
+  }
+}
 
-export default ProposalFilter;
+export default withRouter(ProposalFilter);
