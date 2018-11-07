@@ -43,6 +43,7 @@
     "mockapi": "node mockapi.js",
     "analyze": "source-map-explorer build/static/js/main.*",
     "start": "cross-env HTTPS=true react-scripts start",
+    "start-redux-logger": "REACT_APP_USE_REDUX_LOGGER=true cross-env HTTPS=true react-scripts start",
     "uidev": "concurrently \"node mockapi.js\" \"react-scripts start\"",
     "build": "react-scripts build",
     "build-staging": "REACT_APP_STAGING=true react-scripts build",
