@@ -1360,6 +1360,11 @@ li p.header-3 {
   margin-right: 4px;
   color: #777;
 }
+
+.user-page .detail-form .ident-value {
+  margin-left: 164px; /* field-label width + margin-right */
+}
+
 .user-page .detail-form .field .field-value {
   float: left;
   width: 600px;
