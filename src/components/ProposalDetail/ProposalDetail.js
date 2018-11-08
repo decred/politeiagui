@@ -3,6 +3,7 @@ import isEqual from "lodash/isEqual";
 import { Content } from "../snew";
 import { commentsToT1, proposalToT3 } from "../../lib/snew";
 import { getTextFromIndexMd } from "../../helpers";
+import { DEFAULT_TAB_TITLE } from "../../constants";
 import Message from "../Message";
 import { updateSortedComments, mergeNewComments, getUpdatedComments } from "./helpers";
 
@@ -14,6 +15,9 @@ class ProposalDetail extends React.Component {
     };
   }
   componentDidUpdate(prevProps) {
+    if (prevProps.proposal && this.props && prevProps.proposal.name !== this.props.proposal.name) {
+      document.title = this.props.proposal.name;
+    }
     if((!prevProps.proposal || Object.keys(prevProps.proposal).length === 0 ) &&
       this.props.proposal && Object.keys(this.props.proposal).length > 0 &&
       this.props.proposal.status === 4 ){
@@ -21,12 +25,16 @@ class ProposalDetail extends React.Component {
     }
     this.handleUpdateOfComments(prevProps, this.props);
   }
+
   componentDidMount() {
     this.props.onFetchLikedComments(this.props.token);
   }
+
   componentWillUnmount() {
     this.props.resetLastSubmittedProposal();
+    document.title = DEFAULT_TAB_TITLE;
   }
+
   handleUpdateOfComments = (currentProps, nextProps) => {
     let sortedComments;
 
@@ -94,6 +102,7 @@ class ProposalDetail extends React.Component {
       this.setState({ sortedComments });
     }
   }
+
   render() {
     const {
       isLoading,
@@ -103,9 +112,12 @@ class ProposalDetail extends React.Component {
       markdownFile,
       otherFiles,
       onFetchData,
+      commentid,
+      tempThreadTree,
       ...props
     } = this.props;
     const comments = this.state.sortedComments;
+    const tempTree = tempThreadTree[commentid];
     return (
       <div className="content" role="main">
         <div className="page proposal-page">
@@ -118,6 +130,8 @@ class ProposalDetail extends React.Component {
             <Content  {...{
               isLoading,
               error,
+              commentid,
+              comments,
               bodyClassName: "single-page comments-page",
               onFetchData: () => onFetchData(token),
               listings: isLoading ? [] : [
@@ -132,7 +146,7 @@ class ProposalDetail extends React.Component {
                     }
                   }]
                 },
-                { allChildren: commentsToT1(comments) }
+                { allChildren: commentsToT1(comments, commentid, tempTree) }
               ],
               ...props
             }} />

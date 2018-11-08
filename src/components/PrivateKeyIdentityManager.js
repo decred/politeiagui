@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import userConnector from "../connectors/user";
 import ReactFileReader from "react-file-reader";
 import FileDownloadLink from "./FileDownloadLink";
 import * as pki from "../lib/pki";
@@ -10,7 +11,6 @@ const INVALID_FILE = "This is not a valid identity file. The identity has to be 
 const LOAD_KEY_FAILED = "Sorry, something went wrong while importing the identity file, please try again. If the error persists, contact the Politeia support.";
 
 class PrivateKeyIdentityManager extends Component {
-
   componentDidMount() {
     this.fetchKeys().then(keyData => {
       if(!this.unmounting) {
@@ -26,7 +26,7 @@ class PrivateKeyIdentityManager extends Component {
   render() {
     return (
       <div className="private-key-identity clearfloat">
-        {this.state && this.state.keyData && (
+        {this.state && this.state.keyData && !this.props.keyMismatch && (
           <FileDownloadLink
             filename="politeia-pki.json"
             mime="application/json;charset=utf-8"
@@ -96,4 +96,4 @@ class PrivateKeyIdentityManager extends Component {
   }
 }
 
-export default PrivateKeyIdentityManager;
+export default userConnector(PrivateKeyIdentityManager);

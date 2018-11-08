@@ -45,3 +45,5 @@ export const LIST_HEADER_USER = "Your Proposals";
 export const SORT_BY_OLD = "OLD";
 export const SORT_BY_NEW = "NEW";
 export const SORT_BY_TOP = "TOP";
+
+export const DEFAULT_TAB_TITLE = "Politeia";

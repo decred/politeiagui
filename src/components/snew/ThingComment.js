@@ -5,11 +5,9 @@ import { PROPOSAL_VOTING_FINISHED } from "../../constants";
 import Message from "../Message";
 
 class ThingComment extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showCommentForm: false
-    };
+  handlePermalinkClick = (e) => {
+    e && e.preventDefault && e.preventDefault();
+    this.props.history.push(`/proposals/${this.props.token}/comments/${this.props.id}`);
   }
   handleCommentCensor = (e) => {
     e && e.preventDefault && e.preventDefault();
@@ -17,9 +15,9 @@ class ThingComment extends React.PureComponent {
   }
   handleCommentMaxHeight = () => {
     const insertAfter = (newNode, referenceNode) => referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-    const commentsDiv = Array.prototype.slice.call(document.querySelectorAll(".comment > .entry > .usertext"));
+    const commentsDiv = Array.prototype.slice.call(document.querySelectorAll(".entry > .usertext "));
     const overflowDivs = commentsDiv.filter(function isOverflown(element) {
-      return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+      return element.scrollHeight > element.clientHeight && element.scrollHeight > 530;
     });
     overflowDivs.forEach((overflowDiv) => {
       const readMore = document.createElement("a");
@@ -36,13 +34,7 @@ class ThingComment extends React.PureComponent {
   componentDidMount(){
     this.handleCommentMaxHeight();
   }
-  toggleCommentForm = (e, forceValue = null) => {
-    e && e.preventDefault && e.preventDefault();
-    this.setState({
-      showCommentForm: forceValue != null ? forceValue : !this.state.showCommentForm
-    });
-  }
-  onCloseCommentForm = () => this.toggleCommentForm(null, false)
+
   render() {
     const {
       onLikeComment,
@@ -52,9 +44,12 @@ class ThingComment extends React.PureComponent {
       getVoteStatus,
       likeCommentError,
       likeCommentPayload,
+      commentid,
+      showCommentForm,
+      toggleCommentForm,
+      onCloseCommentForm,
       ...props
     } = this.props;
-    const { showCommentForm } = this.state;
     return (
       <div>
         {likeCommentError && likeCommentPayload.token === token
@@ -71,10 +66,11 @@ class ThingComment extends React.PureComponent {
           showCensorLink: !!props.isAdmin && !props.censored,
           showArrows: !props.censored,
           grayBody: props.censored,
+          highlightcomment: commentid === props.id,
           showReply: !props.censored,
-          onShowReply: this.toggleCommentForm,
+          onShowReply: toggleCommentForm,
           onCensorComment: this.handleCommentCensor,
-          onCloseCommentForm: this.onCloseCommentForm,
+          onCloseCommentForm,
           showCommentForm,
           user: loggedInAsEmail,
           authorHref: `/user/${props.authorid}`,

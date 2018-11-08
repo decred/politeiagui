@@ -5,8 +5,8 @@ import {
   assertPOSTOnRouteIsCalled
 } from "./support/helpers";
 describe("test external api lib (lib/api.js)", () => {
-  const FAKE_TESTNET_ADDRESS = "T_fake_adress";
-  const FAKE_MAINNET_ADDRESS = "M_fake_adress";
+  const FAKE_TESTNET_ADDRESS = "T_fake_address";
+  const FAKE_MAINNET_ADDRESS = "M_fake_address";
   const dcrdataTestnetUrl = "https://testnet.dcrdata.org/api";
   const dcrdataExplorerUrl = "https://explorer.dcrdata.org/api";
   const insightTestnetUrl = "https://testnet.decred.org/api";

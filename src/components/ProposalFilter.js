@@ -67,7 +67,7 @@ const mapHeaderToOptions = {
 const mapHeaderToCount = {
   [LIST_HEADER_UNVETTED]: (proposalCounts, status) => {
     // unreviewed proposals and proposals with unreviewed changes are shown on the same list
-    // so is necesary to sum their counts
+    // so is necessary to sum their counts
     const count = proposalCounts[status] || 0;
     if(status === PROPOSAL_STATUS_UNREVIEWED) {
       return count + (proposalCounts[PROPOSAL_STATUS_UNREVIEWED_CHANGES] || 0);

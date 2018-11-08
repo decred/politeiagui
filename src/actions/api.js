@@ -96,7 +96,11 @@ export const onCreateNewUser = ({ email, username, password }) =>
         dispatch(closeModal());
       })
       .catch(error => {
-        dispatch(act.RECEIVE_NEW_USER(null, error));
+        if (error.toString() === "Error: No available storage method found.") { //local storage error
+          dispatch(act.RECEIVE_NEW_USER(null, new Error("Politeia requires local storage to work.")));
+        } else {
+          dispatch(act.RECEIVE_NEW_USER(null, error));
+        }
         throw error;
       });
   });
@@ -247,6 +251,10 @@ export const onFetchProposal = token => dispatch => {
 
 export const onFetchUser = userId => dispatch => {
   dispatch(act.REQUEST_USER(userId));
+  const regexp = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  const valid = regexp.test(userId);
+  if (!valid)
+    return dispatch(act.RECEIVE_USER(null, "This is not a valid user ID."));
   return api
     .user(userId)
     .then(response => dispatch(act.RECEIVE_USER(response)))
@@ -388,13 +396,18 @@ export const onCensorComment = (loggedInAsEmail, token, commentid) =>
       });
   });
 
-export const onSubmitComment = (loggedInAsEmail, token, comment, parentid) =>
+export const onSubmitComment = (loggedInAsEmail, token, comment, parentid, commentid) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
     return Promise.resolve(api.makeComment(token, comment, parentid))
       .then(comment => api.signComment(loggedInAsEmail, comment))
       .then(comment => api.newComment(csrf, comment))
-      .then(response => dispatch(act.RECEIVE_NEW_COMMENT(response.comment)))
+      .then(response => {
+        const responsecomment = response.comment;
+        dispatch(act.RECEIVE_NEW_COMMENT(responsecomment));
+        commentid && dispatch(act.RECEIVE_NEW_THREAD_COMMENT({ id: commentid, comment: responsecomment }));
+        return;
+      })
       .catch(error => {
         dispatch(act.RECEIVE_NEW_COMMENT(null, error));
         throw error;
@@ -687,8 +700,8 @@ export const onRescanUserPayments = (userid) =>
       response => {
         dispatch(act.RECEIVE_RESCAN_USER_PAYMENTS(response));
 
-        // if the rescan returns new credits we need to refetch the user details
-        // so the user credis are correclty updated
+        // if the rescan returns new credits, a refetch of the user details
+        // is needed to update the user credits.
         // if(response.newcredits && response.newcredits.length > 0) {
         //   dispatch(onFetchUser(userid));
         // }

@@ -136,13 +136,14 @@ The basic process for submitting and approving proposals is outlined below. Note
 
 1. Submit proposal.
 2. Proposal reviewed by Politeia admins, spam is censored.
-3. Valid proposals appear publicly on Politeia, open for discussion, but voting does not begin immediately.
-4. For now, the ticket-voting interval of 2016 blocks (~1 week) can only be triggered by an admin. Until ticket-voting is triggered, the
-proposal can be edited by its owner in response to community feedback.
-5. Ticket-voting starts, ticket-holders vote through their wallet.
-6. When the ticket-voting period ends, the proposal is formally approved or rejected. Some types of proposal will
-require a super-majority. Details like supermajorities and quorum required for different kinds of proposal are to be
-determined.
+3. Valid proposals appear publicly on Politeia, open for discussion, but voting does not begin immediately. The proposal can be 
+edited by its owner in response to feedback.
+4. The proposal owner authorizes voting to start. An admin then triggers the start of voting.
+5. The ticket-voting interval of 2016 blocks (~1 week) begins. A snapshot of the live ticket pool is taken at 256 blocks prior to
+the start of voting. Every ticket in this snapshot can vote Yes or No on the proposal. Tickets bought after the snapshot for a proposal 
+cannot vote on it. Tickets that vote on-chain can still be used to vote on a proposal if they were live when the snapshot was taken.
+6. When the ticket-voting period ends, the proposal is formally approved or rejected. There is a quorum requirement for a vote to be
+considered valid: 20% of the eligible tickets must vote Yes or No. The threshold for a proposal to be approved is 60% Yes votes.
 7. When a proposal with a budget and deliverables is approved, work can begin. The proposal owner can submit claims
 against that budget as deliverables are completed.
 8. Payment claims will be handled manually by Decred Holdings Group until such times as this process can be adequately
@@ -280,8 +281,8 @@ votes should be less than a week.
     Stakey costume: $500
     Stakey costume occupant: 3 (10 hour) days at $40/hr (that suit is warm!): $1,200
     Travel expenses for booth staff: Up to $2,000
-    Accomodation for booth staff. We will stay at the conference hotel costing $200/night, it is unlikely
-	that all booth staff need accomodation, but the maximum would be 200 x 3 nights x 4 staff = $2,400
+    Accommodation for booth staff. We will stay at the conference hotel costing $200/night, it is unlikely
+	that all booth staff need accommodation, but the maximum would be 200 x 3 nights x 4 staff = $2,400
 
     Maximum total budget: $15,600
 
@@ -297,7 +298,7 @@ votes should be less than a week.
 
     Registration fees are due by September 30th, I will pay these up-front and request full reimbursement
 	immediately. I will front the cost of the swag and Stakey suit, and claim this along with my
-	travel/accomodation expenses and payment for my work, after the event.
+	travel/accommodation expenses and payment for my work, after the event.
     Booth staff who are already Decred contributors will bill for their hours and expenses directly,
 	I will serve as intermediary for any staff costs not associated with established contributors.
 `

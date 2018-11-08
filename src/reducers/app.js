@@ -16,6 +16,7 @@ export const DEFAULT_STATE = {
     name: "",
     description: ""
   },
+  replyThreadTree: {},
   adminProposalsShow: PROPOSAL_STATUS_UNREVIEWED,
   publicProposalsShow: PROPOSAL_FILTER_ALL,
   userProposalsShow: PROPOSAL_USER_FILTER_SUBMITTED,
@@ -39,6 +40,34 @@ const app = (state = DEFAULT_STATE, action) => (({
       [action.payload.censorshiprecord.token]: action.payload
     }
   }),
+  [act.RECEIVE_NEW_THREAD_COMMENT]: () => {
+    const { id, comment: { parentid, commentid } } = action.payload;
+    const tree = state.replyThreadTree[id];
+    if (tree) {
+      const parentBranch = tree[parentid];
+      const updatedParentBranch = parentBranch ? [ ...parentBranch, commentid ] : [commentid];
+      return {
+        ...state,
+        replyThreadTree: {
+          ...state.replyThreadTree,
+          [id]: {
+            ...state.replyThreadTree[id],
+            [parentid]: updatedParentBranch
+          }
+        }
+      };
+    }
+    return {
+      ...state,
+      replyThreadTree: {
+        ...state.replyThreadTree,
+        [id]: {
+          ...state.replyThreadTree[id],
+          [parentid]: [commentid]
+        }
+      }
+    };
+  },
   [act.SAVE_DRAFT_PROPOSAL]: () => {
     const newDraftProposals = state.draftProposals;
     const draftId = action.payload.draftId || uniqueID("draft");

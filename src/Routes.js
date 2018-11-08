@@ -56,7 +56,8 @@ class Routes extends Component {
         <AdminAuthenticatedRoute path="/admin" component={admin(ProposalListing)} exact />
         <AdminAuthenticatedRoute path="/admin/users" component={UserLookup} />
         <Route path="/user/:userId" component={userDetail(UserDetail)} />
-        <Route path="/proposals/:token" component={proposalDetail(ProposalDetail)} />
+        <Route path="/proposals/:token" component={proposalDetail(ProposalDetail)} exact />
+        <Route path="/proposals/:token/comments/:commentid" component={proposalDetail(ProposalDetail)} />
         <Route path="/500" component={ErrorPage} />
         <Route path="*" component={NotFound} />
       </Switch>
