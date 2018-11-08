@@ -102,7 +102,10 @@ class ProposalFilter extends React.Component {
     const { location, header, handleChangeFilterValue } = props;
     const { tab } = qs.parse(location.search);
     const tabOptions = mapHeaderToOptions[header];
-    const validTabOption = tab && tabOptions.find(op => op.label === tab);
+    if (!tabOptions)
+      return;
+
+    const validTabOption = tabOptions.find(op => op.label === tab);
     if (validTabOption) {
       handleChangeFilterValue(validTabOption.value);
     }
@@ -111,7 +114,10 @@ class ProposalFilter extends React.Component {
     const { header } = this.props;
     const filterValueTabHasChanged = prevProps.filterValue !== this.props.filterValue;
     const tabOptions = mapHeaderToOptions[header];
-    const selectedOption = tabOptions.find(op => op.value === this.props.filterValue);
+    if(!tabOptions)
+      return;
+
+    const selectedOption = tabOptions && tabOptions.find(op => op.value === this.props.filterValue);
     const optionLabel = selectedOption.label;
 
     if(filterValueTabHasChanged) {

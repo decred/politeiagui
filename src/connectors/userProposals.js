@@ -35,22 +35,23 @@ class Wrapper extends Component {
 
   componentDidMount() {
     const {
-      userid,
-      loggedInAsEmail,
-      history,
       match,
-      onFetchUserProposals,
       onChangeFilter
     } = this.props;
 
-    if (!loggedInAsEmail) history.push("/login");
-    if (userid !== null) onFetchUserProposals(userid);
     if (match.params && typeof match.params.filter !== "undefined") {
       onChangeFilter({
         "submitted": PROPOSAL_USER_FILTER_SUBMITTED,
         "drafts": PROPOSAL_USER_FILTER_DRAFT
       }[match.params.filter]);
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { userid } = this.props;
+    const userFetched = !prevProps.userid && this.props.userid;
+    if (userFetched)
+      this.props.onFetchUserProposals(userid);
   }
 
   render () {
