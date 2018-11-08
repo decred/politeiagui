@@ -659,7 +659,7 @@ li p.header-3 {
   margin-left: 5em;
   display: flex;
 }
-.private-key-identity .react-file-reader {
+.private-key-identity .react-file-reader .ReactFileReader {
   margin-top: 0px;
 }
 

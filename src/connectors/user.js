@@ -83,6 +83,7 @@ const userConnector = connect(
         onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
         onFetchData: act.onFetchUser,
         openModal: act.openModal,
+        closeModal: act.closeModal,
         keyMismatchAction: act.keyMismatch,
         onIdentityImported: act.onIdentityImported,
         confirmWithModal: act.confirmWithModal,
