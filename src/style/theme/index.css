@@ -148,6 +148,13 @@ body>.appWrapper>.content {
     padding: 92px 352px 64px 16px;
     margin: 0;
 }
+body>.appWrapper>.content>#login {
+		margin-left: 0;
+		padding-right: 1em;
+    position: absolute;
+    width: 98.75%;
+    margin: 0;
+}
 
 .link {
     padding: 16px;
