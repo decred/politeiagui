@@ -1361,11 +1361,7 @@ li p.header-3 {
   font-size: 1.05em;
   margin-right: 4px;
   color: #777;
-  text-align: right;
-}
-
-.user-page .detail-form .ident-value {
-  margin-left: 164px; /* field-label width + margin-right */
+  text-align: left;
 }
 
 .user-page .detail-form .field .field-value {

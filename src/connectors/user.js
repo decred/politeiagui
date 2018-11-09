@@ -50,49 +50,49 @@ const userConnector = connect(
     loggedInAsUsername: sel.loggedInAsUsername,
     amountOfCreditsAddedOnRescan: sel.amountOfCreditsAddedOnRescan,
     rescanUserId: sel.apiRescanUserPaymentsUserId,
-    isApiRequestingMarkAsPaid: state => (
+    isApiRequestingMarkAsPaid: state =>
       sel.isApiRequestingManageUser(state) &&
-        sel.manageUserAction(state) === MANAGE_USER_CLEAR_USER_PAYWALL
-    ),
-    isApiRequestingMarkNewUserAsExpired: state => (
+      sel.manageUserAction(state) === MANAGE_USER_CLEAR_USER_PAYWALL,
+    isApiRequestingMarkNewUserAsExpired: state =>
       sel.isApiRequestingManageUser(state) &&
-        sel.manageUserAction(state) === MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION
-    ),
-    isApiRequestingMarkUpdateKeyAsExpired: state => (
+      sel.manageUserAction(state) === MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
+    isApiRequestingMarkUpdateKeyAsExpired: state =>
       sel.isApiRequestingManageUser(state) &&
-        sel.manageUserAction(state) === MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION
-    ),
-    isApiRequestingMarkResetPasswordAsExpired: state => (
+      sel.manageUserAction(state) ===
+        MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
+    isApiRequestingMarkResetPasswordAsExpired: state =>
       sel.isApiRequestingManageUser(state) &&
-        sel.manageUserAction(state) === MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION
-    ),
-    isApiRequestingUnlockUser: state => (
+      sel.manageUserAction(state) ===
+        MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
+    isApiRequestingUnlockUser: state =>
       sel.isApiRequestingManageUser(state) &&
-        sel.manageUserAction(state) === MANAGE_USER_UNLOCK
-    ),
-    isApiRequestingDeactivateUser: state => (
+      sel.manageUserAction(state) === MANAGE_USER_UNLOCK,
+    isApiRequestingDeactivateUser: state =>
       sel.isApiRequestingManageUser(state) &&
-        sel.manageUserAction(state) === MANAGE_USER_DEACTIVATE
-    ),
-    isApiRequestingReactivateUser: state => (
+      sel.manageUserAction(state) === MANAGE_USER_DEACTIVATE,
+    isApiRequestingReactivateUser: state =>
       sel.isApiRequestingManageUser(state) &&
-        sel.manageUserAction(state) === MANAGE_USER_REACTIVATE
-    ),
-    manageUserResponse: sel.manageUserResponse
+      sel.manageUserAction(state) === MANAGE_USER_REACTIVATE,
+    manageUserResponse: sel.manageUserResponse,
+    numOfUserProposals: sel.numOfUserProposals
   }),
-  dispatch => bindActionCreators({
-    onFetchUserProposals: act.onFetchUserProposals,
-    onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
-    onFetchData: act.onFetchUser,
-    openModal: act.openModal,
-    keyMismatchAction: act.keyMismatch,
-    onIdentityImported: act.onIdentityImported,
-    confirmWithModal: act.confirmWithModal,
-    onUpdateUserKey: act.onUpdateUserKey,
-    onManageUser: act.onManageUser,
-    onRescan: act.onRescanUserPayments,
-    onResetRescan: act.onResetRescanUserPayments
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        onFetchUserProposals: act.onFetchUserProposals,
+        onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
+        onFetchData: act.onFetchUser,
+        openModal: act.openModal,
+        keyMismatchAction: act.keyMismatch,
+        onIdentityImported: act.onIdentityImported,
+        confirmWithModal: act.confirmWithModal,
+        onUpdateUserKey: act.onUpdateUserKey,
+        onManageUser: act.onManageUser,
+        onRescan: act.onRescanUserPayments,
+        onResetRescan: act.onResetRescanUserPayments
+      },
+      dispatch
+    )
 );
 
 export default compose(
