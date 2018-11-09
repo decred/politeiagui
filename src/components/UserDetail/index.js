@@ -15,6 +15,7 @@ class UserDetail extends Component {
 
   componentDidMount() {
     this.props.onFetchData(this.props.userId);
+    this.props.onFetchUserProposals(this.props.userId);
     this.props.onFetchProposalsVoteStatus();
   }
 
