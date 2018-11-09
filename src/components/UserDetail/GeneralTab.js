@@ -83,8 +83,8 @@ class GeneralTab extends React.Component {
       showIdentityHelpText: false,
       openedVerification: false,
       pubkey: "",
-      pubkeyStatus: PUB_KEY_STATUS_LOADING
-
+      pubkeyStatus: PUB_KEY_STATUS_LOADING,
+      showPastUserIdentities: false
     };
   }
 
@@ -191,23 +191,25 @@ class GeneralTab extends React.Component {
       onResetRescan,
       rescanUserId
     } = this.props;
-    const { showIdentityHelpText, pubkey, pubkeyStatus } = this.state;
+    const { showIdentityHelpText, pubkey, pubkeyStatus, showPastUserIdentities } = this.state;
     const userHasActivePaywall = user && user.newuserpaywalladdress && user.newuserpaywallamount;
     const isUserPageOwner = loggedInAsUserId === user.id;
     const hasTheRescanResult = amountOfCreditsAddedOnRescan !== undefined && rescanUserId === user.id;
+    const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
     return (
       <div className="detail-form">
         <div>
-          <Field label="Proposal credits">
-            {user.proposalcredits}
-            {isAdmin ?
-              <ButtonWithLoadingIcon
-                className="c-btn c-btn-primary button-small"
-                isLoading={isLoadingRescan}
-                onClick={() => onRescan(user.id)}
-                text="rescan"
-              /> : null}
-          </Field>
+          {isAdminOrTheUser ?
+            <Field label="Proposal credits">
+              {user.proposalcredits}
+              {isAdmin ?
+                <ButtonWithLoadingIcon
+                  className="c-btn c-btn-primary button-small"
+                  isLoading={isLoadingRescan}
+                  onClick={() => onRescan(user.id)}
+                  text="rescan"
+                /> : null}
+            </Field> : null }
           {hasTheRescanResult ?
             <Message
               type="success"
@@ -228,7 +230,12 @@ class GeneralTab extends React.Component {
         </div>
         {keyMismatch && !identityImportSuccess ?
           <Field label="Active Identity"><div style={{ color: "red" }} className="monospace">{`${pubkey} is invalid. Please see 'Manage Identity'`}</div></Field> :
-          <Field className="account-info" label="Your public key"><div className="monospace">{pubkeyStatus === PUB_KEY_STATUS_LOADED ? (pubkey || "none") : "Loading public key..." }</div></Field>}
+          <Field className="account-info" label={isUserPageOwner ? "Your Public Key" : `${user.username}'s Public Key`}>
+            {isUserPageOwner ?
+              <div className="monospace">{pubkeyStatus === PUB_KEY_STATUS_LOADED ? (pubkey || "none") : "Loading public key..." }</div>
+              : <div className="monospace">{pubkeyStatus === PUB_KEY_STATUS_LOADED ?
+                (user.identities[user.identities.length - 1].pubkey || "none") : "Loading public key..." }</div> }
+          </Field> }
         {(isUserPageOwner) ?
           <div>
             {showIdentityHelpText && isUserPageOwner ? (
@@ -333,35 +340,58 @@ class GeneralTab extends React.Component {
           </div>
         ) : null}
         <FieldSeparator />
-        {!user.newuserverificationtoken ? (
-          <Field label="Verified email">Yes</Field>
-        ) : (
+        <Field label="Past Public Keys" style={{ float: "left" }}>
+          {showPastUserIdentities ? (
+            <span>
+              <span style={{ fontWeight: "bold" }}>Expanded</span>
+              <a className="linkish" style={{ paddingLeft: "1em" }}onClick={() => this.setState({ showPastUserIdentities: false })}>(hide)</a>
+            </span> ) : (
+            <a className="linkish" onClick={() => this.setState({ showPastUserIdentities: true })}>Expand</a>
+          )}
+        </Field>
+        {showPastUserIdentities ?
+          <ul>{user.identities.map((identity, i) => (
+            <ul key={i} style={{ lineHeight: "2em" }}>
+              <li style={{ float: "left", fontWeight: "bold", marginRight: ".75em", lineHeight: "1.5em" }}>{i + 1})</li>
+              <li className="monospace">{identity.pubkey}</li>
+            </ul>
+          ))}
+          </ul>
+          : null }
+        <FieldSeparator />
+        {isAdminOrTheUser ?
           <div>
-            <Field label="Verified email">No</Field>
-            <TokenFields
-              tokenLabel="Registration token"
-              token={" " + user.newuserverificationtoken + " "}
-              expiry={user.newuserverificationexpiry}
-              userId={user.id}
-              action={EDIT_USER_EXPIRE_NEW_USER_VERIFICATION}
-              isRequesting={isApiRequestingMarkNewUserAsExpired}
-              onEditUser={onEditUser} />
-          </div>
-        )}
+            {!user.newuserverificationtoken ? (
+              <Field label="Verified email">Yes</Field>
+            ) : (
+              <div>
+                <Field label="Verified email">No</Field>
+                <TokenFields
+                  tokenLabel="Registration token"
+                  token={" " + user.newuserverificationtoken + " "}
+                  expiry={user.newuserverificationexpiry}
+                  userId={user.id}
+                  action={EDIT_USER_EXPIRE_NEW_USER_VERIFICATION}
+                  isRequesting={isApiRequestingMarkNewUserAsExpired}
+                  onEditUser={onEditUser} />
+              </div>
+            )}
+          </div> : null }
         {(loggedInAsUserId === user.id) ?
           <Field label="Password"><a className="linkish" onClick={() => openModal(CHANGE_PASSWORD_MODAL)}>Change Password</a></Field> : null}
-        <FieldSeparator />
-        <Field label="Has paid">
-          {user.newuserpaywalltx ? "Yes" : ([
-            <span>No</span>,
-            isAdmin && <ButtonWithLoadingIcon
-              className="c-btn c-btn-primary button-small"
-              text="Mark as paid"
-              disabled={isApiRequestingMarkAsPaid}
-              isLoading={isApiRequestingMarkAsPaid}
-              onClick={() => onEditUser(user.id, EDIT_USER_CLEAR_USER_PAYWALL)} />
-          ])}
-        </Field>
+        { isAdminOrTheUser ? <FieldSeparator /> : null }
+        { isAdminOrTheUser ?
+          <Field label="Has paid">
+            {user.newuserpaywalltx ? "Yes" : ([
+              <span>No</span>,
+              isAdmin && <ButtonWithLoadingIcon
+                className="c-btn c-btn-primary button-small"
+                text="Mark as paid"
+                disabled={isApiRequestingMarkAsPaid}
+                isLoading={isApiRequestingMarkAsPaid}
+                onClick={() => onEditUser(user.id, EDIT_USER_CLEAR_USER_PAYWALL)} />
+            ])}
+          </Field> : null }
         {userHasActivePaywall ? (
           <div>
             <Field label="Address"><div className="monospace">{" " + user.newuserpaywalladdress + " "}</div></Field>
@@ -381,18 +411,21 @@ class GeneralTab extends React.Component {
           </Field>,
           <FieldSeparator key={2} />
         ])}
-        <Field label="Failed login attempts">{user.failedloginattempts}</Field>
-        <Field label="Locked">
-          {!user.islocked ? "No" : ([
-            <span>Yes</span>,
-            <ButtonWithLoadingIcon
-              className="c-btn c-btn-primary button-small"
-              text="Unlock user"
-              disabled={isApiRequestingUnlockUser}
-              isLoading={isApiRequestingUnlockUser}
-              onClick={() => onEditUser(user.id, EDIT_USER_UNLOCK)} />
-          ])}
-        </Field>
+        { isAdminOrTheUser ?
+          <div>
+            <Field label="Failed login attempts">{user.failedloginattempts}</Field>
+            <Field label="Locked">
+              {!user.islocked ? "No" : ([
+                <span>Yes</span>,
+                <ButtonWithLoadingIcon
+                  className="c-btn c-btn-primary button-small"
+                  text="Unlock user"
+                  disabled={isApiRequestingUnlockUser}
+                  isLoading={isApiRequestingUnlockUser}
+                  onClick={() => onEditUser(user.id, EDIT_USER_UNLOCK)} />
+              ])}
+            </Field>
+          </div> : null }
         {isAdmin &&
           <React.Fragment>
             <FieldSeparator />
@@ -419,7 +452,15 @@ class GeneralTab extends React.Component {
                 </React.Fragment>}
             </Field>
           </React.Fragment>}
+        { isAdminOrTheUser ? <FieldSeparator /> : null }
+        { !isAdminOrTheUser ?
+          <Field label="Admin (Y/N)">
+            {user.isAdmin ? <div>Yes</div> : <div>No</div> }
+          </Field> : null }
         <FieldSeparator />
+        <Field label="User ID">
+          <div>{user.id}</div>
+        </Field>
         {user.updatekeyverificationtoken && ([
           <TokenFields
             tokenLabel="Update key token"
