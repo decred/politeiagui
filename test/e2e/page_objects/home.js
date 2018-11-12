@@ -1,7 +1,6 @@
 const Commands = {
-  submitProposal: function () {
-    return this
-      .waitForElementVisible("@submitProposalLink", 10000)
+  submitProposal: function() {
+    return this.waitForElementVisible("@submitProposalLink", 10000)
       .click("@submitProposalLink")
       .waitForElementVisible("@submitProposalPage", 10000);
   }
@@ -9,7 +8,7 @@ const Commands = {
 
 module.exports = {
   commands: [Commands],
-  url: function () {
+  url: function() {
     return this.api.launchUrl;
   },
   elements: {

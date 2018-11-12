@@ -3,7 +3,7 @@ import configureStore from "redux-mock-store";
 import qs from "query-string";
 import thunk from "redux-thunk";
 import * as api from "../api";
-import * as ea  from "../external_api";
+import * as ea from "../external_api";
 import * as act from "../types";
 import {
   done,
@@ -59,50 +59,68 @@ describe("test api actions (actions/api.js)", () => {
   };
 
   const getMockedStore = () => mockStore(MOCK_STATE);
-  const assertApiActionOnSuccess = async (path, fn, params, expectedActions, options = {}, method = methods.GET) => {
-    switch(method) {
-    case methods.GET:
-      setGetSuccessResponse(path, options);
-      break;
-    case methods.POST:
-      setPostSuccessResponse(path, options);
-      break;
-    case methods.PUT:
-      setPutSuccessResponse(path, options);
-      break;
-    default:
-      setGetSuccessResponse(path, options);
+  const assertApiActionOnSuccess = async (
+    path,
+    fn,
+    params,
+    expectedActions,
+    options = {},
+    method = methods.GET
+  ) => {
+    switch (method) {
+      case methods.GET:
+        setGetSuccessResponse(path, options);
+        break;
+      case methods.POST:
+        setPostSuccessResponse(path, options);
+        break;
+      case methods.PUT:
+        setPutSuccessResponse(path, options);
+        break;
+      default:
+        setGetSuccessResponse(path, options);
     }
-    await expect(fn.apply(null, params))
-      .toDispatchActionsWithState(MOCK_STATE, expectedActions, done);
+    await expect(fn.apply(null, params)).toDispatchActionsWithState(
+      MOCK_STATE,
+      expectedActions,
+      done
+    );
   };
-  const assertApiActionOnError = async (path, fn, params, callbackWithError, options = {}, method = methods.GET) => {
-    switch(method) {
-    case methods.GET:
-      setGetErrorResponse(path, options);
-      break;
-    case methods.POST:
-      setPostErrorResponse(path, options);
-      break;
-    case methods.PUT:
-      setPutErrorResponse(path, options);
-      break;
-    default:
-      setGetErrorResponse(path, options);
+  const assertApiActionOnError = async (
+    path,
+    fn,
+    params,
+    callbackWithError,
+    options = {},
+    method = methods.GET
+  ) => {
+    switch (method) {
+      case methods.GET:
+        setGetErrorResponse(path, options);
+        break;
+      case methods.POST:
+        setPostErrorResponse(path, options);
+        break;
+      case methods.PUT:
+        setPutErrorResponse(path, options);
+        break;
+      default:
+        setGetErrorResponse(path, options);
     }
 
     const store = getMockedStore();
-    const expectedError = new Error(getHumanReadableError(RANDOM_ERROR_RESPONSE.errorcode));
+    const expectedError = new Error(
+      getHumanReadableError(RANDOM_ERROR_RESPONSE.errorcode)
+    );
 
     try {
       await store.dispatch(fn.apply(null, params));
       const expectedActions = callbackWithError(expectedError);
       expect(store.getActions()).toEqual(expectedActions);
-    } catch(e) {
+    } catch (e) {
       const expectedActions = callbackWithError(e);
       expect(store.getActions()).toEqual(expectedActions);
     }
-
   };
 
   beforeEach(() => {
@@ -111,8 +129,16 @@ describe("test api actions (actions/api.js)", () => {
     fetchMock.post("/", {}).catch({});
     // define specific mocks for external apis to return responses as an array
     const { address } = FAKE_PAYWALL;
-    setGetSuccessResponse(`https://testnet.dcrdata.org/api/address/${address}/raw`, {}, []);
-    setGetSuccessResponse(`https://testnet.decred.org/api/addr/${address}/utxo?noCache=1`, {}, []);
+    setGetSuccessResponse(
+      `https://testnet.dcrdata.org/api/address/${address}/raw`,
+      {},
+      []
+    );
+    setGetSuccessResponse(
+      `https://testnet.decred.org/api/addr/${address}/utxo?noCache=1`,
+      {},
+      []
+    );
   });
 
   test("request api info action", async () => {
@@ -121,28 +147,31 @@ describe("test api actions (actions/api.js)", () => {
     //test it handles a success response
     setGetSuccessResponse(path);
     // test without pooling paywall flag
-    await expect(api.requestApiInfo())
-      .toDispatchActionsWithState(MOCK_STATE, [
+    await expect(api.requestApiInfo()).toDispatchActionsWithState(
+      MOCK_STATE,
+      [
         { type: act.REQUEST_INIT_SESSION, error: false },
-        { type: act.RECEIVE_INIT_SESSION, error: false, payload: { csrfToken: null } },
+        {
+          type: act.RECEIVE_INIT_SESSION,
+          error: false,
+          payload: { csrfToken: null }
+        },
         { type: act.REQUEST_ME, error: false }
-      ], done);
-
+      ],
+      done
+    );
 
     // test it handles an error and dispatch an action
     const store = mockStore(MOCK_STATE);
     setGetErrorResponse(path);
     localStorage.setItem("state", "any");
-    await store.dispatch(api.requestApiInfo())
-      .catch((e) => {
-        expect(store.getActions()).toEqual([
-          { type: act.REQUEST_INIT_SESSION, error: false },
-          { type: act.RECEIVE_INIT_SESSION, error: true, payload: e }
-        ]);
-      });
-
+    await store.dispatch(api.requestApiInfo()).catch(e => {
+      expect(store.getActions()).toEqual([
+        { type: act.REQUEST_INIT_SESSION, error: false },
+        { type: act.RECEIVE_INIT_SESSION, error: true, payload: e }
+      ]);
+    });
   });
-
 
   test("on request me action", async () => {
     const successfulResponse = { ...FAKE_USER };
@@ -152,14 +181,18 @@ describe("test api actions (actions/api.js)", () => {
 
     // test it successfully handles the response and dispatch actions
     setGetSuccessResponse(path, {}, successfulResponse);
-    await expect(api.onRequestMe())
-      .toDispatchActionsWithState(MOCK_STATE, [
+    await expect(api.onRequestMe()).toDispatchActionsWithState(
+      MOCK_STATE,
+      [
         { type: act.REQUEST_ME },
-        { type: act.RECEIVE_ME,
+        {
+          type: act.RECEIVE_ME,
           payload: { email: FAKE_USER.email, username: FAKE_USER.username }
         },
         ea.verifyUserPayment(address, amount, txNotBefore)
-      ], done);
+      ],
+      done
+    );
 
     //test it successfully handles the error response
     //test localstorage was cleaned up
@@ -167,23 +200,21 @@ describe("test api actions (actions/api.js)", () => {
     setGetErrorResponse(path);
     localStorage.setItem("state", "any");
     expect(localStorage.getItem("state")).toBeTruthy();
-    await store.dispatch(api.onRequestMe())
-      .catch((e) => {
-        expect(store.getActions()).toBeEqual([
-          { type: act.REQUEST_ME, error: false },
-          { type: act.RECEIVE_ME, error: e }
-        ]);
-        expect(localStorage.getItem("state")).toBeFalsy();
-      });
+    await store.dispatch(api.onRequestMe()).catch(e => {
+      expect(store.getActions()).toBeEqual([
+        { type: act.REQUEST_ME, error: false },
+        { type: act.RECEIVE_ME, error: e }
+      ]);
+      expect(localStorage.getItem("state")).toBeFalsy();
+    });
   });
 
   test("update me action", () => {
     const payload = "any";
-    expect(api.updateMe(payload))
-      .toDispatchActions(
-        { type: act.UPDATE_ME, payload },
-        done
-      );
+    expect(api.updateMe(payload)).toDispatchActions(
+      { type: act.UPDATE_ME, payload },
+      done
+    );
   });
 
   test("on get policy action", async () => {
@@ -195,20 +226,19 @@ describe("test api actions (actions/api.js)", () => {
       [],
       [
         { type: act.REQUEST_POLICY },
-        { type: act.RECEIVE_POLICY, error: false, payload: RANDOM_SUCCESS_RESPONSE }
+        {
+          type: act.RECEIVE_POLICY,
+          error: false,
+          payload: RANDOM_SUCCESS_RESPONSE
+        }
       ]
     );
 
     //test it handles an error response
-    await assertApiActionOnError(
-      path,
-      api.onGetPolicy,
-      [],
-      (e) => [
-        { type: act.REQUEST_POLICY, error: false, payload: undefined },
-        { type: act.RECEIVE_POLICY, error: true, payload: e }
-      ]
-    );
+    await assertApiActionOnError(path, api.onGetPolicy, [], e => [
+      { type: act.REQUEST_POLICY, error: false, payload: undefined },
+      { type: act.RECEIVE_POLICY, error: true, payload: e }
+    ]);
   });
 
   test("on search users action", async () => {
@@ -234,8 +264,12 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onCreateNewUser,
       [FAKE_USER],
-      (e) => [
-        { type: act.REQUEST_NEW_USER, payload: { email: FAKE_USER.email }, error: false },
+      e => [
+        {
+          type: act.REQUEST_NEW_USER,
+          payload: { email: FAKE_USER.email },
+          error: false
+        },
         { type: act.RECEIVE_NEW_USER, error: true, payload: e }
       ],
       {},
@@ -257,14 +291,21 @@ describe("test api actions (actions/api.js)", () => {
   test("on verify new user action", async () => {
     const path = "/api/v1/user/verify";
     const verificationtoken = "any";
-    const searchQuery = qs.stringify({ email: FAKE_USER.email, verificationtoken });
+    const searchQuery = qs.stringify({
+      email: FAKE_USER.email,
+      verificationtoken
+    });
 
     await assertApiActionOnError(
       path,
       api.onVerifyNewUser,
       [searchQuery],
-      (e) => [
-        { type: act.REQUEST_VERIFY_NEW_USER, error: false, payload: searchQuery },
+      e => [
+        {
+          type: act.REQUEST_VERIFY_NEW_USER,
+          error: false,
+          payload: searchQuery
+        },
         { type: act.RECEIVE_VERIFY_NEW_USER, error: true, payload: e }
       ],
       {
@@ -293,10 +334,11 @@ describe("test api actions (actions/api.js)", () => {
   });
 
   test("on signup action", async () => {
-    await expect(api.onSignupConfirm(FAKE_USER))
-      .toDispatchActionsWithState(MOCK_STATE, [
-        api.onCreateNewUser(FAKE_USER)
-      ], done);
+    await expect(api.onSignupConfirm(FAKE_USER)).toDispatchActionsWithState(
+      MOCK_STATE,
+      [api.onCreateNewUser(FAKE_USER)],
+      done
+    );
   });
 
   test("on login action", async () => {
@@ -305,10 +347,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onLogin,
       [FAKE_USER],
-      [
-        { type: act.REQUEST_LOGIN },
-        { type: act.RECEIVE_LOGIN, error: false }
-      ],
+      [{ type: act.REQUEST_LOGIN }, { type: act.RECEIVE_LOGIN, error: false }],
       {},
       methods.POST
     );
@@ -316,8 +355,12 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onLogin,
       [FAKE_USER],
-      (e) => [
-        { type: act.REQUEST_LOGIN, error: false, payload: { email: FAKE_USER.email } },
+      e => [
+        {
+          type: act.REQUEST_LOGIN,
+          error: false,
+          payload: { email: FAKE_USER.email }
+        },
         { type: act.RECEIVE_LOGIN, error: true, payload: e }
       ],
       {},
@@ -343,7 +386,7 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on change username action", async () => {
     const path = "/api/v1/user/username/change";
-    const params = [ FAKE_USER.password, FAKE_USER.username ];
+    const params = [FAKE_USER.password, FAKE_USER.username];
     await assertApiActionOnSuccess(
       path,
       api.onChangeUsername,
@@ -359,7 +402,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onChangeUsername,
       params,
-      (e) => [
+      e => [
         { type: act.REQUEST_CHANGE_USERNAME, error: false, payload: undefined },
         { type: act.RECEIVE_CHANGE_USERNAME, error: true, payload: e }
       ],
@@ -370,7 +413,7 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on change password action", async () => {
     const path = "/api/v1/user/password/change";
-    const params = [ FAKE_USER.password, "any" ];
+    const params = [FAKE_USER.password, "any"];
     await assertApiActionOnSuccess(
       path,
       api.onChangePassword,
@@ -386,7 +429,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onChangePassword,
       params,
-      (e) => [
+      e => [
         { type: act.REQUEST_CHANGE_PASSWORD, error: false, payload: undefined },
         { type: act.RECEIVE_CHANGE_PASSWORD, error: true, payload: e }
       ],
@@ -416,7 +459,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onFetchUserProposals,
       params,
-      (e) => [
+      e => [
         { type: act.REQUEST_USER_PROPOSALS, error: false, payload: undefined },
         { type: act.RECEIVE_USER_PROPOSALS, error: true, payload: e }
       ],
@@ -434,20 +477,12 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onFetchVetted,
       [],
-      [
-        { type: act.REQUEST_VETTED },
-        { type: act.RECEIVE_VETTED, error: false }
-      ]
+      [{ type: act.REQUEST_VETTED }, { type: act.RECEIVE_VETTED, error: false }]
     );
-    await assertApiActionOnError(
-      path,
-      api.onFetchVetted,
-      [],
-      (e) => [
-        { type: act.REQUEST_VETTED, error: false, payload: undefined },
-        { type: act.RECEIVE_VETTED, error: true, payload: e }
-      ]
-    );
+    await assertApiActionOnError(path, api.onFetchVetted, [], e => [
+      { type: act.REQUEST_VETTED, error: false, payload: undefined },
+      { type: act.RECEIVE_VETTED, error: true, payload: e }
+    ]);
   });
 
   test("on fetch unvetted action", async () => {
@@ -461,81 +496,63 @@ describe("test api actions (actions/api.js)", () => {
         { type: act.RECEIVE_UNVETTED, error: false }
       ]
     );
-    await assertApiActionOnError(
-      path,
-      api.onFetchUnvetted,
-      [],
-      (e) => [
-        { type: act.REQUEST_UNVETTED, error: false, payload: undefined },
-        { type: act.RECEIVE_UNVETTED, error: true, payload: e }
-      ]
-    );
+    await assertApiActionOnError(path, api.onFetchUnvetted, [], e => [
+      { type: act.REQUEST_UNVETTED, error: false, payload: undefined },
+      { type: act.RECEIVE_UNVETTED, error: true, payload: e }
+    ]);
   });
 
   test("on fetch liked comments action", async () => {
     const path = `/api/v1/proposals/${FAKE_PROPOSAL_TOKEN}/commentsvotes`;
     const params = [FAKE_PROPOSAL_TOKEN];
-    await assertApiActionOnSuccess(
-      path,
-      api.onFetchLikedComments,
-      params,
-      [
-        { type: act.REQUEST_LIKED_COMMENTS },
-        { type: act.RECEIVE_LIKED_COMMENTS, error: false, payload: {} }
-      ]
-    );
-    await assertApiActionOnError(
-      path,
-      api.onFetchLikedComments,
-      params,
-      () => [
-        { type: act.REQUEST_LIKED_COMMENTS, error: false, payload: FAKE_PROPOSAL_TOKEN },
-        { type: act.RECEIVE_LIKED_COMMENTS, error: false, payload: {} }
-      ]
-    );
+    await assertApiActionOnSuccess(path, api.onFetchLikedComments, params, [
+      { type: act.REQUEST_LIKED_COMMENTS },
+      { type: act.RECEIVE_LIKED_COMMENTS, error: false, payload: {} }
+    ]);
+    await assertApiActionOnError(path, api.onFetchLikedComments, params, () => [
+      {
+        type: act.REQUEST_LIKED_COMMENTS,
+        error: false,
+        payload: FAKE_PROPOSAL_TOKEN
+      },
+      { type: act.RECEIVE_LIKED_COMMENTS, error: false, payload: {} }
+    ]);
   });
 
   test("on fetch proposal action", async () => {
     const path = `/api/v1/proposals/${FAKE_PROPOSAL_TOKEN}`;
     const params = [FAKE_PROPOSAL_TOKEN];
-    await assertApiActionOnSuccess(
-      path,
-      api.onFetchProposal,
-      params,
-      [
-        { type: act.REQUEST_PROPOSAL },
-        { type: act.RECEIVE_PROPOSAL, error: false }
-      ]
-    );
-    await assertApiActionOnError(
-      path,
-      api.onFetchProposal,
-      params,
-      (e) => [
-        { type: act.REQUEST_PROPOSAL, error: false, payload: FAKE_PROPOSAL_TOKEN },
-        { type: act.RECEIVE_PROPOSAL, error: true, payload: e }
-      ]
-    );
+    await assertApiActionOnSuccess(path, api.onFetchProposal, params, [
+      { type: act.REQUEST_PROPOSAL },
+      { type: act.RECEIVE_PROPOSAL, error: false }
+    ]);
+    await assertApiActionOnError(path, api.onFetchProposal, params, e => [
+      {
+        type: act.REQUEST_PROPOSAL,
+        error: false,
+        payload: FAKE_PROPOSAL_TOKEN
+      },
+      { type: act.RECEIVE_PROPOSAL, error: true, payload: e }
+    ]);
   });
 
   test("on fetch proposal comments", async () => {
     const path = `/api/v1/proposals/${FAKE_PROPOSAL_TOKEN}/comments`;
     const params = [FAKE_PROPOSAL_TOKEN];
-    await assertApiActionOnSuccess(
-      path,
-      api.onFetchProposalComments,
-      params,
-      [
-        { type: act.REQUEST_PROPOSAL_COMMENTS },
-        { type: act.RECEIVE_PROPOSAL_COMMENTS, error: false }
-      ]
-    );
+    await assertApiActionOnSuccess(path, api.onFetchProposalComments, params, [
+      { type: act.REQUEST_PROPOSAL_COMMENTS },
+      { type: act.RECEIVE_PROPOSAL_COMMENTS, error: false }
+    ]);
     await assertApiActionOnError(
       path,
       api.onFetchProposalComments,
       params,
-      (e) => [
-        { type: act.REQUEST_PROPOSAL_COMMENTS, error: false, payload: FAKE_PROPOSAL_TOKEN },
+      e => [
+        {
+          type: act.REQUEST_PROPOSAL_COMMENTS,
+          error: false,
+          payload: FAKE_PROPOSAL_TOKEN
+        },
         { type: act.RECEIVE_PROPOSAL_COMMENTS, error: true, payload: e }
       ]
     );
@@ -543,7 +560,14 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on submit proposal", async () => {
     const path = "/api/v1/proposals/new";
-    const params = [ FAKE_USER.email, FAKE_USER.id, FAKE_USER.username, FAKE_PROPOSAL_NAME, FAKE_PROPOSAL_DESCRIPTION, [] ];
+    const params = [
+      FAKE_USER.email,
+      FAKE_USER.id,
+      FAKE_USER.username,
+      FAKE_PROPOSAL_NAME,
+      FAKE_PROPOSAL_DESCRIPTION,
+      []
+    ];
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -554,16 +578,19 @@ describe("test api actions (actions/api.js)", () => {
     expect(dispatchedActions[1].type).toEqual(act.RECEIVE_NEW_PROPOSAL);
     expect(dispatchedActions[1].error).toBeFalsy();
 
-
     await assertApiActionOnError(
       path,
       api.onSubmitProposal,
       params,
-      (e) => [
+      e => [
         {
           type: act.REQUEST_NEW_PROPOSAL,
           error: false,
-          payload: { name: FAKE_PROPOSAL_NAME, description: FAKE_PROPOSAL_DESCRIPTION, files: [] }
+          payload: {
+            name: FAKE_PROPOSAL_NAME,
+            description: FAKE_PROPOSAL_DESCRIPTION,
+            files: []
+          }
         },
         { type: act.RECEIVE_NEW_PROPOSAL, error: true, payload: e }
       ],
@@ -574,8 +601,13 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on submit comment action", async () => {
     const path = "/api/v1/comments/new";
-    const parentId= 0;
-    const params = [ FAKE_USER.email, FAKE_PROPOSAL_TOKEN, FAKE_COMMENT, parentId ];
+    const parentId = 0;
+    const params = [
+      FAKE_USER.email,
+      FAKE_PROPOSAL_TOKEN,
+      FAKE_COMMENT,
+      parentId
+    ];
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -590,11 +622,15 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onSubmitComment,
       params,
-      (e) => [
+      e => [
         {
           type: act.REQUEST_NEW_COMMENT,
           error: false,
-          payload: { token: FAKE_PROPOSAL_TOKEN, comment: FAKE_COMMENT, parentid: parentId }
+          payload: {
+            token: FAKE_PROPOSAL_TOKEN,
+            comment: FAKE_COMMENT,
+            parentid: parentId
+          }
         },
         { type: act.RECEIVE_NEW_COMMENT, error: true, payload: e }
       ],
@@ -608,7 +644,7 @@ describe("test api actions (actions/api.js)", () => {
     const commentid = 0;
     const up_action = 1;
     //const down_action = -1;
-    const params = [ FAKE_USER.email, FAKE_PROPOSAL_TOKEN, commentid, up_action ];
+    const params = [FAKE_USER.email, FAKE_PROPOSAL_TOKEN, commentid, up_action];
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -622,7 +658,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onLikeComment,
       params,
-      (e) => [
+      e => [
         {
           type: act.REQUEST_LIKE_COMMENT,
           error: false,
@@ -666,7 +702,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onUpdateUserKey,
       params,
-      (e) => [
+      e => [
         { type: act.REQUEST_UPDATED_KEY, error: false, payload: undefined },
         { type: act.RECEIVE_UPDATED_KEY, error: true, payload: e }
       ],
@@ -678,7 +714,7 @@ describe("test api actions (actions/api.js)", () => {
   test("on verify user key", async () => {
     const path = "/api/v1/user/key/verify";
     const verificationtoken = "any";
-    const params = [ FAKE_USER.email, verificationtoken ];
+    const params = [FAKE_USER.email, verificationtoken];
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -693,7 +729,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onVerifyUserKey,
       params,
-      (e) => [
+      e => [
         {
           type: act.REQUEST_VERIFIED_KEY,
           error: false,
@@ -707,16 +743,20 @@ describe("test api actions (actions/api.js)", () => {
   });
 
   test("redirected From action ", () => {
-    expect(api.redirectedFrom("any")).toDispatchActions({
-      type: act.REDIRECTED_FROM, payload: "any"
-    }, done);
+    expect(api.redirectedFrom("any")).toDispatchActions(
+      {
+        type: act.REDIRECTED_FROM,
+        payload: "any"
+      },
+      done
+    );
   });
 
   test("reset redirected from action", () => {
-    expect(api.resetRedirectedFrom())
-      .toDispatchActions([
-        { type: act.RESET_REDIRECTED_FROM }
-      ], done);
+    expect(api.resetRedirectedFrom()).toDispatchActions(
+      [{ type: act.RESET_REDIRECTED_FROM }],
+      done
+    );
   });
 
   test("on forgotten password request action", async () => {
@@ -739,13 +779,17 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onForgottenPasswordRequest,
       params,
-      (e) => [
+      e => [
         {
           type: act.REQUEST_FORGOTTEN_PASSWORD_REQUEST,
           error: false,
           payload: { email: FAKE_USER.email }
         },
-        { type: act.RECEIVE_FORGOTTEN_PASSWORD_REQUEST, error: true, payload: e }
+        {
+          type: act.RECEIVE_FORGOTTEN_PASSWORD_REQUEST,
+          error: true,
+          payload: e
+        }
       ],
       {},
       methods.POST
@@ -753,22 +797,23 @@ describe("test api actions (actions/api.js)", () => {
   });
 
   test("reset forgotten password action", () => {
-    expect(api.resetForgottenPassword())
-      .toDispatchActions(
-        { type: act.RESET_FORGOTTEN_PASSWORD_REQUEST },
-        done
-      );
+    expect(api.resetForgottenPassword()).toDispatchActions(
+      { type: act.RESET_FORGOTTEN_PASSWORD_REQUEST },
+      done
+    );
   });
 
   test("on password reset request action", async () => {
     const path = "/api/v1/user/password/reset";
     const verificationtoken = "any";
     const { email, password } = FAKE_USER;
-    const params = [{
-      email,
-      verificationtoken,
-      newpassword: password
-    }];
+    const params = [
+      {
+        email,
+        verificationtoken,
+        newpassword: password
+      }
+    ];
 
     await assertApiActionOnSuccess(
       path,
@@ -786,7 +831,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onPasswordResetRequest,
       params,
-      (e) => [
+      e => [
         {
           type: act.REQUEST_PASSWORD_RESET_REQUEST,
           error: false,
@@ -800,19 +845,17 @@ describe("test api actions (actions/api.js)", () => {
   });
 
   test("on key mismatch action", () => {
-    expect(api.keyMismatch("any"))
-      .toDispatchActions(
-        { type: act.KEY_MISMATCH, payload: "any" },
-        done
-      );
+    expect(api.keyMismatch("any")).toDispatchActions(
+      { type: act.KEY_MISMATCH, payload: "any" },
+      done
+    );
   });
 
   test("reset passsword request action", () => {
-    expect(api.resetPasswordReset())
-      .toDispatchActions(
-        { type: act.RESET_PASSWORD_RESET_REQUEST },
-        done
-      );
+    expect(api.resetPasswordReset()).toDispatchActions(
+      { type: act.RESET_PASSWORD_RESET_REQUEST },
+      done
+    );
   });
 
   test("verify user payment with politeia action", async () => {
@@ -837,8 +880,12 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onFetchProposalsVoteStatus,
       [],
-      (e) => [
-        { type: act.REQUEST_PROPOSALS_VOTE_STATUS, error: false, payload: undefined },
+      e => [
+        {
+          type: act.REQUEST_PROPOSALS_VOTE_STATUS,
+          error: false,
+          payload: undefined
+        },
         { type: act.RECEIVE_PROPOSALS_VOTE_STATUS, error: true, payload: e }
       ]
     );
@@ -863,8 +910,12 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onFetchProposalVoteStatus,
       params,
-      (e) => [
-        { type: act.REQUEST_PROPOSAL_VOTE_STATUS, error: false, payload: { token } },
+      e => [
+        {
+          type: act.REQUEST_PROPOSAL_VOTE_STATUS,
+          error: false,
+          payload: { token }
+        },
         { type: act.RECEIVE_PROPOSAL_VOTE_STATUS, error: true, payload: e }
       ]
     );
@@ -881,7 +932,11 @@ describe("test api actions (actions/api.js)", () => {
       [USER_ID],
       [
         { type: act.REQUEST_USER },
-        { type: act.RECEIVE_USER, error: false, payload: RANDOM_SUCCESS_RESPONSE }
+        {
+          type: act.RECEIVE_USER,
+          error: false,
+          payload: RANDOM_SUCCESS_RESPONSE
+        }
       ]
     );
   });
@@ -893,7 +948,7 @@ describe("test api actions (actions/api.js)", () => {
     await assertApiActionOnSuccess(
       path,
       api.onEditUser,
-      [ FAKE_USER.id, EDIT_USER_CLEAR_USER_PAYWALL ],
+      [FAKE_USER.id, EDIT_USER_CLEAR_USER_PAYWALL],
       [
         {
           type: act.REQUEST_EDIT_USER,
@@ -911,7 +966,13 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on edit proposal action", async () => {
     const path = "/api/v1/proposals/edit";
-    const params = [ FAKE_USER.email, FAKE_PROPOSAL_NAME, FAKE_PROPOSAL_DESCRIPTION, [], FAKE_PROPOSAL_TOKEN ];
+    const params = [
+      FAKE_USER.email,
+      FAKE_PROPOSAL_NAME,
+      FAKE_PROPOSAL_DESCRIPTION,
+      [],
+      FAKE_PROPOSAL_TOKEN
+    ];
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -926,32 +987,38 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onSubmitEditedProposal,
       params,
-      (e) => [
+      e => [
         {
           type: act.REQUEST_EDIT_PROPOSAL,
           error: false,
-          payload: { name: FAKE_PROPOSAL_NAME, description: FAKE_PROPOSAL_DESCRIPTION, files: [] }
+          payload: {
+            name: FAKE_PROPOSAL_NAME,
+            description: FAKE_PROPOSAL_DESCRIPTION,
+            files: []
+          }
         },
         { type: act.RECEIVE_EDIT_PROPOSAL, error: true, payload: e }
       ],
       {},
       methods.POST
     );
-
   });
 
   test("on authorize vote on proposal action", async () => {
     const path = "/api/v1/proposals/authorizevote";
-    const params = [ FAKE_USER.email, FAKE_PROPOSAL_TOKEN, FAKE_PROPOSAL_VERSION ];
+    const params = [
+      FAKE_USER.email,
+      FAKE_PROPOSAL_TOKEN,
+      FAKE_PROPOSAL_VERSION
+    ];
 
-    const requestAction =
-      {
-        type: act.REQUEST_AUTHORIZE_VOTE,
-        error: false,
-        payload: {
-          token: FAKE_PROPOSAL_TOKEN
-        }
-      };
+    const requestAction = {
+      type: act.REQUEST_AUTHORIZE_VOTE,
+      error: false,
+      payload: {
+        token: FAKE_PROPOSAL_TOKEN
+      }
+    };
 
     setPostSuccessResponse(path);
     const store = getMockedStore();
@@ -965,18 +1032,17 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onAuthorizeVote,
       params,
-      (e) => [
+      e => [
         requestAction,
         { type: act.RECEIVE_AUTHORIZE_VOTE, error: true, payload: e }
       ],
       {},
       methods.POST
     );
-
   });
 
   test("test onFetchProposalPaywallPayment action", async () => {
-    const path =  "/api/v1/proposals/paywallpayment";
+    const path = "/api/v1/proposals/paywallpayment";
 
     //test it handles a successful response
     await assertApiActionOnSuccess(
@@ -1004,9 +1070,7 @@ describe("test api actions (actions/api.js)", () => {
     };
 
     const mockSuccessResponse = {
-      newcredits: [
-        { paywallid: "any" }
-      ]
+      newcredits: [{ paywallid: "any" }]
     };
     setPutSuccessResponse(path, {}, mockSuccessResponse);
     const store = getMockedStore();
@@ -1023,7 +1087,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onRescanUserPayments,
       [userid],
-      (e) => [
+      e => [
         requestAction,
         {
           type: act.RECEIVE_RESCAN_USER_PAYMENTS,

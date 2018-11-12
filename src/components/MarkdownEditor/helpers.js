@@ -16,24 +16,30 @@ function tryingParagraphWithOneNewline(value) {
   iterateOverStringCharsCode(value, (charCode, index) => {
     const nextCharCode = value.charCodeAt(index + 1);
     const prevCharCode = value.charCodeAt(index - 1);
-    if (charCode === newline && nextCharCode && nextCharCode !== newline && prevCharCode !== newline ) {
+    if (
+      charCode === newline &&
+      nextCharCode &&
+      nextCharCode !== newline &&
+      prevCharCode !== newline
+    ) {
       thereAreASingleNewline = true;
     }
   });
-  return finderResult(thereAreASingleNewline, "You should press Enter twice to create separate paragraphs of text");
+  return finderResult(
+    thereAreASingleNewline,
+    "You should press Enter twice to create separate paragraphs of text"
+  );
 }
 
-const mistakeFinders = [
-  tryingParagraphWithOneNewline
-];
+const mistakeFinders = [tryingParagraphWithOneNewline];
 
 export function applyMistakeFinders(value) {
   const findersResults = mistakeFinders.map(f => f(value));
   const anyMistake = findersResults.filter(r => r.mistake).length > 0;
-  return ({
+  return {
     findersResults,
     anyMistake
-  });
+  };
 }
 
 export function getPreviewContent(className) {

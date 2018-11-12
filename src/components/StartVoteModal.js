@@ -3,12 +3,12 @@ import ModalWrapper from "./Modal/ModalContentWrapper";
 import modalConnector from "../connectors/modal";
 import FancyRadioButton from "./FancyRadioButton";
 
-const preDefinedDurations = [ 2016, 2880, 4032 ];
-const getDurationOptions = (isTesnet) => {
+const preDefinedDurations = [2016, 2880, 4032];
+const getDurationOptions = isTesnet => {
   const blockDuration = isTesnet ? 2 : 5;
   return preDefinedDurations.map(nb => ({
     value: nb,
-    text: `${Math.round(nb*blockDuration/60/24)} days`
+    text: `${Math.round((nb * blockDuration) / 60 / 24)} days`
   }));
 };
 
@@ -28,8 +28,7 @@ class StartVoteModal extends React.Component {
       passError: ""
     };
   }
-  onChangeDuration = duration =>
-    this.setState({ duration })
+  onChangeDuration = duration => this.setState({ duration });
 
   onChangeQuorumPercentage = event => {
     const quorumPercentage = parseInt(event.target.value, 10);
@@ -38,10 +37,12 @@ class StartVoteModal extends React.Component {
     }
     this.setState({
       quorumPercentage,
-      quorumError: quorumPercentage < MIN_QUORUM || !quorumPercentage ?
-        `Quorum percentage must be a value between ${MIN_QUORUM} and ${MAX_QUORUM}` : ""
+      quorumError:
+        quorumPercentage < MIN_QUORUM || !quorumPercentage
+          ? `Quorum percentage must be a value between ${MIN_QUORUM} and ${MAX_QUORUM}`
+          : ""
     });
-  }
+  };
 
   onChangePassPercentage = event => {
     const passPercentage = parseInt(event.target.value, 10);
@@ -50,22 +51,18 @@ class StartVoteModal extends React.Component {
     }
     this.setState({
       passPercentage,
-      passError: passPercentage < MIN_PASS || !passPercentage ?
-        `Pass percentage must be a value between ${MIN_PASS} and ${MAX_PASS}` : ""
+      passError:
+        passPercentage < MIN_PASS || !passPercentage
+          ? `Pass percentage must be a value between ${MIN_PASS} and ${MAX_PASS}`
+          : ""
     });
-  }
+  };
 
   handleSubmit = () => {
     const { quorumPercentage, passPercentage, duration } = this.state;
-    this.props.me.callback(
-      duration,
-      quorumPercentage,
-      passPercentage
-    );
+    this.props.me.callback(duration, quorumPercentage, passPercentage);
     this.props.closeModal();
-  }
-
-
+  };
 
   render() {
     const { closeModal, isTestnet } = this.props;
@@ -84,7 +81,8 @@ class StartVoteModal extends React.Component {
       marginTop: "10px"
     };
 
-    const validQuorum = quorumPercentage >= MIN_QUORUM && quorumPercentage <= MAX_QUORUM;
+    const validQuorum =
+      quorumPercentage >= MIN_QUORUM && quorumPercentage <= MAX_QUORUM;
     const validPass = passPercentage >= MIN_PASS && passPercentage <= MAX_PASS;
     const canStartVote = validQuorum && validPass;
 
@@ -96,7 +94,14 @@ class StartVoteModal extends React.Component {
         submitDisabled={!canStartVote}
         submitText="Start Vote"
       >
-        <form style={{ padding: "10px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <form
+          style={{
+            padding: "10px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center"
+          }}
+        >
           <label>Duration:</label>
           <FancyRadioButton
             style={{ marginTop: "5px" }}
@@ -113,7 +118,9 @@ class StartVoteModal extends React.Component {
               onChange={this.onChangeQuorumPercentage}
             />
           </div>
-          {quorumError ? <span className="input-error">{quorumError}</span> : null}
+          {quorumError ? (
+            <span className="input-error">{quorumError}</span>
+          ) : null}
           <div style={fieldWrapper}>
             <label>Pass percentage:</label>
             <input
@@ -129,6 +136,5 @@ class StartVoteModal extends React.Component {
     );
   }
 }
-
 
 export default modalConnector(StartVoteModal);

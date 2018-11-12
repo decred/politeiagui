@@ -6,12 +6,16 @@ const Tooltip = ({
   wrapperStyle = {},
   text = "tip",
   children
-}) =>
+}) => (
   <div className="tooltip-wrapper" style={wrapperStyle}>
-    <div className={`tip tip-${position}`} style={{ ...tipStyle, zIndex: "999" }}>
+    <div
+      className={`tip tip-${position}`}
+      style={{ ...tipStyle, zIndex: "999" }}
+    >
       {text}
     </div>
     {children}
-  </div>;
+  </div>
+);
 
 export default Tooltip;

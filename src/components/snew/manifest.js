@@ -32,4 +32,3 @@ export { default as Thing } from "./Thing";
 export { default as ThingComment } from "./ThingComment";
 export { default as ThingLink } from "./ThingLink";
 export { default as UserInfo } from "./UserInfo";
-

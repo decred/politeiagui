@@ -1,7 +1,6 @@
 import { request, receive, reset, DEFAULT_REQUEST_STATE } from "../util";
 
 describe("test util reducers (request, receive, reset)", () => {
-
   const MOCK_STATE = {
     persist: "to test state persistence by the spread operator"
   };

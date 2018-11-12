@@ -22,13 +22,14 @@ class PageLoadingIcon extends React.Component {
       this.loadingIconDelay = 0;
     }
   }
-  render () {
+  render() {
     const { show } = this.state;
     return (
       <LoadingIcon
         hidden={!show}
         width={200}
-        style={{ paddingTop: "300px", margin: "0 auto" }} />
+        style={{ paddingTop: "300px", margin: "0 auto" }}
+      />
     );
   }
 }

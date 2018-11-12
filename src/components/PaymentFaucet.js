@@ -4,7 +4,7 @@ import ButtonWithLoadingIcon from "./snew/ButtonWithLoadingIcon";
 import Message from "./Message";
 
 const FAUCET_BASE_URL = "https://testnet.dcrdata.org/explorer/tx";
-const getFaucetUrl = (txid) => `${FAUCET_BASE_URL}/${txid}`;
+const getFaucetUrl = txid => `${FAUCET_BASE_URL}/${txid}`;
 
 const PaymentFaucet = ({
   // from connector props
@@ -25,27 +25,26 @@ const PaymentFaucet = ({
         This Politeia instance is running on Testnet, which means you can pay
         with the Decred faucet:
       </p>
-      {payWithFaucetTxId ? null :
+      {payWithFaucetTxId ? null : (
         <ButtonWithLoadingIcon
           className="c-btn c-btn-primary float-right inverse"
           text="Pay with Faucet"
           isLoading={isApiRequestingPayWithFaucet}
-          onClick={() => payWithFaucet(paywallAddress, paywallAmount)} />}
+          onClick={() => payWithFaucet(paywallAddress, paywallAmount)}
+        />
+      )}
       {payWithFaucetError ? (
-        <Message
-          type="error"
-          header="Faucet error"
-          body={payWithFaucetError} />
-      ) : null }
+        <Message type="error" header="Faucet error" body={payWithFaucetError} />
+      ) : null}
       {payWithFaucetTxId ? (
-        <Message
-          type="info"
-          header="Sent payment">
+        <Message type="info" header="Sent payment">
           Sent transaction{" "}
           <a
             className="paywall-payment-sent"
             href={getFaucetUrl(payWithFaucetTxId)}
-            target="_blank" rel="noopener noreferrer">
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {payWithFaucetTxId}
           </a>{" "}
           to the address; it may take a few minutes to be confirmed.
@@ -59,12 +58,12 @@ class Wrapper extends React.Component {
   componentWillUnmount() {
     this.props.resetFaucet();
   }
-  render () {
+  render() {
     const { Component, ...props } = this.props;
     return <Component {...{ ...props }} />;
   }
 }
 
-const wrap = (Component) => (props) => <Wrapper { ...{ ...props, Component }} />;
+const wrap = Component => props => <Wrapper {...{ ...props, Component }} />;
 
 export default paymentFaucetConnector(wrap(PaymentFaucet));

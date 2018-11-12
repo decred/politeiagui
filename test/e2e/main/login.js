@@ -7,14 +7,12 @@ module.exports = {
     browser.end();
   },
   "Test login": browser => {
-    const page = browser
-      .page
+    const page = browser.page
       .auth()
       .navigate()
       .logout();
 
-    page
-      .goToLoginSignupPage();
+    page.goToLoginSignupPage();
 
     page.loginWithErrorInvalidEmailAddress();
     page.loginWithErrorAllFieldsRequired();

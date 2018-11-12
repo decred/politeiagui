@@ -9,7 +9,7 @@ class OnBoard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tab: get([ "me", "payload", "tab" ], this.props) || 0
+      tab: get(["me", "payload", "tab"], this.props) || 0
     };
   }
   render() {
@@ -42,30 +42,31 @@ class OnBoard extends React.Component {
       >
         <div style={contentWrapperStyle}>
           <Tabs>
-            {onBoardingContent.map(
-              ({ title }, idx) =>
-                <Tab
-                  tabId={idx}
-                  selected={this.state.tab === idx}
-                  onTabChange={() => this.setState({ tab: idx })}
-                  title={title}
-                />
-            )}
+            {onBoardingContent.map(({ title }, idx) => (
+              <Tab
+                tabId={idx}
+                selected={this.state.tab === idx}
+                onTabChange={() => this.setState({ tab: idx })}
+                title={title}
+              />
+            ))}
           </Tabs>
           <div style={bodyWrapperStyle}>
             <Markdown body={onBoardingContent[this.state.tab].body} />
           </div>
         </div>
         <div style={buttonsWrapperStyle}>
-          {tab !== 0 ?
+          {tab !== 0 ? (
             <button
               className="inverse"
               onClick={() => this.setState({ tab: tab - 1 })}
             >
               ← {onBoardingContent[tab - 1].title}
-            </button> : <div></div>
-          }
-          {tab < onBoardingContent.length - 1 &&
+            </button>
+          ) : (
+            <div />
+          )}
+          {tab < onBoardingContent.length - 1 && (
             <button
               className="inverse"
               style={{ margin: 0 }}
@@ -73,13 +74,12 @@ class OnBoard extends React.Component {
             >
               {onBoardingContent[tab + 1].title} →
             </button>
-          }
+          )}
         </div>
       </ModalContentWrapper>
     );
   }
 }
-
 
 const onBoardingContent = [
   {
@@ -304,6 +304,5 @@ votes should be less than a week.
 `
   }
 ];
-
 
 export default modalConnector(OnBoard);

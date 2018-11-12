@@ -14,21 +14,21 @@ const Commands = {
       .click("@resetLinkFromSignupLoginPage")
       .waitForElementVisible("@forgottenPasswordPage", 10000);
   },
-  resetPasswordWithErrorMalformedEmailAddress: function () {
+  resetPasswordWithErrorMalformedEmailAddress: function() {
     return this.waitForElementVisible("@forgottenPasswordPage", 10000)
       .clearValue("@inputEmail")
       .setValue("@inputEmail", "test@error.com")
       .click("@submitButton")
       .waitForElementVisible("@error", 10000);
   },
-  resetPasswordWithErrorInvalidEmailAddress: function () {
+  resetPasswordWithErrorInvalidEmailAddress: function() {
     return this.waitForElementVisible("@forgottenPasswordPage", 10000)
       .clearValue("@inputEmail")
       .setValue("@inputEmail", "test")
       .click("@submitButton")
       .waitForElementVisible("@error", 10000);
   },
-  resetPassword: function () {
+  resetPassword: function() {
     return this.waitForElementVisible("@forgottenPasswordPage", 10000)
       .clearValue("@inputEmail")
       .setValue("@inputEmail", "test@decred.com")
@@ -39,7 +39,7 @@ const Commands = {
 
 module.exports = {
   commands: [Commands],
-  url: function () {
+  url: function() {
     return this.api.launchUrl + "/password";
   },
   elements: {

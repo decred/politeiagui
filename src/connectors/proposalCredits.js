@@ -16,16 +16,21 @@ export default connect(
     isTestnet: sel.isTestNet,
     proposalPaywallPaymentTxid: sel.apiProposalPaywallPaymentTxid,
     proposalPaywallPaymentAmount: sel.apiProposalPaywallPaymentAmount,
-    proposalPaywallPaymentConfirmations: sel.apiProposalPaywallPaymentConfirmations,
+    proposalPaywallPaymentConfirmations:
+      sel.apiProposalPaywallPaymentConfirmations,
     pollingCreditsPayment: sel.pollingCreditsPayment,
     proposalPaymentReceived: sel.proposalPaymentReceived,
     paywallTxid: sel.paywallTxid
   }),
-  dispatch => bindActionCreators({
-    onUserProposalCredits: act.onUserProposalCredits,
-    onPurchaseProposalCredits: act.onFetchProposalPaywallDetails,
-    onFetchProposalPaywallPayment: act.onFetchProposalPaywallPayment,
-    toggleCreditsPaymentPolling: act.toggleCreditsPaymentPolling,
-    toggleProposalPaymentReceived: act.toggleProposalPaymentReceived
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        onUserProposalCredits: act.onUserProposalCredits,
+        onPurchaseProposalCredits: act.onFetchProposalPaywallDetails,
+        onFetchProposalPaywallPayment: act.onFetchProposalPaywallPayment,
+        toggleCreditsPaymentPolling: act.toggleCreditsPaymentPolling,
+        toggleProposalPaymentReceived: act.toggleProposalPaymentReceived
+      },
+      dispatch
+    )
 );

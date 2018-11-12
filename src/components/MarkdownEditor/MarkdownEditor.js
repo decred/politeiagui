@@ -1,9 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { ReactMdeToolbar, ReactMdeTextArea, ReactMdeCommands } from "react-mde";
-import {
-  getSelection
-} from "react-mde/lib/js/helpers/ReactMdeSelectionHelper";
+import { getSelection } from "react-mde/lib/js/helpers/ReactMdeSelectionHelper";
 import "react-mde/lib/styles/css/react-mde.css";
 import "react-mde/lib/styles/css/react-mde-toolbar.css";
 import "react-mde/lib/styles/css/react-mde-textarea.css";
@@ -18,16 +16,14 @@ const DefaultLayout = ({ Toolbar, TextArea, Preview, LiveHelper }) => (
       {TextArea}
       {Preview}
     </div>
-    <div className="mde-help">
-      {LiveHelper}
-    </div>
+    <div className="mde-help">{LiveHelper}</div>
   </div>
 );
 
 class TogglerLayout extends React.Component {
   state = {
     previewActive: false
-  }
+  };
   render() {
     const { Preview, TextArea, Toolbar, value } = this.props;
     const { previewActive } = this.state;
@@ -58,18 +54,35 @@ class TogglerLayout extends React.Component {
     return (
       <div style={{ position: "relative" }}>
         <div style={toggleContainerStyle}>
-          <span style={toggleWriteStyle} onClick={() => this.setState({ previewActive: false })} >Write</span>
-          <span style={togglePreviewStyle} onClick={() => this.setState({ previewActive: true })}>Preview</span>
+          <span
+            style={toggleWriteStyle}
+            onClick={() => this.setState({ previewActive: false })}
+          >
+            Write
+          </span>
+          <span
+            style={togglePreviewStyle}
+            onClick={() => this.setState({ previewActive: true })}
+          >
+            Preview
+          </span>
         </div>
-        {previewActive ?
+        {previewActive ? (
           <div style={previewContainerStyle}>
-            {!value ? <span style={nothingToPreviewMessageStyle}>Nothing to preview</span> : Preview}</div>
-          :
+            {!value ? (
+              <span style={nothingToPreviewMessageStyle}>
+                Nothing to preview
+              </span>
+            ) : (
+              Preview
+            )}
+          </div>
+        ) : (
           <div className="react-mde" style={{ background: "white" }}>
             {Toolbar}
             {TextArea}
           </div>
-        }
+        )}
       </div>
     );
   }
@@ -88,36 +101,36 @@ class MarkdownEditor extends React.Component {
       makeOrderedListCommand
     } = ReactMdeCommands;
     const customCommands = [
-      [ makeHeaderCommand, makeBoldCommand, makeItalicCommand ],
-      [ makeLinkCommand, makeQuoteCommand, makeCodeCommand ],
-      [ makeUnorderedListCommand, makeOrderedListCommand ]
+      [makeHeaderCommand, makeBoldCommand, makeItalicCommand],
+      [makeLinkCommand, makeQuoteCommand, makeCodeCommand],
+      [makeUnorderedListCommand, makeOrderedListCommand]
     ];
     return customCommands;
-  }
+  };
 
-  handleValueChange = (value) => {
+  handleValueChange = value => {
     if (!this.props.toggledStyle) {
       this.textArea.style.height = "auto";
-      this.textArea.style.height = (this.textArea.scrollHeight) + "px";
+      this.textArea.style.height = this.textArea.scrollHeight + "px";
     }
     const { onChange } = this.props;
     onChange(value.text);
-  }
+  };
 
-  handleCommand = (command) => {
+  handleCommand = command => {
     const { value, onChange } = this.props;
     const newValue = command.execute(value, getSelection(this.textArea));
     onChange(newValue.text);
-  }
+  };
 
   componentDidMount() {
     if (!this.props.toggledStyle) {
       const tx = this.textArea;
       for (let i = 0; i < tx.length; i++) {
-        tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;");
+        tx[i].setAttribute("style", "height:" + tx[i].scrollHeight + "px;");
       }
     }
-    if(typeof this.props.tabIndex !== "undefined") {
+    if (typeof this.props.tabIndex !== "undefined") {
       this.textArea.setAttribute("tabindex", this.props.tabIndex);
     }
   }
@@ -134,41 +147,38 @@ class MarkdownEditor extends React.Component {
       <ReactMdeTextArea
         onChange={this.handleValueChange}
         value={{ text: value }}
-        textAreaRef={(c) => this.textArea = c}
+        textAreaRef={c => (this.textArea = c)}
       />
     );
-    const Preview = (
-      <MarkdownPreview body={value} />
-    );
+    const Preview = <MarkdownPreview body={value} />;
     const LiveHelper = (
       <MarkdownLiveHelper classToSelect="mde-preview-content" />
     );
 
-    return (
-      toggledStyle ?
-        <TogglerLayout
-          Toolbar={Toolbar}
-          TextArea={
-            <ReactMdeTextArea
-              onChange={this.handleValueChange}
-              value={{ text: value }}
-              textAreaProps={{
-                style: { overflowY: "auto", resize: "vertical" }
-              }}
-              textAreaRef={(c) => this.textArea = c}
-            />
-          }
-          Preview={<MarkdownPreview body={value} fullWidth />}
-          LiveHelper={LiveHelper}
-          value={value}
-        />
-        :
-        <DefaultLayout
-          Toolbar={Toolbar}
-          TextArea={TextArea}
-          Preview={Preview}
-          LiveHelper={LiveHelper}
-        />
+    return toggledStyle ? (
+      <TogglerLayout
+        Toolbar={Toolbar}
+        TextArea={
+          <ReactMdeTextArea
+            onChange={this.handleValueChange}
+            value={{ text: value }}
+            textAreaProps={{
+              style: { overflowY: "auto", resize: "vertical" }
+            }}
+            textAreaRef={c => (this.textArea = c)}
+          />
+        }
+        Preview={<MarkdownPreview body={value} fullWidth />}
+        LiveHelper={LiveHelper}
+        value={value}
+      />
+    ) : (
+      <DefaultLayout
+        Toolbar={Toolbar}
+        TextArea={TextArea}
+        Preview={Preview}
+        LiveHelper={LiveHelper}
+      />
     );
   }
 }

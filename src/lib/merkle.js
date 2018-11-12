@@ -4,7 +4,10 @@ import crypto from "crypto";
 // hash algorithm
 function sha256(data) {
   // returns Buffer
-  return crypto.createHash("sha256").update(data).digest();
+  return crypto
+    .createHash("sha256")
+    .update(data)
+    .digest();
 }
 
 /**
@@ -51,22 +54,21 @@ class MerkleTree {
 
     for (let i = 0; i < nodes.length - 1; i += 2) {
       const left = nodes[i];
-      const right = nodes[i+1];
+      const right = nodes[i + 1];
       let data = null;
 
-      data = Buffer.concat([ left, right ]);
+      data = Buffer.concat([left, right]);
 
       const hash = this.hashAlgo(data);
-
 
       this.layers[layerIndex].push(hash);
     }
 
     // is odd number of nodes
     if (nodes.length % 2 === 1) {
-      let data = nodes[nodes.length-1];
+      let data = nodes[nodes.length - 1];
       let hash = data;
-      data = Buffer.concat([ data, data ]);
+      data = Buffer.concat([data, data]);
       hash = this.hashAlgo(data);
 
       this.layers[layerIndex].push(hash);
@@ -105,7 +107,7 @@ class MerkleTree {
    * const root = tree.getRoot()
    */
   getRoot() {
-    return this.layers[this.layers.length-1][0];
+    return this.layers[this.layers.length - 1][0];
   }
 
   /**
@@ -140,44 +142,39 @@ class MerkleTree {
       return [];
     }
 
-    if (index === (this.leaves.length - 1)) {
-
+    if (index === this.leaves.length - 1) {
       for (let i = 0; i < this.layers.length - 1; i++) {
         const layer = this.layers[i];
         const isRightNode = index % 2;
-        const pairIndex = (isRightNode ? index - 1: index);
+        const pairIndex = isRightNode ? index - 1 : index;
 
         if (pairIndex < layer.length) {
           proof.push({
-            position: isRightNode ? "left": "right",
+            position: isRightNode ? "left" : "right",
             data: layer[pairIndex]
           });
         }
 
         // set index to parent index
-        index = (index / 2)|0;
-
+        index = (index / 2) | 0;
       }
 
       return proof;
-
     } else {
-
       for (let i = 0; i < this.layers.length; i++) {
         const layer = this.layers[i];
         const isRightNode = index % 2;
-        const pairIndex = (isRightNode ? index - 1 : index + 1);
+        const pairIndex = isRightNode ? index - 1 : index + 1;
 
         if (pairIndex < layer.length) {
           proof.push({
-            position: isRightNode ? "left": "right",
+            position: isRightNode ? "left" : "right",
             data: layer[pairIndex]
           });
         }
 
         // set index to parent index
-        index = (index / 2)|0;
-
+        index = (index / 2) | 0;
       }
 
       return proof;
@@ -202,16 +199,13 @@ class MerkleTree {
   verify(proof, targetNode, root) {
     let hash = targetNode;
 
-    if (!Array.isArray(proof) ||
-        !proof.length ||
-        !targetNode ||
-        !root) {
+    if (!Array.isArray(proof) || !proof.length || !targetNode || !root) {
       return false;
     }
 
     for (let i = 0; i < proof.length; i++) {
       const node = proof[i];
-      const isLeftNode = (node.position === "left");
+      const isLeftNode = node.position === "left";
       const buffers = [];
 
       buffers.push(hash);

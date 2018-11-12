@@ -17,7 +17,6 @@ function _initStorage(options) {
   return Promise.resolve();
 }
 
-
 function clear(callback) {
   const self = this;
   const promise = new Promise(function(resolve, reject) {
@@ -47,9 +46,7 @@ function getItem(key, callback) {
 
   // Cast the key to a string, as that's all we can set as a key.
   if (typeof key !== "string") {
-    window.console.warn(
-      key + " used as a key, but it is not a string."
-    );
+    window.console.warn(key + " used as a key, but it is not a string.");
     key = String(key);
   }
 
@@ -172,9 +169,7 @@ function removeItem(key, callback) {
 
   // Cast the key to a string, as that's all we can set as a key.
   if (typeof key !== "string") {
-    window.console.warn(
-      key + " used as a key, but it is not a string."
-    );
+    window.console.warn(key + " used as a key, but it is not a string.");
     key = String(key);
   }
 
@@ -202,9 +197,7 @@ function setItem(key, value, callback) {
 
   // Cast the key to a string, as that's all we can set as a key.
   if (typeof key !== "string") {
-    window.console.warn(
-      key + " used as a key, but it is not a string."
-    );
+    window.console.warn(key + " used as a key, but it is not a string.");
     key = String(key);
   }
 
@@ -230,8 +223,6 @@ function setItem(key, value, callback) {
   executeCallback(promise, callback);
   return promise;
 }
-
-
 
 function executeCallback(promise, callback) {
   if (callback) {
@@ -261,4 +252,3 @@ const dummyStorageDriver = {
 };
 
 export default dummyStorageDriver;
-

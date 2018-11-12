@@ -5,9 +5,21 @@ import compose from "lodash/fp/compose";
 import union from "lodash/fp/union";
 import { TOP_LEVEL_COMMENT_PARENTID } from "./api";
 
-export const proposalToT3 = ({
-  name, timestamp, status, userid, username, numcomments, censorshiprecord = {}, draftId = "", version, statuschangemessage
-}, idx) => ({
+export const proposalToT3 = (
+  {
+    name,
+    timestamp,
+    status,
+    userid,
+    username,
+    numcomments,
+    censorshiprecord = {},
+    draftId = "",
+    version,
+    statuschangemessage
+  },
+  idx
+) => ({
   kind: "t3",
   data: {
     authorid: userid,
@@ -16,11 +28,13 @@ export const proposalToT3 = ({
     rank: idx + 1,
     title: name || "(Proposal name hidden)",
     id: censorshiprecord.token,
-    name: "t3_"+censorshiprecord.token,
+    name: "t3_" + censorshiprecord.token,
     review_status: status,
     created_utc: timestamp,
-    permalink: `/proposals/${censorshiprecord.token || (draftId ? `new?draftid=${draftId}` : "")}`,
-    url: `/proposals/${censorshiprecord.token || (draftId ? `new?draftid=${draftId}` : "")}`,
+    permalink: `/proposals/${censorshiprecord.token ||
+      (draftId ? `new?draftid=${draftId}` : "")}`,
+    url: `/proposals/${censorshiprecord.token ||
+      (draftId ? `new?draftid=${draftId}` : "")}`,
     is_self: true,
     draftId,
     version,
@@ -28,25 +42,28 @@ export const proposalToT3 = ({
   }
 });
 
-export const formatProposalData = (proposal, idx) => proposalToT3(proposal, idx);
+export const formatProposalData = (proposal, idx) =>
+  proposalToT3(proposal, idx);
 
-const getChildComments = ({ tree, comments }, parentid) => map(
-  compose(
-    data => ({
-      kind: "t1",
-      data: {
-        ...data,
-        replies: {
-          data: {
-            children: (data.id && getChildComments({ tree, comments }, data.id)) || []
+const getChildComments = ({ tree, comments }, parentid) =>
+  map(
+    compose(
+      data => ({
+        kind: "t1",
+        data: {
+          ...data,
+          replies: {
+            data: {
+              children:
+                (data.id && getChildComments({ tree, comments }, data.id)) || []
+            }
           }
         }
-      }
-    }),
-    id => comments[id]
-  ),
-  get(parentid || TOP_LEVEL_COMMENT_PARENTID, tree) || []
-);
+      }),
+      id => comments[id]
+    ),
+    get(parentid || TOP_LEVEL_COMMENT_PARENTID, tree) || []
+  );
 
 // get filtered thread tree if commentid exists, returns the existing tree if not
 const getTree = ({ tree, comments }, commentid, tempThreadTree) => {
@@ -57,12 +74,14 @@ const getTree = ({ tree, comments }, commentid, tempThreadTree) => {
         ...newTree,
         [commentid]: tree[commentid]
       };
-      tree[commentid] && tree[commentid].forEach(item => getChildren(tree, item));
+      tree[commentid] &&
+        tree[commentid].forEach(item => getChildren(tree, item));
     };
     const getParents = (tree, commentid) => {
       const firstlevel = Object.keys(tree);
       firstlevel.forEach(key => {
-        if (tree[key].find(item => item === commentid)) { // find the comment parent
+        if (tree[key].find(item => item === commentid)) {
+          // find the comment parent
           newTree = {
             ...newTree,
             [key]: [commentid]
@@ -81,18 +100,31 @@ const getTree = ({ tree, comments }, commentid, tempThreadTree) => {
         };
       });
     }
-    return ({ tree: newTree, comments });
+    return { tree: newTree, comments };
   }
-  return({ tree, comments });
+  return { tree, comments };
 };
-
 
 // compose JS reduce and getTree, will return a {tree, comments} object
 export const buildCommentsTree = (comments, commentid, tempThreadTree) =>
   compose(
-    (obj) => getTree(obj, commentid, tempThreadTree),
+    obj => getTree(obj, commentid, tempThreadTree),
     reduce(
-      (r, { commentid, userid, username, parentid, token, comment, timestamp, resultvotes, vote, censored }) => ({
+      (
+        r,
+        {
+          commentid,
+          userid,
+          username,
+          parentid,
+          token,
+          comment,
+          timestamp,
+          resultvotes,
+          vote,
+          censored
+        }
+      ) => ({
         ...r,
         comments: {
           ...r.comments,
@@ -114,7 +146,7 @@ export const buildCommentsTree = (comments, commentid, tempThreadTree) =>
         tree: {
           ...r.tree,
           [parentid || TOP_LEVEL_COMMENT_PARENTID]: [
-            ...(get([ "tree", parentid || TOP_LEVEL_COMMENT_PARENTID ], r) || []),
+            ...(get(["tree", parentid || TOP_LEVEL_COMMENT_PARENTID], r) || []),
             commentid
           ]
         }
@@ -122,8 +154,6 @@ export const buildCommentsTree = (comments, commentid, tempThreadTree) =>
       { tree: {}, comments: {} }
     )
   )(comments);
-
-
 
 export const commentsToT1 = (comments, commentid, tempThreadTree) => {
   return compose(

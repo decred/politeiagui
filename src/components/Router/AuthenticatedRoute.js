@@ -10,7 +10,10 @@ class AuthenticatedRoute extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!this.props.loggedInAsEmail || this.props.location !== prevProps.location) {
+    if (
+      !this.props.loggedInAsEmail ||
+      this.props.location !== prevProps.location
+    ) {
       this.checkAuthentication(this.props);
     }
   }
@@ -30,12 +33,13 @@ class AuthenticatedRoute extends Component {
     // localstorage data. The localstorage check handles the case where the user has logged in
     // another tab and the current tab hasn't fetched the user authenticated data from the api yet
     const validUserLoginFromApi = dataHasBeenFetched && loggedInAsEmail;
-    const validUserLoginFromLocalStorage = (stateFromLocalStorage
-      && stateFromLocalStorage.api
-      && stateFromLocalStorage.api.me
-      && stateFromLocalStorage.api.me.response);
+    const validUserLoginFromLocalStorage =
+      stateFromLocalStorage &&
+      stateFromLocalStorage.api &&
+      stateFromLocalStorage.api.me &&
+      stateFromLocalStorage.api.me.response;
 
-    if(validUserLoginFromApi || validUserLoginFromLocalStorage) {
+    if (validUserLoginFromApi || validUserLoginFromLocalStorage) {
       return true;
     } else {
       this.props.redirectedFrom(this.props.location.pathname);
@@ -48,13 +52,7 @@ class AuthenticatedRoute extends Component {
 
   render() {
     const { component: Component, ...rest } = this.props;
-    return (
-      <Route {...rest}
-        render={props => (
-          <Component {...props} />
-        )}
-      />
-    );
+    return <Route {...rest} render={props => <Component {...props} />} />;
   }
 }
 

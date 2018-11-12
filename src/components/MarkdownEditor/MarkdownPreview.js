@@ -4,7 +4,7 @@ import Markdown from "../snew/Markdown";
 
 const MarkdownPreview = ({ body, fullWidth }) => (
   <div className={`mde-preview ${fullWidth && "fullwidth"}`}>
-    <Markdown body={body} className="mde-preview-content"/>
+    <Markdown body={body} className="mde-preview-content" />
   </div>
 );
 

@@ -24,7 +24,6 @@ class DownloadBundle extends Component {
     fileDownload(data, `${proposal.censorshiprecord.token}-comments.json`);
   }
 
-
   render() {
     const t = this.props.type;
 

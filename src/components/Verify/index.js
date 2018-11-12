@@ -9,18 +9,20 @@ class Verify extends Component {
   constructor(props) {
     super();
     const { verificationtoken, email } = qs.parse(props.location.search);
-    if (isEmpty(props.location.search)
-      || !email || !verificationtoken
-      || typeof(email) !== "string" || typeof(verificationtoken) !== "string"
+    if (
+      isEmpty(props.location.search) ||
+      !email ||
+      !verificationtoken ||
+      typeof email !== "string" ||
+      typeof verificationtoken !== "string"
     ) {
       props.history.push("/user/login");
       return;
     }
 
-    props.onVerify(props.location.search)
-      .catch(err => {
-        console.error(err.stack || err);
-      });
+    props.onVerify(props.location.search).catch(err => {
+      console.error(err.stack || err);
+    });
   }
 
   render() {

@@ -17,7 +17,10 @@ const signupFormConnector = connect(
     policy: sel.policy,
     newUserResponse: sel.newUserResponse,
     isApiRequestingLogin: sel.isApiRequestingLogin,
-    isApiRequestingNewUser: or(sel.isApiRequestingInit, sel.isApiRequestingNewUser),
+    isApiRequestingNewUser: or(
+      sel.isApiRequestingInit,
+      sel.isApiRequestingNewUser
+    ),
     isApiRequestingVerifyNewUser: sel.isApiRequestingVerifyNewUser,
     apiNewUserError: sel.apiNewUserError,
     apiVerifyNewUserError: sel.apiVerifyNewUserError,
@@ -59,8 +62,7 @@ class Wrapper extends Component {
     }
 
     const { hasFetchedPolicy } = this.state;
-    if (hasFetchedPolicy)
-      return;
+    if (hasFetchedPolicy) return;
 
     if (this.props.csrf) {
       this.setState({ hasFetchedPolicy: true });
@@ -76,10 +78,14 @@ class Wrapper extends Component {
 
   render() {
     const Component = this.props.Component;
-    return <Component {...{
-      ...this.props,
-      onSignup: this.onSignup.bind(this)
-    }} />;
+    return (
+      <Component
+        {...{
+          ...this.props,
+          onSignup: this.onSignup.bind(this)
+        }}
+      />
+    );
   }
 
   onSignup(args) {
@@ -91,7 +97,7 @@ class Wrapper extends Component {
     const policy = this.props.policy || {};
     validate(policy, args);
     const { error } = this.props;
-    if(error) {
+    if (error) {
       this.props.clearSubmitErrors();
     }
 
@@ -100,7 +106,7 @@ class Wrapper extends Component {
     }
 
     const promise = this.props.onSignupConfirm(args);
-    if(promise) {
+    if (promise) {
       return promise.catch(e => {
         throw new SubmissionError({
           _error: e.message
@@ -108,9 +114,13 @@ class Wrapper extends Component {
       });
     }
   }
-
 }
 
-const wrap = (Component) => signupFormConnector((props) => <Wrapper {...{ ...props, Component }} />);
+const wrap = Component =>
+  signupFormConnector(props => <Wrapper {...{ ...props, Component }} />);
 
-export default compose(reduxForm({ form: "form/signup" }), withRouter, wrap);
+export default compose(
+  reduxForm({ form: "form/signup" }),
+  withRouter,
+  wrap
+);

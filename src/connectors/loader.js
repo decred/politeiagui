@@ -15,12 +15,16 @@ export default connect(
     onboardViewed: sel.onboardViewed,
     identityImportSuccess: sel.identityImportSuccess
   }),
-  dispatch => bindActionCreators({
-    onInit: act.requestApiInfo,
-    keyMismatchAction: act.keyMismatch,
-    openModal: act.openModal,
-    confirmWithModal: act.confirmWithModal,
-    setOnboardAsViewed: act.setOnboardAsViewed,
-    onLoadDraftProposals: act.onLoadDraftProposals
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        onInit: act.requestApiInfo,
+        keyMismatchAction: act.keyMismatch,
+        openModal: act.openModal,
+        confirmWithModal: act.confirmWithModal,
+        setOnboardAsViewed: act.setOnboardAsViewed,
+        onLoadDraftProposals: act.onLoadDraftProposals
+      },
+      dispatch
+    )
 );

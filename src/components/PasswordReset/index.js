@@ -13,7 +13,10 @@ class PasswordReset extends Component {
   constructor(props) {
     super(props);
     const query = this.getQueryParams();
-    if (isRequiredValidator(query.email) && isRequiredValidator(query.verificationtoken)) {
+    if (
+      isRequiredValidator(query.email) &&
+      isRequiredValidator(query.verificationtoken)
+    ) {
       return;
     }
     props.history.push("/");
@@ -36,10 +39,12 @@ class PasswordReset extends Component {
   render() {
     console.log(this.props);
     return (
-      <PasswordResetForm {...{
-        onPasswordReset: this.onPasswordReset,
-        isRequesting: this.props.isRequesting
-      }} />
+      <PasswordResetForm
+        {...{
+          onPasswordReset: this.onPasswordReset,
+          isRequesting: this.props.isRequesting
+        }}
+      />
     );
   }
 
@@ -51,10 +56,11 @@ class PasswordReset extends Component {
     const policy = this.props.policy;
     validate(props, policy);
 
-    return this
-      .props
-      .onPasswordResetRequest(assign({ newpassword: props.newPassword }, this.getQueryParams()))
-      .catch((error) => {
+    return this.props
+      .onPasswordResetRequest(
+        assign({ newpassword: props.newPassword }, this.getQueryParams())
+      )
+      .catch(error => {
         throw new SubmissionError({
           _error: error.message
         });

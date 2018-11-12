@@ -15,28 +15,27 @@ class ModalStack extends React.Component {
     const { openedModals } = this.props;
     const { modals } = this.state;
     let modalChanged = false;
-    if(modals.length > openedModals.length) {
+    if (modals.length > openedModals.length) {
       modalChanged = true;
       modals.pop();
-    } else if(modals.length < openedModals.length){
+    } else if (modals.length < openedModals.length) {
       modalChanged = true;
       const lastPosition = openedModals.length - 1;
       const lastInsertedModal = openedModals[lastPosition];
-      modals.push(
-        this.renderModalContent(lastInsertedModal)
-      );
+      modals.push(this.renderModalContent(lastInsertedModal));
     }
-    if(modalChanged) this.setState({ modals }, () => {
-      if (modals.length !== 0)
-        document.querySelector("body").style.overflowY = "hidden";
-      else document.querySelector("body").style.overflowY = "scroll";
-    });
+    if (modalChanged)
+      this.setState({ modals }, () => {
+        if (modals.length !== 0)
+          document.querySelector("body").style.overflowY = "hidden";
+        else document.querySelector("body").style.overflowY = "scroll";
+      });
   }
-  renderModalContent = (modalData) => (
+  renderModalContent = modalData => (
     <Modal key={modalData.type}>
       <ModalContent modalData={modalData} />
     </Modal>
-  )
+  );
   render() {
     return this.state.modals;
   }

@@ -1,5 +1,4 @@
 module.exports = {
-
   // Abord all on test fail
   abortOnAssertionFailure: true,
 
@@ -10,9 +9,9 @@ module.exports = {
   waitForConditionTimeout: 1000,
 
   /*
-    * Define if the test failed when many HTML elements are found when
-    * we expect only one
-    */
+   * Define if the test failed when many HTML elements are found when
+   * we expect only one
+   */
   throwOnMultipleElementsReturned: false,
 
   // Before/After Hooks of all tests

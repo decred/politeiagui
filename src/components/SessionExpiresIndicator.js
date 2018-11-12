@@ -15,7 +15,7 @@ class SessionExpiresIndicator extends React.Component {
   }
 
   getTimeLeft = (sessionMaxAge, lastLoginTime) =>
-    (lastLoginTime + sessionMaxAge) - Date.now()/1000;
+    lastLoginTime + sessionMaxAge - Date.now() / 1000;
 
   intervalProcedure = () => {
     let { timer } = this.state;
@@ -24,12 +24,13 @@ class SessionExpiresIndicator extends React.Component {
     const validSessionTimeLeft = !isNaN(sessionTimeLeft);
     const lessThan10MinutesLeft = sessionTimeLeft < 20;
 
-    if (timer != null && validSessionTimeLeft) { // timer is running
+    if (timer != null && validSessionTimeLeft) {
+      // timer is running
       // decrease timer
       const newTimer = --timer;
-      return newTimer <= 0 ?
-        this.setState({ activateInterval: false }) :
-        this.setState({ timer: newTimer });
+      return newTimer <= 0
+        ? this.setState({ activateInterval: false })
+        : this.setState({ timer: newTimer });
     }
 
     if (validSessionTimeLeft && lessThan10MinutesLeft) {
@@ -37,7 +38,7 @@ class SessionExpiresIndicator extends React.Component {
     } else if (!validSessionTimeLeft) {
       this.setState({ timer: null });
     }
-  }
+  };
 
   finishInterval = () => {
     const {
@@ -49,25 +50,30 @@ class SessionExpiresIndicator extends React.Component {
     } = this.props;
 
     const redirectToLogoutPage = () => history.push("/user/logout");
-    const openSessionExpiredModal = () => openModal(modalTypes.LOGIN, {
-      title: "Your session has expired. Please log in again.",
-      redirectAfterLogin: location.pathname
-    }, null);
+    const openSessionExpiredModal = () =>
+      openModal(
+        modalTypes.LOGIN,
+        {
+          title: "Your session has expired. Please log in again.",
+          redirectAfterLogin: location.pathname
+        },
+        null
+      );
 
     this.setState({ timer: null });
 
     // if user is logged in, perform the logout procedure
     // there is no need to trigger the logout request b/c the session has
     // already expired
-    if(loggedInAsEmail) {
+    if (loggedInAsEmail) {
       handleLogout({}, redirectToLogoutPage());
       openSessionExpiredModal();
     }
-  }
+  };
 
   componentDidUpdate(prevProps) {
     const { loggedInAsEmail } = this.props;
-    if(!prevProps.loggedInAsEmail && loggedInAsEmail) {
+    if (!prevProps.loggedInAsEmail && loggedInAsEmail) {
       // user has logged in
       // start the check for the session status
       this.setState({
@@ -91,16 +97,14 @@ class SessionExpiresIndicator extends React.Component {
         onFinishInterval={this.finishInterval}
         active={this.state.activateInterval}
       >
-        {timer ?
+        {timer ? (
           <div className="session-expiration">
             {"current session expires "}
-            {
-              distanceInWordsToNow(
-                timer * 1000 + Date.now(),
-                { addSuffix: true }
-              )
-            }
-          </div> : null}
+            {distanceInWordsToNow(timer * 1000 + Date.now(), {
+              addSuffix: true
+            })}
+          </div>
+        ) : null}
       </IntervalComponent>
     );
   }

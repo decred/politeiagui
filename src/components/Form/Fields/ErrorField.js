@@ -6,12 +6,7 @@ const ErrorField = ({ title, meta: { error } }) => {
     return null;
   }
 
-  return (
-    <Message
-      type="error"
-      header={title}
-      body={error} />
-  );
+  return <Message type="error" header={title} body={error} />;
 };
 
 export default ErrorField;

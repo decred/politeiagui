@@ -19,7 +19,6 @@ import {
 } from "../constants";
 import { setQueryStringWithoutPageReload } from "../helpers";
 
-
 const adminFilterOptions = [
   {
     label: "unreviewed",
@@ -73,7 +72,7 @@ const mapHeaderToCount = {
     // unreviewed proposals and proposals with unreviewed changes are shown on the same list
     // so is necessary to sum their counts
     const count = proposalCounts[status] || 0;
-    if(status === PROPOSAL_STATUS_UNREVIEWED) {
+    if (status === PROPOSAL_STATUS_UNREVIEWED) {
       return count + (proposalCounts[PROPOSAL_STATUS_UNREVIEWED_CHANGES] || 0);
     }
     return count;
@@ -82,7 +81,7 @@ const mapHeaderToCount = {
     // voting not authorized and voting authorized proposals are shown on the same list
     // so is necessary to sum their counts
     const count = proposalCounts[status] || 0;
-    if(status === PROPOSAL_VOTING_NOT_AUTHORIZED) {
+    if (status === PROPOSAL_VOTING_NOT_AUTHORIZED) {
       return count + (proposalCounts[PROPOSAL_VOTING_AUTHORIZED] || 0);
     }
     return count;
@@ -98,48 +97,52 @@ class ProposalFilter extends React.Component {
   componentDidUpdate(prevProps) {
     this.handleUpdateQueryForFilterValueChange(prevProps);
   }
-  handleUpdateFilterValueForQueryValue = (props) => {
+  handleUpdateFilterValueForQueryValue = props => {
     const { location, header, handleChangeFilterValue } = props;
     const { tab } = qs.parse(location.search);
     const tabOptions = mapHeaderToOptions[header];
-    if (!tabOptions)
-      return;
+    if (!tabOptions) return;
 
     const validTabOption = tabOptions.find(op => op.label === tab);
     if (validTabOption) {
       handleChangeFilterValue(validTabOption.value);
     }
-  }
-  handleUpdateQueryForFilterValueChange = (prevProps) => {
+  };
+  handleUpdateQueryForFilterValueChange = prevProps => {
     const { header } = this.props;
-    const filterValueTabHasChanged = prevProps.filterValue !== this.props.filterValue;
+    const filterValueTabHasChanged =
+      prevProps.filterValue !== this.props.filterValue;
     const tabOptions = mapHeaderToOptions[header];
-    if(!tabOptions)
-      return;
+    if (!tabOptions) return;
 
-    const selectedOption = tabOptions && tabOptions.find(op => op.value === this.props.filterValue);
+    const selectedOption =
+      tabOptions && tabOptions.find(op => op.value === this.props.filterValue);
     const optionLabel = selectedOption.label;
 
-    if(filterValueTabHasChanged) {
+    if (filterValueTabHasChanged) {
       setQueryStringWithoutPageReload(`?tab=${optionLabel}`);
     }
-  }
+  };
   render() {
-    const { handleChangeFilterValue, header, filterValue, proposalCounts } = this.props;
-    return (
-      mapHeaderToOptions[header] ?
-        <Tabs>
-          {mapHeaderToOptions[header].map((op) => (
-            <Tab
-              key={op.value}
-              title={op.label}
-              count={mapHeaderToCount[header](proposalCounts, op.value)}
-              selected={filterValue === op.value}
-              onTabChange={() => handleChangeFilterValue(op.value)} />
-          ))}
-        </Tabs>
-        : null
-    );
+    const {
+      handleChangeFilterValue,
+      header,
+      filterValue,
+      proposalCounts
+    } = this.props;
+    return mapHeaderToOptions[header] ? (
+      <Tabs>
+        {mapHeaderToOptions[header].map(op => (
+          <Tab
+            key={op.value}
+            title={op.label}
+            count={mapHeaderToCount[header](proposalCounts, op.value)}
+            selected={filterValue === op.value}
+            onTabChange={() => handleChangeFilterValue(op.value)}
+          />
+        ))}
+      </Tabs>
+    ) : null;
   }
 }
 

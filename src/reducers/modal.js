@@ -4,23 +4,28 @@ const DEFAULT_STATE = {
   openedModals: []
 };
 
-const modal = (state = DEFAULT_STATE, action) => (({
-  [act.OPEN_MODAL]: () => ({
-    ...state,
-    openedModals: state.openedModals.concat([{
-      type: action.modalType,
-      payload: action.payload,
-      callback: action.callback
-    }])
-  }),
-  [act.CLOSE_MODAL]: () => ({
-    ...state,
-    openedModals: state.openedModals.filter((obj, idx) => idx !== state.openedModals.length - 1)
-  }),
-  [act.CLOSE_ALL_MODALS]: () => ({
-    ...state,
-    openedModals: []
-  })
-})[action.type] || (() => state))();
+const modal = (state = DEFAULT_STATE, action) =>
+  (({
+    [act.OPEN_MODAL]: () => ({
+      ...state,
+      openedModals: state.openedModals.concat([
+        {
+          type: action.modalType,
+          payload: action.payload,
+          callback: action.callback
+        }
+      ])
+    }),
+    [act.CLOSE_MODAL]: () => ({
+      ...state,
+      openedModals: state.openedModals.filter(
+        (obj, idx) => idx !== state.openedModals.length - 1
+      )
+    }),
+    [act.CLOSE_ALL_MODALS]: () => ({
+      ...state,
+      openedModals: []
+    })
+  }[action.type] || (() => state))());
 
 export default modal;

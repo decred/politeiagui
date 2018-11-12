@@ -4,10 +4,7 @@ import modalConnector from "../../../connectors/modal";
 import ProposalCredits from "../../ProposalCreditsManager";
 
 const ProposalCreditsModal = ({ closeAllModals }) => (
-  <ModalContentWrapper
-    title={"Account History"}
-    onClose={closeAllModals}
-  >
+  <ModalContentWrapper title={"Account History"} onClose={closeAllModals}>
     <ProposalCredits />
   </ModalContentWrapper>
 );

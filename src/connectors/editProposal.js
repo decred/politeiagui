@@ -11,8 +11,8 @@ import { arg, or } from "../lib/fp";
 const submitConnector = connect(
   sel.selectorMap({
     token: compose(
-      t => t ? t.toLowerCase() : t,
-      get([ "match", "params", "token" ]),
+      t => (t ? t.toLowerCase() : t),
+      get(["match", "params", "token"]),
       arg(1)
     ),
     editedProposalToken: sel.editProposalToken,
@@ -39,22 +39,25 @@ const submitConnector = connect(
 );
 
 class SubmitWrapper extends Component {
-
   componentDidMount() {
     const { token } = this.props;
     this.props.policy || this.props.onFetchData();
     this.props.onFetchProposal && this.props.onFetchProposal(token);
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     const { editedProposalToken, proposal } = this.props;
     if (editedProposalToken) {
       this.props.onResetProposal();
       return this.props.history.push("/proposals/" + editedProposalToken);
     }
 
-    const isProposalFetched = proposal && proposal.censorshiprecord && proposal.censorshiprecord.token === this.props.token;
-    const proposalBelongsToTheUser = proposal && proposal.userid === this.props.userid;
+    const isProposalFetched =
+      proposal &&
+      proposal.censorshiprecord &&
+      proposal.censorshiprecord.token === this.props.token;
+    const proposalBelongsToTheUser =
+      proposal && proposal.userid === this.props.userid;
     if (isProposalFetched && !proposalBelongsToTheUser) {
       this.props.history.push("/");
     }
@@ -62,19 +65,22 @@ class SubmitWrapper extends Component {
 
   render() {
     const Component = this.props.Component;
-    return <Component { ...{ ...this.props,
-      editingMode: true,
-      onSave: this.onSave
-    }}  />;
+    return (
+      <Component
+        {...{ ...this.props, editingMode: true, onSave: this.onSave }}
+      />
+    );
   }
 
   onSave = (...args) => {
     validate(...args);
     return this.props.onSave(...args, this.props.token);
-  }
+  };
 }
 
-const wrapSubmit = (Component) => (props) => <SubmitWrapper { ...{ ...props, Component }} />;
+const wrapSubmit = Component => props => (
+  <SubmitWrapper {...{ ...props, Component }} />
+);
 
 export default compose(
   submitConnector,

@@ -46,16 +46,20 @@ class UserInfo extends React.Component {
                     Account
                   </li>
                   <li
-                    className={`dropdown-list-item ${!userCanExecuteActions ? "disabled" : ""}`}
-                    onClick={() => userCanExecuteActions ? history.push("/proposals/new") : null}
+                    className={`dropdown-list-item ${
+                      !userCanExecuteActions ? "disabled" : ""
+                    }`}
+                    onClick={() =>
+                      userCanExecuteActions
+                        ? history.push("/proposals/new")
+                        : null
+                    }
                   >
                     Submit Proposal
                   </li>
                   <li
                     className="dropdown-list-item logout-button"
-                    onClick={() => onLogout(
-                      () => history.push("/user/logout")
-                    )}
+                    onClick={() => onLogout(() => history.push("/user/logout"))}
                   >
                     <form className="logout hover" />
                     Log out

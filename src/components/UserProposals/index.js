@@ -5,11 +5,10 @@ import userProposalsConnector from "../../connectors/userProposals";
 import { Content as ProposalListing } from "../../components/snew";
 
 class UserProposals extends Component {
-
   render() {
     return (
       <div className="page content">
-        <ProposalListing  {...this.props} />
+        <ProposalListing {...this.props} />
       </div>
     );
   }

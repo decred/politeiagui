@@ -11,12 +11,13 @@ import {
   PROPOSAL_VOTING_AUTHORIZED
 } from "../constants";
 
-
 const mapVoteStatusToMessage = {
   [PROPOSAL_VOTING_ACTIVE]: "Proposal voting active",
   [PROPOSAL_VOTING_FINISHED]: "Proposal voting finished",
-  [PROPOSAL_VOTING_NOT_AUTHORIZED]: "Author has not yet authorized the start of voting",
-  [PROPOSAL_VOTING_AUTHORIZED]: "Waiting for administrator approval to start voting"
+  [PROPOSAL_VOTING_NOT_AUTHORIZED]:
+    "Author has not yet authorized the start of voting",
+  [PROPOSAL_VOTING_AUTHORIZED]:
+    "Waiting for administrator approval to start voting"
 };
 
 const VoteStatusLabel = ({ status }) => {
@@ -25,34 +26,42 @@ const VoteStatusLabel = ({ status }) => {
   };
   const mapVoteStatusToLabel = {
     [PROPOSAL_VOTING_ACTIVE]: (
-      <span style={{
-        ...spanStyle,
-        color: "#41bf53"
-      }}>
+      <span
+        style={{
+          ...spanStyle,
+          color: "#41bf53"
+        }}
+      >
         {mapVoteStatusToMessage[status]}
       </span>
     ),
     [PROPOSAL_VOTING_FINISHED]: (
-      <span style={{
-        ...spanStyle,
-        color: "#091440"
-      }}>
+      <span
+        style={{
+          ...spanStyle,
+          color: "#091440"
+        }}
+      >
         {mapVoteStatusToMessage[status]}
       </span>
     ),
     [PROPOSAL_VOTING_NOT_AUTHORIZED]: (
-      <span style={{
-        ...spanStyle,
-        color: "#8997a5"
-      }}>
+      <span
+        style={{
+          ...spanStyle,
+          color: "#8997a5"
+        }}
+      >
         {mapVoteStatusToMessage[status]}
       </span>
     ),
     [PROPOSAL_VOTING_AUTHORIZED]: (
-      <span style={{
-        ...spanStyle,
-        color: "#FFC84E"
-      }}>
+      <span
+        style={{
+          ...spanStyle,
+          color: "#FFC84E"
+        }}
+      >
         {mapVoteStatusToMessage[status]}
       </span>
     )
@@ -60,22 +69,25 @@ const VoteStatusLabel = ({ status }) => {
   return mapVoteStatusToLabel[status] || null;
 };
 
-const getPercentage = (received, total) => Number.parseFloat((received/total)*100).toFixed(2);
-const sortOptionYesFirst = a => a.id === "yes" ? -1 : 1;
+const getPercentage = (received, total) =>
+  Number.parseFloat((received / total) * 100).toFixed(2);
+const sortOptionYesFirst = a => (a.id === "yes" ? -1 : 1);
 
 class Stats extends React.Component {
   getColor = optionId => {
-    switch(optionId) {
-    case "yes":
-      return "#def9f7";
-    case "no":
-      return "#FFF";
-    default:
-      return getRandomColor();
+    switch (optionId) {
+      case "yes":
+        return "#def9f7";
+      case "no":
+        return "#FFF";
+      default:
+        return getRandomColor();
     }
-  }
+  };
   canShowStats = (status, totalVotes) =>
-    (status === PROPOSAL_VOTING_ACTIVE || status === PROPOSAL_VOTING_FINISHED) && totalVotes > 0;
+    (status === PROPOSAL_VOTING_ACTIVE ||
+      status === PROPOSAL_VOTING_FINISHED) &&
+    totalVotes > 0;
 
   transformOptionsResult = (totalVotes, optionsResult = []) =>
     optionsResult
@@ -85,8 +97,9 @@ class Stats extends React.Component {
         votesReceived: votesreceived,
         percentage: getPercentage(votesreceived, totalVotes),
         color: this.getColor(option.id)
-      })).sort(sortOptionYesFirst)
-  renderStats = (option) => {
+      }))
+      .sort(sortOptionYesFirst);
+  renderStats = option => {
     const optionStyle = {
       display: "flex",
       marginRight: "8px"
@@ -97,36 +110,42 @@ class Stats extends React.Component {
       marginRight: "4px"
     };
     return (
-      <span key={`option-${option.id}`} style={optionStyle} >
-        { option.id === "yes" ?
-          (
-            <Tooltip
-              tipStyle={{ fontSize: "11px", top: "20px", left: "20px", width: "36px" }}
-              text="Yes"
-              position="bottom"
-            >
-              <span>
-                <span style={optionIdStyle} >{` ✔ ${option.votesReceived}`}</span>
-              </span>
-            </Tooltip>
-          ) :
-          (
-            <Tooltip
-              tipStyle={{ fontSize: "11px", top: "20px", left: "20px", width: "29px" }}
-              text="No"
-              position="bottom"
-            >
-              <span style={{ marginRight: "25px" }}>
-                <span style={optionIdStyle} >{` ✖ ${option.votesReceived}`}</span>
-              </span>
-            </Tooltip>
-          )
-        }
-
+      <span key={`option-${option.id}`} style={optionStyle}>
+        {option.id === "yes" ? (
+          <Tooltip
+            tipStyle={{
+              fontSize: "11px",
+              top: "20px",
+              left: "20px",
+              width: "36px"
+            }}
+            text="Yes"
+            position="bottom"
+          >
+            <span>
+              <span style={optionIdStyle}>{` ✔ ${option.votesReceived}`}</span>
+            </span>
+          </Tooltip>
+        ) : (
+          <Tooltip
+            tipStyle={{
+              fontSize: "11px",
+              top: "20px",
+              left: "20px",
+              width: "29px"
+            }}
+            text="No"
+            position="bottom"
+          >
+            <span style={{ marginRight: "25px" }}>
+              <span style={optionIdStyle}>{` ✖ ${option.votesReceived}`}</span>
+            </span>
+          </Tooltip>
+        )}
       </span>
     );
   };
-  getChartData = (options) =>
+  getChartData = options =>
     options.map(op => ({
       label: op.id,
       value: op.percentage,
@@ -135,21 +154,31 @@ class Stats extends React.Component {
 
   getTimeInBlocks = (endHeight, currentHeight) => {
     const blocks = endHeight - currentHeight;
-    const blockTimeMinutes = this.props.isTestnet ? blocks*2 : blocks*5 ;
+    const blockTimeMinutes = this.props.isTestnet ? blocks * 2 : blocks * 5;
     const mili = blockTimeMinutes * 60000;
     const dateMs = new Date(mili + Date.now()); // gets time in ms
-    const distance = distanceInWordsToNow(
-      dateMs,
-      { addSuffix: true }
-    );
+    const distance = distanceInWordsToNow(dateMs, { addSuffix: true });
     const element = (
       <Tooltip
-        tipStyle={{ fontSize: "11px", top: "20px", left: "20px", width: "90px" }}
-        text={"Voting ends at block #"+endHeight}
+        tipStyle={{
+          fontSize: "11px",
+          top: "20px",
+          left: "20px",
+          width: "90px"
+        }}
+        text={"Voting ends at block #" + endHeight}
         position="bottom"
       >
-        <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
-          <span>{blocks === 0 ? "last block left" : blocks + " blocks left"}</span>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column"
+          }}
+        >
+          <span>
+            {blocks === 0 ? "last block left" : blocks + " blocks left"}
+          </span>
           <span style={{ fontSize: "11px" }}>vote ends {distance}</span>
         </div>
       </Tooltip>
@@ -168,10 +197,19 @@ class Stats extends React.Component {
       numOfEligibleVotes
     } = this.props;
     const showStats = this.canShowStats(status, totalVotes);
-    const options = optionsResult ? this.transformOptionsResult(totalVotes, optionsResult) : [];
-    const isPreVoting = status === PROPOSAL_VOTING_NOT_AUTHORIZED || status === PROPOSAL_VOTING_AUTHORIZED;
-    const currentQuorumPercentage = getPercentage(totalVotes, numOfEligibleVotes);
-    const quorumInVotes = Math.round(numOfEligibleVotes * quorumPercentage/100);
+    const options = optionsResult
+      ? this.transformOptionsResult(totalVotes, optionsResult)
+      : [];
+    const isPreVoting =
+      status === PROPOSAL_VOTING_NOT_AUTHORIZED ||
+      status === PROPOSAL_VOTING_AUTHORIZED;
+    const currentQuorumPercentage = getPercentage(
+      totalVotes,
+      numOfEligibleVotes
+    );
+    const quorumInVotes = Math.round(
+      (numOfEligibleVotes * quorumPercentage) / 100
+    );
 
     const headerStyle = {
       display: "flex",
@@ -184,18 +222,21 @@ class Stats extends React.Component {
 
     const bodyStyle = { marginTop: "10px" };
     return (
-      <div >
+      <div>
         <div style={headerStyle}>
           <VoteStatusLabel status={status} />
           {showStats && <span style={{ marginLeft: "20px" }}>Votes: </span>}
-          {!isPreVoting && !showStats ?
-            (<div style={detailStyle}><p>zero votes</p></div>)
-            : null }
+          {!isPreVoting && !showStats ? (
+            <div style={detailStyle}>
+              <p>zero votes</p>
+            </div>
+          ) : null}
           {showStats && options.map(op => this.renderStats(op))}
-          {endHeight && currentHeight ? this.getTimeInBlocks(endHeight, currentHeight) : null}
-
+          {endHeight && currentHeight
+            ? this.getTimeInBlocks(endHeight, currentHeight)
+            : null}
         </div>
-        {showStats ?
+        {showStats ? (
           <div style={bodyStyle}>
             <StackedBarChart
               displayValuesForLabel="yes"
@@ -203,12 +244,15 @@ class Stats extends React.Component {
               data={this.getChartData(options)}
               threeshold={passPercentage}
             />
-            <div
-              style={{ marginTop: "10px", display: "flex" }}
-            >
+            <div style={{ marginTop: "10px", display: "flex" }}>
               Quorum:
               <Tooltip
-                tipStyle={{ left: "80px", maxWidth: "70px", padding: "2px", textAlign: "center" }}
+                tipStyle={{
+                  left: "80px",
+                  maxWidth: "70px",
+                  padding: "2px",
+                  textAlign: "center"
+                }}
                 text={`${currentQuorumPercentage}/${quorumPercentage} %`}
                 position="right"
               >
@@ -217,15 +261,16 @@ class Stats extends React.Component {
                     marginLeft: "5px",
                     color: totalVotes < quorumInVotes ? "#FFA07A" : "green"
                   }}
-                >{`${totalVotes}/${quorumInVotes} votes`}
+                >
+                  {`${totalVotes}/${quorumInVotes} votes`}
                 </span>
               </Tooltip>
             </div>
-          </div> : null
-        }
+          </div>
+        ) : null}
       </div>
     );
-  }
+  };
   render() {
     return this.renderOptionsStats();
   }
@@ -254,7 +299,7 @@ class VoteStats extends React.Component {
       cursor: "default"
     };
 
-    return(
+    return (
       <div style={wrapperStyle}>
         <Stats
           status={status}
@@ -265,7 +310,7 @@ class VoteStats extends React.Component {
           passPercentage={passpercentage}
           numOfEligibleVotes={numofeligiblevotes}
           currentHeight={lastBlockHeight}
-          { ...props }
+          {...props}
         />
       </div>
     );

@@ -19,7 +19,8 @@ const actions = connect(
     isRequestingAuthorizeVote: sel.isApiRequestingAuthorizeVote,
     startVoteToken: sel.apiStartVoteToken,
     isRequestingStartVote: sel.isApiRequestingStartVote,
-    isApiRequestingSetProposalStatusByToken: sel.isApiRequestingSetProposalStatusByToken,
+    isApiRequestingSetProposalStatusByToken:
+      sel.isApiRequestingSetProposalStatusByToken,
     startVoteError: sel.apiStartVoteError
   }),
   {

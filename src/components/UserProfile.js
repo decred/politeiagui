@@ -20,20 +20,25 @@ const UserProfile = ({
   <div className="content" role="main">
     <div className="page user-profile-page">
       <h1>User Profile</h1>
-      {updateUserKey && updateUserKey.success &&
+      {updateUserKey && updateUserKey.success && (
         <Message type="success" header="Email verification required">
           <UpdatedKeyMessage email={loggedInAsEmail} />
         </Message>
-      }
-      {updateUserKeyError &&
+      )}
+      {updateUserKeyError && (
         <Message
           type="error"
           header="Error"
           body={updateUserKeyError.message}
         />
-      }
-      <button onClick={() => onUpdateUserKey(loggedInAsEmail)}>Update Key Pair</button>
-      <PrivateKeyIdentityManager loggedInAsEmail={loggedInAsEmail} onUpdateUserKey={onUpdateUserKey} />
+      )}
+      <button onClick={() => onUpdateUserKey(loggedInAsEmail)}>
+        Update Key Pair
+      </button>
+      <PrivateKeyIdentityManager
+        loggedInAsEmail={loggedInAsEmail}
+        onUpdateUserKey={onUpdateUserKey}
+      />
       <PasswordChange />
     </div>
   </div>

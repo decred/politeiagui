@@ -17,7 +17,7 @@ class Dropdown extends Component {
     });
   }
   handleClick(e) {
-    if(ReactDOM.findDOMNode(this).contains(e.target)) return;
+    if (ReactDOM.findDOMNode(this).contains(e.target)) return;
     this.setState({ isopen: false });
   }
   componentDidMount() {
@@ -44,20 +44,15 @@ class Dropdown extends Component {
       marginLeft: "5px",
       position: "relative"
     };
-    const DropdownTriggerWithProps = React.cloneElement(
-      DropdownTrigger, {
-        style: dropdownTriggerStyle
-      });
-    const DropdownContentWithProps = React.cloneElement(
-      DropdownContent,
-      { style: dropdownContentStyle }
-    );
+    const DropdownTriggerWithProps = React.cloneElement(DropdownTrigger, {
+      style: dropdownTriggerStyle
+    });
+    const DropdownContentWithProps = React.cloneElement(DropdownContent, {
+      style: dropdownContentStyle
+    });
     return (
       <div className="dropdown-ct">
-        <div
-          className="dropdown"
-          onClick={this.handleTriggerClick}
-        >
+        <div className="dropdown" onClick={this.handleTriggerClick}>
           {DropdownTriggerWithProps}
           <span style={angleStyle}>&#9662;</span>
         </div>

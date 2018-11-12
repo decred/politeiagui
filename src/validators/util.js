@@ -19,10 +19,14 @@ export function proposalNameValidator(name, supportedChars) {
   return matches.length === name.length;
 }
 
-export const validateURL = (text) => {
+export const validateURL = text => {
   const validUrl = urlValidator(text);
-  if(validUrl.error) {
-    throw new SubmissionError({ _error: `The link "${validUrl.url}" is invalid. Make sure that it is a valid URL.` });
+  if (validUrl.error) {
+    throw new SubmissionError({
+      _error: `The link "${
+        validUrl.url
+      }" is invalid. Make sure that it is a valid URL.`
+    });
   }
 };
 
@@ -33,13 +37,13 @@ export function urlValidator(text) {
     return { error: false };
   }
   for (const urlMarkdown of urlArray) {
-    let url =  urlMarkdown.match(/\(([^()]*)\)/gi)[0];
+    let url = urlMarkdown.match(/\(([^()]*)\)/gi)[0];
     url = url.slice(1, url.length - 1);
     try {
       new URL(url);
       const link = document.createElement("a");
       link.href = url;
-      if(!link.hostname){
+      if (!link.hostname) {
         return { url: url, error: true };
       }
     } catch (error) {
@@ -51,7 +55,7 @@ export function urlValidator(text) {
 
 export function lengthValidator(str, minLength, maxLength) {
   let v = str.length >= minLength;
-  if(maxLength) {
+  if (maxLength) {
     v &= str.length <= maxLength;
   }
   return v;

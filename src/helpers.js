@@ -6,18 +6,20 @@ import {
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_FILTER_ALL,
-  PROPOSAL_VOTING_FINISHED } from "./constants.js";
+  PROPOSAL_VOTING_FINISHED
+} from "./constants.js";
 
-export const getProposalStatus = (proposalStatus) => get(proposalStatus, [
-  "Invalid",
-  "Not found",
-  "Not reviewed",
-  "Censored",
-  "Public"
-]);
+export const getProposalStatus = proposalStatus =>
+  get(proposalStatus, [
+    "Invalid",
+    "Not found",
+    "Not reviewed",
+    "Censored",
+    "Public"
+  ]);
 
-export const utoa = (str) => window.btoa(unescape(encodeURIComponent(str)));
-export const atou = (str) => decodeURIComponent(escape(window.atob(str)));
+export const utoa = str => window.btoa(unescape(encodeURIComponent(str)));
+export const atou = str => decodeURIComponent(escape(window.atob(str)));
 
 // This function extracts the content of index.md's payload. The payload is
 // formatted as:
@@ -38,7 +40,9 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     2: "The provided email address is invalid.",
     3: "The provided verification token is invalid. Please ensure you click the link or copy and paste it exactly as it appears in the verification email.",
     4: "The provided verification token is expired. Please register again to receive another email with a new verification token.",
-    5: `The provided proposal is missing the following file(s): ${errorContext.join(", ")}`,
+    5: `The provided proposal is missing the following file(s): ${errorContext.join(
+      ", "
+    )}`,
     6: "The requested proposal does not exist.",
     7: `The provided proposal has duplicate files: ${errorContext.join(", ")}`,
     8: "The provided proposal does not have a valid title.",
@@ -51,7 +55,9 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     15: "The provided proposal name was invalid.",
     16: "The SHA256 checksum for one of the files was incorrect.",
     17: "The Base64 encoding for one of the files was incorrect.",
-    18: `The MIME type detected for ${errorContext[0]} did not match the provided MIME type. MIME type: ${errorContext[1]}`,
+    18: `The MIME type detected for ${
+      errorContext[0]
+    } did not match the provided MIME type. MIME type: ${errorContext[1]}`,
     19: "The MIME type for one of the files is not supported.",
     20: "The proposal cannot be set to that status.",
     21: "The provided public key was invalid.",
@@ -67,7 +73,9 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     31: "You cannot change the status of your own proposal, please have another admin review it!",
     32: "The username you provided is invalid; it's either too short, too long, or has unsupported characters.",
     33: "Another user already has that username, please choose another.",
-    34: `A verification email has already been sent recently. Please check your email, or wait until it expires and send another one.\n\nYour verification email is set to expire on ${new Date(parseInt(errorContext[0] + "000", 10))}. If you did not receive an email, please contact Politeia administrators.`,
+    34: `A verification email has already been sent recently. Please check your email, or wait until it expires and send another one.\n\nYour verification email is set to expire on ${new Date(
+      parseInt(errorContext[0] + "000", 10)
+    )}. If you did not receive an email, please contact Politeia administrators.`,
     35: "The server cannot verify the payment at this time, please try again later or contact Politeia administrators.",
     36: "The public key provided is already taken by another user.",
     37: "The proposal cannot be set to that voting status.",
@@ -92,25 +100,29 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
   };
 
   const error = errorMessages[errorCode];
-  if(!error) {
+  if (!error) {
     // If the error code sent from the server cannot be translated to any error message,
     // it's an internal error code for an internal server error.
-    return "The server encountered an unexpected error, please contact Politeia " +
-      "administrators and include the following error code: " + errorCode;
+    return (
+      "The server encountered an unexpected error, please contact Politeia " +
+      "administrators and include the following error code: " +
+      errorCode
+    );
   }
 
   return error;
 };
 
 // Copied from https://stackoverflow.com/a/43131635
-export const hexToArray = hex => (new Uint8Array(hex.match(/[\da-f]{2}/gi).map(h => parseInt(h, 16))));
+export const hexToArray = hex =>
+  new Uint8Array(hex.match(/[\da-f]{2}/gi).map(h => parseInt(h, 16)));
 
 // Copied from https://stackoverflow.com/a/21797381
 export const base64ToArrayBuffer = base64 => {
-  const binary_string =  window.atob(base64);
+  const binary_string = window.atob(base64);
   const len = binary_string.length;
-  const bytes = new Uint8Array( len );
-  for (let i = 0; i < len; i++)        {
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
     bytes[i] = binary_string.charCodeAt(i);
   }
   return bytes.buffer;
@@ -122,20 +134,24 @@ export const arrayBufferToWordArray = ab => {
   const a = [];
   for (let i = 0; i < i8a.length; i += 4) {
     // eslint-disable-next-line
-    a.push(i8a[i] << 24 | i8a[i + 1] << 16 | i8a[i + 2] << 8 | i8a[i + 3]);
+    a.push(
+      (i8a[i] << 24) | (i8a[i + 1] << 16) | (i8a[i + 2] << 8) | i8a[i + 3]
+    );
   }
   return CryptoJS.lib.WordArray.create(a, i8a.length);
 };
 
 export const getUsernameFieldLabel = (policy, defaultText = "Username") => {
-  if(policy) {
-    return `${defaultText} (${policy.minusernamelength} - ${policy.maxusernamelength} characters)`;
+  if (policy) {
+    return `${defaultText} (${policy.minusernamelength} - ${
+      policy.maxusernamelength
+    } characters)`;
   }
   return defaultText;
 };
 
 export const getPasswordFieldLabel = (policy, defaultText = "Password") => {
-  if(policy) {
+  if (policy) {
     return `${defaultText} (at least ${policy.minpasswordlength} characters)`;
   }
   return defaultText;
@@ -151,16 +167,16 @@ export const getRandomColor = () => {
 };
 
 export const uniqueID = prefix =>
-  prefix + "_" + Math.random().toString(36).substr(2, 9);
+  prefix +
+  "_" +
+  Math.random()
+    .toString(36)
+    .substr(2, 9);
 
 export const verifyUserPubkey = (email, keyToBeMatched, keyMismatchAction) =>
   pki
     .getKeys(email)
-    .then(keys =>
-      keyMismatchAction(
-        keys.publicKey !== keyToBeMatched
-      )
-    );
+    .then(keys => keyMismatchAction(keys.publicKey !== keyToBeMatched));
 
 export const multiplyFloatingNumbers = (num1, num2) => {
   let cont1 = 0;
@@ -173,36 +189,42 @@ export const multiplyFloatingNumbers = (num1, num2) => {
     num2 *= 10;
     cont2++;
   }
-  return (num1*num2)/(Math.pow(10, cont1+cont2));
+  return (num1 * num2) / Math.pow(10, cont1 + cont2);
 };
 
-export const countPublicProposals = (proposals) => {
+export const countPublicProposals = proposals => {
   const defaultObj = {
     [PROPOSAL_VOTING_ACTIVE]: 0,
     [PROPOSAL_VOTING_NOT_AUTHORIZED]: 0,
     [PROPOSAL_VOTING_FINISHED]: 0,
     [PROPOSAL_FILTER_ALL]: 0
   };
-  return proposals ? proposals.reduce((acc, cur) => {
-    if(cur.status === PROPOSAL_VOTING_NOT_AUTHORIZED ||
-      cur.status === PROPOSAL_VOTING_AUTHORIZED)
-      acc[PROPOSAL_VOTING_NOT_AUTHORIZED]++;
-    else if(cur.status === PROPOSAL_VOTING_ACTIVE)
-      acc[PROPOSAL_VOTING_ACTIVE]++;
-    else if(cur.status === PROPOSAL_VOTING_FINISHED)
-      acc[PROPOSAL_VOTING_FINISHED]++;
-    acc[PROPOSAL_FILTER_ALL]++;
-    return acc;
-  }, defaultObj) : defaultObj;
+  return proposals
+    ? proposals.reduce((acc, cur) => {
+        if (
+          cur.status === PROPOSAL_VOTING_NOT_AUTHORIZED ||
+          cur.status === PROPOSAL_VOTING_AUTHORIZED
+        )
+          acc[PROPOSAL_VOTING_NOT_AUTHORIZED]++;
+        else if (cur.status === PROPOSAL_VOTING_ACTIVE)
+          acc[PROPOSAL_VOTING_ACTIVE]++;
+        else if (cur.status === PROPOSAL_VOTING_FINISHED)
+          acc[PROPOSAL_VOTING_FINISHED]++;
+        acc[PROPOSAL_FILTER_ALL]++;
+        return acc;
+      }, defaultObj)
+    : defaultObj;
 };
 
 export const proposalsArrayToObject = arr =>
-  arr ? arr.reduce((acc, cur) => {
-    return {
-      ...acc,
-      [cur.censorshiprecord.token]: cur
-    };
-  }, {}) : {};
+  arr
+    ? arr.reduce((acc, cur) => {
+        return {
+          ...acc,
+          [cur.censorshiprecord.token]: cur
+        };
+      }, {})
+    : {};
 
 export const removeProposalsDuplicates = (arr1, arr2) => {
   const mergedObj = {
@@ -215,7 +237,7 @@ export const removeProposalsDuplicates = (arr1, arr2) => {
 export const exportToCsv = (data, fields) => {
   const csvContent = data.reduce((acc, info) => {
     let row = "";
-    fields.forEach(f => row += `"${info[f]}",`);
+    fields.forEach(f => (row += `"${info[f]}",`));
     return acc + row + "\n";
   }, "");
   const titles = fields.reduce((acc, f) => acc + `"${f}",`, "");
@@ -227,19 +249,24 @@ export const exportToCsv = (data, fields) => {
   link.click();
 };
 
-export const formatDate = (date) => {
-  const twoChars = (v) => v < 10 ? `0${v}` : v;
+export const formatDate = date => {
+  const twoChars = v => (v < 10 ? `0${v}` : v);
   const d = new Date(date * 1000);
   const year = d.getUTCFullYear();
   const month = twoChars(d.getUTCMonth());
-  const day= twoChars(d.getUTCDate());
+  const day = twoChars(d.getUTCDate());
   const hours = twoChars(d.getUTCHours());
   const minutes = twoChars(d.getUTCMinutes());
   const seconds = twoChars(d.getUTCSeconds());
   return `${year}-${month}-${day}-${hours}:${minutes}:${seconds}`;
 };
 
-export const setQueryStringWithoutPageReload = (qs) => {
-  const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + qs;
+export const setQueryStringWithoutPageReload = qs => {
+  const newurl =
+    window.location.protocol +
+    "//" +
+    window.location.host +
+    window.location.pathname +
+    qs;
   window.history.pushState({ path: newurl }, "", newurl);
 };

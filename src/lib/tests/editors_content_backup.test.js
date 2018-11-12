@@ -21,7 +21,7 @@ describe("Persist editors content on session storage", () => {
     }
   };
 
-  const getFromSS = (key) => sessionStorage.getItem(key);
+  const getFromSS = key => sessionStorage.getItem(key);
 
   test("backup new proposal content into to session storage", () => {
     const path = ecb.NEW_PROPOSAL_PATH;
@@ -31,7 +31,10 @@ describe("Persist editors content on session storage", () => {
     const descKey = ecb.getProposalBackupKey(ecb.PROPOSAL_FORM_DESC, path);
 
     // retrieve data from session storage
-    expect(ecb.getNewProposalData()).toEqual({ name: NAME, description: DESCRIPTION });
+    expect(ecb.getNewProposalData()).toEqual({
+      name: NAME,
+      description: DESCRIPTION
+    });
     // clear saved data
     ecb.resetNewProposalData();
     expect(getFromSS(nameKey)).toBeFalsy();

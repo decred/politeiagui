@@ -8,8 +8,7 @@ const Link = ({ href, ...props }) => {
       r[key] = props[key];
       return r;
     }, {});
-  return <NavLink to={href} {...props } />;
+  return <NavLink to={href} {...props} />;
 };
 
 export default Link;
-
