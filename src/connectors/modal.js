@@ -8,10 +8,14 @@ export default connect(
   sel.selectorMap({
     isTestnet: sel.isTestNet
   }),
-  dispatch => bindActionCreators({
-    closeModal: act.closeModal,
-    closeAllModals: act.closeAllModals,
-    openModal: act.openModal,
-    confirmWithModal: confirmWithModal
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        closeModal: act.closeModal,
+        closeAllModals: act.closeAllModals,
+        openModal: act.openModal,
+        confirmWithModal: confirmWithModal
+      },
+      dispatch
+    )
 );

@@ -5,7 +5,6 @@ import Message from "../Message";
 import SignupWarning from "../SignupWarning";
 import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
 
-
 const ResendVerificationEmailForm = ({
   error,
   handleSubmit,
@@ -13,12 +12,13 @@ const ResendVerificationEmailForm = ({
   onResendVerificationEmail,
   isShowingConfirmation
 }) => (
-  <form className="resend-verification-form" onSubmit={handleSubmit(onResendVerificationEmail)}>
-    {error && <Message
-      type="error"
-      header="Resend verification error"
-      body={error}
-    />}
+  <form
+    className="resend-verification-form"
+    onSubmit={handleSubmit(onResendVerificationEmail)}
+  >
+    {error && (
+      <Message type="error" header="Resend verification error" body={error} />
+    )}
     <div className="c-form-group">
       <label className="screenreader-only" htmlFor="email">
         Email Address:
@@ -31,7 +31,8 @@ const ResendVerificationEmailForm = ({
         component="input"
         type="text"
         placeholder="Email Address"
-        tabIndex={3} />
+        tabIndex={3}
+      />
     </div>
     {!isShowingConfirmation ? (
       <div className="c-clearfix c-submit-group">
@@ -44,16 +45,15 @@ const ResendVerificationEmailForm = ({
         </button>
       </div>
     ) : (
-      <Message
-        type="info"
-        header="Before you continue...">
+      <Message type="info" header="Before you continue...">
         <SignupWarning />
         <ButtonWithLoadingIcon
           style={{ marginRight: "0px" }}
           className="c-btn c-btn-primary c-pull-right"
           tabIndex={3}
           text="I understand, continue"
-          isLoading={isRequesting} />
+          isLoading={isRequesting}
+        />
       </Message>
     )}
   </form>
@@ -61,4 +61,6 @@ const ResendVerificationEmailForm = ({
 
 autobind(ResendVerificationEmailForm);
 
-export default reduxForm({ form: "form/resendVerificationEmail" })(ResendVerificationEmailForm);
+export default reduxForm({ form: "form/resendVerificationEmail" })(
+  ResendVerificationEmailForm
+);

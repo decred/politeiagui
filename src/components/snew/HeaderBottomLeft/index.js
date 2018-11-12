@@ -4,13 +4,9 @@ import Page from "./Page";
 import headerConnector from "../../../connectors/header";
 
 class HeaderBottomLeft extends React.Component {
-
   render() {
-    return (
-      <Page />
-    );
+    return <Page />;
   }
-
 }
 
 autobind(HeaderBottomLeft);

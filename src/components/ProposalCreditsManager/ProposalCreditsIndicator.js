@@ -4,9 +4,7 @@ import currentUserConnector from "../../connectors/currentUser";
 import IntervalComponent from "../IntervalComponent";
 import Tooltip from "../Tooltip";
 import { PAYWALL_MODAL, MANAGE_CREDITS_MODAL } from "../Modal/modalTypes";
-import {
-  PAYWALL_STATUS_PAID
-} from "../../constants";
+import { PAYWALL_STATUS_PAID } from "../../constants";
 
 /**
  * ProposalCreditsIndicator indicates what are the current number of credits owned by the user.
@@ -14,9 +12,7 @@ import {
  */
 class ProposalCreditsIndicator extends React.Component {
   componentDidUpdate(prevProps) {
-    const {
-      proposalPaywallPaymentTxid
-    } = this.props;
+    const { proposalPaywallPaymentTxid } = this.props;
 
     if (prevProps.proposalPaywallPaymentTxid && !proposalPaywallPaymentTxid) {
       // a transaction has been confirmed
@@ -28,10 +24,10 @@ class ProposalCreditsIndicator extends React.Component {
     }
   }
   onFinishInterval = () => {
-    if(this.props.pollingCreditsPayment) {
+    if (this.props.pollingCreditsPayment) {
       this.props.toggleCreditsPaymentPolling(false);
     }
-  }
+  };
   render() {
     const {
       onFetchProposalPaywallPayment,
@@ -55,11 +51,22 @@ class ProposalCreditsIndicator extends React.Component {
           text="Proposal credits are purchased to submit proposals. Click here for more information."
           position="bottom"
         >
-          <div className="user-proposal-credits" onClick={() => userPaywallStatus !== PAYWALL_STATUS_PAID
-            ? openModal(PAYWALL_MODAL)
-            : openModal(MANAGE_CREDITS_MODAL)}>
-            <div className="proposal-credits-text">{(proposalCredits || 0) + " proposal credit" + (proposalCredits !== 1 ? "s" : "")}</div>
-            <span className="proposalc-credits-click-here-text">Click here to buy and update credits</span>
+          <div
+            className="user-proposal-credits"
+            onClick={() =>
+              userPaywallStatus !== PAYWALL_STATUS_PAID
+                ? openModal(PAYWALL_MODAL)
+                : openModal(MANAGE_CREDITS_MODAL)
+            }
+          >
+            <div className="proposal-credits-text">
+              {(proposalCredits || 0) +
+                " proposal credit" +
+                (proposalCredits !== 1 ? "s" : "")}
+            </div>
+            <span className="proposalc-credits-click-here-text">
+              Click here to buy and update credits
+            </span>
           </div>
         </Tooltip>
       </IntervalComponent>
@@ -67,4 +74,6 @@ class ProposalCreditsIndicator extends React.Component {
   }
 }
 
-export default proposalCreditsConnector(currentUserConnector(ProposalCreditsIndicator));
+export default proposalCreditsConnector(
+  currentUserConnector(ProposalCreditsIndicator)
+);

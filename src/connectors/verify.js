@@ -9,9 +9,13 @@ const verifyConnector = connect(
     isRequestingVerifyNewUser: sel.isApiRequestingVerifyNewUser,
     verifyNewUserError: sel.apiVerifyNewUserError
   }),
-  dispatch => bindActionCreators({
-    onVerify: act.onVerifyNewUser
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        onVerify: act.onVerifyNewUser
+      },
+      dispatch
+    )
 );
 
 export default verifyConnector;

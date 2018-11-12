@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import { autobind } from "core-decorators";
 import UserDetailPage from "./Page";
 import userConnector from "../../connectors/user";
-import { USER_DETAIL_TAB_PROPOSALS, USER_DETAIL_TAB_GENERAL } from "../../constants";
+import {
+  USER_DETAIL_TAB_PROPOSALS,
+  USER_DETAIL_TAB_GENERAL
+} from "../../constants";
 
 class UserDetail extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -21,12 +23,12 @@ class UserDetail extends Component {
 
   componentDidUpdate(prevProps) {
     const { loggedInAsUserId, editUserResponse, user, isAdmin } = this.props;
-    if(editUserResponse) {
+    if (editUserResponse) {
       window.location.reload();
     }
 
     const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
-    if (!isAdminOrTheUser && (prevProps.user !== this.props.user)) {
+    if (!isAdminOrTheUser && prevProps.user !== this.props.user) {
       this.setState({ tabId: USER_DETAIL_TAB_PROPOSALS });
     }
   }
@@ -42,7 +44,7 @@ class UserDetail extends Component {
   render() {
     const { isTestnet } = this.props;
     let dcrdataTxUrl;
-    if(isTestnet) {
+    if (isTestnet) {
       dcrdataTxUrl = "https://testnet.dcrdata.org/tx/";
     } else {
       dcrdataTxUrl = "https://explorer.dcrdata.org/tx/";

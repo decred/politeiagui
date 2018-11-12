@@ -2,7 +2,6 @@ import modal from "../modal";
 import * as act from "../../actions/types";
 
 describe("test modal reducer", () => {
-
   const MOCK_STATE = {
     openedModals: []
   };
@@ -19,11 +18,13 @@ describe("test modal reducer", () => {
     const state = modal(MOCK_STATE, action);
 
     expect(state).toEqual({
-      openedModals: [{
-        type: action.modalType,
-        payload: action.payload,
-        callback: action.callback
-      }]
+      openedModals: [
+        {
+          type: action.modalType,
+          payload: action.payload,
+          callback: action.callback
+        }
+      ]
     });
 
     action = {
@@ -33,5 +34,4 @@ describe("test modal reducer", () => {
 
     expect(modal(state, action)).toEqual({ openedModals: [] });
   });
-
 });

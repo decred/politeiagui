@@ -67,10 +67,13 @@ describe("test app actions (actions/app.js)", () => {
   });
 
   test("set reply parent and reset form reply", async () => {
-    await expect(app.onSetReplyParent(0)).toDispatchActions([
-      { type: act.SET_REPLY_PARENT },
-      { type: "@@redux-form/RESET", meta: { form: "form/reply" } }
-    ], done);
+    await expect(app.onSetReplyParent(0)).toDispatchActions(
+      [
+        { type: act.SET_REPLY_PARENT },
+        { type: "@@redux-form/RESET", meta: { form: "form/reply" } }
+      ],
+      done
+    );
   });
   test("save new proposal action", async () => {
     const props = {
@@ -79,8 +82,11 @@ describe("test app actions (actions/app.js)", () => {
       username: FAKE_USER.username
     };
     const proposal = FAKE_PROPOSAL;
-    await expect(app.onSaveNewProposal(proposal, null, props))
-      .toDispatchActionsWithState(MOCK_STATE, [
+    await expect(
+      app.onSaveNewProposal(proposal, null, props)
+    ).toDispatchActionsWithState(
+      MOCK_STATE,
+      [
         onSubmitProposal(
           props.loggedInAsEmail,
           props.userid,
@@ -89,7 +95,9 @@ describe("test app actions (actions/app.js)", () => {
           proposal.description,
           proposal.files
         )
-      ], done);
+      ],
+      done
+    );
   });
 
   test("save change username action", async () => {
@@ -97,123 +105,128 @@ describe("test app actions (actions/app.js)", () => {
       password: FAKE_USER.password,
       newUsername: FAKE_USER.username
     };
-    await expect(app.onSaveChangeUsername(params))
-      .toDispatchActionsWithState(MOCK_STATE, [
-        onChangeUsername(params.password, params.newUsername)
-      ], done);
+    await expect(app.onSaveChangeUsername(params)).toDispatchActionsWithState(
+      MOCK_STATE,
+      [onChangeUsername(params.password, params.newUsername)],
+      done
+    );
   });
 
   test("save change password action", async () => {
     const existingPassword = FAKE_USER.password;
     const newPassword = "new_pass";
-    await expect(app.onSaveChangePassword({ existingPassword, newPassword }))
-      .toDispatchActionsWithState(MOCK_STATE, [
-        onChangePassword(existingPassword, newPassword)
-      ], done);
+    await expect(
+      app.onSaveChangePassword({ existingPassword, newPassword })
+    ).toDispatchActionsWithState(
+      MOCK_STATE,
+      [onChangePassword(existingPassword, newPassword)],
+      done
+    );
   });
 
   test("fetch proposal action", async () => {
     const { token } = FAKE_PROPOSAL;
-    await expect(app.onFetchProposal(token))
-      .toDispatchActionsWithState(MOCK_STATE, [
-        onFetchProposalApi(token),
-        onFetchProposalComments(token)
-      ], done);
+    await expect(app.onFetchProposal(token)).toDispatchActionsWithState(
+      MOCK_STATE,
+      [onFetchProposalApi(token), onFetchProposalComments(token)],
+      done
+    );
   });
 
   test("load me action", () => {
     const { me } = MOCK_STATE.api;
-    expect(app.onLoadMe(me))
-      .toDispatchActions(
-        { type: act.LOAD_ME, payload: me },
-        done
-      );
+    expect(app.onLoadMe(me)).toDispatchActions(
+      { type: act.LOAD_ME, payload: me },
+      done
+    );
   });
 
   test("on change admin filter action", () => {
     const option = "any";
-    expect(app.onChangeAdminFilter(option))
-      .toDispatchActions(
-        { type: act.CHANGE_ADMIN_FILTER_VALUE, payload: option },
-        done
-      );
+    expect(app.onChangeAdminFilter(option)).toDispatchActions(
+      { type: act.CHANGE_ADMIN_FILTER_VALUE, payload: option },
+      done
+    );
   });
 
   test("on change public filter action", () => {
     const option = "any";
-    expect(app.onChangePublicFilter(option))
-      .toDispatchActions(
-        { type: act.CHANGE_PUBLIC_FILTER_VALUE, payload: option },
-        done
-      );
+    expect(app.onChangePublicFilter(option)).toDispatchActions(
+      { type: act.CHANGE_PUBLIC_FILTER_VALUE, payload: option },
+      done
+    );
   });
 
   test("on change user filter action", () => {
     const option = "any";
-    expect(app.onChangeUserFilter(option))
-      .toDispatchActions(
-        { type: act.CHANGE_USER_FILTER_VALUE, payload: option },
-        done
-      );
+    expect(app.onChangeUserFilter(option)).toDispatchActions(
+      { type: act.CHANGE_USER_FILTER_VALUE, payload: option },
+      done
+    );
   });
 
   test("on change proposal status to approved action", () => {
     const status = "any";
-    expect(app.onChangeProposalStatusApproved(status))
-      .toDispatchActions(
-        { type: act.SET_PROPOSAL_APPROVED, payload: status },
-        done
-      );
+    expect(app.onChangeProposalStatusApproved(status)).toDispatchActions(
+      { type: act.SET_PROPOSAL_APPROVED, payload: status },
+      done
+    );
   });
 
   test("on submit comment action", async () => {
     const { token, comment, parentid } = FAKE_COMMENT;
     const { email } = FAKE_USER;
-    await expect(app.onSubmitComment(email, token, comment, parentid))
-      .toDispatchActionsWithState(MOCK_STATE, [
-        onSubmitCommentApi(email, token, comment, parentid)
-      ], done);
+    await expect(
+      app.onSubmitComment(email, token, comment, parentid)
+    ).toDispatchActionsWithState(
+      MOCK_STATE,
+      [onSubmitCommentApi(email, token, comment, parentid)],
+      done
+    );
   });
 
   test("on save draft proposal action", () => {
-    expect(app.onSaveDraftProposal(FAKE_PROPOSAL))
-      .toDispatchActions([
+    expect(app.onSaveDraftProposal(FAKE_PROPOSAL)).toDispatchActions(
+      [
         {
           type: act.SAVE_DRAFT_PROPOSAL,
           payload: { name: FAKE_PROPOSAL.name }
         }
-      ], done);
+      ],
+      done
+    );
   });
 
   test("on load draft proposals", () => {
     const { email } = MOCK_STATE.api.me.response;
     ls.handleSaveStateToLocalStorage(MOCK_STATE);
-    expect(app.onLoadDraftProposals(email))
-      .toDispatchActions([
+    expect(app.onLoadDraftProposals(email)).toDispatchActions(
+      [
         {
           type: act.LOAD_DRAFT_PROPOSALS,
           payload: MOCK_STATE.app.draftProposals
         }
-      ], done);
+      ],
+      done
+    );
   });
 
   test("on delete draft proposal", () => {
     const id = "draft_id";
-    expect(app.onDeleteDraftProposal(id))
-      .toDispatchActions([
-        { type: act.DELETE_DRAFT_PROPOSAL, payload: id }
-      ], done);
+    expect(app.onDeleteDraftProposal(id)).toDispatchActions(
+      [{ type: act.DELETE_DRAFT_PROPOSAL, payload: id }],
+      done
+    );
   });
 
   test("toggleCreditsPaymentPolling action", () => {
-    expect(app.toggleCreditsPaymentPolling(true))
-      .toDispatchActions([
-        { type: act.TOGGLE_CREDITS_PAYMENT_POLLING, payload: true }
-      ], done);
+    expect(app.toggleCreditsPaymentPolling(true)).toDispatchActions(
+      [{ type: act.TOGGLE_CREDITS_PAYMENT_POLLING, payload: true }],
+      done
+    );
   });
 
   test("on local storage change action", () => {
-
     //save if values aren't equal
     const mockedNewStorageStateValue = {
       api: {
@@ -230,38 +243,53 @@ describe("test app actions (actions/app.js)", () => {
       newValue,
       key
     });
-    let mockedEvent = generateLSChangeEvent(JSON.stringify(mockedNewStorageStateValue));
-    expect(app.onLocalStorageChange(mockedEvent))
-      .toDispatchActionsWithState(MOCK_STATE, [
-        app.onLoadMe(mockedNewStorageStateValue.api.me)
-      ], done);
+    let mockedEvent = generateLSChangeEvent(
+      JSON.stringify(mockedNewStorageStateValue)
+    );
+    expect(app.onLocalStorageChange(mockedEvent)).toDispatchActionsWithState(
+      MOCK_STATE,
+      [app.onLoadMe(mockedNewStorageStateValue.api.me)],
+      done
+    );
 
     //equal values and undefined/falsy local storage values leads to logout
     localStorage.removeItem(ls.loggedInStateKey);
     mockedEvent = generateLSChangeEvent(JSON.stringify({}));
-    expect(app.onLocalStorageChange(mockedEvent))
-      .toDispatchActionsWithState(MOCK_STATE, [
+    expect(app.onLocalStorageChange(mockedEvent)).toDispatchActionsWithState(
+      MOCK_STATE,
+      [
         {
           type: act.RECEIVE_LOGOUT,
           payload: {}
         }
-      ], done);
+      ],
+      done
+    );
 
     localStorage.removeItem(ls.loggedInStateKey);
     mockedEvent = generateLSChangeEvent(JSON.stringify(false));
-    expect(app.onLocalStorageChange(mockedEvent))
-      .toDispatchActionsWithState(MOCK_STATE, [
+    expect(app.onLocalStorageChange(mockedEvent)).toDispatchActionsWithState(
+      MOCK_STATE,
+      [
         {
           type: act.RECEIVE_LOGOUT,
           payload: {}
         }
-      ], done);
+      ],
+      done
+    );
 
     // Actions are not dispatched when the local storage event key
     // is different from ls.loggedInStateKey
     localStorage.removeItem(ls.loggedInStateKey);
-    mockedEvent = generateLSChangeEvent(JSON.stringify(mockedNewStorageStateValue), "any");
-    expect(app.onLocalStorageChange(mockedEvent))
-      .toDispatchActionsWithState(MOCK_STATE, [], done);
+    mockedEvent = generateLSChangeEvent(
+      JSON.stringify(mockedNewStorageStateValue),
+      "any"
+    );
+    expect(app.onLocalStorageChange(mockedEvent)).toDispatchActionsWithState(
+      MOCK_STATE,
+      [],
+      done
+    );
   });
 });

@@ -7,7 +7,9 @@ const validate = values => {
   }
 
   if (values.censorship.length !== 64) {
-    throw new SubmissionError({ _error: "Censorship tokens must be 64 characters long" });
+    throw new SubmissionError({
+      _error: "Censorship tokens must be 64 characters long"
+    });
   }
 };
 

@@ -4,7 +4,6 @@ import { TOP_LEVEL_COMMENT_PARENTID } from "../../lib/api";
 import { PAYWALL_STATUS_PAID } from "../../constants";
 
 describe("test app reducer", () => {
-
   const MOCK_STATE = {
     draftProposals: {
       newDraft: true,
@@ -53,7 +52,6 @@ describe("test app reducer", () => {
   });
 
   test("correctly updates state for receiving new proposals", () => {
-
     const act1 = {
       type: act.RECEIVE_NEW_PROPOSAL,
       payload: {
@@ -150,7 +148,6 @@ describe("test app reducer", () => {
         [action2.payload.draftId]: action2.payload
       }
     });
-
   });
 
   test("correctly deletes draft proposal from state by name", () => {
@@ -209,7 +206,6 @@ describe("test app reducer", () => {
     action.error = true;
 
     expect(app(state, action)).toEqual(state);
-
   });
 
   test("correctly deals with proposal credit reducers", () => {
@@ -231,7 +227,9 @@ describe("test app reducer", () => {
 
     const state2 = app(state, action2);
 
-    expect(state2).toEqual({ proposalCredits: action.payload - action2.payload });
+    expect(state2).toEqual({
+      proposalCredits: action.payload - action2.payload
+    });
 
     const action3 = {
       type: act.SUBTRACT_PROPOSAL_CREDITS
@@ -267,21 +265,36 @@ describe("test app reducer", () => {
 
     const state = app({ proposalCredits: 0 }, action);
 
-    expect(state).toEqual({ proposalCredits: action.payload.amount, recentPayments: [action.payload] });
+    expect(state).toEqual({
+      proposalCredits: action.payload.amount,
+      recentPayments: [action.payload]
+    });
 
-    const state2 = app({ proposalCredits: 5, recentPayments: [{
-      amount: 5,
-      txid: "ff0207a03b761cb409c7677c5b5521562302653d2236c92d016dd47e0ae37bf7"
-    }] }, action2);
-
-    expect(state2).toEqual({ proposalCredits: 5 + action2.payload.amount, recentPayments: [
+    const state2 = app(
       {
-        amount: 5,
-        txid: "ff0207a03b761cb409c7677c5b5521562302653d2236c92d016dd47e0ae37bf7"
+        proposalCredits: 5,
+        recentPayments: [
+          {
+            amount: 5,
+            txid:
+              "ff0207a03b761cb409c7677c5b5521562302653d2236c92d016dd47e0ae37bf7"
+          }
+        ]
       },
-      action2.payload
-    ] });
+      action2
+    );
 
+    expect(state2).toEqual({
+      proposalCredits: 5 + action2.payload.amount,
+      recentPayments: [
+        {
+          amount: 5,
+          txid:
+            "ff0207a03b761cb409c7677c5b5521562302653d2236c92d016dd47e0ae37bf7"
+        },
+        action2.payload
+      ]
+    });
   });
 
   test("correctly updates paywall status", () => {
@@ -324,12 +337,18 @@ describe("test app reducer", () => {
 
   test("correctly test simpler reducers with assertion", () => {
     const reducers = [
-      { action: act.REQUEST_SIGNUP_CONFIRMATION, assertion: { isShowingSignupConfirmation: true } },
-      { action: act.RESET_SIGNUP_CONFIRMATION, assertion: { isShowingSignupConfirmation: false } },
+      {
+        action: act.REQUEST_SIGNUP_CONFIRMATION,
+        assertion: { isShowingSignupConfirmation: true }
+      },
+      {
+        action: act.RESET_SIGNUP_CONFIRMATION,
+        assertion: { isShowingSignupConfirmation: false }
+      },
       { action: act.SET_ONBOARD_AS_VIEWED, assertion: { onboardViewed: true } }
     ];
 
-    reducers.map( obj => {
+    reducers.map(obj => {
       const action = {
         type: obj.action,
         payload: {},
@@ -363,11 +382,14 @@ describe("test app reducer", () => {
       { action: act.SHOULD_AUTO_VERIFY_KEY, key: "shouldVerifyKey" },
       { action: act.IDENTITY_IMPORTED, key: "identityImportResult" },
       { action: act.SET_COMMENTS_SORT_OPTION, key: "commentsSortOption" },
-      { action: act.TOGGLE_CREDITS_PAYMENT_POLLING, key: "pollingCreditsPayment" },
+      {
+        action: act.TOGGLE_CREDITS_PAYMENT_POLLING,
+        key: "pollingCreditsPayment"
+      },
       { action: act.REDIRECTED_FROM, key: "redirectedFrom" }
     ];
 
-    reducers.map( obj => {
+    reducers.map(obj => {
       const act = {
         type: obj.action,
         payload: { data: "any" },
@@ -375,8 +397,5 @@ describe("test app reducer", () => {
       };
       assertKeyEqualsPayload({}, act, obj.key);
     });
-
   });
-
-
 });

@@ -37,7 +37,7 @@ const newProposalConnector = connect(
 );
 
 class NewProposalWrapper extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       initialValues: props.draftProposal || getNewProposalData(),
@@ -55,8 +55,9 @@ class NewProposalWrapper extends Component {
       return this.props.history.push("/proposals/" + token);
     }
 
-    const draftProposalDataAvailable = !prevProps.draftProposal && draftProposal;
-    if(draftProposalDataAvailable) {
+    const draftProposalDataAvailable =
+      !prevProps.draftProposal && draftProposal;
+    if (draftProposalDataAvailable) {
       this.setState({
         initialValues: draftProposal
       });
@@ -66,19 +67,22 @@ class NewProposalWrapper extends Component {
   render() {
     const { Component } = this.props;
     const { validationError } = this.state;
-    return <Component
-      { ...{ ...this.props,
-        onSave: this.onSave.bind(this),
-        initialValues: this.state.initialValues,
-        newProposalError: validationError,
-        onChange: this.onChange
-      }}
-    />;
+    return (
+      <Component
+        {...{
+          ...this.props,
+          onSave: this.onSave.bind(this),
+          initialValues: this.state.initialValues,
+          newProposalError: validationError,
+          onChange: this.onChange
+        }}
+      />
+    );
   }
 
   onChange = () => {
     this.setState({ validationError: "" });
-  }
+  };
 
   onSave = (...args) => {
     try {
@@ -88,10 +92,12 @@ class NewProposalWrapper extends Component {
       return;
     }
     return this.props.onSave(...args);
-  }
+  };
 }
 
-const wrap = (Component) => (props) => <NewProposalWrapper { ...{ ...props, Component }} />;
+const wrap = Component => props => (
+  <NewProposalWrapper {...{ ...props, Component }} />
+);
 
 export default compose(
   newProposalConnector,

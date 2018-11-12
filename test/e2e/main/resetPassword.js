@@ -7,49 +7,32 @@ module.exports = {
     browser.end();
   },
   "Go to the forgotten password page from side": browser => {
-
-    browser
-      .page
+    browser.page
       .auth()
       .navigate()
       .logout();
 
-    browser
-      .page
-      .forgottenPassword()
-      .goToPageFromSide();
+    browser.page.forgottenPassword().goToPageFromSide();
   },
   "Go to the forgotten password page from signup login page": browser => {
-    browser
-      .page
+    browser.page
       .auth()
       .navigate()
       .logout();
 
-    browser
-      .page
-      .forgottenPassword()
-      .goToPageFromSignupLoginPage();
+    browser.page.forgottenPassword().goToPageFromSignupLoginPage();
   },
   "Reset password": browser => {
-    browser
-      .page
-      .forgottenPassword()
-      .navigate();
+    browser.page.forgottenPassword().navigate();
 
-    browser
-      .page
+    browser.page
       .forgottenPassword()
       .resetPasswordWithErrorMalformedEmailAddress();
 
-    browser
-      .page
+    browser.page
       .forgottenPassword()
       .resetPasswordWithErrorInvalidEmailAddress();
 
-    browser
-      .page
-      .forgottenPassword()
-      .resetPassword();
+    browser.page.forgottenPassword().resetPassword();
   }
 };

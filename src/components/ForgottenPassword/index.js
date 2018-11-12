@@ -26,20 +26,18 @@ class ForgottenPassword extends Component {
         {...{
           onForgottenPassword: this.onForgottenPassword,
           isRequesting: this.props.isRequesting
-        }} />
+        }}
+      />
     );
   }
 
   onForgottenPassword(props) {
     validate(props);
-    return this
-      .props
-      .onForgottenPasswordRequest(props)
-      .catch((error) => {
-        throw new SubmissionError({
-          _error: error.message
-        });
+    return this.props.onForgottenPasswordRequest(props).catch(error => {
+      throw new SubmissionError({
+        _error: error.message
       });
+    });
   }
 }
 

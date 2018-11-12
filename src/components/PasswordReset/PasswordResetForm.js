@@ -4,22 +4,25 @@ import ErrorField from "../Form/Fields/ErrorField";
 import Message from "../Message";
 import { PageLoadingIcon } from "../snew";
 
-const PasswordResetForm = ({ error, handleSubmit, onPasswordReset, isRequesting }) => {
+const PasswordResetForm = ({
+  error,
+  handleSubmit,
+  onPasswordReset,
+  isRequesting
+}) => {
   if (isRequesting) {
     return <PageLoadingIcon />;
   }
 
   return (
-    <form className="reset-password-form" onSubmit={handleSubmit(onPasswordReset)}>
-      {error && <Message
-        type="error"
-        header="Password reset error"
-        body={error}
-      />}
-      <Field
-        name="global"
-        component={ErrorField}
-      />
+    <form
+      className="reset-password-form"
+      onSubmit={handleSubmit(onPasswordReset)}
+    >
+      {error && (
+        <Message type="error" header="Password reset error" body={error} />
+      )}
+      <Field name="global" component={ErrorField} />
       <div className="c-form-group">
         <label className="screenreader-only" htmlFor="password">
           Password:
@@ -32,7 +35,8 @@ const PasswordResetForm = ({ error, handleSubmit, onPasswordReset, isRequesting 
           component="input"
           type="password"
           placeholder="Password"
-          tabIndex={3} />
+          tabIndex={3}
+        />
       </div>
       <div className="c-form-group">
         <label className="screenreader-only" htmlFor="newPasswordVerify">
@@ -45,7 +49,8 @@ const PasswordResetForm = ({ error, handleSubmit, onPasswordReset, isRequesting 
           component="input"
           type="password"
           placeholder="Verify Password"
-          tabIndex={3} />
+          tabIndex={3}
+        />
       </div>
       <div className="c-clearfix c-submit-group">
         <button

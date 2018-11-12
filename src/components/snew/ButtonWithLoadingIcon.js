@@ -17,7 +17,8 @@ const ButtonWithLoadingIcon = ({
       {isLoading ? (
         <i
           className="fa fa-circle-o-notch fa-spin right-margin-5"
-          style={{ fontSize: "14px", ...loadingIconStyle }}></i>
+          style={{ fontSize: "14px", ...loadingIconStyle }}
+        />
       ) : null}
       <div style={{ whiteSpace: "normal" }}>{text}</div>
       <div style={{ clear: "both" }} />

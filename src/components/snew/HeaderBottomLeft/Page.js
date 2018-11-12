@@ -2,11 +2,7 @@ import React from "react";
 import Link from "../Link";
 import currentUserConnector from "../../../connectors/currentUser";
 
-const HeaderBottomLeft = ({
-  subredditData,
-  useStyle,
-  isAdmin
-}) => (
+const HeaderBottomLeft = ({ subredditData, useStyle, isAdmin }) => (
   <div id="header-bottom-left">
     {useStyle && subredditData && subredditData.header_img ? (
       <Link href="/">
@@ -17,11 +13,7 @@ const HeaderBottomLeft = ({
         />
       </Link>
     ) : (
-      <Link
-        className="default-header"
-        href="/"
-        id="header-img"
-      >
+      <Link className="default-header" href="/" id="header-img">
         Decred
       </Link>
     )}
@@ -29,11 +21,13 @@ const HeaderBottomLeft = ({
       <Link href="/">Politeia</Link>
     </span>
     <ul className="tabmenu">
-      {isAdmin ? <li>
-        <Link className="choice" href="/admin/">
-          Admin
-        </Link>
-      </li> : null}
+      {isAdmin ? (
+        <li>
+          <Link className="choice" href="/admin/">
+            Admin
+          </Link>
+        </li>
+      ) : null}
     </ul>
   </div>
 );

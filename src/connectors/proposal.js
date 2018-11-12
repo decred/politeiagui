@@ -12,13 +12,13 @@ import { buildCommentsTree } from "../lib/snew";
 const proposalConnector = connect(
   sel.selectorMap({
     token: compose(
-      t => t ? t.toLowerCase() : t,
-      get([ "match", "params", "token" ]),
+      t => (t ? t.toLowerCase() : t),
+      get(["match", "params", "token"]),
       arg(1)
     ),
     commentid: compose(
-      t => t ? t.toLowerCase() : t,
-      get([ "match", "params", "commentid" ]),
+      t => (t ? t.toLowerCase() : t),
+      get(["match", "params", "commentid"]),
       arg(1)
     ),
     tempThreadTree: sel.getTempThreadTree,
@@ -30,19 +30,27 @@ const proposalConnector = connect(
     comments: sel.proposalComments,
     commentsvotes: sel.commentsVotes,
     error: or(sel.proposalError, sel.apiPropVoteStatusError),
-    isLoading: or(sel.proposalIsRequesting, sel.setStatusProposalIsRequesting, sel.isApiRequestingPropVoteStatus),
+    isLoading: or(
+      sel.proposalIsRequesting,
+      sel.setStatusProposalIsRequesting,
+      sel.isApiRequestingPropVoteStatus
+    ),
     markdownFile: sel.getMarkdownFile,
     otherFiles: sel.getNotMarkdownFile,
     commentsSortOption: sel.commentsSortOption
   }),
-  dispatch => bindActionCreators({
-    onFetchData: act.onFetchProposal,
-    onSetReplyParent: act.onSetReplyParent,
-    onFetchProposalVoteStatus: act.onFetchProposalVoteStatus,
-    onFetchLikedComments: act.onFetchLikedComments,
-    onSetCommentsSortOption: act.onSetCommentsSortOption,
-    resetLastSubmittedProposal: act.resetLastSubmittedProposal
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        onFetchData: act.onFetchProposal,
+        onSetReplyParent: act.onSetReplyParent,
+        onFetchProposalVoteStatus: act.onFetchProposalVoteStatus,
+        onFetchLikedComments: act.onFetchLikedComments,
+        onSetCommentsSortOption: act.onSetCommentsSortOption,
+        resetLastSubmittedProposal: act.resetLastSubmittedProposal
+      },
+      dispatch
+    )
 );
 
 class Wrapper extends Component {
@@ -50,28 +58,39 @@ class Wrapper extends Component {
     this.props.onSetReplyParent();
   }
 
-  handleViewAllClick = (e) => {
+  handleViewAllClick = e => {
     e && e.preventDefault() && e.stopPropagation();
     this.props.history.push(`/proposals/${this.props.token}`);
-  }
+  };
 
   // create data structure with all the comments on thread uniquely
-  buildSetOfComments = (tree) => {
+  buildSetOfComments = tree => {
     const set = new Set();
     Object.keys(tree).forEach(key => {
       tree[key] && tree[key].forEach(item => item && set.add(item));
       key && key !== "0" && set.add(key);
     });
     return set;
-  }
+  };
 
-  render () {
+  render() {
     const { Component, ...props } = this.props;
     const { tree } = buildCommentsTree(props.comments, props.commentid);
     const commentsSet = this.buildSetOfComments(tree);
-    return <Component {...{ ...props, onViewAllClick: this.handleViewAllClick, numofcomments: commentsSet.size }} />;
+    return (
+      <Component
+        {...{
+          ...props,
+          onViewAllClick: this.handleViewAllClick,
+          numofcomments: commentsSet.size
+        }}
+      />
+    );
   }
 }
 
-const wrap = (Component) => withRouter(proposalConnector(props => <Wrapper {...{ ...props, Component }} />));
+const wrap = Component =>
+  withRouter(
+    proposalConnector(props => <Wrapper {...{ ...props, Component }} />)
+  );
 export default wrap;

@@ -13,17 +13,21 @@ class VerifyKey extends Component {
   constructor(props) {
     super();
     const { verificationtoken } = qs.parse(props.location.search);
-    if (isEmpty(props.location.search) || !verificationtoken || typeof(verificationtoken) !== "string") {
+    if (
+      isEmpty(props.location.search) ||
+      !verificationtoken ||
+      typeof verificationtoken !== "string"
+    ) {
       props.history.push("/user/login");
     }
     const { email } = props;
-    if(email && verificationtoken) {
+    if (email && verificationtoken) {
       props.onVerifyUserKey(email, verificationtoken);
     }
   }
 
   componentDidUpdate(prevProps) {
-    if(!prevProps.email && this.props.email) {
+    if (!prevProps.email && this.props.email) {
       const { verificationtoken } = qs.parse(this.props.location.search);
       const { email } = this.props;
       this.props.onVerifyUserKey(email, verificationtoken);
@@ -33,12 +37,21 @@ class VerifyKey extends Component {
       apiMeResponse,
       loggedInAsEmail,
       userPubkey,
-      keyMismatchAction } = this.props;
-    if(verifyUserKey && verifyUserKey.success && apiMeResponse && loggedInAsEmail) {
+      keyMismatchAction
+    } = this.props;
+    if (
+      verifyUserKey &&
+      verifyUserKey.success &&
+      apiMeResponse &&
+      loggedInAsEmail
+    ) {
       verifyUserPubkey(loggedInAsEmail, userPubkey, keyMismatchAction);
-      pki.myPubKeyHex(loggedInAsEmail).then((pubkey) => {
-        if(pubkey !== apiMeResponse.publickey) {
-          this.props.updateMe({ ...this.props.apiMeResponse, publickey: pubkey });
+      pki.myPubKeyHex(loggedInAsEmail).then(pubkey => {
+        if (pubkey !== apiMeResponse.publickey) {
+          this.props.updateMe({
+            ...this.props.apiMeResponse,
+            publickey: pubkey
+          });
         }
       });
     }
@@ -50,19 +63,20 @@ class VerifyKey extends Component {
       <div className="content" role="main">
         <div className="page verification-page">
           {!verifyUserKey && !verifyUserKeyError && <PageLoadingIcon />}
-          {verifyUserKeyError &&
+          {verifyUserKeyError && (
             <Message
               type="error"
               header="Verification failed"
               body={verifyUserKeyError.message}
             />
-          }
-          {verifyUserKey && verifyUserKey.success &&
+          )}
+          {verifyUserKey && verifyUserKey.success && (
             <Message
               type="success"
               header="Verification successful"
-              body="You have verified and activated your new identity." />
-          }
+              body="You have verified and activated your new identity."
+            />
+          )}
         </div>
       </div>
     );

@@ -7,15 +7,16 @@ const SuccessPage = () => (
       type="success"
       className="account-page-message"
       header="Password reset completed"
-      body={(
+      body={
         <div>
-          <p>Your password has been changed. You can now <a href="/user/signup">login</a> with your new password.</p>
+          <p>
+            Your password has been changed. You can now{" "}
+            <a href="/user/signup">login</a> with your new password.
+          </p>
         </div>
-      )}
+      }
     />
   </div>
-
-
 );
 
 export default SuccessPage;

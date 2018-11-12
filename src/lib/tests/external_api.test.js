@@ -68,10 +68,9 @@ describe("test external api lib (lib/api.js)", () => {
   });
 
   test("pay with faucet", async () => {
-    await assertPOSTOnRouteIsCalled(
-      faucetUrl,
-      ea.payWithFaucet,
-      [ FAKE_TESTNET_ADDRESS, 10 ]
-    );
+    await assertPOSTOnRouteIsCalled(faucetUrl, ea.payWithFaucet, [
+      FAKE_TESTNET_ADDRESS,
+      10
+    ]);
   });
 });

@@ -6,7 +6,10 @@ import { or } from "../lib/fp";
 const changeUsernameConnector = connect(
   sel.selectorMap({
     policy: sel.policy,
-    isApiRequestingChangeUsername: or(sel.isApiRequestingInit, sel.isApiRequestingChangeUsername),
+    isApiRequestingChangeUsername: or(
+      sel.isApiRequestingInit,
+      sel.isApiRequestingChangeUsername
+    ),
     changeUsernameResponse: sel.apiChangeUsernameResponse
   }),
   {

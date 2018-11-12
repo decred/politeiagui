@@ -69,11 +69,12 @@ const LoginFormSide = ({
           <label htmlFor="rem-login-main">remember me</label>
           <a
             onClick={onTogglePrivacyPolicy}
-            style={{ marginRight: "10px", cursor: "pointer" }}>
+            style={{ marginRight: "10px", cursor: "pointer" }}
+          >
             Privacy Policy
           </a>
           <Link className="recover-password" href="/password">
-						Reset Password
+            Reset Password
           </Link>
         </div>
         <div className="submit">
@@ -84,7 +85,9 @@ const LoginFormSide = ({
           />
         </div>
         <div className="clear" />
-        {showPrivacyPolicy && <PrivacyPolicy onHidePrivacyPolicy={onHidePrivacyPolicy} />}
+        {showPrivacyPolicy && (
+          <PrivacyPolicy onHidePrivacyPolicy={onHidePrivacyPolicy} />
+        )}
       </form>
     </div>
   );

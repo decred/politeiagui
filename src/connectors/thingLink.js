@@ -8,8 +8,8 @@ import { arg } from "../lib/fp";
 const thingLinkConnector = connect(
   sel.selectorMap({
     commentid: compose(
-      t => t ? t.toLowerCase() : t,
-      get([ "match", "params", "commentid" ]),
+      t => (t ? t.toLowerCase() : t),
+      get(["match", "params", "commentid"]),
       arg(1)
     ),
     isProposalStatusApproved: sel.isProposalStatusApproved,

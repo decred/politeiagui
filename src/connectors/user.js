@@ -21,7 +21,7 @@ import {
 const userConnector = connect(
   sel.selectorMap({
     userId: compose(
-      get([ "match", "params", "userId" ]),
+      get(["match", "params", "userId"]),
       arg(1)
     ),
     loggedInAsUserId: sel.userid,
@@ -30,7 +30,10 @@ const userConnector = connect(
     errorRescan: sel.apiRescanUserPaymentsError,
     isLoadingRescan: sel.isApiRequestingRescanUserPayments,
     isLoading: or(sel.isApiRequestingUser, sel.isApiRequestingMe),
-    isLoadingProposals: or(sel.userProposalsIsRequesting, sel.isApiRequestingPropsVoteStatus),
+    isLoadingProposals: or(
+      sel.userProposalsIsRequesting,
+      sel.isApiRequestingPropsVoteStatus
+    ),
     isTestnet: sel.isTestNet,
     loggedInAsEmail: sel.loggedInAsEmail,
     userProposals: sel.getUserProposals,
@@ -49,43 +52,51 @@ const userConnector = connect(
     loggedInAsUsername: sel.loggedInAsUsername,
     amountOfCreditsAddedOnRescan: sel.amountOfCreditsAddedOnRescan,
     rescanUserId: sel.apiRescanUserPaymentsUserId,
-    isApiRequestingMarkAsPaid: state => (
-      sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_CLEAR_USER_PAYWALL
-    ),
-    isApiRequestingMarkNewUserAsExpired: state => (
-      sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_EXPIRE_NEW_USER_VERIFICATION
-    ),
-    isApiRequestingMarkUpdateKeyAsExpired: state => (
-      sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_EXPIRE_UPDATE_KEY_VERIFICATION
-    ),
-    isApiRequestingMarkResetPasswordAsExpired: state => (
-      sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_EXPIRE_RESET_PASSWORD_VERIFICATION
-    ),
-    isApiRequestingUnlockUser: state => (
-      sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_UNLOCK
-    ),
-    isApiRequestingDeactivateUser: state => (
-      sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_DEACTIVATE
-    ),
-    isApiRequestingReactivateUser: state => (
-      sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_REACTIVATE
-    ),
+    isApiRequestingMarkAsPaid: state =>
+      sel.isApiRequestingEditUser(state) &&
+      sel.editUserAction(state) === EDIT_USER_CLEAR_USER_PAYWALL,
+    isApiRequestingMarkNewUserAsExpired: state =>
+      sel.isApiRequestingEditUser(state) &&
+      sel.editUserAction(state) === EDIT_USER_EXPIRE_NEW_USER_VERIFICATION,
+    isApiRequestingMarkUpdateKeyAsExpired: state =>
+      sel.isApiRequestingEditUser(state) &&
+      sel.editUserAction(state) === EDIT_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
+    isApiRequestingMarkResetPasswordAsExpired: state =>
+      sel.isApiRequestingEditUser(state) &&
+      sel.editUserAction(state) ===
+        EDIT_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
+    isApiRequestingUnlockUser: state =>
+      sel.isApiRequestingEditUser(state) &&
+      sel.editUserAction(state) === EDIT_USER_UNLOCK,
+    isApiRequestingDeactivateUser: state =>
+      sel.isApiRequestingEditUser(state) &&
+      sel.editUserAction(state) === EDIT_USER_DEACTIVATE,
+    isApiRequestingReactivateUser: state =>
+      sel.isApiRequestingEditUser(state) &&
+      sel.editUserAction(state) === EDIT_USER_REACTIVATE,
     editUserResponse: sel.editUserResponse,
     numOfUserProposals: sel.numOfUserProposals
   }),
-  dispatch => bindActionCreators({
-    onFetchUserProposals: act.onFetchUserProposals,
-    onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
-    onFetchData: act.onFetchUser,
-    openModal: act.openModal,
-    keyMismatchAction: act.keyMismatch,
-    onIdentityImported: act.onIdentityImported,
-    confirmWithModal,
-    onUpdateUserKey,
-    onEditUser: act.onEditUser,
-    onRescan: act.onRescanUserPayments,
-    onResetRescan: act.onResetRescanUserPayments
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        onFetchUserProposals: act.onFetchUserProposals,
+        onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
+        onFetchData: act.onFetchUser,
+        openModal: act.openModal,
+        keyMismatchAction: act.keyMismatch,
+        onIdentityImported: act.onIdentityImported,
+        confirmWithModal,
+        onUpdateUserKey,
+        onEditUser: act.onEditUser,
+        onRescan: act.onRescanUserPayments,
+        onResetRescan: act.onResetRescanUserPayments
+      },
+      dispatch
+    )
 );
 
-export default compose(withRouter, userConnector);
+export default compose(
+  withRouter,
+  userConnector
+);

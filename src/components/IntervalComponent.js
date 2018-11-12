@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
  * and it will end the interval once the "active" prop changes from true to false
  */
 class IntervalComponent extends React.Component {
-  interval = null
+  interval = null;
   constructor(props) {
     super(props);
     this.state = { numberOfExecutions: 0 };
@@ -18,7 +18,7 @@ class IntervalComponent extends React.Component {
       this.onInterval();
     }
     this.interval = setInterval(this.onInterval, intervalPeriod);
-  }
+  };
   onInterval = () => {
     const { maxNumberOfExecutions, onInterval } = this.props;
     let { numberOfExecutions } = this.state;
@@ -29,17 +29,17 @@ class IntervalComponent extends React.Component {
       this.setState({ numberOfExecutions: ++numberOfExecutions });
       onInterval();
     }
-  }
+  };
   finishInterval = () => {
     clearInterval(this.interval);
     this.setState({ numberOfExecutions: 0 });
     this.props.onFinishInterval && this.props.onFinishInterval();
-  }
+  };
   componentDidUpdate(prevProps) {
     const { active, startOnMount } = this.props;
     if (!startOnMount && !prevProps.active && active) {
       this.startInterval();
-    } else if(prevProps.active && !active) {
+    } else if (prevProps.active && !active) {
       this.finishInterval();
     }
   }

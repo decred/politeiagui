@@ -1,7 +1,7 @@
-module.exports = function (request, response) {
+module.exports = function(request, response) {
   let body = [];
   request
-    .on("data", (chunk) => {
+    .on("data", chunk => {
       body.push(chunk);
     })
     .on("end", () => {
@@ -12,7 +12,7 @@ module.exports = function (request, response) {
       response.writeHead(200);
 
       if (bodyParsed.currentpassword === "error") {
-        return response.end(JSON.stringify({ "errorcode": 1 }));
+        return response.end(JSON.stringify({ errorcode: 1 }));
       }
 
       return response.end(JSON.stringify({}));

@@ -6,7 +6,7 @@ class ProposalCreditsPage extends React.Component {
   componentDidMount() {
     this.props.onPurchaseProposalCredits();
   }
-  render () {
+  render() {
     const {
       proposalCreditPrice,
       isApiRequestingProposalPaywall,
@@ -27,19 +27,19 @@ class ProposalCreditsPage extends React.Component {
       txId: this.props.paywallTxid
     });
 
-    return isApiRequestingProposalPaywall ?
+    return isApiRequestingProposalPaywall ? (
       <PageLoadingIcon />
-      : (
-        <div className="proposal-paywall-section">
-          <ProposalCreditsSummary
-            proposalCreditPrice={proposalCreditPrice}
-            proposalCredits={proposalCredits}
-            proposalCreditPurchases={proposalCreditPurchases}
-            isTestnet={isTestnet}
-            { ...{ ...props, proposalPaywallPaymentTxid }}
-          />
-        </div>
-      );
+    ) : (
+      <div className="proposal-paywall-section">
+        <ProposalCreditsSummary
+          proposalCreditPrice={proposalCreditPrice}
+          proposalCredits={proposalCredits}
+          proposalCreditPurchases={proposalCreditPurchases}
+          isTestnet={isTestnet}
+          {...{ ...props, proposalPaywallPaymentTxid }}
+        />
+      </div>
+    );
   }
 }
 

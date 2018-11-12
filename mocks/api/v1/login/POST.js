@@ -1,7 +1,7 @@
-module.exports = function (request, response) {
+module.exports = function(request, response) {
   let body = [];
   request
-    .on("data", (chunk) => {
+    .on("data", chunk => {
       body.push(chunk);
     })
     .on("end", () => {
@@ -12,25 +12,29 @@ module.exports = function (request, response) {
       response.writeHead(200);
 
       if (bodyParsed.email === "test@error.com") {
-        return response.end(JSON.stringify({ "errorcode": 2 }));
+        return response.end(JSON.stringify({ errorcode: 2 }));
       }
 
       if (bodyParsed.email === "testlogin@nonadmin.com") {
-        return response.end(JSON.stringify({
-          isadmin: false,
+        return response.end(
+          JSON.stringify({
+            isadmin: false,
+            userid: "0",
+            email: bodyParsed.email,
+            publickey:
+              "ec88b934fd9f334a9ed6d2e719da2bdb2061de5370ff20a38b0e1e3c9538199a"
+          })
+        );
+      }
+
+      return response.end(
+        JSON.stringify({
+          isadmin: true,
           userid: "0",
           email: bodyParsed.email,
           publickey:
-              "ec88b934fd9f334a9ed6d2e719da2bdb2061de5370ff20a38b0e1e3c9538199a"
-        }));
-      }
-
-      return response.end(JSON.stringify({
-        isadmin: true,
-        userid: "0",
-        email: bodyParsed.email,
-        publickey:
             "ec88b934fd9f334a9ed6d2e719da2bdb2061de5370ff20a38b0e1e3c9538199a"
-      }));
+        })
+      );
     });
 };

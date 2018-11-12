@@ -17,13 +17,16 @@ import { verifyUserPubkey } from "./helpers";
 
 const store = configureStore();
 
-store.subscribe(throttle(() => {
-  const state = store.getState();
-  handleSaveTextEditorsContent(state);
-  handleSaveStateToLocalStorage(state);
-}, 1000));
+store.subscribe(
+  throttle(() => {
+    const state = store.getState();
+    handleSaveTextEditorsContent(state);
+    handleSaveStateToLocalStorage(state);
+  }, 1000)
+);
 
-const createStorageListener = store => event => store.dispatch(onLocalStorageChange(event));
+const createStorageListener = store => event =>
+  store.dispatch(onLocalStorageChange(event));
 
 class Loader extends Component {
   constructor(props) {
@@ -36,29 +39,42 @@ class Loader extends Component {
       this.props.onLoadDraftProposals(this.props.loggedInAsEmail);
     }
     if (prevProps.userPubkey && this.props.userPubkey) {
-      verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey, this.props.keyMismatchAction);
+      verifyUserPubkey(
+        this.props.loggedInAsEmail,
+        this.props.userPubkey,
+        this.props.keyMismatchAction
+      );
     }
 
-    if(!prevProps.onboardViewed && this.props.lastLoginTime === 0){
+    if (!prevProps.onboardViewed && this.props.lastLoginTime === 0) {
       const { openModal, setOnboardAsViewed } = this.props;
       setOnboardAsViewed();
-      this.props.confirmWithModal(CONFIRM_ACTION, {
-        title: "Welcome to Politeia!",
-        message: (
-          <React.Fragment>
-            <strong style={{ fontSize: "1.05em", marginBottom: "10px", fontWeight: "1.2em" }}>
-              Are you new to Politeia? Would you like to read more on how all of this works?
-            </strong>
-            <br />
-            <p style={{ marginTop: "10px", fontStyle: "italic" }}>
-              The following information can be reviewed by clicking 'Learn More about Politiea' in the sidebar.
-            </p>
-          </React.Fragment>
-        ),
-        cancelText: "Maybe later",
-        submitText: "Yes, show me more"
-      })
-        .then((confirm) => confirm && openModal(ONBOARD));
+      this.props
+        .confirmWithModal(CONFIRM_ACTION, {
+          title: "Welcome to Politeia!",
+          message: (
+            <React.Fragment>
+              <strong
+                style={{
+                  fontSize: "1.05em",
+                  marginBottom: "10px",
+                  fontWeight: "1.2em"
+                }}
+              >
+                Are you new to Politeia? Would you like to read more on how all
+                of this works?
+              </strong>
+              <br />
+              <p style={{ marginTop: "10px", fontStyle: "italic" }}>
+                The following information can be reviewed by clicking 'Learn
+                More about Politiea' in the sidebar.
+              </p>
+            </React.Fragment>
+          ),
+          cancelText: "Maybe later",
+          submitText: "Yes, show me more"
+        })
+        .then(confirm => confirm && openModal(ONBOARD));
     }
 
     if (!prevProps.apiError && this.props.apiError) {
@@ -73,7 +89,11 @@ class Loader extends Component {
 
   componentDidMount() {
     if (this.props.loggedInAsEmail) {
-      verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey, this.props.keyMismatchAction);
+      verifyUserPubkey(
+        this.props.loggedInAsEmail,
+        this.props.userPubkey,
+        this.props.keyMismatchAction
+      );
     }
 
     this.storageListener = createStorageListener(store);
@@ -96,16 +116,30 @@ class Loader extends Component {
 
 const LoaderComponent = withRouter(loaderConnector(Loader));
 
-const StagingAlert = () => process.env.REACT_APP_STAGING  ?
-  <div className="staging-alert">
-    This is the politeia staging environment. DO NOT USE, YOU WILL LOSE YOUR DECRED.
-  </div> : null;
+const StagingAlert = () =>
+  process.env.REACT_APP_STAGING ? (
+    <div className="staging-alert">
+      This is the politeia staging environment. DO NOT USE, YOU WILL LOSE YOUR
+      DECRED.
+    </div>
+  ) : null;
 
 const HeaderAlertComponent = withRouter(
   loaderConnector(
-    ({ location, loggedInAsEmail, keyMismatch, history, loggedInAsUserId, identityImportSuccess }) => {
+    ({
+      location,
+      loggedInAsEmail,
+      keyMismatch,
+      history,
+      loggedInAsUserId,
+      identityImportSuccess
+    }) => {
       if (!loggedInAsEmail) return null;
-      if (keyMismatch && !identityImportSuccess && location.pathname !== `/user/${loggedInAsUserId}`) {
+      if (
+        keyMismatch &&
+        !identityImportSuccess &&
+        location.pathname !== `/user/${loggedInAsUserId}`
+      ) {
         return (
           <HeaderAlert className="action-needed-alert">
             You cannot currently submit proposals or comments, please visit your{" "}

@@ -1,6 +1,6 @@
 // The pageObject is prepared but we currently can't logout with the mock
 const Commands = {
-  changePassword: function () {
+  changePassword: function() {
     return this.waitForElementVisible("@changePasswordPage", 10000)
       .clearValue("@inputPassword")
       .clearValue("@inputPasswordVerify")
@@ -12,7 +12,7 @@ const Commands = {
 
 module.exports = {
   commands: [Commands],
-  url: function (query) {
+  url: function(query) {
     return this.api.launchUrl + "/user/password/reset?" + query;
   },
   elements: {

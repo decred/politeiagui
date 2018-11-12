@@ -4,13 +4,9 @@ import * as act from "../../actions/types";
 import { testReceiveReducer, testRequestReducer } from "./helpers";
 
 describe("test external_api reducer", () => {
-
-  const MOCK_STATE = {
-
-  };
+  const MOCK_STATE = {};
 
   test("tests paywall reducers, involving request and receive", () => {
-
     const request_action = {
       type: act.REQUEST_PAYWALL_PAYMENT_WITH_FAUCET,
       payload: "data",
@@ -23,12 +19,21 @@ describe("test external_api reducer", () => {
       error: false
     };
 
-    testRequestReducer(external_api, "payWithFaucet", MOCK_STATE, request_action);
-    testReceiveReducer(external_api, "payWithFaucet", MOCK_STATE, receive_action);
+    testRequestReducer(
+      external_api,
+      "payWithFaucet",
+      MOCK_STATE,
+      request_action
+    );
+    testReceiveReducer(
+      external_api,
+      "payWithFaucet",
+      MOCK_STATE,
+      receive_action
+    );
   });
 
   test("tests last block height reducers, involving request and receive", () => {
-
     const request_action = {
       type: act.REQUEST_GET_LAST_BLOCK_HEIGHT,
       payload: "data",
@@ -46,7 +51,9 @@ describe("test external_api reducer", () => {
   });
 
   test("default tests on external_api reducer", () => {
-    expect(DEFAULT_STATE).toEqual({ payWithFaucet: { isRequesting: false, response: null, error: null } });
+    expect(DEFAULT_STATE).toEqual({
+      payWithFaucet: { isRequesting: false, response: null, error: null }
+    });
 
     expect(external_api(MOCK_STATE, {})).toEqual(MOCK_STATE);
 

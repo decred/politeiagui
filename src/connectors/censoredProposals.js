@@ -10,8 +10,11 @@ export default connect(
     error: sel.vettedProposalsError,
     isLoading: sel.vettedProposalsIsRequesting
   }),
-  dispatch => bindActionCreators({
-    onFetchData: act.onFetchUnvetted
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        onFetchData: act.onFetchUnvetted
+      },
+      dispatch
+    )
 );
-

@@ -13,7 +13,10 @@ const MarkdownRenderer = ({
   <div className={className}>
     <ReactMarkdown
       className="md"
-      renderers={customRenderers(filterXss, displayExternalLikWarning && confirmWithModal)}
+      renderers={customRenderers(
+        filterXss,
+        displayExternalLikWarning && confirmWithModal
+      )}
       source={body}
     />
   </div>

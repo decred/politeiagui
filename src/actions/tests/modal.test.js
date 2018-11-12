@@ -7,25 +7,24 @@ describe("test actions/modal.js", () => {
   const PAYLOAD = "any";
   const CALLBACK = () => "callback returned value";
   test("open modal action", () => {
-    expect(modals.openModal(MODAL_TYPE, PAYLOAD, CALLBACK))
-      .toEqual({
-        type: act.OPEN_MODAL,
-        modalType: MODAL_TYPE,
-        payload: PAYLOAD,
-        callback: CALLBACK
-      });
+    expect(modals.openModal(MODAL_TYPE, PAYLOAD, CALLBACK)).toEqual({
+      type: act.OPEN_MODAL,
+      modalType: MODAL_TYPE,
+      payload: PAYLOAD,
+      callback: CALLBACK
+    });
   });
 
   test("close modal action", () => {
-    expect(modals.closeModal())
-      .toEqual({
-        type: act.CLOSE_MODAL
-      });
+    expect(modals.closeModal()).toEqual({
+      type: act.CLOSE_MODAL
+    });
   });
 
   test("confirm with modal", () => {
-    expect(modals.confirmWithModal(MODAL_TYPE, PAYLOAD))
-      .toDispatchActions([modals.openModal()], done);
+    expect(modals.confirmWithModal(MODAL_TYPE, PAYLOAD)).toDispatchActions(
+      [modals.openModal()],
+      done
+    );
   });
 });
-

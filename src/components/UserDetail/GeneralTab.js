@@ -18,26 +18,19 @@ import Message from "../Message";
 import { myPubKeyHex } from "../../lib/pki";
 import { verifyUserPubkey } from "../../helpers";
 
-const Field = ({
-  label,
-  children
-}) => (
+const Field = ({ label, children }) => (
   <div className="field">
     <label className="field-label">{label + ":"}</label>
     <div className="field-value">{children}</div>
-    <div className="clear"></div>
+    <div className="clear" />
   </div>
 );
 
-const UTCDate = ({
-  time
-}) => (
+const UTCDate = ({ time }) => (
   <span>{new Date(time * 1000).toUTCString()}</span>
 );
 
-const FieldSeparator = () => (
-  <div className="field-separator"></div>
-);
+const FieldSeparator = () => <div className="field-separator" />;
 
 const TokenFields = ({
   tokenLabel,
@@ -50,7 +43,7 @@ const TokenFields = ({
 }) => (
   <div>
     <Field label={tokenLabel}>{token}</Field>
-    {(new Date().getTime() > (expiry * 1000)) ? (
+    {new Date().getTime() > expiry * 1000 ? (
       <Field label="Expired">Yes</Field>
     ) : (
       <Field label="Expires">
@@ -60,7 +53,8 @@ const TokenFields = ({
           text="Mark as expired"
           disabled={isRequesting}
           isLoading={isRequesting}
-          onClick={() => onEditUser(userId, action)} />
+          onClick={() => onEditUser(userId, action)}
+        />
       </Field>
     )}
   </div>
@@ -70,8 +64,8 @@ const UpdatedKeyMessage = ({ email }) => (
     Your new identity has been requested, please check your email at{" "}
     <b>{email}</b> to verify and activate it.
     <br />
-    The verification link needs to be open with the same browser
-    that you used to generate this new identity.
+    The verification link needs to be open with the same browser that you used
+    to generate this new identity.
   </span>
 );
 
@@ -84,46 +78,58 @@ class GeneralTab extends React.Component {
       openedVerification: false,
       pubkey: "",
       pubkeyStatus: PUB_KEY_STATUS_LOADING
-
     };
   }
 
   resolvePubkey = () => {
-    if(!this.state.pubkey && this.props.loggedInAsEmail) {
+    if (!this.state.pubkey && this.props.loggedInAsEmail) {
       this.refreshPubKey();
     }
-  }
+  };
 
   updatePubkey = (shouldAutoVerifyKey, prevUpdateUserKey, updateUserKey) => {
     if (shouldAutoVerifyKey && updateUserKey) {
       const { verificationtoken } = updateUserKey;
-      if ((prevUpdateUserKey && (verificationtoken !== prevUpdateUserKey.verificationtoken))
-        || (!prevUpdateUserKey && verificationtoken)) {
+      if (
+        (prevUpdateUserKey &&
+          verificationtoken !== prevUpdateUserKey.verificationtoken) ||
+        (!prevUpdateUserKey && verificationtoken)
+      ) {
         this.setState({ openedVerification: true });
-        this.props.history.push(`/user/key/verify/?verificationtoken=${verificationtoken}`);
+        this.props.history.push(
+          `/user/key/verify/?verificationtoken=${verificationtoken}`
+        );
         return;
       }
     }
-  }
+  };
 
   refreshPubKey = () => {
     myPubKeyHex(this.props.loggedInAsEmail).then(pubkey => {
-      if(!this.unmounting) {
+      if (!this.unmounting) {
         this.setState({ pubkey, pubkeyStatus: PUB_KEY_STATUS_LOADED });
       }
     });
-  }
+  };
 
   componentDidMount() {
     if (this.props.loggedInAsEmail) {
-      verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey, this.props.keyMismatchAction);
+      verifyUserPubkey(
+        this.props.loggedInAsEmail,
+        this.props.userPubkey,
+        this.props.keyMismatchAction
+      );
     }
     this.resolvePubkey();
     this.isMessageShown();
   }
 
   componentWillUnmount() {
-    verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey, this.props.keyMismatchAction);
+    verifyUserPubkey(
+      this.props.loggedInAsEmail,
+      this.props.userPubkey,
+      this.props.keyMismatchAction
+    );
     this.unmounting = true;
     this.props.onIdentityImported(null);
     this.props.onResetRescan();
@@ -131,12 +137,19 @@ class GeneralTab extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (!prevProps.loggedInAsEmail && this.props.loggedInAsEmail) {
-      verifyUserPubkey(this.props.loggedInAsEmail, this.props.userPubkey, this.props.keyMismatchAction);
+      verifyUserPubkey(
+        this.props.loggedInAsEmail,
+        this.props.userPubkey,
+        this.props.keyMismatchAction
+      );
     }
     this.resolvePubkey();
-    if (this.state.openedVerification)
-      return;
-    this.updatePubkey(this.props.shouldAutoVerifyKey, prevProps.updateUserKey, this.props.updateUserKey);
+    if (this.state.openedVerification) return;
+    this.updatePubkey(
+      this.props.shouldAutoVerifyKey,
+      prevProps.updateUserKey,
+      this.props.updateUserKey
+    );
 
     // update displayed public key when the identity is successfully imported
     if (!prevProps.identityImportSuccess && this.props.identityImportSuccess) {
@@ -148,15 +161,24 @@ class GeneralTab extends React.Component {
     const { onUpdateUserKey, loggedInAsEmail, confirmWithModal } = this.props;
     confirmWithModal(CONFIRM_ACTION, {
       message: "Are you sure you want to generate a new identity?"
-    }).then(
-      (confirm) => confirm && onUpdateUserKey(loggedInAsEmail)
-    );
-  }
+    }).then(confirm => confirm && onUpdateUserKey(loggedInAsEmail));
+  };
 
   isMessageShown() {
-    const { updateUserKey, keyMismatch, identityImportSuccess, updateUserKeyError, identityImportError } = this.props;
-    if ((updateUserKey && updateUserKey.success) || (keyMismatch && !identityImportSuccess) || (updateUserKeyError)
-      || (identityImportError) || (identityImportSuccess)) {
+    const {
+      updateUserKey,
+      keyMismatch,
+      identityImportSuccess,
+      updateUserKeyError,
+      identityImportError
+    } = this.props;
+    if (
+      (updateUserKey && updateUserKey.success) ||
+      (keyMismatch && !identityImportSuccess) ||
+      updateUserKeyError ||
+      identityImportError ||
+      identityImportSuccess
+    ) {
       this.setState({ showIdentityHelpText: true });
     }
   }
@@ -192,79 +214,121 @@ class GeneralTab extends React.Component {
       rescanUserId
     } = this.props;
     const { showIdentityHelpText, pubkey, pubkeyStatus } = this.state;
-    const userHasActivePaywall = user && user.newuserpaywalladdress && user.newuserpaywallamount;
+    const userHasActivePaywall =
+      user && user.newuserpaywalladdress && user.newuserpaywallamount;
     const isUserPageOwner = loggedInAsUserId === user.id;
-    const hasTheRescanResult = amountOfCreditsAddedOnRescan !== undefined && rescanUserId === user.id;
+    const hasTheRescanResult =
+      amountOfCreditsAddedOnRescan !== undefined && rescanUserId === user.id;
     return (
       <div className="detail-form">
         <div>
           <Field label="Proposal credits">
             {user.proposalcredits}
-            {isAdmin ?
+            {isAdmin ? (
               <ButtonWithLoadingIcon
                 className="c-btn c-btn-primary button-small"
                 isLoading={isLoadingRescan}
                 onClick={() => onRescan(user.id)}
                 text="rescan"
-              /> : null}
+              />
+            ) : null}
           </Field>
-          {hasTheRescanResult ?
+          {hasTheRescanResult ? (
             <Message
               type="success"
-              body={<div>
-                {amountOfCreditsAddedOnRescan === 0 ?
-                  <span>User credits are up to date.</span> :
-                  <span><b>{amountOfCreditsAddedOnRescan} proposal credits </b>were found by the rescan and added to the user account.</span>
-                }
-              </div>}
+              body={
+                <div>
+                  {amountOfCreditsAddedOnRescan === 0 ? (
+                    <span>User credits are up to date.</span>
+                  ) : (
+                    <span>
+                      <b>{amountOfCreditsAddedOnRescan} proposal credits </b>
+                      were found by the rescan and added to the user account.
+                    </span>
+                  )}
+                </div>
+              }
               onDismissClick={onResetRescan}
-            /> : null}
-          {errorRescan ?
-            <Message
-              type="error"
-              body={errorRescan}
-            /> : null}
+            />
+          ) : null}
+          {errorRescan ? <Message type="error" body={errorRescan} /> : null}
           <FieldSeparator />
         </div>
-        {keyMismatch && !identityImportSuccess ?
-          <Field label="Active Identity"><div style={{ color: "red" }} className="monospace">{`${pubkey} is invalid. Please see 'Manage Identity'`}</div></Field> :
-          <Field className="account-info" label="Your public key"><div className="monospace">{pubkeyStatus === PUB_KEY_STATUS_LOADED ? (pubkey || "none") : "Loading public key..." }</div></Field>}
-        {(isUserPageOwner) ?
+        {keyMismatch && !identityImportSuccess ? (
+          <Field label="Active Identity">
+            <div
+              style={{ color: "red" }}
+              className="monospace"
+            >{`${pubkey} is invalid. Please see 'Manage Identity'`}</div>
+          </Field>
+        ) : (
+          <Field className="account-info" label="Your public key">
+            <div className="monospace">
+              {pubkeyStatus === PUB_KEY_STATUS_LOADED
+                ? pubkey || "none"
+                : "Loading public key..."}
+            </div>
+          </Field>
+        )}
+        {isUserPageOwner ? (
           <div>
             {showIdentityHelpText && isUserPageOwner ? (
               <div>
-                <span style={{ fontWeight: "bold", maxWidth: "7em" }} className="ident-value">{this.identityHelpPrompt}</span>{" "}
-                <a className="linkish" onClick={() => this.setState({ showIdentityHelpText: false })}>
-                (hide)
+                <span
+                  style={{ fontWeight: "bold", maxWidth: "7em" }}
+                  className="ident-value"
+                >
+                  {this.identityHelpPrompt}
+                </span>{" "}
+                <a
+                  className="linkish"
+                  onClick={() => this.setState({ showIdentityHelpText: false })}
+                >
+                  (hide)
                 </a>
               </div>
             ) : (
-              <a className="linkish ident-value" style={{ maxWidth: "7em" }} onClick={() => this.setState({ showIdentityHelpText: true })}>
+              <a
+                className="linkish ident-value"
+                style={{ maxWidth: "7em" }}
+                onClick={() => this.setState({ showIdentityHelpText: true })}
+              >
                 {this.identityHelpPrompt}
               </a>
             )}
-          </div> : null }
+          </div>
+        ) : null}
         {showIdentityHelpText && isUserPageOwner ? (
           <div className="identity-help">
             <p>
               <br />
-              <b>What is an Identity:</b> Each user has a unique <i>identity</i> which is necessary
-              for proving who the author of a proposal is. An identity was generated automatically for you when you created an
-              account. Every identity is made up of a pair of keys: one public &amp; one private.
+              <b>What is an Identity:</b> Each user has a unique <i>identity</i>{" "}
+              which is necessary for proving who the author of a proposal is. An
+              identity was generated automatically for you when you created an
+              account. Every identity is made up of a pair of keys: one public
+              &amp; one private.
             </p>
             <br />
             <ul>
-              <li><b>Private key:</b> A key only you have access to that is used for creating a "signature" whenever you submit a proposal.</li>
+              <li>
+                <b>Private key:</b> A key only you have access to that is used
+                for creating a "signature" whenever you submit a proposal.
+              </li>
               <br />
-              <li><b>Public key:</b> A key that you share with others (and Politeia) which proves your proposal was signed with your private key.</li>
+              <li>
+                <b>Public key:</b> A key that you share with others (and
+                Politeia) which proves your proposal was signed with your
+                private key.
+              </li>
             </ul>
             <br />
             <p>
-              <b>Note:</b> If you've lost your identity (because you've switched browsers
-              or cleared your cookies, for example), you can create a new one. This
-              new identity will replace your existing one, but note that Politeia keeps
-              a record of all your past public keys. You can also download your current
-              identity for future use or import an existing one.
+              <b>Note:</b> If you've lost your identity (because you've switched
+              browsers or cleared your cookies, for example), you can create a
+              new one. This new identity will replace your existing one, but
+              note that Politeia keeps a record of all your past public keys.
+              You can also download your current identity for future use or
+              import an existing one.
             </p>
             <br />
             {keyMismatch && !identityImportSuccess ? (
@@ -272,23 +336,24 @@ class GeneralTab extends React.Component {
                 type="error"
                 className="account-page-message"
                 header="Action needed"
-                body={(
+                body={
                   <div>
                     <p>
-                        The public key on the Politeia server differs from the key
-                        on your browser.  This is usually caused from the local data
-                        on your browser being cleared or by using a different browser.
+                      The public key on the Politeia server differs from the key
+                      on your browser. This is usually caused from the local
+                      data on your browser being cleared or by using a different
+                      browser.
                     </p>
                     <p>
-                        You can fix this by importing your old identity, logging in
-                        with the proper browser, or by creating a new identity
-                        (destroying your old identity).
+                      You can fix this by importing your old identity, logging
+                      in with the proper browser, or by creating a new identity
+                      (destroying your old identity).
                     </p>
                   </div>
-                )} />
+                }
+              />
             ) : null}
-            {updateUserKey &&
-              updateUserKey.success && (
+            {updateUserKey && updateUserKey.success && (
               <Message
                 type="info"
                 header="Verification required"
@@ -310,17 +375,18 @@ class GeneralTab extends React.Component {
               />
             )}
             {identityImportSuccess && (
-              <Message
-                type="success"
-                header={identityImportSuccess}
-              />
+              <Message type="success" header={identityImportSuccess} />
             )}
             <div style={{ display: "flex", flexDirection: "row" }}>
               <button
                 className="c-btn c-btn-primary"
                 onClick={this.onGenerateNewIdentity}
-                disabled={(updateUserKey && updateUserKey.success) || this.state.openedVerification}>
-              Create New Identity
+                disabled={
+                  (updateUserKey && updateUserKey.success) ||
+                  this.state.openedVerification
+                }
+              >
+                Create New Identity
               </button>
               <PrivateKeyIdentityManager
                 loggedInAsEmail={loggedInAsEmail}
@@ -345,59 +411,94 @@ class GeneralTab extends React.Component {
               userId={user.id}
               action={EDIT_USER_EXPIRE_NEW_USER_VERIFICATION}
               isRequesting={isApiRequestingMarkNewUserAsExpired}
-              onEditUser={onEditUser} />
+              onEditUser={onEditUser}
+            />
           </div>
         )}
-        {(loggedInAsUserId === user.id) ?
-          <Field label="Password"><a className="linkish" onClick={() => openModal(CHANGE_PASSWORD_MODAL)}>Change Password</a></Field> : null}
+        {loggedInAsUserId === user.id ? (
+          <Field label="Password">
+            <a
+              className="linkish"
+              onClick={() => openModal(CHANGE_PASSWORD_MODAL)}
+            >
+              Change Password
+            </a>
+          </Field>
+        ) : null}
         <FieldSeparator />
         <Field label="Has paid">
-          {user.newuserpaywalltx ? "Yes" : ([
-            <span>No</span>,
-            isAdmin && <ButtonWithLoadingIcon
-              className="c-btn c-btn-primary button-small"
-              text="Mark as paid"
-              disabled={isApiRequestingMarkAsPaid}
-              isLoading={isApiRequestingMarkAsPaid}
-              onClick={() => onEditUser(user.id, EDIT_USER_CLEAR_USER_PAYWALL)} />
-          ])}
+          {user.newuserpaywalltx
+            ? "Yes"
+            : [
+                <span>No</span>,
+                isAdmin && (
+                  <ButtonWithLoadingIcon
+                    className="c-btn c-btn-primary button-small"
+                    text="Mark as paid"
+                    disabled={isApiRequestingMarkAsPaid}
+                    isLoading={isApiRequestingMarkAsPaid}
+                    onClick={() =>
+                      onEditUser(user.id, EDIT_USER_CLEAR_USER_PAYWALL)
+                    }
+                  />
+                )
+              ]}
         </Field>
         {userHasActivePaywall ? (
           <div>
-            <Field label="Address"><div className="monospace">{" " + user.newuserpaywalladdress + " "}</div></Field>
-            <Field label="Amount">{user.newuserpaywallamount / 100000000} DCR</Field>
-            {!user.newuserpaywalltx && ([
-              <Field label="Pay after"><UTCDate time={user.newuserpaywalltxnotbefore} /></Field>,
+            <Field label="Address">
+              <div className="monospace">
+                {" " + user.newuserpaywalladdress + " "}
+              </div>
+            </Field>
+            <Field label="Amount">
+              {user.newuserpaywallamount / 100000000} DCR
+            </Field>
+            {!user.newuserpaywalltx && [
+              <Field label="Pay after">
+                <UTCDate time={user.newuserpaywalltxnotbefore} />
+              </Field>,
               <FieldSeparator />
-            ])}
+            ]}
           </div>
         ) : null}
-        {user.newuserpaywalltx && ([
+        {user.newuserpaywalltx && [
           <Field label="Transaction" key={0}>
-            {user.newuserpaywalltx === "cleared_by_admin" ?
-              <span>Cleared by admin</span> :
-              <a href={dcrdataTxUrl + user.newuserpaywalltx} target="_blank" className="monospace" rel="noopener noreferrer">{user.newuserpaywalltx}</a>
-            }
+            {user.newuserpaywalltx === "cleared_by_admin" ? (
+              <span>Cleared by admin</span>
+            ) : (
+              <a
+                href={dcrdataTxUrl + user.newuserpaywalltx}
+                target="_blank"
+                className="monospace"
+                rel="noopener noreferrer"
+              >
+                {user.newuserpaywalltx}
+              </a>
+            )}
           </Field>,
           <FieldSeparator key={2} />
-        ])}
+        ]}
         <Field label="Failed login attempts">{user.failedloginattempts}</Field>
         <Field label="Locked">
-          {!user.islocked ? "No" : ([
-            <span>Yes</span>,
-            <ButtonWithLoadingIcon
-              className="c-btn c-btn-primary button-small"
-              text="Unlock user"
-              disabled={isApiRequestingUnlockUser}
-              isLoading={isApiRequestingUnlockUser}
-              onClick={() => onEditUser(user.id, EDIT_USER_UNLOCK)} />
-          ])}
+          {!user.islocked
+            ? "No"
+            : [
+                <span>Yes</span>,
+                <ButtonWithLoadingIcon
+                  className="c-btn c-btn-primary button-small"
+                  text="Unlock user"
+                  disabled={isApiRequestingUnlockUser}
+                  isLoading={isApiRequestingUnlockUser}
+                  onClick={() => onEditUser(user.id, EDIT_USER_UNLOCK)}
+                />
+              ]}
         </Field>
-        {isAdmin &&
+        {isAdmin && (
           <React.Fragment>
             <FieldSeparator />
             <Field label="Deactivated">
-              {user.isdeactivated ?
+              {user.isdeactivated ? (
                 <React.Fragment>
                   <span style={{ fontWeight: "bold", color: "red" }}>Yes</span>
                   <ButtonWithLoadingIcon
@@ -405,9 +506,10 @@ class GeneralTab extends React.Component {
                     text="Re-activate account"
                     disabled={isApiRequestingReactivateUser}
                     isLoading={isApiRequestingReactivateUser}
-                    onClick={() => onEditUser(user.id, EDIT_USER_REACTIVATE)} />
+                    onClick={() => onEditUser(user.id, EDIT_USER_REACTIVATE)}
+                  />
                 </React.Fragment>
-                :
+              ) : (
                 <React.Fragment>
                   <span>No</span>
                   <ButtonWithLoadingIcon
@@ -415,12 +517,15 @@ class GeneralTab extends React.Component {
                     text="Deactivate account"
                     disabled={isApiRequestingDeactivateUser}
                     isLoading={isApiRequestingDeactivateUser}
-                    onClick={() => onEditUser(user.id, EDIT_USER_DEACTIVATE)} />
-                </React.Fragment>}
+                    onClick={() => onEditUser(user.id, EDIT_USER_DEACTIVATE)}
+                  />
+                </React.Fragment>
+              )}
             </Field>
-          </React.Fragment>}
+          </React.Fragment>
+        )}
         <FieldSeparator />
-        {user.updatekeyverificationtoken && ([
+        {user.updatekeyverificationtoken && [
           <TokenFields
             tokenLabel="Update key token"
             token={" " + user.updatekeyverificationtoken + " "}
@@ -428,10 +533,11 @@ class GeneralTab extends React.Component {
             userId={user.id}
             action={EDIT_USER_EXPIRE_UPDATE_KEY_VERIFICATION}
             isRequesting={isApiRequestingMarkUpdateKeyAsExpired}
-            onEditUser={onEditUser} />,
+            onEditUser={onEditUser}
+          />,
           <FieldSeparator />
-        ])}
-        {user.resetpasswordverificationtoken && ([
+        ]}
+        {user.resetpasswordverificationtoken && [
           <TokenFields
             tokenLabel="Reset password token"
             token={" " + user.resetpasswordverificationtoken + " "}
@@ -439,9 +545,10 @@ class GeneralTab extends React.Component {
             userId={user.id}
             action={EDIT_USER_EXPIRE_RESET_PASSWORD_VERIFICATION}
             isRequesting={isApiRequestingMarkResetPasswordAsExpired}
-            onEditUser={onEditUser} />,
+            onEditUser={onEditUser}
+          />,
           <FieldSeparator />
-        ])}
+        ]}
       </div>
     );
   }

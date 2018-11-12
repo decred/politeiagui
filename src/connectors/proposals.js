@@ -11,17 +11,24 @@ export default connect(
     isAdmin: sel.isAdmin,
     proposals: sel.getVettedFilteredProposals,
     proposalCounts: sel.getVettedProposalFilterCounts,
-    isLoading: or(sel.vettedProposalsIsRequesting, sel.isApiRequestingPropsVoteStatus),
+    isLoading: or(
+      sel.vettedProposalsIsRequesting,
+      sel.isApiRequestingPropsVoteStatus
+    ),
     error: or(sel.vettedProposalsError, sel.apiPropsVoteStatusError),
     filterValue: sel.getPublicFilterValue,
     header: () => LIST_HEADER_PUBLIC,
     lastLoadedProposal: sel.lastLoadedVettedProposal,
     emptyProposalsMessage: sel.getVettedEmptyProposalsMessage
   }),
-  dispatch => bindActionCreators({
-    onFetchData: act.onFetchVetted,
-    onChangeStatus: act.onSubmitStatusProposal,
-    onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
-    onChangeFilter: act.onChangePublicFilter
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        onFetchData: act.onFetchVetted,
+        onChangeStatus: act.onSubmitStatusProposal,
+        onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
+        onChangeFilter: act.onChangePublicFilter
+      },
+      dispatch
+    )
 );

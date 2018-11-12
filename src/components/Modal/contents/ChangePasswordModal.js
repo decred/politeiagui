@@ -4,10 +4,7 @@ import modalConnector from "../../../connectors/modal";
 import PasswordChange from "../../PasswordChange/index.js";
 
 const ChangeUsernameModal = ({ closeAllModals }) => (
-  <ModalContentWrapper
-    title={"Change Password"}
-    onClose={closeAllModals}
-  >
+  <ModalContentWrapper title={"Change Password"} onClose={closeAllModals}>
     <PasswordChange />
   </ModalContentWrapper>
 );

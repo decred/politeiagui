@@ -1,12 +1,10 @@
 import React from "react";
 
 const MarkdownHelp = () => (
-  <div className="markhelp" >
+  <div className="markhelp">
     <p style={{ width: "100%" }}>
       We use a slightly-customized version of{" "}
-      <a href="http://daringfireball.net/projects/markdown/syntax">
-        Markdown
-      </a>{" "}
+      <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a>{" "}
       for formatting. See below for some basics
     </p>
     <table className="md">
@@ -45,8 +43,7 @@ const MarkdownHelp = () => (
         <tr>
           <td>
             * item 1<br />
-            * item 2<br />
-            * item 3
+            * item 2<br />* item 3
           </td>
           <td>
             <ul>
@@ -64,18 +61,25 @@ const MarkdownHelp = () => (
         </tr>
         <tr>
           <td>
-            Lines starting with four spaces<br />
-            are treated like code:<br />
+            Lines starting with four spaces
             <br />
-            <span className="spaces">    </span>if 1 * 2 != 3:<br />
-            <span className="spaces">        </span>print
-            "hello, world!"<br />
+            are treated like code:
+            <br />
+            <br />
+            <span className="spaces">    </span>if 1 * 2 != 3:
+            <br />
+            <span className="spaces">        </span>print "hello, world!"
+            <br />
           </td>
           <td>
-            Lines starting with four spaces<br />
-            are treated like code:<br />
+            Lines starting with four spaces
+            <br />
+            are treated like code:
+            <br />
             <pre>
-              if 1 * 2 != 3:<br />    print "hello, world!"{"\n"}
+              if 1 * 2 != 3:
+              <br />
+              print "hello, world!"{"\n"}
             </pre>
           </td>
         </tr>

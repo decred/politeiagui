@@ -4,18 +4,24 @@ import { autobind } from "core-decorators";
 import Message from "../Message";
 import { PageLoadingIcon } from "../snew";
 
-const ForgottenPasswordForm = ({ error, handleSubmit, isRequesting, onForgottenPassword }) => {
+const ForgottenPasswordForm = ({
+  error,
+  handleSubmit,
+  isRequesting,
+  onForgottenPassword
+}) => {
   if (isRequesting) {
     return <PageLoadingIcon />;
   }
 
   return (
-    <form className="forgotten-password-form" onSubmit={handleSubmit(onForgottenPassword)}>
-      {error && <Message
-        type="error"
-        header="Forgotten password error"
-        body={error}
-      />}
+    <form
+      className="forgotten-password-form"
+      onSubmit={handleSubmit(onForgottenPassword)}
+    >
+      {error && (
+        <Message type="error" header="Forgotten password error" body={error} />
+      )}
       <div className="c-form-group">
         <label className="screenreader-only" htmlFor="email">
           Email Address:
@@ -28,7 +34,8 @@ const ForgottenPasswordForm = ({ error, handleSubmit, isRequesting, onForgottenP
           component="input"
           type="text"
           placeholder="Email Address"
-          tabIndex={3} />
+          tabIndex={3}
+        />
       </div>
       <div className="c-clearfix c-submit-group">
         <button
@@ -45,4 +52,6 @@ const ForgottenPasswordForm = ({ error, handleSubmit, isRequesting, onForgottenP
 
 autobind(ForgottenPasswordForm);
 
-export default reduxForm({ form: "form/forgottenPassword" })(ForgottenPasswordForm);
+export default reduxForm({ form: "form/forgottenPassword" })(
+  ForgottenPasswordForm
+);

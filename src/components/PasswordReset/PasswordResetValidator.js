@@ -7,8 +7,13 @@ const validate = (values, policy) => {
     throw new SubmissionError({ _error: "Passwords do not match" });
   }
 
-  if (!lengthValidator(values.newPassword, policy.minpasswordlength)){
-    throw new SubmissionError({ _error: "Your password must be at least "+policy.minpasswordlength+" characters." });
+  if (!lengthValidator(values.newPassword, policy.minpasswordlength)) {
+    throw new SubmissionError({
+      _error:
+        "Your password must be at least " +
+        policy.minpasswordlength +
+        " characters."
+    });
   }
 };
 

@@ -11,13 +11,14 @@ import { connect } from "react-redux";
 const replyConnector = connect(
   sel.selectorMap({
     commentid: compose(
-      t => t ? t.toLowerCase() : t,
-      get([ "match", "params", "commentid" ]),
+      t => (t ? t.toLowerCase() : t),
+      get(["match", "params", "commentid"]),
       arg(1)
     ),
     token: sel.proposalToken,
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
+    proposalAuthor: sel.proposalAuthor,
     keyMismatch: sel.getKeyMismatch,
     userCanExecuteActions: sel.userCanExecuteActions,
     replyTo: sel.replyTo,
@@ -56,9 +57,10 @@ class Wrapper extends Component {
   toggleCommentForm = (e, forceValue = null) => {
     e && e.preventDefault && e.preventDefault();
     this.setState({
-      showCommentForm: forceValue != null ? forceValue : !this.state.showCommentForm
+      showCommentForm:
+        forceValue != null ? forceValue : !this.state.showCommentForm
     });
-  }
+  };
 
   onCloseCommentForm = () => this.toggleCommentForm(null, false);
 
@@ -85,21 +87,27 @@ class Wrapper extends Component {
 
   onChange = value => {
     this.setState({ commentValue: value, validationError: "" });
-  }
+  };
 
   resetForm = () => {
     this.setState({ commentValue: "", showCommentForm: false });
     this.props.onClose && this.props.onClose();
-  }
+  };
 
   onSave(e) {
     e && e.preventDefault && e.preventDefault();
-    const { loggedInAsEmail, token, thingId: replyTo, policy, commentid } = this.props;
+    const {
+      loggedInAsEmail,
+      token,
+      thingId: replyTo,
+      policy,
+      commentid
+    } = this.props;
     const { commentValue } = this.state;
     const comment = commentValue.trim();
     try {
       validate({ values: { comment }, ...this.props }, policy);
-    } catch(e) {
+    } catch (e) {
       this.setState({ validationError: e.errors._error });
       return;
     }

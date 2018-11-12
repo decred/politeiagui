@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import ProposalCreditsPage from "./Page";
 import proposalCreditsConnector from "../../connectors/proposalCredits";
 
-
 class ProposalCreditsManager extends Component {
-
   constructor(props) {
     super(props);
 
@@ -17,14 +15,14 @@ class ProposalCreditsManager extends Component {
     this.props.onUserProposalCredits();
   }
 
-  onUpdateCreditsToPurchase = (event) => {
+  onUpdateCreditsToPurchase = event => {
     const numCreditsToPurchase = parseInt(event.target.value, 10);
     if (numCreditsToPurchase < 1) {
       return;
     }
 
     this.setState({ numCreditsToPurchase });
-  }
+  };
 
   render() {
     const { numCreditsToPurchase } = this.state;
@@ -39,7 +37,6 @@ class ProposalCreditsManager extends Component {
       />
     );
   }
-
 }
 
 export default proposalCreditsConnector(ProposalCreditsManager);

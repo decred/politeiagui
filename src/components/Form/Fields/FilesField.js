@@ -14,10 +14,16 @@ class FilesField extends React.Component {
     };
   }
 
-  handleFilesChange = (files) => {
-    const { input, policy, meta: { dispatch } } = this.props;
+  handleFilesChange = files => {
+    const {
+      input,
+      policy,
+      meta: { dispatch }
+    } = this.props;
     const formattedFiles = getFormattedFiles(files);
-    const inputAndNewFiles = input.value ? formattedFiles.concat(input.value) : formattedFiles;
+    const inputAndNewFiles = input.value
+      ? formattedFiles.concat(input.value)
+      : formattedFiles;
     const validation = validateFiles(inputAndNewFiles, policy);
 
     this.setState({
@@ -25,11 +31,11 @@ class FilesField extends React.Component {
     });
 
     return dispatch(change("form/proposal", "files", validation.files));
-  }
+  };
 
   render() {
     const {
-      placeholder="Upload",
+      placeholder = "Upload",
       input,
       touched,
       error,
@@ -43,7 +49,7 @@ class FilesField extends React.Component {
     };
     return (
       <div className="attach-wrapper">
-        { policyErrors.length > 0 && <PolicyErrors errors={policyErrors} />}
+        {policyErrors.length > 0 && <PolicyErrors errors={policyErrors} />}
         <div>
           <ReactFileReader
             base64
@@ -53,18 +59,37 @@ class FilesField extends React.Component {
           >
             <div className="button-wrapper">
               <button
-                className={`togglebutton access-required${!userCanExecuteActions ? " not-active disabled" : ""}`}
+                className={`togglebutton access-required${
+                  !userCanExecuteActions ? " not-active disabled" : ""
+                }`}
                 style={buttonStyle}
-              >{placeholder}</button>
+              >
+                {placeholder}
+              </button>
               <div className="attach-requirements">
-                <div> Max number of files: <span>{policy.maximages}.</span> </div>
-                <div> Max file size: <span>{Math.floor(policy.maximagesize / 1024)} Kb. </span> </div>
-                <div> Valid MIME types: <span>{policy.validmimetypes.join(", ")}</span> </div>
+                <div>
+                  {" "}
+                  Max number of files: <span>{policy.maximages}.</span>{" "}
+                </div>
+                <div>
+                  {" "}
+                  Max file size:{" "}
+                  <span>
+                    {Math.floor(policy.maximagesize / 1024)} Kb.{" "}
+                  </span>{" "}
+                </div>
+                <div>
+                  {" "}
+                  Valid MIME types:{" "}
+                  <span>{policy.validmimetypes.join(", ")}</span>{" "}
+                </div>
               </div>
             </div>
           </ReactFileReader>
         </div>
-        {touched && error && !disabled && <span className="error">{error}</span>}
+        {touched && error && !disabled && (
+          <span className="error">{error}</span>
+        )}
         <ProposalImages files={input.value || []} onChange={input.onChange} />
       </div>
     );

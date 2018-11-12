@@ -16,6 +16,12 @@ class SearchWrapper extends Component {
   }
 }
 
-const wrapSearch = (Component) => (props) => <SearchWrapper {...{ ...props, Component }} />;
+const wrapSearch = Component => props => (
+  <SearchWrapper {...{ ...props, Component }} />
+);
 
-export default compose(withRouter, reduxForm({ form: "form/proposal-find" }), wrapSearch);
+export default compose(
+  withRouter,
+  reduxForm({ form: "form/proposal-find" }),
+  wrapSearch
+);
