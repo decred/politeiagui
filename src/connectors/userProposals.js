@@ -36,7 +36,8 @@ class Wrapper extends Component {
   componentDidMount() {
     const {
       match,
-      onChangeFilter
+      onChangeFilter,
+      userid
     } = this.props;
 
     if (match.params && typeof match.params.filter !== "undefined") {
@@ -44,6 +45,10 @@ class Wrapper extends Component {
         "submitted": PROPOSAL_USER_FILTER_SUBMITTED,
         "drafts": PROPOSAL_USER_FILTER_DRAFT
       }[match.params.filter]);
+    }
+
+    if (userid) {
+      this.props.onFetchUserProposals(userid);
     }
   }
 
