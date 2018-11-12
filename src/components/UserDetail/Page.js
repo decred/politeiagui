@@ -23,7 +23,8 @@ const UserDetailPage = ({
   onTabChange,
   dcrdataTxUrl,
   isAdmin,
-  openModal
+  openModal,
+  numOfUserProposals
 }) => {
   const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
   return (
@@ -58,7 +59,7 @@ const UserDetailPage = ({
                   onTabChange={onTabChange} /> : null}
                 <Tab
                   title="Proposals"
-                  count={user.numofproposals}
+                  count={numOfUserProposals}
                   selected={tabId === USER_DETAIL_TAB_PROPOSALS}
                   tabId={USER_DETAIL_TAB_PROPOSALS}
                   onTabChange={onTabChange} />

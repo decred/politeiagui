@@ -70,7 +70,8 @@ const userConnector = connect(
     isApiRequestingReactivateUser: state => (
       sel.isApiRequestingEditUser(state) && sel.editUserAction(state) === EDIT_USER_REACTIVATE
     ),
-    editUserResponse: sel.editUserResponse
+    editUserResponse: sel.editUserResponse,
+    numOfUserProposals: sel.numOfUserProposals
   }),
   dispatch => bindActionCreators({
     onFetchUserProposals: act.onFetchUserProposals,
