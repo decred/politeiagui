@@ -43,10 +43,7 @@ const CommentForm = ({
           {!isPostingComment && !isVotingFinished ? (
             <div className="md">
               <MarkdownEditorField
-                input={{
-                  value: value,
-                  onChange: onChange
-                }}
+                input={{ value: value, onChange: onChange }}
                 toggledStyle
               />
             </div>
