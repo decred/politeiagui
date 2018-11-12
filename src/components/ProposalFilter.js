@@ -1,4 +1,6 @@
 import React from "react";
+import qs from "query-string";
+import { withRouter } from "react-router-dom";
 import { Tabs, Tab } from "./Tabs";
 import {
   PROPOSAL_FILTER_ALL,
@@ -15,6 +17,8 @@ import {
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   PROPOSAL_VOTING_AUTHORIZED
 } from "../constants";
+import { setQueryStringWithoutPageReload } from "../helpers";
+
 
 const adminFilterOptions = [
   {
@@ -86,19 +90,57 @@ const mapHeaderToCount = {
   [LIST_HEADER_USER]: (proposalCounts, status) => proposalCounts[status] || 0
 };
 
-const ProposalFilter = ({ handleChangeFilterValue, header, filterValue, proposalCounts }) => (
-  mapHeaderToOptions[header] ?
-    <Tabs>
-      {mapHeaderToOptions[header].map((op) => (
-        <Tab
-          key={op.value}
-          title={op.label}
-          count={mapHeaderToCount[header](proposalCounts, op.value)}
-          selected={filterValue === op.value}
-          onTabChange={() => handleChangeFilterValue(op.value)} />
-      ))}
-    </Tabs>
-    : null
-);
+class ProposalFilter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleUpdateFilterValueForQueryValue(props);
+  }
+  componentDidUpdate(prevProps) {
+    this.handleUpdateQueryForFilterValueChange(prevProps);
+  }
+  handleUpdateFilterValueForQueryValue = (props) => {
+    const { location, header, handleChangeFilterValue } = props;
+    const { tab } = qs.parse(location.search);
+    const tabOptions = mapHeaderToOptions[header];
+    if (!tabOptions)
+      return;
 
-export default ProposalFilter;
+    const validTabOption = tabOptions.find(op => op.label === tab);
+    if (validTabOption) {
+      handleChangeFilterValue(validTabOption.value);
+    }
+  }
+  handleUpdateQueryForFilterValueChange = (prevProps) => {
+    const { header } = this.props;
+    const filterValueTabHasChanged = prevProps.filterValue !== this.props.filterValue;
+    const tabOptions = mapHeaderToOptions[header];
+    if(!tabOptions)
+      return;
+
+    const selectedOption = tabOptions && tabOptions.find(op => op.value === this.props.filterValue);
+    const optionLabel = selectedOption.label;
+
+    if(filterValueTabHasChanged) {
+      setQueryStringWithoutPageReload(`?tab=${optionLabel}`);
+    }
+  }
+  render() {
+    const { handleChangeFilterValue, header, filterValue, proposalCounts } = this.props;
+    return (
+      mapHeaderToOptions[header] ?
+        <Tabs>
+          {mapHeaderToOptions[header].map((op) => (
+            <Tab
+              key={op.value}
+              title={op.label}
+              count={mapHeaderToCount[header](proposalCounts, op.value)}
+              selected={filterValue === op.value}
+              onTabChange={() => handleChangeFilterValue(op.value)} />
+          ))}
+        </Tabs>
+        : null
+    );
+  }
+}
+
+export default withRouter(ProposalFilter);

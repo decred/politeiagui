@@ -238,3 +238,8 @@ export const formatDate = (date) => {
   const seconds = twoChars(d.getUTCSeconds());
   return `${year}-${month}-${day}-${hours}:${minutes}:${seconds}`;
 };
+
+export const setQueryStringWithoutPageReload = (qs) => {
+  const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + qs;
+  window.history.pushState({ path: newurl }, "", newurl);
+};
