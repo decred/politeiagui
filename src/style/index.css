@@ -1475,6 +1475,10 @@ form div.usertext-body.may-blank-within.md-container {
   margin-right: 5px !important;
 }
 
+.right-margin-10 {
+  margin-right: 10px !important;
+}
+
 .left-margin-5 {
   margin-left: 5px !important;
 }

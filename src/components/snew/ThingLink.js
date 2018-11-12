@@ -172,7 +172,10 @@ class ThingLinkComp extends React.Component {
           <Link className="thumbnail self may-blank" href={url} />
         ) : null}
         <div className="entry unvoted">
-          <span className="title" style={{ display: "flex" }}>
+          <span
+            className="title"
+            style={{ display: "flex", overflow: "visible" }}
+          >
             <Link
               className="title may-blank loggedin"
               href={url}
@@ -189,12 +192,17 @@ class ThingLinkComp extends React.Component {
               </span>
             ) : null}
             <div
-              style={{ flex: "1", display: "flex", justifyContent: "flex-end" }}
+              style={{
+                flex: "1",
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "flex-start"
+              }}
             >
               {isEditable ? (
                 <Link
                   href={`/proposals/${id}/edit`}
-                  className="edit-proposal"
+                  className="edit-proposal right-margin-10"
                   onClick={() => null}
                 >
                   <i className="fa fa-edit right-margin-5" />
@@ -202,13 +210,39 @@ class ThingLinkComp extends React.Component {
                 </Link>
               ) : disableEditButton ? (
                 <Tooltip
+                  wrapperStyle={{ marginRight: "10px" }}
+                  tipStyle={{ top: "20px", fontSize: "14px" }}
                   text="Revoke vote authorization to edit your proposal again."
                   position="bottom"
                 >
-                  <span style={{ color: "#777" }}>
+                  <span style={{ color: "#bbb", cursor: "not-allowed" }}>
                     <i className="fa fa-edit right-margin-5" />
                     Edit
                   </span>
+                </Tooltip>
+              ) : null}
+              {isVetted ? (
+                <Tooltip
+                  tipStyle={{ top: "20px", fontSize: "14px" }}
+                  text="Check this proposal’s content on our GitHub repository. There you can find proposal's metadata and its comments journals."
+                  position="bottom"
+                >
+                  <a
+                    style={{ color: "#777" }}
+                    href={
+                      isTestnet
+                        ? `https://github.com/decred-proposals/testnet3/tree/master/${id}/${version}`
+                        : `https://github.com/decred-proposals/mainnet/tree/master/${id}/${version}`
+                    }
+                    target="_blank"
+                    className="blue-link"
+                    c
+                    rel="noopener noreferrer"
+                    title=""
+                  >
+                    <i className="fa fa-github right-margin-5" />
+                    See on GitHub
+                  </a>
                 </Tooltip>
               ) : null}
             </div>
@@ -452,31 +486,6 @@ class ThingLinkComp extends React.Component {
                 permalink
               </Link>
             </li>
-            {isVetted ? (
-              <Tooltip
-                wrapperStyle={{ padding: "5px" }}
-                tipStyle={{ bottom: "30px", right: "10px" }}
-                text="Check this proposal’s content on our GitHub repository. There you can find proposal's metadata and its comments journals."
-                position="top"
-              >
-                <li>
-                  <a
-                    href={
-                      isTestnet
-                        ? `https://github.com/decred-proposals/testnet3/tree/master/${id}/${version}`
-                        : `https://github.com/decred-proposals/mainnet/tree/master/${id}/${version}`
-                    }
-                    target="_blank"
-                    className="blue-link"
-                    rel="noopener noreferrer"
-                    title=""
-                  >
-                    <i className="fa fa-github right-margin-5" />
-                    See on GitHub
-                  </a>
-                </li>
-              </Tooltip>
-            ) : null}
           </ul>
           {allErrors.map((error, idx) =>
             error ? (
