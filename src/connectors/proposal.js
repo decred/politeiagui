@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { bindActionCreators } from "redux";
@@ -53,7 +53,7 @@ const proposalConnector = connect(
     )
 );
 
-class Wrapper extends Component {
+class Wrapper extends React.PureComponent {
   componentDidMount() {
     this.props.onSetReplyParent();
   }

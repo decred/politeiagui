@@ -236,9 +236,7 @@ class ThingLinkComp extends React.Component {
                     }
                     target="_blank"
                     className="blue-link"
-                    c
                     rel="noopener noreferrer"
-                    title=""
                   >
                     <i className="fa fa-github right-margin-5" />
                     See on GitHub

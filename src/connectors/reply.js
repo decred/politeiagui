@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import * as act from "../actions";
 import * as sel from "../selectors";
 import get from "lodash/fp/get";
@@ -38,7 +38,7 @@ const replyConnector = connect(
   }
 );
 
-class Wrapper extends Component {
+class Wrapper extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
