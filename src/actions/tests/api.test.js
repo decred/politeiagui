@@ -941,13 +941,13 @@ describe("test api actions (actions/api.js)", () => {
     );
   });
 
-  test("on edit user action", async () => {
+  test("on manage user action", async () => {
     const path = "/api/v1/user/manage";
 
     //test it handles a successful response
     await assertApiActionOnSuccess(
       path,
-      api.onEditUser,
+      api.onManageUser,
       [FAKE_USER.id, MANAGE_USER_CLEAR_USER_PAYWALL],
       [
         {
