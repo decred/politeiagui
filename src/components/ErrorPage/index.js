@@ -1,16 +1,21 @@
 import React, { Component } from "react";
 import { autobind } from "core-decorators";
 import InternalServerErrorMessage from "./InternalServerErrorMessage";
+import apiErrorConnector from "../../connectors/apiError";
 
 class ErrorPage extends Component {
+  componentDidMount() {
+    const { apiError, history } = this.props;
+    if (!apiError) {
+      history.push("/");
+    }
+  }
   render() {
-    const params =
-      this.props.location && new URLSearchParams(this.props.location.search);
-    const error = params.get("error");
-    return <InternalServerErrorMessage error={error} />;
+    const { apiError } = this.props;
+    return <InternalServerErrorMessage error={apiError && apiError.message} />;
   }
 }
 
 autobind(ErrorPage);
 
-export default ErrorPage;
+export default apiErrorConnector(ErrorPage);
