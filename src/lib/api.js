@@ -207,14 +207,10 @@ export const userProposalCredits = () =>
   GET("/v1/user/proposals/credits").then(getResponse);
 
 export const editUser = (csrf, {
-  myproposalnotifications,
-  regularproposalnotifications,
-  adminproposalnotifications
+  proposalemailnotifications
 }) =>
   POST("/user/edit", csrf, {
-    myproposalnotifications,
-    regularproposalnotifications,
-    adminproposalnotifications
+    proposalemailnotifications
   }).then(getResponse);
 
 export const manageUser = (csrf, userid, action, reason) =>
