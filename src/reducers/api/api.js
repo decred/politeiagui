@@ -238,17 +238,7 @@ const api = (state = DEFAULT_STATE, action) =>
           rescanUserPayments: DEFAULT_REQUEST_STATE
         };
       }
-      return {
-        ...state,
-        logout: {
-          ...state.logout,
-          response: null,
-          isRequesting: false,
-          error: {
-            message: "Log out failed"
-          }
-        }
-      };
+      return receive("logout", state, action);
     }
   }[action.type] || (() => state))());
 

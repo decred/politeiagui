@@ -7,11 +7,6 @@ import Link from "./Link";
 import ProposalCreditsIndicator from "../ProposalCreditsManager/ProposalCreditsIndicator";
 
 class UserInfo extends React.Component {
-  componentDidUpdate(prevProps) {
-    if (!prevProps.error && this.props.error) {
-      this.props.history.push(`/500?error=${this.props.error.message}`);
-    }
-  }
   render() {
     const {
       history,
@@ -59,7 +54,10 @@ class UserInfo extends React.Component {
                   </li>
                   <li
                     className="dropdown-list-item logout-button"
-                    onClick={() => onLogout(() => history.push("/user/logout"))}
+                    onClick={() => {
+                      history.push("/user/logout");
+                      onLogout();
+                    }}
                   >
                     <form className="logout hover" />
                     Log out
