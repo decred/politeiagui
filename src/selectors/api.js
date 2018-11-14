@@ -220,7 +220,7 @@ export const apiPasswordResetError = or(
   getApiError("passwordReset")
 );
 export const apiLoginError = or(apiInitError, getApiError("login"));
-export const apiLogoutError = or(apiInitError, getApiError("logout"));
+export const apiLogoutError = getApiError("logout");
 export const apiUserSearchError = getApiError("userSearch");
 const apiVettedError = getApiError("vetted");
 const apiUserProposalsError = getApiError("userProposals");
