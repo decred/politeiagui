@@ -9,13 +9,12 @@ const FAKE_PAYWALL = {
 };
 
 const FAKE_PUBKEY = "fake_pub_key";
-const FAKE_CSRF   = "fake_csrf_token";
-const FAKE_TOKEN  = "fake_token";
+const FAKE_CSRF = "fake_csrf_token";
+const FAKE_TOKEN = "fake_token";
 
 const MOCK_USER_PROPS = [
   {
-    name:
-      "Proposal to mitigate risks regarding identity theft and forgery",
+    name: "Proposal to mitigate risks regarding identity theft and forgery",
     status: 2,
     numcomments: 3,
     timestamp: 1505940194,
@@ -73,18 +72,22 @@ export const MOCK_STATE = {
     },
     userProposalCredits: {
       response: {
-        spentcredits: [{
-          txid: "fake_txid",
-          paywallid: "fake_paywallid",
-          price: 200000000,
-          datepurchased: "fake_date"
-        }],
-        unspentcredits: [{
-          txid: "fake_txid2",
-          paywallid: "fake_paywallid2",
-          price: 400000000,
-          datepurchased: "fake_date2"
-        }]
+        spentcredits: [
+          {
+            txid: "fake_txid",
+            paywallid: "fake_paywallid",
+            price: 200000000,
+            datepurchased: "fake_date"
+          }
+        ],
+        unspentcredits: [
+          {
+            txid: "fake_txid2",
+            paywallid: "fake_paywallid2",
+            price: 400000000,
+            datepurchased: "fake_date2"
+          }
+        ]
       }
     },
     me: {
@@ -206,7 +209,7 @@ export const MOCK_STATE = {
       payload: {
         name: "fake_proposal_name",
         description: "fake_proposal_desc",
-        files: [ "file1", "file2" ]
+        files: ["file1", "file2"]
       },
       response: {
         censorshiprecord: {
@@ -225,10 +228,12 @@ export const MOCK_STATE = {
           isMarkdown: true,
           userid: 2,
           username: "fake_username",
-          files: [{
-            name: "index.md",
-            payload: window.btoa("proposal's coded payload")
-          }],
+          files: [
+            {
+              name: "index.md",
+              payload: window.btoa("proposal's coded payload")
+            }
+          ],
           censorshiprecord: {
             token: FAKE_TOKEN
           }
@@ -258,27 +263,34 @@ export const MOCK_STATE = {
     },
     proposalVoteStatus: {
       response: {
-        token: "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8"
+        token:
+          "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8"
       }
     },
     proposalsVoteStatus: {
       response: {
-        votesstatus: [ {
-          token: "fake_token"
-        }, {
-          token: "fake_token2"
-        } ]
+        votesstatus: [
+          {
+            token: "fake_token"
+          },
+          {
+            token: "fake_token2"
+          }
+        ]
       }
     },
     proposalComments: {
       response: {
-        comments: [ {
-          text: "comment",
-          userid: 2
-        }, {
-          text: "comment2",
-          userid: 3
-        } ]
+        comments: [
+          {
+            text: "comment",
+            userid: 2
+          },
+          {
+            text: "comment2",
+            userid: 3
+          }
+        ]
       }
     },
     resendVerificationEmail: {
@@ -298,7 +310,7 @@ export const MOCK_STATE = {
     pollingCreditsPayment: false,
     identityImportResult: {
       errorMsg: "invalid identity",
-      successMsg: "successfull identity"
+      successMsg: "successful identity"
     },
     draftProposals: {
       newDraft: {

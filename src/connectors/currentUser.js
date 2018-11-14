@@ -13,12 +13,18 @@ const currentUserConnector = connect(
     userCanExecuteActions: sel.userCanExecuteActions,
     proposalCredits: sel.proposalCredits,
     lastLoginTime: sel.lastLoginTimeFromMeResponse,
-    sessionMaxAge: sel.sessionMaxAge
+    sessionMaxAge: sel.sessionMaxAge,
+    loggedInAsUserId: sel.userid
   }),
-  dispatch => bindActionCreators({
-    onLogout: act.onLogout,
-    openModal: act.openModal
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        onLogout: act.onLogout,
+        handleLogout: act.handleLogout,
+        openModal: act.openModal
+      },
+      dispatch
+    )
 );
 
 export default currentUserConnector;

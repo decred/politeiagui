@@ -12,19 +12,17 @@ class InternalServerErrorMessage extends Component {
             header="Internal server error"
             children={
               <div>
-                {error && (
-                  <p>
-                    {error}
-                  </p>
-                )}
+                {error && <p>{error}</p>}
                 <p>
-                  You can try reloading the page. If the error persists, please try again in a few minutes.
+                  You can try reloading the page. If the error persists, please
+                  try again in a few minutes.
                 </p>
-                <button onClick={() => window.location.href = "/"}>
+                <button onClick={() => (window.location.href = "/")}>
                   Back to Home
                 </button>
               </div>
-            } />
+            }
+          />
         </div>
       </div>
     );

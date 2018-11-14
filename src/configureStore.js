@@ -11,31 +11,27 @@ const configureStore = preloadedState => {
       {
         ...loadStateLocalStorage,
         ...preloadedState
-      }
-      ,
+      },
       compose(applyMiddleware(thunkMiddleware))
     );
   } else {
+    const composeEnhancers =
+      typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+        ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+            // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+          })
+        : compose;
     const loggerMiddleware = createLogger();
 
-    const composeEnhancers =
-    typeof window === "object" &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
-      window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-        // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
-      }) : compose;
+    const middlewares = [
+      thunkMiddleware,
+      process.env.REACT_APP_USE_REDUX_LOGGER && loggerMiddleware
+    ].filter(Boolean);
 
     return createStore(
       rootReducer,
-      {
-        ...loadStateLocalStorage,
-        ...preloadedState
-      }
-      ,
-      composeEnhancers(applyMiddleware(
-        thunkMiddleware,
-        loggerMiddleware
-      ))
+      { ...loadStateLocalStorage, ...preloadedState },
+      composeEnhancers(applyMiddleware(...middlewares))
     );
   }
 };

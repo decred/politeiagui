@@ -4,13 +4,12 @@ import util from "tweetnacl-util";
 import nacl from "tweetnacl";
 
 describe("Key pair generation and storage handlers (lib/pki.js)", () => {
-
   test("converts an object/array/string to hex representation as a string", () => {
-    expect(pki.toHex([ 4, 34, 54 ])).toBe("042236");
+    expect(pki.toHex([4, 34, 54])).toBe("042236");
   });
 
   test("converts a string to a byte array", () => {
-    expect(pki.toByteArray("042236")).toEqual(new Uint8Array([ 4, 34, 54 ]));
+    expect(pki.toByteArray("042236")).toEqual(new Uint8Array([4, 34, 54]));
   });
 
   test("converts and object to a uint8Array", () => {
@@ -19,7 +18,7 @@ describe("Key pair generation and storage handlers (lib/pki.js)", () => {
       1: 126,
       2: 328
     };
-    const uint8 = Uint8Array.from([ 234, 126, 328 ]);
+    const uint8 = Uint8Array.from([234, 126, 328]);
     expect(pki.toUint8Array(obj)).toEqual(uint8);
     //test it doesn't change an already Uint8array object
     expect(pki.toUint8Array(uint8)).toEqual(uint8);
@@ -53,7 +52,11 @@ describe("Key pair generation and storage handlers (lib/pki.js)", () => {
     await pki.loadKeys(EMAIL, keys);
     const pubKey = await pki.myPublicKey(EMAIL);
     const signature = await pki.signString(EMAIL, MSG);
-    const verification = await pki.verify(util.decodeUTF8(MSG), signature, pubKey);
+    const verification = await pki.verify(
+      util.decodeUTF8(MSG),
+      signature,
+      pubKey
+    );
     expect(verification).toBe(true);
   });
 
@@ -66,7 +69,7 @@ describe("Key pair generation and storage handlers (lib/pki.js)", () => {
     expect(keysSaved).toBeTruthy();
   });
 
-  test("return falsy for a not found key",  async () => {
+  test("return falsy for a not found key", async () => {
     expect.assertions(1);
     const UNEXISTENT_EMAIL = "a@a.com";
     const keys = await pki.existing(UNEXISTENT_EMAIL);

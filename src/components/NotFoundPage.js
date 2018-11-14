@@ -7,7 +7,8 @@ const NotFoundPage = () => (
       <Message
         type="error"
         header="Page not found"
-        body="The requested page does not exist." />
+        body="The requested page does not exist."
+      />
     </div>
   </div>
 );

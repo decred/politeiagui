@@ -1,13 +1,22 @@
-import { NETWORK } from "../constants";
+import { TESTNET, MAINNET, EXPLORER } from "../constants";
 
-const dcrdataURL = (network) => `https://${network}.dcrdata.org/api`;
-const insightURL = (network) => `https://${network}.decred.org/api`;
+const getSubdomainForDcrdata = isTestnet => (isTestnet ? TESTNET : EXPLORER);
+const getSubdomainForInsight = isTestnet => (isTestnet ? TESTNET : MAINNET);
 
-const dcrddataBlockHeightURL = network => `${dcrdataURL(network)}/block/best/height`;
-const insightBlockHeightURL = network => `${insightURL(network)}/status`;
+const dcrdataURL = isTestnet =>
+  `https://${getSubdomainForDcrdata(isTestnet)}.dcrdata.org/api`;
+const insightURL = isTestnet =>
+  `https://${getSubdomainForInsight(isTestnet)}.decred.org/api`;
 
-const dcrdataAddressURL = (network, address) => `${dcrdataURL(network)}/address/${address}/raw`;
-const insightAddressURL = (network, address) => `${insightURL(network)}/addr/${address}/utxo?noCache=1`;
+export const dcrddataBlockHeightURL = isTestnet =>
+  `${dcrdataURL(isTestnet)}/block/best/height`;
+export const insightBlockHeightURL = isTestnet =>
+  `${insightURL(isTestnet)}/status`;
+
+const dcrdataAddressURL = (isTestnet, address) =>
+  `${dcrdataURL(isTestnet)}/address/${address}/raw`;
+const insightAddressURL = (isTestnet, address) =>
+  `${insightURL(isTestnet)}/addr/${address}/utxo?noCache=1`;
 const FAUCET_URL = "https://faucet.decred.org/requestfaucet";
 
 const POST = (path, params, method = "POST") => {
@@ -35,34 +44,31 @@ const POST = (path, params, method = "POST") => {
 };
 
 const getRawTransactions = url => {
-  return fetch(url)
-    .then(r => {
-      // work around when transactions are not paid and dcrdata api returns Unprocessable Entity
-      if (r.statusText === "Unprocessable Entity") {
-        return null;
-      }
-      return r.json();
-    });
+  return fetch(url).then(r => {
+    // work around when transactions are not paid and dcrdata api returns Unprocessable Entity
+    if (r.statusText === "Unprocessable Entity") {
+      return null;
+    }
+    return r.json();
+  });
 };
 
-export const getHeightByDcrdata = (network = NETWORK) => {
-  network = network === "testnet" ? "testnet" : "explorer";
-  return getRawTransactions(dcrddataBlockHeightURL(network));
-};
+const addressFromTestnet = addr => addr[0] === "T";
 
-export const getHeightByInsight = (network = NETWORK) => {
-  network = network === "testnet" ? "testnet" : "mainnet";
-  return getRawTransactions(insightBlockHeightURL(network));
-};
+export const getHeightByDcrdata = isTestnet =>
+  getRawTransactions(dcrddataBlockHeightURL(isTestnet));
+
+export const getHeightByInsight = isTestnet =>
+  getRawTransactions(insightBlockHeightURL(isTestnet));
 
 export const getPaymentsByAddressDcrdata = address => {
-  const network = address[0] === "T" ? "testnet" : "explorer";
-  return getRawTransactions(dcrdataAddressURL(network, address));
+  const isTestnet = addressFromTestnet(address);
+  return getRawTransactions(dcrdataAddressURL(isTestnet, address));
 };
 
 export const getPaymentsByAddressInsight = address => {
-  const network = address[0] === "T" ? "testnet" : "mainnet";
-  return getRawTransactions(insightAddressURL(network, address));
+  const isTestnet = addressFromTestnet(address);
+  return getRawTransactions(insightAddressURL(isTestnet, address));
 };
 
 export const payWithFaucet = (address, amount) => {

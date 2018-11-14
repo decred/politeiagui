@@ -5,8 +5,8 @@ import {
   assertPOSTOnRouteIsCalled
 } from "./support/helpers";
 describe("test external api lib (lib/api.js)", () => {
-  const FAKE_TESTNET_ADDRESS = "T_fake_adress";
-  const FAKE_MAINNET_ADDRESS = "M_fake_adress";
+  const FAKE_TESTNET_ADDRESS = "T_fake_address";
+  const FAKE_MAINNET_ADDRESS = "M_fake_address";
   const dcrdataTestnetUrl = "https://testnet.dcrdata.org/api";
   const dcrdataExplorerUrl = "https://explorer.dcrdata.org/api";
   const insightTestnetUrl = "https://testnet.decred.org/api";
@@ -17,7 +17,7 @@ describe("test external api lib (lib/api.js)", () => {
     await assertGETOnRouteIsCalled(
       `${dcrdataTestnetUrl}/block/best/height`,
       ea.getHeightByDcrdata,
-      []
+      [true]
     );
     // console.log(fetchMock.spy());
     await assertGETOnRouteIsCalled(
@@ -31,7 +31,7 @@ describe("test external api lib (lib/api.js)", () => {
     await assertGETOnRouteIsCalled(
       `${insightTestnetUrl}/status`,
       ea.getHeightByInsight,
-      []
+      [true]
     );
     await assertGETOnRouteIsCalled(
       `${insightMainnetUrl}/status`,
@@ -68,10 +68,9 @@ describe("test external api lib (lib/api.js)", () => {
   });
 
   test("pay with faucet", async () => {
-    await assertPOSTOnRouteIsCalled(
-      faucetUrl,
-      ea.payWithFaucet,
-      [ FAKE_TESTNET_ADDRESS, 10 ]
-    );
+    await assertPOSTOnRouteIsCalled(faucetUrl, ea.payWithFaucet, [
+      FAKE_TESTNET_ADDRESS,
+      10
+    ]);
   });
 });

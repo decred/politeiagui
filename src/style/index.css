@@ -3,6 +3,10 @@
   text-transform: none !important;
 }
 
+.download-link:hover {
+  text-decoration: unset;
+}
+
 .submit-page #header-bottom-left,
 #header-bottom-left {
   height: 72px;
@@ -302,6 +306,9 @@ a:hover, a:focus {
 }
 
 .change-password-form,
+.change-username-form {
+	padding: 1em;
+}
 .resend-verification-form,
 .forgotten-password-form,
 .reset-password-form {
@@ -331,11 +338,10 @@ a:hover, a:focus {
 }
 .message-icon {
   min-width: 64px;
-  line-height: 62px;
   font-size: 24px;
   color: #ffffff;
   display: flex;
-  align-items: start;
+  align-items: center;
   justify-content: center;
 }
 .message-text {
@@ -347,7 +353,6 @@ a:hover, a:focus {
 .message-header {
   font-size: 18px;
   vertical-align: middle;
-  margin-bottom: 8px;
 }
 .message-body {
   vertical-align: middle;
@@ -647,6 +652,8 @@ li p.header-3 {
 .private-key-identity>a,
 .private-key-identity>div {
   float: left;
+  margin-left: 5em;
+  display: flex;
 }
 .private-key-identity .react-file-reader {
   margin-top: 0px;
@@ -1303,6 +1310,10 @@ li p.header-3 {
 	width: 40% !important;
   text-align: center;
 }
+
+.credit-purchase-type {
+  text-align: center;
+}
 .credit-purchase-price {
   text-align: center;
 }
@@ -1344,11 +1355,16 @@ li p.header-3 {
 }
 .user-page .detail-form .field .field-label {
   float: left;
-  text-align: right;
   width: 160px;
+  font-size: 1.05em;
   margin-right: 4px;
   color: #777;
 }
+
+.user-page .detail-form .ident-value {
+  margin-left: 164px; /* field-label width + margin-right */
+}
+
 .user-page .detail-form .field .field-value {
   float: left;
   width: 600px;
@@ -1459,6 +1475,10 @@ form div.usertext-body.may-blank-within.md-container {
   margin-right: 5px !important;
 }
 
+.right-margin-10 {
+  margin-right: 10px !important;
+}
+
 .left-margin-5 {
   margin-left: 5px !important;
 }
@@ -1479,14 +1499,17 @@ form div.usertext-body.may-blank-within.md-container {
   float: right;
 }
 
-.comment > .entry > .usertext {
-	max-height: 500px;
+/* Max height is (line-height * 25)  */
+.entry > .usertext {
+	max-height: 35.71428575em;
 	overflow: hidden;
 }
 
+/* Max height is (line-height * 25)  */
 .collapsed {
-	max-height: 500px;
+	max-height: 35.71428575em;
 	overflow: hidden;
+	margin-bottom: 7.5px;
 }
 
 .expanded {
@@ -1560,10 +1583,10 @@ form div.usertext-body.may-blank-within.md-container {
   line-height: 30px;
   -moz-border-radius: 15px;
   border-radius: 15px;
-  background-color: #FFF;    
+  background-color: #FFF;
   color: #c0c0c0;
   text-align: center;
-  animation: blinkingText 2s infinite;  
+  animation: blinkingText 2s infinite;
 }
 .roundbadge-grey.hollow {
   display: inline-block;
@@ -1572,7 +1595,7 @@ form div.usertext-body.may-blank-within.md-container {
   line-height: 30px;
   -moz-border-radius: 15px;
   border-radius: 15px;
-  background-color: #FFF;    
+  background-color: #FFF;
   color: rgb(206, 206, 206);
   text-align: center;
   -webkit-box-shadow: 0px 0px 0px 2px rgb(206, 206, 206);
@@ -1595,10 +1618,10 @@ form div.usertext-body.may-blank-within.md-container {
   line-height: 30px;
   -moz-border-radius: 15px;
   border-radius: 15px;
-  background-color: #FFF;    
+  background-color: #FFF;
   color: #c98301;
   text-align: center;
-  animation: blinkingTextWaiting 2s infinite;  
+  animation: blinkingTextWaiting 2s infinite;
 }
 .roundbadge-waiting.hollow {
   display: inline-block;
@@ -1607,7 +1630,7 @@ form div.usertext-body.may-blank-within.md-container {
   line-height: 30px;
   -moz-border-radius: 15px;
   border-radius: 15px;
-  background-color: #FFF;    
+  background-color: #FFF;
   color: #c98301;
   text-align: center;
   -webkit-box-shadow: 0px 0px 0px 2px #c98301;
@@ -1622,7 +1645,7 @@ form div.usertext-body.may-blank-within.md-container {
   line-height: 30px;
   -moz-border-radius: 15px;
   border-radius: 15px;
-  background-color: #FFF;    
+  background-color: #FFF;
   color: #091440;
   text-align: center;
 }
@@ -1633,10 +1656,103 @@ form div.usertext-body.may-blank-within.md-container {
   line-height: 30px;
   -moz-border-radius: 15px;
   border-radius: 15px;
-  background-color: #FFF;    
+  background-color: #FFF;
   color: #091440;
   text-align: center;
   -webkit-box-shadow: 0px 0px 0px 2px #091440;
   -moz-box-shadow: 0px 0px 0px 2px #091440;
   box-shadow: 0px 0px 0px 2px #091440;
+}
+
+.user-search-results h3 {
+  text-align: center;
+}
+
+.user-search-results table {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 900px;
+  margin-top: 10px;
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+.user-search-results th {
+  font-weight: 600;
+  height: 50px;
+  padding: 5px;
+}
+
+.user-search-results td {
+  padding: 10px 5px;
+}
+
+.user-search-results td, .user-search-results th {
+  text-align: center;
+  border: 1px solid black;
+}
+
+.f-radio {
+  display: flex;
+}
+
+.f-radio label {
+  border: 1px solid white;
+  background: #dcdcdc;
+  color: #0079d3;
+  cursor: pointer;
+  border-left: 0px;
+  padding: 8px 10px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.f-radio label:hover{
+  background: #e9e9e9;
+}
+
+.f-radio label.first {
+  border-left: 1px solid white;
+  border-radius: 8px 0 0 8px;
+}
+
+.f-radio label.last, .f-radio label.last.selected {
+  border-radius: 0 8px 8px 0;
+}
+
+.f-radio label.selected {
+  background: #0079d3;
+  color: white;
+}
+
+.staging-alert {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 1px;
+  font-weight: bold;
+  background: #bf4153;
+  color: white;
+  z-index: 99999;
+  text-align: center;
+}
+
+.collapse-icon-button {
+  background: #bcbcbc;
+  margin: 4px 16px 4px 0;
+  padding: 0 6px;
+  height: 22px;
+  line-height: 22px;
+}
+
+.collapse-icon-button:hover {
+  background: #909090;
+}
+
+.collapse-icon-button:active {
+  background: #909090;
+}
+
+.monospace {
+  font-family: monospace;
 }

@@ -7,6 +7,7 @@ import { LIST_HEADER_UNVETTED } from "../constants";
 export default connect(
   sel.selectorMap({
     proposals: sel.getUnvettedFilteredProposals,
+    showLookUp: () => true,
     proposalCounts: sel.getUnvettedProposalFilterCounts,
     error: sel.unvettedProposalsError,
     isLoading: or(sel.unvettedProposalsIsRequesting),

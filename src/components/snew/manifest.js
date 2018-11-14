@@ -29,8 +29,6 @@ export const SubmitLinkSidebox = Blank;
 export { default as SubmitTextSidebox } from "./SubmitTextSidebox";
 export { default as Subreddit } from "./Subreddit";
 export { default as Thing } from "./Thing";
-export { default as Timestamp } from "./Timestamp";
 export { default as ThingComment } from "./ThingComment";
 export { default as ThingLink } from "./ThingLink";
 export { default as UserInfo } from "./UserInfo";
-

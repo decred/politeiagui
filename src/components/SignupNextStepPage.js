@@ -2,10 +2,14 @@ import React from "react";
 import signupNext from "../connectors/signupNext";
 
 class SignupNextStepPage extends React.Component {
-  componentDidMount () {
+  componentDidMount() {
     const { isTestnet, email, verificationToken, history } = this.props;
     if (isTestnet && email && verificationToken) {
-      history.push(`/user/verify?email=${encodeURIComponent(email)}&verificationtoken=${verificationToken}`);
+      history.push(
+        `/user/verify?email=${encodeURIComponent(
+          email
+        )}&verificationtoken=${verificationToken}`
+      );
     }
   }
 
@@ -13,23 +17,27 @@ class SignupNextStepPage extends React.Component {
     this.props.onResetNewUser();
   }
 
-  render () {
+  render() {
     const { email } = this.props;
     return (
-      <div className="content page signup-next-step-page" role="main" style={{ minHeight: "calc(100vh - 350px)" }}>
+      <div
+        className="content page signup-next-step-page"
+        role="main"
+        style={{ minHeight: "calc(100vh - 350px)" }}
+      >
         <div className="text-wrapper">
           <div className="centered">
             <h3>Please check your inbox to verify your registration.</h3>
             <p>
-              Note that, for privacy reasons, Politeia does not disclose whether an
-              email address has already been registered. If you don't receive an
-              email:
+              Note that, for privacy reasons, Politeia does not disclose whether
+              an email address has already been registered. If you don't receive
+              an email:
             </p>
             <ul>
               {email ? (
                 <li>
-                  Check that <span className="email-address">{email}</span> is the
-                  correct address.
+                  Check that <span className="email-address">{email}</span> is
+                  the correct address.
                 </li>
               ) : null}
               <li>Check your spam folder!</li>
@@ -38,8 +46,8 @@ class SignupNextStepPage extends React.Component {
                 that you used to sign up.
               </li>
               <li>
-                Make sure you don't already have an account on Politeia with this
-                email address. If you do, you should{" "}
+                Make sure you don't already have an account on Politeia with
+                this email address. If you do, you should{" "}
                 <a href="/password">reset your account</a> instead.
               </li>
             </ul>

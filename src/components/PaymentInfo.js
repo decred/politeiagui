@@ -30,7 +30,9 @@ const PaymentPanel = ({
 }) => {
   const waitingPaymentContent = (
     <React.Fragment>
-      <span className="payment-panel__label">Send this exact amount of DCR: <b>{amount}</b></span>
+      <span className="payment-panel__label">
+        Send this exact amount of DCR: <b>{amount}</b>
+      </span>
       <div style={{ display: "flex", alignItems: "center" }}>
         <span className="payment-panel__label">To this address: </span>
         <div className="address-viewer">
@@ -39,14 +41,19 @@ const PaymentPanel = ({
           </span>
           <div className="address-viewer_menu">
             <Tooltip
-              tipStyle={{ fontSize: "11px", top: "20px", left: "20px", width: "100px" }}
+              tipStyle={{
+                fontSize: "11px",
+                top: "20px",
+                left: "20px",
+                width: "100px"
+              }}
               text="Copy address to clipboard"
               position="bottom"
             >
               <span
                 className="address-viewer_menu_option fa fa-copy"
                 onClick={() => copyToClipboard(paywallAddress)}
-              ></span>
+              />
             </Tooltip>
           </div>
         </div>
@@ -59,13 +66,17 @@ const PaymentPanel = ({
 
   const lackingConfirmationsContent = (
     <React.Fragment>
-      <span className="payment-panel__label">Transaction: <DcrdataTxLink isTestnet={isTestnet} txId={paywallTxid} /></span>
+      <span className="payment-panel__label">
+        Transaction: <DcrdataTxLink isTestnet={isTestnet} txId={paywallTxid} />
+      </span>
     </React.Fragment>
   );
 
   return (
     <div className="payment-panel">
-      {paywallStatus === PAYWALL_STATUS_LACKING_CONFIRMATIONS ? lackingConfirmationsContent : waitingPaymentContent}
+      {paywallStatus === PAYWALL_STATUS_LACKING_CONFIRMATIONS
+        ? lackingConfirmationsContent
+        : waitingPaymentContent}
       <div style={centralizeStyle}>
         <Status
           userPaywallStatus={paywallStatus}

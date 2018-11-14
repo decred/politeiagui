@@ -16,14 +16,17 @@ const Message = ({
   };
   const icon = mapTypeToIcon[type] ? mapTypeToIcon[type] : mapTypeToIcon.error;
 
-  if(className) {
+  if (className) {
     className = " " + className;
   } else {
     className = "";
   }
 
   return (
-    <div className={"message-ct message-" + type + className} style={{ height: height }}>
+    <div
+      className={"message-ct message-" + type + className}
+      style={{ height: height }}
+    >
       <div className="message-icon" style={{ lineHeight: height }}>
         {icon}
       </div>
@@ -32,13 +35,13 @@ const Message = ({
         <div className="message-body">
           {body ? (
             <span style={{ whiteSpace: "pre-wrap" }}>
-              {(body instanceof Error) ? body.message : body }
+              {body instanceof Error ? body.message : body}
             </span>
           ) : null}
           {children ? children : null}
         </div>
       </div>
-      {onDismissClick &&
+      {onDismissClick && (
         <span style={{ padding: "10px" }}>
           <span
             style={{
@@ -47,10 +50,10 @@ const Message = ({
             }}
             onClick={onDismissClick}
           >
-              ✖
+            ✖
           </span>
         </span>
-      }
+      )}
     </div>
   );
 };

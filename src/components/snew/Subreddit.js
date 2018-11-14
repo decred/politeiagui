@@ -4,9 +4,12 @@ import { Switch, Route, withRouter } from "react-router-dom";
 import routeChangeConnector from "../../connectors/routeChange";
 import { loadStateLocalStorage } from "../../lib/local_storage";
 
-
-const noSidebar = (p1) => (p2) => <Subreddit {...{ ...p2, ...p1 }} useSidebar={false} />;
-const withSidebar = (p1) => (p2) => <Subreddit {...{ ...p2, ...p1 }} useSidebar={true} />;
+const noSidebar = p1 => p2 => (
+  <Subreddit {...{ ...p2, ...p1 }} useSidebar={false} />
+);
+const withSidebar = p1 => p2 => (
+  <Subreddit {...{ ...p2, ...p1 }} useSidebar={true} />
+);
 
 class CustomSubreddit extends Component {
   componentDidUpdate(prevProps) {
@@ -15,7 +18,11 @@ class CustomSubreddit extends Component {
       window.scrollTo(0, 0);
     }
     const stateFromLocalStorage = loadStateLocalStorage();
-    if (stateFromLocalStorage && stateFromLocalStorage.api && stateFromLocalStorage.api.me) {
+    if (
+      stateFromLocalStorage &&
+      stateFromLocalStorage.api &&
+      stateFromLocalStorage.api.me
+    ) {
       this.props.onLoadMe(stateFromLocalStorage.api.me);
     }
   }
@@ -32,4 +39,3 @@ class CustomSubreddit extends Component {
 }
 
 export default withRouter(routeChangeConnector(CustomSubreddit));
-

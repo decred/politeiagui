@@ -4,54 +4,52 @@ import { applyMistakeFinders, getPreviewContent } from "./helpers";
 import Message from "../Message";
 
 class MarkdownLiveHelper extends React.Component {
-    interval = null
+  interval = null;
 
-    constructor(props) {
-      super(props);
-      this.state = {
-        show: false,
-        findersResults: []
-      };
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      show: false,
+      findersResults: []
+    };
+  }
 
-    componentDidMount() {
-      this.interval = setInterval(() => {
-        this.lookForMistakes();
-      }, 1000);
-    }
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      this.lookForMistakes();
+    }, 1000);
+  }
 
-    componentWillUnmount() {
-      clearInterval(this.interval);
-    }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
 
-    lookForMistakes = () => {
-      const { classToSelect } = this.props;
-      const value = getPreviewContent(classToSelect);
-      const { findersResults, anyMistake } = applyMistakeFinders(value);
-      this.setState({
-        show: anyMistake,
-        findersResults
-      });
-    }
+  lookForMistakes = () => {
+    const { classToSelect } = this.props;
+    const value = getPreviewContent(classToSelect);
+    const { findersResults, anyMistake } = applyMistakeFinders(value);
+    this.setState({
+      show: anyMistake,
+      findersResults
+    });
+  };
 
-    renderMessages = (findersResults) => {
-      return (
-        <ul style={{ paddingLeft: "20px" }}>
-          {
-            findersResults.map((result, i) =>
-              <li key={`rm-${i}`}>{result.message}</li>
-            )
-          }
-        </ul>
-      );
-    }
+  renderMessages = findersResults => {
+    return (
+      <ul style={{ paddingLeft: "20px" }}>
+        {findersResults.map((result, i) => (
+          <li key={`rm-${i}`}>{result.message}</li>
+        ))}
+      </ul>
+    );
+  };
 
-    render() {
-      const { show, findersResults } = this.state;
-      return show ? (
-        <Message body={this.renderMessages(findersResults)} type="info" />
-      ) : null;
-    }
+  render() {
+    const { show, findersResults } = this.state;
+    return show ? (
+      <Message body={this.renderMessages(findersResults)} type="info" />
+    ) : null;
+  }
 }
 
 MarkdownLiveHelper.propTypes = {

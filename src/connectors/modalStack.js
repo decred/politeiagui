@@ -7,7 +7,11 @@ export default connect(
   sel.selectorMap({
     openedModals: sel.getopenedModals
   }),
-  dispatch => bindActionCreators({
-    closeModal: act.closeModal
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        closeModal: act.closeModal
+      },
+      dispatch
+    )
 );

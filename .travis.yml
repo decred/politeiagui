@@ -10,7 +10,8 @@ addons:
       - google-chrome-stable
 language: node_js
 node_js:
-  - 10.12.0
+  - 10.13.0
+cache: yarn
 install:
   - yarn install
 before_script:

@@ -5,7 +5,9 @@ import { redirectedFrom } from "../actions/api";
 const requireLoginConnector = connect(
   sel.selectorMap({
     loggedInAsEmail: sel.loggedInAsEmail,
-    isAdmin: sel.isAdmin
+    isAdmin: sel.isAdmin,
+    apiMeResponse: sel.apiMeResponse,
+    apiLoginResponse: sel.apiLoginResponse
   }),
   { redirectedFrom }
 );

@@ -7,7 +7,6 @@ import Message from "../Message";
 import validate from "../../validators/password-change";
 
 class ChangePassword extends Component {
-
   componentDidMount() {
     this.props.policy || this.props.onFetchData();
   }
@@ -17,21 +16,23 @@ class ChangePassword extends Component {
 
     validate(props, policy);
 
-    return this.props.onChangePassword(props)
-      .catch((error) => {
-        throw new SubmissionError({
-          _error: error.message
-        });
+    return this.props.onChangePassword(props).catch(error => {
+      throw new SubmissionError({
+        _error: error.message
       });
+    });
   }
 
   render() {
     return (
       <div>
-        {this.props.changePasswordResponse && <Message
-          type="success"
-          header="Password changed"
-          body="Your password was successfully changed." />}
+        {this.props.changePasswordResponse && (
+          <Message
+            type="success"
+            header="Password changed"
+            body="Your password was successfully changed."
+          />
+        )}
         <ChangePasswordForm
           {...{
             ...this.props,

@@ -3,20 +3,21 @@ import voteStatsConnector from "../connectors/voteStats";
 import StackedBarChart from "./StackedBarChart";
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 import { getRandomColor } from "../helpers";
+import Tooltip from "./Tooltip";
 import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_VOTING_NOT_AUTHORIZED,
-  PROPOSAL_VOTING_AUTHORIZED,
-  NETWORK
+  PROPOSAL_VOTING_AUTHORIZED
 } from "../constants";
-
 
 const mapVoteStatusToMessage = {
   [PROPOSAL_VOTING_ACTIVE]: "Proposal voting active",
   [PROPOSAL_VOTING_FINISHED]: "Proposal voting finished",
-  [PROPOSAL_VOTING_NOT_AUTHORIZED]: "Author has not yet authorized the start of voting",
-  [PROPOSAL_VOTING_AUTHORIZED]: "Waiting for administrator approval to start voting"
+  [PROPOSAL_VOTING_NOT_AUTHORIZED]:
+    "Author has not yet authorized the start of voting",
+  [PROPOSAL_VOTING_AUTHORIZED]:
+    "Waiting for administrator approval to start voting"
 };
 
 const VoteStatusLabel = ({ status }) => {
@@ -25,34 +26,42 @@ const VoteStatusLabel = ({ status }) => {
   };
   const mapVoteStatusToLabel = {
     [PROPOSAL_VOTING_ACTIVE]: (
-      <span style={{
-        ...spanStyle,
-        color: "#41bf53"
-      }}>
+      <span
+        style={{
+          ...spanStyle,
+          color: "#41bf53"
+        }}
+      >
         {mapVoteStatusToMessage[status]}
       </span>
     ),
     [PROPOSAL_VOTING_FINISHED]: (
-      <span style={{
-        ...spanStyle,
-        color: "#bf4153"
-      }}>
+      <span
+        style={{
+          ...spanStyle,
+          color: "#091440"
+        }}
+      >
         {mapVoteStatusToMessage[status]}
       </span>
     ),
     [PROPOSAL_VOTING_NOT_AUTHORIZED]: (
-      <span style={{
-        ...spanStyle,
-        color: "#586D82"
-      }}>
+      <span
+        style={{
+          ...spanStyle,
+          color: "#8997a5"
+        }}
+      >
         {mapVoteStatusToMessage[status]}
       </span>
     ),
     [PROPOSAL_VOTING_AUTHORIZED]: (
-      <span style={{
-        ...spanStyle,
-        color: "rgb(202, 184, 42)"
-      }}>
+      <span
+        style={{
+          ...spanStyle,
+          color: "#FFC84E"
+        }}
+      >
         {mapVoteStatusToMessage[status]}
       </span>
     )
@@ -60,23 +69,26 @@ const VoteStatusLabel = ({ status }) => {
   return mapVoteStatusToLabel[status] || null;
 };
 
-const getPercentage = (received, total) => Number.parseFloat((received/total)*100).toFixed(2);
-const sortOptionYesFirst = a => a.id === "yes" ? -1 : 1;
+const getPercentage = (received, total) =>
+  Number.parseFloat((received / total) * 100).toFixed(2);
+const sortOptionYesFirst = a => (a.id === "yes" ? -1 : 1);
 
 class Stats extends React.Component {
   getColor = optionId => {
-    switch(optionId) {
-    case "yes":
-      return "#def9f7";
-    case "no":
-      return "#FFF";
-    default:
-      return getRandomColor();
+    switch (optionId) {
+      case "yes":
+        return "#def9f7";
+      case "no":
+        return "#FFF";
+      default:
+        return getRandomColor();
     }
-  }
+  };
   canShowStats = (status, totalVotes) =>
-    (status === PROPOSAL_VOTING_ACTIVE || status === PROPOSAL_VOTING_FINISHED) &&
-    totalVotes > 0
+    (status === PROPOSAL_VOTING_ACTIVE ||
+      status === PROPOSAL_VOTING_FINISHED) &&
+    totalVotes > 0;
+
   transformOptionsResult = (totalVotes, optionsResult = []) =>
     optionsResult
       .map(({ option, votesreceived }) => ({
@@ -85,52 +97,120 @@ class Stats extends React.Component {
         votesReceived: votesreceived,
         percentage: getPercentage(votesreceived, totalVotes),
         color: this.getColor(option.id)
-      })).sort(sortOptionYesFirst)
-  renderStats = (option) => {
+      }))
+      .sort(sortOptionYesFirst);
+  renderStats = option => {
     const optionStyle = {
       display: "flex",
       marginRight: "8px"
     };
     const optionIdStyle = {
       textTransform: "uppercase",
-      fontWeight: "bold",
+      fontWeight: "semibold",
       marginRight: "4px"
     };
     return (
-      <div key={`option-${option.id}`} style={optionStyle} >
-        <span style={optionIdStyle} >{`${option.id}:`}</span>
-        <span>{`${option.votesReceived} votes    `}</span>
-      </div>
+      <span key={`option-${option.id}`} style={optionStyle}>
+        {option.id === "yes" ? (
+          <Tooltip
+            tipStyle={{
+              fontSize: "11px",
+              top: "20px",
+              left: "20px",
+              width: "36px"
+            }}
+            text="Yes"
+            position="bottom"
+          >
+            <span>
+              <span style={optionIdStyle}>{` ✔ ${option.votesReceived}`}</span>
+            </span>
+          </Tooltip>
+        ) : (
+          <Tooltip
+            tipStyle={{
+              fontSize: "11px",
+              top: "20px",
+              left: "20px",
+              width: "29px"
+            }}
+            text="No"
+            position="bottom"
+          >
+            <span style={{ marginRight: "25px" }}>
+              <span style={optionIdStyle}>{` ✖ ${option.votesReceived}`}</span>
+            </span>
+          </Tooltip>
+        )}
+      </span>
     );
   };
-  getChartData = (options) =>
+  getChartData = options =>
     options.map(op => ({
       label: op.id,
       value: op.percentage,
       color: op.color
-    }))
+    }));
 
-  getTimeInBlocks = (blocks) => {
-    const blockTimeMinutes = NETWORK === "testnet" ? blocks*2 : blocks*5 ;
+  getTimeInBlocks = (endHeight, currentHeight) => {
+    const blocks = endHeight - currentHeight;
+    const blockTimeMinutes = this.props.isTestnet ? blocks * 2 : blocks * 5;
     const mili = blockTimeMinutes * 60000;
     const dateMs = new Date(mili + Date.now()); // gets time in ms
-    const distance = distanceInWordsToNow(
-      dateMs,
-      { addSuffix: true }
+    const distance = distanceInWordsToNow(dateMs, { addSuffix: true });
+    const element = (
+      <Tooltip
+        tipStyle={{
+          fontSize: "11px",
+          top: "20px",
+          left: "20px",
+          width: "90px"
+        }}
+        text={"Voting ends at block #" + endHeight}
+        position="bottom"
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column"
+          }}
+        >
+          <span>
+            {blocks === 0 ? "last block left" : blocks + " blocks left"}
+          </span>
+          <span style={{ fontSize: "11px" }}>vote ends {distance}</span>
+        </div>
+      </Tooltip>
     );
-    const element =
-    <span>
-      expires {distance}
-    </span>
-    ;
-    return blockTimeMinutes > 0 ? element : <span>expired</span>;
+    return blockTimeMinutes > 0 ? element : <span>finished</span>;
   };
-  renderOptionsStats = (totalVotes, optionsResult, endHeight, currentHeight) => {
-
-    const { status } = this.props;
+  renderOptionsStats = () => {
+    const {
+      status,
+      totalVotes,
+      optionsResult,
+      endHeight,
+      currentHeight,
+      quorumPercentage,
+      passPercentage,
+      numOfEligibleVotes
+    } = this.props;
     const showStats = this.canShowStats(status, totalVotes);
-    const options = optionsResult ? this.transformOptionsResult(totalVotes, optionsResult) : [];
-    const isPreVoting = status === PROPOSAL_VOTING_NOT_AUTHORIZED || status === PROPOSAL_VOTING_AUTHORIZED;
+    const options = optionsResult
+      ? this.transformOptionsResult(totalVotes, optionsResult)
+      : [];
+    const isPreVoting =
+      status === PROPOSAL_VOTING_NOT_AUTHORIZED ||
+      status === PROPOSAL_VOTING_AUTHORIZED;
+    const currentQuorumPercentage = getPercentage(
+      totalVotes,
+      numOfEligibleVotes
+    );
+    const quorumInVotes = Math.round(
+      (numOfEligibleVotes * quorumPercentage) / 100
+    );
+
     const headerStyle = {
       display: "flex",
       alignItems: "center",
@@ -140,48 +220,74 @@ class Stats extends React.Component {
       color: "gray"
     };
 
-    const bodyStyle = { marginTop: "5px" };
+    const bodyStyle = { marginTop: "10px" };
     return (
       <div>
-        <div
-          style={headerStyle}
-        >
+        <div style={headerStyle}>
           <VoteStatusLabel status={status} />
-          {endHeight && currentHeight ? this.getTimeInBlocks(endHeight - currentHeight) : null}
-          {showStats && options.map(op => this.renderStats(op))}
-        </div>
-        {showStats ?
-          <StackedBarChart
-            displayValuesForLabel="yes"
-            style={{ ...bodyStyle, maxWidth: "400px" }}
-            data={this.getChartData(options)}
-          /> :
-          !isPreVoting ?
-            <div
-              style={bodyStyle}
-            >
-              <div
-                style={detailStyle}
-              >
-                {currentHeight && endHeight ? <p>Voting {endHeight > currentHeight ? "ends" : "ended"} at block #{endHeight}</p> : null}
-              </div>
-              This proposal has not received any votes
+          {showStats && <span style={{ marginLeft: "20px" }}>Votes: </span>}
+          {!isPreVoting && !showStats ? (
+            <div style={detailStyle}>
+              <p>zero votes</p>
             </div>
-            : null
-        }
+          ) : null}
+          {showStats && options.map(op => this.renderStats(op))}
+          {endHeight && currentHeight
+            ? this.getTimeInBlocks(endHeight, currentHeight)
+            : null}
+        </div>
+        {showStats ? (
+          <div style={bodyStyle}>
+            <StackedBarChart
+              displayValuesForLabel="yes"
+              style={{ ...bodyStyle, maxWidth: "500px" }}
+              data={this.getChartData(options)}
+              threeshold={passPercentage}
+            />
+            <div style={{ marginTop: "10px", display: "flex" }}>
+              Quorum:
+              <Tooltip
+                tipStyle={{
+                  left: "80px",
+                  maxWidth: "70px",
+                  padding: "2px",
+                  textAlign: "center"
+                }}
+                text={`${currentQuorumPercentage}/${quorumPercentage} %`}
+                position="right"
+              >
+                <span
+                  style={{
+                    marginLeft: "5px",
+                    color: totalVotes < quorumInVotes ? "#FFA07A" : "green"
+                  }}
+                >
+                  {`${totalVotes}/${quorumInVotes} votes`}
+                </span>
+              </Tooltip>
+            </div>
+          </div>
+        ) : null}
       </div>
     );
-  }
+  };
   render() {
-    const { totalVotes, optionsResult, endHeight, currentHeight } = this.props;
-    return this.renderOptionsStats(totalVotes, optionsResult, endHeight, currentHeight);
+    return this.renderOptionsStats();
   }
 }
 
 class VoteStats extends React.Component {
   render() {
-    const { token, getVoteStatus, lastBlockHeight } = this.props;
-    const { optionsresult, status, totalvotes, endheight } = getVoteStatus(token);
+    const { token, getVoteStatus, lastBlockHeight, ...props } = this.props;
+    const {
+      optionsresult,
+      status,
+      totalvotes,
+      endheight,
+      quorumpercentage,
+      passpercentage,
+      numofeligiblevotes
+    } = getVoteStatus(token);
     const wrapperStyle = {
       display: "flex",
       flexDirection: "column",
@@ -189,11 +295,23 @@ class VoteStats extends React.Component {
       border: "1px solid #bbb",
       marginTop: "10px",
       borderRadius: "8px",
-      maxWidth: "400px"
+      width: "500px",
+      cursor: "default"
     };
-    return(
+
+    return (
       <div style={wrapperStyle}>
-        <Stats status={status} optionsResult={optionsresult} totalVotes={totalvotes} endHeight={endheight} currentHeight={lastBlockHeight}/>
+        <Stats
+          status={status}
+          optionsResult={optionsresult}
+          totalVotes={totalvotes}
+          endHeight={endheight}
+          quorumPercentage={quorumpercentage}
+          passPercentage={passpercentage}
+          numOfEligibleVotes={numofeligiblevotes}
+          currentHeight={lastBlockHeight}
+          {...props}
+        />
       </div>
     );
   }

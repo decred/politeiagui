@@ -10,7 +10,12 @@ const InputFieldWithError = ({
 }) => (
   <div className="input-with-error">
     <label>{label}</label>
-    <input {...input} tabIndex={tabIndex} placeholder={placeholder} type={type} />
+    <input
+      {...input}
+      tabIndex={tabIndex}
+      placeholder={placeholder}
+      type={type}
+    />
     <div className="input-subline">
       {touched &&
         ((error && <div className="input-error">{error}</div>) ||

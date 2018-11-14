@@ -15,11 +15,13 @@ class ResendVerificationEmail extends Component {
 
   render() {
     return (
-      <ResendVerificationEmailForm {...{
-        onResendVerificationEmail: this.onResendVerificationEmail,
-        isShowingConfirmation: this.props.isShowingConfirmation,
-        isRequesting: this.props.isRequesting
-      }} />
+      <ResendVerificationEmailForm
+        {...{
+          onResendVerificationEmail: this.onResendVerificationEmail,
+          isShowingConfirmation: this.props.isShowingConfirmation,
+          isRequesting: this.props.isRequesting
+        }}
+      />
     );
   }
 
@@ -31,7 +33,7 @@ class ResendVerificationEmail extends Component {
     }
 
     const promise = this.props.onResendVerificationEmailConfirm(props);
-    if(promise) {
+    if (promise) {
       return promise.catch(e => {
         throw new SubmissionError({
           _error: e.message
@@ -43,4 +45,6 @@ class ResendVerificationEmail extends Component {
 
 autobind(ResendVerificationEmail);
 
-export default resendVerificationEmailConnector(withRouter(ResendVerificationEmail));
+export default resendVerificationEmailConnector(
+  withRouter(ResendVerificationEmail)
+);

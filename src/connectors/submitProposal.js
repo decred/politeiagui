@@ -27,26 +27,25 @@ const submitConnector = connect(
 );
 
 class SubmitWrapper extends Component {
-
   componentDidMount() {
     this.props.policy || this.props.onFetchData();
   }
 
   render() {
     const Component = this.props.Component;
-    return <Component { ...{ ...this.props,
-      onSaveDraft: this.onSaveDraft
-    }}  />;
+    return <Component {...{ ...this.props, onSaveDraft: this.onSaveDraft }} />;
   }
 
   onSaveDraft = (...args) => {
     validate(...args);
     this.props.onSaveDraft(...args);
     this.props.history.push("/user/proposals/drafts");
-  }
+  };
 }
 
-const wrapSubmit = (Component) => (props) => <SubmitWrapper { ...{ ...props, Component }} />;
+const wrapSubmit = Component => props => (
+  <SubmitWrapper {...{ ...props, Component }} />
+);
 
 export default compose(
   withRouter,

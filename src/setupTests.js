@@ -8,20 +8,20 @@ class MockedLocalStorage {
   constructor() {
     this.keyValue = {};
   }
-  inspectValues = () => this.keyValue
+  inspectValues = () => this.keyValue;
   setItem = (key, value) => {
     this.keyValue = {
       ...this.keyValue,
       [key]: value
     };
-  }
-  getItem = (key) => this.keyValue[key]
-  removeItem = (key) => {
+  };
+  getItem = key => this.keyValue[key];
+  removeItem = key => {
     delete this.keyValue[key];
-  }
+  };
   clear = () => {
     this.keyValue = {};
-  }
+  };
 }
 
 class MockedSessionStorage extends MockedLocalStorage {
@@ -41,9 +41,7 @@ beforeEach(() => {
       localforage.clear();
     });
   });
-  registerMiddlewares([
-    thunk
-  ]);
+  registerMiddlewares([thunk]);
 });
 
 beforeEach(registerAssertions);
@@ -64,10 +62,9 @@ describe("test redux actions assertions", () => {
     const testAction = () => ({
       type: "TEST_ACTION"
     });
-    const someAction = () => (dispatch) => {
+    const someAction = () => dispatch => {
       dispatch(testAction());
     };
     expect(someAction()).toDispatchActions({ type: "TEST_ACTION" }, true);
   });
 });
-

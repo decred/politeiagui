@@ -18,7 +18,8 @@ class UserInfo extends React.Component {
       loggedInAsEmail,
       loggedInAsUsername,
       userCanExecuteActions,
-      onLogout
+      onLogout,
+      loggedInAsUserId
     } = this.props;
     return loggedInAsEmail ? (
       <div id="header-right">
@@ -40,21 +41,25 @@ class UserInfo extends React.Component {
                   </li>
                   <li
                     className="dropdown-list-item"
-                    onClick={() => history.push("/user/account")}
+                    onClick={() => history.push(`/user/${loggedInAsUserId}`)}
                   >
                     Account
                   </li>
                   <li
-                    className={`dropdown-list-item ${!userCanExecuteActions ? "disabled" : ""}`}
-                    onClick={() => userCanExecuteActions ? history.push("/proposals/new") : null}
+                    className={`dropdown-list-item ${
+                      !userCanExecuteActions ? "disabled" : ""
+                    }`}
+                    onClick={() =>
+                      userCanExecuteActions
+                        ? history.push("/proposals/new")
+                        : null
+                    }
                   >
                     Submit Proposal
                   </li>
                   <li
                     className="dropdown-list-item logout-button"
-                    onClick={() => onLogout(
-                      () => history.push("/user/logout")
-                    )}
+                    onClick={() => onLogout(() => history.push("/user/logout"))}
                   >
                     <form className="logout hover" />
                     Log out

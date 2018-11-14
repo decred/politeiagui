@@ -9,16 +9,22 @@ export default connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     keyMismatch: sel.getKeyMismatch,
     apiError: sel.apiError,
+    loggedInAsUserId: sel.userid,
     userCanExecuteActions: sel.userCanExecuteActions,
     lastLoginTime: sel.lastLoginTimeFromLoginResponse,
-    onboardViewed: sel.onboardViewed
+    onboardViewed: sel.onboardViewed,
+    identityImportSuccess: sel.identityImportSuccess
   }),
-  dispatch => bindActionCreators({
-    onInit: act.requestApiInfo,
-    keyMismatchAction: act.keyMismatch,
-    openModal: act.openModal,
-    confirmWithModal: act.confirmWithModal,
-    setOnboardAsViewed: act.setOnboardAsViewed,
-    onLoadDraftProposals: act.onLoadDraftProposals
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        onInit: act.requestApiInfo,
+        keyMismatchAction: act.keyMismatch,
+        openModal: act.openModal,
+        confirmWithModal: act.confirmWithModal,
+        setOnboardAsViewed: act.setOnboardAsViewed,
+        onLoadDraftProposals: act.onLoadDraftProposals
+      },
+      dispatch
+    )
 );

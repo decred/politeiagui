@@ -14,19 +14,21 @@ export function validateFiles(files, policy) {
     policy: policy
   };
 
-  const validated =
-    validatePipe(
-      validateMaxImages,
-      validateMaxSize,
-      validateMimeTypes
-    );
+  const validated = validatePipe(
+    validateMaxImages,
+    validateMaxSize,
+    validateMimeTypes
+  );
 
   return validated(validation, policy);
 }
 
 export function getFormattedFiles({ base64, fileList }) {
   return Array.from(fileList).map(({ name, size, type: mime }, idx) => ({
-    name, mime, size, payload: base64[idx].split("base64,").pop()
+    name,
+    mime,
+    size,
+    payload: base64[idx].split("base64,").pop()
   }));
 }
 
@@ -37,30 +39,31 @@ export function getFormattedFiles({ base64, fileList }) {
 */
 export function isFileValid(file, policy) {
   if (file.size > policy.maximagesize) {
-    return ({
+    return {
       valid: false,
       errorMsg: getErrorMessage(policy, errorTypes.MAX_SIZE, file.name)
-    });
+    };
   }
 
   if (policy.validmimetypes.indexOf(file.mime) < 0) {
-    return ({
+    return {
       valid: false,
       errorMsg: getErrorMessage(policy, errorTypes.INVALID_MIME, file.name)
-    });
+    };
   }
 
-  return ({
+  return {
     valid: true,
     errorMsg: null
-  });
+  };
 }
-
 
 function getErrorMessage(policy, errorType, filename = "") {
   const errors = {
     [errorTypes.MAX_SIZE]: `The file "${filename}" exceeds the maximum size.`,
-    [errorTypes.MAX_IMAGES]: `You can upload a maximum of ${policy.maximages} images per proposal.`,
+    [errorTypes.MAX_IMAGES]: `You can upload a maximum of ${
+      policy.maximages
+    } images per proposal.`,
     [errorTypes.INVALID_MIME]: `The file "${filename}" has an invalid MIME type.`
   };
   return errors[errorType];
@@ -71,12 +74,12 @@ const validatePipe = (...fs) => x => fs.reduce((v, f) => f(v), x);
 function validateMaxImages({ files, errors, policy }) {
   if (files.length > policy.maximages) {
     errors.push(getErrorMessage(policy, errorTypes.MAX_IMAGES));
-    return ({
+    return {
       files: files.slice(0, policy.maximages),
       errors
-    });
+    };
   }
-  return ({ files, errors, policy });
+  return { files, errors, policy };
 }
 
 function validateMaxSize({ files, errors, policy }) {
@@ -87,11 +90,11 @@ function validateMaxSize({ files, errors, policy }) {
     }
     return true;
   });
-  return ({
+  return {
     files: newFiles,
     errors,
     policy
-  });
+  };
 }
 
 function validateMimeTypes({ files, errors, policy }) {
@@ -102,8 +105,8 @@ function validateMimeTypes({ files, errors, policy }) {
     }
     return true;
   });
-  return ({
+  return {
     files: newFiles,
     errors
-  });
+  };
 }

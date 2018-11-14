@@ -1,7 +1,7 @@
-module.exports = function (request, response) {
+module.exports = function(request, response) {
   let body = [];
   request
-    .on("data", (chunk) => {
+    .on("data", chunk => {
       body.push(chunk);
     })
     .on("end", () => {
@@ -11,7 +11,11 @@ module.exports = function (request, response) {
       const bodyParsed = JSON.parse(body);
       response.writeHead(200);
 
-      if (bodyParsed.email && bodyParsed.verificationtoken && bodyParsed.newpassword) {
+      if (
+        bodyParsed.email &&
+        bodyParsed.verificationtoken &&
+        bodyParsed.newpassword
+      ) {
         return handlePasswordReset(bodyParsed, response);
       }
 
@@ -21,7 +25,7 @@ module.exports = function (request, response) {
 
 function handleForgottenPassword(body, response) {
   if (body.email === "test@error.com") {
-    return response.end(JSON.stringify({ "errorcode": 2 }));
+    return response.end(JSON.stringify({ errorcode: 2 }));
   }
 
   return response.end(JSON.stringify({}));
@@ -29,14 +33,14 @@ function handleForgottenPassword(body, response) {
 
 function handlePasswordReset(body, response) {
   if (body.email === "test@error.com") {
-    return response.end(JSON.stringify({ "errorcode": 2 }));
+    return response.end(JSON.stringify({ errorcode: 2 }));
   }
   console.log(body.verificationtoken);
   if (body.verificationtoken === "invalid") {
-    return response.end(JSON.stringify({ "errorcode": 3 }));
+    return response.end(JSON.stringify({ errorcode: 3 }));
   }
   if (body.verificationtoken === "expired") {
-    return response.end(JSON.stringify({ "errorcode": 4 }));
+    return response.end(JSON.stringify({ errorcode: 4 }));
   }
 
   return response.end(JSON.stringify({}));

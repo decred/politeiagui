@@ -1,9 +1,7 @@
 import * as act from "../../actions/types";
 import formReducer from "../form";
 
-
 describe("test redux form reducers", () => {
-
   test("form/proposal behaving correctly", () => {
     const action = {
       type: act.RECEIVE_NEW_PROPOSAL,

@@ -4,7 +4,11 @@ import { bindActionCreators } from "redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
 import { or } from "../lib/fp";
-import { LIST_HEADER_USER, PROPOSAL_USER_FILTER_SUBMITTED, PROPOSAL_USER_FILTER_DRAFT } from "../constants";
+import {
+  LIST_HEADER_USER,
+  PROPOSAL_USER_FILTER_SUBMITTED,
+  PROPOSAL_USER_FILTER_DRAFT
+} from "../constants";
 
 const userProposalsConnector = connect(
   sel.selectorMap({
@@ -12,7 +16,10 @@ const userProposalsConnector = connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
     error: sel.userProposalsError,
-    isLoading: or(sel.userProposalsIsRequesting, sel.isApiRequestingPropsVoteStatus),
+    isLoading: or(
+      sel.userProposalsIsRequesting,
+      sel.isApiRequestingPropsVoteStatus
+    ),
     proposals: sel.getUserProposals,
     proposalCounts: sel.getUserProposalFilterCounts,
     filterValue: sel.getUserFilterValue,
@@ -32,28 +39,30 @@ const userProposalsConnector = connect(
 );
 
 class Wrapper extends Component {
-
   componentDidMount() {
-    const {
-      userid,
-      loggedInAsEmail,
-      history,
-      match,
-      onFetchUserProposals,
-      onChangeFilter
-    } = this.props;
+    const { match, onChangeFilter, userid } = this.props;
 
-    if (!loggedInAsEmail) history.push("/login");
-    if (userid !== null) onFetchUserProposals(userid);
     if (match.params && typeof match.params.filter !== "undefined") {
-      onChangeFilter({
-        "submitted": PROPOSAL_USER_FILTER_SUBMITTED,
-        "drafts": PROPOSAL_USER_FILTER_DRAFT
-      }[match.params.filter]);
+      onChangeFilter(
+        {
+          submitted: PROPOSAL_USER_FILTER_SUBMITTED,
+          drafts: PROPOSAL_USER_FILTER_DRAFT
+        }[match.params.filter]
+      );
+    }
+
+    if (userid) {
+      this.props.onFetchUserProposals(userid);
     }
   }
 
-  render () {
+  componentDidUpdate(prevProps) {
+    const { userid } = this.props;
+    const userFetched = !prevProps.userid && this.props.userid;
+    if (userFetched) this.props.onFetchUserProposals(userid);
+  }
+
+  render() {
     const { Component, ...props } = this.props;
     return (
       <div className="page content user-proposals-page">
@@ -61,7 +70,6 @@ class Wrapper extends Component {
       </div>
     );
   }
-
 }
 
 const wrap = Component =>

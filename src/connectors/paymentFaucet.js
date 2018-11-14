@@ -10,8 +10,12 @@ export default connect(
     payWithFaucetTxId: sel.payWithFaucetTxId,
     payWithFaucetError: sel.payWithFaucetError
   }),
-  dispatch => bindActionCreators({
-    payWithFaucet: act.payWithFaucet,
-    resetFaucet: act.resetPaywallPaymentWithFaucet
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        payWithFaucet: act.payWithFaucet,
+        resetFaucet: act.resetPaywallPaymentWithFaucet
+      },
+      dispatch
+    )
 );

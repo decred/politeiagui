@@ -14,7 +14,7 @@ const Commands = {
       .click("@signupLoginLink")
       .waitForElementVisible("@signupLoginPage", 10000);
   },
-  loginWithErrorAllFieldsRequired: function () {
+  loginWithErrorAllFieldsRequired: function() {
     return this.waitForElementVisible("@signupLoginPage", 10000)
       .clearValue("@loginInputEmail")
       .clearValue("@loginInputPassword")
@@ -22,7 +22,7 @@ const Commands = {
       .click("@loginSubmitButton")
       .waitForElementVisible("@error", 10000);
   },
-  loginWithErrorInvalidEmailAddress: function () {
+  loginWithErrorInvalidEmailAddress: function() {
     return this.waitForElementVisible("@signupLoginPage", 10000)
       .clearValue("@loginInputEmail")
       .setValue("@loginInputEmail", "test")
@@ -31,7 +31,7 @@ const Commands = {
       .click("@loginSubmitButton")
       .waitForElementVisible("@error", 10000);
   },
-  login: function () {
+  login: function() {
     return this.waitForElementVisible("@signupLoginPage", 10000)
       .clearValue("@loginInputEmail")
       .setValue("@loginInputEmail", "test@test.com")
@@ -40,7 +40,7 @@ const Commands = {
       .click("@loginSubmitButton")
       .waitForElementVisible("@loggedInAsEmail", 10000);
   },
-  signupWithErrorAllFieldsRequired: function () {
+  signupWithErrorAllFieldsRequired: function() {
     return this.waitForElementVisible("@signupLoginPage", 10000)
       .clearValue("@signupInputEmail")
       .clearValue("@signupInputPassword")
@@ -49,7 +49,7 @@ const Commands = {
       .click("@signupSubmitButton")
       .waitForElementVisible("@error", 10000);
   },
-  signupWithErrorInvalidEmailAddress: function () {
+  signupWithErrorInvalidEmailAddress: function() {
     return this.waitForElementVisible("@signupLoginPage", 10000)
       .clearValue("@signupInputEmail")
       .setValue("@signupInputEmail", "test")
@@ -58,7 +58,7 @@ const Commands = {
       .click("@signupSubmitButton")
       .waitForElementVisible("@error", 10000);
   },
-  signupWithErrorPasswordNotMatch: function () {
+  signupWithErrorPasswordNotMatch: function() {
     return this.waitForElementVisible("@signupLoginPage", 10000)
       .clearValue("@signupInputEmail")
       .setValue("@signupInputEmail", "test")
@@ -74,7 +74,7 @@ const Commands = {
    * eg: the signup process call the /me mock endpoint to get the CSRF token
    * the /me mock endpoint always return an user
    */
-  signup: function () {
+  signup: function() {
     return this.waitForElementVisible("@signupLoginPage", 10000)
       .clearValue("@signupInputEmail")
       .setValue("@signupInputEmail", "test@test.com")

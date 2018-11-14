@@ -24,9 +24,16 @@ class ProposalImages extends Component {
               <a
                 className="attached-image-remove"
                 onClick={() => this.onRemove(idx)}
-                title="Remove image">✖</a>
+                title="Remove image"
+              >
+                ✖
+              </a>
             )}
-            <img className="attached-image" alt={name} src={`data:${mime};base64,${payload}`} />
+            <img
+              className="attached-image"
+              alt={name}
+              src={`data:${mime};base64,${payload}`}
+            />
           </div>
         ))}
       </div>

@@ -7,15 +7,15 @@ const CensorMessage = ({ message }) => {
     padding: "10px",
     marginTop: "10px"
   };
-  return <div
-    style={wrapperStyle}>
-    <p>
-      <span style={{ fontWeight: "bold" }}>
-        Admin Censorship reason:
-      </span><br></br>
-      {message}
-    </p>
-  </div>;
+  return (
+    <div style={wrapperStyle}>
+      <p>
+        <span style={{ fontWeight: "bold" }}>Admin Censorship reason:</span>
+        <br />
+        {message}
+      </p>
+    </div>
+  );
 };
 
 export default CensorMessage;

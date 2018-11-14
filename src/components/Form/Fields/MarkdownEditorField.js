@@ -10,7 +10,8 @@ const MarkdownEditorField = ({
   toggledStyle,
   meta = {}
 }) => {
-  const hasError = (error && touched && !disabled) || (meta.error && meta.touched);
+  const hasError =
+    (error && touched && !disabled) || (meta.error && meta.touched);
   const { warning } = meta;
   return (
     <div className="ffmarkdown-editor">
@@ -19,11 +20,14 @@ const MarkdownEditorField = ({
           value={input.value}
           onChange={input.onChange}
           tabIndex={tabIndex}
-          toggledStyle={toggledStyle} />
+          toggledStyle={toggledStyle}
+        />
       </div>
       <div className="input-subline">
-        {(hasError && <div className="input-error">{meta.error || error}</div>) ||
-            (warning && <div className="input-warning">{warning}</div>)}
+        {(hasError && (
+          <div className="input-error">{meta.error || error}</div>
+        )) ||
+          (warning && <div className="input-warning">{warning}</div>)}
       </div>
     </div>
   );

@@ -4,14 +4,14 @@ import Message from "../Message";
 import LoadingIcon from "./LoadingIcon";
 import searchConnector from "../../connectors/search";
 
-const SidebarSearch = ({
-  error,
-  isSaving,
-  onFind,
-  handleSubmit
-}) => (
+const SidebarSearch = ({ error, isSaving, onFind, handleSubmit }) => (
   <div className="spacer">
-    <form id="search" role="search" onSubmit={handleSubmit(onFind)}>
+    <form
+      className="search-form"
+      id="search"
+      role="search"
+      onSubmit={handleSubmit(onFind)}
+    >
       <Field
         name="censorship"
         component="input"
@@ -28,20 +28,21 @@ const SidebarSearch = ({
             position: "absolute",
             top: "14px",
             right: "12px"
-          }} />
+          }}
+        />
       ) : (
-        <input
-          tabIndex={22}
-          type="submit"
-          value="" />
+        <input tabIndex={22} type="submit" value="" />
       )}
 
       {error && (
-        <Message type="error" header="Cannot search for proposal" body={error} />
+        <Message
+          type="error"
+          header="Cannot search for proposal"
+          body={error}
+        />
       )}
       <div className="infobar" id="searchexpando">
-        <div id="moresearchinfo">
-        </div>
+        <div id="moresearchinfo" />
       </div>
     </form>
   </div>

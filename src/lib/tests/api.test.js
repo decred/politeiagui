@@ -6,7 +6,8 @@ import { getHumanReadableError } from "../../helpers";
 import {
   assertGETOnRouteIsCalled,
   assertRouteIsCalledWithQueryParams,
-  assertPOSTOnRouteIsCalled } from "./support/helpers";
+  assertPOSTOnRouteIsCalled
+} from "./support/helpers";
 import { PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
 
 describe("api integration modules (lib/api.js)", () => {
@@ -23,11 +24,12 @@ describe("api integration modules (lib/api.js)", () => {
   const FILE = {
     name: "example.jpeg",
     mime: "image/jpeg",
-    payload:
-      "VGVzdCBwcm9wCiMgVGhpcyBpcyBhIHRlc3QgcHJvcG9zYWw="
+    payload: "VGVzdCBwcm9wCiMgVGhpcyBpcyBhIHRlc3QgcHJvcG9zYWw="
   };
-  const FILE_DIGESTED_PAYLOAD = "3973715772c4e0d41fc98fb67e97ad2436dca47961ac78a0757be43053d5af8c";
-  const COMMENT_TOKEN = "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8";
+  const FILE_DIGESTED_PAYLOAD =
+    "3973715772c4e0d41fc98fb67e97ad2436dca47961ac78a0757be43053d5af8c";
+  const COMMENT_TOKEN =
+    "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8";
   const COMMENT = "I dont like this prop";
 
   test("converts a markdown to a file", () => {
@@ -46,7 +48,9 @@ describe("api integration modules (lib/api.js)", () => {
 
   test("make a proposal", () => {
     let proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE]);
-    let fileFromMarkdown = api.convertMarkdownToFile(PROPOSAL_NAME+ "\n" + MARKDOWN);
+    let fileFromMarkdown = api.convertMarkdownToFile(
+      PROPOSAL_NAME + "\n" + MARKDOWN
+    );
     expect(proposal).toEqual({
       files: [
         {
@@ -61,7 +65,9 @@ describe("api integration modules (lib/api.js)", () => {
     });
     // test without providing attachment object
     proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN);
-    fileFromMarkdown = api.convertMarkdownToFile(PROPOSAL_NAME+ "\n" + MARKDOWN);
+    fileFromMarkdown = api.convertMarkdownToFile(
+      PROPOSAL_NAME + "\n" + MARKDOWN
+    );
     expect(proposal).toEqual({
       files: [
         {
@@ -73,7 +79,9 @@ describe("api integration modules (lib/api.js)", () => {
 
     // test with a falsy attachment
     proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, false);
-    fileFromMarkdown = api.convertMarkdownToFile(PROPOSAL_NAME+ "\n" + MARKDOWN);
+    fileFromMarkdown = api.convertMarkdownToFile(
+      PROPOSAL_NAME + "\n" + MARKDOWN
+    );
     expect(proposal).toEqual({
       files: [
         {
@@ -141,7 +149,8 @@ describe("api integration modules (lib/api.js)", () => {
     expect.assertions(3);
     let headers = new Headers({
       "content-type": "application/json",
-      "X-Csrf-Token": "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca9"
+      "X-Csrf-Token":
+        "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca9"
     });
     let initResponse = {
       status: "200",
@@ -152,12 +161,13 @@ describe("api integration modules (lib/api.js)", () => {
     let parsedResponse = await api.parseResponse(response);
     expect(parsedResponse).toEqual({
       response: { foo: "bar" },
-      csrfToken: "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca9"
+      csrfToken:
+        "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca9"
     });
     response = new Response("{ \"errorcode\": 1}", initResponse);
     try {
       parsedResponse = await api.parseResponse(response);
-    } catch(e) {
+    } catch (e) {
       expect(e).toEqual(new Error(getHumanReadableError(1)));
     }
 
@@ -170,7 +180,7 @@ describe("api integration modules (lib/api.js)", () => {
     response = new Response("{\"foo\": \"bar\"}", initResponse);
     try {
       parsedResponse = await api.parseResponse(response);
-    } catch(e) {
+    } catch (e) {
       expect(e).toEqual(new Error("Internal server error"));
     }
   });
@@ -180,7 +190,10 @@ describe("api integration modules (lib/api.js)", () => {
     const PATH = "/api/";
     const MOCK_RESULT = await import(`${MOCKS_PATH}/GET.json`);
     // set csrf token header
-    fetchMock.getOnce(PATH, { body: MOCK_RESULT, headers: { "X-Csrf-Token": "notafake" } });
+    fetchMock.getOnce(PATH, {
+      body: MOCK_RESULT,
+      headers: { "X-Csrf-Token": "notafake" }
+    });
     let result = await api.apiInfo();
     expect(fetchMock.called(PATH)).toBeTruthy();
     expect(result).toEqual({ ...MOCK_RESULT, csrfToken: "notafake" });
@@ -196,7 +209,12 @@ describe("api integration modules (lib/api.js)", () => {
     expect.assertions(2);
     const PATH = "/api/v1/user/me";
     const MOCK_RESULT = await import(`${MOCKS_PATH}/v1/user/me/GET.json`);
-    const result = await assertGETOnRouteIsCalled(PATH, api.me, [], MOCK_RESULT);
+    const result = await assertGETOnRouteIsCalled(
+      PATH,
+      api.me,
+      [],
+      MOCK_RESULT
+    );
     const publickey = MOCK_RESULT.publickey;
     delete MOCK_RESULT.publickey;
     delete MOCK_RESULT.csrfToken;
@@ -207,18 +225,23 @@ describe("api integration modules (lib/api.js)", () => {
   });
 
   test("create new user (api/user/new)", async () => {
-    await assertPOSTOnRouteIsCalled(
-      "/api/v1/user/new",
-      api.newUser,
-      [ FAKE_CSRF, EMAIL, USERNAME, PASSWORD ]
-    );
+    await assertPOSTOnRouteIsCalled("/api/v1/user/new", api.newUser, [
+      FAKE_CSRF,
+      EMAIL,
+      USERNAME,
+      PASSWORD
+    ]);
   });
 
   test("verify new user (api/v1/user/verify)", async () => {
     const PATH = "/api/v1/user/verify";
-    const SEARCH_QUERY = qs.stringify({ email: EMAIL, verificationtoken: VERIFICATION_TOKEN });
+    const SEARCH_QUERY = qs.stringify({
+      email: EMAIL,
+      verificationtoken: VERIFICATION_TOKEN
+    });
     await assertRouteIsCalledWithQueryParams(
-      PATH, {
+      PATH,
+      {
         email: EMAIL,
         verificationtoken: VERIFICATION_TOKEN
       },
@@ -230,7 +253,12 @@ describe("api integration modules (lib/api.js)", () => {
   test("verify user payment (api/v1/user/verifypayment)", async () => {
     const PATH = "/api/v1/user/verifypayment";
     const MOCK_RESULT = await import(`${MOCKS_PATH}/v1/user/verifypayment/GET.json`);
-    await assertGETOnRouteIsCalled(PATH, api.verifyUserPayment, [], MOCK_RESULT);
+    await assertGETOnRouteIsCalled(
+      PATH,
+      api.verifyUserPayment,
+      [],
+      MOCK_RESULT
+    );
   });
 
   test("fetch user proposals (api/v1/user/proposals)", async () => {
@@ -248,18 +276,18 @@ describe("api integration modules (lib/api.js)", () => {
   });
 
   test("login (api/v1/login)", async () => {
-    await assertPOSTOnRouteIsCalled(
-      "/api/v1/login",
-      api.login,
-      [ FAKE_CSRF, EMAIL, PASSWORD ]
-    );
+    await assertPOSTOnRouteIsCalled("/api/v1/login", api.login, [
+      FAKE_CSRF,
+      EMAIL,
+      PASSWORD
+    ]);
   });
 
   test("change user name (api/v1/user/username/change)", async () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/username/change",
       api.changeUsername,
-      [ FAKE_CSRF, PASSWORD, USERNAME ]
+      [FAKE_CSRF, PASSWORD, USERNAME]
     );
   });
 
@@ -267,16 +295,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/password/change",
       api.changePassword,
-      [ FAKE_CSRF, PASSWORD, "some_new_password" ]
-    );
-  });
-
-  test("usernames by id (api/usernames)", async () => {
-    const USER_ID = "0";
-    await assertPOSTOnRouteIsCalled(
-      "/api/v1/usernames",
-      api.usernamesById,
-      [[USER_ID]]
+      [FAKE_CSRF, PASSWORD, "some_new_password"]
     );
   });
 
@@ -284,7 +303,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/password/reset",
       api.forgottenPasswordRequest,
-      [ FAKE_CSRF, EMAIL ]
+      [FAKE_CSRF, EMAIL]
     );
   });
 
@@ -293,7 +312,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/password/reset",
       api.passwordResetRequest,
-      [ FAKE_CSRF, EMAIL, VERIFICATION_TOKEN, "mynewpassword" ]
+      [FAKE_CSRF, EMAIL, VERIFICATION_TOKEN, "mynewpassword"]
     );
   });
 
@@ -301,7 +320,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/new/resend",
       api.resendVerificationEmailRequest,
-      [ FAKE_CSRF, EMAIL ]
+      [FAKE_CSRF, EMAIL]
     );
   });
 
@@ -310,40 +329,31 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/new/resend",
       api.resendVerificationEmailRequest,
-      [ FAKE_CSRF, EMAIL, VERIFICATION_TOKEN ]
+      [FAKE_CSRF, EMAIL, VERIFICATION_TOKEN]
     );
   });
 
   test("update key (api/v1/user/key", async () => {
-    await assertPOSTOnRouteIsCalled(
-      "/api/v1/user/key",
-      api.updateKeyRequest,
-      [ FAKE_CSRF, EMAIL ]
-    );
+    await assertPOSTOnRouteIsCalled("/api/v1/user/key", api.updateKeyRequest, [
+      FAKE_CSRF,
+      EMAIL
+    ]);
   });
 
   test("verify key (api/v1/user/key/verify)", async () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/key/verify",
       api.verifyKeyRequest,
-      [ FAKE_CSRF, EMAIL, VERIFICATION_TOKEN ]
+      [FAKE_CSRF, EMAIL, VERIFICATION_TOKEN]
     );
   });
 
   test("get policy (api/v1/policy)", async () => {
-    await assertGETOnRouteIsCalled(
-      "/api/v1/policy",
-      api.policy,
-      []
-    );
+    await assertGETOnRouteIsCalled("/api/v1/policy", api.policy, []);
   });
 
   test("get vetted proposals (api/v1/proposals/vetted)", async () => {
-    await assertGETOnRouteIsCalled(
-      "/api/v1/proposals/vetted",
-      api.vetted,
-      []
-    );
+    await assertGETOnRouteIsCalled("/api/v1/proposals/vetted", api.vetted, []);
   });
 
   test("get unvetted proposals (api/v1/proposals/unvetted)", async () => {
@@ -381,11 +391,7 @@ describe("api integration modules (lib/api.js)", () => {
   test("logout (api/v1/logout)", async () => {
     //make sure local storage is being cleaned up on logout
     localStorage.setItem("state", "anything");
-    await assertPOSTOnRouteIsCalled(
-      "/api/v1/logout",
-      api.logout,
-      [FAKE_CSRF]
-    );
+    await assertPOSTOnRouteIsCalled("/api/v1/logout", api.logout, [FAKE_CSRF]);
     expect(localStorage.getItem("state")).toBeFalsy();
   });
 
@@ -393,16 +399,15 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "express:/api/v1/proposals/:token/status",
       api.proposalSetStatus,
-      [ EMAIL, FAKE_CSRF, PROPOSAL_TOKEN, 2 ]
+      [EMAIL, FAKE_CSRF, PROPOSAL_TOKEN, 2]
     );
   });
 
   test("create a new comment (api/v1/comments/new", async () => {
-    await assertPOSTOnRouteIsCalled(
-      "/api/v1/comments/new",
-      api.newComment,
-      [ FAKE_CSRF, COMMENT ]
-    );
+    await assertPOSTOnRouteIsCalled("/api/v1/comments/new", api.newComment, [
+      FAKE_CSRF,
+      COMMENT
+    ]);
   });
 
   test("create new proposal (api/v1/proposals/new)", async () => {
@@ -411,7 +416,7 @@ describe("api integration modules (lib/api.js)", () => {
     const result = await assertPOSTOnRouteIsCalled(
       "/api/v1/proposals/new",
       api.newProposal,
-      [ FAKE_CSRF, proposal ],
+      [FAKE_CSRF, proposal],
       {
         censorshiprecord: CENSORSHIP_RECORD
       }
@@ -426,7 +431,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/proposals/startvote",
       api.startVote,
-      [ EMAIL, FAKE_CSRF, PROPOSAL_TOKEN, 2 ]
+      [EMAIL, FAKE_CSRF, PROPOSAL_TOKEN, 2]
     );
   });
 
@@ -464,37 +469,35 @@ describe("api integration modules (lib/api.js)", () => {
 
   test("get user details (api/v1/user/:userId)", async () => {
     const USER_ID = 0;
-    await assertGETOnRouteIsCalled(
-      "express:/api/v1/user/:userId",
-      api.user,
-      [USER_ID.toString()]
-    );
+    await assertGETOnRouteIsCalled("express:/api/v1/user/:userId", api.user, [
+      USER_ID.toString()
+    ]);
   });
 
   test("edit user (api/user/edit)", async () => {
     const USER_ID = 0;
     const ACTION = "FAKE_ACTION";
     const REASON = "FAKE_REASON";
-    await assertPOSTOnRouteIsCalled(
-      "/api/v1/user/edit",
-      api.editUser,
-      [ FAKE_CSRF, USER_ID, ACTION, REASON ]
-    );
+    await assertPOSTOnRouteIsCalled("/api/v1/user/edit", api.editUser, [
+      FAKE_CSRF,
+      USER_ID,
+      ACTION,
+      REASON
+    ]);
   });
 
   test("it correctly returns the hex encoded SHA3-256 of a string", () => {
-    expect(
-      api.digest("password")
-    ).toEqual("c0067d4af4e87f00dbac63b6156828237059172d1bbeac67427345d6a9fda484");
+    expect(api.digest("password")).toEqual(
+      "c0067d4af4e87f00dbac63b6156828237059172d1bbeac67427345d6a9fda484"
+    );
   });
-
 
   test("edit a proposal (api/v1/proposals/edit)", async () => {
     const proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE]);
     await assertPOSTOnRouteIsCalled(
       "/api/v1/proposals/edit",
       api.editProposal,
-      [ FAKE_CSRF, proposal ],
+      [FAKE_CSRF, proposal],
       {
         proposal
       }
@@ -505,8 +508,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/proposals/authorizevote",
       api.proposalAuthorizeOrRevokeVote,
-      [ FAKE_CSRF, "authorize", PROPOSAL_TOKEN, EMAIL, PROPOSAL_VERSION ]
+      [FAKE_CSRF, "authorize", PROPOSAL_TOKEN, EMAIL, PROPOSAL_VERSION]
     );
   });
-
 });

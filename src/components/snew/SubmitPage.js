@@ -53,15 +53,19 @@ class SubmitPage extends React.Component {
       proposalCredits,
       editingMode
     } = this.props;
-    const submitEnabled = !submitting && !error && !newProposalError && userCanExecuteActions && (proposalCredits > 0 || editingMode);
-    return !policy || isLoading ? <PageLoadingIcon /> : (
+    const submitEnabled =
+      !submitting &&
+      !error &&
+      !newProposalError &&
+      userCanExecuteActions &&
+      (proposalCredits > 0 || editingMode);
+    return !policy || isLoading ? (
+      <PageLoadingIcon />
+    ) : (
       <div className="content" role="main">
         <div className="page submit-proposal-page">
           <ReactBody className="submit-page" />
-          <div
-            className="submit content warn-on-unload"
-            id="newlink"
-          >
+          <div className="submit conztent warn-on-unload" id="newlink">
             {newProposalError && (
               <Message type="error" header="Error creating proposal">
                 <MultipleItemsBodyMessage items={newProposalError} />
@@ -76,7 +80,9 @@ class SubmitPage extends React.Component {
               <div className="spacer">
                 <Field
                   name="global"
-                  component={props => <ErrorField title="Cannot submit proposal" {...props} />}
+                  component={props => (
+                    <ErrorField title="Cannot submit proposal" {...props} />
+                  )}
                 />
                 <div className="roundfield" id="title-field">
                   <div className="roundfield-content">
@@ -88,17 +94,20 @@ class SubmitPage extends React.Component {
                         type="text"
                         placeholder="Proposal Name"
                       />
-                      {editingMode ? <div
-                        style={{
-                          flex: "1",
-                          display: "flex",
-                          justifyContent: "flex-end"
-                        }}>
-                        <span style={{ color: "#777" }}>
-                          <i className="fa fa-edit right-margin-5" />
-                          Editing
-                        </span>
-                      </div> : null}
+                      {editingMode ? (
+                        <div
+                          style={{
+                            flex: "1",
+                            display: "flex",
+                            justifyContent: "flex-end"
+                          }}
+                        >
+                          <span style={{ color: "#777" }}>
+                            <i className="fa fa-edit right-margin-5" />
+                            Editing
+                          </span>
+                        </div>
+                      ) : null}
                     </div>
                     <input name="kind" type="hidden" defaultValue="self" />
                     <div className="usertext">
@@ -113,7 +122,12 @@ class SubmitPage extends React.Component {
                             rows={20}
                             cols={80}
                           />
-                          <a className="linkish-modal" onClick={() => openModal(ONBOARD, { tab: 4 })}>Learn How to Format your Proposal</a>
+                          <a
+                            className="linkish-modal"
+                            onClick={() => openModal(ONBOARD, { tab: 4 })}
+                          >
+                            Learn How to Format your Proposal
+                          </a>
                           <Field
                             name="files"
                             className="attach-button greenprimary"
@@ -128,11 +142,13 @@ class SubmitPage extends React.Component {
                     </div>
                     <div className="submit-wrapper">
                       <button
-                        className={`togglebutton access-required${!submitEnabled && " not-active disabled"}`}
+                        className={`togglebutton access-required${!submitEnabled &&
+                          " not-active disabled"}`}
                         name="submit"
                         type="submit"
                         value="form"
-                        onClick={handleSubmit(onSave)}>
+                        onClick={handleSubmit(onSave)}
+                      >
                         {!editingMode ? "submit" : "update"}
                       </button>
                       <button
@@ -140,13 +156,21 @@ class SubmitPage extends React.Component {
                         name="submit"
                         type="submit"
                         value="form"
-                        onClick={handleSubmit(onSaveDraft)}>
+                        onClick={handleSubmit(onSaveDraft)}
+                      >
                         Save as Draft
                       </button>
-                      {(proposalCredits === 0 && !editingMode) && (
+                      {proposalCredits === 0 && !editingMode && (
                         <div className="submit-button-error">
-                          To submit a proposal, you must purchase a proposal credit.
-                          <a className="linkish" onClick={() => openModal(MANAGE_CREDITS_MODAL)}> Click here</a>{" "}
+                          To submit a proposal, you must purchase a proposal
+                          credit.
+                          <a
+                            className="linkish"
+                            onClick={() => openModal(MANAGE_CREDITS_MODAL)}
+                          >
+                            {" "}
+                            Click here
+                          </a>{" "}
                           to open the proposal credits manager.
                         </div>
                       )}

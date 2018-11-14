@@ -7,7 +7,6 @@ import modal from "../modal";
 import external_api from "../external_api";
 
 describe("test reducers combination on index", () => {
-
   // smoke test for root reducer
   test("checking if all reducers needed are being combined", () => {
     const store = createStore(rootReducer);
@@ -24,5 +23,4 @@ describe("test reducers combination on index", () => {
 
     expect(store.getState().modal).toEqual(modal(undefined, {}));
   });
-
 });

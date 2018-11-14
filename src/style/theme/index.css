@@ -25,14 +25,17 @@ a:hover {
 }
 
 .flat-list .first a {
-    color: #2971ff !important;
-    font-weight: 700 !important;
     font: 13px Source Sans Pro,Lato,Arial,sans-serif;
     padding: 0 1px;
     text-decoration: none !important;
 }
 
-.flat-list .first a:hover {
+.proposal-permalink {
+    color: #2971ff !important;
+    font-weight: 700 !important;
+}
+
+.proposal-permalink:hover {
     color: #2971ff;
 }
 
@@ -42,7 +45,6 @@ body .appWrapper input[type=password],
 body .appWrapper input[type=text],
 body .appWrapper input[type=url],
 body .appWrapper textarea {
-    box-shadow: none;
     transition: border-color .15s ease, color .15s ease;
     padding: 6px 12px;
 }
@@ -146,6 +148,13 @@ body>.appWrapper>.content {
     padding: 92px 352px 64px 16px;
     margin: 0;
 }
+body>.appWrapper>.content>#login {
+		margin-left: 0;
+		padding-right: 1em;
+    position: absolute;
+    width: 98.75%;
+    margin: 0;
+}
 
 .link {
     padding: 16px;
@@ -242,7 +251,7 @@ body>.appWrapper>.content {
 }
 
 .proposals-listing-header {
-  margin: 8px 352px 8px 24px;
+  margin: 8px 0px 8px 24px;
 }
 
 .user-proposals-page .proposals-listing-header {
@@ -268,7 +277,7 @@ body>.appWrapper>.content {
     margin: 0 0 16px;
 }
 
-#search input[type=text] {
+.search-form input[type=text], #search input[type=text] {
     padding: 0 42px 0 16px;
     border: 0 solid;
     border-radius: 2px;
@@ -280,37 +289,21 @@ body>.appWrapper>.content {
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .14);
     transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
 }
-#search input[type=text]:hover {
+.search-form input[type=text]:hover, #search input[type=text]:hover {
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2);
 }
-#search input[type=text]:focus {
+.search-form input[type=text]:focus, #search input[type=text]:focus {
     border-radius: 2px 2px 0 0;
 }
-#search input[type=text]:focus:hover {
+.search-form input[type=text]:focus:hover, #search input[type=text]:focus:hover {
     box-shadow: 0 1px 5px rgba(0, 0, 0, .28) !important;
 }
-#search input[type=text]:-moz-placeholder {
+
+.search-form input[type=text]::placeholder, #search input[type=text]::placeholder {
     font-size: 14px;
     text-transform: capitalize;
     top: 1px;
     position: relative;
-    color: #B3B3B3;
-}
-#search input[type=text]::-webkit-input-placeholder {
-    font-size: 14px;
-    text-transform: capitalize;
-    top: 1px;
-    position: relative;
-    color: #B3B3B3;
-}
-#search input[type=text]:-ms-input-placeholder {
-    font-size: 14px;
-    text-transform: capitalize;
-    top: 1px;
-    position: relative;
-    color: #B3B3B3;
-}
-#search input[type=text]::-moz-placeholder {
     color: #B3B3B3;
 }
 
@@ -381,6 +374,10 @@ button.disabled {
     margin-left: 0;
 }
 
+.titlebox {
+    box-shadow: 3px 4px 6px 1px #e9e9e9;
+}
+
 .titlebox .tagline {
     font-size: 12px;
 }
@@ -391,8 +388,20 @@ button.disabled {
     display: block;
 }
 
+.side .md p {
+    color: #0c1e3e;
+    font: 13px/1.45 Source Sans Pro,Lato,Arial,sans-serif;
+    text-rendering: optimizelegibility;
+    letter-spacing: .03em;
+}
+
 .side .titlebox .md h1 {
     line-height: 18px;
+}
+
+.side .titlebox .md ul > li {
+    line-height: 18px;
+    font: 13px/1.45 Source Sans Pro,Lato,Arial,sans-serif;
 }
 
 .side .titlebox .md h3 a,
@@ -447,7 +456,10 @@ button.disabled {
 .commentarea .panestack-title {
     margin: 16px 0 0;
     border-bottom: 0;
-    padding-left: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
 }
 .commentarea .panestack-title .title {
     color: #4D5763;
@@ -508,11 +520,11 @@ button.disabled {
 }
 .commentarea .thing {
     margin: 0 0 16px;
-    padding: 8px 16px 8px 0;
+    padding: 8px 0px 0px 0;
 }
 .commentarea .child .thing {
     box-shadow: none;
-    padding: 8px 0px 0px 2px;
+    padding: 8px 0px 0px 0px;
     margin: 8px 0 0;
 }
 .commentarea .comment .midcol {
@@ -523,10 +535,13 @@ button.disabled {
 }
 .comment .child,
 .comment .showreplies {
-    border-left: 1px solid #edf1f3;
     margin-top: 0;
-    margin-left: 20px;
+    margin-left: 0;
+    padding-left: 20px;
+    background: #fff;
+    border-left: 0;
 }
+
 .comment .midcol {
     width: 24px;
     margin-right: 0;
@@ -728,7 +743,7 @@ body.other-discussions-page>.content {
     position: relative;
 }
 
-#search {
+.search-form {
     position: relative;
     top: 16px;
     z-index: 1;
