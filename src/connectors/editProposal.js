@@ -16,6 +16,7 @@ const submitConnector = connect(
       arg(1)
     ),
     editedProposalToken: sel.editProposalToken,
+    submitError: sel.apiEditProposalError,
     proposal: sel.proposal,
     initialValues: or(sel.getEditProposalValues),
     isLoading: or(sel.isLoadingSubmit, sel.proposalIsRequesting),
@@ -39,6 +40,12 @@ const submitConnector = connect(
 );
 
 class SubmitWrapper extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      validationError: ""
+    };
+  }
   componentDidMount() {
     const { token } = this.props;
     this.props.policy || this.props.onFetchData();
@@ -67,14 +74,23 @@ class SubmitWrapper extends Component {
     const Component = this.props.Component;
     return (
       <Component
-        {...{ ...this.props, editingMode: true, onSave: this.onSave }}
+        {...{
+          ...this.props,
+          validationError: this.state.validationError,
+          editingMode: true,
+          onSave: this.onSave
+        }}
       />
     );
   }
 
   onSave = (...args) => {
-    validate(...args);
-    return this.props.onSave(...args, this.props.token);
+    try {
+      validate(...args);
+      this.props.onSave(...args, this.props.token);
+    } catch (e) {
+      this.setState({ validationError: e.errors._error });
+    }
   };
 }
 
