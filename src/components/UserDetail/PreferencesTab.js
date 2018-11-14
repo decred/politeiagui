@@ -5,7 +5,6 @@ import userPreferencesConnector from "../../connectors/userPreferences";
 import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
 import Message from "../Message";
 
-
 const FieldGroup = ({ children }) => (
   <div style={{ marginBottom: 24 }}>{children}</div>
 );
@@ -14,21 +13,19 @@ const FieldGroupHeader = ({ children }) => (
   <h3 style={{ marginBottom: 8 }}>{children}</h3>
 );
 
-const FieldContainer = ({
-  label,
-  fieldWidth = 30,
-  children
-}) => (
+const FieldContainer = ({ label, fieldWidth = 30, children }) => (
   <div className="field">
-    <label className="field-label" style={{ minHeight: 1, width: 220 }}>{label && (label + ":")}</label>
-    <div className="field-value" style={{ width: fieldWidth }}>{children}</div>
-    <div className="clear"></div>
+    <label className="field-label" style={{ minHeight: 1, width: 220 }}>
+      {label && label + ":"}
+    </label>
+    <div className="field-value" style={{ width: fieldWidth }}>
+      {children}
+    </div>
+    <div className="clear" />
   </div>
 );
 
-
 class PreferencesTab extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -42,11 +39,11 @@ class PreferencesTab extends React.Component {
   onEditUser = (...args) => {
     this.setState({ showEditUserMessage: true });
     return this.props.onEditUser(...args);
-  }
+  };
 
   onChange = () => {
     this.setState({ formChanged: true });
-  }
+  };
 
   render() {
     const {
@@ -67,17 +64,25 @@ class PreferencesTab extends React.Component {
               <Message
                 type="error"
                 header="Error saving preferences"
-                body={editUserError} />
+                body={editUserError}
+              />
             )}
             {editUserResponse && (
-              <Message
-                type="success"
-                header="Preferences saved" />
+              <Message type="success" header="Preferences saved" />
             )}
           </Fragment>
         )}
+        <p style={{ marginBottom: 16 }}>
+          <b>Note:</b> Currently, each notification email is only attempted to
+          be sent once. If the email cannot be delivered in the initial attempt,
+          for whatever reason, Politeia won't try to resend it. This will be
+          improved in the future, but for now, there is a (tiny!) chance you
+          won't receive an email notification.
+        </p>
         <FieldGroup>
-          <FieldGroupHeader>Email notifications for my proposals</FieldGroupHeader>
+          <FieldGroupHeader>
+            Email notifications for my proposals
+          </FieldGroupHeader>
           <FieldContainer label="Proposal approved or censored">
             <Field
               autoFocus
@@ -85,7 +90,8 @@ class PreferencesTab extends React.Component {
               component="input"
               type="checkbox"
               disabled={!isUserPageOwner}
-              onChange={this.onChange} />
+              onChange={this.onChange}
+            />
           </FieldContainer>
           <FieldContainer label="Voting started for proposal">
             <Field
@@ -93,18 +99,22 @@ class PreferencesTab extends React.Component {
               component="input"
               type="checkbox"
               disabled={!isUserPageOwner}
-              onChange={this.onChange} />
+              onChange={this.onChange}
+            />
           </FieldContainer>
         </FieldGroup>
         <FieldGroup>
-          <FieldGroupHeader>Email notifications for others' proposals</FieldGroupHeader>
+          <FieldGroupHeader>
+            Email notifications for others' proposals
+          </FieldGroupHeader>
           <FieldContainer label="New proposal published">
             <Field
               name="regularproposalnotifications-vetted"
               component="input"
               type="checkbox"
               disabled={!isUserPageOwner}
-              onChange={this.onChange} />
+              onChange={this.onChange}
+            />
           </FieldContainer>
           <FieldContainer label="Proposal edited">
             <Field
@@ -112,7 +122,8 @@ class PreferencesTab extends React.Component {
               component="input"
               type="checkbox"
               disabled={!isUserPageOwner}
-              onChange={this.onChange} />
+              onChange={this.onChange}
+            />
           </FieldContainer>
           <FieldContainer label="Voting started for proposal">
             <Field
@@ -120,7 +131,8 @@ class PreferencesTab extends React.Component {
               component="input"
               type="checkbox"
               disabled={!isUserPageOwner}
-              onChange={this.onChange} />
+              onChange={this.onChange}
+            />
           </FieldContainer>
         </FieldGroup>
         {isAdmin && isUserPageOwner && (
@@ -131,14 +143,16 @@ class PreferencesTab extends React.Component {
                 name="adminproposalnotifications-new"
                 component="input"
                 type="checkbox"
-                onChange={this.onChange} />
+                onChange={this.onChange}
+              />
             </FieldContainer>
             <FieldContainer label="Voting authorized for proposal">
               <Field
                 name="adminproposalnotifications-voteauthorized"
                 component="input"
                 type="checkbox"
-                onChange={this.onChange} />
+                onChange={this.onChange}
+              />
             </FieldContainer>
           </FieldGroup>
         )}
@@ -149,13 +163,13 @@ class PreferencesTab extends React.Component {
               type="submit"
               disabled={isApiRequestingEditUser || !this.state.formChanged}
               isLoading={isApiRequestingEditUser}
-              text="Save preferences" />
+              text="Save preferences"
+            />
           </FieldContainer>
         )}
       </form>
     );
   }
-
 }
 
 export default userPreferencesConnector(PreferencesTab);
