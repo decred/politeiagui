@@ -7,7 +7,7 @@ class ErrorPage extends Component {
   componentDidMount() {
     const { apiError, history } = this.props;
     if (!apiError) {
-      history.push("/");
+      history.goBack();
     }
   }
   render() {
