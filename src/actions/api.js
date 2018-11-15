@@ -248,7 +248,16 @@ export const onFetchProposal = token => dispatch => {
   dispatch(act.REQUEST_PROPOSAL(token));
   return api
     .proposal(token)
-    .then(response => dispatch(act.RECEIVE_PROPOSAL(response)))
+    .then(response => {
+      response && response.proposal && Object.keys(response.proposal).length > 0
+        ? dispatch(act.RECEIVE_PROPOSAL(response))
+        : dispatch(
+            act.RECEIVE_PROPOSAL(
+              null,
+              new Error("The requested proposal does not exist.")
+            )
+          );
+    })
     .catch(error => {
       dispatch(act.RECEIVE_PROPOSAL(null, error));
     });
