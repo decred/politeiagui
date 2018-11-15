@@ -75,9 +75,7 @@ class PreferencesTab extends React.Component {
         <p style={{ marginBottom: 16 }}>
           <b>Note:</b> Currently, each notification email is only attempted to
           be sent once. If the email cannot be delivered in the initial attempt,
-          for whatever reason, Politeia won't try to resend it. This will be
-          improved in the future, but for now, there is a (tiny!) chance you
-          won't receive an email notification.
+          for whatever reason, Politeia won't try to resend it.
         </p>
         <FieldGroup>
           <FieldGroupHeader>
