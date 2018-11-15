@@ -1,7 +1,10 @@
 import React from "react";
 import { ThingComment as BaseComment } from "snew-classic-ui";
 import replyConnector from "../../connectors/reply";
-import { PROPOSAL_VOTING_FINISHED } from "../../constants";
+import {
+  PROPOSAL_VOTING_FINISHED,
+  PROPOSAL_STATUS_ABANDONED
+} from "../../constants";
 import Message from "../Message";
 
 class ThingComment extends React.PureComponent {
@@ -65,8 +68,10 @@ class ThingComment extends React.PureComponent {
       toggleCommentForm,
       onCloseCommentForm,
       proposalAuthor,
+      proposalStatus,
       ...props
     } = this.props;
+    const isProposalAbandoned = proposalStatus === PROPOSAL_STATUS_ABANDONED;
     return (
       <div>
         {likeCommentError &&
@@ -83,10 +88,10 @@ class ThingComment extends React.PureComponent {
           {...{
             ...props,
             showCensorLink: !!props.isAdmin && !props.censored,
-            showArrows: !props.censored,
-            grayBody: props.censored,
+            showArrows: !props.censored && !isProposalAbandoned,
+            grayBody: props.censored || isProposalAbandoned,
             highlightcomment: commentid === props.id,
-            showReply: !props.censored,
+            showReply: !props.censored && !isProposalAbandoned,
             onShowReply: toggleCommentForm,
             onCensorComment: this.handleCommentCensor,
             onCloseCommentForm,
@@ -96,7 +101,8 @@ class ThingComment extends React.PureComponent {
             authorHref: `/user/${props.authorid}`,
             blockvote:
               keyMismatch ||
-              getVoteStatus(token).status === PROPOSAL_VOTING_FINISHED,
+              getVoteStatus(token).status === PROPOSAL_VOTING_FINISHED ||
+              isProposalAbandoned,
             handleVote: onLikeComment,
             token
           }}

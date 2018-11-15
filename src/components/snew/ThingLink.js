@@ -13,7 +13,8 @@ import {
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   PROPOSAL_VOTING_ACTIVE,
-  PROPOSAL_VOTING_FINISHED
+  PROPOSAL_VOTING_FINISHED,
+  PROPOSAL_STATUS_ABANDONED
 } from "../../constants";
 import { getProposalStatus } from "../../helpers";
 import VoteStats from "../VoteStats";
@@ -95,6 +96,8 @@ class ThingLinkComp extends React.Component {
       commentid
     } = this.props;
     const voteStatus = getVoteStatus(id) && getVoteStatus(id).status;
+    const isAbandoned = review_status === PROPOSAL_STATUS_ABANDONED;
+    const isCensored = review_status === PROPOSAL_STATUS_CENSORED;
     const isUnvetted =
       review_status === PROPOSAL_STATUS_UNREVIEWED ||
       review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES;
@@ -106,7 +109,8 @@ class ThingLinkComp extends React.Component {
     const isEditable =
       authorid === userId &&
       !isVotingActiveOrFinished &&
-      review_status !== PROPOSAL_STATUS_CENSORED &&
+      !isAbandoned &&
+      !isCensored &&
       voteStatus !== PROPOSAL_VOTING_AUTHORIZED;
     const disableEditButton =
       authorid === userId && voteStatus === PROPOSAL_VOTING_AUTHORIZED;
@@ -115,11 +119,14 @@ class ThingLinkComp extends React.Component {
       parseInt(version, 10) > 1;
     const currentUserIsTheAuthor = authorid === userId;
     const userCanAuthorizeTheVote =
-      currentUserIsTheAuthor && voteStatus === PROPOSAL_VOTING_NOT_AUTHORIZED;
+      currentUserIsTheAuthor &&
+      voteStatus &&
+      (voteStatus === PROPOSAL_VOTING_NOT_AUTHORIZED && !isAbandoned);
     const userCanRevokeVote =
       currentUserIsTheAuthor && voteStatus === PROPOSAL_VOTING_AUTHORIZED;
     const adminCanStartTheVote =
       isAdmin &&
+      !isAbandoned &&
       voteStatus === PROPOSAL_VOTING_AUTHORIZED &&
       (authorid !== userid || isTestnet);
     const enableAdminActionsForUnvetted =
@@ -143,12 +150,21 @@ class ThingLinkComp extends React.Component {
     const status = isApiRequestingSetProposalStatusByToken(id);
     const loadingCensor = status && status === PROPOSAL_STATUS_CENSORED;
     const loadingApprove = status && status === PROPOSAL_STATUS_PUBLIC;
+    const loadingAbandoned = status && status === PROPOSAL_STATUS_ABANDONED;
+
+    const censoredorAbandoned = () => {
+      if (review_status === PROPOSAL_STATUS_CENSORED) {
+        return "spam";
+      } else if (isAbandoned) {
+        return "abandoned";
+      } else {
+        return null;
+      }
+    };
 
     return (
       <div
-        className={`thing thing-proposal id-${id} odd link ${
-          review_status === PROPOSAL_STATUS_CENSORED ? "spam" : null
-        }`}
+        className={`thing thing-proposal id-${id} odd link ${censoredorAbandoned()}`}
         data-author={author}
         data-author-fullname=""
         data-domain={domain}
@@ -467,6 +483,36 @@ class ThingLinkComp extends React.Component {
               />
             </li>
           ) : null}
+          {isVetted && !isVotingActiveOrFinished && isAdmin && !isAbandoned && (
+            <ul style={{ display: "flex" }}>
+              <li key="spam">
+                <ButtonWithLoadingIcon
+                  className={`c-btn c-btn-primary${
+                    !userCanExecuteActions ? " not-active disabled" : ""
+                  }`}
+                  onClick={e =>
+                    confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
+                      reasonPlaceholder:
+                        "Please provide a reason for marking this proposal as deprecated"
+                    }).then(
+                      ({ reason, confirm }) =>
+                        confirm &&
+                        onChangeStatus(
+                          authorid,
+                          loggedInAsEmail,
+                          id,
+                          PROPOSAL_STATUS_ABANDONED,
+                          reason
+                        )
+                    ) && e.preventDefault()
+                  }
+                  text="deprecate"
+                  data-event-action="deprecate"
+                  isLoading={loadingAbandoned}
+                />
+              </li>
+            </ul>
+          )}
           <ul
             className="flat-list buttons"
             style={{

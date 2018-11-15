@@ -6,11 +6,13 @@ import {
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_FILTER_ALL,
-  PROPOSAL_VOTING_FINISHED
+  PROPOSAL_VOTING_FINISHED,
+  PROPOSAL_STATUS_ABANDONED
 } from "./constants.js";
 
 export const getProposalStatus = proposalStatus =>
   get(proposalStatus, [
+    "Abandoned",
     "Invalid",
     "Not found",
     "Not reviewed",
@@ -206,6 +208,8 @@ export const countPublicProposals = proposals => {
           cur.status === PROPOSAL_VOTING_AUTHORIZED
         )
           acc[PROPOSAL_VOTING_NOT_AUTHORIZED]++;
+        else if (cur.status === PROPOSAL_STATUS_ABANDONED)
+          acc[PROPOSAL_VOTING_FINISHED]++;
         else if (cur.status === PROPOSAL_VOTING_ACTIVE)
           acc[PROPOSAL_VOTING_ACTIVE]++;
         else if (cur.status === PROPOSAL_VOTING_FINISHED)
