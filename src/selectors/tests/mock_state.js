@@ -65,7 +65,7 @@ export const MOCK_STATE = {
       },
       error: "errormsg"
     },
-    editUser: {
+    manageUser: {
       payload: {
         action: "fake_action"
       }

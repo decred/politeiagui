@@ -55,6 +55,7 @@ export const isApiRequestingPropVoteStatus = getIsApiRequesting(
   "proposalVoteStatus"
 );
 export const isApiRequestingEditUser = getIsApiRequesting("editUser");
+export const isApiRequestingManageUser = getIsApiRequesting("manageUser");
 export const isApiRequestingEditProposal = getIsApiRequesting("editProposal");
 
 const apiNewUserPayload = getApiPayload("newUser");
@@ -65,14 +66,14 @@ const apiResendVerificationEmailPayload = getApiPayload(
 );
 const apiNewProposalPayload = getApiPayload("newProposal");
 const apiSetStatusProposalPayload = getApiPayload("setStatusProposal");
-const apiEditUserPayload = getApiPayload("editUser");
+const apiManageUserPayload = getApiPayload("manageUser");
 
 export const apiMeResponse = getApiResponse("me");
 export const apiUnvettedStatusResponse = getApiResponse("unvettedStatus");
 const apiInitResponse = getApiResponse("init");
 const apiPolicyResponse = getApiResponse("policy");
 const apiNewUserResponse = getApiResponse("newUser");
-const apiUserResponse = getApiResponse("user");
+export const apiUserResponse = getApiResponse("user");
 export const apiChangePasswordResponse = getApiResponse("changePassword");
 export const apiChangeUsernameResponse = getApiResponse("changeUsername");
 export const apiLoginResponse = getApiResponse("login");
@@ -95,7 +96,10 @@ export const verifyUserKey = getApiResponse("verifyUserKey");
 export const updateUserKeyError = getApiError("updateUserKey");
 export const verifyUserKeyError = getApiError("verifyUserKey");
 const apiCommentsVotesResponse = getApiResponse("commentsvotes");
-export const editUserResponse = getApiResponse("editUser");
+export const apiEditUserPayload = getApiPayload("editUser");
+export const apiEditUserResponse = getApiResponse("editUser");
+export const editUserError = getApiError("editUser");
+export const manageUserResponse = getApiResponse("manageUser");
 
 export const apiLikeCommentResponse = getApiResponse("likeComment");
 export const apiLikeCommentError = getApiError("likeComment");
@@ -521,9 +525,9 @@ export const verificationToken = compose(
   apiNewUserResponse
 );
 export const getKeyMismatch = state => state.api.keyMismatch;
-export const editUserAction = compose(
+export const manageUserAction = compose(
   get("action"),
-  apiEditUserPayload
+  apiManageUserPayload
 );
 export const lastLoginTimeFromLoginResponse = compose(
   get("lastlogintime"),
@@ -606,5 +610,5 @@ export const isApiRequesting = or(
   isApiRequestingStartVote,
   isApiRequestingPropsVoteStatus,
   isApiRequestingPropVoteStatus,
-  isApiRequestingEditUser
+  isApiRequestingManageUser
 );

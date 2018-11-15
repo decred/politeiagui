@@ -17,7 +17,7 @@ import { resetNewProposalData } from "../lib/editors_content_backup";
 import * as sel from "../selectors";
 import act from "./methods";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
-import { onLogout, cleanErrors } from "./api";
+import { onLogout, onEditUser, cleanErrors } from "./api";
 import { loadStateLocalStorage, loggedInStateKey } from "../lib/local_storage";
 import {
   PROPOSAL_VOTING_ACTIVE,
@@ -205,3 +205,6 @@ export const toggleCreditsPaymentPolling = bool =>
 
 export const toggleProposalPaymentReceived = bool =>
   act.TOGGLE_PROPOSAL_PAYMENT_RECEIVED(bool);
+
+export const onEditUserPreferences = preferences => dispatch =>
+  dispatch(onEditUser(sel.resolveEditUserValues(preferences)));

@@ -743,8 +743,8 @@ describe("test api reducer", () => {
         key: "commentsvotes",
         type: "receive"
       },
-      { action: act.REQUEST_EDIT_USER, key: "editUser", type: "request" },
-      { action: act.RECEIVE_EDIT_USER, key: "editUser", type: "receive" },
+      { action: act.REQUEST_MANAGE_USER, key: "manageUser", type: "request" },
+      { action: act.RECEIVE_MANAGE_USER, key: "manageUser", type: "receive" },
       { action: act.REQUEST_NEW_PROPOSAL, key: "newProposal", type: "request" },
       { action: act.RECEIVE_NEW_PROPOSAL, key: "newProposal", type: "receive" },
       {

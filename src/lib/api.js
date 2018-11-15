@@ -206,8 +206,15 @@ export const proposalPaywallDetails = () =>
 export const userProposalCredits = () =>
   GET("/v1/user/proposals/credits").then(getResponse);
 
-export const editUser = (csrf, userid, action, reason) =>
-  POST("/user/edit", csrf, { userid, action, reason }).then(getResponse);
+export const editUser = (csrf, {
+  proposalemailnotifications
+}) =>
+  POST("/user/edit", csrf, {
+    proposalemailnotifications
+  }).then(getResponse);
+
+export const manageUser = (csrf, userid, action, reason) =>
+  POST("/user/manage", csrf, { userid, action, reason }).then(getResponse);
 
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);

@@ -264,6 +264,7 @@ export const onFetchProposal = token => dispatch => {
 };
 
 export const onFetchUser = userId => dispatch => {
+  dispatch(act.RESET_EDIT_USER());
   dispatch(act.REQUEST_USER(userId));
   const regexp = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   const valid = regexp.test(userId);
@@ -297,18 +298,29 @@ export const onFetchLikedComments = token => dispatch => {
     });
 };
 
-export const onEditUser = (userId, action) =>
+export const onEditUser = preferences =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_EDIT_USER(preferences));
+    return api
+      .editUser(csrf, preferences)
+      .then(response => dispatch(act.RECEIVE_EDIT_USER(response)))
+      .catch(error => {
+        dispatch(act.RECEIVE_EDIT_USER(null, error));
+      });
+  });
+
+export const onManageUser = (userId, action) =>
   withCsrf((dispatch, getState, csrf) => {
     return dispatch(
       confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {})
     ).then(({ confirm, reason }) => {
       if (confirm) {
-        dispatch(act.REQUEST_EDIT_USER({ userId, action, reason }));
+        dispatch(act.REQUEST_MANAGE_USER({ userId, action, reason }));
         return api
-          .editUser(csrf, userId, action, reason)
-          .then(response => dispatch(act.RECEIVE_EDIT_USER(response)))
+          .manageUser(csrf, userId, action, reason)
+          .then(response => dispatch(act.RECEIVE_MANAGE_USER(response)))
           .catch(error => {
-            dispatch(act.RECEIVE_EDIT_USER(null, error));
+            dispatch(act.RECEIVE_MANAGE_USER(null, error));
           });
       }
     });
