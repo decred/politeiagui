@@ -523,8 +523,7 @@ describe("test api actions (actions/api.js)", () => {
     const path = `/api/v1/proposals/${FAKE_PROPOSAL_TOKEN}`;
     const params = [FAKE_PROPOSAL_TOKEN];
     await assertApiActionOnSuccess(path, api.onFetchProposal, params, [
-      { type: act.REQUEST_PROPOSAL },
-      { type: act.RECEIVE_PROPOSAL, error: false }
+      { type: act.REQUEST_PROPOSAL }
     ]);
     await assertApiActionOnError(path, api.onFetchProposal, params, e => [
       {
