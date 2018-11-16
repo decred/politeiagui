@@ -41,7 +41,8 @@ import {
   NOTIFICATION_EMAIL_ADMIN_PROPOSAL_VOTE_AUTHORIZED,
   NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VETTED,
   NOTIFICATION_EMAIL_REGULAR_PROPOSAL_EDITED,
-  NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED
+  NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED,
+  PROPOSAL_STATUS_ABANDONED
 } from "../constants";
 import { getTextFromIndexMd, countPublicProposals } from "../helpers";
 
@@ -110,44 +111,61 @@ export const getEditUserValues = state => {
     proposalEmailNotifications = editUserPayload.proposalemailnotifications;
   } else {
     const userResponse = apiUserResponse(state) || { user: {} };
-    proposalEmailNotifications = userResponse.user.proposalemailnotifications || 0;
+    proposalEmailNotifications =
+      userResponse.user.proposalemailnotifications || 0;
   }
 
   return {
-    "myproposalnotifications-statuschange": !!(proposalEmailNotifications &
-      NOTIFICATION_EMAIL_MY_PROPOSAL_STATUS_CHANGE),
-    "myproposalnotifications-votestarted": !!(proposalEmailNotifications &
-      NOTIFICATION_EMAIL_MY_PROPOSAL_VOTE_STARTED),
-    "regularproposalnotifications-vetted": !!(proposalEmailNotifications &
-      NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VETTED),
-    "regularproposalnotifications-edited": !!(proposalEmailNotifications &
-      NOTIFICATION_EMAIL_REGULAR_PROPOSAL_EDITED),
-    "regularproposalnotifications-votestarted": !!(proposalEmailNotifications &
-      NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED),
-    "adminproposalnotifications-new": !!(proposalEmailNotifications &
-      NOTIFICATION_EMAIL_ADMIN_PROPOSAL_NEW),
-    "adminproposalnotifications-voteauthorized": !!(proposalEmailNotifications &
-      NOTIFICATION_EMAIL_ADMIN_PROPOSAL_VOTE_AUTHORIZED)
+    "myproposalnotifications-statuschange": !!(
+      proposalEmailNotifications & NOTIFICATION_EMAIL_MY_PROPOSAL_STATUS_CHANGE
+    ),
+    "myproposalnotifications-votestarted": !!(
+      proposalEmailNotifications & NOTIFICATION_EMAIL_MY_PROPOSAL_VOTE_STARTED
+    ),
+    "regularproposalnotifications-vetted": !!(
+      proposalEmailNotifications & NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VETTED
+    ),
+    "regularproposalnotifications-edited": !!(
+      proposalEmailNotifications & NOTIFICATION_EMAIL_REGULAR_PROPOSAL_EDITED
+    ),
+    "regularproposalnotifications-votestarted": !!(
+      proposalEmailNotifications &
+      NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED
+    ),
+    "adminproposalnotifications-new": !!(
+      proposalEmailNotifications & NOTIFICATION_EMAIL_ADMIN_PROPOSAL_NEW
+    ),
+    "adminproposalnotifications-voteauthorized": !!(
+      proposalEmailNotifications &
+      NOTIFICATION_EMAIL_ADMIN_PROPOSAL_VOTE_AUTHORIZED
+    )
   };
 };
 
 export const resolveEditUserValues = prefs => {
   return {
-    proposalemailnotifications: (
-      prefs["myproposalnotifications-statuschange"] ? NOTIFICATION_EMAIL_MY_PROPOSAL_STATUS_CHANGE : 0
-    ) | (
-      prefs["myproposalnotifications-votestarted"] ? NOTIFICATION_EMAIL_MY_PROPOSAL_VOTE_STARTED : 0
-    ) | (
-      prefs["regularproposalnotifications-vetted"] ? NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VETTED : 0
-    ) | (
-      prefs["regularproposalnotifications-edited"] ? NOTIFICATION_EMAIL_REGULAR_PROPOSAL_EDITED : 0
-    ) | (
-      prefs["regularproposalnotifications-votestarted"] ? NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED : 0
-    ) | (
-      prefs["adminproposalnotifications-new"] ? NOTIFICATION_EMAIL_ADMIN_PROPOSAL_NEW : 0
-    ) | (
-      prefs["adminproposalnotifications-voteauthorized"] ? NOTIFICATION_EMAIL_ADMIN_PROPOSAL_VOTE_AUTHORIZED : 0
-    )
+    proposalemailnotifications:
+      (prefs["myproposalnotifications-statuschange"]
+        ? NOTIFICATION_EMAIL_MY_PROPOSAL_STATUS_CHANGE
+        : 0) |
+      (prefs["myproposalnotifications-votestarted"]
+        ? NOTIFICATION_EMAIL_MY_PROPOSAL_VOTE_STARTED
+        : 0) |
+      (prefs["regularproposalnotifications-vetted"]
+        ? NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VETTED
+        : 0) |
+      (prefs["regularproposalnotifications-edited"]
+        ? NOTIFICATION_EMAIL_REGULAR_PROPOSAL_EDITED
+        : 0) |
+      (prefs["regularproposalnotifications-votestarted"]
+        ? NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED
+        : 0) |
+      (prefs["adminproposalnotifications-new"]
+        ? NOTIFICATION_EMAIL_ADMIN_PROPOSAL_NEW
+        : 0) |
+      (prefs["adminproposalnotifications-voteauthorized"]
+        ? NOTIFICATION_EMAIL_ADMIN_PROPOSAL_VOTE_AUTHORIZED
+        : 0)
   };
 };
 
@@ -228,12 +246,26 @@ export const getVettedFilteredProposals = state => {
       const propVoteStatus = getPropVoteStatus(state)(
         prop.censorshiprecord.token
       ).status;
-      if (
-        filterValue === PROPOSAL_VOTING_NOT_AUTHORIZED &&
-        propVoteStatus === PROPOSAL_VOTING_AUTHORIZED
-      ) {
+
+      // the filter value used for all proposals on pre-voting
+      // is PROPOSAL_VOTING_NOT_AUTHORIZED however proposals with
+      // authorized voting should also be included
+      const filterForPreVoting = filterValue === PROPOSAL_VOTING_NOT_AUTHORIZED;
+      const propIsVotingAuthorized =
+        propVoteStatus === PROPOSAL_VOTING_AUTHORIZED;
+      if (filterForPreVoting && propIsVotingAuthorized) {
         return true;
       }
+
+      // the proposals under the abandoned tab are classified by their
+      // regular status and NOT by their voting status, so is necessary
+      // a special conditional to handle this corner case
+      const filterForAbandoned = filterValue === PROPOSAL_STATUS_ABANDONED;
+      const propIsAbandoned = prop.status === PROPOSAL_STATUS_ABANDONED;
+      if (filterForAbandoned && propIsAbandoned) {
+        return true;
+      }
+
       return (
         filterValue ===
         getPropVoteStatus(state)(prop.censorshiprecord.token).status
@@ -303,9 +335,18 @@ export const getUnvettedProposalFilterCounts = state => {
     : {};
 };
 
+const countAbandonedProposals = proposals =>
+  proposals.filter(p => p.status === PROPOSAL_STATUS_ABANDONED).length;
+
 export const getVettedProposalFilterCounts = state => {
   const vsResponse = apiPropsVoteStatusResponse(state);
-  return vsResponse ? countPublicProposals(vsResponse.votesstatus) : {};
+  const vettedProps = apiVettedProposals(state);
+  const count = vsResponse ? countPublicProposals(vsResponse.votesstatus) : {};
+  // abandoned proposals has to be counted separately because it's counting
+  // is not based on its voting status
+  const countOfAbandonedProps = countAbandonedProposals(vettedProps);
+
+  return { ...count, [PROPOSAL_STATUS_ABANDONED]: countOfAbandonedProps };
 };
 
 export const getUnvettedEmptyProposalsMessage = state => {

@@ -5,7 +5,8 @@ import compose from "lodash/fp/compose";
 import { or, bool, constant, not } from "../lib/fp";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_STATUS_CENSORED
+  PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_STATUS_ABANDONED
 } from "../constants";
 
 export const getIsApiRequesting = key =>
@@ -357,7 +358,9 @@ export const isMainNet = not(isTestNet);
 export const getPropVoteStatus = state => token => {
   // try to get it from single prop response (proposal detail)
   let vsResponse = apiPropVoteStatusResponse(state);
-  if (vsResponse && vsResponse.token === token) return vsResponse;
+  if (vsResponse && vsResponse.token === token) {
+    return vsResponse;
+  }
   // otherwise try to get it from the all vote status response (public props)
   vsResponse = apiPropsVoteStatusResponse(state);
   if (vsResponse && vsResponse.votesstatus) {
@@ -444,6 +447,7 @@ const filtered = status =>
     apiUnvettedProposals
   );
 export const unreviewedProposals = filtered(PROPOSAL_STATUS_UNREVIEWED);
+export const abandonedProposals = filtered(PROPOSAL_STATUS_ABANDONED);
 export const censoredProposals = filtered(PROPOSAL_STATUS_CENSORED);
 export const unvettedProposalsIsRequesting = or(
   isApiRequestingInit,
@@ -459,6 +463,11 @@ export const proposalToken = compose(
   get(["censorshiprecord", "token"]),
   apiProposal
 );
+export const proposalStatus = compose(
+  get("status"),
+  apiProposal
+);
+
 export const proposalAuthor = compose(
   get(["username"]),
   apiProposal

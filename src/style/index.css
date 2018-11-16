@@ -1561,6 +1561,9 @@ form div.usertext-body.may-blank-within.md-container {
   background-color: #FFE9E6;
 }
 
+.thing.abandoned {
+	background-color: #fffae6a6;
+}
 .togglebutton {
   text-transform: uppercase;
 }
