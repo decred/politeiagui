@@ -17,9 +17,6 @@ class InternalServerErrorMessage extends Component {
                   You can try reloading the page. If the error persists, please
                   try again in a few minutes.
                 </p>
-                <button onClick={() => (window.location.href = "/")}>
-                  Back to Home
-                </button>
               </div>
             }
           />

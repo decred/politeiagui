@@ -8,12 +8,15 @@ import {
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
-  PROPOSAL_STATUS_PUBLIC
+  PROPOSAL_STATUS_PUBLIC,
+  PROPOSAL_STATUS_ABANDONED
 } from "../../constants";
 
 export const onReceiveSetStatus = (state, action) => {
   state = receive("setStatusProposal", state, action);
   if (action.error) return state;
+  let proposalsVoteStatus =
+    get(["proposalsVoteStatus", "response", "votesstatus"], state) || [];
   const getProposalToken = prop => get(["censorshiprecord", "token"], prop);
 
   const updatedProposal = {
@@ -40,6 +43,14 @@ export const onReceiveSetStatus = (state, action) => {
     );
     // add to vetted list
     vettedProps = [updatedProposal].concat(vettedProps);
+  } else if (updatedProposal.status === PROPOSAL_STATUS_ABANDONED) {
+    // if status is set to abandoned keep it in the vetted list
+    // and update the status
+    vettedProps = map(updateProposalStatus, vettedProps);
+    // remove this prop form the proposals votes status response
+    proposalsVoteStatus = proposalsVoteStatus.filter(
+      pvs => pvs.token !== getProposalToken(updatedProposal)
+    );
   } else {
     unvettedProps = map(updateProposalStatus, unvettedProps);
   }
@@ -67,6 +78,13 @@ export const onReceiveSetStatus = (state, action) => {
       response: {
         ...state.vetted.response,
         proposals: vettedProps
+      }
+    },
+    proposalsVoteStatus: {
+      ...state.proposalsVoteStatus,
+      response: {
+        ...state.proposalsVoteStatus.response,
+        votesstatus: proposalsVoteStatus
       }
     }
   };

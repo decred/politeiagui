@@ -18,7 +18,7 @@ const newProposalConnector = connect(
     name: sel.newProposalName,
     description: sel.newProposalDescription,
     files: sel.newProposalFiles,
-    newProposalError: sel.newProposalError,
+    submitError: sel.newProposalError,
     merkle: sel.newProposalMerkle,
     token: sel.newProposalToken,
     signature: sel.newProposalSignature,
@@ -73,7 +73,7 @@ class NewProposalWrapper extends Component {
           ...this.props,
           onSave: this.onSave.bind(this),
           initialValues: this.state.initialValues,
-          newProposalError: validationError,
+          validationError: validationError,
           onChange: this.onChange
         }}
       />

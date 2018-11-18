@@ -6,16 +6,14 @@ import compose from "lodash/fp/compose";
 import { arg, or } from "../lib/fp";
 import * as sel from "../selectors";
 import * as act from "../actions";
-import { confirmWithModal } from "../actions/modal";
-import { onUpdateUserKey } from "../actions/api";
 import {
-  EDIT_USER_CLEAR_USER_PAYWALL,
-  EDIT_USER_EXPIRE_NEW_USER_VERIFICATION,
-  EDIT_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
-  EDIT_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
-  EDIT_USER_UNLOCK,
-  EDIT_USER_DEACTIVATE,
-  EDIT_USER_REACTIVATE
+  MANAGE_USER_CLEAR_USER_PAYWALL,
+  MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
+  MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
+  MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
+  MANAGE_USER_UNLOCK,
+  MANAGE_USER_DEACTIVATE,
+  MANAGE_USER_REACTIVATE
 } from "../constants";
 
 const userConnector = connect(
@@ -53,29 +51,29 @@ const userConnector = connect(
     amountOfCreditsAddedOnRescan: sel.amountOfCreditsAddedOnRescan,
     rescanUserId: sel.apiRescanUserPaymentsUserId,
     isApiRequestingMarkAsPaid: state =>
-      sel.isApiRequestingEditUser(state) &&
-      sel.editUserAction(state) === EDIT_USER_CLEAR_USER_PAYWALL,
+      sel.isApiRequestingManageUser(state) &&
+      sel.manageUserAction(state) === MANAGE_USER_CLEAR_USER_PAYWALL,
     isApiRequestingMarkNewUserAsExpired: state =>
-      sel.isApiRequestingEditUser(state) &&
-      sel.editUserAction(state) === EDIT_USER_EXPIRE_NEW_USER_VERIFICATION,
+      sel.isApiRequestingManageUser(state) &&
+      sel.manageUserAction(state) === MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
     isApiRequestingMarkUpdateKeyAsExpired: state =>
-      sel.isApiRequestingEditUser(state) &&
-      sel.editUserAction(state) === EDIT_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
+      sel.isApiRequestingManageUser(state) &&
+      sel.manageUserAction(state) ===
+        MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
     isApiRequestingMarkResetPasswordAsExpired: state =>
-      sel.isApiRequestingEditUser(state) &&
-      sel.editUserAction(state) ===
-        EDIT_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
+      sel.isApiRequestingManageUser(state) &&
+      sel.manageUserAction(state) ===
+        MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
     isApiRequestingUnlockUser: state =>
-      sel.isApiRequestingEditUser(state) &&
-      sel.editUserAction(state) === EDIT_USER_UNLOCK,
+      sel.isApiRequestingManageUser(state) &&
+      sel.manageUserAction(state) === MANAGE_USER_UNLOCK,
     isApiRequestingDeactivateUser: state =>
-      sel.isApiRequestingEditUser(state) &&
-      sel.editUserAction(state) === EDIT_USER_DEACTIVATE,
+      sel.isApiRequestingManageUser(state) &&
+      sel.manageUserAction(state) === MANAGE_USER_DEACTIVATE,
     isApiRequestingReactivateUser: state =>
-      sel.isApiRequestingEditUser(state) &&
-      sel.editUserAction(state) === EDIT_USER_REACTIVATE,
-    editUserResponse: sel.editUserResponse,
-    numOfUserProposals: sel.numOfUserProposals
+      sel.isApiRequestingManageUser(state) &&
+      sel.manageUserAction(state) === MANAGE_USER_REACTIVATE,
+    manageUserResponse: sel.manageUserResponse
   }),
   dispatch =>
     bindActionCreators(
@@ -86,9 +84,9 @@ const userConnector = connect(
         openModal: act.openModal,
         keyMismatchAction: act.keyMismatch,
         onIdentityImported: act.onIdentityImported,
-        confirmWithModal,
-        onUpdateUserKey,
-        onEditUser: act.onEditUser,
+        confirmWithModal: act.confirmWithModal,
+        onUpdateUserKey: act.onUpdateUserKey,
+        onManageUser: act.onManageUser,
         onRescan: act.onRescanUserPayments,
         onResetRescan: act.onResetRescanUserPayments
       },

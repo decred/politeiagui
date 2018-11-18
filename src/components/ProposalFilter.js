@@ -15,7 +15,8 @@ import {
   LIST_HEADER_UNVETTED,
   LIST_HEADER_USER,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
-  PROPOSAL_VOTING_AUTHORIZED
+  PROPOSAL_VOTING_AUTHORIZED,
+  PROPOSAL_STATUS_ABANDONED
 } from "../constants";
 import { setQueryStringWithoutPageReload } from "../helpers";
 
@@ -35,6 +36,10 @@ const adminFilterOptions = [
 ];
 const publicFilterOptions = [
   {
+    label: "all proposals",
+    value: PROPOSAL_FILTER_ALL
+  },
+  {
     label: "pre-voting",
     value: PROPOSAL_VOTING_NOT_AUTHORIZED
   },
@@ -47,8 +52,8 @@ const publicFilterOptions = [
     value: PROPOSAL_VOTING_FINISHED
   },
   {
-    label: "all proposals",
-    value: PROPOSAL_FILTER_ALL
+    label: "deprecated",
+    value: PROPOSAL_STATUS_ABANDONED
   }
 ];
 const userFilterOptions = [
@@ -80,6 +85,7 @@ const mapHeaderToCount = {
   [LIST_HEADER_PUBLIC]: (proposalCounts, status) => {
     // voting not authorized and voting authorized proposals are shown on the same list
     // so is necessary to sum their counts
+
     const count = proposalCounts[status] || 0;
     if (status === PROPOSAL_VOTING_NOT_AUTHORIZED) {
       return count + (proposalCounts[PROPOSAL_VOTING_AUTHORIZED] || 0);

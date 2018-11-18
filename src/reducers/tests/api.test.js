@@ -109,7 +109,8 @@ describe("test api reducer", () => {
       }
     },
     vetted: DEFAULT_REQUEST_STATE,
-    userProposals: DEFAULT_REQUEST_STATE
+    userProposals: DEFAULT_REQUEST_STATE,
+    proposalsVoteStatus: DEFAULT_REQUEST_STATE
   };
 
   const MOCK_PROPOSALS_LOAD = [
@@ -467,7 +468,7 @@ describe("test api reducer", () => {
     );
   });
 
-  test("correcly updates status state for onReceiveSetStatus (unvetted -> vetted)", () => {
+  test("correctly updates status state for onReceiveSetStatus (unvetted -> vetted)", () => {
     const proposalUpdated = {
       ...MOCK_STATE.unvetted.response.proposals[0],
       status: 4,
@@ -743,8 +744,8 @@ describe("test api reducer", () => {
         key: "commentsvotes",
         type: "receive"
       },
-      { action: act.REQUEST_EDIT_USER, key: "editUser", type: "request" },
-      { action: act.RECEIVE_EDIT_USER, key: "editUser", type: "receive" },
+      { action: act.REQUEST_MANAGE_USER, key: "manageUser", type: "request" },
+      { action: act.RECEIVE_MANAGE_USER, key: "manageUser", type: "receive" },
       { action: act.REQUEST_NEW_PROPOSAL, key: "newProposal", type: "request" },
       { action: act.RECEIVE_NEW_PROPOSAL, key: "newProposal", type: "receive" },
       {

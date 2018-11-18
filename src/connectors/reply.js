@@ -16,6 +16,7 @@ const replyConnector = connect(
       arg(1)
     ),
     token: sel.proposalToken,
+    proposalStatus: sel.proposalStatus,
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
     proposalAuthor: sel.proposalAuthor,

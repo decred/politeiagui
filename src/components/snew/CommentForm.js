@@ -3,7 +3,10 @@ import LinkComponent from "./Link";
 import Message from "../Message";
 import replyConnector from "../../connectors/reply";
 import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
-import { PROPOSAL_VOTING_FINISHED } from "../../constants";
+import {
+  PROPOSAL_VOTING_FINISHED,
+  PROPOSAL_STATUS_ABANDONED
+} from "../../constants";
 import MarkdownHelp from "../MarkdownHelp";
 
 const CommentForm = ({
@@ -18,6 +21,7 @@ const CommentForm = ({
   userCanExecuteActions,
   getVoteStatus,
   token,
+  proposalStatus,
   showContentPolicy = false,
   value,
   onChange,
@@ -27,6 +31,7 @@ const CommentForm = ({
   const isVotingFinished =
     getVoteStatus(token) &&
     getVoteStatus(token).status === PROPOSAL_VOTING_FINISHED;
+  const isProposalAbandoned = proposalStatus === PROPOSAL_STATUS_ABANDONED;
   return loggedInAsEmail ? (
     <React.Fragment>
       <form
@@ -40,7 +45,7 @@ const CommentForm = ({
         <input name="parentid" type="hidden" defaultValue={thingId} />
         <div className="usertext-edit md-container">
           {isPostingComment && <h2>Posting comment...</h2>}
-          {!isPostingComment && !isVotingFinished ? (
+          {!isPostingComment && !isVotingFinished && !isProposalAbandoned ? (
             <div className="md">
               <MarkdownEditorField
                 input={{ value: value, onChange: onChange }}
@@ -54,8 +59,18 @@ const CommentForm = ({
                 votes are not allowed.
               </span>
             </Message>
+          ) : isProposalAbandoned ? (
+            <Message height="70px" type="info">
+              <span>
+                This proposal has been deprecated. New comments and comment
+                votes are not allowed.
+              </span>
+            </Message>
           ) : null}
-          {!isPostingComment && getVoteStatus(token) && !isVotingFinished ? (
+          {!isPostingComment &&
+          getVoteStatus(token) &&
+          !isVotingFinished &&
+          !isProposalAbandoned ? (
             <div className="bottom-area">
               <span className="help-toggle toggle">
                 <a

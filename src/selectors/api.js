@@ -5,7 +5,8 @@ import compose from "lodash/fp/compose";
 import { or, bool, constant, not } from "../lib/fp";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_STATUS_CENSORED
+  PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_STATUS_ABANDONED
 } from "../constants";
 
 export const getIsApiRequesting = key =>
@@ -55,6 +56,7 @@ export const isApiRequestingPropVoteStatus = getIsApiRequesting(
   "proposalVoteStatus"
 );
 export const isApiRequestingEditUser = getIsApiRequesting("editUser");
+export const isApiRequestingManageUser = getIsApiRequesting("manageUser");
 export const isApiRequestingEditProposal = getIsApiRequesting("editProposal");
 
 const apiNewUserPayload = getApiPayload("newUser");
@@ -65,14 +67,14 @@ const apiResendVerificationEmailPayload = getApiPayload(
 );
 const apiNewProposalPayload = getApiPayload("newProposal");
 const apiSetStatusProposalPayload = getApiPayload("setStatusProposal");
-const apiEditUserPayload = getApiPayload("editUser");
+const apiManageUserPayload = getApiPayload("manageUser");
 
 export const apiMeResponse = getApiResponse("me");
 export const apiUnvettedStatusResponse = getApiResponse("unvettedStatus");
 const apiInitResponse = getApiResponse("init");
 const apiPolicyResponse = getApiResponse("policy");
 const apiNewUserResponse = getApiResponse("newUser");
-const apiUserResponse = getApiResponse("user");
+export const apiUserResponse = getApiResponse("user");
 export const apiChangePasswordResponse = getApiResponse("changePassword");
 export const apiChangeUsernameResponse = getApiResponse("changeUsername");
 export const apiLoginResponse = getApiResponse("login");
@@ -95,7 +97,10 @@ export const verifyUserKey = getApiResponse("verifyUserKey");
 export const updateUserKeyError = getApiError("updateUserKey");
 export const verifyUserKeyError = getApiError("verifyUserKey");
 const apiCommentsVotesResponse = getApiResponse("commentsvotes");
-export const editUserResponse = getApiResponse("editUser");
+export const apiEditUserPayload = getApiPayload("editUser");
+export const apiEditUserResponse = getApiResponse("editUser");
+export const editUserError = getApiError("editUser");
+export const manageUserResponse = getApiResponse("manageUser");
 
 export const apiLikeCommentResponse = getApiResponse("likeComment");
 export const apiLikeCommentError = getApiError("likeComment");
@@ -220,7 +225,7 @@ export const apiPasswordResetError = or(
   getApiError("passwordReset")
 );
 export const apiLoginError = or(apiInitError, getApiError("login"));
-export const apiLogoutError = or(apiInitError, getApiError("logout"));
+export const apiLogoutError = getApiError("logout");
 export const apiUserSearchError = getApiError("userSearch");
 const apiVettedError = getApiError("vetted");
 const apiUserProposalsError = getApiError("userProposals");
@@ -361,7 +366,9 @@ export const isMainNet = not(isTestNet);
 export const getPropVoteStatus = state => token => {
   // try to get it from single prop response (proposal detail)
   let vsResponse = apiPropVoteStatusResponse(state);
-  if (vsResponse && vsResponse.token === token) return vsResponse;
+  if (vsResponse && vsResponse.token === token) {
+    return vsResponse;
+  }
   // otherwise try to get it from the all vote status response (public props)
   vsResponse = apiPropsVoteStatusResponse(state);
   if (vsResponse && vsResponse.votesstatus) {
@@ -448,6 +455,7 @@ const filtered = status =>
     apiUnvettedProposals
   );
 export const unreviewedProposals = filtered(PROPOSAL_STATUS_UNREVIEWED);
+export const abandonedProposals = filtered(PROPOSAL_STATUS_ABANDONED);
 export const censoredProposals = filtered(PROPOSAL_STATUS_CENSORED);
 export const unvettedProposalsIsRequesting = or(
   isApiRequestingInit,
@@ -463,6 +471,11 @@ export const proposalToken = compose(
   get(["censorshiprecord", "token"]),
   apiProposal
 );
+export const proposalStatus = compose(
+  get("status"),
+  apiProposal
+);
+
 export const proposalAuthor = compose(
   get(["username"]),
   apiProposal
@@ -529,9 +542,9 @@ export const verificationToken = compose(
   apiNewUserResponse
 );
 export const getKeyMismatch = state => state.api.keyMismatch;
-export const editUserAction = compose(
+export const manageUserAction = compose(
   get("action"),
-  apiEditUserPayload
+  apiManageUserPayload
 );
 export const lastLoginTimeFromLoginResponse = compose(
   get("lastlogintime"),
@@ -614,5 +627,5 @@ export const isApiRequesting = or(
   isApiRequestingStartVote,
   isApiRequestingPropsVoteStatus,
   isApiRequestingPropVoteStatus,
-  isApiRequestingEditUser
+  isApiRequestingManageUser
 );

@@ -3,10 +3,12 @@ import PageLoadingIcon from "../snew/PageLoadingIcon";
 import Message from "../Message";
 import { Tabs, Tab } from "../Tabs";
 import GeneralTab from "./GeneralTab";
+import PreferencesTab from "./PreferencesTab";
 import ProposalsTab from "./ProposalsTab";
 import CommentsTab from "./CommentsTab";
 import {
   USER_DETAIL_TAB_GENERAL,
+  USER_DETAIL_TAB_PREFERENCES,
   USER_DETAIL_TAB_PROPOSALS,
   USER_DETAIL_TAB_COMMENTS
 } from "../../constants";
@@ -68,6 +70,14 @@ const UserDetailPage = ({
                     onTabChange={onTabChange}
                   />
                 ) : null}
+                {isAdminOrTheUser ? (
+                  <Tab
+                    title="Preferences"
+                    selected={tabId === USER_DETAIL_TAB_PREFERENCES}
+                    tabId={USER_DETAIL_TAB_PREFERENCES}
+                    onTabChange={onTabChange}
+                  />
+                ) : null}
                 <Tab
                   title="Proposals"
                   count={numOfUserProposals}
@@ -88,6 +98,7 @@ const UserDetailPage = ({
               {tabId === USER_DETAIL_TAB_GENERAL && (
                 <GeneralTab dcrdataTxUrl={dcrdataTxUrl} />
               )}
+              {tabId === USER_DETAIL_TAB_PREFERENCES && <PreferencesTab />}
               {tabId === USER_DETAIL_TAB_PROPOSALS && (
                 <ProposalsTab count={user.numofproposals} />
               )}

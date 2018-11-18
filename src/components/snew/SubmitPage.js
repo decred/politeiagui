@@ -47,16 +47,18 @@ class SubmitPage extends React.Component {
       onSaveDraft,
       submitting,
       handleSubmit,
-      newProposalError,
+      validationError,
+      submitError,
       userCanExecuteActions,
       openModal,
       proposalCredits,
       editingMode
     } = this.props;
+    console.log("new proposal error", submitError);
     const submitEnabled =
       !submitting &&
       !error &&
-      !newProposalError &&
+      !validationError &&
       userCanExecuteActions &&
       (proposalCredits > 0 || editingMode);
     return !policy || isLoading ? (
@@ -66,9 +68,9 @@ class SubmitPage extends React.Component {
         <div className="page submit-proposal-page">
           <ReactBody className="submit-page" />
           <div className="submit conztent warn-on-unload" id="newlink">
-            {newProposalError && (
+            {validationError && (
               <Message type="error" header="Error creating proposal">
-                <MultipleItemsBodyMessage items={newProposalError} />
+                <MultipleItemsBodyMessage items={validationError} />
               </Message>
             )}
             {!error && warning && (
@@ -175,6 +177,15 @@ class SubmitPage extends React.Component {
                         </div>
                       )}
                     </div>
+                    {submitError ? (
+                      <Message
+                        type="error"
+                        header={`Error ${
+                          editingMode ? "updating" : "creating"
+                        } proposal`}
+                        body={submitError}
+                      />
+                    ) : null}
                   </div>
                 </div>
               </div>

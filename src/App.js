@@ -80,7 +80,7 @@ class Loader extends Component {
     if (!prevProps.apiError && this.props.apiError) {
       // Unrecoverable error
       if (this.props.apiError.internalError) {
-        this.props.history.push(`/500?error=${this.props.apiError.message}`);
+        this.props.history.push("/500");
       } else {
         console.error("ERROR:", this.props.apiError.message);
       }

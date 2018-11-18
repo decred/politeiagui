@@ -18,7 +18,7 @@ import {
   RANDOM_ERROR_RESPONSE
 } from "./helpers";
 import { getHumanReadableError } from "../../helpers";
-import { EDIT_USER_CLEAR_USER_PAYWALL } from "../../constants";
+import { MANAGE_USER_CLEAR_USER_PAYWALL } from "../../constants";
 
 const mockStore = configureStore([thunk]);
 
@@ -523,8 +523,7 @@ describe("test api actions (actions/api.js)", () => {
     const path = `/api/v1/proposals/${FAKE_PROPOSAL_TOKEN}`;
     const params = [FAKE_PROPOSAL_TOKEN];
     await assertApiActionOnSuccess(path, api.onFetchProposal, params, [
-      { type: act.REQUEST_PROPOSAL },
-      { type: act.RECEIVE_PROPOSAL, error: false }
+      { type: act.REQUEST_PROPOSAL }
     ]);
     await assertApiActionOnError(path, api.onFetchProposal, params, e => [
       {
@@ -941,23 +940,23 @@ describe("test api actions (actions/api.js)", () => {
     );
   });
 
-  test("on edit user action", async () => {
-    const path = "/api/v1/user/edit";
+  test("on manage user action", async () => {
+    const path = "/api/v1/user/manage";
 
     //test it handles a successful response
     await assertApiActionOnSuccess(
       path,
-      api.onEditUser,
-      [FAKE_USER.id, EDIT_USER_CLEAR_USER_PAYWALL],
+      api.onManageUser,
+      [FAKE_USER.id, MANAGE_USER_CLEAR_USER_PAYWALL],
       [
         {
-          type: act.REQUEST_EDIT_USER,
+          type: act.REQUEST_MANAGE_USER,
           payload: {
             userId: FAKE_USER.id,
-            action: EDIT_USER_CLEAR_USER_PAYWALL
+            action: MANAGE_USER_CLEAR_USER_PAYWALL
           }
         },
-        { type: act.RECEIVE_EDIT_USER, error: false }
+        { type: act.RECEIVE_MANAGE_USER, error: false }
       ],
       {},
       methods.POST

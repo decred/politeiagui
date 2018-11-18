@@ -156,21 +156,20 @@ export const onLogin = ({ email, password }) =>
 // handleLogout handles all the procedure to be done once the user is logged out
 // it can be called either when the logout request has been successful or when the
 // session has already expired
-export const handleLogout = (response, cb) => dispatch => {
+export const handleLogout = response => dispatch => {
   dispatch(act.RECEIVE_LOGOUT(response));
   clearStateLocalStorage();
   external_api_actions.clearPollingPointer();
   dispatch(onSetEmail(""));
-  if (cb) cb();
 };
 
-export const onLogout = cb =>
+export const onLogout = () =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_LOGOUT());
     return api
       .logout(csrf)
       .then(response => {
-        dispatch(handleLogout(response, cb));
+        dispatch(handleLogout(response));
       })
       .catch(error => {
         dispatch(act.RECEIVE_LOGOUT(null, error));
@@ -249,13 +248,23 @@ export const onFetchProposal = token => dispatch => {
   dispatch(act.REQUEST_PROPOSAL(token));
   return api
     .proposal(token)
-    .then(response => dispatch(act.RECEIVE_PROPOSAL(response)))
+    .then(response => {
+      response && response.proposal && Object.keys(response.proposal).length > 0
+        ? dispatch(act.RECEIVE_PROPOSAL(response))
+        : dispatch(
+            act.RECEIVE_PROPOSAL(
+              null,
+              new Error("The requested proposal does not exist.")
+            )
+          );
+    })
     .catch(error => {
       dispatch(act.RECEIVE_PROPOSAL(null, error));
     });
 };
 
 export const onFetchUser = userId => dispatch => {
+  dispatch(act.RESET_EDIT_USER());
   dispatch(act.REQUEST_USER(userId));
   const regexp = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   const valid = regexp.test(userId);
@@ -289,18 +298,29 @@ export const onFetchLikedComments = token => dispatch => {
     });
 };
 
-export const onEditUser = (userId, action) =>
+export const onEditUser = preferences =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_EDIT_USER(preferences));
+    return api
+      .editUser(csrf, preferences)
+      .then(response => dispatch(act.RECEIVE_EDIT_USER(response)))
+      .catch(error => {
+        dispatch(act.RECEIVE_EDIT_USER(null, error));
+      });
+  });
+
+export const onManageUser = (userId, action) =>
   withCsrf((dispatch, getState, csrf) => {
     return dispatch(
       confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {})
     ).then(({ confirm, reason }) => {
       if (confirm) {
-        dispatch(act.REQUEST_EDIT_USER({ userId, action, reason }));
+        dispatch(act.REQUEST_MANAGE_USER({ userId, action, reason }));
         return api
-          .editUser(csrf, userId, action, reason)
-          .then(response => dispatch(act.RECEIVE_EDIT_USER(response)))
+          .manageUser(csrf, userId, action, reason)
+          .then(response => dispatch(act.RECEIVE_MANAGE_USER(response)))
           .catch(error => {
-            dispatch(act.RECEIVE_EDIT_USER(null, error));
+            dispatch(act.RECEIVE_MANAGE_USER(null, error));
           });
       }
     });

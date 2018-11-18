@@ -205,8 +205,8 @@ describe("test api selectors", () => {
       MOCK_STATE.api.newUser.response.verificationtoken
     );
 
-    expect(sel.editUserAction(MOCK_STATE)).toEqual(
-      MOCK_STATE.api.editUser.payload.action
+    expect(sel.manageUserAction(MOCK_STATE)).toEqual(
+      MOCK_STATE.api.manageUser.payload.action
     );
 
     expect(sel.lastLoginTimeFromLoginResponse(MOCK_STATE)).toEqual(

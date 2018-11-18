@@ -474,11 +474,11 @@ describe("api integration modules (lib/api.js)", () => {
     ]);
   });
 
-  test("edit user (api/user/edit)", async () => {
+  test("edit user (api/user/manage)", async () => {
     const USER_ID = 0;
     const ACTION = "FAKE_ACTION";
     const REASON = "FAKE_REASON";
-    await assertPOSTOnRouteIsCalled("/api/v1/user/edit", api.editUser, [
+    await assertPOSTOnRouteIsCalled("/api/v1/user/manage", api.manageUser, [
       FAKE_CSRF,
       USER_ID,
       ACTION,
