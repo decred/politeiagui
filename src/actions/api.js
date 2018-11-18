@@ -752,3 +752,31 @@ export const onRescanUserPayments = userid =>
         throw error;
       });
   });
+
+export const onFetchVisitedProposals = token => dispatch => {
+  dispatch(act.REQUEST_GET_VISITED_PROPOSAL());
+  return api
+    .getProposalAccessTimes(token)
+    .then(response => {
+      console.log(response);
+      dispatch(act.RECEIVE_GET_VISITED_PROPOSAL(response));
+    })
+    .catch(error => {
+      dispatch(act.RECEIVE_GET_VISITED_PROPOSAL(null, error));
+      throw error;
+    });
+};
+
+export const onSaveVisitedProposal = token =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_SET_VISITED_PROPOSAL());
+    return api
+      .setProposalAccessTime(token, csrf)
+      .then(response => {
+        dispatch(act.RECEIVE_SET_VISITED_PROPOSAL(response));
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_SET_VISITED_PROPOSAL(null, error));
+        throw error;
+      });
+  });

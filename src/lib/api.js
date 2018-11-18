@@ -409,3 +409,9 @@ export const proposalPaywallPayment = () =>
 
 export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
+
+export const setProposalAccessTime = (token, csrf) =>
+  POST(`/user/proposals/access/${token}`, csrf, {}).then(getResponse);
+
+export const getProposalAccessTimes = token =>
+  GET(`/v1/user/proposals/access/${token}`).then(getResponse);

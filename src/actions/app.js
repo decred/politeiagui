@@ -86,10 +86,6 @@ export const onLoadDraftProposals = email => {
   return act.LOAD_DRAFT_PROPOSALS(drafts);
 };
 
-export const onVisitedProposal = proposalId => {
-  return act.SAVE_VISITED_PROPOSAL({ [proposalId]: Date.now() / 1000 });
-};
-
 export const onDeleteDraftProposal = draftId =>
   act.DELETE_DRAFT_PROPOSAL(draftId);
 

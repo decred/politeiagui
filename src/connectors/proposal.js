@@ -48,7 +48,8 @@ const proposalConnector = connect(
         onFetchLikedComments: act.onFetchLikedComments,
         onSetCommentsSortOption: act.onSetCommentsSortOption,
         resetLastSubmittedProposal: act.resetLastSubmittedProposal,
-        onVisitedProposal: act.onVisitedProposal
+        onSaveVisitedProposal: act.onSaveVisitedProposal,
+        onFetchVisitedProposals: act.onFetchVisitedProposals
       },
       dispatch
     )

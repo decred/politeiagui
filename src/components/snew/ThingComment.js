@@ -49,7 +49,7 @@ class ThingComment extends React.PureComponent {
   };
   componentDidMount() {
     this.handleCommentMaxHeight();
-    console.log("LastVisit", this.props);
+    // console.log("LastVisit", this.props);
   }
 
   render() {

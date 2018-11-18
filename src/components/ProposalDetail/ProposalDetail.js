@@ -39,11 +39,13 @@ class ProposalDetail extends React.Component {
 
   componentDidMount() {
     this.props.onFetchLikedComments(this.props.token);
+    this.props.onFetchVisitedProposals(this.props.token);
   }
 
   componentWillUnmount() {
     this.props.resetLastSubmittedProposal();
-    this.props.onVisitedProposal(this.props.token);
+    console.log("will unmount");
+    this.props.onSaveVisitedProposal(this.props.token);
     document.title = DEFAULT_TAB_TITLE;
   }
 

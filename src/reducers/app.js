@@ -228,17 +228,7 @@ const app = (state = DEFAULT_STATE, action) =>
       proposalPaymentReceived: action.payload
     }),
     [act.REDIRECTED_FROM]: () => ({ ...state, redirectedFrom: action.payload }),
-    [act.RESET_REDIRECTED_FROM]: () => ({ ...state, redirectedFrom: null }),
-    [act.SAVE_VISITED_PROPOSAL]: () => {
-      const visitedProposals = state.visitedProposals;
-      return {
-        ...state,
-        visitedProposals: {
-          ...visitedProposals,
-          ...action.payload
-        }
-      };
-    }
+    [act.RESET_REDIRECTED_FROM]: () => ({ ...state, redirectedFrom: null })
   }[action.type] || (() => state))());
 
 export default app;
