@@ -52,7 +52,7 @@ const publicFilterOptions = [
     value: PROPOSAL_VOTING_FINISHED
   },
   {
-    label: "deprecated",
+    label: "abandoned",
     value: PROPOSAL_STATUS_ABANDONED
   }
 ];

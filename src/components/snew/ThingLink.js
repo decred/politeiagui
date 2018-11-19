@@ -493,7 +493,7 @@ class ThingLinkComp extends React.Component {
                   onClick={e =>
                     confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
                       reasonPlaceholder:
-                        "Please provide a reason for marking this proposal as deprecated"
+                        "Please provide a reason for marking this proposal as abandoned"
                     }).then(
                       ({ reason, confirm }) =>
                         confirm &&
@@ -506,8 +506,8 @@ class ThingLinkComp extends React.Component {
                         )
                     ) && e.preventDefault()
                   }
-                  text="deprecate"
-                  data-event-action="deprecate"
+                  text="abandon"
+                  data-event-action="abandon"
                   isLoading={loadingAbandoned}
                 />
               </li>
