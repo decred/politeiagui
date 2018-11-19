@@ -305,7 +305,7 @@ class ThingLinkComp extends React.Component {
           {review_status === 4 && <VoteStats token={id} />}
           {expanded &&
             (lastSubmitted === id ? (
-              <Message height="80px" type="info">
+              <Message type="info">
                 <span>
                   <p
                     style={{
@@ -328,7 +328,10 @@ class ThingLinkComp extends React.Component {
                       politeia_verify tool
                     </a>{" "}
                     to prove that your submission has been accepted for review
-                    by Politeia.
+                    by Politeia.  Once approved, an "Authorize Voting to Start"
+                    button will appear.  You will have 14 days to authorize a
+                    proposal vote.  If you fail to do so, your proposal will be
+                    considered abandoned.
                   </p>
                 </span>
               </Message>
