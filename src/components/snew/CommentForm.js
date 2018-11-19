@@ -62,8 +62,8 @@ const CommentForm = ({
           ) : isProposalAbandoned ? (
             <Message height="70px" type="info">
               <span>
-                This proposal has been deprecated. New comments and comment
-                votes are not allowed.
+                This proposal has been abandoned. New comments and comment votes
+                are not allowed.
               </span>
             </Message>
           ) : null}
