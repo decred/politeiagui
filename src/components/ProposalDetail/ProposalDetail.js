@@ -15,7 +15,8 @@ class ProposalDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sortedComments: []
+      sortedComments: [],
+      accessTime: 0
     };
   }
   componentDidUpdate(prevProps) {
@@ -44,7 +45,6 @@ class ProposalDetail extends React.Component {
 
   componentWillUnmount() {
     this.props.resetLastSubmittedProposal();
-    console.log("will unmount");
     this.props.onSaveVisitedProposal(this.props.token);
     document.title = DEFAULT_TAB_TITLE;
   }
@@ -144,6 +144,7 @@ class ProposalDetail extends React.Component {
       ...props
     } = this.props;
     const comments = this.state.sortedComments;
+    const accessTime = this.state.accessTime;
     const tempTree = tempThreadTree[commentid];
     return (
       <div className="content" role="main">
@@ -153,6 +154,7 @@ class ProposalDetail extends React.Component {
           ) : (
             <Content
               {...{
+                accessTime,
                 isLoading,
                 error,
                 commentid,

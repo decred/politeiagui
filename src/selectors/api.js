@@ -559,6 +559,11 @@ export const sessionMaxAge = compose(
   apiMeResponse
 );
 
+export const visitedProposal = compose(
+  get("proposalaccesstime"),
+  getApiResponse("visitedProposal")
+);
+
 export const apiEditProposalResponse = getApiResponse("editProposal");
 export const apiEditProposalError = getApiError("editProposal");
 export const apiEditProposalPayload = getApiPayload("editProposal");

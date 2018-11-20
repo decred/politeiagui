@@ -778,7 +778,6 @@ export const onFetchVisitedProposals = token => dispatch => {
   return api
     .getProposalAccessTimes(token)
     .then(response => {
-      console.log(response);
       dispatch(act.RECEIVE_GET_VISITED_PROPOSAL(response));
     })
     .catch(error => {

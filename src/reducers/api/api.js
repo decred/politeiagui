@@ -249,9 +249,10 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_SET_VISITED_PROPOSAL]: () =>
       receive("setVisitedProposal", state, action),
     [act.REQUEST_GET_VISITED_PROPOSAL]: () =>
-      request("getVisitedProposal", state, action),
-    [act.RECEIVE_GET_VISITED_PROPOSAL]: () =>
-      receive("getVisitedProposal", state, action)
+      request("visitedProposal", state, action),
+    [act.RECEIVE_GET_VISITED_PROPOSAL]: () => {
+      return receive("visitedProposal", state, action);
+    }
   }[action.type] || (() => state))());
 
 export default api;

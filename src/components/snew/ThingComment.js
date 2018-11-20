@@ -64,7 +64,6 @@ class ThingComment extends React.PureComponent {
       getVoteStatus,
       likeCommentError,
       likeCommentPayload,
-      userAccessTime,
       lastVisit,
       commentid,
       showCommentForm,
@@ -100,7 +99,7 @@ class ThingComment extends React.PureComponent {
             onCloseCommentForm,
             showCommentForm,
             proposalAuthor,
-            userAccessTime: lastVisit ? lastVisit : userAccessTime,
+            userAccessTime: lastVisit ? lastVisit.timestamp : 0,
             user: loggedInAsEmail,
             authorHref: `/user/${props.authorid}`,
             blockvote:

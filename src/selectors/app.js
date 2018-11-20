@@ -62,17 +62,6 @@ export const newProposalInitialValues = state =>
   state.app.draftProposals.initialValues || {};
 export const draftProposals = state =>
   state && state.app && state.app.draftProposals;
-
-export const visitedProposalById = state => {
-  const proposalId = window.location.pathname.split("/")[2];
-  return (
-    (state &&
-      state.app &&
-      state.app.visitedProposals &&
-      state.app.visitedProposals[proposalId]) ||
-    null
-  );
-};
 export const draftProposalById = state => {
   const drafts = draftProposals(state);
   const { draftid } = qs.parse(window.location.search);

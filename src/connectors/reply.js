@@ -30,7 +30,7 @@ const replyConnector = connect(
     likeCommentError: sel.apiLikeCommentError,
     likeCommentPayload: sel.apiLikeCommentPayload,
     userAccessTime: sel.lastLoginTime,
-    lastVisit: sel.visitedProposalById
+    lastVisit: sel.visitedProposal
   }),
   {
     onFetchData: act.onGetPolicy,
