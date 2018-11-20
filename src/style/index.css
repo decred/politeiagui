@@ -207,6 +207,7 @@ a:hover, a:focus {
 .submit-proposal-page .submit-wrapper {
   display: flex;
   margin: 20px 0;
+  flex-wrap: wrap;
 }
 
 .attach-wrapper {
@@ -279,6 +280,7 @@ a:hover, a:focus {
   height: 36px;
   line-height: 18px;
   padding: 4px 0;
+  width: 65%;
 }
 
 .login-form fieldset {
