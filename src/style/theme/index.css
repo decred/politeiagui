@@ -20,10 +20,6 @@ a:hover {
     color: #2971ff;
 }
 
-.link .entry .tagline a, .md a, md a:hover {
-    color: #2971ff !important;
-}
-
 .flat-list .first a {
     font: 13px Source Sans Pro,Lato,Arial,sans-serif;
     padding: 0 1px;
