@@ -245,14 +245,13 @@ const api = (state = DEFAULT_STATE, action) =>
       return receive("logout", state, action);
     },
     [act.REQUEST_SET_VISITED_PROPOSAL]: () =>
-      request("setVisitedProposal", state, action),
+      request("visitedProposal", state, action),
     [act.RECEIVE_SET_VISITED_PROPOSAL]: () =>
-      receive("setVisitedProposal", state, action),
+      receive("visitedProposal", state, action),
     [act.REQUEST_GET_VISITED_PROPOSAL]: () =>
       request("visitedProposal", state, action),
-    [act.RECEIVE_GET_VISITED_PROPOSAL]: () => {
-      return receive("visitedProposal", state, action);
-    }
+    [act.RECEIVE_GET_VISITED_PROPOSAL]: () =>
+      receive("visitedProposal", state, action)
   }[action.type] || (() => state))());
 
 export default api;

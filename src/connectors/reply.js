@@ -37,7 +37,8 @@ const replyConnector = connect(
     onSubmitComment: act.onSubmitComment,
     onSetReplyParent: act.onSetReplyParent,
     onLikeComment: act.onLikeComment,
-    onCensorComment: act.onCensorComment
+    onCensorComment: act.onCensorComment,
+    onSaveVisitedProposal: act.onSaveVisitedProposal
   }
 );
 
@@ -104,12 +105,14 @@ class Wrapper extends React.PureComponent {
       token,
       thingId: replyTo,
       policy,
-      commentid
+      commentid,
+      onSaveVisitedProposal
     } = this.props;
     const { commentValue } = this.state;
     const comment = commentValue.trim();
     try {
       validate({ values: { comment }, ...this.props }, policy);
+      onSaveVisitedProposal(token);
     } catch (e) {
       this.setState({ validationError: e.errors._error });
       return;

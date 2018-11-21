@@ -1,5 +1,6 @@
 import React from "react";
 import isEqual from "lodash/isEqual";
+import { withRouter } from "react-router-dom";
 import { Content } from "../snew";
 import { commentsToT1, proposalToT3 } from "../../lib/snew";
 import { getTextFromIndexMd } from "../../helpers";
@@ -37,15 +38,19 @@ class ProposalDetail extends React.Component {
     }
     this.handleUpdateOfComments(prevProps, this.props);
   }
-
+  componentWillMount() {
+    this.unlisten = this.props.history.listen(() => {
+      this.props.onSaveVisitedProposal(this.props.token);
+    });
+  }
   componentDidMount() {
     this.props.onFetchLikedComments(this.props.token);
     this.props.onFetchVisitedProposals(this.props.token);
   }
 
   componentWillUnmount() {
+    this.unlisten();
     this.props.resetLastSubmittedProposal();
-    this.props.onSaveVisitedProposal(this.props.token);
     document.title = DEFAULT_TAB_TITLE;
   }
 
@@ -195,4 +200,4 @@ class ProposalDetail extends React.Component {
   }
 }
 
-export default ProposalDetail;
+export default withRouter(ProposalDetail);

@@ -782,7 +782,6 @@ export const onFetchVisitedProposals = token => dispatch => {
     })
     .catch(error => {
       dispatch(act.RECEIVE_GET_VISITED_PROPOSAL(null, error));
-      throw error;
     });
 };
 
@@ -796,6 +795,5 @@ export const onSaveVisitedProposal = token =>
       })
       .catch(error => {
         dispatch(act.RECEIVE_SET_VISITED_PROPOSAL(null, error));
-        throw error;
       });
   });
