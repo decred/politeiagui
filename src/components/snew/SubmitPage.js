@@ -54,7 +54,6 @@ class SubmitPage extends React.Component {
       proposalCredits,
       editingMode
     } = this.props;
-    console.log("new proposal error", submitError);
     const submitEnabled =
       !submitting &&
       !error &&
