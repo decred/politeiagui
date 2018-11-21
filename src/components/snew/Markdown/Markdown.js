@@ -1,25 +1,38 @@
 import React from "react";
+import PropTypes from "prop-types";
 import ReactMarkdown from "react-markdown";
-import { customRenderers } from "./helpers";
+
+import { customRenderers, htmlParserRules } from "./helpers";
 import modalConnector from "../../../connectors/modal";
 
 const MarkdownRenderer = ({
   body,
   className,
   confirmWithModal,
+  style,
   filterXss = true,
-  displayExternalLikWarning = true
-}) => (
-  <div className={className}>
+  displayExternalLikWarning = true,
+  scapeHtml = true
+}) => {
+  return <div className={className} style={style}>
     <ReactMarkdown
       className="md"
-      renderers={customRenderers(
-        filterXss,
-        displayExternalLikWarning && confirmWithModal
-      )}
+      escapeHtml={scapeHtml}
+      astPlugins={[htmlParserRules]}
+      renderers={customRenderers(filterXss, displayExternalLikWarning && confirmWithModal)}
       source={body}
     />
-  </div>
-);
+  </div>;
+};
+
+MarkdownRenderer.prototype = {
+  body: PropTypes.string,
+  className: PropTypes.string,
+  confirmWithModal: PropTypes.bool,
+  style: PropTypes.object,
+  filterXss: PropTypes.bool,
+  displayExternalLikWarning: PropTypes.bool,
+  scapeHtml: PropTypes.bool
+};
 
 export default modalConnector(MarkdownRenderer);

@@ -1762,3 +1762,38 @@ form div.usertext-body.may-blank-within.md-container {
 .monospace {
   font-family: monospace;
 }
+
+.diff-in {
+  background-color: #e6ffed;
+}
+
+.diff-out {
+  background-color: #ffdce0;
+  color: #cb2431;
+  position: relative;
+}
+
+
+.diff-out-line {
+  background-color: #cb2431;
+  height: 1px; 
+  position: absolute;
+}
+
+.diff-header {
+  background-color: #f6f8fa;
+  border-bottom: 1px solid #d1d5da;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  color: #586069;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+}
+
+.diff-wrapper {
+  background-color: white;
+  border-radius: 3px;
+  border: 1px solid #d1d5da;
+  width: 800px;
+}

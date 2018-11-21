@@ -1,6 +1,10 @@
 import React from "react";
+import OnKeyListener from "../OnKeyListener";
 import PropTypes from "prop-types";
 import { uniqueID } from "../../helpers";
+
+const ESC_KEY = 27;
+const modalID = uniqueID("modal");
 
 const CancelButton = ({ onClick, text }) => (
   <button className="btn" onClick={onClick}>
@@ -19,32 +23,13 @@ const SubmitButton = ({ onClick, text, disabled }) => (
 );
 
 class ModalContentWrapper extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      modalID: uniqueID("modal")
-    };
-  }
-  handleKeyUp = e => {
-    const ESC_KEY = 27;
-    const pressedEscKey =
-      e.keyCode === ESC_KEY && !this.props.disableCloseOnEsc;
-    const action = this.props.onClose || this.props.onCancel;
-    if (pressedEscKey && action) action();
-  };
   focusFirstInputOnModal = () => {
-    const modal = document.getElementById(this.state.modalID);
+    const modal = document.getElementById(modalID);
     const inputs = modal && modal.querySelectorAll("input");
     if (inputs && inputs.length) {
       inputs[0].focus();
     }
   };
-  componentWillMount() {
-    window.addEventListener("keyup", this.handleKeyUp);
-  }
-  componentWillUnmount() {
-    window.removeEventListener("keyup", this.handleKeyUp);
-  }
   componentDidMount() {
     this.focusFirstInputOnModal();
   }
@@ -60,56 +45,62 @@ class ModalContentWrapper extends React.Component {
       children,
       style
     } = this.props;
-
     return (
-      <div
-        id={this.state.modalID}
-        className="modal-content"
-        style={{ minWidth: "700px", ...style }}
+      <OnKeyListener
+        disabled={this.props.disableCloseOnEsc}
+        ID={modalID}
+        keyCode={ESC_KEY}
+        onKeyPress={this.props.onClose || this.props.onCancel}
       >
-        <div className="modal-content-header">
-          <h2 style={{ fontSize: "18px", textTransform: "uppercase" }}>
-            {title}
-          </h2>
-          <div style={{ display: "flex", justifyContent: "flex-end", flex: 1 }}>
-            {onClose && (
-              <span
-                style={{ fontSize: "18px", cursor: "pointer" }}
-                onClick={onClose}
-              >
-                ✖
-              </span>
-            )}
+        <div className="modal-content" style={{ minWidth: "700px", ...style }}>
+          <div className="modal-content-header">
+            <h2 style={{ fontSize: "18px", textTransform: "uppercase" }}>
+              {title}
+            </h2>
+            <div
+              style={{ display: "flex", justifyContent: "flex-end", flex: 1 }}
+            >
+              {onClose && (
+                <span
+                  style={{ fontSize: "18px", cursor: "pointer" }}
+                  onClick={onClose}
+                >
+                  ✖
+                </span>
+              )}
+            </div>
           </div>
+          {children}
+          {(onCancel || onSubmit) && (
+            <div className="modal-content-actions">
+              {onCancel && (
+                <CancelButton onClick={onCancel} text={cancelText} />
+              )}
+              {onSubmit && (
+                <SubmitButton
+                  onClick={onSubmit}
+                  text={submitText}
+                  disabled={submitDisabled}
+                />
+              )}
+            </div>
+          )}
         </div>
-        {children}
-        {(onCancel || onSubmit) && (
-          <div className="modal-content-actions">
-            {onCancel && <CancelButton onClick={onCancel} text={cancelText} />}
-            {onSubmit && (
-              <SubmitButton
-                onClick={onSubmit}
-                text={submitText}
-                disabled={submitDisabled}
-              />
-            )}
-          </div>
-        )}
-      </div>
+      </OnKeyListener>
     );
   }
 }
 
 ModalContentWrapper.propTypes = {
-  onClose: PropTypes.func,
-  onCancel: PropTypes.func,
-  onSubmit: PropTypes.func,
-  submitDisabled: PropTypes.bool,
-  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  submitText: PropTypes.string,
   cancelText: PropTypes.string,
+  disableCloseOnEsc: PropTypes.bool,
+  onCancel: PropTypes.func,
+  onClose: PropTypes.func,
+  onSubmit: PropTypes.func,
   style: PropTypes.object,
-  disableCloseOnEsc: PropTypes.bool
+  submitDisabled: PropTypes.bool,
+  submitText: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
 };
 
 export default ModalContentWrapper;
