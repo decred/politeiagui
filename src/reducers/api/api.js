@@ -245,9 +245,9 @@ const api = (state = DEFAULT_STATE, action) =>
       return receive("logout", state, action);
     },
     [act.REQUEST_SET_VISITED_PROPOSAL]: () =>
-      request("visitedProposal", state, action),
+      request("setVisitedProposal", state, action),
     [act.RECEIVE_SET_VISITED_PROPOSAL]: () =>
-      receive("visitedProposal", state, action),
+      receive("setVisitedProposal", state, action),
     [act.REQUEST_GET_VISITED_PROPOSAL]: () =>
       request("visitedProposal", state, action),
     [act.RECEIVE_GET_VISITED_PROPOSAL]: () =>

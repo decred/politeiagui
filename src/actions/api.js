@@ -773,6 +773,7 @@ export const onRescanUserPayments = userid =>
       });
   });
 
+// Gets user visited time for a proposal
 export const onFetchVisitedProposals = token => dispatch => {
   dispatch(act.REQUEST_GET_VISITED_PROPOSAL());
   return api
@@ -787,13 +788,25 @@ export const onFetchVisitedProposals = token => dispatch => {
 
 export const onSaveVisitedProposal = token =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_SET_VISITED_PROPOSAL());
-    return api
-      .setProposalAccessTime(token, csrf)
-      .then(response => {
-        dispatch(act.RECEIVE_SET_VISITED_PROPOSAL(response));
-      })
-      .catch(error => {
-        dispatch(act.RECEIVE_SET_VISITED_PROPOSAL(null, error));
-      });
+    if (csrf) {
+      dispatch(act.REQUEST_SET_VISITED_PROPOSAL());
+      return api
+        .setProposalAccessTime(token, csrf)
+        .then(response => {
+          dispatch(act.RECEIVE_SET_VISITED_PROPOSAL(response));
+        })
+        .catch(error => {
+          dispatch(act.RECEIVE_SET_VISITED_PROPOSAL(null, error));
+        });
+    }
   });
+
+export const onUpdateVisitedProposal = time => dispatch => {
+  dispatch(
+    act.RECEIVE_GET_VISITED_PROPOSAL({
+      proposalaccesstime: {
+        timestamp: time
+      }
+    })
+  );
+};

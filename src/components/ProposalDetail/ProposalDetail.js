@@ -46,6 +46,7 @@ class ProposalDetail extends React.Component {
   componentDidMount() {
     this.props.onFetchLikedComments(this.props.token);
     this.props.onFetchVisitedProposals(this.props.token);
+    this.props.onSaveVisitedProposal(this.props.token);
   }
 
   componentWillUnmount() {

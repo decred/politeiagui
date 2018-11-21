@@ -38,7 +38,7 @@ const replyConnector = connect(
     onSetReplyParent: act.onSetReplyParent,
     onLikeComment: act.onLikeComment,
     onCensorComment: act.onCensorComment,
-    onSaveVisitedProposal: act.onSaveVisitedProposal
+    onUpdateVisitedProposal: act.onUpdateVisitedProposal
   }
 );
 
@@ -106,13 +106,13 @@ class Wrapper extends React.PureComponent {
       thingId: replyTo,
       policy,
       commentid,
-      onSaveVisitedProposal
+      onUpdateVisitedProposal
     } = this.props;
     const { commentValue } = this.state;
     const comment = commentValue.trim();
+    onUpdateVisitedProposal(Math.trunc(Date.now() / 1000));
     try {
       validate({ values: { comment }, ...this.props }, policy);
-      onSaveVisitedProposal(token);
     } catch (e) {
       this.setState({ validationError: e.errors._error });
       return;
