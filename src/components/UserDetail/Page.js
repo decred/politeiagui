@@ -62,14 +62,12 @@ const UserDetailPage = ({
               </div>
               <div className="detail-email">{user.email}</div>
               <Tabs>
-                {isAdminOrTheUser ? (
-                  <Tab
-                    title="General"
-                    selected={tabId === USER_DETAIL_TAB_GENERAL}
-                    tabId={USER_DETAIL_TAB_GENERAL}
-                    onTabChange={onTabChange}
-                  />
-                ) : null}
+                <Tab
+                  title="General"
+                  selected={tabId === USER_DETAIL_TAB_GENERAL}
+                  tabId={USER_DETAIL_TAB_GENERAL}
+                  onTabChange={onTabChange}
+                />
                 {isAdminOrTheUser ? (
                   <Tab
                     title="Preferences"
@@ -77,10 +75,10 @@ const UserDetailPage = ({
                     tabId={USER_DETAIL_TAB_PREFERENCES}
                     onTabChange={onTabChange}
                   />
-                ): null}
+                ) : null}
                 <Tab
                   title="Proposals"
-                  count={numOfUserProposals}
+                  count={numOfUserProposals || 0}
                   selected={tabId === USER_DETAIL_TAB_PROPOSALS}
                   tabId={USER_DETAIL_TAB_PROPOSALS}
                   onTabChange={onTabChange}
@@ -98,9 +96,7 @@ const UserDetailPage = ({
               {tabId === USER_DETAIL_TAB_GENERAL && (
                 <GeneralTab dcrdataTxUrl={dcrdataTxUrl} />
               )}
-              {tabId === USER_DETAIL_TAB_PREFERENCES && (
-                <PreferencesTab />
-              )}
+              {tabId === USER_DETAIL_TAB_PREFERENCES && <PreferencesTab />}
               {tabId === USER_DETAIL_TAB_PROPOSALS && (
                 <ProposalsTab count={user.numofproposals} />
               )}
