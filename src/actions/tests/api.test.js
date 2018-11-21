@@ -503,7 +503,7 @@ describe("test api actions (actions/api.js)", () => {
   });
 
   test("on fetch liked comments action", async () => {
-    const path = `/api/v1/proposals/${FAKE_PROPOSAL_TOKEN}/commentsvotes`;
+    const path = `/api/v1/proposals/${FAKE_PROPOSAL_TOKEN}/commentslikes`;
     const params = [FAKE_PROPOSAL_TOKEN];
     await assertApiActionOnSuccess(path, api.onFetchLikedComments, params, [
       { type: act.REQUEST_LIKED_COMMENTS },

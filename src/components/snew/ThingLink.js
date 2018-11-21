@@ -13,6 +13,7 @@ import ProposalImages from "../ProposalImages";
 import thingLinkConnector from "../../connectors/thingLink";
 import Tooltip from "../Tooltip";
 import VoteStats from "../VoteStats";
+// import Diff from "./Markdown/Diff";
 
 import {
   PROPOSAL_STATUS_ABANDONED,

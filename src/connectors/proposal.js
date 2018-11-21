@@ -28,7 +28,7 @@ const proposalConnector = connect(
     isAdmin: sel.isAdmin,
     proposal: sel.proposal,
     comments: sel.proposalComments,
-    commentsvotes: sel.commentsVotes,
+    commentslikes: sel.commentsLikes,
     error: or(sel.proposalError, sel.apiPropVoteStatusError),
     isLoading: or(
       sel.proposalIsRequesting,

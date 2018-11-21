@@ -96,7 +96,7 @@ export const updateUserKey = getApiResponse("updateUserKey");
 export const verifyUserKey = getApiResponse("verifyUserKey");
 export const updateUserKeyError = getApiError("updateUserKey");
 export const verifyUserKeyError = getApiError("verifyUserKey");
-const apiCommentsVotesResponse = getApiResponse("commentsvotes");
+const apiCommentsLikesResponse = getApiResponse("commentslikes");
 export const apiEditUserPayload = getApiPayload("editUser");
 export const apiEditUserResponse = getApiResponse("editUser");
 export const editUserError = getApiError("editUser");
@@ -233,7 +233,7 @@ const apiUnvettedError = getApiError("unvetted");
 const apiProposalError = getApiError("proposal");
 const apiNewProposalError = getApiError("newProposal");
 const apiSetStatusProposalError = getApiError("setStatusProposal");
-const apiCommentsVotesError = getApiError("commentsvotes");
+const apiCommentsLikesError = getApiError("commentslikes");
 export const apiError = or(
   apiInitError,
   apiNewUserError,
@@ -248,7 +248,7 @@ export const apiError = or(
   apiProposalError,
   apiUserSearchError,
   apiNewProposalError,
-  apiCommentsVotesError,
+  apiCommentsLikesError,
   apiSetStatusProposalError
 );
 
@@ -391,10 +391,10 @@ export const userPubkey = compose(
   get("publickey"),
   apiMeResponse
 );
-export const commentsVotes = or(
+export const commentsLikes = or(
   compose(
-    get("commentsvotes"),
-    apiCommentsVotesResponse
+    get("commentslikes"),
+    apiCommentsLikesResponse
   ),
   constant(null)
 );
