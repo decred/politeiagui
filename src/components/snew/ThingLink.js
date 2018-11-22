@@ -1,28 +1,30 @@
 import React from "react";
+
 import { DateTooltip } from "snew-classic-ui";
-import ProposalImages from "../ProposalImages";
+import { getProposalStatus } from "../../helpers";
+import { withRouter } from "react-router-dom";
+import * as modalTypes from "../Modal/modalTypes";
+import actions from "../../connectors/actions";
+import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
+import CensorMessage from "../CensorMessage";
 import DownloadBundle from "../DownloadBundle";
 import Message from "../Message";
-import actions from "../../connectors/actions";
+import ProposalImages from "../ProposalImages";
 import thingLinkConnector from "../../connectors/thingLink";
+import Tooltip from "../Tooltip";
+import VoteStats from "../VoteStats";
+
 import {
+  PROPOSAL_STATUS_ABANDONED,
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
-  PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_VOTING_NOT_AUTHORIZED,
-  PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
+  PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_VOTING_ACTIVE,
+  PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_FINISHED,
-  PROPOSAL_STATUS_ABANDONED
+  PROPOSAL_VOTING_NOT_AUTHORIZED
 } from "../../constants";
-import { getProposalStatus } from "../../helpers";
-import VoteStats from "../VoteStats";
-import { withRouter } from "react-router-dom";
-import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
-import Tooltip from "../Tooltip";
-import * as modalTypes from "../Modal/modalTypes";
-import CensorMessage from "../CensorMessage";
 
 const ToggleIcon = (type, onClick) => (
   <button className="collapse-icon-button" onClick={onClick}>
@@ -305,7 +307,7 @@ class ThingLinkComp extends React.Component {
           {review_status === 4 && <VoteStats token={id} />}
           {expanded &&
             (lastSubmitted === id ? (
-              <Message height="80px" type="info">
+              <Message type="info">
                 <span>
                   <p
                     style={{
@@ -328,7 +330,10 @@ class ThingLinkComp extends React.Component {
                       politeia_verify tool
                     </a>{" "}
                     to prove that your submission has been accepted for review
-                    by Politeia.
+                    by Politeia. Once approved, an "Authorize Voting to Start"
+                    button will appear. You will have 14 days to authorize a
+                    proposal vote. If you fail to do so, your proposal will be
+                    considered abandoned.
                   </p>
                 </span>
               </Message>
@@ -493,7 +498,7 @@ class ThingLinkComp extends React.Component {
                   onClick={e =>
                     confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
                       reasonPlaceholder:
-                        "Please provide a reason for marking this proposal as deprecated"
+                        "Please provide a reason for marking this proposal as abandoned"
                     }).then(
                       ({ reason, confirm }) =>
                         confirm &&
@@ -506,8 +511,8 @@ class ThingLinkComp extends React.Component {
                         )
                     ) && e.preventDefault()
                   }
-                  text="deprecate"
-                  data-event-action="deprecate"
+                  text="abandon"
+                  data-event-action="abandon"
                   isLoading={loadingAbandoned}
                 />
               </li>
@@ -530,6 +535,25 @@ class ThingLinkComp extends React.Component {
                 permalink
               </Link>
             </li>
+            {isVotingActiveOrFinished && (
+              <li>
+                <Link
+                  className="bylink comments may-blank proposal-permalink"
+                  href=""
+                  target="_blank"
+                  onClick={e => {
+                    e.preventDefault();
+                    openModal(
+                      modalTypes.SEARCH_PROPOSAL_VOTES,
+                      { id: id, title: title },
+                      null
+                    );
+                  }}
+                >
+                  search votes
+                </Link>
+              </li>
+            )}
           </ul>
           {allErrors.map((error, idx) =>
             error ? (

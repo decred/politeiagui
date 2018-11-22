@@ -55,6 +55,9 @@ export const isApiRequestingPropsVoteStatus = getIsApiRequesting(
 export const isApiRequestingPropVoteStatus = getIsApiRequesting(
   "proposalVoteStatus"
 );
+export const isApiRequestingPropVoteResults = getIsApiRequesting(
+  "proposalVoteResults"
+);
 export const isApiRequestingEditUser = getIsApiRequesting("editUser");
 export const isApiRequestingManageUser = getIsApiRequesting("manageUser");
 export const isApiRequestingEditProposal = getIsApiRequesting("editProposal");
@@ -111,6 +114,9 @@ export const apiPropsVoteStatusError = getApiError("proposalsVoteStatus");
 
 export const apiPropVoteStatusResponse = getApiResponse("proposalVoteStatus");
 export const apiPropVoteStatusError = getApiError("proposalVoteStatusError");
+
+export const apiPropVoteResultsResponse = getApiResponse("proposalVoteResults");
+export const apiPropVoteResultsError = getApiError("proposalVoteResultsError");
 
 export const apiAuthorizeVoteResponse = getApiResponse("authorizeVote");
 export const apiAuthorizeVotePayload = getApiPayload("authorizeVote");
@@ -632,5 +638,5 @@ export const isApiRequesting = or(
   isApiRequestingStartVote,
   isApiRequestingPropsVoteStatus,
   isApiRequestingPropVoteStatus,
-  isApiRequestingManageUser
+  isApiRequestingPropVoteResults
 );

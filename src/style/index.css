@@ -207,6 +207,7 @@ a:hover, a:focus {
 .submit-proposal-page .submit-wrapper {
   display: flex;
   margin: 20px 0;
+  flex-wrap: wrap;
 }
 
 .attach-wrapper {
@@ -279,6 +280,7 @@ a:hover, a:focus {
   height: 36px;
   line-height: 18px;
   padding: 4px 0;
+  width: 65%;
 }
 
 .login-form fieldset {
@@ -426,10 +428,12 @@ a:hover, a:focus {
   width: 100%;
 }
 .attached-image-title {
-  display: inline-block;
   height: 24px;
   line-height: 24px;
-  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 600px;
 }
 .attached-image-remove {
   display: inline-block;
@@ -1359,11 +1363,7 @@ li p.header-3 {
   font-size: 1.05em;
   margin-right: 4px;
   color: #777;
-  text-align: right;
-}
-
-.user-page .detail-form .ident-value {
-  margin-left: 164px; /* field-label width + margin-right */
+  text-align: left;
 }
 
 .user-page .detail-form .field .field-value {
@@ -1668,11 +1668,16 @@ form div.usertext-body.may-blank-within.md-container {
   box-shadow: 0px 0px 0px 2px #091440;
 }
 
-.user-search-results h3 {
+.search-results.votes {
+  margin: 10px;
+  padding: 10px;
+}
+
+.search-results h3 {
   text-align: center;
 }
 
-.user-search-results table {
+.search-results table {
   width: 100%;
   margin: 0 auto;
   max-width: 900px;
@@ -1681,17 +1686,17 @@ form div.usertext-body.may-blank-within.md-container {
   border: 1px solid black;
 }
 
-.user-search-results th {
+.search-results th {
   font-weight: 600;
   height: 50px;
   padding: 5px;
 }
 
-.user-search-results td {
+.search-results td {
   padding: 10px 5px;
 }
 
-.user-search-results td, .user-search-results th {
+.search-results td, .search-results th {
   text-align: center;
   border: 1px solid black;
 }
@@ -1759,4 +1764,39 @@ form div.usertext-body.may-blank-within.md-container {
 
 .monospace {
   font-family: monospace;
+}
+
+.diff-in {
+  background-color: #e6ffed;
+}
+
+.diff-out {
+  background-color: #ffdce0;
+  color: #cb2431;
+  position: relative;
+}
+
+
+.diff-out-line {
+  background-color: #cb2431;
+  height: 1px; 
+  position: absolute;
+}
+
+.diff-header {
+  background-color: #f6f8fa;
+  border-bottom: 1px solid #d1d5da;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  color: #586069;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+}
+
+.diff-wrapper {
+  background-color: white;
+  border-radius: 3px;
+  border: 1px solid #d1d5da;
+  width: 800px;
 }

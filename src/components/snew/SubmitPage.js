@@ -175,6 +175,17 @@ class SubmitPage extends React.Component {
                           to open the proposal credits manager.
                         </div>
                       )}
+                      <p
+                        style={{
+                          fontSize: "16px",
+                          display: "flex",
+                          paddingTop: "1em"
+                        }}
+                      >
+                        <b>NOTE:&nbsp;</b> Drafts are locally stored in the
+                        browser and will NOT be available across different
+                        browsers or devices.
+                      </p>
                     </div>
                     {submitError ? (
                       <Message

@@ -1,6 +1,39 @@
 import React from "react";
+import { diffWords } from "diff";
+import htmlParser from "react-markdown/plugins/html-parser";
 import xssFilters from "xss-filters";
 import * as modalTypes from "../../Modal/modalTypes";
+
+const diffCheck = node => {
+  const className = node.attribs.classname;
+  return (
+    node.type === "tag" &&
+    node.name === "span" &&
+    (className === "diff-in" || className === "diff-out")
+  );
+};
+
+export const htmlParserRules = htmlParser({
+  isValidNode: node => {
+    return node.type !== "script" && diffCheck(node);
+  }
+});
+
+export const insertDiffHTML = (oldComment, newComment) => {
+  const diff = diffWords(oldComment, newComment, { ignoreCase: true });
+
+  const handleDiffString = string => {
+    const { added, removed, value } = string;
+    if (added) return `<span className='diff-in'>${value}</span>`;
+    else if (removed) return `<span className='diff-out'>${value}</span>`;
+    return value;
+  };
+
+  return diff.reduce(
+    (accumulated, current) => accumulated + handleDiffString(current),
+    ""
+  );
+};
 
 export const traverseChildren = (el, cb) => {
   const filterChildren = c =>

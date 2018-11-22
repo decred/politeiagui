@@ -73,7 +73,8 @@ const userConnector = connect(
     isApiRequestingReactivateUser: state =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_REACTIVATE,
-    manageUserResponse: sel.manageUserResponse
+    manageUserResponse: sel.manageUserResponse,
+    numOfUserProposals: sel.numOfUserProposals
   }),
   dispatch =>
     bindActionCreators(
