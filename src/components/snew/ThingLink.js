@@ -535,6 +535,25 @@ class ThingLinkComp extends React.Component {
                 permalink
               </Link>
             </li>
+            {isVotingActiveOrFinished && (
+              <li>
+                <Link
+                  className="bylink comments may-blank proposal-permalink"
+                  href=""
+                  target="_blank"
+                  onClick={e => {
+                    e.preventDefault();
+                    openModal(
+                      modalTypes.SEARCH_PROPOSAL_VOTES,
+                      { id: id, title: title },
+                      null
+                    );
+                  }}
+                >
+                  search votes
+                </Link>
+              </li>
+            )}
           </ul>
           {allErrors.map((error, idx) =>
             error ? (

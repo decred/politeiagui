@@ -74,7 +74,7 @@ class UserLookupPage extends React.PureComponent {
           <Message type="error" header="Cannot search for user" body={error} />
         )}
         {userSearch && !isLoading && (
-          <div className="user-search-results">
+          <div className="search-results">
             <h3>
               Matches {userSearch.totalmatches} of {userSearch.totalusers} users
             </h3>

@@ -1668,11 +1668,16 @@ form div.usertext-body.may-blank-within.md-container {
   box-shadow: 0px 0px 0px 2px #091440;
 }
 
-.user-search-results h3 {
+.search-results.votes {
+  margin: 10px;
+  padding: 10px;
+}
+
+.search-results h3 {
   text-align: center;
 }
 
-.user-search-results table {
+.search-results table {
   width: 100%;
   margin: 0 auto;
   max-width: 900px;
@@ -1681,17 +1686,17 @@ form div.usertext-body.may-blank-within.md-container {
   border: 1px solid black;
 }
 
-.user-search-results th {
+.search-results th {
   font-weight: 600;
   height: 50px;
   padding: 5px;
 }
 
-.user-search-results td {
+.search-results td {
   padding: 10px 5px;
 }
 
-.user-search-results td, .user-search-results th {
+.search-results td, .search-results th {
   text-align: center;
   border: 1px solid black;
 }
