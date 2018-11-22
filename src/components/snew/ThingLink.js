@@ -535,7 +535,7 @@ class ThingLinkComp extends React.Component {
                 permalink
               </Link>
             </li>
-            {isVotingActiveOrFinished ? (
+            {isVotingActiveOrFinished && (
               <li>
                 <Link
                   className="bylink comments may-blank proposal-permalink"
@@ -553,7 +553,7 @@ class ThingLinkComp extends React.Component {
                   search votes
                 </Link>
               </li>
-            ) : null}
+            )}
           </ul>
           {allErrors.map((error, idx) =>
             error ? (

@@ -17,11 +17,14 @@ class SearchVotesModal extends React.Component {
   }
 
   componentDidMount() {
-    this.props.onFetchProposalVoteResults(this.props.me.payload.id);
+    this.props.onFetchProposalVoteResults &&
+      this.props.onFetchProposalVoteResults(this.props.me.payload.id);
   }
 
   handleSubmit = ({ token }) => {
-    const vote = this.props.proposalVoteResults.castvotes[token];
+    const vote =
+      this.props.proposalVoteResults &&
+      this.props.proposalVoteResults.castvotes[token];
     return vote
       ? this.setState({
           result: token,
