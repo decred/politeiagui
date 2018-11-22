@@ -51,7 +51,7 @@ export const CustomContent = ({
     <Message
       type="error"
       header="Comment not found"
-      body={`Could not find comment ${commentid}`}
+      body="Could not find comment"
     />
   ) : (
     <div>
