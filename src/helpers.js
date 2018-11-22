@@ -12,12 +12,13 @@ import {
 
 export const getProposalStatus = proposalStatus =>
   get(proposalStatus, [
-    "Abandoned",
     "Invalid",
     "Not found",
     "Not reviewed",
     "Censored",
-    "Public"
+    "Public",
+    "Unreviewed changes",
+    "Abandoned"
   ]);
 
 export const utoa = str => window.btoa(unescape(encodeURIComponent(str)));
