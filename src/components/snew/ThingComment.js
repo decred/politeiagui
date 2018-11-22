@@ -70,9 +70,13 @@ class ThingComment extends React.PureComponent {
       onCloseCommentForm,
       proposalAuthor,
       proposalStatus,
+      created_utc,
       ...props
     } = this.props;
+    console.log(lastVisit);
     const isProposalAbandoned = proposalStatus === PROPOSAL_STATUS_ABANDONED;
+    const isNewComment = lastVisit ? lastVisit < created_utc : false;
+    const isCommentPermalink = commentid === props.id;
     return (
       <div>
         {likeCommentError &&
@@ -88,17 +92,18 @@ class ThingComment extends React.PureComponent {
         <BaseComment
           {...{
             ...props,
+            created_utc,
             showCensorLink: !!props.isAdmin && !props.censored,
             showArrows: !props.censored && !isProposalAbandoned,
             grayBody: props.censored || isProposalAbandoned,
-            highlightcomment: commentid === props.id,
+            highlightcomment: isCommentPermalink || isNewComment,
             showReply: !props.censored && !isProposalAbandoned,
             onShowReply: toggleCommentForm,
             onCensorComment: this.handleCommentCensor,
             onCloseCommentForm,
             showCommentForm,
             proposalAuthor,
-            userAccessTime: lastVisit ? lastVisit.timestamp : 0,
+            isNewComment,
             user: loggedInAsEmail,
             authorHref: `/user/${props.authorid}`,
             blockvote:

@@ -418,7 +418,7 @@ export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
 
 export const setProposalAccessTime = (token, csrf) =>
-  POST(`/user/proposals/${token}/accesstime`, csrf, {}).then(getResponse);
+  PUT(`/user/accesstimes/${token}`, csrf, {}).then(getResponse);
 
 export const getProposalAccessTimes = token =>
-  GET(`/v1/user/proposals/${token}/accesstime`).then(getResponse);
+  GET(`/v1/user/accesstimes/${token}`).then(getResponse);
