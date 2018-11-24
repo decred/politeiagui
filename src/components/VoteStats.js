@@ -249,8 +249,8 @@ class Stats extends React.Component {
               <Tooltip
                 tipStyle={{
                   left: "80px",
-                  maxWidth: "70px",
-                  padding: "2px",
+                  maxWidth: "100px",
+                  padding: "6px",
                   textAlign: "center"
                 }}
                 text={`${currentQuorumPercentage}/${quorumPercentage} %`}
