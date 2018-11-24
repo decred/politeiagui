@@ -819,7 +819,7 @@ export const onSaveVisitedProposal = token =>
 export const onUpdateVisitedProposal = time => dispatch => {
   dispatch(
     act.RECEIVE_GET_VISITED_PROPOSAL({
-      proposalaccesstime: time
+      accesstime: time
     })
   );
 };

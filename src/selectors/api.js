@@ -566,7 +566,7 @@ export const sessionMaxAge = compose(
 );
 
 export const visitedProposal = compose(
-  get("proposalaccesstime"),
+  get("accesstime"),
   getApiResponse("visitedProposal")
 );
 
