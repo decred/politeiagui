@@ -206,9 +206,9 @@ export const proposalPaywallDetails = () =>
 export const userProposalCredits = () =>
   GET("/v1/user/proposals/credits").then(getResponse);
 
-export const editUser = (csrf, { proposalemailnotifications }) =>
+export const editUser = (csrf, { emailnotifications }) =>
   POST("/user/edit", csrf, {
-    proposalemailnotifications
+    emailnotifications
   }).then(getResponse);
 
 export const manageUser = (csrf, userid, action, reason) =>

@@ -42,6 +42,8 @@ import {
   NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VETTED,
   NOTIFICATION_EMAIL_REGULAR_PROPOSAL_EDITED,
   NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED,
+  NOTIFICATION_EMAIL_COMMENT_ON_MY_PROPOSAL,
+  NOTIFICATION_EMAIL_COMMENT_ON_MY_COMMENT,
   PROPOSAL_STATUS_ABANDONED
 } from "../constants";
 import { getTextFromIndexMd, countPublicProposals } from "../helpers";
@@ -104,47 +106,50 @@ export const getEditProposalValues = state => {
 };
 
 export const getEditUserValues = state => {
-  let proposalEmailNotifications;
+  let emailNotifications;
 
   if (apiEditUserResponse(state)) {
     const editUserPayload = apiEditUserPayload(state);
-    proposalEmailNotifications = editUserPayload.proposalemailnotifications;
+    emailNotifications = editUserPayload.emailnotifications;
   } else {
     const userResponse = apiUserResponse(state) || { user: {} };
-    proposalEmailNotifications =
-      userResponse.user.proposalemailnotifications || 0;
+    emailNotifications = userResponse.user.emailnotifications || 0;
   }
 
   return {
     "myproposalnotifications-statuschange": !!(
-      proposalEmailNotifications & NOTIFICATION_EMAIL_MY_PROPOSAL_STATUS_CHANGE
+      emailNotifications & NOTIFICATION_EMAIL_MY_PROPOSAL_STATUS_CHANGE
     ),
     "myproposalnotifications-votestarted": !!(
-      proposalEmailNotifications & NOTIFICATION_EMAIL_MY_PROPOSAL_VOTE_STARTED
+      emailNotifications & NOTIFICATION_EMAIL_MY_PROPOSAL_VOTE_STARTED
     ),
     "regularproposalnotifications-vetted": !!(
-      proposalEmailNotifications & NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VETTED
+      emailNotifications & NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VETTED
     ),
     "regularproposalnotifications-edited": !!(
-      proposalEmailNotifications & NOTIFICATION_EMAIL_REGULAR_PROPOSAL_EDITED
+      emailNotifications & NOTIFICATION_EMAIL_REGULAR_PROPOSAL_EDITED
     ),
     "regularproposalnotifications-votestarted": !!(
-      proposalEmailNotifications &
-      NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED
+      emailNotifications & NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED
     ),
     "adminproposalnotifications-new": !!(
-      proposalEmailNotifications & NOTIFICATION_EMAIL_ADMIN_PROPOSAL_NEW
+      emailNotifications & NOTIFICATION_EMAIL_ADMIN_PROPOSAL_NEW
     ),
     "adminproposalnotifications-voteauthorized": !!(
-      proposalEmailNotifications &
-      NOTIFICATION_EMAIL_ADMIN_PROPOSAL_VOTE_AUTHORIZED
+      emailNotifications & NOTIFICATION_EMAIL_ADMIN_PROPOSAL_VOTE_AUTHORIZED
+    ),
+    "commentnotifications-proposal": !!(
+      emailNotifications & NOTIFICATION_EMAIL_COMMENT_ON_MY_PROPOSAL
+    ),
+    "commentnotifications-comment": !!(
+      emailNotifications & NOTIFICATION_EMAIL_COMMENT_ON_MY_COMMENT
     )
   };
 };
 
 export const resolveEditUserValues = prefs => {
   return {
-    proposalemailnotifications:
+    emailnotifications:
       (prefs["myproposalnotifications-statuschange"]
         ? NOTIFICATION_EMAIL_MY_PROPOSAL_STATUS_CHANGE
         : 0) |
@@ -165,6 +170,12 @@ export const resolveEditUserValues = prefs => {
         : 0) |
       (prefs["adminproposalnotifications-voteauthorized"]
         ? NOTIFICATION_EMAIL_ADMIN_PROPOSAL_VOTE_AUTHORIZED
+        : 0) |
+      (prefs["commentnotifications-proposal"]
+        ? NOTIFICATION_EMAIL_COMMENT_ON_MY_PROPOSAL
+        : 0) |
+      (prefs["commentnotifications-comment"]
+        ? NOTIFICATION_EMAIL_COMMENT_ON_MY_COMMENT
         : 0)
   };
 };
