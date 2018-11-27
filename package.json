@@ -8,6 +8,7 @@
     "crypto-js": "^3.1.9-1",
     "date-fns": "^1.29.0",
     "diff": "^3.5.0",
+    "dompurify": "^1.0.8",
     "font-awesome": "^4.7.0",
     "js-file-download": "^0.4.1",
     "js-sha256": "^0.7.1",

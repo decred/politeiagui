@@ -1,12 +1,14 @@
-/* The validation will return an object with the following shape
-  { files: [file1, file2], validationErrors: ['message1', 'message2']}
-*/
+import DOMPurify from "dompurify";
+
 export const errorTypes = {
   MAX_SIZE: "max_size",
   MAX_IMAGES: "max_length",
   INVALID_MIME: "invalid_mime"
 };
 
+/* The validation will return an object with the following shape
+  { files: [file1, file2], validationErrors: ['message1', 'message2']}
+*/
 export function validateFiles(files, policy) {
   const validation = {
     files,
@@ -110,3 +112,20 @@ function validateMimeTypes({ files, errors, policy }) {
     errors
   };
 }
+
+const isSVG = file => file.mime === "image/svg+xml";
+
+export const sanitizeSVGFiles = files => {
+  files = files.map(file => {
+    if (!isSVG(file)) return file;
+
+    const decodedStr = window.atob(file.payload);
+    const sanitizedPayload = DOMPurify.sanitize(decodedStr);
+    const payload = window.btoa(sanitizedPayload);
+    return {
+      ...file,
+      payload
+    };
+  });
+  return files;
+};
