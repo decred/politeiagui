@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { sanitizeSVGFiles } from "./helpers";
 
 class ProposalImages extends Component {
   constructor(props) {
@@ -14,10 +15,11 @@ class ProposalImages extends Component {
 
   render() {
     const { files, readOnly } = this.props;
+    const sanitizedFiles = sanitizeSVGFiles(files || []);
 
     return (
       <div className="attached-images">
-        {(files || []).map(({ name, mime, payload }, idx) => (
+        {sanitizedFiles.map(({ name, mime, payload }, idx) => (
           <div key={`prop-image-${idx}`} className="attached-image-ct">
             <div style={{ display: "flex", alignItems: "center" }}>
               <h5 className="attached-image-title">{name}</h5>
