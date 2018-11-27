@@ -17,8 +17,8 @@ class ProposalImages extends Component {
 
     return (
       <div className="attached-images">
-        {(files || []).map(({ name, mime, digest, payload }, idx) => (
-          <div key={digest || idx} className="attached-image-ct">
+        {(files || []).map(({ name, mime, payload }, idx) => (
+          <div key={`prop-image-${idx}`} className="attached-image-ct">
             <div style={{ display: "flex", alignItems: "center" }}>
               <h5 className="attached-image-title">{name}</h5>
               {!readOnly && (

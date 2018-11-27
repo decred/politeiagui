@@ -4,7 +4,11 @@ import ReactFileReader from "react-file-reader";
 import { change } from "redux-form";
 import ProposalImages from "../../ProposalImages";
 import PolicyErrors from "./PolicyErrors";
-import { validateFiles, getFormattedFiles } from "../../ProposalImages/helpers";
+import {
+  validateFiles,
+  getFormattedFiles,
+  sanitizeSVGFiles
+} from "../../ProposalImages/helpers";
 
 class FilesField extends React.Component {
   constructor(props) {
@@ -25,12 +29,13 @@ class FilesField extends React.Component {
       ? formattedFiles.concat(input.value)
       : formattedFiles;
     const validation = validateFiles(inputAndNewFiles, policy);
+    const sanitizedFiles = sanitizeSVGFiles(validation.files);
 
     this.setState({
       policyErrors: validation.errors ? validation.errors : []
     });
 
-    return dispatch(change("form/proposal", "files", validation.files));
+    return dispatch(change("form/proposal", "files", sanitizedFiles));
   };
 
   render() {
