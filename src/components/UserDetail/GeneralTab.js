@@ -20,7 +20,7 @@ import { verifyUserPubkey } from "../../helpers";
 
 const Field = ({ label, children }) => (
   <div className="field">
-    <label className="field-label">{label + ":"}</label>
+    <label className="field-label">{label && label + ":"}</label>
     <div className="field-value">{children}</div>
     <div className="clear" />
   </div>
@@ -266,40 +266,37 @@ class GeneralTab extends React.Component {
                   : "Loading public key..."}
               </div>
             )}
-            {isUserPageOwner && (
-              <div>
-                {showIdentityHelpText && isUserPageOwner ? (
-                  <div>
-                    <span
-                      style={{ fontWeight: "bold", maxWidth: "7em" }}
-                      className="ident-value"
-                    >
-                      {this.identityHelpPrompt}
-                    </span>{" "}
-                    <a
-                      className="linkish"
-                      onClick={() =>
-                        this.setState({ showIdentityHelpText: false })
-                      }
-                    >
-                      (hide)
-                    </a>
-                  </div>
-                ) : (
-                  <a
-                    className="linkish ident-value"
-                    style={{ maxWidth: "7em" }}
-                    onClick={() =>
-                      this.setState({ showIdentityHelpText: true })
-                    }
-                  >
-                    {this.identityHelpPrompt}
-                  </a>
-                )}
-              </div>
-            )}
           </Field>
         )}
+        {isUserPageOwner && (
+          <div style={{ marginLeft: "164px" }}>
+            {showIdentityHelpText ? (
+              <div>
+                <span
+                  style={{ fontWeight: "bold", maxWidth: "7em" }}
+                  className="ident-value"
+                >
+                  {this.identityHelpPrompt}
+                </span>{" "}
+                <a
+                  className="linkish"
+                  onClick={() => this.setState({ showIdentityHelpText: false })}
+                >
+                  (hide)
+                </a>
+              </div>
+            ) : (
+              <a
+                className="linkish ident-value"
+                style={{ maxWidth: "7em" }}
+                onClick={() => this.setState({ showIdentityHelpText: true })}
+              >
+                {this.identityHelpPrompt}
+              </a>
+            )}
+          </div>
+        )}
+
         {showIdentityHelpText && isUserPageOwner && (
           <div className="identity-help">
             <p>
