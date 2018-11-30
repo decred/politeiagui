@@ -2,16 +2,33 @@ import React from "react";
 import ModalContentWrapper from "../ModalContentWrapper";
 import modalConnector from "../../../connectors/modal";
 import proposalCredisConnector from "../../../connectors/proposalCredits";
+import ButtonWithLoadingIcon from "../../snew/ButtonWithLoadingIcon";
 import * as modalTypes from "../modalTypes";
 
 class ProposalCreditsModal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.openCreditsHistoryAfterApi = this.openCreditsHistoryAfterApi.bind(
+      this
+    );
+  }
   componentDidMount() {
-    this.props.onUserProposalCredits();
     this.props.onPurchaseProposalCredits();
     this.props.onFetchProposalPaywallPayment();
   }
+
+  openCreditsHistoryAfterApi() {
+    this.props.onUserProposalCredits();
+    this.props.openModal(modalTypes.CREDITS_HISTORY_MODAL);
+  }
+
   render() {
-    const { closeModal, openModal, proposalCredits } = this.props;
+    const {
+      closeModal,
+      openModal,
+      proposalCredits,
+      isApiRequestingUserProposalCredits
+    } = this.props;
     return (
       <ModalContentWrapper title={"Manage Credits"} onClose={closeModal}>
         <div className="modal-content__wrapper">
@@ -30,9 +47,12 @@ class ProposalCreditsModal extends React.Component {
             >
               Purchase Credits
             </button>
-            <button onClick={() => openModal(modalTypes.CREDITS_HISTORY_MODAL)}>
-              Account History
-            </button>
+            <ButtonWithLoadingIcon
+              onClick={this.openCreditsHistoryAfterApi}
+              text="Account History"
+              isLoading={isApiRequestingUserProposalCredits}
+              style={{ overflow: "hidden" }}
+            />
           </div>
         </div>
       </ModalContentWrapper>
