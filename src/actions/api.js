@@ -278,15 +278,16 @@ export const onFetchUser = userId => dispatch => {
     });
 };
 
-export const onFetchProposalComments = token => dispatch => {
-  dispatch(act.REQUEST_PROPOSAL_COMMENTS(token));
-  return api
-    .proposalComments(token)
-    .then(response => dispatch(act.RECEIVE_PROPOSAL_COMMENTS(response)))
-    .catch(error => {
-      dispatch(act.RECEIVE_PROPOSAL_COMMENTS(null, error));
-    });
-};
+export const onFetchProposalComments = token =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_PROPOSAL_COMMENTS(token));
+    return api
+      .proposalComments(token, csrf)
+      .then(response => dispatch(act.RECEIVE_PROPOSAL_COMMENTS(response)))
+      .catch(error => {
+        dispatch(act.RECEIVE_PROPOSAL_COMMENTS(null, error));
+      });
+  });
 
 export const onFetchLikedComments = token => dispatch => {
   dispatch(act.REQUEST_LIKED_COMMENTS(token));
@@ -788,38 +789,38 @@ export const onRescanUserPayments = userid =>
       });
   });
 
-// Gets user visited time for a proposal
-export const onFetchVisitedProposals = token => dispatch => {
-  dispatch(act.REQUEST_GET_VISITED_PROPOSAL());
-  return api
-    .getProposalAccessTimes(token)
-    .then(response => {
-      dispatch(act.RECEIVE_GET_VISITED_PROPOSAL(response));
-    })
-    .catch(error => {
-      dispatch(act.RECEIVE_GET_VISITED_PROPOSAL(null, error));
-    });
-};
+// // Gets user visited time for a proposal
+// export const onFetchVisitedProposals = token => dispatch => {
+//   dispatch(act.REQUEST_GET_VISITED_PROPOSAL());
+//   return api
+//     .getProposalAccessTimes(token)
+//     .then(response => {
+//       dispatch(act.RECEIVE_GET_VISITED_PROPOSAL(response));
+//     })
+//     .catch(error => {
+//       dispatch(act.RECEIVE_GET_VISITED_PROPOSAL(null, error));
+//     });
+// };
 
-export const onSaveVisitedProposal = token =>
-  withCsrf((dispatch, getState, csrf) => {
-    if (csrf) {
-      dispatch(act.REQUEST_SET_VISITED_PROPOSAL());
-      return api
-        .setProposalAccessTime(token, csrf)
-        .then(response => {
-          dispatch(act.RECEIVE_SET_VISITED_PROPOSAL(response));
-        })
-        .catch(error => {
-          dispatch(act.RECEIVE_SET_VISITED_PROPOSAL(null, error));
-        });
-    }
-  });
+// export const onSaveVisitedProposal = token =>
+//   withCsrf((dispatch, getState, csrf) => {
+//     if (csrf) {
+//       dispatch(act.REQUEST_SET_VISITED_PROPOSAL());
+//       return api
+//         .setProposalAccessTime(token, csrf)
+//         .then(response => {
+//           dispatch(act.RECEIVE_SET_VISITED_PROPOSAL(response));
+//         })
+//         .catch(error => {
+//           dispatch(act.RECEIVE_SET_VISITED_PROPOSAL(null, error));
+//         });
+//     }
+//   });
 
-export const onUpdateVisitedProposal = time => dispatch => {
-  dispatch(
-    act.RECEIVE_GET_VISITED_PROPOSAL({
-      accesstime: time
-    })
-  );
-};
+// export const onUpdateVisitedProposal = time => dispatch => {
+//   dispatch(
+//     act.RECEIVE_GET_VISITED_PROPOSAL({
+//       accesstime: time
+//     })
+//   );
+// };

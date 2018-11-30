@@ -47,9 +47,7 @@ const proposalConnector = connect(
         onFetchProposalVoteStatus: act.onFetchProposalVoteStatus,
         onFetchLikedComments: act.onFetchLikedComments,
         onSetCommentsSortOption: act.onSetCommentsSortOption,
-        resetLastSubmittedProposal: act.resetLastSubmittedProposal,
-        onSaveVisitedProposal: act.onSaveVisitedProposal,
-        onFetchVisitedProposals: act.onFetchVisitedProposals
+        resetLastSubmittedProposal: act.resetLastSubmittedProposal
       },
       dispatch
     )

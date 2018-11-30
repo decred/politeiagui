@@ -417,11 +417,3 @@ export const proposalPaywallPayment = () =>
 export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
 
-export const setProposalAccessTime = (token, csrf) =>
-  PUT(`/user/accesstimes/${token}`, csrf, {
-    token: token,
-    accesstime: Math.trunc(Date.now() / 1000)
-  }).then(getResponse);
-
-export const getProposalAccessTimes = token =>
-  GET(`/v1/user/accesstimes/${token}`).then(getResponse);

@@ -39,16 +39,10 @@ class ProposalDetail extends React.Component {
     this.handleUpdateOfComments(prevProps, this.props);
   }
   componentDidMount() {
-    this.unlisten = this.props.history.listen(() => {
-      this.props.onSaveVisitedProposal(this.props.token);
-    });
     this.props.onFetchLikedComments(this.props.token);
-    this.props.onFetchVisitedProposals(this.props.token);
-    this.props.onSaveVisitedProposal(this.props.token);
   }
 
   componentWillUnmount() {
-    this.unlisten();
     this.props.resetLastSubmittedProposal();
     document.title = DEFAULT_TAB_TITLE;
   }
@@ -148,7 +142,6 @@ class ProposalDetail extends React.Component {
       ...props
     } = this.props;
     const comments = this.state.sortedComments;
-    const accessTime = this.state.accessTime;
     const tempTree = tempThreadTree[commentid];
     return (
       <div className="content" role="main">
@@ -158,7 +151,6 @@ class ProposalDetail extends React.Component {
           ) : (
             <Content
               {...{
-                accessTime,
                 isLoading,
                 error,
                 commentid,
