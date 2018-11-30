@@ -20,7 +20,8 @@ import {
   onResetSyncLikeComment,
   onReceiveUser,
   onReceiveVoteStatusChange,
-  onReceiveRescanUserPayments
+  onReceiveRescanUserPayments,
+  onReceiveProposalVoteResults
 } from "./handlers";
 
 export const DEFAULT_STATE = {
@@ -202,6 +203,10 @@ const api = (state = DEFAULT_STATE, action) =>
       request("proposalVoteStatus", state, action),
     [act.RECEIVE_PROPOSAL_VOTE_STATUS]: () =>
       receive("proposalVoteStatus", state, action),
+    [act.REQUEST_PROPOSAL_VOTE_RESULTS]: () =>
+      request("proposalVoteResults", state, action),
+    [act.RECEIVE_PROPOSAL_VOTE_RESULTS]: () =>
+      onReceiveProposalVoteResults("proposalVoteResults", state, action),
     [act.REQUEST_AUTHORIZE_VOTE]: () => request("authorizeVote", state, action),
     [act.RECEIVE_AUTHORIZE_VOTE]: () =>
       onReceiveVoteStatusChange(

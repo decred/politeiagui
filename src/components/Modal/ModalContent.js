@@ -10,7 +10,9 @@ import ManageCreditsModal from "./contents/ManageCreditsModal";
 import PurchaseCreditsModal from "./contents/PurchaseCreditsModal";
 import ChangeUsernameModal from "./contents/ChangeUsernameModal";
 import ChangePasswordModal from "./contents/ChangePasswordModal";
+import SearchVotesModal from "./contents/SearchVotesModal";
 import StartVoteModal from "../StartVoteModal";
+import ImportIdentityModal from "./contents/ImportIdentityModal";
 import { withRouter } from "react-router-dom";
 
 const mapModalTypeToContent = {
@@ -32,7 +34,11 @@ const mapModalTypeToContent = {
   [modalTypes.CHANGE_PASSWORD_MODAL]: () => <ChangePasswordModal />,
   [modalTypes.START_VOTE_MODAL]: ({ modalData }) => (
     <StartVoteModal me={modalData} />
-  )
+  ),
+  [modalTypes.SEARCH_PROPOSAL_VOTES]: ({ modalData }) => (
+    <SearchVotesModal me={modalData} />
+  ),
+  [modalTypes.IMPORT_IDENTITY_MODAL]: () => <ImportIdentityModal />
 };
 
 const ModalContent = ({ modalData, location }) => {

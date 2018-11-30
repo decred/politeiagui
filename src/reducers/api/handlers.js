@@ -161,6 +161,30 @@ export const onResetSyncLikeComment = state => {
   };
 };
 
+export const onReceiveProposalVoteResults = (key, state, action) => {
+  state = receive(key, state, action);
+  if (action.error) return state;
+
+  const hashmap = state.proposalVoteResults.response.castvotes.reduce(
+    (map, obj) => {
+      map[obj.ticket] = obj;
+      return map;
+    },
+    {}
+  );
+
+  return {
+    ...state,
+    proposalVoteResults: {
+      ...state.proposalVoteResults,
+      response: {
+        ...state.proposalVoteResults.response,
+        castvotes: hashmap
+      }
+    }
+  };
+};
+
 export const onReceiveSyncLikeComment = (state, action) => {
   const { token, action: cAction, commentid } = action.payload;
   const newAction = parseInt(cAction, 10);

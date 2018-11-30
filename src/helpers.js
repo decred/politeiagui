@@ -9,15 +9,17 @@ import {
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_STATUS_ABANDONED
 } from "./constants.js";
+import { INVALID_FILE } from "./constants";
 
 export const getProposalStatus = proposalStatus =>
   get(proposalStatus, [
-    "Abandoned",
     "Invalid",
     "Not found",
     "Not reviewed",
     "Censored",
-    "Public"
+    "Public",
+    "Unreviewed changes",
+    "Abandoned"
   ]);
 
 export const utoa = str => window.btoa(unescape(encodeURIComponent(str)));
@@ -273,4 +275,15 @@ export const setQueryStringWithoutPageReload = qs => {
     window.location.pathname +
     qs;
   window.history.pushState({ path: newurl }, "", newurl);
+};
+
+export const getJsonData = base64 => {
+  const data = atob(base64.split(",").pop());
+  try {
+    const json = JSON.parse(data);
+    if (!json) throw new Error(INVALID_FILE);
+    return json;
+  } catch (e) {
+    throw new Error(INVALID_FILE);
+  }
 };

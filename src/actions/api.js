@@ -714,6 +714,21 @@ export const onFetchProposalVoteStatus = token => dispatch => {
     });
 };
 
+export const onFetchProposalVoteResults = token => dispatch => {
+  dispatch(act.REQUEST_PROPOSAL_VOTE_RESULTS({ token }));
+  return api
+    .proposalVoteResults(token)
+    .then(response =>
+      dispatch(
+        act.RECEIVE_PROPOSAL_VOTE_RESULTS({ ...response, success: true })
+      )
+    )
+    .catch(error => {
+      dispatch(act.RECEIVE_PROPOSAL_VOTE_RESULTS(null, error));
+      throw error;
+    });
+};
+
 export const onAuthorizeVote = (email, token, version) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_AUTHORIZE_VOTE({ token }));

@@ -206,9 +206,9 @@ export const proposalPaywallDetails = () =>
 export const userProposalCredits = () =>
   GET("/v1/user/proposals/credits").then(getResponse);
 
-export const editUser = (csrf, { proposalemailnotifications }) =>
+export const editUser = (csrf, { emailnotifications }) =>
   POST("/user/edit", csrf, {
-    proposalemailnotifications
+    emailnotifications
   }).then(getResponse);
 
 export const manageUser = (csrf, userid, action, reason) =>
@@ -387,6 +387,8 @@ export const proposalsVoteStatus = () =>
   GET("/v1/proposals/votestatus").then(getResponse);
 export const proposalVoteStatus = token =>
   GET(`/v1/proposals/${token}/votestatus`).then(getResponse);
+export const proposalVoteResults = token =>
+  GET(`/v1/proposals/${token}/votes`).then(getResponse);
 
 export const proposalAuthorizeOrRevokeVote = (
   csrf,
