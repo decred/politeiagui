@@ -6,8 +6,7 @@ import {
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_FILTER_ALL,
-  PROPOSAL_VOTING_FINISHED,
-  PROPOSAL_STATUS_ABANDONED
+  PROPOSAL_VOTING_FINISHED
 } from "./constants.js";
 import { INVALID_FILE } from "./constants";
 
@@ -19,7 +18,9 @@ export const getProposalStatus = proposalStatus =>
     "Censored",
     "Public",
     "Unreviewed changes",
-    "Abandoned"
+    "Abandoned",
+    "Rejected",
+    "Approved"
   ]);
 
 export const utoa = str => window.btoa(unescape(encodeURIComponent(str)));
@@ -196,11 +197,21 @@ export const multiplyFloatingNumbers = (num1, num2) => {
   return (num1 * num2) / Math.pow(10, cont1 + cont2);
 };
 
+export const isProposalApproved = vs => {
+  const hasReachedQuorom =
+    vs.totalvotes >= (vs.numofeligiblevotes * vs.quorumpercentage) / 100;
+  const yesOption = vs.optionsresult && vs.optionsresult[1];
+  const hasPassed =
+    yesOption &&
+    vs.totalvotes > 0 &&
+    yesOption.votesreceived >= (vs.totalvotes * vs.passpercentage) / 100;
+  return hasReachedQuorom && hasPassed;
+};
+
 export const countPublicProposals = proposals => {
   const defaultObj = {
     [PROPOSAL_VOTING_ACTIVE]: 0,
     [PROPOSAL_VOTING_NOT_AUTHORIZED]: 0,
-    [PROPOSAL_VOTING_FINISHED]: 0,
     [PROPOSAL_FILTER_ALL]: 0
   };
   return proposals
@@ -210,8 +221,6 @@ export const countPublicProposals = proposals => {
           cur.status === PROPOSAL_VOTING_AUTHORIZED
         )
           acc[PROPOSAL_VOTING_NOT_AUTHORIZED]++;
-        else if (cur.status === PROPOSAL_STATUS_ABANDONED)
-          acc[PROPOSAL_VOTING_FINISHED]++;
         else if (cur.status === PROPOSAL_VOTING_ACTIVE)
           acc[PROPOSAL_VOTING_ACTIVE]++;
         else if (cur.status === PROPOSAL_VOTING_FINISHED)

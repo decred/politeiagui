@@ -23,7 +23,9 @@ import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_NOT_AUTHORIZED,
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_FILTER_ALL
+  PROPOSAL_FILTER_ALL,
+  PROPOSAL_APPROVED,
+  PROPOSAL_REJECTED
 } from "../constants";
 
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
@@ -165,7 +167,9 @@ export const selectDefaultPublicFilterValue = (dispatch, getState) => {
     [
       PROPOSAL_VOTING_ACTIVE,
       PROPOSAL_VOTING_NOT_AUTHORIZED,
-      PROPOSAL_FILTER_ALL
+      PROPOSAL_FILTER_ALL,
+      PROPOSAL_APPROVED,
+      PROPOSAL_REJECTED
     ]
   );
   dispatch(onChangePublicFilter(filterValue));
