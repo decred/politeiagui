@@ -1,6 +1,5 @@
 import React from "react";
 import ProposalCreditsSummary from "./Summary";
-import { PageLoadingIcon } from "../snew";
 
 class ProposalCreditsPage extends React.Component {
   componentDidMount() {
@@ -9,8 +8,8 @@ class ProposalCreditsPage extends React.Component {
   render() {
     const {
       proposalCreditPrice,
-      isApiRequestingProposalPaywall,
       proposalCredits,
+      isApiRequestingUserProposalCredits,
 
       // Testnet only
       isTestnet,
@@ -27,18 +26,18 @@ class ProposalCreditsPage extends React.Component {
       txId: this.props.paywallTxid
     });
 
-    return isApiRequestingProposalPaywall ? (
-      <PageLoadingIcon />
-    ) : (
-      <div className="proposal-paywall-section">
-        <ProposalCreditsSummary
-          proposalCreditPrice={proposalCreditPrice}
-          proposalCredits={proposalCredits}
-          proposalCreditPurchases={proposalCreditPurchases}
-          isTestnet={isTestnet}
-          {...{ ...props, proposalPaywallPaymentTxid }}
-        />
-      </div>
+    return (
+      !isApiRequestingUserProposalCredits && (
+        <div className="proposal-paywall-section">
+          <ProposalCreditsSummary
+            proposalCreditPrice={proposalCreditPrice}
+            proposalCredits={proposalCredits}
+            proposalCreditPurchases={proposalCreditPurchases}
+            isTestnet={isTestnet}
+            {...{ ...props, proposalPaywallPaymentTxid }}
+          />
+        </div>
+      )
     );
   }
 }
