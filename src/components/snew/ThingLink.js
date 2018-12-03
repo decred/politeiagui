@@ -137,6 +137,12 @@ class ThingLinkComp extends React.Component {
     const hasComment = () => {
       return comments.length > 0;
     };
+    const isAbandonable =
+      isVetted &&
+      !isVotingActiveOrFinished &&
+      voteStatus !== PROPOSAL_VOTING_AUTHORIZED &&
+      isAdmin &&
+      !isAbandoned;
 
     // errors
     const errorSetStatus =
@@ -489,7 +495,7 @@ class ThingLinkComp extends React.Component {
               />
             </li>
           ) : null}
-          {isVetted && !isVotingActiveOrFinished && isAdmin && !isAbandoned && (
+          {isAbandonable && (
             <ul style={{ display: "flex" }}>
               <li key="spam">
                 <ButtonWithLoadingIcon
