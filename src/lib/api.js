@@ -198,7 +198,7 @@ export const verifyNewUser = searchQuery => {
 };
 
 export const likedComments = token =>
-  GET(`/v1/user/proposals/${token}/commentsvotes`).then(getResponse);
+  GET(`/v1/user/proposals/${token}/commentslikes`).then(getResponse);
 
 export const proposalPaywallDetails = () =>
   GET("/v1/proposals/paywall").then(getResponse);

@@ -72,7 +72,7 @@ class ProposalDetail extends React.Component {
       sortedComments = updateSortedComments(
         newComments,
         currentProps.commentsSortOption,
-        nextProps.commentsvotes,
+        nextProps.commentslikes,
         isEmpty
       );
     }
@@ -84,17 +84,17 @@ class ProposalDetail extends React.Component {
       sortedComments = updateSortedComments(
         nextProps.comments,
         currentProps.commentsSortOption,
-        nextProps.commentsvotes
+        nextProps.commentslikes
       );
     }
 
-    // commentsvotes changed
+    // commentslikes changed
     if (
-      nextProps.commentsvotes &&
-      !isEqual(currentProps.commentsvotes, nextProps.commentsvotes)
+      nextProps.commentslikes &&
+      !isEqual(currentProps.commentslikes, nextProps.commentslikes)
     ) {
       const updatedComments = getUpdatedComments(
-        nextProps.commentsvotes,
+        nextProps.commentslikes,
         nextProps.comments
       );
       const newComments = mergeNewComments(
@@ -104,7 +104,7 @@ class ProposalDetail extends React.Component {
       sortedComments = updateSortedComments(
         newComments,
         currentProps.commentsSortOption,
-        nextProps.commentsvotes,
+        nextProps.commentslikes,
         false
       );
     }
@@ -117,7 +117,7 @@ class ProposalDetail extends React.Component {
       sortedComments = updateSortedComments(
         nextProps.comments,
         currentProps.commentsSortOption,
-        nextProps.commentsvotes,
+        nextProps.commentslikes,
         true
       );
     }
