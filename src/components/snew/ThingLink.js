@@ -370,7 +370,9 @@ class ThingLinkComp extends React.Component {
               compressIcon: ToggleIcon("compress", this.hanldeExpandToggle)
             }}
           />
-          <ProposalImages readOnly files={otherFiles} />
+          {this.state.expanded && (
+            <ProposalImages readOnly files={otherFiles} />
+          )}
           {enableAdminActionsForUnvetted ? (
             <ul style={{ display: "flex" }}>
               <li key="spam">
