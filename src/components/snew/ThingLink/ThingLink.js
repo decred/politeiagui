@@ -1,18 +1,19 @@
 import React from "react";
 
 import { DateTooltip } from "snew-classic-ui";
-import { getProposalStatus } from "../../helpers";
+import { getProposalStatus } from "../../../helpers";
 import { withRouter } from "react-router-dom";
-import * as modalTypes from "../Modal/modalTypes";
-import actions from "../../connectors/actions";
-import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
-import CensorMessage from "../CensorMessage";
-import DownloadBundle from "../DownloadBundle";
-import Message from "../Message";
-import ProposalImages from "../ProposalImages";
-import thingLinkConnector from "../../connectors/thingLink";
-import Tooltip from "../Tooltip";
-import VoteStats from "../VoteStats";
+import * as modalTypes from "../../Modal/modalTypes";
+import actions from "../../../connectors/actions";
+import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
+import CensorMessage from "../../CensorMessage";
+import DownloadBundle from "../../DownloadBundle";
+import Message from "../../Message";
+import ProposalImages from "../../ProposalImages";
+import thingLinkConnector from "../../../connectors/thingLink";
+import Tooltip from "../../Tooltip";
+import VersionsDiff from "./VersionsDiff";
+import VoteStats from "../../VoteStats";
 // import Diff from "./Markdown/Diff";
 
 import {
@@ -25,7 +26,7 @@ import {
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_VOTING_NOT_AUTHORIZED
-} from "../../constants";
+} from "../../../constants";
 
 const ToggleIcon = (type, onClick) => (
   <button className="collapse-icon-button" onClick={onClick}>
@@ -46,57 +47,57 @@ class ThingLinkComp extends React.Component {
   };
   render() {
     const {
-      Link,
-      Expando,
-      id,
-      expanded = false,
-      name,
       author,
       authorid,
+      authorizeVoteError,
+      authorizeVoteToken,
       censorMessage,
-      domain,
-      rank = 0,
-      userid,
-      draftId,
-      version,
-      subreddit,
-      subreddit_id,
+      commentid,
+      comments,
+      confirmWithModal,
       created_utc,
-      title,
-      url,
-      permalink,
+      domain,
+      draftId,
+      expanded = false,
+      Expando,
+      getVoteStatus,
+      id,
       is_self,
-      selftext,
-      selftext_html,
-      thumbnail,
-      otherFiles,
-      review_status,
-      numcomments,
-      lastSubmitted,
-      loggedInAsEmail,
       isAdmin,
-      userCanExecuteActions,
+      isApiRequestingSetProposalStatusByToken,
+      isRequestingAuthorizeVote,
+      isRequestingStartVote,
+      isTestnet,
+      lastSubmitted,
+      Link,
+      loggedInAsEmail,
+      name,
+      numcomments,
+      onAuthorizeVote,
       onChangeStatus,
+      onDeleteDraftProposal,
+      onRevokeVote,
       onStartVote,
       openModal,
-      onAuthorizeVote,
-      onRevokeVote,
-      setStatusProposalToken,
-      onDeleteDraftProposal,
+      otherFiles,
+      permalink,
+      rank = 0,
+      review_status,
+      selftext_html,
+      selftext,
       setStatusProposalError,
-      isTestnet,
-      getVoteStatus,
-      confirmWithModal,
-      userId,
-      comments,
-      authorizeVoteToken,
-      isRequestingAuthorizeVote,
-      authorizeVoteError,
-      isRequestingStartVote,
-      startVoteToken,
+      setStatusProposalToken,
       startVoteError,
-      isApiRequestingSetProposalStatusByToken,
-      commentid
+      startVoteToken,
+      subreddit_id,
+      subreddit,
+      thumbnail,
+      title,
+      url,
+      userCanExecuteActions,
+      userid,
+      userId,
+      version
     } = this.props;
     const voteStatus = getVoteStatus(id) && getVoteStatus(id).status;
     const isAbandoned = review_status === PROPOSAL_STATUS_ABANDONED;
@@ -280,7 +281,7 @@ class ThingLinkComp extends React.Component {
                   <Link href={`/user/${authorid}`}>{author}</Link>
                 </span>
               )}
-              {displayVersion && version ? ` - version ${version}` : null}
+              {displayVersion && version && <VersionsDiff />}
               {numcomments > 0 && (
                 <span>
                   {" "}

@@ -30,5 +30,5 @@ export { default as SubmitTextSidebox } from "./SubmitTextSidebox";
 export { default as Subreddit } from "./Subreddit";
 export { default as Thing } from "./Thing";
 export { default as ThingComment } from "./ThingComment";
-export { default as ThingLink } from "./ThingLink";
+export { default as ThingLink } from "./ThingLink/ThingLink";
 export { default as UserInfo } from "./UserInfo";
