@@ -27,8 +27,8 @@ export const mergeNewComments = (sortedComments, updatedComments) => {
   });
 };
 
-export const getUpdatedComments = (commentsVotes = [], comments) => {
-  const updatedComments = commentsVotes.reduce((acc, cv) => {
+export const getUpdatedComments = (commentsLikes = [], comments) => {
+  const updatedComments = commentsLikes.reduce((acc, cv) => {
     const found = comments.find(c => cv.commentid === c.commentid);
     return found ? acc.concat(found) : acc;
   }, []);

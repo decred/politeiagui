@@ -23,7 +23,9 @@ import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_NOT_AUTHORIZED,
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_FILTER_ALL
+  PROPOSAL_FILTER_ALL,
+  PROPOSAL_APPROVED,
+  PROPOSAL_REJECTED
 } from "../constants";
 
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
@@ -114,8 +116,6 @@ export const onLoadMe = me => dispatch => {
   dispatch(act.LOAD_ME(me));
 };
 
-
-
 export const onResetPaywallInfo = () => act.RESET_PAYWALL_INFO();
 export const onChangeAdminFilter = option =>
   act.CHANGE_ADMIN_FILTER_VALUE(option);
@@ -167,7 +167,9 @@ export const selectDefaultPublicFilterValue = (dispatch, getState) => {
     [
       PROPOSAL_VOTING_ACTIVE,
       PROPOSAL_VOTING_NOT_AUTHORIZED,
-      PROPOSAL_FILTER_ALL
+      PROPOSAL_FILTER_ALL,
+      PROPOSAL_APPROVED,
+      PROPOSAL_REJECTED
     ]
   );
   dispatch(onChangePublicFilter(filterValue));

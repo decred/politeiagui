@@ -13,6 +13,7 @@ import ProposalImages from "../ProposalImages";
 import thingLinkConnector from "../../connectors/thingLink";
 import Tooltip from "../Tooltip";
 import VoteStats from "../VoteStats";
+// import Diff from "./Markdown/Diff";
 
 import {
   PROPOSAL_STATUS_ABANDONED,
@@ -136,6 +137,12 @@ class ThingLinkComp extends React.Component {
     const hasComment = () => {
       return comments.length > 0;
     };
+    const isAbandonable =
+      isVetted &&
+      !isVotingActiveOrFinished &&
+      voteStatus !== PROPOSAL_VOTING_AUTHORIZED &&
+      isAdmin &&
+      !isAbandoned;
 
     // errors
     const errorSetStatus =
@@ -363,7 +370,9 @@ class ThingLinkComp extends React.Component {
               compressIcon: ToggleIcon("compress", this.hanldeExpandToggle)
             }}
           />
-          <ProposalImages readOnly files={otherFiles} />
+          {this.state.expanded && (
+            <ProposalImages readOnly files={otherFiles} />
+          )}
           {enableAdminActionsForUnvetted ? (
             <ul style={{ display: "flex" }}>
               <li key="spam">
@@ -488,7 +497,7 @@ class ThingLinkComp extends React.Component {
               />
             </li>
           ) : null}
-          {isVetted && !isVotingActiveOrFinished && isAdmin && !isAbandoned && (
+          {isAbandonable && (
             <ul style={{ display: "flex" }}>
               <li key="spam">
                 <ButtonWithLoadingIcon

@@ -7,7 +7,7 @@ import * as pki from "../lib/pki";
 class PrivateKeyDownloadManager extends Component {
   componentDidMount() {
     this.fetchKeys().then(keyData => {
-      if(!this.unmounting) {
+      if (!this.unmounting) {
         this.setState({ keyData });
       }
     });
@@ -30,14 +30,18 @@ class PrivateKeyDownloadManager extends Component {
         )}
         <button
           className="ReactFileReader"
-          onClick={() => this.props.openModal(IMPORT_IDENTITY_MODAL)}>Import Identity
+          onClick={() => this.props.openModal(IMPORT_IDENTITY_MODAL)}
+        >
+          Import Identity
         </button>
       </div>
     );
   }
 
   fetchKeys() {
-    return pki.getKeys(this.props.loggedInAsEmail).then(keys => JSON.stringify(keys, null, 2));
+    return pki
+      .getKeys(this.props.loggedInAsEmail)
+      .then(keys => JSON.stringify(keys, null, 2));
   }
 }
 

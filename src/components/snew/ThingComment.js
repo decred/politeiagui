@@ -63,6 +63,7 @@ class ThingComment extends React.PureComponent {
       getVoteStatus,
       likeCommentError,
       likeCommentPayload,
+      lastVisit,
       commentid,
       showCommentForm,
       toggleCommentForm,
@@ -73,7 +74,9 @@ class ThingComment extends React.PureComponent {
       ...props
     } = this.props;
     const isProposalAbandoned = proposalStatus === PROPOSAL_STATUS_ABANDONED;
-    const isNewComment = lastVisit ? lastVisit < created_utc : false;
+    const isNewComment = lastVisit
+      ? lastVisit < created_utc && props.authorid !== props.userid
+      : false;
     const isCommentPermalink = commentid === props.id;
     return (
       <div>
@@ -101,6 +104,7 @@ class ThingComment extends React.PureComponent {
             onCloseCommentForm,
             showCommentForm,
             proposalAuthor,
+            isNewComment,
             user: loggedInAsEmail,
             authorHref: `/user/${props.authorid}`,
             blockvote:

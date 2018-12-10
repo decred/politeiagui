@@ -18,9 +18,9 @@ import {
 
 describe("test api reducer", () => {
   const MOCK_STATE = {
-    commentsvotes: {
+    commentslikes: {
       response: {
-        commentsvotes: [
+        commentslikes: [
           {
             action: "0",
             commentid: "1",
@@ -135,7 +135,7 @@ describe("test api reducer", () => {
   ];
 
   const getCommentVoteFromState = (state, token, commentid) =>
-    state.commentsvotes.response.commentsvotes.filter(
+    state.commentslikes.response.commentslikes.filter(
       cv => cv.token === token && cv.commentid === commentid
     )[0];
   const getProposalCommentFromState = (state, token, commentid) =>
@@ -161,8 +161,8 @@ describe("test api reducer", () => {
     expect(newCommentVote).toEqual({ token, commentid, action: expAction });
     expect(newComment.totalvotes).toEqual(expTotal);
     expect(newComment.resultvotes).toEqual(expResult);
-    expect(newState.commentsvotes.backup).toEqual(
-      initialState.commentsvotes.response.commentsvotes
+    expect(newState.commentslikes.backup).toEqual(
+      initialState.commentslikes.response.commentslikes
     );
     expect(newState.proposalComments.backup).toEqual(
       initialState.proposalComments.response.comments
@@ -185,8 +185,8 @@ describe("test api reducer", () => {
     expect(newCommentVoteR).toEqual({ token, commentid, action: expAction });
     expect(newCommentR.totalvotes).toEqual(expTotal);
     expect(newCommentR.resultvotes).toEqual(expResult);
-    expect(reducerState.commentsvotes.backup).toEqual(
-      initialState.commentsvotes.response.commentsvotes
+    expect(reducerState.commentslikes.backup).toEqual(
+      initialState.commentslikes.response.commentslikes
     );
     expect(reducerState.proposalComments.backup).toEqual(
       initialState.proposalComments.response.comments
@@ -241,7 +241,7 @@ describe("test api reducer", () => {
       proposalComments: DEFAULT_REQUEST_STATE,
       proposalsVoteStatus: DEFAULT_REQUEST_STATE,
       proposalVoteStatus: DEFAULT_REQUEST_STATE,
-      commentsvotes: DEFAULT_REQUEST_STATE,
+      commentslikes: DEFAULT_REQUEST_STATE,
       userProposals: DEFAULT_REQUEST_STATE,
       newProposal: DEFAULT_REQUEST_STATE,
       editProposal: DEFAULT_REQUEST_STATE,
@@ -373,14 +373,14 @@ describe("test api reducer", () => {
     const stateAfterResetR = api.default(state, {
       type: act.RESET_SYNC_LIKE_COMMENT
     });
-    expect(stateAfterReset.commentsvotes.response.commentsvotes).toEqual(
-      initialState.commentsvotes.response.commentsvotes
+    expect(stateAfterReset.commentslikes.response.commentslikes).toEqual(
+      initialState.commentslikes.response.commentslikes
     );
     expect(stateAfterReset.proposalComments.response.comments).toEqual(
       initialState.proposalComments.response.comments
     );
-    expect(stateAfterResetR.commentsvotes.response.commentsvotes).toEqual(
-      initialState.commentsvotes.response.commentsvotes
+    expect(stateAfterResetR.commentslikes.response.commentslikes).toEqual(
+      initialState.commentslikes.response.commentslikes
     );
     expect(stateAfterResetR.proposalComments.response.comments).toEqual(
       initialState.proposalComments.response.comments
@@ -736,12 +736,12 @@ describe("test api reducer", () => {
       { action: act.RECEIVE_LIKE_COMMENT, key: "likeComment", type: "receive" },
       {
         action: act.REQUEST_LIKED_COMMENTS,
-        key: "commentsvotes",
+        key: "commentslikes",
         type: "request"
       },
       {
         action: act.RECEIVE_LIKED_COMMENTS,
-        key: "commentsvotes",
+        key: "commentslikes",
         type: "receive"
       },
       { action: act.REQUEST_MANAGE_USER, key: "manageUser", type: "request" },
