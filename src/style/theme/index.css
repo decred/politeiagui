@@ -104,7 +104,7 @@ button:visited {
     background: #5981ab;
 }
 
-.react-file-reader-button button
+.react-file-reader-button button,
 {
   color: #fff;
   background: #28a745;
@@ -128,11 +128,15 @@ body button.secondary.disabled {
   color: #bbb;
 }
 
-.react-file-reader-button button
+.react-file-reader-button button, .ReactFileReader
 {
   color: #fff;
   background: #28a745;
   min-width: 200px;
+}
+
+.ReactFileReader {
+	margin-left: 5em;
 }
 
 .c-btn-primary:active {

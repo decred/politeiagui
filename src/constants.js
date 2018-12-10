@@ -26,6 +26,8 @@ export const PROPOSAL_VOTING_AUTHORIZED = 2;
 export const PROPOSAL_VOTING_ACTIVE = 3;
 export const PROPOSAL_VOTING_FINISHED = 4;
 export const PROPOSAL_STATUS_ABANDONED = 6;
+export const PROPOSAL_REJECTED = 7;
+export const PROPOSAL_APPROVED = 8;
 
 export const USER_DETAIL_TAB_GENERAL = 0;
 export const USER_DETAIL_TAB_PREFERENCES = 1;
@@ -57,3 +59,13 @@ export const NOTIFICATION_EMAIL_REGULAR_PROPOSAL_EDITED = 1 << 3;
 export const NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED = 1 << 4;
 export const NOTIFICATION_EMAIL_ADMIN_PROPOSAL_NEW = 1 << 5;
 export const NOTIFICATION_EMAIL_ADMIN_PROPOSAL_VOTE_AUTHORIZED = 1 << 6;
+export const NOTIFICATION_EMAIL_COMMENT_ON_MY_PROPOSAL = 1 << 7;
+export const NOTIFICATION_EMAIL_COMMENT_ON_MY_COMMENT = 1 << 8;
+// Import key errors
+export const PUBLIC_KEY_MISMATCH =
+  "The provided public key doesn't match the key stored in the server.";
+export const INVALID_KEY_PAIR = "The provided key pair is not valid.";
+export const INVALID_FILE =
+  "This is not a valid identity file. The identity has to be a JSON file containing the publicKey and the secretKey values.";
+export const LOAD_KEY_FAILED =
+  "Sorry, something went wrong while importing the identity file, please try again. If the error persists, contact the Politeia support.";

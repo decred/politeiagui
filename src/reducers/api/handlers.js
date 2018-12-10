@@ -139,15 +139,15 @@ export const onReceiveNewComment = (state, action) => {
 };
 
 export const onResetSyncLikeComment = state => {
-  const { backup: commentsVotesBackup } = state.commentsvotes;
+  const { backup: commentsLikesBackup } = state.commentslikes;
   const { backup: proposalCommentsBackup } = state.proposalComments;
   return {
     ...state,
-    commentsvotes: {
-      ...state.commentsvotes,
+    commentslikes: {
+      ...state.commentslikes,
       backup: null,
       response: {
-        commentsvotes: commentsVotesBackup
+        commentslikes: commentsLikesBackup
       }
     },
     proposalComments: {
@@ -189,19 +189,19 @@ export const onReceiveSyncLikeComment = (state, action) => {
   const { token, action: cAction, commentid } = action.payload;
   const newAction = parseInt(cAction, 10);
 
-  const commentsvotes =
-    state.commentsvotes.response && state.commentsvotes.response.commentsvotes;
-  const backupCV = cloneDeep(commentsvotes);
+  const commentslikes =
+    state.commentslikes.response && state.commentslikes.response.commentslikes;
+  const backupCV = cloneDeep(commentslikes);
   const comments =
     state.proposalComments.response && state.proposalComments.response.comments;
 
   let reducedVotes = null;
   const cvfound =
-    commentsvotes &&
-    commentsvotes.find(cv => cv.commentid === commentid && cv.token === token);
+    commentslikes &&
+    commentslikes.find(cv => cv.commentid === commentid && cv.token === token);
 
   if (cvfound) {
-    reducedVotes = commentsvotes.reduce(
+    reducedVotes = commentslikes.reduce(
       (acc, cv) => {
         if (cv.commentid === commentid && cv.token === token) {
           const currentAction = parseInt(cv.action, 10);
@@ -218,22 +218,22 @@ export const onReceiveSyncLikeComment = (state, action) => {
   } else {
     const newCommentVote = { token, commentid, action: newAction };
     reducedVotes = {
-      cvs: commentsvotes
-        ? commentsvotes.concat([newCommentVote])
+      cvs: commentslikes
+        ? commentslikes.concat([newCommentVote])
         : [newCommentVote],
       oldAction: 0
     };
   }
 
-  const { cvs: newCommentsVotes, oldAction } = reducedVotes;
+  const { cvs: newCommentsLikes, oldAction } = reducedVotes;
 
   return {
     ...state,
-    commentsvotes: {
-      ...state.commentsvotes,
+    commentslikes: {
+      ...state.commentslikes,
       backup: backupCV,
       response: {
-        commentsvotes: newCommentsVotes
+        commentslikes: newCommentsLikes
       }
     },
     proposalComments: {

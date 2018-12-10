@@ -67,6 +67,9 @@ const StackedBarChart = ({
   const labelToDisplay =
     dataToDisplay && `${dataToDisplay.label}: ${dataToDisplay.value}%`;
 
+  const gradientInitialColor = "#FFA07A";
+  const gradientFinalColor = "#a7f1eb";
+
   return (
     <div
       style={{
@@ -84,8 +87,8 @@ const StackedBarChart = ({
               ...barStyle,
               background:
                 dr.value < threeshold
-                  ? "linear-gradient(90deg, #FFA07A 20%, #def9f7)"
-                  : "#def9f7",
+                  ? `linear-gradient(90deg, ${gradientInitialColor} 20%, ${gradientFinalColor})`
+                  : gradientFinalColor,
               width: `${dr.value}%`
             }}
           />

@@ -154,6 +154,27 @@ class PreferencesTab extends React.Component {
             </FieldContainer>
           </FieldGroup>
         )}
+        <FieldGroup>
+          <FieldGroupHeader>Comment email notifications</FieldGroupHeader>
+          <FieldContainer label="New comment on your proposal">
+            <Field
+              name="commentnotifications-proposal"
+              component="input"
+              type="checkbox"
+              disabled={!isUserPageOwner}
+              onChange={this.onChange}
+            />
+          </FieldContainer>
+          <FieldContainer label="New comment reply to your comment">
+            <Field
+              name="commentnotifications-comment"
+              component="input"
+              type="checkbox"
+              disabled={!isUserPageOwner}
+              onChange={this.onChange}
+            />
+          </FieldContainer>
+        </FieldGroup>
         {isUserPageOwner && (
           <FieldContainer fieldWidth={250}>
             <ButtonWithLoadingIcon

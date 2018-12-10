@@ -30,7 +30,7 @@ class FilesField extends React.Component {
       policyErrors: validation.errors ? validation.errors : []
     });
 
-    return dispatch(change("form/proposal", "files", validation.files));
+    return dispatch(change("form/proposal", "files", inputAndNewFiles));
   };
 
   render() {

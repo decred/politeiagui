@@ -10,7 +10,8 @@ import {
   PROPOSAL_USER_FILTER_DRAFT,
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_NOT_AUTHORIZED,
-  PROPOSAL_VOTING_FINISHED,
+  PROPOSAL_REJECTED,
+  PROPOSAL_APPROVED,
   LIST_HEADER_PUBLIC,
   LIST_HEADER_UNVETTED,
   LIST_HEADER_USER,
@@ -48,8 +49,12 @@ const publicFilterOptions = [
     value: PROPOSAL_VOTING_ACTIVE
   },
   {
-    label: "finished voting",
-    value: PROPOSAL_VOTING_FINISHED
+    label: "approved",
+    value: PROPOSAL_APPROVED
+  },
+  {
+    label: "rejected",
+    value: PROPOSAL_REJECTED
   },
   {
     label: "abandoned",

@@ -35,6 +35,8 @@ import {
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_USER_FILTER_SUBMITTED,
   PROPOSAL_USER_FILTER_DRAFT,
+  PROPOSAL_APPROVED,
+  PROPOSAL_REJECTED,
   NOTIFICATION_EMAIL_MY_PROPOSAL_STATUS_CHANGE,
   NOTIFICATION_EMAIL_MY_PROPOSAL_VOTE_STARTED,
   NOTIFICATION_EMAIL_ADMIN_PROPOSAL_NEW,
@@ -42,9 +44,15 @@ import {
   NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VETTED,
   NOTIFICATION_EMAIL_REGULAR_PROPOSAL_EDITED,
   NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED,
+  NOTIFICATION_EMAIL_COMMENT_ON_MY_PROPOSAL,
+  NOTIFICATION_EMAIL_COMMENT_ON_MY_COMMENT,
   PROPOSAL_STATUS_ABANDONED
 } from "../constants";
-import { getTextFromIndexMd, countPublicProposals } from "../helpers";
+import {
+  getTextFromIndexMd,
+  countPublicProposals,
+  isProposalApproved
+} from "../helpers";
 
 export const replyTo = or(get(["app", "replyParent"]), constant(0));
 
@@ -104,47 +112,50 @@ export const getEditProposalValues = state => {
 };
 
 export const getEditUserValues = state => {
-  let proposalEmailNotifications;
+  let emailNotifications;
 
   if (apiEditUserResponse(state)) {
     const editUserPayload = apiEditUserPayload(state);
-    proposalEmailNotifications = editUserPayload.proposalemailnotifications;
+    emailNotifications = editUserPayload.emailnotifications;
   } else {
     const userResponse = apiUserResponse(state) || { user: {} };
-    proposalEmailNotifications =
-      userResponse.user.proposalemailnotifications || 0;
+    emailNotifications = userResponse.user.emailnotifications || 0;
   }
 
   return {
     "myproposalnotifications-statuschange": !!(
-      proposalEmailNotifications & NOTIFICATION_EMAIL_MY_PROPOSAL_STATUS_CHANGE
+      emailNotifications & NOTIFICATION_EMAIL_MY_PROPOSAL_STATUS_CHANGE
     ),
     "myproposalnotifications-votestarted": !!(
-      proposalEmailNotifications & NOTIFICATION_EMAIL_MY_PROPOSAL_VOTE_STARTED
+      emailNotifications & NOTIFICATION_EMAIL_MY_PROPOSAL_VOTE_STARTED
     ),
     "regularproposalnotifications-vetted": !!(
-      proposalEmailNotifications & NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VETTED
+      emailNotifications & NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VETTED
     ),
     "regularproposalnotifications-edited": !!(
-      proposalEmailNotifications & NOTIFICATION_EMAIL_REGULAR_PROPOSAL_EDITED
+      emailNotifications & NOTIFICATION_EMAIL_REGULAR_PROPOSAL_EDITED
     ),
     "regularproposalnotifications-votestarted": !!(
-      proposalEmailNotifications &
-      NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED
+      emailNotifications & NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED
     ),
     "adminproposalnotifications-new": !!(
-      proposalEmailNotifications & NOTIFICATION_EMAIL_ADMIN_PROPOSAL_NEW
+      emailNotifications & NOTIFICATION_EMAIL_ADMIN_PROPOSAL_NEW
     ),
     "adminproposalnotifications-voteauthorized": !!(
-      proposalEmailNotifications &
-      NOTIFICATION_EMAIL_ADMIN_PROPOSAL_VOTE_AUTHORIZED
+      emailNotifications & NOTIFICATION_EMAIL_ADMIN_PROPOSAL_VOTE_AUTHORIZED
+    ),
+    "commentnotifications-proposal": !!(
+      emailNotifications & NOTIFICATION_EMAIL_COMMENT_ON_MY_PROPOSAL
+    ),
+    "commentnotifications-comment": !!(
+      emailNotifications & NOTIFICATION_EMAIL_COMMENT_ON_MY_COMMENT
     )
   };
 };
 
 export const resolveEditUserValues = prefs => {
   return {
-    proposalemailnotifications:
+    emailnotifications:
       (prefs["myproposalnotifications-statuschange"]
         ? NOTIFICATION_EMAIL_MY_PROPOSAL_STATUS_CHANGE
         : 0) |
@@ -165,6 +176,12 @@ export const resolveEditUserValues = prefs => {
         : 0) |
       (prefs["adminproposalnotifications-voteauthorized"]
         ? NOTIFICATION_EMAIL_ADMIN_PROPOSAL_VOTE_AUTHORIZED
+        : 0) |
+      (prefs["commentnotifications-proposal"]
+        ? NOTIFICATION_EMAIL_COMMENT_ON_MY_PROPOSAL
+        : 0) |
+      (prefs["commentnotifications-comment"]
+        ? NOTIFICATION_EMAIL_COMMENT_ON_MY_COMMENT
         : 0)
   };
 };
@@ -246,10 +263,9 @@ export const getVettedFilteredProposals = state => {
       const propVoteStatus = getPropVoteStatus(state)(
         prop.censorshiprecord.token
       ).status;
+      const propVote = getPropVoteStatus(state)(prop.censorshiprecord.token);
 
-      // the filter value used for all proposals on pre-voting
-      // is PROPOSAL_VOTING_NOT_AUTHORIZED however proposals with
-      // authorized voting should also be included
+      // the filter value used for all proposals on pre-voting is PROPOSAL_VOTING_NOT_AUTHORIZED however proposals with authorized voting should also be included
       const filterForPreVoting = filterValue === PROPOSAL_VOTING_NOT_AUTHORIZED;
       const propIsVotingAuthorized =
         propVoteStatus === PROPOSAL_VOTING_AUTHORIZED;
@@ -257,9 +273,24 @@ export const getVettedFilteredProposals = state => {
         return true;
       }
 
-      // the proposals under the abandoned tab are classified by their
-      // regular status and NOT by their voting status, so is necessary
-      // a special conditional to handle this corner case
+      // proposals approved and rejected should be handled
+      const filterForApproved = filterValue === PROPOSAL_APPROVED;
+      const propIsApproved =
+        propVoteStatus === PROPOSAL_VOTING_FINISHED &&
+        isProposalApproved(propVote);
+      if (filterForApproved && propIsApproved) {
+        return true;
+      }
+
+      const filterForRejected = filterValue === PROPOSAL_REJECTED;
+      const propIsRejected =
+        propVoteStatus === PROPOSAL_VOTING_FINISHED &&
+        !isProposalApproved(propVote);
+      if (filterForRejected && propIsRejected) {
+        return true;
+      }
+
+      // the proposals under the abandoned tab are classified by their regular status and NOT by their voting status, so is necessary a special conditional to handle this corner case
       const filterForAbandoned = filterValue === PROPOSAL_STATUS_ABANDONED;
       const propIsAbandoned = prop.status === PROPOSAL_STATUS_ABANDONED;
       if (filterForAbandoned && propIsAbandoned) {
@@ -338,15 +369,43 @@ export const getUnvettedProposalFilterCounts = state => {
 const countAbandonedProposals = proposals =>
   proposals.filter(p => p.status === PROPOSAL_STATUS_ABANDONED).length;
 
+const countApprovedProps = votesstatus =>
+  votesstatus.filter(vs => {
+    if (vs.status === PROPOSAL_VOTING_FINISHED) {
+      return isProposalApproved(vs);
+    }
+    return false;
+  }).length;
+
+const countRejectedProps = votesstatus =>
+  votesstatus.filter(vs => {
+    if (vs.status === PROPOSAL_VOTING_FINISHED) {
+      return !isProposalApproved(vs);
+    }
+    return false;
+  }).length;
+
 export const getVettedProposalFilterCounts = state => {
   const vsResponse = apiPropsVoteStatusResponse(state);
   const vettedProps = apiVettedProposals(state);
   const count = vsResponse ? countPublicProposals(vsResponse.votesstatus) : {};
-  // abandoned proposals has to be counted separately because it's counting
-  // is not based on its voting status
+
+  // abandoned proposals has to be counted separately because it's counting  is not based on its voting status
   const countOfAbandonedProps = countAbandonedProposals(vettedProps);
 
-  return { ...count, [PROPOSAL_STATUS_ABANDONED]: countOfAbandonedProps };
+  // approved and rejected proposals
+  const countOfApprovedProps = vsResponse
+    ? countApprovedProps(vsResponse.votesstatus)
+    : 0;
+  const countOfRejectedProps = vsResponse
+    ? countRejectedProps(vsResponse.votesstatus)
+    : 0;
+  return {
+    ...count,
+    [PROPOSAL_STATUS_ABANDONED]: countOfAbandonedProps,
+    [PROPOSAL_APPROVED]: countOfApprovedProps,
+    [PROPOSAL_REJECTED]: countOfRejectedProps
+  };
 };
 
 export const getUnvettedEmptyProposalsMessage = state => {
@@ -364,10 +423,14 @@ export const getVettedEmptyProposalsMessage = state => {
   switch (getPublicFilterValue(state)) {
     case PROPOSAL_VOTING_ACTIVE:
       return "There are no proposals being actively voted on";
-    case PROPOSAL_VOTING_FINISHED:
-      return "There are no proposals that have finished voting";
     case PROPOSAL_VOTING_NOT_AUTHORIZED:
       return "There are no pre-voting proposals";
+    case PROPOSAL_REJECTED:
+      return "There are no rejected proposals";
+    case PROPOSAL_APPROVED:
+      return "There are no approved proposals";
+    case PROPOSAL_STATUS_ABANDONED:
+      return "There are no abandoned proposals";
     default:
       return "There are no proposals";
   }

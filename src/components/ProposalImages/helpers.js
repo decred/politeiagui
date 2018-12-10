@@ -1,12 +1,12 @@
-/* The validation will return an object with the following shape
-  { files: [file1, file2], validationErrors: ['message1', 'message2']}
-*/
 export const errorTypes = {
   MAX_SIZE: "max_size",
   MAX_IMAGES: "max_length",
   INVALID_MIME: "invalid_mime"
 };
 
+/* The validation will return an object with the following shape
+  { files: [file1, file2], validationErrors: ['message1', 'message2']}
+*/
 export function validateFiles(files, policy) {
   const validation = {
     files,

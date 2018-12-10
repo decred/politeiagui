@@ -71,10 +71,15 @@ class ThingComment extends React.PureComponent {
       proposalAuthor,
       proposalStatus,
       created_utc,
+      userid,
+      authorid,
       ...props
     } = this.props;
     const isProposalAbandoned = proposalStatus === PROPOSAL_STATUS_ABANDONED;
-    const isNewComment = lastVisit ? lastVisit < created_utc : false;
+    console.log(authorid, userid);
+    const isNewComment = lastVisit
+      ? lastVisit < created_utc && authorid !== userid
+      : false;
     const isCommentPermalink = commentid === props.id;
     return (
       <div>

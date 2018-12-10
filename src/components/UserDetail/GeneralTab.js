@@ -13,14 +13,14 @@ import {
   PUB_KEY_STATUS_LOADING
 } from "../../constants";
 import { CHANGE_PASSWORD_MODAL, CONFIRM_ACTION } from "../Modal/modalTypes";
-import PrivateKeyIdentityManager from "../PrivateKeyIdentityManager";
+import PrivateKeyDownloadManager from "../PrivateKeyDownloadManager";
 import Message from "../Message";
 import { myPubKeyHex } from "../../lib/pki";
 import { verifyUserPubkey } from "../../helpers";
 
 const Field = ({ label, children }) => (
   <div className="field">
-    <label className="field-label">{label + ":"}</label>
+    <label className="field-label">{label && label + ":"}</label>
     <div className="field-value">{children}</div>
     <div className="clear" />
   </div>
@@ -122,7 +122,6 @@ class GeneralTab extends React.Component {
       );
     }
     this.resolvePubkey();
-    this.isMessageShown();
   }
 
   componentWillUnmount() {
@@ -165,24 +164,6 @@ class GeneralTab extends React.Component {
     }).then(confirm => confirm && onUpdateUserKey(loggedInAsEmail));
   };
 
-  isMessageShown() {
-    const {
-      updateUserKey,
-      keyMismatch,
-      identityImportSuccess,
-      updateUserKeyError,
-      identityImportError
-    } = this.props;
-    if (
-      (updateUserKey && updateUserKey.success) ||
-      (keyMismatch && !identityImportSuccess) ||
-      updateUserKeyError ||
-      identityImportError ||
-      identityImportSuccess
-    ) {
-      this.setState({ showIdentityHelpText: true });
-    }
-  }
   render() {
     const {
       user,
@@ -200,7 +181,6 @@ class GeneralTab extends React.Component {
       updateUserKey,
       updateUserKeyError,
       onIdentityImported,
-      identityImportError,
       identityImportSuccess,
       userPubkey,
       keyMismatch,
@@ -286,40 +266,37 @@ class GeneralTab extends React.Component {
                   : "Loading public key..."}
               </div>
             )}
-            {isUserPageOwner && (
-              <div>
-                {showIdentityHelpText && isUserPageOwner ? (
-                  <div>
-                    <span
-                      style={{ fontWeight: "bold", maxWidth: "7em" }}
-                      className="ident-value"
-                    >
-                      {this.identityHelpPrompt}
-                    </span>{" "}
-                    <a
-                      className="linkish"
-                      onClick={() =>
-                        this.setState({ showIdentityHelpText: false })
-                      }
-                    >
-                      (hide)
-                    </a>
-                  </div>
-                ) : (
-                  <a
-                    className="linkish ident-value"
-                    style={{ maxWidth: "7em" }}
-                    onClick={() =>
-                      this.setState({ showIdentityHelpText: true })
-                    }
-                  >
-                    {this.identityHelpPrompt}
-                  </a>
-                )}
-              </div>
-            )}
           </Field>
         )}
+        {isUserPageOwner && (
+          <div style={{ marginLeft: "164px" }}>
+            {showIdentityHelpText ? (
+              <div>
+                <span
+                  style={{ fontWeight: "bold", maxWidth: "7em" }}
+                  className="ident-value"
+                >
+                  {this.identityHelpPrompt}
+                </span>{" "}
+                <a
+                  className="linkish"
+                  onClick={() => this.setState({ showIdentityHelpText: false })}
+                >
+                  (hide)
+                </a>
+              </div>
+            ) : (
+              <a
+                className="linkish ident-value"
+                style={{ maxWidth: "7em" }}
+                onClick={() => this.setState({ showIdentityHelpText: true })}
+              >
+                {this.identityHelpPrompt}
+              </a>
+            )}
+          </div>
+        )}
+
         {showIdentityHelpText && isUserPageOwner && (
           <div className="identity-help">
             <p>
@@ -389,13 +366,6 @@ class GeneralTab extends React.Component {
                 body={updateUserKeyError.message}
               />
             )}
-            {identityImportError && (
-              <Message
-                type="error"
-                header="Error importing identity"
-                body={identityImportError}
-              />
-            )}
             {identityImportSuccess && (
               <Message type="success" header={identityImportSuccess} />
             )}
@@ -410,7 +380,7 @@ class GeneralTab extends React.Component {
               >
                 Create New Identity
               </button>
-              <PrivateKeyIdentityManager
+              <PrivateKeyDownloadManager
                 loggedInAsEmail={loggedInAsEmail}
                 onUpdateUserKey={onUpdateUserKey}
                 onIdentityImported={onIdentityImported}

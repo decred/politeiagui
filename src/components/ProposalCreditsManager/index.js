@@ -11,10 +11,6 @@ class ProposalCreditsManager extends Component {
     };
   }
 
-  componentDidMount() {
-    this.props.onUserProposalCredits();
-  }
-
   onUpdateCreditsToPurchase = event => {
     const numCreditsToPurchase = parseInt(event.target.value, 10);
     if (numCreditsToPurchase < 1) {
