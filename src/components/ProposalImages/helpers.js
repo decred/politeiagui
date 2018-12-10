@@ -1,5 +1,3 @@
-import DOMPurify from "dompurify";
-
 export const errorTypes = {
   MAX_SIZE: "max_size",
   MAX_IMAGES: "max_length",
@@ -112,20 +110,3 @@ function validateMimeTypes({ files, errors, policy }) {
     errors
   };
 }
-
-const isSVG = file => file.mime === "image/svg+xml";
-
-export const sanitizeSVGFiles = files => {
-  files = files.map(file => {
-    if (!isSVG(file)) return file;
-
-    const decodedStr = window.atob(file.payload);
-    const sanitizedPayload = DOMPurify.sanitize(decodedStr);
-    const payload = window.btoa(sanitizedPayload);
-    return {
-      ...file,
-      payload
-    };
-  });
-  return files;
-};
