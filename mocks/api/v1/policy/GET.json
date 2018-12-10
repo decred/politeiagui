@@ -14,7 +14,6 @@
   "validmimetypes":[
     "image/jpeg",
     "image/png",
-    "image/svg+xml",
     "text/plain",
     "text/plain; charset=utf-8"
   ],
