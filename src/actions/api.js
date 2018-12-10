@@ -788,39 +788,3 @@ export const onRescanUserPayments = userid =>
         throw error;
       });
   });
-
-// // Gets user visited time for a proposal
-// export const onFetchVisitedProposals = token => dispatch => {
-//   dispatch(act.REQUEST_GET_VISITED_PROPOSAL());
-//   return api
-//     .getProposalAccessTimes(token)
-//     .then(response => {
-//       dispatch(act.RECEIVE_GET_VISITED_PROPOSAL(response));
-//     })
-//     .catch(error => {
-//       dispatch(act.RECEIVE_GET_VISITED_PROPOSAL(null, error));
-//     });
-// };
-
-// export const onSaveVisitedProposal = token =>
-//   withCsrf((dispatch, getState, csrf) => {
-//     if (csrf) {
-//       dispatch(act.REQUEST_SET_VISITED_PROPOSAL());
-//       return api
-//         .setProposalAccessTime(token, csrf)
-//         .then(response => {
-//           dispatch(act.RECEIVE_SET_VISITED_PROPOSAL(response));
-//         })
-//         .catch(error => {
-//           dispatch(act.RECEIVE_SET_VISITED_PROPOSAL(null, error));
-//         });
-//     }
-//   });
-
-// export const onUpdateVisitedProposal = time => dispatch => {
-//   dispatch(
-//     act.RECEIVE_GET_VISITED_PROPOSAL({
-//       accesstime: time
-//     })
-//   );
-// };
