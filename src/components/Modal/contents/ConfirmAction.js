@@ -19,6 +19,7 @@ class ConfirmAction extends React.Component {
     const { me } = this.props;
     return (
       <ModalContentWrapper
+        style={me.payload.style}
         title={me.payload.title || "Confirm Action"}
         submitText={me.payload.submitText || "Yes"}
         cancelText={me.payload.cancelText || "No"}
@@ -26,13 +27,15 @@ class ConfirmAction extends React.Component {
         onSubmit={this.handleConfirm}
       >
         <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            padding: "10px 8px",
-            minHeight: "80px",
-            alignItems: "center"
-          }}
+          style={
+            me.payload.altStyle || {
+              display: "flex",
+              justifyContent: "center",
+              padding: "10px 8px",
+              minHeight: "80px",
+              alignItems: "center"
+            }
+          }
         >
           <span
             style={{

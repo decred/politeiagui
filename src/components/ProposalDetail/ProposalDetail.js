@@ -22,9 +22,10 @@ class ProposalDetail extends React.Component {
   }
   componentDidUpdate(prevProps) {
     if (
-      prevProps.proposal &&
-      this.props &&
-      prevProps.proposal.name !== this.props.proposal.name
+      (prevProps.proposal &&
+        this.props &&
+        prevProps.proposal.name !== this.props.proposal.name) ||
+      this.props.openedModals.length < prevProps.openedModals.length
     ) {
       document.title = this.props.proposal.name;
     }
