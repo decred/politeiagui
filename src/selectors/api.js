@@ -293,6 +293,14 @@ export const loggedInAsEmail = or(
     apiMeResponse
   )
 );
+
+export const lastLoginTime = or(
+  compose(
+    get("lastlogintime"),
+    apiMeResponse
+  )
+);
+
 export const loggedInAsUsername = or(
   compose(
     get("username"),
@@ -555,6 +563,11 @@ export const lastLoginTimeFromMeResponse = compose(
 export const sessionMaxAge = compose(
   get("sessionmaxage"),
   apiMeResponse
+);
+
+export const visitedProposal = compose(
+  get("accesstime"),
+  getApiResponse("proposalComments")
 );
 
 export const apiEditProposalResponse = getApiResponse("editProposal");

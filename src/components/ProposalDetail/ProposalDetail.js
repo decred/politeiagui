@@ -1,5 +1,6 @@
 import React from "react";
 import isEqual from "lodash/isEqual";
+import { withRouter } from "react-router-dom";
 import { Content } from "../snew";
 import { commentsToT1, proposalToT3 } from "../../lib/snew";
 import { getTextFromIndexMd } from "../../helpers";
@@ -15,7 +16,8 @@ class ProposalDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sortedComments: []
+      sortedComments: [],
+      accessTime: 0
     };
   }
   componentDidUpdate(prevProps) {
@@ -36,7 +38,6 @@ class ProposalDetail extends React.Component {
     }
     this.handleUpdateOfComments(prevProps, this.props);
   }
-
   componentDidMount() {
     this.props.onFetchLikedComments(this.props.token);
   }
@@ -190,4 +191,4 @@ class ProposalDetail extends React.Component {
   }
 }
 
-export default ProposalDetail;
+export default withRouter(ProposalDetail);

@@ -28,7 +28,10 @@ const replyConnector = connect(
     userHasPaid: sel.userHasPaid,
     getVoteStatus: sel.getPropVoteStatus,
     likeCommentError: sel.apiLikeCommentError,
-    likeCommentPayload: sel.apiLikeCommentPayload
+    likeCommentPayload: sel.apiLikeCommentPayload,
+    userAccessTime: sel.lastLoginTime,
+    lastVisit: sel.visitedProposal,
+    userid: sel.userid
   }),
   {
     onFetchData: act.onGetPolicy,

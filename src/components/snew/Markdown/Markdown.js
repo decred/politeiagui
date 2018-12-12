@@ -14,15 +14,20 @@ const MarkdownRenderer = ({
   displayExternalLikWarning = true,
   scapeHtml = true
 }) => {
-  return <div className={className} style={style}>
-    <ReactMarkdown
-      className="md"
-      escapeHtml={scapeHtml}
-      astPlugins={[htmlParserRules]}
-      renderers={customRenderers(filterXss, displayExternalLikWarning && confirmWithModal)}
-      source={body}
-    />
-  </div>;
+  return (
+    <div className={className} style={style}>
+      <ReactMarkdown
+        className="md"
+        escapeHtml={scapeHtml}
+        astPlugins={[htmlParserRules]}
+        renderers={customRenderers(
+          filterXss,
+          displayExternalLikWarning && confirmWithModal
+        )}
+        source={body}
+      />
+    </div>
+  );
 };
 
 MarkdownRenderer.prototype = {

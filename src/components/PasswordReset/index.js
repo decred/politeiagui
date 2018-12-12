@@ -37,7 +37,6 @@ class PasswordReset extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <PasswordResetForm
         {...{
