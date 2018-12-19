@@ -37,7 +37,8 @@ const proposalConnector = connect(
     ),
     markdownFile: sel.getMarkdownFile,
     otherFiles: sel.getNotMarkdownFile,
-    commentsSortOption: sel.commentsSortOption
+    commentsSortOption: sel.commentsSortOption,
+    openedModals: sel.getopenedModals
   }),
   dispatch =>
     bindActionCreators(

@@ -84,25 +84,59 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
     tmpLink.hostname && tmpLink.hostname !== window.top.location.hostname;
   // if this is an external link, show confirmation dialog
   if (externalLink) {
+    document.title = "Leaving Politeia...";
     confirmWithModal(modalTypes.CONFIRM_ACTION, {
-      title: "External Link Warning",
+      style: {
+        maxWidth: "600px",
+        display: "flex",
+        flexFlow: "column"
+      },
+      altStyle: {
+        maxWidth: "98%",
+        padding: "10px 9px",
+        minHeight: "80px",
+        alignItems: "center"
+      },
+      title: "Warning: Leaving Politeia",
       message: (
-        <React.Fragment>
+        <div style={{ textAlign: "left", alignItems: "center" }}>
           <p style={{ marginBottom: "10px" }}>
-            You are about to be sent to an external website!{" "}
-            <strong className="red">Do not</strong> enter your Politeia
-            credentials or reveal any other sensitive information.
+            You are about to be sent to an external website. This can result in
+            unintended consequences.
+            <strong> DO NOT</strong> enter your Politeia credentials or reveal
+            any other sensitive information.
           </p>
-          <p>
-            <b>External link:</b> {tmpLink.href}
+          <br />
+          <div>
+            <b>External link:</b>
+            <br />
+            <div
+              style={{
+                display: "inline-block",
+                border: "1px solid #dcdcdc",
+                padding: ".5em",
+                borderRadius: "6px",
+                background: "#dcdcdc5c",
+                width: "100%",
+                marginTop: "1em"
+              }}
+            >
+              <span>
+                {" "}
+                {tmpLink.protocol + "//"}
+                <strong className="red">{tmpLink.hostname}</strong>
+                {tmpLink.pathname}
+              </span>
+            </div>
+          </div>
+          <br />
+          <p style={{ marginTop: "12px", textAlign: "center" }}>
+            Are you <strong> sure</strong> you want to open this link?
           </p>
-          <p style={{ marginTop: "10px" }}>
-            <b>External domain:</b>{" "}
-            <strong className="red">{tmpLink.hostname}</strong>
-          </p>
-          <p style={{ marginTop: "10px" }}>Are you sure you want to proceed?</p>
-        </React.Fragment>
-      )
+        </div>
+      ),
+      cancelText: "Cancel",
+      submitText: "Proceed"
     }).then(confirm => {
       if (confirm) {
         const newWindow = window.open();
@@ -113,6 +147,7 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
     });
   } else if (tmpLink.hostname) {
     window.location.href = link;
+    document.title = this.props.proposal.name;
   } else {
     console.log("Blocked potentially malicious link: ", link);
   }
