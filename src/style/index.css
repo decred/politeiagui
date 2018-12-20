@@ -1466,6 +1466,36 @@ button.inverse {
   padding: 2px !important;
 }
 
+
+.version-select__control { 
+  width: 100px;
+  background-color: #FFF !important;
+  margin-right: 5px;
+  min-height: 18px !important;
+  font-size: 12px;
+}
+
+.version-select__control--is-focused {
+  font-size: 12px;
+}
+
+.version-select__single-value {
+  font-size: 12px;
+}
+
+.version-select__dropdown-indicator {
+  padding: 2px !important;
+}
+
+.version-select__menu {
+  width: 100px !important;
+  font-size: 12px;
+}
+
+.version-select__option {
+  padding: 4px !important;
+}
+
 form div.usertext-body.may-blank-within.md-container {
   width: 100%;
 }
@@ -1499,10 +1529,13 @@ form div.usertext-body.may-blank-within.md-container {
   float: right;
 }
 
+.entry {
+ overflow: visible;
+}
 /* Max height is (line-height * 25)  */
 .entry > .usertext {
-	max-height: 35.71428575em;
-	overflow: hidden;
+  max-height: 35.71428575em;
+  overflow: hidden;
 }
 
 /* Max height is (line-height * 25)  */

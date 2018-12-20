@@ -244,10 +244,10 @@ export const onFetchUnvetted = token => dispatch => {
     });
 };
 
-export const onFetchProposal = token => dispatch => {
+export const onFetchProposal = (token, version = null) => dispatch => {
   dispatch(act.REQUEST_PROPOSAL(token));
   return api
-    .proposal(token)
+    .proposal(token, version)
     .then(response => {
       response && response.proposal && Object.keys(response.proposal).length > 0
         ? dispatch(act.RECEIVE_PROPOSAL(response))

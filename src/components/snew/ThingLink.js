@@ -1,5 +1,5 @@
 import React from "react";
-
+import Select from "react-select";
 import { DateTooltip } from "snew-classic-ui";
 import { getProposalStatus } from "../../helpers";
 import { withRouter } from "react-router-dom";
@@ -26,6 +26,26 @@ import {
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_VOTING_NOT_AUTHORIZED
 } from "../../constants";
+
+const VersionPicker = ({ version, onSelectVersion }) => {
+  const versionsOptions = [];
+
+  for (let i = 1; i <= parseInt(version, 10); i++) {
+    versionsOptions.push({ value: i.toString(), label: `version ${i}` });
+  }
+  return (
+    <Select
+      isDisabled={version === "1"}
+      isSearchable={false}
+      isClearable={false}
+      escapeClearsValue={false}
+      classNamePrefix="version-select"
+      value={{ value: version, label: `version ${version}` }}
+      onChange={({ value }) => onSelectVersion(value)}
+      options={versionsOptions}
+    />
+  );
+};
 
 const ToggleIcon = (type, onClick) => (
   <button className="collapse-icon-button" onClick={onClick}>
@@ -224,6 +244,17 @@ class ThingLinkComp extends React.Component {
                 alignItems: "flex-start"
               }}
             >
+              {displayVersion ? (
+                <VersionPicker
+                  onSelectVersion={selVersion => {
+                    openModal(modalTypes.PROPOSAL_VERSION_DIFF, {
+                      version: selVersion,
+                      token: id
+                    });
+                  }}
+                  version={version}
+                />
+              ) : null}
               {isEditable ? (
                 <Link
                   href={`/proposals/${id}/edit`}
@@ -270,6 +301,7 @@ class ThingLinkComp extends React.Component {
               ) : null}
             </div>
           </span>
+
           <span className="tagline">
             <span className="submitted-by">
               {hasBeenUpdated ? "updated " : "submitted "}
@@ -279,8 +311,7 @@ class ThingLinkComp extends React.Component {
                   {" by "}
                   <Link href={`/user/${authorid}`}>{author}</Link>
                 </span>
-              )}
-              {displayVersion && version ? ` - version ${version}` : null}
+              )}{" "}
               {numcomments > 0 && (
                 <span>
                   {" "}

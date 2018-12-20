@@ -14,6 +14,7 @@ import SearchVotesModal from "./contents/SearchVotesModal";
 import StartVoteModal from "../StartVoteModal";
 import ImportIdentityModal from "./contents/ImportIdentityModal";
 import { withRouter } from "react-router-dom";
+import ProposalVersionDiff from "./contents/ProposalVersionDiff";
 
 const mapModalTypeToContent = {
   [modalTypes.CONFIRM_ACTION]: ({ modalData }) => (
@@ -38,7 +39,10 @@ const mapModalTypeToContent = {
   [modalTypes.SEARCH_PROPOSAL_VOTES]: ({ modalData }) => (
     <SearchVotesModal me={modalData} />
   ),
-  [modalTypes.IMPORT_IDENTITY_MODAL]: () => <ImportIdentityModal />
+  [modalTypes.IMPORT_IDENTITY_MODAL]: () => <ImportIdentityModal />,
+  [modalTypes.PROPOSAL_VERSION_DIFF]: ({ modalData }) => (
+    <ProposalVersionDiff me={modalData} />
+  )
 };
 
 const ModalContent = ({ modalData, location }) => {
