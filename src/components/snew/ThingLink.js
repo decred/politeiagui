@@ -244,7 +244,7 @@ class ThingLinkComp extends React.Component {
                 alignItems: "flex-start"
               }}
             >
-              {displayVersion ? (
+              {expanded && displayVersion ? (
                 <VersionPicker
                   onSelectVersion={selVersion => {
                     openModal(modalTypes.PROPOSAL_VERSION_DIFF, {
