@@ -6,15 +6,12 @@ import modalConnector from "../../../connectors/modal";
 import { getTextFromIndexMd, formatDate } from "../../../helpers";
 
 class ProposalVersionDiff extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      proposal: null,
-      prevProposal: null,
-      error: null,
-      loading: true
-    };
-  }
+  state = {
+    proposal: null,
+    prevProposal: null,
+    error: null,
+    loading: true
+  };
   componentDidMount() {
     const {
       me: {
@@ -45,17 +42,13 @@ class ProposalVersionDiff extends React.Component {
   };
 
   getProposalText = proposal => {
-    if (!proposal) return "";
-    const markdownFile = proposal.files.filter(
-      file => file.name === "index.md"
-    )[0];
-    return getTextFromIndexMd(markdownFile);
+    const getMarkdowFile = prop =>
+      prop.files.filter(file => file.name === "index.md")[0];
+    return proposal ? getTextFromIndexMd(getMarkdowFile(proposal)) : "";
   };
 
-  getProposalFilesWithourIndexMd = proposal => {
-    if (!proposal) return [];
-    return proposal.files.filter(file => file.name !== "index.md");
-  };
+  getProposalFilesWithourIndexMd = proposal =>
+    proposal ? proposal.files.filter(file => file.name !== "index.md") : [];
 
   render() {
     const { proposal, prevProposal, loading, error } = this.state;

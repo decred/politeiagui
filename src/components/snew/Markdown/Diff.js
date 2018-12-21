@@ -15,7 +15,7 @@ const DiffHeader = ({
   loading,
   enableFilesDiff,
   filesDiff,
-  onFilesDiff
+  onToggleFilesDiff
 }) => (
   <div className="diff-header">
     {loading ? (
@@ -32,7 +32,7 @@ const DiffHeader = ({
             <span
               className="linkish"
               style={{ marginRight: "10px" }}
-              onClick={onFilesDiff}
+              onClick={onToggleFilesDiff}
               href=""
             >
               {filesDiff ? "Text diff" : "Files Diff"}
@@ -71,17 +71,12 @@ const withDiffStyle = {
 };
 
 class Diff extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      filesDiff: false
-    };
-  }
-  onToggleFIlesDiff = e => {
+  state = { filesDiff: false };
+  handleToggleFilesDiff = e => {
     e.preventDefault();
-    this.setState({
-      filesDiff: !this.state.filesDiff
-    });
+    this.setState(state => ({
+      filesDiff: !state.filesDiff
+    }));
   };
   render() {
     const {
@@ -109,7 +104,7 @@ class Diff extends React.Component {
             lastEdition={lastEdition}
             onClose={onClose}
             filesDiff={filesDiff}
-            onFilesDiff={this.onToggleFIlesDiff}
+            onToggleFilesDiff={this.handleToggleFilesDiff}
             enableFilesDiff={oldFiles.length || newFiles.length}
           />
           {error ? (
@@ -129,7 +124,7 @@ class Diff extends React.Component {
   }
 }
 
-Diff.PropTypes = {
+Diff.propTypes = {
   lastEdition: PropTypes.string,
   newProposal: PropTypes.string,
   oldProposal: PropTypes.string,
