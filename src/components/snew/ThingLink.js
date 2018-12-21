@@ -1,5 +1,4 @@
 import React from "react";
-import Select from "react-select";
 import { DateTooltip } from "snew-classic-ui";
 import { getProposalStatus } from "../../helpers";
 import { withRouter } from "react-router-dom";
@@ -13,6 +12,7 @@ import ProposalImages from "../ProposalImages";
 import thingLinkConnector from "../../connectors/thingLink";
 import Tooltip from "../Tooltip";
 import VoteStats from "../VoteStats";
+import VersionPicker from "../VersionPicker";
 // import Diff from "./Markdown/Diff";
 
 import {
@@ -26,26 +26,6 @@ import {
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_VOTING_NOT_AUTHORIZED
 } from "../../constants";
-
-const VersionPicker = ({ version, onSelectVersion }) => {
-  const versionsOptions = [];
-
-  for (let i = 1; i <= parseInt(version, 10); i++) {
-    versionsOptions.push({ value: i.toString(), label: `version ${i}` });
-  }
-  return (
-    <Select
-      isDisabled={version === "1"}
-      isSearchable={false}
-      isClearable={false}
-      escapeClearsValue={false}
-      classNamePrefix="version-select"
-      value={{ value: version, label: `version ${version}` }}
-      onChange={({ value }) => onSelectVersion(value)}
-      options={versionsOptions}
-    />
-  );
-};
 
 const ToggleIcon = (type, onClick) => (
   <button className="collapse-icon-button" onClick={onClick}>
@@ -231,6 +211,17 @@ class ThingLinkComp extends React.Component {
                 <span className="font-12 warning-color">(edited)</span>
               ) : null}
             </Link>{" "}
+            {expanded && displayVersion ? (
+              <VersionPicker
+                onSelectVersion={selVersion => {
+                  openModal(modalTypes.PROPOSAL_VERSION_DIFF, {
+                    version: selVersion,
+                    token: id
+                  });
+                }}
+                version={version}
+              />
+            ) : null}
             {domain ? (
               <span className="domain">
                 (<Link href={`/domain/${domain}/`}>{domain}</Link>)
@@ -244,17 +235,6 @@ class ThingLinkComp extends React.Component {
                 alignItems: "flex-start"
               }}
             >
-              {expanded && displayVersion ? (
-                <VersionPicker
-                  onSelectVersion={selVersion => {
-                    openModal(modalTypes.PROPOSAL_VERSION_DIFF, {
-                      version: selVersion,
-                      token: id
-                    });
-                  }}
-                  version={version}
-                />
-              ) : null}
               {isEditable ? (
                 <Link
                   href={`/proposals/${id}/edit`}
@@ -301,6 +281,13 @@ class ThingLinkComp extends React.Component {
               ) : null}
             </div>
           </span>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              paddingRight: "5px"
+            }}
+          />
 
           <span className="tagline">
             <span className="submitted-by">

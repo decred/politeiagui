@@ -1832,3 +1832,7 @@ form div.usertext-body.may-blank-within.md-container {
   border: 1px solid #d1d5da;
   width: 800px;
 }
+
+.version-picker__item:hover {
+  background: #d1d5da;
+}
