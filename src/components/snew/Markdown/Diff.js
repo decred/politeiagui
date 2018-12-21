@@ -3,42 +3,138 @@ import PropTypes from "prop-types";
 import { insertDiffHTML } from "./helpers";
 import MarkdownRenderer from "./Markdown";
 import Modal from "../../Modal/Modal";
+import Message from "../../Message";
+import ProposalImages from "../../ProposalImages";
 
-const DiffHeader = ({ userName, lastEdition, onClose }) => (
+const DiffHeader = ({
+  userName,
+  title,
+  version,
+  lastEdition,
+  onClose,
+  loading,
+  enableFilesDiff,
+  filesDiff,
+  onToggleFilesDiff
+}) => (
   <div className="diff-header">
-    <span>{`${userName} ${lastEdition}`}</span>
-    <span onClick={onClose}>✖</span>
+    {loading ? (
+      <span>Fetching proposal...</span>
+    ) : (
+      <React.Fragment>
+        <span>
+          {userName && lastEdition && version && title
+            ? `${userName} ${lastEdition} - version ${version} - ${title}`
+            : ""}
+        </span>
+        <div>
+          {enableFilesDiff ? (
+            <span
+              className="linkish"
+              style={{ marginRight: "10px" }}
+              onClick={onToggleFilesDiff}
+              href=""
+            >
+              {filesDiff ? "Text diff" : "Files Diff"}
+            </span>
+          ) : null}
+          <span onClick={onClose} style={{ cursor: "pointer" }}>
+            ✖
+          </span>
+        </div>
+      </React.Fragment>
+    )}
   </div>
 );
+
+const FilesDiff = ({ oldFiles, newFiles }) => {
+  const filesDiff = [];
+  const hasFile = (file, items) =>
+    items.filter(f => f.name === file.name && f.payload === file.payload)
+      .length > 0;
+  oldFiles.forEach(file => {
+    if (!hasFile(file, newFiles)) file.removed = true;
+    filesDiff.push(file);
+  });
+  newFiles.forEach(file => {
+    if (!hasFile(file, filesDiff)) {
+      file.added = true;
+      filesDiff.push(file);
+    }
+  });
+  return <ProposalImages files={filesDiff} readOnly={true} />;
+};
 
 const withDiffStyle = {
   paddingTop: "80px",
   zIndex: 9999
 };
 
-const Diff = ({ oldProposal, newProposal, userName, lastEdition, onClose }) => (
-  <Modal style={withDiffStyle} onClose={onClose}>
-    <div className="diff-wrapper">
-      <DiffHeader
-        userName={userName}
-        lastEdition={lastEdition}
-        onClose={onClose}
-      />
-      <MarkdownRenderer
-        body={insertDiffHTML(oldProposal, newProposal)}
-        style={{ padding: "16px" }}
-        scapeHtml={false}
-      />
-    </div>
-  </Modal>
-);
+class Diff extends React.Component {
+  state = { filesDiff: false };
+  handleToggleFilesDiff = e => {
+    e.preventDefault();
+    this.setState(state => ({
+      filesDiff: !state.filesDiff
+    }));
+  };
+  render() {
+    const {
+      oldProposal,
+      newProposal,
+      oldFiles,
+      newFiles,
+      title,
+      version,
+      userName,
+      lastEdition,
+      onClose,
+      loading,
+      error
+    } = this.props;
+    const { filesDiff } = this.state;
+    return (
+      <Modal style={withDiffStyle} onClose={onClose}>
+        <div className="diff-wrapper">
+          <DiffHeader
+            title={title}
+            version={version}
+            loading={loading}
+            userName={userName}
+            lastEdition={lastEdition}
+            onClose={onClose}
+            filesDiff={filesDiff}
+            onToggleFilesDiff={this.handleToggleFilesDiff}
+            enableFilesDiff={oldFiles.length || newFiles.length}
+          />
+          {error ? (
+            <Message body={error} type="error" />
+          ) : filesDiff ? (
+            <FilesDiff oldFiles={oldFiles} newFiles={newFiles} />
+          ) : (
+            <MarkdownRenderer
+              body={insertDiffHTML(oldProposal, newProposal)}
+              style={{ padding: "16px" }}
+              scapeHtml={false}
+            />
+          )}
+        </div>
+      </Modal>
+    );
+  }
+}
 
-Diff.PropTypes = {
+Diff.propTypes = {
   lastEdition: PropTypes.string,
   newProposal: PropTypes.string,
   oldProposal: PropTypes.string,
+  oldFiles: PropTypes.array,
+  newFiles: PropTypes.array,
+  title: PropTypes.string,
+  version: PropTypes.string,
   onClose: PropTypes.func,
-  userName: PropTypes.string
+  userName: PropTypes.string,
+  loading: PropTypes.bool
 };
 
 export default Diff;

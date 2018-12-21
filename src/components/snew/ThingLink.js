@@ -1,5 +1,4 @@
 import React from "react";
-
 import { DateTooltip } from "snew-classic-ui";
 import { getProposalStatus } from "../../helpers";
 import { withRouter } from "react-router-dom";
@@ -13,6 +12,7 @@ import ProposalImages from "../ProposalImages";
 import thingLinkConnector from "../../connectors/thingLink";
 import Tooltip from "../Tooltip";
 import VoteStats from "../VoteStats";
+import VersionPicker from "../VersionPicker";
 // import Diff from "./Markdown/Diff";
 
 import {
@@ -211,6 +211,17 @@ class ThingLinkComp extends React.Component {
                 <span className="font-12 warning-color">(edited)</span>
               ) : null}
             </Link>{" "}
+            {expanded && displayVersion ? (
+              <VersionPicker
+                onSelectVersion={selVersion => {
+                  openModal(modalTypes.PROPOSAL_VERSION_DIFF, {
+                    version: selVersion,
+                    token: id
+                  });
+                }}
+                version={version}
+              />
+            ) : null}
             {domain ? (
               <span className="domain">
                 (<Link href={`/domain/${domain}/`}>{domain}</Link>)
@@ -270,6 +281,14 @@ class ThingLinkComp extends React.Component {
               ) : null}
             </div>
           </span>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              paddingRight: "5px"
+            }}
+          />
+
           <span className="tagline">
             <span className="submitted-by">
               {hasBeenUpdated ? "updated " : "submitted "}
@@ -279,8 +298,7 @@ class ThingLinkComp extends React.Component {
                   {" by "}
                   <Link href={`/user/${authorid}`}>{author}</Link>
                 </span>
-              )}
-              {displayVersion && version ? ` - version ${version}` : null}
+              )}{" "}
               {numcomments > 0 && (
                 <span>
                   {" "}
