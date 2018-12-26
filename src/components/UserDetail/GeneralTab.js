@@ -476,7 +476,7 @@ class GeneralTab extends React.Component {
           <React.Fragment>
             <FieldSeparator />
             <Field label="Has paid">
-              {user.newuserpaywalltx
+              {!user.newuserpaywalladdress
                 ? "Yes"
                 : [
                     <span>No</span>,

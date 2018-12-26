@@ -21,7 +21,8 @@ import {
   onReceiveUser,
   onReceiveVoteStatusChange,
   onReceiveRescanUserPayments,
-  onReceiveProposalVoteResults
+  onReceiveProposalVoteResults,
+  onReceiveManageUser
 } from "./handlers";
 
 export const DEFAULT_STATE = {
@@ -135,7 +136,7 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_EDIT_USER]: () => receive("editUser", state, action),
     [act.RESET_EDIT_USER]: () => reset("editUser", state, action),
     [act.REQUEST_MANAGE_USER]: () => request("manageUser", state, action),
-    [act.RECEIVE_MANAGE_USER]: () => receive("manageUser", state, action),
+    [act.RECEIVE_MANAGE_USER]: () => onReceiveManageUser(state, action),
     [act.REQUEST_NEW_PROPOSAL]: () => request("newProposal", state, action),
     [act.RECEIVE_NEW_PROPOSAL]: () => receive("newProposal", state, action),
     [act.REQUEST_USER_SEARCH]: () => request("userSearch", state, action),

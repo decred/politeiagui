@@ -420,3 +420,42 @@ export const onReceiveRescanUserPayments = (state, action) => {
     }
   };
 };
+
+export const onReceiveManageUser = (state, action) => {
+  state = receive("manageUser", state, action);
+  if (action.error) return state;
+  const manageUserPayload = get(["manageUser", "payload"], state);
+  const user = get(["user", "response", "user"], state);
+  const { action: manageAction } = manageUserPayload;
+  switch (manageAction) {
+    case 4:
+      // paywall marked as paid
+      user.newuserpaywalladdress = "";
+      user.newuserpaywallamount = 0;
+      break;
+    case 5:
+      // user unlocked
+      user.islocked = false;
+      break;
+    case 6:
+      // user deactivated
+      user.isdeactivated = true;
+      break;
+    case 7:
+      // user re-activated
+      user.isdeactivated = false;
+      break;
+    default:
+      break;
+  }
+  return {
+    ...state,
+    user: {
+      ...state.user,
+      response: {
+        ...state.user.response,
+        user: user
+      }
+    }
+  };
+};
