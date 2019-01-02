@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ForgottenPassword from "./ForgottenPassword";
-import qs from "query-string";
+
+const qs = require("querystring");
 
 class ForgottenPasswordPage extends Component {
   constructor(props) {
