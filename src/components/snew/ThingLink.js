@@ -211,7 +211,7 @@ class ThingLinkComp extends React.Component {
                 <span className="font-12 warning-color">(edited)</span>
               ) : null}
             </Link>{" "}
-            {expanded && displayVersion ? (
+            {expanded && (displayVersion || isAbandoned) ? (
               <VersionPicker
                 onSelectVersion={selVersion => {
                   openModal(modalTypes.PROPOSAL_VERSION_DIFF, {
