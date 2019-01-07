@@ -29,7 +29,6 @@ const VersionPicker = ({ version, onSelectVersion }) => {
   const disablePicker = version === "1";
 
   for (let i = parseInt(version, 10); i >= 1; i--) {
-    // versionsOptions.push({ value: i.toString(), label: `version ${i}` });
     versionsOptions.push(
       <span
         className="version-picker__item"

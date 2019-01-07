@@ -34,7 +34,7 @@ const DiffHeader = ({
               onClick={onToggleFilesDiff}
               href=""
             >
-              {filesDiff ? "Text Diff" : "Files Diff"}
+              {filesDiff ? "Text" : "Files"}
             </span>
           ) : null}
           <span onClick={onClose} style={{ cursor: "pointer" }}>
@@ -46,23 +46,24 @@ const DiffHeader = ({
   </div>
 );
 
-const FilesDiff = ({ oldFiles, newFiles }) => {
-  const filesDiff = [];
-  const hasFile = (file, items) =>
-    items.filter(f => f.name === file.name && f.payload === file.payload)
-      .length > 0;
-  oldFiles.forEach(file => {
-    if (!hasFile(file, newFiles)) file.removed = true;
-    filesDiff.push(file);
-  });
-  newFiles.forEach(file => {
-    if (!hasFile(file, filesDiff)) {
-      file.added = true;
-      filesDiff.push(file);
-    }
-  });
-  return <ProposalImages files={filesDiff} readOnly={true} />;
-};
+/** TODO: use files diff component when diff implementation is polished  */
+// const FilesDiff = ({ oldFiles, newFiles }) => {
+//   const filesDiff = [];
+//   const hasFile = (file, items) =>
+//     items.filter(f => f.name === file.name && f.payload === file.payload)
+//       .length > 0;
+//   oldFiles.forEach(file => {
+//     if (!hasFile(file, newFiles)) file.removed = true;
+//     filesDiff.push(file);
+//   });
+//   newFiles.forEach(file => {
+//     if (!hasFile(file, filesDiff)) {
+//       file.added = true;
+//       filesDiff.push(file);
+//     }
+//   });
+//   return <ProposalImages files={filesDiff} readOnly={true} />;
+// };
 
 const withDiffStyle = {
   paddingTop: "80px",
@@ -80,7 +81,6 @@ class Diff extends React.Component {
   render() {
     const {
       newProposal,
-      oldFiles,
       newFiles,
       title,
       version,
@@ -103,12 +103,12 @@ class Diff extends React.Component {
             onClose={onClose}
             filesDiff={filesDiff}
             onToggleFilesDiff={this.handleToggleFilesDiff}
-            enableFilesDiff={oldFiles.length || newFiles.length}
+            enableFilesDiff={newFiles.length}
           />
           {error ? (
             <Message body={error} type="error" />
           ) : filesDiff ? (
-            <FilesDiff oldFiles={oldFiles} newFiles={newFiles} />
+            <ProposalImages files={newFiles} readOnly={true} />
           ) : (
             <MarkdownRenderer
               body={newProposal}
