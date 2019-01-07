@@ -35,7 +35,7 @@ const DiffHeader = ({
               onClick={onToggleFilesDiff}
               href=""
             >
-              {filesDiff ? "Text diff" : "Files Diff"}
+              {filesDiff ? "Text Diff" : "Files Diff"}
             </span>
           ) : null}
           <span onClick={onClose} style={{ cursor: "pointer" }}>
