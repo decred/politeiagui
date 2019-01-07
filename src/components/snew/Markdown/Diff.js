@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { insertDiffHTML } from "./helpers";
 import MarkdownRenderer from "./Markdown";
 import Modal from "../../Modal/Modal";
 import Message from "../../Message";
@@ -80,7 +79,6 @@ class Diff extends React.Component {
   };
   render() {
     const {
-      oldProposal,
       newProposal,
       oldFiles,
       newFiles,
@@ -113,7 +111,7 @@ class Diff extends React.Component {
             <FilesDiff oldFiles={oldFiles} newFiles={newFiles} />
           ) : (
             <MarkdownRenderer
-              body={insertDiffHTML(oldProposal, newProposal)}
+              body={newProposal}
               style={{ padding: "16px" }}
               scapeHtml={false}
             />
