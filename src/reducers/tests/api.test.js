@@ -1,11 +1,20 @@
 import * as api from "../api";
 import * as act from "../../actions/types";
 import cloneDeep from "lodash/cloneDeep";
+import set from "lodash/set";
+import get from "lodash/fp/get";
 import { DEFAULT_REQUEST_STATE } from "../util";
 import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_STATUS_PUBLIC,
-  PROPOSAL_STATUS_UNREVIEWED
+  PROPOSAL_STATUS_UNREVIEWED,
+  MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
+  MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
+  MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
+  MANAGE_USER_CLEAR_USER_PAYWALL,
+  MANAGE_USER_UNLOCK,
+  MANAGE_USER_DEACTIVATE,
+  MANAGE_USER_REACTIVATE
 } from "../../constants";
 import { request, receive } from "../util";
 import {
@@ -15,6 +24,8 @@ import {
   testResetReducer,
   testResetMultipleReducer
 } from "./helpers";
+
+const getUserFromState = state => state.user.response.user;
 
 describe("test api reducer", () => {
   const MOCK_STATE = {
@@ -110,7 +121,8 @@ describe("test api reducer", () => {
     },
     vetted: DEFAULT_REQUEST_STATE,
     userProposals: DEFAULT_REQUEST_STATE,
-    proposalsVoteStatus: DEFAULT_REQUEST_STATE
+    proposalsVoteStatus: DEFAULT_REQUEST_STATE,
+    manageUser: DEFAULT_REQUEST_STATE
   };
 
   const MOCK_PROPOSALS_LOAD = [
@@ -654,8 +666,6 @@ describe("test api reducer", () => {
       }
     };
 
-    const getUserFromState = state => state.user.response.user;
-
     const state = api.onReceiveRescanUserPayments(MOCK_STATE, action);
 
     // make sure the user credits are updated
@@ -666,6 +676,79 @@ describe("test api reducer", () => {
 
     // make sure the state has received the entire response from the request
     expect(state.rescanUserPayments.response.newcredits).toBeTruthy();
+  });
+
+  test("correctly updates the state for onReceiveManageUser", () => {
+    const getUserFromState = state => get(["user", "response", "user"], state);
+    const updateStateForManageUser = (state, manageUserAction) => {
+      // simulate the update of state for 'REQUEST_MANAGE_USER'
+      const stateAfterRequest = set(state, ["manageUser", "payload"], {
+        action: manageUserAction
+      });
+
+      const action = {
+        type: act.RECEIVE_MANAGE_USER,
+        payload: {}
+      };
+
+      return api.onReceiveManageUser(stateAfterRequest, action);
+    };
+    let resultState = null;
+    let user = null;
+
+    resultState = updateStateForManageUser(
+      MOCK_STATE,
+      MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION
+    );
+    user = getUserFromState(resultState);
+    expect(user.updatekeyverificationexpiry).toBeTruthy();
+    expect(user.updatekeyverificationexpiry * 1000).toBeLessThan(
+      new Date().getTime()
+    );
+
+    resultState = updateStateForManageUser(
+      MOCK_STATE,
+      MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION
+    );
+    user = getUserFromState(resultState);
+    expect(user.newuserverificationexpiry).toBeTruthy();
+    expect(user.newuserverificationexpiry * 1000).toBeLessThan(
+      new Date().getTime()
+    );
+
+    resultState = updateStateForManageUser(
+      MOCK_STATE,
+      MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION
+    );
+    user = getUserFromState(resultState);
+    expect(user.resetpasswordverificationexpiry).toBeTruthy();
+    expect(user.resetpasswordverificationexpiry * 1000).toBeLessThan(
+      new Date().getTime()
+    );
+
+    // test state after clearing user paywall
+    resultState = updateStateForManageUser(
+      MOCK_STATE,
+      MANAGE_USER_CLEAR_USER_PAYWALL
+    );
+    user = getUserFromState(resultState);
+    expect(user.newuserpaywalladdress).toEqual("");
+    expect(user.newuserpaywallamount).toEqual(0);
+
+    // test state after unlocking user
+    resultState = updateStateForManageUser(MOCK_STATE, MANAGE_USER_UNLOCK);
+    user = getUserFromState(resultState);
+    expect(user.islocked).toEqual(false);
+
+    // test state after deactivating user
+    resultState = updateStateForManageUser(MOCK_STATE, MANAGE_USER_DEACTIVATE);
+    user = getUserFromState(resultState);
+    expect(user.isdeactivated).toEqual(true);
+
+    // test state after reactivating user
+    resultState = updateStateForManageUser(MOCK_STATE, MANAGE_USER_REACTIVATE);
+    user = getUserFromState(resultState);
+    expect(user.isdeactivated).toEqual(false);
   });
 
   test("correctly updates state for reducers using request/receive/reset", () => {
@@ -745,7 +828,6 @@ describe("test api reducer", () => {
         type: "receive"
       },
       { action: act.REQUEST_MANAGE_USER, key: "manageUser", type: "request" },
-      { action: act.RECEIVE_MANAGE_USER, key: "manageUser", type: "receive" },
       { action: act.REQUEST_NEW_PROPOSAL, key: "newProposal", type: "request" },
       { action: act.RECEIVE_NEW_PROPOSAL, key: "newProposal", type: "receive" },
       {

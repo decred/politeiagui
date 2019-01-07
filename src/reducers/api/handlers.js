@@ -9,7 +9,14 @@ import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   PROPOSAL_STATUS_PUBLIC,
-  PROPOSAL_STATUS_ABANDONED
+  PROPOSAL_STATUS_ABANDONED,
+  MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
+  MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
+  MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
+  MANAGE_USER_CLEAR_USER_PAYWALL,
+  MANAGE_USER_UNLOCK,
+  MANAGE_USER_DEACTIVATE,
+  MANAGE_USER_REACTIVATE
 } from "../../constants";
 
 export const onReceiveSetStatus = (state, action) => {
@@ -416,6 +423,56 @@ export const onReceiveRescanUserPayments = (state, action) => {
           ...user,
           proposalcredits: user.proposalcredits + creditsAdded
         }
+      }
+    }
+  };
+};
+
+export const onReceiveManageUser = (state, action) => {
+  state = receive("manageUser", state, action);
+  if (action.error) return state;
+
+  const getExpiredTime = () => {
+    const oneHourInMilliseconds = 1000 * 60 * 60;
+    return (new Date().getTime() - 168 * oneHourInMilliseconds) / 1000; // -168 hours is 7 days in the past
+  };
+  const manageUserPayload = get(["manageUser", "payload"], state);
+  const user = get(["user", "response", "user"], state);
+  const { action: manageAction } = manageUserPayload;
+
+  switch (manageAction) {
+    case MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION:
+      user.newuserverificationexpiry = getExpiredTime();
+      break;
+    case MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION:
+      user.updatekeyverificationexpiry = getExpiredTime();
+      break;
+    case MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION:
+      user.resetpasswordverificationexpiry = getExpiredTime();
+      break;
+    case MANAGE_USER_CLEAR_USER_PAYWALL:
+      user.newuserpaywalladdress = "";
+      user.newuserpaywallamount = 0;
+      break;
+    case MANAGE_USER_UNLOCK:
+      user.islocked = false;
+      break;
+    case MANAGE_USER_DEACTIVATE:
+      user.isdeactivated = true;
+      break;
+    case MANAGE_USER_REACTIVATE:
+      user.isdeactivated = false;
+      break;
+    default:
+      break;
+  }
+  return {
+    ...state,
+    user: {
+      ...state.user,
+      response: {
+        ...state.user.response,
+        user: user
       }
     }
   };
