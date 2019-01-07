@@ -121,7 +121,7 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
                 marginTop: "1em"
               }}
             >
-              <span>
+              <span style={{ wordWrap: "break-word" }}>
                 {" "}
                 {tmpLink.protocol + "//"}
                 <strong className="red">{tmpLink.hostname}</strong>

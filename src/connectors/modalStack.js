@@ -10,7 +10,8 @@ export default connect(
   dispatch =>
     bindActionCreators(
       {
-        closeModal: act.closeModal
+        closeModal: act.closeModal,
+        closeAllModals: act.closeAllModals
       },
       dispatch
     )
