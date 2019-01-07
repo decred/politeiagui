@@ -8,7 +8,7 @@ import { getTextFromIndexMd, formatDate } from "../../../helpers";
 class ProposalVersionDiff extends React.Component {
   state = {
     proposal: null,
-    prevProposal: null,
+    //prevProposal: null,
     error: null,
     loading: true
   };
@@ -25,17 +25,17 @@ class ProposalVersionDiff extends React.Component {
     // and the version before that so it's possible to construct the
     // revision diff.
     try {
-      let prevProposal = null;
       const { proposal } = await fetchProposal(token, version);
-      // if version is bigge than 1, also fetch the previous one
-      if (version > 1) {
-        const prevProposalRes = await fetchProposal(
-          token,
-          parseInt(version, 10) - 1
-        );
-        prevProposal = prevProposalRes.proposal;
-      }
-      this.setState({ proposal, prevProposal, loading: false });
+      /** TODO: Fetch previous version when diff implementation is polished */
+      // if version is bigger than 1, also fetch the previous one
+      // if (version > 1) {
+      //   const prevProposalRes = await fetchProposal(
+      //     token,
+      //     parseInt(version, 10) - 1
+      //   );
+      //   prevProposal = prevProposalRes.proposal;
+      // }
+      this.setState({ proposal, loading: false });
     } catch (e) {
       this.setState({ error: e, loading: false });
     }
@@ -51,22 +51,22 @@ class ProposalVersionDiff extends React.Component {
     proposal ? proposal.files.filter(file => file.name !== "index.md") : [];
 
   render() {
-    const { proposal, prevProposal, loading, error } = this.state;
+    const { proposal, loading, error } = this.state;
     const { closeModal } = this.props;
-    const oldText = this.getProposalText(prevProposal);
+    //const oldText = this.getProposalText(prevProposal);
     const currentText = this.getProposalText(proposal);
 
     // remove first file (index.md) from the diff files
-    const oldFiles = this.getProposalFilesWithourIndexMd(prevProposal);
+    //const oldFiles = this.getProposalFilesWithourIndexMd(prevProposal);
     const newFiles = this.getProposalFilesWithourIndexMd(proposal);
     return (
       <Diff
         userName={proposal ? proposal.username : ""}
         lastEdition={proposal ? formatDate(proposal.timestamp) : ""}
         onClose={closeModal}
-        oldProposal={oldText}
+        //oldProposal={oldText}
         newProposal={currentText}
-        oldFiles={oldFiles}
+        //oldFiles={oldFiles}
         newFiles={newFiles}
         title={proposal ? proposal.name : ""}
         version={proposal ? proposal.version : ""}
