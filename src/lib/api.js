@@ -4,7 +4,6 @@ import * as pki from "./pki";
 import { sha3_256 } from "js-sha3";
 import get from "lodash/fp/get";
 import MerkleTree from "./merkle";
-import qs from "query-string";
 import { PROPOSAL_STATUS_UNREVIEWED } from "../constants";
 import {
   getHumanReadableError,
@@ -22,6 +21,7 @@ const STATUS_ERR = {
   404: "Not found"
 };
 
+const qs = require("querystring");
 const apiBase = "/api";
 const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
 const getResponse = get("response");

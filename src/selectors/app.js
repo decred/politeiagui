@@ -3,7 +3,6 @@ import compose from "lodash/fp/compose";
 import eq from "lodash/fp/eq";
 import filter from "lodash/fp/filter";
 import find from "lodash/fp/find";
-import qs from "query-string";
 import orderBy from "lodash/fp/orderBy";
 import { or, constant, not } from "../lib/fp";
 import {
@@ -53,6 +52,8 @@ import {
   countPublicProposals,
   isProposalApproved
 } from "../helpers";
+
+const qs = require("querystring");
 
 export const replyTo = or(get(["app", "replyParent"]), constant(0));
 
