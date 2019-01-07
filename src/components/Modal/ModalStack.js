@@ -6,12 +6,9 @@ import modalStackConnector from "../../connectors/modalStack";
 import { withRouter } from "react-router-dom";
 
 class ModalStack extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      modals: []
-    };
-  }
+  state = {
+    modals: []
+  };
   componentWillMount() {
     document.addEventListener("click", this.modalClickHandler);
   }

@@ -10,7 +10,7 @@ const Modal = props => {
       <div className="modal">
         <div className="modal-overlay" />
         <div className="modal-container" style={props.style}>
-          {props.children}
+          <div className="modal-content">{props.children}</div>
         </div>
       </div>
     </OnKeyListener>
