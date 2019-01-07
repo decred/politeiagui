@@ -16,7 +16,10 @@ export const proposalToT3 = (
     censorshiprecord = {},
     draftId = "",
     version,
-    statuschangemessage
+    statuschangemessage,
+    publishedat,
+    censoredat,
+    abandonedat
   },
   idx
 ) => ({
@@ -31,6 +34,9 @@ export const proposalToT3 = (
     name: "t3_" + censorshiprecord.token,
     review_status: status,
     created_utc: timestamp,
+    publishedat,
+    censoredat,
+    abandonedat,
     permalink: `/proposals/${censorshiprecord.token ||
       (draftId ? `new?draftid=${draftId}` : "")}`,
     url: `/proposals/${censorshiprecord.token ||

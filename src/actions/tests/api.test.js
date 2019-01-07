@@ -1,6 +1,5 @@
 import fetchMock from "fetch-mock";
 import configureStore from "redux-mock-store";
-import qs from "query-string";
 import thunk from "redux-thunk";
 import * as api from "../api";
 import * as ea from "../external_api";
@@ -20,6 +19,7 @@ import {
 import { getHumanReadableError } from "../../helpers";
 import { MANAGE_USER_CLEAR_USER_PAYWALL } from "../../constants";
 
+const qs = require("querystring");
 const mockStore = configureStore([thunk]);
 
 describe("test api actions (actions/api.js)", () => {

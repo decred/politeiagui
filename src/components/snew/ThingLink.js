@@ -1,6 +1,5 @@
 import React from "react";
 import { DateTooltip } from "snew-classic-ui";
-import { getProposalStatus } from "../../helpers";
 import { withRouter } from "react-router-dom";
 import * as modalTypes from "../Modal/modalTypes";
 import actions from "../../connectors/actions";
@@ -62,6 +61,9 @@ class ThingLinkComp extends React.Component {
       subreddit,
       subreddit_id,
       created_utc,
+      publishedat,
+      abandonedat,
+      censoredat,
       title,
       url,
       permalink,
@@ -105,7 +107,10 @@ class ThingLinkComp extends React.Component {
       review_status === PROPOSAL_STATUS_UNREVIEWED ||
       review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES;
     const isVetted = review_status === PROPOSAL_STATUS_PUBLIC;
-    const displayVersion = review_status === PROPOSAL_STATUS_PUBLIC;
+    const displayVersion =
+      version &&
+      parseInt(version, 10) > 1 &&
+      review_status === PROPOSAL_STATUS_PUBLIC;
     const isVotingActiveOrFinished =
       voteStatus === PROPOSAL_VOTING_ACTIVE ||
       voteStatus === PROPOSAL_VOTING_FINISHED;
@@ -208,10 +213,10 @@ class ThingLinkComp extends React.Component {
             >
               {title}{" "}
               {review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES ? (
-                <span className="font-12 warning-color">(edited)</span>
+                <span className="font-12 warning-color">edited</span>
               ) : null}
             </Link>{" "}
-            {expanded && (displayVersion || isAbandoned) ? (
+            {expanded && (displayVersion || isAbandoned) && version > 1 ? (
               <VersionPicker
                 onSelectVersion={selVersion => {
                   openModal(modalTypes.PROPOSAL_VERSION_DIFF, {
@@ -281,38 +286,57 @@ class ThingLinkComp extends React.Component {
               ) : null}
             </div>
           </span>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              paddingRight: "5px"
-            }}
-          />
-
-          <span className="tagline">
+          <span
+            style={{ display: "flex", flexDirection: "column" }}
+            className="tagline"
+          >
             <span className="submitted-by">
-              {hasBeenUpdated ? "updated " : "submitted "}
-              <DateTooltip createdAt={created_utc} />
               {author && (
                 <span>
                   {" by "}
                   <Link href={`/user/${authorid}`}>{author}</Link>
                 </span>
-              )}{" "}
-              {numcomments > 0 && (
-                <span>
-                  {" "}
-                  - {numcomments}
-                  {numcomments === 1 ? " comment" : " comments"}{" "}
-                </span>
               )}
             </span>
+            {isUnvetted ? (
+              <span className="submitted-by">
+                {hasBeenUpdated ? "edited " : "submitted "}
+                <DateTooltip createdAt={created_utc} />
+              </span>
+            ) : null}
+            <span className="submitted-by">
+              {publishedat ? (
+                <React.Fragment>
+                  {"published "}
+                  <DateTooltip createdAt={publishedat} />
+                </React.Fragment>
+              ) : null}
+            </span>
+            <span className="submitted-by">
+              {abandonedat ? (
+                <React.Fragment>
+                  {"abandoned "}
+                  <DateTooltip createdAt={abandonedat} />
+                </React.Fragment>
+              ) : null}
+            </span>
+            <span className="submitted-by">
+              {censoredat ? (
+                <React.Fragment>
+                  {"censored "}
+                  <DateTooltip createdAt={censoredat} />
+                </React.Fragment>
+              ) : null}
+            </span>
+            <span className="submitted-by">
+              {displayVersion ? (
+                <React.Fragment>
+                  {`version ${version} edited `}
+                  <DateTooltip createdAt={created_utc} />
+                </React.Fragment>
+              ) : null}
+            </span>
           </span>
-          {!draftId && (
-            <p className="tagline proposal-token">
-              {id} • {getProposalStatus(review_status)}
-            </p>
-          )}
           {draftId && (
             <div className="tagline proposal-draft">
               Saved as draft
@@ -548,15 +572,25 @@ class ThingLinkComp extends React.Component {
           <ul
             className="flat-list buttons"
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between"
+              display: "flex"
             }}
           >
-            <li className="first">
+            {isVetted ? (
+              <li>
+                <Link
+                  className="bylink comments may-blank proposal-permalink"
+                  data-event-action="comments"
+                  href={`${url}?comments=true`}
+                >
+                  {numcomments || ""}{" "}
+                  {numcomments <= 1 ? "comment" : "comments"}
+                </Link>
+              </li>
+            ) : null}
+            <li>
               <Link
                 className="bylink comments may-blank proposal-permalink"
-                data-event-action="comments"
+                data-event-action="permalink"
                 href={permalink}
               >
                 permalink

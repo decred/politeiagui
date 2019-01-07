@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { autobind } from "core-decorators";
 import { withRouter } from "react-router-dom";
-import qs from "query-string";
 import assign from "lodash/assign";
 import { isRequiredValidator } from "../../validators";
 import PasswordResetForm from "./PasswordResetForm";
 import passwordResetConnector from "../../connectors/passwordReset";
 import validate from "./PasswordResetValidator";
 import { SubmissionError } from "redux-form";
+
+const qs = require("querystring");
 
 class PasswordReset extends Component {
   constructor(props) {

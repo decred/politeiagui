@@ -5,9 +5,10 @@ import isEmpty from "lodash/isEmpty";
 import * as pki from "../../lib/pki";
 import PageLoadingIcon from "../snew/PageLoadingIcon";
 import verifyKeyConnector from "../../connectors/verifyKey";
-import qs from "query-string";
 import Message from "../Message";
 import { verifyUserPubkey } from "../../helpers";
+
+const qs = require("querystring");
 
 class VerifyKey extends Component {
   constructor(props) {

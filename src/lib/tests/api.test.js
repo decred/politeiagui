@@ -1,5 +1,4 @@
 import fetchMock from "fetch-mock";
-import qs from "query-string";
 import * as api from "../api";
 import * as pki from "../pki.js";
 import { getHumanReadableError } from "../../helpers";
@@ -9,6 +8,8 @@ import {
   assertPOSTOnRouteIsCalled
 } from "./support/helpers";
 import { PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
+
+const qs = require("querystring");
 
 describe("api integration modules (lib/api.js)", () => {
   const MOCKS_PATH = "../../../mocks/api/";
