@@ -122,7 +122,16 @@ are submitted, they are checked by Politeia administrators, and proposals that a
 censored. If a user believes they have been unfairly censored, they can prove that their proposal was censored using
 a “censorship token”; a token automatically generated upon proposal submission using the user’s unique
 cryptographic identity (pub/priv key pair). This token can be used to demonstrate to the community that the user's specific
-proposal/comment was submitted, the time it was submitted, and in what form.
+proposal/comment was submitted, the time it was submitted, and in what form. 
+
+**How to Verify Proposal Censorshsip:**
+
+1. Navigate to the page of the proposal in question.
+2. Click on _Download Proposal Bundle_.
+3. Open the downloaded file in an application which can read JSON files.
+4. Verify the number in the 'status' row. A censored proposal will have a status code of 3.  
+_Note: All proposal status codes can be viewed
+[on Github](https://github.com/decred/politeia/tree/master/politeiawww/cmd/politeiawwwcli#proposal-status-codes)_
 `
   },
   {
