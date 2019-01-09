@@ -2,13 +2,12 @@ import React, { Component } from "react";
 import propTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import isEmpty from "lodash/isEmpty";
+import qs from "query-string";
 import * as pki from "../../lib/pki";
 import PageLoadingIcon from "../snew/PageLoadingIcon";
 import verifyKeyConnector from "../../connectors/verifyKey";
 import Message from "../Message";
 import { verifyUserPubkey } from "../../helpers";
-
-const qs = require("querystring");
 
 class VerifyKey extends Component {
   constructor(props) {

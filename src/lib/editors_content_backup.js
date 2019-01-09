@@ -1,7 +1,7 @@
 /*
 This lib is designed to handle persisting data for the text editors using session storage
 */
-const qs = require("querystring");
+import qs from "query-string";
 
 export const NEW_PROPOSAL_PATH = "/proposals/new";
 

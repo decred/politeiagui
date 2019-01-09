@@ -114,10 +114,10 @@ export const onCreateNewUser = ({ email, username, password }) =>
 
 export const onResetNewUser = act.RESET_NEW_USER;
 
-export const onVerifyNewUser = searchQuery => dispatch => {
-  dispatch(act.REQUEST_VERIFY_NEW_USER(searchQuery));
+export const onVerifyNewUser = (email, verificationToken) => dispatch => {
+  dispatch(act.REQUEST_VERIFY_NEW_USER({ email, verificationToken }));
   return api
-    .verifyNewUser(searchQuery)
+    .verifyNewUser(email, verificationToken)
     .then(res => dispatch(act.RECEIVE_VERIFY_NEW_USER(res)))
     .catch(err => {
       dispatch(act.RECEIVE_VERIFY_NEW_USER(null, err));
