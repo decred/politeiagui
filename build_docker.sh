@@ -28,4 +28,4 @@ echo "    docker run -d --rm -p <local port>:80 decred/politeiagui-serve:latest"
 echo ""
 
 # Cleanup
-rm -rf docker-build
+# rm -rf docker-build
