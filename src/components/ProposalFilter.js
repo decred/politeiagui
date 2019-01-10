@@ -1,5 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import qs from "query-string";
 import { Tabs, Tab } from "./Tabs";
 import {
   PROPOSAL_FILTER_ALL,
@@ -19,8 +20,6 @@ import {
   PROPOSAL_STATUS_ABANDONED
 } from "../constants";
 import { setQueryStringWithoutPageReload } from "../helpers";
-
-const qs = require("querystring");
 
 const adminFilterOptions = [
   {

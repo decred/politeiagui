@@ -1,6 +1,7 @@
 import fetchMock from "fetch-mock";
 import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
+import qs from "query-string";
 import * as api from "../api";
 import * as ea from "../external_api";
 import * as act from "../types";
@@ -19,7 +20,6 @@ import {
 import { getHumanReadableError } from "../../helpers";
 import { MANAGE_USER_CLEAR_USER_PAYWALL } from "../../constants";
 
-const qs = require("querystring");
 const mockStore = configureStore([thunk]);
 
 describe("test api actions (actions/api.js)", () => {
@@ -290,28 +290,29 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on verify new user action", async () => {
     const path = "/api/v1/user/verify";
-    const verificationtoken = "any";
-    const searchQuery = qs.stringify({
-      email: FAKE_USER.email,
-      verificationtoken
-    });
+    const verificationToken = "any";
+    const { email } = FAKE_USER;
+    // const searchQuery = qs.stringify({
+    //   email: FAKE_USER.email,
+    //   verificationtoken
+    // });
 
     await assertApiActionOnError(
       path,
       api.onVerifyNewUser,
-      [searchQuery],
+      [email, verificationToken],
       e => [
         {
           type: act.REQUEST_VERIFY_NEW_USER,
           error: false,
-          payload: searchQuery
+          payload: { email, verificationToken }
         },
         { type: act.RECEIVE_VERIFY_NEW_USER, error: true, payload: e }
       ],
       {
         query: {
-          email: FAKE_USER.email,
-          verificationtoken
+          email,
+          verificationToken
         }
       }
     );
@@ -319,15 +320,18 @@ describe("test api actions (actions/api.js)", () => {
     await assertApiActionOnSuccess(
       path,
       api.onVerifyNewUser,
-      [searchQuery],
+      [email, verificationToken],
       [
-        { type: act.REQUEST_VERIFY_NEW_USER, payload: searchQuery },
+        {
+          type: act.REQUEST_VERIFY_NEW_USER,
+          payload: { email, verificationToken }
+        },
         { type: act.RECEIVE_VERIFY_NEW_USER, error: false }
       ],
       {
         query: {
-          email: FAKE_USER.email,
-          verificationtoken
+          email,
+          verificationToken
         }
       }
     );

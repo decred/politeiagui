@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
+import qs from "query-string";
 import isEmpty from "lodash/isEmpty";
 import VerifyPage from "./Page";
 import verifyConnector from "../../connectors/verify";
 
-const qs = require("querystring");
-
 class Verify extends Component {
   constructor(props) {
-    super();
+    super(props);
     const { verificationtoken, email } = qs.parse(props.location.search);
     if (
       isEmpty(props.location.search) ||
@@ -21,7 +20,7 @@ class Verify extends Component {
       return;
     }
 
-    props.onVerify(props.location.search).catch(err => {
+    props.onVerify(email, verificationtoken).catch(err => {
       console.error(err.stack || err);
     });
   }
