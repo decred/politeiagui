@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import MarkdownRenderer from "./Markdown";
-import Modal from "../../Modal/Modal";
 import Message from "../../Message";
 import ProposalImages from "../../ProposalImages";
 
@@ -65,11 +64,6 @@ const DiffHeader = ({
 //   return <ProposalImages files={filesDiff} readOnly={true} />;
 // };
 
-const withDiffStyle = {
-  paddingTop: "80px",
-  zIndex: 9999
-};
-
 class Diff extends React.Component {
   state = { filesDiff: false };
   handleToggleFilesDiff = e => {
@@ -92,32 +86,30 @@ class Diff extends React.Component {
     } = this.props;
     const { filesDiff } = this.state;
     return (
-      <Modal style={withDiffStyle} onClose={onClose}>
-        <div className="diff-wrapper">
-          <DiffHeader
-            title={title}
-            version={version}
-            loading={loading}
-            userName={userName}
-            lastEdition={lastEdition}
-            onClose={onClose}
-            filesDiff={filesDiff}
-            onToggleFilesDiff={this.handleToggleFilesDiff}
-            enableFilesDiff={newFiles.length}
+      <div className="modal-content diff-wrapper">
+        <DiffHeader
+          title={title}
+          version={version}
+          loading={loading}
+          userName={userName}
+          lastEdition={lastEdition}
+          onClose={onClose}
+          filesDiff={filesDiff}
+          onToggleFilesDiff={this.handleToggleFilesDiff}
+          enableFilesDiff={newFiles.length}
+        />
+        {error ? (
+          <Message body={error} type="error" />
+        ) : filesDiff ? (
+          <ProposalImages files={newFiles} readOnly={true} />
+        ) : (
+          <MarkdownRenderer
+            body={newProposal}
+            style={{ padding: "16px" }}
+            scapeHtml={false}
           />
-          {error ? (
-            <Message body={error} type="error" />
-          ) : filesDiff ? (
-            <ProposalImages files={newFiles} readOnly={true} />
-          ) : (
-            <MarkdownRenderer
-              body={newProposal}
-              style={{ padding: "16px" }}
-              scapeHtml={false}
-            />
-          )}
-        </div>
-      </Modal>
+        )}
+      </div>
     );
   }
 }
