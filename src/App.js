@@ -12,7 +12,7 @@ import { handleSaveTextEditorsContent } from "./lib/editors_content_backup";
 import { handleSaveStateToLocalStorage } from "./lib/local_storage";
 import { onLocalStorageChange } from "./actions/app";
 import ModalStack from "./components/Modal/ModalStack";
-import { ONBOARD, CONFIRM_ACTION } from "./components/Modal/modalTypes";
+import { WELCOME_MODAL } from "./components/Modal/modalTypes";
 import { verifyUserPubkey } from "./helpers";
 
 const store = configureStore();
@@ -45,44 +45,18 @@ class Loader extends Component {
         this.props.keyMismatchAction
       );
     }
-
     if (!prevProps.onboardViewed && this.props.lastLoginTime === 0) {
-      const { openModal, setOnboardAsViewed } = this.props;
+      const { setOnboardAsViewed, openModal } = this.props;
       setOnboardAsViewed();
-      this.props
-        .confirmWithModal(CONFIRM_ACTION, {
-          title: "Welcome to Politeia!",
-          message: (
-            <React.Fragment>
-              <strong
-                style={{
-                  fontSize: "1.05em",
-                  marginBottom: "10px",
-                  fontWeight: "1.2em"
-                }}
-              >
-                Are you new to Politeia? Would you like to read more on how all
-                of this works?
-              </strong>
-              <br />
-              <p style={{ marginTop: "10px", fontStyle: "italic" }}>
-                The following information can be reviewed by clicking 'Learn
-                More about Politiea' in the sidebar.
-              </p>
-            </React.Fragment>
-          ),
-          cancelText: "Maybe later",
-          submitText: "Yes, show me more"
-        })
-        .then(confirm => confirm && openModal(ONBOARD));
-    }
+      openModal(WELCOME_MODAL);
 
-    if (!prevProps.apiError && this.props.apiError) {
-      // Unrecoverable error
-      if (this.props.apiError.internalError) {
-        this.props.history.push("/500");
-      } else {
-        console.error("ERROR:", this.props.apiError.message);
+      if (!prevProps.apiError && this.props.apiError) {
+        // Unrecoverable error
+        if (this.props.apiError.internalError) {
+          this.props.history.push("/500");
+        } else {
+          console.error("ERROR:", this.props.apiError.message);
+        }
       }
     }
   }

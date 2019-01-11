@@ -69,3 +69,8 @@ export const INVALID_FILE =
   "This is not a valid identity file. The identity has to be a JSON file containing the publicKey and the secretKey values.";
 export const LOAD_KEY_FAILED =
   "Sorry, something went wrong while importing the identity file, please try again. If the error persists, contact the Politeia support.";
+
+//Links
+export const PI_DOCS = "https://docs.decred.org/governance/politeia/politeia/";
+export const PROPOSAL_GUIDELINES =
+  "https://docs.decred.org/governance/politeia/proposal-guidelines/";

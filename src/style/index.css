@@ -599,12 +599,6 @@ table.md {
   height: 28px;
   line-height: 24px;
 }
-.mde-header ul.mde-header-group li.mde-header-item button:focus {
-   background-color: #2971FF;
-}
-.mde-header ul.mde-header-group li.mde-header-item button:focus .fa {
-  color: #fff;
-}
 
 .mde-text {
   min-width: calc(50% - 8px);
@@ -635,6 +629,15 @@ table.md {
 
 .markdown-help-text {
   margin-left: 3px;
+}
+
+.modal-content-actions > .btn > .md-modal-link > div > .md > p > a {
+	color: #fff !important;
+	font-weight: 700 !important
+}
+
+.modal-content-actions > .btn > .md-modal-link > div > .md > p > a:hover {
+	text-decoration: none !important;
 }
 
 li p.header-1 {

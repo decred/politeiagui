@@ -13,7 +13,8 @@ import concat from "lodash/concat";
 import cloneDeep from "lodash/cloneDeep";
 import { Field } from "redux-form";
 import MarkdownHelp from "../MarkdownHelp";
-import { MANAGE_CREDITS_MODAL, ONBOARD } from "../Modal/modalTypes";
+import { MANAGE_CREDITS_MODAL } from "../Modal/modalTypes";
+import { PROPOSAL_GUIDELINES } from "../../constants";
 
 const normalizer = (value, previousValue) => {
   let files = [];
@@ -123,12 +124,14 @@ class SubmitPage extends React.Component {
                             rows={20}
                             cols={80}
                           />
-                          <span
-                            className="linkish-modal"
-                            onClick={() => openModal(ONBOARD, { tab: 4 })}
+                          <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={PROPOSAL_GUIDELINES}
+                            style={{ fontSize: "1.01em" }}
                           >
-                            Learn How to Format your Proposal
-                          </span>
+                            Learn how to format your proposal
+                          </a>
                           <Field
                             name="files"
                             className="attach-button greenprimary"
