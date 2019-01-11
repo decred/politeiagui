@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { insertDiffHTML } from "./helpers";
 import MarkdownRenderer from "./Markdown";
 import Modal from "../../Modal/Modal";
 import Message from "../../Message";
@@ -34,7 +35,7 @@ const DiffHeader = ({
               onClick={onToggleFilesDiff}
               href=""
             >
-              {filesDiff ? "Text" : "Files"}
+              {filesDiff ? "Text Diff" : "Files Diff"}
             </span>
           ) : null}
           <span onClick={onClose} style={{ cursor: "pointer" }}>
@@ -47,23 +48,23 @@ const DiffHeader = ({
 );
 
 /** TODO: use files diff component when diff implementation is polished  */
-// const FilesDiff = ({ oldFiles, newFiles }) => {
-//   const filesDiff = [];
-//   const hasFile = (file, items) =>
-//     items.filter(f => f.name === file.name && f.payload === file.payload)
-//       .length > 0;
-//   oldFiles.forEach(file => {
-//     if (!hasFile(file, newFiles)) file.removed = true;
-//     filesDiff.push(file);
-//   });
-//   newFiles.forEach(file => {
-//     if (!hasFile(file, filesDiff)) {
-//       file.added = true;
-//       filesDiff.push(file);
-//     }
-//   });
-//   return <ProposalImages files={filesDiff} readOnly={true} />;
-// };
+const FilesDiff = ({ oldFiles, newFiles }) => {
+  const filesDiff = [];
+  const hasFile = (file, items) =>
+    items.filter(f => f.name === file.name && f.payload === file.payload)
+      .length > 0;
+  oldFiles.forEach(file => {
+    if (!hasFile(file, newFiles)) file.removed = true;
+    filesDiff.push(file);
+  });
+  newFiles.forEach(file => {
+    if (!hasFile(file, filesDiff)) {
+      file.added = true;
+      filesDiff.push(file);
+    }
+  });
+  return <ProposalImages files={filesDiff} readOnly={true} />;
+};
 
 const withDiffStyle = {
   paddingTop: "80px",
@@ -81,7 +82,9 @@ class Diff extends React.Component {
   render() {
     const {
       newProposal,
+      oldProposal,
       newFiles,
+      oldFiles,
       title,
       version,
       userName,
@@ -103,15 +106,15 @@ class Diff extends React.Component {
             onClose={onClose}
             filesDiff={filesDiff}
             onToggleFilesDiff={this.handleToggleFilesDiff}
-            enableFilesDiff={newFiles.length}
+            enableFilesDiff={oldFiles.length || newFiles.length}
           />
           {error ? (
             <Message body={error} type="error" />
           ) : filesDiff ? (
-            <ProposalImages files={newFiles} readOnly={true} />
+            <FilesDiff oldFiles={oldFiles} newFiles={newFiles} />
           ) : (
             <MarkdownRenderer
-              body={newProposal}
+              body={insertDiffHTML(oldProposal, newProposal)}
               style={{ padding: "16px" }}
               scapeHtml={false}
             />
