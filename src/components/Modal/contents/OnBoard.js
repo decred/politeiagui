@@ -143,20 +143,15 @@ _Note: All proposal status codes can be viewed
 The basic process for submitting and approving proposals is outlined below. Note that as Politeia is still in an experimental stage,
  this process is subject to change as the system iterates.
 
-1. Submit proposal.
-2. Proposal reviewed by Politeia admins, spam is censored.
-3. Valid proposals appear publicly on Politeia, open for discussion, but voting does not begin immediately. The proposal can be 
-edited by its owner in response to feedback.
-4. The proposal owner authorizes voting to start. An admin then triggers the start of voting.
-5. The ticket-voting interval of 2016 blocks (~1 week) begins. A snapshot of the live ticket pool is taken at 256 blocks prior to
-the start of voting. Every ticket in this snapshot can vote Yes or No on the proposal. Tickets bought after the snapshot for a proposal 
-cannot vote on it. Tickets that vote on-chain can still be used to vote on a proposal if they were live when the snapshot was taken.
-6. When the ticket-voting period ends, the proposal is formally approved or rejected. There is a quorum requirement for a vote to be
-considered valid: 20% of the eligible tickets must vote Yes or No. The threshold for a proposal to be approved is 60% Yes votes.
-7. When a proposal with a budget and deliverables is approved, work can begin. The proposal owner can submit claims
-against that budget as deliverables are completed.
-8. Payment claims will be handled manually by Decred Holdings Group until such times as this process can be adequately
-decentralized.
+1. A proposal is submitted.
+2. The proposal is reviewed by Politeia admins. Spam is censored. 
+3. Valid proposals appear publicly on Politeia. They are open for discussion, but voting does not begin immediately, and the proposal can be edited by its owner in response to community feedback. 
+4. If a proposal becomes clearly inactive (proposal owner stops commenting on the proposal, does not authorize the start of voting), an admin may mark the proposal as ‘Abandoned’. Abandoned proposals appear in the ‘Abandoned’ tab on Politeia. They are publicly viewable, but cannot be edited, commented on, or be authorized to vote. An admin can mark a proposal as abandoned at any time before the proposal owner authorizes voting. Once the proposal owner authorizes voting on a proposal, it cannot be abandoned unless the proposal owner revokes voting on the proposal.
+5. The proposal owner authorizes voting to start. An admin then triggers the start of voting.
+6. The ticket-voting interval of 2016 blocks (~1 week) begins. A snapshot of the live ticket pool is taken at 256 blocks prior to the start of voting. Every ticket in the pool when this snapshot was taken can vote 'Yes' or 'No' on the proposal. Tickets bought after the snapshot cannot vote on the proposal. If a ticket is called to vote on-chain during the ticket-voting interval (to validate blocks or vote on consensus rule changes), it still has until the end of the ticket-voting interval to vote on the proposal. 
+7. When the ticket-voting period ends, the proposal is formally approved or rejected. There is a quorum requirement for a vote to be considered valid: 20% of the eligible tickets must vote 'Yes' or 'No'. The threshold for a proposal to be approved is 60% 'Yes' votes.
+8. When a proposal with a budget and deliverables is approved, work can begin. The proposal owner can submit claims against the budget as deliverables are completed.
+9. Payment claims will be handled manually by Decred Holdings Group (DHG) until such times as this process can be handled by the Decred Decentralized Autonomous Entity (DAE).
 
 Politeia's aim is to serve as the decision-making force behind the Decred Decentralized Autonomous Entity (DAE). This is an ambitious aim.
 Because Politeia and its accompanying processes are still in an experimental stage, Politeia will serve initially as a robust
