@@ -9,12 +9,6 @@ class ModalStack extends React.Component {
   state = {
     modals: []
   };
-  componentWillMount() {
-    document.addEventListener("click", this.modalClickHandler);
-  }
-  componentWillUnmount() {
-    document.removeEventListener("click", this.modalClickHandler);
-  }
   componentDidUpdate(prevProps) {
     const { openedModals, location, closeAllModals } = this.props;
     const { modals } = this.state;
@@ -34,6 +28,13 @@ class ModalStack extends React.Component {
           document.querySelector("body").style.overflowY = "hidden";
         else document.querySelector("body").style.overflowY = "scroll";
       });
+
+    // adds/removes click listener for opened modals
+    if (openedModals.length > 0) {
+      document.addEventListener("click", this.modalClickHandler);
+    } else {
+      document.removeEventListener("click", this.modalClickHandler);
+    }
 
     // closes modals if user path has changed
     if (location.pathname !== prevProps.location.pathname) {
