@@ -187,7 +187,10 @@ describe("api integration modules (lib/api.js)", () => {
   test("fetches api info ", async () => {
     expect.assertions(3);
     const PATH = "/api/";
-    const MOCK_RESULT = await import(`${MOCKS_PATH}/GET.json`);
+    const MOCK_RESULT = await import(`${MOCKS_PATH}/GET.json`).then(
+      d => d.default
+    );
+
     // set csrf token header
     fetchMock.getOnce(PATH, {
       body: MOCK_RESULT,

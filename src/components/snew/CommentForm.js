@@ -73,18 +73,16 @@ const CommentForm = ({
           !isProposalAbandoned ? (
             <div className="bottom-area">
               <span className="help-toggle toggle">
-                <a
-                  className="option active"
+                <span
+                  className="linkish option active"
                   tabIndex={100}
-                  style={{ cursor: "pointer" }}
                   onClick={e => {
                     onToggleMarkdownHelp();
                     e.preventDefault();
                   }}
                 >
                   formatting help
-                </a>
-                <a className="option">hide help</a>
+                </span>
               </span>
               {showContentPolicy && (
                 <Link

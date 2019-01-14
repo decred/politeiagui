@@ -123,12 +123,12 @@ class SubmitPage extends React.Component {
                             rows={20}
                             cols={80}
                           />
-                          <a
+                          <span
                             className="linkish-modal"
                             onClick={() => openModal(ONBOARD, { tab: 4 })}
                           >
                             Learn How to Format your Proposal
-                          </a>
+                          </span>
                           <Field
                             name="files"
                             className="attach-button greenprimary"
@@ -165,13 +165,13 @@ class SubmitPage extends React.Component {
                         <div className="submit-button-error">
                           To submit a proposal, you must purchase a proposal
                           credit.
-                          <a
+                          <span
                             className="linkish"
                             onClick={() => openModal(MANAGE_CREDITS_MODAL)}
                           >
                             {" "}
                             Click here
-                          </a>{" "}
+                          </span>{" "}
                           to open the proposal credits manager.
                         </div>
                       )}

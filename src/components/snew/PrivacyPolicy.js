@@ -12,13 +12,14 @@ const PrivacyPolicy = ({ onHidePrivacyPolicy }) => (
         associating your user-name with content contributions will be published
         openly, in the interests of transparency.
       </p>
-      <a
+      <span
+        className="linkish"
         onClick={onHidePrivacyPolicy}
         tabIndex={6}
         style={{ cursor: "pointer" }}
       >
         Hide
-      </a>
+      </span>
     </Message>
   </div>
 );

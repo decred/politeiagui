@@ -143,12 +143,13 @@ const HeaderAlertComponent = withRouter(
         return (
           <HeaderAlert className="action-needed-alert">
             You cannot currently submit proposals or comments, please visit your{" "}
-            <a
+            <span
+              className="linkish"
               style={{ cursor: "pointer" }}
               onClick={() => history.push(`/user/${loggedInAsUserId}`)}
             >
               account page
-            </a>{" "}
+            </span>{" "}
             to correct this problem.
           </HeaderAlert>
         );

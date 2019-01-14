@@ -30,4 +30,4 @@ echo ""
 # Cleanup
 # TODO: reenable cleanup once it's figured out how to bypass 
 # the permission restrictions
-# rm -rf docker-build
+rm -rf docker-build

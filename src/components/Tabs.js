@@ -15,11 +15,11 @@ export const Tab = ({ title, count, tabId, selected, onTabChange }) => {
   }
 
   return (
-    <a
+    <span
       className={"tab" + (selected ? " tab-selected" : "")}
       onClick={() => onTabChange(tabId)}
     >
       {title} {countIcon}
-    </a>
+    </span>
   );
 };

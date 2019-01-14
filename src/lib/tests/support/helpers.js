@@ -38,11 +38,6 @@ export const assertGETOnRouteIsCalled = async (
   return result;
 };
 
-export const setMockUrl = props => {
-  Object.keys(props).forEach(key => {
-    Object.defineProperty(window.location, key, {
-      writable: true,
-      value: props[key]
-    });
-  });
+export const setMockUrl = ({ pathname, search }) => {
+  window.history.pushState({}, "Test title", `${pathname}${search || ""}`);
 };
