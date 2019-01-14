@@ -93,15 +93,6 @@
     "redux-mock-store": "^1.5.1",
     "selenium-server-standalone-jar": "^3.141.5"
   },
-  "proxy": {
-    "/api": {
-      "target": "https://localhost:4443",
-      "secure": false,
-      "pathRewrite": {
-        "/api": ""
-      }
-    }
-  },
   "browserslist": [
     ">0.2%",
     "not dead",
