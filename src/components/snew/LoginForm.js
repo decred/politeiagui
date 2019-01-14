@@ -89,14 +89,14 @@ const LoginForm = ({
         >
           Reset Password
         </Link>
-        <a
-          className="c-pull-right reset-password-link"
+        <span
+          className="linkish c-pull-right reset-password-link"
           tabIndex={5}
           onClick={onTogglePrivacyPolicy}
           style={{ cursor: "pointer" }}
         >
           Privacy Policy
-        </a>
+        </span>
       </div>
       {showPrivacyPolicy && (
         <PrivacyPolicy onHidePrivacyPolicy={onHidePrivacyPolicy} />

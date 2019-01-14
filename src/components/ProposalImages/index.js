@@ -36,13 +36,13 @@ class ProposalImages extends Component {
               <div style={{ display: "flex", alignItems: "center" }}>
                 <h5 className="attached-image-title">{name}</h5>
                 {!readOnly && (
-                  <a
+                  <span
                     className="attached-image-remove"
                     onClick={() => this.onRemove(idx)}
                     title="Remove image"
                   >
                     ✖
-                  </a>
+                  </span>
                 )}
               </div>
               <img

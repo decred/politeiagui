@@ -278,21 +278,21 @@ class GeneralTab extends React.Component {
                 >
                   {this.identityHelpPrompt}
                 </span>{" "}
-                <a
+                <span
                   className="linkish"
                   onClick={() => this.setState({ showIdentityHelpText: false })}
                 >
                   (hide)
-                </a>
+                </span>
               </div>
             ) : (
-              <a
+              <span
                 className="linkish ident-value"
                 style={{ maxWidth: "7em" }}
                 onClick={() => this.setState({ showIdentityHelpText: true })}
               >
                 {this.identityHelpPrompt}
-              </a>
+              </span>
             )}
           </div>
         )}
@@ -395,21 +395,21 @@ class GeneralTab extends React.Component {
           {showPastUserIdentities ? (
             <span>
               <span style={{ fontWeight: "bold" }}>Expanded</span>
-              <a
+              <span
                 className="linkish"
                 style={{ paddingLeft: "1em" }}
                 onClick={() => this.setState({ showPastUserIdentities: false })}
               >
                 (hide)
-              </a>
+              </span>
             </span>
           ) : (
-            <a
+            <span
               className="linkish"
               onClick={() => this.setState({ showPastUserIdentities: true })}
             >
               Expand
-            </a>
+            </span>
           )}
           {showPastUserIdentities && (
             <ul>
@@ -464,12 +464,12 @@ class GeneralTab extends React.Component {
         )}
         {loggedInAsUserId === user.id && (
           <Field label="Password">
-            <a
+            <span
               className="linkish"
               onClick={() => openModal(CHANGE_PASSWORD_MODAL)}
             >
               Change Password
-            </a>
+            </span>
           </Field>
         )}
         {isAdminOrTheUser && (

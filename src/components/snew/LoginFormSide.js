@@ -67,12 +67,13 @@ const LoginFormSide = ({
             type="checkbox"
           />
           <label htmlFor="rem-login-main">remember me</label>
-          <a
+          <span
             onClick={onTogglePrivacyPolicy}
-            style={{ marginRight: "10px", cursor: "pointer" }}
+            className="linkish"
+            style={{ marginRight: "10px" }}
           >
             Privacy Policy
-          </a>
+          </span>
           <Link className="recover-password" href="/password">
             Reset Password
           </Link>
