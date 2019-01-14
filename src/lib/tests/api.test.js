@@ -190,7 +190,7 @@ describe("api integration modules (lib/api.js)", () => {
     const MOCK_RESULT = await import(`${MOCKS_PATH}/GET.json`).then(
       d => d.default
     );
-    delete MOCK_RESULT.default;
+
     // set csrf token header
     fetchMock.getOnce(PATH, {
       body: MOCK_RESULT,
