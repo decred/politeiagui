@@ -14,6 +14,7 @@ const MarkdownRenderer = ({
   displayExternalLikWarning = true,
   scapeHtml = true
 }) => {
+  // console.log("BODY", body);
   return (
     <div className={className} style={style}>
       <ReactMarkdown
@@ -24,6 +25,7 @@ const MarkdownRenderer = ({
           filterXss,
           displayExternalLikWarning && confirmWithModal
         )}
+        unwrapDisallowed={true}
         source={body}
       />
     </div>

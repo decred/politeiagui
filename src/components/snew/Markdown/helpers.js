@@ -1,38 +1,80 @@
 import React from "react";
-import { diffWords } from "diff";
+import { diffLines, diffWords } from "diff";
 import htmlParser from "react-markdown/plugins/html-parser";
 import xssFilters from "xss-filters";
 import * as modalTypes from "../../Modal/modalTypes";
 
 const diffCheck = node => {
-  const className = node.attribs.classname;
-  return (
-    node.type === "tag" &&
-    node.name === "span" &&
-    (className === "diff-in" || className === "diff-out")
-  );
+  const className = node.attribs && node.attribs.classname;
+  // if the line is edited
+  const isChild = !node.name && !!node.parent;
+  return isChild
+    ? node.parent.type === "tag" && node.type === "text"
+    : (node.name === "li" || node.name === "span") &&
+        (node.type === "tag" || node.type === "text") &&
+        (className === "diff-in" ||
+          className === "diff-out" ||
+          className === "diff-line-in" ||
+          className === "diff-line-out");
 };
 
 export const htmlParserRules = htmlParser({
   isValidNode: node => {
+    console.log(node);
     return node.type !== "script" && diffCheck(node);
   }
 });
 
 export const insertDiffHTML = (oldComment, newComment) => {
-  const diff = diffWords(oldComment, newComment, { ignoreCase: true });
-
-  const handleDiffString = string => {
+  const diffL = diffLines(oldComment, newComment, {
+    ignoreWhitespace: false,
+    newlineIsToken: false
+  });
+  const handleDiffString = (string, isLineAdded, isLineRemoved) => {
     const { added, removed, value } = string;
-    if (added) return `<span className='diff-in'>${value}</span>`;
-    else if (removed) return `<span className='diff-out'>${value}</span>`;
+    if (added) {
+      if (isLineRemoved) {
+        return "";
+      }
+      return `<span className="diff-in">\n${value}\n</span>\n`;
+    } else if (removed) {
+      if (isLineAdded) {
+        return "";
+      }
+      return `<span className="diff-out">\n${value}\n</span>\n`;
+    }
     return value;
   };
+  const handleDiffLine = line => {
+    const { count, added, removed } = line;
+    const lineAdded = diffL.filter(lin => lin.count === count && lin.added);
+    const lineRemoved = diffL.filter(lin => lin.count === count && lin.removed);
+    const diffW = diffWords(
+      lineRemoved.length ? lineRemoved[0].value : "",
+      lineAdded.length ? lineAdded[0].value : "",
+      { ignoreCase: true }
+    );
+    const dw = diffW.map(word => {
+      return handleDiffString(word, added, removed);
+    });
+    return dw.length && dw.length > 1 ? dw.join("") : dw[0];
+  };
 
-  return diff.reduce(
-    (accumulated, current) => accumulated + handleDiffString(current),
-    ""
+  const handleDiffLines = line => {
+    const { added, removed, value } = line;
+    if (added) {
+      return `<li className="diff-line-in">\n${handleDiffLine(line)}\n</li>\n`;
+    } else if (removed) {
+      return `<li className="diff-line-out">\n${handleDiffLine(line)}\n</li>\n`;
+    }
+    return value;
+  };
+  const c = diffL.reduce(
+    (accumulated, current) => accumulated + handleDiffLines(current),
+    "\n"
   );
+  console.log(c);
+  return c;
 };
 
 export const traverseChildren = (el, cb) => {

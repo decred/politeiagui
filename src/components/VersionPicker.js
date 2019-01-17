@@ -31,6 +31,7 @@ const VersionPicker = ({ version, onSelectVersion }) => {
   for (let i = parseInt(version, 10); i >= 1; i--) {
     versionsOptions.push(
       <span
+        key={i}
         className="version-picker__item"
         style={dropdownItemStyle}
         onClick={() => onSelectVersion(i.toString())}
