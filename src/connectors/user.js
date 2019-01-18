@@ -47,6 +47,7 @@ const userConnector = connect(
     shouldAutoVerifyKey: sel.shouldAutoVerifyKey,
     verificationToken: sel.verificationToken,
     userPubkey: sel.userPubkey,
+    userPaywallStatus: sel.getUserPaywallStatus,
     loggedInAsUsername: sel.loggedInAsUsername,
     amountOfCreditsAddedOnRescan: sel.amountOfCreditsAddedOnRescan,
     rescanUserId: sel.apiRescanUserPaymentsUserId,
