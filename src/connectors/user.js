@@ -50,6 +50,7 @@ const userConnector = connect(
     loggedInAsUsername: sel.loggedInAsUsername,
     amountOfCreditsAddedOnRescan: sel.amountOfCreditsAddedOnRescan,
     rescanUserId: sel.apiRescanUserPaymentsUserId,
+    isApiRequestingUpdateUserKey: sel.isApiRequestingUpdateUserKey,
     isApiRequestingMarkAsPaid: state =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_CLEAR_USER_PAYWALL,
