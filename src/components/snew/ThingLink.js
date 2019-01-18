@@ -27,9 +27,21 @@ import {
 } from "../../constants";
 
 const ToggleIcon = (type, onClick) => (
-  <button className="collapse-icon-button" onClick={onClick}>
-    <i className={`fa fa-${type}`} />
-  </button>
+  <div style={{ width: "25px" }}>
+    <Tooltip
+      tipStyle={{
+        fontSize: "14px",
+        left: "30px",
+        width: "145px"
+      }}
+      text={`${type === "expand" ? "Show" : "Hide"} proposal body`}
+      position="right"
+    >
+      <button className="collapse-icon-button" onClick={onClick}>
+        <i className={`fa fa-${type}`} />
+      </button>
+    </Tooltip>
+  </div>
 );
 
 class ThingLinkComp extends React.Component {
@@ -39,7 +51,7 @@ class ThingLinkComp extends React.Component {
       expanded: !this.props.commentid
     };
   }
-  hanldeExpandToggle = e => {
+  handleExpandToggle = e => {
     e && e.preventDefault() && e.stopPropagation();
     this.setState(state => ({ expanded: !state.expanded }));
   };
@@ -408,8 +420,8 @@ class ThingLinkComp extends React.Component {
               is_self,
               selftext,
               selftext_html,
-              expandIcon: ToggleIcon("expand", this.hanldeExpandToggle),
-              compressIcon: ToggleIcon("compress", this.hanldeExpandToggle)
+              expandIcon: ToggleIcon("expand", this.handleExpandToggle),
+              compressIcon: ToggleIcon("compress", this.handleExpandToggle)
             }}
           />
           {this.state.expanded && (
