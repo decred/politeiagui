@@ -93,7 +93,10 @@ class Routes extends Component {
           exact
         />
         <AdminAuthenticatedRoute path="/admin/users" component={UserLookup} />
-        <Route path="/user/:userId" component={userDetail(UserDetail)} />
+        <Route
+          path="/user/:userId/:filter?"
+          component={userDetail(UserDetail)}
+        />
         <Route
           path="/proposals/:token"
           component={proposalDetail(ProposalDetail)}
