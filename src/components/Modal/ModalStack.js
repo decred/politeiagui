@@ -9,12 +9,7 @@ class ModalStack extends React.Component {
   state = {
     modals: []
   };
-  componentWillMount() {
-    document.addEventListener("click", this.modalClickHandler);
-  }
-  componentWillUnmount() {
-    document.removeEventListener("click", this.modalClickHandler);
-  }
+
   componentDidUpdate(prevProps) {
     const { openedModals, location, closeAllModals } = this.props;
     const { modals } = this.state;
@@ -40,15 +35,7 @@ class ModalStack extends React.Component {
       closeAllModals();
     }
   }
-  //function which closes all modals if user clicks outside of modal window
-  modalClickHandler = event => {
-    if (
-      event.target.closest(".modal-content") ||
-      this.props.openedModals.length === 0
-    )
-      return;
-    this.props.closeAllModals();
-  };
+
   renderModalContent = modalData => (
     <Modal key={modalData.type}>
       <ModalContent modalData={modalData} />
