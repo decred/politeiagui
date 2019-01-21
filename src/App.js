@@ -35,6 +35,9 @@ class Loader extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    const isUserFirstLogin = this.props.lastLoginTime === 0;
+    const criticalAPIError = !prevProps.apiError && this.props.apiError;
+
     if (!prevProps.loggedInAsEmail && this.props.loggedInAsEmail) {
       this.props.onLoadDraftProposals(this.props.loggedInAsEmail);
     }
@@ -45,18 +48,19 @@ class Loader extends Component {
         this.props.keyMismatchAction
       );
     }
-    if (!prevProps.onboardViewed && this.props.lastLoginTime === 0) {
+
+    if (!prevProps.onboardViewed && isUserFirstLogin) {
       const { setOnboardAsViewed, openModal } = this.props;
       setOnboardAsViewed();
       openModal(WELCOME_MODAL);
+    }
 
-      if (!prevProps.apiError && this.props.apiError) {
-        // Unrecoverable error
-        if (this.props.apiError.internalError) {
-          this.props.history.push("/500");
-        } else {
-          console.error("ERROR:", this.props.apiError.message);
-        }
+    if (criticalAPIError) {
+      // Unrecoverable error
+      if (this.props.apiError.internalError) {
+        this.props.history.push("/500");
+      } else {
+        console.error("ERROR:", this.props.apiError.message);
       }
     }
   }
