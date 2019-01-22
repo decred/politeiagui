@@ -174,6 +174,7 @@ class GeneralTab extends React.Component {
       isApiRequestingMarkNewUserAsExpired,
       isApiRequestingMarkUpdateKeyAsExpired,
       isApiRequestingMarkResetPasswordAsExpired,
+      isApiRequestingUpdateUserKey,
       isApiRequestingUnlockUser,
       onManageUser,
       isAdmin,
@@ -372,16 +373,17 @@ class GeneralTab extends React.Component {
               <Message type="success" header={identityImportSuccess} />
             )}
             <div style={{ display: "flex", flexDirection: "row" }}>
-              <button
+              <ButtonWithLoadingIcon
                 className="c-btn c-btn-primary"
-                onClick={this.onGenerateNewIdentity}
+                text={isApiRequestingUpdateUserKey ? "" : "Create new identity"}
                 disabled={
                   (updateUserKey && updateUserKey.success) ||
                   this.state.openedVerification
                 }
-              >
-                Create New Identity
-              </button>
+                isLoading={isApiRequestingUpdateUserKey}
+                onClick={this.onGenerateNewIdentity}
+                style={{ width: "250px" }}
+              />
               <PrivateKeyDownloadManager
                 loggedInAsEmail={loggedInAsEmail}
                 onUpdateUserKey={onUpdateUserKey}

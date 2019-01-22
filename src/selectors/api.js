@@ -596,6 +596,7 @@ export const apiProposalPaywallPaymentConfirmations = compose(
   get("confirmations"),
   apiProposalPaywallPaymentResponse
 );
+export const isApiRequestingUpdateUserKey = getIsApiRequesting("updateUserKey");
 
 const rescanUserPaymentsKey = "rescanUserPayments";
 export const apiRescanUserPaymentsResponse = getApiResponse(
