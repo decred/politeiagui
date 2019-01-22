@@ -1,7 +1,6 @@
 import React from "react";
 import Markdown from "./snew/Markdown";
 import modalConnector from "../connectors/modal";
-import { ONBOARD } from "./Modal/modalTypes";
 import PaywallAlert from "./Paywall/PaywallAlert";
 import UserBadge from "./UserBadge";
 
@@ -16,6 +15,8 @@ Politeia (Pi) is a censorship-resistant blockchain-anchored public proposal
 system, which empowers users to submit their own projects for self-funding
 from DCR's block subsidy. Pi ensures the ecosystem remains sustainable and
 thrives.
+
+[Learn More about Politeia](https://docs.decred.org/governance/politeia/politeia/)
 `;
 
 const resourcesText = `
@@ -44,15 +45,6 @@ const SidebarText = props => (
       displayExternalLikWarning={false}
       {...props}
     />
-    <span
-      style={{ cursor: "pointer", color: "#2971FF" }}
-      onClick={e => {
-        e.preventDefault();
-        props.openModal(ONBOARD);
-      }}
-    >
-      Learn More about Politeia
-    </span>
     <Markdown
       body={resourcesText}
       filterXss={false}

@@ -3,7 +3,6 @@ import * as modalTypes from "./modalTypes";
 import ConfirmAction from "./contents/ConfirmAction";
 import ConfirmActionWithReason from "./contents/ConfirmActionWithReason";
 import Login from "./contents/Login";
-import OnBoard from "./contents/OnBoard";
 import PaywallModal from "./contents/PaywallModal";
 import CreditsHistoryModal from "./contents/CreditsHistoryModal";
 import ManageCreditsModal from "./contents/ManageCreditsModal";
@@ -15,6 +14,7 @@ import StartVoteModal from "../StartVoteModal";
 import ImportIdentityModal from "./contents/ImportIdentityModal";
 import { withRouter } from "react-router-dom";
 import ProposalVersionDiff from "./contents/ProposalVersionDiff";
+import WelcomeModal from "./contents/WelcomeModal";
 
 const mapModalTypeToContent = {
   [modalTypes.CONFIRM_ACTION]: ({ modalData }) => (
@@ -26,7 +26,6 @@ const mapModalTypeToContent = {
   [modalTypes.LOGIN]: ({ location, modalData }) => (
     <Login me={modalData} pathname={location.pathname} />
   ),
-  [modalTypes.ONBOARD]: ({ modalData }) => <OnBoard me={modalData} />,
   [modalTypes.PAYWALL_MODAL]: () => <PaywallModal />,
   [modalTypes.CREDITS_HISTORY_MODAL]: () => <CreditsHistoryModal />,
   [modalTypes.MANAGE_CREDITS_MODAL]: () => <ManageCreditsModal />,
@@ -42,7 +41,8 @@ const mapModalTypeToContent = {
   [modalTypes.IMPORT_IDENTITY_MODAL]: () => <ImportIdentityModal />,
   [modalTypes.PROPOSAL_VERSION_DIFF]: ({ modalData }) => (
     <ProposalVersionDiff me={modalData} />
-  )
+  ),
+  [modalTypes.WELCOME_MODAL]: ({ modalData }) => <WelcomeModal me={modalData} />
 };
 
 const ModalContent = ({ modalData, location }) => {
