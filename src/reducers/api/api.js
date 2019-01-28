@@ -56,6 +56,8 @@ export const DEFAULT_STATE = {
   proposalPaywallPayment: DEFAULT_REQUEST_STATE,
   rescanUserPayments: DEFAULT_REQUEST_STATE,
   userSearch: DEFAULT_REQUEST_STATE,
+  user: DEFAULT_REQUEST_STATE,
+  proposalPaywallDetails: DEFAULT_REQUEST_STATE,
   email: "",
   keyMismatch: false,
   lastLoaded: {}
@@ -245,7 +247,10 @@ const api = (state = DEFAULT_STATE, action) =>
           changePassword: DEFAULT_REQUEST_STATE,
           verifyUserKey: DEFAULT_REQUEST_STATE,
           proposalPaywallPayment: DEFAULT_REQUEST_STATE,
-          rescanUserPayments: DEFAULT_REQUEST_STATE
+          proposalPaywallDetails: DEFAULT_REQUEST_STATE,
+          rescanUserPayments: DEFAULT_REQUEST_STATE,
+          user: DEFAULT_REQUEST_STATE,
+          unvetted: DEFAULT_REQUEST_STATE
         };
       }
       return receive("logout", state, action);
