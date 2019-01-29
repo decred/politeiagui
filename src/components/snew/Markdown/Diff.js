@@ -49,7 +49,6 @@ const DiffHeader = ({
   </div>
 );
 
-/** TODO: use files diff component when diff implementation is polished  */
 const FilesDiff = ({ oldFiles, newFiles }) => {
   const filesDiff = [];
   const hasFile = (file, items) =>

@@ -27,7 +27,6 @@ class ProposalVersionDiff extends React.Component {
     try {
       let prevProposal = null;
       const { proposal } = await fetchProposal(token, version);
-      /** TODO: Fetch previous version when diff implementation is polished */
       // if version is bigger than 1, also fetch the previous one
       if (version > 1) {
         const prevProposalRes = await fetchProposal(
