@@ -2,6 +2,7 @@ import React from "react";
 import OnKeyListener from "../OnKeyListener";
 import PropTypes from "prop-types";
 import { uniqueID } from "../../helpers";
+import OnClickListener from "../OnClickListener";
 
 const ESC_KEY = 27;
 const modalID = uniqueID("modal");
@@ -38,6 +39,8 @@ class ModalContentWrapper extends React.Component {
       onClose,
       onCancel,
       onSubmit,
+      disableCloseOnEsc,
+      disableCloseOnClick,
       submitDisabled = false,
       title,
       submitText = "OK",
@@ -47,45 +50,54 @@ class ModalContentWrapper extends React.Component {
     } = this.props;
     return (
       <OnKeyListener
-        disabled={this.props.disableCloseOnEsc}
         ID={modalID}
         keyCode={ESC_KEY}
-        onKeyPress={this.props.onClose || this.props.onCancel}
+        onKeyPress={onClose || onCancel}
+        disabled={disableCloseOnEsc}
       >
-        <div className="modal-content" style={{ minWidth: "700px", ...style }}>
-          <div className="modal-content-header">
-            <h2 style={{ fontSize: "18px", textTransform: "uppercase" }}>
-              {title}
-            </h2>
-            <div
-              style={{ display: "flex", justifyContent: "flex-end", flex: 1 }}
-            >
-              {onClose && (
-                <span
-                  style={{ fontSize: "18px", cursor: "pointer" }}
-                  onClick={onClose}
-                >
-                  ✖
-                </span>
-              )}
+        <OnClickListener
+          ID={modalID}
+          onClick={onClose || onCancel}
+          disabled={disableCloseOnClick}
+        >
+          <div
+            className="modal-content"
+            style={{ minWidth: "700px", ...style }}
+          >
+            <div className="modal-content-header">
+              <h2 style={{ fontSize: "18px", textTransform: "uppercase" }}>
+                {title}
+              </h2>
+              <div
+                style={{ display: "flex", justifyContent: "flex-end", flex: 1 }}
+              >
+                {onClose && (
+                  <span
+                    style={{ fontSize: "18px", cursor: "pointer" }}
+                    onClick={onClose}
+                  >
+                    ✖
+                  </span>
+                )}
+              </div>
             </div>
+            {children}
+            {(onCancel || onSubmit) && (
+              <div className="modal-content-actions">
+                {onCancel && (
+                  <CancelButton onClick={onCancel} text={cancelText} />
+                )}
+                {onSubmit && (
+                  <SubmitButton
+                    onClick={onSubmit}
+                    text={submitText}
+                    disabled={submitDisabled}
+                  />
+                )}
+              </div>
+            )}
           </div>
-          {children}
-          {(onCancel || onSubmit) && (
-            <div className="modal-content-actions">
-              {onCancel && (
-                <CancelButton onClick={onCancel} text={cancelText} />
-              )}
-              {onSubmit && (
-                <SubmitButton
-                  onClick={onSubmit}
-                  text={submitText}
-                  disabled={submitDisabled}
-                />
-              )}
-            </div>
-          )}
-        </div>
+        </OnClickListener>
       </OnKeyListener>
     );
   }
@@ -94,6 +106,7 @@ class ModalContentWrapper extends React.Component {
 ModalContentWrapper.propTypes = {
   cancelText: PropTypes.string,
   disableCloseOnEsc: PropTypes.bool,
+  disableCloseOnClick: PropTypes.bool,
   onCancel: PropTypes.func,
   onClose: PropTypes.func,
   onSubmit: PropTypes.func,

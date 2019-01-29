@@ -47,7 +47,7 @@ const UserDetailPage = ({
                   <span className="detail-admin">(admin user)</span>
                 )}
                 {loggedInAsUserId === user.id ? (
-                  <a
+                  <span
                     style={{
                       marginLeft: "1.25em",
                       marginTop: ".5em",
@@ -57,7 +57,7 @@ const UserDetailPage = ({
                     onClick={() => openModal(CHANGE_USERNAME_MODAL)}
                   >
                     Change Username
-                  </a>
+                  </span>
                 ) : null}
               </div>
               <div className="detail-email">{user.email}</div>

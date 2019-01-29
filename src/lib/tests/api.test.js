@@ -9,8 +9,6 @@ import {
 } from "./support/helpers";
 import { PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
 
-const qs = require("querystring");
-
 describe("api integration modules (lib/api.js)", () => {
   const MOCKS_PATH = "../../../mocks/api/";
   const FAKE_CSRF = "itsafake";
@@ -189,7 +187,10 @@ describe("api integration modules (lib/api.js)", () => {
   test("fetches api info ", async () => {
     expect.assertions(3);
     const PATH = "/api/";
-    const MOCK_RESULT = await import(`${MOCKS_PATH}/GET.json`);
+    const MOCK_RESULT = await import(`${MOCKS_PATH}/GET.json`).then(
+      d => d.default
+    );
+
     // set csrf token header
     fetchMock.getOnce(PATH, {
       body: MOCK_RESULT,
@@ -236,18 +237,15 @@ describe("api integration modules (lib/api.js)", () => {
 
   test("verify new user (api/v1/user/verify)", async () => {
     const PATH = "/api/v1/user/verify";
-    const SEARCH_QUERY = qs.stringify({
-      email: EMAIL,
-      verificationtoken: VERIFICATION_TOKEN
-    });
+
     await assertRouteIsCalledWithQueryParams(
       PATH,
       {
         email: EMAIL,
-        verificationtoken: VERIFICATION_TOKEN
+        verificationToken: VERIFICATION_TOKEN
       },
       api.verifyNewUser,
-      [SEARCH_QUERY]
+      [EMAIL, VERIFICATION_TOKEN]
     );
   });
 

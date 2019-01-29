@@ -10,7 +10,8 @@ import {
   MANAGE_USER_DEACTIVATE,
   MANAGE_USER_REACTIVATE,
   PUB_KEY_STATUS_LOADED,
-  PUB_KEY_STATUS_LOADING
+  PUB_KEY_STATUS_LOADING,
+  PAYWALL_STATUS_PAID
 } from "../../constants";
 import { CHANGE_PASSWORD_MODAL, CONFIRM_ACTION } from "../Modal/modalTypes";
 import PrivateKeyDownloadManager from "../PrivateKeyDownloadManager";
@@ -168,10 +169,12 @@ class GeneralTab extends React.Component {
     const {
       user,
       dcrdataTxUrl,
+      userPaywallStatus,
       isApiRequestingMarkAsPaid,
       isApiRequestingMarkNewUserAsExpired,
       isApiRequestingMarkUpdateKeyAsExpired,
       isApiRequestingMarkResetPasswordAsExpired,
+      isApiRequestingUpdateUserKey,
       isApiRequestingUnlockUser,
       onManageUser,
       isAdmin,
@@ -278,21 +281,21 @@ class GeneralTab extends React.Component {
                 >
                   {this.identityHelpPrompt}
                 </span>{" "}
-                <a
+                <span
                   className="linkish"
                   onClick={() => this.setState({ showIdentityHelpText: false })}
                 >
                   (hide)
-                </a>
+                </span>
               </div>
             ) : (
-              <a
+              <span
                 className="linkish ident-value"
                 style={{ maxWidth: "7em" }}
                 onClick={() => this.setState({ showIdentityHelpText: true })}
               >
                 {this.identityHelpPrompt}
-              </a>
+              </span>
             )}
           </div>
         )}
@@ -370,16 +373,17 @@ class GeneralTab extends React.Component {
               <Message type="success" header={identityImportSuccess} />
             )}
             <div style={{ display: "flex", flexDirection: "row" }}>
-              <button
+              <ButtonWithLoadingIcon
                 className="c-btn c-btn-primary"
-                onClick={this.onGenerateNewIdentity}
+                text={isApiRequestingUpdateUserKey ? "" : "Create new identity"}
                 disabled={
                   (updateUserKey && updateUserKey.success) ||
                   this.state.openedVerification
                 }
-              >
-                Create New Identity
-              </button>
+                isLoading={isApiRequestingUpdateUserKey}
+                onClick={this.onGenerateNewIdentity}
+                style={{ width: "250px" }}
+              />
               <PrivateKeyDownloadManager
                 loggedInAsEmail={loggedInAsEmail}
                 onUpdateUserKey={onUpdateUserKey}
@@ -395,21 +399,21 @@ class GeneralTab extends React.Component {
           {showPastUserIdentities ? (
             <span>
               <span style={{ fontWeight: "bold" }}>Expanded</span>
-              <a
+              <span
                 className="linkish"
                 style={{ paddingLeft: "1em" }}
                 onClick={() => this.setState({ showPastUserIdentities: false })}
               >
                 (hide)
-              </a>
+              </span>
             </span>
           ) : (
-            <a
+            <span
               className="linkish"
               onClick={() => this.setState({ showPastUserIdentities: true })}
             >
               Expand
-            </a>
+            </span>
           )}
           {showPastUserIdentities && (
             <ul>
@@ -464,19 +468,19 @@ class GeneralTab extends React.Component {
         )}
         {loggedInAsUserId === user.id && (
           <Field label="Password">
-            <a
+            <span
               className="linkish"
               onClick={() => openModal(CHANGE_PASSWORD_MODAL)}
             >
               Change Password
-            </a>
+            </span>
           </Field>
         )}
         {isAdminOrTheUser && (
           <React.Fragment>
             <FieldSeparator />
             <Field label="Has paid">
-              {!user.newuserpaywalladdress
+              {userPaywallStatus === PAYWALL_STATUS_PAID
                 ? "Yes"
                 : [
                     <span>No</span>,

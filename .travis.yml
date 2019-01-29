@@ -22,4 +22,4 @@ before_script:
   - yarn lint
   - scripts/serverUpChecker.sh
 script:
-  - sh build_docker.sh
+  - ./build_docker.sh

@@ -1,6 +1,7 @@
 import "isomorphic-fetch";
 import CryptoJS from "crypto-js";
 import * as pki from "./pki";
+import qs from "query-string";
 import { sha3_256 } from "js-sha3";
 import get from "lodash/fp/get";
 import MerkleTree from "./merkle";
@@ -21,7 +22,6 @@ const STATUS_ERR = {
   404: "Not found"
 };
 
-const qs = require("querystring");
 const apiBase = "/api";
 const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
 const getResponse = get("response");
@@ -184,14 +184,13 @@ export const newUser = (csrf, email, username, password) =>
     }).then(getResponse)
   );
 
-export const verifyNewUser = searchQuery => {
-  const { email, verificationtoken } = qs.parse(searchQuery);
+export const verifyNewUser = (email, verificationToken) => {
   return pki
-    .signStringHex(email, verificationtoken)
+    .signStringHex(email, verificationToken)
     .then(signature =>
       GET(
         "/v1/user/verify?" +
-          qs.stringify({ email, verificationtoken, signature })
+          qs.stringify({ email, verificationToken, signature })
       )
     )
     .then(getResponse);

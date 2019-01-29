@@ -13,7 +13,8 @@ import concat from "lodash/concat";
 import cloneDeep from "lodash/cloneDeep";
 import { Field } from "redux-form";
 import MarkdownHelp from "../MarkdownHelp";
-import { MANAGE_CREDITS_MODAL, ONBOARD } from "../Modal/modalTypes";
+import { MANAGE_CREDITS_MODAL } from "../Modal/modalTypes";
+import { PROPOSAL_GUIDELINES } from "../../constants";
 
 const normalizer = (value, previousValue) => {
   let files = [];
@@ -124,10 +125,12 @@ class SubmitPage extends React.Component {
                             cols={80}
                           />
                           <a
-                            className="linkish-modal"
-                            onClick={() => openModal(ONBOARD, { tab: 4 })}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={PROPOSAL_GUIDELINES}
+                            style={{ fontSize: "1.01em" }}
                           >
-                            Learn How to Format your Proposal
+                            Learn how to format your proposal
                           </a>
                           <Field
                             name="files"
@@ -165,13 +168,13 @@ class SubmitPage extends React.Component {
                         <div className="submit-button-error">
                           To submit a proposal, you must purchase a proposal
                           credit.
-                          <a
+                          <span
                             className="linkish"
                             onClick={() => openModal(MANAGE_CREDITS_MODAL)}
                           >
                             {" "}
                             Click here
-                          </a>{" "}
+                          </span>{" "}
                           to open the proposal credits manager.
                         </div>
                       )}

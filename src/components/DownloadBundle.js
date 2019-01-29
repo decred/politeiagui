@@ -28,13 +28,13 @@ class DownloadBundle extends Component {
     const t = this.props.type;
 
     return t === "proposal" ? (
-      <a style={{ cursor: "pointer" }} onClick={this.handleDownloadProposal}>
+      <span className="linkish" onClick={this.handleDownloadProposal}>
         {this.props.message || "Download Proposal Bundle"}
-      </a>
+      </span>
     ) : t === "comments" ? (
-      <a style={{ cursor: "pointer" }} onClick={this.handleDownloadComment}>
+      <span className="linkish" onClick={this.handleDownloadComment}>
         {this.props.message || "Download Comments Bundle"}
-      </a>
+      </span>
     ) : null;
   }
 }
