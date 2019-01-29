@@ -1564,13 +1564,14 @@ form div.usertext-body.may-blank-within.md-container {
 
 .new-file-indicator {
   color: red;
-  position: absolute;
-  top: 14px;
-  right: 30px;
+  position: relative;
+  top: -12px;
+  font-size: 0px;
+  right: 0px;
   border-style: solid;
   border-radius: 50%;
-  width: 3px;
-  height: 3px;
+  max-width: 3px;
+  max-height: 3px;
 }
 
 .linkish-modal {
