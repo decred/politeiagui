@@ -15,7 +15,8 @@ const DiffHeader = ({
   loading,
   enableFilesDiff,
   filesDiff,
-  onToggleFilesDiff
+  onToggleFilesDiff,
+  isNewFile
 }) => (
   <div className="diff-header">
     {loading ? (
@@ -36,6 +37,7 @@ const DiffHeader = ({
               href=""
             >
               {filesDiff ? "Text Diff" : "Files Diff"}
+              {isNewFile ? <span className="new-file-indicator" /> : null}
             </span>
           ) : null}
           <span onClick={onClose} style={{ cursor: "pointer" }}>
@@ -69,6 +71,23 @@ const FilesDiff = ({ oldFiles, newFiles }) => {
 const withDiffStyle = {
   paddingTop: "80px",
   zIndex: 9999
+};
+
+const hasFileChanged = (oldFiles, newFiles) => {
+  const hasFile = (file, items) =>
+    items.filter(f => f.name === file.name && f.payload === file.payload)
+      .length > 0;
+  for (let i = 0; i < oldFiles.length; i++) {
+    if (!hasFile(oldFiles[i], newFiles)) {
+      return true;
+    }
+  }
+  for (let i = 0; i < newFiles.length; i++) {
+    if (!hasFile(newFiles[i], oldFiles)) {
+      return true;
+    }
+  }
+  return false;
 };
 
 class Diff extends React.Component {
@@ -105,6 +124,7 @@ class Diff extends React.Component {
             lastEdition={lastEdition}
             onClose={onClose}
             filesDiff={filesDiff}
+            isNewFile={hasFileChanged(oldFiles, newFiles)}
             onToggleFilesDiff={this.handleToggleFilesDiff}
             enableFilesDiff={oldFiles.length || newFiles.length}
           />

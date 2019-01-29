@@ -1559,6 +1559,17 @@ form div.usertext-body.may-blank-within.md-container {
   cursor: pointer;
 }
 
+.new-file-indicator {
+  color: red;
+  position: absolute;
+  top: 14px;
+  right: 30px;
+  border-style: solid;
+  border-radius: 50%;
+  width: 3px;
+  height: 3px;
+}
+
 .linkish-modal {
 	color: #2971FF;
 	font-size: .8em;
