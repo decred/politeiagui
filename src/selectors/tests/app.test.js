@@ -1,6 +1,6 @@
 import * as sel from "../app";
 import { MOCK_STATE } from "./mock_state";
-import { getTextFromIndexMd } from "../../helpers";
+import { getTextFromIndexMd, getSummaryFromIndexMd } from "../../helpers";
 import {
   PAYWALL_STATUS_PAID,
   PROPOSAL_STATUS_UNREVIEWED,
@@ -23,7 +23,8 @@ describe("test app selector", () => {
     expect(sel.getEditProposalValues(MOCK_STATE)).toEqual({
       name: MOCK_STATE.api.proposal.response.proposal.name,
       description: getTextFromIndexMd(sel.getMarkdownFile(MOCK_STATE)),
-      files: sel.getNotMarkdownFile(MOCK_STATE)
+      files: sel.getNotMarkdownFile(MOCK_STATE),
+      summary: getSummaryFromIndexMd(sel.getMarkdownFile(MOCK_STATE))
     });
 
     const state = {
@@ -33,7 +34,8 @@ describe("test app selector", () => {
     expect(sel.getEditProposalValues(state)).toEqual({
       name: undefined,
       description: "",
-      files: []
+      files: [],
+      summary: ""
     });
   });
 

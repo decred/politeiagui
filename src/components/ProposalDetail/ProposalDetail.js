@@ -3,7 +3,7 @@ import isEqual from "lodash/isEqual";
 import { withRouter } from "react-router-dom";
 import { Content } from "../snew";
 import { commentsToT1, proposalToT3 } from "../../lib/snew";
-import { getTextFromIndexMd } from "../../helpers";
+import { getTextFromIndexMd, getSummaryFromIndexMd } from "../../helpers";
 import { DEFAULT_TAB_TITLE } from "../../constants";
 import Message from "../Message";
 import {
@@ -144,6 +144,7 @@ class ProposalDetail extends React.Component {
     } = this.props;
     const comments = this.state.sortedComments;
     const tempTree = tempThreadTree[commentid];
+    const proposalHeader = "** Proposal ** \n \n";
     return (
       <div className="content" role="main">
         <div className="page proposal-page">
@@ -169,10 +170,15 @@ class ProposalDetail extends React.Component {
                               ...proposalToT3(proposal, 0).data,
                               otherFiles,
                               selftext: markdownFile
-                                ? getTextFromIndexMd(markdownFile)
+                                ? proposalHeader +
+                                  getTextFromIndexMd(markdownFile)
                                 : null,
                               selftext_html: markdownFile
-                                ? getTextFromIndexMd(markdownFile)
+                                ? proposalHeader +
+                                  getTextFromIndexMd(markdownFile)
+                                : null,
+                              selftext_summary: markdownFile
+                                ? getSummaryFromIndexMd(markdownFile)
                                 : null
                             }
                           }

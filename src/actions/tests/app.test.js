@@ -38,7 +38,8 @@ describe("test app actions (actions/app.js)", () => {
           name: "test",
           description: "Description",
           files: [],
-          timestamp: Date.now() / 1000
+          timestamp: Date.now() / 1000,
+          summary: "summary"
         }
       }
     }
@@ -52,7 +53,8 @@ describe("test app actions (actions/app.js)", () => {
     token: "fake_token",
     name: "fake name",
     description: "fake description",
-    files: []
+    files: [],
+    summary: "fake_proposal_summary"
   };
   const FAKE_USER = {
     id: "2",
@@ -93,7 +95,8 @@ describe("test app actions (actions/app.js)", () => {
           props.username,
           proposal.name,
           proposal.description,
-          proposal.files
+          proposal.files,
+          proposal.summary
         )
       ],
       done

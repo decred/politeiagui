@@ -20,6 +20,7 @@ describe("api integration modules (lib/api.js)", () => {
   const PROPOSAL_TOKEN = "FAKE_TOKEN";
   const PROPOSAL_VERSION = "2";
   const MARKDOWN = "# This is a test proposal";
+  const SUMMARY = "Test prop summary";
   const FILE = {
     name: "example.jpeg",
     mime: "image/jpeg",
@@ -46,9 +47,9 @@ describe("api integration modules (lib/api.js)", () => {
   });
 
   test("make a proposal", () => {
-    let proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE]);
+    let proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE], SUMMARY);
     let fileFromMarkdown = api.convertMarkdownToFile(
-      PROPOSAL_NAME + "\n" + MARKDOWN
+      PROPOSAL_NAME + "\n" + SUMMARY + "\r" + MARKDOWN
     );
     expect(proposal).toEqual({
       files: [
@@ -63,9 +64,9 @@ describe("api integration modules (lib/api.js)", () => {
       ]
     });
     // test without providing attachment object
-    proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN);
+    proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [], SUMMARY);
     fileFromMarkdown = api.convertMarkdownToFile(
-      PROPOSAL_NAME + "\n" + MARKDOWN
+      PROPOSAL_NAME + "\n" + SUMMARY + "\r" + MARKDOWN
     );
     expect(proposal).toEqual({
       files: [
@@ -77,9 +78,9 @@ describe("api integration modules (lib/api.js)", () => {
     });
 
     // test with a falsy attachment
-    proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, false);
+    proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, false, SUMMARY);
     fileFromMarkdown = api.convertMarkdownToFile(
-      PROPOSAL_NAME + "\n" + MARKDOWN
+      PROPOSAL_NAME + "\n" + SUMMARY + "\r" + MARKDOWN
     );
     expect(proposal).toEqual({
       files: [
@@ -124,7 +125,7 @@ describe("api integration modules (lib/api.js)", () => {
 
   test("signs a proposal", async () => {
     expect.assertions(3);
-    const proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE]);
+    const proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE], SUMMARY);
     const keys = await pki.generateKeys(EMAIL);
     await pki.loadKeys(EMAIL, keys);
     const pubKey = await pki.myPubKeyHex(EMAIL);

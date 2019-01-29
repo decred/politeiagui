@@ -14,7 +14,8 @@ export const DEFAULT_STATE = {
   replyParent: TOP_LEVEL_COMMENT_PARENTID,
   newProposal: {
     name: "",
-    description: ""
+    description: "",
+    summary: ""
   },
   replyThreadTree: {},
   adminProposalsShow: PROPOSAL_STATUS_UNREVIEWED,

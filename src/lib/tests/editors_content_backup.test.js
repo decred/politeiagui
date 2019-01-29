@@ -5,12 +5,14 @@ describe("Persist editors content on session storage", () => {
   const NAME = "test title";
   const DESCRIPTION = "test description";
   const COMMENT = "test comment";
+  const SUMMARY = "test summary";
   const mockState = {
     form: {
       "form/proposal": {
         values: {
           name: NAME,
-          description: DESCRIPTION
+          description: DESCRIPTION,
+          summary: SUMMARY
         }
       },
       "form/reply": {
@@ -33,7 +35,8 @@ describe("Persist editors content on session storage", () => {
     // retrieve data from session storage
     expect(ecb.getNewProposalData()).toEqual({
       name: NAME,
-      description: DESCRIPTION
+      description: DESCRIPTION,
+      summary: SUMMARY
     });
     // clear saved data
     ecb.resetNewProposalData();

@@ -18,13 +18,24 @@ function checkProposalName(props, values) {
   );
 }
 
+function checkProposalSummary(props, values) {
+  const summary = values.summary.trim();
+  return (
+    (props.policy.minproposalsummarylength &&
+      summary.length < props.policy.minproposalsummarylength) ||
+    (props.policy.maxproposalsummarylength &&
+      summary.length > props.policy.maxproposalsummarylength)
+  );
+}
+
 const validate = (values, dispatch, props) => {
   if (
     !isRequiredValidator(values.name && values.name.trim()) ||
-    !isRequiredValidator(values.description)
+    !isRequiredValidator(values.description) ||
+    !isRequiredValidator(values.summary)
   ) {
     throw new SubmissionError({
-      _error: "You must provide both a proposal name and description."
+      _error: "You must provide a proposal name, description, and summary."
     });
   }
 
@@ -39,6 +50,15 @@ const validate = (values, dispatch, props) => {
         )}`
     });
   }
+
+  if (checkProposalSummary(props, values)) {
+    throw new SubmissionError({
+      _error: `The proposal summary must be between ${
+        props.policy.minproposalsummarylength
+      } and ${props.policy.maxproposalsummarylength} characters long `
+    });
+  }
+
   validateURL(values.description);
 
   if (values.files) {
@@ -80,6 +100,11 @@ const synchronousValidation = (values, props) => {
       "The proposal name must be between 8 and 80 characters long and only contain the following characters: a-z A-Z 0-9 & . , : ; - @ + # / \\ ^ _ ` ( ) ! [ ].";
   } else if (!isRequiredValidator(values.description)) {
     errors.description = "You must provide a description.";
+  } else if (!isRequiredValidator(values.summary)) {
+    errors.summary = "You must provide a summary.";
+  } else if (props.policy && checkProposalSummary(props, values)) {
+    errors.summary =
+      "The proposal sumary must be between 10 and 255 characters long.";
   } else {
     errors._error = null;
   }
@@ -89,11 +114,17 @@ const synchronousValidation = (values, props) => {
 const warn = (values, props) => {
   const warnings = {};
   if (props.policy) {
-    const nameLengthLimit = props.policy.maxproposalnamelength - 10;
+    const nameLengthLimit = props.policy.maxproposalnamelength - 11;
+    const summaryLengthLimit = props.policy.maxproposalsummarylength - 11;
     if (values.name && values.name.trim().length > nameLengthLimit) {
       warnings.name = `The proposal name is close to the limit of ${
         props.policy.maxproposalnamelength
       } characters. Current Length: ${values.name.length}.`;
+    }
+    if (values.summary && values.summary.trim().length > summaryLengthLimit) {
+      warnings.summary = `The proposal summary is close to the limit of ${
+        props.policy.maxproposalsummarylength
+      } characters. Current Length: ${values.summary.length}.`;
     }
   }
   return warnings;

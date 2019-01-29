@@ -333,11 +333,12 @@ export const onSubmitProposal = (
   username,
   name,
   description,
-  files
+  files,
+  summary
 ) =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_NEW_PROPOSAL({ name, description, files }));
-    return Promise.resolve(api.makeProposal(name, description, files))
+    dispatch(act.REQUEST_NEW_PROPOSAL({ name, description, files, summary }));
+    return Promise.resolve(api.makeProposal(name, description, files, summary))
       .then(proposal => api.signProposal(loggedInAsEmail, proposal))
       .then(proposal => api.newProposal(csrf, proposal))
       .then(proposal => {
@@ -348,7 +349,8 @@ export const onSubmitProposal = (
             userid,
             username,
             name,
-            description
+            description,
+            summary
           })
         );
         resetNewProposalData();
@@ -368,11 +370,12 @@ export const onSubmitEditedProposal = (
   name,
   description,
   files,
-  token
+  token,
+  summary
 ) =>
   withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_EDIT_PROPOSAL({ name, description, files }));
-    return Promise.resolve(api.makeProposal(name, description, files))
+    dispatch(act.REQUEST_EDIT_PROPOSAL({ name, description, files, summary }));
+    return Promise.resolve(api.makeProposal(name, description, files, summary))
       .then(proposal => api.signProposal(loggedInAsEmail, proposal))
       .then(proposal => api.editProposal(csrf, { ...proposal, token }))
       .then(proposal => {

@@ -39,9 +39,9 @@ export const convertMarkdownToFile = markdown => ({
   payload: utoa(markdown)
 });
 
-export const makeProposal = (name, markdown, attachments = []) => ({
+export const makeProposal = (name, markdown, attachments = [], summary) => ({
   files: [
-    convertMarkdownToFile(name + "\n" + markdown),
+    convertMarkdownToFile(name + "\n" + summary + "\r" + markdown),
     ...(attachments || [])
   ].map(({ name, mime, payload }) => ({
     name,

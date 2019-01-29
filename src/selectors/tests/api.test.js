@@ -189,6 +189,10 @@ describe("test api selectors", () => {
       MOCK_STATE.api.newProposal.payload.description
     );
 
+    expect(sel.newProposalSummary(MOCK_STATE)).toEqual(
+      MOCK_STATE.api.newProposal.payload.summary
+    );
+
     expect(sel.newProposalFiles(MOCK_STATE)).toEqual(
       MOCK_STATE.api.newProposal.payload.files
     );

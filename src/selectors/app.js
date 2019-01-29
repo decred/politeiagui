@@ -51,7 +51,8 @@ import {
 import {
   getTextFromIndexMd,
   countPublicProposals,
-  isProposalApproved
+  isProposalApproved,
+  getSummaryFromIndexMd
 } from "../helpers";
 
 export const replyTo = or(get(["app", "replyParent"]), constant(0));
@@ -104,10 +105,12 @@ export const getEditProposalValues = state => {
 
   const files = name ? getNotMarkdownFile(state) : [];
   const description = name ? getTextFromIndexMd(getMarkdownFile(state)) : "";
+  const summary = name ? getSummaryFromIndexMd(getMarkdownFile(state)) : "";
   return {
     name,
     description,
-    files
+    files,
+    summary
   };
 };
 

@@ -5,6 +5,7 @@ import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
 import FilesField from "../Form/Fields/FilesField";
 import ErrorField from "../Form/Fields/ErrorField";
 import InputFieldWithError from "../Form/Fields/InputFieldWithError";
+import TextAreaWithError from "../Form/Fields/TextAreaWithError";
 import Message from "../Message";
 import MultipleItemsBodyMessage from "../MultipleItemsBodyMessage";
 import isArray from "lodash/isArray";
@@ -111,11 +112,23 @@ class SubmitPage extends React.Component {
                         </div>
                       ) : null}
                     </div>
-                    <input name="kind" type="hidden" defaultValue="self" />
-                    <div className="usertext">
-                      <input name="thing_id" type="hidden" defaultValue />
-                      <div className="usertext-edit md-container" style={{}}>
-                        <div className="md">
+                    <div className="md">
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={PROPOSAL_GUIDELINES}
+                        style={{
+                          fontSize: ".75em",
+                          marginRight: ".75em",
+                          float: "right"
+                        }}
+                      >
+                        Learn how to format your proposal
+                      </a>
+                      <input name="kind" type="hidden" defaultValue="self" />
+                      <div className="usertext">
+                        <input name="thing_id" type="hidden" defaultValue />
+                        <div className="usertext-edit md-container">
                           <Field
                             name="description"
                             component={MarkdownEditorField}
@@ -124,14 +137,20 @@ class SubmitPage extends React.Component {
                             rows={20}
                             cols={80}
                           />
-                          <a
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href={PROPOSAL_GUIDELINES}
-                            style={{ fontSize: "1.01em" }}
-                          >
-                            Learn how to format your proposal
-                          </a>
+                          <Field
+                            name="summary"
+                            component={TextAreaWithError}
+                            tabIndex={3}
+                            type="text"
+                            placeholder="Proposal Summary"
+                            style={{
+                              width: "35%",
+                              marginTop: "2.5em",
+                              height: "10em",
+                              resize: "auto",
+                              whiteSpace: "pre-wrap"
+                            }}
+                          />
                           <Field
                             name="files"
                             className="attach-button greenprimary"

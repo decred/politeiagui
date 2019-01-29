@@ -14,6 +14,7 @@ export const getProposalPath = location => {
 
 export const PROPOSAL_FORM_NAME = "name";
 export const PROPOSAL_FORM_DESC = "description";
+export const PROPOSAL_FORM_SUMMARY = "summary";
 
 export const getProposalBackupKey = (key, path) => `proposal-${key}::${path}`;
 
@@ -22,7 +23,8 @@ const updateFormData = state => {
   const newProposalData = (proposalFormState && proposalFormState.values) || {};
   const name = newProposalData[PROPOSAL_FORM_NAME];
   const description = newProposalData[PROPOSAL_FORM_DESC];
-  if (!name && !description) {
+  const summary = newProposalData[PROPOSAL_FORM_SUMMARY];
+  if (!name && !description && !summary) {
     return;
   }
 
@@ -35,6 +37,10 @@ const updateFormData = state => {
     getProposalBackupKey(PROPOSAL_FORM_DESC, path),
     newProposalData[PROPOSAL_FORM_DESC]
   );
+  sessionStorage.setItem(
+    getProposalBackupKey(PROPOSAL_FORM_SUMMARY, path),
+    newProposalData[PROPOSAL_FORM_SUMMARY]
+  );
 };
 
 export const resetNewProposalData = () => {
@@ -44,6 +50,10 @@ export const resetNewProposalData = () => {
   );
   sessionStorage.setItem(
     getProposalBackupKey(PROPOSAL_FORM_DESC, NEW_PROPOSAL_PATH),
+    ""
+  );
+  sessionStorage.setItem(
+    getProposalBackupKey(PROPOSAL_FORM_SUMMARY, NEW_PROPOSAL_PATH),
     ""
   );
 };
@@ -57,6 +67,10 @@ export const getNewProposalData = () => {
     description:
       sessionStorage.getItem(
         getProposalBackupKey(PROPOSAL_FORM_DESC, NEW_PROPOSAL_PATH)
+      ) || "",
+    summary:
+      sessionStorage.getItem(
+        getProposalBackupKey(PROPOSAL_FORM_SUMMARY, NEW_PROPOSAL_PATH)
       ) || ""
   };
 };

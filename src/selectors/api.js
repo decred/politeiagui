@@ -525,6 +525,10 @@ export const newProposalDescription = compose(
   get("description"),
   apiNewProposalPayload
 );
+export const newProposalSummary = compose(
+  get("summary"),
+  apiNewProposalPayload
+);
 export const newProposalFiles = compose(
   get("files"),
   apiNewProposalPayload

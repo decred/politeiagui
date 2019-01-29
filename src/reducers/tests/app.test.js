@@ -12,7 +12,8 @@ describe("test app reducer", () => {
         name: "draft",
         description: "Description",
         files: [],
-        timestamp: Date.now() / 1000
+        timestamp: Date.now() / 1000,
+        summary: "summary"
       }
     }
   };
@@ -109,7 +110,8 @@ describe("test app reducer", () => {
         draftId: "randomDraftId",
         description: "Description",
         files: [],
-        timestamp: Date.now() / 1000
+        timestamp: Date.now() / 1000,
+        summary: "summary"
       },
       error: false
     };
@@ -121,7 +123,8 @@ describe("test app reducer", () => {
         draftId: "randomDraftId2",
         description: "Description",
         files: [],
-        timestamp: Date.now() / 1000
+        timestamp: Date.now() / 1000,
+        summary: "summary"
       },
       error: false
     };

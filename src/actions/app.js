@@ -41,10 +41,11 @@ export const onSetReplyParent = (
     dispatch(act.SET_REPLY_PARENT(parentId)),
     dispatch(reset("form/reply"))
   ]);
-export const onSaveNewProposal = ({ name, description, files }, _, props) => (
-  dispatch,
-  getState
-) =>
+export const onSaveNewProposal = (
+  { name, description, files, summary },
+  _,
+  props
+) => (dispatch, getState) =>
   dispatch(
     onSubmitProposal(
       props.loggedInAsEmail,
@@ -52,12 +53,13 @@ export const onSaveNewProposal = ({ name, description, files }, _, props) => (
       props.username,
       name.trim(),
       description,
-      files
+      files,
+      summary
     )
   ).then(() => sel.newProposalToken(getState()));
 
 export const onEditProposal = (
-  { name, description, files },
+  { name, description, files, summary },
   _,
   props
 ) => dispatch =>
@@ -67,18 +69,26 @@ export const onEditProposal = (
       name.trim(),
       description,
       files,
-      props.token
+      props.token,
+      summary
     )
   );
 
-export const onSaveDraftProposal = ({ name, description, files, draftId }) => {
+export const onSaveDraftProposal = ({
+  name,
+  description,
+  files,
+  draftId,
+  summary
+}) => {
   resetNewProposalData();
   return act.SAVE_DRAFT_PROPOSAL({
     name: name.trim(),
     description,
     files,
     timestamp: Date.now() / 1000,
-    draftId
+    draftId,
+    summary
   });
 };
 

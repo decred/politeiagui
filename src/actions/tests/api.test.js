@@ -32,6 +32,7 @@ describe("test api actions (actions/api.js)", () => {
   const FAKE_CSRF = "fake_csrf_token";
   const FAKE_PROPOSAL_NAME = "Fake prop name";
   const FAKE_PROPOSAL_DESCRIPTION = "Fake prop description";
+  const FAKE_PROPOSAL_SUMMARY = "Fake prop summary";
   const FAKE_PROPOSAL_TOKEN = "fake_prop_token";
   const FAKE_PROPOSAL_VERSION = "2";
   const FAKE_COMMENT = "fake comment text";
@@ -570,7 +571,8 @@ describe("test api actions (actions/api.js)", () => {
       FAKE_USER.username,
       FAKE_PROPOSAL_NAME,
       FAKE_PROPOSAL_DESCRIPTION,
-      []
+      [],
+      FAKE_PROPOSAL_SUMMARY
     ];
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
@@ -593,7 +595,8 @@ describe("test api actions (actions/api.js)", () => {
           payload: {
             name: FAKE_PROPOSAL_NAME,
             description: FAKE_PROPOSAL_DESCRIPTION,
-            files: []
+            files: [],
+            summary: FAKE_PROPOSAL_SUMMARY
           }
         },
         { type: act.RECEIVE_NEW_PROPOSAL, error: true, payload: e }
@@ -980,7 +983,8 @@ describe("test api actions (actions/api.js)", () => {
       FAKE_PROPOSAL_NAME,
       FAKE_PROPOSAL_DESCRIPTION,
       [],
-      FAKE_PROPOSAL_TOKEN
+      FAKE_PROPOSAL_TOKEN,
+      FAKE_PROPOSAL_SUMMARY
     ];
     const keys = await pki.generateKeys(FAKE_USER.email);
     await pki.loadKeys(FAKE_USER.email, keys);
@@ -1005,7 +1009,8 @@ describe("test api actions (actions/api.js)", () => {
           payload: {
             name: FAKE_PROPOSAL_NAME,
             description: FAKE_PROPOSAL_DESCRIPTION,
-            files: []
+            files: [],
+            summary: FAKE_PROPOSAL_SUMMARY
           }
         },
         { type: act.RECEIVE_EDIT_PROPOSAL, error: true, payload: e }

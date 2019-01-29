@@ -21,7 +21,8 @@ describe("save state chunks to local storage (lib/local_storage.js", () => {
           name: "test",
           description: "Description",
           files: [],
-          timestamp: Date.now() / 1000
+          timestamp: Date.now() / 1000,
+          summary: "summary"
         }
       }
     }

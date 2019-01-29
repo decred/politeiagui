@@ -30,11 +30,22 @@ export const atou = str => decodeURIComponent(escape(window.atob(str)));
 // formatted as:
 //
 //  <proposal name>\n
-//  <proposal description>
+//  <proposal description>\n
 //
 export const getTextFromIndexMd = file => {
   const text = atou(file.payload);
-  return text.substring(text.indexOf("\n") + 1);
+  return text.substring(text.indexOf("\r"));
+};
+
+export const getSummaryFromIndexMd = file => {
+  const text = atou(file.payload);
+  const summary = text.slice(text.indexOf("\n") + 1, text.indexOf("\r"));
+  //If statement to hide empty summaries for pre-existing proposals
+  if (summary.length > 1) {
+    return summary;
+  } else {
+    return null;
+  }
 };
 
 export const getHumanReadableError = (errorCode, errorContext = []) => {

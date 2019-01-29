@@ -12,6 +12,8 @@ import thingLinkConnector from "../../connectors/thingLink";
 import Tooltip from "../Tooltip";
 import VoteStats from "../VoteStats";
 import VersionPicker from "../VersionPicker";
+import Markdown from "./Markdown/Markdown";
+
 // import Diff from "./Markdown/Diff";
 
 import {
@@ -110,7 +112,8 @@ class ThingLinkComp extends React.Component {
       startVoteToken,
       startVoteError,
       isApiRequestingSetProposalStatusByToken,
-      commentid
+      commentid,
+      selftext_summary
     } = this.props;
     const voteStatus = getVoteStatus(id) && getVoteStatus(id).status;
     const isAbandoned = review_status === PROPOSAL_STATUS_ABANDONED;
@@ -412,6 +415,21 @@ class ThingLinkComp extends React.Component {
                 <DownloadBundle type="proposal" /> <br />
               </div>
             ))}
+          {selftext_html && this.state.expanded && (
+            <form
+              action="#"
+              className="usertext warn-on-unload"
+              id="form-t4_5rve"
+            >
+              <Markdown
+                className="usertext-body may-blank-within md-container"
+                body={`** Summary ** \n \n ${selftext_summary}`}
+                filterXss={true}
+                confirmWithModal={true}
+                displayExternalLikWarning={false}
+              />
+            </form>
+          )}
           {censorMessage && <CensorMessage message={censorMessage} />}
           <Expando
             {...{
@@ -423,7 +441,9 @@ class ThingLinkComp extends React.Component {
               expandIcon: ToggleIcon("expand", this.handleExpandToggle),
               compressIcon: ToggleIcon("compress", this.handleExpandToggle)
             }}
-          />
+          >
+            Proposal{" "}
+          </Expando>
           {this.state.expanded && (
             <ProposalImages readOnly files={otherFiles} />
           )}

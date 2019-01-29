@@ -209,7 +209,8 @@ export const MOCK_STATE = {
       payload: {
         name: "fake_proposal_name",
         description: "fake_proposal_desc",
-        files: ["file1", "file2"]
+        files: ["file1", "file2"],
+        summary: "fake_proposal_summary"
       },
       response: {
         censorshiprecord: {
@@ -236,7 +237,8 @@ export const MOCK_STATE = {
           ],
           censorshiprecord: {
             token: FAKE_TOKEN
-          }
+          },
+          summary: "fake_proposal_summary"
         }
       }
     },
