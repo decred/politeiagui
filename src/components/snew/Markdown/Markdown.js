@@ -25,7 +25,6 @@ const MarkdownRenderer = ({
           filterXss,
           displayExternalLikWarning && confirmWithModal
         )}
-        unwrapDisallowed={true}
         source={body}
       />
     </div>

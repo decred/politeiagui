@@ -20,7 +20,6 @@ const diffCheck = node => {
 
 export const htmlParserRules = htmlParser({
   isValidNode: node => {
-    console.log(node);
     return node.type !== "script" && diffCheck(node);
   }
 });
@@ -28,7 +27,7 @@ export const htmlParserRules = htmlParser({
 export const insertDiffHTML = (oldComment, newComment) => {
   const diffL = diffLines(oldComment, newComment, {
     ignoreWhitespace: false,
-    newlineIsToken: false
+    newlineIsToken: true
   });
   const handleDiffString = (string, isLineAdded, isLineRemoved) => {
     const { added, removed, value } = string;
@@ -36,12 +35,12 @@ export const insertDiffHTML = (oldComment, newComment) => {
       if (isLineRemoved) {
         return "";
       }
-      return `<span className="diff-in">\n${value}\n</span>\n`;
+      return `<span className="diff-in"> ${value}</span>`;
     } else if (removed) {
       if (isLineAdded) {
         return "";
       }
-      return `<span className="diff-out">\n${value}\n</span>\n`;
+      return `<span className="diff-out"> ${value}</span>`;
     }
     return value;
   };
@@ -62,18 +61,21 @@ export const insertDiffHTML = (oldComment, newComment) => {
 
   const handleDiffLines = line => {
     const { added, removed, value } = line;
+    const diffLine = handleDiffLine(line);
+    // console.log("diflineeee", diffLine);
     if (added) {
-      return `<li className="diff-line-in">\n${handleDiffLine(line)}\n</li>\n`;
+      return `<li className="diff-line-in"> ${diffLine}</li>`;
     } else if (removed) {
-      return `<li className="diff-line-out">\n${handleDiffLine(line)}\n</li>\n`;
+      return `<li className="diff-line-out"> ${diffLine}</li>`;
     }
-    return value;
+    return `${value}`;
   };
-  const c = diffL.reduce(
-    (accumulated, current) => accumulated + handleDiffLines(current),
-    "\n"
-  );
-  console.log(c);
+  const c = diffL
+    .reduce(
+      (accumulated, current) => accumulated + handleDiffLines(current),
+      "<br>"
+    )
+    .replace(/(\r\n|\n|\r)/gm, "<br>");
   return c;
 };
 
