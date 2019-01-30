@@ -1,8 +1,0 @@
-FROM httpd:alpine
-
-LABEL description="politeiagui serve"
-LABEL version="1.0"
-LABEL maintainer "holdstockjamie@gmail.com"
-
-COPY ./docker-build/ /usr/local/apache2/htdocs/
-RUN sed -i -e "$ a #Security Headers\nHeader set X-Content-Type-Options \"nosniff\"\nHeader set Referrer-Policy \"same-origin\"\n#CSP Header\nHeader set Content-Security-Policy \"default-src 'none'; script-src 'self'; img-src 'self' data:; style-src 'self' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=';font-src 'self';connect-src 'self' faucet.decred.org explorer.dcrdata.org testnet.dcrdata.org testnet.decred.org mainnet.decred.org;manifest-src 'self'; object-src 'none';\"" /usr/local/apache2/conf/httpd.conf
