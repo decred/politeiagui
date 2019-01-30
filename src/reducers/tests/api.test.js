@@ -268,6 +268,8 @@ describe("test api reducer", () => {
       userSearch: DEFAULT_REQUEST_STATE,
       proposalPaywallPayment: DEFAULT_REQUEST_STATE,
       rescanUserPayments: DEFAULT_REQUEST_STATE,
+      user: DEFAULT_REQUEST_STATE,
+      proposalPaywallDetails: DEFAULT_REQUEST_STATE,
       email: "",
       keyMismatch: false,
       lastLoaded: {}
