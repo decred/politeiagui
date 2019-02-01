@@ -12,6 +12,7 @@ describe("test modal reducer", () => {
       payload: "modal data",
       modalType: "warning message",
       callback: "account page",
+      options: {},
       error: false
     };
 
@@ -22,7 +23,8 @@ describe("test modal reducer", () => {
         {
           type: action.modalType,
           payload: action.payload,
-          callback: action.callback
+          callback: action.callback,
+          options: action.options
         }
       ]
     });

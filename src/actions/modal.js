@@ -1,10 +1,16 @@
 import { OPEN_MODAL, CLOSE_MODAL, CLOSE_ALL_MODALS } from "./types";
 
-export const openModal = (modalType, payload, callback) => ({
+export const openModal = (
+  modalType,
+  payload,
+  callback,
+  options = { disableCloseOnClick: false, disableCloseOnEsc: false }
+) => ({
   type: OPEN_MODAL,
   modalType,
   payload,
-  callback
+  callback,
+  options
 });
 
 export const closeModal = () => ({

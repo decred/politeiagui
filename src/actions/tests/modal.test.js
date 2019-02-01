@@ -6,12 +6,14 @@ describe("test actions/modal.js", () => {
   const MODAL_TYPE = "ANY_TYPE";
   const PAYLOAD = "any";
   const CALLBACK = () => "callback returned value";
+  const OPTIONS = { disableCloseOnClick: false, disableCloseOnEsc: false };
   test("open modal action", () => {
     expect(modals.openModal(MODAL_TYPE, PAYLOAD, CALLBACK)).toEqual({
       type: act.OPEN_MODAL,
       modalType: MODAL_TYPE,
       payload: PAYLOAD,
-      callback: CALLBACK
+      callback: CALLBACK,
+      options: OPTIONS
     });
   });
 

@@ -12,7 +12,11 @@ const modal = (state = DEFAULT_STATE, action) =>
         {
           type: action.modalType,
           payload: action.payload,
-          callback: action.callback
+          callback: action.callback,
+          options: {
+            disableCloseOnClick: action.options.disableCloseOnClick,
+            disableCloseOnEsc: action.options.disableCloseOnEsc
+          }
         }
       ])
     }),
