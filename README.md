@@ -43,13 +43,13 @@ There is more testing to be done, you can check it on this opened issue: https:/
 `politeia` can be hosted in a docker container. To build the site and the docker container:
 
 ```bash
-$ ./build_docker.sh
+$ ./bin/build.sh
 ```
 
 The container can then be run with
 
 ```bash
-$ docker run -d --rm -p <local port>:80 decred/politeiagui-serve:latest
+$ docker run -d --rm -p <local port>:80 decred/politeiagui:latest
 ```
 
 ---
