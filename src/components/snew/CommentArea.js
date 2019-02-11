@@ -14,7 +14,7 @@ import {
 import qs from "query-string";
 
 class CommentArea extends React.Component {
-  componentDidUpdate() {
+  componentDidMount() {
     const { comments } = this.props;
     const { comments: scrollToComments } = qs.parse(this.props.location.search);
     if (comments && scrollToComments) {

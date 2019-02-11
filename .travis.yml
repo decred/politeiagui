@@ -10,7 +10,7 @@ addons:
       - google-chrome-stable
 language: node_js
 node_js:
-  - 10.15.0
+  - 10.15.1
 cache: yarn
 install:
   - yarn install
@@ -22,4 +22,4 @@ before_script:
   - yarn lint
   - scripts/serverUpChecker.sh
 script:
-  - ./build_docker.sh
+  - ./bin/build.sh

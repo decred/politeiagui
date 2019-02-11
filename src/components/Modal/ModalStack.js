@@ -37,7 +37,12 @@ class ModalStack extends React.Component {
   }
 
   renderModalContent = modalData => (
-    <Modal key={modalData.type}>
+    <Modal
+      key={modalData.type}
+      onClose={this.props.closeAllModals}
+      disableCloseOnClick={modalData.options.disableCloseOnClick}
+      disableCloseOnEsc={modalData.options.disableCloseOnEsc}
+    >
       <ModalContent modalData={modalData} />
     </Modal>
   );
