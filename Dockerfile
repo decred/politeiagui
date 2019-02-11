@@ -1,5 +1,5 @@
 # Build image
-FROM node:10.15.0
+FROM node:10.15.1
 
 LABEL description="politeiagui build"
 LABEL version="1.0"
