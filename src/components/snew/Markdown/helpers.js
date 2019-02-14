@@ -1,5 +1,5 @@
 import React from "react";
-import { diffLines, diffWords } from "diff";
+import { diffWords } from "diff";
 import htmlParser from "react-markdown/plugins/html-parser";
 import xssFilters from "xss-filters";
 import * as modalTypes from "../../Modal/modalTypes";
@@ -10,7 +10,7 @@ const diffCheck = node => {
   const isChild = !node.name && !!node.parent;
   return isChild
     ? node.parent.type === "tag" && node.type === "text"
-    : (node.name === "li" || node.name === "span") &&
+    : (node.name === "li" || node.name === "span" || node.name === "br") &&
         (node.type === "tag" || node.type === "text") &&
         (className === "diff-in" ||
           className === "diff-out" ||
@@ -25,58 +25,70 @@ export const htmlParserRules = htmlParser({
 });
 
 export const insertDiffHTML = (oldComment, newComment) => {
-  const diffL = diffLines(oldComment, newComment, {
-    ignoreWhitespace: false,
-    newlineIsToken: true
-  });
-  const handleDiffString = (string, isLineAdded, isLineRemoved) => {
-    const { added, removed, value } = string;
+  const handleDiffLine = line => {
+    const { removed, value, added } = line;
+    let diffLine = "";
+    if (removed) {
+      const dw = diffWords(removed ? removed : "", value ? value : "");
+      let result = "";
+      dw.forEach(x => (result += handleDiffString(x, false, !!removed)));
+      diffLine += `<li className="diff-line-out">${result}&zwnj;</li>\n\n`;
+    }
     if (added) {
-      if (isLineRemoved) {
-        return "";
-      }
-      return `<span className="diff-in"> ${value}</span>`;
-    } else if (removed) {
-      if (isLineAdded) {
-        return "";
-      }
-      return `<span className="diff-out"> ${value}</span>`;
+      const dw = diffWords(removed ? removed : "", value ? value : "");
+      let result = "";
+      dw.forEach(x => (result += handleDiffString(x, added, false)));
+      diffLine += `<li className="diff-line-in">${result}&zwnj;</li>\n\n`;
+    }
+    if (!removed && !added) {
+      diffLine += value ? value + "<br>\n" : "";
+    }
+    return diffLine;
+  };
+  const handleDiffString = (string, isLineAdded, isLineRemoved) => {
+    const { removed, added, value } = string;
+    if (removed) {
+      if (isLineAdded) return "";
+      return `<span className="diff-out">${value}</span>`;
+    } else if (added) {
+      if (isLineRemoved) return "";
+      return `<span className="diff-in">${value}</span>`;
     }
     return value;
   };
-  const handleDiffLine = line => {
-    const { count, added, removed } = line;
-    const lineAdded = diffL.filter(lin => lin.count === count && lin.added);
-    const lineRemoved = diffL.filter(lin => lin.count === count && lin.removed);
-    const diffW = diffWords(
-      lineRemoved.length ? lineRemoved[0].value : "",
-      lineAdded.length ? lineAdded[0].value : "",
-      { ignoreCase: true }
-    );
-    const dw = diffW.map(word => {
-      return handleDiffString(word, added, removed);
-    });
-    return dw.length && dw.length > 1 ? dw.join("") : dw[0];
-  };
-
-  const handleDiffLines = line => {
-    const { added, removed, value } = line;
-    const diffLine = handleDiffLine(line);
-    // console.log("diflineeee", diffLine);
-    if (added) {
-      return `<li className="diff-line-in"> ${diffLine}</li>`;
-    } else if (removed) {
-      return `<li className="diff-line-out"> ${diffLine}</li>`;
+  // disable read-only mode
+  let commentDiff = [];
+  // split comments into lines to get line numbers in order
+  //  to make the line-by-line comparison
+  const oldComLines =
+    oldComment && 0 !== oldComment.length ? oldComment.split("\n") : [];
+  const newComLines =
+    newComment && 0 !== newComment.length ? newComment.split("\n") : [];
+  commentDiff = newComLines.map((x, i) => {
+    if (oldComLines.includes(x)) {
+      return { value: x, line: i, removed: false, added: false };
     }
-    return `${value}`;
-  };
-  const c = diffL
-    .reduce(
-      (accumulated, current) => accumulated + handleDiffLines(current),
-      "<br>"
-    )
-    .replace(/(\r\n|\n|\r)/gm, "<br>");
-  return c;
+    // if line was not found, it means it was added
+    return { value: x, line: i, removed: false, added: true };
+  });
+  // search for removed lines
+  oldComLines.forEach((x, i) => {
+    if (!newComLines.includes(x)) {
+      // adds the removed line into the "removed" field
+      commentDiff[i]
+        ? (commentDiff[i].removed = x)
+        : (commentDiff[i] = { line: i, removed: x, added: false });
+    }
+  });
+  let finalDiff = "";
+  commentDiff.forEach(line => {
+    if (line.value !== "" || line.removed) {
+      finalDiff += handleDiffLine(line);
+    } else {
+      finalDiff += "";
+    }
+  });
+  return finalDiff;
 };
 
 export const traverseChildren = (el, cb) => {

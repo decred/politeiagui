@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { insertDiffHTML } from "./helpers";
 import MarkdownRenderer from "./Markdown";
-import Modal from "../../Modal/Modal";
 import Message from "../../Message";
 import ProposalImages from "../../ProposalImages";
 
@@ -68,10 +67,11 @@ const FilesDiff = ({ oldFiles, newFiles }) => {
 };
 
 const withDiffStyle = {
-  paddingTop: "80px",
   zIndex: 9999
 };
 
+// This function allows us to know if the file has changed or not, in order to display the red dot
+// to indicate the Files Diff
 const hasFileChanged = (oldFiles, newFiles) => {
   const hasFile = (file, items) =>
     items.filter(f => f.name === file.name && f.payload === file.payload)
@@ -113,7 +113,12 @@ class Diff extends React.Component {
     } = this.props;
     const { filesDiff } = this.state;
     return (
-      <Modal style={withDiffStyle} onClose={onClose}>
+      // It is not necessary to use another Modal component here, since we already call the openModal function on
+      // the parent component
+      <div
+        className="modal-content"
+        style={{ minWidth: "700px", ...withDiffStyle }}
+      >
         <div className="diff-wrapper">
           <DiffHeader
             title={title}
@@ -139,7 +144,7 @@ class Diff extends React.Component {
             />
           )}
         </div>
-      </Modal>
+      </div>
     );
   }
 }

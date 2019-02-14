@@ -15,7 +15,6 @@ export class OnKeyListener extends React.Component {
   };
 
   componentDidMount() {
-    console.log("KEY MOUNTING");
     if (!this.props.disabled) {
       this.setState({ isEventListener: true }, () =>
         window.addEventListener("keyup", this.handleKeyUp)
