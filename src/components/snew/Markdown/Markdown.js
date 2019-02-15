@@ -14,7 +14,6 @@ const MarkdownRenderer = ({
   displayExternalLikWarning = true,
   scapeHtml = true
 }) => {
-  // console.log("BODY", body);
   return (
     <div className={className} style={style}>
       <ReactMarkdown

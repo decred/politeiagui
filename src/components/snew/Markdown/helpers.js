@@ -24,7 +24,12 @@ export const htmlParserRules = htmlParser({
   }
 });
 
-export const insertDiffHTML = (oldComment, newComment) => {
+// insertDiffHTML - The function compares the oldTextBody with the newTextBody line by line.
+// the lines that have differences are highlighted as "added" or "removed".
+export const insertDiffHTML = (oldTextBody, newTextBody) => {
+  // handleDiffLine - The function gets one line and checks which words have changed.
+  // if the line is added, it wraps the line with a green mark using a HTML tag. If the
+  // line is removed, it wraps it with a red mark.
   const handleDiffLine = line => {
     const { removed, value, added } = line;
     let diffLine = "";
@@ -45,12 +50,15 @@ export const insertDiffHTML = (oldComment, newComment) => {
     }
     return diffLine;
   };
+  // handleDiffString - The function gets a string, checks if the string is added, removed or unchanged
   const handleDiffString = (string, isLineAdded, isLineRemoved) => {
     const { removed, added, value } = string;
     if (removed) {
+      // check if line is removed so it doesn't add a red mark into a green line
       if (isLineAdded) return "";
       return `<span className="diff-out">${value}</span>`;
     } else if (added) {
+      // same checking here to avoid red marks on green lines
       if (isLineRemoved) return "";
       return `<span className="diff-in">${value}</span>`;
     }
@@ -61,9 +69,9 @@ export const insertDiffHTML = (oldComment, newComment) => {
   // split comments into lines to get line numbers in order
   //  to make the line-by-line comparison
   const oldComLines =
-    oldComment && 0 !== oldComment.length ? oldComment.split("\n") : [];
+    oldTextBody && 0 !== oldTextBody.length ? oldTextBody.split("\n") : [];
   const newComLines =
-    newComment && 0 !== newComment.length ? newComment.split("\n") : [];
+    newTextBody && 0 !== newTextBody.length ? newTextBody.split("\n") : [];
   commentDiff = newComLines.map((x, i) => {
     if (oldComLines.includes(x)) {
       return { value: x, line: i, removed: false, added: false };
@@ -81,7 +89,9 @@ export const insertDiffHTML = (oldComment, newComment) => {
     }
   });
   let finalDiff = "";
+  // loop the array to run the handleDiffLine function for all lines
   commentDiff.forEach(line => {
+    // if line is not empty
     if (line.value !== "" || line.removed) {
       finalDiff += handleDiffLine(line);
     } else {
