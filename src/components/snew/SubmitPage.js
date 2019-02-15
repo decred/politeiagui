@@ -36,6 +36,10 @@ const normalizer = (value, previousValue) => {
   return files;
 };
 
+const ToggledMarkdown = props => (
+  <MarkdownEditorField input={props.input} toggledStyle={true} />
+);
+
 class SubmitPage extends React.Component {
   render() {
     const {
@@ -118,7 +122,7 @@ class SubmitPage extends React.Component {
                         <div className="md">
                           <Field
                             name="description"
-                            component={MarkdownEditorField}
+                            component={ToggledMarkdown}
                             tabIndex={2}
                             placeholder="Markdown Entry"
                             rows={20}
