@@ -3,24 +3,11 @@ import { diffWords } from "diff";
 import htmlParser from "react-markdown/plugins/html-parser";
 import xssFilters from "xss-filters";
 import * as modalTypes from "../../Modal/modalTypes";
-
-const diffCheck = node => {
-  const className = node.attribs && node.attribs.classname;
-  // if the line is edited
-  const isChild = !node.name && !!node.parent;
-  return isChild
-    ? node.parent.type === "tag" && node.type === "text"
-    : (node.name === "li" || node.name === "span" || node.name === "br") &&
-        (node.type === "tag" || node.type === "text") &&
-        (className === "diff-in" ||
-          className === "diff-out" ||
-          className === "diff-line-in" ||
-          className === "diff-line-out");
-};
+import Showdown from "showdown";
 
 export const htmlParserRules = htmlParser({
   isValidNode: node => {
-    return node.type !== "script" && diffCheck(node);
+    return node.type !== "script";
   }
 });
 
@@ -37,13 +24,13 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
       const dw = diffWords(removed ? removed : "", value ? value : "");
       let result = "";
       dw.forEach(x => (result += handleDiffString(x, false, !!removed)));
-      diffLine += `<li className="diff-line-out">${result}&zwnj;</li>\n\n`;
+      diffLine += `<li className="diff-line-out">\n${result}\n</li>\n\n`;
     }
     if (added) {
       const dw = diffWords(removed ? removed : "", value ? value : "");
       let result = "";
       dw.forEach(x => (result += handleDiffString(x, added, false)));
-      diffLine += `<li className="diff-line-in">${result}&zwnj;</li>\n\n`;
+      diffLine += `<li className="diff-line-in">\n${result}\n</li>\n\n`;
     }
     if (!removed && !added) {
       diffLine += value ? value + "<br>\n" : "";
@@ -52,15 +39,27 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
   };
   // handleDiffString - The function gets a string, checks if the string is added, removed or unchanged
   const handleDiffString = (string, isLineAdded, isLineRemoved) => {
+    const isHeader = string =>
+      string === "# " ||
+      string === "## " ||
+      string === "### " ||
+      string === "#### " ||
+      string === "##### " ||
+      string === "###### ";
     const { removed, added, value } = string;
+    const converter = new Showdown.Converter({ omitExtraWLInCodeBlocks: true });
     if (removed) {
       // check if line is removed so it doesn't add a red mark into a green line
       if (isLineAdded) return "";
-      return `<span className="diff-out">${value}</span>`;
+      return `<div className="diff-out">${
+        !isHeader(value) ? converter.makeHtml(value) : value
+      }</div>\n`;
     } else if (added) {
       // same checking here to avoid red marks on green lines
       if (isLineRemoved) return "";
-      return `<span className="diff-in">${value}</span>`;
+      return `<div className="diff-in">${
+        !isHeader(value) ? converter.makeHtml(value) : value
+      }</div>\n`;
     }
     return value;
   };
