@@ -175,13 +175,17 @@ export const apiInfo = () =>
   );
 
 export const newUser = (csrf, email, username, password) =>
-  pki.myPubKeyHex(email).then(publickey =>
-    POST("/user/new", csrf, {
-      email,
-      username,
-      password: digest(password),
-      publickey
-    }).then(getResponse)
+  pki.generateKeys().then(keys =>
+    pki.loadKeys(email, keys).then(() =>
+      pki.myPubKeyHex(email).then(publickey =>
+        POST("/user/new", csrf, {
+          email,
+          username,
+          password: digest(password),
+          publickey
+        }).then(getResponse)
+      )
+    )
   );
 
 export const verifyNewUser = (email, verificationToken) => {

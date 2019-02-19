@@ -3,6 +3,7 @@ import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import qs from "query-string";
 import * as api from "../api";
+import * as pki from "../../lib/pki";
 import * as ea from "../external_api";
 import * as act from "../types";
 import {
@@ -611,6 +612,8 @@ describe("test api actions (actions/api.js)", () => {
       FAKE_COMMENT,
       parentId
     ];
+    const keys = await pki.generateKeys(FAKE_USER.email);
+    await pki.loadKeys(FAKE_USER.email, keys);
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -718,6 +721,9 @@ describe("test api actions (actions/api.js)", () => {
     const path = "/api/v1/user/key/verify";
     const verificationtoken = "any";
     const params = [FAKE_USER.email, verificationtoken];
+
+    const keys = await pki.generateKeys(FAKE_USER.email);
+    await pki.loadKeys(FAKE_USER.email, keys);
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -976,6 +982,8 @@ describe("test api actions (actions/api.js)", () => {
       [],
       FAKE_PROPOSAL_TOKEN
     ];
+    const keys = await pki.generateKeys(FAKE_USER.email);
+    await pki.loadKeys(FAKE_USER.email, keys);
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -1014,7 +1022,6 @@ describe("test api actions (actions/api.js)", () => {
       FAKE_PROPOSAL_TOKEN,
       FAKE_PROPOSAL_VERSION
     ];
-
     const requestAction = {
       type: act.REQUEST_AUTHORIZE_VOTE,
       error: false,
@@ -1022,6 +1029,8 @@ describe("test api actions (actions/api.js)", () => {
         token: FAKE_PROPOSAL_TOKEN
       }
     };
+    const keys = await pki.generateKeys(FAKE_USER.email);
+    await pki.loadKeys(FAKE_USER.email, keys);
 
     setPostSuccessResponse(path);
     const store = getMockedStore();
