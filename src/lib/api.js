@@ -421,3 +421,8 @@ export const proposalPaywallPayment = () =>
 
 export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
+
+export const inviteNewUser = (csrf, email) =>
+  POST("/user/invite", csrf, {
+    email
+  }).then(getResponse);

@@ -33,6 +33,10 @@ import UserDetail from "./components/UserDetail";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
 
+// CMS Pages/Routes
+import InviteUser from "./components/InviteUserPage";
+import InviteUserSuccess from "./components/InviteUser/SuccessPage";
+
 class Routes extends Component {
   render() {
     return (
@@ -78,6 +82,16 @@ class Routes extends Component {
         <AuthenticatedRoute
           path="/proposals/:token/edit"
           component={editProposal(SubmitPage)}
+        />
+        <AdminAuthenticatedRoute
+          path="/admin/invite"
+          component={admin(InviteUser)}
+          exact
+        />
+        <AdminAuthenticatedRoute
+          path="/admin/invite/next"
+          component={admin(InviteUserSuccess)}
+          exact
         />
         <AdminAuthenticatedRoute
           path="/admin/censored"

@@ -90,6 +90,31 @@ export const withCsrf = fn => (dispatch, getState) => {
   );
 };
 
+export const onInviteUserConfirm = ({ email }) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_INVITE_USER({ email }));
+    return api
+      .inviteNewUser(csrf, email)
+      .then(response => {
+        dispatch(act.RECEIVE_INVITE_USER(response));
+        dispatch(closeModal());
+      })
+      .catch(error => {
+        if (error.toString() === "Error: No available storage method found.") {
+          //local storage error
+          dispatch(
+            act.RECEIVE_INVITE_USER(
+              null,
+              new Error("CMS requires local storage to work.")
+            )
+          );
+        } else {
+          dispatch(act.RECEIVE_INVITE_USER(null, error));
+        }
+        throw error;
+      });
+  });
+
 export const onCreateNewUser = ({ email, username, password }) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_USER({ email }));

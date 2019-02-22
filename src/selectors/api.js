@@ -9,7 +9,6 @@ import {
   PROPOSAL_STATUS_ABANDONED
 } from "../constants";
 
-export const isCMS = () => bool(true);
 export const getIsApiRequesting = key =>
   bool(get(["api", key, "isRequesting"]));
 export const getApiPayload = key => get(["api", key, "payload"]);
@@ -640,5 +639,11 @@ export const isApiRequesting = or(
   isApiRequestingStartVote,
   isApiRequestingPropsVoteStatus,
   isApiRequestingPropVoteStatus,
-  isApiRequestingPropVoteResults
+  isApiRequestingPropVoteResults,
+  isApiRequestingInviteUser
 );
+
+// CMS Selectors
+export const isCMS = () => bool(true);
+export const inviteUserResponse = getApiResponse("inviteUser");
+export const isApiRequestingInviteUser = getIsApiRequesting("inviteUser");
