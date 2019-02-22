@@ -639,8 +639,7 @@ export const isApiRequesting = or(
   isApiRequestingStartVote,
   isApiRequestingPropsVoteStatus,
   isApiRequestingPropVoteStatus,
-  isApiRequestingPropVoteResults,
-  isApiRequestingInviteUser
+  isApiRequestingPropVoteResults
 );
 
 // CMS Selectors
