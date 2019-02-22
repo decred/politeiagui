@@ -9,6 +9,7 @@ import {
   PROPOSAL_STATUS_ABANDONED
 } from "../constants";
 
+export const isCMS = () => bool(true);
 export const getIsApiRequesting = key =>
   bool(get(["api", key, "isRequesting"]));
 export const getApiPayload = key => get(["api", key, "payload"]);

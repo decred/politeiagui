@@ -25,12 +25,13 @@ const signupFormConnector = connect(
     apiNewUserError: sel.apiNewUserError,
     apiVerifyNewUserError: sel.apiVerifyNewUserError,
     isShowingSignupConfirmation: sel.isShowingSignupConfirmation,
-    csrf: sel.csrf
+    csrf: sel.csrf,
+    isCMS: sel.isCMS
   }),
   {
     onFetchData: act.onGetPolicy,
     onSignup: act.onSignup,
-    onSignupConfirm: act.onSignupConfirm,
+    onSignupConfirm: sel.isCMS ? act.onSignupConfirmCMS : act.onSignupConfirm,
     onResetSignup: act.onResetSignup
   }
 );
@@ -95,13 +96,13 @@ class Wrapper extends Component {
     };
 
     const policy = this.props.policy || {};
-    validate(policy, args);
+    validate(policy, args, this.props.isCMS);
     const { error } = this.props;
     if (error) {
       this.props.clearSubmitErrors();
     }
 
-    if (!this.props.isShowingSignupConfirmation) {
+    if (!this.props.isShowingSignupConfirmation && !this.props.isCMS) {
       return this.props.onSignup();
     }
 

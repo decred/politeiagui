@@ -19,6 +19,9 @@ export const onResetRescanUserPayments = act.RESET_RESCAN_USER_PAYMENTS;
 export const onSignupConfirm = props => dispatch => {
   dispatch(onCreateNewUser(props));
 };
+export const onSignupConfirmCMS = props => dispatch => {
+  dispatch(onCreateNewUserCMS(props));
+};
 
 export const requestApiInfo = () => dispatch => {
   dispatch(act.REQUEST_INIT_SESSION());
@@ -103,6 +106,48 @@ export const onCreateNewUser = ({ email, username, password }) =>
             act.RECEIVE_NEW_USER(
               null,
               new Error("Politeia requires local storage to work.")
+            )
+          );
+        } else {
+          dispatch(act.RECEIVE_NEW_USER(null, error));
+        }
+        throw error;
+      });
+  });
+
+export const onCreateNewUserCMS = ({
+  email,
+  username,
+  password,
+  location,
+  xpublickey,
+  name,
+  verificationtoken
+}) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_NEW_USER({ email }));
+    return api
+      .newUser(
+        csrf,
+        email,
+        username,
+        password,
+        name,
+        verificationtoken,
+        location,
+        xpublickey
+      )
+      .then(response => {
+        dispatch(act.RECEIVE_NEW_USER(response));
+        dispatch(closeModal());
+      })
+      .catch(error => {
+        if (error.toString() === "Error: No available storage method found.") {
+          //local storage error
+          dispatch(
+            act.RECEIVE_NEW_USER(
+              null,
+              new Error("CMS requires local storage to work.")
             )
           );
         } else {
