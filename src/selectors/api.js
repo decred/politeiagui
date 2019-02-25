@@ -643,6 +643,9 @@ export const isApiRequesting = or(
 );
 
 // CMS Selectors
-export const isCMS = () => bool(true);
+export const isCMS = compose(
+  get("cms"),
+  apiInitResponse
+);
 export const inviteUserResponse = getApiResponse("inviteUser");
 export const isApiRequestingInviteUser = getIsApiRequesting("inviteUser");

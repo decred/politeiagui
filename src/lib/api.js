@@ -165,12 +165,13 @@ export const me = () => GET("/v1/user/me").then(getResponse);
 
 export const apiInfo = () =>
   GET("/").then(
-    ({ csrfToken, response: { version, route, pubkey, testnet } }) => ({
+    ({ csrfToken, response: { version, route, pubkey, testnet, cms } }) => ({
       csrfToken: csrfToken,
       version,
       route,
       pubkey,
-      testnet
+      testnet,
+      cms
     })
   );
 
