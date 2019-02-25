@@ -13,6 +13,7 @@ import unreviewed from "./connectors/unreviewedProposals";
 import admin from "./connectors/admin";
 import newProposal from "./connectors/newProposal";
 import editProposal from "./connectors/editProposal";
+import routesConnector from "./connectors/routes";
 
 import Logout from "./components/LogoutPage";
 import UserLookup from "./components/UserLookupPage";
@@ -37,94 +38,141 @@ import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute
 import InviteUser from "./components/InviteUserPage";
 import InviteUserSuccess from "./components/InviteUser/SuccessPage";
 
+const SwitchCMS = () => {
+  return (
+    <Switch>
+      <Route path="/" component={vetted(ProposalListing)} exact />
+      <Route path="/login" component={LoginSignupPage} />
+      <Route path="/user/login" component={LoginSignupPage} />
+      <Route path="/user/logout" component={Logout} />
+      <Route path="/user/signup/next" component={SignupNext} />
+      <Route path="/user/signup" component={LoginSignupPage} />
+      <Route exact path="/password" component={ForgottenPassword} />
+      <Route
+        exact
+        path="/user/forgotten/password"
+        component={ForgottenPassword}
+      />
+      <Route
+        exact
+        path="/user/forgotten/password/next"
+        component={ForgottenPasswordSuccess}
+      />
+      <Route exact path="/user/password/reset" component={PasswordReset} />
+      <Route
+        exact
+        path="/user/password/reset/next"
+        component={PasswordResetSuccess}
+      />
+      <Route path="/user/verify" component={Verify} exact />
+      <Route path="/user/key/verify" component={VerifyKey} exact />
+      <Route path="/user/resend" component={ResendVerificationEmail} exact />
+      <Route
+        path="/user/resend/next"
+        component={ResendVerificationEmailSuccess}
+      />
+      <AdminAuthenticatedRoute
+        path="/admin"
+        component={admin(ProposalListing)}
+        exact
+      />
+      <AdminAuthenticatedRoute path="/admin/users" component={UserLookup} />
+      <Route path="/user/:userId/:filter?" component={userDetail(UserDetail)} />
+      <AdminAuthenticatedRoute
+        path="/admin/invite"
+        component={admin(InviteUser)}
+        exact
+      />
+      <AdminAuthenticatedRoute
+        path="/admin/invite/next"
+        component={admin(InviteUserSuccess)}
+        exact
+      />
+      <Route path="/500" component={ErrorPage} />
+      <Route path="*" component={NotFound} />
+    </Switch>
+  );
+};
+
+const PoliteiaCMS = () => {
+  return (
+    <Switch>
+      <Route path="/" component={vetted(ProposalListing)} exact />
+      <Route path="/login" component={LoginSignupPage} />
+      <Route path="/user/login" component={LoginSignupPage} />
+      <Route path="/user/logout" component={Logout} />
+      <Route path="/user/signup/next" component={SignupNext} />
+      <Route path="/user/signup" component={LoginSignupPage} />
+      <AuthenticatedRoute
+        path="/user/proposals/:filter?"
+        component={UserProposals}
+      />
+      <Route exact path="/password" component={ForgottenPassword} />
+      <Route
+        exact
+        path="/user/forgotten/password"
+        component={ForgottenPassword}
+      />
+      <Route
+        exact
+        path="/user/forgotten/password/next"
+        component={ForgottenPasswordSuccess}
+      />
+      <Route exact path="/user/password/reset" component={PasswordReset} />
+      <Route
+        exact
+        path="/user/password/reset/next"
+        component={PasswordResetSuccess}
+      />
+      <Route path="/user/verify" component={Verify} exact />
+      <Route path="/user/key/verify" component={VerifyKey} exact />
+      <Route path="/user/resend" component={ResendVerificationEmail} exact />
+      <Route
+        path="/user/resend/next"
+        component={ResendVerificationEmailSuccess}
+      />
+      <AdminAuthenticatedRoute
+        path="/admin"
+        component={admin(ProposalListing)}
+        exact
+      />
+      <AdminAuthenticatedRoute path="/admin/users" component={UserLookup} />
+      <Route path="/user/:userId/:filter?" component={userDetail(UserDetail)} />
+      <AuthenticatedRoute
+        path="/proposals/new"
+        component={newProposal(SubmitPage)}
+      />
+      <AuthenticatedRoute
+        path="/proposals/:token/edit"
+        component={editProposal(SubmitPage)}
+      />
+      <AdminAuthenticatedRoute
+        path="/admin/censored"
+        component={censored(ProposalListing)}
+      />
+      <AdminAuthenticatedRoute
+        path="/admin/unreviewed"
+        component={unreviewed(ProposalListing)}
+      />
+      <Route
+        path="/proposals/:token"
+        component={proposalDetail(ProposalDetail)}
+        exact
+      />
+      <Route
+        path="/proposals/:token/comments/:commentid"
+        component={proposalDetail(ProposalDetail)}
+      />
+      <Route path="/500" component={ErrorPage} />
+      <Route path="*" component={NotFound} />
+    </Switch>
+  );
+};
+
 class Routes extends Component {
   render() {
-    return (
-      <Switch>
-        <Route path="/" component={vetted(ProposalListing)} exact />
-        <Route path="/login" component={LoginSignupPage} />
-        <Route path="/user/login" component={LoginSignupPage} />
-        <Route path="/user/logout" component={Logout} />
-        <Route path="/user/signup/next" component={SignupNext} />
-        <Route path="/user/signup" component={LoginSignupPage} />
-        <AuthenticatedRoute
-          path="/user/proposals/:filter?"
-          component={UserProposals}
-        />
-        <Route exact path="/password" component={ForgottenPassword} />
-        <Route
-          exact
-          path="/user/forgotten/password"
-          component={ForgottenPassword}
-        />
-        <Route
-          exact
-          path="/user/forgotten/password/next"
-          component={ForgottenPasswordSuccess}
-        />
-        <Route exact path="/user/password/reset" component={PasswordReset} />
-        <Route
-          exact
-          path="/user/password/reset/next"
-          component={PasswordResetSuccess}
-        />
-        <Route path="/user/verify" component={Verify} exact />
-        <Route path="/user/key/verify" component={VerifyKey} exact />
-        <Route path="/user/resend" component={ResendVerificationEmail} exact />
-        <Route
-          path="/user/resend/next"
-          component={ResendVerificationEmailSuccess}
-        />
-        <AuthenticatedRoute
-          path="/proposals/new"
-          component={newProposal(SubmitPage)}
-        />
-        <AuthenticatedRoute
-          path="/proposals/:token/edit"
-          component={editProposal(SubmitPage)}
-        />
-        <AdminAuthenticatedRoute
-          path="/admin/invite"
-          component={admin(InviteUser)}
-          exact
-        />
-        <AdminAuthenticatedRoute
-          path="/admin/invite/next"
-          component={admin(InviteUserSuccess)}
-          exact
-        />
-        <AdminAuthenticatedRoute
-          path="/admin/censored"
-          component={censored(ProposalListing)}
-        />
-        <AdminAuthenticatedRoute
-          path="/admin/unreviewed"
-          component={unreviewed(ProposalListing)}
-        />
-        <AdminAuthenticatedRoute
-          path="/admin"
-          component={admin(ProposalListing)}
-          exact
-        />
-        <AdminAuthenticatedRoute path="/admin/users" component={UserLookup} />
-        <Route
-          path="/user/:userId/:filter?"
-          component={userDetail(UserDetail)}
-        />
-        <Route
-          path="/proposals/:token"
-          component={proposalDetail(ProposalDetail)}
-          exact
-        />
-        <Route
-          path="/proposals/:token/comments/:commentid"
-          component={proposalDetail(ProposalDetail)}
-        />
-        <Route path="/500" component={ErrorPage} />
-        <Route path="*" component={NotFound} />
-      </Switch>
-    );
+    return this.props.isCMS ? <SwitchCMS /> : <PoliteiaCMS />;
   }
 }
 
-export default Routes;
+export default routesConnector(Routes);
