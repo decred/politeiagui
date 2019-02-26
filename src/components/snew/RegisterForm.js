@@ -1,5 +1,5 @@
 import React from "react";
-import signupConnector from "../../connectors/signup";
+import signupFormHOC from "../../hocs/signupForm";
 import { Field } from "redux-form";
 import Message from "../Message";
 import SignupWarning from "../SignupWarning";
@@ -334,4 +334,4 @@ const RegisterForm = ({
     </form>
   );
 
-export default signupConnector(RegisterForm);
+export default signupFormHOC(RegisterForm);
