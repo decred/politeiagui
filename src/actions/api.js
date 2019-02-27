@@ -42,20 +42,22 @@ export const onRequestMe = () => (dispatch, getState) => {
     .me()
     .then(response => {
       dispatch(act.RECEIVE_ME(response));
-      dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
+      if (sel.usePaywall(getState())) {
+        dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
 
-      // Start polling for the user paywall tx, if applicable.
-      const paywallAddress = sel.paywallAddress(getState());
-      if (paywallAddress) {
-        const paywallAmount = sel.paywallAmount(getState());
-        const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
-        dispatch(
-          external_api_actions.verifyUserPayment(
-            paywallAddress,
-            paywallAmount,
-            paywallTxNotBefore
-          )
-        );
+        // Start polling for the user paywall tx, if applicable.
+        const paywallAddress = sel.paywallAddress(getState());
+        if (paywallAddress) {
+          const paywallAmount = sel.paywallAmount(getState());
+          const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
+          dispatch(
+            external_api_actions.verifyUserPayment(
+              paywallAddress,
+              paywallAmount,
+              paywallTxNotBefore
+            )
+          );
+        }
       }
     })
     .catch(error => {
@@ -213,7 +215,9 @@ export const onLogin = ({ email, password }) =>
       .login(csrf, email, password)
       .then(response => {
         dispatch(act.RECEIVE_LOGIN(response));
-        dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
+        if (sel.usePaywall(getState())) {
+          dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
+        }
         dispatch(closeModal());
       })
       .then(() => dispatch(onRequestMe()))

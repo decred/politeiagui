@@ -2,7 +2,7 @@ import get from "lodash/fp/get";
 import eq from "lodash/fp/eq";
 import filter from "lodash/fp/filter";
 import compose from "lodash/fp/compose";
-import { or, bool, constant, not } from "../lib/fp";
+import { and, or, bool, constant, not } from "../lib/fp";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_CENSORED,
@@ -649,3 +649,5 @@ export const isCMS = compose(
 );
 export const inviteUserResponse = getApiResponse("inviteUser");
 export const isApiRequestingInviteUser = getIsApiRequesting("inviteUser");
+
+export const usePaywall = and(not(isCMS));
