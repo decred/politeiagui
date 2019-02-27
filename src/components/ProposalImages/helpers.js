@@ -23,13 +23,20 @@ export function validateFiles(files, policy) {
   return validated(validation, policy);
 }
 
+/*
+  Format proposal files before sending to server. If the file extension
+  is .txt, we correct its mime type to match the type that is found by
+  the server
+*/
 export function getFormattedFiles({ base64, fileList }) {
-  return Array.from(fileList).map(({ name, size, type: mime }, idx) => ({
-    name,
-    mime,
-    size,
-    payload: base64[idx].split("base64,").pop()
-  }));
+  return Array.from(fileList).map(({ name, size, type: mime }, idx) => {
+    return {
+      name,
+      mime: name.includes(".txt") ? `${mime}; charset=utf-8` : mime,
+      size,
+      payload: base64[idx].split("base64,").pop()
+    };
+  });
 }
 
 /*
