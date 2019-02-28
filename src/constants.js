@@ -75,17 +75,25 @@ export const PI_DOCS = "https://docs.decred.org/governance/politeia/politeia/";
 export const PROPOSAL_GUIDELINES =
   "https://docs.decred.org/governance/politeia/proposal-guidelines/";
 
-export const INVOICE_STATUS_INVALID = 0; // Invalid status
-export const INVOICE_STATUS_NOTFOUND = 1; // Invoice not found
+export const INVOICE_FILTER_ALL = 0;
+
+export const INVOICE_STATUS_INVALID = 1; // Invalid status XXX?
+export const INVOICE_STATUS_NOTFOUND = 1; // Invoice not found XXX?
+
 export const INVOICE_STATUS_NEW = 2; // Invoice has not been reviewed
 export const INVOICE_STATUS_UPDATED = 3; // Invoice has unreviewed changes
 export const INVOICE_STATUS_REJECTED = 4; // Invoice needs to be revised
 export const INVOICE_STATUS_APPROVED = 5; // Invoice has been approved
 export const INVOICE_STATUS_PAID = 6; // Invoice has been paid
 
-export const CMS_LIST_HEADER_REVIEWED = "Reviewed Invoices";
-export const CMS_LIST_HEADER_UNREVIEWED = "Unreviewed/Updated Invoices";
-export const CMS_LIST_HEADER_PAID = "Paid Invoices";
+export const INVOICE_USER_FILTER_DRAFT = 1;
+export const INVOICE_USER_FILTER_NEW = 2;
+export const INVOICE_USER_FILTER_UPDATED = 3;
+export const INVOICE_USER_FILTER_REJECTED = 4;
+export const INVOICE_USER_FILTER_APPROVED = 5;
+export const INVOICE_USER_FILTER_PAID = 6;
+
+export const CMS_LIST_HEADER_ADMIN = "Admin Invoices";
 export const CMS_LIST_HEADER_USER = "Your Invoices";
 
 export const CMS_DEFAULT_TAB_TITLE = "Contractor Management System";
