@@ -8,7 +8,7 @@ const getSort = sortOption => {
     [SORT_BY_TOP]: orderBy(["resultvotes", "timestamp"], ["desc", "desc"])
   };
 
-  return mapOptionToSort[sortOption.value] || mapOptionToSort[SORT_BY_NEW];
+  return mapOptionToSort[sortOption.value] || mapOptionToSort[SORT_BY_TOP];
 };
 
 const mergeCommentsAndVotes = (comments, votes) => {
