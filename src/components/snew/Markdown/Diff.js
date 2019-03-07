@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { insertDiffHTML } from "./helpers";
-// import MarkdownRenderer from "./Markdown";
 import Message from "../../Message";
 import ProposalImages from "../../ProposalImages";
 
