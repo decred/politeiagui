@@ -21,8 +21,7 @@ const MarkdownRenderer = ({
       astPlugins={[htmlParserRules]}
       renderers={customRenderers(
         filterXss,
-        displayExternalLikWarning && confirmWithModal,
-        !scapeHtml
+        displayExternalLikWarning && confirmWithModal
       )}
       source={body}
     />

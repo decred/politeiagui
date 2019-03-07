@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { insertDiffHTML } from "./helpers";
-import MarkdownRenderer from "./Markdown";
+// import MarkdownRenderer from "./Markdown";
 import Message from "../../Message";
 import ProposalImages from "../../ProposalImages";
 
@@ -45,6 +45,12 @@ const DiffHeader = ({
         </div>
       </React.Fragment>
     )}
+  </div>
+);
+
+const DiffBody = ({ body }) => (
+  <div className="md" style={{ padding: "16px" }}>
+    {body}
   </div>
 );
 
@@ -137,11 +143,7 @@ class Diff extends React.Component {
           ) : filesDiff ? (
             <FilesDiff oldFiles={oldFiles} newFiles={newFiles} />
           ) : (
-            <MarkdownRenderer
-              body={insertDiffHTML(oldProposal, newProposal)}
-              style={{ padding: "16px" }}
-              scapeHtml={false}
-            />
+            <DiffBody body={insertDiffHTML(oldProposal, newProposal)} />
           )}
         </div>
       </div>
