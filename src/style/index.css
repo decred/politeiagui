@@ -1532,9 +1532,6 @@ form div.usertext-body.may-blank-within.md-container {
   float: right;
 }
 
-.entry {
- overflow: visible;
-}
 /* Max height is (line-height * 25)  */
 .entry > .usertext {
   max-height: 35.71428575em;
