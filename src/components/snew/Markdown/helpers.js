@@ -3,25 +3,20 @@ import { diffWordsWithSpace } from "diff";
 import htmlParser from "react-markdown/plugins/html-parser";
 import xssFilters from "xss-filters";
 import * as modalTypes from "../../Modal/modalTypes";
-import MarkdownRenderer from "./Markdown";
+import ReactMarkdown from "react-markdown";
 
-// const diffCheck = node => {
-//   const className = node.attribs && node.attribs.classname;
-//   // if the line is edited
-//   const isChild = !node.name && !!node.parent;
-//   return isChild
-//     ? node.parent.type === "tag" && node.type === "text"
-//     : (node.name === "li" || node.name === "span" || node.name === "br") &&
-//         (node.type === "tag" || node.type === "text") &&
-//         (className === "diff-in" ||
-//           className === "diff-out" ||
-//           className === "diff-line-in" ||
-//           className === "diff-line-out");
-// };
+const diffCheck = node => {
+  const className = node.attribs.classname;
+  return (
+    node.type === "tag" &&
+    node.name === "span" &&
+    (className === "diff-in" || className === "diff-out")
+  );
+};
 
 export const htmlParserRules = htmlParser({
   isValidNode: node => {
-    return node.type !== "script";
+    return node.type !== "script" && diffCheck(node);
   }
 });
 
@@ -60,7 +55,7 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
     if (!removed && !added) {
       diffLine.push(
         value ? (
-          <MarkdownRenderer body={value} key={index} />
+          <ReactMarkdown source={value} key={index} />
         ) : (
           <p key={index}>""</p>
         )
@@ -76,7 +71,7 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
       if (isLineAdded) return "";
       return (
         <span className="diff-out" key={index}>
-          <MarkdownRenderer body={value} />
+          <ReactMarkdown source={value} />
         </span>
       );
     } else if (added) {
@@ -84,7 +79,7 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
       if (isLineRemoved) return "";
       return (
         <span className="diff-in" key={index}>
-          <MarkdownRenderer body={value} />
+          <ReactMarkdown source={value} />
         </span>
       );
     }
