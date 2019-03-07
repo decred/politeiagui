@@ -25,13 +25,10 @@ export const generateKeys = () => Promise.resolve(nacl.sign.keyPair());
 export const existing = email =>
   localforage.getItem(STORAGE_PREFIX + email).catch(e => console.warn(e));
 const myKeyPair = email =>
-  existing(email).then(
-    res =>
-      (res && res.secretKey && res) ||
-      generateKeys().then(keys => loadKeys(email, keys))
-  );
+  existing(email).then(res => res && res.secretKey && res);
 export const myPublicKey = email => myKeyPair(email).then(get("publicKey"));
-export const myPubKeyHex = email => myPublicKey(email).then(toHex);
+export const myPubKeyHex = email =>
+  myPublicKey(email).then(keys => toHex(keys));
 export const sign = (email, msg) =>
   myKeyPair(email).then(({ secretKey }) =>
     nacl.sign.detached(toUint8Array(msg), toUint8Array(secretKey))
@@ -66,7 +63,9 @@ const keysFromHex = ({ publicKey, secretKey }) => ({
   secretKey: toByteArray(secretKey)
 });
 
-export const getKeys = email => myKeyPair(email).then(keysToHex);
+export const getKeys = email =>
+  myKeyPair(email).then(keys => (keys ? keysToHex(keys) : keys));
+
 export const importKeys = (email, keys) =>
   Promise.resolve(keysFromHex(keys)).then(decodedKeys =>
     loadKeys(email, decodedKeys)

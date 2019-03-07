@@ -16,7 +16,7 @@ import {
 import { CHANGE_PASSWORD_MODAL, CONFIRM_ACTION } from "../Modal/modalTypes";
 import PrivateKeyDownloadManager from "../PrivateKeyDownloadManager";
 import Message from "../Message";
-import { myPubKeyHex } from "../../lib/pki";
+import { myPubKeyHex, existing } from "../../lib/pki";
 import { verifyUserPubkey } from "../../helpers";
 
 const Field = ({ label, children }) => (
@@ -62,11 +62,14 @@ const TokenFields = ({
 );
 const UpdatedKeyMessage = ({ email }) => (
   <span>
-    Your new identity has been requested, please check your email at{" "}
-    <b>{email}</b> to verify and activate it.
-    <br />
-    The verification link needs to be open with the same browser that you used
-    to generate this new identity.
+    <p>
+      Your new identity has been requested, please check your email at{" "}
+      <b>{email}</b> to verify and activate it.
+    </p>
+    <p>
+      The verification link needs to be open with the same browser that you used
+      to generate this new identity.
+    </p>
   </span>
 );
 
@@ -82,12 +85,6 @@ class GeneralTab extends React.Component {
       showPastUserIdentities: false
     };
   }
-
-  resolvePubkey = () => {
-    if (!this.state.pubkey && this.props.loggedInAsEmail) {
-      this.refreshPubKey();
-    }
-  };
 
   updatePubkey = (shouldAutoVerifyKey, prevUpdateUserKey, updateUserKey) => {
     if (shouldAutoVerifyKey && updateUserKey) {
@@ -107,9 +104,13 @@ class GeneralTab extends React.Component {
   };
 
   refreshPubKey = () => {
-    myPubKeyHex(this.props.loggedInAsEmail).then(pubkey => {
-      if (!this.unmounting) {
-        this.setState({ pubkey, pubkeyStatus: PUB_KEY_STATUS_LOADED });
+    existing(this.props.loggedInAsEmail).then(pubkey => {
+      if (pubkey) {
+        myPubKeyHex(this.props.loggedInAsEmail).then(pubkey => {
+          if (!this.unmounting) {
+            this.setState({ pubkey, pubkeyStatus: PUB_KEY_STATUS_LOADED });
+          }
+        });
       }
     });
   };
@@ -122,7 +123,6 @@ class GeneralTab extends React.Component {
         this.props.keyMismatchAction
       );
     }
-    this.resolvePubkey();
   }
 
   componentWillUnmount() {
@@ -144,7 +144,7 @@ class GeneralTab extends React.Component {
         this.props.keyMismatchAction
       );
     }
-    this.resolvePubkey();
+
     if (this.state.openedVerification) return;
     this.updatePubkey(
       this.props.shouldAutoVerifyKey,
@@ -154,6 +154,11 @@ class GeneralTab extends React.Component {
 
     // update displayed public key when the identity is successfully imported
     if (!prevProps.identityImportSuccess && this.props.identityImportSuccess) {
+      this.refreshPubKey();
+    }
+
+    // update internal state with public key when one is loaded
+    if (this.props.userPubkey !== this.state.pubkey) {
       this.refreshPubKey();
     }
   }
@@ -248,10 +253,11 @@ class GeneralTab extends React.Component {
         </div>
         {keyMismatch && !identityImportSuccess && isUserPageOwner ? (
           <Field label="Active Key">
-            <div
-              style={{ color: "red" }}
-              className="monospace"
-            >{`${pubkey} is invalid. Please see 'Manage Identity'`}</div>
+            <div style={{ color: "red" }} className="monospace">
+              {
+                "Your key is invalid or inexistent. Please create/import one under 'Manage Identity'"
+              }
+            </div>
           </Field>
         ) : (
           <Field className="account-info" label="Active Public Key">

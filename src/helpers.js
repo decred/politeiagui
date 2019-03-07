@@ -179,9 +179,10 @@ export const uniqueID = prefix =>
     .substr(2, 9);
 
 export const verifyUserPubkey = (email, keyToBeMatched, keyMismatchAction) =>
-  pki
-    .getKeys(email)
-    .then(keys => keyMismatchAction(keys.publicKey !== keyToBeMatched));
+  pki.getKeys(email).then(keys => {
+    const res = keys ? keys.publicKey !== keyToBeMatched : true;
+    keyMismatchAction(res);
+  });
 
 export const multiplyFloatingNumbers = (num1, num2) => {
   let cont1 = 0;
