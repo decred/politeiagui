@@ -1823,13 +1823,16 @@ form div.usertext-body.may-blank-within.md-container {
   list-style-type: none;
   background-color: #bfffd1;
   color: #164623;
+  display:inline-block;
+  margin-left: 0.16em;
 }
 
 .diff-out {
-  background-color: #f8bac1;
   list-style-type: none;
+  background-color: #f8bac1;
   color: #cb2431;
-  position: relative;
+  display:inline-block;
+  margin-left: 0.16em;
 }
 
 .diff-line-out {
