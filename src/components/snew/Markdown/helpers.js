@@ -3,7 +3,7 @@ import { diffWordsWithSpace } from "diff";
 import htmlParser from "react-markdown/plugins/html-parser";
 import xssFilters from "xss-filters";
 import * as modalTypes from "../../Modal/modalTypes";
-import ReactMarkdown from "react-markdown";
+import MarkdownRenderer from "./Markdown";
 
 const diffCheck = node => {
   const className = node.attribs.classname;
@@ -55,7 +55,7 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
     if (!removed && !added) {
       diffLine.push(
         value ? (
-          <ReactMarkdown source={value} key={index} />
+          <MarkdownRenderer body={value} key={index} />
         ) : (
           <p key={index}>""</p>
         )
@@ -71,7 +71,7 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
       if (isLineAdded) return "";
       return (
         <span className="diff-out" key={index}>
-          <ReactMarkdown source={value} />
+          <MarkdownRenderer body={value} />
         </span>
       );
     } else if (added) {
@@ -79,7 +79,7 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
       if (isLineRemoved) return "";
       return (
         <span className="diff-in" key={index}>
-          <ReactMarkdown source={value} />
+          <MarkdownRenderer body={value} />
         </span>
       );
     }

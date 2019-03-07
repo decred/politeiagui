@@ -126,7 +126,7 @@ describe("test app actions (actions/app.js)", () => {
 
   test("fetch proposal action", async () => {
     const { token } = FAKE_PROPOSAL;
-    await expect(app.onFetchProposal(token)).toDispatchActionsWithState(
+    await expect(app.onFetchProposalApp(token)).toDispatchActionsWithState(
       MOCK_STATE,
       [onFetchProposalApi(token), onFetchProposalComments(token)],
       done
@@ -177,7 +177,7 @@ describe("test app actions (actions/app.js)", () => {
     const { token, comment, parentid } = FAKE_COMMENT;
     const { email } = FAKE_USER;
     await expect(
-      app.onSubmitComment(email, token, comment, parentid)
+      app.onSubmitCommentApp(email, token, comment, parentid)
     ).toDispatchActionsWithState(
       MOCK_STATE,
       [onSubmitCommentApi(email, token, comment, parentid)],
