@@ -85,33 +85,50 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
     }
     return value;
   };
-  // disable read-only mode
-  let commentDiff = [];
+  const arrayDiff = (newCommentBody, oldCommentBody, diffFunc) => [
+    ...newCommentBody.filter(diffFunc(oldCommentBody)).map(markAsAdded),
+    ...oldCommentBody.filter(diffFunc(newCommentBody)).map(markAsRemoved),
+    ...newCommentBody.filter(eqFunc(oldCommentBody)).map(markAsUnchanged)
+  ];
+  const markAsAdded = elem => ({
+    value: elem.value,
+    lineIndex: elem.index,
+    removed: false,
+    added: true,
+    status: "line added"
+  });
+  const markAsRemoved = elem => ({
+    lineIndex: elem.index,
+    removed: elem.value,
+    added: false,
+    status: "line removed"
+  });
+  const markAsUnchanged = elem => ({
+    value: elem.value,
+    lineIndex: elem.index,
+    removed: false,
+    added: false,
+    status: "line unchanged"
+  });
+  const diffFunc = arr => elem =>
+    !arr.some(arrelem => arrelem.value === elem.value);
+  const eqFunc = arr => elem =>
+    arr.some(arrelem => arrelem.value === elem.value);
+  const getLineArray = string =>
+    string && string.length
+      ? string.split("\n").map((line, index) => ({ value: line, index: index }))
+      : [];
   // split comments into lines to get line numbers in order
   //  to make the line-by-line comparison
-  const oldComLines =
-    oldTextBody && 0 !== oldTextBody.length ? oldTextBody.split("\n") : [];
-  const newComLines =
-    newTextBody && 0 !== newTextBody.length ? newTextBody.split("\n") : [];
-  commentDiff = newComLines.map((x, i) => {
-    if (oldComLines.includes(x)) {
-      return { value: x, line: i, removed: false, added: false };
-    }
-    // if line was not found, it means it was added
-    return { value: x, line: i, removed: false, added: true };
-  });
-  // search for removed lines
-  oldComLines.forEach((x, i) => {
-    if (!newComLines.includes(x)) {
-      // adds the removed line into the "removed" field
-      commentDiff[i]
-        ? (commentDiff[i].removed = x)
-        : (commentDiff[i] = { line: i, removed: x, added: false });
-    }
-  });
+  const oldComLines = getLineArray(oldTextBody);
+  const newComLines = getLineArray(newTextBody);
+  const linesDiff = arrayDiff(newComLines, oldComLines, diffFunc).sort(
+    (a, b) => a.lineIndex - b.lineIndex
+  );
+
   const finalDiff = [];
   // loop the array to run the handleDiffLine function for all lines
-  commentDiff.forEach((line, index) => {
+  linesDiff.map((line, index) => {
     // if line is not empty
     if (line.value !== "" || line.removed) {
       finalDiff.push(handleDiffLine(line, index));
