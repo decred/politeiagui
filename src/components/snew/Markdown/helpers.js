@@ -128,7 +128,7 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
 
   const finalDiff = [];
   // loop the array to run the handleDiffLine function for all lines
-  linesDiff.map((line, index) => {
+  linesDiff.forEach((line, index) => {
     // if line is not empty
     if (line.value !== "" || line.removed) {
       finalDiff.push(handleDiffLine(line, index));
