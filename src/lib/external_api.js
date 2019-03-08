@@ -6,7 +6,7 @@ const getSubdomainForInsight = isTestnet => (isTestnet ? TESTNET : MAINNET);
 const dcrdataURL = isTestnet =>
   `https://${getSubdomainForDcrdata(isTestnet)}.dcrdata.org/api`;
 const insightURL = isTestnet =>
-  `https://${getSubdomainForInsight(isTestnet)}.decred.org/api`;
+  `https://${getSubdomainForInsight(isTestnet)}.decred.org/insight/api`;
 
 export const dcrddataBlockHeightURL = isTestnet =>
   `${dcrdataURL(isTestnet)}/block/best/height`;
