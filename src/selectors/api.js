@@ -649,7 +649,7 @@ const mode = compose(
   apiInitResponse
 );
 
-export const isCMS = () => bool(eq(CMSWWWMODE, mode));
+export const isCMS = state => mode(state) === CMSWWWMODE;
 
 export const inviteUserResponse = getApiResponse("inviteUser");
 export const isApiRequestingInviteUser = getIsApiRequesting("inviteUser");
