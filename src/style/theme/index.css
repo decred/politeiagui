@@ -777,7 +777,7 @@ form div.usertext-body.may-blank-within.md-container {
 /* Header */
 #header {
     height: 72px;
-    position: fixed;
+    position: absolute;
     top: 0;
     width: 100%;
     background-image: none;
