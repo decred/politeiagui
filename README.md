@@ -9,10 +9,10 @@ Politeiagui uses node.js and the yarn package manager.
 
 - [node](https://nodejs.org/en/download/)
 - [yarn](https://yarnpkg.com/en/)
+- [politeiawww](https://github.com/decred/politeia)
 
+    **Note:**  Politeiagui can be run as a standalone application that uses mock APIs to simulate communicaiton with the Politeia backend (useful if you're only doing UI changes). In this case, `politeiawww` isn't needed. However, be aware that the Mock APIs are not always up-to-date with the latest changes. 
 
-
-Politeiagui can be built and run as a standalone application that uses mock APIs to simulate communicaiton with the Politeia backend (useful if you're only doing UI changes). However, if you want run the the full Politeia application, you'll first need to build and run `politeiawww`, Politeia's webserver. Instructions for doing so can be found [here](https://github.com/decred/politeia)
 
 
 ## Development
@@ -25,17 +25,19 @@ Politeiagui can be built and run as a standalone application that uses mock APIs
 
 1. Build and run locally.
 
-    **Mock APIs**
-
-    To run politeiagui using mock APIs that do not communicate with `politeiawww` (useful for working on UI changes only), run the following command:
-    
-    `yarn && yarn uidev`
-    
     **Against politeiawww**
     
     To run politeiagui against `politeiawww`, make sure `politeiawww` is running and use the following command:
     
     `yarn && yarn start`
+
+    **Mock APIs (WARNING: may be out of date)**
+
+    To run politeiagui using mock APIs that do not communicate with `politeiawww` (useful for working on UI changes only), run the following command:
+    
+    `yarn && yarn uidev`
+    
+
     
 
 ## Production
@@ -56,7 +58,13 @@ It is necessary for politeiagui to connect to the testnet or mainnet in order to
 
 ## Testing 
 
-Politeiagui currently has unit tests for its core logic. Test coverage is provied for lib files (`/src/lib/*`) and actions files (`/src/actions/*`).
+Politeiagui has unit tests for its core logic. To run all unit tests run the command:
+
+    yarn test
+
+
+Test coverage is currently provided for (`actions/*`), (`lib/*, reducers/*`) and (`selectors/*`).
+
 
 Relevant libraries/modules used for testing are:
 
@@ -67,7 +75,7 @@ Relevant libraries/modules used for testing are:
 
 ## Docker
 
-Politeiagui can be hosted in a docker container. To build the site and the docker container, run the following commands:
+Politeiagui can also be hosted in a docker container. To build the the docker container, run the following commands:
 
 ```bash
 $ ./bin/build.sh
