@@ -9,8 +9,8 @@ describe("test external api lib (lib/api.js)", () => {
   const FAKE_MAINNET_ADDRESS = "M_fake_address";
   const dcrdataTestnetUrl = "https://testnet.dcrdata.org/api";
   const dcrdataExplorerUrl = "https://explorer.dcrdata.org/api";
-  const insightTestnetUrl = "https://testnet.decred.org/api";
-  const insightMainnetUrl = "https://mainnet.decred.org/api";
+  const insightTestnetUrl = "https://testnet.decred.org/insight/api";
+  const insightMainnetUrl = "https://mainnet.decred.org/insight/api";
   const faucetUrl = "https://faucet.decred.org/requestfaucet";
 
   test("get height from dcrd data", async () => {
