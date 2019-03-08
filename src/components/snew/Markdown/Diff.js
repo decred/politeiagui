@@ -35,7 +35,7 @@ const DiffHeader = ({
               href=""
             >
               {filesDiff ? "Text Diff" : "Files Diff"}
-              {isNewFile ? <span className="new-file-indicator" /> : null}
+              {isNewFile && <span className="new-file-indicator" />}
             </span>
           ) : null}
           <span onClick={onClose} style={{ cursor: "pointer" }}>
@@ -53,45 +53,23 @@ const DiffBody = ({ body }) => (
   </div>
 );
 
-const FilesDiff = ({ oldFiles, newFiles }) => {
-  const filesDiff = [];
-  const hasFile = (file, items) =>
-    items.filter(f => f.name === file.name && f.payload === file.payload)
-      .length > 0;
-  oldFiles.forEach(file => {
-    if (!hasFile(file, newFiles)) file.removed = true;
-    filesDiff.push(file);
-  });
-  newFiles.forEach(file => {
-    if (!hasFile(file, filesDiff)) {
-      file.added = true;
-      filesDiff.push(file);
-    }
-  });
-  return <ProposalImages files={filesDiff} readOnly={true} />;
-};
+const getFilesDiff = (newFiles, oldFiles, diffFunc) => [
+  ...newFiles.filter(diffFunc(oldFiles)).map(markAsAdded),
+  ...oldFiles.filter(diffFunc(newFiles)).map(markAsRemoved)
+];
+
+const markAsAdded = elem => ({ ...elem, added: true });
+const markAsRemoved = elem => ({ ...elem, removed: true });
+const diffFunc = arr => elem =>
+  !arr.some(
+    arrelem => arrelem.name === elem.name && arrelem.payload === elem.payload
+  );
+// This function allows us to know if the file has changed or not, in order to display the red dot
+// to indicate the Files Diff
+const hasFilesChanged = filesDiff => filesDiff.length > 0;
 
 const withDiffStyle = {
   zIndex: 9999
-};
-
-// This function allows us to know if the file has changed or not, in order to display the red dot
-// to indicate the Files Diff
-const hasFileChanged = (oldFiles, newFiles) => {
-  const hasFile = (file, items) =>
-    items.filter(f => f.name === file.name && f.payload === file.payload)
-      .length > 0;
-  for (let i = 0; i < oldFiles.length; i++) {
-    if (!hasFile(oldFiles[i], newFiles)) {
-      return true;
-    }
-  }
-  for (let i = 0; i < newFiles.length; i++) {
-    if (!hasFile(newFiles[i], oldFiles)) {
-      return true;
-    }
-  }
-  return false;
 };
 
 class Diff extends React.Component {
@@ -117,6 +95,8 @@ class Diff extends React.Component {
       error
     } = this.props;
     const { filesDiff } = this.state;
+    const filesDiffArray = getFilesDiff(newFiles, oldFiles, diffFunc);
+    const hasFileChanged = hasFilesChanged(filesDiffArray);
     return (
       // It is not necessary to use another Modal component here, since we already call the openModal function on
       // the parent component
@@ -133,14 +113,14 @@ class Diff extends React.Component {
             lastEdition={lastEdition}
             onClose={onClose}
             filesDiff={filesDiff}
-            isNewFile={hasFileChanged(oldFiles, newFiles)}
+            isNewFile={hasFileChanged}
             onToggleFilesDiff={this.handleToggleFilesDiff}
             enableFilesDiff={oldFiles.length || newFiles.length}
           />
           {error ? (
             <Message body={error} type="error" />
           ) : filesDiff ? (
-            <FilesDiff oldFiles={oldFiles} newFiles={newFiles} />
+            <ProposalImages files={filesDiffArray} readOnly={true} />
           ) : (
             <DiffBody body={insertDiffHTML(oldProposal, newProposal)} />
           )}
