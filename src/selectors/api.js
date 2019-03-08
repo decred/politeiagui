@@ -6,7 +6,8 @@ import { and, or, bool, constant, not } from "../lib/fp";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_CENSORED,
-  PROPOSAL_STATUS_ABANDONED
+  PROPOSAL_STATUS_ABANDONED,
+  CMSWWWMODE
 } from "../constants";
 
 export const getIsApiRequesting = key =>
@@ -643,10 +644,13 @@ export const isApiRequesting = or(
 );
 
 // CMS Selectors
-export const isCMS = compose(
-  get("cms"),
+const mode = compose(
+  get("mode"),
   apiInitResponse
 );
+
+export const isCMS = () => bool(eq(CMSWWWMODE, mode));
+
 export const inviteUserResponse = getApiResponse("inviteUser");
 export const isApiRequestingInviteUser = getIsApiRequesting("inviteUser");
 
