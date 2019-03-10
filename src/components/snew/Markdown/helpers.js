@@ -20,35 +20,32 @@ export const htmlParserRules = htmlParser({
   }
 });
 
-// insertDiffHTML - The function compares the oldTextBody with the newTextBody line by line.
-// the lines that have differences are highlighted as "added" or "removed".
 export const insertDiffHTML = (oldTextBody, newTextBody) => {
-  // handleDiffLine - The function gets one line and checks which words have changed.
-  // if the line is added, it wraps the line with a green mark using a HTML tag. If the
-  // line is removed, it wraps it with a red mark.
   const handleDiffLine = (line, index) => {
     const { removed, value, added } = line;
     const diffLine = [];
 
     const dw = diffWordsWithSpace(removed ? removed : "", value ? value : "");
     if (removed) {
-      const result = [];
+      const diffStrings = [];
       dw.forEach((x, i) =>
-        result.push(handleDiffString(x, false, !!removed, i))
+        diffStrings.push(handleDiffString(x, false, !!removed, i))
       );
       diffLine.push(
         <li className="diff-line-out" key={index}>
-          {result}
+          {diffStrings}
         </li>
       );
     }
     if (added) {
-      const result = [];
-      dw.forEach((x, i) => result.push(handleDiffString(x, added, false, i)));
+      const diffStrings = [];
+      dw.forEach((x, i) =>
+        diffStrings.push(handleDiffString(x, added, false, i))
+      );
       // the index is added .5 to differentiate from added lines
       diffLine.push(
         <li className="diff-line-in" key={index + ".5"}>
-          {result}
+          {diffStrings}
         </li>
       );
     }
@@ -63,11 +60,10 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
     }
     return diffLine;
   };
-  // handleDiffString - The function gets a string, checks if the string is added, removed or unchanged
+
   const handleDiffString = (string, isLineAdded, isLineRemoved, index) => {
     const { removed, added, value } = string;
     if (removed) {
-      // check if line is removed so it doesn't add a red mark into a green line
       if (isLineAdded) return "";
       return (
         <span className="diff-out" key={index}>
@@ -75,7 +71,6 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
         </span>
       );
     } else if (added) {
-      // same checking here to avoid red marks on green lines
       if (isLineRemoved) return "";
       return (
         <span className="diff-in" key={index}>
@@ -118,25 +113,21 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
     string && string.length
       ? string.split("\n").map((line, index) => ({ value: line, index: index }))
       : [];
-  // split comments into lines to get line numbers in order
-  //  to make the line-by-line comparison
+
   const oldComLines = getLineArray(oldTextBody);
   const newComLines = getLineArray(newTextBody);
+  // order matters
   const linesDiff = arrayDiff(newComLines, oldComLines, diffFunc).sort(
     (a, b) => a.lineIndex - b.lineIndex
   );
 
-  const finalDiff = [];
-  // loop the array to run the handleDiffLine function for all lines
-  linesDiff.forEach((line, index) => {
-    // if line is not empty
+  return linesDiff.map((line, index) => {
     if (line.value !== "" || line.removed) {
-      finalDiff.push(handleDiffLine(line, index));
+      return handleDiffLine(line, index);
     } else {
-      finalDiff.push(<span key={index} />);
+      return <span key={index} />;
     }
   });
-  return finalDiff;
 };
 
 export const traverseChildren = (el, cb) => {

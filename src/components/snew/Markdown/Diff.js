@@ -71,7 +71,9 @@ const eqFunc = arr => elem =>
   );
 // This function allows us to know if the file has changed or not, in order to display the red dot
 // to indicate the Files Diff
-const hasFilesChanged = filesDiff => filesDiff.length > 0;
+const hasFilesChanged = filesDiff =>
+  filesDiff.length > 0 &&
+  filesDiff.filter(file => file.added || file.removed).length > 0;
 
 const withDiffStyle = {
   zIndex: 9999
