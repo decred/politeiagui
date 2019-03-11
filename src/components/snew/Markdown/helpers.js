@@ -80,10 +80,10 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
     }
     return value;
   };
-  const arrayDiff = (newCommentBody, oldCommentBody, diffFunc) => [
-    ...newCommentBody.filter(diffFunc(oldCommentBody)).map(markAsAdded),
-    ...oldCommentBody.filter(diffFunc(newCommentBody)).map(markAsRemoved),
-    ...newCommentBody.filter(eqFunc(oldCommentBody)).map(markAsUnchanged)
+  const arrayDiff = (newCommentBody, oldCommentBody, lineDiffFunc) => [
+    ...newCommentBody.filter(lineDiffFunc(oldCommentBody)).map(markAsAdded),
+    ...oldCommentBody.filter(lineDiffFunc(newCommentBody)).map(markAsRemoved),
+    ...newCommentBody.filter(lineEqFunc(oldCommentBody)).map(markAsUnchanged)
   ];
   const markAsAdded = elem => ({
     value: elem.value,
@@ -105,9 +105,9 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
     added: false,
     status: "line unchanged"
   });
-  const diffFunc = arr => elem =>
+  const lineDiffFunc = arr => elem =>
     !arr.some(arrelem => arrelem.value === elem.value);
-  const eqFunc = arr => elem => !diffFunc(arr)(elem);
+  const lineEqFunc = arr => elem => !lineDiffFunc(arr)(elem);
   const getLineArray = string =>
     string && string.length
       ? string.split("\n").map((line, index) => ({ value: line, index: index }))
@@ -116,7 +116,7 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
   const oldComLines = getLineArray(oldTextBody);
   const newComLines = getLineArray(newTextBody);
   // order matters
-  const linesDiff = arrayDiff(newComLines, oldComLines, diffFunc).sort(
+  const linesDiff = arrayDiff(newComLines, oldComLines, lineDiffFunc).sort(
     (a, b) => a.lineIndex - b.lineIndex
   );
 

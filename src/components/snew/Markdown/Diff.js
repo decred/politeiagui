@@ -53,19 +53,19 @@ const DiffBody = ({ body }) => (
   </div>
 );
 
-const getFilesDiff = (newFiles, oldFiles, diffFunc) => [
-  ...newFiles.filter(diffFunc(oldFiles)).map(markAsAdded),
-  ...oldFiles.filter(diffFunc(newFiles)).map(markAsRemoved),
-  ...newFiles.filter(eqFunc(oldFiles)) // for unchanged files
+const getFilesDiff = (newFiles, oldFiles, filesDiffFunc) => [
+  ...newFiles.filter(filesDiffFunc(oldFiles)).map(markAsAdded),
+  ...oldFiles.filter(filesDiffFunc(newFiles)).map(markAsRemoved),
+  ...newFiles.filter(filesEqFunc(oldFiles)) // for unchanged files
 ];
 
 const markAsAdded = elem => ({ ...elem, added: true });
 const markAsRemoved = elem => ({ ...elem, removed: true });
-const diffFunc = arr => elem =>
+const filesDiffFunc = arr => elem =>
   !arr.some(
     arrelem => arrelem.name === elem.name && arrelem.payload === elem.payload
   );
-const eqFunc = arr => elem => !diffFunc(arr)(elem);
+const filesEqFunc = arr => elem => !filesDiffFunc(arr)(elem);
 // This function allows us to know if the file has changed or not, in order to display the red dot
 // to indicate the Files Diff
 const hasFilesChanged = filesDiff =>
@@ -99,7 +99,7 @@ class Diff extends React.Component {
       error
     } = this.props;
     const { filesDiff } = this.state;
-    const filesDiffArray = getFilesDiff(newFiles, oldFiles, diffFunc);
+    const filesDiffArray = getFilesDiff(newFiles, oldFiles, filesDiffFunc);
     const hasFileChanged = hasFilesChanged(filesDiffArray);
     return (
       // It is not necessary to use another Modal component here, since we already call the openModal function on
