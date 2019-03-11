@@ -83,7 +83,9 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
   const arrayDiff = (newCommentBody, oldCommentBody, diffFunc) => [
     ...newCommentBody.filter(diffFunc(oldCommentBody)).map(markAsAdded),
     ...oldCommentBody.filter(diffFunc(newCommentBody)).map(markAsRemoved),
-    ...newCommentBody.filter(eqFunc(oldCommentBody)).map(markAsUnchanged)
+    ...newCommentBody
+      .filter(diffFunc(oldCommentBody, true))
+      .map(markAsUnchanged)
   ];
   const markAsAdded = elem => ({
     value: elem.value,
@@ -105,10 +107,10 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
     added: false,
     status: "line unchanged"
   });
-  const diffFunc = arr => elem =>
-    !arr.some(arrelem => arrelem.value === elem.value);
-  const eqFunc = arr => elem =>
-    arr.some(arrelem => arrelem.value === elem.value);
+  const diffFunc = (arr, matchEqual = false) => elem =>
+    !arr.some(arrelem => arrelem.value === elem.value)
+      ? !matchEqual
+      : matchEqual;
   const getLineArray = string =>
     string && string.length
       ? string.split("\n").map((line, index) => ({ value: line, index: index }))
