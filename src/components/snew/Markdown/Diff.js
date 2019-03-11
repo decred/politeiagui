@@ -56,21 +56,16 @@ const DiffBody = ({ body }) => (
 const getFilesDiff = (newFiles, oldFiles, diffFunc) => [
   ...newFiles.filter(diffFunc(oldFiles)).map(markAsAdded),
   ...oldFiles.filter(diffFunc(newFiles)).map(markAsRemoved),
-  ...newFiles.filter(diffFunc(oldFiles, true)) // for unchanged files
+  ...newFiles.filter(eqFunc(oldFiles)) // for unchanged files
 ];
 
 const markAsAdded = elem => ({ ...elem, added: true });
 const markAsRemoved = elem => ({ ...elem, removed: true });
-const diffFunc = (arr, matchEqual = false) => elem =>
+const diffFunc = arr => elem =>
   !arr.some(
     arrelem => arrelem.name === elem.name && arrelem.payload === elem.payload
-  )
-    ? !matchEqual
-    : matchEqual;
-// const eqFunc = arr => elem =>
-//   arr.some(
-//     arrelem => arrelem.name === elem.name && arrelem.payload === elem.payload
-//   );
+  );
+const eqFunc = arr => elem => !diffFunc(arr)(elem);
 // This function allows us to know if the file has changed or not, in order to display the red dot
 // to indicate the Files Diff
 const hasFilesChanged = filesDiff =>
