@@ -51,11 +51,7 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
     }
     if (!removed && !added) {
       diffLine.push(
-        value ? (
-          <MarkdownRenderer body={value} key={index} />
-        ) : (
-          <p key={index} />
-        )
+        value ? <MarkdownRenderer body={value} key={index} /> : null
       );
     }
     return diffLine;
