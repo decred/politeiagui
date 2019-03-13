@@ -54,7 +54,7 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
         value ? (
           <MarkdownRenderer body={value} key={index} />
         ) : (
-          <p key={index}>""</p>
+          <p key={index} />
         )
       );
     }
@@ -64,14 +64,14 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
   const handleDiffString = (string, isLineAdded, isLineRemoved, index) => {
     const { removed, added, value } = string;
     if (removed) {
-      if (isLineAdded) return "";
+      if (isLineAdded) return <span />;
       return (
         <span className="diff-out" key={index}>
           <MarkdownRenderer body={value} />
         </span>
       );
     } else if (added) {
-      if (isLineRemoved) return "";
+      if (isLineRemoved) return <span />;
       return (
         <span className="diff-in" key={index}>
           <MarkdownRenderer body={value} />
