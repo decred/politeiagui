@@ -1559,6 +1559,18 @@ form div.usertext-body.may-blank-within.md-container {
   cursor: pointer;
 }
 
+.new-file-indicator {
+  color: red;
+  position: relative;
+  top: -12px;
+  font-size: 0px;
+  right: 0px;
+  border-style: solid;
+  border-radius: 50%;
+  max-width: 3px;
+  max-height: 3px;
+}
+
 .linkish-modal {
 	color: #2971FF;
 	font-size: .8em;
@@ -1798,16 +1810,34 @@ form div.usertext-body.may-blank-within.md-container {
   font-family: monospace;
 }
 
-.diff-in {
+.diff-line-in {
+  list-style-type: none;
   background-color: #e6ffed;
+  color: #164623;
+}
+
+.diff-in {
+  list-style-type: none;
+  background-color: #bfffd1;
+  color: #164623;
+  display:inline-block;
+  margin-left: 0.16em;
 }
 
 .diff-out {
+  list-style-type: none;
+  background-color: #f8bac1;
+  color: #cb2431;
+  display:inline-block;
+  margin-left: 0.16em;
+}
+
+.diff-line-out {
   background-color: #ffdce0;
+  list-style-type: none;
   color: #cb2431;
   position: relative;
 }
-
 
 .diff-out-line {
   background-color: #cb2431;

@@ -107,7 +107,7 @@ export const onSaveChangePassword = ({ existingPassword, newPassword }) => (
     sel.newProposalToken(getState())
   );
 
-export const onFetchProposal = token => dispatch =>
+export const onFetchProposalApp = token => dispatch =>
   dispatch(onFetchProposalApi(token)).then(() =>
     dispatch(onFetchProposalComments(token))
   );
@@ -130,7 +130,7 @@ export const onChangeProposalStatusApproved = status =>
 export const onIdentityImported = (successMsg, errorMsg = "") =>
   act.IDENTITY_IMPORTED({ errorMsg, successMsg });
 
-export const onSubmitComment = (...args) => dispatch =>
+export const onSubmitCommentApp = (...args) => dispatch =>
   dispatch(onSubmitCommentApi(...args)).then(() =>
     dispatch(onSetReplyParent())
   );

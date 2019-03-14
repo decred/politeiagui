@@ -1,8 +1,9 @@
 import React from "react";
-import { diffWords } from "diff";
+import { diffWordsWithSpace } from "diff";
 import htmlParser from "react-markdown/plugins/html-parser";
 import xssFilters from "xss-filters";
 import * as modalTypes from "../../Modal/modalTypes";
+import MarkdownRenderer from "./Markdown";
 
 const diffCheck = node => {
   const className = node.attribs.classname;
@@ -19,20 +20,109 @@ export const htmlParserRules = htmlParser({
   }
 });
 
-export const insertDiffHTML = (oldComment, newComment) => {
-  const diff = diffWords(oldComment, newComment, { ignoreCase: true });
+export const insertDiffHTML = (oldTextBody, newTextBody) => {
+  const handleDiffLine = (line, index) => {
+    const { removed, value, added } = line;
+    const diffLine = [];
 
-  const handleDiffString = string => {
-    const { added, removed, value } = string;
-    if (added) return `<span className='diff-in'>${value}</span>`;
-    else if (removed) return `<span className='diff-out'>${value}</span>`;
-    return value;
+    const dw = diffWordsWithSpace(removed ? removed : "", value ? value : "");
+    if (removed) {
+      const diffStrings = [];
+      dw.forEach((x, i) =>
+        diffStrings.push(handleDiffString(x, false, !!removed, i))
+      );
+      diffLine.push(
+        <li className="diff-line-out" key={index}>
+          {diffStrings}
+        </li>
+      );
+    }
+    if (added) {
+      const diffStrings = [];
+      dw.forEach((x, i) =>
+        diffStrings.push(handleDiffString(x, added, false, i))
+      );
+      // the index is added .5 to differentiate from added lines
+      diffLine.push(
+        <li className="diff-line-in" key={index + ".5"}>
+          {diffStrings}
+        </li>
+      );
+    }
+    if (!removed && !added) {
+      diffLine.push(
+        value ? <MarkdownRenderer body={value} key={index} /> : null
+      );
+    }
+    return diffLine;
   };
 
-  return diff.reduce(
-    (accumulated, current) => accumulated + handleDiffString(current),
-    ""
+  const handleDiffString = (string, isLineAdded, isLineRemoved, index) => {
+    const { removed, added, value } = string;
+    if (removed) {
+      if (isLineAdded) return <span />;
+      return (
+        <span className="diff-out" key={index}>
+          <MarkdownRenderer body={value} />
+        </span>
+      );
+    } else if (added) {
+      if (isLineRemoved) return <span />;
+      return (
+        <span className="diff-in" key={index}>
+          <MarkdownRenderer body={value} />
+        </span>
+      );
+    }
+    return value;
+  };
+  const arrayDiff = (newCommentBody, oldCommentBody, lineDiffFunc) => [
+    ...newCommentBody.filter(lineDiffFunc(oldCommentBody)).map(markAsAdded),
+    ...oldCommentBody.filter(lineDiffFunc(newCommentBody)).map(markAsRemoved),
+    ...newCommentBody.filter(lineEqFunc(oldCommentBody)).map(markAsUnchanged)
+  ];
+  const markAsAdded = elem => ({
+    value: elem.value,
+    lineIndex: elem.index,
+    removed: false,
+    added: true,
+    status: "line added"
+  });
+  const markAsRemoved = elem => ({
+    lineIndex: elem.index,
+    removed: elem.value,
+    added: false,
+    status: "line removed"
+  });
+  const markAsUnchanged = elem => ({
+    value: elem.value,
+    lineIndex: elem.index,
+    removed: false,
+    added: false,
+    status: "line unchanged"
+  });
+  const lineDiffFunc = arr => elem =>
+    !arr.some(arrelem => arrelem.value === elem.value);
+  const lineEqFunc = arr => elem => !lineDiffFunc(arr)(elem);
+  const getLineArray = string =>
+    string && string.length
+      ? string.split("\n").map((line, index) => ({ value: line, index: index }))
+      : [];
+
+  const oldComLines = getLineArray(oldTextBody);
+  const newComLines = getLineArray(newTextBody);
+  // order matters
+  const linesDiff = arrayDiff(newComLines, oldComLines, lineDiffFunc).sort(
+    (a, b) => a.lineIndex - b.lineIndex
   );
+
+  return linesDiff.map((line, index) => {
+    if (line.value !== "" || line.removed) {
+      return handleDiffLine(line, index);
+    } else {
+      return <span key={index} />;
+    }
+  });
 };
 
 export const traverseChildren = (el, cb) => {

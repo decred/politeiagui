@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import MarkdownRenderer from "./Markdown";
+import { insertDiffHTML } from "./helpers";
 import Message from "../../Message";
 import ProposalImages from "../../ProposalImages";
 
@@ -13,7 +13,8 @@ const DiffHeader = ({
   loading,
   enableFilesDiff,
   filesDiff,
-  onToggleFilesDiff
+  onToggleFilesDiff,
+  isNewFile
 }) => (
   <div className="diff-header">
     {loading ? (
@@ -33,7 +34,8 @@ const DiffHeader = ({
               onClick={onToggleFilesDiff}
               href=""
             >
-              {filesDiff ? "Text" : "Files"}
+              {filesDiff ? "Text Diff" : "Files Diff"}
+              {isNewFile && <span className="new-file-indicator" />}
             </span>
           ) : null}
           <span onClick={onClose} style={{ cursor: "pointer" }}>
@@ -45,24 +47,34 @@ const DiffHeader = ({
   </div>
 );
 
-/** TODO: use files diff component when diff implementation is polished  */
-// const FilesDiff = ({ oldFiles, newFiles }) => {
-//   const filesDiff = [];
-//   const hasFile = (file, items) =>
-//     items.filter(f => f.name === file.name && f.payload === file.payload)
-//       .length > 0;
-//   oldFiles.forEach(file => {
-//     if (!hasFile(file, newFiles)) file.removed = true;
-//     filesDiff.push(file);
-//   });
-//   newFiles.forEach(file => {
-//     if (!hasFile(file, filesDiff)) {
-//       file.added = true;
-//       filesDiff.push(file);
-//     }
-//   });
-//   return <ProposalImages files={filesDiff} readOnly={true} />;
-// };
+const DiffBody = ({ body }) => (
+  <div className="md" style={{ padding: "16px" }}>
+    {body}
+  </div>
+);
+
+const getFilesDiff = (newFiles, oldFiles, filesDiffFunc) => [
+  ...newFiles.filter(filesDiffFunc(oldFiles)).map(markAsAdded),
+  ...oldFiles.filter(filesDiffFunc(newFiles)).map(markAsRemoved),
+  ...newFiles.filter(filesEqFunc(oldFiles)) // for unchanged files
+];
+
+const markAsAdded = elem => ({ ...elem, added: true });
+const markAsRemoved = elem => ({ ...elem, removed: true });
+const filesDiffFunc = arr => elem =>
+  !arr.some(
+    arrelem => arrelem.name === elem.name && arrelem.payload === elem.payload
+  );
+const filesEqFunc = arr => elem => !filesDiffFunc(arr)(elem);
+// This function allows us to know if the file has changed or not, in order to display the red dot
+// to indicate the Files Diff
+const hasFilesChanged = filesDiff =>
+  filesDiff.length > 0 &&
+  filesDiff.filter(file => file.added || file.removed).length > 0;
+
+const withDiffStyle = {
+  zIndex: 9999
+};
 
 class Diff extends React.Component {
   state = { filesDiff: false };
@@ -75,7 +87,9 @@ class Diff extends React.Component {
   render() {
     const {
       newProposal,
+      oldProposal,
       newFiles,
+      oldFiles,
       title,
       version,
       userName,
@@ -85,30 +99,36 @@ class Diff extends React.Component {
       error
     } = this.props;
     const { filesDiff } = this.state;
+    const filesDiffArray = getFilesDiff(newFiles, oldFiles, filesDiffFunc);
+    const hasFileChanged = hasFilesChanged(filesDiffArray);
     return (
-      <div className="modal-content diff-wrapper">
-        <DiffHeader
-          title={title}
-          version={version}
-          loading={loading}
-          userName={userName}
-          lastEdition={lastEdition}
-          onClose={onClose}
-          filesDiff={filesDiff}
-          onToggleFilesDiff={this.handleToggleFilesDiff}
-          enableFilesDiff={newFiles.length}
-        />
-        {error ? (
-          <Message body={error} type="error" />
-        ) : filesDiff ? (
-          <ProposalImages files={newFiles} readOnly={true} />
-        ) : (
-          <MarkdownRenderer
-            body={newProposal}
-            style={{ padding: "16px" }}
-            scapeHtml={false}
+      // It is not necessary to use another Modal component here, since we already call the openModal function on
+      // the parent component
+      <div
+        className="modal-content"
+        style={{ minWidth: "700px", ...withDiffStyle }}
+      >
+        <div className="diff-wrapper">
+          <DiffHeader
+            title={title}
+            version={version}
+            loading={loading}
+            userName={userName}
+            lastEdition={lastEdition}
+            onClose={onClose}
+            filesDiff={filesDiff}
+            isNewFile={hasFileChanged}
+            onToggleFilesDiff={this.handleToggleFilesDiff}
+            enableFilesDiff={oldFiles.length || newFiles.length}
           />
-        )}
+          {error ? (
+            <Message body={error} type="error" />
+          ) : filesDiff ? (
+            <ProposalImages files={filesDiffArray} readOnly={true} />
+          ) : (
+            <DiffBody body={insertDiffHTML(oldProposal, newProposal)} />
+          )}
+        </div>
       </div>
     );
   }

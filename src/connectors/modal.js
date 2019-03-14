@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as sel from "../selectors";
-import * as act from "../actions";
+import { closeModal, closeAllModals, openModal } from "../actions";
 import { confirmWithModal } from "../actions/modal";
 
 export default connect(
@@ -11,9 +11,9 @@ export default connect(
   dispatch =>
     bindActionCreators(
       {
-        closeModal: act.closeModal,
-        closeAllModals: act.closeAllModals,
-        openModal: act.openModal,
+        closeModal: closeModal,
+        closeAllModals: closeAllModals,
+        openModal: openModal,
         confirmWithModal: confirmWithModal
       },
       dispatch
