@@ -4,6 +4,7 @@ import Modal from "./Modal";
 import ModalContent from "./ModalContent";
 import modalStackConnector from "../../connectors/modalStack";
 import { withRouter } from "react-router-dom";
+import { WELCOME_MODAL } from "./modalTypes";
 
 class ModalStack extends React.Component {
   state = {
@@ -12,6 +13,9 @@ class ModalStack extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { openedModals, location, closeAllModals } = this.props;
+    const welcomeModal = openedModals.filter(
+      modal => modal.type === WELCOME_MODAL
+    );
     const { modals } = this.state;
     let modalChanged = false;
     if (modals.length > openedModals.length) {
@@ -29,9 +33,8 @@ class ModalStack extends React.Component {
           document.querySelector("body").style.overflowY = "hidden";
         else document.querySelector("body").style.overflowY = "scroll";
       });
-
-    // closes modals if user path has changed
-    if (location.pathname !== prevProps.location.pathname) {
+    // closes modals if user path has changed except when it's the user's first access
+    if (location.pathname !== prevProps.location.pathname && !welcomeModal) {
       closeAllModals();
     }
   }
