@@ -25,6 +25,7 @@ class ConfirmAction extends React.Component {
         cancelText={me.payload.cancelText || "No"}
         onCancel={this.handleCancel}
         onSubmit={this.handleConfirm}
+        onClose={this.props.closeModal}
       >
         <div
           style={
