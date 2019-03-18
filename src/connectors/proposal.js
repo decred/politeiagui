@@ -43,7 +43,7 @@ const proposalConnector = connect(
   dispatch =>
     bindActionCreators(
       {
-        onFetchData: act.onFetchProposal,
+        onFetchData: act.onFetchProposalApp,
         onSetReplyParent: act.onSetReplyParent,
         onFetchProposalVoteStatus: act.onFetchProposalVoteStatus,
         onFetchLikedComments: act.onFetchLikedComments,
