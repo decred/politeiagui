@@ -24,6 +24,7 @@ import {
   apiUserResponse,
   apiEditUserResponse,
   apiEditUserPayload,
+  apiReadComments,
   isCMS,
   apiAdminInvoices
 } from "./api";
@@ -257,6 +258,8 @@ export const activeVotesEndHeight = state => state.app.activeVotesEndHeight;
 export const proposalComments = state => apiProposalComments(state);
 
 export const invoiceComments = state => apiInvoiceComments(state);
+
+export const readComments = state => apiReadComments(state).commentids || [];
 
 export const getTempThreadTree = state => state.app.replyThreadTree;
 

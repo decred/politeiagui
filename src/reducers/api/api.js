@@ -22,7 +22,9 @@ import {
   onReceiveVoteStatusChange,
   onReceiveRescanUserPayments,
   onReceiveProposalVoteResults,
-  onReceiveManageUser
+  onReceiveManageUser,
+  onReceiveSetReadComments,
+  onReceiveProposalComments
 } from "./handlers";
 import { onReceiveSetStatusInvoice } from "./handlersCMS";
 
@@ -66,6 +68,7 @@ export const DEFAULT_STATE = {
   email: "",
   keyMismatch: false,
   lastLoaded: {},
+  readComments: DEFAULT_REQUEST_STATE,
   // CMS
   newInvoice: DEFAULT_REQUEST_STATE
 };
@@ -130,7 +133,11 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.REQUEST_PROPOSAL_COMMENTS]: () =>
       request("proposalComments", state, action),
     [act.RECEIVE_PROPOSAL_COMMENTS]: () =>
-      receive("proposalComments", state, action),
+      onReceiveProposalComments(state, action),
+    [act.REQUEST_SET_READ_COMMENTS]: () =>
+      request("readComments", state, action),
+    [act.RECEIVE_SET_READ_COMMENTS]: () =>
+      onReceiveSetReadComments(state, action),
     [act.REQUEST_LIKE_COMMENT]: () => request("likeComment", state, action),
     [act.RECEIVE_LIKE_COMMENT]: () => receive("likeComment", state, action),
     [act.REQUEST_CENSOR_COMMENT]: () => request("censorComment", state, action),

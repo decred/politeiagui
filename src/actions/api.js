@@ -394,6 +394,19 @@ export const onFetchProposalComments = token =>
       });
   });
 
+export const onSetReadComments = (token, readComments) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_SET_READ_COMMENTS());
+    return api
+      .onSetUserReadComments(csrf, token, readComments)
+      .then(response => {
+        response && dispatch(act.RECEIVE_SET_READ_COMMENTS(readComments));
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_SET_READ_COMMENTS(null, error));
+      });
+  });
+
 export const onFetchLikedComments = token => dispatch => {
   dispatch(act.REQUEST_LIKED_COMMENTS(token));
   return api
@@ -612,7 +625,6 @@ export const onSubmitComment = (
               comment: responsecomment
             })
           );
-        return;
       })
       .catch(error => {
         dispatch(act.RECEIVE_NEW_COMMENT(null, error));

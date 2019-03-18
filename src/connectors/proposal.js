@@ -39,7 +39,8 @@ const proposalConnector = connect(
     otherFiles: sel.getNotMarkdownFile,
     commentsSortOption: sel.commentsSortOption,
     openedModals: sel.getopenedModals,
-    isCMS: sel.isCMS
+    isCMS: sel.isCMS,
+    readComments: sel.readComments
   }),
   dispatch =>
     bindActionCreators(
@@ -49,7 +50,8 @@ const proposalConnector = connect(
         onFetchProposalVoteStatus: act.onFetchProposalVoteStatus,
         onFetchLikedComments: act.onFetchLikedComments,
         onSetCommentsSortOption: act.onSetCommentsSortOption,
-        resetLastSubmittedProposal: act.resetLastSubmittedProposal
+        resetLastSubmittedProposal: act.resetLastSubmittedProposal,
+        onSetReadComments: act.onSetReadComments
       },
       dispatch
     )

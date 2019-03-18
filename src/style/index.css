@@ -1468,7 +1468,16 @@ button.inverse {
 .sort-select__dropdown-indicator {
   padding: 2px !important;
 }
-
+.comments-read-option {
+  text-align: right;
+  top: -23px;
+  padding-right: 8px;
+  position: relative;
+}
+.comments-read-option a{
+  padding-left: 7px;
+  font-size: 10px;
+}
 
 .version-select__control {
   width: 100px;

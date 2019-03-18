@@ -22,6 +22,27 @@ class ThingComment extends React.PureComponent {
       this.props.id
     );
   };
+  handleToggleReadComment = e => {
+    e && e.preventDefault && e.preventDefault();
+    const { readComments, id, onSetReadComments, token } = this.props;
+    if (!readComments.find(cid => cid === id)) {
+      onSetReadComments(token, [...readComments, id]);
+    } else {
+      const newReadComments = readComments.filter(
+        commentid => commentid !== id
+      );
+      onSetReadComments(token, newReadComments);
+    }
+  };
+
+  handleLikeComment = (loggedInAsEmail, token, commentid, action) => {
+    const { readComments, onSetReadComments, onLikeComment } = this.props;
+    if (!readComments.find(cid => cid === commentid) && loggedInAsEmail) {
+      onSetReadComments(token, [...readComments, commentid]);
+    }
+    onLikeComment(loggedInAsEmail, token, commentid, action);
+  };
+
   handleCommentMaxHeight = () => {
     const insertAfter = (newNode, referenceNode) =>
       referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
@@ -50,20 +71,19 @@ class ThingComment extends React.PureComponent {
       });
     });
   };
+
   componentDidMount() {
     this.handleCommentMaxHeight();
   }
 
   render() {
     const {
-      onLikeComment,
       loggedInAsEmail,
       token,
       keyMismatch,
       getVoteStatus,
       likeCommentError,
       likeCommentPayload,
-      lastVisit,
       commentid,
       showCommentForm,
       toggleCommentForm,
@@ -71,12 +91,12 @@ class ThingComment extends React.PureComponent {
       proposalAuthor,
       proposalStatus,
       created_utc,
+      readComments,
       ...props
     } = this.props;
     const isProposalAbandoned = proposalStatus === PROPOSAL_STATUS_ABANDONED;
-    const isNewComment = lastVisit
-      ? lastVisit < created_utc && props.authorid !== props.userid
-      : false;
+    const isCommentRead = readComments.find(id => id === props.id);
+    const isCommentUnread = !isCommentRead;
     const isCommentPermalink = commentid === props.id;
     return (
       <div>
@@ -97,21 +117,22 @@ class ThingComment extends React.PureComponent {
             showCensorLink: !!props.isAdmin && !props.censored,
             showArrows: !props.censored && !isProposalAbandoned,
             grayBody: props.censored || isProposalAbandoned,
-            highlightcomment: isCommentPermalink || isNewComment,
+            highlightcomment: isCommentPermalink,
             showReply: !props.censored && !isProposalAbandoned,
             onShowReply: toggleCommentForm,
             onCensorComment: this.handleCommentCensor,
+            onToggleMarkAsRead: this.handleToggleReadComment,
             onCloseCommentForm,
             showCommentForm,
             proposalAuthor,
-            isNewComment,
+            isCommentUnread,
             user: loggedInAsEmail,
             authorHref: `/user/${props.authorid}`,
             blockvote:
               keyMismatch ||
               getVoteStatus(token).status === PROPOSAL_VOTING_FINISHED ||
               isProposalAbandoned,
-            handleVote: onLikeComment,
+            handleVote: this.handleLikeComment,
             token
           }}
         />

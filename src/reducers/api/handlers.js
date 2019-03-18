@@ -117,15 +117,39 @@ export const onReceiveCensoredComment = (state, action) => {
   };
 };
 
-export const onReceiveNewComment = (state, action) => {
-  state = receive("newComment", state, action);
-  if (action.error) return state;
+export const onReceiveProposalComments = (state, action) => {
+  state = receive("proposalComments", state, action);
+  if (action.error || !state.proposalComments.response.readcomments)
+    return state;
   return {
     ...state,
     proposalComments: {
       ...state.proposalComments,
       response: {
         ...state.proposalComments.response,
+        readcomments: {
+          commentids: state.proposalComments.response.readcomments || []
+        }
+      }
+    }
+  };
+};
+
+export const onReceiveNewComment = (state, action) => {
+  state = receive("newComment", state, action);
+  if (action.error) return state;
+  const prevReadComments = state.proposalComments.response.readcomments
+    ? state.proposalComments.response.readcomments.commentids || []
+    : [];
+  return {
+    ...state,
+    proposalComments: {
+      ...state.proposalComments,
+      response: {
+        ...state.proposalComments.response,
+        readcomments: {
+          commentids: [...prevReadComments, state.newComment.response.commentid]
+        },
         comments: [
           ...state.proposalComments.response.comments,
           {
@@ -140,6 +164,23 @@ export const onReceiveNewComment = (state, action) => {
             timestamp: Date.now() / 1000
           }
         ]
+      }
+    }
+  };
+};
+
+export const onReceiveSetReadComments = (state, action) => {
+  state = receive("readComments", state, action);
+  if (action.error) return state;
+  return {
+    ...state,
+    proposalComments: {
+      ...state.proposalComments,
+      response: {
+        ...state.proposalComments.response,
+        readcomments: {
+          commentids: action.payload
+        }
       }
     }
   };

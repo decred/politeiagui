@@ -76,7 +76,10 @@ describe("test api reducer", () => {
             userid: "0",
             username: "admin"
           }
-        ]
+        ],
+        readcomments: {
+          commentids: ["1"]
+        }
       }
     },
     me: {
@@ -216,6 +219,13 @@ describe("test api reducer", () => {
           ...state.proposalComments,
           response: {
             ...state.proposalComments.response,
+            readcomments: {
+              ...state.proposalComments.response.readcomments,
+              commentids: [
+                ...state.proposalComments.response.readcomments.commentids,
+                "3"
+              ]
+            },
             comments: [
               ...state.proposalComments.response.comments,
               {
@@ -263,6 +273,7 @@ describe("test api reducer", () => {
       newInvoice: DEFAULT_REQUEST_STATE,
       editProposal: DEFAULT_REQUEST_STATE,
       newComment: DEFAULT_REQUEST_STATE,
+      readComments: DEFAULT_REQUEST_STATE,
       forgottenPassword: DEFAULT_REQUEST_STATE,
       passwordReset: DEFAULT_REQUEST_STATE,
       changeUsername: DEFAULT_REQUEST_STATE,

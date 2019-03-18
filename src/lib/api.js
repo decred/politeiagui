@@ -373,6 +373,8 @@ export const proposalComments = token =>
   GET(`/v1/proposals/${token}/comments`).then(getResponse);
 export const invoiceComments = token =>
   GET(`/v1/invoices/${token}/comments`).then(getResponse);
+export const onSetUserReadComments = (csrf, token, readcomments) =>
+  POST(`/user/proposals/${token}/readcomments`, csrf, { readcomments });
 export const logout = csrf =>
   POST("/logout", csrf, {}).then(() => {
     localStorage.removeItem("state");

@@ -51,6 +51,15 @@ class CommentArea extends React.Component {
     // set the comment option in the app state
     this.props.onSetCommentsSortOption(option);
   };
+
+  handleSetAllRead = e => {
+    e && e.preventDefault && e.preventDefault();
+    const { comments, onSetReadComments, token } = this.props;
+    const newReadComments =
+      comments && comments.map(comment => comment.commentid);
+    onSetReadComments(token, newReadComments);
+  };
+
   render() {
     const {
       comments,
@@ -61,6 +70,7 @@ class CommentArea extends React.Component {
       onViewAllClick,
       token,
       numofcomments,
+      readComments,
       ...props
     } = this.props;
     return Object.keys(proposal).length === 0 ||
@@ -98,6 +108,16 @@ class CommentArea extends React.Component {
                     label: op
                   }))}
                 />
+              </div>
+            ) : null,
+          SetReadCommentsComponent: () =>
+            loggedInAsEmail &&
+            numofcomments > 0 &&
+            readComments.length !== numofcomments ? (
+              <div className="comments-read-option">
+                <a href={`proposals/${token}`} onClick={this.handleSetAllRead}>
+                  mark all as read
+                </a>
               </div>
             ) : null,
           hideSortOptions: false

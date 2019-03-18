@@ -54,7 +54,6 @@ export const testReceiveReducer = (reducer, key, state, action) => {
       error: action.error ? action.payload : null
     }
   });
-
   expect(action_state).toEqual(func_state);
 };
 

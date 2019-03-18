@@ -31,14 +31,16 @@ const replyConnector = connect(
     likeCommentPayload: sel.apiLikeCommentPayload,
     userAccessTime: sel.lastLoginTime,
     lastVisit: sel.visitedProposal,
-    userid: sel.userid
+    userid: sel.userid,
+    readComments: sel.readComments
   }),
   {
     onFetchData: act.onGetPolicy,
     onSubmitComment: act.onSubmitComment,
     onSetReplyParent: act.onSetReplyParent,
     onLikeComment: act.onLikeComment,
-    onCensorComment: act.onCensorComment
+    onCensorComment: act.onCensorComment,
+    onSetReadComments: act.onSetReadComments
   }
 );
 

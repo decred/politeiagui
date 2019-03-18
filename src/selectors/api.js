@@ -311,6 +311,13 @@ export const lastLoginTime = or(
   )
 );
 
+export const apiReadComments = or(
+  compose(
+    get("readcomments"),
+    apiProposalCommentsResponse
+  )
+);
+
 export const loggedInAsUsername = or(
   compose(
     get("username"),
