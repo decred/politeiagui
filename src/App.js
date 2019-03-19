@@ -40,7 +40,6 @@ class Loader extends Component {
 
     if (!prevProps.loggedInAsEmail && this.props.loggedInAsEmail) {
       this.props.onLoadDraftProposals(this.props.loggedInAsEmail);
-      this.props.onLoadCommentsSortOption(this.props.loggedInAsEmail);
     }
     if (prevProps.userPubkey && this.props.userPubkey) {
       verifyUserPubkey(

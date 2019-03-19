@@ -8,8 +8,10 @@ import {
   USER_DETAIL_TAB_PROPOSALS,
   USER_DETAIL_TAB_COMMENTS
 } from "../../constants";
-import { setQueryStringWithoutPageReload } from "../../helpers";
-import qs from "query-string";
+import {
+  setQueryStringValue,
+  getQueryStringValue
+} from "../../lib/queryString";
 
 const userDetailOptions = [
   {
@@ -42,9 +44,8 @@ class UserDetail extends Component {
     this.handleUpdateQueryForFilterValueChange(prevState);
   }
 
-  handleUpdateFilterValueForQueryValue = props => {
-    const { location } = props;
-    const { tab } = qs.parse(location.search);
+  handleUpdateFilterValueForQueryValue = () => {
+    const tab = getQueryStringValue("tab");
     const validTabOption = userDetailOptions.find(op => op.label === tab);
     return validTabOption ? validTabOption.value : USER_DETAIL_TAB_GENERAL;
   };
@@ -54,7 +55,7 @@ class UserDetail extends Component {
       op => op.value === this.state.tabId
     );
     filterValueTabHasChanged &&
-      setQueryStringWithoutPageReload(`?tab=${selectedOption.label}`);
+      setQueryStringValue("tab", selectedOption.label);
   };
 
   componentDidMount() {

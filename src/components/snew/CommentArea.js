@@ -11,14 +11,28 @@ import {
   SORT_BY_NEW,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES
 } from "../../constants";
-import qs from "query-string";
+import {
+  setQueryStringValue,
+  getQueryStringValue
+} from "../../lib/queryString";
 
 class CommentArea extends React.Component {
   componentDidMount() {
     const { comments } = this.props;
-    const { comments: scrollToComments } = qs.parse(this.props.location.search);
+    // see if the comment parameter is in the query string if it is the page is
+    // scrolled to the top of the comments area
+    const scrollToComments = getQueryStringValue("comments");
     if (comments && scrollToComments) {
       this.scrollToCommentArea();
+    }
+
+    // get the comment sort option from the query string. If it specified
+    // and valid, the sort option should be changed.
+    const sort = getQueryStringValue("sort");
+    const validSortOptionFromQueryString =
+      sort && [SORT_BY_NEW, SORT_BY_OLD, SORT_BY_TOP].find(o => o === sort);
+    if (validSortOptionFromQueryString) {
+      this.props.onSetCommentsSortOption({ value: sort, label: sort });
     }
   }
   scrollToCommentArea = () => {
@@ -30,12 +44,18 @@ class CommentArea extends React.Component {
       window.scrollTo(0, window.scrollY - additionalHeightToBypassHeader);
     }
   };
+  onSetCommentsSortOption = option => {
+    // set the coment option in the query string
+    setQueryStringValue("sort", option.value);
+
+    // set the comment option in the app state
+    this.props.onSetCommentsSortOption(option);
+  };
   render() {
     const {
       comments,
       loggedInAsEmail,
       proposal,
-      onSetCommentsSortOption,
       commentsSortOption,
       commentid,
       onViewAllClick,
@@ -72,7 +92,7 @@ class CommentArea extends React.Component {
                   isClearable={false}
                   escapeClearsValue={false}
                   value={commentsSortOption}
-                  onChange={onSetCommentsSortOption}
+                  onChange={this.onSetCommentsSortOption}
                   options={[SORT_BY_NEW, SORT_BY_OLD, SORT_BY_TOP].map(op => ({
                     value: op,
                     label: op
