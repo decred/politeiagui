@@ -10,8 +10,7 @@ import {
   MANAGE_USER_DEACTIVATE,
   MANAGE_USER_REACTIVATE,
   PUB_KEY_STATUS_LOADED,
-  PUB_KEY_STATUS_LOADING,
-  PAYWALL_STATUS_PAID
+  PUB_KEY_STATUS_LOADING
 } from "../../constants";
 import { CHANGE_PASSWORD_MODAL, CONFIRM_ACTION } from "../Modal/modalTypes";
 import PrivateKeyDownloadManager from "../PrivateKeyDownloadManager";
@@ -174,7 +173,6 @@ class GeneralTab extends React.Component {
     const {
       user,
       dcrdataTxUrl,
-      userPaywallStatus,
       isApiRequestingMarkAsPaid,
       isApiRequestingMarkNewUserAsExpired,
       isApiRequestingMarkUpdateKeyAsExpired,
@@ -486,7 +484,7 @@ class GeneralTab extends React.Component {
           <React.Fragment>
             <FieldSeparator />
             <Field label="Has paid">
-              {userPaywallStatus === PAYWALL_STATUS_PAID
+              {user && user.newuserpaywalltx !== ""
                 ? "Yes"
                 : [
                     <span>No</span>,
