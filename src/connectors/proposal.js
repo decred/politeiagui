@@ -7,7 +7,7 @@ import compose from "lodash/fp/compose";
 import { arg, or } from "../lib/fp";
 import * as sel from "../selectors";
 import * as act from "../actions";
-import { buildCommentsTree } from "../lib/snew";
+import { buildCommentsTree, buildSetOfComments } from "../lib/snew";
 
 const proposalConnector = connect(
   sel.selectorMap({
@@ -65,20 +65,10 @@ class Wrapper extends React.PureComponent {
     this.props.history.push(`/proposals/${this.props.token}`);
   };
 
-  // create data structure with all the comments on thread uniquely
-  buildSetOfComments = tree => {
-    const set = new Set();
-    Object.keys(tree).forEach(key => {
-      tree[key] && tree[key].forEach(item => item && set.add(item));
-      key && key !== "0" && set.add(key);
-    });
-    return set;
-  };
-
   render() {
     const { Component, ...props } = this.props;
     const { tree } = buildCommentsTree(props.comments, props.commentid);
-    const commentsSet = this.buildSetOfComments(tree);
+    const commentsSet = buildSetOfComments(tree);
     return (
       <Component
         {...{

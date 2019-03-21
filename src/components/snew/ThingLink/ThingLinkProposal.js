@@ -186,6 +186,15 @@ class ThingLinkComp extends React.Component {
       }
     };
 
+    // We use same component to render comment length on detail view and list view
+    // listOrDetailView checks if proposal is expanded
+    const detailViewComments = comments.length;
+    const listViewComments = numcomments;
+    const listOrDetailViewComments =
+      expanded && detailViewComments > listViewComments
+        ? detailViewComments
+        : listViewComments;
+
     return (
       <div
         className={`thing thing-proposal id-${id} odd link ${censoredorAbandoned()}`}
@@ -592,8 +601,8 @@ class ThingLinkComp extends React.Component {
                   data-event-action="comments"
                   href={`${url}?comments=true`}
                 >
-                  {numcomments || ""}{" "}
-                  {numcomments <= 1 ? "comment" : "comments"}
+                  {listOrDetailViewComments || ""}{" "}
+                  {listOrDetailViewComments <= 1 ? "comment" : "comments"}
                 </Link>
               </li>
             ) : null}
