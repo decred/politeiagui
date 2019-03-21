@@ -5,6 +5,8 @@ import {
   LoginSignupPage,
   Content as ProposalListing
 } from "./components/snew";
+
+// POLITEIA CONNECTORS
 import vetted from "./connectors/proposals";
 import userDetail from "./connectors/user";
 import proposalDetail from "./connectors/proposal";
@@ -15,6 +17,7 @@ import newProposal from "./connectors/newProposal";
 import editProposal from "./connectors/editProposal";
 import routesConnector from "./connectors/routes";
 
+// POLITEIA ROUTES
 import Logout from "./components/LogoutPage";
 import UserLookup from "./components/UserLookupPage";
 import SignupNext from "./components/SignupNextStepPage";
@@ -34,14 +37,19 @@ import UserDetail from "./components/UserDetail";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
 
-// CMS Pages/Routes
+// CMS CONNECTORS
+import publicInvoices from "./connectors/invoices";
+import adminCMS from "./connectors/adminCMS";
+
+// CMS ROUTES
+import UserInvoices from "./components/UserInvoices";
 import InviteUser from "./components/InviteUserPage";
 import InviteUserSuccess from "./components/InviteUser/SuccessPage";
 
 const SwitchCMS = () => {
   return (
     <Switch>
-      <Route path="/" component={vetted(ProposalListing)} exact />
+      <Route path="/" component={publicInvoices(ProposalListing)} exact />
       <Route path="/login" component={LoginSignupPage} />
       <Route path="/user/login" component={LoginSignupPage} />
       <Route path="/user/logout" component={Logout} />
@@ -73,19 +81,28 @@ const SwitchCMS = () => {
       />
       <AdminAuthenticatedRoute
         path="/admin"
-        component={admin(ProposalListing)}
+        component={adminCMS(ProposalListing)}
         exact
       />
       <AdminAuthenticatedRoute path="/admin/users" component={UserLookup} />
-      <Route path="/user/:userId/:filter?" component={userDetail(UserDetail)} />
+      <AuthenticatedRoute
+        path="/user/invoices/:filter?"
+        component={UserInvoices}
+        exact
+      />
+      <Route
+        path="/user/:userId/:filter?"
+        component={userDetail(UserDetail)}
+        exact
+      />
       <AdminAuthenticatedRoute
         path="/admin/invite"
-        component={admin(InviteUser)}
+        component={adminCMS(InviteUser)}
         exact
       />
       <AdminAuthenticatedRoute
         path="/admin/invite/next"
-        component={admin(InviteUserSuccess)}
+        component={adminCMS(InviteUserSuccess)}
         exact
       />
       <Route path="/500" component={ErrorPage} />

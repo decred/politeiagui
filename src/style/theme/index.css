@@ -143,14 +143,20 @@ body button.secondary.disabled {
     margin-top: 4px;
 }
 
+.appWrapper {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
 body.listing-page>.content,
 body>.appWrapper>.content {
-    padding: 92px 352px 64px 16px;
+    padding: 92px 16px 64px 16px;
+    width: 100%;
     margin: 0;
 }
 body>.appWrapper>.content>#login {
-		margin-left: 0;
-		padding-right: 1em;
+    margin-left: 0;
+    padding-right: 1em;
     position: absolute;
     width: 98.75%;
     margin: 0;

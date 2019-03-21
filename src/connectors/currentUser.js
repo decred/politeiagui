@@ -14,7 +14,8 @@ const currentUserConnector = connect(
     proposalCredits: sel.proposalCredits,
     lastLoginTime: sel.lastLoginTimeFromMeResponse,
     sessionMaxAge: sel.sessionMaxAge,
-    loggedInAsUserId: sel.userid
+    loggedInAsUserId: sel.userid,
+    isCMS: sel.isCMS
   }),
   dispatch =>
     bindActionCreators(

@@ -6,6 +6,7 @@ import ReactBody from "react-body";
 import PageLoadingIcon from "./PageLoadingIcon";
 import Message from "../Message";
 import ProposalFilter from "../ProposalFilter";
+import InvoiceFilter from "../InvoiceFilter";
 import thingLinkConnector from "../../connectors/thingLink";
 
 export const CustomContent = ({
@@ -28,6 +29,8 @@ export const CustomContent = ({
   showLookUp,
   commentid,
   comments,
+  isCMS,
+  invoiceCounts,
   ...props
 }) => {
   const invalidcomment =
@@ -80,12 +83,21 @@ export const CustomContent = ({
           )}
         </div>
       )}
-      <ProposalFilter
-        header={header}
-        handleChangeFilterValue={onChangeFilter}
-        filterValue={filterValue}
-        proposalCounts={proposalCounts}
-      />
+      {isCMS ? (
+        <InvoiceFilter
+          header={header}
+          handleChangeFilterValue={onChangeFilter}
+          filterValue={filterValue}
+          invoiceCounts={invoiceCounts}
+        />
+      ) : (
+        <ProposalFilter
+          header={header}
+          handleChangeFilterValue={onChangeFilter}
+          filterValue={filterValue}
+          proposalCounts={proposalCounts}
+        />
+      )}
       {showList ? (
         <React.Fragment>
           <Content
@@ -172,7 +184,8 @@ class Loader extends Component {
       this.setState({ isFetched: true });
       this.props.onFetchData && this.props.onFetchData();
       this.props.onFetchStatus && this.props.onFetchStatus();
-      this.props.onFetchProposalsVoteStatus &&
+      !this.props.isCMS &&
+        this.props.onFetchProposalsVoteStatus &&
         this.props.onFetchProposalsVoteStatus();
       getLastBlockHeight && getLastBlockHeight(isTestnet);
     }

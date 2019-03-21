@@ -23,7 +23,8 @@ class InviteUser extends Component {
   }
 
   componentWillUnmount() {
-    this.props.resetInviteUser();
+    // TODO: uncomment when this function is added to the invite connector
+    //this.props.resetInviteUser();
   }
 
   componentDidUpdate() {

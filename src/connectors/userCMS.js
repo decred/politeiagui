@@ -7,7 +7,6 @@ import { arg, or } from "../lib/fp";
 import * as sel from "../selectors";
 import * as act from "../actions";
 import {
-  MANAGE_USER_CLEAR_USER_PAYWALL,
   MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
   MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
   MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
@@ -16,7 +15,9 @@ import {
   MANAGE_USER_REACTIVATE
 } from "../constants";
 
-const userConnector = connect(
+// TODO: customize for CMS needs
+
+const userCMSConnector = connect(
   sel.selectorMap({
     userId: compose(
       get(["match", "params", "userId"]),
@@ -28,10 +29,7 @@ const userConnector = connect(
     errorRescan: sel.apiRescanUserPaymentsError,
     isLoadingRescan: sel.isApiRequestingRescanUserPayments,
     isLoading: or(sel.isApiRequestingUser, sel.isApiRequestingMe),
-    isLoadingProposals: or(
-      sel.userProposalsIsRequesting,
-      sel.isApiRequestingPropsVoteStatus
-    ),
+    isLoadingProposals: or(sel.userProposalsIsRequesting),
     isTestnet: sel.isTestNet,
     loggedInAsEmail: sel.loggedInAsEmail,
     userProposals: sel.getUserProposals,
@@ -47,14 +45,8 @@ const userConnector = connect(
     shouldAutoVerifyKey: sel.shouldAutoVerifyKey,
     verificationToken: sel.verificationToken,
     userPubkey: sel.userPubkey,
-    userPaywallStatus: sel.getUserPaywallStatus,
     loggedInAsUsername: sel.loggedInAsUsername,
-    amountOfCreditsAddedOnRescan: sel.amountOfCreditsAddedOnRescan,
-    rescanUserId: sel.apiRescanUserPaymentsUserId,
     isApiRequestingUpdateUserKey: sel.isApiRequestingUpdateUserKey,
-    isApiRequestingMarkAsPaid: state =>
-      sel.isApiRequestingManageUser(state) &&
-      sel.manageUserAction(state) === MANAGE_USER_CLEAR_USER_PAYWALL,
     isApiRequestingMarkNewUserAsExpired: state =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
@@ -76,14 +68,12 @@ const userConnector = connect(
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_REACTIVATE,
     manageUserResponse: sel.manageUserResponse,
-    numOfUserProposals: sel.numOfUserProposals,
-    isCMS: sel.isCMS
+    numOfUserProposals: sel.numOfUserProposals
   }),
   dispatch =>
     bindActionCreators(
       {
         onFetchUserProposals: act.onFetchUserProposals,
-        onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
         onFetchData: act.onFetchUser,
         openModal: act.openModal,
         closeModal: act.closeModal,
@@ -91,9 +81,7 @@ const userConnector = connect(
         onIdentityImported: act.onIdentityImported,
         confirmWithModal: act.confirmWithModal,
         onUpdateUserKey: act.onUpdateUserKey,
-        onManageUser: act.onManageUser,
-        onRescan: act.onRescanUserPayments,
-        onResetRescan: act.onResetRescanUserPayments
+        onManageUser: act.onManageUser
       },
       dispatch
     )
@@ -101,5 +89,5 @@ const userConnector = connect(
 
 export default compose(
   withRouter,
-  userConnector
+  userCMSConnector
 );

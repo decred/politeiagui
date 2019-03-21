@@ -32,7 +32,12 @@ class CustomSubreddit extends Component {
       <Switch>
         <Route path="/user/signup" component={noSidebar(this.props)} />
         <Route path="/user/login" component={noSidebar(this.props)} />
-        <Route path="*" component={withSidebar(this.props)} />
+        <Route
+          path="*"
+          component={
+            this.props.isCMS ? noSidebar(this.props) : withSidebar(this.props)
+          }
+        />
       </Switch>
     );
   }

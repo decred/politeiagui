@@ -35,7 +35,7 @@ class ProposalDetail extends React.Component {
       Object.keys(this.props.proposal).length > 0 &&
       this.props.proposal.status === 4
     ) {
-      prevProps.onFetchProposalVoteStatus(prevProps.token);
+      !prevProps.isCMS && prevProps.onFetchProposalVoteStatus(prevProps.token);
     }
     this.handleUpdateOfComments(prevProps, this.props);
   }

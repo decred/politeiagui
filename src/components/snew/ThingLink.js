@@ -110,7 +110,8 @@ class ThingLinkComp extends React.Component {
       startVoteToken,
       startVoteError,
       isApiRequestingSetProposalStatusByToken,
-      commentid
+      commentid,
+      isCMS
     } = this.props;
     const voteStatus = getVoteStatus(id) && getVoteStatus(id).status;
     const isAbandoned = review_status === PROPOSAL_STATUS_ABANDONED;
@@ -365,7 +366,7 @@ class ThingLinkComp extends React.Component {
               </span>
             </div>
           )}
-          {review_status === 4 && <VoteStats token={id} />}
+          {!isCMS && review_status === 4 && <VoteStats token={id} />}
           {expanded &&
             (lastSubmitted === id ? (
               <Message type="info">

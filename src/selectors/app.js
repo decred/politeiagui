@@ -20,7 +20,8 @@ import {
   userid,
   apiUserResponse,
   apiEditUserResponse,
-  apiEditUserPayload
+  apiEditUserPayload,
+  isCMS
 } from "./api";
 import {
   PAYWALL_STATUS_PAID,
@@ -46,7 +47,8 @@ import {
   NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED,
   NOTIFICATION_EMAIL_COMMENT_ON_MY_PROPOSAL,
   NOTIFICATION_EMAIL_COMMENT_ON_MY_COMMENT,
-  PROPOSAL_STATUS_ABANDONED
+  PROPOSAL_STATUS_ABANDONED,
+  CMS_PAYWALL_STATUS
 } from "../constants";
 import {
   getTextFromIndexMd,
@@ -187,6 +189,7 @@ export const resolveEditUserValues = prefs => {
 };
 
 export const getUserPaywallStatus = state => {
+  if (isCMS(state)) return CMS_PAYWALL_STATUS;
   if (userAlreadyPaid(state)) {
     return PAYWALL_STATUS_PAID;
   }
@@ -386,6 +389,12 @@ const countRejectedProps = votesstatus =>
   }).length;
 
 export const getVettedProposalFilterCounts = state => {
+  if (isCMS(state))
+    return {
+      [PROPOSAL_STATUS_ABANDONED]: 0,
+      [PROPOSAL_APPROVED]: 0,
+      [PROPOSAL_REJECTED]: 0
+    };
   const vsResponse = apiPropsVoteStatusResponse(state);
   const vettedProps = apiVettedProposals(state);
   const count = vsResponse ? countPublicProposals(vsResponse.votesstatus) : {};

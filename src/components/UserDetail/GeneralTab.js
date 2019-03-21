@@ -200,7 +200,8 @@ class GeneralTab extends React.Component {
       errorRescan,
       amountOfCreditsAddedOnRescan,
       onResetRescan,
-      rescanUserId
+      rescanUserId,
+      isCMS
     } = this.props;
     const {
       showIdentityHelpText,
@@ -209,7 +210,7 @@ class GeneralTab extends React.Component {
       showPastUserIdentities
     } = this.state;
     const userHasActivePaywall =
-      user && user.newuserpaywalladdress && user.newuserpaywallamount;
+      !isCMS && user && user.newuserpaywalladdress && user.newuserpaywallamount;
     const isUserPageOwner = loggedInAsUserId === user.id;
     const hasTheRescanResult =
       amountOfCreditsAddedOnRescan !== undefined && rescanUserId === user.id;
@@ -217,7 +218,7 @@ class GeneralTab extends React.Component {
     return (
       <div className="detail-form">
         <div>
-          {isAdminOrTheUser && (
+          {!isCMS && isAdminOrTheUser && (
             <Field label="Proposal credits">
               {user.proposalcredits}
               {isAdmin && (
@@ -482,7 +483,7 @@ class GeneralTab extends React.Component {
             </span>
           </Field>
         )}
-        {isAdminOrTheUser && (
+        {!isCMS && isAdminOrTheUser && (
           <React.Fragment>
             <FieldSeparator />
             <Field label="Has paid">
@@ -523,23 +524,24 @@ class GeneralTab extends React.Component {
             ]}
           </div>
         ) : null}
-        {user.newuserpaywalltx && [
-          <Field label="Transaction" key={0}>
-            {user.newuserpaywalltx === "cleared_by_admin" ? (
-              <span>Cleared by admin</span>
-            ) : (
-              <a
-                href={dcrdataTxUrl + user.newuserpaywalltx}
-                target="_blank"
-                className="monospace"
-                rel="noopener noreferrer"
-              >
-                {user.newuserpaywalltx}
-              </a>
-            )}
-          </Field>,
-          <FieldSeparator key={2} />
-        ]}
+        {!isCMS &&
+          user.newuserpaywalltx && [
+            <Field label="Transaction" key={0}>
+              {user.newuserpaywalltx === "cleared_by_admin" ? (
+                <span>Cleared by admin</span>
+              ) : (
+                <a
+                  href={dcrdataTxUrl + user.newuserpaywalltx}
+                  target="_blank"
+                  className="monospace"
+                  rel="noopener noreferrer"
+                >
+                  {user.newuserpaywalltx}
+                </a>
+              )}
+            </Field>,
+            <FieldSeparator key={2} />
+          ]}
         {isAdminOrTheUser && (
             <Field label="Failed login attempts">
               {user.failedloginattempts}

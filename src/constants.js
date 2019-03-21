@@ -18,6 +18,8 @@ export const PROPOSAL_USER_FILTER_DRAFT = 2;
 export const PAYWALL_STATUS_WAITING = 0;
 export const PAYWALL_STATUS_LACKING_CONFIRMATIONS = 1;
 export const PAYWALL_STATUS_PAID = 2;
+
+export const CMS_PAYWALL_STATUS = 2;
 export const CONFIRMATIONS_REQUIRED = 2;
 
 export const PUB_KEY_STATUS_LOADING = 0;
@@ -43,11 +45,9 @@ export const MANAGE_USER_CLEAR_USER_PAYWALL = 4;
 export const MANAGE_USER_UNLOCK = 5;
 export const MANAGE_USER_DEACTIVATE = 6;
 export const MANAGE_USER_REACTIVATE = 7;
-
 export const LIST_HEADER_PUBLIC = "Public Proposals";
 export const LIST_HEADER_UNVETTED = "Unvetted Proposals";
 export const LIST_HEADER_USER = "Your Proposals";
-
 export const SORT_BY_OLD = "OLD";
 export const SORT_BY_NEW = "NEW";
 export const SORT_BY_TOP = "TOP";
@@ -93,6 +93,7 @@ export const INVOICE_USER_FILTER_NEW = 2;
 export const INVOICE_USER_FILTER_UPDATED = 3;
 export const INVOICE_USER_FILTER_REJECTED = 4;
 export const INVOICE_USER_FILTER_APPROVED = 5;
+export const INVOICE_USER_FILTER_UNREVIEWED = 7;
 export const INVOICE_USER_FILTER_PAID = 6;
 
 export const CMS_LIST_HEADER_ADMIN = "Admin Invoices";
