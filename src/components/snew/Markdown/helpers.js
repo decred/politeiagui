@@ -215,7 +215,7 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
                 {" "}
                 {tmpLink.protocol + "//"}
                 <strong className="red">{tmpLink.hostname}</strong>
-                {tmpLink.pathname}
+                {tmpLink.pathname + tmpLink.search + tmpLink.hash}
               </span>
             </div>
           </div>

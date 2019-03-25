@@ -13,7 +13,7 @@ class ModalStack extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { openedModals, location, closeAllModals } = this.props;
-    const welcomeModal = openedModals.filter(
+    const welcomeModalOpened = openedModals.find(
       modal => modal.type === WELCOME_MODAL
     );
     const { modals } = this.state;
@@ -34,7 +34,10 @@ class ModalStack extends React.Component {
         else document.querySelector("body").style.overflowY = "scroll";
       });
     // closes modals if user path has changed except when it's the user's first access
-    if (location.pathname !== prevProps.location.pathname && !welcomeModal) {
+    if (
+      location.pathname !== prevProps.location.pathname &&
+      !welcomeModalOpened
+    ) {
       closeAllModals();
     }
   }
