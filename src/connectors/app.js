@@ -4,7 +4,8 @@ import * as sel from "../selectors";
 
 const appConnector = connect(
   sel.selectorMap({
-    isCMS: sel.isCMS
+    isCMS: sel.isCMS,
+    loggedInAsEmail: sel.loggedInAsEmail
   }),
   dispatch => bindActionCreators({}, dispatch)
 );

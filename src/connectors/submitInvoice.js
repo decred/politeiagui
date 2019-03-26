@@ -12,7 +12,8 @@ const submitInvoiceConnector = connect(
     keyMismatch: sel.getKeyMismatch
   }),
   {
-    onFetchData: act.onGetPolicy
+    onFetchData: act.onGetPolicy,
+    onSave: act.onSaveNewInvoice
     //onResetInvoice: act.onResetInvoice,
     //onSaveDraft: act.onSaveDraftInvoice,
     //onDeleteDraft: act.onDeleteDraftInvoice

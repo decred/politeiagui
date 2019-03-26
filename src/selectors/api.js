@@ -44,6 +44,7 @@ const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
 const isApiRequestingUserProposals = getIsApiRequesting("userProposals");
 const isApiRequestingProposal = getIsApiRequesting("proposal");
 const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
+const isApiRequestingNewInvoice = getIsApiRequesting("newInvoice");
 export const isApiRequestingUserSearch = getIsApiRequesting("userSearch");
 export const isApiRequestingUser = getIsApiRequesting("user");
 export const isApiRequestingNewComment = getIsApiRequesting("newComment");
@@ -70,6 +71,7 @@ const apiResendVerificationEmailPayload = getApiPayload(
   "resendVerificationEmail"
 );
 const apiNewProposalPayload = getApiPayload("newProposal");
+const apiNewInvoicePayload = getApiPayload("newInvoice");
 const apiSetStatusProposalPayload = getApiPayload("setStatusProposal");
 const apiManageUserPayload = getApiPayload("manageUser");
 
@@ -93,6 +95,7 @@ const apiUnvettedResponse = getApiResponse("unvetted");
 const apiProposalResponse = getApiResponse("proposal");
 const apiProposalCommentsResponse = getApiResponse("proposalComments");
 const apiNewProposalResponse = getApiResponse("newProposal");
+const apiNewInvoiceResponse = getApiResponse("newInvoice");
 const apiSetStatusProposalResponse = getApiResponse("setStatusProposal");
 export const apiUserSearchResponse = getApiResponse("userSearch");
 export const verifyNewUser = getApiResponse("verifyNewUser");
@@ -239,6 +242,7 @@ const apiUserProposalsError = getApiError("userProposals");
 const apiUnvettedError = getApiError("unvetted");
 const apiProposalError = getApiError("proposal");
 const apiNewProposalError = getApiError("newProposal");
+const apiNewInvoiceError = getApiError("newInvoice");
 const apiSetStatusProposalError = getApiError("setStatusProposal");
 const apiCommentsLikesError = getApiError("commentslikes");
 export const apiError = or(
@@ -505,7 +509,9 @@ export const user = compose(
 );
 export const newUserResponse = bool(apiNewUserResponse);
 export const newProposalIsRequesting = isApiRequestingNewProposal;
+export const newInvoiceIsRequesting = isApiRequestingNewInvoice;
 export const newProposalError = apiNewProposalError;
+export const newInvoiceError = apiNewInvoiceError;
 export const newProposalMerkle = compose(
   get(["censorshiprecord", "merkle"]),
   apiNewProposalResponse
@@ -529,6 +535,30 @@ export const newProposalDescription = compose(
 export const newProposalFiles = compose(
   get("files"),
   apiNewProposalPayload
+);
+export const newInvoiceMerkle = compose(
+  get(["censorshiprecord", "merkle"]),
+  apiNewInvoiceResponse
+);
+export const newInvoiceToken = compose(
+  get(["censorshiprecord", "token"]),
+  apiNewInvoiceResponse
+);
+export const newInvoiceSignature = compose(
+  get(["censorshiprecord", "signature"]),
+  apiNewInvoiceResponse
+);
+export const newInvoiceYear = compose(
+  get("year"),
+  apiNewInvoicePayload
+);
+export const newInvoiceMonth = compose(
+  get("month"),
+  apiNewInvoicePayload
+);
+export const newInvoiceFiles = compose(
+  get("files"),
+  apiNewInvoicePayload
 );
 export const setStatusProposal = compose(
   get("status"),

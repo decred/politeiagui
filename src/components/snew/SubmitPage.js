@@ -90,20 +90,7 @@ const InvoiceSubmit = props => {
                     <Field
                       name="month"
                       component={SelectField}
-                      options={[
-                        "Jan",
-                        "Feb",
-                        "Mar",
-                        "Apr",
-                        "May",
-                        "Jun",
-                        "Jul",
-                        "Aug",
-                        "Sep",
-                        "Oct",
-                        "Nov",
-                        "Dec"
-                      ]}
+                      options={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
                       tabIndex={1}
                       label="Month"
                     />
@@ -112,15 +99,7 @@ const InvoiceSubmit = props => {
                       component={SelectField}
                       tabIndex={1}
                       type="text"
-                      options={[
-                        "2019",
-                        "2020",
-                        "2021",
-                        "2022",
-                        "2023",
-                        "2024",
-                        "2025"
-                      ]}
+                      options={[2019, 2020, 2021, 2022, 2023, 2024, 2025]}
                       label="Year"
                     />
                   </div>

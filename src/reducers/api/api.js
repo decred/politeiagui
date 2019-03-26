@@ -60,7 +60,9 @@ export const DEFAULT_STATE = {
   proposalPaywallDetails: DEFAULT_REQUEST_STATE,
   email: "",
   keyMismatch: false,
-  lastLoaded: {}
+  lastLoaded: {},
+  // CMS
+  newInvoice: DEFAULT_REQUEST_STATE
 };
 
 const api = (state = DEFAULT_STATE, action) =>
@@ -147,8 +149,12 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_EDIT_PROPOSAL]: () => receive("editProposal", state, action),
     [act.REQUEST_NEW_COMMENT]: () => request("newComment", state, action),
     [act.RECEIVE_NEW_COMMENT]: () => onReceiveNewComment(state, action),
+    // == CMS START ==
     [act.REQUEST_INVITE_USER]: () => request("inviteUser", state, action),
     [act.RECEIVE_INVITE_USER]: () => receive("inviteUser", state, action),
+    [act.REQUEST_NEW_INVOICE]: () => request("newInvoice", state, action),
+    [act.RECEIVE_NEW_INVOICE]: () => receive("newInvoice", state, action),
+    // === CMS END ===
     [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
       request("proposalPaywallDetails", state, action),
     [act.RECEIVE_PROPOSAL_PAYWALL_DETAILS]: () =>

@@ -401,6 +401,38 @@ export const onManageUser = (userId, action) =>
     });
   });
 
+export const onSubmitInvoice = (
+  loggedInAsEmail,
+  userid,
+  username,
+  month,
+  year,
+  csv
+) =>
+  withCsrf((dispatch, getState, csrf) => {
+    console.log("to aqui benhe", month, year, csv);
+    dispatch(act.REQUEST_NEW_INVOICE({ month, year, csv }));
+    return Promise.resolve(api.makeInvoice(month, year, csv))
+      .then(invoice => api.signRegister(loggedInAsEmail, invoice))
+      .then(invoice => api.newInvoice(csrf, invoice))
+      .then(invoice => {
+        dispatch(
+          act.RECEIVE_NEW_INVOICE({
+            ...invoice,
+            numcomments: 0,
+            userid,
+            username
+          })
+        );
+        resetNewProposalData();
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_NEW_INVOICE(null, error));
+        resetNewProposalData();
+        throw error;
+      });
+  });
+
 export const onSubmitProposal = (
   loggedInAsEmail,
   userid,
@@ -412,7 +444,7 @@ export const onSubmitProposal = (
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_PROPOSAL({ name, description, files }));
     return Promise.resolve(api.makeProposal(name, description, files))
-      .then(proposal => api.signProposal(loggedInAsEmail, proposal))
+      .then(proposal => api.signRegister(loggedInAsEmail, proposal))
       .then(proposal => api.newProposal(csrf, proposal))
       .then(proposal => {
         dispatch(
@@ -447,7 +479,7 @@ export const onSubmitEditedProposal = (
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_EDIT_PROPOSAL({ name, description, files }));
     return Promise.resolve(api.makeProposal(name, description, files))
-      .then(proposal => api.signProposal(loggedInAsEmail, proposal))
+      .then(proposal => api.signRegister(loggedInAsEmail, proposal))
       .then(proposal => api.editProposal(csrf, { ...proposal, token }))
       .then(proposal => {
         dispatch(act.RECEIVE_EDIT_PROPOSAL(proposal));

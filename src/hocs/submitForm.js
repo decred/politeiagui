@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import compose from "lodash/fp/compose";
 import { reduxForm } from "redux-form";
-import { validate, synchronousValidation, warn } from "../validators/proposal";
+import { warn } from "../validators/proposal";
+import { validate, synchronousValidation } from "../validators/submit";
 import { withRouter } from "react-router-dom";
 import submitProposal from "../connectors/submitProposal";
 import submitInvoice from "../connectors/submitInvoice";
@@ -14,8 +15,26 @@ class SubmitFormContainer extends Component {
 
   render() {
     const Component = this.props.Component;
-    return <Component {...{ ...this.props, onSaveDraft: this.onSaveDraft }} />;
+    return (
+      <Component
+        {...{
+          ...this.props,
+          onSaveDraft: this.onSaveDraft,
+          onSave: this.onSave
+        }}
+      />
+    );
   }
+
+  onSave = (...args) => {
+    try {
+      validate(...args);
+    } catch (e) {
+      this.setState({ validationError: e.errors._error });
+      return;
+    }
+    return this.props.onSave(...args);
+  };
 
   onSaveDraft = (...args) => {
     validate(...args);
@@ -34,8 +53,10 @@ const wrap = Component =>
   });
 
 export default compose(
+  appConnector,
   reduxForm({
     form: "form/proposal",
+    initialValues: { month: 1, year: 2019 },
     touchOnChange: true,
     validate: synchronousValidation,
     enableReinitialize: true,

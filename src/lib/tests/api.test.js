@@ -128,7 +128,7 @@ describe("api integration modules (lib/api.js)", () => {
     const keys = await pki.generateKeys(EMAIL);
     await pki.loadKeys(EMAIL, keys);
     const pubKey = await pki.myPubKeyHex(EMAIL);
-    const signedProposal = await api.signProposal(EMAIL, proposal);
+    const signedProposal = await api.signRegister(EMAIL, proposal);
     expect(signedProposal.publickey).toEqual(pubKey);
     expect(signedProposal.files).toEqual(proposal.files);
     expect(signedProposal.signature).toBeTruthy();

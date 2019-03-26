@@ -7,7 +7,8 @@ import {
   onChangeUsername,
   onChangePassword,
   onFetchProposalComments,
-  onSubmitEditedProposal
+  onSubmitEditedProposal,
+  onSubmitInvoice
 } from "./api";
 import {
   onFetchProposal as onFetchProposalApi,
@@ -41,6 +42,22 @@ export const onSetReplyParent = (
     dispatch(act.SET_REPLY_PARENT(parentId)),
     dispatch(reset("form/reply"))
   ]);
+
+export const onSaveNewInvoice = ({ month, year, csv }, _, props) => (
+  dispatch,
+  getState
+) =>
+  dispatch(
+    onSubmitInvoice(
+      props.loggedInAsEmail,
+      props.userid,
+      props.username,
+      +month,
+      +year,
+      csv.trim()
+    )
+  ).then(() => sel.newInvoiceToken(getState()));
+
 export const onSaveNewProposal = ({ name, description, files }, _, props) => (
   dispatch,
   getState

@@ -5,6 +5,11 @@ export const CMSWWWMODE = "cmswww";
 
 export const EXPLORER = "explorer";
 
+// CMS
+export const INVOICE_STATUS_UNREVIEWED = 2;
+
+// POLITEIA
+
 export const PROPOSAL_FILTER_ALL = 0;
 
 export const PROPOSAL_STATUS_UNREVIEWED = 2;
