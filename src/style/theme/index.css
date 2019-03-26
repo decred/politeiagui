@@ -642,7 +642,6 @@ button.disabled {
 .submit-page .formtabs-content {
     border-top: 0;
     padding-top: 0;
-    margin-left: calc((100vw - 975px)/2);
 }
 
 .usertext .bottom-area a {

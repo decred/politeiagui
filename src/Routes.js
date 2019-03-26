@@ -95,6 +95,10 @@ const SwitchCMS = () => {
         component={userDetail(UserDetail)}
         exact
       />
+      <AuthenticatedRoute
+        path="/invoices/new"
+        component={newProposal(SubmitPage)}
+      />
       <AdminAuthenticatedRoute
         path="/admin/invite"
         component={adminCMS(InviteUser)}

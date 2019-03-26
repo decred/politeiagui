@@ -4,6 +4,8 @@ import submitFormHOC from "../../hocs/submitForm";
 import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
 import FilesField from "../Form/Fields/FilesField";
 import ErrorField from "../Form/Fields/ErrorField";
+import SelectField from "../Form/Fields/SelectField";
+import TextAreaField from "../Form/Fields/TextAreaField";
 import InputFieldWithError from "../Form/Fields/InputFieldWithError";
 import Message from "../Message";
 import MultipleItemsBodyMessage from "../MultipleItemsBodyMessage";
@@ -44,7 +46,6 @@ const InvoiceSubmit = props => {
   const {
     isLoading,
     PageLoadingIcon,
-    policy,
     error,
     warning,
     onSave,
@@ -58,7 +59,7 @@ const InvoiceSubmit = props => {
   } = props;
   const submitEnabled =
     !submitting && !error && !validationError && userCanExecuteActions;
-  return !policy || isLoading ? (
+  return isLoading ? (
     <PageLoadingIcon />
   ) : (
     <div className="content" role="main">
@@ -88,40 +89,50 @@ const InvoiceSubmit = props => {
                   <div style={{ display: "flex", width: "100%" }}>
                     <Field
                       name="month"
-                      component={InputFieldWithError}
+                      component={SelectField}
+                      options={[
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Oct",
+                        "Nov",
+                        "Dec"
+                      ]}
                       tabIndex={1}
-                      type="text"
-                      placeholder="Month"
+                      label="Month"
                     />
                     <Field
                       name="year"
-                      component={InputFieldWithError}
+                      component={SelectField}
                       tabIndex={1}
                       type="text"
-                      placeholder="Year"
+                      options={[
+                        "2019",
+                        "2020",
+                        "2021",
+                        "2022",
+                        "2023",
+                        "2024",
+                        "2025"
+                      ]}
+                      label="Year"
                     />
                   </div>
-                  <input name="kind" type="hidden" defaultValue="self" />
                   <div className="usertext">
-                    <input name="thing_id" type="hidden" defaultValue />
                     <div className="usertext-edit md-container" style={{}}>
                       <div className="md">
                         <Field
                           name="csv"
-                          component={InputFieldWithError}
+                          component={TextAreaField}
                           type="text"
                           tabIndex={1}
                           placeholder="CSV Invoice Input"
-                        />
-                        <Field
-                          name="files"
-                          className="attach-button greenprimary"
-                          component={FilesField}
-                          userCanExecuteActions={userCanExecuteActions}
-                          placeholder="Attach a file"
-                          policy={policy}
-                          normalize={normalizer}
-                          disabled
                         />
                       </div>
                     </div>
@@ -357,9 +368,9 @@ const ProposalSubmit = props => {
 class SubmitPage extends React.Component {
   render() {
     if (this.props.isCMS) {
-      return <InvoiceSubmit {...{ props: this.props }} />;
+      return <InvoiceSubmit {...this.props} />;
     } else {
-      return <ProposalSubmit {...{ props: this.props }} />;
+      return <ProposalSubmit {...this.props} />;
     }
   }
 }

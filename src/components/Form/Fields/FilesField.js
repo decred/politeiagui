@@ -6,6 +6,52 @@ import ProposalImages from "../../ProposalImages";
 import PolicyErrors from "./PolicyErrors";
 import { validateFiles, getFormattedFiles } from "../../ProposalImages/helpers";
 
+//TODO: remove policy mock and use it from props
+const policy = {
+  maximages: 5,
+  maximagesize: 524288,
+  maxmds: 1,
+  minpasswordlength: 8,
+  minusernamelength: 3,
+  maxusernamelength: 30,
+  usernamesupportedchars: [
+    "A-z",
+    "0-9",
+    ".",
+    ":",
+    ";",
+    ",",
+    "-",
+    " ",
+    "@",
+    "+"
+  ],
+  minproposalnamelength: 8,
+  maxproposalnamelength: 80,
+  maxmdsize: 524288,
+  validmimetypes: [
+    "image/jpeg",
+    "image/png",
+    "text/plain",
+    "text/plain; charset=utf-8"
+  ],
+  maxcommentlength: 8000,
+  proposalnamesupportedchars: [
+    "A-z",
+    "0-9",
+    "&",
+    ".",
+    ":",
+    ";",
+    ",",
+    "-",
+    " ",
+    "@",
+    "+",
+    "#"
+  ]
+};
+
 class FilesField extends React.Component {
   constructor(props) {
     super(props);
@@ -17,9 +63,9 @@ class FilesField extends React.Component {
   handleFilesChange = files => {
     const {
       input,
-      policy,
       meta: { dispatch }
     } = this.props;
+
     const formattedFiles = getFormattedFiles(files);
     const inputAndNewFiles = input.value
       ? formattedFiles.concat(input.value)
@@ -40,7 +86,6 @@ class FilesField extends React.Component {
       touched,
       error,
       disabled,
-      policy,
       userCanExecuteActions
     } = this.props;
     const { policyErrors } = this.state;
