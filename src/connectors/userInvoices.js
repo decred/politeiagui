@@ -6,9 +6,7 @@ import * as act from "../actions";
 import { or } from "../lib/fp";
 import { CMS_LIST_HEADER_USER } from "../constants";
 
-//TODO: create getUserInvoices, invoiceCounts selectors and onFetchUserInvoices action
-
-const userProposalsConnector = connect(
+const userInvoicesConnector = connect(
   sel.selectorMap({
     userid: sel.userid,
     loggedInAsEmail: sel.loggedInAsEmail,
@@ -18,8 +16,8 @@ const userProposalsConnector = connect(
       sel.userProposalsIsRequesting,
       sel.isApiRequestingPropsVoteStatus
     ),
-    invoices: sel.getUserProposals,
-    invoiceCounts: () => ({}),
+    invoices: sel.getUserInvoices,
+    invoiceCounts: sel.getUserInvoicesFilterCounts,
     filterValue: sel.getUserFilterValue,
     lastLoadedInvoice: sel.lastLoadedUserProposal,
     header: () => CMS_LIST_HEADER_USER,
@@ -28,7 +26,7 @@ const userProposalsConnector = connect(
   dispatch =>
     bindActionCreators(
       {
-        onFetchUserInvoices: act.onFetchUserProposals,
+        onFetchUserInvoices: act.onFetchUserInvoices,
         onChangeFilter: act.onChangeUserFilter
       },
       dispatch
@@ -61,6 +59,6 @@ class Wrapper extends Component {
 }
 
 const wrap = Component =>
-  userProposalsConnector(props => <Wrapper {...{ ...props, Component }} />);
+  userInvoicesConnector(props => <Wrapper {...{ ...props, Component }} />);
 
 export default wrap;

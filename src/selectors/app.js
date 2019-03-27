@@ -14,6 +14,7 @@ import {
   apiPropsVoteStatusResponse,
   apiUnvettedProposals,
   apiVettedProposals,
+  apiUserInvoices,
   getPropVoteStatus,
   apiUnvettedStatusResponse,
   numOfUserProposals,
@@ -38,6 +39,16 @@ import {
   PROPOSAL_USER_FILTER_DRAFT,
   PROPOSAL_APPROVED,
   PROPOSAL_REJECTED,
+  INVOICE_USER_FILTER_UNREVIEWED,
+  INVOICE_USER_FILTER_UPDATED,
+  INVOICE_USER_FILTER_REJECTED,
+  INVOICE_USER_FILTER_APPROVED,
+  INVOICE_USER_FILTER_PAID,
+  INVOICE_STATUS_NEW,
+  INVOICE_STATUS_UPDATED,
+  INVOICE_STATUS_REJECTED,
+  INVOICE_STATUS_APPROVED,
+  INVOICE_STATUS_PAID,
   NOTIFICATION_EMAIL_MY_PROPOSAL_STATUS_CHANGE,
   NOTIFICATION_EMAIL_MY_PROPOSAL_VOTE_STARTED,
   NOTIFICATION_EMAIL_ADMIN_PROPOSAL_NEW,
@@ -340,6 +351,60 @@ export const getUserProposals = state => {
 
   return [];
 };
+
+export const getUserInvoices = state => {
+  const userFilterValue = getUserFilterValue(state);
+  const invoices = apiUserInvoices(state);
+
+  if (!invoices) return [];
+
+  switch (userFilterValue) {
+    case INVOICE_USER_FILTER_UNREVIEWED:
+      return getUserInvoicesByFilter(invoices, INVOICE_STATUS_NEW);
+    case INVOICE_USER_FILTER_UPDATED:
+      return getUserInvoicesByFilter(invoices, INVOICE_STATUS_UPDATED);
+    case INVOICE_USER_FILTER_REJECTED:
+      return getUserInvoicesByFilter(invoices, INVOICE_STATUS_REJECTED);
+    case INVOICE_USER_FILTER_APPROVED:
+      return getUserInvoicesByFilter(invoices, INVOICE_STATUS_APPROVED);
+    case INVOICE_USER_FILTER_PAID:
+      return getUserInvoicesByFilter(invoices, INVOICE_STATUS_PAID);
+    default:
+      return [];
+  }
+};
+
+export const getUserInvoicesFilterCounts = state => {
+  const invoices = apiUserInvoices(state);
+
+  return invoices
+    ? {
+        [INVOICE_USER_FILTER_UNREVIEWED]: getUserInvoicesByFilter(
+          invoices,
+          INVOICE_STATUS_NEW
+        ).length,
+        [INVOICE_USER_FILTER_UPDATED]: getUserInvoicesByFilter(
+          invoices,
+          INVOICE_STATUS_UPDATED
+        ).length,
+        [INVOICE_USER_FILTER_REJECTED]: getUserInvoicesByFilter(
+          invoices,
+          INVOICE_STATUS_REJECTED
+        ).length,
+        [INVOICE_USER_FILTER_APPROVED]: getUserInvoicesByFilter(
+          invoices,
+          INVOICE_STATUS_APPROVED
+        ).length,
+        [INVOICE_USER_FILTER_PAID]: getUserInvoicesByFilter(
+          invoices,
+          INVOICE_STATUS_PAID
+        ).length
+      }
+    : 0;
+};
+
+const getUserInvoicesByFilter = (invoices, filter) =>
+  invoices.filter(i => i.status === filter);
 
 export const getUserProposalFilterCounts = state => {
   const proposalFilterCounts = {

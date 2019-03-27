@@ -93,13 +93,14 @@ export const INVOICE_STATUS_REJECTED = 4; // Invoice needs to be revised
 export const INVOICE_STATUS_APPROVED = 5; // Invoice has been approved
 export const INVOICE_STATUS_PAID = 6; // Invoice has been paid
 
-export const INVOICE_USER_FILTER_DRAFT = 1;
-export const INVOICE_USER_FILTER_NEW = 2;
-export const INVOICE_USER_FILTER_UPDATED = 3;
-export const INVOICE_USER_FILTER_REJECTED = 4;
-export const INVOICE_USER_FILTER_APPROVED = 5;
-export const INVOICE_USER_FILTER_UNREVIEWED = 7;
-export const INVOICE_USER_FILTER_PAID = 6;
+// export const INVOICE_USER_FILTER_DRAFT = 1;
+// export const INVOICE_USER_FILTER_NEW = 2;
+
+export const INVOICE_USER_FILTER_UNREVIEWED = 1;
+export const INVOICE_USER_FILTER_UPDATED = 2;
+export const INVOICE_USER_FILTER_REJECTED = 3;
+export const INVOICE_USER_FILTER_APPROVED = 4;
+export const INVOICE_USER_FILTER_PAID = 5;
 
 export const CMS_LIST_HEADER_ADMIN = "Admin Invoices";
 export const CMS_LIST_HEADER_USER = "Your Invoices";

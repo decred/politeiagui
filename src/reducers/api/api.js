@@ -154,6 +154,8 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_INVITE_USER]: () => receive("inviteUser", state, action),
     [act.REQUEST_NEW_INVOICE]: () => request("newInvoice", state, action),
     [act.RECEIVE_NEW_INVOICE]: () => receive("newInvoice", state, action),
+    [act.REQUEST_USER_INVOICES]: () => request("userInvoices", state, action),
+    [act.RECEIVE_USER_INVOICES]: () => receive("userInvoices", state, action),
     // === CMS END ===
     [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
       request("proposalPaywallDetails", state, action),

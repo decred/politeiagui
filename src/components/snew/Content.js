@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Content } from "snew-classic-ui";
-import { formatProposalData } from "../../lib/snew";
+import { formatProposalData, formatInvoiceData } from "../../lib/snew";
 import Link from "./Link";
 import ReactBody from "react-body";
 import PageLoadingIcon from "./PageLoadingIcon";
@@ -30,6 +30,7 @@ export const CustomContent = ({
   commentid,
   comments,
   isCMS,
+  invoices,
   invoiceCounts,
   ...props
 }) => {
@@ -39,6 +40,7 @@ export const CustomContent = ({
   const showList =
     (listings && listings.length > 0) ||
     (proposals && proposals.length > 0) ||
+    (invoices && invoices.length > 0) ||
     (proposalCounts && filterValue >= 0 && proposalCounts[filterValue]) !== 0;
   const showLoadMore =
     proposals &&
@@ -99,51 +101,77 @@ export const CustomContent = ({
         />
       )}
       {showList ? (
-        <React.Fragment>
-          <Content
-            {...{
-              ...props,
-              highlightcomment: commentid,
-              key: "content",
-              lastBlockHeight: props.lastBlockHeight,
-              listings: listings || [
-                {
-                  allChildren: proposals
-                    ? proposals.map((proposal, idx) =>
-                        formatProposalData(proposal, idx, activeVotes)
-                      )
-                    : []
-                }
-              ]
-            }}
-          />
-          {showLoadMore && (
-            <div
-              style={{ width: "100%", maxWidth: "1000px", textAlign: "center" }}
-            >
-              <button
-                style={{ marginTop: "15px" }}
-                className="c-btn c-btn-primary"
-                onClick={() =>
-                  onFetchData
-                    ? onFetchData(
-                        lastLoadedProposal
-                          ? lastLoadedProposal.censorshiprecord.token
-                          : null
-                      )
-                    : onFetchUserProposals(
-                        userid,
-                        lastLoadedProposal
-                          ? lastLoadedProposal.censorshiprecord.token
-                          : null
-                      )
-                }
+        !isCMS ? (
+          <React.Fragment>
+            <Content
+              {...{
+                ...props,
+                highlightcomment: commentid,
+                key: "content",
+                lastBlockHeight: props.lastBlockHeight,
+                listings: listings || [
+                  {
+                    allChildren: proposals
+                      ? proposals.map((proposal, idx) =>
+                          formatProposalData(proposal, idx, activeVotes)
+                        )
+                      : []
+                  }
+                ]
+              }}
+            />
+            {showLoadMore && (
+              <div
+                style={{
+                  width: "100%",
+                  maxWidth: "1000px",
+                  textAlign: "center"
+                }}
               >
-                Load More
-              </button>
-            </div>
-          )}
-        </React.Fragment>
+                <button
+                  style={{ marginTop: "15px" }}
+                  className="c-btn c-btn-primary"
+                  onClick={() =>
+                    onFetchData
+                      ? onFetchData(
+                          lastLoadedProposal
+                            ? lastLoadedProposal.censorshiprecord.token
+                            : null
+                        )
+                      : onFetchUserProposals(
+                          userid,
+                          lastLoadedProposal
+                            ? lastLoadedProposal.censorshiprecord.token
+                            : null
+                        )
+                  }
+                >
+                  Load More
+                </button>
+              </div>
+            )}
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <Content
+              {...{
+                ...props,
+                highlightcomment: commentid,
+                key: "content",
+                lastBlockHeight: props.lastBlockHeight,
+                listings: listings || [
+                  {
+                    allChildren: invoices
+                      ? invoices.map((invoice, idx) =>
+                          formatInvoiceData(invoice, idx)
+                        )
+                      : []
+                  }
+                ]
+              }}
+            />
+          </React.Fragment>
+        )
       ) : (
         <h1 style={{ textAlign: "center", paddingTop: "125px", color: "#777" }}>
           {emptyProposalsMessage}

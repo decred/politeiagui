@@ -9,7 +9,6 @@ import {
   INVOICE_STATUS_REJECTED,
   INVOICE_STATUS_APPROVED,
   INVOICE_STATUS_PAID,
-  INVOICE_USER_FILTER_DRAFT,
   INVOICE_USER_FILTER_UNREVIEWED,
   INVOICE_USER_FILTER_UPDATED,
   INVOICE_USER_FILTER_REJECTED,
@@ -47,10 +46,6 @@ const adminFilterOptions = [
   }
 ];
 const userFilterOptions = [
-  {
-    label: "drafts",
-    value: INVOICE_USER_FILTER_DRAFT
-  },
   {
     label: "unreviewed",
     value: INVOICE_USER_FILTER_UNREVIEWED
