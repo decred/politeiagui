@@ -420,7 +420,6 @@ export const onSubmitInvoice = (
   csv
 ) =>
   withCsrf((dispatch, getState, csrf) => {
-    console.log("to aqui benhe", month, year, csv);
     dispatch(act.REQUEST_NEW_INVOICE({ month, year, csv }));
     return Promise.resolve(api.makeInvoice(month, year, csv))
       .then(invoice => api.signRegister(loggedInAsEmail, invoice))

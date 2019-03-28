@@ -56,6 +56,7 @@ const InvoiceSubmit = props => {
     userCanExecuteActions,
     editingMode
   } = props;
+  console.log(validationError, submitError);
   const submitEnabled =
     !submitting && !error && !validationError && userCanExecuteActions;
   return isLoading ? (
@@ -112,6 +113,7 @@ const InvoiceSubmit = props => {
                           tabIndex={1}
                           placeholder="CSV Invoice Input"
                         />
+                        {error && <div className="input-error">{error}</div>}
                       </div>
                     </div>
                   </div>
@@ -132,7 +134,7 @@ const InvoiceSubmit = props => {
                       type="error"
                       header={`Error ${
                         editingMode ? "updating" : "creating"
-                      } proposal`}
+                      } invoice`}
                       body={submitError}
                     />
                   ) : null}

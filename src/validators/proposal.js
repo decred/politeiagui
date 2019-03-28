@@ -68,6 +68,8 @@ const validate = (values, dispatch, props) => {
         "Your local key does not match the one on the server.  Please generate a new one under account settings."
     });
   }
+
+  return null;
 };
 
 const synchronousValidation = (values, props) => {

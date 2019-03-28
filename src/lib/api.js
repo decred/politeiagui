@@ -13,7 +13,8 @@ import {
   getHumanReadableError,
   base64ToArrayBuffer,
   arrayBufferToWordArray,
-  utoa
+  utoa,
+  csvToJson
 } from "../helpers";
 
 export const TOP_LEVEL_COMMENT_PARENTID = "0";
@@ -41,10 +42,10 @@ export const convertMarkdownToFile = markdown => ({
   mime: "text/plain; charset=utf-8",
   payload: utoa(markdown)
 });
-export const convertCsvToFile = csv => ({
-  name: "invoice.csv",
+export const convertJsonToFile = json => ({
+  name: "invoice.json",
   mime: "text/plain; charset=utf-8",
-  payload: utoa(csv)
+  payload: utoa(JSON.stringify(json))
 });
 
 export const makeProposal = (name, markdown, attachments = []) => ({
@@ -59,16 +60,26 @@ export const makeProposal = (name, markdown, attachments = []) => ({
   }))
 });
 
-export const makeInvoice = (month, year, csv) => ({
-  month,
-  year,
-  files: [convertCsvToFile(csv)].map(({ name, mime, payload }) => ({
-    name,
-    mime,
-    payload,
-    digest: digestPayload(payload)
-  }))
-});
+export const makeInvoice = (month, year, csv) => {
+  const { name, mime, payload } = convertJsonToFile({
+    month,
+    year,
+    lineitems: csvToJson(csv)
+  });
+  return {
+    id: "",
+    month,
+    year,
+    files: [
+      {
+        name,
+        mime,
+        payload,
+        digest: digestPayload(payload)
+      }
+    ]
+  };
+};
 
 export const makeComment = (token, comment, parentid) => ({
   token,
@@ -100,6 +111,7 @@ export const signRegister = (email, proposal) => {
       .then(signature => ({ ...proposal, publickey, signature }));
   });
 };
+
 export const signComment = (email, comment) =>
   pki
     .myPubKeyHex(email)
