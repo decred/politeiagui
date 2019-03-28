@@ -366,10 +366,10 @@ export const getUnvettedProposalFilterCounts = state => {
     : {};
 };
 
-const countAbandonedProposals = proposals =>
+const countAbandonedProposals = (proposals = []) =>
   proposals.filter(p => p.status === PROPOSAL_STATUS_ABANDONED).length;
 
-const countApprovedProps = votesstatus =>
+const countApprovedProps = (votesstatus = []) =>
   votesstatus.filter(vs => {
     if (vs.status === PROPOSAL_VOTING_FINISHED) {
       return isProposalApproved(vs);
@@ -377,7 +377,7 @@ const countApprovedProps = votesstatus =>
     return false;
   }).length;
 
-const countRejectedProps = votesstatus =>
+const countRejectedProps = (votesstatus = []) =>
   votesstatus.filter(vs => {
     if (vs.status === PROPOSAL_VOTING_FINISHED) {
       return !isProposalApproved(vs);

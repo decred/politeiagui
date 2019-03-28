@@ -6,7 +6,7 @@ import {
   PROPOSAL_FILTER_ALL,
   PAYWALL_STATUS_PAID,
   PROPOSAL_USER_FILTER_SUBMITTED,
-  SORT_BY_NEW
+  SORT_BY_TOP
 } from "../constants";
 
 export const DEFAULT_STATE = {
@@ -26,7 +26,7 @@ export const DEFAULT_STATE = {
   draftProposals: null,
   identityImportResult: { errorMsg: "", successMsg: "" },
   onboardViewed: false,
-  commentsSortOption: { value: SORT_BY_NEW, label: SORT_BY_NEW },
+  commentsSortOption: { value: SORT_BY_TOP, label: SORT_BY_TOP },
   pollingCreditsPayment: false,
   redirectedFrom: null
 };

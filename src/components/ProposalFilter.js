@@ -19,7 +19,7 @@ import {
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_STATUS_ABANDONED
 } from "../constants";
-import { setQueryStringWithoutPageReload } from "../helpers";
+import { setQueryStringValue } from "../lib/queryString";
 
 const adminFilterOptions = [
   {
@@ -131,7 +131,7 @@ class ProposalFilter extends React.Component {
     const optionLabel = selectedOption.label;
 
     if (filterValueTabHasChanged) {
-      setQueryStringWithoutPageReload(`?tab=${optionLabel}`);
+      setQueryStringValue("tab", optionLabel);
     }
   };
   render() {
