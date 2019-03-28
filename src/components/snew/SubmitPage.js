@@ -56,7 +56,6 @@ const InvoiceSubmit = props => {
     userCanExecuteActions,
     editingMode
   } = props;
-  console.log(validationError, submitError);
   const submitEnabled =
     !submitting && !error && !validationError && userCanExecuteActions;
   return isLoading ? (
