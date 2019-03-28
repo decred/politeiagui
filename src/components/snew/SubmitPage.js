@@ -49,7 +49,6 @@ const InvoiceSubmit = props => {
     error,
     warning,
     onSave,
-    onSaveDraft,
     submitting,
     handleSubmit,
     validationError,
@@ -127,26 +126,6 @@ const InvoiceSubmit = props => {
                     >
                       {!editingMode ? "submit" : "update"}
                     </button>
-                    <button
-                      className={"togglebutton secondary access-required"}
-                      name="submit"
-                      type="submit"
-                      value="form"
-                      onClick={handleSubmit(onSaveDraft)}
-                    >
-                      Save as Draft
-                    </button>
-                    <p
-                      style={{
-                        fontSize: "16px",
-                        display: "flex",
-                        paddingTop: "1em"
-                      }}
-                    >
-                      <b>NOTE:&nbsp;</b> Drafts are locally stored in the
-                      browser and will NOT be available across different
-                      browsers or devices.
-                    </p>
                   </div>
                   {submitError ? (
                     <Message

@@ -2,7 +2,9 @@ import { SubmissionError } from "redux-form";
 import { isRequiredValidator } from "./util";
 
 const emptyInvoiceField = values =>
-  !isRequiredValidator(values.csv && values.csv.trim());
+  !isRequiredValidator(values.csv && values.csv.trim()) ||
+  !isRequiredValidator(values.month && values.month.trim()) ||
+  !isRequiredValidator(values.year && values.year.trim());
 
 const validate = (values, dispatch, props) => {
   if (emptyInvoiceField(values)) {
