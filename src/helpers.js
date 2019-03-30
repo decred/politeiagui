@@ -277,16 +277,6 @@ export const formatDate = date => {
   return `${year}-${month}-${day}-${hours}:${minutes}:${seconds}`;
 };
 
-export const setQueryStringWithoutPageReload = qs => {
-  const newurl =
-    window.location.protocol +
-    "//" +
-    window.location.host +
-    window.location.pathname +
-    qs;
-  window.history.pushState({ path: newurl }, "", newurl);
-};
-
 export const getJsonData = base64 => {
   const data = atob(base64.split(",").pop());
   try {
@@ -296,6 +286,16 @@ export const getJsonData = base64 => {
   } catch (e) {
     throw new Error(INVALID_FILE);
   }
+};
+
+export const setQueryStringWithoutPageReload = qs => {
+  const newurl =
+    window.location.protocol +
+    "//" +
+    window.location.host +
+    window.location.pathname +
+    qs;
+  window.history.pushState({ path: newurl }, "", newurl);
 };
 
 // CSV
