@@ -10,6 +10,7 @@ const invite = connect(
   }),
   {
     onInviteUserConfirm: act.onInviteUserConfirm,
+    resetInviteUser: act.onResetInviteUser,
     onFetchData: act.onGetPolicy
   }
 );

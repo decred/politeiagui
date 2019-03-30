@@ -464,7 +464,7 @@ export const rescanUserPayments = (csrf, userid) =>
 
 // CMS
 export const inviteNewUser = (csrf, email) =>
-  POST("/user/invite", csrf, {
+  POST("/invite", csrf, {
     email
   }).then(getResponse);
 

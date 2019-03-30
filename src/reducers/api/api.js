@@ -152,6 +152,7 @@ const api = (state = DEFAULT_STATE, action) =>
     // == CMS START ==
     [act.REQUEST_INVITE_USER]: () => request("inviteUser", state, action),
     [act.RECEIVE_INVITE_USER]: () => receive("inviteUser", state, action),
+    [act.RESET_INVITE_USER]: () => reset("inviteUser", state, action),
     [act.REQUEST_NEW_INVOICE]: () => request("newInvoice", state, action),
     [act.RECEIVE_NEW_INVOICE]: () => receive("newInvoice", state, action),
     [act.REQUEST_USER_INVOICES]: () => request("userInvoices", state, action),
