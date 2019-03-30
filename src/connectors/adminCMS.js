@@ -8,19 +8,18 @@ import { CMS_LIST_HEADER_ADMIN } from "../constants";
 
 export default connect(
   sel.selectorMap({
-    invoices: sel.getUnvettedFilteredProposals,
+    invoices: sel.getAdminInvoices,
     showLookUp: () => true,
-    invoiceCounts: () => ({}),
+    invoiceCounts: sel.getAdminInvoicesCountByStatus,
     error: sel.unvettedProposalsError,
-    isLoading: or(sel.unvettedProposalsIsRequesting),
+    isLoading: or(sel.isApiRequestingAdminInvoices),
     filterValue: sel.getAdminFilterValue,
     header: () => CMS_LIST_HEADER_ADMIN,
     emptyProposalsMessage: () => "No invoices",
     lastLoadedProposal: sel.lastLoadedUnvettedProposal
   }),
   {
-    onFetchStatus: act.onFetchUnvettedStatus,
-    onFetchData: act.onFetchUnvetted,
+    onFetchData: act.onFetchAdminInvoices,
     onChangeFilter: act.onChangeAdminFilter
   }
 );

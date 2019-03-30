@@ -300,6 +300,17 @@ export const onFetchUserInvoices = (userid, token) => dispatch => {
     });
 };
 
+export const onFetchAdminInvoices = () =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_ADMIN_INVOICES());
+    return api
+      .adminInvoices(csrf)
+      .then(response => dispatch(act.RECEIVE_ADMIN_INVOICES(response)))
+      .catch(error => {
+        dispatch(act.RECEIVE_ADMIN_INVOICES(null, error));
+      });
+  });
+
 export const onFetchVetted = token => dispatch => {
   dispatch(act.REQUEST_VETTED());
   return api

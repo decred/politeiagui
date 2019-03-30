@@ -46,7 +46,7 @@ import UserInvoices from "./components/UserInvoices";
 import InviteUser from "./components/InviteUserPage";
 import InviteUserSuccess from "./components/InviteUser/SuccessPage";
 
-const SwitchCMS = () => {
+const RoutesForCMS = () => {
   return (
     <Switch>
       <Route path="/" component={publicInvoices(ProposalListing)} exact />
@@ -112,7 +112,7 @@ const SwitchCMS = () => {
   );
 };
 
-const PoliteiaCMS = () => {
+const RoutesForPoliteia = () => {
   return (
     <Switch>
       <Route path="/" component={vetted(ProposalListing)} exact />
@@ -189,7 +189,7 @@ const PoliteiaCMS = () => {
 
 class Routes extends Component {
   render() {
-    return this.props.isCMS ? <SwitchCMS /> : <PoliteiaCMS />;
+    return this.props.isCMS ? <RoutesForCMS /> : <RoutesForPoliteia />;
   }
 }
 

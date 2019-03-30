@@ -6,20 +6,16 @@ import {
   INVOICE_FILTER_ALL,
   INVOICE_STATUS_NEW,
   INVOICE_STATUS_UPDATED,
+  INVOICE_STATUS_DISPUTED,
   INVOICE_STATUS_REJECTED,
   INVOICE_STATUS_APPROVED,
   INVOICE_STATUS_PAID,
-  INVOICE_USER_FILTER_UNREVIEWED,
-  INVOICE_USER_FILTER_UPDATED,
-  INVOICE_USER_FILTER_REJECTED,
-  INVOICE_USER_FILTER_APPROVED,
-  INVOICE_USER_FILTER_PAID,
   CMS_LIST_HEADER_ADMIN,
   CMS_LIST_HEADER_USER
 } from "../constants";
 import { setQueryStringWithoutPageReload } from "../helpers";
 
-const adminFilterOptions = [
+const invoiceFilterOptions = [
   {
     label: "unreviewed",
     value: INVOICE_STATUS_NEW
@@ -27,6 +23,10 @@ const adminFilterOptions = [
   {
     label: "updated",
     value: INVOICE_STATUS_UPDATED
+  },
+  {
+    label: "disputed",
+    value: INVOICE_STATUS_DISPUTED
   },
   {
     label: "approved",
@@ -45,43 +45,15 @@ const adminFilterOptions = [
     value: INVOICE_FILTER_ALL
   }
 ];
-const userFilterOptions = [
-  {
-    label: "unreviewed",
-    value: INVOICE_USER_FILTER_UNREVIEWED
-  },
-  {
-    label: "updated",
-    value: INVOICE_USER_FILTER_UPDATED
-  },
-  {
-    label: "approved",
-    value: INVOICE_USER_FILTER_APPROVED
-  },
-  {
-    label: "rejected",
-    value: INVOICE_USER_FILTER_REJECTED
-  },
-  {
-    label: "paid",
-    value: INVOICE_USER_FILTER_PAID
-  }
-];
+
 const mapHeaderToOptions = {
-  [CMS_LIST_HEADER_ADMIN]: adminFilterOptions,
-  [CMS_LIST_HEADER_USER]: userFilterOptions
+  [CMS_LIST_HEADER_ADMIN]: invoiceFilterOptions,
+  [CMS_LIST_HEADER_USER]: invoiceFilterOptions
 };
 
 const mapHeaderToCount = {
-  [CMS_LIST_HEADER_ADMIN]: (invoiceCounts, status) => {
-    // unreviewed invoices and invoices with unreviewed changes are shown on the same list
-    // so is necessary to sum their counts
-    const count = invoiceCounts[status] || 0;
-    if (status === INVOICE_STATUS_NEW) {
-      return count + (invoiceCounts[INVOICE_STATUS_UPDATED] || 0);
-    }
-    return count;
-  },
+  [CMS_LIST_HEADER_ADMIN]: (invoiceCounts, status) =>
+    invoiceCounts[status] || 0,
   [CMS_LIST_HEADER_USER]: (invoiceCounts, status) => invoiceCounts[status] || 0
 };
 
@@ -89,6 +61,18 @@ class InvoiceFilter extends React.Component {
   constructor(props) {
     super(props);
     this.handleUpdateFilterValueForQueryValue(props);
+  }
+  componentDidMount() {
+    const { filterValue, header } = this.props;
+    const filterOptions = mapHeaderToOptions[header] || [];
+    const validFilterOption = filterOptions.find(
+      op => op && op.value === filterValue
+    );
+    // if the filter option set is not valid for the current available
+    // filter options, set the first valid option.
+    if (filterOptions.length && !validFilterOption) {
+      this.props.handleChangeFilterValue(filterOptions[0].value);
+    }
   }
   componentDidUpdate(prevProps) {
     this.handleUpdateQueryForFilterValueChange(prevProps);
@@ -113,7 +97,7 @@ class InvoiceFilter extends React.Component {
 
     const selectedOption =
       tabOptions && tabOptions.find(op => op.value === this.props.filterValue);
-    const optionLabel = selectedOption.label;
+    const optionLabel = selectedOption && selectedOption.label;
 
     if (filterValueTabHasChanged) {
       setQueryStringWithoutPageReload(`?tab=${optionLabel}`);

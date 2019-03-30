@@ -334,6 +334,9 @@ export const userProposals = (userid, after) => {
 
 export const userInvoices = () => GET("/v1/user/invoices").then(getResponse);
 
+export const adminInvoices = csrf =>
+  POST("/admin/invoices", csrf, {}).then(getResponse);
+
 export const searchUser = obj =>
   GET(`/v1/users?${qs.stringify(obj)}`).then(getResponse);
 

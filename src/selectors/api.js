@@ -691,4 +691,11 @@ export const isCMS = state => mode(state) === CMSWWWMODE;
 export const inviteUserResponse = getApiResponse("inviteUser");
 export const isApiRequestingInviteUser = getIsApiRequesting("inviteUser");
 
+export const isApiRequestingAdminInvoices = getIsApiRequesting("adminInvoices");
+export const adminInvoicesResponse = getApiResponse("adminInvoices");
+export const apiAdminInvoices = compose(
+  get("invoices"),
+  adminInvoicesResponse
+);
+
 export const usePaywall = and(not(isCMS));
