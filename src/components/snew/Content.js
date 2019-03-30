@@ -74,14 +74,23 @@ export const CustomContent = ({
         >
           <h1 className="proposals-listing-header">{header}</h1>
           {showLookUp && (
-            <Link
-              style={{ marginRight: "24px" }}
-              href="/admin/users"
-              onClick={() => null}
-            >
-              <i className="fa fa-search right-margin-5" />
-              Search users
-            </Link>
+            <div>
+              <Link
+                style={{ marginRight: "24px" }}
+                href="/admin/invite"
+                onClick={() => null}
+              >
+                Invite new contractor
+              </Link>
+              <Link
+                style={{ marginRight: "24px" }}
+                href="/admin/users"
+                onClick={() => null}
+              >
+                <i className="fa fa-search right-margin-5" />
+                Search users
+              </Link>
+            </div>
           )}
         </div>
       )}
