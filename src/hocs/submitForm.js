@@ -4,13 +4,22 @@ import { reduxForm } from "redux-form";
 import { warn } from "../validators/proposal";
 import { validate, synchronousValidation } from "../validators/submit";
 import { withRouter } from "react-router-dom";
-import submitProposal from "../connectors/submitProposal";
-import submitInvoice from "../connectors/submitInvoice";
+import submit from "../connectors/submit";
 import appConnector from "../connectors/app";
 
 class SubmitFormContainer extends Component {
   componentDidMount() {
     this.props.policy || this.props.onFetchData();
+  }
+
+  componentDidUpdate() {
+    const { token } = this.props;
+    if (token) {
+      this.props.onResetInvoice();
+      return this.props.isCMS
+        ? this.props.history.push("/invoice/" + token)
+        : this.props.history.push("/proposals/" + token);
+    }
   }
 
   render() {
@@ -27,13 +36,17 @@ class SubmitFormContainer extends Component {
   }
 
   onSave = (...args) => {
+    console.log("aqui:", args);
     try {
       validate(...args);
     } catch (e) {
       this.setState({ validationError: e.errors._error });
       return;
     }
-    return this.props.onSave(...args);
+    console.log("to aq");
+    return this.props.isCMS
+      ? this.props.onSaveInvoice(...args)
+      : this.props.onSaveProposal(...args);
   };
 
   onSaveDraft = (...args) => {
@@ -43,17 +56,14 @@ class SubmitFormContainer extends Component {
   };
 }
 
-const wrap = Component =>
-  appConnector(props => {
-    const connector = props.isCMS ? submitInvoice : submitProposal;
-    const Comp = connector(otherProps => (
-      <SubmitFormContainer {...{ ...otherProps, ...props, Component }} />
-    ));
-    return <Comp />;
-  });
+const wrap = Component => props => (
+  <SubmitFormContainer {...{ ...props, Component }} />
+);
 
 export default compose(
+  submit,
   appConnector,
+  withRouter,
   reduxForm({
     form: "form/proposal",
     initialValues: { month: 1, year: 2019 },
@@ -62,6 +72,5 @@ export default compose(
     enableReinitialize: true,
     warn
   }),
-  withRouter,
   wrap
 );

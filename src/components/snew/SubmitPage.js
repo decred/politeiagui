@@ -112,7 +112,6 @@ const InvoiceSubmit = props => {
                           tabIndex={1}
                           placeholder="CSV Invoice Input"
                         />
-                        {error && <div className="input-error">{error}</div>}
                       </div>
                     </div>
                   </div>

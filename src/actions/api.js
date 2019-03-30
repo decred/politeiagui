@@ -11,6 +11,8 @@ import { resetNewProposalData } from "../lib/editors_content_backup";
 import act from "./methods";
 
 export const onResetProposal = act.RESET_PROPOSAL;
+
+export const onResetInvoice = act.RESET_INVOICE;
 export const onSetEmail = act.SET_EMAIL;
 
 export const onSignup = act.REQUEST_SIGNUP_CONFIRMATION;

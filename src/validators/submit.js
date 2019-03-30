@@ -8,6 +8,7 @@ import {
 } from "./invoice";
 
 const validate = (values, dispatch, props) => {
+  console.log(values, props);
   return props.isCMS
     ? invoiceValidate(values, dispatch, props)
     : proposalValidate(values, dispatch, props);

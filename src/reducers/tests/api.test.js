@@ -920,6 +920,11 @@ describe("test api reducer", () => {
         type: "resetMultiple"
       },
       {
+        action: act.RESET_INVOICE,
+        key: ["newInvoice"],
+        type: "reset"
+      },
+      {
         action: act.REQUEST_SETSTATUS_PROPOSAL,
         key: "setStatusProposal",
         type: "request"

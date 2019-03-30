@@ -70,20 +70,22 @@ const validate = (values, dispatch, props) => {
 
 const synchronousValidation = values => {
   const errors = {};
-  if (emptyInvoiceField(values)) errors._error = "You must fill all fields";
+  errors._error = "Errors found";
+  if (emptyInvoiceField(values)) errors.csv = "You must fill all fields";
   else {
     const errorsPerLine = validateCsv(values.csv);
     if (errorsPerLine) {
       for (const error of errorsPerLine) {
         if (error) {
-          errors._error = error;
+          errors.csv = error;
           break;
         }
       }
     } else {
-      errors._error = null;
+      errors.csv = null;
     }
   }
+  if (!errors.csv) errors._error = null;
   return errors;
 };
 

@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
 
-const submitInvoiceConnector = connect(
+const submitConnector = connect(
   sel.selectorMap({
     loggedInAsEmail: sel.loggedInAsEmail,
     userCanExecuteActions: sel.userCanExecuteActions,
@@ -10,13 +10,18 @@ const submitInvoiceConnector = connect(
     userid: sel.userid,
     username: sel.loggedInAsUsername,
     keyMismatch: sel.getKeyMismatch,
+    proposalCredits: sel.proposalCredits,
     token: sel.newInvoiceToken
   }),
   {
     onFetchData: act.onGetPolicy,
-    onSave: act.onSaveNewInvoice
-    //onResetInvoice: act.onResetInvoice,
+    onSaveInvoice: act.onSaveNewInvoice,
+    onSaveProposal: act.onSaveNewProposal,
+    openModal: act.openModal,
+    onResetInvoice: act.onResetInvoice,
+    onSaveDraft: act.onSaveDraftProposal,
+    onDeleteDraft: act.onDeleteDraftProposal
   }
 );
 
-export default submitInvoiceConnector;
+export default submitConnector;
