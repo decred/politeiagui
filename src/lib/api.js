@@ -332,13 +332,7 @@ export const userProposals = (userid, after) => {
       );
 };
 
-export const userInvoices = (userid, after) => {
-  return !after
-    ? GET(`/v1/user/invoices?${qs.stringify({ userid })}`).then(getResponse)
-    : GET(`/v1/user/invoices?${qs.stringify({ userid, after })}`).then(
-        getResponse
-      );
-};
+export const userInvoices = () => GET("/v1/user/invoices").then(getResponse);
 
 export const searchUser = obj =>
   GET(`/v1/users?${qs.stringify(obj)}`).then(getResponse);
