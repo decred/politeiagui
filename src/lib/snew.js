@@ -49,14 +49,23 @@ export const proposalToT3 = (
 });
 
 export const invoiceToT3 = (
-  { userid, username, month, year, censorshiprecord = {}, status, timestamp },
+  {
+    userid,
+    username,
+    month,
+    year,
+    censorshiprecord = {},
+    status,
+    timestamp,
+    numcomments
+  },
   idx
 ) => ({
   kind: "t3",
   data: {
     authorid: userid,
     author: username,
-    numcomments: 0,
+    numcomments,
     rank: idx + 1,
     title: `Invoice ${month}/${year}`,
     id: censorshiprecord.token,
@@ -65,7 +74,8 @@ export const invoiceToT3 = (
     created_utc: timestamp,
     permalink: `/invoices/${censorshiprecord.token}`,
     url: `/invoices/${censorshiprecord.token}`,
-    is_self: true
+    is_self: true,
+    version: "1"
   }
 });
 

@@ -345,9 +345,15 @@ export const proposal = (token, version = null) =>
   GET(`/v1/proposals/${token}` + (version ? `?version=${version}` : "")).then(
     getResponse
   );
+export const invoice = (token, version = null) =>
+  GET(`/v1/invoices/${token}` + (version ? `?version=${version}` : "")).then(
+    getResponse
+  );
 export const user = userId => GET(`/v1/user/${userId}`).then(getResponse);
 export const proposalComments = token =>
   GET(`/v1/proposals/${token}/comments`).then(getResponse);
+export const invoiceComments = token =>
+  GET(`/v1/invoices/${token}/comments`).then(getResponse);
 export const logout = csrf =>
   POST("/logout", csrf, {}).then(() => {
     localStorage.removeItem("state");

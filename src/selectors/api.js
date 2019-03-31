@@ -45,6 +45,7 @@ const isApiRequestingUserProposals = getIsApiRequesting("userProposals");
 const isApiRequestingProposal = getIsApiRequesting("proposal");
 const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
 const isApiRequestingNewInvoice = getIsApiRequesting("newInvoice");
+const isApiRequestingInvoice = getIsApiRequesting("invoice");
 export const isApiRequestingUserSearch = getIsApiRequesting("userSearch");
 export const isApiRequestingUser = getIsApiRequesting("user");
 export const isApiRequestingNewComment = getIsApiRequesting("newComment");
@@ -93,7 +94,9 @@ const apiVettedResponse = getApiResponse("vetted");
 const apiUserProposalsResponse = getApiResponse("userProposals");
 const apiUnvettedResponse = getApiResponse("unvetted");
 const apiProposalResponse = getApiResponse("proposal");
+const apiInvoiceResponse = getApiResponse("invoice");
 const apiProposalCommentsResponse = getApiResponse("proposalComments");
+const apiInvoiceCommentsResponse = getApiResponse("invoiceComments");
 const apiNewProposalResponse = getApiResponse("newProposal");
 const apiNewInvoiceResponse = getApiResponse("newInvoice");
 const apiUserInvoicesResponse = getApiResponse("userInvoices");
@@ -479,6 +482,10 @@ export const apiProposal = compose(
   get("proposal"),
   apiProposalResponse
 );
+export const apiInvoice = compose(
+  get("invoice"),
+  apiInvoiceResponse
+);
 export const proposalPayload = state => state.api.proposal.payload;
 export const proposalToken = compose(
   get(["censorshiprecord", "token"]),
@@ -500,10 +507,18 @@ export const apiProposalComments = or(
   ),
   constant([])
 );
+export const apiInvoiceComments = or(
+  compose(
+    get("comments"),
+    apiInvoiceCommentsResponse
+  ),
+  constant([])
+);
 export const proposalIsRequesting = or(
   isApiRequestingInit,
   isApiRequestingProposal
 );
+export const invoiceIsRequesting = isApiRequestingInvoice;
 export const proposalError = or(apiInitError, apiProposalError);
 export const user = compose(
   get("user"),

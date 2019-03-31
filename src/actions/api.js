@@ -360,6 +360,25 @@ export const onFetchProposal = (token, version = null) => dispatch => {
     });
 };
 
+export const onFetchInvoice = (token, version = null) => dispatch => {
+  dispatch(act.REQUEST_INVOICE(token));
+  return api
+    .invoice(token, version)
+    .then(response => {
+      response && response.invoice && Object.keys(response.invoice).length > 0
+        ? dispatch(act.RECEIVE_INVOICE(response))
+        : dispatch(
+            act.RECEIVE_PROPOSAL(
+              null,
+              new Error("The requested invoice does not exist.")
+            )
+          );
+    })
+    .catch(error => {
+      dispatch(act.RECEIVE_INVOICE(null, error));
+    });
+};
+
 export const onFetchUser = userId => dispatch => {
   dispatch(act.RESET_EDIT_USER());
   dispatch(act.REQUEST_USER(userId));
@@ -383,6 +402,17 @@ export const onFetchProposalComments = token =>
       .then(response => dispatch(act.RECEIVE_PROPOSAL_COMMENTS(response)))
       .catch(error => {
         dispatch(act.RECEIVE_PROPOSAL_COMMENTS(null, error));
+      });
+  });
+
+export const onFetchInvoiceComments = token =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_INVOICE_COMMENTS(token));
+    return api
+      .invoiceComments(token, csrf)
+      .then(response => dispatch(act.RECEIVE_INVOICE_COMMENTS(response)))
+      .catch(error => {
+        dispatch(act.RECEIVE_INVOICE_COMMENTS(null, error));
       });
   });
 

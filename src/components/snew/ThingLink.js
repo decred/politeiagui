@@ -12,6 +12,7 @@ import thingLinkConnector from "../../connectors/thingLink";
 import Tooltip from "../Tooltip";
 import VoteStats from "../VoteStats";
 import VersionPicker from "../VersionPicker";
+import { renderInvoiceStatus } from "../../helpers";
 // import Diff from "./Markdown/Diff";
 
 import {
@@ -254,14 +255,25 @@ class ThingLinkComp extends React.Component {
               }}
             >
               {isEditable ? (
-                <Link
-                  href={`/proposals/${id}/edit`}
-                  className="edit-proposal right-margin-10"
-                  onClick={() => null}
-                >
-                  <i className="fa fa-edit right-margin-5" />
-                  Edit
-                </Link>
+                !isCMS ? (
+                  <Link
+                    href={`/proposals/${id}/edit`}
+                    className="edit-proposal right-margin-10"
+                    onClick={() => null}
+                  >
+                    <i className="fa fa-edit right-margin-5" />
+                    Edit
+                  </Link>
+                ) : (
+                  <Link
+                    href={`/invoices/${id}/edit`}
+                    className="edit-proposal right-margin-10"
+                    onClick={() => null}
+                  >
+                    <i className="fa fa-edit right-margin-5" />
+                    Edit
+                  </Link>
+                )
               ) : disableEditButton ? (
                 <Tooltip
                   wrapperStyle={{ marginRight: "10px" }}
@@ -368,6 +380,7 @@ class ThingLinkComp extends React.Component {
           )}
           {!isCMS && review_status === 4 && <VoteStats token={id} />}
           {expanded &&
+            !isCMS &&
             (lastSubmitted === id ? (
               <Message type="info">
                 <span>
@@ -399,7 +412,7 @@ class ThingLinkComp extends React.Component {
                   </p>
                 </span>
               </Message>
-            ) : hasComment() ? (
+            ) : !isCMS && hasComment() ? (
               <div>
                 <div style={{ marginTop: "15px", marginBottom: "15px" }}>
                   <DownloadBundle type="proposal" />
@@ -408,11 +421,12 @@ class ThingLinkComp extends React.Component {
                   <DownloadBundle type="comments" />
                 </div>
               </div>
-            ) : (
+            ) : !isCMS ? (
               <div style={{ marginTop: "15px", marginBottom: "15px" }}>
                 <DownloadBundle type="proposal" /> <br />
               </div>
-            ))}
+            ) : null)}
+          {isCMS ? renderInvoiceStatus(review_status) : null}
           {censorMessage && <CensorMessage message={censorMessage} />}
           <Expando
             {...{

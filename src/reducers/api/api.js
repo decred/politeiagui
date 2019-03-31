@@ -159,6 +159,12 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_USER_INVOICES]: () => receive("userInvoices", state, action),
     [act.REQUEST_ADMIN_INVOICES]: () => request("adminInvoices", state, action),
     [act.RECEIVE_ADMIN_INVOICES]: () => receive("adminInvoices", state, action),
+    [act.REQUEST_INVOICE]: () => request("invoice", state, action),
+    [act.RECEIVE_INVOICE]: () => receive("invoice", state, action),
+    [act.REQUEST_INVOICE_COMMENTS]: () =>
+      request("invoiceComments", state, action),
+    [act.RECEIVE_PROPOSAL_COMMENTS]: () =>
+      receive("invoiceComments", state, action),
     // === CMS END ===
     [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
       request("proposalPaywallDetails", state, action),

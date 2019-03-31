@@ -40,6 +40,7 @@ import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute
 // CMS CONNECTORS
 import publicInvoices from "./connectors/invoices";
 import adminCMS from "./connectors/adminCMS";
+import invoiceDetail from "./connectors/invoice";
 
 // CMS ROUTES
 import UserInvoices from "./components/UserInvoices";
@@ -96,6 +97,11 @@ const RoutesForCMS = () => {
         exact
       />
       <AuthenticatedRoute path="/invoices/new" component={SubmitPage} />
+      <Route
+        path="/invoices/:token"
+        component={invoiceDetail(ProposalDetail)}
+        exact
+      />
       <AdminAuthenticatedRoute
         path="/admin/invite"
         component={adminCMS(InviteUser)}

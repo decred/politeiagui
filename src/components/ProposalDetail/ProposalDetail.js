@@ -2,8 +2,8 @@ import React from "react";
 import isEqual from "lodash/isEqual";
 import { withRouter } from "react-router-dom";
 import { Content } from "../snew";
-import { commentsToT1, proposalToT3 } from "../../lib/snew";
-import { getTextFromIndexMd } from "../../helpers";
+import { commentsToT1, proposalToT3, invoiceToT3 } from "../../lib/snew";
+import { getTextFromIndexMd, getTextFromJsonToCsv } from "../../helpers";
 import { DEFAULT_TAB_TITLE } from "../../constants";
 import Message from "../Message";
 import {
@@ -40,7 +40,7 @@ class ProposalDetail extends React.Component {
     this.handleUpdateOfComments(prevProps, this.props);
   }
   componentDidMount() {
-    this.props.onFetchLikedComments(this.props.token);
+    !this.props.isCMS && this.props.onFetchLikedComments(this.props.token);
   }
 
   componentWillUnmount() {
@@ -140,10 +140,21 @@ class ProposalDetail extends React.Component {
       onFetchData,
       commentid,
       tempThreadTree,
+      isCMS,
       ...props
     } = this.props;
     const comments = this.state.sortedComments;
     const tempTree = tempThreadTree[commentid];
+    const data = !isCMS
+      ? proposalToT3(proposal, 0).data
+      : invoiceToT3(proposal, 0).data;
+    const selftext = !isCMS
+      ? markdownFile
+        ? getTextFromIndexMd(markdownFile)
+        : null
+      : markdownFile
+      ? getTextFromJsonToCsv(markdownFile)
+      : null;
     return (
       <div className="content" role="main">
         <div className="page proposal-page">
@@ -166,14 +177,10 @@ class ProposalDetail extends React.Component {
                           {
                             kind: "t3",
                             data: {
-                              ...proposalToT3(proposal, 0).data,
+                              ...data,
                               otherFiles,
-                              selftext: markdownFile
-                                ? getTextFromIndexMd(markdownFile)
-                                : null,
-                              selftext_html: markdownFile
-                                ? getTextFromIndexMd(markdownFile)
-                                : null
+                              selftext: selftext,
+                              selftext_html: selftext
                             }
                           }
                         ]

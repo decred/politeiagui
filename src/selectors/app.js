@@ -8,7 +8,9 @@ import { or, constant, not } from "../lib/fp";
 import qs from "query-string";
 import {
   apiProposal,
+  apiInvoice,
   apiProposalComments,
+  apiInvoiceComments,
   userAlreadyPaid,
   getKeyMismatch,
   apiPropsVoteStatusResponse,
@@ -72,6 +74,12 @@ export const proposal = state => {
   return proposal;
 };
 
+export const invoice = state => {
+  const invoice = apiInvoice(state) || {};
+
+  return invoice;
+};
+
 export const proposalCredits = state => state.app.proposalCredits;
 
 export const getLastSubmittedProposal = state =>
@@ -96,9 +104,17 @@ export const isMarkdown = compose(
   eq("index.md"),
   get("name")
 );
+export const isJSON = compose(
+  eq("invoice.json"),
+  get("name")
+);
 export const getProposalFiles = compose(
   get("files"),
   proposal
+);
+export const getInvoiceFiles = compose(
+  get("file"),
+  invoice
 );
 export const getMarkdownFile = compose(
   find(isMarkdown),
@@ -107,6 +123,14 @@ export const getMarkdownFile = compose(
 export const getNotMarkdownFile = compose(
   filter(not(isMarkdown)),
   getProposalFiles
+);
+export const getInvoiceJSON = compose(
+  find(isJSON),
+  getInvoiceFiles
+);
+export const getNotJSONFile = compose(
+  filter(not(isJSON)),
+  getInvoiceFiles
 );
 
 export const getEditProposalValues = state => {
@@ -230,6 +254,8 @@ export const isProposalStatusApproved = state =>
 export const activeVotesEndHeight = state => state.app.activeVotesEndHeight;
 
 export const proposalComments = state => apiProposalComments(state);
+
+export const invoiceComments = state => apiInvoiceComments(state);
 
 export const getTempThreadTree = state => state.app.replyThreadTree;
 
