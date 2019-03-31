@@ -12,7 +12,6 @@ import {
 } from "./api";
 import {
   onFetchProposal as onFetchProposalApi,
-  onFetchInvoice as onFetchInvoiceApi,
   onSubmitComment as onSubmitCommentApi
 } from "./api";
 import { resetNewProposalData } from "../lib/editors_content_backup";
@@ -129,9 +128,6 @@ export const onFetchProposal = token => dispatch =>
   dispatch(onFetchProposalApi(token)).then(() =>
     dispatch(onFetchProposalComments(token))
   );
-
-export const onFetchInvoice = token => dispatch =>
-  dispatch(onFetchInvoiceApi(token));
 
 export const onLoadMe = me => dispatch => {
   dispatch(act.LOAD_ME(me));

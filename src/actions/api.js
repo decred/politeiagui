@@ -405,17 +405,6 @@ export const onFetchProposalComments = token =>
       });
   });
 
-export const onFetchInvoiceComments = token =>
-  withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_INVOICE_COMMENTS(token));
-    return api
-      .invoiceComments(token, csrf)
-      .then(response => dispatch(act.RECEIVE_INVOICE_COMMENTS(response)))
-      .catch(error => {
-        dispatch(act.RECEIVE_INVOICE_COMMENTS(null, error));
-      });
-  });
-
 export const onFetchLikedComments = token => dispatch => {
   dispatch(act.REQUEST_LIKED_COMMENTS(token));
   return api
