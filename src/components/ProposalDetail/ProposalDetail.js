@@ -145,16 +145,15 @@ class ProposalDetail extends React.Component {
     } = this.props;
     const comments = this.state.sortedComments;
     const tempTree = tempThreadTree[commentid];
-    const data = !isCMS
-      ? proposalToT3(proposal, 0).data
-      : invoiceToT3(proposal, 0).data;
-    const selftext = !isCMS
-      ? markdownFile
-        ? getTextFromIndexMd(markdownFile)
-        : null
-      : markdownFile
-      ? getTextFromJsonToCsv(markdownFile)
-      : null;
+    let data, selftext;
+    if (!isCMS) {
+      data = proposalToT3(proposal, 0).data;
+      selftext = markdownFile ? getTextFromIndexMd(markdownFile) : null;
+    } else {
+      data = invoiceToT3(proposal, 0).data;
+      selftext = markdownFile ? getTextFromJsonToCsv(markdownFile) : null;
+    }
+
     return (
       <div className="content" role="main">
         <div className="page proposal-page">
