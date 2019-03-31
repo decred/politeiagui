@@ -225,8 +225,9 @@ class Loader extends Component {
       this.props.onFetchStatus && this.props.onFetchStatus();
       !this.props.isCMS &&
         this.props.onFetchProposalsVoteStatus &&
-        this.props.onFetchProposalsVoteStatus();
-      getLastBlockHeight && getLastBlockHeight(isTestnet);
+        this.props.onFetchProposalsVoteStatus() &&
+        getLastBlockHeight &&
+        getLastBlockHeight(isTestnet);
     }
   }
 
