@@ -17,7 +17,7 @@ class SubmitFormContainer extends Component {
     if (token) {
       this.props.onResetInvoice();
       return this.props.isCMS
-        ? this.props.history.push("/invoice/" + token)
+        ? this.props.history.push("/invoices/" + token)
         : this.props.history.push("/proposals/" + token);
     }
   }
