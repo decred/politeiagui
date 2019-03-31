@@ -250,12 +250,15 @@ describe("test api reducer", () => {
       vetted: DEFAULT_REQUEST_STATE,
       unvetted: DEFAULT_REQUEST_STATE,
       proposal: DEFAULT_REQUEST_STATE,
+      invoice: DEFAULT_REQUEST_STATE,
       proposalComments: DEFAULT_REQUEST_STATE,
+      invoiceComments: DEFAULT_REQUEST_STATE,
       proposalsVoteStatus: DEFAULT_REQUEST_STATE,
       proposalVoteStatus: DEFAULT_REQUEST_STATE,
       commentslikes: DEFAULT_REQUEST_STATE,
       userProposals: DEFAULT_REQUEST_STATE,
       newProposal: DEFAULT_REQUEST_STATE,
+      newInvoice: DEFAULT_REQUEST_STATE,
       editProposal: DEFAULT_REQUEST_STATE,
       newComment: DEFAULT_REQUEST_STATE,
       forgottenPassword: DEFAULT_REQUEST_STATE,
@@ -817,6 +820,11 @@ describe("test api reducer", () => {
         key: "proposalComments",
         type: "receive"
       },
+      {
+        action: act.REQUEST_INVOICE,
+        key: "invoice",
+        type: "request"
+      },
       { action: act.REQUEST_LIKE_COMMENT, key: "likeComment", type: "request" },
       { action: act.RECEIVE_LIKE_COMMENT, key: "likeComment", type: "receive" },
       {
@@ -917,6 +925,11 @@ describe("test api reducer", () => {
         action: act.RESET_PROPOSAL,
         key: ["newProposal", "editProposal"],
         type: "resetMultiple"
+      },
+      {
+        action: act.RESET_INVOICE,
+        key: ["newInvoice"],
+        type: "reset"
       },
       {
         action: act.REQUEST_SETSTATUS_PROPOSAL,

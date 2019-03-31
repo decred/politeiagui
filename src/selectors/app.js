@@ -8,19 +8,24 @@ import { or, constant, not } from "../lib/fp";
 import qs from "query-string";
 import {
   apiProposal,
+  apiInvoice,
   apiProposalComments,
+  apiInvoiceComments,
   userAlreadyPaid,
   getKeyMismatch,
   apiPropsVoteStatusResponse,
   apiUnvettedProposals,
   apiVettedProposals,
+  apiUserInvoices,
   getPropVoteStatus,
   apiUnvettedStatusResponse,
   numOfUserProposals,
   userid,
   apiUserResponse,
   apiEditUserResponse,
-  apiEditUserPayload
+  apiEditUserPayload,
+  isCMS,
+  apiAdminInvoices
 } from "./api";
 import {
   PAYWALL_STATUS_PAID,
@@ -37,6 +42,11 @@ import {
   PROPOSAL_USER_FILTER_DRAFT,
   PROPOSAL_APPROVED,
   PROPOSAL_REJECTED,
+  INVOICE_STATUS_NEW,
+  INVOICE_STATUS_UPDATED,
+  INVOICE_STATUS_REJECTED,
+  INVOICE_STATUS_APPROVED,
+  INVOICE_STATUS_PAID,
   NOTIFICATION_EMAIL_MY_PROPOSAL_STATUS_CHANGE,
   NOTIFICATION_EMAIL_MY_PROPOSAL_VOTE_STARTED,
   NOTIFICATION_EMAIL_ADMIN_PROPOSAL_NEW,
@@ -46,7 +56,9 @@ import {
   NOTIFICATION_EMAIL_REGULAR_PROPOSAL_VOTE_STARTED,
   NOTIFICATION_EMAIL_COMMENT_ON_MY_PROPOSAL,
   NOTIFICATION_EMAIL_COMMENT_ON_MY_COMMENT,
-  PROPOSAL_STATUS_ABANDONED
+  PROPOSAL_STATUS_ABANDONED,
+  CMS_PAYWALL_STATUS,
+  INVOICE_FILTER_ALL
 } from "../constants";
 import {
   getTextFromIndexMd,
@@ -60,6 +72,12 @@ export const proposal = state => {
   const proposal = apiProposal(state) || {};
 
   return proposal;
+};
+
+export const invoice = state => {
+  const invoice = apiInvoice(state) || {};
+
+  return invoice;
 };
 
 export const proposalCredits = state => state.app.proposalCredits;
@@ -86,9 +104,17 @@ export const isMarkdown = compose(
   eq("index.md"),
   get("name")
 );
+export const isJSON = compose(
+  eq("invoice.json"),
+  get("name")
+);
 export const getProposalFiles = compose(
   get("files"),
   proposal
+);
+export const getInvoiceFiles = compose(
+  get("file"),
+  invoice
 );
 export const getMarkdownFile = compose(
   find(isMarkdown),
@@ -97,6 +123,14 @@ export const getMarkdownFile = compose(
 export const getNotMarkdownFile = compose(
   filter(not(isMarkdown)),
   getProposalFiles
+);
+export const getInvoiceJSON = compose(
+  find(isJSON),
+  getInvoiceFiles
+);
+export const getNotJSONFile = compose(
+  filter(not(isJSON)),
+  getInvoiceFiles
 );
 
 export const getEditProposalValues = state => {
@@ -187,6 +221,7 @@ export const resolveEditUserValues = prefs => {
 };
 
 export const getUserPaywallStatus = state => {
+  if (isCMS(state)) return CMS_PAYWALL_STATUS;
   if (userAlreadyPaid(state)) {
     return PAYWALL_STATUS_PAID;
   }
@@ -219,6 +254,8 @@ export const isProposalStatusApproved = state =>
 export const activeVotesEndHeight = state => state.app.activeVotesEndHeight;
 
 export const proposalComments = state => apiProposalComments(state);
+
+export const invoiceComments = state => apiInvoiceComments(state);
 
 export const getTempThreadTree = state => state.app.replyThreadTree;
 
@@ -338,6 +375,66 @@ export const getUserProposals = state => {
   return [];
 };
 
+// TODO: call getUserInvoicesCountByStatus
+export const getUserInvoicesFilterCounts = state => {
+  const invoices = apiUserInvoices(state);
+  return getInvoicesCountByStatus(invoices);
+};
+
+export const getAdminInvoicesCountByStatus = state => {
+  const invoices = apiAdminInvoices(state);
+  return getInvoicesCountByStatus(invoices);
+};
+
+export const getInvoicesCountByStatus = invoices => {
+  return invoices
+    ? {
+        [INVOICE_STATUS_NEW]: getInvoicesByStatus(invoices, INVOICE_STATUS_NEW)
+          .length,
+        [INVOICE_STATUS_UPDATED]: getInvoicesByStatus(
+          invoices,
+          INVOICE_STATUS_UPDATED
+        ).length,
+        [INVOICE_STATUS_REJECTED]: getInvoicesByStatus(
+          invoices,
+          INVOICE_STATUS_REJECTED
+        ).length,
+        [INVOICE_STATUS_APPROVED]: getInvoicesByStatus(
+          invoices,
+          INVOICE_STATUS_APPROVED
+        ).length,
+        [INVOICE_STATUS_PAID]: getInvoicesByStatus(
+          invoices,
+          INVOICE_STATUS_PAID
+        ).length,
+        [INVOICE_FILTER_ALL]: invoices.length
+      }
+    : 0;
+};
+
+const getInvoicesByStatus = (invoices, status) =>
+  status === INVOICE_FILTER_ALL
+    ? invoices
+    : invoices.filter(i => i.status === status);
+
+export const getAdminInvoices = state => {
+  const invoices = apiAdminInvoices(state);
+  const adminFilterValue = getAdminFilterValue(state);
+
+  if (!invoices) return [];
+
+  return getInvoicesByStatus(invoices, adminFilterValue);
+};
+
+export const getUserInvoices = state => {
+  const userFilterValue = getUserFilterValue(state);
+  const invoices = apiUserInvoices(state);
+
+  if (!invoices) return [];
+
+  return getInvoicesByStatus(invoices, userFilterValue);
+};
+
 export const getUserProposalFilterCounts = state => {
   const proposalFilterCounts = {
     [PROPOSAL_USER_FILTER_SUBMITTED]: numOfUserProposals(state),
@@ -386,6 +483,12 @@ const countRejectedProps = (votesstatus = []) =>
   }).length;
 
 export const getVettedProposalFilterCounts = state => {
+  if (isCMS(state))
+    return {
+      [PROPOSAL_STATUS_ABANDONED]: 0,
+      [PROPOSAL_APPROVED]: 0,
+      [PROPOSAL_REJECTED]: 0
+    };
   const vsResponse = apiPropsVoteStatusResponse(state);
   const vettedProps = apiVettedProposals(state);
   const count = vsResponse ? countPublicProposals(vsResponse.votesstatus) : {};

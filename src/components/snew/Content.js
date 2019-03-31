@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Content } from "snew-classic-ui";
-import { formatProposalData } from "../../lib/snew";
+import { formatProposalData, formatInvoiceData } from "../../lib/snew";
 import Link from "./Link";
 import ReactBody from "react-body";
 import PageLoadingIcon from "./PageLoadingIcon";
 import Message from "../Message";
 import ProposalFilter from "../ProposalFilter";
+import InvoiceFilter from "../InvoiceFilter";
 import thingLinkConnector from "../../connectors/thingLink";
 
 export const CustomContent = ({
@@ -28,6 +29,9 @@ export const CustomContent = ({
   showLookUp,
   commentid,
   comments,
+  isCMS,
+  invoices,
+  invoiceCounts,
   ...props
 }) => {
   const invalidcomment =
@@ -36,6 +40,7 @@ export const CustomContent = ({
   const showList =
     (listings && listings.length > 0) ||
     (proposals && proposals.length > 0) ||
+    (invoices && invoices.length > 0) ||
     (proposalCounts && filterValue >= 0 && proposalCounts[filterValue]) !== 0;
   const showLoadMore =
     proposals &&
@@ -69,69 +74,115 @@ export const CustomContent = ({
         >
           <h1 className="proposals-listing-header">{header}</h1>
           {showLookUp && (
-            <Link
-              style={{ marginRight: "24px" }}
-              href="/admin/users"
-              onClick={() => null}
-            >
-              <i className="fa fa-search right-margin-5" />
-              Search users
-            </Link>
+            <div>
+              {isCMS && (
+                <Link
+                  style={{ marginRight: "24px" }}
+                  href="/admin/invite"
+                  onClick={() => null}
+                >
+                  Invite new contractor
+                </Link>
+              )}
+              <Link
+                style={{ marginRight: "24px" }}
+                href="/admin/users"
+                onClick={() => null}
+              >
+                <i className="fa fa-search right-margin-5" />
+                Search users
+              </Link>
+            </div>
           )}
         </div>
       )}
-      <ProposalFilter
-        header={header}
-        handleChangeFilterValue={onChangeFilter}
-        filterValue={filterValue}
-        proposalCounts={proposalCounts}
-      />
+      {isCMS ? (
+        <InvoiceFilter
+          header={header}
+          handleChangeFilterValue={onChangeFilter}
+          filterValue={filterValue}
+          invoiceCounts={invoiceCounts}
+        />
+      ) : (
+        <ProposalFilter
+          header={header}
+          handleChangeFilterValue={onChangeFilter}
+          filterValue={filterValue}
+          proposalCounts={proposalCounts}
+        />
+      )}
       {showList ? (
-        <React.Fragment>
-          <Content
-            {...{
-              ...props,
-              highlightcomment: commentid,
-              key: "content",
-              lastBlockHeight: props.lastBlockHeight,
-              listings: listings || [
-                {
-                  allChildren: proposals
-                    ? proposals.map((proposal, idx) =>
-                        formatProposalData(proposal, idx, activeVotes)
-                      )
-                    : []
-                }
-              ]
-            }}
-          />
-          {showLoadMore && (
-            <div
-              style={{ width: "100%", maxWidth: "1000px", textAlign: "center" }}
-            >
-              <button
-                style={{ marginTop: "15px" }}
-                className="c-btn c-btn-primary"
-                onClick={() =>
-                  onFetchData
-                    ? onFetchData(
-                        lastLoadedProposal
-                          ? lastLoadedProposal.censorshiprecord.token
-                          : null
-                      )
-                    : onFetchUserProposals(
-                        userid,
-                        lastLoadedProposal
-                          ? lastLoadedProposal.censorshiprecord.token
-                          : null
-                      )
-                }
+        !isCMS ? (
+          <React.Fragment>
+            <Content
+              {...{
+                ...props,
+                highlightcomment: commentid,
+                key: "content",
+                lastBlockHeight: props.lastBlockHeight,
+                listings: listings || [
+                  {
+                    allChildren: proposals
+                      ? proposals.map((proposal, idx) =>
+                          formatProposalData(proposal, idx, activeVotes)
+                        )
+                      : []
+                  }
+                ]
+              }}
+            />
+            {showLoadMore && (
+              <div
+                style={{
+                  width: "100%",
+                  maxWidth: "1000px",
+                  textAlign: "center"
+                }}
               >
-                Load More
-              </button>
-            </div>
-          )}
-        </React.Fragment>
+                <button
+                  style={{ marginTop: "15px" }}
+                  className="c-btn c-btn-primary"
+                  onClick={() =>
+                    onFetchData
+                      ? onFetchData(
+                          lastLoadedProposal
+                            ? lastLoadedProposal.censorshiprecord.token
+                            : null
+                        )
+                      : onFetchUserProposals(
+                          userid,
+                          lastLoadedProposal
+                            ? lastLoadedProposal.censorshiprecord.token
+                            : null
+                        )
+                  }
+                >
+                  Load More
+                </button>
+              </div>
+            )}
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <Content
+              {...{
+                ...props,
+                highlightcomment: commentid,
+                key: "content",
+                lastBlockHeight: props.lastBlockHeight,
+                listings: listings || [
+                  {
+                    allChildren: invoices
+                      ? invoices.map((invoice, idx) =>
+                          formatInvoiceData(invoice, idx)
+                        )
+                      : []
+                  }
+                ]
+              }}
+            />
+          </React.Fragment>
+        )
       ) : (
         <h1 style={{ textAlign: "center", paddingTop: "125px", color: "#777" }}>
           {emptyProposalsMessage}
@@ -172,9 +223,11 @@ class Loader extends Component {
       this.setState({ isFetched: true });
       this.props.onFetchData && this.props.onFetchData();
       this.props.onFetchStatus && this.props.onFetchStatus();
-      this.props.onFetchProposalsVoteStatus &&
-        this.props.onFetchProposalsVoteStatus();
-      getLastBlockHeight && getLastBlockHeight(isTestnet);
+      !this.props.isCMS &&
+        this.props.onFetchProposalsVoteStatus &&
+        this.props.onFetchProposalsVoteStatus() &&
+        getLastBlockHeight &&
+        getLastBlockHeight(isTestnet);
     }
   }
 

@@ -1470,7 +1470,7 @@ button.inverse {
 }
 
 
-.version-select__control { 
+.version-select__control {
   width: 100px;
   background-color: #FFF !important;
   margin-right: 5px;
@@ -1522,10 +1522,6 @@ form div.usertext-body.may-blank-within.md-container {
 
 .font-12 {
   font-size: 12px !important;
-}
-
-.spacer {
-  max-width: 1000px !important;
 }
 
 .float-right {
@@ -1841,7 +1837,7 @@ form div.usertext-body.may-blank-within.md-container {
 
 .diff-out-line {
   background-color: #cb2431;
-  height: 1px; 
+  height: 1px;
   position: absolute;
 }
 

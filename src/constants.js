@@ -1,7 +1,14 @@
 export const MAINNET = "mainnet";
 export const TESTNET = "testnet";
 
+export const CMSWWWMODE = "cmswww";
+
 export const EXPLORER = "explorer";
+
+// CMS
+export const INVOICE_STATUS_UNREVIEWED = 2;
+
+// POLITEIA
 
 export const PROPOSAL_FILTER_ALL = 0;
 
@@ -16,6 +23,8 @@ export const PROPOSAL_USER_FILTER_DRAFT = 2;
 export const PAYWALL_STATUS_WAITING = 0;
 export const PAYWALL_STATUS_LACKING_CONFIRMATIONS = 1;
 export const PAYWALL_STATUS_PAID = 2;
+
+export const CMS_PAYWALL_STATUS = 2;
 export const CONFIRMATIONS_REQUIRED = 2;
 
 export const PUB_KEY_STATUS_LOADING = 0;
@@ -41,11 +50,9 @@ export const MANAGE_USER_CLEAR_USER_PAYWALL = 4;
 export const MANAGE_USER_UNLOCK = 5;
 export const MANAGE_USER_DEACTIVATE = 6;
 export const MANAGE_USER_REACTIVATE = 7;
-
 export const LIST_HEADER_PUBLIC = "Public Proposals";
 export const LIST_HEADER_UNVETTED = "Unvetted Proposals";
 export const LIST_HEADER_USER = "Your Proposals";
-
 export const SORT_BY_OLD = "OLD";
 export const SORT_BY_NEW = "NEW";
 export const SORT_BY_TOP = "TOP";
@@ -74,3 +81,23 @@ export const LOAD_KEY_FAILED =
 export const PI_DOCS = "https://docs.decred.org/governance/politeia/politeia/";
 export const PROPOSAL_GUIDELINES =
   "https://docs.decred.org/governance/politeia/proposal-guidelines/";
+
+export const INVOICE_STATUS_INVALID = 0; // Invalid status XXX?
+export const INVOICE_STATUS_NOTFOUND = 1; // Invoice not found XXX?
+
+export const INVOICE_STATUS_NEW = 2; // Invoice has not been reviewed
+export const INVOICE_STATUS_UPDATED = 3; // Invoice has unreviewed changes
+export const INVOICE_STATUS_DISPUTED = 4; // Invoice has been disputed for some reason
+export const INVOICE_STATUS_REJECTED = 5; // Invoice needs to be revised
+export const INVOICE_STATUS_APPROVED = 6; // Invoice has been approved
+export const INVOICE_STATUS_PAID = 7; // Invoice has been paid
+
+export const INVOICE_FILTER_ALL = 99;
+
+// export const INVOICE_USER_FILTER_DRAFT = 1;
+// export const INVOICE_USER_FILTER_NEW = 2;
+
+export const CMS_LIST_HEADER_ADMIN = "Admin Invoices";
+export const CMS_LIST_HEADER_USER = "Your Invoices";
+
+export const CMS_DEFAULT_TAB_TITLE = "Contractor Management System";

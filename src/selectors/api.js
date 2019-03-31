@@ -2,11 +2,12 @@ import get from "lodash/fp/get";
 import eq from "lodash/fp/eq";
 import filter from "lodash/fp/filter";
 import compose from "lodash/fp/compose";
-import { or, bool, constant, not } from "../lib/fp";
+import { and, or, bool, constant, not } from "../lib/fp";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_CENSORED,
-  PROPOSAL_STATUS_ABANDONED
+  PROPOSAL_STATUS_ABANDONED,
+  CMSWWWMODE
 } from "../constants";
 
 export const getIsApiRequesting = key =>
@@ -43,6 +44,8 @@ const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
 const isApiRequestingUserProposals = getIsApiRequesting("userProposals");
 const isApiRequestingProposal = getIsApiRequesting("proposal");
 const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
+const isApiRequestingNewInvoice = getIsApiRequesting("newInvoice");
+const isApiRequestingInvoice = getIsApiRequesting("invoice");
 export const isApiRequestingUserSearch = getIsApiRequesting("userSearch");
 export const isApiRequestingUser = getIsApiRequesting("user");
 export const isApiRequestingNewComment = getIsApiRequesting("newComment");
@@ -69,6 +72,7 @@ const apiResendVerificationEmailPayload = getApiPayload(
   "resendVerificationEmail"
 );
 const apiNewProposalPayload = getApiPayload("newProposal");
+const apiNewInvoicePayload = getApiPayload("newInvoice");
 const apiSetStatusProposalPayload = getApiPayload("setStatusProposal");
 const apiManageUserPayload = getApiPayload("manageUser");
 
@@ -90,8 +94,12 @@ const apiVettedResponse = getApiResponse("vetted");
 const apiUserProposalsResponse = getApiResponse("userProposals");
 const apiUnvettedResponse = getApiResponse("unvetted");
 const apiProposalResponse = getApiResponse("proposal");
+const apiInvoiceResponse = getApiResponse("invoice");
 const apiProposalCommentsResponse = getApiResponse("proposalComments");
+const apiInvoiceCommentsResponse = getApiResponse("invoiceComments");
 const apiNewProposalResponse = getApiResponse("newProposal");
+const apiNewInvoiceResponse = getApiResponse("newInvoice");
+const apiUserInvoicesResponse = getApiResponse("userInvoices");
 const apiSetStatusProposalResponse = getApiResponse("setStatusProposal");
 export const apiUserSearchResponse = getApiResponse("userSearch");
 export const verifyNewUser = getApiResponse("verifyNewUser");
@@ -238,6 +246,8 @@ const apiUserProposalsError = getApiError("userProposals");
 const apiUnvettedError = getApiError("unvetted");
 const apiProposalError = getApiError("proposal");
 const apiNewProposalError = getApiError("newProposal");
+const apiNewInvoiceError = getApiError("newInvoice");
+const apiUserInvoicesError = getApiError("userInvoices");
 const apiSetStatusProposalError = getApiError("setStatusProposal");
 const apiCommentsLikesError = getApiError("commentslikes");
 export const apiError = or(
@@ -472,6 +482,10 @@ export const apiProposal = compose(
   get("proposal"),
   apiProposalResponse
 );
+export const apiInvoice = compose(
+  get("invoice"),
+  apiInvoiceResponse
+);
 export const proposalPayload = state => state.api.proposal.payload;
 export const proposalToken = compose(
   get(["censorshiprecord", "token"]),
@@ -493,10 +507,18 @@ export const apiProposalComments = or(
   ),
   constant([])
 );
+export const apiInvoiceComments = or(
+  compose(
+    get("comments"),
+    apiInvoiceCommentsResponse
+  ),
+  constant([])
+);
 export const proposalIsRequesting = or(
   isApiRequestingInit,
   isApiRequestingProposal
 );
+export const invoiceIsRequesting = isApiRequestingInvoice;
 export const proposalError = or(apiInitError, apiProposalError);
 export const user = compose(
   get("user"),
@@ -504,7 +526,10 @@ export const user = compose(
 );
 export const newUserResponse = bool(apiNewUserResponse);
 export const newProposalIsRequesting = isApiRequestingNewProposal;
+export const newInvoiceIsRequesting = isApiRequestingNewInvoice;
 export const newProposalError = apiNewProposalError;
+export const newInvoiceError = apiNewInvoiceError;
+export const userInvoiceError = apiUserInvoicesError;
 export const newProposalMerkle = compose(
   get(["censorshiprecord", "merkle"]),
   apiNewProposalResponse
@@ -528,6 +553,34 @@ export const newProposalDescription = compose(
 export const newProposalFiles = compose(
   get("files"),
   apiNewProposalPayload
+);
+export const newInvoiceMerkle = compose(
+  get(["censorshiprecord", "merkle"]),
+  apiNewInvoiceResponse
+);
+export const newInvoiceToken = compose(
+  get(["censorshiprecord", "token"]),
+  apiNewInvoiceResponse
+);
+export const newInvoiceSignature = compose(
+  get(["censorshiprecord", "signature"]),
+  apiNewInvoiceResponse
+);
+export const newInvoiceYear = compose(
+  get("year"),
+  apiNewInvoicePayload
+);
+export const newInvoiceMonth = compose(
+  get("month"),
+  apiNewInvoicePayload
+);
+export const newInvoiceFiles = compose(
+  get("files"),
+  apiNewInvoicePayload
+);
+export const apiUserInvoices = compose(
+  get("invoices"),
+  apiUserInvoicesResponse
 );
 export const setStatusProposal = compose(
   get("status"),
@@ -641,3 +694,23 @@ export const isApiRequesting = or(
   isApiRequestingPropVoteStatus,
   isApiRequestingPropVoteResults
 );
+
+// CMS Selectors
+const mode = compose(
+  get("mode"),
+  apiInitResponse
+);
+
+export const isCMS = state => mode(state) === CMSWWWMODE;
+
+export const inviteUserResponse = getApiResponse("inviteUser");
+export const isApiRequestingInviteUser = getIsApiRequesting("inviteUser");
+
+export const isApiRequestingAdminInvoices = getIsApiRequesting("adminInvoices");
+export const adminInvoicesResponse = getApiResponse("adminInvoices");
+export const apiAdminInvoices = compose(
+  get("invoices"),
+  adminInvoicesResponse
+);
+
+export const usePaywall = and(not(isCMS));

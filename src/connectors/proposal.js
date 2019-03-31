@@ -38,7 +38,8 @@ const proposalConnector = connect(
     markdownFile: sel.getMarkdownFile,
     otherFiles: sel.getNotMarkdownFile,
     commentsSortOption: sel.commentsSortOption,
-    openedModals: sel.getopenedModals
+    openedModals: sel.getopenedModals,
+    isCMS: sel.isCMS
   }),
   dispatch =>
     bindActionCreators(

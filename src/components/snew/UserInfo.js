@@ -14,13 +14,14 @@ class UserInfo extends React.Component {
       loggedInAsUsername,
       userCanExecuteActions,
       onLogout,
-      loggedInAsUserId
+      loggedInAsUserId,
+      isCMS
     } = this.props;
     return loggedInAsEmail ? (
       <div id="header-right">
         <div id="header-right-content">
           <ReactBody className="loggedin" />
-          <ProposalCreditsIndicator />
+          {!isCMS && <ProposalCreditsIndicator />}
           <div className="user">
             <Dropdown
               DropdownTrigger={
@@ -28,12 +29,21 @@ class UserInfo extends React.Component {
               }
               DropdownContent={
                 <ul>
-                  <li
-                    className="dropdown-list-item"
-                    onClick={() => history.push("/user/proposals")}
-                  >
-                    Proposals
-                  </li>
+                  {isCMS ? (
+                    <li
+                      className="dropdown-list-item"
+                      onClick={() => history.push("/user/invoices")}
+                    >
+                      Invoices
+                    </li>
+                  ) : (
+                    <li
+                      className="dropdown-list-item"
+                      onClick={() => history.push("/user/proposals")}
+                    >
+                      Proposals
+                    </li>
+                  )}
                   <li
                     className="dropdown-list-item"
                     onClick={() => history.push(`/user/${loggedInAsUserId}`)}
@@ -46,11 +56,13 @@ class UserInfo extends React.Component {
                     }`}
                     onClick={() =>
                       userCanExecuteActions
-                        ? history.push("/proposals/new")
+                        ? history.push(
+                            `/${isCMS ? "invoices" : "proposals"}/new`
+                          )
                         : null
                     }
                   >
-                    Submit Proposal
+                    {isCMS ? "Submit Invoice" : "Submit Proposal"}
                   </li>
                   <li
                     className="dropdown-list-item logout-button"

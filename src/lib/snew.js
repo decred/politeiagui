@@ -48,8 +48,41 @@ export const proposalToT3 = (
   }
 });
 
+export const invoiceToT3 = (
+  {
+    userid,
+    username,
+    month,
+    year,
+    censorshiprecord = {},
+    status,
+    timestamp,
+    numcomments
+  },
+  idx
+) => ({
+  kind: "t3",
+  data: {
+    authorid: userid,
+    author: username,
+    numcomments,
+    rank: idx + 1,
+    title: `Invoice ${month}/${year}`,
+    id: censorshiprecord.token,
+    name: "t3_" + censorshiprecord.token,
+    review_status: status,
+    created_utc: timestamp,
+    permalink: `/invoices/${censorshiprecord.token}`,
+    url: `/invoices/${censorshiprecord.token}`,
+    is_self: true,
+    version: "1"
+  }
+});
+
 export const formatProposalData = (proposal, idx) =>
   proposalToT3(proposal, idx);
+
+export const formatInvoiceData = (invoice, idx) => invoiceToT3(invoice, idx);
 
 const getChildComments = ({ tree, comments }, parentid) =>
   map(

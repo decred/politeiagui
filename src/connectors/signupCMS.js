@@ -3,7 +3,7 @@ import * as sel from "../selectors";
 import * as act from "../actions";
 import { or } from "../lib/fp";
 
-const signupFormConnector = connect(
+const signupCMSFormConnector = connect(
   sel.selectorMap({
     email: sel.email,
     loggedInAsEmail: sel.loggedInAsEmail,
@@ -25,9 +25,9 @@ const signupFormConnector = connect(
   {
     onFetchData: act.onGetPolicy,
     onSignup: act.onSignup,
-    onSignupConfirm: act.onSignupConfirm,
+    onSignupConfirm: act.onSignupConfirmCMS,
     onResetSignup: act.onResetSignup
   }
 );
 
-export default signupFormConnector;
+export default signupCMSFormConnector;

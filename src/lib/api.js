@@ -5,12 +5,16 @@ import qs from "query-string";
 import { sha3_256 } from "js-sha3";
 import get from "lodash/fp/get";
 import MerkleTree from "./merkle";
-import { PROPOSAL_STATUS_UNREVIEWED } from "../constants";
+import {
+  PROPOSAL_STATUS_UNREVIEWED,
+  INVOICE_STATUS_UNREVIEWED
+} from "../constants";
 import {
   getHumanReadableError,
   base64ToArrayBuffer,
   arrayBufferToWordArray,
-  utoa
+  utoa,
+  csvToJson
 } from "../helpers";
 
 export const TOP_LEVEL_COMMENT_PARENTID = "0";
@@ -38,6 +42,11 @@ export const convertMarkdownToFile = markdown => ({
   mime: "text/plain; charset=utf-8",
   payload: utoa(markdown)
 });
+export const convertJsonToFile = json => ({
+  name: "invoice.json",
+  mime: "text/plain; charset=utf-8",
+  payload: utoa(JSON.stringify(json))
+});
 
 export const makeProposal = (name, markdown, attachments = []) => ({
   files: [
@@ -50,6 +59,27 @@ export const makeProposal = (name, markdown, attachments = []) => ({
     digest: digestPayload(payload)
   }))
 });
+
+export const makeInvoice = (month, year, csv) => {
+  const { name, mime, payload } = convertJsonToFile({
+    month,
+    year,
+    lineitems: csvToJson(csv)
+  });
+  return {
+    id: "",
+    month,
+    year,
+    files: [
+      {
+        name,
+        mime,
+        payload,
+        digest: digestPayload(payload)
+      }
+    ]
+  };
+};
 
 export const makeComment = (token, comment, parentid) => ({
   token,
@@ -69,8 +99,8 @@ export const makeCensoredComment = (token, reason, commentid) => ({
   reason
 });
 
-export const signProposal = (email, proposal) =>
-  pki.myPubKeyHex(email).then(publickey => {
+export const signRegister = (email, proposal) => {
+  return pki.myPubKeyHex(email).then(publickey => {
     const digests = proposal.files
       .map(x => Buffer.from(get("digest", x), "hex"))
       .sort(Buffer.compare);
@@ -80,6 +110,7 @@ export const signProposal = (email, proposal) =>
       .signStringHex(email, root)
       .then(signature => ({ ...proposal, publickey, signature }));
   });
+};
 
 export const signComment = (email, comment) =>
   pki
@@ -165,12 +196,13 @@ export const me = () => GET("/v1/user/me").then(getResponse);
 
 export const apiInfo = () =>
   GET("/").then(
-    ({ csrfToken, response: { version, route, pubkey, testnet } }) => ({
+    ({ csrfToken, response: { version, route, pubkey, testnet, mode } }) => ({
       csrfToken: csrfToken,
       version,
       route,
       pubkey,
-      testnet
+      testnet,
+      mode
     })
   );
 
@@ -300,6 +332,11 @@ export const userProposals = (userid, after) => {
       );
 };
 
+export const userInvoices = () => GET("/v1/user/invoices").then(getResponse);
+
+export const adminInvoices = csrf =>
+  POST("/admin/invoices", csrf, {}).then(getResponse);
+
 export const searchUser = obj =>
   GET(`/v1/users?${qs.stringify(obj)}`).then(getResponse);
 
@@ -308,9 +345,15 @@ export const proposal = (token, version = null) =>
   GET(`/v1/proposals/${token}` + (version ? `?version=${version}` : "")).then(
     getResponse
   );
+export const invoice = (token, version = null) =>
+  GET(`/v1/invoices/${token}` + (version ? `?version=${version}` : "")).then(
+    getResponse
+  );
 export const user = userId => GET(`/v1/user/${userId}`).then(getResponse);
 export const proposalComments = token =>
   GET(`/v1/proposals/${token}/comments`).then(getResponse);
+export const invoiceComments = token =>
+  GET(`/v1/invoices/${token}/comments`).then(getResponse);
 export const logout = csrf =>
   POST("/logout", csrf, {}).then(() => {
     localStorage.removeItem("state");
@@ -421,3 +464,19 @@ export const proposalPaywallPayment = () =>
 
 export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
+
+// CMS
+export const inviteNewUser = (csrf, email) =>
+  POST("/invite", csrf, {
+    email
+  }).then(getResponse);
+
+export const newInvoice = (csrf, invoice) =>
+  POST("/invoices/new", csrf, invoice).then(
+    ({ response: { censorshiprecord } }) => ({
+      ...invoice,
+      censorshiprecord,
+      timestamp: Date.now() / 1000,
+      status: INVOICE_STATUS_UNREVIEWED
+    })
+  );

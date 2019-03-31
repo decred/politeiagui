@@ -18,7 +18,8 @@ const thingLinkConnector = connect(
     isTestnet: sel.isTestNet,
     getVoteStatus: sel.getPropVoteStatus,
     comments: sel.proposalComments,
-    csrf: sel.csrf
+    csrf: sel.csrf,
+    isCMS: sel.isCMS
   }),
   {
     confirmWithModal: act.confirmWithModal,

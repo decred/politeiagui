@@ -1,3 +1,4 @@
+import React from "react";
 import get from "lodash/fp/get";
 import CryptoJS from "crypto-js";
 import * as pki from "./lib/pki";
@@ -6,7 +7,12 @@ import {
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_FILTER_ALL,
-  PROPOSAL_VOTING_FINISHED
+  PROPOSAL_VOTING_FINISHED,
+  INVOICE_STATUS_NEW,
+  INVOICE_STATUS_UPDATED,
+  INVOICE_STATUS_REJECTED,
+  INVOICE_STATUS_APPROVED,
+  INVOICE_STATUS_PAID
 } from "./constants.js";
 import { INVALID_FILE } from "./constants";
 
@@ -35,6 +41,20 @@ export const atou = str => decodeURIComponent(escape(window.atob(str)));
 export const getTextFromIndexMd = file => {
   const text = atou(file.payload);
   return text.substring(text.indexOf("\n") + 1);
+};
+
+export const getTextFromJsonToCsv = file => {
+  const json = JSON.parse(atou(file.payload));
+  const lineitems = json.lineitems;
+  let linesCsv = "";
+  lineitems &&
+    lineitems.forEach(
+      l =>
+        (linesCsv += `${l.type},${l.subtype},${l.description},${
+          l.proposaltoken
+        },${l.hours},${l.totalcost}\n`)
+    );
+  return linesCsv;
 };
 
 export const getHumanReadableError = (errorCode, errorContext = []) => {
@@ -250,6 +270,76 @@ export const removeProposalsDuplicates = (arr1, arr2) => {
   return Object.keys(mergedObj).map(item => mergedObj[item]);
 };
 
+// CMS HELPERS
+export const renderInvoiceStatus = status => {
+  const mapInvoiceStatusToLabel = {
+    [INVOICE_STATUS_NEW]: (
+      <span
+        style={{
+          fontWeight: "bold",
+          color: "#091440"
+        }}
+      >
+        <br />
+        {mapInvoiceStatusToMessage[status]}
+      </span>
+    ),
+    [INVOICE_STATUS_UPDATED]: (
+      <span
+        style={{
+          fontWeight: "bold",
+          color: "#091440"
+        }}
+      >
+        <br />
+        {mapInvoiceStatusToMessage[status]}
+      </span>
+    ),
+    [INVOICE_STATUS_REJECTED]: (
+      <span
+        style={{
+          fontWeight: "bold",
+          color: "#8997a5"
+        }}
+      >
+        <br />
+        {mapInvoiceStatusToMessage[status]}
+      </span>
+    ),
+    [INVOICE_STATUS_APPROVED]: (
+      <span
+        style={{
+          fontWeight: "bold",
+          color: "#FFC84E"
+        }}
+      >
+        <br />
+        {mapInvoiceStatusToMessage[status]}
+      </span>
+    ),
+    [INVOICE_STATUS_PAID]: (
+      <span
+        style={{
+          fontWeight: "bold",
+          color: "#41bf53"
+        }}
+      >
+        <br />
+        {mapInvoiceStatusToMessage[status]}
+      </span>
+    )
+  };
+  return mapInvoiceStatusToLabel[status];
+};
+
+const mapInvoiceStatusToMessage = {
+  [INVOICE_STATUS_NEW]: "Invoice Unreviewed",
+  [INVOICE_STATUS_UPDATED]: "Invoice Updated and Unreviewed",
+  [INVOICE_STATUS_REJECTED]: "Invoice Rejected",
+  [INVOICE_STATUS_APPROVED]: "Invoice Approved",
+  [INVOICE_STATUS_PAID]: "Invoice Paid"
+};
+
 export const exportToCsv = (data, fields) => {
   const csvContent = data.reduce((acc, info) => {
     let row = "";
@@ -287,3 +377,41 @@ export const getJsonData = base64 => {
     throw new Error(INVALID_FILE);
   }
 };
+
+export const setQueryStringWithoutPageReload = qs => {
+  const newurl =
+    window.location.protocol +
+    "//" +
+    window.location.host +
+    window.location.pathname +
+    qs;
+  window.history.pushState({ path: newurl }, "", newurl);
+};
+
+// CSV
+const DELIMITER_CHAR = ",";
+const COMMENT_CHAR = "#";
+const LINE_DELIMITER = "\n";
+
+export const isComment = line => line[0] === COMMENT_CHAR;
+
+const split = (string, delimiter) => string.split(delimiter);
+
+export const splitLine = string => split(string, LINE_DELIMITER);
+
+export const splitColumn = string => split(string, DELIMITER_CHAR);
+
+const jsonCsvMap = (line, linenum) => ({
+  linenum,
+  type: line[0],
+  subtype: line[1],
+  description: line[2],
+  proposaltoken: line[3],
+  hours: +line[4],
+  totalcost: +line[5]
+});
+
+export const csvToJson = csv =>
+  splitLine(csv)
+    .map(splitColumn)
+    .map(jsonCsvMap);

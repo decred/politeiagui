@@ -17,9 +17,10 @@ class FilesField extends React.Component {
   handleFilesChange = files => {
     const {
       input,
-      policy,
-      meta: { dispatch }
+      meta: { dispatch },
+      policy
     } = this.props;
+
     const formattedFiles = getFormattedFiles(files);
     const inputAndNewFiles = input.value
       ? formattedFiles.concat(input.value)

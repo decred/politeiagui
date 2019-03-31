@@ -11,6 +11,8 @@ import { resetNewProposalData } from "../lib/editors_content_backup";
 import act from "./methods";
 
 export const onResetProposal = act.RESET_PROPOSAL;
+
+export const onResetInvoice = act.RESET_INVOICE;
 export const onSetEmail = act.SET_EMAIL;
 
 export const onSignup = act.REQUEST_SIGNUP_CONFIRMATION;
@@ -18,6 +20,9 @@ export const onResetSignup = act.RESET_SIGNUP_CONFIRMATION;
 export const onResetRescanUserPayments = act.RESET_RESCAN_USER_PAYMENTS;
 export const onSignupConfirm = props => dispatch => {
   dispatch(onCreateNewUser(props));
+};
+export const onSignupConfirmCMS = props => dispatch => {
+  dispatch(onCreateNewUserCMS(props));
 };
 
 export const requestApiInfo = () => dispatch => {
@@ -39,20 +44,22 @@ export const onRequestMe = () => (dispatch, getState) => {
     .me()
     .then(response => {
       dispatch(act.RECEIVE_ME(response));
-      dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
+      if (sel.usePaywall(getState())) {
+        dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
 
-      // Start polling for the user paywall tx, if applicable.
-      const paywallAddress = sel.paywallAddress(getState());
-      if (paywallAddress) {
-        const paywallAmount = sel.paywallAmount(getState());
-        const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
-        dispatch(
-          external_api_actions.verifyUserPayment(
-            paywallAddress,
-            paywallAmount,
-            paywallTxNotBefore
-          )
-        );
+        // Start polling for the user paywall tx, if applicable.
+        const paywallAddress = sel.paywallAddress(getState());
+        if (paywallAddress) {
+          const paywallAmount = sel.paywallAmount(getState());
+          const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
+          dispatch(
+            external_api_actions.verifyUserPayment(
+              paywallAddress,
+              paywallAmount,
+              paywallTxNotBefore
+            )
+          );
+        }
       }
     })
     .catch(error => {
@@ -87,6 +94,31 @@ export const withCsrf = fn => (dispatch, getState) => {
   );
 };
 
+export const onInviteUserConfirm = ({ email }) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_INVITE_USER({ email }));
+    return api
+      .inviteNewUser(csrf, email)
+      .then(response => {
+        dispatch(act.RECEIVE_INVITE_USER(response));
+        dispatch(closeModal());
+      })
+      .catch(error => {
+        if (error.toString() === "Error: No available storage method found.") {
+          //local storage error
+          dispatch(
+            act.RECEIVE_INVITE_USER(
+              null,
+              new Error("CMS requires local storage to work.")
+            )
+          );
+        } else {
+          dispatch(act.RECEIVE_INVITE_USER(null, error));
+        }
+        throw error;
+      });
+  });
+
 export const onCreateNewUser = ({ email, username, password }) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_USER({ email }));
@@ -103,6 +135,48 @@ export const onCreateNewUser = ({ email, username, password }) =>
             act.RECEIVE_NEW_USER(
               null,
               new Error("Politeia requires local storage to work.")
+            )
+          );
+        } else {
+          dispatch(act.RECEIVE_NEW_USER(null, error));
+        }
+        throw error;
+      });
+  });
+
+export const onCreateNewUserCMS = ({
+  email,
+  username,
+  password,
+  location,
+  xpublickey,
+  name,
+  verificationtoken
+}) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_NEW_USER({ email }));
+    return api
+      .newUser(
+        csrf,
+        email,
+        username,
+        password,
+        name,
+        verificationtoken,
+        location,
+        xpublickey
+      )
+      .then(response => {
+        dispatch(act.RECEIVE_NEW_USER(response));
+        dispatch(closeModal());
+      })
+      .catch(error => {
+        if (error.toString() === "Error: No available storage method found.") {
+          //local storage error
+          dispatch(
+            act.RECEIVE_NEW_USER(
+              null,
+              new Error("CMS requires local storage to work.")
             )
           );
         } else {
@@ -143,7 +217,9 @@ export const onLogin = ({ email, password }) =>
       .login(csrf, email, password)
       .then(response => {
         dispatch(act.RECEIVE_LOGIN(response));
-        dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
+        if (sel.usePaywall(getState())) {
+          dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
+        }
         dispatch(closeModal());
       })
       .then(() => dispatch(onRequestMe()))
@@ -214,6 +290,27 @@ export const onFetchUserProposals = (userid, token) => dispatch => {
     });
 };
 
+export const onFetchUserInvoices = (userid, token) => dispatch => {
+  dispatch(act.REQUEST_USER_INVOICES());
+  return api
+    .userInvoices(userid, token)
+    .then(response => dispatch(act.RECEIVE_USER_INVOICES(response)))
+    .catch(error => {
+      dispatch(act.RECEIVE_USER_INVOICES(null, error));
+    });
+};
+
+export const onFetchAdminInvoices = () =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_ADMIN_INVOICES());
+    return api
+      .adminInvoices(csrf)
+      .then(response => dispatch(act.RECEIVE_ADMIN_INVOICES(response)))
+      .catch(error => {
+        dispatch(act.RECEIVE_ADMIN_INVOICES(null, error));
+      });
+  });
+
 export const onFetchVetted = token => dispatch => {
   dispatch(act.REQUEST_VETTED());
   return api
@@ -260,6 +357,25 @@ export const onFetchProposal = (token, version = null) => dispatch => {
     })
     .catch(error => {
       dispatch(act.RECEIVE_PROPOSAL(null, error));
+    });
+};
+
+export const onFetchInvoice = (token, version = null) => dispatch => {
+  dispatch(act.REQUEST_INVOICE(token));
+  return api
+    .invoice(token, version)
+    .then(response => {
+      response && response.invoice && Object.keys(response.invoice).length > 0
+        ? dispatch(act.RECEIVE_INVOICE(response))
+        : dispatch(
+            act.RECEIVE_PROPOSAL(
+              null,
+              new Error("The requested invoice does not exist.")
+            )
+          );
+    })
+    .catch(error => {
+      dispatch(act.RECEIVE_INVOICE(null, error));
     });
 };
 
@@ -327,6 +443,37 @@ export const onManageUser = (userId, action) =>
     });
   });
 
+export const onSubmitInvoice = (
+  loggedInAsEmail,
+  userid,
+  username,
+  month,
+  year,
+  csv
+) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_NEW_INVOICE({ month, year, csv }));
+    return Promise.resolve(api.makeInvoice(month, year, csv))
+      .then(invoice => api.signRegister(loggedInAsEmail, invoice))
+      .then(invoice => api.newInvoice(csrf, invoice))
+      .then(invoice => {
+        dispatch(
+          act.RECEIVE_NEW_INVOICE({
+            ...invoice,
+            numcomments: 0,
+            userid,
+            username
+          })
+        );
+        resetNewProposalData();
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_NEW_INVOICE(null, error));
+        resetNewProposalData();
+        throw error;
+      });
+  });
+
 export const onSubmitProposal = (
   loggedInAsEmail,
   userid,
@@ -338,7 +485,7 @@ export const onSubmitProposal = (
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_PROPOSAL({ name, description, files }));
     return Promise.resolve(api.makeProposal(name, description, files))
-      .then(proposal => api.signProposal(loggedInAsEmail, proposal))
+      .then(proposal => api.signRegister(loggedInAsEmail, proposal))
       .then(proposal => api.newProposal(csrf, proposal))
       .then(proposal => {
         dispatch(
@@ -373,7 +520,7 @@ export const onSubmitEditedProposal = (
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_EDIT_PROPOSAL({ name, description, files }));
     return Promise.resolve(api.makeProposal(name, description, files))
-      .then(proposal => api.signProposal(loggedInAsEmail, proposal))
+      .then(proposal => api.signRegister(loggedInAsEmail, proposal))
       .then(proposal => api.editProposal(csrf, { ...proposal, token }))
       .then(proposal => {
         dispatch(act.RECEIVE_EDIT_PROPOSAL(proposal));

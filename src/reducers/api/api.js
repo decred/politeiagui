@@ -37,7 +37,9 @@ export const DEFAULT_STATE = {
   unvetted: DEFAULT_REQUEST_STATE,
   censorComment: DEFAULT_REQUEST_STATE,
   proposal: DEFAULT_REQUEST_STATE,
+  invoice: DEFAULT_REQUEST_STATE,
   proposalComments: DEFAULT_REQUEST_STATE,
+  invoiceComments: DEFAULT_REQUEST_STATE,
   proposalsVoteStatus: DEFAULT_REQUEST_STATE,
   proposalVoteStatus: DEFAULT_REQUEST_STATE,
   commentslikes: DEFAULT_REQUEST_STATE,
@@ -60,7 +62,9 @@ export const DEFAULT_STATE = {
   proposalPaywallDetails: DEFAULT_REQUEST_STATE,
   email: "",
   keyMismatch: false,
-  lastLoaded: {}
+  lastLoaded: {},
+  // CMS
+  newInvoice: DEFAULT_REQUEST_STATE
 };
 
 const api = (state = DEFAULT_STATE, action) =>
@@ -147,6 +151,21 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_EDIT_PROPOSAL]: () => receive("editProposal", state, action),
     [act.REQUEST_NEW_COMMENT]: () => request("newComment", state, action),
     [act.RECEIVE_NEW_COMMENT]: () => onReceiveNewComment(state, action),
+    // == CMS START ==
+    [act.REQUEST_INVITE_USER]: () => request("inviteUser", state, action),
+    [act.RECEIVE_INVITE_USER]: () => receive("inviteUser", state, action),
+    [act.RESET_INVITE_USER]: () => reset("inviteUser", state, action),
+    [act.REQUEST_NEW_INVOICE]: () => request("newInvoice", state, action),
+    [act.RECEIVE_NEW_INVOICE]: () => receive("newInvoice", state, action),
+    [act.REQUEST_USER_INVOICES]: () => request("userInvoices", state, action),
+    [act.RECEIVE_USER_INVOICES]: () => receive("userInvoices", state, action),
+    [act.REQUEST_ADMIN_INVOICES]: () => request("adminInvoices", state, action),
+    [act.RECEIVE_ADMIN_INVOICES]: () => receive("adminInvoices", state, action),
+    [act.REQUEST_INVOICE]: () => request("invoice", state, action),
+    [act.RECEIVE_INVOICE]: () => receive("invoice", state, action),
+    [act.REQUEST_INVOICE_COMMENTS]: () =>
+      request("invoiceComments", state, action),
+    // === CMS END ===
     [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
       request("proposalPaywallDetails", state, action),
     [act.RECEIVE_PROPOSAL_PAYWALL_DETAILS]: () =>
@@ -177,6 +196,7 @@ const api = (state = DEFAULT_STATE, action) =>
       receive("passwordReset", state, action),
     [act.RESET_PROPOSAL]: () =>
       resetMultiple(["newProposal", "editProposal"], state),
+    [act.RESET_INVOICE]: () => reset(["newInvoice"], state),
     [act.REQUEST_SETSTATUS_PROPOSAL]: () =>
       request("setStatusProposal", state, action),
     [act.RECEIVE_SETSTATUS_PROPOSAL]: () => onReceiveSetStatus(state, action),
