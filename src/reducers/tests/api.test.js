@@ -250,7 +250,9 @@ describe("test api reducer", () => {
       vetted: DEFAULT_REQUEST_STATE,
       unvetted: DEFAULT_REQUEST_STATE,
       proposal: DEFAULT_REQUEST_STATE,
+      invoice: DEFAULT_REQUEST_STATE,
       proposalComments: DEFAULT_REQUEST_STATE,
+      invoiceComments: DEFAULT_REQUEST_STATE,
       proposalsVoteStatus: DEFAULT_REQUEST_STATE,
       proposalVoteStatus: DEFAULT_REQUEST_STATE,
       commentslikes: DEFAULT_REQUEST_STATE,
@@ -817,6 +819,11 @@ describe("test api reducer", () => {
         action: act.RECEIVE_PROPOSAL_COMMENTS,
         key: "proposalComments",
         type: "receive"
+      },
+      {
+        action: act.REQUEST_INVOICE,
+        key: "invoice",
+        type: "request"
       },
       { action: act.REQUEST_LIKE_COMMENT, key: "likeComment", type: "request" },
       { action: act.RECEIVE_LIKE_COMMENT, key: "likeComment", type: "receive" },

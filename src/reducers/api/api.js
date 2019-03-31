@@ -37,7 +37,9 @@ export const DEFAULT_STATE = {
   unvetted: DEFAULT_REQUEST_STATE,
   censorComment: DEFAULT_REQUEST_STATE,
   proposal: DEFAULT_REQUEST_STATE,
+  invoice: DEFAULT_REQUEST_STATE,
   proposalComments: DEFAULT_REQUEST_STATE,
+  invoiceComments: DEFAULT_REQUEST_STATE,
   proposalsVoteStatus: DEFAULT_REQUEST_STATE,
   proposalVoteStatus: DEFAULT_REQUEST_STATE,
   commentslikes: DEFAULT_REQUEST_STATE,
@@ -163,8 +165,6 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_INVOICE]: () => receive("invoice", state, action),
     [act.REQUEST_INVOICE_COMMENTS]: () =>
       request("invoiceComments", state, action),
-    [act.RECEIVE_PROPOSAL_COMMENTS]: () =>
-      receive("invoiceComments", state, action),
     // === CMS END ===
     [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
       request("proposalPaywallDetails", state, action),
