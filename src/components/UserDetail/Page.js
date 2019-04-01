@@ -26,7 +26,8 @@ const UserDetailPage = ({
   dcrdataTxUrl,
   isAdmin,
   openModal,
-  numOfUserProposals
+  numOfUserProposals,
+  isCMS
 }) => {
   const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
   return (
@@ -69,27 +70,33 @@ const UserDetailPage = ({
                   onTabChange={onTabChange}
                 />
                 {isAdminOrTheUser ? (
+                  !isCMS ? (
+                    <Tab
+                      title="Preferences"
+                      selected={tabId === USER_DETAIL_TAB_PREFERENCES}
+                      tabId={USER_DETAIL_TAB_PREFERENCES}
+                      onTabChange={onTabChange}
+                    />
+                  ) : null
+                ) : null}
+                {!isCMS ? (
                   <Tab
-                    title="Preferences"
-                    selected={tabId === USER_DETAIL_TAB_PREFERENCES}
-                    tabId={USER_DETAIL_TAB_PREFERENCES}
+                    title="Proposals"
+                    count={numOfUserProposals || 0}
+                    selected={tabId === USER_DETAIL_TAB_PROPOSALS}
+                    tabId={USER_DETAIL_TAB_PROPOSALS}
                     onTabChange={onTabChange}
                   />
                 ) : null}
-                <Tab
-                  title="Proposals"
-                  count={numOfUserProposals || 0}
-                  selected={tabId === USER_DETAIL_TAB_PROPOSALS}
-                  tabId={USER_DETAIL_TAB_PROPOSALS}
-                  onTabChange={onTabChange}
-                />
-                <Tab
-                  title={"Comments"}
-                  count={(user.comments && user.comments.length) || 0}
-                  selected={tabId === USER_DETAIL_TAB_COMMENTS}
-                  tabId={USER_DETAIL_TAB_COMMENTS}
-                  onTabChange={onTabChange}
-                />
+                {!isCMS ? (
+                  <Tab
+                    title={"Comments"}
+                    count={(user.comments && user.comments.length) || 0}
+                    selected={tabId === USER_DETAIL_TAB_COMMENTS}
+                    tabId={USER_DETAIL_TAB_COMMENTS}
+                    onTabChange={onTabChange}
+                  />
+                ) : null}
               </Tabs>
             </div>
             <div className="detail-tab-body">
