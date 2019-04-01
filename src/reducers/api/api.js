@@ -24,6 +24,7 @@ import {
   onReceiveProposalVoteResults,
   onReceiveManageUser
 } from "./handlers";
+import { onReceiveSetStatusInvoice } from "./handlersCMS";
 
 export const DEFAULT_STATE = {
   me: DEFAULT_REQUEST_STATE,
@@ -38,6 +39,8 @@ export const DEFAULT_STATE = {
   censorComment: DEFAULT_REQUEST_STATE,
   proposal: DEFAULT_REQUEST_STATE,
   invoice: DEFAULT_REQUEST_STATE,
+  userInvoices: DEFAULT_REQUEST_STATE,
+  adminInvoices: DEFAULT_REQUEST_STATE,
   proposalComments: DEFAULT_REQUEST_STATE,
   invoiceComments: DEFAULT_REQUEST_STATE,
   proposalsVoteStatus: DEFAULT_REQUEST_STATE,
@@ -165,6 +168,10 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_INVOICE]: () => receive("invoice", state, action),
     [act.REQUEST_INVOICE_COMMENTS]: () =>
       request("invoiceComments", state, action),
+    [act.REQUEST_SETSTATUS_INVOICE]: () =>
+      request("setStatusInvoice", state, action),
+    [act.RECEIVE_SETSTATUS_INVOICE]: () =>
+      onReceiveSetStatusInvoice(state, action),
     // === CMS END ===
     [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
       request("proposalPaywallDetails", state, action),

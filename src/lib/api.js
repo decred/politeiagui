@@ -7,8 +7,7 @@ import get from "lodash/fp/get";
 import MerkleTree from "./merkle";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
-  INVOICE_STATUS_UNREVIEWED,
-  RECORD_TYPE_INVOICE
+  INVOICE_STATUS_UNREVIEWED
 } from "../constants";
 import {
   getHumanReadableError,
@@ -361,26 +360,33 @@ export const logout = csrf =>
     return {};
   });
 
-export const proposalSetStatus = (
-  email,
-  csrf,
-  token,
-  status,
-  censorMsg,
-  recordType
-) =>
+export const proposalSetStatus = (email, csrf, token, status, censorMsg) =>
   pki
     .myPubKeyHex(email)
     .then(publickey =>
       pki.signStringHex(email, token + status + censorMsg).then(signature => {
-        const censorMsgKey =
-          recordType === RECORD_TYPE_INVOICE ? "reason" : "statuschangemessage";
-        return POST(`/${recordType}/${token}/status`, csrf, {
+        return POST(`/proposals/${token}/status`, csrf, {
           proposalstatus: status,
           token,
           signature,
           publickey,
-          [censorMsgKey]: censorMsg
+          statuschangemessage: censorMsg
+        });
+      })
+    )
+    .then(getResponse);
+
+export const invoiceSetStatus = (email, csrf, token, status, censorMsg) =>
+  pki
+    .myPubKeyHex(email)
+    .then(publickey =>
+      pki.signStringHex(email, token + status + censorMsg).then(signature => {
+        return POST(`/invoices/${token}/status`, csrf, {
+          status,
+          token,
+          signature,
+          publickey,
+          reason: censorMsg
         });
       })
     )

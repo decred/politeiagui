@@ -25,7 +25,7 @@ export default connect(
     bindActionCreators(
       {
         onFetchData: act.onFetchVetted,
-        onChangeStatus: act.onSetRecordStatus,
+        onChangeStatus: act.onSetProposalStatus,
         onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
         onChangeFilter: act.onChangePublicFilter
       },

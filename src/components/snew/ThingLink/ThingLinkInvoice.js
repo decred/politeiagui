@@ -1,6 +1,7 @@
 import React from "react";
 import { DateTooltip } from "snew-classic-ui";
 import * as modalTypes from "../../Modal/modalTypes";
+import actionsCMS from "../../../connectors/actionsCMS";
 import { renderInvoiceStatus } from "../../../helpers";
 import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
 import {
@@ -161,4 +162,4 @@ const ThingLinkInvoice = ({
   );
 };
 
-export default ThingLinkInvoice;
+export default actionsCMS(ThingLinkInvoice);

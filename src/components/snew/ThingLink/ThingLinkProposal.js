@@ -9,6 +9,7 @@ import ProposalImages from "../../ProposalImages";
 import Tooltip from "../../Tooltip";
 import VoteStats from "../../VoteStats";
 import VersionPicker from "../../VersionPicker";
+import actions from "../../../connectors/actions";
 // import Diff from "./Markdown/Diff";
 
 import {
@@ -643,4 +644,4 @@ class ThingLinkComp extends React.Component {
   }
 }
 
-export default ThingLinkComp;
+export default actions(ThingLinkComp);

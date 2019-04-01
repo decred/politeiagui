@@ -10,6 +10,6 @@ export default connect(
   }),
   {
     onFetchData: act.onFetchUnvetted,
-    onSetRecordStatus: act.onSetRecordStatus
+    onSetProposalStatus: act.onSetProposalStatus
   }
 );
