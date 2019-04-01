@@ -1,18 +1,14 @@
 import React from "react";
 import { DateTooltip } from "snew-classic-ui";
-import { withRouter } from "react-router-dom";
-import * as modalTypes from "../Modal/modalTypes";
-import actions from "../../connectors/actions";
-import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
-import CensorMessage from "../CensorMessage";
-import DownloadBundle from "../DownloadBundle";
-import Message from "../Message";
-import ProposalImages from "../ProposalImages";
-import thingLinkConnector from "../../connectors/thingLink";
-import Tooltip from "../Tooltip";
-import VoteStats from "../VoteStats";
-import VersionPicker from "../VersionPicker";
-import { renderInvoiceStatus } from "../../helpers";
+import * as modalTypes from "../../Modal/modalTypes";
+import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
+import CensorMessage from "../../CensorMessage";
+import DownloadBundle from "../../DownloadBundle";
+import Message from "../../Message";
+import ProposalImages from "../../ProposalImages";
+import Tooltip from "../../Tooltip";
+import VoteStats from "../../VoteStats";
+import VersionPicker from "../../VersionPicker";
 // import Diff from "./Markdown/Diff";
 
 import {
@@ -25,7 +21,7 @@ import {
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_VOTING_NOT_AUTHORIZED
-} from "../../constants";
+} from "../../../constants";
 
 const ToggleIcon = (type, onClick) => (
   <div style={{ width: "25px" }}>
@@ -111,8 +107,7 @@ class ThingLinkComp extends React.Component {
       startVoteToken,
       startVoteError,
       isApiRequestingSetProposalStatusByToken,
-      commentid,
-      isCMS
+      commentid
     } = this.props;
     const voteStatus = getVoteStatus(id) && getVoteStatus(id).status;
     const isAbandoned = review_status === PROPOSAL_STATUS_ABANDONED;
@@ -255,25 +250,14 @@ class ThingLinkComp extends React.Component {
               }}
             >
               {isEditable ? (
-                !isCMS ? (
-                  <Link
-                    href={`/proposals/${id}/edit`}
-                    className="edit-proposal right-margin-10"
-                    onClick={() => null}
-                  >
-                    <i className="fa fa-edit right-margin-5" />
-                    Edit
-                  </Link>
-                ) : (
-                  <Link
-                    href={`/invoices/${id}/edit`}
-                    className="edit-proposal right-margin-10"
-                    onClick={() => null}
-                  >
-                    <i className="fa fa-edit right-margin-5" />
-                    Edit
-                  </Link>
-                )
+                <Link
+                  href={`/proposals/${id}/edit`}
+                  className="edit-proposal right-margin-10"
+                  onClick={() => null}
+                >
+                  <i className="fa fa-edit right-margin-5" />
+                  Edit
+                </Link>
               ) : disableEditButton ? (
                 <Tooltip
                   wrapperStyle={{ marginRight: "10px" }}
@@ -378,9 +362,8 @@ class ThingLinkComp extends React.Component {
               </span>
             </div>
           )}
-          {!isCMS && review_status === 4 && <VoteStats token={id} />}
+          {review_status === 4 && <VoteStats token={id} />}
           {expanded &&
-            !isCMS &&
             (lastSubmitted === id ? (
               <Message type="info">
                 <span>
@@ -412,7 +395,7 @@ class ThingLinkComp extends React.Component {
                   </p>
                 </span>
               </Message>
-            ) : !isCMS && hasComment() ? (
+            ) : hasComment() ? (
               <div>
                 <div style={{ marginTop: "15px", marginBottom: "15px" }}>
                   <DownloadBundle type="proposal" />
@@ -421,12 +404,11 @@ class ThingLinkComp extends React.Component {
                   <DownloadBundle type="comments" />
                 </div>
               </div>
-            ) : !isCMS ? (
+            ) : (
               <div style={{ marginTop: "15px", marginBottom: "15px" }}>
                 <DownloadBundle type="proposal" /> <br />
               </div>
-            ) : null)}
-          {isCMS ? renderInvoiceStatus(review_status) : null}
+            ))}
           {censorMessage && <CensorMessage message={censorMessage} />}
           <Expando
             {...{
@@ -661,6 +643,4 @@ class ThingLinkComp extends React.Component {
   }
 }
 
-export const ThingLink = actions(ThingLinkComp);
-
-export default withRouter(thingLinkConnector(ThingLink));
+export default ThingLinkComp;
