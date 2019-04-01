@@ -30,3 +30,12 @@ export const setQueryStringValue = (
   });
   setQueryStringWithoutPageReload(`?${newQsValue}`);
 };
+
+export const removeQueryStringsFromUrl = (url, parameter, parameter2) => {
+  const newurl = url
+    .replace(new RegExp("[?&]" + parameter + "=[^&#]*(#.*)?$"), "$1")
+    .replace(new RegExp("([?&])" + parameter + "=[^&]*&"), "$1")
+    .replace(new RegExp("[?&]" + parameter2 + "=[^&#]*(#.*)?$"), "$1")
+    .replace(new RegExp("([?&])" + parameter2 + "=[^&]*&"), "$1");
+  window.history.pushState({ path: newurl }, "", newurl);
+};

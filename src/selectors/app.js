@@ -59,12 +59,14 @@ import {
   PROPOSAL_STATUS_ABANDONED,
   CMS_PAYWALL_STATUS,
   INVOICE_FILTER_ALL,
-  INVOICE_STATUS_DISPUTED
+  INVOICE_STATUS_DISPUTED,
+  FILTER_ALL_MONTHS
 } from "../constants";
 import {
   getTextFromIndexMd,
   countPublicProposals,
-  isProposalApproved
+  isProposalApproved,
+  getCurrentYear
 } from "../helpers";
 
 export const replyTo = or(get(["app", "replyParent"]), constant(0));
@@ -101,6 +103,11 @@ export const getPublicFilterValue = state =>
   parseInt(state.app.publicProposalsShow, 10);
 export const getUserFilterValue = state =>
   parseInt(state.app.userProposalsShow, 10);
+export const getMonthFilterValue = state =>
+  state.app.invoiceSortOption &&
+  parseInt(state.app.invoiceSortOption.month, 10);
+export const getYearFilterValue = state =>
+  state.app.invoiceSortOption && parseInt(state.app.invoiceSortOption.year, 10);
 export const isMarkdown = compose(
   eq("index.md"),
   get("name")
@@ -422,22 +429,44 @@ const getInvoicesByStatus = (invoices, status) =>
     ? invoices
     : invoices.filter(i => i.status === status);
 
+const getInvoicesByYear = (invoices, year) =>
+  year === getCurrentYear()
+    ? invoices
+    : invoices.filter(i => i.input.year === year);
+
+const getInvoicesByMonth = (invoices, month) =>
+  month === FILTER_ALL_MONTHS
+    ? invoices
+    : invoices.filter(i => i.input.month === month);
+
 export const getAdminInvoices = state => {
   const invoices = apiAdminInvoices(state);
   const adminFilterValue = getAdminFilterValue(state);
+  const monthFilter = getMonthFilterValue(state);
+  const yearFilter = getYearFilterValue(state);
 
   if (!invoices) return [];
 
-  return getInvoicesByStatus(invoices, adminFilterValue);
+  const invoicesByStatus = getInvoicesByStatus(invoices, adminFilterValue);
+  const invoicesByYear = getInvoicesByYear(invoicesByStatus, yearFilter);
+  const invoicesByMonth = getInvoicesByMonth(invoicesByYear, monthFilter);
+
+  return invoicesByStatus && invoicesByYear && invoicesByMonth;
 };
 
 export const getUserInvoices = state => {
-  const userFilterValue = getUserFilterValue(state);
   const invoices = apiUserInvoices(state);
+  const userFilterValue = getUserFilterValue(state);
+  const monthFilter = getMonthFilterValue(state);
+  const yearFilter = getYearFilterValue(state);
 
   if (!invoices) return [];
 
-  return getInvoicesByStatus(invoices, userFilterValue);
+  const invoicesByStatus = getInvoicesByStatus(invoices, userFilterValue);
+  const invoicesByYear = getInvoicesByYear(invoicesByStatus, yearFilter);
+  const invoicesByMonth = getInvoicesByMonth(invoicesByYear, monthFilter);
+
+  return invoicesByStatus && invoicesByYear && invoicesByMonth;
 };
 
 export const getUserProposalFilterCounts = state => {
