@@ -3,6 +3,9 @@ export const TESTNET = "testnet";
 
 export const CMSWWWMODE = "cmswww";
 
+export const RECORD_TYPE_PROPOSAL = "proposals";
+export const RECORD_TYPE_INVOICE = "invoices";
+
 export const EXPLORER = "explorer";
 
 // CMS

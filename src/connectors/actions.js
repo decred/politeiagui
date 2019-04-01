@@ -24,7 +24,7 @@ const actions = connect(
     startVoteError: sel.apiStartVoteError
   }),
   {
-    onChangeStatus: act.onSubmitStatusProposal,
+    onChangeStatus: act.onSetRecordStatus,
     onDeleteDraftProposal: act.onDeleteDraftProposal,
     onStartVote: act.onStartVote,
     onAuthorizeVote: act.onAuthorizeVote,

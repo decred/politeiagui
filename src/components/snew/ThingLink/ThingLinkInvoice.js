@@ -1,11 +1,21 @@
 import React from "react";
+import { DateTooltip } from "snew-classic-ui";
+import * as modalTypes from "../../Modal/modalTypes";
 import { renderInvoiceStatus } from "../../../helpers";
+import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
+import {
+  INVOICE_STATUS_UNREVIEWED,
+  INVOICE_STATUS_APPROVED,
+  RECORD_TYPE_INVOICE,
+  INVOICE_STATUS_REJECTED
+} from "../../../constants";
 
 const ThingLinkInvoice = ({
   id,
   title,
   author,
   authorid,
+  created_utc,
   is_self,
   selftext,
   selftext_html,
@@ -13,10 +23,22 @@ const ThingLinkInvoice = ({
   Link,
   Expando,
   url,
+  location,
+  isAdmin,
+  confirmWithModal,
+  onChangeStatus,
+  userCanExecuteActions,
+  loggedInAsEmail,
+  isApiRequestingSetProposalStatusByToken, // TODO use more generic name
   rank = 0
 }) => {
   const isEditable = true; // TODO: set the proper conditions here
-
+  const isInvoiceDetailPath = location.pathname.split("/")[1] === "invoices";
+  const invoiceCanBeApproved = review_status === INVOICE_STATUS_UNREVIEWED;
+  const invoiceCanBeRejected = review_status === INVOICE_STATUS_UNREVIEWED;
+  const status = isApiRequestingSetProposalStatusByToken(id);
+  const loadingReject = status && status === INVOICE_STATUS_REJECTED;
+  const loadingApprove = status && status === INVOICE_STATUS_APPROVED;
   return (
     <div className={`thing thing-proposal id-${id} odd link`}>
       <div className="entry unvoted">
@@ -59,16 +81,81 @@ const ThingLinkInvoice = ({
               </span>
             )}
           </span>
+          <span className="submitted-by">
+            {"submitted "}
+            <DateTooltip createdAt={created_utc} />
+          </span>
           {renderInvoiceStatus(review_status)}
           <Expando
             {...{
-              expanded: true,
+              expanded: isInvoiceDetailPath,
               is_self,
               selftext,
               selftext_html
             }}
           />
         </span>
+        {isAdmin && (
+          <ul style={{ display: "flex" }}>
+            {invoiceCanBeRejected && (
+              <li key="spam">
+                <ButtonWithLoadingIcon
+                  className={`c-btn c-btn-primary${
+                    !userCanExecuteActions ? " not-active disabled" : ""
+                  }`}
+                  onClick={e =>
+                    confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
+                      reasonPlaceholder:
+                        "Please provide a reason to reject this invoice"
+                    }).then(
+                      ({ reason, confirm }) =>
+                        confirm &&
+                        onChangeStatus(
+                          authorid,
+                          loggedInAsEmail,
+                          id,
+                          INVOICE_STATUS_REJECTED,
+                          reason,
+                          RECORD_TYPE_INVOICE
+                        )
+                    ) && e.preventDefault()
+                  }
+                  text="Reject"
+                  data-event-action="spam"
+                  isLoading={loadingReject}
+                />
+              </li>
+            )}
+            {invoiceCanBeApproved && (
+              <li>
+                <ButtonWithLoadingIcon
+                  className={`c-btn c-btn-primary${
+                    !userCanExecuteActions ? " not-active disabled" : ""
+                  }`}
+                  onClick={e =>
+                    confirmWithModal(modalTypes.CONFIRM_ACTION, {
+                      message: "Are you sure you want to publish this proposal?"
+                    }).then(
+                      confirm =>
+                        confirm &&
+                        onChangeStatus(
+                          authorid,
+                          loggedInAsEmail,
+                          id,
+                          INVOICE_STATUS_APPROVED,
+                          "",
+                          RECORD_TYPE_INVOICE
+                        )
+                    ) && e.preventDefault()
+                  }
+                  text="approve"
+                  data-event-action="approve"
+                  isLoading={loadingApprove}
+                />
+              </li>
+            )}
+          </ul>
+        )}
       </div>
     </div>
   );

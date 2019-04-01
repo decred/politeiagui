@@ -648,12 +648,13 @@ export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
       });
   });
 
-export const onSubmitStatusProposal = (
+export const onSetRecordStatus = (
   authorid,
   loggedInAsEmail,
   token,
   status,
-  censorMessage = ""
+  censorMessage = "",
+  recordType = "proposals"
 ) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
@@ -662,7 +663,14 @@ export const onSubmitStatusProposal = (
     }
 
     return api
-      .proposalSetStatus(loggedInAsEmail, csrf, token, status, censorMessage)
+      .proposalSetStatus(
+        loggedInAsEmail,
+        csrf,
+        token,
+        status,
+        censorMessage,
+        recordType
+      )
       .then(({ proposal }) => {
         dispatch(
           act.RECEIVE_SETSTATUS_PROPOSAL({
