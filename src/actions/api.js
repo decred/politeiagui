@@ -11,8 +11,8 @@ import { resetNewProposalData } from "../lib/editors_content_backup";
 import act from "./methods";
 
 export const onResetProposal = act.RESET_PROPOSAL;
-
 export const onResetInvoice = act.RESET_INVOICE;
+
 export const onSetEmail = act.SET_EMAIL;
 
 export const onSignup = act.REQUEST_SIGNUP_CONFIRMATION;
@@ -544,6 +544,37 @@ export const onSubmitEditedProposal = (
       })
       .catch(error => {
         dispatch(act.RECEIVE_EDIT_PROPOSAL(null, error));
+        resetNewProposalData();
+        throw error;
+      });
+  });
+
+export const onSubmitEditedInvoice = (
+  loggedInAsEmail,
+  userid,
+  username,
+  month,
+  year,
+  csv
+) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_EDIT_INVOICE({ month, year, csv }));
+    return Promise.resolve(api.makeInvoice(month, year, csv))
+      .then(invoice => api.signRegister(loggedInAsEmail, invoice))
+      .then(invoice => api.editInvoice(csrf, invoice))
+      .then(invoice => {
+        dispatch(
+          act.RECEIVE_EDIT_INVOICE({
+            ...invoice,
+            numcomments: 0,
+            userid,
+            username
+          })
+        );
+        resetNewProposalData();
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_EDIT_INVOICE(null, error));
         resetNewProposalData();
         throw error;
       });

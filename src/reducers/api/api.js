@@ -172,6 +172,8 @@ const api = (state = DEFAULT_STATE, action) =>
       request("setStatusInvoice", state, action),
     [act.RECEIVE_SETSTATUS_INVOICE]: () =>
       onReceiveSetStatusInvoice(state, action),
+    [act.REQUEST_EDIT_INVOICE]: () => request("editInvoice", state, action),
+    [act.RECEIVE_EDIT_INVOICE]: () => receive("editInvoice", state, action),
     // === CMS END ===
     [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
       request("proposalPaywallDetails", state, action),

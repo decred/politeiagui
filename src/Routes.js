@@ -42,6 +42,7 @@ import publicInvoices from "./connectors/invoices";
 import adminCMS from "./connectors/adminCMS";
 import invoiceDetail from "./connectors/invoice";
 import newInvoice from "./hocs/newInvoice";
+import editInvoice from "./connectors/editInvoice";
 
 // CMS ROUTES
 import UserInvoices from "./components/UserInvoices";
@@ -101,6 +102,10 @@ const RoutesForCMS = () => {
         path="/invoices/new"
         component={newInvoice(SubmitPage)}
         exact
+      />
+      <AuthenticatedRoute
+        path="/invoices/:token/edit"
+        component={editInvoice(SubmitPage)}
       />
       <Route
         path="/invoices/:token"

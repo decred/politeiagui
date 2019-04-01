@@ -8,7 +8,8 @@ import {
   onChangePassword,
   onFetchProposalComments,
   onSubmitEditedProposal,
-  onSubmitInvoice
+  onSubmitInvoice,
+  onSubmitEditedInvoice
 } from "./api";
 import {
   onFetchProposal as onFetchProposalApi,
@@ -94,6 +95,18 @@ export const onEditProposal = (
       description,
       files,
       props.token
+    )
+  );
+
+export const onEditInvoice = ({ month, year, csv }, _, props) => dispatch =>
+  dispatch(
+    onSubmitEditedInvoice(
+      props.loggedInAsEmail,
+      props.userid,
+      props.username,
+      +month,
+      +year,
+      csv.trim()
     )
   );
 

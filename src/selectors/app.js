@@ -10,7 +10,6 @@ import {
   apiProposal,
   apiInvoice,
   apiProposalComments,
-  apiInvoiceComments,
   userAlreadyPaid,
   getKeyMismatch,
   apiPropsVoteStatusResponse,
@@ -63,6 +62,7 @@ import {
 } from "../constants";
 import {
   getTextFromIndexMd,
+  getTextFromJsonToCsv,
   countPublicProposals,
   isProposalApproved
 } from "../helpers";
@@ -143,6 +143,16 @@ export const getEditProposalValues = state => {
     name,
     description,
     files
+  };
+};
+
+export const getEditInvoiceValues = state => {
+  const { month, year, file } = invoice(state);
+  const csv = file ? getTextFromJsonToCsv(file[0]) : null;
+  return {
+    month,
+    year,
+    csv
   };
 };
 
@@ -255,8 +265,6 @@ export const isProposalStatusApproved = state =>
 export const activeVotesEndHeight = state => state.app.activeVotesEndHeight;
 
 export const proposalComments = state => apiProposalComments(state);
-
-export const invoiceComments = state => apiInvoiceComments(state);
 
 export const getTempThreadTree = state => state.app.replyThreadTree;
 

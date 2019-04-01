@@ -737,3 +737,11 @@ export const isApiRequestingSetInvoiceStatusByToken = state => token => {
 };
 
 export const usePaywall = and(not(isCMS));
+
+export const apiEditInvoiceResponse = getApiResponse("editProposal");
+export const apiEditInvoiceError = getApiError("editProposal");
+
+export const editInvoiceToken = compose(
+  get(["invoice", "censorshiprecord", "token"]),
+  apiEditInvoiceResponse
+);
