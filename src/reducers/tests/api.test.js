@@ -251,6 +251,8 @@ describe("test api reducer", () => {
       unvetted: DEFAULT_REQUEST_STATE,
       proposal: DEFAULT_REQUEST_STATE,
       invoice: DEFAULT_REQUEST_STATE,
+      adminInvoices: DEFAULT_REQUEST_STATE,
+      userInvoices: DEFAULT_REQUEST_STATE,
       proposalComments: DEFAULT_REQUEST_STATE,
       invoiceComments: DEFAULT_REQUEST_STATE,
       proposalsVoteStatus: DEFAULT_REQUEST_STATE,
