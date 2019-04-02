@@ -1,3 +1,4 @@
+import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/fp/get";
 import map from "lodash/fp/map";
 import { receive } from "../util";
@@ -10,15 +11,15 @@ export const onReceiveSetStatusInvoice = (state, action) => {
 
   const invoiceFromState = get(["invoice", "response", "invoice"], state);
 
-  const updatedInvoice = {
-    ...action.payload.invoice,
-    file: invoiceFromState && invoiceFromState.file,
-    username: invoiceFromState && invoiceFromState.username
-  };
+  const updatedInvoiceToken = get(
+    ["setStatusInvoice", "payload", "token"],
+    state
+  );
+  const updatedInvoiceStatus = get(["payload", "invoice", "status"], action);
 
   const updateInvoiceStatus = invoice =>
-    getInvoiceToken(action.invoice) === getInvoiceToken(invoice)
-      ? updatedInvoice
+    updatedInvoiceToken === getInvoiceToken(invoice)
+      ? cloneDeep({ ...invoice, status: updatedInvoiceStatus })
       : invoice;
 
   // update user invoices list
@@ -29,7 +30,6 @@ export const onReceiveSetStatusInvoice = (state, action) => {
   // update admin invoices list
   const adminInvoices =
     get(["adminInvoices", "response", "invoices"], state) || [];
-
   const updatedAdminInvoices = map(updateInvoiceStatus, adminInvoices);
 
   return {
@@ -52,7 +52,10 @@ export const onReceiveSetStatusInvoice = (state, action) => {
       ...state.invoice,
       response: {
         ...state.invoice.response,
-        invoice: updatedInvoice
+        invoice: cloneDeep({
+          ...invoiceFromState,
+          status: updatedInvoiceStatus
+        })
       }
     }
   };
