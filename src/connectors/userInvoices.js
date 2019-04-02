@@ -12,10 +12,7 @@ const userInvoicesConnector = connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
     error: sel.userProposalsError,
-    isLoading: or(
-      sel.userProposalsIsRequesting,
-      sel.isApiRequestingPropsVoteStatus
-    ),
+    isLoading: or(sel.isApiRequestingUserInvoices),
     invoices: sel.getUserInvoices,
     invoiceCounts: sel.getUserInvoicesFilterCounts,
     filterValue: sel.getUserFilterValue,

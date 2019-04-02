@@ -657,14 +657,9 @@ export const onSetInvoiceStatus = (
 ) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_SETSTATUS_INVOICE({ status, token, reason }));
-    // if (status === 4) {
-    //   dispatch(act.SET_PROPOSAL_APPROVED(true));
-    // }
-
     return api
       .invoiceSetStatus(loggedInAsEmail, csrf, token, status, reason)
       .then(({ invoice }) => {
-        console.log("got invoice", invoice);
         dispatch(
           act.RECEIVE_SETSTATUS_INVOICE({
             invoice: {

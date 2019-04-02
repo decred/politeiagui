@@ -1,4 +1,3 @@
-import React from "react";
 import get from "lodash/fp/get";
 import CryptoJS from "crypto-js";
 import * as pki from "./lib/pki";
@@ -12,7 +11,8 @@ import {
   INVOICE_STATUS_UPDATED,
   INVOICE_STATUS_REJECTED,
   INVOICE_STATUS_APPROVED,
-  INVOICE_STATUS_PAID
+  INVOICE_STATUS_PAID,
+  INVOICE_STATUS_DISPUTED
 } from "./constants.js";
 import { INVALID_FILE } from "./constants";
 
@@ -272,72 +272,16 @@ export const removeProposalsDuplicates = (arr1, arr2) => {
 
 // CMS HELPERS
 export const renderInvoiceStatus = status => {
-  const mapInvoiceStatusToLabel = {
-    [INVOICE_STATUS_NEW]: (
-      <span
-        style={{
-          fontWeight: "bold",
-          color: "#091440"
-        }}
-      >
-        <br />
-        {mapInvoiceStatusToMessage[status]}
-      </span>
-    ),
-    [INVOICE_STATUS_UPDATED]: (
-      <span
-        style={{
-          fontWeight: "bold",
-          color: "#091440"
-        }}
-      >
-        <br />
-        {mapInvoiceStatusToMessage[status]}
-      </span>
-    ),
-    [INVOICE_STATUS_REJECTED]: (
-      <span
-        style={{
-          fontWeight: "bold",
-          color: "#8997a5"
-        }}
-      >
-        <br />
-        {mapInvoiceStatusToMessage[status]}
-      </span>
-    ),
-    [INVOICE_STATUS_APPROVED]: (
-      <span
-        style={{
-          fontWeight: "bold",
-          color: "#FFC84E"
-        }}
-      >
-        <br />
-        {mapInvoiceStatusToMessage[status]}
-      </span>
-    ),
-    [INVOICE_STATUS_PAID]: (
-      <span
-        style={{
-          fontWeight: "bold",
-          color: "#41bf53"
-        }}
-      >
-        <br />
-        {mapInvoiceStatusToMessage[status]}
-      </span>
-    )
-  };
-  return mapInvoiceStatusToLabel[status];
+  return mapInvoiceStatusToMessage[status] || "Invalid Invoice Status";
 };
 
 const mapInvoiceStatusToMessage = {
-  [INVOICE_STATUS_NEW]: "Invoice Unreviewed",
-  [INVOICE_STATUS_UPDATED]: "Invoice Updated and Unreviewed",
-  [INVOICE_STATUS_REJECTED]: "Invoice Rejected",
-  [INVOICE_STATUS_APPROVED]: "Invoice Approved",
-  [INVOICE_STATUS_PAID]: "Invoice Paid"
+  [INVOICE_STATUS_NEW]: "Invoice ureviewed",
+  [INVOICE_STATUS_UPDATED]: "Invoice updated and unreviewed",
+  [INVOICE_STATUS_REJECTED]: "Invoice rejected",
+  [INVOICE_STATUS_DISPUTED]: "Invoice disputed",
+  [INVOICE_STATUS_APPROVED]: "Invoice approved",
+  [INVOICE_STATUS_PAID]: "Invoice paid"
 };
 
 export const exportToCsv = (data, fields) => {
@@ -403,7 +347,7 @@ export const splitColumn = string => split(string, DELIMITER_CHAR);
 
 const jsonCsvMap = (line, linenum) => ({
   linenum,
-  type: line[0],
+  type: +line[0],
   subtype: line[1],
   description: line[2],
   proposaltoken: line[3],

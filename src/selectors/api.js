@@ -713,4 +713,27 @@ export const apiAdminInvoices = compose(
   adminInvoicesResponse
 );
 
+export const isApiRequestingUserInvoices = getIsApiRequesting("userInvoices");
+
+export const isApiRequestingSetStatusInvoice = getIsApiRequesting(
+  "setStatusInvoice"
+);
+export const setStatusInvoicePayload = getApiPayload("setStatusInvoice");
+export const setStatusInvoicePayloadToken = compose(
+  get("token"),
+  setStatusInvoicePayload
+);
+export const setStatusInvoicePayloadStatus = compose(
+  get("status"),
+  setStatusInvoicePayload
+);
+
+export const isApiRequestingSetInvoiceStatusByToken = state => token => {
+  return (
+    isApiRequestingSetStatusInvoice(state) &&
+    setStatusInvoicePayloadToken(state) === token &&
+    setStatusInvoicePayloadStatus(state)
+  );
+};
+
 export const usePaywall = and(not(isCMS));

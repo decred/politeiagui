@@ -58,7 +58,8 @@ import {
   NOTIFICATION_EMAIL_COMMENT_ON_MY_COMMENT,
   PROPOSAL_STATUS_ABANDONED,
   CMS_PAYWALL_STATUS,
-  INVOICE_FILTER_ALL
+  INVOICE_FILTER_ALL,
+  INVOICE_STATUS_DISPUTED
 } from "../constants";
 import {
   getTextFromIndexMd,
@@ -402,6 +403,10 @@ export const getInvoicesCountByStatus = invoices => {
         [INVOICE_STATUS_APPROVED]: getInvoicesByStatus(
           invoices,
           INVOICE_STATUS_APPROVED
+        ).length,
+        [INVOICE_STATUS_DISPUTED]: getInvoicesByStatus(
+          invoices,
+          INVOICE_STATUS_DISPUTED
         ).length,
         [INVOICE_STATUS_PAID]: getInvoicesByStatus(
           invoices,

@@ -11,7 +11,8 @@ const actionsCMS = connect(
     userCanExecuteActions: sel.userCanExecuteActions,
     // setStatusProposalToken: sel.setStatusProposalToken,
     // setStatusProposalError: sel.setStatusProposalError,
-    isApiRequestingSetProposalStatusByToken: () => () => null
+    isApiRequestingSetInvoiceStatusByToken:
+      sel.isApiRequestingSetInvoiceStatusByToken
     // startVoteError: sel.apiStartVoteError
   }),
   {
