@@ -120,54 +120,6 @@ const RegisterForm = ({
             />
           ) : null}
         </div>
-        {isCMS && (
-          <div className="c-form-group">
-            <label className="screenreader-only" htmlFor="user_reg">
-              name:
-            </label>
-            <Field
-              name="name"
-              placeholder="Full Name"
-              component="input"
-              type="text"
-              className="c-form-control"
-              id="username_reg"
-              tabIndex={2}
-            />
-          </div>
-        )}
-        {isCMS && (
-          <div className="c-form-group">
-            <label className="screenreader-only" htmlFor="user_reg">
-              location:
-            </label>
-            <Field
-              name="location"
-              placeholder="Location"
-              component="input"
-              type="text"
-              className="c-form-control"
-              id="username_reg"
-              tabIndex={2}
-            />
-          </div>
-        )}
-        {isCMS && (
-          <div className="c-form-group">
-            <label className="screenreader-only" htmlFor="user_reg">
-              extended pubkey:
-            </label>
-            <Field
-              name="xpublickey"
-              placeholder="Extended Pubkey"
-              component="input"
-              type="text"
-              className="c-form-control"
-              id="username_reg"
-              tabIndex={2}
-            />
-          </div>
-        )}
         <Field
           name="global"
           component={props => <ErrorField title="Cannot sign up" {...props} />}
