@@ -5,7 +5,6 @@ import validate from "../validators/signup";
 import { withRouter } from "react-router-dom";
 import { SubmissionError } from "redux-form";
 import signupConnector from "../connectors/signup";
-import signupCMSConnector from "../connectors/signupCMS";
 import appConnector from "../connectors/app";
 
 class SignupFormContainer extends Component {
@@ -66,7 +65,7 @@ class SignupFormContainer extends Component {
       return this.props.onSignup();
     }
 
-    const promise = this.props.onSignupConfirm(args);
+    const promise = this.props.onSignupConfirm(args, this.props.isCMS);
     if (promise) {
       return promise.catch(e => {
         throw new SubmissionError({
@@ -91,7 +90,7 @@ class SignupFormContainer extends Component {
 
 const wrap = Component =>
   appConnector(props => {
-    const connector = props.isCMS ? signupCMSConnector : signupConnector;
+    const connector = signupConnector;
     const Comp = connector(otherProps => (
       <SignupFormContainer {...{ ...otherProps, ...props, Component }} />
     ));

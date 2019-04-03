@@ -18,11 +18,12 @@ export const onSetEmail = act.SET_EMAIL;
 export const onSignup = act.REQUEST_SIGNUP_CONFIRMATION;
 export const onResetSignup = act.RESET_SIGNUP_CONFIRMATION;
 export const onResetRescanUserPayments = act.RESET_RESCAN_USER_PAYMENTS;
-export const onSignupConfirm = props => dispatch => {
-  dispatch(onCreateNewUser(props));
-};
-export const onSignupConfirmCMS = props => dispatch => {
-  dispatch(onCreateNewUserCMS(props));
+export const onSignupConfirm = (props, isCMS) => dispatch => {
+  if (isCMS) {
+    dispatch(onCreateNewUserCMS(props));
+  } else {
+    dispatch(onCreateNewUser(props));
+  }
 };
 
 export const requestApiInfo = () => dispatch => {
