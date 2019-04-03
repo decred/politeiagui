@@ -43,10 +43,11 @@ export const onSetReplyParent = (
     dispatch(reset("form/reply"))
   ]);
 
-export const onSaveNewInvoice = ({ month, year, csv }, _, props) => (
-  dispatch,
-  getState
-) =>
+export const onSaveNewInvoice = (
+  { month, year, csv, name, location, contact, rate, address },
+  _,
+  props
+) => (dispatch, getState) =>
   dispatch(
     onSubmitInvoice(
       props.loggedInAsEmail,
@@ -54,7 +55,12 @@ export const onSaveNewInvoice = ({ month, year, csv }, _, props) => (
       props.username,
       +month,
       +year,
-      csv.trim()
+      csv.trim(),
+      name,
+      location,
+      contact,
+      +rate,
+      address
     )
   ).then(() => sel.newInvoiceToken(getState()));
 

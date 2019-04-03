@@ -103,6 +103,38 @@ const InvoiceSubmit = props => {
                     />
                   </div>
                   <div className="usertext">
+                    <Field
+                      name="name"
+                      label="Contractor name"
+                      type="text"
+                      component={InputFieldWithError}
+                    />
+                    <Field
+                      name="location"
+                      label="Contractor location"
+                      type="text"
+                      component={InputFieldWithError}
+                    />
+                    <Field
+                      name="contact"
+                      label="Contractor contact"
+                      type="text"
+                      component={InputFieldWithError}
+                    />
+                    <Field
+                      name="rate"
+                      label="Contractor rate"
+                      type="number"
+                      component={InputFieldWithError}
+                    />
+                    <Field
+                      name="address"
+                      label="Payment address"
+                      type="text"
+                      component={InputFieldWithError}
+                    />
+                  </div>
+                  <div className="usertext">
                     <div className="usertext-edit md-container" style={{}}>
                       <div className="md">
                         <Field

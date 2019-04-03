@@ -60,16 +60,36 @@ export const makeProposal = (name, markdown, attachments = []) => ({
   }))
 });
 
-export const makeInvoice = (month, year, csv) => {
+export const makeInvoice = (
+  month,
+  year,
+  csv,
+  contractorname,
+  contractorlocation,
+  contractorcontact,
+  contractorrate,
+  paymentaddress
+) => {
   const { name, mime, payload } = convertJsonToFile({
+    version: 1,
     month,
     year,
+    contractorname,
+    contractorlocation,
+    contractorcontact,
+    contractorrate,
+    paymentaddress,
     lineitems: csvToJson(csv)
   });
   return {
     id: "",
     month,
     year,
+    contractorname,
+    contractorlocation,
+    contractorcontact,
+    contractorrate,
+    paymentaddress,
     files: [
       {
         name,

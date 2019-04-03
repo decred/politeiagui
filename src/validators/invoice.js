@@ -44,7 +44,12 @@ const validateCsv = csv => {
 const emptyInvoiceField = values =>
   !isRequiredValidator(values.csv && values.csv.trim()) ||
   !isRequiredValidator(values.month) ||
-  !isRequiredValidator(values.year);
+  !isRequiredValidator(values.year) ||
+  !isRequiredValidator(values.name && values.name.trim()) ||
+  !isRequiredValidator(values.location && values.location.trim()) ||
+  !isRequiredValidator(values.contact && values.contact.trim()) ||
+  !isRequiredValidator(values.rate) ||
+  !isRequiredValidator(values.address && values.address.trim());
 
 const validate = (values, dispatch, props) => {
   if (emptyInvoiceField(values)) {
