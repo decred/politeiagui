@@ -36,14 +36,12 @@ class SubmitFormContainer extends Component {
   }
 
   onSave = (...args) => {
-    console.log("aqui:", args);
     try {
       validate(...args);
     } catch (e) {
       this.setState({ validationError: e.errors._error });
       return;
     }
-    console.log("to aq");
     return this.props.isCMS
       ? this.props.onSaveInvoice(...args)
       : this.props.onSaveProposal(...args);

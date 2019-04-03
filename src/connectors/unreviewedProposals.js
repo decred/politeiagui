@@ -14,7 +14,7 @@ export default connect(
     bindActionCreators(
       {
         onFetchData: act.onFetchUnvetted,
-        onSubmitStatusProposal: act.onSubmitStatusProposal
+        onSetProposalStatus: act.onSetProposalStatus
       },
       dispatch
     )

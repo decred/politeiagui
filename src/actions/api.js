@@ -648,19 +648,45 @@ export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
       });
   });
 
-export const onSubmitStatusProposal = (
+export const onSetInvoiceStatus = (
+  authorid,
+  loggedInAsEmail,
+  token,
+  status,
+  reason = ""
+) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_SETSTATUS_INVOICE({ status, token, reason }));
+    return api
+      .invoiceSetStatus(loggedInAsEmail, csrf, token, status, reason)
+      .then(({ invoice }) => {
+        dispatch(
+          act.RECEIVE_SETSTATUS_INVOICE({
+            invoice: {
+              ...invoice,
+              userid: authorid
+            }
+          })
+        );
+        // dispatch(onFetchUnvettedStatus());
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_SETSTATUS_INVOICE(null, error));
+      });
+  });
+
+export const onSetProposalStatus = (
   authorid,
   loggedInAsEmail,
   token,
   status,
   censorMessage = ""
-) =>
-  withCsrf((dispatch, getState, csrf) => {
+) => {
+  return withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
     if (status === 4) {
       dispatch(act.SET_PROPOSAL_APPROVED(true));
     }
-
     return api
       .proposalSetStatus(loggedInAsEmail, csrf, token, status, censorMessage)
       .then(({ proposal }) => {
@@ -678,6 +704,7 @@ export const onSubmitStatusProposal = (
         dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
       });
   });
+};
 
 export const redirectedFrom = location => dispatch =>
   dispatch(act.REDIRECTED_FROM(location));

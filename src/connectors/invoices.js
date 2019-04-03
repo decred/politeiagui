@@ -26,7 +26,7 @@ export default connect(
   dispatch =>
     bindActionCreators(
       {
-        onChangeStatus: act.onSubmitStatusProposal,
+        onChangeStatus: act.onSetProposalStatus,
         onChangeFilter: act.onChangePublicFilter
       },
       dispatch

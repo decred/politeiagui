@@ -364,15 +364,31 @@ export const proposalSetStatus = (email, csrf, token, status, censorMsg) =>
   pki
     .myPubKeyHex(email)
     .then(publickey =>
-      pki.signStringHex(email, token + status + censorMsg).then(signature =>
-        POST(`/proposals/${token}/status`, csrf, {
+      pki.signStringHex(email, token + status + censorMsg).then(signature => {
+        return POST(`/proposals/${token}/status`, csrf, {
           proposalstatus: status,
           token,
           signature,
           publickey,
           statuschangemessage: censorMsg
-        })
-      )
+        });
+      })
+    )
+    .then(getResponse);
+
+export const invoiceSetStatus = (email, csrf, token, status, censorMsg) =>
+  pki
+    .myPubKeyHex(email)
+    .then(publickey =>
+      pki.signStringHex(email, token + status + censorMsg).then(signature => {
+        return POST(`/invoices/${token}/status`, csrf, {
+          status,
+          token,
+          signature,
+          publickey,
+          reason: censorMsg
+        });
+      })
     )
     .then(getResponse);
 
