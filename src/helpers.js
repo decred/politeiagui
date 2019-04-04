@@ -345,14 +345,13 @@ export const splitLine = string => split(string, LINE_DELIMITER);
 
 export const splitColumn = string => split(string, DELIMITER_CHAR);
 
-const jsonCsvMap = (line, linenum) => ({
-  linenum,
+const jsonCsvMap = line => ({
   type: +line[0],
   subtype: line[1],
   description: line[2],
   proposaltoken: line[3],
-  hours: +line[4],
-  totalcost: +line[5]
+  labor: +line[4],
+  expenses: +line[5]
 });
 
 export const csvToJson = csv =>

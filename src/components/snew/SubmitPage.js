@@ -17,6 +17,7 @@ import { Field } from "redux-form";
 import MarkdownHelp from "../MarkdownHelp";
 import { MANAGE_CREDITS_MODAL } from "../Modal/modalTypes";
 import { PROPOSAL_GUIDELINES } from "../../constants";
+import InvoiceDatasheet from "../InvoiceDatasheet";
 
 const normalizer = (value, previousValue) => {
   let files = [];
@@ -135,6 +136,7 @@ const InvoiceSubmit = props => {
                     />
                   </div>
                   <div className="usertext">
+                    <InvoiceDatasheet />
                     <div className="usertext-edit md-container" style={{}}>
                       <div className="md">
                         <Field

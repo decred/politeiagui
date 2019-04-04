@@ -1862,3 +1862,7 @@ form div.usertext-body.may-blank-within.md-container {
 .version-picker__item:hover {
   background: #d1d5da;
 }
+
+.sheet {
+  width: 100%;
+}
