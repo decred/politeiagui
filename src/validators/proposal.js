@@ -19,7 +19,6 @@ function checkProposalName(props, values) {
 }
 
 const validate = (values, dispatch, props) => {
-  console.log(values);
   if (
     !isRequiredValidator(values.name && values.name.trim()) ||
     !isRequiredValidator(values.description)

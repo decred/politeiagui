@@ -1,26 +1,6 @@
 
-.equation.cell {
-  position: relative;
-}
-.error.cell {
-  background: rgba(255,0,0,0.14);
-  font-size: 0.8em;
-  color: red;
-}
 .error.cell > div.text {
   text-align: center;
-}
-.equation.cell:before {
-  content: '';
-  width: 0;
-  height: 0;
-  position: absolute;
-  left: 0;
-  top: 0;
-  border-style: solid;
-  border-width: 6px 6px 0 0;
-  border-color: #2185d0 transparent transparent transparent;
-  z-index: 2;
 }
 
 .row-handle.cell {
@@ -56,20 +36,7 @@ table.data-grid {
   margin: auto;
   width: 100%;
 }
-.Select-control, .Select-input, .Select-placeholder,.Select-clear, .Select-placeholder, .Select--single > .Select-control .Select-value {
-  height: 15px;
-  line-height: 12px;
-  font-size: 12px;
-  text-align: left;
-  border-radius: 0;
-  border: 0;
-}
 
-.Select-control input{
-  height: 16px;
-  font-size: 12px;
-  padding: 0;
-}
 .sheet-container {
   display: block;
   padding: 5px;
@@ -96,37 +63,38 @@ pre {
     border-left: 2px solid white;
 }
 
-.add-grocery {
-  text-align: left;
-  padding: 5px 10px;
-  color: #888;
+.table-button {
+    line-height: 1.4rem !important;
+    font-size: 0.8rem;    
+    max-height: 1.4rem;
 }
-.add-button {
-  float: right;
-    border-radius: 0;
-    background: #CCC;
-    border-radius: 2px;
-    padding: 2px 20px;
+
+.table-button.add-row {
+    background: #164623;
+}
+
+.table-button.add-row:hover {
+    background: #476b50;
+}
+
+.table-button.remove-row {
     background: #e63946;
-    color: white;
-    cursor: pointer;
-    font-size: 9px;
 }
-.add-button:hover {
-  background: #f17d86;
+
+.table-button.remove-row.disabled {
+    background: rgba(0, 0, 0, .08)
 }
-.github-link {
-  display: block;
-  width: 200px;
-  font-size: 12px;
-  text-decoration: none;
-  margin: auto;
-  color: white;
+
+.table-button.remove-row:hover {
+    background: #f17d86;
 }
-.github-link:hover {
-  color: #DDD;
-}
+
 
 .error-list {
     color: red;
+}
+
+.data-grid-container .data-grid .cell .value-viewer {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

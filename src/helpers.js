@@ -331,30 +331,3 @@ export const setQueryStringWithoutPageReload = qs => {
     qs;
   window.history.pushState({ path: newurl }, "", newurl);
 };
-
-// CSV
-const DELIMITER_CHAR = ",";
-const COMMENT_CHAR = "#";
-const LINE_DELIMITER = "\n";
-
-export const isComment = line => line[0] === COMMENT_CHAR;
-
-const split = (string, delimiter) => string.split(delimiter);
-
-export const splitLine = string => split(string, LINE_DELIMITER);
-
-export const splitColumn = string => split(string, DELIMITER_CHAR);
-
-const jsonCsvMap = line => ({
-  type: +line[0],
-  subtype: line[1],
-  description: line[2],
-  proposaltoken: line[3],
-  labor: +line[4],
-  expenses: +line[5]
-});
-
-export const csvToJson = csv =>
-  splitLine(csv)
-    .map(splitColumn)
-    .map(jsonCsvMap);

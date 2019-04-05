@@ -6,6 +6,10 @@ import { validate, synchronousValidation } from "../validators/submit";
 import { withRouter } from "react-router-dom";
 import submit from "../connectors/submit";
 import appConnector from "../connectors/app";
+import {
+  createNewRow,
+  createTableHeaders
+} from "../components/InvoiceDatasheet/helpers";
 
 class SubmitFormContainer extends Component {
   componentDidMount() {
@@ -29,7 +33,8 @@ class SubmitFormContainer extends Component {
         {...{
           ...this.props,
           onSaveDraft: this.onSaveDraft,
-          onSave: this.onSave
+          onSave: this.onSave,
+          error: this.props.isCMS ? this.props.invoiceError : null
         }}
       />
     );
@@ -64,7 +69,11 @@ export default compose(
   withRouter,
   reduxForm({
     form: "form/proposal",
-    initialValues: { month: 1, year: 2019 },
+    initialValues: {
+      month: 1,
+      year: 2019,
+      datasheet: [createTableHeaders(), createNewRow(1)]
+    },
     touchOnChange: true,
     validate: synchronousValidation,
     enableReinitialize: true,

@@ -5,7 +5,6 @@ import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
 import FilesField from "../Form/Fields/FilesField";
 import ErrorField from "../Form/Fields/ErrorField";
 import SelectField from "../Form/Fields/SelectField";
-import TextAreaField from "../Form/Fields/TextAreaField";
 import InputFieldWithError from "../Form/Fields/InputFieldWithError";
 import Message from "../Message";
 import MultipleItemsBodyMessage from "../MultipleItemsBodyMessage";
@@ -54,11 +53,10 @@ const InvoiceSubmit = props => {
     handleSubmit,
     validationError,
     submitError,
-    userCanExecuteActions,
     editingMode
   } = props;
-  const submitEnabled =
-    !submitting && !error && !validationError && userCanExecuteActions;
+  const submitEnabled = !submitting && !error && !validationError;
+
   return isLoading ? (
     <PageLoadingIcon />
   ) : (
@@ -70,6 +68,13 @@ const InvoiceSubmit = props => {
             <Message type="error" header="Error creating invoice">
               <MultipleItemsBodyMessage items={validationError} />
             </Message>
+          )}
+          {error && (
+            <Message
+              type="error"
+              header="Error creating invoice"
+              body={error}
+            />
           )}
           {!error && warning && (
             <Message type="warn" header="Warning">
@@ -136,18 +141,8 @@ const InvoiceSubmit = props => {
                     />
                   </div>
                   <div className="usertext">
-                    <InvoiceDatasheet />
-                    <div className="usertext-edit md-container" style={{}}>
-                      <div className="md">
-                        <Field
-                          name="csv"
-                          component={TextAreaField}
-                          type="text"
-                          tabIndex={1}
-                          placeholder="CSV Invoice Input"
-                        />
-                      </div>
-                    </div>
+                    <Field name="datasheet" component={InvoiceDatasheet} />
+                    {/* <InvoiceDatasheet /> */}
                   </div>
                   <div className="submit-wrapper">
                     <button

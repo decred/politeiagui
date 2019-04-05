@@ -11,7 +11,8 @@ const submitConnector = connect(
     username: sel.loggedInAsUsername,
     keyMismatch: sel.getKeyMismatch,
     proposalCredits: sel.proposalCredits,
-    token: sel.newInvoiceToken
+    token: sel.newInvoiceToken,
+    invoiceError: sel.newInvoiceError
   }),
   {
     onFetchData: act.onGetPolicy,

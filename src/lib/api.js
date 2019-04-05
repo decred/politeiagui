@@ -13,8 +13,7 @@ import {
   getHumanReadableError,
   base64ToArrayBuffer,
   arrayBufferToWordArray,
-  utoa,
-  csvToJson
+  utoa
 } from "../helpers";
 
 export const TOP_LEVEL_COMMENT_PARENTID = "0";
@@ -63,12 +62,12 @@ export const makeProposal = (name, markdown, attachments = []) => ({
 export const makeInvoice = (
   month,
   year,
-  csv,
   contractorname,
   contractorlocation,
   contractorcontact,
   contractorrate,
-  paymentaddress
+  paymentaddress,
+  lineItems
 ) => {
   const { name, mime, payload } = convertJsonToFile({
     version: 1,
@@ -79,7 +78,7 @@ export const makeInvoice = (
     contractorcontact,
     contractorrate,
     paymentaddress,
-    lineitems: csvToJson(csv)
+    lineItems
   });
   return {
     id: "",

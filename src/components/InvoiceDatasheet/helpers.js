@@ -1,3 +1,34 @@
+export const getLineItemsFromDatasheet = grid => {
+  const copyGrid = grid.map(row => [...row]);
+  return copyGrid.reduce((acc, rowValues, row) => {
+    // skip first row as it is exclusive for table headers
+    if (row === 0) return acc;
+
+    const lineItem = rowValues.reduce((acc, cell, col) => {
+      switch (col) {
+        case columnTypes.TYPE_COL:
+          return { ...acc, type: +cell.value };
+        case columnTypes.DOMAIN_COL:
+          return { ...acc, domain: cell.value };
+        case columnTypes.SUBDOMAIN_COL:
+          return { ...acc, subdomain: cell.value };
+        case columnTypes.DESC_COL:
+          return { ...acc, description: cell.value };
+        case columnTypes.PROP_TOKEN_COL:
+          return { ...acc, proposaltoken: cell.value };
+        case columnTypes.LABOR_COL:
+          return { ...acc, labor: +cell.value };
+        case columnTypes.EXP_COL:
+          return { ...acc, expenses: +cell.value };
+        default:
+          return acc;
+      }
+    }, {});
+
+    return acc.concat([lineItem]);
+  }, []);
+};
+
 export const columnTypes = {
   TYPE_COL: 1,
   DOMAIN_COL: 2,
@@ -9,7 +40,7 @@ export const columnTypes = {
 };
 
 const {
-  //   TYPE_COL,
+  TYPE_COL,
   //   DOMAIN_COL,
   //   SUBDOMAIN_COL,
   //   DESC_COL,
@@ -23,26 +54,26 @@ const MIN_STRING_LEN = 3;
 const MAX_STRING_LEN = 50;
 
 export const createTableHeaders = () => [
-  { readOnly: true, value: "" },
+  { readOnly: true, value: "", width: 10 },
   { value: "Type", width: 40, readOnly: true },
   { value: "Domain", readOnly: true },
   { value: "Subdomain", readOnly: true },
   { value: "Description", readOnly: true },
   { value: "Proposal Token", readOnly: true },
-  { value: "Labor", width: 40, readOnly: true },
-  { value: "Expense", width: 40, readOnly: true }
+  { value: "Labor", width: 60, readOnly: true },
+  { value: "Expense", width: 60, readOnly: true }
 ];
 
 export const createNewRow = rowNum => {
   return [
     { readOnly: true, value: rowNum },
-    { value: 1 },
     { value: "" },
     { value: "" },
     { value: "" },
     { value: "" },
-    { value: 0 },
-    { value: 0, readOnly: true }
+    { value: "" },
+    { value: "" },
+    { value: "" }
   ];
 };
 
@@ -50,14 +81,27 @@ export const errors = {
   InvalidType: 1,
   InvalidDomainLen: 2,
   InvalidSubdomainLen: 3,
-  InvalidDescriptionLen: 4
+  InvalidDescriptionLen: 4,
+  InvalidPropTokenLen: 5,
+  InvalidLaborValue: 6,
+  InvalidLaborAmount: 7,
+  InvalidExpenseValue: 8,
+  InvalidExpenseAmount: 9
 };
 
 export const errorsMessage = {
   [errors.InvalidType]: "Type must be either 1, 2 or 3",
   [errors.InvalidDomainLen]: "Domain must have between 3 and 50 chars",
   [errors.InvalidSubdomainLen]: "Subomain must have between 3 and 50 chars",
-  [errors.InvalidDescriptionLen]: "Description must have between 3 and 50 chars"
+  [errors.InvalidDescriptionLen]:
+    "Description must have between 3 and 50 chars",
+  [errors.InvalidPropTokenLen]: "Proposals tokens must be 64 characters long",
+  [errors.InvalidLaborValue]: "Labor value must be an integer",
+  [errors.InvalidLaborAmount]:
+    "If Type is 1, labor value must be greater than 0",
+  [errors.InvalidExpenseValue]: "Expense value must be an integer",
+  [errors.InvalidExpenseAmount]:
+    "If Type is 2, expense value must be greater than 0"
 };
 
 const response = (error, newValue) => ({
@@ -160,4 +204,81 @@ export const processDescriptionColChange = (grid, { row, col, value }) => {
   }
 
   return response(null, updateGridCell(grid, row, col, { value }));
+};
+
+export const processPropTokenColChange = (grid, { row, col, value }) => {
+  const updatedGrid = updateGridCell(grid, row, col, {
+    value: value
+  });
+  // proposal token can be either blank or have a valid token
+  if (!value) {
+    return response(null, updatedGrid);
+  }
+
+  // for now only validate the token length
+  if (value.length < 64) {
+    return response(errors.InvalidPropTokenLen, updatedGrid);
+  }
+
+  return updatedGrid;
+};
+
+export const processLaborColChange = (grid, { row, col, value }) => {
+  const intValue = parseInt(value, 10);
+  // make sure the value can be converted to an integer
+  if (intValue !== 0 && !intValue) {
+    return response(
+      errors.InvalidLaborValue,
+      updateGridCell(grid, row, col, {
+        value: ""
+      })
+    );
+  }
+
+  // make sure labor is different than 0 if type is equal 1
+  if (grid[row][TYPE_COL].value === "1" && intValue <= 0) {
+    return response(
+      errors.InvalidLaborAmount,
+      updateGridCell(grid, row, col, {
+        value: 1
+      })
+    );
+  }
+
+  return response(
+    null,
+    updateGridCell(grid, row, col, {
+      value: value
+    })
+  );
+};
+
+export const processExpenseColChange = (grid, { row, col, value }) => {
+  const intValue = parseInt(value, 10);
+  // make sure the value can be converted to an integer
+  if (intValue !== 0 && !intValue) {
+    return response(
+      errors.InvalidExpenseValue,
+      updateGridCell(grid, row, col, {
+        value: ""
+      })
+    );
+  }
+
+  // make sure expense is different than 0 if type is equal 2
+  if (grid[row][TYPE_COL].value === "2" && intValue <= 0) {
+    return response(
+      errors.InvalidExpenseAmount,
+      updateGridCell(grid, row, col, {
+        value: 1
+      })
+    );
+  }
+
+  return response(
+    null,
+    updateGridCell(grid, row, col, {
+      value: value
+    })
+  );
 };

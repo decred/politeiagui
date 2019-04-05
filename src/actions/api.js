@@ -450,17 +450,37 @@ export const onSubmitInvoice = (
   username,
   month,
   year,
-  csv,
   name,
   location,
   contact,
   rate,
-  address
+  address,
+  lineItems
 ) =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_NEW_INVOICE({ month, year, csv }));
+    dispatch(
+      act.REQUEST_NEW_INVOICE({
+        month,
+        year,
+        name,
+        location,
+        contact,
+        rate,
+        address,
+        lineItems
+      })
+    );
     return Promise.resolve(
-      api.makeInvoice(month, year, csv, name, location, contact, rate, address)
+      api.makeInvoice(
+        month,
+        year,
+        name,
+        location,
+        contact,
+        rate,
+        address,
+        lineItems
+      )
     )
       .then(invoice => api.signRegister(loggedInAsEmail, invoice))
       .then(invoice => api.newInvoice(csrf, invoice))
