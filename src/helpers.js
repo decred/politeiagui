@@ -121,7 +121,32 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     52: "This account has been deactivated.",
     53: "Your email address has not yet been verified.",
     54: "Invalid proposal vote parameters",
-    55: "Email address is not verified"
+    55: "Email address is not verified",
+    56: "Invalid user ID",
+    57: "Invalid like comment action",
+    58: "Invalid proposal censorship token",
+    59: "Email address is already verified",
+    60: "Malformed name",
+    61: "Malformed location",
+    62: "Invoice cannot be found",
+    63: "Month or year was set, while the other was not",
+    64: "Invalid invoice status transition",
+    65: "Reason for action not provided",
+    66: "Submitted invoice file is malformed",
+    67: "Submitted invoice is a duplicate of an existing invoice",
+    68: "Invalid payment address",
+    69: "Malformed line item submitted",
+    70: "Invoice missing contractor name",
+    71: "Invoice missing contractor location",
+    72: "Invoice missing contractor contact",
+    73: "Invoice has malformed contractor contact",
+    74: "Invoice missing contractor rate",
+    75: "Invoice has invalid contractor rate",
+    76: "Line item has malformed proposal token",
+    77: "Line item has malformed domain",
+    78: "Line item has malformed subdomain",
+    79: "Line item has malformed description",
+    80: "Invoice is an wrong status to be editted (approved, rejected or paid)"
   };
 
   const error = errorMessages[errorCode];
