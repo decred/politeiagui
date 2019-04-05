@@ -55,7 +55,7 @@ const InvoiceSubmit = props => {
     submitError,
     editingMode
   } = props;
-  const submitEnabled = !submitting && !error && !validationError;
+  const submitEnabled = !submitting && !validationError;
 
   return isLoading ? (
     <PageLoadingIcon />
