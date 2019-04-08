@@ -9,6 +9,8 @@ const formReducer = reducer.plugin({
           return state;
         }
         return undefined;
+      case act.RECEIVE_NEW_INVOICE:
+        return action.error ? state : undefined;
       case act.RECEIVE_EDIT_PROPOSAL:
         if (action.error) {
           return state;

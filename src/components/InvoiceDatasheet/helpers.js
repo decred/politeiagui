@@ -39,15 +39,7 @@ export const columnTypes = {
   EXP_COL: 7
 };
 
-const {
-  TYPE_COL,
-  //   DOMAIN_COL,
-  //   SUBDOMAIN_COL,
-  //   DESC_COL,
-  //   PROP_TOKEN_COL,
-  LABOR_COL,
-  EXP_COL
-} = columnTypes;
+const { TYPE_COL, LABOR_COL, EXP_COL } = columnTypes;
 
 // TODO: get this values dinamically from the api policy
 const MIN_STRING_LEN = 3;
@@ -280,5 +272,47 @@ export const processExpenseColChange = (grid, { row, col, value }) => {
     updateGridCell(grid, row, col, {
       value: value
     })
+  );
+};
+
+export const processCellsChange = (currentGrid, changes) => {
+  let result = null;
+  const getGridAndErrorsFromResult = (acc, result) => ({
+    grid: result.newValue,
+    errors: result.error ? acc.errors.add(result.error) : acc.errors
+  });
+
+  return changes.reduce(
+    (acc, change) => {
+      switch (change.col) {
+        case columnTypes.TYPE_COL:
+          result = processTypeColChange(acc.grid, change);
+          return getGridAndErrorsFromResult(acc, result);
+        case columnTypes.DOMAIN_COL:
+          result = processDomainColChange(acc.grid, change);
+          return getGridAndErrorsFromResult(acc, result);
+        case columnTypes.SUBDOMAIN_COL:
+          result = processSubdomainColChange(acc.grid, change);
+          return getGridAndErrorsFromResult(acc, result);
+        case columnTypes.DESC_COL:
+          result = processDescriptionColChange(acc.grid, change);
+          return getGridAndErrorsFromResult(acc, result);
+        case columnTypes.PROP_TOKEN_COL:
+          result = processPropTokenColChange(acc.grid, change);
+          return getGridAndErrorsFromResult(acc, result);
+        case columnTypes.LABOR_COL:
+          result = processLaborColChange(acc.grid, change);
+          return getGridAndErrorsFromResult(acc, result);
+        case columnTypes.EXP_COL:
+          result = processExpenseColChange(acc.grid, change);
+          return getGridAndErrorsFromResult(acc, result);
+        default:
+          acc.grid = updateGridCell(acc.grid, change.row, change.col, {
+            value: change.value
+          });
+          return acc;
+      }
+    },
+    { grid: currentGrid, errors: new Set() }
   );
 };

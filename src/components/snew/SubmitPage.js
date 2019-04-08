@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactBody from "react-body";
 import submitFormHOC from "../../hocs/submitForm";
 import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
@@ -53,9 +53,12 @@ const InvoiceSubmit = props => {
     handleSubmit,
     validationError,
     submitError,
-    editingMode
+    editingMode,
+    valid
   } = props;
-  const submitEnabled = !submitting && !validationError;
+
+  const [datasheetErrors, setDatasheetErrors] = useState([]);
+  const submitEnabled = !submitting && valid && datasheetErrors.length === 0;
 
   return isLoading ? (
     <PageLoadingIcon />
@@ -141,7 +144,12 @@ const InvoiceSubmit = props => {
                     />
                   </div>
                   <div className="usertext">
-                    <Field name="datasheet" component={InvoiceDatasheet} />
+                    <Field
+                      name="datasheet"
+                      onChangeErrors={setDatasheetErrors}
+                      errors={datasheetErrors}
+                      component={InvoiceDatasheet}
+                    />
                     {/* <InvoiceDatasheet /> */}
                   </div>
                   <div className="submit-wrapper">

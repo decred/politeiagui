@@ -22,21 +22,64 @@ const validate = (values, dispatch, props) => {
         "Your local key does not match the one on the server.  Please generate a new one under account settings."
     });
   }
-  // const errors = validateCsv(values.csv);
-  // if ("" + errors) {
-  //   throw new SubmissionError({
-  //     _error: "Malformed CSV."
-  //   });
-  // }
 
   return null;
 };
 
-const synchronousValidation = values => {
-  const errors = {};
-  errors._error = "Errors found";
-  if (emptyInvoiceField(values)) errors.csv = "You must fill all fields";
-  if (!errors.csv) errors._error = null;
+const validateContractorName = name => {
+  if (!name) {
+    return "Name cannot be blank";
+  }
+  return null;
+};
+
+const validateContractorLocation = location => {
+  if (!location) {
+    return "Location cannot be blank";
+  }
+  return null;
+};
+
+const validateContractorContact = contact => {
+  if (!contact) {
+    return "Contact cannot be blank";
+  }
+  return null;
+};
+
+const validateContractorRate = rate => {
+  if (!rate) {
+    return "Rate cannot be blank";
+  }
+  if (+rate < 500 || +rate > 50000) {
+    return "Rate must be within the range of 500 to 50000";
+  }
+  return null;
+};
+
+const validateContractorPaymentAddress = address => {
+  if (!address) {
+    return "Rate cannot be blank";
+  }
+  return null;
+};
+
+const synchronousValidation = ({ name, location, contact, rate, address }) => {
+  const errors = {
+    name: validateContractorName(name),
+    location: validateContractorLocation(location),
+    contact: validateContractorContact(contact),
+    rate: validateContractorRate(rate),
+    address: validateContractorPaymentAddress(address)
+  };
+
+  const errorFound = Object.keys(errors).reduce(
+    (acc, k) => acc || !!errors[k],
+    false
+  );
+  errors._error = errorFound && "Errors found";
+
+  // if (!errors.csv) errors._error = null;
   return errors;
 };
 
