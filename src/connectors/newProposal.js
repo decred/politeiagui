@@ -71,7 +71,7 @@ class NewProposalWrapper extends Component {
       <Component
         {...{
           ...this.props,
-          onSaveProposal: this.onSaveProposal.bind(this),
+          onSave: this.onSaveProposal.bind(this),
           initialValues: this.state.initialValues,
           validationError: validationError,
           onChange: this.onChange

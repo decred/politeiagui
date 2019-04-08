@@ -10,15 +10,11 @@ const submitConnector = connect(
     userid: sel.userid,
     username: sel.loggedInAsUsername,
     keyMismatch: sel.getKeyMismatch,
-    proposalCredits: sel.proposalCredits,
-    token: sel.newInvoiceToken
+    proposalCredits: sel.proposalCredits
   }),
   {
     onFetchData: act.onGetPolicy,
-    onSaveInvoice: act.onSaveNewInvoice,
-    onSaveProposal: act.onSaveNewProposal,
     openModal: act.openModal,
-    onResetInvoice: act.onResetInvoice,
     onSaveDraft: act.onSaveDraftProposal,
     onDeleteDraft: act.onDeleteDraftProposal
   }

@@ -12,40 +12,17 @@ class SubmitFormContainer extends Component {
     this.props.policy || this.props.onFetchData();
   }
 
-  componentDidUpdate() {
-    const { token } = this.props;
-    if (token) {
-      this.props.onResetInvoice();
-      return this.props.isCMS
-        ? this.props.history.push("/invoices/" + token)
-        : this.props.history.push("/proposals/" + token);
-    }
-  }
-
   render() {
     const Component = this.props.Component;
     return (
       <Component
         {...{
           ...this.props,
-          onSaveDraft: this.onSaveDraft,
-          onSave: this.onSave
+          onSaveDraft: this.onSaveDraft
         }}
       />
     );
   }
-
-  onSave = (...args) => {
-    try {
-      validate(...args);
-    } catch (e) {
-      this.setState({ validationError: e.errors._error });
-      return;
-    }
-    return this.props.isCMS
-      ? this.props.onSaveInvoice(...args)
-      : this.props.onSaveProposal(...args);
-  };
 
   onSaveDraft = (...args) => {
     validate(...args);
@@ -64,7 +41,6 @@ export default compose(
   withRouter,
   reduxForm({
     form: "form/proposal",
-    initialValues: { month: 1, year: 2019 },
     touchOnChange: true,
     validate: synchronousValidation,
     enableReinitialize: true,

@@ -10,8 +10,8 @@ const SelectField = ({
   <div className="input-with-error">
     <label>{label}</label>
     <select {...input} tabIndex={tabIndex}>
-      {options.map(op => (
-        <option>{op}</option>
+      {options.map((op, idx) => (
+        <option key={`option-${idx}`}>{op}</option>
       ))}
     </select>
     <div className="input-subline">

@@ -28,6 +28,7 @@ import {
   PROPOSAL_APPROVED,
   PROPOSAL_REJECTED
 } from "../constants";
+import { getLineItemsFromDatasheet } from "../components/InvoiceDatasheet/helpers";
 
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
 
@@ -43,10 +44,12 @@ export const onSetReplyParent = (
     dispatch(reset("form/reply"))
   ]);
 
-export const onSaveNewInvoice = ({ month, year, csv }, _, props) => (
-  dispatch,
-  getState
-) =>
+export const onSaveNewInvoice = (
+  { month, year, name, location, contact, rate, address, datasheet },
+  _,
+  props
+) => (dispatch, getState) => {
+  const lineItems = getLineItemsFromDatasheet(datasheet);
   dispatch(
     onSubmitInvoice(
       props.loggedInAsEmail,
@@ -54,9 +57,15 @@ export const onSaveNewInvoice = ({ month, year, csv }, _, props) => (
       props.username,
       +month,
       +year,
-      csv.trim()
+      name,
+      location,
+      contact,
+      +rate,
+      address,
+      lineItems
     )
   ).then(() => sel.newInvoiceToken(getState()));
+};
 
 export const onSaveNewProposal = ({ name, description, files }, _, props) => (
   dispatch,
