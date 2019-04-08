@@ -9,8 +9,7 @@ const ButtonWithLoadingIcon = ({
 }) => {
   return (
     <button
-      className={className || "btn"}
-      type="submit"
+      className={`btn ${isLoading ? "loading" : ""} ${className}`}
       {...props}
       onClick={isLoading ? () => null : props.onClick}
     >

@@ -3,6 +3,7 @@ import ReactBody from "react-body";
 import ErrorField from "../../Form/Fields/ErrorField";
 import SelectField from "../../Form/Fields/SelectField";
 import InputFieldWithError from "../../Form/Fields/InputFieldWithError";
+import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
 import Message from "../../Message";
 import { Field } from "redux-form";
 import InvoiceDatasheet from "../../InvoiceDatasheet";
@@ -10,7 +11,6 @@ import InvoiceDatasheet from "../../InvoiceDatasheet";
 const InvoiceSubmit = props => {
   const {
     isLoading,
-    PageLoadingIcon,
     onSave,
     submitting,
     handleSubmit,
@@ -22,9 +22,7 @@ const InvoiceSubmit = props => {
   const [datasheetErrors, setDatasheetErrors] = useState([]);
   const submitEnabled = !submitting && valid && datasheetErrors.length === 0;
 
-  return isLoading ? (
-    <PageLoadingIcon />
-  ) : (
+  return (
     <div className="content" role="main">
       <div className="page submit-proposal-page">
         <ReactBody className="submit-page" />
@@ -104,16 +102,16 @@ const InvoiceSubmit = props => {
                     />
                   </div>
                   <div className="submit-wrapper">
-                    <button
+                    <ButtonWithLoadingIcon
                       className={`togglebutton access-required${!submitEnabled &&
                         " not-active disabled"}`}
                       name="submit"
                       type="submit"
                       value="form"
+                      text={!editingMode ? "submit" : "update"}
                       onClick={handleSubmit(onSave)}
-                    >
-                      {!editingMode ? "submit" : "update"}
-                    </button>
+                      isLoading={isLoading}
+                    />
                   </div>
                 </div>
               </div>

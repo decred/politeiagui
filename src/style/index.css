@@ -1866,3 +1866,7 @@ form div.usertext-body.may-blank-within.md-container {
 .sheet {
   width: 100%;
 }
+
+.btn.loading {
+  cursor: not-allowed;
+}
