@@ -73,13 +73,6 @@ const synchronousValidation = ({ name, location, contact, rate, address }) => {
     address: validateContractorPaymentAddress(address)
   };
 
-  const errorFound = Object.keys(errors).reduce(
-    (acc, k) => acc || !!errors[k],
-    false
-  );
-  errors._error = errorFound && "Errors found";
-
-  // if (!errors.csv) errors._error = null;
   return errors;
 };
 

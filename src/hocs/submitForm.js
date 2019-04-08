@@ -6,24 +6,10 @@ import { validate, synchronousValidation } from "../validators/submit";
 import { withRouter } from "react-router-dom";
 import submit from "../connectors/submit";
 import appConnector from "../connectors/app";
-import {
-  createNewRow,
-  createTableHeaders
-} from "../components/InvoiceDatasheet/helpers";
 
 class SubmitFormContainer extends Component {
   componentDidMount() {
     this.props.policy || this.props.onFetchData();
-  }
-
-  componentDidUpdate() {
-    const { token } = this.props;
-    if (token) {
-      this.props.onResetInvoice();
-      return this.props.isCMS
-        ? this.props.history.push("/invoices/" + token)
-        : this.props.history.push("/proposals/" + token);
-    }
   }
 
   render() {
@@ -32,25 +18,11 @@ class SubmitFormContainer extends Component {
       <Component
         {...{
           ...this.props,
-          onSaveDraft: this.onSaveDraft,
-          onSave: this.onSave,
-          error: this.props.isCMS ? this.props.invoiceError : null
+          onSaveDraft: this.onSaveDraft
         }}
       />
     );
   }
-
-  onSave = (...args) => {
-    try {
-      validate(...args);
-    } catch (e) {
-      this.setState({ validationError: e.errors._error });
-      return;
-    }
-    return this.props.isCMS
-      ? this.props.onSaveInvoice(...args)
-      : this.props.onSaveProposal(...args);
-  };
 
   onSaveDraft = (...args) => {
     validate(...args);
@@ -69,11 +41,6 @@ export default compose(
   withRouter,
   reduxForm({
     form: "form/proposal",
-    initialValues: {
-      month: 1,
-      year: 2019,
-      datasheet: [createTableHeaders(), createNewRow(1)]
-    },
     touchOnChange: true,
     validate: synchronousValidation,
     enableReinitialize: true,
