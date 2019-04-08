@@ -13,7 +13,7 @@ import {
 // XXX: connector needs to be moved in its own file
 const newInvoiceConnector = connect(
   sel.selectorMap({
-    isLoading: or(sel.isLoadingSubmit, sel.newProposalIsRequesting),
+    isLoading: or(sel.isLoadingSubmit, sel.newInvoiceIsRequesting),
     description: sel.newProposalDescription,
     error: sel.newInvoiceError,
     submitError: sel.newInvoiceError,

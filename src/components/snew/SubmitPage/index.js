@@ -6,7 +6,7 @@ const Invoice = lazy(() => import("./SubmitPageInvoice"));
 const Proposal = lazy(() => import("./SubmitPageProposal"));
 
 const SubmitPage = ({ isCMS, ...props }) => (
-  <Suspense fallback={PageLoadingIcon}>
+  <Suspense fallback={<PageLoadingIcon />}>
     {isCMS ? <Invoice {...props} /> : <Proposal {...props} />}
   </Suspense>
 );

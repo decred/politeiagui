@@ -111,7 +111,6 @@ export const processTypeColChange = (grid, { row, col, value }) => {
   const valueIsValid = validTypeValues.find(v => v === +value);
   // validate if the value
   if (!valueIsValid) {
-    // grid[row][col] = { ...grid[row][col], value: "" };
     return response(
       errors.InvalidType,
       updateGridCell(grid, row, col, {

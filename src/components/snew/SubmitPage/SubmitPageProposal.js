@@ -217,15 +217,3 @@ const ProposalSubmit = props => {
 };
 
 export default ProposalSubmit;
-
-// class SubmitPage extends React.Component {
-//   render() {
-//     if (this.props.isCMS) {
-//       return <InvoiceSubmit {...this.props} />;
-//     } else {
-//       return <ProposalSubmit {...this.props} />;
-//     }
-//   }
-// }
-
-// export default submitFormHOC(SubmitPage);
