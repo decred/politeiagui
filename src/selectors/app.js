@@ -501,6 +501,9 @@ export const getVettedProposalFilterCounts = state => {
   // abandoned proposals has to be counted separately because it's counting  is not based on its voting status
   const countOfAbandonedProps = countAbandonedProposals(vettedProps);
 
+  // add the amount of abandoned props to the total num of proposals
+  count[PROPOSAL_FILTER_ALL] += countOfAbandonedProps;
+
   // approved and rejected proposals
   const countOfApprovedProps = vsResponse
     ? countApprovedProps(vsResponse.votesstatus)
