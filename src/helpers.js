@@ -45,16 +45,9 @@ export const getTextFromIndexMd = file => {
 
 export const getTextFromJsonToCsv = file => {
   const json = JSON.parse(atou(file.payload));
-  const lineitems = json.lineitems;
-  let linesCsv = "";
-  lineitems &&
-    lineitems.forEach(
-      l =>
-        (linesCsv += `${l.type},${l.subtype},${l.description},${
-          l.proposaltoken
-        },${l.hours},${l.totalcost}\n`)
-    );
-  return linesCsv;
+  // const lineitems = json.lineitems;
+
+  return json;
 };
 
 export const getHumanReadableError = (errorCode, errorContext = []) => {

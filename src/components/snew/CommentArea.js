@@ -55,7 +55,7 @@ class CommentArea extends React.Component {
     const {
       comments,
       loggedInAsEmail,
-      proposal,
+      record: proposal,
       commentsSortOption,
       commentid,
       onViewAllClick,

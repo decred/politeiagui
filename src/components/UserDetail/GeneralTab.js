@@ -17,20 +17,11 @@ import PrivateKeyDownloadManager from "../PrivateKeyDownloadManager";
 import Message from "../Message";
 import { myPubKeyHex, existing } from "../../lib/pki";
 import { verifyUserPubkey } from "../../helpers";
-
-const Field = ({ label, children }) => (
-  <div className="field">
-    <label className="field-label">{label && label + ":"}</label>
-    <div className="field-value">{children}</div>
-    <div className="clear" />
-  </div>
-);
+import Field, { FieldSeparator } from "../DescriptiveField";
 
 const UTCDate = ({ time }) => (
   <span>{new Date(time * 1000).toUTCString()}</span>
 );
-
-const FieldSeparator = () => <div className="field-separator" />;
 
 const TokenFields = ({
   tokenLabel,

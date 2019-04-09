@@ -1,4 +1,21 @@
-export const getLineItemsFromDatasheet = grid => {
+export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
+  const grid = [createTableHeaders()];
+  const gridBody = lineItems.map((line, idx) => {
+    return [
+      { readOnly: true, value: idx + 1 },
+      { readOnly, value: line.type },
+      { readOnly, value: line.domain },
+      { readOnly, value: line.subdomain },
+      { readOnly, value: line.description },
+      { readOnly, value: line.proposaltoken },
+      { readOnly, value: line.labor },
+      { readOnly, value: line.expense }
+    ];
+  });
+  return grid.concat(gridBody);
+};
+
+export const convertGridToLineItems = grid => {
   const copyGrid = grid.map(row => [...row]);
   return copyGrid.reduce((acc, rowValues, row) => {
     // skip first row as it is exclusive for table headers
@@ -128,7 +145,7 @@ export const processTypeColChange = (grid, { row, col, value }) => {
   }
 
   // if value is 2, the labor column must be 0, so we set it to readOnly
-  if (+value === 2) {
+  if (+value === 2 || +value === 3) {
     grid = updateGridCell(grid, row, LABOR_COL, { value: 0, readOnly: true });
   } else {
     // if it is not 2, we make sure it is not readOnly

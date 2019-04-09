@@ -1,0 +1,27 @@
+.field {
+    display: flex;
+    line-height: 24px;
+}
+
+.field .clear {
+    clear: left;
+}
+
+.field .field-label {
+    float: left;
+    width: 160px;
+    font-size: 1.05em;
+    margin-right: 4px;
+    color: #777;
+    text-align: left;
+}
+  
+.field .field-value {
+    float: left;
+    width: 600px;
+    line-height: 24px;
+}
+  
+.field-separator {
+    height: 16px;
+}

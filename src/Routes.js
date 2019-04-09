@@ -32,7 +32,7 @@ import UserProposals from "./components/UserProposals";
 import VerifyKey from "./components/VerifyKey";
 import NotFound from "./components/NotFoundPage";
 import ErrorPage from "./components/ErrorPage/";
-import ProposalDetail from "./components/ProposalDetail";
+import ProposalDetail from "./components/RecordDetail";
 import UserDetail from "./components/UserDetail";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";

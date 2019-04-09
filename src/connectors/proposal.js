@@ -26,7 +26,7 @@ const proposalConnector = connect(
     censoredComment: sel.censoredComment,
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
-    proposal: sel.proposal,
+    record: sel.proposal,
     comments: sel.proposalComments,
     commentslikes: sel.commentsLikes,
     error: or(sel.proposalError, sel.apiPropVoteStatusError),

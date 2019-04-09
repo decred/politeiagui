@@ -28,7 +28,7 @@ import {
   PROPOSAL_APPROVED,
   PROPOSAL_REJECTED
 } from "../constants";
-import { getLineItemsFromDatasheet } from "../components/InvoiceDatasheet/helpers";
+import { convertGridToLineItems } from "../components/InvoiceDatasheet/helpers";
 
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
 
@@ -49,7 +49,7 @@ export const onSaveNewInvoice = (
   _,
   props
 ) => (dispatch, getState) => {
-  const lineItems = getLineItemsFromDatasheet(datasheet);
+  const lineItems = convertGridToLineItems(datasheet);
   dispatch(
     onSubmitInvoice(
       props.loggedInAsEmail,

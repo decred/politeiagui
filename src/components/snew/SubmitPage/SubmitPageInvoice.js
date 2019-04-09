@@ -6,7 +6,7 @@ import InputFieldWithError from "../../Form/Fields/InputFieldWithError";
 import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
 import Message from "../../Message";
 import { Field } from "redux-form";
-import InvoiceDatasheet from "../../InvoiceDatasheet";
+import InvoiceDatasheetField from "../../Form/Fields/InvoiceDatasheetField";
 
 const InvoiceSubmit = props => {
   const {
@@ -98,7 +98,7 @@ const InvoiceSubmit = props => {
                       name="datasheet"
                       onChangeErrors={setDatasheetErrors}
                       errors={datasheetErrors}
-                      component={InvoiceDatasheet}
+                      component={InvoiceDatasheetField}
                     />
                   </div>
                   <div className="submit-wrapper">

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import ReactDataSheet from "react-datasheet";
 import dropRight from "lodash/dropRight";
 import "react-datasheet/lib/react-datasheet.css";
@@ -6,9 +7,11 @@ import "./styles.css";
 import { createNewRow, errorsMessage, processCellsChange } from "./helpers";
 
 const InvoiceDatasheet = ({
-  input: { value, onChange },
+  value,
+  onChange,
   errors,
-  onChangeErrors: setErrors
+  onChangeErrors: setErrors,
+  readOnly
 }) => {
   const grid = value;
 
@@ -34,24 +37,26 @@ const InvoiceDatasheet = ({
     setErrors([...newErrors]);
   };
 
-  const anyError = !!errors.length;
-  const removeRowsIsDisabled = grid.length <= 2;
+  const anyError = !!errors && !!errors.length;
+  const removeRowsIsDisabled = grid && grid.length <= 2;
 
   return (
     <div className="sheet-container">
-      <div style={{ display: "flex", justifyContent: "flex-start" }}>
-        <button className="table-button add-row" onClick={handleAddNewRow}>
-          Add row
-        </button>
-        <button
-          className={`table-button remove-row ${
-            removeRowsIsDisabled ? "disabled" : ""
-          }`}
-          onClick={handleRemoveLastRow}
-        >
-          Remove row
-        </button>
-      </div>
+      {!readOnly && (
+        <div style={{ display: "flex", justifyContent: "flex-start" }}>
+          <button className="table-button add-row" onClick={handleAddNewRow}>
+            Add row
+          </button>
+          <button
+            className={`table-button remove-row ${
+              removeRowsIsDisabled ? "disabled" : ""
+            }`}
+            onClick={handleRemoveLastRow}
+          >
+            Remove row
+          </button>
+        </div>
+      )}
       <ReactDataSheet
         data={grid}
         valueRenderer={cell => cell.value}
@@ -67,6 +72,18 @@ const InvoiceDatasheet = ({
       )}
     </div>
   );
+};
+
+InvoiceDatasheet.propTypes = {
+  value: PropTypes.array.isRequired,
+  readOnly: PropTypes.bool.isRequired,
+  onChange: PropTypes.func,
+  errors: PropTypes.array,
+  onChangeErrors: PropTypes.func
+};
+
+InvoiceDatasheet.defaultProps = {
+  readOnly: false
 };
 
 export default InvoiceDatasheet;
