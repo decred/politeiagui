@@ -38,7 +38,7 @@ const InvoiceDatasheet = ({
   };
 
   const anyError = !!errors && !!errors.length;
-  const removeRowsIsDisabled = grid.length <= 2;
+  const removeRowsIsDisabled = grid && grid.length <= 2;
 
   return (
     <div className="sheet-container">

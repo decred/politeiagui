@@ -28,12 +28,7 @@ const InvoiceContent = ({
         <FieldSeparator />
         <Field label="Payment address">{paymentaddress}</Field>
       </div>
-      <InvoiceDatasheet
-        readOnly
-        input={{
-          value: convertLineItemsToGrid(lineItems)
-        }}
-      />
+      <InvoiceDatasheet readOnly value={convertLineItemsToGrid(lineItems)} />
     </>
   );
 };
