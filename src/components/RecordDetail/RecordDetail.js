@@ -12,7 +12,7 @@ import {
   getUpdatedComments
 } from "./helpers";
 
-class ProposalDetail extends React.Component {
+class RecordDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -132,10 +132,11 @@ class ProposalDetail extends React.Component {
   render() {
     const {
       isLoading,
-      proposal,
+      record,
       token,
       error,
       markdownFile,
+      jsonFile,
       otherFiles,
       onFetchData,
       commentid,
@@ -146,12 +147,13 @@ class ProposalDetail extends React.Component {
     const comments = this.state.sortedComments;
     const tempTree = tempThreadTree[commentid];
     let data, selftext;
+
     if (!isCMS) {
-      data = proposalToT3(proposal, 0).data;
+      data = proposalToT3(record, 0).data;
       selftext = markdownFile ? getTextFromIndexMd(markdownFile) : null;
     } else {
-      data = invoiceToT3(proposal, 0).data;
-      selftext = markdownFile ? getTextFromJsonToCsv(markdownFile) : null;
+      data = invoiceToT3(record, 0).data;
+      selftext = jsonFile ? getTextFromJsonToCsv(jsonFile) : null;
     }
 
     return (
@@ -198,4 +200,4 @@ class ProposalDetail extends React.Component {
   }
 }
 
-export default withRouter(ProposalDetail);
+export default withRouter(RecordDetail);

@@ -11,6 +11,7 @@ import {
   INVOICE_STATUS_REJECTED,
   INVOICE_STATUS_DISPUTED
 } from "../../../constants";
+import InvoiceContent from "../../InvoiceContent";
 
 const ThingLinkInvoice = ({
   id,
@@ -18,12 +19,9 @@ const ThingLinkInvoice = ({
   author,
   authorid,
   created_utc,
-  is_self,
   selftext,
-  selftext_html,
   review_status,
   Link,
-  Expando,
   url,
   location,
   isAdmin,
@@ -89,14 +87,10 @@ const ThingLinkInvoice = ({
             <DateTooltip createdAt={created_utc} />
           </span>
           {renderInvoiceStatus(review_status)}
-          <Expando
-            {...{
-              expanded: isInvoiceDetailPath,
-              is_self,
-              selftext,
-              selftext_html
-            }}
-          />
+
+          {selftext && (
+            <InvoiceContent expanded={isInvoiceDetailPath} {...selftext} />
+          )}
         </span>
         {isAdmin && (
           <ul style={{ display: "flex" }}>

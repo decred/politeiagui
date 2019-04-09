@@ -8,7 +8,8 @@ import { createNewRow, errorsMessage, processCellsChange } from "./helpers";
 const InvoiceDatasheet = ({
   input: { value, onChange },
   errors,
-  onChangeErrors: setErrors
+  onChangeErrors: setErrors,
+  readOnly
 }) => {
   const grid = value;
 
@@ -34,24 +35,26 @@ const InvoiceDatasheet = ({
     setErrors([...newErrors]);
   };
 
-  const anyError = !!errors.length;
+  const anyError = !!errors && !!errors.length;
   const removeRowsIsDisabled = grid.length <= 2;
 
   return (
     <div className="sheet-container">
-      <div style={{ display: "flex", justifyContent: "flex-start" }}>
-        <button className="table-button add-row" onClick={handleAddNewRow}>
-          Add row
-        </button>
-        <button
-          className={`table-button remove-row ${
-            removeRowsIsDisabled ? "disabled" : ""
-          }`}
-          onClick={handleRemoveLastRow}
-        >
-          Remove row
-        </button>
-      </div>
+      {!readOnly && (
+        <div style={{ display: "flex", justifyContent: "flex-start" }}>
+          <button className="table-button add-row" onClick={handleAddNewRow}>
+            Add row
+          </button>
+          <button
+            className={`table-button remove-row ${
+              removeRowsIsDisabled ? "disabled" : ""
+            }`}
+            onClick={handleRemoveLastRow}
+          >
+            Remove row
+          </button>
+        </div>
+      )}
       <ReactDataSheet
         data={grid}
         valueRenderer={cell => cell.value}

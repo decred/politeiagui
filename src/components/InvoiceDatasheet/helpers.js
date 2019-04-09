@@ -1,4 +1,21 @@
-export const getLineItemsFromDatasheet = grid => {
+export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
+  const grid = [createTableHeaders()];
+  const gridBody = lineItems.map((line, idx) => {
+    return [
+      { readOnly: true, value: idx + 1 },
+      { readOnly, value: line.type },
+      { readOnly, value: line.domain },
+      { readOnly, value: line.subdomain },
+      { readOnly, value: line.description },
+      { readOnly, value: line.proposaltoken },
+      { readOnly, value: line.labor },
+      { readOnly, value: line.expense }
+    ];
+  });
+  return grid.concat(gridBody);
+};
+
+export const convertGridToLineItems = grid => {
   const copyGrid = grid.map(row => [...row]);
   return copyGrid.reduce((acc, rowValues, row) => {
     // skip first row as it is exclusive for table headers
