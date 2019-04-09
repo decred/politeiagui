@@ -9,11 +9,8 @@ import {
 const validate = (policy, values, isCMS) => {
   if (isCMS) {
     if (
-      !isRequiredValidator(values.email) ||
       !isRequiredValidator(values.verificationtoken) ||
       !isRequiredValidator(values.username) ||
-      !isRequiredValidator(values.password) ||
-      !isRequiredValidator(values.password_verify) ||
       !isRequiredValidator(values.location) ||
       !isRequiredValidator(values.xpublickey) ||
       !isRequiredValidator(values.name)
@@ -21,14 +18,6 @@ const validate = (policy, values, isCMS) => {
       throw new SubmissionError({ _error: "All fields are required" });
     }
 
-    if (!lengthValidator(values.password, policy.minpasswordlength)) {
-      throw new SubmissionError({
-        _error:
-          "Your password must be at least " +
-          policy.minpasswordlength +
-          " characters."
-      });
-    }
     if (
       !lengthValidator(
         values.username,
@@ -45,39 +34,30 @@ const validate = (policy, values, isCMS) => {
           "."
       });
     }
+  }
 
-    if (!passwordVerifyValidator(values.password, values.password_verify)) {
-      throw new SubmissionError({ _error: "Passwords do not match" });
-    }
+  if (
+    !isRequiredValidator(values.email) ||
+    !isRequiredValidator(values.password) ||
+    !isRequiredValidator(values.password_verify)
+  ) {
+    throw new SubmissionError({ _error: "All fields are required" });
+  }
 
-    if (!emailValidator(values.email)) {
-      throw new SubmissionError({ _error: "Invalid email address" });
-    }
-  } else {
-    if (
-      !isRequiredValidator(values.email) ||
-      !isRequiredValidator(values.password) ||
-      !isRequiredValidator(values.password_verify)
-    ) {
-      throw new SubmissionError({ _error: "All fields are required" });
-    }
+  if (!lengthValidator(values.password, policy.minpasswordlength)) {
+    throw new SubmissionError({
+      _error:
+        "Your password must be at least " +
+        policy.minpasswordlength +
+        " characters."
+    });
+  }
+  if (!passwordVerifyValidator(values.password, values.password_verify)) {
+    throw new SubmissionError({ _error: "Passwords do not match" });
+  }
 
-    if (!lengthValidator(values.password, policy.minpasswordlength)) {
-      throw new SubmissionError({
-        _error:
-          "Your password must be at least " +
-          policy.minpasswordlength +
-          " characters."
-      });
-    }
-
-    if (!passwordVerifyValidator(values.password, values.password_verify)) {
-      throw new SubmissionError({ _error: "Passwords do not match" });
-    }
-
-    if (!emailValidator(values.email)) {
-      throw new SubmissionError({ _error: "Invalid email address" });
-    }
+  if (!emailValidator(values.email)) {
+    throw new SubmissionError({ _error: "Invalid email address" });
   }
 };
 
