@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import ReactDataSheet from "react-datasheet";
 import dropRight from "lodash/dropRight";
 import "react-datasheet/lib/react-datasheet.css";
@@ -6,7 +7,8 @@ import "./styles.css";
 import { createNewRow, errorsMessage, processCellsChange } from "./helpers";
 
 const InvoiceDatasheet = ({
-  input: { value, onChange },
+  value,
+  onChange,
   errors,
   onChangeErrors: setErrors,
   readOnly
@@ -70,6 +72,18 @@ const InvoiceDatasheet = ({
       )}
     </div>
   );
+};
+
+InvoiceDatasheet.propTypes = {
+  value: PropTypes.array.isRequired,
+  readOnly: PropTypes.bool.isRequired,
+  onChange: PropTypes.func,
+  errors: PropTypes.array,
+  onChangeErrors: PropTypes.func
+};
+
+InvoiceDatasheet.defaultProps = {
+  readOnly: false
 };
 
 export default InvoiceDatasheet;
