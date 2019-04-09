@@ -145,7 +145,7 @@ export const processTypeColChange = (grid, { row, col, value }) => {
   }
 
   // if value is 2, the labor column must be 0, so we set it to readOnly
-  if (+value === 2) {
+  if (+value === 2 || +value === 3) {
     grid = updateGridCell(grid, row, LABOR_COL, { value: 0, readOnly: true });
   } else {
     // if it is not 2, we make sure it is not readOnly

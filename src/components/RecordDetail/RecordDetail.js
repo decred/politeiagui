@@ -11,6 +11,7 @@ import {
   mergeNewComments,
   getUpdatedComments
 } from "./helpers";
+import { PROPOSAL_STATUS_PUBLIC } from "../../constants";
 
 class RecordDetail extends React.Component {
   constructor(props) {
@@ -20,23 +21,30 @@ class RecordDetail extends React.Component {
       accessTime: 0
     };
   }
+  resolveTabTitle = prevProps => {
+    const { isCMS, record } = this.props;
+    const proposal = !isCMS && record;
+    const proposalNameHasBeenUpdated =
+      proposal && prevProps.record && prevProps.record.name !== proposal.name;
+    if (proposalNameHasBeenUpdated) {
+      document.title = proposal.name;
+    }
+  };
+  resolveFetchProposalVoteStatus = prevProps => {
+    const { isCMS, record, onFetchProposalVoteStatus, token } = this.props;
+    const proposal = !isCMS && record;
+    const proposalIsPublic = proposal.status === PROPOSAL_STATUS_PUBLIC;
+    const proposalJustFetched =
+      proposal &&
+      !prevProps.record &&
+      Object.keys(prevProps.record).length === 0;
+    if (proposalJustFetched && proposalIsPublic) {
+      onFetchProposalVoteStatus(token);
+    }
+  };
   componentDidUpdate(prevProps) {
-    if (
-      (prevProps.proposal &&
-        this.props &&
-        prevProps.proposal.name !== this.props.proposal.name) ||
-      this.props.openedModals.length < prevProps.openedModals.length
-    ) {
-      document.title = this.props.proposal.name;
-    }
-    if (
-      (!prevProps.proposal || Object.keys(prevProps.proposal).length === 0) &&
-      this.props.proposal &&
-      Object.keys(this.props.proposal).length > 0 &&
-      this.props.proposal.status === 4
-    ) {
-      !prevProps.isCMS && prevProps.onFetchProposalVoteStatus(prevProps.token);
-    }
+    this.resolveTabTitle(prevProps);
+    this.resolveFetchProposalVoteStatus(prevProps);
     this.handleUpdateOfComments(prevProps, this.props);
   }
   componentDidMount() {
