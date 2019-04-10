@@ -49,7 +49,15 @@ export const proposalToT3 = (
 });
 
 export const invoiceToT3 = (
-  { userid, username, censorshiprecord = {}, status, timestamp, numcomments },
+  {
+    userid,
+    username,
+    censorshiprecord = {},
+    status,
+    timestamp,
+    numcomments,
+    input
+  },
   idx
 ) => ({
   kind: "t3",
@@ -57,8 +65,10 @@ export const invoiceToT3 = (
     authorid: userid,
     author: username,
     numcomments,
+    input,
     rank: idx + 1,
-    title: `Invoice from ${username}`,
+    title: `Invoice from ${username} - ${input && input.month}/${input &&
+      input.year}`,
     id: censorshiprecord.token,
     name: "t3_" + censorshiprecord.token,
     review_status: status,

@@ -3,7 +3,7 @@ import isEqual from "lodash/isEqual";
 import { withRouter } from "react-router-dom";
 import { Content } from "../snew";
 import { commentsToT1, proposalToT3, invoiceToT3 } from "../../lib/snew";
-import { getTextFromIndexMd, getTextFromJsonToCsv } from "../../helpers";
+import { getTextFromIndexMd } from "../../helpers";
 import { DEFAULT_TAB_TITLE } from "../../constants";
 import Message from "../Message";
 import {
@@ -144,7 +144,6 @@ class RecordDetail extends React.Component {
       token,
       error,
       markdownFile,
-      jsonFile,
       otherFiles,
       onFetchData,
       commentid,
@@ -154,15 +153,13 @@ class RecordDetail extends React.Component {
     } = this.props;
     const comments = this.state.sortedComments;
     const tempTree = tempThreadTree[commentid];
-    let data, selftext;
+    const data = !isCMS
+      ? proposalToT3(record, 0).data
+      : invoiceToT3(record, 0).data;
 
-    if (!isCMS) {
-      data = proposalToT3(record, 0).data;
-      selftext = markdownFile ? getTextFromIndexMd(markdownFile) : null;
-    } else {
-      data = invoiceToT3(record, 0).data;
-      selftext = jsonFile ? getTextFromJsonToCsv(jsonFile) : null;
-    }
+    // when dealing with proposals, extract the text content from the markdown
+    // file
+    const selftext = markdownFile ? getTextFromIndexMd(markdownFile) : null;
 
     return (
       <div className="content" role="main">
