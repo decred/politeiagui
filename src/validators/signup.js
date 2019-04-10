@@ -13,10 +13,7 @@ const validate = (policy, values, isCMS) => {
       !isRequiredValidator(values.verificationtoken) ||
       !isRequiredValidator(values.username) ||
       !isRequiredValidator(values.password) ||
-      !isRequiredValidator(values.password_verify) ||
-      !isRequiredValidator(values.location) ||
-      !isRequiredValidator(values.xpublickey) ||
-      !isRequiredValidator(values.name)
+      !isRequiredValidator(values.password_verify)
     ) {
       throw new SubmissionError({ _error: "All fields are required" });
     }
