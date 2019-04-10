@@ -45,8 +45,6 @@ export const getTextFromIndexMd = file => {
 
 export const getTextFromJsonToCsv = file => {
   const json = JSON.parse(atou(file.payload));
-  // const lineitems = json.lineitems;
-
   return json;
 };
 

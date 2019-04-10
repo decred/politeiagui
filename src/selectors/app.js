@@ -66,6 +66,7 @@ import {
   countPublicProposals,
   isProposalApproved
 } from "../helpers";
+import { convertLineItemsToGrid } from "../components/InvoiceDatasheet/helpers";
 
 export const replyTo = or(get(["app", "replyParent"]), constant(0));
 
@@ -147,13 +148,20 @@ export const getEditProposalValues = state => {
 };
 
 export const getEditInvoiceValues = state => {
-  const { month, year, file } = invoice(state);
-  const csv = file ? getTextFromJsonToCsv(file[0]) : null;
-  return {
-    month,
-    year,
-    csv
-  };
+  const { file } = invoice(state);
+  const data = file ? getTextFromJsonToCsv(file[0]) : null;
+  return data
+    ? {
+        month: data.month,
+        year: data.year,
+        name: data.contractorname,
+        contact: data.contractorcontact,
+        location: data.contractorlocation,
+        rate: data.contractorrate,
+        address: data.paymentaddress,
+        datasheet: convertLineItemsToGrid(data.lineItems, false)
+      }
+    : {};
 };
 
 export const getEditUserValues = state => {

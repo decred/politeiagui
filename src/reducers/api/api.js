@@ -205,7 +205,8 @@ const api = (state = DEFAULT_STATE, action) =>
       receive("passwordReset", state, action),
     [act.RESET_PROPOSAL]: () =>
       resetMultiple(["newProposal", "editProposal"], state),
-    [act.RESET_INVOICE]: () => reset(["newInvoice"], state),
+    [act.RESET_INVOICE]: () =>
+      resetMultiple(["newInvoice", "editInvoice"], state),
     [act.REQUEST_SETSTATUS_PROPOSAL]: () =>
       request("setStatusProposal", state, action),
     [act.RECEIVE_SETSTATUS_PROPOSAL]: () => onReceiveSetStatus(state, action),

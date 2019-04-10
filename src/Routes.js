@@ -42,7 +42,7 @@ import publicInvoices from "./connectors/invoices";
 import adminCMS from "./connectors/adminCMS";
 import invoiceDetail from "./connectors/invoice";
 import newInvoice from "./hocs/newInvoice";
-import editInvoice from "./connectors/editInvoice";
+import editInvoice from "./hocs/editInvoice";
 
 // CMS ROUTES
 import UserInvoices from "./components/UserInvoices";

@@ -555,13 +555,41 @@ export const onSubmitEditedInvoice = (
   username,
   month,
   year,
-  csv
+  name,
+  location,
+  contact,
+  rate,
+  address,
+  lineItems,
+  token
 ) =>
   withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_EDIT_INVOICE({ month, year, csv }));
-    return Promise.resolve(api.makeInvoice(month, year, csv))
+    dispatch(
+      act.REQUEST_EDIT_INVOICE({
+        month,
+        year,
+        name,
+        location,
+        contact,
+        rate,
+        address,
+        lineItems
+      })
+    );
+    return Promise.resolve(
+      api.makeInvoice(
+        month,
+        year,
+        name,
+        location,
+        contact,
+        rate,
+        address,
+        lineItems
+      )
+    )
       .then(invoice => api.signRegister(loggedInAsEmail, invoice))
-      .then(invoice => api.editInvoice(csrf, invoice))
+      .then(invoice => api.editInvoice(csrf, { ...invoice, token }))
       .then(invoice => {
         dispatch(
           act.RECEIVE_EDIT_INVOICE({

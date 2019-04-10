@@ -64,6 +64,7 @@ export const isApiRequestingPropVoteResults = getIsApiRequesting(
 export const isApiRequestingEditUser = getIsApiRequesting("editUser");
 export const isApiRequestingManageUser = getIsApiRequesting("manageUser");
 export const isApiRequestingEditProposal = getIsApiRequesting("editProposal");
+export const isApiRequestingEditInvoice = getIsApiRequesting("editInvoice");
 
 const apiNewUserPayload = getApiPayload("newUser");
 const apiLoginPayload = getApiPayload("login");
@@ -738,8 +739,8 @@ export const isApiRequestingSetInvoiceStatusByToken = state => token => {
 
 export const usePaywall = and(not(isCMS));
 
-export const apiEditInvoiceResponse = getApiResponse("editProposal");
-export const apiEditInvoiceError = getApiError("editProposal");
+export const apiEditInvoiceResponse = getApiResponse("editInvoice");
+export const apiEditInvoiceError = getApiError("editInvoice");
 
 export const editInvoiceToken = compose(
   get(["invoice", "censorshiprecord", "token"]),

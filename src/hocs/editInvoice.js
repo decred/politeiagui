@@ -5,21 +5,21 @@ import * as sel from "../selectors";
 import * as act from "../actions";
 import compose from "lodash/fp/compose";
 import get from "lodash/fp/get";
-import { validate } from "../validators/proposal";
+import { validate } from "../validators/invoice";
 import { arg, or } from "../lib/fp";
 
-const submitConnector = connect(
+const editInvoiceConnector = connect(
   sel.selectorMap({
     token: compose(
       t => (t ? t.toLowerCase() : t),
       get(["match", "params", "token"]),
       arg(1)
     ),
-    editedProposalToken: sel.editInvoiceToken,
+    editedInvoiceToken: sel.editInvoiceToken,
     submitError: sel.apiEditInvoiceError,
-    proposal: sel.invoice,
+    invoice: sel.invoice,
     initialValues: or(sel.getEditInvoiceValues),
-    isLoading: sel.invoiceIsRequesting,
+    isLoading: or(sel.isLoadingSubmit, sel.isApiRequestingEditInvoice),
     loggedInAsEmail: sel.loggedInAsEmail,
     userCanExecuteActions: sel.userCanExecuteActions,
     policy: sel.policy,
@@ -29,41 +29,46 @@ const submitConnector = connect(
   }),
   {
     onFetchData: act.onGetPolicy,
-    onFetchProposal: act.onFetchInvoice,
-    onResetProposal: act.onResetInvoice,
+    onFetchInvoice: act.onFetchInvoice,
+    onResetInvoice: act.onResetInvoice,
     onSave: act.onEditInvoice
   }
 );
 
-class SubmitWrapper extends Component {
+class EditInvoiceContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       validationError: ""
     };
   }
+
   componentDidMount() {
     const { token } = this.props;
     this.props.policy || this.props.onFetchData();
-    this.props.onFetchProposal && this.props.onFetchProposal(token);
+    this.props.onFetchInvoice && this.props.onFetchInvoice(token);
   }
 
   componentDidUpdate() {
-    const { editedProposalToken, proposal } = this.props;
-    if (editedProposalToken) {
-      this.props.onResetProposal();
-      return this.props.history.push("/invoices/" + editedProposalToken);
+    const { editedInvoiceToken, invoice } = this.props;
+    if (editedInvoiceToken) {
+      this.props.onResetInvoice();
+      return this.props.history.push("/invoices/" + editedInvoiceToken);
     }
 
-    const isProposalFetched =
-      proposal &&
-      proposal.censorshiprecord &&
-      proposal.censorshiprecord.token === this.props.token;
-    const proposalBelongsToTheUser =
-      proposal && proposal.userid === this.props.userid;
-    if (isProposalFetched && !proposalBelongsToTheUser) {
+    const isInvoiceFetched =
+      invoice &&
+      invoice.censorshiprecord &&
+      invoice.censorshiprecord.token === this.props.token;
+    const invoiceBelongsToTheUser =
+      invoice && invoice.userid === this.props.userid;
+    if (isInvoiceFetched && !invoiceBelongsToTheUser) {
       this.props.history.push("/");
     }
+  }
+
+  componentWillUnmount() {
+    this.props.onResetInvoice();
   }
 
   render() {
@@ -90,12 +95,12 @@ class SubmitWrapper extends Component {
   };
 }
 
-const wrapSubmit = Component => props => (
-  <SubmitWrapper {...{ ...props, Component }} />
+const wrap = Component => props => (
+  <EditInvoiceContainer {...{ ...props, Component }} />
 );
 
 export default compose(
-  submitConnector,
+  editInvoiceConnector,
   withRouter,
-  wrapSubmit
+  wrap
 );

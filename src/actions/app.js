@@ -98,7 +98,12 @@ export const onEditProposal = (
     )
   );
 
-export const onEditInvoice = ({ month, year, csv }, _, props) => dispatch =>
+export const onEditInvoice = (
+  { month, year, name, location, contact, rate, address, datasheet },
+  _,
+  props
+) => dispatch => {
+  const lineItems = convertGridToLineItems(datasheet);
   dispatch(
     onSubmitEditedInvoice(
       props.loggedInAsEmail,
@@ -106,10 +111,16 @@ export const onEditInvoice = ({ month, year, csv }, _, props) => dispatch =>
       props.username,
       +month,
       +year,
-      csv.trim()
+      name,
+      location,
+      contact,
+      +rate,
+      address,
+      lineItems,
+      props.token
     )
   );
-
+};
 export const onSaveDraftProposal = ({ name, description, files, draftId }) => {
   resetNewProposalData();
   return act.SAVE_DRAFT_PROPOSAL({
