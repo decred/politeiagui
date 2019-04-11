@@ -19,7 +19,7 @@ const ThingLinkInvoice = ({
   author,
   authorid,
   created_utc,
-  selftext,
+  input,
   review_status,
   Link,
   url,
@@ -88,8 +88,8 @@ const ThingLinkInvoice = ({
           </span>
           {renderInvoiceStatus(review_status)}
 
-          {selftext && (
-            <InvoiceContent expanded={isInvoiceDetailPath} {...selftext} />
+          {input && (
+            <InvoiceContent expanded={isInvoiceDetailPath} {...input} />
           )}
         </span>
         {isAdmin && (

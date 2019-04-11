@@ -7,7 +7,7 @@ const InvoiceContent = ({
   contractorlocation,
   contractorname,
   contractorrate,
-  lineItems,
+  lineitems,
   month,
   paymentaddress,
   year,
@@ -28,7 +28,7 @@ const InvoiceContent = ({
         <FieldSeparator />
         <Field label="Payment address">{paymentaddress}</Field>
       </div>
-      <InvoiceDatasheet readOnly value={convertLineItemsToGrid(lineItems)} />
+      <InvoiceDatasheet readOnly value={convertLineItemsToGrid(lineitems)} />
     </>
   );
 };
