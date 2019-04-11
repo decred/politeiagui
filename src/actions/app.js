@@ -150,6 +150,9 @@ export const onChangePublicFilter = option =>
 export const onChangeUserFilter = option =>
   act.CHANGE_USER_FILTER_VALUE(option);
 
+export const onChangeDateFilter = (month, year) =>
+  act.CHANGE_DATE_FILTER({ month, year });
+
 export const onChangeProposalStatusApproved = status =>
   act.SET_PROPOSAL_APPROVED(status);
 

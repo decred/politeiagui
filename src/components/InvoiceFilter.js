@@ -13,7 +13,7 @@ import {
   CMS_LIST_HEADER_ADMIN,
   CMS_LIST_HEADER_USER
 } from "../constants";
-import { setQueryStringWithoutPageReload } from "../helpers";
+import { setQueryStringValue } from "../lib/queryString";
 
 const invoiceFilterOptions = [
   {
@@ -100,7 +100,7 @@ class InvoiceFilter extends React.Component {
     const optionLabel = selectedOption && selectedOption.label;
 
     if (filterValueTabHasChanged) {
-      setQueryStringWithoutPageReload(`?tab=${optionLabel}`);
+      setQueryStringValue("tab", optionLabel);
     }
   };
   render() {

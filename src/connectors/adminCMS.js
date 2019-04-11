@@ -16,10 +16,13 @@ export default connect(
     filterValue: sel.getAdminFilterValue,
     header: () => CMS_LIST_HEADER_ADMIN,
     emptyProposalsMessage: () => "No invoices",
-    lastLoadedProposal: sel.lastLoadedUnvettedProposal
+    lastLoadedProposal: sel.lastLoadedUnvettedProposal,
+    monthFilterValue: sel.getMonthFilterValue,
+    yearFilterValue: sel.getYearFilterValue
   }),
   {
     onFetchData: act.onFetchAdminInvoices,
-    onChangeFilter: act.onChangeAdminFilter
+    onChangeFilter: act.onChangeAdminFilter,
+    onChangeDateFilter: act.onChangeDateFilter
   }
 );
