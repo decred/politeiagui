@@ -260,8 +260,9 @@ describe("test api reducer", () => {
       commentslikes: DEFAULT_REQUEST_STATE,
       userProposals: DEFAULT_REQUEST_STATE,
       newProposal: DEFAULT_REQUEST_STATE,
-      newInvoice: DEFAULT_REQUEST_STATE,
       editProposal: DEFAULT_REQUEST_STATE,
+      newInvoice: DEFAULT_REQUEST_STATE,
+      editInvoice: DEFAULT_REQUEST_STATE,
       newComment: DEFAULT_REQUEST_STATE,
       forgottenPassword: DEFAULT_REQUEST_STATE,
       passwordReset: DEFAULT_REQUEST_STATE,
@@ -930,8 +931,8 @@ describe("test api reducer", () => {
       },
       {
         action: act.RESET_INVOICE,
-        key: ["newInvoice"],
-        type: "reset"
+        key: ["newInvoice", "editInvoice"],
+        type: "resetMultiple"
       },
       {
         action: act.REQUEST_SETSTATUS_PROPOSAL,

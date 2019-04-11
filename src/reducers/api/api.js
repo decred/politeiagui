@@ -67,7 +67,8 @@ export const DEFAULT_STATE = {
   keyMismatch: false,
   lastLoaded: {},
   // CMS
-  newInvoice: DEFAULT_REQUEST_STATE
+  newInvoice: DEFAULT_REQUEST_STATE,
+  editInvoice: DEFAULT_REQUEST_STATE
 };
 
 const api = (state = DEFAULT_STATE, action) =>
