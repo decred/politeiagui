@@ -154,7 +154,7 @@ export const onCreateNewUserCMS = ({
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_USER({ email }));
     return api
-      .newUser(csrf, email, username, password, verificationtoken)
+      .register(csrf, email, username, password, verificationtoken)
       .then(response => {
         dispatch(act.RECEIVE_NEW_USER(response));
         dispatch(closeModal());
