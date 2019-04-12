@@ -40,9 +40,19 @@ class UserDetail extends Component {
     };
   }
 
-  componentDidUpdate(_, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     this.handleUpdateQueryForFilterValueChange(prevState);
+    this.handleFetchingOfProposalData(prevProps);
   }
+
+  handleFetchingOfProposalData = prevProps => {
+    const userFetched =
+      !prevProps.loggedInAsEmail && this.props.loggedInAsEmail;
+    if (userFetched && !this.props.isCMS) {
+      this.props.onFetchUserProposals(this.props.userId);
+      this.props.onFetchProposalsVoteStatus();
+    }
+  };
 
   handleUpdateFilterValueForQueryValue = () => {
     const tab = getQueryStringValue("tab");
@@ -60,8 +70,6 @@ class UserDetail extends Component {
 
   componentDidMount() {
     this.props.onFetchData(this.props.userId);
-    this.props.onFetchUserProposals(this.props.userId);
-    !this.props.isCMS && this.props.onFetchProposalsVoteStatus();
   }
 
   onTabChange(tabId) {
