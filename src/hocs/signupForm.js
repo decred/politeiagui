@@ -97,7 +97,7 @@ const wrap = Component =>
     return <Comp />;
   });
 
-const { email, token: verificationtoken } = getQueryStringValues();
+const { email, verificationtoken } = getQueryStringValues();
 export default compose(
   reduxForm({
     form: "form/signup",
