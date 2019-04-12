@@ -12,6 +12,7 @@ const InvoiceSubmit = props => {
   const {
     isLoading,
     onSave,
+    onCancel,
     submitting,
     handleSubmit,
     submitError,
@@ -112,6 +113,14 @@ const InvoiceSubmit = props => {
                       onClick={handleSubmit(onSave)}
                       isLoading={isLoading}
                     />
+                    {editingMode ? (
+                      <ButtonWithLoadingIcon
+                        className="togglebutton access-required"
+                        name="cancel"
+                        text="Cancel"
+                        onClick={onCancel}
+                      />
+                    ) : null}
                   </div>
                 </div>
               </div>

@@ -79,7 +79,8 @@ class EditInvoiceContainer extends Component {
           ...this.props,
           validationError: this.state.validationError,
           editingMode: true,
-          onSave: this.onSave
+          onSave: this.onSave,
+          onCancel: this.onCancel
         }}
       />
     );
@@ -93,6 +94,8 @@ class EditInvoiceContainer extends Component {
       this.setState({ validationError: e.errors._error });
     }
   };
+
+  onCancel = () => this.props.history.push("/user/invoices");
 }
 
 const wrap = Component => props => (
