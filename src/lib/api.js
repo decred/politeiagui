@@ -239,6 +239,21 @@ export const newUser = (csrf, email, username, password) =>
     )
   );
 
+export const register = (csrf, email, username, password, verificationtoken) =>
+  pki.generateKeys().then(keys =>
+    pki.loadKeys(email, keys).then(() =>
+      pki.myPubKeyHex(email).then(publickey =>
+        POST("/register", csrf, {
+          email,
+          username,
+          password: digest(password),
+          publickey,
+          verificationtoken
+        }).then(getResponse)
+      )
+    )
+  );
+
 export const verifyNewUser = (email, verificationToken) => {
   return pki
     .signStringHex(email, verificationToken)

@@ -54,6 +54,7 @@ const RoutesForCMS = () => {
     <Switch>
       <Route path="/" component={publicInvoices(ProposalListing)} exact />
       <Route path="/login" component={LoginSignupPage} />
+      <Route path="/register" component={LoginSignupPage} />
       <Route path="/user/login" component={LoginSignupPage} />
       <Route path="/user/logout" component={Logout} />
       <Route path="/user/signup/next" component={SignupNext} />

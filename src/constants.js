@@ -104,3 +104,34 @@ export const CMS_LIST_HEADER_ADMIN = "Admin Invoices";
 export const CMS_LIST_HEADER_USER = "Your Invoices";
 
 export const CMS_DEFAULT_TAB_TITLE = "Contractor Management System";
+
+// months && years
+export const MONTHS = [
+  "january",
+  "february",
+  "march",
+  "april",
+  "may",
+  "june",
+  "july",
+  "august",
+  "september",
+  "october",
+  "november",
+  "december"
+];
+export const YEARS = [
+  "2019",
+  "2020",
+  "2021",
+  "2022",
+  "2023",
+  "2024",
+  "2025",
+  "2026",
+  "2027",
+  "2028",
+  "2029",
+  "2030"
+];
+export const FILTER_ALL_MONTHS = 0;

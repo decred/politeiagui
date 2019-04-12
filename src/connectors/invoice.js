@@ -24,7 +24,6 @@ const invoiceConnector = connect(
     record: sel.invoice,
     error: or(sel.proposalError, sel.apiPropVoteStatusError),
     isLoading: sel.invoiceIsRequesting,
-    jsonFile: sel.getInvoiceJSON,
     otherFiles: sel.getNotJSONFile,
     commentsSortOption: sel.commentsSortOption,
     openedModals: sel.getopenedModals,

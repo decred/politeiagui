@@ -930,6 +930,25 @@ li p.header-3 {
   cursor: pointer;
 }
 
+.dropdown-sort-wrapper {
+	display: flex;
+	align-items: center;
+}
+
+.dropdown-sort-wrapper > div > div {
+	width: 8em;
+}
+
+.dropdown-sort-wrapper > span {
+	color: #2971ff;
+	cursor: pointer;
+	padding-left: 1em;
+}
+
+.dropdown-sort-wrapper > span:hover {
+	text-decoration: underline;
+}
+
 .signup-next-step-wrapper {
   display: flex;
   flex-direction: row

@@ -6,11 +6,11 @@ import { withRouter } from "react-router-dom";
 import { SubmissionError } from "redux-form";
 import signupConnector from "../connectors/signup";
 import appConnector from "../connectors/app";
+import { getQueryStringValues } from "../lib/queryString";
 
 class SignupFormContainer extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       hasFetchedPolicy: false
     };
@@ -97,8 +97,15 @@ const wrap = Component =>
     return <Comp />;
   });
 
+const { email, verificationtoken } = getQueryStringValues();
 export default compose(
-  reduxForm({ form: "form/signup" }),
+  reduxForm({
+    form: "form/signup",
+    initialValues: {
+      email,
+      verificationtoken
+    }
+  }),
   withRouter,
   wrap
 );

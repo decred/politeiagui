@@ -18,6 +18,9 @@ export const getQueryStringValue = (
   return values[key];
 };
 
+export const getQueryStringValues = (queryString = window.location.search) =>
+  qs.parse(queryString);
+
 export const setQueryStringValue = (
   key,
   value,
@@ -29,4 +32,13 @@ export const setQueryStringValue = (
     [key]: value
   });
   setQueryStringWithoutPageReload(`?${newQsValue}`);
+};
+
+export const removeQueryStringsFromUrl = (url, parameter, parameter2) => {
+  const newurl = url
+    .replace(new RegExp("[?&]" + parameter + "=[^&#]*(#.*)?$"), "$1")
+    .replace(new RegExp("([?&])" + parameter + "=[^&]*&"), "$1")
+    .replace(new RegExp("[?&]" + parameter2 + "=[^&#]*(#.*)?$"), "$1")
+    .replace(new RegExp("([?&])" + parameter2 + "=[^&]*&"), "$1");
+  window.history.pushState({ path: newurl }, "", newurl);
 };

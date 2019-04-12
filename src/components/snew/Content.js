@@ -7,6 +7,8 @@ import PageLoadingIcon from "./PageLoadingIcon";
 import Message from "../Message";
 import ProposalFilter from "../ProposalFilter";
 import InvoiceFilter from "../InvoiceFilter";
+import DateFilter from "../DateFilter";
+
 import thingLinkConnector from "../../connectors/thingLink";
 
 export const CustomContent = ({
@@ -32,6 +34,9 @@ export const CustomContent = ({
   isCMS,
   invoices,
   invoiceCounts,
+  onChangeDateFilter,
+  monthFilterValue,
+  yearFilterValue,
   ...props
 }) => {
   const invalidcomment =
@@ -97,12 +102,20 @@ export const CustomContent = ({
         </div>
       )}
       {isCMS ? (
-        <InvoiceFilter
-          header={header}
-          handleChangeFilterValue={onChangeFilter}
-          filterValue={filterValue}
-          invoiceCounts={invoiceCounts}
-        />
+        <React.Fragment>
+          <InvoiceFilter
+            header={header}
+            handleChangeFilterValue={onChangeFilter}
+            filterValue={filterValue}
+            invoiceCounts={invoiceCounts}
+          />
+          <DateFilter
+            header={header}
+            handleChangeDateFilter={onChangeDateFilter}
+            monthFilterValue={monthFilterValue}
+            yearFilterValue={yearFilterValue}
+          />
+        </React.Fragment>
       ) : (
         <ProposalFilter
           header={header}

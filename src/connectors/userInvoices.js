@@ -18,13 +18,16 @@ const userInvoicesConnector = connect(
     filterValue: sel.getUserFilterValue,
     lastLoadedInvoice: sel.lastLoadedUserProposal,
     header: () => CMS_LIST_HEADER_USER,
-    emptyInvoicesMessage: () => "You have not created any invoices yet"
+    emptyInvoicesMessage: () => "You have not created any invoices yet",
+    monthFilterValue: sel.getMonthFilterValue,
+    yearFilterValue: sel.getYearFilterValue
   }),
   dispatch =>
     bindActionCreators(
       {
         onFetchUserInvoices: act.onFetchUserInvoices,
-        onChangeFilter: act.onChangeUserFilter
+        onChangeFilter: act.onChangeUserFilter,
+        onChangeDateFilter: act.onChangeDateFilter
       },
       dispatch
     )

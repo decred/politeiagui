@@ -1,12 +1,13 @@
 import * as act from "../actions/types";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
-import { uniqueID } from "../helpers";
+import { uniqueID, getCurrentYear } from "../helpers";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_FILTER_ALL,
   PAYWALL_STATUS_PAID,
   PROPOSAL_USER_FILTER_SUBMITTED,
-  SORT_BY_TOP
+  SORT_BY_TOP,
+  FILTER_ALL_MONTHS
 } from "../constants";
 
 export const DEFAULT_STATE = {
@@ -28,7 +29,8 @@ export const DEFAULT_STATE = {
   onboardViewed: false,
   commentsSortOption: { value: SORT_BY_TOP, label: SORT_BY_TOP },
   pollingCreditsPayment: false,
-  redirectedFrom: null
+  redirectedFrom: null,
+  invoiceSortOption: { month: FILTER_ALL_MONTHS, year: getCurrentYear() }
 };
 
 const app = (state = DEFAULT_STATE, action) =>
@@ -161,6 +163,10 @@ const app = (state = DEFAULT_STATE, action) =>
     [act.CHANGE_USER_FILTER_VALUE]: () => ({
       ...state,
       userProposalsShow: action.payload
+    }),
+    [act.CHANGE_DATE_FILTER]: () => ({
+      ...state,
+      invoiceSortOption: action.payload
     }),
     [act.RESET_PAYWALL_INFO]: () => ({ ...state, userAlreadyPaid: null }),
     [act.UPDATE_USER_PAYWALL_STATUS]: () => ({
