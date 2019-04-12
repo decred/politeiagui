@@ -10,7 +10,7 @@ export const assertRouteIsCalledWithQueryParams = async (
   const OPTIONS = { query };
   fetchMock.getOnce(path, mockResult, OPTIONS);
   const result = await func.apply(null, args);
-  expect(fetchMock.called(path)).toBeTruthy();
+  expect(fetchMock.called(path, OPTIONS)).toBeTruthy();
   return result;
 };
 
