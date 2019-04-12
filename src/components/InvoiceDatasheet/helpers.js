@@ -1,6 +1,9 @@
 export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
   const grid = [createTableHeaders()];
   const gridBody = lineItems.map((line, idx) => {
+    const isLabelReadonly =
+      line.type === 2 ? true : line.type === 3 ? true : readOnly;
+    const isExpenseReadonly = line.type === 1 ? true : readOnly;
     return [
       { readOnly: true, value: idx + 1 },
       { readOnly, value: line.type },
@@ -8,8 +11,8 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
       { readOnly, value: line.subdomain },
       { readOnly, value: line.description },
       { readOnly, value: line.proposaltoken },
-      { readOnly, value: line.labor },
-      { readOnly, value: line.expense }
+      { readOnly: isLabelReadonly, value: line.labor },
+      { readOnly: isExpenseReadonly, value: line.expense }
     ];
   });
   return grid.concat(gridBody);

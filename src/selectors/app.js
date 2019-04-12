@@ -62,7 +62,6 @@ import {
 } from "../constants";
 import {
   getTextFromIndexMd,
-  getTextFromJsonToCsv,
   countPublicProposals,
   isProposalApproved
 } from "../helpers";
@@ -148,18 +147,17 @@ export const getEditProposalValues = state => {
 };
 
 export const getEditInvoiceValues = state => {
-  const { file } = invoice(state);
-  const data = file ? getTextFromJsonToCsv(file[0]) : null;
-  return data
+  const { input } = invoice(state);
+  return input
     ? {
-        month: data.month,
-        year: data.year,
-        name: data.contractorname,
-        contact: data.contractorcontact,
-        location: data.contractorlocation,
-        rate: data.contractorrate,
-        address: data.paymentaddress,
-        datasheet: convertLineItemsToGrid(data.lineItems, false)
+        month: input.month,
+        year: input.year,
+        name: input.contractorname,
+        contact: input.contractorcontact,
+        location: input.contractorlocation,
+        rate: input.contractorrate,
+        address: input.paymentaddress,
+        datasheet: convertLineItemsToGrid(input.lineitems, false)
       }
     : {};
 };

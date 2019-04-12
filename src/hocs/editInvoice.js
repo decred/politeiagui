@@ -95,7 +95,7 @@ class EditInvoiceContainer extends Component {
     }
   };
 
-  onCancel = () => this.props.history.push("/user/invoices");
+  onCancel = () => this.props.history.push(`/invoices/${this.props.token}`);
 }
 
 const wrap = Component => props => (
