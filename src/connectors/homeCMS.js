@@ -16,13 +16,6 @@ const homeCMSConnector = connect(
     ),
     userInvoices: sel.apiUserInvoices,
     adminInvoices: sel.apiAdminInvoices
-    //   invoiceCounts: sel.getUserInvoicesFilterCounts,
-    //   filterValue: sel.getUserFilterValue,
-    //   lastLoadedInvoice: sel.lastLoadedUserProposal,
-    //   header: () => CMS_LIST_HEADER_USER,
-    //   emptyInvoicesMessage: () => "You have not created any invoices yet",
-    //   monthFilterValue: sel.getMonthFilterValue,
-    //   yearFilterValue: sel.getYearFilterValue
   }),
   dispatch =>
     bindActionCreators(
