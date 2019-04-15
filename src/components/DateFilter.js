@@ -30,12 +30,12 @@ class DateFilter extends React.Component {
     const qsYear = getQueryStringValue("year");
     if (qsMonth) {
       this.props.handleChangeDateFilter(qsMonth, yearFilterValue);
-    }
-    if (qsYear) {
+    } else if (qsYear) {
       this.props.handleChangeDateFilter(monthFilterValue, qsYear);
-    }
-    if (qsMonth && qsYear) {
+    } else if (qsMonth && qsYear) {
       this.props.handleChangeDateFilter(qsMonth, qsYear);
+    } else if (!qsMonth && !qsYear) {
+      this.props.handleResetDateFilter();
     }
   }
 

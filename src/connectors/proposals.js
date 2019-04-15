@@ -27,7 +27,8 @@ export default connect(
         onFetchData: act.onFetchVetted,
         onChangeStatus: act.onSetProposalStatus,
         onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
-        onChangeFilter: act.onChangePublicFilter
+        onChangeFilter: act.onChangePublicFilter,
+        onResetDateFilter: act.onResetDateFilter
       },
       dispatch
     )

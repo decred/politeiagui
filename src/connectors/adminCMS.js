@@ -23,6 +23,7 @@ export default connect(
   {
     onFetchData: act.onFetchAdminInvoices,
     onChangeFilter: act.onChangeAdminFilter,
-    onChangeDateFilter: act.onChangeDateFilter
+    onChangeDateFilter: act.onChangeDateFilter,
+    onResetDateFilter: act.onResetDateFilter
   }
 );

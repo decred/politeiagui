@@ -27,7 +27,8 @@ const userInvoicesConnector = connect(
       {
         onFetchUserInvoices: act.onFetchUserInvoices,
         onChangeFilter: act.onChangeUserFilter,
-        onChangeDateFilter: act.onChangeDateFilter
+        onChangeDateFilter: act.onChangeDateFilter,
+        onResetDateFilter: act.onResetDateFilter
       },
       dispatch
     )

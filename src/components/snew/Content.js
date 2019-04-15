@@ -35,6 +35,7 @@ export const CustomContent = ({
   invoices,
   invoiceCounts,
   onChangeDateFilter,
+  onResetDateFilter,
   monthFilterValue,
   yearFilterValue,
   ...props
@@ -111,9 +112,10 @@ export const CustomContent = ({
           />
           <DateFilter
             header={header}
-            handleChangeDateFilter={onChangeDateFilter}
             monthFilterValue={monthFilterValue}
             yearFilterValue={yearFilterValue}
+            handleChangeDateFilter={onChangeDateFilter}
+            handleResetDateFilter={onResetDateFilter}
           />
         </React.Fragment>
       ) : (
