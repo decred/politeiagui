@@ -712,6 +712,7 @@ export const apiAdminInvoices = compose(
   get("invoices"),
   adminInvoicesResponse
 );
+export const adminInvoicesError = getApiError("adminInvoices");
 
 export const isApiRequestingUserInvoices = getIsApiRequesting("userInvoices");
 

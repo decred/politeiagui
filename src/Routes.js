@@ -38,7 +38,6 @@ import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
 
 // CMS CONNECTORS
-import publicInvoices from "./connectors/invoices";
 import adminCMS from "./connectors/adminCMS";
 import invoiceDetail from "./connectors/invoice";
 import newInvoice from "./hocs/newInvoice";
@@ -47,11 +46,12 @@ import newInvoice from "./hocs/newInvoice";
 import UserInvoices from "./components/UserInvoices";
 import InviteUser from "./components/InviteUserPage";
 import InviteUserSuccess from "./components/InviteUser/SuccessPage";
+import HomeCMS from "./components/HomeCMS";
 
 const RoutesForCMS = () => {
   return (
     <Switch>
-      <Route path="/" component={publicInvoices(ProposalListing)} exact />
+      <Route path="/" component={HomeCMS} exact />
       <Route path="/login" component={LoginSignupPage} />
       <Route path="/register" component={LoginSignupPage} />
       <Route path="/user/login" component={LoginSignupPage} />
