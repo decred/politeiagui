@@ -117,7 +117,7 @@ const HomeCMS = ({
         <div style={{ paddingLeft: "24px" }}>
           <ReminderList title={"Reminders"}>
             <UserReminders invoices={userInvoices} />
-            <AdminReminders invoices={adminInvoices} />
+            {isAdmin && <AdminReminders invoices={adminInvoices} />}
           </ReminderList>
         </div>
       )}
