@@ -28,6 +28,8 @@ const proposalConnector = connect(
     isAdmin: sel.isAdmin,
     record: sel.proposal,
     comments: sel.proposalComments,
+    invoice: sel.invoice,
+    invoiceComments: sel.invoiceComments,
     commentslikes: sel.commentsLikes,
     error: or(sel.proposalError, sel.apiPropVoteStatusError),
     isLoading: or(
@@ -62,12 +64,16 @@ class Wrapper extends React.PureComponent {
 
   handleViewAllClick = e => {
     e && e.preventDefault() && e.stopPropagation();
-    this.props.history.push(`/proposals/${this.props.token}`);
+    !this.props.isCMS
+      ? this.props.history.push(`/proposals/${this.props.token}`)
+      : this.props.history.push(`/invoices/${this.props.token}`);
   };
 
   render() {
     const { Component, ...props } = this.props;
-    const { tree } = buildCommentsTree(props.comments, props.commentid);
+    const { tree } = !props.isCMS
+      ? buildCommentsTree(props.comments, props.commentid)
+      : buildCommentsTree(props.invoiceComments, props.commentid);
     const commentsSet = buildSetOfComments(tree);
     return (
       <Component

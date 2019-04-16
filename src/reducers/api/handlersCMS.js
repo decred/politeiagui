@@ -60,3 +60,50 @@ export const onReceiveSetStatusInvoice = (state, action) => {
     }
   };
 };
+
+export const onReceiveNewInvoiceComment = (state, action) => {
+  state = receive("newComment", state, action);
+  if (action.error) return state;
+  return {
+    ...state,
+    invoiceComments: {
+      ...state.invoiceComments,
+      response: {
+        ...state.invoiceComments.response,
+        comments: [
+          ...state.invoiceComments.response.comments,
+          {
+            ...state.newComment.payload,
+            token: state.invoice.poyload,
+            userid: state.newComment.response.userid,
+            username: state.me.response.username,
+            isadmin: state.me.response.isadmin,
+            totalvotes: 0,
+            resultvotes: 0,
+            commentid: state.newComment.response.commentid,
+            timestamp: Date.now() / 1000
+          }
+        ]
+      }
+    }
+  };
+};
+
+export const onReceiveCensorInvoiceComment = (state, action) => {
+  state = receive("censorComment", state, action);
+  if (action.error) return state;
+  return {
+    ...state,
+    invoiceComments: {
+      ...state.invoiceComments,
+      response: {
+        ...state.invoiceComments.response,
+        comments: state.invoiceComments.response.comments.map(c => {
+          return c.commentid === action.payload
+            ? { ...c, comment: "", censored: true }
+            : c;
+        })
+      }
+    }
+  };
+};

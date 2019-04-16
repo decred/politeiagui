@@ -291,6 +291,18 @@ export const onFetchUserInvoices = (userid, token) => dispatch => {
     });
 };
 
+export const onFetchInvoiceComments = token => dispatch => {
+  dispatch(act.REQUEST_INVOICE_COMMENTS());
+  return api
+    .invoiceComments(token)
+    .then(response => {
+      dispatch(act.RECEIVE_INVOICE_COMMENTS(response));
+    })
+    .catch(error => {
+      dispatch(act.RECEIVE_INVOICE_COMMENTS(null, error));
+    });
+};
+
 export const onFetchAdminInvoices = () =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_ADMIN_INVOICES());
@@ -627,7 +639,7 @@ export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
       });
   });
 
-export const onCensorComment = (loggedInAsEmail, token, commentid) =>
+export const onCensorComment = (loggedInAsEmail, token, commentid, isCms) =>
   withCsrf((dispatch, getState, csrf) => {
     return dispatch(
       confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {})
@@ -641,7 +653,9 @@ export const onCensorComment = (loggedInAsEmail, token, commentid) =>
           .then(comment => api.censorComment(csrf, comment))
           .then(response => {
             if (response.receipt) {
-              dispatch(act.RECEIVE_CENSOR_COMMENT(commentid, null));
+              !isCms
+                ? dispatch(act.RECEIVE_CENSOR_COMMENT(commentid, null))
+                : dispatch(act.RECEIVE_CENSOR_INVOICE_COMMENT(commentid, null));
             }
           })
           .catch(error => {
@@ -656,7 +670,8 @@ export const onSubmitComment = (
   token,
   comment,
   parentid,
-  commentid
+  commentid,
+  isCMS = false
 ) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
@@ -665,7 +680,9 @@ export const onSubmitComment = (
       .then(comment => api.newComment(csrf, comment))
       .then(response => {
         const responsecomment = response.comment;
-        dispatch(act.RECEIVE_NEW_COMMENT(responsecomment));
+        !isCMS
+          ? dispatch(act.RECEIVE_NEW_COMMENT(responsecomment))
+          : dispatch(act.RECEIVE_NEW_INVOICE_COMMENT(responsecomment));
         commentid &&
           dispatch(
             act.RECEIVE_NEW_THREAD_COMMENT({

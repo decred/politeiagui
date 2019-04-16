@@ -27,12 +27,13 @@ const invoiceConnector = connect(
     otherFiles: sel.getNotJSONFile,
     commentsSortOption: sel.commentsSortOption,
     openedModals: sel.getopenedModals,
-    isCMS: sel.isCMS
+    isCMS: sel.isCMS,
+    comments: sel.invoiceComments
   }),
   dispatch =>
     bindActionCreators(
       {
-        onFetchData: act.onFetchInvoice,
+        onFetchData: act.onFetchInvoiceApp,
         onSetReplyParent: act.onSetReplyParent,
         onFetchLikedComments: act.onFetchLikedComments,
         onSetCommentsSortOption: act.onSetCommentsSortOption,

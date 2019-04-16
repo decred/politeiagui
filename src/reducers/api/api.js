@@ -24,7 +24,11 @@ import {
   onReceiveProposalVoteResults,
   onReceiveManageUser
 } from "./handlers";
-import { onReceiveSetStatusInvoice } from "./handlersCMS";
+import {
+  onReceiveSetStatusInvoice,
+  onReceiveNewInvoiceComment,
+  onReceiveCensorInvoiceComment
+} from "./handlersCMS";
 
 export const DEFAULT_STATE = {
   me: DEFAULT_REQUEST_STATE,
@@ -169,6 +173,12 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_INVOICE]: () => receive("invoice", state, action),
     [act.REQUEST_INVOICE_COMMENTS]: () =>
       request("invoiceComments", state, action),
+    [act.RECEIVE_INVOICE_COMMENTS]: () =>
+      receive("invoiceComments", state, action),
+    [act.RECEIVE_NEW_INVOICE_COMMENT]: () =>
+      onReceiveNewInvoiceComment(state, action),
+    [act.RECEIVE_CENSOR_INVOICE_COMMENT]: () =>
+      onReceiveCensorInvoiceComment(state, action),
     [act.REQUEST_SETSTATUS_INVOICE]: () =>
       request("setStatusInvoice", state, action),
     [act.RECEIVE_SETSTATUS_INVOICE]: () =>

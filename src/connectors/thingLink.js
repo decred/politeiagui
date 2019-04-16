@@ -18,13 +18,16 @@ const thingLinkConnector = connect(
     isTestnet: sel.isTestNet,
     getVoteStatus: sel.getPropVoteStatus,
     comments: sel.proposalComments,
+    invoiceComments: sel.invoiceComments,
     csrf: sel.csrf,
     isCMS: sel.isCMS
   }),
   {
     confirmWithModal: act.confirmWithModal,
     onChangeProposalStatusApproved: act.onChangeProposalStatusApproved,
-    getLastBlockHeight: act.getLastBlockHeight
+    getLastBlockHeight: act.getLastBlockHeight,
+    onChangeDateFilter: act.onChangeDateFilter,
+    onResetDateFilter: act.onResetDateFilter
   }
 );
 

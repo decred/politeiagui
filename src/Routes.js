@@ -118,6 +118,10 @@ const RoutesForCMS = () => {
         component={invoiceDetail(ProposalDetail)}
         exact
       />
+      <Route
+        path="/invoices/:token/comments/:commentid"
+        component={invoiceDetail(ProposalDetail)}
+      />
       <AdminAuthenticatedRoute
         path="/admin/invite"
         component={adminCMS(InviteUser)}

@@ -9,11 +9,13 @@ import {
   onFetchProposalComments,
   onSubmitEditedProposal,
   onSubmitInvoice,
-  onSubmitEditedInvoice
+  onSubmitEditedInvoice,
+  onFetchInvoiceComments
 } from "./api";
 import {
   onFetchProposal as onFetchProposalApi,
-  onSubmitComment as onSubmitCommentApi
+  onSubmitComment as onSubmitCommentApi,
+  onFetchInvoice as onFetchInvoiceApi
 } from "./api";
 import { resetNewProposalData } from "../lib/editors_content_backup";
 import * as sel from "../selectors";
@@ -160,6 +162,11 @@ export const onSaveChangePassword = ({ existingPassword, newPassword }) => (
 export const onFetchProposalApp = token => dispatch =>
   dispatch(onFetchProposalApi(token)).then(() =>
     dispatch(onFetchProposalComments(token))
+  );
+
+export const onFetchInvoiceApp = (token, version = null) => dispatch =>
+  dispatch(onFetchInvoiceApi(token, version)).then(() =>
+    dispatch(onFetchInvoiceComments(token))
   );
 
 export const onLoadMe = me => dispatch => {

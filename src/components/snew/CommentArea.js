@@ -9,7 +9,9 @@ import {
   SORT_BY_TOP,
   SORT_BY_OLD,
   SORT_BY_NEW,
-  PROPOSAL_STATUS_UNREVIEWED_CHANGES
+  PROPOSAL_STATUS_UNREVIEWED_CHANGES,
+  INVOICE_STATUS_INVALID,
+  INVOICE_STATUS_NOTFOUND
 } from "../../constants";
 import {
   setQueryStringValue,
@@ -61,19 +63,28 @@ class CommentArea extends React.Component {
       onViewAllClick,
       token,
       numofcomments,
+      invoice,
       ...props
     } = this.props;
-    return Object.keys(proposal).length === 0 ||
-      proposal.status === PROPOSAL_STATUS_UNREVIEWED ||
-      proposal.status === PROPOSAL_STATUS_UNREVIEWED_CHANGES ||
-      proposal.status === PROPOSAL_STATUS_CENSORED ? null : (
+    const hideComments =
+      (Object.keys(proposal).length === 0 ||
+        proposal.status === PROPOSAL_STATUS_UNREVIEWED ||
+        proposal.status === PROPOSAL_STATUS_UNREVIEWED_CHANGES ||
+        proposal.status === PROPOSAL_STATUS_CENSORED) &&
+      (Object.keys(invoice).length === 0 ||
+        invoice.status === INVOICE_STATUS_INVALID ||
+        invoice.status === INVOICE_STATUS_NOTFOUND);
+    return hideComments ? null : (
       <CommentAreaBase
         {...{
           ...props,
           singleThread: commentid ? (
             <span>
               Single comment thread.{" "}
-              <a href={`proposals/${token}`} onClick={onViewAllClick}>
+              <a
+                href={!props.isCMS ? `proposals/${token}` : `invoices/${token}`}
+                onClick={onViewAllClick}
+              >
                 View all
               </a>
             </span>

@@ -704,6 +704,11 @@ const mode = compose(
 
 export const isCMS = state => mode(state) === CMSWWWMODE;
 
+export const invoiceToken = compose(
+  get(["censorshiprecord", "token"]),
+  apiInvoice
+);
+
 export const inviteUserResponse = getApiResponse("inviteUser");
 export const isApiRequestingInviteUser = getIsApiRequesting("inviteUser");
 
@@ -754,4 +759,9 @@ export const apiEditInvoiceError = getApiError("editInvoice");
 export const editInvoiceToken = compose(
   get(["invoice", "censorshiprecord", "token"]),
   apiEditInvoiceResponse
+);
+
+export const visitedInvoice = compose(
+  get("accesstime"),
+  getApiResponse("invoiceComments")
 );
