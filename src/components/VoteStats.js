@@ -232,7 +232,7 @@ class Stats extends React.Component {
             </div>
           ) : null}
           {showStats && options.map(op => this.renderStats(op))}
-          {endHeight && currentHeight
+          {endHeight && currentHeight && !isPreVoting
             ? this.getTimeInBlocks(endHeight, currentHeight)
             : null}
         </div>
