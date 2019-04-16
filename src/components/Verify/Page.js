@@ -5,12 +5,11 @@ import PageLoadingIcon from "../snew/PageLoadingIcon";
 const Page = ({
   verifyNewUser,
   isRequestingVerifyNewUser,
-  verifyNewUserError,
-  isCMS
+  verifyNewUserError
 }) => {
   return isRequestingVerifyNewUser ? (
     <PageLoadingIcon />
-  ) : !isCMS && verifyNewUserError ? (
+  ) : verifyNewUserError ? (
     <div className="page verification-failure-page">
       {verifyNewUserError.errorCode === 23 ? (
         <Message type="error" header="Verification failed">
@@ -32,7 +31,7 @@ const Page = ({
         />
       )}
     </div>
-  ) : !isCMS && verifyNewUser ? (
+  ) : verifyNewUser ? (
     <div className="page verification-success-page">
       <h3>Your email has been successfully verified.</h3>
       <p>
@@ -42,17 +41,6 @@ const Page = ({
       </p>
       <p>
         Please log in to find instructions on how to pay the registration fee.
-      </p>
-    </div>
-  ) : isCMS && verifyNewUser ? (
-    <div className="page verification-success-page">
-      <h3>
-        "Congratulations, you have fully registered for the Contractor
-        Manangement System!
-      </h3>
-      <p>
-        You may now log in. Please refer to for instructions on how to
-        appropriately create and submit invoices."
       </p>
     </div>
   ) : null;
