@@ -256,11 +256,11 @@ body>.appWrapper>.content>#login {
     color: #4d5763;
 }
 
-.proposals-listing-header {
+.content-title {
   margin: 8px 0px 8px 24px;
 }
 
-.user-proposals-page .proposals-listing-header {
+.user-proposals-page .content-title {
   margin-left: 10px;
 }
 .user-proposals-filter {
