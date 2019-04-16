@@ -201,3 +201,13 @@ export const commentsToT1 = (comments, commentid, tempThreadTree) => {
     comments => buildCommentsTree(comments, commentid, tempThreadTree)
   )(comments);
 };
+
+// create data structure with all the comments on thread uniquely
+export const buildSetOfComments = tree => {
+  const set = new Set();
+  Object.keys(tree).forEach(key => {
+    tree[key] && tree[key].forEach(item => item && set.add(item));
+    key && key !== "0" && set.add(key);
+  });
+  return set;
+};
