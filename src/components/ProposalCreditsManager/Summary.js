@@ -12,7 +12,7 @@ const exportData = data => {
       price: d.type === "fee" ? "" : d.price
     }));
   const fields = ["numberPurchased", "price", "txId", "datePurchased", "type"];
-  exportToCsv(data, fields);
+  exportToCsv(data, fields, "payment_history");
 };
 
 const ProposalCreditsSummary = ({

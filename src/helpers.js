@@ -300,7 +300,7 @@ const mapInvoiceStatusToMessage = {
   [INVOICE_STATUS_PAID]: "Invoice paid"
 };
 
-export const exportToCsv = (data, fields) => {
+export const exportToCsv = (data, fields, filename) => {
   const csvContent = data.reduce((acc, info) => {
     let row = "";
     fields.forEach(f => (row += `"${info[f]}",`));
@@ -311,7 +311,7 @@ export const exportToCsv = (data, fields) => {
   const content = encodeURI(csv);
   const link = document.createElement("a");
   link.setAttribute("href", content);
-  link.setAttribute("download", "payment_history");
+  link.setAttribute("download", filename);
   link.click();
 };
 

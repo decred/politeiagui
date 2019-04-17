@@ -15,3 +15,8 @@
 .payouts-table > tbody > tr > th  {
     font-weight: bold;
 }
+
+.payouts-btn-export-to-csv {
+    float: right;
+    margin: 0 0 20px;
+}
