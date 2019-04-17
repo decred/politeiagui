@@ -46,9 +46,11 @@ class UserDetail extends Component {
   }
 
   handleFetchingOfProposalData = prevProps => {
-    const userFetched =
+    const emailFetched =
       !prevProps.loggedInAsEmail && this.props.loggedInAsEmail;
-    if (userFetched && !this.props.isCMS) {
+    const userFetched = !prevProps.user && this.props.user;
+
+    if ((emailFetched || userFetched) && !this.props.isCMS) {
       this.props.onFetchUserProposals(this.props.userId);
       this.props.onFetchProposalsVoteStatus();
     }
@@ -70,6 +72,8 @@ class UserDetail extends Component {
 
   componentDidMount() {
     this.props.onFetchData(this.props.userId);
+    this.props.onFetchUserProposals(this.props.userId);
+    this.props.onFetchProposalsVoteStatus();
   }
 
   onTabChange(tabId) {
