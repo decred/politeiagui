@@ -143,13 +143,15 @@ const RegisterForm = ({
             text="Sign up"
             isLoading={false}
           />
-          <Link
-            className="c-pull-right resend-verification-link"
-            href="/user/resend"
-            tabIndex={2}
-          >
-            Resend verification email
-          </Link>
+          {!isCMS && (
+            <Link
+              className="c-pull-right resend-verification-link"
+              href="/user/resend"
+              tabIndex={2}
+            >
+              Resend verification email
+            </Link>
+          )}
         </div>
       ) : (
         <Message type="info" header="Before you sign up...">
