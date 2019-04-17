@@ -47,7 +47,9 @@ class RecordDetail extends React.Component {
     this.handleUpdateOfComments(prevProps, this.props);
   }
   componentDidMount() {
-    !this.props.isCMS && this.props.onFetchLikedComments(this.props.token);
+    !this.props.isCMS &&
+      this.props.loggedInAsEmail &&
+      this.props.onFetchLikedComments(this.props.token);
   }
 
   componentWillUnmount() {
