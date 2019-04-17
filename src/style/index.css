@@ -1254,6 +1254,7 @@ li p.header-3 {
 .appWrapper {
   background: #f3f5f6;
   min-height: 100%;
+  overflow-x: scroll;
 }
 
 .available-credits {
