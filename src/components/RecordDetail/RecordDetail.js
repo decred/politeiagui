@@ -36,8 +36,7 @@ class RecordDetail extends React.Component {
     const proposalIsPublic = proposal.status === PROPOSAL_STATUS_PUBLIC;
     const proposalJustFetched =
       proposal &&
-      !prevProps.record &&
-      Object.keys(prevProps.record).length === 0;
+      (!prevProps.record || Object.keys(prevProps.record).length === 0);
     if (proposalJustFetched && proposalIsPublic) {
       onFetchProposalVoteStatus(token);
     }
