@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
 import * as sel from "../selectors";
 import * as act from "../actions";
 import compose from "lodash/fp/compose";
 import get from "lodash/fp/get";
 import { validate } from "../validators/invoice";
 import { arg, or } from "../lib/fp";
+import { convertLineItemsToGrid } from "../components/InvoiceDatasheet/helpers";
 
 const editInvoiceConnector = connect(
   sel.selectorMap({
@@ -18,7 +18,6 @@ const editInvoiceConnector = connect(
     editedInvoiceToken: sel.editInvoiceToken,
     submitError: sel.apiEditInvoiceError,
     invoice: sel.invoice,
-    initialValues: or(sel.getEditInvoiceValues),
     isLoading: or(sel.isLoadingSubmit, sel.isApiRequestingEditInvoice),
     loggedInAsEmail: sel.loggedInAsEmail,
     userCanExecuteActions: sel.userCanExecuteActions,
@@ -55,20 +54,30 @@ class EditInvoiceContainer extends Component {
       this.props.onResetInvoice();
       return this.props.history.push("/invoices/" + editedInvoiceToken);
     }
-
     const isInvoiceFetched =
       invoice &&
       invoice.censorshiprecord &&
       invoice.censorshiprecord.token === this.props.token;
     const invoiceBelongsToTheUser =
       invoice && invoice.userid === this.props.userid;
+    if (isInvoiceFetched && !this.state.initialValues) {
+      const { input } = invoice;
+      this.setState({
+        initialValues: {
+          month: input.month,
+          year: input.year,
+          name: input.contractorname,
+          contact: input.contractorcontact,
+          location: input.contractorlocation,
+          rate: input.contractorrate,
+          address: input.paymentaddress,
+          datasheet: convertLineItemsToGrid(input.lineitems, false)
+        }
+      });
+    }
     if (isInvoiceFetched && !invoiceBelongsToTheUser) {
       this.props.history.push("/");
     }
-  }
-
-  componentWillUnmount() {
-    this.props.onResetInvoice();
   }
 
   render() {
@@ -78,6 +87,7 @@ class EditInvoiceContainer extends Component {
         {...{
           ...this.props,
           validationError: this.state.validationError,
+          initialValues: this.state.initialValues,
           editingMode: true,
           onSave: this.onSave,
           onCancel: this.onCancel
@@ -104,6 +114,5 @@ const wrap = Component => props => (
 
 export default compose(
   editInvoiceConnector,
-  withRouter,
   wrap
 );
