@@ -153,6 +153,8 @@ export const onChangeUserFilter = option =>
 export const onChangeDateFilter = (month, year) =>
   act.CHANGE_DATE_FILTER({ month, year });
 
+export const onResetDateFilter = () => act.RESET_DATE_FILTER();
+
 export const onChangeProposalStatusApproved = status =>
   act.SET_PROPOSAL_APPROVED(status);
 

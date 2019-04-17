@@ -168,6 +168,14 @@ const app = (state = DEFAULT_STATE, action) =>
       ...state,
       invoiceSortOption: action.payload
     }),
+    [act.RESET_DATE_FILTER]: () => ({
+      ...state,
+      invoiceSortOption: {
+        ...state.invoiceSortOption,
+        month: FILTER_ALL_MONTHS,
+        year: getCurrentYear()
+      }
+    }),
     [act.RESET_PAYWALL_INFO]: () => ({ ...state, userAlreadyPaid: null }),
     [act.UPDATE_USER_PAYWALL_STATUS]: () => ({
       ...state,
