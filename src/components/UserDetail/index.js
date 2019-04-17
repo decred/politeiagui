@@ -5,8 +5,7 @@ import userConnector from "../../connectors/user";
 import {
   USER_DETAIL_TAB_GENERAL,
   USER_DETAIL_TAB_PREFERENCES,
-  USER_DETAIL_TAB_PROPOSALS,
-  USER_DETAIL_TAB_COMMENTS
+  USER_DETAIL_TAB_PROPOSALS
 } from "../../constants";
 import {
   setQueryStringValue,
@@ -25,10 +24,6 @@ const userDetailOptions = [
   {
     label: "proposals",
     value: USER_DETAIL_TAB_PROPOSALS
-  },
-  {
-    label: "comments",
-    value: USER_DETAIL_TAB_COMMENTS
   }
 ];
 

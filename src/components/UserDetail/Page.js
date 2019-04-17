@@ -5,12 +5,10 @@ import { Tabs, Tab } from "../Tabs";
 import GeneralTab from "./GeneralTab";
 import PreferencesTab from "./PreferencesTab";
 import ProposalsTab from "./ProposalsTab";
-import CommentsTab from "./CommentsTab";
 import {
   USER_DETAIL_TAB_GENERAL,
   USER_DETAIL_TAB_PREFERENCES,
-  USER_DETAIL_TAB_PROPOSALS,
-  USER_DETAIL_TAB_COMMENTS
+  USER_DETAIL_TAB_PROPOSALS
 } from "../../constants";
 import { CHANGE_USERNAME_MODAL } from "../Modal/modalTypes";
 import userConnector from "../../connectors/user";
@@ -88,15 +86,6 @@ const UserDetailPage = ({
                     onTabChange={onTabChange}
                   />
                 ) : null}
-                {!isCMS ? (
-                  <Tab
-                    title={"Comments"}
-                    count={(user.comments && user.comments.length) || 0}
-                    selected={tabId === USER_DETAIL_TAB_COMMENTS}
-                    tabId={USER_DETAIL_TAB_COMMENTS}
-                    onTabChange={onTabChange}
-                  />
-                ) : null}
               </Tabs>
             </div>
             <div className="detail-tab-body">
@@ -107,7 +96,6 @@ const UserDetailPage = ({
               {tabId === USER_DETAIL_TAB_PROPOSALS && (
                 <ProposalsTab count={user.numofproposals} />
               )}
-              {tabId === USER_DETAIL_TAB_COMMENTS && <CommentsTab />}
             </div>
           </div>
         )}
