@@ -66,9 +66,8 @@ export const DEFAULT_STATE = {
   email: "",
   keyMismatch: false,
   lastLoaded: {},
-  // CMS
   newInvoice: DEFAULT_REQUEST_STATE,
-  editInvoice: DEFAULT_REQUEST_STATE
+  editInvoice: DEFAULT_REQUEST_STATE,
   payouts: DEFAULT_REQUEST_STATE
 };
 
