@@ -67,7 +67,8 @@ export const DEFAULT_STATE = {
   keyMismatch: false,
   lastLoaded: {},
   // CMS
-  newInvoice: DEFAULT_REQUEST_STATE
+  newInvoice: DEFAULT_REQUEST_STATE,
+  editInvoice: DEFAULT_REQUEST_STATE
 };
 
 const api = (state = DEFAULT_STATE, action) =>
@@ -172,6 +173,8 @@ const api = (state = DEFAULT_STATE, action) =>
       request("setStatusInvoice", state, action),
     [act.RECEIVE_SETSTATUS_INVOICE]: () =>
       onReceiveSetStatusInvoice(state, action),
+    [act.REQUEST_EDIT_INVOICE]: () => request("editInvoice", state, action),
+    [act.RECEIVE_EDIT_INVOICE]: () => receive("editInvoice", state, action),
     // === CMS END ===
     [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
       request("proposalPaywallDetails", state, action),
@@ -203,7 +206,8 @@ const api = (state = DEFAULT_STATE, action) =>
       receive("passwordReset", state, action),
     [act.RESET_PROPOSAL]: () =>
       resetMultiple(["newProposal", "editProposal"], state),
-    [act.RESET_INVOICE]: () => reset(["newInvoice"], state),
+    [act.RESET_INVOICE]: () =>
+      resetMultiple(["newInvoice", "editInvoice"], state),
     [act.REQUEST_SETSTATUS_PROPOSAL]: () =>
       request("setStatusProposal", state, action),
     [act.RECEIVE_SETSTATUS_PROPOSAL]: () => onReceiveSetStatus(state, action),

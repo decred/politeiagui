@@ -7,6 +7,7 @@ import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
 import {
   INVOICE_STATUS_UNREVIEWED,
   INVOICE_STATUS_APPROVED,
+  INVOICE_STATUS_UPDATED,
   RECORD_TYPE_INVOICE,
   INVOICE_STATUS_REJECTED,
   INVOICE_STATUS_DISPUTED
@@ -18,6 +19,7 @@ const ThingLinkInvoice = ({
   title,
   author,
   authorid,
+  userId,
   created_utc,
   input,
   review_status,
@@ -32,7 +34,11 @@ const ThingLinkInvoice = ({
   isApiRequestingSetInvoiceStatusByToken,
   rank = 0
 }) => {
-  const isEditable = true; // TODO: set the proper conditions here
+  const isEditable =
+    authorid === userId &&
+    (review_status === INVOICE_STATUS_UNREVIEWED ||
+      review_status === INVOICE_STATUS_DISPUTED ||
+      review_status === INVOICE_STATUS_UPDATED);
   const isInvoiceDetailPath = location.pathname.split("/")[1] === "invoices";
   const invoiceCanBeApproved = review_status === INVOICE_STATUS_UNREVIEWED;
   const invoiceCanBeRejected = review_status === INVOICE_STATUS_UNREVIEWED;

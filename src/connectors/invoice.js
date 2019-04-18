@@ -22,8 +22,6 @@ const invoiceConnector = connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
     record: sel.invoice,
-    comments: sel.invoiceComments,
-    commentslikes: sel.commentsLikes || [],
     error: or(sel.proposalError, sel.apiPropVoteStatusError),
     isLoading: sel.invoiceIsRequesting,
     otherFiles: sel.getNotJSONFile,

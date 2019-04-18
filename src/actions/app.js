@@ -8,7 +8,8 @@ import {
   onChangePassword,
   onFetchProposalComments,
   onSubmitEditedProposal,
-  onSubmitInvoice
+  onSubmitInvoice,
+  onSubmitEditedInvoice
 } from "./api";
 import {
   onFetchProposal as onFetchProposalApi,
@@ -97,6 +98,29 @@ export const onEditProposal = (
     )
   );
 
+export const onEditInvoice = (
+  { month, year, name, location, contact, rate, address, datasheet },
+  _,
+  props
+) => dispatch => {
+  const lineItems = convertGridToLineItems(datasheet);
+  dispatch(
+    onSubmitEditedInvoice(
+      props.loggedInAsEmail,
+      props.userid,
+      props.username,
+      +month,
+      +year,
+      name,
+      location,
+      contact,
+      +rate,
+      address,
+      lineItems,
+      props.token
+    )
+  );
+};
 export const onSaveDraftProposal = ({ name, description, files, draftId }) => {
   resetNewProposalData();
   return act.SAVE_DRAFT_PROPOSAL({
