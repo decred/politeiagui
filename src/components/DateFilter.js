@@ -67,7 +67,6 @@ class DateFilter extends React.Component {
       invoiceFilterMonthOptions.find(op => op.value === monthFilterValue) ||
       monthFilterValue === FILTER_ALL_MONTHS;
 
-    console.log(this.props.handleResetDateFilter);
     return header && header !== CMS_DEFAULT_TAB_TITLE ? (
       <div className="dropdown-sort-wrapper">
         <Select

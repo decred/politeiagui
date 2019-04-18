@@ -215,13 +215,17 @@ export const me = () => GET("/v1/user/me").then(getResponse);
 
 export const apiInfo = () =>
   GET("/").then(
-    ({ csrfToken, response: { version, route, pubkey, testnet, mode } }) => ({
+    ({
+      csrfToken,
+      response: { version, route, pubkey, testnet, mode, activeusersession }
+    }) => ({
       csrfToken: csrfToken,
       version,
       route,
       pubkey,
       testnet,
-      mode
+      mode,
+      activeusersession
     })
   );
 
