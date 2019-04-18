@@ -32,7 +32,9 @@ export const requestApiInfo = () => dispatch => {
     .apiInfo()
     .then(response => {
       dispatch(act.RECEIVE_INIT_SESSION(response));
-      dispatch(onRequestMe());
+      if (response.activeusersession) {
+        dispatch(onRequestMe());
+      }
     })
     .catch(error => {
       dispatch(act.RECEIVE_INIT_SESSION(null, error));
