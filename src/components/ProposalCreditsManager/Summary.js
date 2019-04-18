@@ -1,19 +1,18 @@
 import React from "react";
-import { exportToCsv, formatDate } from "../../helpers";
+import { formatDate } from "../../helpers";
 import { CONFIRMATIONS_REQUIRED } from "../../constants";
 import DcrdataTxLink from "../DcrdataTxLink";
+import ExportToCsv from "../ExportToCsv";
 
-const exportData = data => {
-  data = data
+const getCsvData = data =>
+  data
     .filter(d => !d.confirming)
     .map(d => ({
       ...d,
       datePurchased: d.datePurchased ? formatDate(d.datePurchased) : "",
-      price: d.type === "fee" ? "" : d.price
+      price: d.type === "fee" ? "" : d.price,
+      type: d.type === "fee" ? "registration fee" : "credits"
     }));
-  const fields = ["numberPurchased", "price", "txId", "datePurchased", "type"];
-  exportToCsv(data, fields, "payment_history");
-};
 
 const ProposalCreditsSummary = ({
   proposalCreditPrice,
@@ -48,12 +47,21 @@ const ProposalCreditsSummary = ({
     <div className="proposal-credits-summary">
       {isThereAnyCompletedPurchase ? (
         <div className="credits-purchase-menu">
-          <button
-            className="inverse credits-purchase-menu__button"
-            onClick={() => exportData(proposalCreditPurchases)}
+          <ExportToCsv
+            data={getCsvData(proposalCreditPurchases)}
+            fields={[
+              "numberPurchased",
+              "price",
+              "txId",
+              "datePurchased",
+              "type"
+            ]}
+            filename="payment_history"
           >
-            {"Export to CSV"}
-          </button>
+            <button className="inverse credits-purchase-menu__button">
+              {"Export to CSV"}
+            </button>
+          </ExportToCsv>
         </div>
       ) : null}
       {proposalCreditPurchases && proposalCreditPurchases.length ? (

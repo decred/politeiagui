@@ -4,35 +4,33 @@ import payouts from "../../connectors/payouts";
 import { PageLoadingIcon } from "../snew";
 import Message from "../Message";
 import PayoutsTable from "./PayoutsTable";
-import { exportToCsv } from "../../helpers";
+import ExportToCsv from "../ExportToCsv";
 
 const GeneratePayoutsPage = ({
-  payouts,
+  payouts = [],
   error,
   loading,
   onGeneratePayouts
 }) => {
-  const handleExportPayouts = () => {
-    const data = payouts.map(p => ({
-      ...p,
-      combinedtotal: p.labortotal + p.expensetotal
-    }));
-    const fields = [
-      "year",
-      "month",
-      "contractorname",
-      "contractorrate",
-      "labortotal",
-      "expensetotal",
-      "combinedtotal",
-      "address"
-    ];
-    exportToCsv(data, fields, "payouts");
-  };
   const fetchPayouts = () => {
     onGeneratePayouts();
   };
   useEffect(fetchPayouts, []);
+
+  const csvData = payouts.map(p => ({
+    ...p,
+    combinedtotal: p.labortotal + p.expensetotal
+  }));
+  const csvFields = [
+    "year",
+    "month",
+    "contractorname",
+    "contractorrate",
+    "labortotal",
+    "expensetotal",
+    "combinedtotal",
+    "address"
+  ];
   return loading ? (
     <PageLoadingIcon />
   ) : error ? (
@@ -41,14 +39,15 @@ const GeneratePayoutsPage = ({
     <div className="content">
       <h1 className="content-title">Payouts</h1>
       <div style={{ paddingLeft: "24px" }}>
-        <button
-          className="inverse payouts-btn-export-to-csv "
-          onClick={handleExportPayouts}
-        >
-          {"Export to CSV"}
-        </button>
+        <ExportToCsv data={csvData} fields={csvFields} filename={"payouts"}>
+          <button className="inverse payouts-btn-export-to-csv ">
+            {"Export to CSV"}
+          </button>
+        </ExportToCsv>
+
         {payouts && <PayoutsTable payouts={payouts} />}
       </div>
+      <div id="csv-hidden-div" style={{ display: "none" }} />
     </div>
   );
 };
