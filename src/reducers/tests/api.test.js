@@ -272,6 +272,7 @@ describe("test api reducer", () => {
       verifyUserKey: DEFAULT_REQUEST_STATE,
       likeComment: DEFAULT_REQUEST_STATE,
       userSearch: DEFAULT_REQUEST_STATE,
+      payouts: DEFAULT_REQUEST_STATE,
       proposalPaywallPayment: DEFAULT_REQUEST_STATE,
       rescanUserPayments: DEFAULT_REQUEST_STATE,
       user: DEFAULT_REQUEST_STATE,

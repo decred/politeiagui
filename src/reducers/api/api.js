@@ -66,9 +66,9 @@ export const DEFAULT_STATE = {
   email: "",
   keyMismatch: false,
   lastLoaded: {},
-  // CMS
   newInvoice: DEFAULT_REQUEST_STATE,
-  editInvoice: DEFAULT_REQUEST_STATE
+  editInvoice: DEFAULT_REQUEST_STATE,
+  payouts: DEFAULT_REQUEST_STATE
 };
 
 const api = (state = DEFAULT_STATE, action) =>
@@ -266,6 +266,8 @@ const api = (state = DEFAULT_STATE, action) =>
       onReceiveRescanUserPayments(state, action),
     [act.RESET_RESCAN_USER_PAYMENTS]: () =>
       reset("rescanUserPayments", state, action),
+    [act.REQUEST_GENERATE_PAYOUTS]: () => request("payouts", state, action),
+    [act.RECEIVE_GENERATE_PAYOUTS]: () => receive("payouts", state, action),
     [act.RECEIVE_LOGOUT]: () => {
       if (!action.error) {
         return {

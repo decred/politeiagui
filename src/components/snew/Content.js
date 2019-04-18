@@ -78,17 +78,26 @@ export const CustomContent = ({
               : {}
           }
         >
-          <h1 className="proposals-listing-header">{header}</h1>
+          <h1 className="content-title">{header}</h1>
           {showLookUp && (
             <div>
               {isCMS && (
-                <Link
-                  style={{ marginRight: "24px" }}
-                  href="/admin/invite"
-                  onClick={() => null}
-                >
-                  Invite new contractor
-                </Link>
+                <>
+                  <Link
+                    style={{ marginRight: "24px" }}
+                    href="/admin/payouts"
+                    onClick={() => null}
+                  >
+                    Generate payouts
+                  </Link>
+                  <Link
+                    style={{ marginRight: "24px" }}
+                    href="/admin/invite"
+                    onClick={() => null}
+                  >
+                    Invite new contractor
+                  </Link>
+                </>
               )}
               <Link
                 style={{ marginRight: "24px" }}

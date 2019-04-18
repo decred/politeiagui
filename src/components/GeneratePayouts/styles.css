@@ -1,0 +1,22 @@
+.payouts-table {
+    width: 100%;
+}
+
+.payouts-table > tbody > tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.payouts-table > tbody > tr > td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.payouts-table > tbody > tr > th  {
+    font-weight: bold;
+}
+
+.payouts-btn-export-to-csv {
+    float: right;
+    margin: 0 0 20px;
+}

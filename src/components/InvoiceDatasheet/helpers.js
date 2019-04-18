@@ -12,7 +12,7 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
       { readOnly, value: line.description },
       { readOnly, value: line.proposaltoken },
       { readOnly: isLabelReadonly, value: line.labor },
-      { readOnly: isExpenseReadonly, value: line.expense }
+      { readOnly: isExpenseReadonly, value: line.expenses }
     ];
   });
   return grid.concat(gridBody);

@@ -730,6 +730,14 @@ export const setStatusInvoicePayloadStatus = compose(
   setStatusInvoicePayload
 );
 
+export const generatePayoutsResponse = getApiResponse("payouts");
+export const generatePayoutsError = getApiError("payouts");
+export const isApiRequestingGeneratePayouts = getIsApiRequesting("payouts");
+export const payouts = compose(
+  get("payouts"),
+  generatePayoutsResponse
+);
+
 export const isApiRequestingSetInvoiceStatusByToken = state => token => {
   return (
     isApiRequestingSetStatusInvoice(state) &&

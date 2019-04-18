@@ -48,6 +48,7 @@ import UserInvoices from "./components/UserInvoices";
 import InviteUser from "./components/InviteUserPage";
 import InviteUserSuccess from "./components/InviteUser/SuccessPage";
 import HomeCMS from "./components/HomeCMS";
+import GeneratePayouts from "./components/GeneratePayouts";
 
 const RoutesForCMS = () => {
   return (
@@ -89,6 +90,10 @@ const RoutesForCMS = () => {
         exact
       />
       <AdminAuthenticatedRoute path="/admin/users" component={UserLookup} />
+      <AdminAuthenticatedRoute
+        path="/admin/payouts"
+        component={GeneratePayouts}
+      />
       <AuthenticatedRoute
         path="/user/invoices/:filter?"
         component={UserInvoices}

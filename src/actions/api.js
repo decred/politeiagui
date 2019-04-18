@@ -1038,3 +1038,16 @@ export const onRescanUserPayments = userid =>
         throw error;
       });
   });
+
+export const onGeneratePayouts = () =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_GENERATE_PAYOUTS({}));
+    return api
+      .generatePayouts(csrf)
+      .then(response => {
+        dispatch(act.RECEIVE_GENERATE_PAYOUTS(response));
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_GENERATE_PAYOUTS(null, error));
+      });
+  });
