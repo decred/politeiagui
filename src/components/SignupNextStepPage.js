@@ -18,7 +18,7 @@ class SignupNextStepPage extends React.Component {
   }
 
   render() {
-    const { email } = this.props;
+    const { email, isCMS } = this.props;
     return (
       <div
         className="content page signup-next-step-page"
@@ -27,38 +27,51 @@ class SignupNextStepPage extends React.Component {
       >
         <div className="text-wrapper">
           <div className="centered">
-            <h3>Please check your inbox to verify your registration.</h3>
-            <p>
-              Note that, for privacy reasons, Politeia does not disclose whether
-              an email address has already been registered. If you don't receive
-              an email:
-            </p>
-            <ul>
-              {email ? (
-                <li>
-                  Check that <span className="email-address">{email}</span> is
-                  the correct address.
-                </li>
-              ) : null}
-              <li>Check your spam folder!</li>
-              <li>
-                The verification link needs to be opened with the same browser
-                that you used to sign up.
-              </li>
-              <li>
-                Make sure you don't already have an account on Politeia with
-                this email address. If you do, you should{" "}
-                <a href="/password">reset your account</a> instead.
-              </li>
-            </ul>
-            <p>
-              If you're sure you should have received an email, join the{" "}
-              <code>#support:decred.org</code> channel on{" "}
-              <a href="https://www.decred.org/matrix/">
-                Matrix
-              </a>{" "}
-              to get assistance from Politeia administrators.
-            </p>
+            {!isCMS ? (
+              <React.Fragment>
+                <h3>Please check your inbox to verify your registration.</h3>
+                <p>
+                  Note that, for privacy reasons, Politeia does not disclose
+                  whether an email address has already been registered. If you
+                  don't receive an email:
+                </p>
+                <ul>
+                  {email ? (
+                    <li>
+                      Check that <span className="email-address">{email}</span>{" "}
+                      is the correct address.
+                    </li>
+                  ) : null}
+                  <li>Check your spam folder!</li>
+                  <li>
+                    The verification link needs to be opened with the same
+                    browser that you used to sign up.
+                  </li>
+                  <li>
+                    Make sure you don't already have an account on Politeia with
+                    this email address. If you do, you should{" "}
+                    <a href="/password">reset your account</a> instead.
+                  </li>
+                </ul>
+                <p>
+                  If you're sure you should have received an email, join the{" "}
+                  <code>#support:decred.org</code> channel on{" "}
+                  <a href="https://www.decred.org/matrix/">Matrix</a> to get
+                  assistance from Politeia administrators.
+                </p>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <h3>
+                  Congratulations, you have fully registered for the Contractor
+                  Manangement System!
+                </h3>
+                <p>
+                  You may now login. Please refer to for instructions on how to
+                  appropriately create and submit invoices.
+                </p>
+              </React.Fragment>
+            )}
           </div>
         </div>
       </div>
