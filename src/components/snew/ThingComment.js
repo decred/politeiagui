@@ -5,7 +5,8 @@ import {
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_STATUS_ABANDONED,
   INVOICE_STATUS_APPROVED,
-  INVOICE_STATUS_PAID
+  INVOICE_STATUS_PAID,
+  INVOICE_STATUS_REJECTED
 } from "../../constants";
 import Message from "../Message";
 
@@ -84,7 +85,8 @@ class ThingComment extends React.PureComponent {
     } = this.props;
     const isCommentInvoiceUnavailable = props.isCMS
       ? (invoice.status === INVOICE_STATUS_APPROVED ||
-          invoice.status === INVOICE_STATUS_PAID) &&
+          invoice.status === INVOICE_STATUS_PAID ||
+          invoice.status === INVOICE_STATUS_REJECTED) &&
         props.isAdmin
       : false;
     const isProposalAbandoned = proposalStatus === PROPOSAL_STATUS_ABANDONED;
@@ -95,7 +97,7 @@ class ThingComment extends React.PureComponent {
       : false;
     const isCommentPermalink = commentid === props.id;
     return (
-      <div>
+      <div style={props.isCMS ? { padding: "0 16px" } : null}>
         {likeCommentError &&
           likeCommentPayload.token === token &&
           likeCommentPayload.commentid === props.id && (

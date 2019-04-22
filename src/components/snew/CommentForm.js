@@ -7,7 +7,8 @@ import {
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_STATUS_ABANDONED,
   INVOICE_STATUS_APPROVED,
-  INVOICE_STATUS_PAID
+  INVOICE_STATUS_PAID,
+  INVOICE_STATUS_REJECTED
 } from "../../constants";
 import MarkdownHelp from "../MarkdownHelp";
 
@@ -35,7 +36,8 @@ const CommentForm = ({
 }) => {
   const isCommentInvoiceUnavailable = isCMS
     ? (invoice.status === INVOICE_STATUS_APPROVED ||
-        invoice.status === INVOICE_STATUS_PAID) &&
+        invoice.status === INVOICE_STATUS_PAID ||
+        invoice.status === INVOICE_STATUS_REJECTED) &&
       isAdmin
     : false;
   const isVotingFinished =
