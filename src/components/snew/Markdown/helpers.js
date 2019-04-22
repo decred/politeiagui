@@ -174,6 +174,7 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
     tmpLink.hostname && tmpLink.hostname !== window.top.location.hostname;
   // if this is an external link, show confirmation dialog
   if (externalLink) {
+    const currentTitle = document.title;
     document.title = "Leaving Politeia...";
     confirmWithModal(modalTypes.CONFIRM_ACTION, {
       style: {
@@ -234,6 +235,7 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
         newWindow.location.href = link;
         newWindow.target = "_blank";
       }
+      document.title = currentTitle;
     });
   } else if (tmpLink.hostname) {
     window.location.href = link;
