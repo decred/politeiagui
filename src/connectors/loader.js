@@ -13,7 +13,8 @@ export default connect(
     userCanExecuteActions: sel.userCanExecuteActions,
     lastLoginTime: sel.lastLoginTimeFromLoginResponse,
     onboardViewed: sel.onboardViewed,
-    identityImportSuccess: sel.identityImportSuccess
+    identityImportSuccess: sel.identityImportSuccess,
+    isCMS: sel.isCMS
   }),
   dispatch =>
     bindActionCreators(
