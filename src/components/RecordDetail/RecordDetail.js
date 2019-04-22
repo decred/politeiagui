@@ -41,9 +41,17 @@ class RecordDetail extends React.Component {
       onFetchProposalVoteStatus(token);
     }
   };
+  resolveFetchLikedComments = prevProps => {
+    const userJustFetched =
+      !prevProps.loggedInAsEmail && this.props.loggedInAsEmail;
+    if (userJustFetched) {
+      this.props.onFetchLikedComments(this.props.token);
+    }
+  };
   componentDidUpdate(prevProps) {
     this.resolveTabTitle(prevProps);
     this.resolveFetchProposalVoteStatus(prevProps);
+    this.resolveFetchLikedComments(prevProps);
     this.handleUpdateOfComments(prevProps, this.props);
   }
   componentDidMount() {
