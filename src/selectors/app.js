@@ -385,12 +385,20 @@ export const getUserProposals = state => {
 
 // TODO: call getUserInvoicesCountByStatus
 export const getUserInvoicesFilterCounts = state => {
-  const invoices = apiUserInvoices(state);
+  let invoices = apiUserInvoices(state);
+  const { month, year } = state.app.invoiceSortOption;
+  if (month !== FILTER_ALL_MONTHS) {
+    invoices = getInvoicesByMonth(getInvoicesByYear(invoices, year), month);
+  }
   return getInvoicesCountByStatus(invoices);
 };
 
 export const getAdminInvoicesCountByStatus = state => {
-  const invoices = apiAdminInvoices(state);
+  let invoices = apiAdminInvoices(state);
+  const { month, year } = state.app.invoiceSortOption;
+  if (month !== FILTER_ALL_MONTHS) {
+    invoices = getInvoicesByMonth(getInvoicesByYear(invoices, year), month);
+  }
   return getInvoicesCountByStatus(invoices);
 };
 
@@ -434,7 +442,7 @@ const getInvoicesByYear = (invoices, year) =>
     ? invoices
     : invoices.filter(i => i.input.year === year);
 
-const getInvoicesByMonth = (invoices, month) =>
+const getInvoicesByMonth = (invoices = [], month) =>
   month === FILTER_ALL_MONTHS
     ? invoices
     : invoices.filter(i => i.input.month === month);
