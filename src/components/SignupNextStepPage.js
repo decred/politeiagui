@@ -67,8 +67,10 @@ class SignupNextStepPage extends React.Component {
                   Manangement System!
                 </h3>
                 <p>
-                  You may now login. Please refer to for instructions on how to
-                  appropriately create and submit invoices.
+                  If you're having trouble accessing your account, use the{" "}
+                  <code>#support:decred.org</code> channel on{" "}
+                  <a href="https://www.decred.org/matrix/">Matrix</a> to get
+                  assistance from Politeia administrators.
                 </p>
               </React.Fragment>
             )}
