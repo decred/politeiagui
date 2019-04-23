@@ -10,6 +10,7 @@ import {
   apiProposal,
   apiInvoice,
   apiProposalComments,
+  apiInvoiceComments,
   userAlreadyPaid,
   getKeyMismatch,
   apiPropsVoteStatusResponse,
@@ -261,6 +262,8 @@ export const isProposalStatusApproved = state =>
 export const activeVotesEndHeight = state => state.app.activeVotesEndHeight;
 
 export const proposalComments = state => apiProposalComments(state);
+
+export const invoiceComments = state => apiInvoiceComments(state);
 
 export const getTempThreadTree = state => state.app.replyThreadTree;
 

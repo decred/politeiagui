@@ -31,7 +31,11 @@ const replyConnector = connect(
     likeCommentPayload: sel.apiLikeCommentPayload,
     userAccessTime: sel.lastLoginTime,
     lastVisit: sel.visitedProposal,
-    userid: sel.userid
+    lastVisitInvoice: sel.visitedInvoice,
+    userid: sel.userid,
+    invoice: sel.invoice,
+    invoiceToken: sel.invoiceToken,
+    isCMS: sel.isCMS
   }),
   {
     onFetchData: act.onGetPolicy,
@@ -105,7 +109,9 @@ class Wrapper extends React.PureComponent {
       token,
       thingId: replyTo,
       policy,
-      commentid
+      commentid,
+      invoiceToken,
+      isCMS
     } = this.props;
     const { commentValue } = this.state;
     const comment = commentValue.trim();
@@ -116,7 +122,14 @@ class Wrapper extends React.PureComponent {
       return;
     }
     return this.props
-      .onSubmitComment(loggedInAsEmail, token, comment, replyTo, commentid)
+      .onSubmitComment(
+        loggedInAsEmail,
+        token || invoiceToken,
+        comment,
+        replyTo,
+        commentid,
+        isCMS
+      )
       .then(() => this.resetForm());
   }
 

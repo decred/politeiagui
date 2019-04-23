@@ -3,23 +3,31 @@ import { ThingComment as BaseComment } from "snew-classic-ui";
 import replyConnector from "../../connectors/reply";
 import {
   PROPOSAL_VOTING_FINISHED,
-  PROPOSAL_STATUS_ABANDONED
+  PROPOSAL_STATUS_ABANDONED,
+  INVOICE_STATUS_APPROVED,
+  INVOICE_STATUS_PAID,
+  INVOICE_STATUS_REJECTED
 } from "../../constants";
 import Message from "../Message";
 
 class ThingComment extends React.PureComponent {
   handlePermalinkClick = e => {
     e && e.preventDefault && e.preventDefault();
-    this.props.history.push(
-      `/proposals/${this.props.token}/comments/${this.props.id}`
-    );
+    !this.props.isCMS
+      ? this.props.history.push(
+          `/proposals/${this.props.token}/comments/${this.props.id}`
+        )
+      : this.props.history.push(
+          `/invoices/${this.props.invoiceToken}/comments/${this.props.id}`
+        );
   };
   handleCommentCensor = e => {
     e && e.preventDefault && e.preventDefault();
     this.props.onCensorComment(
       this.props.loggedInAsEmail,
-      this.props.token,
-      this.props.id
+      this.props.token || this.props.invoiceToken,
+      this.props.id,
+      this.props.isCMS
     );
   };
   handleCommentMaxHeight = () => {
@@ -71,15 +79,25 @@ class ThingComment extends React.PureComponent {
       proposalAuthor,
       proposalStatus,
       created_utc,
+      invoice,
+      lastVisitInvoice,
       ...props
     } = this.props;
+    const isCommentInvoiceUnavailable = props.isCMS
+      ? (invoice.status === INVOICE_STATUS_APPROVED ||
+          invoice.status === INVOICE_STATUS_PAID ||
+          invoice.status === INVOICE_STATUS_REJECTED) &&
+        props.isAdmin
+      : false;
     const isProposalAbandoned = proposalStatus === PROPOSAL_STATUS_ABANDONED;
     const isNewComment = lastVisit
       ? lastVisit < created_utc && props.authorid !== props.userid
+      : lastVisitInvoice
+      ? lastVisitInvoice < created_utc && props.authorid !== props.userid
       : false;
     const isCommentPermalink = commentid === props.id;
     return (
-      <div>
+      <div style={props.isCMS ? { padding: "0 16px" } : null}>
         {likeCommentError &&
           likeCommentPayload.token === token &&
           likeCommentPayload.commentid === props.id && (
@@ -95,10 +113,13 @@ class ThingComment extends React.PureComponent {
             ...props,
             created_utc,
             showCensorLink: !!props.isAdmin && !props.censored,
-            showArrows: !props.censored && !isProposalAbandoned,
+            showArrows: !props.censored && !isProposalAbandoned && !props.isCMS,
             grayBody: props.censored || isProposalAbandoned,
             highlightcomment: isCommentPermalink || isNewComment,
-            showReply: !props.censored && !isProposalAbandoned,
+            showReply:
+              !props.censored &&
+              !isProposalAbandoned &&
+              !isCommentInvoiceUnavailable,
             onShowReply: toggleCommentForm,
             onCensorComment: this.handleCommentCensor,
             onCloseCommentForm,
@@ -112,7 +133,8 @@ class ThingComment extends React.PureComponent {
               getVoteStatus(token).status === PROPOSAL_VOTING_FINISHED ||
               isProposalAbandoned,
             handleVote: onLikeComment,
-            token
+            token,
+            onPermalinkClick: this.handlePermalinkClick
           }}
         />
       </div>

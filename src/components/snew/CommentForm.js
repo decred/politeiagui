@@ -5,7 +5,10 @@ import replyConnector from "../../connectors/reply";
 import MarkdownEditorField from "../Form/Fields/MarkdownEditorField";
 import {
   PROPOSAL_VOTING_FINISHED,
-  PROPOSAL_STATUS_ABANDONED
+  PROPOSAL_STATUS_ABANDONED,
+  INVOICE_STATUS_APPROVED,
+  INVOICE_STATUS_PAID,
+  INVOICE_STATUS_REJECTED
 } from "../../constants";
 import MarkdownHelp from "../MarkdownHelp";
 
@@ -26,8 +29,17 @@ const CommentForm = ({
   value,
   onChange,
   onClose,
-  hide = false
+  hide = false,
+  invoice,
+  isAdmin,
+  isCMS
 }) => {
+  const isCommentInvoiceUnavailable = isCMS
+    ? (invoice.status === INVOICE_STATUS_APPROVED ||
+        invoice.status === INVOICE_STATUS_PAID ||
+        invoice.status === INVOICE_STATUS_REJECTED) &&
+      isAdmin
+    : false;
   const isVotingFinished =
     getVoteStatus(token) &&
     getVoteStatus(token).status === PROPOSAL_VOTING_FINISHED;
@@ -45,7 +57,10 @@ const CommentForm = ({
         <input name="parentid" type="hidden" defaultValue={thingId} />
         <div className="usertext-edit md-container">
           {isPostingComment && <h2>Posting comment...</h2>}
-          {!isPostingComment && !isVotingFinished && !isProposalAbandoned ? (
+          {!isPostingComment &&
+          !isVotingFinished &&
+          !isProposalAbandoned &&
+          !isCommentInvoiceUnavailable ? (
             <div className="md">
               <MarkdownEditorField
                 input={{ value: value, onChange: onChange }}
@@ -70,7 +85,8 @@ const CommentForm = ({
           {!isPostingComment &&
           getVoteStatus(token) &&
           !isVotingFinished &&
-          !isProposalAbandoned ? (
+          !isProposalAbandoned &&
+          !isCommentInvoiceUnavailable ? (
             <div className="bottom-area">
               <span className="help-toggle toggle">
                 <span
