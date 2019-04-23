@@ -1,5 +1,6 @@
 import React from "react";
 import signupNext from "../connectors/signupNext";
+import Link from "./snew/Link";
 
 class SignupNextStepPage extends React.Component {
   componentDidMount() {
@@ -66,6 +67,14 @@ class SignupNextStepPage extends React.Component {
                   Congratulations, you have fully registered for the Contractor
                   Manangement System!
                 </h3>
+                <p>
+                  You may now log in
+                  <Link href="/user/signup" className="login-required">
+                    {" "}
+                    here
+                  </Link>
+                </p>
+                <br />
                 <p>
                   If you're having trouble accessing your account, use the{" "}
                   <code>#support:decred.org</code> channel on{" "}
