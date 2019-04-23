@@ -56,7 +56,8 @@ export const invoiceToT3 = (
     status,
     timestamp,
     numcomments,
-    input
+    input,
+    version
   },
   idx
 ) => ({
@@ -76,7 +77,7 @@ export const invoiceToT3 = (
     permalink: `/invoices/${censorshiprecord.token}`,
     url: `/invoices/${censorshiprecord.token}`,
     is_self: true,
-    version: "1"
+    version
   }
 });
 

@@ -747,12 +747,13 @@ export const onSetInvoiceStatus = (
   loggedInAsEmail,
   token,
   status,
+  version,
   reason = ""
 ) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_SETSTATUS_INVOICE({ status, token, reason }));
     return api
-      .invoiceSetStatus(loggedInAsEmail, csrf, token, status, reason)
+      .invoiceSetStatus(loggedInAsEmail, csrf, token, version, status, reason)
       .then(({ invoice }) => {
         dispatch(
           act.RECEIVE_SETSTATUS_INVOICE({
