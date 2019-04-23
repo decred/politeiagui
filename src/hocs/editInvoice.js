@@ -7,6 +7,7 @@ import get from "lodash/fp/get";
 import { validate } from "../validators/invoice";
 import { arg, or } from "../lib/fp";
 import { convertLineItemsToGrid } from "../components/InvoiceDatasheet/helpers";
+import { fromUSDCentsToUSDUnits } from "../helpers";
 
 const editInvoiceConnector = connect(
   sel.selectorMap({
@@ -69,7 +70,7 @@ class EditInvoiceContainer extends Component {
           name: input.contractorname,
           contact: input.contractorcontact,
           location: input.contractorlocation,
-          rate: input.contractorrate,
+          rate: fromUSDCentsToUSDUnits(input.contractorrate),
           address: input.paymentaddress,
           datasheet: convertLineItemsToGrid(input.lineitems, false)
         }

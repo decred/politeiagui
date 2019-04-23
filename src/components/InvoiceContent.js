@@ -1,6 +1,7 @@
 import React from "react";
 import Field, { FieldSeparator } from "./DescriptiveField";
 import InvoiceDatasheet, { convertLineItemsToGrid } from "./InvoiceDatasheet";
+import { fromUSDCentsToUSDUnits } from "../helpers";
 
 const InvoiceContent = ({
   contractorcontact,
@@ -24,7 +25,9 @@ const InvoiceContent = ({
         <FieldSeparator />
         <Field label="Contractor location">{contractorlocation}</Field>
         <FieldSeparator />
-        <Field label="Contractor rate">{contractorrate}</Field>
+        <Field label="Contractor rate (USD)">
+          {fromUSDCentsToUSDUnits(contractorrate)}
+        </Field>
         <FieldSeparator />
         <Field label="Payment address">{paymentaddress}</Field>
       </div>

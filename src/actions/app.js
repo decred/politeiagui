@@ -32,6 +32,7 @@ import {
   PROPOSAL_REJECTED
 } from "../constants";
 import { convertGridToLineItems } from "../components/InvoiceDatasheet/helpers";
+import { fromUSDUnitsToUSDCents } from "../helpers";
 
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
 
@@ -63,7 +64,7 @@ export const onSaveNewInvoice = (
       name,
       location,
       contact,
-      +rate,
+      fromUSDUnitsToUSDCents(+rate),
       address,
       lineItems
     )
@@ -116,7 +117,7 @@ export const onEditInvoice = (
       name,
       location,
       contact,
-      +rate,
+      fromUSDUnitsToUSDCents(+rate),
       address,
       lineItems,
       props.token
