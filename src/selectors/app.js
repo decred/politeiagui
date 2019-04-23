@@ -439,7 +439,7 @@ const getInvoicesByYear = (invoices, year) =>
     ? invoices
     : invoices.filter(i => i.input.year === year);
 
-const getInvoicesByMonth = (invoices, month) =>
+const getInvoicesByMonth = (invoices = [], month) =>
   month === FILTER_ALL_MONTHS
     ? invoices
     : invoices.filter(i => i.input.month === month + 1);
