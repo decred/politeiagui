@@ -442,7 +442,7 @@ const getInvoicesByYear = (invoices, year) =>
 const getInvoicesByMonth = (invoices = [], month) =>
   month === FILTER_ALL_MONTHS
     ? invoices
-    : invoices.filter(i => i.input.month === month + 1);
+    : invoices.filter(i => i.input.month === month);
 
 export const getAdminInvoices = state => {
   const invoices = apiAdminInvoices(state);
