@@ -73,6 +73,10 @@ Relevant libraries/modules used for testing are:
  - [redux-mock-store](https://github.com/dmitry-zaets/redux-mock-store) and [redux-actions-assertions](https://github.com/redux-things/redux-actions-assertions) for testing redux actions.
 
 
+## Contributing 
+
+We encourage you to contribute to Politeiagui. Please check [How to contribute to Politeiagui] for guidelines about hot to proceed.
+
 ## Docker
 
 Politeiagui can also be hosted in a docker container. To build the the docker container, run the following commands:
