@@ -49,7 +49,7 @@ class Loader extends Component {
       );
     }
 
-    if (!prevProps.onboardViewed && isUserFirstLogin) {
+    if (!prevProps.onboardViewed && isUserFirstLogin && !this.props.isCMS) {
       const { setOnboardAsViewed, openModal } = this.props;
       setOnboardAsViewed();
       openModal(WELCOME_MODAL);
