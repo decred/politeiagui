@@ -250,12 +250,6 @@ class Loader extends Component {
     const { getLastBlockHeight, isTestnet } = this.props;
     if (isFetched) return;
     else if (csrf) {
-      console.log("hello this is where I get blockheight");
-      console.log(
-        "this.props.onFetchProposalsVoteStatus",
-        this.props.onFetchProposalsVoteStatus
-      );
-      console.log("getLastBlockHeigh", getLastBlockHeight);
       this.setState({ isFetched: true });
       this.props.onFetchData && this.props.onFetchData();
       this.props.onFetchStatus && this.props.onFetchStatus();
