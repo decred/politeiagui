@@ -75,7 +75,7 @@ Relevant libraries/modules used for testing are:
 
 ## Contributing 
 
-We encourage you to contribute to Politeiagui. Please check [How to contribute to Politeiagui] for guidelines about hot to proceed.
+We encourage you to contribute to Politeiagui. Please check [How to contribute to Politeiagui](../CONTRIBUTING.md) for guidelines about how to proceed.
 
 ## Docker
 
