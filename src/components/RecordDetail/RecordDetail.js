@@ -21,15 +21,7 @@ class RecordDetail extends React.Component {
       accessTime: 0
     };
   }
-  resolveTabTitle = prevProps => {
-    const { isCMS, record } = this.props;
-    const proposal = !isCMS && record;
-    const proposalNameHasBeenUpdated =
-      proposal && prevProps.record && prevProps.record.name !== proposal.name;
-    if (proposalNameHasBeenUpdated) {
-      document.title = proposal.name;
-    }
-  };
+
   resolveFetchProposalVoteStatus = prevProps => {
     const { isCMS, record, onFetchProposalVoteStatus, token } = this.props;
     const proposal = !isCMS && record;
@@ -49,7 +41,6 @@ class RecordDetail extends React.Component {
     }
   };
   componentDidUpdate(prevProps) {
-    this.resolveTabTitle(prevProps);
     this.resolveFetchProposalVoteStatus(prevProps);
     this.resolveFetchLikedComments(prevProps);
     this.handleUpdateOfComments(prevProps, this.props);
@@ -165,6 +156,12 @@ class RecordDetail extends React.Component {
     const data = !isCMS
       ? proposalToT3(record, 0).data
       : invoiceToT3(record, 0).data;
+    const currentTitle =
+      (data.title !== "(Proposal name hidden)" &&
+        data.url === this.props.location.pathname) === false
+        ? "Politeia"
+        : data.title;
+    document.title = currentTitle;
 
     // when dealing with proposals, extract the text content from the markdown
     // file
