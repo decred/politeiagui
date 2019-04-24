@@ -23,6 +23,7 @@ const ThingLinkInvoice = ({
   created_utc,
   input,
   review_status,
+  version,
   Link,
   url,
   location,
@@ -118,6 +119,7 @@ const ThingLinkInvoice = ({
                           loggedInAsEmail,
                           id,
                           INVOICE_STATUS_REJECTED,
+                          version,
                           reason,
                           RECORD_TYPE_INVOICE
                         )
@@ -146,6 +148,7 @@ const ThingLinkInvoice = ({
                           loggedInAsEmail,
                           id,
                           INVOICE_STATUS_APPROVED,
+                          version,
                           "",
                           RECORD_TYPE_INVOICE
                         )
@@ -174,6 +177,7 @@ const ThingLinkInvoice = ({
                           loggedInAsEmail,
                           id,
                           INVOICE_STATUS_DISPUTED,
+                          version,
                           "",
                           RECORD_TYPE_INVOICE
                         )
