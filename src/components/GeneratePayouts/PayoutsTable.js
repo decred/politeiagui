@@ -32,10 +32,10 @@ const PayoutsTable = ({ payouts }) => {
           <th>Year</th>
           <th>Month</th>
           <th>Name</th>
-          <th>Rate</th>
-          <th>Labor total</th>
-          <th>Expense total</th>
-          <th>Combined total</th>
+          <th>Rate (USD)</th>
+          <th>Labor total (USD)</th>
+          <th>Expense total (USD)</th>
+          <th>Combined total (USD)</th>
           <th>Address</th>
         </tr>
         {payouts.map((payout, idx) => (

@@ -83,7 +83,7 @@ const InvoiceSubmit = props => {
                     />
                     <Field
                       name="rate"
-                      label="Contractor rate"
+                      label="Contractor rate (USD)"
                       type="number"
                       component={InputFieldWithError}
                     />
