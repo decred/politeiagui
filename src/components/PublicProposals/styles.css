@@ -1,0 +1,21 @@
+@keyframes pulse {
+    0% {
+        background-color: rgba(165, 165, 165, 0.1)
+    }
+    50% {
+        background-color: rgba(165, 165, 165, 0.3)
+    }
+    100% {
+        background-color: rgba(165, 165, 165, 0.1)
+    }
+}
+
+.card-placeholder {
+    animation: pulse 1s infinite ease-in-out;
+    background: darkgray;
+    background-size: 800px 104px;
+    height: 186px;
+    width: 100%;
+    margin: 15px 0;
+    position: relative;
+}

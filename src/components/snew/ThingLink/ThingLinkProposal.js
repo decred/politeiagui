@@ -10,6 +10,8 @@ import Tooltip from "../../Tooltip";
 import VoteStats from "../../VoteStats";
 import VersionPicker from "../../VersionPicker";
 import actions from "../../../connectors/actions";
+import thingLink from "../../../connectors/thingLink";
+import SubsExpando from "../Expando";
 // import Diff from "./Markdown/Diff";
 
 import {
@@ -23,6 +25,8 @@ import {
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_VOTING_NOT_AUTHORIZED
 } from "../../../constants";
+
+const SubsLink = ({ children, href }) => <a href={href}>{children}</a>;
 
 const ToggleIcon = (type, onClick) => (
   <div style={{ width: "25px" }}>
@@ -55,8 +59,8 @@ class ThingLinkComp extends React.Component {
   };
   render() {
     const {
-      Link,
-      Expando,
+      Link = SubsLink,
+      Expando = SubsExpando,
       id,
       expanded = false,
       name,
@@ -653,4 +657,4 @@ class ThingLinkComp extends React.Component {
   }
 }
 
-export default actions(ThingLinkComp);
+export default actions(thingLink(ThingLinkComp));

@@ -7,7 +7,6 @@ import {
 } from "./components/snew";
 
 // POLITEIA CONNECTORS
-import vetted from "./connectors/proposals";
 import userDetail from "./connectors/user";
 import proposalDetail from "./connectors/proposal";
 import censored from "./connectors/censoredProposals";
@@ -36,6 +35,7 @@ import ProposalDetail from "./components/RecordDetail";
 import UserDetail from "./components/UserDetail";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
+import PublicProposals from "./components/PublicProposals";
 
 // CMS CONNECTORS
 import adminCMS from "./connectors/adminCMS";
@@ -141,7 +141,7 @@ const RoutesForCMS = () => {
 const RoutesForPoliteia = () => {
   return (
     <Switch>
-      <Route path="/" component={vetted(ProposalListing)} exact />
+      <Route path="/" component={PublicProposals} exact />
       <Route path="/login" component={LoginSignupPage} />
       <Route path="/user/login" component={LoginSignupPage} />
       <Route path="/user/logout" component={Logout} />

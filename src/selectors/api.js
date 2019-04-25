@@ -91,7 +91,7 @@ export const resendVerificationEmailResponse = getApiResponse(
   "resendVerificationEmail"
 );
 export const passwordResetResponse = getApiResponse("passwordReset");
-const apiVettedResponse = getApiResponse("vetted");
+export const apiVettedResponse = getApiResponse("vetted");
 const apiUserProposalsResponse = getApiResponse("userProposals");
 const apiUnvettedResponse = getApiResponse("unvetted");
 const apiProposalResponse = getApiResponse("proposal");
@@ -670,6 +670,10 @@ export const amountOfCreditsAddedOnRescan = state => {
   const newCredits = apiRescanUserPaymentsNewCredits(state);
   return newCredits && newCredits.length;
 };
+
+export const apiTokenInventoryResponse = getApiResponse("tokenInventory");
+export const apiTokenInventoryError = getApiError("tokenInventory");
+export const apiTokenInventoryPayload = getApiPayload("tokenInventory");
 
 export const isApiRequesting = or(
   isApiRequestingInit,

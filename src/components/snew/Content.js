@@ -8,7 +8,6 @@ import Message from "../Message";
 import ProposalFilter from "../ProposalFilter";
 import InvoiceFilter from "../InvoiceFilter";
 import DateFilter from "../DateFilter";
-
 import thingLinkConnector from "../../connectors/thingLink";
 
 export const CustomContent = ({
