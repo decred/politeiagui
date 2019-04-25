@@ -12,7 +12,7 @@ import {
 import { proposalToT3 } from "../../lib/snew";
 import proposalsConnector from "../../connectors/publicProposals";
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 6;
 
 const tabValues = {
   IN_DISCUSSSION: 0,
@@ -99,10 +99,7 @@ const PublicProposals = ({
     filteredTokens && filteredProposals.length < filteredTokens.length;
 
   const handleFetchMoreRecords = async () => {
-    const index =
-      filteredProposals.length === 0
-        ? filteredProposals.length
-        : filteredProposals.length - 1;
+    const index = filteredProposals.length;
     const propTokensToBeFetched = filteredTokens.slice(
       index,
       index + PAGE_SIZE
@@ -110,13 +107,12 @@ const PublicProposals = ({
     setHasMore(false);
     setItemsOnLoad(propTokensToBeFetched.length);
     await onFetchVettedByTokens(propTokensToBeFetched);
-    setHasMore(hasMoreRecordsToLoad);
     setItemsOnLoad(0);
   };
 
   useEffect(() => {
-    setHasMore(true);
-  }, [filteredTokens]);
+    setHasMore(hasMoreRecordsToLoad);
+  }, [filteredTokens, filteredProposals.length]);
 
   useEffect(() => {
     onFetchProposalsVoteStatus();

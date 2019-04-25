@@ -264,14 +264,14 @@ class ThingLinkComp extends React.Component {
               }}
             >
               {isEditable ? (
-                <Link
+                <a
                   href={`/proposals/${id}/edit`}
                   className="edit-proposal right-margin-10"
                   onClick={() => null}
                 >
                   <i className="fa fa-edit right-margin-5" />
                   Edit
-                </Link>
+                </a>
               ) : disableEditButton ? (
                 <Tooltip
                   wrapperStyle={{ marginRight: "10px" }}
