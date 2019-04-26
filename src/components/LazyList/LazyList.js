@@ -25,11 +25,6 @@ const LazyList = ({
         loadMore={onFetchMore}
         initialLoad={initialLoad}
         hasMore={hasMore}
-        loader={
-          <div className="loader" key={0}>
-            Loading ...
-          </div>
-        }
       >
         {items.map(renderItem)}
       </InfiniteScroll>
