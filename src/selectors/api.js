@@ -120,6 +120,12 @@ export const apiLikeCommentPayload = getApiPayload("likeComment");
 
 export const apiPropsVoteStatusResponse = getApiResponse("proposalsVoteStatus");
 export const apiPropsVoteStatusError = getApiError("proposalsVoteStatus");
+export const propsVoteStatusFetched = bool(
+  compose(
+    get("votesstatus"),
+    apiPropsVoteStatusResponse
+  )
+);
 
 export const apiPropVoteStatusResponse = getApiResponse("proposalVoteStatus");
 export const apiPropVoteStatusError = getApiError("proposalVoteStatusError");
@@ -674,6 +680,10 @@ export const amountOfCreditsAddedOnRescan = state => {
 export const apiTokenInventoryResponse = getApiResponse("tokenInventory");
 export const apiTokenInventoryError = getApiError("tokenInventory");
 export const apiTokenInventoryPayload = getApiPayload("tokenInventory");
+export const apiTokenInventoryIsRequesting = getIsApiRequesting(
+  "tokenInventory"
+);
+export const tokenInventoryFetched = bool(apiTokenInventoryResponse);
 
 export const isApiRequesting = or(
   isApiRequestingInit,

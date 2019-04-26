@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import "./styles.css";
 import { Tabs, Tab } from "../Tabs";
-import RecordsList from "../RecordsList/RecordsList";
+import LazyList from "../LazyList/LazyList";
 import ThingLinkProposal from "../snew/ThingLink/ThingLinkProposal";
 import {
   PROPOSAL_VOTING_NOT_AUTHORIZED,
@@ -11,6 +12,7 @@ import {
 } from "../../constants";
 import { proposalToT3 } from "../../lib/snew";
 import proposalsConnector from "../../connectors/publicProposals";
+import { PageLoadingIcon } from "../snew";
 
 const PAGE_SIZE = 6;
 
@@ -78,7 +80,10 @@ const PublicProposals = ({
   getVoteStatus,
   onFetchVettedByTokens,
   onFetchProposalsVoteStatus,
-  onFetchTokenInventory
+  onFetchTokenInventory,
+  voteStatusFetched,
+  tokenInventoryFetched,
+  isLoading
 }) => {
   const [tabOption, setTabOption] = useState(tabValues.IN_DISCUSSSION);
   const [hasMoreToLoad, setHasMore] = useState(true);
@@ -115,14 +120,13 @@ const PublicProposals = ({
   }, [filteredTokens, filteredProposals.length]);
 
   useEffect(() => {
-    onFetchProposalsVoteStatus();
-    onFetchTokenInventory();
+    !voteStatusFetched && onFetchProposalsVoteStatus();
+    !tokenInventoryFetched && onFetchTokenInventory();
   }, []);
 
   return (
     <div className="content">
       <h1 className="content-title">Public Proposals</h1>
-
       <Tabs>
         <Tab
           title="In Discusssion"
@@ -149,12 +153,12 @@ const PublicProposals = ({
           onTabChange={() => handleTabChange(tabValues.ABANDONED)}
         />
       </Tabs>
+      {isLoading && <PageLoadingIcon />}
       {proposalsTokens && (
-        <RecordsList
-          records={filteredProposals}
-          recordsTokens={filteredTokens}
-          renderRecord={renderProposal}
-          onFetchRecords={handleFetchMoreRecords}
+        <LazyList
+          items={filteredProposals}
+          renderItem={renderProposal}
+          onFetchMore={handleFetchMoreRecords}
           hasMore={hasMoreToLoad}
           isLoading={itemsOnLoad > 0}
           loadingPlaceholder={getListLoadingPlaceholders(itemsOnLoad)}

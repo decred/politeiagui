@@ -1,4 +1,12 @@
-import "./styles.css";
-import PublicProposals from "./PublicProposals";
+import React, { lazy, Suspense } from "react";
+import FallbackUI from "../ListPageFallbackUI";
 
-export default PublicProposals;
+const PublicProposals = lazy(() => import("./PublicProposals"));
+
+const PublicProposalsWrapper = () => (
+  <Suspense fallback={<FallbackUI />}>
+    <PublicProposals />
+  </Suspense>
+);
+
+export default PublicProposalsWrapper;

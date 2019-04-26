@@ -334,17 +334,6 @@ export const onFetchVettedByTokens = tokens => async dispatch => {
   } catch (error) {
     dispatch(act.RECEIVE_VETTED(null, error));
   }
-
-  // return Promise.all(promisses)
-  //   .then(res => {
-  //     console.log("go res", res);
-  //     const proposals = res.map(r => r.proposal);
-  //     console.log("props", proposals);
-  //     dispatch(act.RECEIVE_VETTED({ proposals }));
-  //   })
-  //   .catch(error => {
-  //     dispatch(act.RECEIVE_VETTED(null, error));
-  //   });
 };
 
 export const onFetchTokenInventory = () => dispatch => {
