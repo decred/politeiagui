@@ -21,7 +21,6 @@ export default connect(
     emptyProposalsMessage: sel.getVettedEmptyProposalsMessage,
     getVoteStatus: sel.getPropVoteStatus,
     proposalsTokens: sel.apiTokenInventoryResponse,
-    voteStatusFetched: sel.propsVoteStatusFetched,
     tokenInventoryFetched: sel.tokenInventoryFetched
   }),
   dispatch =>

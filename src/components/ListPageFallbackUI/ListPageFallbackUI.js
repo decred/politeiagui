@@ -1,8 +1,8 @@
 import React from "react";
 
 const ListPageFallbackUI = () => (
-  <div className="content">
-    <h1 className="content-title">Loading...</h1>
+  <div className="fallback-list-page-content">
+    <h1 className="fallback-list-page-content-title">Loading...</h1>
   </div>
 );
 

@@ -18,6 +18,7 @@ import {
   MANAGE_USER_DEACTIVATE,
   MANAGE_USER_REACTIVATE
 } from "../../constants";
+import { updateTokenInventory, getTokenInventory } from "./helpers";
 
 export const onReceiveSetStatus = (state, action) => {
   state = receive("setStatusProposal", state, action);
@@ -93,6 +94,14 @@ export const onReceiveSetStatus = (state, action) => {
         ...state.proposalsVoteStatus.response,
         votesstatus: proposalsVoteStatus
       }
+    },
+    tokenInventory: {
+      ...state.tokenInventory,
+      response: updateTokenInventory(
+        getTokenInventory(state),
+        updatedProposal.status,
+        getProposalToken(updatedProposal)
+      )
     }
   };
 };
@@ -302,12 +311,14 @@ export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
   state = receive(key, state, action);
   if (action.error) return state;
 
+  const token = state[key].payload.token;
   const newVoteStatus = {
-    token: state[key].payload.token,
+    token,
     status: newStatus,
     optionsresult: null,
     totalvotes: 0
   };
+
   return {
     ...state,
     proposalsVoteStatus: {
@@ -329,6 +340,10 @@ export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
         ...state.proposalVoteStatus.response,
         ...newVoteStatus
       }
+    },
+    tokenInventory: {
+      ...state.tokenInventory,
+      response: updateTokenInventory(getTokenInventory(state), newStatus, token)
     }
   };
 };
