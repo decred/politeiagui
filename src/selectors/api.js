@@ -677,7 +677,6 @@ export const apiTokenInventoryPayload = getApiPayload("tokenInventory");
 export const apiTokenInventoryIsRequesting = getIsApiRequesting(
   "tokenInventory"
 );
-export const tokenInventoryFetched = bool(apiTokenInventoryResponse);
 
 export const isApiRequesting = or(
   isApiRequestingInit,

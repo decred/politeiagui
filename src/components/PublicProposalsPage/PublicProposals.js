@@ -81,7 +81,6 @@ const PublicProposals = ({
   onFetchVettedByTokens,
   onFetchProposalsVoteStatus,
   onFetchTokenInventory,
-  tokenInventoryFetched,
   isLoading,
   error
 }) => {
@@ -121,7 +120,7 @@ const PublicProposals = ({
 
   useEffect(() => {
     onFetchProposalsVoteStatus();
-    !tokenInventoryFetched && onFetchTokenInventory();
+    onFetchTokenInventory();
   }, []);
 
   if (error) throw error;
