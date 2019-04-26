@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReactBody from "react-body";
 import ErrorField from "../../Form/Fields/ErrorField";
 import SelectField from "../../Form/Fields/SelectField";
+import { FilesField, normalizer } from "../../Form/Fields/FilesField";
 import InputFieldWithError from "../../Form/Fields/InputFieldWithError";
 import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
 import Message from "../../Message";
@@ -17,6 +18,8 @@ const InvoiceSubmit = props => {
     handleSubmit,
     submitError,
     editingMode,
+    policy,
+    userCanExecuteActions,
     valid
   } = props;
 
@@ -102,6 +105,17 @@ const InvoiceSubmit = props => {
                       component={InvoiceDatasheetField}
                     />
                   </div>
+                  <div>
+                    <Field
+                      name="files"
+                      className="attach-button greenprimary"
+                      component={FilesField}
+                      userCanExecuteActions={userCanExecuteActions}
+                      placeholder="Attach a file"
+                      policy={policy}
+                      normalize={normalizer}
+                    />
+                  </div>
                   <div className="submit-wrapper">
                     <ButtonWithLoadingIcon
                       className={`togglebutton access-required${!submitEnabled &&
@@ -115,7 +129,8 @@ const InvoiceSubmit = props => {
                     />
                     {editingMode ? (
                       <ButtonWithLoadingIcon
-                        className="togglebutton access-required"
+                        className={`togglebutton access-required${isLoading &&
+                          " not-active disabled"}`}
                         name="cancel"
                         text="Cancel"
                         onClick={onCancel}

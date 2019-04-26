@@ -4,6 +4,7 @@ import * as modalTypes from "../../Modal/modalTypes";
 import actionsCMS from "../../../connectors/actionsCMS";
 import { renderInvoiceStatus } from "../../../helpers";
 import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
+import ProposalImages from "../../ProposalImages";
 import {
   INVOICE_STATUS_UNREVIEWED,
   INVOICE_STATUS_APPROVED,
@@ -23,6 +24,7 @@ const ThingLinkInvoice = ({
   created_utc,
   input,
   review_status,
+  otherFiles,
   version,
   Link,
   url,
@@ -98,6 +100,8 @@ const ThingLinkInvoice = ({
           {input && (
             <InvoiceContent expanded={isInvoiceDetailPath} {...input} />
           )}
+
+          {otherFiles && <ProposalImages readOnly files={otherFiles} />}
         </span>
         {isAdmin && (
           <ul style={{ display: "flex" }}>

@@ -5,8 +5,12 @@ import { change } from "redux-form";
 import ProposalImages from "../../ProposalImages";
 import PolicyErrors from "./PolicyErrors";
 import { validateFiles, getFormattedFiles } from "../../ProposalImages/helpers";
+import isArray from "lodash/isArray";
+import isUndefined from "lodash/isUndefined";
+import concat from "lodash/concat";
+import cloneDeep from "lodash/cloneDeep";
 
-class FilesField extends React.Component {
+export class FilesField extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -106,4 +110,22 @@ FilesField.propTypes = {
   policy: PropTypes.object.isRequired
 };
 
-export default FilesField;
+export const normalizer = (value, previousValue) => {
+  let files = [];
+
+  if (previousValue && isArray(previousValue)) {
+    files = cloneDeep(previousValue);
+  }
+
+  // Delete images
+  if (!isUndefined(value.remove)) {
+    files.splice(value.remove, 1);
+  }
+
+  // Add images
+  if (isArray(value)) {
+    files = concat(files, value);
+  }
+
+  return files;
+};

@@ -48,7 +48,7 @@ export const onSetReplyParent = (
   ]);
 
 export const onSaveNewInvoice = (
-  { month, year, name, location, contact, rate, address, datasheet },
+  { month, year, name, location, contact, rate, address, datasheet, files },
   _,
   props
 ) => (dispatch, getState) => {
@@ -65,7 +65,8 @@ export const onSaveNewInvoice = (
       contact,
       +rate,
       address,
-      lineItems
+      lineItems,
+      files
     )
   ).then(() => sel.newInvoiceToken(getState()));
 };
@@ -101,7 +102,7 @@ export const onEditProposal = (
   );
 
 export const onEditInvoice = (
-  { month, year, name, location, contact, rate, address, datasheet },
+  { month, year, name, location, contact, rate, address, datasheet, files },
   _,
   props
 ) => dispatch => {
@@ -119,6 +120,7 @@ export const onEditInvoice = (
       +rate,
       address,
       lineItems,
+      files,
       props.token
     )
   );

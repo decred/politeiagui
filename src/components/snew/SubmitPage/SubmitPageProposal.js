@@ -1,39 +1,15 @@
 import React from "react";
 import ReactBody from "react-body";
 import MarkdownEditorField from "../../Form/Fields/MarkdownEditorField";
-import FilesField from "../../Form/Fields/FilesField";
+import { FilesField, normalizer } from "../../Form/Fields/FilesField";
 import ErrorField from "../../Form/Fields/ErrorField";
 import InputFieldWithError from "../../Form/Fields/InputFieldWithError";
 import Message from "../../Message";
 import MultipleItemsBodyMessage from "../../MultipleItemsBodyMessage";
-import isArray from "lodash/isArray";
-import isUndefined from "lodash/isUndefined";
-import concat from "lodash/concat";
-import cloneDeep from "lodash/cloneDeep";
 import { Field } from "redux-form";
 import MarkdownHelp from "../../MarkdownHelp";
 import { MANAGE_CREDITS_MODAL } from "../../Modal/modalTypes";
 import { PROPOSAL_GUIDELINES } from "../../../constants";
-
-const normalizer = (value, previousValue) => {
-  let files = [];
-
-  if (previousValue && isArray(previousValue)) {
-    files = cloneDeep(previousValue);
-  }
-
-  // Delete images
-  if (!isUndefined(value.remove)) {
-    files.splice(value.remove, 1);
-  }
-
-  // Add images
-  if (isArray(value)) {
-    files = concat(files, value);
-  }
-
-  return files;
-};
 
 const ToggledMarkdown = props => (
   <MarkdownEditorField input={props.input} toggledStyle={true} />
