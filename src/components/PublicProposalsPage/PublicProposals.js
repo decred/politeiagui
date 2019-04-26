@@ -11,7 +11,6 @@ import {
 } from "./helpers";
 import { proposalToT3 } from "../../lib/snew";
 import proposalsConnector from "../../connectors/publicProposals";
-import { PageLoadingIcon } from "../snew";
 
 const DEFAULT_PAGE_SIZE = 6;
 
@@ -109,15 +108,16 @@ const PublicProposals = ({
           onTabChange={() => handleTabChange(tabValues.ABANDONED)}
         />
       </Tabs>
-      {isLoading && <PageLoadingIcon />}
       {proposalsTokens && (
         <LazyList
           items={filteredProposals}
           renderItem={renderProposal}
           onFetchMore={handleFetchMoreRecords}
           hasMore={hasMoreToLoad}
-          isLoading={itemsOnLoad > 0}
-          loadingPlaceholder={getListLoadingPlaceholders(itemsOnLoad)}
+          isLoading={itemsOnLoad > 0 || isLoading}
+          loadingPlaceholder={getListLoadingPlaceholders(
+            itemsOnLoad || pageSize
+          )}
         />
       )}
     </>
