@@ -83,7 +83,8 @@ const PublicProposals = ({
   onFetchTokenInventory,
   voteStatusFetched,
   tokenInventoryFetched,
-  isLoading
+  isLoading,
+  error
 }) => {
   const [tabOption, setTabOption] = useState(tabValues.IN_DISCUSSSION);
   const [hasMoreToLoad, setHasMore] = useState(true);
@@ -124,9 +125,10 @@ const PublicProposals = ({
     !tokenInventoryFetched && onFetchTokenInventory();
   }, []);
 
+  if (error) throw error;
+
   return (
-    <div className="content">
-      <h1 className="content-title">Public Proposals</h1>
+    <>
       <Tabs>
         <Tab
           title="In Discusssion"
@@ -164,7 +166,7 @@ const PublicProposals = ({
           loadingPlaceholder={getListLoadingPlaceholders(itemsOnLoad)}
         />
       )}
-    </div>
+    </>
   );
 };
 

@@ -35,7 +35,7 @@ import ProposalDetail from "./components/RecordDetail";
 import UserDetail from "./components/UserDetail";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
-import PublicProposals from "./components/PublicProposals";
+import PublicProposalsPage from "./components/PublicProposalsPage/PublicProposalsPage";
 
 // CMS CONNECTORS
 import adminCMS from "./connectors/adminCMS";
@@ -141,7 +141,7 @@ const RoutesForCMS = () => {
 const RoutesForPoliteia = () => {
   return (
     <Switch>
-      <Route path="/" component={PublicProposals} exact />
+      <Route path="/" component={PublicProposalsPage} exact />
       <Route path="/login" component={LoginSignupPage} />
       <Route path="/user/login" component={LoginSignupPage} />
       <Route path="/user/logout" component={Logout} />

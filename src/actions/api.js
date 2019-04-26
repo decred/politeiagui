@@ -343,7 +343,9 @@ export const onFetchTokenInventory = () => dispatch => {
     .then(tokenInventory =>
       dispatch(act.RECEIVE_TOKEN_INVENTORY(tokenInventory))
     )
-    .catch(error => dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error)));
+    .catch(error => {
+      dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error));
+    });
 };
 
 export const onFetchUnvettedStatus = () => dispatch => {
