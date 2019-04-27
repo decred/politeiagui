@@ -27,7 +27,8 @@ const submitConnector = connect(
     username: sel.loggedInAsUsername,
     keyMismatch: sel.getKeyMismatch,
     proposalCredits: sel.proposalCredits,
-    draftProposalById: sel.draftProposalById
+    draftProposalById: sel.draftProposalById,
+    isApiRequestingMe: sel.isApiRequestingMe
   }),
   {
     onFetchData: act.onGetPolicy,
@@ -53,7 +54,7 @@ class SubmitWrapper extends Component {
   }
 
   componentDidUpdate() {
-    const { editedProposalToken, proposal } = this.props;
+    const { editedProposalToken, proposal, isApiRequestingMe } = this.props;
     if (editedProposalToken) {
       this.props.onResetProposal();
       return this.props.history.push("/proposals/" + editedProposalToken);
@@ -65,7 +66,7 @@ class SubmitWrapper extends Component {
       proposal.censorshiprecord.token === this.props.token;
     const proposalBelongsToTheUser =
       proposal && proposal.userid === this.props.userid;
-    if (isProposalFetched && !proposalBelongsToTheUser) {
+    if (isProposalFetched && !proposalBelongsToTheUser && !isApiRequestingMe) {
       this.props.history.push("/");
     }
   }
