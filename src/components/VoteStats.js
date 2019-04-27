@@ -59,7 +59,7 @@ const VoteStatusLabel = ({ status }) => {
       <span
         style={{
           ...spanStyle,
-          color: "#FFC84E"
+          color: "#d69400"
         }}
       >
         {mapVoteStatusToMessage[status]}
