@@ -781,7 +781,7 @@ form div.usertext-body.may-blank-within.md-container {
 
 /* Header */
 #header {
-    height: 72px;
+    height: 45px;
     position: absolute;
     top: 0;
     width: 100%;
@@ -840,7 +840,7 @@ form div.usertext-body.may-blank-within.md-container {
     position: absolute;
     display: block;
     top: 0;
-    height: 72px;
+    height: 45px;
     background-image: url("./logo.svg");
     background-position: 100% 50%;
     background-size: 155px;
