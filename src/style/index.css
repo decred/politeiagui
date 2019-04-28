@@ -421,11 +421,11 @@ a:hover, a:focus {
 
 .attached-image-ct {
   margin: 16px;
+  width: 100%;
 }
 .attached-image {
   display: block;
   position: relative;
-  width: 100%;
 }
 .attached-image-title {
   height: 24px;
