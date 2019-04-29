@@ -457,7 +457,8 @@ export const onSubmitInvoice = (
   contact,
   rate,
   address,
-  lineItems
+  lineItems,
+  files
 ) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(
@@ -469,7 +470,8 @@ export const onSubmitInvoice = (
         contact,
         rate,
         address,
-        lineItems
+        lineItems,
+        files
       })
     );
     return Promise.resolve(
@@ -481,7 +483,8 @@ export const onSubmitInvoice = (
         contact,
         rate,
         address,
-        lineItems
+        lineItems,
+        files
       )
     )
       .then(invoice => api.signRegister(loggedInAsEmail, invoice))
@@ -575,6 +578,7 @@ export const onSubmitEditedInvoice = (
   rate,
   address,
   lineItems,
+  files,
   token
 ) =>
   withCsrf((dispatch, _, csrf) => {
@@ -587,7 +591,8 @@ export const onSubmitEditedInvoice = (
         contact,
         rate,
         address,
-        lineItems
+        lineItems,
+        files
       })
     );
     return Promise.resolve(
@@ -599,7 +604,8 @@ export const onSubmitEditedInvoice = (
         contact,
         rate,
         address,
-        lineItems
+        lineItems,
+        files
       )
     )
       .then(invoice => api.signRegister(loggedInAsEmail, invoice))
