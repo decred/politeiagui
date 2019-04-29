@@ -36,6 +36,7 @@ import UserDetail from "./components/UserDetail";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
 import PublicProposalsPage from "./components/PublicProposalsPage/PublicProposalsPage";
+import PrivacyPolicy from "./components/snew/PrivacyPolicy";
 
 // CMS CONNECTORS
 import adminCMS from "./connectors/adminCMS";
@@ -175,6 +176,7 @@ const RoutesForPoliteia = () => {
         path="/user/resend/next"
         component={ResendVerificationEmailSuccess}
       />
+      <Route path="/privacy-policy/" component={PrivacyPolicy} />
       <AdminAuthenticatedRoute
         path="/admin"
         component={admin(ProposalListing)}
