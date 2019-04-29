@@ -75,6 +75,8 @@ class NewInvoiceContainer extends Component {
   };
 
   onSaveInvoice = (...args) => {
+    const { exchangeRate } = this.props;
+    args[0].exchangerate = exchangeRate;
     try {
       validate(...args);
     } catch (e) {

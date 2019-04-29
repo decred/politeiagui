@@ -104,6 +104,8 @@ class EditInvoiceContainer extends Component {
   }
 
   onSave = (...args) => {
+    const { exchangeRate } = this.props;
+    args[0].exchangerate = exchangeRate;
     try {
       validate(...args);
       this.props.onSave(...args, this.props.token);

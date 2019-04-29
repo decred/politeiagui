@@ -12,6 +12,7 @@ const InvoiceContent = ({
   month,
   paymentaddress,
   year,
+  exchangerate,
   expanded = true
 }) => {
   return !expanded ? null : (
@@ -19,14 +20,18 @@ const InvoiceContent = ({
       <div style={{ padding: "5px", marginTop: "20px" }}>
         <Field label="Invoice month">{`${month}/${year}`}</Field>
         <FieldSeparator />
+        <Field label="Exchange rate">
+          {`${fromUSDCentsToUSDUnits(exchangerate)} USD`}
+        </Field>
+        <FieldSeparator />
         <Field label="Contractor name">{contractorname}</Field>
         <FieldSeparator />
         <Field label="Contractor contact">{contractorcontact}</Field>
         <FieldSeparator />
         <Field label="Contractor location">{contractorlocation}</Field>
         <FieldSeparator />
-        <Field label="Contractor rate (USD)">
-          {fromUSDCentsToUSDUnits(contractorrate)}
+        <Field label="Contractor rate">
+          {`${fromUSDCentsToUSDUnits(contractorrate)} USD`}
         </Field>
         <FieldSeparator />
         <Field label="Payment address">{paymentaddress}</Field>

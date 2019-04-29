@@ -43,14 +43,19 @@ const InvoiceSubmit = props => {
     // limit the months options up to the current month if
     // year is the current year
     if (+year === getCurrentYear()) {
-      const newMonths = MONTH_OPTIONS.slice(0, getCurrentMonth());
+      const newMonths = MONTH_OPTIONS.slice(0, getCurrentMonth() - 1);
       setMonthOptions(newMonths);
     } else {
       setMonthOptions(MONTH_OPTIONS);
     }
   }, [year]);
 
-  const submitEnabled = !submitting && valid && datasheetErrors.length === 0;
+  const submitEnabled =
+    !submitting &&
+    valid &&
+    datasheetErrors.length === 0 &&
+    !exchangeRateError &&
+    !loadingExchangeRate;
 
   const handleFetchExchangeRate = () => {
     if (month && year) {

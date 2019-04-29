@@ -62,6 +62,7 @@ export const makeProposal = (name, markdown, attachments = []) => ({
 export const makeInvoice = (
   month,
   year,
+  exchangerate,
   contractorname,
   contractorlocation,
   contractorcontact,
@@ -73,6 +74,7 @@ export const makeInvoice = (
     version: 1,
     month,
     year,
+    exchangerate,
     contractorname,
     contractorlocation,
     contractorcontact,
@@ -84,6 +86,7 @@ export const makeInvoice = (
     id: "",
     month,
     year,
+    exchangerate,
     contractorname,
     contractorlocation,
     contractorcontact,

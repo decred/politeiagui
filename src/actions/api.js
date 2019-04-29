@@ -452,6 +452,7 @@ export const onSubmitInvoice = (
   username,
   month,
   year,
+  exchangerate,
   name,
   location,
   contact,
@@ -464,6 +465,7 @@ export const onSubmitInvoice = (
       act.REQUEST_NEW_INVOICE({
         month,
         year,
+        exchangerate,
         name,
         location,
         contact,
@@ -476,6 +478,7 @@ export const onSubmitInvoice = (
       api.makeInvoice(
         month,
         year,
+        exchangerate,
         name,
         location,
         contact,
@@ -569,6 +572,7 @@ export const onSubmitEditedInvoice = (
   username,
   month,
   year,
+  exchangerate,
   name,
   location,
   contact,
@@ -582,6 +586,7 @@ export const onSubmitEditedInvoice = (
       act.REQUEST_EDIT_INVOICE({
         month,
         year,
+        exchangerate,
         name,
         location,
         contact,
@@ -594,6 +599,7 @@ export const onSubmitEditedInvoice = (
       api.makeInvoice(
         month,
         year,
+        exchangerate,
         name,
         location,
         contact,
