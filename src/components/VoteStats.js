@@ -207,7 +207,7 @@ class Stats extends React.Component {
       totalVotes,
       numOfEligibleVotes
     );
-    const quorumInVotes = Math.round(
+    const quorumInVotes = Math.trunc(
       (numOfEligibleVotes * quorumPercentage) / 100
     );
 
