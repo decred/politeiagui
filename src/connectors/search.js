@@ -22,6 +22,6 @@ const wrapSearch = Component => props => (
 
 export default compose(
   withRouter,
-  reduxForm({ form: "form/proposal-find" }),
+  reduxForm({ form: "form/record-find" }),
   wrapSearch
 );

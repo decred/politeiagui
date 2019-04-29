@@ -1071,3 +1071,17 @@ export const onGeneratePayouts = () =>
         dispatch(act.RECEIVE_GENERATE_PAYOUTS(null, error));
       });
   });
+
+export const onFetchExchangeRate = (month, year) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_EXCHANGE_RATE({ month, year }));
+    return api
+      .exchangeRate(csrf, +month, +year)
+      .then(response => {
+        dispatch(act.RECEIVE_EXCHANGE_RATE(response));
+      })
+      .catch(error => {
+        console.log("GOT HERE");
+        dispatch(act.RECEIVE_EXCHANGE_RATE(null, error));
+      });
+  });

@@ -17,12 +17,18 @@ const newInvoiceConnector = connect(
     description: sel.newProposalDescription,
     error: sel.newInvoiceError,
     submitError: sel.newInvoiceError,
-    token: sel.newInvoiceToken
+    token: sel.newInvoiceToken,
+    month: sel.invoiceFormMonth,
+    year: sel.invoiceFormYear,
+    exchangeRate: sel.exchangeRate,
+    loadingExchangeRate: sel.isApiRequestingExchangeRate,
+    exchangeRateError: sel.apiExchangeRateError
   }),
   {
     onFetchData: act.onGetPolicy,
     onSave: act.onSaveNewInvoice,
-    onResetInvoice: act.onResetInvoice
+    onResetInvoice: act.onResetInvoice,
+    onFetchExchangeRate: act.onFetchExchangeRate
   }
 );
 

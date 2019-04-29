@@ -7,6 +7,8 @@ import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
 import Message from "../../Message";
 import { Field } from "redux-form";
 import InvoiceDatasheetField from "../../Form/Fields/InvoiceDatasheetField";
+import DynamicDataDisplay from "../../DynamicDataDisplay";
+import { fromUSDCentsToUSDUnits } from "../../../helpers";
 
 const InvoiceSubmit = props => {
   const {
@@ -17,11 +19,22 @@ const InvoiceSubmit = props => {
     handleSubmit,
     submitError,
     editingMode,
-    valid
+    valid,
+    month,
+    year,
+    onFetchExchangeRate,
+    loadingExchangeRate,
+    exchangeRate,
+    exchangeRateError
   } = props;
 
   const [datasheetErrors, setDatasheetErrors] = useState([]);
   const submitEnabled = !submitting && valid && datasheetErrors.length === 0;
+  const handleFetchExchangeRate = () => {
+    if (month && year) {
+      onFetchExchangeRate(month, year);
+    }
+  };
 
   return (
     <div className="content" role="main">
@@ -45,7 +58,13 @@ const InvoiceSubmit = props => {
               />
               <div className="roundfield" id="title-field">
                 <div className="roundfield-content">
-                  <div style={{ display: "flex", width: "100%" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      alignItems: "flex-end"
+                    }}
+                  >
                     <Field
                       name="month"
                       component={SelectField}
@@ -61,6 +80,25 @@ const InvoiceSubmit = props => {
                       options={[2019, 2020, 2021, 2022, 2023, 2024, 2025]}
                       label="Year"
                     />
+
+                    <DynamicDataDisplay
+                      onFetch={handleFetchExchangeRate}
+                      refreshTriggers={[month, year]}
+                      isLoading={loadingExchangeRate}
+                      error={exchangeRateError}
+                      loadingMessage="Updating exchange rate..."
+                      style={{
+                        marginLeft: "10px",
+                        fontSize: "0.75em",
+                        maxWidth: "200px",
+                        paddingBottom: "10px"
+                      }}
+                    >
+                      <span>
+                        Exchange Rate:{" "}
+                        <b>{`${fromUSDCentsToUSDUnits(exchangeRate)} USD`}</b>
+                      </span>
+                    </DynamicDataDisplay>
                   </div>
                   <div className="usertext">
                     <Field
