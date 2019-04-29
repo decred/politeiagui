@@ -361,10 +361,14 @@ export const csvToJson = csv =>
     .map(splitColumn)
     .map(jsonCsvMap);
 
+export const getCurrentMonth = () => {
+  const d = new Date();
+  return d.getMonth() + 1;
+};
+
 export const getCurrentYear = () => {
   const d = new Date();
-  const n = d.getFullYear();
-  return n;
+  return d.getFullYear();
 };
 
 export const fromMinutesToHours = minutes =>

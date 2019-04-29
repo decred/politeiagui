@@ -9,6 +9,7 @@ import {
   createNewRow,
   createTableHeaders
 } from "../components/InvoiceDatasheet/helpers";
+import { getCurrentYear, getCurrentMonth } from "../helpers";
 
 // XXX: connector needs to be moved in its own file
 const newInvoiceConnector = connect(
@@ -37,8 +38,8 @@ class NewInvoiceContainer extends Component {
     super(props);
     this.state = {
       initialValues: {
-        month: 1,
-        year: 2019,
+        month: getCurrentMonth(),
+        year: getCurrentYear(),
         datasheet: [createTableHeaders(), createNewRow(1)]
       },
       validationError: ""

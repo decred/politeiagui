@@ -6,16 +6,7 @@ import { PageLoadingIcon } from "../snew";
 import Message from "../Message";
 import { INVOICE_STATUS_NEW } from "../../constants";
 import Reminder, { ReminderList } from "./Reminder";
-
-const getCurrentMonth = () => {
-  const d = new Date();
-  return d.getMonth() + 1;
-};
-
-const getCurrentYear = () => {
-  const d = new Date();
-  return d.getFullYear();
-};
+import { getCurrentMonth, getCurrentYear } from "../../helpers";
 
 const invoiceYear = get(["input", "year"]);
 const invoiceMonth = get(["input", "month"]);
