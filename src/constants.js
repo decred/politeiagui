@@ -84,6 +84,8 @@ export const LOAD_KEY_FAILED =
 export const PI_DOCS = "https://docs.decred.org/governance/politeia/politeia/";
 export const PROPOSAL_GUIDELINES =
   "https://docs.decred.org/governance/politeia/proposal-guidelines/";
+export const PROPOSALS_REPOSITORY =
+  "https://github.com/decred-proposals/mainnet/";
 
 export const INVOICE_STATUS_INVALID = 0; // Invalid status XXX?
 export const INVOICE_STATUS_NOTFOUND = 1; // Invoice not found XXX?
