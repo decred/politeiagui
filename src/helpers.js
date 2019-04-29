@@ -137,7 +137,11 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     77: "Line item has malformed domain",
     78: "Line item has malformed subdomain",
     79: "Line item has malformed description",
-    80: "Invoice is an wrong status to be editted (approved, rejected or paid)"
+    80: "Invoice is an wrong status to be editted (approved, rejected or paid)",
+    81: "Invoices require at least 1 line item",
+    82: "Only one invoice per month/year is allowed to be submitted",
+    83: "An invalid month/year was submitted on an invoice",
+    84: "Exchange rate was invalid or didn't match the expected result"
   };
 
   const error = errorMessages[errorCode];
