@@ -112,7 +112,7 @@ const PublicProposals = ({
         />
         <Tab
           title="Rejected"
-          count={proposalsTokens ? proposalsTokens.approved.length : ""}
+          count={proposalsTokens ? proposalsTokens.rejected.length : ""}
           selected={tabValues.REJECTED === tabOption}
           onTabChange={() => handleTabChange(tabValues.REJECTED)}
         />
