@@ -74,23 +74,7 @@ class PrivacyPolicy extends React.Component {
                   <li>
                     In the interests of transparency, data associating your
                     public key with content contributions will be published
-                    openly in the Decred-proposals repository here:{" "}
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={
-                        isTestnet
-                          ? TESTNET_PROPOSALS_REPOSITORY
-                          : MAINNET_PROPOSALS_REPOSITORY
-                      }
-                      style={{ fontSize: "1.01em" }}
-                    >
-                      {`${
-                        isTestnet
-                          ? TESTNET_PROPOSALS_REPOSITORY
-                          : MAINNET_PROPOSALS_REPOSITORY
-                      }`}
-                    </a>
+                    openly in the Decred-proposals repository here:
                   </li>
                 </ul>
               </React.Fragment>

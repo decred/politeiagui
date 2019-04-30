@@ -85,6 +85,7 @@ const RoutesForCMS = () => {
         path="/user/resend/next"
         component={ResendVerificationEmailSuccess}
       />
+      <Route path="/privacy-policy/" component={PrivacyPolicy} />
       <AdminAuthenticatedRoute
         path="/admin"
         component={adminCMS(ProposalListing)}
