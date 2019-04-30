@@ -1,7 +1,12 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Message from "./Message";
 
-export default class ErrorBoundary extends Component {
+const defaulErrorRenderer = (error, title) => (
+  <Message header={title} type="error" body={error.toString()} />
+);
+
+class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,12 +21,24 @@ export default class ErrorBoundary extends Component {
   }
 
   render() {
-    const { title } = this.props;
+    const { title, errorRenderer, displayError } = this.props;
     const { error } = this.state;
-    return error ? (
-      <Message header={title} type="error" body={error.toString()} />
-    ) : (
-      this.props.children
-    );
+    return error && displayError
+      ? errorRenderer(error, title)
+      : this.props.children;
   }
 }
+
+ErrorBoundary.propTypes = {
+  title: PropTypes.string,
+  errorRenderer: PropTypes.func,
+  displayError: PropTypes.bool
+};
+
+ErrorBoundary.defaultProps = {
+  title: "Error",
+  errorRenderer: defaulErrorRenderer,
+  displayError: true
+};
+
+export default ErrorBoundary;

@@ -38,7 +38,7 @@ class NewInvoiceContainer extends Component {
     super(props);
     this.state = {
       initialValues: {
-        month: getCurrentMonth(),
+        month: getCurrentMonth() - 1,
         year: getCurrentYear(),
         datasheet: [createTableHeaders(), createNewRow(1)]
       },

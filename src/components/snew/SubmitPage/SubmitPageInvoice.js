@@ -68,6 +68,7 @@ const InvoiceSubmit = props => {
 
   const handleYearChange = (event, value) => {
     // reset month value to 1 on every year change
+    console.log("hey");
     change("month", 1);
     change("year", value);
   };
