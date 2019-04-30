@@ -19,7 +19,6 @@ export default connect(
     ),
     filterValue: sel.getPublicFilterValue,
     emptyProposalsMessage: sel.getVettedEmptyProposalsMessage,
-    getVoteStatus: sel.getPropVoteStatus,
     proposalsTokens: sel.apiTokenInventoryResponse
   }),
   dispatch =>

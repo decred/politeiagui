@@ -7,12 +7,14 @@ import ThingLinkProposal from "../snew/ThingLink/ThingLinkProposal";
 import {
   tabValues,
   getProposalTokensByTabOption,
-  getProposalsByTabOption
+  getProposalsByTabOption,
+  getInitialTabValue,
+  setTabValueInQS
 } from "./helpers";
 import { proposalToT3 } from "../../lib/snew";
 import proposalsConnector from "../../connectors/publicProposals";
 
-const DEFAULT_PAGE_SIZE = 6;
+const DEFAULT_PAGE_SIZE = 4;
 
 const renderProposal = (record, index) => (
   <ThingLinkProposal
@@ -34,7 +36,6 @@ const getListLoadingPlaceholders = numberOfItems => {
 const PublicProposals = ({
   proposals,
   proposalsTokens,
-  getVoteStatus,
   onFetchVettedByTokens,
   onFetchProposalsVoteStatus,
   onFetchTokenInventory,
@@ -42,7 +43,7 @@ const PublicProposals = ({
   error,
   pageSize
 }) => {
-  const [tabOption, setTabOption] = useState(tabValues.IN_DISCUSSSION);
+  const [tabOption, setTabOption] = useState(getInitialTabValue());
   const [hasMoreToLoad, setHasMore] = useState(true);
   const [itemsOnLoad, setItemsOnLoad] = useState(0);
 
@@ -54,11 +55,8 @@ const PublicProposals = ({
   const filteredProposals = getProposalsByTabOption(
     tabOption,
     proposals,
-    getVoteStatus
+    proposalsTokens
   );
-
-  const hasMoreRecordsToLoad =
-    filteredTokens && filteredProposals.length < filteredTokens.length;
 
   const handleFetchMoreRecords = async () => {
     const index = filteredProposals.length;
@@ -70,10 +68,20 @@ const PublicProposals = ({
   };
 
   useEffect(() => {
+    setTabValueInQS(tabOption);
+  }, [tabOption]);
+
+  // Verify if there is more records to load everytime the filtered tokens
+  // or the filtered proposals have changed
+  useEffect(() => {
+    const hasMoreRecordsToLoad =
+      filteredTokens && filteredProposals.length < filteredTokens.length;
     setHasMore(hasMoreRecordsToLoad);
   }, [filteredTokens, filteredProposals.length]);
 
+  // Component did mount effect
   useEffect(() => {
+    // Fetch initial data
     onFetchProposalsVoteStatus();
     onFetchTokenInventory();
   }, []);
@@ -96,10 +104,16 @@ const PublicProposals = ({
           onTabChange={() => handleTabChange(tabValues.VOTING)}
         />
         <Tab
-          title="Finished"
-          count={proposalsTokens ? proposalsTokens.finished.length : ""}
-          selected={tabValues.FINISHED === tabOption}
-          onTabChange={() => handleTabChange(tabValues.FINISHED)}
+          title="Approved"
+          count={proposalsTokens ? proposalsTokens.approved.length : ""}
+          selected={tabValues.APPROVED === tabOption}
+          onTabChange={() => handleTabChange(tabValues.APPROVED)}
+        />
+        <Tab
+          title="Rejected"
+          count={proposalsTokens ? proposalsTokens.approved.length : ""}
+          selected={tabValues.REJECTED === tabOption}
+          onTabChange={() => handleTabChange(tabValues.REJECTED)}
         />
         <Tab
           title="Abandoned"
@@ -115,9 +129,7 @@ const PublicProposals = ({
           onFetchMore={handleFetchMoreRecords}
           hasMore={hasMoreToLoad}
           isLoading={itemsOnLoad > 0 || isLoading}
-          loadingPlaceholder={getListLoadingPlaceholders(
-            itemsOnLoad || pageSize
-          )}
+          loadingPlaceholder={getListLoadingPlaceholders(itemsOnLoad || 1)}
         />
       )}
     </>
@@ -126,13 +138,16 @@ const PublicProposals = ({
 
 PublicProposals.propTypes = {
   proposals: PropTypes.array,
-  proposalsTokens: PropTypes.array,
-  getVoteStatus: PropTypes.func,
+  proposalsTokens: PropTypes.object,
   onFetchVettedByTokens: PropTypes.func.isRequired,
   onFetchProposalsVoteStatus: PropTypes.func.isRequired,
   onFetchTokenInventory: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
-  error: PropTypes.string,
+  error: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+    PropTypes.bool
+  ]),
   pageSize: PropTypes.number
 };
 

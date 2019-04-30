@@ -1,28 +1,40 @@
 import {
-  PROPOSAL_VOTING_NOT_AUTHORIZED,
-  PROPOSAL_VOTING_AUTHORIZED,
-  PROPOSAL_VOTING_ACTIVE,
-  PROPOSAL_VOTING_FINISHED,
-  PROPOSAL_STATUS_ABANDONED
-} from "../../constants";
+  setQueryStringValue,
+  getQueryStringValue
+} from "../../lib/queryString";
 
 export const tabValues = {
-  IN_DISCUSSSION: 0,
-  VOTING: 1,
-  FINISHED: 2,
-  ABANDONED: 3
+  IN_DISCUSSSION: "discussion",
+  VOTING: "voting",
+  APPROVED: "approved",
+  REJECTED: "rejected",
+  ABANDONED: "abandoned"
 };
+
+export const validTabValue = value =>
+  Object.keys(tabValues).find(k => tabValues[k] === value);
+
+export const getInitialTabValue = () => {
+  const tabOption = getQueryStringValue("tab");
+  return tabOption && validTabValue(tabOption)
+    ? tabOption
+    : tabValues.IN_DISCUSSSION;
+};
+
+export const setTabValueInQS = tab => setQueryStringValue("tab", tab);
 
 export const getProposalTokensByTabOption = (tabOption, proposalsTokens) => {
   if (!proposalsTokens) return [];
-  const { pre, active, finished, abandoned } = proposalsTokens;
+  const { pre, active, approved, rejected, abandoned } = proposalsTokens;
   switch (tabOption) {
     case tabValues.IN_DISCUSSSION:
       return pre;
     case tabValues.VOTING:
       return active;
-    case tabValues.FINISHED:
-      return finished;
+    case tabValues.APPROVED:
+      return approved;
+    case tabValues.REJECTED:
+      return rejected;
     case tabValues.ABANDONED:
       return abandoned;
     default:
@@ -33,20 +45,20 @@ export const getProposalTokensByTabOption = (tabOption, proposalsTokens) => {
 export const getProposalsByTabOption = (
   tabOption,
   proposals,
-  getVoteStatus
+  proposalsTokens
 ) => {
-  const proposalVotingStatus = proposal =>
-    getVoteStatus(proposal.censorshiprecord.token).status;
-  const mapTabOptionToFilter = {
-    [tabValues.IN_DISCUSSSION]: p =>
-      proposalVotingStatus(p) === PROPOSAL_VOTING_NOT_AUTHORIZED ||
-      proposalVotingStatus(p) === PROPOSAL_VOTING_AUTHORIZED,
-    [tabValues.VOTING]: p => proposalVotingStatus(p) === PROPOSAL_VOTING_ACTIVE,
-    [tabValues.FINISHED]: p =>
-      proposalVotingStatus(p) === PROPOSAL_VOTING_FINISHED,
-    [tabValues.ABANDONED]: p => p.status === PROPOSAL_STATUS_ABANDONED
-  };
-  const filter = mapTabOptionToFilter[tabOption];
+  const filterProposalsByTokens = (tokens, proposals) =>
+    tokens.reduce((filteredProposals, token) => {
+      const foundProp = proposals.find(
+        prop =>
+          prop && prop.censorshiprecord && token === prop.censorshiprecord.token
+      );
+      return foundProp
+        ? filteredProposals.concat([foundProp])
+        : filteredProposals;
+    }, []);
 
-  return proposals.filter(filter);
+  const tokens = getProposalTokensByTabOption(tabOption, proposalsTokens);
+
+  return filterProposalsByTokens(tokens, proposals);
 };
