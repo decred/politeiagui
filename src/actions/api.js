@@ -452,6 +452,7 @@ export const onSubmitInvoice = (
   username,
   month,
   year,
+  exchangerate,
   name,
   location,
   contact,
@@ -465,6 +466,7 @@ export const onSubmitInvoice = (
       act.REQUEST_NEW_INVOICE({
         month,
         year,
+        exchangerate,
         name,
         location,
         contact,
@@ -478,6 +480,7 @@ export const onSubmitInvoice = (
       api.makeInvoice(
         month,
         year,
+        exchangerate,
         name,
         location,
         contact,
@@ -572,6 +575,7 @@ export const onSubmitEditedInvoice = (
   username,
   month,
   year,
+  exchangerate,
   name,
   location,
   contact,
@@ -586,6 +590,7 @@ export const onSubmitEditedInvoice = (
       act.REQUEST_EDIT_INVOICE({
         month,
         year,
+        exchangerate,
         name,
         location,
         contact,
@@ -599,6 +604,7 @@ export const onSubmitEditedInvoice = (
       api.makeInvoice(
         month,
         year,
+        exchangerate,
         name,
         location,
         contact,
@@ -1075,5 +1081,19 @@ export const onGeneratePayouts = () =>
       })
       .catch(error => {
         dispatch(act.RECEIVE_GENERATE_PAYOUTS(null, error));
+      });
+  });
+
+export const onFetchExchangeRate = (month, year) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_EXCHANGE_RATE({ month, year }));
+    return api
+      .exchangeRate(csrf, +month, +year)
+      .then(response => {
+        dispatch(act.RECEIVE_EXCHANGE_RATE(response));
+      })
+      .catch(error => {
+        console.log("GOT HERE");
+        dispatch(act.RECEIVE_EXCHANGE_RATE(null, error));
       });
   });

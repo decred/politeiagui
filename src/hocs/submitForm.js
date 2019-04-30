@@ -40,7 +40,7 @@ export default compose(
   appConnector,
   withRouter,
   reduxForm({
-    form: "form/proposal",
+    form: "form/record",
     touchOnChange: true,
     validate: synchronousValidation,
     enableReinitialize: true,

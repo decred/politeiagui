@@ -62,6 +62,7 @@ export const makeProposal = (name, markdown, attachments = []) => ({
 export const makeInvoice = (
   month,
   year,
+  exchangerate,
   contractorname,
   contractorlocation,
   contractorcontact,
@@ -74,6 +75,7 @@ export const makeInvoice = (
     version: 1,
     month,
     year,
+    exchangerate,
     contractorname,
     contractorlocation,
     contractorcontact,
@@ -85,6 +87,7 @@ export const makeInvoice = (
     id: "",
     month,
     year,
+    exchangerate,
     contractorname,
     contractorlocation,
     contractorcontact,
@@ -551,3 +554,6 @@ export const adminInvoices = csrf =>
 
 export const generatePayouts = csrf =>
   POST("/admin/generatepayouts", csrf, {}).then(getResponse);
+
+export const exchangeRate = (csrf, month, year) =>
+  POST("/invoices/exchangerate", csrf, { month, year }).then(getResponse);

@@ -26,13 +26,19 @@ const editInvoiceConnector = connect(
     policy: sel.policy,
     userid: sel.userid,
     username: sel.loggedInAsUsername,
-    keyMismatch: sel.getKeyMismatch
+    keyMismatch: sel.getKeyMismatch,
+    month: sel.invoiceFormMonth,
+    year: sel.invoiceFormYear,
+    exchangeRate: sel.exchangeRate,
+    loadingExchangeRate: sel.isApiRequestingExchangeRate,
+    exchangeRateError: sel.apiExchangeRateError
   }),
   {
     onFetchData: act.onGetPolicy,
     onFetchInvoice: act.onFetchInvoice,
     onResetInvoice: act.onResetInvoice,
-    onSave: act.onEditInvoice
+    onSave: act.onEditInvoice,
+    onFetchExchangeRate: act.onFetchExchangeRate
   }
 );
 
@@ -100,6 +106,8 @@ class EditInvoiceContainer extends Component {
   }
 
   onSave = (...args) => {
+    const { exchangeRate } = this.props;
+    args[0].exchangerate = exchangeRate;
     try {
       validate(...args);
       this.props.onSave(...args, this.props.token);

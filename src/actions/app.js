@@ -49,7 +49,18 @@ export const onSetReplyParent = (
   ]);
 
 export const onSaveNewInvoice = (
-  { month, year, name, location, contact, rate, address, datasheet, files },
+  {
+    month,
+    year,
+    name,
+    location,
+    contact,
+    rate,
+    address,
+    datasheet,
+    exchangerate,
+    files
+  },
   _,
   props
 ) => (dispatch, getState) => {
@@ -61,6 +72,7 @@ export const onSaveNewInvoice = (
       props.username,
       +month,
       +year,
+      exchangerate,
       name,
       location,
       contact,
@@ -103,7 +115,18 @@ export const onEditProposal = (
   );
 
 export const onEditInvoice = (
-  { month, year, name, location, contact, rate, address, datasheet, files },
+  {
+    month,
+    year,
+    name,
+    location,
+    contact,
+    rate,
+    address,
+    datasheet,
+    exchangerate,
+    files
+  },
   _,
   props
 ) => dispatch => {
@@ -115,6 +138,7 @@ export const onEditInvoice = (
       props.username,
       +month,
       +year,
+      exchangerate,
       name,
       location,
       contact,

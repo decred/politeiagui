@@ -9,6 +9,7 @@ import {
   createNewRow,
   createTableHeaders
 } from "../components/InvoiceDatasheet/helpers";
+import { getCurrentYear, getCurrentMonth } from "../helpers";
 
 // XXX: connector needs to be moved in its own file
 const newInvoiceConnector = connect(
@@ -17,12 +18,18 @@ const newInvoiceConnector = connect(
     description: sel.newProposalDescription,
     error: sel.newInvoiceError,
     submitError: sel.newInvoiceError,
-    token: sel.newInvoiceToken
+    token: sel.newInvoiceToken,
+    month: sel.invoiceFormMonth,
+    year: sel.invoiceFormYear,
+    exchangeRate: sel.exchangeRate,
+    loadingExchangeRate: sel.isApiRequestingExchangeRate,
+    exchangeRateError: sel.apiExchangeRateError
   }),
   {
     onFetchData: act.onGetPolicy,
     onSave: act.onSaveNewInvoice,
-    onResetInvoice: act.onResetInvoice
+    onResetInvoice: act.onResetInvoice,
+    onFetchExchangeRate: act.onFetchExchangeRate
   }
 );
 
@@ -31,8 +38,8 @@ class NewInvoiceContainer extends Component {
     super(props);
     this.state = {
       initialValues: {
-        month: 1,
-        year: 2019,
+        month: getCurrentMonth(),
+        year: getCurrentYear(),
         datasheet: [createTableHeaders(), createNewRow(1)]
       },
       validationError: ""
@@ -68,6 +75,8 @@ class NewInvoiceContainer extends Component {
   };
 
   onSaveInvoice = (...args) => {
+    const { exchangeRate } = this.props;
+    args[0].exchangerate = exchangeRate;
     try {
       validate(...args);
     } catch (e) {
