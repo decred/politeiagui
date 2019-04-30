@@ -7,6 +7,7 @@ import "./styles.css";
 import { createNewRow, errorsMessage, processCellsChange } from "./helpers";
 
 const InvoiceDatasheet = ({
+  policy,
   value,
   onChange,
   errors,
@@ -30,6 +31,7 @@ const InvoiceDatasheet = ({
 
   const handleCellsChange = changes => {
     const { grid: newGrid, errors: newErrors } = processCellsChange(
+      policy,
       grid,
       changes
     );
