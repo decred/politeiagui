@@ -9,7 +9,6 @@ import privacyConnector from "../../connectors/privacy";
 class PrivacyPolicy extends React.Component {
   render() {
     const { isCMS, isTestnet } = this.props;
-    console.log(this.props);
     return (
       <div
         className="content page signup-next-step-page"
