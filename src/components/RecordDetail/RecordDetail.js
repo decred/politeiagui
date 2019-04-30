@@ -25,7 +25,10 @@ class RecordDetail extends React.Component {
     const { isCMS, record } = this.props;
     const proposal = !isCMS && record;
     const proposalNameHasBeenUpdated =
-      proposal && prevProps.record && prevProps.record.name !== proposal.name;
+      (proposal &&
+        prevProps.record &&
+        prevProps.record.name !== proposal.name) ||
+      (proposal && proposal.name !== document.title);
     if (proposalNameHasBeenUpdated) {
       document.title = proposal.name;
     }
