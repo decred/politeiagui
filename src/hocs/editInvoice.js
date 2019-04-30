@@ -19,6 +19,7 @@ const editInvoiceConnector = connect(
     editedInvoiceToken: sel.editInvoiceToken,
     submitError: sel.apiEditInvoiceError,
     invoice: sel.invoice,
+    otherFiles: sel.getNotJSONFile,
     isLoading: or(sel.isLoadingSubmit, sel.isApiRequestingEditInvoice),
     loggedInAsEmail: sel.loggedInAsEmail,
     userCanExecuteActions: sel.userCanExecuteActions,
@@ -78,7 +79,8 @@ class EditInvoiceContainer extends Component {
           location: input.contractorlocation,
           rate: fromUSDCentsToUSDUnits(input.contractorrate),
           address: input.paymentaddress,
-          datasheet: convertLineItemsToGrid(input.lineitems, false)
+          datasheet: convertLineItemsToGrid(input.lineitems, false),
+          files: this.props.otherFiles
         }
       });
     }

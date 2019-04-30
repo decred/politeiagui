@@ -58,7 +58,8 @@ export const onSaveNewInvoice = (
     rate,
     address,
     datasheet,
-    exchangerate
+    exchangerate,
+    files
   },
   _,
   props
@@ -77,7 +78,8 @@ export const onSaveNewInvoice = (
       contact,
       fromUSDUnitsToUSDCents(+rate),
       address,
-      lineItems
+      lineItems,
+      files
     )
   ).then(() => sel.newInvoiceToken(getState()));
 };
@@ -122,7 +124,8 @@ export const onEditInvoice = (
     rate,
     address,
     datasheet,
-    exchangerate
+    exchangerate,
+    files
   },
   _,
   props
@@ -142,6 +145,7 @@ export const onEditInvoice = (
       fromUSDUnitsToUSDCents(+rate),
       address,
       lineItems,
+      files,
       props.token
     )
   );
