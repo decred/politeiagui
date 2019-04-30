@@ -1,12 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactBody from "react-body";
 import ErrorField from "../../Form/Fields/ErrorField";
 import SelectField from "../../Form/Fields/SelectField";
+import { FilesField, normalizer } from "../../Form/Fields/FilesField";
 import InputFieldWithError from "../../Form/Fields/InputFieldWithError";
 import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
 import Message from "../../Message";
 import { Field } from "redux-form";
 import InvoiceDatasheetField from "../../Form/Fields/InvoiceDatasheetField";
+import DynamicDataDisplay from "../../DynamicDataDisplay";
+import {
+  fromUSDCentsToUSDUnits,
+  getCurrentYear,
+  getCurrentMonth
+} from "../../../helpers";
+
+const YEAR_OPTIONS = [2018, 2019];
+const MONTH_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 const InvoiceSubmit = props => {
   const {
@@ -17,11 +27,50 @@ const InvoiceSubmit = props => {
     handleSubmit,
     submitError,
     editingMode,
+    month,
+    year,
+    onFetchExchangeRate,
+    loadingExchangeRate,
+    exchangeRate,
+    exchangeRateError,
+    change,
+    policy,
+    userCanExecuteActions,
     valid
   } = props;
 
   const [datasheetErrors, setDatasheetErrors] = useState([]);
-  const submitEnabled = !submitting && valid && datasheetErrors.length === 0;
+  const [monthOptions, setMonthOptions] = useState(MONTH_OPTIONS);
+
+  useEffect(() => {
+    // limit the months options up to the current month if
+    // year is the current year
+    if (+year === getCurrentYear()) {
+      const newMonths = MONTH_OPTIONS.slice(0, getCurrentMonth() - 1);
+      setMonthOptions(newMonths);
+    } else {
+      setMonthOptions(MONTH_OPTIONS);
+    }
+  }, [year]);
+
+  const submitEnabled =
+    !submitting &&
+    valid &&
+    datasheetErrors.length === 0 &&
+    !exchangeRateError &&
+    !loadingExchangeRate;
+
+  const handleFetchExchangeRate = () => {
+    if (month && year) {
+      onFetchExchangeRate(month, year);
+    }
+  };
+
+  const handleYearChange = (event, value) => {
+    // reset month value to 1 on every year change
+    change("month", 1);
+    change("year", value);
+  };
 
   return (
     <div className="content" role="main">
@@ -45,11 +94,17 @@ const InvoiceSubmit = props => {
               />
               <div className="roundfield" id="title-field">
                 <div className="roundfield-content">
-                  <div style={{ display: "flex", width: "100%" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      alignItems: "flex-end"
+                    }}
+                  >
                     <Field
                       name="month"
                       component={SelectField}
-                      options={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
+                      options={monthOptions}
                       tabIndex={1}
                       label="Month"
                     />
@@ -58,9 +113,29 @@ const InvoiceSubmit = props => {
                       component={SelectField}
                       tabIndex={1}
                       type="text"
-                      options={[2019, 2020, 2021, 2022, 2023, 2024, 2025]}
+                      options={YEAR_OPTIONS}
                       label="Year"
+                      onChange={handleYearChange}
                     />
+
+                    <DynamicDataDisplay
+                      onFetch={handleFetchExchangeRate}
+                      refreshTriggers={[month, year]}
+                      isLoading={loadingExchangeRate}
+                      error={exchangeRateError}
+                      loadingMessage="Updating exchange rate..."
+                      style={{
+                        marginLeft: "10px",
+                        fontSize: "0.75em",
+                        maxWidth: "200px",
+                        paddingBottom: "10px"
+                      }}
+                    >
+                      <span>
+                        Exchange Rate:{" "}
+                        <b>{`${fromUSDCentsToUSDUnits(exchangeRate)} USD`}</b>
+                      </span>
+                    </DynamicDataDisplay>
                   </div>
                   <div className="usertext">
                     <Field
@@ -83,7 +158,7 @@ const InvoiceSubmit = props => {
                     />
                     <Field
                       name="rate"
-                      label="Contractor rate"
+                      label="Contractor rate (USD)"
                       type="number"
                       component={InputFieldWithError}
                     />
@@ -102,6 +177,17 @@ const InvoiceSubmit = props => {
                       component={InvoiceDatasheetField}
                     />
                   </div>
+                  <div>
+                    <Field
+                      name="files"
+                      className="attach-button greenprimary"
+                      component={FilesField}
+                      userCanExecuteActions={userCanExecuteActions}
+                      placeholder="Attach a file"
+                      policy={policy}
+                      normalize={normalizer}
+                    />
+                  </div>
                   <div className="submit-wrapper">
                     <ButtonWithLoadingIcon
                       className={`togglebutton access-required${!submitEnabled &&
@@ -115,7 +201,8 @@ const InvoiceSubmit = props => {
                     />
                     {editingMode ? (
                       <ButtonWithLoadingIcon
-                        className="togglebutton access-required"
+                        className={`togglebutton access-required${isLoading &&
+                          " not-active disabled"}`}
                         name="cancel"
                         text="Cancel"
                         onClick={onCancel}

@@ -2,7 +2,7 @@ import { reducer } from "redux-form";
 import * as act from "../actions/types";
 
 const formReducer = reducer.plugin({
-  "form/proposal": (state, action) => {
+  "form/record": (state, action) => {
     switch (action.type) {
       case act.RECEIVE_NEW_PROPOSAL:
         if (action.error) {

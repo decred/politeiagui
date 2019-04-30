@@ -7,6 +7,7 @@ import get from "lodash/fp/get";
 import { validate } from "../validators/invoice";
 import { arg, or } from "../lib/fp";
 import { convertLineItemsToGrid } from "../components/InvoiceDatasheet/helpers";
+import { fromUSDCentsToUSDUnits } from "../helpers";
 
 const editInvoiceConnector = connect(
   sel.selectorMap({
@@ -18,19 +19,26 @@ const editInvoiceConnector = connect(
     editedInvoiceToken: sel.editInvoiceToken,
     submitError: sel.apiEditInvoiceError,
     invoice: sel.invoice,
+    otherFiles: sel.getNotJSONFile,
     isLoading: or(sel.isLoadingSubmit, sel.isApiRequestingEditInvoice),
     loggedInAsEmail: sel.loggedInAsEmail,
     userCanExecuteActions: sel.userCanExecuteActions,
     policy: sel.policy,
     userid: sel.userid,
     username: sel.loggedInAsUsername,
-    keyMismatch: sel.getKeyMismatch
+    keyMismatch: sel.getKeyMismatch,
+    month: sel.invoiceFormMonth,
+    year: sel.invoiceFormYear,
+    exchangeRate: sel.exchangeRate,
+    loadingExchangeRate: sel.isApiRequestingExchangeRate,
+    exchangeRateError: sel.apiExchangeRateError
   }),
   {
     onFetchData: act.onGetPolicy,
     onFetchInvoice: act.onFetchInvoice,
     onResetInvoice: act.onResetInvoice,
-    onSave: act.onEditInvoice
+    onSave: act.onEditInvoice,
+    onFetchExchangeRate: act.onFetchExchangeRate
   }
 );
 
@@ -69,9 +77,10 @@ class EditInvoiceContainer extends Component {
           name: input.contractorname,
           contact: input.contractorcontact,
           location: input.contractorlocation,
-          rate: input.contractorrate,
+          rate: fromUSDCentsToUSDUnits(input.contractorrate),
           address: input.paymentaddress,
-          datasheet: convertLineItemsToGrid(input.lineitems, false)
+          datasheet: convertLineItemsToGrid(input.lineitems, false),
+          files: this.props.otherFiles
         }
       });
     }
@@ -97,6 +106,8 @@ class EditInvoiceContainer extends Component {
   }
 
   onSave = (...args) => {
+    const { exchangeRate } = this.props;
+    args[0].exchangerate = exchangeRate;
     try {
       validate(...args);
       this.props.onSave(...args, this.props.token);

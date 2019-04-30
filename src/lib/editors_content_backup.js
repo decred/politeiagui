@@ -18,7 +18,7 @@ export const PROPOSAL_FORM_DESC = "description";
 export const getProposalBackupKey = (key, path) => `proposal-${key}::${path}`;
 
 const updateFormData = state => {
-  const proposalFormState = state.form["form/proposal"];
+  const proposalFormState = state.form["form/record"];
   const newProposalData = (proposalFormState && proposalFormState.values) || {};
   const name = newProposalData[PROPOSAL_FORM_NAME];
   const description = newProposalData[PROPOSAL_FORM_DESC];

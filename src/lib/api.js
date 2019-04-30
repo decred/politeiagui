@@ -62,17 +62,20 @@ export const makeProposal = (name, markdown, attachments = []) => ({
 export const makeInvoice = (
   month,
   year,
+  exchangerate,
   contractorname,
   contractorlocation,
   contractorcontact,
   contractorrate,
   paymentaddress,
-  lineItems
+  lineItems,
+  files = []
 ) => {
   const { name, mime, payload } = convertJsonToFile({
     version: 1,
     month,
     year,
+    exchangerate,
     contractorname,
     contractorlocation,
     contractorcontact,
@@ -84,6 +87,7 @@ export const makeInvoice = (
     id: "",
     month,
     year,
+    exchangerate,
     contractorname,
     contractorlocation,
     contractorcontact,
@@ -95,8 +99,14 @@ export const makeInvoice = (
         mime,
         payload,
         digest: digestPayload(payload)
-      }
-    ]
+      },
+      ...files
+    ].map(({ name, mime, payload }) => ({
+      name,
+      mime,
+      payload,
+      digest: digestPayload(payload)
+    }))
   };
 };
 
@@ -547,3 +557,6 @@ export const generatePayouts = csrf =>
 
 export const tokenInventory = () =>
   GET("/v1/proposals/tokeninventory").then(getResponse);
+
+export const exchangeRate = (csrf, month, year) =>
+  POST("/invoices/exchangerate", csrf, { month, year }).then(getResponse);

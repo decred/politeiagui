@@ -51,8 +51,8 @@ const validateContractorRate = rate => {
   if (!rate) {
     return "Rate cannot be blank";
   }
-  if (+rate < 500 || +rate > 50000) {
-    return "Rate must be within the range of 500 to 50000";
+  if (+rate < 5 || +rate > 500) {
+    return "Rate must be within the range of 5 to 500";
   }
   return null;
 };

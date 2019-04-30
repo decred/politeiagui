@@ -7,7 +7,7 @@ describe("Persist editors content on session storage", () => {
   const COMMENT = "test comment";
   const mockState = {
     form: {
-      "form/proposal": {
+      "form/record": {
         values: {
           name: NAME,
           description: DESCRIPTION

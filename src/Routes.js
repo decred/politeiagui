@@ -53,7 +53,7 @@ import GeneratePayouts from "./components/GeneratePayouts";
 const RoutesForCMS = () => {
   return (
     <Switch>
-      <Route path="/" component={HomeCMS} exact />
+      <AuthenticatedRoute path="/" component={HomeCMS} exact />
       <Route path="/login" component={LoginSignupPage} />
       <Route path="/register" component={LoginSignupPage} />
       <Route path="/user/login" component={LoginSignupPage} />

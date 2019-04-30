@@ -32,6 +32,7 @@ import {
   PROPOSAL_REJECTED
 } from "../constants";
 import { convertGridToLineItems } from "../components/InvoiceDatasheet/helpers";
+import { fromUSDUnitsToUSDCents } from "../helpers";
 
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
 
@@ -48,7 +49,18 @@ export const onSetReplyParent = (
   ]);
 
 export const onSaveNewInvoice = (
-  { month, year, name, location, contact, rate, address, datasheet },
+  {
+    month,
+    year,
+    name,
+    location,
+    contact,
+    rate,
+    address,
+    datasheet,
+    exchangerate,
+    files
+  },
   _,
   props
 ) => (dispatch, getState) => {
@@ -60,12 +72,14 @@ export const onSaveNewInvoice = (
       props.username,
       +month,
       +year,
+      exchangerate,
       name,
       location,
       contact,
-      +rate,
+      fromUSDUnitsToUSDCents(+rate),
       address,
-      lineItems
+      lineItems,
+      files
     )
   ).then(() => sel.newInvoiceToken(getState()));
 };
@@ -101,7 +115,18 @@ export const onEditProposal = (
   );
 
 export const onEditInvoice = (
-  { month, year, name, location, contact, rate, address, datasheet },
+  {
+    month,
+    year,
+    name,
+    location,
+    contact,
+    rate,
+    address,
+    datasheet,
+    exchangerate,
+    files
+  },
   _,
   props
 ) => dispatch => {
@@ -113,12 +138,14 @@ export const onEditInvoice = (
       props.username,
       +month,
       +year,
+      exchangerate,
       name,
       location,
       contact,
-      +rate,
+      fromUSDUnitsToUSDCents(+rate),
       address,
       lineItems,
+      files,
       props.token
     )
   );

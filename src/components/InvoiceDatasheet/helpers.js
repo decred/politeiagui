@@ -1,3 +1,10 @@
+import {
+  fromHoursToMinutes,
+  fromUSDCentsToUSDUnits,
+  fromMinutesToHours,
+  fromUSDUnitsToUSDCents
+} from "../../helpers";
+
 export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
   const grid = [createTableHeaders()];
   const gridBody = lineItems.map((line, idx) => {
@@ -11,8 +18,11 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
       { readOnly, value: line.subdomain },
       { readOnly, value: line.description },
       { readOnly, value: line.proposaltoken },
-      { readOnly: isLabelReadonly, value: line.labor },
-      { readOnly: isExpenseReadonly, value: line.expenses }
+      { readOnly: isLabelReadonly, value: fromMinutesToHours(line.labor) },
+      {
+        readOnly: isExpenseReadonly,
+        value: fromUSDCentsToUSDUnits(line.expenses)
+      }
     ];
   });
   return grid.concat(gridBody);
@@ -37,9 +47,9 @@ export const convertGridToLineItems = grid => {
         case columnTypes.PROP_TOKEN_COL:
           return { ...acc, proposaltoken: cell.value };
         case columnTypes.LABOR_COL:
-          return { ...acc, labor: +cell.value };
+          return { ...acc, labor: fromHoursToMinutes(+cell.value) };
         case columnTypes.EXP_COL:
-          return { ...acc, expenses: +cell.value };
+          return { ...acc, expenses: fromUSDUnitsToUSDCents(+cell.value) };
         default:
           return acc;
       }
@@ -72,8 +82,8 @@ export const createTableHeaders = () => [
   { value: "Subdomain", readOnly: true },
   { value: "Description", readOnly: true },
   { value: "Proposal Token", readOnly: true },
-  { value: "Labor", width: 60, readOnly: true },
-  { value: "Expense", width: 60, readOnly: true }
+  { value: "Labor (hours)", width: 60, readOnly: true },
+  { value: "Expense (USD)", width: 60, readOnly: true }
 ];
 
 export const createNewRow = rowNum => {
@@ -108,10 +118,10 @@ export const errorsMessage = {
   [errors.InvalidDescriptionLen]:
     "Description must have between 3 and 50 chars",
   [errors.InvalidPropTokenLen]: "Proposals tokens must be 64 characters long",
-  [errors.InvalidLaborValue]: "Labor value must be an integer",
+  [errors.InvalidLaborValue]: "Labor value must be a number",
   [errors.InvalidLaborAmount]:
     "If Type is 1, labor value must be greater than 0",
-  [errors.InvalidExpenseValue]: "Expense value must be an integer",
+  [errors.InvalidExpenseValue]: "Expense value must be a number",
   [errors.InvalidExpenseAmount]:
     "If Type is 2, expense value must be greater than 0"
 };
@@ -235,9 +245,11 @@ export const processPropTokenColChange = (grid, { row, col, value }) => {
 };
 
 export const processLaborColChange = (grid, { row, col, value }) => {
-  const intValue = parseInt(value, 10);
-  // make sure the value can be converted to an integer
-  if (intValue !== 0 && !intValue) {
+  const floatValue = parseFloat(value, 10).toFixed(2);
+
+  // make sure the value can be converted to a valid number
+  const invalidNumber = !floatValue || isNaN(floatValue);
+  if (invalidNumber) {
     return response(
       errors.InvalidLaborValue,
       updateGridCell(grid, row, col, {
@@ -247,7 +259,9 @@ export const processLaborColChange = (grid, { row, col, value }) => {
   }
 
   // make sure labor is different than 0 if type is equal 1
-  if (grid[row][TYPE_COL].value === "1" && intValue <= 0) {
+  const typeColValue = grid[row][TYPE_COL].value;
+  const isTypeOne = parseInt(typeColValue, 10) === 1;
+  if (isTypeOne && +floatValue <= 0) {
     return response(
       errors.InvalidLaborAmount,
       updateGridCell(grid, row, col, {
@@ -259,15 +273,17 @@ export const processLaborColChange = (grid, { row, col, value }) => {
   return response(
     null,
     updateGridCell(grid, row, col, {
-      value: value
+      value: floatValue
     })
   );
 };
 
 export const processExpenseColChange = (grid, { row, col, value }) => {
-  const intValue = parseInt(value, 10);
-  // make sure the value can be converted to an integer
-  if (intValue !== 0 && !intValue) {
+  const floatValue = parseFloat(value, 10).toFixed(2);
+
+  const invalidNumber = !floatValue || isNaN(floatValue);
+
+  if (invalidNumber) {
     return response(
       errors.InvalidExpenseValue,
       updateGridCell(grid, row, col, {
@@ -277,7 +293,9 @@ export const processExpenseColChange = (grid, { row, col, value }) => {
   }
 
   // make sure expense is different than 0 if type is equal 2
-  if (grid[row][TYPE_COL].value === "2" && intValue <= 0) {
+  const typeColValue = grid[row][TYPE_COL].value;
+  const isTypeTwo = parseInt(typeColValue, 10) === 2;
+  if (isTypeTwo && +floatValue <= 0) {
     return response(
       errors.InvalidExpenseAmount,
       updateGridCell(grid, row, col, {
@@ -289,7 +307,7 @@ export const processExpenseColChange = (grid, { row, col, value }) => {
   return response(
     null,
     updateGridCell(grid, row, col, {
-      value: value
+      value: floatValue
     })
   );
 };

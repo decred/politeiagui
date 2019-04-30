@@ -137,7 +137,11 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     77: "Line item has malformed domain",
     78: "Line item has malformed subdomain",
     79: "Line item has malformed description",
-    80: "Invoice is an wrong status to be editted (approved, rejected or paid)"
+    80: "Invoice is an wrong status to be editted (approved, rejected or paid)",
+    81: "Invoices require at least 1 line item",
+    82: "Only one invoice per month/year is allowed to be submitted",
+    83: "An invalid month/year was submitted on an invoice",
+    84: "Exchange rate was invalid or didn't match the expected result"
   };
 
   const error = errorMessages[errorCode];
@@ -361,8 +365,19 @@ export const csvToJson = csv =>
     .map(splitColumn)
     .map(jsonCsvMap);
 
+export const getCurrentMonth = () => {
+  const d = new Date();
+  return d.getMonth() + 1;
+};
+
 export const getCurrentYear = () => {
   const d = new Date();
-  const n = d.getFullYear();
-  return n;
+  return d.getFullYear();
 };
+
+export const fromMinutesToHours = minutes =>
+  parseFloat(minutes / 60).toFixed(2);
+export const fromHoursToMinutes = hours => parseInt(hours * 60, 10);
+export const fromUSDCentsToUSDUnits = cents =>
+  parseFloat(cents / 100).toFixed(2);
+export const fromUSDUnitsToUSDCents = units => parseInt(units * 100, 10);

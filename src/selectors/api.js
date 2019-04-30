@@ -772,3 +772,11 @@ export const visitedInvoice = compose(
   get("accesstime"),
   getApiResponse("invoiceComments")
 );
+
+export const apiExchangeRateResponse = getApiResponse("exchangeRate");
+export const apiExchangeRateError = getApiError("exchangeRate");
+export const isApiRequestingExchangeRate = getIsApiRequesting("exchangeRate");
+export const exchangeRate = compose(
+  get("exchangerate"),
+  apiExchangeRateResponse
+);
