@@ -71,10 +71,6 @@ export const columnTypes = {
 
 const { TYPE_COL, LABOR_COL, EXP_COL } = columnTypes;
 
-// TODO: get this values dinamically from the api policy
-const MIN_STRING_LEN = 3;
-const MAX_STRING_LEN = 50;
-
 export const createTableHeaders = () => [
   { readOnly: true, value: "", width: 10 },
   { value: "Type", width: 40, readOnly: true },
@@ -168,15 +164,18 @@ export const processTypeColChange = (grid, { row, col, value }) => {
   return response(null, updateGridCell(grid, row, col, { value }));
 };
 
-const validateStringLength = value => {
-  if (value.length < MIN_STRING_LEN || value.length > MAX_STRING_LEN) {
+const validateStringLength = (policy, value) => {
+  if (
+    value.length < policy.minlineitemcollength ||
+    value.length > policy.maxlineitemcollength
+  ) {
     return false;
   }
   return true;
 };
 
-export const processStringColChange = (grid, { row, col, value }) => {
-  if (!validateStringLength(value)) {
+export const processStringColChange = (policy, grid, { row, col, value }) => {
+  if (!validateStringLength(policy, value)) {
     return response(
       errors.InvalidDomainLen,
       updateGridCell(grid, row, col, {
@@ -188,8 +187,8 @@ export const processStringColChange = (grid, { row, col, value }) => {
   return response(null, updateGridCell(grid, row, col, { value }));
 };
 
-export const processDomainColChange = (grid, { row, col, value }) => {
-  if (!validateStringLength(value)) {
+export const processDomainColChange = (policy, grid, { row, col, value }) => {
+  if (!validateStringLength(policy, value)) {
     return response(
       errors.InvalidDomainLen,
       updateGridCell(grid, row, col, {
@@ -201,8 +200,12 @@ export const processDomainColChange = (grid, { row, col, value }) => {
   return response(null, updateGridCell(grid, row, col, { value }));
 };
 
-export const processSubdomainColChange = (grid, { row, col, value }) => {
-  if (!validateStringLength(value)) {
+export const processSubdomainColChange = (
+  policy,
+  grid,
+  { row, col, value }
+) => {
+  if (!validateStringLength(policy, value)) {
     return response(
       errors.InvalidSubdomainLen,
       updateGridCell(grid, row, col, {
@@ -214,8 +217,12 @@ export const processSubdomainColChange = (grid, { row, col, value }) => {
   return response(null, updateGridCell(grid, row, col, { value }));
 };
 
-export const processDescriptionColChange = (grid, { row, col, value }) => {
-  if (!validateStringLength(value)) {
+export const processDescriptionColChange = (
+  policy,
+  grid,
+  { row, col, value }
+) => {
+  if (!validateStringLength(policy, value)) {
     return response(
       errors.InvalidDescriptionLen,
       updateGridCell(grid, row, col, {
@@ -312,7 +319,7 @@ export const processExpenseColChange = (grid, { row, col, value }) => {
   );
 };
 
-export const processCellsChange = (currentGrid, changes) => {
+export const processCellsChange = (policy, currentGrid, changes) => {
   let result = null;
   const getGridAndErrorsFromResult = (acc, result) => ({
     grid: result.newValue,
@@ -326,13 +333,13 @@ export const processCellsChange = (currentGrid, changes) => {
           result = processTypeColChange(acc.grid, change);
           return getGridAndErrorsFromResult(acc, result);
         case columnTypes.DOMAIN_COL:
-          result = processDomainColChange(acc.grid, change);
+          result = processDomainColChange(policy, acc.grid, change);
           return getGridAndErrorsFromResult(acc, result);
         case columnTypes.SUBDOMAIN_COL:
-          result = processSubdomainColChange(acc.grid, change);
+          result = processSubdomainColChange(policy, acc.grid, change);
           return getGridAndErrorsFromResult(acc, result);
         case columnTypes.DESC_COL:
-          result = processDescriptionColChange(acc.grid, change);
+          result = processDescriptionColChange(policy, acc.grid, change);
           return getGridAndErrorsFromResult(acc, result);
         case columnTypes.PROP_TOKEN_COL:
           result = processPropTokenColChange(acc.grid, change);

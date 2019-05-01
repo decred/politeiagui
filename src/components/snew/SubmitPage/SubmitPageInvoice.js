@@ -175,6 +175,7 @@ const InvoiceSubmit = props => {
                       onChangeErrors={setDatasheetErrors}
                       errors={datasheetErrors}
                       component={InvoiceDatasheetField}
+                      policy={policy}
                     />
                   </div>
                   <div>
