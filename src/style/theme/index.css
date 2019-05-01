@@ -150,7 +150,7 @@ body button.secondary.disabled {
 
 body.listing-page>.content,
 body>.appWrapper>.content {
-    padding: 92px 16px 64px 16px;
+    padding: 68px 16px 64px 16px;
     width: 100%;
     margin: 0;
 }
@@ -737,7 +737,7 @@ body.other-discussions-page>.content {
 }
 
 .side {
-    margin: 92px 16px 0 0;
+    margin: 68px 16px 0 0;
 }
 
 .submit .morelink {
