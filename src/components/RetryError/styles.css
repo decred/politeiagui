@@ -1,0 +1,20 @@
+.retry-error {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.retry-error_content {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.retry-error_title {
+    font-size: 0.8em;
+    color: red;
+}
+
+.retry-error_message {
+    font-size: 0.6em;
+}

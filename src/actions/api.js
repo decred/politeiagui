@@ -1093,7 +1093,6 @@ export const onFetchExchangeRate = (month, year) =>
         dispatch(act.RECEIVE_EXCHANGE_RATE(response));
       })
       .catch(error => {
-        console.log("GOT HERE");
         dispatch(act.RECEIVE_EXCHANGE_RATE(null, error));
       });
   });
