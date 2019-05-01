@@ -1,5 +1,6 @@
 import React from "react";
 import { DateTooltip } from "snew-classic-ui";
+import { Link } from "react-router-dom";
 import * as modalTypes from "../../Modal/modalTypes";
 import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
 import CensorMessage from "../../CensorMessage";
@@ -10,7 +11,8 @@ import Tooltip from "../../Tooltip";
 import VoteStats from "../../VoteStats";
 import VersionPicker from "../../VersionPicker";
 import actions from "../../../connectors/actions";
-// import Diff from "./Markdown/Diff";
+import thingLink from "../../../connectors/thingLink";
+import SubsExpando from "../Expando";
 
 import {
   PROPOSAL_STATUS_ABANDONED,
@@ -55,8 +57,7 @@ class ThingLinkComp extends React.Component {
   };
   render() {
     const {
-      Link,
-      Expando,
+      Expando = SubsExpando,
       id,
       expanded = false,
       name,
@@ -213,28 +214,25 @@ class ThingLinkComp extends React.Component {
         <p className="parent" />
         {thumbnail &&
         !["image", "default", "nsfw", "self"].find(sub => sub === thumbnail) ? (
-          <Link className="thumbnail may-blank loggedin" href={url}>
+          <Link to={url} className="thumbnail may-blank loggedin">
             <img alt="Thumb" height={70} src={thumbnail} width={70} />
           </Link>
         ) : null}
         {is_self ? (
-          <Link className="thumbnail self may-blank" href={url} />
+          <Link className="thumbnail self may-blank" to={url} />
         ) : null}
         <div className="entry unvoted">
           <span
             className="title"
-            style={{ display: "flex", overflow: "visible" }}
+            style={{ display: "flex", overflow: "visible", cursor: "pointer" }}
           >
-            <Link
-              className="title may-blank loggedin"
-              href={url}
-              tabIndex={rank}
-            >
+            <Link to={`/proposals/${id}`}>
               {title}{" "}
               {review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES ? (
                 <span className="font-12 warning-color">edited</span>
-              ) : null}
-            </Link>{" "}
+              ) : null}{" "}
+            </Link>
+
             {expanded && (displayVersion || isAbandoned) && version > 1 ? (
               <VersionPicker
                 onSelectVersion={selVersion => {
@@ -248,7 +246,7 @@ class ThingLinkComp extends React.Component {
             ) : null}
             {domain ? (
               <span className="domain">
-                (<Link href={`/domain/${domain}/`}>{domain}</Link>)
+                (<Link to={`/domain/${domain}/`}>{domain}</Link>)
               </span>
             ) : null}
             <div
@@ -261,9 +259,8 @@ class ThingLinkComp extends React.Component {
             >
               {isEditable ? (
                 <Link
-                  href={`/proposals/${id}/edit`}
+                  to={`/proposals/${id}/edit`}
                   className="edit-proposal right-margin-10"
-                  onClick={() => null}
                 >
                   <i className="fa fa-edit right-margin-5" />
                   Edit
@@ -313,7 +310,7 @@ class ThingLinkComp extends React.Component {
               {author && (
                 <span>
                   {" by "}
-                  <Link href={`/user/${authorid}`}>{author}</Link>
+                  <Link to={`/user/${authorid}`}>{author}</Link>
                 </span>
               )}
             </span>
@@ -599,7 +596,7 @@ class ThingLinkComp extends React.Component {
                 <Link
                   className="bylink comments may-blank proposal-permalink"
                   data-event-action="comments"
-                  href={`${url}?comments=true`}
+                  to={`${url}?comments=true`}
                 >
                   {listOrDetailViewComments || ""}{" "}
                   {listOrDetailViewComments <= 1 ? "comment" : "comments"}
@@ -610,7 +607,7 @@ class ThingLinkComp extends React.Component {
               <Link
                 className="bylink comments may-blank proposal-permalink"
                 data-event-action="permalink"
-                href={permalink}
+                to={permalink}
               >
                 permalink
               </Link>
@@ -619,7 +616,7 @@ class ThingLinkComp extends React.Component {
               <li>
                 <Link
                   className="bylink comments may-blank proposal-permalink"
-                  href=""
+                  to=""
                   target="_blank"
                   onClick={e => {
                     e.preventDefault();
@@ -653,4 +650,4 @@ class ThingLinkComp extends React.Component {
   }
 }
 
-export default actions(ThingLinkComp);
+export default actions(thingLink(ThingLinkComp));

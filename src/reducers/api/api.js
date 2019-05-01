@@ -72,7 +72,8 @@ export const DEFAULT_STATE = {
   lastLoaded: {},
   newInvoice: DEFAULT_REQUEST_STATE,
   editInvoice: DEFAULT_REQUEST_STATE,
-  payouts: DEFAULT_REQUEST_STATE
+  payouts: DEFAULT_REQUEST_STATE,
+  tokenInventory: DEFAULT_REQUEST_STATE
 };
 
 const api = (state = DEFAULT_STATE, action) =>
@@ -122,6 +123,10 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.REQUEST_USER_PROPOSALS]: () => request("userProposals", state, action),
     [act.RECEIVE_USER_PROPOSALS]: () =>
       onReceiveProposals("userProposals", state, action),
+    [act.REQUEST_TOKEN_INVENTORY]: () =>
+      request("tokenInventory", state, action),
+    [act.RECEIVE_TOKEN_INVENTORY]: () =>
+      receive("tokenInventory", state, action),
     [act.REQUEST_VETTED]: () => request("vetted", state, action),
     [act.RECEIVE_VETTED]: () => onReceiveProposals("vetted", state, action),
     [act.REQUEST_UNVETTED]: () => request("unvetted", state, action),

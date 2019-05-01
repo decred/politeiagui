@@ -324,6 +324,30 @@ export const onFetchVetted = token => dispatch => {
     });
 };
 
+export const onFetchVettedByTokens = tokens => async dispatch => {
+  dispatch(act.REQUEST_VETTED(tokens));
+  try {
+    const promises = tokens.map(t => api.proposal(t));
+    const res = await Promise.all(promises);
+    const proposals = res.map(r => r.proposal);
+    return dispatch(act.RECEIVE_VETTED({ proposals }));
+  } catch (error) {
+    dispatch(act.RECEIVE_VETTED(null, error));
+  }
+};
+
+export const onFetchTokenInventory = () => dispatch => {
+  dispatch(act.REQUEST_TOKEN_INVENTORY());
+  return api
+    .tokenInventory()
+    .then(tokenInventory =>
+      dispatch(act.RECEIVE_TOKEN_INVENTORY(tokenInventory))
+    )
+    .catch(error => {
+      dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error));
+    });
+};
+
 export const onFetchUnvettedStatus = () => dispatch => {
   dispatch(act.REQUEST_UNVETTED_STATUS());
   return api

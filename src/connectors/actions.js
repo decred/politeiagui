@@ -14,6 +14,7 @@ const actions = connect(
     setStatusProposalToken: sel.setStatusProposalToken,
     setStatusProposalError: sel.setStatusProposalError,
     authorizeVoteError: sel.apiAuthorizeVoteError,
+    getVoteStatus: sel.getPropVoteStatus,
     authorizeVoteToken: sel.apiAuthorizeVoteToken,
     userPaywallStatus: sel.getUserPaywallStatus,
     isRequestingAuthorizeVote: sel.isApiRequestingAuthorizeVote,

@@ -555,5 +555,8 @@ export const adminInvoices = csrf =>
 export const generatePayouts = csrf =>
   POST("/admin/generatepayouts", csrf, {}).then(getResponse);
 
+export const tokenInventory = () =>
+  GET("/v1/proposals/tokeninventory").then(getResponse);
+
 export const exchangeRate = (csrf, month, year) =>
   POST("/invoices/exchangerate", csrf, { month, year }).then(getResponse);
