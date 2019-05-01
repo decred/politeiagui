@@ -9,8 +9,6 @@ describe("test external api lib (lib/api.js)", () => {
   const FAKE_MAINNET_ADDRESS = "M_fake_address";
   const dcrdataTestnetUrl = "https://testnet.dcrdata.org/api";
   const dcrdataExplorerUrl = "https://explorer.dcrdata.org/api";
-  const insightTestnetUrl = "https://testnet.decred.org/insight/api";
-  const insightMainnetUrl = "https://mainnet.decred.org/insight/api";
   const faucetUrl = "https://faucet.decred.org/requestfaucet";
 
   test("get height from dcrd data", async () => {
@@ -27,19 +25,6 @@ describe("test external api lib (lib/api.js)", () => {
     );
   });
 
-  test("get height from Insight", async () => {
-    await assertGETOnRouteIsCalled(
-      `${insightTestnetUrl}/status`,
-      ea.getHeightByInsight,
-      [true]
-    );
-    await assertGETOnRouteIsCalled(
-      `${insightMainnetUrl}/status`,
-      ea.getHeightByInsight,
-      [false]
-    );
-  });
-
   test("get payment by address from dcr data", async () => {
     fetchMock.restore();
     await assertGETOnRouteIsCalled(
@@ -50,19 +35,6 @@ describe("test external api lib (lib/api.js)", () => {
     await assertGETOnRouteIsCalled(
       `${dcrdataExplorerUrl}/address/${FAKE_MAINNET_ADDRESS}/raw`,
       ea.getPaymentsByAddressDcrdata,
-      [FAKE_MAINNET_ADDRESS]
-    );
-  });
-
-  test("get payment by address from Insight", async () => {
-    await assertGETOnRouteIsCalled(
-      `${insightTestnetUrl}/addr/${FAKE_TESTNET_ADDRESS}/utxo?noCache=1`,
-      ea.getPaymentsByAddressInsight,
-      [FAKE_TESTNET_ADDRESS]
-    );
-    await assertGETOnRouteIsCalled(
-      `${insightMainnetUrl}/addr/${FAKE_MAINNET_ADDRESS}/utxo?noCache=1`,
-      ea.getPaymentsByAddressInsight,
       [FAKE_MAINNET_ADDRESS]
     );
   });

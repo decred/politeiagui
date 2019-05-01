@@ -29,7 +29,6 @@ describe("test actions/external_api", () => {
 
   const mockPiVerifyPaymentPath = "/api/v1/user/verifypayment";
   const mockDcrDataPath = `https://testnet.dcrdata.org/api/address/${FAKE_ADDRESS}/raw`;
-  const mockInsightPath = `https://testnet.decred.org/api/addr/${FAKE_ADDRESS}/utxo?noCache=1`;
   const mockDcrDataResponseLackingConfirmation = [
     {
       size: 251,
@@ -154,9 +153,6 @@ describe("test actions/external_api", () => {
 
   test("test verify user payment action", async () => {
     const params = [FAKE_ADDRESS, AMOUNT, FAKE_TX_NOT_BEFORE];
-
-    //mock dcr insight response
-    setGetSuccessResponse(mockInsightPath, {}, []);
 
     //test with payment confirmed by the network
     setGetSuccessResponse(mockDcrDataPath, {}, mockDcrDataResponseComplete);
