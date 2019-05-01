@@ -104,7 +104,7 @@ button:visited {
     background: #5981ab;
 }
 
-.react-file-reader-button button,
+.react-file-reader-button button
 {
   color: #fff;
   background: #28a745;
@@ -781,7 +781,7 @@ form div.usertext-body.may-blank-within.md-container {
 
 /* Header */
 #header {
-    height: 45px;
+    height: 52px;
     position: absolute;
     top: 0;
     width: 100%;
@@ -840,7 +840,7 @@ form div.usertext-body.may-blank-within.md-container {
     position: absolute;
     display: block;
     top: 0;
-    height: 45px;
+    height: 52px;
     background-image: url("./logo.svg");
     background-position: 100% 50%;
     background-size: 155px;
