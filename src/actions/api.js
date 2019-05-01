@@ -327,8 +327,8 @@ export const onFetchVetted = token => dispatch => {
 export const onFetchVettedByTokens = tokens => async dispatch => {
   dispatch(act.REQUEST_VETTED(tokens));
   try {
-    const promisses = tokens.map(t => api.proposal(t));
-    const res = await Promise.all(promisses);
+    const promises = tokens.map(t => api.proposal(t));
+    const res = await Promise.all(promises);
     const proposals = res.map(r => r.proposal);
     return dispatch(act.RECEIVE_VETTED({ proposals }));
   } catch (error) {
