@@ -39,7 +39,7 @@ class Dropdown extends Component {
     const { isopen } = this.state;
     const dropdownContentStyle = {
       position: "absolute",
-      top: "45px",
+      top: "36px",
       right: "-16px",
       border: "1px solid rgba(255, 255, 255, .8)",
       backgroundColor: "#091440",
