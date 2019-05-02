@@ -39,23 +39,6 @@ export const verifyUserPayment = (address, amount, txNotBefore) => dispatch => {
       if (txn) {
         return txn;
       }
-
-      // If that fails, then try insight.
-      return external_api
-        .getPaymentsByAddressInsight(address)
-        .then(response => {
-          if (response === null) {
-            return null;
-          }
-
-          return checkForPayment(
-            checkInsightHandler,
-            response,
-            address,
-            amount,
-            txNotBefore
-          );
-        });
     })
     .then(txn => {
       if (!txn) {
@@ -144,22 +127,6 @@ const checkDcrdataHandler = (
   return null;
 };
 
-const checkInsightHandler = (
-  transaction,
-  addressToMatch,
-  amount,
-  txNotBefore
-) => {
-  if (transaction.amount >= amount && transaction.ts >= txNotBefore) {
-    return {
-      id: transaction.txid,
-      confirmations: transaction.confirmations
-    };
-  }
-
-  return null;
-};
-
 export const payWithFaucet = (address, amount) => dispatch => {
   dispatch(act.REQUEST_PAYWALL_PAYMENT_WITH_FAUCET());
   return external_api
@@ -180,23 +147,13 @@ export const payWithFaucet = (address, amount) => dispatch => {
 
 export const getLastBlockHeight = isTestnet => dispatch => {
   dispatch(act.REQUEST_GET_LAST_BLOCK_HEIGHT());
-  // try with dcrData if fail we try with insight api
   external_api
     .getHeightByDcrdata(isTestnet)
     .then(response => {
       return dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(response));
     })
     .catch(() => {
-      external_api
-        .getHeightByInsight(isTestnet)
-        .then(response => {
-          return dispatch(
-            act.RECEIVE_GET_LAST_BLOCK_HEIGHT(response.info.blocks)
-          );
-        })
-        .catch(() => {
-          return dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(null));
-        });
+      return dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(null));
     });
 };
 
