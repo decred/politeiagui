@@ -53,50 +53,52 @@ export class FilesField extends React.Component {
       margin: 0
     };
     return (
-      <div className="attach-wrapper">
-        {policyErrors.length > 0 && <PolicyErrors errors={policyErrors} />}
-        <div>
-          <ReactFileReader
-            base64
-            multipleFiles
-            fileTypes={policy.validmimetypes}
-            handleFiles={this.handleFilesChange}
-          >
-            <div className="button-wrapper">
-              <button
-                className={`togglebutton access-required${
-                  !userCanExecuteActions ? " not-active disabled" : ""
-                }`}
-                style={buttonStyle}
-              >
-                {placeholder}
-              </button>
-              <div className="attach-requirements">
-                <div>
-                  {" "}
-                  Max number of files: <span>{policy.maximages}.</span>{" "}
-                </div>
-                <div>
-                  {" "}
-                  Max file size:{" "}
-                  <span>
-                    {Math.floor(policy.maximagesize / 1024)} Kb.{" "}
-                  </span>{" "}
-                </div>
-                <div>
-                  {" "}
-                  Valid MIME types:{" "}
-                  <span>{policy.validmimetypes.join(", ")}</span>{" "}
+      policy && (
+        <div className="attach-wrapper">
+          {policyErrors.length > 0 && <PolicyErrors errors={policyErrors} />}
+          <div>
+            <ReactFileReader
+              base64
+              multipleFiles
+              fileTypes={policy.validmimetypes}
+              handleFiles={this.handleFilesChange}
+            >
+              <div className="button-wrapper">
+                <button
+                  className={`togglebutton access-required${
+                    !userCanExecuteActions ? " not-active disabled" : ""
+                  }`}
+                  style={buttonStyle}
+                >
+                  {placeholder}
+                </button>
+                <div className="attach-requirements">
+                  <div>
+                    {" "}
+                    Max number of files: <span>{policy.maximages}.</span>{" "}
+                  </div>
+                  <div>
+                    {" "}
+                    Max file size:{" "}
+                    <span>
+                      {Math.floor(policy.maximagesize / 1024)} Kb.{" "}
+                    </span>{" "}
+                  </div>
+                  <div>
+                    {" "}
+                    Valid MIME types:{" "}
+                    <span>{policy.validmimetypes.join(", ")}</span>{" "}
+                  </div>
                 </div>
               </div>
-            </div>
-          </ReactFileReader>
+            </ReactFileReader>
+          </div>
+          {touched && error && !disabled && (
+            <span className="error">{error}</span>
+          )}
+          <ProposalImages files={input.value || []} onChange={input.onChange} />
         </div>
-        {touched && error && !disabled && (
-          <span className="error">{error}</span>
-        )}
-        <ProposalImages files={input.value || []} onChange={input.onChange} />
-      </div>
+      )
     );
   }
 }
