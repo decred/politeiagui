@@ -8,9 +8,6 @@ introduce yourself. We always like to know who is interested in the project and 
 
 **Did you find a bug?**
 
-- Do not open up a GitHub issue if the bug is a security vulnerability in Politeiagui, and instead check our 
-[Bug Bounty Program](https://bounty.decred.org/).
-
 - Ensure the bug was not already reported by searching our GitHub under [issues](https://github.com/decred/politeiagui/issues).
 
 - If you're unable to find an open issue addressing the problem, open a new one. Be sure to include:
