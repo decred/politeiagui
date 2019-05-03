@@ -226,7 +226,7 @@ class ThingLinkComp extends React.Component {
             className="title"
             style={{ display: "flex", overflow: "visible", cursor: "pointer" }}
           >
-            <Link to={`/proposals/${id}`}>
+            <Link to={`/proposals/${id}`} className="right-margin-5">
               {title}{" "}
               {review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES ? (
                 <span className="font-12 warning-color">edited</span>
