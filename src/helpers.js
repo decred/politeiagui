@@ -40,7 +40,7 @@ export const atou = str => decodeURIComponent(escape(window.atob(str)));
 //
 export const getTextFromIndexMd = file => {
   const text = atou(file.payload);
-  return text.substring(text.indexOf("\n") + 1);
+  return text.substring(text.indexOf("\n\n") + 1);
 };
 
 export const getTextFromJsonToCsv = file => {

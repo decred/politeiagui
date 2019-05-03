@@ -49,7 +49,7 @@ export const convertJsonToFile = json => ({
 
 export const makeProposal = (name, markdown, attachments = []) => ({
   files: [
-    convertMarkdownToFile(name + "\n" + markdown),
+    convertMarkdownToFile(name + "\n\n" + markdown),
     ...(attachments || [])
   ].map(({ name, mime, payload }) => ({
     name,
