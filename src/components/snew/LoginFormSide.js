@@ -4,7 +4,6 @@ import ErrorField from "../Form/Fields/ErrorField";
 import Message from "../Message";
 import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
 import loginConnector from "../../connectors/login";
-import PrivacyPolicy from "./PrivacyPolicy";
 
 const LoginFormSide = ({
   Link,
@@ -14,10 +13,7 @@ const LoginFormSide = ({
   loggedInAsEmail,
   formAction = "/post/login",
   onLogin,
-  handleSubmit,
-  onTogglePrivacyPolicy,
-  onHidePrivacyPolicy,
-  showPrivacyPolicy
+  handleSubmit
 }) =>
   loggedInAsEmail ? null : (
     <div className="spacer">
@@ -67,13 +63,13 @@ const LoginFormSide = ({
             type="checkbox"
           />
           <label htmlFor="rem-login-main">remember me</label>
-          <span
-            onClick={onTogglePrivacyPolicy}
-            className="linkish"
+          <Link
+            className="recover-password"
+            href="/privacy-policy"
             style={{ marginRight: "10px" }}
           >
             Privacy Policy
-          </span>
+          </Link>
           <Link className="recover-password" href="/password">
             Reset Password
           </Link>
@@ -86,9 +82,6 @@ const LoginFormSide = ({
           />
         </div>
         <div className="clear" />
-        {showPrivacyPolicy && (
-          <PrivacyPolicy onHidePrivacyPolicy={onHidePrivacyPolicy} />
-        )}
       </form>
     </div>
   );

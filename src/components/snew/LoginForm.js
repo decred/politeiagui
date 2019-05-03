@@ -4,7 +4,6 @@ import Message from "../Message";
 import ButtonWithLoadingIcon from "./ButtonWithLoadingIcon";
 import ErrorField from "../Form/Fields/ErrorField";
 import loginConnector from "../../connectors/login";
-import PrivacyPolicy from "./PrivacyPolicy";
 
 const LoginForm = ({
   Link,
@@ -14,10 +13,7 @@ const LoginForm = ({
   loggedInAsEmail,
   apiLoginError,
   onLogin,
-  handleSubmit,
-  onTogglePrivacyPolicy,
-  onHidePrivacyPolicy,
-  showPrivacyPolicy
+  handleSubmit
 }) =>
   loggedInAsEmail ? null : (
     <form
@@ -89,18 +85,14 @@ const LoginForm = ({
         >
           Reset Password
         </Link>
-        <span
-          className="linkish c-pull-right reset-password-link"
-          tabIndex={5}
-          onClick={onTogglePrivacyPolicy}
-          style={{ cursor: "pointer" }}
+        <Link
+          className="c-pull-right reset-password-link"
+          href="/privacy-policy"
+          tabIndex={4}
         >
           Privacy Policy
-        </span>
+        </Link>
       </div>
-      {showPrivacyPolicy && (
-        <PrivacyPolicy onHidePrivacyPolicy={onHidePrivacyPolicy} />
-      )}
     </form>
   );
 
