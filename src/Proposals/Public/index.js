@@ -1,0 +1,1 @@
+export { PublicProposalsPage } from "./PublicProposalsPage";

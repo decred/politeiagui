@@ -1,7 +1,7 @@
 import React from "react";
 import Diff from "../../snew/Markdown/Diff";
 import { proposal as fetchProposal } from "../../../lib/api";
-import proposalConnector from "../../../connectors/proposal";
+import { proposalConnector } from "src/Proposals/Detail/hooks";
 import modalConnector from "../../../connectors/modal";
 import { getTextFromIndexMd, formatDate } from "../../../helpers";
 

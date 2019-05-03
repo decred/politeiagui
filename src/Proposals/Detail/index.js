@@ -1,0 +1,1 @@
+export { ProposalDetail } from "./ProposalDetail";

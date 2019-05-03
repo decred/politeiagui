@@ -2,22 +2,23 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, withRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import throttle from "lodash/throttle";
-import configureStore from "./configureStore";
-import { Subreddit } from "./components/snew";
-import HeaderAlert from "./components/HeaderAlert";
-import SessionExpiresIndicator from "./components/SessionExpiresIndicator";
-import Routes from "./Routes";
-import loaderConnector from "./connectors/loader";
+import configureStore from "src/configureStore";
+import { Subreddit } from "src/components/snew";
+import HeaderAlert from "src/components/HeaderAlert";
+import SessionExpiresIndicator from "src/components/SessionExpiresIndicator";
+import Routes from "src/Routes";
+import loaderConnector from "src/connectors/loader";
 import {
   handleSaveTextEditorsContent,
   handleSaveCSVEditorsContent
-} from "./lib/editors_content_backup";
-import { handleSaveStateToLocalStorage } from "./lib/local_storage";
-import { onLocalStorageChange } from "./actions/app";
-import ModalStack from "./components/Modal/ModalStack";
-import { WELCOME_MODAL } from "./components/Modal/modalTypes";
-import { verifyUserPubkey } from "./helpers";
-import Config, { ConfigContext, useConfig } from "./Config";
+} from "src/lib/editors_content_backup";
+import { handleSaveStateToLocalStorage } from "src/lib/local_storage";
+import { onLocalStorageChange } from "src/actions/app";
+import ModalStack from "src/components/Modal/ModalStack";
+import { WELCOME_MODAL } from "src/components/Modal/modalTypes";
+import { verifyUserPubkey } from "src/helpers";
+import Config, { ConfigContext, useConfig } from "src/Config";
+import { AppProvider } from "./AppProvider";
 
 const store = configureStore();
 
@@ -155,19 +156,21 @@ const HeaderAlertComponent = withRouter(
   )
 );
 
-export default class App extends Component {
+export class App extends Component {
   render() {
     return (
       <Provider store={store}>
         <Config>
           <Router>
             <LoaderComponent>
-              <StagingAlert />
-              <SessionExpiresIndicator />
-              <HeaderAlertComponent />
-              <Subreddit>
-                <Routes />
-              </Subreddit>
+              <AppProvider apiState={this.props.apiState} reduxStore={store}>
+                <StagingAlert />
+                <SessionExpiresIndicator />
+                <HeaderAlertComponent />
+                <Subreddit>
+                  <Routes />
+                </Subreddit>
+              </AppProvider>
             </LoaderComponent>
           </Router>
         </Config>

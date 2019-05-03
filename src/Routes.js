@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import {
   SubmitPage,
   LoginSignupPage,
@@ -8,12 +8,7 @@ import {
 
 // POLITEIA CONNECTORS
 import userDetail from "./connectors/user";
-import proposalDetail from "./connectors/proposal";
-import censored from "./connectors/censoredProposals";
-import unreviewed from "./connectors/unreviewedProposals";
 import admin from "./connectors/admin";
-import newProposal from "./connectors/newProposal";
-import editProposal from "./connectors/editProposal";
 import routesConnector from "./connectors/routes";
 
 // POLITEIA ROUTES
@@ -31,12 +26,15 @@ import UserProposals from "./components/UserProposals";
 import VerifyKey from "./components/VerifyKey";
 import NotFound from "./components/NotFoundPage";
 import ErrorPage from "./components/ErrorPage/";
-import ProposalDetail from "./components/RecordDetail";
+import RecordDetail from "./components/RecordDetail";
 import UserDetail from "./components/UserDetail";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
-import PublicProposalsPage from "./components/PublicProposalsPage/PublicProposalsPage";
 import PrivacyPolicy from "./components/snew/PrivacyPolicy";
+import { PublicProposalsPage } from "src/Proposals/Public";
+import { ProposalDetail } from "src/Proposals/Detail";
+import { ProposalNew } from "src/Proposals/New";
+import { ProposalEdit } from "src/Proposals/Edit";
 
 // CMS CONNECTORS
 import adminCMS from "./connectors/adminCMS";
@@ -117,12 +115,12 @@ const RoutesForCMS = () => {
       />
       <Route
         path="/invoices/:token"
-        component={invoiceDetail(ProposalDetail)}
+        component={invoiceDetail(RecordDetail)}
         exact
       />
       <Route
         path="/invoices/:token/comments/:commentid"
-        component={invoiceDetail(ProposalDetail)}
+        component={invoiceDetail(RecordDetail)}
       />
       <AdminAuthenticatedRoute
         path="/admin/invite"
@@ -185,30 +183,21 @@ const RoutesForPoliteia = () => {
       />
       <AdminAuthenticatedRoute path="/admin/users" component={UserLookup} />
       <Route path="/user/:userId/:filter?" component={userDetail(UserDetail)} />
-      <AuthenticatedRoute
-        path="/proposals/new"
-        component={newProposal(SubmitPage)}
-      />
+      <AuthenticatedRoute path="/proposals/new" component={ProposalNew} />
       <AuthenticatedRoute
         path="/proposals/:token/edit"
-        component={editProposal(SubmitPage)}
+        component={ProposalEdit}
       />
-      <AdminAuthenticatedRoute
-        path="/admin/censored"
-        component={censored(ProposalListing)}
-      />
-      <AdminAuthenticatedRoute
-        path="/admin/unreviewed"
-        component={unreviewed(ProposalListing)}
-      />
-      <Route
-        path="/proposals/:token"
-        component={proposalDetail(ProposalDetail)}
-        exact
-      />
+      <Route path="/admin/censored">
+        <Redirect to="/admin/?tab=censored" />
+      </Route>
+      <Route path="/admin/unreviewed">
+        <Redirect to="/admin/?tab=unreviewed" />
+      </Route>
+      <Route path="/proposals/:token" component={ProposalDetail} exact />
       <Route
         path="/proposals/:token/comments/:commentid"
-        component={proposalDetail(ProposalDetail)}
+        component={ProposalDetail}
       />
       <Route path="/500" component={ErrorPage} />
       <Route path="*" component={NotFound} />

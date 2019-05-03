@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import "./styles.css";
-import { Tabs, Tab } from "../Tabs";
-import LazyList from "../LazyList/LazyList";
-import ThingLinkProposal from "../snew/ThingLink/ThingLinkProposal";
+import { Tabs, Tab } from "../../components/Tabs";
+import LazyList from "../../components/LazyList/LazyList";
+import ThingLinkProposal from "../../components/snew/ThingLink/ThingLinkProposal";
+import { proposalToT3 } from "../../lib/snew";
 import {
   tabValues,
   getProposalTokensByTabOption,
@@ -11,8 +12,7 @@ import {
   getInitialTabValue,
   setTabValueInQS
 } from "./helpers";
-import { proposalToT3 } from "../../lib/snew";
-import proposalsConnector from "../../connectors/publicProposals";
+import { usePublicProposals } from "./hooks";
 
 const DEFAULT_PAGE_SIZE = 4;
 
@@ -49,26 +49,26 @@ function reducer(state, action) {
   }
 }
 
-const PublicProposals = ({
-  proposals,
-  proposalsTokens,
-  onFetchVettedByTokens,
-  onFetchTokenInventory,
-  onFetchLastBlockHeight,
-  isLoading,
-  error,
-  pageSize
-}) => {
+export const PublicProposals = props => {
+  const { pageSize = DEFAULT_PAGE_SIZE } = props;
+  const {
+    isLoading,
+    proposals,
+    proposalsTokens,
+    onFetchVettedByTokens
+  } = usePublicProposals(props);
+
   const [tabOption, setTabOption] = useState(getInitialTabValue());
+  const handleTabChange = newTabValue => setTabOption(newTabValue);
   const [hasMoreToLoad, setHasMore] = useState(true);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { itemsOnLoad } = state;
 
-  const handleTabChange = newTabValue => setTabOption(newTabValue);
   const filteredTokens = getProposalTokensByTabOption(
     tabOption,
     proposalsTokens
   );
+
   const filteredProposals = getProposalsByTabOption(
     tabOption,
     proposals,
@@ -89,22 +89,11 @@ const PublicProposals = ({
     setTabValueInQS(tabOption);
   }, [tabOption]);
 
-  // Verify if there is more records to load everytime the filtered tokens
-  // or the filtered proposals have changed
   useEffect(() => {
     const hasMoreRecordsToLoad =
       filteredTokens && filteredProposals.length < filteredTokens.length;
     setHasMore(hasMoreRecordsToLoad);
   }, [filteredTokens, filteredProposals.length]);
-
-  // Component did mount effect
-  useEffect(() => {
-    // Fetch initial data
-    onFetchTokenInventory();
-    onFetchLastBlockHeight();
-  }, []);
-
-  if (error) throw error;
 
   return (
     <>
@@ -155,21 +144,9 @@ const PublicProposals = ({
 };
 
 PublicProposals.propTypes = {
-  proposals: PropTypes.array,
-  proposalsTokens: PropTypes.object,
-  onFetchVettedByTokens: PropTypes.func.isRequired,
-  onFetchTokenInventory: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool,
-  error: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-    PropTypes.bool
-  ]),
   pageSize: PropTypes.number
 };
 
 PublicProposals.defaultProps = {
   pageSize: DEFAULT_PAGE_SIZE
 };
-
-export default proposalsConnector(PublicProposals);
