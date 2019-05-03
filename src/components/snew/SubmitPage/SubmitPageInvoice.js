@@ -161,12 +161,12 @@ const InvoiceSubmit = props => {
                     className="usertext"
                     style={{
                       display: "flex",
-                      width: "100%"
+                      justifyContent: "space-between"
                     }}
                   >
                     <div
                       style={{
-                        width: "50%"
+                        paddingRight: "20px"
                       }}
                     >
                       <Field
@@ -200,11 +200,7 @@ const InvoiceSubmit = props => {
                         component={InputFieldWithError}
                       />
                     </div>
-                    <div
-                      style={{
-                        width: "50%"
-                      }}
-                    >
+                    <div>
                       <Markdown
                         body={invoiceInstructions}
                         filterXss={false}
