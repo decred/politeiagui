@@ -1,4 +1,4 @@
-import React, { Component, useMemo } from "react";
+import React, { Component } from "react";
 import { BrowserRouter as Router, withRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import throttle from "lodash/throttle";
@@ -15,8 +15,6 @@ import ModalStack from "./components/Modal/ModalStack";
 import { WELCOME_MODAL } from "./components/Modal/modalTypes";
 import { verifyUserPubkey } from "./helpers";
 import Config, { ConfigContext, useConfig } from "./Config";
-
-require("dotenv").config();
 
 const store = configureStore();
 
@@ -102,15 +100,13 @@ const LoaderComponent = withRouter(loaderConnector(Loader));
 
 const StagingAlert = () => {
   const { isStaging } = useConfig();
-  return useMemo(
-    () =>
-      isStaging && (
-        <div className="staging-alert">
-          This is the politeia staging environment. DO NOT USE, YOU WILL LOSE
-          YOUR DECRED.
-        </div>
-      ),
-    [isStaging]
+  return (
+    isStaging && (
+      <div className="staging-alert">
+        This is the politeia staging environment. DO NOT USE, YOU WILL LOSE YOUR
+        DECRED.
+      </div>
+    )
   );
 };
 

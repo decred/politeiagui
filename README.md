@@ -53,7 +53,7 @@ Politeiagui allow customization of settings and features toggling from enviromen
 To make this process easier we use [dotenv](https://github.com/motdotla/dotenv). 
 
 Specify your config options by creating a `.env` file in the root folder of the project. All 
-variables must be preceeded by "REACT_APP" as follow:
+variables must be preceded by "REACT_APP" as follow:
 
 **/.env:**
 
