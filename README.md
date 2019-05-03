@@ -1,5 +1,7 @@
 # Politeia GUI
 
+[![Build Status](https://travis-ci.org/decred/politeiagui.svg?branch=master)](https://travis-ci.org/decred/politeiagui)
+
 Politeiagui is the web frontent for [Politiea](https://github.com/decred/politeia), Decred's [proposal system](https://proposals.decred.org/). 
 
 
