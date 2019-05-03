@@ -14,8 +14,7 @@ import { onLocalStorageChange } from "./actions/app";
 import ModalStack from "./components/Modal/ModalStack";
 import { WELCOME_MODAL } from "./components/Modal/modalTypes";
 import { verifyUserPubkey } from "./helpers";
-import { ConfigContext, useConfig } from "./Config/ConfigProvider";
-import Config from "./Config/Config";
+import Config, { ConfigContext, useConfig } from "./Config";
 
 require("dotenv").config();
 

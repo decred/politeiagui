@@ -49,12 +49,30 @@ To build politeiagui for production deployment, use the following commands:
 
 ## Configuration
 
+Politeiagui allow customization of settings and features toggling from enviroment variables. 
+To make this process easier we use [dotenv](https://github.com/motdotla/dotenv). 
 
-By default, politeiagui is configured to use Decred's testnet blockchain. To use the mainnet blockchain, change the "network" field in `package.json` to "mainnet". 
+Specify your config options by creating a `.env` file in the root folder of the project. All 
+variables must be preceeded by "REACT_APP" as follow:
 
-It is necessary for politeiagui to connect to the testnet or mainnet in order to get the last block height, and determine the status of votes. 
+**/.env:**
 
----
+```dosini
+REACT_APP_TITLE="Politeia"
+REACT_APP_STAGING=false
+```
+
+It is also possible to specify a preset to be used:
+
+**/.env:**
+
+```dosini
+REACT_APP_PRESET="POLITEIA"
+```
+
+If the `REACT_APP_PRESET` is specified, all other specified options in the env
+file will be ignored.
+
 
 ## Testing 
 

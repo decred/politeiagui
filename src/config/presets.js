@@ -9,5 +9,5 @@ export const POLITEIA = {
 
 export const CMS = {
   ...commonDefaults,
-  title: "CMS"
+  title: "Contractor Management"
 };

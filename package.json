@@ -1,7 +1,6 @@
 {
   "name": "politeiagui",
   "version": "0.1.1",
-  "network": "testnet",
   "dependencies": {
     "ajv": "^6.10.0",
     "concurrently": "^4.1.0",
