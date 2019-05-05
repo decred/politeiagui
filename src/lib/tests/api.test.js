@@ -48,7 +48,7 @@ describe("api integration modules (lib/api.js)", () => {
   test("make a proposal", () => {
     let proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE]);
     let fileFromMarkdown = api.convertMarkdownToFile(
-      PROPOSAL_NAME + "\n" + MARKDOWN
+      PROPOSAL_NAME + "\n\n" + MARKDOWN
     );
     expect(proposal).toEqual({
       files: [
@@ -65,7 +65,7 @@ describe("api integration modules (lib/api.js)", () => {
     // test without providing attachment object
     proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN);
     fileFromMarkdown = api.convertMarkdownToFile(
-      PROPOSAL_NAME + "\n" + MARKDOWN
+      PROPOSAL_NAME + "\n\n" + MARKDOWN
     );
     expect(proposal).toEqual({
       files: [
@@ -79,7 +79,7 @@ describe("api integration modules (lib/api.js)", () => {
     // test with a falsy attachment
     proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, false);
     fileFromMarkdown = api.convertMarkdownToFile(
-      PROPOSAL_NAME + "\n" + MARKDOWN
+      PROPOSAL_NAME + "\n\n" + MARKDOWN
     );
     expect(proposal).toEqual({
       files: [
