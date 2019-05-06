@@ -59,7 +59,7 @@ const validateContractorRate = rate => {
 
 const validateContractorPaymentAddress = address => {
   if (!address) {
-    return "Rate cannot be blank";
+    return "Payment address cannot be blank";
   }
   return null;
 };
