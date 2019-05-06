@@ -128,6 +128,7 @@ class ThingComment extends React.PureComponent {
             isNewComment,
             user: loggedInAsEmail,
             authorHref: `/user/${props.authorid}`,
+            score_hidden: props.isCMS,
             blockvote:
               keyMismatch ||
               getVoteStatus(token).status === PROPOSAL_VOTING_FINISHED ||
