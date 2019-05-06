@@ -138,7 +138,7 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
 export const convertGridToLineItems = grid => {
   const copyGrid = grid.map(row => [...row]);
   return copyGrid.reduce((acc, rowValues, row) => {
-    // skip first row as it is exclusive for table headers
+    // skip first and last rows
     if (row === 0 || row === copyGrid.length - 1) return acc;
 
     const lineItem = rowValues.reduce((acc, cell, col) => {
