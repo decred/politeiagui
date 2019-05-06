@@ -5,10 +5,7 @@ import * as act from "../actions";
 import compose from "lodash/fp/compose";
 import { or } from "../lib/fp";
 import { validate } from "../validators/invoice";
-import {
-  createNewRow,
-  createTableHeaders
-} from "../components/InvoiceDatasheet/helpers";
+import { generateBlankLineItem } from "../components/InvoiceDatasheet/helpers";
 import { getCurrentYear, getCurrentMonth } from "../helpers";
 
 // XXX: connector needs to be moved in its own file
@@ -40,7 +37,7 @@ class NewInvoiceContainer extends Component {
       initialValues: {
         month: getCurrentMonth() - 1,
         year: getCurrentYear(),
-        datasheet: [createTableHeaders(), createNewRow(1)]
+        lineitems: [generateBlankLineItem()]
       },
       validationError: ""
     };

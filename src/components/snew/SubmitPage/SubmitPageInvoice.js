@@ -212,7 +212,7 @@ const InvoiceSubmit = props => {
                   </div>
                   <div className="usertext">
                     <Field
-                      name="datasheet"
+                      name="lineitems"
                       onChangeErrors={setDatasheetErrors}
                       errors={datasheetErrors}
                       component={InvoiceDatasheetField}

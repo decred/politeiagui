@@ -1,38 +1,145 @@
+import React from "react";
 import {
   fromHoursToMinutes,
   fromUSDCentsToUSDUnits,
   fromMinutesToHours,
   fromUSDUnitsToUSDCents
 } from "../../helpers";
+import SelectEditor from "./SelectEditor";
+
+export const columnTypes = {
+  TYPE_COL: 1,
+  DOMAIN_COL: 2,
+  SUBDOMAIN_COL: 3,
+  DESC_COL: 4,
+  PROP_TOKEN_COL: 5,
+  LABOR_COL: 6,
+  EXP_COL: 7
+};
+
+const { TYPE_COL, LABOR_COL, EXP_COL } = columnTypes;
+
+const getDropdownOptionsByColumnType = colType => {
+  const domainOptions = [
+    "Development",
+    "Marketing",
+    "Design",
+    "Research",
+    "Documentation",
+    "Communnity Managament"
+  ];
+  const mapColTypeToOptions = {
+    [columnTypes.TYPE_COL]: [
+      {
+        label: "Labor",
+        value: 1
+      },
+      {
+        label: "Expense",
+        value: 2
+      },
+      {
+        label: "Misc",
+        value: 3
+      }
+    ],
+    [columnTypes.DOMAIN_COL]: domainOptions.map(op => ({
+      value: op,
+      label: op
+    }))
+  };
+
+  return mapColTypeToOptions[colType];
+};
+
+export const selectWrapper = options => props => (
+  <SelectEditor {...{ ...props, options }} />
+);
+
+export const generateBlankLineItem = () => ({
+  type: "",
+  domain: "",
+  subdomain: "",
+  description: "",
+  proposaltoken: "",
+  labor: "",
+  expenses: ""
+});
 
 export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
   const grid = [createTableHeaders()];
-  const gridBody = lineItems.map((line, idx) => {
-    const isLabelReadonly =
-      line.type === 2 ? true : line.type === 3 ? true : readOnly;
-    const isExpenseReadonly = line.type === 1 ? true : readOnly;
-    return [
-      { readOnly: true, value: idx + 1 },
-      { readOnly, value: line.type },
-      { readOnly, value: line.domain },
-      { readOnly, value: line.subdomain },
-      { readOnly, value: line.description },
-      { readOnly, value: line.proposaltoken },
-      { readOnly: isLabelReadonly, value: fromMinutesToHours(line.labor) },
-      {
-        readOnly: isExpenseReadonly,
-        value: fromUSDCentsToUSDUnits(line.expenses)
-      }
-    ];
-  });
-  return grid.concat(gridBody);
+  const { grid: gridBody, expenseTotal, laborTotal } = lineItems.reduce(
+    (acc, line, idx) => {
+      const isLabelReadonly =
+        line.type === 2 ? true : line.type === 3 ? true : readOnly;
+      const isExpenseReadonly = line.type === 1 ? true : readOnly;
+      const newLine = [
+        { readOnly: true, value: idx + 1 },
+        {
+          readOnly,
+          value: line.type,
+          dataEditor: selectWrapper(
+            getDropdownOptionsByColumnType(columnTypes.TYPE_COL)
+          )
+        },
+        {
+          readOnly,
+          value: line.domain,
+          dataEditor: selectWrapper(
+            getDropdownOptionsByColumnType(columnTypes.DOMAIN_COL)
+          )
+        },
+        { readOnly, value: line.subdomain },
+        { readOnly, value: line.description },
+        { readOnly, value: line.proposaltoken },
+        { readOnly: isLabelReadonly, value: fromMinutesToHours(line.labor) },
+        {
+          readOnly: isExpenseReadonly,
+          value: fromUSDCentsToUSDUnits(line.expenses)
+        }
+      ];
+      return {
+        grid: acc.grid.concat([newLine]),
+        expenseTotal: acc.expenseTotal + line.expenses,
+        laborTotal: acc.laborTotal + line.labor
+      };
+    },
+    { grid: [], expenseTotal: 0, laborTotal: 0 }
+  );
+  const totalsLine = [
+    { readOnly: true },
+    { readOnly: true },
+    { readOnly: true },
+    { readOnly: true },
+    { readOnly: true },
+    {
+      readOnly: true,
+      component: <span className="total-label">Total</span>,
+      forceComponent: true
+    },
+    {
+      readOnly: true,
+      value: (
+        <span className="total-label">{fromMinutesToHours(laborTotal)}</span>
+      )
+    },
+    {
+      readOnly: true,
+      value: (
+        <span className="total-label">
+          {fromUSDCentsToUSDUnits(expenseTotal)}
+        </span>
+      )
+    }
+  ];
+  return grid.concat(gridBody).concat([totalsLine]);
 };
 
 export const convertGridToLineItems = grid => {
   const copyGrid = grid.map(row => [...row]);
   return copyGrid.reduce((acc, rowValues, row) => {
     // skip first row as it is exclusive for table headers
-    if (row === 0) return acc;
+    if (row === 0 || row === copyGrid.length - 1) return acc;
 
     const lineItem = rowValues.reduce((acc, cell, col) => {
       switch (col) {
@@ -59,21 +166,9 @@ export const convertGridToLineItems = grid => {
   }, []);
 };
 
-export const columnTypes = {
-  TYPE_COL: 1,
-  DOMAIN_COL: 2,
-  SUBDOMAIN_COL: 3,
-  DESC_COL: 4,
-  PROP_TOKEN_COL: 5,
-  LABOR_COL: 6,
-  EXP_COL: 7
-};
-
-const { TYPE_COL, LABOR_COL, EXP_COL } = columnTypes;
-
 export const createTableHeaders = () => [
-  { readOnly: true, value: "", width: 10 },
-  { value: "Type", width: 40, readOnly: true },
+  { readOnly: true, value: "", width: 20 },
+  { value: "Type", width: 120, readOnly: true },
   { value: "Domain", readOnly: true },
   { value: "Subdomain", readOnly: true },
   { value: "Description", readOnly: true },
@@ -81,19 +176,6 @@ export const createTableHeaders = () => [
   { value: "Labor (hours)", width: 60, readOnly: true },
   { value: "Expense (USD)", width: 60, readOnly: true }
 ];
-
-export const createNewRow = rowNum => {
-  return [
-    { readOnly: true, value: rowNum },
-    { value: "" },
-    { value: "" },
-    { value: "" },
-    { value: "" },
-    { value: "" },
-    { value: "" },
-    { value: "" }
-  ];
-};
 
 export const errors = {
   InvalidType: 1,
