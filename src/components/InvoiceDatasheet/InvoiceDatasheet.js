@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import ReactDataSheet from "react-datasheet";
 import dropRight from "lodash/dropRight";
 import "react-datasheet/lib/react-datasheet.css";
 import "./styles.css";
-import { createNewRow, errorsMessage, processCellsChange } from "./helpers";
+import {
+  errorsMessage,
+  processCellsChange,
+  convertLineItemsToGrid,
+  convertGridToLineItems,
+  generateBlankLineItem
+} from "./helpers";
 
 const InvoiceDatasheet = ({
   policy,
@@ -14,20 +20,7 @@ const InvoiceDatasheet = ({
   onChangeErrors: setErrors,
   readOnly
 }) => {
-  const grid = value;
-
-  const handleAddNewRow = e => {
-    e.preventDefault();
-    const newGrid = grid.concat([createNewRow(grid.length)]);
-    onChange(newGrid);
-  };
-
-  const handleRemoveLastRow = e => {
-    e.preventDefault();
-    if (grid.length > 2) {
-      onChange(dropRight(grid, 1));
-    }
-  };
+  const [grid, setGrid] = useState([]);
 
   const handleCellsChange = changes => {
     const { grid: newGrid, errors: newErrors } = processCellsChange(
@@ -35,8 +28,31 @@ const InvoiceDatasheet = ({
       grid,
       changes
     );
-    onChange(newGrid);
+    const lineItems = convertGridToLineItems(newGrid);
+    onChange(lineItems);
     setErrors([...newErrors]);
+  };
+
+  const handleAddNewRow = e => {
+    e.preventDefault();
+    const newValue = value.concat([generateBlankLineItem()]);
+    onChange(newValue);
+  };
+
+  // const
+  useEffect(
+    function updateGridOnValueChange() {
+      const grid = convertLineItemsToGrid(value, readOnly);
+      setGrid(grid);
+    },
+    [value.length, JSON.stringify(value)]
+  );
+
+  const handleRemoveLastRow = e => {
+    e.preventDefault();
+    if (grid.length > 2) {
+      onChange(dropRight(value, 1));
+    }
   };
 
   const anyError = !!errors && !!errors.length;

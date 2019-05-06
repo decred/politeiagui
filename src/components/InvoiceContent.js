@@ -1,6 +1,6 @@
 import React from "react";
 import Field, { FieldSeparator } from "./DescriptiveField";
-import InvoiceDatasheet, { convertLineItemsToGrid } from "./InvoiceDatasheet";
+import InvoiceDatasheet from "./InvoiceDatasheet";
 import { fromUSDCentsToUSDUnits } from "../helpers";
 
 const InvoiceContent = ({
@@ -36,7 +36,7 @@ const InvoiceContent = ({
         <FieldSeparator />
         <Field label="Payment address">{paymentaddress}</Field>
       </div>
-      <InvoiceDatasheet readOnly value={convertLineItemsToGrid(lineitems)} />
+      <InvoiceDatasheet readOnly value={lineitems} />
     </>
   );
 };

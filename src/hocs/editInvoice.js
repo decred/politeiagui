@@ -6,7 +6,6 @@ import compose from "lodash/fp/compose";
 import get from "lodash/fp/get";
 import { validate } from "../validators/invoice";
 import { arg, or } from "../lib/fp";
-import { convertLineItemsToGrid } from "../components/InvoiceDatasheet/helpers";
 import { fromUSDCentsToUSDUnits } from "../helpers";
 
 const editInvoiceConnector = connect(
@@ -79,7 +78,7 @@ class EditInvoiceContainer extends Component {
           location: input.contractorlocation,
           rate: fromUSDCentsToUSDUnits(input.contractorrate),
           address: input.paymentaddress,
-          datasheet: convertLineItemsToGrid(input.lineitems, false),
+          lineitems: input.lineitems,
           files: this.props.otherFiles
         }
       });

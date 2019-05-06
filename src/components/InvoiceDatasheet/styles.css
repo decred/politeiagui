@@ -3,6 +3,11 @@
   text-align: center;
 }
 
+.value-viewer, .data-editor {
+  text-align: left !important;
+  padding-left: 10px;
+}
+
 .row-handle.cell {
   width: 1rem;
 }
@@ -94,7 +99,8 @@ pre {
     color: red;
 }
 
-.data-grid-container .data-grid .cell .value-viewer {
-    overflow: hidden;
-    text-overflow: ellipsis;
+.total-label {
+  color: black;
+  font-size: 12px;
+  font-weight: bold;
 }
