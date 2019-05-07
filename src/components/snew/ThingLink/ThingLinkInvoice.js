@@ -43,8 +43,11 @@ const ThingLinkInvoice = ({
       review_status === INVOICE_STATUS_DISPUTED ||
       review_status === INVOICE_STATUS_UPDATED);
   const isInvoiceDetailPath = location.pathname.split("/")[1] === "invoices";
-  const invoiceCanBeApproved = review_status === INVOICE_STATUS_UNREVIEWED;
-  const invoiceCanBeRejected = review_status === INVOICE_STATUS_UNREVIEWED;
+
+  const invoiceMissingVerdict =
+    review_status === INVOICE_STATUS_UNREVIEWED ||
+    review_status === INVOICE_STATUS_UPDATED;
+
   const status = isApiRequestingSetInvoiceStatusByToken(id);
   const loadingReject = status === INVOICE_STATUS_REJECTED;
   const loadingApprove = status === INVOICE_STATUS_APPROVED;
@@ -105,7 +108,7 @@ const ThingLinkInvoice = ({
         </span>
         {isAdmin && (
           <ul style={{ display: "flex" }}>
-            {invoiceCanBeRejected && (
+            {invoiceMissingVerdict && (
               <li key="spam">
                 <ButtonWithLoadingIcon
                   className={`c-btn c-btn-primary${
@@ -135,7 +138,7 @@ const ThingLinkInvoice = ({
                 />
               </li>
             )}
-            {invoiceCanBeApproved && (
+            {invoiceMissingVerdict && (
               <li>
                 <ButtonWithLoadingIcon
                   className={`c-btn c-btn-primary${
@@ -164,7 +167,7 @@ const ThingLinkInvoice = ({
                 />
               </li>
             )}
-            {invoiceCanBeApproved && (
+            {invoiceMissingVerdict && (
               <li>
                 <ButtonWithLoadingIcon
                   className={`c-btn c-btn-primary${
