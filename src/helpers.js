@@ -296,7 +296,7 @@ export const renderInvoiceStatus = status => {
 };
 
 const mapInvoiceStatusToMessage = {
-  [INVOICE_STATUS_NEW]: "Invoice ureviewed",
+  [INVOICE_STATUS_NEW]: "Invoice unreviewed",
   [INVOICE_STATUS_UPDATED]: "Invoice updated and unreviewed",
   [INVOICE_STATUS_REJECTED]: "Invoice rejected",
   [INVOICE_STATUS_DISPUTED]: "Invoice disputed",
