@@ -11,20 +11,26 @@ import { getCurrentMonth, getCurrentYear } from "../../helpers";
 const invoiceYear = get(["input", "year"]);
 const invoiceMonth = get(["input", "month"]);
 
-const UserReminders = ({ invoices }) => {
+const getPreviousMonthAndYear = () => {
   const currentMonth = getCurrentMonth();
   const currentYear = getCurrentYear();
+  const month = currentMonth === 1 ? 12 : currentMonth - 1;
+  const year = currentMonth === 1 ? currentYear - 1 : currentYear;
+  return { month, year };
+};
+
+const UserReminders = ({ invoices }) => {
+  const { month, year } = getPreviousMonthAndYear();
   const hasSubmittedInvoiceInTheCurrentYearAndMonth = invoices.find(
-    inv =>
-      invoiceYear(inv) === currentYear && invoiceMonth(inv) === currentMonth
+    inv => invoiceYear(inv) === year && invoiceMonth(inv) === month
   );
 
   return (
     <>
       <Reminder
         done={!!hasSubmittedInvoiceInTheCurrentYearAndMonth}
-        text={"You have not yet submitted your invoice for this month."}
-        doneText={"You already submmited an invoice for this month."}
+        text={"You have not yet submitted your invoice for the previous month."}
+        doneText={"You already submmited an invoice for the previous month."}
         actionText={"Submit now"}
         actionLink={"invoices/new"}
         isAdmin={false}
@@ -34,17 +40,15 @@ const UserReminders = ({ invoices }) => {
 };
 
 const AdminReminders = ({ invoices }) => {
-  const currentMonth = getCurrentMonth();
-  const currentYear = getCurrentYear();
+  const { month, year } = getPreviousMonthAndYear();
 
   const invoicesWaitingForReview = invoices.filter(
     inv => inv.status === INVOICE_STATUS_NEW
   );
-  const newInvoicesForThisMonth = invoices.filter(
-    inv =>
-      invoiceYear(inv) === currentYear && invoiceMonth(inv) === currentMonth
+  const newInvoicesForThePreviousMonth = invoices.filter(
+    inv => invoiceYear(inv) === year && invoiceMonth(inv) === month
   );
-  const newInvoicesUnreviewed = newInvoicesForThisMonth.filter(
+  const newInvoicesUnreviewed = newInvoicesForThePreviousMonth.filter(
     inv => inv.status === INVOICE_STATUS_NEW
   );
 
@@ -53,9 +57,9 @@ const AdminReminders = ({ invoices }) => {
       <Reminder
         isAdmin={true}
         done={!invoicesWaitingForReview.length}
-        text={`There are ${
+        text={`${
           invoicesWaitingForReview.length
-        } invoices with pending review.`}
+        } invoice(s) with pending review.`}
         doneText={"All invoices are reviewed."}
         actionText={"Review"}
         actionLink={"admin/?tab=unreviewed"}
@@ -63,14 +67,16 @@ const AdminReminders = ({ invoices }) => {
       <Reminder
         isAdmin={true}
         done={!newInvoicesUnreviewed.length}
-        text={`${newInvoicesForThisMonth.length} invoices this month. ${
+        text={`${
+          newInvoicesForThePreviousMonth.length
+        } invoice(s) int the previous month. ${
           newInvoicesUnreviewed.length
         } with pending review.`}
         doneText={`${
-          newInvoicesForThisMonth.length
-        } invoices this month. All reviewed.`}
+          newInvoicesForThePreviousMonth.length
+        } invoice(s) in the previous month. All reviewed.`}
         actionText={"Review"}
-        actionLink={`admin/?month=${currentMonth}&year=${currentYear}`}
+        actionLink={`admin/?month=${month}&year=${year}`}
       />
     </>
   );
