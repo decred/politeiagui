@@ -1,5 +1,7 @@
 import "./styles.css";
 import DescriptiveField from "./DescriptiveField";
-export * from "./aux";
+import Separator from "./FieldSeparator";
+
+export const FieldSeparator = Separator;
 
 export default DescriptiveField;
