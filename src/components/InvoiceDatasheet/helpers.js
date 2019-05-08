@@ -26,7 +26,7 @@ const getDropdownOptionsByColumnType = colType => {
     "Design",
     "Research",
     "Documentation",
-    "Communnity Managament"
+    "Community Managament"
   ];
   const mapColTypeToOptions = {
     [columnTypes.TYPE_COL]: [
