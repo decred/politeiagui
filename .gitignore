@@ -12,3 +12,5 @@ test/e2e/reports
 coverage
 .yalc
 yalc.lock
+
+.env

@@ -14,6 +14,7 @@ import { onLocalStorageChange } from "./actions/app";
 import ModalStack from "./components/Modal/ModalStack";
 import { WELCOME_MODAL } from "./components/Modal/modalTypes";
 import { verifyUserPubkey } from "./helpers";
+import Config, { ConfigContext, useConfig } from "./Config";
 
 const store = configureStore();
 
@@ -29,6 +30,7 @@ const createStorageListener = store => event =>
   store.dispatch(onLocalStorageChange(event));
 
 class Loader extends Component {
+  static contextType = ConfigContext;
   constructor(props) {
     super();
     props.onInit();
@@ -76,6 +78,8 @@ class Loader extends Component {
 
     this.storageListener = createStorageListener(store);
     window.addEventListener("storage", this.storageListener);
+
+    document.title = this.context.title;
   }
 
   componentWillUnmount() {
@@ -94,13 +98,17 @@ class Loader extends Component {
 
 const LoaderComponent = withRouter(loaderConnector(Loader));
 
-const StagingAlert = () =>
-  process.env.REACT_APP_STAGING ? (
-    <div className="staging-alert">
-      This is the politeia staging environment. DO NOT USE, YOU WILL LOSE YOUR
-      DECRED.
-    </div>
-  ) : null;
+const StagingAlert = () => {
+  const { isStaging } = useConfig();
+  return (
+    isStaging && (
+      <div className="staging-alert">
+        This is the politeia staging environment. DO NOT USE, YOU WILL LOSE YOUR
+        DECRED.
+      </div>
+    )
+  );
+};
 
 const HeaderAlertComponent = withRouter(
   loaderConnector(
@@ -141,16 +149,18 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Router>
-          <LoaderComponent>
-            <StagingAlert />
-            <SessionExpiresIndicator />
-            <HeaderAlertComponent />
-            <Subreddit>
-              <Routes />
-            </Subreddit>
-          </LoaderComponent>
-        </Router>
+        <Config>
+          <Router>
+            <LoaderComponent>
+              <StagingAlert />
+              <SessionExpiresIndicator />
+              <HeaderAlertComponent />
+              <Subreddit>
+                <Routes />
+              </Subreddit>
+            </LoaderComponent>
+          </Router>
+        </Config>
       </Provider>
     );
   }
