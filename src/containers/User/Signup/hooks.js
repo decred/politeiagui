@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import * as sel from "src/selectors";
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
-import { signupValidationSchema } from "./validation";
 import { useConfig } from "src/Config";
 import { getQueryStringValues } from "src/lib/queryString";
+import { useRedux } from "src/redux";
+import * as sel from "src/selectors";
+import { signupValidationSchema } from "./validation";
 
 const mapStateToProps = {
   policy: sel.policy,

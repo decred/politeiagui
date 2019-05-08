@@ -1,10 +1,10 @@
+import { Button, Text, TextInput } from "pi-ui";
 import React, { useState } from "react";
-import { TextInput, Button, Text } from "pi-ui";
 import { Link as RouterLink } from "react-router-dom";
-import ModalIdentityWarning from "src/componentsv2/ModalIdentityWarning";
-import FormWrapper from "src/componentsv2/FormWrapper";
-import EmailSentMessage from "src/componentsv2/EmailSentMessage";
 import DevelopmentOnlyContent from "src/componentsv2/DevelopmentOnlyContent";
+import EmailSentMessage from "src/componentsv2/EmailSentMessage";
+import FormWrapper from "src/componentsv2/FormWrapper";
+import ModalIdentityWarning from "src/componentsv2/ModalIdentityWarning";
 import { useSignup } from "./hooks";
 
 const SignupForm = () => {
@@ -149,22 +149,22 @@ const SignupForm = () => {
               </Footer>
             </Form>
           ) : (
-            <EmailSentMessage
-              title="Please check your inbox to verify your registration"
-              email={email}
-              bulletPoints={[
-                "The verification link needs to be opened with the same browser that you used to sign up.",
-                <>
-                  Make sure you don’t already have an account on Politeia with
+              <EmailSentMessage
+                title="Please check your inbox to verify your registration"
+                email={email}
+                bulletPoints={[
+                  "The verification link needs to be opened with the same browser that you used to sign up.",
+                  <>
+                    Make sure you don’t already have an account on Politeia with
                   this email address. If you do, you should{" "}
-                  <Link to="/user/request-reset-password">
-                    reset your password
+                    <Link to="/user/request-reset-password">
+                      reset your password
                   </Link>{" "}
-                  instead.
+                    instead.
                 </>
-              ]}
-            />
-          )
+                ]}
+              />
+            )
         }
       </FormWrapper>
       <DevelopmentOnlyContent

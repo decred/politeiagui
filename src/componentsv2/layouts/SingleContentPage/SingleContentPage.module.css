@@ -25,7 +25,7 @@
     }
 }
 
-  
+
 /* SMALL WIDTH */
 @media screen and (max-width: 768px){
     .customMain {
@@ -42,4 +42,4 @@
     .customMain {
         margin-top: 0 !important;
     }
-} 
+}

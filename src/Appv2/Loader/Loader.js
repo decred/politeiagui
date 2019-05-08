@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  createContext,
-  useState,
-  useMemo
-} from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useLoader } from "./hooks";
 
 export const LoaderContext = createContext();

@@ -12,7 +12,7 @@
   align-items: center;
 }
 
-.navLink { 
+.navLink {
     composes: navContainer;
     color: var(--color-gray-dark);
     border-bottom: 2px solid transparent;
@@ -41,5 +41,4 @@
         padding: 0 var(--spacing-small);
     }
 }
-  
-  
+
