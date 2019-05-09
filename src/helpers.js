@@ -141,7 +141,8 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     81: "Invoices require at least 1 line item",
     82: "Only one invoice per month/year is allowed to be submitted",
     83: "An invalid month/year was submitted on an invoice",
-    84: "Exchange rate was invalid or didn't match the expected result"
+    84: "Exchange rate was invalid or didn't match the expected result",
+    85: "The provided password was invalid"
   };
 
   const error = errorMessages[errorCode];
