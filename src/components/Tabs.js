@@ -13,7 +13,9 @@ export const Tab = ({ title, count, tabId, selected, onTabChange }) => {
   if (typeof count !== "undefined") {
     countIcon = <div className="tab-count">{count}</div>;
   }
-
+  if (count === "") {
+    countIcon = null;
+  }
   return (
     <span
       className={"tab" + (selected ? " tab-selected" : "")}
