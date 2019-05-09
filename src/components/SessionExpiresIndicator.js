@@ -41,15 +41,8 @@ class SessionExpiresIndicator extends React.Component {
   };
 
   finishInterval = () => {
-    const {
-      loggedInAsEmail,
-      handleLogout,
-      openModal,
-      history,
-      location
-    } = this.props;
+    const { loggedInAsEmail, handleLogout, openModal, location } = this.props;
 
-    const redirectToLogoutPage = () => history.push("/user/logout");
     const openSessionExpiredModal = () =>
       openModal(
         modalTypes.LOGIN,
@@ -66,7 +59,7 @@ class SessionExpiresIndicator extends React.Component {
     // there is no need to trigger the logout request b/c the session has
     // already expired
     if (loggedInAsEmail) {
-      handleLogout({}, redirectToLogoutPage());
+      handleLogout();
       openSessionExpiredModal();
     }
   };
