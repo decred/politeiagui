@@ -105,7 +105,7 @@ const HomeCMS = ({
 
   return (
     <div className="content">
-      <h1 className="content-title">Contractor Mangament System</h1>
+      <h1 className="content-title">Contractor Management System</h1>
       {isLoading ? (
         <PageLoadingIcon />
       ) : error ? (
