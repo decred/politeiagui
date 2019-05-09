@@ -1,9 +1,0 @@
-{
-  "presets": ["es2017", "react", "flow", "stage-2"],
-  "plugins": [
-    "transform-promise-to-bluebird",
-    "transform-class-properties",
-    "add-module-exports"
-  ],
-  "comments": false
-}
