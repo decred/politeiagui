@@ -10,6 +10,7 @@ const getComposer = () => {
 
   if (!isProductionEnv && browserHasReduxDevTools) {
     return window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+      trace: true
       // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
     });
   }

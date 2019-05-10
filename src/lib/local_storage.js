@@ -91,7 +91,34 @@ const handleSaveAppDraftProposals = state => {
   }
 };
 
+const handleSaveAppDraftInvoices = state => {
+  const email = loggedInAsEmail(state);
+  if (!email) {
+    return;
+  }
+  const stateFromLs = loadStateLocalStorage(email) || {};
+  const draftInvoicesFromStore = state.app.draftInvoices;
+  const draftInvoicesLocalStorage = get(
+    stateFromLs,
+    ["app", "draftInvoices"],
+    {}
+  );
+
+  if (
+    draftInvoicesFromStore &&
+    !isEqual(draftInvoicesFromStore, draftInvoicesLocalStorage)
+  ) {
+    const newValue = set(
+      stateFromLs,
+      ["app", "draftInvoices"],
+      draftInvoicesFromStore
+    );
+    saveStateLocalStorage(newValue, email);
+  }
+};
+
 export const handleSaveStateToLocalStorage = state => {
   handleSaveApiMe(state);
   handleSaveAppDraftProposals(state);
+  handleSaveAppDraftInvoices(state);
 };

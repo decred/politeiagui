@@ -8,7 +8,10 @@ import HeaderAlert from "./components/HeaderAlert";
 import SessionExpiresIndicator from "./components/SessionExpiresIndicator";
 import Routes from "./Routes";
 import loaderConnector from "./connectors/loader";
-import { handleSaveTextEditorsContent } from "./lib/editors_content_backup";
+import {
+  handleSaveTextEditorsContent,
+  handleSaveCSVEditorsContent
+} from "./lib/editors_content_backup";
 import { handleSaveStateToLocalStorage } from "./lib/local_storage";
 import { onLocalStorageChange } from "./actions/app";
 import ModalStack from "./components/Modal/ModalStack";
@@ -22,6 +25,7 @@ store.subscribe(
   throttle(() => {
     const state = store.getState();
     handleSaveTextEditorsContent(state);
+    handleSaveCSVEditorsContent(state);
     handleSaveStateToLocalStorage(state);
   }, 1000)
 );

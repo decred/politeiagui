@@ -17,7 +17,7 @@ export const PROPOSAL_FORM_DESC = "description";
 
 export const getProposalBackupKey = (key, path) => `proposal-${key}::${path}`;
 
-const updateFormData = state => {
+const updateProposalFormData = state => {
   const proposalFormState = state.form["form/record"];
   const newProposalData = (proposalFormState && proposalFormState.values) || {};
   const name = newProposalData[PROPOSAL_FORM_NAME];
@@ -62,5 +62,54 @@ export const getNewProposalData = () => {
 };
 
 export const handleSaveTextEditorsContent = state => {
-  updateFormData(state);
+  updateProposalFormData(state);
+};
+
+//CMS
+export const NEW_INVOICE_PATH = "/invoices/new";
+
+export const getInvoicePath = location => {
+  const { pathname, search } = location;
+  const { draftid } = qs.parse(search);
+  const path = draftid ? `${pathname}-${draftid}` : pathname;
+  return path;
+};
+
+export const INVOICE_FORM_NAME = "name";
+
+export const getInvoiceBackupKey = (key, path) => `invoice-${key}::${path}`;
+
+const updateInvoiceFormData = state => {
+  const invoiceFormState = state.form["form/record"];
+  const newInvoiceData = (invoiceFormState && invoiceFormState.values) || {};
+  const name = newInvoiceData[INVOICE_FORM_NAME];
+  if (!name) {
+    return;
+  }
+
+  const path = getProposalPath(window.location);
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_NAME, path),
+    newInvoiceData[INVOICE_FORM_NAME]
+  );
+};
+
+export const resetNewInvoiceData = () => {
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_NAME, NEW_INVOICE_PATH),
+    ""
+  );
+};
+
+export const getNewInvoiceData = () => {
+  return {
+    name:
+      sessionStorage.getItem(
+        getInvoiceBackupKey(INVOICE_FORM_NAME, NEW_INVOICE_PATH)
+      ) || ""
+  };
+};
+
+export const handleSaveCSVEditorsContent = state => {
+  updateInvoiceFormData(state);
 };

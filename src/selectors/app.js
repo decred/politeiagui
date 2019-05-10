@@ -19,11 +19,11 @@ import {
   apiUserInvoices,
   getPropVoteStatus,
   apiUnvettedStatusResponse,
+  numOfUserProposals,
   userid,
   apiUserResponse,
   apiEditUserResponse,
   apiEditUserPayload,
-  loggedInAsEmail,
   isCMS,
   apiAdminInvoices
 } from "./api";
@@ -39,7 +39,7 @@ import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_USER_FILTER_SUBMITTED,
-  PROPOSAL_USER_FILTER_DRAFT,
+  PROPOSAL_USER_FILTER_DRAFT_PROPOSALS,
   PROPOSAL_APPROVED,
   PROPOSAL_REJECTED,
   INVOICE_STATUS_NEW,
@@ -60,7 +60,8 @@ import {
   CMS_PAYWALL_STATUS,
   INVOICE_FILTER_ALL,
   INVOICE_STATUS_DISPUTED,
-  FILTER_ALL_MONTHS
+  FILTER_ALL_MONTHS,
+  PROPOSAL_USER_FILTER_DRAFT_INVOICES
 } from "../constants";
 import {
   getTextFromIndexMd,
@@ -93,6 +94,14 @@ export const draftProposals = state =>
   state && state.app && state.app.draftProposals;
 export const draftProposalById = state => {
   const drafts = draftProposals(state);
+  const { draftid } = qs.parse(window.location.search);
+  return (draftid && drafts && drafts[draftid]) || false;
+};
+export const draftInvoices = state => {
+  return state && state.app && state.app.draftInvoices;
+};
+export const draftInvoiceById = state => {
+  const drafts = draftInvoices(state);
   const { draftid } = qs.parse(window.location.search);
   return (draftid && drafts && drafts[draftid]) || false;
 };
@@ -254,11 +263,7 @@ export const userHasPaid = state => {
   return getUserPaywallStatus(state) === PAYWALL_STATUS_PAID;
 };
 export const userCanExecuteActions = state => {
-  return (
-    userHasPaid(state) &&
-    !getKeyMismatch(state) &&
-    !!loggedInAsEmail(state) !== false
-  );
+  return userHasPaid(state) && !getKeyMismatch(state);
 };
 
 export const isProposalStatusApproved = state =>
@@ -380,7 +385,7 @@ export const getUserProposals = state => {
 
   if (userFilterValue === PROPOSAL_USER_FILTER_SUBMITTED) {
     return getSubmittedUserProposals(state)(userID);
-  } else if (userFilterValue === PROPOSAL_USER_FILTER_DRAFT) {
+  } else if (userFilterValue === PROPOSAL_USER_FILTER_DRAFT_PROPOSALS) {
     return getDraftProposals(state);
   }
 
@@ -394,7 +399,15 @@ export const getUserInvoicesFilterCounts = state => {
   if (month !== FILTER_ALL_MONTHS) {
     invoices = getInvoicesByMonth(getInvoicesByYear(invoices, year), month);
   }
-  return getInvoicesCountByStatus(invoices);
+  const draftFilterCounts = {
+    [PROPOSAL_USER_FILTER_DRAFT_INVOICES]: getDraftInvoices(state).length
+  };
+  const userInvoiceCounts = Object.assign(
+    {},
+    getInvoicesCountByStatus(invoices),
+    draftFilterCounts
+  );
+  return userInvoiceCounts;
 };
 
 export const getAdminInvoicesCountByStatus = state => {
@@ -478,15 +491,30 @@ export const getUserInvoices = state => {
   const invoicesByYear = getInvoicesByYear(invoicesByStatus, yearFilter);
   const invoicesByMonth = getInvoicesByMonth(invoicesByYear, monthFilter);
 
-  return invoicesByStatus && invoicesByYear && invoicesByMonth;
+  if (userFilterValue === PROPOSAL_USER_FILTER_DRAFT_INVOICES) {
+    return getDraftInvoices(state);
+  } else {
+    return invoicesByStatus && invoicesByYear && invoicesByMonth;
+  }
+};
+
+export const getDraftInvoices = state => {
+  const draftsObj = draftInvoices(state) || {};
+  const drafts = Object.keys(draftsObj)
+    .filter(
+      key => ["newDraft", "lastSubmitted", "originalName"].indexOf(key) === -1
+    )
+    .map(key => draftsObj[key]);
+
+  const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
+
+  return sortByNewestFirst(drafts);
 };
 
 export const getUserProposalFilterCounts = state => {
-  const userId = userid(state);
   const proposalFilterCounts = {
-    [PROPOSAL_USER_FILTER_SUBMITTED]: getSubmittedUserProposals(state)(userId)
-      .length,
-    [PROPOSAL_USER_FILTER_DRAFT]: getDraftProposals(state).length
+    [PROPOSAL_USER_FILTER_SUBMITTED]: numOfUserProposals(state),
+    [PROPOSAL_USER_FILTER_DRAFT_PROPOSALS]: getDraftProposals(state).length
   };
 
   proposalFilterCounts[PROPOSAL_FILTER_ALL] = Object.keys(
