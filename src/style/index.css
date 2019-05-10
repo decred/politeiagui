@@ -1890,6 +1890,7 @@ form div.usertext-body.may-blank-within.md-container {
 
 .btn.loading {
   cursor: not-allowed;
+  overflow: hidden;
 }
 
 .thing  {
