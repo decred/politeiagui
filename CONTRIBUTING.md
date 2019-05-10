@@ -18,11 +18,11 @@ introduce yourself. We always like to know who is interested in the project and 
 
 **Do you want to add a new feature or change an existing one?**
 
-- Before openning an issue, suggest your change in the [Politeia Room](https://riot.im/app/#/room/#politeia:decred.org) and collect enough positive feedback. We expect GitHub issues to be primarly intended to bug reports and fixes.
+- Before openning an issue, suggest your change in the [Politeia Room](https://riot.im/app/#/room/#politeia:decred.org) and collect enough positive feedback. We expect GitHub issues to be primarly intended for bug reports and fixes.
 
 **Do you intend to work on a patch that fixes a bug?**
 
-- Give a signal in the issue that you are going to work on it or assign the issue to your self if you have the GitHub permission.
+- Give a signal in the issue that you are going to work on it or assign the issue to yourself if you have the GitHub permission.
 
 - Do your best to drive the issue into completition. But if you think you won't be able to finish it, remember to comment in the issue signaling that you are no longer working on it.
 
@@ -34,9 +34,9 @@ introduce yourself. We always like to know who is interested in the project and 
 
 - Ensure the PR description clearly describes the problem and solution. Include the relevant issue number if applicable. 
 
-**Do you intend to work an issue but you don't know what to pick?**
+**Do you intend to work on an issue but you don't know which one to pick?**
 
-- **If you are newcomer**, look for the 'good-first-issue' label in the issues list. Those are the easiest ones to be dealt with.
+- **If you are a newcomer**, look for the 'good-first-issue' label in the issues list. Those are the easiest ones to be dealt with.
 
 - **If you are already contributing**, prioritize the issues by weighing the value it will deliver to the end user and how fast you can write that code. Generally speaking, the labels 'bug', 'ux', 'enhancements' are good choices. They are generally faster to be handled and they deliver a good value to the end user. 
 
