@@ -1,5 +1,7 @@
 # Politeia GUI
 
+[![Build Status](https://travis-ci.org/decred/politeiagui.svg?branch=master)](https://travis-ci.org/decred/politeiagui)
+
 Politeiagui is the web frontent for [Politiea](https://github.com/decred/politeia), Decred's [proposal system](https://proposals.decred.org/). 
 
 
@@ -90,6 +92,10 @@ Relevant libraries/modules used for testing are:
  - [fetch-mock](http://www.wheresrhys.co.uk/fetch-mock/api) - Mock http requests
  - [redux-mock-store](https://github.com/dmitry-zaets/redux-mock-store) and [redux-actions-assertions](https://github.com/redux-things/redux-actions-assertions) for testing redux actions.
 
+
+## Contributing 
+
+We encourage you to contribute to Politeiagui. Please check [How to contribute to Politeiagui](../CONTRIBUTING.md) for guidelines about how to proceed.
 
 ## Docker
 
