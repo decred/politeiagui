@@ -75,28 +75,54 @@ export const getInvoicePath = location => {
   return path;
 };
 
+export const INVOICE_FORM_ADDRESS = "address";
+export const INVOICE_FORM_CONTACT = "contact";
+export const INVOICE_FORM_LINE_ITEMS = "lineitems";
+export const INVOICE_FORM_LOCATION = "location";
+export const INVOICE_FORM_MONTH = "month";
+export const INVOICE_FORM_YEAR = "year";
 export const INVOICE_FORM_NAME = "name";
+export const INVOICE_FORM_RATE = "rate";
 
 export const getInvoiceBackupKey = (key, path) => `invoice-${key}::${path}`;
 
 const updateInvoiceFormData = state => {
   const invoiceFormState = state.form["form/record"];
   const newInvoiceData = (invoiceFormState && invoiceFormState.values) || {};
+  console.log(newInvoiceData);
+
+  const address = newInvoiceData[INVOICE_FORM_ADDRESS];
+  const contact = newInvoiceData[INVOICE_FORM_CONTACT];
+  const lineItems = newInvoiceData[INVOICE_FORM_LINE_ITEMS];
+  const location = newInvoiceData[INVOICE_FORM_LOCATION];
+  const month = newInvoiceData[INVOICE_FORM_MONTH];
+  const year = newInvoiceData[INVOICE_FORM_YEAR];
   const name = newInvoiceData[INVOICE_FORM_NAME];
-  if (!name) {
+  const rate = newInvoiceData[INVOICE_FORM_RATE];
+
+  if (
+    !address &&
+    !contact &&
+    !lineItems &&
+    !location &&
+    !month &&
+    !year &&
+    !name &&
+    !rate
+  ) {
     return;
   }
 
   const path = getProposalPath(window.location);
   sessionStorage.setItem(
-    getInvoiceBackupKey(INVOICE_FORM_NAME, path),
-    newInvoiceData[INVOICE_FORM_NAME]
+    getInvoiceBackupKey(INVOICE_FORM_ADDRESS, path),
+    newInvoiceData[INVOICE_FORM_ADDRESS]
   );
 };
 
 export const resetNewInvoiceData = () => {
   sessionStorage.setItem(
-    getInvoiceBackupKey(INVOICE_FORM_NAME, NEW_INVOICE_PATH),
+    getInvoiceBackupKey(INVOICE_FORM_ADDRESS, NEW_INVOICE_PATH),
     ""
   );
 };
@@ -105,7 +131,7 @@ export const getNewInvoiceData = () => {
   return {
     name:
       sessionStorage.getItem(
-        getInvoiceBackupKey(INVOICE_FORM_NAME, NEW_INVOICE_PATH)
+        getInvoiceBackupKey(INVOICE_FORM_ADDRESS, NEW_INVOICE_PATH)
       ) || ""
   };
 };

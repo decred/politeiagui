@@ -171,13 +171,31 @@ export const onLoadDraftProposals = email => {
 export const onDeleteDraftProposal = draftId =>
   act.DELETE_DRAFT_PROPOSAL(draftId);
 
-export const onSaveDraftInvoice = ({ name, description, files, draftId }) => {
+export const onSaveDraftInvoice = ({
+  month,
+  year,
+  name,
+  location,
+  contact,
+  rate,
+  address,
+  lineitems,
+  exchangerate,
+  files,
+  draftId
+}) => {
   resetNewInvoiceData();
   return act.SAVE_DRAFT_INVOICE({
-    name: name.trim(),
-    description,
+    month,
+    year,
+    name,
+    location,
+    contact,
+    rate,
+    address,
+    lineitems,
+    exchangerate,
     files,
-    timestamp: Date.now() / 1000,
     draftId
   });
 };

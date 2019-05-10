@@ -500,6 +500,7 @@ export const getUserInvoices = state => {
 
 export const getDraftInvoices = state => {
   const draftsObj = draftInvoices(state) || {};
+  console.log(draftsObj);
   const drafts = Object.keys(draftsObj)
     .filter(
       key => ["newDraft", "lastSubmitted", "originalName"].indexOf(key) === -1
