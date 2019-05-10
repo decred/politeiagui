@@ -106,6 +106,7 @@ const ProposalCreditsSummary = ({
                   <DcrdataTxLink
                     isTestnet={isTestnet}
                     txId={creditPurchase.txId}
+                    isTxId={creditPurchase.txId !== "created_by_dbutil"}
                   />
                 </div>
                 <div className="credit-purchase-cell credit-purchase-status">
