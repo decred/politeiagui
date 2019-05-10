@@ -16,7 +16,7 @@ const submitProposalConnector = connect(
     onFetchData: act.onGetPolicy,
     openModal: act.openModal,
     onResetProposal: act.onResetProposal,
-    onSaveDraft: act.onSaveDraftProposal,
+    onSaveProposalDraft: act.onSaveDraftProposal,
     onDeleteDraft: act.onDeleteDraftProposal
   }
 );

@@ -4,7 +4,10 @@ import { bindActionCreators } from "redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
 import { or } from "../lib/fp";
-import { CMS_LIST_HEADER_USER } from "../constants";
+import {
+  CMS_LIST_HEADER_USER,
+  PROPOSAL_USER_FILTER_DRAFT_INVOICES
+} from "../constants";
 
 const userInvoicesConnector = connect(
   sel.selectorMap({
@@ -36,7 +39,15 @@ const userInvoicesConnector = connect(
 
 class Wrapper extends Component {
   componentDidMount() {
-    const { userid } = this.props;
+    const { match, onChangeFilter, userid } = this.props;
+
+    if (match.params && typeof match.params.filter !== "undefined") {
+      onChangeFilter(
+        {
+          drafts: PROPOSAL_USER_FILTER_DRAFT_INVOICES
+        }[match.params.filter]
+      );
+    }
 
     if (userid) {
       this.props.onFetchUserInvoices(userid);

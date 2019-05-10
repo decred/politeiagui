@@ -45,7 +45,11 @@ class Loader extends Component {
     const criticalAPIError = !prevProps.apiError && this.props.apiError;
 
     if (!prevProps.loggedInAsEmail && this.props.loggedInAsEmail) {
-      this.props.onLoadDraftProposals(this.props.loggedInAsEmail);
+      if (!this.props.cms) {
+        this.props.onLoadDraftProposals(this.props.loggedInAsEmail);
+      } else {
+        this.props.onLoadDraftInvoices(this.props.loggedInAsEmail);
+      }
     }
     if (prevProps.userPubkey && this.props.userPubkey) {
       verifyUserPubkey(
