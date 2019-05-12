@@ -21,6 +21,7 @@ const newInvoiceConnector = connect(
     exchangeRate: sel.exchangeRate,
     loadingExchangeRate: sel.isApiRequestingExchangeRate,
     exchangeRateError: sel.apiExchangeRateError,
+    draftInvoiceById: sel.draftInvoiceById,
     draftInvoice: sel.draftInvoiceById
   }),
   {
@@ -28,7 +29,8 @@ const newInvoiceConnector = connect(
     onSave: act.onSaveNewInvoice,
     onResetInvoice: act.onResetInvoice,
     onFetchExchangeRate: act.onFetchExchangeRate,
-    onSaveInvoiceDraft: act.onSaveDraftInvoice
+    onSaveInvoiceDraft: act.onSaveDraftInvoice,
+    onDeleteDraftInvoice: act.onDeleteDraftInvoice
   }
 );
 
@@ -36,7 +38,7 @@ class NewInvoiceContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      initialValues: props.draftProposal || {
+      initialValues: props.draftInvoice || {
         month: getCurrentMonth() - 1,
         year: getCurrentYear(),
         lineitems: [generateBlankLineItem()]
@@ -47,14 +49,13 @@ class NewInvoiceContainer extends Component {
   componentDidUpdate(prevProps) {
     const { token, onResetInvoice, draftInvoice } = this.props;
     if (token) {
-      if (this.props.draftProposalById) {
-        this.props.onDeleteDraft(this.props.draftProposalById.draftId);
+      if (this.props.draftInvoiceById) {
+        this.props.onDeleteDraft(this.props.draftInvoiceById.draftId);
       }
       onResetInvoice();
       return this.props.history.push("/invoices/" + token);
     }
     const draftInvoiceDataAvailable = !prevProps.draftInvoice && draftInvoice;
-    console.log(draftInvoiceDataAvailable);
     if (draftInvoiceDataAvailable) {
       this.setState({
         initialValues: draftInvoice

@@ -35,7 +35,9 @@ const ThingLinkInvoice = ({
   userCanExecuteActions,
   loggedInAsEmail,
   isApiRequestingSetInvoiceStatusByToken,
-  rank = 0
+  rank = 0,
+  draftId,
+  onDeleteDraftInvoice
 }) => {
   const isEditable =
     authorid === userId &&
@@ -106,6 +108,22 @@ const ThingLinkInvoice = ({
 
           {otherFiles && <ProposalImages readOnly files={otherFiles} />}
         </span>
+        {draftId && (
+          <div className="tagline proposal-draft">
+            Saved as draft
+            <span
+              className="delete-draft"
+              onClick={() => {
+                confirmWithModal(modalTypes.CONFIRM_ACTION, {
+                  message: "Are you sure you want to delete this draft?"
+                }).then(ok => ok && onDeleteDraftInvoice(draftId));
+              }}
+            >
+              <i className="fa fa-trash" />
+              Delete
+            </span>
+          </div>
+        )}
         {isAdmin && (
           <ul style={{ display: "flex" }}>
             {invoiceMissingVerdict && (

@@ -17,7 +17,8 @@ const actionsCMS = connect(
   }),
   {
     onChangeStatus: act.onSetInvoiceStatus,
-    openModal: act.openModal
+    openModal: act.openModal,
+    onDeleteDraftInvoice: act.onDeleteDraftInvoice
   }
 );
 

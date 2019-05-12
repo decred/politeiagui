@@ -100,7 +100,6 @@ export const INVOICE_STATUS_APPROVED = 6; // Invoice has been approved
 export const INVOICE_STATUS_PAID = 7; // Invoice has been paid
 
 export const INVOICE_FILTER_ALL = 99;
-
 export const PROPOSAL_USER_FILTER_DRAFT_INVOICES = 100;
 
 // export const INVOICE_USER_FILTER_DRAFT = 1;

@@ -41,6 +41,7 @@ export const CustomContent = ({
   loggedInAsEmail,
   ...props
 }) => {
+  console.log(invoiceCounts);
   const invalidProposalComment =
     !isLoading &&
     (commentid && comments && !comments.find(c => c.commentid === commentid));
