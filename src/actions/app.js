@@ -207,7 +207,7 @@ export const onLoadDraftInvoices = email => {
 };
 
 export const onDeleteDraftInvoice = draftId => {
-  return act.DELETE_DRAFT_Invoice(draftId);
+  return act.DELETE_DRAFT_INVOICE(draftId);
 };
 
 export const onSaveChangeUsername = ({ password, newUsername }) => (
