@@ -57,6 +57,7 @@ class NewProposalWrapper extends Component {
 
     const draftProposalDataAvailable =
       !prevProps.draftProposal && draftProposal;
+    console.log(draftProposal, draftProposalDataAvailable);
     if (draftProposalDataAvailable) {
       this.setState({
         initialValues: draftProposal

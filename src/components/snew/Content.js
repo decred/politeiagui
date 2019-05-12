@@ -9,6 +9,7 @@ import ProposalFilter from "../ProposalFilter";
 import InvoiceFilter from "../InvoiceFilter";
 import DateFilter from "../DateFilter";
 import thingLinkConnector from "../../connectors/thingLink";
+import { PROPOSAL_USER_FILTER_DRAFT_INVOICES } from "../../constants";
 
 export const CustomContent = ({
   bodyClassName = "listing-page",
@@ -41,7 +42,6 @@ export const CustomContent = ({
   loggedInAsEmail,
   ...props
 }) => {
-  console.log(invoiceCounts);
   const invalidProposalComment =
     !isLoading &&
     (commentid && comments && !comments.find(c => c.commentid === commentid));
@@ -126,13 +126,15 @@ export const CustomContent = ({
             filterValue={filterValue}
             invoiceCounts={invoiceCounts}
           />
-          <DateFilter
-            header={header}
-            monthFilterValue={monthFilterValue}
-            yearFilterValue={yearFilterValue}
-            handleChangeDateFilter={onChangeDateFilter}
-            handleResetDateFilter={onResetDateFilter}
-          />
+          {filterValue !== PROPOSAL_USER_FILTER_DRAFT_INVOICES && (
+            <DateFilter
+              header={header}
+              monthFilterValue={monthFilterValue}
+              yearFilterValue={yearFilterValue}
+              handleChangeDateFilter={onChangeDateFilter}
+              handleResetDateFilter={onResetDateFilter}
+            />
+          )}
         </React.Fragment>
       ) : (
         <ProposalFilter

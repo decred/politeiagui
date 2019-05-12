@@ -13,7 +13,7 @@ const actionsCMS = connect(
     // setStatusProposalError: sel.setStatusProposalError,
     isApiRequestingSetInvoiceStatusByToken:
       sel.isApiRequestingSetInvoiceStatusByToken
-    // startVoteError: sel.apiStartVoteError
+    // startVoteError: sel.apiStartVoteError,
   }),
   {
     onChangeStatus: act.onSetInvoiceStatus,

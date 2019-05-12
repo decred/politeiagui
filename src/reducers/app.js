@@ -117,6 +117,8 @@ const app = (state = DEFAULT_STATE, action) =>
     [act.SAVE_DRAFT_INVOICE]: () => {
       const newDraftInvoices = state.draftInvoices;
       const draftId = action.payload.draftId || uniqueID("draft");
+      const month = action.payload.month;
+      const year = action.payload.year;
       return {
         ...state,
         draftInvoices: {
@@ -126,6 +128,14 @@ const app = (state = DEFAULT_STATE, action) =>
           [draftId]: {
             ...action.payload,
             draftId
+          },
+          [month]: {
+            ...action.payload,
+            month
+          },
+          [year]: {
+            ...action.payload,
+            year
           }
         }
       };

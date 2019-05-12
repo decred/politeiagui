@@ -58,7 +58,9 @@ export const invoiceToT3 = (
     numcomments,
     input,
     version,
-    draftId = ""
+    draftId = "",
+    month,
+    year
   },
   idx
 ) => ({
@@ -69,8 +71,10 @@ export const invoiceToT3 = (
     numcomments,
     input,
     rank: idx + 1,
-    title: `Invoice from ${username} - ${input && input.month}/${input &&
-      input.year}`,
+    title: !draftId
+      ? `Invoice from ${username} - ${input && input.month}/${input &&
+          input.year}`
+      : `Draft for ${month}/${year}`,
     id: censorshiprecord.token,
     name: "t3_" + censorshiprecord.token,
     review_status: status,

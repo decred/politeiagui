@@ -180,7 +180,6 @@ export const onSaveDraftInvoice = ({
   rate,
   address,
   lineitems,
-  exchangerate,
   files,
   draftId
 }) => {
@@ -194,9 +193,9 @@ export const onSaveDraftInvoice = ({
     rate,
     address,
     lineitems,
-    exchangerate,
     files,
-    draftId
+    draftId,
+    timestamp: Date.now() / 1000
   });
 };
 

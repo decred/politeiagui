@@ -96,11 +96,13 @@ const ThingLinkInvoice = ({
               </span>
             )}
           </span>
-          <span className="submitted-by">
-            {"submitted "}
-            <DateTooltip createdAt={created_utc} />
-          </span>
-          {renderInvoiceStatus(review_status)}
+          {created_utc && (
+            <span className="submitted-by">
+              {"submitted "}
+              <DateTooltip createdAt={created_utc} />
+            </span>
+          )}
+          {review_status && renderInvoiceStatus(review_status)}
 
           {input && (
             <InvoiceContent expanded={isInvoiceDetailPath} {...input} />
