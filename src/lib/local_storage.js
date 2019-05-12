@@ -108,11 +108,13 @@ const handleSaveAppDraftInvoices = state => {
     draftInvoicesFromStore &&
     !isEqual(draftInvoicesFromStore, draftInvoicesLocalStorage)
   ) {
+    console.log("store and local storage not equal", draftInvoicesFromStore);
     const newValue = set(
       stateFromLs,
       ["app", "draftInvoices"],
       draftInvoicesFromStore
     );
+    console.log(newValue);
     saveStateLocalStorage(newValue, email);
   }
 };
@@ -121,4 +123,5 @@ export const handleSaveStateToLocalStorage = state => {
   handleSaveApiMe(state);
   handleSaveAppDraftProposals(state);
   handleSaveAppDraftInvoices(state);
+  console.log(handleSaveAppDraftInvoices(state));
 };

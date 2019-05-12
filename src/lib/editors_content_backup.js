@@ -89,7 +89,6 @@ export const getInvoiceBackupKey = (key, path) => `invoice-${key}::${path}`;
 const updateInvoiceFormData = state => {
   const invoiceFormState = state.form["form/record"];
   const newInvoiceData = (invoiceFormState && invoiceFormState.values) || {};
-  console.log(newInvoiceData);
 
   const address = newInvoiceData[INVOICE_FORM_ADDRESS];
   const contact = newInvoiceData[INVOICE_FORM_CONTACT];

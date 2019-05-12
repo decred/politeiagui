@@ -14,7 +14,8 @@ const submitInvoiceConnector = connect(
   }),
   {
     onFetchData: act.onGetPolicy,
-    onSave: act.onSaveNewInvoice
+    onSave: act.onSaveNewInvoice,
+    onSaveInvoiceDraft: act.onSaveDraftInvoice
     //onResetInvoice: act.onResetInvoice,
   }
 );

@@ -18,16 +18,23 @@ class SubmitFormContainer extends Component {
       <Component
         {...{
           ...this.props,
-          onSaveDraft: this.onSaveDraft
+          onSaveProposalDraft: this.onSaveProposalDraft,
+          onSaveInvoiceDraft: this.onSaveInvoiceDraft
         }}
       />
     );
   }
 
-  onSaveDraft = (...args) => {
+  onSaveProposalDraft = (...args) => {
     validate(...args);
-    this.props.onSaveDraft(...args);
+    this.props.onSaveProposalDraft(...args);
     this.props.history.push("/user/proposals/drafts");
+  };
+
+  onSaveInvoiceDraft = (...args) => {
+    validate(...args);
+    this.props.onSaveInvoiceDraft(...args);
+    this.props.history.push("/user/invoices/drafts");
   };
 }
 
