@@ -39,6 +39,7 @@ const PublicProposals = ({
   onFetchVettedByTokens,
   onFetchProposalsVoteStatus,
   onFetchTokenInventory,
+  onFetchLastBlockHeight,
   isLoading,
   error,
   pageSize
@@ -84,6 +85,7 @@ const PublicProposals = ({
     // Fetch initial data
     onFetchProposalsVoteStatus();
     onFetchTokenInventory();
+    onFetchLastBlockHeight();
   }, []);
 
   if (error) throw error;
