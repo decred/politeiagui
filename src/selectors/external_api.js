@@ -19,3 +19,6 @@ export const payWithFaucetTxId = compose(
 );
 
 export const lastBlockHeight = getExtApiResponse("blockHeight");
+export const isApiRequestingLastBlockHeight = getIsExtApiRequesting(
+  "blockHeight"
+);
