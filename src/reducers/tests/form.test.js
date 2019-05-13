@@ -18,6 +18,11 @@ describe("test redux form reducers", () => {
     action.error = false;
 
     expect(formReducer({}, action)).toEqual({});
+
+    action.type = act.SAVE_DRAFT_INVOICE;
+    action.error = false;
+
+    expect(formReducer({}, action)).toEqual({});
   });
 
   test("form/reply behaving correctly", () => {

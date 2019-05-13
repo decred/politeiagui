@@ -249,4 +249,14 @@ describe("test app selector", () => {
   it("test pollingCreditsPayment selector", () => {
     expect(sel.pollingCreditsPayment(MOCK_STATE)).toBeFalsy();
   });
+
+  it("test selector getDraftInvoices", () => {
+    expect(sel.getDraftInvoices(MOCK_STATE)).toEqual([]);
+  });
+
+  it("test selectors draftInvoices and draftInvoiceById", () => {
+    expect(sel.draftInvoices(MOCK_STATE)).toEqual(MOCK_STATE.app.draftInvoices);
+
+    expect(sel.draftInvoiceById(MOCK_STATE)).toBeFalsy();
+  });
 });

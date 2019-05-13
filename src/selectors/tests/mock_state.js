@@ -327,6 +327,11 @@ export const MOCK_STATE = {
     },
     submittedProposals: {
       lastSubmitted: {}
+    },
+    draftInvoices: {
+      newDraft: {
+        invoice: ""
+      }
     }
   },
   external_api: {

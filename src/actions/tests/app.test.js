@@ -40,6 +40,21 @@ describe("test app actions (actions/app.js)", () => {
           files: [],
           timestamp: Date.now() / 1000
         }
+      },
+      draftInvoices: {
+        draft_id: {
+          month: "month",
+          year: "year",
+          name: "name",
+          location: "location",
+          contact: "contact",
+          rate: "20",
+          address: "",
+          lineitems: [],
+          files: [],
+          draftId: "draft_id",
+          timestamp: Date.now() / 1000
+        }
       }
     }
   };
@@ -59,6 +74,11 @@ describe("test app actions (actions/app.js)", () => {
     email: "foo@bar.com",
     username: "foobar",
     password: "foobar1234"
+  };
+  const FAKE_INVOICE = {
+    token: "fake_token",
+    lineitems: [],
+    files: []
   };
   beforeEach(() => {
     //send status 200 to every unmatched request
@@ -215,6 +235,40 @@ describe("test app actions (actions/app.js)", () => {
     const id = "draft_id";
     expect(app.onDeleteDraftProposal(id)).toDispatchActions(
       [{ type: act.DELETE_DRAFT_PROPOSAL, payload: id }],
+      done
+    );
+  });
+
+  test("on save draft invoice action", () => {
+    expect(app.onSaveDraftInvoice(FAKE_PROPOSAL)).toDispatchActions(
+      [
+        {
+          type: act.SAVE_DRAFT_INVOICE,
+          payload: { name: FAKE_INVOICE.name }
+        }
+      ],
+      done
+    );
+  });
+
+  test("on load draft invoices", () => {
+    const { email } = MOCK_STATE.api.me.response;
+    ls.handleSaveStateToLocalStorage(MOCK_STATE);
+    expect(app.onLoadDraftInvoices(email)).toDispatchActions(
+      [
+        {
+          type: act.LOAD_DRAFT_INVOICES,
+          payload: MOCK_STATE.app.draftInvoices
+        }
+      ],
+      done
+    );
+  });
+
+  test("on delete draft invoice", () => {
+    const id = "draft_id";
+    expect(app.onDeleteDraftInvoice(id)).toDispatchActions(
+      [{ type: act.DELETE_DRAFT_INVOICE, payload: id }],
       done
     );
   });

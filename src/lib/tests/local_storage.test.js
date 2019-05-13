@@ -23,6 +23,21 @@ describe("save state chunks to local storage (lib/local_storage.js", () => {
           files: [],
           timestamp: Date.now() / 1000
         }
+      },
+      draftInvoices: {
+        draft_id: {
+          month: "month",
+          year: "year",
+          name: "name",
+          location: "location",
+          contact: "contact",
+          rate: "20",
+          address: "",
+          lineitems: [],
+          files: [],
+          draftId: "draft_id",
+          timestamp: Date.now() / 1000
+        }
       }
     }
   };
@@ -60,6 +75,24 @@ describe("save state chunks to local storage (lib/local_storage.js", () => {
         me: mockState.api.me
       }
     });
+  });
+
+  test("save draft invoice to local storage", () => {
+    const { email } = mockState.api.me.response;
+    const lsKey = ls.stateKey(email);
+
+    ls.handleSaveStateToLocalStorage(mockState);
+    expect(getFromLS(lsKey)).toBeTruthy();
+    expect(ls.loadStateLocalStorage(email)).toEqual({
+      app: mockState.app
+    });
+
+    localStorage.setItem(lsKey, "");
+    // test that without passing the email nothing will be saved
+    const copyState = JSON.parse(JSON.stringify(mockState));
+    delete copyState.api.me.response;
+    ls.handleSaveStateToLocalStorage(copyState);
+    expect(getFromLS(lsKey)).toBeFalsy();
   });
 
   test("clear state from local storage", () => {
