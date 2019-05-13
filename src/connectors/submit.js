@@ -17,7 +17,7 @@ const submitConnector = connect(
     openModal: act.openModal,
     onSaveProposalDraft: act.onSaveDraftProposal,
     onSaveInvoiceDraft: act.onSaveDraftInvoice,
-    onDeleteDraft: act.onDeleteDraftProposal,
+    onDeleteDraftProposal: act.onDeleteDraftProposal,
     onDeleteDraftInvoice: act.onDeleteDraftInvoice
   }
 );

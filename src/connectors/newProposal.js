@@ -31,8 +31,8 @@ const newProposalConnector = connect(
     onFetchData: act.onGetPolicy,
     onSave: act.onSaveNewProposal,
     onResetProposal: act.onResetProposal,
-    onSaveDraft: act.onSaveDraftProposal,
-    onDeleteDraft: act.onDeleteDraftProposal
+    onSaveDraftProposal: act.onSaveDraftProposal,
+    onDeleteDraftProposal: act.onDeleteDraftProposal
   }
 );
 
@@ -49,7 +49,7 @@ class NewProposalWrapper extends Component {
     const { token, draftProposal } = this.props;
     if (token) {
       if (this.props.draftProposalById) {
-        this.props.onDeleteDraft(this.props.draftProposalById.draftId);
+        this.props.onDeleteDraftProposal(this.props.draftProposalById.draftId);
       }
       this.props.onResetProposal();
       return this.props.history.push("/proposals/" + token);
@@ -57,7 +57,6 @@ class NewProposalWrapper extends Component {
 
     const draftProposalDataAvailable =
       !prevProps.draftProposal && draftProposal;
-    console.log(draftProposal, draftProposalDataAvailable);
     if (draftProposalDataAvailable) {
       this.setState({
         initialValues: draftProposal

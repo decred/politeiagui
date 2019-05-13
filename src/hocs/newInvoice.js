@@ -50,7 +50,7 @@ class NewInvoiceContainer extends Component {
     const { token, onResetInvoice, draftInvoice } = this.props;
     if (token) {
       if (this.props.draftInvoiceById) {
-        this.props.onDeleteDraft(this.props.draftInvoiceById.draftId);
+        this.props.onDeleteDraftInvoice(this.props.draftInvoiceById.draftId);
       }
       onResetInvoice();
       return this.props.history.push("/invoices/" + token);
