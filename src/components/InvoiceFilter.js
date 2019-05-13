@@ -51,8 +51,11 @@ const invoiceFilterOptions = [
   }
 ];
 
+//Remove draft tab from admin options
+const adminOptions = invoiceFilterOptions.slice(0, -1);
+
 const mapHeaderToOptions = {
-  [CMS_LIST_HEADER_ADMIN]: invoiceFilterOptions,
+  [CMS_LIST_HEADER_ADMIN]: adminOptions,
   [CMS_LIST_HEADER_USER]: invoiceFilterOptions
 };
 
