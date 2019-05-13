@@ -295,7 +295,7 @@ class VoteStats extends React.Component {
       border: "1px solid #bbb",
       marginTop: "10px",
       borderRadius: "8px",
-      width: "500px",
+      maxWidth: "600px",
       cursor: "default"
     };
 
