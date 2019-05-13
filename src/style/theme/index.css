@@ -507,6 +507,7 @@ button.disabled {
 }
 
 .commentarea .usertext-edit {
+    width: 100% !important;
     max-width: 500px;
 }
 
