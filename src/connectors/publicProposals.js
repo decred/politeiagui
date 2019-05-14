@@ -27,7 +27,6 @@ export default connect(
       {
         onFetchVettedByTokens: act.onFetchVettedByTokens,
         onFetchTokenInventory: act.onFetchTokenInventory,
-        onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
         onFetchLastBlockHeight: act.getLastBlockHeight
       },
       dispatch

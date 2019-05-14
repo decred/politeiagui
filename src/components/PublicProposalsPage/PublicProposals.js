@@ -37,7 +37,6 @@ const PublicProposals = ({
   proposals,
   proposalsTokens,
   onFetchVettedByTokens,
-  onFetchProposalsVoteStatus,
   onFetchTokenInventory,
   onFetchLastBlockHeight,
   isLoading,
@@ -83,7 +82,6 @@ const PublicProposals = ({
   // Component did mount effect
   useEffect(() => {
     // Fetch initial data
-    onFetchProposalsVoteStatus();
     onFetchTokenInventory();
     onFetchLastBlockHeight();
   }, []);
@@ -142,7 +140,6 @@ PublicProposals.propTypes = {
   proposals: PropTypes.array,
   proposalsTokens: PropTypes.object,
   onFetchVettedByTokens: PropTypes.func.isRequired,
-  onFetchProposalsVoteStatus: PropTypes.func.isRequired,
   onFetchTokenInventory: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   error: PropTypes.oneOfType([

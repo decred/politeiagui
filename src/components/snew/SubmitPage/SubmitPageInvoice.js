@@ -143,6 +143,7 @@ const InvoiceSubmit = props => {
                       refreshTriggers={[month, year]}
                       isLoading={loadingExchangeRate}
                       error={exchangeRateError}
+                      errorTitle={"Failed to fetch exchange rate"}
                       loadingMessage="Updating exchange rate..."
                       style={{
                         marginLeft: "10px",

@@ -22,7 +22,9 @@ import {
   onReceiveVoteStatusChange,
   onReceiveRescanUserPayments,
   onReceiveProposalVoteResults,
-  onReceiveManageUser
+  onReceiveManageUser,
+  onReceiveProposalVoteStatus,
+  onReceiveProposalsVoteStatus
 } from "./handlers";
 import {
   onReceiveSetStatusInvoice,
@@ -249,11 +251,11 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.REQUEST_PROPOSALS_VOTE_STATUS]: () =>
       request("proposalsVoteStatus", state, action),
     [act.RECEIVE_PROPOSALS_VOTE_STATUS]: () =>
-      receive("proposalsVoteStatus", state, action),
+      onReceiveProposalsVoteStatus(state, action),
     [act.REQUEST_PROPOSAL_VOTE_STATUS]: () =>
       request("proposalVoteStatus", state, action),
     [act.RECEIVE_PROPOSAL_VOTE_STATUS]: () =>
-      receive("proposalVoteStatus", state, action),
+      onReceiveProposalVoteStatus(state, action),
     [act.REQUEST_PROPOSAL_VOTE_RESULTS]: () =>
       request("proposalVoteResults", state, action),
     [act.RECEIVE_PROPOSAL_VOTE_RESULTS]: () =>

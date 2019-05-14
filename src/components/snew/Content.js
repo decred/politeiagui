@@ -252,12 +252,7 @@ class Loader extends Component {
       this.setState({ isFetched: true });
       this.props.onFetchData && this.props.onFetchData();
       this.props.onFetchStatus && this.props.onFetchStatus();
-      !this.props.isCMS &&
-        ((this.props.onFetchProposalsVoteStatus &&
-          this.props.onFetchProposalsVoteStatus()) ||
-          this.props.onFetchProposalVoteStatus) &&
-        getLastBlockHeight &&
-        getLastBlockHeight();
+      !this.props.isCMS && getLastBlockHeight && getLastBlockHeight();
     }
   }
 

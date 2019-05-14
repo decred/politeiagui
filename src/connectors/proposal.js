@@ -32,11 +32,7 @@ const proposalConnector = connect(
     invoiceComments: sel.invoiceComments,
     commentslikes: sel.commentsLikes,
     error: or(sel.proposalError, sel.apiPropVoteStatusError),
-    isLoading: or(
-      sel.proposalIsRequesting,
-      sel.setStatusProposalIsRequesting,
-      sel.isApiRequestingPropVoteStatus
-    ),
+    isLoading: or(sel.proposalIsRequesting, sel.setStatusProposalIsRequesting),
     markdownFile: sel.getMarkdownFile,
     otherFiles: sel.getNotMarkdownFile,
     commentsSortOption: sel.commentsSortOption,

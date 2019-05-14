@@ -118,11 +118,11 @@ describe("test api selectors", () => {
     state = { api: { ...MOCK_STATE.api, proposalVoteStatus: {} } };
 
     expect(sel.getPropVoteStatus(MOCK_STATE)("fake_token")).toEqual(
-      MOCK_STATE.api.proposalsVoteStatus.response.votesstatus[0]
+      MOCK_STATE.api.proposalsVoteStatus.response["fake_token"]
     );
 
     expect(sel.getPropVoteStatus(MOCK_STATE)("fake_token2")).toEqual(
-      MOCK_STATE.api.proposalsVoteStatus.response.votesstatus[1]
+      MOCK_STATE.api.proposalsVoteStatus.response["fake_token2"]
     );
 
     expect(sel.getPropVoteStatus(MOCK_STATE)("fake_token5234")).toEqual({});

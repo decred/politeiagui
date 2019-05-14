@@ -4,7 +4,6 @@ import unionWith from "lodash/unionWith";
 import cloneDeep from "lodash/cloneDeep";
 import { receive } from "../util";
 import {
-  PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
@@ -22,8 +21,7 @@ import {
 export const onReceiveSetStatus = (state, action) => {
   state = receive("setStatusProposal", state, action);
   if (action.error) return state;
-  let proposalsVoteStatus =
-    get(["proposalsVoteStatus", "response", "votesstatus"], state) || [];
+
   const getProposalToken = prop => get(["censorshiprecord", "token"], prop);
 
   const updatedProposal = {
@@ -54,10 +52,6 @@ export const onReceiveSetStatus = (state, action) => {
     // if status is set to abandoned keep it in the vetted list
     // and update the status
     vettedProps = map(updateProposalStatus, vettedProps);
-    // remove this prop form the proposals votes status response
-    proposalsVoteStatus = proposalsVoteStatus.filter(
-      pvs => pvs.token !== getProposalToken(updatedProposal)
-    );
   } else {
     unvettedProps = map(updateProposalStatus, unvettedProps);
   }
@@ -85,13 +79,6 @@ export const onReceiveSetStatus = (state, action) => {
       response: {
         ...state.vetted.response,
         proposals: vettedProps
-      }
-    },
-    proposalsVoteStatus: {
-      ...state.proposalsVoteStatus,
-      response: {
-        ...state.proposalsVoteStatus.response,
-        votesstatus: proposalsVoteStatus
       }
     }
   };
@@ -266,38 +253,6 @@ export const onReceiveSyncLikeComment = (state, action) => {
   };
 };
 
-export const onReceiveStartVote = (state, action) => {
-  state = receive("startVote", state, action);
-  const newVoteStatus = {
-    token: state.startVote.payload.token,
-    status: PROPOSAL_VOTING_ACTIVE,
-    optionsresult: null,
-    totalvotes: 0,
-    endheight: state.startVote.response.endheight
-  };
-  return {
-    ...state,
-    proposalsVoteStatus: {
-      ...state.proposalsVoteStatus,
-      response: {
-        ...state.proposalsVoteStatus.response,
-        votesstatus: state.proposalsVoteStatus.response.votesstatus
-          ? state.proposalsVoteStatus.response.votesstatus.map(vs =>
-              newVoteStatus.token === vs.token ? newVoteStatus : vs
-            )
-          : [newVoteStatus]
-      }
-    },
-    proposalVoteStatus: {
-      ...state.proposalsVoteStatus,
-      response: {
-        ...state.proposalVoteStatus.response,
-        ...newVoteStatus
-      }
-    }
-  };
-};
-
 export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
   state = receive(key, state, action);
   if (action.error) return state;
@@ -314,20 +269,7 @@ export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
       ...state.proposalsVoteStatus,
       response: {
         ...state.proposalsVoteStatus.response,
-        votesstatus:
-          state.proposalsVoteStatus.response &&
-          state.proposalsVoteStatus.response.votesstatus
-            ? state.proposalsVoteStatus.response.votesstatus.map(vs =>
-                newVoteStatus.token === vs.token ? newVoteStatus : vs
-              )
-            : [newVoteStatus]
-      }
-    },
-    proposalVoteStatus: {
-      ...state.proposalsVoteStatus,
-      response: {
-        ...state.proposalVoteStatus.response,
-        ...newVoteStatus
+        [newVoteStatus.token]: { ...newVoteStatus }
       }
     }
   };
@@ -473,6 +415,48 @@ export const onReceiveManageUser = (state, action) => {
       response: {
         ...state.user.response,
         user: user
+      }
+    }
+  };
+};
+
+export const onReceiveProposalsVoteStatus = (state, action) => {
+  state = receive("proposalsVoteStatus", state, action);
+  if (action.error) return state;
+
+  const proposalsVoteStatus = get(["payload", "votesstatus"], state) || [];
+
+  const data = proposalsVoteStatus.reduce(
+    (acc, value) => ({
+      ...acc,
+      [value.token]: { ...value }
+    }),
+    {}
+  );
+
+  return {
+    ...state,
+    proposalsVoteStatus: {
+      ...state.proposalsVoteStatus,
+      response: data
+    }
+  };
+};
+
+export const onReceiveProposalVoteStatus = (state, action) => {
+  state = receive("proposalVoteStatus", state, action);
+  if (action.error) return state;
+
+  const proposalsVoteStatus =
+    get(["proposalsVoteStatus", "response"], state) || {};
+
+  return {
+    ...state,
+    proposalsVoteStatus: {
+      ...state.proposalsVoteStatus,
+      response: {
+        ...proposalsVoteStatus,
+        [action.payload.token]: { ...action.payload }
       }
     }
   };

@@ -1,15 +1,15 @@
 import React from "react";
-import voteStatsConnector from "../connectors/voteStats";
-import StackedBarChart from "./StackedBarChart";
+// import voteStatsConnector from "../../connectors/voteStats";
+import StackedBarChart from "../StackedBarChart";
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
-import { getRandomColor } from "../helpers";
-import Tooltip from "./Tooltip";
+import { getRandomColor } from "../../helpers";
+import Tooltip from "../Tooltip";
 import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_VOTING_NOT_AUTHORIZED,
   PROPOSAL_VOTING_AUTHORIZED
-} from "../constants";
+} from "../../constants";
 
 const mapVoteStatusToMessage = {
   [PROPOSAL_VOTING_ACTIVE]: "Proposal voting active",
@@ -276,45 +276,47 @@ class Stats extends React.Component {
   }
 }
 
-class VoteStats extends React.Component {
-  render() {
-    const { token, getVoteStatus, lastBlockHeight, ...props } = this.props;
-    const {
-      optionsresult,
-      status,
-      totalvotes,
-      endheight,
-      quorumpercentage,
-      passpercentage,
-      numofeligiblevotes
-    } = getVoteStatus(token);
-    const wrapperStyle = {
-      display: "flex",
-      flexDirection: "column",
-      padding: "10px",
-      border: "1px solid #bbb",
-      marginTop: "10px",
-      borderRadius: "8px",
-      maxWidth: "600px",
-      cursor: "default"
-    };
+export default Stats;
 
-    return (
-      <div style={wrapperStyle}>
-        <Stats
-          status={status}
-          optionsResult={optionsresult}
-          totalVotes={totalvotes}
-          endHeight={endheight}
-          quorumPercentage={quorumpercentage}
-          passPercentage={passpercentage}
-          numOfEligibleVotes={numofeligiblevotes}
-          currentHeight={lastBlockHeight}
-          {...props}
-        />
-      </div>
-    );
-  }
-}
+// class VoteStats extends React.Component {
+//   render() {
+//     const { token, getVoteStatus, lastBlockHeight, ...props } = this.props;
+//     const {
+//       optionsresult,
+//       status,
+//       totalvotes,
+//       endheight,
+//       quorumpercentage,
+//       passpercentage,
+//       numofeligiblevotes
+//     } = getVoteStatus(token);
+//     const wrapperStyle = {
+//       display: "flex",
+//       flexDirection: "column",
+//       padding: "10px",
+//       border: "1px solid #bbb",
+//       marginTop: "10px",
+//       borderRadius: "8px",
+//       maxWidth: "600px",
+//       cursor: "default"
+//     };
 
-export default voteStatsConnector(VoteStats);
+//     return (
+//       <div style={wrapperStyle}>
+//         <Stats
+//           status={status}
+//           optionsResult={optionsresult}
+//           totalVotes={totalvotes}
+//           endHeight={endheight}
+//           quorumPercentage={quorumpercentage}
+//           passPercentage={passpercentage}
+//           numOfEligibleVotes={numofeligiblevotes}
+//           currentHeight={lastBlockHeight}
+//           {...props}
+//         />
+//       </div>
+//     );
+//   }
+// }
+
+// export default voteStatsConnector(VoteStats);

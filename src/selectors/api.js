@@ -381,20 +381,8 @@ export const isTestNet = compose(
 export const isMainNet = not(isTestNet);
 
 export const getPropVoteStatus = state => token => {
-  // try to get it from single prop response (proposal detail)
-  let vsResponse = apiPropVoteStatusResponse(state);
-  if (vsResponse && vsResponse.token === token) {
-    return vsResponse;
-  }
-  // otherwise try to get it from the all vote status response (public props)
-  vsResponse = apiPropsVoteStatusResponse(state);
-  if (vsResponse && vsResponse.votesstatus) {
-    const voteStatus = vsResponse.votesstatus.filter(
-      vs => vs.token === token
-    )[0];
-    return voteStatus || {};
-  }
-  return {};
+  const vsResponse = apiPropsVoteStatusResponse(state) || {};
+  return vsResponse[token] || {};
 };
 
 export const userid = state =>

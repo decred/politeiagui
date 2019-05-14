@@ -5,7 +5,6 @@ import set from "lodash/set";
 import get from "lodash/fp/get";
 import { DEFAULT_REQUEST_STATE } from "../util";
 import {
-  PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_UNREVIEWED,
   MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
@@ -558,71 +557,6 @@ describe("test api reducer", () => {
     expect(state.vetted.response.proposals).toEqual([]);
   });
 
-  test("correcly updates state for onReceiveStartVote", () => {
-    const action = {
-      type: act.RECEIVE_START_VOTE,
-      payload: {
-        token: "token"
-      },
-      error: false
-    };
-
-    const newVoteStatus = {
-      token: action.payload.token,
-      status: PROPOSAL_VOTING_ACTIVE,
-      optionsresult: null,
-      totalvotes: 0
-    };
-
-    const state = request("startVote", MOCK_STATE, action);
-
-    const stateWithoutVotes = {
-      ...state,
-      proposalsVoteStatus: {
-        response: {
-          votesstatus: null
-        }
-      },
-      proposalVoteStatus: {
-        response: {
-          newVoteStatus: null
-        }
-      }
-    };
-
-    const stateWithVotes = {
-      ...state,
-      proposalsVoteStatus: {
-        response: {
-          votesstatus: [
-            { token: "anothertoken" },
-            { token: action.payload.token }
-          ]
-        }
-      },
-      proposalVoteStatus: {
-        response: {
-          newVoteStatus: newVoteStatus
-        }
-      }
-    };
-
-    let newState = api.onReceiveStartVote(stateWithoutVotes, action);
-    expect(newState.proposalsVoteStatus.response.votesstatus[0]).toEqual(
-      newVoteStatus
-    );
-    const reducerState = api.default(stateWithVotes, action);
-    expect(reducerState.proposalsVoteStatus.response.votesstatus).toEqual([
-      { token: "anothertoken" },
-      newVoteStatus
-    ]);
-    newState = api.onReceiveStartVote(stateWithVotes, action);
-    expect(newState.proposalsVoteStatus.response.votesstatus).toEqual([
-      { token: "anothertoken" },
-      newVoteStatus
-    ]);
-  });
-
   test("correctly updates the state for onReceiveProposals", () => {
     const key = "userProposals";
 
@@ -969,19 +903,9 @@ describe("test api reducer", () => {
         type: "request"
       },
       {
-        action: act.RECEIVE_PROPOSALS_VOTE_STATUS,
-        key: "proposalsVoteStatus",
-        type: "receive"
-      },
-      {
         action: act.REQUEST_PROPOSAL_VOTE_STATUS,
         key: "proposalVoteStatus",
         type: "request"
-      },
-      {
-        action: act.RECEIVE_PROPOSAL_VOTE_STATUS,
-        key: "proposalVoteStatus",
-        type: "receive"
       },
       {
         action: act.REQUEST_PROPOSAL_PAYWALL_PAYMENT,

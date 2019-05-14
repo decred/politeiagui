@@ -47,7 +47,6 @@ class UserDetail extends Component {
 
     if ((emailFetched || userFetched) && !this.props.isCMS) {
       this.props.onFetchUserProposals(this.props.userId);
-      this.props.onFetchProposalsVoteStatus();
     }
   };
 
@@ -68,7 +67,6 @@ class UserDetail extends Component {
   componentDidMount() {
     this.props.onFetchData(this.props.userId);
     !this.props.isCMS && this.props.onFetchUserProposals(this.props.userId);
-    !this.props.isCMS && this.props.onFetchProposalsVoteStatus();
   }
 
   onTabChange(tabId) {
