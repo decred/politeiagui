@@ -6,6 +6,7 @@ import {
   fromUSDUnitsToUSDCents
 } from "../../helpers";
 import SelectEditor from "./SelectEditor";
+import MultiLineEditor from "./MultiLineEditor";
 
 export const columnTypes = {
   TYPE_COL: 1,
@@ -56,6 +57,8 @@ export const selectWrapper = options => props => (
   <SelectEditor {...{ ...props, options }} />
 );
 
+export const multiLineWrapper = props => <MultiLineEditor {...{ ...props }} />;
+
 export const generateBlankLineItem = () => ({
   type: 1,
   domain: "",
@@ -90,7 +93,12 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
           )
         },
         { readOnly, value: line.subdomain },
-        { readOnly, value: line.description },
+        {
+          readOnly,
+          value: line.description,
+          dataEditor: multiLineWrapper,
+          className: "description"
+        },
         { readOnly, value: line.proposaltoken },
         { readOnly: isLabelReadonly, value: fromMinutesToHours(line.labor) },
         {

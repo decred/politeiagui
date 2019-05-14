@@ -1899,6 +1899,9 @@ form div.usertext-body.may-blank-within.md-container {
   list-style-type: none;
 }
 
+.description.cell {
+	word-break: break-word;
+}
 /* On screens that are 768px or less, apply the following styles */
 @media screen and (max-width: 768px) {
   /* hide side bar */
