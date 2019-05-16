@@ -299,7 +299,6 @@ const api = (state = DEFAULT_STATE, action) =>
           proposalPaywallPayment: DEFAULT_REQUEST_STATE,
           proposalPaywallDetails: DEFAULT_REQUEST_STATE,
           rescanUserPayments: DEFAULT_REQUEST_STATE,
-          user: DEFAULT_REQUEST_STATE,
           unvetted: DEFAULT_REQUEST_STATE
         };
       }

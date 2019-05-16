@@ -10,6 +10,7 @@ const GeneratePayoutsPage = ({
   payouts = [],
   error,
   loading,
+  loggedInAsEmail,
   onGeneratePayouts
 }) => {
   const fetchPayouts = () => {
@@ -31,23 +32,39 @@ const GeneratePayoutsPage = ({
     "combinedtotal",
     "address"
   ];
-  return loading ? (
-    <PageLoadingIcon />
-  ) : error ? (
-    <Message type="error" header="Could not generate payouts" body={error} />
+  return loggedInAsEmail ? (
+    loading ? (
+      <PageLoadingIcon />
+    ) : error ? (
+      <div className="content">
+        <Message
+          type="error"
+          header="Could not generate payouts"
+          body={error}
+        />
+      </div>
+    ) : (
+      <div className="content">
+        <h1 className="content-title">Payouts</h1>
+        <div style={{ paddingLeft: "24px" }}>
+          <ExportToCsv data={csvData} fields={csvFields} filename={"payouts"}>
+            <button className="inverse payouts-btn-export-to-csv ">
+              {"Export to CSV"}
+            </button>
+          </ExportToCsv>
+
+          {payouts && <PayoutsTable payouts={payouts} />}
+        </div>
+        <div id="csv-hidden-div" style={{ display: "none" }} />
+      </div>
+    )
   ) : (
     <div className="content">
-      <h1 className="content-title">Payouts</h1>
-      <div style={{ paddingLeft: "24px" }}>
-        <ExportToCsv data={csvData} fields={csvFields} filename={"payouts"}>
-          <button className="inverse payouts-btn-export-to-csv ">
-            {"Export to CSV"}
-          </button>
-        </ExportToCsv>
-
-        {payouts && <PayoutsTable payouts={payouts} />}
-      </div>
-      <div id="csv-hidden-div" style={{ display: "none" }} />
+      <Message
+        type="error"
+        header="Forbidden"
+        body="This is an admin protected area. Please login to your account."
+      />
     </div>
   );
 };

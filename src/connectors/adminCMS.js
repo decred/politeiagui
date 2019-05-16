@@ -9,7 +9,7 @@ import { CMS_LIST_HEADER_ADMIN } from "../constants";
 export default connect(
   sel.selectorMap({
     invoices: sel.getAdminInvoices,
-    showLookUp: () => true,
+    showLookUp: sel.loggedInAsEmail,
     invoiceCounts: sel.getAdminInvoicesCountByStatus,
     error: sel.unvettedProposalsError,
     isLoading: or(sel.isApiRequestingAdminInvoices),
