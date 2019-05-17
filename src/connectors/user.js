@@ -83,7 +83,6 @@ const userConnector = connect(
     bindActionCreators(
       {
         onFetchUserProposals: act.onFetchUserProposals,
-        onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
         onFetchData: act.onFetchUser,
         openModal: act.openModal,
         closeModal: act.closeModal,

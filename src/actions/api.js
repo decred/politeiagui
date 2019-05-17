@@ -1012,9 +1012,12 @@ export const onFetchProposalVoteStatus = token => dispatch => {
   dispatch(act.REQUEST_PROPOSAL_VOTE_STATUS({ token }));
   return api
     .proposalVoteStatus(token)
-    .then(response =>
-      dispatch(act.RECEIVE_PROPOSAL_VOTE_STATUS({ ...response, success: true }))
-    )
+    .then(response => {
+      dispatch(
+        act.RECEIVE_PROPOSAL_VOTE_STATUS({ ...response, success: true })
+      );
+      return response;
+    })
     .catch(error => {
       dispatch(act.RECEIVE_PROPOSAL_VOTE_STATUS(null, error));
       throw error;

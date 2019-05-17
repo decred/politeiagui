@@ -31,8 +31,7 @@ const userProposalsConnector = connect(
     bindActionCreators(
       {
         onFetchUserProposals: act.onFetchUserProposals,
-        onChangeFilter: act.onChangeUserFilter,
-        onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus
+        onChangeFilter: act.onChangeUserFilter
       },
       dispatch
     )

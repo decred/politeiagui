@@ -11,7 +11,6 @@ import {
   mergeNewComments,
   getUpdatedComments
 } from "./helpers";
-import { PROPOSAL_STATUS_PUBLIC } from "../../constants";
 
 class RecordDetail extends React.Component {
   constructor(props) {
@@ -33,17 +32,6 @@ class RecordDetail extends React.Component {
       document.title = proposal.name;
     }
   };
-  resolveFetchProposalVoteStatus = prevProps => {
-    const { isCMS, record, onFetchProposalVoteStatus, token } = this.props;
-    const proposal = !isCMS && record;
-    const proposalIsPublic = proposal.status === PROPOSAL_STATUS_PUBLIC;
-    const proposalJustFetched =
-      proposal &&
-      (!prevProps.record || Object.keys(prevProps.record).length === 0);
-    if (proposalJustFetched && proposalIsPublic) {
-      onFetchProposalVoteStatus(token);
-    }
-  };
   resolveFetchLikedComments = prevProps => {
     const userJustFetched =
       !prevProps.loggedInAsEmail && this.props.loggedInAsEmail;
@@ -53,7 +41,6 @@ class RecordDetail extends React.Component {
   };
   componentDidUpdate(prevProps) {
     this.resolveTabTitle(prevProps);
-    this.resolveFetchProposalVoteStatus(prevProps);
     this.resolveFetchLikedComments(prevProps);
     this.handleUpdateOfComments(prevProps, this.props);
   }

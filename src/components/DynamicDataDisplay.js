@@ -35,12 +35,17 @@ const DynamicDataDisplay = ({
   );
 };
 
-const DynamicDataDisplayWrapper = ({ onFetch, isLoading, ...props }) => (
+const DynamicDataDisplayWrapper = ({
+  onFetch,
+  isLoading,
+  errorTitle,
+  ...props
+}) => (
   <ErrorBoundary
     displayError={!isLoading}
     errorRenderer={error => (
       <RetryError
-        errorTitle={"Failed to fetch exchange rate"}
+        errorTitle={errorTitle}
         errorMessage={typeof error === "object" ? error.toString() : error}
         onRetry={onFetch}
       />
