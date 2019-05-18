@@ -258,7 +258,7 @@ export const userCanExecuteActions = state => {
   return (
     userHasPaid(state) &&
     !getKeyMismatch(state) &&
-    loggedInAsEmail(state) !== false
+    !!loggedInAsEmail(state) !== false
   );
 };
 
