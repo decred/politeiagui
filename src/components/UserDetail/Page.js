@@ -22,12 +22,10 @@ const UserDetailPage = ({
   tabId,
   onTabChange,
   dcrdataTxUrl,
-  isAdmin,
   openModal,
   numOfUserProposals,
   isCMS
 }) => {
-  const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
   return (
     <div className="content" role="main">
       <div className="page user-page">
@@ -67,15 +65,13 @@ const UserDetailPage = ({
                   tabId={USER_DETAIL_TAB_GENERAL}
                   onTabChange={onTabChange}
                 />
-                {isAdminOrTheUser ? (
-                  !isCMS ? (
-                    <Tab
-                      title="Preferences"
-                      selected={tabId === USER_DETAIL_TAB_PREFERENCES}
-                      tabId={USER_DETAIL_TAB_PREFERENCES}
-                      onTabChange={onTabChange}
-                    />
-                  ) : null
+                {!isCMS ? (
+                  <Tab
+                    title="Preferences"
+                    selected={tabId === USER_DETAIL_TAB_PREFERENCES}
+                    tabId={USER_DETAIL_TAB_PREFERENCES}
+                    onTabChange={onTabChange}
+                  />
                 ) : null}
                 {!isCMS ? (
                   <Tab

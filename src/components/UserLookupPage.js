@@ -11,8 +11,14 @@ class UserLookupPage extends React.PureComponent {
   };
 
   render() {
-    const { userSearch, error, isLoading, handleSubmit } = this.props;
-    return (
+    const {
+      userSearch,
+      loggedInAsEmail,
+      error,
+      isLoading,
+      handleSubmit
+    } = this.props;
+    return loggedInAsEmail ? (
       <div className="content" role="main">
         <form
           className="search-form"
@@ -102,6 +108,14 @@ class UserLookupPage extends React.PureComponent {
             )}
           </div>
         )}
+      </div>
+    ) : (
+      <div className="content">
+        <Message
+          type="error"
+          header="Forbidden"
+          body="This is an admin protected area. Please login to your account."
+        />
       </div>
     );
   }

@@ -12,7 +12,7 @@ COPY ./ /root/
 
 RUN yarn install
 
-RUN yarn build
+RUN INLINE_RUNTIME_CHUNK=false yarn build
 
 # Serve image (stable nginx version)
 FROM nginx:1.14.2 

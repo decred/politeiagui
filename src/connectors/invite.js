@@ -6,6 +6,7 @@ const invite = connect(
   sel.selectorMap({
     inviteUserResponse: sel.inviteUserResponse,
     isRequesting: sel.isApiRequestingInviteUser,
+    loggedInAsEmail: sel.loggedInAsEmail,
     policy: sel.policy
   }),
   {

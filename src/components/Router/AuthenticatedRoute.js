@@ -19,13 +19,7 @@ class AuthenticatedRoute extends Component {
   }
 
   checkAuthentication(params) {
-    const {
-      location,
-      loggedInAsEmail,
-      history,
-      apiMeResponse,
-      apiLoginResponse
-    } = params;
+    const { loggedInAsEmail, apiMeResponse, apiLoginResponse } = params;
     const dataHasBeenFetched = apiMeResponse || apiLoginResponse;
     const stateFromLocalStorage = loadStateLocalStorage();
 
@@ -41,12 +35,6 @@ class AuthenticatedRoute extends Component {
 
     if (validUserLoginFromApi || validUserLoginFromLocalStorage) {
       return true;
-    } else {
-      this.props.redirectedFrom(this.props.location.pathname);
-      history.replace({
-        pathname: "/user/login",
-        state: { from: location }
-      });
     }
   }
 

@@ -7,6 +7,7 @@ import InviteUserForm from "./InviteUserForm";
 import inviteConnector from "../../connectors/invite";
 import validate from "./InviteUserValidator";
 import { SubmissionError } from "redux-form";
+import Message from "../Message";
 
 const qs = require("querystring");
 
@@ -37,13 +38,21 @@ class InviteUser extends Component {
   }
 
   render() {
-    return (
+    return this.props.loggedInAsEmail ? (
       <InviteUserForm
         {...{
           onInviteUser: this.onInviteUser,
           isRequesting: this.props.isRequesting
         }}
       />
+    ) : (
+      <div className="content">
+        <Message
+          type="error"
+          header="Forbidden"
+          body="This is an admin protected area. Please login to your account."
+        />
+      </div>
     );
   }
 

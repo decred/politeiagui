@@ -190,11 +190,12 @@ export const errors = {
 };
 
 export const errorsMessage = {
-  [errors.InvalidType]: "Type must be either 1, 2 or 3",
-  [errors.InvalidDomainLen]: "Domain must have between 3 and 50 chars",
-  [errors.InvalidSubdomainLen]: "Subomain must have between 3 and 50 chars",
+  [errors.InvalidType]:
+    "Type must be either Labor (1), Expense (2) or Misc (3)",
+  [errors.InvalidDomainLen]: "Domain must have between 3 and 200 chars",
+  [errors.InvalidSubdomainLen]: "Subomain must have between 3 and 200 chars",
   [errors.InvalidDescriptionLen]:
-    "Description must have between 3 and 50 chars",
+    "Description must have between 3 and 200 chars",
   [errors.InvalidPropTokenLen]: "Proposals tokens must be 64 characters long",
   [errors.InvalidLaborValue]: "Labor value must be a number",
   [errors.InvalidLaborAmount]:

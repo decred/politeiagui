@@ -56,6 +56,7 @@ const InvoiceSubmit = props => {
     change,
     policy,
     userCanExecuteActions,
+    loggedInAsEmail,
     valid
   } = props;
 
@@ -74,6 +75,7 @@ const InvoiceSubmit = props => {
   }, [year]);
 
   const submitEnabled =
+    loggedInAsEmail &&
     !submitting &&
     valid &&
     datasheetErrors.length === 0 &&
