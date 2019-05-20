@@ -1,14 +1,10 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as sel from "../selectors";
 import * as act from "../actions";
 import { or } from "../lib/fp";
-import {
-  LIST_HEADER_USER,
-  PROPOSAL_USER_FILTER_SUBMITTED,
-  PROPOSAL_USER_FILTER_DRAFT
-} from "../constants";
+import { LIST_HEADER_USER } from "../constants";
 
 const userProposalsConnector = connect(
   sel.selectorMap({
@@ -16,10 +12,7 @@ const userProposalsConnector = connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
     error: sel.userProposalsError,
-    isLoading: or(
-      sel.userProposalsIsRequesting,
-      sel.isApiRequestingPropsVoteStatus
-    ),
+    isLoading: or(sel.userProposalsIsRequesting),
     proposals: sel.getUserProposals,
     proposalCounts: sel.getUserProposalFilterCounts,
     filterValue: sel.getUserFilterValue,
@@ -30,46 +23,28 @@ const userProposalsConnector = connect(
   dispatch =>
     bindActionCreators(
       {
-        onFetchUserProposals: act.onFetchUserProposals,
+        onFetchUserProposals: act.onFetchUserProposalsWithVoteStatus,
         onChangeFilter: act.onChangeUserFilter
       },
       dispatch
     )
 );
 
-class Wrapper extends Component {
-  componentDidMount() {
-    const { match, onChangeFilter, userid } = this.props;
+const Wrapper = props => {
+  const { userid, onFetchUserProposals } = props;
 
-    if (match.params && typeof match.params.filter !== "undefined") {
-      onChangeFilter(
-        {
-          submitted: PROPOSAL_USER_FILTER_SUBMITTED,
-          drafts: PROPOSAL_USER_FILTER_DRAFT
-        }[match.params.filter]
-      );
-    }
-
+  useEffect(() => {
     if (userid) {
-      this.props.onFetchUserProposals(userid);
+      onFetchUserProposals(userid);
     }
-  }
+  }, [userid]);
 
-  componentDidUpdate(prevProps) {
-    const { userid } = this.props;
-    const userFetched = !prevProps.userid && this.props.userid;
-    if (userFetched) this.props.onFetchUserProposals(userid);
-  }
-
-  render() {
-    const { Component, ...props } = this.props;
-    return (
-      <div className="page content user-proposals-page">
-        <Component {...{ ...props }} />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="page content user-proposals-page">
+      <props.Component {...{ ...props, userid }} />
+    </div>
+  );
+};
 
 const wrap = Component =>
   userProposalsConnector(props => <Wrapper {...{ ...props, Component }} />);

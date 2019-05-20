@@ -76,13 +76,12 @@ const userConnector = connect(
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_REACTIVATE,
     manageUserResponse: sel.manageUserResponse,
-    numOfUserProposals: sel.numOfUserProposals,
     isCMS: sel.isCMS
   }),
   dispatch =>
     bindActionCreators(
       {
-        onFetchUserProposals: act.onFetchUserProposals,
+        onFetchUserProposals: act.onFetchUserProposalsWithVoteStatus,
         onFetchData: act.onFetchUser,
         openModal: act.openModal,
         closeModal: act.closeModal,

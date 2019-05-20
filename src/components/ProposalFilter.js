@@ -127,7 +127,9 @@ class ProposalFilter extends React.Component {
     if (!tabOptions) return;
 
     const selectedOption =
-      tabOptions && tabOptions.find(op => op.value === this.props.filterValue);
+      (tabOptions &&
+        tabOptions.find(op => op.value === this.props.filterValue)) ||
+      {};
     const optionLabel = selectedOption.label;
 
     if (filterValueTabHasChanged) {

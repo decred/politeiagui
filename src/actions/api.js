@@ -9,6 +9,7 @@ import { clearStateLocalStorage } from "../lib/local_storage";
 import { callAfterMinimumWait } from "./lib";
 import { resetNewProposalData } from "../lib/editors_content_backup";
 import act from "./methods";
+import { PROPOSAL_STATUS_PUBLIC } from "../constants";
 
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onResetInvoice = act.RESET_INVOICE;
@@ -324,12 +325,25 @@ export const onFetchVetted = token => dispatch => {
     });
 };
 
-export const onFetchVettedByTokens = tokens => async dispatch => {
+export const onFetchVettedByTokens = (
+  tokens,
+  fetchVoteStatus = true
+) => async dispatch => {
   dispatch(act.REQUEST_VETTED(tokens));
   try {
-    const promises = tokens.map(t => api.proposal(t));
+    let promises = tokens.map(t => api.proposal(t));
+
+    if (fetchVoteStatus) {
+      const voteStatusPromises = tokens.map(t =>
+        dispatch(onFetchProposalVoteStatus(t))
+      );
+      promises = promises.concat(voteStatusPromises);
+    }
     const res = await Promise.all(promises);
-    const proposals = res.map(r => r.proposal);
+
+    // filter only proposals responses
+    const proposals = res.filter(r => r && r.proposal).map(r => r.proposal);
+
     return dispatch(act.RECEIVE_VETTED({ proposals }));
   } catch (error) {
     dispatch(act.RECEIVE_VETTED(null, error));
@@ -1006,6 +1020,37 @@ export const onFetchProposalsVoteStatus = () => dispatch => {
       dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS(null, error));
       throw error;
     });
+};
+
+export const onFetchUserProposalsWithVoteStatus = userid => async dispatch => {
+  dispatch(act.REQUEST_USER_PROPOSALS({ userid }));
+  try {
+    const { proposals } = await api.userProposals(userid);
+    const publicPropsTokens = proposals
+      .filter(prop => prop.status === PROPOSAL_STATUS_PUBLIC)
+      .map(prop => prop.censorshiprecord.token);
+
+    if (publicPropsTokens.length) {
+      await dispatch(onFetchProposalsVoteStatusByTokens(publicPropsTokens));
+    }
+    dispatch(act.RECEIVE_USER_PROPOSALS({ proposals }));
+  } catch (e) {
+    dispatch(act.RECEIVE_USER_PROPOSALS(null, e));
+  }
+};
+
+export const onFetchProposalsVoteStatusByTokens = tokens => async dispatch => {
+  dispatch(act.REQUEST_PROPOSALS_VOTE_STATUS({ tokens }));
+  try {
+    const promises = tokens.map(token => api.proposalVoteStatus(token));
+    const res = await Promise.all(promises);
+    dispatch(
+      act.RECEIVE_PROPOSALS_VOTE_STATUS({ votesstatus: res, success: true })
+    );
+  } catch (e) {
+    dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS(null, e));
+    throw e;
+  }
 };
 
 export const onFetchProposalVoteStatus = token => dispatch => {

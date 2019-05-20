@@ -426,13 +426,7 @@ export const apiVettedProposals = or(
 );
 export const vettedProposalsIsRequesting = isApiRequestingVetted;
 export const vettedProposalsError = or(apiInitError, apiVettedError);
-export const numOfUserProposals = or(
-  compose(
-    get("numofproposals"),
-    apiUserProposalsResponse
-  ),
-  constant(0)
-);
+
 export const apiUserProposals = or(
   compose(
     get("proposals"),

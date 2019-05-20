@@ -23,9 +23,10 @@ const UserDetailPage = ({
   onTabChange,
   dcrdataTxUrl,
   openModal,
-  numOfUserProposals,
+  getSubmittedUserProposals,
   isCMS
 }) => {
+  const proposals = user && user.id && getSubmittedUserProposals(user.id);
   return (
     <div className="content" role="main">
       <div className="page user-page">
@@ -76,7 +77,7 @@ const UserDetailPage = ({
                 {!isCMS ? (
                   <Tab
                     title="Proposals"
-                    count={numOfUserProposals || 0}
+                    count={proposals.length}
                     selected={tabId === USER_DETAIL_TAB_PROPOSALS}
                     tabId={USER_DETAIL_TAB_PROPOSALS}
                     onTabChange={onTabChange}
@@ -90,7 +91,7 @@ const UserDetailPage = ({
               )}
               {tabId === USER_DETAIL_TAB_PREFERENCES && <PreferencesTab />}
               {tabId === USER_DETAIL_TAB_PROPOSALS && (
-                <ProposalsTab count={user.numofproposals} />
+                <ProposalsTab count={proposals.length} />
               )}
             </div>
           </div>

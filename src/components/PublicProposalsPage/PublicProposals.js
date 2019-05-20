@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import "./styles.css";
 import { Tabs, Tab } from "../Tabs";
@@ -33,6 +33,22 @@ const getListLoadingPlaceholders = numberOfItems => {
   return placeholders;
 };
 
+const initialState = { itemsOnLoad: 0 };
+
+const INCREMENT_LOADING_ITEMS = "increment";
+const DECREMENT_LOADING_ITEMS = "decrement";
+
+function reducer(state, action) {
+  switch (action.type) {
+    case INCREMENT_LOADING_ITEMS:
+      return { itemsOnLoad: state.itemsOnLoad + action.count };
+    case DECREMENT_LOADING_ITEMS:
+      return { itemsOnLoad: state.itemsOnLoad - action.count };
+    default:
+      throw new Error();
+  }
+}
+
 const PublicProposals = ({
   proposals,
   proposalsTokens,
@@ -45,7 +61,8 @@ const PublicProposals = ({
 }) => {
   const [tabOption, setTabOption] = useState(getInitialTabValue());
   const [hasMoreToLoad, setHasMore] = useState(true);
-  const [itemsOnLoad, setItemsOnLoad] = useState(0);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { itemsOnLoad } = state;
 
   const handleTabChange = newTabValue => setTabOption(newTabValue);
   const filteredTokens = getProposalTokensByTabOption(
@@ -62,9 +79,10 @@ const PublicProposals = ({
     const index = filteredProposals.length;
     const propTokensToBeFetched = filteredTokens.slice(index, index + pageSize);
     setHasMore(false);
-    setItemsOnLoad(propTokensToBeFetched.length);
+    const numOfItemsToBeFetched = propTokensToBeFetched.length;
+    dispatch({ type: INCREMENT_LOADING_ITEMS, count: numOfItemsToBeFetched });
     await onFetchVettedByTokens(propTokensToBeFetched);
-    setItemsOnLoad(0);
+    dispatch({ type: DECREMENT_LOADING_ITEMS, count: numOfItemsToBeFetched });
   };
 
   useEffect(() => {
