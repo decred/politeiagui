@@ -91,7 +91,7 @@ const UserDetailPage = ({
               )}
               {tabId === USER_DETAIL_TAB_PREFERENCES && <PreferencesTab />}
               {tabId === USER_DETAIL_TAB_PROPOSALS && (
-                <ProposalsTab count={user.numofproposals} />
+                <ProposalsTab count={proposals.length} />
               )}
             </div>
           </div>
