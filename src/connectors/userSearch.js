@@ -6,6 +6,7 @@ import * as sel from "../selectors";
 const searchUserConnector = connect(
   sel.selectorMap({
     userSearch: sel.apiUserSearchResponse,
+    loggedInAsEmail: sel.loggedInAsEmail,
     error: sel.apiUserSearchError,
     isLoading: sel.isApiRequestingUserSearch
   }),

@@ -38,6 +38,7 @@ export const CustomContent = ({
   monthFilterValue,
   yearFilterValue,
   invoiceComments,
+  loggedInAsEmail,
   ...props
 }) => {
   const invalidProposalComment =
@@ -86,7 +87,7 @@ export const CustomContent = ({
           <h1 className="content-title">{header}</h1>
           {showLookUp && (
             <div>
-              {isCMS && (
+              {isCMS && loggedInAsEmail && (
                 <>
                   <Link
                     style={{ marginRight: "24px" }}

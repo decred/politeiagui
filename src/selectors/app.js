@@ -24,6 +24,7 @@ import {
   apiUserResponse,
   apiEditUserResponse,
   apiEditUserPayload,
+  loggedInAsEmail,
   isCMS,
   apiAdminInvoices
 } from "./api";
@@ -254,7 +255,11 @@ export const userHasPaid = state => {
   return getUserPaywallStatus(state) === PAYWALL_STATUS_PAID;
 };
 export const userCanExecuteActions = state => {
-  return userHasPaid(state) && !getKeyMismatch(state);
+  return (
+    userHasPaid(state) &&
+    !getKeyMismatch(state) &&
+    !!loggedInAsEmail(state) !== false
+  );
 };
 
 export const isProposalStatusApproved = state =>

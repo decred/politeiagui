@@ -249,7 +249,7 @@ class GeneralTab extends React.Component {
               }
             </div>
           </Field>
-        ) : (
+        ) : loggedInAsUserId ? (
           <Field className="account-info" label="Active Public Key">
             {isUserPageOwner ? (
               <div className="monospace">
@@ -266,7 +266,7 @@ class GeneralTab extends React.Component {
               </div>
             )}
           </Field>
-        )}
+        ) : null}
         {isUserPageOwner && (
           <div style={{ marginLeft: "164px" }}>
             {showIdentityHelpText ? (
@@ -391,50 +391,53 @@ class GeneralTab extends React.Component {
           </div>
         )}
         <FieldSeparator />
-        <Field label="Past Public Keys" style={{ float: "left" }}>
-          {showPastUserIdentities ? (
-            <span>
-              <span style={{ fontWeight: "bold" }}>Expanded</span>
+        {loggedInAsUserId ? (
+          <Field label="Past Public Keys" style={{ float: "left" }}>
+            {showPastUserIdentities ? (
+              <span>
+                <span style={{ fontWeight: "bold" }}>Expanded</span>
+                <span
+                  className="linkish"
+                  style={{ paddingLeft: "1em" }}
+                  onClick={() =>
+                    this.setState({ showPastUserIdentities: false })
+                  }
+                >
+                  (hide)
+                </span>
+              </span>
+            ) : (
               <span
                 className="linkish"
-                style={{ paddingLeft: "1em" }}
-                onClick={() => this.setState({ showPastUserIdentities: false })}
+                onClick={() => this.setState({ showPastUserIdentities: true })}
               >
-                (hide)
+                Expand
               </span>
-            </span>
-          ) : (
-            <span
-              className="linkish"
-              onClick={() => this.setState({ showPastUserIdentities: true })}
-            >
-              Expand
-            </span>
-          )}
-          {showPastUserIdentities && (
-            <ul>
-              {user.identities.map((identity, i) => (
-                <ul key={identity.pubkey} style={{ lineHeight: "2em" }}>
-                  <li
-                    style={{
-                      float: "left",
-                      fontWeight: "bold",
-                      marginRight: ".75em",
-                      lineHeight: "1.5em"
-                    }}
-                  >
-                    {i + 1})
-                  </li>
-                  <li className="monospace">{identity.pubkey}</li>
-                </ul>
-              ))}
-            </ul>
-          )}
-        </Field>
+            )}
+            {showPastUserIdentities && (
+              <ul>
+                {user.identities.map((identity, i) => (
+                  <ul key={identity.pubkey} style={{ lineHeight: "2em" }}>
+                    <li
+                      style={{
+                        float: "left",
+                        fontWeight: "bold",
+                        marginRight: ".75em",
+                        lineHeight: "1.5em"
+                      }}
+                    >
+                      {i + 1})
+                    </li>
+                    <li className="monospace">{identity.pubkey}</li>
+                  </ul>
+                ))}
+              </ul>
+            )}
+          </Field>
+        ) : null}
         <FieldSeparator />
         {isAdminOrTheUser && (
           <div>
-            <Field label="Verified email">No</Field>
             <TokenFields
               tokenLabel="Registration token"
               token={" " + user.newuserverificationtoken + " "}

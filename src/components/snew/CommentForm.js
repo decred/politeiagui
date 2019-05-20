@@ -20,7 +20,6 @@ const CommentForm = ({
   thingId,
   onSave,
   onToggleMarkdownHelp,
-  loggedInAsEmail,
   userCanExecuteActions,
   getVoteStatus,
   token,
@@ -44,7 +43,7 @@ const CommentForm = ({
     getVoteStatus(token) &&
     getVoteStatus(token).status === PROPOSAL_VOTING_FINISHED;
   const isProposalAbandoned = proposalStatus === PROPOSAL_STATUS_ABANDONED;
-  return loggedInAsEmail ? (
+  return (
     <React.Fragment>
       <form
         className="usertext cloneable warn-on-unload"
@@ -141,7 +140,7 @@ const CommentForm = ({
         {isShowingMarkdownHelp && <MarkdownHelp />}
       </form>
     </React.Fragment>
-  ) : null;
+  );
 };
 
 export default replyConnector(CommentForm);

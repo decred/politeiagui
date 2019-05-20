@@ -31,9 +31,11 @@ const ProposalSubmit = props => {
     userCanExecuteActions,
     openModal,
     proposalCredits,
+    loggedInAsEmail,
     editingMode
   } = props;
   const submitEnabled =
+    loggedInAsEmail &&
     !submitting &&
     !error &&
     !validationError &&
