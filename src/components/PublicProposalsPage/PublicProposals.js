@@ -14,7 +14,7 @@ import {
 import { proposalToT3 } from "../../lib/snew";
 import proposalsConnector from "../../connectors/publicProposals";
 
-const DEFAULT_PAGE_SIZE = 4;
+const DEFAULT_PAGE_SIZE = 3;
 
 const renderProposal = (record, index) => (
   <ThingLinkProposal

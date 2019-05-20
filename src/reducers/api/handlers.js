@@ -424,7 +424,7 @@ export const onReceiveProposalsVoteStatus = (state, action) => {
   state = receive("proposalsVoteStatus", state, action);
   if (action.error) return state;
 
-  const proposalsVoteStatus = get(["payload", "votesstatus"], state) || [];
+  const proposalsVoteStatus = get(["payload", "votesstatus"], action) || [];
 
   const data = proposalsVoteStatus.reduce(
     (acc, value) => ({

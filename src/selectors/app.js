@@ -19,7 +19,6 @@ import {
   apiUserInvoices,
   getPropVoteStatus,
   apiUnvettedStatusResponse,
-  numOfUserProposals,
   userid,
   apiUserResponse,
   apiEditUserResponse,
@@ -484,7 +483,7 @@ export const getUserInvoices = state => {
 
 export const getUserProposalFilterCounts = state => {
   const proposalFilterCounts = {
-    [PROPOSAL_USER_FILTER_SUBMITTED]: numOfUserProposals(state),
+    [PROPOSAL_USER_FILTER_SUBMITTED]: getUserProposals(state).length,
     [PROPOSAL_USER_FILTER_DRAFT]: getDraftProposals(state).length
   };
 

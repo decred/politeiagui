@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import { Content } from "../snew";
 import { commentsToT1, proposalToT3, invoiceToT3 } from "../../lib/snew";
 import { getTextFromIndexMd } from "../../helpers";
-import { DEFAULT_TAB_TITLE } from "../../constants";
+import { DEFAULT_TAB_TITLE, PROPOSAL_STATUS_PUBLIC } from "../../constants";
 import Message from "../Message";
 import {
   updateSortedComments,
@@ -32,6 +32,12 @@ class RecordDetail extends React.Component {
       document.title = proposal.name;
     }
   };
+  resolveFetchProposalVoteStatus = () => {
+    const { isCMS, onFetchProposalVoteStatus, token } = this.props;
+    if (!isCMS) {
+      onFetchProposalVoteStatus(token);
+    }
+  };
   resolveFetchLikedComments = prevProps => {
     const userJustFetched =
       !prevProps.loggedInAsEmail && this.props.loggedInAsEmail;
@@ -39,9 +45,21 @@ class RecordDetail extends React.Component {
       this.props.onFetchLikedComments(this.props.token);
     }
   };
+  resolveFetchProposalVoteStatus = prevProps => {
+    const { isCMS, record, onFetchProposalVoteStatus, token } = this.props;
+    const proposal = !isCMS && record;
+    const proposalIsPublic = proposal.status === PROPOSAL_STATUS_PUBLIC;
+    const proposalJustFetched =
+      proposal &&
+      (!prevProps.record || Object.keys(prevProps.record).length === 0);
+    if (proposalJustFetched && proposalIsPublic) {
+      onFetchProposalVoteStatus(token);
+    }
+  };
   componentDidUpdate(prevProps) {
     this.resolveTabTitle(prevProps);
     this.resolveFetchLikedComments(prevProps);
+    this.resolveFetchProposalVoteStatus(prevProps);
     this.handleUpdateOfComments(prevProps, this.props);
   }
   componentDidMount() {

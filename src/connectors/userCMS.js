@@ -67,8 +67,7 @@ const userCMSConnector = connect(
     isApiRequestingReactivateUser: state =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_REACTIVATE,
-    manageUserResponse: sel.manageUserResponse,
-    numOfUserProposals: sel.numOfUserProposals
+    manageUserResponse: sel.manageUserResponse
   }),
   dispatch =>
     bindActionCreators(
