@@ -1029,7 +1029,10 @@ export const onFetchUserProposalsWithVoteStatus = userid => async dispatch => {
     const publicPropsTokens = proposals
       .filter(prop => prop.status === PROPOSAL_STATUS_PUBLIC)
       .map(prop => prop.censorshiprecord.token);
-    await dispatch(onFetchProposalsVoteStatusByTokens(publicPropsTokens));
+
+    if (publicPropsTokens.length) {
+      await dispatch(onFetchProposalsVoteStatusByTokens(publicPropsTokens));
+    }
     dispatch(act.RECEIVE_USER_PROPOSALS({ proposals }));
   } catch (e) {
     dispatch(act.RECEIVE_USER_PROPOSALS(null, e));

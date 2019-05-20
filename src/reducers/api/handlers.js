@@ -421,8 +421,8 @@ export const onReceiveManageUser = (state, action) => {
 };
 
 export const onReceiveProposalsVoteStatus = (state, action) => {
-  state = receive("proposalsVoteStatus", state, action);
-  if (action.error) return state;
+  const newState = receive("proposalsVoteStatus", state, action);
+  if (action.error) return newState;
 
   const proposalsVoteStatus = get(["payload", "votesstatus"], action) || [];
 
@@ -435,10 +435,13 @@ export const onReceiveProposalsVoteStatus = (state, action) => {
   );
 
   return {
-    ...state,
+    ...newState,
     proposalsVoteStatus: {
-      ...state.proposalsVoteStatus,
-      response: data
+      ...newState.proposalsVoteStatus,
+      response: {
+        ...state.proposalsVoteStatus.response,
+        ...data
+      }
     }
   };
 };
