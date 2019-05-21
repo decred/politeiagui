@@ -4,8 +4,7 @@ import * as sel from "../selectors";
 import * as act from "../actions";
 import compose from "lodash/fp/compose";
 import { or } from "../lib/fp";
-import { generateBlankLineItem } from "../components/InvoiceDatasheet/helpers";
-import { getCurrentYear, getCurrentMonth } from "../helpers";
+import { getNewInvoiceData } from "../lib/editors_content_backup";
 
 // XXX: connector needs to be moved in its own file
 const newInvoiceConnector = connect(
@@ -38,11 +37,8 @@ class NewInvoiceContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      initialValues: props.draftInvoice || {
-        month: getCurrentMonth() - 1,
-        year: getCurrentYear(),
-        lineitems: [generateBlankLineItem()]
-      }
+      initialValues: props.draftInvoice || getNewInvoiceData(),
+      validationError: ""
     };
   }
 

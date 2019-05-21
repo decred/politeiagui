@@ -7,7 +7,10 @@ import * as modalTypes from "../components/Modal/modalTypes";
 import * as external_api_actions from "./external_api";
 import { clearStateLocalStorage } from "../lib/local_storage";
 import { callAfterMinimumWait } from "./lib";
-import { resetNewProposalData } from "../lib/editors_content_backup";
+import {
+  resetNewProposalData,
+  resetNewInvoiceData
+} from "../lib/editors_content_backup";
 import act from "./methods";
 import { PROPOSAL_STATUS_PUBLIC } from "../constants";
 
@@ -539,7 +542,7 @@ export const onSubmitInvoice = (
             username
           })
         );
-        resetNewProposalData();
+        resetNewInvoiceData();
       })
       .catch(error => {
         dispatch(act.RECEIVE_NEW_INVOICE(null, error));
@@ -663,11 +666,11 @@ export const onSubmitEditedInvoice = (
             username
           })
         );
-        resetNewProposalData();
+        resetNewInvoiceData();
       })
       .catch(error => {
         dispatch(act.RECEIVE_EDIT_INVOICE(null, error));
-        resetNewProposalData();
+        resetNewInvoiceData();
         throw error;
       });
   });

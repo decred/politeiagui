@@ -2,6 +2,8 @@
 This lib is designed to handle persisting data for the text editors using session storage
 */
 import qs from "query-string";
+import { getCurrentMonth, getCurrentYear } from "../helpers";
+import { generateBlankLineItem } from "../components/InvoiceDatasheet/helpers";
 
 export const NEW_PROPOSAL_PATH = "/proposals/new";
 
@@ -92,7 +94,7 @@ const updateInvoiceFormData = state => {
 
   const address = newInvoiceData[INVOICE_FORM_ADDRESS];
   const contact = newInvoiceData[INVOICE_FORM_CONTACT];
-  const lineItems = newInvoiceData[INVOICE_FORM_LINE_ITEMS];
+  const lineitems = newInvoiceData[INVOICE_FORM_LINE_ITEMS];
   const location = newInvoiceData[INVOICE_FORM_LOCATION];
   const month = newInvoiceData[INVOICE_FORM_MONTH];
   const year = newInvoiceData[INVOICE_FORM_YEAR];
@@ -102,7 +104,7 @@ const updateInvoiceFormData = state => {
   if (
     !address &&
     !contact &&
-    !lineItems &&
+    !lineitems &&
     !location &&
     !month &&
     !year &&
@@ -112,10 +114,38 @@ const updateInvoiceFormData = state => {
     return;
   }
 
-  const path = getProposalPath(window.location);
+  const path = getInvoicePath(window.location);
   sessionStorage.setItem(
     getInvoiceBackupKey(INVOICE_FORM_ADDRESS, path),
     newInvoiceData[INVOICE_FORM_ADDRESS]
+  );
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_CONTACT, path),
+    newInvoiceData[INVOICE_FORM_CONTACT]
+  );
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_LINE_ITEMS, path),
+    JSON.stringify(newInvoiceData[INVOICE_FORM_LINE_ITEMS])
+  );
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_LOCATION, path),
+    newInvoiceData[INVOICE_FORM_LOCATION]
+  );
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_MONTH, path),
+    newInvoiceData[INVOICE_FORM_MONTH]
+  );
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_YEAR, path),
+    newInvoiceData[INVOICE_FORM_YEAR]
+  );
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_NAME, path),
+    newInvoiceData[INVOICE_FORM_NAME]
+  );
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_RATE, path),
+    newInvoiceData[INVOICE_FORM_RATE]
   );
 };
 
@@ -124,13 +154,70 @@ export const resetNewInvoiceData = () => {
     getInvoiceBackupKey(INVOICE_FORM_ADDRESS, NEW_INVOICE_PATH),
     ""
   );
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_CONTACT, NEW_INVOICE_PATH),
+    ""
+  );
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_LINE_ITEMS, NEW_INVOICE_PATH),
+    JSON.stringify([generateBlankLineItem()])
+  );
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_LOCATION, NEW_INVOICE_PATH),
+    ""
+  );
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_MONTH, NEW_INVOICE_PATH),
+    getCurrentMonth() - 1
+  );
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_YEAR, NEW_INVOICE_PATH),
+    getCurrentYear()
+  );
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_NAME, NEW_INVOICE_PATH),
+    ""
+  );
+  sessionStorage.setItem(
+    getInvoiceBackupKey(INVOICE_FORM_RATE, NEW_INVOICE_PATH),
+    ""
+  );
 };
 
 export const getNewInvoiceData = () => {
   return {
-    name:
+    address:
       sessionStorage.getItem(
         getInvoiceBackupKey(INVOICE_FORM_ADDRESS, NEW_INVOICE_PATH)
+      ) || "",
+    contact:
+      sessionStorage.getItem(
+        getInvoiceBackupKey(INVOICE_FORM_CONTACT, NEW_INVOICE_PATH)
+      ) || "",
+    lineitems: JSON.parse(
+      sessionStorage.getItem(
+        getInvoiceBackupKey(INVOICE_FORM_LINE_ITEMS, NEW_INVOICE_PATH)
+      )
+    ) || [generateBlankLineItem()],
+    location:
+      sessionStorage.getItem(
+        getInvoiceBackupKey(INVOICE_FORM_LOCATION, NEW_INVOICE_PATH)
+      ) || "",
+    month:
+      sessionStorage.getItem(
+        getInvoiceBackupKey(INVOICE_FORM_MONTH, NEW_INVOICE_PATH)
+      ) || getCurrentMonth() - 1,
+    year:
+      sessionStorage.getItem(
+        getInvoiceBackupKey(INVOICE_FORM_YEAR, NEW_INVOICE_PATH)
+      ) || getCurrentYear(),
+    name:
+      sessionStorage.getItem(
+        getInvoiceBackupKey(INVOICE_FORM_NAME, NEW_INVOICE_PATH)
+      ) || "",
+    rate:
+      sessionStorage.getItem(
+        getInvoiceBackupKey(INVOICE_FORM_RATE, NEW_INVOICE_PATH)
       ) || ""
   };
 };
