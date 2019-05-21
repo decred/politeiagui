@@ -18,6 +18,7 @@ class MultiLineEditor extends React.Component {
     const { value, onKeyDown } = this.props;
     return (
       <textarea
+        className="description-multiline"
         ref={input => {
           this._input = input;
         }}
