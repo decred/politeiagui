@@ -3,7 +3,6 @@ import { diffWordsWithSpace } from "diff";
 import htmlParser from "react-markdown/plugins/html-parser";
 import xssFilters from "xss-filters";
 import * as modalTypes from "../../Modal/modalTypes";
-import MarkdownRenderer from "./Markdown";
 
 const diffCheck = node => {
   const className = node.attribs.classname;
@@ -21,60 +20,63 @@ export const htmlParserRules = htmlParser({
 });
 
 export const insertDiffHTML = (oldTextBody, newTextBody) => {
-  const handleDiffLine = (line, index) => {
+  const DiffLine = ({
+    added = false,
+    removed = false,
+    removedIndex = "",
+    addedIndex = "",
+    content = ""
+  }) => (
+    <tr
+      className={"diff-line" + (added ? "-added" : removed ? "-removed" : "")}
+    >
+      <td className="diff-line-index">{removedIndex}</td>
+      <td className="diff-line-index">{addedIndex}</td>
+      <td className="diff-line-icon">{added ? "+" : removed ? "-" : ""}</td>
+      <td className="diff-line-content">{content}</td>
+    </tr>
+  );
+  const handleDiffLine = (
+    line,
+    index,
+    oldTextLineCounter,
+    newTextLineCounter
+  ) => {
     const { removed, value, added } = line;
     const diffLine = [];
-
     const dw = diffWordsWithSpace(removed ? removed : "", value ? value : "");
+    const diffStrings = dw.map(({ value }) => value);
     if (removed) {
-      const diffStrings = [];
-      dw.forEach((x, i) =>
-        diffStrings.push(handleDiffString(x, false, !!removed, i))
-      );
       diffLine.push(
-        <li className="diff-line-out" key={index}>
-          {diffStrings}
-        </li>
+        <DiffLine
+          removed={true}
+          content={diffStrings}
+          removedIndex={oldTextLineCounter}
+          key={index}
+        />
       );
     }
     if (added) {
-      const diffStrings = [];
-      dw.forEach((x, i) =>
-        diffStrings.push(handleDiffString(x, added, false, i))
-      );
-      // the index is added .5 to differentiate from added lines
       diffLine.push(
-        <li className="diff-line-in" key={index + ".5"}>
-          {diffStrings}
-        </li>
+        <DiffLine
+          added={true}
+          content={diffStrings}
+          addedIndex={newTextLineCounter}
+          key={index}
+        />
       );
     }
     if (!removed && !added) {
       diffLine.push(
-        value ? <MarkdownRenderer body={value} key={index} /> : null
+        <DiffLine
+          content={value}
+          addedIndex={newTextLineCounter}
+          removedIndex={oldTextLineCounter}
+          key={index}
+        />
       );
     }
     return diffLine;
-  };
-
-  const handleDiffString = (string, isLineAdded, isLineRemoved, index) => {
-    const { removed, added, value } = string;
-    if (removed) {
-      if (isLineAdded) return <span />;
-      return (
-        <span className="diff-out" key={index}>
-          <MarkdownRenderer body={value} />
-        </span>
-      );
-    } else if (added) {
-      if (isLineRemoved) return <span />;
-      return (
-        <span className="diff-in" key={index}>
-          <MarkdownRenderer body={value} />
-        </span>
-      );
-    }
-    return value;
   };
   const arrayDiff = (newCommentBody, oldCommentBody, lineDiffFunc) => [
     ...newCommentBody.filter(lineDiffFunc(oldCommentBody)).map(markAsAdded),
@@ -85,21 +87,18 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
     value: elem.value,
     lineIndex: elem.index,
     removed: false,
-    added: true,
-    status: "line added"
+    added: true
   });
   const markAsRemoved = elem => ({
     lineIndex: elem.index,
     removed: elem.value,
-    added: false,
-    status: "line removed"
+    added: false
   });
   const markAsUnchanged = elem => ({
     value: elem.value,
     lineIndex: elem.index,
     removed: false,
-    added: false,
-    status: "line unchanged"
+    added: false
   });
   const lineDiffFunc = arr => elem =>
     !arr.some(arrelem => arrelem.value === elem.value);
@@ -112,17 +111,44 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
   const oldComLines = getLineArray(oldTextBody);
   const newComLines = getLineArray(newTextBody);
   // order matters
-  const linesDiff = arrayDiff(newComLines, oldComLines, lineDiffFunc).sort(
-    (a, b) => a.lineIndex - b.lineIndex
-  );
 
-  return linesDiff.map((line, index) => {
-    if (line.value !== "" || line.removed) {
-      return handleDiffLine(line, index);
-    } else {
-      return <span key={index} />;
-    }
-  });
+  let newTextLineCounter = 0,
+    oldTextLineCounter = 0;
+  const linesDiff = arrayDiff(newComLines, oldComLines, lineDiffFunc)
+    .sort((a, b) => a.lineIndex - b.lineIndex)
+    .map((line, index) => {
+      if (line.value !== "" || line.removed) {
+        if (line.added) {
+          newTextLineCounter += 1;
+        } else if (line.removed) {
+          oldTextLineCounter += 1;
+        } else {
+          newTextLineCounter += 1;
+          oldTextLineCounter += 1;
+        }
+        return handleDiffLine(
+          line,
+          index,
+          oldTextLineCounter,
+          newTextLineCounter
+        );
+      } else {
+        newTextLineCounter += 1;
+        oldTextLineCounter += 1;
+        return (
+          <DiffLine
+            addedIndex={newTextLineCounter}
+            removedIndex={oldTextLineCounter}
+            key={index}
+          />
+        );
+      }
+    });
+  return (
+    <table className="diff-table" cellSpacing="0" cellPadding="0">
+      <tbody>{linesDiff}</tbody>
+    </table>
+  );
 };
 
 export const traverseChildren = (el, cb) => {

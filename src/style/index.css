@@ -425,6 +425,7 @@ a:hover, a:focus {
 .attached-image {
   display: block;
   position: relative;
+  max-width: 100%;
 }
 .attached-image-title {
   height: 24px;
@@ -553,12 +554,23 @@ table.md {
 
 .md a {
   color: #2971ff;
+  word-break: break-all;
+  white-space: normal;
 }
 .md a:visited {
   color: #7D5D8A;
 }
 .md pre {
   padding: 8px;
+}
+
+.md code, .md pre code {
+  display: block;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  line-height: 1.5em !important;
 }
 .md blockquote {
   border-left: 2px solid #edf1f3;
@@ -1167,11 +1179,19 @@ li p.header-3 {
   z-index: 1;
 }
 
+@media (max-width: 800px) {
+  .modal-container {
+      align-items: normal !important;
+  }
+}
+
 .modal-container {
-  overflow-y: auto;
+  overflow: auto;
   box-sizing: border-box;
   padding-top: 80px;
+  padding-bottom: 80px;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1181,7 +1201,6 @@ li p.header-3 {
   background: white;
   box-shadow: 0 9px 46px 8px rgba(0,0,0,.14),0 11px 15px -7px rgba(0,0,0,.12),0 24px 38px 3px rgba(0,0,0,.2);
   z-index: 2;
-  margin-bottom: 40px;
 }
 
 .modal-content-header {
@@ -1253,10 +1272,7 @@ li p.header-3 {
 .appWrapper {
   background: #f3f5f6;
   min-height: 100%;
-  overflow-x: auto;
-}
-
-.appWrapper > .content {
+  height: 100%;
   overflow-x: auto;
 }
 
@@ -1829,32 +1845,57 @@ form div.usertext-body.may-blank-within.md-container {
   font-family: monospace;
 }
 
-.diff-line-in {
+.diff-text-preview-toggle {
+  width: 100%;
+  display: inline-block;
+  background-color: #dcdcdc;
+  line-height: 2em;
+  cursor: pointer;
+}
+.diff-text-preview-toggle div {
+  width: 50%;
+  float: left;
+  text-align: center
+}
+.diff-active-toggle{
+  background-color: white;
+}
+
+.diff-table {
+  border: none;
+  table-layout: fixed;
+  width: 100%;
+  font-family: "menlo",monospace;
+}
+.diff-table td {
+  font-size: 0.8em;
+  border: none;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.diff-line-index {
+  width: 2em;
+  padding: 4px 1px
+}
+.diff-line-icon {
+  font-weight: bold;
+  width: 1em
+}
+.diff-line-content {
+  width: 500px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.diff-line-added {
   list-style-type: none;
   background-color: #e6ffed;
   color: #164623;
 }
 
-.diff-in {
-  list-style-type: none;
-  background-color: #bfffd1;
-  color: #164623;
-  display:inline-block;
-  margin-left: 0.16em;
-}
-
-.diff-out {
-  list-style-type: none;
-  background-color: #f8bac1;
-  color: #cb2431;
-  display:inline-block;
-  margin-left: 0.16em;
-}
-
-.diff-line-out {
+.diff-line-removed {
   background-color: #ffdce0;
   list-style-type: none;
-  color: #cb2431;
   position: relative;
 }
 
