@@ -61,7 +61,6 @@ const InvoiceSubmit = props => {
     pristine
   } = props;
 
-  const [datasheetErrors, setDatasheetErrors] = useState([]);
   const [monthOptions, setMonthOptions] = useState(MONTH_OPTIONS);
 
   useEffect(() => {
@@ -80,7 +79,6 @@ const InvoiceSubmit = props => {
     !submitting &&
     valid &&
     !pristine &&
-    datasheetErrors.length === 0 &&
     !exchangeRateError &&
     !loadingExchangeRate;
 
@@ -218,7 +216,6 @@ const InvoiceSubmit = props => {
                   <div className="usertext">
                     <Field
                       name="lineitems"
-                      onChangeErrors={setDatasheetErrors}
                       component={InvoiceDatasheetField}
                       policy={policy}
                     />

@@ -5,32 +5,19 @@ import dropRight from "lodash/dropRight";
 import "react-datasheet/lib/react-datasheet.css";
 import "./styles.css";
 import {
-  errorsMessage,
   processCellsChange,
   convertLineItemsToGrid,
   convertGridToLineItems,
   generateBlankLineItem
 } from "./helpers";
 
-const InvoiceDatasheet = ({
-  policy,
-  value,
-  onChange,
-  errors,
-  onChangeErrors: setErrors,
-  readOnly
-}) => {
+const InvoiceDatasheet = ({ value, onChange, readOnly }) => {
   const [grid, setGrid] = useState([]);
 
   const handleCellsChange = changes => {
-    const { grid: newGrid, errors: newErrors } = processCellsChange(
-      policy,
-      grid,
-      changes
-    );
+    const { grid: newGrid } = processCellsChange(grid, changes);
     const lineItems = convertGridToLineItems(newGrid);
     onChange(lineItems);
-    setErrors([...newErrors]);
   };
 
   const handleAddNewRow = e => {
@@ -55,7 +42,6 @@ const InvoiceDatasheet = ({
     }
   };
 
-  const anyError = !!errors && !!errors.length;
   const removeRowsIsDisabled = grid && grid.length <= 2;
 
   return (
@@ -81,13 +67,6 @@ const InvoiceDatasheet = ({
         onContextMenu={(e, cell) => (cell.readOnly ? e.preventDefault() : null)}
         onCellsChanged={handleCellsChange}
       />
-      {anyError && (
-        <ul className="error-list">
-          {errors.map((e, idx) => (
-            <li key={`error-${idx}`}>{errorsMessage[e]}</li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 };
@@ -95,9 +74,7 @@ const InvoiceDatasheet = ({
 InvoiceDatasheet.propTypes = {
   value: PropTypes.array.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  onChange: PropTypes.func,
-  errors: PropTypes.array,
-  onChangeErrors: PropTypes.func
+  onChange: PropTypes.func
 };
 
 InvoiceDatasheet.defaultProps = {
