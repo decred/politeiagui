@@ -57,7 +57,7 @@ export const selectWrapper = options => props => (
 );
 
 export const generateBlankLineItem = () => ({
-  type: "",
+  type: 1,
   domain: "",
   subdomain: "",
   description: "",

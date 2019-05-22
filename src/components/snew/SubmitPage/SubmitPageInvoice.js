@@ -219,7 +219,6 @@ const InvoiceSubmit = props => {
                     <Field
                       name="lineitems"
                       onChangeErrors={setDatasheetErrors}
-                      errors={datasheetErrors}
                       component={InvoiceDatasheetField}
                       policy={policy}
                     />
