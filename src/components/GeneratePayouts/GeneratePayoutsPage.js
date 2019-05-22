@@ -30,6 +30,8 @@ const GeneratePayoutsPage = ({
     "labortotal",
     "expensetotal",
     "combinedtotal",
+    "exchangerate",
+    "dcrtotal",
     "address"
   ];
   return loggedInAsEmail ? (
