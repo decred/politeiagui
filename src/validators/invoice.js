@@ -53,7 +53,11 @@ const invoiceValidationSchema = ({
           description: Yup.string()
             .min(minlineitemcollength)
             .max(maxlineitemcollength)
-            .matches(...fieldMatcher("Description", invoicefieldsupportedchars))
+            .matches(
+              ...fieldMatcher("Description", invoicefieldsupportedchars)
+            ),
+          labour: Yup.number(),
+          expense: Yup.number()
         })
       )
       .min(1)
@@ -94,7 +98,11 @@ export function yupToFormErrors(yupError) {
 }
 
 const buildRegexFromSupportedChars = supportedChars => {
-  const concatedChars = supportedChars.reduce((str, v) => str + `\\${v}`, "");
+  const charNeedsEscaping = c => c === "/" || c === "." || c === "-";
+  const concatedChars = supportedChars.reduce(
+    (str, char) => (charNeedsEscaping(char) ? str + `\\${char}` : str + char),
+    ""
+  );
   const regex = "^[" + concatedChars + "]*$";
   return new RegExp(regex);
 };
