@@ -57,7 +57,8 @@ const InvoiceSubmit = props => {
     policy,
     userCanExecuteActions,
     loggedInAsEmail,
-    valid
+    valid,
+    pristine
   } = props;
 
   const [datasheetErrors, setDatasheetErrors] = useState([]);
@@ -78,6 +79,7 @@ const InvoiceSubmit = props => {
     loggedInAsEmail &&
     !submitting &&
     valid &&
+    !pristine &&
     datasheetErrors.length === 0 &&
     !exchangeRateError &&
     !loadingExchangeRate;

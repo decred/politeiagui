@@ -542,6 +542,7 @@ export const onSubmitInvoice = (
         resetNewProposalData();
       })
       .catch(error => {
+        console.log("error", error);
         dispatch(act.RECEIVE_NEW_INVOICE(null, error));
         resetNewProposalData();
         throw error;

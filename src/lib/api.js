@@ -83,6 +83,7 @@ export const makeInvoice = (
     paymentaddress,
     lineItems
   });
+
   return {
     id: "",
     month,
@@ -129,16 +130,23 @@ export const makeCensoredComment = (token, reason, commentid) => ({
 });
 
 export const signRegister = (email, proposal) => {
-  return pki.myPubKeyHex(email).then(publickey => {
-    const digests = proposal.files
-      .map(x => Buffer.from(get("digest", x), "hex"))
-      .sort(Buffer.compare);
-    const tree = new MerkleTree(digests);
-    const root = tree.getRoot().toString("hex");
-    return pki
-      .signStringHex(email, root)
-      .then(signature => ({ ...proposal, publickey, signature }));
-  });
+  return pki
+    .myPubKeyHex(email)
+    .then(publickey => {
+      const digests = proposal.files
+        .map(x => Buffer.from(get("digest", x), "hex"))
+        .sort(Buffer.compare);
+      const tree = new MerkleTree(digests);
+      const root = tree.getRoot().toString("hex");
+      return pki
+        .signStringHex(email, root)
+        .then(signature => ({ ...proposal, publickey, signature }));
+    })
+    .catch(() => {
+      throw new Error(
+        "Failed to load user identity. You need tor restore it from a backup or generate a new one."
+      );
+    });
 };
 
 export const signComment = (email, comment) =>
