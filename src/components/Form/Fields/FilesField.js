@@ -109,7 +109,7 @@ FilesField.propTypes = {
   touched: PropTypes.bool,
   error: PropTypes.bool,
   disabled: PropTypes.bool,
-  policy: PropTypes.object.isRequired
+  policy: PropTypes.object
 };
 
 export const normalizer = (value, previousValue) => {

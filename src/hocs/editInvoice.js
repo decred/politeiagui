@@ -4,7 +4,6 @@ import * as sel from "../selectors";
 import * as act from "../actions";
 import compose from "lodash/fp/compose";
 import get from "lodash/fp/get";
-import { validate } from "../validators/invoice";
 import { arg, or } from "../lib/fp";
 import { fromUSDCentsToUSDUnits } from "../helpers";
 
@@ -44,9 +43,7 @@ const editInvoiceConnector = connect(
 class EditInvoiceContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      validationError: ""
-    };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -107,12 +104,7 @@ class EditInvoiceContainer extends Component {
   onSave = (...args) => {
     const { exchangeRate } = this.props;
     args[0].exchangerate = exchangeRate;
-    try {
-      validate(...args);
-      this.props.onSave(...args, this.props.token);
-    } catch (e) {
-      this.setState({ validationError: e.errors._error });
-    }
+    this.props.onSave(...args, this.props.token);
   };
 
   onCancel = () => this.props.history.push(`/invoices/${this.props.token}`);

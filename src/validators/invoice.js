@@ -1,79 +1,142 @@
-import { SubmissionError } from "redux-form";
-import { isRequiredValidator } from "./util";
+import * as Yup from "yup";
 
-const emptyInvoiceField = values =>
-  !isRequiredValidator(values.month) ||
-  !isRequiredValidator(values.year) ||
-  !isRequiredValidator(values.name && values.name.trim()) ||
-  !isRequiredValidator(values.location && values.location.trim()) ||
-  !isRequiredValidator(values.contact && values.contact.trim()) ||
-  !isRequiredValidator(values.rate) ||
-  !isRequiredValidator(values.address && values.address.trim());
+const invoiceValidationSchema = ({
+  cmscontactsupportedchars,
+  cmsnamelocationsupportedchars,
+  maxlocationlength,
+  minlocationlength,
+  mincontactlength,
+  maxcontactlength,
+  minnamelength,
+  maxnamelength,
+  minlineitemcollength,
+  maxlineitemcollength,
+  invoicefieldsupportedchars
+}) =>
+  Yup.object().shape({
+    name: Yup.string()
+      .required("required")
+      .min(minnamelength)
+      .max(maxnamelength)
+      .matches(...fieldMatcher("Name", cmsnamelocationsupportedchars)),
+    location: Yup.string()
+      .required("required")
+      .min(minlocationlength)
+      .max(maxlocationlength)
+      .matches(...fieldMatcher("Location", cmsnamelocationsupportedchars)),
+    contact: Yup.string()
+      .required("required")
+      .min(mincontactlength)
+      .max(maxcontactlength)
+      .matches(...fieldMatcher("Contact", cmscontactsupportedchars)),
+    rate: Yup.number()
+      .required("required")
+      .min(5)
+      .max(500),
+    address: Yup.string().required("required"),
+    lineitems: Yup.array()
+      .of(
+        Yup.object().shape({
+          type: Yup.string()
+            .required("required")
+            .oneOf(["1", "2", "3"]),
+          domain: Yup.string()
+            .required("required")
+            .min(minlineitemcollength)
+            .max(maxlineitemcollength)
+            .matches(...fieldMatcher("Domain", invoicefieldsupportedchars)),
+          subdomain: Yup.string()
+            .required("required")
+            .min(minlineitemcollength)
+            .max(maxlineitemcollength)
+            .matches(...fieldMatcher("Sub domain", invoicefieldsupportedchars)),
+          description: Yup.string()
+            .min(minlineitemcollength)
+            .max(maxlineitemcollength)
+            .matches(
+              ...fieldMatcher("Description", invoicefieldsupportedchars)
+            ),
+          labour: Yup.number(),
+          expense: Yup.number()
+        })
+      )
+      .min(1)
+  });
 
-const validate = (values, dispatch, props) => {
-  if (emptyInvoiceField(values)) {
-    throw new SubmissionError({
-      _error: "Your invoice must have a month, a year and an input."
-    });
-  }
-  if (props.keyMismatch) {
-    throw new SubmissionError({
-      _error:
-        "Your local key does not match the one on the server.  Please generate a new one under account settings."
-    });
-  }
+/** Captures a value such as 'lineitems[0].description' */
+const lineItemPathRegex = /[A-z]*\[[0-9]*\]\.[A-z]*/gm;
 
-  return null;
+const getErrorForLineItem = (errors, errPath, errMessage) => {
+  const column = errPath.split(".")[1];
+  const position = +/\[([0-9])*\]/gm.exec(errPath)[1] + 1;
+  const message = `'${column}' of item ${position} ${errMessage.replace(
+    lineItemPathRegex,
+    ""
+  )}`;
+  return (errors.lineitems || []).concat([message]);
 };
 
-const validateContractorName = name => {
-  if (!name) {
-    return "Name cannot be blank";
+export function yupToFormErrors(yupError) {
+  let errors = {};
+  if (yupError.inner.length === 0) {
+    return { ...errors, [yupError.path]: yupError.message };
   }
-  return null;
-};
-
-const validateContractorLocation = location => {
-  if (!location) {
-    return "Location cannot be blank";
+  for (const err of yupError.inner) {
+    if (!errors[err.path]) {
+      const isLineItemPath = lineItemPathRegex.test(err.path);
+      if (isLineItemPath) {
+        errors = {
+          ...errors,
+          lineitems: getErrorForLineItem(errors, err.path, err.message)
+        };
+      } else {
+        errors = { ...errors, [err.path]: err.message };
+      }
+    }
   }
-  return null;
-};
-
-const validateContractorContact = contact => {
-  if (!contact) {
-    return "Contact cannot be blank";
-  }
-  return null;
-};
-
-const validateContractorRate = rate => {
-  if (!rate) {
-    return "Rate cannot be blank";
-  }
-  if (+rate < 5 || +rate > 500) {
-    return "Rate must be within the range of 5 to 500";
-  }
-  return null;
-};
-
-const validateContractorPaymentAddress = address => {
-  if (!address) {
-    return "Payment address cannot be blank";
-  }
-  return null;
-};
-
-const synchronousValidation = ({ name, location, contact, rate, address }) => {
-  const errors = {
-    name: validateContractorName(name),
-    location: validateContractorLocation(location),
-    contact: validateContractorContact(contact),
-    rate: validateContractorRate(rate),
-    address: validateContractorPaymentAddress(address)
-  };
-
   return errors;
+}
+
+const buildRegexFromSupportedChars = supportedChars => {
+  const charNeedsEscaping = c => c === "/" || c === "." || c === "-";
+  const concatedChars = supportedChars.reduce(
+    (str, char) => (charNeedsEscaping(char) ? str + `\\${char}` : str + char),
+    ""
+  );
+  const regex = "^[" + concatedChars + "]*$";
+  return new RegExp(regex);
 };
 
-export { validate, synchronousValidation };
+const invalidMessage = (fieldName, supportedChars) =>
+  `${fieldName} is not valid. Valid chars are ${buildValidCharsStrFromSupportedChars(
+    supportedChars
+  )} `;
+
+const fieldMatcher = (fieldName, supportedChars) => {
+  return [
+    buildRegexFromSupportedChars(supportedChars),
+    {
+      excludeEmptyString: true,
+      message: invalidMessage(fieldName, supportedChars)
+    }
+  ];
+};
+
+const buildValidCharsStrFromSupportedChars = supportedChars =>
+  supportedChars.reduce((str, v) => str + v, "");
+
+const synchronousValidation = (values, { policy }) => {
+  if (!policy)
+    return {
+      waiting: "policy"
+    };
+  const validationSchema = invoiceValidationSchema(policy);
+  try {
+    validationSchema.validateSync(values, { abortEarly: false });
+    return {};
+  } catch (e) {
+    return yupToFormErrors(e);
+  }
+};
+
+export { synchronousValidation };

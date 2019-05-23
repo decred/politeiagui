@@ -15,28 +15,10 @@ import {
   getCurrentYear,
   getCurrentMonth
 } from "../../../helpers";
+import { invoiceInstructions } from "./helpers";
 
 const YEAR_OPTIONS = [2018, 2019];
 const MONTH_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
-const invoiceInstructions = `
-***Contractor Name:*** This is whatever name you identify yourself with the DHG, typically something beyond a mere handle or nick.
-
-***Contractor Location:*** This is the country you are currently located, or primarily residing.
-
-***Contractor Contact:*** Contact information in case an administrator would need to reach out to discuss something, typically an email address or chat nick.
-
-***Contractor Rate:*** This is the previously agreed upon rate you will be performing work.
-
-***Payment Address:*** This is the DCR address where you would like to receive payment.  
-
-***Line Items:***
-  * Type: Currently can be 1 (Labor), 2 (Expense), or 3 (Misc)
-  * Domain: The broad category of work performed/expenses spent (for example, Development, Marketing, Community etc).
-  * Subdomain: The specific project or program of which the work or expenses are related (for example, Decrediton, dcrd, NYC Event).
-  * Description: A thorough description of the work or expenses.
-  * Labor: The number of hours of work performed.
-  * Expenses: The cost of the line item (in USD).`;
 
 const InvoiceSubmit = props => {
   const {
@@ -57,10 +39,10 @@ const InvoiceSubmit = props => {
     policy,
     userCanExecuteActions,
     loggedInAsEmail,
-    valid
+    valid,
+    pristine
   } = props;
 
-  const [datasheetErrors, setDatasheetErrors] = useState([]);
   const [monthOptions, setMonthOptions] = useState(MONTH_OPTIONS);
 
   useEffect(() => {
@@ -78,7 +60,7 @@ const InvoiceSubmit = props => {
     loggedInAsEmail &&
     !submitting &&
     valid &&
-    datasheetErrors.length === 0 &&
+    !pristine &&
     !exchangeRateError &&
     !loadingExchangeRate;
 
@@ -204,20 +186,20 @@ const InvoiceSubmit = props => {
                       />
                     </div>
                     <div>
-                      <Markdown
-                        body={invoiceInstructions}
-                        filterXss={false}
-                        confirmWithModal={null}
-                        displayExternalLikWarning={false}
-                        {...props}
-                      />
+                      {policy && (
+                        <Markdown
+                          body={invoiceInstructions(policy)}
+                          filterXss={false}
+                          confirmWithModal={null}
+                          displayExternalLikWarning={false}
+                          {...props}
+                        />
+                      )}
                     </div>
                   </div>
                   <div className="usertext">
                     <Field
                       name="lineitems"
-                      onChangeErrors={setDatasheetErrors}
-                      errors={datasheetErrors}
                       component={InvoiceDatasheetField}
                       policy={policy}
                     />
