@@ -30,14 +30,12 @@ const CommentForm = ({
   onClose,
   hide = false,
   invoice,
-  isAdmin,
   isCMS
 }) => {
   const isCommentInvoiceUnavailable = isCMS
-    ? (invoice.status === INVOICE_STATUS_APPROVED ||
-        invoice.status === INVOICE_STATUS_PAID ||
-        invoice.status === INVOICE_STATUS_REJECTED) &&
-      isAdmin
+    ? invoice.status === INVOICE_STATUS_APPROVED ||
+      invoice.status === INVOICE_STATUS_PAID ||
+      invoice.status === INVOICE_STATUS_REJECTED
     : false;
   const isVotingFinished =
     getVoteStatus(token) &&
