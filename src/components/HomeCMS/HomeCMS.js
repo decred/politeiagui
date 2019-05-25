@@ -7,6 +7,7 @@ import Message from "../Message";
 import { INVOICE_STATUS_NEW } from "../../constants";
 import Reminder, { ReminderList } from "./Reminder";
 import { getCurrentMonth, getCurrentYear } from "../../helpers";
+import Link from "../snew/Link";
 
 const invoiceYear = get(["input", "year"]);
 const invoiceMonth = get(["input", "month"]);
@@ -90,7 +91,8 @@ const HomeCMS = ({
   error,
   isLoading,
   userInvoices,
-  adminInvoices
+  adminInvoices,
+  loggedInAsEmail
 }) => {
   const fetchUserInvoices = () => {
     if (userid) {
@@ -112,10 +114,18 @@ const HomeCMS = ({
         <Message header="Error fetching invoices" type={"error"} body={error} />
       ) : (
         <div style={{ paddingLeft: "24px" }}>
-          <ReminderList title={"Reminders"}>
-            <UserReminders invoices={userInvoices} />
-            {isAdmin && <AdminReminders invoices={adminInvoices} />}
-          </ReminderList>
+          {loggedInAsEmail ? (
+            <ReminderList title={"Reminders"}>
+              <UserReminders invoices={userInvoices} />
+              {isAdmin && <AdminReminders invoices={adminInvoices} />}
+            </ReminderList>
+          ) : (
+            <li style={{ fontSize: "16px" }}>
+              <span>
+                <Link to={"/login"}>Log in </Link>to submit your invoice
+              </span>
+            </li>
+          )}
         </div>
       )}
     </div>

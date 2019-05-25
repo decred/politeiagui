@@ -19,7 +19,13 @@ class AuthenticatedRoute extends Component {
   }
 
   checkAuthentication(params) {
-    const { loggedInAsEmail, apiMeResponse, apiLoginResponse } = params;
+    const {
+      loggedInAsEmail,
+      apiMeResponse,
+      apiLoginResponse,
+      history,
+      location
+    } = params;
     const dataHasBeenFetched = apiMeResponse || apiLoginResponse;
     const stateFromLocalStorage = loadStateLocalStorage();
 
@@ -35,6 +41,18 @@ class AuthenticatedRoute extends Component {
 
     if (validUserLoginFromApi || validUserLoginFromLocalStorage) {
       return true;
+    } else if (
+      // Prevents redirect if login modal from session expiration is already open
+      !(validUserLoginFromApi || validUserLoginFromLocalStorage) &&
+      this.props.openedModals.length > 0
+    ) {
+      return true;
+    } else {
+      this.props.redirectedFrom(this.props.location.pathname);
+      history.replace({
+        pathname: "/user/login",
+        state: { from: location }
+      });
     }
   }
 

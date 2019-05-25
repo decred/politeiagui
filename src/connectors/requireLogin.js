@@ -7,7 +7,8 @@ const requireLoginConnector = connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     isAdmin: sel.isAdmin,
     apiMeResponse: sel.apiMeResponse,
-    apiLoginResponse: sel.apiLoginResponse
+    apiLoginResponse: sel.apiLoginResponse,
+    openedModals: sel.getopenedModals
   }),
   { redirectedFrom }
 );
