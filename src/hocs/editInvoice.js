@@ -36,7 +36,8 @@ const editInvoiceConnector = connect(
     onFetchInvoice: act.onFetchInvoice,
     onResetInvoice: act.onResetInvoice,
     onSave: act.onEditInvoice,
-    onFetchExchangeRate: act.onFetchExchangeRate
+    onFetchExchangeRate: act.onFetchExchangeRate,
+    onDeleteDraftInvoice: act.onDeleteDraftInvoice
   }
 );
 

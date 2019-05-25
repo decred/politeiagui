@@ -40,7 +40,8 @@ const InvoiceSubmit = props => {
     userCanExecuteActions,
     loggedInAsEmail,
     valid,
-    pristine
+    pristine,
+    onSaveInvoiceDraft
   } = props;
 
   const [monthOptions, setMonthOptions] = useState(MONTH_OPTIONS);
@@ -226,6 +227,15 @@ const InvoiceSubmit = props => {
                       onClick={handleSubmit(onSave)}
                       isLoading={isLoading}
                     />
+                    <button
+                      className={"togglebutton secondary access-required"}
+                      name="submit"
+                      type="submit"
+                      value="form"
+                      onClick={handleSubmit(onSaveInvoiceDraft)}
+                    >
+                      Save as Draft
+                    </button>
                     {editingMode ? (
                       <ButtonWithLoadingIcon
                         className={`togglebutton access-required${isLoading &&
@@ -235,6 +245,17 @@ const InvoiceSubmit = props => {
                         onClick={onCancel}
                       />
                     ) : null}
+                    <p
+                      style={{
+                        fontSize: "16px",
+                        display: "flex",
+                        paddingTop: "1em"
+                      }}
+                    >
+                      <b>NOTE:&nbsp;</b> Drafts are locally stored in the
+                      browser and will NOT be available across different
+                      browsers or devices.
+                    </p>
                   </div>
                 </div>
               </div>

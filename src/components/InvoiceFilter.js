@@ -11,7 +11,8 @@ import {
   INVOICE_STATUS_APPROVED,
   INVOICE_STATUS_PAID,
   CMS_LIST_HEADER_ADMIN,
-  CMS_LIST_HEADER_USER
+  CMS_LIST_HEADER_USER,
+  PROPOSAL_USER_FILTER_DRAFT_INVOICES
 } from "../constants";
 import { setQueryStringValue } from "../lib/queryString";
 
@@ -43,11 +44,18 @@ const invoiceFilterOptions = [
   {
     label: "all invoices",
     value: INVOICE_FILTER_ALL
+  },
+  {
+    label: "drafts",
+    value: PROPOSAL_USER_FILTER_DRAFT_INVOICES
   }
 ];
 
+//Remove draft tab from admin options
+const adminOptions = invoiceFilterOptions.slice(0, -1);
+
 const mapHeaderToOptions = {
-  [CMS_LIST_HEADER_ADMIN]: invoiceFilterOptions,
+  [CMS_LIST_HEADER_ADMIN]: adminOptions,
   [CMS_LIST_HEADER_USER]: invoiceFilterOptions
 };
 

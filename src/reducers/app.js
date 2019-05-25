@@ -30,7 +30,8 @@ export const DEFAULT_STATE = {
   commentsSortOption: { value: SORT_BY_TOP, label: SORT_BY_TOP },
   pollingCreditsPayment: false,
   redirectedFrom: null,
-  invoiceSortOption: { month: FILTER_ALL_MONTHS, year: getCurrentYear() }
+  invoiceSortOption: { month: FILTER_ALL_MONTHS, year: getCurrentYear() },
+  draftInvoices: null
 };
 
 const app = (state = DEFAULT_STATE, action) =>
@@ -111,6 +112,36 @@ const app = (state = DEFAULT_STATE, action) =>
     [act.LOAD_DRAFT_PROPOSALS]: () => ({
       ...state,
       draftProposals: action.payload
+    }),
+
+    [act.SAVE_DRAFT_INVOICE]: () => {
+      const newDraftInvoices = state.draftInvoices;
+      const draftId = action.payload.draftId || uniqueID("draft");
+      return {
+        ...state,
+        draftInvoices: {
+          ...newDraftInvoices,
+          newDraft: true,
+          lastSubmitted: action.payload.name,
+          [draftId]: {
+            ...action.payload,
+            draftId
+          }
+        }
+      };
+    },
+    [act.DELETE_DRAFT_INVOICE]: () => {
+      const draftId = action.payload;
+      if (!state.draftInvoices[draftId]) {
+        return state;
+      }
+      const newDraftInvoices = state.draftInvoices;
+      delete newDraftInvoices[draftId];
+      return { ...state, draftInvoices: newDraftInvoices };
+    },
+    [act.LOAD_DRAFT_INVOICES]: () => ({
+      ...state,
+      draftInvoices: action.payload
     }),
     [act.REQUEST_SETSTATUS_PROPOSAL]: () => {
       if (action.error) return state;

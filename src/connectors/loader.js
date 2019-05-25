@@ -24,7 +24,8 @@ export default connect(
         openModal: act.openModal,
         confirmWithModal: act.confirmWithModal,
         setOnboardAsViewed: act.setOnboardAsViewed,
-        onLoadDraftProposals: act.onLoadDraftProposals
+        onLoadDraftProposals: act.onLoadDraftProposals,
+        onLoadDraftInvoices: act.onLoadDraftInvoices
       },
       dispatch
     )

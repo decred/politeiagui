@@ -30,7 +30,8 @@ const actions = connect(
     onStartVote: act.onStartVote,
     onAuthorizeVote: act.onAuthorizeVote,
     onRevokeVote: act.onRevokeVote,
-    openModal: act.openModal
+    openModal: act.openModal,
+    onDeleteDraftInvoice: act.onDeleteDraftInvoice
   }
 );
 

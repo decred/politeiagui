@@ -4,8 +4,7 @@ import * as sel from "../selectors";
 import * as act from "../actions";
 import compose from "lodash/fp/compose";
 import { or } from "../lib/fp";
-import { generateBlankLineItem } from "../components/InvoiceDatasheet/helpers";
-import { getCurrentYear, getCurrentMonth } from "../helpers";
+import { getNewInvoiceData } from "../lib/editors_content_backup";
 
 // XXX: connector needs to be moved in its own file
 const newInvoiceConnector = connect(
@@ -20,13 +19,17 @@ const newInvoiceConnector = connect(
     year: sel.invoiceFormYear,
     exchangeRate: sel.exchangeRate,
     loadingExchangeRate: sel.isApiRequestingExchangeRate,
-    exchangeRateError: sel.apiExchangeRateError
+    exchangeRateError: sel.apiExchangeRateError,
+    draftInvoiceById: sel.draftInvoiceById,
+    draftInvoice: sel.draftInvoiceById
   }),
   {
     onFetchData: act.onGetPolicy,
     onSave: act.onSaveNewInvoice,
     onResetInvoice: act.onResetInvoice,
-    onFetchExchangeRate: act.onFetchExchangeRate
+    onFetchExchangeRate: act.onFetchExchangeRate,
+    onSaveInvoiceDraft: act.onSaveDraftInvoice,
+    onDeleteDraftInvoice: act.onDeleteDraftInvoice
   }
 );
 
@@ -34,19 +37,25 @@ class NewInvoiceContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      initialValues: {
-        month: getCurrentMonth() - 1,
-        year: getCurrentYear(),
-        lineitems: [generateBlankLineItem()]
-      }
+      initialValues: props.draftInvoice || getNewInvoiceData(),
+      validationError: ""
     };
   }
 
-  componentDidUpdate() {
-    const { token, onResetInvoice } = this.props;
+  componentDidUpdate(prevProps) {
+    const { token, onResetInvoice, draftInvoice } = this.props;
     if (token) {
+      if (this.props.draftInvoiceById) {
+        this.props.onDeleteDraftInvoice(this.props.draftInvoiceById.draftId);
+      }
       onResetInvoice();
       return this.props.history.push("/invoices/" + token);
+    }
+    const draftInvoiceDataAvailable = !prevProps.draftInvoice && draftInvoice;
+    if (draftInvoiceDataAvailable) {
+      this.setState({
+        initialValues: draftInvoice
+      });
     }
   }
 

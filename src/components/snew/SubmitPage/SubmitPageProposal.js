@@ -23,7 +23,7 @@ const ProposalSubmit = props => {
     error,
     warning,
     onSave,
-    onSaveDraft,
+    onSaveProposalDraft,
     submitting,
     handleSubmit,
     validationError,
@@ -140,7 +140,7 @@ const ProposalSubmit = props => {
                       name="submit"
                       type="submit"
                       value="form"
-                      onClick={handleSubmit(onSaveDraft)}
+                      onClick={handleSubmit(onSaveProposalDraft)}
                     >
                       Save as Draft
                     </button>

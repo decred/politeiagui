@@ -15,8 +15,10 @@ const submitConnector = connect(
   {
     onFetchData: act.onGetPolicy,
     openModal: act.openModal,
-    onSaveDraft: act.onSaveDraftProposal,
-    onDeleteDraft: act.onDeleteDraftProposal
+    onSaveProposalDraft: act.onSaveDraftProposal,
+    onSaveInvoiceDraft: act.onSaveDraftInvoice,
+    onDeleteDraftProposal: act.onDeleteDraftProposal,
+    onDeleteDraftInvoice: act.onDeleteDraftInvoice
   }
 );
 

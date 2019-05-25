@@ -17,7 +17,10 @@ import {
   onSubmitComment as onSubmitCommentApi,
   onFetchInvoice as onFetchInvoiceApi
 } from "./api";
-import { resetNewProposalData } from "../lib/editors_content_backup";
+import {
+  resetNewProposalData,
+  resetNewInvoiceData
+} from "../lib/editors_content_backup";
 import * as sel from "../selectors";
 import act from "./methods";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
@@ -167,6 +170,44 @@ export const onLoadDraftProposals = email => {
 
 export const onDeleteDraftProposal = draftId =>
   act.DELETE_DRAFT_PROPOSAL(draftId);
+
+export const onSaveDraftInvoice = ({
+  month,
+  year,
+  name,
+  location,
+  contact,
+  rate,
+  address,
+  lineitems,
+  files,
+  draftId
+}) => {
+  resetNewInvoiceData();
+  return act.SAVE_DRAFT_INVOICE({
+    month,
+    year,
+    name,
+    location,
+    contact,
+    rate,
+    address,
+    lineitems,
+    files,
+    draftId,
+    timestamp: Date.now() / 1000
+  });
+};
+
+export const onLoadDraftInvoices = email => {
+  const stateFromLS = loadStateLocalStorage(email);
+  const drafts = sel.draftInvoices(stateFromLS) || {};
+  return act.LOAD_DRAFT_INVOICES(drafts);
+};
+
+export const onDeleteDraftInvoice = draftId => {
+  return act.DELETE_DRAFT_INVOICE(draftId);
+};
 
 export const onSaveChangeUsername = ({ password, newUsername }) => (
   dispatch,

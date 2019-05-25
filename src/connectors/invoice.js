@@ -37,7 +37,8 @@ const invoiceConnector = connect(
         onSetReplyParent: act.onSetReplyParent,
         onFetchLikedComments: act.onFetchLikedComments,
         onSetCommentsSortOption: act.onSetCommentsSortOption,
-        resetLastSubmittedProposal: act.resetLastSubmittedProposal
+        resetLastSubmittedProposal: act.resetLastSubmittedProposal,
+        onDeleteDraftInvoice: act.onDeleteDraftInvoice
       },
       dispatch
     )

@@ -57,7 +57,10 @@ export const invoiceToT3 = (
     timestamp,
     numcomments,
     input,
-    version
+    version,
+    draftId = "",
+    month,
+    year
   },
   idx
 ) => ({
@@ -68,16 +71,21 @@ export const invoiceToT3 = (
     numcomments,
     input,
     rank: idx + 1,
-    title: `Invoice from ${username} - ${input && input.month}/${input &&
-      input.year}`,
+    title: !draftId
+      ? `Invoice from ${username} - ${input && input.month}/${input &&
+          input.year}`
+      : `Draft for ${month}/${year}`,
     id: censorshiprecord.token,
     name: "t3_" + censorshiprecord.token,
     review_status: status,
     created_utc: timestamp,
-    permalink: `/invoices/${censorshiprecord.token}`,
-    url: `/invoices/${censorshiprecord.token}`,
+    permalink: `/invoices/${censorshiprecord.token ||
+      (draftId ? `new?draftid=${draftId}` : "")}`,
+    url: `/invoices/${censorshiprecord.token ||
+      (draftId ? `new?draftid=${draftId}` : "")}`,
     is_self: true,
-    version
+    version,
+    draftId
   }
 });
 

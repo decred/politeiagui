@@ -35,8 +35,8 @@ const submitConnector = connect(
     onFetchProposal: act.onFetchProposal,
     onResetProposal: act.onResetProposal,
     onSave: act.onEditProposal,
-    onSaveDraft: act.onSaveDraftProposal,
-    onDeleteDraft: act.onDeleteDraftProposal
+    onSaveDraftProposal: act.onSaveDraftProposal,
+    onDeleteDraftProposal: act.onDeleteDraftProposal
   }
 );
 

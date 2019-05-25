@@ -21,7 +21,7 @@ export const PROPOSAL_STATUS_PUBLIC = 4;
 export const PROPOSAL_STATUS_UNREVIEWED_CHANGES = 5;
 
 export const PROPOSAL_USER_FILTER_SUBMITTED = 1;
-export const PROPOSAL_USER_FILTER_DRAFT = 2;
+export const PROPOSAL_USER_FILTER_DRAFT_PROPOSALS = 2;
 
 export const PAYWALL_STATUS_WAITING = 0;
 export const PAYWALL_STATUS_LACKING_CONFIRMATIONS = 1;
@@ -100,6 +100,7 @@ export const INVOICE_STATUS_APPROVED = 6; // Invoice has been approved
 export const INVOICE_STATUS_PAID = 7; // Invoice has been paid
 
 export const INVOICE_FILTER_ALL = 99;
+export const PROPOSAL_USER_FILTER_DRAFT_INVOICES = 100;
 
 // export const INVOICE_USER_FILTER_DRAFT = 1;
 // export const INVOICE_USER_FILTER_NEW = 2;
