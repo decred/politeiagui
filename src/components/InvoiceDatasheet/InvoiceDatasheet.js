@@ -46,8 +46,20 @@ const InvoiceDatasheet = ({ value, onChange, readOnly }) => {
 
   return (
     <div className="sheet-container">
+      <ReactDataSheet
+        data={grid}
+        valueRenderer={cell => cell.value}
+        onContextMenu={(e, cell) => (cell.readOnly ? e.preventDefault() : null)}
+        onCellsChanged={handleCellsChange}
+      />
       {!readOnly && (
-        <div style={{ display: "flex", justifyContent: "flex-start" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-start",
+            marginTop: "1em"
+          }}
+        >
           <button className="table-button add-row" onClick={handleAddNewRow}>
             Add row
           </button>
@@ -61,12 +73,6 @@ const InvoiceDatasheet = ({ value, onChange, readOnly }) => {
           </button>
         </div>
       )}
-      <ReactDataSheet
-        data={grid}
-        valueRenderer={cell => cell.value}
-        onContextMenu={(e, cell) => (cell.readOnly ? e.preventDefault() : null)}
-        onCellsChanged={handleCellsChange}
-      />
     </div>
   );
 };
