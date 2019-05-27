@@ -14,7 +14,8 @@ export default connect(
     lastLoginTime: sel.lastLoginTimeFromLoginResponse,
     onboardViewed: sel.onboardViewed,
     identityImportSuccess: sel.identityImportSuccess,
-    isCMS: sel.isCMS
+    isCMS: sel.isCMS,
+    isModeFetched: sel.isModeFetched
   }),
   dispatch =>
     bindActionCreators(
