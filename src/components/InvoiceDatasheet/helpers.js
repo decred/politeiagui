@@ -97,9 +97,14 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
           readOnly,
           value: line.description,
           dataEditor: multiLineWrapper,
-          className: "description"
+          className: "multiline-cell-value"
         },
-        { readOnly, value: line.proposaltoken },
+        {
+          readOnly,
+          value: line.proposaltoken,
+          dataEditor: multiLineWrapper,
+          className: "multiline-cell-value"
+        },
         { readOnly: isLabelReadonly, value: fromMinutesToHours(line.labor) },
         {
           readOnly: isExpenseReadonly,
