@@ -691,6 +691,14 @@ const mode = compose(
   apiInitResponse
 );
 
+export const isModeFetched = state => {
+  if (mode(state) === undefined) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
 export const isCMS = state => mode(state) === CMSWWWMODE;
 
 export const invoiceToken = compose(

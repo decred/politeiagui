@@ -58,7 +58,7 @@ class RecordDetail extends React.Component {
   };
   componentDidUpdate(prevProps) {
     this.resolveTabTitle(prevProps);
-    this.resolveFetchLikedComments(prevProps);
+    !this.props.isCMS && this.resolveFetchLikedComments(prevProps);
     this.resolveFetchProposalVoteStatus(prevProps);
     this.handleUpdateOfComments(prevProps, this.props);
   }

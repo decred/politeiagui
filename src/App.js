@@ -96,10 +96,12 @@ class Loader extends Component {
 
   render() {
     return (
-      <div className="appWrapper">
-        <ModalStack />
-        {this.props.children}
-      </div>
+      this.props.isModeFetched && (
+        <div className="appWrapper">
+          <ModalStack />
+          {this.props.children}
+        </div>
+      )
     );
   }
 }
