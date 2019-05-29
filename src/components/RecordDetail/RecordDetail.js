@@ -29,7 +29,7 @@ class RecordDetail extends React.Component {
         prevProps.record.name !== proposal.name) ||
       (proposal && proposal.name !== document.title);
     if (proposalNameHasBeenUpdated) {
-      document.title = proposal.name;
+      document.title = proposal.name || DEFAULT_TAB_TITLE;
     }
   };
   resolveFetchProposalVoteStatus = () => {
