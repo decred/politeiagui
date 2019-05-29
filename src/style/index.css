@@ -1899,14 +1899,6 @@ form div.usertext-body.may-blank-within.md-container {
   list-style-type: none;
 }
 
-.multiline-cell-value {
-	word-break: break-word;
-}
-
-.multiline-cell-editor {
-	resize: vertical;
-}
-
 /* On screens that are 768px or less, apply the following styles */
 @media screen and (max-width: 768px) {
   /* hide side bar */
