@@ -554,27 +554,6 @@ class GeneralTab extends React.Component {
                   ]}
             </Field>
           )}
-        {isAdminOrTheUser && (
-          <div>
-            <Field label="Failed login attempts">
-              {user.failedloginattempts}
-            </Field>
-            <Field label="Locked">
-              {!user.islocked
-                ? "No"
-                : [
-                    <span>Yes</span>,
-                    <ButtonWithLoadingIcon
-                      className="c-btn c-btn-primary button-small"
-                      text="Unlock user"
-                      disabled={isApiRequestingUnlockUser}
-                      isLoading={isApiRequestingUnlockUser}
-                      onClick={() => onManageUser(user.id, MANAGE_USER_UNLOCK)}
-                    />
-                  ]}
-            </Field>
-          </div>
-        )}
         {isAdmin && (
           <React.Fragment>
             <FieldSeparator />
