@@ -1,7 +1,4 @@
-import {
-  setQueryStringValue,
-  getQueryStringValue
-} from "../../lib/queryString";
+import { setQueryStringValue, getQueryStringValue } from "src/lib/queryString";
 
 export const tabValues = {
   IN_DISCUSSSION: "discussion",

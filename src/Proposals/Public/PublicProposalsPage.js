@@ -1,5 +1,5 @@
 import React from "react";
-import ErrorBoundary from "../../components/ErrorBoundary";
+import ErrorBoundary from "src/components/ErrorBoundary";
 import { PublicProposals } from "./PublicProposals";
 
 export const PublicProposalsPage = () => (

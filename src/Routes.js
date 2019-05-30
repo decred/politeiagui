@@ -22,7 +22,6 @@ import PasswordResetSuccess from "./components/PasswordReset/SuccessPage";
 import ResendVerificationEmail from "./components/ResendVerificationEmailPage";
 import ResendVerificationEmailSuccess from "./components/ResendVerificationEmail/SuccessPage";
 import Verify from "./components/Verify";
-import UserProposals from "./components/UserProposals";
 import VerifyKey from "./components/VerifyKey";
 import NotFound from "./components/NotFoundPage";
 import ErrorPage from "./components/ErrorPage/";
@@ -35,6 +34,7 @@ import { PublicProposalsPage } from "src/Proposals/Public";
 import { ProposalDetail } from "src/Proposals/Detail";
 import { ProposalNew } from "src/Proposals/New";
 import { ProposalEdit } from "src/Proposals/Edit";
+import { UserProposals } from "src/Proposals/User";
 
 // CMS CONNECTORS
 import adminCMS from "./connectors/adminCMS";

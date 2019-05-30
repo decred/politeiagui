@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import "./styles.css";
-import { Tabs, Tab } from "../../components/Tabs";
-import LazyList from "../../components/LazyList/LazyList";
-import ThingLinkProposal from "../../components/snew/ThingLink/ThingLinkProposal";
-import { proposalToT3 } from "../../lib/snew";
+import { Tabs, Tab } from "src/components/Tabs";
+import LazyList from "src/components/LazyList/LazyList";
+import ThingLinkProposal from "src/components/snew/ThingLink/ThingLinkProposal";
+import { proposalToT3 } from "src/lib/snew";
 import {
   tabValues,
   getProposalTokensByTabOption,

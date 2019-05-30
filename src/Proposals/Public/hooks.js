@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 
-import { or } from "../../lib/fp";
-import * as sel from "../../selectors";
-import * as act from "../../actions";
-import { useRedux } from "../../lib/redux";
+import { or } from "src/lib/fp";
+import * as sel from "src/selectors";
+import * as act from "src/actions";
+import { useRedux } from "src/lib/redux";
 
 const mapStateToProps = {
   loggedInAsEmail: sel.loggedInAsEmail,
