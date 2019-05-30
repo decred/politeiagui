@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { bindActionCreators } from "redux";
 import { selectorMap } from "../selectors";
 
-export function useRedux(ownProps, mapStateToProps, mapDispatchToProps) {
+export function useRedux(ownProps, mapStateToProps, mapDispatchToProps = {}) {
   const { redux } = useApp();
   const [state, setState] = useState(redux.getState());
   const dispatch = redux.dispatch;

@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import * as modalTypes from "../../Modal/modalTypes";
 import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
 import CensorMessage from "../../CensorMessage";
-import DownloadBundle from "../../DownloadBundle";
 import Message from "../../Message";
 import ProposalImages from "../../ProposalImages";
 import Tooltip from "../../Tooltip";
@@ -13,6 +12,7 @@ import VersionPicker from "../../VersionPicker";
 import actions from "../../../connectors/actions";
 import thingLink from "../../../connectors/thingLink";
 import SubsExpando from "../Expando";
+import { ProposalDownload } from "src/Proposals/Download";
 
 import {
   PROPOSAL_STATUS_ABANDONED,
@@ -382,7 +382,7 @@ class ThingLinkComp extends React.Component {
                   >
                     Your proposal has been created, but it will not be public
                     until an admin approves it. You can{" "}
-                    <DownloadBundle
+                    <ProposalDownload
                       message="download your proposal"
                       type="proposal"
                     />{" "}
@@ -405,15 +405,15 @@ class ThingLinkComp extends React.Component {
             ) : hasComment() ? (
               <div>
                 <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-                  <DownloadBundle type="proposal" />
+                  <ProposalDownload type="proposal" />
                 </div>
                 <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-                  <DownloadBundle type="comments" />
+                  <ProposalDownload type="comments" />
                 </div>
               </div>
             ) : (
               <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-                <DownloadBundle type="proposal" /> <br />
+                <ProposalDownload type="proposal" /> <br />
               </div>
             ))}
           {censorMessage && <CensorMessage message={censorMessage} />}

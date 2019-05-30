@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import proposalDownloadConnector from "../connectors/proposalDownload";
 import fileDownload from "js-file-download";
 import { commentsToT1 } from "../lib/snew";
 
-class DownloadBundle extends Component {
+export class DownloadBundle extends Component {
   constructor(props) {
     super(props);
     this.handleDownloadProposal = this.handleDownloadProposal.bind(this);
@@ -38,5 +37,3 @@ class DownloadBundle extends Component {
     ) : null;
   }
 }
-
-export default proposalDownloadConnector(DownloadBundle);
