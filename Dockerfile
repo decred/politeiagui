@@ -1,5 +1,5 @@
 # Build image
-FROM node:10.15.1
+FROM node:10.16.0
 
 LABEL description="politeiagui build"
 LABEL version="1.0"
@@ -15,7 +15,7 @@ RUN yarn install
 RUN INLINE_RUNTIME_CHUNK=false yarn build
 
 # Serve image (stable nginx version)
-FROM nginx:1.14.2 
+FROM nginx:1.16.0
 
 LABEL description="politeiagui serve"
 LABEL version="1.0"
