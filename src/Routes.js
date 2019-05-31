@@ -80,15 +80,6 @@ const RoutesForCMS = () => {
       />
       <Route path="/user/verify" component={Verify} exact />
       <Route path="/user/key/verify" component={VerifyKey} exact />
-      <AdminAuthenticatedRoute
-        path="/user/resend"
-        component={ResendVerificationEmail}
-        exact
-      />
-      <AdminAuthenticatedRoute
-        path="/user/resend/next"
-        component={ResendVerificationEmailSuccess}
-      />
       <Route path="/privacy-policy/" component={PrivacyPolicy} />
       <AdminAuthenticatedRoute
         path="/admin"
