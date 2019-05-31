@@ -37,8 +37,7 @@ export const proposalToT3 = (
     publishedat,
     censoredat,
     abandonedat,
-    permalink: `/proposals/${censorshiprecord.token ||
-      (draftId ? `new?draftid=${draftId}` : "")}`,
+    permalink: `/proposals/${censorshiprecord.token}`,
     url: `/proposals/${censorshiprecord.token ||
       (draftId ? `new?draftid=${draftId}` : "")}`,
     is_self: true,

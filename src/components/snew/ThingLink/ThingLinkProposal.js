@@ -176,6 +176,7 @@ class ThingLinkComp extends React.Component {
     const loadingCensor = status && status === PROPOSAL_STATUS_CENSORED;
     const loadingApprove = status && status === PROPOSAL_STATUS_PUBLIC;
     const loadingAbandoned = status && status === PROPOSAL_STATUS_ABANDONED;
+    const isDraft = !!draftId;
 
     const censoredorAbandoned = () => {
       if (review_status === PROPOSAL_STATUS_CENSORED) {
@@ -226,7 +227,7 @@ class ThingLinkComp extends React.Component {
             className="title"
             style={{ display: "flex", overflow: "visible", cursor: "pointer" }}
           >
-            <Link to={`/proposals/${id}`} className="right-margin-5">
+            <Link to={url} className="right-margin-5">
               {title}{" "}
               {review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES ? (
                 <span className="font-12 warning-color">edited</span>
@@ -603,15 +604,17 @@ class ThingLinkComp extends React.Component {
                 </Link>
               </li>
             ) : null}
-            <li>
-              <Link
-                className="bylink comments may-blank proposal-permalink"
-                data-event-action="permalink"
-                to={permalink}
-              >
-                permalink
-              </Link>
-            </li>
+            {!isDraft && (
+              <li>
+                <Link
+                  className="bylink comments may-blank proposal-permalink"
+                  data-event-action="permalink"
+                  to={permalink}
+                >
+                  permalink
+                </Link>
+              </li>
+            )}
             {isVotingActiveOrFinished && (
               <li>
                 <Link
