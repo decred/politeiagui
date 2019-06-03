@@ -142,7 +142,8 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     82: "Only one invoice per month/year is allowed to be submitted",
     83: "An invalid month/year was submitted on an invoice",
     84: "Exchange rate was invalid or didn't match the expected result",
-    85: "The provided password was invalid"
+    85: "The provided password was invalid",
+    89: "The invoice has a duplicate payment address, please use a new address."
   };
 
   const error = errorMessages[errorCode];
