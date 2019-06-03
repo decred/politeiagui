@@ -99,3 +99,11 @@ pre {
   font-size: 12px;
   font-weight: bold;
 }
+
+.multiline-cell-value {
+	word-break: break-word;
+}
+
+.multiline-cell-editor {
+	resize: vertical;
+}

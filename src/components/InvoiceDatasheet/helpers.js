@@ -97,9 +97,14 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
           readOnly,
           value: line.description,
           dataEditor: multiLineWrapper,
-          className: "description"
+          className: "multiline-cell-value"
         },
-        { readOnly, value: line.proposaltoken },
+        {
+          readOnly,
+          value: line.proposaltoken,
+          dataEditor: multiLineWrapper,
+          className: "multiline-cell-value"
+        },
         { readOnly: isLabelReadonly, value: fromMinutesToHours(line.labor) },
         {
           readOnly: isExpenseReadonly,
@@ -175,10 +180,10 @@ export const convertGridToLineItems = grid => {
 };
 
 export const createTableHeaders = () => [
-  { readOnly: true, value: "", width: 20 },
+  { readOnly: true, value: "", width: 25 },
   { value: "Type", width: 120, readOnly: true },
-  { value: "Domain", readOnly: true },
-  { value: "Subdomain", readOnly: true },
+  { value: "Domain", width: 175, readOnly: true },
+  { value: "Subdomain", width: 175, readOnly: true },
   { value: "Description", readOnly: true },
   { value: "Proposal Token", readOnly: true },
   { value: "Labor (hours)", width: 60, readOnly: true },
