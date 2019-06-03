@@ -57,10 +57,18 @@ const DiffBody = ({
 }) => (
   <div>
     <div className="diff-text-preview-toggle" onClick={onToggleTextDiffPreview}>
-      <div className={!preview ? "diff-active-toggle" : ""}>
+      <div
+        className={!preview ? "diff-active-toggle" : ""}
+        onClick={!preview ? onToggleTextDiffPreview : null}
+      >
         View version {version}
       </div>
-      <div className={preview ? "diff-active-toggle" : ""}>Text changes</div>
+      <div
+        className={preview ? "diff-active-toggle" : ""}
+        onClick={preview ? onToggleTextDiffPreview : null}
+      >
+        Text changes
+      </div>
     </div>
     <div style={{ padding: "16px" }}>
       {preview ? (

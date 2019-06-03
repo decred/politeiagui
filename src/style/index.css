@@ -1859,6 +1859,7 @@ form div.usertext-body.may-blank-within.md-container {
 }
 .diff-active-toggle{
   background-color: white;
+  cursor: default;
 }
 
 .diff-table {
