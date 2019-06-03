@@ -1872,11 +1872,13 @@ form div.usertext-body.may-blank-within.md-container {
   border: none;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  padding: 3px 4px;
 }
 
 .diff-line-index {
   width: 2em;
-  padding: 4px 1px
+  padding: 4px 1px;
+  text-align: center;
 }
 .diff-line-icon {
   font-weight: bold;
