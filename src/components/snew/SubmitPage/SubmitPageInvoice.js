@@ -43,8 +43,8 @@ const InvoiceSubmit = props => {
     pristine,
     onSaveInvoiceDraft
   } = props;
-
   const [monthOptions, setMonthOptions] = useState(MONTH_OPTIONS);
+  const [contractorRate, setContractorRate] = useState(0);
 
   useEffect(() => {
     // limit the months options up to the current month if
@@ -76,6 +76,9 @@ const InvoiceSubmit = props => {
     change("month", 1);
     change("year", value);
   };
+
+  const handleContractorRateChange = e =>
+    setContractorRate(e.target.valueAsNumber);
 
   return (
     <div className="content" role="main">
@@ -178,6 +181,7 @@ const InvoiceSubmit = props => {
                         label="Contractor rate (USD)"
                         type="number"
                         component={InputFieldWithError}
+                        onChange={handleContractorRateChange}
                       />
                       <Field
                         name="address"
@@ -203,6 +207,7 @@ const InvoiceSubmit = props => {
                       name="lineitems"
                       component={InvoiceDatasheetField}
                       policy={policy}
+                      userRate={contractorRate}
                     />
                   </div>
                   <div>

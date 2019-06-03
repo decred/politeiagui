@@ -15,10 +15,11 @@ export const columnTypes = {
   DESC_COL: 4,
   PROP_TOKEN_COL: 5,
   LABOR_COL: 6,
-  EXP_COL: 7
+  EXP_COL: 7,
+  SUBTOTAL_COL: 8
 };
 
-const { LABOR_COL, EXP_COL } = columnTypes;
+export const { LABOR_COL, EXP_COL, SUBTOTAL_COL } = columnTypes;
 
 const getDropdownOptionsByColumnType = colType => {
   const domainOptions = [
@@ -66,12 +67,13 @@ export const generateBlankLineItem = () => ({
   description: "",
   proposaltoken: "",
   labor: "",
-  expenses: ""
+  expenses: "",
+  subtotal: ""
 });
 
 export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
   const grid = [createTableHeaders()];
-  const { grid: gridBody, expenseTotal, laborTotal } = lineItems.reduce(
+  const { grid: gridBody, expenseTotal, laborTotal, total } = lineItems.reduce(
     (acc, line, idx) => {
       const isLabelReadonly =
         line.type === 2 ? true : line.type === 3 ? true : readOnly;
@@ -105,19 +107,24 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
           dataEditor: multiLineWrapper,
           className: "multiline-cell-value"
         },
-        { readOnly: isLabelReadonly, value: fromMinutesToHours(line.labor) },
+        { readOnly: isLabelReadonly, value: +fromMinutesToHours(line.labor) },
         {
           readOnly: isExpenseReadonly,
-          value: fromUSDCentsToUSDUnits(line.expenses)
+          value: +fromUSDCentsToUSDUnits(line.expenses)
+        },
+        {
+          readOnly: true,
+          value: line.subtotal
         }
       ];
       return {
         grid: acc.grid.concat([newLine]),
         expenseTotal: acc.expenseTotal + line.expenses,
-        laborTotal: acc.laborTotal + line.labor
+        laborTotal: acc.laborTotal + line.labor,
+        total: acc.total + line.subtotal
       };
     },
-    { grid: [], expenseTotal: 0, laborTotal: 0 }
+    { grid: [], expenseTotal: 0, laborTotal: 0, total: 0 }
   );
   const totalsLine = [
     { readOnly: true },
@@ -133,16 +140,20 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
     {
       readOnly: true,
       value: (
-        <span className="total-label">{fromMinutesToHours(laborTotal)}</span>
+        <span className="total-label">{+fromMinutesToHours(laborTotal)}</span>
       )
     },
     {
       readOnly: true,
       value: (
         <span className="total-label">
-          {fromUSDCentsToUSDUnits(expenseTotal)}
+          {+fromUSDCentsToUSDUnits(expenseTotal)}
         </span>
       )
+    },
+    {
+      readOnly: true,
+      value: <span className="total-label">{total}</span>
     }
   ];
   return grid.concat(gridBody).concat([totalsLine]);
@@ -170,6 +181,8 @@ export const convertGridToLineItems = grid => {
           return { ...acc, labor: fromHoursToMinutes(+cell.value) };
         case columnTypes.EXP_COL:
           return { ...acc, expenses: fromUSDUnitsToUSDCents(+cell.value) };
+        case columnTypes.SUBTOTAL_COL:
+          return { ...acc, subtotal: +cell.value };
         default:
           return acc;
       }
@@ -179,6 +192,19 @@ export const convertGridToLineItems = grid => {
   }, []);
 };
 
+export const lineitemsWithSubtotal = (lineItems, rate) =>
+  lineItems.map(l => {
+    return l.type === 1
+      ? {
+          ...l,
+          subtotal: +fromMinutesToHours(l.labor) * +fromUSDCentsToUSDUnits(rate)
+        }
+      : {
+          ...l,
+          subtotal: +fromUSDCentsToUSDUnits(l.expenses)
+        };
+  });
+
 export const createTableHeaders = () => [
   { readOnly: true, value: "", width: 25 },
   { value: "Type", width: 120, readOnly: true },
@@ -187,7 +213,8 @@ export const createTableHeaders = () => [
   { value: "Description", readOnly: true },
   { value: "Proposal Token", readOnly: true },
   { value: "Labor (hours)", width: 60, readOnly: true },
-  { value: "Expense (USD)", width: 60, readOnly: true }
+  { value: "Expense (USD)", width: 60, readOnly: true },
+  { value: "Subtotal (USD)", width: 60, readOnly: true }
 ];
 
 export const updateGridCell = (grid, row, col, values) => {
@@ -215,12 +242,49 @@ export const processTypeColChange = (grid, { row, col, value }) => {
   return updateGridCell(grid, row, col, { value });
 };
 
-export const processCellsChange = (currentGrid, changes) => {
+export const processLaborColChange = (grid, { row, col, value }, userRate) => {
+  // updates subtotal upon labor value entry
+  grid = updateGridCell(grid, row, SUBTOTAL_COL, { value: value * userRate });
+  return updateGridCell(grid, row, col, { value });
+};
+
+export const processExpenseColChange = (grid, { row, col, value }) => {
+  // updates subtotal upon expense value entry
+  grid = updateGridCell(grid, row, SUBTOTAL_COL, { value: value });
+  return updateGridCell(grid, row, col, { value });
+};
+
+export const processSubtotalColChange = (grid, userRate) => {
+  // case where user rate changes and grid must recalculate subtotal
+  for (const g of grid) {
+    const row = g[0].value;
+    const type = g[1].value;
+    const value = g[6].value;
+
+    if (type === 1) {
+      grid = updateGridCell(grid, row, SUBTOTAL_COL, {
+        value: value * userRate
+      });
+    }
+  }
+  return grid;
+};
+
+export const processCellsChange = (currentGrid, changes, userRate = 0) => {
   return changes.reduce(
     (acc, change) => {
       switch (change.col) {
         case columnTypes.TYPE_COL:
           acc.grid = processTypeColChange(acc.grid, change);
+          return acc;
+        case columnTypes.LABOR_COL:
+          acc.grid = processLaborColChange(acc.grid, change, userRate);
+          return acc;
+        case columnTypes.EXP_COL:
+          acc.grid = processExpenseColChange(acc.grid, change);
+          return acc;
+        case columnTypes.SUBTOTAL_COL:
+          acc.grid = processSubtotalColChange(acc.grid, userRate);
           return acc;
         default:
           acc.grid = updateGridCell(acc.grid, change.row, change.col, {
