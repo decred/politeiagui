@@ -6,6 +6,7 @@
   
 .user-page .detail-tab-content {
     padding-left: 24px;
+    width: calc(100% - 24px);
     text-align: left;
     float: left;
 }

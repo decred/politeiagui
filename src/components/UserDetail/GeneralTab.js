@@ -264,36 +264,40 @@ class GeneralTab extends React.Component {
                   : "Loading public key..."}
               </div>
             )}
+            {isUserPageOwner && (
+              <div>
+                {showIdentityHelpText ? (
+                  <div>
+                    <span
+                      style={{ fontWeight: "bold", maxWidth: "7em" }}
+                      className="ident-value"
+                    >
+                      {this.identityHelpPrompt}
+                    </span>{" "}
+                    <span
+                      className="linkish"
+                      onClick={() =>
+                        this.setState({ showIdentityHelpText: false })
+                      }
+                    >
+                      (hide)
+                    </span>
+                  </div>
+                ) : (
+                  <span
+                    className="linkish ident-value"
+                    style={{ maxWidth: "7em" }}
+                    onClick={() =>
+                      this.setState({ showIdentityHelpText: true })
+                    }
+                  >
+                    {this.identityHelpPrompt}
+                  </span>
+                )}
+              </div>
+            )}
           </Field>
         ) : null}
-        {isUserPageOwner && (
-          <div style={{ marginLeft: "164px" }}>
-            {showIdentityHelpText ? (
-              <div>
-                <span
-                  style={{ fontWeight: "bold", maxWidth: "7em" }}
-                  className="ident-value"
-                >
-                  {this.identityHelpPrompt}
-                </span>{" "}
-                <span
-                  className="linkish"
-                  onClick={() => this.setState({ showIdentityHelpText: false })}
-                >
-                  (hide)
-                </span>
-              </div>
-            ) : (
-              <span
-                className="linkish ident-value"
-                style={{ maxWidth: "7em" }}
-                onClick={() => this.setState({ showIdentityHelpText: true })}
-              >
-                {this.identityHelpPrompt}
-              </span>
-            )}
-          </div>
-        )}
 
         {showIdentityHelpText && isUserPageOwner && (
           <div className="identity-help">
