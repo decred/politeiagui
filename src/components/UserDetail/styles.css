@@ -1,0 +1,16 @@
+.user-page .detail-admin {
+    display: inline-block;
+    margin-left: 8px;
+    color: #39740a;
+}
+  
+.user-page .detail-tab-content {
+    padding-left: 24px;
+    text-align: left;
+    float: left;
+}
+
+.user-page .detail-header {
+    display: flex;
+    align-items: center;
+}

@@ -205,42 +205,41 @@ class GeneralTab extends React.Component {
       amountOfCreditsAddedOnRescan !== undefined && rescanUserId === user.id;
     const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
     return (
-      <div className="detail-form">
-        <div>
-          {!isCMS && isAdminOrTheUser && (
-            <Field label="Proposal credits">
-              {user.proposalcredits}
-              {isAdmin && (
-                <ButtonWithLoadingIcon
-                  className="c-btn c-btn-primary button-small"
-                  isLoading={isLoadingRescan}
-                  onClick={() => onRescan(user.id)}
-                  text="rescan"
-                />
-              )}
-            </Field>
-          )}
-          {hasTheRescanResult && (
-            <Message
-              type="success"
-              body={
-                <div>
-                  {amountOfCreditsAddedOnRescan === 0 ? (
-                    <span>User credits are up to date.</span>
-                  ) : (
-                    <span>
-                      <b>{amountOfCreditsAddedOnRescan} proposal credits </b>
-                      were found by the rescan and added to the user account.
-                    </span>
-                  )}
-                </div>
-              }
-              onDismissClick={onResetRescan}
-            />
-          )}
-          {errorRescan && <Message type="error" body={errorRescan} />}
-          <FieldSeparator />
-        </div>
+      <div className="detail-tab-content">
+        {!isCMS && isAdminOrTheUser && (
+          <Field label="Proposal credits">
+            {user.proposalcredits}
+            {isAdmin && (
+              <ButtonWithLoadingIcon
+                className="c-btn c-btn-primary button-small"
+                isLoading={isLoadingRescan}
+                onClick={() => onRescan(user.id)}
+                text="rescan"
+              />
+            )}
+          </Field>
+        )}
+        {hasTheRescanResult && (
+          <Message
+            type="success"
+            body={
+              <div>
+                {amountOfCreditsAddedOnRescan === 0 ? (
+                  <span>User credits are up to date.</span>
+                ) : (
+                  <span>
+                    <b>{amountOfCreditsAddedOnRescan} proposal credits </b>
+                    were found by the rescan and added to the user account.
+                  </span>
+                )}
+              </div>
+            }
+            onDismissClick={onResetRescan}
+          />
+        )}
+        {errorRescan && <Message type="error" body={errorRescan} />}
+        <FieldSeparator />
+
         {keyMismatch && !identityImportSuccess && isUserPageOwner ? (
           <Field label="Active Key">
             <div style={{ color: "red" }} className="monospace">

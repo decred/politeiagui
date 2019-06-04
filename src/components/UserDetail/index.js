@@ -11,6 +11,7 @@ import {
   setQueryStringValue,
   getQueryStringValue
 } from "../../lib/queryString";
+import "./styles.css";
 
 const userDetailOptions = [
   {
