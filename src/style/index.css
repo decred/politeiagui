@@ -581,9 +581,41 @@ table.md {
   border: none;
   color: #0c1e3e;
 }
+
+.md h1, .md h2, .md h3, .md h4, .md h5, .md h6 {
+  font-weight: 600;
+ }
+
+.md h1, .md h2 {
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: .3em;
+}
+
+.md h1 {
+  font-size: 2em !important;
+}
+
+.md h2 {
+  font-size: 1.5em !important;
+}
+
 .md h3 {
+  font-size: 1.25em !important;
   color: #0c1e3e;
   margin: 16px 0 0;
+}
+
+.md h4 {
+  font-size: 1em !important;
+}
+
+.md h5 {
+  font-size: 0.875em !important;
+}
+
+.md h6 {
+  color: #777777;
+  font-size: 0.85em !important;
 }
 
 .link .usertext .md {
