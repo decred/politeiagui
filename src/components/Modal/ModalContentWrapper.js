@@ -31,7 +31,7 @@ class ModalContentWrapper extends React.Component {
       style
     } = this.props;
     return (
-      <div className="modal-content" style={{ minWidth: "700px", ...style }}>
+      <div className="modal-content" style={{ minWidth: "803px", ...style }}>
         <div className="modal-content-header">
           <h2 style={{ fontSize: "18px", textTransform: "uppercase" }}>
             {title}

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { insertDiffHTML } from "./helpers";
 import Message from "../../Message";
 import ProposalImages from "../../ProposalImages";
+import MarkdownRenderer from "./Markdown";
 
 const DiffHeader = ({
   userName,
@@ -34,7 +35,7 @@ const DiffHeader = ({
               onClick={onToggleFilesDiff}
               href=""
             >
-              {filesDiff ? "Text Diff" : "Files Diff"}
+              {filesDiff ? "Text Changes" : "Attachments changes"}
               {isNewFile && <span className="new-file-indicator" />}
             </span>
           ) : null}
@@ -47,9 +48,35 @@ const DiffHeader = ({
   </div>
 );
 
-const DiffBody = ({ body }) => (
-  <div className="md" style={{ padding: "16px" }}>
-    {body}
+const DiffBody = ({
+  body,
+  proposal,
+  onToggleTextDiffPreview,
+  preview,
+  version
+}) => (
+  <div>
+    <div className="diff-text-preview-toggle" onClick={onToggleTextDiffPreview}>
+      <div
+        className={!preview ? "diff-active-toggle" : ""}
+        onClick={!preview ? onToggleTextDiffPreview : null}
+      >
+        View version {version}
+      </div>
+      <div
+        className={preview ? "diff-active-toggle" : ""}
+        onClick={preview ? onToggleTextDiffPreview : null}
+      >
+        Text changes
+      </div>
+    </div>
+    <div style={{ padding: "16px" }}>
+      {preview ? (
+        <div className="md">{body}</div>
+      ) : (
+        <MarkdownRenderer body={proposal} />
+      )}
+    </div>
   </div>
 );
 
@@ -73,15 +100,23 @@ const hasFilesChanged = filesDiff =>
   filesDiff.filter(file => file.added || file.removed).length > 0;
 
 const withDiffStyle = {
-  zIndex: 9999
+  zIndex: 9999,
+  minWidth: "800px",
+  margin: "0px 1px"
 };
 
 class Diff extends React.Component {
-  state = { filesDiff: false };
+  state = { filesDiff: false, textDiffPreview: false };
   handleToggleFilesDiff = e => {
     e.preventDefault();
     this.setState(state => ({
       filesDiff: !state.filesDiff
+    }));
+  };
+  handleToggleTextDiffPreview = e => {
+    e.preventDefault();
+    this.setState(state => ({
+      textDiffPreview: !state.textDiffPreview
     }));
   };
   render() {
@@ -98,16 +133,13 @@ class Diff extends React.Component {
       loading,
       error
     } = this.props;
-    const { filesDiff } = this.state;
+    const { filesDiff, textDiffPreview } = this.state;
     const filesDiffArray = getFilesDiff(newFiles, oldFiles, filesDiffFunc);
     const hasFileChanged = hasFilesChanged(filesDiffArray);
     return (
       // It is not necessary to use another Modal component here, since we already call the openModal function on
       // the parent component
-      <div
-        className="modal-content"
-        style={{ minWidth: "700px", ...withDiffStyle }}
-      >
+      <div className="modal-content" style={withDiffStyle}>
         <div className="diff-wrapper">
           <DiffHeader
             title={title}
@@ -126,7 +158,13 @@ class Diff extends React.Component {
           ) : filesDiff ? (
             <ProposalImages files={filesDiffArray} readOnly={true} />
           ) : (
-            <DiffBody body={insertDiffHTML(oldProposal, newProposal)} />
+            <DiffBody
+              body={insertDiffHTML(oldProposal, newProposal)}
+              proposal={newProposal}
+              onToggleTextDiffPreview={this.handleToggleTextDiffPreview}
+              preview={textDiffPreview}
+              version={version}
+            />
           )}
         </div>
       </div>

@@ -27,9 +27,10 @@ class Modal extends React.Component {
           disabled={disableCloseOnClick}
         />
         <div className="modal">
-          <div className="modal-overlay" />
-          <div className="modal-container" style={style}>
-            {children}
+          <div className="modal-overlay">
+            <div className="modal-container" style={style}>
+              {children}
+            </div>
           </div>
         </div>
       </div>
