@@ -1,6 +1,7 @@
 .field {
     display: flex;
     line-height: 24px;
+    width: 100%;
 }
 
 .field .clear {
@@ -9,7 +10,7 @@
 
 .field .field-label {
     float: left;
-    width: 160px;
+    width: 33%;
     font-size: 1.05em;
     margin-right: 4px;
     color: #777;
@@ -18,8 +19,10 @@
   
 .field .field-value {
     float: left;
-    width: 600px;
     line-height: 24px;
+    width: 66%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
   
 .field-separator {

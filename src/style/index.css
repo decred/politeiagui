@@ -1272,7 +1272,6 @@ li p.header-3 {
 .appWrapper {
   background: #f3f5f6;
   min-height: 100%;
-  height: 100%;
   overflow-x: auto;
 }
 
@@ -1371,58 +1370,6 @@ li p.header-3 {
 }
 .credit-purchase-status-font {
   font-weight: 500;
-}
-.user-page {
-  margin: 0 auto;
-  width: 800px;
-}
-.user-page .detail-header {
-  margin-bottom: 16px;
-}
-.user-page .detail-username {
-  font-size: 20px;
-  margin-bottom: 4px;
-}
-.user-page .detail-email {
-  margin-bottom: 16px;
-  color: #555;
-}
-.user-page .detail-admin {
-  display: inline-block;
-  margin-left: 8px;
-  color: #39740a;
-}
-.user-page .detail-form .field {
-  line-height: 24px;
-}
-.user-page .detail-form .field .clear {
-  clear: left;
-}
-.user-page .detail-form .field .field-label {
-  float: left;
-  width: 160px;
-  font-size: 1.05em;
-  margin-right: 4px;
-  color: #777;
-  text-align: left;
-}
-
-.user-page .detail-form .field .field-value {
-  float: left;
-  width: 600px;
-  line-height: 24px;
-}
-.user-page .detail-form .field-separator {
-  height: 16px;
-}
-.user-page .detail-form .field-value .mark-link {
-  margin-left: 8px;
-}
-.user-page .detail-tab-body {
-  padding: 0 8px;
-}
-.user-page .detail-proposals > .content {
-  margin: 0;
 }
 
 button.button-small {
@@ -1943,8 +1890,13 @@ form div.usertext-body.may-blank-within.md-container {
   list-style-type: none;
 }
 
+.content-subtitle { 
+  color: #555;
+  margin: 8px 0px 8px 24px;
+}
+
 /* On screens that are 768px or less, apply the following styles */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1000px) {
   /* hide side bar */
   .side {
     display: none;

@@ -205,42 +205,41 @@ class GeneralTab extends React.Component {
       amountOfCreditsAddedOnRescan !== undefined && rescanUserId === user.id;
     const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
     return (
-      <div className="detail-form">
-        <div>
-          {!isCMS && isAdminOrTheUser && (
-            <Field label="Proposal credits">
-              {user.proposalcredits}
-              {isAdmin && (
-                <ButtonWithLoadingIcon
-                  className="c-btn c-btn-primary button-small"
-                  isLoading={isLoadingRescan}
-                  onClick={() => onRescan(user.id)}
-                  text="rescan"
-                />
-              )}
-            </Field>
-          )}
-          {hasTheRescanResult && (
-            <Message
-              type="success"
-              body={
-                <div>
-                  {amountOfCreditsAddedOnRescan === 0 ? (
-                    <span>User credits are up to date.</span>
-                  ) : (
-                    <span>
-                      <b>{amountOfCreditsAddedOnRescan} proposal credits </b>
-                      were found by the rescan and added to the user account.
-                    </span>
-                  )}
-                </div>
-              }
-              onDismissClick={onResetRescan}
-            />
-          )}
-          {errorRescan && <Message type="error" body={errorRescan} />}
-          <FieldSeparator />
-        </div>
+      <div className="detail-tab-content">
+        {!isCMS && isAdminOrTheUser && (
+          <Field label="Proposal credits">
+            {user.proposalcredits}
+            {isAdmin && (
+              <ButtonWithLoadingIcon
+                className="c-btn c-btn-primary button-small"
+                isLoading={isLoadingRescan}
+                onClick={() => onRescan(user.id)}
+                text="rescan"
+              />
+            )}
+          </Field>
+        )}
+        {hasTheRescanResult && (
+          <Message
+            type="success"
+            body={
+              <div>
+                {amountOfCreditsAddedOnRescan === 0 ? (
+                  <span>User credits are up to date.</span>
+                ) : (
+                  <span>
+                    <b>{amountOfCreditsAddedOnRescan} proposal credits </b>
+                    were found by the rescan and added to the user account.
+                  </span>
+                )}
+              </div>
+            }
+            onDismissClick={onResetRescan}
+          />
+        )}
+        {errorRescan && <Message type="error" body={errorRescan} />}
+        <FieldSeparator />
+
         {keyMismatch && !identityImportSuccess && isUserPageOwner ? (
           <Field label="Active Key">
             <div style={{ color: "red" }} className="monospace">
@@ -252,49 +251,53 @@ class GeneralTab extends React.Component {
         ) : loggedInAsUserId ? (
           <Field className="account-info" label="Active Public Key">
             {isUserPageOwner ? (
-              <div className="monospace">
+              <div className="monospace no-text-overflow">
                 {pubkeyStatus === PUB_KEY_STATUS_LOADED
                   ? pubkey
                   : "Loading public key..."}
               </div>
             ) : (
-              <div className="monospace">
+              <div className="monospace no-text-overflow">
                 {pubkeyStatus !== PUB_KEY_STATUS_LOADED ||
                 user.identities[user.identities.length - 1].pubkey !== pubkey
                   ? user.identities[user.identities.length - 1].pubkey
                   : "Loading public key..."}
               </div>
             )}
+            {isUserPageOwner && (
+              <div>
+                {showIdentityHelpText ? (
+                  <div>
+                    <span
+                      style={{ fontWeight: "bold", maxWidth: "7em" }}
+                      className="ident-value"
+                    >
+                      {this.identityHelpPrompt}
+                    </span>{" "}
+                    <span
+                      className="linkish"
+                      onClick={() =>
+                        this.setState({ showIdentityHelpText: false })
+                      }
+                    >
+                      (hide)
+                    </span>
+                  </div>
+                ) : (
+                  <span
+                    className="linkish ident-value"
+                    style={{ maxWidth: "7em" }}
+                    onClick={() =>
+                      this.setState({ showIdentityHelpText: true })
+                    }
+                  >
+                    {this.identityHelpPrompt}
+                  </span>
+                )}
+              </div>
+            )}
           </Field>
         ) : null}
-        {isUserPageOwner && (
-          <div style={{ marginLeft: "164px" }}>
-            {showIdentityHelpText ? (
-              <div>
-                <span
-                  style={{ fontWeight: "bold", maxWidth: "7em" }}
-                  className="ident-value"
-                >
-                  {this.identityHelpPrompt}
-                </span>{" "}
-                <span
-                  className="linkish"
-                  onClick={() => this.setState({ showIdentityHelpText: false })}
-                >
-                  (hide)
-                </span>
-              </div>
-            ) : (
-              <span
-                className="linkish ident-value"
-                style={{ maxWidth: "7em" }}
-                onClick={() => this.setState({ showIdentityHelpText: true })}
-              >
-                {this.identityHelpPrompt}
-              </span>
-            )}
-          </div>
-        )}
 
         {showIdentityHelpText && isUserPageOwner && (
           <div className="identity-help">

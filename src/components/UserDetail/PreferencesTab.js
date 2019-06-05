@@ -57,7 +57,10 @@ class PreferencesTab extends React.Component {
     } = this.props;
     const isUserPageOwner = user && loggedInAsUserId === user.id;
     return (
-      <form className="detail-form" onSubmit={handleSubmit(this.onEditUser)}>
+      <form
+        className="detail-tab-content"
+        onSubmit={handleSubmit(this.onEditUser)}
+      >
         {this.state.showEditUserMessage && (
           <Fragment>
             {editUserError && (
