@@ -251,13 +251,13 @@ class GeneralTab extends React.Component {
         ) : loggedInAsUserId ? (
           <Field className="account-info" label="Active Public Key">
             {isUserPageOwner ? (
-              <div className="monospace">
+              <div className="monospace no-text-overflow">
                 {pubkeyStatus === PUB_KEY_STATUS_LOADED
                   ? pubkey
                   : "Loading public key..."}
               </div>
             ) : (
-              <div className="monospace">
+              <div className="monospace no-text-overflow">
                 {pubkeyStatus !== PUB_KEY_STATUS_LOADED ||
                 user.identities[user.identities.length - 1].pubkey !== pubkey
                   ? user.identities[user.identities.length - 1].pubkey

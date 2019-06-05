@@ -20,6 +20,9 @@
 .field .field-value {
     float: left;
     line-height: 24px;
+    width: 66%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
   
 .field-separator {
