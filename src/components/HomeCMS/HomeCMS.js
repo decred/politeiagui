@@ -31,7 +31,7 @@ const UserReminders = ({ invoices }) => {
       <Reminder
         done={!!hasSubmittedInvoiceInTheCurrentYearAndMonth}
         text={"You have not yet submitted your invoice for the previous month."}
-        doneText={"You already submmited an invoice for the previous month."}
+        doneText={"You already submitted an invoice for the previous month."}
         actionText={"Submit now"}
         actionLink={"invoices/new"}
         isAdmin={false}
