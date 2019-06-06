@@ -8,17 +8,24 @@ import {
   processCellsChange,
   convertLineItemsToGrid,
   convertGridToLineItems,
-  generateBlankLineItem
+  generateBlankLineItem,
+  SUBTOTAL_COL
 } from "./helpers";
 
-const InvoiceDatasheet = ({ value, onChange, readOnly }) => {
+const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
   const [grid, setGrid] = useState([]);
+  const [localUserRate, setLocalUserRate] = useState(userRate);
 
   const handleCellsChange = changes => {
-    const { grid: newGrid } = processCellsChange(grid, changes);
+    const { grid: newGrid } = processCellsChange(grid, changes, userRate);
     const lineItems = convertGridToLineItems(newGrid);
     onChange(lineItems);
   };
+
+  if (localUserRate !== userRate) {
+    setLocalUserRate(userRate);
+    handleCellsChange([{ col: SUBTOTAL_COL }]);
+  }
 
   const handleAddNewRow = e => {
     e.preventDefault();
@@ -26,7 +33,6 @@ const InvoiceDatasheet = ({ value, onChange, readOnly }) => {
     onChange(newValue);
   };
 
-  // const
   useEffect(
     function updateGridOnValueChange() {
       const grid = convertLineItemsToGrid(value, readOnly);

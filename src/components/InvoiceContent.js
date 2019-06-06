@@ -2,6 +2,7 @@ import React from "react";
 import Field, { FieldSeparator } from "./DescriptiveField";
 import InvoiceDatasheet from "./InvoiceDatasheet";
 import { fromUSDCentsToUSDUnits } from "../helpers";
+import { lineitemsWithSubtotal } from "../components/InvoiceDatasheet/helpers";
 
 const InvoiceContent = ({
   contractorcontact,
@@ -36,7 +37,10 @@ const InvoiceContent = ({
         <FieldSeparator />
         <Field label="Payment address">{paymentaddress}</Field>
       </div>
-      <InvoiceDatasheet readOnly value={lineitems} />
+      <InvoiceDatasheet
+        readOnly
+        value={lineitemsWithSubtotal(lineitems, contractorrate)}
+      />
     </>
   );
 };

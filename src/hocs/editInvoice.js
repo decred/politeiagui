@@ -6,6 +6,7 @@ import compose from "lodash/fp/compose";
 import get from "lodash/fp/get";
 import { arg, or } from "../lib/fp";
 import { fromUSDCentsToUSDUnits } from "../helpers";
+import { lineitemsWithSubtotal } from "../components/InvoiceDatasheet/helpers";
 
 const editInvoiceConnector = connect(
   sel.selectorMap({
@@ -76,7 +77,10 @@ class EditInvoiceContainer extends Component {
           location: input.contractorlocation,
           rate: fromUSDCentsToUSDUnits(input.contractorrate),
           address: input.paymentaddress,
-          lineitems: input.lineitems,
+          lineitems: lineitemsWithSubtotal(
+            input.lineitems,
+            input.contractorrate
+          ),
           files: this.props.otherFiles
         }
       });
