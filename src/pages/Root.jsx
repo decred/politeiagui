@@ -14,6 +14,7 @@ import PageUserResetPassword from "./User/ResetPassword";
 import PageUserRequestResendVerificationEmail from "./User/RequestResendVerificationEmail";
 import PageUserPrivacyPolicy from "./User/PrivacyPolicy";
 import PageUserVerifyEmail from "./User/VerifyEmail";
+import PageUserDetail from "./User/Detail";
 
 import PageProposalsPublicList from "./Proposals/PublicList";
 import PageProposalsUser from "./Proposals/User";
@@ -64,6 +65,7 @@ const Routes = () => {
         exact
         component={PageUserVerifyEmail}
       />
+      <Route path="/user/:userid" exact component={PageUserDetail} />
 
       {/* Record routes */}
       <AuthenticatedRoute

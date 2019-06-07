@@ -3,7 +3,7 @@ import * as act from "src/actions";
 import { useRedux } from "src/redux";
 
 const mapStateToProps = {
-  username: sel.loggedInAsUsername
+  user: sel.apiMeResponse
 };
 
 const mapDispatchToProps = {

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Card, Message, Container, Main, classNames } from "pi-ui";
-import styles from "./SingleContentPage.module.css";
+import styles from "../layouts.module.css";
 import ErrorBoundary from "src/components/ErrorBoundary";
 import Header from "src/containers/Header";
 

@@ -6,7 +6,7 @@ import styles from "./Header.module.css";
 import { useHeader } from "./hooks";
 
 const Header = ({ noBorder }) => {
-  const { username, onLogout } = useHeader();
+  const { user, onLogout } = useHeader();
   return (
     <UIHeader
       className={`${styles.customHeader} ${noBorder ? styles.noBorder : ""}`}
@@ -14,7 +14,7 @@ const Header = ({ noBorder }) => {
       <NavLink to="/">
         <img src={Logo} alt="presentation" />
       </NavLink>
-      {username ? (
+      {user ? (
         <div>
           <Text className="margin-right-s">{username}</Text>
           <Text onClick={onLogout}>Logout</Text>
