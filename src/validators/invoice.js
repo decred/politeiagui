@@ -90,7 +90,7 @@ export function yupToFormErrors(yupError) {
           lineitems: getErrorForLineItem(errors, err.path, err.message)
         };
       } else {
-        errors = { ...errors, [err.path]: err.message };
+        errors = { ...errors, [err.path]: [err.message] };
       }
     }
   }
