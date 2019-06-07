@@ -8832,7 +8832,7 @@ performance-now@^2.1.0:
 
 "pi-ui@https://github.com/tiagoalvesdulce/pi-ui":
   version "1.0.0"
-  resolved "https://github.com/tiagoalvesdulce/pi-ui#1064e8cf5fe81dbdb3480e35edf10817b2afef46"
+  resolved "https://github.com/tiagoalvesdulce/pi-ui#0b48eac9cf2413f300f759a921e4d6eb14c07d38"
 
 pify@^2.0.0:
   version "2.3.0"
