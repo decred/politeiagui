@@ -43,13 +43,12 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
 
   const handleRemoveLastRow = e => {
     e.preventDefault();
-    if (grid.length > 2) {
+    if (grid.length > 3) {
       onChange(dropRight(value, 1));
     }
   };
 
-  const removeRowsIsDisabled = grid && grid.length <= 2;
-
+  const removeRowsIsDisabled = grid && grid.length <= 3;
   return (
     <div className="sheet-container">
       <ReactDataSheet
