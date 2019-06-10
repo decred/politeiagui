@@ -245,9 +245,9 @@ class Stats extends React.Component {
               Quorum:
               <Tooltip
                 tipStyle={{
-                  left: "110px",
-                  bottom: "-5px",
-                  padding: "6px",
+                  left: "105px",
+                  top: "-2px",
+                  padding: "3px",
                   textAlign: "center",
                   minWidth: "300px"
                 }}
