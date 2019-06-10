@@ -57,6 +57,7 @@ export function useSignup(ownProps) {
     email: email || "",
     verificationtoken: verificationtoken || "",
     password: "",
+    username: "",
     verify_password: ""
   };
 

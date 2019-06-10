@@ -63,9 +63,7 @@ const LoginForm = () => {
             error={touched.password && errors.password}
           />
           <Actions>
-            <Link to="/user/request-reset-password" className="margin-right-l">
-              Reset Password
-            </Link>
+            <Link to="/user/request-reset-password">Reset Password</Link>
             <Button loading={isSubmitting} kind="primary" type="submit">
               Login
             </Button>

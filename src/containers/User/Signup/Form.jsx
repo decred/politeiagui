@@ -133,10 +133,7 @@ const SignupForm = () => {
                 />
               )}
               <Actions>
-                <Link
-                  to="/user/resend-verification-email"
-                  className="margin-right-l"
-                >
+                <Link to="/user/resend-verification-email">
                   Resend verification email
                 </Link>
                 <Button type="submit" loading={isSubmitting}>
