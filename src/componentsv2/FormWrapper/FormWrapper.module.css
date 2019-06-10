@@ -13,12 +13,9 @@
     width: 100%;
     padding: 3rem 0;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
-.link {
-    color: var(--color-primary);
-}
 
 .footer {
     width: 100%;

@@ -19,6 +19,10 @@
     font-size: 1.4rem;
 }
 
+.navLink:hover {
+    color: var(--color-primary-dark);
+}
+
 .navLinkText {
     padding: 0 2rem;
 }

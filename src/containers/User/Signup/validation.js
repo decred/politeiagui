@@ -18,24 +18,33 @@ export const signupValidationSchema = (
   Yup.object().shape({
     email: Yup.string()
       .email("Invalid email")
-      .required("required"),
+      .required("Required"),
     username: Yup.string()
       .matches(
         buildUsernameRegex(usernamesupportedchars),
         {
           excludeEmptyString: true
         },
-        { message: "invalid username" }
+        { message: "Invalid username" }
       )
-      .min(minusernamelength)
-      .max(maxusernamelength)
-      .required("required"),
+      .min(
+        minusernamelength,
+        `Username must be at least ${minusernamelength} characters`
+      )
+      .max(
+        maxusernamelength,
+        `Username must be at most ${maxusernamelength} characters`
+      )
+      .required("Required"),
     password: Yup.string()
-      .min(minpasswordlength)
-      .required("required"),
+      .min(
+        minpasswordlength,
+        `Password must be at least ${minpasswordlength} characters`
+      )
+      .required("Required"),
     verify_password: Yup.string()
       .oneOf([Yup.ref("password")], "Passwords must match")
-      .required("required"),
+      .required("Required"),
     verificationtoken: withVerificationToken
       ? Yup.string().required("required")
       : Yup.string()

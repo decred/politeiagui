@@ -2,6 +2,7 @@ import React from "react";
 import { H1, Message, Spinner, classNames } from "pi-ui";
 import { Link as RouterLink } from "react-router-dom";
 import { Formik } from "formik";
+import Link from "../Link";
 import styles from "./FormWrapper.module.css";
 
 const Title = ({ className, ...props }) => (
@@ -18,10 +19,6 @@ const Footer = ({ className, ...props }) => (
 
 const Form = ({ className, ...props }) => (
   <form className={classNames(styles.form, className)} {...props} />
-);
-
-const Link = ({ className, ...props }) => (
-  <RouterLink className={classNames(styles.link, className)} {...props} />
 );
 
 const ErrorMessage = ({ ...props }) => <Message kind="error" {...props} />;

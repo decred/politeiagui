@@ -71,7 +71,9 @@ const LoginForm = () => {
             </Button>
           </Actions>
           <Footer>
-            <Link to="/user/privacy-policy">Privacy Policy</Link>
+            <Link to="/user/privacy-policy" gray>
+              Privacy Policy
+            </Link>
             <div>
               Don't have an account? <Link to="/user/signup">Create here!</Link>
             </div>

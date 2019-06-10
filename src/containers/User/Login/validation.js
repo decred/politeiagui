@@ -4,8 +4,11 @@ export const loginValidationSchema = ({ minpasswordlength }) =>
   Yup.object().shape({
     email: Yup.string()
       .email("Invalid email")
-      .required("required"),
+      .required("Required"),
     password: Yup.string()
-      .min(minpasswordlength)
-      .required("required")
+      .min(
+        minpasswordlength,
+        `Password must be at least ${minpasswordlength} characters`
+      )
+      .required("Required")
   });
