@@ -22,6 +22,10 @@
     color: var(--color-primary-dark);
 }
 
+.navLink:hover {
+    color: var(--color-primary-dark);
+}
+
 .navLinkText {
     padding: 0 2rem;
 }
