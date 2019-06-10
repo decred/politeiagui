@@ -203,10 +203,7 @@ class Stats extends React.Component {
     const isPreVoting =
       status === PROPOSAL_VOTING_NOT_AUTHORIZED ||
       status === PROPOSAL_VOTING_AUTHORIZED;
-    const currentQuorumPercentage = getPercentage(
-      totalVotes,
-      numOfEligibleVotes
-    );
+
     const quorumInVotes = Math.trunc(
       (numOfEligibleVotes * quorumPercentage) / 100
     );
@@ -248,12 +245,13 @@ class Stats extends React.Component {
               Quorum:
               <Tooltip
                 tipStyle={{
-                  left: "80px",
-                  maxWidth: "100px",
+                  left: "110px",
+                  bottom: "-5px",
                   padding: "6px",
-                  textAlign: "center"
+                  textAlign: "center",
+                  minWidth: "300px"
                 }}
-                text={`${currentQuorumPercentage}/${quorumPercentage} %`}
+                text={`Quorum minimum is ${quorumPercentage}% of ${numOfEligibleVotes} elegible votes`}
                 position="right"
               >
                 <span
