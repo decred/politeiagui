@@ -79,11 +79,16 @@ class SubmitWrapper extends Component {
           ...this.props,
           validationError: this.state.validationError,
           editingMode: true,
-          onSave: this.onSave
+          onSave: this.onSave,
+          onChange: this.onChange
         }}
       />
     );
   }
+
+  onChange = () => {
+    this.setState({ validationError: "" });
+  };
 
   onSave = (...args) => {
     try {
