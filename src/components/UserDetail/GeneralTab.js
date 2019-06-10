@@ -200,10 +200,12 @@ class GeneralTab extends React.Component {
     } = this.state;
     const userHasActivePaywall =
       !isCMS && user && user.newuserpaywalladdress && user.newuserpaywallamount;
+
     const isUserPageOwner = loggedInAsUserId === user.id;
     const hasTheRescanResult =
       amountOfCreditsAddedOnRescan !== undefined && rescanUserId === user.id;
     const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
+
     return (
       <div className="detail-tab-content">
         {!isCMS && isAdminOrTheUser && (
@@ -264,41 +266,40 @@ class GeneralTab extends React.Component {
                   : "Loading public key..."}
               </div>
             )}
-            {isUserPageOwner && (
-              <div>
-                {showIdentityHelpText ? (
-                  <div>
-                    <span
-                      style={{ fontWeight: "bold", maxWidth: "7em" }}
-                      className="ident-value"
-                    >
-                      {this.identityHelpPrompt}
-                    </span>{" "}
-                    <span
-                      className="linkish"
-                      onClick={() =>
-                        this.setState({ showIdentityHelpText: false })
-                      }
-                    >
-                      (hide)
-                    </span>
-                  </div>
-                ) : (
-                  <span
-                    className="linkish ident-value"
-                    style={{ maxWidth: "7em" }}
-                    onClick={() =>
-                      this.setState({ showIdentityHelpText: true })
-                    }
-                  >
-                    {this.identityHelpPrompt}
-                  </span>
-                )}
-              </div>
-            )}
           </Field>
         ) : null}
-
+        <Field>
+          {isUserPageOwner && (
+            <div>
+              {showIdentityHelpText ? (
+                <div>
+                  <span
+                    style={{ fontWeight: "bold", maxWidth: "7em" }}
+                    className="ident-value"
+                  >
+                    {this.identityHelpPrompt}
+                  </span>{" "}
+                  <span
+                    className="linkish"
+                    onClick={() =>
+                      this.setState({ showIdentityHelpText: false })
+                    }
+                  >
+                    (hide)
+                  </span>
+                </div>
+              ) : (
+                <span
+                  className="linkish ident-value"
+                  style={{ maxWidth: "7em" }}
+                  onClick={() => this.setState({ showIdentityHelpText: true })}
+                >
+                  {this.identityHelpPrompt}
+                </span>
+              )}
+            </div>
+          )}
+        </Field>
         {showIdentityHelpText && isUserPageOwner && (
           <div className="identity-help">
             <p>
@@ -614,18 +615,20 @@ class GeneralTab extends React.Component {
           />,
           <FieldSeparator />
         ]}
-        {user.resetpasswordverificationtoken && [
-          <TokenFields
-            tokenLabel="Reset password token"
-            token={" " + user.resetpasswordverificationtoken + " "}
-            expiry={user.resetpasswordverificationexpiry}
-            userId={user.id}
-            action={MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION}
-            isRequesting={isApiRequestingMarkResetPasswordAsExpired}
-            onManageUser={onManageUser}
-          />,
-          <FieldSeparator />
-        ]}
+        {user.resetpasswordverificationtoken && (
+          <>
+            <TokenFields
+              tokenLabel="Reset password token"
+              token={" " + user.resetpasswordverificationtoken + " "}
+              expiry={user.resetpasswordverificationexpiry}
+              userId={user.id}
+              action={MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION}
+              isRequesting={isApiRequestingMarkResetPasswordAsExpired}
+              onManageUser={onManageUser}
+            />
+            <FieldSeparator />
+          </>
+        )}
       </div>
     );
   }
