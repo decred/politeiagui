@@ -10,6 +10,13 @@ class Login extends React.Component {
     this.props.closeModal();
   };
 
+  componentDidUpdate(prevProps) {
+    // user just logged in
+    if (!prevProps.loggedInAsEmail && this.props.loggedInAsEmail) {
+      this.handleClose();
+    }
+  }
+
   componentDidMount() {
     const {
       me: { payload }

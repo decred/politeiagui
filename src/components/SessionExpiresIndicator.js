@@ -14,8 +14,12 @@ class SessionExpiresIndicator extends React.Component {
     };
   }
 
-  getTimeLeft = (sessionMaxAge, lastLoginTime) =>
-    lastLoginTime + sessionMaxAge - Date.now() / 1000;
+  getTimeLeft = (sessionMaxAge, lastLoginTime) => {
+    // set an additional time to make sure the session has expired and we
+    // can safely trigger the logout after the time left has passed
+    const additionalTime = 5;
+    return lastLoginTime + sessionMaxAge + additionalTime - Date.now() / 1000;
+  };
 
   intervalProcedure = () => {
     let { timer } = this.state;
