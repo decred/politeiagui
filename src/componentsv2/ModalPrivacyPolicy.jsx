@@ -11,7 +11,7 @@ const ModalPrivacyPolicy = props => {
       <StaticMarkdown contentName={privacyPolicyContent} />
       <div className="justify-right">
         <Link to="/user/privacy-policy" className="margin-top-m">
-          Priacy Policy Permalink
+          Privacy Policy Permalink
         </Link>
       </div>
     </Modal>
