@@ -68,9 +68,7 @@ export function isFileValid(file, policy) {
 function getErrorMessage(policy, errorType, filename = "") {
   const errors = {
     [errorTypes.MAX_SIZE]: `The file "${filename}" exceeds the maximum size.`,
-    [errorTypes.MAX_IMAGES]: `You can upload a maximum of ${
-      policy.maximages
-    } images per proposal.`,
+    [errorTypes.MAX_IMAGES]: `You can upload a maximum of ${policy.maximages} images per proposal.`,
     [errorTypes.INVALID_MIME]: `The file "${filename}" has an invalid MIME type.`
   };
   return errors[errorType];
@@ -83,7 +81,8 @@ function validateMaxImages({ files, errors, policy }) {
     errors.push(getErrorMessage(policy, errorTypes.MAX_IMAGES));
     return {
       files: files.slice(0, policy.maximages),
-      errors
+      errors,
+      policy
     };
   }
   return { files, errors, policy };
