@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { Header as UIHeader } from "pi-ui";
 import styles from "./Header.module.css";
-import Logo from "src/style/piLogo.png";
+import Logo from "src/assets/pi-logo-light.svg";
 import { useHeader } from "./hooks";
 
 const Header = ({ noBorder }) => {
