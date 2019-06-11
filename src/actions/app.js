@@ -36,7 +36,7 @@ import {
 } from "../constants";
 import { fromUSDUnitsToUSDCents } from "../helpers";
 import { openModal } from "./modal";
-import * as modalTypes from "src/components/Modal/modalTypes";
+import * as modalTypes from "../components/Modal/modalTypes";
 
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
 
