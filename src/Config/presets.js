@@ -4,19 +4,22 @@ export const constants = {
 };
 
 export const commonDefaults = {
-  isStaging: false
+  isStaging: false,
+  aboutContent: "about-politeia"
 };
 
 export const POLITEIA = {
   ...commonDefaults,
   title: "Politeia",
   recordType: constants.RECORD_TYPE_PROPOSAL,
-  enableAdminInvite: false
+  enableAdminInvite: false,
+  privacyPolicyContent: "privacy-policy"
 };
 
 export const CMS = {
   ...commonDefaults,
   title: "Contractor Management",
   recordType: constants.RECORD_TYPE_INVOICE,
-  enableAdminInvite: true
+  enableAdminInvite: true,
+  privacyprivacyPolicyContent: "privacy-policy-cms"
 };

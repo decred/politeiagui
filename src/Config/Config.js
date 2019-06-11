@@ -15,7 +15,9 @@ const loadConfig = () => {
     isStaging: defaultStagingValue,
     title: defaultTitleValue,
     recordType: defaultRecordType,
-    enableAdminInvite: defaultEnableAdminInvite
+    enableAdminInvite: defaultEnableAdminInvite,
+    privacyPolicyContent: defaultprivacyPolicyContent,
+    aboutContent: defaultAboutContent
   } = defaultPreset;
   const env = dotenvParse(process.env);
   const getConf = key => env[`REACT_APP_${key}`];
@@ -36,7 +38,10 @@ const loadConfig = () => {
     title: getConf("TITLE") || defaultTitleValue,
     recordType: getConf("RECORD_TYPE") || defaultRecordType,
     enableAdminInvite:
-      getConf("ENABLE_ADMIN_INVITE") || defaultEnableAdminInvite
+      getConf("ENABLE_ADMIN_INVITE") || defaultEnableAdminInvite,
+    privacyPolicyContent:
+      getConf("PRIVACY_POLICY_CONTENT") || defaultprivacyPolicyContent,
+    aboutContent: getConf("ABOUT_CONTENT") || defaultAboutContent
   };
 };
 

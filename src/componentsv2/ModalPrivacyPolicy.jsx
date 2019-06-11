@@ -1,0 +1,21 @@
+import React from "react";
+import { Modal } from "pi-ui";
+import { useConfig } from "src/Config";
+import Link from "src/componentsv2/Link";
+import StaticMarkdown from "./StaticMarkdown";
+
+const ModalPrivacyPolicy = props => {
+  const { privacyPolicyContent } = useConfig();
+  return (
+    <Modal {...props}>
+      <StaticMarkdown contentName={privacyPolicyContent} />
+      <div className="justify-right">
+        <Link to="/user/privacy-policy" className="margin-top-m">
+          Priacy Policy Permalink
+        </Link>
+      </div>
+    </Modal>
+  );
+};
+
+export default ModalPrivacyPolicy;
