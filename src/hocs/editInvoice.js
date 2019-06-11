@@ -60,6 +60,7 @@ class EditInvoiceContainer extends Component {
       this.props.onResetInvoice();
       return this.props.history.push("/invoices/" + editedInvoiceToken);
     }
+    const isUserIDFetched = this.props.userid !== null ? true : false;
     const isInvoiceFetched =
       invoice &&
       invoice.censorshiprecord &&
@@ -85,7 +86,7 @@ class EditInvoiceContainer extends Component {
         }
       });
     }
-    if (isInvoiceFetched && !invoiceBelongsToTheUser) {
+    if (isInvoiceFetched && isUserIDFetched && !invoiceBelongsToTheUser) {
       this.props.history.push("/");
     }
   }
