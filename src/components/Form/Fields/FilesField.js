@@ -18,23 +18,6 @@ export class FilesField extends React.Component {
     };
   }
 
-  onChange = ({ ...props }) => {
-    const {
-      input,
-      meta: { dispatch },
-      policy
-    } = this.props;
-    const newFilesList = props.hasOwnProperty("remove")
-      ? input.value.filter((x, i) => (i !== props.remove ? x : null))
-      : input.value;
-    const validation = validateFiles(newFilesList, policy);
-    this.setState({
-      policyErrors: validation.errors ? validation.errors : []
-    });
-    input.onChange(props);
-    return dispatch(change("form/record", "files", newFilesList));
-  };
-
   handleFilesChange = files => {
     const {
       input,
@@ -47,11 +30,12 @@ export class FilesField extends React.Component {
       ? formattedFiles.concat(input.value)
       : formattedFiles;
     const validation = validateFiles(inputAndNewFiles, policy);
-
     this.setState({
       policyErrors: validation.errors ? validation.errors : []
     });
-
+    if (validation.errors.length > 0) {
+      return;
+    }
     return dispatch(change("form/record", "files", inputAndNewFiles));
   };
 
@@ -113,7 +97,7 @@ export class FilesField extends React.Component {
           {touched && error && !disabled && (
             <span className="error">{error}</span>
           )}
-          <ProposalImages files={input.value || []} onChange={this.onChange} />
+          <ProposalImages files={input.value || []} onChange={input.onChange} />
         </div>
       )
     );
