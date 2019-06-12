@@ -17,7 +17,9 @@ const loadConfig = () => {
     recordType: defaultRecordType,
     enableAdminInvite: defaultEnableAdminInvite,
     privacyPolicyContent: defaultprivacyPolicyContent,
-    aboutContent: defaultAboutContent
+    aboutContent: defaultAboutContent,
+    testnetGitRepository: defaultTestnetGitRepository,
+    mainnetGitRepository: defaultMainnetGitRepository
   } = defaultPreset;
   const env = dotenvParse(process.env);
   const getConf = key => env[`REACT_APP_${key}`];
@@ -41,7 +43,11 @@ const loadConfig = () => {
       getConf("ENABLE_ADMIN_INVITE") || defaultEnableAdminInvite,
     privacyPolicyContent:
       getConf("PRIVACY_POLICY_CONTENT") || defaultprivacyPolicyContent,
-    aboutContent: getConf("ABOUT_CONTENT") || defaultAboutContent
+    aboutContent: getConf("ABOUT_CONTENT") || defaultAboutContent,
+    testnetGitRepository:
+      getConf("TESTNET_GIT_REPOSITORY") || defaultTestnetGitRepository,
+    mainnetGitRepository:
+      getConf("MAINNET_GIT_REPOSITORY") || defaultMainnetGitRepository
   };
 };
 

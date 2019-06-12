@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`filter potencial 'XSS' attackers 1`] = `
+<div>
+  <p>
+    <a
+      href="x-javascript:alert('XSS')"
+      onClick={[Function]}
+      rel="nofollow noopener noreferrer"
+      target="_blank"
+    >
+      clickforxss
+    </a>
+      
+    <a
+      href="javascript:void(0)"
+      onClick={[Function]}
+      rel="nofollow noopener noreferrer"
+      target="_blank"
+    >
+      clickforxss
+    </a>
+  </p>
+</div>
+`;

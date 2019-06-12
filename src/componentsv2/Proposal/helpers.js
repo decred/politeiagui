@@ -1,0 +1,153 @@
+import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
+import {
+  PROPOSAL_STATUS_PUBLIC,
+  PROPOSAL_VOTING_NOT_AUTHORIZED,
+  PROPOSAL_VOTING_AUTHORIZED,
+  PROPOSAL_VOTING_ACTIVE,
+  BLOCK_DURATION_TESTNET,
+  BLOCK_DURATION_MAINNET
+} from "src/constants";
+import {
+  PROPOSAL_VOTING_FINISHED,
+  PROPOSAL_STATUS_ABANDONED
+} from "../../constants";
+import { getTextFromIndexMd } from "src/helpers";
+
+export const getMarkdownContent = files => {
+  const markdownFile = files.find(f => f.name === "index.md");
+  return getTextFromIndexMd(markdownFile);
+};
+
+/**
+ * Converts the api data for vote status into an array of data
+ * that can be used to render the StatusBar
+ * @param {Object} voteStatus
+ * @returns {Array} status bar data
+ */
+export const getStatusBarData = voteStatus => {
+  return voteStatus.optionsresult
+    .map(op => ({
+      label: op.option.id,
+      amount: op.votesreceived,
+      color: op.option.id === "yes" ? "#41BE53" : "#ED6D47"
+    }))
+    .sort(a => (a.label === "yes" ? -1 : 1));
+};
+
+/**
+ * Return the votes quorum of a given proposal vote status
+ * @param {Object} voteStatus
+ */
+export const getQuorumInVotes = voteStatus =>
+  Math.trunc(
+    (voteStatus.numofeligiblevotes * voteStatus.quorumpercentage) / 100
+  );
+
+/**
+ * Returns true if the given proposal is public
+ * @param {Object} proposal
+ * @returns {Boolean} isPublic
+ */
+export const isPublicProposal = proposal => {
+  return proposal.status === PROPOSAL_STATUS_PUBLIC;
+};
+
+/**
+ * Returns true if the given proposal is abandoned
+ * @param {Object} proposal
+ * @returns {Boolean} isAbandoned
+ */
+export const isAbandonedProposal = proposal => {
+  return proposal.status === PROPOSAL_STATUS_ABANDONED;
+};
+
+/**
+ * Returns true if the given proposal is approved
+ * @param {Object} voteStatus
+ * @returns {Boolean} isApproved
+ */
+export const isApprovedProposal = proposal => {
+  if (!proposal || !proposal.voteStatus || !isPublicProposal(proposal)) {
+    return false;
+  }
+  const {
+    quorumpercentage,
+    passpercentage,
+    numofeligiblevotes,
+    optionsresult,
+    totalvotes
+  } = proposal.voteStatus;
+  const quorumInVotes = (quorumpercentage * numofeligiblevotes) / 100;
+  const quorumPasses = totalvotes >= quorumInVotes;
+  if (!quorumPasses) {
+    return false;
+  }
+
+  const yesVotes = optionsresult.find(op => op.option.id === "yes")
+    .votesreceived;
+
+  return yesVotes > (passpercentage * totalvotes) / 100;
+};
+
+export const isVoteActiveProposal = proposal =>
+  !!proposal &&
+  !!proposal.voteStatus &&
+  proposal.voteStatus.status === PROPOSAL_VOTING_ACTIVE;
+
+/**
+ * Return the properties to be passed to the StatusTag UI component
+ * @param {object} proposal
+ */
+export const getProposalStatusTagProps = proposal => {
+  if (isPublicProposal(proposal)) {
+    switch (proposal.voteStatus.status) {
+      case PROPOSAL_VOTING_NOT_AUTHORIZED:
+        return { type: "blackTime", text: "Hasn't authorized yet" };
+      case PROPOSAL_VOTING_AUTHORIZED:
+        return { type: "yellowTime", text: "Waiting for approval" };
+      case PROPOSAL_VOTING_ACTIVE:
+        return { type: "bluePending", text: "Active" };
+      case PROPOSAL_VOTING_FINISHED:
+        if (isApprovedProposal(proposal)) {
+          return { type: "greenCheck", text: "Finished" };
+        } else {
+          return { type: "grayNegative", text: "Finished" };
+        }
+      default:
+        break;
+    }
+  }
+
+  if (isAbandonedProposal(proposal)) {
+    return { type: "orangeNegativeCircled", text: "Abandoned" };
+  }
+
+  return { type: "finished", text: "missing" };
+};
+
+export const getVoteBlocksLeft = (proposal, chainHeight) => {
+  const {
+    voteStatus: { endheight }
+  } = proposal;
+  return +endheight - chainHeight;
+};
+
+export const getVoteTimeLeftInWords = (proposal, chainHeight, isTestnet) => {
+  if (
+    !proposal ||
+    !isPublicProposal(proposal) ||
+    proposal.voteStatus.status !== PROPOSAL_VOTING_ACTIVE
+  ) {
+    return "";
+  }
+
+  const blocks = getVoteBlocksLeft(proposal, chainHeight);
+  const blockTimeMinutes = isTestnet
+    ? blocks * BLOCK_DURATION_TESTNET
+    : blocks * BLOCK_DURATION_MAINNET;
+  const mili = blockTimeMinutes * 60000;
+  const dateMs = new Date(mili + Date.now()); // gets time in ms
+
+  // console.log(+endheight, chainHeight);
+  return distanceInWordsToNow(dateMs, { addSuffix: true });
+};

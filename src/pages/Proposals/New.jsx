@@ -1,5 +1,6 @@
 import React from "react";
-import MultipleContentPage from "src/componentsv2/layouts/MultipleContentPage";
+import MultipleContentPage from "src/componentsv2/layout/MultipleContentPage";
+import ProposalNewForm from "src/containers/Proposal/New";
 
 const PageProposalsNew = () => {
   return (
@@ -13,7 +14,9 @@ const PageProposalsNew = () => {
             <SideBanner />
           </TopBanner>
           <Sidebar />
-          <Main>Main Content</Main>
+          <Main>
+            <ProposalNewForm />
+          </Main>
         </>
       )}
     </MultipleContentPage>

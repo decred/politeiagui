@@ -1,0 +1,80 @@
+.mde-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: .5rem 0;
+}
+
+.mde-header-group {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 1rem;
+    border-right: 1px solid var(--color-gray-lighter);
+    margin-right: 1rem;
+    list-style-type: none;
+}
+
+.mde-header ul:last-child {
+    max-width: 20px;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mde-header-item:last-child {
+    margin-right: 0;
+}
+
+.react-mde .grip {
+   display: none;
+}
+
+
+.mde-text {
+    max-width: 100%;
+    min-width: 100%;
+    padding: 2rem;
+    min-height: 20rem;
+    border: 1px solid var(--color-gray-lighter);
+    font-size: var(--font-size-small);
+}
+
+.mde-text::placeholder {
+    color: var(--color-gray-light);
+}
+
+.mde-header-item {
+    margin-right: 1rem;
+    
+}
+
+.mde-header-item button {
+    border: none;
+    cursor: pointer;
+}
+
+
+.mde-tabs button {
+    cursor: pointer;
+    color: var(--color-gray);
+    border: none;
+    font-size: var(--font-size-small) !important;
+}
+
+.mde-tabs button:focus {
+    outline: none;
+}
+
+.mde-tabs button.selected {
+    color: var(--color-primary-dark) !important;
+}
+
+.mde-tabs > :first-child {
+    padding-right: 1rem;
+    border-right: 1px solid var(--color-gray-lighter);
+}
+
+.mde-tabs > :last-child {
+    padding-left: 1rem;
+}

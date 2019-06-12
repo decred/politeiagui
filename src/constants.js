@@ -140,3 +140,6 @@ export const YEARS = [
   "2030"
 ];
 export const FILTER_ALL_MONTHS = 0;
+
+export const BLOCK_DURATION_TESTNET = 2;
+export const BLOCK_DURATION_MAINNET = 5;

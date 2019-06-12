@@ -232,7 +232,7 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_PASSWORD_RESET_REQUEST]: () =>
       receive("passwordReset", state, action),
     [act.RESET_PROPOSAL]: () =>
-      resetMultiple(["newProposal", "editProposal"], state),
+      resetMultiple(["newProposal", "editProposal", "proposal"], state),
     [act.RESET_INVOICE]: () =>
       resetMultiple(["newInvoice", "editInvoice"], state),
     [act.REQUEST_SETSTATUS_PROPOSAL]: () =>

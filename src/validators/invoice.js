@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import { yupFieldMatcher } from "src/utils/validation";
 
 const invoiceValidationSchema = ({
   cmscontactsupportedchars,
@@ -18,17 +19,17 @@ const invoiceValidationSchema = ({
       .required("required")
       .min(minnamelength)
       .max(maxnamelength)
-      .matches(...fieldMatcher("Name", cmsnamelocationsupportedchars)),
+      .matches(...yupFieldMatcher("Name", cmsnamelocationsupportedchars)),
     location: Yup.string()
       .required("required")
       .min(minlocationlength)
       .max(maxlocationlength)
-      .matches(...fieldMatcher("Location", cmsnamelocationsupportedchars)),
+      .matches(...yupFieldMatcher("Location", cmsnamelocationsupportedchars)),
     contact: Yup.string()
       .required("required")
       .min(mincontactlength)
       .max(maxcontactlength)
-      .matches(...fieldMatcher("Contact", cmscontactsupportedchars)),
+      .matches(...yupFieldMatcher("Contact", cmscontactsupportedchars)),
     rate: Yup.number()
       .required("required")
       .min(5)
@@ -45,17 +46,19 @@ const invoiceValidationSchema = ({
             .required("required")
             .min(minlineitemcollength)
             .max(maxlineitemcollength)
-            .matches(...fieldMatcher("Domain", invoicefieldsupportedchars)),
+            .matches(...yupFieldMatcher("Domain", invoicefieldsupportedchars)),
           subdomain: Yup.string()
             .required("required")
             .min(minlineitemcollength)
             .max(maxlineitemcollength)
-            .matches(...fieldMatcher("Sub domain", invoicefieldsupportedchars)),
+            .matches(
+              ...yupFieldMatcher("Sub domain", invoicefieldsupportedchars)
+            ),
           description: Yup.string()
             .min(minlineitemcollength)
             .max(maxlineitemcollength)
             .matches(
-              ...fieldMatcher("Description", invoicefieldsupportedchars)
+              ...yupFieldMatcher("Description", invoicefieldsupportedchars)
             ),
           labour: Yup.number(),
           expense: Yup.number()
@@ -97,34 +100,6 @@ export function yupToFormErrors(yupError) {
   }
   return errors;
 }
-
-const buildRegexFromSupportedChars = supportedChars => {
-  const charNeedsEscaping = c => c === "/" || c === "." || c === "-";
-  const concatedChars = supportedChars.reduce(
-    (str, char) => (charNeedsEscaping(char) ? str + `\\${char}` : str + char),
-    ""
-  );
-  const regex = "^[" + concatedChars + "]*$";
-  return new RegExp(regex);
-};
-
-const invalidMessage = (fieldName, supportedChars) =>
-  `${fieldName} is not valid. Valid chars are ${buildValidCharsStrFromSupportedChars(
-    supportedChars
-  )} `;
-
-const fieldMatcher = (fieldName, supportedChars) => {
-  return [
-    buildRegexFromSupportedChars(supportedChars),
-    {
-      excludeEmptyString: true,
-      message: invalidMessage(fieldName, supportedChars)
-    }
-  ];
-};
-
-const buildValidCharsStrFromSupportedChars = supportedChars =>
-  supportedChars.reduce((str, v) => str + v, "");
 
 const synchronousValidation = (values, { policy }) => {
   if (!policy)

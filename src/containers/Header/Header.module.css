@@ -1,7 +1,3 @@
-.customHeader {
-    background-color: var(--color-gray-lightest2);
-}
-
 .noBorder {
     border: 0 !important;
 }

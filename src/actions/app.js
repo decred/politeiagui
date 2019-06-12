@@ -103,6 +103,19 @@ export const onSaveNewProposal = ({ name, description, files }, _, props) => (
     )
   ).then(() => sel.newProposalToken(getState()));
 
+export const onSaveNewProposalV2 = ({ name, description, files }) => (
+  dispatch,
+  getState
+) => {
+  const email = sel.loggedInAsEmail(getState());
+  const id = sel.userid(getState());
+  const username = sel.loggedInAsUsername(getState());
+
+  return dispatch(
+    onSubmitProposal(email, id, username, name.trim(), description, files)
+  ).then(() => sel.newProposalToken(getState()));
+};
+
 export const onEditProposal = (
   { name, description, files },
   _,

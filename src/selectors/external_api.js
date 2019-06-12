@@ -22,3 +22,4 @@ export const lastBlockHeight = getExtApiResponse("blockHeight");
 export const isApiRequestingLastBlockHeight = getIsExtApiRequesting(
   "blockHeight"
 );
+export const lasBlockHeightError = getExtApiError("blockHeight");

@@ -1,0 +1,26 @@
+.row {
+    margin-top: var(--spacing-small);
+}
+
+.timeLeft {
+    margin-top: .5rem;
+}
+
+.markdownContainer {
+    margin-top: var(--spacing-2);
+    padding: var(--spacing-2) 0;
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: var(--color-gray-lighter);
+}
+
+
+@media screen and (max-width: 560px) {
+    .timeLeft {
+        margin-top: 0;
+    }
+
+    .statusTag {
+        margin-right: var(--spacing-1);
+    }
+}

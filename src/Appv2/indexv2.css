@@ -1,9 +1,15 @@
+@font-face {
+    font-family: "Source Sans Pro";
+    src: local("Source Sans Pro"), url(../assets/fonts/source-sans-pro/source-sans-pro-v9-latin-regular.woff) format("woff")
+}
+
 :root {
     --spacing-extra-small: 0.5rem;
     --spacing-small: 1rem;
     --spacing-medium: 2rem;
     --spacing-large: 3rem;
 }
+
 
 /* Flex Helpers */
 .justify-right {
@@ -14,6 +20,16 @@
 .justify-left {
     display: flex;
     justify-content: left;
+}
+
+.justify-space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.justify-center {
+    display: flex;
+    justify-content: center;
 }
 
 /* Generic helpers */
@@ -95,9 +111,34 @@
     margin-bottom: var(--spacing-large);
 }
 
+.overflow-hidden {
+    overflow: hidden;
+}
+
+
 .main {
     padding: 2rem 4rem;
     max-width: 100vw;
+}
+
+
+.fade-enter {
+    opacity: 0;
+    z-index: 1;
+}
+  
+.fade-enter-active {
+    opacity: 1;
+    transition: opacity 215ms ease-in;
+}
+
+.fade-exit {
+    opacity: 1;
+}
+
+.fade-exit {
+    opacity: 0;
+    transition: opacity 100ms;
 }
 
 
@@ -105,5 +146,8 @@
 @media screen and (max-width: 560px) {
     .main {
         padding: 1rem 2.5rem;
+    }
+    .hide-on-mobile {
+        display: none !important;
     }
 }
