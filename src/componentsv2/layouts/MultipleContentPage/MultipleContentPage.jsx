@@ -24,6 +24,8 @@ const renderError = error => (
 
 const Title = props => <H1 className="margin-top-l" {...props} />;
 
+const Subtitle = props => <span className={styles.subtitle} {...props}>{props.children}</span>;
+
 const PageDetails = ({ className, ...props }) => (
   <PageDetailsUI
     className={classNames(styles.customPageDetails, className)}
@@ -45,6 +47,7 @@ const MultipleContentpage = ({ children }) => {
           TopBanner,
           SideBanner,
           Main,
+          Subtitle,
           PageDetails,
           Title,
           Tabs,

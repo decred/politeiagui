@@ -1,0 +1,23 @@
+.label {
+  color: var(--color-gray-blueish);
+  width: 25%;
+}
+
+.sectionWrapper {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.info {
+  word-wrap: break-word;
+  width: 75%;
+}
+
+/* SMALL */
+@media screen and (max-width: 768px) {
+  .label, .info {
+    width: 100%;
+  }
+}

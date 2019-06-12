@@ -1,7 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { useUserDetail } from "./hooks";
 import { useQueryStringWithIndexValue } from "src/lib/queryString";
+import { Link } from "pi-ui";
+import styles from "./detail.module.css";
+import General from "./General.jsx";
+import Preferences from "./Preferences.jsx";
+import Proposals from "./Proposals.jsx";
+
+const getTabComponent = (params) => [
+  <General {...params} />,
+  <Preferences {...params} />,
+  <Proposals {...params} />
+];
 
 const UserDetail = ({
   TopBanner,
@@ -10,6 +21,7 @@ const UserDetail = ({
   Sidebar,
   Main,
   Title,
+  Subtitle,
   Tabs,
   Tab,
   match
@@ -34,7 +46,11 @@ const UserDetail = ({
     <>
       <TopBanner>
         <PageDetails>
-          <Title>{user.username}</Title>
+          <div className={styles.titleWrapper}>
+            <Title>{user.username}</Title>
+            <Link href="#" className={styles.titleLink}>Change Username</Link>
+          </div>
+          <Subtitle>{user.email}</Subtitle>
           <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
             {tabLabels.map(label => (
               <Tab key={`tab${label}`} label={label} />
@@ -44,7 +60,9 @@ const UserDetail = ({
         <SideBanner />
       </TopBanner>
       <Sidebar />
-      <Main>Main Content</Main>
+      <Main className="main">
+        {getTabComponent(user)[index]}
+      </Main>
     </>
   ) : null;
 };

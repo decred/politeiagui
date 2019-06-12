@@ -1,0 +1,9 @@
+.titleWrapper {
+  display: flex;
+  align-items: flex-end;
+}
+
+.titleLink {
+  line-height: var(--spacing-3);
+  margin-left: 1rem;
+}
