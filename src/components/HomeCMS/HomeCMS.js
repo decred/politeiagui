@@ -7,7 +7,6 @@ import Message from "../Message";
 import { INVOICE_STATUS_NEW } from "../../constants";
 import Reminder, { ReminderList } from "./Reminder";
 import { getCurrentMonth, getCurrentYear } from "../../helpers";
-import Link from "../snew/Link";
 
 const invoiceYear = get(["input", "year"]);
 const invoiceMonth = get(["input", "month"]);
@@ -58,9 +57,7 @@ const AdminReminders = ({ invoices }) => {
       <Reminder
         isAdmin={true}
         done={!invoicesWaitingForReview.length}
-        text={`${
-          invoicesWaitingForReview.length
-        } invoice(s) with pending review.`}
+        text={`${invoicesWaitingForReview.length} invoice(s) with pending review.`}
         doneText={"All invoices are reviewed."}
         actionText={"Review"}
         actionLink={"admin/?tab=unreviewed"}
@@ -68,14 +65,8 @@ const AdminReminders = ({ invoices }) => {
       <Reminder
         isAdmin={true}
         done={!newInvoicesUnreviewed.length}
-        text={`${
-          newInvoicesForThePreviousMonth.length
-        } invoice(s) int the previous month. ${
-          newInvoicesUnreviewed.length
-        } with pending review.`}
-        doneText={`${
-          newInvoicesForThePreviousMonth.length
-        } invoice(s) in the previous month. All reviewed.`}
+        text={`${newInvoicesForThePreviousMonth.length} invoice(s) int the previous month. ${newInvoicesUnreviewed.length} with pending review.`}
+        doneText={`${newInvoicesForThePreviousMonth.length} invoice(s) in the previous month. All reviewed.`}
         actionText={"Review"}
         actionLink={`admin/?month=${month}&year=${year}`}
       />
@@ -92,7 +83,8 @@ const HomeCMS = ({
   isLoading,
   userInvoices,
   adminInvoices,
-  loggedInAsEmail
+  loggedInAsEmail,
+  history
 }) => {
   const fetchUserInvoices = () => {
     if (userid) {
@@ -100,11 +92,13 @@ const HomeCMS = ({
       if (isAdmin) {
         onFetchAdminInvoices();
       }
+    } else if (!userid && !loggedInAsEmail) {
+      history.replace({
+        pathname: "/user/login"
+      });
     }
   };
-
   useEffect(fetchUserInvoices, [userid]);
-
   return (
     <div className="content">
       <h1 className="content-title">Contractor Management System</h1>
@@ -114,18 +108,10 @@ const HomeCMS = ({
         <Message header="Error fetching invoices" type={"error"} body={error} />
       ) : (
         <div style={{ paddingLeft: "24px" }}>
-          {loggedInAsEmail ? (
-            <ReminderList title={"Reminders"}>
-              <UserReminders invoices={userInvoices} />
-              {isAdmin && <AdminReminders invoices={adminInvoices} />}
-            </ReminderList>
-          ) : (
-            <li style={{ fontSize: "16px" }}>
-              <span>
-                <Link to={"/login"}>Log in </Link>to submit your invoice
-              </span>
-            </li>
-          )}
+          <ReminderList title={"Reminders"}>
+            <UserReminders invoices={userInvoices} />
+            {isAdmin && <AdminReminders invoices={adminInvoices} />}
+          </ReminderList>
         </div>
       )}
     </div>
