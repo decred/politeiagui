@@ -45,11 +45,13 @@ class ProposalImages extends Component {
                   </span>
                 )}
               </div>
-              <img
-                className="attached-image"
-                alt={name}
-                src={`data:${mime};base64,${payload}`}
-              />
+              {mime.includes("image") ? (
+                <img
+                  className="attached-image"
+                  alt={name}
+                  src={`data:${mime};base64,${payload}`}
+                />
+              ) : null}
             </div>
           )
         )}
