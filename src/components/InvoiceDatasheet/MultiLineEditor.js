@@ -7,7 +7,19 @@ class MultiLineEditor extends React.Component {
   }
 
   componentDidMount() {
-    this._input.focus();
+    this.resizeText();
+  }
+
+  componentDidUpdate() {
+    this.resizeText();
+  }
+
+  //Sets height and maxheight of textarea to scrollheight
+  resizeText() {
+    if (this.textAreaRef) {
+      this.textAreaRef.style.height = this.textAreaRef.scrollHeight + "px";
+      this.textAreaRef.style.maxHeight = this.textAreaRef.scrollHeight + "px";
+    }
   }
 
   handleInputChange(event) {
@@ -18,13 +30,12 @@ class MultiLineEditor extends React.Component {
     const { value, onKeyDown } = this.props;
     return (
       <textarea
+        autoFocus
         className="multiline-cell-editor"
-        ref={input => {
-          this._input = input;
-        }}
         value={value}
-        onChange={this.handleInputChange}
         onKeyDown={onKeyDown}
+        onChange={this.handleInputChange}
+        ref={textAreaRef => (this.textAreaRef = textAreaRef)}
       />
     );
   }
