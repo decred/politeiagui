@@ -24,10 +24,10 @@ const SignupForm = () => {
   // We check that the email has been set to consider the signup as successful
   const signupSuccess = !!email;
 
-  const onConfirm = (
+  async function onConfirm(
     values,
     { setSubmitting, resetForm, setFieldError }
-  ) => async () => {
+  ) {
     setModalOpen(false);
     try {
       await onSignup(values);
@@ -38,12 +38,18 @@ const SignupForm = () => {
       setSubmitting(false);
       setFieldError("global", e);
     }
-  };
+  }
 
-  const onCancel = (_, { setSubmitting }) => () => {
+  function onCancel(_, { setSubmitting }) {
     setSubmitting(false);
     setModalOpen(false);
-  };
+  }
+
+  async function onSubmit(...args) {
+    setModalOpen(true);
+    setOnModalConfirm(() => onConfirm(...args));
+    setOnModalCancel(() => onCancel(...args));
+  }
 
   return (
     <>
@@ -58,11 +64,7 @@ const SignupForm = () => {
         initialValues={initialValues}
         loading={!validationSchema}
         validationSchema={validationSchema}
-        onSubmit={async (...args) => {
-          setModalOpen(true);
-          setOnModalConfirm(() => onConfirm(...args));
-          setOnModalCancel(() => onCancel(...args));
-        }}
+        onSubmit={onSubmit}
       >
         {({
           Form,

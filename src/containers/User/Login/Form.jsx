@@ -7,6 +7,18 @@ import { useLogin } from "./hooks";
 const LoginForm = () => {
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
   const { onLogin, validationSchema } = useLogin();
+
+  async function onSubmit(values, { resetForm, setSubmitting, setFieldError }) {
+    try {
+      await onLogin(values);
+      setSubmitting(false);
+      resetForm();
+    } catch (e) {
+      setSubmitting(false);
+      setFieldError("global", e);
+    }
+  }
+
   return (
     <>
       <FormWrapper
@@ -16,19 +28,7 @@ const LoginForm = () => {
         }}
         loading={!validationSchema}
         validationSchema={validationSchema}
-        onSubmit={async (
-          values,
-          { resetForm, setSubmitting, setFieldError }
-        ) => {
-          try {
-            await onLogin(values);
-            setSubmitting(false);
-            resetForm();
-          } catch (e) {
-            setSubmitting(false);
-            setFieldError("global", e);
-          }
-        }}
+        onSubmit={onSubmit}
       >
         {({
           Form,

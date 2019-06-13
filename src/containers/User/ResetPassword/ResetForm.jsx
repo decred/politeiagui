@@ -25,21 +25,23 @@ const ResetForm = () => {
     throw invalidParamsError;
   }
 
+  async function onSubmit(values, { setSubmitting, setFieldError, resetForm }) {
+    try {
+      await onResetPassword(values);
+      setSubmitting(false);
+      setSuccess(true);
+      resetForm();
+    } catch (e) {
+      setFieldError("global", e);
+    }
+  }
+
   return (
     <FormWrapper
       initialValues={initialValues}
       validationSchema={validationSchema}
       loading={!validationSchema}
-      onSubmit={async (values, { setSubmitting, setFieldError, resetForm }) => {
-        try {
-          await onResetPassword(values);
-          setSubmitting(false);
-          setSuccess(true);
-          resetForm();
-        } catch (e) {
-          setFieldError("global", e);
-        }
-      }}
+      onSubmit={onSubmit}
     >
       {({
         Form,

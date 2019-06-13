@@ -20,10 +20,10 @@ const RequestVerificationEmailForm = () => {
 
   const success = !!email;
 
-  const onConfirm = (
+  async function onConfirm(
     values,
     { setSubmitting, resetForm, setFieldError }
-  ) => async () => {
+  ) {
     setModalOpen(false);
     try {
       await onResendVerificationEmail(values);
@@ -34,12 +34,18 @@ const RequestVerificationEmailForm = () => {
       setSubmitting(false);
       setFieldError("global", e);
     }
-  };
+  }
 
-  const onCancel = (_, { setSubmitting }) => () => {
+  function onCancel(_, { setSubmitting }) {
     setSubmitting(false);
     setModalOpen(false);
-  };
+  }
+
+  async function onSubmit(...args) {
+    setModalOpen(true);
+    setOnModalConfirm(() => onConfirm(...args));
+    setOnModalCancel(() => onCancel(...args));
+  }
 
   return (
     <>
@@ -55,11 +61,7 @@ const RequestVerificationEmailForm = () => {
           email: ""
         }}
         validationSchema={validationSchema}
-        onSubmit={async (...args) => {
-          setModalOpen(true);
-          setOnModalConfirm(() => onConfirm(...args));
-          setOnModalCancel(() => onCancel(...args));
-        }}
+        onSubmit={onSubmit}
       >
         {({
           Form,
