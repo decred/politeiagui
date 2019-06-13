@@ -10,7 +10,7 @@ const Title = ({ className, ...props }) => (
 );
 
 const Actions = ({ className, ...props }) => (
-  <div className={classNames(styles.actions, className)} {...props} />
+  <div className={classNames(props.children.length > 1 ? styles.actions : styles.singleAction, className)} {...props} />
 );
 
 const Footer = ({ className, ...props }) => (
@@ -33,12 +33,12 @@ const FormWrapper = ({ children, loading, ...props }) => {
   return loading ? (
     <Loader />
   ) : (
-    <Formik {...props}>
-      {props =>
-        children({ ...props, Actions, Footer, Title, Form, ErrorMessage, Link })
-      }
-    </Formik>
-  );
+      <Formik {...props}>
+        {props =>
+          children({ ...props, Actions, Footer, Title, Form, ErrorMessage, Link })
+        }
+      </Formik>
+    );
 };
 
 export default FormWrapper;

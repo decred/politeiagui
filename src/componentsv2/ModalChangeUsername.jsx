@@ -1,0 +1,84 @@
+import React from "react";
+import PropTypes from "prop-types";
+import { Modal, Button, TextInput } from "pi-ui";
+import FormWrapper from "src/componentsv2/FormWrapper";
+
+const ModalChangeUsername = ({ show, onClose, validationSchema, onChangeUsername }) => {
+  const onSubmitChangeUsername = async (
+    values,
+    { resetForm, setSubmitting, setFieldError }
+  ) => {
+    try {
+      await onChangeUsername(values);
+      setSubmitting(false);
+      resetForm();
+      onClose();
+    } catch (e) {
+      setSubmitting(false);
+      setFieldError("global", e);
+    }
+  };
+  return (
+    <Modal title="Change Username" show={show} onClose={onClose}>
+      <FormWrapper
+        initialValues={{
+          newUsername: "",
+          password: ""
+        }}
+        onSubmit={onSubmitChangeUsername}
+        loading={!validationSchema}
+        validationSchema={validationSchema}>
+        {({
+          Form,
+          Actions,
+          ErrorMessage,
+          values,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+          errors,
+          touched
+        }) => (
+            <Form onSubmit={handleSubmit}>
+              {errors && errors.global && (
+                <ErrorMessage>{errors.global.toString()}</ErrorMessage>
+              )}
+              <TextInput
+                label="New Username"
+                name="newUsername"
+                type="username"
+                value={values.newUsername}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.newUsername && errors.newUsername}
+              />
+              <TextInput
+                label="Password"
+                name="password"
+                type="password"
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.password && errors.password}
+              />
+              <Actions>
+                <Button loading={isSubmitting} kind="primary" type="submit">
+                  Change Username
+                </Button>
+              </Actions>
+            </Form>
+          )}
+      </FormWrapper>
+    </Modal>
+  );
+};
+
+ModalChangeUsername.propTypes = {
+  show: PropTypes.bool,
+  onClose: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  isSubmitting: PropTypes.bool
+};
+
+export default ModalChangeUsername;
