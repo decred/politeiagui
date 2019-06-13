@@ -2,7 +2,7 @@ import React from "react";
 import { Sidebar as UISidebar, Button, Card } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import LoggedInContent from "./LoggedInContent";
-import StaticMarkdow from "./StaticMarkdown";
+import StaticMarkdown from "./StaticMarkdown";
 import { useConfig } from "src/Config";
 
 const Sidebar = ({ history }) => {
@@ -19,7 +19,7 @@ const Sidebar = ({ history }) => {
         </Button>
       </LoggedInContent>
       <Card paddingSize="small">
-        <StaticMarkdow contentName={aboutContent} />
+        <StaticMarkdown contentName={aboutContent} />
       </Card>
     </UISidebar>
   );
