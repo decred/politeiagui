@@ -4,6 +4,7 @@ class MultiLineEditor extends React.Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleOnKeyDownCapture = this.handleOnKeyDownCapture.bind(this);
   }
 
   componentDidMount() {
@@ -14,16 +15,23 @@ class MultiLineEditor extends React.Component {
     this.resizeText();
   }
 
+  handleInputChange(event) {
+    this.props.onChange(event.target.value);
+  }
+
+  // Prevents default onKeyDown if shift + enter are pressed
+  handleOnKeyDownCapture(event) {
+    if (event.keyCode === 13 && event.shiftKey) {
+      event.stopPropagation();
+    }
+  }
+
   //Sets height and maxheight of textarea to scrollheight
   resizeText() {
     if (this.textAreaRef) {
       this.textAreaRef.style.height = this.textAreaRef.scrollHeight + "px";
       this.textAreaRef.style.maxHeight = this.textAreaRef.scrollHeight + "px";
     }
-  }
-
-  handleInputChange(event) {
-    this.props.onChange(event.target.value);
   }
 
   render() {
@@ -33,8 +41,9 @@ class MultiLineEditor extends React.Component {
         autoFocus
         className="multiline-cell-editor"
         value={value}
-        onKeyDown={onKeyDown}
         onChange={this.handleInputChange}
+        onKeyDownCapture={this.handleOnKeyDownCapture}
+        onKeyDown={onKeyDown}
         ref={textAreaRef => (this.textAreaRef = textAreaRef)}
       />
     );
