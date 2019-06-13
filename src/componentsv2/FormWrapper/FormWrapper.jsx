@@ -1,6 +1,5 @@
 import React from "react";
 import { H1, Message, Spinner, classNames } from "pi-ui";
-import { Link as RouterLink } from "react-router-dom";
 import { Formik } from "formik";
 import Link from "../Link";
 import styles from "./FormWrapper.module.css";
