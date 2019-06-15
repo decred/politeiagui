@@ -32,7 +32,8 @@ const invoiceValidationSchema = ({
     rate: Yup.number()
       .required("required")
       .min(5)
-      .max(500),
+      .max(500)
+      .typeError("rate must be a number"),
     address: Yup.string().required("required"),
     lineitems: Yup.array()
       .of(
