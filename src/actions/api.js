@@ -36,8 +36,12 @@ export const requestApiInfo = () => dispatch => {
     .apiInfo()
     .then(response => {
       dispatch(act.RECEIVE_INIT_SESSION(response));
+      // if there is an active session, try to fetch the user information
+      // otherwise we make sure there are no user data saved into localstorage
       if (response.activeusersession) {
         dispatch(onRequestMe());
+      } else {
+        clearStateLocalStorage();
       }
     })
     .catch(error => {

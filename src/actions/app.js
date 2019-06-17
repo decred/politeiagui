@@ -1,7 +1,5 @@
 import Promise from "promise";
 import { reset } from "redux-form";
-import get from "lodash/get";
-import isEqual from "lodash/isEqual";
 import {
   onSubmitProposal,
   onChangeUsername,
@@ -10,7 +8,9 @@ import {
   onSubmitEditedProposal,
   onSubmitInvoice,
   onSubmitEditedInvoice,
-  onFetchInvoiceComments
+  onFetchInvoiceComments,
+  handleLogout,
+  onRequestMe
 } from "./api";
 import {
   onFetchProposal as onFetchProposalApi,
@@ -23,8 +23,8 @@ import {
 } from "../lib/editors_content_backup";
 import * as sel from "../selectors";
 import act from "./methods";
-import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
-import { onLogout, onEditUser, cleanErrors } from "./api";
+import { TOP_LEVEL_COMMENT_PARENTID, apiInfo } from "../lib/api";
+import { onEditUser, cleanErrors } from "./api";
 import { loadStateLocalStorage, loggedInStateKey } from "../lib/local_storage";
 import {
   PROPOSAL_VOTING_ACTIVE,
@@ -35,6 +35,8 @@ import {
   PROPOSAL_REJECTED
 } from "../constants";
 import { fromUSDUnitsToUSDCents } from "../helpers";
+import { openModal } from "./modal";
+import * as modalTypes from "../components/Modal/modalTypes";
 
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
 
@@ -263,7 +265,7 @@ export const onSubmitCommentApp = (...args) => dispatch =>
     dispatch(onSetReplyParent())
   );
 
-export const onLocalStorageChange = event => (dispatch, getState) => {
+export const onLocalStorageChange = event => async (dispatch, getState) => {
   const state = getState();
 
   if (event.key !== loggedInStateKey) {
@@ -272,21 +274,39 @@ export const onLocalStorageChange = event => (dispatch, getState) => {
 
   const apiMeResponse = sel.apiMeResponse(state);
 
-  try {
-    const stateFromStorage = JSON.parse(event.newValue);
-    const apiMeFromStorage = get(stateFromStorage, ["api", "me"], undefined);
-    const apiMeResponseFromStorage = sel.apiMeResponse(stateFromStorage);
+  const localUserDataDeleted = !event.newValue;
 
-    if (
-      apiMeResponseFromStorage &&
-      !isEqual(apiMeResponseFromStorage, apiMeResponse)
-    ) {
-      dispatch(onLoadMe(apiMeFromStorage));
-    } else if (!stateFromStorage || (stateFromStorage && !apiMeFromStorage))
-      dispatch(act.RECEIVE_LOGOUT({}));
-  } catch (e) {
-    dispatch(onLogout());
+  // user local data was cleared but the user data in the app
+  // state is also empty so there is nothing to do here
+  if (localUserDataDeleted && !apiMeResponse) {
+    return;
   }
+
+  // request the api info to see if there is an active user
+  const apiInfoResponse = await apiInfo();
+  const userActive = apiInfoResponse.activeusersession;
+
+  // user is not active so we just trigger the logout action
+  // to clear the app state
+  if (!userActive) {
+    dispatch(handleLogout());
+    dispatch(
+      openModal(
+        modalTypes.LOGIN,
+        {
+          title: "Your session has expired. Please log in again.",
+          redirectAfterLogin: window.location.pathname
+        },
+        null
+      )
+    );
+    return;
+  }
+
+  // From this point we know the user is active and the local storage
+  // has changed. Because of it we can no longer trust the data saved in there.
+  // Hence, we update the user data by querying it from the api.
+  dispatch(onRequestMe());
 };
 
 export const selectDefaultPublicFilterValue = (dispatch, getState) => {

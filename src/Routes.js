@@ -35,6 +35,7 @@ import ProposalDetail from "./components/RecordDetail";
 import UserDetail from "./components/UserDetail";
 import AuthenticatedRoute from "./components/Router/AuthenticatedRoute";
 import AdminAuthenticatedRoute from "./components/Router/AdminAuthenticatedRoute";
+import NotAuthenticatedRoute from "./components/Router/NotAuthenticatedRoute";
 import PublicProposalsPage from "./components/PublicProposalsPage/PublicProposalsPage";
 import PrivacyPolicy from "./components/snew/PrivacyPolicy";
 
@@ -55,25 +56,33 @@ const RoutesForCMS = () => {
   return (
     <Switch>
       <Route path="/" component={HomeCMS} exact />
-      <Route path="/login" component={LoginSignupPage} />
-      <Route path="/register" component={LoginSignupPage} />
-      <Route path="/user/login" component={LoginSignupPage} />
-      <Route path="/user/logout" component={Logout} />
-      <Route path="/user/signup/next" component={SignupNext} />
-      <Route path="/user/signup" component={LoginSignupPage} />
-      <Route exact path="/password" component={ForgottenPassword} />
-      <Route
+      <NotAuthenticatedRoute path="/login" component={LoginSignupPage} />
+      <NotAuthenticatedRoute path="/register" component={LoginSignupPage} />
+      <NotAuthenticatedRoute path="/user/login" component={LoginSignupPage} />
+      <NotAuthenticatedRoute path="/user/logout" component={Logout} />
+      <NotAuthenticatedRoute path="/user/signup/next" component={SignupNext} />
+      <NotAuthenticatedRoute path="/user/signup" component={LoginSignupPage} />
+      <NotAuthenticatedRoute
+        exact
+        path="/password"
+        component={ForgottenPassword}
+      />
+      <NotAuthenticatedRoute
         exact
         path="/user/forgotten/password"
         component={ForgottenPassword}
       />
-      <Route
+      <NotAuthenticatedRoute
         exact
         path="/user/forgotten/password/next"
         component={ForgottenPasswordSuccess}
       />
-      <Route exact path="/user/password/reset" component={PasswordReset} />
-      <Route
+      <NotAuthenticatedRoute
+        exact
+        path="/user/password/reset"
+        component={PasswordReset}
+      />
+      <NotAuthenticatedRoute
         exact
         path="/user/password/reset/next"
         component={PasswordResetSuccess}
@@ -139,28 +148,32 @@ const RoutesForPoliteia = () => {
   return (
     <Switch>
       <Route path="/" component={PublicProposalsPage} exact />
-      <Route path="/login" component={LoginSignupPage} />
-      <Route path="/user/login" component={LoginSignupPage} />
-      <Route path="/user/logout" component={Logout} />
-      <Route path="/user/signup/next" component={SignupNext} />
-      <Route path="/user/signup" component={LoginSignupPage} />
-      <AuthenticatedRoute
-        path="/user/proposals/:filter?"
-        component={UserProposals}
+      <NotAuthenticatedRoute path="/login" component={LoginSignupPage} />
+      <NotAuthenticatedRoute path="/user/login" component={LoginSignupPage} />
+      <NotAuthenticatedRoute path="/user/logout" component={Logout} />
+      <NotAuthenticatedRoute path="/user/signup/next" component={SignupNext} />
+      <NotAuthenticatedRoute path="/user/signup" component={LoginSignupPage} />
+      <NotAuthenticatedRoute
+        exact
+        path="/password"
+        component={ForgottenPassword}
       />
-      <Route exact path="/password" component={ForgottenPassword} />
-      <Route
+      <NotAuthenticatedRoute
         exact
         path="/user/forgotten/password"
         component={ForgottenPassword}
       />
-      <Route
+      <NotAuthenticatedRoute
         exact
         path="/user/forgotten/password/next"
         component={ForgottenPasswordSuccess}
       />
-      <Route exact path="/user/password/reset" component={PasswordReset} />
-      <Route
+      <NotAuthenticatedRoute
+        exact
+        path="/user/password/reset"
+        component={PasswordReset}
+      />
+      <NotAuthenticatedRoute
         exact
         path="/user/password/reset/next"
         component={PasswordResetSuccess}
@@ -173,6 +186,10 @@ const RoutesForPoliteia = () => {
         component={ResendVerificationEmailSuccess}
       />
       <Route path="/privacy-policy/" component={PrivacyPolicy} />
+      <AuthenticatedRoute
+        path="/user/proposals/:filter?"
+        component={UserProposals}
+      />
       <AdminAuthenticatedRoute
         path="/admin"
         component={admin(ProposalListing)}
