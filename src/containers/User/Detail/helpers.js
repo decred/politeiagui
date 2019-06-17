@@ -32,3 +32,28 @@ export const hasUserPaid = newuserpaywalltx =>
  * @return {string} yes/no string saying if the user is locked
  */
 export const isUserLocked = islocked => (islocked ? "Yes" : "No");
+
+/**
+ * Verifies if the user is admin
+ *
+ * @param {bool} isAdmin
+ * @return {string} yes/no string saying if the user is Admin
+ */
+export const isUserAdmin = isAdmin => (isAdmin ? "Yes" : "No");
+
+/**
+ * Verifies if the user is deactivated
+ *
+ * @param {bool} isDeactivated
+ * @return {string} yes/no string saying if the user is deactivated
+ */
+export const isUserDeactivated = isDeactivated =>
+  isDeactivated ? "Yes" : "No";
+
+/**
+ * Given the unix time, verifies if it is expired
+ *
+ * @param {number} expiryTime
+ * @return {bool} true/false if timestamp is expired
+ */
+export const isExpired = expiryTime => new Date().getTime() > expiryTime * 1000;

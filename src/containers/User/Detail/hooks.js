@@ -15,7 +15,9 @@ const mapStateToProps = {
     get(["match", "params", "userId"]),
     arg(1)
   ),
-  user: sel.user
+  isAdmin: sel.isAdmin,
+  user: sel.user,
+  loggedInAsUserId: sel.userid
 };
 
 const mapDispatchToProps = {
@@ -39,6 +41,7 @@ const mapChangePasswordStateToProps = {
     sel.isApiRequestingInit,
     sel.isApiRequestingChangePassword
   ),
+  userUsername: sel.getUserUsername,
   changePasswordResponse: sel.apiChangePasswordResponse
 };
 
@@ -108,4 +111,21 @@ export function useChangeUsername(ownProps) {
   );
 
   return { ...fromRedux, validationSchema };
+}
+
+const mapManageUserStateToProps = {
+  user: sel.user
+};
+
+const mapManageUserDispatchToProps = {
+  onManageUser: act.onManageUserv2
+};
+
+export function useManageUser(ownProps) {
+  const { ...fromRedux } = useRedux(
+    ownProps,
+    mapManageUserStateToProps,
+    mapManageUserDispatchToProps
+  );
+  return { ...fromRedux, validateUUID };
 }

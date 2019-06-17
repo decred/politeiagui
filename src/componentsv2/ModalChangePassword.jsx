@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Modal, Button, TextInput } from "pi-ui";
 import FormWrapper from "src/componentsv2/FormWrapper";
+import { isEmpty } from "src/helpers";
 
 const ModalChangePassword = ({ show, onClose, validationSchema, onChangePassword }) => {
   const onSubmitChangePassword = async (
@@ -22,7 +23,7 @@ const ModalChangePassword = ({ show, onClose, validationSchema, onChangePassword
     <Modal title="Change Password" show={show} onClose={onClose}>
       <FormWrapper
         initialValues={{
-          password: "",
+          existingPassword: "",
           newPassword: "",
           newPasswordVerify: ""
         }}
@@ -40,7 +41,9 @@ const ModalChangePassword = ({ show, onClose, validationSchema, onChangePassword
           isSubmitting,
           errors,
           touched
-        }) => (
+        }) => {
+          const canSubmit = values.existingPassword && values.newPassword && values.newPasswordVerify && isEmpty(errors);
+          return (
             <Form onSubmit={handleSubmit}>
               {errors && errors.global && (
                 <ErrorMessage>{errors.global.toString()}</ErrorMessage>
@@ -73,12 +76,13 @@ const ModalChangePassword = ({ show, onClose, validationSchema, onChangePassword
                 error={touched.newPasswordVerify && errors.newPasswordVerify}
               />
               <Actions>
-                <Button loading={isSubmitting} kind="primary" type="submit">
+                <Button loading={isSubmitting} kind={canSubmit ? "primary" : "disabled"} type="submit">
                   Change Password
               </Button>
               </Actions>
             </Form>
-          )}
+          );
+        }}
       </FormWrapper>
     </Modal>
   );
@@ -87,8 +91,8 @@ const ModalChangePassword = ({ show, onClose, validationSchema, onChangePassword
 ModalChangePassword.propTypes = {
   show: PropTypes.bool,
   onClose: PropTypes.func,
-  handleSubmit: PropTypes.func,
-  isSubmitting: PropTypes.bool
+  onChangePassword: PropTypes.func,
+  validationSchema: PropTypes.object
 };
 
 export default ModalChangePassword;

@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Modal, Button, TextInput } from "pi-ui";
 import FormWrapper from "src/componentsv2/FormWrapper";
+import { isEmpty } from "src/helpers";
 
 const ModalChangeUsername = ({ show, onClose, validationSchema, onChangeUsername }) => {
   const onSubmitChangeUsername = async (
@@ -39,7 +40,9 @@ const ModalChangeUsername = ({ show, onClose, validationSchema, onChangeUsername
           isSubmitting,
           errors,
           touched
-        }) => (
+        }) => {
+          const canSubmit = values.newUsername && values.password && isEmpty(errors);
+          return (
             <Form onSubmit={handleSubmit}>
               {errors && errors.global && (
                 <ErrorMessage>{errors.global.toString()}</ErrorMessage>
@@ -63,12 +66,13 @@ const ModalChangeUsername = ({ show, onClose, validationSchema, onChangeUsername
                 error={touched.password && errors.password}
               />
               <Actions>
-                <Button loading={isSubmitting} kind="primary" type="submit">
+                <Button loading={isSubmitting} kind={canSubmit ? "primary" : "disabled"} type="submit">
                   Change Username
                 </Button>
               </Actions>
             </Form>
-          )}
+          );
+        }}
       </FormWrapper>
     </Modal>
   );

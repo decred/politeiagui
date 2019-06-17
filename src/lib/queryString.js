@@ -55,6 +55,7 @@ export function useQueryString(key, initialValue) {
 }
 
 export function useQueryStringWithIndexValue(key, initialIndex, values) {
+  values = values.map(v => v.toLowerCase());
   const [value, onSetValue] = useQueryString(key, values[initialIndex]);
   const [index, setIndex] = useState(initialIndex);
 

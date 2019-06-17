@@ -478,8 +478,10 @@ export const onEditUser = preferences =>
       });
   });
 
+// TODO: erase this after the refactor and make the onManageUserv2 official
 export const onManageUser = (userId, action) =>
   withCsrf((dispatch, getState, csrf) => {
+    console.log("amigo estou aq");
     return dispatch(
       confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {})
     ).then(({ confirm, reason }) => {
@@ -493,6 +495,18 @@ export const onManageUser = (userId, action) =>
           });
       }
     });
+  });
+
+export const onManageUserv2 = (userId, action, reason) =>
+  withCsrf((dispatch, getState, csrf) => {
+    console.log("amigo estou aq", userId, action, reason);
+    dispatch(act.REQUEST_MANAGE_USER({ userId, action, reason }));
+    return api
+      .manageUser(csrf, userId, action, reason)
+      .then(response => dispatch(act.RECEIVE_MANAGE_USER(response)))
+      .catch(error => {
+        dispatch(act.RECEIVE_MANAGE_USER(null, error));
+      });
   });
 
 export const onSubmitInvoice = (

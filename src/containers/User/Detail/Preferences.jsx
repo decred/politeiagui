@@ -1,16 +1,11 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-const Preferences = props => {
+const Preferences = () => {
   return (
     <div>
-      Preferences
+      Preferences (waiting design)
     </div>
   );
-};
-
-Preferences.propTypes = {
-
 };
 
 export default Preferences;

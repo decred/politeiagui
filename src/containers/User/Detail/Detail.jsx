@@ -10,10 +10,10 @@ import Proposals from "./Proposals.jsx";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
 import { useChangeUsername } from "./hooks";
 
-const getTabComponent = (params) => [
-  <General {...params} />,
-  <Preferences {...params} />,
-  <Proposals {...params} />
+const getTabComponent = ({ user, ...rest }) => [
+  <General {...user} {...rest} />,
+  <Preferences {...rest} />,
+  <Proposals {...rest} />
 ];
 
 const UserDetail = ({
@@ -28,7 +28,10 @@ const UserDetail = ({
   Tab,
   match
 }) => {
-  const { onFetchUser, validateUUID, user } = useUserDetail();
+  const { onFetchUser, validateUUID, user, isAdmin, loggedInAsUserId } = useUserDetail();
+
+  const isUserPageOwner = user && (loggedInAsUserId === user.id);
+  const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
 
   const tabLabels = ["General", "Preferences", "Proposals"];
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
@@ -37,7 +40,7 @@ const UserDetail = ({
   const [showUsernameModal, setShowUsernameModal] = useState(false);
   const openUsernameModal = () => setShowUsernameModal(true);
   const closeUsernameModal = () => setShowUsernameModal(false);
-  const { loggedInAsUsername, onChangeUsername, validationSchema } = useChangeUsername();
+  const { userUsername, onChangeUsername, validationSchema } = useChangeUsername();
 
   // Validate and set user id or throw an error in case it is invalid
   useEffect(function setUserID() {
@@ -55,8 +58,11 @@ const UserDetail = ({
       <TopBanner>
         <PageDetails>
           <div className={styles.titleWrapper}>
-            <Title>{loggedInAsUsername}</Title>
-            <Link href="#" onClick={openUsernameModal} className={styles.titleLink}>Change Username</Link>
+            <Title>{userUsername || user.username}</Title>
+            {
+              isUserPageOwner &&
+              <Link href="#" onClick={openUsernameModal} className={styles.titleLink}>Change Username</Link>
+            }
           </div>
           <Subtitle>{user.email}</Subtitle>
           <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
@@ -69,7 +75,7 @@ const UserDetail = ({
       </TopBanner>
       <Sidebar />
       <Main className="main">
-        {getTabComponent(user)[index]}
+        {getTabComponent({ user, isAdminOrTheUser, isUserPageOwner, isAdmin })[index]}
       </Main>
       <ModalChangeUsername validationSchema={validationSchema} onChangeUsername={onChangeUsername} show={showUsernameModal} onClose={closeUsernameModal} />
     </>
