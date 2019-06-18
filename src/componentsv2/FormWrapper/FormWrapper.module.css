@@ -32,28 +32,3 @@
     justify-content: center;
     align-items: center;
 }
-
-/* SMALL */
-@media screen and (max-width: 768px) {
-    
-    .title {
-        text-align: center;
-    }
-
-    .form{
-        align-items: center;
-    }
-
-    .actions, .footer {
-        flex-direction: column-reverse;
-        justify-content: center;
-        text-align: center;
-    }
-
-    .link {
-        margin: 10px 0 !important;
-    }
-
-}
-  
-  
