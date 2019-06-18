@@ -1079,7 +1079,12 @@ export const onFetchProposalVoteStatus = token => dispatch => {
     })
     .catch(error => {
       dispatch(act.RECEIVE_PROPOSAL_VOTE_STATUS(null, error));
-      throw error;
+      // Discard error when proposal is not public
+      if (error.errorCode === 28) {
+        return;
+      } else {
+        throw error;
+      }
     });
 };
 
