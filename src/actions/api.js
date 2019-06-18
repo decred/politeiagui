@@ -30,22 +30,26 @@ export const onSignupConfirm = (props, isCMS) => dispatch => {
   }
 };
 
-export const requestApiInfo = () => dispatch => {
+export const requestApiInfo = (fetchUser = true) => dispatch => {
   dispatch(act.REQUEST_INIT_SESSION());
   return api
     .apiInfo()
     .then(response => {
       dispatch(act.RECEIVE_INIT_SESSION(response));
+
       // if there is an active session, try to fetch the user information
       // otherwise we make sure there are no user data saved into localstorage
-      if (response.activeusersession) {
-        dispatch(onRequestMe());
-      } else {
+      if (!response.activeusersession) {
         clearStateLocalStorage();
+      } else if (fetchUser) {
+        dispatch(onRequestMe());
       }
+
+      return response;
     })
     .catch(error => {
       dispatch(act.RECEIVE_INIT_SESSION(null, error));
+      throw error;
     });
 };
 
@@ -71,11 +75,13 @@ export const onRequestMe = () => (dispatch, getState) => {
             )
           );
         }
+        return response;
       }
     })
     .catch(error => {
       dispatch(act.RECEIVE_ME(null, error));
       clearStateLocalStorage();
+      throw error;
     });
 };
 
@@ -220,6 +226,7 @@ export const onLogin = ({ email, password }) =>
           dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
         }
         dispatch(closeModal());
+        return response;
       })
       .then(() => dispatch(onRequestMe()))
       .catch(error => {

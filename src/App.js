@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, withRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import throttle from "lodash/throttle";
-import configureStore from "./configureStore";
+import configureStore from "./redux/configureStore";
 import { Subreddit } from "./components/snew";
 import HeaderAlert from "./components/HeaderAlert";
 import SessionExpiresIndicator from "./components/SessionExpiresIndicator";
@@ -18,6 +18,11 @@ import ModalStack from "./components/Modal/ModalStack";
 import { WELCOME_MODAL } from "./components/Modal/modalTypes";
 import { verifyUserPubkey } from "./helpers";
 import Config, { ConfigContext, useConfig } from "./Config";
+
+import "snew-classic-ui/static/css/reddit.css";
+import "font-awesome/css/font-awesome.min.css";
+import "./style/index.css";
+import "./style/theme/index.css";
 
 const store = configureStore();
 
@@ -63,6 +68,10 @@ class Loader extends Component {
       const { setOnboardAsViewed, openModal } = this.props;
       setOnboardAsViewed();
       openModal(WELCOME_MODAL);
+    }
+
+    if (!prevProps.apiInfoResponse && this.props.apiInfoResponse) {
+      this.props.onRequestMe();
     }
 
     if (criticalAPIError) {

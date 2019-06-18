@@ -3,7 +3,7 @@ import { Route, withRouter } from "react-router-dom";
 import requireLoginConnector from "../../connectors/requireLogin";
 import { loadStateLocalStorage } from "../../lib/local_storage";
 
-class AuthenticatedRoute extends Component {
+export class AuthenticatedRoute extends Component {
   constructor(props) {
     super(props);
     this.checkAuthentication(props);

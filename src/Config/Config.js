@@ -13,7 +13,9 @@ const defaultPreset = presets.POLITEIA;
 const loadConfig = () => {
   const {
     isStaging: defaultStagingValue,
-    title: defaultTitleValue
+    title: defaultTitleValue,
+    recordType: defaultRecordType,
+    enableAdminInvite: defaultEnableAdminInvite
   } = defaultPreset;
   const env = dotenvParse(process.env);
   const getConf = key => env[`REACT_APP_${key}`];
@@ -31,7 +33,10 @@ const loadConfig = () => {
 
   return {
     isStaging: getConf("IS_STAGING") || defaultStagingValue,
-    title: getConf("TITLE") || defaultTitleValue
+    title: getConf("TITLE") || defaultTitleValue,
+    recordType: getConf("RECORD_TYPE") || defaultRecordType,
+    enableAdminInvite:
+      getConf("ENABLE_ADMIN_INVITE") || defaultEnableAdminInvite
   };
 };
 

@@ -1,4 +1,4 @@
-import AuthenticatedRoute from "./AuthenticatedRoute";
+import { AuthenticatedRoute } from "./AuthenticatedRoute";
 import requireLoginConnector from "../../connectors/requireLogin";
 import { withRouter } from "react-router-dom";
 
