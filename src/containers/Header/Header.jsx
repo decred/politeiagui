@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Header as UIHeader } from "pi-ui";
+import { Header as UIHeader, Text } from "pi-ui";
 import styles from "./Header.module.css";
 import Logo from "src/assets/pi-logo-light.svg";
 import { useHeader } from "./hooks";
@@ -16,8 +16,8 @@ const Header = ({ noBorder }) => {
       </NavLink>
       {username ? (
         <div>
-          <span style={{ marginRight: "10px" }}>{username}</span>
-          <span onClick={onLogout}>Logout</span>
+          <Text className="margin-right-s">{username}</Text>
+          <Text onClick={onLogout}>Logout</Text>
         </div>
       ) : (
         <nav className={styles.navContainer}>
@@ -26,16 +26,16 @@ const Header = ({ noBorder }) => {
             activeClassName={styles.activeNavLink}
             to="/user/login"
           >
-            <span className={`${styles.navLinkText} ${styles.rightGreyBorder}`}>
+            <Text className={`${styles.navLinkText} ${styles.rightGreyBorder}`}>
               Log in
-            </span>
+            </Text>
           </NavLink>
           <NavLink
             className={styles.navLink}
             activeClassName={styles.activeNavLink}
             to="/user/signup"
           >
-            <span className={styles.navLinkText}>Sign up</span>
+            <Text className={styles.navLinkText}>Sign up</Text>
           </NavLink>
         </nav>
       )}

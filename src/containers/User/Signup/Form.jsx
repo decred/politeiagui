@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextInput, Button } from "pi-ui";
+import { TextInput, Button, Text } from "pi-ui";
 import { Link as RouterLink } from "react-router-dom";
 import ModalIdentityWarning from "src/componentsv2/ModalIdentityWarning";
 import FormWrapper from "src/componentsv2/FormWrapper";
@@ -143,12 +143,9 @@ const SignupForm = () => {
                 </Button>
               </Actions>
               <Footer className="justify-right">
-                <span>
-                  Already have an account?{" "}
-                  <Link className="margin-left-s" to="/user/login">
-                    Log in!
-                  </Link>
-                </span>
+                <Text>
+                  Already have an account? <Link to="/user/login">Log in!</Link>
+                </Text>
               </Footer>
             </Form>
           ) : (

@@ -16,7 +16,6 @@
     composes: navContainer;
     color: var(--color-gray-dark);
     border-bottom: 2px solid transparent;
-    font-size: 1.4rem;
 }
 
 .navLink:hover {

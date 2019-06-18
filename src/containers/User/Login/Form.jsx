@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextInput, Button, Link as UILink } from "pi-ui";
+import { TextInput, Button, Link as UILink, Text } from "pi-ui";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import ModalPrivacyPolicy from "src/componentsv2/ModalPrivacyPolicy";
 import { useLogin } from "./hooks";
@@ -79,16 +79,16 @@ const LoginForm = () => {
                 gray
                 onClick={() => setShowPrivacyPolicy(true)}
                 customComponent={props => (
-                  <span {...props} style={{ cursor: "pointer" }}>
+                  <Text style={{ cursor: "pointer" }} {...props}>
                     {" "}
                     Privacy Policy
-                  </span>
+                  </Text>
                 )}
               />
-              <div>
+              <Text>
                 Don't have an account?{" "}
                 <Link to="/user/signup">Create here!</Link>
-              </div>
+              </Text>
             </Footer>
           </Form>
         )}
