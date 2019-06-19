@@ -15,7 +15,7 @@ export function arrayToRegex(arr) {
 
 export function proposalNameValidator(name, supportedChars) {
   const re = arrayToRegex(supportedChars);
-  const matches = name.match(re);
+  const matches = name.match(re) || [];
   return matches.length === name.length;
 }
 
@@ -23,9 +23,7 @@ export const validateURL = text => {
   const validUrl = urlValidator(text);
   if (validUrl.error) {
     throw new SubmissionError({
-      _error: `The link "${
-        validUrl.url
-      }" is invalid. Make sure that it is a valid URL.`
+      _error: `The link "${validUrl.url}" is invalid. Make sure that it is a valid URL.`
     });
   }
 };
