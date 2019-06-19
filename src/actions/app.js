@@ -34,7 +34,7 @@ import {
   PROPOSAL_APPROVED,
   PROPOSAL_REJECTED
 } from "../constants";
-import { fromUSDUnitsToUSDCents } from "../helpers";
+import { fromUSDUnitsToUSDCents, uniqueID } from "../helpers";
 import { openModal } from "./modal";
 import * as modalTypes from "../components/Modal/modalTypes";
 
@@ -155,12 +155,13 @@ export const onEditInvoice = (
 };
 export const onSaveDraftProposal = ({ name, description, files, draftId }) => {
   resetNewProposalData();
+  const id = draftId || uniqueID("draft");
   return act.SAVE_DRAFT_PROPOSAL({
     name: name.trim(),
     description,
     files,
     timestamp: Date.now() / 1000,
-    draftId
+    id
   });
 };
 
@@ -186,6 +187,7 @@ export const onSaveDraftInvoice = ({
   draftId
 }) => {
   resetNewInvoiceData();
+  const id = draftId || uniqueID("draft");
   return act.SAVE_DRAFT_INVOICE({
     month,
     year,
@@ -196,7 +198,7 @@ export const onSaveDraftInvoice = ({
     address,
     lineitems,
     files,
-    draftId,
+    id,
     timestamp: Date.now() / 1000
   });
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactBody from "react-body";
 import MarkdownEditorField from "../../Form/Fields/MarkdownEditorField";
 import { FilesField, normalizer } from "../../Form/Fields/FilesField";
@@ -6,6 +6,7 @@ import ErrorField from "../../Form/Fields/ErrorField";
 import InputFieldWithError from "../../Form/Fields/InputFieldWithError";
 import Message from "../../Message";
 import MultipleItemsBodyMessage from "../../MultipleItemsBodyMessage";
+import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
 import { Field } from "redux-form";
 import MarkdownHelp from "../../MarkdownHelp";
 import { MANAGE_CREDITS_MODAL } from "../../Modal/modalTypes";
@@ -34,6 +35,7 @@ const ProposalSubmit = props => {
     loggedInAsEmail,
     editingMode
   } = props;
+  const [saveDraftLoading, setSaveDraftLoading] = useState(false);
   const submitEnabled =
     loggedInAsEmail &&
     !submitting &&
@@ -41,6 +43,7 @@ const ProposalSubmit = props => {
     !validationError &&
     userCanExecuteActions &&
     (proposalCredits > 0 || editingMode);
+
   return !policy || isLoading ? (
     <PageLoadingIcon />
   ) : (
@@ -135,15 +138,24 @@ const ProposalSubmit = props => {
                     >
                       {!editingMode ? "submit" : "update"}
                     </button>
-                    <button
+                    <ButtonWithLoadingIcon
                       className={"togglebutton secondary access-required"}
                       name="submit"
                       type="submit"
                       value="form"
-                      onClick={handleSubmit(onSaveProposalDraft)}
-                    >
-                      Save as Draft
-                    </button>
+                      text="Save as Draft"
+                      // Provides minor visual feedback for
+                      // the action of saving a draft
+                      onClick={e => {
+                        e.persist();
+                        setSaveDraftLoading(true);
+                        setTimeout(() => {
+                          setSaveDraftLoading(false);
+                          handleSubmit(onSaveProposalDraft)(e);
+                        }, 200);
+                      }}
+                      isLoading={saveDraftLoading}
+                    />
                     {proposalCredits === 0 && !editingMode && (
                       <div className="submit-button-error">
                         To submit a proposal, you must purchase a proposal

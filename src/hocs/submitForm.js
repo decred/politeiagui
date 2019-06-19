@@ -27,14 +27,16 @@ class SubmitFormContainer extends Component {
 
   onSaveProposalDraft = (...args) => {
     validate(...args);
-    this.props.onSaveProposalDraft(...args);
-    this.props.history.push("/user/proposals/drafts");
+    const { payload } = this.props.onSaveProposalDraft(...args);
+    if (this.props.location.search === "")
+      this.props.history.replace("/proposals/new?draftid=" + payload.id);
   };
 
   onSaveInvoiceDraft = (...args) => {
     validate(...args);
-    this.props.onSaveInvoiceDraft(...args);
-    this.props.history.push("/user/invoices/drafts");
+    const { payload } = this.props.onSaveInvoiceDraft(...args);
+    if (this.props.location.search === "")
+      this.props.history.replace("/invoices/new?draftid=" + payload.id);
   };
 }
 
@@ -51,6 +53,7 @@ export default compose(
     touchOnChange: true,
     validate: synchronousValidation,
     enableReinitialize: true,
+    destroyOnUnmount: false,
     warn
   }),
   wrap

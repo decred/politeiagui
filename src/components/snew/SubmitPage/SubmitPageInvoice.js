@@ -46,6 +46,7 @@ const InvoiceSubmit = props => {
   } = props;
   const [monthOptions, setMonthOptions] = useState(MONTH_OPTIONS);
   const [contractorRate, setContractorRate] = useState(0);
+  const [saveDraftLoading, setSaveDraftLoading] = useState(false);
 
   useEffect(() => {
     // limit the months options up to the current month if
@@ -240,15 +241,24 @@ const InvoiceSubmit = props => {
                       onClick={handleSubmit(onSave)}
                       isLoading={isLoading}
                     />
-                    <button
+                    <ButtonWithLoadingIcon
                       className={"togglebutton secondary access-required"}
                       name="submit"
                       type="submit"
                       value="form"
-                      onClick={handleSubmit(onSaveInvoiceDraft)}
-                    >
-                      Save as Draft
-                    </button>
+                      text="Save as draft"
+                      // Provides minor visual feedback for
+                      // the action of saving a draft
+                      onClick={e => {
+                        e.persist();
+                        setSaveDraftLoading(true);
+                        setTimeout(() => {
+                          setSaveDraftLoading(false);
+                          handleSubmit(onSaveInvoiceDraft)(e);
+                        }, 200);
+                      }}
+                      isLoading={saveDraftLoading}
+                    />
                     {editingMode ? (
                       <ButtonWithLoadingIcon
                         className={`togglebutton access-required${isLoading &&
