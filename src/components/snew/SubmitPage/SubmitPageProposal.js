@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactBody from "react-body";
 import MarkdownEditorField from "../../Form/Fields/MarkdownEditorField";
 import { FilesField, normalizer } from "../../Form/Fields/FilesField";
@@ -32,9 +32,9 @@ const ProposalSubmit = props => {
     openModal,
     proposalCredits,
     loggedInAsEmail,
-    editingMode
+    editingMode,
+    isDraftSaving
   } = props;
-  const [draftSavedFeedback, setDraftSavedFeedback] = useState(false);
   const submitEnabled =
     loggedInAsEmail &&
     !submitting &&
@@ -142,27 +142,16 @@ const ProposalSubmit = props => {
                       name="submit"
                       type="submit"
                       value="form"
-                      // Provides minor visual feedback for
-                      // the action of saving a draft
-                      onClick={e => {
-                        e.persist();
-                        setDraftSavedFeedback(true);
-                        setTimeout(() => {
-                          setDraftSavedFeedback(false);
-                          handleSubmit(onSaveProposalDraft)(e);
-                        }, 700);
-                      }}
+                      onClick={handleSubmit(onSaveProposalDraft)}
                     >
                       Save as Draft
                     </button>
-                    {draftSavedFeedback && (
+                    {isDraftSaving && (
                       <p
                         style={{
                           fontSize: "14px",
                           display: "flex",
-                          paddingTop: "1em",
-                          WebkitTransition: "all",
-                          msTransition: "all"
+                          paddingTop: "1em"
                         }}
                       >
                         ✔ saved

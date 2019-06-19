@@ -42,11 +42,11 @@ const InvoiceSubmit = props => {
     valid,
     pristine,
     onSaveInvoiceDraft,
-    draftInvoiceById
+    draftInvoiceById,
+    isDraftSaving
   } = props;
   const [monthOptions, setMonthOptions] = useState(MONTH_OPTIONS);
   const [contractorRate, setContractorRate] = useState(0);
-  const [draftSavedFeedback, setDraftSavedFeedback] = useState(false);
 
   useEffect(() => {
     // limit the months options up to the current month if
@@ -246,27 +246,16 @@ const InvoiceSubmit = props => {
                       name="submit"
                       type="submit"
                       value="form"
-                      // Provides minor visual feedback for
-                      // the action of saving a draft
-                      onClick={e => {
-                        e.persist();
-                        setDraftSavedFeedback(true);
-                        setTimeout(() => {
-                          setDraftSavedFeedback(false);
-                          handleSubmit(onSaveInvoiceDraft)(e);
-                        }, 700);
-                      }}
+                      onClick={handleSubmit(onSaveInvoiceDraft)}
                     >
                       Save as draft
                     </button>
-                    {draftSavedFeedback && (
+                    {isDraftSaving && (
                       <p
                         style={{
                           fontSize: "14px",
                           display: "flex",
-                          paddingTop: "1em",
-                          WebkitTransition: "all",
-                          msTransition: "all"
+                          paddingTop: "1em"
                         }}
                       >
                         ✔ saved

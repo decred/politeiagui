@@ -8,6 +8,15 @@ import submit from "../connectors/submit";
 import appConnector from "../connectors/app";
 
 class SubmitFormContainer extends Component {
+  constructor(props) {
+    super(props);
+    // Provides minor visual feedback when succesfully
+    // saving a draft.
+    this.state = {
+      isDraftSaving: false
+    };
+  }
+
   componentDidMount() {
     this.props.policy || this.props.onFetchData();
   }
@@ -19,7 +28,8 @@ class SubmitFormContainer extends Component {
         {...{
           ...this.props,
           onSaveProposalDraft: this.onSaveProposalDraft,
-          onSaveInvoiceDraft: this.onSaveInvoiceDraft
+          onSaveInvoiceDraft: this.onSaveInvoiceDraft,
+          isDraftSaving: this.state.isDraftSaving
         }}
       />
     );
@@ -28,15 +38,23 @@ class SubmitFormContainer extends Component {
   onSaveProposalDraft = (...args) => {
     validate(...args);
     const { payload } = this.props.onSaveProposalDraft(...args);
-    if (this.props.location.search === "")
-      this.props.history.replace("/proposals/new?draftid=" + payload.id);
+    this.setState({ isDraftSaving: true });
+    setTimeout(() => {
+      this.setState({ isDraftSaving: false });
+      if (this.props.location.search === "")
+        this.props.history.replace("/proposals/new?draftid=" + payload.id);
+    }, 700);
   };
 
   onSaveInvoiceDraft = (...args) => {
     validate(...args);
     const { payload } = this.props.onSaveInvoiceDraft(...args);
-    if (this.props.location.search === "")
-      this.props.history.replace("/invoices/new?draftid=" + payload.id);
+    this.setState({ isDraftSaving: true });
+    setTimeout(() => {
+      this.setState({ isDraftSaving: false });
+      if (this.props.location.search === "")
+        this.props.history.replace("/invoices/new?draftid=" + payload.id);
+    }, 700);
   };
 }
 
