@@ -102,8 +102,10 @@ pre {
 
 .multiline-cell-value {
 	word-break: break-word;
+	white-space: pre-line !important;
 }
 
 .multiline-cell-editor {
 	resize: vertical;
+	height: 25px;
 }
