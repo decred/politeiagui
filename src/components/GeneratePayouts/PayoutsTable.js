@@ -13,10 +13,12 @@ const PayoutRow = ({
   expensetotal,
   address,
   exchangerate,
-  dcrtotal
+  dcrtotal,
+  approvedtime
 }) => {
   return (
     <tr>
+      <td>{new Date(approvedtime * 1000).toString()}</td>
       <td>{year}</td>
       <td>{month}</td>
       <td>{contractorname}</td>
@@ -36,6 +38,7 @@ const PayoutsTable = ({ payouts }) => {
     <table className="payouts-table">
       <tbody>
         <tr>
+          <th>Approved Time</th>
           <th>Year</th>
           <th>Month</th>
           <th>Name</th>
