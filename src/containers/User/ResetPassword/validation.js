@@ -4,17 +4,17 @@ export const requestResetValidationSchema = () =>
   Yup.object().shape({
     email: Yup.string()
       .email("Invalid email")
-      .required("required")
+      .required("Required")
   });
 
 export const resetValidationSchema = ({ minpasswordlength }) =>
   Yup.object().shape({
     newpassword: Yup.string()
       .min(minpasswordlength)
-      .required("required"),
+      .required("Required"),
     verify_password: Yup.string()
       .oneOf([Yup.ref("newpassword")], "Passwords must match")
-      .required("required")
+      .required("Required")
   });
 
 export const urlParamsValidationSchema = () =>

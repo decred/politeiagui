@@ -46,6 +46,6 @@ export const signupValidationSchema = (
       .oneOf([Yup.ref("password")], "Passwords must match")
       .required("Required"),
     verificationtoken: withVerificationToken
-      ? Yup.string().required("required")
+      ? Yup.string().required("Required")
       : Yup.string()
   });

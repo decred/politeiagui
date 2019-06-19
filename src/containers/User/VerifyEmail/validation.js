@@ -4,7 +4,7 @@ export const requestResendEmailValidationSchema = () =>
   Yup.object().shape({
     email: Yup.string()
       .email("Invalid email")
-      .required("required")
+      .required("Required")
   });
 
 export const urlParamsValidationSchema = () =>
