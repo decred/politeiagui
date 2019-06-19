@@ -118,6 +118,7 @@ const InvoiceSubmit = props => {
                       component={SelectField}
                       options={monthOptions}
                       tabIndex={1}
+                      disabled={editingMode}
                       label="Month"
                     />
                     <Field
@@ -127,6 +128,7 @@ const InvoiceSubmit = props => {
                       type="text"
                       options={YEAR_OPTIONS}
                       label="Year"
+                      disabled={editingMode}
                       onChange={handleYearChange}
                     />
 

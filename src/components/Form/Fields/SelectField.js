@@ -5,11 +5,12 @@ const SelectField = ({
   label,
   tabIndex,
   options,
-  meta: { touched, error, warning }
+  meta: { touched, error, warning },
+  disabled
 }) => (
   <div className="input-with-error">
     <label>{label}</label>
-    <select {...input} tabIndex={tabIndex}>
+    <select {...input} tabIndex={tabIndex} disabled={disabled}>
       {options.map((op, idx) => (
         <option key={`option-${idx}`}>{op}</option>
       ))}
