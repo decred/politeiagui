@@ -6,7 +6,6 @@ import ErrorField from "../../Form/Fields/ErrorField";
 import InputFieldWithError from "../../Form/Fields/InputFieldWithError";
 import Message from "../../Message";
 import MultipleItemsBodyMessage from "../../MultipleItemsBodyMessage";
-import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
 import { Field } from "redux-form";
 import MarkdownHelp from "../../MarkdownHelp";
 import { MANAGE_CREDITS_MODAL } from "../../Modal/modalTypes";
@@ -35,7 +34,7 @@ const ProposalSubmit = props => {
     loggedInAsEmail,
     editingMode
   } = props;
-  const [saveDraftLoading, setSaveDraftLoading] = useState(false);
+  const [draftSavedFeedback, setDraftSavedFeedback] = useState(false);
   const submitEnabled =
     loggedInAsEmail &&
     !submitting &&
@@ -138,24 +137,37 @@ const ProposalSubmit = props => {
                     >
                       {!editingMode ? "submit" : "update"}
                     </button>
-                    <ButtonWithLoadingIcon
+                    <button
                       className={"togglebutton secondary access-required"}
                       name="submit"
                       type="submit"
                       value="form"
-                      text="Save as Draft"
                       // Provides minor visual feedback for
                       // the action of saving a draft
                       onClick={e => {
                         e.persist();
-                        setSaveDraftLoading(true);
+                        setDraftSavedFeedback(true);
                         setTimeout(() => {
-                          setSaveDraftLoading(false);
+                          setDraftSavedFeedback(false);
                           handleSubmit(onSaveProposalDraft)(e);
-                        }, 200);
+                        }, 700);
                       }}
-                      isLoading={saveDraftLoading}
-                    />
+                    >
+                      Save as Draft
+                    </button>
+                    {draftSavedFeedback && (
+                      <p
+                        style={{
+                          fontSize: "14px",
+                          display: "flex",
+                          paddingTop: "1em",
+                          WebkitTransition: "all",
+                          msTransition: "all"
+                        }}
+                      >
+                        ✔ saved
+                      </p>
+                    )}
                     {proposalCredits === 0 && !editingMode && (
                       <div className="submit-button-error">
                         To submit a proposal, you must purchase a proposal

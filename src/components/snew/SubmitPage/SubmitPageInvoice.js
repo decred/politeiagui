@@ -46,7 +46,7 @@ const InvoiceSubmit = props => {
   } = props;
   const [monthOptions, setMonthOptions] = useState(MONTH_OPTIONS);
   const [contractorRate, setContractorRate] = useState(0);
-  const [saveDraftLoading, setSaveDraftLoading] = useState(false);
+  const [draftSavedFeedback, setDraftSavedFeedback] = useState(false);
 
   useEffect(() => {
     // limit the months options up to the current month if
@@ -241,24 +241,37 @@ const InvoiceSubmit = props => {
                       onClick={handleSubmit(onSave)}
                       isLoading={isLoading}
                     />
-                    <ButtonWithLoadingIcon
+                    <button
                       className={"togglebutton secondary access-required"}
                       name="submit"
                       type="submit"
                       value="form"
-                      text="Save as draft"
                       // Provides minor visual feedback for
                       // the action of saving a draft
                       onClick={e => {
                         e.persist();
-                        setSaveDraftLoading(true);
+                        setDraftSavedFeedback(true);
                         setTimeout(() => {
-                          setSaveDraftLoading(false);
+                          setDraftSavedFeedback(false);
                           handleSubmit(onSaveInvoiceDraft)(e);
-                        }, 200);
+                        }, 700);
                       }}
-                      isLoading={saveDraftLoading}
-                    />
+                    >
+                      Save as draft
+                    </button>
+                    {draftSavedFeedback && (
+                      <p
+                        style={{
+                          fontSize: "14px",
+                          display: "flex",
+                          paddingTop: "1em",
+                          WebkitTransition: "all",
+                          msTransition: "all"
+                        }}
+                      >
+                        ✔ saved
+                      </p>
+                    )}
                     {editingMode ? (
                       <ButtonWithLoadingIcon
                         className={`togglebutton access-required${isLoading &&
