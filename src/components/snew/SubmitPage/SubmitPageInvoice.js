@@ -41,7 +41,8 @@ const InvoiceSubmit = props => {
     loggedInAsEmail,
     valid,
     pristine,
-    onSaveInvoiceDraft
+    onSaveInvoiceDraft,
+    draftInvoiceById
   } = props;
   const [monthOptions, setMonthOptions] = useState(MONTH_OPTIONS);
   const [contractorRate, setContractorRate] = useState(0);
@@ -57,11 +58,14 @@ const InvoiceSubmit = props => {
     }
   }, [year]);
 
+  // Form is considered 'pristine' if the user has not modified
+  // the invoice since saving the draft. To work around this,
+  // the (!pristine || draftInvoiceById) condition is used
   const submitEnabled =
     loggedInAsEmail &&
     !submitting &&
     valid &&
-    !pristine &&
+    (!pristine || draftInvoiceById) &&
     !exchangeRateError &&
     !loadingExchangeRate;
 
