@@ -257,7 +257,8 @@ body>.appWrapper>.content>#login {
 }
 
 .content-title {
-  margin: 8px 0px 8px 24px;
+    font-size: 2em !important;
+    margin: 8px 0px 8px 24px;
 }
 
 .user-proposals-page .content-title {

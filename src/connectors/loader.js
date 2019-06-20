@@ -15,12 +15,14 @@ export default connect(
     onboardViewed: sel.onboardViewed,
     identityImportSuccess: sel.identityImportSuccess,
     isCMS: sel.isCMS,
-    isModeFetched: sel.isModeFetched
+    isModeFetched: sel.isModeFetched,
+    apiInfo: sel.apiInitResponse
   }),
   dispatch =>
     bindActionCreators(
       {
         onInit: act.requestApiInfo,
+        onRequestMe: act.onRequestMe,
         keyMismatchAction: act.keyMismatch,
         openModal: act.openModal,
         confirmWithModal: act.confirmWithModal,

@@ -202,9 +202,9 @@ describe("test api actions (actions/api.js)", () => {
     localStorage.setItem("state", "any");
     expect(localStorage.getItem("state")).toBeTruthy();
     await store.dispatch(api.onRequestMe()).catch(e => {
-      expect(store.getActions()).toBeEqual([
-        { type: act.REQUEST_ME, error: false },
-        { type: act.RECEIVE_ME, error: e }
+      expect(store.getActions()).toEqual([
+        { type: act.REQUEST_ME, error: false, payload: undefined },
+        { type: act.RECEIVE_ME, error: true, payload: e }
       ]);
       expect(localStorage.getItem("state")).toBeFalsy();
     });

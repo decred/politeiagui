@@ -21,7 +21,7 @@ export const isApiRequestingUnvettedStatus = getIsApiRequesting(
   "unvettedStatus"
 );
 export const isApiRequestingMe = getIsApiRequesting("me");
-const isApiRequestingPolicy = getIsApiRequesting("policy");
+export const isApiRequestingPolicy = getIsApiRequesting("policy");
 export const isApiRequestingNewUser = getIsApiRequesting("newUser");
 export const isApiRequestingChangePassword = getIsApiRequesting(
   "changePassword"
@@ -79,9 +79,9 @@ const apiManageUserPayload = getApiPayload("manageUser");
 
 export const apiMeResponse = getApiResponse("me");
 export const apiUnvettedStatusResponse = getApiResponse("unvettedStatus");
-const apiInitResponse = getApiResponse("init");
+export const apiInitResponse = getApiResponse("init");
 const apiPolicyResponse = getApiResponse("policy");
-const apiNewUserResponse = getApiResponse("newUser");
+export const apiNewUserResponse = getApiResponse("newUser");
 export const apiUserResponse = getApiResponse("user");
 export const apiChangePasswordResponse = getApiResponse("changePassword");
 export const apiChangeUsernameResponse = getApiResponse("changeUsername");

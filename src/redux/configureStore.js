@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import thunkMiddleware from "redux-thunk";
 import { createLogger } from "redux-logger";
-import rootReducer from "./reducers";
+import rootReducer from "../reducers";
 
 const getComposer = () => {
   const isProductionEnv = process.env.NODE_ENV === "production";

@@ -1,12 +1,8 @@
 import React, { useMemo, createContext, useContext } from "react";
 import PropTypes from "prop-types";
+import { constants } from "./presets";
 
-export const defaultConfig = {
-  isStaging: false,
-  title: "Politeia"
-};
-
-export const ConfigContext = createContext(defaultConfig);
+export const ConfigContext = createContext();
 
 export const ConfigConsumer = ConfigContext.Consumer;
 
@@ -18,7 +14,10 @@ export const useConfig = () => useContext(ConfigContext);
  */
 export const ConfigProvider = ({ children, ...configOptions }) => (
   <ConfigContext.Provider
-    value={useMemo(() => configOptions, Object.values(configOptions))}
+    value={useMemo(
+      () => ({ ...configOptions, constants }),
+      Object.values(configOptions)
+    )}
   >
     {children}
   </ConfigContext.Provider>
@@ -26,7 +25,12 @@ export const ConfigProvider = ({ children, ...configOptions }) => (
 
 ConfigProvider.propTypes = {
   isStaging: PropTypes.bool,
-  title: PropTypes.string
+  title: PropTypes.string,
+  recordType: PropTypes.oneOf([
+    constants.RECORD_TYPE_INVOICE,
+    constants.RECORD_TYPE_PROPOSAL
+  ]),
+  enableAdminInvite: PropTypes.bool
 };
 
 export default ConfigProvider;
