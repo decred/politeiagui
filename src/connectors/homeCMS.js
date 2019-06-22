@@ -8,6 +8,7 @@ const homeCMSConnector = connect(
   sel.selectorMap({
     userid: sel.userid,
     loggedInAsEmail: sel.loggedInAsEmail,
+    isApiRequestingLogout: sel.isApiRequestingLogout,
     isAdmin: sel.isAdmin,
     error: or(sel.userInvoiceError, sel.adminInvoicesError),
     isLoading: or(
