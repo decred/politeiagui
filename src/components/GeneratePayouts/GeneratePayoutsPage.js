@@ -20,9 +20,11 @@ const GeneratePayoutsPage = ({
 
   const csvData = payouts.map(p => ({
     ...p,
+    approvedtime: new Date(p.approvedtime * 1000).toString(),
     combinedtotal: p.labortotal + p.expensetotal
   }));
   const csvFields = [
+    "approvedtime",
     "year",
     "month",
     "contractorname",

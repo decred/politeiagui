@@ -147,7 +147,9 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     1025: "Exchange rate was invalid or didn't match the expected result",
     1026: "An invalid line item type was entered.",
     1027: "An invalid value was entered into labor or expenses.",
-    1028: "The invoice has a duplicate payment address, please use a new address."
+    1028: "The invoice has a duplicate payment address, please use a new address.",
+    1029: "Invalid dates were requested for line item payouts.",
+    1030: "An attempted edit of invoice included an unauthorized month or year change."
   };
 
   const error = errorMessages[errorCode];
@@ -194,9 +196,7 @@ export const arrayBufferToWordArray = ab => {
 
 export const getUsernameFieldLabel = (policy, defaultText = "Username") => {
   if (policy) {
-    return `${defaultText} (${policy.minusernamelength} - ${
-      policy.maxusernamelength
-    } characters)`;
+    return `${defaultText} (${policy.minusernamelength} - ${policy.maxusernamelength} characters)`;
   }
   return defaultText;
 };
