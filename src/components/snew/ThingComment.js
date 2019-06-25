@@ -84,10 +84,9 @@ class ThingComment extends React.PureComponent {
       ...props
     } = this.props;
     const isCommentInvoiceUnavailable = props.isCMS
-      ? (invoice.status === INVOICE_STATUS_APPROVED ||
-          invoice.status === INVOICE_STATUS_PAID ||
-          invoice.status === INVOICE_STATUS_REJECTED) &&
-        props.isAdmin
+      ? invoice.status === INVOICE_STATUS_APPROVED ||
+        invoice.status === INVOICE_STATUS_PAID ||
+        invoice.status === INVOICE_STATUS_REJECTED
       : false;
     const isProposalAbandoned = proposalStatus === PROPOSAL_STATUS_ABANDONED;
     const isNewComment = lastVisit
