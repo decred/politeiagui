@@ -82,7 +82,9 @@ const InvoiceSubmit = props => {
   };
 
   const handleContractorRateChange = e =>
-    setContractorRate(e.target.valueAsNumber);
+    !isNaN(e.target.valueAsNumber)
+      ? setContractorRate(e.target.valueAsNumber)
+      : setContractorRate(0);
 
   return (
     <div className="content" role="main">
