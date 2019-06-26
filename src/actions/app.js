@@ -227,10 +227,10 @@ export const onSaveChangePassword = ({ existingPassword, newPassword }) => (
     sel.newProposalToken(getState())
   );
 
-export const onFetchProposalApp = token => dispatch =>
-  dispatch(onFetchProposalApi(token)).then(() =>
-    dispatch(onFetchProposalComments(token))
-  );
+export const onFetchProposalApp = token => dispatch => {
+  dispatch(onFetchProposalApi(token));
+  dispatch(onFetchProposalComments(token));
+};
 
 export const onFetchInvoiceApp = (token, version = null) => dispatch =>
   dispatch(onFetchInvoiceApi(token, version)).then(() =>
