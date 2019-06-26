@@ -3,7 +3,7 @@ import voteStatsConnector from "src/connectors/voteStats";
 import Stats from "./StatsDisplay";
 import "./styles.css";
 
-const VoteStats = ({ token, lastBlockHeight, getVoteStatus }) => {
+const VoteStats = ({ token, getVoteStatus }) => {
   const {
     optionsresult,
     status,
@@ -11,7 +11,8 @@ const VoteStats = ({ token, lastBlockHeight, getVoteStatus }) => {
     endheight,
     quorumpercentage,
     passpercentage,
-    numofeligiblevotes
+    numofeligiblevotes,
+    bestblock
   } = getVoteStatus(token) || {};
 
   return (
@@ -24,7 +25,7 @@ const VoteStats = ({ token, lastBlockHeight, getVoteStatus }) => {
         quorumPercentage={quorumpercentage}
         passPercentage={passpercentage}
         numOfEligibleVotes={numofeligiblevotes}
-        currentHeight={lastBlockHeight}
+        currentHeight={bestblock}
       />
     </div>
   );
