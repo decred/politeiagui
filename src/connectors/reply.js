@@ -58,7 +58,11 @@ class Wrapper extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.policy || this.props.onFetchData();
+    // Only request policy for the CommentForm component
+    if (this.props.Component.name === "CommentForm") {
+      this.props.policy || this.props.onFetchData();
+    }
+
     // this.props.initialize(getNewCommentData());
   }
 
