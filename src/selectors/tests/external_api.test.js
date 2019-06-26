@@ -36,18 +36,7 @@ describe("test external_api selector", () => {
     state = {
       external_api: {
         ...MOCK_STATE.external_api,
-        payWithFaucet: { isRequesting: false },
-        blockHeight: { isRequesting: true }
-      }
-    };
-
-    expect(sel.isApiRequestingPayWithFaucet(state)).toEqual(true);
-
-    state = {
-      external_api: {
-        ...MOCK_STATE.external_api,
-        payWithFaucet: { isRequesting: false },
-        blockHeight: { isRequesting: false }
+        payWithFaucet: { isRequesting: false }
       }
     };
 

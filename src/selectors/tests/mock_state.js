@@ -344,9 +344,6 @@ export const MOCK_STATE = {
         msg: "fake_error"
       }
     },
-    blockHeight: {
-      isRequesting: false
-    },
     payProposalWithFaucet: {
       response: {
         Txid: "fake_txid"
