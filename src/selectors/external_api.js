@@ -9,7 +9,6 @@ export const getExtApiError = key => get(["external_api", key, "error"]);
 
 export const isApiRequestingPayWithFaucet = or(
   getIsExtApiRequesting("payWithFaucet"),
-  getIsExtApiRequesting("blockHeight")
 );
 
 export const payWithFaucetError = getExtApiError("payWithFaucet");
@@ -18,9 +17,3 @@ export const payWithFaucetTxId = compose(
   get("txid"),
   getExtApiResponse("payWithFaucet")
 );
-
-export const lastBlockHeight = getExtApiResponse("blockHeight");
-export const isApiRequestingLastBlockHeight = getIsExtApiRequesting(
-  "blockHeight"
-);
-export const lasBlockHeightError = getExtApiError("blockHeight");

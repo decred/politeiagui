@@ -10,8 +10,7 @@ export default connect(
     proposals: sel.apiVettedProposals,
     isLoading: or(
       sel.apiTokenInventoryIsRequesting,
-      sel.isApiRequestingPropsVoteStatus,
-      sel.isApiRequestingLastBlockHeight
+      sel.isApiRequestingPropsVoteStatus
     ),
     error: or(
       sel.vettedProposalsError,
@@ -26,8 +25,7 @@ export default connect(
     bindActionCreators(
       {
         onFetchVettedByTokens: act.onFetchVettedByTokens,
-        onFetchTokenInventory: act.onFetchTokenInventory,
-        onFetchLastBlockHeight: act.getLastBlockHeight
+        onFetchTokenInventory: act.onFetchTokenInventory
       },
       dispatch
     )

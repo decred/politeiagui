@@ -54,7 +54,6 @@ const PublicProposals = ({
   proposalsTokens,
   onFetchVettedByTokens,
   onFetchTokenInventory,
-  onFetchLastBlockHeight,
   isLoading,
   error,
   pageSize
@@ -101,8 +100,12 @@ const PublicProposals = ({
   useEffect(() => {
     // Fetch initial data
     onFetchTokenInventory();
+<<<<<<< HEAD
     onFetchLastBlockHeight();
   }, [onFetchLastBlockHeight, onFetchTokenInventory]);
+=======
+  }, []);
+>>>>>>> 6055451... Remove references to dcrdata bestblock request
 
   if (error) throw error;
 

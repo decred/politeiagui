@@ -152,7 +152,6 @@ export const CustomContent = ({
                 ...props,
                 highlightcomment: commentid,
                 key: "content",
-                lastBlockHeight: props.lastBlockHeight,
                 listings: listings || [
                   {
                     allChildren: proposals
@@ -202,7 +201,6 @@ export const CustomContent = ({
                 ...props,
                 highlightcomment: commentid,
                 key: "content",
-                lastBlockHeight: props.lastBlockHeight,
                 listings: listings || [
                   {
                     allChildren: invoices
@@ -250,13 +248,11 @@ class Loader extends Component {
   componentDidUpdate() {
     const { csrf } = this.props;
     const { isFetched } = this.state;
-    const { getLastBlockHeight } = this.props;
     if (isFetched) return;
     else if (csrf) {
       this.setState({ isFetched: true });
       this.props.onFetchData && this.props.onFetchData();
       this.props.onFetchStatus && this.props.onFetchStatus();
-      !this.props.isCMS && getLastBlockHeight && getLastBlockHeight();
     }
   }
 

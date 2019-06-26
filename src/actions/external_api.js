@@ -1,7 +1,6 @@
 import * as external_api from "../lib/external_api";
 import { verifyUserPaymentWithPoliteia } from "./api";
 import act from "./methods";
-import * as sel from "../selectors";
 import {
   PAYWALL_STATUS_LACKING_CONFIRMATIONS,
   PAYWALL_STATUS_PAID,
@@ -143,19 +142,6 @@ export const payWithFaucet = (address, amount) => dispatch => {
     .catch(error => {
       dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(null, error));
       throw error;
-    });
-};
-
-export const getLastBlockHeight = () => (dispatch, getState) => {
-  const isTestnet = sel.isTestNet(getState());
-  dispatch(act.REQUEST_GET_LAST_BLOCK_HEIGHT());
-  external_api
-    .getHeightByDcrdata(isTestnet)
-    .then(response => {
-      return dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(response));
-    })
-    .catch(() => {
-      return dispatch(act.RECEIVE_GET_LAST_BLOCK_HEIGHT(null));
     });
 };
 

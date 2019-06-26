@@ -14,7 +14,6 @@ const thingLinkConnector = connect(
     ),
     isProposalStatusApproved: sel.isProposalStatusApproved,
     userId: sel.userid,
-    lastBlockHeight: sel.lastBlockHeight,
     isTestnet: sel.isTestNet,
     getVoteStatus: sel.getPropVoteStatus,
     comments: sel.proposalComments,
@@ -26,7 +25,6 @@ const thingLinkConnector = connect(
   {
     confirmWithModal: act.confirmWithModal,
     onChangeProposalStatusApproved: act.onChangeProposalStatusApproved,
-    getLastBlockHeight: act.getLastBlockHeight,
     onChangeDateFilter: act.onChangeDateFilter,
     onResetDateFilter: act.onResetDateFilter
   }

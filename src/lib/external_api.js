@@ -5,9 +5,6 @@ const getSubdomainForDcrdata = isTestnet => (isTestnet ? TESTNET : EXPLORER);
 const dcrdataURL = isTestnet =>
   `https://${getSubdomainForDcrdata(isTestnet)}.dcrdata.org/api`;
 
-export const dcrddataBlockHeightURL = isTestnet =>
-  `${dcrdataURL(isTestnet)}/block/best/height`;
-
 const dcrdataAddressURL = (isTestnet, address) =>
   `${dcrdataURL(isTestnet)}/address/${address}/raw`;
 const FAUCET_URL = "https://faucet.decred.org/requestfaucet";
@@ -47,9 +44,6 @@ const getRawTransactions = url => {
 };
 
 const addressFromTestnet = addr => addr[0] === "T";
-
-export const getHeightByDcrdata = isTestnet =>
-  getRawTransactions(dcrddataBlockHeightURL(isTestnet));
 
 export const getPaymentsByAddressDcrdata = address => {
   const isTestnet = addressFromTestnet(address);
