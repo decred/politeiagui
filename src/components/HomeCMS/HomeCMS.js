@@ -99,7 +99,7 @@ const HomeCMS = ({
     }
   };
   useEffect(fetchUserInvoices, [userid]);
-  return (
+  return userid && loggedInAsEmail ? (
     <div className="content">
       <h1 className="content-title">Contractor Management System</h1>
       {isLoading ? (
@@ -115,7 +115,7 @@ const HomeCMS = ({
         </div>
       )}
     </div>
-  );
+  ) : null;
 };
 
 HomeCMS.defaultProps = {
