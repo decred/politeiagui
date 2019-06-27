@@ -2,7 +2,10 @@ import Promise from "promise";
 import * as modalTypes from "../components/Modal/modalTypes";
 import { PROPOSAL_STATUS_PUBLIC } from "../constants";
 import * as api from "../lib/api";
-import { resetNewInvoiceData, resetNewProposalData } from "../lib/editors_content_backup";
+import {
+  resetNewInvoiceData,
+  resetNewProposalData
+} from "../lib/editors_content_backup";
 import { clearStateLocalStorage } from "../lib/local_storage";
 import * as pki from "../lib/pki";
 import * as sel from "../selectors";
@@ -481,7 +484,6 @@ export const onEditUser = preferences =>
 // TODO: erase this after the refactor and make the onManageUserv2 official
 export const onManageUser = (userId, action) =>
   withCsrf((dispatch, getState, csrf) => {
-    console.log("amigo estou aq");
     return dispatch(
       confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {})
     ).then(({ confirm, reason }) => {
@@ -499,7 +501,6 @@ export const onManageUser = (userId, action) =>
 
 export const onManageUserv2 = (userId, action, reason) =>
   withCsrf((dispatch, getState, csrf) => {
-    console.log("amigo estou aq", userId, action, reason);
     dispatch(act.REQUEST_MANAGE_USER({ userId, action, reason }));
     return api
       .manageUser(csrf, userId, action, reason)
