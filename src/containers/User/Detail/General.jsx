@@ -1,23 +1,13 @@
-import React, { useState } from "react";
+import { Link, Spinner } from "pi-ui";
 import PropTypes from "prop-types";
-import { Link } from "pi-ui";
-import InfoSection from "./InfoSection.jsx";
-import { getUserActivePublicKey, isUserEmailVerified, hasUserPaid, isUserLocked, isExpired, isUserDeactivated, isUserAdmin } from "./helpers";
-import { convertAtomsToDcr, formatUnixTimestamp } from "src/utilsv2";
+import React, { useState } from "react";
 import ModalChangePassword from "src/componentsv2/ModalChangePassword";
 import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
-import { useChangePassword, useManageUser } from "./hooks";
-import {
-  MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION
-  // MANAGE_USER_CLEAR_USER_PAYWALL,
-  // MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
-  // MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
-  // MANAGE_USER_UNLOCK,
-  // MANAGE_USER_DEACTIVATE,
-  // MANAGE_USER_REACTIVATE,
-  // PUB_KEY_STATUS_LOADED,
-  // PUB_KEY_STATUS_LOADING
-} from "src/constants";
+import { MANAGE_USER_CLEAR_USER_PAYWALL, MANAGE_USER_DEACTIVATE, MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION, MANAGE_USER_REACTIVATE } from "src/constants";
+import { convertAtomsToDcr, formatUnixTimestamp } from "src/utilsv2";
+import { getUserActivePublicKey, hasUserPaid, isExpired, isUserAdmin, isUserDeactivated, isUserEmailVerified, isUserLocked } from "./helpers";
+import { useActivationModal, useChangePassword, useManageUser, useMarkAsExpiredConfirmModal, useMarkAsPaidModal } from "./hooks";
+import InfoSection from "./InfoSection.jsx";
 
 const General = ({
   proposalcredits,
@@ -39,14 +29,18 @@ const General = ({
 }) => {
 
   // Manage User
-  const { onManageUser } = useManageUser();
+  const { onManageUser, isApiRequestingDeactivateUser, isApiRequestingReactivateUser, isApiRequestingMarkAsPaid } = useManageUser();
+
+  const isActivationLoading = isApiRequestingDeactivateUser || isApiRequestingReactivateUser;
+
   const markResetPasswordTokenAsExpired = (reason) => onManageUser(id, MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION, reason);
+  const deactivateUser = (reason) => onManageUser(id, MANAGE_USER_DEACTIVATE, reason);
+  const reactivateUser = (reason) => onManageUser(id, MANAGE_USER_REACTIVATE, reason);
+  const markAsPaid = (reason) => onManageUser(id, MANAGE_USER_CLEAR_USER_PAYWALL, reason);
 
-
-  // Confirm Action Modal
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const openConfirmModal = () => setShowConfirmModal(true);
-  const closeConfirmModal = () => setShowConfirmModal(false);
+  const { showMarkAsExpiredConfirmModal, openMarkAsExpiredConfirmModal, closeMarkAsExpiredConfirmModal } = useMarkAsExpiredConfirmModal();
+  const { showActivationConfirmModal, openActivationModal, closeActivationModal } = useActivationModal();
+  const { showMarkAsPaidConfirmModal, openMarkAsPaidModal, closeMarkAsPaidModal } = useMarkAsPaidModal();
 
   // Change Password Modal
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -75,8 +69,11 @@ const General = ({
           }
           <InfoSection label="Has paid:" info={
             <>
-              {hasUserPaid(newuserpaywalltx)}
-              {isAdmin && hasUserPaid(newuserpaywalltx) === "No" && <Link style={{ marginLeft: "5px" }} href="#">Mark as paid</Link>}
+              {hasUserPaid(newuserpaywalltx, newuserpaywallamount)}
+              {isAdmin && hasUserPaid(newuserpaywalltx, newuserpaywallamount) === "No" ? isApiRequestingMarkAsPaid ?
+                <span style={{ marginLeft: "5px" }}>
+                  <Spinner invert />
+                </span> : <Link style={{ marginLeft: "5px" }} href="#" onClick={openMarkAsPaidModal}>Mark as paid</Link> : null}
             </>
           } />
           <InfoSection label="Address:" info={newuserpaywalladdress} />
@@ -87,8 +84,16 @@ const General = ({
           <InfoSection label="Deactivated:" info={
             <>
               {isUserDeactivated(isdeactivated)}
-              {isAdmin && isUserDeactivated(isdeactivated) === "No" && <Link style={{ marginLeft: "5px" }} href="#">Deactivate</Link>}
-            </>} />
+              {isAdmin && (isActivationLoading ?
+                <span style={{ marginLeft: "5px" }}>
+                  <Spinner invert />
+                </span>
+                :
+                isUserDeactivated(isdeactivated) === "No" ?
+                  <Link style={{ marginLeft: "5px" }} href="#" onClick={openActivationModal}>Deactivate</Link> :
+                  <Link style={{ marginLeft: "5px" }} href="#" onClick={openActivationModal}>Reactivate</Link>)}
+            </>
+          } />
           {resetpasswordverificationtoken &&
             <>
               <InfoSection label="Reset password token:" info={resetpasswordverificationtoken} />
@@ -97,7 +102,7 @@ const General = ({
                   :
                   <>
                     {formatUnixTimestamp(resetpasswordverificationexpiry)}
-                    <Link style={{ marginLeft: "5px" }} href="#" onClick={openConfirmModal}>Mark as expired</Link>
+                    <Link style={{ marginLeft: "5px" }} href="#" onClick={openMarkAsExpiredConfirmModal}>Mark as expired</Link>
                   </>
               } />
             </>
@@ -105,7 +110,9 @@ const General = ({
         </>
       )}
       <ModalChangePassword onChangePassword={onChangePassword} validationSchema={validationSchema} show={showPasswordModal} onClose={closePasswordModal} />
-      <ModalConfirmWithReason onSubmit={markResetPasswordTokenAsExpired} validationSchema={validationSchema} show={showConfirmModal} onClose={closeConfirmModal} />
+      <ModalConfirmWithReason onSubmit={markResetPasswordTokenAsExpired} validationSchema={validationSchema} show={showMarkAsExpiredConfirmModal} onClose={closeMarkAsExpiredConfirmModal} />
+      <ModalConfirmWithReason onSubmit={isdeactivated ? reactivateUser : deactivateUser} validationSchema={validationSchema} show={showActivationConfirmModal} onClose={closeActivationModal} />
+      <ModalConfirmWithReason onSubmit={markAsPaid} validationSchema={validationSchema} show={showMarkAsPaidConfirmModal} onClose={closeMarkAsPaidModal} />
     </>
   );
 };

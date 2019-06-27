@@ -1,10 +1,19 @@
-import { useEffect, useState } from "react";
-import get from "lodash/fp/get";
 import compose from "lodash/fp/compose";
-import { arg, or } from "src/lib/fp";
-import * as sel from "src/selectors";
+import get from "lodash/fp/get";
+import { useEffect, useState } from "react";
 import * as act from "src/actions";
+import {
+  MANAGE_USER_CLEAR_USER_PAYWALL,
+  MANAGE_USER_DEACTIVATE,
+  MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
+  MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
+  MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
+  MANAGE_USER_REACTIVATE,
+  MANAGE_USER_UNLOCK
+} from "src/constants";
+import { arg, or } from "src/lib/fp";
 import { useRedux } from "src/redux";
+import * as sel from "src/selectors";
 import {
   changePasswordValidationSchema,
   changeUsernameValidationSchema
@@ -114,7 +123,31 @@ export function useChangeUsername(ownProps) {
 }
 
 const mapManageUserStateToProps = {
-  user: sel.user
+  user: sel.user,
+  isApiRequestingUpdateUserKey: sel.isApiRequestingUpdateUserKey,
+  isApiRequestingMarkAsPaid: state =>
+    sel.isApiRequestingManageUser(state) &&
+    sel.manageUserAction(state) === MANAGE_USER_CLEAR_USER_PAYWALL,
+  isApiRequestingMarkNewUserAsExpired: state =>
+    sel.isApiRequestingManageUser(state) &&
+    sel.manageUserAction(state) === MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
+  isApiRequestingMarkUpdateKeyAsExpired: state =>
+    sel.isApiRequestingManageUser(state) &&
+    sel.manageUserAction(state) === MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
+  isApiRequestingMarkResetPasswordAsExpired: state =>
+    sel.isApiRequestingManageUser(state) &&
+    sel.manageUserAction(state) ===
+      MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
+  isApiRequestingUnlockUser: state =>
+    sel.isApiRequestingManageUser(state) &&
+    sel.manageUserAction(state) === MANAGE_USER_UNLOCK,
+  isApiRequestingDeactivateUser: state =>
+    sel.isApiRequestingManageUser(state) &&
+    sel.manageUserAction(state) === MANAGE_USER_DEACTIVATE,
+  isApiRequestingReactivateUser: state =>
+    sel.isApiRequestingManageUser(state) &&
+    sel.manageUserAction(state) === MANAGE_USER_REACTIVATE,
+  manageUserResponse: sel.manageUserResponse
 };
 
 const mapManageUserDispatchToProps = {
@@ -128,4 +161,56 @@ export function useManageUser(ownProps) {
     mapManageUserDispatchToProps
   );
   return { ...fromRedux, validateUUID };
+}
+
+export function useMarkAsExpiredConfirmModal() {
+  const [
+    showMarkAsExpiredConfirmModal,
+    setShowMarkAsExpiredConfirmModal
+  ] = useState(false);
+  const openMarkAsExpiredConfirmModal = () =>
+    setShowMarkAsExpiredConfirmModal(true);
+  const closeMarkAsExpiredConfirmModal = () =>
+    setShowMarkAsExpiredConfirmModal(false);
+  return {
+    showMarkAsExpiredConfirmModal,
+    openMarkAsExpiredConfirmModal,
+    closeMarkAsExpiredConfirmModal
+  };
+}
+
+export function useActivationModal() {
+  const [showActivationConfirmModal, setShowActivationConfirmModal] = useState(
+    false
+  );
+  const openActivationModal = e => {
+    e.preventDefault();
+    setShowActivationConfirmModal(true);
+  };
+  const closeActivationModal = () => {
+    setShowActivationConfirmModal(false);
+  };
+  return {
+    showActivationConfirmModal,
+    openActivationModal,
+    closeActivationModal
+  };
+}
+
+export function useMarkAsPaidModal() {
+  const [showMarkAsPaidConfirmModal, setShowMarkAsPaidConfirmModal] = useState(
+    false
+  );
+  const openMarkAsPaidModal = e => {
+    e.preventDefault();
+    setShowMarkAsPaidConfirmModal(true);
+  };
+  const closeMarkAsPaidModal = () => {
+    setShowMarkAsPaidConfirmModal(false);
+  };
+  return {
+    showMarkAsPaidConfirmModal,
+    openMarkAsPaidModal,
+    closeMarkAsPaidModal
+  };
 }
