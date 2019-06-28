@@ -87,11 +87,11 @@ const General = ({
           <InfoSection label="Registration fee:" info={
             <>
               {hasUserPaid(newuserpaywalltx, newuserpaywallamount) ? "Paid" : "Not paid"}
-              {(!hasUserPaid(newuserpaywalltx, newuserpaywallamount)) && isAdmin ?
+              {!hasUserPaid(newuserpaywalltx, newuserpaywallamount) && isAdmin ?
                 <Button className="margin-left-s" loading={isApiRequestingMarkAsPaid} size="sm" onClick={openMarkAsPaidModal}>
                   Mark as paid
                 </Button>
-                :
+                : !hasUserPaid(newuserpaywalltx, newuserpaywallamount) &&
                 <Button className="margin-left-s" size="sm">
                   Pay registration fee
                 </Button>
