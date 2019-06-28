@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styles from "./RecordWrapper.module.css";
 import DateTooltip from "../DateTooltip";
 import DownloadJSON from "../DownloadJSON";
-import { Card, H3, Icon, Link as UILink, classNames, Text } from "pi-ui";
+import { Card, H3, Icon, Link as UILink, Text } from "pi-ui";
 import { Row } from "../layout";
 import Link from "../Link";
 import githubIcon from "src/assets/github.svg";

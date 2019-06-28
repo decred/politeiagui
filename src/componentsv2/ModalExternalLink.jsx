@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Modal, Button, TextInput, P, Text, Message } from "pi-ui";
+import { Modal, Button, P, Text, Message } from "pi-ui";
 import { Row } from "./layout";
 
 const ModalExternalLink = ({ show, onClose, link }) => {
@@ -54,6 +54,12 @@ const ModalExternalLink = ({ show, onClose, link }) => {
       </Row>
     </Modal>
   );
+};
+
+ModalExternalLink.propTypes = {
+  show: PropTypes.bool,
+  onClose: PropTypes.func,
+  link: PropTypes.string
 };
 
 export default ModalExternalLink;

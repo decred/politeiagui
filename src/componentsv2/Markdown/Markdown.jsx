@@ -7,14 +7,14 @@ import "./styles.css";
 const MarkdownRenderer = ({
   body,
   className,
-  style,
   filterXss = true,
-  scapeHtml = true
+  escapeHtml = true,
+  ...props
 }) => (
-  <div className={className} style={style}>
+  <div className={className} {...props}>
     <ReactMarkdown
       className="markdown-body"
-      escapeHtml={scapeHtml}
+      escapeHtml={escapeHtml}
       astPlugins={[htmlParserRules]}
       renderers={customRenderers(filterXss)}
       source={body}
@@ -26,10 +26,9 @@ MarkdownRenderer.prototype = {
   body: PropTypes.string,
   className: PropTypes.string,
   confirmWithModal: PropTypes.bool,
-  style: PropTypes.object,
   filterXss: PropTypes.bool,
   displayExternalLikWarning: PropTypes.bool,
-  scapeHtml: PropTypes.bool
+  escapeHtml: PropTypes.bool
 };
 
 export default MarkdownRenderer;

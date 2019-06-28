@@ -1,49 +1,14 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Button, classNames } from "pi-ui";
-import commands from "./commands";
+import { classNames } from "pi-ui";
+import { getCommandsList, getCommandIcon } from "./commands";
 import Markdown from "../Markdown";
 import styles from "./MarkdownEditor.module.css";
 import "./styles.css";
-import ReactMde, { commands as mdeCommands } from "react-mde-newest";
-
-const attachCommand = {
-  name: "attach",
-  keyCommand: "attach",
-  execute: (state, api) => null
-};
-
-const getCommandsList = () => {
-  const list = [
-    {
-      commands: [
-        mdeCommands.boldCommand,
-        mdeCommands.italicCommand,
-        mdeCommands.linkCommand,
-        mdeCommands.quoteCommand,
-        mdeCommands.codeCommand,
-        mdeCommands.unorderedListCommand,
-        mdeCommands.orderedListCommand
-      ]
-    },
-    {
-      commands: [attachCommand]
-    }
-  ];
-
-  return list;
-};
+import ReactMde from "react-mde-newest";
 
 const TAB_WRITE = "write";
 const TAB_PREVIEW = "preview";
-
-const getCommandIcon = filesInput => commandName => {
-  if (commandName === "attach") {
-    return <>{filesInput}</>;
-  }
-  const command = commands.find(c => c.command === commandName);
-  return <img src={command.iconSrc} />;
-};
 
 const MarkdownEditor = ({
   onChange,

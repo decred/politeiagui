@@ -1,3 +1,5 @@
+import React from "react";
+import { commands as mdeCommands } from "react-mde-newest";
 import boldSVG from "./assets/bold.svg";
 import italicSVG from "./assets/italic.svg";
 import linkSVG from "./assets/link.svg";
@@ -16,7 +18,7 @@ const commandTypes = {
   code: "code"
 };
 
-const commands = [
+export const commands = [
   {
     command: commandTypes.bold,
     tooltipText: "Add bold text",
@@ -54,4 +56,51 @@ const commands = [
   }
 ];
 
-export default commands;
+const attachCommand = {
+  name: "attach",
+  keyCommand: "attach",
+  execute: () => null
+};
+
+/**
+ * Returns the commands list to be used in the react-mde toolbar
+ * @returns {Array} array of commands list
+ */
+export const getCommandsList = () => {
+  const list = [
+    {
+      commands: [
+        mdeCommands.boldCommand,
+        mdeCommands.italicCommand,
+        mdeCommands.linkCommand,
+        mdeCommands.quoteCommand,
+        mdeCommands.codeCommand,
+        mdeCommands.unorderedListCommand,
+        mdeCommands.orderedListCommand
+      ]
+    },
+    {
+      commands: [attachCommand]
+    }
+  ];
+
+  return list;
+};
+
+/**
+ * Curried function
+ * @param {Object} filesInput
+ * @returns {function} a function that accepts a command name parameter
+ */
+/**
+ * Returns the React node to be displayed for a given command name.
+ * @param {string} commandName
+ * @returns {Object} React node
+ */
+export const getCommandIcon = filesInput => commandName => {
+  if (commandName === "attach") {
+    return <>{filesInput}</>;
+  }
+  const command = commands.find(c => c.command === commandName);
+  return <img alt={commandName} src={command.iconSrc} />;
+};

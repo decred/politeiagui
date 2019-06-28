@@ -1,16 +1,15 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { Formik } from "formik";
-import { Card, TextInput, Button, Message, BoxTextInput } from "pi-ui";
+import { Card, Button, Message, BoxTextInput } from "pi-ui";
 import { Row } from "../layout";
 import MarkdownEditor from "src/componentsv2/MarkdownEditor";
 import FilesInput from "src/componentsv2/Files/Input";
 import AttachFileButton from "src/componentsv2/AttachFileButton";
-import styles from "./ProposalForm.module.css";
 import { useProposalForm } from "./hooks";
 
 const ProposalForm = ({ initialValues, onSubmit, history }) => {
-  const { validationSchema, policy } = useProposalForm();
+  const { validationSchema } = useProposalForm();
   async function handleSubmit(
     values,
     { resetForm, setSubmitting, setFieldError }
@@ -49,8 +48,7 @@ const ProposalForm = ({ initialValues, onSubmit, history }) => {
             touched,
             setFieldValue,
             errors,
-            isValid,
-            dirty
+            isValid
           } = props;
           function handleDescriptionChange(v) {
             setFieldValue("description", v);
