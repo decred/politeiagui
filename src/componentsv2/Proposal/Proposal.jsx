@@ -73,6 +73,13 @@ const Proposal = ({ proposal, extended }) => {
                 {abandonedat && (
                   <Event event={"abandoned"} timestamp={abandonedat} />
                 )}
+                {version > 1 && (
+                  <Text
+                    className={styles.version}
+                    color="gray"
+                    size="small"
+                  >{`version ${version}`}</Text>
+                )}
               </Subtitle>
             }
             status={

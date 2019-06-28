@@ -6,6 +6,10 @@
     margin-top: .5rem;
 }
 
+.version {
+    line-height: var(--spacing-2);
+}
+
 .markdownContainer {
     margin-top: var(--spacing-2);
     padding: var(--spacing-2) 0;
