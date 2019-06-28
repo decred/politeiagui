@@ -50,7 +50,6 @@ const mapChangePasswordStateToProps = {
     sel.isApiRequestingInit,
     sel.isApiRequestingChangePassword
   ),
-  userUsername: sel.getUserUsername,
   changePasswordResponse: sel.apiChangePasswordResponse
 };
 
@@ -89,7 +88,7 @@ const mapChangeUsernameStateToProps = {
     sel.isApiRequestingInit,
     sel.isApiRequestingChangeUsername
   ),
-  loggedInAsUsername: sel.loggedInAsUsername,
+  username: sel.getUserUsername,
   changeUsernameResponse: sel.apiChangeUsernameResponse
 };
 

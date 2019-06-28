@@ -14,7 +14,7 @@ export const getUserActivePublicKey = ids =>
  * @return {string} yes/no string saying if email is verified
  */
 export const isUserEmailVerified = newuserverificationtoken =>
-  !newuserverificationtoken ? "Yes" : "No";
+  !newuserverificationtoken;
 
 /**
  * Verifies if the user has paid the paywall
@@ -23,7 +23,7 @@ export const isUserEmailVerified = newuserverificationtoken =>
  * @return {string} yes/no string saying if paywall was paid
  */
 export const hasUserPaid = (newuserpaywalltx, newuserpaywallamount) =>
-  newuserpaywalltx || newuserpaywallamount === 0 ? "Yes" : "No";
+  newuserpaywalltx || newuserpaywallamount === 0;
 
 /**
  * Verifies if the user is locked
@@ -31,7 +31,7 @@ export const hasUserPaid = (newuserpaywalltx, newuserpaywallamount) =>
  * @param {bool} islocked
  * @return {string} yes/no string saying if the user is locked
  */
-export const isUserLocked = islocked => (islocked ? "Yes" : "No");
+export const isUserLocked = islocked => islocked;
 
 /**
  * Verifies if the user is admin
@@ -39,7 +39,7 @@ export const isUserLocked = islocked => (islocked ? "Yes" : "No");
  * @param {bool} isAdmin
  * @return {string} yes/no string saying if the user is Admin
  */
-export const isUserAdmin = isAdmin => (isAdmin ? "Yes" : "No");
+export const isUserAdmin = isAdmin => isAdmin;
 
 /**
  * Verifies if the user is deactivated
@@ -47,8 +47,7 @@ export const isUserAdmin = isAdmin => (isAdmin ? "Yes" : "No");
  * @param {bool} isDeactivated
  * @return {string} yes/no string saying if the user is deactivated
  */
-export const isUserDeactivated = isDeactivated =>
-  isDeactivated ? "Yes" : "No";
+export const isUserDeactivated = isDeactivated => isDeactivated;
 
 /**
  * Given the unix time, verifies if it is expired

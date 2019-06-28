@@ -1,4 +1,4 @@
-import { Link, Spinner } from "pi-ui";
+import { Button } from "pi-ui";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import ModalChangePassword from "src/componentsv2/ModalChangePassword";
@@ -44,7 +44,10 @@ const General = ({
 
   // Change Password Modal
   const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const openPasswordModal = () => setShowPasswordModal(true);
+  const openPasswordModal = (e) => {
+    e.preventDefault();
+    setShowPasswordModal(true);
+  };
   const closePasswordModal = () => setShowPasswordModal(false);
   const { onChangePassword, validationSchema } = useChangePassword();
 
@@ -52,46 +55,66 @@ const General = ({
     || isAdmin;
   return (
     <>
-      <InfoSection label="Admin:" info={isUserAdmin(isadmin)} />
-      <InfoSection label="User public key:" info={getUserActivePublicKey(identities)} />
+      <InfoSection label="Admin:" info={isUserAdmin(isadmin) ? "Yes" : "No"} />
+      <InfoSection label="User public key:" info={
+        <>
+          {getUserActivePublicKey(identities)}
+          {
+            isUserPageOwner &&
+            <Button size="sm" className="margin-left-s">
+              Manage Identity
+            </Button>
+          }
+        </>}
+      />
       {showDetailedLabels && (
         <>
           <InfoSection label="Proposal credits:" info={
             <>
               {proposalcredits}
-              {isAdmin && <Link href="#" style={{ marginLeft: "5px" }}>Rescan</Link>}
+              {isAdmin && <Button size="sm" className="margin-left-s">Rescan</Button>}
             </>}
           />
-          <InfoSection label="Verified email:" info={isUserEmailVerified(newuserverificationtoken)} />
+          <InfoSection label="Verified email:" info={isUserEmailVerified(newuserverificationtoken) ? "Yes" : "No"} />
           {
             isUserPageOwner &&
-            <InfoSection label="Password:" info={<Link href="#" onClick={openPasswordModal}>Change Password</Link>} />
+            <InfoSection label="Password:" info={
+              <Button size="sm" onClick={openPasswordModal}>
+                Change Password
+              </Button>
+            } />
           }
-          <InfoSection label="Has paid:" info={
+          <InfoSection label="Registration fee:" info={
             <>
-              {hasUserPaid(newuserpaywalltx, newuserpaywallamount)}
-              {isAdmin && hasUserPaid(newuserpaywalltx, newuserpaywallamount) === "No" ? isApiRequestingMarkAsPaid ?
-                <span style={{ marginLeft: "5px" }}>
-                  <Spinner invert />
-                </span> : <Link style={{ marginLeft: "5px" }} href="#" onClick={openMarkAsPaidModal}>Mark as paid</Link> : null}
+              {hasUserPaid(newuserpaywalltx, newuserpaywallamount) ? "Paid" : "Not paid"}
+              {(!hasUserPaid(newuserpaywalltx, newuserpaywallamount)) && isAdmin ?
+                <Button className="margin-left-s" loading={isApiRequestingMarkAsPaid} size="sm" onClick={openMarkAsPaidModal}>
+                  Mark as paid
+                </Button>
+                :
+                <Button className="margin-left-s" size="sm">
+                  Pay registration fee
+                </Button>
+              }
             </>
           } />
           <InfoSection label="Address:" info={newuserpaywalladdress} />
           <InfoSection label="Amount:" info={`${convertAtomsToDcr(newuserpaywallamount)} DCR`} />
           <InfoSection label="Pay after:" info={formatUnixTimestamp(newuserpaywalltxnotbefore)} />
           <InfoSection label="Failed login attempts:" info={failedloginattempts} />
-          <InfoSection label="Locked:" info={isUserLocked(islocked)} />
+          <InfoSection label="Locked:" info={isUserLocked(islocked) ? "Yes" : "No"} />
           <InfoSection label="Deactivated:" info={
             <>
-              {isUserDeactivated(isdeactivated)}
-              {isAdmin && (isActivationLoading ?
-                <span style={{ marginLeft: "5px" }}>
-                  <Spinner invert />
-                </span>
+              {isUserDeactivated(isdeactivated) ? "Yes" : "No"}
+              {isAdmin && (!isUserDeactivated(isdeactivated) ?
+                <Button className="margin-left-s" loading={isActivationLoading} size="sm" onClick={openActivationModal}>
+                  Deactivate
+                </Button>
                 :
-                isUserDeactivated(isdeactivated) === "No" ?
-                  <Link style={{ marginLeft: "5px" }} href="#" onClick={openActivationModal}>Deactivate</Link> :
-                  <Link style={{ marginLeft: "5px" }} href="#" onClick={openActivationModal}>Reactivate</Link>)}
+                <Button className="margin-left-s" loading={isActivationLoading} size="sm" onClick={openActivationModal}>
+                  Reactivate
+                </Button>)
+              }
             </>
           } />
           {resetpasswordverificationtoken &&
@@ -102,7 +125,9 @@ const General = ({
                   :
                   <>
                     {formatUnixTimestamp(resetpasswordverificationexpiry)}
-                    <Link style={{ marginLeft: "5px" }} href="#" onClick={openMarkAsExpiredConfirmModal}>Mark as expired</Link>
+                    <Button className="margin-left-s" loading={isActivationLoading} size="sm" onClick={openMarkAsExpiredConfirmModal}>
+                      Mark as expired
+                    </Button>
                   </>
               } />
             </>

@@ -1,14 +1,14 @@
+import { Button, Link } from "pi-ui";
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
-import { useUserDetail } from "./hooks";
+import useDimensions from "react-use-dimensions";
+import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
 import { useQueryStringWithIndexValue } from "src/lib/queryString";
-import { Link } from "pi-ui";
 import styles from "./detail.module.css";
 import General from "./General.jsx";
+import { useChangeUsername, useUserDetail } from "./hooks";
 import Preferences from "./Preferences.jsx";
 import Proposals from "./Proposals.jsx";
-import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
-import { useChangeUsername } from "./hooks";
 
 const getTabComponent = ({ user, ...rest }) => [
   <General {...user} {...rest} />,
@@ -26,6 +26,7 @@ const UserDetail = ({
   Subtitle,
   Tabs,
   Tab,
+  history,
   match
 }) => {
   const { onFetchUser, validateUUID, user, isAdmin, loggedInAsUserId } = useUserDetail();
@@ -38,9 +39,12 @@ const UserDetail = ({
 
   // Change Username Modal
   const [showUsernameModal, setShowUsernameModal] = useState(false);
-  const openUsernameModal = () => setShowUsernameModal(true);
+  const openUsernameModal = (e) => {
+    e.preventDefault();
+    setShowUsernameModal(true);
+  };
   const closeUsernameModal = () => setShowUsernameModal(false);
-  const { userUsername, onChangeUsername, validationSchema } = useChangeUsername();
+  const { username, onChangeUsername, validationSchema } = useChangeUsername();
 
   // Validate and set user id or throw an error in case it is invalid
   useEffect(function setUserID() {
@@ -52,13 +56,17 @@ const UserDetail = ({
     }
   }, []);
 
+  // Dimensions
+  const [ref, { width }] = useDimensions();
+  console.log(width, ref);
+
   // TODO: need a loading while user has not been fetched yet
   return user ? (
     <>
       <TopBanner>
         <PageDetails>
-          <div className={styles.titleWrapper}>
-            <Title>{userUsername || user.username}</Title>
+          <div ref={ref} className={styles.titleWrapper}>
+            <Title>{username || user.username}</Title>
             {
               isUserPageOwner &&
               <Link href="#" onClick={openUsernameModal} className={styles.titleLink}>Change Username</Link>
@@ -71,7 +79,14 @@ const UserDetail = ({
             ))}
           </Tabs>
         </PageDetails>
-        <SideBanner />
+        <SideBanner className={styles.sidebanner}>
+          <Button
+            className="margin-bottom-s"
+            onClick={() => history.push("/proposals/new")}
+          >
+            {width > 330 ? "New Proposal" : "+"}
+          </Button>
+        </SideBanner>
       </TopBanner>
       <Sidebar />
       <Main className="main">

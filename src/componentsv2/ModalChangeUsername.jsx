@@ -1,6 +1,6 @@
-import React from "react";
+import { Button, Modal, TextInput } from "pi-ui";
 import PropTypes from "prop-types";
-import { Modal, Button, TextInput } from "pi-ui";
+import React from "react";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import { isEmpty } from "src/helpers";
 
@@ -11,9 +11,9 @@ const ModalChangeUsername = ({ show, onClose, validationSchema, onChangeUsername
   ) => {
     try {
       await onChangeUsername(values);
-      setSubmitting(false);
       resetForm();
       onClose();
+      setSubmitting(true);
     } catch (e) {
       setSubmitting(false);
       setFieldError("global", e);

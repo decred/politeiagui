@@ -19,10 +19,6 @@
 
 /* EXTRA SMALL WIDTH */
 @media screen and (max-width: 560px){
-    .customPageDetails {
-        padding-left: 2rem;
-    }
-
     .customTab {
         margin-right: 2rem;
     }

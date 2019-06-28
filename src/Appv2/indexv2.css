@@ -104,6 +104,6 @@
 /* EXTRA SMALL */
 @media screen and (max-width: 560px) {
     .main {
-        padding: 1rem 1rem;
+        padding: 1rem 2.5rem;
     }
 }
