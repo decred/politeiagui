@@ -12,10 +12,10 @@ export const Join = ({ children, SeparatorComponent, className }) => {
   return (
     <div className={classNames(styles.join, className)}>
       {childrenArray.map((child, idx) => (
-        <>
+        <React.Fragment key={`join-${idx}`}>
           {React.cloneElement(child)}
           {childrenArray[idx + 1] ? <SeparatorComponent /> : ""}
-        </>
+        </React.Fragment>
       ))}
     </div>
   );

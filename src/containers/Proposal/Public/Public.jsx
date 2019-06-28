@@ -14,8 +14,8 @@ import Proposal from "src/componentsv2/Proposal";
 
 const DEFAULT_PAGE_SIZE = 4;
 
-const renderProposal = (record, index) => {
-  return <Proposal proposal={record} />;
+const renderProposal = record => {
+  return <Proposal key={record.censorshiprecord.token} proposal={record} />;
 };
 
 const PlaceHolder = () => <div className={styles.cardPlaceholder} />;

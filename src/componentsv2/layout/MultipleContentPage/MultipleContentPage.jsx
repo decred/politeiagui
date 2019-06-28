@@ -3,7 +3,6 @@ import {
   TopBanner,
   Main,
   PageDetails as PageDetailsUI,
-  SideBanner,
   H1,
   Container,
   Message,
@@ -14,6 +13,7 @@ import {
 import ErrorBoundary from "src/components/ErrorBoundary";
 import Header from "src/containers/Header/Header";
 import Sidebar from "../../Sidebar";
+import SideBanner from "src/componentsv2/SideBanner";
 import styles from "../layouts.module.css";
 
 const renderError = error => (
@@ -24,7 +24,11 @@ const renderError = error => (
 
 const Title = props => <H1 className="margin-top-l" {...props} />;
 
-const Subtitle = props => <span className={styles.subtitle} {...props}>{props.children}</span>;
+const Subtitle = props => (
+  <span className={styles.subtitle} {...props}>
+    {props.children}
+  </span>
+);
 
 const PageDetails = ({ className, ...props }) => (
   <PageDetailsUI

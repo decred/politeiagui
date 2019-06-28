@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar, StatusTag, Text } from "pi-ui";
+import { StatusBar, StatusTag, Text, classNames } from "pi-ui";
 import RecordWrapper from "../RecordWrapper";
 import {
   getStatusBarData,
@@ -71,7 +71,7 @@ const Proposal = ({ proposal, extended }) => {
                 )}
                 {version > 1 && (
                   <Text
-                    className={styles.version}
+                    className={classNames(styles.version, "hide-on-mobile")}
                     color="gray"
                     size="small"
                   >{`version ${version}`}</Text>
