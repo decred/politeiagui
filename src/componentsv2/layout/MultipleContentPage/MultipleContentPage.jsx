@@ -6,7 +6,7 @@ import {
   H1,
   Container,
   Message,
-  Tabs,
+  Tabs as TabsUI,
   Tab as TabUI,
   classNames
 } from "pi-ui";
@@ -39,6 +39,10 @@ const PageDetails = ({ className, ...props }) => (
 
 const Tab = ({ className, ...props }) => (
   <TabUI className={classNames(styles.customTab, className)} {...props} />
+);
+
+const Tabs = ({ className, ...props }) => (
+  <TabsUI className={classNames(styles.customTabs, className)} {...props} />
 );
 
 const MultipleContentpage = ({ children }) => {

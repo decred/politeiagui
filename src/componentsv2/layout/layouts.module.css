@@ -18,6 +18,12 @@
     font-size: var(--font-size-small);
 }
 
+.customTabs {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+}
+
 /* EXTRA SMALL WIDTH */
 @media screen and (max-width: 560px){
     .customTab {
