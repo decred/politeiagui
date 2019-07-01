@@ -313,6 +313,11 @@ export const login = (csrf, username, password) =>
     getResponse
   );
 
+export const loginWithUsername = (csrf, username, password) =>
+  POST("/login", csrf, { username, password: digest(password) }).then(
+    getResponse
+  );
+
 export const likeComment = (csrf, comment) =>
   POST("/comments/like", csrf, comment).then(getResponse);
 

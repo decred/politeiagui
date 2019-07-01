@@ -235,6 +235,26 @@ export const onLogin = ({ username, password }) =>
       });
   });
 
+export const onLoginWithUsername = ({ username, password }) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_LOGIN({ username }));
+    return api
+      .loginWithUsername(csrf, username, password)
+      .then(response => {
+        dispatch(act.RECEIVE_LOGIN(response));
+        if (sel.usePaywall(getState())) {
+          dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
+        }
+        dispatch(closeModal());
+        return response;
+      })
+      .then(() => dispatch(onRequestMe()))
+      .catch(error => {
+        dispatch(act.RECEIVE_LOGIN(null, error));
+        throw error;
+      });
+  });
+
 // handleLogout handles all the procedure to be done once the user is logged out
 // it can be called either when the logout request has been successful or when the
 // session has already expired
