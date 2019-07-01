@@ -8825,7 +8825,7 @@ performance-now@^2.1.0:
 
 "pi-ui@https://github.com/tiagoalvesdulce/pi-ui":
   version "1.0.0"
-  resolved "https://github.com/tiagoalvesdulce/pi-ui#377844b903824835dbaa128da8ed18bebf4bb2bb"
+  resolved "https://github.com/tiagoalvesdulce/pi-ui#336851a15c153c848defa0257bc2100c9bb7d0f8"
   dependencies:
     react-spring "^8.0.25"
 

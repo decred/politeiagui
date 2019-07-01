@@ -82,6 +82,7 @@ const UserDetail = ({
           {matchesMediaQueryExtraSmall ?
             <Button
               size="sm"
+              icon
               onClick={() => history.push("/proposals/new")}
             >
               +
