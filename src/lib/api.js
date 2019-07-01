@@ -308,8 +308,10 @@ export const manageUser = (csrf, userid, action, reason) =>
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);
 
-export const login = (csrf, email, password) =>
-  POST("/login", csrf, { email, password: digest(password) }).then(getResponse);
+export const login = (csrf, username, password) =>
+  POST("/login", csrf, { username, password: digest(password) }).then(
+    getResponse
+  );
 
 export const likeComment = (csrf, comment) =>
   POST("/comments/like", csrf, comment).then(getResponse);

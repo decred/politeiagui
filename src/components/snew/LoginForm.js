@@ -34,10 +34,10 @@ const LoginForm = ({
           autoFocus
           className="c-form-control"
           id="user_login"
-          name="email"
+          name="username"
           component="input"
           type="text"
-          placeholder="Email Address"
+          placeholder="Username"
           tabIndex={4}
         />
       </div>

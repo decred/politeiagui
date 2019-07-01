@@ -215,11 +215,11 @@ export const onSearchUser = query => dispatch => {
     });
 };
 
-export const onLogin = ({ email, password }) =>
+export const onLogin = ({ username, password }) =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_LOGIN({ email }));
+    dispatch(act.REQUEST_LOGIN({ username }));
     return api
-      .login(csrf, email, password)
+      .login(csrf, username, password)
       .then(response => {
         dispatch(act.RECEIVE_LOGIN(response));
         if (sel.usePaywall(getState())) {

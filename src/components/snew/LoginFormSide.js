@@ -22,17 +22,17 @@ const LoginFormSide = ({
         className="login-form login-form-side"
         id="login_login-main"
         method="post"
-        onSubmit={handleSubmit(({ emailSide, passwordSide }) =>
-          onLogin({ email: emailSide, password: passwordSide })
+        onSubmit={handleSubmit(({ username, passwordSide }) =>
+          onLogin({ username: username, password: passwordSide })
         )}
       >
         <input name="op" type="hidden" defaultValue="login-main" />
         <Field
           id="user_login"
-          name="emailSide"
+          name="username"
           component="input"
           type="text"
-          placeholder="Email Address"
+          placeholder="Username"
           tabIndex={3}
         />
         <Field
