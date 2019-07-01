@@ -717,6 +717,8 @@ export const isApiRequesting = or(
   isApiRequestingPropVoteResults
 );
 
+export const resetPasswordResponse = getApiResponse("resetPassword");
+
 // CMS Selectors
 const mode = compose(
   get("mode"),
