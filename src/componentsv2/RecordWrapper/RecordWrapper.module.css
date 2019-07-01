@@ -28,6 +28,10 @@
     margin-right: 0.2rem;
 }
 
+.recordCard {
+    padding: 2rem 4rem;
+}
+
 @media screen and (max-width: 768px) {
     .titleWrapper {
         width: 66%;
@@ -35,6 +39,11 @@
 }
 
 @media screen and (max-width: 560px) {
+
+    .recordCard {
+        padding: 2rem 2.5rem;
+    };
+    
     .status {
         flex-direction: row;
         justify-content: flex-start;

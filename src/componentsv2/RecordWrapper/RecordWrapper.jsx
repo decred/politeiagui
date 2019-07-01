@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styles from "./RecordWrapper.module.css";
 import DateTooltip from "../DateTooltip";
 import DownloadJSON from "../DownloadJSON";
-import { Card, H3, Icon, Link as UILink, Text } from "pi-ui";
+import { Card, H3, Icon, Link as UILink, Text, classNames } from "pi-ui";
 import { Row } from "../layout";
 import Link from "../Link";
 import githubIcon from "src/assets/github.svg";
@@ -85,9 +85,11 @@ export const CommentsLink = ({ numOfComments, url = "#" }) => (
 
 export const DownloadRecord = DownloadJSON;
 
-const RecordWrapper = ({ children }) => {
+const RecordWrapper = ({ children, className }) => {
   return (
-    <Card paddingSize="small" className="margin-bottom-m">
+    <Card
+      className={classNames(styles.recordCard, "margin-bottom-m", className)}
+    >
       {children({
         Author,
         Event,
@@ -106,7 +108,8 @@ const RecordWrapper = ({ children }) => {
 };
 
 RecordWrapper.propTypes = {
-  children: PropTypes.func.isRequired
+  children: PropTypes.func.isRequired,
+  className: PropTypes.string
 };
 
 Author.propTypes = {

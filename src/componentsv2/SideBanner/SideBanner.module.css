@@ -9,14 +9,6 @@
     content: "New Proposal"
 }
 
-
-@media screen and (max-width: 768px){
-    .customSideBanner {
-        padding-right: 3rem;
-    }
-}
-
-
 @media screen and (max-width: 560px){
     .newProposalButtonContent::after {
         content: "+"
