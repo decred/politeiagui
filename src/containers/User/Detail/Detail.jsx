@@ -1,8 +1,8 @@
-import { Button, Link } from "pi-ui";
+import { Button, classNames, Link } from "pi-ui";
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
-import useDimensions from "react-use-dimensions";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
+import useMediaQuery from "src/hooks/useMediaQuery";
 import { useQueryStringWithIndexValue } from "src/lib/queryString";
 import styles from "./detail.module.css";
 import General from "./General.jsx";
@@ -56,20 +56,19 @@ const UserDetail = ({
     }
   }, []);
 
-  // Dimensions
-  const [ref, { width }] = useDimensions();
-  console.log(width, ref);
+  // Media Query
+  const matchesMediaQueryExtraSmall = useMediaQuery("(max-width: 560px)");
 
   // TODO: need a loading while user has not been fetched yet
   return user ? (
     <>
       <TopBanner>
         <PageDetails>
-          <div ref={ref} className={styles.titleWrapper}>
+          <div className={styles.titleWrapper}>
             <Title>{username || user.username}</Title>
             {
               isUserPageOwner &&
-              <Link href="#" onClick={openUsernameModal} className={styles.titleLink}>Change Username</Link>
+              <Link href="#" onClick={openUsernameModal} className={classNames(styles.titleLink)}>Change Username</Link>
             }
           </div>
           <Subtitle>{user.email}</Subtitle>
@@ -80,12 +79,20 @@ const UserDetail = ({
           </Tabs>
         </PageDetails>
         <SideBanner className={styles.sidebanner}>
-          <Button
-            className="margin-bottom-s"
-            onClick={() => history.push("/proposals/new")}
-          >
-            {width > 330 ? "New Proposal" : "+"}
-          </Button>
+          {matchesMediaQueryExtraSmall ?
+            <Button
+              size="sm"
+              onClick={() => history.push("/proposals/new")}
+            >
+              +
+            </Button>
+            :
+            <Button
+              onClick={() => history.push("/proposals/new")}
+            >
+              New Proposal
+            </Button>
+          }
         </SideBanner>
       </TopBanner>
       <Sidebar />

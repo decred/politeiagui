@@ -39,7 +39,7 @@
     border-bottom: 2px solid var(--color-yellow);
 }
 
-/* EXTRA SMALL */
+/* SMALL */
 @media screen and (max-width: 768px) {
     .customHeader {
         padding: 0 var(--spacing-small);

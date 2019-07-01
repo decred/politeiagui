@@ -1,12 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
 import { classNames } from "pi-ui";
+import PropTypes from "prop-types";
+import React from "react";
 import styles from "./infosection.module.css";
 
-const InfoSection = ({ label, info }) => {
+const InfoSection = ({ label, info, alignLabelCenter }) => {
   return (
     <div className={classNames(styles.sectionWrapper, "margin-top-m")}>
-      <span className={styles.label}>{label}</span>
+      <span className={styles.label} style={alignLabelCenter && { alignSelf: "center" }}>{label}</span>
       <span className={styles.info}>{info}</span>
     </div>
   );

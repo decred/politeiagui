@@ -58,10 +58,10 @@ const General = ({
       <InfoSection label="Admin:" info={isUserAdmin(isadmin) ? "Yes" : "No"} />
       <InfoSection label="User public key:" info={
         <>
-          {getUserActivePublicKey(identities)}
+          <span style={{ wordBreak: "break-word" }}>{getUserActivePublicKey(identities)}</span>
           {
             isUserPageOwner &&
-            <Button size="sm" className="margin-left-s">
+            <Button className="margin-top-s" size="sm">
               Manage Identity
             </Button>
           }
@@ -72,13 +72,13 @@ const General = ({
           <InfoSection label="Proposal credits:" info={
             <>
               {proposalcredits}
-              {isAdmin && <Button size="sm" className="margin-left-s">Rescan</Button>}
+              {isAdmin && <Button className="margin-top-s" size="sm">Rescan</Button>}
             </>}
           />
           <InfoSection label="Verified email:" info={isUserEmailVerified(newuserverificationtoken) ? "Yes" : "No"} />
           {
             isUserPageOwner &&
-            <InfoSection label="Password:" info={
+            <InfoSection label="Password:" alignLabelCenter info={
               <Button size="sm" onClick={openPasswordModal}>
                 Change Password
               </Button>
@@ -88,17 +88,17 @@ const General = ({
             <>
               {hasUserPaid(newuserpaywalltx, newuserpaywallamount) ? "Paid" : "Not paid"}
               {!hasUserPaid(newuserpaywalltx, newuserpaywallamount) && isAdmin ?
-                <Button className="margin-left-s" loading={isApiRequestingMarkAsPaid} size="sm" onClick={openMarkAsPaidModal}>
+                <Button loading={isApiRequestingMarkAsPaid} size="sm" onClick={openMarkAsPaidModal}>
                   Mark as paid
                 </Button>
                 : !hasUserPaid(newuserpaywalltx, newuserpaywallamount) &&
-                <Button className="margin-left-s" size="sm">
+                <Button size="sm">
                   Pay registration fee
                 </Button>
               }
             </>
           } />
-          <InfoSection label="Address:" info={newuserpaywalladdress} />
+          <InfoSection label="Address:" info={<span style={{ wordBreak: "break-word" }}>{newuserpaywalladdress}</span>} />
           <InfoSection label="Amount:" info={`${convertAtomsToDcr(newuserpaywallamount)} DCR`} />
           <InfoSection label="Pay after:" info={formatUnixTimestamp(newuserpaywalltxnotbefore)} />
           <InfoSection label="Failed login attempts:" info={failedloginattempts} />
@@ -107,11 +107,11 @@ const General = ({
             <>
               {isUserDeactivated(isdeactivated) ? "Yes" : "No"}
               {isAdmin && (!isUserDeactivated(isdeactivated) ?
-                <Button className="margin-left-s" loading={isActivationLoading} size="sm" onClick={openActivationModal}>
+                <Button className="margin-top-s" loading={isActivationLoading} size="sm" onClick={openActivationModal}>
                   Deactivate
                 </Button>
-                :
-                <Button className="margin-left-s" loading={isActivationLoading} size="sm" onClick={openActivationModal}>
+                : isAdmin &&
+                <Button className="margin-top-s" loading={isActivationLoading} size="sm" onClick={openActivationModal}>
                   Reactivate
                 </Button>)
               }
@@ -125,7 +125,7 @@ const General = ({
                   :
                   <>
                     {formatUnixTimestamp(resetpasswordverificationexpiry)}
-                    <Button className="margin-left-s" loading={isActivationLoading} size="sm" onClick={openMarkAsExpiredConfirmModal}>
+                    <Button loading={isActivationLoading} size="sm" onClick={openMarkAsExpiredConfirmModal}>
                       Mark as expired
                     </Button>
                   </>
