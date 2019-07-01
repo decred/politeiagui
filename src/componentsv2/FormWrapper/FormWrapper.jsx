@@ -27,7 +27,13 @@ const Form = ({ className, ...props }) => (
   <form className={classNames(styles.form, className)} {...props} />
 );
 
-const ErrorMessage = ({ ...props }) => <Message kind="error" {...props} />;
+const ErrorMessage = ({ className, ...props }) => (
+  <Message
+    kind="error"
+    className={classNames(styles.errorMessage, className)}
+    {...props}
+  />
+);
 
 const Loader = ({ className, ...props }) => (
   <div className={classNames(styles.loader, className)} {...props}>
