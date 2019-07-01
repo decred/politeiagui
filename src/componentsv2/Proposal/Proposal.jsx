@@ -42,7 +42,6 @@ const Proposal = ({ proposal, extended }) => {
     <RecordWrapper>
       {({
         Author,
-        BaseInfo,
         Event,
         Row,
         Title,

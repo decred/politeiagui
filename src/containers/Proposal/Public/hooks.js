@@ -18,15 +18,13 @@ const mapStateToProps = {
     sel.apiTokenInventoryError
   ),
   proposalsTokens: sel.apiTokenInventoryResponse,
-  getVoteStatus: sel.getPropVoteStatus,
-  lastBlockHeight: sel.lastBlockHeight
+  getVoteStatus: sel.getPropVoteStatus
 };
 
 const mapDispatchToProps = {
   onFetchVettedByTokens: act.onFetchVettedByTokens,
   onFetchTokenInventory: act.onFetchTokenInventory,
-  onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus,
-  onFetchLastBlockHeight: act.getLastBlockHeight
+  onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus
 };
 
 export function usePublicProposals(ownProps) {
@@ -35,7 +33,6 @@ export function usePublicProposals(ownProps) {
 
   useEffect(() => {
     fromRedux.onFetchTokenInventory();
-    fromRedux.onFetchLastBlockHeight();
   }, []);
 
   return fromRedux;
