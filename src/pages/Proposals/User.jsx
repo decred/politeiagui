@@ -4,13 +4,10 @@ import MultipleContentPage from "src/componentsv2/layout/MultipleContentPage";
 const PageProposalsUser = () => {
   return (
     <MultipleContentPage>
-      {({ TopBanner, PageDetails, SideBanner, Sidebar, Main, Title }) => (
+      {({ TopBanner, PageDetails, Sidebar, Main }) => (
         <>
           <TopBanner>
-            <PageDetails>
-              <Title>User proposals</Title>
-            </PageDetails>
-            <SideBanner />
+            <PageDetails title="Your Proposals" />
           </TopBanner>
           <Sidebar>Sidebar</Sidebar>
           <Main>Main Content</Main>

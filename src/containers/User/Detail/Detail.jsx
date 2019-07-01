@@ -19,7 +19,6 @@ const getTabComponent = ({ user, ...rest }) => [
 const UserDetail = ({
   TopBanner,
   PageDetails,
-  SideBanner,
   Sidebar,
   Main,
   Title,
@@ -29,9 +28,15 @@ const UserDetail = ({
   history,
   match
 }) => {
-  const { onFetchUser, validateUUID, user, isAdmin, loggedInAsUserId } = useUserDetail();
+  const {
+    onFetchUser,
+    validateUUID,
+    user,
+    isAdmin,
+    loggedInAsUserId
+  } = useUserDetail();
 
-  const isUserPageOwner = user && (loggedInAsUserId === user.id);
+  const isUserPageOwner = user && loggedInAsUserId === user.id;
   const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
 
   const tabLabels = ["General", "Preferences", "Proposals"];
@@ -39,7 +44,7 @@ const UserDetail = ({
 
   // Change Username Modal
   const [showUsernameModal, setShowUsernameModal] = useState(false);
-  const openUsernameModal = (e) => {
+  const openUsernameModal = e => {
     e.preventDefault();
     setShowUsernameModal(true);
   };
@@ -63,44 +68,44 @@ const UserDetail = ({
   return user ? (
     <>
       <TopBanner>
-        <PageDetails>
-          <div className={styles.titleWrapper}>
-            <Title>{username || user.username}</Title>
-            {
-              isUserPageOwner &&
-              <Link href="#" onClick={openUsernameModal} className={classNames(styles.titleLink)}>Change Username</Link>
-            }
-          </div>
-          <Subtitle>{user.email}</Subtitle>
+        <PageDetails
+          title={
+            <div className={styles.titleWrapper}>
+              <Title>{username || user.username}</Title>
+              {isUserPageOwner && (
+                <Link
+                  href="#"
+                  onClick={openUsernameModal}
+                  className={styles.titleLink}
+                >
+                  Change Username
+                </Link>
+              )}
+            </div>
+          }
+          subtitle={user.email}
+        >
           <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
             {tabLabels.map(label => (
               <Tab key={`tab${label}`} label={label} />
             ))}
           </Tabs>
         </PageDetails>
-        <SideBanner className={styles.sidebanner}>
-          {matchesMediaQueryExtraSmall ?
-            <Button
-              size="sm"
-              icon
-              onClick={() => history.push("/proposals/new")}
-            >
-              +
-            </Button>
-            :
-            <Button
-              onClick={() => history.push("/proposals/new")}
-            >
-              New Proposal
-            </Button>
-          }
-        </SideBanner>
       </TopBanner>
       <Sidebar />
       <Main className="main">
-        {getTabComponent({ user, isAdminOrTheUser, isUserPageOwner, isAdmin })[index]}
+        {
+          getTabComponent({ user, isAdminOrTheUser, isUserPageOwner, isAdmin })[
+            index
+          ]
+        }
       </Main>
-      <ModalChangeUsername validationSchema={validationSchema} onChangeUsername={onChangeUsername} show={showUsernameModal} onClose={closeUsernameModal} />
+      <ModalChangeUsername
+        validationSchema={validationSchema}
+        onChangeUsername={onChangeUsername}
+        show={showUsernameModal}
+        onClose={closeUsernameModal}
+      />
     </>
   ) : null;
 };

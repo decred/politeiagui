@@ -47,7 +47,6 @@ function reducer(state, action) {
 const PublicProposals = ({
   TopBanner,
   PageDetails,
-  SideBanner,
   Sidebar,
   Main,
   Title,
@@ -116,8 +115,7 @@ const PublicProposals = ({
   return (
     <>
       <TopBanner>
-        <PageDetails>
-          <Title>Public Proposals</Title>
+        <PageDetails title="Public Proposals">
           <Tabs wrap onSelectTab={onSetIndex} activeTabIndex={index}>
             {tabLabels.map(label => (
               <Tab
@@ -128,7 +126,6 @@ const PublicProposals = ({
             ))}
           </Tabs>
         </PageDetails>
-        <SideBanner />
       </TopBanner>
       <Sidebar />
 
