@@ -6,6 +6,7 @@ import ErrorField from "../../Form/Fields/ErrorField";
 import InputFieldWithError from "../../Form/Fields/InputFieldWithError";
 import Message from "../../Message";
 import MultipleItemsBodyMessage from "../../MultipleItemsBodyMessage";
+import ButtonWithLoadingIcon from "../ButtonWithLoadingIcon";
 import { Field } from "redux-form";
 import MarkdownHelp from "../../MarkdownHelp";
 import { MANAGE_CREDITS_MODAL } from "../../Modal/modalTypes";
@@ -33,7 +34,8 @@ const ProposalSubmit = props => {
     proposalCredits,
     loggedInAsEmail,
     editingMode,
-    isDraftSaving
+    isDraftSaving,
+    draftButtonText
   } = props;
   const submitEnabled =
     loggedInAsEmail &&
@@ -137,26 +139,15 @@ const ProposalSubmit = props => {
                     >
                       {!editingMode ? "submit" : "update"}
                     </button>
-                    <button
+                    <ButtonWithLoadingIcon
                       className={"togglebutton secondary access-required"}
                       name="submit"
                       type="submit"
                       value="form"
+                      text={draftButtonText}
                       onClick={handleSubmit(onSaveProposalDraft)}
-                    >
-                      Save as Draft
-                    </button>
-                    {isDraftSaving && (
-                      <p
-                        style={{
-                          fontSize: "14px",
-                          display: "flex",
-                          paddingTop: "1em"
-                        }}
-                      >
-                        ✔ saved
-                      </p>
-                    )}
+                      isLoading={isDraftSaving}
+                    />
                     {proposalCredits === 0 && !editingMode && (
                       <div className="submit-button-error">
                         To submit a proposal, you must purchase a proposal

@@ -13,7 +13,8 @@ class SubmitFormContainer extends Component {
     // Provides minor visual feedback when succesfully
     // saving a draft.
     this.state = {
-      isDraftSaving: false
+      isDraftSaving: false,
+      draftButtonText: "Save as Draft"
     };
   }
 
@@ -29,7 +30,8 @@ class SubmitFormContainer extends Component {
           ...this.props,
           onSaveProposalDraft: this.onSaveProposalDraft,
           onSaveInvoiceDraft: this.onSaveInvoiceDraft,
-          isDraftSaving: this.state.isDraftSaving
+          isDraftSaving: this.state.isDraftSaving,
+          draftButtonText: this.state.draftButtonText
         }}
       />
     );
@@ -38,22 +40,25 @@ class SubmitFormContainer extends Component {
   onSaveProposalDraft = (...args) => {
     validate(...args);
     const { payload } = this.props.onSaveProposalDraft(...args);
-    this.setState({ isDraftSaving: true });
-    setTimeout(() => {
-      this.setState({ isDraftSaving: false });
-      if (this.props.location.search === "")
-        this.props.history.replace("/proposals/new?draftid=" + payload.id);
-    }, 700);
+    this.draftButtonTextAnimation(this.props.isCMS, payload.id);
   };
 
   onSaveInvoiceDraft = (...args) => {
     validate(...args);
     const { payload } = this.props.onSaveInvoiceDraft(...args);
-    this.setState({ isDraftSaving: true });
+    this.draftButtonTextAnimation(this.props.isCMS, payload.id);
+  };
+
+  draftButtonTextAnimation = (isCMS, id) => {
+    const url = isCMS ? "/invoices/new?draftid=" : "/proposals/new?draftid=";
+    this.setState({ isDraftSaving: true, draftButtonText: "✔ saved" });
     setTimeout(() => {
       this.setState({ isDraftSaving: false });
-      if (this.props.location.search === "")
-        this.props.history.replace("/invoices/new?draftid=" + payload.id);
+      setTimeout(() => {
+        this.setState({ draftButtonText: "Save as Draft" });
+        if (this.props.location.search === "")
+          this.props.history.replace(url + id);
+      }, 500);
     }, 700);
   };
 }
