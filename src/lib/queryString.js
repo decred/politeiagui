@@ -1,5 +1,4 @@
 import qs from "query-string";
-import { useEffect, useMemo, useState } from "react";
 
 export const setQueryStringWithoutPageReload = qsValue => {
   const newurl =
@@ -43,34 +42,3 @@ export const removeQueryStringsFromUrl = (url, parameter, parameter2) => {
     .replace(new RegExp("([?&])" + parameter2 + "=[^&]*&"), "$1");
   window.history.pushState({ path: newurl }, "", newurl);
 };
-
-export function useQueryString(key, initialValue) {
-  const [value, setValue] = useState(getQueryStringValue(key) || initialValue);
-  function onSetValue(newValue) {
-    setValue(newValue);
-    setQueryStringValue(key, newValue);
-  }
-
-  return [value, onSetValue];
-}
-
-export function useQueryStringWithIndexValue(key, initialIndex, values) {
-  values = values.map(v => v.toLowerCase());
-  const [value, onSetValue] = useQueryString(key, values[initialIndex]);
-  const [index, setIndex] = useState(initialIndex);
-
-  function onSetIndex(index) {
-    const newValue = values[index];
-    onSetValue(newValue);
-  }
-
-  useEffect(
-    function onValueChange() {
-      const newIndex = values.findIndex(v => v === value);
-      setIndex(newIndex);
-    },
-    [value]
-  );
-
-  return useMemo(() => [index, onSetIndex], [index]);
-}
