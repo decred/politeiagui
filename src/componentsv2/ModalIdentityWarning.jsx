@@ -1,6 +1,6 @@
-import React from "react";
+import { Button, Modal, P } from "pi-ui";
 import PropTypes from "prop-types";
-import { Modal, P, Button } from "pi-ui";
+import React from "react";
 
 const ModalIdentityWarning = ({ title, onClose, show, onConfirm, confirmMessage }) => (
   <Modal show={show} title={title} onClose={onClose}>
@@ -26,15 +26,15 @@ const ModalIdentityWarning = ({ title, onClose, show, onConfirm, confirmMessage 
 );
 
 ModalIdentityWarning.propTypes = {
-    title: PropTypes.string,
-    onClose: PropTypes.func.isRequired,
-    onConfirm: PropTypes.func.isRequired,
-    confirmMessage: PropTypes.string
-}
+  title: PropTypes.string,
+  onClose: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+  confirmMessage: PropTypes.string
+};
 
 ModalIdentityWarning.defaultProps = {
-    title: "Before you continue",
-    confirmMessage: "I understand, continue"
+  title: "Before you continue",
+  confirmMessage: "I understand, continue"
 };
 
 export default ModalIdentityWarning;

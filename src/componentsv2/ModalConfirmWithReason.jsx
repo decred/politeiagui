@@ -11,8 +11,8 @@ const ModalConfirmWithReason = ({ show, onClose, onSubmit }) => {
     try {
       await onSubmit(values.reason);
       resetForm();
-      onClose();
       setSubmitting(false);
+      window.setTimeout(onClose, 200);
     } catch (e) {
       setSubmitting(false);
       setFieldError("global", e);

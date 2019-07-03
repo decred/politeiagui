@@ -12,8 +12,8 @@ const ModalChangeUsername = ({ show, onClose, validationSchema, onChangeUsername
     try {
       await onChangeUsername(values);
       resetForm();
-      onClose();
-      setSubmitting(true);
+      setSubmitting(false);
+      window.setTimeout(onClose, 200);
     } catch (e) {
       setSubmitting(false);
       setFieldError("global", e);
@@ -50,7 +50,7 @@ const ModalChangeUsername = ({ show, onClose, validationSchema, onChangeUsername
               <TextInput
                 label="New Username"
                 name="newUsername"
-                type="username"
+                type="text"
                 value={values.newUsername}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -82,7 +82,7 @@ ModalChangeUsername.propTypes = {
   show: PropTypes.bool,
   onClose: PropTypes.func,
   handleSubmit: PropTypes.func,
-  isSubmitting: PropTypes.bool
+  validationSchema: PropTypes.object
 };
 
 export default ModalChangeUsername;

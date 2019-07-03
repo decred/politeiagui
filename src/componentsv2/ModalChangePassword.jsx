@@ -12,8 +12,8 @@ const ModalChangePassword = ({ show, onClose, validationSchema, onChangePassword
     try {
       await onChangePassword(values);
       resetForm();
-      onClose();
       setSubmitting(false);
+      window.setTimeout(onClose, 200);
     } catch (e) {
       setSubmitting(false);
       setFieldError("global", e);
