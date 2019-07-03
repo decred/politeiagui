@@ -378,6 +378,14 @@ export const getSubmittedUserProposals = state => userID => {
   return sortByNewestFirst(vettedProps.concat(unvettedProps));
 };
 
+export const getUserProposalsWithVoteStatus = (state, { userID }) => {
+  const userProposals = getSubmittedUserProposals(state)(userID);
+  return userProposals.map(prop => ({
+    ...prop,
+    voteStatus: getPropVoteStatus(state)(prop.censorshiprecord.token)
+  }));
+};
+
 export const getUserProposals = state => {
   const userFilterValue = getUserFilterValue(state);
   const userID = userid(state);

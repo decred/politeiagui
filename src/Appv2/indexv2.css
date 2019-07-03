@@ -43,6 +43,10 @@
     margin-right: 0 !important;
 }
 
+.no-margin-top {
+    margin-top: 0 !important;
+}
+
 /* Extra Small margin */
 .margin-left-xs {
     margin-left: var(--spacing-extra-small)
@@ -117,7 +121,6 @@
 
 
 .main {
-    padding: 2rem 4rem;
     max-width: 100vw;
 }
 
@@ -144,9 +147,6 @@
 
 /* EXTRA SMALL */
 @media screen and (max-width: 560px) {
-    .main {
-        padding: 1rem 2.5rem;
-    }
     .hide-on-mobile {
         display: none !important;
     }

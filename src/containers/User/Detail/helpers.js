@@ -1,3 +1,9 @@
+export const tabValues = {
+  GENERAL: "General",
+  PREFERENCES: "Preferences",
+  PROPOSALS: "Proposals"
+};
+
 /**
  * Return the user active pubkey
  *

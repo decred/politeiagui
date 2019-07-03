@@ -1,19 +1,28 @@
-import { Button, classNames, Link } from "pi-ui";
 import React, { useEffect, useState } from "react";
+import { Link } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
-import useMediaQuery from "src/hooks/useMediaQuery";
 import useQueryStringWithIndexValue from "src/hooks/useQueryStringWithIndexValue";
 import styles from "./detail.module.css";
 import General from "./General.jsx";
 import { useChangeUsername, useUserDetail } from "./hooks";
+import { tabValues } from "./helpers";
 import Preferences from "./Preferences.jsx";
-import Proposals from "./Proposals.jsx";
+import Proposals from "./Proposals";
 
-const getTabComponent = ({ user, ...rest }) => [
+const getTabComponent = ({
+  user,
+  userProposals,
+  setUserProposals,
+  ...rest
+}) => [
   <General {...user} {...rest} />,
   <Preferences {...rest} />,
-  <Proposals {...rest} />
+  <Proposals
+    userID={user.id}
+    userProposals={userProposals}
+    setUserProposals={setUserProposals}
+  />
 ];
 
 const UserDetail = ({
@@ -36,10 +45,18 @@ const UserDetail = ({
     loggedInAsUserId
   } = useUserDetail();
 
+  // Proposals fetching will be triggered from the 'proposals' tab
+  // but cached here to avoid re-fetching it
+  const [userProposals, setUserProposals] = useState(null);
+
   const isUserPageOwner = user && loggedInAsUserId === user.id;
   const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
 
-  const tabLabels = ["General", "Preferences", "Proposals"];
+  const tabLabels = [
+    tabValues.GENERAL,
+    tabValues.PREFERENCES,
+    tabValues.PROPOSALS
+  ];
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
 
   // Change Username Modal
@@ -60,9 +77,6 @@ const UserDetail = ({
       onFetchUser(userId);
     }
   }, []);
-
-  // Media Query
-  const matchesMediaQueryExtraSmall = useMediaQuery("(max-width: 560px)");
 
   // TODO: need a loading while user has not been fetched yet
   return user ? (
@@ -95,9 +109,14 @@ const UserDetail = ({
       <Sidebar />
       <Main className="main">
         {
-          getTabComponent({ user, isAdminOrTheUser, isUserPageOwner, isAdmin })[
-            index
-          ]
+          getTabComponent({
+            user,
+            isAdminOrTheUser,
+            isUserPageOwner,
+            isAdmin,
+            userProposals,
+            setUserProposals
+          })[index]
         }
       </Main>
       <ModalChangeUsername

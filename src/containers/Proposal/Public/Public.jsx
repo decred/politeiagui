@@ -9,7 +9,7 @@ import {
   getProposalsByTabOption
 } from "./helpers";
 import { usePublicProposals } from "./hooks";
-import { useQueryStringWithIndexValue } from "src/lib/queryString";
+import useQueryStringWithIndexValue from "src/hooks/useQueryStringWithIndexValue";
 import Proposal from "src/componentsv2/Proposal";
 
 const DEFAULT_PAGE_SIZE = 4;

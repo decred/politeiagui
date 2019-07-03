@@ -3,11 +3,16 @@ import { useLoaderContext } from "src/Appv2/Loader";
 import {
   getVoteTimeLeftInWords,
   isVoteActiveProposal,
-  getVoteBlocksLeft
+  getVoteBlocksLeft,
+  isPublicProposal
 } from "./helpers";
 
 export function useProposalVoteInfo(proposal) {
   const { apiInfo } = useLoaderContext();
+
+  if (!isPublicProposal(proposal)) {
+    return {};
+  }
 
   const bestBlock =
     proposal && proposal.voteStatus && proposal.voteStatus.bestblock;
