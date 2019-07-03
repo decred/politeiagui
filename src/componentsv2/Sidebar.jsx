@@ -1,23 +1,12 @@
+import { Card, Sidebar as UISidebar } from "pi-ui";
 import React from "react";
-import { Sidebar as UISidebar, Button, Card } from "pi-ui";
-import { withRouter } from "react-router-dom";
-import LoggedInContent from "./LoggedInContent";
-import StaticMarkdown from "./StaticMarkdown";
 import { useConfig } from "src/Config";
+import StaticMarkdown from "./StaticMarkdown";
 
-const Sidebar = ({ history }) => {
+const Sidebar = () => {
   const { aboutContent } = useConfig();
   return (
     <UISidebar>
-      <LoggedInContent>
-        <Button
-          className="margin-bottom-s"
-          onClick={() => history.push(`/proposals/new`)}
-          fullWidth
-        >
-          Submit Proposal
-        </Button>
-      </LoggedInContent>
       <Card paddingSize="small">
         <StaticMarkdown contentName={aboutContent} />
       </Card>
@@ -25,4 +14,4 @@ const Sidebar = ({ history }) => {
   );
 };
 
-export default withRouter(Sidebar);
+export default Sidebar;

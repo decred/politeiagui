@@ -387,3 +387,5 @@ export const fromHoursToMinutes = hours => parseInt(hours * 60, 10);
 export const fromUSDCentsToUSDUnits = cents =>
   parseFloat(cents / 100).toFixed(2);
 export const fromUSDUnitsToUSDCents = units => parseInt(units * 100, 10);
+
+export const isEmpty = obj => Object.keys(obj).length === 0;

@@ -1,6 +1,6 @@
+import dotenvParse from "dotenv-parse-variables";
 import React from "react";
 import { ConfigProvider } from "./ConfigProvider";
-import dotenvParse from "dotenv-parse-variables";
 import * as presets from "./presets";
 
 const defaultPreset = presets.POLITEIA;

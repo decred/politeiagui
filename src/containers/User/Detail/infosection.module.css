@@ -1,0 +1,29 @@
+.label {
+  color: var(--color-gray-blueish);
+  width: 25%;
+}
+
+.sectionWrapper {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.info {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* SMALL */
+@media screen and (max-width: 768px) {
+  .label, .info {
+    width: 100%;
+  }
+  .info {
+    margin-top: 0.5rem;
+  }
+}

@@ -1,6 +1,6 @@
-import React from "react";
-import { H1, Message, Spinner, classNames } from "pi-ui";
 import { Formik } from "formik";
+import { classNames, H1, Message, Spinner } from "pi-ui";
+import React from "react";
 import Link from "../Link";
 import styles from "./FormWrapper.module.css";
 
@@ -9,7 +9,7 @@ const Title = ({ className, ...props }) => (
 );
 
 const Actions = ({ className, ...props }) => (
-  <div className={classNames(styles.actions, className)} {...props} />
+  <div className={classNames(props.children.length > 1 ? styles.actions : styles.singleAction, className)} {...props} />
 );
 
 const Footer = ({ className, ...props }) => (
@@ -32,12 +32,12 @@ const FormWrapper = ({ children, loading, ...props }) => {
   return loading ? (
     <Loader />
   ) : (
-    <Formik {...props}>
-      {props =>
-        children({ ...props, Actions, Footer, Title, Form, ErrorMessage, Link })
-      }
-    </Formik>
-  );
+      <Formik {...props}>
+        {props =>
+          children({ ...props, Actions, Footer, Title, Form, ErrorMessage, Link })
+        }
+      </Formik>
+    );
 };
 
 export default FormWrapper;

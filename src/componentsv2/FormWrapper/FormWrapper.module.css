@@ -16,6 +16,11 @@
     justify-content: space-between;
 }
 
+.singleAction {
+    composes: actions;
+    justify-content: flex-end;
+}
+
 
 .footer {
     width: 100%;

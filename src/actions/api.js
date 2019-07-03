@@ -1,18 +1,18 @@
 import Promise from "promise";
-import * as sel from "../selectors";
-import * as api from "../lib/api";
-import * as pki from "../lib/pki";
-import { confirmWithModal, openModal, closeModal } from "./modal";
 import * as modalTypes from "../components/Modal/modalTypes";
-import * as external_api_actions from "./external_api";
-import { clearStateLocalStorage } from "../lib/local_storage";
-import { callAfterMinimumWait } from "./lib";
-import {
-  resetNewProposalData,
-  resetNewInvoiceData
-} from "../lib/editors_content_backup";
-import act from "./methods";
 import { PROPOSAL_STATUS_PUBLIC } from "../constants";
+import * as api from "../lib/api";
+import {
+  resetNewInvoiceData,
+  resetNewProposalData
+} from "../lib/editors_content_backup";
+import { clearStateLocalStorage } from "../lib/local_storage";
+import * as pki from "../lib/pki";
+import * as sel from "../selectors";
+import * as external_api_actions from "./external_api";
+import { callAfterMinimumWait } from "./lib";
+import act from "./methods";
+import { closeModal, confirmWithModal, openModal } from "./modal";
 
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onResetInvoice = act.RESET_INVOICE;
@@ -481,6 +481,7 @@ export const onEditUser = preferences =>
       });
   });
 
+// TODO: erase this after the refactor and make the onManageUserv2 official
 export const onManageUser = (userId, action) =>
   withCsrf((dispatch, getState, csrf) => {
     return dispatch(
@@ -496,6 +497,17 @@ export const onManageUser = (userId, action) =>
           });
       }
     });
+  });
+
+export const onManageUserv2 = (userId, action, reason) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_MANAGE_USER({ userId, action, reason }));
+    return api
+      .manageUser(csrf, userId, action, reason)
+      .then(response => dispatch(act.RECEIVE_MANAGE_USER(response)))
+      .catch(error => {
+        dispatch(act.RECEIVE_MANAGE_USER(null, error));
+      });
   });
 
 export const onSubmitInvoice = (

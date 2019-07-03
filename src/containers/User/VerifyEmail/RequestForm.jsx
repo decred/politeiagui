@@ -1,11 +1,11 @@
+import { Button, TextInput } from "pi-ui";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { TextInput, Button } from "pi-ui";
-import FormWrapper from "src/componentsv2/FormWrapper";
+import DevelopmentOnlyContent from "src/componentsv2/DevelopmentOnlyContent";
 import EmailSentMessage from "src/componentsv2/EmailSentMessage";
+import FormWrapper from "src/componentsv2/FormWrapper";
 import ModalIdentityWarning from "src/componentsv2/ModalIdentityWarning";
 import { useRequestResendVerificationEmail } from "./hooks";
-import DevelopmentOnlyContent from "src/componentsv2/DevelopmentOnlyContent";
 
 const RequestVerificationEmailForm = () => {
   const {
@@ -90,8 +90,8 @@ const RequestVerificationEmailForm = () => {
               </Actions>
             </Form>
           ) : (
-            <EmailSentMessage title="Please check your inbox for your verification email" />
-          )
+              <EmailSentMessage title="Please check your inbox for your verification email" />
+            )
         }
       </FormWrapper>
       <DevelopmentOnlyContent show={response && response.verificationtoken}>

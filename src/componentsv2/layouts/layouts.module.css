@@ -6,6 +6,24 @@
     background: none !important;
 }
 
+.customPageDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.subtitle {
+    color: var(--color-gray);
+    font-size: var(--font-size-small);
+}
+
+/* EXTRA SMALL WIDTH */
+@media screen and (max-width: 560px){
+    .customTab {
+        margin-right: 2rem;
+    }
+}
+
 .narrow {
     grid-column: 5 / 11 !important;
 }
@@ -25,7 +43,7 @@
     }
 }
 
-  
+
 /* SMALL WIDTH */
 @media screen and (max-width: 768px){
     .customMain {
@@ -42,4 +60,4 @@
     .customMain {
         margin-top: 0 !important;
     }
-} 
+}

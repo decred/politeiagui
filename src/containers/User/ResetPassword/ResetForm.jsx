@@ -1,5 +1,5 @@
+import { Button, H2, P, TextInput } from "pi-ui";
 import React, { useState } from "react";
-import { TextInput, Button, H2, P } from "pi-ui";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import { useResetPassword } from "./hooks";
 
@@ -86,8 +86,8 @@ const ResetForm = () => {
             </Actions>
           </Form>
         ) : (
-          <SuccessContent />
-        )
+            <SuccessContent />
+          )
       }
     </FormWrapper>
   );

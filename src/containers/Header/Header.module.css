@@ -12,10 +12,14 @@
   align-items: center;
 }
 
-.navLink { 
+.navLink {
     composes: navContainer;
     color: var(--color-gray-dark);
     border-bottom: 2px solid transparent;
+}
+
+.navLink:hover {
+    color: var(--color-primary-dark);
 }
 
 .navLink:hover {
@@ -35,11 +39,10 @@
     border-bottom: 2px solid var(--color-yellow);
 }
 
-/* EXTRA SMALL */
+/* SMALL */
 @media screen and (max-width: 768px) {
     .customHeader {
         padding: 0 var(--spacing-small);
     }
 }
-  
-  
+

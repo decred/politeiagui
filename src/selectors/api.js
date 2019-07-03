@@ -312,6 +312,17 @@ export const lastLoginTime = or(
   )
 );
 
+export const getUserUsername = or(
+  compose(
+    get("username"),
+    apiChangeUsernameResponse
+  ),
+  compose(
+    get("username"),
+    apiUserResponse
+  )
+);
+
 export const loggedInAsUsername = or(
   compose(
     get("username"),
