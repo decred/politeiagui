@@ -10,6 +10,8 @@ export default connect(
     loggedInAsEmail: sel.loggedInAsEmail
   }),
   {
-    onGeneratePayouts: act.onGeneratePayouts
+    onGeneratePayouts: act.onGeneratePayouts,
+    onPayApprovedInvoices: act.onPayApprovedInvoices,
+    confirmWithModal: act.confirmWithModal
   }
 );

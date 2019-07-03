@@ -1214,6 +1214,18 @@ export const onGeneratePayouts = () =>
       });
   });
 
+export const onPayApprovedInvoices = () => dispatch => {
+  dispatch(act.REQUEST_PAY_APPROVED({}));
+  return api
+    .payApprovedInvoices()
+    .then(response => {
+      dispatch(act.RECEIVE_PAY_APPROVED(response));
+    })
+    .catch(error => {
+      dispatch(act.RECEIVE_PAY_APPROVED(null, error));
+    });
+};
+
 export const onFetchExchangeRate = (month, year) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_EXCHANGE_RATE({ month, year }));
