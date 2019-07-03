@@ -68,7 +68,7 @@ const ResetForm = () => {
               id="newpassword"
               label="Password"
               type="password"
-              name="newpassword"
+              id="newpassword"
               value={values.newpassword}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -78,7 +78,7 @@ const ResetForm = () => {
               id="verify_password"
               label="Confirm Password"
               type="password"
-              name="verify_password"
+              id="verify_password"
               value={values.verify_password}
               onChange={handleChange}
               onBlur={handleBlur}

@@ -1,7 +1,7 @@
 .newProposalButton {
     width: 15.5rem;
-    padding-right: 0;
-    padding-left: 0;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -17,7 +17,7 @@
     }
 
     .newProposalButton { 
-        padding: 0;
+        padding: 0 !important;
         width: 3.2rem;
         height: 3.2rem;
     }

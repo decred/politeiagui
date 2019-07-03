@@ -24,7 +24,8 @@ const ModalConfirmWithReason = ({ show, onClose, onSubmit }) => {
         initialValues={{
           reason: ""
         }}
-        onSubmit={onSubmitReason}>
+        onSubmit={onSubmitReason}
+      >
         {({
           Form,
           Actions,
@@ -37,26 +38,30 @@ const ModalConfirmWithReason = ({ show, onClose, onSubmit }) => {
           errors,
           touched
         }) => (
-            <Form onSubmit={handleSubmit}>
-              {errors && errors.global && (
-                <ErrorMessage>{errors.global.toString()}</ErrorMessage>
-              )}
-              <TextInput
-                label="Reason"
-                name="reason"
-                type="text"
-                value={values.reason}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.reason && errors.reason}
-              />
-              <Actions>
-                <Button loading={isSubmitting} kind={values.reason ? "primary" : "disabled"} type="submit">
-                  Confirm
+          <Form onSubmit={handleSubmit}>
+            {errors && errors.global && (
+              <ErrorMessage>{errors.global.toString()}</ErrorMessage>
+            )}
+            <TextInput
+              label="Reason"
+              id="reason"
+              type="text"
+              value={values.reason}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.reason && errors.reason}
+            />
+            <Actions>
+              <Button
+                loading={isSubmitting}
+                kind={values.reason ? "primary" : "disabled"}
+                type="submit"
+              >
+                Confirm
               </Button>
-              </Actions>
-            </Form>
-          )}
+            </Actions>
+          </Form>
+        )}
       </FormWrapper>
     </Modal>
   );

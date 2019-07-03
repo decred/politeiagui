@@ -56,7 +56,7 @@ const RequestForm = () => {
               )}
               <TextInput
                 label="Username"
-                name="username"
+                id="username"
                 value={values.username}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -64,7 +64,7 @@ const RequestForm = () => {
               />
               <TextInput
                 label="Email"
-                name="email"
+                id="email"
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}

@@ -52,7 +52,7 @@ const LoginForm = () => {
             )}
             <TextInput
               label="Username"
-              name="username"
+              id="username"
               value={values.username}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -62,7 +62,6 @@ const LoginForm = () => {
               id="password"
               label="Password"
               type="password"
-              name="password"
               value={values.password}
               onChange={handleChange}
               onBlur={handleBlur}
