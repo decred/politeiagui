@@ -55,7 +55,16 @@ const Proposal = ({ proposal, extended }) => {
       }) => (
         <>
           <Header
-            title={<Title url={proposalURL}>{name}</Title>}
+            title={
+              <Title
+                id={`proposal-title-${proposalToken}`}
+                truncate
+                linesBeforeTruncate={2}
+                url={proposalURL}
+              >
+                {name}
+              </Title>
+            }
             subtitle={
               <Subtitle>
                 <Author username={username} id={userid} />

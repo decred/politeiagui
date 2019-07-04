@@ -26,18 +26,23 @@
 
 .pageDetailsHeader {
     display: flex;
+    flex: 1;
     align-items: center;
     margin-top: 3rem;
 }
 
 .pageDetailsTitle {
     width: 75%;
+    display: flex;
+    align-items: flex-start;
 }
 
 .pageDetailsActions {
     flex: 1;
     display: flex;
     justify-content: flex-end;
+    height: 100%;
+    align-items: center;
 }
 
 .card {
@@ -57,6 +62,9 @@
 @media screen and (max-width: 560px){
     .customTab {
         margin-right: 2rem;
+    }
+    .pageDetailsTitle {
+        width: 85%;
     }
 }
 

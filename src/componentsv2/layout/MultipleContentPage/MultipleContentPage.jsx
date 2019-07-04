@@ -36,11 +36,19 @@ const PageDetails = ({
   subtitle,
   actionsContent,
   children,
+  headerClassName,
   ...props
 }) => {
   const titleContent =
     typeof title === "string" ? (
-      <H1 className={styles.pageDetailsTitle}>{title}</H1>
+      <H1
+        id="proposal-title"
+        truncate
+        linesBeforeTruncate={3}
+        className={styles.pageDetailsTitle}
+      >
+        {title}
+      </H1>
     ) : (
       title
     );
@@ -49,7 +57,7 @@ const PageDetails = ({
       className={classNames(styles.customPageDetails, className)}
       {...props}
     >
-      <div className={styles.pageDetailsHeader}>
+      <div className={classNames(styles.pageDetailsHeader, headerClassName)}>
         {titleContent}
         <div className={styles.pageDetailsActions}>{actionsContent}</div>
       </div>
