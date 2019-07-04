@@ -20,19 +20,26 @@ export function useUserProposals(ownProps) {
     mapDispatchToProps
   );
 
-  useEffect(() => {
+  useEffect(function handleFetchUserProposals() {
     if (!userProposals) {
       onFetchUserProposals(userID);
     }
   }, []);
 
-  useEffect(() => {
-    const proposalsFeched = !!proposals;
-    const hasProposalsCached = userProposals && userProposals.length;
-    if (proposalsFeched && !hasProposalsCached) {
-      setUserProposals(proposals);
-    }
-  }, [proposals]);
+  useEffect(
+    function handleCachingProposals() {
+      const proposalsFeched = !!proposals;
+      const hasProposalsCached = userProposals && userProposals.length;
+      const hasAllProposalsCached =
+        proposalsFeched &&
+        hasProposalsCached &&
+        userProposals.length === proposals.length;
+      if (!hasAllProposalsCached) {
+        setUserProposals(proposals);
+      }
+    },
+    [proposals]
+  );
 
   return { proposals: userProposals, loading };
 }
