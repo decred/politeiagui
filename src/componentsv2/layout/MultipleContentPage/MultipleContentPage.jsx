@@ -1,7 +1,7 @@
 import React from "react";
 import {
   TopBanner,
-  Main,
+  Main as UIMain,
   PageDetails as PageDetailsUI,
   H1,
   Container,
@@ -17,7 +17,7 @@ import NewProposalButton from "src/componentsv2/NewProposalButton";
 import styles from "../layouts.module.css";
 
 const renderError = error => (
-  <Main className={styles.customMain}>
+  <Main className={styles.singleContentMain}>
     <Message kind="error">{error.toString()}</Message>
   </Main>
 );
@@ -73,6 +73,10 @@ const Tab = ({ className, ...props }) => (
 
 const Tabs = ({ className, ...props }) => (
   <TabsUI className={classNames(styles.customTabs, className)} {...props} />
+);
+
+const Main = ({ className, ...props }) => (
+  <UIMain className={classNames(styles.customMain, className)} {...props} />
 );
 
 const MultipleContentpage = ({ children }) => {

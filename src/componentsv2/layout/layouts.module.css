@@ -1,9 +1,14 @@
 .customMain {
+    background: none !important;
+    max-width: 100vw;
+}
+
+.singleContentMain {
+    composes: customMain;
     grid-row: auto !important;
     grid-column: 5 / 11 !important;
     margin-top: 6rem !important;
     padding: 2rem 0 0 0 !important;
-    background: none !important;
 }
 
 .customPageDetails {
@@ -71,7 +76,7 @@
 
 /* MEDIUM */
 @media screen and (max-width: 1000px){
-    .customMain {
+    .singleContentMain {
         grid-column: 4 / 12 !important;
     }
 
@@ -83,7 +88,7 @@
 
 /* SMALL WIDTH */
 @media screen and (max-width: 768px){
-    .customMain {
+    .singleContentMain {
         grid-column: 3 / 13 !important;
     }
 }
@@ -94,7 +99,7 @@
         padding: 2rem 3rem;
     }
 
-    .customMain {
+    .singleContentMain {
         grid-column: full-start / full-end !important;
         margin-top: 0 !important;
     }

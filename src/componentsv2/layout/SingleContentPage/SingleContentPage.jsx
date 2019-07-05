@@ -13,7 +13,7 @@ const SingleContentPage = ({ children, contentWidth }) => {
       <Header noBorder={true} />
       <Main
         fill
-        className={classNames(styles.customMain, styles[contentWidth])}
+        className={classNames(styles.singleContentMain, styles[contentWidth])}
       >
         <ErrorBoundary errorRenderer={renderError}>
           <Card className={styles.card}>{children}</Card>
