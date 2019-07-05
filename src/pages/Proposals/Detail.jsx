@@ -4,7 +4,7 @@ import ProposalDetail from "src/containers/Proposal/Detail";
 
 const PublicList = () => {
   return (
-    <MultipleContentPage>
+    <MultipleContentPage topBannerHeight={90}>
       {props => {
         return useMemo(
           () => <ProposalDetail {...props} />,

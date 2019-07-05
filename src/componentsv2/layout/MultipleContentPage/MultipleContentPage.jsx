@@ -42,9 +42,9 @@ const PageDetails = ({
   const titleContent =
     typeof title === "string" ? (
       <H1
-        id="proposal-title"
+        id="page-title"
         truncate
-        linesBeforeTruncate={3}
+        linesBeforeTruncate={2}
         className={styles.pageDetailsTitle}
       >
         {title}

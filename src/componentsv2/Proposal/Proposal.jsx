@@ -116,7 +116,9 @@ const Proposal = ({ proposal, extended }) => {
             }
           />
           <Row topMarginSize="s" hide={!extended}>
-            <Text truncate>{proposalToken}</Text>
+            <Text id={`proposal-token-${proposalToken}`} truncate>
+              {proposalToken}
+            </Text>
           </Row>
           {hasVoteStatus && (
             <Row>
