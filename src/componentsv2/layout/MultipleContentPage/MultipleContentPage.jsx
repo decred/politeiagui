@@ -79,9 +79,9 @@ const Main = ({ className, ...props }) => (
   <UIMain className={classNames(styles.customMain, className)} {...props} />
 );
 
-const MultipleContentpage = ({ children }) => {
+const MultipleContentpage = ({ children, ...props }) => {
   return (
-    <Container>
+    <Container {...props}>
       <Header noBorder />
       <ErrorBoundary errorRenderer={renderError}>
         {children({
