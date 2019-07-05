@@ -79,7 +79,10 @@
       "src/selectors/*.{js,jsx}",
       "!<rootDir>/node_modules/",
       "!<rootDir>/path/to/dir/"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^src(.*)": "<rootDir>/src"
+    }
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
@@ -87,6 +90,9 @@
     "connect": "^3.7.0",
     "connect-api-mocker": "^1.5.0",
     "cross-env": "^5.0.5",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-to-json": "^3.3.5",
     "eslint": "5.12.0",
     "eslint-config-prettier": "^4.3.0",
     "eslint-config-standard-react": "7.0.2",

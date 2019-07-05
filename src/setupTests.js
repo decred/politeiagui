@@ -3,6 +3,11 @@ import dummyStorageDriver from "./lib/tests/support/dummyStorageDriver";
 import { registerAssertions } from "redux-actions-assertions/jest";
 import { registerMiddlewares } from "redux-actions-assertions";
 import thunk from "redux-thunk";
+import { configure } from "enzyme";
+import Adapter from "enzyme-adapter-react-16";
+
+// setup enzyme adapter
+configure({ adapter: new Adapter() });
 
 class MockedLocalStorage {
   constructor() {
@@ -68,3 +73,7 @@ describe("test redux actions assertions", () => {
     expect(someAction()).toDispatchActions({ type: "TEST_ACTION" }, true);
   });
 });
+
+const appRoot = document.createElement("div");
+appRoot.setAttribute("id", "root");
+document.body.append(appRoot);

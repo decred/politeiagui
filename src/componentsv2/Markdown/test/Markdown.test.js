@@ -1,19 +1,21 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import renderer from "react-test-renderer";
+import { mount } from "enzyme";
 import { customRenderers } from "../helpers";
 
 const maliciousBodyText =
   "![clickforxss](javascript:alert('XSS'))  [clickforxss](javascript:alert('XSS'))";
 
 it("filter potencial 'XSS' attackers", () => {
-  const tree = renderer
-    .create(
-      <ReactMarkdown
-        source={maliciousBodyText}
-        renderers={customRenderers(true)}
-      />
-    )
-    .toJSON();
-  expect(tree).toMatchSnapshot();
+  const wrapper = mount(
+    <ReactMarkdown
+      source={maliciousBodyText}
+      renderers={customRenderers(true)}
+    />
+  );
+  wrapper.find("LinkRenderer").forEach(el => {
+    expect(["x-javascript:alert('XSS')", "javascript:void(0)"]).toContain(
+      el.prop("url")
+    );
+  });
 });

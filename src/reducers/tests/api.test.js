@@ -862,7 +862,7 @@ describe("test api reducer", () => {
       },
       {
         action: act.RESET_PROPOSAL,
-        key: ["newProposal", "editProposal"],
+        key: ["newProposal", "editProposal", "proposal"],
         type: "resetMultiple"
       },
       {

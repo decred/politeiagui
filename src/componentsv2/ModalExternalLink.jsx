@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Modal, Button, P, Text, Message } from "pi-ui";
-import { Row } from "./layout";
+// import { Row } from "./layout";
 
 const ModalExternalLink = ({ show, onClose, link }) => {
   const tmpLink = document.createElement("a");
@@ -44,14 +44,14 @@ const ModalExternalLink = ({ show, onClose, link }) => {
           <Text>{tmpLink.pathname + tmpLink.search + tmpLink.hash}</Text>
         </div>
       </div>
-      <Row topMarginSize="m" justify="center">
+      <div className="margin-top-m">
         <Text weight="semibold">Are you sure you want to open this link?</Text>
-      </Row>
-      <Row topMarginSize="s" justify="right">
+      </div>
+      <div className="margin-top-m">
         <Button className="margin-top-s" onClick={onProceed}>
           Yes, proceed
         </Button>
-      </Row>
+      </div>
     </Modal>
   );
 };
