@@ -44,10 +44,10 @@ const ModalExternalLink = ({ show, onClose, link }) => {
           <Text>{tmpLink.pathname + tmpLink.search + tmpLink.hash}</Text>
         </div>
       </div>
-      <div className="margin-top-m">
+      <div className="margin-top-m justify-center">
         <Text weight="semibold">Are you sure you want to open this link?</Text>
       </div>
-      <div className="margin-top-m">
+      <div className="margin-top-m justify-right">
         <Button className="margin-top-s" onClick={onProceed}>
           Yes, proceed
         </Button>
