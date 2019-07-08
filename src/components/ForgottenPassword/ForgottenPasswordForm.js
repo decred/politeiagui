@@ -24,6 +24,21 @@ const ForgottenPasswordForm = ({
       )}
       <div className="c-form-group">
         <label className="screenreader-only" htmlFor="email">
+          Username:
+        </label>
+        <Field
+          autoFocus
+          className="c-form-control"
+          id="username"
+          name="username"
+          component="input"
+          type="text"
+          placeholder="Username"
+          tabIndex={3}
+        />
+      </div>
+      <div className="c-form-group">
+        <label className="screenreader-only" htmlFor="email">
           Email Address:
         </label>
         <Field

@@ -887,6 +887,38 @@ export const onForgottenPasswordRequest = ({ email }) =>
 export const resetForgottenPassword = () => dispatch =>
   dispatch(act.RESET_FORGOTTEN_PASSWORD_REQUEST());
 
+// XXXX: Do not use this action for production code before the following
+// PR is meged: https://github.com/decred/politeia/pull/937
+export const onResetPassword = ({ username, email }) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_RESET_PASSWORD({ username, email }));
+    return api
+      .resetPassword(csrf, username, email)
+      .then(response => dispatch(act.RECEIVE_RESET_PASSWORD(response)))
+      .catch(error => {
+        dispatch(act.RECEIVE_RESET_PASSWORD(null, error));
+        throw error;
+      });
+  });
+
+// XXXX: Do not use this action for production code before the following
+// PR is meged: https://github.com/decred/politeia/pull/937
+export const onVerifyResetPassword = ({
+  username,
+  verificationtoken,
+  newpassword
+}) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_RESET_PASSWORD({ username }));
+    return api
+      .verifyResetPassword(csrf, username, verificationtoken, newpassword)
+      .then(response => dispatch(act.RECEIVE_VERIFY_RESET_PASSWORD(response)))
+      .catch(error => {
+        dispatch(act.RECEIVE_VERIFY_RESET_PASSWORD(null, error));
+        throw error;
+      });
+  });
+
 export const onResendVerificationEmail = act.REQUEST_SIGNUP_CONFIRMATION;
 export const onResendVerificationEmailConfirm = ({ email }) =>
   withCsrf((dispatch, getState, csrf) => {
@@ -905,6 +937,7 @@ export const onResendVerificationEmailConfirm = ({ email }) =>
 export const resetResendVerificationEmail = () => dispatch =>
   dispatch(act.RESET_RESEND_VERIFICATION_EMAIL());
 
+// USING THIS ON PASSWORD RESET
 export const onPasswordResetRequest = ({
   email,
   verificationtoken,

@@ -14,7 +14,7 @@ class PasswordReset extends Component {
     super(props);
     const query = this.getQueryParams();
     if (
-      isRequiredValidator(query.email) &&
+      isRequiredValidator(query.username) &&
       isRequiredValidator(query.verificationtoken)
     ) {
       return;
@@ -27,7 +27,7 @@ class PasswordReset extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.passwordResetResponse) {
+    if (this.props.verifyResetPasswordResponse) {
       this.props.history.push("/user/password/reset/next");
     }
   }
@@ -56,7 +56,7 @@ class PasswordReset extends Component {
     validate(props, policy);
 
     return this.props
-      .onPasswordResetRequest(
+      .onVerifyResetPassword(
         assign({ newpassword: props.newPassword }, this.getQueryParams())
       )
       .catch(error => {
