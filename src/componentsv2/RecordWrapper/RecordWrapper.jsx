@@ -22,7 +22,12 @@ export const Event = ({ event, timestamp }) => (
     placement="bottom"
   >
     {({ timeAgo }) => (
-      <Text color="gray" size="small" truncate>{`${event} ${timeAgo}`}</Text>
+      <Text
+        id={`event-${event}-${timestamp}`}
+        color="gray"
+        size="small"
+        truncate
+      >{`${event} ${timeAgo}`}</Text>
     )}
   </DateTooltip>
 );

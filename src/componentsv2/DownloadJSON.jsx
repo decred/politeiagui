@@ -30,13 +30,7 @@ const DownloadJSON = ({
 };
 
 DownloadJSON.propTypes = {
-  content: PropTypes.object.isRequired,
-  children: PropTypes.node.isRequired,
-  contentName: PropTypes.string
-};
-
-DownloadJSON.defaultProps = {
-  contentName: "content.json"
+  content: PropTypes.object.isRequired
 };
 
 export default DownloadJSON;

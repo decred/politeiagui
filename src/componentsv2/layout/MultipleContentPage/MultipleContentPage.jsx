@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {
   TopBanner,
   Main as UIMain,
@@ -15,6 +16,7 @@ import Header from "src/containers/Header/Header";
 import Sidebar from "../../Sidebar";
 import NewProposalButton from "src/componentsv2/NewProposalButton";
 import styles from "../layouts.module.css";
+import useScrollToTop from "src/hooks/useScrollToTop";
 
 const renderError = error => (
   <Main className={styles.singleContentMain}>
@@ -79,7 +81,8 @@ const Main = ({ className, ...props }) => (
   <UIMain className={classNames(styles.customMain, className)} {...props} />
 );
 
-const MultipleContentpage = ({ children, ...props }) => {
+const MultipleContentpage = ({ children, disableScrollToTop, ...props }) => {
+  useScrollToTop(disableScrollToTop);
   return (
     <Container {...props}>
       <Header noBorder />
@@ -101,6 +104,15 @@ const MultipleContentpage = ({ children, ...props }) => {
 
 PageDetails.defaultProps = {
   actionsContent: <NewProposalButton />
+};
+
+MultipleContentpage.propTypes = {
+  children: PropTypes.func,
+  disableScrollToTop: PropTypes.bool
+};
+
+MultipleContentpage.defaultProps = {
+  disableScrollToTop: false
 };
 
 export default MultipleContentpage;

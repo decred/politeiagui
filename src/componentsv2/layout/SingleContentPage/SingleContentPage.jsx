@@ -4,10 +4,12 @@ import { Card, Message, Container, Main, classNames } from "pi-ui";
 import styles from "../layouts.module.css";
 import ErrorBoundary from "src/components/ErrorBoundary";
 import Header from "src/containers/Header";
+import useScrollToTop from "src/hooks/useScrollToTop";
 
 const renderError = error => <Message kind="error">{error.toString()}</Message>;
 
-const SingleContentPage = ({ children, contentWidth }) => {
+const SingleContentPage = ({ children, contentWidth, disableScrollToTop }) => {
+  useScrollToTop(disableScrollToTop);
   return (
     <Container className={styles.customContainer}>
       <Header noBorder={true} />
@@ -25,11 +27,13 @@ const SingleContentPage = ({ children, contentWidth }) => {
 
 SingleContentPage.propTypes = {
   children: PropTypes.node.isRequired,
-  contentWidth: PropTypes.oneOf(["narrow", "widen"])
+  contentWidth: PropTypes.oneOf(["narrow", "widen"]),
+  disableScrollToTop: PropTypes.bool
 };
 
 SingleContentPage.defaultProps = {
-  contentWidth: "narrow"
+  contentWidth: "narrow",
+  disableScrollToTop: false
 };
 
 export default SingleContentPage;

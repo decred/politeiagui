@@ -122,7 +122,7 @@ export const getProposalStatusTagProps = proposal => {
     return { type: "orangeNegativeCircled", text: "Abandoned" };
   }
 
-  return { type: "finished", text: "missing" };
+  return { type: "grayNegative", text: "missing" };
 };
 
 export const getVoteBlocksLeft = (proposal, chainHeight) => {

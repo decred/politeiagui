@@ -119,8 +119,8 @@ const PublicProposals = ({
           <Tabs wrap onSelectTab={onSetIndex} activeTabIndex={index}>
             {tabLabels.map(label => (
               <Tab
+                key={`tab-${label}`}
                 count={getPropsCountByTab(label)}
-                key={`tab${label}`}
                 label={label}
               />
             ))}

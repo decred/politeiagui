@@ -79,9 +79,11 @@ const Proposal = ({ proposal, extended }) => {
                 )}
                 {version > 1 && (
                   <Text
+                    id={`proposal-${proposalToken}-version`}
                     className={classNames(styles.version, "hide-on-mobile")}
                     color="gray"
                     size="small"
+                    truncate
                   >{`version ${version}`}</Text>
                 )}
               </Subtitle>
@@ -115,11 +117,13 @@ const Proposal = ({ proposal, extended }) => {
               )
             }
           />
-          <Row topMarginSize="s" hide={!extended}>
-            <Text id={`proposal-token-${proposalToken}`} truncate>
-              {proposalToken}
-            </Text>
-          </Row>
+          {extended && (
+            <Row topMarginSize="s">
+              <Text id={`proposal-token-${proposalToken}`} truncate>
+                {proposalToken}
+              </Text>
+            </Row>
+          )}
           {hasVoteStatus && (
             <Row>
               <StatusBar
@@ -141,20 +145,22 @@ const Proposal = ({ proposal, extended }) => {
               <GithubLink token={proposalToken} />
             </Row>
           )}
-          <Row hide={!extended}>
-            <DownloadRecord
-              fileName={proposalToken}
-              content={proposal}
-              className="margin-right-s"
-              label="Download Proposal Bundle"
-            />
-            {/*TODO: comment download needs to be a container imported from the comments context */}
-            {isPublic && !!numcomments && (
-              <Link title="not implemented yet" to="#">
-                Download Comments Bundle
-              </Link>
-            )}
-          </Row>
+          {extended && (
+            <Row>
+              <DownloadRecord
+                fileName={proposalToken}
+                content={proposal}
+                className="margin-right-s"
+                label="Download Proposal Bundle"
+              />
+              {/*TODO: comment download needs to be a container imported from the comments context */}
+              {isPublic && !!numcomments && (
+                <Link title="not implemented yet" to="#">
+                  Download Comments Bundle
+                </Link>
+              )}
+            </Row>
+          )}
         </>
       )}
     </RecordWrapper>

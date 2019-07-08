@@ -4,7 +4,7 @@ import PublicProposals from "src/containers/Proposal/Public";
 
 const PublicList = () => {
   return (
-    <MultipleContentPage>
+    <MultipleContentPage disableScrollToTop>
       {props => {
         return useMemo(
           () => <PublicProposals {...props} />,
