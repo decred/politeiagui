@@ -116,7 +116,7 @@ const PublicProposals = ({
     <>
       <TopBanner>
         <PageDetails title="Public Proposals">
-          <Tabs wrap onSelectTab={onSetIndex} activeTabIndex={index}>
+          <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
             {tabLabels.map(label => (
               <Tab
                 key={`tab-${label}`}
