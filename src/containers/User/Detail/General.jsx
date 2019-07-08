@@ -261,18 +261,21 @@ const General = ({
         onClose={closePasswordModal}
       />
       <ModalConfirmWithReason
+        subject="expireResetPasswordToken"
         onSubmit={markResetPasswordTokenAsExpired}
         validationSchema={validationSchema}
         show={showMarkAsExpiredConfirmModal}
         onClose={closeMarkAsExpiredConfirmModal}
       />
       <ModalConfirmWithReason
+        subject="deactivateOrReactivateUser"
         onSubmit={isdeactivated ? reactivateUser : deactivateUser}
         validationSchema={validationSchema}
         show={showActivationConfirmModal}
         onClose={closeActivationModal}
       />
       <ModalConfirmWithReason
+        subject="markUserPaywallAsPaid"
         onSubmit={markAsPaid}
         validationSchema={validationSchema}
         show={showMarkAsPaidConfirmModal}

@@ -108,7 +108,6 @@ const SignupForm = () => {
                 id="password"
                 label="Password"
                 type="password"
-                id="password"
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -118,7 +117,6 @@ const SignupForm = () => {
                 id="verify_password"
                 label="Verify Password"
                 type="password"
-                id="verify_password"
                 value={values.verify_password}
                 onChange={handleChange}
                 onBlur={handleBlur}

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import FormWrapper from "src/componentsv2/FormWrapper";
 
-const ModalConfirmWithReason = ({ show, onClose, onSubmit }) => {
+const ModalConfirmWithReason = ({ show, onClose, onSubmit, subject }) => {
   const onSubmitReason = async (
     values,
     { resetForm, setSubmitting, setFieldError }
@@ -44,7 +44,8 @@ const ModalConfirmWithReason = ({ show, onClose, onSubmit }) => {
             )}
             <TextInput
               label="Reason"
-              id="reason"
+              name="reason"
+              id={`reason-for-${subject}`}
               type="text"
               value={values.reason}
               onChange={handleChange}
@@ -68,6 +69,7 @@ const ModalConfirmWithReason = ({ show, onClose, onSubmit }) => {
 };
 
 ModalConfirmWithReason.propTypes = {
+  subject: PropTypes.string.isRequired,
   show: PropTypes.bool,
   onClose: PropTypes.func,
   onSubmit: PropTypes.func
