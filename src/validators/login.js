@@ -3,14 +3,14 @@ import { emailValidator, isRequiredValidator } from "./util";
 
 const validate = values => {
   if (
-    !isRequiredValidator(values.email) ||
+    !isRequiredValidator(values.username) ||
     !isRequiredValidator(values.password)
   ) {
     throw new SubmissionError({ _error: "All fields are required" });
   }
 
-  if (!emailValidator(values.email)) {
-    throw new SubmissionError({ _error: "Invalid email address" });
+  if (emailValidator(values.username)) {
+    throw new SubmissionError({ _error: "Username must be used to login" });
   }
 };
 

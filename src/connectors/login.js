@@ -51,7 +51,7 @@ class Wrapper extends Component {
   onLogin(args) {
     args = {
       ...args,
-      email: args.email === undefined ? null : args.email.trim()
+      username: args.username === undefined ? null : args.username.trim()
     };
     validate(args);
     return this.props
