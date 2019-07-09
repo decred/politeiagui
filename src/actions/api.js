@@ -964,7 +964,7 @@ export const keyMismatch = payload => dispatch =>
   dispatch(act.KEY_MISMATCH(payload));
 
 export const resetPasswordReset = () => dispatch =>
-  dispatch(act.RESET_PASSWORD_RESET_REQUEST());
+  dispatch(act.RESET_RESET_PASSWORD());
 
 export const verifyUserPaymentWithPoliteia = txid => {
   return api.verifyUserPayment(txid).then(response => response.haspaid);
