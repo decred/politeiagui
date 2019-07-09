@@ -1,0 +1,31 @@
+.paywallInfo {
+  display: flex;
+  background-color: var(--color-gray-lightest);
+  padding: 2rem 3rem;
+}
+
+.qrcodeWrapper {
+  width: 10rem;
+}
+
+.copyToClipboard {
+  width: 1.4rem;
+  height: 1.4rem;
+  cursor: pointer;
+}
+
+.infoWrapper {
+  flex-grow: 2;
+  position: relative;
+}
+
+.statusTag {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.addressWrapper {
+  padding: 0.3rem 1rem;
+  background-color: var(--color-blue-lighter);
+}

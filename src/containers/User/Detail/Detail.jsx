@@ -31,10 +31,8 @@ const UserDetail = ({
   Sidebar,
   Main,
   Title,
-  Subtitle,
   Tabs,
   Tab,
-  history,
   match
 }) => {
   const {

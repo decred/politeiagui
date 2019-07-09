@@ -65,7 +65,7 @@
     margin-top: var(--spacing-extra-small);
 }
 
-.margi-bottom-xs {
+.margin-bottom-xs {
     margin-bottom: var(--spacing-extra-small);
 }
 
@@ -141,7 +141,7 @@
     opacity: 0;
     z-index: 1;
 }
-  
+
 .fade-enter-active {
     opacity: 1;
     transition: opacity 215ms ease-in;

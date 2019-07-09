@@ -1,20 +1,20 @@
-import get from "lodash/fp/get";
 import CryptoJS from "crypto-js";
-import * as pki from "./lib/pki";
-import {
-  PROPOSAL_VOTING_NOT_AUTHORIZED,
-  PROPOSAL_VOTING_AUTHORIZED,
-  PROPOSAL_VOTING_ACTIVE,
-  PROPOSAL_FILTER_ALL,
-  PROPOSAL_VOTING_FINISHED,
-  INVOICE_STATUS_NEW,
-  INVOICE_STATUS_UPDATED,
-  INVOICE_STATUS_REJECTED,
-  INVOICE_STATUS_APPROVED,
-  INVOICE_STATUS_PAID,
-  INVOICE_STATUS_DISPUTED
-} from "./constants.js";
+import get from "lodash/fp/get";
 import { INVALID_FILE } from "./constants";
+import {
+  INVOICE_STATUS_APPROVED,
+  INVOICE_STATUS_DISPUTED,
+  INVOICE_STATUS_NEW,
+  INVOICE_STATUS_PAID,
+  INVOICE_STATUS_REJECTED,
+  INVOICE_STATUS_UPDATED,
+  PROPOSAL_FILTER_ALL,
+  PROPOSAL_VOTING_ACTIVE,
+  PROPOSAL_VOTING_AUTHORIZED,
+  PROPOSAL_VOTING_FINISHED,
+  PROPOSAL_VOTING_NOT_AUTHORIZED
+} from "./constants.js";
+import * as pki from "./lib/pki";
 
 export const getProposalStatus = proposalStatus =>
   get(proposalStatus, [
@@ -389,3 +389,12 @@ export const fromUSDCentsToUSDUnits = cents =>
 export const fromUSDUnitsToUSDCents = units => parseInt(units * 100, 10);
 
 export const isEmpty = obj => Object.keys(obj).length === 0;
+
+export const copyToClipboard = str => {
+  const el = document.createElement("textarea");
+  el.value = str;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand("copy");
+  document.body.removeChild(el);
+};

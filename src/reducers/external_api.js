@@ -1,5 +1,5 @@
 import * as act from "../actions/types";
-import { DEFAULT_REQUEST_STATE, request, receive, reset } from "./util";
+import { DEFAULT_REQUEST_STATE, receive, request, reset } from "./util";
 
 export const DEFAULT_STATE = {
   payWithFaucet: DEFAULT_REQUEST_STATE
@@ -16,7 +16,8 @@ const external_api = (state = DEFAULT_STATE, action) =>
     [act.REQUEST_GET_LAST_BLOCK_HEIGHT]: () =>
       request("blockHeight", state, action),
     [act.RECEIVE_GET_LAST_BLOCK_HEIGHT]: () =>
-      receive("blockHeight", state, action)
+      receive("blockHeight", state, action),
+    [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
   }[action.type] || (() => state))());
 
 export default external_api;
