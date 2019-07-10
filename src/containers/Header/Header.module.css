@@ -23,6 +23,10 @@
     color: var(--color-primary-dark);
 }
 
+.navLink:last-child .navLinkText {
+    padding-right: 0;
+}
+
 .activeNavLink {
     border-bottom: 2px solid var(--color-yellow);
 }
