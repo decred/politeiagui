@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import distance from "date-fns/distance_in_words";
-import { Tooltip } from "pi-ui";
+import { Tooltip, classNames } from "pi-ui";
+import styles from "./DateTooltip.module.css";
 
 const getTimeAgo = timestamp =>
   distance(new Date(), new Date(timestamp * 1000), { addSuffix: true });
@@ -11,7 +12,7 @@ const DateTooltip = ({ timestamp, placement, className, children }) => {
   const timeAgo = useMemo(() => getTimeAgo(timestamp), [timestamp]);
   return (
     <Tooltip
-      className={className}
+      className={classNames(className, styles.dateTooltip)}
       content={date.toISOString()}
       placement={placement}
     >
