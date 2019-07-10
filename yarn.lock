@@ -856,6 +856,7 @@
 
 "@babel/runtime@^7.3.1":
 <<<<<<< HEAD
+<<<<<<< HEAD
   version "7.5.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.5.4.tgz#cb7d1ad7c6d65676e66b47186577930465b5271b"
   integrity sha512-Na84uwyImZZc3FKf4aUF1tysApzwf3p2yuFBIyBfbzT5glzKTdvYI4KVW4kcgjrzoGUjC7w3YyCHcJKaRxsr2Q==
@@ -864,6 +865,11 @@
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.5.3.tgz#ad06e9d28539426fc20869f0b3d9ed6c21bed909"
   integrity sha512-09kHrO2Y0JWybW20qnt+UMlNTj7NUQByP6ubyq50Yj1QCDhbHfEmWk/uso+SaEi5XKNEWYVKbBgdiZisIaBPmw==
 >>>>>>> f84bded... Add paywall
+=======
+  version "7.5.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.5.4.tgz#cb7d1ad7c6d65676e66b47186577930465b5271b"
+  integrity sha512-Na84uwyImZZc3FKf4aUF1tysApzwf3p2yuFBIyBfbzT5glzKTdvYI4KVW4kcgjrzoGUjC7w3YyCHcJKaRxsr2Q==
+>>>>>>> 646dd3a... use CopyableText from pi-ui
   dependencies:
     regenerator-runtime "^0.13.2"
 
@@ -9038,10 +9044,14 @@ performance-now@^2.1.0:
 "pi-ui@https://github.com/tiagoalvesdulce/pi-ui":
   version "1.0.0"
 <<<<<<< HEAD
+<<<<<<< HEAD
   resolved "https://github.com/tiagoalvesdulce/pi-ui#3fa52cd523a7e8d0310186092bb0c07221a16cf3"
 =======
   resolved "https://github.com/tiagoalvesdulce/pi-ui#7a4bdf4f4ca07ca53b626d284f742c3c4ddc087c"
 >>>>>>> f84bded... Add paywall
+=======
+  resolved "https://github.com/tiagoalvesdulce/pi-ui#1ba3e717f0a65156eb75d140f497ce395c6d6e1d"
+>>>>>>> 646dd3a... use CopyableText from pi-ui
   dependencies:
     clamp-js-main "^0.11.5"
     react-spring "^8.0.25"

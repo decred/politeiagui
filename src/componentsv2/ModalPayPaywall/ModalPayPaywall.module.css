@@ -9,12 +9,6 @@
   min-width: 10rem;
 }
 
-.copyToClipboard {
-  width: 1.4rem;
-  height: 1.4rem;
-  cursor: pointer;
-}
-
 .infoWrapper {
   flex-grow: 2;
   position: relative;
@@ -46,9 +40,4 @@
   .paywallDescription {
     margin-top: 1rem;
   }
-}
-
-.addressWrapper {
-  padding: 0.3rem 1rem;
-  background-color: var(--color-blue-lighter);
 }

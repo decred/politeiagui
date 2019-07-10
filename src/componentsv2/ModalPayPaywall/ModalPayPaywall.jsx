@@ -1,10 +1,8 @@
-import { classNames, H4, Modal, P, StatusTag, Text, useMediaQuery } from "pi-ui";
+import { classNames, CopyableText, H4, Modal, P, StatusTag, Text, useMediaQuery } from "pi-ui";
 import React from "react";
 import { PAYWALL_STATUS_LACKING_CONFIRMATIONS, PAYWALL_STATUS_PAID, PAYWALL_STATUS_WAITING } from "src/constants";
-import { copyToClipboard as copy } from "src/helpers";
 import PaymentFaucet from "../PaymentFaucet/PaymentFaucet";
 import QRCode from "../QRCode";
-import CopyToClipboard from "./assets/CopyToClipboard.svg";
 import styles from "./ModalPayPaywall.module.css";
 
 const mapPaywallStatusToStatusTag = {
@@ -28,10 +26,7 @@ const ModalPayPaywall = ({ show, title, onClose, address, amount, status }) => {
           <H4 weight="bold" className="margin-bottom-xs">Send</H4>
           <Text>{amount} DCR</Text>
           <H4 weight="bold" className="margin-top-s margin-bottom-xs">To address</H4>
-          <div>
-            <Text className={styles.addressWrapper} truncate>{address}</Text>
-            <img className={classNames(styles.copyToClipboard, "margin-left-xs")} onClick={() => copy(address)} src={CopyToClipboard} alt="copy to clipboard" />
-          </div>
+          <CopyableText truncate>{address}</CopyableText>
           {!extraSmall && mapPaywallStatusToStatusTag[status]}
         </div>
       </div>
