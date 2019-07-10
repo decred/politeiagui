@@ -119,12 +119,19 @@
     overflow: hidden;
 }
 
+/* Color helpers */
+.color-gray {
+    color: var(--color-gray);
+}
+
+
 
 .main {
     max-width: 100vw;
 }
 
 
+/* Global transition effect classes */
 .fade-enter {
     opacity: 0;
     z-index: 1;

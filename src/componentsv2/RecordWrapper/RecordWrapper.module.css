@@ -1,5 +1,5 @@
-.title {
-    font-weight: var(--font-weight-regular);
+.title, .title > h2 {
+    color: var(--color-primary-dark);
 }
 
 .header {

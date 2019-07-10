@@ -82,7 +82,6 @@ const Proposal = ({ proposal, extended }) => {
                     id={`proposal-${proposalToken}-version`}
                     className={classNames(styles.version, "hide-on-mobile")}
                     color="gray"
-                    size="small"
                     truncate
                   >{`version ${version}`}</Text>
                 )}

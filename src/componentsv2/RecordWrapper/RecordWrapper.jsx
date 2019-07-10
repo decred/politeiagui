@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styles from "./RecordWrapper.module.css";
 import DateTooltip from "../DateTooltip";
 import DownloadJSON from "../DownloadJSON";
-import { Card, H3, Icon, Link as UILink, Text, classNames } from "pi-ui";
+import { Card, H2, Icon, Link as UILink, Text, classNames } from "pi-ui";
 import { Row } from "../layout";
 import Link from "../Link";
 import githubIcon from "src/assets/github.svg";
@@ -25,7 +25,6 @@ export const Event = ({ event, timestamp }) => (
       <Text
         id={`event-${event}-${timestamp}`}
         color="gray"
-        size="small"
         truncate
       >{`${event} ${timeAgo}`}</Text>
     )}
@@ -33,10 +32,8 @@ export const Event = ({ event, timestamp }) => (
 );
 
 export const Title = ({ children, url, ...props }) => (
-  <Link to={url} noHoverEffect>
-    <H3 {...props} className={styles.title}>
-      {children}
-    </H3>
+  <Link to={url} className={styles.title}>
+    <H2 {...props}>{children}</H2>
   </Link>
 );
 
@@ -45,7 +42,9 @@ export const Subtitle = ({ children }) => {
     <Join
       className="margin-top-s"
       SeparatorComponent={() => (
-        <span className="margin-left-s margin-right-s hide-on-mobile">•</span>
+        <span className="margin-left-s margin-right-s hide-on-mobile color-gray">
+          •
+        </span>
       )}
     >
       {children}
