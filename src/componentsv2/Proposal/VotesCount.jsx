@@ -14,29 +14,27 @@ const VotesCount = ({
   const votesLeft = quorumVotes - votesReceived;
 
   return (
-    isVoteActive && (
-      <div className={styles.voteCount}>
-        {!isMobileScreen ? (
-          <>
-            {onSearchVotes && votesReceived > 0 && (
-              <img
-                onClick={onSearchVotes}
-                alt="Search votes"
-                className={styles.voteCountSearch}
-                src={iconSearchSmall}
-              />
-            )}
-            <Text size="small">{votesReceived}/</Text>
-            <Text color="gray" size="small">{`${quorumVotes} votes`}</Text>
-          </>
-        ) : (
-          <Text color="gray" size="small">
-            {votesLeft > 0 ? votesLeft : ""}
-            {` votes left`}
-          </Text>
-        )}
-      </div>
-    )
+    <div className={styles.voteCount}>
+      {!isMobileScreen ? (
+        <>
+          {onSearchVotes && votesReceived > 0 && (
+            <img
+              onClick={onSearchVotes}
+              alt="Search votes"
+              className={styles.voteCountSearch}
+              src={iconSearchSmall}
+            />
+          )}
+          <Text size="small">{votesReceived}/</Text>
+          <Text color="gray" size="small">{`${quorumVotes} votes`}</Text>
+        </>
+      ) : isVoteActive ? (
+        <Text color="gray" size="small">
+          {votesLeft > 0 ? votesLeft : ""}
+          {` votes left`}
+        </Text>
+      ) : null}
+    </div>
   );
 };
 
