@@ -1,22 +1,12 @@
-import React from "react";
+import { classNames, Container, H1, Main as UIMain, Message, PageDetails as PageDetailsUI, Tab as TabUI, Tabs as TabsUI, TopBanner } from "pi-ui";
 import PropTypes from "prop-types";
-import {
-  TopBanner,
-  Main as UIMain,
-  PageDetails as PageDetailsUI,
-  H1,
-  Container,
-  Message,
-  Tabs as TabsUI,
-  Tab as TabUI,
-  classNames
-} from "pi-ui";
+import React from "react";
 import ErrorBoundary from "src/components/ErrorBoundary";
-import Header from "src/containers/Header/Header";
-import Sidebar from "../../Sidebar";
 import NewProposalButton from "src/componentsv2/NewProposalButton";
-import styles from "../layouts.module.css";
+import Header from "src/containers/Header/Header";
 import useScrollToTop from "src/hooks/useScrollToTop";
+import Sidebar from "../../Sidebar";
+import styles from "../layouts.module.css";
 
 const renderError = error => (
   <Main className={styles.singleContentMain}>
@@ -52,8 +42,8 @@ const PageDetails = ({
         {title}
       </H1>
     ) : (
-      title
-    );
+        title
+      );
   return (
     <PageDetailsUI
       className={classNames(styles.customPageDetails, className)}

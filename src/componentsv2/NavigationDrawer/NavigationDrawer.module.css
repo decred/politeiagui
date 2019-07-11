@@ -1,0 +1,39 @@
+.navigationDrawer {
+  position: fixed;
+  margin-top: 6rem;
+  z-index: var(--z-index-5);
+  height: 100%;
+  top: 0;
+  right: 0;
+  opacity: 0.5;
+  width: 400px;
+  transform: translateX(410px);
+  background-color: var(--color-gray-lightest2);
+  transition: all 0.2s;
+}
+
+.navigationDrawerFullScreen {
+  composes: navigationDrawer;
+  width: 100%;
+  transform: translateX(105%);
+}
+
+.navigationDrawerShow {
+  composes: navigationDrawer;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.navWrapper {
+  height: 6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2.5rem;
+  background-color: var(--color-white);
+}
+
+.fillHeight {
+  height: 100%;
+  background-color: var(--color-white);
+}

@@ -1,22 +1,9 @@
-import { Card, Sidebar as UISidebar } from "pi-ui";
-import React, { useMemo } from "react";
-import { useConfig } from "src/Config";
-import PaywallMessage from "./PaywallMessage";
-import StaticMarkdown from "./StaticMarkdown";
+import { Sidebar as UISidebar } from "pi-ui";
+import React from "react";
+import SidebarContent from "./SidebarContent";
 
 const Sidebar = () => {
-  const { aboutContent, paywallContent } = useConfig();
-  return useMemo(
-    () => (
-      <UISidebar>
-        <PaywallMessage />
-        <Card paddingSize="small">
-          <StaticMarkdown contentName={aboutContent} />
-        </Card>
-      </UISidebar>
-    ),
-    [aboutContent, paywallContent]
-  );
+  return <SidebarContent wrapper={UISidebar} />;
 };
 
 export default Sidebar;

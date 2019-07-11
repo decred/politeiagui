@@ -1,44 +1,29 @@
-import { Header as UIHeader, Text } from "pi-ui";
-import React from "react";
+import { classNames, Header as UIHeader, useMediaQuery } from "pi-ui";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "src/assets/pi-logo-light.svg";
+import HamburgerMenu from "src/componentsv2/HamburgerMenu";
+import HeaderNav from "src/componentsv2/HeaderNav";
+import NavigationDrawer from "src/componentsv2/NavigationDrawer";
 import styles from "./Header.module.css";
-import { useHeader } from "./hooks";
 
 const Header = ({ noBorder }) => {
-  const { user, username, onLogout } = useHeader();
+  const small = useMediaQuery("(max-width: 1000px)");
+  const extrasmall = useMediaQuery("(max-width: 560px)");
+  const [showMenu, setShowMenu] = useState(false);
+  const toggleShowMenu = () => setShowMenu(!showMenu);
   return (
-    <UIHeader className={`${noBorder ? styles.noBorder : ""}`}>
+    <UIHeader className={classNames(noBorder && styles.noBorder)} style={{ overflow: "hidden" }}>
       <NavLink to="/">
         <img src={Logo} alt="presentation" />
       </NavLink>
-      {username ? (
-        <div>
-          <NavLink to={`/user/${user.userid}`} style={{ marginRight: "10px" }}>
-            {username}
-          </NavLink>
-          <Text onClick={onLogout}>Logout</Text>
-        </div>
-      ) : (
-          <nav className={styles.navContainer}>
-            <NavLink
-              className={styles.navLink}
-              activeClassName={styles.activeNavLink}
-              to="/user/login"
-            >
-              <Text className={`${styles.navLinkText} ${styles.rightGreyBorder}`}>
-                Log in
-            </Text>
-            </NavLink>
-            <NavLink
-              className={styles.navLink}
-              activeClassName={styles.activeNavLink}
-              to="/user/signup"
-            >
-              <Text className={styles.navLinkText}>Sign up</Text>
-            </NavLink>
-          </nav>
-        )}
+      {small ?
+        <>
+          <HamburgerMenu toggleShowMenu={toggleShowMenu} showMenu={showMenu} />
+          <NavigationDrawer show={showMenu} fullScreen={extrasmall} />
+        </>
+        : <HeaderNav />
+      }
     </UIHeader>
   );
 };
