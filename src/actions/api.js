@@ -235,28 +235,6 @@ export const onLogin = ({ username, password }) =>
       });
   });
 
-// XXXX: Do not use this action for production code before the following
-// PR is meged: https://github.com/decred/politeia/pull/940
-export const onLoginWithUsername = ({ username, password }) =>
-  withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_LOGIN({ username }));
-    return api
-      .loginWithUsername(csrf, username, password)
-      .then(response => {
-        dispatch(act.RECEIVE_LOGIN(response));
-        if (sel.usePaywall(getState())) {
-          dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
-        }
-        dispatch(closeModal());
-        return response;
-      })
-      .then(() => dispatch(onRequestMe()))
-      .catch(error => {
-        dispatch(act.RECEIVE_LOGIN(null, error));
-        throw error;
-      });
-  });
-
 // handleLogout handles all the procedure to be done once the user is logged out
 // it can be called either when the logout request has been successful or when the
 // session has already expired
@@ -898,39 +876,6 @@ export const onSetProposalStatus = (
       });
   });
 };
-
-// XXXX: Do not use this action for production code before the following
-// PR is meged: https://github.com/decred/politeia/pull/937
-export const onResetPassword = ({ username, email }) =>
-  withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_RESET_PASSWORD({ username, email }));
-    return api
-      .resetPassword(csrf, username, email)
-      .then(response => dispatch(act.RECEIVE_RESET_PASSWORD(response)))
-      .catch(error => {
-        dispatch(act.RECEIVE_RESET_PASSWORD(null, error));
-        throw error;
-      });
-  });
-
-// XXXX: Do not use this action for production code before the following
-// PR is meged: https://github.com/decred/politeia/pull/937
-export const onVerifyResetPassword = ({
-  username,
-  email,
-  verificationtoken,
-  newpassword
-}) =>
-  withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_RESET_PASSWORD({ username, email }));
-    return api
-      .verifyResetPassword(csrf, username, verificationtoken, newpassword)
-      .then(response => dispatch(act.RECEIVE_VERIFY_RESET_PASSWORD(response)))
-      .catch(error => {
-        dispatch(act.RECEIVE_VERIFY_RESET_PASSWORD(null, error));
-        throw error;
-      });
-  });
 
 export const redirectedFrom = location => dispatch =>
   dispatch(act.REDIRECTED_FROM(location));

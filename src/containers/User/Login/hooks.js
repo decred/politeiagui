@@ -10,7 +10,7 @@ const mapStateToProps = {
 };
 
 const mapDispatchToProps = {
-  onLogin: act.onLoginWithUsername,
+  onLogin: act.onLogin,
   onGetPolicy: act.onGetPolicy
 };
 

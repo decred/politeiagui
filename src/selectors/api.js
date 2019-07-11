@@ -753,7 +753,6 @@ export const resetPassEmail = compose(
   get("email"),
   getApiPayload("resetPassword")
 );
-export const resetPasswordResponse = getApiResponse("resetPassword");
 export const adminInvoicesError = getApiError("adminInvoices");
 
 export const isApiRequestingUserInvoices = getIsApiRequesting("userInvoices");
