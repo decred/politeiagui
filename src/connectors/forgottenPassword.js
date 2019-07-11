@@ -4,11 +4,12 @@ import * as act from "../actions";
 
 const forgottenPasswordConnector = connect(
   sel.selectorMap({
-    forgottenPasswordResponse: sel.forgottenPasswordResponse,
+    resetPasswordResponse: sel.resetPasswordResponse,
     isRequesting: sel.isApiRequestingForgottenPassword
   }),
   {
-    onForgottenPasswordRequest: act.onForgottenPasswordRequest
+    onForgottenPasswordRequest: act.onForgottenPasswordRequest,
+    onResetPassword: act.onResetPassword
   }
 );
 

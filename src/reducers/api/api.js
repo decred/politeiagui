@@ -213,6 +213,14 @@ const api = (state = DEFAULT_STATE, action) =>
       receive("forgottenPassword", state, action),
     [act.RESET_FORGOTTEN_PASSWORD_REQUEST]: () =>
       reset("forgottenPassword", state),
+    [act.REQUEST_RESET_PASSWORD]: () => request("resetPassword", state, action),
+    [act.RECEIVE_RESET_PASSWORD]: () => receive("resetPassword", state, action),
+    [act.REQUEST_VERIFY_RESET_PASSWORD]: () =>
+      request("verifyResetPassword", state, action),
+    [act.RECEIVE_VERIFY_RESET_PASSWORD]: () =>
+      receive("verifyResetPassword", state, action),
+    [act.RESET_RESET_PASSWORD]: () =>
+      resetMultiple(["resetPassword", "verifyResetPassword"], state),
     [act.REQUEST_RESEND_VERIFICATION_EMAIL]: () =>
       request("resendVerificationEmail", state, action),
     [act.RECEIVE_RESEND_VERIFICATION_EMAIL]: () =>

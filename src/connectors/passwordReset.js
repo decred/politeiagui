@@ -4,13 +4,14 @@ import * as act from "../actions";
 
 const passwordResetConnector = connect(
   sel.selectorMap({
-    passwordResetResponse: sel.passwordResetResponse,
+    verifyResetPasswordResponse: sel.verifyResetPasswordResponse,
     isRequesting: sel.isApiRequestingPasswordReset,
     policy: sel.policy
   }),
   {
     resetPasswordReset: act.resetPasswordReset,
     onPasswordResetRequest: act.onPasswordResetRequest,
+    onVerifyResetPassword: act.onVerifyResetPassword,
     onFetchData: act.onGetPolicy
   }
 );

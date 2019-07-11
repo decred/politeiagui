@@ -8,7 +8,7 @@ import validate from "./ForgottenPasswordValidator";
 
 class ForgottenPassword extends Component {
   componentDidUpdate() {
-    if (this.props.forgottenPasswordResponse) {
+    if (this.props.resetPasswordResponse) {
       this.props.history.push("/user/forgotten/password/next");
     }
   }
@@ -33,7 +33,7 @@ class ForgottenPassword extends Component {
 
   onForgottenPassword(props) {
     validate(props);
-    return this.props.onForgottenPasswordRequest(props).catch(error => {
+    return this.props.onResetPassword(props).catch(error => {
       throw new SubmissionError({
         _error: error.message
       });

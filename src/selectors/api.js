@@ -91,6 +91,9 @@ export const resendVerificationEmailResponse = getApiResponse(
   "resendVerificationEmail"
 );
 export const passwordResetResponse = getApiResponse("passwordReset");
+export const verifyResetPasswordResponse = getApiResponse(
+  "verifyResetPassword"
+);
 export const apiVettedResponse = getApiResponse("vetted");
 const apiUserProposalsResponse = getApiResponse("userProposals");
 const apiUnvettedResponse = getApiResponse("unvetted");
@@ -726,6 +729,7 @@ export const apiAdminInvoices = compose(
   get("invoices"),
   adminInvoicesResponse
 );
+export const resetPasswordResponse = getApiResponse("resetPassword");
 export const adminInvoicesError = getApiError("adminInvoices");
 
 export const isApiRequestingUserInvoices = getIsApiRequesting("userInvoices");
