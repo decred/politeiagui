@@ -19,6 +19,17 @@ export const getMarkdownContent = files => {
 };
 
 /**
+ * Returns the total amount of votes received by a given proposal
+ * @param {Object} proposal
+ */
+export const getVotesReceived = proposal => {
+  if (!proposal || !proposal.voteStatus) {
+    return 0;
+  }
+  return proposal.voteStatus.totalvotes;
+};
+
+/**
  * Converts the api data for vote status into an array of data
  * that can be used to render the StatusBar
  * @param {Object} voteStatus
@@ -96,7 +107,7 @@ export const isVoteActiveProposal = proposal =>
 
 /**
  * Return the properties to be passed to the StatusTag UI component
- * @param {object} proposal
+ * @param {Object} proposal
  */
 export const getProposalStatusTagProps = proposal => {
   if (isPublicProposal(proposal)) {
@@ -125,6 +136,12 @@ export const getProposalStatusTagProps = proposal => {
   return { type: "grayNegative", text: "missing" };
 };
 
+/**
+ * Return the amount of blocks left to the end of the voting period
+ * @param {Object} proposal
+ * @param {Number} chainHeight
+ * @returns {Number} number of blocks left
+ */
 export const getVoteBlocksLeft = (proposal, chainHeight) => {
   const {
     voteStatus: { endheight }
@@ -132,6 +149,13 @@ export const getVoteBlocksLeft = (proposal, chainHeight) => {
   return +endheight - chainHeight;
 };
 
+/**
+ * Return a "human readable" message of how long will take until the voting ends
+ * @param {Object} proposal
+ * @param {Number} chainHeight
+ * @param {Boolean} isTestnet
+ * @returns {String} message
+ */
 export const getVoteTimeLeftInWords = (proposal, chainHeight, isTestnet) => {
   if (
     !proposal ||

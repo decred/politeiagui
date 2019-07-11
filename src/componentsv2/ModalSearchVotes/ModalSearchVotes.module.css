@@ -1,0 +1,15 @@
+.contentWrapper {
+    min-height: 80px;
+}
+
+.loadingWrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchVotesModal {
+    min-width: 90vw;
+}

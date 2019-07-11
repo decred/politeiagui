@@ -18,6 +18,14 @@
     border-color: var(--color-gray-lighter);
 }
 
+.voteCount {
+    display: flex;
+}
+
+.voteCountSearch {
+    cursor: pointer;
+    margin-right: var(--spacing-small);
+}
 
 @media screen and (max-width: 560px) {
     .timeLeft {
