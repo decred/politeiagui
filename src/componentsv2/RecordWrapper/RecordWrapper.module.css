@@ -2,8 +2,13 @@
     color: var(--color-primary-dark);
 }
 
+.title {
+    width: calc(100% - 12rem);
+}
+
 .header {
     display: flex;
+    flex-direction: column;
 }
 
 .status {
@@ -14,7 +19,8 @@
 }
 
 .titleWrapper {
-    width: 75%;
+    width: 100%;
+    display: flex;
 }
 
 .commentsLink {
@@ -32,12 +38,6 @@
     padding: 2rem 4rem;
 }
 
-@media screen and (max-width: 768px) {
-    .titleWrapper {
-        width: 66%;
-    }
-}
-
 @media screen and (max-width: 560px) {
 
     .recordCard {
@@ -50,11 +50,11 @@
         align-items: center;
     }
 
-    .header {
+    .titleWrapper {
         flex-direction: column-reverse;
     }
 
-    .titleWrapper {
+    .title {
         width: 100%;
         margin-top: .5rem;
     }

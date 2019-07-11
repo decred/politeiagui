@@ -61,9 +61,9 @@ export const Header = ({ title, subtitle, status }) => {
     <div className={styles.header}>
       <div className={styles.titleWrapper}>
         {title}
-        {subtitle}
+        {status}
       </div>
-      {status}
+      {subtitle}
     </div>
   );
 };

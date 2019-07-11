@@ -141,6 +141,7 @@ const Proposal = ({ proposal, extended }) => {
                   markerPosition={`${voteStatus.passpercentage}%`}
                   renderStatusInfoComponent={
                     <VotesCount
+                      isVoteActive={isVoteActive}
                       quorumVotes={getQuorumInVotes(voteStatus)}
                       votesReceived={getVotesReceived(proposal)}
                       onSearchVotes={handleOpenSearchVotesModal}
