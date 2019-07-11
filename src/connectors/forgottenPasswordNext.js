@@ -6,12 +6,13 @@ import * as act from "../actions";
 
 const forgottenPasswordNextConnector = connect(
   sel.selectorMap({
-    email: sel.forgottenPassEmail
+    email: sel.resetPassEmail || sel.forgottenPassEmail
   }),
   dispatch =>
     bindActionCreators(
       {
-        resetForgottenPassword: act.resetForgottenPassword
+        resetForgottenPassword: act.resetForgottenPassword,
+        resetPasswordReset: act.resetPasswordReset
       },
       dispatch
     )
@@ -19,6 +20,7 @@ const forgottenPasswordNextConnector = connect(
 
 class Wrapper extends Component {
   componentWillUnmount() {
+    this.props.resetPasswordReset();
     this.props.resetForgottenPassword();
   }
 
