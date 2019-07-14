@@ -12,6 +12,9 @@
 }
 
 .status {
+    position: absolute;
+    right: 4rem;
+    top: 2rem;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -35,6 +38,7 @@
 }
 
 .recordCard {
+    position: relative;
     padding: 2rem 4rem;
 }
 
@@ -45,6 +49,7 @@
     }
     
     .status {
+        position: initial;
         flex-direction: row;
         justify-content: flex-start;
         align-items: center;
