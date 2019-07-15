@@ -855,9 +855,9 @@
     regenerator-runtime "^0.13.2"
 
 "@babel/runtime@^7.3.1":
-  version "7.5.1"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.5.1.tgz#51b56e216e87103ab3f7d6040b464c538e242888"
-  integrity sha512-g+hmPKs16iewFSmW57NkH9xpPkuYD1RV3UE2BCkXx9j+nhhRb9hsiSxPmEa67j35IecTQdn4iyMtHMbt5VoREg==
+  version "7.5.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.5.4.tgz#cb7d1ad7c6d65676e66b47186577930465b5271b"
+  integrity sha512-Na84uwyImZZc3FKf4aUF1tysApzwf3p2yuFBIyBfbzT5glzKTdvYI4KVW4kcgjrzoGUjC7w3YyCHcJKaRxsr2Q==
   dependencies:
     regenerator-runtime "^0.13.2"
 
@@ -3010,6 +3010,11 @@ circular-json@^0.3.1:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/circular-json/-/circular-json-0.3.3.tgz#815c99ea84f6809529d2f45791bdf82711352d66"
   integrity sha512-UZK3NBx2Mca+b5LsG7bY183pHWt5Y1xts4P3Pz7ENTwGVnJOUWbRb3ocjvX7hx9tq/yTAdclXm9sZ38gNuem4A==
+
+clamp-js-main@^0.11.5:
+  version "0.11.5"
+  resolved "https://registry.yarnpkg.com/clamp-js-main/-/clamp-js-main-0.11.5.tgz#624172c66f8ad0a982bcf10189fd081de7acea0f"
+  integrity sha512-XjwTIP0HtHR9Vf0B1X6Yc/ma9qkcvCDHnEKX07v6EgtpA1t9Nb2d0CEzes+/UT2pPpZ9RdBAHrya7+roFspABA==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -9026,8 +9031,9 @@ performance-now@^2.1.0:
 
 "pi-ui@https://github.com/tiagoalvesdulce/pi-ui":
   version "1.0.0"
-  resolved "https://github.com/tiagoalvesdulce/pi-ui#6b00931e0748a61d0d9426814907dce89ff3b426"
+  resolved "https://github.com/tiagoalvesdulce/pi-ui#3fa52cd523a7e8d0310186092bb0c07221a16cf3"
   dependencies:
+    clamp-js-main "^0.11.5"
     react-spring "^8.0.25"
 
 pify@^2.0.0:
