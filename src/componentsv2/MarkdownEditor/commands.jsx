@@ -66,7 +66,7 @@ const attachCommand = {
  * Returns the commands list to be used in the react-mde toolbar
  * @returns {Array} array of commands list
  */
-export const getCommandsList = () => {
+export const getCommandsList = (withFileInput = false) => {
   const list = [
     {
       commands: [
@@ -78,11 +78,16 @@ export const getCommandsList = () => {
         mdeCommands.unorderedListCommand,
         mdeCommands.orderedListCommand
       ]
-    },
-    {
-      commands: [attachCommand]
     }
   ];
+
+  if (withFileInput) {
+    return list.concat([
+      {
+        commands: [attachCommand]
+      }
+    ]);
+  }
 
   return list;
 };

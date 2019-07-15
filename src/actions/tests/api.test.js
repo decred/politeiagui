@@ -680,6 +680,9 @@ describe("test api actions (actions/api.js)", () => {
     expect(dispatchedActions[0].type).toEqual(act.REQUEST_LIKE_COMMENT);
     expect(dispatchedActions[1].type).toEqual(act.RECEIVE_SYNC_LIKE_COMMENT);
 
+    const keys = await pki.generateKeys(FAKE_USER.email);
+    await pki.loadKeys(FAKE_USER.email, keys);
+
     await assertApiActionOnError(
       path,
       api.onLikeComment,

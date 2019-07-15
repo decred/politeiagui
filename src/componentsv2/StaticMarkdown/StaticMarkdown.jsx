@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { P, H1, H2, H3, H4, Link } from "pi-ui";
+import styles from "./StaticMarkdown.module.css";
 
 const paragraphRenderer = ({ children }) => <P>{children}</P>;
 
@@ -8,7 +9,14 @@ const headingRenderer = ({ level, children }) => {
   const headings = [H1, H2, H3, H4];
   // TODO: add h5 and h6 headings from pi-ui once it is available
   const Heading = headings[level - 1] || H4;
-  return <Heading style={{ marginBottom: "1.7rem" }}>{children}</Heading>;
+  return (
+    <Heading
+      style={{ marginBottom: "1.7rem" }}
+      className={styles.markdownHeadings}
+    >
+      {children}
+    </Heading>
+  );
 };
 
 const linkRenderer = ({ href, children }) => (

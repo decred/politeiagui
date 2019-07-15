@@ -10,6 +10,7 @@ import githubIcon from "src/assets/github.svg";
 import { useConfig } from "src/Config";
 import { useLoader } from "src/Appv2/Loader";
 import Join from "../Join";
+import CopyLink from "../CopyLink";
 
 export const Author = ({ username, id }) => (
   <Link to={`/user/${id}`}>{username}</Link>
@@ -31,11 +32,26 @@ export const Event = ({ event, timestamp }) => (
   </DateTooltip>
 );
 
-export const Title = ({ children, url, ...props }) => (
-  <Link to={url} className={styles.title}>
-    <H2 {...props}>{children}</H2>
-  </Link>
-);
+export const RecordToken = ({ token }) => {
+  return (
+    <div className="align-center overflow-hidden">
+      <Icon type="sign" className="margin-right-xs" />
+      <Text id={`proposal-token-${token}`} truncate>
+        {token}
+      </Text>
+    </div>
+  );
+};
+
+export const Title = ({ children, url, ...props }) => {
+  const SimpleWrapper = props => <div {...props} />;
+  const Wrapper = url ? Link : SimpleWrapper;
+  return (
+    <Wrapper to={url} className={styles.title}>
+      <H2 {...props}>{children}</H2>
+    </Wrapper>
+  );
+};
 
 export const Subtitle = ({ children }) => {
   return (
@@ -62,18 +78,15 @@ export const Status = ({ children }) => (
   <div className={styles.status}>{children}</div>
 );
 
-
-const MobileHeader = ({title, status, edit}) => (
+const MobileHeader = ({ title, status, edit }) => (
   <div className={styles.titleWrapper}>
-    <div className={styles.titleEditWrapper}>
-      {title}
-    </div>
+    <div className={styles.titleEditWrapper}>{title}</div>
     <div className={styles.titleStatusWrapper}>
       {status}
       {edit}
     </div>
   </div>
-)
+);
 
 export const Header = ({ title, subtitle, status, edit, mobile }) => {
   return (
@@ -84,16 +97,11 @@ export const Header = ({ title, subtitle, status, edit, mobile }) => {
             {title}
             {edit}
           </div>
-          <div className={styles.titleStatusWrapper}>
-            {status}
-          </div>
+          <div className={styles.titleStatusWrapper}>{status}</div>
         </div>
-      ) : 
-      <MobileHeader 
-        title={title} 
-        status={status} 
-        edit={edit} 
-      />}
+      ) : (
+        <MobileHeader title={title} status={status} edit={edit} />
+      )}
       {subtitle}
     </div>
   );
@@ -110,7 +118,7 @@ export const GithubLink = ({ token }) => {
   );
 };
 
-export const CommentsLink = ({ numOfComments, url = "#" }) => (
+export const CommentsLink = ({ numOfComments, url }) => (
   <Link to={url} gray className={styles.commentsLink}>
     <Icon type="discuss" className="margin-right-s" />
     <span>{numOfComments}</span>
@@ -133,11 +141,13 @@ const RecordWrapper = ({ children, className }) => {
         CommentsLink,
         Link,
         GithubLink,
+        CopyLink,
         DownloadRecord,
         Header,
         Subtitle,
         Edit,
-        Status
+        Status,
+        RecordToken
       })}
     </Card>
   );

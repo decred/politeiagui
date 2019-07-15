@@ -10,15 +10,6 @@
     }
 }
 
-.cardPlaceholder {
-    animation: pulse 1s infinite ease-in-out;
-    background: darkgray;
-    background-size: 800px 104px;
-    height: 186px;
-    width: 100%;
-    margin-bottom: var(--spacing-medium);
-    position: relative;
-}
 
 .customMain {
     background: none !important;

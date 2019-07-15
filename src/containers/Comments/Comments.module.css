@@ -1,0 +1,39 @@
+.commentAreaContainer {
+    padding: 2rem 4rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.commentsHeader { 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+h2.commentsTitle {
+    font-weight: var(--font-weight-regular);
+}
+
+.commentsCount {
+    color: var(--color-gray);
+}
+
+.sortContainer {
+    width: 60px;
+}
+
+.notAllowedMessageContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+@media screen and (max-width: 560px) {
+
+    .commentAreaContainer {
+        padding: 2rem 2.5rem;
+    }
+
+}

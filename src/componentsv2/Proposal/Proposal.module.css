@@ -27,6 +27,23 @@
     margin-right: var(--spacing-small);
 }
 
+.lastRow {
+ display: flex;
+ justify-content: space-between;   
+}
+
+.copyLink {
+    margin-right: 2.4rem;
+}
+
+.downloadCommentsLink {
+    margin-right: 1rem;
+}
+
+.proposalActions {
+    margin: 0;
+}
+
 @media screen and (max-width: 560px) {
     .timeLeft {
         margin-top: 0;
@@ -34,5 +51,22 @@
 
     .statusTag {
         margin-right: var(--spacing-1);
+    }
+
+    .lastRow {
+        flex-direction: column;
+    }
+
+    .downloadLinksWrapper {
+        flex-direction: column;
+    }
+
+    .downloadCommentsLink {
+        margin-right: 0;
+        margin-top: 1rem;
+    }
+
+    .proposalActions {
+        margin-top: 2rem;
     }
 }

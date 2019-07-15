@@ -1,0 +1,22 @@
+.likeBtn {
+    cursor: pointer;
+    border: none;
+    background: none !important;
+    outline: none;
+}
+
+.likeBtn:disabled {
+    cursor: not-allowed;
+}
+
+.likesResult {
+    display: block;
+    width: 2rem;
+    line-height: 16px !important;
+    text-align: right !important;
+    color: var(--color-gray) !important;
+}
+
+.likeBtn:hover >  svg {
+    fill: black;
+}

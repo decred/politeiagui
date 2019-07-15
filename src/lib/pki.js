@@ -28,7 +28,13 @@ const myKeyPair = email =>
   existing(email).then(res => res && res.secretKey && res);
 export const myPublicKey = email => myKeyPair(email).then(get("publicKey"));
 export const myPubKeyHex = email =>
-  myPublicKey(email).then(keys => toHex(keys));
+  myPublicKey(email)
+    .then(keys => toHex(keys))
+    .catch(() => {
+      throw new Error(
+        "Failed to load user identity. You need tor restore it from a backup or generate a new one."
+      );
+    });
 export const sign = (email, msg) =>
   myKeyPair(email).then(({ secretKey }) =>
     nacl.sign.detached(toUint8Array(msg), toUint8Array(secretKey))

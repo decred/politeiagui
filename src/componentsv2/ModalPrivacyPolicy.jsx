@@ -7,7 +7,12 @@ import StaticMarkdown from "./StaticMarkdown";
 const ModalPrivacyPolicy = props => {
   const { privacyPolicyContent } = useConfig();
   return (
-    <Modal {...props}>
+    <Modal
+      style={{ maxWidth: "70rem" }}
+      {...props}
+      iconType="info"
+      iconSize="lg"
+    >
       <StaticMarkdown contentName={privacyPolicyContent} />
       <div className="justify-right">
         <Link to="/user/privacy-policy" className="margin-top-m">

@@ -121,10 +121,17 @@ export const onEditProposalV2 = ({ token, name, description, files }) => (
   getState
 ) => {
   const email = sel.loggedInAsEmail(getState());
-
   return dispatch(
     onSubmitEditedProposal(email, name, description, files, token)
   ).then(() => dispatch(onFetchProposalApi(token)).then(() => token));
+};
+
+export const onSaveNewCommentV2 = ({ comment, token, parentID }) => (
+  dispatch,
+  getState
+) => {
+  const email = sel.loggedInAsEmail(getState());
+  return dispatch(onSubmitCommentApi(email, token, comment, parentID));
 };
 
 export const onEditProposal = (
@@ -141,6 +148,8 @@ export const onEditProposal = (
       props.token
     )
   );
+
+export const onResetUser = () => act.RESET_USER();
 
 export const onEditInvoice = (
   {
@@ -384,6 +393,8 @@ export const toggleProposalPaymentReceived = bool =>
 
 export const onEditUserPreferences = preferences => dispatch =>
   dispatch(onEditUser(sel.resolveEditUserValues(preferences)));
+
+export const onResetComments = () => act.RESET_COMMENTS();
 
 // CMS
 export const onResetInviteUser = () => act.RESET_INVITE_USER();

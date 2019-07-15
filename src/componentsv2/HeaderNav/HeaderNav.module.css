@@ -4,6 +4,12 @@
   align-items: center;
 }
 
+.loggedInContainer {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
 .navLink {
     composes: navContainer;
     color: var(--color-gray-dark);

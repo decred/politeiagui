@@ -13,17 +13,21 @@ const Header = ({ noBorder }) => {
   const [showMenu, setShowMenu] = useState(false);
   const toggleShowMenu = () => setShowMenu(!showMenu);
   return (
-    <UIHeader className={classNames(noBorder && styles.noBorder)} style={{ overflow: "hidden" }}>
-      <NavLink to="/" className={extrasmall && showMenu ? styles.hideLogo : styles.showLogo}>
+    <UIHeader className={classNames(noBorder && styles.noBorder)}>
+      <NavLink
+        to="/"
+        className={extrasmall && showMenu ? styles.hideLogo : styles.showLogo}
+      >
         <img src={Logo} alt="presentation" />
       </NavLink>
-      {small ?
+      {small ? (
         <>
           <HamburgerMenu toggleShowMenu={toggleShowMenu} showMenu={showMenu} />
           <NavigationDrawer show={showMenu} fullScreen={extrasmall} />
         </>
-        : <HeaderNav />
-      }
+      ) : (
+        <HeaderNav />
+      )}
     </UIHeader>
   );
 };
