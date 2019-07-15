@@ -28,7 +28,7 @@
 }
 
 .activeNavLink {
-    border-bottom: 2px solid var(--color-yellow);
+    border-bottom: 2px solid var(--tab-selected-color);
 }
 
 .activeNavLink .navLinkText {
