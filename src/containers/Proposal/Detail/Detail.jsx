@@ -10,7 +10,10 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
   return !!proposal && !loading ? (
     <>
       <TopBanner>
-        <PageDetails title={name} headerClassName="no-margin-top" />
+        <PageDetails
+          title={"Proposal Details"}
+          headerClassName="no-margin-top"
+        />
       </TopBanner>
       <Sidebar />
       <Main className={styles.customMain}>
