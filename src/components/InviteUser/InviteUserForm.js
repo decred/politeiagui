@@ -3,7 +3,6 @@ import { Field, reduxForm } from "redux-form";
 import ErrorField from "../Form/Fields/ErrorField";
 import Message from "../Message";
 import { PageLoadingIcon } from "../snew";
-import { isApiRequestingInviteUser } from "../../selectors";
 import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
 
 const InviteUserForm = ({
@@ -11,7 +10,8 @@ const InviteUserForm = ({
   handleSubmit,
   onInviteUser,
   isRequesting,
-  isShowingInviteUserConfirmation
+  isShowingInviteUserConfirmation,
+  isApiRequestingInviteUser
 }) => {
   if (isRequesting) {
     return <PageLoadingIcon />;

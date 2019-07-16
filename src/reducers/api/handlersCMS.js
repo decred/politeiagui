@@ -1,9 +1,16 @@
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/fp/get";
 import map from "lodash/fp/map";
-import { receive } from "../util";
+import { receive, reset } from "../util";
 
 const getInvoiceToken = invoice => get(["censorshiprecord", "token"], invoice);
+
+export const onReceivePayApprovedInvoices = (state, action) => {
+  state = receive("payApproved", state, action);
+  if (action.error) return state;
+  state = reset("payouts", state);
+  return state;
+};
 
 export const onReceiveSetStatusInvoice = (state, action) => {
   state = receive("setStatusInvoice", state, action);

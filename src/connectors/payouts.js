@@ -7,9 +7,12 @@ export default connect(
     payouts: sel.payouts,
     error: sel.generatePayoutsError,
     loading: sel.isApiRequestingGeneratePayouts,
-    loggedInAsEmail: sel.loggedInAsEmail
+    loggedInAsEmail: sel.loggedInAsEmail,
+    isApiRequestingPayInvoices: sel.isApiRequestingPayInvoices
   }),
   {
-    onGeneratePayouts: act.onGeneratePayouts
+    onGeneratePayouts: act.onGeneratePayouts,
+    onPayApprovedInvoices: act.onPayApprovedInvoices,
+    confirmWithModal: act.confirmWithModal
   }
 );

@@ -27,6 +27,7 @@ import {
   onReceiveProposalsVoteStatus
 } from "./handlers";
 import {
+  onReceivePayApprovedInvoices,
   onReceiveSetStatusInvoice,
   onReceiveNewInvoiceComment,
   onReceiveCensorInvoiceComment
@@ -295,6 +296,9 @@ const api = (state = DEFAULT_STATE, action) =>
       reset("rescanUserPayments", state, action),
     [act.REQUEST_GENERATE_PAYOUTS]: () => request("payouts", state, action),
     [act.RECEIVE_GENERATE_PAYOUTS]: () => receive("payouts", state, action),
+    [act.REQUEST_PAY_APPROVED]: () => request("payApproved", state, action),
+    [act.RECEIVE_PAY_APPROVED]: () =>
+      onReceivePayApprovedInvoices(state, action),
     [act.RECEIVE_LOGOUT]: () => {
       if (!action.error) {
         return {
