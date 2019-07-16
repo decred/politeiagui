@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import * as modalTypes from "../Modal/modalTypes";
 import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
-import { isApiRequestingPayInvoices } from "../../selectors";
 import payouts from "../../connectors/payouts";
 import { PageLoadingIcon } from "../snew";
 import Message from "../Message";
@@ -16,7 +15,8 @@ const GeneratePayoutsPage = ({
   loggedInAsEmail,
   onGeneratePayouts,
   onPayApprovedInvoices,
-  confirmWithModal
+  confirmWithModal,
+  isApiRequestingPayInvoices
 }) => {
   const fetchPayouts = () => {
     onGeneratePayouts();

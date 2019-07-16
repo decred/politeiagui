@@ -7,7 +7,8 @@ const invite = connect(
     inviteUserResponse: sel.inviteUserResponse,
     isRequesting: sel.isApiRequestingInviteUser,
     loggedInAsEmail: sel.loggedInAsEmail,
-    policy: sel.policy
+    policy: sel.policy,
+    isApiRequestingInviteUser: sel.isApiRequestingInviteUser
   }),
   {
     onInviteUserConfirm: act.onInviteUserConfirm,
