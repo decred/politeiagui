@@ -5,6 +5,16 @@ import { receive } from "../util";
 
 const getInvoiceToken = invoice => get(["censorshiprecord", "token"], invoice);
 
+export const onReceivePayApprovedInvoices = (state, action) => {
+  state = receive("payApproved", state, action);
+  if (action.error) return state;
+
+  return {
+    ...state,
+    payouts: {}
+  };
+};
+
 export const onReceiveSetStatusInvoice = (state, action) => {
   state = receive("setStatusInvoice", state, action);
   if (action.error) return state;
