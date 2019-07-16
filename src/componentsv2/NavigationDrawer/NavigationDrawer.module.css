@@ -10,6 +10,7 @@
   transform: translateX(410px);
   background-color: var(--color-gray-lightest2);
   transition: all 0.2s;
+  box-shadow: 0.5rem 2rem 2rem 0px var(--color-shadow-light);
 }
 
 .navigationDrawerFullScreen {

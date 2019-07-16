@@ -5,6 +5,12 @@ import SidebarContent from "../SidebarContent";
 import styles from "./NavigationDrawer.module.css";
 
 const NavigationDrawer = ({ show, fullScreen }) => {
+  if (show) {
+    window.scrollTo(0, 0);
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "scroll";
+  }
   return (
     <div className={classNames(
       fullScreen ?

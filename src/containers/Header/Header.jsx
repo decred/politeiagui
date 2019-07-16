@@ -14,7 +14,7 @@ const Header = ({ noBorder }) => {
   const toggleShowMenu = () => setShowMenu(!showMenu);
   return (
     <UIHeader className={classNames(noBorder && styles.noBorder)} style={{ overflow: "hidden" }}>
-      <NavLink to="/">
+      <NavLink to="/" className={extrasmall && showMenu ? styles.hideLogo : styles.showLogo}>
         <img src={Logo} alt="presentation" />
       </NavLink>
       {small ?
