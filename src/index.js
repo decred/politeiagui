@@ -15,8 +15,9 @@ const WhichApp = () => {
   );
 };
 
-const targetElement = process.env.REACT_APP_V2
-  ? document.getElementById("root")
-  : document.body;
+const targetElement =
+  process.env.REACT_APP_V2 || process.env.NODE_ENV === "test"
+    ? document.getElementById("root")
+    : document.body;
 
 ReactDOM.render(<WhichApp />, targetElement);

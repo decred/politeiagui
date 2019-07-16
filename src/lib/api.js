@@ -313,6 +313,13 @@ export const login = (csrf, username, password) =>
     getResponse
   );
 
+// XXXX: this route hasn't been merged into the master of the backend.
+// Pull request: https://github.com/decred/politeia/pull/940
+export const loginWithUsername = (csrf, username, password) =>
+  POST("/login", csrf, { username, password: digest(password) }).then(
+    getResponse
+  );
+
 export const likeComment = (csrf, comment) =>
   POST("/comments/like", csrf, comment).then(getResponse);
 

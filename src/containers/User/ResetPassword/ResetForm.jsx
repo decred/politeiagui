@@ -1,7 +1,7 @@
 import { Button, H2, P, TextInput } from "pi-ui";
 import React, { useState } from "react";
 import FormWrapper from "src/componentsv2/FormWrapper";
-import { useResetPassword } from "./hooks";
+import { useVerifyResetPassword } from "./hooks";
 
 const SuccessContent = () => (
   <>
@@ -15,11 +15,11 @@ const SuccessContent = () => (
 const ResetForm = () => {
   const [success, setSuccess] = useState(false);
   const {
-    onResetPassword,
+    onVerifyResetPassword,
     validationSchema,
     initialValues,
     invalidParamsError
-  } = useResetPassword();
+  } = useVerifyResetPassword();
 
   if (invalidParamsError) {
     throw invalidParamsError;
@@ -27,11 +27,12 @@ const ResetForm = () => {
 
   async function onSubmit(values, { setSubmitting, setFieldError, resetForm }) {
     try {
-      await onResetPassword(values);
+      await onVerifyResetPassword(values);
       setSubmitting(false);
       setSuccess(true);
       resetForm();
     } catch (e) {
+      setSubmitting(false);
       setFieldError("global", e);
     }
   }
@@ -42,6 +43,7 @@ const ResetForm = () => {
       validationSchema={validationSchema}
       loading={!validationSchema}
       onSubmit={onSubmit}
+      enableReinitialize
     >
       {({
         Form,
@@ -53,7 +55,8 @@ const ResetForm = () => {
         handleBlur,
         handleSubmit,
         errors,
-        touched
+        touched,
+        isSubmitting
       }) =>
         !success ? (
           <Form onSubmit={handleSubmit}>
@@ -65,7 +68,6 @@ const ResetForm = () => {
               id="newpassword"
               label="Password"
               type="password"
-              name="newpassword"
               value={values.newpassword}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -75,19 +77,20 @@ const ResetForm = () => {
               id="verify_password"
               label="Confirm Password"
               type="password"
-              name="verify_password"
               value={values.verify_password}
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.verify_password && errors.verify_password}
             />
             <Actions>
-              <Button type="submit">Reset Password</Button>
+              <Button loading={isSubmitting} type="submit">
+                Reset Password
+              </Button>
             </Actions>
           </Form>
         ) : (
-            <SuccessContent />
-          )
+          <SuccessContent />
+        )
       }
     </FormWrapper>
   );

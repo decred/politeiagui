@@ -1,21 +1,16 @@
 import * as Yup from "yup";
+import { maxLengthMessage, minLengthMessage } from "src/utils/validation";
 
 export const changePasswordValidationSchema = ({ minpasswordlength }) =>
   Yup.object().shape({
     newPassword: Yup.string()
-      .min(
-        minpasswordlength,
-        `Password must be at least ${minpasswordlength} characters`
-      )
+      .min(minpasswordlength, minLengthMessage("password", minpasswordlength))
       .required("Required"),
     newPasswordVerify: Yup.string()
       .oneOf([Yup.ref("newPassword")], "Passwords must match")
       .required("Required"),
     existingPassword: Yup.string()
-      .min(
-        minpasswordlength,
-        `Password must be at least ${minpasswordlength} characters`
-      )
+      .min(minpasswordlength, minLengthMessage("password", minpasswordlength))
       .required("Required")
   });
 
@@ -39,19 +34,10 @@ export const changeUsernameValidationSchema = ({
         },
         { message: "Invalid username" }
       )
-      .min(
-        minusernamelength,
-        `Username must be at least ${minusernamelength} characters`
-      )
-      .max(
-        maxusernamelength,
-        `Username must be at most ${maxusernamelength} characters`
-      )
+      .min(minusernamelength, minLengthMessage("username", minusernamelength))
+      .max(maxusernamelength, maxLengthMessage("username", maxusernamelength))
       .required("Required"),
     password: Yup.string()
-      .min(
-        minpasswordlength,
-        `Password must be at least ${minpasswordlength} characters`
-      )
+      .min(minpasswordlength, minLengthMessage("password", minpasswordlength))
       .required("Required")
   });

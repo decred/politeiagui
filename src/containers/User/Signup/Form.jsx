@@ -89,7 +89,7 @@ const SignupForm = () => {
               )}
               <TextInput
                 label="Email"
-                name="email"
+                id="email"
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -97,7 +97,7 @@ const SignupForm = () => {
               />
               <TextInput
                 label="Username"
-                name="username"
+                id="username"
                 value={values.username}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -108,7 +108,6 @@ const SignupForm = () => {
                 id="password"
                 label="Password"
                 type="password"
-                name="password"
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -118,7 +117,6 @@ const SignupForm = () => {
                 id="verify_password"
                 label="Verify Password"
                 type="password"
-                name="verify_password"
                 value={values.verify_password}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -127,7 +125,7 @@ const SignupForm = () => {
               {enableAdminInvite && (
                 <TextInput
                   label="Verification Token"
-                  name="verificationtoken"
+                  id="verificationtoken"
                   value={values.verificationtoken}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -149,22 +147,22 @@ const SignupForm = () => {
               </Footer>
             </Form>
           ) : (
-              <EmailSentMessage
-                title="Please check your inbox to verify your registration"
-                email={email}
-                bulletPoints={[
-                  "The verification link needs to be opened with the same browser that you used to sign up.",
-                  <>
-                    Make sure you don’t already have an account on Politeia with
+            <EmailSentMessage
+              title="Please check your inbox to verify your registration"
+              email={email}
+              bulletPoints={[
+                "The verification link needs to be opened with the same browser that you used to sign up.",
+                <>
+                  Make sure you don’t already have an account on Politeia with
                   this email address. If you do, you should{" "}
-                    <Link to="/user/request-reset-password">
-                      reset your password
+                  <Link to="/user/request-reset-password">
+                    reset your password
                   </Link>{" "}
-                    instead.
+                  instead.
                 </>
-                ]}
-              />
-            )
+              ]}
+            />
+          )
         }
       </FormWrapper>
       <DevelopmentOnlyContent

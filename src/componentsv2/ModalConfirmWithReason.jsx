@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import FormWrapper from "src/componentsv2/FormWrapper";
 
-const ModalConfirmWithReason = ({ show, onClose, onSubmit }) => {
+const ModalConfirmWithReason = ({ show, onClose, onSubmit, subject }) => {
   const onSubmitReason = async (
     values,
     { resetForm, setSubmitting, setFieldError }
@@ -24,7 +24,8 @@ const ModalConfirmWithReason = ({ show, onClose, onSubmit }) => {
         initialValues={{
           reason: ""
         }}
-        onSubmit={onSubmitReason}>
+        onSubmit={onSubmitReason}
+      >
         {({
           Form,
           Actions,
@@ -37,32 +38,38 @@ const ModalConfirmWithReason = ({ show, onClose, onSubmit }) => {
           errors,
           touched
         }) => (
-            <Form onSubmit={handleSubmit}>
-              {errors && errors.global && (
-                <ErrorMessage>{errors.global.toString()}</ErrorMessage>
-              )}
-              <TextInput
-                label="Reason"
-                name="reason"
-                type="text"
-                value={values.reason}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.reason && errors.reason}
-              />
-              <Actions>
-                <Button loading={isSubmitting} kind={values.reason ? "primary" : "disabled"} type="submit">
-                  Confirm
+          <Form onSubmit={handleSubmit}>
+            {errors && errors.global && (
+              <ErrorMessage>{errors.global.toString()}</ErrorMessage>
+            )}
+            <TextInput
+              label="Reason"
+              name="reason"
+              id={`reason-for-${subject}`}
+              type="text"
+              value={values.reason}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.reason && errors.reason}
+            />
+            <Actions>
+              <Button
+                loading={isSubmitting}
+                kind={values.reason ? "primary" : "disabled"}
+                type="submit"
+              >
+                Confirm
               </Button>
-              </Actions>
-            </Form>
-          )}
+            </Actions>
+          </Form>
+        )}
       </FormWrapper>
     </Modal>
   );
 };
 
 ModalConfirmWithReason.propTypes = {
+  subject: PropTypes.string.isRequired,
   show: PropTypes.bool,
   onClose: PropTypes.func,
   onSubmit: PropTypes.func

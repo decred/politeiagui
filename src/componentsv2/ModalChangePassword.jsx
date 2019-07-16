@@ -4,7 +4,12 @@ import React from "react";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import { isEmpty } from "src/helpers";
 
-const ModalChangePassword = ({ show, onClose, validationSchema, onChangePassword }) => {
+const ModalChangePassword = ({
+  show,
+  onClose,
+  validationSchema,
+  onChangePassword
+}) => {
   const onSubmitChangePassword = async (
     values,
     { resetForm, setSubmitting, setFieldError }
@@ -29,7 +34,8 @@ const ModalChangePassword = ({ show, onClose, validationSchema, onChangePassword
         }}
         onSubmit={onSubmitChangePassword}
         loading={!validationSchema}
-        validationSchema={validationSchema}>
+        validationSchema={validationSchema}
+      >
         {({
           Form,
           Actions,
@@ -42,7 +48,11 @@ const ModalChangePassword = ({ show, onClose, validationSchema, onChangePassword
           errors,
           touched
         }) => {
-          const canSubmit = values.existingPassword && values.newPassword && values.newPasswordVerify && isEmpty(errors);
+          const canSubmit =
+            values.existingPassword &&
+            values.newPassword &&
+            values.newPasswordVerify &&
+            isEmpty(errors);
           return (
             <Form onSubmit={handleSubmit}>
               {errors && errors.global && (
@@ -50,7 +60,7 @@ const ModalChangePassword = ({ show, onClose, validationSchema, onChangePassword
               )}
               <TextInput
                 label="Current Password"
-                name="existingPassword"
+                id="existingPassword"
                 type="password"
                 value={values.existingPassword}
                 onChange={handleChange}
@@ -59,7 +69,7 @@ const ModalChangePassword = ({ show, onClose, validationSchema, onChangePassword
               />
               <TextInput
                 label="New Password"
-                name="newPassword"
+                id="newPassword"
                 type="password"
                 value={values.newPassword}
                 onChange={handleChange}
@@ -68,7 +78,7 @@ const ModalChangePassword = ({ show, onClose, validationSchema, onChangePassword
               />
               <TextInput
                 label="Verify Password"
-                name="newPasswordVerify"
+                id="newPasswordVerify"
                 type="password"
                 value={values.newPasswordVerify}
                 onChange={handleChange}
@@ -76,9 +86,13 @@ const ModalChangePassword = ({ show, onClose, validationSchema, onChangePassword
                 error={touched.newPasswordVerify && errors.newPasswordVerify}
               />
               <Actions>
-                <Button loading={isSubmitting} kind={canSubmit ? "primary" : "disabled"} type="submit">
+                <Button
+                  loading={isSubmitting}
+                  kind={canSubmit ? "primary" : "disabled"}
+                  type="submit"
+                >
                   Change Password
-              </Button>
+                </Button>
               </Actions>
             </Form>
           );

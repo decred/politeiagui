@@ -1,7 +1,24 @@
 import * as Yup from "yup";
+import {
+  maxLengthMessage,
+  minLengthMessage,
+  yupFieldMatcher
+} from "src/utils/validation";
 
-export const requestResetValidationSchema = () =>
+const usernameValidator = ({
+  minusernamelength,
+  maxusernamelength,
+  usernamesupportedchars
+}) =>
+  Yup.string()
+    .matches(...yupFieldMatcher("username", usernamesupportedchars))
+    .min(minusernamelength, minLengthMessage("username", minusernamelength))
+    .max(maxusernamelength, maxLengthMessage("username", maxusernamelength))
+    .required("Required");
+
+export const requestResetValidationSchema = policy =>
   Yup.object().shape({
+    username: usernameValidator(policy),
     email: Yup.string()
       .email("Invalid email")
       .required("Required")
@@ -17,10 +34,8 @@ export const resetValidationSchema = ({ minpasswordlength }) =>
       .required("Required")
   });
 
-export const urlParamsValidationSchema = () =>
+export const urlParamsValidationSchema = policy =>
   Yup.object().shape({
-    email: Yup.string()
-      .email("Invalid email")
-      .required("Email is required"),
+    username: usernameValidator(policy),
     verificationtoken: Yup.string().required("Verification token is required")
   });

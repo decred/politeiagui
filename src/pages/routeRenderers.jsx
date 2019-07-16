@@ -15,8 +15,9 @@ const PageInvoicesNew = lazy(() =>
 
 const renderComponent = (componentMap, recordType, props) => {
   const Component = componentMap[recordType] || PageNotFound;
+  // TODO: set a proper designed fallback UI
   return (
-    <Suspense fallback={<div>loading...</div>}>
+    <Suspense fallback={<div />}>
       <Component {...props} />
     </Suspense>
   );

@@ -4,7 +4,12 @@ import React from "react";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import { isEmpty } from "src/helpers";
 
-const ModalChangeUsername = ({ show, onClose, validationSchema, onChangeUsername }) => {
+const ModalChangeUsername = ({
+  show,
+  onClose,
+  validationSchema,
+  onChangeUsername
+}) => {
   const onSubmitChangeUsername = async (
     values,
     { resetForm, setSubmitting, setFieldError }
@@ -28,7 +33,8 @@ const ModalChangeUsername = ({ show, onClose, validationSchema, onChangeUsername
         }}
         onSubmit={onSubmitChangeUsername}
         loading={!validationSchema}
-        validationSchema={validationSchema}>
+        validationSchema={validationSchema}
+      >
         {({
           Form,
           Actions,
@@ -41,7 +47,8 @@ const ModalChangeUsername = ({ show, onClose, validationSchema, onChangeUsername
           errors,
           touched
         }) => {
-          const canSubmit = values.newUsername && values.password && isEmpty(errors);
+          const canSubmit =
+            values.newUsername && values.password && isEmpty(errors);
           return (
             <Form onSubmit={handleSubmit}>
               {errors && errors.global && (
@@ -49,8 +56,8 @@ const ModalChangeUsername = ({ show, onClose, validationSchema, onChangeUsername
               )}
               <TextInput
                 label="New Username"
-                name="newUsername"
-                type="text"
+                id="newUsername"
+                type="username"
                 value={values.newUsername}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -58,7 +65,7 @@ const ModalChangeUsername = ({ show, onClose, validationSchema, onChangeUsername
               />
               <TextInput
                 label="Password"
-                name="password"
+                id="password"
                 type="password"
                 value={values.password}
                 onChange={handleChange}
@@ -66,7 +73,11 @@ const ModalChangeUsername = ({ show, onClose, validationSchema, onChangeUsername
                 error={touched.password && errors.password}
               />
               <Actions>
-                <Button loading={isSubmitting} kind={canSubmit ? "primary" : "disabled"} type="submit">
+                <Button
+                  loading={isSubmitting}
+                  kind={canSubmit ? "primary" : "disabled"}
+                  type="submit"
+                >
                   Change Username
                 </Button>
               </Actions>

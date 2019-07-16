@@ -1,0 +1,81 @@
+.diff-text-preview-toggle {
+    width: 100%;
+    display: inline-block;
+    background-color: #dcdcdc;
+    line-height: 2em;
+    cursor: pointer;
+  }
+  .diff-text-preview-toggle div {
+    width: 50%;
+    float: left;
+    text-align: center
+  }
+  .diff-active-toggle{
+    background-color: white;
+    cursor: default;
+  }
+  
+  .diffTable {
+    border: none;
+    table-layout: fixed;
+    width: 100%;
+    font-family: "menlo",monospace;
+  }
+  .diffTable td {
+    font-size: 0.8em;
+    border: none;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    padding: 3px 4px;
+  }
+  
+  .lineIndex {
+    width: 2em;
+    padding: 4px 1px;
+    text-align: center;
+  }
+  .lineIcon {
+    font-weight: bold;
+    width: 1em
+  }
+  .lineContent {
+    width: 500px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  .lineAdded {
+    list-style-type: none;
+    background-color: #e6ffed;
+    color: #164623;
+  }
+  
+  .lineRemoved {
+    background-color: #ffdce0;
+    list-style-type: none;
+    position: relative;
+  }
+  
+  .diff-out-line {
+    background-color: #cb2431;
+    height: 1px;
+    position: absolute;
+  }
+  
+  .diff-header {
+    background-color: #f6f8fa;
+    border-bottom: 1px solid #d1d5da;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    color: #586069;
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+  }
+  
+  .diff-wrapper {
+    background-color: white;
+    border-radius: 3px;
+    border: 1px solid #d1d5da;
+    width: 800px;
+  }
+  

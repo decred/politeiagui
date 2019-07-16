@@ -3,30 +3,34 @@ import { Link } from "react-router-dom";
 import { TextInput, Button } from "pi-ui";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import EmailSentMessage from "src/componentsv2/EmailSentMessage";
-import { useRequestResetPassword } from "./hooks";
+import { useResetPassword } from "./hooks";
 import DevelopmentOnlyContent from "src/componentsv2/DevelopmentOnlyContent";
 
 const RequestForm = () => {
   const {
     validationSchema,
-    onRequestResetPassword,
+    onResetPassword,
     requestResetResponse
-  } = useRequestResetPassword();
-  const [email, setEmail] = useState(false);
-  const success = !!email;
+  } = useResetPassword();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const success = !!username && !!email;
   return (
     <>
       <FormWrapper
         initialValues={{
+          username: "",
           email: ""
         }}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setFieldError }) => {
           try {
-            await onRequestResetPassword(values);
+            await onResetPassword(values);
             setSubmitting(false);
+            setUsername(values.username);
             setEmail(values.email);
           } catch (e) {
+            setSubmitting(false);
             setFieldError("global", e);
           }
         }}
@@ -41,7 +45,8 @@ const RequestForm = () => {
           handleBlur,
           handleSubmit,
           errors,
-          touched
+          touched,
+          isSubmitting
         }) =>
           !success ? (
             <Form onSubmit={handleSubmit}>
@@ -50,15 +55,25 @@ const RequestForm = () => {
                 <ErrorMessage>{errors.global.toString()}</ErrorMessage>
               )}
               <TextInput
+                label="Username"
+                id="username"
+                value={values.username}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.username && errors.username}
+              />
+              <TextInput
                 label="Email"
-                name="email"
+                id="email"
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={touched.email && errors.email}
               />
               <Actions>
-                <Button type="submit">Reset Password</Button>
+                <Button loading={isSubmitting} type="submit">
+                  Reset Password
+                </Button>
               </Actions>
             </Form>
           ) : (
@@ -73,7 +88,7 @@ const RequestForm = () => {
         show={requestResetResponse && requestResetResponse.verificationtoken}
       >
         <Link
-          to={`/user/reset-password?email=${email}&verificationtoken=${requestResetResponse &&
+          to={`/user/reset-password?username=${username}&verificationtoken=${requestResetResponse &&
             requestResetResponse.verificationtoken}`}
         >
           Reset password

@@ -1,0 +1,38 @@
+.row {
+    margin-top: var(--spacing-small);
+}
+
+.timeLeft {
+    margin-top: .5rem;
+}
+
+.version {
+    line-height: var(--spacing-2);
+}
+
+.markdownContainer {
+    margin-top: var(--spacing-2);
+    padding: var(--spacing-2) 0;
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: var(--color-gray-lighter);
+}
+
+.voteCount {
+    display: flex;
+}
+
+.voteCountSearch {
+    cursor: pointer;
+    margin-right: var(--spacing-small);
+}
+
+@media screen and (max-width: 560px) {
+    .timeLeft {
+        margin-top: 0;
+    }
+
+    .statusTag {
+        margin-right: var(--spacing-1);
+    }
+}

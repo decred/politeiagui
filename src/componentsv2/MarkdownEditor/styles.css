@@ -1,0 +1,117 @@
+.mde-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: .5rem 0;
+}
+
+.mde-preview {
+    min-height: 200px !important;
+}
+
+.mde-header-group {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 1rem;
+    border-right: 1px solid var(--color-gray-lighter);
+    margin-right: 1rem;
+    list-style-type: none;
+}
+
+.mde-header ul:last-child {
+    max-width: 20px;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mde-header-item:last-child {
+    margin-right: 0;
+}
+
+.react-mde .grip {
+   display: none;
+}
+
+.mde-tabs button,
+.mde-header-group:not(:last-child) .mde-header-item button {
+    background: none;
+}
+
+.mde-text {
+    font-family: "Source Sans Prop", sans-serif;
+    font-weight: var(--font-weight-regular);
+    max-width: 100%;
+    min-width: 100%;
+    padding: 2rem;
+    min-height: 20rem;
+    border: 1px solid var(--color-gray-lighter);
+    line-height: 1.5;
+    font-size: var(--font-size-regular);
+    -webkit-appearance: none;
+}
+
+.mde-text::placeholder {
+    color: var(--color-gray-light);
+}
+
+.mde-header-item {
+    margin-right: 1rem;
+    
+}
+
+.mde-header-item button {
+    border: none;
+    cursor: pointer;
+}
+
+
+.mde-tabs button {
+    cursor: pointer;
+    color: var(--color-gray);
+    border: none;
+    font-size: var(--font-size-small) !important;
+}
+
+.mde-tabs button:focus {
+    outline: none;
+}
+
+.mde-tabs button.selected {
+    color: var(--color-primary-dark) !important;
+}
+
+.mde-tabs > :first-child {
+    padding-right: 1rem;
+    border-right: 1px solid var(--color-gray-lighter);
+}
+
+.mde-tabs > :last-child {
+    padding-left: 1rem;
+}
+
+
+@media screen and (max-width: 370px){ 
+    .mde-tabs {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .mde-tabs > :last-child {
+        margin-top: 0.1rem;
+    }
+
+    .mde-tabs > :first-child {
+        border-right: 0;
+    }
+
+    .mde-tabs button {
+        padding-left: 2px !important;
+        border-left: 2px solid transparent;
+    }
+
+    .mde-tabs button.selected {
+        border-color: var(--color-yellow);
+    }
+}

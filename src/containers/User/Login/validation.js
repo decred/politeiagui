@@ -1,9 +1,21 @@
 import * as Yup from "yup";
+import {
+  maxLengthMessage,
+  minLengthMessage,
+  yupFieldMatcher
+} from "src/utils/validation";
 
-export const loginValidationSchema = ({ minpasswordlength }) =>
+export const loginValidationSchema = ({
+  minpasswordlength,
+  usernamesupportedchars,
+  minusernamelength,
+  maxusernamelength
+}) =>
   Yup.object().shape({
-    email: Yup.string()
-      .email("Invalid email")
+    username: Yup.string()
+      .matches(...yupFieldMatcher("username", usernamesupportedchars))
+      .min(minusernamelength, minLengthMessage("username", minusernamelength))
+      .max(maxusernamelength, maxLengthMessage("username", maxusernamelength))
       .required("Required"),
     password: Yup.string()
       .min(

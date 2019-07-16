@@ -11,35 +11,23 @@ import { getQueryStringValues } from "src/lib/queryString";
 
 const mapStateToProps = {
   policy: sel.policy,
-  requestResetResponse: sel.forgottenPasswordResponse
+  requestResetResponse: sel.resetPasswordResponse
 };
 
 const mapDispatchToProps = {
-  onResetPassword: act.onPasswordResetRequest,
-  onRequestResetPassword: act.onForgottenPasswordRequest,
+  onVerifyResetPassword: act.onVerifyResetPassword,
+  onResetPassword: act.onResetPassword,
   onGetPolicy: act.onGetPolicy
 };
 
-export function useRequestResetPassword(ownProps) {
-  const { onRequestResetPassword, requestResetResponse } = useRedux(
-    ownProps,
-    mapStateToProps,
-    mapDispatchToProps
-  );
-  const validationSchema = requestResetValidationSchema();
-  return { onRequestResetPassword, validationSchema, requestResetResponse };
-}
-
-export function useResetPassword(ownProps) {
+function useValidationSchemaFromPolicy(schemaFn) {
   const [validationSchema, setValidationSchema] = useState(null);
-  const [initialValues, setInitialValues] = useState({});
-  const [invalidParamsError, setInvalidParamsError] = useState(false);
-  const { onResetPassword, policy, onGetPolicy } = useRedux(
-    ownProps,
+
+  const { policy, onGetPolicy } = useRedux(
+    {},
     mapStateToProps,
     mapDispatchToProps
   );
-
   // Fetch policy
   useEffect(() => {
     if (!policy) {
@@ -50,36 +38,71 @@ export function useResetPassword(ownProps) {
   // Set the validation shcema once the policy has been fetched
   useEffect(() => {
     if (policy) {
-      const schema = resetValidationSchema(policy);
+      const schema = schemaFn(policy);
       setValidationSchema(schema);
     }
   }, [policy]);
 
+  return validationSchema;
+}
+
+export function useResetPassword(ownProps) {
+  const { onResetPassword, requestResetResponse } = useRedux(
+    ownProps,
+    mapStateToProps,
+    mapDispatchToProps
+  );
+  const validationSchema = useValidationSchemaFromPolicy(
+    requestResetValidationSchema
+  );
+  return { onResetPassword, validationSchema, requestResetResponse };
+}
+
+export function useVerifyResetPassword(ownProps) {
+  const [initialValues, setInitialValues] = useState({});
+  const [invalidParamsError, setInvalidParamsError] = useState(false);
+  const { onVerifyResetPassword } = useRedux(
+    ownProps,
+    mapStateToProps,
+    mapDispatchToProps
+  );
+
+  const resetPasswordValidationSchema = useValidationSchemaFromPolicy(
+    resetValidationSchema
+  );
+  const urlValidationSchema = useValidationSchemaFromPolicy(
+    urlParamsValidationSchema
+  );
+
   // validate url parameters for email and verification token
   useEffect(() => {
-    const schema = urlParamsValidationSchema();
-
-    async function validateUrlParams() {
-      const { email, verificationtoken } = getQueryStringValues();
-      const valid = await schema.isValid({ email, verificationtoken });
+    async function validateUrlParams(schema) {
+      const { username, verificationtoken } = getQueryStringValues();
+      const valid = await schema.isValid({
+        username,
+        verificationtoken
+      });
       if (!valid) {
-        setInvalidParamsError("Invalid email or verification token");
+        setInvalidParamsError("Invalid email, username or verification token");
         return;
       }
       const initialValues = {
-        email: email || "",
+        username: username || "",
         verificationtoken: verificationtoken || "",
         newpassword: "",
         verify_password: ""
       };
       setInitialValues(initialValues);
     }
-    validateUrlParams();
-  }, []);
+
+    if (urlValidationSchema) {
+      validateUrlParams(urlValidationSchema);
+    }
+  }, [urlValidationSchema]);
 
   return {
-    onResetPassword,
-    validationSchema,
+    onVerifyResetPassword,
+    validationSchema: resetPasswordValidationSchema,
     initialValues,
     invalidParamsError
   };

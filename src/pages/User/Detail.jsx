@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import MultipleContentPage from "src/componentsv2/layouts/MultipleContentPage";
+import MultipleContentPage from "src/componentsv2/layout/MultipleContentPage";
 import UserDetail from "src/containers/User/Detail";
 
 const PageUserDetail = () => {

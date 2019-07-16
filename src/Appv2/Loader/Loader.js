@@ -38,7 +38,7 @@ const Loader = ({ children }) => {
         [initDone, error, apiInfo, user]
       )}
     >
-      {children}
+      {initDone && children}
     </LoaderContext.Provider>
   );
 };

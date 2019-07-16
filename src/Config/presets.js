@@ -13,7 +13,11 @@ export const POLITEIA = {
   title: "Politeia",
   recordType: constants.RECORD_TYPE_PROPOSAL,
   enableAdminInvite: false,
-  privacyPolicyContent: "privacy-policy"
+  privacyPolicyContent: "privacy-policy",
+  testnetGitRepository:
+    "https://github.com/decred-proposals/testnet3/tree/master",
+  mainnetGitRepository:
+    "https://github.com/decred-proposals/mainnet/tree/master"
 };
 
 export const CMS = {
@@ -21,5 +25,7 @@ export const CMS = {
   title: "Contractor Management",
   recordType: constants.RECORD_TYPE_INVOICE,
   enableAdminInvite: true,
-  privacyprivacyPolicyContent: "privacy-policy-cms"
+  privacyprivacyPolicyContent: "privacy-policy-cms",
+  testnetGitRepository: "",
+  mainnetGitRepository: ""
 };

@@ -79,7 +79,7 @@ const RequestVerificationEmailForm = () => {
               <Title>Resend Verification Email</Title>
               <TextInput
                 label="Email"
-                name="email"
+                id="email"
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -90,8 +90,8 @@ const RequestVerificationEmailForm = () => {
               </Actions>
             </Form>
           ) : (
-              <EmailSentMessage title="Please check your inbox for your verification email" />
-            )
+            <EmailSentMessage title="Please check your inbox for your verification email" />
+          )
         }
       </FormWrapper>
       <DevelopmentOnlyContent show={response && response.verificationtoken}>

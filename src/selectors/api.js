@@ -399,6 +399,24 @@ export const getPropVoteStatus = state => token => {
   return vsResponse[token] || {};
 };
 
+export const proposalsWithVoteStatus = state => {
+  const proposals = apiVettedProposals(state);
+  return proposals.map(prop => ({
+    ...prop,
+    voteStatus: getPropVoteStatus(state)(prop.censorshiprecord.token)
+  }));
+};
+
+export const proposalWithVoteStatus = state => {
+  const proposal = apiProposal(state);
+  return (
+    !!proposal && {
+      ...proposal,
+      voteStatus: getPropVoteStatus(state)(proposal.censorshiprecord.token)
+    }
+  );
+};
+
 export const userid = state =>
   state.api.me.response && state.api.me.response.userid;
 export const censoredComment = state => state.api.censorComment.response;
@@ -699,6 +717,8 @@ export const isApiRequesting = or(
   isApiRequestingPropVoteResults
 );
 
+export const resetPasswordResponse = getApiResponse("resetPassword");
+
 // CMS Selectors
 const mode = compose(
   get("mode"),
@@ -733,7 +753,6 @@ export const resetPassEmail = compose(
   get("email"),
   getApiPayload("resetPassword")
 );
-export const resetPasswordResponse = getApiResponse("resetPassword");
 export const adminInvoicesError = getApiError("adminInvoices");
 
 export const isApiRequestingUserInvoices = getIsApiRequesting("userInvoices");
