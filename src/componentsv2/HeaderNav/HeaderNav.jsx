@@ -37,10 +37,4 @@ const HeaderNav = () => {
   );
 };
 
-HeaderNav.propTypes = {
-  // username: PropTypes.string,
-  // user: PropTypes.object,
-  // onLogout: PropTypes.func
-};
-
 export default HeaderNav;

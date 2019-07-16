@@ -1,17 +1,13 @@
 import { classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
+import { toggleBlockScroll } from "src/helpers";
 import HeaderNav from "../HeaderNav";
 import SidebarContent from "../SidebarContent";
 import styles from "./NavigationDrawer.module.css";
 
 const NavigationDrawer = ({ show, fullScreen }) => {
-  if (show) {
-    window.scrollTo(0, 0);
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "scroll";
-  }
+  toggleBlockScroll(show);
   return (
     <div className={classNames(
       fullScreen ?

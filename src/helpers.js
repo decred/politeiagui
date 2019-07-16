@@ -389,3 +389,16 @@ export const fromUSDCentsToUSDUnits = cents =>
 export const fromUSDUnitsToUSDCents = units => parseInt(units * 100, 10);
 
 export const isEmpty = obj => Object.keys(obj).length === 0;
+
+/**
+ * Toggle Scroll Block
+ * @param {bool} block - block/unblock scroll
+ */
+export const toggleBlockScroll = block => {
+  if (block) {
+    window.scrollTo(0, 0);
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "scroll";
+  }
+};
