@@ -13,6 +13,7 @@
   flex-grow: 2;
   position: relative;
   margin-left: 1rem;
+  min-width: 70%;
 }
 
 .statusTag {

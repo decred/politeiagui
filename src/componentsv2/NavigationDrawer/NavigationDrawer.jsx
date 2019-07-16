@@ -1,4 +1,5 @@
 import { classNames } from "pi-ui";
+import PropTypes from "prop-types";
 import React from "react";
 import HeaderNav from "../HeaderNav";
 import SidebarContent from "../SidebarContent";
@@ -28,8 +29,9 @@ const NavigationDrawer = ({ show, fullScreen }) => {
   );
 };
 
-// NavigationDrawer.propTypes = {
-
-// };
+NavigationDrawer.propTypes = {
+  show: PropTypes.bool.isRequired,
+  fullScreen: PropTypes.bool.isRequired
+};
 
 export default NavigationDrawer;

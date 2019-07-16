@@ -37,6 +37,8 @@ const PaymentFaucet = ({ address, amount, isPaid }) => {
           <Link
             href={getFaucetUrl(payWithFaucetTxId)}
             target="_blank"
+            id="transactionLink"
+            truncate
             rel="noopener noreferrer"
           >
             {payWithFaucetTxId}
