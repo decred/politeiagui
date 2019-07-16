@@ -33,7 +33,9 @@ const PaymentFaucet = ({ address, amount, isPaid }) => {
       ) : null}
       {payWithFaucetTxId ? (
         <Message kind="info">
-          Sent transaction:{" "}
+          <span style={{ marginRight: "5px" }}>
+            Sent transaction:{" "}
+          </span>
           <Link
             href={getFaucetUrl(payWithFaucetTxId)}
             target="_blank"
