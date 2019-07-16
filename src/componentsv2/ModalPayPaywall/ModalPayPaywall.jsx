@@ -17,7 +17,7 @@ const ModalPayPaywall = ({ show, title, onClose, address, amount, status }) => {
   return (
     <Modal show={show} title={title} onClose={onClose}>
       {extraSmall && mapPaywallStatusToStatusTag[status]}
-      <P className={styles.paywallDescription}>To participate on proposals and to submit your own, Politeia requires you to pay a small registration fee of <Text weight="bold">exactly {amount} DCR.</Text> This helps keep Politeia free of things like spam and vote manipulation.</P>
+      <P className={styles.paywallDescription}>To participate on proposals and to submit your own, Politeia requires you to pay a small registration fee of <Text weight="bold">exactly {amount} DCR.</Text> This helps keep Politeia free of things like spam and comment manipulation.</P>
       <div className={classNames(styles.paywallInfo, "margin-top-l")}>
         <div className={styles.qrcodeWrapper}>
           <QRCode addr={address} />
