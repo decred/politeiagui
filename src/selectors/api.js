@@ -743,6 +743,8 @@ export const invoiceToken = compose(
 export const inviteUserResponse = getApiResponse("inviteUser");
 export const isApiRequestingInviteUser = getIsApiRequesting("inviteUser");
 
+export const isApiRequestingPayInvoices = getIsApiRequesting("payApproved");
+
 export const isApiRequestingAdminInvoices = getIsApiRequesting("adminInvoices");
 export const adminInvoicesResponse = getApiResponse("adminInvoices");
 export const apiAdminInvoices = compose(
