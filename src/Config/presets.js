@@ -11,6 +11,7 @@ export const commonDefaults = {
 export const POLITEIA = {
   ...commonDefaults,
   title: "Politeia",
+  paywallContent: "paywall-politeia",
   recordType: constants.RECORD_TYPE_PROPOSAL,
   enableAdminInvite: false,
   privacyPolicyContent: "privacy-policy",

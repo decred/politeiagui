@@ -18,6 +18,7 @@ const loadConfig = () => {
     enableAdminInvite: defaultEnableAdminInvite,
     privacyPolicyContent: defaultprivacyPolicyContent,
     aboutContent: defaultAboutContent,
+    paywallContent: defaultPaywallContent,
     testnetGitRepository: defaultTestnetGitRepository,
     mainnetGitRepository: defaultMainnetGitRepository
   } = defaultPreset;
@@ -44,6 +45,7 @@ const loadConfig = () => {
     privacyPolicyContent:
       getConf("PRIVACY_POLICY_CONTENT") || defaultprivacyPolicyContent,
     aboutContent: getConf("ABOUT_CONTENT") || defaultAboutContent,
+    paywallContent: getConf("PAYWALL_CONTENT") || defaultPaywallContent,
     testnetGitRepository:
       getConf("TESTNET_GIT_REPOSITORY") || defaultTestnetGitRepository,
     mainnetGitRepository:

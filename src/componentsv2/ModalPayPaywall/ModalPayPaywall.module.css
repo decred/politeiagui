@@ -1,0 +1,44 @@
+.paywallInfo {
+  display: flex;
+  background-color: var(--color-gray-lightest);
+  padding: 2rem 3rem;
+}
+
+.qrcodeWrapper {
+  width: 10rem;
+  min-width: 10rem;
+}
+
+.infoWrapper {
+  flex-grow: 2;
+  position: relative;
+  margin-left: 1rem;
+  min-width: 70%;
+}
+
+.statusTag {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+
+/* EXTRA SMALL */
+@media screen and (max-width: 560px) {
+  .paywallInfo {
+    flex-direction: column-reverse;
+  }
+  .qrcodeWrapper {
+    width: 100%;
+    margin-top: 2rem;
+  }
+  .infoWrapper {
+    margin-left: 0.5rem;
+  }
+  .statusTag {
+    position: relative;
+  }
+  .paywallDescription {
+    margin-top: 1rem;
+  }
+}

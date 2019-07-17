@@ -393,7 +393,6 @@ export const onReceiveManageUser = (state, action) => {
       user.resetpasswordverificationexpiry = getExpiredTime();
       break;
     case MANAGE_USER_CLEAR_USER_PAYWALL:
-      user.newuserpaywalladdress = "";
       user.newuserpaywallamount = 0;
       break;
     case MANAGE_USER_UNLOCK:

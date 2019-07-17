@@ -1,0 +1,68 @@
+.navButton {
+  transform: translateX(1rem);
+  width: 4rem;
+  height: 4rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-index-big);
+}
+
+.navIcon {
+  position: relative;
+}
+
+.navIcon, .navIcon::before, .navIcon::after {
+  display: inline-block;
+  width: 2rem;
+  height: 3px;
+  background-color: var(--color-primary-dark);
+}
+
+.navIcon::before, .navIcon::after {
+  position: absolute;
+  content: "";
+  left: 0;
+  transition: all 0.2s;
+  backface-visibility: hidden;
+}
+
+.navIcon::before {
+  transform: translateY(-0.7rem);
+}
+
+.navIcon::after {
+  transform: translateY(0.7rem);
+}
+
+.navButton:hover .navIcon::before {
+  transform: translateY(-0.8rem);
+}
+
+.navButton:hover .navIcon::after {
+  transform: translateY(0.8rem);
+}
+
+.navIconClose {
+  composes: navIcon;
+  background-color: transparent;
+}
+
+.navIconClose::before {
+  top: 0;
+  transform: rotate(135deg) translateY(0rem);
+}
+
+.navIconClose::after {
+  top: 0;
+  transform: rotate(-135deg) translateY(0rem);
+}
+
+.navButton:hover .navIconClose::before {
+  transform: rotate(135deg) translateY(0rem);
+}
+
+.navButton:hover .navIconClose::after {
+  transform: rotate(-135deg) translateY(0rem);
+}

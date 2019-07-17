@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import ModalChangePassword from "src/componentsv2/ModalChangePassword";
 import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
 import {
+  PAYWALL_STATUS_PAID,
   MANAGE_USER_CLEAR_USER_PAYWALL,
   MANAGE_USER_DEACTIVATE,
   MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
@@ -27,6 +28,8 @@ import {
   useMarkAsPaidModal
 } from "./hooks";
 import InfoSection from "./InfoSection.jsx";
+import ModalPayPaywall from "src/componentsv2/ModalPayPaywall";
+import usePaywall from "src/hooks/usePaywall";
 
 const General = ({
   proposalcredits,
@@ -91,6 +94,16 @@ const General = ({
   const closePasswordModal = () => setShowPasswordModal(false);
   const { onChangePassword, validationSchema } = useChangePassword();
 
+  // Paywall
+  const { userPaywallStatus, paywallAmount, paywallAddress } = usePaywall();
+  // Pay Paywall Modal
+  const [showPaywallModal, setShowPaywallModal] = useState(false);
+  const openPaywallModal = e => {
+    e.preventDefault();
+    setShowPaywallModal(true);
+  };
+  const closePaywallModal = () => setShowPaywallModal(false);
+
   const showDetailedLabels = isUserPageOwner || isAdmin;
   return (
     <Card paddingSize="small">
@@ -148,10 +161,10 @@ const General = ({
             label="Registration fee:"
             info={
               <>
-                {hasUserPaid(newuserpaywalltx, newuserpaywallamount)
+                {hasUserPaid(newuserpaywalltx, newuserpaywallamount, isUserPageOwner &&userPaywallStatus === PAYWALL_STATUS_PAID)
                   ? "Paid"
                   : "Not paid"}
-                {!hasUserPaid(newuserpaywalltx, newuserpaywallamount) &&
+                {!hasUserPaid(newuserpaywalltx, newuserpaywallamount, isUserPageOwner &&userPaywallStatus === PAYWALL_STATUS_PAID) &&
                 isAdmin ? (
                   <Button
                     className="margin-top-s"
@@ -162,8 +175,8 @@ const General = ({
                     Mark as paid
                   </Button>
                 ) : (
-                  !hasUserPaid(newuserpaywalltx, newuserpaywallamount) && (
-                    <Button className="margin-top-s" size="sm">
+                  !hasUserPaid(newuserpaywalltx, newuserpaywallamount, isUserPageOwner &&userPaywallStatus === PAYWALL_STATUS_PAID) && (
+                    <Button className="margin-top-s" size="sm" onClick={openPaywallModal}>
                       Pay registration fee
                     </Button>
                   )
@@ -281,6 +294,7 @@ const General = ({
         show={showMarkAsPaidConfirmModal}
         onClose={closeMarkAsPaidModal}
       />
+      <ModalPayPaywall show={showPaywallModal} title="Complete your registration" address={paywallAddress} amount={paywallAmount} onClose={closePaywallModal} status={userPaywallStatus} />
     </Card>
   );
 };

@@ -54,7 +54,7 @@ describe("test external_api selector", () => {
     expect(sel.isApiRequestingPayWithFaucet(state)).toEqual(false);
 
     expect(sel.payWithFaucetTxId(MOCK_STATE)).toEqual(
-      MOCK_STATE.external_api.payWithFaucet.response.Txid
+      MOCK_STATE.external_api.payWithFaucet.response.txid
     );
   });
 });

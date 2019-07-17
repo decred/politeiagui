@@ -13,8 +13,9 @@ export const isApiRequestingPayWithFaucet = or(
 );
 
 export const payWithFaucetError = getExtApiError("payWithFaucet");
+
 export const payWithFaucetTxId = compose(
-  get("Txid"),
+  get("txid"),
   getExtApiResponse("payWithFaucet")
 );
 

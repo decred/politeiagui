@@ -1,20 +1,9 @@
-import React, { useMemo } from "react";
-import { Card, Sidebar as UISidebar } from "pi-ui";
-import { useConfig } from "src/Config";
-import StaticMarkdown from "./StaticMarkdown";
+import { Sidebar as UISidebar } from "pi-ui";
+import React from "react";
+import SidebarContent from "./SidebarContent";
 
 const Sidebar = () => {
-  const { aboutContent } = useConfig();
-  return useMemo(
-    () => (
-      <UISidebar>
-        <Card paddingSize="small">
-          <StaticMarkdown contentName={aboutContent} />
-        </Card>
-      </UISidebar>
-    ),
-    [aboutContent]
-  );
+  return <SidebarContent wrapper={UISidebar} />;
 };
 
 export default Sidebar;

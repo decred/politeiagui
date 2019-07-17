@@ -28,8 +28,11 @@ export const isUserEmailVerified = newuserverificationtoken =>
  * @param {string} newuserpaywalltx
  * @return {string} yes/no string saying if paywall was paid
  */
-export const hasUserPaid = (newuserpaywalltx, newuserpaywallamount) =>
-  newuserpaywalltx || newuserpaywallamount === 0;
+export const hasUserPaid = (
+  newuserpaywalltx,
+  newuserpaywallamount,
+  fromPaywall
+) => fromPaywall || (newuserpaywalltx || newuserpaywallamount === 0);
 
 /**
  * Verifies if the user is locked

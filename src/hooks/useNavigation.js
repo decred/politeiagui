@@ -11,7 +11,7 @@ const mapDispatchToProps = {
   onLogout: act.onLogout
 };
 
-export function useHeader(ownProps) {
+export default function useNavigation(ownProps) {
   const fromRedux = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
   return fromRedux;
 }

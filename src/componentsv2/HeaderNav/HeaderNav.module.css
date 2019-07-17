@@ -1,0 +1,32 @@
+.navContainer {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.navLink {
+    composes: navContainer;
+    color: var(--color-gray-dark);
+    border-bottom: 2px solid transparent;
+}
+
+.navLink:hover {
+    color: var(--color-primary-dark);
+}
+
+.navLink:hover {
+    color: var(--color-primary-dark);
+}
+
+.navLinkText {
+    padding: 0 2rem;
+}
+
+.rightGreyBorder {
+    border-right: 1px solid var(--color-gray-lighter);
+}
+
+.activeNavLink {
+    color: var(--color-primary-dark);
+    border-bottom: 2px solid var(--color-yellow);
+}
