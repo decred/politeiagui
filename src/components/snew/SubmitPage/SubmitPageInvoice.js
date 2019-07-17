@@ -69,17 +69,11 @@ const InvoiceSubmit = props => {
     !exchangeRateError &&
     !loadingExchangeRate;
 
-  // const handleFetchExchangeRate = () => {
-  //   if (month && year) {
-  //     onFetchExchangeRate(month, year);
-  //   }
-  // };
-
   const handleFetchExchangeRate = useCallback(() => {
     if (month && year) {
       onFetchExchangeRate(month, year);
     }
-  }, [month, year]);
+  }, [month, year, onFetchExchangeRate]);
 
   const handleYearChange = (event, value) => {
     // reset month value to 1 on every year change

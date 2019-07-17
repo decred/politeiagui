@@ -38,7 +38,7 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
       const grid = convertLineItemsToGrid(value, readOnly);
       setGrid(grid);
     },
-    [value.length, JSON.stringify(value)]
+    [value.length, JSON.stringify(value), readOnly]
   );
 
   const handleRemoveLastRow = e => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import get from "lodash/fp/get";
 import compose from "lodash/fp/compose";
 import isEqual from "lodash/isEqual";
@@ -40,7 +40,7 @@ export function useProposal(ownProps) {
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
   const [proposal, setProposal] = useState(null);
 
-  function getProposalFromCache() {
+  const getProposalFromCache = useCallback(() => {
     // search in the public proposals
     const proposalFromPublic = publicProposals.find(
       prop => prop.censorshiprecord.token === token
@@ -62,19 +62,34 @@ export function useProposal(ownProps) {
     }
 
     return false;
-  }
+  }, [publicProposals, unvettedProposals, token]);
 
-  useEffect(function fetchProposal() {
-    // try to get the proposal from the cache before fetching it
-    if (getProposalFromCache()) {
-      return;
-    }
+  useEffect(
+    function resetProposalWhenComponentUnmounts() {
+      return () => onResetProposal();
+    },
+    [onResetProposal]
+  );
 
-    // proposal was not found in the cache, so we fetch it
-    onFetchProposal(token);
-    onFetchProposalVoteStatus(token);
-    return () => onResetProposal();
-  }, []);
+  useEffect(
+    function fetchProposal() {
+      if (loading || !!proposal || getProposalFromCache()) {
+        return;
+      }
+
+      onFetchProposal(token);
+      onFetchProposalVoteStatus(token);
+    },
+    [
+      proposal,
+      token,
+      getProposalFromCache,
+      onFetchProposal,
+      onFetchProposalVoteStatus,
+      onResetProposal,
+      loading
+    ]
+  );
 
   useEffect(
     function receiveFetchedProposal() {
@@ -82,7 +97,7 @@ export function useProposal(ownProps) {
         setProposal(proposalDetail);
       }
     },
-    [proposalDetail]
+    [proposalDetail, proposal]
   );
 
   if (error) {

@@ -41,7 +41,7 @@ export function useUserProposals(ownProps) {
         setUserProposals(proposals);
       }
     },
-    [proposals, setUserProposals]
+    [proposals, userProposals, setUserProposals]
   );
 
   return { proposals: userProposals, loading };

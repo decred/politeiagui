@@ -35,7 +35,7 @@ export function useSignup(ownProps) {
         setValidationSchema(signupValidationSchema(policy, enableAdminInvite));
       }
     },
-    [policy]
+    [policy, enableAdminInvite, validationSchema]
   );
 
   // Switch between signup methods accordingly to the config 'enableAdminInvite'

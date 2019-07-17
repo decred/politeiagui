@@ -6,10 +6,13 @@ function useQueryStringWithIndexValue(key, initialIndex, values) {
   const [value, onSetValue] = useQueryString(key, values[initialIndex]);
   const [index, setIndex] = useState(initialIndex);
 
-  const onSetIndex = useCallback(index => {
-    const newValue = values[index];
-    onSetValue(newValue);
-  });
+  const onSetIndex = useCallback(
+    index => {
+      const newValue = values[index];
+      onSetValue(newValue);
+    },
+    [values, onSetValue]
+  );
 
   useEffect(
     function onValueChange() {

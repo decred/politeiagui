@@ -65,7 +65,7 @@ export function useVerifyUserEmail(ownProps) {
     }
 
     validateUrlParamsAndVerifyUser();
-  }, []);
+  }, [onVerify]);
 
   return {
     success,

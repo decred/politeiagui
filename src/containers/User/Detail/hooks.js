@@ -22,11 +22,12 @@ import {
 
 const mapStateToProps = {
   userId: compose(
-    get(["match", "params", "userId"]),
+    get(["match", "params", "userid"]),
     arg(1)
   ),
   isAdmin: sel.isAdmin,
   user: sel.user,
+  loading: sel.isApiRequestingUser,
   loggedInAsUserId: sel.userid
 };
 
