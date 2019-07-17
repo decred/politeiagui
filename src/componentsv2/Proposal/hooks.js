@@ -1,18 +1,13 @@
 import { useMemo } from "react";
 import { useLoaderContext } from "src/Appv2/Loader";
 import {
-  getVoteTimeLeftInWords,
-  isVoteActiveProposal,
   getVoteBlocksLeft,
-  isPublicProposal
+  getVoteTimeLeftInWords,
+  isVoteActiveProposal
 } from "./helpers";
 
 export function useProposalVoteInfo(proposal) {
   const { apiInfo } = useLoaderContext();
-
-  if (!isPublicProposal(proposal)) {
-    return {};
-  }
 
   const bestBlock =
     proposal && proposal.voteStatus && proposal.voteStatus.bestblock;

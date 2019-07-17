@@ -1,17 +1,17 @@
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 import {
-  PROPOSAL_STATUS_PUBLIC,
-  PROPOSAL_VOTING_NOT_AUTHORIZED,
-  PROPOSAL_VOTING_AUTHORIZED,
-  PROPOSAL_VOTING_ACTIVE,
+  BLOCK_DURATION_MAINNET,
   BLOCK_DURATION_TESTNET,
-  BLOCK_DURATION_MAINNET
+  PROPOSAL_STATUS_PUBLIC,
+  PROPOSAL_VOTING_ACTIVE,
+  PROPOSAL_VOTING_AUTHORIZED,
+  PROPOSAL_VOTING_NOT_AUTHORIZED
 } from "src/constants";
-import {
-  PROPOSAL_VOTING_FINISHED,
-  PROPOSAL_STATUS_ABANDONED
-} from "../../constants";
 import { getTextFromIndexMd } from "src/helpers";
+import {
+  PROPOSAL_STATUS_ABANDONED,
+  PROPOSAL_VOTING_FINISHED
+} from "../../constants";
 
 export const getMarkdownContent = files => {
   const markdownFile = files.find(f => f.name === "index.md");
@@ -143,6 +143,7 @@ export const getProposalStatusTagProps = proposal => {
  * @returns {Number} number of blocks left
  */
 export const getVoteBlocksLeft = (proposal, chainHeight) => {
+  if (!isPublicProposal(proposal)) return null;
   const {
     voteStatus: { endheight }
   } = proposal;

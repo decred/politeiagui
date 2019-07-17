@@ -1,12 +1,11 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import Proposal from "src/componentsv2/Proposal";
 import styles from "./Detail.module.css";
 import { useProposal } from "./hooks";
-import Proposal from "src/componentsv2/Proposal";
 
 const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
   const { proposal, loading } = useProposal({ match });
-  const { name } = proposal || {};
   return !!proposal && !loading ? (
     <>
       <TopBanner>
