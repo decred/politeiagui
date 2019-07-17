@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
@@ -76,6 +76,10 @@ const UserDetail = ({
     }
   }, []);
 
+  const handleCacheUserProposals = useCallback(proposals => {
+    setUserProposals(proposals);
+  }, []);
+
   // TODO: need a loading while user has not been fetched yet
   return user ? (
     <>
@@ -113,7 +117,7 @@ const UserDetail = ({
             isUserPageOwner,
             isAdmin,
             userProposals,
-            setUserProposals
+            setUserProposals: handleCacheUserProposals
           })[index]
         }
       </Main>

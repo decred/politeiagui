@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useLoaderContext } from "src/Appv2/Loader";
 import {
   getVoteBlocksLeft,
@@ -8,17 +7,14 @@ import {
 
 export function useProposalVoteInfo(proposal) {
   const { apiInfo } = useLoaderContext();
-
   const bestBlock =
     proposal && proposal.voteStatus && proposal.voteStatus.bestblock;
-
-  const voteTimeLeft = useMemo(
-    () => getVoteTimeLeftInWords(proposal, bestBlock, apiInfo.testnet),
-    [bestBlock]
+  const voteTimeLeft = getVoteTimeLeftInWords(
+    proposal,
+    bestBlock,
+    apiInfo.testnet
   );
-
-  const voteBlocksLeft = useMemo(() => getVoteBlocksLeft(proposal, bestBlock));
-
+  const voteBlocksLeft = getVoteBlocksLeft(proposal, bestBlock);
   const voteActive = isVoteActiveProposal(proposal);
 
   return {

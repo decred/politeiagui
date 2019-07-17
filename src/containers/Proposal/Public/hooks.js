@@ -28,12 +28,16 @@ const mapDispatchToProps = {
 };
 
 export function usePublicProposals(ownProps) {
-  const fromRedux = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
+  const { onFetchTokenInventory, ...fromRedux } = useRedux(
+    ownProps,
+    mapStateToProps,
+    mapDispatchToProps
+  );
   if (fromRedux.error) throw fromRedux.error;
 
   useEffect(() => {
-    fromRedux.onFetchTokenInventory();
-  }, []);
+    onFetchTokenInventory();
+  }, [onFetchTokenInventory]);
 
   return fromRedux;
 }

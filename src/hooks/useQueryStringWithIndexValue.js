@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import useQueryString from "./useQueryString";
 
 function useQueryStringWithIndexValue(key, initialIndex, values) {
@@ -6,20 +6,20 @@ function useQueryStringWithIndexValue(key, initialIndex, values) {
   const [value, onSetValue] = useQueryString(key, values[initialIndex]);
   const [index, setIndex] = useState(initialIndex);
 
-  function onSetIndex(index) {
+  const onSetIndex = useCallback(index => {
     const newValue = values[index];
     onSetValue(newValue);
-  }
+  });
 
   useEffect(
     function onValueChange() {
       const newIndex = values.findIndex(v => v === value);
       setIndex(newIndex);
     },
-    [value]
+    [value, values]
   );
 
-  return useMemo(() => [index, onSetIndex], [index]);
+  return useMemo(() => [index, onSetIndex], [index, onSetIndex]);
 }
 
 export default useQueryStringWithIndexValue;

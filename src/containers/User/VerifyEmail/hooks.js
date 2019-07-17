@@ -29,7 +29,7 @@ export function useRequestResendVerificationEmail(ownProps) {
     return function cleanUp() {
       resetResendVerificationEmail();
     };
-  }, []);
+  }, [resetResendVerificationEmail]);
   return {
     validationSchema,
     onResendVerificationEmail,

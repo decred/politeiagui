@@ -1,4 +1,4 @@
-import React, { useMemo, createContext, useContext } from "react";
+import React, { createContext, useContext } from "react";
 import PropTypes from "prop-types";
 import { constants } from "./presets";
 
@@ -13,12 +13,7 @@ export const useConfig = () => useContext(ConfigContext);
  * each custom option alllowed.
  */
 export const ConfigProvider = ({ children, ...configOptions }) => (
-  <ConfigContext.Provider
-    value={useMemo(
-      () => ({ ...configOptions, constants }),
-      Object.values(configOptions)
-    )}
-  >
+  <ConfigContext.Provider value={{ ...configOptions, constants }}>
     {children}
   </ConfigContext.Provider>
 );

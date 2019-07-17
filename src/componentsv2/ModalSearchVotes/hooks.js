@@ -26,7 +26,7 @@ export const useSearchVotes = (proposalToken, modalOpen) => {
         onFetchProposalVoteResults(proposalToken);
       }
     },
-    [proposalToken, modalOpen]
+    [proposalToken, modalOpen, onFetchProposalVoteResults]
   );
 
   return {

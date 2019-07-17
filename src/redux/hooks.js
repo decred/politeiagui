@@ -23,7 +23,7 @@ export function useRedux(ownProps, mapStateToProps, mapDispatchToProps) {
     [mapDispatchToProps, dispatch]
   );
 
-  useEffect(() => redux.subscribe(() => setState(redux.getState())), []);
+  useEffect(() => redux.subscribe(() => setState(redux.getState())));
 
   return useMemo(() => ({ ...computedState, ...boundActions }), [
     computedState,

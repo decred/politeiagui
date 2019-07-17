@@ -1,39 +1,28 @@
 import { useEffect, useState } from "react";
-import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useRedux } from "src/redux";
+import usePolicy from "src/hooks/usePolicy";
 import { loginValidationSchema } from "./validation";
 
-const mapStateToProps = {
-  policy: sel.policy,
-  loadingPolicy: sel.isApiRequestingPolicy
-};
-
 const mapDispatchToProps = {
-  onLogin: act.onLogin,
-  onGetPolicy: act.onGetPolicy
+  onLogin: act.onLogin
 };
 
 export function useLogin(ownProps) {
-  const { policy, ...fromRedux } = useRedux(
-    ownProps,
-    mapStateToProps,
-    mapDispatchToProps
-  );
+  const fromRedux = useRedux(ownProps, {}, mapDispatchToProps);
+  const { policy, loading: loadingPolicy } = usePolicy();
   const [validationSchema, setValidationSchema] = useState(
     policy ? loginValidationSchema(policy) : null
   );
 
   useEffect(
     function handleSetValidationSchemaFromPolicy() {
-      if (!policy) {
-        fromRedux.onGetPolicy();
-      } else if (!validationSchema) {
+      if (!!policy && !validationSchema) {
         setValidationSchema(loginValidationSchema(policy));
       }
     },
-    [policy]
+    [policy, validationSchema]
   );
 
-  return { ...fromRedux, validationSchema };
+  return { ...fromRedux, validationSchema, loadingPolicy };
 }

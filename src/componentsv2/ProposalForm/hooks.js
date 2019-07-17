@@ -1,38 +1,21 @@
 import { useEffect, useState } from "react";
-import * as sel from "src/selectors";
-import * as act from "src/actions";
-import { useRedux } from "src/redux";
+import usePolicy from "src/hooks/usePolicy";
 import { proposalValidationSchema } from "./validation";
 
-const mapStateToProps = {
-  policy: sel.policy
-};
-
-const mapDispatchToProps = {
-  onGetPolicy: act.onGetPolicy
-};
-
-export function useProposalForm(ownProps) {
-  const { policy, ...fromRedux } = useRedux(
-    ownProps,
-    mapStateToProps,
-    mapDispatchToProps
-  );
-
+export function useProposalForm() {
+  const { policy } = usePolicy();
   const [validationSchema, setValidationSchema] = useState(
     policy ? proposalValidationSchema(policy) : null
   );
 
   useEffect(
     function handleSetValidationSchemaFromPolicy() {
-      if (!policy) {
-        fromRedux.onGetPolicy();
-      } else if (!validationSchema) {
+      if (!!policy && !validationSchema) {
         setValidationSchema(proposalValidationSchema(policy));
       }
     },
-    [policy]
+    [policy, validationSchema]
   );
 
-  return { ...fromRedux, validationSchema, policy };
+  return { validationSchema, policy };
 }
