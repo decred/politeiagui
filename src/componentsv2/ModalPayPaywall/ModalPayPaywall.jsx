@@ -7,7 +7,7 @@ import styles from "./ModalPayPaywall.module.css";
 
 const mapPaywallStatusToStatusTag = {
   [PAYWALL_STATUS_WAITING]: <StatusTag className={styles.statusTag} type="yellowTime" text="Waiting for payment" />,
-  [PAYWALL_STATUS_LACKING_CONFIRMATIONS]: <StatusTag className={styles.statusTag} type="yellowTime" text="Waiting for approval" />,
+  [PAYWALL_STATUS_LACKING_CONFIRMATIONS]: <StatusTag className={styles.statusTag} type="yellowTime" text="Waiting for confirmations" />,
   [PAYWALL_STATUS_PAID]: <StatusTag className={styles.statusTag} type="greenCheck" text="Confirmed" />
 };
 

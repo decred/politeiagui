@@ -1,4 +1,5 @@
 .navButton {
+  transform: translateX(1rem);
   width: 4rem;
   height: 4rem;
   cursor: pointer;
