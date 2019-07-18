@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from "react";
 import { useLoader } from "./hooks";
 
 export const LoaderContext = createContext();
@@ -24,7 +30,7 @@ const Loader = ({ children }) => {
       }
     }
     onInit();
-  }, []);
+  }, [onRequestApiInfo, onRequestCurrentUser]);
 
   return (
     <LoaderContext.Provider

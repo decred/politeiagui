@@ -9,7 +9,7 @@ const AdminAuthenticatedRoute = ({ history, ...props }) => {
       // there is not user logged in or user is not an admin
       history.push("/");
     }
-  }, [initDone, currentUser]);
+  }, [initDone, currentUser, history]);
   return <Route {...props} />;
 };
 

@@ -7,7 +7,7 @@ import StaticMarkdown from "./StaticMarkdown";
 
 const SidebarContent = ({ wrapper }) => {
   const WrapperComponent = wrapper;
-  const { aboutContent, paywallContent } = useConfig();
+  const { aboutContent } = useConfig();
   return useMemo(
     () => (
       <WrapperComponent>
@@ -17,7 +17,7 @@ const SidebarContent = ({ wrapper }) => {
         </Card>
       </WrapperComponent>
     ),
-    [aboutContent, paywallContent]
+    [aboutContent]
   );
 };
 

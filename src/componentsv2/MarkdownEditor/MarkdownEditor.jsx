@@ -29,7 +29,7 @@ const MarkdownEditor = ({
     if (!!textarea) {
       textarea.placeholder = placeholder;
     }
-  }, [tab]);
+  }, [tab, placeholder]);
 
   return (
     <div className={classNames(styles.container, className)}>

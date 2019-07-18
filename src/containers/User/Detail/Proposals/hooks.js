@@ -20,11 +20,14 @@ export function useUserProposals(ownProps) {
     mapDispatchToProps
   );
 
-  useEffect(function handleFetchUserProposals() {
-    if (!userProposals) {
-      onFetchUserProposals(userID);
-    }
-  }, []);
+  useEffect(
+    function handleFetchUserProposals() {
+      if (!userProposals) {
+        onFetchUserProposals(userID);
+      }
+    },
+    [onFetchUserProposals, userID, userProposals]
+  );
 
   useEffect(
     function handleCachingProposals() {
@@ -38,7 +41,7 @@ export function useUserProposals(ownProps) {
         setUserProposals(proposals);
       }
     },
-    [proposals]
+    [proposals, userProposals, setUserProposals]
   );
 
   return { proposals: userProposals, loading };

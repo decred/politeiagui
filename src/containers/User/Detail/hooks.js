@@ -1,6 +1,7 @@
 import compose from "lodash/fp/compose";
 import get from "lodash/fp/get";
 import { useEffect, useState } from "react";
+import usePolicy from "src/hooks/usePolicy";
 import * as act from "src/actions";
 import {
   MANAGE_USER_CLEAR_USER_PAYWALL,
@@ -21,11 +22,12 @@ import {
 
 const mapStateToProps = {
   userId: compose(
-    get(["match", "params", "userId"]),
+    get(["match", "params", "userid"]),
     arg(1)
   ),
   isAdmin: sel.isAdmin,
   user: sel.user,
+  loading: sel.isApiRequestingUser,
   loggedInAsUserId: sel.userid
 };
 
@@ -45,7 +47,6 @@ export function useUserDetail(ownProps) {
 }
 
 const mapChangePasswordStateToProps = {
-  policy: sel.policy,
   isApiRequestingChangePassword: or(
     sel.isApiRequestingInit,
     sel.isApiRequestingChangePassword
@@ -54,36 +55,33 @@ const mapChangePasswordStateToProps = {
 };
 
 const mapChangePasswordDispatchToProps = {
-  onChangePassword: act.onSaveChangePassword,
-  onGetPolicy: act.onGetPolicy
+  onChangePassword: act.onSaveChangePassword
 };
 
 export function useChangePassword(ownProps) {
-  const { policy, ...fromRedux } = useRedux(
+  const fromRedux = useRedux(
     ownProps,
     mapChangePasswordStateToProps,
     mapChangePasswordDispatchToProps
   );
+  const { policy } = usePolicy();
   const [validationSchema, setValidationSchema] = useState(
     policy ? changePasswordValidationSchema(policy) : null
   );
 
   useEffect(
     function handleSetValidationSchemaFromPolicy() {
-      if (!policy) {
-        fromRedux.onGetPolicy();
-      } else if (!validationSchema) {
+      if (!!policy && !validationSchema) {
         setValidationSchema(changePasswordValidationSchema(policy));
       }
     },
-    [policy]
+    [policy, validationSchema]
   );
 
   return { ...fromRedux, validationSchema };
 }
 
 const mapChangeUsernameStateToProps = {
-  policy: sel.policy,
   isApiRequestingChangeUsername: or(
     sel.isApiRequestingInit,
     sel.isApiRequestingChangeUsername
@@ -93,29 +91,27 @@ const mapChangeUsernameStateToProps = {
 };
 
 const mapChangeUsernameDispatchToProps = {
-  onChangeUsername: act.onSaveChangeUsername,
-  onGetPolicy: act.onGetPolicy
+  onChangeUsername: act.onSaveChangeUsername
 };
 
 export function useChangeUsername(ownProps) {
-  const { policy, ...fromRedux } = useRedux(
+  const fromRedux = useRedux(
     ownProps,
     mapChangeUsernameStateToProps,
     mapChangeUsernameDispatchToProps
   );
+  const { policy } = usePolicy();
   const [validationSchema, setValidationSchema] = useState(
     policy ? changeUsernameValidationSchema(policy) : null
   );
 
   useEffect(
     function handleSetValidationSchemaFromPolicy() {
-      if (!policy) {
-        fromRedux.onGetPolicy();
-      } else if (!validationSchema) {
+      if (!!policy && !validationSchema) {
         setValidationSchema(changeUsernameValidationSchema(policy));
       }
     },
-    [policy]
+    [policy, validationSchema]
   );
 
   return { ...fromRedux, validationSchema };

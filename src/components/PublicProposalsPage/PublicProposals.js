@@ -102,7 +102,7 @@ const PublicProposals = ({
     // Fetch initial data
     onFetchTokenInventory();
     onFetchLastBlockHeight();
-  }, []);
+  }, [onFetchLastBlockHeight, onFetchTokenInventory]);
 
   if (error) throw error;
 

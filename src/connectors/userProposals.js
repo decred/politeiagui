@@ -37,7 +37,7 @@ const Wrapper = props => {
     if (userid) {
       onFetchUserProposals(userid);
     }
-  }, [userid]);
+  }, [userid, onFetchUserProposals]);
 
   return (
     <div className="page content user-proposals-page">

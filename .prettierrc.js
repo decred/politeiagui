@@ -22,7 +22,7 @@ module.exports = {
   jsxSingleQuote: false,
 
   // Override the parser. You shouldn't have to change this setting.
-  parser: "babylon",
+  parser: "babel",
 
   // Fit code within this line limit
   printWidth: 80,

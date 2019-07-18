@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import MultipleContentPage from "src/componentsv2/layout/MultipleContentPage";
 import ProposalDetail from "src/containers/Proposal/Detail";
 
@@ -6,10 +6,7 @@ const PublicList = () => {
   return (
     <MultipleContentPage topBannerHeight={90}>
       {props => {
-        return useMemo(
-          () => <ProposalDetail {...props} />,
-          Object.values(props)
-        );
+        return <ProposalDetail {...props} />;
       }}
     </MultipleContentPage>
   );

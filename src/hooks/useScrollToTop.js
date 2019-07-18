@@ -5,7 +5,7 @@ function useScrollToTop(disable = false) {
     if (!disable) {
       window.scrollTo(0, 0);
     }
-  }, []);
+  }, [disable]);
 }
 
 export default useScrollToTop;

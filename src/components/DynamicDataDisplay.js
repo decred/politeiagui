@@ -12,9 +12,10 @@ const DynamicDataDisplay = ({
   onFetch,
   style = {}
 }) => {
+  const refetchTrigger = JSON.stringify(refreshTriggers);
   useEffect(() => {
     onFetch();
-  }, refreshTriggers);
+  }, [refetchTrigger, onFetch]);
 
   if (error) throw error;
 

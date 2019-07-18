@@ -3,41 +3,39 @@ import * as act from "src/actions";
 import { useConfig } from "src/Config";
 import { getQueryStringValues } from "src/lib/queryString";
 import { useRedux } from "src/redux";
+import usePolicy from "src/hooks/usePolicy";
 import * as sel from "src/selectors";
 import { signupValidationSchema } from "./validation";
 
 const mapStateToProps = {
-  policy: sel.policy,
   signupResponse: sel.apiNewUserResponse
 };
 
 const mapDispatchToProps = {
-  onGetPolicy: act.onGetPolicy,
   onCreateNewUser: act.onCreateNewUser,
   onCreateNewUseFromAdminInvitation: act.onCreateNewUserCMS,
   onResetSignup: act.onResetNewUser
 };
 
 export function useSignup(ownProps) {
-  const { policy, ...fromRedux } = useRedux(
+  const { onResetSignup, ...fromRedux } = useRedux(
     ownProps,
     mapStateToProps,
     mapDispatchToProps
   );
   const { enableAdminInvite } = useConfig();
+  const { policy } = usePolicy();
   const [validationSchema, setValidationSchema] = useState(
     policy ? signupValidationSchema(policy, enableAdminInvite) : null
   );
 
   useEffect(
     function handleSetValidationSchemaFromPolicy() {
-      if (!policy) {
-        fromRedux.onGetPolicy();
-      } else if (!validationSchema) {
+      if (!!policy && !validationSchema) {
         setValidationSchema(signupValidationSchema(policy, enableAdminInvite));
       }
     },
-    [policy]
+    [policy, enableAdminInvite, validationSchema]
   );
 
   // Switch between signup methods accordingly to the config 'enableAdminInvite'
@@ -47,9 +45,9 @@ export function useSignup(ownProps) {
 
   useEffect(() => {
     return function resetSignup() {
-      fromRedux.onResetSignup();
+      onResetSignup();
     };
-  }, []);
+  }, [onResetSignup]);
 
   // Set intial values
   const { email, verificationtoken } = getQueryStringValues();

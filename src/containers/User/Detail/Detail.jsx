@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
@@ -39,10 +39,13 @@ const UserDetail = ({
     onFetchUser,
     validateUUID,
     user,
+    loading,
     isAdmin,
+    userId,
     loggedInAsUserId
-  } = useUserDetail();
+  } = useUserDetail({ match });
 
+  const userFetched = !!user;
   // Proposals fetching will be triggered from the 'proposals' tab
   // but cached here to avoid re-fetching it
   const [userProposals, setUserProposals] = useState(null);
@@ -67,13 +70,19 @@ const UserDetail = ({
   const { username, onChangeUsername, validationSchema } = useChangeUsername();
 
   // Validate and set user id or throw an error in case it is invalid
-  useEffect(function setUserID() {
-    const userId = match && match.params && match.params.userid;
-    if (!validateUUID(userId)) {
-      throw new Error("Invalid user ID");
-    } else {
-      onFetchUser(userId);
-    }
+  useEffect(
+    function setUserID() {
+      if (!validateUUID(userId)) {
+        throw new Error("Invalid user ID");
+      } else if (!userFetched && !loading) {
+        onFetchUser(userId);
+      }
+    },
+    [validateUUID, userId, onFetchUser, userFetched, loading]
+  );
+
+  const handleCacheUserProposals = useCallback(proposals => {
+    setUserProposals(proposals);
   }, []);
 
   // TODO: need a loading while user has not been fetched yet
@@ -113,7 +122,7 @@ const UserDetail = ({
             isUserPageOwner,
             isAdmin,
             userProposals,
-            setUserProposals
+            setUserProposals: handleCacheUserProposals
           })[index]
         }
       </Main>

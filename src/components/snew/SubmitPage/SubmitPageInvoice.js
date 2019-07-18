@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ReactBody from "react-body";
 import ErrorField from "../../Form/Fields/ErrorField";
 import SelectField from "../../Form/Fields/SelectField";
@@ -69,11 +69,11 @@ const InvoiceSubmit = props => {
     !exchangeRateError &&
     !loadingExchangeRate;
 
-  const handleFetchExchangeRate = () => {
+  const handleFetchExchangeRate = useCallback(() => {
     if (month && year) {
       onFetchExchangeRate(month, year);
     }
-  };
+  }, [month, year, onFetchExchangeRate]);
 
   const handleYearChange = (event, value) => {
     // reset month value to 1 on every year change

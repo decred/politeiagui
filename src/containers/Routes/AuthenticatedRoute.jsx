@@ -9,7 +9,7 @@ const AuthenticatedRoute = ({ history, ...props }) => {
       // there is not user logged in
       history.push("/");
     }
-  }, [initDone, currentUser]);
+  }, [initDone, currentUser, history]);
   return <Route {...props} />;
 };
 

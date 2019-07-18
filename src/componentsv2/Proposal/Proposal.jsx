@@ -1,20 +1,12 @@
+import { classNames, StatusBar, StatusTag, Text } from "pi-ui";
 import React, { useState } from "react";
-import { StatusBar, StatusTag, Text, classNames } from "pi-ui";
+import Markdown from "../Markdown";
+import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
-import {
-  getStatusBarData,
-  isPublicProposal,
-  getProposalStatusTagProps,
-  isAbandonedProposal,
-  getQuorumInVotes,
-  getMarkdownContent,
-  getVotesReceived
-} from "./helpers";
+import { getMarkdownContent, getProposalStatusTagProps, getQuorumInVotes, getStatusBarData, getVotesReceived, isAbandonedProposal, isPublicProposal } from "./helpers";
 import { useProposalVoteInfo } from "./hooks";
 import styles from "./Proposal.module.css";
-import Markdown from "../Markdown";
 import VotesCount from "./VotesCount";
-import ModalSearchVotes from "../ModalSearchVotes";
 
 const Proposal = ({ proposal, extended }) => {
   const {

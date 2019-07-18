@@ -33,7 +33,7 @@ const StaticMarkdown = ({ contentName }) => {
       }
     }
     fetchSource();
-  }, []);
+  }, [contentName]);
   return (
     <ReactMarkdown
       escapeHtml={false}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
+import usePolicy from "src/hooks/usePolicy";
 import { useRedux } from "src/redux";
 import {
   resetValidationSchema,
@@ -10,30 +11,17 @@ import {
 import { getQueryStringValues } from "src/lib/queryString";
 
 const mapStateToProps = {
-  policy: sel.policy,
   requestResetResponse: sel.resetPasswordResponse
 };
 
 const mapDispatchToProps = {
   onVerifyResetPassword: act.onVerifyResetPassword,
-  onResetPassword: act.onResetPassword,
-  onGetPolicy: act.onGetPolicy
+  onResetPassword: act.onResetPassword
 };
 
 function useValidationSchemaFromPolicy(schemaFn) {
   const [validationSchema, setValidationSchema] = useState(null);
-
-  const { policy, onGetPolicy } = useRedux(
-    {},
-    mapStateToProps,
-    mapDispatchToProps
-  );
-  // Fetch policy
-  useEffect(() => {
-    if (!policy) {
-      onGetPolicy();
-    }
-  }, []);
+  const { policy } = usePolicy();
 
   // Set the validation shcema once the policy has been fetched
   useEffect(() => {
@@ -41,7 +29,7 @@ function useValidationSchemaFromPolicy(schemaFn) {
       const schema = schemaFn(policy);
       setValidationSchema(schema);
     }
-  }, [policy]);
+  }, [policy, schemaFn]);
 
   return validationSchema;
 }

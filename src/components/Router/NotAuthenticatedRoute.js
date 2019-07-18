@@ -8,7 +8,7 @@ const NotAuthenticatedRoute = ({ loggedInAsEmail, history, ...props }) => {
       // user is logged in so he must no be in this route
       history.push("/");
     }
-  }, [loggedInAsEmail]);
+  }, [loggedInAsEmail, history]);
 
   return <Route {...props} />;
 };

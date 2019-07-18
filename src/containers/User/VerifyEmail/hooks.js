@@ -29,7 +29,7 @@ export function useRequestResendVerificationEmail(ownProps) {
     return function cleanUp() {
       resetResendVerificationEmail();
     };
-  }, []);
+  }, [resetResendVerificationEmail]);
   return {
     validationSchema,
     onResendVerificationEmail,
@@ -65,7 +65,7 @@ export function useVerifyUserEmail(ownProps) {
     }
 
     validateUrlParamsAndVerifyUser();
-  }, []);
+  }, [onVerify]);
 
   return {
     success,
