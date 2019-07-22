@@ -5,6 +5,7 @@ import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import { getMarkdownContent, getProposalStatusTagProps, getQuorumInVotes, getStatusBarData, getVotesReceived, isAbandonedProposal, isPublicProposal } from "./helpers";
 import { useProposalVoteInfo } from "./hooks";
+import { useLoaderContext } from "src/Appv2/Loader";
 import styles from "./Proposal.module.css";
 import VotesCount from "./VotesCount";
 
@@ -22,9 +23,11 @@ const Proposal = ({ proposal, extended }) => {
     version,
     voteStatus
   } = proposal;
+  const { currentUser } = useLoaderContext();
   const hasVoteStatus = !!voteStatus && !!voteStatus.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
   const proposalURL = `/proposal/${proposalToken}`;
+  const isAuthor = currentUser && currentUser.userid === userid;
   const isPublic = isPublicProposal(proposal);
   const isAbandoned = isAbandonedProposal(proposal);
   const {
@@ -153,6 +156,11 @@ const Proposal = ({ proposal, extended }) => {
                 <CommentsLink numOfComments={numcomments} />
                 <GithubLink token={proposalToken} />
               </Row>
+            )}
+            {isAuthor && (
+              <Link to={`${proposalToken}/edit`}>
+                Edit Proposal
+              </Link>  
             )}
             {extended && (
               <Row>

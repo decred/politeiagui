@@ -116,6 +116,17 @@ export const onSaveNewProposalV2 = ({ name, description, files }) => (
   ).then(() => sel.newProposalToken(getState()));
 };
 
+export const onEditProposalV2 = ({ token, name, description, files }) => (
+  dispatch,
+  getState
+) => {
+  const email = sel.loggedInAsEmail(getState());
+
+  return dispatch(
+    onSubmitEditedProposal(email, name, description, files, token)
+  );
+};
+
 export const onEditProposal = (
   { name, description, files },
   _,

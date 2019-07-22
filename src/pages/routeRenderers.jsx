@@ -7,7 +7,12 @@ const PageProposalsNew = lazy(() =>
 const PageInvoicesNew = lazy(() =>
   import(/* webpackChunkName: "PageInvoicesNew" */ "./Invoices/New")
 );
-
+const PageProposalEdit = lazy(() => 
+  import(/* webpackChunkName: "PageProposalEdit" */ "./Proposals/Edit")
+);
+const PageInvoiceEdit = lazy(() =>
+  import(/* webpackChunkName: "PageInvoiceEdit" */ "./Invoices/Edit")
+);
 /** This adds the first example of how we should manage routing to different componentes based
  * on the record type specified in the config. More renderers will be moved here as we progress
  * on building the componenents for different record types such as invoices.
@@ -30,3 +35,11 @@ export const renderNewRecordRoute = ({ recordType, constants }) => props => {
   };
   return renderComponent(mapRecordTypeToComponent, recordType, props);
 };
+
+export const renderEditRecordRoute = ({ recordType, constants }) => props => {
+  const mapRecordTypeToComponent = {
+    [constants.RECORD_TYPE_INVOICE]: PageInvoiceEdit,
+    [constants.RECORD_TYPE_PROPOSAL]: PageProposalEdit
+  };
+  return renderComponent(mapRecordTypeToComponent, recordType, props);
+}
