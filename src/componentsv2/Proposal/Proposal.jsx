@@ -70,7 +70,7 @@ const Proposal = ({ proposal, extended }) => {
                   {name}
                   {isAuthor && (
                     <Link to={`/proposal/${proposalToken}/edit`}>
-                      <Icon type="edit" />
+                      <Icon type="edit" className="margin-left-s"/>
                     </Link>  
                   )}
                 </Title>
