@@ -17,7 +17,7 @@ const EditProposal = ({ match }) => {
       token: match.params.token,
       name: proposal.name,
       description: getTextFromIndexMd(markdownFile),
-      files: proposal.files
+      files: proposal.files.filter(p => p.name !== "index.md")
     } : {};
 
     return !!proposal && !loading ? (

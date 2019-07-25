@@ -1,4 +1,4 @@
-import { classNames, StatusBar, StatusTag, Text } from "pi-ui";
+import { classNames, StatusBar, StatusTag, Text, Icon } from "pi-ui";
 import React, { useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
@@ -159,6 +159,7 @@ const Proposal = ({ proposal, extended }) => {
             )}
             {isAuthor && (
               <Link to={`${proposalToken}/edit`}>
+                <Icon type="edit" />
                 Edit Proposal
               </Link>  
             )}
