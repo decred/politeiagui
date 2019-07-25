@@ -124,7 +124,7 @@ export const onEditProposalV2 = ({ token, name, description, files }) => (
 
   return dispatch(
     onSubmitEditedProposal(email, name, description, files, token)
-  ).then(() => token);
+  ).then(() => dispatch(onFetchProposalApi(token)).then(() => token));
 };
 
 export const onEditProposal = (

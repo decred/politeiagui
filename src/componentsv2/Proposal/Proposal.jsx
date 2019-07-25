@@ -68,6 +68,11 @@ const Proposal = ({ proposal, extended }) => {
                   url={proposalURL}
                 >
                   {name}
+                  {isAuthor && (
+                    <Link to={`/proposal/${proposalToken}/edit`}>
+                      <Icon type="edit" />
+                    </Link>  
+                  )}
                 </Title>
               }
               subtitle={
@@ -156,12 +161,6 @@ const Proposal = ({ proposal, extended }) => {
                 <CommentsLink numOfComments={numcomments} />
                 <GithubLink token={proposalToken} />
               </Row>
-            )}
-            {isAuthor && (
-              <Link to={`${proposalToken}/edit`}>
-                <Icon type="edit" />
-                Edit Proposal
-              </Link>  
             )}
             {extended && (
               <Row>
