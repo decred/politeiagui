@@ -1,12 +1,13 @@
-import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "pi-ui";
+import React, { useCallback, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
 import useQueryStringWithIndexValue from "src/hooks/useQueryStringWithIndexValue";
+import Credits from "./Credits";
 import styles from "./detail.module.css";
 import General from "./General.jsx";
-import { useChangeUsername, useUserDetail } from "./hooks";
 import { tabValues } from "./helpers";
+import { useChangeUsername, useUserDetail } from "./hooks";
 import Preferences from "./Preferences.jsx";
 import Proposals from "./Proposals";
 
@@ -14,16 +15,19 @@ const getTabComponent = ({
   user,
   userProposals,
   setUserProposals,
+  isAdminOrTheUser,
   ...rest
-}) => [
-  <General {...user} {...rest} />,
-  <Preferences {...rest} />,
-  <Proposals
-    userID={user.id}
-    userProposals={userProposals}
-    setUserProposals={setUserProposals}
-  />
-];
+}) =>
+  [
+    <General {...user} {...rest} />,
+    <Preferences {...rest} />,
+    isAdminOrTheUser && <Credits {...rest} />,
+    <Proposals
+      userID={user.id}
+      userProposals={userProposals}
+      setUserProposals={setUserProposals}
+    />
+  ].filter(Boolean);
 
 const UserDetail = ({
   TopBanner,
@@ -35,32 +39,30 @@ const UserDetail = ({
   Tab,
   match
 }) => {
-  const {
-    onFetchUser,
-    onResetUser,
-    validateUUID,
-    user,
-    isAdmin,
-    userId,
-    loggedInAsUserId
-  } = useUserDetail({ match });
-
-  if (!validateUUID(userId)) throw new Error("Invalid user ID");
+  const { user, isAdmin, userId, loggedInAsUserId } = useUserDetail({ match });
 
   // Proposals fetching will be triggered from the 'proposals' tab
   // but cached here to avoid re-fetching it
   const [userProposals, setUserProposals] = useState(null);
 
+  const [tabLabels, setTabLabels] = useState([]);
+
   const isUserPageOwner = user && loggedInAsUserId === user.id;
   const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
 
-  const tabLabels = [
-    tabValues.GENERAL,
-    tabValues.PREFERENCES,
-    tabValues.PROPOSALS
-  ];
-  const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
+  useEffect(() => {
+    setTabLabels(
+      [
+        tabValues.GENERAL,
+        tabValues.PREFERENCES,
+        isAdminOrTheUser ? tabValues.CREDITS : false,
+        tabValues.PROPOSALS
+      ].filter(Boolean)
+    );
+  }, [isAdminOrTheUser]);
 
+  const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
+  // console.log(index);
   // Change Username Modal
   const [showUsernameModal, setShowUsernameModal] = useState(false);
   const openUsernameModal = e => {
@@ -70,27 +72,12 @@ const UserDetail = ({
   const closeUsernameModal = () => setShowUsernameModal(false);
   const { username, onChangeUsername, validationSchema } = useChangeUsername();
 
-  // Validate and set user id or throw an error in case it is invalid
-  useEffect(
-    function setUserID() {
-      if (!!user) {
-        return;
-      }
-      onFetchUser(userId);
-    },
-    [userId, onFetchUser, user]
-  );
-
-  useEffect(() => {
-    return () => onResetUser();
-  }, [onResetUser]);
-
   const handleCacheUserProposals = useCallback(proposals => {
     setUserProposals(proposals);
   }, []);
 
   // TODO: need a loading while user has not been fetched yet
-  return user ? (
+  return !!user && userId === user.id ? (
     <>
       <TopBanner>
         <PageDetails

@@ -13,14 +13,8 @@ const PaywallMessage = () => {
   };
   const closePaywallModal = () => setShowModal(false);
   const { paywallContent } = useConfig();
-  const {
-    userPaywallStatus,
-    paywallAmount,
-    paywallAddress,
-    paywallEnabled
-  } = usePaywall();
-  const showMessage =
-    paywallEnabled && userPaywallStatus < 2 && paywallAmount > 0;
+  const { userPaywallStatus, paywallAmount } = usePaywall();
+  const showMessage = userPaywallStatus < 2 && paywallAmount > 0;
   return (
     <>
       {showMessage ? (
@@ -36,10 +30,7 @@ const PaywallMessage = () => {
       <ModalPayPaywall
         show={showModal}
         title="Complete your registration"
-        address={paywallAddress}
-        amount={paywallAmount}
         onClose={closePaywallModal}
-        status={userPaywallStatus}
       />
     </>
   );

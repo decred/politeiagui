@@ -1,35 +1,15 @@
-import React, { useState } from "react";
 import { Button, Card } from "pi-ui";
 import PropTypes from "prop-types";
+import React, { useState } from "react";
 import ModalChangePassword from "src/componentsv2/ModalChangePassword";
 import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
-import {
-  PAYWALL_STATUS_PAID,
-  MANAGE_USER_CLEAR_USER_PAYWALL,
-  MANAGE_USER_DEACTIVATE,
-  MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
-  MANAGE_USER_REACTIVATE
-} from "src/constants";
-import { convertAtomsToDcr, formatUnixTimestamp } from "src/utilsv2";
-import {
-  getUserActivePublicKey,
-  hasUserPaid,
-  isExpired,
-  isUserAdmin,
-  isUserDeactivated,
-  isUserEmailVerified,
-  isUserLocked
-} from "./helpers";
-import {
-  useActivationModal,
-  useChangePassword,
-  useManageUser,
-  useMarkAsExpiredConfirmModal,
-  useMarkAsPaidModal
-} from "./hooks";
-import InfoSection from "./InfoSection.jsx";
 import ModalPayPaywall from "src/componentsv2/ModalPayPaywall";
+import { MANAGE_USER_CLEAR_USER_PAYWALL, MANAGE_USER_DEACTIVATE, MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION, MANAGE_USER_REACTIVATE, PAYWALL_STATUS_PAID } from "src/constants";
 import usePaywall from "src/hooks/usePaywall";
+import { convertAtomsToDcr, formatUnixTimestamp } from "src/utilsv2";
+import { getUserActivePublicKey, hasUserPaid, isExpired, isUserAdmin, isUserDeactivated, isUserEmailVerified, isUserLocked } from "./helpers";
+import { useActivationModal, useChangePassword, useManageUser, useMarkAsExpiredConfirmModal, useMarkAsPaidModal } from "./hooks";
+import InfoSection from "./InfoSection.jsx";
 
 const General = ({
   proposalcredits,
@@ -161,26 +141,26 @@ const General = ({
             label="Registration fee:"
             info={
               <>
-                {hasUserPaid(newuserpaywalltx, newuserpaywallamount, isUserPageOwner &&userPaywallStatus === PAYWALL_STATUS_PAID)
+                {hasUserPaid(newuserpaywalltx, newuserpaywallamount, isUserPageOwner && userPaywallStatus === PAYWALL_STATUS_PAID)
                   ? "Paid"
                   : "Not paid"}
-                {!hasUserPaid(newuserpaywalltx, newuserpaywallamount, isUserPageOwner &&userPaywallStatus === PAYWALL_STATUS_PAID) &&
-                isAdmin ? (
-                  <Button
-                    className="margin-top-s"
-                    loading={isApiRequestingMarkAsPaid}
-                    size="sm"
-                    onClick={openMarkAsPaidModal}
-                  >
-                    Mark as paid
+                {!hasUserPaid(newuserpaywalltx, newuserpaywallamount, isUserPageOwner && userPaywallStatus === PAYWALL_STATUS_PAID) &&
+                  isAdmin ? (
+                    <Button
+                      className="margin-top-s"
+                      loading={isApiRequestingMarkAsPaid}
+                      size="sm"
+                      onClick={openMarkAsPaidModal}
+                    >
+                      Mark as paid
                   </Button>
-                ) : (
-                  !hasUserPaid(newuserpaywalltx, newuserpaywallamount, isUserPageOwner &&userPaywallStatus === PAYWALL_STATUS_PAID) && (
-                    <Button className="margin-top-s" size="sm" onClick={openPaywallModal}>
-                      Pay registration fee
+                  ) : (
+                    !hasUserPaid(newuserpaywalltx, newuserpaywallamount, isUserPageOwner && userPaywallStatus === PAYWALL_STATUS_PAID) && (
+                      <Button className="margin-top-s" size="sm" onClick={openPaywallModal}>
+                        Pay registration fee
                     </Button>
-                  )
-                )}
+                    )
+                  )}
               </>
             }
           />
@@ -224,17 +204,17 @@ const General = ({
                       Deactivate
                     </Button>
                   ) : (
-                    isAdmin && (
-                      <Button
-                        className="margin-top-s"
-                        loading={isActivationLoading}
-                        size="sm"
-                        onClick={openActivationModal}
-                      >
-                        Reactivate
+                      isAdmin && (
+                        <Button
+                          className="margin-top-s"
+                          loading={isActivationLoading}
+                          size="sm"
+                          onClick={openActivationModal}
+                        >
+                          Reactivate
                       </Button>
-                    )
-                  ))}
+                      )
+                    ))}
               </>
             }
           />
@@ -250,17 +230,17 @@ const General = ({
                   isExpired(resetpasswordverificationexpiry) ? (
                     <span>Expired</span>
                   ) : (
-                    <>
-                      {formatUnixTimestamp(resetpasswordverificationexpiry)}
-                      <Button
-                        loading={isActivationLoading}
-                        size="sm"
-                        onClick={openMarkAsExpiredConfirmModal}
-                      >
-                        Mark as expired
+                      <>
+                        {formatUnixTimestamp(resetpasswordverificationexpiry)}
+                        <Button
+                          loading={isActivationLoading}
+                          size="sm"
+                          onClick={openMarkAsExpiredConfirmModal}
+                        >
+                          Mark as expired
                       </Button>
-                    </>
-                  )
+                      </>
+                    )
                 }
               />
             </>
@@ -300,7 +280,7 @@ const General = ({
 };
 
 General.propTypes = {
-  proposalcredits: PropTypes.string,
+  proposalcredits: PropTypes.number,
   identities: PropTypes.array,
   newuserverificationtoken: PropTypes.any,
   newuserpaywalltx: PropTypes.string,

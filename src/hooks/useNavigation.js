@@ -4,7 +4,8 @@ import * as sel from "src/selectors";
 
 const mapStateToProps = {
   username: sel.loggedInAsUsername,
-  user: sel.apiMeResponse
+  user: sel.apiMeResponse,
+  proposalCredits: sel.proposalCredits
 };
 
 const mapDispatchToProps = {

@@ -36,3 +36,8 @@
     color: var(--color-primary-dark);
     border-bottom: 2px solid var(--color-yellow);
 }
+
+.proposalCreditsButton {
+    padding: 0rem 0.5rem !important;
+    margin-left: 0.5rem;
+}

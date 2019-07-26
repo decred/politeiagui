@@ -4,6 +4,7 @@ import Proposal from "src/componentsv2/Proposal";
 
 const Proposals = props => {
   const { proposals, loading } = useUserProposals(props);
+
   const renderProposal = record => {
     return <Proposal key={record.censorshiprecord.token} proposal={record} />;
   };
