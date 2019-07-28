@@ -10,6 +10,11 @@
     line-height: var(--spacing-2);
 }
 
+.editButton {
+    margin-right: 37rem;
+    margin-top: .8rem;
+}
+
 .markdownContainer {
     margin-top: var(--spacing-2);
     padding: var(--spacing-2) 0;

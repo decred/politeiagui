@@ -56,11 +56,12 @@ export const Status = ({ children }) => (
   <div className={styles.status}>{children}</div>
 );
 
-export const Header = ({ title, subtitle, status }) => {
+export const Header = ({ title, subtitle, status, edit }) => {
   return (
     <div className={styles.header}>
       <div className={styles.titleWrapper}>
         {title}
+        {edit}
         {status}
       </div>
       {subtitle}

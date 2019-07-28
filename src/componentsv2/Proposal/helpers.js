@@ -10,7 +10,9 @@ import {
 import { getTextFromIndexMd } from "src/helpers";
 import {
   PROPOSAL_STATUS_ABANDONED,
-  PROPOSAL_VOTING_FINISHED
+  PROPOSAL_VOTING_FINISHED,
+  PROPOSAL_STATUS_UNREVIEWED,
+  PROPOSAL_STATUS_UNREVIEWED_CHANGES
 } from "../../constants";
 
 export const getMarkdownContent = files => {
@@ -61,6 +63,18 @@ export const getQuorumInVotes = voteStatus =>
  */
 export const isPublicProposal = proposal => {
   return proposal.status === PROPOSAL_STATUS_PUBLIC;
+};
+
+/**
+ * Returns true if the given proposal is unreviewed
+ * @param {Object} proposal
+ * @returns {Boolean} isUnreviewed
+ */
+export const isUnreviewedProposal = proposal => {
+  return (
+    proposal.status === PROPOSAL_STATUS_UNREVIEWED ||
+    proposal.status === PROPOSAL_STATUS_UNREVIEWED_CHANGES
+  );
 };
 
 /**
