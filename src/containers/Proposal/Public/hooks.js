@@ -7,10 +7,7 @@ import { useRedux } from "src/redux";
 const mapStateToProps = {
   loggedInAsEmail: sel.loggedInAsEmail,
   proposals: sel.proposalsWithVoteStatus,
-  isLoading: or(
-    sel.isApiRequestingPropsVoteStatus,
-    sel.isApiRequestingLastBlockHeight
-  ),
+  isLoading: or(sel.isApiRequestingPropsVoteStatus),
   loadingTokenInventory: sel.apiTokenInventoryIsRequesting,
   error: or(
     sel.vettedProposalsError,
