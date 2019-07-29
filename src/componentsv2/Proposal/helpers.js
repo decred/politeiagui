@@ -81,7 +81,7 @@ export const isUnreviewedProposal = proposal => {
  * Returns true if the given proposal is public, but voting
  * is not authorized yet.
  * @param {Object} proposal
- * @returns {Boolean} isUnreviewed
+ * @returns {Boolean} isVotingNotAuthorized
  */
 export const isVotingNotAuthorizedProposal = proposal => {
   return (
@@ -94,7 +94,7 @@ export const isVotingNotAuthorizedProposal = proposal => {
 /**
  * Returns true if the given proposal is editable
  * @param {Object} proposal
- * @returns {Boolean} isUnreviewed
+ * @returns {Boolean} isEditable
  */
 export const isEditableProposal = proposal => {
   return (
