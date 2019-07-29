@@ -52,6 +52,12 @@ export const Subtitle = ({ children }) => {
   );
 };
 
+export const Edit = ({ url }) => (
+  <Link to={url}>
+    <Icon type="edit" className={styles.editButton} />
+  </Link>
+);
+
 export const Status = ({ children }) => (
   <div className={styles.status}>{children}</div>
 );
@@ -60,9 +66,11 @@ export const Header = ({ title, subtitle, status, edit }) => {
   return (
     <div className={styles.header}>
       <div className={styles.titleWrapper}>
-        {title}
-        {edit}
-        {status}
+        <div className={styles.titleEditWrapper}>
+          {title}
+          {edit}
+        </div>
+          {status}
       </div>
       {subtitle}
     </div>
@@ -106,6 +114,7 @@ const RecordWrapper = ({ children, className }) => {
         DownloadRecord,
         Header,
         Subtitle,
+        Edit,
         Status
       })}
     </Card>

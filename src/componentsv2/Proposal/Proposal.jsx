@@ -1,9 +1,9 @@
-import { classNames, StatusBar, StatusTag, Text, Icon } from "pi-ui";
+import { classNames, StatusBar, StatusTag, Text } from "pi-ui";
 import React, { useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
-import { getMarkdownContent, getProposalStatusTagProps, getQuorumInVotes, getStatusBarData, getVotesReceived, isAbandonedProposal, isPublicProposal, isUnreviewedProposal } from "./helpers";
+import { getMarkdownContent, getProposalStatusTagProps, getQuorumInVotes, getStatusBarData, getVotesReceived, isAbandonedProposal, isPublicProposal, isEditableProposal } from "./helpers";
 import { useProposalVoteInfo } from "./hooks";
 import { useLoaderContext } from "src/Appv2/Loader";
 import styles from "./Proposal.module.css";
@@ -27,11 +27,10 @@ const Proposal = ({ proposal, extended }) => {
   const hasVoteStatus = !!voteStatus && !!voteStatus.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
   const proposalURL = `/proposal/${proposalToken}`;
-  const isAuthor = currentUser && currentUser.userid === userid;
   const isPublic = isPublicProposal(proposal);
-  const isUnreviewed = isUnreviewedProposal(proposal);
   const isAbandoned = isAbandonedProposal(proposal);
-  const isEditable = isAuthor && (isPublic || isUnreviewed) && !isVoteActive;
+  const isAuthor = currentUser && currentUser.userid === userid;
+  const isEditable = isAuthor && isEditableProposal(proposal);
   const {
     voteActive: isVoteActive,
     voteTimeLeft,
@@ -58,6 +57,7 @@ const Proposal = ({ proposal, extended }) => {
           DownloadRecord,
           Header,
           Subtitle,
+          Edit,
           Status
         }) => (
           <>
@@ -73,9 +73,7 @@ const Proposal = ({ proposal, extended }) => {
                 </Title>
               }
               edit={isEditable && (
-                <Link to={`/proposal/${proposalToken}/edit`}>
-                  <Icon type="edit" className={styles.editButton} />
-                </Link>  
+                <Edit url={`/proposal/${proposalToken}/edit`} />
               )}
               subtitle={
                 <Subtitle>

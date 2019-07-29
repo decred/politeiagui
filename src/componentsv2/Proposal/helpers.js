@@ -78,6 +78,32 @@ export const isUnreviewedProposal = proposal => {
 };
 
 /**
+ * Returns true if the given proposal is public, but voting
+ * is not authorized yet.
+ * @param {Object} proposal
+ * @returns {Boolean} isUnreviewed
+ */
+export const isVotingNotAuthorizedProposal = proposal => {
+  return (
+    !!proposal &&
+    !!proposal.voteStatus &&
+    proposal.voteStatus.status === PROPOSAL_VOTING_NOT_AUTHORIZED
+  );
+};
+
+/**
+ * Returns true if the given proposal is editable
+ * @param {Object} proposal
+ * @returns {Boolean} isUnreviewed
+ */
+export const isEditableProposal = proposal => {
+  return (
+    isUnreviewedProposal(proposal) ||
+    (isPublicProposal(proposal) && isVotingNotAuthorizedProposal(proposal))
+  );
+};
+
+/**
  * Returns true if the given proposal is abandoned
  * @param {Object} proposal
  * @returns {Boolean} isAbandoned
