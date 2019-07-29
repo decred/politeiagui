@@ -175,6 +175,10 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_NEW_INVOICE]: () => receive("newInvoice", state, action),
     [act.REQUEST_USER_INVOICES]: () => request("userInvoices", state, action),
     [act.RECEIVE_USER_INVOICES]: () => receive("userInvoices", state, action),
+    [act.REQUEST_ADMIN_USER_INVOICES]: () =>
+      request("userInvoices", state, action),
+    [act.RECEIVE_ADMIN_USER_INVOICES]: () =>
+      receive("userInvoices", state, action),
     [act.REQUEST_ADMIN_INVOICES]: () => request("adminInvoices", state, action),
     [act.RECEIVE_ADMIN_INVOICES]: () => receive("adminInvoices", state, action),
     [act.REQUEST_INVOICE]: () => request("invoice", state, action),

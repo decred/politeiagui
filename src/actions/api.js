@@ -305,6 +305,16 @@ export const onFetchUserInvoices = (userid, token) => dispatch => {
       dispatch(act.RECEIVE_USER_INVOICES(null, error));
     });
 };
+export const onFetchAdminUserInvoices = userid =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_ADMIN_USER_INVOICES());
+    return api
+      .adminUserInvoices(csrf, userid)
+      .then(response => dispatch(act.RECEIVE_ADMIN_USER_INVOICES(response)))
+      .catch(error => {
+        dispatch(act.RECEIVE_ADMIN_USER_INVOICES(null, error));
+      });
+  });
 
 export const onFetchInvoiceComments = token => dispatch => {
   dispatch(act.REQUEST_INVOICE_COMMENTS());

@@ -37,6 +37,7 @@ const userCMSConnector = connect(
     lastLoadedUserDetailProposal: sel.lastLoadedUserDetailProposal,
     lastLoadedProposal: sel.lastLoadedUserProposal,
     getSubmittedUserProposals: sel.getSubmittedUserProposals,
+    getSubmittedUserInvoices: sel.getSubmittedUserInvoices,
     identityImportError: sel.identityImportError,
     identityImportSuccess: sel.identityImportSuccess,
     keyMismatch: sel.getKeyMismatch,

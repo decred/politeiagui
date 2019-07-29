@@ -5,10 +5,12 @@ import { Tabs, Tab } from "../Tabs";
 import GeneralTab from "./GeneralTab";
 import PreferencesTab from "./PreferencesTab";
 import ProposalsTab from "./ProposalsTab";
+import InvoicesTab from "./InvoicesTab";
 import {
   USER_DETAIL_TAB_GENERAL,
   USER_DETAIL_TAB_PREFERENCES,
-  USER_DETAIL_TAB_PROPOSALS
+  USER_DETAIL_TAB_PROPOSALS,
+  USER_DETAIL_TAB_INVOICES
 } from "../../constants";
 import { CHANGE_USERNAME_MODAL } from "../Modal/modalTypes";
 import userConnector from "../../connectors/user";
@@ -24,9 +26,12 @@ const UserDetailPage = ({
   dcrdataTxUrl,
   openModal,
   getSubmittedUserProposals,
-  isCMS
+  getSubmittedUserInvoices,
+  isCMS,
+  isAdmin
 }) => {
   const proposals = user && user.id && getSubmittedUserProposals(user.id);
+  const invoices = user && user.id && isCMS && getSubmittedUserInvoices;
   return (
     <div className="content user-page" role="main">
       {isLoading && <PageLoadingIcon />}
@@ -80,6 +85,15 @@ const UserDetailPage = ({
                 onTabChange={onTabChange}
               />
             ) : null}
+            {isCMS && isAdmin ? (
+              <Tab
+                title="Invoices"
+                count={invoices.length}
+                selected={tabId === USER_DETAIL_TAB_INVOICES}
+                tabId={USER_DETAIL_TAB_INVOICES}
+                onTabChange={onTabChange}
+              />
+            ) : null}
           </Tabs>
           {tabId === USER_DETAIL_TAB_GENERAL && (
             <GeneralTab dcrdataTxUrl={dcrdataTxUrl} />
@@ -87,6 +101,9 @@ const UserDetailPage = ({
           {tabId === USER_DETAIL_TAB_PREFERENCES && <PreferencesTab />}
           {tabId === USER_DETAIL_TAB_PROPOSALS && (
             <ProposalsTab count={proposals.length} />
+          )}
+          {tabId === USER_DETAIL_TAB_INVOICES && (
+            <InvoicesTab count={invoices.length} />
           )}
         </>
       )}
