@@ -3,7 +3,7 @@
 }
 
 .title {
-    width: calc(100% - 20rem);
+    max-width: 100%;
 }
 
 .header {
@@ -22,17 +22,16 @@
 }
 
 .editButton {
-    margin-top: 1rem;
+    margin-top: .7rem;
     margin-left: 1rem;
 }
 
 .titleWrapper {
-    width: 100%;
     display: flex;
 }
 
 .titleEditWrapper {
-    width: 100%;
+    max-width: calc(100% - 20rem);
     display: flex;
 }
 
