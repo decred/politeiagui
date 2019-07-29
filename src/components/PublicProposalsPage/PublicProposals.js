@@ -100,12 +100,7 @@ const PublicProposals = ({
   useEffect(() => {
     // Fetch initial data
     onFetchTokenInventory();
-<<<<<<< HEAD
-    onFetchLastBlockHeight();
-  }, [onFetchLastBlockHeight, onFetchTokenInventory]);
-=======
-  }, []);
->>>>>>> 6055451... Remove references to dcrdata bestblock request
+  }, [onFetchTokenInventory]);
 
   if (error) throw error;
 
