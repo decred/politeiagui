@@ -588,8 +588,8 @@ export const userInvoices = () => GET("/v1/user/invoices").then(getResponse);
 export const adminInvoices = csrf =>
   POST("/admin/invoices", csrf, {}).then(getResponse);
 
-export const adminUserInvoices = (csrf, userid) =>
-  POST("/admin/userinvoices", csrf, { userid }).then(getResponse);
+export const adminUserInvoices = userid =>
+  GET(`/v1/admin/userinvoices?${qs.stringify({ userid })}`).then(getResponse);
 
 export const generatePayouts = csrf =>
   POST("/admin/generatepayouts", csrf, {}).then(getResponse);
