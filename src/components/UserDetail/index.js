@@ -62,7 +62,9 @@ class UserDetail extends Component {
   componentDidMount() {
     this.props.onFetchData(this.props.userId);
     !this.props.isCMS && this.props.onFetchUserProposals(this.props.userId);
-    this.props.isCMS && this.props.onFetchUserInvoices(this.props.userId);
+    this.props.isCMS &&
+      this.props.isAdmin &&
+      this.props.onFetchUserInvoices(this.props.userId);
   }
 
   onTabChange(tabId) {
