@@ -62,16 +62,38 @@ export const Status = ({ children }) => (
   <div className={styles.status}>{children}</div>
 );
 
-export const Header = ({ title, subtitle, status, edit }) => {
+
+const MobileHeader = ({title, status, edit}) => (
+  <div className={styles.titleWrapper}>
+    <div className={styles.titleEditWrapper}>
+      {title}
+    </div>
+    <div className={styles.titleStatusWrapper}>
+      {status}
+      {edit}
+    </div>
+  </div>
+)
+
+export const Header = ({ title, subtitle, status, edit, mobile }) => {
   return (
     <div className={styles.header}>
-      <div className={styles.titleWrapper}>
-        <div className={styles.titleEditWrapper}>
-          {title}
-          {edit}
+      {!mobile ? (
+        <div className={styles.titleWrapper}>
+          <div className={styles.titleEditWrapper}>
+            {title}
+            {edit}
+          </div>
+          <div className={styles.titleStatusWrapper}>
+            {status}
+          </div>
         </div>
-          {status}
-      </div>
+      ) : 
+      <MobileHeader 
+        title={title} 
+        status={status} 
+        edit={edit} 
+      />}
       {subtitle}
     </div>
   );

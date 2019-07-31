@@ -73,6 +73,10 @@
         max-width: 100%;
     }
 
+    .titleStatusWrapper {
+        display: flex;
+    }
+    
     .title {
         max-width: 100%;
         margin-top: .5rem;

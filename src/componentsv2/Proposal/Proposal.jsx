@@ -1,4 +1,4 @@
-import { classNames, StatusBar, StatusTag, Text } from "pi-ui";
+import { classNames, StatusBar, StatusTag, Text, useMediaQuery } from "pi-ui";
 import React, { useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
@@ -36,6 +36,7 @@ const Proposal = ({ proposal, extended }) => {
     voteTimeLeft,
     voteBlocksLeft
   } = useProposalVoteInfo(proposal);
+  const mobile = useMediaQuery("(max-width: 560px)");
   const [showSearchVotesModal, setShowSearchVotesModal] = useState(false);
   function handleCloseSearchVotesModal() {
     setShowSearchVotesModal(false);
@@ -125,6 +126,7 @@ const Proposal = ({ proposal, extended }) => {
                   </Status>
                 )
               }
+              mobile={mobile}
             />
             {extended && (
               <Row topMarginSize="s">
