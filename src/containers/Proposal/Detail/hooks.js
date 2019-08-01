@@ -31,7 +31,11 @@ const mapDispatchToProps = {
 };
 
 const isEqualProposalToken = (proposal, token) => {
-  return proposal && proposal.censorshiprecord.token === token;
+  return (
+    proposal &&
+    proposal.censorshiprecord &&
+    proposal.censorshiprecord.token === token
+  );
 };
 
 export function useProposal(ownProps) {
