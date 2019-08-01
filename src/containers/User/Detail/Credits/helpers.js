@@ -21,7 +21,9 @@ export const tableHeaders = [
 const getRowDataForCreditsPurchase = purchase => ({
   Type: "Credits",
   Amount: purchase.numberPurchased,
-  "DCRs Paid": purchase.price,
+  "DCRs Paid": purchase.price
+    ? (purchase.price * purchase.numberPurchased).toFixed(1)
+    : 0,
   Transaction:
     purchase.txId === "created_by_dbutil" ? (
       purchase.txId
@@ -36,7 +38,9 @@ const getRowDataForCreditsPurchase = purchase => ({
   Date:
     purchase.datePurchased === "just now"
       ? purchase.datePurchased
-      : formatUnixTimestamp(purchase.datePurchased)
+      : formatUnixTimestamp(purchase.datePurchased),
+  timestamp:
+    purchase.datePurchased === "just now" ? 99999999999 : purchase.datePurchased
 });
 
 export const getTableContentFromPurchases = (
@@ -44,7 +48,7 @@ export const getTableContentFromPurchases = (
   pendingTransaction,
   creditPrice
 ) =>
-  orderBy(["Date"], ["desc"])(
+  orderBy(["timestamp"], ["desc"])(
     proposalCreditPurchases.map(getRowDataForCreditsPurchase).concat(
       pendingTransaction && pendingTransaction.txID
         ? [
@@ -60,7 +64,10 @@ export const getTableContentFromPurchases = (
           ]
         : []
     )
-  );
+  ).map(item => {
+    delete item.timestamp;
+    return item;
+  });
 
 export const getCsvData = data =>
   data
