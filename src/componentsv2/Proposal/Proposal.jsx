@@ -1,10 +1,11 @@
-import { classNames, StatusBar, StatusTag, Text } from "pi-ui";
+import { classNames, StatusBar, StatusTag, Text, useMediaQuery } from "pi-ui";
 import React, { useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
-import { getMarkdownContent, getProposalStatusTagProps, getQuorumInVotes, getStatusBarData, getVotesReceived, isAbandonedProposal, isPublicProposal } from "./helpers";
+import { getMarkdownContent, getProposalStatusTagProps, getQuorumInVotes, getStatusBarData, getVotesReceived, isAbandonedProposal, isPublicProposal, isEditableProposal } from "./helpers";
 import { useProposalVoteInfo } from "./hooks";
+import { useLoaderContext } from "src/Appv2/Loader";
 import styles from "./Proposal.module.css";
 import VotesCount from "./VotesCount";
 
@@ -22,16 +23,20 @@ const Proposal = ({ proposal, extended }) => {
     version,
     voteStatus
   } = proposal;
+  const { currentUser } = useLoaderContext();
   const hasVoteStatus = !!voteStatus && !!voteStatus.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
   const proposalURL = `/proposal/${proposalToken}`;
   const isPublic = isPublicProposal(proposal);
   const isAbandoned = isAbandonedProposal(proposal);
+  const isAuthor = currentUser && currentUser.userid === userid;
+  const isEditable = isAuthor && isEditableProposal(proposal);
   const {
     voteActive: isVoteActive,
     voteTimeLeft,
     voteBlocksLeft
   } = useProposalVoteInfo(proposal);
+  const mobile = useMediaQuery("(max-width: 560px)");
   const [showSearchVotesModal, setShowSearchVotesModal] = useState(false);
   function handleCloseSearchVotesModal() {
     setShowSearchVotesModal(false);
@@ -53,6 +58,7 @@ const Proposal = ({ proposal, extended }) => {
           DownloadRecord,
           Header,
           Subtitle,
+          Edit,
           Status
         }) => (
           <>
@@ -67,6 +73,9 @@ const Proposal = ({ proposal, extended }) => {
                   {name}
                 </Title>
               }
+              edit={isEditable && (
+                <Edit url={`/proposal/${proposalToken}/edit`} />
+              )}
               subtitle={
                 <Subtitle>
                   <Author username={username} id={userid} />
@@ -117,6 +126,7 @@ const Proposal = ({ proposal, extended }) => {
                   </Status>
                 )
               }
+              mobile={mobile}
             />
             {extended && (
               <Row topMarginSize="s">

@@ -24,7 +24,7 @@ import PageProposalDetail from "./Proposals/Detail";
 
 import PageNotFound from "./NotFound";
 
-import { renderNewRecordRoute } from "./routeRenderers";
+import { renderNewRecordRoute, renderEditRecordRoute } from "./routeRenderers";
 
 const Routes = ({ location }) => {
   const config = useConfig();
@@ -82,6 +82,11 @@ const Routes = ({ location }) => {
             path={`/${recordType}s/new`}
             exact
             render={renderNewRecordRoute(config)}
+          />
+          <AuthenticatedRoute
+            path={`/${recordType}/:token/edit`}
+            exact
+            render={renderEditRecordRoute(config)}
           />
           <AdminAuthenticatedRoute
             path={`/${recordType}s/admin`}

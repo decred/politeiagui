@@ -12,6 +12,7 @@ const mapStateToProps = {
     get(["match", "params", "token"]),
     arg(1)
   ),
+  editedProposal: sel.apiEditProposalResponse,
   publicProposals: sel.proposalsWithVoteStatus,
   unvettedProposals: sel.apiUnvettedProposals,
   proposalDetail: sel.proposalWithVoteStatus,
@@ -32,6 +33,7 @@ export function useProposal(ownProps) {
     onFetchProposal,
     token,
     proposalDetail,
+    editedProposal,
     publicProposals,
     unvettedProposals,
     loading,
@@ -41,6 +43,15 @@ export function useProposal(ownProps) {
   const [proposal, setProposal] = useState(null);
 
   const getProposalFromCache = useCallback(() => {
+    // search if proposal was recently edited
+    if (
+      editedProposal &&
+      editedProposal.proposal.censorshiprecord.token === token
+    ) {
+      setProposal(editedProposal);
+      return true;
+    }
+
     // search in the public proposals
     const proposalFromPublic = publicProposals.find(
       prop => prop.censorshiprecord.token === token
