@@ -1,5 +1,4 @@
 .commentAreaContainer {
-    padding: 2rem 4rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
 }
@@ -29,12 +28,4 @@ h2.commentsTitle {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-}
-
-@media screen and (max-width: 560px) {
-
-    .commentAreaContainer {
-        padding: 2rem 2.5rem;
-    }
-
 }

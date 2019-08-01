@@ -13,7 +13,7 @@ const HeaderNav = ({ history }) => {
   return username ? (
     <div className={styles.loggedInContainer}>
       <ProposalCreditsIndicator />
-      <Dropdown title={username}>
+      <Dropdown className={styles.accountDropdown} title={username}>
         <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
         <DropdownItem onClick={onLogout}>Logout</DropdownItem>
       </Dropdown>

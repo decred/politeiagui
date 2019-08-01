@@ -6,7 +6,9 @@
 
 .loggedInContainer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 270px;
   width: 100%;
 }
 
@@ -37,7 +39,12 @@
     border-bottom: 2px solid var(--color-yellow);
 }
 
-.proposalCreditsButton {
-    padding: 0rem 0.5rem !important;
-    margin-left: 0.5rem;
+div.accountDropdown {
+    align-self: unset;
+}
+
+@media screen and (max-width: 1000px) { 
+    .loggedInContainer {
+        max-width: unset;
+    }
 }

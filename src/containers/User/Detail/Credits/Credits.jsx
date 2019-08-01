@@ -97,7 +97,7 @@ const Credits = () => {
       <Spinner invert />
     </div>
   ) : (
-    <Card paddingSize="small">
+    <Card className="container">
       <div className={styles.block}>
         <div className={styles.blockDetails}>
           <Text className={styles.title}>Registration fee</Text>

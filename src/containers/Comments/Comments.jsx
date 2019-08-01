@@ -116,7 +116,11 @@ const Comments = ({
     <>
       <Card
         id="commentArea"
-        className={classNames(styles.commentAreaContainer, className)}
+        className={classNames(
+          "container",
+          styles.commentAreaContainer,
+          className
+        )}
       >
         <LoggedInContent
           fallback={

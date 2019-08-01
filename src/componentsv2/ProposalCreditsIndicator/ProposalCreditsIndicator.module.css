@@ -1,8 +1,8 @@
 .wrapper {
-    padding: 0 2rem;
 }
 
-.proposalCreditsButton {
-    padding: 0rem 0.5rem !important;
+button.proposalCreditsButton {
+    padding: 0rem 0.5rem;
     margin-left: 0.5rem;
+    font-weight: var(--font-weight-regular);
 }
