@@ -110,7 +110,16 @@ const Credits = () => {
           >
             {paywallIsPaid ? "Paid" : "Not paid"}
           </Text>
-          {!paywallIsPaid && isAdmin ? (
+          {!paywallIsPaid && isUserPageOwner && (
+            <Button
+              className="margin-top-s"
+              size="sm"
+              onClick={openPaywallModal}
+            >
+              Pay registration fee
+            </Button>
+          )}
+          {!paywallIsPaid && isAdmin && (
             <Button
               className="margin-top-s"
               loading={isApiRequestingMarkAsPaid}
@@ -119,17 +128,6 @@ const Credits = () => {
             >
               Mark as paid
             </Button>
-          ) : (
-            !paywallIsPaid &&
-            isUserPageOwner && (
-              <Button
-                className="margin-top-s"
-                size="sm"
-                onClick={openPaywallModal}
-              >
-                Pay registration fee
-              </Button>
-            )
           )}
         </div>
         <div className={styles.description}>
@@ -152,26 +150,27 @@ const Credits = () => {
           >
             {user.proposalcredits}
           </Text>
-
-          {isUserPageOwner && paywallIsPaid && (
-            <Button
-              className="margin-top-s"
-              size="sm"
-              onClick={openProposalCreditsModal}
-            >
-              Purchase more
-            </Button>
-          )}
-          {isAdmin && (
-            <Button
-              onClick={onRescanUserCredits}
-              loading={isLoadingRescan}
-              className="margin-top-s"
-              size="sm"
-            >
-              Rescan
-            </Button>
-          )}
+          <div className={styles.buttonsWrapper}>
+            {isUserPageOwner && paywallIsPaid && (
+              <Button
+                className="margin-top-s"
+                size="sm"
+                onClick={openProposalCreditsModal}
+              >
+                Purchase more
+              </Button>
+            )}
+            {isAdmin && (
+              <Button
+                onClick={onRescanUserCredits}
+                loading={isLoadingRescan}
+                className="margin-top-s"
+                size="sm"
+              >
+                Rescan
+              </Button>
+            )}
+          </div>
         </div>
         <div className={styles.description}>
           <P className={styles.descriptionParagraph}>
@@ -191,7 +190,7 @@ const Credits = () => {
           {errorRescan.toString()}
         </Message>
       )}
-      {isUserPageOwner && (
+      {isUserPageOwner && data && !!data.length && (
         <div className="margin-top-l" style={{ overflowX: "scroll" }}>
           <Text className="margin-right-xs">Credit History</Text>
           <ExportToCsv

@@ -30,3 +30,36 @@
   justify-content: center;
   align-items: center;
 }
+
+.buttonsWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonsWrapper button {
+  max-width: 136px;
+}
+
+
+/* EXTRA SMALL */
+@media screen and (max-width: 560px){
+  .block {
+    flex-direction: column;
+  }
+
+  .blockDetails {
+    max-width: unset;
+    min-width: unset;
+    width: 100%;
+  }
+
+  .descriptionParagraph {
+    margin-top: 1rem;
+    padding-left: 0;
+    border: 0;
+  }
+
+  .buttonsWrapper {
+    flex-direction: row;
+  }
+}
