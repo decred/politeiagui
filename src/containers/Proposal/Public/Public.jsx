@@ -11,6 +11,7 @@ import {
 import { usePublicProposals } from "./hooks";
 import useQueryStringWithIndexValue from "src/hooks/useQueryStringWithIndexValue";
 import Proposal from "src/componentsv2/Proposal";
+import ProposalLoader from "src/componentsv2/Proposal/ProposalLoader";
 
 const DEFAULT_PAGE_SIZE = 4;
 
@@ -18,12 +19,10 @@ const renderProposal = record => {
   return <Proposal key={record.censorshiprecord.token} proposal={record} />;
 };
 
-const PlaceHolder = () => <div className={styles.cardPlaceholder} />;
-
 const getListLoadingPlaceholders = numberOfItems => {
   const placeholders = [];
   for (let i = 0; i < numberOfItems; i++) {
-    placeholders.push(<PlaceHolder key={`placeholder-${i}`} />);
+    placeholders.push(<ProposalLoader key={`placeholder-${i}`} />);
   }
   return placeholders;
 };

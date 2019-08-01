@@ -3,11 +3,21 @@ import React, { useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
-import { getMarkdownContent, getProposalStatusTagProps, getQuorumInVotes, getStatusBarData, getVotesReceived, isAbandonedProposal, isPublicProposal, isEditableProposal } from "./helpers";
+import {
+  getMarkdownContent,
+  getProposalStatusTagProps,
+  getQuorumInVotes,
+  getStatusBarData,
+  getVotesReceived,
+  isAbandonedProposal,
+  isPublicProposal,
+  isEditableProposal
+} from "./helpers";
 import { useProposalVoteInfo } from "./hooks";
 import { useLoaderContext } from "src/Appv2/Loader";
 import styles from "./Proposal.module.css";
 import VotesCount from "./VotesCount";
+import DownloadComments from "src/containers/Comments/Download";
 
 const Proposal = ({ proposal, extended }) => {
   const {
@@ -55,11 +65,13 @@ const Proposal = ({ proposal, extended }) => {
           CommentsLink,
           Link,
           GithubLink,
+          CopyLink,
           DownloadRecord,
           Header,
           Subtitle,
           Edit,
-          Status
+          Status,
+          RecordToken
         }) => (
           <>
             <Header
@@ -68,14 +80,14 @@ const Proposal = ({ proposal, extended }) => {
                   id={`proposal-title-${proposalToken}`}
                   truncate
                   linesBeforeTruncate={2}
-                  url={proposalURL}
+                  url={extended ? "" : proposalURL}
                 >
                   {name}
                 </Title>
               }
-              edit={isEditable && (
-                <Edit url={`/proposal/${proposalToken}/edit`} />
-              )}
+              edit={
+                isEditable && <Edit url={`/proposal/${proposalToken}/edit`} />
+              }
               subtitle={
                 <Subtitle>
                   <Author username={username} id={userid} />
@@ -130,9 +142,7 @@ const Proposal = ({ proposal, extended }) => {
             />
             {extended && (
               <Row topMarginSize="s">
-                <Text id={`proposal-token-${proposalToken}`} truncate>
-                  {proposalToken}
-                </Text>
+                <RecordToken token={proposalToken} />
               </Row>
             )}
             {hasVoteStatus && (
@@ -158,26 +168,38 @@ const Proposal = ({ proposal, extended }) => {
                 body={getMarkdownContent(files)}
               />
             )}
-            {(isPublic || isAbandoned) && (
+            {(isPublic || isAbandoned) && !extended && (
               <Row justify="space-between">
-                <CommentsLink numOfComments={numcomments} />
+                <CommentsLink
+                  numOfComments={numcomments}
+                  url={`/proposal/${proposalToken}?scrollToComments=true`}
+                />
                 <GithubLink token={proposalToken} />
               </Row>
             )}
             {extended && (
-              <Row>
-                <DownloadRecord
-                  fileName={proposalToken}
-                  content={proposal}
-                  className="margin-right-s"
-                  label="Download Proposal Bundle"
-                />
-                {/*TODO: comment download needs to be a container imported from the comments context */}
-                {isPublic && !!numcomments && (
-                  <Link title="not implemented yet" to="#">
-                    Download Comments Bundle
-                  </Link>
-                )}
+              <Row className={styles.lastRow}>
+                <Row className={styles.downloadLinksWrapper} noMargin>
+                  <DownloadRecord
+                    fileName={proposalToken}
+                    content={proposal}
+                    className="margin-right-s"
+                    label="Download Proposal Bundle"
+                  />
+                  {isPublic && !!numcomments && (
+                    <DownloadComments
+                      recordToken={proposalToken}
+                      className={styles.downloadCommentsLink}
+                    />
+                  )}
+                </Row>
+                <Row className={styles.proposalActions}>
+                  <CopyLink
+                    className={styles.copyLink}
+                    url={window.location.origin + proposalURL}
+                  />
+                  <GithubLink token={proposalToken} />
+                </Row>
               </Row>
             )}
           </>

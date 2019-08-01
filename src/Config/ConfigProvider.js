@@ -25,7 +25,8 @@ ConfigProvider.propTypes = {
     constants.RECORD_TYPE_INVOICE,
     constants.RECORD_TYPE_PROPOSAL
   ]),
-  enableAdminInvite: PropTypes.bool
+  enableAdminInvite: PropTypes.bool,
+  enableCommentVote: PropTypes.bool
 };
 
 export default ConfigProvider;

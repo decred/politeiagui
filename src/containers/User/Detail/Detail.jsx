@@ -37,15 +37,16 @@ const UserDetail = ({
 }) => {
   const {
     onFetchUser,
+    onResetUser,
     validateUUID,
     user,
-    loading,
     isAdmin,
     userId,
     loggedInAsUserId
   } = useUserDetail({ match });
 
-  const userFetched = !!user;
+  if (!validateUUID(userId)) throw new Error("Invalid user ID");
+
   // Proposals fetching will be triggered from the 'proposals' tab
   // but cached here to avoid re-fetching it
   const [userProposals, setUserProposals] = useState(null);
@@ -72,14 +73,17 @@ const UserDetail = ({
   // Validate and set user id or throw an error in case it is invalid
   useEffect(
     function setUserID() {
-      if (!validateUUID(userId)) {
-        throw new Error("Invalid user ID");
-      } else if (!userFetched && !loading) {
-        onFetchUser(userId);
+      if (!!user) {
+        return;
       }
+      onFetchUser(userId);
     },
-    [validateUUID, userId, onFetchUser, userFetched, loading]
+    [userId, onFetchUser, user]
   );
+
+  useEffect(() => {
+    return () => onResetUser();
+  }, [onResetUser]);
 
   const handleCacheUserProposals = useCallback(proposals => {
     setUserProposals(proposals);

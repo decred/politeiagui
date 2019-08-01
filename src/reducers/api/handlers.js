@@ -114,7 +114,9 @@ export const onReceiveNewComment = (state, action) => {
       response: {
         ...state.proposalComments.response,
         comments: [
-          ...state.proposalComments.response.comments,
+          ...((state.proposalComments.response &&
+            state.proposalComments.response.comments) ||
+            []),
           {
             ...state.newComment.payload,
             token: state.proposal.payload,

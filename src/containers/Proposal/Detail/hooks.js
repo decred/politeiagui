@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import get from "lodash/fp/get";
 import compose from "lodash/fp/compose";
 import isEqual from "lodash/isEqual";
@@ -13,6 +13,10 @@ const mapStateToProps = {
     arg(1)
   ),
   editedProposal: sel.apiEditProposalResponse,
+  commentID: compose(
+    get(["match", "params", "commentid"]),
+    arg(1)
+  ),
   publicProposals: sel.proposalsWithVoteStatus,
   unvettedProposals: sel.apiUnvettedProposals,
   proposalDetail: sel.proposalWithVoteStatus,
@@ -23,8 +27,15 @@ const mapStateToProps = {
 const mapDispatchToProps = {
   onFetchUser: act.onFetchUser,
   onFetchProposal: act.onFetchProposal,
-  onResetProposal: act.onResetProposal,
   onFetchProposalVoteStatus: act.onFetchProposalVoteStatus
+};
+
+const isEqualProposalToken = (proposal, token) => {
+  return (
+    proposal &&
+    proposal.censorshiprecord &&
+    proposal.censorshiprecord.token === token
+  );
 };
 
 export function useProposal(ownProps) {
@@ -37,83 +48,72 @@ export function useProposal(ownProps) {
     publicProposals,
     unvettedProposals,
     loading,
-    onResetProposal,
-    onFetchProposalVoteStatus
+    onFetchProposalVoteStatus,
+    commentID: threadParentID
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
-  const [proposal, setProposal] = useState(null);
 
-  const getProposalFromCache = useCallback(() => {
-    // search if proposal was recently edited
-    if (
-      editedProposal &&
-      editedProposal.proposal.censorshiprecord.token === token
-    ) {
-      setProposal(editedProposal);
-      return true;
+  const getProposalFromCache = () => {
+    // try to use the edited proposal from cache first to get the
+    // most updated version
+    if (isEqualProposalToken(editedProposal, token)) {
+      return editedProposal;
+    }
+
+    // compare to the current cached proposal detail
+    if (isEqualProposalToken(proposalDetail, token)) {
+      return proposalDetail;
     }
 
     // search in the public proposals
-    const proposalFromPublic = publicProposals.find(
-      prop => prop.censorshiprecord.token === token
+    const proposalFromPublic = publicProposals.find(prop =>
+      isEqualProposalToken(prop, token)
     );
 
     if (proposalFromPublic) {
-      setProposal(proposalFromPublic);
-      return true;
+      return proposalFromPublic;
     }
 
     // search in the unvetted proposals
-    const proposalFromUnvetted = unvettedProposals.find(
-      prop => prop.censorshiprecord.token === token
+    const proposalFromUnvetted = unvettedProposals.find(prop =>
+      isEqualProposalToken(prop, token)
     );
 
     if (proposalFromUnvetted) {
-      setProposal(proposalFromUnvetted);
-      return true;
+      return proposalFromUnvetted;
     }
 
-    return false;
-  }, [publicProposals, unvettedProposals, token]);
+    return null;
+  };
 
-  useEffect(
-    function resetProposalWhenComponentUnmounts() {
-      return () => onResetProposal();
-    },
-    [onResetProposal]
-  );
+  const [proposal, setProposal] = useState(getProposalFromCache());
 
   useEffect(
     function fetchProposal() {
-      if (loading || !!proposal || getProposalFromCache()) {
+      if (proposal) {
         return;
       }
-
       onFetchProposal(token);
       onFetchProposalVoteStatus(token);
     },
-    [
-      proposal,
-      token,
-      getProposalFromCache,
-      onFetchProposal,
-      onFetchProposalVoteStatus,
-      onResetProposal,
-      loading
-    ]
+    [proposal, token, onFetchProposal, onFetchProposalVoteStatus]
   );
 
   useEffect(
     function receiveFetchedProposal() {
-      if (!!proposalDetail && !isEqual(proposalDetail, proposal)) {
+      if (
+        !!proposalDetail &&
+        isEqualProposalToken(proposalDetail, token) &&
+        !isEqual(proposalDetail, proposal)
+      ) {
         setProposal(proposalDetail);
       }
     },
-    [proposalDetail, proposal]
+    [token, proposalDetail, proposal]
   );
 
   if (error) {
     throw error;
   }
 
-  return { proposal, loading };
+  return { proposal, loading, threadParentID };
 }

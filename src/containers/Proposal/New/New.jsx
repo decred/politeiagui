@@ -1,15 +1,32 @@
-import { Message } from "pi-ui";
+import { Message, Card } from "pi-ui";
 import React from "react";
 import ProposalForm from "src/componentsv2/ProposalForm";
-import { PAYWALL_STATUS_PAID } from "src/constants";
+import { IdentityMessageError } from "src/componentsv2/IdentityErrorIndicators";
+import Or from "src/componentsv2/Or";
 import usePaywall from "src/hooks/usePaywall";
+import useIdentity from "src/hooks/useIdentity";
 import { useNewProposal } from "./hooks";
 
 const NewProposal = () => {
   const { onSubmitProposal } = useNewProposal();
-  const { userPaywallStatus } = usePaywall();
-  const isPaid = userPaywallStatus === PAYWALL_STATUS_PAID;
-  return isPaid ? <ProposalForm onSubmit={onSubmitProposal} /> : <Message kind="warning">You must pay the paywall to create a proposal</Message>;
+  const { isPaid } = usePaywall();
+  const [, identityError] = useIdentity();
+  return (
+    <Card paddingSize="small">
+      <Or>
+        {!isPaid && (
+          <Message kind="error">
+            You must pay the paywall to create a proposal
+          </Message>
+        )}
+        {!!identityError && <IdentityMessageError />}
+      </Or>
+      <ProposalForm
+        disableSubmit={!isPaid || !!identityError}
+        onSubmit={onSubmitProposal}
+      />
+    </Card>
+  );
 };
 
 export default NewProposal;

@@ -5,15 +5,13 @@ import {
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_AUTHORIZED,
-  PROPOSAL_VOTING_NOT_AUTHORIZED
-} from "src/constants";
-import { getTextFromIndexMd } from "src/helpers";
-import {
+  PROPOSAL_VOTING_NOT_AUTHORIZED,
   PROPOSAL_STATUS_ABANDONED,
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES
 } from "../../constants";
+import { getTextFromIndexMd } from "src/helpers";
 
 export const getMarkdownContent = files => {
   const markdownFile = files.find(f => f.name === "index.md");

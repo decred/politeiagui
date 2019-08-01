@@ -2,8 +2,21 @@ import { Button, Modal, P } from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
 
-const ModalIdentityWarning = ({ title, onClose, show, onConfirm, confirmMessage }) => (
-  <Modal show={show} title={title} onClose={onClose}>
+const ModalIdentityWarning = ({
+  title,
+  onClose,
+  show,
+  onConfirm,
+  confirmMessage
+}) => (
+  <Modal
+    style={{ maxWidth: "70rem" }}
+    show={show}
+    title={title}
+    onClose={onClose}
+    iconType="info"
+    iconSize="lg"
+  >
     <P>
       Politeia will send you a link to verify your email address. You must open
       this link in the same browser. After verifying your email, Politeia will

@@ -1,0 +1,17 @@
+.wrapper { 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border: 1px solid var(--color-gray-lighter);
+}
+
+/* SMALL WIDTH */
+@media screen and (max-width: 768px){
+    .wrapper {
+        flex-direction: column;
+    }
+    .buttonsWrapper {
+        margin-top: 1rem;
+    }
+}

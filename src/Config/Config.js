@@ -16,6 +16,8 @@ const loadConfig = () => {
     title: defaultTitleValue,
     recordType: defaultRecordType,
     enableAdminInvite: defaultEnableAdminInvite,
+    enableCommentVote: defaultEnableCommentVote,
+    enablePaywall: defaultEnablePaywall,
     privacyPolicyContent: defaultprivacyPolicyContent,
     aboutContent: defaultAboutContent,
     paywallContent: defaultPaywallContent,
@@ -42,6 +44,9 @@ const loadConfig = () => {
     recordType: getConf("RECORD_TYPE") || defaultRecordType,
     enableAdminInvite:
       getConf("ENABLE_ADMIN_INVITE") || defaultEnableAdminInvite,
+    enableCommentVote:
+      getConf("ENABLE_COMMENT_VOTE") || defaultEnableCommentVote,
+    enablePaywall: getConf("ENABLE_PAYWALL") || defaultEnablePaywall,
     privacyPolicyContent:
       getConf("PRIVACY_POLICY_CONTENT") || defaultprivacyPolicyContent,
     aboutContent: getConf("ABOUT_CONTENT") || defaultAboutContent,

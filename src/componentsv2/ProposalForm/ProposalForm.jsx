@@ -1,14 +1,15 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Formik } from "formik";
-import { Card, Button, Message, BoxTextInput } from "pi-ui";
+import { Button, Message, BoxTextInput } from "pi-ui";
 import { Row } from "../layout";
 import MarkdownEditor from "src/componentsv2/MarkdownEditor";
 import FilesInput from "src/componentsv2/Files/Input";
 import AttachFileButton from "src/componentsv2/AttachFileButton";
 import { useProposalForm } from "./hooks";
 
-const ProposalForm = ({ initialValues, onSubmit, history }) => {
+const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
   const { validationSchema } = useProposalForm();
   async function handleSubmit(
     values,
@@ -25,79 +26,83 @@ const ProposalForm = ({ initialValues, onSubmit, history }) => {
     }
   }
   return (
-    <Card paddingSize="small">
-      <Formik
-        initialValues={
-          initialValues || {
-            name: "",
-            description: "",
-            files: []
-          }
+    <Formik
+      initialValues={
+        initialValues || {
+          name: "",
+          description: "",
+          files: []
         }
-        loading={!validationSchema}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-      >
-        {props => {
-          const {
-            values,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            isSubmitting,
-            touched,
-            setFieldValue,
-            errors,
-            isValid
-          } = props;
-          function handleDescriptionChange(v) {
-            setFieldValue("description", v);
-          }
-          function handleFilesChange(v) {
-            setFieldValue("files", v);
-          }
-          return (
-            <form onSubmit={handleSubmit}>
-              {errors && errors.global && (
-                <Message kind="error">{errors.global.toString()}</Message>
-              )}
-              <BoxTextInput
-                placeholder="Proposal name"
-                name="name"
-                value={values.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.name && errors.name}
-              />
-              <MarkdownEditor
-                name="description"
-                className="margin-top-s"
-                value={values.description}
-                onChange={handleDescriptionChange}
-                onBlur={handleBlur}
-                placeholder={"Write your proposal"}
-                filesInput={
-                  <FilesInput value={values.files} onChange={handleFilesChange}>
-                    <AttachFileButton type="button" />
-                  </FilesInput>
-                }
-              />
-              <Row justify="right" topMarginSize="s">
-                <Button kind="secondary">Save as draft</Button>
-                <Button
-                  type="submit"
-                  kind={!isValid ? "disabled" : "primary"}
-                  loading={isSubmitting}
-                >
-                  Submit
-                </Button>
-              </Row>
-            </form>
-          );
-        }}
-      </Formik>
-    </Card>
+      }
+      loading={!validationSchema}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {props => {
+        const {
+          values,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+          touched,
+          setFieldValue,
+          errors,
+          isValid
+        } = props;
+        function handleDescriptionChange(v) {
+          setFieldValue("description", v);
+        }
+        function handleFilesChange(v) {
+          setFieldValue("files", v);
+        }
+        return (
+          <form onSubmit={handleSubmit}>
+            {errors && errors.global && (
+              <Message kind="error">{errors.global.toString()}</Message>
+            )}
+            <BoxTextInput
+              placeholder="Proposal name"
+              name="name"
+              value={values.name}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.name && errors.name}
+            />
+            <MarkdownEditor
+              name="description"
+              className="margin-top-s"
+              value={values.description}
+              onChange={handleDescriptionChange}
+              onBlur={handleBlur}
+              placeholder={"Write your proposal"}
+              filesInput={
+                <FilesInput value={values.files} onChange={handleFilesChange}>
+                  <AttachFileButton type="button" />
+                </FilesInput>
+              }
+            />
+            <Row justify="right" topMarginSize="s">
+              <Button kind="secondary">Save as draft</Button>
+              <Button
+                type="submit"
+                kind={!isValid && disableSubmit ? "disabled" : "primary"}
+                loading={isSubmitting}
+              >
+                Submit
+              </Button>
+            </Row>
+          </form>
+        );
+      }}
+    </Formik>
   );
+};
+
+ProposalForm.propTypes = {
+  initialValues: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  disableSubmit: PropTypes.bool
 };
 
 export default withRouter(ProposalForm);

@@ -32,7 +32,8 @@ const mapStateToProps = {
 };
 
 const mapDispatchToProps = {
-  onFetchUser: act.onFetchUser
+  onFetchUser: act.onFetchUser,
+  onResetUser: act.onResetUser
 };
 
 function validateUUID(str) {

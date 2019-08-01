@@ -719,6 +719,13 @@ export const isApiRequesting = or(
 
 export const resetPasswordResponse = getApiResponse("resetPassword");
 
+export const isApiRequestingComments = or(
+  getIsApiRequesting("proposalComments"),
+  getIsApiRequesting("invoiceComments")
+);
+
+export const isApiRequestingCommentsLikes = getIsApiRequesting("commentslikes");
+
 // CMS Selectors
 const mode = compose(
   get("mode"),
