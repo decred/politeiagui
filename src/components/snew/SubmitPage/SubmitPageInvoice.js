@@ -42,7 +42,9 @@ const InvoiceSubmit = props => {
     valid,
     pristine,
     onSaveInvoiceDraft,
-    draftInvoiceById
+    draftInvoiceById,
+    isDraftSaving,
+    draftButtonText
   } = props;
   const [monthOptions, setMonthOptions] = useState(MONTH_OPTIONS);
   const [contractorRate, setContractorRate] = useState(0);
@@ -240,15 +242,15 @@ const InvoiceSubmit = props => {
                       onClick={handleSubmit(onSave)}
                       isLoading={isLoading}
                     />
-                    <button
+                    <ButtonWithLoadingIcon
                       className={"togglebutton secondary access-required"}
                       name="submit"
                       type="submit"
                       value="form"
+                      text={draftButtonText}
                       onClick={handleSubmit(onSaveInvoiceDraft)}
-                    >
-                      Save as Draft
-                    </button>
+                      isLoading={isDraftSaving}
+                    />
                     {editingMode ? (
                       <ButtonWithLoadingIcon
                         className={`togglebutton access-required${isLoading &&

@@ -8,6 +8,16 @@ import submit from "../connectors/submit";
 import appConnector from "../connectors/app";
 
 class SubmitFormContainer extends Component {
+  constructor(props) {
+    super(props);
+    // Provides minor visual feedback when succesfully
+    // saving a draft.
+    this.state = {
+      isDraftSaving: false,
+      draftButtonText: "Save as Draft"
+    };
+  }
+
   componentDidMount() {
     this.props.policy || this.props.onFetchData();
   }
@@ -19,7 +29,9 @@ class SubmitFormContainer extends Component {
         {...{
           ...this.props,
           onSaveProposalDraft: this.onSaveProposalDraft,
-          onSaveInvoiceDraft: this.onSaveInvoiceDraft
+          onSaveInvoiceDraft: this.onSaveInvoiceDraft,
+          isDraftSaving: this.state.isDraftSaving,
+          draftButtonText: this.state.draftButtonText
         }}
       />
     );
@@ -27,14 +39,27 @@ class SubmitFormContainer extends Component {
 
   onSaveProposalDraft = (...args) => {
     validate(...args);
-    this.props.onSaveProposalDraft(...args);
-    this.props.history.push("/user/proposals/drafts");
+    const { payload } = this.props.onSaveProposalDraft(...args);
+    this.draftButtonTextAnimation(this.props.isCMS, payload.id);
   };
 
   onSaveInvoiceDraft = (...args) => {
     validate(...args);
-    this.props.onSaveInvoiceDraft(...args);
-    this.props.history.push("/user/invoices/drafts");
+    const { payload } = this.props.onSaveInvoiceDraft(...args);
+    this.draftButtonTextAnimation(this.props.isCMS, payload.id);
+  };
+
+  draftButtonTextAnimation = (isCMS, id) => {
+    const url = isCMS ? "/invoices/new?draftid=" : "/proposals/new?draftid=";
+    this.setState({ isDraftSaving: true, draftButtonText: "✔ saved" });
+    setTimeout(() => {
+      this.setState({ isDraftSaving: false });
+      setTimeout(() => {
+        this.setState({ draftButtonText: "Save as Draft" });
+        if (this.props.location.search === "")
+          this.props.history.replace(url + id);
+      }, 500);
+    }, 700);
   };
 }
 
@@ -51,6 +76,7 @@ export default compose(
     touchOnChange: true,
     validate: synchronousValidation,
     enableReinitialize: true,
+    destroyOnUnmount: false,
     warn
   }),
   wrap
