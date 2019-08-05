@@ -6,7 +6,6 @@ import {
   AdminAuthenticatedRoute,
   NotAuthenticatedRoute
 } from "src/containers/Routes";
-import { UserSessionChecker } from "src/containers/User/SessionChecker";
 import { useConfig } from "src/Config";
 
 import PageUserLogin from "./User/Login";
@@ -34,66 +33,64 @@ const Routes = ({ location }) => {
   return (
     <TransitionGroup>
       <CSSTransition key={location.key} classNames="fade" timeout={300}>
-        <UserSessionChecker>
-          <Switch location={location}>
-            <Route path="/" exact component={PageProposalsPublicList} />
-            <NotAuthenticatedRoute
-              path="/user/login"
-              exact
-              component={PageUserLogin}
-            />
-            <NotAuthenticatedRoute
-              path="/user/signup"
-              exact
-              component={PageUserSignup}
-            />
-            <NotAuthenticatedRoute
-              path="/user/request-reset-password"
-              exact
-              component={PageUserRequestResetPassword}
-            />
-            <NotAuthenticatedRoute
-              path="/user/reset-password"
-              exact
-              component={PageUserResetPassword}
-            />
-            <NotAuthenticatedRoute
-              path="/user/resend-verification-email"
-              exact
-              component={PageUserRequestResendVerificationEmail}
-            />
-            <NotAuthenticatedRoute
-              path="/user/privacy-policy"
-              exact
-              component={PageUserPrivacyPolicy}
-            />
-            <NotAuthenticatedRoute
-              path="/user/verify-email"
-              exact
-              component={PageUserVerifyEmail}
-            />
-            <Route path="/user/:userid" exact component={PageUserDetail} />
+        <Switch location={location}>
+          <Route path="/" exact component={PageProposalsPublicList} />
+          <NotAuthenticatedRoute
+            path="/user/login"
+            exact
+            component={PageUserLogin}
+          />
+          <NotAuthenticatedRoute
+            path="/user/signup"
+            exact
+            component={PageUserSignup}
+          />
+          <NotAuthenticatedRoute
+            path="/user/request-reset-password"
+            exact
+            component={PageUserRequestResetPassword}
+          />
+          <NotAuthenticatedRoute
+            path="/user/reset-password"
+            exact
+            component={PageUserResetPassword}
+          />
+          <NotAuthenticatedRoute
+            path="/user/resend-verification-email"
+            exact
+            component={PageUserRequestResendVerificationEmail}
+          />
+          <NotAuthenticatedRoute
+            path="/user/privacy-policy"
+            exact
+            component={PageUserPrivacyPolicy}
+          />
+          <NotAuthenticatedRoute
+            path="/user/verify-email"
+            exact
+            component={PageUserVerifyEmail}
+          />
+          <Route path="/user/:userid" exact component={PageUserDetail} />
 
-            {/* Record routes */}
-            <Route path="/proposal/:token" exact component={PageProposalDetail} />
-            <AuthenticatedRoute
-              path={`/${recordType}s/user`}
-              exact
-              component={PageProposalsUser}
-            />
-            <AuthenticatedRoute
-              path={`/${recordType}s/new`}
-              exact
-              render={renderNewRecordRoute(config)}
-            />
-            <AdminAuthenticatedRoute
-              path={`/${recordType}s/admin`}
-              exact
-              component={PageProposalsAdmin}
-            />
-            <Route path="*" component={PageNotFound} />
-          </Switch>
-        </UserSessionChecker>
+          {/* Record routes */}
+          <Route path="/proposal/:token" exact component={PageProposalDetail} />
+          <AuthenticatedRoute
+            path={`/${recordType}s/user`}
+            exact
+            component={PageProposalsUser}
+          />
+          <AuthenticatedRoute
+            path={`/${recordType}s/new`}
+            exact
+            render={renderNewRecordRoute(config)}
+          />
+          <AdminAuthenticatedRoute
+            path={`/${recordType}s/admin`}
+            exact
+            component={PageProposalsAdmin}
+          />
+          <Route path="*" component={PageNotFound} />
+        </Switch>
       </CSSTransition>
     </TransitionGroup>
   );

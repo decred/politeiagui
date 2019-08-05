@@ -6,20 +6,21 @@ import useNavigation from "src/hooks/useNavigation";
 
 const SessionChecker = ({ children }) => {
   const { sessionExpired, setSessionExpired } = useSessionChecker();
-  const { onLogout } = useNavigation();
+  const { handleLogout } = useNavigation();
   const closeLogin = () => {
     setSessionExpired(false);
   };
   const logout = () => {
-    onLogout();
+    handleLogout();
     closeLogin();
   };
   return (
     <>
       <ModalLogin
         onLoggedIn={closeLogin}
-        onDismissModal={logout}
+        onClose={logout}
         show={sessionExpired}
+        title={"Your session has expired. Please log in again"}
       />
       {children}
     </>
@@ -27,7 +28,7 @@ const SessionChecker = ({ children }) => {
 };
 
 SessionChecker.propTypes = {
-  children: PropTypes.object.isRequired
+  children: PropTypes.node.isRequired
 };
 
 export default SessionChecker;
