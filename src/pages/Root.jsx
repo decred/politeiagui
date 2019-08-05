@@ -26,7 +26,6 @@ import PageNotFound from "./NotFound";
 
 import { renderNewRecordRoute, renderEditRecordRoute } from "./routeRenderers";
 
-
 const Routes = ({ location }) => {
   const config = useConfig();
   const { recordType } = config;
