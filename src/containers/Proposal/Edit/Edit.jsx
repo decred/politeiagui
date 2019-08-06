@@ -4,8 +4,8 @@ import { useProposal } from "../Detail/hooks";
 import { useEditProposal } from "./hooks";
 import { withRouter } from "react-router-dom";
 import { getMarkdownContent } from "src/componentsv2/Proposal/helpers";
-import usePaywall from "src/hooks/usePaywall";
-import useIdentity from "src/hooks/useIdentity";
+import usePaywall from "src/hooks/api/usePaywall";
+import useIdentity from "src/hooks/api/useIdentity";
 import Or from "src/componentsv2/Or";
 import { IdentityMessageError } from "src/componentsv2/IdentityErrorIndicators";
 import ProposalForm from "src/componentsv2/ProposalForm";
@@ -16,14 +16,15 @@ const EditProposal = ({ match }) => {
   const { isPaid } = usePaywall();
   const [, identityError] = useIdentity();
 
-  const initialValues = proposal
-    ? {
-        token: match.params.token,
-        name: proposal.name,
-        description: getMarkdownContent(proposal.files),
-        files: proposal.files.filter(p => p.name !== "index.md")
-      }
-    : {};
+  const initialValues =
+    proposal && !!proposal.files.length
+      ? {
+          token: match.params.token,
+          name: proposal.name,
+          description: getMarkdownContent(proposal.files),
+          files: proposal.files.filter(p => p.name !== "index.md")
+        }
+      : {};
 
   return !!proposal && !loading ? (
     <Card className="container">

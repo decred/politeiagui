@@ -65,7 +65,7 @@ const handleSaveApiMe = state => {
   }
 };
 
-const handleSaveAppDraftProposals = state => {
+export const handleSaveAppDraftProposals = state => {
   const email = loggedInAsEmail(state);
   if (!email) {
     return;

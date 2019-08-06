@@ -11,8 +11,7 @@ const CommentForm = ({
   onSubmit,
   onCommentSubmitted,
   disableSubmit,
-  persistKey,
-  editorRef
+  persistKey
 }) => {
   async function handleSubmit(
     values,
@@ -62,7 +61,6 @@ const CommentForm = ({
               onChange={handleCommentChange}
               onBlur={handleBlur}
               placeholder={"Write a comment"}
-              textAreaRef={editorRef}
             />
             <Row justify="right" topMarginSize="s">
               <Button

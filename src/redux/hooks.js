@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect, useContext } from "react";
 import { bindActionCreators } from "redux";
 import { selectorMap } from "src/selectors";
+import throttle from "lodash/throttle";
 
 export const reduxContext = React.createContext();
 export const useReduxContext = () => useContext(reduxContext);
@@ -30,3 +31,13 @@ export function useRedux(ownProps, mapStateToProps, mapDispatchToProps) {
     boundActions
   ]);
 }
+
+export const useStoreSubscribe = callbackFn => {
+  const { store } = useReduxContext();
+  return store.subscribe(
+    throttle(() => {
+      const state = store.getState();
+      callbackFn(state);
+    }, 1000)
+  );
+};

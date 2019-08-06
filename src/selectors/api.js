@@ -40,7 +40,7 @@ export const isApiRequestingResendVerificationEmail = getIsApiRequesting(
 );
 export const isApiRequestingPasswordReset = getIsApiRequesting("passwordReset");
 const isApiRequestingVetted = getIsApiRequesting("vetted");
-const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
+export const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
 const isApiRequestingUserProposals = getIsApiRequesting("userProposals");
 const isApiRequestingProposal = getIsApiRequesting("proposal");
 const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
@@ -250,7 +250,7 @@ export const apiLogoutError = getApiError("logout");
 export const apiUserSearchError = getApiError("userSearch");
 const apiVettedError = getApiError("vetted");
 const apiUserProposalsError = getApiError("userProposals");
-const apiUnvettedError = getApiError("unvetted");
+export const apiUnvettedError = getApiError("unvetted");
 const apiProposalError = getApiError("proposal");
 const apiNewProposalError = getApiError("newProposal");
 const apiNewInvoiceError = getApiError("newInvoice");
@@ -412,10 +412,13 @@ export const proposalsWithVoteStatus = state => {
 
 export const proposalWithVoteStatus = state => {
   const proposal = apiProposal(state);
+  const voteStatus = proposal
+    ? getPropVoteStatus(state)(proposal.censorshiprecord.token)
+    : {};
   return (
     !!proposal && {
       ...proposal,
-      voteStatus: getPropVoteStatus(state)(proposal.censorshiprecord.token)
+      voteStatus
     }
   );
 };
@@ -469,6 +472,12 @@ export const apiUserProposals = or(
   ),
   constant([])
 );
+
+export const numOfUserProposals = compose(
+  get("numofproposals"),
+  apiUserProposalsResponse
+);
+
 export const userProposalsIsRequesting = isApiRequestingUserProposals;
 export const userProposalsError = or(apiInitError, apiUserProposalsError);
 export const apiUnvettedProposals = or(

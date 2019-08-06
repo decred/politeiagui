@@ -90,6 +90,20 @@ export const isVotingNotAuthorizedProposal = proposal => {
 };
 
 /**
+ * Returns true if the given proposal is public, but voting
+ * has finished already
+ * @param {Object} proposal
+ * @returns {Boolean} isVotingFinished
+ */
+export const isVotingFinishedProposal = proposal => {
+  return (
+    !!proposal &&
+    !!proposal.voteStatus &&
+    proposal.voteStatus.status === PROPOSAL_VOTING_FINISHED
+  );
+};
+
+/**
  * Returns true if the given proposal is editable
  * @param {Object} proposal
  * @returns {Boolean} isEditable
@@ -98,6 +112,19 @@ export const isEditableProposal = proposal => {
   return (
     isUnreviewedProposal(proposal) ||
     (isPublicProposal(proposal) && isVotingNotAuthorizedProposal(proposal))
+  );
+};
+
+/**
+ * Returns true if the given proposal is under discussion
+ * @param {Object} proposal
+ * @returns {Boolean} isUnderDiscussion
+ */
+export const isUnderDiscussionProposal = proposal => {
+  return (
+    isPublicProposal(proposal) &&
+    !isVoteActiveProposal(proposal) &&
+    !isVotingFinishedProposal(proposal)
   );
 };
 

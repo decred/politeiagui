@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import * as act from "src/actions";
 import { useRedux } from "src/redux";
-import usePolicy from "src/hooks/usePolicy";
+import usePolicy from "src/hooks/api/usePolicy";
 import { loginValidationSchema } from "./validation";
 
 const mapDispatchToProps = {

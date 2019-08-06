@@ -26,8 +26,7 @@ export const onReceiveSetStatus = (state, action) => {
 
   const updatedProposal = {
     ...action.payload.proposal,
-    files: get(["proposal", "response", "proposal", "files"], state) || [],
-    username: get(["proposal", "response", "proposal", "username"], state) || ""
+    files: get(["proposal", "response", "proposal", "files"], state) || []
   };
 
   const viewedProposal = get(["proposal", "response", "proposal"], state);
@@ -259,11 +258,15 @@ export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
   state = receive(key, state, action);
   if (action.error) return state;
 
+  const targetToken = state[key].payload.token;
+
+  const proposalVoteStatus =
+    get(["proposalsVoteStatus", "response", targetToken], state) || {};
+
   const newVoteStatus = {
+    ...proposalVoteStatus,
     token: state[key].payload.token,
-    status: newStatus,
-    optionsresult: null,
-    totalvotes: 0
+    status: newStatus
   };
   return {
     ...state,

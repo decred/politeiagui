@@ -2,8 +2,16 @@ import { Button, Modal, TextInput } from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
 import FormWrapper from "src/componentsv2/FormWrapper";
+import * as Yup from "yup";
 
-const ModalConfirmWithReason = ({ show, onClose, onSubmit, subject }) => {
+const ModalConfirmWithReason = ({
+  show,
+  onClose,
+  onSubmit,
+  subject,
+  title,
+  reasonLabel
+}) => {
   const onSubmitReason = async (
     values,
     { resetForm, setSubmitting, setFieldError }
@@ -19,11 +27,19 @@ const ModalConfirmWithReason = ({ show, onClose, onSubmit, subject }) => {
     }
   };
   return (
-    <Modal title="Confirm Action" show={show} onClose={onClose}>
+    <Modal
+      style={{ maxWidth: "500px" }}
+      title={title}
+      show={show}
+      onClose={onClose}
+    >
       <FormWrapper
         initialValues={{
           reason: ""
         }}
+        validationSchema={Yup.object().shape({
+          reason: Yup.string().required("Required")
+        })}
         onSubmit={onSubmitReason}
       >
         {({
@@ -43,7 +59,7 @@ const ModalConfirmWithReason = ({ show, onClose, onSubmit, subject }) => {
               <ErrorMessage>{errors.global.toString()}</ErrorMessage>
             )}
             <TextInput
-              label="Reason"
+              label={reasonLabel}
               name="reason"
               id={`reason-for-${subject}`}
               type="text"
@@ -52,12 +68,8 @@ const ModalConfirmWithReason = ({ show, onClose, onSubmit, subject }) => {
               onBlur={handleBlur}
               error={touched.reason && errors.reason}
             />
-            <Actions>
-              <Button
-                loading={isSubmitting}
-                kind={values.reason ? "primary" : "disabled"}
-                type="submit"
-              >
+            <Actions className="no-padding-bottom">
+              <Button loading={isSubmitting} type="submit">
                 Confirm
               </Button>
             </Actions>
@@ -69,10 +81,17 @@ const ModalConfirmWithReason = ({ show, onClose, onSubmit, subject }) => {
 };
 
 ModalConfirmWithReason.propTypes = {
+  title: PropTypes.string,
+  reasonLabel: PropTypes.string,
   subject: PropTypes.string.isRequired,
   show: PropTypes.bool,
   onClose: PropTypes.func,
   onSubmit: PropTypes.func
+};
+
+ModalConfirmWithReason.defaultProps = {
+  title: "Confirm Action",
+  reasonLabel: "Reason"
 };
 
 export default ModalConfirmWithReason;

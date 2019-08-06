@@ -32,30 +32,15 @@ export const getProposalTokensByTabOption = (tabOption, proposalsTokens) => {
 };
 
 /**
- * Filter the proposals based on a given tab option and an object of proposals
- * tokens
- * @param {string} tabOption
- * @param {Array} proposals
- * @param {Object} proposalsTokens
- * @returns {Array} proposals
+ * Returns an onject mapping the proposals tokens to each tab label
+ * @param {array} tabLabels
+ * @param {object} proposalsTokens
  */
-export const getProposalsByTabOption = (
-  tabOption,
-  proposals,
-  proposalsTokens
-) => {
-  const filterProposalsByTokens = (tokens, proposals) =>
-    tokens.reduce((filteredProposals, token) => {
-      const foundProp = proposals.find(
-        prop =>
-          prop && prop.censorshiprecord && token === prop.censorshiprecord.token
-      );
-      return foundProp
-        ? filteredProposals.concat([foundProp])
-        : filteredProposals;
-    }, []);
-
-  const tokens = getProposalTokensByTabOption(tabOption, proposalsTokens);
-
-  return filterProposalsByTokens(tokens, proposals);
+export const mapProposalsTokensByTab = (tabLabels, proposalsTokens) => {
+  return tabLabels.reduce((map, tab) => {
+    return {
+      ...map,
+      [tab]: getProposalTokensByTabOption(tab, proposalsTokens)
+    };
+  }, {});
 };

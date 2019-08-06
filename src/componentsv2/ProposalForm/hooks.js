@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import usePolicy from "src/hooks/usePolicy";
+import usePolicy from "src/hooks/api/usePolicy";
 import { proposalValidationSchema } from "./validation";
 
 export function useProposalForm() {
@@ -7,7 +7,6 @@ export function useProposalForm() {
   const [validationSchema, setValidationSchema] = useState(
     policy ? proposalValidationSchema(policy) : null
   );
-
   useEffect(
     function handleSetValidationSchemaFromPolicy() {
       if (!!policy && !validationSchema) {

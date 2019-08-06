@@ -254,7 +254,9 @@ describe("api integration modules (lib/api.js)", () => {
 
   test("verify user payment (api/v1/user/verifypayment)", async () => {
     const PATH = "/api/v1/user/verifypayment";
-    const MOCK_RESULT = await import(`${MOCKS_PATH}/v1/user/verifypayment/GET.json`);
+    const MOCK_RESULT = await import(
+      `${MOCKS_PATH}/v1/user/verifypayment/GET.json`
+    );
     await assertGETOnRouteIsCalled(
       PATH,
       api.verifyUserPayment,

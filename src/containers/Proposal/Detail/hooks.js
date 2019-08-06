@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import get from "lodash/fp/get";
 import compose from "lodash/fp/compose";
 import isEqual from "lodash/isEqual";
@@ -38,6 +38,12 @@ const isEqualProposalToken = (proposal, token) => {
   );
 };
 
+const proposalWithFilesOrNothing = proposal => {
+  return proposal && proposal.files && !!proposal.files.length
+    ? proposal
+    : null;
+};
+
 export function useProposal(ownProps) {
   const {
     error,
@@ -52,7 +58,7 @@ export function useProposal(ownProps) {
     commentID: threadParentID
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
 
-  const getProposalFromCache = () => {
+  const getProposalFromCache = useCallback(() => {
     // try to use the edited proposal from cache first to get the
     // most updated version
     if (isEqualProposalToken(editedProposal, token)) {
@@ -83,9 +89,17 @@ export function useProposal(ownProps) {
     }
 
     return null;
-  };
+  }, [
+    token,
+    editedProposal,
+    proposalDetail,
+    publicProposals,
+    unvettedProposals
+  ]);
 
-  const [proposal, setProposal] = useState(getProposalFromCache());
+  const [proposal, setProposal] = useState(
+    proposalWithFilesOrNothing(getProposalFromCache())
+  );
 
   useEffect(
     function fetchProposal() {
@@ -99,16 +113,13 @@ export function useProposal(ownProps) {
   );
 
   useEffect(
-    function receiveFetchedProposal() {
-      if (
-        !!proposalDetail &&
-        isEqualProposalToken(proposalDetail, token) &&
-        !isEqual(proposalDetail, proposal)
-      ) {
-        setProposal(proposalDetail);
+    function handleProposalChanged() {
+      const prop = getProposalFromCache();
+      if (!!prop && !isEqual(prop, proposal)) {
+        setProposal(prop);
       }
     },
-    [token, proposalDetail, proposal]
+    [getProposalFromCache, proposal]
   );
 
   if (error) {

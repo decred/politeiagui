@@ -186,22 +186,31 @@ export const onEditInvoice = (
     )
   );
 };
-export const onSaveDraftProposal = ({ name, description, files, draftId }) => {
+export const onSaveDraftProposal = ({
+  name,
+  description,
+  files,
+  draftId
+}) => dispatch => {
   resetNewProposalData();
   const id = draftId || uniqueID("draft");
-  return act.SAVE_DRAFT_PROPOSAL({
-    name: name.trim(),
-    description,
-    files,
-    timestamp: Date.now() / 1000,
-    id
-  });
+  dispatch(
+    act.SAVE_DRAFT_PROPOSAL({
+      name: name ? name.trim() : "",
+      description,
+      files,
+      timestamp: Math.floor(Date.now() / 1000),
+      id
+    })
+  );
+  return id;
 };
 
-export const onLoadDraftProposals = email => {
-  const stateFromLS = loadStateLocalStorage(email);
+export const onLoadDraftProposals = email => (dispatch, getState) => {
+  const key = email || sel.loggedInAsEmail(getState());
+  const stateFromLS = loadStateLocalStorage(key);
   const drafts = sel.draftProposals(stateFromLS) || {};
-  return act.LOAD_DRAFT_PROPOSALS(drafts);
+  dispatch(act.LOAD_DRAFT_PROPOSALS(drafts));
 };
 
 export const onDeleteDraftProposal = draftId =>

@@ -2,7 +2,7 @@ import { Button, Text } from "pi-ui";
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { usePollProposalCreditsPayment } from "src/containers/User/Detail/Credits/hooks";
-import useNavigation from "src/hooks/useNavigation";
+import useNavigation from "src/hooks/api/useNavigation";
 import styles from "./ProposalCreditsIndicator.module.css";
 
 const ProposalCreditsIndicator = ({ history }) => {

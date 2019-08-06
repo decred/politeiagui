@@ -4,7 +4,7 @@ import { Card, Message, Container, Main, classNames } from "pi-ui";
 import styles from "../layouts.module.css";
 import ErrorBoundary from "src/components/ErrorBoundary";
 import Header from "src/containers/Header";
-import useScrollToTop from "src/hooks/useScrollToTop";
+import useScrollToTop from "src/hooks/utils/useScrollToTop";
 
 const renderError = error => <Message kind="error">{error.toString()}</Message>;
 

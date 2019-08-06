@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { P, H1, H2, H3, H4, Link } from "pi-ui";
 import styles from "./StaticMarkdown.module.css";
+import { useStaticContent } from "src/containers/StaticContent";
 
 const paragraphRenderer = ({ children }) => <P>{children}</P>;
 
@@ -29,19 +30,21 @@ const linkRenderer = ({ href, children }) => (
  */
 const StaticMarkdown = ({ contentName }) => {
   const [source, setSource] = useState("");
+  const { getContent } = useStaticContent();
   useEffect(() => {
     async function fetchSource() {
       try {
-        const module = await import(`src/contents/${contentName}.md`);
-        const markdownContent = await fetch(module.default);
-        const text = await markdownContent.text();
-        setSource(text);
+        const content = await getContent(contentName);
+        setSource(content);
       } catch (e) {
-        console.log("Failed loading content:", contentName);
+        throw e;
       }
     }
-    fetchSource();
-  }, [contentName]);
+    if (!source) {
+      fetchSource();
+    }
+  }, [contentName, getContent, source]);
+
   return (
     <ReactMarkdown
       escapeHtml={false}

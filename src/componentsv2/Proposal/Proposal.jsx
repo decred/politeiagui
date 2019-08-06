@@ -16,10 +16,12 @@ import {
 import { useProposalVoteInfo } from "./hooks";
 import { useLoaderContext } from "src/Appv2/Loader";
 import styles from "./Proposal.module.css";
+import LoggedInContent from "src/componentsv2/LoggedInContent";
 import VotesCount from "./VotesCount";
 import DownloadComments from "src/containers/Comments/Download";
+import ProposalActions from "./ProposalActions";
 
-const Proposal = ({ proposal, extended }) => {
+const Proposal = ({ proposal, extended, children }) => {
   const {
     censorshiprecord,
     files,
@@ -39,6 +41,7 @@ const Proposal = ({ proposal, extended }) => {
   const proposalURL = `/proposal/${proposalToken}`;
   const isPublic = isPublicProposal(proposal);
   const isAbandoned = isAbandonedProposal(proposal);
+  const isPublicAccessible = isPublic || isAbandoned;
   const isAuthor = currentUser && currentUser.userid === userid;
   const isEditable = isAuthor && isEditableProposal(proposal);
   const {
@@ -63,7 +66,6 @@ const Proposal = ({ proposal, extended }) => {
           Row,
           Title,
           CommentsLink,
-          Link,
           GithubLink,
           CopyLink,
           DownloadRecord,
@@ -162,13 +164,13 @@ const Proposal = ({ proposal, extended }) => {
                 />
               </Row>
             )}
-            {extended && (
+            {extended && !!files.length && (
               <Markdown
                 className={styles.markdownContainer}
                 body={getMarkdownContent(files)}
               />
             )}
-            {(isPublic || isAbandoned) && !extended && (
+            {isPublicAccessible && !extended && (
               <Row justify="space-between">
                 <CommentsLink
                   numOfComments={numcomments}
@@ -195,13 +197,16 @@ const Proposal = ({ proposal, extended }) => {
                 </Row>
                 <Row className={styles.proposalActions}>
                   <CopyLink
-                    className={styles.copyLink}
+                    className={isPublicAccessible ? styles.copyLink : ""}
                     url={window.location.origin + proposalURL}
                   />
-                  <GithubLink token={proposalToken} />
+                  {isPublicAccessible && <GithubLink token={proposalToken} />}
                 </Row>
               </Row>
             )}
+            <LoggedInContent>
+              <ProposalActions proposal={proposal} />
+            </LoggedInContent>
           </>
         )}
       </RecordWrapper>

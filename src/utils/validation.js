@@ -72,3 +72,13 @@ export const maxLengthMessage = (fieldName, maxLength) =>
   `${stringUtils.capitalize(
     fieldName
   )} must be at most ${maxLength} characters`;
+
+export const minAmountMessage = (fieldName, minAmount) =>
+  `${stringUtils.capitalize(
+    fieldName
+  )} must be greater than or equal to ${minAmount}`;
+
+export const maxAmountMessage = (fieldName, maxAmount) =>
+  `${stringUtils.capitalize(
+    fieldName
+  )} must be less than or equal to ${maxAmount}`;

@@ -1,7 +1,7 @@
 import { Modal, P, Text, useMediaQuery } from "pi-ui";
 import React from "react";
 import { PAYWALL_STATUS_PAID } from "src/constants";
-import usePaywall from "src/hooks/usePaywall";
+import usePaywall from "src/hooks/api/usePaywall";
 import PaymentComponent from "../PaymentComponent";
 import PaymentStatusTag from "../PaymentStatusTag";
 import styles from "./ModalPayPaywall.module.css";
