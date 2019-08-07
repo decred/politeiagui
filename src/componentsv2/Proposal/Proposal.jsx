@@ -18,6 +18,7 @@ import { useLoaderContext } from "src/Appv2/Loader";
 import styles from "./Proposal.module.css";
 import VotesCount from "./VotesCount";
 import DownloadComments from "src/containers/Comments/Download";
+import FilesThumbnail from "../Files/Thumbnail";
 
 const Proposal = ({ proposal, extended }) => {
   const {
@@ -63,7 +64,6 @@ const Proposal = ({ proposal, extended }) => {
           Row,
           Title,
           CommentsLink,
-          Link,
           GithubLink,
           CopyLink,
           DownloadRecord,
@@ -177,6 +177,14 @@ const Proposal = ({ proposal, extended }) => {
                 <GithubLink token={proposalToken} />
               </Row>
             )}
+            {extended && files.length > 1 && (
+              <Row className={styles.filesRow} justify="left" topMarginSize="s">
+                <FilesThumbnail 
+                  value={files}
+                  viewOnly={true}
+                />
+              </Row>
+            )} 
             {extended && (
               <Row className={styles.lastRow}>
                 <Row className={styles.downloadLinksWrapper} noMargin>

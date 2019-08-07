@@ -8,11 +8,6 @@ const FilesInput = ({ value, onChange, children, validMimeTypes }) => {
     const inputAndNewFiles = !!value
       ? formattedFiles.concat(value)
       : formattedFiles;
-    // const validation = validateFiles(inputAndNewFiles, policy);
-
-    // this.setState({
-    //     policyErrors: validation.errors ? validation.errors : []
-    // });
 
     onChange(inputAndNewFiles);
   }
@@ -21,7 +16,7 @@ const FilesInput = ({ value, onChange, children, validMimeTypes }) => {
     <ReactFileReader
       base64
       multipleFiles
-      fileTypes={validMimeTypes}
+      // fileTypes={validMimeTypes}
       handleFiles={handleFilesChange}
     >
       {children}

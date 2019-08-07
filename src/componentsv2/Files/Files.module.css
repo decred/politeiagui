@@ -1,0 +1,56 @@
+.thumbnailWrapper {
+    display: flex;
+    flex-flow: row wrap;
+    margin-bottom: 10px;
+}
+
+.fileError {
+    border: 1px solid #ed6d47;
+}
+
+.fileErrorText {
+    color: #ed6d47;
+    font-size: 1.3rem;
+    min-height: 2rem;
+    margin-top: 3px;
+}
+
+.removeFileIcon {
+    transition: box-shadow .3s;
+    position: absolute;
+    align-content: flex-end;
+    margin-left: 100px;
+    margin-top: 5px;
+}
+
+.fileThumbnail {
+    transition: box-shadow .3s;
+    width: 125px;
+    height: 90px;
+    border-radius: 2px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    background-color: #E6EAED;
+}
+
+.imageThumbnail {
+    transition: box-shadow .3s;
+    width: 125px;
+    height: 90px;
+    border-radius: 2px;
+    margin-right: 10px;
+}
+
+.imageThumbnail:hover {
+    box-shadow: 0 0 10px rgba(33,33,33,.2); 
+}
+
+.fileThumbnail:hover {
+    box-shadow: 0 0 10px rgba(33,33,33,.2); 
+}
+
+.fileThumbnailText {
+    font-size: 1.3rem;
+    text-align: center;
+    margin-top: 30px;
+}

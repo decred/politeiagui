@@ -23,7 +23,6 @@ export const buildValidCharsStrFromSupportedChars = supportedChars =>
   supportedChars.reduce((str, v) => str + v, "");
 
 /**
- *
  * @param {string} fieldName
  * @param {Array} supportedChars
  * @returns {string} custom error message for a non-valid field given a set of
@@ -72,3 +71,19 @@ export const maxLengthMessage = (fieldName, maxLength) =>
   `${stringUtils.capitalize(
     fieldName
   )} must be at most ${maxLength} characters`;
+
+/**
+ * Returns a generic error message for exceeding the maximum size
+ * for attached files in a proposal
+ * @param {number} maxSize
+ */
+export const maxFileSizeMessage = maxSize =>
+  `Files must have size at most ${maxSize}`;
+
+/**
+ * Returns a generic error message for invalid mime types on
+ * attached files
+ * @param {number} maxSize
+ */
+export const validMimeTypesMessage = validMimeTypes =>
+  `Files must have a valid mime type: ${validMimeTypes}`;

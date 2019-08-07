@@ -6,6 +6,7 @@ import { Button, Message, BoxTextInput } from "pi-ui";
 import { Row } from "../layout";
 import MarkdownEditor from "src/componentsv2/MarkdownEditor";
 import FilesInput from "src/componentsv2/Files/Input";
+import FilesThumbnail from "src/componentsv2/Files/Thumbnail";
 import AttachFileButton from "src/componentsv2/AttachFileButton";
 import { useProposalForm } from "./hooks";
 
@@ -56,6 +57,10 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
         function handleFilesChange(v) {
           setFieldValue("files", v);
         }
+        function handleFileRemoval(v) {
+          const fs = values.files.filter(f => f.payload !== v.payload);
+          setFieldValue("files", fs);
+        }
         return (
           <form onSubmit={handleSubmit}>
             {errors && errors.global && (
@@ -76,11 +81,17 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
               onChange={handleDescriptionChange}
               onBlur={handleBlur}
               placeholder={"Write your proposal"}
+              error={touched.name && errors.name}
               filesInput={
                 <FilesInput value={values.files} onChange={handleFilesChange}>
                   <AttachFileButton type="button" />
                 </FilesInput>
               }
+            />
+            <FilesThumbnail 
+              value={values.files}
+              errors={errors.files ? errors.files : null}
+              onClick={handleFileRemoval}
             />
             <Row justify="right" topMarginSize="s">
               <Button kind="secondary">Save as draft</Button>
