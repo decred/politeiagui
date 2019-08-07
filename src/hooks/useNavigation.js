@@ -8,7 +8,8 @@ const mapStateToProps = {
 };
 
 const mapDispatchToProps = {
-  onLogout: act.onLogout
+  onLogout: act.onLogout,
+  handleLogout: act.handleLogout
 };
 
 export default function useNavigation(ownProps) {

@@ -5,6 +5,7 @@ import { defaultLightTheme, useTheme } from "pi-ui";
 import { ReduxProvider } from "src/redux";
 import Loader from "./Loader";
 import Routes from "src/pages/Root";
+import { UserSessionChecker } from "src/containers/User/SessionChecker";
 
 const App = () => {
   useTheme(defaultLightTheme);
@@ -13,7 +14,9 @@ const App = () => {
       <ReduxProvider>
         <Loader>
           <Router>
-            <Routes />
+            <UserSessionChecker>
+              <Routes />
+            </UserSessionChecker>
           </Router>
         </Loader>
       </ReduxProvider>

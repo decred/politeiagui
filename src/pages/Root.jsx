@@ -73,11 +73,6 @@ const Routes = ({ location }) => {
 
           {/* Record routes */}
           <Route path="/proposal/:token" exact component={PageProposalDetail} />
-          <Route
-            path="/proposal/:token/comments/:commentid"
-            exact
-            component={PageProposalDetail}
-          />
           <AuthenticatedRoute
             path={`/${recordType}s/user`}
             exact
@@ -87,11 +82,6 @@ const Routes = ({ location }) => {
             path={`/${recordType}s/new`}
             exact
             render={renderNewRecordRoute(config)}
-          />
-          <AuthenticatedRoute
-            path={`/${recordType}/:token/edit`}
-            exact
-            render={renderEditRecordRoute(config)}
           />
           <AdminAuthenticatedRoute
             path={`/${recordType}s/admin`}

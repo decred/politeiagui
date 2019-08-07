@@ -201,7 +201,7 @@ const Comments = ({
           </div>
         )}
       </Card>
-      <ModalLogin show={loginModalShow} onClose={handleCloseLoginModal} />
+      <ModalLogin show={loginModalShow} onLoggedIn={handleCloseLoginModal} onClose={handleCloseLoginModal} />
     </>
   );
 };
