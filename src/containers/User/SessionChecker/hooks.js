@@ -10,7 +10,7 @@ export function useSessionChecker() {
       const expired = sessionmaxage < Date.now() / 1000 - lastlogintime;
       setSessionExpired(expired);
     }
-  }, [currentUser]);
+  });
 
   return { sessionExpired, setSessionExpired };
 }
