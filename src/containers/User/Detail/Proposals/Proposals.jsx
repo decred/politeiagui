@@ -13,7 +13,7 @@ const Proposals = props => {
   const emptyProposalList = !!proposals && proposals.length > 0;
   return !loading ? emptyProposalList ?
       <>{proposals.map(proposal => renderProposal(proposal))}</> :
-      <HelpMessage>You have not created any proposals yet</HelpMessage> :
+      <HelpMessage>This user has not created any proposals yet</HelpMessage> :
       <LoadingWithMessage message={"Loading"} spinnerProps={{ invert: true }}/>;
 };
 
