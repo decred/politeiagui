@@ -45,7 +45,7 @@ div.customSelect__control--menu-is-open {
 
 
 .customSelect__single-value {
-    color: var(--color-gray) ! important; 
+    color: var(--color-primary-dark) ! important; 
     font-size: var(--font-size-small);
 }
 

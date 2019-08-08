@@ -16,5 +16,10 @@
 }
 
 .previewContainer.nothingToPreview p {
-    color: var(--color-gray-light);
+    color: var(--color-gray-blueish);
+}
+
+.previewContainer.nothingToPreview {
+    border: 0px transparent;
+    padding: 2rem 0;
 }

@@ -17,6 +17,7 @@ h2.commentsTitle {
 
 .commentsCount {
     color: var(--color-gray);
+    padding-left: .3rem;
 }
 
 .sortContainer {
