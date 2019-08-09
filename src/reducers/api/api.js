@@ -321,7 +321,8 @@ const api = (state = DEFAULT_STATE, action) =>
           proposalPaywallPayment: DEFAULT_REQUEST_STATE,
           proposalPaywallDetails: DEFAULT_REQUEST_STATE,
           rescanUserPayments: DEFAULT_REQUEST_STATE,
-          unvetted: DEFAULT_REQUEST_STATE
+          unvetted: DEFAULT_REQUEST_STATE,
+          userProposalCredits: DEFAULT_REQUEST_STATE
         };
       }
       return receive("logout", state, action);
