@@ -1,37 +1,23 @@
-import {
-  Button,
-  Card,
-  classNames,
-  Link,
-  P,
-  Spinner,
-  Table,
-  Text,
-  Message
-} from "pi-ui";
-import React from "react";
+import { Button, Card, classNames, Link, Message, P, Spinner, Table, Text } from "pi-ui";
+import React, { useEffect } from "react";
 import ExportToCsv from "src/componentsv2/ExportToCsv.jsx";
-import useBooleanState from "src/hooks/useBooleanState";
 import ModalBuyProposalCredits from "src/componentsv2/ModalBuyProposalCredits";
 import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
 import ModalPayPaywall from "src/componentsv2/ModalPayPaywall";
 import { MANAGE_USER_CLEAR_USER_PAYWALL } from "src/constants";
+import useBooleanState from "src/hooks/useBooleanState";
+import { hasUserPaid } from "../helpers";
 import { useManageUser } from "../hooks.js";
 import styles from "./Credits.module.css";
+import { getCsvData, getProposalCreditsPaymentStatus, getTableContentFromPurchases, tableHeaders } from "./helpers.js";
 import { useCredits, useRescanUserCredits } from "./hooks.js";
-import {
-  getTableContentFromPurchases,
-  tableHeaders,
-  getCsvData,
-  getProposalCreditsPaymentStatus
-} from "./helpers.js";
-import { hasUserPaid } from "../helpers";
 
 const Credits = () => {
   const {
     proposalCreditPrice,
     isAdmin,
     user,
+    userMe,
     isApiRequestingUserProposalCredits,
     proposalCreditPurchases,
     loggedInAsUserId,
@@ -39,7 +25,10 @@ const Credits = () => {
     proposalPaywallPaymentConfirmations,
     proposalPaywallPaymentTxid,
     proposalPaywallPaymentAmount,
-    toggleCreditsPaymentPolling
+    toggleCreditsPaymentPolling,
+    pollingCreditsPayment,
+    proposalPaymentReceived,
+    toggleProposalPaymentReceived
   } = useCredits();
 
   const {
@@ -65,9 +54,22 @@ const Credits = () => {
     closeProposalCreditsModal
   ] = useBooleanState(false);
 
-  function onStartPollingPayment() {
+  const onStartPollingPayment = () => {
     toggleCreditsPaymentPolling(true);
-  }
+  };
+
+  const customCloseProposalCreditsModal = () => {
+    toggleProposalPaymentReceived(false);
+    closeProposalCreditsModal();
+  };
+
+  useEffect(() => {
+    if (proposalPaymentReceived) {
+      toggleCreditsPaymentPolling(false);
+      toggleProposalPaymentReceived(false);
+      closeProposalCreditsModal();
+    }
+  }, [proposalPaymentReceived, toggleProposalPaymentReceived, closeProposalCreditsModal, toggleCreditsPaymentPolling]);
 
   const isUserPageOwner = user && loggedInAsUserId === user.id;
 
@@ -91,65 +93,80 @@ const Credits = () => {
     proposalCreditPrice
   );
 
-  return isApiRequestingUserProposalCredits &&
-    !proposalCreditPurchases.length ? (
-    <div className={styles.spinnerWrapper}>
-      <Spinner invert />
-    </div>
-  ) : (
-    <Card className="container">
-      <div className={styles.block}>
-        <div className={styles.blockDetails}>
-          <Text className={styles.title}>Registration fee</Text>
-          <Text
-            size="large"
-            className={classNames(
-              styles.status,
-              "margin-top-xs margin-bottom-xs"
-            )}
-          >
-            {paywallIsPaid ? "Paid" : "Not paid"}
-          </Text>
-          {!paywallIsPaid && isUserPageOwner && (
-            <Button
-              className="margin-top-s"
-              size="sm"
-              onClick={openPaywallModal}
-            >
-              Pay registration fee
-            </Button>
-          )}
-          {!paywallIsPaid && isAdmin && (
-            <Button
-              className="margin-top-s"
-              loading={isApiRequestingMarkAsPaid}
-              size="sm"
-              onClick={openMarkAsPaidModal}
-            >
-              Mark as paid
-            </Button>
-          )}
+  const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
+
+  return !isAdminOrTheUser ?
+    <Message kind="error">
+      Only admins or the user himself can access this route.
+    </Message>
+    :
+    isApiRequestingUserProposalCredits &&
+      !proposalCreditPurchases.length ? (
+        <div className={styles.spinnerWrapper}>
+          <Spinner invert />
         </div>
-        <div className={styles.description}>
-          <P className={styles.descriptionParagraph}>
-            <b>Registration Fee:</b> In order to participate on proposals and to
+      ) : (
+        <Card className="container">
+          <div className={styles.block}>
+            <div className={styles.blockDetails}>
+              <Text className={styles.title}>Registration fee</Text>
+              <Text
+                size="large"
+                className={classNames(
+                  styles.status,
+                  "margin-top-xs margin-bottom-xs"
+                )}
+              >
+                {paywallIsPaid ? "Paid" : "Not paid"}
+              </Text>
+              {!paywallIsPaid && isUserPageOwner && (
+                <Button
+                  className="margin-top-s"
+                  size="sm"
+                  onClick={openPaywallModal}
+                >
+                  Pay registration fee
+            </Button>
+              )}
+              {!paywallIsPaid && isAdmin && (
+                <Button
+                  className="margin-top-s"
+                  loading={isApiRequestingMarkAsPaid}
+                  size="sm"
+                  onClick={openMarkAsPaidModal}
+                >
+                  Mark as paid
+            </Button>
+              )}
+            </div>
+            <div className={styles.description}>
+              <P className={styles.descriptionParagraph}>
+                <b>Registration Fee:</b> In order to participate on proposals and to
             submit your own, Politeia requires a small registration fee{" "}
-            <b>of exactly 0.4 DCR.</b>
+                <b>of exactly 0.1 DCR.</b>
+              </P>
+            </div>
+          </div>
+          <div className={classNames(styles.block, "margin-top-l")}>
+            <div className={styles.blockDetails}>
+              <Text className={styles.title}>Proposal Credits</Text>
+              <Text
+                size="large"
+                className={classNames(
+                  styles.status,
+                  "margin-top-xs margin-bottom-xs"
+                )}
+              >
+                {isUserPageOwner ? userMe.proposalcredits : user.proposalcredits}
+              </Text>
+            </div>
+            <div className={styles.description}>
+              <P className={styles.descriptionParagraph}>
+                <b>Proposal credits:</b> each proposal submission requires{" "}
+                <b>1 proposal</b> credit which costs <b>exactly {proposalCreditPrice || 0.1} DCR</b>.
           </P>
-        </div>
-      </div>
-      <div className={classNames(styles.block, "margin-top-l")}>
-        <div className={styles.blockDetails}>
-          <Text className={styles.title}>Proposal Credits</Text>
-          <Text
-            size="large"
-            className={classNames(
-              styles.status,
-              "margin-top-xs margin-bottom-xs"
-            )}
-          >
-            {user.proposalcredits}
-          </Text>
+            </div>
+          </div>
           <div className={styles.buttonsWrapper}>
             {isUserPageOwner && paywallIsPaid && (
               <Button
@@ -171,72 +188,65 @@ const Credits = () => {
               </Button>
             )}
           </div>
-        </div>
-        <div className={styles.description}>
-          <P className={styles.descriptionParagraph}>
-            <b>Proposal credits:</b> each proposal submission requires{" "}
-            <b>1 proposal</b> credit which costs <b>exactly 0.1 DCR</b>.
-          </P>
-        </div>
-      </div>
-      {amountOfCreditsAddedOnRescan !== undefined && (
-        <Message className="margin-top-s" kind="success">
-          User credits are up to date. {amountOfCreditsAddedOnRescan} proposal
-          credits were found by the rescan and added to the user account.
-        </Message>
-      )}
-      {errorRescan && (
-        <Message className="margin-top-s" kind="error">
-          {errorRescan.toString()}
-        </Message>
-      )}
-      {isUserPageOwner && data && !!data.length && (
-        <div className="margin-top-l" style={{ overflowX: "scroll" }}>
-          <Text className="margin-right-xs">Credit History</Text>
-          <ExportToCsv
-            data={getCsvData(proposalCreditPurchases)}
-            fields={[
-              "numberPurchased",
-              "price",
-              "txId",
-              "datePurchased",
-              "type"
-            ]}
-            filename="payment_history"
-          >
-            <Link style={{ cursor: "pointer" }}>Export to csv</Link>
-          </ExportToCsv>
-          <div className="margin-top-s">
-            <Table data={data} headers={tableHeaders} />
-          </div>
-        </div>
-      )}
-      <ModalConfirmWithReason
-        subject="markUserPaywallAsPaid"
-        onSubmit={markAsPaid}
-        show={showMarkAsPaidConfirmModal}
-        onClose={closeMarkAsPaidModal}
-      />
-      <ModalPayPaywall
-        show={showPaywallModal}
-        title="Complete your registration"
-        onClose={closePaywallModal}
-      />
-      <ModalBuyProposalCredits
-        show={showProposalCreditsModal}
-        title="Purchase Proposal Credits"
-        price={proposalCreditPrice}
-        address={proposalPaywallAddress}
-        startPollingPayment={onStartPollingPayment}
-        status={getProposalCreditsPaymentStatus(
-          proposalPaywallPaymentConfirmations,
-          proposalPaywallPaymentTxid
-        )}
-        initialStep={proposalPaywallPaymentTxid ? 1 : 0}
-        onClose={closeProposalCreditsModal}
-      />
-    </Card>
-  );
+          {amountOfCreditsAddedOnRescan !== undefined && (
+            <Message className="margin-top-s" kind="success">
+              User credits are up to date. {amountOfCreditsAddedOnRescan} proposal
+              credits were found by the rescan and added to the user account.
+            </Message>
+          )}
+          {errorRescan && (
+            <Message className="margin-top-s" kind="error">
+              {errorRescan.toString()}
+            </Message>
+          )}
+          {isUserPageOwner && data && !!data.length && (
+            <div className="margin-top-l" style={{ overflowX: "scroll" }}>
+              <Text className="margin-right-xs">Credit History</Text>
+              <ExportToCsv
+                data={getCsvData(proposalCreditPurchases)}
+                fields={[
+                  "numberPurchased",
+                  "price",
+                  "txId",
+                  "datePurchased",
+                  "type"
+                ]}
+                filename="payment_history"
+              >
+                <Link style={{ cursor: "pointer" }}>Export to csv</Link>
+              </ExportToCsv>
+              <div className="margin-top-s">
+                <Table data={data} headers={tableHeaders} />
+              </div>
+            </div>
+          )}
+          <ModalConfirmWithReason
+            subject="markUserPaywallAsPaid"
+            onSubmit={markAsPaid}
+            show={showMarkAsPaidConfirmModal}
+            onClose={closeMarkAsPaidModal}
+          />
+          <ModalPayPaywall
+            show={showPaywallModal}
+            title="Complete your registration"
+            onClose={closePaywallModal}
+          />
+          <ModalBuyProposalCredits
+            show={showProposalCreditsModal}
+            title="Purchase Proposal Credits"
+            price={proposalCreditPrice}
+            address={proposalPaywallAddress}
+            startPollingPayment={onStartPollingPayment}
+            status={getProposalCreditsPaymentStatus(
+              proposalPaywallPaymentConfirmations,
+              proposalPaywallPaymentTxid
+            )}
+            initialStep={proposalPaywallPaymentTxid ? 1 : 0}
+            isPollingCreditsPayment={pollingCreditsPayment}
+            onClose={customCloseProposalCreditsModal}
+          />
+        </Card>
+      );
 };
 
 export default Credits;

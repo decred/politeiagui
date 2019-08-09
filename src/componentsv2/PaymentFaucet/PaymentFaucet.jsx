@@ -42,6 +42,7 @@ const PaymentFaucet = ({ address, amount, isPaid }) => {
             id="transactionLink"
             truncate
             rel="noopener noreferrer"
+            style={{ maxWidth: "200px" }}
           >
             {payWithFaucetTxId}
           </Link>

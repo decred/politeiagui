@@ -1,6 +1,6 @@
 import { Button, classNames, Modal, Text, useMediaQuery } from "pi-ui";
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PaymentComponent from "../PaymentComponent";
 import PaymentStatusTag from "../PaymentStatusTag";
 import styles from "./ModalBuyProposalCredits.module.css";
@@ -13,6 +13,7 @@ const ModalBuyProposalCredits = ({
   address,
   isPaid,
   status,
+  isPollingCreditsPayment,
   startPollingPayment
 }) => {
   const [number, setNumber] = useState(1);
@@ -24,8 +25,11 @@ const ModalBuyProposalCredits = ({
   const [modalType, setModalType] = useState(initialStep);
   function handleGoToPaymentDetails() {
     setModalType(1);
-    startPollingPayment();
   }
+
+  useEffect(() => {
+    if (!isPollingCreditsPayment) startPollingPayment();
+  }, [isPollingCreditsPayment, startPollingPayment]);
 
   const setValue = e => {
     if (e.target.value < 1) return;
@@ -44,33 +48,34 @@ const ModalBuyProposalCredits = ({
       />
     </Modal>
   ) : (
-    <Modal
-      show={show}
-      onClose={customOnClose}
-      title="Purchase Proposal Credits"
-    >
-      <div>
-        <Text>How many credits do you want to buy? </Text>
-        <input
-          value={number}
-          onChange={setValue}
-          type="number"
-          style={{ width: "40px" }}
-        />
-      </div>
-      <div className="margin-top-s">
-        <Text>Each proposal credit costs 0.1 DCR</Text>
-      </div>
-      <div className={classNames("margin-top-l", styles.actionButtons)}>
-        <Button onClick={customOnClose} kind="secondary">
-          Back
+      <Modal
+        show={show}
+        onClose={customOnClose}
+        title="Purchase Proposal Credits"
+        contentStyle={{ width: "100%" }}
+      >
+        <div>
+          <Text>How many credits do you want to buy? </Text>
+          <input
+            value={number}
+            onChange={setValue}
+            type="number"
+            style={{ width: "40px" }}
+          />
+        </div>
+        <div className="margin-top-s">
+          <Text color="gray">Each proposal credit costs 0.1 DCR</Text>
+        </div>
+        <div className={classNames("margin-top-l", styles.actionButtons)}>
+          <Button onClick={customOnClose} kind="secondary">
+            Back
         </Button>
-        <Button kind="primary" onClick={handleGoToPaymentDetails}>
-          Next
+          <Button kind="primary" onClick={handleGoToPaymentDetails}>
+            Next
         </Button>
-      </div>
-    </Modal>
-  );
+        </div>
+      </Modal>
+    );
 };
 
 ModalBuyProposalCredits.propTypes = {

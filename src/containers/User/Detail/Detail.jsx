@@ -1,5 +1,5 @@
 import { Link } from "pi-ui";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
 import useQueryStringWithIndexValue from "src/hooks/useQueryStringWithIndexValue";
@@ -15,13 +15,13 @@ const getTabComponent = ({
   user,
   userProposals,
   setUserProposals,
-  isAdminOrTheUser,
+  // isAdminOrTheUser,
   ...rest
 }) =>
   [
     <General {...user} {...rest} />,
     <Preferences {...rest} />,
-    isAdminOrTheUser && <Credits {...rest} />,
+    <Credits {...rest} />,
     <Proposals
       userID={user.id}
       userProposals={userProposals}
@@ -45,24 +45,18 @@ const UserDetail = ({
   // but cached here to avoid re-fetching it
   const [userProposals, setUserProposals] = useState(null);
 
-  const [tabLabels, setTabLabels] = useState([]);
+  const tabLabels = [
+    tabValues.GENERAL,
+    tabValues.PREFERENCES,
+    tabValues.CREDITS,
+    tabValues.PROPOSALS
+  ];
 
   const isUserPageOwner = user && loggedInAsUserId === user.id;
   const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
 
-  useEffect(() => {
-    setTabLabels(
-      [
-        tabValues.GENERAL,
-        tabValues.PREFERENCES,
-        isAdminOrTheUser ? tabValues.CREDITS : false,
-        tabValues.PROPOSALS
-      ].filter(Boolean)
-    );
-  }, [isAdminOrTheUser]);
-
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
-  // console.log(index);
+
   // Change Username Modal
   const [showUsernameModal, setShowUsernameModal] = useState(false);
   const openUsernameModal = e => {
@@ -98,9 +92,11 @@ const UserDetail = ({
           subtitle={user.email}
         >
           <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
-            {tabLabels.map(label => (
-              <Tab key={`tab${label}`} label={label} />
-            ))}
+            {tabLabels.map((label, i) => {
+              return !isAdminOrTheUser && i === 2 ? <></> : (
+                <Tab key={`tab${label}`} label={label} />
+              );
+            })}
           </Tabs>
         </PageDetails>
       </TopBanner>

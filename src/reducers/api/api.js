@@ -1,36 +1,36 @@
 import * as act from "../../actions/types";
 import {
-  DEFAULT_REQUEST_STATE,
-  request,
-  receive,
-  reset,
-  resetMultiple
-} from "../util";
-import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_NOT_AUTHORIZED
 } from "../../constants";
 import {
+  DEFAULT_REQUEST_STATE,
+  receive,
+  request,
+  reset,
+  resetMultiple
+} from "../util";
+import {
   onReceiveCensoredComment,
+  onReceiveManageUser,
   onReceiveNewComment,
-  onReceiveSetStatus,
   onReceiveProposals,
+  onReceiveProposalsVoteStatus,
+  onReceiveProposalVoteResults,
+  onReceiveProposalVoteStatus,
+  onReceiveRescanUserPayments,
+  onReceiveSetStatus,
   onReceiveSyncLikeComment,
-  onResetSyncLikeComment,
   onReceiveUser,
   onReceiveVoteStatusChange,
-  onReceiveRescanUserPayments,
-  onReceiveProposalVoteResults,
-  onReceiveManageUser,
-  onReceiveProposalVoteStatus,
-  onReceiveProposalsVoteStatus
+  onResetSyncLikeComment
 } from "./handlers";
 import {
-  onReceivePayApprovedInvoices,
-  onReceiveSetStatusInvoice,
+  onReceiveCensorInvoiceComment,
   onReceiveNewInvoiceComment,
-  onReceiveCensorInvoiceComment
+  onReceivePayApprovedInvoices,
+  onReceiveSetStatusInvoice
 } from "./handlersCMS";
 
 export const DEFAULT_STATE = {
@@ -325,6 +325,18 @@ const api = (state = DEFAULT_STATE, action) =>
         };
       }
       return receive("logout", state, action);
+    },
+    [act.SET_PROPOSAL_CREDITS]: () => {
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          response: {
+            ...state.me.response,
+            proposalcredits: action.payload
+          }
+        }
+      };
     }
   }[action.type] || (() => state))());
 

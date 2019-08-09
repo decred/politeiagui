@@ -1,13 +1,13 @@
-import React from "react";
 import orderBy from "lodash/fp/orderBy";
 import { StatusTag } from "pi-ui";
-import { formatUnixTimestamp } from "src/utilsv2";
+import React from "react";
 import DcrTransactionLink from "src/componentsv2/DcrTransactionLink";
 import {
   PAYWALL_STATUS_LACKING_CONFIRMATIONS,
   PAYWALL_STATUS_PAID,
   PAYWALL_STATUS_WAITING
 } from "src/constants";
+import { formatShortUnixTimestamp, formatUnixTimestamp } from "src/utilsv2";
 
 export const tableHeaders = [
   "Type",
@@ -38,7 +38,7 @@ const getRowDataForCreditsPurchase = purchase => ({
   Date:
     purchase.datePurchased === "just now"
       ? purchase.datePurchased
-      : formatUnixTimestamp(purchase.datePurchased),
+      : formatShortUnixTimestamp(purchase.datePurchased),
   timestamp:
     purchase.datePurchased === "just now" ? 99999999999 : purchase.datePurchased
 });

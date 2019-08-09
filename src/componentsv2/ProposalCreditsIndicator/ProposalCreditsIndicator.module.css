@@ -1,8 +1,11 @@
 .wrapper {
+    display: flex;
+    align-items: center;
 }
 
-button.proposalCreditsButton {
-    padding: 0rem 0.5rem;
+.proposalCreditsButton {
+    padding: 0rem 0.4rem;
     margin-left: 0.5rem;
     font-weight: var(--font-weight-regular);
+    position: relative;
 }

@@ -8,8 +8,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 270px;
-  width: 100%;
 }
 
 .navLink {
@@ -43,7 +41,7 @@ div.accountDropdown {
     align-self: unset;
 }
 
-@media screen and (max-width: 1000px) { 
+@media screen and (max-width: 1000px) {
     .loggedInContainer {
         max-width: unset;
     }

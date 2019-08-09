@@ -1,9 +1,9 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import * as act from "src/actions";
+import useInterval from "src/hooks/useInterval";
+import usePaywall from "src/hooks/usePaywall";
 import { useRedux } from "src/redux";
 import * as sel from "src/selectors";
-import usePaywall from "src/hooks/usePaywall";
-import useInterval from "src/hooks/useInterval";
 
 const mapStateToProps = {
   proposalPaywallAddress: sel.proposalPaywallAddress,
@@ -25,6 +25,7 @@ const mapStateToProps = {
   paywallTxid: sel.paywallTxid,
   isAdmin: sel.isAdmin,
   user: sel.user,
+  userMe: sel.apiMeResponse,
   loggedInAsUserId: sel.userid
 };
 

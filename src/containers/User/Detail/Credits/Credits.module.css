@@ -33,11 +33,11 @@
 
 .buttonsWrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .buttonsWrapper button {
-  max-width: 140px;
+  width: 14rem;
 }
 
 
