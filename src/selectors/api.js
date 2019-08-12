@@ -104,6 +104,7 @@ const apiInvoiceCommentsResponse = getApiResponse("invoiceComments");
 const apiNewProposalResponse = getApiResponse("newProposal");
 const apiNewInvoiceResponse = getApiResponse("newInvoice");
 const apiUserInvoicesResponse = getApiResponse("userInvoices");
+export const userInvoicesError = getApiError("userInvoices");
 const apiSetStatusProposalResponse = getApiResponse("setStatusProposal");
 export const apiUserSearchResponse = getApiResponse("userSearch");
 export const verifyNewUser = getApiResponse("verifyNewUser");
