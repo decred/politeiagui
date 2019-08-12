@@ -18,7 +18,7 @@ import { useLoaderContext } from "src/Appv2/Loader";
 import styles from "./Proposal.module.css";
 import VotesCount from "./VotesCount";
 import DownloadComments from "src/containers/Comments/Download";
-import FilesThumbnail from "../Files/Thumbnail";
+import ThumbnailGrid from "../Files/Thumbnail";
 
 const Proposal = ({ proposal, extended }) => {
   const {
@@ -179,7 +179,7 @@ const Proposal = ({ proposal, extended }) => {
             )}
             {extended && files.length > 1 && (
               <Row className={styles.filesRow} justify="left" topMarginSize="s">
-                <FilesThumbnail 
+                <ThumbnailGrid 
                   value={files}
                   viewOnly={true}
                 />

@@ -4,6 +4,8 @@ import {
   minLengthMessage,
   maxLengthMessage,
   maxFileSizeMessage,
+  maxImageFilesMessage,
+  maxTextFilesMessage,
   validMimeTypesMessage
 } from "src/utils/validation";
 
@@ -12,7 +14,9 @@ export const proposalValidationSchema = ({
   maxproposalnamelength,
   minproposalnamelength,
   validmimetypes,
+  maximages,
   maximagesize,
+  maxmds,
   maxmdsize
 }) =>
   Yup.object().shape({
@@ -39,15 +43,15 @@ export const proposalValidationSchema = ({
           .required()
           .when("mime", {
             is: m => m.startsWith("image/"),
-            then: Yup.number().max(
-              maximagesize,
-              maxFileSizeMessage(maximagesize)
-            ),
-            otherwise: Yup.number().max(
-              maxmdsize,
-              maxFileSizeMessage(maxmdsize)
-            )
+            then: Yup.number().max(maximagesize, maxFileSizeMessage()),
+            otherwise: Yup.number().max(maxmdsize, maxFileSizeMessage())
           })
       })
-    )
+    ),
+    imgCount: Yup.number()
+      .notRequired()
+      .max(maximages, maxImageFilesMessage(maximages)),
+    mdCount: Yup.number()
+      .notRequired()
+      .max(maxmds, maxTextFilesMessage())
   });

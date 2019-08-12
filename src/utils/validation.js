@@ -65,7 +65,7 @@ export const minLengthMessage = (fieldName, minLenght) =>
 /**
  * Returns a generic error message for exceeding the maximum length
  * @param {string} fieldName
- * @param {number} minLenght
+ * @param {number} maxLength
  */
 export const maxLengthMessage = (fieldName, maxLength) =>
   `${stringUtils.capitalize(
@@ -75,15 +75,30 @@ export const maxLengthMessage = (fieldName, maxLength) =>
 /**
  * Returns a generic error message for exceeding the maximum size
  * for attached files in a proposal
- * @param {number} maxSize
  */
-export const maxFileSizeMessage = maxSize =>
-  `Files must have size at most ${maxSize}`;
+export const maxFileSizeMessage = () => "Files size can be at most 512kb";
 
 /**
  * Returns a generic error message for invalid mime types on
  * attached files
- * @param {number} maxSize
+ * @param {Array} validMimeTypes
  */
 export const validMimeTypesMessage = validMimeTypes =>
   `Files must have a valid mime type: ${validMimeTypes}`;
+
+/**
+ * Returns a generic error message for exceeding the maximum
+ * attached images allowed per proposal
+ * @param {number} maximages
+ */
+export const maxImageFilesMessage = maximages =>
+  `Proposals can have at most ${maximages} attached images`;
+
+/**
+ * Returns a generic error message for exceeding the maximum
+ * attached md files allowed per proposal
+ * NOTE: Current policies in pi doesn't allow for attached md
+ * or text files in a proposal
+ */
+export const maxTextFilesMessage = () =>
+  "Proposals can't have attached text or md files";
