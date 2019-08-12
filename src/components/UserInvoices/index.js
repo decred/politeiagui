@@ -3,6 +3,7 @@ import { autobind } from "core-decorators";
 import { withRouter } from "react-router-dom";
 import userInvoicesConnector from "../../connectors/userInvoices";
 import { Content as ProposalListing } from "../../components/snew";
+import Message from "../Message";
 
 class UserInvoices extends Component {
   render() {
