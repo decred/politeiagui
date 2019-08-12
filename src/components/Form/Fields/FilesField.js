@@ -30,11 +30,16 @@ export class FilesField extends React.Component {
       ? formattedFiles.concat(input.value)
       : formattedFiles;
     const validation = validateFiles(inputAndNewFiles, policy);
-
+    const { errors, files: validFiles } = validation;
     this.setState({
-      policyErrors: validation.errors ? validation.errors : []
+      policyErrors: errors ? errors : []
     });
-
+    if (validation.errors.length > 0) {
+      if (validFiles.length > 0) {
+        return dispatch(change("form/record", "files", validFiles));
+      }
+      return;
+    }
     return dispatch(change("form/record", "files", inputAndNewFiles));
   };
 
