@@ -1,17 +1,26 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import lineItemPayouts from "../../connectors/lineItemPayouts";
-import { PageLoadingIcon } from "../snew";
+import { PageLoadingIcon, Link } from "../snew";
 import Message from "../Message";
 import LineItemPayoutsTable from "./LineItemPayoutsTable";
 import ExportToCsv from "../ExportToCsv";
+import DateFilter from "../DateFilter";
 
 const LineItemsPayoutsPage = ({
   lineItemPayouts = [],
   error,
   loading,
   loggedInAsEmail,
-  onLineItemPayouts
+  onLineItemPayouts,
+  onChangeStartPayoutDateFilter,
+  onResetStartPayoutDateFilter,
+  startMonthFilterValue,
+  startYearFilterValue,
+  onChangeEndPayoutDateFilter,
+  onResetEndPayoutDateFilter,
+  endMonthFilterValue,
+  endYearFilterValue
 }) => {
   const fetchLineItemPayouts = () => {
     const today = new Date();
@@ -50,6 +59,31 @@ const LineItemsPayoutsPage = ({
     ) : (
       <div className="content">
         <h1 className="content-title">Line Item Payouts</h1>
+        <div>
+          <>
+            <Link
+              style={{ marginLeft: "24px" }}
+              href="/admin/"
+              onClick={() => null}
+            >
+              Back
+            </Link>
+          </>
+        </div>
+        <DateFilter
+          header={true}
+          monthFilterValue={startMonthFilterValue}
+          yearFilterValue={startYearFilterValue}
+          handleChangeDateFilter={onChangeStartPayoutDateFilter}
+          handleResetDateFilter={onResetStartPayoutDateFilter}
+        />
+        <DateFilter
+          header={true}
+          monthFilterValue={endMonthFilterValue}
+          yearFilterValue={endYearFilterValue}
+          handleChangeDateFilter={onChangeEndPayoutDateFilter}
+          handleResetDateFilter={onResetEndPayoutDateFilter}
+        />
         <div style={{ paddingLeft: "24px" }}>
           <ExportToCsv data={csvData} fields={csvFields} filename={"payouts"}>
             <button className="inverse payouts-btn-export-to-csv ">

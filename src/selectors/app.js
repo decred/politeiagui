@@ -111,6 +111,14 @@ export const getPublicFilterValue = state =>
   parseInt(state.app.publicProposalsShow, 10);
 export const getUserFilterValue = state =>
   parseInt(state.app.userProposalsShow, 10);
+export const getStartMonthPayoutFilterValue = state =>
+  state.app.startPayoutOption & parseInt(state.app.startPayoutOption.month, 10);
+export const getEndMonthPayoutFilterValue = state =>
+  state.app.endPayoutOption && parseInt(state.app.endPayoutOption.month, 10);
+export const getStartYearPayoutFilterValue = state =>
+  state.app.startPayoutOption && parseInt(state.app.startPayoutOption.year, 10);
+export const getEndYearPayoutFilterValue = state =>
+  state.app.endPayoutOption && parseInt(state.app.endPayoutOption.month, 10);
 export const getMonthFilterValue = state =>
   state.app.invoiceSortOption &&
   parseInt(state.app.invoiceSortOption.month, 10);

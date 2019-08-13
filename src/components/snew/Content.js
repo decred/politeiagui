@@ -92,6 +92,13 @@ export const CustomContent = ({
                 <>
                   <Link
                     style={{ marginRight: "24px" }}
+                    href="/admin/lineitempayouts"
+                    onClick={() => null}
+                  >
+                    Payout summaries
+                  </Link>
+                  <Link
+                    style={{ marginRight: "24px" }}
                     href="/admin/payouts"
                     onClick={() => null}
                   >

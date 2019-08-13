@@ -7,7 +7,7 @@ import {
   PROPOSAL_USER_FILTER_SUBMITTED,
   SORT_BY_TOP
 } from "../constants";
-import { getCurrentYear } from "../helpers";
+import { getCurrentYear, getCurrentMonth } from "../helpers";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 
 export const DEFAULT_STATE = {
@@ -31,6 +31,8 @@ export const DEFAULT_STATE = {
   pollingCreditsPayment: false,
   redirectedFrom: null,
   invoiceSortOption: { month: FILTER_ALL_MONTHS, year: getCurrentYear() },
+  endPayoutOption: { month: getCurrentMonth(), year: getCurrentYear() },
+  startPayoutOption: { month: getCurrentMonth() - 1, year: getCurrentYear() },
   draftInvoices: null
 };
 
@@ -204,6 +206,30 @@ const app = (state = DEFAULT_STATE, action) =>
       invoiceSortOption: {
         ...state.invoiceSortOption,
         month: FILTER_ALL_MONTHS,
+        year: getCurrentYear()
+      }
+    }),
+    [act.CHANGE_START_PAYOUT_DATE_FILTER]: () => ({
+      ...state,
+      startPayoutOption: action.payload
+    }),
+    [act.RESET_START_PAYOUT_DATE_FILTER]: () => ({
+      ...state,
+      startPayoutOption: {
+        ...state.startPayoutOption,
+        month: getCurrentMonth() - 1,
+        year: getCurrentYear()
+      }
+    }),
+    [act.CHANGE_END_PAYOUT_DATE_FILTER]: () => ({
+      ...state,
+      endPayoutOption: action.payload
+    }),
+    [act.RESET_END_PAYOUT_DATE_FILTER]: () => ({
+      ...state,
+      endPayoutOption: {
+        ...state.endPayoutOption,
+        month: getCurrentMonth(),
         year: getCurrentYear()
       }
     }),

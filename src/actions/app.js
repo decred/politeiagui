@@ -284,6 +284,18 @@ export const onChangePublicFilter = option =>
 export const onChangeUserFilter = option =>
   act.CHANGE_USER_FILTER_VALUE(option);
 
+export const onChangeStartPayoutDateFilter = (month, year) =>
+  act.CHANGE_START_PAYOUT_DATE_FILTER({ month, year });
+
+export const onResetStartPayoutDateFilter = () =>
+  act.RESET_START_PAYOUT_DATE_FILTER();
+
+export const onChangeEndPayoutDateFilter = (month, year) =>
+  act.CHANGE_END_PAYOUT_DATE_FILTER({ month, year });
+
+export const onResetEndPayoutDateFilter = () =>
+  act.RESET_END_PAYOUT_DATE_FILTER();
+
 export const onChangeDateFilter = (month, year) =>
   act.CHANGE_DATE_FILTER({ month, year });
 
