@@ -1,56 +1,41 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const usdConvert = 100;
-const dcrConvert = 100000000;
-
 const PayoutRow = ({
-  year,
-  month,
-  contractorname,
-  contractorrate,
-  labortotal,
-  expensetotal,
-  address,
-  exchangerate,
-  dcrtotal,
-  approvedtime
+  description,
+  domain,
+  expenses,
+  labor,
+  proposaltoken,
+  subdomain
 }) => {
   return (
     <tr>
-      <td>{new Date(approvedtime * 1000).toString()}</td>
-      <td>{year}</td>
-      <td>{month}</td>
-      <td>{contractorname}</td>
-      <td>{contractorrate / usdConvert}</td>
-      <td>{labortotal / usdConvert}</td>
-      <td>{expensetotal / usdConvert}</td>
-      <td>{(expensetotal + labortotal) / usdConvert}</td>
-      <td>{exchangerate / usdConvert}</td>
-      <td>{dcrtotal / dcrConvert}</td>
-      <td>{address}</td>
+      <td>{domain}</td>
+      <td>{subdomain}</td>
+      <td>{description}</td>
+      <td>{proposaltoken}</td>
+      <td>{expenses}</td>
+      <td>{labor}</td>
+      <td>{expenses + labor}</td>
     </tr>
   );
 };
 
-const PayoutsTable = ({ payouts }) => {
+const PayoutsTable = ({ lineItemPayouts }) => {
   return (
     <table className="payouts-table">
       <tbody>
         <tr>
-          <th>Approved Time</th>
-          <th>Year</th>
-          <th>Month</th>
-          <th>Name</th>
-          <th>Rate (USD)</th>
-          <th>Labor total (USD)</th>
-          <th>Expense total (USD)</th>
-          <th>Combined total (USD)</th>
-          <th>Exchange Rate (USD)</th>
-          <th>Total Payment (DCR)</th>
-          <th>Address</th>
+          <th>Domain</th>
+          <th>Sub Domain</th>
+          <th>Description</th>
+          <th>Token</th>
+          <th>Expenses (USD)</th>
+          <th>Labor (USD)</th>
+          <th>Total (USD)</th>
         </tr>
-        {payouts.map((payout, idx) => (
+        {lineItemPayouts.map((payout, idx) => (
           <PayoutRow key={`payout-${idx}`} {...payout} />
         ))}
       </tbody>

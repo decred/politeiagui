@@ -788,7 +788,7 @@ export const isApiRequestingLineItemPayouts = getIsApiRequesting(
   "lineItemPayouts"
 );
 export const lineItemPayouts = compose(
-  get("lineItemPayouts"),
+  get("lineitems"),
   lineItemPayoutsResponse
 );
 

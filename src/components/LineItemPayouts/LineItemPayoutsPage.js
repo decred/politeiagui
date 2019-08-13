@@ -11,30 +11,30 @@ const LineItemsPayoutsPage = ({
   error,
   loading,
   loggedInAsEmail,
-  onLineItemsPayouts
+  onLineItemPayouts
 }) => {
   const fetchLineItemPayouts = () => {
-    onLineItemsPayouts();
+    const today = new Date();
+    const monthsBack = new Date();
+    monthsBack.setMonth(3);
+    const start = Math.round(monthsBack.valueOf() / 1000);
+    const end = Math.round(today.valueOf() / 1000);
+    onLineItemPayouts(start, end);
   };
   useEffect(fetchLineItemPayouts, []);
 
   const csvData = lineItemPayouts.map(p => ({
     ...p,
-    approvedtime: new Date(p.approvedtime * 1000).toString(),
-    combinedtotal: p.labortotal + p.expensetotal
+    combinedtotal: p.labor + p.expenses
   }));
   const csvFields = [
-    "approvedtime",
-    "year",
-    "month",
-    "contractorname",
-    "contractorrate",
-    "labortotal",
-    "expensetotal",
-    "combinedtotal",
-    "exchangerate",
-    "dcrtotal",
-    "address"
+    "domain",
+    "subdomain",
+    "description",
+    "proposaltoken",
+    "expenses",
+    "labor",
+    "combinedtotal"
   ];
   return loggedInAsEmail ? (
     loading ? (
