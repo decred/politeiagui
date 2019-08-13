@@ -1,6 +1,7 @@
+import React from "react";
 import { diffWordsWithSpace } from "diff";
 import DiffLine from "./DiffLine";
-import { arrayDiff, lineDiffFunc, getLineArray } from "./helpers";
+import { arrayDiff, lineDiffFunc, getLineArray, getFilesDiff } from "./helpers";
 import styles from "./Diff.module.css";
 
 const handleDiffLine = (
@@ -65,11 +66,45 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
   return (
     <table
       className={styles.diffTable}
-      className="diff-table"
+      // className="diff-table"
       cellSpacing="0"
       cellPadding="0"
     >
       <tbody>{linesDiff}</tbody>
+    </table>
+  );
+};
+
+const fileHandler = file => file.mime.includes("image") ? (
+  <img
+    className={styles.diffImage}
+    alt={file.name}
+    src={`data:${file.mime};base64,${file.payload}`}
+  />
+) : (
+  <p>{file.name}</p>
+);
+
+export const insertFilesDiff = (oldFiles, newFiles) => {
+  const files = getFilesDiff(newFiles, oldFiles);
+  return (
+    <table className={styles.diffTable}>
+      {files.map((file, key) => {
+        const formattedFile = fileHandler(file);
+        return file.added ? (
+          <div className={styles.fileAdded} key={key}>
+            {formattedFile}
+          </div>
+        ) : file.removed ? (
+          <div className={styles.fileRemoved} key={key}>
+            {formattedFile}
+          </div>
+        ) : (
+          <div className={styles.fileUnchanged} key={key}>
+            {formattedFile}
+          </div>
+        );
+      })}
     </table>
   );
 };

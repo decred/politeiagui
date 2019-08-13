@@ -23,6 +23,7 @@ import ProposalActions from "./ProposalActions";
 import { useFullImageModal } from "../ProposalForm/hooks";
 import ThumbnailGrid from "../Files/Thumbnail";
 import ModalFullImage from "../ModalFullImage";
+import VersionPicker from "src/componentsv2/VersionPicker";
 
 const Proposal = ({ proposal, extended, children }) => {
   const {
@@ -113,14 +114,19 @@ const Proposal = ({ proposal, extended, children }) => {
                   {abandonedat && (
                     <Event event={"abandoned"} timestamp={abandonedat} />
                   )}
-                  {version > 1 && (
+                  {/* {version > 1 && (
                     <Text
                       id={`proposal-${proposalToken}-version`}
                       className={classNames(styles.version, "hide-on-mobile")}
                       color="gray"
                       truncate
                     >{`version ${version}`}</Text>
-                  )}
+                  )} */}
+                  <VersionPicker
+                    className={classNames(styles.version, "hide-on-mobile")}
+                    version={version}
+                    token={proposalToken}
+                  />
                 </Subtitle>
               }
               status={
