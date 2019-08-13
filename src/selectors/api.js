@@ -782,6 +782,16 @@ export const setStatusInvoicePayloadStatus = compose(
   setStatusInvoicePayload
 );
 
+export const lineItemPayoutsResponse = getApiResponse("lineItemPayouts");
+export const lineItemPayoutsError = getApiError("lineItemPayouts");
+export const isApiRequestingLineItemPayouts = getIsApiRequesting(
+  "lineItemPayouts"
+);
+export const lineItemPayouts = compose(
+  get("lineItemPayouts"),
+  lineItemPayoutsResponse
+);
+
 export const generatePayoutsResponse = getApiResponse("payouts");
 export const generatePayoutsError = getApiError("payouts");
 export const isApiRequestingGeneratePayouts = getIsApiRequesting("payouts");
