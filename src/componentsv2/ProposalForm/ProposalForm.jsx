@@ -90,7 +90,10 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
               error={touched.name && errors.name}
               filesInput={
                 <FilesInput value={values.files} onChange={handleFilesChange}>
-                  <AttachFileButton type="button" />
+                  <AttachFileButton 
+                    type="button" 
+                    kind={errors.imgCount && "disabled"} 
+                  />
                 </FilesInput>
               }
             />
