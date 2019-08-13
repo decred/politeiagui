@@ -1,81 +1,19 @@
 import React, { useMemo, useState } from "react";
 import { classNames } from "pi-ui";
-import { diffWordsWithSpace } from "diff";
-import { arrayDiff, lineDiffFunc, getLineArray, getFilesDiff } from "./helpers";
-import DiffLine from "./DiffLine";
+import { getMarkdownTextDiff, getFilesDiff } from "./helpers";
 import styles from "./Diff.module.css";
 import HelpMessage from "src/componentsv2/HelpMessage";
 import { ImageThumbnail, TextThumbnail } from "src/componentsv2/Files/Thumbnail";
 import ModalFullImage from "src/componentsv2/ModalFullImage";
 
-const handleDiffLine = (
-  line,
-  index,
-  oldTextLineCounter,
-  newTextLineCounter
-) => {
-  const { removed, value, added } = line;
-  const diffLine = [];
-  const dw = diffWordsWithSpace(removed ? removed : "", value ? value : "");
-  const diffStrings = dw.map(({ value }) => value);
-  diffLine.push(
-    <DiffLine
-      key={index}
-      removed={removed}
-      added={added}
-      content={diffStrings}
-      removedIndex={added ? newTextLineCounter : oldTextLineCounter}
-    />
-  );
-
-  return diffLine;
-};
-
 export const DiffHTML = ({ oldTextBody, newTextBody }) => {
-  const linesDiff = useMemo(() => {
-    const oldComLines = getLineArray(oldTextBody);
-    const newComLines = getLineArray(newTextBody);
-    let newTextLineCounter = 0,
-      oldTextLineCounter = 0;
-    return arrayDiff(newComLines, oldComLines, lineDiffFunc)
-      .sort((a, b) => a.lineIndex - b.lineIndex)
-      .map((line, index) => {
-        if (line.value !== "" || line.removed) {
-          if (line.added) {
-            newTextLineCounter += 1;
-          } else if (line.removed) {
-            oldTextLineCounter += 1;
-          } else {
-            newTextLineCounter += 1;
-            oldTextLineCounter += 1;
-          }
-          return handleDiffLine(
-            line,
-            index,
-            oldTextLineCounter,
-            newTextLineCounter
-          );
-        } else {
-          newTextLineCounter += 1;
-          oldTextLineCounter += 1;
-          return (
-            <DiffLine
-              addedIndex={newTextLineCounter}
-              removedIndex={oldTextLineCounter}
-              key={index}
-            />
-          );
-        }
-      });
-  }, [newTextBody, oldTextBody]);
+  const linesDiff = useMemo(() =>
+    getMarkdownTextDiff(oldTextBody, newTextBody)
+  , [newTextBody, oldTextBody]);
   return (
-    <table
-      className={styles.diffTable}
-      cellSpacing="0"
-      cellPadding="0"
-    >
-      <tbody>{linesDiff}</tbody>
-    </table>
+    <div className="markdown-body">
+      {linesDiff}
+    </div>
   );
 };
 

@@ -16,6 +16,7 @@
     "js-sha3": "^0.8.0",
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",
+    "markdown-to-jsx": "^6.10.3",
     "normalize.css": "^8.0.1",
     "pi-ui": "https://github.com/decred/pi-ui",
     "prop-types": "^15.7.2",

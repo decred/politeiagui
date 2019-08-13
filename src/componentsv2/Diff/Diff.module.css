@@ -39,7 +39,7 @@
   width: 1em
 }
 .lineContent {
-  width: 500px;
+  /* width: 500px; */
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
@@ -53,6 +53,41 @@
   background-color: #ffdce0;
   list-style-type: none;
   position: relative;
+}
+
+.lineChanged {
+  border-left: 3px solid #fddfa3;
+  padding-left: 3px;
+  list-style-type: none;
+  position: relative;
+}
+
+.stringChanged {
+  background-color: #fddfa3;
+  display: inline-block;
+}
+
+.changedTip {
+  white-space: nowrap;
+  padding: 0.3rem;
+  font-size: var(--font-size-small);
+  font-weight: normal;
+}
+
+.stringAdded {
+  background-color:#e6ffed;
+  display: inline-block;
+  white-space: pre;
+}
+
+.stringRemoved {
+  background-color: #ffdce0;
+  display: inline-block;
+  white-space: pre;
+}
+
+.customElements {
+  
 }
 
 .diff-out-line {

@@ -20,10 +20,30 @@ const DiffLine = ({ added = false, removed = false, content = "" }) => {
   );
 };
 
+const DiffLineNew = ({ added = false, removed = false, content = "" }) => {
+  const line = content && content.length > 0 ? content.join("") : content;
+  const lineFullyAdded = added && !removed,
+    lineFullyRemoved = !added && removed,
+    lineChanged = added && removed;
+  return (
+    <div
+      className={classNames(
+        lineFullyAdded && styles.lineAdded,
+        lineFullyRemoved && styles.lineRemoved,
+        lineChanged && styles.lineChanged
+      )}
+    >
+      {/* <span className={styles.lineContent}> */}
+      <Markdown body={line}/>
+      {/* </span> */}
+    </div>
+  );
+};
+
 DiffLine.propTypes = {
   added: PropTypes.bool,
   removed: PropTypes.bool || PropTypes.string,
   content: PropTypes.array || PropTypes.string
 };
 
-export default DiffLine;
+export default DiffLineNew;

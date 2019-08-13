@@ -117,7 +117,7 @@ const ProposalForm = React.memo(function ProposalForm({
         </Button>
         <DraftSaver submitSuccess={submitSuccess} />
         {values.token &&
-	        <Button 
+	        <Button
 	        	type="button"
 	        	kind="secondary"
 	        	onClick={cancelProposalEdits}>
