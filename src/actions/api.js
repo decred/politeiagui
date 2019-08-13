@@ -1228,7 +1228,7 @@ export const onLineItemPayouts = (start, end) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_LINEITEM_PAYOUTS({}));
     return api
-      .lineItemPayoute(csrf, start, end)
+      .lineItemPayouts(csrf, start, end)
       .then(response => {
         dispatch(act.RECEIVE_LINEITEM_PAYOUTS(response));
       })
