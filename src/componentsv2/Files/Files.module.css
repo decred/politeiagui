@@ -14,7 +14,13 @@
     min-height: 2rem;
 }
 
+.marginRight {
+    margin-right: 15px;
+}
+
 .removeFileIcon {
+    height: 10;
+    border: 0;
     margin-right: 10px;
 }
 
@@ -22,6 +28,7 @@
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 10px;
+    align-items: flex-start;
 }
 
 .fileThumbnail {
@@ -29,8 +36,7 @@
     width: 125px;
     height: 90px;
     border-radius: 2px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #ed6d47;
     background-color: #E6EAED;
 }
 
@@ -38,6 +44,7 @@
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 10px;
+    align-items: flex-start;
 }
 
 .imageThumbnail {
@@ -45,7 +52,6 @@
     width: 125px;
     height: 90px;
     border-radius: 2px;
-    margin-right: 5px;
 }
 
 .imageThumbnail:hover {
