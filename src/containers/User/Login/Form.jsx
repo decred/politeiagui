@@ -39,7 +39,7 @@ const LoginForm = ({
     <>
       <FormWrapper
         initialValues={{
-          username: "",
+          email: "",
           password: ""
         }}
         loading={!validationSchema}
@@ -67,12 +67,12 @@ const LoginForm = ({
               <ErrorMessage>{errors.global.toString()}</ErrorMessage>
             )}
             <TextInput
-              label="Username"
-              id="username"
-              value={values.username}
+              label="Email"
+              id="email"
+              value={values.email}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={touched.username && errors.username}
+              error={touched.email && errors.email}
             />
             <TextInput
               id="password"

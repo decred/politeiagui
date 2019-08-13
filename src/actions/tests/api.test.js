@@ -364,7 +364,7 @@ describe("test api actions (actions/api.js)", () => {
         {
           type: act.REQUEST_LOGIN,
           error: false,
-          payload: { username: FAKE_USER.username }
+          payload: { email: FAKE_USER.email }
         },
         { type: act.RECEIVE_LOGIN, error: true, payload: e }
       ],
