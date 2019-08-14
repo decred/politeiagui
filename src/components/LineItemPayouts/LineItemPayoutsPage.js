@@ -5,7 +5,7 @@ import { PageLoadingIcon, Link } from "../snew";
 import Message from "../Message";
 import LineItemPayoutsTable from "./LineItemPayoutsTable";
 import ExportToCsv from "../ExportToCsv";
-import DateFilter from "../DateFilter";
+import PayoutFilter from "../PayoutFilter";
 
 const LineItemsPayoutsPage = ({
   lineItemPayouts = [],
@@ -14,21 +14,19 @@ const LineItemsPayoutsPage = ({
   loggedInAsEmail,
   onLineItemPayouts,
   onChangeStartPayoutDateFilter,
-  onResetStartPayoutDateFilter,
   startMonthFilterValue,
   startYearFilterValue,
   onChangeEndPayoutDateFilter,
-  onResetEndPayoutDateFilter,
   endMonthFilterValue,
   endYearFilterValue
 }) => {
   const fetchLineItemPayouts = () => {
-    const today = new Date();
-    const monthsBack = new Date();
-    monthsBack.setMonth(3);
-    const start = Math.round(monthsBack.valueOf() / 1000);
-    const end = Math.round(today.valueOf() / 1000);
-    onLineItemPayouts(start, end);
+    const start = new Date(startYearFilterValue, startMonthFilterValue);
+    const end = new Date(endYearFilterValue, endYearFilterValue);
+    onLineItemPayouts(
+      Math.round(start.valueOf() / 1000),
+      Math.round(end.valueOf() / 1000)
+    );
   };
   useEffect(fetchLineItemPayouts, []);
 
@@ -70,19 +68,17 @@ const LineItemsPayoutsPage = ({
             </Link>
           </>
         </div>
-        <DateFilter
-          header={true}
+        <PayoutFilter
+          header={"Start"}
           monthFilterValue={startMonthFilterValue}
           yearFilterValue={startYearFilterValue}
           handleChangeDateFilter={onChangeStartPayoutDateFilter}
-          handleResetDateFilter={onResetStartPayoutDateFilter}
         />
-        <DateFilter
-          header={true}
+        <PayoutFilter
+          header={"End"}
           monthFilterValue={endMonthFilterValue}
           yearFilterValue={endYearFilterValue}
           handleChangeDateFilter={onChangeEndPayoutDateFilter}
-          handleResetDateFilter={onResetEndPayoutDateFilter}
         />
         <div style={{ paddingLeft: "24px" }}>
           <ExportToCsv data={csvData} fields={csvFields} filename={"payouts"}>

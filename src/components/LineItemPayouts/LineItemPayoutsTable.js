@@ -44,7 +44,7 @@ const PayoutsTable = ({ lineItemPayouts }) => {
 };
 
 PayoutsTable.propTypes = {
-  payouts: PropTypes.array.isRequired
+  lineItemPayouts: PropTypes.array.isRequired
 };
 
 export default PayoutsTable;
