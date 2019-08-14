@@ -4,7 +4,6 @@ import { withRouter } from "react-router-dom";
 import { Formik } from "formik";
 import { Button, Message, BoxTextInput } from "pi-ui";
 import { Row } from "../layout";
-import { countImgFiles, countMdFiles, getValidatedFiles } from "./validation"; 
 import MarkdownEditor from "src/componentsv2/MarkdownEditor";
 import FilesInput from "src/componentsv2/Files/Input";
 import ThumbnailGrid from "src/componentsv2/Files/Thumbnail";
@@ -55,22 +54,24 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
         function handleDescriptionChange(v) {
           setFieldValue("description", v);
         }
-        function handleFilesChange(v) {
-          setFieldValue("imgCount", countImgFiles(v));
-          setFieldValue("mdCount", countMdFiles(v));
-          const fs = getValidatedFiles(v, policy);
-          setFieldValue("files", fs);
+        function handleFilesChange(v, e) {
+          e && setFieldValue("filesLengthLimitError", e);
+          setFieldValue("files", v);
         }
         function handleFileRemoval(v) {
           const fs = values.files.filter(f => f.payload !== v.payload);
-          setFieldValue("imgCount", countImgFiles(v));
-          setFieldValue("mdCount", countMdFiles(v));
+          if (fs.length <= policy.maximages) {
+            setFieldValue("filesLengthLimitError", null);
+          }
           setFieldValue("files", fs);
         }
         return (
           <form onSubmit={handleSubmit}>
             {errors && errors.global && (
               <Message kind="error">{errors.global.toString()}</Message>
+            )}
+            {values && values.filesLengthLimitError && (
+              <Message kind="warning">{values.filesLengthLimitError}</Message>
             )}
             <BoxTextInput
               placeholder="Proposal name"
@@ -92,9 +93,9 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
                 <FilesInput 
                   value={values.files} 
                   onChange={handleFilesChange} 
-                  disabled={errors.imgCount}
+                  policy={policy}
                 >
-                  <AttachFileButton type="button" kind={errors.imgCount && "disabled"}/>
+                  <AttachFileButton type="button"/>
                 </FilesInput>
               }
             />

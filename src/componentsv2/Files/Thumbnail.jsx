@@ -10,7 +10,6 @@ const ThumbnailGrid = ({ value, onClick, errors = [], viewOnly = false }) => {
     errors.files && errors.files[key] ?
       { ...file, error: true } : { ...file, error: false }
   );
-  if (errors.imgCount) filesWithErrors[0].error = true; 
 	return (
 		<>
 		<ThumbnailGridErrors errors={errors} />
@@ -42,14 +41,11 @@ const ThumbnailGrid = ({ value, onClick, errors = [], viewOnly = false }) => {
 
 const ThumbnailGridErrors = ({ errors }) => {
   const fileErrors = errors.files || [];
-  const imgCountError = errors.imgCount;
-  const mdCountError = errors.mdCount;
-
   // Unique errors is used to remove duplicate error messages from Yup
   const errs = fileErrors.reduce((acc, err) => {
     return err ? acc.concat(Object.values(err)) : acc;
   }, []);
-  const uniqueErrors = [...new Set(errs)].concat(imgCountError, mdCountError);
+  const uniqueErrors = [...new Set(errs)];
 
   return uniqueErrors.map(err => err && (
     <p key={err} className={styles.fileErrorText}>

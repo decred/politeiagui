@@ -85,20 +85,3 @@ export const maxFileSizeMessage = () => "Files size can be at most 512kb";
  */
 export const validMimeTypesMessage = validMimeTypes =>
   `Files must have a valid mime type: ${validMimeTypes}`;
-
-/**
- * Returns a generic error message for exceeding the maximum
- * attached images allowed per proposal
- * @param {number} maximages
- */
-export const maxImageFilesMessage = maximages =>
-  `Proposals can have at most ${maximages} attached images`;
-
-/**
- * Returns a generic error message for exceeding the maximum
- * attached md files allowed per proposal
- * NOTE: Current policies in pi doesn't allow for attached md
- * or text files in a proposal
- */
-export const maxTextFilesMessage = () =>
-  "Proposals can't have attached text or md files";
