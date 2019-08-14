@@ -89,11 +89,12 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
               placeholder={"Write your proposal"}
               error={touched.name && errors.name}
               filesInput={
-                <FilesInput value={values.files} onChange={handleFilesChange}>
-                  <AttachFileButton 
-                    type="button" 
-                    kind={errors.imgCount && "disabled"} 
-                  />
+                <FilesInput 
+                  value={values.files} 
+                  onChange={handleFilesChange} 
+                  disabled={errors.imgCount}
+                >
+                  <AttachFileButton type="button" kind={errors.imgCount && "disabled"}/>
                 </FilesInput>
               }
             />
@@ -106,7 +107,7 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
               <Button kind="secondary">Save as draft</Button>
               <Button
                 type="submit"
-                kind={!isValid && disableSubmit ? "disabled" : "primary"}
+                kind={!isValid || disableSubmit ? "disabled" : "primary"}
                 loading={isSubmitting}
               >
                 Submit

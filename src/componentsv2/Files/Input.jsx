@@ -2,7 +2,7 @@ import React from "react";
 import ReactFileReader from "react-file-reader";
 import { getFormattedFiles } from "./helpers";
 
-const FilesInput = ({ value, onChange, children }) => {
+const FilesInput = ({ value, onChange, children, disabled }) => {
   function handleFilesChange(files) {
     const formattedFiles = getFormattedFiles(files);
     const inputAndNewFiles = !!value
@@ -17,6 +17,7 @@ const FilesInput = ({ value, onChange, children }) => {
       base64
       multipleFiles
       handleFiles={handleFilesChange}
+      disabled={disabled}
     >
       {children}
     </ReactFileReader>

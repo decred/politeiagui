@@ -11,7 +11,7 @@
 .fileErrorText {
     color: #ed6d47;
     font-size: 1.3rem;
-    min-height: 2rem;
+    margin-bottom: 5px;
 }
 
 .marginRight {

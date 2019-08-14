@@ -10,7 +10,7 @@ const ThumbnailGrid = ({ value, onClick, errors = [], viewOnly = false }) => {
     errors.files && errors.files[key] ?
       { ...file, error: true } : { ...file, error: false }
   );
-  if (errors.imgCount) filesWithErrors[0].error = true;
+  if (errors.imgCount) filesWithErrors[0].error = true; 
 	return (
 		<>
 		<ThumbnailGridErrors errors={errors} />
@@ -52,9 +52,9 @@ const ThumbnailGridErrors = ({ errors }) => {
   const uniqueErrors = [...new Set(errs)].concat(imgCountError, mdCountError);
 
   return uniqueErrors.map(err => err && (
-    <P className={styles.fileErrorText}>
+    <p key={err} className={styles.fileErrorText}>
       {err}
-    </P>
+    </p>
   ))
 };
 
