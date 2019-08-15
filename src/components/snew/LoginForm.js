@@ -28,16 +28,16 @@ const LoginForm = ({
       <input name="dest" type="hidden" defaultValue="/" />
       <div className="c-form-group">
         <label className="screenreader-only" htmlFor="user_login">
-          username:
+          email:
         </label>
         <Field
           autoFocus
           className="c-form-control"
           id="user_login"
-          name="username"
+          name="email"
           component="input"
           type="text"
-          placeholder="Username"
+          placeholder="Email"
           tabIndex={4}
         />
       </div>

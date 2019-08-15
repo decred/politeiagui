@@ -117,6 +117,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     57: "Invalid like comment action",
     58: "Invalid proposal censorship token",
     59: "Email address is already verified",
+    63: "Invalid login credentials",
     85: "The provided password was invalid",
     88: "No changes were found in the proposal.",
     // CMS Errors
