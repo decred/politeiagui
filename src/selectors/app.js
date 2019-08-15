@@ -368,6 +368,14 @@ export const getDraftProposals = state => {
   return drafts;
 };
 
+export const getSubmittedUserInvoices = state => {
+  const invoices = apiUserInvoices(state);
+
+  const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
+
+  return sortByNewestFirst(invoices);
+};
+
 export const getSubmittedUserProposals = state => userID => {
   const isUserProp = prop => prop.userid === userID;
   const vettedProps = vettedProposals(state).filter(isUserProp);
