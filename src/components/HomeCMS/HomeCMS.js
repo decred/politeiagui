@@ -84,10 +84,11 @@ const HomeCMS = ({
   userInvoices,
   adminInvoices,
   loggedInAsEmail,
-  history
+  history,
+  isApiRequestingLogout
 }) => {
   const fetchUserInvoices = () => {
-    if (userid) {
+    if (userid && !isApiRequestingLogout) {
       onFetchUserInvoices(userid);
       if (isAdmin) {
         onFetchAdminInvoices();
@@ -108,10 +109,12 @@ const HomeCMS = ({
         <Message header="Error fetching invoices" type={"error"} body={error} />
       ) : (
         <div style={{ paddingLeft: "24px" }}>
-          <ReminderList title={"Reminders"}>
-            <UserReminders invoices={userInvoices} />
-            {isAdmin && <AdminReminders invoices={adminInvoices} />}
-          </ReminderList>
+          {loggedInAsEmail && !isApiRequestingLogout ? (
+            <ReminderList title={"Reminders"}>
+              <UserReminders invoices={userInvoices} />
+              {isAdmin && <AdminReminders invoices={adminInvoices} />}
+            </ReminderList>
+          ) : null}
         </div>
       )}
     </div>
