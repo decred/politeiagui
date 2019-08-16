@@ -262,6 +262,7 @@ describe("test api reducer", () => {
       newInvoice: DEFAULT_REQUEST_STATE,
       editInvoice: DEFAULT_REQUEST_STATE,
       newComment: DEFAULT_REQUEST_STATE,
+      userProposalCredits: DEFAULT_REQUEST_STATE,
       forgottenPassword: DEFAULT_REQUEST_STATE,
       passwordReset: DEFAULT_REQUEST_STATE,
       changeUsername: DEFAULT_REQUEST_STATE,
