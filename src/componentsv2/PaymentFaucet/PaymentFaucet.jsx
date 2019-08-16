@@ -1,6 +1,7 @@
 import { Button, Link, Message, P } from "pi-ui";
 import React from "react";
 import useFaucet from "./hooks";
+import styles from "./PaymentFaucet.module.css";
 
 const FAUCET_BASE_URL = "https://testnet.dcrdata.org/explorer/tx";
 const getFaucetUrl = txid => `${FAUCET_BASE_URL}/${txid}`;
@@ -32,7 +33,7 @@ const PaymentFaucet = ({ address, amount, isPaid }) => {
         <Message type="error" header="Faucet error" body={payWithFaucetError} />
       ) : null}
       {payWithFaucetTxId ? (
-        <Message kind="info">
+        <Message kind="info" className={styles.transactionIdMessage}>
           <span style={{ marginRight: "5px" }}>
             Sent transaction:{" "}
           </span>
@@ -42,7 +43,7 @@ const PaymentFaucet = ({ address, amount, isPaid }) => {
             id="transactionLink"
             truncate
             rel="noopener noreferrer"
-            style={{ maxWidth: "200px" }}
+            className={styles.transactionIdLink}
           >
             {payWithFaucetTxId}
           </Link>
