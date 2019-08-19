@@ -10,7 +10,7 @@ addons:
       - google-chrome-stable
 language: node_js
 node_js:
-  - 10.16.0
+  - 10.16.2
 cache: yarn
 install:
   - yarn install --network-concurrency 1
