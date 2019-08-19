@@ -1,0 +1,16 @@
+.attachButton {
+    font-size: var(--font-size-small);
+    padding: .3rem .6rem;
+}
+
+.fileInputTooltip {
+    width: 200px;
+}
+
+.formatHelpButton {
+    border: 0;
+    color: #8997A5;
+    font-size: 14px;
+    font-weight: 400;
+    padding-right: 50px;
+}
