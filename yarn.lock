@@ -9229,7 +9229,7 @@ performance-now@^2.1.0:
 
 "pi-ui@https://github.com/tiagoalvesdulce/pi-ui":
   version "1.0.0"
-  resolved "https://github.com/tiagoalvesdulce/pi-ui#5844dd4caa1419fcb356ee02a717a63277ccf0f2"
+  resolved "https://github.com/tiagoalvesdulce/pi-ui#a745727659f8df9aa5c9ef2e839fa0980177e561"
   dependencies:
     clamp-js-main "^0.11.5"
     react-spring "^8.0.25"
@@ -10426,10 +10426,15 @@ react-input-autosize@^2.2.1:
   dependencies:
     prop-types "^15.5.8"
 
-react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
+react-is@^16.7.0, react-is@^16.8.4, react-is@^16.8.6:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
+
+react-is@^16.8.1:
+  version "16.9.0"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.9.0.tgz#21ca9561399aad0ff1a7701c01683e8ca981edcb"
+  integrity sha512-tJBzzzIgnnRfEm046qRcURvwQnZVXmuCbscxUO5RWrGTXpon2d4c8mI0D8WE6ydVIm29JiLB6+RslkIvym9Rjw==
 
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"

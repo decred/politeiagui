@@ -189,7 +189,9 @@ export const isApiRequestingUpdateProposalCredits = getIsApiRequesting(
   "updateProposalCredits"
 );
 export const updateProposalCreditsError = getApiError("updateProposalCredits");
-const apiUserProposalCreditsResponse = getApiResponse("userProposalCredits");
+export const apiUserProposalCreditsResponse = getApiResponse(
+  "userProposalCredits"
+);
 export const proposalCreditPurchases = state => {
   const r = apiUserProposalCreditsResponse(state);
   if (!r || !r.spentcredits || !r.unspentcredits) {

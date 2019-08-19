@@ -130,9 +130,7 @@ export const DownloadRecord = DownloadJSON;
 
 const RecordWrapper = ({ children, className }) => {
   return (
-    <Card
-      className={classNames(styles.recordCard, "margin-bottom-m", className)}
-    >
+    <Card className={classNames("container margin-bottom-m", className)}>
       {children({
         Author,
         Event,

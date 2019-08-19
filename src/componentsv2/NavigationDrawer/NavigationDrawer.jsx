@@ -9,13 +9,14 @@ import styles from "./NavigationDrawer.module.css";
 const NavigationDrawer = ({ show, fullScreen }) => {
   toggleBlockScroll(show);
   return (
-    <div className={classNames(
-      fullScreen ?
-        styles.navigationDrawerFullScreen :
-        styles.navigationDrawer,
-      show && styles.navigationDrawerShow
-    )
-    }>
+    <div
+      className={classNames(
+        fullScreen
+          ? styles.navigationDrawerFullScreen
+          : styles.navigationDrawer,
+        show && styles.navigationDrawerShow
+      )}
+    >
       <div className={classNames(styles.navWrapper, "margin-bottom-s")}>
         <HeaderNav />
       </div>

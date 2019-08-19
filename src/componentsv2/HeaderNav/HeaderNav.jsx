@@ -1,6 +1,7 @@
 import { Text, Dropdown, DropdownItem } from "pi-ui";
 import React from "react";
 import { NavLink, withRouter } from "react-router-dom";
+import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
 import useNavigation from "src/hooks/useNavigation";
 import styles from "./HeaderNav.module.css";
 
@@ -11,7 +12,8 @@ const HeaderNav = ({ history }) => {
   }
   return username ? (
     <div className={styles.loggedInContainer}>
-      <Dropdown title={username}>
+      <ProposalCreditsIndicator />
+      <Dropdown className={styles.accountDropdown} title={username}>
         <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
         <DropdownItem onClick={onLogout}>Logout</DropdownItem>
       </Dropdown>

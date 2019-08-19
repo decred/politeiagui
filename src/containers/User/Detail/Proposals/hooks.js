@@ -31,13 +31,12 @@ export function useUserProposals(ownProps) {
 
   useEffect(
     function handleCachingProposals() {
-      const proposalsFeched = !!proposals;
-      const hasProposalsCached = userProposals && userProposals.length;
-      const hasAllProposalsCached =
-        proposalsFeched &&
-        hasProposalsCached &&
-        userProposals.length === proposals.length;
-      if (!hasAllProposalsCached) {
+      const needsCaching =
+        (!userProposals && !!proposals) ||
+        (userProposals &&
+          !!proposals &&
+          proposals.length > userProposals.length);
+      if (needsCaching) {
         setUserProposals(proposals);
       }
     },

@@ -1,0 +1,12 @@
+.statusTag {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+/* EXTRA SMALL */
+@media screen and (max-width: 560px) {
+  .statusTag {
+    position: relative;
+  }
+}
