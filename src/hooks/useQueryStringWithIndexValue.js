@@ -17,9 +17,9 @@ function useQueryStringWithIndexValue(key, initialIndex, values) {
   useEffect(
     function onValueChange() {
       const newIndex = values.findIndex(v => v === value);
-      setIndex(newIndex);
+      setIndex(newIndex >= 0 ? newIndex : initialIndex);
     },
-    [value, values]
+    [value, values, initialIndex]
   );
 
   return useMemo(() => [index, onSetIndex], [index, onSetIndex]);

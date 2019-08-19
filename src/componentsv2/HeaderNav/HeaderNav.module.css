@@ -6,8 +6,8 @@
 
 .loggedInContainer {
   display: flex;
-  justify-content: flex-end;
-  width: 100%;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .navLink {
@@ -35,4 +35,14 @@
 .activeNavLink {
     color: var(--color-primary-dark);
     border-bottom: 2px solid var(--color-yellow);
+}
+
+div.accountDropdown {
+    align-self: unset;
+}
+
+@media screen and (max-width: 1000px) {
+    .loggedInContainer {
+        max-width: unset;
+    }
 }

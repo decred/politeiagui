@@ -301,10 +301,8 @@ export const manageUser = (csrf, userid, action, reason) =>
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);
 
-export const login = (csrf, username, password) =>
-  POST("/login", csrf, { username, password: digest(password) }).then(
-    getResponse
-  );
+export const login = (csrf, email, password) =>
+  POST("/login", csrf, { email, password: digest(password) }).then(getResponse);
 
 // XXXX: this route hasn't been merged into the master of the backend.
 // Pull request: https://github.com/decred/politeia/pull/940
@@ -580,6 +578,9 @@ export const userInvoices = () => GET("/v1/user/invoices").then(getResponse);
 
 export const adminInvoices = csrf =>
   POST("/admin/invoices", csrf, {}).then(getResponse);
+
+export const adminUserInvoices = userid =>
+  GET(`/v1/admin/userinvoices?${qs.stringify({ userid })}`).then(getResponse);
 
 export const generatePayouts = csrf =>
   POST("/admin/generatepayouts", csrf, {}).then(getResponse);

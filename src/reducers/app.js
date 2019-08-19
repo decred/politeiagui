@@ -1,14 +1,14 @@
 import * as act from "../actions/types";
-import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
-import { uniqueID, getCurrentYear } from "../helpers";
 import {
-  PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_FILTER_ALL,
+  FILTER_ALL_MONTHS,
   PAYWALL_STATUS_PAID,
+  PROPOSAL_FILTER_ALL,
+  PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_USER_FILTER_SUBMITTED,
-  SORT_BY_TOP,
-  FILTER_ALL_MONTHS
+  SORT_BY_TOP
 } from "../constants";
+import { getCurrentYear } from "../helpers";
+import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 
 export const DEFAULT_STATE = {
   isShowingSignupConfirmation: false,
@@ -86,7 +86,7 @@ const app = (state = DEFAULT_STATE, action) =>
     },
     [act.SAVE_DRAFT_PROPOSAL]: () => {
       const newDraftProposals = state.draftProposals;
-      const draftId = action.payload.draftId || uniqueID("draft");
+      const draftId = action.payload.id;
       return {
         ...state,
         draftProposals: {
@@ -116,7 +116,7 @@ const app = (state = DEFAULT_STATE, action) =>
 
     [act.SAVE_DRAFT_INVOICE]: () => {
       const newDraftInvoices = state.draftInvoices;
-      const draftId = action.payload.draftId || uniqueID("draft");
+      const draftId = action.payload.id;
       return {
         ...state,
         draftInvoices: {

@@ -26,7 +26,7 @@ const EditProposal = ({ match }) => {
     : {};
 
   return !!proposal && !loading ? (
-    <Card paddingSize="small">
+    <Card className="container">
       <Or>
         {!isPaid && (
           <Message kind="error">

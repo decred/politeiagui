@@ -39,6 +39,7 @@ const userConnector = connect(
     lastLoadedUserDetailProposal: sel.lastLoadedUserDetailProposal,
     lastLoadedProposal: sel.lastLoadedUserProposal,
     getSubmittedUserProposals: sel.getSubmittedUserProposals,
+    getSubmittedUserInvoices: sel.getSubmittedUserInvoices,
     identityImportError: sel.identityImportError,
     identityImportSuccess: sel.identityImportSuccess,
     keyMismatch: sel.getKeyMismatch,
@@ -82,6 +83,7 @@ const userConnector = connect(
     bindActionCreators(
       {
         onFetchUserProposals: act.onFetchUserProposalsWithVoteStatus,
+        onFetchUserInvoices: act.onFetchAdminUserInvoices,
         onFetchData: act.onFetchUser,
         openModal: act.openModal,
         closeModal: act.closeModal,

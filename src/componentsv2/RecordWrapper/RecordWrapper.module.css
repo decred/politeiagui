@@ -46,16 +46,7 @@
     margin-right: 0.2rem;
 }
 
-.recordCard {
-    position: relative;
-    padding: 2rem 4rem;
-}
-
 @media screen and (max-width: 560px) {
-
-    .recordCard {
-        padding: 2rem 2.5rem;
-    }
     
     .status {
         position: initial;

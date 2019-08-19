@@ -1,36 +1,36 @@
 import * as act from "../../actions/types";
 import {
-  DEFAULT_REQUEST_STATE,
-  request,
-  receive,
-  reset,
-  resetMultiple
-} from "../util";
-import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_NOT_AUTHORIZED
 } from "../../constants";
 import {
+  DEFAULT_REQUEST_STATE,
+  receive,
+  request,
+  reset,
+  resetMultiple
+} from "../util";
+import {
   onReceiveCensoredComment,
+  onReceiveManageUser,
   onReceiveNewComment,
-  onReceiveSetStatus,
   onReceiveProposals,
+  onReceiveProposalsVoteStatus,
+  onReceiveProposalVoteResults,
+  onReceiveProposalVoteStatus,
+  onReceiveRescanUserPayments,
+  onReceiveSetStatus,
   onReceiveSyncLikeComment,
-  onResetSyncLikeComment,
   onReceiveUser,
   onReceiveVoteStatusChange,
-  onReceiveRescanUserPayments,
-  onReceiveProposalVoteResults,
-  onReceiveManageUser,
-  onReceiveProposalVoteStatus,
-  onReceiveProposalsVoteStatus
+  onResetSyncLikeComment
 } from "./handlers";
 import {
-  onReceivePayApprovedInvoices,
-  onReceiveSetStatusInvoice,
+  onReceiveCensorInvoiceComment,
   onReceiveNewInvoiceComment,
-  onReceiveCensorInvoiceComment
+  onReceivePayApprovedInvoices,
+  onReceiveSetStatusInvoice
 } from "./handlersCMS";
 
 export const DEFAULT_STATE = {
@@ -55,6 +55,7 @@ export const DEFAULT_STATE = {
   commentslikes: DEFAULT_REQUEST_STATE,
   userProposals: DEFAULT_REQUEST_STATE,
   newProposal: DEFAULT_REQUEST_STATE,
+  userProposalCredits: DEFAULT_REQUEST_STATE,
   editProposal: DEFAULT_REQUEST_STATE,
   newComment: DEFAULT_REQUEST_STATE,
   forgottenPassword: DEFAULT_REQUEST_STATE,
@@ -177,6 +178,10 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_NEW_INVOICE]: () => receive("newInvoice", state, action),
     [act.REQUEST_USER_INVOICES]: () => request("userInvoices", state, action),
     [act.RECEIVE_USER_INVOICES]: () => receive("userInvoices", state, action),
+    [act.REQUEST_ADMIN_USER_INVOICES]: () =>
+      request("userInvoices", state, action),
+    [act.RECEIVE_ADMIN_USER_INVOICES]: () =>
+      receive("userInvoices", state, action),
     [act.REQUEST_ADMIN_INVOICES]: () => request("adminInvoices", state, action),
     [act.RECEIVE_ADMIN_INVOICES]: () => receive("adminInvoices", state, action),
     [act.REQUEST_INVOICE]: () => request("invoice", state, action),
@@ -317,10 +322,23 @@ const api = (state = DEFAULT_STATE, action) =>
           proposalPaywallPayment: DEFAULT_REQUEST_STATE,
           proposalPaywallDetails: DEFAULT_REQUEST_STATE,
           rescanUserPayments: DEFAULT_REQUEST_STATE,
-          unvetted: DEFAULT_REQUEST_STATE
+          unvetted: DEFAULT_REQUEST_STATE,
+          userProposalCredits: DEFAULT_REQUEST_STATE
         };
       }
       return receive("logout", state, action);
+    },
+    [act.SET_PROPOSAL_CREDITS]: () => {
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          response: {
+            ...state.me.response,
+            proposalcredits: action.payload
+          }
+        }
+      };
     }
   }[action.type] || (() => state))());
 

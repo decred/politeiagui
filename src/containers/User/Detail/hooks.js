@@ -1,5 +1,6 @@
 import compose from "lodash/fp/compose";
 import get from "lodash/fp/get";
+import isEqual from "lodash/isEqual";
 import { useEffect, useState } from "react";
 import usePolicy from "src/hooks/usePolicy";
 import * as act from "src/actions";
@@ -43,8 +44,29 @@ function validateUUID(str) {
 
 export function useUserDetail(ownProps) {
   const fromRedux = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
+  const { onFetchUser, user: userFromAppState, loading, userId } = fromRedux;
+  const [user, setUser] = useState(null);
+  const userFetched = !!user;
+  // Validate and set user id or throw an error in case it is invalid
+  useEffect(
+    function handleFetchUser() {
+      if (!validateUUID(userId)) {
+        throw new Error("Invalid user ID");
+      }
+      if (
+        !!userFromAppState &&
+        userFromAppState.id === userId &&
+        !isEqual(userFromAppState, user)
+      ) {
+        setUser(userFromAppState);
+      } else if (!loading && !user) {
+        onFetchUser(userId);
+      }
+    },
+    [user, userFromAppState, userId, onFetchUser, userFetched, loading]
+  );
 
-  return { ...fromRedux, validateUUID };
+  return { ...fromRedux, user };
 }
 
 const mapChangePasswordStateToProps = {

@@ -104,6 +104,7 @@ const apiInvoiceCommentsResponse = getApiResponse("invoiceComments");
 const apiNewProposalResponse = getApiResponse("newProposal");
 const apiNewInvoiceResponse = getApiResponse("newInvoice");
 const apiUserInvoicesResponse = getApiResponse("userInvoices");
+export const userInvoicesError = getApiError("userInvoices");
 const apiSetStatusProposalResponse = getApiResponse("setStatusProposal");
 export const apiUserSearchResponse = getApiResponse("userSearch");
 export const verifyNewUser = getApiResponse("verifyNewUser");
@@ -188,7 +189,9 @@ export const isApiRequestingUpdateProposalCredits = getIsApiRequesting(
   "updateProposalCredits"
 );
 export const updateProposalCreditsError = getApiError("updateProposalCredits");
-const apiUserProposalCreditsResponse = getApiResponse("userProposalCredits");
+export const apiUserProposalCreditsResponse = getApiResponse(
+  "userProposalCredits"
+);
 export const proposalCreditPurchases = state => {
   const r = apiUserProposalCreditsResponse(state);
   if (!r || !r.spentcredits || !r.unspentcredits) {

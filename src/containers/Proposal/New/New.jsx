@@ -12,7 +12,7 @@ const NewProposal = () => {
   const { isPaid } = usePaywall();
   const [, identityError] = useIdentity();
   return (
-    <Card paddingSize="small">
+    <Card className="container">
       <Or>
         {!isPaid && (
           <Message kind="error">

@@ -5,7 +5,8 @@ import userConnector from "../../connectors/user";
 import {
   USER_DETAIL_TAB_GENERAL,
   USER_DETAIL_TAB_PREFERENCES,
-  USER_DETAIL_TAB_PROPOSALS
+  USER_DETAIL_TAB_PROPOSALS,
+  USER_DETAIL_TAB_INVOICES
 } from "../../constants";
 import {
   setQueryStringValue,
@@ -25,6 +26,10 @@ const userDetailOptions = [
   {
     label: "proposals",
     value: USER_DETAIL_TAB_PROPOSALS
+  },
+  {
+    label: "invoices",
+    value: USER_DETAIL_TAB_INVOICES
   }
 ];
 
@@ -57,6 +62,9 @@ class UserDetail extends Component {
   componentDidMount() {
     this.props.onFetchData(this.props.userId);
     !this.props.isCMS && this.props.onFetchUserProposals(this.props.userId);
+    this.props.isCMS &&
+      this.props.isAdmin &&
+      this.props.onFetchUserInvoices(this.props.userId);
   }
 
   onTabChange(tabId) {

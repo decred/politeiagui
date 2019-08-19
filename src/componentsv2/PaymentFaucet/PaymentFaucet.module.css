@@ -1,0 +1,37 @@
+.transactionIdLink {
+  width: 100%;
+}
+
+/* SMALL */
+@media screen and (max-width: 768px) {
+  .transactionIdMessage {
+    padding: 2rem 2rem;
+  }
+
+  .transactionIdLink {
+    width: 80%
+  }
+}
+
+
+/* EXTRA SMALL */
+@media screen and (max-width: 560px){
+  .transactionIdMessage {
+    padding: 2rem 1rem;
+  }
+
+  .transactionIdLink {
+    width: 50%;
+  }
+}
+
+/* EXTRA EXTRA SMALL */
+@media screen and (max-width: 410px){
+  .transactionIdMessage {
+    padding: 2rem 0rem;
+  }
+
+  .transactionIdLink {
+    width: 30%;
+  }
+}

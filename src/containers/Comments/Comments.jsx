@@ -116,7 +116,11 @@ const Comments = ({
     <>
       <Card
         id="commentArea"
-        className={classNames(styles.commentAreaContainer, className)}
+        className={classNames(
+          "container",
+          styles.commentAreaContainer,
+          className
+        )}
       >
         <LoggedInContent
           fallback={
@@ -201,7 +205,7 @@ const Comments = ({
           </div>
         )}
       </Card>
-      <ModalLogin show={loginModalShow} onClose={handleCloseLoginModal} />
+      <ModalLogin show={loginModalShow} onLoggedIn={handleCloseLoginModal} onClose={handleCloseLoginModal} />
     </>
   );
 };

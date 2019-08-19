@@ -106,7 +106,7 @@ describe("test app reducer", () => {
       type: act.SAVE_DRAFT_PROPOSAL,
       payload: {
         name: "draft",
-        draftId: "randomDraftId",
+        id: "randomDraftId",
         description: "Description",
         files: [],
         timestamp: Date.now() / 1000
@@ -118,7 +118,7 @@ describe("test app reducer", () => {
       type: act.SAVE_DRAFT_PROPOSAL,
       payload: {
         name: "draft2",
-        draftId: "randomDraftId2",
+        id: "randomDraftId2",
         description: "Description",
         files: [],
         timestamp: Date.now() / 1000
@@ -134,7 +134,10 @@ describe("test app reducer", () => {
       draftProposals: {
         newDraft: true,
         lastSubmitted: action.payload.name,
-        [action.payload.draftId]: action.payload
+        [action.payload.id]: {
+          ...action.payload,
+          draftId: action.payload.id
+        }
       }
     });
 
@@ -144,8 +147,14 @@ describe("test app reducer", () => {
       draftProposals: {
         newDraft: true,
         lastSubmitted: action2.payload.name,
-        [action.payload.draftId]: action.payload,
-        [action2.payload.draftId]: action2.payload
+        [action.payload.id]: {
+          ...action.payload,
+          draftId: action.payload.id
+        },
+        [action2.payload.id]: {
+          ...action2.payload,
+          draftId: action2.payload.id
+        }
       }
     });
   });
