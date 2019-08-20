@@ -50,7 +50,7 @@
 }
 
 .mde-text {
-    font-family: "Source Sans Prop", sans-serif;
+    font-family: var(--font-family-text);
     font-weight: var(--font-weight-regular);
     max-width: 100%;
     min-width: 100%;

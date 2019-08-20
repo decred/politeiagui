@@ -96,7 +96,7 @@ const Proposal = ({ proposal, extended, children }) => {
                   {publishedat && (
                     <Event event="published" timestamp={publishedat} />
                   )}
-                  {timestamp !== publishedat && timestamp !== abandonedat && (
+                  {timestamp !== publishedat && !abandonedat && (
                     <Event event="edited" timestamp={timestamp} />
                   )}
                   {abandonedat && (

@@ -89,7 +89,7 @@ const RecordsView = ({
     if (!recordTokensByTab) return "";
     return (recordTokensByTab[tab] || []).length;
   };
-  console.log(filteredRecords);
+
   return children({
     tabs: (
       <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>

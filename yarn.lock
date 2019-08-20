@@ -3256,9 +3256,9 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     safe-buffer "^5.0.1"
 
 clamp-js-main@^0.11.5:
-  version "0.11.5"
-  resolved "https://registry.yarnpkg.com/clamp-js-main/-/clamp-js-main-0.11.5.tgz#624172c66f8ad0a982bcf10189fd081de7acea0f"
-  integrity sha512-XjwTIP0HtHR9Vf0B1X6Yc/ma9qkcvCDHnEKX07v6EgtpA1t9Nb2d0CEzes+/UT2pPpZ9RdBAHrya7+roFspABA==
+  version "0.11.6"
+  resolved "https://registry.yarnpkg.com/clamp-js-main/-/clamp-js-main-0.11.6.tgz#dcb420c7266310867f01bc90457f3ff8ab1f2e2b"
+  integrity sha512-Am5og1TzbYZDUv0MQX3OZB7D/rNZTqNho5sb0M1v+e8X8blV7H/lrJDTYrJqC3nXyokda9EP6mVvQBPOKb8/gA==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -9229,7 +9229,7 @@ performance-now@^2.1.0:
 
 "pi-ui@https://github.com/tiagoalvesdulce/pi-ui":
   version "1.0.0"
-  resolved "https://github.com/tiagoalvesdulce/pi-ui#fe5ed7374859d36ccf4092c7c97922166b69ac1e"
+  resolved "https://github.com/tiagoalvesdulce/pi-ui#10b775ee3dc9395eecfd86ae59f4bee4ffd4c45b"
   dependencies:
     clamp-js-main "^0.11.5"
     react-spring "^8.0.25"
