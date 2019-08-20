@@ -28,6 +28,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     onFetchProposalsBatch
   } = usePublicProposals();
 
+
   return (
     <RecordsView
       onFetchRecords={onFetchProposalsBatch}
