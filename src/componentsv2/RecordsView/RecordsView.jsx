@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { Tabs, Tab } from "pi-ui";
 import LazyList from "src/components/LazyList/LazyList";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { getRecordsByTabOption } from "./helpers";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import HelpMessage from "src/componentsv2/HelpMessage";
@@ -103,26 +102,22 @@ const RecordsView = ({
       </Tabs>
     ),
     content: (
-      <TransitionGroup>
-        <CSSTransition key={index} classNames="fade" timeout={200}>
-           <LazyList
-            items={filteredRecords}
-            renderItem={renderRecord}
-            onFetchMore={handleFetchMoreRecords}
-            hasMore={hasMoreToLoad}
-            emptyListComponent={<HelpMessage>
-              {getEmptyMessage(tabOption)}
-            </HelpMessage>}
-            isLoading={itemsOnLoad > 0}
-            loadingPlaceholder={
-              <LoadingPlaceholders
-                numberOfItems={itemsOnLoad}
-                placeholder={placeholder}
-              />
-            }
+      <LazyList
+        items={filteredRecords}
+        renderItem={renderRecord}
+        onFetchMore={handleFetchMoreRecords}
+        hasMore={hasMoreToLoad}
+        emptyListComponent={
+          <HelpMessage>{getEmptyMessage(tabOption)}</HelpMessage>
+        }
+        isLoading={itemsOnLoad > 0}
+        loadingPlaceholder={
+          <LoadingPlaceholders
+            numberOfItems={itemsOnLoad}
+            placeholder={placeholder}
           />
-        </CSSTransition>
-      </TransitionGroup>
+        }
+      />
     )
   });
 };
