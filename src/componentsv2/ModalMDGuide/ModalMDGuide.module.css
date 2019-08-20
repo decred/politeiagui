@@ -1,0 +1,40 @@
+.table {
+    display: flex;
+    flex-direction: column;
+}
+.tableHeader {
+    display: flex;
+    justify-content: space-around;
+    background-color: #F3F5F6;
+    margin-top: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.tableRow {
+    display: flex; 
+    justify-content: space-around;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #F3F5F6;
+}
+.tableRowEven {
+    display: flex; 
+    justify-content: space-evenly;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #F3F5F6;
+}
+.quotedText {
+    border-left: .25em solid #dfe2e5;
+    color: #6a737d;
+    padding: 0 1em;
+}
+.codeBlock {
+    padding: 8px;
+    overflow: auto;
+    border: 1px solid #eeeed2;
+    background-color: #fcfcf7;
+    border-radius: 2px;
+    margin-top: 25px;
+}
+  
