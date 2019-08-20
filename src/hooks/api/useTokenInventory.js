@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useRedux } from "src/redux";
+import { useLoaderContext } from "src/Appv2/Loader";
 
 const mapStateToProps = {
   loading: sel.apiTokenInventoryIsRequesting,
@@ -20,11 +21,20 @@ export default function useTokenInventory(ownProps) {
     mapDispatchToProps
   );
 
+  const { currentUser } = useLoaderContext();
+  const userIsAdmin = currentUser && currentUser.isadmin;
+
   useEffect(() => {
     if (!tokenInventory) {
       onFetchTokenInventory();
     }
   }, [tokenInventory, onFetchTokenInventory]);
+
+  useEffect(() => {
+    if (userIsAdmin) {
+      onFetchTokenInventory();
+    }
+  }, [userIsAdmin]);
 
   return [tokenInventory, error, loading];
 }
