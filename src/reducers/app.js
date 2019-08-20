@@ -1,5 +1,12 @@
 import * as act from "../actions/types";
-import { FILTER_ALL_MONTHS, PAYWALL_STATUS_PAID, PROPOSAL_FILTER_ALL, PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_USER_FILTER_SUBMITTED, SORT_BY_TOP } from "../constants";
+import {
+  FILTER_ALL_MONTHS,
+  PAYWALL_STATUS_PAID,
+  PROPOSAL_FILTER_ALL,
+  PROPOSAL_STATUS_UNREVIEWED,
+  PROPOSAL_USER_FILTER_SUBMITTED,
+  SORT_BY_TOP
+} from "../constants";
 import { getCurrentYear } from "../helpers";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 

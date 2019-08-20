@@ -6,6 +6,8 @@ export const tabValues = {
   ABANDONED: "Abandoned"
 };
 
+export const noProposalMessage = "No proposals available";
+
 /**
  * Returns an array of proposal tokens for the given tab option
  * @param {string} tabOption

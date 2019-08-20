@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRedux } from "src/redux";
 import { or } from "src/lib/fp";
 import * as act from "src/actions";
@@ -14,6 +14,7 @@ const mapDispatchToProps = {
 
 export function useUserProposals(ownProps) {
   const { userID, userProposals, setUserProposals } = ownProps;
+  const [doneLoading, setDoneLoading] = useState(false);
   const { onFetchUserProposals, proposals, loading } = useRedux(
     ownProps,
     mapStateToProps,
@@ -24,6 +25,7 @@ export function useUserProposals(ownProps) {
     function handleFetchUserProposals() {
       if (!userProposals) {
         onFetchUserProposals(userID);
+        setDoneLoading(true);
       }
     },
     [onFetchUserProposals, userID, userProposals]
@@ -39,9 +41,10 @@ export function useUserProposals(ownProps) {
       if (needsCaching) {
         setUserProposals(proposals);
       }
+      setDoneLoading(true);
     },
     [proposals, userProposals, setUserProposals]
   );
 
-  return { proposals: userProposals, loading };
+  return { proposals: userProposals, loading: loading || !doneLoading };
 }

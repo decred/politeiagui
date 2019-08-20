@@ -6,12 +6,15 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import {
   tabValues,
   getProposalTokensByTabOption,
-  getProposalsByTabOption
+  getProposalsByTabOption,
+  noProposalMessage
 } from "./helpers";
 import { usePublicProposals } from "./hooks";
 import useQueryStringWithIndexValue from "src/hooks/useQueryStringWithIndexValue";
 import Proposal from "src/componentsv2/Proposal";
 import ProposalLoader from "src/componentsv2/Proposal/ProposalLoader";
+import HelpMessage from "src/componentsv2/HelpMessage";
+import { Spinner } from "pi-ui";
 
 const DEFAULT_PAGE_SIZE = 4;
 
@@ -72,7 +75,8 @@ const PublicProposals = ({
     isLoading,
     proposals,
     proposalsTokens,
-    onFetchVettedByTokens
+    onFetchVettedByTokens,
+    loadingTokenInventory
   } = usePublicProposals(props);
 
   const filteredTokens = getProposalTokensByTabOption(
@@ -111,6 +115,7 @@ const PublicProposals = ({
     itemsOnLoad
   ]);
 
+
   return (
     <>
       <TopBanner>
@@ -129,6 +134,11 @@ const PublicProposals = ({
       <Sidebar />
 
       <Main className={styles.customMain}>
+        {!loadingTokenInventory ? !getPropsCountByTab(tabOption) && (
+          <HelpMessage>{noProposalMessage}</HelpMessage>
+        ) : <HelpMessage>
+          <Spinner invert/>
+        </HelpMessage>}
         {proposalsTokens && !isLoading && (
           <TransitionGroup>
             <CSSTransition key={index} classNames="fade" timeout={200}>
