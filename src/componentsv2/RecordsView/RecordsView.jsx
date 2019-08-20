@@ -4,6 +4,7 @@ import LazyList from "src/components/LazyList/LazyList";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { getRecordsByTabOption } from "./helpers";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
+import HelpMessage from "src/componentsv2/HelpMessage";
 
 const DEFAULT_PAGE_SIZE = 4;
 
@@ -32,6 +33,8 @@ function reducer(state, action) {
   }
 }
 
+const getDefaultEmptyMessage = () => "No records available";
+
 const RecordsView = ({
   children,
   onFetchRecords,
@@ -41,7 +44,8 @@ const RecordsView = ({
   renderRecord,
   displayTabCount,
   pageSize = DEFAULT_PAGE_SIZE,
-  placeholder
+  placeholder,
+  getEmptyMessage = getDefaultEmptyMessage
 }) => {
   const [hasMoreToLoad, setHasMore] = useState(true);
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -85,7 +89,7 @@ const RecordsView = ({
     if (!recordTokensByTab) return "";
     return (recordTokensByTab[tab] || []).length;
   };
-
+  console.log(filteredRecords);
   return children({
     tabs: (
       <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
@@ -101,11 +105,14 @@ const RecordsView = ({
     content: (
       <TransitionGroup>
         <CSSTransition key={index} classNames="fade" timeout={200}>
-          <LazyList
+           <LazyList
             items={filteredRecords}
             renderItem={renderRecord}
             onFetchMore={handleFetchMoreRecords}
             hasMore={hasMoreToLoad}
+            emptyListComponent={<HelpMessage>
+              {getEmptyMessage(tabOption)}
+            </HelpMessage>}
             isLoading={itemsOnLoad > 0}
             loadingPlaceholder={
               <LoadingPlaceholders

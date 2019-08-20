@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useUnvettedProposals } from "./hooks";
 import Proposal from "src/componentsv2/Proposal";
 import ProposalLoader from "src/componentsv2/Proposal/ProposalLoader";
@@ -10,6 +10,8 @@ const renderProposal = prop => (
   <Proposal key={prop.censorshiprecord.token} proposal={prop} />
 );
 
+const tabLabels = [tabValues.UNREVIEWED, tabValues.CENSORED];
+
 const UnvettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const {
     proposals,
@@ -18,11 +20,19 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     loadingTokenInventory,
     onFetchProposalsBatch
   } = useUnvettedProposals();
-  const tabLabels = [tabValues.UNREVIEWED, tabValues.CENSORED];
+  
 
   function handleFetchRecords(tokens) {
     return onFetchProposalsBatch(tokens, false);
   }
+
+  const getEmptyMessage = useCallback((tab) => {
+    const mapTabToMessage = {
+      [tabValues.UNREVIEWED]: "No proposals unreviewed",
+      [tabValues.CENSORED]: "No proposals censored",
+    };
+    return mapTabToMessage[tab];
+  },[]);
 
   return (
     <RecordsView
@@ -33,6 +43,7 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       renderRecord={renderProposal}
       displayTabCount={!loadingTokenInventory}
       placeholder={ProposalLoader}
+      getEmptyMessage={getEmptyMessage}
     >
       {({ tabs, content }) => (
         <>

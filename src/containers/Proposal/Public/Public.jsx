@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styles from "./PublicProposals.module.css";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
 import { usePublicProposals } from "./hooks";
@@ -11,14 +11,15 @@ const renderProposal = record => {
   return <Proposal key={record.censorshiprecord.token} proposal={record} />;
 };
 
+const tabLabels = [
+  tabValues.IN_DISCUSSSION,
+  tabValues.VOTING,
+  tabValues.APPROVED,
+  tabValues.REJECTED,
+  tabValues.ABANDONED
+];
+
 const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
-  const tabLabels = [
-    tabValues.IN_DISCUSSSION,
-    tabValues.VOTING,
-    tabValues.APPROVED,
-    tabValues.REJECTED,
-    tabValues.ABANDONED
-  ];
 
   const {
     isLoading,
@@ -28,6 +29,16 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     onFetchProposalsBatch
   } = usePublicProposals();
 
+  const getEmptyMessage = useCallback((tab) => {
+    const mapTabToMessage = {
+      [tabValues.IN_DISCUSSSION]: "No proposals under dicussion",
+      [tabValues.VOTING]: "No proposals voting",
+      [tabValues.APPROVED]: "No proposals approved",
+      [tabValues.REJECTED]: "No proposals rejected",
+      [tabValues.ABANDONED]: "No proposals abandoned"
+    };
+    return mapTabToMessage[tab];
+  },[]);
 
   return (
     <RecordsView
@@ -38,6 +49,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       renderRecord={renderProposal}
       displayTabCount={!loadingTokenInventory}
       placeholder={ProposalLoader}
+      getEmptyMessage={getEmptyMessage}
     >
       {({ tabs, content }) => (
         <>

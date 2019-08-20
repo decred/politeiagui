@@ -8,6 +8,7 @@ import {
 } from "src/containers/Proposal/Actions";
 import LazyList from "src/components/LazyList";
 import LoadingPlaceholders from "src/componentsv2/LoadingPlaceholders";
+import HelpMessage from "src/componentsv2/HelpMessage";
 
 const PAGE_SIZE = 20;
 
@@ -65,6 +66,7 @@ const Proposals = props => {
           onFetchMore={handleFetchMoreProposals}
           hasMore={hasMoreToLoad}
           isLoading={loading}
+          emptyListComponent={<HelpMessage>No proposals available</HelpMessage>}
           loadingPlaceholder={
             <LoadingPlaceholders
               placeholder={ProposalLoader}

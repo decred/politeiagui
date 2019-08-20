@@ -9,6 +9,9 @@ import {
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_ABANDONED,
+  PROPOSAL_VOTING_ACTIVE,
+  PROPOSAL_VOTING_AUTHORIZED,
+  PROPOSAL_VOTING_NOT_AUTHORIZED,
   MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
   MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
   MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
@@ -54,6 +57,12 @@ export const onReceiveSetStatus = (state, action) => {
   } else {
     unvettedProps = map(updateProposalStatus, unvettedProps);
   }
+
+  state = onUpdateTokenInventory(
+    updatedProposal.status,
+    state,
+    getProposalToken(updatedProposal)
+  );
 
   return {
     ...state,
@@ -268,6 +277,9 @@ export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
     token: state[key].payload.token,
     status: newStatus
   };
+
+  state = onUpdateTokenInventory(newStatus, state, targetToken);
+
   return {
     ...state,
     proposalsVoteStatus: {
@@ -276,6 +288,44 @@ export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
         ...state.proposalsVoteStatus.response,
         [newVoteStatus.token]: { ...newVoteStatus }
       }
+    }
+  };
+};
+
+export const onUpdateTokenInventory = (newStatus, state, token) => {
+  const tokenInventory = get(["tokenInventory", "response"], state) || {};
+
+  // map only status which can be assigned to a proposal after a user/admin action
+  const mapStatusToTokenInventoryStatus = {
+    [PROPOSAL_STATUS_UNREVIEWED]: "unreviewed",
+    [PROPOSAL_STATUS_UNREVIEWED_CHANGES]: "unreviewed",
+    [PROPOSAL_STATUS_CENSORED]: "censored",
+    [PROPOSAL_STATUS_PUBLIC]: "pre",
+    [PROPOSAL_VOTING_NOT_AUTHORIZED]: "pre",
+    [PROPOSAL_VOTING_AUTHORIZED]: "pre",
+    [PROPOSAL_VOTING_ACTIVE]: "active",
+    [PROPOSAL_STATUS_ABANDONED]: "abandoned"
+  };
+
+  const newTokenInventoryStatus = mapStatusToTokenInventoryStatus[newStatus];
+
+  const newTokenInventory = Object.keys(tokenInventory).reduce((inv, key) => {
+    const tokens = tokenInventory[key] || [];
+    const foundToken = tokens.find(t => t === token);
+    if (foundToken && key !== newTokenInventoryStatus)
+      return { ...inv, [key]: tokens.filter(t => t !== token) };
+
+    if (!foundToken && key === newTokenInventoryStatus)
+      return { ...inv, [key]: [token].concat(tokens) };
+
+    return { ...inv, [key]: tokens };
+  }, {});
+
+  return {
+    ...state,
+    tokenInventory: {
+      ...(state.tokenInventory || {}),
+      response: newTokenInventory
     }
   };
 };
