@@ -534,6 +534,9 @@ export const apiProposalComments = or(
   ),
   constant([])
 );
+
+export const apiProposalsBatchError = getApiError("proposalsBatch");
+
 export const apiInvoiceComments = or(
   compose(
     get("comments"),

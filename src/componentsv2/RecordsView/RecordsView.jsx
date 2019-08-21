@@ -62,19 +62,22 @@ const RecordsView = ({
   );
 
   const handleFetchMoreRecords = async () => {
+    const index = filteredRecords.length;
+    const recordTokensToBeFetched = filteredTokens.slice(
+      index,
+      index + pageSize
+    );
+    setHasMore(false);
+    const numOfItemsToBeFetched = recordTokensToBeFetched.length;
+    dispatch({ type: INCREMENT_LOADING_ITEMS, count: numOfItemsToBeFetched });
     try {
-      const index = filteredRecords.length;
-      const recordTokensToBeFetched = filteredTokens.slice(
-        index,
-        index + pageSize
-      );
-      setHasMore(false);
-      const numOfItemsToBeFetched = recordTokensToBeFetched.length;
-      dispatch({ type: INCREMENT_LOADING_ITEMS, count: numOfItemsToBeFetched });
       await onFetchRecords(recordTokensToBeFetched);
       dispatch({ type: DECREMENT_LOADING_ITEMS, count: numOfItemsToBeFetched });
     } catch (e) {
-      throw e;
+      dispatch({
+        type: DECREMENT_LOADING_ITEMS,
+        count: itemsOnLoad + numOfItemsToBeFetched
+      });
     }
   };
 

@@ -1,11 +1,13 @@
-import { useEffect } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
+import { or } from "src/lib/fp";
 import { useRedux } from "src/redux";
 import useTokenInventory from "src/hooks/api/useTokenInventory";
+import useThrowError from "src/hooks/utils/useThrowError";
 
 const mapStateToProps = {
-  proposals: sel.proposalsWithVoteStatus
+  proposals: sel.proposalsWithVoteStatus,
+  error: or(sel.apiProposalsBatchError, sel.apiPropVoteStatusError)
 };
 
 const mapDispatchToProps = {
@@ -13,7 +15,7 @@ const mapDispatchToProps = {
 };
 
 export function usePublicProposals(ownProps) {
-  const { proposals, onFetchProposalsBatch } = useRedux(
+  const { proposals, onFetchProposalsBatch, error } = useRedux(
     ownProps,
     mapStateToProps,
     mapDispatchToProps
@@ -25,13 +27,9 @@ export function usePublicProposals(ownProps) {
     loadingTokenInventory
   ] = useTokenInventory();
 
-  const anyError = errorTokenInventory;
+  const anyError = errorTokenInventory || error;
 
-  useEffect(() => {
-    if (anyError) {
-      throw anyError;
-    }
-  }, [anyError]);
+  useThrowError(anyError);
 
   return {
     proposals,

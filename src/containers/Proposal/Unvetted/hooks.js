@@ -1,11 +1,12 @@
-import { useEffect } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useRedux } from "src/redux";
 import useTokenInventory from "src/hooks/api/useTokenInventory";
+import useThrowError from "src/hooks/utils/useThrowError";
 
 const mapStateToProps = {
-  proposals: sel.unvettedProposals
+  proposals: sel.unvettedProposals,
+  error: sel.apiProposalsBatchError
 };
 
 const mapDispatchToProps = {
@@ -13,7 +14,7 @@ const mapDispatchToProps = {
 };
 
 export function useUnvettedProposals(ownProps) {
-  const { proposals, ...fromRedux } = useRedux(
+  const { proposals, error, ...fromRedux } = useRedux(
     ownProps,
     mapStateToProps,
     mapDispatchToProps
@@ -25,13 +26,9 @@ export function useUnvettedProposals(ownProps) {
     loadingTokenInventory
   ] = useTokenInventory();
 
-  const anyError = errorTokenInventory;
+  const anyError = errorTokenInventory || error;
 
-  useEffect(() => {
-    if (anyError) {
-      throw anyError;
-    }
-  }, [anyError]);
+  useThrowError(anyError);
 
   return {
     proposals,

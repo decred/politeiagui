@@ -4,6 +4,7 @@ import * as act from "src/actions";
 import { or } from "src/lib/fp";
 import { useRedux, useStoreSubscribe } from "src/redux";
 import { handleSaveAppDraftProposals } from "src/lib/local_storage";
+import useThrowError from "src/hooks/utils/useThrowError";
 
 export function useDraftProposals() {
   const fromRedux = useRedux(
@@ -42,7 +43,11 @@ export function useDraftProposals() {
 const mapStateToProps = {
   proposals: sel.getUserProposalsWithVoteStatus,
   numOfUserProposals: sel.numOfUserProposals,
-  loading: or(sel.userProposalsIsRequesting, sel.isApiRequestingPropsVoteStatus)
+  loading: or(
+    sel.userProposalsIsRequesting,
+    sel.isApiRequestingPropsVoteStatus
+  ),
+  error: or(sel.userProposalsError, sel.apiPropVoteStatusError)
 };
 
 const mapDisptachToProps = {
@@ -53,7 +58,7 @@ export function useUserProposals(ownProps) {
   const { userID } = ownProps;
   const fromRedux = useRedux(ownProps, mapStateToProps, mapDisptachToProps);
 
-  const { onFetchUserProposals } = fromRedux;
+  const { onFetchUserProposals, error } = fromRedux;
 
   useEffect(
     function handleFetchUserProposals() {
@@ -61,6 +66,8 @@ export function useUserProposals(ownProps) {
     },
     [onFetchUserProposals, userID]
   );
+
+  useThrowError(error);
 
   return { ...fromRedux };
 }

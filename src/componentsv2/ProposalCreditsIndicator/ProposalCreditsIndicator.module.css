@@ -3,7 +3,7 @@
     align-items: center;
 }
 
-.proposalCreditsButton {
+button.proposalCreditsButton {
     padding: 0rem 0.4rem;
     margin-left: 0.5rem;
     font-weight: var(--font-weight-regular);
