@@ -67,6 +67,7 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
             <BoxTextInput
               placeholder="Proposal name"
               name="name"
+              tabIndex={1}
               value={values.name}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -76,6 +77,7 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
               name="description"
               className="margin-top-s"
               value={values.description}
+              textAreaProps={{ tabIndex: 2 }}
               onChange={handleDescriptionChange}
               onBlur={handleBlur}
               placeholder={"Write your proposal"}
@@ -89,7 +91,7 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
               <DraftSaver submitSuccess={submitSuccess} />
               <Button
                 type="submit"
-                kind={!isValid && disableSubmit ? "disabled" : "primary"}
+                kind={!isValid || disableSubmit ? "disabled" : "primary"}
                 loading={isSubmitting}
               >
                 Submit
