@@ -879,6 +879,28 @@ export const onSetInvoiceStatus = (
       });
   });
 
+export const onSetProposalStatusV2 = (token, status, censorMessage = "") =>
+  withCsrf((dispatch, getState, csrf) => {
+    const email = sel.loggedInAsEmail(getState());
+    dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
+    return api
+      .proposalSetStatus(email, csrf, token, status, censorMessage)
+      .then(({ proposal }) => {
+        dispatch(
+          act.RECEIVE_SETSTATUS_PROPOSAL({
+            proposal
+          })
+        );
+        if (status === PROPOSAL_STATUS_PUBLIC) {
+          dispatch(onFetchProposalVoteStatus(token));
+        }
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
+        throw error;
+      });
+  });
+
 export const onSetProposalStatus = (
   authorid,
   loggedInAsEmail,

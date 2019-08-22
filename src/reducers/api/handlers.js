@@ -278,7 +278,7 @@ export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
     status: newStatus
   };
 
-  state = onUpdateTokenInventory(newStatus, state, targetToken);
+  state = onUpdateTokenInventory(newStatus, state, targetToken, true);
 
   return {
     ...state,
@@ -292,22 +292,32 @@ export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
   };
 };
 
-export const onUpdateTokenInventory = (newStatus, state, token) => {
+export const onUpdateTokenInventory = (
+  newStatus,
+  state,
+  token,
+  isVoteStatusUpdate = false
+) => {
   const tokenInventory = get(["tokenInventory", "response"], state) || {};
 
   // map only status which can be assigned to a proposal after a user/admin action
-  const mapStatusToTokenInventoryStatus = {
+  const mapReviewStatusToTokenInventoryStatus = {
     [PROPOSAL_STATUS_UNREVIEWED]: "unreviewed",
     [PROPOSAL_STATUS_UNREVIEWED_CHANGES]: "unreviewed",
     [PROPOSAL_STATUS_CENSORED]: "censored",
     [PROPOSAL_STATUS_PUBLIC]: "pre",
-    [PROPOSAL_VOTING_NOT_AUTHORIZED]: "pre",
-    [PROPOSAL_VOTING_AUTHORIZED]: "pre",
-    [PROPOSAL_VOTING_ACTIVE]: "active",
     [PROPOSAL_STATUS_ABANDONED]: "abandoned"
   };
 
-  const newTokenInventoryStatus = mapStatusToTokenInventoryStatus[newStatus];
+  const mapVotingStatusToTokenInventoryStatys = {
+    [PROPOSAL_VOTING_NOT_AUTHORIZED]: "pre",
+    [PROPOSAL_VOTING_AUTHORIZED]: "pre",
+    [PROPOSAL_VOTING_ACTIVE]: "active"
+  };
+
+  const newTokenInventoryStatus = isVoteStatusUpdate
+    ? mapVotingStatusToTokenInventoryStatys[newStatus]
+    : mapReviewStatusToTokenInventoryStatus[newStatus];
 
   const newTokenInventory = Object.keys(tokenInventory).reduce((inv, key) => {
     const tokens = tokenInventory[key] || [];

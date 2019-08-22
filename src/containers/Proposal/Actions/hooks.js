@@ -21,15 +21,12 @@ export function useUnvettedActions() {
     {},
     {},
     {
-      onSetProposalStatus: act.onSetProposalStatus
+      onSetProposalStatus: act.onSetProposalStatusV2
     }
   );
-  const { currentUser } = useLoaderContext();
 
   const onCensorProposal = proposal => reason =>
     onSetProposalStatus(
-      proposal.userid,
-      currentUser.email,
       proposal.censorshiprecord.token,
       PROPOSAL_STATUS_CENSORED,
       reason
@@ -37,8 +34,6 @@ export function useUnvettedActions() {
 
   const onApproveProposal = proposal => () =>
     onSetProposalStatus(
-      proposal.userid,
-      currentUser.email,
       proposal.censorshiprecord.token,
       PROPOSAL_STATUS_PUBLIC
     );
@@ -62,7 +57,7 @@ export function usePublicActions() {
       onStartVote: act.onStartVote,
       onAuthorizeVote: act.onAuthorizeVote,
       onRevokeVote: act.onRevokeVote,
-      onSetProposalStatus: act.onSetProposalStatus
+      onSetProposalStatus: act.onSetProposalStatusV2
     }
   );
 
@@ -70,8 +65,6 @@ export function usePublicActions() {
 
   const onAbandonProposal = proposal => reason =>
     onSetProposalStatus(
-      proposal.userid,
-      currentUser.email,
       proposal.censorshiprecord.token,
       PROPOSAL_STATUS_ABANDONED,
       reason
