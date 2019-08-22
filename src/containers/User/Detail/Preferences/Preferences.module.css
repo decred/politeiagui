@@ -1,0 +1,23 @@
+.submitButton {
+  margin: 1rem 0;
+}
+
+.confirmMessage {
+  margin: 0 0 1rem 0;
+}
+
+
+/* SMALL WIDTH */
+@media screen and (max-width: 768px){
+  .marginHorizontal1 {
+    margin: 0 1rem;
+  }
+
+  .confirmMessage {
+    margin: 0 1rem 1rem 1rem;
+  }
+
+  .submitButton {
+    margin: 1rem;
+  }
+}
