@@ -6,13 +6,13 @@ import useNavigation from "src/hooks/api/useNavigation";
 import styles from "./ProposalCreditsIndicator.module.css";
 
 const ProposalCreditsIndicator = ({ history }) => {
-  const { user } = useNavigation();
+  const { user, proposalCredits } = useNavigation();
   usePollProposalCreditsPayment();
   const pushToProposalCredits = () =>
     history.push(`/user/${user.userid}?tab=credits`);
   return (
     <div className={styles.wrapper}>
-      <Text>proposal credits: {user && user.proposalcredits}</Text>
+      <Text>proposal credits: {user && proposalCredits}</Text>
       <Button
         className={styles.proposalCreditsButton}
         size="sm"
