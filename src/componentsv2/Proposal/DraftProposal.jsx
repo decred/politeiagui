@@ -19,7 +19,7 @@ const DraftProposal = ({ draft, onDelete }) => {
                   id={`proposal-title-${draftId}`}
                   truncate
                   linesBeforeTruncate={2}
-                  url={`/proposals/new/draft/${draftId}`}
+                  url={`/proposals/new?draft=${draftId}`}
                 >
                   {name}
                 </Title>
