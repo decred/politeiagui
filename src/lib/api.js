@@ -585,6 +585,11 @@ export const adminUserInvoices = userid =>
 export const generatePayouts = csrf =>
   POST("/admin/generatepayouts", csrf, {}).then(getResponse);
 
+export const lineItemPayouts = (csrf, starttime, endtime) =>
+  POST("/admin/lineitempayouts", csrf, { starttime, endtime }).then(
+    getResponse
+  );
+
 export const payApprovedInvoices = () =>
   GET("/v1/admin/payinvoices").then(getResponse);
 
