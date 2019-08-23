@@ -5,7 +5,7 @@ import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
 import useNavigation from "src/hooks/api/useNavigation";
 import styles from "./HeaderNav.module.css";
 
-const HeaderNav = ({ history }) => {
+const HeaderNav = ({ history, location }) => {
   const { user, username, onLogout } = useNavigation();
   function goToUserAccount() {
     history.push(`/user/${user.userid}`);
@@ -16,12 +16,19 @@ const HeaderNav = ({ history }) => {
   function goToUserProposals() {
     history.push("/proposals/user");
   }
+  function goToPublicProposals() {
+    history.push("/");
+  }
+  const isOnUnvettedRoute = location.pathname === `/proposals/unvetted`;
   return username ? (
     <div className={styles.loggedInContainer}>
       <ProposalCreditsIndicator />
       <Dropdown title={username}>
-        {user.isadmin && (
+        {user.isadmin && !isOnUnvettedRoute && (
           <DropdownItem onClick={goToUnvetted}>Admin</DropdownItem>
+        )}
+        {isOnUnvettedRoute && (
+          <DropdownItem onClick={goToPublicProposals}>Proposals</DropdownItem>
         )}
         <DropdownItem onClick={goToUserProposals}>My Proposals</DropdownItem>
         <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
