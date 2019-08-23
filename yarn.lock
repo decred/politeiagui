@@ -9229,7 +9229,7 @@ performance-now@^2.1.0:
 
 "pi-ui@https://github.com/tiagoalvesdulce/pi-ui":
   version "1.0.0"
-  resolved "https://github.com/tiagoalvesdulce/pi-ui#e7d009dec0aa37fc8248f83d54c652b7e07ce34a"
+  resolved "https://github.com/tiagoalvesdulce/pi-ui#6f94c497ce3c619bd95c5dd9a35416139ad281da"
   dependencies:
     clamp-js-main "^0.11.5"
     react-spring "^8.0.25"

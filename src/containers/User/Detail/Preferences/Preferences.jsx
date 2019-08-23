@@ -1,5 +1,5 @@
-import { Formik, Field } from "formik";
-import { Button, Card, Checkbox, H2, Message } from "pi-ui";
+import { Field, Formik } from "formik";
+import { Button, Card, Checkbox, H2, Icon, Message } from "pi-ui";
 import React, { useState } from "react";
 import { useUserPreferences } from "./hooks.js";
 import styles from "./Preferences.module.css";
@@ -32,32 +32,26 @@ const Preferences = () => {
           setFieldValue,
           values
         } = formikProps;
+        const customSetFieldValue = (...props) => {
+          setShowConfirm(false);
+          setFieldValue(...props);
+        };
         return (
           <form onSubmit={handleSubmit}>
             <div>
-              {showConfirm && (
-                <>
-                  {editUserError && (
-                    <Message className={styles.confirmMessage} kind="error">{editUserError}</Message>
-                  )}
-                  {editUserResponse && (
-                    <Message className={styles.confirmMessage} kind="success">Preferences Saved</Message>
-                  )}
-                </>
-              )}
               <Message className={styles.marginHorizontal1} kind="info">Currently, each notification email is only attempted to be sent once. If the email cannot be delivered in the initial attempt, for whatever reason, Politeia won't try to resend it.</Message>
               <Card className="container margin-top-s">
                 <H2>Email notifications for my proposals</H2>
                 <Field
                   component={Checkbox}
                   checked={values["myproposalnotifications-statuschange"]}
-                  onChange={event => setFieldValue("myproposalnotifications-statuschange", event.target.checked)}
+                  onChange={event => customSetFieldValue("myproposalnotifications-statuschange", event.target.checked)}
                   className="margin-top-m" id="1" name="myproposalnotifications-statuschange" label="Proposal approved or censored"
                 />
                 <Field
                   component={Checkbox}
                   checked={values["myproposalnotifications-votestarted"]}
-                  onChange={event => setFieldValue("myproposalnotifications-votestarted", event.target.checked)}
+                  onChange={event => customSetFieldValue("myproposalnotifications-votestarted", event.target.checked)}
                   className="margin-top-m" id="2" name="myproposalnotifications-votestarted" label="Voting started for proposal"
                 />
               </Card>
@@ -66,19 +60,19 @@ const Preferences = () => {
                 <Field
                   component={Checkbox}
                   checked={values["regularproposalnotifications-vetted"]}
-                  onChange={event => setFieldValue("regularproposalnotifications-vetted", event.target.checked)}
+                  onChange={event => customSetFieldValue("regularproposalnotifications-vetted", event.target.checked)}
                   className="margin-top-m" id="3" name="regularproposalnotifications-vetted" label="New proposal published"
                 />
                 <Field
                   component={Checkbox}
                   checked={values["regularproposalnotifications-edited"]}
-                  onChange={event => setFieldValue("regularproposalnotifications-edited", event.target.checked)}
+                  onChange={event => customSetFieldValue("regularproposalnotifications-edited", event.target.checked)}
                   className="margin-top-m" id="4" name="regularproposalnotifications-edited" label="Proposal edited"
                 />
                 <Field
                   component={Checkbox}
                   checked={values["regularproposalnotifications-votestarted"]}
-                  onChange={event => setFieldValue("regularproposalnotifications-votestarted", event.target.checked)}
+                  onChange={event => customSetFieldValue("regularproposalnotifications-votestarted", event.target.checked)}
                   className="margin-top-m" id="5" name="regularproposalnotifications-votestarted" label="Voting started for proposal"
                 />
               </Card>
@@ -88,13 +82,13 @@ const Preferences = () => {
                   <Field
                     component={Checkbox}
                     checked={values["adminproposalnotifications-new"]}
-                    onChange={event => setFieldValue("adminproposalnotifications-new", event.target.checked)}
+                    onChange={event => customSetFieldValue("adminproposalnotifications-new", event.target.checked)}
                     className="margin-top-m" id="6" name="adminproposalnotifications-new" label="New proposal submitted"
                   />
                   <Field
                     component={Checkbox}
                     checked={values["adminproposalnotifications-voteauthorized"]}
-                    onChange={event => setFieldValue("adminproposalnotifications-voteauthorized", event.target.checked)}
+                    onChange={event => customSetFieldValue("adminproposalnotifications-voteauthorized", event.target.checked)}
                     className="margin-top-m" id="7" name="adminproposalnotifications-voteauthorized" label="Voting authorized for proposal"
                   />
                 </Card>
@@ -104,27 +98,36 @@ const Preferences = () => {
                 <Field
                   component={Checkbox}
                   checked={values["commentnotifications-proposal"]}
-                  onChange={event => setFieldValue("commentnotifications-proposal", event.target.checked)}
+                  onChange={event => customSetFieldValue("commentnotifications-proposal", event.target.checked)}
                   className="margin-top-m" id="8" name="commentnotifications-proposal" label="New comment on your proposal"
                 />
                 <Field
                   component={Checkbox}
                   checked={values["commentnotifications-comment"]}
-                  onChange={event => setFieldValue("commentnotifications-comment", event.target.checked)}
+                  onChange={event => customSetFieldValue("commentnotifications-comment", event.target.checked)}
                   className="margin-top-m" id="9" name="commentnotifications-comment" label="New comment reply to your comment"
                 />
               </Card>
-              <Button style={{ float: "right" }} type="submit" loading={isApiRequestingEditUser} className={styles.submitButton}>Save Preferences</Button>
+              <Button style={{ float: "right" }} type="submit" loading={isApiRequestingEditUser} kind={showConfirm ? "disabled" : "primary"} className={styles.submitButton}>
+                {showConfirm && editUserResponse ? (
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    Saved <Icon type="checkmark" backgroundColor="#e6eaed" size="lg" iconColor="#8997a5" />
+                  </div>
+                ) : "Save preferences"}
+              </Button>
+              {showConfirm && editUserError && (
+                <Message className={styles.confirmMessage} kind="error">{editUserError}</Message>
+              )}
             </div>
           </form>
         );
       }}
     </Formik>
   ) : (
-    <Message kind="error">
-      Only admins or the user himself can access this route.
-    </Message>
-  );
+      <Message kind="error">
+        Only admins or the user himself can access this route.
+      </Message>
+    );
 };
 
 export default Preferences;
