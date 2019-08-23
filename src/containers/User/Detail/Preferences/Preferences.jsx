@@ -56,7 +56,7 @@ const Preferences = () => {
                 />
               </Card>
               <Card className="container margin-top-s">
-                <H2>Email notifications for others" proposals</H2>
+                <H2>Email notifications for others' proposals</H2>
                 <Field
                   component={Checkbox}
                   checked={values["regularproposalnotifications-vetted"]}
