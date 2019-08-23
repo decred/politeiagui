@@ -1,15 +1,11 @@
 import React from "react";
 import { Row } from "../layout";
 import styles from "./Files.module.css";
-import { classNames, P, Button } from "pi-ui";
+import { classNames, P } from "pi-ui";
 
 
-const ThumbnailGrid = ({ value, onClick, errors = [], viewOnly = false }) => {
+const ThumbnailGrid = ({ value, onClick, onRemove, errors = [], viewOnly = false }) => {
   const files = value.filter(f => f.name !== "index.md");
-  const filesWithErrors = files.map((file, key) => 
-    errors.files && errors.files[key] ?
-      { ...file, error: true } : { ...file, error: false }
-  );
 	return (
 		<>
 		<ThumbnailGridErrors errors={errors} />
@@ -19,19 +15,21 @@ const ThumbnailGrid = ({ value, onClick, errors = [], viewOnly = false }) => {
       justify="left" 
       topMarginSize={errors ? "s" : "m"}
     >
-			{filesWithErrors.map( (f, key) => f.mime.includes("image") ? (
+			{files.map( (f, key) => f.mime.includes("image") ? (
 				<ImageThumbnail
           key={`img-${key}`}
 					file={f}
-					viewOnly={viewOnly}
-					onClick={onClick}
+          viewOnly={viewOnly}
+          onClick={onClick}
+					onRemove={onRemove}
 				/>
 			) : (
         <TextThumbnail 
           key={`txt-${key}`}      
 					file={f}
-					viewOnly={viewOnly}
-					onClick={onClick}
+          viewOnly={viewOnly}
+          onClick={onClick}
+					onRemove={onRemove}
 				/>
 			))}
 		</Row>
@@ -41,12 +39,8 @@ const ThumbnailGrid = ({ value, onClick, errors = [], viewOnly = false }) => {
 
 const ThumbnailGridErrors = ({ errors }) => {
   const fileErrors = errors.files || [];
-  // Unique errors is used to remove duplicate error messages from Yup
-  const errs = fileErrors.reduce((acc, err) => {
-    return err ? acc.concat(Object.values(err)) : acc;
-  }, []);
-  const uniqueErrors = [...new Set(errs)];
-
+  const uniqueErrors = 
+    Array.isArray(fileErrors) ? [...new Set(fileErrors)] : [fileErrors];
   return uniqueErrors.map(err => err && (
     <p key={err} className={styles.fileErrorText}>
       {err}
@@ -54,43 +48,42 @@ const ThumbnailGridErrors = ({ errors }) => {
   ))
 };
 
-const ImageThumbnail = ({ file, viewOnly, onClick }) => (
+const ImageThumbnail = ({ file, viewOnly, onClick, onRemove }) => (
   <div 
     className={classNames(styles.imageThumbnailWrapper, viewOnly && styles.marginRight)}
-  >
-		<img
-			className={classNames(styles.imageThumbnail, file.error && styles.fileError)}
-			alt={file.name}
-			src={`data:${file.mime};base64,${file.payload}`}
-		/>
-		{!viewOnly && RemoveButton(file, onClick)}
-	</div>
+  > 
+    <span onClick={onClick(file)}>
+    <img
+      className={styles.imageThumbnail}
+      alt={file.name}
+      src={`data:${file.mime};base64,${file.payload}`}
+    />
+    </span>
+    {!viewOnly && RemoveButton(file, onRemove)}
+  </div>
 );
 
-const TextThumbnail = ({ file, viewOnly, onClick }) => (
+const TextThumbnail = ({ file, viewOnly, onRemove }) => (
   <div 
     className={classNames(styles.fileThumbnailWrapper, viewOnly && styles.marginRight)}
   >
-		<div className={classNames(styles.fileThumbnail, file.error && styles.fileError)}>
+		<div className={styles.fileThumbnail}>
 			<P className={styles.fileThumbnailText}>.txt</P>	
 		</div>
-		{!viewOnly && RemoveButton(file, onClick)}
+		{!viewOnly && RemoveButton(file, onRemove)}
 	</div>
 );
 
-const RemoveButton = (file, onClick) => (
-  <Button 
+const RemoveButton = (file, onRemove) => (
+  <button 
     className={styles.removeFileIcon} 
     onClick={(e) => {
       e.preventDefault();
-      onClick(file);
+      onRemove(file);
     }}
-    kind="secondary"
-    size="sm"
-    icon
   >
 		&times;
-	</Button>
+	</button>
 );
 
 export default ThumbnailGrid;

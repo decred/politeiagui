@@ -79,6 +79,13 @@ export const maxLengthMessage = (fieldName, maxLength) =>
 export const maxFileSizeMessage = () => "Files size can be at most 512kb";
 
 /**
+ * Returns a generic error message for exceeding the maximum number
+ * of attached files in a proposal
+ */
+export const maxFilesExceededMessage = max =>
+  `Proposals must have at most ${max} attached images`;
+
+/**
  * Returns a generic error message for invalid mime types on
  * attached files
  * @param {Array} validMimeTypes

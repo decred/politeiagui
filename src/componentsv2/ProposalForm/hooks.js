@@ -1,21 +1,54 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import usePolicy from "src/hooks/usePolicy";
-import { proposalValidationSchema } from "./validation";
+import { proposalValidation } from "./validation";
 
 export function useProposalForm() {
   const { policy } = usePolicy();
-  const [validationSchema, setValidationSchema] = useState(
-    policy ? proposalValidationSchema(policy) : null
-  );
+  // const [proposalFormValidation, setProposalFormValidation] = useState(
+  //   policy ? proposalValidation(policy) : null
+  // );
 
-  useEffect(
-    function handleSetValidationSchemaFromPolicy() {
-      if (!!policy && !validationSchema) {
-        setValidationSchema(proposalValidationSchema(policy));
-      }
-    },
-    [policy, validationSchema]
-  );
+  // useEffect(
+  //   function handleSetProposalFormValidationFromPolicy() {
+  //     if (!!policy && !proposalFormValidation) {
+  //       setProposalFormValidation(proposalValidation(policy));
+  //     }
+  //   },
+  //   [policy, proposalFormValidation]
+  // );
 
-  return { validationSchema, policy };
+  return {
+    proposalFormValidation: policy && proposalValidation(policy),
+    policy
+  };
+}
+
+export function useFullImageModal() {
+  const [showFullImageModal, setShowFullImageModal] = useState(null);
+  const openFullImageModal = f => {
+    setShowFullImageModal(f);
+  };
+  const closeFullImageModal = () => {
+    setShowFullImageModal(null);
+  };
+  return {
+    showFullImageModal,
+    openFullImageModal,
+    closeFullImageModal
+  };
+}
+
+export function useAttachFileModal() {
+  const [showAttachFileModal, setShowAttachFileModal] = useState(false);
+  const openAttachFileModal = () => {
+    setShowAttachFileModal(true);
+  };
+  const closeAttachFileModal = () => {
+    setShowAttachFileModal(false);
+  };
+  return {
+    showAttachFileModal,
+    openAttachFileModal,
+    closeAttachFileModal
+  };
 }

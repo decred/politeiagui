@@ -1,29 +1,22 @@
 import React from "react";
-import ReactFileReader from "react-file-reader";
-import { getFormattedFiles, getValidatedFiles } from "./helpers";
+import FileReaderInput from 'react-file-reader-input';
+import { getFormattedFiles } from "./helpers";
 
-const FilesInput = ({ value, onChange, children, policy }) => {
-  function handleFilesChange(files) {
+const FilesInput = ({ onChange, children }) => {
+  function handleFilesChange(e, files) {
     const formattedFiles = getFormattedFiles(files);
-    const inputAndNewFiles = !!value
-      ? formattedFiles.concat(value)
-      : formattedFiles;
-    const { 
-      validatedFiles, 
-      filesLengthLimitError
-    } = getValidatedFiles(inputAndNewFiles, policy);
-
-    onChange(validatedFiles, filesLengthLimitError);
+    onChange(formattedFiles);
   }
 
   return (
-    <ReactFileReader
-      base64
-      multipleFiles
-      handleFiles={handleFilesChange}
+    <FileReaderInput 
+      as="binary" 
+      id="my-file-input" 
+      onChange={handleFilesChange} 
+      multiple
     >
       {children}
-    </ReactFileReader>
+    </FileReaderInput>
   );
 };
 

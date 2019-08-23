@@ -18,7 +18,9 @@ import { useLoaderContext } from "src/Appv2/Loader";
 import styles from "./Proposal.module.css";
 import VotesCount from "./VotesCount";
 import DownloadComments from "src/containers/Comments/Download";
+import { useFullImageModal } from "../ProposalForm/hooks";
 import ThumbnailGrid from "../Files/Thumbnail";
+import ModalFullImage from "../ModalFullImage";
 
 const Proposal = ({ proposal, extended }) => {
   const {
@@ -35,6 +37,11 @@ const Proposal = ({ proposal, extended }) => {
     voteStatus
   } = proposal;
   const { currentUser } = useLoaderContext();
+  const {
+    showFullImageModal,
+    openFullImageModal,
+    closeFullImageModal
+  } = useFullImageModal();
   const hasVoteStatus = !!voteStatus && !!voteStatus.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
   const proposalURL = `/proposal/${proposalToken}`;
@@ -54,6 +61,9 @@ const Proposal = ({ proposal, extended }) => {
   }
   function handleOpenSearchVotesModal() {
     setShowSearchVotesModal(true);
+  }
+  const onClickFile = f => () => {
+    openFullImageModal(f);
   }
   return (
     <>
@@ -181,6 +191,7 @@ const Proposal = ({ proposal, extended }) => {
               <Row className={styles.filesRow} justify="left" topMarginSize="s">
                 <ThumbnailGrid 
                   value={files}
+                  onClick={onClickFile}
                   viewOnly={true}
                 />
               </Row>
@@ -217,6 +228,11 @@ const Proposal = ({ proposal, extended }) => {
         show={showSearchVotesModal}
         onClose={handleCloseSearchVotesModal}
         proposal={proposal}
+      />
+      <ModalFullImage
+        image={showFullImageModal}
+        show={showFullImageModal} 
+        onClose={closeFullImageModal}
       />
     </>
   );

@@ -5,13 +5,18 @@ import { Formik } from "formik";
 import { Button, Message, BoxTextInput } from "pi-ui";
 import { Row } from "../layout";
 import MarkdownEditor from "src/componentsv2/MarkdownEditor";
-import FilesInput from "src/componentsv2/Files/Input";
 import ThumbnailGrid from "src/componentsv2/Files/Thumbnail";
 import AttachFileButton from "src/componentsv2/AttachFileButton";
-import { useProposalForm } from "./hooks";
+import ModalFullImage from "src/componentsv2/ModalFullImage";
+import { useProposalForm, useFullImageModal } from "./hooks";
 
 const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
-  const { validationSchema, policy } = useProposalForm();
+  const { proposalFormValidation } = useProposalForm();
+  const {
+    showFullImageModal,
+    openFullImageModal,
+    closeFullImageModal
+  } = useFullImageModal();
   async function handleSubmit(
     values,
     { resetForm, setSubmitting, setFieldError }
@@ -26,6 +31,7 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
       setFieldError("global", e);
     }
   }
+
   return (
     <Formik
       initialValues={
@@ -35,8 +41,9 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
           files: []
         }
       }
-      loading={!validationSchema}
-      validationSchema={validationSchema}
+      loading={!proposalFormValidation}
+      validate={proposalFormValidation}
+      validateOnChange={true}
       onSubmit={handleSubmit}
     >
       {props => {
@@ -54,25 +61,22 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
         function handleDescriptionChange(v) {
           setFieldValue("description", v);
         }
-        function handleFilesChange(v, e) {
-          e && setFieldValue("filesLengthLimitError", e);
-          setFieldValue("files", v);
+        function handleFilesChange(v) {
+          const files = values.files.concat(v);
+          setFieldValue("files", files);
         }
         function handleFileRemoval(v) {
           const fs = values.files.filter(f => f.payload !== v.payload);
-          if (fs.length <= policy.maximages) {
-            setFieldValue("filesLengthLimitError", null);
-          }
           setFieldValue("files", fs);
+        }
+        const onClickFile = f => () => {
+          openFullImageModal(f);
         }
         return (
           <form onSubmit={handleSubmit}>
             {errors && errors.global && (
               <Message kind="error">{errors.global.toString()}</Message>
-            )}
-            {values && values.filesLengthLimitError && (
-              <Message kind="warning">{values.filesLengthLimitError}</Message>
-            )}
+            )}            
             <BoxTextInput
               placeholder="Proposal name"
               name="name"
@@ -88,20 +92,15 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
               onChange={handleDescriptionChange}
               onBlur={handleBlur}
               placeholder={"Write your proposal"}
-              error={touched.name && errors.name}
+              error={touched.description && errors.description}
               filesInput={
-                <FilesInput 
-                  value={values.files} 
-                  onChange={handleFilesChange} 
-                  policy={policy}
-                >
-                  <AttachFileButton type="button"/>
-                </FilesInput>
+                <AttachFileButton onChange={handleFilesChange} type="button"/>
               }
             />
             <ThumbnailGrid 
               value={values.files}
-              onClick={handleFileRemoval}
+              onClick={onClickFile}
+              onRemove={handleFileRemoval}
               errors={errors}
             />
             <Row justify="right" topMarginSize="s">
@@ -114,6 +113,11 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
                 Submit
               </Button>
             </Row>
+            <ModalFullImage
+              image={showFullImageModal}
+              show={showFullImageModal} 
+              onClose={closeFullImageModal}
+            />            
           </form>
         );
       }}
