@@ -19,7 +19,7 @@ const ProposalCreditsIndicator = ({ history }) => {
         kind="primary"
         onClick={pushToProposalCredits}
       >
-        +
+        <span>+</span>
       </Button>
     </div>
   );
