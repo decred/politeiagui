@@ -55,6 +55,7 @@ const PublicActionsProvider = ({ children }) => {
           reasonLabel="Abandon reason"
           subject="abandonProposal"
           onSubmit={onAbandonProposal(targetProposal)}
+          successMessage="Proposal abandoned!"
           show={showAbandonModal}
           onClose={closeAbandonModal}
         />
@@ -62,6 +63,7 @@ const PublicActionsProvider = ({ children }) => {
           title={`Authorize vote - ${targetProposal.name}`}
           message="Are you sure you want to authorize the vote start?"
           onSubmit={onAuthorizeVote(targetProposal)}
+          successMessage="Proposal vote authorized!"
           show={showAuthorizeVoteModal}
           onClose={closeAuthorizeVoteModal}
         />
@@ -69,12 +71,14 @@ const PublicActionsProvider = ({ children }) => {
           title={`Revoke vote - ${targetProposal.name}`}
           message="Are you sure you want to revoke the vote start?"
           onSubmit={onRevokeVote(targetProposal)}
+          successMessage="Proposal vote revoked!"
           show={showRevokeVoteModal}
           onClose={closeRevokeVoteModal}
         />
         <ModalStartVote
           title={`Start vote - ${targetProposal.name}`}
           onSubmit={onStartVote(targetProposal)}
+          successMessage="Proposal vote started!"
           show={showStartVoteModal}
           onClose={closeStartVoteModal}
         />

@@ -36,6 +36,7 @@ const UnvettedActionsProvider = ({ children }) => {
           reasonLabel="Censor reason"
           subject="censorProposal"
           onSubmit={onCensorProposal(targetProposal)}
+          successMessage="Proposal censored!"
           show={showCensorModal}
           onClose={closeCensorModal}
         />
@@ -43,6 +44,7 @@ const UnvettedActionsProvider = ({ children }) => {
           title={`Approve proposal - ${targetProposal.name}`}
           message="Are you sure you want to approve this proposal?"
           onSubmit={onApproveProposal(targetProposal)}
+          successMessage="Proposal approved!"
           show={showApproveModal}
           onClose={closeApproveModal}
         />

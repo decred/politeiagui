@@ -1049,6 +1049,7 @@ export const onStartVote = (loggedInAsEmail, token, duration, quorum, pass) =>
       })
       .catch(error => {
         dispatch(act.RECEIVE_START_VOTE(null, error));
+        throw error;
       });
   });
 
