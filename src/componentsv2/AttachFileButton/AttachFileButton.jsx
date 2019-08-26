@@ -1,18 +1,18 @@
 import React from "react";
-import { Button, classNames } from "pi-ui";
+import { Button } from "pi-ui";
 import styles from "./AttachFileButton.module.css";
 import attachSVG from "./attach-file.svg";
-import { useAttachFileModal } from "./hooks";
+import useBooleanState from "src/hooks/useBooleanState";
 import usePolicy from "src/hooks/usePolicy";
 import ModalAttachFiles from "src/componentsv2/ModalAttachFiles";
 
-const AttachFileButton = ({ className, onChange, ...props }) => {
+const AttachFileButton = ({ onChange, ...props }) => {
   const { policy } = usePolicy();
-  const {
+  const [
     showAttachFileModal,
     openAttachFileModal,
     closeAttachFileModal
-  } = useAttachFileModal();
+  ] = useBooleanState(false);
 
   const handleOnChange = (v) => {
     onChange(v);
@@ -22,17 +22,17 @@ const AttachFileButton = ({ className, onChange, ...props }) => {
   return (
     <>
     <Button
-      className={classNames(styles.attachFileButton, className)}
+      className={styles.attachFileButton}
       onClick={openAttachFileModal}
       {...props}
     >
       <img alt="Attach" src={attachSVG} />
     </Button>
     <ModalAttachFiles
-      onChange={handleOnChange}
       show={showAttachFileModal} 
-      onClose={closeAttachFileModal}
       policy={policy}
+      onChange={handleOnChange}
+      onClose={closeAttachFileModal}
     />
     </>
   );

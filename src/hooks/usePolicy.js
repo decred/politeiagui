@@ -28,19 +28,7 @@ function usePolicy() {
     [policy, onGetPolicy]
   );
 
-  /*
-    Currently pi policy only allows 1 md file to be attached to a proposal.
-    It corresponds to the index file, so a proposal can only accept image
-    attachments until this policy changes.
-  */
-  return {
-    policy: {
-      ...policy,
-      validmimetypes:
-        policy && policy.validmimetypes.filter(m => m.startsWith("image/"))
-    },
-    loading
-  };
+  return { policy, loading };
 }
 
 export default usePolicy;

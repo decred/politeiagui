@@ -47,15 +47,22 @@ export const proposalValidation = ({
     errors.description = "Required";
   }
 
-  // Files value validation
+  /*
+    Files value validation
+
+    Currently pi policy only allows 1 md file to be attached to a proposal.
+    It corresponds to the index file, so a proposal can only accept image
+    attachments until this policy changes.
+  */
+  const validMimeTypes = validmimetypes.filter(m => m.startsWith("image/"));
   const validatedFiles = [];
   errors.files = [];
 
   for (const file of values.files) {
     if (validatedFiles.length > maximages - 1 || values.files > maximages - 1) {
       errors.files.push(maxFilesExceededMessage(maximages));
-    } else if (!validmimetypes.includes(file.mime)) {
-      errors.files.push(validMimeTypesMessage(validmimetypes));
+    } else if (!validMimeTypes.includes(file.mime)) {
+      errors.files.push(validMimeTypesMessage(validMimeTypes));
     } else if (
       (file.mime.startsWith("image/") && file.size > maximagesize) ||
       (file.mime.startsWith("text/") && file.size > maxmdsize)

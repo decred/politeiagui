@@ -3,11 +3,11 @@ import { Modal, P, Button } from "pi-ui";
 import styles from "./ModalAttachFiles.module.css";
 import FilesInput from "src/componentsv2/Files/Input";
 
-const ModalAttachFiles = ({ title = "Upload new file", onChange, policy, ...props }) => (
+const ModalAttachFiles = ({ title = "Upload new file", show, policy, onChange, onClose }) => (
   <Modal
     title={title}
-    style={{}}
-    {...props}
+    show={show}
+    onClose={onClose}
   >
     <div className={styles.wrapper}>
     <P>
