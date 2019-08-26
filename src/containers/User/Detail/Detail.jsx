@@ -8,7 +8,7 @@ import styles from "./detail.module.css";
 import General from "./General.jsx";
 import { tabValues } from "./helpers";
 import { useChangeUsername, useUserDetail } from "./hooks";
-import Preferences from "./Preferences.jsx";
+import Preferences from "./Preferences";
 import Proposals from "./Proposals";
 
 const getTabComponent = ({
@@ -93,7 +93,7 @@ const UserDetail = ({
         >
           <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
             {tabLabels.map((label, i) => {
-              return !isAdminOrTheUser && i === 2 ? <></> : (
+              return (!isAdminOrTheUser && i === 2) || (!isUserPageOwner && i === 1) ? <></> : (
                 <Tab key={`tab${label}`} label={label} />
               );
             })}

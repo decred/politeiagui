@@ -1,9 +1,8 @@
 import React, { Fragment } from "react";
 import { Field } from "redux-form";
-
 import userPreferencesConnector from "../../connectors/userPreferences";
-import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
 import Message from "../Message";
+import ButtonWithLoadingIcon from "../snew/ButtonWithLoadingIcon";
 
 const FieldGroup = ({ children }) => (
   <div style={{ marginBottom: 24 }}>{children}</div>
