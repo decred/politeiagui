@@ -1,21 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import usePolicy from "src/hooks/usePolicy";
-import { proposalValidationSchema } from "./validation";
+import { proposalValidation } from "./validation";
 
 export function useProposalForm() {
   const { policy } = usePolicy();
-  const [validationSchema, setValidationSchema] = useState(
-    policy ? proposalValidationSchema(policy) : null
-  );
 
-  useEffect(
-    function handleSetValidationSchemaFromPolicy() {
-      if (!!policy && !validationSchema) {
-        setValidationSchema(proposalValidationSchema(policy));
-      }
-    },
-    [policy, validationSchema]
-  );
+  return {
+    proposalFormValidation: policy && proposalValidation(policy),
+    policy
+  };
+}
 
-  return { validationSchema, policy };
+export function useFullImageModal() {
+  const [showFullImageModal, setShowFullImageModal] = useState(false);
+  const openFullImageModal = f => {
+    setShowFullImageModal(f);
+  };
+  const closeFullImageModal = () => {
+    setShowFullImageModal(false);
+  };
+  return {
+    showFullImageModal,
+    openFullImageModal,
+    closeFullImageModal
+  };
 }
