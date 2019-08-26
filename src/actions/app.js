@@ -10,6 +10,7 @@ import {
   onSubmitEditedInvoice,
   onFetchInvoiceComments,
   handleLogout,
+  onLineItemPayouts,
   onRequestMe
 } from "./api";
 import {
@@ -292,6 +293,39 @@ export const onChangePublicFilter = option =>
   act.CHANGE_PUBLIC_FILTER_VALUE(option);
 export const onChangeUserFilter = option =>
   act.CHANGE_USER_FILTER_VALUE(option);
+
+export const onChangeStartPayoutDateFilter = (month, year) => (
+  dispatch,
+  getState
+) => {
+  const start = new Date(year, month - 1);
+  const end = new Date(
+    sel.getEndYearPayoutFilterValue(getState()),
+    sel.getEndMonthPayoutFilterValue(getState()) - 1
+  );
+
+  dispatch(onLineItemPayouts(start.valueOf() / 1000, end.valueOf() / 1000));
+  dispatch(act.CHANGE_START_PAYOUT_DATE_FILTER({ month, year }));
+};
+
+export const onResetStartPayoutDateFilter = () =>
+  act.RESET_START_PAYOUT_DATE_FILTER();
+
+export const onChangeEndPayoutDateFilter = (month, year) => (
+  dispatch,
+  getState
+) => {
+  const end = new Date(year, month - 1);
+  const start = new Date(
+    sel.getStartYearPayoutFilterValue(getState()),
+    sel.getStartMonthPayoutFilterValue(getState()) - 1
+  );
+  dispatch(onLineItemPayouts(start.valueOf() / 1000, end.valueOf() / 1000));
+  dispatch(act.CHANGE_END_PAYOUT_DATE_FILTER({ month, year }));
+};
+
+export const onResetEndPayoutDateFilter = () =>
+  act.RESET_END_PAYOUT_DATE_FILTER();
 
 export const onChangeDateFilter = (month, year) =>
   act.CHANGE_DATE_FILTER({ month, year });

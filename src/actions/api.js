@@ -1275,6 +1275,19 @@ export const onGeneratePayouts = () =>
       });
   });
 
+export const onLineItemPayouts = (start, end) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_LINEITEM_PAYOUTS({}));
+    return api
+      .lineItemPayouts(csrf, start, end)
+      .then(response => {
+        dispatch(act.RECEIVE_LINEITEM_PAYOUTS(response));
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_LINEITEM_PAYOUTS(null, error));
+      });
+  });
+
 export const onPayApprovedInvoices = () => dispatch => {
   dispatch(act.REQUEST_PAY_APPROVED({}));
   return api

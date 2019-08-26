@@ -8,7 +8,7 @@ import styles from "./detail.module.css";
 import General from "./General.jsx";
 import { tabValues } from "./helpers";
 import { useChangeUsername, useUserDetail } from "./hooks";
-import Preferences from "./Preferences.jsx";
+import Preferences from "./Preferences";
 import Proposals from "src/containers/Proposal/User/Submitted";
 
 const getTabComponent = ({ user, userProposals, setUserProposals, ...rest }) =>
@@ -52,6 +52,15 @@ const UserDetail = ({
   const closeUsernameModal = () => setShowUsernameModal(false);
   const { username, onChangeUsername, validationSchema } = useChangeUsername();
 
+  const isTabDisabled = tabIndex => {
+    const tabLabel = tabLabels[tabIndex];
+    if (tabLabel === tabValues.PREFERENCES && !isUserPageOwner) return true;
+
+    if (tabLabel === tabValues.CREDITS && !isAdminOrTheUser) return true;
+
+    return false;
+  };
+
   // TODO: need a loading while user has not been fetched yet
   return !!user && userId === user.id ? (
     <>
@@ -75,7 +84,7 @@ const UserDetail = ({
         >
           <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
             {tabLabels.map((label, i) => {
-              return !isAdminOrTheUser && i === 2 ? (
+              return isTabDisabled(i) ? (
                 <></>
               ) : (
                 <Tab key={`tab${label}`} label={label} />
