@@ -7,7 +7,8 @@ import {
   P,
   Spinner,
   Table,
-  Text
+  Text,
+  useMediaQuery
 } from "pi-ui";
 import React, { useEffect } from "react";
 import ExportToCsv from "src/componentsv2/ExportToCsv.jsx";
@@ -72,6 +73,8 @@ const Credits = () => {
   const onStartPollingPayment = () => {
     toggleCreditsPaymentPolling(true);
   };
+
+  const extraSmall = useMediaQuery("(max-width: 560px)");
 
   const customCloseProposalCreditsModal = () => {
     toggleProposalPaymentReceived(false);
@@ -219,7 +222,10 @@ const Credits = () => {
         </Message>
       )}
       {isUserPageOwner && data && !!data.length && (
-        <div className="margin-top-l" style={{ overflowX: "scroll" }}>
+        <div
+          className="margin-top-l"
+          style={!extraSmall ? { overflowX: "scroll" } : {}}
+        >
           <Text className="margin-right-xs">Credit History</Text>
           <ExportToCsv
             data={getCsvData(proposalCreditPurchases)}

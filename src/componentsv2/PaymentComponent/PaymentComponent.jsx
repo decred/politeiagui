@@ -21,7 +21,9 @@ const PaymentComponent = ({ address, amount, extraSmall, isPaid, status }) => {
           <H4 weight="bold" className="margin-top-s margin-bottom-xs">
             To address
           </H4>
-          <CopyableText truncate>{address}</CopyableText>
+          <CopyableText id="payment-address" truncate>
+            {address}
+          </CopyableText>
           {!extraSmall && <PaymentStatusTag status={status} />}
         </div>
       </div>

@@ -37,7 +37,7 @@ const SidebarContent = ({ wrapper }) => {
 };
 
 SidebarContent.propTypes = {
-  wrapper: PropTypes.element
+  wrapper: PropTypes.oneOfType([PropTypes.func, PropTypes.element])
 };
 
 SidebarContent.defaultProps = {

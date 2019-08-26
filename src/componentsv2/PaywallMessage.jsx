@@ -38,7 +38,7 @@ const PaywallMessage = ({ wrapper, ...props }) => {
 };
 
 PaywallMessage.propTypes = {
-  wrapper: PropTypes.element
+  wrapper: PropTypes.oneOfType([PropTypes.func, PropTypes.element])
 };
 
 PaywallMessage.defaultProps = {
