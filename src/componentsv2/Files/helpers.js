@@ -1,10 +1,15 @@
-export function getFormattedFiles({ base64, fileList }) {
-  return Array.from(fileList).map(({ name, size, type: mime }, idx) => {
-    return {
-      name,
-      mime: name.includes(".txt") ? `${mime}; charset=utf-8` : mime,
-      size,
-      payload: base64[idx].split("base64,").pop()
-    };
+export function getFormattedFiles(files) {
+  const formattedFiles = [];
+  files.forEach(r => {
+    const [event, file] = r;
+    formattedFiles.push({
+      name: file.name,
+      mime: file.name.includes(".txt")
+        ? `${file.type}; charset=utf-8`
+        : file.type,
+      size: file.size,
+      payload: btoa(event.target.result)
+    });
   });
+  return formattedFiles;
 }

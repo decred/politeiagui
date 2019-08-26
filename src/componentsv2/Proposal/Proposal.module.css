@@ -2,6 +2,12 @@
     margin-top: var(--spacing-small);
 }
 
+.filesRow {
+    display: flex;
+    flex-flow: row wrap;
+    margin-bottom: 10px;
+}
+
 .timeLeft {
     margin-top: .5rem;
 }

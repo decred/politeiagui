@@ -1,0 +1,21 @@
+.wrapper {
+  width:  632px;
+}
+
+.selectFileWrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.greyText {
+  color: #8997A5;
+}
+
+@media screen and (max-width: 700px) {
+    
+  .wrapper {
+    width: 100%;
+    max-width: 632px;
+  }
+
+}
