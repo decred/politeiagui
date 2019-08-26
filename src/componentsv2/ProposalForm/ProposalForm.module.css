@@ -10,7 +10,16 @@
 .formatHelpButton {
     border: 0;
     color: #8997A5;
-    font-size: 14px;
+    padding-top: 0.9rem;
     font-weight: 400;
-    padding-right: 50px;
+    cursor: pointer;
+}
+
+.formatHelpButton:hover {
+    color: var(--color-gray-dark);
+}
+
+.mobileColumn {
+    display: flex;
+    flex-direction: column;
 }

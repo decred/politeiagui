@@ -42,9 +42,9 @@ const MDGuide = () => (
         <div><s>strikethrough</s></div>
       </div>
 
-      <div className={styles.tableRowEven}>
+      <div className={styles.tableRow}>
         <div>[decred!](https://decred.org)</div>
-        <div >
+        <div style={{ paddingRight: "40px"}}>
           <a href="https://decred.org">decred!</a>
         </div>
       </div>
@@ -67,7 +67,7 @@ const MDGuide = () => (
         </div>
       </div>
 
-      <div className={styles.tableRowEven}>
+      <div className={styles.tableRow}>
         <div>
           Lines starting with four spaces <br/>are treated like code: <br /> <br />
           <span className="spaces">    </span>if 1 * 3 != 3: <br />

@@ -17,13 +17,6 @@
     padding-bottom: 15px;
     border-bottom: 1px solid #F3F5F6;
 }
-.tableRowEven {
-    display: flex; 
-    justify-content: space-evenly;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #F3F5F6;
-}
 .quotedText {
     border-left: .25em solid #dfe2e5;
     color: #6a737d;
