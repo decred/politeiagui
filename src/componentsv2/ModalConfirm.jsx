@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal, Text } from "pi-ui";
+import { Modal, Button, Icon, useTheme, getThemeProperty, Text } from "pi-ui";
 import PropTypes from "prop-types";
 import FormWrapper from "src/componentsv2/FormWrapper";
-import ActionSuccess from "src/componentsv2/ActionSuccess";
 
 const ModalConfirm = ({
   show,
@@ -10,10 +9,11 @@ const ModalConfirm = ({
   onSubmit,
   title,
   message,
-  successMessage,
-  disableSuccessFeedback
+  successTitle,
+  successMessage
 }) => {
   const [success, setSuccess] = useState(false);
+
   const onSubmitForm = async (
     _,
     { resetForm, setSubmitting, setFieldError }
@@ -36,12 +36,29 @@ const ModalConfirm = ({
     },
     [show]
   );
+
+  const theme = useTheme();
+  const colorGray = getThemeProperty(theme, "color-gray");
+  const colorPrimaryDark = getThemeProperty(theme, "color-primary-dark");
+
   return (
     <Modal
-      style={{ maxWidth: "500px" }}
-      title={title}
+      style={{ maxWidth: "600px" }}
+      title={successTitle && success ? successTitle : title}
       show={show}
       onClose={onClose}
+      iconComponent={
+        !success ? (
+          <Icon type={"info"} size={26} />
+        ) : (
+          <Icon
+            type={"checkmark"}
+            size={26}
+            iconColor={colorPrimaryDark}
+            backgroundColor={colorGray}
+          />
+        )
+      }
     >
       {!success && (
         <FormWrapper initialValues={{}} onSubmit={onSubmitForm}>
@@ -67,7 +84,7 @@ const ModalConfirm = ({
           )}
         </FormWrapper>
       )}
-      <ActionSuccess show={success} successMessage={successMessage} />
+      {success && successMessage}
     </Modal>
   );
 };
@@ -78,7 +95,8 @@ ModalConfirm.propTypes = {
   show: PropTypes.bool,
   onClose: PropTypes.func,
   onSubmit: PropTypes.func,
-  successMessage: PropTypes.string
+  successTitle: PropTypes.string,
+  successMessage: PropTypes.node
 };
 
 ModalConfirm.defaultProps = {

@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
 import FormWrapper from "src/componentsv2/FormWrapper";
-import { Button, Modal, TextInput, RadioButtonGroup } from "pi-ui";
+import {
+  Button,
+  Modal,
+  TextInput,
+  RadioButtonGroup,
+  Icon,
+  useTheme,
+  getThemeProperty
+} from "pi-ui";
 import PropTypes from "prop-types";
 import { useLoaderContext } from "src/Appv2/Loader";
 import { validationSchema } from "./validation";
-import ActionSuccess from "src/componentsv2/ActionSuccess";
 
 const preDefinedDurations = [2016, 2880, 4032];
 const getDurationOptions = isTesnet => {
@@ -15,7 +22,14 @@ const getDurationOptions = isTesnet => {
   }));
 };
 
-const ModalStartVote = ({ show, onClose, onSubmit, title, successMessage }) => {
+const ModalStartVote = ({
+  show,
+  onClose,
+  onSubmit,
+  title,
+  successMessage,
+  successTitle
+}) => {
   const [success, setSuccess] = useState(false);
   const { apiInfo } = useLoaderContext();
   const onSubmitChangePassword = async (
@@ -40,12 +54,29 @@ const ModalStartVote = ({ show, onClose, onSubmit, title, successMessage }) => {
     },
     [show]
   );
+
+  const theme = useTheme();
+  const colorGray = getThemeProperty(theme, "color-gray");
+  const colorPrimaryDark = getThemeProperty(theme, "color-primary-dark");
+
   return (
     <Modal
       style={{ maxWidth: "500px" }}
-      title={title}
+      title={(success && successTitle) || title}
       show={show}
       onClose={onClose}
+      iconComponent={
+        !success ? (
+          <Icon type={"info"} size={26} />
+        ) : (
+          <Icon
+            type={"checkmark"}
+            size={26}
+            iconColor={colorPrimaryDark}
+            backgroundColor={colorGray}
+          />
+        )
+      }
     >
       {!success && (
         <FormWrapper
@@ -119,7 +150,7 @@ const ModalStartVote = ({ show, onClose, onSubmit, title, successMessage }) => {
           }}
         </FormWrapper>
       )}
-      <ActionSuccess successMessage={successMessage} show={success} />
+      {success && successMessage}
     </Modal>
   );
 };
@@ -129,7 +160,8 @@ ModalStartVote.propTypes = {
   show: PropTypes.bool,
   onClose: PropTypes.func,
   onSubmit: PropTypes.func,
-  successMessage: PropTypes.string
+  successTitle: PropTypes.string,
+  successMessage: PropTypes.node
 };
 
 ModalStartVote.defaultProps = {

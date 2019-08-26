@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useUnvettedActions, UnvettedProposalsActionsContext } from "./hooks";
+import { Text } from "pi-ui";
+import Link from "src/componentsv2/Link";
 import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
 import ModalConfirm from "src/componentsv2/ModalConfirm";
 import useBooleanState from "src/hooks/utils/useBooleanState";
@@ -36,7 +38,15 @@ const UnvettedActionsProvider = ({ children }) => {
           reasonLabel="Censor reason"
           subject="censorProposal"
           onSubmit={onCensorProposal(targetProposal)}
-          successMessage="Proposal censored!"
+          successTitle="Proposal censored"
+          successMessage={
+            <Text>
+              The proposal has been successfully censored! Now it will appear
+              under under{" "}
+              <Link to={"/proposals/unvetted?tab=censored"}>censored</Link> tab
+              among Unvetted Proposals.
+            </Text>
+          }
           show={showCensorModal}
           onClose={closeCensorModal}
         />
@@ -44,7 +54,14 @@ const UnvettedActionsProvider = ({ children }) => {
           title={`Approve proposal - ${targetProposal.name}`}
           message="Are you sure you want to approve this proposal?"
           onSubmit={onApproveProposal(targetProposal)}
-          successMessage="Proposal approved!"
+          successTitle="Proposal approved"
+          successMessage={
+            <Text>
+              The proposal has been successfully approved! Now it will appear
+              under <Link to={"/?tab=in%20discussion"}>In discussion</Link> tab
+              among Public Proposals.
+            </Text>
+          }
           show={showApproveModal}
           onClose={closeApproveModal}
         />

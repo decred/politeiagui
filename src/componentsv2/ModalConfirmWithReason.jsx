@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal, TextInput } from "pi-ui";
+import {
+  Button,
+  Modal,
+  TextInput,
+  Icon,
+  useTheme,
+  getThemeProperty
+} from "pi-ui";
 import PropTypes from "prop-types";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import * as Yup from "yup";
-import ActionSuccess from "src/componentsv2/ActionSuccess";
 
 const ModalConfirmWithReason = ({
   show,
@@ -34,12 +40,29 @@ const ModalConfirmWithReason = ({
       setTimeout(() => setSuccess(false), 500);
     }
   }, [show]);
+
+  const theme = useTheme();
+  const colorGray = getThemeProperty(theme, "color-gray");
+  const colorPrimaryDark = getThemeProperty(theme, "color-primary-dark");
+
   return (
     <Modal
-      style={{ maxWidth: "500px" }}
+      style={{ maxWidth: "600px" }}
       title={title}
       show={show}
       onClose={onClose}
+      iconComponent={
+        !success ? (
+          <Icon type={"info"} size={26} />
+        ) : (
+          <Icon
+            type={"checkmark"}
+            size={26}
+            iconColor={colorPrimaryDark}
+            backgroundColor={colorGray}
+          />
+        )
+      }
     >
       {!success && (
         <FormWrapper
@@ -86,7 +109,7 @@ const ModalConfirmWithReason = ({
           )}
         </FormWrapper>
       )}
-      <ActionSuccess show={success} successMessage={successMessage} />
+      {success && successMessage}
     </Modal>
   );
 };
@@ -98,7 +121,8 @@ ModalConfirmWithReason.propTypes = {
   show: PropTypes.bool,
   onClose: PropTypes.func,
   onSubmit: PropTypes.func,
-  successMessage: PropTypes.string
+  successTitle: PropTypes.string,
+  successMessage: PropTypes.node
 };
 
 ModalConfirmWithReason.defaultProps = {

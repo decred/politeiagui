@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Text } from "pi-ui";
+import Link from "src/componentsv2/Link";
 import { PublicProposalsActionsContext, usePublicActions } from "./hooks";
 import ModalConfirm from "src/componentsv2/ModalConfirm";
 import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
@@ -55,7 +57,13 @@ const PublicActionsProvider = ({ children }) => {
           reasonLabel="Abandon reason"
           subject="abandonProposal"
           onSubmit={onAbandonProposal(targetProposal)}
-          successMessage="Proposal abandoned!"
+          successTitle="Proposal abandoned"
+          successMessage={
+            <Text>
+              The proposal has been successfully abandoned! Now it will appear
+              under the <Link to="/?tab=abandoned">abandoned</Link> tab.
+            </Text>
+          }
           show={showAbandonModal}
           onClose={closeAbandonModal}
         />
@@ -63,7 +71,13 @@ const PublicActionsProvider = ({ children }) => {
           title={`Authorize vote - ${targetProposal.name}`}
           message="Are you sure you want to authorize the vote start?"
           onSubmit={onAuthorizeVote(targetProposal)}
-          successMessage="Proposal vote authorized!"
+          successTitle="Proposal vote authorized"
+          successMessage={
+            <Text>
+              The proposal vote has been successfully authorized! Wait for an
+              admin to start the vote for this proposal.
+            </Text>
+          }
           show={showAuthorizeVoteModal}
           onClose={closeAuthorizeVoteModal}
         />
@@ -71,14 +85,27 @@ const PublicActionsProvider = ({ children }) => {
           title={`Revoke vote - ${targetProposal.name}`}
           message="Are you sure you want to revoke the vote start?"
           onSubmit={onRevokeVote(targetProposal)}
-          successMessage="Proposal vote revoked!"
+          successTitle="Proposal vote revoked"
+          successMessage={
+            <Text>
+              The proposal vote has been successfully revoked! Now the admins
+              cannot start the vote for this proposal until you authorize it
+              again.
+            </Text>
+          }
           show={showRevokeVoteModal}
           onClose={closeRevokeVoteModal}
         />
         <ModalStartVote
           title={`Start vote - ${targetProposal.name}`}
           onSubmit={onStartVote(targetProposal)}
-          successMessage="Proposal vote started!"
+          successTitle="Proposal vote started"
+          successMessage={
+            <Text>
+              The proposal vote has been successfully started! Now it will
+              appear under the <Link to="/?tab=voting">voting</Link> tab.
+            </Text>
+          }
           show={showStartVoteModal}
           onClose={closeStartVoteModal}
         />
