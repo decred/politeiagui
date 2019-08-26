@@ -17,6 +17,6 @@ button.proposalCreditsButton {
 button.proposalCreditsButton > span {
     position: absolute;
     top: 40%;
-    left: 52%;
+    left: 50%;
     transform: translate(-50%, -50%);
 }

@@ -37,11 +37,11 @@ const SidebarContent = ({ wrapper }) => {
 };
 
 SidebarContent.propTypes = {
-  wrapper: PropTypes.oneOfType([PropTypes.func, PropTypes.element])
+  wrapper: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
 };
 
 SidebarContent.defaultProps = {
-  wrapper: React.Fragment
+  wrapper: ({ children }) => <>{children}</>
 };
 
 export default SidebarContent;
