@@ -1,0 +1,14 @@
+.searchForm {
+    display: flex;
+    align-items: center;
+}
+
+.searchBox {
+    width: 24rem;
+    margin-right: 2rem;
+}
+
+.searchButton {
+    position: relative;
+    bottom: 0.6rem;
+}
