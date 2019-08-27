@@ -73,7 +73,7 @@ const MDGuide = () => (
           <span className="spaces">    </span>if 1 * 3 != 3: <br />
           <span className="spaces">        </span>return false
         </div>
-        <div >
+        <div style={{ paddingRight: "30px"}}>
           <pre className={styles.codeBlock}>
           if 1 * 2 != 3:
           <br />
