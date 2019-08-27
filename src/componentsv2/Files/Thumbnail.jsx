@@ -4,7 +4,7 @@ import styles from "./Files.module.css";
 import { classNames, P } from "pi-ui";
 
 
-const ThumbnailGrid = ({ value, onClick, onRemove, errors = [], viewOnly = false }) => {
+const ThumbnailGrid = ({ value = [], onClick, onRemove, errors = [], viewOnly = false }) => {
   const files = value.filter(f => f.name !== "index.md");
 	return (
 		<>

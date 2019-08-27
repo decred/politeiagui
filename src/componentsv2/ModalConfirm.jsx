@@ -43,8 +43,8 @@ const ModalConfirm = ({
 
   return (
     <Modal
-      style={{ maxWidth: "600px" }}
-      title={successTitle && success ? successTitle : title}
+      style={{ width: "600px" }}
+      title={(success && successTitle) || title}
       show={show}
       onClose={onClose}
       iconComponent={
@@ -84,7 +84,12 @@ const ModalConfirm = ({
           )}
         </FormWrapper>
       )}
-      {success && successMessage}
+      {success && <> 
+        {successMessage}
+        <div className="justify-right margin-top-m">
+          <Button onClick={onClose}>Ok</Button>  
+        </div>
+      </>}
     </Modal>
   );
 };

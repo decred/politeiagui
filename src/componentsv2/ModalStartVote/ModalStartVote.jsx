@@ -61,7 +61,7 @@ const ModalStartVote = ({
 
   return (
     <Modal
-      style={{ maxWidth: "500px" }}
+      style={{ width: "600px" }}
       title={(success && successTitle) || title}
       show={show}
       onClose={onClose}
@@ -150,7 +150,12 @@ const ModalStartVote = ({
           }}
         </FormWrapper>
       )}
-      {success && successMessage}
+      {success && <> 
+        {successMessage}
+        <div className="justify-right margin-top-m">
+          <Button onClick={onClose}>Ok</Button>  
+        </div>
+      </>}
     </Modal>
   );
 };
