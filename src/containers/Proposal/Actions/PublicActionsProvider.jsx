@@ -61,7 +61,7 @@ const PublicActionsProvider = ({ children }) => {
           successMessage={
             <Text>
               The proposal has been successfully abandoned! Now it will appear
-              under the <Link to="/?tab=abandoned">abandoned</Link> tab.
+              under the <Link to="/?tab=abandoned">Abandoned</Link> tab.
             </Text>
           }
           show={showAbandonModal}
@@ -103,7 +103,7 @@ const PublicActionsProvider = ({ children }) => {
           successMessage={
             <Text>
               The proposal vote has been successfully started! Now it will
-              appear under the <Link to="/?tab=voting">voting</Link> tab.
+              appear under the <Link to="/?tab=voting">Voting</Link> tab.
             </Text>
           }
           show={showStartVoteModal}

@@ -43,7 +43,7 @@ const UnvettedActionsProvider = ({ children }) => {
             <Text>
               The proposal has been successfully censored! Now it will appear
               under under{" "}
-              <Link to={"/proposals/unvetted?tab=censored"}>censored</Link> tab
+              <Link to={"/proposals/unvetted?tab=censored"}>Censored</Link> tab
               among Unvetted Proposals.
             </Text>
           }
