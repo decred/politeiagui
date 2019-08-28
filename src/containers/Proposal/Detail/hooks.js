@@ -114,7 +114,7 @@ export function useProposal(ownProps) {
 
   useEffect(
     function handleProposalChanged() {
-      const prop = getProposalFromCache();
+      const prop = proposalWithFilesOrNothing(getProposalFromCache());
       if (!!prop && !isEqual(prop, proposal)) {
         setProposal(prop);
       }
