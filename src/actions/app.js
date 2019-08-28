@@ -228,22 +228,25 @@ export const onSaveDraftInvoice = ({
   lineitems,
   files,
   draftId
-}) => {
+}) => dispatch => {
   resetNewInvoiceData();
   const id = draftId || uniqueID("draft");
-  return act.SAVE_DRAFT_INVOICE({
-    month,
-    year,
-    name,
-    location,
-    contact,
-    rate,
-    address,
-    lineitems,
-    files,
-    id,
-    timestamp: Date.now() / 1000
-  });
+  dispatch(
+    act.SAVE_DRAFT_INVOICE({
+      month,
+      year,
+      name,
+      location,
+      contact,
+      rate,
+      address,
+      lineitems,
+      files,
+      id,
+      timestamp: Date.now() / 1000
+    })
+  );
+  return id;
 };
 
 export const onLoadDraftInvoices = email => {

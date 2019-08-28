@@ -39,14 +39,14 @@ class SubmitFormContainer extends Component {
 
   onSaveProposalDraft = (...args) => {
     validate(...args);
-    const { payload } = this.props.onSaveProposalDraft(...args);
-    this.draftButtonTextAnimation(this.props.isCMS, payload.id);
+    const idProposal = this.props.onSaveProposalDraft(...args);
+    this.draftButtonTextAnimation(this.props.isCMS, idProposal);
   };
 
   onSaveInvoiceDraft = (...args) => {
     validate(...args);
-    const { payload } = this.props.onSaveInvoiceDraft(...args);
-    this.draftButtonTextAnimation(this.props.isCMS, payload.id);
+    const idInvoice = this.props.onSaveInvoiceDraft(...args);
+    this.draftButtonTextAnimation(this.props.isCMS, idInvoice);
   };
 
   draftButtonTextAnimation = (isCMS, id) => {
