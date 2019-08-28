@@ -10,7 +10,7 @@ const AdminAuthenticatedRoute = ({ history, ...props }) => {
       history.push("/");
     }
   }, [initDone, currentUser, history]);
-  return <Route {...props} />;
+  return initDone && !!currentUser && <Route {...props} />;
 };
 
 export default withRouter(AdminAuthenticatedRoute);

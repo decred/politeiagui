@@ -16,7 +16,7 @@ const MarkdownEditor = ({
   placeholder,
   className,
   filesInput,
-  textAreaRef
+  textAreaProps
 }) => {
   const [tab, setTab] = useState(TAB_WRITE);
 
@@ -37,7 +37,7 @@ const MarkdownEditor = ({
       <ReactMde
         selectedTab={tab}
         onTabChange={handleSwitchTab}
-        textAreaProps={{ ref: textAreaRef }}
+        textAreaProps={textAreaProps}
         generateMarkdownPreview={markdown =>
           Promise.resolve(
             <Markdown
@@ -63,11 +63,13 @@ MarkdownEditor.propTypes = {
   value: PropTypes.string,
   placeholder: PropTypes.string,
   className: PropTypes.string,
-  fileInput: PropTypes.node
+  fileInput: PropTypes.node,
+  textAreaProps: PropTypes.object
 };
 
 MarkdownEditor.defaultProps = {
-  placeholder: "Write here"
+  placeholder: "Write here",
+  textAreaProps: {}
 };
 
 export default MarkdownEditor;

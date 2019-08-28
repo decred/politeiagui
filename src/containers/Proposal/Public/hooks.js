@@ -1,43 +1,40 @@
-import { useEffect } from "react";
-import { or } from "src/lib/fp";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
+import { or } from "src/lib/fp";
 import { useRedux } from "src/redux";
+import useTokenInventory from "src/hooks/api/useTokenInventory";
+import useThrowError from "src/hooks/utils/useThrowError";
 
 const mapStateToProps = {
-  loggedInAsEmail: sel.loggedInAsEmail,
   proposals: sel.proposalsWithVoteStatus,
-  isLoading: or(
-    sel.isApiRequestingPropsVoteStatus,
-    sel.isApiRequestingLastBlockHeight
-  ),
-  loadingTokenInventory: sel.apiTokenInventoryIsRequesting,
-  error: or(
-    sel.vettedProposalsError,
-    sel.apiPropsVoteStatusError,
-    sel.apiTokenInventoryError
-  ),
-  proposalsTokens: sel.apiTokenInventoryResponse,
-  getVoteStatus: sel.getPropVoteStatus
+  error: or(sel.apiProposalsBatchError, sel.apiPropVoteStatusError)
 };
 
 const mapDispatchToProps = {
-  onFetchVettedByTokens: act.onFetchVettedByTokens,
-  onFetchTokenInventory: act.onFetchTokenInventory,
-  onFetchProposalsVoteStatus: act.onFetchProposalsVoteStatus
+  onFetchProposalsBatch: act.onFetchProposalsBatch
 };
 
 export function usePublicProposals(ownProps) {
-  const { onFetchTokenInventory, ...fromRedux } = useRedux(
+  const { proposals, onFetchProposalsBatch, error } = useRedux(
     ownProps,
     mapStateToProps,
     mapDispatchToProps
   );
-  if (fromRedux.error) throw fromRedux.error;
 
-  useEffect(() => {
-    onFetchTokenInventory();
-  }, [onFetchTokenInventory]);
+  const [
+    tokenInventory,
+    errorTokenInventory,
+    loadingTokenInventory
+  ] = useTokenInventory();
 
-  return fromRedux;
+  const anyError = errorTokenInventory || error;
+
+  useThrowError(anyError);
+
+  return {
+    proposals,
+    onFetchProposalsBatch,
+    loadingTokenInventory,
+    proposalsTokens: tokenInventory
+  };
 }

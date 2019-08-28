@@ -16,13 +16,15 @@ import {
 import { useProposalVoteInfo } from "./hooks";
 import { useLoaderContext } from "src/Appv2/Loader";
 import styles from "./Proposal.module.css";
+import LoggedInContent from "src/componentsv2/LoggedInContent";
 import VotesCount from "./VotesCount";
 import DownloadComments from "src/containers/Comments/Download";
+import ProposalActions from "./ProposalActions";
 import { useFullImageModal } from "../ProposalForm/hooks";
 import ThumbnailGrid from "../Files/Thumbnail";
 import ModalFullImage from "../ModalFullImage";
 
-const Proposal = ({ proposal, extended }) => {
+const Proposal = ({ proposal, extended, children }) => {
   const {
     censorshiprecord,
     files,
@@ -47,6 +49,7 @@ const Proposal = ({ proposal, extended }) => {
   const proposalURL = `/proposal/${proposalToken}`;
   const isPublic = isPublicProposal(proposal);
   const isAbandoned = isAbandonedProposal(proposal);
+  const isPublicAccessible = isPublic || isAbandoned;
   const isAuthor = currentUser && currentUser.userid === userid;
   const isEditable = isAuthor && isEditableProposal(proposal);
   const {
@@ -64,7 +67,7 @@ const Proposal = ({ proposal, extended }) => {
   }
   const onClickFile = f => () => {
     openFullImageModal(f);
-  }
+  };
   return (
     <>
       <RecordWrapper>
@@ -104,7 +107,7 @@ const Proposal = ({ proposal, extended }) => {
                   {publishedat && (
                     <Event event="published" timestamp={publishedat} />
                   )}
-                  {timestamp !== publishedat && timestamp !== abandonedat && (
+                  {timestamp !== publishedat && !abandonedat && (
                     <Event event="edited" timestamp={timestamp} />
                   )}
                   {abandonedat && (
@@ -172,13 +175,13 @@ const Proposal = ({ proposal, extended }) => {
                 />
               </Row>
             )}
-            {extended && (
+            {extended && !!files.length && (
               <Markdown
                 className={styles.markdownContainer}
                 body={getMarkdownContent(files)}
               />
             )}
-            {(isPublic || isAbandoned) && !extended && (
+            {isPublicAccessible && !extended && (
               <Row justify="space-between">
                 <CommentsLink
                   numOfComments={numcomments}
@@ -189,13 +192,13 @@ const Proposal = ({ proposal, extended }) => {
             )}
             {extended && files.length > 1 && (
               <Row className={styles.filesRow} justify="left" topMarginSize="s">
-                <ThumbnailGrid 
+                <ThumbnailGrid
                   value={files}
                   onClick={onClickFile}
                   viewOnly={true}
                 />
               </Row>
-            )} 
+            )}
             {extended && (
               <Row className={styles.lastRow}>
                 <Row className={styles.downloadLinksWrapper} noMargin>
@@ -214,13 +217,16 @@ const Proposal = ({ proposal, extended }) => {
                 </Row>
                 <Row className={styles.proposalActions}>
                   <CopyLink
-                    className={styles.copyLink}
+                    className={isPublicAccessible ? styles.copyLink : ""}
                     url={window.location.origin + proposalURL}
                   />
-                  <GithubLink token={proposalToken} />
+                  {isPublicAccessible && <GithubLink token={proposalToken} />}
                 </Row>
               </Row>
             )}
+            <LoggedInContent>
+              <ProposalActions proposal={proposal} />
+            </LoggedInContent>
           </>
         )}
       </RecordWrapper>
@@ -229,11 +235,13 @@ const Proposal = ({ proposal, extended }) => {
         onClose={handleCloseSearchVotesModal}
         proposal={proposal}
       />
-      <ModalFullImage
-        image={showFullImageModal}
-        show={showFullImageModal} 
-        onClose={closeFullImageModal}
-      />
+      {extended && (
+        <ModalFullImage
+          image={showFullImageModal}
+          show={!!showFullImageModal}
+          onClose={closeFullImageModal}
+        />
+      )}
     </>
   );
 };

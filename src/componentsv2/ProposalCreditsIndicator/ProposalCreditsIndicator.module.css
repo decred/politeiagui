@@ -1,11 +1,22 @@
 .wrapper {
     display: flex;
     align-items: center;
+    margin-right: 3rem;
 }
 
-.proposalCreditsButton {
-    padding: 0rem 0.4rem;
+button.proposalCreditsButton {
+    padding: 0px;
+    height: 16px;
+    width: 16px;
     margin-left: 0.5rem;
+    line-height: unset;
     font-weight: var(--font-weight-regular);
     position: relative;
+}
+
+button.proposalCreditsButton > span {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

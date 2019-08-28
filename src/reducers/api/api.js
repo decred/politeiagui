@@ -136,6 +136,10 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_VETTED]: () => onReceiveProposals("vetted", state, action),
     [act.REQUEST_UNVETTED]: () => request("unvetted", state, action),
     [act.RECEIVE_UNVETTED]: () => onReceiveProposals("unvetted", state, action),
+    [act.REQUEST_PROPOSALS_BATCH]: () =>
+      request("proposalsBatch", state, action),
+    [act.RECEIVE_PROPOSALS_BATCH]: () =>
+      onReceiveProposals("proposalsBatch", state, action),
     [act.REQUEST_UNVETTED_STATUS]: () =>
       request("unvettedStatus", state, action),
     [act.RECEIVE_UNVETTED_STATUS]: () =>

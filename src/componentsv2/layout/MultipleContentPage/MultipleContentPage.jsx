@@ -1,10 +1,20 @@
-import { classNames, Container, H1, Main as UIMain, Message, PageDetails as PageDetailsUI, Tab as TabUI, Tabs as TabsUI, TopBanner } from "pi-ui";
+import {
+  classNames,
+  Container,
+  H1,
+  Main as UIMain,
+  Message,
+  PageDetails as PageDetailsUI,
+  Tab as TabUI,
+  Tabs as TabsUI,
+  TopBanner
+} from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
 import ErrorBoundary from "src/components/ErrorBoundary";
 import NewProposalButton from "src/componentsv2/NewProposalButton";
 import Header from "src/containers/Header/Header";
-import useScrollToTop from "src/hooks/useScrollToTop";
+import useScrollToTop from "src/hooks/utils/useScrollToTop";
 import Sidebar from "../../Sidebar";
 import styles from "../layouts.module.css";
 
@@ -42,8 +52,8 @@ const PageDetails = ({
         {title}
       </H1>
     ) : (
-        title
-      );
+      title
+    );
   return (
     <PageDetailsUI
       className={classNames(styles.customPageDetails, className)}

@@ -11,7 +11,7 @@ import {
   MANAGE_USER_REACTIVATE,
   PAYWALL_STATUS_PAID
 } from "src/constants";
-import usePaywall from "src/hooks/usePaywall";
+import usePaywall from "src/hooks/api/usePaywall";
 import { convertAtomsToDcr, formatUnixTimestamp } from "src/utilsv2";
 import {
   getUserActivePublicKey,

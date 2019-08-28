@@ -1,32 +1,22 @@
+import React, { useState } from "react";
 import { Link } from "pi-ui";
-import React, { useCallback, useState } from "react";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
-import useQueryStringWithIndexValue from "src/hooks/useQueryStringWithIndexValue";
+import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import Credits from "./Credits";
 import styles from "./detail.module.css";
 import General from "./General.jsx";
 import { tabValues } from "./helpers";
 import { useChangeUsername, useUserDetail } from "./hooks";
 import Preferences from "./Preferences";
-import Proposals from "./Proposals";
+import Proposals from "src/containers/Proposal/User/Submitted";
 
-const getTabComponent = ({
-  user,
-  userProposals,
-  setUserProposals,
-  // isAdminOrTheUser,
-  ...rest
-}) =>
+const getTabComponent = ({ user, userProposals, setUserProposals, ...rest }) =>
   [
     <General {...user} {...rest} />,
     <Preferences {...rest} />,
     <Credits {...rest} />,
-    <Proposals
-      userID={user.id}
-      userProposals={userProposals}
-      setUserProposals={setUserProposals}
-    />
+    <Proposals userID={user.id} />
   ].filter(Boolean);
 
 const UserDetail = ({
@@ -41,9 +31,8 @@ const UserDetail = ({
 }) => {
   const { user, isAdmin, userId, loggedInAsUserId } = useUserDetail({ match });
 
-  // Proposals fetching will be triggered from the 'proposals' tab
-  // but cached here to avoid re-fetching it
-  const [userProposals, setUserProposals] = useState(null);
+  const isUserPageOwner = user && loggedInAsUserId === user.id;
+  const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
 
   const tabLabels = [
     tabValues.GENERAL,
@@ -51,9 +40,6 @@ const UserDetail = ({
     tabValues.CREDITS,
     tabValues.PROPOSALS
   ];
-
-  const isUserPageOwner = user && loggedInAsUserId === user.id;
-  const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
 
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
 
@@ -66,9 +52,14 @@ const UserDetail = ({
   const closeUsernameModal = () => setShowUsernameModal(false);
   const { username, onChangeUsername, validationSchema } = useChangeUsername();
 
-  const handleCacheUserProposals = useCallback(proposals => {
-    setUserProposals(proposals);
-  }, []);
+  const isTabDisabled = tabIndex => {
+    const tabLabel = tabLabels[tabIndex];
+    if (tabLabel === tabValues.PREFERENCES && !isUserPageOwner) return true;
+
+    if (tabLabel === tabValues.CREDITS && !isAdminOrTheUser) return true;
+
+    return false;
+  };
 
   // TODO: need a loading while user has not been fetched yet
   return !!user && userId === user.id ? (
@@ -93,7 +84,9 @@ const UserDetail = ({
         >
           <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
             {tabLabels.map((label, i) => {
-              return (!isAdminOrTheUser && i === 2) || (!isUserPageOwner && i === 1) ? <></> : (
+              return isTabDisabled(i) ? (
+                <></>
+              ) : (
                 <Tab key={`tab${label}`} label={label} />
               );
             })}
@@ -107,9 +100,7 @@ const UserDetail = ({
             user,
             isAdminOrTheUser,
             isUserPageOwner,
-            isAdmin,
-            userProposals,
-            setUserProposals: handleCacheUserProposals
+            isAdmin
           })[index]
         }
       </Main>

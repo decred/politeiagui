@@ -3,7 +3,7 @@ import * as act from "src/actions";
 import { useConfig } from "src/Config";
 import { getQueryStringValues } from "src/lib/queryString";
 import { useRedux } from "src/redux";
-import usePolicy from "src/hooks/usePolicy";
+import usePolicy from "src/hooks/api/usePolicy";
 import * as sel from "src/selectors";
 import { signupValidationSchema } from "./validation";
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
-import usePolicy from "src/hooks/usePolicy";
+import usePolicy from "src/hooks/api/usePolicy";
 import { useRedux } from "src/redux";
 import {
   resetValidationSchema,

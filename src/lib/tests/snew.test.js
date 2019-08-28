@@ -4,9 +4,9 @@ describe("snew tests (lib/snew)", () => {
   const PROPOSAL_TOKEN =
     "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca11";
   test("format proposal data", async () => {
-    const {
-      proposal
-    } = await import(`../../../mocks/api/v1/proposals/${PROPOSAL_TOKEN}/GET.json`);
+    const { proposal } = await import(
+      `../../../mocks/api/v1/proposals/${PROPOSAL_TOKEN}/GET.json`
+    );
     const index = 1;
     let result = snew.formatProposalData(proposal, index);
     let { data } = result;
@@ -28,9 +28,9 @@ describe("snew tests (lib/snew)", () => {
   });
 
   test("comments to T1", async () => {
-    const {
-      comments
-    } = await import(`../../../mocks/api/v1/proposals/${PROPOSAL_TOKEN}/comments/GET.json`);
+    const { comments } = await import(
+      `../../../mocks/api/v1/proposals/${PROPOSAL_TOKEN}/comments/GET.json`
+    );
     let result = snew.commentsToT1(comments);
     const comment = comments[0];
     let resultComment = result[0];

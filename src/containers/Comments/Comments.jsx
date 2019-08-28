@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import { Card, H2, Text, Message, classNames } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import styles from "./Comments.module.css";
@@ -10,17 +10,17 @@ import CommentLoader from "./Comment/CommentLoader";
 import Link from "src/componentsv2/Link";
 import Select from "src/componentsv2/Select";
 import Or from "src/componentsv2/Or";
-import useQueryString from "src/hooks/useQueryString";
+import useQueryString from "src/hooks/utils/useQueryString";
 import {
   getSortOptionsForSelect,
   createSelectOptionFromSortOption,
   commentSortOptions,
   NUMBER_OF_LIST_PLACEHOLDERS
 } from "./helpers";
-import useIdentity from "src/hooks/useIdentity";
-import usePaywall from "src/hooks/usePaywall";
+import useIdentity from "src/hooks/api/useIdentity";
+import usePaywall from "src/hooks/api/usePaywall";
 import { IdentityMessageError } from "src/componentsv2/IdentityErrorIndicators";
-import ModalLogin from "src/componentsv2/ModalLogin";
+import { useLoginModal } from "src/containers/User/Login";
 import WhatAreYourThoughts from "src/componentsv2/WhatAreYourThoughts";
 import { commentsReducer, initialState, actions } from "./commentsReducer";
 import { getQueryStringValue } from "src/lib/queryString";
@@ -53,9 +53,12 @@ const Comments = ({
     recordToken,
     numOfComments
   });
-  const [loginModalShow, setLoginModalShow] = useState(false);
-  const handleOpenLoginModal = () => setLoginModalShow(true);
-  const handleCloseLoginModal = () => setLoginModalShow(false);
+  const [, , openLoginModal, closeLoginModal] = useLoginModal();
+  const handleOpenLoginModal = () => {
+    openLoginModal("commentsLoginModal", {
+      onLoggedIn: closeLoginModal
+    });
+  };
 
   const onRedirectToSignup = () => {
     history.push("/user/signup");
@@ -205,7 +208,6 @@ const Comments = ({
           </div>
         )}
       </Card>
-      <ModalLogin show={loginModalShow} onLoggedIn={handleCloseLoginModal} onClose={handleCloseLoginModal} />
     </>
   );
 };

@@ -4,8 +4,8 @@ import { useProposal } from "../Detail/hooks";
 import { useEditProposal } from "./hooks";
 import { withRouter } from "react-router-dom";
 import { getMarkdownContent } from "src/componentsv2/Proposal/helpers";
-import usePaywall from "src/hooks/usePaywall";
-import useIdentity from "src/hooks/useIdentity";
+import usePaywall from "src/hooks/api/usePaywall";
+import useIdentity from "src/hooks/api/useIdentity";
 import Or from "src/componentsv2/Or";
 import { IdentityMessageError } from "src/componentsv2/IdentityErrorIndicators";
 import ProposalForm from "src/componentsv2/ProposalForm";
@@ -36,13 +36,13 @@ const EditProposal = ({ match }) => {
         )}
         {!!identityError && <IdentityMessageError />}
       </Or>
-      { !loading && !!proposal ?
+      {!loading && !!proposal ? (
         <ProposalForm initialValues={initialValues} onSubmit={onEditProposal} />
-        :
+      ) : (
         <ProposalFormLoader />
-      }
+      )}
     </Card>
   );
-}
+};
 
 export default withRouter(EditProposal);

@@ -14,3 +14,4 @@ coverage
 yalc.lock
 
 .env
+.vscode

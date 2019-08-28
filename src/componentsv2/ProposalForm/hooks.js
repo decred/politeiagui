@@ -1,5 +1,5 @@
 import { useState } from "react";
-import usePolicy from "src/hooks/usePolicy";
+import usePolicy from "src/hooks/api/usePolicy";
 import { proposalValidation } from "./validation";
 
 export function useProposalForm() {

@@ -6,6 +6,8 @@ import { ReduxProvider } from "src/redux";
 import Loader from "./Loader";
 import Routes from "src/pages/Root";
 import { UserSessionChecker } from "src/containers/User/SessionChecker";
+import { LoginModalProvider } from "src/containers/User/Login";
+import StaticContentProvider from "src/containers/StaticContent";
 
 const App = () => {
   useTheme(defaultLightTheme);
@@ -13,11 +15,15 @@ const App = () => {
     <Config>
       <ReduxProvider>
         <Loader>
-          <Router>
-            <UserSessionChecker>
-              <Routes />
-            </UserSessionChecker>
-          </Router>
+          <StaticContentProvider>
+            <Router>
+              <LoginModalProvider>
+                <UserSessionChecker>
+                  <Routes />
+                </UserSessionChecker>
+              </LoginModalProvider>
+            </Router>
+          </StaticContentProvider>
         </Loader>
       </ReduxProvider>
     </Config>

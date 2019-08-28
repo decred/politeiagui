@@ -10,6 +10,10 @@ import {
   isPublicProposal,
   isAbandonedProposal
 } from "src/componentsv2/Proposal/helpers";
+import {
+  UnvettedActionsProvider,
+  PublicActionsProvider
+} from "src/containers/Proposal/Actions";
 
 const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
   const { proposal, loading, threadParentID } = useProposal({ match });
@@ -27,21 +31,25 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
       </TopBanner>
       <Sidebar />
       <Main className={styles.customMain}>
-        {loading || !proposal ? (
-          <ProposalLoader extended />
-        ) : (
-          <Proposal proposal={proposal} extended />
-        )}
-        {showCommentArea && (
-          <Comments
-            recordAuthorID={proposal.userid}
-            recordToken={proposalToken}
-            numOfComments={proposal.numcomments}
-            threadParentID={threadParentID}
-            readOnly={!proposalCanReceiveComments(proposal)}
-            readOnlyReason={getCommentBlockedReason(proposal)}
-          />
-        )}
+        <UnvettedActionsProvider>
+          <PublicActionsProvider>
+            {loading || !proposal ? (
+              <ProposalLoader extended />
+            ) : (
+              <Proposal proposal={proposal} extended />
+            )}
+            {showCommentArea && (
+              <Comments
+                recordAuthorID={proposal.userid}
+                recordToken={proposalToken}
+                numOfComments={proposal.numcomments}
+                threadParentID={threadParentID}
+                readOnly={!proposalCanReceiveComments(proposal)}
+                readOnlyReason={getCommentBlockedReason(proposal)}
+              />
+            )}
+          </PublicActionsProvider>
+        </UnvettedActionsProvider>
       </Main>
     </>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Formik } from "formik";
@@ -9,8 +9,10 @@ import ThumbnailGrid from "src/componentsv2/Files/Thumbnail";
 import AttachFileButton from "src/componentsv2/AttachFileButton";
 import ModalFullImage from "src/componentsv2/ModalFullImage";
 import { useProposalForm, useFullImageModal } from "./hooks";
+import DraftSaver from "./DraftSaver";
 
 const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const { proposalFormValidation } = useProposalForm();
   const {
     showFullImageModal,
@@ -24,6 +26,7 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
     try {
       const proposalToken = await onSubmit(values);
       setSubmitting(false);
+      setSubmitSuccess(true);
       history.push(`/proposal/${proposalToken}`);
       resetForm();
     } catch (e) {
@@ -71,15 +74,16 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
         }
         const onClickFile = f => () => {
           openFullImageModal(f);
-        }
+        };
         return (
           <form onSubmit={handleSubmit}>
             {errors && errors.global && (
               <Message kind="error">{errors.global.toString()}</Message>
-            )}            
+            )}
             <BoxTextInput
               placeholder="Proposal name"
               name="name"
+              tabIndex={1}
               value={values.name}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -89,22 +93,23 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
               name="description"
               className="margin-top-s"
               value={values.description}
+              textAreaProps={{ tabIndex: 2 }}
               onChange={handleDescriptionChange}
               onBlur={handleBlur}
               placeholder={"Write your proposal"}
               error={touched.description && errors.description}
               filesInput={
-                <AttachFileButton onChange={handleFilesChange} type="button"/>
+                <AttachFileButton onChange={handleFilesChange} type="button" />
               }
             />
-            <ThumbnailGrid 
+            <ThumbnailGrid
               value={values.files}
               onClick={onClickFile}
               onRemove={handleFileRemoval}
               errors={errors}
             />
             <Row justify="right" topMarginSize="s">
-              <Button kind="secondary">Save as draft</Button>
+              <DraftSaver submitSuccess={submitSuccess} />
               <Button
                 type="submit"
                 kind={!isValid || disableSubmit ? "disabled" : "primary"}
@@ -115,9 +120,9 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
             </Row>
             <ModalFullImage
               image={showFullImageModal}
-              show={showFullImageModal} 
+              show={!!showFullImageModal}
               onClose={closeFullImageModal}
-            />            
+            />
           </form>
         );
       }}

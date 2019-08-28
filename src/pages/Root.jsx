@@ -21,6 +21,7 @@ import PageProposalsPublicList from "./Proposals/PublicList";
 import PageProposalsUser from "./Proposals/User";
 import PageProposalsAdmin from "./Proposals/Admin";
 import PageProposalDetail from "./Proposals/Detail";
+import PageProposalsUnvetted from "./Proposals/UnvettedList";
 
 import PageNotFound from "./NotFound";
 
@@ -72,7 +73,21 @@ const Routes = ({ location }) => {
           <Route path="/user/:userid" exact component={PageUserDetail} />
 
           {/* Record routes */}
-          <Route path="/proposal/:token" exact component={PageProposalDetail} />
+          <AdminAuthenticatedRoute
+            path={`/${recordType}s/unvetted`}
+            exact
+            component={PageProposalsUnvetted}
+          />
+          <Route
+            path={`/${recordType}/:token`}
+            exact
+            component={PageProposalDetail}
+          />
+          <Route
+            path={`/${recordType}/:token/comments/:commentid`}
+            exact
+            component={PageProposalDetail}
+          />
           <AuthenticatedRoute
             path={`/${recordType}s/user`}
             exact

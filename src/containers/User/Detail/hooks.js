@@ -2,7 +2,7 @@ import compose from "lodash/fp/compose";
 import get from "lodash/fp/get";
 import isEqual from "lodash/isEqual";
 import { useEffect, useState } from "react";
-import usePolicy from "src/hooks/usePolicy";
+import usePolicy from "src/hooks/api/usePolicy";
 import * as act from "src/actions";
 import {
   MANAGE_USER_CLEAR_USER_PAYWALL,

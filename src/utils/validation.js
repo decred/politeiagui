@@ -73,6 +73,24 @@ export const maxLengthMessage = (fieldName, maxLength) =>
   )} must be at most ${maxLength} characters`;
 
 /**
+ * Returns a generic error message for exceeding the maximum amount
+ * for a given field name
+ */
+export const minAmountMessage = (fieldName, minAmount) =>
+  `${stringUtils.capitalize(
+    fieldName
+  )} must be greater than or equal to ${minAmount}`;
+
+/**
+ * Returns a generic error message for not meeting the minimun amount
+ * for a given field name
+ */
+export const maxAmountMessage = (fieldName, maxAmount) =>
+  `${stringUtils.capitalize(
+    fieldName
+  )} must be less than or equal to ${maxAmount}`;
+
+/**
  * Returns a generic error message for exceeding the maximum size
  * for attached files in a proposal
  */

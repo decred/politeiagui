@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import * as act from "src/actions";
-import useInterval from "src/hooks/useInterval";
-import usePaywall from "src/hooks/usePaywall";
+import useInterval from "src/hooks/utils/useInterval";
+import usePaywall from "src/hooks/api/usePaywall";
 import { useRedux } from "src/redux";
 import * as sel from "src/selectors";
 

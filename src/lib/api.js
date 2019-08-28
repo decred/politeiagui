@@ -416,6 +416,9 @@ export const proposal = (token, version = null) =>
     getResponse
   );
 
+export const proposalsBatch = (csrf, tokens) =>
+  POST("/proposals/batch", csrf, { tokens }).then(getResponse);
+
 export const user = userId => GET(`/v1/user/${userId}`).then(getResponse);
 export const proposalComments = token =>
   GET(`/v1/proposals/${token}/comments`).then(getResponse);
@@ -493,7 +496,7 @@ export const startVote = (
           vote: {
             token,
             mask: 3,
-            duration: 1,
+            duration,
             quorumpercentage,
             passpercentage,
             options: [

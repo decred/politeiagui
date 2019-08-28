@@ -16,9 +16,9 @@ export const Author = ({ username, id }) => (
   <Link to={`/user/${id}`}>{username}</Link>
 );
 
-export const Event = ({ event, timestamp }) => (
+export const Event = ({ event, timestamp, keepOnMobile = false }) => (
   <DateTooltip
-    className="hide-on-mobile"
+    className={!keepOnMobile ? "hide-on-mobile" : ""}
     timestamp={timestamp}
     placement="bottom"
   >
@@ -74,8 +74,16 @@ export const Edit = ({ url }) => (
   </Link>
 );
 
-export const Status = ({ children }) => (
-  <div className={styles.status}>{children}</div>
+export const Status = ({ children, disableMobileView, className }) => (
+  <div
+    className={classNames(
+      styles.status,
+      disableMobileView && styles.disableMobileView,
+      className
+    )}
+  >
+    {children}
+  </div>
 );
 
 const MobileHeader = ({ title, status, edit }) => (
@@ -88,10 +96,17 @@ const MobileHeader = ({ title, status, edit }) => (
   </div>
 );
 
-export const Header = ({ title, subtitle, status, edit, mobile }) => {
+export const Header = ({
+  title,
+  subtitle,
+  status,
+  edit,
+  mobile,
+  disableMobileView = false
+}) => {
   return (
     <div className={styles.header}>
-      {!mobile ? (
+      {!mobile || disableMobileView ? (
         <div className={styles.titleWrapper}>
           <div className={styles.titleEditWrapper}>
             {title}
