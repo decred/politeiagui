@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Formik } from "formik";
@@ -12,7 +12,7 @@ import ModalFullImage from "src/componentsv2/ModalFullImage";
 import ModalMDGuide from "src/componentsv2/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm, useFullImageModal } from "./hooks";
-import useBooleanState from "src/hooks/useBooleanState";
+import useBooleanState from "src/hooks/utils/useBooleanState";
 
 const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
   const mobile = useMediaQuery("(max-width: 560px)");
