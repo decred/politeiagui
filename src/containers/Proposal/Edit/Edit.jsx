@@ -9,6 +9,7 @@ import useIdentity from "src/hooks/api/useIdentity";
 import Or from "src/componentsv2/Or";
 import { IdentityMessageError } from "src/componentsv2/IdentityErrorIndicators";
 import ProposalForm from "src/componentsv2/ProposalForm";
+import ProposalFormLoader from "src/componentsv2/ProposalForm/ProposalFormLoader";
 
 const EditProposal = ({ match }) => {
   const { proposal, loading } = useProposal({ match });
@@ -16,18 +17,17 @@ const EditProposal = ({ match }) => {
   const { isPaid } = usePaywall();
   const [, identityError] = useIdentity();
 
-  const initialValues =
-    proposal && !!proposal.files.length
-      ? {
-          token: match.params.token,
-          name: proposal.name,
-          description: getMarkdownContent(proposal.files),
-          files: proposal.files.filter(p => p.name !== "index.md")
-        }
-      : {};
+  const initialValues = proposal
+    ? {
+        token: match.params.token,
+        name: proposal.name,
+        description: getMarkdownContent(proposal.files),
+        files: proposal.files.filter(p => p.name !== "index.md")
+      }
+    : null;
 
-  return !!proposal && !loading ? (
-    <Card className="container">
+  return (
+    <Card className={"container"}>
       <Or>
         {!isPaid && (
           <Message kind="error">
@@ -36,9 +36,13 @@ const EditProposal = ({ match }) => {
         )}
         {!!identityError && <IdentityMessageError />}
       </Or>
-      <ProposalForm initialValues={initialValues} onSubmit={onEditProposal} />
+      {!loading && !!proposal ? (
+        <ProposalForm initialValues={initialValues} onSubmit={onEditProposal} />
+      ) : (
+        <ProposalFormLoader />
+      )}
     </Card>
-  ) : null;
+  );
 };
 
 export default withRouter(EditProposal);
