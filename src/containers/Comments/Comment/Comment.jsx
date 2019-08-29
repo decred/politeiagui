@@ -11,7 +11,6 @@ import Likes from "src/componentsv2/Likes";
 import CopyLink from "src/componentsv2/CopyLink";
 
 const Comment = ({
-  children,
   className,
   permalink,
   topLevelComment,
@@ -31,13 +30,14 @@ const Comment = ({
   onClickReply,
   onClickShowReplies,
   numOfReplies,
+  highlightAsNew,
   ...props
 }) => {
   return (
     <div
       className={classNames(
         styles.commentWrapper,
-        !topLevelComment && styles.withLeftPadding,
+        highlightAsNew && styles.highlightAsNew,
         className
       )}
       {...props}
@@ -60,6 +60,7 @@ const Comment = ({
               </Link>
             )}
           </DateTooltip>
+          {highlightAsNew && <Text color="gray">new</Text>}
         </Join>
         {!disableLikes && (
           <Likes
@@ -94,13 +95,11 @@ const Comment = ({
         </div>
         <CopyLink url={window.location.origin + permalink} />
       </div>
-      {children}
     </div>
   );
 };
 
 Comment.propTypes = {
-  children: PropTypes.node,
   className: PropTypes.string,
   permalink: PropTypes.string,
   topLevelComment: PropTypes.bool,

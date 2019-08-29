@@ -11,6 +11,7 @@ const mapStateToProps = {
   email: sel.loggedInAsEmail,
   comments: sel.proposalComments,
   commentsLikes: sel.commentsLikes,
+  lastVisitTimestamp: sel.visitedProposal,
   loading: sel.isApiRequestingComments,
   loadingLikes: sel.isApiRequestingCommentsLikes
 };
