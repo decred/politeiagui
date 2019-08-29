@@ -8,6 +8,8 @@ const DefaultLoader = () => (
   </div>
 );
 
+const DefaultEmptyList = () => <span>Empty</span>;
+
 const LazyList = ({
   items,
   initialLoad,
@@ -15,9 +17,11 @@ const LazyList = ({
   loadingPlaceholder,
   onFetchMore,
   hasMore,
+  emptyListComponent,
   renderItem,
   pageStart
 }) => {
+  const isEmpty = !items.length;
   return (
     <>
       <InfiniteScroll
@@ -28,7 +32,7 @@ const LazyList = ({
       >
         {items.map(renderItem)}
       </InfiniteScroll>
-      {isLoading && loadingPlaceholder}
+      {isLoading ? loadingPlaceholder : isEmpty ? emptyListComponent : null}
     </>
   );
 };
@@ -46,6 +50,7 @@ LazyList.propTypes = {
 
 LazyList.defaultProps = {
   initialLoad: true,
+  emptyListComponent: <DefaultEmptyList />,
   loadingPlaceholder: <DefaultLoader />,
   pageStart: 0
 };
