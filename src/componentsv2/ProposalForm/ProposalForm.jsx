@@ -2,23 +2,33 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Formik } from "formik";
-import { Button, Message, BoxTextInput } from "pi-ui";
+import { Button, Message, BoxTextInput, Text, useMediaQuery } from "pi-ui";
 import { Row } from "../layout";
+import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/componentsv2/MarkdownEditor";
 import ThumbnailGrid from "src/componentsv2/Files/Thumbnail";
 import AttachFileButton from "src/componentsv2/AttachFileButton";
 import ModalFullImage from "src/componentsv2/ModalFullImage";
-import { useProposalForm, useFullImageModal } from "./hooks";
+import ModalMDGuide from "src/componentsv2/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
+import { useProposalForm, useFullImageModal } from "./hooks";
+import useBooleanState from "src/hooks/utils/useBooleanState";
 
 const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
+  const mobile = useMediaQuery("(max-width: 560px)");
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { proposalFormValidation } = useProposalForm();
+  const [
+    showMDGuideModal, 
+    openMDGuideModal, 
+    closeMDGuideModal
+  ] = useBooleanState(false);
   const {
     showFullImageModal,
     openFullImageModal,
     closeFullImageModal
   } = useFullImageModal();
+  
   async function handleSubmit(
     values,
     { resetForm, setSubmitting, setFieldError }
@@ -108,21 +118,58 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
               onRemove={handleFileRemoval}
               errors={errors}
             />
-            <Row justify="right" topMarginSize="s">
-              <DraftSaver submitSuccess={submitSuccess} />
-              <Button
-                type="submit"
-                kind={!isValid || disableSubmit ? "disabled" : "primary"}
-                loading={isSubmitting}
-              >
-                Submit
-              </Button>
-            </Row>
+            {!mobile ? (
+              <Row justify="right" topMarginSize="s">
+                <DraftSaver submitSuccess={submitSuccess} />
+                <Text
+                  weight="semibold"
+                  color="gray"
+                  className={styles.formatHelpButton}
+                  style={{ marginRight: "40px"}}
+                  onClick={() => openMDGuideModal()}
+                >
+                  Formatting Help
+                </Text>
+                <Button kind="secondary">Save as draft</Button>
+                <Button
+                  type="submit"
+                  kind={!isValid && disableSubmit ? "disabled" : "primary"}
+                  loading={isSubmitting}
+                >
+                  Submit
+                </Button>
+              </Row>
+            ) : (
+              <div className={styles.mobileColumn}>
+                <Row justify="right" topMarginSize="s">  
+                  <DraftSaver submitSuccess={submitSuccess} />              
+                  <Button kind="secondary">Save as draft</Button>
+                  <Button
+                    type="submit"
+                    kind={!isValid && disableSubmit ? "disabled" : "primary"}
+                    loading={isSubmitting}
+                  >
+                    Submit
+                  </Button>
+                </Row>
+                <Row justify="right" topMarginSize="s">
+                  <Text
+                    weight="semibold"
+                    color="gray"
+                    className={styles.formatHelpButton}
+                    onClick={() => openMDGuideModal()}
+                  >
+                    Formatting Help
+                  </Text>
+                </Row>
+              </div>
+            )}
             <ModalFullImage
               image={showFullImageModal}
               show={!!showFullImageModal}
               onClose={closeFullImageModal}
-            />
+            />          
+            <ModalMDGuide show={showMDGuideModal} onClose={closeMDGuideModal} />
           </form>
         );
       }}
