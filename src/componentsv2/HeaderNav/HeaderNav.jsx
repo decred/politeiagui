@@ -27,7 +27,7 @@ const HeaderNav = ({ history, location }) => {
   return username ? (
     <div className={styles.loggedInContainer}>
       <ProposalCreditsIndicator />
-      <Dropdown title={username}>
+      <Dropdown itemsListClassName={styles.dropdownList} title={username}>
         {user.isadmin && !isOnUnvettedRoute && (
           <DropdownItem onClick={goToUnvetted}>Admin</DropdownItem>
         )}

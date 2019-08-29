@@ -4,9 +4,6 @@ import * as sel from "src/selectors";
 
 const mapStateToProps = {
   searchResult: sel.apiUserSearchResponse
-  // loggedInAsEmail: sel.loggedInAsEmail,
-  // error: sel.apiUserSearchError,
-  // isLoading: sel.isApiRequestingUserSearch
 };
 
 const mapDispatchToProps = {

@@ -37,8 +37,8 @@
     border-bottom: 2px solid var(--color-yellow);
 }
 
-div.accountDropdown {
-    align-self: unset;
+ul.dropdownList {
+    width: unset;
 }
 
 @media screen and (max-width: 1000px) {
