@@ -110,10 +110,10 @@ const PublicProposals = ({
     <>
       <Tabs>
         <Tab
-          title="In Discusssion"
+          title="In Discussion"
           count={proposalsTokens ? proposalsTokens.pre.length : ""}
-          selected={tabValues.IN_DISCUSSSION === tabOption}
-          onTabChange={() => handleTabChange(tabValues.IN_DISCUSSSION)}
+          selected={tabValues.IN_DISCUSSION === tabOption}
+          onTabChange={() => handleTabChange(tabValues.IN_DISCUSSION)}
         />
         <Tab
           title="Voting"
