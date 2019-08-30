@@ -3,7 +3,7 @@ FROM node:10.16.3
 
 LABEL description="politeiagui build"
 LABEL version="1.0"
-LABEL maintainer "holdstockjamie@gmail.com"
+LABEL maintainer "jholdstock@decred.org"
 
 USER root
 WORKDIR /root
@@ -19,7 +19,7 @@ FROM nginx:1.16.1
 
 LABEL description="politeiagui serve"
 LABEL version="1.0"
-LABEL maintainer "holdstockjamie@gmail.com"
+LABEL maintainer "jholdstock@decred.org"
 
 COPY conf/nginx.conf /etc/nginx/conf.d/default.conf
 
