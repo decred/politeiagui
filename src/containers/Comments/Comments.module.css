@@ -1,6 +1,10 @@
-.commentAreaContainer {
+div.commentAreaContainer {
     margin-top: 1rem;
     margin-bottom: 1rem;
+}
+
+div.commentsWrapper {
+    padding: 0 2.6rem;
 }
 
 .commentsHeader { 
@@ -28,4 +32,10 @@ h2.commentsTitle {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+}
+
+@media screen and (max-width: 560px){ 
+    div.commentsWrapper {
+        padding: 0;
+    }
 }

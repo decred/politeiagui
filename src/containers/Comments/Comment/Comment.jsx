@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Text, classNames } from "pi-ui";
+import { Text, classNames, useMediaQuery } from "pi-ui";
 import styles from "./Comment.module.css";
 import DateTooltip from "src/componentsv2/DateTooltip";
 import Markdown from "src/componentsv2/Markdown";
@@ -33,6 +33,7 @@ const Comment = ({
   highlightAsNew,
   ...props
 }) => {
+  const extraSmall = useMediaQuery("(max-width: 560px)");
   return (
     <div
       className={classNames(
@@ -60,7 +61,7 @@ const Comment = ({
               </Link>
             )}
           </DateTooltip>
-          {highlightAsNew && <Text color="gray">new</Text>}
+          {highlightAsNew && !extraSmall && <Text color="gray">new</Text>}
         </Join>
         {!disableLikes && (
           <Likes
