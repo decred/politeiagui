@@ -82,6 +82,7 @@ const UserSearch = ({ TopBanner, PageDetails, Sidebar, Main, Title }) => {
                 <form>
                   <RadioButtonGroup
                     className={styles.searchByRadioGroup}
+                    optionClassName={styles.searchByRadioButton}
                     label=""
                     options={[
                       { value: "email", label: "By email" },
