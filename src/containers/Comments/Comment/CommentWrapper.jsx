@@ -3,7 +3,6 @@ import styles from "./Comment.module.css";
 import CommentForm from "src/componentsv2/CommentForm";
 import { useComment } from "../hooks";
 import Comment from "./Comment";
-import { useLoaderContext } from "src/Appv2/Loader";
 
 const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
   const {
@@ -20,10 +19,8 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     readOnly,
     identityError,
     paywallMissing,
-    openLoginModal,
-    lastVisitTimestamp
+    openLoginModal
   } = useComment();
-  const { currentUser } = useLoaderContext();
   const {
     comment: commentText,
     token,
@@ -32,13 +29,10 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     timestamp,
     username,
     userid,
-    parentid
+    parentid,
+    isNew,
+    sumOfNewDescendants
   } = comment;
-
-  const isNew =
-    lastVisitTimestamp < timestamp &&
-    currentUser &&
-    currentUser.userid !== userid;
 
   const isRecordAuthor = recordAuthorID === userid;
   const isThreadParent = +parentid === 0 || +commentid === +threadParentID;
@@ -107,6 +101,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
         onClickShowReplies={handleToggleReplies}
         numOfReplies={numOfReplies}
         commentBody={commentText}
+        numOfNewHiddenReplies={sumOfNewDescendants}
         {...props}
       />
       {showReplyForm && (

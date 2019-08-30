@@ -1,33 +1,78 @@
 import React, { useState, useEffect } from "react";
 import CommentsList from "./CommentsList";
 
-const getChildren = (comments, commentId) => {
+const getChildren = (comments, commentId, lastTimeAccessed, currentUserID) => {
   return (
     comments.filter(comment => +comment.parentid === +commentId) || []
-  ).map(comment => ({
-    ...comment,
-    children: getChildren(comments, comment.commentid)
-  }));
+  ).map(comment =>
+    createComputedComment(comment, comments, lastTimeAccessed, currentUserID)
+  );
 };
 
-const CommentsListWrapper = ({ comments, threadParentID }) => {
+const createComputedComment = (
+  comment,
+  comments,
+  lastTimeAccessed,
+  currentUserID
+) => {
+  const children = getChildren(
+    comments,
+    comment.commentid,
+    lastTimeAccessed,
+    currentUserID
+  );
+
+  // set as true if this comment was created after the lastTimeAccessed
+  // and the author is not the current user
+  const isNew =
+    lastTimeAccessed &&
+    currentUserID !== comment.userid &&
+    comment.timestamp > lastTimeAccessed;
+
+  // count how many of the childrens are new comments
+  const numOfNewChildren = children.filter(c => c.isNew).length;
+
+  // sum of all new descendants, including childrens
+  const sumOfNewDescendants = children.reduce(
+    (sum, c) => sum + c.sumOfNewDescendants,
+    numOfNewChildren
+  );
+
+  return {
+    ...comment,
+    isNew,
+    numOfNewChildren,
+    sumOfNewDescendants,
+    children
+  };
+};
+
+const CommentsListWrapper = ({
+  comments,
+  threadParentID,
+  lastTimeAccessed,
+  currentUserID
+}) => {
   const [nestedComments, setNestedComments] = useState([]);
   useEffect(
     function generateNestedComments() {
       // single thread mode: find the childrens of the thread parent comment
-      if (threadParentID && !!comments.length) {
+      const isSingleThred = threadParentID && !!comments.length;
+      if (isSingleThred) {
         const singleThreadParent = comments.find(
           c => +c.commentid === +threadParentID
         );
         setNestedComments([
-          {
-            ...singleThreadParent,
-            children: getChildren(comments, threadParentID)
-          }
+          createComputedComment(
+            singleThreadParent,
+            comments,
+            lastTimeAccessed,
+            currentUserID
+          )
         ]);
         return;
       }
-      const result = getChildren(comments, 0);
+      const result = getChildren(comments, 0, lastTimeAccessed, currentUserID);
       setNestedComments(result);
     },
     [comments, threadParentID]

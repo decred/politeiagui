@@ -48,6 +48,8 @@ const Comments = ({
     onLikeComment,
     loading,
     recordType,
+    lastVisitTimestamp,
+    currentUser,
     ...commentsCtx
   } = useComments({
     recordToken,
@@ -121,7 +123,7 @@ const Comments = ({
         id="commentArea"
         className={classNames(styles.commentAreaContainer, className)}
       >
-        <div className="container">
+        <div className={classNames("container", styles.commentsHeaderWrapper)}>
           <LoggedInContent
             fallback={
               <WhatAreYourThoughts
@@ -199,7 +201,9 @@ const Comments = ({
               }}
             >
               <CommentsListWrapper
+                lastTimeAccessed={lastVisitTimestamp}
                 threadParentID={threadParentID}
+                currentUserID={currentUser.userid}
                 comments={state.comments}
               />
             </CommentContext.Provider>

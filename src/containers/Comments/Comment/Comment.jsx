@@ -30,6 +30,7 @@ const Comment = ({
   onClickReply,
   onClickShowReplies,
   numOfReplies,
+  numOfNewHiddenReplies,
   highlightAsNew,
   ...props
 }) => {
@@ -93,6 +94,9 @@ const Comment = ({
               {showReplies ? "-" : `+${numOfReplies}`}
             </span>
           )}
+          {numOfNewHiddenReplies > 0 && !showReplies && (
+            <Text color="green">{`${numOfNewHiddenReplies} new`}</Text>
+          )}
         </div>
         <CopyLink url={window.location.origin + permalink} />
       </div>
@@ -119,7 +123,8 @@ Comment.propTypes = {
   disableReply: PropTypes.bool,
   onClickReply: PropTypes.func,
   onClickShowReplies: PropTypes.func,
-  numOfReplies: PropTypes.number
+  numOfReplies: PropTypes.number,
+  numOfNewHiddenReplies: PropTypes.number
 };
 
 export default Comment;
