@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import styles from "./Comment.module.css";
+import { Text } from "pi-ui";
+import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
 import CommentForm from "src/componentsv2/CommentForm";
+import useBooleanState from "src/hooks/utils/useBooleanState";
 import { useComment } from "../hooks";
 import Comment from "./Comment";
 
@@ -8,11 +11,14 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
   const {
     onSubmitComment,
     onLikeComment,
+    onCensorComment,
     getCommentLikeOption,
     enableCommentVote,
     recordAuthorID,
     loadingLikes,
     userLoggedIn,
+    userEmail,
+    isAdmin,
     recordToken,
     recordType,
     threadParentID,
@@ -26,6 +32,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     token,
     commentid,
     resultvotes,
+    censored,
     timestamp,
     username,
     userid,
@@ -39,6 +46,12 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
 
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(isThreadParent);
+
+  const [
+    showCensorModal,
+    openCensorModal,
+    closeCensorModal
+  ] = useBooleanState(false);
 
   function handleToggleReplyForm() {
     setShowReplyForm(!showReplyForm);

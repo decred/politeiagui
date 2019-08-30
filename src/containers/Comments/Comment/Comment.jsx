@@ -16,7 +16,9 @@ const Comment = ({
   topLevelComment,
   author,
   authorID,
+  isAdmin,
   createdAt,
+  censored,
   highlightAuthor,
   likesCount,
   likeOption,
@@ -27,6 +29,7 @@ const Comment = ({
   commentBody,
   showReplies,
   disableReply,
+  onClickCensor,
   onClickReply,
   onClickShowReplies,
   numOfReplies,
@@ -63,6 +66,15 @@ const Comment = ({
             )}
           </DateTooltip>
           {highlightAsNew && !extraSmall && <Text color="gray">new</Text>}
+          {isAdmin &&
+            <Text
+              weight="semibold"
+              className={styles.censor}
+              onClick={onClickCensor}
+            >
+              Censor
+            </Text>
+          }
         </Join>
         {!disableLikes && (
           <Likes
@@ -74,7 +86,11 @@ const Comment = ({
           />
         )}
       </div>
-      <Markdown className="margin-top-s" body={commentBody} />
+      { !censored ?
+        <Markdown className="margin-top-s" body={commentBody} />
+      :
+        <Markdown className={styles.censored} body="Censored by moderators " />
+      }      
       <div className="justify-space-between margin-top-s">
         <div className="justify-left">
           {!disableReply && (

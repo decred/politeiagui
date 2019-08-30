@@ -21,7 +21,8 @@ const mapDispatchToProps = {
   onFetchComments: act.onFetchProposalComments,
   onFetchLikes: act.onFetchLikedComments,
   onLikeComment: act.onLikeComment,
-  onResetComments: act.onResetComments
+  onResetComments: act.onResetComments,
+  onCensorComment: act.onCensorCommentv2
 };
 
 export function useComments(ownProps) {
@@ -31,6 +32,7 @@ export function useComments(ownProps) {
     onFetchLikes,
     commentsLikes,
     onResetComments,
+    onCensorComment,
     ...fromRedux
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
   const { enableCommentVote, recordType } = useConfig();
@@ -95,9 +97,11 @@ export function useComments(ownProps) {
 
   return {
     onLikeComment,
+    onCensorComment,
     getCommentLikeOption,
     enableCommentVote,
     userLoggedIn,
+    userEmail: email,
     recordType,
     currentUser,
     ...fromRedux
