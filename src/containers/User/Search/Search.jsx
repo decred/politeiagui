@@ -50,7 +50,7 @@ const UserSearch = ({ TopBanner, PageDetails, Sidebar, Main, Title }) => {
           title={<Title className="margin-right-m">Search</Title>}
           subtitle={
             <Link gray to="/proposals/unvetted">
-              &#8592; Go Back to unvetted proposals
+              &#8592; Go back to unvetted proposals
             </Link>
           }
         >
