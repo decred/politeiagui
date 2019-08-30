@@ -8,6 +8,7 @@ import {
   Message
 } from "pi-ui";
 import { Formik } from "formik";
+import Link from "src/componentsv2/Link";
 import styles from "./Search.module.css";
 import * as Yup from "yup";
 import { useSearchUser } from "./hooks";
@@ -44,71 +45,74 @@ const UserSearch = ({ TopBanner, PageDetails, Sidebar, Main, Title }) => {
   return (
     <>
       <TopBanner>
-        <Formik
-          initialValues={{
-            searchTerm: "",
-            searchBy: "username"
-          }}
-          onSubmit={onSubmit}
-          validationSchema={Yup.object().shape({
-            searchTerm: Yup.string().required("Required")
-          })}
+        <PageDetails
+          actionsContent={null}
+          title={<Title className="margin-right-m">Search</Title>}
+          subtitle={
+            <Link gray to="/proposals/unvetted">
+              &#8592; Go Back to unvetted proposals
+            </Link>
+          }
         >
-          {({
-            values,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            isSubmitting,
-            setFieldValue,
-            errors,
-            isValid,
-            touched
-          }) => {
-            function handleChangeSearchBy(v) {
-              setFieldValue("searchBy", v.value);
-            }
-            return (
-              <PageDetails
-                actionsContent={null}
-                title={
-                  <>
-                    <Title className="margin-right-m">Search</Title>
-                    <RadioButtonGroup
-                      label="Search by"
-                      options={[
-                        { value: "username", label: "username" },
-                        { value: "email", label: "email" }
-                      ]}
-                      value={values.searchBy}
-                      onChange={handleChangeSearchBy}
-                    />
-                  </>
-                }
-              >
-                <form className={styles.searchForm}>
-                  <BoxTextInput
-                    name="searchTerm"
-                    className={styles.searchBox}
-                    value={values.searchTerm}
-                    onChange={handleChange}
-                    placeholder="User email or username"
+          <Formik
+            initialValues={{
+              searchTerm: "",
+              searchBy: "email"
+            }}
+            onSubmit={onSubmit}
+            validationSchema={Yup.object().shape({
+              searchTerm: Yup.string().required("Required")
+            })}
+          >
+            {({
+              values,
+              handleChange,
+              // handleBlur,
+              handleSubmit,
+              isSubmitting,
+              setFieldValue,
+              // errors,
+              isValid
+              // touched
+            }) => {
+              function handleChangeSearchBy(v) {
+                setFieldValue("searchBy", v.value);
+              }
+              return (
+                <form>
+                  <RadioButtonGroup
+                    className={styles.searchByRadioGroup}
+                    label=""
+                    options={[
+                      { value: "email", label: "By email" },
+                      { value: "username", label: "By username" }
+                    ]}
+                    value={values.searchBy}
+                    onChange={handleChangeSearchBy}
                   />
-
-                  <Button
-                    className={styles.searchButton}
-                    onClick={handleSubmit}
-                    type="submit"
-                    loading={isSubmitting}
-                    kind={isValid ? "primary" : "disabled"}
-                  >
-                    Search
-                  </Button>
+                  <div className="justify-left margin-top-m">
+                    <BoxTextInput
+                      name="searchTerm"
+                      className={styles.searchBox}
+                      value={values.searchTerm}
+                      onChange={handleChange}
+                      placeholder="User email or username"
+                    />
+                    <Button
+                      className={styles.searchButton}
+                      onClick={handleSubmit}
+                      type="submit"
+                      loading={isSubmitting}
+                      kind={isValid ? "primary" : "disabled"}
+                    >
+                      Search
+                    </Button>
+                  </div>
                 </form>
-              </PageDetails>
-            );
-          }}
-        </Formik>
+              );
+            }}
+          </Formik>
+        </PageDetails>
       </TopBanner>
       <Sidebar />
       <Main>
