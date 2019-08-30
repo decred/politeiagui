@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Formik } from "formik";
@@ -19,8 +19,8 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { proposalFormValidation } = useProposalForm();
   const [
-    showMDGuideModal, 
-    openMDGuideModal, 
+    showMDGuideModal,
+    openMDGuideModal,
     closeMDGuideModal
   ] = useBooleanState(false);
   const {
@@ -28,7 +28,7 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
     openFullImageModal,
     closeFullImageModal
   } = useFullImageModal();
-  
+
   async function handleSubmit(
     values,
     { resetForm, setSubmitting, setFieldError }
@@ -118,57 +118,30 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
               onRemove={handleFileRemoval}
               errors={errors}
             />
-            {!mobile ? (
-              <Row justify="right" topMarginSize="s">
-                <DraftSaver submitSuccess={submitSuccess} />
-                <Text
-                  weight="semibold"
-                  color="gray"
-                  className={styles.formatHelpButton}
-                  style={{ marginRight: "40px"}}
-                  onClick={() => openMDGuideModal()}
-                >
-                  Formatting Help
-                </Text>
-                <Button kind="secondary">Save as draft</Button>
-                <Button
-                  type="submit"
-                  kind={!isValid && disableSubmit ? "disabled" : "primary"}
-                  loading={isSubmitting}
-                >
-                  Submit
-                </Button>
-              </Row>
-            ) : (
-              <div className={styles.mobileColumn}>
-                <Row justify="right" topMarginSize="s">  
-                  <DraftSaver submitSuccess={submitSuccess} />              
-                  <Button kind="secondary">Save as draft</Button>
-                  <Button
-                    type="submit"
-                    kind={!isValid && disableSubmit ? "disabled" : "primary"}
-                    loading={isSubmitting}
-                  >
-                    Submit
-                  </Button>
-                </Row>
-                <Row justify="right" topMarginSize="s">
-                  <Text
-                    weight="semibold"
-                    color="gray"
-                    className={styles.formatHelpButton}
-                    onClick={() => openMDGuideModal()}
-                  >
-                    Formatting Help
-                  </Text>
-                </Row>
-              </div>
-            )}
+            <div className={styles.actionsWrapper}>
+              <Button
+                color="gray"
+                type="button"
+                kind="secondary"
+                className={styles.formatHelpButton}
+                onClick={() => openMDGuideModal()}
+              >
+                Formatting Help
+              </Button>
+              <DraftSaver submitSuccess={submitSuccess} />
+              <Button
+                type="submit"
+                kind={!isValid && disableSubmit ? "disabled" : "primary"}
+                loading={isSubmitting}
+              >
+                Submit
+              </Button>
+            </div>
             <ModalFullImage
               image={showFullImageModal}
               show={!!showFullImageModal}
               onClose={closeFullImageModal}
-            />          
+            />
             <ModalMDGuide show={showMDGuideModal} onClose={closeMDGuideModal} />
           </form>
         );
