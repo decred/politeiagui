@@ -75,7 +75,7 @@ const CommentsListWrapper = ({
       const result = getChildren(comments, 0, lastTimeAccessed, currentUserID);
       setNestedComments(result);
     },
-    [comments, threadParentID]
+    [comments, threadParentID, currentUserID, lastTimeAccessed]
   );
   return <CommentsList comments={nestedComments} />;
 };

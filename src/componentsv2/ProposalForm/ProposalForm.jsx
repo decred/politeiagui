@@ -1,9 +1,8 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Formik } from "formik";
-import { Button, Message, BoxTextInput, Text, useMediaQuery } from "pi-ui";
-import { Row } from "../layout";
+import { Button, Message, BoxTextInput } from "pi-ui";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/componentsv2/MarkdownEditor";
 import ThumbnailGrid from "src/componentsv2/Files/Thumbnail";
@@ -15,7 +14,6 @@ import { useProposalForm, useFullImageModal } from "./hooks";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 
 const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
-  const mobile = useMediaQuery("(max-width: 560px)");
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { proposalFormValidation } = useProposalForm();
   const [
