@@ -1,0 +1,13 @@
+.contentWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.notFoundImg {
+    margin-top: 2rem;
+}
+
+.returnHomeBtn {
+    margin-top: 4rem;
+}
