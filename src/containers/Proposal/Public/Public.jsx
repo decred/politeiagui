@@ -12,7 +12,7 @@ const renderProposal = record => {
 };
 
 const tabLabels = [
-  tabValues.IN_DISCUSSSION,
+  tabValues.IN_DISCUSSION,
   tabValues.VOTING,
   tabValues.APPROVED,
   tabValues.REJECTED,
@@ -31,7 +31,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
-      [tabValues.IN_DISCUSSSION]: "No proposals under dicussion",
+      [tabValues.IN_DISCUSSION]: "No proposals under dicussion",
       [tabValues.VOTING]: "No proposals voting",
       [tabValues.APPROVED]: "No proposals approved",
       [tabValues.REJECTED]: "No proposals rejected",

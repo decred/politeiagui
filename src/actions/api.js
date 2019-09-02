@@ -389,7 +389,7 @@ export const onFetchVettedByTokens = (
     const res = await Promise.all(promises);
 
     // filter only proposals responses
-    const proposals = res.filter(r => r && r.proposals).map(r => r.proposal);
+    const proposals = res.filter(r => r && r.proposal).map(r => r.proposal);
 
     return dispatch(act.RECEIVE_VETTED({ proposals }));
   } catch (error) {

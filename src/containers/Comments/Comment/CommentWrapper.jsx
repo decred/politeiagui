@@ -29,7 +29,9 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     timestamp,
     username,
     userid,
-    parentid
+    parentid,
+    isNew,
+    sumOfNewDescendants
   } = comment;
 
   const isRecordAuthor = recordAuthorID === userid;
@@ -70,41 +72,50 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     }
     return onLikeComment(commentid, "-1");
   }
+  const hasChildrenComments = !!React.Children.toArray(children).filter(
+    child =>
+      child.props && child.props.comments && !!child.props.comments.length
+  ).length;
+
   return (
-    <Comment
-      permalink={`/${recordType}/${recordToken}/comments/${commentid}`}
-      topLevelComment={isThreadParent}
-      author={username}
-      authorID={userid}
-      createdAt={timestamp}
-      highlightAuthor={isRecordAuthor}
-      disableLikes={!enableCommentVote}
-      disableLikesClick={
-        loadingLikes || readOnly || (userLoggedIn && identityError)
-      }
-      disableReply={readOnly || !!identityError || paywallMissing}
-      likesCount={resultvotes}
-      likeOption={getCommentLikeOption(commentid)}
-      onLike={handleLikeComment}
-      onDislike={handleDislikeComment}
-      showReplies={showReplies}
-      onClickReply={handleToggleReplyForm}
-      onClickShowReplies={handleToggleReplies}
-      numOfReplies={numOfReplies}
-      commentBody={commentText}
-      {...props}
-    >
+    <>
+      <Comment
+        permalink={`/${recordType}/${recordToken}/comments/${commentid}`}
+        topLevelComment={isThreadParent}
+        author={username}
+        authorID={userid}
+        createdAt={timestamp}
+        highlightAuthor={isRecordAuthor}
+        highlightAsNew={isNew}
+        disableLikes={!enableCommentVote}
+        disableLikesClick={
+          loadingLikes || readOnly || (userLoggedIn && identityError)
+        }
+        disableReply={readOnly || !!identityError || paywallMissing}
+        likesCount={resultvotes}
+        likeOption={getCommentLikeOption(commentid)}
+        onLike={handleLikeComment}
+        onDislike={handleDislikeComment}
+        showReplies={showReplies}
+        onClickReply={handleToggleReplyForm}
+        onClickShowReplies={handleToggleReplies}
+        numOfReplies={numOfReplies}
+        commentBody={commentText}
+        numOfNewHiddenReplies={sumOfNewDescendants}
+        {...props}
+      />
       {showReplyForm && (
         <CommentForm
+          className={styles.replyForm}
           persistKey={`replying-to-${commentid}-from-${token}`}
           onSubmit={handleSubmitComment}
           onCommentSubmitted={handleCommentSubmitted}
         />
       )}
-      {showReplies && (
+      {showReplies && hasChildrenComments && (
         <div className={styles.childrenContainer}>{children}</div>
       )}
-    </Comment>
+    </>
   );
 };
 

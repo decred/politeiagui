@@ -7,12 +7,18 @@
     width: 200px;
 }
 
-.formatHelpButton {
+.actionsWrapper { 
+    display: flex;
+    flex-wrap: wrap-reverse;
+    justify-content: flex-end;
+}
+
+button.formatHelpButton {
     border: 0;
     color: #8997A5;
-    padding-top: 0.9rem;
     font-weight: 400;
     cursor: pointer;
+    margin: 0 !important;
 }
 
 .formatHelpButton:hover {
@@ -22,4 +28,10 @@
 .mobileColumn {
     display: flex;
     flex-direction: column;
+}
+
+@media screen and (max-width: 560px) { 
+    button.formatHelpButton {
+        padding-right: 0;
+    }
 }
