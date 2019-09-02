@@ -4,6 +4,7 @@ import Proposal from "src/componentsv2/Proposal";
 import styles from "./Detail.module.css";
 import { useProposal } from "./hooks";
 import Comments from "src/containers/Comments";
+import Link from "src/componentsv2/Link";
 import ProposalLoader from "src/componentsv2/Proposal/ProposalLoader";
 import { proposalCanReceiveComments, getCommentBlockedReason } from "./helpers";
 import {
@@ -26,7 +27,11 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
       <TopBanner>
         <PageDetails
           title={"Proposal Details"}
-          headerClassName="no-margin-top"
+          subtitle={
+            <Link gray to="/">
+              &#8592; Go back to all proposals
+            </Link>
+          }
         />
       </TopBanner>
       <Sidebar />

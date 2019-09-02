@@ -16,6 +16,7 @@ import PageUserRequestResendVerificationEmail from "./User/RequestResendVerifica
 import PageUserPrivacyPolicy from "./User/PrivacyPolicy";
 import PageUserVerifyEmail from "./User/VerifyEmail";
 import PageUserDetail from "./User/Detail";
+import PageUserSearch from "./User/Search";
 
 import PageProposalsPublicList from "./Proposals/PublicList";
 import PageProposalsUser from "./Proposals/User";
@@ -69,6 +70,11 @@ const Routes = ({ location }) => {
             path="/user/verify-email"
             exact
             component={PageUserVerifyEmail}
+          />
+          <AdminAuthenticatedRoute
+            path={`/user/search`}
+            exact
+            component={PageUserSearch}
           />
           <Route path="/user/:userid" exact component={PageUserDetail} />
 

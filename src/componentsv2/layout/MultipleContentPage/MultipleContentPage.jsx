@@ -60,10 +60,13 @@ const PageDetails = ({
       {...props}
     >
       <div className={classNames(styles.pageDetailsHeader, headerClassName)}>
-        {titleContent}
+        <div className={styles.titleAndSubtitleWrapper}>
+          {titleContent}
+          {!!subtitle && <Subtitle>{subtitle}</Subtitle>}
+        </div>
         <div className={styles.pageDetailsActions}>{actionsContent}</div>
       </div>
-      {!!subtitle && <Subtitle>{subtitle}</Subtitle>}
+
       {children}
     </PageDetailsUI>
   );
