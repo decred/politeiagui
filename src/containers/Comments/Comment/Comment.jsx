@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Text, classNames } from "pi-ui";
+import { Text, classNames, useMediaQuery } from "pi-ui";
 import styles from "./Comment.module.css";
 import DateTooltip from "src/componentsv2/DateTooltip";
 import Markdown from "src/componentsv2/Markdown";
@@ -11,7 +11,6 @@ import Likes from "src/componentsv2/Likes";
 import CopyLink from "src/componentsv2/CopyLink";
 
 const Comment = ({
-  children,
   className,
   permalink,
   topLevelComment,
@@ -31,13 +30,16 @@ const Comment = ({
   onClickReply,
   onClickShowReplies,
   numOfReplies,
+  numOfNewHiddenReplies,
+  highlightAsNew,
   ...props
 }) => {
+  const extraSmall = useMediaQuery("(max-width: 560px)");
   return (
     <div
       className={classNames(
         styles.commentWrapper,
-        !topLevelComment && styles.withLeftPadding,
+        highlightAsNew && styles.highlightAsNew,
         className
       )}
       {...props}
@@ -60,6 +62,7 @@ const Comment = ({
               </Link>
             )}
           </DateTooltip>
+          {highlightAsNew && !extraSmall && <Text color="gray">new</Text>}
         </Join>
         {!disableLikes && (
           <Likes
@@ -91,16 +94,17 @@ const Comment = ({
               {showReplies ? "-" : `+${numOfReplies}`}
             </span>
           )}
+          {numOfNewHiddenReplies > 0 && !showReplies && (
+            <Text color="green">{`${numOfNewHiddenReplies} new`}</Text>
+          )}
         </div>
         <CopyLink url={window.location.origin + permalink} />
       </div>
-      {children}
     </div>
   );
 };
 
 Comment.propTypes = {
-  children: PropTypes.node,
   className: PropTypes.string,
   permalink: PropTypes.string,
   topLevelComment: PropTypes.bool,
@@ -119,7 +123,8 @@ Comment.propTypes = {
   disableReply: PropTypes.bool,
   onClickReply: PropTypes.func,
   onClickShowReplies: PropTypes.func,
-  numOfReplies: PropTypes.number
+  numOfReplies: PropTypes.number,
+  numOfNewHiddenReplies: PropTypes.number
 };
 
 export default Comment;
