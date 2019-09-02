@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 
 const ModalProvider = ({ children, modal, context }) => {
@@ -6,11 +6,13 @@ const ModalProvider = ({ children, modal, context }) => {
   const [id, setId] = useState(undefined);
   const [showModal, openModal, closeModal] = useBooleanState(false);
 
-  function handleOpen(id, props = {}) {
+  // const open
+
+  const handleOpen = useCallback((id, props = {}) => {
     setId(id);
     setModalProps(props);
     openModal();
-  }
+  }, [openModal]);
 
   useEffect(
     function resetModalProps() {

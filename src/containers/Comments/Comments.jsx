@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useCallback, useMemo } from "react";
 import { Card, H2, Text, Message, classNames } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import styles from "./Comments.module.css";
@@ -53,12 +53,14 @@ const Comments = ({
     recordToken,
     numOfComments
   });
+
   const [, , openLoginModal, closeLoginModal] = useLoginModal();
-  const handleOpenLoginModal = () => {
+
+  const handleOpenLoginModal = useCallback(() => {
     openLoginModal("commentsLoginModal", {
       onLoggedIn: closeLoginModal
     });
-  };
+  }, [openLoginModal, closeLoginModal]);
 
   const onRedirectToSignup = () => {
     history.push("/user/signup");
@@ -67,21 +69,33 @@ const Comments = ({
   const paywallMissing = paywallEnabled && !isPaid;
   const isSingleThread = !!threadParentID;
 
-  function handleSubmitComment(comment) {
-    return onSubmitComment({
-      comment,
-      token: recordToken,
-      parentID: 0
-    });
-  }
+  const handleSubmitComment = useCallback(
+    comment => {
+      return onSubmitComment({
+        comment,
+        token: recordToken,
+        parentID: 0
+      });
+    },
+    [recordToken, onSubmitComment]
+  );
 
-  function handleSetSortOption(option) {
-    setSortOption(option.value);
-    dispatch({
-      type: actions.SORT,
-      sortOption: option.value
-    });
-  }
+  const handleSetSortOption = useCallback(
+    option => {
+      setSortOption(option.value);
+      dispatch({
+        type: actions.SORT,
+        sortOption: option.value
+      });
+    },
+    [setSortOption]
+  );
+
+  const selectOptions = useMemo(() => getSortOptionsForSelect(), []);
+  const selectValue = useMemo(
+    () => createSelectOptionFromSortOption(sortOption),
+    [sortOption]
+  );
 
   const scrollToComments = getQueryStringValue("scrollToComments");
   useEffect(
@@ -115,6 +129,7 @@ const Comments = ({
     }
     return contents;
   }
+
   return (
     <>
       <Card
@@ -168,9 +183,9 @@ const Comments = ({
             {!!comments && !!comments.length && (
               <Select
                 isSearchable={false}
-                value={createSelectOptionFromSortOption(sortOption)}
+                value={selectValue}
                 onChange={handleSetSortOption}
-                options={getSortOptionsForSelect()}
+                options={selectOptions}
               />
             )}
           </div>

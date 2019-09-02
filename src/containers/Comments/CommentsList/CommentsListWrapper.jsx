@@ -35,4 +35,4 @@ const CommentsListWrapper = ({ comments, threadParentID }) => {
   return <CommentsList comments={nestedComments} />;
 };
 
-export default CommentsListWrapper;
+export default React.memo(CommentsListWrapper);

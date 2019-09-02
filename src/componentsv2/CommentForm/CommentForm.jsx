@@ -86,4 +86,4 @@ CommentForm.propTypes = {
   persistKey: PropTypes.string
 };
 
-export default CommentForm;
+export default React.memo(CommentForm);

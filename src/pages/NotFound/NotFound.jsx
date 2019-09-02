@@ -11,7 +11,11 @@ const PageNotFound = ({ history }) => {
     <SingleContentPage noCardWrap>
       <div className={styles.contentWrapper}>
         <H1>Page not found</H1>
-        <img className={styles.notFoundImg} src={notFoundImage} />
+        <img
+          alt="Not Found"
+          className={styles.notFoundImg}
+          src={notFoundImage}
+        />
         <Button className={styles.returnHomeBtn} onClick={goToHomePage}>
           Return home
         </Button>

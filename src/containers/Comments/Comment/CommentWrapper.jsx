@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import styles from "./Comment.module.css";
 import CommentForm from "src/componentsv2/CommentForm";
 import { useComment } from "../hooks";
@@ -38,38 +38,72 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(isThreadParent);
 
-  function handleToggleReplyForm() {
+  const handleToggleReplyForm = useCallback(() => {
     setShowReplyForm(!showReplyForm);
-  }
-  function handleToggleReplies() {
-    setShowReplies(!showReplies);
-  }
+  }, [showReplyForm]);
 
-  async function handleSubmitComment(comment) {
-    return onSubmitComment({
-      comment,
-      token,
-      parentID: commentid
-    });
-  }
-  function handleCommentSubmitted() {
+  const handleToggleReplies = useCallback(() => {
+    setShowReplies(!showReplies);
+  }, [showReplies]);
+
+  const handleSubmitComment = useCallback(
+    async comment => {
+      return onSubmitComment({
+        comment,
+        token,
+        parentID: commentid
+      });
+    },
+    [token, commentid, onSubmitComment]
+  );
+
+  const handleCommentSubmitted = useCallback(() => {
     setShowReplyForm(false);
     setShowReplies(true);
-  }
-  async function handleLikeComment() {
+  }, []);
+
+  const handleLikeComment = useCallback(() => {
     if (!userLoggedIn) {
       openLoginModal();
       return;
     }
     return onLikeComment(commentid, "1");
-  }
-  function handleDislikeComment() {
+  }, [openLoginModal, userLoggedIn, onLikeComment, commentid]);
+
+  const handleDislikeComment = useCallback(() => {
     if (!userLoggedIn) {
       openLoginModal();
       return;
     }
     return onLikeComment(commentid, "-1");
-  }
+  }, [openLoginModal, onLikeComment, userLoggedIn, commentid]);
+
+  const commentForm = useMemo(
+    () => (
+      <CommentForm
+        persistKey={`replying-to-${commentid}-from-${token}`}
+        onSubmit={handleSubmitComment}
+        onCommentSubmitted={handleCommentSubmitted}
+      />
+    ),
+    [commentid, handleSubmitComment, token, handleCommentSubmitted]
+  );
+
+  const replies = useMemo(
+    () => <div className={styles.childrenContainer}>{children}</div>,
+    [children]
+  );
+
+  const commentContent = useMemo(
+    () => (
+      <>
+        {showReplyForm && commentForm}
+        {showReplies && replies}
+      </>
+    ),
+    [showReplyForm, showReplies, commentForm, replies]
+  );
+
   return (
     <Comment
       permalink={`/${recordType}/${recordToken}/comments/${commentid}`}
@@ -94,16 +128,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
       commentBody={commentText}
       {...props}
     >
-      {showReplyForm && (
-        <CommentForm
-          persistKey={`replying-to-${commentid}-from-${token}`}
-          onSubmit={handleSubmitComment}
-          onCommentSubmitted={handleCommentSubmitted}
-        />
-      )}
-      {showReplies && (
-        <div className={styles.childrenContainer}>{children}</div>
-      )}
+      {commentContent}
     </Comment>
   );
 };
