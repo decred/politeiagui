@@ -19,14 +19,14 @@ export const getMarkdownContent = files => {
 };
 
 /**
- * Returns the total amount of votes received by a given proposal
- * @param {Object} proposal
+ * Returns the total amount of votes received by a given proposal voteStatus
+ * @param {Object} voteStatus
  */
-export const getVotesReceived = proposal => {
-  if (!proposal || !proposal.voteStatus) {
+export const getVotesReceived = voteStatus => {
+  if (!voteStatus) {
     return 0;
   }
-  return proposal.voteStatus.totalvotes;
+  return voteStatus.totalvotes;
 };
 
 /**
@@ -78,53 +78,47 @@ export const isUnreviewedProposal = proposal => {
 /**
  * Returns true if the given proposal is public, but voting
  * is not authorized yet.
- * @param {Object} proposal
+ * @param {Object} voteStatus
  * @returns {Boolean} isVotingNotAuthorized
  */
-export const isVotingNotAuthorizedProposal = proposal => {
-  return (
-    !!proposal &&
-    !!proposal.voteStatus &&
-    proposal.voteStatus.status === PROPOSAL_VOTING_NOT_AUTHORIZED
-  );
+export const isVotingNotAuthorizedProposal = voteStatus => {
+  return !!voteStatus && voteStatus.status === PROPOSAL_VOTING_NOT_AUTHORIZED;
 };
 
 /**
  * Returns true if the given proposal is public, but voting
  * has finished already
- * @param {Object} proposal
+ * @param {Object} voteStatus
  * @returns {Boolean} isVotingFinished
  */
-export const isVotingFinishedProposal = proposal => {
-  return (
-    !!proposal &&
-    !!proposal.voteStatus &&
-    proposal.voteStatus.status === PROPOSAL_VOTING_FINISHED
-  );
+export const isVotingFinishedProposal = voteStatus => {
+  return !!voteStatus && voteStatus.status === PROPOSAL_VOTING_FINISHED;
 };
 
 /**
  * Returns true if the given proposal is editable
  * @param {Object} proposal
+ * @param {Object} voteStatus
  * @returns {Boolean} isEditable
  */
-export const isEditableProposal = proposal => {
+export const isEditableProposal = (proposal, voteStatus) => {
   return (
     isUnreviewedProposal(proposal) ||
-    (isPublicProposal(proposal) && isVotingNotAuthorizedProposal(proposal))
+    (isPublicProposal(proposal) && isVotingNotAuthorizedProposal(voteStatus))
   );
 };
 
 /**
  * Returns true if the given proposal is under discussion
  * @param {Object} proposal
+ * @param {Object} voteStatus
  * @returns {Boolean} isUnderDiscussion
  */
-export const isUnderDiscussionProposal = proposal => {
+export const isUnderDiscussionProposal = (proposal, voteStatus) => {
   return (
     isPublicProposal(proposal) &&
-    !isVoteActiveProposal(proposal) &&
-    !isVotingFinishedProposal(proposal)
+    !isVoteActiveProposal(voteStatus) &&
+    !isVotingFinishedProposal(voteStatus)
   );
 };
 
@@ -139,11 +133,12 @@ export const isAbandonedProposal = proposal => {
 
 /**
  * Returns true if the given proposal is approved
+ * @param {Object} proposal
  * @param {Object} voteStatus
  * @returns {Boolean} isApproved
  */
-export const isApprovedProposal = proposal => {
-  if (!proposal || !proposal.voteStatus || !isPublicProposal(proposal)) {
+export const isApprovedProposal = (proposal, voteStatus) => {
+  if (!proposal || !voteStatus || !isPublicProposal(proposal)) {
     return false;
   }
   const {
@@ -152,7 +147,7 @@ export const isApprovedProposal = proposal => {
     numofeligiblevotes,
     optionsresult,
     totalvotes
-  } = proposal.voteStatus;
+  } = voteStatus;
   const quorumInVotes = (quorumpercentage * numofeligiblevotes) / 100;
   const quorumPasses = totalvotes >= quorumInVotes;
   if (!quorumPasses) {
@@ -165,18 +160,18 @@ export const isApprovedProposal = proposal => {
   return yesVotes > (passpercentage * totalvotes) / 100;
 };
 
-export const isVoteActiveProposal = proposal =>
-  !!proposal &&
-  !!proposal.voteStatus &&
-  proposal.voteStatus.status === PROPOSAL_VOTING_ACTIVE;
+export const isVoteActiveProposal = voteStatus =>
+  !!voteStatus && voteStatus.status === PROPOSAL_VOTING_ACTIVE;
 
 /**
  * Return the properties to be passed to the StatusTag UI component
  * @param {Object} proposal
+ * @param {Object} voteStatus
+ * @returns {Object} statusTagProps
  */
-export const getProposalStatusTagProps = proposal => {
+export const getProposalStatusTagProps = (proposal, voteStatus) => {
   if (isPublicProposal(proposal)) {
-    switch (proposal.voteStatus.status) {
+    switch (voteStatus.status) {
       case PROPOSAL_VOTING_NOT_AUTHORIZED:
         return { type: "blackTime", text: "Hasn't authorized yet" };
       case PROPOSAL_VOTING_AUTHORIZED:
@@ -184,7 +179,7 @@ export const getProposalStatusTagProps = proposal => {
       case PROPOSAL_VOTING_ACTIVE:
         return { type: "bluePending", text: "Active" };
       case PROPOSAL_VOTING_FINISHED:
-        if (isApprovedProposal(proposal)) {
+        if (isApprovedProposal(proposal, voteStatus)) {
           return { type: "greenCheck", text: "Finished" };
         } else {
           return { type: "grayNegative", text: "Finished" };
@@ -203,35 +198,29 @@ export const getProposalStatusTagProps = proposal => {
 
 /**
  * Return the amount of blocks left to the end of the voting period
- * @param {Object} proposal
+ * @param {Object} voteStatus
  * @param {Number} chainHeight
  * @returns {Number} number of blocks left
  */
-export const getVoteBlocksLeft = (proposal, chainHeight) => {
-  if (!isPublicProposal(proposal)) return null;
-  const {
-    voteStatus: { endheight }
-  } = proposal;
+export const getVoteBlocksLeft = (voteStatus, chainHeight) => {
+  if (!voteStatus) return null;
+  const { endheight } = voteStatus;
   return +endheight - chainHeight;
 };
 
 /**
  * Return a "human readable" message of how long will take until the voting ends
- * @param {Object} proposal
+ * @param {Object} voteStatus
  * @param {Number} chainHeight
  * @param {Boolean} isTestnet
  * @returns {String} message
  */
-export const getVoteTimeLeftInWords = (proposal, chainHeight, isTestnet) => {
-  if (
-    !proposal ||
-    !isPublicProposal(proposal) ||
-    proposal.voteStatus.status !== PROPOSAL_VOTING_ACTIVE
-  ) {
+export const getVoteTimeLeftInWords = (voteStatus, chainHeight, isTestnet) => {
+  if (!voteStatus || voteStatus.status !== PROPOSAL_VOTING_ACTIVE) {
     return "";
   }
 
-  const blocks = getVoteBlocksLeft(proposal, chainHeight);
+  const blocks = getVoteBlocksLeft(voteStatus, chainHeight);
   const blockTimeMinutes = isTestnet
     ? blocks * BLOCK_DURATION_TESTNET
     : blocks * BLOCK_DURATION_MAINNET;

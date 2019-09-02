@@ -1,4 +1,10 @@
+import {
+  createSelectorCreator,
+  defaultMemoize,
+  createSelector
+} from "reselect";
 import get from "lodash/fp/get";
+import isEqual from "lodash/isEqual";
 import eq from "lodash/fp/eq";
 import filter from "lodash/fp/filter";
 import compose from "lodash/fp/compose";
@@ -9,6 +15,8 @@ import {
   PROPOSAL_STATUS_ABANDONED,
   CMSWWWMODE
 } from "../constants";
+// create a "selector creator" that uses lodash.isEqual instead of ===
+const createDeepEqualSelector = createSelectorCreator(defaultMemoize, isEqual);
 
 export const getIsApiRequesting = key =>
   bool(get(["api", key, "isRequesting"]));
@@ -397,17 +405,19 @@ export const isTestNet = compose(
 );
 export const isMainNet = not(isTestNet);
 
-export const getPropVoteStatus = state => token => {
-  const vsResponse = apiPropsVoteStatusResponse(state) || {};
-  return vsResponse[token] || {};
-};
+export const getPropVoteStatus = createDeepEqualSelector(
+  apiPropsVoteStatusResponse,
+  vsResponse => {
+    const getVoteStatusByToken = token => vsResponse[token];
+    return getVoteStatusByToken;
+  }
+);
 
-export const proposalsWithVoteStatus = state => {
-  const proposals = apiVettedProposals(state);
-  return proposals.map(prop => ({
-    ...prop,
-    voteStatus: getPropVoteStatus(state)(prop.censorshiprecord.token)
-  }));
+export const makeGetPropVoteStatus = token => {
+  return createSelector(
+    apiPropsVoteStatusResponse,
+    vsResponse => vsResponse[token]
+  );
 };
 
 export const proposalWithVoteStatus = state => {
@@ -462,6 +472,16 @@ export const apiVettedProposals = or(
   ),
   constant([])
 );
+
+export const proposalsWithVoteStatus = createDeepEqualSelector(
+  apiVettedProposals,
+  proposals =>
+    proposals.map(prop => ({
+      ...prop,
+      voteStatus: {}
+    }))
+);
+
 export const vettedProposalsIsRequesting = isApiRequestingVetted;
 export const vettedProposalsError = or(apiInitError, apiVettedError);
 

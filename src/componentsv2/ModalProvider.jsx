@@ -6,13 +6,14 @@ const ModalProvider = ({ children, modal, context }) => {
   const [id, setId] = useState(undefined);
   const [showModal, openModal, closeModal] = useBooleanState(false);
 
-  // const open
-
-  const handleOpen = useCallback((id, props = {}) => {
-    setId(id);
-    setModalProps(props);
-    openModal();
-  }, [openModal]);
+  const handleOpen = useCallback(
+    (id, props = {}) => {
+      setId(id);
+      setModalProps(props);
+      openModal();
+    },
+    [openModal]
+  );
 
   useEffect(
     function resetModalProps() {

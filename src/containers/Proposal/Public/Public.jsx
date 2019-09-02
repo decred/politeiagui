@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import styles from "./PublicProposals.module.css";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
 import { usePublicProposals } from "./hooks";
@@ -20,7 +20,6 @@ const tabLabels = [
 ];
 
 const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
-
   const {
     isLoading,
     proposals,
@@ -29,7 +28,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     onFetchProposalsBatch
   } = usePublicProposals();
 
-  const getEmptyMessage = useCallback((tab) => {
+  const getEmptyMessage = useCallback(tab => {
     const mapTabToMessage = {
       [tabValues.IN_DISCUSSSION]: "No proposals under dicussion",
       [tabValues.VOTING]: "No proposals voting",
@@ -38,32 +37,42 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       [tabValues.ABANDONED]: "No proposals abandoned"
     };
     return mapTabToMessage[tab];
-  },[]);
+  }, []);
+
+  const recordTokensByTab = useMemo(
+    () => mapProposalsTokensByTab(tabLabels, proposalsTokens),
+    [proposalsTokens]
+  );
+
+  const content = useCallback(
+    ({ tabs, content }) => (
+      <>
+        <TopBanner>
+          <PageDetails title="Public Proposals">{tabs}</PageDetails>
+        </TopBanner>
+        <Sidebar />
+        <Main className={styles.customMain}>
+          <PublicActionsProvider>
+            {proposalsTokens && !isLoading && content}
+          </PublicActionsProvider>
+        </Main>
+      </>
+    ),
+    [proposalsTokens, isLoading]
+  );
 
   return (
     <RecordsView
       onFetchRecords={onFetchProposalsBatch}
       records={proposals}
       tabLabels={tabLabels}
-      recordTokensByTab={mapProposalsTokensByTab(tabLabels, proposalsTokens)}
+      recordTokensByTab={recordTokensByTab}
       renderRecord={renderProposal}
       displayTabCount={!loadingTokenInventory}
       placeholder={ProposalLoader}
       getEmptyMessage={getEmptyMessage}
     >
-      {({ tabs, content }) => (
-        <>
-          <TopBanner>
-            <PageDetails title="Public Proposals">{tabs}</PageDetails>
-          </TopBanner>
-          <Sidebar />
-          <Main className={styles.customMain}>
-            <PublicActionsProvider>
-              {proposalsTokens && !isLoading && content}
-            </PublicActionsProvider>
-          </Main>
-        </>
-      )}
+      {content}
     </RecordsView>
   );
 };

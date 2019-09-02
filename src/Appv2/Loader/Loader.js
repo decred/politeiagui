@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState
-} from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useLoader } from "./hooks";
 
 export const LoaderContext = createContext();
@@ -34,15 +28,12 @@ const Loader = ({ children }) => {
 
   return (
     <LoaderContext.Provider
-      value={useMemo(
-        () => ({
-          initDone,
-          error,
-          currentUser: user,
-          apiInfo
-        }),
-        [initDone, error, apiInfo, user]
-      )}
+      value={{
+        initDone,
+        error,
+        currentUser: user,
+        apiInfo
+      }}
     >
       {initDone && children}
     </LoaderContext.Provider>

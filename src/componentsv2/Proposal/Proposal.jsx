@@ -13,7 +13,7 @@ import {
   isPublicProposal,
   isEditableProposal
 } from "./helpers";
-import { useProposalVoteInfo } from "./hooks";
+import { useProposalVoteInfo, useProposalVoteStatus } from "./hooks";
 import { useLoaderContext } from "src/Appv2/Loader";
 import styles from "./Proposal.module.css";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
@@ -24,7 +24,7 @@ import { useFullImageModal } from "../ProposalForm/hooks";
 import ThumbnailGrid from "../Files/Thumbnail";
 import ModalFullImage from "../ModalFullImage";
 
-const Proposal = ({ proposal, extended, children }) => {
+const Proposal = ({ proposal, extended }) => {
   const {
     censorshiprecord,
     files,
@@ -35,9 +35,9 @@ const Proposal = ({ proposal, extended, children }) => {
     timestamp,
     userid,
     username,
-    version,
-    voteStatus
+    version
   } = proposal;
+  const voteStatus = useProposalVoteStatus(censorshiprecord.token);
   const { currentUser } = useLoaderContext();
   const {
     showFullImageModal,
@@ -51,7 +51,7 @@ const Proposal = ({ proposal, extended, children }) => {
   const isAbandoned = isAbandonedProposal(proposal);
   const isPublicAccessible = isPublic || isAbandoned;
   const isAuthor = currentUser && currentUser.userid === userid;
-  const isEditable = isAuthor && isEditableProposal(proposal);
+  const isEditable = isAuthor && isEditableProposal(proposal, voteStatus);
   const {
     voteActive: isVoteActive,
     voteTimeLeft,
@@ -128,7 +128,7 @@ const Proposal = ({ proposal, extended, children }) => {
                   <Status>
                     <StatusTag
                       className={styles.statusTag}
-                      {...getProposalStatusTagProps(proposal)}
+                      {...getProposalStatusTagProps(proposal, voteStatus)}
                     />
                     {isVoteActive && (
                       <>
@@ -168,7 +168,7 @@ const Proposal = ({ proposal, extended, children }) => {
                     <VotesCount
                       isVoteActive={isVoteActive}
                       quorumVotes={getQuorumInVotes(voteStatus)}
-                      votesReceived={getVotesReceived(proposal)}
+                      votesReceived={getVotesReceived(voteStatus)}
                       onSearchVotes={handleOpenSearchVotesModal}
                     />
                   }
@@ -225,7 +225,7 @@ const Proposal = ({ proposal, extended, children }) => {
               </Row>
             )}
             <LoggedInContent>
-              <ProposalActions proposal={proposal} />
+              <ProposalActions proposal={proposal} voteStatus={voteStatus} />
             </LoggedInContent>
           </>
         )}

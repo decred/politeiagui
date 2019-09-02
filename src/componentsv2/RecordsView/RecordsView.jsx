@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useMemo,
+  useCallback
+} from "react";
 import { Tabs, Tab } from "pi-ui";
 import LazyList from "src/components/LazyList/LazyList";
 import { getRecordsByTabOption } from "./helpers";
@@ -55,13 +61,12 @@ const RecordsView = ({
 
   const filteredTokens = recordTokensByTab[tabOption] || [];
 
-  const filteredRecords = getRecordsByTabOption(
-    tabOption,
-    records,
-    filteredTokens
+  const filteredRecords = useMemo(
+    () => getRecordsByTabOption(tabOption, records, filteredTokens),
+    [tabOption, records, filteredTokens]
   );
 
-  const handleFetchMoreRecords = async () => {
+  const handleFetchMoreRecords = useCallback(async () => {
     const index = filteredRecords.length;
     const recordTokensToBeFetched = filteredTokens.slice(
       index,
@@ -79,7 +84,14 @@ const RecordsView = ({
         count: itemsOnLoad + numOfItemsToBeFetched
       });
     }
-  };
+  }, [
+    filteredRecords,
+    filteredTokens,
+    pageSize,
+    setHasMore,
+    onFetchRecords,
+    itemsOnLoad
+  ]);
 
   useEffect(() => {
     const hasMoreRecordsToLoad =
@@ -87,21 +99,40 @@ const RecordsView = ({
     setHasMore(hasMoreRecordsToLoad);
   }, [filteredTokens, filteredRecords.length]);
 
-  const getPropsCountByTab = tab => {
-    if (!recordTokensByTab) return "";
-    return (recordTokensByTab[tab] || []).length;
-  };
+  const getPropsCountByTab = useCallback(
+    tab => {
+      if (!recordTokensByTab) return "";
+      return (recordTokensByTab[tab] || []).length;
+    },
+    [recordTokensByTab]
+  );
+
+  const tabs = useMemo(
+    () =>
+      tabLabels.map(label => (
+        <Tab
+          key={`tab-${label}`}
+          count={displayTabCount ? getPropsCountByTab(label) : ""}
+          label={label}
+        />
+      )),
+    [tabLabels, displayTabCount, getPropsCountByTab]
+  );
+
+  const loadingPlaceholders = useMemo(
+    () => (
+      <LoadingPlaceholders
+        numberOfItems={itemsOnLoad}
+        placeholder={placeholder}
+      />
+    ),
+    [itemsOnLoad, placeholder]
+  );
 
   return children({
     tabs: (
       <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
-        {tabLabels.map(label => (
-          <Tab
-            key={`tab-${label}`}
-            count={displayTabCount ? getPropsCountByTab(label) : ""}
-            label={label}
-          />
-        ))}
+        {tabs}
       </Tabs>
     ),
     content: (
@@ -114,12 +145,7 @@ const RecordsView = ({
           <HelpMessage>{getEmptyMessage(tabOption)}</HelpMessage>
         }
         isLoading={itemsOnLoad > 0}
-        loadingPlaceholder={
-          <LoadingPlaceholders
-            numberOfItems={itemsOnLoad}
-            placeholder={placeholder}
-          />
-        }
+        loadingPlaceholder={loadingPlaceholders}
       />
     )
   });
