@@ -21,7 +21,7 @@ const UserSearch = ({ TopBanner, PageDetails, Sidebar, Main, Title }) => {
   const { onSearchUser, searchResult } = useSearchUser();
   const [searchError, setSearchError] = useState(null);
   const [foundUsers, setFoundUsers] = useState([]);
-  async function onSubmit(values, { resetForm, setSubmitting, setFieldError }) {
+  async function onSubmit(values, { setSubmitting }) {
     try {
       setSearchError(null);
       await onSearchUser({
@@ -67,13 +67,10 @@ const UserSearch = ({ TopBanner, PageDetails, Sidebar, Main, Title }) => {
             {({
               values,
               handleChange,
-              // handleBlur,
               handleSubmit,
               isSubmitting,
               setFieldValue,
-              // errors,
               isValid
-              // touched
             }) => {
               function handleChangeSearchBy(v) {
                 setFieldValue("searchBy", v.value);

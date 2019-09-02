@@ -22,8 +22,8 @@ const HeaderNav = ({ history, location }) => {
   function goToSearchUsers() {
     history.push("/user/search");
   }
-  const isOnUnvettedRoute = location.pathname === `/proposals/unvetted`;
-  const isOnSearchUsersRoute = location.pathname === `/user/search`;
+  const isOnUnvettedRoute = location.pathname === "/proposals/unvetted";
+  const isOnSearchUsersRoute = location.pathname === "/user/search";
   return username ? (
     <div className={styles.loggedInContainer}>
       <ProposalCreditsIndicator />
