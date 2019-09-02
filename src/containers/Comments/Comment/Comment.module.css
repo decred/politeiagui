@@ -11,6 +11,7 @@
 .censor {
     cursor: pointer;
     color: #ED6D47;
+    margin-right: 1rem;
 }
 
 .censored {
@@ -45,7 +46,7 @@
 }
 
 .censor:hover {
-    color: orange;
+    color: #D0A244;
 }
 
 .commentAuthor {

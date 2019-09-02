@@ -7,6 +7,7 @@ import Markdown from "src/componentsv2/Markdown";
 import Join from "src/componentsv2/Join";
 import Link from "src/componentsv2/Link";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
+import AdminContent from "src/componentsv2/AdminContent";
 import Likes from "src/componentsv2/Likes";
 import CopyLink from "src/componentsv2/CopyLink";
 
@@ -65,7 +66,6 @@ const Comment = ({
               </Link>
             )}
           </DateTooltip>
-          {highlightAsNew && !extraSmall && <Text color="gray">new</Text>}
           {isAdmin &&
             <Text
               weight="semibold"
@@ -75,6 +75,7 @@ const Comment = ({
               Censor
             </Text>
           }
+          {highlightAsNew && !extraSmall && <Text color="gray">new</Text>}
         </Join>
         {!disableLikes && (
           <Likes
@@ -104,6 +105,17 @@ const Comment = ({
                 Reply
               </Text>
             </LoggedInContent>
+          )}
+          {!censored && (
+            <AdminContent>
+              <Text
+                weight="semibold"
+                className={styles.censor}
+                onClick={onClickCensor}
+              >
+                Censor
+              </Text>
+            </AdminContent>            
           )}
           {numOfReplies > 0 && (
             <span className={styles.showReplies} onClick={onClickShowReplies}>

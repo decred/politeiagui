@@ -28,11 +28,11 @@ const mapDispatchToProps = {
 export function useComments(ownProps) {
   const {
     onFetchComments,
-    onLikeComment: onLikeCommentAction,
     onFetchLikes,
-    commentsLikes,
-    onResetComments,
     onCensorComment,
+    onResetComments,
+    onLikeComment: onLikeCommentAction,
+    commentsLikes,
     ...fromRedux
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
   const { enableCommentVote, recordType } = useConfig();

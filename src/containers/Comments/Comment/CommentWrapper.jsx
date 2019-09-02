@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import styles from "./Comment.module.css";
-import { Text } from "pi-ui";
-import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
 import CommentForm from "src/componentsv2/CommentForm";
-import useBooleanState from "src/hooks/utils/useBooleanState";
 import { useComment } from "../hooks";
 import Comment from "./Comment";
 
@@ -11,20 +8,18 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
   const {
     onSubmitComment,
     onLikeComment,
-    onCensorComment,
     getCommentLikeOption,
     enableCommentVote,
     recordAuthorID,
     loadingLikes,
     userLoggedIn,
-    userEmail,
-    isAdmin,
     recordToken,
     recordType,
     threadParentID,
     readOnly,
     identityError,
     paywallMissing,
+    openCensorModal,
     openLoginModal
   } = useComment();
   const {
@@ -46,12 +41,6 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
 
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(isThreadParent);
-
-  const [
-    showCensorModal,
-    openCensorModal,
-    closeCensorModal
-  ] = useBooleanState(false);
 
   function handleToggleReplyForm() {
     setShowReplyForm(!showReplyForm);
@@ -85,6 +74,9 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     }
     return onLikeComment(commentid, "-1");
   }
+  function handleClickCensor() {
+    return openCensorModal(commentid);
+  }
   const hasChildrenComments = !!React.Children.toArray(children).filter(
     child =>
       child.props && child.props.comments && !!child.props.comments.length
@@ -98,6 +90,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
         author={username}
         authorID={userid}
         createdAt={timestamp}
+        censored={censored}
         highlightAuthor={isRecordAuthor}
         highlightAsNew={isNew}
         disableLikes={!enableCommentVote}
@@ -110,12 +103,12 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
         onLike={handleLikeComment}
         onDislike={handleDislikeComment}
         showReplies={showReplies}
+        onClickCensor={handleClickCensor}
         onClickReply={handleToggleReplyForm}
         onClickShowReplies={handleToggleReplies}
         numOfReplies={numOfReplies}
         commentBody={commentText}
         numOfNewHiddenReplies={sumOfNewDescendants}
-        {...props}
       />
       {showReplyForm && (
         <CommentForm
