@@ -17,7 +17,6 @@ const Comment = ({
   topLevelComment,
   author,
   authorID,
-  isAdmin,
   createdAt,
   censored,
   highlightAuthor,
@@ -66,15 +65,6 @@ const Comment = ({
               </Link>
             )}
           </DateTooltip>
-          {isAdmin &&
-            <Text
-              weight="semibold"
-              className={styles.censor}
-              onClick={onClickCensor}
-            >
-              Censor
-            </Text>
-          }
           {highlightAsNew && !extraSmall && <Text color="gray">new</Text>}
         </Join>
         {!disableLikes && (
