@@ -1,0 +1,25 @@
+.attachButton {
+    font-size: var(--font-size-small);
+    padding: .3rem .6rem;
+}
+
+.fileInputTooltip {
+    width: 200px;
+}
+
+.formatHelpButton {
+    border: 0;
+    color: #8997A5;
+    padding-top: 0.9rem;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.formatHelpButton:hover {
+    color: var(--color-gray-dark);
+}
+
+.mobileColumn {
+    display: flex;
+    flex-direction: column;
+}
