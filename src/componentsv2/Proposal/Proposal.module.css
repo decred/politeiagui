@@ -14,8 +14,12 @@
 
 .version {
     line-height: var(--spacing-2);
-    cursor: pointer;
     color: var(--color-gray) !important;
+}
+
+.versionPicker > div > span {
+    color: var(--color-gray) !important;
+
 }
 
 .markdownContainer {

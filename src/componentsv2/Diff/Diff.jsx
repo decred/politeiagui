@@ -66,7 +66,6 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
   return (
     <table
       className={styles.diffTable}
-      // className="diff-table"
       cellSpacing="0"
       cellPadding="0"
     >

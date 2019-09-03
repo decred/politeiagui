@@ -30,7 +30,7 @@ const VersionPicker = ({ version, token, className }) => {
           </DropdownItem>
         ))}
       </Dropdown>
-      { proposalDiff ?
+      { proposalDiff && (
         <ModalDiff
           onClose={onToggleModal}
           show={showModal}
@@ -41,7 +41,7 @@ const VersionPicker = ({ version, token, className }) => {
           newFiles={proposalDiff.newFiles}
 
         />
-      : null}
+      )}
     </>
   );
 };

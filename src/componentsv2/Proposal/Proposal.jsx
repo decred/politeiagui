@@ -114,19 +114,21 @@ const Proposal = ({ proposal, extended, children }) => {
                   {abandonedat && (
                     <Event event={"abandoned"} timestamp={abandonedat} />
                   )}
-                  {/* {version > 1 && (
+                  {version > 1 && !extended && (
                     <Text
                       id={`proposal-${proposalToken}-version`}
                       className={classNames(styles.version, "hide-on-mobile")}
                       color="gray"
                       truncate
                     >{`version ${version}`}</Text>
-                  )} */}
-                  <VersionPicker
-                    className={classNames(styles.version, "hide-on-mobile")}
-                    version={version}
-                    token={proposalToken}
-                  />
+                  )}
+                  {extended && (
+                    <VersionPicker
+                      className={classNames(styles.versionPicker, "hide-on-mobile")}
+                      version={version}
+                      token={proposalToken}
+                    />
+                  )}
                 </Subtitle>
               }
               status={

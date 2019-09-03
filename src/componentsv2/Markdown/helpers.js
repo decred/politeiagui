@@ -71,7 +71,6 @@ const LinkRenderer = ({ url, children }) => {
   function onCloseModal() {
     setModalState(false);
   }
-  console.log("LINK RENDERER", modalState);
   return (
     <>
       <a href={url} onClick={onLinkClick}>

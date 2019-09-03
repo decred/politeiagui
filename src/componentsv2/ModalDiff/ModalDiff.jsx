@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { insertDiffHTML, insertFilesDiff } from "src/componentsv2/Diff/Diff";
 import { Header, Title, Author, Event, Subtitle } from "src/componentsv2/RecordWrapper";
 import styles from "./ModalDiff.module.css";
-// import Thumbnail from "src/componentsv2/Files/Thumbnail";
 
 const ModalDiff = ({
   onClose,
@@ -15,7 +14,6 @@ const ModalDiff = ({
   proposalDetails,
   ...props
 }) => {
-  console.log("render modal diff");
   const diffFiles = insertFilesDiff(oldFiles, newFiles);
   const diff = insertDiffHTML(oldText, newText);
   const [activeTabIndex, setActiveTabIndex] = useState(0);
