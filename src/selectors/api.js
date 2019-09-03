@@ -408,7 +408,8 @@ export const isMainNet = not(isTestNet);
 export const getPropVoteStatus = createDeepEqualSelector(
   apiPropsVoteStatusResponse,
   vsResponse => {
-    const getVoteStatusByToken = token => vsResponse[token];
+    const getVoteStatusByToken = token =>
+      vsResponse ? vsResponse[token] : null;
     return getVoteStatusByToken;
   }
 );
@@ -416,7 +417,7 @@ export const getPropVoteStatus = createDeepEqualSelector(
 export const makeGetPropVoteStatus = token => {
   return createSelector(
     apiPropsVoteStatusResponse,
-    vsResponse => vsResponse[token]
+    vsResponse => (vsResponse ? vsResponse[token] : null)
   );
 };
 

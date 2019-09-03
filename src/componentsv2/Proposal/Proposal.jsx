@@ -3,17 +3,16 @@ import React, { useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
+import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
 import {
   getMarkdownContent,
-  getProposalStatusTagProps,
-  getQuorumInVotes,
-  getStatusBarData,
   getVotesReceived,
   isAbandonedProposal,
   isPublicProposal,
-  isEditableProposal
-} from "./helpers";
-import { useProposalVoteInfo, useProposalVoteStatus } from "./hooks";
+  isEditableProposal,
+  getQuorumInVotes
+} from "src/containers/Proposal/helpers";
+import { useProposalVote } from "src/containers/Proposal/hooks";
 import { useLoaderContext } from "src/Appv2/Loader";
 import styles from "./Proposal.module.css";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
@@ -37,7 +36,12 @@ const Proposal = ({ proposal, extended }) => {
     username,
     version
   } = proposal;
-  const voteStatus = useProposalVoteStatus(censorshiprecord.token);
+  const {
+    voteStatus,
+    voteActive: isVoteActive,
+    voteTimeLeftInWords: voteTimeLeft,
+    voteBlocksLeft
+  } = useProposalVote(censorshiprecord.token);
   const { currentUser } = useLoaderContext();
   const {
     showFullImageModal,
@@ -52,11 +56,6 @@ const Proposal = ({ proposal, extended }) => {
   const isPublicAccessible = isPublic || isAbandoned;
   const isAuthor = currentUser && currentUser.userid === userid;
   const isEditable = isAuthor && isEditableProposal(proposal, voteStatus);
-  const {
-    voteActive: isVoteActive,
-    voteTimeLeft,
-    voteBlocksLeft
-  } = useProposalVoteInfo(proposal);
   const mobile = useMediaQuery("(max-width: 560px)");
   const [showSearchVotesModal, setShowSearchVotesModal] = useState(false);
   function handleCloseSearchVotesModal() {

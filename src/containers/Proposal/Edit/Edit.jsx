@@ -3,7 +3,7 @@ import { Card, Message } from "pi-ui";
 import { useProposal } from "../Detail/hooks";
 import { useEditProposal } from "./hooks";
 import { withRouter } from "react-router-dom";
-import { getMarkdownContent } from "src/componentsv2/Proposal/helpers";
+import { getMarkdownContent } from "src/containers/Proposal/helpers";
 import usePaywall from "src/hooks/api/usePaywall";
 import useIdentity from "src/hooks/api/useIdentity";
 import Or from "src/componentsv2/Or";

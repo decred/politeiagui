@@ -5,22 +5,29 @@ import styles from "./Detail.module.css";
 import { useProposal } from "./hooks";
 import Comments from "src/containers/Comments";
 import ProposalLoader from "src/componentsv2/Proposal/ProposalLoader";
-import { proposalCanReceiveComments, getCommentBlockedReason } from "./helpers";
+import { getCommentBlockedReason } from "./helpers";
 import {
   isPublicProposal,
-  isAbandonedProposal
-} from "src/componentsv2/Proposal/helpers";
+  isAbandonedProposal,
+  isVotingFinishedProposal
+} from "../helpers";
 import {
   UnvettedActionsProvider,
   PublicActionsProvider
 } from "src/containers/Proposal/Actions";
+import { useProposalVote } from "../hooks";
 
 const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
   const { proposal, loading, threadParentID } = useProposal({ match });
   const proposalToken =
     proposal && proposal.censorshiprecord && proposal.censorshiprecord.token;
+  const { voteStatus } = useProposalVote(proposalToken);
+
   const showCommentArea =
     proposal && (isPublicProposal(proposal) || isAbandonedProposal(proposal));
+  const canReceiveComments =
+    isPublicProposal(proposal) && !isVotingFinishedProposal(voteStatus);
+
   return (
     <>
       <TopBanner>
@@ -44,8 +51,8 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
                 recordToken={proposalToken}
                 numOfComments={proposal.numcomments}
                 threadParentID={threadParentID}
-                readOnly={!proposalCanReceiveComments(proposal)}
-                readOnlyReason={getCommentBlockedReason(proposal)}
+                readOnly={!canReceiveComments}
+                readOnlyReason={getCommentBlockedReason(proposal, voteStatus)}
               />
             )}
           </PublicActionsProvider>

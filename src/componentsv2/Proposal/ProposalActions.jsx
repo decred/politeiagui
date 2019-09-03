@@ -6,7 +6,7 @@ import {
   isAbandonedProposal,
   isVotingNotAuthorizedProposal,
   isUnderDiscussionProposal
-} from "./helpers";
+} from "src/containers/Proposal/helpers";
 import {
   useUnvettedProposalActions,
   usePublicProposalActions
