@@ -8,10 +8,7 @@ const PageProposalsNew = () => {
       {({ TopBanner, PageDetails, Sidebar, Main }) => (
         <>
           <TopBanner>
-            <PageDetails
-              headerClassName="no-margin-top"
-              title="Create Proposal"
-            />
+            <PageDetails title="Create Proposal" />
           </TopBanner>
           <Sidebar />
           <Main>

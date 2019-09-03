@@ -39,7 +39,6 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
 
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(isThreadParent);
-  console.log(showReplyForm);
 
   const handleToggleReplyForm = useCallback(() => {
     setShowReplyForm(!showReplyForm);
