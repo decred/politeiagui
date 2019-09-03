@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import styles from "./Comment.module.css";
-import CommentForm from "src/componentsv2/CommentForm";
+import CommentForm from "src/componentsv2/CommentForm/CommentFormLazy";
 import { useComment } from "../hooks";
 import Comment from "./Comment";
 

@@ -3,7 +3,7 @@ import { Card, H2, Text, Message, classNames } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import styles from "./Comments.module.css";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
-import CommentForm from "src/componentsv2/CommentForm";
+import CommentForm from "src/componentsv2/CommentForm/CommentFormLazy";
 import { useComments, CommentContext } from "./hooks";
 import CommentsListWrapper from "./CommentsList/CommentsListWrapper";
 import CommentLoader from "./Comment/CommentLoader";
