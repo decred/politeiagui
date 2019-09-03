@@ -3,14 +3,15 @@ import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useRedux } from "src/redux";
 import { useConfig } from "src/Config";
+import { useLoaderContext } from "src/Appv2/Loader";
 
 export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
 
 const mapStateToProps = {
-  email: sel.loggedInAsEmail,
   comments: sel.proposalComments,
   commentsLikes: sel.commentsLikes,
+  lastVisitTimestamp: sel.visitedProposal,
   loading: sel.isApiRequestingComments,
   loadingLikes: sel.isApiRequestingCommentsLikes
 };
@@ -27,13 +28,14 @@ export function useComments(ownProps) {
   const {
     onFetchComments,
     onLikeComment: onLikeCommentAction,
-    email,
     onFetchLikes,
     commentsLikes,
     onResetComments,
     ...fromRedux
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
   const { enableCommentVote, recordType } = useConfig();
+  const { currentUser } = useLoaderContext();
+  const email = currentUser && currentUser.email;
 
   const userLoggedIn = !!email;
   const recordToken = ownProps && ownProps.recordToken;
@@ -97,6 +99,7 @@ export function useComments(ownProps) {
     enableCommentVote,
     userLoggedIn,
     recordType,
+    currentUser,
     ...fromRedux
   };
 }

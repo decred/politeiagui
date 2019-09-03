@@ -29,7 +29,9 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     timestamp,
     username,
     userid,
-    parentid
+    parentid,
+    isNew,
+    sumOfNewDescendants
   } = comment;
 
   const isRecordAuthor = recordAuthorID === userid;
@@ -37,6 +39,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
 
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(isThreadParent);
+  console.log(showReplyForm);
 
   const handleToggleReplyForm = useCallback(() => {
     setShowReplyForm(!showReplyForm);
@@ -81,12 +84,22 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
   const commentForm = useMemo(
     () => (
       <CommentForm
+        className={styles.replyForm}
         persistKey={`replying-to-${commentid}-from-${token}`}
         onSubmit={handleSubmitComment}
         onCommentSubmitted={handleCommentSubmitted}
       />
     ),
     [commentid, handleSubmitComment, token, handleCommentSubmitted]
+  );
+
+  const hasChildrenComments = useMemo(
+    () =>
+      !!React.Children.toArray(children).filter(
+        child =>
+          child.props && child.props.comments && !!child.props.comments.length
+      ).length,
+    [children]
   );
 
   const replies = useMemo(
@@ -98,38 +111,41 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     () => (
       <>
         {showReplyForm && commentForm}
-        {showReplies && replies}
+        {showReplies && hasChildrenComments && replies}
       </>
     ),
-    [showReplyForm, showReplies, commentForm, replies]
+    [showReplyForm, showReplies, hasChildrenComments, commentForm, replies]
   );
 
   return (
-    <Comment
-      permalink={`/${recordType}/${recordToken}/comments/${commentid}`}
-      topLevelComment={isThreadParent}
-      author={username}
-      authorID={userid}
-      createdAt={timestamp}
-      highlightAuthor={isRecordAuthor}
-      disableLikes={!enableCommentVote}
-      disableLikesClick={
-        loadingLikes || readOnly || (userLoggedIn && identityError)
-      }
-      disableReply={readOnly || !!identityError || paywallMissing}
-      likesCount={resultvotes}
-      likeOption={getCommentLikeOption(commentid)}
-      onLike={handleLikeComment}
-      onDislike={handleDislikeComment}
-      showReplies={showReplies}
-      onClickReply={handleToggleReplyForm}
-      onClickShowReplies={handleToggleReplies}
-      numOfReplies={numOfReplies}
-      commentBody={commentText}
-      {...props}
-    >
+    <>
+      <Comment
+        permalink={`/${recordType}/${recordToken}/comments/${commentid}`}
+        topLevelComment={isThreadParent}
+        author={username}
+        authorID={userid}
+        createdAt={timestamp}
+        highlightAuthor={isRecordAuthor}
+        highlightAsNew={isNew}
+        disableLikes={!enableCommentVote}
+        disableLikesClick={
+          loadingLikes || readOnly || (userLoggedIn && identityError)
+        }
+        disableReply={readOnly || !!identityError || paywallMissing}
+        likesCount={resultvotes}
+        likeOption={getCommentLikeOption(commentid)}
+        onLike={handleLikeComment}
+        onDislike={handleDislikeComment}
+        showReplies={showReplies}
+        onClickReply={handleToggleReplyForm}
+        onClickShowReplies={handleToggleReplies}
+        numOfReplies={numOfReplies}
+        numOfNewHiddenReplies={sumOfNewDescendants}
+        commentBody={commentText}
+        {...props}
+      />
       {commentContent}
-    </Comment>
+    </>
   );
 };
 

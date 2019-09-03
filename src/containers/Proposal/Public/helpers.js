@@ -1,5 +1,5 @@
 export const tabValues = {
-  IN_DISCUSSSION: "In Discussion",
+  IN_DISCUSSION: "In Discussion",
   VOTING: "Voting",
   APPROVED: "Approved",
   REJECTED: "Rejected",
@@ -18,7 +18,7 @@ export const getProposalTokensByTabOption = (tabOption, proposalsTokens) => {
   if (!proposalsTokens) return [];
   const { pre, active, approved, rejected, abandoned } = proposalsTokens;
   switch (tabOption) {
-    case tabValues.IN_DISCUSSSION:
+    case tabValues.IN_DISCUSSION:
       return pre;
     case tabValues.VOTING:
       return active;

@@ -11,7 +11,8 @@ const CommentForm = ({
   onSubmit,
   onCommentSubmitted,
   disableSubmit,
-  persistKey
+  persistKey,
+  className
 }) => {
   async function handleSubmit(
     values,
@@ -50,7 +51,7 @@ const CommentForm = ({
           setFieldValue("comment", v);
         }
         return (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className={className}>
             {errors && errors.global && (
               <Message kind="error">{errors.global.toString()}</Message>
             )}
@@ -80,6 +81,7 @@ const CommentForm = ({
 };
 
 CommentForm.propTypes = {
+  className: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   onCommentSubmitted: PropTypes.func,
   disableSubmit: PropTypes.bool,

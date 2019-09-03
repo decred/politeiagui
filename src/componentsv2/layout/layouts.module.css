@@ -15,7 +15,12 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    max-height: 14rem;
+}
+
+.titleAndSubtitleWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
 }
 
 .subtitle {
@@ -32,14 +37,13 @@
 .pageDetailsHeader {
     display: flex;
     flex: 1;
-    align-items: center;
     margin-top: 3rem;
 }
 
 .pageDetailsTitle {
-    width: 75%;
     display: flex;
     align-items: flex-start;
+    width: 100%;
 }
 
 .pageDetailsActions {
@@ -47,7 +51,7 @@
     display: flex;
     justify-content: flex-end;
     height: 100%;
-    align-items: center;
+    max-height: 4.4rem;
 }
 
 .card {
@@ -68,7 +72,7 @@
     .customTab {
         margin-right: 2rem !important;
     }
-    .pageDetailsTitle {
+    .titleAndSubtitleWrapper {
         width: 85%;
     }
 }

@@ -19,16 +19,25 @@ const HeaderNav = ({ history, location }) => {
   function goToPublicProposals() {
     history.push("/");
   }
-  const isOnUnvettedRoute = location.pathname === `/proposals/unvetted`;
+  function goToSearchUsers() {
+    history.push("/user/search");
+  }
+  const isOnUnvettedRoute = location.pathname === "/proposals/unvetted";
+  const isOnSearchUsersRoute = location.pathname === "/user/search";
   return username ? (
     <div className={styles.loggedInContainer}>
       <ProposalCreditsIndicator />
-      <Dropdown title={username}>
+      <Dropdown itemsListClassName={styles.dropdownList} title={username}>
         {user.isadmin && !isOnUnvettedRoute && (
           <DropdownItem onClick={goToUnvetted}>Admin</DropdownItem>
         )}
         {isOnUnvettedRoute && (
           <DropdownItem onClick={goToPublicProposals}>Proposals</DropdownItem>
+        )}
+        {user.isadmin && !isOnSearchUsersRoute && (
+          <DropdownItem onClick={goToSearchUsers}>
+            Search for users
+          </DropdownItem>
         )}
         <DropdownItem onClick={goToUserProposals}>My Proposals</DropdownItem>
         <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>

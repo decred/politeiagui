@@ -6,7 +6,7 @@ import React, {
   useCallback
 } from "react";
 import { Tabs, Tab } from "pi-ui";
-import LazyList from "src/components/LazyList/LazyList";
+import LazyList from "src/componentsv2/LazyList";
 import { getRecordsByTabOption } from "./helpers";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import HelpMessage from "src/componentsv2/HelpMessage";

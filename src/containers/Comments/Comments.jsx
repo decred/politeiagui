@@ -48,6 +48,8 @@ const Comments = ({
     onLikeComment,
     loading,
     recordType,
+    lastVisitTimestamp,
+    currentUser,
     ...commentsCtx
   } = useComments({
     recordToken,
@@ -120,7 +122,9 @@ const Comments = ({
     [comments, sortOption]
   );
 
-  function renderCommentLoaders() {
+  const commentLoaders = useMemo(() => {
+    if (!loading) return null;
+
     const numOfContents =
       numOfComments < 3 ? numOfComments : NUMBER_OF_LIST_PLACEHOLDERS;
     const contents = [];
@@ -128,78 +132,75 @@ const Comments = ({
       contents.push(<CommentLoader key={`comment-loader-${i}`} />);
     }
     return contents;
-  }
+  }, [numOfComments, loading]);
 
   return (
     <>
       <Card
         id="commentArea"
-        className={classNames(
-          "container",
-          styles.commentAreaContainer,
-          className
-        )}
+        className={classNames(styles.commentAreaContainer, className)}
       >
-        <LoggedInContent
-          fallback={
-            <WhatAreYourThoughts
-              onLoginClick={handleOpenLoginModal}
-              onSignupClick={onRedirectToSignup}
-            />
-          }
-        >
-          <Or>
-            {readOnly && (
-              <Message kind="blocked" title={"Comments are not allowed"}>
-                {readOnlyReason}
-              </Message>
-            )}
-            {!isPaid && paywallEnabled && (
-              <Message kind="error">
-                You must pay the paywall to submit comments.
-              </Message>
-            )}
-            {!readOnly && !!identityError && <IdentityMessageError />}
-          </Or>
-          {!isSingleThread && !readOnly && (
-            <CommentForm
-              persistKey={`commenting-on-${recordToken}`}
-              onSubmit={handleSubmitComment}
-              disableSubmit={!!identityError || paywallMissing}
-            />
-          )}
-        </LoggedInContent>
-
-        <div className={styles.commentsHeader}>
-          {!isSingleThread && (
-            <H2 className={styles.commentsTitle}>
-              Comments{" "}
-              <span className={styles.commentsCount}>
-                {state.comments.length || numOfComments}
-              </span>
-            </H2>
-          )}
-          <div className={styles.sortContainer}>
-            {!!comments && !!comments.length && (
-              <Select
-                isSearchable={false}
-                value={selectValue}
-                onChange={handleSetSortOption}
-                options={selectOptions}
+        <div className={classNames("container", styles.commentsHeaderWrapper)}>
+          <LoggedInContent
+            fallback={
+              <WhatAreYourThoughts
+                onLoginClick={handleOpenLoginModal}
+                onSignupClick={onRedirectToSignup}
+              />
+            }
+          >
+            <Or>
+              {readOnly && (
+                <Message kind="blocked" title={"Comments are not allowed"}>
+                  {readOnlyReason}
+                </Message>
+              )}
+              {!isPaid && paywallEnabled && (
+                <Message kind="error">
+                  You must pay the paywall to submit comments.
+                </Message>
+              )}
+              {!readOnly && !!identityError && <IdentityMessageError />}
+            </Or>
+            {!isSingleThread && !readOnly && (
+              <CommentForm
+                persistKey={`commenting-on-${recordToken}`}
+                onSubmit={handleSubmitComment}
+                disableSubmit={!!identityError || paywallMissing}
               />
             )}
-          </div>
-          {isSingleThread && (
-            <div className="justify-right">
-              <Text className="margin-right-xs">Single comment thread. </Text>
-              <Link to={`/${recordType}/${recordToken}`}> View all.</Link>
+          </LoggedInContent>
+          <div className={styles.commentsHeader}>
+            {!isSingleThread && (
+              <H2 className={styles.commentsTitle}>
+                Comments{" "}
+                <span className={styles.commentsCount}>
+                  {state.comments.length || numOfComments}
+                </span>
+              </H2>
+            )}
+            <div className={styles.sortContainer}>
+              {!!comments && !!comments.length && (
+                <Select
+                  isSearchable={false}
+                  value={selectValue}
+                  onChange={handleSetSortOption}
+                  options={selectOptions}
+                />
+              )}
             </div>
-          )}
+            {isSingleThread && (
+              <div className="justify-right">
+                <Text className="margin-right-xs">Single comment thread. </Text>
+                <Link to={`/${recordType}/${recordToken}`}> View all.</Link>
+              </div>
+            )}
+          </div>
         </div>
-        {loading ? (
-          renderCommentLoaders()
-        ) : (
-          <div className="margin-top-m">
+        <div className={styles.commentsWrapper}>
+          {loading ? (
+            commentLoaders
+          ) : (
             <CommentContext.Provider
               value={{
                 onSubmitComment,
@@ -216,12 +217,14 @@ const Comments = ({
               }}
             >
               <CommentsListWrapper
+                lastTimeAccessed={lastVisitTimestamp}
                 threadParentID={threadParentID}
+                currentUserID={currentUser && currentUser.userid}
                 comments={state.comments}
               />
             </CommentContext.Provider>
-          </div>
-        )}
+          )}
+        </div>
       </Card>
     </>
   );
