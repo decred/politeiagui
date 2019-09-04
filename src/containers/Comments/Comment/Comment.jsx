@@ -7,6 +7,7 @@ import Markdown from "src/componentsv2/Markdown";
 import Join from "src/componentsv2/Join";
 import Link from "src/componentsv2/Link";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
+import AdminContent from "src/componentsv2/AdminContent";
 import Likes from "src/componentsv2/Likes";
 import CopyLink from "src/componentsv2/CopyLink";
 
@@ -17,6 +18,7 @@ const Comment = ({
   author,
   authorID,
   createdAt,
+  censored,
   highlightAuthor,
   likesCount,
   likeOption,
@@ -27,6 +29,7 @@ const Comment = ({
   commentBody,
   showReplies,
   disableReply,
+  onClickCensor,
   onClickReply,
   onClickShowReplies,
   numOfReplies,
@@ -74,7 +77,11 @@ const Comment = ({
           />
         )}
       </div>
-      <Markdown className="margin-top-s" body={commentBody} />
+      { !censored ?
+        <Markdown className="margin-top-s" body={commentBody} />
+      :
+        <Markdown className={styles.censored} body="Censored by moderators " />
+      }      
       <div className="justify-space-between margin-top-s">
         <div className="justify-left">
           {!disableReply && (
@@ -88,6 +95,17 @@ const Comment = ({
                 Reply
               </Text>
             </LoggedInContent>
+          )}
+          {!censored && (
+            <AdminContent>
+              <Text
+                weight="semibold"
+                className={styles.censor}
+                onClick={onClickCensor}
+              >
+                Censor
+              </Text>
+            </AdminContent>            
           )}
           {numOfReplies > 0 && (
             <span className={styles.showReplies} onClick={onClickShowReplies}>

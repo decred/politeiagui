@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  P,
   Button,
   Modal,
   TextInput,
@@ -65,6 +66,11 @@ const ModalConfirmWithReason = ({
         )
       }
     >
+      { !success &&
+        <P style={{ marginBottom: "20px"}}>
+          Please, provide a reason for this action.
+        </P>
+      }
       {!success && (
         <FormWrapper
           initialValues={{

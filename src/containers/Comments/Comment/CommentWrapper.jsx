@@ -19,6 +19,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     readOnly,
     identityError,
     paywallMissing,
+    openCensorModal,
     openLoginModal
   } = useComment();
   const {
@@ -26,6 +27,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     token,
     commentid,
     resultvotes,
+    censored,
     timestamp,
     username,
     userid,
@@ -116,6 +118,10 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     [showReplyForm, showReplies, hasChildrenComments, commentForm, replies]
   );
 
+  const handleClickCensor = useCallback(() => {
+    return openCensorModal(commentid);
+  }, [commentid, openCensorModal]);
+
   return (
     <>
       <Comment
@@ -124,6 +130,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
         author={username}
         authorID={userid}
         createdAt={timestamp}
+        censored={censored}
         highlightAuthor={isRecordAuthor}
         highlightAsNew={isNew}
         disableLikes={!enableCommentVote}
@@ -136,6 +143,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
         onLike={handleLikeComment}
         onDislike={handleDislikeComment}
         showReplies={showReplies}
+        onClickCensor={handleClickCensor}
         onClickReply={handleToggleReplyForm}
         onClickShowReplies={handleToggleReplies}
         numOfReplies={numOfReplies}

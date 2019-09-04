@@ -774,6 +774,23 @@ export const onCensorComment = (loggedInAsEmail, token, commentid, isCms) =>
     });
   });
 
+export const onCensorCommentv2 = (email, token, commentid, reason) => {
+  return withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_CENSOR_COMMENT({ commentid, token }));
+    return Promise.resolve(api.makeCensoredComment(token, reason, commentid))
+      .then(comment => api.signCensorComment(email, comment))
+      .then(comment => api.censorComment(csrf, comment))
+      .then(response => {
+        if (response.receipt) {
+          dispatch(act.RECEIVE_CENSOR_COMMENT(commentid, null));
+        }
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_CENSOR_COMMENT(null, error));
+      });
+  });
+};
+
 export const onSubmitComment = (
   loggedInAsEmail,
   token,

@@ -1,9 +1,16 @@
-import React, { useEffect, useReducer, useCallback, useMemo } from "react";
+import React, {
+  useEffect,
+  useReducer,
+  useCallback,
+  useMemo,
+  useState
+} from "react";
 import { Card, H2, Text, Message, classNames } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import styles from "./Comments.module.css";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
 import CommentForm from "src/componentsv2/CommentForm/CommentFormLazy";
+import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
 import { useComments, CommentContext } from "./hooks";
 import CommentsListWrapper from "./CommentsList/CommentsListWrapper";
 import CommentLoader from "./Comment/CommentLoader";
@@ -19,6 +26,7 @@ import {
 } from "./helpers";
 import useIdentity from "src/hooks/api/useIdentity";
 import usePaywall from "src/hooks/api/usePaywall";
+import useBooleanState from "src/hooks/utils/useBooleanState";
 import { IdentityMessageError } from "src/componentsv2/IdentityErrorIndicators";
 import { useLoginModal } from "src/containers/User/Login";
 import WhatAreYourThoughts from "src/componentsv2/WhatAreYourThoughts";
@@ -38,18 +46,21 @@ const Comments = ({
   const [, identityError] = useIdentity();
   const { isPaid, paywallEnabled } = usePaywall();
   const [state, dispatch] = useReducer(commentsReducer, initialState);
+  const [commentIDCensorTarget, setCommentIDCensorTarget] = useState(null);
   const [sortOption, setSortOption] = useQueryString(
     "sort",
     commentSortOptions.SORT_BY_TOP
   );
   const {
     onSubmitComment,
-    comments,
     onLikeComment,
+    onCensorComment,
+    comments,
     loading,
     recordType,
     lastVisitTimestamp,
     currentUser,
+    userEmail,
     ...commentsCtx
   } = useComments({
     recordToken,
@@ -134,6 +145,31 @@ const Comments = ({
     return contents;
   }, [numOfComments, loading]);
 
+  const [showCensorModal, openCensorModal, closeCensorModal] = useBooleanState(
+    false
+  );
+
+  useEffect(
+    function handleCensorCommentModal() {
+      if (commentIDCensorTarget) {
+        openCensorModal();
+      }
+    },
+    [commentIDCensorTarget, openCensorModal]
+  );
+
+  const handleCensorComment = useCallback(
+    reason => {
+      return onCensorComment(
+        userEmail,
+        recordToken,
+        commentIDCensorTarget,
+        reason
+      );
+    },
+    [userEmail, recordToken, commentIDCensorTarget, onCensorComment]
+  );
+
   return (
     <>
       <Card
@@ -212,6 +248,7 @@ const Comments = ({
                 readOnly,
                 identityError,
                 paywallMissing,
+                openCensorModal: setCommentIDCensorTarget,
                 openLoginModal: handleOpenLoginModal,
                 ...commentsCtx
               }}
@@ -225,6 +262,21 @@ const Comments = ({
             </CommentContext.Provider>
           )}
         </div>
+        <ModalConfirmWithReason
+          title={`Censor comment`}
+          reasonLabel="Censor reason"
+          subject="censorComment"
+          successTitle="Comment censored"
+          successMessage={
+            <Text>The comment has been successfully censored.</Text>
+          }
+          show={showCensorModal}
+          onSubmit={handleCensorComment}
+          onClose={() => {
+            setCommentIDCensorTarget(null);
+            return closeCensorModal();
+          }}
+        />
       </Card>
     </>
   );
