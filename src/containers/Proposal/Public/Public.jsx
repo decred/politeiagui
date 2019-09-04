@@ -24,7 +24,6 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     isLoading,
     proposals,
     proposalsTokens,
-    loadingTokenInventory,
     onFetchProposalsBatch
   } = usePublicProposals();
 
@@ -68,7 +67,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       tabLabels={tabLabels}
       recordTokensByTab={recordTokensByTab}
       renderRecord={renderProposal}
-      displayTabCount={!loadingTokenInventory}
+      displayTabCount={!!proposalsTokens}
       placeholder={ProposalLoader}
       getEmptyMessage={getEmptyMessage}
     >

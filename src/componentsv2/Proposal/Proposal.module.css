@@ -50,6 +50,10 @@
     margin: 0;
 }
 
+span.statusTag > span {
+    overflow: visible;
+}
+
 @media screen and (max-width: 560px) {
     .timeLeft {
         margin-top: 0;
