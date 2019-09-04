@@ -1,18 +1,20 @@
-import React, { useState } from "react";
 import { Link, useMediaQuery } from "pi-ui";
+import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
+import Proposals from "src/containers/Proposal/User/Submitted";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import Credits from "./Credits";
 import styles from "./detail.module.css";
-import General from "./General.jsx";
+import General from "./General";
 import { tabValues } from "./helpers";
 import { useChangeUsername, useUserDetail } from "./hooks";
+import Identity from "./Identity";
 import Preferences from "./Preferences";
-import Proposals from "src/containers/Proposal/User/Submitted";
 
 const getTabComponent = ({ user, ...rest }) =>
   [
+    <Identity {...user} {...rest} />,
     <General {...user} {...rest} />,
     <Preferences {...rest} />,
     <Credits {...rest} />,
@@ -35,6 +37,7 @@ const UserDetail = ({
   const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
 
   const tabLabels = [
+    tabValues.IDENTITY,
     tabValues.GENERAL,
     tabValues.PREFERENCES,
     tabValues.CREDITS,
@@ -88,8 +91,8 @@ const UserDetail = ({
               return isTabDisabled(i) ? (
                 <></>
               ) : (
-                <Tab key={`tab${label}`} label={label} />
-              );
+                  <Tab key={`tab${label}`} label={label} />
+                );
             })}
           </Tabs>
         </PageDetails>

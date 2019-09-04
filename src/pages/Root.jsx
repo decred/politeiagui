@@ -1,32 +1,29 @@
 import React from "react";
-import { Switch, Route, withRouter } from "react-router-dom";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
-import {
-  AuthenticatedRoute,
-  AdminAuthenticatedRoute,
-  NotAuthenticatedRoute
-} from "src/containers/Routes";
+import { Route, Switch, withRouter } from "react-router-dom";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useConfig } from "src/Config";
-
-import PageUserLogin from "./User/Login";
-import PageUserSignup from "./User/Signup";
-import PageUserRequestResetPassword from "./User/RequestResetPassword";
-import PageUserResetPassword from "./User/ResetPassword";
-import PageUserRequestResendVerificationEmail from "./User/RequestResendVerificationEmail";
-import PageUserPrivacyPolicy from "./User/PrivacyPolicy";
-import PageUserVerifyEmail from "./User/VerifyEmail";
-import PageUserDetail from "./User/Detail";
-import PageUserSearch from "./User/Search";
-
-import PageProposalsPublicList from "./Proposals/PublicList";
-import PageProposalsUser from "./Proposals/User";
+import { AdminAuthenticatedRoute, AuthenticatedRoute, NotAuthenticatedRoute } from "src/containers/Routes";
+import PageNotFound from "./NotFound";
 import PageProposalsAdmin from "./Proposals/Admin";
 import PageProposalDetail from "./Proposals/Detail";
+import PageProposalsPublicList from "./Proposals/PublicList";
 import PageProposalsUnvetted from "./Proposals/UnvettedList";
+import PageProposalsUser from "./Proposals/User";
+import { renderEditRecordRoute, renderNewRecordRoute } from "./routeRenderers";
+import PageUserDetail from "./User/Detail";
+import PageUserLogin from "./User/Login";
+import PageUserPrivacyPolicy from "./User/PrivacyPolicy";
+import PageUserRequestResendVerificationEmail from "./User/RequestResendVerificationEmail";
+import PageUserRequestResetPassword from "./User/RequestResetPassword";
+import PageUserResetPassword from "./User/ResetPassword";
+import PageUserSearch from "./User/Search";
+import PageUserSignup from "./User/Signup";
+import PageUserVerifyEmail from "./User/VerifyEmail";
+import PageUserVerifyKey from "./User/VerifyKey";
+<<<<<<< HEAD
 
-import PageNotFound from "./NotFound";
 
-import { renderNewRecordRoute, renderEditRecordRoute } from "./routeRenderers";
+
 
 const Routes = ({ location }) => {
   const config = useConfig();
@@ -56,6 +53,11 @@ const Routes = ({ location }) => {
             exact
             component={PageUserResetPassword}
           />
+          <AuthenticatedRoute
+            path="/user/key/verify"
+            exact
+            component={PageUserVerifyKey}
+          />
           <NotAuthenticatedRoute
             path="/user/resend-verification-email"
             exact
@@ -76,7 +78,11 @@ const Routes = ({ location }) => {
             exact
             component={PageUserSearch}
           />
-          <Route path="/user/:userid" exact component={PageUserDetail} />
+          <Route
+            path="/user/:userid"
+            exact
+            component={PageUserDetail}
+          />
 
           {/* Record routes */}
           <AdminAuthenticatedRoute

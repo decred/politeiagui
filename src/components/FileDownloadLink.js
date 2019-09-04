@@ -7,7 +7,7 @@ const FileDownloadLink = ({
   data
 }) => (
   <a
-    className="download-link"
+    style={{ display: "inline" }}
     href={`data:${mime},${encodeURIComponent(data)}`}
     download={filename}
   >

@@ -824,7 +824,7 @@ export const onSubmitComment = (
       });
   });
 
-export const onUpdateUserKey = loggedInAsEmail =>
+export const onUpdateUserKey = (loggedInAsEmail, history) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_UPDATED_KEY());
     return pki
@@ -839,6 +839,9 @@ export const onUpdateUserKey = loggedInAsEmail =>
                 const { testnet } = getState().api.init.response;
                 if (testnet) {
                   dispatch(act.SHOULD_AUTO_VERIFY_KEY(true));
+                  history.push(
+                    `/user/key/verify?verificationtoken=${verificationtoken}`
+                  );
                 }
               }
               return dispatch(
