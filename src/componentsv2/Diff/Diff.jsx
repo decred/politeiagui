@@ -2,6 +2,7 @@ import React from "react";
 import { diffWordsWithSpace } from "diff";
 import DiffLine from "./DiffLine";
 import { arrayDiff, lineDiffFunc, getLineArray, getFilesDiff } from "./helpers";
+import HelpMessage from "src/componentsv2/HelpMessage";
 import styles from "./Diff.module.css";
 
 const handleDiffLine = (
@@ -88,7 +89,7 @@ export const insertFilesDiff = (oldFiles, newFiles) => {
   const files = getFilesDiff(newFiles, oldFiles);
   return (
     <table className={styles.diffTable}>
-      {files.map((file, key) => {
+      {files.length > 0 ? files.map((file, key) => {
         const formattedFile = fileHandler(file);
         return file.added ? (
           <div className={styles.fileAdded} key={key}>
@@ -103,7 +104,11 @@ export const insertFilesDiff = (oldFiles, newFiles) => {
             {formattedFile}
           </div>
         );
-      })}
+      }) : (
+        <HelpMessage>
+          There are no attachment changes
+        </HelpMessage>
+      )}
     </table>
   );
 };
