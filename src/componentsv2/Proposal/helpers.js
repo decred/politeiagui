@@ -27,7 +27,7 @@ export const getStatusBarData = voteStatus => {
 };
 
 export const getProposalStatusTagProps = (proposal, voteStatus) => {
-  if (isPublicProposal(proposal)) {
+  if (isPublicProposal(proposal) && !!voteStatus) {
     switch (voteStatus.status) {
       case PROPOSAL_VOTING_NOT_AUTHORIZED:
         return { type: "blackTime", text: "Hasn't authorized yet" };
