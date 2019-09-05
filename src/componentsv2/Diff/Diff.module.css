@@ -19,6 +19,7 @@
   border: none;
   table-layout: fixed;
   width: 100%;
+  padding-bottom: 2rem;
   font-family: "menlo",monospace;
 }
 .diffTable td {
@@ -89,4 +90,9 @@
   border-left: 1em solid #ffdce0;
 }
 
+@media screen and (max-width: 560px) {
+  .lineContent {
+    width: calc(100vw - 8rem);
+  }
+}
   

@@ -117,14 +117,14 @@ const Proposal = ({ proposal, extended, children }) => {
                   {version > 1 && !extended && (
                     <Text
                       id={`proposal-${proposalToken}-version`}
-                      className={classNames(styles.version, "hide-on-mobile")}
+                      className={classNames(styles.version)}
                       color="gray"
                       truncate
                     >{`version ${version}`}</Text>
                   )}
                   {extended && (
                     <VersionPicker
-                      className={classNames(styles.versionPicker, "hide-on-mobile")}
+                      className={classNames(styles.versionPicker)}
                       version={version}
                       token={proposalToken}
                     />

@@ -48,6 +48,7 @@ const ModalDiff = ({
               <Text
                 id={`proposal-${proposalDetails.proposalToken}-version`}
                 color="gray"
+                className={styles.version}
               >{`version ${proposalDetails.version}`}</Text>
             )}
           </Subtitle>

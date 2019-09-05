@@ -81,4 +81,10 @@
     .proposalActions {
         margin-top: 2rem;
     }
+    .versionPicker {
+        margin-left: auto;
+    }
+    .version {
+        margin-left: auto !important;
+    }
 }
