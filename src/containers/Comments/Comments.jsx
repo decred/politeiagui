@@ -110,14 +110,20 @@ const Comments = ({
     [sortOption]
   );
 
-  const scrollToComments = getQueryStringValue("scrollToComments");
+  const hasComments = !!comments;
+
   useEffect(
     function handleScrollToComments() {
-      if (scrollToComments) {
-        document.getElementById("commentArea").scrollIntoView();
+      const scrollToComments = async () =>
+        setTimeout(() => {
+          document.getElementById("commentArea").scrollIntoView();
+        }, 100);
+      const shouldScrollToComments = getQueryStringValue("scrollToComments");
+      if (shouldScrollToComments && hasComments) {
+        scrollToComments();
       }
     },
-    [scrollToComments]
+    [hasComments]
   );
 
   useEffect(
