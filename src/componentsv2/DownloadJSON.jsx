@@ -30,7 +30,7 @@ const DownloadJSON = ({
 };
 
 DownloadJSON.propTypes = {
-  content: PropTypes.object.isRequired
+  content: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired
 };
 
 export default DownloadJSON;

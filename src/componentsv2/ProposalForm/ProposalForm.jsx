@@ -6,7 +6,7 @@ import { Button, Message, BoxTextInput } from "pi-ui";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/componentsv2/MarkdownEditor";
 import ThumbnailGrid from "src/componentsv2/Files/Thumbnail";
-import AttachFileButton from "src/componentsv2/AttachFileButton";
+import AttachFileInput from "src/componentsv2/AttachFileInput";
 import ModalFullImage from "src/componentsv2/ModalFullImage";
 import ModalMDGuide from "src/componentsv2/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
@@ -107,7 +107,7 @@ const ProposalForm = ({ initialValues, onSubmit, history, disableSubmit }) => {
               placeholder={"Write your proposal"}
               error={touched.description && errors.description}
               filesInput={
-                <AttachFileButton onChange={handleFilesChange} type="button" />
+                <AttachFileInput onChange={handleFilesChange} type="button" />
               }
             />
             <ThumbnailGrid
