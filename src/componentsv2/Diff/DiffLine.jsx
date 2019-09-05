@@ -2,6 +2,7 @@ import React from "react";
 import { classNames } from "pi-ui";
 import styles from "./Diff.module.css";
 import Markdown from "src/componentsv2/Markdown";
+import PropTypes from "prop-types";
 
 const DiffLine = ({
   added = false,
@@ -9,6 +10,7 @@ const DiffLine = ({
   content = ""
 }) => {
   const line = content && content.length > 0 ? content.join("") : content;
+  console.log("content", content);
   return (
     <tr
       className={classNames(
@@ -23,6 +25,12 @@ const DiffLine = ({
       </td>
     </tr>
   );
+};
+
+DiffLine.propTypes = {
+  added: PropTypes.bool,
+  removed: PropTypes.bool,
+  content: PropTypes.array || PropTypes.string
 };
 
 export default DiffLine;

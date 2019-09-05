@@ -47,7 +47,9 @@ const VersionPicker = ({ version, token, className }) => {
 };
 
 VersionPicker.propTypes = {
-  version: PropTypes.string.isRequired
+  version: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
+  className: PropTypes.string
 };
 
 export default VersionPicker;

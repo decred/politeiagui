@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { diffWordsWithSpace } from "diff";
 import DiffLine from "./DiffLine";
 import { arrayDiff, lineDiffFunc, getLineArray, getFilesDiff } from "./helpers";
@@ -28,42 +28,43 @@ const handleDiffLine = (
   return diffLine;
 };
 
-export const insertDiffHTML = (oldTextBody, newTextBody) => {
-  const oldComLines = getLineArray(oldTextBody);
-  const newComLines = getLineArray(newTextBody);
-
-  let newTextLineCounter = 0,
-    oldTextLineCounter = 0;
-  const linesDiff = arrayDiff(newComLines, oldComLines, lineDiffFunc)
-    .sort((a, b) => a.lineIndex - b.lineIndex)
-    .map((line, index) => {
-      if (line.value !== "" || line.removed) {
-        if (line.added) {
-          newTextLineCounter += 1;
-        } else if (line.removed) {
-          oldTextLineCounter += 1;
+export const DiffHTML = ({ oldTextBody, newTextBody }) => {
+  const linesDiff = useMemo(() => {
+    const oldComLines = getLineArray(oldTextBody);
+    const newComLines = getLineArray(newTextBody);
+    let newTextLineCounter = 0,
+      oldTextLineCounter = 0;
+    return arrayDiff(newComLines, oldComLines, lineDiffFunc)
+      .sort((a, b) => a.lineIndex - b.lineIndex)
+      .map((line, index) => {
+        if (line.value !== "" || line.removed) {
+          if (line.added) {
+            newTextLineCounter += 1;
+          } else if (line.removed) {
+            oldTextLineCounter += 1;
+          } else {
+            newTextLineCounter += 1;
+            oldTextLineCounter += 1;
+          }
+          return handleDiffLine(
+            line,
+            index,
+            oldTextLineCounter,
+            newTextLineCounter
+          );
         } else {
           newTextLineCounter += 1;
           oldTextLineCounter += 1;
+          return (
+            <DiffLine
+              addedIndex={newTextLineCounter}
+              removedIndex={oldTextLineCounter}
+              key={index}
+            />
+          );
         }
-        return handleDiffLine(
-          line,
-          index,
-          oldTextLineCounter,
-          newTextLineCounter
-        );
-      } else {
-        newTextLineCounter += 1;
-        oldTextLineCounter += 1;
-        return (
-          <DiffLine
-            addedIndex={newTextLineCounter}
-            removedIndex={oldTextLineCounter}
-            key={index}
-          />
-        );
-      }
-    });
+      });
+  }, [newTextBody, oldTextBody]);
   return (
     <table
       className={styles.diffTable}
@@ -85,7 +86,7 @@ const fileHandler = file => file.mime.includes("image") ? (
   <p>{file.name}</p>
 );
 
-export const insertFilesDiff = (oldFiles, newFiles) => {
+export const FilesDiff = ({ oldFiles, newFiles }) => {
   const files = getFilesDiff(newFiles, oldFiles);
   return (
     <table className={styles.diffTable}>

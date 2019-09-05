@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Text, Tab, Tabs } from "pi-ui";
 import PropTypes from "prop-types";
-import { insertDiffHTML, insertFilesDiff } from "src/componentsv2/Diff/Diff";
+import { DiffHTML, FilesDiff } from "src/componentsv2/Diff/Diff";
 import { Header, Title, Author, Event, Subtitle } from "src/componentsv2/RecordWrapper";
 import styles from "./ModalDiff.module.css";
 
@@ -14,8 +14,6 @@ const ModalDiff = ({
   proposalDetails,
   ...props
 }) => {
-  const diffFiles = insertFilesDiff(oldFiles, newFiles);
-  const diff = insertDiffHTML(oldText, newText);
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   return (
     <Modal
@@ -60,20 +58,22 @@ const ModalDiff = ({
         className={styles.diffTabs}
       >
         <Tab label="Text Changes">
-          {diff}
+          <DiffHTML oldTextBody={oldText} newTextBody={newText}/>
         </Tab>
         <Tab label="Attachments Changes">
-          {diffFiles}
+          <FilesDiff oldFiles={oldFiles} newFiles={newFiles}/>
         </Tab>
       </Tabs>
     </Modal>
   );
 };
 ModalDiff.propTypes = {
-  title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
-  oldText: PropTypes.string.isRequired,
-  newText: PropTypes.string.isRequired
+  oldText: PropTypes.string,
+  newText: PropTypes.string,
+  oldFiles: PropTypes.array,
+  newFiles: PropTypes.array,
+  proposalDetails: PropTypes.object
 };
 
 export default ModalDiff;
