@@ -409,7 +409,7 @@ export const getPropVoteStatus = createDeepEqualSelector(
   apiPropsVoteStatusResponse,
   vsResponse => {
     const getVoteStatusByToken = token =>
-      vsResponse ? vsResponse[token] : null;
+      (vsResponse && vsResponse[token]) || {};
     return getVoteStatusByToken;
   }
 );
