@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import usePolicy from "src/hooks/api/usePolicy";
 import { proposalValidation } from "./validation";
 
@@ -13,12 +13,15 @@ export function useProposalForm() {
 
 export function useFullImageModal() {
   const [showFullImageModal, setShowFullImageModal] = useState(false);
-  const openFullImageModal = f => {
-    setShowFullImageModal(f);
-  };
-  const closeFullImageModal = () => {
+  const openFullImageModal = useCallback(
+    f => {
+      setShowFullImageModal(f);
+    },
+    [setShowFullImageModal]
+  );
+  const closeFullImageModal = useCallback(() => {
     setShowFullImageModal(false);
-  };
+  }, [setShowFullImageModal]);
   return {
     showFullImageModal,
     openFullImageModal,

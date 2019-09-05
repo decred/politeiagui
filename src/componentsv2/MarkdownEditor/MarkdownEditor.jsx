@@ -7,14 +7,14 @@ import styles from "./MarkdownEditor.module.css";
 import "./styles.css";
 import ReactMde from "react-mde-newest";
 
-const MarkdownEditor = ({
+const MarkdownEditor = React.memo(function MarkdownEditor({
   onChange,
   value,
   placeholder,
   className,
   filesInput,
   textAreaProps
-}) => {
+}) {
   const [tab, setTab] = useState("write");
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const MarkdownEditor = ({
       />
     </div>
   );
-};
+});
 
 MarkdownEditor.propTypes = {
   onChange: PropTypes.func,
@@ -75,4 +75,4 @@ MarkdownEditor.defaultProps = {
   textAreaProps: {}
 };
 
-export default React.memo(MarkdownEditor);
+export default MarkdownEditor;
