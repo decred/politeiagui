@@ -95,7 +95,7 @@ const RecordsView = ({
   const isMobileScreen = useMediaQuery("(max-width:560px)");
   return children({
     tabs: (
-      <Tabs onSelectTab={onSetIndex} vertical activeTabIndex={index} mode={isMobileScreen ? "dropdown" : "horizontal"} >
+      <Tabs onSelectTab={onSetIndex} activeTabIndex={index} mode={isMobileScreen ? "dropdown" : "horizontal"} >
         {tabLabels.map(label => (
           <Tab
             key={`tab-${label}`}
