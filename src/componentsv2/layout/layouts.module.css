@@ -70,9 +70,6 @@
 
 /* EXTRA SMALL WIDTH */
 @media screen and (max-width: 560px){
-    .customTab {
-        margin-right: 2rem !important;
-    }
     .titleAndSubtitleWrapper {
         width: 85%;
     }
