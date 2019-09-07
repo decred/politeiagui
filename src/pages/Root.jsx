@@ -20,10 +20,6 @@ import PageUserSearch from "./User/Search";
 import PageUserSignup from "./User/Signup";
 import PageUserVerifyEmail from "./User/VerifyEmail";
 import PageUserVerifyKey from "./User/VerifyKey";
-<<<<<<< HEAD
-
-
-
 
 const Routes = ({ location }) => {
   const config = useConfig();
@@ -74,7 +70,7 @@ const Routes = ({ location }) => {
             component={PageUserVerifyEmail}
           />
           <AdminAuthenticatedRoute
-            path={`/user/search`}
+            path={"/user/search"}
             exact
             component={PageUserSearch}
           />
