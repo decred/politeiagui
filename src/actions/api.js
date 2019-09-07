@@ -824,7 +824,7 @@ export const onSubmitComment = (
       });
   });
 
-export const onUpdateUserKey = (loggedInAsEmail, history) =>
+export const onUpdateUserKey = loggedInAsEmail =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_UPDATED_KEY());
     return pki
@@ -839,9 +839,6 @@ export const onUpdateUserKey = (loggedInAsEmail, history) =>
                 const { testnet } = getState().api.init.response;
                 if (testnet) {
                   dispatch(act.SHOULD_AUTO_VERIFY_KEY(true));
-                  history.push(
-                    `/user/key/verify?verificationtoken=${verificationtoken}`
-                  );
                 }
               }
               return dispatch(
@@ -863,9 +860,10 @@ export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
     );
     return api
       .verifyKeyRequest(csrf, loggedInAsEmail, verificationtoken)
-      .then(response =>
-        dispatch(act.RECEIVE_VERIFIED_KEY({ ...response, success: true }))
-      )
+      .then(response => {
+        dispatch(act.RECEIVE_VERIFIED_KEY({ ...response, success: true }));
+        dispatch(act.SHOULD_AUTO_VERIFY_KEY(false));
+      })
       .catch(error => {
         dispatch(act.RECEIVE_VERIFIED_KEY(null, error));
       });

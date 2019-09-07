@@ -3,40 +3,15 @@ import PropTypes from "prop-types";
 import React, { useState } from "react";
 import ModalChangePassword from "src/componentsv2/ModalChangePassword";
 import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
-import ModalPayPaywall from "src/componentsv2/ModalPayPaywall";
-import {
-  MANAGE_USER_CLEAR_USER_PAYWALL,
-  MANAGE_USER_DEACTIVATE,
-  MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
-  MANAGE_USER_REACTIVATE,
-  PAYWALL_STATUS_PAID
-} from "src/constants";
-import usePaywall from "src/hooks/api/usePaywall";
+import { MANAGE_USER_DEACTIVATE, MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION, MANAGE_USER_REACTIVATE } from "src/constants";
 import { convertAtomsToDcr, formatUnixTimestamp } from "src/utilsv2";
-import {
-  getUserActivePublicKey,
-  hasUserPaid,
-  isExpired,
-  isUserAdmin,
-  isUserDeactivated,
-  isUserEmailVerified,
-  isUserLocked
-} from "./helpers";
-import {
-  useActivationModal,
-  useChangePassword,
-  useManageUser,
-  useMarkAsExpiredConfirmModal,
-  useMarkAsPaidModal
-} from "./hooks";
+import { isExpired, isUserAdmin, isUserDeactivated, isUserEmailVerified, isUserLocked } from "./helpers";
+import { useActivationModal, useChangePassword, useManageUser, useMarkAsExpiredConfirmModal } from "./hooks";
 import InfoSection from "./InfoSection.jsx";
 
-const General = ({
-  proposalcredits,
-  identities,
+const Account = ({
   id,
   newuserverificationtoken,
-  newuserpaywalltx,
   newuserpaywalladdress,
   newuserpaywallamount,
   newuserpaywalltxnotbefore,
@@ -53,8 +28,7 @@ const General = ({
   const {
     onManageUser,
     isApiRequestingDeactivateUser,
-    isApiRequestingReactivateUser,
-    isApiRequestingMarkAsPaid
+    isApiRequestingReactivateUser
   } = useManageUser();
 
   const isActivationLoading =
@@ -66,8 +40,6 @@ const General = ({
     onManageUser(id, MANAGE_USER_DEACTIVATE, reason);
   const reactivateUser = reason =>
     onManageUser(id, MANAGE_USER_REACTIVATE, reason);
-  const markAsPaid = reason =>
-    onManageUser(id, MANAGE_USER_CLEAR_USER_PAYWALL, reason);
 
   const {
     showMarkAsExpiredConfirmModal,
@@ -79,11 +51,6 @@ const General = ({
     openActivationModal,
     closeActivationModal
   } = useActivationModal();
-  const {
-    showMarkAsPaidConfirmModal,
-    openMarkAsPaidModal,
-    closeMarkAsPaidModal
-  } = useMarkAsPaidModal();
 
   // Change Password Modal
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -94,16 +61,6 @@ const General = ({
   const closePasswordModal = () => setShowPasswordModal(false);
   const { onChangePassword, validationSchema } = useChangePassword();
 
-  // Paywall
-  const { userPaywallStatus, paywallAmount, paywallAddress } = usePaywall();
-  // Pay Paywall Modal
-  const [showPaywallModal, setShowPaywallModal] = useState(false);
-  const openPaywallModal = e => {
-    e.preventDefault();
-    setShowPaywallModal(true);
-  };
-  const closePaywallModal = () => setShowPaywallModal(false);
-
   const showDetailedLabels = isUserPageOwner || isAdmin;
   return (
     <Card className="container">
@@ -112,36 +69,8 @@ const General = ({
         label="Admin:"
         info={isUserAdmin(isadmin) ? "Yes" : "No"}
       />
-      <InfoSection
-        label="User public key:"
-        info={
-          <>
-            <span style={{ wordBreak: "break-word" }}>
-              {getUserActivePublicKey(identities)}
-            </span>
-            {isUserPageOwner && (
-              <Button className="margin-top-s" size="sm">
-                Manage Identity
-              </Button>
-            )}
-          </>
-        }
-      />
       {showDetailedLabels && (
         <>
-          <InfoSection
-            label="Proposal credits:"
-            info={
-              <>
-                {proposalcredits}
-                {isAdmin && (
-                  <Button className="margin-top-s" size="sm">
-                    Rescan
-                  </Button>
-                )}
-              </>
-            }
-          />
           <InfoSection
             label="Verified email:"
             info={isUserEmailVerified(newuserverificationtoken) ? "Yes" : "No"}
@@ -157,48 +86,6 @@ const General = ({
               }
             />
           )}
-          <InfoSection
-            label="Registration fee:"
-            info={
-              <>
-                {hasUserPaid(
-                  newuserpaywalltx,
-                  newuserpaywallamount,
-                  isUserPageOwner && userPaywallStatus === PAYWALL_STATUS_PAID
-                )
-                  ? "Paid"
-                  : "Not paid"}
-                {!hasUserPaid(
-                  newuserpaywalltx,
-                  newuserpaywallamount,
-                  isUserPageOwner && userPaywallStatus === PAYWALL_STATUS_PAID
-                ) && isAdmin ? (
-                  <Button
-                    className="margin-top-s"
-                    loading={isApiRequestingMarkAsPaid}
-                    size="sm"
-                    onClick={openMarkAsPaidModal}
-                  >
-                    Mark as paid
-                  </Button>
-                ) : (
-                  !hasUserPaid(
-                    newuserpaywalltx,
-                    newuserpaywallamount,
-                    isUserPageOwner && userPaywallStatus === PAYWALL_STATUS_PAID
-                  ) && (
-                    <Button
-                      className="margin-top-s"
-                      size="sm"
-                      onClick={openPaywallModal}
-                    >
-                      Pay registration fee
-                    </Button>
-                  )
-                )}
-              </>
-            }
-          />
           <InfoSection
             label="Address:"
             info={
@@ -239,17 +126,17 @@ const General = ({
                       Deactivate
                     </Button>
                   ) : (
-                    isAdmin && (
-                      <Button
-                        className="margin-top-s"
-                        loading={isActivationLoading}
-                        size="sm"
-                        onClick={openActivationModal}
-                      >
-                        Reactivate
+                      isAdmin && (
+                        <Button
+                          className="margin-top-s"
+                          loading={isActivationLoading}
+                          size="sm"
+                          onClick={openActivationModal}
+                        >
+                          Reactivate
                       </Button>
-                    )
-                  ))}
+                      )
+                    ))}
               </>
             }
           />
@@ -265,17 +152,17 @@ const General = ({
                   isExpired(resetpasswordverificationexpiry) ? (
                     <span>Expired</span>
                   ) : (
-                    <>
-                      {formatUnixTimestamp(resetpasswordverificationexpiry)}
-                      <Button
-                        loading={isActivationLoading}
-                        size="sm"
-                        onClick={openMarkAsExpiredConfirmModal}
-                      >
-                        Mark as expired
+                      <>
+                        {formatUnixTimestamp(resetpasswordverificationexpiry)}
+                        <Button
+                          loading={isActivationLoading}
+                          size="sm"
+                          onClick={openMarkAsExpiredConfirmModal}
+                        >
+                          Mark as expired
                       </Button>
-                    </>
-                  )
+                      </>
+                    )
                 }
               />
             </>
@@ -302,30 +189,12 @@ const General = ({
         show={showActivationConfirmModal}
         onClose={closeActivationModal}
       />
-      <ModalConfirmWithReason
-        subject="markUserPaywallAsPaid"
-        onSubmit={markAsPaid}
-        validationSchema={validationSchema}
-        show={showMarkAsPaidConfirmModal}
-        onClose={closeMarkAsPaidModal}
-      />
-      <ModalPayPaywall
-        show={showPaywallModal}
-        title="Complete your registration"
-        address={paywallAddress}
-        amount={paywallAmount}
-        onClose={closePaywallModal}
-        status={userPaywallStatus}
-      />
     </Card>
   );
 };
 
-General.propTypes = {
-  proposalcredits: PropTypes.number,
-  identities: PropTypes.array,
+Account.propTypes = {
   newuserverificationtoken: PropTypes.any,
-  newuserpaywalltx: PropTypes.string,
   newuserpaywalladdress: PropTypes.string,
   newuserpaywallamount: PropTypes.number,
   newuserpaywalltxnotbefore: PropTypes.number,
@@ -338,4 +207,4 @@ General.propTypes = {
   isdeactivated: PropTypes.bool
 };
 
-export default General;
+export default Account;

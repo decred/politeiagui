@@ -4,9 +4,9 @@ import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
 import Proposals from "src/containers/Proposal/User/Submitted";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
+import Account from "./Account";
 import Credits from "./Credits";
 import styles from "./detail.module.css";
-import General from "./General";
 import { tabValues } from "./helpers";
 import { useChangeUsername, useUserDetail } from "./hooks";
 import Identity from "./Identity";
@@ -15,7 +15,7 @@ import Preferences from "./Preferences";
 const getTabComponent = ({ user, ...rest }) =>
   [
     <Identity {...user} {...rest} />,
-    <General {...user} {...rest} />,
+    <Account {...user} {...rest} />,
     <Preferences {...rest} />,
     <Credits {...rest} />,
     <Proposals userID={user.id} />
@@ -38,7 +38,7 @@ const UserDetail = ({
 
   const tabLabels = [
     tabValues.IDENTITY,
-    tabValues.GENERAL,
+    tabValues.ACCOUNT,
     tabValues.PREFERENCES,
     tabValues.CREDITS,
     tabValues.PROPOSALS
@@ -58,6 +58,8 @@ const UserDetail = ({
   const isTabDisabled = tabIndex => {
     const tabLabel = tabLabels[tabIndex];
     if (tabLabel === tabValues.PREFERENCES && !isUserPageOwner) return true;
+
+    if (tabLabel === tabValues.IDENTITY && !isUserPageOwner) return true;
 
     if (tabLabel === tabValues.CREDITS && !isAdminOrTheUser) return true;
 
