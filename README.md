@@ -47,7 +47,7 @@ Politeiagui uses node.js and the yarn package manager.
  In case you find some kind of incompatibility between react versions when running `yarn start-v2`:
   
 - Link the react package from this repository into pi-ui by accessing the react folder inside node_modules:
-     - `cd /ploiteiagui/node_modules/react && yarn link`
+     - `cd /politeiagui/node_modules/react && yarn link`
      - `cd /pi-ui && yarn link react`
     
 
