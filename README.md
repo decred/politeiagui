@@ -33,22 +33,13 @@ Politeiagui uses node.js and the yarn package manager.
     
     `yarn && yarn start`
 
-    **Running v2 [redisgn]**
-
-    `yarn && yarn start-v2`
-
     **Mock APIs (WARNING: may be out of date)**
 
     To run politeiagui using mock APIs that do not communicate with `politeiawww` (useful for working on UI changes only), run the following command:
     
     `yarn && yarn uidev`
     
-**Troubleshooting:**
- In case you find some kind of incompatibility between react versions when running `yarn start-v2`:
-  
-- Link the react package from this repository into pi-ui by accessing the react folder inside node_modules:
-     - `cd /politeiagui/node_modules/react && yarn link`
-     - `cd /pi-ui && yarn link react`
+
     
 
 ## Production
