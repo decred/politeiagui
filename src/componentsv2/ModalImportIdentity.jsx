@@ -1,6 +1,6 @@
-import { Button, Modal, Text, TextInput } from "pi-ui";
+import { Button, getThemeProperty, Icon, Modal, Text, TextInput, useTheme } from "pi-ui";
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactFileReader from "react-file-reader";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import { INVALID_FILE, INVALID_KEY_PAIR, LOAD_KEY_FAILED, PUBLIC_KEY_MISMATCH } from "src/constants";
@@ -58,10 +58,13 @@ const onSubmitFiles = (onIdentityImported, userPubkey, loggedInAsEmail, json, se
 const ModalImportIdentity = ({
   show,
   onClose,
-  validationSchema
+  validationSchema,
+  successMessage,
+  successTitle
 }) => {
-  const { onIdentityImported, userPubkey, loggedInAsEmail } = useUserIdentity();
+  const { onIdentityImported, userPubkey, loggedInAsEmail, keyMismatchAction } = useUserIdentity();
   const [fileError, setFileError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const onSubmitNewIdentity = (
     values,
     { resetForm, setSubmitting, setFieldError }
@@ -69,84 +72,124 @@ const ModalImportIdentity = ({
     try {
       onSubmitFiles(onIdentityImported, userPubkey, loggedInAsEmail, values, setFileError);
       resetForm();
+      setSuccess(true);
+      keyMismatchAction(false);
       setSubmitting(false);
     } catch (e) {
       setSubmitting(false);
       setFieldError("global", e);
     }
   };
+  useEffect(
+    function clearOnClose() {
+      if (!show) {
+        setTimeout(() => setSuccess(false), 500);
+      }
+    },
+    [show]
+  );
+
+  const theme = useTheme();
+  const colorGray = getThemeProperty(theme, "color-gray");
+  const colorPrimaryDark = getThemeProperty(theme, "color-primary-dark");
+
   return (
-    <Modal title="Import Identity" show={show} onClose={onClose}>
-      <FormWrapper
-        initialValues={{
-          publicKey: "",
-          secretKey: ""
-        }}
-        onSubmit={onSubmitNewIdentity}
-        validationSchema={validationSchema}
-      >
-        {({
-          Form,
-          Actions,
-          ErrorMessage,
-          values,
-          handleChange,
-          handleBlur,
-          setFieldValue,
-          handleSubmit,
-          isSubmitting,
-          errors
-        }) => {
-          const canSubmit =
-            values.publicKey && values.secretKey && isEmpty(errors) && !fileError;
-          return (
-            <Form onSubmit={handleSubmit}>
-              {errors && errors.global && (
-                <ErrorMessage>{errors.global.toString()}</ErrorMessage>
-              )}
-              {fileError && (
-                <ErrorMessage>{fileError.toString()}</ErrorMessage>
-              )}
-              <div style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                <ReactFileReader
-                  base64
-                  handleFiles={onSelectFiles(setFileError, setFieldValue)}
-                  multipleFiles={false}
-                  fileTypes="json"
-                >
-                  <Button type="button">
-                    Upload json identity file
-                  </Button>
-                </ReactFileReader>
-                <Text className="margin-top-l margin-bottom-m" color="grayDark">Or paste in your own</Text>
-              </div>
-              <TextInput
-                id="publicKey"
-                label="Public key" name="publicKey"
-                value={values.publicKey}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <TextInput
-                id="secretKey"
-                label="Private key" name="secretKey"
-                value={values.secretKey}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <Actions>
-                <Button
-                  loading={isSubmitting}
-                  kind={canSubmit ? "primary" : "disabled"}
-                  type="submit"
-                >
-                  Submit Identity
+    <Modal
+      title={success ? successTitle : "Import Identity"}
+      show={show}
+      onClose={onClose}
+      style={{ width: "600px" }}
+      iconComponent={
+        !success ? (
+          <Icon type={"info"} size={26} />
+        ) : (
+            <Icon
+              type={"checkmark"}
+              size={26}
+              iconColor={colorPrimaryDark}
+              backgroundColor={colorGray}
+            />
+          )
+      }>
+      {!success ?
+        <FormWrapper
+          initialValues={{
+            publicKey: "",
+            secretKey: ""
+          }}
+          onSubmit={onSubmitNewIdentity}
+          validationSchema={validationSchema}
+        >
+          {({
+            Form,
+            Actions,
+            ErrorMessage,
+            values,
+            handleChange,
+            handleBlur,
+            setFieldValue,
+            handleSubmit,
+            isSubmitting,
+            errors
+          }) => {
+            const canSubmit =
+              values.publicKey && values.secretKey && isEmpty(errors) && !fileError;
+            return (
+              <Form onSubmit={handleSubmit}>
+                {errors && errors.global && (
+                  <ErrorMessage>{errors.global.toString()}</ErrorMessage>
+                )}
+                {fileError && (
+                  <ErrorMessage>{fileError.toString()}</ErrorMessage>
+                )}
+                <div style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                  <ReactFileReader
+                    base64
+                    handleFiles={onSelectFiles(setFileError, setFieldValue)}
+                    multipleFiles={false}
+                    fileTypes="json"
+                  >
+                    <Button type="button">
+                      Upload json identity file
                 </Button>
-              </Actions>
-            </Form>
-          );
-        }}
-      </FormWrapper>
+                  </ReactFileReader>
+                  <Text className="margin-top-l margin-bottom-m" color="grayDark">Or paste in your own</Text>
+                </div>
+                <TextInput
+                  id="publicKey"
+                  label="Public key" name="publicKey"
+                  value={values.publicKey}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <TextInput
+                  id="secretKey"
+                  label="Private key" name="secretKey"
+                  value={values.secretKey}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <Actions>
+                  <Button
+                    loading={isSubmitting}
+                    kind={canSubmit ? "primary" : "disabled"}
+                    type="submit"
+                  >
+                    Submit Identity
+              </Button>
+                </Actions>
+              </Form>
+            );
+          }}
+        </FormWrapper>
+        :
+        <>
+          {successMessage}
+          <div className="justify-right margin-top-m">
+            <Button onClick={onClose}>Ok</Button>
+          </div>
+        </>
+      }
     </Modal>
   );
 };
@@ -155,7 +198,14 @@ ModalImportIdentity.propTypes = {
   show: PropTypes.bool,
   onClose: PropTypes.func,
   handleSubmit: PropTypes.func,
-  validationSchema: PropTypes.object
+  validationSchema: PropTypes.object,
+  successTitle: PropTypes.string,
+  successMessage: PropTypes.node
+};
+
+ModalImportIdentity.defaultProps = {
+  successTitle: "Identity imported successfully",
+  successMessage: "Your keys were imported successfully"
 };
 
 export default ModalImportIdentity;

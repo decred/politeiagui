@@ -59,13 +59,19 @@ const Identity = ({ history }) => {
         setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
       });
     });
-  }, [loggedInAsEmail]);
-  useEffect(() => {
-    refreshPubKey();
-  }, [refreshPubKey]);
+  }, [loggedInAsEmail, setPubkey]);
   useEffect(() => {
     if (userPubkey !== pubkey) refreshPubKey();
-  }, [refreshPubKey, userPubkey, pubkey]);
+    if (identityImportSuccess) refreshPubKey();
+  }, [refreshPubKey, userPubkey, pubkey, identityImportSuccess]);
+
+  const updateKey = useCallback(async () => {
+    try {
+      await onUpdateUserKey(loggedInAsEmail);
+    } catch (e) {
+      throw e;
+    }
+  }, [onUpdateUserKey, loggedInAsEmail]);
   const isUserPageOwner = user && loggedInAsUserId === user.id;
   return !isUserPageOwner ? (
     <Message kind="error">
@@ -126,11 +132,11 @@ const Identity = ({ history }) => {
           message="Are you sure you want to generate a new identity?"
           show={showConfirmModal}
           onClose={closeConfirmModal}
-          onSubmit={() => onUpdateUserKey(loggedInAsEmail, history)}
+          onSubmit={updateKey}
           successTitle="Create new identity"
           successMessage={`Your new identity has been requested, please check your email at ${loggedInAsEmail} to verify and activate it.
 
-        The verification link needs to be open with the same browser that you used to generate this new identity.`}
+          The verification link needs to be open with the same browser that you used to generate this new identity.`}
         />
         <ModalImportIdentity
           show={showImportIdentityModal}

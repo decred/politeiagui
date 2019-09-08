@@ -6,6 +6,7 @@ import * as sel from "src/selectors";
 const mapStateToProps = {
   userPubkey: sel.userPubkey,
   user: sel.user,
+  apiMeResponse: sel.apiMeResponse,
   loggedInAsUserId: sel.userid,
   identityImportError: sel.identityImportError,
   identityImportSuccess: sel.identityImportSuccess,
@@ -24,6 +25,7 @@ const mapStateToProps = {
 const mapDispatchToProps = {
   keyMismatchAction: act.keyMismatch,
   onIdentityImported: act.onIdentityImported,
+  updateMe: act.updateMe,
   onUpdateUserKey: act.onUpdateUserKey
 };
 
