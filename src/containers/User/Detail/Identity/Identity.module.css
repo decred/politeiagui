@@ -13,6 +13,13 @@
   display: flex;
 }
 
+.spinnerWrapper {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
 /* EXTRA SMALL */
 @media screen and (max-width: 400px) {
   .buttonsWrapper {

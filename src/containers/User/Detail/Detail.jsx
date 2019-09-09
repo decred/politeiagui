@@ -1,9 +1,12 @@
 import { Link, useMediaQuery } from "pi-ui";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
+import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "src/constants";
 import Proposals from "src/containers/Proposal/User/Submitted";
+import useUserIdentity from "src/hooks/api/useUserIdentity";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
+import { existing, myPubKeyHex } from "src/lib/pki";
 import Account from "./Account";
 import Credits from "./Credits";
 import styles from "./detail.module.css";
@@ -31,7 +34,17 @@ const UserDetail = ({
   Tab,
   match
 }) => {
-  const { user, isAdmin, userId, loggedInAsUserId } = useUserDetail({ match });
+  const {
+    user,
+    isAdmin,
+    userId,
+    loggedInAsUserId
+  } = useUserDetail({ match });
+  const {
+    loggedInAsEmail,
+    userPubkey,
+    identityImportSuccess
+  } = useUserIdentity();
 
   const isUserPageOwner = user && loggedInAsUserId === user.id;
   const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
@@ -106,7 +119,9 @@ const UserDetail = ({
             user,
             isAdminOrTheUser,
             isUserPageOwner,
-            isAdmin
+            isAdmin,
+            loadingKey,
+            pubkey
           })[index]
         }
       </Main>
