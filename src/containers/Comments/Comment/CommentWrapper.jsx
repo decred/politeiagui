@@ -19,6 +19,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     readOnly,
     identityError,
     paywallMissing,
+    openCensorModal,
     openLoginModal
   } = useComment();
   const {
@@ -26,6 +27,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     token,
     commentid,
     resultvotes,
+    censored,
     timestamp,
     username,
     userid,
@@ -72,6 +74,9 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     }
     return onLikeComment(commentid, "-1");
   }
+  function handleClickCensor() {
+    return openCensorModal(commentid);
+  }
   const hasChildrenComments = !!React.Children.toArray(children).filter(
     child =>
       child.props && child.props.comments && !!child.props.comments.length
@@ -85,6 +90,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
         author={username}
         authorID={userid}
         createdAt={timestamp}
+        censored={censored}
         highlightAuthor={isRecordAuthor}
         highlightAsNew={isNew}
         disableLikes={!enableCommentVote}
@@ -97,12 +103,12 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
         onLike={handleLikeComment}
         onDislike={handleDislikeComment}
         showReplies={showReplies}
+        onClickCensor={handleClickCensor}
         onClickReply={handleToggleReplyForm}
         onClickShowReplies={handleToggleReplies}
         numOfReplies={numOfReplies}
         commentBody={commentText}
         numOfNewHiddenReplies={sumOfNewDescendants}
-        {...props}
       />
       {showReplyForm && (
         <CommentForm

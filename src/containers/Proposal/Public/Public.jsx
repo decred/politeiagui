@@ -38,7 +38,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       [tabValues.ABANDONED]: "No proposals abandoned"
     };
     return mapTabToMessage[tab];
-  },[]);
+  }, []);
 
   return (
     <RecordsView

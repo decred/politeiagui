@@ -8,6 +8,19 @@
     margin-right: 1rem;
 }
 
+.censor {
+    cursor: pointer;
+    color: #ED6D47;
+    margin-right: 1rem;
+}
+
+.censored {
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #FEF5F3;
+}
+
 .timeAgo {
     font-size: var(--font-size-normal);
 }
@@ -30,6 +43,10 @@
 
 .reply:hover {
     color: var(--color-primary-dark);
+}
+
+.censor:hover {
+    color: #E25025;
 }
 
 .commentAuthor {

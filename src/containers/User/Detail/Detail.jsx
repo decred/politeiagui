@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "pi-ui";
+import { Link, useMediaQuery } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
@@ -11,7 +11,7 @@ import { useChangeUsername, useUserDetail } from "./hooks";
 import Preferences from "./Preferences";
 import Proposals from "src/containers/Proposal/User/Submitted";
 
-const getTabComponent = ({ user, userProposals, setUserProposals, ...rest }) =>
+const getTabComponent = ({ user, ...rest }) =>
   [
     <General {...user} {...rest} />,
     <Preferences {...rest} />,
@@ -61,6 +61,7 @@ const UserDetail = ({
     return false;
   };
 
+  const isMobileScreen = useMediaQuery("(max-width:560px)");
   // TODO: need a loading while user has not been fetched yet
   return !!user && userId === user.id ? (
     <>
@@ -82,7 +83,7 @@ const UserDetail = ({
           }
           subtitle={user.email}
         >
-          <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
+          <Tabs onSelectTab={onSetIndex} activeTabIndex={index} mode={isMobileScreen ? "dropdown" : "horizontal"}>
             {tabLabels.map((label, i) => {
               return isTabDisabled(i) ? (
                 <></>

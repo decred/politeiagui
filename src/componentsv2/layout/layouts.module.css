@@ -15,6 +15,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    overflow: visible;
 }
 
 .titleAndSubtitleWrapper {
@@ -31,7 +32,7 @@
 .customTabs {
     flex: 1;
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
 }
 
 .pageDetailsHeader {
@@ -69,9 +70,6 @@
 
 /* EXTRA SMALL WIDTH */
 @media screen and (max-width: 560px){
-    .customTab {
-        margin-right: 2rem !important;
-    }
     .titleAndSubtitleWrapper {
         width: 85%;
     }
