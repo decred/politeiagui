@@ -12,6 +12,10 @@ const getProposalFilesWithoutIndexMd = proposal =>
   proposal ? proposal.files.filter(file => file.name !== "index.md") : [];
 
 export function useVersionPicker(ownProps) {
+  const [selectedVersion, setSelectedVersion] = useState(ownProps.version);
+  const [proposalDiff, setProposalDiff] = useState();
+  const [showModal, setShowModal] = useState(false);
+
   const onChangeVersion = v => {
     setSelectedVersion(v);
     setShowModal(true);
@@ -35,10 +39,6 @@ export function useVersionPicker(ownProps) {
       oldText: getProposalText(prevProposal)
     });
   }
-
-  const [selectedVersion, setSelectedVersion] = useState(ownProps.version);
-  const [proposalDiff, setProposalDiff] = useState();
-  const [showModal, setShowModal] = useState(false);
 
   const disablePicker = ownProps.version === "1";
 

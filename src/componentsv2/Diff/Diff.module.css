@@ -98,5 +98,13 @@
   .lineContent {
     width: calc(100vw - 8rem);
   }
+
+  .files > td {
+    display: block;
+  }
+
+  .fileUnchanged {
+    padding-left: 1rem;
+  }
 }
   
