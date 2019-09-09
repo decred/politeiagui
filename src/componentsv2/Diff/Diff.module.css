@@ -20,7 +20,6 @@
   table-layout: fixed;
   width: 100%;
   padding-bottom: 2rem;
-  font-family: "menlo",monospace;
 }
 .diffTable td {
   font-size: 1em;
@@ -80,14 +79,19 @@
   width: 800px;
 }
 
+.files {
+  display: table;
+  table-layout: fixed;
+  align-items: center;
+  margin: auto;
+}
+
 .fileAdded {
-  border-left: 1em solid #e6ffed;
-  padding: 1em;
+  border: 1rem solid #e6ffed !important;
 }
 
 .fileRemoved {
-  padding: 1em;
-  border-left: 1em solid #ffdce0;
+  border: 1rem solid #ffdce0 !important;
 }
 
 @media screen and (max-width: 560px) {

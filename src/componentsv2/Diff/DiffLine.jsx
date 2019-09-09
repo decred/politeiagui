@@ -22,7 +22,7 @@ const DiffLine = ({ added = false, removed = false, content = "" }) => {
 
 DiffLine.propTypes = {
   added: PropTypes.bool,
-  removed: PropTypes.bool,
+  removed: PropTypes.bool || PropTypes.string,
   content: PropTypes.array || PropTypes.string
 };
 

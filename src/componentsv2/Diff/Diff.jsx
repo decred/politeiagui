@@ -1,9 +1,12 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
+import { classNames } from "pi-ui";
 import { diffWordsWithSpace } from "diff";
-import DiffLine from "./DiffLine";
 import { arrayDiff, lineDiffFunc, getLineArray, getFilesDiff } from "./helpers";
-import HelpMessage from "src/componentsv2/HelpMessage";
+import DiffLine from "./DiffLine";
 import styles from "./Diff.module.css";
+import HelpMessage from "src/componentsv2/HelpMessage";
+import { ImageThumbnail, TextThumbnail } from "src/componentsv2/Files/Thumbnail";
+import ModalFullImage from "src/componentsv2/ModalFullImage";
 
 const handleDiffLine = (
   line,
@@ -76,40 +79,65 @@ export const DiffHTML = ({ oldTextBody, newTextBody }) => {
   );
 };
 
-const fileHandler = file => file.mime.includes("image") ? (
-  <img
-    className={styles.diffImage}
-    alt={file.name}
-    src={`data:${file.mime};base64,${file.payload}`}
-  />
-) : (
-  <p>{file.name}</p>
-);
+const FileWrapper = ({ file, className }) => {
+  const [showFullImageModal, setShowFullImageModal] = useState(false);
+  const showModal = file => () => {
+    setShowFullImageModal(file);
+  };
+  const closeModal = () => {
+    setShowFullImageModal(false);
+  };
+  return file.mime.includes("image") ? (
+    <>
+      <ImageThumbnail
+        className={className}
+        file={file}
+        viewOnly={true}
+        onClick={showModal}
+      />
+      <ModalFullImage
+        image={file}
+        show={!!showFullImageModal}
+        onClose={closeModal}
+      />
+    </>
+  ) : (
+    <TextThumbnail
+      file={file}
+      viewOnly
+    />
+  );
+};
 
 export const FilesDiff = ({ oldFiles, newFiles }) => {
   const files = getFilesDiff(newFiles, oldFiles);
   return (
-    <table className={styles.diffTable}>
-      {files.length > 0 ? files.map((file, key) => {
-        const formattedFile = fileHandler(file);
-        return file.added ? (
-          <div className={styles.fileAdded} key={key}>
-            {formattedFile}
-          </div>
-        ) : file.removed ? (
-          <div className={styles.fileRemoved} key={key}>
-            {formattedFile}
-          </div>
-        ) : (
-          <div className={styles.fileUnchanged} key={key}>
-            {formattedFile}
-          </div>
-        );
-      }) : (
-        <HelpMessage>
-          There are no attachment changes
-        </HelpMessage>
-      )}
+    <table className={classNames(styles.diffTable, styles.files)}>
+      <tbody>
+        <tr className={styles.files}>
+          {files.length > 0 ? files.map((file, key) => {
+            return file.added ? (
+              <td key={key}>
+                <FileWrapper file={file} className={styles.fileAdded}/>
+              </td>
+            ) : file.removed ? (
+              <td key={key}>
+                <FileWrapper file={file} className={styles.fileRemoved}/>
+              </td>
+            ) : (
+              <td key={key}>
+                <FileWrapper file={file} className={styles.fileUnchanged}/>
+              </td>
+            );
+          }) : (
+            <td className={styles.noFiles}>
+              <HelpMessage>
+                There are no attachment changes
+              </HelpMessage>
+            </td>
+          )}
+        </tr>
+      </tbody>
     </table>
   );
 };

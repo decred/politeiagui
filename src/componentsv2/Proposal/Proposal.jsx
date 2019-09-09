@@ -20,9 +20,9 @@ import LoggedInContent from "src/componentsv2/LoggedInContent";
 import VotesCount from "./VotesCount";
 import DownloadComments from "src/containers/Comments/Download";
 import ProposalActions from "./ProposalActions";
-import { useFullImageModal } from "../ProposalForm/hooks";
-import ThumbnailGrid from "../Files/Thumbnail";
-import ModalFullImage from "../ModalFullImage";
+import { useFullImageModal } from "src/componentsv2/ProposalForm/hooks";
+import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
+import ModalFullImage from "src/componentsv2/ModalFullImage";
 import VersionPicker from "src/componentsv2/VersionPicker";
 
 const Proposal = ({ proposal, extended, children }) => {
