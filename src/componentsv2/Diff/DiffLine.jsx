@@ -4,13 +4,8 @@ import styles from "./Diff.module.css";
 import Markdown from "src/componentsv2/Markdown";
 import PropTypes from "prop-types";
 
-const DiffLine = ({
-  added = false,
-  removed = false,
-  content = ""
-}) => {
+const DiffLine = ({ added = false, removed = false, content = "" }) => {
   const line = content && content.length > 0 ? content.join("") : content;
-  console.log("content", content);
   return (
     <tr
       className={classNames(
@@ -19,9 +14,7 @@ const DiffLine = ({
       )}
     >
       <td className={styles.lineContent}>
-        <Markdown
-          body={line}
-        />
+        <Markdown body={line} />
       </td>
     </tr>
   );

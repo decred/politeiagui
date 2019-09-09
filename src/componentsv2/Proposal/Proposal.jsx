@@ -105,16 +105,16 @@ const Proposal = ({ proposal, extended, children }) => {
               subtitle={
                 <Subtitle>
                   <Author username={username} id={userid} />
-                  {publishedat && (
+                  {publishedat && !mobile && (
                     <Event event="published" timestamp={publishedat} />
                   )}
-                  {timestamp !== publishedat && !abandonedat && (
+                  {timestamp !== publishedat && !abandonedat && !mobile && (
                     <Event event="edited" timestamp={timestamp} />
                   )}
-                  {abandonedat && (
+                  {abandonedat && !mobile && (
                     <Event event={"abandoned"} timestamp={abandonedat} />
                   )}
-                  {version > 1 && !extended && (
+                  {version > 1 && !extended && !mobile && (
                     <Text
                       id={`proposal-${proposalToken}-version`}
                       className={classNames(styles.version)}

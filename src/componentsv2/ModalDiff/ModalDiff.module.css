@@ -8,9 +8,3 @@
   flex: 50%;
   justify-content: center;
 }
-
-@media screen and (max-width: 560px) {
-  .version {
-    margin-left: auto !important;
-  }
-}
