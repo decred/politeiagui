@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useLoader } from "./hooks";
+import LoaderScreen from "./LoaderScreen";
 
 export const LoaderContext = createContext();
 export const useLoaderContext = () => useContext(LoaderContext);
@@ -35,7 +36,7 @@ const Loader = ({ children }) => {
         apiInfo
       }}
     >
-      {initDone && children}
+      {initDone && !error ? children : <LoaderScreen error={error} />}
     </LoaderContext.Provider>
   );
 };
