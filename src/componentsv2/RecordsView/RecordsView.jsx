@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Tabs, Tab } from "pi-ui";
+import { Tabs, Tab, useMediaQuery } from "pi-ui";
 import LazyList from "src/componentsv2/LazyList";
 import { getRecordsByTabOption } from "./helpers";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
@@ -92,9 +92,10 @@ const RecordsView = ({
     return (recordTokensByTab[tab] || []).length;
   };
 
+  const isMobileScreen = useMediaQuery("(max-width:560px)");
   return children({
     tabs: (
-      <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
+      <Tabs onSelectTab={onSetIndex} activeTabIndex={index} mode={isMobileScreen ? "dropdown" : "horizontal"} >
         {tabLabels.map(label => (
           <Tab
             key={`tab-${label}`}
