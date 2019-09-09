@@ -14,7 +14,6 @@ import CopyLink from "src/componentsv2/CopyLink";
 const Comment = ({
   className,
   permalink,
-  topLevelComment,
   author,
   authorID,
   createdAt,
@@ -77,11 +76,22 @@ const Comment = ({
           />
         )}
       </div>
+      {!censored && (
+            <AdminContent>
+              <Text
+                weight="semibold"
+                className={styles.censor}
+                onClick={onClickCensor}
+              >
+                Censor
+              </Text>
+            </AdminContent>
+            )}
       { !censored ?
         <Markdown className="margin-top-s" body={commentBody} />
       :
         <Markdown className={styles.censored} body="Censored by moderators " />
-      }      
+      }
       <div className="justify-space-between margin-top-s">
         <div className="justify-left">
           {!disableReply && (
@@ -95,17 +105,6 @@ const Comment = ({
                 Reply
               </Text>
             </LoggedInContent>
-          )}
-          {!censored && (
-            <AdminContent>
-              <Text
-                weight="semibold"
-                className={styles.censor}
-                onClick={onClickCensor}
-              >
-                Censor
-              </Text>
-            </AdminContent>            
           )}
           {numOfReplies > 0 && (
             <span className={styles.showReplies} onClick={onClickShowReplies}>
