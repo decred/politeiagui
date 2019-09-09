@@ -23,8 +23,7 @@ const Identity = ({ history, loadingKey, pubkey }) => {
     updateUserKey,
     keyMismatch,
     keyMismatchAction,
-    shouldAutoVerifyKey,
-    isApiRequestingUpdateUserKey
+    shouldAutoVerifyKey
   } = useUserIdentity();
   const [
     showConfirmModal,
@@ -47,7 +46,7 @@ const Identity = ({ history, loadingKey, pubkey }) => {
       userPubkey,
       keyMismatchAction
     );
-  }, [loggedInAsEmail, userPubkey, keyMismatchAction, shouldAutoVerifyKey, updateUserKey]);
+  }, [loggedInAsEmail, userPubkey, keyMismatchAction]);
 
   const updateKey = useCallback(async () => {
     try {
@@ -56,13 +55,14 @@ const Identity = ({ history, loadingKey, pubkey }) => {
       throw e;
     }
   }, [onUpdateUserKey, loggedInAsEmail]);
+
   const isUserPageOwner = user && loggedInAsUserId === user.id;
   return !isUserPageOwner ? (
     <Message kind="error">
       Only the user himself can access this route.
     </Message>
   ) :
-    isApiRequestingUpdateUserKey || loadingKey === PUB_KEY_STATUS_LOADING ? (
+    loadingKey === PUB_KEY_STATUS_LOADING ? (
       <div className={styles.spinnerWrapper}>
         <Spinner invert />
       </div>

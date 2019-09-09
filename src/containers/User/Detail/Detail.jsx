@@ -1,4 +1,4 @@
-import { Link } from "pi-ui";
+import { Link, useMediaQuery } from "pi-ui";
 import React, { useCallback, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
@@ -97,6 +97,8 @@ const UserDetail = ({
     if (identityImportSuccess) refreshPubKey();
   }, [refreshPubKey, userPubkey, pubkey, identityImportSuccess]);
 
+  const isMobileScreen = useMediaQuery("(max-width:560px)");
+
   // TODO: need a loading while user has not been fetched yet
   return !!user && userId === user.id ? (
     <>
@@ -118,7 +120,7 @@ const UserDetail = ({
           }
           subtitle={user.email}
         >
-          <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
+          <Tabs onSelectTab={onSetIndex} activeTabIndex={index} mode={isMobileScreen ? "dropdown" : "horizontal"}>
             {tabLabels.map((label, i) => {
               return isTabDisabled(i) ? (
                 <></>
