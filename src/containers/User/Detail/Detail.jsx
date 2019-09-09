@@ -1,4 +1,4 @@
-import { Link, useMediaQuery } from "pi-ui";
+import { Link } from "pi-ui";
 import React, { useCallback, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
@@ -79,7 +79,24 @@ const UserDetail = ({
     return false;
   };
 
-  const isMobileScreen = useMediaQuery("(max-width:560px)");
+  const [loadingKey, setKeyAsLoaded] = useState(PUB_KEY_STATUS_LOADING);
+
+  const [pubkey, setPubkey] = useState("");
+  const refreshPubKey = useCallback(() => {
+    existing(loggedInAsEmail).then(() => {
+      myPubKeyHex(loggedInAsEmail).then(pubkey => {
+        setPubkey(pubkey);
+        setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
+      }).catch(() => {
+        setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
+      });
+    });
+  }, [loggedInAsEmail, setPubkey]);
+  useEffect(() => {
+    if (userPubkey !== pubkey) refreshPubKey();
+    if (identityImportSuccess) refreshPubKey();
+  }, [refreshPubKey, userPubkey, pubkey, identityImportSuccess]);
+
   // TODO: need a loading while user has not been fetched yet
   return !!user && userId === user.id ? (
     <>
@@ -101,7 +118,7 @@ const UserDetail = ({
           }
           subtitle={user.email}
         >
-          <Tabs onSelectTab={onSetIndex} activeTabIndex={index} mode={isMobileScreen ? "dropdown" : "horizontal"}>
+          <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
             {tabLabels.map((label, i) => {
               return isTabDisabled(i) ? (
                 <></>
