@@ -1,5 +1,6 @@
 export const tabValues = {
-  GENERAL: "General",
+  IDENTITY: "Identity",
+  ACCOUNT: "Account",
   PREFERENCES: "Preferences",
   CREDITS: "Credits",
   PROPOSALS: "Proposals"

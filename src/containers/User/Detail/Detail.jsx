@@ -1,19 +1,24 @@
-import React, { useState } from "react";
 import { Link, useMediaQuery } from "pi-ui";
+import React, { useCallback, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
+import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "src/constants";
+import Proposals from "src/containers/Proposal/User/Submitted";
+import useUserIdentity from "src/hooks/api/useUserIdentity";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
+import { existing, myPubKeyHex } from "src/lib/pki";
+import Account from "./Account";
 import Credits from "./Credits";
 import styles from "./detail.module.css";
-import General from "./General.jsx";
 import { tabValues } from "./helpers";
 import { useChangeUsername, useUserDetail } from "./hooks";
+import Identity from "./Identity";
 import Preferences from "./Preferences";
-import Proposals from "src/containers/Proposal/User/Submitted";
 
 const getTabComponent = ({ user, ...rest }) =>
   [
-    <General {...user} {...rest} />,
+    <Identity {...user} {...rest} />,
+    <Account {...user} {...rest} />,
     <Preferences {...rest} />,
     <Credits {...rest} />,
     <Proposals userID={user.id} />
@@ -29,13 +34,24 @@ const UserDetail = ({
   Tab,
   match
 }) => {
-  const { user, isAdmin, userId, loggedInAsUserId } = useUserDetail({ match });
+  const {
+    user,
+    isAdmin,
+    userId,
+    loggedInAsUserId
+  } = useUserDetail({ match });
+  const {
+    loggedInAsEmail,
+    userPubkey,
+    identityImportSuccess
+  } = useUserIdentity();
 
   const isUserPageOwner = user && loggedInAsUserId === user.id;
   const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
 
   const tabLabels = [
-    tabValues.GENERAL,
+    tabValues.IDENTITY,
+    tabValues.ACCOUNT,
     tabValues.PREFERENCES,
     tabValues.CREDITS,
     tabValues.PROPOSALS
@@ -56,12 +72,33 @@ const UserDetail = ({
     const tabLabel = tabLabels[tabIndex];
     if (tabLabel === tabValues.PREFERENCES && !isUserPageOwner) return true;
 
+    if (tabLabel === tabValues.IDENTITY && !isUserPageOwner) return true;
+
     if (tabLabel === tabValues.CREDITS && !isAdminOrTheUser) return true;
 
     return false;
   };
 
+  const [loadingKey, setKeyAsLoaded] = useState(PUB_KEY_STATUS_LOADING);
+
+  const [pubkey, setPubkey] = useState("");
+  const refreshPubKey = useCallback(() => {
+    existing(loggedInAsEmail).then(() => {
+      myPubKeyHex(loggedInAsEmail).then(pubkey => {
+        setPubkey(pubkey);
+        setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
+      }).catch(() => {
+        setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
+      });
+    });
+  }, [loggedInAsEmail, setPubkey]);
+  useEffect(() => {
+    if (userPubkey !== pubkey) refreshPubKey();
+    if (identityImportSuccess) refreshPubKey();
+  }, [refreshPubKey, userPubkey, pubkey, identityImportSuccess]);
+
   const isMobileScreen = useMediaQuery("(max-width:560px)");
+
   // TODO: need a loading while user has not been fetched yet
   return !!user && userId === user.id ? (
     <>
@@ -88,8 +125,8 @@ const UserDetail = ({
               return isTabDisabled(i) ? (
                 <></>
               ) : (
-                <Tab key={`tab${label}`} label={label} />
-              );
+                  <Tab key={`tab${label}`} label={label} />
+                );
             })}
           </Tabs>
         </PageDetails>
@@ -101,7 +138,9 @@ const UserDetail = ({
             user,
             isAdminOrTheUser,
             isUserPageOwner,
-            isAdmin
+            isAdmin,
+            loadingKey,
+            pubkey
           })[index]
         }
       </Main>

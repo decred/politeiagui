@@ -1,15 +1,15 @@
 import React from "react";
 import ReactFileReader from "react-file-reader";
 import userConnector from "../connectors/user";
-import Message from "./Message";
-import * as pki from "../lib/pki";
-import { getJsonData } from "../helpers";
 import {
   INVALID_FILE,
   INVALID_KEY_PAIR,
-  PUBLIC_KEY_MISMATCH,
-  LOAD_KEY_FAILED
+  LOAD_KEY_FAILED,
+  PUBLIC_KEY_MISMATCH
 } from "../constants";
+import { getJsonData } from "../helpers";
+import * as pki from "../lib/pki";
+import Message from "./Message";
 
 class PrivateKeyImportManager extends React.Component {
   constructor(props) {

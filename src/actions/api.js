@@ -860,9 +860,10 @@ export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
     );
     return api
       .verifyKeyRequest(csrf, loggedInAsEmail, verificationtoken)
-      .then(response =>
-        dispatch(act.RECEIVE_VERIFIED_KEY({ ...response, success: true }))
-      )
+      .then(response => {
+        dispatch(act.RECEIVE_VERIFIED_KEY({ ...response, success: true }));
+        dispatch(act.SHOULD_AUTO_VERIFY_KEY(false));
+      })
       .catch(error => {
         dispatch(act.RECEIVE_VERIFIED_KEY(null, error));
       });
