@@ -17,7 +17,6 @@ import {
  * @returns {Array} status bar data
  */
 export const getStatusBarData = voteStatus => {
-  console.log(voteStatus);
   return voteStatus.results
     .map(op => ({
       label: op.option.id,
