@@ -20,7 +20,10 @@ export const getVotesReceived = voteStatus => {
   if (!voteStatus) {
     return 0;
   }
-  return voteStatus.totalvotes;
+  return voteStatus.results.reduce(
+    (totalVotes, option) => (totalVotes += option.votesreceived),
+    0
+  );
 };
 
 /**
