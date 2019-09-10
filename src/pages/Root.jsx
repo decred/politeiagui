@@ -72,7 +72,7 @@ const Routes = ({ location }) => {
             component={PageUserVerifyEmail}
           />
           <AdminAuthenticatedRoute
-            path={`/user/search`}
+            path="/user/search"
             exact
             component={PageUserSearch}
           />

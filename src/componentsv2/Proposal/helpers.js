@@ -36,7 +36,8 @@ export const getVotesReceived = proposal => {
  * @returns {Array} status bar data
  */
 export const getStatusBarData = voteStatus => {
-  return voteStatus.optionsresult
+  console.log(voteStatus);
+  return voteStatus.results
     .map(op => ({
       label: op.option.id,
       amount: op.votesreceived,
@@ -50,9 +51,7 @@ export const getStatusBarData = voteStatus => {
  * @param {Object} voteStatus
  */
 export const getQuorumInVotes = voteStatus =>
-  Math.trunc(
-    (voteStatus.numofeligiblevotes * voteStatus.quorumpercentage) / 100
-  );
+  Math.trunc((voteStatus.eligibletickets * voteStatus.quorumpercentage) / 100);
 
 /**
  * Returns true if the given proposal is public
@@ -238,6 +237,5 @@ export const getVoteTimeLeftInWords = (proposal, chainHeight, isTestnet) => {
   const mili = blockTimeMinutes * 60000;
   const dateMs = new Date(mili + Date.now()); // gets time in ms
 
-  // console.log(+endheight, chainHeight);
   return distanceInWordsToNow(dateMs, { addSuffix: true });
 };

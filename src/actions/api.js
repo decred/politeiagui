@@ -311,7 +311,6 @@ export const onFetchAdminUserInvoices = userid => dispatch => {
     .adminUserInvoices(userid)
     .then(response => dispatch(act.RECEIVE_ADMIN_USER_INVOICES(response)))
     .catch(error => {
-      console.log(error);
       dispatch(act.RECEIVE_ADMIN_USER_INVOICES(null, error));
     });
 };
@@ -354,18 +353,14 @@ export const onFetchProposalsBatch = (tokens, fetchVoteStatus = true) =>
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
     try {
       let promises = [api.proposalsBatch(csrf, tokens)];
-
       if (fetchVoteStatus) {
-        const voteStatusPromises = tokens.map(t =>
-          dispatch(onFetchProposalVoteStatus(t))
+        promises = promises.concat(
+          dispatch(onFetchBatchProposalsVoteStatus(csrf, tokens))
         );
-        promises = promises.concat(voteStatusPromises);
       }
       const res = await Promise.all(promises);
-
       // filter only proposals responses
       const proposals = res.find(r => r && r.proposals).proposals;
-
       dispatch(act.RECEIVE_PROPOSALS_BATCH({ proposals }));
     } catch (e) {
       dispatch(act.RECEIVE_PROPOSALS_BATCH(null, e));
@@ -1188,6 +1183,27 @@ export const onFetchProposalsVoteStatusByTokens = tokens => async dispatch => {
     dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS(null, e));
     throw e;
   }
+};
+
+export const onFetchBatchProposalsVoteStatus = (csrf, tokens) => dispatch => {
+  tokens.map(token => dispatch(act.REQUEST_PROPOSAL_VOTE_STATUS({ token })));
+  return api
+    .batchProposalVoteStatus(csrf, tokens)
+    .then(response => {
+      Object.keys(response.summaries).forEach(token => {
+        dispatch(
+          act.RECEIVE_PROPOSAL_VOTE_STATUS({
+            ...response.summaries[token],
+            success: true,
+            token
+          })
+        );
+      });
+      return response;
+    })
+    .catch(error => {
+      dispatch(act.RECEIVE_PROPOSAL_VOTE_STATUS(null, error));
+    });
 };
 
 export const onFetchProposalVoteStatus = token => dispatch => {

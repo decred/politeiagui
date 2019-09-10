@@ -24,7 +24,7 @@ import { useFullImageModal } from "../ProposalForm/hooks";
 import ThumbnailGrid from "../Files/Thumbnail";
 import ModalFullImage from "../ModalFullImage";
 
-const Proposal = ({ proposal, extended, children }) => {
+const Proposal = ({ proposal, extended }) => {
   const {
     censorshiprecord,
     files,
