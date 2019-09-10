@@ -1,5 +1,5 @@
 import React from "react";
-import FileReaderInput from 'react-file-reader-input';
+import FileReaderInput from "react-file-reader-input";
 import { getFormattedFiles } from "./helpers";
 
 const FilesInput = ({ onChange, children }) => {
@@ -9,10 +9,10 @@ const FilesInput = ({ onChange, children }) => {
   }
 
   return (
-    <FileReaderInput 
-      as="binary" 
-      id="my-file-input" 
-      onChange={handleFilesChange} 
+    <FileReaderInput
+      as="binary"
+      id="my-file-input"
+      onChange={handleFilesChange}
       multiple
     >
       {children}

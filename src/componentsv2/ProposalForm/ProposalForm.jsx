@@ -5,7 +5,7 @@ import { Formik } from "formik";
 import { Button, Message, BoxTextInput } from "pi-ui";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/componentsv2/MarkdownEditor";
-import ThumbnailGrid from "src/componentsv2/Files/Thumbnail";
+import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
 import AttachFileButton from "src/componentsv2/AttachFileButton";
 import ModalFullImage from "src/componentsv2/ModalFullImage";
 import ModalMDGuide from "src/componentsv2/ModalMDGuide";
