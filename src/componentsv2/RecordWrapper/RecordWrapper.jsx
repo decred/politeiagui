@@ -16,12 +16,8 @@ export const Author = ({ username, id }) => (
   <Link to={`/user/${id}`}>{username}</Link>
 );
 
-export const Event = ({ event, timestamp, keepOnMobile = false }) => (
-  <DateTooltip
-    className={!keepOnMobile ? "hide-on-mobile" : ""}
-    timestamp={timestamp}
-    placement="bottom"
-  >
+export const Event = ({ event, timestamp }) => (
+  <DateTooltip timestamp={timestamp} placement="bottom">
     {({ timeAgo }) => (
       <Text
         id={`event-${event}-${timestamp}`}
@@ -58,9 +54,7 @@ export const Subtitle = ({ children }) => {
     <Join
       className="margin-top-s"
       SeparatorComponent={() => (
-        <span className="margin-left-s margin-right-s hide-on-mobile color-gray">
-          •
-        </span>
+        <span className="margin-left-s margin-right-s color-gray">•</span>
       )}
     >
       {children}

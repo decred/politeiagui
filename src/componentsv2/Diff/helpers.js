@@ -31,5 +31,20 @@ export const lineEqFunc = arr => elem => !lineDiffFunc(arr)(elem);
 
 export const getLineArray = string =>
   string && string.length
-    ? string.split("\n").map((line, index) => ({ value: line, index: index }))
+    ? string.split("\n\n").map((line, index) => ({ value: line, index: index }))
     : [];
+
+const markFileAsAdded = elem => ({ ...elem, added: true });
+const markFileAsRemoved = elem => ({ ...elem, removed: true });
+
+const filesDiffFunc = arr => elem =>
+  !arr.some(
+    arrelem => arrelem.name === elem.name && arrelem.payload === elem.payload
+  );
+const filesEqFunc = arr => elem => !filesDiffFunc(arr)(elem);
+
+export const getFilesDiff = (newFiles, oldFiles) => [
+  ...newFiles.filter(filesDiffFunc(oldFiles)).map(markFileAsAdded),
+  ...oldFiles.filter(filesDiffFunc(newFiles)).map(markFileAsRemoved),
+  ...newFiles.filter(filesEqFunc(oldFiles)) // for unchanged files
+];

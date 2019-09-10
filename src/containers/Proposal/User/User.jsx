@@ -61,7 +61,7 @@ const ProposalsUser = ({
     <>
       <TopBanner>
         <PageDetails title="Your Proposals">
-          <Tabs onSelectTab={onSetIndex} activeTabIndex={index} mode={isMobileScreen ? "dropdown" : "horizontal"}>
+          <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
             {tabLabels.map(label => (
               <Tab key={`tab-${label}`} label={label} />
             ))}

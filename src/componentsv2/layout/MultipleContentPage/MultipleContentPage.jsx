@@ -77,7 +77,7 @@ const Tab = ({ className, ...props }) => (
 );
 
 const Tabs = ({ className, ...props }) => (
-  <TabsUI className={classNames(styles.customTabs, className)} {...props} />
+  <TabsUI className={classNames(className)} {...props} />
 );
 
 const Main = ({ className, ...props }) => (

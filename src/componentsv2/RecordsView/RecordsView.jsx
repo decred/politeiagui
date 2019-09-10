@@ -50,7 +50,8 @@ const RecordsView = ({
   displayTabCount,
   pageSize = DEFAULT_PAGE_SIZE,
   placeholder,
-  getEmptyMessage = getDefaultEmptyMessage
+  getEmptyMessage = getDefaultEmptyMessage,
+  dropdownTabsForMobile
 }) => {
   const [hasMoreToLoad, setHasMore] = useState(true);
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -114,7 +115,6 @@ const RecordsView = ({
       tabLabels.map(label => (
         <Tab
           key={`tab-${label}`}
-          mode={isMobileScreen ? "dropdown" : "horizontal"}
           count={displayTabCount ? getPropsCountByTab(label) : ""}
           label={label}
         />
@@ -132,9 +132,16 @@ const RecordsView = ({
     [itemsOnLoad, placeholder]
   );
 
+  const useDropdownTabs = isMobileScreen && dropdownTabsForMobile;
+
   return children({
     tabs: (
-      <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
+      <Tabs
+        onSelectTab={onSetIndex}
+        activeTabIndex={index}
+        className={useDropdownTabs ? "padding-bottom-s" : ""}
+        mode={useDropdownTabs ? "dropdown" : "horizontal"}
+      >
         {tabs}
       </Tabs>
     ),

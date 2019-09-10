@@ -19,9 +19,10 @@ import LoggedInContent from "src/componentsv2/LoggedInContent";
 import VotesCount from "./VotesCount";
 import DownloadComments from "src/containers/Comments/Download";
 import ProposalActions from "./ProposalActions";
-import { useFullImageModal } from "../ProposalForm/hooks";
-import ThumbnailGrid from "../Files/Thumbnail";
-import ModalFullImage from "../ModalFullImage";
+import { useFullImageModal } from "src/componentsv2/ProposalForm/hooks";
+import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
+import ModalFullImage from "src/componentsv2/ModalFullImage";
+import VersionPicker from "src/componentsv2/VersionPicker";
 
 const Proposal = ({ proposal, extended }) => {
   const {
@@ -103,22 +104,29 @@ const Proposal = ({ proposal, extended }) => {
               subtitle={
                 <Subtitle>
                   <Author username={username} id={userid} />
-                  {publishedat && (
+                  {publishedat && !mobile && (
                     <Event event="published" timestamp={publishedat} />
                   )}
-                  {timestamp !== publishedat && !abandonedat && (
+                  {timestamp !== publishedat && !abandonedat && !mobile && (
                     <Event event="edited" timestamp={timestamp} />
                   )}
-                  {abandonedat && (
+                  {abandonedat && !mobile && (
                     <Event event={"abandoned"} timestamp={abandonedat} />
                   )}
-                  {version > 1 && (
+                  {version > 1 && !extended && !mobile && (
                     <Text
                       id={`proposal-${proposalToken}-version`}
-                      className={classNames(styles.version, "hide-on-mobile")}
+                      className={classNames(styles.version)}
                       color="gray"
                       truncate
                     >{`version ${version}`}</Text>
+                  )}
+                  {extended && (
+                    <VersionPicker
+                      className={classNames(styles.versionPicker)}
+                      version={version}
+                      token={proposalToken}
+                    />
                   )}
                 </Subtitle>
               }

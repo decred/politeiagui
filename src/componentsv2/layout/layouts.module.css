@@ -29,11 +29,6 @@
     font-size: var(--font-size-small);
 }
 
-.customTabs {
-    flex: 1;
-    display: flex;
-    align-items: flex-start;
-}
 
 .pageDetailsHeader {
     display: flex;

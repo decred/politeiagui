@@ -70,6 +70,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       displayTabCount={!!proposalsTokens}
       placeholder={ProposalLoader}
       getEmptyMessage={getEmptyMessage}
+      dropdownTabsForMobile={true}
     >
       {content}
     </RecordsView>

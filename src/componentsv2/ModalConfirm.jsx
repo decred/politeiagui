@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Button, Icon, useTheme, getThemeProperty, Text } from "pi-ui";
+import { Button, getThemeProperty, Icon, Modal, Text, useTheme } from "pi-ui";
 import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import FormWrapper from "src/componentsv2/FormWrapper";
 
 const ModalConfirm = ({
@@ -51,13 +51,13 @@ const ModalConfirm = ({
         !success ? (
           <Icon type={"info"} size={26} />
         ) : (
-          <Icon
-            type={"checkmark"}
-            size={26}
-            iconColor={colorPrimaryDark}
-            backgroundColor={colorGray}
-          />
-        )
+            <Icon
+              type={"checkmark"}
+              size={26}
+              iconColor={colorPrimaryDark}
+              backgroundColor={colorGray}
+            />
+          )
       }
     >
       {!success && (
@@ -70,24 +70,24 @@ const ModalConfirm = ({
             isSubmitting,
             errors
           }) => (
-            <Form onSubmit={handleSubmit}>
-              {errors && errors.global && (
-                <ErrorMessage>{errors.global.toString()}</ErrorMessage>
-              )}
-              <Text>{message}</Text>
-              <Actions className="no-padding-bottom">
-                <Button loading={isSubmitting} type="submit">
-                  Confirm
+              <Form onSubmit={handleSubmit}>
+                {errors && errors.global && (
+                  <ErrorMessage>{errors.global.toString()}</ErrorMessage>
+                )}
+                <Text>{message}</Text>
+                <Actions className="no-padding-bottom">
+                  <Button loading={isSubmitting} type="submit">
+                    Confirm
                 </Button>
-              </Actions>
-            </Form>
-          )}
+                </Actions>
+              </Form>
+            )}
         </FormWrapper>
       )}
-      {success && <> 
+      {success && <>
         {successMessage}
         <div className="justify-right margin-top-m">
-          <Button onClick={onClose}>Ok</Button>  
+          <Button onClick={onClose}>Ok</Button>
         </div>
       </>}
     </Modal>
