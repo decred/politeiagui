@@ -889,9 +889,9 @@
     regenerator-runtime "^0.13.2"
 
 "@babel/runtime@^7.3.1":
-  version "7.5.5"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.5.5.tgz#74fba56d35efbeca444091c7850ccd494fd2f132"
-  integrity sha512-28QvEGyQyNkB0/m2B4FU7IEZGK2NUrcMtT6BZEFALTguLk+AUT6ofsHtPk5QyjAdUkpMJ+/Em+quwz4HOt30AQ==
+  version "7.6.0"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.6.0.tgz#4fc1d642a9fd0299754e8b5de62c631cf5568205"
+  integrity sha512-89eSBLJsxNxOERC0Op4vd+0Bqm6wRMqMbFtV3i0/fbaWw/mJ8Q3eBvgX0G4SyrOOLCtbu98HspF8o09MRT+KzQ==
   dependencies:
     regenerator-runtime "^0.13.2"
 
@@ -9229,7 +9229,7 @@ performance-now@^2.1.0:
 
 "pi-ui@https://github.com/tiagoalvesdulce/pi-ui":
   version "1.0.0"
-  resolved "https://github.com/tiagoalvesdulce/pi-ui#350be934aa65571468e6c19edba11631bfb1ab0e"
+  resolved "https://github.com/tiagoalvesdulce/pi-ui#e684322a1ada704e5517d51e5cbc6cd519fcc355"
   dependencies:
     clamp-js-main "^0.11.5"
     react-spring "^8.0.25"

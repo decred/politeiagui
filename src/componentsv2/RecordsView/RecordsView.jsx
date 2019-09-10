@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useCallback
 } from "react";
-import { Tabs, Tab } from "pi-ui";
+import { Tabs, Tab, useMediaQuery } from "pi-ui";
 import LazyList from "src/componentsv2/LazyList";
 import { getRecordsByTabOption } from "./helpers";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
@@ -61,6 +61,8 @@ const RecordsView = ({
 
   const filteredTokens = recordTokensByTab[tabOption] || [];
 
+  const isMobileScreen = useMediaQuery("(max-width:560px)");
+
   const filteredRecords = useMemo(
     () => getRecordsByTabOption(tabOption, records, filteredTokens),
     [tabOption, records, filteredTokens]
@@ -112,11 +114,12 @@ const RecordsView = ({
       tabLabels.map(label => (
         <Tab
           key={`tab-${label}`}
+          mode={isMobileScreen ? "dropdown" : "horizontal"}
           count={displayTabCount ? getPropsCountByTab(label) : ""}
           label={label}
         />
       )),
-    [tabLabels, displayTabCount, getPropsCountByTab]
+    [tabLabels, displayTabCount, getPropsCountByTab, isMobileScreen]
   );
 
   const loadingPlaceholders = useMemo(
