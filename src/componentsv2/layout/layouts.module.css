@@ -11,7 +11,7 @@
     padding: 2rem 0 0 0 !important;
 }
 
-.customPageDetails {
+div.customPageDetails {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
