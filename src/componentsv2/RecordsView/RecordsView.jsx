@@ -119,7 +119,7 @@ const RecordsView = ({
           label={label}
         />
       )),
-    [tabLabels, displayTabCount, getPropsCountByTab, isMobileScreen]
+    [tabLabels, displayTabCount, getPropsCountByTab]
   );
 
   const loadingPlaceholders = useMemo(
