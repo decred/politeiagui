@@ -28,9 +28,7 @@ export const getVotesReceived = voteStatus => {
  * @param {Object} voteStatus
  */
 export const getQuorumInVotes = voteStatus =>
-  Math.trunc(
-    (voteStatus.numofeligiblevotes * voteStatus.quorumpercentage) / 100
-  );
+  Math.trunc((voteStatus.eligibletickets * voteStatus.quorumpercentage) / 100);
 
 /**
  * Returns true if the given proposal is public
