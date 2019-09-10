@@ -17,7 +17,6 @@ export function useProposalVote(token) {
   }, [token]);
   const { voteStatus } = useRedux({}, mapStateToProps, {});
   const { apiInfo } = useLoaderContext();
-  // TODO: change best block ?
   const bestBlock = voteStatus && voteStatus.bestblock;
   const voteTimeLeftInWords = getVoteTimeLeftInWords(
     voteStatus,

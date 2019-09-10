@@ -1191,12 +1191,14 @@ export const onFetchBatchProposalsVoteStatus = (csrf, tokens) => dispatch => {
   return api
     .batchProposalVoteStatus(csrf, tokens)
     .then(response => {
+      const bestblock = response.bestblock;
       Object.keys(response.summaries).forEach(token => {
         dispatch(
           act.RECEIVE_PROPOSAL_VOTE_STATUS({
             ...response.summaries[token],
             success: true,
-            token
+            token,
+            bestblock
           })
         );
       });
