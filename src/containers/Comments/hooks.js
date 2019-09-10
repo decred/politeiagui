@@ -37,7 +37,7 @@ export function useComments(ownProps) {
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
   const { enableCommentVote, recordType } = useConfig();
   const { currentUser } = useLoaderContext();
-  const email = currentUser.email;
+  const email = currentUser && currentUser.email;
 
   const userLoggedIn = !!email;
   const recordToken = ownProps && ownProps.recordToken;

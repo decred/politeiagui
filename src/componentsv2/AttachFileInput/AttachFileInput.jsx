@@ -1,12 +1,11 @@
-import React from "react";
-import { Button } from "pi-ui";
-import styles from "./AttachFileButton.module.css";
+import React, { useCallback } from "react";
+import styles from "./AttachFileInput.module.css";
 import attachSVG from "./attach-file.svg";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import usePolicy from "src/hooks/api/usePolicy";
 import ModalAttachFiles from "src/componentsv2/ModalAttachFiles";
 
-const AttachFileButton = ({ onChange, ...props }) => {
+const AttachFiles = ({ onChange, ...props }) => {
   const { policy } = usePolicy();
   const [
     showAttachFileModal,
@@ -14,20 +13,23 @@ const AttachFileButton = ({ onChange, ...props }) => {
     closeAttachFileModal
   ] = useBooleanState(false);
 
-  const handleOnChange = v => {
-    onChange(v);
-    closeAttachFileModal();
-  };
+  const handleOnChange = useCallback(
+    v => {
+      onChange(v);
+      closeAttachFileModal();
+    },
+    [onChange, closeAttachFileModal]
+  );
 
   return (
     <>
-      <Button
+      <span
         className={styles.attachFileButton}
         onClick={openAttachFileModal}
         {...props}
       >
         <img alt="Attach" src={attachSVG} />
-      </Button>
+      </span>
       <ModalAttachFiles
         show={showAttachFileModal}
         policy={policy}
@@ -38,4 +40,4 @@ const AttachFileButton = ({ onChange, ...props }) => {
   );
 };
 
-export default AttachFileButton;
+export default AttachFiles;

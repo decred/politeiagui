@@ -14,6 +14,12 @@
 
 .version {
     line-height: var(--spacing-2);
+    color: var(--color-gray) !important;
+}
+
+.versionPicker > div > span {
+    color: var(--color-gray) !important;
+
 }
 
 .markdownContainer {
@@ -50,6 +56,10 @@
     margin: 0;
 }
 
+span.statusTag > span {
+    overflow: visible;
+}
+
 @media screen and (max-width: 560px) {
     .timeLeft {
         margin-top: 0;
@@ -75,4 +85,5 @@
     .proposalActions {
         margin-top: 2rem;
     }
+
 }

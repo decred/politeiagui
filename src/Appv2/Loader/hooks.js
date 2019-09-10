@@ -25,7 +25,8 @@ const mapDispatchToProps = {
   onRequestCurrentUser: act.onRequestMe,
   confirmWithModal: act.confirmWithModal,
   setOnboardAsViewed: act.setOnboardAsViewed,
-  onLoadDraftProposals: act.onLoadDraftProposals
+  onLoadDraftProposals: act.onLoadDraftProposals,
+  localLogout: act.handleLogout
 };
 
 export function useLoader(ownProps) {

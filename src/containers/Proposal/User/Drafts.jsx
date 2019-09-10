@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
+import { Text } from "pi-ui";
 import { useDraftProposals } from "./hooks";
 import DraftProposal from "src/componentsv2/Proposal/DraftProposal";
 import useBooleanState from "src/hooks/utils/useBooleanState";
@@ -13,29 +14,48 @@ const Drafts = () => {
     openDeleteModal,
     closeDeleteModal
   ] = useBooleanState(false);
-  function handleOpenDeleteDraftModal(draftID) {
-    setTargetDraftID(draftID);
-    openDeleteModal();
-  }
-  function handleDeleteDraft() {
+
+  const handleOpenDeleteDraftModal = useCallback(
+    draftID => {
+      setTargetDraftID(draftID);
+      openDeleteModal();
+    },
+    [setTargetDraftID, openDeleteModal]
+  );
+
+  const handleDeleteDraft = useCallback(() => {
     onDeleteDraftProposal(targetDraftID);
     setTargetDraftID("");
-  }
-  const drafts = !!draftProposals ?  Object.values(draftProposals)
-  .filter(draft => !!draft.draftId) : [];
+  }, [onDeleteDraftProposal, setTargetDraftID, targetDraftID]);
+
+  const drafts = useMemo(
+    () =>
+      !!draftProposals
+        ? Object.values(draftProposals).filter(draft => !!draft.draftId)
+        : [],
+    [draftProposals]
+  );
+
   return (
     <>
-      {!!drafts.length ?
+      {!!drafts.length ? (
         drafts.map(draft => (
-            <DraftProposal
-              key={`draft-${draft.draftId}`}
-              onDelete={handleOpenDeleteDraftModal}
-              draft={draft}
-            />
-          )) : <HelpMessage>No drafts available</HelpMessage>}
+          <DraftProposal
+            key={`draft-${draft.draftId}`}
+            onDelete={handleOpenDeleteDraftModal}
+            draft={draft}
+          />
+        ))
+      ) : (
+        <HelpMessage>No drafts available</HelpMessage>
+      )}
       <ModalConfirm
         title={"Delete draft proposal"}
         message="Are you sure you want to delete this draft?"
+        successTitle="Draft proposal deleted"
+        successMessage={
+          <Text>The draft proposal has been successfully deleted!</Text>
+        }
         show={showDeleteDraftModal}
         onClose={closeDeleteModal}
         onSubmit={handleDeleteDraft}

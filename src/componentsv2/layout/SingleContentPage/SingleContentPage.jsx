@@ -8,7 +8,12 @@ import useScrollToTop from "src/hooks/utils/useScrollToTop";
 
 const renderError = error => <Message kind="error">{error.toString()}</Message>;
 
-const SingleContentPage = ({ children, contentWidth, disableScrollToTop }) => {
+const SingleContentPage = ({
+  children,
+  contentWidth,
+  disableScrollToTop,
+  noCardWrap
+}) => {
   useScrollToTop(disableScrollToTop);
   return (
     <Container className={styles.customContainer}>
@@ -18,7 +23,11 @@ const SingleContentPage = ({ children, contentWidth, disableScrollToTop }) => {
         className={classNames(styles.singleContentMain, styles[contentWidth])}
       >
         <ErrorBoundary errorRenderer={renderError}>
-          <Card className={styles.card}>{children}</Card>
+          {noCardWrap ? (
+            children
+          ) : (
+            <Card className={styles.card}>{children}</Card>
+          )}
         </ErrorBoundary>
       </Main>
     </Container>
@@ -28,12 +37,14 @@ const SingleContentPage = ({ children, contentWidth, disableScrollToTop }) => {
 SingleContentPage.propTypes = {
   children: PropTypes.node.isRequired,
   contentWidth: PropTypes.oneOf(["narrow", "widen"]),
-  disableScrollToTop: PropTypes.bool
+  disableScrollToTop: PropTypes.bool,
+  noCardWrap: PropTypes.bool
 };
 
 SingleContentPage.defaultProps = {
   contentWidth: "narrow",
-  disableScrollToTop: false
+  disableScrollToTop: false,
+  noCardWrap: false
 };
 
 export default SingleContentPage;

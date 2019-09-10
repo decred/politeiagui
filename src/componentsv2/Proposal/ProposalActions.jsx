@@ -6,7 +6,7 @@ import {
   isAbandonedProposal,
   isVotingNotAuthorizedProposal,
   isUnderDiscussionProposal
-} from "./helpers";
+} from "src/containers/Proposal/helpers";
 import {
   useUnvettedProposalActions,
   usePublicProposalActions
@@ -45,7 +45,7 @@ const UnvettedActions = ({ proposal }) => {
   );
 };
 
-const PublicActions = ({ proposal }) => {
+const PublicActions = ({ proposal, voteStatus }) => {
   if (!usePublicProposalActions()) {
     throw Error(
       "PublicActions requires an PublicActionsProvider on a higher level of the component tree. "
@@ -68,9 +68,9 @@ const PublicActions = ({ proposal }) => {
   const isProposalOwner =
     currentUser && proposal && currentUser.userid === proposal.userid;
 
-  const isVotingStartAuthorized = !isVotingNotAuthorizedProposal(proposal);
+  const isVotingStartAuthorized = !isVotingNotAuthorizedProposal(voteStatus);
   return (
-    isUnderDiscussionProposal(proposal) && (
+    isUnderDiscussionProposal(proposal, voteStatus) && (
       <div className="justify-right margin-top-m">
         {isProposalOwner &&
           (!isVotingStartAuthorized ? (
@@ -94,9 +94,9 @@ const PublicActions = ({ proposal }) => {
   );
 };
 
-const ProposalActions = ({ proposal }) => {
+const ProposalActions = ({ proposal, voteStatus }) => {
   return isPublicProposal(proposal) || isAbandonedProposal(proposal) ? (
-    <PublicActions proposal={proposal} />
+    <PublicActions proposal={proposal} voteStatus={voteStatus} />
   ) : (
     <UnvettedActions proposal={proposal} />
   );

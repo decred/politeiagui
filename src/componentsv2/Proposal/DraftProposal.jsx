@@ -48,4 +48,4 @@ const DraftProposal = ({ draft, onDelete }) => {
   );
 };
 
-export default DraftProposal;
+export default React.memo(DraftProposal);
