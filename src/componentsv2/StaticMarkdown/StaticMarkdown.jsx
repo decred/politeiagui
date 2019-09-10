@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import { P, H1, H2, H3, H4, Link } from "pi-ui";
 import styles from "./StaticMarkdown.module.css";
@@ -45,18 +45,23 @@ const StaticMarkdown = ({ contentName }) => {
     }
   }, [contentName, getContent, source]);
 
+  const renderers = useMemo(
+    () => ({
+      paragraph: paragraphRenderer,
+      heading: headingRenderer,
+      link: linkRenderer
+    }),
+    []
+  );
+
   return (
     <ReactMarkdown
       escapeHtml={false}
       className="static-md"
       source={source}
-      renderers={{
-        paragraph: paragraphRenderer,
-        heading: headingRenderer,
-        link: linkRenderer
-      }}
+      renderers={renderers}
     />
   );
 };
 
-export default StaticMarkdown;
+export default React.memo(StaticMarkdown);

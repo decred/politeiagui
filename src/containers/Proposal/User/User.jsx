@@ -4,7 +4,6 @@ import useNavigation from "src/hooks/api/useNavigation";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import Drafts from "./Drafts";
 import Submitted from "./Submitted";
-import { useMediaQuery } from "pi-ui";
 
 function useTraceUpdate(props) {
   const prev = useRef(props);
@@ -39,7 +38,6 @@ const ProposalsUser = ({
   // Proposals fetching will be triggered from the 'proposals' tab
   // but cached here to avoid re-fetching it
   const [userProposals, setUserProposals] = useState(null);
-  const isMobileScreen = useMediaQuery("(max-width:560px)");
 
   useTraceUpdate({ userProposals, userId });
 
@@ -61,7 +59,7 @@ const ProposalsUser = ({
     <>
       <TopBanner>
         <PageDetails title="Your Proposals">
-          <Tabs onSelectTab={onSetIndex} activeTabIndex={index} mode={isMobileScreen ? "dropdown" : "horizontal"}>
+          <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
             {tabLabels.map(label => (
               <Tab key={`tab-${label}`} label={label} />
             ))}

@@ -1,6 +1,6 @@
 import { Message, Card } from "pi-ui";
 import React from "react";
-import ProposalForm from "src/componentsv2/ProposalForm";
+import ProposalForm from "src/componentsv2/ProposalForm/ProposalFormLazy";
 import { IdentityMessageError } from "src/componentsv2/IdentityErrorIndicators";
 import Or from "src/componentsv2/Or";
 import usePaywall from "src/hooks/api/usePaywall";

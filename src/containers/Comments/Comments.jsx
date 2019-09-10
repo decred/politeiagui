@@ -1,10 +1,16 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, {
+  useEffect,
+  useReducer,
+  useCallback,
+  useMemo,
+  useState
+} from "react";
 import { Card, H2, Text, Message, classNames } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import styles from "./Comments.module.css";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
+import CommentForm from "src/componentsv2/CommentForm/CommentFormLazy";
 import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
-import CommentForm from "src/componentsv2/CommentForm";
 import { useComments, CommentContext } from "./hooks";
 import CommentsListWrapper from "./CommentsList/CommentsListWrapper";
 import CommentLoader from "./Comment/CommentLoader";
@@ -60,12 +66,14 @@ const Comments = ({
     recordToken,
     numOfComments
   });
+
   const [, , openLoginModal, closeLoginModal] = useLoginModal();
-  const handleOpenLoginModal = () => {
+
+  const handleOpenLoginModal = useCallback(() => {
     openLoginModal("commentsLoginModal", {
       onLoggedIn: closeLoginModal
     });
-  };
+  }, [openLoginModal, closeLoginModal]);
 
   const onRedirectToSignup = () => {
     history.push("/user/signup");
@@ -74,30 +82,48 @@ const Comments = ({
   const paywallMissing = paywallEnabled && !isPaid;
   const isSingleThread = !!threadParentID;
 
-  function handleSubmitComment(comment) {
-    return onSubmitComment({
-      comment,
-      token: recordToken,
-      parentID: 0
-    });
-  }
+  const handleSubmitComment = useCallback(
+    comment => {
+      return onSubmitComment({
+        comment,
+        token: recordToken,
+        parentID: 0
+      });
+    },
+    [recordToken, onSubmitComment]
+  );
 
-  function handleSetSortOption(option) {
-    setSortOption(option.value);
-    dispatch({
-      type: actions.SORT,
-      sortOption: option.value
-    });
-  }
+  const handleSetSortOption = useCallback(
+    option => {
+      setSortOption(option.value);
+      dispatch({
+        type: actions.SORT,
+        sortOption: option.value
+      });
+    },
+    [setSortOption]
+  );
 
-  const scrollToComments = getQueryStringValue("scrollToComments");
+  const selectOptions = useMemo(() => getSortOptionsForSelect(), []);
+  const selectValue = useMemo(
+    () => createSelectOptionFromSortOption(sortOption),
+    [sortOption]
+  );
+
+  const hasComments = !!comments;
+
   useEffect(
     function handleScrollToComments() {
-      if (scrollToComments) {
-        document.getElementById("commentArea").scrollIntoView();
+      const scrollToComments = async () =>
+        setTimeout(() => {
+          document.getElementById("commentArea").scrollIntoView();
+        }, 100);
+      const shouldScrollToComments = getQueryStringValue("scrollToComments");
+      if (shouldScrollToComments && hasComments) {
+        scrollToComments();
       }
     },
-    [scrollToComments]
+    [hasComments]
   );
 
   useEffect(
@@ -113,7 +139,9 @@ const Comments = ({
     [comments, sortOption]
   );
 
-  function renderCommentLoaders() {
+  const commentLoaders = useMemo(() => {
+    if (!loading) return null;
+
     const numOfContents =
       numOfComments < 3 ? numOfComments : NUMBER_OF_LIST_PLACEHOLDERS;
     const contents = [];
@@ -121,13 +149,11 @@ const Comments = ({
       contents.push(<CommentLoader key={`comment-loader-${i}`} />);
     }
     return contents;
-  }
+  }, [numOfComments, loading]);
 
-  const [
-    showCensorModal,
-    openCensorModal,
-    closeCensorModal
-  ] = useBooleanState(false);
+  const [showCensorModal, openCensorModal, closeCensorModal] = useBooleanState(
+    false
+  );
 
   useEffect(
     function handleCensorCommentModal() {
@@ -138,9 +164,17 @@ const Comments = ({
     [commentIDCensorTarget, openCensorModal]
   );
 
-  function handleCensorComment(reason) {
-    return onCensorComment(userEmail, recordToken, commentIDCensorTarget, reason);
-  } 
+  const handleCensorComment = useCallback(
+    reason => {
+      return onCensorComment(
+        userEmail,
+        recordToken,
+        commentIDCensorTarget,
+        reason
+      );
+    },
+    [userEmail, recordToken, commentIDCensorTarget, onCensorComment]
+  );
 
   return (
     <>
@@ -178,7 +212,6 @@ const Comments = ({
               />
             )}
           </LoggedInContent>
-
           <div className={styles.commentsHeader}>
             {!isSingleThread && (
               <H2 className={styles.commentsTitle}>
@@ -192,9 +225,9 @@ const Comments = ({
               {!!comments && !!comments.length && (
                 <Select
                   isSearchable={false}
-                  value={createSelectOptionFromSortOption(sortOption)}
+                  value={selectValue}
                   onChange={handleSetSortOption}
-                  options={getSortOptionsForSelect()}
+                  options={selectOptions}
                 />
               )}
             </div>
@@ -208,7 +241,7 @@ const Comments = ({
         </div>
         <div className={styles.commentsWrapper}>
           {loading ? (
-            renderCommentLoaders()
+            commentLoaders
           ) : (
             <CommentContext.Provider
               value={{
@@ -229,7 +262,7 @@ const Comments = ({
               <CommentsListWrapper
                 lastTimeAccessed={lastVisitTimestamp}
                 threadParentID={threadParentID}
-                currentUserID={currentUser.userid}
+                currentUserID={currentUser && currentUser.userid}
                 comments={state.comments}
               />
             </CommentContext.Provider>
@@ -241,9 +274,7 @@ const Comments = ({
           subject="censorComment"
           successTitle="Comment censored"
           successMessage={
-            <Text>
-              The comment has been successfully censored.
-            </Text>
+            <Text>The comment has been successfully censored.</Text>
           }
           show={showCensorModal}
           onSubmit={handleCensorComment}

@@ -144,4 +144,4 @@ Comment.propTypes = {
   numOfNewHiddenReplies: PropTypes.number
 };
 
-export default Comment;
+export default React.memo(Comment);

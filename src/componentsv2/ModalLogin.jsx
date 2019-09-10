@@ -22,4 +22,4 @@ const ModalLogin = ({ title = "Login", onLoggedIn, onClose, ...props }) => {
   );
 };
 
-export default ModalLogin;
+export default React.memo(ModalLogin);

@@ -34,12 +34,7 @@ const UserDetail = ({
   Tab,
   match
 }) => {
-  const {
-    user,
-    isAdmin,
-    userId,
-    loggedInAsUserId
-  } = useUserDetail({ match });
+  const { user, isAdmin, userId, loggedInAsUserId } = useUserDetail({ match });
   const {
     loggedInAsEmail,
     userPubkey,
@@ -84,12 +79,14 @@ const UserDetail = ({
   const [pubkey, setPubkey] = useState("");
   const refreshPubKey = useCallback(() => {
     existing(loggedInAsEmail).then(() => {
-      myPubKeyHex(loggedInAsEmail).then(pubkey => {
-        setPubkey(pubkey);
-        setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
-      }).catch(() => {
-        setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
-      });
+      myPubKeyHex(loggedInAsEmail)
+        .then(pubkey => {
+          setPubkey(pubkey);
+          setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
+        })
+        .catch(() => {
+          setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
+        });
     });
   }, [loggedInAsEmail, setPubkey]);
   useEffect(() => {
@@ -120,13 +117,18 @@ const UserDetail = ({
           }
           subtitle={user.email}
         >
-          <Tabs onSelectTab={onSetIndex} activeTabIndex={index} mode={isMobileScreen ? "dropdown" : "horizontal"}>
+          <Tabs
+            onSelectTab={onSetIndex}
+            className={isMobileScreen ? "padding-bottom-s" : ""}
+            activeTabIndex={index}
+            mode={isMobileScreen ? "dropdown" : "horizontal"}
+          >
             {tabLabels.map((label, i) => {
               return isTabDisabled(i) ? (
                 <></>
               ) : (
-                  <Tab key={`tab${label}`} label={label} />
-                );
+                <Tab key={`tab${label}`} label={label} />
+              );
             })}
           </Tabs>
         </PageDetails>

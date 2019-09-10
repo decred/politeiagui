@@ -138,6 +138,10 @@
     padding-top: 0 !important;
 }
 
+.padding-bottom-s {
+    padding-bottom: var(--spacing-small);
+}
+
 .overflow-hidden {
     overflow: hidden;
 }

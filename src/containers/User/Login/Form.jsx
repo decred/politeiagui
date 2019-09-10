@@ -1,5 +1,5 @@
 import { Button, Link as UILink, Text, TextInput } from "pi-ui";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import FormWrapper from "src/componentsv2/FormWrapper";
@@ -15,17 +15,20 @@ const LoginForm = ({
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
   const { onLogin, validationSchema } = useLogin();
 
-  async function onSubmit(values, { resetForm, setSubmitting, setFieldError }) {
-    try {
-      await onLogin(values);
-      setSubmitting(false);
-      resetForm();
-      onLoggedIn && onLoggedIn();
-    } catch (e) {
-      setSubmitting(false);
-      setFieldError("global", e);
-    }
-  }
+  const onSubmit = useCallback(
+    async (values, { resetForm, setSubmitting, setFieldError }) => {
+      try {
+        await onLogin(values);
+        setSubmitting(false);
+        resetForm();
+        onLoggedIn && onLoggedIn();
+      } catch (e) {
+        setSubmitting(false);
+        setFieldError("global", e);
+      }
+    },
+    [onLogin, onLoggedIn]
+  );
 
   function handleOnPrivacyPolicyClick() {
     if (redirectToPrivacyPolicyRoute) {

@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 export default function(initialValue) {
   const [value, setValue] = useState(initialValue);
 
-  function setValueFalse() {
+  const setValueFalse = useCallback(() => {
     setValue(false);
-  }
+  }, []);
 
-  function setValueTrue() {
+  const setValueTrue = useCallback(() => {
     setValue(true);
-  }
+  }, []);
 
   return [value, setValueTrue, setValueFalse];
 }

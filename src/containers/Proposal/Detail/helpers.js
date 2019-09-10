@@ -1,22 +1,11 @@
-import { PROPOSAL_VOTING_FINISHED } from "src/constants";
-import {
-  isPublicProposal,
-  isAbandonedProposal
-} from "src/componentsv2/Proposal/helpers";
+import { isAbandonedProposal, isVotingFinishedProposal } from "../helpers";
 
-export const proposalCanReceiveComments = proposal => {
-  return (
-    isPublicProposal(proposal) &&
-    proposal.voteStatus.status !== PROPOSAL_VOTING_FINISHED
-  );
-};
-
-export const getCommentBlockedReason = proposal => {
+export const getCommentBlockedReason = (proposal, voteStatus) => {
   if (isAbandonedProposal(proposal)) {
     return "This proposal has been abandoned. New comments and comment votes are not allowed.";
   }
 
-  if (proposal.voteStatus.status === PROPOSAL_VOTING_FINISHED) {
+  if (isVotingFinishedProposal(voteStatus)) {
     return "Voting has finished for this proposal. New comments and comment votes are not allowed.";
   }
 

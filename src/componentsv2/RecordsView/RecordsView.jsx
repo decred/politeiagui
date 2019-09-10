@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useMemo,
+  useCallback
+} from "react";
 import { Tabs, Tab, useMediaQuery } from "pi-ui";
 import LazyList from "src/componentsv2/LazyList";
 import { getRecordsByTabOption } from "./helpers";
@@ -44,7 +50,8 @@ const RecordsView = ({
   displayTabCount,
   pageSize = DEFAULT_PAGE_SIZE,
   placeholder,
-  getEmptyMessage = getDefaultEmptyMessage
+  getEmptyMessage = getDefaultEmptyMessage,
+  dropdownTabsForMobile
 }) => {
   const [hasMoreToLoad, setHasMore] = useState(true);
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -55,13 +62,14 @@ const RecordsView = ({
 
   const filteredTokens = recordTokensByTab[tabOption] || [];
 
-  const filteredRecords = getRecordsByTabOption(
-    tabOption,
-    records,
-    filteredTokens
+  const isMobileScreen = useMediaQuery("(max-width:560px)");
+
+  const filteredRecords = useMemo(
+    () => getRecordsByTabOption(tabOption, records, filteredTokens),
+    [tabOption, records, filteredTokens]
   );
 
-  const handleFetchMoreRecords = async () => {
+  const handleFetchMoreRecords = useCallback(async () => {
     const index = filteredRecords.length;
     const recordTokensToBeFetched = filteredTokens.slice(
       index,
@@ -79,7 +87,14 @@ const RecordsView = ({
         count: itemsOnLoad + numOfItemsToBeFetched
       });
     }
-  };
+  }, [
+    filteredRecords,
+    filteredTokens,
+    pageSize,
+    setHasMore,
+    onFetchRecords,
+    itemsOnLoad
+  ]);
 
   useEffect(() => {
     const hasMoreRecordsToLoad =
@@ -87,22 +102,47 @@ const RecordsView = ({
     setHasMore(hasMoreRecordsToLoad);
   }, [filteredTokens, filteredRecords.length]);
 
-  const getPropsCountByTab = tab => {
-    if (!recordTokensByTab) return "";
-    return (recordTokensByTab[tab] || []).length;
-  };
+  const getPropsCountByTab = useCallback(
+    tab => {
+      if (!recordTokensByTab) return "";
+      return (recordTokensByTab[tab] || []).length;
+    },
+    [recordTokensByTab]
+  );
 
-  const isMobileScreen = useMediaQuery("(max-width:560px)");
+  const tabs = useMemo(
+    () =>
+      tabLabels.map(label => (
+        <Tab
+          key={`tab-${label}`}
+          count={displayTabCount ? getPropsCountByTab(label) : ""}
+          label={label}
+        />
+      )),
+    [tabLabels, displayTabCount, getPropsCountByTab]
+  );
+
+  const loadingPlaceholders = useMemo(
+    () => (
+      <LoadingPlaceholders
+        numberOfItems={itemsOnLoad}
+        placeholder={placeholder}
+      />
+    ),
+    [itemsOnLoad, placeholder]
+  );
+
+  const useDropdownTabs = isMobileScreen && dropdownTabsForMobile;
+
   return children({
     tabs: (
-      <Tabs onSelectTab={onSetIndex} activeTabIndex={index} mode={isMobileScreen ? "dropdown" : "horizontal"} >
-        {tabLabels.map(label => (
-          <Tab
-            key={`tab-${label}`}
-            count={displayTabCount ? getPropsCountByTab(label) : ""}
-            label={label}
-          />
-        ))}
+      <Tabs
+        onSelectTab={onSetIndex}
+        activeTabIndex={index}
+        className={useDropdownTabs ? "padding-bottom-s" : ""}
+        mode={useDropdownTabs ? "dropdown" : "horizontal"}
+      >
+        {tabs}
       </Tabs>
     ),
     content: (
@@ -115,12 +155,7 @@ const RecordsView = ({
           <HelpMessage>{getEmptyMessage(tabOption)}</HelpMessage>
         }
         isLoading={itemsOnLoad > 0}
-        loadingPlaceholder={
-          <LoadingPlaceholders
-            numberOfItems={itemsOnLoad}
-            placeholder={placeholder}
-          />
-        }
+        loadingPlaceholder={loadingPlaceholders}
       />
     )
   });

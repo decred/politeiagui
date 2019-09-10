@@ -8,10 +8,7 @@ const PageProposalEdit = () => {
       {({ TopBanner, PageDetails, Sidebar, Main }) => (
         <>
           <TopBanner>
-            <PageDetails
-              headerClassName="no-margin-top"
-              title="Edit Proposal"
-            />
+            <PageDetails title="Edit Proposal" />
           </TopBanner>
           <Sidebar />
           <Main>

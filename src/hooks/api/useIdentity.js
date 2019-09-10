@@ -34,12 +34,13 @@ const useIdentity = () => {
         if (!valid) {
           throw new Error(IDENTITY_MISMATCH);
         }
+        setError(null);
       } catch (e) {
         setError(e);
       }
     }
 
-    if (userLoggedIn) {
+    if (userLoggedIn && userEmail) {
       verifyIdentity();
     }
   }, [userLoggedIn, userEmail, userActivePublicKey]);
