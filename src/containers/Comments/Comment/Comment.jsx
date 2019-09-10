@@ -37,6 +37,15 @@ const Comment = ({
   ...props
 }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
+
+  const censorButton = !censored && (
+    <AdminContent>
+      <Text weight="semibold" className={styles.censor} onClick={onClickCensor}>
+        Censor
+      </Text>
+    </AdminContent>
+  );
+
   return (
     <div
       className={classNames(
@@ -65,6 +74,7 @@ const Comment = ({
             )}
           </DateTooltip>
           {highlightAsNew && !extraSmall && <Text color="gray">new</Text>}
+          {!extraSmall && censorButton}
         </Join>
         {!disableLikes && (
           <Likes
@@ -76,22 +86,12 @@ const Comment = ({
           />
         )}
       </div>
-      {!censored && (
-            <AdminContent>
-              <Text
-                weight="semibold"
-                className={styles.censor}
-                onClick={onClickCensor}
-              >
-                Censor
-              </Text>
-            </AdminContent>
-            )}
-      { !censored ?
+      {extraSmall && censorButton}
+      {!censored ? (
         <Markdown className="margin-top-s" body={commentBody} />
-      :
+      ) : (
         <Markdown className={styles.censored} body="Censored by moderators " />
-      }
+      )}
       <div className="justify-space-between margin-top-s">
         <div className="justify-left">
           {!disableReply && (
