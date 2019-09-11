@@ -104,7 +104,7 @@ export function useProposal(ownProps) {
       if (proposal) {
         return;
       }
-      onFetchProposalsBatch([token]);
+      onFetchProposalsBatch([token], true);
     },
     [proposal, token, onFetchProposalsBatch]
   );
