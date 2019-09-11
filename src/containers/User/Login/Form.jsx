@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import ModalPrivacyPolicy from "src/componentsv2/ModalPrivacyPolicy";
 import { useLogin } from "./hooks";
+import { useLoginModal } from "./LoginModalProvider";
 
 const LoginForm = ({
   hideTitle,
@@ -14,6 +15,7 @@ const LoginForm = ({
 }) => {
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
   const { onLogin, validationSchema } = useLogin();
+  const [ , modalIsOpen, , closeLoginModal] = useLoginModal();
 
   const onSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
@@ -32,6 +34,9 @@ const LoginForm = ({
 
   function handleOnPrivacyPolicyClick() {
     if (redirectToPrivacyPolicyRoute) {
+      if (modalIsOpen) {
+        closeLoginModal();
+      }
       history.push("/user/privacy-policy");
     } else {
       setShowPrivacyPolicy(true);
