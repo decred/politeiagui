@@ -2,7 +2,11 @@ import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useConfig } from "src/Config";
-import { AdminAuthenticatedRoute, AuthenticatedRoute, NotAuthenticatedRoute } from "src/containers/Routes";
+import {
+  AdminAuthenticatedRoute,
+  AuthenticatedRoute,
+  NotAuthenticatedRoute
+} from "src/containers/Routes";
 import PageNotFound from "./NotFound";
 import PageProposalsAdmin from "./Proposals/Admin";
 import PageProposalDetail from "./Proposals/Detail";
@@ -45,7 +49,7 @@ const Routes = ({ location }) => {
             component={PageUserRequestResetPassword}
           />
           <NotAuthenticatedRoute
-            path="/user/reset-password"
+            path="/user/password/reset"
             exact
             component={PageUserResetPassword}
           />
@@ -65,7 +69,7 @@ const Routes = ({ location }) => {
             component={PageUserPrivacyPolicy}
           />
           <NotAuthenticatedRoute
-            path="/user/verify-email"
+            path="/user/verify"
             exact
             component={PageUserVerifyEmail}
           />
@@ -74,11 +78,7 @@ const Routes = ({ location }) => {
             exact
             component={PageUserSearch}
           />
-          <Route
-            path="/user/:userid"
-            exact
-            component={PageUserDetail}
-          />
+          <Route path="/user/:userid" exact component={PageUserDetail} />
 
           {/* Record routes */}
           <AdminAuthenticatedRoute
