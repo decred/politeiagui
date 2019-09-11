@@ -26,8 +26,7 @@ const mapStateToProps = {
 
 const mapDispatchToProps = {
   onFetchUser: act.onFetchUser,
-  onFetchProposal: act.onFetchProposal,
-  onFetchProposalVoteStatus: act.onFetchProposalVoteStatus
+  onFetchProposalsBatch: act.onFetchProposalsBatch
 };
 
 const isEqualProposalToken = (proposal, token) => {
@@ -47,14 +46,13 @@ const proposalWithFilesOrNothing = proposal => {
 export function useProposal(ownProps) {
   const {
     error,
-    onFetchProposal,
     token,
     proposalDetail,
     editedProposal,
     publicProposals,
     unvettedProposals,
     loading,
-    onFetchProposalVoteStatus,
+    onFetchProposalsBatch,
     commentID: threadParentID
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
 
@@ -106,10 +104,9 @@ export function useProposal(ownProps) {
       if (proposal) {
         return;
       }
-      onFetchProposal(token);
-      onFetchProposalVoteStatus(token);
+      onFetchProposalsBatch([token]);
     },
-    [proposal, token, onFetchProposal, onFetchProposalVoteStatus]
+    [proposal, token, onFetchProposalsBatch]
   );
 
   useEffect(
