@@ -487,16 +487,15 @@ export const onReceiveManageUser = (state, action) => {
 export const onReceiveProposalsVoteStatus = (state, action) => {
   const newState = receive("proposalsVoteStatus", state, action);
   if (action.error) return newState;
-
-  const proposalsVoteStatus = get(["payload", "votesstatus"], action) || [];
-
-  const data = proposalsVoteStatus.reduce(
-    (acc, value) => ({
-      ...acc,
-      [value.token]: { ...value }
-    }),
-    {}
-  );
+  const proposalsVoteStatus = get(["payload", "summaries"], action) || [];
+  const bestblock = get(["payload", "bestblock"], action) || [];
+  const data = {};
+  Object.keys(proposalsVoteStatus).forEach(token => {
+    data[token] = {
+      ...proposalsVoteStatus[token],
+      bestblock
+    };
+  });
 
   return {
     ...newState,

@@ -354,7 +354,7 @@ export const onFetchProposalsBatch = (tokens, fetchVoteStatus = true) =>
     try {
       const proposals = (await api.proposalsBatch(csrf, tokens)).proposals;
       if (fetchVoteStatus) {
-        await dispatch(onFetchBatchProposalsVoteStatus(csrf, tokens));
+        await dispatch(onFetchBatchProposalsVoteSummary(tokens));
       }
       dispatch(act.RECEIVE_PROPOSALS_BATCH({ proposals }));
     } catch (e) {
@@ -1181,28 +1181,21 @@ export const onFetchProposalsVoteStatusByTokens = tokens => async dispatch => {
   }
 };
 
-export const onFetchBatchProposalsVoteStatus = (csrf, tokens) => dispatch => {
-  tokens.map(token => dispatch(act.REQUEST_PROPOSAL_VOTE_STATUS({ token })));
-  return api
-    .batchProposalVoteStatus(csrf, tokens)
-    .then(response => {
-      const bestblock = response.bestblock;
-      Object.keys(response.summaries).forEach(token => {
+export const onFetchBatchProposalsVoteSummary = tokens =>
+  withCsrf((dispatch, _, csrf) => {
+    tokens.map(token => dispatch(act.REQUEST_PROPOSAL_VOTE_STATUS({ token })));
+    return api
+      .batchProposalVoteStatus(csrf, tokens)
+      .then(response => {
         dispatch(
-          act.RECEIVE_PROPOSAL_VOTE_STATUS({
-            ...response.summaries[token],
-            success: true,
-            token,
-            bestblock
-          })
+          act.RECEIVE_PROPOSALS_VOTE_SUMMARY({ ...response, success: true })
         );
+        return response;
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_PROPOSALS_VOTE_SUMMARY(null, error));
       });
-      return response;
-    })
-    .catch(error => {
-      dispatch(act.RECEIVE_PROPOSAL_VOTE_STATUS(null, error));
-    });
-};
+  });
 
 export const onFetchProposalVoteStatus = token => dispatch => {
   dispatch(act.REQUEST_PROPOSAL_VOTE_STATUS({ token }));
