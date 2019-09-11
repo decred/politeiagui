@@ -111,7 +111,7 @@ const UserDetail = ({
 
   const currentTabComponent = useMemo(
     () => user && tabComponents[tabLabels[index]],
-    [tabComponents, tabLabels, index]
+    [user, tabComponents, tabLabels, index]
   );
 
   const tabs = useMemo(

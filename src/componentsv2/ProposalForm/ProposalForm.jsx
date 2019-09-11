@@ -109,7 +109,7 @@ const ProposalForm = React.memo(function ProposalForm({
         <DraftSaver submitSuccess={submitSuccess} />
         <Button
           type="submit"
-          kind={!isValid && disableSubmit ? "disabled" : "primary"}
+          kind={!isValid || disableSubmit ? "disabled" : "primary"}
           loading={isSubmitting}
         >
           Submit
