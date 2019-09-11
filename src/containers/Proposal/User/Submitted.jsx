@@ -6,7 +6,7 @@ import {
   UnvettedActionsProvider,
   PublicActionsProvider
 } from "src/containers/Proposal/Actions";
-import LazyList from "src/components/LazyList";
+import LazyList from "src/componentsv2/LazyList";
 import LoadingPlaceholders from "src/componentsv2/LoadingPlaceholders";
 import HelpMessage from "src/componentsv2/HelpMessage";
 
@@ -30,8 +30,6 @@ const Proposals = props => {
   const amountOfProposalsFetched = proposals ? proposals.length : 0;
 
   async function handleFetchMoreProposals() {
-    // only fetch more after the first batch of proposals has been fetched
-    if (!proposals || !amountOfProposalsFetched || loading) return;
     try {
       const lastProposal =
         proposals && !!proposals.length && proposals[proposals.length - 1];
@@ -45,11 +43,14 @@ const Proposals = props => {
     }
   }
 
+  const numOfProsalsLoaded = proposals.length;
+  const initialFetchDone = numOfUserProposals !== undefined;
+
   useEffect(() => {
     const hasMoreRecordsToLoad =
-      proposals && proposals.length < numOfUserProposals;
+      !initialFetchDone || numOfProsalsLoaded < numOfUserProposals;
     setHasMore(hasMoreRecordsToLoad);
-  }, [proposals, numOfUserProposals]);
+  }, [numOfProsalsLoaded, numOfUserProposals, initialFetchDone]);
 
   const amountOfMissingProposals =
     numOfUserProposals - amountOfProposalsFetched;
@@ -74,7 +75,6 @@ const Proposals = props => {
             />
           }
         />
-        {/* {proposals.map(proposal => renderProposal(proposal))} */}
       </PublicActionsProvider>
     </UnvettedActionsProvider>
   );
