@@ -21,7 +21,9 @@ const headingRenderer = ({ level, children }) => {
 };
 
 const linkRenderer = ({ href, children }) => (
-  <Link href={href}>{children}</Link>
+  <Link href={href} target="_blank">
+    {children}
+  </Link>
 );
 
 /* 
