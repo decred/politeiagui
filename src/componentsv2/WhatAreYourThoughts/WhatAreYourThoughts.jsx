@@ -8,7 +8,7 @@ const WhatAreYourThoughts = ({ onLoginClick, onSignupClick }) => {
       <Text color="gray">What are your thoughts?</Text>
       <div className={styles.buttonsWrapper}>
         {onLoginClick && (
-          <Button kind="secondary" style={{ border: "solid 1px" }} onClick={onLoginClick}>
+          <Button kind="secondary" onClick={onLoginClick}>
             Log in
           </Button>
         )}
