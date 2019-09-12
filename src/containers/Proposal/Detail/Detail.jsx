@@ -22,12 +22,12 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
   const { proposal, loading, threadParentID } = useProposal({ match });
   const proposalToken =
     proposal && proposal.censorshiprecord && proposal.censorshiprecord.token;
-  const { voteStatus } = useProposalVote(proposalToken);
+  const { voteSummary } = useProposalVote(proposalToken);
 
   const showCommentArea =
     proposal && (isPublicProposal(proposal) || isAbandonedProposal(proposal));
   const canReceiveComments =
-    isPublicProposal(proposal) && !isVotingFinishedProposal(voteStatus);
+    isPublicProposal(proposal) && !isVotingFinishedProposal(voteSummary);
   return (
     <>
       <TopBanner>
@@ -56,7 +56,7 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
                 numOfComments={proposal.numcomments}
                 threadParentID={threadParentID}
                 readOnly={!canReceiveComments}
-                readOnlyReason={getCommentBlockedReason(proposal, voteStatus)}
+                readOnlyReason={getCommentBlockedReason(proposal, voteSummary)}
               />
             )}
           </PublicActionsProvider>

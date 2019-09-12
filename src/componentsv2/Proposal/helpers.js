@@ -13,11 +13,11 @@ import {
 /**
  * Converts the api data for vote status into an array of data
  * that can be used to render the StatusBar
- * @param {Object} voteStatus
+ * @param {Object} voteSummary
  * @returns {Array} status bar data
  */
-export const getStatusBarData = voteStatus => {
-  return voteStatus.results
+export const getStatusBarData = voteSummary => {
+  return voteSummary.results
     .map(op => ({
       label: op.option.id,
       amount: op.votesreceived,
@@ -26,9 +26,9 @@ export const getStatusBarData = voteStatus => {
     .sort(a => (a.label === "yes" ? -1 : 1));
 };
 
-export const getProposalStatusTagProps = (proposal, voteStatus) => {
-  if (isPublicProposal(proposal) && !!voteStatus) {
-    switch (voteStatus.status) {
+export const getProposalStatusTagProps = (proposal, voteSummary) => {
+  if (isPublicProposal(proposal) && !!voteSummary) {
+    switch (voteSummary.status) {
       case PROPOSAL_VOTING_NOT_AUTHORIZED:
         return { type: "blackTime", text: "Hasn't authorized yet" };
       case PROPOSAL_VOTING_AUTHORIZED:
@@ -36,7 +36,7 @@ export const getProposalStatusTagProps = (proposal, voteStatus) => {
       case PROPOSAL_VOTING_ACTIVE:
         return { type: "bluePending", text: "Active" };
       case PROPOSAL_VOTING_FINISHED:
-        if (isApprovedProposal(proposal, voteStatus)) {
+        if (isApprovedProposal(proposal, voteSummary)) {
           return { type: "greenCheck", text: "Finished" };
         } else {
           return { type: "grayNegative", text: "Finished" };

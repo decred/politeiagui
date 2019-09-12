@@ -489,13 +489,15 @@ export const onReceiveProposalsVoteSummary = (state, action) => {
   if (action.error) return newState;
   const proposalsVoteStatus = get(["payload", "summaries"], action) || [];
   const bestblock = get(["payload", "bestblock"], action) || [];
-  const data = {};
-  Object.keys(proposalsVoteStatus).forEach(token => {
-    data[token] = {
-      ...proposalsVoteStatus[token],
-      bestblock
+  const data = Object.keys(proposalsVoteStatus).reduce((acc, token) => {
+    return {
+      ...acc,
+      [token]: {
+        ...proposalsVoteStatus[token],
+        bestblock
+      }
     };
-  });
+  }, {});
 
   return {
     ...newState,

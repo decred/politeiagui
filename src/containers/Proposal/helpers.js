@@ -13,14 +13,14 @@ import {
 import { getTextFromIndexMd } from "src/helpers";
 
 /**
- * Returns the total amount of votes received by a given proposal voteStatus
- * @param {Object} voteStatus
+ * Returns the total amount of votes received by a given proposal voteSummary
+ * @param {Object} voteSummary
  */
-export const getVotesReceived = voteStatus => {
-  if (!voteStatus) {
+export const getVotesReceived = voteSummary => {
+  if (!voteSummary) {
     return 0;
   }
-  return voteStatus.results.reduce(
+  return voteSummary.results.reduce(
     (totalVotes, option) => (totalVotes += option.votesreceived),
     0
   );
@@ -28,10 +28,12 @@ export const getVotesReceived = voteStatus => {
 
 /**
  * Return the votes quorum of a given proposal vote status
- * @param {Object} voteStatus
+ * @param {Object} voteSummary
  */
-export const getQuorumInVotes = voteStatus =>
-  Math.trunc((voteStatus.eligibletickets * voteStatus.quorumpercentage) / 100);
+export const getQuorumInVotes = voteSummary =>
+  Math.trunc(
+    (voteSummary.eligibletickets * voteSummary.quorumpercentage) / 100
+  );
 
 /**
  * Returns true if the given proposal is public
@@ -57,47 +59,47 @@ export const isUnreviewedProposal = proposal => {
 /**
  * Returns true if the given proposal is public, but voting
  * is not authorized yet.
- * @param {Object} voteStatus
+ * @param {Object} voteSummary
  * @returns {Boolean} isVotingNotAuthorized
  */
-export const isVotingNotAuthorizedProposal = voteStatus => {
-  return !!voteStatus && voteStatus.status === PROPOSAL_VOTING_NOT_AUTHORIZED;
+export const isVotingNotAuthorizedProposal = voteSummary => {
+  return !!voteSummary && voteSummary.status === PROPOSAL_VOTING_NOT_AUTHORIZED;
 };
 
 /**
  * Returns true if the given proposal is public, but voting
  * has finished already
- * @param {Object} voteStatus
+ * @param {Object} voteSummary
  * @returns {Boolean} isVotingFinished
  */
-export const isVotingFinishedProposal = voteStatus => {
-  return !!voteStatus && voteStatus.status === PROPOSAL_VOTING_FINISHED;
+export const isVotingFinishedProposal = voteSummary => {
+  return !!voteSummary && voteSummary.status === PROPOSAL_VOTING_FINISHED;
 };
 
 /**
  * Returns true if the given proposal is editable
  * @param {Object} proposal
- * @param {Object} voteStatus
+ * @param {Object} voteSummary
  * @returns {Boolean} isEditable
  */
-export const isEditableProposal = (proposal, voteStatus) => {
+export const isEditableProposal = (proposal, voteSummary) => {
   return (
     isUnreviewedProposal(proposal) ||
-    (isPublicProposal(proposal) && isVotingNotAuthorizedProposal(voteStatus))
+    (isPublicProposal(proposal) && isVotingNotAuthorizedProposal(voteSummary))
   );
 };
 
 /**
  * Returns true if the given proposal is under discussion
  * @param {Object} proposal
- * @param {Object} voteStatus
+ * @param {Object} voteSummary
  * @returns {Boolean} isUnderDiscussion
  */
-export const isUnderDiscussionProposal = (proposal, voteStatus) => {
+export const isUnderDiscussionProposal = (proposal, voteSummary) => {
   return (
     isPublicProposal(proposal) &&
-    !isVoteActiveProposal(voteStatus) &&
-    !isVotingFinishedProposal(voteStatus)
+    !isVoteActiveProposal(voteSummary) &&
+    !isVotingFinishedProposal(voteSummary)
   );
 };
 
@@ -113,11 +115,11 @@ export const isAbandonedProposal = proposal => {
 /**
  * Returns true if the given proposal is approved
  * @param {Object} proposal
- * @param {Object} voteStatus
+ * @param {Object} voteSummary
  * @returns {Boolean} isApproved
  */
-export const isApprovedProposal = (proposal, voteStatus) => {
-  if (!proposal || !voteStatus || !isPublicProposal(proposal)) {
+export const isApprovedProposal = (proposal, voteSummary) => {
+  if (!proposal || !voteSummary || !isPublicProposal(proposal)) {
     return false;
   }
   const {
@@ -126,7 +128,7 @@ export const isApprovedProposal = (proposal, voteStatus) => {
     numofeligiblevotes,
     optionsresult,
     totalvotes
-  } = voteStatus;
+  } = voteSummary;
   const quorumInVotes = (quorumpercentage * numofeligiblevotes) / 100;
   const quorumPasses = totalvotes >= quorumInVotes;
   if (!quorumPasses) {
@@ -141,37 +143,37 @@ export const isApprovedProposal = (proposal, voteStatus) => {
 
 /**
  * Returns true if the proposal vote is active
- * @param {Object} voteStatus
+ * @param {Object} voteSummary
  * @returns {Boolean} isVoteActiceProposal
  */
-export const isVoteActiveProposal = voteStatus =>
-  !!voteStatus && voteStatus.status === PROPOSAL_VOTING_ACTIVE;
+export const isVoteActiveProposal = voteSummary =>
+  !!voteSummary && voteSummary.status === PROPOSAL_VOTING_ACTIVE;
 
 /**
  * Return the amount of blocks left to the end of the voting period
- * @param {Object} voteStatus
+ * @param {Object} voteSummary
  * @param {Number} chainHeight
  * @returns {Number} number of blocks left
  */
-export const getVoteBlocksLeft = (voteStatus, chainHeight) => {
-  if (!voteStatus) return null;
-  const { endheight } = voteStatus;
+export const getVoteBlocksLeft = (voteSummary, chainHeight) => {
+  if (!voteSummary) return null;
+  const { endheight } = voteSummary;
   return +endheight - chainHeight;
 };
 
 /**
  * Return a "human readable" message of how long will take until the voting ends
- * @param {Object} voteStatus
+ * @param {Object} voteSummary
  * @param {Number} chainHeight
  * @param {Boolean} isTestnet
  * @returns {String} message
  */
-export const getVoteTimeLeftInWords = (voteStatus, chainHeight, isTestnet) => {
-  if (!voteStatus || voteStatus.status !== PROPOSAL_VOTING_ACTIVE) {
+export const getVoteTimeLeftInWords = (voteSummary, chainHeight, isTestnet) => {
+  if (!voteSummary || voteSummary.status !== PROPOSAL_VOTING_ACTIVE) {
     return "";
   }
 
-  const blocks = getVoteBlocksLeft(voteStatus, chainHeight);
+  const blocks = getVoteBlocksLeft(voteSummary, chainHeight);
   const blockTimeMinutes = isTestnet
     ? blocks * BLOCK_DURATION_TESTNET
     : blocks * BLOCK_DURATION_MAINNET;
