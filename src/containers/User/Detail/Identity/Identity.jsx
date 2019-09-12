@@ -1,13 +1,4 @@
-import {
-  Button,
-  Card,
-  classNames,
-  Message,
-  Modal,
-  P,
-  Spinner,
-  Text
-} from "pi-ui";
+import { Button, Card, classNames, Message, Modal, P, Spinner, Text } from "pi-ui";
 import React, { useCallback, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import DevelopmentOnlyContent from "src/componentsv2/DevelopmentOnlyContent";
@@ -127,10 +118,10 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
             <Button size="sm" onClick={openConfirmModal}>
               Create new identity
             </Button>
-            {!keyMismatch && <PrivateKeyDownloadManager />}
             <Button size="sm" onClick={openImportIdentityModal}>
               Import identity
             </Button>
+            {!keyMismatch && <PrivateKeyDownloadManager />}
           </div>
         </>
       )}
