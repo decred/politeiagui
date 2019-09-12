@@ -21,7 +21,10 @@ const mapStateToProps = {
   unvettedProposals: sel.apiUnvettedProposals,
   proposalDetail: sel.proposalWithVoteStatus,
   error: sel.proposalError,
-  loading: or(sel.proposalIsRequesting, sel.isApiRequestingPropVoteStatus)
+  loading: or(
+    sel.isApiRequestingProposalsVoteSummary,
+    sel.isApiRequestingProposalsBatch
+  )
 };
 
 const mapDispatchToProps = {

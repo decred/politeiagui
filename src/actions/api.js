@@ -1052,7 +1052,7 @@ export const onStartVote = (loggedInAsEmail, token, duration, quorum, pass) =>
     return api
       .startVote(loggedInAsEmail, csrf, token, duration, quorum, pass)
       .then(response => {
-        dispatch(onFetchProposalVoteStatus(token));
+        dispatch(onFetchBatchProposalsVoteSummary([token]));
         dispatch(act.RECEIVE_START_VOTE({ ...response, success: true }));
       })
       .catch(error => {
@@ -1183,7 +1183,7 @@ export const onFetchProposalsVoteStatusByTokens = tokens => async dispatch => {
 
 export const onFetchBatchProposalsVoteSummary = tokens =>
   withCsrf((dispatch, _, csrf) => {
-    tokens.map(token => dispatch(act.REQUEST_PROPOSAL_VOTE_STATUS({ token })));
+    dispatch(act.REQUEST_PROPOSALS_VOTE_SUMMARY({ tokens }));
     return api
       .batchProposalVoteStatus(csrf, tokens)
       .then(response => {

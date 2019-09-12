@@ -28,7 +28,6 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
     proposal && (isPublicProposal(proposal) || isAbandonedProposal(proposal));
   const canReceiveComments =
     isPublicProposal(proposal) && !isVotingFinishedProposal(voteStatus);
-
   return (
     <>
       <TopBanner>

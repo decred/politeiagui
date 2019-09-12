@@ -69,6 +69,12 @@ export const isApiRequestingPropVoteStatus = getIsApiRequesting(
 export const isApiRequestingPropVoteResults = getIsApiRequesting(
   "proposalVoteResults"
 );
+export const isApiRequestingProposalsBatch = getIsApiRequesting(
+  "proposalsBatch"
+);
+export const isApiRequestingProposalsVoteSummary = getIsApiRequesting(
+  "proposalsVoteSummary"
+);
 export const isApiRequestingEditUser = getIsApiRequesting("editUser");
 export const isApiRequestingManageUser = getIsApiRequesting("manageUser");
 export const isApiRequestingEditProposal = getIsApiRequesting("editProposal");

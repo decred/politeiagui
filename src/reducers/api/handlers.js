@@ -484,8 +484,8 @@ export const onReceiveManageUser = (state, action) => {
   };
 };
 
-export const onReceiveProposalsVoteStatus = (state, action) => {
-  const newState = receive("proposalsVoteStatus", state, action);
+export const onReceiveProposalsVoteSummary = (state, action) => {
+  const newState = receive("proposalsVoteSummary", state, action);
   if (action.error) return newState;
   const proposalsVoteStatus = get(["payload", "summaries"], action) || [];
   const bestblock = get(["payload", "bestblock"], action) || [];
