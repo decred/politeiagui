@@ -90,13 +90,16 @@ const RequestVerificationEmailForm = () => {
               </Actions>
             </Form>
           ) : (
-            <EmailSentMessage title="Please check your inbox for your verification email" />
+            <EmailSentMessage
+              title="Please check your inbox for your verification email"
+              email={email}
+            />
           )
         }
       </FormWrapper>
       <DevelopmentOnlyContent show={response && response.verificationtoken}>
         <Link
-          to={`/user/verify-email?email=${email}&verificationtoken=${response &&
+          to={`/user/verify?email=${email}&verificationtoken=${response &&
             response.verificationtoken}`}
         >
           Verify email

@@ -169,7 +169,7 @@ const SignupForm = () => {
         show={signupResponse && signupResponse.verificationtoken}
       >
         <RouterLink
-          to={`/user/verify-email?email=${email}&verificationtoken=${signupResponse &&
+          to={`/user/verify?email=${email}&verificationtoken=${signupResponse &&
             signupResponse.verificationtoken}`}
         >
           Verify email
