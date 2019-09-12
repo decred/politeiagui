@@ -108,9 +108,9 @@ const Preferences = () => {
                   className="margin-top-m" id="9" name="commentnotifications-comment" label="New comment reply to your comment"
                 />
               </Card>
-              <Button style={{ float: "right" }} type="submit" loading={isApiRequestingEditUser} kind={showConfirm ? "disabled" : "primary"} className={styles.submitButton}>
+              <Button style={{ marginBottom: "3rem", float: "right" }} width={195} type="submit" loading={isApiRequestingEditUser} kind={showConfirm ? "disabled" : "primary"} className={styles.submitButton}>
                 {showConfirm && editUserResponse ? (
-                  <div style={{ display: "flex", alignItems: "center" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                     Saved <Icon type="checkmark" backgroundColor="#e6eaed" size="lg" iconColor="#8997a5" />
                   </div>
                 ) : "Save preferences"}

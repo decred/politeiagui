@@ -29,10 +29,10 @@ export const proposalValidation = ({
 
   // Name value validation
   const regex = buildRegexFromSupportedChars(proposalnamesupportedchars);
-  if (values.name.length < minproposalnamelength) {
+  if (values.name.trim().length < minproposalnamelength) {
     errors.name = minLengthMessage("name", minproposalnamelength);
   }
-  if (values.name.length > maxproposalnamelength) {
+  if (values.name.trim().length > maxproposalnamelength) {
     errors.name = maxLengthMessage("name", maxproposalnamelength);
   }
   if (!values.name.match(regex)) {

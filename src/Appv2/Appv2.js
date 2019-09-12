@@ -7,6 +7,7 @@ import Loader from "./Loader";
 import Routes from "src/pages/Root";
 import { UserSessionChecker } from "src/containers/User/SessionChecker";
 import { LoginModalProvider } from "src/containers/User/Login";
+import Onboard from "src/containers/User/Onboard";
 import StaticContentProvider from "src/containers/StaticContent";
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
       <ReduxProvider>
         <Loader>
           <StaticContentProvider>
+            <Onboard />
             <Router>
               <LoginModalProvider>
                 <UserSessionChecker>

@@ -4,3 +4,5 @@ Decred is an autonomous digital currency. With a hybrid consensus system, it is 
 
 
 Politeia (Pi) is a censorship-resistant blockchain-anchored public proposal system, which empowers users to submit their own projects for self-funding from DCR’s block subsidy. Pi ensures the ecosystem remains sustainable and thrives.
+
+[Learn More about Politeia](https://docs.decred.org/governance/politeia/overview/)

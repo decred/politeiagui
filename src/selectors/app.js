@@ -1,3 +1,4 @@
+import { createSelector } from "reselect";
 import get from "lodash/fp/get";
 import compose from "lodash/fp/compose";
 import eq from "lodash/fp/eq";
@@ -393,6 +394,19 @@ export const getSubmittedUserProposals = state => userID => {
   const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
 
   return sortByNewestFirst(vettedProps.concat(unvettedProps));
+};
+
+export const makeGetUserProposals = userID => {
+  return createSelector(
+    vettedProposals,
+    unvettedProposals,
+    (vettedProps, unvettedProps) => {
+      const isUserProp = prop => prop.userid === userID;
+      const userProps = vettedProps.concat(unvettedProps).filter(isUserProp);
+      const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
+      return sortByNewestFirst(userProps);
+    }
+  );
 };
 
 export const getUserProposalsWithVoteStatus = (state, { userID }) => {
