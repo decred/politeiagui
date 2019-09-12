@@ -108,6 +108,10 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
                   "margin-top-s"
                 )}
               >
+                <P className="margin-bottom-s">
+                The active private key is used to sign proposals and comments. 
+                The public key is used to verify the identity.
+                </P>
                 <Text backgroundColor="blueLighter" monospace>
                   {pubkey || userPubkey}
                 </Text>
@@ -136,6 +140,9 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
       >
         Past public keys
       </Text>
+      <P>
+        List of inactive public keys your account has had in the past.
+      </P>
       <Button size="sm" onClick={openShowAllModal}>
         Show all
       </Button>
@@ -150,6 +157,10 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
       >
         User ID
       </Text>
+      <P className="margin-bottom-s">
+        Unique 16-byte UUID, as defined in <a href="http://tools.ietf.org/html/rfc4122">
+        RFC 4122</a>, used to identify your user.
+      </P>
       <Text backgroundColor="blueLighter" monospace>
         {userID}
       </Text>
