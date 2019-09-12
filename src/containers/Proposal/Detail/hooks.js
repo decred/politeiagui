@@ -41,9 +41,10 @@ const isEqualProposalToken = (proposal, token) => {
 };
 
 const proposalWithFilesOrNothing = proposal => {
-  return proposal && proposal.files && !!proposal.files.length
-    ? proposal
-    : null;
+  // return proposal && proposal.files && !!proposal.files.length
+  //   ? proposal
+  //   : null;
+  return proposal;
 };
 
 export function useProposal(ownProps) {
