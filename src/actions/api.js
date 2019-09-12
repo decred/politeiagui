@@ -900,7 +900,7 @@ export const onSetProposalStatusV2 = (token, status, censorMessage = "") =>
           })
         );
         if (status === PROPOSAL_STATUS_PUBLIC) {
-          dispatch(onFetchProposalVoteStatus(token));
+          dispatch(onFetchBatchProposalsVoteSummary([token]));
         }
       })
       .catch(error => {
