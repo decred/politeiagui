@@ -493,9 +493,9 @@ export const onReceiveProposalsVoteSummary = (state, action) => {
     return {
       ...acc,
       [token]: {
-        ...proposalsVoteSummaries[token],
-        bestblock
-      }
+        ...proposalsVoteSummaries[token]
+      },
+      bestblock
     };
   }, {});
 
