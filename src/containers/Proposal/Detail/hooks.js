@@ -21,15 +21,13 @@ const mapStateToProps = {
   unvettedProposals: sel.apiUnvettedProposals,
   proposalDetail: sel.proposalWithVoteStatus,
   error: sel.proposalError,
-  loading: or(
-    sel.isApiRequestingProposalsVoteSummary,
-    sel.isApiRequestingProposalsBatch
-  )
+  loading: or(sel.isApiRequestingProposalsVoteSummary, sel.proposalIsRequesting)
 };
 
 const mapDispatchToProps = {
   onFetchUser: act.onFetchUser,
-  onFetchProposalsBatch: act.onFetchProposalsBatch
+  onFetchProposal: act.onFetchProposal,
+  onFetchProposalsVoteSummary: act.onFetchBatchProposalsVoteSummary
 };
 
 const isEqualProposalToken = (proposal, token) => {
@@ -41,10 +39,9 @@ const isEqualProposalToken = (proposal, token) => {
 };
 
 const proposalWithFilesOrNothing = proposal => {
-  // return proposal && proposal.files && !!proposal.files.length
-  //   ? proposal
-  //   : null;
-  return proposal;
+  return proposal && proposal.files && !!proposal.files.length
+    ? proposal
+    : null;
 };
 
 export function useProposal(ownProps) {
@@ -56,7 +53,8 @@ export function useProposal(ownProps) {
     publicProposals,
     unvettedProposals,
     loading,
-    onFetchProposalsBatch,
+    onFetchProposal,
+    onFetchProposalsVoteSummary,
     commentID: threadParentID
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
 
@@ -108,9 +106,10 @@ export function useProposal(ownProps) {
       if (proposal) {
         return;
       }
-      onFetchProposalsBatch([token], true);
+      onFetchProposal(token);
+      onFetchProposalsVoteSummary([token]);
     },
-    [proposal, token, onFetchProposalsBatch]
+    [proposal, token, onFetchProposal, onFetchProposalsVoteSummary]
   );
 
   useEffect(
