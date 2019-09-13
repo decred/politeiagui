@@ -13,11 +13,10 @@ const ModalConfirm = ({
   successMessage
 }) => {
   const [success, setSuccess] = useState(false);
+  const [isSubmitting, setSubmitting] = useState(false);
 
-  const onSubmitForm = async (
-    _,
-    { resetForm, setSubmitting, setFieldError }
-  ) => {
+  const onSubmitForm = async (_, { resetForm, setFieldError }) => {
+    setSubmitting(true);
     try {
       await onSubmit();
       resetForm();
@@ -44,6 +43,7 @@ const ModalConfirm = ({
   return (
     <Modal
       style={{ width: "600px" }}
+      disableClose={isSubmitting}
       title={(success && successTitle) || title}
       show={show}
       onClose={onClose}
@@ -51,45 +51,40 @@ const ModalConfirm = ({
         !success ? (
           <Icon type={"info"} size={26} />
         ) : (
-            <Icon
-              type={"checkmark"}
-              size={26}
-              iconColor={colorPrimaryDark}
-              backgroundColor={colorGray}
-            />
-          )
+          <Icon
+            type={"checkmark"}
+            size={26}
+            iconColor={colorPrimaryDark}
+            backgroundColor={colorGray}
+          />
+        )
       }
     >
       {!success && (
         <FormWrapper initialValues={{}} onSubmit={onSubmitForm}>
-          {({
-            Form,
-            Actions,
-            ErrorMessage,
-            handleSubmit,
-            isSubmitting,
-            errors
-          }) => (
-              <Form onSubmit={handleSubmit}>
-                {errors && errors.global && (
-                  <ErrorMessage>{errors.global.toString()}</ErrorMessage>
-                )}
-                <Text>{message}</Text>
-                <Actions className="no-padding-bottom">
-                  <Button loading={isSubmitting} type="submit">
-                    Confirm
+          {({ Form, Actions, ErrorMessage, handleSubmit, errors }) => (
+            <Form onSubmit={handleSubmit}>
+              {errors && errors.global && (
+                <ErrorMessage>{errors.global.toString()}</ErrorMessage>
+              )}
+              <Text>{message}</Text>
+              <Actions className="no-padding-bottom">
+                <Button loading={isSubmitting} type="submit">
+                  Confirm
                 </Button>
-                </Actions>
-              </Form>
-            )}
+              </Actions>
+            </Form>
+          )}
         </FormWrapper>
       )}
-      {success && <>
-        {successMessage}
-        <div className="justify-right margin-top-m">
-          <Button onClick={onClose}>Ok</Button>
-        </div>
-      </>}
+      {success && (
+        <>
+          {successMessage}
+          <div className="justify-right margin-top-m">
+            <Button onClick={onClose}>Ok</Button>
+          </div>
+        </>
+      )}
     </Modal>
   );
 };

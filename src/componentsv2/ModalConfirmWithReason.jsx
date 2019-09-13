@@ -23,10 +23,10 @@ const ModalConfirmWithReason = ({
   successTitle
 }) => {
   const [success, setSuccess] = useState(false);
-  const onSubmitReason = async (
-    values,
-    { resetForm, setSubmitting, setFieldError }
-  ) => {
+  const [isSubmitting, setSubmitting] = useState(false);
+
+  const onSubmitReason = async (values, { resetForm, setFieldError }) => {
+    setSubmitting(true);
     try {
       await onSubmit(values.reason);
       resetForm();
@@ -50,6 +50,7 @@ const ModalConfirmWithReason = ({
   return (
     <Modal
       style={{ width: "600px" }}
+      disableClose={isSubmitting}
       title={(success && successTitle) || title}
       show={show}
       onClose={onClose}
@@ -66,11 +67,11 @@ const ModalConfirmWithReason = ({
         )
       }
     >
-      { !success &&
-        <P style={{ marginBottom: "20px"}}>
+      {!success && (
+        <P style={{ marginBottom: "20px" }}>
           Please, provide a reason for this action.
         </P>
-      }
+      )}
       {!success && (
         <FormWrapper
           initialValues={{
@@ -89,7 +90,6 @@ const ModalConfirmWithReason = ({
             handleChange,
             handleBlur,
             handleSubmit,
-            isSubmitting,
             errors,
             touched
           }) => (
@@ -116,12 +116,14 @@ const ModalConfirmWithReason = ({
           )}
         </FormWrapper>
       )}
-      {success && <> 
-        {successMessage}
-        <div className="justify-right margin-top-m">
-          <Button onClick={onClose}>Ok</Button>  
-        </div>
-      </>}
+      {success && (
+        <>
+          {successMessage}
+          <div className="justify-right margin-top-m">
+            <Button onClick={onClose}>Ok</Button>
+          </div>
+        </>
+      )}
     </Modal>
   );
 };
