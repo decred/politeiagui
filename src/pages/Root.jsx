@@ -12,7 +12,6 @@ import PageProposalsAdmin from "./Proposals/Admin";
 import PageProposalDetail from "./Proposals/Detail";
 import PageProposalsPublicList from "./Proposals/PublicList";
 import PageProposalsUnvetted from "./Proposals/UnvettedList";
-import PageProposalsUser from "./Proposals/User";
 import { renderEditRecordRoute, renderNewRecordRoute } from "./routeRenderers";
 import PageUserDetail from "./User/Detail";
 import PageUserLogin from "./User/Login";
@@ -95,11 +94,6 @@ const Routes = ({ location }) => {
             path={`/${recordType}/:token/comments/:commentid`}
             exact
             component={PageProposalDetail}
-          />
-          <AuthenticatedRoute
-            path={`/${recordType}s/user`}
-            exact
-            component={PageProposalsUser}
           />
           <Route
             path={`/${recordType}/:token/comments/:commentid`}

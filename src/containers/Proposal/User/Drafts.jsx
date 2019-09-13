@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { Text } from "pi-ui";
 import { useDraftProposals } from "./hooks";
 import DraftProposal from "src/componentsv2/Proposal/DraftProposal";
@@ -28,13 +28,9 @@ const Drafts = () => {
     setTargetDraftID("");
   }, [onDeleteDraftProposal, setTargetDraftID, targetDraftID]);
 
-  const drafts = useMemo(
-    () =>
-      !!draftProposals
-        ? Object.values(draftProposals).filter(draft => !!draft.draftId)
-        : [],
-    [draftProposals]
-  );
+  const drafts = !!draftProposals
+    ? Object.values(draftProposals).filter(draft => !!draft.draftId)
+    : [];
 
   return (
     <>
