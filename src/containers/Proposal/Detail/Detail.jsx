@@ -1,10 +1,10 @@
 import React, { useMemo, useCallback } from "react";
+import { Link } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import Proposal from "src/componentsv2/Proposal";
 import styles from "./Detail.module.css";
 import { useProposal } from "./hooks";
 import Comments from "src/containers/Comments";
-import Link from "src/componentsv2/Link";
 import ProposalLoader from "src/componentsv2/Proposal/ProposalLoader";
 import { getCommentBlockedReason } from "./helpers";
 import {
@@ -30,7 +30,9 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
   const canReceiveComments =
     isPublicProposal(proposal) && !isVotingFinishedProposal(voteStatus);
 
-  const { previousLocation, history } = useRouter();
+  const { pastLocations, history } = useRouter();
+
+  const previousLocation = pastLocations[1];
 
   const returnToPreviousLocation = useCallback(() => history.goBack(), [
     history
@@ -57,7 +59,11 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
     if (!message) return null;
 
     return (
-      <Link gray to="/" onClick={returnToPreviousLocation}>
+      <Link
+        gray
+        className={styles.returnLink}
+        onClick={returnToPreviousLocation}
+      >
         &#8592; {message}
       </Link>
     );
