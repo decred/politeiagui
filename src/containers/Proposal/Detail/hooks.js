@@ -27,7 +27,7 @@ const mapStateToProps = {
 const mapDispatchToProps = {
   onFetchUser: act.onFetchUser,
   onFetchProposal: act.onFetchProposal,
-  onFetchProposalsVoteSummary: act.onFetchBatchProposalsVoteSummary
+  onFetchProposalsVoteSummary: act.onFetchProposalsBatchVoteSummary
 };
 
 const isEqualProposalToken = (proposal, token) => {

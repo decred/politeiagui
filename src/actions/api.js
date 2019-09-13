@@ -354,7 +354,7 @@ export const onFetchProposalsBatch = (tokens, fetchVoteStatus = true) =>
     try {
       const proposals = (await api.proposalsBatch(csrf, tokens)).proposals;
       if (fetchVoteStatus) {
-        await dispatch(onFetchBatchProposalsVoteSummary(tokens));
+        await dispatch(onFetchProposalsBatchVoteSummary(tokens));
       }
       dispatch(act.RECEIVE_PROPOSALS_BATCH({ proposals }));
     } catch (e) {
@@ -900,7 +900,7 @@ export const onSetProposalStatusV2 = (token, status, censorMessage = "") =>
           })
         );
         if (status === PROPOSAL_STATUS_PUBLIC) {
-          dispatch(onFetchBatchProposalsVoteSummary([token]));
+          dispatch(onFetchProposalsBatchVoteSummary([token]));
         }
       })
       .catch(error => {
@@ -1052,7 +1052,7 @@ export const onStartVote = (loggedInAsEmail, token, duration, quorum, pass) =>
     return api
       .startVote(loggedInAsEmail, csrf, token, duration, quorum, pass)
       .then(response => {
-        dispatch(onFetchBatchProposalsVoteSummary([token]));
+        dispatch(onFetchProposalsBatchVoteSummary([token]));
         dispatch(act.RECEIVE_START_VOTE({ ...response, success: true }));
       })
       .catch(error => {
@@ -1181,11 +1181,11 @@ export const onFetchProposalsVoteStatusByTokens = tokens => async dispatch => {
   }
 };
 
-export const onFetchBatchProposalsVoteSummary = tokens =>
+export const onFetchProposalsBatchVoteSummary = tokens =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_VOTE_SUMMARY({ tokens }));
     return api
-      .batchProposalVoteStatus(csrf, tokens)
+      .proposalsBatchVoteSummary(csrf, tokens)
       .then(response => {
         dispatch(
           act.RECEIVE_PROPOSALS_VOTE_SUMMARY({ ...response, success: true })

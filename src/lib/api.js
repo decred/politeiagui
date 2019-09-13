@@ -523,7 +523,7 @@ export const proposalsVoteStatus = () =>
   GET("/v1/proposals/votestatus").then(getResponse);
 export const proposalVoteStatus = token =>
   GET(`/v1/proposals/${token}/votestatus`).then(getResponse);
-export const batchProposalVoteStatus = (csrf, tokens) =>
+export const proposalsBatchVoteSummary = (csrf, tokens) =>
   POST("/proposals/batchvotesummary", csrf, {
     tokens
   }).then(getResponse);
