@@ -8,7 +8,6 @@ import {
   Message
 } from "pi-ui";
 import { Formik } from "formik";
-import Link from "src/componentsv2/Link";
 import styles from "./Search.module.css";
 import * as Yup from "yup";
 import { useSearchUser } from "./hooks";
@@ -48,11 +47,6 @@ const UserSearch = ({ TopBanner, PageDetails, Sidebar, Main, Title }) => {
         <PageDetails
           actionsContent={null}
           title={<Title className="margin-right-m">Search</Title>}
-          subtitle={
-            <Link gray to="/proposals/unvetted">
-              &#8592; Go back to unvetted proposals
-            </Link>
-          }
         >
           <Formik
             initialValues={{
