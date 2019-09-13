@@ -1,13 +1,12 @@
-import { classNames } from "pi-ui";
+import { classNames, useLockBodyScrollOnTrue } from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
-import { toggleBlockScroll } from "src/helpers";
 import HeaderNav from "../HeaderNav";
 import SidebarContent from "../SidebarContent";
 import styles from "./NavigationDrawer.module.css";
 
 const NavigationDrawer = ({ show, fullScreen }) => {
-  toggleBlockScroll(show);
+  useLockBodyScrollOnTrue(show);
   return (
     <div
       className={classNames(
