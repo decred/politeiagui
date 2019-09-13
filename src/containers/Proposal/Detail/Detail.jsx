@@ -69,7 +69,6 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
     );
   }, [previousLocation, returnToPreviousLocation]);
 
-    isPublicProposal(proposal) && !isVotingFinishedProposal(voteSummary);
   return (
     <>
       <TopBanner>
