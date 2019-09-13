@@ -3,10 +3,20 @@ import PropTypes from "prop-types";
 import styles from "./RecordWrapper.module.css";
 import DateTooltip from "../DateTooltip";
 import DownloadJSON from "../DownloadJSON";
-import { Card, H2, Icon, Link as UILink, Text, classNames } from "pi-ui";
+import {
+  Card,
+  H2,
+  Icon,
+  Link as UILink,
+  Text,
+  classNames,
+  useHover,
+  useTheme,
+  getThemeProperty,
+  Tooltip
+} from "pi-ui";
 import { Row } from "../layout";
 import Link from "../Link";
-import githubIcon from "src/assets/github.svg";
 import { useConfig } from "src/Config";
 import { useLoader } from "src/Appv2/Loader";
 import Join from "../Join";
@@ -120,10 +130,21 @@ export const GithubLink = ({ token }) => {
   const { testnetGitRepository, mainnetGitRepository } = useConfig();
   const { apiInfo } = useLoader();
   const repoURL = apiInfo.testnet ? testnetGitRepository : mainnetGitRepository;
+  const theme = useTheme();
+  const hoverColor = getThemeProperty(theme, "color-gray");
+  const [ref, isHovered] = useHover();
+  const iconColor = isHovered ? hoverColor : undefined;
+
   return (
-    <UILink target="_blank" href={`${repoURL}/${token}`}>
-      <img alt="github icon" src={githubIcon} />
-    </UILink>
+    <Tooltip
+      className={styles.seeOnGithubTooltip}
+      placement="bottom"
+      content="See on GitHub"
+    >
+      <UILink ref={ref} target="_blank" href={`${repoURL}/${token}`}>
+        <Icon type="github" iconColor={iconColor} />
+      </UILink>
+    </Tooltip>
   );
 };
 

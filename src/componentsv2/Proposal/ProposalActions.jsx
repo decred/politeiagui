@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "pi-ui";
+import { Button, classNames } from "pi-ui";
 import {
   isPublicProposal,
   isUnreviewedProposal,
@@ -13,6 +13,7 @@ import {
 } from "src/containers/Proposal/Actions";
 import AdminContent from "src/componentsv2/AdminContent";
 import { useLoaderContext } from "src/Appv2/Loader";
+import styles from "./ProposalActions.module.css";
 
 const UnvettedActions = ({ proposal }) => {
   if (!useUnvettedProposalActions()) {
@@ -33,7 +34,8 @@ const UnvettedActions = ({ proposal }) => {
         <div className="justify-right margin-top-m">
           <Button
             onClick={withProposal(onCensor)}
-            className="margin-right-s"
+            className={classNames("margin-right-s", styles.reportButton)}
+            noBorder
             kind="secondary"
           >
             Report as spam

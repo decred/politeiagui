@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { or } from "src/lib/fp";
@@ -7,17 +7,21 @@ import { handleSaveAppDraftProposals } from "src/lib/local_storage";
 import useThrowError from "src/hooks/utils/useThrowError";
 
 export function useDraftProposals() {
-  const fromRedux = useRedux(
-    {},
-    {
+  const mapStateToProps = useMemo(
+    () => ({
       draftProposals: sel.draftProposals
-    },
-    {
+    }),
+    []
+  );
+  const mapDispatchToProps = useMemo(
+    () => ({
       onLoadDraftProposals: act.onLoadDraftProposals,
       onSaveDraftProposal: act.onSaveDraftProposal,
       onDeleteDraftProposal: act.onDeleteDraftProposal
-    }
+    }),
+    []
   );
+  const fromRedux = useRedux({}, mapStateToProps, mapDispatchToProps);
   const [unsubscribe] = useState(
     useStoreSubscribe(handleSaveAppDraftProposals)
   );
@@ -40,32 +44,32 @@ export function useDraftProposals() {
   return fromRedux;
 }
 
-const mapStateToProps = {
-  proposals: sel.getUserProposalsWithVoteStatus,
-  numOfUserProposals: sel.numOfUserProposals,
-  loading: or(
-    sel.userProposalsIsRequesting,
-    sel.isApiRequestingPropsVoteStatus
-  ),
-  error: or(sel.userProposalsError, sel.apiPropVoteStatusError)
-};
-
-const mapDisptachToProps = {
-  onFetchUserProposals: act.onFetchUserProposalsWithVoteStatus
-};
-
 export function useUserProposals(ownProps) {
   const { userID } = ownProps;
+
+  const mapDisptachToProps = useMemo(
+    () => ({
+      onFetchUserProposals: act.onFetchUserProposalsWithVoteStatus
+    }),
+    []
+  );
+
+  const mapStateToProps = useMemo(() => {
+    const proposalsSelector = sel.makeGetUserProposals(userID);
+    return {
+      proposals: proposalsSelector,
+      numOfUserProposals: sel.numOfUserProposals,
+      loading: or(
+        sel.userProposalsIsRequesting,
+        sel.isApiRequestingPropsVoteStatus
+      ),
+      error: or(sel.userProposalsError, sel.apiPropVoteStatusError)
+    };
+  }, [userID]);
+
   const fromRedux = useRedux(ownProps, mapStateToProps, mapDisptachToProps);
 
-  const { onFetchUserProposals, error } = fromRedux;
-
-  useEffect(
-    function handleFetchUserProposals() {
-      onFetchUserProposals(userID);
-    },
-    [onFetchUserProposals, userID]
-  );
+  const { error } = fromRedux;
 
   useThrowError(error);
 

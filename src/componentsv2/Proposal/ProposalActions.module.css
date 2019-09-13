@@ -1,0 +1,8 @@
+button.reportButton {
+    color: var(--color-gray);
+}
+
+button.reportButton:hover, button.reportButton:active, button.reportButton:focus {
+    color: var(--color-primary-dark);
+}
+
