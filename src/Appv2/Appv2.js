@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { Router } from "src/componentsv2/Router";
 import Config from "src/Config";
 import { defaultLightTheme, useTheme } from "pi-ui";
 import { ReduxProvider } from "src/redux";

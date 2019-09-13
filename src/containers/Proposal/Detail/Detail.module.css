@@ -2,3 +2,7 @@
     background: none !important;
     overflow: hidden;
 }
+
+.returnLink {
+    cursor: pointer;
+}

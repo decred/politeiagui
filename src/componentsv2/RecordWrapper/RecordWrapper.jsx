@@ -17,7 +17,6 @@ import {
 } from "pi-ui";
 import { Row } from "../layout";
 import Link from "../Link";
-import githubIcon from "src/assets/github.svg";
 import { useConfig } from "src/Config";
 import { useLoader } from "src/Appv2/Loader";
 import Join from "../Join";

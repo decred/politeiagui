@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
 import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "src/constants";
-import Proposals from "src/containers/Proposal/User/Submitted";
 import useUserIdentity from "src/hooks/api/useUserIdentity";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import { existing, myPubKeyHex } from "src/lib/pki";
@@ -14,6 +13,7 @@ import { tabValues } from "./helpers";
 import { useChangeUsername, useUserDetail } from "./hooks";
 import Identity from "./Identity";
 import Preferences from "./Preferences";
+import UserProposals from "src/containers/Proposal/User";
 
 const getTabComponents = ({ user, ...rest }) => {
   const mapTabValueToComponent = {
@@ -21,7 +21,13 @@ const getTabComponents = ({ user, ...rest }) => {
     [tabValues.ACCOUNT]: <Account key="tab-account" {...user} {...rest} />,
     [tabValues.PREFERENCES]: <Preferences key="tab-preferences" {...rest} />,
     [tabValues.CREDITS]: <Credits key="tab-credits" {...rest} />,
-    [tabValues.PROPOSALS]: <Proposals key="tab-proposals" userID={user.id} />
+    [tabValues.PROPOSALS]: (
+      <UserProposals
+        key="tab-proposals"
+        userID={user.id}
+        withDrafts={rest.isUserPageOwner}
+      />
+    )
   };
   return mapTabValueToComponent;
 };
