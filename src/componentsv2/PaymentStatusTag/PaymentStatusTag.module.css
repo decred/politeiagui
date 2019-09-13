@@ -4,6 +4,10 @@
   top: 0;
 }
 
+span.statusTag > span {
+  overflow: visible;
+}
+
 /* EXTRA SMALL */
 @media screen and (max-width: 560px) {
   .statusTag {
