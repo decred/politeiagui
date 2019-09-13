@@ -269,11 +269,11 @@ export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
 
   const targetToken = state[key].payload.token;
 
-  const proposalVoteStatus =
-    get(["proposalsVoteStatus", "response", targetToken], state) || {};
+  const proposalVoteSummary =
+    get(["proposalsVoteSummary", "response", targetToken], state) || {};
 
-  const newVoteStatus = {
-    ...proposalVoteStatus,
+  const newVoteSummary = {
+    ...proposalVoteSummary,
     token: state[key].payload.token,
     status: newStatus
   };
@@ -282,11 +282,11 @@ export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
 
   return {
     ...state,
-    proposalsVoteStatus: {
-      ...state.proposalsVoteStatus,
+    proposalsVoteSummary: {
+      ...state.proposalsVoteSummary,
       response: {
-        ...state.proposalsVoteStatus.response,
-        [newVoteStatus.token]: { ...newVoteStatus }
+        ...state.proposalsVoteSummary.response,
+        [newVoteSummary.token]: { ...newVoteSummary }
       }
     }
   };
@@ -501,10 +501,10 @@ export const onReceiveProposalsVoteSummary = (state, action) => {
 
   return {
     ...newState,
-    proposalsVoteSummaries: {
-      ...newState.proposalsVoteSummaries,
+    proposalsVoteSummary: {
+      ...newState.proposalsVoteSummary,
       response: {
-        ...state.proposalsVoteSummaries.response,
+        ...state.proposalsVoteSummary.response,
         ...data
       }
     }

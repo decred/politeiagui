@@ -427,6 +427,20 @@ export const makeGetPropVoteStatus = token => {
   );
 };
 
+const apiPropsVoteSummaries = getApiResponse("proposalsVoteSummary");
+
+export const makeGetPropVoteSummary = token => {
+  return createSelector(
+    apiPropsVoteSummaries,
+    vsResponse => (vsResponse ? vsResponse[token] : null)
+  );
+};
+
+export const getBestBlockFromVoteSummaryResponse = createSelector(
+  apiPropsVoteSummaries,
+  vsResponse => vsResponse && vsResponse.bestblock
+);
+
 export const proposalWithVoteStatus = state => {
   const proposal = apiProposal(state);
   const voteStatus = proposal
