@@ -12,7 +12,7 @@ const routerCtx = createContext();
 
 export const useRouter = () => useContext(routerCtx);
 
-const RouterProvider = ({ location, history, children, ...rest }) => {
+const RouterProvider = ({ location, children, ...rest }) => {
   const [pastLocations, setPastLocations] = useState([]);
 
   useEffect(() => {
@@ -21,10 +21,11 @@ const RouterProvider = ({ location, history, children, ...rest }) => {
     }
   }, [location, pastLocations]);
 
-  const ctxValue = useMemo(
-    () => ({ ...rest, location, history, pastLocations }),
-    [rest, location, history, pastLocations]
-  );
+  const ctxValue = useMemo(() => ({ ...rest, location, pastLocations }), [
+    rest,
+    location,
+    pastLocations
+  ]);
 
   return <routerCtx.Provider value={ctxValue}>{children}</routerCtx.Provider>;
 };
