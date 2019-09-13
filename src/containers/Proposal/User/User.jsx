@@ -43,7 +43,7 @@ const ProposalsUser = ({ userID, withDrafts = false }) => {
   return (
     <>
       {withDrafts && (
-        <div className="justify-right" style={{ marginBottom: "10px" }}>
+        <div className={styles.selectContainer}>
           <Select
             isSearchable={false}
             className={styles.select}
