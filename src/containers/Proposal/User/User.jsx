@@ -1,73 +1,59 @@
-import React, { useMemo, useState, useEffect, useRef } from "react";
-import { tabValues } from "./helpers";
-import useNavigation from "src/hooks/api/useNavigation";
-import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
+import React, { useMemo, useState, useCallback } from "react";
+import Select from "src/componentsv2/Select";
 import Drafts from "./Drafts";
 import Submitted from "./Submitted";
+import styles from "./User.module.css";
 
-function useTraceUpdate(props) {
-  const prev = useRef(props);
-  useEffect(() => {
-    const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
-      if (prev.current[k] !== v) {
-        ps[k] = [prev.current[k], v];
-      }
-      return ps;
-    }, {});
-    if (Object.keys(changedProps).length > 0) {
-      console.log("Changed props:", changedProps);
-    }
-    prev.current = props;
-  });
-}
+const SUBMITTED = "Submitted";
+const DRAFTS = "Drafts";
 
-const ProposalsUser = ({
-  TopBanner,
-  PageDetails,
-  Sidebar,
-  Main,
-  Tabs,
-  Tab
-}) => {
-  const tabLabels = [tabValues.DRAFTS, tabValues.SUBMITTED];
-  const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
-  const tabOption = tabLabels[index];
+export const filterOptions = [
+  { value: SUBMITTED, label: SUBMITTED },
+  { value: DRAFTS, label: DRAFTS }
+];
 
-  const { user } = useNavigation();
-  const userId = user.userid;
+const ProposalsUser = ({ userID, withDrafts = false }) => {
   // Proposals fetching will be triggered from the 'proposals' tab
   // but cached here to avoid re-fetching it
   const [userProposals, setUserProposals] = useState(null);
 
-  useTraceUpdate({ userProposals, userId });
+  const [proposalsFilter, setProposalsFilter] = useState(filterOptions[0]);
+
+  const onSetFilterOption = useCallback(
+    option => {
+      setProposalsFilter(option);
+    },
+    [setProposalsFilter]
+  );
 
   const content = useMemo(() => {
-    const mapTabToContent = {
-      [tabValues.DRAFTS]: <Drafts />,
-      [tabValues.SUBMITTED]: (
+    const mapFilterOptionsToContent = {
+      [DRAFTS]: <Drafts />,
+      [SUBMITTED]: (
         <Submitted
-          userID={userId}
+          userID={userID}
           userProposals={userProposals}
           setUserProposals={setUserProposals}
         />
       )
     };
-    return mapTabToContent[tabOption];
-  }, [tabOption, userProposals, userId]);
+    return mapFilterOptionsToContent[proposalsFilter.value];
+  }, [userProposals, userID, proposalsFilter]);
 
   return (
     <>
-      <TopBanner>
-        <PageDetails title="Your Proposals">
-          <Tabs onSelectTab={onSetIndex} activeTabIndex={index}>
-            {tabLabels.map(label => (
-              <Tab key={`tab-${label}`} label={label} />
-            ))}
-          </Tabs>
-        </PageDetails>
-      </TopBanner>
-      <Sidebar />
-      <Main>{content}</Main>
+      {withDrafts && (
+        <div className={styles.selectContainer}>
+          <Select
+            isSearchable={false}
+            className={styles.select}
+            value={proposalsFilter}
+            onChange={onSetFilterOption}
+            options={filterOptions}
+          />
+        </div>
+      )}
+      {content}
     </>
   );
 };

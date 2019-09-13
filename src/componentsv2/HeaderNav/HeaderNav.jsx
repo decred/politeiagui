@@ -13,9 +13,6 @@ const HeaderNav = ({ history, location }) => {
   function goToUnvetted() {
     history.push(`/proposals/unvetted`);
   }
-  function goToUserProposals() {
-    history.push("/proposals/user");
-  }
   function goToPublicProposals() {
     history.push("/");
   }
@@ -39,7 +36,6 @@ const HeaderNav = ({ history, location }) => {
             Search for users
           </DropdownItem>
         )}
-        <DropdownItem onClick={goToUserProposals}>My Proposals</DropdownItem>
         <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
         <DropdownItem onClick={onLogout}>Logout</DropdownItem>
       </Dropdown>
