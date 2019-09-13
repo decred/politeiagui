@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useMemo, useCallback } from "react";
+import { Link } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import Proposal from "src/componentsv2/Proposal";
 import styles from "./Detail.module.css";
 import { useProposal } from "./hooks";
 import Comments from "src/containers/Comments";
-import Link from "src/componentsv2/Link";
 import ProposalLoader from "src/componentsv2/Proposal/ProposalLoader";
 import { getCommentBlockedReason } from "./helpers";
 import {
@@ -17,6 +17,7 @@ import {
   PublicActionsProvider
 } from "src/containers/Proposal/Actions";
 import { useProposalVote } from "../hooks";
+import { useRouter } from "src/componentsv2/Router";
 
 const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
   const { proposal, loading, threadParentID } = useProposal({ match });
@@ -29,16 +30,51 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
   const canReceiveComments =
     isPublicProposal(proposal) && !isVotingFinishedProposal(voteStatus);
 
+  const { pastLocations, history } = useRouter();
+
+  const previousLocation = pastLocations[1];
+
+  const returnToPreviousLocation = useCallback(() => history.goBack(), [
+    history
+  ]);
+
+  const goBackLinkFromPreviousLocation = useMemo(() => {
+    if (!previousLocation) return null;
+    let message = "";
+
+    switch (previousLocation.pathname) {
+      case "/":
+        message = "Go back to public proposals";
+        break;
+      case "/proposals/unvetted":
+        message = "Go back to unvetted proposals";
+        break;
+      default:
+        if (previousLocation.pathname.match("/user/*")) {
+          message = "Go back to user account";
+        }
+        break;
+    }
+
+    if (!message) return null;
+
+    return (
+      <Link
+        gray
+        className={styles.returnLink}
+        onClick={returnToPreviousLocation}
+      >
+        &#8592; {message}
+      </Link>
+    );
+  }, [previousLocation, returnToPreviousLocation]);
+
   return (
     <>
       <TopBanner>
         <PageDetails
           title={"Proposal Details"}
-          subtitle={
-            <Link gray to="/">
-              &#8592; Go back to all proposals
-            </Link>
-          }
+          subtitle={goBackLinkFromPreviousLocation}
         />
       </TopBanner>
       <Sidebar />
