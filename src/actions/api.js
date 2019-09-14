@@ -354,7 +354,7 @@ export const onFetchProposalsBatch = (tokens, fetchVoteStatus = true) =>
     try {
       const promises = [api.proposalsBatch(csrf, tokens)];
       if (fetchVoteStatus) {
-        promises.push(onFetchProposalsBatchVoteSummary(tokens));
+        promises.push(dispatch(onFetchProposalsBatchVoteSummary(tokens)));
       }
       const response = await Promise.all(promises);
       const proposals = response.find(res => res && res.proposals).proposals;

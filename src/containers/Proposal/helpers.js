@@ -172,7 +172,6 @@ export const getVoteTimeLeftInWords = (voteSummary, chainHeight, isTestnet) => {
   if (!voteSummary || voteSummary.status !== PROPOSAL_VOTING_ACTIVE) {
     return "";
   }
-  console.log(chainHeight);
   const blocks = getVoteBlocksLeft(voteSummary, chainHeight);
   const blockTimeMinutes = isTestnet
     ? blocks * BLOCK_DURATION_TESTNET
