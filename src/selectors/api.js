@@ -494,12 +494,12 @@ export const apiVettedProposals = or(
   constant([])
 );
 
-export const proposalsWithVoteStatus = createDeepEqualSelector(
+export const proposalsWithVoteSummary = createDeepEqualSelector(
   apiVettedProposals,
   proposals =>
     proposals.map(prop => ({
       ...prop,
-      voteStatus: {}
+      voteSummary: {}
     }))
 );
 

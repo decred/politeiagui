@@ -17,7 +17,7 @@ const mapStateToProps = {
     get(["match", "params", "commentid"]),
     arg(1)
   ),
-  publicProposals: sel.proposalsWithVoteStatus,
+  publicProposals: sel.proposalsWithVoteSummary,
   unvettedProposals: sel.apiUnvettedProposals,
   proposalDetail: sel.proposalWithVoteStatus,
   error: sel.proposalError,
