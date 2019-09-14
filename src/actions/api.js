@@ -352,10 +352,12 @@ export const onFetchProposalsBatch = (tokens, fetchVoteStatus = true) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
     try {
-      const proposals = (await api.proposalsBatch(csrf, tokens)).proposals;
+      const promises = [api.proposalsBatch(csrf, tokens)];
       if (fetchVoteStatus) {
-        await dispatch(onFetchProposalsBatchVoteSummary(tokens));
+        promises.push(onFetchProposalsBatchVoteSummary(tokens));
       }
+      const response = await Promise.all(promises);
+      const proposals = response.find(res => res && res.proposals).proposals;
       dispatch(act.RECEIVE_PROPOSALS_BATCH({ proposals }));
     } catch (e) {
       dispatch(act.RECEIVE_PROPOSALS_BATCH(null, e));
