@@ -49,7 +49,7 @@ export function useUserProposals(ownProps) {
 
   const mapDisptachToProps = useMemo(
     () => ({
-      onFetchUserProposals: act.onFetchUserProposalsWithVoteStatus
+      onFetchUserProposals: act.onFetchUserProposalsWithVoteSummary
     }),
     []
   );

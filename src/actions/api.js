@@ -1169,6 +1169,26 @@ export const onFetchUserProposalsWithVoteStatus = (
   }
 };
 
+export const onFetchUserProposalsWithVoteSummary = (
+  userid,
+  token
+) => async dispatch => {
+  dispatch(act.REQUEST_USER_PROPOSALS({ userid }));
+  try {
+    const { proposals, ...response } = await api.userProposals(userid, token);
+    const publicPropsTokens = proposals
+      .filter(prop => prop.status === PROPOSAL_STATUS_PUBLIC)
+      .map(prop => prop.censorshiprecord.token);
+
+    if (publicPropsTokens.length) {
+      await dispatch(onFetchProposalsBatchVoteSummary(publicPropsTokens));
+    }
+    dispatch(act.RECEIVE_USER_PROPOSALS({ proposals, ...response }));
+  } catch (e) {
+    dispatch(act.RECEIVE_USER_PROPOSALS(null, e));
+  }
+};
+
 export const onFetchProposalsVoteStatusByTokens = tokens => async dispatch => {
   dispatch(act.REQUEST_PROPOSALS_VOTE_STATUS({ tokens }));
   try {
