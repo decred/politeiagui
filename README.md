@@ -51,14 +51,14 @@ To build politeiagui for production deployment, use the following commands:
     ls build
 
 
-### Development for v2
+## Development for v2
 
 1. Clone this repository
 2. Install the dependencies and run the application: 
 `yarn && yarn start-v2`
     
-### Production for v2
-1. Install the dependencies and build the application:
+## Production for v2
+Install the dependencies and build the application:
 `yarn && yarn build-v2`
 
 ## Configuration
