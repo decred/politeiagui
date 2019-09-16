@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
+import IconButton from "src/componentsv2/IconButton";
 import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
 import {
   getMarkdownContent,
@@ -23,8 +24,9 @@ import { useFullImageModal } from "src/componentsv2/ProposalForm/hooks";
 import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
 import ModalFullImage from "src/componentsv2/ModalFullImage";
 import VersionPicker from "src/componentsv2/VersionPicker";
+import { useRouter } from "src/componentsv2/Router";
 
-const Proposal = ({ proposal, extended }) => {
+const Proposal = ({ proposal, extended, collapseBodyContent }) => {
   const {
     censorshiprecord,
     files,
@@ -38,25 +40,26 @@ const Proposal = ({ proposal, extended }) => {
     version
   } = proposal;
   const {
-    voteStatus,
+    voteSummary,
     voteActive: isVoteActive,
     voteTimeLeftInWords: voteTimeLeft,
     voteBlocksLeft
   } = useProposalVote(censorshiprecord.token);
   const { currentUser } = useLoaderContext();
+  const { history } = useRouter();
   const {
     showFullImageModal,
     openFullImageModal,
     closeFullImageModal
   } = useFullImageModal();
-  const hasVoteStatus = !!voteStatus && !!voteStatus.endheight;
+  const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
   const proposalURL = `/proposal/${proposalToken}`;
   const isPublic = isPublicProposal(proposal);
   const isAbandoned = isAbandonedProposal(proposal);
   const isPublicAccessible = isPublic || isAbandoned;
   const isAuthor = currentUser && currentUser.userid === userid;
-  const isEditable = isAuthor && isEditableProposal(proposal, voteStatus);
+  const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
   const mobile = useMediaQuery("(max-width: 560px)");
   const [showSearchVotesModal, setShowSearchVotesModal] = useState(false);
   function handleCloseSearchVotesModal() {
@@ -64,6 +67,9 @@ const Proposal = ({ proposal, extended }) => {
   }
   function handleOpenSearchVotesModal() {
     setShowSearchVotesModal(true);
+  }
+  function goToFullProposal() {
+    history.push(proposalURL);
   }
   const onClickFile = f => () => {
     openFullImageModal(f);
@@ -121,7 +127,7 @@ const Proposal = ({ proposal, extended }) => {
                       truncate
                     >{`version ${version}`}</Text>
                   )}
-                  {extended && (
+                  {extended && version > 1 && (
                     <VersionPicker
                       className={classNames(styles.versionPicker)}
                       version={version}
@@ -135,7 +141,7 @@ const Proposal = ({ proposal, extended }) => {
                   <Status>
                     <StatusTag
                       className={styles.statusTag}
-                      {...getProposalStatusTagProps(proposal, voteStatus)}
+                      {...getProposalStatusTagProps(proposal, voteSummary)}
                     />
                     {isVoteActive && (
                       <>
@@ -165,27 +171,35 @@ const Proposal = ({ proposal, extended }) => {
                 <RecordToken token={proposalToken} />
               </Row>
             )}
-            {hasVoteStatus && (
+            {hasvoteSummary && (
               <Row>
                 <StatusBar
-                  max={getQuorumInVotes(voteStatus)}
-                  status={getStatusBarData(voteStatus)}
-                  markerPosition={`${voteStatus.passpercentage}%`}
+                  max={getQuorumInVotes(voteSummary)}
+                  status={getStatusBarData(voteSummary)}
+                  markerPosition={`${voteSummary.passpercentage}%`}
                   renderStatusInfoComponent={
                     <VotesCount
                       isVoteActive={isVoteActive}
-                      quorumVotes={getQuorumInVotes(voteStatus)}
-                      votesReceived={getVotesReceived(voteStatus)}
+                      quorumVotes={getQuorumInVotes(voteSummary)}
+                      votesReceived={getVotesReceived(voteSummary)}
                       onSearchVotes={handleOpenSearchVotesModal}
                     />
                   }
                 />
               </Row>
             )}
-            {extended && !!files.length && (
+            {extended && !!files.length && !collapseBodyContent && (
               <Markdown
                 className={styles.markdownContainer}
                 body={getMarkdownContent(files)}
+              />
+            )}
+            {collapseBodyContent && (
+              <IconButton
+                type="expand"
+                className="margin-top-m"
+                size={"xlg"}
+                onClick={goToFullProposal}
               />
             )}
             {isPublicAccessible && !extended && (
@@ -232,7 +246,7 @@ const Proposal = ({ proposal, extended }) => {
               </Row>
             )}
             <LoggedInContent>
-              <ProposalActions proposal={proposal} voteStatus={voteStatus} />
+              <ProposalActions proposal={proposal} voteSummary={voteSummary} />
             </LoggedInContent>
           </>
         )}

@@ -31,7 +31,7 @@ const VotesCount = ({
       ) : isVoteActive ? (
         <Text color="gray" size="small">
           {votesLeft > 0 ? votesLeft : ""}
-          {` votes left`}
+          {" votes left"}
         </Text>
       ) : null}
     </div>

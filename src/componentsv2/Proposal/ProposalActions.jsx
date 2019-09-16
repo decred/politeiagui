@@ -47,7 +47,7 @@ const UnvettedActions = ({ proposal }) => {
   );
 };
 
-const PublicActions = ({ proposal, voteStatus }) => {
+const PublicActions = ({ proposal, voteSummary }) => {
   if (!usePublicProposalActions()) {
     throw Error(
       "PublicActions requires an PublicActionsProvider on a higher level of the component tree. "
@@ -70,9 +70,9 @@ const PublicActions = ({ proposal, voteStatus }) => {
   const isProposalOwner =
     currentUser && proposal && currentUser.userid === proposal.userid;
 
-  const isVotingStartAuthorized = !isVotingNotAuthorizedProposal(voteStatus);
+  const isVotingStartAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
   return (
-    isUnderDiscussionProposal(proposal, voteStatus) && (
+    isUnderDiscussionProposal(proposal, voteSummary) && (
       <div className="justify-right margin-top-m">
         {isProposalOwner &&
           (!isVotingStartAuthorized ? (
@@ -96,9 +96,9 @@ const PublicActions = ({ proposal, voteStatus }) => {
   );
 };
 
-const ProposalActions = ({ proposal, voteStatus }) => {
+const ProposalActions = ({ proposal, voteSummary }) => {
   return isPublicProposal(proposal) || isAbandonedProposal(proposal) ? (
-    <PublicActions proposal={proposal} voteStatus={voteStatus} />
+    <PublicActions proposal={proposal} voteSummary={voteSummary} />
   ) : (
     <UnvettedActions proposal={proposal} />
   );

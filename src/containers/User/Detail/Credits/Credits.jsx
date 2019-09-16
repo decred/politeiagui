@@ -249,6 +249,9 @@ const Credits = () => {
         subject="markUserPaywallAsPaid"
         onSubmit={markAsPaid}
         show={showMarkAsPaidConfirmModal}
+        title="Mark user paywall as paid"
+        successTitle="Paywall marked as paid"
+        successMessage="The user paywall was successfully marked as paid!"
         onClose={closeMarkAsPaidModal}
       />
       <ModalPayPaywall

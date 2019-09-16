@@ -254,6 +254,7 @@ const Comments = ({
                 readOnly,
                 identityError,
                 paywallMissing,
+                isAdmin: currentUser && currentUser.isadmin,
                 openCensorModal: setCommentIDCensorTarget,
                 openLoginModal: handleOpenLoginModal,
                 ...commentsCtx

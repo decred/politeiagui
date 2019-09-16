@@ -31,11 +31,13 @@ const ModalStartVote = ({
   successTitle
 }) => {
   const [success, setSuccess] = useState(false);
+  const [isSubmitting, setSubmitting] = useState(false);
   const { apiInfo } = useLoaderContext();
   const onSubmitChangePassword = async (
     values,
-    { resetForm, setSubmitting, setFieldError }
+    { resetForm, setFieldError }
   ) => {
+    setSubmitting(true);
     try {
       await onSubmit(values);
       resetForm();
@@ -62,6 +64,7 @@ const ModalStartVote = ({
   return (
     <Modal
       style={{ width: "600px" }}
+      disableClose={isSubmitting}
       title={(success && successTitle) || title}
       show={show}
       onClose={onClose}
@@ -97,7 +100,6 @@ const ModalStartVote = ({
             handleBlur,
             handleSubmit,
             setFieldValue,
-            isSubmitting,
             errors,
             touched
           }) => {
@@ -150,12 +152,14 @@ const ModalStartVote = ({
           }}
         </FormWrapper>
       )}
-      {success && <> 
-        {successMessage}
-        <div className="justify-right margin-top-m">
-          <Button onClick={onClose}>Ok</Button>  
-        </div>
-      </>}
+      {success && (
+        <>
+          {successMessage}
+          <div className="justify-right margin-top-m">
+            <Button onClick={onClose}>Ok</Button>
+          </div>
+        </>
+      )}
     </Modal>
   );
 };
