@@ -5,15 +5,15 @@
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#fff",
-  "theme_color": "#673ab8",
+  "theme_color": "#fff",
   "icons": [{
-    "src": "/assets/icons/android-chrome-48x48.png",
+    "src": "/assets/icons/android-chrome-192x192.png",
     "type": "image/png",
-    "sizes": "48x48"
+    "sizes": "192x192"
   },
   {
     "src": "/assets/icons/apple-touch-icon.png",
     "type": "image/png",
-    "sizes": "60x60"
+    "sizes": "512x512"
   }]
 }
