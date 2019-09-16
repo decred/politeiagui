@@ -1,8 +1,10 @@
 import React from "react";
 import { Modal } from "pi-ui";
 import LoginForm from "src/containers/User/Login/Form";
+import { useRouteChanges } from "src/componentsv2/Router";
 
 const ModalLogin = ({ title = "Login", onLoggedIn, onClose, ...props }) => {
+  useRouteChanges(props.show, onClose);
   return (
     <Modal
       title={title}

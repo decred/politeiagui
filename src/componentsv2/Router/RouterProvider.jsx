@@ -12,6 +12,19 @@ const routerCtx = createContext();
 
 export const useRouter = () => useContext(routerCtx);
 
+export const useRouteChanges = (active, callbackFn) => {
+  const { location: { pathname } } = useRouter();
+  const callback = useMemo(() =>
+    active && callbackFn ? callbackFn : () => {}
+  , [callbackFn, active]);
+
+  useEffect(() => {
+    return () => {
+      callback();
+    };
+  }, [pathname, callback]);
+};
+
 const RouterProvider = ({ location, children, ...rest }) => {
   const [pastLocations, setPastLocations] = useState([]);
 
