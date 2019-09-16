@@ -125,20 +125,19 @@ export const isApprovedProposal = (proposal, voteSummary) => {
   const {
     quorumpercentage,
     passpercentage,
-    numofeligiblevotes,
-    optionsresult,
-    totalvotes
+    eligibletickets: numofeligiblevotes,
+    results
   } = voteSummary;
+  const totalVotes = getVotesReceived(voteSummary);
   const quorumInVotes = (quorumpercentage * numofeligiblevotes) / 100;
-  const quorumPasses = totalvotes >= quorumInVotes;
+  const quorumPasses = totalVotes >= quorumInVotes;
   if (!quorumPasses) {
     return false;
   }
 
-  const yesVotes = optionsresult.find(op => op.option.id === "yes")
-    .votesreceived;
+  const yesVotes = results.find(op => op.option.id === "yes").votesreceived;
 
-  return yesVotes > (passpercentage * totalvotes) / 100;
+  return yesVotes > (passpercentage * totalVotes) / 100;
 };
 
 /**

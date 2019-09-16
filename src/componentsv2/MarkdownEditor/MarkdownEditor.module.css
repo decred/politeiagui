@@ -11,7 +11,8 @@
     max-width: 100%;
     min-width: 100%;
     padding: 2rem;
-    border: 1px solid var(--color-gray-lighter);
+    border: 1px solid transparent;
+    border-bottom: 1px solid var(--color-gray-lighter);
     min-height: 20rem;
 }
 
@@ -20,7 +21,5 @@
 }
 
 .previewContainer.nothingToPreview {
-    border: 0px transparent;
-    border-bottom: 1px solid var(--color-gray-lighter);
     padding: 2rem 0;
 }

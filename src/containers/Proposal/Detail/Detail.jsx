@@ -84,7 +84,11 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
             {loading || !proposal ? (
               <ProposalLoader extended />
             ) : (
-              <Proposal proposal={proposal} extended />
+              <Proposal
+                proposal={proposal}
+                extended
+                collapseBodyContent={!!threadParentID}
+              />
             )}
             {showCommentArea && (
               <Comments
