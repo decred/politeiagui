@@ -127,7 +127,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
                       truncate
                     >{`version ${version}`}</Text>
                   )}
-                  {extended && (
+                  {extended && version > 1 && (
                     <VersionPicker
                       className={classNames(styles.versionPicker)}
                       version={version}
