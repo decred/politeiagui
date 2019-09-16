@@ -20,7 +20,6 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     loadingTokenInventory,
     onFetchProposalsBatch
   } = useUnvettedProposals();
-  
 
   function handleFetchRecords(tokens) {
     return onFetchProposalsBatch(tokens, false);
@@ -29,10 +28,10 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
       [tabValues.UNREVIEWED]: "No proposals unreviewed",
-      [tabValues.CENSORED]: "No proposals censored",
+      [tabValues.CENSORED]: "No proposals censored"
     };
     return mapTabToMessage[tab];
-  },[]);
+  }, []);
 
   return (
     <RecordsView

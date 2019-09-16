@@ -269,11 +269,11 @@ export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
 
   const targetToken = state[key].payload.token;
 
-  const proposalVoteStatus =
-    get(["proposalsVoteStatus", "response", targetToken], state) || {};
+  const proposalVoteSummary =
+    get(["proposalsVoteSummary", "response", targetToken], state) || {};
 
-  const newVoteStatus = {
-    ...proposalVoteStatus,
+  const newVoteSummary = {
+    ...proposalVoteSummary,
     token: state[key].payload.token,
     status: newStatus
   };
@@ -282,11 +282,11 @@ export const onReceiveVoteStatusChange = (key, newStatus, state, action) => {
 
   return {
     ...state,
-    proposalsVoteStatus: {
-      ...state.proposalsVoteStatus,
+    proposalsVoteSummary: {
+      ...state.proposalsVoteSummary,
       response: {
-        ...state.proposalsVoteStatus.response,
-        [newVoteStatus.token]: { ...newVoteStatus }
+        ...state.proposalsVoteSummary.response,
+        [newVoteSummary.token]: { ...newVoteSummary }
       }
     }
   };
@@ -504,6 +504,33 @@ export const onReceiveProposalsVoteStatus = (state, action) => {
       ...newState.proposalsVoteStatus,
       response: {
         ...state.proposalsVoteStatus.response,
+        ...data
+      }
+    }
+  };
+};
+
+export const onReceiveProposalsVoteSummary = (state, action) => {
+  const newState = receive("proposalsVoteSummary", state, action);
+  if (action.error) return newState;
+  const proposalsVoteSummaries = get(["payload", "summaries"], action) || [];
+  const bestblock = get(["payload", "bestblock"], action) || [];
+  const data = Object.keys(proposalsVoteSummaries).reduce((acc, token) => {
+    return {
+      ...acc,
+      [token]: {
+        ...proposalsVoteSummaries[token]
+      },
+      bestblock
+    };
+  }, {});
+
+  return {
+    ...newState,
+    proposalsVoteSummary: {
+      ...newState.proposalsVoteSummary,
+      response: {
+        ...state.proposalsVoteSummary.response,
         ...data
       }
     }

@@ -311,7 +311,6 @@ export const onFetchAdminUserInvoices = userid => dispatch => {
     .adminUserInvoices(userid)
     .then(response => dispatch(act.RECEIVE_ADMIN_USER_INVOICES(response)))
     .catch(error => {
-      console.log(error);
       dispatch(act.RECEIVE_ADMIN_USER_INVOICES(null, error));
     });
 };
@@ -353,19 +352,12 @@ export const onFetchProposalsBatch = (tokens, fetchVoteStatus = true) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
     try {
-      let promises = [api.proposalsBatch(csrf, tokens)];
-
+      const promises = [api.proposalsBatch(csrf, tokens)];
       if (fetchVoteStatus) {
-        const voteStatusPromises = tokens.map(t =>
-          dispatch(onFetchProposalVoteStatus(t))
-        );
-        promises = promises.concat(voteStatusPromises);
+        promises.push(dispatch(onFetchProposalsBatchVoteSummary(tokens)));
       }
-      const res = await Promise.all(promises);
-
-      // filter only proposals responses
-      const proposals = res.find(r => r && r.proposals).proposals;
-
+      const response = await Promise.all(promises);
+      const proposals = response.find(res => res && res.proposals).proposals;
       dispatch(act.RECEIVE_PROPOSALS_BATCH({ proposals }));
     } catch (e) {
       dispatch(act.RECEIVE_PROPOSALS_BATCH(null, e));
@@ -910,7 +902,7 @@ export const onSetProposalStatusV2 = (token, status, censorMessage = "") =>
           })
         );
         if (status === PROPOSAL_STATUS_PUBLIC) {
-          dispatch(onFetchProposalVoteStatus(token));
+          dispatch(onFetchProposalsBatchVoteSummary([token]));
         }
       })
       .catch(error => {
@@ -1062,7 +1054,7 @@ export const onStartVote = (loggedInAsEmail, token, duration, quorum, pass) =>
     return api
       .startVote(loggedInAsEmail, csrf, token, duration, quorum, pass)
       .then(response => {
-        dispatch(onFetchProposalVoteStatus(token));
+        dispatch(onFetchProposalsBatchVoteSummary([token]));
         dispatch(act.RECEIVE_START_VOTE({ ...response, success: true }));
       })
       .catch(error => {
@@ -1177,6 +1169,26 @@ export const onFetchUserProposalsWithVoteStatus = (
   }
 };
 
+export const onFetchUserProposalsWithVoteSummary = (
+  userid,
+  token
+) => async dispatch => {
+  dispatch(act.REQUEST_USER_PROPOSALS({ userid }));
+  try {
+    const { proposals, ...response } = await api.userProposals(userid, token);
+    const publicPropsTokens = proposals
+      .filter(prop => prop.status === PROPOSAL_STATUS_PUBLIC)
+      .map(prop => prop.censorshiprecord.token);
+
+    if (publicPropsTokens.length) {
+      await dispatch(onFetchProposalsBatchVoteSummary(publicPropsTokens));
+    }
+    dispatch(act.RECEIVE_USER_PROPOSALS({ proposals, ...response }));
+  } catch (e) {
+    dispatch(act.RECEIVE_USER_PROPOSALS(null, e));
+  }
+};
+
 export const onFetchProposalsVoteStatusByTokens = tokens => async dispatch => {
   dispatch(act.REQUEST_PROPOSALS_VOTE_STATUS({ tokens }));
   try {
@@ -1190,6 +1202,22 @@ export const onFetchProposalsVoteStatusByTokens = tokens => async dispatch => {
     throw e;
   }
 };
+
+export const onFetchProposalsBatchVoteSummary = tokens =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_PROPOSALS_VOTE_SUMMARY({ tokens }));
+    return api
+      .proposalsBatchVoteSummary(csrf, tokens)
+      .then(response => {
+        dispatch(
+          act.RECEIVE_PROPOSALS_VOTE_SUMMARY({ ...response, success: true })
+        );
+        return response;
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_PROPOSALS_VOTE_SUMMARY(null, error));
+      });
+  });
 
 export const onFetchProposalVoteStatus = token => dispatch => {
   dispatch(act.REQUEST_PROPOSAL_VOTE_STATUS({ token }));

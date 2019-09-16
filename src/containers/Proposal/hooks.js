@@ -10,21 +10,21 @@ import {
 
 export function useProposalVote(token) {
   const mapStateToProps = useMemo(() => {
-    const voteStatusSelector = sel.makeGetPropVoteStatus(token);
+    const voteSummarySelector = sel.makeGetPropVoteSummary(token);
     return {
-      voteStatus: voteStatusSelector
+      voteSummary: voteSummarySelector,
+      bestBlock: sel.getBestBlockFromVoteSummaryResponse
     };
   }, [token]);
-  const { voteStatus } = useRedux({}, mapStateToProps, {});
+  const { voteSummary, bestBlock } = useRedux({}, mapStateToProps, {});
   const { apiInfo } = useLoaderContext();
-  const bestBlock = voteStatus && voteStatus.bestblock;
   const voteTimeLeftInWords = getVoteTimeLeftInWords(
-    voteStatus,
+    voteSummary,
     bestBlock,
     apiInfo.testnet
   );
-  const voteBlocksLeft = getVoteBlocksLeft(voteStatus, bestBlock);
-  const voteActive = isVoteActiveProposal(voteStatus);
+  const voteBlocksLeft = getVoteBlocksLeft(voteSummary, bestBlock);
+  const voteActive = isVoteActiveProposal(voteSummary);
 
-  return { voteStatus, voteTimeLeftInWords, voteBlocksLeft, voteActive };
+  return { voteSummary, voteTimeLeftInWords, voteBlocksLeft, voteActive };
 }

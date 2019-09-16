@@ -69,6 +69,12 @@ export const isApiRequestingPropVoteStatus = getIsApiRequesting(
 export const isApiRequestingPropVoteResults = getIsApiRequesting(
   "proposalVoteResults"
 );
+export const isApiRequestingProposalsBatch = getIsApiRequesting(
+  "proposalsBatch"
+);
+export const isApiRequestingProposalsVoteSummary = getIsApiRequesting(
+  "proposalsVoteSummary"
+);
 export const isApiRequestingEditUser = getIsApiRequesting("editUser");
 export const isApiRequestingManageUser = getIsApiRequesting("manageUser");
 export const isApiRequestingEditProposal = getIsApiRequesting("editProposal");
@@ -421,6 +427,20 @@ export const makeGetPropVoteStatus = token => {
   );
 };
 
+const apiPropsVoteSummaries = getApiResponse("proposalsVoteSummary");
+
+export const makeGetPropVoteSummary = token => {
+  return createSelector(
+    apiPropsVoteSummaries,
+    vsResponse => (vsResponse ? vsResponse[token] : null)
+  );
+};
+
+export const getBestBlockFromVoteSummaryResponse = createSelector(
+  apiPropsVoteSummaries,
+  vsResponse => vsResponse && vsResponse.bestblock
+);
+
 export const proposalWithVoteStatus = state => {
   const proposal = apiProposal(state);
   const voteStatus = proposal
@@ -474,12 +494,12 @@ export const apiVettedProposals = or(
   constant([])
 );
 
-export const proposalsWithVoteStatus = createDeepEqualSelector(
+export const proposalsWithVoteSummary = createDeepEqualSelector(
   apiVettedProposals,
   proposals =>
     proposals.map(prop => ({
       ...prop,
-      voteStatus: {}
+      voteSummary: {}
     }))
 );
 
