@@ -7,7 +7,6 @@ import Markdown from "src/componentsv2/Markdown";
 import Join from "src/componentsv2/Join";
 import Link from "src/componentsv2/Link";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
-import AdminContent from "src/componentsv2/AdminContent";
 import Likes from "src/componentsv2/Likes";
 import CopyLink from "src/componentsv2/CopyLink";
 
@@ -34,16 +33,15 @@ const Comment = ({
   numOfReplies,
   numOfNewHiddenReplies,
   highlightAsNew,
+  censorable,
   ...props
 }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
 
-  const censorButton = !censored && (
-    <AdminContent>
-      <Text weight="semibold" className={styles.censor} onClick={onClickCensor}>
-        Censor
-      </Text>
-    </AdminContent>
+  const censorButton = !censored && censorable && (
+    <Text weight="semibold" className={styles.censor} onClick={onClickCensor}>
+      Censor
+    </Text>
   );
 
   return (
@@ -141,7 +139,8 @@ Comment.propTypes = {
   onClickReply: PropTypes.func,
   onClickShowReplies: PropTypes.func,
   numOfReplies: PropTypes.number,
-  numOfNewHiddenReplies: PropTypes.number
+  numOfNewHiddenReplies: PropTypes.number,
+  censorable: PropTypes.bool
 };
 
 export default React.memo(Comment);

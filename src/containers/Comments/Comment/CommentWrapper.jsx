@@ -20,7 +20,8 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     identityError,
     paywallMissing,
     openCensorModal,
-    openLoginModal
+    openLoginModal,
+    isAdmin
   } = useComment();
   const {
     comment: commentText,
@@ -126,6 +127,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     <>
       <Comment
         permalink={`/${recordType}/${recordToken}/comments/${commentid}`}
+        censorable={isAdmin}
         topLevelComment={isThreadParent}
         author={username}
         authorID={userid}
