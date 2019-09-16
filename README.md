@@ -2,8 +2,8 @@
 
 [![Build Status](https://travis-ci.org/decred/politeiagui.svg?branch=master)](https://travis-ci.org/decred/politeiagui)
 
-Politeiagui is the web frontenD utilized for [Politiea](https://github.com/decred/politeia). Currently, 
-there are two different systems built on top of Politeia and Politeiagui:
+Politeiagui is the web frontend used for [Politiea](https://github.com/decred/politeia). Currently, 
+there are two different systems built on top of Politeia and both uses Politeiagui as the web client. They are:
 - Decred's [proposal system](https://proposals.decred.org/). 
 - Decred's [contractor management system](https://cms.decred.org/).
 
@@ -22,7 +22,7 @@ Politeiagui uses node.js and the yarn package manager.
 
 ## Development
 
-**Important:** Politeia is currently going through a redesign and code refactoring in which the old code is being replaced to what we call politeiagui v2. If you want to run the new version skip to [this section instead.](#development-for-v2) The version 2 is, so far, only working for the proposals system. For CMS use the setup below.
+**Important:** Politeiagui is currently going through a UI redesign and code refactoring. Hence, the previous implementation is being replaced to what we call "politeiagui v2" (or just "v2"). If you want to run the new version skip to [this section instead.](#development-for-v2) The version 2 is, so far, only working for the proposals system. For CMS use the setup below.
 
 1. Clone this repository
 
@@ -97,7 +97,7 @@ The full table of options is presented below:
 | ENABLE_COMMENT_VOTE    | true                                                       | false                   | To enable or not the vote on comments                                                                      |
 | TESTNET_GIT_REPOSITORY | "https://github.com/decred-proposals/testnet3/tree/master" | ""                      | The testnet git repository where the public records are stored                                             |
 | MAINNET_GIT_REPOSITORY | "https://github.com/decred-proposals/mainnet/tree/master"  | ""                      | The mainnet git repository where the public records are stored                                             |
-| PAYWALL_CONTENT        | "paywall-politeia"                                         | n                       | Indicate what is the name of the markdown file under `src/contents` to be used for the paywall copy        |
+| PAYWALL_CONTENT        | "paywall-politeia"                                         | ""                       | Indicate what is the name of the markdown file under `src/contents` to be used for the paywall copy        |
 | PRIVACY_POLICY_CONTENT | "privacy-policy"                                           | "privacy-policy-cms"    | Indicate what is the name of the markdown file under `src/contents` to be used for the privacy policy copy |
 
 **Important:** Currently it's only possible to use the CMS or the POLITEIA presets fully. If you want to mix the options from one preset with another, you'll need to modify the code and the API accordingly.
