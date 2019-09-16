@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
+import IconButton from "src/componentsv2/IconButton";
 import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
 import {
   getMarkdownContent,
@@ -23,8 +24,9 @@ import { useFullImageModal } from "src/componentsv2/ProposalForm/hooks";
 import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
 import ModalFullImage from "src/componentsv2/ModalFullImage";
 import VersionPicker from "src/componentsv2/VersionPicker";
+import { useRouter } from "src/componentsv2/Router";
 
-const Proposal = ({ proposal, extended }) => {
+const Proposal = ({ proposal, extended, collapseBodyContent }) => {
   const {
     censorshiprecord,
     files,
@@ -44,6 +46,7 @@ const Proposal = ({ proposal, extended }) => {
     voteBlocksLeft
   } = useProposalVote(censorshiprecord.token);
   const { currentUser } = useLoaderContext();
+  const { history } = useRouter();
   const {
     showFullImageModal,
     openFullImageModal,
@@ -64,6 +67,9 @@ const Proposal = ({ proposal, extended }) => {
   }
   function handleOpenSearchVotesModal() {
     setShowSearchVotesModal(true);
+  }
+  function goToFullProposal() {
+    history.push(proposalURL);
   }
   const onClickFile = f => () => {
     openFullImageModal(f);
@@ -182,10 +188,18 @@ const Proposal = ({ proposal, extended }) => {
                 />
               </Row>
             )}
-            {extended && !!files.length && (
+            {extended && !!files.length && !collapseBodyContent && (
               <Markdown
                 className={styles.markdownContainer}
                 body={getMarkdownContent(files)}
+              />
+            )}
+            {collapseBodyContent && (
+              <IconButton
+                type="expand"
+                className="margin-top-m"
+                size={"xlg"}
+                onClick={goToFullProposal}
               />
             )}
             {isPublicAccessible && !extended && (
