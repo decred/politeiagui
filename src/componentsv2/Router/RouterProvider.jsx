@@ -12,6 +12,14 @@ const routerCtx = createContext();
 
 export const useRouter = () => useContext(routerCtx);
 
+/**
+ * Watch for route changes and triggers the callbackFn when
+ * route changes.
+ *
+ * @param {Boolean} active - if hook is active or not
+ * @param {Function} callbackFn - function that will be
+ * triggered when route changes
+ */
 export const useRouteChanges = (active, callbackFn) => {
   const { location: { pathname } } = useRouter();
   const callback = useMemo(() =>
