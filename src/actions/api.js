@@ -787,6 +787,7 @@ export const onCensorCommentv2 = (email, token, commentid, reason) => {
       })
       .catch(error => {
         dispatch(act.RECEIVE_CENSOR_COMMENT(null, error));
+        throw error;
       });
   });
 };
