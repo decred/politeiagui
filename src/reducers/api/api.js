@@ -16,6 +16,7 @@ import {
   onReceiveManageUser,
   onReceiveNewComment,
   onReceiveProposals,
+  onReceiveProposalsVoteStatus,
   onReceiveProposalsVoteSummary,
   onReceiveProposalVoteResults,
   onReceiveProposalVoteStatus,
@@ -273,7 +274,7 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.REQUEST_PROPOSALS_VOTE_STATUS]: () =>
       request("proposalsVoteStatus", state, action),
     [act.RECEIVE_PROPOSALS_VOTE_STATUS]: () =>
-      onReceiveProposalsVoteSummary(state, action),
+      onReceiveProposalsVoteStatus(state, action),
     [act.REQUEST_PROPOSALS_VOTE_SUMMARY]: () =>
       request("proposalsVoteSummary", state, action),
     [act.RECEIVE_PROPOSALS_VOTE_SUMMARY]: () =>
