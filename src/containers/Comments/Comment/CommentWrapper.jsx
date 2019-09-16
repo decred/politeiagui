@@ -39,6 +39,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
 
   const isRecordAuthor = recordAuthorID === userid;
   const isThreadParent = +parentid === 0 || +commentid === +threadParentID;
+  const censorable = isAdmin && !readOnly;
 
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(isThreadParent);
@@ -127,7 +128,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     <>
       <Comment
         permalink={`/${recordType}/${recordToken}/comments/${commentid}`}
-        censorable={isAdmin}
+        censorable={censorable}
         topLevelComment={isThreadParent}
         author={username}
         authorID={userid}
