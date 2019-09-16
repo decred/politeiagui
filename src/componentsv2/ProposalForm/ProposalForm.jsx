@@ -12,6 +12,7 @@ import ModalMDGuide from "src/componentsv2/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm, useFullImageModal } from "./hooks";
 import useBooleanState from "src/hooks/utils/useBooleanState";
+import { useRouter } from "../Router/RouterProvider";
 
 const ProposalForm = React.memo(function ProposalForm({
   values,
@@ -65,6 +66,16 @@ const ProposalForm = React.memo(function ProposalForm({
 
   const textAreaProps = useMemo(() => ({ tabIndex: 2 }), []);
 
+  const { pastLocations, history } = useRouter();
+  const previousLocation = pastLocations[1];
+  const returnToPreviousLocation = useCallback(() => history.goBack(), [
+    history
+  ]);
+  const returnHome = useCallback(() => history.push("/"), [
+    history
+  ]);
+
+  const goBackOrReturnHome = previousLocation === undefined ? returnHome : returnToPreviousLocation
   return (
     <form onSubmit={handleSubmit}>
       {errors && errors.global && (
@@ -116,6 +127,20 @@ const ProposalForm = React.memo(function ProposalForm({
             Submit
           </Button>
         </div>
+        <DraftSaver submitSuccess={submitSuccess} />
+        <Button 
+        	type="button"
+        	kind="secondary"
+        	onClick={goBackOrReturnHome}>
+        	Cancel
+        </Button>
+        <Button
+          type="submit"
+          kind={!isValid || disableSubmit ? "disabled" : "primary"}
+          loading={isSubmitting}
+        >
+          Submit
+        </Button>
       </div>
     </form>
   );
