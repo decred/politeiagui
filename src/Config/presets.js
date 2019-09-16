@@ -30,7 +30,7 @@ export const CMS = {
   enableAdminInvite: true,
   enableCommentVote: false,
   enablePaywall: false,
-  privacyprivacyPolicyContent: "privacy-policy-cms",
+  privacyPolicyContent: "privacy-policy-cms",
   testnetGitRepository: "",
   mainnetGitRepository: ""
 };

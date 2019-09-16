@@ -2,7 +2,10 @@
 
 [![Build Status](https://travis-ci.org/decred/politeiagui.svg?branch=master)](https://travis-ci.org/decred/politeiagui)
 
-Politeiagui is the web frontent for [Politiea](https://github.com/decred/politeia), Decred's [proposal system](https://proposals.decred.org/). 
+Politeiagui is the web frontenD utilized for [Politiea](https://github.com/decred/politeia). Currently, 
+there are two different systems built on top of Politeia and Politeiagui:
+- Decred's [proposal system](https://proposals.decred.org/). 
+- Decred's [contractor management system](https://cms.decred.org/).
 
 
 ## Requirements
@@ -19,6 +22,7 @@ Politeiagui uses node.js and the yarn package manager.
 
 ## Development
 
+**Important:** Politeia is currently going through a redesign and code refactoring in which the old code is being replaced to what we call politeiagui v2. If you want to run the new version skip to [this section instead.](#development-for-v2) The version 2 is, so far, only working for the proposals system. For CMS use the setup below.
 
 1. Clone this repository
 
@@ -38,9 +42,6 @@ Politeiagui uses node.js and the yarn package manager.
     To run politeiagui using mock APIs that do not communicate with `politeiawww` (useful for working on UI changes only), run the following command:
     
     `yarn && yarn uidev`
-    
-
-    
 
 ## Production
 
@@ -48,6 +49,17 @@ To build politeiagui for production deployment, use the following commands:
 
     yarn && yarn build
     ls build
+
+
+### Development for v2
+
+1. Clone this repository
+2. Install the dependencies and run the application: 
+`yarn && yarn start-v2`
+    
+### Production for v2
+1. Install the dependencies and build the application:
+`yarn && yarn build-v2`
 
 ## Configuration
 
@@ -75,6 +87,20 @@ REACT_APP_PRESET="POLITEIA"
 If the `REACT_APP_PRESET` is specified, all other specified options in the env
 file will be ignored.
 
+The full table of options is presented below:
+
+| Option                 | POLITEIA (default)                                         | CMS                     | Description                                                                                                |
+|------------------------|------------------------------------------------------------|-------------------------|------------------------------------------------------------------------------------------------------------|
+| TITLE                  | "Politeia"                                                 | "Contractor Management" | The title to be used for the website                                                                       |
+| RECORD_TYPE            | "proposal"                                                 | "invoice"               | The main record type name                                                                                  |
+| ENABLE_ADMIN_INVITE    | false                                                      | true                    | To enable or not the UI elements required for admin invite                                                 |
+| ENABLE_COMMENT_VOTE    | true                                                       | false                   | To enable or not the vote on comments                                                                      |
+| TESTNET_GIT_REPOSITORY | "https://github.com/decred-proposals/testnet3/tree/master" | ""                      | The testnet git repository where the public records are stored                                             |
+| MAINNET_GIT_REPOSITORY | "https://github.com/decred-proposals/mainnet/tree/master"  | ""                      | The mainnet git repository where the public records are stored                                             |
+| PAYWALL_CONTENT        | "paywall-politeia"                                         | n                       | Indicate what is the name of the markdown file under `src/contents` to be used for the paywall copy        |
+| PRIVACY_POLICY_CONTENT | "privacy-policy"                                           | "privacy-policy-cms"    | Indicate what is the name of the markdown file under `src/contents` to be used for the privacy policy copy |
+
+**Important:** Currently it's only possible to use the CMS or the POLITEIA presets fully. If you want to mix the options from one preset with another, you'll need to modify the code and the API accordingly.
 
 ## Testing 
 
