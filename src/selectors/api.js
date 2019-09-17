@@ -861,19 +861,17 @@ export const lineItemPayouts = state => {
   const lineItems = [];
   if (invoices) {
     invoices.forEach(invoice => {
-      console.log(invoice);
       const contractorrate = invoice.input.contractorrate / 100;
       invoice.input.lineitems.forEach(lineItem => {
         lineItem.timestamp = invoice.timestamp;
         lineItem.token = invoice.censorshiprecord.token;
         lineItem.labor = (lineItem.labor / 60) * contractorrate;
+        lineItem.description = lineItem.description.replace("#", ""); // This scrubs descriptions of any pounds that screw up CSV export.
         lineItems.push(lineItem);
       });
     });
   }
-  console.log(lineItems);
   lineItems.sort((a, b) => a.timestamp - b.timestamp);
-  console.log(lineItems);
   return lineItems;
 };
 
