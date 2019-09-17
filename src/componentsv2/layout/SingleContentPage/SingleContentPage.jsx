@@ -16,7 +16,7 @@ const SingleContentPage = ({
 }) => {
   useScrollToTop(disableScrollToTop);
   return (
-    <Container className={styles.customContainer}>
+    <Container className={styles.customContainer} singleContent>
       <Header noBorder={true} />
       <Main
         fill
