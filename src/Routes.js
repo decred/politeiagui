@@ -51,7 +51,7 @@ import InviteUser from "./components/InviteUserPage";
 import InviteUserSuccess from "./components/InviteUser/SuccessPage";
 import HomeCMS from "./components/HomeCMS";
 import GeneratePayouts from "./components/GeneratePayouts";
-import LineItemPayouts from "./components/LineItemPayouts";
+import InvoicePayouts from "./components/InvoicePayouts";
 
 const RoutesForCMS = () => {
   return (
@@ -102,8 +102,8 @@ const RoutesForCMS = () => {
         component={GeneratePayouts}
       />
       <AdminAuthenticatedRoute
-        path="/admin/lineitempayouts"
-        component={LineItemPayouts}
+        path="/admin/invoicepayouts"
+        component={InvoicePayouts}
       />
       <AuthenticatedRoute
         path="/user/invoices/:filter?"

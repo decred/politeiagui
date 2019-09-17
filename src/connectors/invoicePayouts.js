@@ -6,7 +6,7 @@ export default connect(
   sel.selectorMap({
     lineItemPayouts: sel.lineItemPayouts,
     error: sel.generatePayoutsError,
-    loading: sel.isApiRequestingLineItemPayouts,
+    loading: sel.isApiRequestingInvoicePayouts,
     loggedInAsEmail: sel.loggedInAsEmail,
     startMonthFilterValue: sel.getStartMonthPayoutFilterValue,
     startYearFilterValue: sel.getStartYearPayoutFilterValue,
@@ -14,7 +14,7 @@ export default connect(
     endYearFilterValue: sel.getEndYearPayoutFilterValue
   }),
   {
-    onLineItemPayouts: act.onLineItemPayouts,
+    onInvoicePayouts: act.onInvoicePayouts,
     onChangeEndPayoutDateFilter: act.onChangeEndPayoutDateFilter,
     onChangeStartPayoutDateFilter: act.onChangeStartPayoutDateFilter,
     onResetStartPayoutDateFilter: act.onResetStartPayoutDateFilter,

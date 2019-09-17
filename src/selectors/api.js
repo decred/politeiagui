@@ -846,15 +846,36 @@ export const setStatusInvoicePayloadStatus = compose(
   setStatusInvoicePayload
 );
 
-export const lineItemPayoutsResponse = getApiResponse("lineItemPayouts");
-export const lineItemPayoutsError = getApiError("lineItemPayouts");
-export const isApiRequestingLineItemPayouts = getIsApiRequesting(
-  "lineItemPayouts"
+export const invoicePayoutsResponse = getApiResponse("invoicePayouts");
+export const invoicePayoutsError = getApiError("invoicePayouts");
+export const isApiRequestingInvoicePayouts = getIsApiRequesting(
+  "invoicePayouts"
 );
-export const lineItemPayouts = compose(
-  get("lineitems"),
-  lineItemPayoutsResponse
+export const invoicePayouts = compose(
+  get("invoices"),
+  invoicePayoutsResponse
 );
+
+export const lineItemPayouts = state => {
+  const invoices = invoicePayouts(state);
+  const lineItems = [];
+  if (invoices) {
+    invoices.forEach(invoice => {
+      console.log(invoice);
+      const contractorrate = invoice.input.contractorrate / 100;
+      invoice.input.lineitems.forEach(lineItem => {
+        lineItem.timestamp = invoice.timestamp;
+        lineItem.token = invoice.censorshiprecord.token;
+        lineItem.labor = (lineItem.labor / 60) * contractorrate;
+        lineItems.push(lineItem);
+      });
+    });
+  }
+  console.log(lineItems);
+  lineItems.sort((a, b) => a.timestamp - b.timestamp);
+  console.log(lineItems);
+  return lineItems;
+};
 
 export const generatePayoutsResponse = getApiResponse("payouts");
 export const generatePayoutsError = getApiError("payouts");

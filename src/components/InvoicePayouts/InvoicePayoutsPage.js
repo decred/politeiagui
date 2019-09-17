@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import lineItemPayouts from "../../connectors/lineItemPayouts";
+import invoicePayouts from "../../connectors/invoicePayouts";
 import { PageLoadingIcon, Link } from "../snew";
 import Message from "../Message";
-import LineItemPayoutsTable from "./LineItemPayoutsTable";
+import InvoicePayoutsTable from "./InvoicePayoutsTable";
 import ExportToCsv from "../ExportToCsv";
 import PayoutFilter from "../PayoutFilter";
 
-const LineItemsPayoutsPage = ({
+const InvoicePayoutsPage = ({
   lineItemPayouts = [],
   error,
   loading,
   loggedInAsEmail,
-  onLineItemPayouts,
+  onInvoicePayouts,
   onChangeStartPayoutDateFilter,
   startMonthFilterValue,
   startYearFilterValue,
@@ -20,15 +20,15 @@ const LineItemsPayoutsPage = ({
   endMonthFilterValue,
   endYearFilterValue
 }) => {
-  const fetchLineItemPayouts = () => {
+  const fetchInvoicePayouts = () => {
     const start = new Date(startYearFilterValue, startMonthFilterValue);
     const end = new Date(endYearFilterValue, endYearFilterValue);
-    onLineItemPayouts(
+    onInvoicePayouts(
       Math.round(start.valueOf() / 1000),
       Math.round(end.valueOf() / 1000)
     );
   };
-  useEffect(fetchLineItemPayouts, []);
+  useEffect(fetchInvoicePayouts, []);
 
   const csvData = lineItemPayouts.map(p => ({
     ...p,
@@ -88,7 +88,7 @@ const LineItemsPayoutsPage = ({
           </ExportToCsv>
 
           {lineItemPayouts && (
-            <LineItemPayoutsTable lineItemPayouts={lineItemPayouts} />
+            <InvoicePayoutsTable lineItemPayouts={lineItemPayouts} />
           )}
         </div>
         <div id="csv-hidden-div" style={{ display: "none" }} />
@@ -105,11 +105,11 @@ const LineItemsPayoutsPage = ({
   );
 };
 
-LineItemsPayoutsPage.propTypes = {
+InvoicePayoutsPage.propTypes = {
   lineItemPayouts: PropTypes.array,
   error: PropTypes.string,
   loading: PropTypes.bool,
-  onLineItemsPayouts: PropTypes.func
+  onInvoicePayouts: PropTypes.func
 };
 
-export default lineItemPayouts(LineItemsPayoutsPage);
+export default invoicePayouts(InvoicePayoutsPage);
