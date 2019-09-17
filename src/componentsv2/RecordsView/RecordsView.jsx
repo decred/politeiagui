@@ -65,10 +65,6 @@ const RecordsView = ({
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
   const tabOption = tabLabels[index];
 
-  useEffect(() => {
-    setHasMore(false);
-  }, [tabOption]);
-
   const filteredTokens = recordTokensByTab[tabOption] || [];
 
   const isMobileScreen = useMediaQuery("(max-width:560px)");
