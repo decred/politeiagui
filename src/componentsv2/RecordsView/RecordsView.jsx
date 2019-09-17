@@ -114,7 +114,8 @@ const RecordsView = ({
     pageSize,
     setHasMore,
     onFetchRecords,
-    itemsOnLoad
+    itemsOnLoad,
+    state.requestedTokens
   ]);
 
   useEffect(() => {
