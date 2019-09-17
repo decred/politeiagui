@@ -67,15 +67,14 @@ const ProposalForm = React.memo(function ProposalForm({
   const textAreaProps = useMemo(() => ({ tabIndex: 2 }), []);
 
   const { pastLocations, history } = useRouter();
-  const previousLocation = pastLocations[1];
   const returnToPreviousLocation = useCallback(() => history.goBack(), [
     history
   ]);
-  const returnHome = useCallback(() => history.push("/"), [
+  const returnToProposalDetail = useCallback(() => history.push(`/proposal/${values.token}`), [
     history
   ]);
 
-  const goBackOrReturnHome = previousLocation === undefined ? returnHome : returnToPreviousLocation
+  const goBackOrReturnHome = values.token !== undefined ? returnToProposalDetail : returnToPreviousLocation;
   return (
     <form onSubmit={handleSubmit}>
       {errors && errors.global && (
