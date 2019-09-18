@@ -6,6 +6,7 @@ import React, {
   useCallback
 } from "react";
 import { Tabs, Tab, useMediaQuery } from "pi-ui";
+import difference from "lodash/difference";
 import LazyList from "src/componentsv2/LazyList";
 import { getRecordsByTabOption } from "./helpers";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
@@ -22,7 +23,7 @@ const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
   return <>{placeholders}</>;
 };
 
-const initialState = { itemsOnLoad: 0 };
+const initialState = { itemsOnLoad: 0, requestedTokens: [] };
 
 const INCREMENT_LOADING_ITEMS = "increment";
 const DECREMENT_LOADING_ITEMS = "decrement";
@@ -30,9 +31,13 @@ const DECREMENT_LOADING_ITEMS = "decrement";
 function reducer(state, action) {
   switch (action.type) {
     case INCREMENT_LOADING_ITEMS:
-      return { itemsOnLoad: state.itemsOnLoad + action.count };
+      return {
+        ...state,
+        itemsOnLoad: state.itemsOnLoad + action.count,
+        requestedTokens: state.requestedTokens.concat(action.tokens)
+      };
     case DECREMENT_LOADING_ITEMS:
-      return { itemsOnLoad: state.itemsOnLoad - action.count };
+      return { ...state, itemsOnLoad: state.itemsOnLoad - action.count };
     default:
       throw new Error();
   }
@@ -71,13 +76,25 @@ const RecordsView = ({
 
   const handleFetchMoreRecords = useCallback(async () => {
     const index = filteredRecords.length;
-    const recordTokensToBeFetched = filteredTokens.slice(
-      index,
-      index + pageSize
+
+    // make sure tokens being requested are different from the ones
+    // already requested
+    const recordTokensToBeFetched = difference(
+      filteredTokens.slice(index, index + pageSize),
+      state.requestedTokens
     );
     setHasMore(false);
     const numOfItemsToBeFetched = recordTokensToBeFetched.length;
-    dispatch({ type: INCREMENT_LOADING_ITEMS, count: numOfItemsToBeFetched });
+
+    // only proceed if there is at least one token to be fetched
+    if (!numOfItemsToBeFetched) return;
+
+    dispatch({
+      type: INCREMENT_LOADING_ITEMS,
+      count: numOfItemsToBeFetched,
+      tokens: recordTokensToBeFetched
+    });
+
     try {
       await onFetchRecords(recordTokensToBeFetched);
       dispatch({ type: DECREMENT_LOADING_ITEMS, count: numOfItemsToBeFetched });
@@ -93,7 +110,8 @@ const RecordsView = ({
     pageSize,
     setHasMore,
     onFetchRecords,
-    itemsOnLoad
+    itemsOnLoad,
+    state.requestedTokens
   ]);
 
   useEffect(() => {
