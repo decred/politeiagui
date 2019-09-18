@@ -152,7 +152,23 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     1027: "An invalid value was entered into labor or expenses.",
     1028: "The invoice has a duplicate payment address, please use a new address.",
     1029: "Invalid dates were requested for line item payouts.",
-    1030: "An attempted edit of invoice included an unauthorized month or year change."
+    1030: "An attempted edit of invoice included an unauthorized month or year change.",
+    1031: "An invalid DCC Type was included in the request.",
+    1032: "Your domain does not match the DCC domain.",
+    1033: "The DCC sponsor statement is malformed.",
+    1034: "The submitted DCC file is malformed, please review and try again.",
+    1035: "This error is currently no implemented.",
+    1036: "There was an invalid status transition detected.",
+    1037: "That email is already being used by another user.",
+    1038: "You do not have the correct contractor status to submit an invoice.",
+    1039: "An invalid nominee was submitted for a DCC.",
+    1040: "The requested DCC was not found.",
+    1041: "Cannot comment/support/oppose a DCC if it's not active.",
+    1042: "Invalid suppport or opposition vote was included, must be aye or nay.",
+    1043: "You have already supported or opposed this DCC.",
+    1044: "You may not support or oppose your own sponsored DCC.",
+    1045: "You are not authorized to complete a DCC request.",
+    1046: "You must include a valid contractor type for a DCC."
   };
 
   const error = errorMessages[errorCode];
