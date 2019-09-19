@@ -44,6 +44,8 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
     verifyUserPubkey(loggedInAsEmail, userPubkey, keyMismatchAction);
   }, [loggedInAsEmail, userPubkey, keyMismatchAction]);
 
+  const pastIdentities = identities.filter(i => !i.isactive);
+  
   const updateKey = useCallback(async () => {
     try {
       await onUpdateUserKey(loggedInAsEmail);
@@ -108,9 +110,16 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
                   "margin-top-s"
                 )}
               >
+                <P>
+                  Your public and private keys constitute your identity. The private key
+                  is used to sign your proposals, comments and any up/down votes on 
+                  Politeia. You can have only one identity active at a time. Your keys 
+                  are stored in your browser by default, so if you use Politeia on multiple 
+                  machines you will need to import your keys before you can participate. 
+                  
+                </P>
                 <P className="margin-bottom-s">
-                The active private key is used to sign proposals and comments. 
-                The public key is used to verify the identity.
+                  Public key stored in your browser:
                 </P>
                 <Text backgroundColor="blueLighter" monospace>
                   {pubkey || userPubkey}
@@ -141,9 +150,17 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
         Past public keys
       </Text>
       <P>
-        List of inactive public keys your account has had in the past.
+        {pastIdentities.length !== 0 ?
+          "List of inactive public keys your account has had in the past."
+        :
+          "This account only had one active public key until now."
+        }
       </P>
-      <Button size="sm" onClick={openShowAllModal}>
+      <Button 
+        size="sm" 
+        kind={pastIdentities.length === 0 ? "disabled" : "primary"} 
+        onClick={openShowAllModal}
+      >
         Show all
       </Button>
       <Text
@@ -184,7 +201,7 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
         onClose={closeShowAllModal}
         title="Past public keys"
       >
-        <IdentityList full identities={identities} />
+        <IdentityList full identities={pastIdentities} />
       </Modal>
     </Card>
   );
