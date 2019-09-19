@@ -74,7 +74,7 @@ const Comment = ({
           {highlightAsNew && !extraSmall && <Text color="gray">new</Text>}
           {!extraSmall && censorButton}
         </Join>
-        {!disableLikes && (
+        {!disableLikes && !censored && (
           <Likes
             disabled={disableLikesClick}
             likes={likesCount}
