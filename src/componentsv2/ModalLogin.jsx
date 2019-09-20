@@ -1,5 +1,5 @@
-import React from "react";
 import { Modal } from "pi-ui";
+import React from "react";
 import LoginForm from "src/containers/User/Login/Form";
 import useOnRouteChange from "src/hooks/utils/useOnRouteChange";
 
@@ -19,6 +19,8 @@ const ModalLogin = ({ title = "Login", onLoggedIn, onClose, ...props }) => {
         onLoggedIn={onLoggedIn}
         hideTitle
         redirectToPrivacyPolicyRoute
+        emailId="modalloginemail"
+        passwordId="modalloginpassword"
       />
     </Modal>
   );
