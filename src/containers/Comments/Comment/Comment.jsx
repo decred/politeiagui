@@ -122,7 +122,6 @@ const Comment = ({
 Comment.propTypes = {
   className: PropTypes.string,
   permalink: PropTypes.string,
-  topLevelComment: PropTypes.bool,
   author: PropTypes.string,
   authorID: PropTypes.string,
   createdAt: PropTypes.number,
