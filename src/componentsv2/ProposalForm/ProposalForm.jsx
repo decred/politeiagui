@@ -12,7 +12,6 @@ import ModalMDGuide from "src/componentsv2/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm, useFullImageModal } from "./hooks";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import { useRouter } from "../Router/RouterProvider";
 
 const ProposalForm = React.memo(function ProposalForm({
   values,
@@ -66,15 +65,14 @@ const ProposalForm = React.memo(function ProposalForm({
 
   const textAreaProps = useMemo(() => ({ tabIndex: 2 }), []);
 
-  const { pastLocations, history } = useRouter();
-  const returnToPreviousLocation = useCallback(() => history.goBack(), [
-    history
-  ]);
-  const returnToProposalDetail = useCallback(() => history.push(`/proposal/${values.token}`), [
-    history
-  ]);
+  const cancelProposalEdits = useCallback(
+  	v => {
+  		setFieldValue("name", values.name);
+      setFieldValue("description", values.description);
+    },
+    [setFieldValue]
+  );
 
-  const goBackOrReturnHome = values.token !== undefined ? returnToProposalDetail : returnToPreviousLocation;
   return (
     <form onSubmit={handleSubmit}>
       {errors && errors.global && (
@@ -116,23 +114,15 @@ const ProposalForm = React.memo(function ProposalForm({
         >
           Formatting Help
         </Button>
-        <div>
-          <DraftSaver submitSuccess={submitSuccess} />
-          <Button
-            type="submit"
-            kind={!isValid || disableSubmit ? "disabled" : "primary"}
-            loading={isSubmitting}
-          >
-            Submit
-          </Button>
-        </div>
         <DraftSaver submitSuccess={submitSuccess} />
-        <Button 
-        	type="button"
-        	kind="secondary"
-        	onClick={goBackOrReturnHome}>
-        	Cancel
-        </Button>
+        {values.token &&
+	        <Button 
+	        	type="button"
+	        	kind="secondary"
+	        	onClick={cancelProposalEdits}>
+	        	Cancel
+	        </Button>
+      	}
         <Button
           type="submit"
           kind={!isValid || disableSubmit ? "disabled" : "primary"}
