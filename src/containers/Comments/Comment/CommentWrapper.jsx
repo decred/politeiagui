@@ -15,7 +15,6 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     userLoggedIn,
     recordToken,
     recordType,
-    threadParentID,
     readOnly,
     identityError,
     paywallMissing,
@@ -32,7 +31,6 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     timestamp,
     username,
     userid,
-    parentid,
     isNew,
     sumOfNewDescendants
   } = comment;
