@@ -210,6 +210,13 @@ describe("test api reducer", () => {
       "newComment",
       {
         ...state,
+        vetted: {
+          ...state.vetted,
+          response: {
+            ...state.vetted.response,
+            proposals: []
+          }
+        },
         proposalComments: {
           ...state.proposalComments,
           response: {
@@ -408,7 +415,7 @@ describe("test api reducer", () => {
     );
   });
 
-  test("correctly updates state for onReceiveNewComment, adds new comment and nothing else", () => {
+  test("correctly updates state for onReceiveNewComment, adds new comment and update vetted", () => {
     const action = {
       type: act.RECEIVE_NEW_COMMENT,
       payload: {
