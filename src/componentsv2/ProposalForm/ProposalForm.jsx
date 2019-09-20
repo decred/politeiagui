@@ -70,7 +70,7 @@ const ProposalForm = React.memo(function ProposalForm({
   		setFieldValue("name", values.name);
       setFieldValue("description", values.description);
     },
-    [setFieldValue]
+    [setFieldValue, values.name, values.description]
   );
 
   return (
