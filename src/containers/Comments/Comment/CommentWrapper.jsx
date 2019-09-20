@@ -42,7 +42,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
   const censorable = isAdmin && !readOnly;
 
   const [showReplyForm, setShowReplyForm] = useState(false);
-  const [showReplies, setShowReplies] = useState(isThreadParent);
+  const [showReplies, setShowReplies] = useState(true);
 
   const handleToggleReplyForm = useCallback(() => {
     setShowReplyForm(!showReplyForm);
