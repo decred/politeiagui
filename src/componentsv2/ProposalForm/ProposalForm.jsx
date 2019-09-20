@@ -26,7 +26,8 @@ const ProposalForm = React.memo(function ProposalForm({
   submitSuccess,
   disableSubmit,
   openMDGuideModal,
-  openFullImageModal
+  openFullImageModal,
+  initialValues
 }) {
   const handleDescriptionChange = useCallback(
     v => {
@@ -64,6 +65,14 @@ const ProposalForm = React.memo(function ProposalForm({
   );
 
   const textAreaProps = useMemo(() => ({ tabIndex: 2 }), []);
+
+  const cancelProposalEdits = useCallback(
+  	v => {
+  		setFieldValue("name", initialValues.name);
+      setFieldValue("description", initialValues.description);
+    },
+    [setFieldValue, initialValues]
+  );
 
   return (
     <form onSubmit={handleSubmit}>
@@ -106,16 +115,22 @@ const ProposalForm = React.memo(function ProposalForm({
         >
           Formatting Help
         </Button>
-        <div>
-          <DraftSaver submitSuccess={submitSuccess} />
-          <Button
-            type="submit"
-            kind={!isValid || disableSubmit ? "disabled" : "primary"}
-            loading={isSubmitting}
-          >
-            Submit
-          </Button>
-        </div>
+        <DraftSaver submitSuccess={submitSuccess} />
+        {values.token &&
+	        <Button 
+	        	type="button"
+	        	kind="secondary"
+	        	onClick={cancelProposalEdits}>
+	        	Cancel
+	        </Button>
+      	}
+        <Button
+          type="submit"
+          kind={!isValid || disableSubmit ? "disabled" : "primary"}
+          loading={isSubmitting}
+        >
+          Submit
+        </Button>
       </div>
     </form>
   );
@@ -176,7 +191,8 @@ const ProposalFormWrapper = ({
               submitSuccess,
               disableSubmit,
               openFullImageModal,
-              openMDGuideModal
+              openMDGuideModal,
+              initialValues
             }}
           />
         )}
