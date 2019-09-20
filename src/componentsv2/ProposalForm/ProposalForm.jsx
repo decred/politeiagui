@@ -26,7 +26,8 @@ const ProposalForm = React.memo(function ProposalForm({
   submitSuccess,
   disableSubmit,
   openMDGuideModal,
-  openFullImageModal
+  openFullImageModal,
+  initialValues
 }) {
   const handleDescriptionChange = useCallback(
     v => {
@@ -67,10 +68,10 @@ const ProposalForm = React.memo(function ProposalForm({
 
   const cancelProposalEdits = useCallback(
   	v => {
-  		setFieldValue("name", values.name);
-      setFieldValue("description", values.description);
+  		setFieldValue("name", initialValues.name);
+      setFieldValue("description", initialValues.description);
     },
-    [setFieldValue, values.name, values.description]
+    [setFieldValue, initialValues]
   );
 
   return (
@@ -190,7 +191,8 @@ const ProposalFormWrapper = ({
               submitSuccess,
               disableSubmit,
               openFullImageModal,
-              openMDGuideModal
+              openMDGuideModal,
+              initialValues
             }}
           />
         )}
