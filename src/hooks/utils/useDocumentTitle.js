@@ -2,10 +2,10 @@ import { useEffect } from "react";
 
 const setHTMLTitle = title => (document.title = title);
 
-export function useDocumentTitle(title) {
-  title = title || "";
+export function useDocumentTitle(newTitle, originalTitle) {
+  newTitle = newTitle || "";
   useEffect(() => {
-    setHTMLTitle(title);
-    return () => setHTMLTitle("meeee");
-  }, [title]);
+    setHTMLTitle(newTitle);
+    return () => setHTMLTitle(originalTitle);
+  }, [newTitle]);
 }
