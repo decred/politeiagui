@@ -4,10 +4,10 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useConfig } from "src/Config";
 import { capitalize } from "src/utils/strings";
 import {
+  Route,
   AdminAuthenticatedRoute,
   AuthenticatedRoute,
-  NotAuthenticatedRoute,
-  RouteWithTitle
+  NotAuthenticatedRoute
 } from "src/containers/Routes";
 import PageNotFound from "./NotFound";
 import PageProposalsAdmin from "./Proposals/Admin";
@@ -33,7 +33,7 @@ const Routes = ({ location }) => {
     <TransitionGroup>
       <CSSTransition key={location.key} classNames="fade" timeout={300}>
         <Switch location={location}>
-          <RouteWithTitle 
+          <Route 
             path="/" 
             title="Public Proposals" 
             exact 
@@ -90,7 +90,7 @@ const Routes = ({ location }) => {
             exact
             component={PageUserSearch}
           />
-          <RouteWithTitle
+          <Route
             path="/user/:userid" 
             title="User Detail"
             exact 
@@ -104,13 +104,13 @@ const Routes = ({ location }) => {
             exact
             component={PageProposalsUnvetted}
           />
-          <RouteWithTitle
+          <Route
             path={`/${recordType}/:token`}
             title={`${capitalize(recordType)} Detail`}
             exact
             component={PageProposalDetail}
           />
-          <RouteWithTitle
+          <Route
             path={`/${recordType}/:token/comments/:commentid`}
             title={`${capitalize(recordType)} Detail`}
             exact
@@ -134,7 +134,7 @@ const Routes = ({ location }) => {
             exact
             component={PageProposalsAdmin}
           />
-          <RouteWithTitle title="Page Not Found" path="*" component={PageNotFound} />
+          <Route title="Page Not Found" path="*" component={PageNotFound} />
         </Switch>
       </CSSTransition>
     </TransitionGroup>

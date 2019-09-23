@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import RouteWithTitle from "./RouteWithTitle";
+import Route from "./Route";
 import { useLoaderContext } from "src/Appv2/Loader";
 
 const AdminAuthenticatedRoute = ({ history, ...props }) => {
@@ -11,7 +11,7 @@ const AdminAuthenticatedRoute = ({ history, ...props }) => {
       history.push("/");
     }
   }, [initDone, currentUser, history]);
-  return initDone && !!currentUser && <RouteWithTitle {...props} />;
+  return initDone && !!currentUser && <Route {...props} />;
 };
 
 export default withRouter(AdminAuthenticatedRoute);

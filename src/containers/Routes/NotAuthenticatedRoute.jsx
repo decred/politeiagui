@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { useLoaderContext } from "src/Appv2/Loader";
-import RouteWithTitle from "./RouteWithTitle";
+import Route from "./Route";
 
 const NotAuthenticatedRoute = ({ history, ...props }) => {
   const { initDone, currentUser } = useLoaderContext();
@@ -11,7 +11,7 @@ const NotAuthenticatedRoute = ({ history, ...props }) => {
       history.push("/");
     }
   }, [initDone, currentUser, history]);
-  return <RouteWithTitle {...props} />;
+  return <Route {...props} />;
 };
 
 export default withRouter(NotAuthenticatedRoute);
