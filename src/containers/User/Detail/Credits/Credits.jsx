@@ -122,7 +122,7 @@ const Credits = () => {
     <Message kind="error">
       Only admins or the user himself can access this route.
     </Message>
-  ) : isApiRequestingUserProposalCredits && !proposalCreditPurchases.length ? (
+  ) : isApiRequestingUserProposalCredits || !proposalCreditPurchases.length ? (
     <div className={styles.spinnerWrapper}>
       <Spinner invert />
     </div>
