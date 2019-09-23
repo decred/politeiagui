@@ -3,7 +3,7 @@ import { Link } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import Proposal from "src/componentsv2/Proposal";
 import styles from "./Detail.module.css";
-import { useProposal } from "./hooks";
+import { useProposal, usePageTitle } from "./hooks";
 import Comments from "src/containers/Comments";
 import ProposalLoader from "src/componentsv2/Proposal/ProposalLoader";
 import { getCommentBlockedReason } from "./helpers";
@@ -29,6 +29,7 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
     proposal && (isPublicProposal(proposal) || isAbandonedProposal(proposal));
   const canReceiveComments =
     isPublicProposal(proposal) && !isVotingFinishedProposal(voteSummary);
+  usePageTitle(proposal && proposal.name);
 
   const { pastLocations, history } = useRouter();
 

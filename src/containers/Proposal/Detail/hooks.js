@@ -44,6 +44,24 @@ const proposalWithFilesOrNothing = proposal => {
     : null;
 };
 
+const getCurrentHTMLTitle = () => {
+  return document.title;
+};
+
+const setHTMLTitle = title => {
+  return (document.title = title);
+};
+
+export function usePageTitle(title) {
+  const [originalTitle, setOriginalTitle] = useState();
+  useEffect(() => {
+    const originalTitle = getCurrentHTMLTitle();
+    setOriginalTitle(originalTitle);
+    setHTMLTitle(title || "");
+    return () => setHTMLTitle(originalTitle);
+  }, [title, originalTitle, setOriginalTitle]);
+}
+
 export function useProposal(ownProps) {
   const {
     error,
