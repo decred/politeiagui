@@ -44,13 +44,9 @@ const proposalWithFilesOrNothing = proposal => {
     : null;
 };
 
-const getCurrentHTMLTitle = () => {
-  return document.title;
-};
+const getCurrentHTMLTitle = () => document.title;
 
-const setHTMLTitle = title => {
-  return (document.title = title);
-};
+const setHTMLTitle = title => (document.title = title);
 
 export function usePageTitle(title) {
   const [originalTitle, setOriginalTitle] = useState();
