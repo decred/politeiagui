@@ -229,7 +229,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
                     className="margin-right-s"
                     label="Download Proposal Bundle"
                   />
-                  {isPublic && !!numcomments && (
+                  {isPublic && !!numcomments && !collapseBodyContent && (
                     <DownloadComments
                       recordToken={proposalToken}
                       className={styles.downloadCommentsLink}
