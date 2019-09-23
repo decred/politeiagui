@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { Route, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import RouteWithTitle from "./RouteWithTitle";
 import { useLoaderContext } from "src/Appv2/Loader";
 
 const AuthenticatedRoute = ({ history, ...props }) => {
@@ -10,7 +11,7 @@ const AuthenticatedRoute = ({ history, ...props }) => {
       history.push("/");
     }
   }, [initDone, currentUser, history]);
-  return <Route {...props} />;
+  return <RouteWithTitle {...props} />;
 };
 
 export default withRouter(AuthenticatedRoute);
