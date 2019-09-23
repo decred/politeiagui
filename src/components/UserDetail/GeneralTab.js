@@ -261,9 +261,12 @@ class GeneralTab extends React.Component {
             ) : (
               <div className="monospace no-text-overflow">
                 {pubkeyStatus !== PUB_KEY_STATUS_LOADED ||
-                user.identities[user.identities.length - 1].pubkey !== pubkey
-                  ? user.identities[user.identities.length - 1].pubkey
-                  : "Loading public key..."}
+                user.identities.length > 1
+                  ? user.identities[user.identities.length - 1].pubkey !==
+                    pubkey
+                    ? user.identities[user.identities.length - 1].pubkey
+                    : "Loading public key..."
+                  : "No Idenities available"}
               </div>
             )}
           </Field>

@@ -1,7 +1,7 @@
 import { Button, Link as UILink, Text, TextInput } from "pi-ui";
-import React, { useState, useCallback } from "react";
-import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
+import React, { useCallback, useState } from "react";
+import { withRouter } from "react-router-dom";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import ModalPrivacyPolicy from "src/componentsv2/ModalPrivacyPolicy";
 import { useLogin } from "./hooks";
@@ -10,7 +10,9 @@ const LoginForm = ({
   hideTitle,
   onLoggedIn,
   redirectToPrivacyPolicyRoute,
-  history
+  history,
+  emailId,
+  passwordId
 }) => {
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
   const { onLogin, validationSchema } = useLogin();
@@ -70,17 +72,19 @@ const LoginForm = ({
               <ErrorMessage>{errors.global.toString()}</ErrorMessage>
             )}
             <TextInput
+              id={emailId}
               label="Email"
-              id="email"
+              name="email"
               value={values.email}
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.email && errors.email}
             />
             <TextInput
-              id="password"
+              id={passwordId}
               label="Password"
               type="password"
+              name="password"
               value={values.password}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -121,7 +125,14 @@ const LoginForm = ({
 
 LoginForm.propTypes = {
   hideTitle: PropTypes.bool,
-  onLoggedIn: PropTypes.func
+  onLoggedIn: PropTypes.func,
+  emailId: PropTypes.string,
+  passwordId: PropTypes.string
+};
+
+LoginForm.defaultProps = {
+  emailId: "loginemail",
+  passwordId: "loginpassword"
 };
 
 export default withRouter(LoginForm);
