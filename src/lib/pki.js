@@ -5,6 +5,9 @@ import util from "tweetnacl-util";
 import get from "lodash/fp/get";
 
 export const STORAGE_PREFIX = "ed255191~";
+export const IDENTITY_ERROR =
+  "User identity not found. You need tor restore it from a backup or generate a new one. If this is a verification from an emailed link, please esure to open it in the same browser where you requested it.";
+
 export const toHex = x => Buffer.from(toUint8Array(x)).toString("hex");
 
 export const toByteArray = str => {
@@ -31,14 +34,16 @@ export const myPubKeyHex = email =>
   myPublicKey(email)
     .then(keys => toHex(keys))
     .catch(() => {
-      throw new Error(
-        "Failed to load user identity. You need tor restore it from a backup or generate a new one."
-      );
+      throw new Error(IDENTITY_ERROR);
     });
 export const sign = (email, msg) =>
-  myKeyPair(email).then(({ secretKey }) =>
-    nacl.sign.detached(toUint8Array(msg), toUint8Array(secretKey))
-  );
+  myKeyPair(email)
+    .then(({ secretKey }) =>
+      nacl.sign.detached(toUint8Array(msg), toUint8Array(secretKey))
+    )
+    .catch(() => {
+      throw new Error(IDENTITY_ERROR);
+    });
 export const signString = (email, msg) => sign(email, util.decodeUTF8(msg));
 export const signHex = (email, msg) => sign(email, msg).then(toHex);
 export const signStringHex = (email, msg) => signString(email, msg).then(toHex);
