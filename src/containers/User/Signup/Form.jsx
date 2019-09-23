@@ -89,7 +89,8 @@ const SignupForm = () => {
               )}
               <TextInput
                 label="Email"
-                id="email"
+                id="signupemail"
+                name="email"
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -98,6 +99,7 @@ const SignupForm = () => {
               <TextInput
                 label="Username"
                 id="username"
+                name="username"
                 value={values.username}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -105,9 +107,10 @@ const SignupForm = () => {
               />
 
               <TextInput
-                id="password"
+                id="signuppassword"
                 label="Password"
                 type="password"
+                name="password"
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -117,6 +120,7 @@ const SignupForm = () => {
                 id="verify_password"
                 label="Verify Password"
                 type="password"
+                name="verify_password"
                 value={values.verify_password}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -126,6 +130,7 @@ const SignupForm = () => {
                 <TextInput
                   label="Verification Token"
                   id="verificationtoken"
+                  name="verificationtoken"
                   value={values.verificationtoken}
                   onChange={handleChange}
                   onBlur={handleBlur}
