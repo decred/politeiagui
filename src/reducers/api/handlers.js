@@ -1,25 +1,25 @@
+import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/fp/get";
 import map from "lodash/fp/map";
 import unionWith from "lodash/unionWith";
-import cloneDeep from "lodash/cloneDeep";
-import { receive } from "../util";
 import {
-  PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_STATUS_CENSORED,
-  PROPOSAL_STATUS_UNREVIEWED_CHANGES,
-  PROPOSAL_STATUS_PUBLIC,
+  MANAGE_USER_CLEAR_USER_PAYWALL,
+  MANAGE_USER_DEACTIVATE,
+  MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
+  MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
+  MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
+  MANAGE_USER_REACTIVATE,
+  MANAGE_USER_UNLOCK,
   PROPOSAL_STATUS_ABANDONED,
+  PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_STATUS_PUBLIC,
+  PROPOSAL_STATUS_UNREVIEWED,
+  PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_AUTHORIZED,
-  PROPOSAL_VOTING_NOT_AUTHORIZED,
-  MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
-  MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
-  MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
-  MANAGE_USER_CLEAR_USER_PAYWALL,
-  MANAGE_USER_UNLOCK,
-  MANAGE_USER_DEACTIVATE,
-  MANAGE_USER_REACTIVATE
+  PROPOSAL_VOTING_NOT_AUTHORIZED
 } from "../../constants";
+import { receive } from "../util";
 
 export const onReceiveSetStatus = (state, action) => {
   state = receive("setStatusProposal", state, action);
@@ -115,8 +115,24 @@ export const onReceiveCensoredComment = (state, action) => {
 export const onReceiveNewComment = (state, action) => {
   state = receive("newComment", state, action);
   if (action.error) return state;
+  const proposalToken = action.payload.token;
+  let newProposals = [];
+  if (state.vetted.response && state.vetted.response.proposals) {
+    newProposals = state.vetted.response.proposals.map(p =>
+      p.censorshiprecord.token === proposalToken
+        ? { ...p, numcomments: p.numcomments + 1 }
+        : p
+    );
+  }
   return {
     ...state,
+    vetted: {
+      ...state.vetted,
+      response: {
+        ...state.vetted.response,
+        proposals: [...newProposals]
+      }
+    },
     proposalComments: {
       ...state.proposalComments,
       response: {
