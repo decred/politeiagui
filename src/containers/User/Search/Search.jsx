@@ -5,7 +5,8 @@ import {
   RadioButtonGroup,
   Table,
   Card,
-  Message
+  Message,
+  Link,
 } from "pi-ui";
 import { Formik } from "formik";
 import styles from "./Search.module.css";
@@ -14,7 +15,11 @@ import { useSearchUser } from "./hooks";
 import HelpMessage from "src/componentsv2/HelpMessage";
 
 const getFormattedSearchResults = (users = []) =>
-  users.map(u => ({ Username: u.username, Email: u.email, ID: u.id }));
+  users.map(u => ({ 
+  	Username: u.username, 
+  	Email: u.email, 
+  	ID: <Link href={`/user/${u.id}`}>{u.id}</Link> 
+ }));
 
 const UserSearch = ({ TopBanner, PageDetails, Sidebar, Main, Title }) => {
   const { onSearchUser, searchResult } = useSearchUser();
