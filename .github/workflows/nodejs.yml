@@ -1,5 +1,5 @@
 name: Build and Test
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build:
@@ -15,17 +15,20 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: xvfb run
+      run: |
+        export DISPLAY=:99.0
+        Xvfb :99.0 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
     - name: yarn install
-       run: yarn install --network-concurrency 1
+      run: yarn install --network-concurrency 1
     - name: linter checks
-       run: yarn lint
+      run: yarn lint
     - name: tests
-       run: |
-         export DISPLAY=:99.0
-         yarn run uidev &
-         yarn test
-         scripts/serverUpChecker.sh
+      run: |
+        yarn run uidev &
+        yarn test
+        scripts/serverUpChecker.sh
     - name: build
-       run: yarn build
-       env:
-         CI: true
+      run: yarn build
+      env:
+        CI: true
