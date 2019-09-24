@@ -1,6 +1,7 @@
 import React from "react";
 import { Switch, withRouter } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import * as sel from "src/selectors";
 import { useConfig } from "src/Config";
 import { capitalize } from "src/utils/strings";
 import {
@@ -33,11 +34,11 @@ const Routes = ({ location }) => {
     <TransitionGroup>
       <CSSTransition key={location.key} classNames="fade" timeout={300}>
         <Switch location={location}>
-          <Route 
-            path="/" 
-            title="Public Proposals" 
-            exact 
-            component={PageProposalsPublicList} 
+          <Route
+            path="/"
+            title="Public Proposals"
+            exact
+            component={PageProposalsPublicList}
           />
           <NotAuthenticatedRoute
             path="/user/login"
@@ -91,10 +92,10 @@ const Routes = ({ location }) => {
             component={PageUserSearch}
           />
           <Route
-            path="/user/:userid" 
+            path="/user/:userid"
             title="User Detail"
-            exact 
-            component={PageUserDetail} 
+            exact
+            component={PageUserDetail}
           />
 
           {/* Record routes */}
@@ -107,12 +108,14 @@ const Routes = ({ location }) => {
           <Route
             path={`/${recordType}/:token`}
             title={`${capitalize(recordType)} Detail`}
+            titleSelector={sel.proposalName}
             exact
             component={PageProposalDetail}
           />
           <Route
             path={`/${recordType}/:token/comments/:commentid`}
             title={`${capitalize(recordType)} Detail`}
+            titleSelector={sel.proposalName}
             exact
             component={PageProposalDetail}
           />
