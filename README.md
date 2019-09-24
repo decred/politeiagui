@@ -1,6 +1,6 @@
 # Politeia GUI
 
-[![Build Status](https://travis-ci.org/decred/politeiagui.svg?branch=master)](https://travis-ci.org/decred/politeiagui)
+[![Build Status](https://github.com/decred/politeiagui/workflows/Build%20and%20Test/badge.svg)](https://github.com/decred/politeiagui/actions)
 
 Politeiagui is the web frontend used for [Politiea](https://github.com/decred/politeia). Currently, 
 there are two different systems built on top of Politeia and both uses Politeiagui as the web client. They are:
@@ -115,7 +115,7 @@ Test coverage is currently provided for (`actions/*`), (`lib/*, reducers/*`) and
 Relevant libraries/modules used for testing are:
 
  - [Jest](https://facebook.github.io/jest/docs/en/getting-started.html) - Javascript testing
- - [fetch-mock](http://www.wheresrhys.co.uk/fetch-mock/api) - Mock http requests
+ - [fetch-mock](https://www.wheresrhys.co.uk/fetch-mock/) - Mock http requests
  - [redux-mock-store](https://github.com/dmitry-zaets/redux-mock-store) and [redux-actions-assertions](https://github.com/redux-things/redux-actions-assertions) for testing redux actions.
 
 
