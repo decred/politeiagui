@@ -21,11 +21,11 @@ import {
 } from "../../constants";
 import { receive } from "../util";
 
+const getProposalToken = prop => get(["censorshiprecord", "token"], prop);
+
 export const onReceiveSetStatus = (state, action) => {
   state = receive("setStatusProposal", state, action);
   if (action.error) return state;
-
-  const getProposalToken = prop => get(["censorshiprecord", "token"], prop);
 
   const updatedProposal = {
     ...action.payload.proposal,
@@ -117,15 +117,31 @@ export const onReceiveNewComment = (state, action) => {
   if (action.error) return state;
   const proposalToken = action.payload.token;
   let newProposals = [];
+  const incNumOfComments = proposal => ({
+    ...proposal,
+    numcomments: proposal.numcomments + 1
+  });
+
   if (state.vetted.response && state.vetted.response.proposals) {
     newProposals = state.vetted.response.proposals.map(p =>
-      p.censorshiprecord.token === proposalToken
-        ? { ...p, numcomments: p.numcomments + 1 }
-        : p
+      getProposalToken(p) === proposalToken ? incNumOfComments(p) : p
     );
   }
+
+  const viewedProposal = get(["proposal", "response", "proposal"], state);
+
   return {
     ...state,
+    proposal:
+      viewedProposal && getProposalToken(viewedProposal) === proposalToken
+        ? {
+            ...state.proposal,
+            response: {
+              ...state.proposal.response,
+              proposal: incNumOfComments(viewedProposal)
+            }
+          }
+        : state.proposal,
     vetted: {
       ...state.vetted,
       response: {

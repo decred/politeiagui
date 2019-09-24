@@ -161,6 +161,7 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RESET_SYNC_LIKE_COMMENT]: () => onResetSyncLikeComment(state),
     [act.REQUEST_LIKED_COMMENTS]: () => request("commentslikes", state, action),
     [act.RECEIVE_LIKED_COMMENTS]: () => receive("commentslikes", state, action),
+    [act.RESET_LIKED_COMMENTS]: () => reset("commentslikes", state, action),
     [act.REQUEST_EDIT_USER]: () => request("editUser", state, action),
     [act.RECEIVE_EDIT_USER]: () => receive("editUser", state, action),
     [act.RECEIVE_EDIT_USER]: () => receive("editUser", state, action),

@@ -16,6 +16,7 @@ import { closeModal, confirmWithModal, openModal } from "./modal";
 
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onResetInvoice = act.RESET_INVOICE;
+export const onResetLikedComments = act.RESET_LIKED_COMMENTS;
 
 export const onSetEmail = act.SET_EMAIL;
 

@@ -22,7 +22,8 @@ const mapDispatchToProps = {
   onFetchLikes: act.onFetchLikedComments,
   onLikeComment: act.onLikeComment,
   onResetComments: act.onResetComments,
-  onCensorComment: act.onCensorCommentv2
+  onCensorComment: act.onCensorCommentv2,
+  onResetCommentsLikes: act.onResetLikedComments
 };
 
 export function useComments(ownProps) {
@@ -33,6 +34,7 @@ export function useComments(ownProps) {
     onResetComments,
     onLikeComment: onLikeCommentAction,
     commentsLikes,
+    onResetCommentsLikes,
     ...fromRedux
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
   const { enableCommentVote, recordType } = useConfig();
@@ -46,18 +48,12 @@ export function useComments(ownProps) {
 
   useEffect(
     function handleFetchOfComments() {
-      if (recordToken && numOfComments > 0) {
+      if (needsToFetchData) {
         onFetchComments(recordToken);
       }
       return () => onResetComments();
     },
-    [
-      onFetchComments,
-      onResetComments,
-      needsToFetchData,
-      recordToken,
-      numOfComments
-    ]
+    [onFetchComments, onResetComments, needsToFetchData, recordToken]
   );
 
   useEffect(
@@ -65,9 +61,12 @@ export function useComments(ownProps) {
       if (needsToFetchData && enableCommentVote && userLoggedIn) {
         onFetchLikes(recordToken);
       }
+
+      return () => onResetCommentsLikes();
     },
     [
       onFetchLikes,
+      onResetCommentsLikes,
       enableCommentVote,
       needsToFetchData,
       userLoggedIn,
