@@ -1,10 +1,9 @@
 import React from "react";
-import { useConfig } from "src/Config";
+import { useDocumentTitle } from "src/hooks/utils/useDocumentTitle";
 import { Route as Router } from "react-router-dom";
 
 const Route = ({ title, ...props }) => {
-  const { title: defaultTitle } = useConfig();
-  document.title = title || defaultTitle;
+  useDocumentTitle(title);
   return <Router {...props} />;
 }
 

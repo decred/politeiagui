@@ -18,8 +18,7 @@ import {
 } from "src/containers/Proposal/Actions";
 import { useProposalVote } from "../hooks";
 import { useRouter } from "src/componentsv2/Router";
-import { useDocumentTitle } from "../../../hooks/utils/useDocumentTitle";
-import { useConfig } from "../../../Config";
+import { useDocumentTitle } from "src/hooks/utils/useDocumentTitle";
 
 const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
   const { proposal, loading, threadParentID } = useProposal({ match });
@@ -32,8 +31,7 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
   const canReceiveComments =
     isPublicProposal(proposal) && !isVotingFinishedProposal(voteSummary);
 
-  const { title } = useConfig();
-  useDocumentTitle(proposal && proposal.name, title);
+  useDocumentTitle(proposal && proposal.name);
 
   const { pastLocations, history } = useRouter();
 
