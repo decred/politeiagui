@@ -43,7 +43,6 @@ const UserDetail = ({
   match
 }) => {
   const { user, isAdmin, userId, loggedInAsUserId } = useUserDetail({ match });
-  console.log(user);
   const {
     loggedInAsEmail,
     userPubkey,
