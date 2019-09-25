@@ -44,6 +44,8 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
     verifyUserPubkey(loggedInAsEmail, userPubkey, keyMismatchAction);
   }, [loggedInAsEmail, userPubkey, keyMismatchAction]);
 
+  const pastIdentities = identities.filter(i => !i.isactive);
+  
   const updateKey = useCallback(async () => {
     try {
       await onUpdateUserKey(loggedInAsEmail);
@@ -108,6 +110,17 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
                   "margin-top-s"
                 )}
               >
+                <P>
+                  Your public and private keys constitute your identity. The private key
+                  is used to sign your proposals, comments and any up/down votes on 
+                  Politeia. You can have only one identity active at a time. Your keys 
+                  are stored in your browser by default, so if you use Politeia on multiple 
+                  machines you will need to import your keys before you can participate. 
+                  
+                </P>
+                <P className="margin-bottom-s">
+                  Public key stored in your browser:
+                </P>
                 <Text backgroundColor="blueLighter" monospace>
                   {pubkey || userPubkey}
                 </Text>
@@ -136,7 +149,18 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
       >
         Past public keys
       </Text>
-      <Button size="sm" onClick={openShowAllModal}>
+      <P>
+        {pastIdentities.length !== 0 ?
+          "List of inactive public keys your account has had in the past."
+        :
+          "This account only had one active public key until now."
+        }
+      </P>
+      <Button 
+        size="sm" 
+        kind={pastIdentities.length === 0 ? "disabled" : "primary"} 
+        onClick={openShowAllModal}
+      >
         Show all
       </Button>
       <Text
@@ -150,6 +174,10 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
       >
         User ID
       </Text>
+      <P className="margin-bottom-s">
+        Unique 16-byte UUID, as defined in <a href="http://tools.ietf.org/html/rfc4122">
+        RFC 4122</a>, used to identify your user.
+      </P>
       <Text backgroundColor="blueLighter" monospace>
         {userID}
       </Text>
@@ -173,7 +201,7 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
         onClose={closeShowAllModal}
         title="Past public keys"
       >
-        <IdentityList full identities={identities} />
+        <IdentityList full identities={pastIdentities} />
       </Modal>
     </Card>
   );
