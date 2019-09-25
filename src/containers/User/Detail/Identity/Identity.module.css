@@ -13,7 +13,7 @@
   display: flex;
 }
 
-.lastButton {
+.importButton {
   margin-right: var(--spacing-1);
 }
 
