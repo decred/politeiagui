@@ -2,7 +2,6 @@ import compose from "lodash/fp/compose";
 import get from "lodash/fp/get";
 import isEqual from "lodash/isEqual";
 import { useEffect, useState } from "react";
-import usePolicy from "src/hooks/api/usePolicy";
 import * as act from "src/actions";
 import {
   MANAGE_USER_CLEAR_USER_PAYWALL,
@@ -13,6 +12,7 @@ import {
   MANAGE_USER_REACTIVATE,
   MANAGE_USER_UNLOCK
 } from "src/constants";
+import usePolicy from "src/hooks/api/usePolicy";
 import { arg, or } from "src/lib/fp";
 import { useRedux } from "src/redux";
 import * as sel from "src/selectors";
@@ -179,6 +179,54 @@ export function useManageUser(ownProps) {
     mapManageUserDispatchToProps
   );
   return { ...fromRedux, validateUUID };
+}
+
+export function useMarkPasswordAsExpiredConfirmModal() {
+  const [
+    showMarkPasswordAsExpiredConfirmModal,
+    setShowMarkPasswordAsExpiredConfirmModal
+  ] = useState(false);
+  const openMarkPasswordAsExpiredConfirmModal = () =>
+    setShowMarkPasswordAsExpiredConfirmModal(true);
+  const closeMarkPasswordAsExpiredConfirmModal = () =>
+    setShowMarkPasswordAsExpiredConfirmModal(false);
+  return {
+    showMarkPasswordAsExpiredConfirmModal,
+    openMarkPasswordAsExpiredConfirmModal,
+    closeMarkPasswordAsExpiredConfirmModal
+  };
+}
+
+export function useMarkUpdateKeyAsExpiredConfirmModal() {
+  const [
+    showMarkUpdateKeyAsExpiredConfirmModal,
+    setShowMarkUpdateKeyAsExpiredConfirmModal
+  ] = useState(false);
+  const openMarkUpdateKeyAsExpiredConfirmModal = () =>
+    setShowMarkUpdateKeyAsExpiredConfirmModal(true);
+  const closeMarkUpdateKeyAsExpiredConfirmModal = () =>
+    setShowMarkUpdateKeyAsExpiredConfirmModal(false);
+  return {
+    showMarkUpdateKeyAsExpiredConfirmModal,
+    openMarkUpdateKeyAsExpiredConfirmModal,
+    closeMarkUpdateKeyAsExpiredConfirmModal
+  };
+}
+
+export function useMarkVerificationTokenAsExpiredConfirmModal() {
+  const [
+    showMarkVerificationTokenAsExpiredConfirmModal,
+    setShowMarkVerificationTokenAsExpiredConfirmModal
+  ] = useState(false);
+  const openMarkVerificationTokenAsExpiredConfirmModal = () =>
+    setShowMarkVerificationTokenAsExpiredConfirmModal(true);
+  const closeMarkVerificationTokenAsExpiredConfirmModal = () =>
+    setShowMarkVerificationTokenAsExpiredConfirmModal(false);
+  return {
+    showMarkVerificationTokenAsExpiredConfirmModal,
+    openMarkVerificationTokenAsExpiredConfirmModal,
+    closeMarkVerificationTokenAsExpiredConfirmModal
+  };
 }
 
 export function useMarkAsExpiredConfirmModal() {

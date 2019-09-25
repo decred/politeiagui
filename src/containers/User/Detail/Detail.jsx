@@ -1,8 +1,9 @@
 import { Link, useMediaQuery } from "pi-ui";
-import React, { useCallback, useEffect, useState, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
 import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "src/constants";
+import UserProposals from "src/containers/Proposal/User";
 import useUserIdentity from "src/hooks/api/useUserIdentity";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import { existing, myPubKeyHex } from "src/lib/pki";
@@ -13,7 +14,6 @@ import { tabValues } from "./helpers";
 import { useChangeUsername, useUserDetail } from "./hooks";
 import Identity from "./Identity";
 import Preferences from "./Preferences";
-import UserProposals from "src/containers/Proposal/User";
 
 const getTabComponents = ({ user, ...rest }) => {
   const mapTabValueToComponent = {
@@ -43,6 +43,7 @@ const UserDetail = ({
   match
 }) => {
   const { user, isAdmin, userId, loggedInAsUserId } = useUserDetail({ match });
+  console.log(user);
   const {
     loggedInAsEmail,
     userPubkey,
@@ -101,24 +102,15 @@ const UserDetail = ({
 
   const isMobileScreen = useMediaQuery("(max-width:560px)");
 
-  const tabComponents = useMemo(
-    () =>
-      user &&
-      getTabComponents({
-        user,
-        isAdminOrTheUser,
-        isUserPageOwner,
-        isAdmin,
-        loadingKey,
-        pubkey
-      }),
-    [user, isAdminOrTheUser, isUserPageOwner, isAdmin, loadingKey, pubkey]
-  );
-
-  const currentTabComponent = useMemo(
-    () => user && tabComponents[tabLabels[index]],
-    [user, tabComponents, tabLabels, index]
-  );
+  const currentTabComponent =
+    user && getTabComponents({
+      user,
+      isAdminOrTheUser,
+      isUserPageOwner,
+      isAdmin,
+      loadingKey,
+      pubkey
+    })[tabLabels[index]];
 
   const tabs = useMemo(
     () => (

@@ -3,32 +3,38 @@ import PropTypes from "prop-types";
 import React, { useState } from "react";
 import ModalChangePassword from "src/componentsv2/ModalChangePassword";
 import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
-import { MANAGE_USER_DEACTIVATE, MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION, MANAGE_USER_REACTIVATE } from "src/constants";
+import { MANAGE_USER_DEACTIVATE, MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION, MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION, MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION, MANAGE_USER_REACTIVATE } from "src/constants";
 import { convertAtomsToDcr, formatUnixTimestamp } from "src/utilsv2";
 import { isExpired, isUserAdmin, isUserDeactivated, isUserEmailVerified, isUserLocked } from "./helpers";
-import { useActivationModal, useChangePassword, useManageUser, useMarkAsExpiredConfirmModal } from "./hooks";
+import { useActivationModal, useChangePassword, useManageUser, useMarkPasswordAsExpiredConfirmModal, useMarkUpdateKeyAsExpiredConfirmModal, useMarkVerificationTokenAsExpiredConfirmModal } from "./hooks";
 import InfoSection from "./InfoSection.jsx";
 
 const Account = ({
   id,
   newuserverificationtoken,
+  newuserverificationexpiry,
   newuserpaywalladdress,
   newuserpaywallamount,
   newuserpaywalltxnotbefore,
   failedloginattempts,
   resetpasswordverificationtoken,
   resetpasswordverificationexpiry,
+  updatekeyverificationtoken,
+  updatekeyverificationexpiry,
   islocked,
   isdeactivated,
   isUserPageOwner,
   isadmin, // from the user API return
   isAdmin // from the logged in user
 }) => {
+
   // Manage User
   const {
     onManageUser,
     isApiRequestingDeactivateUser,
-    isApiRequestingReactivateUser
+    isApiRequestingReactivateUser,
+    isApiRequestingMarkNewUserAsExpired,
+    isApiRequestingMarkUpdateKeyAsExpired
   } = useManageUser();
 
   const isActivationLoading =
@@ -36,16 +42,30 @@ const Account = ({
 
   const markResetPasswordTokenAsExpired = reason =>
     onManageUser(id, MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION, reason);
+  const markVerificationTokenAsExpired = reason =>
+    onManageUser(id, MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION, reason);
+  const markUpdateKeyAsExpired = reason =>
+    onManageUser(id, MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION, reason);
   const deactivateUser = reason =>
     onManageUser(id, MANAGE_USER_DEACTIVATE, reason);
   const reactivateUser = reason =>
     onManageUser(id, MANAGE_USER_REACTIVATE, reason);
 
   const {
-    showMarkAsExpiredConfirmModal,
-    openMarkAsExpiredConfirmModal,
-    closeMarkAsExpiredConfirmModal
-  } = useMarkAsExpiredConfirmModal();
+    showMarkPasswordAsExpiredConfirmModal,
+    openMarkPasswordAsExpiredConfirmModal,
+    closeMarkPasswordAsExpiredConfirmModal
+  } = useMarkPasswordAsExpiredConfirmModal();
+  const {
+    showMarkVerificationTokenAsExpiredConfirmModal,
+    openMarkVerificationTokenAsExpiredConfirmModal,
+    closeMarkVerificationTokenAsExpiredConfirmModal
+  } = useMarkVerificationTokenAsExpiredConfirmModal();
+  const {
+    showMarkUpdateKeyAsExpiredConfirmModal,
+    openMarkUpdateKeyAsExpiredConfirmModal,
+    closeMarkUpdateKeyAsExpiredConfirmModal
+  } = useMarkUpdateKeyAsExpiredConfirmModal();
   const {
     showActivationConfirmModal,
     openActivationModal,
@@ -102,69 +122,127 @@ const Account = ({
             label="Pay after:"
             info={formatUnixTimestamp(newuserpaywalltxnotbefore)}
           />
-          <InfoSection
-            label="Failed login attempts:"
-            info={failedloginattempts}
-          />
-          <InfoSection
-            label="Locked:"
-            info={isUserLocked(islocked) ? "Yes" : "No"}
-          />
-          <InfoSection
-            label="Deactivated:"
-            info={
-              <>
-                {isUserDeactivated(isdeactivated) ? "Yes" : "No"}
-                {isAdmin &&
-                  (!isUserDeactivated(isdeactivated) ? (
-                    <Button
-                      className="margin-top-s"
-                      loading={isActivationLoading}
-                      size="sm"
-                      onClick={openActivationModal}
-                    >
-                      Deactivate
-                    </Button>
-                  ) : (
-                      isAdmin && (
+          {isAdmin && (
+            <>
+              <InfoSection
+                label="Failed login attempts:"
+                info={failedloginattempts}
+              />
+              <InfoSection
+                label="Locked:"
+                info={isUserLocked(islocked) ? "Yes" : "No"}
+              />
+              <InfoSection
+                label="Deactivated:"
+                info={
+                  <>
+                    {isUserDeactivated(isdeactivated) ? "Yes" : "No"}
+                    {isAdmin &&
+                      (!isUserDeactivated(isdeactivated) ? (
                         <Button
                           className="margin-top-s"
                           loading={isActivationLoading}
                           size="sm"
                           onClick={openActivationModal}
                         >
-                          Reactivate
-                      </Button>
-                      )
-                    ))}
-              </>
-            }
-          />
-          {resetpasswordverificationtoken && (
-            <>
-              <InfoSection
-                label="Reset password token:"
-                info={resetpasswordverificationtoken}
-              />
-              <InfoSection
-                label="Expires:"
-                info={
-                  isExpired(resetpasswordverificationexpiry) ? (
-                    <span>Expired</span>
-                  ) : (
-                      <>
-                        {formatUnixTimestamp(resetpasswordverificationexpiry)}
-                        <Button
-                          loading={isActivationLoading}
-                          size="sm"
-                          onClick={openMarkAsExpiredConfirmModal}
-                        >
-                          Mark as expired
-                      </Button>
-                      </>
-                    )
+                          Deactivate
+                        </Button>
+                      ) : (
+                          isAdmin && (
+                            <Button
+                              className="margin-top-s"
+                              loading={isActivationLoading}
+                              size="sm"
+                              onClick={openActivationModal}
+                            >
+                              Reactivate
+                            </Button>
+                          )
+                        ))}
+                  </>
                 }
               />
+              {resetpasswordverificationtoken && (
+                <>
+                  <InfoSection
+                    label="Reset password token:"
+                    info={resetpasswordverificationtoken}
+                  />
+                  <InfoSection
+                    label="Expires:"
+                    info={
+                      isExpired(resetpasswordverificationexpiry) ? (
+                        <span>Expired</span>
+                      ) : (
+                          <>
+                            {formatUnixTimestamp(resetpasswordverificationexpiry)}
+                            <Button
+                              loading={isActivationLoading}
+                              size="sm"
+                              onClick={openMarkPasswordAsExpiredConfirmModal}
+                            >
+                              Mark as expired
+                            </Button>
+                          </>
+                        )
+                    }
+                  />
+                </>
+              )}
+              {newuserverificationtoken && (
+                <>
+                  <InfoSection
+                    label="Verification token:"
+                    info={newuserverificationtoken}
+                  />
+                  <InfoSection
+                    label="Expires:"
+                    info={
+                      isExpired(newuserverificationexpiry) ? (
+                        <span>Expired</span>
+                      ) : (
+                          <>
+                            {formatUnixTimestamp(newuserverificationexpiry)}
+                            <Button
+                              loading={isApiRequestingMarkNewUserAsExpired}
+                              size="sm"
+                              onClick={openMarkVerificationTokenAsExpiredConfirmModal}
+                            >
+                              Mark as expired
+                            </Button>
+                          </>
+                        )
+                    }
+                  />
+                </>
+              )}
+              {updatekeyverificationtoken && (
+                <>
+                  <InfoSection
+                    label="Update key token:"
+                    info={updatekeyverificationtoken}
+                  />
+                  <InfoSection
+                    label="Expires:"
+                    info={
+                      isExpired(updatekeyverificationexpiry) ? (
+                        <span>Expired</span>
+                      ) : (
+                          <>
+                            {formatUnixTimestamp(updatekeyverificationexpiry)}
+                            <Button
+                              loading={isApiRequestingMarkUpdateKeyAsExpired}
+                              size="sm"
+                              onClick={openMarkUpdateKeyAsExpiredConfirmModal}
+                            >
+                              Mark as expired
+                            </Button>
+                          </>
+                        )
+                    }
+                  />
+                </>
+              )}
             </>
           )}
         </>
@@ -179,8 +257,22 @@ const Account = ({
         subject="expireResetPasswordToken"
         onSubmit={markResetPasswordTokenAsExpired}
         validationSchema={validationSchema}
-        show={showMarkAsExpiredConfirmModal}
-        onClose={closeMarkAsExpiredConfirmModal}
+        show={showMarkPasswordAsExpiredConfirmModal}
+        onClose={closeMarkPasswordAsExpiredConfirmModal}
+      />
+      <ModalConfirmWithReason
+        subject="expireVerificationToken"
+        onSubmit={markVerificationTokenAsExpired}
+        validationSchema={validationSchema}
+        show={showMarkVerificationTokenAsExpiredConfirmModal}
+        onClose={closeMarkVerificationTokenAsExpiredConfirmModal}
+      />
+      <ModalConfirmWithReason
+        subject="expireUpdateKey"
+        onSubmit={markUpdateKeyAsExpired}
+        validationSchema={validationSchema}
+        show={showMarkUpdateKeyAsExpiredConfirmModal}
+        onClose={closeMarkUpdateKeyAsExpiredConfirmModal}
       />
       <ModalConfirmWithReason
         subject="deactivateOrReactivateUser"
@@ -194,11 +286,14 @@ const Account = ({
 };
 
 Account.propTypes = {
-  newuserverificationtoken: PropTypes.any,
   newuserpaywalladdress: PropTypes.string,
   newuserpaywallamount: PropTypes.number,
   newuserpaywalltxnotbefore: PropTypes.number,
   failedloginattempts: PropTypes.number,
+  newuserverificationtoken: PropTypes.any,
+  newuserverificationexpiry: PropTypes.number,
+  updatekeyverificationtoken: PropTypes.any,
+  updatekeyverificationexpiry: PropTypes.number,
   resetpasswordverificationexpiry: PropTypes.number,
   resetpasswordverificationtoken: PropTypes.any,
   islocked: PropTypes.bool,
