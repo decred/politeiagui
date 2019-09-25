@@ -1,4 +1,4 @@
-import { Button, Card } from "pi-ui";
+import { Button, Card, classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import ModalChangePassword from "src/componentsv2/ModalChangePassword";
@@ -63,7 +63,7 @@ const Account = ({
 
   const showDetailedLabels = isUserPageOwner || isAdmin;
   return (
-    <Card className="container">
+    <Card className={classNames("container", "margin-bottom-m")}>
       <InfoSection
         className="no-margin-top"
         label="Admin:"

@@ -1,25 +1,17 @@
-import React, { useState, useEffect } from "react";
-import {
-  BoxTextInput,
-  Button,
-  RadioButtonGroup,
-  Table,
-  Card,
-  Message,
-  Link,
-} from "pi-ui";
 import { Formik } from "formik";
-import styles from "./Search.module.css";
+import { BoxTextInput, Button, Card, classNames, Link, Message, RadioButtonGroup, Table } from "pi-ui";
+import React, { useEffect, useState } from "react";
+import HelpMessage from "src/componentsv2/HelpMessage";
 import * as Yup from "yup";
 import { useSearchUser } from "./hooks";
-import HelpMessage from "src/componentsv2/HelpMessage";
+import styles from "./Search.module.css";
 
 const getFormattedSearchResults = (users = []) =>
-  users.map(u => ({ 
-  	Username: u.username, 
-  	Email: u.email, 
-  	ID: <Link href={`/user/${u.id}`}>{u.id}</Link> 
- }));
+  users.map(u => ({
+    Username: u.username,
+    Email: u.email,
+    ID: <Link href={`/user/${u.id}`}>{u.id}</Link>
+  }));
 
 const UserSearch = ({ TopBanner, PageDetails, Sidebar, Main, Title }) => {
   const { onSearchUser, searchResult } = useSearchUser();
@@ -40,7 +32,7 @@ const UserSearch = ({ TopBanner, PageDetails, Sidebar, Main, Title }) => {
   const usersResult = searchResult && searchResult.users;
   useEffect(
     function updateFoundUsers() {
-      if (!!usersResult) {
+      if (usersResult) {
         setFoundUsers(getFormattedSearchResults(usersResult));
       }
     },
@@ -116,12 +108,12 @@ const UserSearch = ({ TopBanner, PageDetails, Sidebar, Main, Title }) => {
         {searchError ? (
           <Message kind="error">{searchError.toString()}</Message>
         ) : foundUsers && !!foundUsers.length ? (
-          <Card className="container">
+          <Card className={classNames("container", "margin-bottom-m")}>
             <Table data={foundUsers} headers={["Username", "Email", "ID"]} />
           </Card>
         ) : (
-          <HelpMessage>No users to show</HelpMessage>
-        )}
+              <HelpMessage>No users to show</HelpMessage>
+            )}
       </Main>
     </>
   );

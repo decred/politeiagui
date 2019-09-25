@@ -1,7 +1,7 @@
 import { classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
-import styles from "./infosection.module.css";
+import styles from "./Infosection.module.css";
 
 const InfoSection = ({ label, info, alignLabelCenter, className }) => {
   return (
