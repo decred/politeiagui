@@ -118,7 +118,7 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
             <Button size="sm" onClick={openConfirmModal}>
               Create new identity
             </Button>
-            <Button size="sm" onClick={openImportIdentityModal}>
+            <Button className={styles.lastButton} size="sm" onClick={openImportIdentityModal}>
               Import identity
             </Button>
             {!keyMismatch && <PrivateKeyDownloadManager />}
