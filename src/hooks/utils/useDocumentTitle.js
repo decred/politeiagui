@@ -4,7 +4,6 @@ import { useConfig } from "src/Config";
 const setDocumentTitle = title => (document.title = title);
 
 export function useDocumentTitle(title) {
-  console.log("here", title);
   const { title: defaultTitle } = useConfig();
   const newTitle = title || defaultTitle;
 
