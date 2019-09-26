@@ -61,6 +61,10 @@
     margin-top: 0 !important;
 }
 
+.no-margin-bottom {
+    margin-bottom: 0 !important;
+}
+
 /* Extra Small margin */
 .margin-left-xs {
     margin-left: var(--spacing-extra-small)

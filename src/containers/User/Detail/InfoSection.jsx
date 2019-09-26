@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import React from "react";
 import styles from "./infosection.module.css";
 
-const InfoSection = ({ label, info, alignLabelCenter, className }) => {
+const InfoSection = ({ label, info, alignLabelCenter, className, noMargin }) => {
   return (
     <div
-      className={classNames(styles.sectionWrapper, "margin-top-m", className)}
+      className={classNames(styles.sectionWrapper, "margin-bottom-m", className, noMargin && "no-margin-bottom")}
     >
       <span
         className={styles.label}
@@ -22,7 +22,8 @@ const InfoSection = ({ label, info, alignLabelCenter, className }) => {
 InfoSection.propTypes = {
   label: PropTypes.string,
   info: PropTypes.node,
-  className: PropTypes.string
+  className: PropTypes.string,
+  noMargin: PropTypes.bool
 };
 
 export default InfoSection;
