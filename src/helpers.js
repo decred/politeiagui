@@ -157,7 +157,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     1032: "Your domain does not match the DCC domain.",
     1033: "The DCC sponsor statement is malformed.",
     1034: "The submitted DCC file is malformed, please review and try again.",
-    1035: "This error is currently no implemented.",
+    1035: "This error is currently not implemented.",
     1036: "There was an invalid status transition detected.",
     1037: "That email is already being used by another user.",
     1038: "You do not have the correct contractor status to submit an invoice.",
