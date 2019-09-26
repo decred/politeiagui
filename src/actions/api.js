@@ -480,7 +480,9 @@ export const onFetchProposalComments = token =>
     dispatch(act.REQUEST_PROPOSAL_COMMENTS(token));
     return api
       .proposalComments(token, csrf)
-      .then(response => dispatch(act.RECEIVE_PROPOSAL_COMMENTS(response)))
+      .then(response =>
+        dispatch(act.RECEIVE_PROPOSAL_COMMENTS({ ...response, token }))
+      )
       .catch(error => {
         dispatch(act.RECEIVE_PROPOSAL_COMMENTS(null, error));
       });
