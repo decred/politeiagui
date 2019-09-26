@@ -7,5 +7,5 @@ export function useDocumentTitle(newTitle, originalTitle) {
   useEffect(() => {
     setHTMLTitle(newTitle);
     return () => setHTMLTitle(originalTitle);
-  }, [newTitle]);
+  }, [newTitle, originalTitle]);
 }
