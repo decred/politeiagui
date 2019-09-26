@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useDocumentTitle } from "src/hooks/utils/useDocumentTitle";
-import { Route as Router } from "react-router-dom";
+import { Route as ReactRoute } from "react-router-dom";
 import { useRedux } from "src/redux";
 
 const useTitleFromState = selector => {
@@ -14,7 +14,7 @@ const useTitleFromState = selector => {
 const Route = ({ title, titleSelector, ...props }) => {
   const titleFromState = useTitleFromState(titleSelector);
   useDocumentTitle(titleFromState || title);
-  return <Router {...props} />;
+  return <ReactRoute {...props} />;
 };
 
 export default Route;
