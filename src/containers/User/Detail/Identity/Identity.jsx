@@ -1,5 +1,5 @@
 import { Button, Card, classNames, Message, Modal, P, Spinner, Text } from "pi-ui";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import DevelopmentOnlyContent from "src/componentsv2/DevelopmentOnlyContent";
 import ModalConfirm from "src/componentsv2/ModalConfirm";
@@ -11,6 +11,13 @@ import useUserIdentity from "src/hooks/api/useUserIdentity";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import styles from "./Identity.module.css";
 import IdentityList from "./IdentityList";
+import * as pki from "src/lib/pki";
+
+
+const fetchKeys = (loggedInAsEmail) =>
+  pki
+    .getKeys(loggedInAsEmail)
+    .then(keys => JSON.stringify(keys, null, 2));
 
 const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
   const {
@@ -54,8 +61,16 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
     }
   }, [onUpdateUserKey, loggedInAsEmail]);
 
+  const [keyData, setKeyData] = useState();
+
+  useEffect(() => {
+    fetchKeys(loggedInAsEmail).then(keyData => {
+      setKeyData(keyData);
+    });
+  }, [loggedInAsEmail]);
+
   const isUserPageOwner = user && loggedInAsUserId === user.id;
-  return loadingKey === PUB_KEY_STATUS_LOADING || keyMismatch ? (
+  return loadingKey === PUB_KEY_STATUS_LOADING || keyMismatch || !keyData ? (
     <div className={styles.spinnerWrapper}>
       <Spinner invert />
     </div>
@@ -131,10 +146,10 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
             <Button size="sm" onClick={openConfirmModal}>
               Create new identity
             </Button>
-            <Button className={styles.importButton} size="sm" onClick={openImportIdentityModal}>
+            <Button size="sm" onClick={openImportIdentityModal}>
               Import identity
             </Button>
-            <PrivateKeyDownloadManager />
+            <PrivateKeyDownloadManager keyData={keyData} />
           </div>
         </>
       )}

@@ -13,10 +13,6 @@
   display: flex;
 }
 
-.importButton {
-  margin-right: var(--spacing-1);
-}
-
 .spinnerWrapper {
   display: flex;
   height: 100%;
