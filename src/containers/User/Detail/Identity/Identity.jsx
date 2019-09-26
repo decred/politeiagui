@@ -53,7 +53,7 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
   }, [onUpdateUserKey, loggedInAsEmail]);
 
   const isUserPageOwner = user && loggedInAsUserId === user.id;
-  return loadingKey === PUB_KEY_STATUS_LOADING ? (
+  return loadingKey === PUB_KEY_STATUS_LOADING || keyMismatch ? (
     <div className={styles.spinnerWrapper}>
       <Spinner invert />
     </div>
@@ -121,7 +121,7 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
             <Button className={styles.importButton} size="sm" onClick={openImportIdentityModal}>
               Import identity
             </Button>
-            {!keyMismatch && <PrivateKeyDownloadManager />}
+            <PrivateKeyDownloadManager />
           </div>
         </>
       )}
