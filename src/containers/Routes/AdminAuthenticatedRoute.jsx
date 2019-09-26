@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { Route, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import Route from "./Route";
 import { useLoaderContext } from "src/Appv2/Loader";
 
 const AdminAuthenticatedRoute = ({ history, ...props }) => {
