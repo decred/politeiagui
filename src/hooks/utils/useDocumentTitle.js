@@ -9,7 +9,6 @@ export function useDocumentTitle(title) {
   const newTitle = title || defaultTitle;
 
   useEffect(() => {
-    console.log("CHANGE", newTitle);
     setDocumentTitle(newTitle);
   }, [newTitle]);
 }
