@@ -45,7 +45,7 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
   }, [loggedInAsEmail, userPubkey, keyMismatchAction]);
 
   const pastIdentities = identities.filter(i => !i.isactive);
-  
+
   const updateKey = useCallback(async () => {
     try {
       await onUpdateUserKey(loggedInAsEmail);
@@ -112,11 +112,11 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
               >
                 <P>
                   Your public and private keys constitute your identity. The private key
-                  is used to sign your proposals, comments and any up/down votes on 
-                  Politeia. You can have only one identity active at a time. Your keys 
-                  are stored in your browser by default, so if you use Politeia on multiple 
-                  machines you will need to import your keys before you can participate. 
-                  
+                  is used to sign your proposals, comments and any up/down votes on
+                  Politeia. You can have only one identity active at a time. Your keys
+                  are stored in your browser by default, so if you use Politeia on multiple
+                  machines you will need to import your keys before you can participate.
+
                 </P>
                 <P className="margin-bottom-s">
                   Public key stored in your browser:
@@ -156,9 +156,9 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
           "This account only had one active public key until now."
         }
       </P>
-      <Button 
-        size="sm" 
-        kind={pastIdentities.length === 0 ? "disabled" : "primary"} 
+      <Button
+        size="sm"
+        kind={pastIdentities.length === 0 ? "disabled" : "primary"}
         onClick={openShowAllModal}
       >
         Show all
