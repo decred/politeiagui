@@ -16,7 +16,6 @@ import { closeModal, confirmWithModal, openModal } from "./modal";
 
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onResetInvoice = act.RESET_INVOICE;
-export const onResetLikedComments = act.RESET_LIKED_COMMENTS;
 
 export const onSetEmail = act.SET_EMAIL;
 
@@ -492,7 +491,9 @@ export const onFetchLikedComments = token => dispatch => {
   dispatch(act.REQUEST_LIKED_COMMENTS(token));
   return api
     .likedComments(token)
-    .then(response => dispatch(act.RECEIVE_LIKED_COMMENTS(response)))
+    .then(response =>
+      dispatch(act.RECEIVE_LIKED_COMMENTS({ ...response, token }))
+    )
     .catch(error => {
       dispatch(act.RECEIVE_LIKED_COMMENTS(null, error));
     });
@@ -737,8 +738,9 @@ export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
     return Promise.resolve(api.makeLikeComment(token, action, commentid))
       .then(comment => api.signLikeComment(loggedInAsEmail, comment))
       .then(comment => api.likeComment(csrf, comment))
+      .then(() => dispatch(act.RECEIVE_LIKE_COMMENT({ token })))
       .catch(error => {
-        dispatch(act.RESET_SYNC_LIKE_COMMENT());
+        dispatch(act.RESET_SYNC_LIKE_COMMENT({ token }));
         dispatch(act.RECEIVE_LIKE_COMMENT(null, error));
       });
   });

@@ -1,1 +1,1 @@
-export { default } from "./models";
+export { default as comments } from "./comments";

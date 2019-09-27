@@ -20,8 +20,7 @@ const mapDispatchToProps = {
   onFetchLikes: act.onFetchLikedComments,
   onLikeComment: act.onLikeComment,
   onResetComments: act.onResetComments,
-  onCensorComment: act.onCensorCommentv2,
-  onResetCommentsLikes: act.onResetLikedComments
+  onCensorComment: act.onCensorCommentv2
 };
 
 export function useComments(ownProps) {
@@ -30,15 +29,19 @@ export function useComments(ownProps) {
     () => sel.makeGetProposalComments(recordToken),
     [recordToken]
   );
+  const commentsLikesSelector = useMemo(
+    () => sel.makeGetProposalCommentsLikes(recordToken),
+    [recordToken]
+  );
   const mapStateToProps = useMemo(
     () => ({
       comments: commentsSelector,
-      commentsLikes: sel.commentsLikes,
+      commentsLikes: commentsLikesSelector,
       lastVisitTimestamp: sel.visitedProposal,
       loading: sel.isApiRequestingComments,
       loadingLikes: sel.isApiRequestingCommentsLikes
     }),
-    [commentsSelector]
+    [commentsSelector, commentsLikesSelector]
   );
 
   const {
@@ -48,7 +51,6 @@ export function useComments(ownProps) {
     onCensorComment,
     onLikeComment: onLikeCommentAction,
     commentsLikes,
-    onResetCommentsLikes,
     ...fromRedux
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
   const { enableCommentVote, recordType } = useConfig();
@@ -58,38 +60,30 @@ export function useComments(ownProps) {
   const userLoggedIn = !!email;
 
   const numOfComments = (ownProps && ownProps.numOfComments) || 0;
-  const needsToFetchData = !!recordToken && !comments && numOfComments > 0;
+  const needsToFetchComments = !!recordToken && !comments && numOfComments > 0;
+  const needsToFetchCommentsLikes =
+    !!recordToken &&
+    !commentsLikes &&
+    numOfComments > 0 &&
+    enableCommentVote &&
+    userLoggedIn;
 
   useEffect(
     function handleFetchOfComments() {
-      if (needsToFetchData) {
+      if (needsToFetchComments) {
         onFetchComments(recordToken);
       }
     },
-    [onFetchComments, needsToFetchData, recordToken]
+    [onFetchComments, needsToFetchComments, recordToken]
   );
 
   useEffect(
     function handleFetchOfLikes() {
-      if (
-        !!recordToken &&
-        numOfComments > 0 &&
-        enableCommentVote &&
-        userLoggedIn
-      ) {
+      if (needsToFetchCommentsLikes) {
         onFetchLikes(recordToken);
       }
-
-      return () => onResetCommentsLikes();
     },
-    [
-      onFetchLikes,
-      onResetCommentsLikes,
-      enableCommentVote,
-      needsToFetchData,
-      userLoggedIn,
-      recordToken
-    ]
+    [onFetchLikes, needsToFetchCommentsLikes, recordToken]
   );
 
   const onLikeComment = useCallback(
