@@ -1,8 +1,11 @@
 import React from "react";
-import { Route, Switch, withRouter } from "react-router-dom";
+import { Switch, withRouter } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import * as sel from "src/selectors";
 import { useConfig } from "src/Config";
+import { capitalize } from "src/utils/strings";
 import {
+  Route,
   AdminAuthenticatedRoute,
   AuthenticatedRoute,
   NotAuthenticatedRoute
@@ -31,19 +34,27 @@ const Routes = ({ location }) => {
     <TransitionGroup>
       <CSSTransition key={location.key} classNames="fade" timeout={300}>
         <Switch location={location}>
-          <Route path="/" exact component={PageProposalsPublicList} />
+          <Route
+            path="/"
+            title="Public Proposals"
+            exact
+            component={PageProposalsPublicList}
+          />
           <NotAuthenticatedRoute
             path="/user/login"
+            title="Login"
             exact
             component={PageUserLogin}
           />
           <NotAuthenticatedRoute
             path="/user/signup"
+            title="Sign Up"
             exact
             component={PageUserSignup}
           />
           <NotAuthenticatedRoute
             path="/user/request-reset-password"
+            title="Reset Password"
             exact
             component={PageUserRequestResetPassword}
           />
@@ -59,11 +70,13 @@ const Routes = ({ location }) => {
           />
           <NotAuthenticatedRoute
             path="/user/resend-verification-email"
+            title="Verification Email"
             exact
             component={PageUserRequestResendVerificationEmail}
           />
           <NotAuthenticatedRoute
             path="/user/privacy-policy"
+            title="Privacy Policy"
             exact
             component={PageUserPrivacyPolicy}
           />
@@ -74,48 +87,57 @@ const Routes = ({ location }) => {
           />
           <AdminAuthenticatedRoute
             path="/user/search"
+            title="Search User"
             exact
             component={PageUserSearch}
           />
-          <Route path="/user/:userid" exact component={PageUserDetail} />
+          <Route
+            path="/user/:userid"
+            title="User Detail"
+            exact
+            component={PageUserDetail}
+          />
 
           {/* Record routes */}
           <AdminAuthenticatedRoute
             path={`/${recordType}s/unvetted`}
+            title={`Unvetted ${capitalize(recordType)}s`}
             exact
             component={PageProposalsUnvetted}
           />
           <Route
             path={`/${recordType}/:token`}
+            title={`${capitalize(recordType)} Detail`}
+            titleSelector={sel.proposalName}
             exact
             component={PageProposalDetail}
           />
           <Route
             path={`/${recordType}/:token/comments/:commentid`}
-            exact
-            component={PageProposalDetail}
-          />
-          <Route
-            path={`/${recordType}/:token/comments/:commentid`}
+            title={`${capitalize(recordType)} Detail`}
+            titleSelector={sel.proposalName}
             exact
             component={PageProposalDetail}
           />
           <AuthenticatedRoute
             path={`/${recordType}/:token/edit`}
+            title={`Edit ${capitalize(recordType)}`}
             exact
             render={renderEditRecordRoute(config)}
           />
           <AuthenticatedRoute
             path={`/${recordType}s/new`}
+            title={`New ${capitalize(recordType)}`}
             exact
             render={renderNewRecordRoute(config)}
           />
           <AdminAuthenticatedRoute
             path={`/${recordType}s/admin`}
+            title={`Admin ${capitalize(recordType)}s`}
             exact
             component={PageProposalsAdmin}
           />
-          <Route path="*" component={PageNotFound} />
+          <Route title="Page Not Found" path="*" component={PageNotFound} />
         </Switch>
       </CSSTransition>
     </TransitionGroup>

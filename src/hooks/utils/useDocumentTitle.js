@@ -1,11 +1,13 @@
 import { useEffect } from "react";
+import { useConfig } from "src/Config";
 
-const setHTMLTitle = title => (document.title = title);
+const setDocumentTitle = title => (document.title = title);
 
-export function useDocumentTitle(newTitle, originalTitle) {
-  newTitle = newTitle || "";
+export function useDocumentTitle(title) {
+  const { title: defaultTitle } = useConfig();
+  const newTitle = title || defaultTitle;
+
   useEffect(() => {
-    setHTMLTitle(newTitle);
-    return () => setHTMLTitle(originalTitle);
-  }, [newTitle, originalTitle]);
+    setDocumentTitle(newTitle);
+  }, [newTitle]);
 }

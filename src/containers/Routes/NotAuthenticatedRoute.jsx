@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { Route, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { useLoaderContext } from "src/Appv2/Loader";
+import Route from "./Route";
 
 const NotAuthenticatedRoute = ({ history, ...props }) => {
   const { initDone, currentUser } = useLoaderContext();

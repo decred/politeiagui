@@ -1,5 +1,5 @@
 import { Button, Card, classNames, Message, Modal, P, Spinner, Text } from "pi-ui";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import DevelopmentOnlyContent from "src/componentsv2/DevelopmentOnlyContent";
 import ModalConfirm from "src/componentsv2/ModalConfirm";
@@ -9,8 +9,14 @@ import { PUB_KEY_STATUS_LOADING } from "src/constants";
 import { verifyUserPubkey } from "src/helpers";
 import useUserIdentity from "src/hooks/api/useUserIdentity";
 import useBooleanState from "src/hooks/utils/useBooleanState";
+import * as pki from "src/lib/pki";
 import styles from "./Identity.module.css";
 import IdentityList from "./IdentityList";
+
+const fetchKeys = (loggedInAsEmail) =>
+  pki
+    .getKeys(loggedInAsEmail)
+    .then(keys => JSON.stringify(keys, null, 2));
 
 const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
   const {
@@ -54,8 +60,16 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
     }
   }, [onUpdateUserKey, loggedInAsEmail]);
 
+  const [keyData, setKeyData] = useState();
+
+  useEffect(() => {
+    fetchKeys(loggedInAsEmail).then(keyData => {
+      setKeyData(keyData);
+    });
+  }, [loggedInAsEmail]);
+
   const isUserPageOwner = user && loggedInAsUserId === user.id;
-  return loadingKey === PUB_KEY_STATUS_LOADING ? (
+  return loadingKey === PUB_KEY_STATUS_LOADING || keyMismatch || !keyData ? (
     <div className={styles.spinnerWrapper}>
       <Spinner invert />
     </div>
@@ -134,7 +148,7 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
               <Button size="sm" onClick={openImportIdentityModal}>
                 Import identity
             </Button>
-              {!keyMismatch && <PrivateKeyDownloadManager />}
+              <PrivateKeyDownloadManager keyData={keyData} />
             </div>
           </>
         )}
