@@ -8,7 +8,7 @@ import styles from "./SidebarContent.module.css";
 
 const SidebarBlock = ({ children, className, ...props }) => (
   <Card
-    className={classNames(styles.sideBarBlockWrapper, className)}
+    className={classNames(styles.sideBarBlockWrapper, "margin-bottom-m", className)}
     {...props}
   >
     {children}
