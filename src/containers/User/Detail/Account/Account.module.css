@@ -1,0 +1,6 @@
+.subtitle {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--color-gray-blueish);
+  margin-top: 3rem;
+}

@@ -6,16 +6,10 @@ import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
 import { MANAGE_USER_DEACTIVATE, MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION, MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION, MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION, MANAGE_USER_REACTIVATE } from "src/constants";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import { convertAtomsToDcr, formatUnixTimestamp } from "src/utilsv2";
-import { isExpired, isUserAdmin, isUserDeactivated, isUserEmailVerified, isUserLocked } from "./helpers";
-import { useChangePassword, useManageUser } from "./hooks";
-import InfoSection from "./InfoSection.jsx";
-
-const subtitleStyle = {
-  display: "block",
-  marginBottom: "5px",
-  color: "#596D81",
-  marginTop: "30px"
-};
+import { isExpired, isUserAdmin, isUserDeactivated, isUserEmailVerified, isUserLocked } from "../helpers";
+import { useChangePassword, useManageUser } from "../hooks";
+import InfoSection from "../InfoSection.jsx";
+import styles from "./Account.module.css";
 
 const Account = ({
   id,
@@ -133,7 +127,7 @@ const Account = ({
           />
           {isAdmin && (
             <>
-              <Text color="grayDark" weight="semibold" style={subtitleStyle}>Security</Text>
+              <Text color="grayDark" weight="semibold" className={styles.subtitle}>Security</Text>
               <InfoSection
                 label="Failed login attempts:"
                 info={failedloginattempts}
@@ -164,7 +158,7 @@ const Account = ({
                 ))}
               {resetpasswordverificationtoken && (
                 <>
-                  <Text color="grayDark" weight="semibold" style={subtitleStyle}>Password</Text>
+                  <Text color="grayDark" weight="semibold" className={styles.subtitle}>Password</Text>
                   <InfoSection
                     label="Reset password token:"
                     info={resetpasswordverificationtoken}
@@ -194,7 +188,7 @@ const Account = ({
               )}
               {newuserverificationtoken && (
                 <>
-                  <Text color="grayDark" weight="semibold" style={subtitleStyle}>Verification token</Text>
+                  <Text color="grayDark" weight="semibold" className={styles.subtitle}>Verification token</Text>
                   <InfoSection
                     label="Verification token:"
                     info={newuserverificationtoken}
@@ -224,7 +218,7 @@ const Account = ({
               )}
               {updatekeyverificationtoken && (
                 <>
-                  <Text color="grayDark" weight="semibold" style={subtitleStyle}>Update key</Text>
+                  <Text color="grayDark" weight="semibold" className={styles.subtitle}>Update key</Text>
                   <InfoSection
                     label="Update key token:"
                     info={updatekeyverificationtoken}

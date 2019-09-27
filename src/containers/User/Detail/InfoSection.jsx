@@ -6,7 +6,7 @@ import styles from "./infosection.module.css";
 const InfoSection = ({ label, info, alignLabelCenter, className, noMargin }) => {
   return (
     <div
-      className={classNames(styles.sectionWrapper, "margin-bottom-m", className, noMargin && "no-margin-bottom")}
+      className={classNames(styles.sectionWrapper, "margin-bottom-s", className, noMargin && "no-margin-bottom")}
     >
       <span
         className={styles.label}
