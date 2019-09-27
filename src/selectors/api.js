@@ -568,6 +568,12 @@ export const proposalAuthor = compose(
   get(["username"]),
   apiProposal
 );
+
+export const proposalName = compose(
+  get(["name"]),
+  apiProposal
+);
+
 export const apiProposalComments = or(
   compose(
     get("comments"),

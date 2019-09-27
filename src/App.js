@@ -56,6 +56,7 @@ class Loader extends Component {
         this.props.onLoadDraftInvoices(this.props.loggedInAsEmail);
       }
     }
+
     if (prevProps.userPubkey && this.props.userPubkey) {
       verifyUserPubkey(
         this.props.loggedInAsEmail,
@@ -81,6 +82,10 @@ class Loader extends Component {
       } else {
         console.error("ERROR:", this.props.apiError.message);
       }
+    }
+
+    if (this.props.isCMS) {
+      document.title = "Contractor Management System";
     }
   }
 

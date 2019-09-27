@@ -1,5 +1,5 @@
 import { Field, Formik } from "formik";
-import { Button, Card, Checkbox, H2, Icon, Message } from "pi-ui";
+import { Button, Card, Checkbox, classNames, H2, Icon, Message } from "pi-ui";
 import React, { useState } from "react";
 import { useUserPreferences } from "./hooks.js";
 import styles from "./Preferences.module.css";
@@ -108,7 +108,7 @@ const Preferences = () => {
                   className="margin-top-m" id="9" name="commentnotifications-comment" label="New comment reply to your comment"
                 />
               </Card>
-              <Button style={{ marginBottom: "3rem", float: "right" }} width={195} type="submit" loading={isApiRequestingEditUser} kind={showConfirm ? "disabled" : "primary"} className={styles.submitButton}>
+              <Button style={{ float: "right" }} width={195} type="submit" loading={isApiRequestingEditUser} kind={showConfirm ? "disabled" : "primary"} className={classNames(styles.submitButton, "margin-bottom-m")}>
                 {showConfirm && editUserResponse ? (
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                     Saved <Icon type="checkmark" backgroundColor="#e6eaed" size="lg" iconColor="#8997a5" />
