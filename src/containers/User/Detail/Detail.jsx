@@ -9,7 +9,7 @@ import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithInde
 import { existing, myPubKeyHex } from "src/lib/pki";
 import Account from "./Account";
 import Credits from "./Credits";
-import styles from "./detail.module.css";
+import styles from "./Detail.module.css";
 import { tabValues } from "./helpers";
 import { useChangeUsername, useUserDetail } from "./hooks";
 import Identity from "./Identity";
