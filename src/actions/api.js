@@ -760,7 +760,9 @@ export const onCensorComment = (loggedInAsEmail, token, commentid, isCms) =>
           .then(response => {
             if (response.receipt) {
               !isCms
-                ? dispatch(act.RECEIVE_CENSOR_COMMENT(commentid, null))
+                ? dispatch(
+                    act.RECEIVE_CENSOR_COMMENT({ commentid, token }, null)
+                  )
                 : dispatch(act.RECEIVE_CENSOR_INVOICE_COMMENT(commentid, null));
             }
           })
@@ -779,7 +781,7 @@ export const onCensorCommentv2 = (email, token, commentid, reason) => {
       .then(comment => api.censorComment(csrf, comment))
       .then(response => {
         if (response.receipt) {
-          dispatch(act.RECEIVE_CENSOR_COMMENT(commentid, null));
+          dispatch(act.RECEIVE_CENSOR_COMMENT({ commentid, token }, null));
         }
       })
       .catch(error => {

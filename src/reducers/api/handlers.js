@@ -95,7 +95,6 @@ export const onReceiveSetStatus = (state, action) => {
 export const onReceiveCensoredComment = (state, action) => {
   state = receive("censorComment", state, action);
   if (action.error) return state;
-
   return {
     ...state,
     proposalComments: {
@@ -103,7 +102,7 @@ export const onReceiveCensoredComment = (state, action) => {
       response: {
         ...state.proposalComments.response,
         comments: state.proposalComments.response.comments.map(c => {
-          return c.commentid === action.payload
+          return c.commentid === action.payload.commentid
             ? { ...c, comment: "", censored: true }
             : c;
         })
