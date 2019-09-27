@@ -101,24 +101,15 @@ const UserDetail = ({
 
   const isMobileScreen = useMediaQuery("(max-width:560px)");
 
-  const tabComponents = useMemo(
-    () =>
-      user &&
-      getTabComponents({
-        user,
-        isAdminOrTheUser,
-        isUserPageOwner,
-        isAdmin,
-        loadingKey,
-        pubkey
-      }),
-    [user, isAdminOrTheUser, isUserPageOwner, isAdmin, loadingKey, pubkey]
-  );
-
-  const currentTabComponent = useMemo(
-    () => user && tabComponents[tabLabels[index]],
-    [user, tabComponents, tabLabels, index]
-  );
+  const currentTabComponent =
+    user && getTabComponents({
+      user,
+      isAdminOrTheUser,
+      isUserPageOwner,
+      isAdmin,
+      loadingKey,
+      pubkey
+    })[tabLabels[index]];
 
   const tabs = useMemo(
     () => (

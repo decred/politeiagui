@@ -2,7 +2,6 @@ import compose from "lodash/fp/compose";
 import get from "lodash/fp/get";
 import isEqual from "lodash/isEqual";
 import { useEffect, useState } from "react";
-import usePolicy from "src/hooks/api/usePolicy";
 import * as act from "src/actions";
 import {
   MANAGE_USER_CLEAR_USER_PAYWALL,
@@ -13,6 +12,7 @@ import {
   MANAGE_USER_REACTIVATE,
   MANAGE_USER_UNLOCK
 } from "src/constants";
+import usePolicy from "src/hooks/api/usePolicy";
 import { arg, or } from "src/lib/fp";
 import { useRedux } from "src/redux";
 import * as sel from "src/selectors";
@@ -180,41 +180,6 @@ export function useManageUser(ownProps) {
   );
   return { ...fromRedux, validateUUID };
 }
-
-export function useMarkAsExpiredConfirmModal() {
-  const [
-    showMarkAsExpiredConfirmModal,
-    setShowMarkAsExpiredConfirmModal
-  ] = useState(false);
-  const openMarkAsExpiredConfirmModal = () =>
-    setShowMarkAsExpiredConfirmModal(true);
-  const closeMarkAsExpiredConfirmModal = () =>
-    setShowMarkAsExpiredConfirmModal(false);
-  return {
-    showMarkAsExpiredConfirmModal,
-    openMarkAsExpiredConfirmModal,
-    closeMarkAsExpiredConfirmModal
-  };
-}
-
-export function useActivationModal() {
-  const [showActivationConfirmModal, setShowActivationConfirmModal] = useState(
-    false
-  );
-  const openActivationModal = e => {
-    e.preventDefault();
-    setShowActivationConfirmModal(true);
-  };
-  const closeActivationModal = () => {
-    setShowActivationConfirmModal(false);
-  };
-  return {
-    showActivationConfirmModal,
-    openActivationModal,
-    closeActivationModal
-  };
-}
-
 export function useMarkAsPaidModal() {
   const [showMarkAsPaidConfirmModal, setShowMarkAsPaidConfirmModal] = useState(
     false
