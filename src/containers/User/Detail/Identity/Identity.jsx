@@ -1,5 +1,5 @@
 import { Button, Card, classNames, Message, Modal, P, Spinner, Text } from "pi-ui";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import DevelopmentOnlyContent from "src/componentsv2/DevelopmentOnlyContent";
 import ModalConfirm from "src/componentsv2/ModalConfirm";
@@ -11,6 +11,13 @@ import useUserIdentity from "src/hooks/api/useUserIdentity";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import styles from "./Identity.module.css";
 import IdentityList from "./IdentityList";
+import * as pki from "src/lib/pki";
+
+
+const fetchKeys = (loggedInAsEmail) =>
+  pki
+    .getKeys(loggedInAsEmail)
+    .then(keys => JSON.stringify(keys, null, 2));
 
 const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
   const {
@@ -45,7 +52,7 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
   }, [loggedInAsEmail, userPubkey, keyMismatchAction]);
 
   const pastIdentities = identities.filter(i => !i.isactive);
-  
+
   const updateKey = useCallback(async () => {
     try {
       await onUpdateUserKey(loggedInAsEmail);
@@ -54,8 +61,16 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
     }
   }, [onUpdateUserKey, loggedInAsEmail]);
 
+  const [keyData, setKeyData] = useState();
+
+  useEffect(() => {
+    fetchKeys(loggedInAsEmail).then(keyData => {
+      setKeyData(keyData);
+    });
+  }, [loggedInAsEmail]);
+
   const isUserPageOwner = user && loggedInAsUserId === user.id;
-  return loadingKey === PUB_KEY_STATUS_LOADING ? (
+  return loadingKey === PUB_KEY_STATUS_LOADING || keyMismatch || !keyData ? (
     <div className={styles.spinnerWrapper}>
       <Spinner invert />
     </div>
@@ -112,11 +127,11 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
               >
                 <P>
                   Your public and private keys constitute your identity. The private key
-                  is used to sign your proposals, comments and any up/down votes on 
-                  Politeia. You can have only one identity active at a time. Your keys 
-                  are stored in your browser by default, so if you use Politeia on multiple 
-                  machines you will need to import your keys before you can participate. 
-                  
+                  is used to sign your proposals, comments and any up/down votes on
+                  Politeia. You can have only one identity active at a time. Your keys
+                  are stored in your browser by default, so if you use Politeia on multiple
+                  machines you will need to import your keys before you can participate.
+
                 </P>
                 <P className="margin-bottom-s">
                   Public key stored in your browser:
@@ -134,7 +149,7 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
             <Button size="sm" onClick={openImportIdentityModal}>
               Import identity
             </Button>
-            {!keyMismatch && <PrivateKeyDownloadManager />}
+            <PrivateKeyDownloadManager keyData={keyData} />
           </div>
         </>
       )}
@@ -156,9 +171,9 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
           "This account only had one active public key until now."
         }
       </P>
-      <Button 
-        size="sm" 
-        kind={pastIdentities.length === 0 ? "disabled" : "primary"} 
+      <Button
+        size="sm"
+        kind={pastIdentities.length === 0 ? "disabled" : "primary"}
         onClick={openShowAllModal}
       >
         Show all
