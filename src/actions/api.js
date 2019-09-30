@@ -479,7 +479,9 @@ export const onFetchProposalComments = token =>
     dispatch(act.REQUEST_PROPOSAL_COMMENTS(token));
     return api
       .proposalComments(token, csrf)
-      .then(response => dispatch(act.RECEIVE_PROPOSAL_COMMENTS(response)))
+      .then(response =>
+        dispatch(act.RECEIVE_PROPOSAL_COMMENTS({ ...response, token }))
+      )
       .catch(error => {
         dispatch(act.RECEIVE_PROPOSAL_COMMENTS(null, error));
       });
@@ -489,7 +491,9 @@ export const onFetchLikedComments = token => dispatch => {
   dispatch(act.REQUEST_LIKED_COMMENTS(token));
   return api
     .likedComments(token)
-    .then(response => dispatch(act.RECEIVE_LIKED_COMMENTS(response)))
+    .then(response =>
+      dispatch(act.RECEIVE_LIKED_COMMENTS({ ...response, token }))
+    )
     .catch(error => {
       dispatch(act.RECEIVE_LIKED_COMMENTS(null, error));
     });
@@ -734,8 +738,9 @@ export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
     return Promise.resolve(api.makeLikeComment(token, action, commentid))
       .then(comment => api.signLikeComment(loggedInAsEmail, comment))
       .then(comment => api.likeComment(csrf, comment))
+      .then(() => dispatch(act.RECEIVE_LIKE_COMMENT({ token })))
       .catch(error => {
-        dispatch(act.RESET_SYNC_LIKE_COMMENT());
+        dispatch(act.RESET_SYNC_LIKE_COMMENT({ token }));
         dispatch(act.RECEIVE_LIKE_COMMENT(null, error));
       });
   });
@@ -755,7 +760,9 @@ export const onCensorComment = (loggedInAsEmail, token, commentid, isCms) =>
           .then(response => {
             if (response.receipt) {
               !isCms
-                ? dispatch(act.RECEIVE_CENSOR_COMMENT(commentid, null))
+                ? dispatch(
+                    act.RECEIVE_CENSOR_COMMENT({ commentid, token }, null)
+                  )
                 : dispatch(act.RECEIVE_CENSOR_INVOICE_COMMENT(commentid, null));
             }
           })
@@ -774,7 +781,7 @@ export const onCensorCommentv2 = (email, token, commentid, reason) => {
       .then(comment => api.censorComment(csrf, comment))
       .then(response => {
         if (response.receipt) {
-          dispatch(act.RECEIVE_CENSOR_COMMENT(commentid, null));
+          dispatch(act.RECEIVE_CENSOR_COMMENT({ commentid, token }, null));
         }
       })
       .catch(error => {

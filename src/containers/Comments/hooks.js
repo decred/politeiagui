@@ -1,4 +1,10 @@
-import { useEffect, useCallback, createContext, useContext } from "react";
+import {
+  useEffect,
+  useCallback,
+  createContext,
+  useContext,
+  useMemo
+} from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useRedux } from "src/redux";
@@ -7,14 +13,6 @@ import { useLoaderContext } from "src/Appv2/Loader";
 
 export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
-
-const mapStateToProps = {
-  comments: sel.proposalComments,
-  commentsLikes: sel.commentsLikes,
-  lastVisitTimestamp: sel.visitedProposal,
-  loading: sel.isApiRequestingComments,
-  loadingLikes: sel.isApiRequestingCommentsLikes
-};
 
 const mapDispatchToProps = {
   onSubmitComment: act.onSaveNewCommentV2,
@@ -26,11 +24,31 @@ const mapDispatchToProps = {
 };
 
 export function useComments(ownProps) {
+  const recordToken = ownProps && ownProps.recordToken;
+  const commentsSelector = useMemo(
+    () => sel.makeGetProposalComments(recordToken),
+    [recordToken]
+  );
+  const commentsLikesSelector = useMemo(
+    () => sel.makeGetProposalCommentsLikes(recordToken),
+    [recordToken]
+  );
+  const mapStateToProps = useMemo(
+    () => ({
+      comments: commentsSelector,
+      commentsLikes: commentsLikesSelector,
+      lastVisitTimestamp: sel.visitedProposal,
+      loading: sel.isApiRequestingComments,
+      loadingLikes: sel.isApiRequestingCommentsLikes
+    }),
+    [commentsSelector, commentsLikesSelector]
+  );
+
   const {
+    comments,
     onFetchComments,
     onFetchLikes,
     onCensorComment,
-    onResetComments,
     onLikeComment: onLikeCommentAction,
     commentsLikes,
     ...fromRedux
@@ -40,39 +58,32 @@ export function useComments(ownProps) {
   const email = currentUser && currentUser.email;
 
   const userLoggedIn = !!email;
-  const recordToken = ownProps && ownProps.recordToken;
+
   const numOfComments = (ownProps && ownProps.numOfComments) || 0;
-  const needsToFetchData = !!recordToken && numOfComments > 0;
+  const needsToFetchComments = !!recordToken && !comments && numOfComments > 0;
+  const needsToFetchCommentsLikes =
+    !!recordToken &&
+    !commentsLikes &&
+    numOfComments > 0 &&
+    enableCommentVote &&
+    userLoggedIn;
 
   useEffect(
     function handleFetchOfComments() {
-      if (recordToken && numOfComments > 0) {
+      if (needsToFetchComments) {
         onFetchComments(recordToken);
       }
-      return () => onResetComments();
     },
-    [
-      onFetchComments,
-      onResetComments,
-      needsToFetchData,
-      recordToken,
-      numOfComments
-    ]
+    [onFetchComments, needsToFetchComments, recordToken]
   );
 
   useEffect(
     function handleFetchOfLikes() {
-      if (needsToFetchData && enableCommentVote && userLoggedIn) {
+      if (needsToFetchCommentsLikes) {
         onFetchLikes(recordToken);
       }
     },
-    [
-      onFetchLikes,
-      enableCommentVote,
-      needsToFetchData,
-      userLoggedIn,
-      recordToken
-    ]
+    [onFetchLikes, needsToFetchCommentsLikes, recordToken]
   );
 
   const onLikeComment = useCallback(
@@ -96,6 +107,7 @@ export function useComments(ownProps) {
   );
 
   return {
+    comments,
     onLikeComment,
     onCensorComment,
     getCommentLikeOption,
