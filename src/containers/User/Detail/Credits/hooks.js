@@ -10,9 +10,8 @@ const mapStateToProps = {
   proposalCreditPrice: sel.proposalCreditPrice,
   proposalPaywallError: sel.proposalPaywallError,
   isApiRequestingProposalPaywall: sel.isApiRequestingProposalPaywall,
-  proposalCreditsResponse: sel.apiUserProposalCreditsResponse,
-  proposalCredits: sel.proposalCredits,
-  proposalCreditPurchases: sel.proposalCreditPurchases,
+  proposalCredits: sel.proposalCreditsV2,
+  proposalCreditsPurchases: sel.proposalCreditsPurchasesV2,
   isApiRequestingUserProposalCredits: sel.isApiRequestingUserProposalCredits,
   userCanExecuteActions: sel.userCanExecuteActions,
   isTestnet: sel.isTestNet,
@@ -50,12 +49,14 @@ export function useCredits(ownProps) {
     proposalPaywallPaymentTxid,
     isApiRequestingProposalPaywall,
     isApiRequestingUserProposalCredits,
-    proposalCreditsResponse,
+    proposalCredits,
+    proposalCreditsPurchases,
     user
   } = fromRedux;
-
   const { isPaid } = usePaywall();
-  const proposalCreditsFetched = !!proposalCreditsResponse;
+  const proposalCreditsFetched = !!proposalCredits;
+  const proposalCreditsPurchasesFetched =
+    proposalCredits > 0 ? proposalCreditsPurchases.length > 0 : true;
   const isUserPageOwner = user && loggedInAsUserId === user.id;
   const shouldFetchPurchaseProposalCredits =
     isPaid &&
@@ -68,7 +69,7 @@ export function useCredits(ownProps) {
     isPaid &&
     isUserPageOwner &&
     !isApiRequestingUserProposalCredits &&
-    !proposalCreditsFetched;
+    (!proposalCreditsFetched || !proposalCreditsPurchasesFetched);
 
   useEffect(() => {
     if (shouldFetchPurchaseProposalCredits) {

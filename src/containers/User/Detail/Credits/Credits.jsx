@@ -17,9 +17,9 @@ const Credits = () => {
     proposalCreditPrice,
     isAdmin,
     user,
-    userMe,
     isApiRequestingUserProposalCredits,
-    proposalCreditPurchases,
+    proposalCredits,
+    proposalCreditsPurchases,
     loggedInAsUserId,
     proposalPaywallAddress,
     proposalPaywallPaymentConfirmations,
@@ -91,7 +91,7 @@ const Credits = () => {
     onManageUser(user.id, MANAGE_USER_CLEAR_USER_PAYWALL, reason);
 
   const data = getTableContentFromPurchases(
-    proposalCreditPurchases,
+    proposalCreditsPurchases,
     {
       confirmations: proposalPaywallPaymentConfirmations,
       txID: proposalPaywallPaymentTxid,
@@ -106,7 +106,7 @@ const Credits = () => {
     <Message kind="error">
       Only admins or the user himself can access this route.
     </Message>
-  ) : isApiRequestingUserProposalCredits || !proposalCreditPurchases.length ? (
+  ) : isApiRequestingUserProposalCredits ? (
     <div className={styles.spinnerWrapper}>
       <Spinner invert />
     </div>
@@ -146,8 +146,8 @@ const Credits = () => {
             </div>
             <div className={styles.description}>
               <P className={styles.descriptionParagraph}>
-                <b>Registration Fee:</b> In order to participate on proposals and to submit your own, Politeia requires a small registration fee{" "}
-                <b>of exactly 0.1 DCR.</b>
+                <b>Registration Fee:</b> In order to participate on proposals and to submit your own, Politeia requires a small registration fee{" "} of 
+                <b> exactly 0.1 DCR.</b>
               </P>
             </div>
           </div>
@@ -161,7 +161,7 @@ const Credits = () => {
                   "margin-top-xs margin-bottom-xs"
                 )}
               >
-                {isUserPageOwner ? userMe.proposalcredits : user.proposalcredits}
+                {isUserPageOwner ? proposalCredits : user.proposalcredits}
               </Text>
             </div>
             <div className={styles.description}>
@@ -211,7 +211,7 @@ const Credits = () => {
             >
               <Text className="margin-right-xs">Credit History</Text>
               <ExportToCsv
-                data={getCsvData(proposalCreditPurchases)}
+                data={getCsvData(proposalCreditsPurchases)}
                 fields={[
                   "numberPurchased",
                   "price",
