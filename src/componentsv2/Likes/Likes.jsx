@@ -1,20 +1,14 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import {
-  Icon,
-  useTheme,
-  Text,
-  getThemeProperty,
-  useHover,
-  classNames
-} from "pi-ui";
+import { Icon, useTheme, Text, getThemeProperty, useHover } from "pi-ui";
 import styles from "./Likes.module.css";
 
 export const isLiked = action => action === 1 || action === "1";
 export const isDisliked = action => action === -1 || action === "-1";
 
 const Likes = ({
-  likes,
+  upLikes,
+  downLikes,
   onLike,
   onDislike,
   option,
@@ -59,41 +53,49 @@ const Likes = ({
 
   return (
     <div className="align-center">
-      <button
-        disabled={loading || disabled}
-        ref={likeRef}
-        className={classNames(styles.likeBtn, "margin-right-s")}
-        onClick={asyncLoading ? handleLike : onLike}
-      >
-        <Icon
-          onClick={onLike}
-          iconColor={likeColor}
-          backgroundColor={likeColor}
-          type="like"
-        />
-      </button>
-      <button
-        disabled={loading || disabled}
-        ref={dislikeRef}
-        className={styles.likeBtn}
-        onClick={asyncLoading ? handleDislike : onDislike}
-      >
-        <Icon
-          onClick={onDislike}
-          iconColor={dislikeColor}
-          backgroundColor={dislikeColor}
-          type="dislike"
-        />
-      </button>
-      <Text size="small" className={styles.likesResult}>
-        {likes}
-      </Text>
+      <div className={styles.leftLikeBox}>
+        <button
+          disabled={loading || disabled}
+          ref={likeRef}
+          className={styles.likeBtn}
+          onClick={asyncLoading ? handleLike : onLike}
+        >
+          <Icon
+            onClick={onLike}
+            iconColor={likeColor}
+            backgroundColor={likeColor}
+            type="like"
+          />
+        </button>
+        <Text size="small" className={styles.likesResult}>
+          {upLikes}
+        </Text>
+      </div>
+      <div className={styles.rightLikeBox}>
+        <button
+          disabled={loading || disabled}
+          ref={dislikeRef}
+          className={styles.likeBtn}
+          onClick={asyncLoading ? handleDislike : onDislike}
+        >
+          <Icon
+            onClick={onDislike}
+            iconColor={dislikeColor}
+            backgroundColor={dislikeColor}
+            type="dislike"
+          />
+        </button>
+        <Text size="small" className={styles.likesResult}>
+          {downLikes}
+        </Text>
+      </div>
     </div>
   );
 };
 
 Likes.propTypes = {
-  likes: PropTypes.number,
+  upLikes: PropTypes.number,
+  downLikes: PropTypes.number,
   option: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onLike: PropTypes.func,
   onDislike: PropTypes.func
@@ -101,7 +103,9 @@ Likes.propTypes = {
 
 Likes.defaultProps = {
   active: false,
-  asyncLoading: true
+  asyncLoading: true,
+  upLikes: 0,
+  downLikes: 0
 };
 
 export default Likes;

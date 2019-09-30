@@ -19,6 +19,8 @@ const Comment = ({
   censored,
   highlightAuthor,
   likesCount,
+  likesUpCount,
+  likesDownCount,
   likeOption,
   disableLikes,
   disableLikesClick,
@@ -77,7 +79,8 @@ const Comment = ({
         {!disableLikes && !censored && (
           <Likes
             disabled={disableLikesClick}
-            likes={likesCount}
+            upLikes={likesUpCount}
+            downLikes={likesDownCount}
             option={likeOption}
             onLike={onLike}
             onDislike={onDislike}
@@ -128,6 +131,8 @@ Comment.propTypes = {
   highlightAuthor: PropTypes.bool,
   disableLikes: PropTypes.bool,
   likesCount: PropTypes.number,
+  likesUpCount: PropTypes.number,
+  likesDownCount: PropTypes.number,
   likeOption: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   disableLikesClick: PropTypes.bool,
   onLike: PropTypes.func,
