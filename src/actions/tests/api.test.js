@@ -516,7 +516,11 @@ describe("test api actions (actions/api.js)", () => {
       params,
       [
         { type: act.REQUEST_LIKED_COMMENTS },
-        { type: act.RECEIVE_LIKED_COMMENTS, error: false, payload: {} }
+        {
+          type: act.RECEIVE_LIKED_COMMENTS,
+          error: false,
+          payload: { token: FAKE_PROPOSAL_TOKEN }
+        }
       ],
       {
         query: {
@@ -534,7 +538,11 @@ describe("test api actions (actions/api.js)", () => {
           error: false,
           payload: FAKE_PROPOSAL_TOKEN
         },
-        { type: act.RECEIVE_LIKED_COMMENTS, error: false, payload: {} }
+        {
+          type: act.RECEIVE_LIKED_COMMENTS,
+          error: false,
+          payload: { token: FAKE_PROPOSAL_TOKEN }
+        }
       ],
       {
         query: {
@@ -701,7 +709,7 @@ describe("test api actions (actions/api.js)", () => {
         {
           type: act.RESET_SYNC_LIKE_COMMENT,
           error: false,
-          payload: undefined
+          payload: { token: FAKE_PROPOSAL_TOKEN }
         },
         {
           error: true,
