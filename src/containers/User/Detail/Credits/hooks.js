@@ -98,7 +98,7 @@ export function useCredits(ownProps) {
     proposalPaywallPaymentTxid
   ]);
 
-  return fromRedux;
+  return { ...fromRedux, shouldFetchProposalCredits };
 }
 
 export function usePollProposalCreditsPayment(ownProps) {

@@ -67,9 +67,9 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
       setKeyData(keyData);
     });
   }, [loggedInAsEmail]);
-
+  
   const isUserPageOwner = user && loggedInAsUserId === user.id;
-  return loadingKey === PUB_KEY_STATUS_LOADING || keyMismatch || !keyData ? (
+  return loadingKey === PUB_KEY_STATUS_LOADING ? (
     <div className={styles.spinnerWrapper}>
       <Spinner invert />
     </div>
