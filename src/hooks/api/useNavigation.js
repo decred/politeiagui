@@ -1,11 +1,12 @@
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
 import * as sel from "src/selectors";
+import { useRedux } from "src/redux";
+import { useCredits } from "src/containers/User/Detail/Credits/hooks.js";
+import { useLoaderContext } from "src/Appv2/Loader";
 
 const mapStateToProps = {
   username: sel.loggedInAsUsername,
-  user: sel.apiMeResponse,
-  proposalCredits: sel.proposalCreditsV2
+  user: sel.apiMeResponse
 };
 
 const mapDispatchToProps = {
@@ -14,6 +15,8 @@ const mapDispatchToProps = {
 };
 
 export default function useNavigation(ownProps) {
+  const { currentUser } = useLoaderContext();
+  const { proposalCredits } = useCredits({ userid: currentUser.userid });
   const fromRedux = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
-  return fromRedux;
+  return { ...fromRedux, proposalCredits };
 }

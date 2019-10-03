@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useMemo } from "react";
 import * as act from "src/actions";
 import useInterval from "src/hooks/utils/useInterval";
 import usePaywall from "src/hooks/api/usePaywall";
@@ -10,7 +10,6 @@ const mapStateToProps = {
   proposalCreditPrice: sel.proposalCreditPrice,
   proposalPaywallError: sel.proposalPaywallError,
   isApiRequestingProposalPaywall: sel.isApiRequestingProposalPaywall,
-  proposalCredits: sel.proposalCreditsV2,
   proposalCreditsPurchases: sel.proposalCreditsPurchasesV2,
   isApiRequestingUserProposalCredits: sel.isApiRequestingUserProposalCredits,
   userCanExecuteActions: sel.userCanExecuteActions,
@@ -22,9 +21,8 @@ const mapStateToProps = {
   pollingCreditsPayment: sel.pollingCreditsPayment,
   proposalPaymentReceived: sel.proposalPaymentReceived,
   paywallTxid: sel.paywallTxid,
-  isAdmin: sel.isAdmin,
   user: sel.user,
-  userMe: sel.apiMeResponse,
+  isAdmin: sel.isAdmin,
   loggedInAsUserId: sel.userid
 };
 
@@ -37,26 +35,41 @@ const mapDispatchToProps = {
 };
 
 export function useCredits(ownProps) {
-  const fromRedux = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
+  const { userid } = ownProps;
+  const creditsSelector = useMemo(() => sel.makeGetUnspentUserCredits(userid), [
+    userid
+  ]);
+  const mapStateToPropsWithCredits = useMemo(
+    () => ({
+      ...mapStateToProps,
+      proposalCredits: creditsSelector
+    }),
+    [creditsSelector]
+  );
   const {
     onPurchaseProposalCredits,
     onUserProposalCredits,
-    loggedInAsUserId,
-    proposalCreditPrice,
-    toggleCreditsPaymentPolling,
-    pollingCreditsPayment,
     onFetchProposalPaywallPayment,
-    proposalPaywallPaymentTxid,
     isApiRequestingProposalPaywall,
     isApiRequestingUserProposalCredits,
+    user,
+    isAdmin,
+    loggedInAsUserId,
+    pollingCreditsPayment,
+    toggleCreditsPaymentPolling,
+    proposalPaymentReceived,
+    toggleProposalPaymentReceived,
+    proposalPaywallAddress,
+    proposalPaywallPaymentTxid,
+    proposalPaywallPaymentAmount,
+    proposalPaywallPaymentConfirmations,
     proposalCredits,
-    proposalCreditsPurchases,
-    user
-  } = fromRedux;
+    proposalCreditPrice,
+    proposalCreditsPurchases
+  } = useRedux(ownProps, mapStateToPropsWithCredits, mapDispatchToProps);
+
   const { isPaid } = usePaywall();
   const proposalCreditsFetched = !!proposalCredits;
-  const proposalCreditsPurchasesFetched =
-    proposalCredits > 0 ? proposalCreditsPurchases.length > 0 : true;
   const isUserPageOwner = user && loggedInAsUserId === user.id;
   const shouldFetchPurchaseProposalCredits =
     isPaid &&
@@ -69,7 +82,7 @@ export function useCredits(ownProps) {
     isPaid &&
     isUserPageOwner &&
     !isApiRequestingUserProposalCredits &&
-    (!proposalCreditsFetched || !proposalCreditsPurchasesFetched);
+    !proposalCreditsFetched;
 
   useEffect(() => {
     if (shouldFetchPurchaseProposalCredits) {
@@ -99,7 +112,23 @@ export function useCredits(ownProps) {
     proposalPaywallPaymentTxid
   ]);
 
-  return fromRedux;
+  return {
+    proposalCreditPrice,
+    isAdmin,
+    user,
+    isApiRequestingUserProposalCredits,
+    proposalCredits,
+    proposalCreditsPurchases,
+    loggedInAsUserId,
+    proposalPaywallAddress,
+    proposalPaywallPaymentConfirmations,
+    proposalPaywallPaymentTxid,
+    proposalPaywallPaymentAmount,
+    toggleCreditsPaymentPolling,
+    pollingCreditsPayment,
+    proposalPaymentReceived,
+    toggleProposalPaymentReceived
+  };
 }
 
 export function usePollProposalCreditsPayment(ownProps) {

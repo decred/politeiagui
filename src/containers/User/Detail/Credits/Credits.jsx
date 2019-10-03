@@ -13,10 +13,10 @@ import { getCsvData, getProposalCreditsPaymentStatus, getTableContentFromPurchas
 import { useCredits, useRescanUserCredits } from "./hooks.js";
 
 const Credits = () => {
+  const { user, onManageUser, isApiRequestingMarkAsPaid } = useManageUser();
   const {
     proposalCreditPrice,
     isAdmin,
-    user,
     isApiRequestingUserProposalCredits,
     proposalCredits,
     proposalCreditsPurchases,
@@ -29,7 +29,7 @@ const Credits = () => {
     pollingCreditsPayment,
     proposalPaymentReceived,
     toggleProposalPaymentReceived
-  } = useCredits();
+  } = useCredits({ userid: user.id});
 
   const {
     onRescanUserCredits,
@@ -79,8 +79,6 @@ const Credits = () => {
   ]);
 
   const isUserPageOwner = user && loggedInAsUserId === user.id;
-
-  const { onManageUser, isApiRequestingMarkAsPaid } = useManageUser();
 
   const paywallIsPaid = hasUserPaid(
     user.newuserpaywalltx,
