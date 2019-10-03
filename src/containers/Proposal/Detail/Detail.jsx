@@ -19,7 +19,7 @@ import {
 import { useProposalVote } from "../hooks";
 import { useRouter } from "src/componentsv2/Router";
 
-const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
+const ProposalDetail = ({ TopBanner, PageDetails, Main, match }) => {
   const { proposal, loading, threadParentID } = useProposal({ match });
   const proposalToken =
     proposal && proposal.censorshiprecord && proposal.censorshiprecord.token;
@@ -73,11 +73,11 @@ const ProposalDetail = ({ TopBanner, PageDetails, Sidebar, Main, match }) => {
     <>
       <TopBanner>
         <PageDetails
-          title={"Proposal Details"}
+          titleAndSubtitleWrapperClassName={styles.customTitleAndSubtitleWrapper}
+          headerClassName={styles.customHeader}
           subtitle={goBackLinkFromPreviousLocation}
         />
       </TopBanner>
-      <Sidebar />
       <Main className={styles.customMain}>
         <UnvettedActionsProvider>
           <PublicActionsProvider>

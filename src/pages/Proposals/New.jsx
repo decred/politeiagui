@@ -1,17 +1,17 @@
 import React from "react";
 import MultipleContentPage from "src/componentsv2/layout/MultipleContentPage";
 import ProposalNewForm from "src/containers/Proposal/New";
+import styles from "./Proposals.module.css";
 
 const PageProposalsNew = () => {
   return (
     <MultipleContentPage topBannerHeight={90}>
-      {({ TopBanner, PageDetails, Sidebar, Main }) => (
+      {({ TopBanner, PageDetails, Main }) => (
         <>
           <TopBanner>
             <PageDetails title="Create Proposal" />
           </TopBanner>
-          <Sidebar />
-          <Main>
+          <Main className={styles.customMain}>
             <ProposalNewForm />
           </Main>
         </>
