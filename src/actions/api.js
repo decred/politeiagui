@@ -9,10 +9,10 @@ import {
 import { clearStateLocalStorage } from "../lib/local_storage";
 import * as pki from "../lib/pki";
 import * as sel from "../selectors";
-import * as external_api_actions from "./external_api";
 import { callAfterMinimumWait } from "./lib";
 import act from "./methods";
 import { closeModal, confirmWithModal, openModal } from "./modal";
+import { PAYWALL_STATUS_PAID } from "../constants";
 
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onResetInvoice = act.RESET_INVOICE;
@@ -65,15 +65,7 @@ export const onRequestMe = () => (dispatch, getState) => {
         // Start polling for the user paywall tx, if applicable.
         const paywallAddress = sel.paywallAddress(getState());
         if (paywallAddress) {
-          const paywallAmount = sel.paywallAmount(getState());
-          const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
-          dispatch(
-            external_api_actions.verifyUserPayment(
-              paywallAddress,
-              paywallAmount,
-              paywallTxNotBefore
-            )
-          );
+          dispatch(onPollUserPayment());
         }
         return response;
       }
@@ -88,6 +80,41 @@ export const onRequestMe = () => (dispatch, getState) => {
 export const updateMe = payload => dispatch => dispatch(act.UPDATE_ME(payload));
 
 export const cleanErrors = act.CLEAN_ERRORS;
+
+let globalpollingpointer = null;
+
+export const clearPollingPointer = () => clearTimeout(globalpollingpointer);
+export const setPollingPointer = paymentpolling => {
+  globalpollingpointer = paymentpolling;
+};
+
+const POLL_INTERVAL = 10 * 1000;
+const onPollUserPayment = () => dispatch => {
+  return api
+    .verifyUserPayment()
+    .then(response => response.haspaid)
+    .then(verified => {
+      if (verified) {
+        dispatch(
+          act.UPDATE_USER_PAYWALL_STATUS({ status: PAYWALL_STATUS_PAID })
+        );
+      } else {
+        const paymentpolling = setTimeout(
+          () => dispatch(onPollUserPayment()),
+          POLL_INTERVAL
+        );
+        setPollingPointer(paymentpolling);
+      }
+    })
+    .catch(error => {
+      const paymentpolling = setTimeout(
+        () => dispatch(onPollUserPayment()),
+        POLL_INTERVAL
+      );
+      setPollingPointer(paymentpolling);
+      throw error;
+    });
+};
 
 export const onGetPolicy = () => dispatch => {
   dispatch(act.REQUEST_POLICY());
@@ -241,7 +268,7 @@ export const onLogin = ({ email, password }) =>
 export const handleLogout = response => dispatch => {
   dispatch(act.RECEIVE_LOGOUT(response));
   clearStateLocalStorage();
-  external_api_actions.clearPollingPointer();
+  clearPollingPointer();
   dispatch(onSetEmail(""));
 };
 

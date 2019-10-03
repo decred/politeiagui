@@ -369,6 +369,7 @@ export const isAdmin = bool(
 
 export const userAlreadyPaid = bool(state => {
   if (state.api.me && state.api.me.response) {
+    console.log(state.api.me.response.paywalladdress === "");
     return state.api.me.response.paywalladdress === "";
   }
   if (state.api.login && state.api.login.response) {
