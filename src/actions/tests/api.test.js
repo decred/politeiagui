@@ -4,7 +4,6 @@ import thunk from "redux-thunk";
 import qs from "query-string";
 import * as api from "../api";
 import * as pki from "../../lib/pki";
-import * as ea from "../external_api";
 import * as act from "../types";
 import {
   done,
@@ -178,7 +177,6 @@ describe("test api actions (actions/api.js)", () => {
     const successfulResponse = { ...FAKE_USER };
     const path = "/api/v1/user/me";
     fetchMock.get("/api/v1/user/me", successfulResponse);
-    const { address, amount, txNotBefore } = FAKE_PAYWALL;
 
     // test it successfully handles the response and dispatch actions
     setGetSuccessResponse(path, {}, successfulResponse);
@@ -190,7 +188,7 @@ describe("test api actions (actions/api.js)", () => {
           type: act.RECEIVE_ME,
           payload: { email: FAKE_USER.email, username: FAKE_USER.username }
         },
-        ea.verifyUserPayment(address, amount, txNotBefore)
+        api.onPollUserPayment()
       ],
       done
     );
@@ -259,7 +257,6 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on create a new user action", async () => {
     const path = "/api/v1/user/new";
-    // fetchMock.restore();
     //test it handles a successful response
     await assertApiActionOnError(
       path,
@@ -293,10 +290,6 @@ describe("test api actions (actions/api.js)", () => {
     const path = "/api/v1/user/verify";
     const verificationToken = "any";
     const { email } = FAKE_USER;
-    // const searchQuery = qs.stringify({
-    //   email: FAKE_USER.email,
-    //   verificationtoken
-    // });
 
     await assertApiActionOnError(
       path,

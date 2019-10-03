@@ -89,7 +89,7 @@ export const setPollingPointer = paymentpolling => {
 };
 
 const POLL_INTERVAL = 10 * 1000;
-const onPollUserPayment = () => dispatch => {
+export const onPollUserPayment = () => dispatch => {
   return api
     .verifyUserPayment()
     .then(response => response.haspaid)
