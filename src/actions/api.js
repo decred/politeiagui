@@ -1079,10 +1079,6 @@ export const keyMismatch = payload => dispatch =>
 export const resetPasswordReset = () => dispatch =>
   dispatch(act.RESET_RESET_PASSWORD());
 
-export const verifyUserPaymentWithPoliteia = txid => {
-  return api.verifyUserPayment(txid).then(response => response.haspaid);
-};
-
 export const onStartVote = (loggedInAsEmail, token, duration, quorum, pass) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_START_VOTE({ token }));
