@@ -23,15 +23,3 @@
 .searchByRadioButton {
     margin-right: 3rem;
 }
-
-.customMain {
-    grid-column: center-start / center-end;
-}
-
-@media screen and (min-width: 1400px) {
-    .customMain {
-        grid-column: full-start / full-end;
-        margin-left: 6rem;
-        margin-right: 6rem;
-    }
-}

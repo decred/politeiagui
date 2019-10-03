@@ -35,7 +35,6 @@ const getTabComponents = ({ user, ...rest }) => {
 const UserDetail = ({
   TopBanner,
   PageDetails,
-  Sidebar,
   Main,
   Title,
   Tabs,
@@ -151,8 +150,7 @@ const UserDetail = ({
           {tabs}
         </PageDetails>
       </TopBanner>
-      <Sidebar />
-      <Main className="main">{currentTabComponent}</Main>
+      <Main fillScreen className="main">{currentTabComponent}</Main>
       <ModalChangeUsername
         validationSchema={validationSchema}
         onChangeUsername={onChangeUsername}

@@ -1,6 +1,6 @@
 .label {
   color: var(--color-gray-blueish);
-  width: 25%;
+  min-width: 150px;
 }
 
 .sectionWrapper {

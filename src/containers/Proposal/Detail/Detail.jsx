@@ -78,7 +78,7 @@ const ProposalDetail = ({ TopBanner, PageDetails, Main, match }) => {
           subtitle={goBackLinkFromPreviousLocation}
         />
       </TopBanner>
-      <Main className={styles.customMain}>
+      <Main className={styles.customMain} fillScreen>
         <UnvettedActionsProvider>
           <PublicActionsProvider>
             {loading || !proposal ? (

@@ -1,6 +1,5 @@
 import React from "react";
 import MultipleContentPage from "src/componentsv2/layout/MultipleContentPage";
-import styles from "./Proposals.module.css";
 
 const PageProposalsAdmin = () => {
   return (
@@ -10,7 +9,7 @@ const PageProposalsAdmin = () => {
           <TopBanner>
             <PageDetails title="Admin" />
           </TopBanner>
-          <Main className={styles.customMain}>Main Content</Main>
+          <Main fillScreen>Main Content</Main>
         </>
       )}
     </MultipleContentPage>

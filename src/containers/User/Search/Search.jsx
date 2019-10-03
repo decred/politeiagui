@@ -103,7 +103,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
           </Formik>
         </PageDetails>
       </TopBanner>
-      <Main className={styles.customMain}>
+      <Main fillScreen>
         {searchError ? (
           <Message kind="error">{searchError.toString()}</Message>
         ) : foundUsers && !!foundUsers.length ? (

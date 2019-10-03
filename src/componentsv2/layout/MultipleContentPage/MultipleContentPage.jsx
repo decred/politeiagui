@@ -81,8 +81,8 @@ const Tabs = ({ className, ...props }) => (
   <TabsUI className={classNames(className)} {...props} />
 );
 
-const Main = ({ className, ...props }) => (
-  <UIMain className={classNames(styles.customMain, className)} {...props} />
+const Main = ({ className, fillScreen, ...props }) => (
+  <UIMain className={classNames(styles.customMain, fillScreen && styles.customMainNoSidebar, className)} {...props} />
 );
 
 const MultipleContentpage = ({ children, disableScrollToTop, ...props }) => {
