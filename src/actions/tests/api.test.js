@@ -1106,7 +1106,8 @@ describe("test api actions (actions/api.js)", () => {
     };
 
     const mockSuccessResponse = {
-      newcredits: [{ paywallid: "any" }]
+      newcredits: [{ paywallid: "any" }],
+      userid
     };
     setPutSuccessResponse(path, {}, mockSuccessResponse);
     const store = getMockedStore();
