@@ -1,6 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Icon, useTheme, Text, getThemeProperty, useHover } from "pi-ui";
+import {
+  Icon,
+  useTheme,
+  Text,
+  getThemeProperty,
+  useHover,
+  classNames
+} from "pi-ui";
 import styles from "./Likes.module.css";
 
 export const isLiked = action => action === 1 || action === "1";
@@ -51,6 +58,18 @@ const Likes = ({
     }
   }
 
+  const renderCount = useCallback(
+    count => (
+      <Text
+        size="small"
+        className={classNames(styles.likesResult, "unselectable")}
+      >
+        {count}
+      </Text>
+    ),
+    []
+  );
+
   return (
     <div className="align-center">
       <div className={styles.leftLikeBox}>
@@ -67,9 +86,7 @@ const Likes = ({
             type="like"
           />
         </button>
-        <Text size="small" className={styles.likesResult}>
-          {upLikes}
-        </Text>
+        {renderCount(upLikes)}
       </div>
       <div className={styles.rightLikeBox}>
         <button
@@ -85,9 +102,7 @@ const Likes = ({
             type="dislike"
           />
         </button>
-        <Text size="small" className={styles.likesResult}>
-          {downLikes}
-        </Text>
+        {renderCount(downLikes)}
       </div>
     </div>
   );
