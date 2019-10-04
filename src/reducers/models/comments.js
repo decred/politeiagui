@@ -58,14 +58,28 @@ const comments = (state = DEFAULT_STATE, action) =>
 
           const updateCommentResultAndTotalVotes = comment => {
             if (comment.commentid !== commentid) return comment;
+            const oldActionEqualsNewAction = oldAction === newAction;
+
             const calcNewTotalVotes = value =>
-              value + (oldAction === newAction ? -1 : oldAction === 0 ? 1 : 0);
+              value + (oldActionEqualsNewAction ? -1 : oldAction === 0 ? 1 : 0);
             const calcNewResultVotes = value =>
               value +
-              (oldAction === newAction ? -oldAction : newAction - oldAction);
+              (oldActionEqualsNewAction ? -oldAction : newAction - oldAction);
+
+            const calcPerActionVotes = action => (value = 0) => {
+              if (newAction === action) {
+                if (oldActionEqualsNewAction) return --value;
+                return ++value;
+              }
+              if (oldAction === action) return --value;
+              return value;
+            };
+
             return compose(
               update("totalvotes", calcNewTotalVotes),
-              update("resultvotes", calcNewResultVotes)
+              update("resultvotes", calcNewResultVotes),
+              update("upvotes", calcPerActionVotes(1)),
+              update("downvotes", calcPerActionVotes(-1))
             )(comment);
           };
 
