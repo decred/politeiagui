@@ -866,6 +866,7 @@ export const lineItemPayouts = state => {
         lineItem.timestamp = invoice.timestamp;
         lineItem.token = invoice.censorshiprecord.token;
         lineItem.labor = (lineItem.labor / 60) * contractorrate;
+        lineItem.expenses = lineItem.expenses / 100;
         lineItem.description = lineItem.description.replace("#", ""); // This scrubs descriptions of any pounds that screw up CSV export.
         lineItems.push(lineItem);
       });
