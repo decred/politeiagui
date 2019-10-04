@@ -1104,37 +1104,10 @@ export const onFetchProposalPaywallDetails = () => dispatch => {
     });
 };
 
-export const onAddProposalCredits = ({ amount, txNotBefore }) => (
-  dispatch,
-  getState
-) => {
-  const propPaywallDetails = getState().api.proposalPaywallDetails;
-  let creditPrice = 0.1;
-  if (propPaywallDetails) {
-    creditPrice = propPaywallDetails.response.creditprice / 100000000;
-  } else {
-    api.proposalPaywallDetails().then(response => {
-      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS(response));
-      creditPrice = response.creditprice / 100000000;
-    });
-  }
-
-  return amount
-    ? dispatch(
-        act.ADD_PROPOSAL_CREDITS({
-          amount: Math.round((amount * 1) / creditPrice),
-          txid: txNotBefore
-        })
-      )
-    : null;
-};
-
 export const onUserProposalCredits = () => (dispatch, getState) => {
   dispatch(act.REQUEST_USER_PROPOSAL_CREDITS());
-  // TODO: get user id from normalized state branch once its
-  // implemented, instead of api me response
-  const { userid } = getState().api.me.response;
-
+  const { userid } =
+    getState().api.me.response || getState().api.login.response;
   return api
     .userProposalCredits()
     .then(response =>

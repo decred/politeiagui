@@ -3,10 +3,12 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { usePollProposalCreditsPayment } from "src/containers/User/Detail/Credits/hooks";
 import useNavigation from "src/hooks/api/useNavigation";
+import { useCredits } from "src/containers/User/Detail/Credits/hooks.js";
 import styles from "./ProposalCreditsIndicator.module.css";
 
 const ProposalCreditsIndicator = ({ history }) => {
-  const { user, proposalCredits } = useNavigation();
+  const { user } = useNavigation();
+  const { proposalCredits } = useCredits({ userid: user.userid });
   usePollProposalCreditsPayment();
   const pushToProposalCredits = () =>
     history.push(`/user/${user.userid}?tab=credits`);

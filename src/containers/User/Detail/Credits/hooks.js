@@ -74,7 +74,7 @@ export function useCredits(ownProps) {
   } = useRedux(ownProps, mapStateToPropsWithCredits, mapDispatchToProps);
 
   const { isPaid } = usePaywall();
-  const proposalCreditsFetched = !!proposalCredits;
+  const proposalCreditsFetched = proposalCredits !== null;
   const isUserPageOwner = user && loggedInAsUserId === user.id;
   const shouldFetchPurchaseProposalCredits =
     isPaid &&
