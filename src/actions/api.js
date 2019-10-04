@@ -9,7 +9,6 @@ import {
 import { clearStateLocalStorage } from "../lib/local_storage";
 import * as pki from "../lib/pki";
 import * as sel from "../selectors";
-import * as external_api_actions from "./external_api";
 import act from "./methods";
 import { closeModal, confirmWithModal, openModal } from "./modal";
 import { PAYWALL_STATUS_PAID } from "../constants";

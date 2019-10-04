@@ -20,8 +20,10 @@ const credits = (state = DEFAULT_STATE, action) =>
         },
         [act.RECEIVE_RESCAN_USER_PAYMENTS]: () => {
           const { userid, newcredits } = action.payload;
-          const unspent = [...newcredits, ...state.byUserID[userid].unspent];
-          return update(["byUserID", userid], { unspent })(state);
+          return update(["byUserID", userid, "unspent"], (unspent = []) => [
+            ...unspent,
+            ...newcredits
+          ])(state);
         }
       }[action.type] || (() => state))();
 

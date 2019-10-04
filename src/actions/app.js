@@ -11,7 +11,8 @@ import {
   onFetchInvoiceComments,
   handleLogout,
   onLineItemPayouts,
-  onRequestMe
+  onRequestMe,
+  onUserProposalCredits
 } from "./api";
 import {
   onFetchProposal as onFetchProposalApi,
@@ -114,7 +115,9 @@ export const onSaveNewProposalV2 = ({ name, description, files }) => (
 
   return dispatch(
     onSubmitProposal(email, id, username, name.trim(), description, files)
-  ).then(() => sel.newProposalToken(getState()));
+  )
+    .then(() => dispatch(onUserProposalCredits()))
+    .then(() => sel.newProposalToken(getState()));
 };
 
 export const onEditProposalV2 = ({ token, name, description, files }) => (

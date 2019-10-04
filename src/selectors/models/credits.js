@@ -1,47 +1,66 @@
 import { createSelector } from "reselect";
 import get from "lodash/fp/get";
 
-// NEW IMPLEMENTATION
 export const creditsByUserID = get(["credits", "byUserID"]);
 
 export const makeGetUnspentUserCredits = userid =>
   createSelector(
     creditsByUserID,
     creditsByUserID =>
-      (creditsByUserID[userid] && creditsByUserID[userid].unspent.length) || 0
+      creditsByUserID[userid] ? creditsByUserID[userid].unspent : []
   );
 
 export const makeGetSpentUserCredits = userid =>
   createSelector(
     creditsByUserID,
     creditsByUserID =>
-      (creditsByUserID[userid] && creditsByUserID[userid].spent.length) || 0
+      creditsByUserID[userid] ? creditsByUserID[userid].spent : []
   );
 
-// OLD IMLEMENTATION
-export const proposalCreditsV2 = get(["credits", "proposalCredits", "credits"]);
+export const makeGetUnspentUserCreditsLength = userid => {
+  const unspentUserCredits = makeGetUnspentUserCredits(userid);
+  return createSelector(
+    unspentUserCredits,
+    unspentCredits => unspentCredits.length
+  );
+};
 
-export const proposalCreditsPurchasesV2 = () => {
-  return [];
-  // const { purchases } = state.credits.proposalCredits;
-  // if (!purchases || !purchases.spentcredits || !purchases.unspentcredits) {
-  //   return [];
-  // }
-  // const purchasesMap = {};
-  // [...purchases.spentcredits, ...purchases.unspentcredits].forEach(credit => {
-  //   if (credit.txid in purchasesMap) {
-  //     purchasesMap[credit.txid].numberPurchased++;
-  //   } else {
-  //     purchasesMap[credit.txid] = {
-  //       price: credit.price / 100000000,
-  //       datePurchased: credit.datepurchased,
-  //       numberPurchased: 1,
-  //       txId: credit.txid
-  //     };
-  //   }
-  // });
+export const makeGetSpentUserCreditsLength = userid => {
+  const spentUserCredits = makeGetSpentUserCredits(userid);
+  return createSelector(
+    spentUserCredits,
+    spentCredits => spentCredits.length
+  );
+};
 
-  // return Object.values(purchasesMap).sort(
-  //   (a, b) => a.datePurchased - b.datePurchased
-  // );
+export const makeGetUserCreditsPurchasesByTx = userid => {
+  const spentUserCredits = makeGetSpentUserCredits(userid);
+  const unspentUserCredits = makeGetUnspentUserCredits(userid);
+
+  return createSelector(
+    spentUserCredits,
+    unspentUserCredits,
+    (spent, unspent) => {
+      const groupedCredits =
+        spent &&
+        unspent &&
+        [...spent, ...unspent].reduce((result, credit) => {
+          if (credit.txid in result) {
+            result[credit.txid].numberPurchased++;
+          } else {
+            result[credit.txid] = {
+              price: credit.price / 100000000,
+              datePurchased: credit.datepurchased,
+              numberPurchased: 1,
+              txId: credit.txid
+            };
+          }
+          return result;
+        }, []);
+      const sortedCredits = Object.values(groupedCredits).sort(
+        (a, b) => a.datePurchased - b.datePurchased
+      );
+      return sortedCredits;
+    }
+  );
 };

@@ -10,7 +10,6 @@ const mapStateToProps = {
   proposalCreditPrice: sel.proposalCreditPrice,
   proposalPaywallError: sel.proposalPaywallError,
   isApiRequestingProposalPaywall: sel.isApiRequestingProposalPaywall,
-  proposalCreditsPurchases: sel.proposalCreditsPurchasesV2,
   isApiRequestingUserProposalCredits: sel.isApiRequestingUserProposalCredits,
   userCanExecuteActions: sel.userCanExecuteActions,
   isTestnet: sel.isTestNet,
@@ -36,15 +35,21 @@ const mapDispatchToProps = {
 
 export function useCredits(ownProps) {
   const { userid } = ownProps;
-  const creditsSelector = useMemo(() => sel.makeGetUnspentUserCredits(userid), [
-    userid
-  ]);
+  const creditsSelector = useMemo(
+    () => sel.makeGetUnspentUserCreditsLength(userid),
+    [userid]
+  );
+  const creditsPurchasesSelector = useMemo(
+    () => sel.makeGetUserCreditsPurchasesByTx(userid),
+    [userid]
+  );
   const mapStateToPropsWithCredits = useMemo(
     () => ({
       ...mapStateToProps,
-      proposalCredits: creditsSelector
+      proposalCredits: creditsSelector,
+      proposalCreditsPurchases: creditsPurchasesSelector
     }),
-    [creditsSelector]
+    [creditsSelector, creditsPurchasesSelector]
   );
   const {
     onPurchaseProposalCredits,
