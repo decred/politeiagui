@@ -427,8 +427,11 @@ export const makeGetPropVoteStatus = token => {
   );
 };
 
-const apiPropsVoteSummaries = getApiResponse("proposalsVoteSummary");
+export const apiPropsVoteSummaryError = getApiError(
+  "proposalsVoteSummaryError"
+);
 
+const apiPropsVoteSummaries = getApiResponse("proposalsVoteSummary");
 export const makeGetPropVoteSummary = token => {
   return createSelector(
     apiPropsVoteSummaries,
