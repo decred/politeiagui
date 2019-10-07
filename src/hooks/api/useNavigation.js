@@ -1,11 +1,10 @@
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
 import * as sel from "src/selectors";
+import { useRedux } from "src/redux";
 
 const mapStateToProps = {
   username: sel.loggedInAsUsername,
-  user: sel.apiMeResponse,
-  proposalCredits: sel.proposalCredits
+  user: sel.apiMeResponse
 };
 
 const mapDispatchToProps = {

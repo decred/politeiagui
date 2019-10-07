@@ -9,10 +9,9 @@ import {
 import { clearStateLocalStorage } from "../lib/local_storage";
 import * as pki from "../lib/pki";
 import * as sel from "../selectors";
-import * as external_api_actions from "./external_api";
-import { callAfterMinimumWait } from "./lib";
 import act from "./methods";
 import { closeModal, confirmWithModal, openModal } from "./modal";
+import { PAYWALL_STATUS_PAID } from "../constants";
 
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onResetInvoice = act.RESET_INVOICE;
@@ -54,26 +53,19 @@ export const requestApiInfo = (fetchUser = true) => dispatch => {
 };
 
 export const onRequestMe = () => (dispatch, getState) => {
+  const state = getState();
   dispatch(act.REQUEST_ME());
   return api
     .me()
     .then(response => {
       dispatch(act.RECEIVE_ME(response));
-      if (sel.usePaywall(getState())) {
-        dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
+      if (sel.usePaywall(state)) {
+        dispatch(onUserProposalCredits());
 
         // Start polling for the user paywall tx, if applicable.
-        const paywallAddress = sel.paywallAddress(getState());
+        const paywallAddress = sel.paywallAddress(state);
         if (paywallAddress) {
-          const paywallAmount = sel.paywallAmount(getState());
-          const paywallTxNotBefore = sel.paywallTxNotBefore(getState());
-          dispatch(
-            external_api_actions.verifyUserPayment(
-              paywallAddress,
-              paywallAmount,
-              paywallTxNotBefore
-            )
-          );
+          dispatch(onPollUserPayment());
         }
         return response;
       }
@@ -88,6 +80,41 @@ export const onRequestMe = () => (dispatch, getState) => {
 export const updateMe = payload => dispatch => dispatch(act.UPDATE_ME(payload));
 
 export const cleanErrors = act.CLEAN_ERRORS;
+
+let globalpollingpointer = null;
+
+export const clearPollingPointer = () => clearTimeout(globalpollingpointer);
+export const setPollingPointer = paymentpolling => {
+  globalpollingpointer = paymentpolling;
+};
+
+const POLL_INTERVAL = 10 * 1000;
+export const onPollUserPayment = () => dispatch => {
+  return api
+    .verifyUserPayment()
+    .then(response => response.haspaid)
+    .then(verified => {
+      if (verified) {
+        dispatch(
+          act.UPDATE_USER_PAYWALL_STATUS({ status: PAYWALL_STATUS_PAID })
+        );
+      } else {
+        const paymentpolling = setTimeout(
+          () => dispatch(onPollUserPayment()),
+          POLL_INTERVAL
+        );
+        setPollingPointer(paymentpolling);
+      }
+    })
+    .catch(error => {
+      const paymentpolling = setTimeout(
+        () => dispatch(onPollUserPayment()),
+        POLL_INTERVAL
+      );
+      setPollingPointer(paymentpolling);
+      throw error;
+    });
+};
 
 export const onGetPolicy = () => dispatch => {
   dispatch(act.REQUEST_POLICY());
@@ -223,7 +250,7 @@ export const onLogin = ({ email, password }) =>
       .then(response => {
         dispatch(act.RECEIVE_LOGIN(response));
         if (sel.usePaywall(getState())) {
-          dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
+          dispatch(onUserProposalCredits());
         }
         dispatch(closeModal());
         return response;
@@ -241,7 +268,7 @@ export const onLogin = ({ email, password }) =>
 export const handleLogout = response => dispatch => {
   dispatch(act.RECEIVE_LOGOUT(response));
   clearStateLocalStorage();
-  external_api_actions.clearPollingPointer();
+  clearPollingPointer();
   dispatch(onSetEmail(""));
 };
 
@@ -1052,10 +1079,6 @@ export const keyMismatch = payload => dispatch =>
 export const resetPasswordReset = () => dispatch =>
   dispatch(act.RESET_RESET_PASSWORD());
 
-export const verifyUserPaymentWithPoliteia = txid => {
-  return api.verifyUserPayment(txid).then(response => response.haspaid);
-};
-
 export const onStartVote = (loggedInAsEmail, token, duration, quorum, pass) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_START_VOTE({ token }));
@@ -1081,62 +1104,14 @@ export const onFetchProposalPaywallDetails = () => dispatch => {
     });
 };
 
-export const onUpdateProposalCredits = () => dispatch => {
-  dispatch(act.REQUEST_UPDATE_PROPOSAL_CREDITS());
-
-  const dispatchAfterWaitFn = callAfterMinimumWait(response => {
-    dispatch(act.RECEIVE_UPDATE_PROPOSAL_CREDITS(response));
-    dispatch(act.SET_PROPOSAL_CREDITS(response.proposalcredits));
-  }, 500);
-
-  return api
-    .me()
-    .then(dispatchAfterWaitFn)
-    .catch(error => {
-      dispatch(act.RECEIVE_UPDATE_PROPOSAL_CREDITS(null, error));
-    });
-};
-
-export const onAddProposalCredits = ({ amount, txNotBefore }) => (
-  dispatch,
-  getState
-) => {
-  const propPaywallDetails = getState().api.proposalPaywallDetails;
-  let creditPrice = 0.1;
-  if (propPaywallDetails) {
-    creditPrice = propPaywallDetails.response.creditprice / 100000000;
-  } else {
-    api.proposalPaywallDetails().then(response => {
-      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS(response));
-      creditPrice = response.creditprice / 100000000;
-    });
-  }
-
-  return amount
-    ? dispatch(
-        act.ADD_PROPOSAL_CREDITS({
-          amount: Math.round((amount * 1) / creditPrice),
-          txid: txNotBefore
-        })
-      )
-    : null;
-};
-
-export const onUserProposalCredits = () => dispatch => {
+export const onUserProposalCredits = () => (dispatch, getState) => {
   dispatch(act.REQUEST_USER_PROPOSAL_CREDITS());
-
-  const dispatchAfterWaitFn = callAfterMinimumWait(response => {
-    dispatch(act.RECEIVE_USER_PROPOSAL_CREDITS(response));
-    dispatch(
-      act.SET_PROPOSAL_CREDITS(
-        response.unspentcredits ? response.unspentcredits.length : 0
-      )
-    );
-  }, 500);
-
+  const userid = sel.userid(getState());
   return api
     .userProposalCredits()
-    .then(dispatchAfterWaitFn)
+    .then(response =>
+      dispatch(act.RECEIVE_USER_PROPOSAL_CREDITS({ ...response, userid }))
+    )
     .catch(error => {
       dispatch(act.RECEIVE_USER_PROPOSAL_CREDITS(null, error));
     });
@@ -1302,13 +1277,7 @@ export const onRescanUserPayments = userid =>
     return api
       .rescanUserPayments(csrf, userid)
       .then(response => {
-        dispatch(act.RECEIVE_RESCAN_USER_PAYMENTS(response));
-
-        // if the rescan returns new credits, a refetch of the user details
-        // is needed to update the user credits.
-        // if(response.newcredits && response.newcredits.length > 0) {
-        //   dispatch(onFetchUser(userid));
-        // }
+        dispatch(act.RECEIVE_RESCAN_USER_PAYMENTS({ ...response, userid }));
       })
       .catch(error => {
         dispatch(act.RECEIVE_RESCAN_USER_PAYMENTS(null, error));

@@ -61,9 +61,9 @@ export function useUserProposals(ownProps) {
       numOfUserProposals: sel.numOfUserProposals,
       loading: or(
         sel.userProposalsIsRequesting,
-        sel.isApiRequestingPropsVoteStatus
+        sel.isApiRequestingProposalsVoteSummary
       ),
-      error: or(sel.userProposalsError, sel.apiPropVoteStatusError)
+      error: or(sel.userProposalsError, sel.apiPropsVoteSummaryError)
     };
   }, [userID]);
 
