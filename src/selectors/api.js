@@ -856,25 +856,25 @@ export const invoicePayouts = compose(
   invoicePayoutsResponse
 );
 
-export const lineItemPayouts = state => {
-  const invoices = invoicePayouts(state);
-  const lineItems = [];
-  if (invoices) {
-    invoices.forEach(invoice => {
-      const contractorrate = invoice.input.contractorrate / 100;
-      invoice.input.lineitems.forEach(lineItem => {
-        lineItem.timestamp = invoice.timestamp;
-        lineItem.token = invoice.censorshiprecord.token;
-        lineItem.labor = (lineItem.labor / 60) * contractorrate;
-        lineItem.expenses = lineItem.expenses / 100;
-        lineItem.description = lineItem.description.replace("#", ""); // This scrubs descriptions of any pounds that screw up CSV export.
-        lineItems.push(lineItem);
-      });
-    });
-  }
-  lineItems.sort((a, b) => a.timestamp - b.timestamp);
-  return lineItems;
-};
+// TODO: Use createSelector instead of compose once we refactor the CMS connectors
+// b/c the createSelector doesn't work properly whe used in combination with the selectorMap
+export const lineItemPayouts = compose(
+  lineItems => lineItems.sort((a, b) => a.timestamp - b.timestamp),
+  (invoices = []) =>
+    invoices.reduce((lineItems, invoice) => {
+      return lineItems.concat(
+        invoice.input.lineitems.map(lineItem => ({
+          ...lineItem,
+          timestamp: invoice.timestamp,
+          token: invoice.censorshiprecord.token,
+          labor: (lineItem.labor / 60) * (invoice.input.contractorrate / 100),
+          expenses: lineItem.expenses / 100,
+          description: lineItem.description.replace("#", "")
+        }))
+      );
+    }, []),
+  invoicePayouts
+);
 
 export const generatePayoutsResponse = getApiResponse("payouts");
 export const generatePayoutsError = getApiError("payouts");

@@ -29,11 +29,11 @@ const PayoutsTable = ({ lineItemPayouts }) => {
     <table className="payouts-table">
       <tbody>
         <tr>
-          <th>token</th>
+          <th>Invoice Token</th>
           <th>Domain</th>
           <th>Sub Domain</th>
           <th>Description</th>
-          <th>Token</th>
+          <th>Proposal Token</th>
           <th>Expenses (USD)</th>
           <th>Labor (USD)</th>
           <th>Total (USD)</th>

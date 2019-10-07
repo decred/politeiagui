@@ -68,18 +68,21 @@ const InvoicePayoutsPage = ({
             </Link>
           </>
         </div>
-        <PayoutFilter
-          header={"Start"}
-          monthFilterValue={startMonthFilterValue}
-          yearFilterValue={startYearFilterValue}
-          handleChangeDateFilter={onChangeStartPayoutDateFilter}
-        />
-        <PayoutFilter
-          header={"End"}
-          monthFilterValue={endMonthFilterValue}
-          yearFilterValue={endYearFilterValue}
-          handleChangeDateFilter={onChangeEndPayoutDateFilter}
-        />
+        <div style={{ marginLeft: "24px" }}>
+          <PayoutFilter
+            header={"Start"}
+            monthFilterValue={startMonthFilterValue}
+            yearFilterValue={startYearFilterValue}
+            handleChangeDateFilter={onChangeStartPayoutDateFilter}
+          />
+          <PayoutFilter
+            header={"End"}
+            monthFilterValue={endMonthFilterValue}
+            yearFilterValue={endYearFilterValue}
+            handleChangeDateFilter={onChangeEndPayoutDateFilter}
+          />
+        </div>
+
         <div style={{ paddingLeft: "24px" }}>
           <ExportToCsv data={csvData} fields={csvFields} filename={"payouts"}>
             <button className="inverse payouts-btn-export-to-csv ">
