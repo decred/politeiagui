@@ -66,7 +66,7 @@ const Proposals = props => {
           renderItem={renderProposal}
           onFetchMore={handleFetchMoreProposals}
           hasMore={hasMoreToLoad}
-          isLoading={loading}
+          isLoading={loading || !initialFetchDone}
           emptyListComponent={<HelpMessage>No proposals available</HelpMessage>}
           loadingPlaceholder={
             <LoadingPlaceholders

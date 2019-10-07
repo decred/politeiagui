@@ -28,13 +28,13 @@ const Drafts = () => {
     setTargetDraftID("");
   }, [onDeleteDraftProposal, setTargetDraftID, targetDraftID]);
 
-  const drafts = !!draftProposals
+  const drafts = draftProposals
     ? Object.values(draftProposals).filter(draft => !!draft.draftId)
     : [];
 
   return (
     <>
-      {!!drafts.length ? (
+      {drafts.length ? (
         drafts.map(draft => (
           <DraftProposal
             key={`draft-${draft.draftId}`}
