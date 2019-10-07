@@ -458,7 +458,9 @@ export const proposalWithVoteStatus = state => {
 };
 
 export const userid = state =>
-  state.api.me.response && state.api.me.response.userid;
+  (state.api.me.response && state.api.me.response.userid) ||
+  (state.api.login.response && state.api.login.response.userid);
+
 export const censoredComment = state => state.api.censorComment.response;
 
 export const getApiLastLoaded = key => get(["api", "lastLoaded", key]);

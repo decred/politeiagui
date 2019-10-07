@@ -1,18 +1,15 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useMemo } from "react";
 import * as act from "src/actions";
+import * as sel from "src/selectors";
 import useInterval from "src/hooks/utils/useInterval";
 import usePaywall from "src/hooks/api/usePaywall";
 import { useRedux } from "src/redux";
-import * as sel from "src/selectors";
 
 const mapStateToProps = {
   proposalPaywallAddress: sel.proposalPaywallAddress,
   proposalCreditPrice: sel.proposalCreditPrice,
   proposalPaywallError: sel.proposalPaywallError,
   isApiRequestingProposalPaywall: sel.isApiRequestingProposalPaywall,
-  proposalCreditsResponse: sel.apiUserProposalCreditsResponse,
-  proposalCredits: sel.proposalCredits,
-  proposalCreditPurchases: sel.proposalCreditPurchases,
   isApiRequestingUserProposalCredits: sel.isApiRequestingUserProposalCredits,
   userCanExecuteActions: sel.userCanExecuteActions,
   isTestnet: sel.isTestNet,
@@ -23,9 +20,8 @@ const mapStateToProps = {
   pollingCreditsPayment: sel.pollingCreditsPayment,
   proposalPaymentReceived: sel.proposalPaymentReceived,
   paywallTxid: sel.paywallTxid,
-  isAdmin: sel.isAdmin,
   user: sel.user,
-  userMe: sel.apiMeResponse,
+  isAdmin: sel.isAdmin,
   loggedInAsUserId: sel.userid
 };
 
@@ -38,24 +34,46 @@ const mapDispatchToProps = {
 };
 
 export function useCredits(ownProps) {
-  const fromRedux = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
+  const { userid } = ownProps;
+  const creditsSelector = useMemo(() => sel.makeGetUnspentUserCredits(userid), [
+    userid
+  ]);
+  const creditsPurchasesSelector = useMemo(
+    () => sel.makeGetUserCreditsPurchasesByTx(userid),
+    [userid]
+  );
+  const mapStateToPropsWithCredits = useMemo(
+    () => ({
+      ...mapStateToProps,
+      proposalCreditsUnspent: creditsSelector,
+      proposalCreditsPurchases: creditsPurchasesSelector
+    }),
+    [creditsSelector, creditsPurchasesSelector]
+  );
   const {
     onPurchaseProposalCredits,
     onUserProposalCredits,
-    loggedInAsUserId,
-    proposalCreditPrice,
-    toggleCreditsPaymentPolling,
-    pollingCreditsPayment,
     onFetchProposalPaywallPayment,
-    proposalPaywallPaymentTxid,
     isApiRequestingProposalPaywall,
     isApiRequestingUserProposalCredits,
-    proposalCreditsResponse,
-    user
-  } = fromRedux;
-
+    user,
+    isAdmin,
+    loggedInAsUserId,
+    pollingCreditsPayment,
+    toggleCreditsPaymentPolling,
+    proposalPaymentReceived,
+    toggleProposalPaymentReceived,
+    proposalPaywallAddress,
+    proposalPaywallPaymentTxid,
+    proposalPaywallPaymentAmount,
+    proposalPaywallPaymentConfirmations,
+    proposalCreditsUnspent,
+    proposalCreditPrice,
+    proposalCreditsPurchases
+  } = useRedux(ownProps, mapStateToPropsWithCredits, mapDispatchToProps);
+  const proposalCredits = proposalCreditsUnspent.length;
   const { isPaid } = usePaywall();
-  const proposalCreditsFetched = !!proposalCreditsResponse;
+  const proposalCreditsFetched = proposalCredits !== null;
   const isUserPageOwner = user && loggedInAsUserId === user.id;
   const shouldFetchPurchaseProposalCredits =
     isPaid &&
@@ -98,7 +116,23 @@ export function useCredits(ownProps) {
     proposalPaywallPaymentTxid
   ]);
 
-  return fromRedux;
+  return {
+    proposalCreditPrice,
+    isAdmin,
+    user,
+    isApiRequestingUserProposalCredits,
+    proposalCredits,
+    proposalCreditsPurchases,
+    loggedInAsUserId,
+    proposalPaywallAddress,
+    proposalPaywallPaymentConfirmations,
+    proposalPaywallPaymentTxid,
+    proposalPaywallPaymentAmount,
+    toggleCreditsPaymentPolling,
+    pollingCreditsPayment,
+    proposalPaymentReceived,
+    toggleProposalPaymentReceived
+  };
 }
 
 export function usePollProposalCreditsPayment(ownProps) {
@@ -143,17 +177,20 @@ export function usePollProposalCreditsPayment(ownProps) {
 }
 
 export function useRescanUserCredits(userID) {
-  const fromRedux = useRedux(
-    {},
-    {
+  const mapStateToProps = useMemo(
+    () => ({
       errorRescan: sel.apiRescanUserPaymentsError,
       isLoadingRescan: sel.isApiRequestingRescanUserPayments,
       amountOfCreditsAddedOnRescan: sel.amountOfCreditsAddedOnRescan
-    },
-    {
+    }),
+    []
+  );
+  const mapDispatchToProps = useMemo(
+    () => ({
       onRescan: act.onRescanUserPayments,
       onResetRescan: act.onResetRescanUserPayments
-    }
+    }),
+    []
   );
 
   const {
@@ -162,18 +199,13 @@ export function useRescanUserCredits(userID) {
     errorRescan,
     isLoadingRescan,
     amountOfCreditsAddedOnRescan
-  } = fromRedux;
+  } = useRedux({}, mapStateToProps, mapDispatchToProps);
 
-  useEffect(
-    function resetResecanOnUnmount() {
-      return () => {
-        if (amountOfCreditsAddedOnRescan !== undefined) {
-          onResetRescan();
-        }
-      };
-    },
-    [onResetRescan, amountOfCreditsAddedOnRescan]
-  );
+  useEffect(() => {
+    if (amountOfCreditsAddedOnRescan !== undefined) {
+      setTimeout(() => onResetRescan(), 3000);
+    }
+  }, [amountOfCreditsAddedOnRescan, onResetRescan]);
 
   const onRescanUserCredits = useCallback(() => {
     onRescan(userID);
