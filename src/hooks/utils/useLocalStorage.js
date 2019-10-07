@@ -2,21 +2,13 @@ import { useState, useCallback } from "react";
 import useEventListener from "./useEventListener";
 
 const setLocalStorageValue = (key, value) => {
-  try {
-    const serializedValue = JSON.stringify(value);
-    localStorage.setItem(key, serializedValue);
-  } catch (e) {
-    throw e;
-  }
+  const serializedValue = JSON.stringify(value);
+  localStorage.setItem(key, serializedValue);
 };
 
 const getLocalStorageValue = key => {
-  try {
-    const serializedState = localStorage.getItem(key);
-    return JSON.parse(serializedState);
-  } catch (e) {
-    throw e;
-  }
+  const serializedState = localStorage.getItem(key);
+  return JSON.parse(serializedState);
 };
 
 export default function useLocalStorage(key, initialValue) {
