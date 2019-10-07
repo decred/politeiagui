@@ -21,9 +21,9 @@ const HeaderNav = ({ history, location }) => {
   }
   const isOnUnvettedRoute = location.pathname === "/proposals/unvetted";
   const isOnSearchUsersRoute = location.pathname === "/user/search";
-  return username ? (
+  return user && username ? (
     <div className={styles.loggedInContainer}>
-      <ProposalCreditsIndicator />
+      <ProposalCreditsIndicator user={user} />
       <Dropdown itemsListClassName={styles.dropdownList} title={username}>
         {user.isadmin && !isOnUnvettedRoute && (
           <DropdownItem onClick={goToUnvetted}>Admin</DropdownItem>

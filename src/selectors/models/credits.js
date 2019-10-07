@@ -17,22 +17,6 @@ export const makeGetSpentUserCredits = userid =>
       creditsByUserID[userid] ? creditsByUserID[userid].spent : []
   );
 
-export const makeGetUnspentUserCreditsLength = userid => {
-  const unspentUserCredits = makeGetUnspentUserCredits(userid);
-  return createSelector(
-    unspentUserCredits,
-    unspentCredits => unspentCredits.length
-  );
-};
-
-export const makeGetSpentUserCreditsLength = userid => {
-  const spentUserCredits = makeGetSpentUserCredits(userid);
-  return createSelector(
-    spentUserCredits,
-    spentCredits => spentCredits.length
-  );
-};
-
 export const makeGetUserCreditsPurchasesByTx = userid => {
   const spentUserCredits = makeGetSpentUserCredits(userid);
   const unspentUserCredits = makeGetUnspentUserCredits(userid);
@@ -57,9 +41,12 @@ export const makeGetUserCreditsPurchasesByTx = userid => {
           }
           return result;
         }, []);
-      const sortedCredits = Object.values(groupedCredits).sort(
-        (a, b) => a.datePurchased - b.datePurchased
-      );
+      const sortedCredits = groupedCredits
+        ? Object.values(groupedCredits).sort(
+            (a, b) => a.datePurchased - b.datePurchased
+          )
+        : [];
+
       return sortedCredits;
     }
   );

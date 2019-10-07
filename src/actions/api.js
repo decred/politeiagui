@@ -1106,8 +1106,7 @@ export const onFetchProposalPaywallDetails = () => dispatch => {
 
 export const onUserProposalCredits = () => (dispatch, getState) => {
   dispatch(act.REQUEST_USER_PROPOSAL_CREDITS());
-  const { userid } =
-    getState().api.me.response || getState().api.login.response;
+  const userid = sel.userid(getState());
   return api
     .userProposalCredits()
     .then(response =>
