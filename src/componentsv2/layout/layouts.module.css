@@ -77,16 +77,14 @@ div.customPageDetails {
     grid-column: 4 / 12 !important;
 }
 
-
-/* EXTRA SMALL WIDTH */
-@media screen and (max-width: 560px){
-    .titleAndSubtitleWrapper {
-        width: 85%;
+/* HUGE SCREENS */
+@media screen and (min-width: 1400px){
+    .narrow {
+        margin-left: 0 !important;
     }
 }
 
-
-/* MEDIUM */
+/* MEDIUM SCREENS */
 @media screen and (max-width: 1000px){
     .singleContentMain {
         grid-column: 4 / 12 !important;
@@ -98,17 +96,21 @@ div.customPageDetails {
 }
 
 
-/* SMALL WIDTH */
+/* SMALL SCREENS */
 @media screen and (max-width: 768px){
     .singleContentMain {
         grid-column: 3 / 13 !important;
     }
 }
 
-/* EXTRA SMALL WIDTH */
+/* EXTRA SMALL SCREENS*/
 @media screen and (max-width: 560px){
     .card {
         padding: 2rem 3rem;
+    }
+
+    .titleAndSubtitleWrapper {
+        width: 85%;
     }
 
     .singleContentMain {
