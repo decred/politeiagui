@@ -32,6 +32,8 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     username,
     userid,
     isNew,
+    upvotes,
+    downvotes,
     sumOfNewDescendants
   } = comment;
 
@@ -134,10 +136,14 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
         highlightAsNew={isNew}
         disableLikes={!enableCommentVote}
         disableLikesClick={
-          loadingLikes || readOnly || (userLoggedIn && identityError)
+          loadingLikes ||
+          readOnly ||
+          (userLoggedIn && (identityError || paywallMissing))
         }
         disableReply={readOnly || !!identityError || paywallMissing}
         likesCount={resultvotes}
+        likesUpCount={upvotes}
+        likesDownCount={downvotes}
         likeOption={getCommentLikeOption(commentid)}
         onLike={handleLikeComment}
         onDislike={handleDislikeComment}

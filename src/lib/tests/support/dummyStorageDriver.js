@@ -26,7 +26,7 @@ function clear(callback) {
         const db = self._dbInfo.db;
 
         for (const key in db) {
-          if (db.hasOwnProperty(key)) {
+          if (Object.prototype.hasOwnProperty.call(db, key)) {
             delete db[key];
             // db[key] = undefined;
           }
@@ -107,7 +107,10 @@ function key(n, callback) {
         let index = 0;
 
         for (const key in db) {
-          if (db.hasOwnProperty(key) && db[key] !== undefined) {
+          if (
+            Object.prototype.hasOwnProperty.call(db, key) &&
+            db[key] !== undefined
+          ) {
             if (n === index) {
               result = key;
               break;
@@ -135,7 +138,7 @@ function keys(callback) {
         const keys = [];
 
         for (const key in db) {
-          if (db.hasOwnProperty(key)) {
+          if (Object.prototype.hasOwnProperty.call(db, key)) {
             keys.push(key);
           }
         }
@@ -178,7 +181,7 @@ function removeItem(key, callback) {
       .ready()
       .then(function() {
         const db = self._dbInfo.db;
-        if (db.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(db, key)) {
           delete db[key];
           // db[key] = undefined;
         }

@@ -30,7 +30,7 @@ const validateOption = (
   location,
   propFullName
 ) => {
-  if (!propValue[key].hasOwnProperty("value")) {
+  if (!Object.prototype.hasOwnProperty.call(propValue[key], "value")) {
     return new Error(`Invalid prop ${propFullName} passed to ${componentName}`);
   }
 };
