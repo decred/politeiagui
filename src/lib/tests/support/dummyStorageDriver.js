@@ -107,7 +107,10 @@ function key(n, callback) {
         let index = 0;
 
         for (const key in db) {
-          if (Object.prototype.hasOwnProperty.call(db, key) && db[key] !== undefined) {
+          if (
+            Object.prototype.hasOwnProperty.call(db, key) &&
+            db[key] !== undefined
+          ) {
             if (n === index) {
               result = key;
               break;
