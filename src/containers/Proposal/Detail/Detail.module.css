@@ -3,6 +3,15 @@
     overflow: hidden;
 }
 
+.customHeader {
+    margin-top: 1.9rem;
+    margin-bottom: 1.9rem;
+}
+
+.customTitleAndSubtitleWrapper {
+    justify-content: center;
+}
+
 .returnLink {
     cursor: pointer;
 }

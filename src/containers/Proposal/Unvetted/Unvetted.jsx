@@ -12,7 +12,7 @@ const renderProposal = prop => (
 
 const tabLabels = [tabValues.UNREVIEWED, tabValues.CENSORED];
 
-const UnvettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
+const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
   const {
     proposals,
     loading,
@@ -49,8 +49,7 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
           <TopBanner>
             <PageDetails title="Unvetted Proposals">{tabs}</PageDetails>
           </TopBanner>
-          <Sidebar />
-          <Main>
+          <Main fillScreen>
             <UnvettedActionsProvider>
               {proposalsTokens && !loading && content}
             </UnvettedActionsProvider>

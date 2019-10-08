@@ -5,13 +5,12 @@ import ProposalNewForm from "src/containers/Proposal/New";
 const PageProposalsNew = () => {
   return (
     <MultipleContentPage topBannerHeight={90}>
-      {({ TopBanner, PageDetails, Sidebar, Main }) => (
+      {({ TopBanner, PageDetails, Main }) => (
         <>
           <TopBanner>
             <PageDetails title="Create Proposal" />
           </TopBanner>
-          <Sidebar />
-          <Main>
+          <Main fillScreen>
             <ProposalNewForm />
           </Main>
         </>

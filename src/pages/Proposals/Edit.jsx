@@ -5,13 +5,12 @@ import ProposalEdit from "src/containers/Proposal/Edit";
 const PageProposalEdit = () => {
   return (
     <MultipleContentPage topBannerHeight={90}>
-      {({ TopBanner, PageDetails, Sidebar, Main }) => (
+      {({ TopBanner, PageDetails, Main }) => (
         <>
           <TopBanner>
             <PageDetails title="Edit Proposal" />
           </TopBanner>
-          <Sidebar />
-          <Main>
+          <Main fillScreen>
             <ProposalEdit />
           </Main>
         </>

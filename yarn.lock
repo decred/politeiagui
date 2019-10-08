@@ -9390,9 +9390,9 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
-"pi-ui@https://github.com/tiagoalvesdulce/pi-ui":
+"pi-ui@https://github.com/decred/pi-ui":
   version "1.0.0"
-  resolved "https://github.com/tiagoalvesdulce/pi-ui#0dad55b115b2a34973514c4500481eb04a330065"
+  resolved "https://github.com/decred/pi-ui#d89be81904c19564166c02201cd41aa5feaace18"
   dependencies:
     clamp-js-main "^0.11.5"
     react-spring "^8.0.25"

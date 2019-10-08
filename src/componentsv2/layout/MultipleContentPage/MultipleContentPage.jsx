@@ -39,6 +39,7 @@ const PageDetails = ({
   actionsContent,
   children,
   headerClassName,
+  titleAndSubtitleWrapperClassName,
   ...props
 }) => {
   const titleContent =
@@ -60,7 +61,7 @@ const PageDetails = ({
       {...props}
     >
       <div className={classNames(styles.pageDetailsHeader, headerClassName)}>
-        <div className={styles.titleAndSubtitleWrapper}>
+        <div className={classNames(styles.titleAndSubtitleWrapper, titleAndSubtitleWrapperClassName)}>
           {titleContent}
           {!!subtitle && <Subtitle>{subtitle}</Subtitle>}
         </div>
@@ -80,8 +81,8 @@ const Tabs = ({ className, ...props }) => (
   <TabsUI className={classNames(className)} {...props} />
 );
 
-const Main = ({ className, ...props }) => (
-  <UIMain className={classNames(styles.customMain, className)} {...props} />
+const Main = ({ className, fillScreen, ...props }) => (
+  <UIMain className={classNames(styles.customMain, fillScreen && styles.customMainNoSidebar, className)} {...props} />
 );
 
 const MultipleContentpage = ({ children, disableScrollToTop, ...props }) => {

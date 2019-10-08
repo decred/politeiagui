@@ -1,6 +1,6 @@
 .block {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .blockDetails {
@@ -41,7 +41,14 @@
 }
 
 
-/* EXTRA SMALL */
+/* HUGE SCREEN */
+@media screen and (min-width: 1400px){
+  .block {
+    justify-content: start;
+  }
+}
+
+/* EXTRA SMALL SCREEN */
 @media screen and (max-width: 560px){
   .block {
     flex-direction: column;

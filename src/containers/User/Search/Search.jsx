@@ -13,7 +13,7 @@ const getFormattedSearchResults = (users = []) =>
     ID: <Link href={`/user/${u.id}`}>{u.id}</Link>
   }));
 
-const UserSearch = ({ TopBanner, PageDetails, Sidebar, Main, Title }) => {
+const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
   const { onSearchUser, searchResult } = useSearchUser();
   const [searchError, setSearchError] = useState(null);
   const [foundUsers, setFoundUsers] = useState([]);
@@ -103,8 +103,7 @@ const UserSearch = ({ TopBanner, PageDetails, Sidebar, Main, Title }) => {
           </Formik>
         </PageDetails>
       </TopBanner>
-      <Sidebar />
-      <Main>
+      <Main fillScreen>
         {searchError ? (
           <Message kind="error">{searchError.toString()}</Message>
         ) : foundUsers && !!foundUsers.length ? (
