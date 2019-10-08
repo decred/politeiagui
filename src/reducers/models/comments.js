@@ -12,7 +12,7 @@ const DEFAULT_STATE = {
 
 const comments = (state = DEFAULT_STATE, action) =>
   action.error
-    ? () => state
+    ? state
     : ({
         [act.RECEIVE_PROPOSAL_COMMENTS]: () => {
           const { token, comments, accesstime } = action.payload;

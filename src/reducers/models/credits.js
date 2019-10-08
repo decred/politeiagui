@@ -8,7 +8,7 @@ const DEFAULT_STATE = {
 
 const credits = (state = DEFAULT_STATE, action) =>
   action.error
-    ? () => state
+    ? state
     : ({
         [act.RECEIVE_USER_PROPOSAL_CREDITS]: () => {
           const {
