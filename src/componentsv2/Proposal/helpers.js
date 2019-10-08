@@ -30,9 +30,15 @@ export const getProposalStatusTagProps = (proposal, voteSummary) => {
   if (isPublicProposal(proposal) && !!voteSummary) {
     switch (voteSummary.status) {
       case PROPOSAL_VOTING_NOT_AUTHORIZED:
-        return { type: "blackTime", text: "Hasn't authorized yet" };
+        return {
+          type: "blackTime",
+          text: "Waiting for author to authorize voting"
+        };
       case PROPOSAL_VOTING_AUTHORIZED:
-        return { type: "yellowTime", text: "Waiting for approval" };
+        return {
+          type: "yellowTime",
+          text: "Waiting for admin to start voting"
+        };
       case PROPOSAL_VOTING_ACTIVE:
         return { type: "bluePending", text: "Active" };
       case PROPOSAL_VOTING_FINISHED:
