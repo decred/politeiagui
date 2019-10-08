@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const PayoutRow = ({
+  token,
   description,
   domain,
   expenses,
@@ -11,6 +12,7 @@ const PayoutRow = ({
 }) => {
   return (
     <tr>
+      <td>{token}</td>
       <td>{domain}</td>
       <td>{subdomain}</td>
       <td>{description}</td>
@@ -27,10 +29,11 @@ const PayoutsTable = ({ lineItemPayouts }) => {
     <table className="payouts-table">
       <tbody>
         <tr>
+          <th>Invoice Token</th>
           <th>Domain</th>
           <th>Sub Domain</th>
           <th>Description</th>
-          <th>Token</th>
+          <th>Proposal Token</th>
           <th>Expenses (USD)</th>
           <th>Labor (USD)</th>
           <th>Total (USD)</th>

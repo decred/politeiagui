@@ -1298,16 +1298,16 @@ export const onGeneratePayouts = () =>
       });
   });
 
-export const onLineItemPayouts = (start, end) =>
+export const onInvoicePayouts = (start, end) =>
   withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_LINEITEM_PAYOUTS({}));
+    dispatch(act.REQUEST_INVOICE_PAYOUTS({}));
     return api
-      .lineItemPayouts(csrf, start, end)
+      .invoicePayouts(csrf, start, end)
       .then(response => {
-        dispatch(act.RECEIVE_LINEITEM_PAYOUTS(response));
+        dispatch(act.RECEIVE_INVOICE_PAYOUTS(response));
       })
       .catch(error => {
-        dispatch(act.RECEIVE_LINEITEM_PAYOUTS(null, error));
+        dispatch(act.RECEIVE_INVOICE_PAYOUTS(null, error));
       });
   });
 

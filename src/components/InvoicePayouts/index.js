@@ -1,4 +1,4 @@
 import "./styles.css";
-import Page from "./LineItemPayoutsPage";
+import Page from "./InvoicePayoutsPage";
 
 export default Page;

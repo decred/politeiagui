@@ -10,7 +10,7 @@ import {
   onSubmitEditedInvoice,
   onFetchInvoiceComments,
   handleLogout,
-  onLineItemPayouts,
+  onInvoicePayouts,
   onRequestMe,
   onUserProposalCredits
 } from "./api";
@@ -307,7 +307,7 @@ export const onChangeStartPayoutDateFilter = (month, year) => (
     sel.getEndMonthPayoutFilterValue(getState()) - 1
   );
 
-  dispatch(onLineItemPayouts(start.valueOf() / 1000, end.valueOf() / 1000));
+  dispatch(onInvoicePayouts(start.valueOf() / 1000, end.valueOf() / 1000));
   dispatch(act.CHANGE_START_PAYOUT_DATE_FILTER({ month, year }));
 };
 
@@ -323,7 +323,7 @@ export const onChangeEndPayoutDateFilter = (month, year) => (
     sel.getStartYearPayoutFilterValue(getState()),
     sel.getStartMonthPayoutFilterValue(getState()) - 1
   );
-  dispatch(onLineItemPayouts(start.valueOf() / 1000, end.valueOf() / 1000));
+  dispatch(onInvoicePayouts(start.valueOf() / 1000, end.valueOf() / 1000));
   dispatch(act.CHANGE_END_PAYOUT_DATE_FILTER({ month, year }));
 };
 
