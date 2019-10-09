@@ -1,16 +1,16 @@
-.customMain {
+div.customMain {
     background: none !important;
     max-width: 100vw;
 }
 
 @media screen and (min-width: 560px) {
-    .customMainNoSidebar {
+    div.customMainNoSidebar {
         grid-column: center-start / center-end;
     }
 }
 
 @media screen and (min-width: 1400px) {
-    .customMainNoSidebar {
+    div.customMainNoSidebar {
         grid-column: full-start / full-end;
         margin-left: 6rem;
         margin-right: 6rem;
