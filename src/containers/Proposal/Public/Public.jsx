@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from "react";
+import { Spinner } from "pi-ui";
 import styles from "./PublicProposals.module.css";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
 import { usePublicProposals } from "./hooks";
@@ -22,6 +23,7 @@ const tabLabels = [
 const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const {
     isLoading,
+    isLoadingTokenInventory,
     proposals,
     proposalsTokens,
     onFetchProposalsBatch
@@ -52,12 +54,18 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
         <Sidebar />
         <Main className={styles.customMain}>
           <PublicActionsProvider>
-            {proposalsTokens && !isLoading && content}
+            {isLoadingTokenInventory ? 
+              <div className={styles.spinnerWrapper}>
+                <Spinner invert />
+              </div>
+            :
+              proposalsTokens && !isLoading && content
+            }
           </PublicActionsProvider>
         </Main>
       </>
     ),
-    [proposalsTokens, isLoading]
+    [proposalsTokens, isLoading, isLoadingTokenInventory]
   );
 
   return (

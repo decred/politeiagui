@@ -24,7 +24,7 @@ export function usePublicProposals(ownProps) {
   const [
     tokenInventory,
     errorTokenInventory,
-    loadingTokenInventory
+    isLoadingTokenInventory
   ] = useTokenInventory();
 
   const anyError = errorTokenInventory || error;
@@ -34,7 +34,7 @@ export function usePublicProposals(ownProps) {
   return {
     proposals,
     onFetchProposalsBatch,
-    loadingTokenInventory,
+    isLoadingTokenInventory,
     proposalsTokens: tokenInventory
   };
 }
