@@ -14,4 +14,16 @@
 
 .returnLink {
     cursor: pointer;
+    font-size: var(--font-size-small);
+}
+
+.returnLinkContainer {
+    margin-bottom: 1rem;
+}
+
+/* EXTRA SMALL */
+@media screen and (max-width: 560px) {
+   .returnLinkContainer {
+       padding-left: var(--container-padding-left);
+   }
 }

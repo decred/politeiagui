@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from "react";
-import { Link } from "pi-ui";
+import { Link, PageDetails } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import Proposal from "src/componentsv2/Proposal";
 import styles from "./Detail.module.css";
@@ -19,7 +19,7 @@ import {
 import { useProposalVote } from "../hooks";
 import { useRouter } from "src/componentsv2/Router";
 
-const ProposalDetail = ({ TopBanner, PageDetails, Main, match }) => {
+const ProposalDetail = ({ TopBanner, Main, match }) => {
   const { proposal, loading, threadParentID } = useProposal({ match });
   const proposalToken =
     proposal && proposal.censorshiprecord && proposal.censorshiprecord.token;
@@ -59,26 +59,22 @@ const ProposalDetail = ({ TopBanner, PageDetails, Main, match }) => {
     if (!message) return null;
 
     return (
-      <Link
-        gray
-        className={styles.returnLink}
-        onClick={returnToPreviousLocation}
-      >
-        &#8592; {message}
-      </Link>
+      <div className={styles.returnLinkContainer}>
+        <Link
+          gray
+          className={styles.returnLink}
+          onClick={returnToPreviousLocation}
+        >
+          &#8592; {message}
+        </Link>
+      </div>
     );
   }, [previousLocation, returnToPreviousLocation]);
 
   return (
     <>
-      <TopBanner>
-        <PageDetails
-          titleAndSubtitleWrapperClassName={styles.customTitleAndSubtitleWrapper}
-          headerClassName={styles.customHeader}
-          subtitle={goBackLinkFromPreviousLocation}
-        />
-      </TopBanner>
       <Main className={styles.customMain} fillScreen>
+        {goBackLinkFromPreviousLocation}
         <UnvettedActionsProvider>
           <PublicActionsProvider>
             {loading || !proposal ? (
