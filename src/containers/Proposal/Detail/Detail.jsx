@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from "react";
-import { Link, PageDetails } from "pi-ui";
+import { Link } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import Proposal from "src/componentsv2/Proposal";
 import styles from "./Detail.module.css";
