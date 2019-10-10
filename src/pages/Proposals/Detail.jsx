@@ -4,7 +4,7 @@ import ProposalDetail from "src/containers/Proposal/Detail";
 
 const PublicList = () => {
   return (
-    <MultipleContentPage topBannerHeight={82}>
+    <MultipleContentPage topBannerHeight={0}>
       {props => {
         return <ProposalDetail {...props} />;
       }}
