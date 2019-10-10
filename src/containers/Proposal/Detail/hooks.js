@@ -137,7 +137,7 @@ export function useProposal(ownProps) {
         setProposal(prop);
       }
     },
-    [getProposalFromCache, proposal]
+    [getProposalFromCache, proposal, getProposal]
   );
 
   if (error) {
