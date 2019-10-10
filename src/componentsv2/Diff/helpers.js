@@ -4,7 +4,8 @@ import { compiler } from "markdown-to-jsx";
 import DiffStrings from "./DiffStrings";
 import trim from "lodash/trim";
 import styles from "./Diff.module.css";
-// import takeWhile from "lodash/takeWhile";
+// import omit from "lodash/omit";
+// import isEqual from "lodash/isEqual";
 
 const markAsAdded = elem => ({
   ...elem,
@@ -119,9 +120,24 @@ export const getMarkdownTextDiff = (oldText, newText) => {
           const renderChildDiffContent = diffContents.find(
             el => trim(el.value) === trim(renderChild) && el.type === type
           );
-          console.log(renderChildDiffContent);
+          const renderChildDiffContentPosition = diffContents.indexOf(
+            renderChildDiffContent
+          );
+          const rest = diffContents.filter(
+            (_, key) => key > renderChildDiffContentPosition
+          );
+          customElements = [
+            tagClassName(styles.stringRemoved)(oldElements[diffHead.index])
+          ];
+          newType = "div";
+          diffContents = [...rest];
+          if (renderChildDiffContent.added) {
+            return <DiffStrings oldString="" newString={renderChild} />;
+          }
         }
+        // TODO: Props comparison.
         diffContents = [...diffTail];
+
         if (diffHead.added) {
           return <DiffStrings oldString="" newString={renderChild} />;
         }
