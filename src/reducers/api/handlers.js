@@ -340,14 +340,14 @@ export const onUpdateTokenInventory = (
     [PROPOSAL_STATUS_ABANDONED]: "abandoned"
   };
 
-  const mapVotingStatusToTokenInventoryStatys = {
+  const mapVotingStatusToTokenInventoryStatus = {
     [PROPOSAL_VOTING_NOT_AUTHORIZED]: "pre",
     [PROPOSAL_VOTING_AUTHORIZED]: "pre",
     [PROPOSAL_VOTING_ACTIVE]: "active"
   };
 
   const newTokenInventoryStatus = isVoteStatusUpdate
-    ? mapVotingStatusToTokenInventoryStatys[newStatus]
+    ? mapVotingStatusToTokenInventoryStatus[newStatus]
     : mapReviewStatusToTokenInventoryStatus[newStatus];
 
   const newTokenInventory = Object.keys(tokenInventory).reduce((inv, key) => {

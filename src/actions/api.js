@@ -317,7 +317,9 @@ export const onFetchUserProposals = (userid, token) => dispatch => {
   dispatch(act.REQUEST_USER_PROPOSALS());
   return api
     .userProposals(userid, token)
-    .then(response => dispatch(act.RECEIVE_USER_PROPOSALS(response)))
+    .then(response =>
+      dispatch(act.RECEIVE_USER_PROPOSALS({ ...response, userid }))
+    )
     .catch(error => {
       dispatch(act.RECEIVE_USER_PROPOSALS(null, error));
     });
@@ -1146,7 +1148,7 @@ export const onFetchUserProposalsWithVoteStatus = (
     if (publicPropsTokens.length) {
       await dispatch(onFetchProposalsVoteStatusByTokens(publicPropsTokens));
     }
-    dispatch(act.RECEIVE_USER_PROPOSALS({ proposals, ...response }));
+    dispatch(act.RECEIVE_USER_PROPOSALS({ proposals, userid, ...response }));
   } catch (e) {
     dispatch(act.RECEIVE_USER_PROPOSALS(null, e));
   }
@@ -1166,7 +1168,7 @@ export const onFetchUserProposalsWithVoteSummary = (
     if (publicPropsTokens.length) {
       await dispatch(onFetchProposalsBatchVoteSummary(publicPropsTokens));
     }
-    dispatch(act.RECEIVE_USER_PROPOSALS({ proposals, ...response }));
+    dispatch(act.RECEIVE_USER_PROPOSALS({ proposals, userid, ...response }));
   } catch (e) {
     dispatch(act.RECEIVE_USER_PROPOSALS(null, e));
   }
