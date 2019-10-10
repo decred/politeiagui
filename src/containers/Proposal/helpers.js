@@ -8,7 +8,8 @@ import {
   PROPOSAL_STATUS_ABANDONED,
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_STATUS_UNREVIEWED_CHANGES
+  PROPOSAL_STATUS_UNREVIEWED_CHANGES,
+  PROPOSAL_STATUS_CENSORED
 } from "../../constants";
 import { getTextFromIndexMd } from "src/helpers";
 
@@ -54,6 +55,15 @@ export const isUnreviewedProposal = proposal => {
     proposal.status === PROPOSAL_STATUS_UNREVIEWED ||
     proposal.status === PROPOSAL_STATUS_UNREVIEWED_CHANGES
   );
+};
+
+/**
+ * Returns true if the given proposal is censored
+ * @param {Object} proposal
+ * @returns {Boolean} isCensored
+ */
+export const isCensoredProposal = proposal => {
+  return proposal.status === PROPOSAL_STATUS_CENSORED;
 };
 
 /**

@@ -6,6 +6,8 @@ import { arg, or } from "src/lib/fp";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useRedux } from "src/redux";
+import { useLoaderContext } from "src/Appv2/Loader";
+import { isUnreviewedProposal, isCensoredProposal } from "../helpers";
 
 const mapStateToProps = {
   token: compose(
@@ -25,7 +27,6 @@ const mapStateToProps = {
 };
 
 const mapDispatchToProps = {
-  onFetchUser: act.onFetchUser,
   onFetchProposal: act.onFetchProposal,
   onFetchProposalsVoteSummary: act.onFetchProposalsBatchVoteSummary
 };
@@ -57,6 +58,10 @@ export function useProposal(ownProps) {
     onFetchProposalsVoteSummary,
     commentID: threadParentID
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
+
+  const { currentUser } = useLoaderContext();
+  const currentUserIsAdmin = currentUser && currentUser.isadmin;
+  const currentUserId = currentUser && currentUser.userid;
 
   const getProposalFromCache = useCallback(() => {
     // try to use the edited proposal from cache first to get the
@@ -97,9 +102,22 @@ export function useProposal(ownProps) {
     unvettedProposals
   ]);
 
-  const [proposal, setProposal] = useState(
-    proposalWithFilesOrNothing(getProposalFromCache())
-  );
+  const getProposal = useCallback(() => {
+    const proposal = getProposalFromCache();
+    const proposalAuthorID = proposal && proposal.userid;
+    const userCannotViewFullProposal =
+      !currentUserIsAdmin || currentUserId !== proposalAuthorID;
+    if (
+      !!proposal &&
+      (isCensoredProposal(proposal) || isUnreviewedProposal(proposal)) &&
+      userCannotViewFullProposal
+    ) {
+      return proposal;
+    }
+    return proposalWithFilesOrNothing(proposal);
+  }, [getProposalFromCache, currentUserId, currentUserIsAdmin]);
+
+  const [proposal, setProposal] = useState(getProposal());
 
   useEffect(
     function fetchProposal() {
@@ -114,12 +132,12 @@ export function useProposal(ownProps) {
 
   useEffect(
     function handleProposalChanged() {
-      const prop = proposalWithFilesOrNothing(getProposalFromCache());
+      const prop = getProposal();
       if (!!prop && !isEqual(prop, proposal)) {
         setProposal(prop);
       }
     },
-    [getProposalFromCache, proposal]
+    [getProposalFromCache, proposal, getProposal]
   );
 
   if (error) {
