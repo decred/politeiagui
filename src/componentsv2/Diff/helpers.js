@@ -31,7 +31,6 @@ const tagClassName = className => elem => ({
     className: className
   }
 });
-
 const getElemArray = (stringArr, rawStringArr, elemArr) => (
   type,
   props,
@@ -39,21 +38,20 @@ const getElemArray = (stringArr, rawStringArr, elemArr) => (
 ) => {
   const el = React.createElement(type, props, children);
   if (children && children.length > 0) {
-    const newChildren = React.Children.map(children, c => {
+    React.Children.map(children, c => {
       if (typeof c === "string") {
         stringArr.push(c);
         rawStringArr.push(markdownToRawText(type, props, c));
+        const el = React.createElement(type, props, c);
+        elemArr.push(el);
         return c;
       }
     });
-    if (elemArr) {
-      elemArr.push(React.createElement(type, props, newChildren));
-    }
   }
   return el;
 };
 
-const overrider = (stringArr, rawStringArr, elemArr = null) => ({
+const overrider = (stringArr, rawStringArr, elemArr) => ({
   createElement: getElemArray(stringArr, rawStringArr, elemArr)
 });
 
@@ -78,19 +76,26 @@ const markdownToRawText = (type, props, child) => {
   return formatter[type] ? formatter[type] : child;
 };
 
+const formatArray = elArray => (value, index) => ({
+  value,
+  index,
+  props: elArray[index].props,
+  type: elArray[index].type
+});
+
 export const getMarkdownTextDiff = (oldText, newText) => {
   const newStringArr = [],
     newStringRawArr = [],
+    newElements = [],
     oldStringArr = [],
     oldStringRawArr = [],
     oldElements = [];
 
   compiler(oldText, overrider(oldStringArr, oldStringRawArr, oldElements));
-  compiler(newText, overrider(newStringArr, newStringRawArr));
+  compiler(newText, overrider(newStringArr, newStringRawArr, newElements));
 
-  const oldStringArray = oldStringArr.map((value, index) => ({ value, index }));
-  const newStringArray = newStringArr.map((value, index) => ({ value, index }));
-
+  const oldStringArray = oldStringArr.map(formatArray(oldElements));
+  const newStringArray = newStringArr.map(formatArray(newElements));
   let diffContents = [
     ...oldStringArray
       .filter(newLineDiffFunc(newStringArray))
@@ -103,50 +108,26 @@ export const getMarkdownTextDiff = (oldText, newText) => {
     let newProps = { ...props };
     let customElements = [];
     let newType = type;
-    const newChildren = React.Children.map(children, renderChild => {
+    let newChildren = React.Children.map(children, renderChild => {
       if (typeof renderChild !== "string") return renderChild;
 
       const [diffHead, ...diffTail] = diffContents;
 
       if (diffHead && diffHead.value === renderChild) {
-        // const foundNewStringIndex = newStringArr.indexOf(
-        //   diffHead.value
-        // );
-        // const foundOldStringIndex = oldStringArr.indexOf(
-        //   diffHead.value
-        // );
-        // const [newStringRaw] = newStringRawArr.splice(foundNewStringIndex, 1);
-        // let oldStringRaw = null;
-        // if (foundOldStringIndex !== -1) {
-        //   [oldStringRaw] = oldStringRawArr.splice(foundOldStringIndex, 1);
-        //   oldStringArr.splice(foundOldStringIndex, 1);
-        // } else {
-        //   [oldStringRaw] = oldStringRawArr.splice(foundNewStringIndex, 1);
-        //   oldStringArr.splice(foundNewStringIndex, 1);
-        // }
-        // newStringArr.splice(foundNewStringIndex, 1);
+        if (diffHead.type !== type) {
+          // find the renderChild corresp diff content
+          const renderChildDiffContent = diffContents.find(
+            el => trim(el.value) === trim(renderChild) && el.type === type
+          );
+          console.log(renderChildDiffContent);
+        }
         diffContents = [...diffTail];
-
-        // if (oldStringRaw && oldStringRaw !== newStringRaw) {
-        //   const [, ...tail] = diffContents;
-        //   console.log("TAIL", [...tail], [...diffContents]);
-        //   diffContents = tail;
-        //   return (
-        //     <DiffStrings
-        //       oldString=""
-        //       forceChange
-        //       rawNewString={newStringRaw}
-        //       rawOldString={oldStringRaw}
-        //       newString={renderChild}
-        //     />
-        //   );
-        // }
-
         if (diffHead.added) {
           return <DiffStrings oldString="" newString={renderChild} />;
         }
         return renderChild;
       }
+
       const renderChildDiffContent = diffContents.find(
         el => trim(el.value) === trim(renderChild)
       );
@@ -169,7 +150,7 @@ export const getMarkdownTextDiff = (oldText, newText) => {
         ),
         ...diffContents.filter(el => el.index > renderChildDiffContent.index)
       ];
-      console.log(prevContents);
+
       diffContents = nextContents;
 
       customElements = prevContents
@@ -185,27 +166,57 @@ export const getMarkdownTextDiff = (oldText, newText) => {
         // same index contents
         const [added] = sameIndexPrevContents.filter(c => c.added);
         const [removed] = sameIndexPrevContents.filter(c => c.removed);
-        // const [unchanged] = sameIndexPrevContents.filter(c => !c.added && !c.removed);
+        const [unchanged] = sameIndexPrevContents.filter(
+          c => !c.added && !c.removed
+        );
         if (added && removed) {
+          const addedEl = newElements[added.index];
+          const removedEl = oldElements[removed.index];
+          if (addedEl.type !== removedEl.type) {
+            customElements = [
+              tagClassName(styles.stringRemoved)(removedEl),
+              ...customElements
+            ];
+            newType = "div";
+            props = {
+              ...props,
+              className: styles.stringAdded
+            };
+            return renderChild;
+          }
           return (
             <DiffStrings oldString={removed.value} newString={added.value} />
           );
+        }
+        if (removed && unchanged) {
+          customElements = [
+            tagClassName(styles.stringRemoved)(oldElements[removed.index]),
+            ...customElements
+          ];
+          newType = "div";
         }
       }
       return renderChild;
     });
 
-    return rootHandler(true)(newType, newProps, [
-      ...customElements,
-      ...newChildren
-    ]);
+    if (customElements.length > 0) {
+      newChildren = [
+        ...customElements,
+        React.createElement(type, props, newChildren)
+      ];
+    }
+
+    return rootHandler(true)(newType, newProps, newChildren);
   };
 
   return compiler(newText, { createElement: customRendererDiff });
 };
 
 export const newLineDiffFunc = arr => elem =>
-  !arr.some(arrelem => trim(arrelem.value) === trim(elem.value));
+  !arr.some(
+    arrelem =>
+      trim(arrelem.value) === trim(elem.value) && arrelem.type === elem.type
+  );
 
 export const newLineEqFunc = arr => elem => !newLineDiffFunc(arr)(elem);
 

@@ -75,13 +75,13 @@
 }
 
 .stringAdded {
-  background-color:#e6ffed;
+  background-color:#e6ffed !important;
   display: inline-block;
   white-space: pre;
 }
 
 .stringRemoved {
-  background-color: #ffdce0;
+  background-color: #ffdce0 !important;
   display: inline-block;
   white-space: pre;
 }
