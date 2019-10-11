@@ -80,7 +80,7 @@ export function useCredits(ownProps) {
     isUserPageOwner &&
     !proposalCreditPrice &&
     !isApiRequestingProposalPaywall;
-  const shouldFetchPaywallPayment =
+  const shouldPollPaywallPayment =
     isPaid && isUserPageOwner && !pollingCreditsPayment;
   const shouldFetchProposalCredits =
     isPaid &&
@@ -93,17 +93,6 @@ export function useCredits(ownProps) {
       onPurchaseProposalCredits();
     }
   }, [shouldFetchPurchaseProposalCredits, onPurchaseProposalCredits]);
-
-  useEffect(() => {
-    if (shouldFetchPaywallPayment) {
-      toggleCreditsPaymentPolling(true);
-      onPollProposalPaywallPayment(true);
-    }
-  }, [
-    shouldFetchPaywallPayment,
-    onPollProposalPaywallPayment,
-    toggleCreditsPaymentPolling
-  ]);
 
   useEffect(() => {
     if (shouldFetchProposalCredits) {
@@ -137,7 +126,8 @@ export function useCredits(ownProps) {
     pollingCreditsPayment,
     proposalPaymentReceived,
     toggleProposalPaymentReceived,
-    onPollProposalPaywallPayment
+    onPollProposalPaywallPayment,
+    shouldPollPaywallPayment
   };
 }
 

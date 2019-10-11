@@ -29,7 +29,8 @@ const Credits = () => {
     pollingCreditsPayment,
     proposalPaymentReceived,
     toggleProposalPaymentReceived,
-    onPollProposalPaywallPayment
+    onPollProposalPaywallPayment,
+    shouldPollPaywallPayment
   } = useCredits({ userid: user.id });
 
   const {
@@ -54,6 +55,17 @@ const Credits = () => {
     openProposalCreditsModal,
     closeProposalCreditsModal
   ] = useBooleanState(false);
+
+  useEffect(() => {
+    if (shouldPollPaywallPayment) {
+      toggleCreditsPaymentPolling(true);
+      onPollProposalPaywallPayment(true);
+    }
+  }, [
+    shouldPollPaywallPayment,
+    onPollProposalPaywallPayment,
+    toggleCreditsPaymentPolling
+  ]);
 
   const onStartPollingPayment = () => {
     if (isUserPageOwner) {
