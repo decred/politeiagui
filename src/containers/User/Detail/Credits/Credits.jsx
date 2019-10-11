@@ -84,7 +84,6 @@ const Credits = () => {
   useEffect(() => {
     if (proposalPaymentReceived) {
       toggleCreditsPaymentPolling(false);
-      toggleProposalPaymentReceived(false);
       closeProposalCreditsModal();
     }
   }, [

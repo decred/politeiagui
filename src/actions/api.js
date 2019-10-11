@@ -88,7 +88,7 @@ export const setPollingPointer = paymentpolling => {
   globalpollingpointer = paymentpolling;
 };
 
-const POLL_INTERVAL = 10 * 1000;
+const POLL_INTERVAL = 3 * 1000;
 export const onPollUserPayment = () => dispatch => {
   return api
     .verifyUserPayment()
@@ -1286,7 +1286,16 @@ export const clearProposalPaymentPollingPointer = () => {
 export const setProposalPaymentPollingPointer = proposalPaymentPolling =>
   (globalProposalPaymentPollingPointer = proposalPaymentPolling);
 
-export const onPollProposalPaywallPayment = isLimited => dispatch => {
+export const onPollProposalPaywallPayment = isLimited => (
+  dispatch,
+  getState
+) => {
+  const proposalPaymentReceived = sel.proposalPaymentReceived(getState());
+  if (proposalPaymentReceived && !isLimited) {
+    clearProposalPaymentPollingPointer();
+    dispatch(act.TOGGLE_CREDITS_PAYMENT_POLLING(false));
+    return;
+  }
   dispatch(act.REQUEST_PROPOSAL_PAYWALL_PAYMENT());
   return api
     .proposalPaywallPayment()

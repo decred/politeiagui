@@ -31,7 +31,8 @@ const mapDispatchToProps = {
   onFetchProposalPaywallPayment: act.onFetchProposalPaywallPayment,
   onPollProposalPaywallPayment: act.onPollProposalPaywallPayment,
   toggleCreditsPaymentPolling: act.toggleCreditsPaymentPolling,
-  toggleProposalPaymentReceived: act.toggleProposalPaymentReceived
+  toggleProposalPaymentReceived: act.toggleProposalPaymentReceived,
+  clearProposalPaymentPollingPointer: act.clearProposalPaymentPollingPointer
 };
 
 export function useCredits(ownProps) {
@@ -55,6 +56,7 @@ export function useCredits(ownProps) {
     onPurchaseProposalCredits,
     onUserProposalCredits,
     onPollProposalPaywallPayment,
+    clearProposalPaymentPollingPointer,
     isApiRequestingProposalPaywall,
     isApiRequestingUserProposalCredits,
     user,
@@ -132,7 +134,8 @@ export function useCredits(ownProps) {
     proposalPaymentReceived,
     toggleProposalPaymentReceived,
     onPollProposalPaywallPayment,
-    shouldPollPaywallPayment
+    shouldPollPaywallPayment,
+    clearProposalPaymentPollingPointer
   };
 }
 
