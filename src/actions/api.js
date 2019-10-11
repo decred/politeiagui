@@ -269,6 +269,7 @@ export const handleLogout = response => dispatch => {
   dispatch(act.RECEIVE_LOGOUT(response));
   clearStateLocalStorage();
   clearPollingPointer();
+  clearProposalPaymentPollingPointer();
   dispatch(onSetEmail(""));
 };
 
@@ -1274,14 +1275,16 @@ export const onFetchProposalPaywallPayment = () => dispatch => {
 const maxRequestLimit = 6;
 let numOfRequests = 0;
 
-let globalProposalsPollingpointer = null;
+let globalProposalPaymentPollingPointer = null;
 
-export const clearProposalsPaymentPollingPointer = () =>
-  clearTimeout(globalProposalsPollingpointer);
-
-export const setProposalsPaymentPollingPointer = proposalsPaymentpolling => {
-  globalProposalsPollingpointer = proposalsPaymentpolling;
+export const clearProposalPaymentPollingPointer = () => {
+  if (globalProposalPaymentPollingPointer) {
+    clearTimeout(globalProposalPaymentPollingPointer);
+  }
 };
+
+export const setProposalPaymentPollingPointer = proposalPaymentPolling =>
+  (globalProposalPaymentPollingPointer = proposalPaymentPolling);
 
 export const onPollProposalPaywallPayment = isLimited => dispatch => {
   dispatch(act.REQUEST_PROPOSAL_PAYWALL_PAYMENT());
@@ -1297,7 +1300,7 @@ export const onPollProposalPaywallPayment = isLimited => dispatch => {
           () => dispatch(onPollProposalPaywallPayment(isLimited)),
           POLL_INTERVAL
         );
-        setProposalsPaymentPollingPointer(paymentpolling);
+        setProposalPaymentPollingPointer(paymentpolling);
       }
     })
     .then(response => dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(response)))
