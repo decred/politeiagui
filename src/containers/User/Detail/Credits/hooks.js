@@ -53,7 +53,7 @@ export function useCredits(ownProps) {
   const {
     onPurchaseProposalCredits,
     onUserProposalCredits,
-    onFetchProposalPaywallPayment,
+    onPollProposalPaywallPayment,
     isApiRequestingProposalPaywall,
     isApiRequestingUserProposalCredits,
     user,
@@ -96,9 +96,14 @@ export function useCredits(ownProps) {
 
   useEffect(() => {
     if (shouldFetchPaywallPayment) {
-      onFetchProposalPaywallPayment();
+      toggleCreditsPaymentPolling(true);
+      onPollProposalPaywallPayment(true);
     }
-  }, [shouldFetchPaywallPayment, onFetchProposalPaywallPayment]);
+  }, [
+    shouldFetchPaywallPayment,
+    onPollProposalPaywallPayment,
+    toggleCreditsPaymentPolling
+  ]);
 
   useEffect(() => {
     if (shouldFetchProposalCredits) {
@@ -131,7 +136,8 @@ export function useCredits(ownProps) {
     toggleCreditsPaymentPolling,
     pollingCreditsPayment,
     proposalPaymentReceived,
-    toggleProposalPaymentReceived
+    toggleProposalPaymentReceived,
+    onPollProposalPaywallPayment
   };
 }
 
@@ -140,15 +146,10 @@ export function usePollProposalCreditsPayment(ownProps) {
     pollingCreditsPayment,
     toggleProposalPaymentReceived,
     toggleCreditsPaymentPolling,
-    onPollProposalPaywallPayment,
     proposalPaywallPaymentTxid,
     onUserProposalCredits
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
   const prevProposalPaywallPaymentTxid = useRef(null);
-
-  useEffect(() => {
-    onPollProposalPaywallPayment(true);
-  }, [onPollProposalPaywallPayment]);
 
   useEffect(() => {
     if (
