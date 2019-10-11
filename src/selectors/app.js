@@ -680,8 +680,8 @@ export const commentsSortOption = state => state.app.commentsSortOption;
 
 export const pollingCreditsPayment = state => state.app.pollingCreditsPayment;
 
-export const reachedCreditsPaymentPollingMax = state =>
-  state.app.reachedCreditsPaymentPollingMax;
+export const reachedCreditsPaymentPollingLimit = state =>
+  state.app.reachedCreditsPaymentPollingLimit;
 
 export const proposalPaymentReceived = state =>
   state.app.proposalPaymentReceived;

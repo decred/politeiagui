@@ -29,7 +29,7 @@ export const DEFAULT_STATE = {
   onboardViewed: false,
   commentsSortOption: { value: SORT_BY_TOP, label: SORT_BY_TOP },
   pollingCreditsPayment: false,
-  reachedCreditsPaymentPollingMax: false,
+  reachedCreditsPaymentPollingLimit: false,
   redirectedFrom: null,
   invoiceSortOption: { month: FILTER_ALL_MONTHS, year: getCurrentYear() },
   endPayoutOption: { month: getCurrentMonth(), year: getCurrentYear() },
@@ -297,7 +297,7 @@ const app = (state = DEFAULT_STATE, action) =>
     }),
     [act.TOGGLE_CREDITS_PAYMENT_POLLING_REACHED_LIMIT]: () => ({
       ...state,
-      reachedCreditsPaymentPollingMax: action.payload
+      reachedCreditsPaymentPollingLimit: action.payload
     }),
     [act.TOGGLE_PROPOSAL_PAYMENT_RECEIVED]: () => ({
       ...state,
