@@ -28,7 +28,6 @@ const ModalBuyProposalCredits = ({
   }
 
   useEffect(() => {
-    console.log(isPollingCreditsPayment, modalType);
     if (!isPollingCreditsPayment && modalType === 1) startPollingPayment();
   }, [isPollingCreditsPayment, startPollingPayment, modalType]);
 

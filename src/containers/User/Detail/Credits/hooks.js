@@ -17,6 +17,7 @@ const mapStateToProps = {
   proposalPaywallPaymentConfirmations:
     sel.apiProposalPaywallPaymentConfirmations,
   pollingCreditsPayment: sel.pollingCreditsPayment,
+  reachedCreditsPaymentPollingMax: sel.reachedCreditsPaymentPollingMax,
   proposalPaymentReceived: sel.proposalPaymentReceived,
   paywallTxid: sel.paywallTxid,
   user: sel.user,
@@ -69,7 +70,8 @@ export function useCredits(ownProps) {
     proposalPaywallPaymentConfirmations,
     proposalCreditsUnspent,
     proposalCreditPrice,
-    proposalCreditsPurchases
+    proposalCreditsPurchases,
+    reachedCreditsPaymentPollingMax
   } = useRedux(ownProps, mapStateToPropsWithCredits, mapDispatchToProps);
   const proposalCredits = proposalCreditsUnspent.length;
   const { isPaid } = usePaywall();
@@ -81,7 +83,10 @@ export function useCredits(ownProps) {
     !proposalCreditPrice &&
     !isApiRequestingProposalPaywall;
   const shouldPollPaywallPayment =
-    isPaid && isUserPageOwner && !pollingCreditsPayment;
+    isPaid &&
+    isUserPageOwner &&
+    !pollingCreditsPayment &&
+    !reachedCreditsPaymentPollingMax;
   const shouldFetchProposalCredits =
     isPaid &&
     isUserPageOwner &&

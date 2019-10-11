@@ -69,7 +69,6 @@ const Credits = () => {
 
   const onStartPollingPayment = () => {
     if (isUserPageOwner) {
-      console.log("polling started");
       toggleCreditsPaymentPolling(true);
       onPollProposalPaywallPayment(false);
     }
