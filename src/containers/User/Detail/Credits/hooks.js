@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useMemo } from "react";
 import * as act from "src/actions";
 import * as sel from "src/selectors";
-import useInterval from "src/hooks/utils/useInterval";
 import usePaywall from "src/hooks/api/usePaywall";
 import { useRedux } from "src/redux";
 
@@ -29,6 +28,7 @@ const mapDispatchToProps = {
   onUserProposalCredits: act.onUserProposalCredits,
   onPurchaseProposalCredits: act.onFetchProposalPaywallDetails,
   onFetchProposalPaywallPayment: act.onFetchProposalPaywallPayment,
+  onPollProposalPaywallPayment: act.onPollProposalPaywallPayment,
   toggleCreditsPaymentPolling: act.toggleCreditsPaymentPolling,
   toggleProposalPaymentReceived: act.toggleProposalPaymentReceived
 };
@@ -140,19 +140,15 @@ export function usePollProposalCreditsPayment(ownProps) {
     pollingCreditsPayment,
     toggleProposalPaymentReceived,
     toggleCreditsPaymentPolling,
-    onFetchProposalPaywallPayment,
+    onPollProposalPaywallPayment,
     proposalPaywallPaymentTxid,
     onUserProposalCredits
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
   const prevProposalPaywallPaymentTxid = useRef(null);
 
-  const pollingInterval = 10 * 1000; // 10 seconds
-
-  useInterval(
-    pollingInterval,
-    pollingCreditsPayment,
-    onFetchProposalPaywallPayment
-  );
+  useEffect(() => {
+    onPollProposalPaywallPayment(true);
+  }, [onPollProposalPaywallPayment]);
 
   useEffect(() => {
     if (

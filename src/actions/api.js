@@ -1271,6 +1271,42 @@ export const onFetchProposalPaywallPayment = () => dispatch => {
     });
 };
 
+const maxRequestLimit = 6;
+let numOfRequests = 0;
+
+let globalProposalsPollingpointer = null;
+
+export const clearProposalsPaymentPollingPointer = () =>
+  clearTimeout(globalProposalsPollingpointer);
+
+export const setProposalsPaymentPollingPointer = proposalsPaymentpolling => {
+  globalProposalsPollingpointer = proposalsPaymentpolling;
+};
+
+export const onPollProposalPaywallPayment = isLimited => dispatch => {
+  dispatch(act.REQUEST_PROPOSAL_PAYWALL_PAYMENT());
+  return api
+    .proposalPaywallPayment()
+    .then(response => {
+      if (isLimited && !response.txid) {
+        numOfRequests++;
+      }
+      if (!isLimited || numOfRequests < maxRequestLimit) {
+        dispatch(onFetchProposalPaywallPayment);
+        const paymentpolling = setTimeout(
+          () => dispatch(onPollProposalPaywallPayment(isLimited)),
+          POLL_INTERVAL
+        );
+        setProposalsPaymentPollingPointer(paymentpolling);
+      }
+    })
+    .then(response => dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(response)))
+    .catch(error => {
+      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(null, error));
+      throw error;
+    });
+};
+
 export const onRescanUserPayments = userid =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_RESCAN_USER_PAYMENTS(userid));
