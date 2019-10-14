@@ -1,7 +1,7 @@
 import React from "react";
 
 const DevelopmentOnlyContent = ({ children, show, style }) =>
-  (process.env.NODE_ENV !== "production" || process.env.REACT_APP_V2) &&
+  process.env.NODE_ENV !== "production" &&
     show ? (
       <div
         style={{

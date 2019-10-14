@@ -12,7 +12,7 @@ COPY ./ /root/
 
 RUN yarn install --network-concurrency 1
 
-RUN INLINE_RUNTIME_CHUNK=false yarn build
+RUN INLINE_RUNTIME_CHUNK=false yarn build-v2
 
 # Serve image (stable nginx version)
 FROM nginx:1.16.1
