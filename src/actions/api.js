@@ -1088,7 +1088,7 @@ export const onStartVote = (loggedInAsEmail, token, duration, quorum, pass) =>
       .startVote(loggedInAsEmail, csrf, token, duration, quorum, pass)
       .then(response => {
         dispatch(onFetchProposalsBatchVoteSummary([token]));
-        dispatch(act.RECEIVE_START_VOTE({ ...response, success: true }));
+        dispatch(act.RECEIVE_START_VOTE({ ...response, token, success: true }));
       })
       .catch(error => {
         dispatch(act.RECEIVE_START_VOTE(null, error));
@@ -1240,7 +1240,9 @@ export const onAuthorizeVote = (email, token, version) =>
     return api
       .proposalAuthorizeOrRevokeVote(csrf, "authorize", token, email, version)
       .then(response =>
-        dispatch(act.RECEIVE_AUTHORIZE_VOTE({ ...response, success: true }))
+        dispatch(
+          act.RECEIVE_AUTHORIZE_VOTE({ ...response, token, success: true })
+        )
       )
       .catch(error => {
         dispatch(act.RECEIVE_AUTHORIZE_VOTE(null, error));
@@ -1249,12 +1251,14 @@ export const onAuthorizeVote = (email, token, version) =>
   });
 
 export const onRevokeVote = (email, token, version) =>
-  withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_AUTHORIZE_VOTE({ token }));
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_REVOKE_AUTH_VOTE({ token }));
     return api
       .proposalAuthorizeOrRevokeVote(csrf, "revoke", token, email, version)
       .then(response =>
-        dispatch(act.RECEIVE_REVOKE_AUTH_VOTE({ ...response, success: true }))
+        dispatch(
+          act.RECEIVE_REVOKE_AUTH_VOTE({ ...response, token, success: true })
+        )
       )
       .catch(error => {
         dispatch(act.RECEIVE_REVOKE_AUTH_VOTE(null, error));

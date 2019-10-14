@@ -294,6 +294,8 @@ const api = (state = DEFAULT_STATE, action) =>
         state,
         action
       ),
+    [act.REQUEST_REVOKE_AUTH_VOTE]: () =>
+      request("authorizeVote", state, action),
     [act.RECEIVE_REVOKE_AUTH_VOTE]: () =>
       onReceiveVoteStatusChange(
         "authorizeVote",

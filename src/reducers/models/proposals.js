@@ -10,41 +10,51 @@ import {
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES
-  // PROPOSAL_VOTING_ACTIVE,
-  // PROPOSAL_VOTING_AUTHORIZED,
-  // PROPOSAL_VOTING_NOT_AUTHORIZED
 } from "../../constants";
 
-// const mapVotingStatusToTokenInventoryStatus = {
-//   [PROPOSAL_VOTING_NOT_AUTHORIZED]: "pre",
-//   [PROPOSAL_VOTING_AUTHORIZED]: "pre",
-//   [PROPOSAL_VOTING_ACTIVE]: "active"
-// };
+// Proposals presentational status returned by the 'tokeninventory' endpoint
+// from the API.
+const UNREVIEWED = "unreviewed";
+const CENSORED = "censored";
+const ABANDONED = "abandoned";
+const PRE_VOTE = "pre";
+const ACTIVE_VOTE = "active";
+const APPROVED = "approved";
+const REJECTED = "rejected";
 
 const DEFAULT_STATE = {
   byToken: {},
   allByStatus: {
-    unreviewed: [],
-    censored: [],
-    abandoned: [],
-    pre: [],
-    active: [],
-    approved: [],
-    rejected: []
+    [UNREVIEWED]: [],
+    [CENSORED]: [],
+    [ABANDONED]: [],
+    [PRE_VOTE]: [],
+    [ACTIVE_VOTE]: [],
+    [APPROVED]: [],
+    [REJECTED]: []
   },
   allProposalsByUserId: {},
   numOfProposalsByUserId: {}
 };
 
+const mapReviewStatusToTokenInventoryStatus = {
+  [PROPOSAL_STATUS_UNREVIEWED]: UNREVIEWED,
+  [PROPOSAL_STATUS_UNREVIEWED_CHANGES]: UNREVIEWED,
+  [PROPOSAL_STATUS_CENSORED]: CENSORED,
+  [PROPOSAL_STATUS_PUBLIC]: PRE_VOTE,
+  [PROPOSAL_STATUS_ABANDONED]: ABANDONED
+};
+
 const proposalToken = proposal => proposal.censorshiprecord.token;
 
-const mapReviewStatusToTokenInventoryStatus = {
-  [PROPOSAL_STATUS_UNREVIEWED]: "unreviewed",
-  [PROPOSAL_STATUS_UNREVIEWED_CHANGES]: "unreviewed",
-  [PROPOSAL_STATUS_CENSORED]: "censored",
-  [PROPOSAL_STATUS_PUBLIC]: "pre",
-  [PROPOSAL_STATUS_ABANDONED]: "abandoned"
-};
+const proposalArrayToByTokenObject = proposals =>
+  proposals.reduce(
+    (proposalsByToken, proposal) => ({
+      ...proposalsByToken,
+      [proposalToken(proposal)]: proposal
+    }),
+    {}
+  );
 
 const updateAllByStatus = (allByStatus, newStatus, token) =>
   Object.keys(allByStatus).reduce((inv, key) => {
@@ -66,7 +76,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
         [act.RECEIVE_PROPOSALS_BATCH]: () =>
           update("byToken", proposals => ({
             ...proposals,
-            ...action.payload.proposals
+            ...proposalArrayToByTokenObject(action.payload.proposals)
           }))(state),
         [act.RECEIVE_TOKEN_INVENTORY]: () =>
           update("allByStatus", allProps => ({
@@ -78,28 +88,22 @@ const proposals = (state = DEFAULT_STATE, action) =>
             ["byToken", proposalToken(action.payload.proposal)],
             action.payload.proposal
           )(state),
-        [act.RECEIVE_NEW_PROPOSAL]: () => {
-          try {
-            return compose(
-              set(["byToken", proposalToken(action.payload)], action.payload),
-              update(["allByStatus", "unreviewed"], (unreviewdProps = []) =>
-                unreviewdProps.concat([action.payload])
-              ),
-              update(
-                ["allProposalsByUserId", action.payload.userid],
-                (userProposals = []) =>
-                  userProposals.concat([proposalToken(action.payload)])
-              ),
-              update(
-                ["numOfProposalsByUserId", action.payload.userid],
-                (numOfProps = 0) => ++numOfProps
-              )
-            )(state);
-          } catch (e) {
-            console.log("GOT ERROR", e);
-          }
-          return state;
-        },
+        [act.RECEIVE_NEW_PROPOSAL]: () =>
+          compose(
+            set(["byToken", proposalToken(action.payload)], action.payload),
+            update(["allByStatus", UNREVIEWED], (unreviewdProps = []) =>
+              unreviewdProps.concat([action.payload])
+            ),
+            update(
+              ["allProposalsByUserId", action.payload.userid],
+              (userProposals = []) =>
+                userProposals.concat([proposalToken(action.payload)])
+            ),
+            update(
+              ["numOfProposalsByUserId", action.payload.userid],
+              (numOfProps = 0) => ++numOfProps
+            )
+          )(state),
         [act.RECEIVE_SETSTATUS_PROPOSAL]: () =>
           compose(
             set(
@@ -120,22 +124,23 @@ const proposals = (state = DEFAULT_STATE, action) =>
           compose(
             update("byToken", proposals => ({
               ...proposals,
-              ...action.payload.proposals.reduce(
-                (userProposalsByToken, userProposal) => ({
-                  ...userProposalsByToken,
-                  [proposalToken(userProposal)]: userProposal
-                }),
-                {}
-              )
+              ...proposalArrayToByTokenObject(action.payload.proposals)
             })),
-            set(
+            update(
               ["allProposalsByUserId", action.payload.userid],
-              action.payload.proposals.map(proposalToken)
+              (userProposals = []) => [
+                ...userProposals,
+                ...action.payload.proposals.map(proposalToken)
+              ]
             ),
             set(
               ["numOfProposalsByUserId", action.payload.userid],
               action.payload.numofproposals
             )
+          )(state),
+        [act.RECEIVE_START_VOTE]: () =>
+          update("allByStatus", allProps =>
+            updateAllByStatus(allProps, ACTIVE_VOTE, action.payload.token)
           )(state)
       }[action.type] || (() => state))();
 
