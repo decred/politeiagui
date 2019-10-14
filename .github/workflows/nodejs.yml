@@ -31,4 +31,4 @@ jobs:
       env:
         CI: true
     - name: build
-      run: yarn build
+      run: yarn build-v2
