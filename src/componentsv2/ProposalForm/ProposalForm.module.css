@@ -1,37 +1,26 @@
-.attachButton {
-    font-size: var(--font-size-small);
-    padding: .3rem .6rem;
-}
-
-.fileInputTooltip {
-    width: 200px;
-}
-
 .actionsWrapper { 
     display: flex;
     flex-wrap: wrap-reverse;
     justify-content: flex-end;
 }
 
-button.formatHelpButton {
+.formatHelpButton {
     border: 0;
     color: #8997A5;
     font-weight: 400;
     cursor: pointer;
-    margin: 0 !important;
+    padding-top: 10px;
+    padding-right: 40px;
 }
 
 .formatHelpButton:hover {
     color: var(--color-gray-dark);
 }
 
-.mobileColumn {
-    display: flex;
-    flex-direction: column;
-}
 
 @media screen and (max-width: 560px) { 
-    button.formatHelpButton {
+
+    .formatHelpButton {
         padding-right: 0;
     }
 }
