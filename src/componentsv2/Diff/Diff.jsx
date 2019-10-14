@@ -50,7 +50,7 @@ const FileWrapper = ({ file, className }) => {
 export const FilesDiff = ({ oldFiles, newFiles }) => {
   const files = getFilesDiff(newFiles, oldFiles);
   return (
-    <table className={classNames(styles.diffTable)}>
+    <table className={classNames(styles.diffFilesTable)}>
       <tbody>
         <tr className={styles.files}>
           {files.length > 0 ? files.map((file, key) => {

@@ -20,6 +20,8 @@ const ModalDiff = ({
       onClose={onClose}
       {...props}
       contentStyle={{ width: "100%", minHeight: "40rem" }}
+      className={styles.diffModal}
+      wrapperClassName={styles.diffModalWrapper}
     >
       <Header
         title={

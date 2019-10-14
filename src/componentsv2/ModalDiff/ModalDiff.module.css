@@ -3,6 +3,12 @@
   margin: 2rem 0;
 }
 
+.diffModal {
+  min-width: calc(100vw - 40rem);
+}
+.diffModalWrapper {
+  z-index: calc(var(--z-index-big) - 1);
+}
 
 .diffTabs > li {
   flex: 50%;

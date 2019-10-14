@@ -4,8 +4,6 @@ import { compiler } from "markdown-to-jsx";
 import DiffStrings from "./DiffStrings";
 import trim from "lodash/trim";
 import styles from "./Diff.module.css";
-// import omit from "lodash/omit";
-// import isEqual from "lodash/isEqual";
 
 const markAsAdded = elem => ({
   ...elem,
@@ -32,17 +30,12 @@ const tagClassName = className => elem => ({
     className: className
   }
 });
-const getElemArray = (stringArr, rawStringArr, elemArr) => (
-  type,
-  props,
-  children
-) => {
+const getElemArray = (stringArr, elemArr) => (type, props, children) => {
   const el = React.createElement(type, props, children);
   if (children && children.length > 0) {
     React.Children.map(children, c => {
       if (typeof c === "string") {
         stringArr.push(c);
-        rawStringArr.push(markdownToRawText(type, props, c));
         const el = React.createElement(type, props, c);
         elemArr.push(el);
         return c;
@@ -56,27 +49,6 @@ const overrider = (stringArr, rawStringArr, elemArr) => ({
   createElement: getElemArray(stringArr, rawStringArr, elemArr)
 });
 
-const markdownToRawText = (type, props, child) => {
-  const formatter = {
-    a: `[${child}](${props.href})`,
-    img: `![${child}](${props.href})`,
-    h1: `# ${child}`,
-    h2: `## ${child}`,
-    h3: `### ${child}`,
-    h4: `#### ${child}`,
-    h5: `##### ${child}`,
-    h6: `###### ${child}`,
-    strong: `**${child}**`,
-    em: `*${child}*`,
-    del: `~~${child}~~`,
-    ul: `* ${child}`,
-    ol: `${props.start}. ${child}`,
-    pre: `\`\`\`${child}\`\`\``,
-    code: `\`${child}\``
-  };
-  return formatter[type] ? formatter[type] : child;
-};
-
 const formatArray = elArray => (value, index) => ({
   value,
   index,
@@ -86,14 +58,12 @@ const formatArray = elArray => (value, index) => ({
 
 export const getMarkdownTextDiff = (oldText, newText) => {
   const newStringArr = [],
-    newStringRawArr = [],
     newElements = [],
     oldStringArr = [],
-    oldStringRawArr = [],
     oldElements = [];
 
-  compiler(oldText, overrider(oldStringArr, oldStringRawArr, oldElements));
-  compiler(newText, overrider(newStringArr, newStringRawArr, newElements));
+  compiler(oldText, overrider(oldStringArr, oldElements));
+  compiler(newText, overrider(newStringArr, newElements));
 
   const oldStringArray = oldStringArr.map(formatArray(oldElements));
   const newStringArray = newStringArr.map(formatArray(newElements));
@@ -113,7 +83,6 @@ export const getMarkdownTextDiff = (oldText, newText) => {
       if (typeof renderChild !== "string") return renderChild;
 
       const [diffHead, ...diffTail] = diffContents;
-
       if (diffHead && diffHead.value === renderChild) {
         if (diffHead.type !== type) {
           // find the renderChild corresp diff content
@@ -130,16 +99,34 @@ export const getMarkdownTextDiff = (oldText, newText) => {
             tagClassName(styles.stringRemoved)(oldElements[diffHead.index])
           ];
           newType = "div";
+          newProps = { className: styles.customElements };
           diffContents = [...rest];
           if (renderChildDiffContent.added) {
-            return <DiffStrings oldString="" newString={renderChild} />;
+            return <DiffStrings newString={renderChild} />;
           }
         }
-        // TODO: Props comparison.
+
+        if (
+          diffHead.props.href !== props.href ||
+          diffHead.props.src !== props.src
+        ) {
+          const oldLink = diffHead.props.href || diffHead.props.src;
+          const newLink = props.href || props.src;
+          const [, ...rest] = diffTail;
+          diffContents = [...rest];
+          return (
+            <DiffStrings
+              propChanges
+              oldLink={oldLink}
+              newLink={newLink}
+              newString={renderChild}
+            />
+          );
+        }
         diffContents = [...diffTail];
 
         if (diffHead.added) {
-          return <DiffStrings oldString="" newString={renderChild} />;
+          return <DiffStrings newString={renderChild} />;
         }
         return renderChild;
       }
@@ -229,10 +216,13 @@ export const getMarkdownTextDiff = (oldText, newText) => {
 };
 
 export const newLineDiffFunc = arr => elem =>
-  !arr.some(
-    arrelem =>
-      trim(arrelem.value) === trim(elem.value) && arrelem.type === elem.type
-  );
+  !arr.some(arrelem => {
+    const sameValues = trim(arrelem.value) === trim(elem.value);
+    const sameTypes = elem.type === arrelem.type;
+    const sameLinks = arrelem.props.href === elem.props.href;
+    const sameSrcs = arrelem.props.src === elem.props.src;
+    return sameValues && sameTypes && sameLinks && sameSrcs;
+  });
 
 export const newLineEqFunc = arr => elem => !newLineDiffFunc(arr)(elem);
 

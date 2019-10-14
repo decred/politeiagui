@@ -4,15 +4,15 @@ import styles from "./Diff.module.css";
 import PropTypes from "prop-types";
 
 const DiffStrings = ({
-  newString,
-  oldString,
-  forceChange = false,
-  rawNewString = "",
-  rawOldString = ""
+  newString = "",
+  oldString = "",
+  propChanges = false,
+  newLink = "",
+  oldLink = ""
 }) => {
   const [showTip, setShowTip] = useState(false);
   const ds = diffWordsWithSpace(oldString, newString);
-  return !forceChange ? ds.map((str, key) => {
+  return !propChanges ? ds.map((str, key) => {
     if (str.added) {
       return <span key={key} className={styles.stringAdded}>{str.value}</span>;
     }
@@ -31,9 +31,9 @@ const DiffStrings = ({
     </span>
     {showTip &&
       <span className={styles.changedTip}>
-        <span key={1} className={styles.stringAdded}>{rawNewString}</span>
+        <span key={1} className={styles.stringAdded}>{newLink}</span>
         <br/>
-        <span key={2} className={styles.stringRemoved}>{rawOldString}</span>
+        <span key={2} className={styles.stringRemoved}>{oldLink}</span>
       </span>
     }
   </>;
@@ -41,10 +41,10 @@ const DiffStrings = ({
 
 DiffStrings.propTypes = {
   newString: PropTypes.string.isRequired,
-  oldString: PropTypes.string.isRequired,
-  forceChange: PropTypes.bool,
-  rawOldString: PropTypes.string,
-  rawNewString: PropTypes.string
+  oldString: PropTypes.string,
+  propChanges: PropTypes.bool,
+  oldLink: PropTypes.string,
+  newLink: PropTypes.string
 };
 
 export default DiffStrings;
