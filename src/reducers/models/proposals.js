@@ -88,6 +88,11 @@ const proposals = (state = DEFAULT_STATE, action) =>
             ["byToken", proposalToken(action.payload.proposal)],
             action.payload.proposal
           )(state),
+        [act.RECEIVE_EDIT_PROPOSAL]: () =>
+          set(
+            ["byToken", proposalToken(action.payload.proposal)],
+            action.payload.proposal
+          )(state),
         [act.RECEIVE_NEW_PROPOSAL]: () =>
           compose(
             set(["byToken", proposalToken(action.payload)], action.payload),
