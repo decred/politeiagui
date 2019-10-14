@@ -1291,7 +1291,7 @@ export const onPollProposalPaywallPayment = isLimited => (
   getState
 ) => {
   const proposalPaymentReceived = sel.proposalPaymentReceived(getState());
-  if (proposalPaymentReceived && !isLimited) {
+  if (proposalPaymentReceived) {
     clearProposalPaymentPollingPointer();
     dispatch(act.TOGGLE_CREDITS_PAYMENT_POLLING(false));
     return;
