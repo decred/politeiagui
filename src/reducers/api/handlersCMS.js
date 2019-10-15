@@ -114,3 +114,23 @@ export const onReceiveCensorInvoiceComment = (state, action) => {
     }
   };
 };
+
+export const onReceiveManageCmsUser = (state, action) => {
+  state = receive("manageCmsUser", state, action);
+  if (action.error) return state;
+  return {
+    ...state,
+    user: {
+      ...state.user,
+      response: {
+        ...state.user.response,
+        user: {
+          ...state.user.response.user,
+          domain: action.payload.domain,
+          contractortype: action.payload.contractortype,
+          supervisoruserids: action.payload.supervisoruserids
+        }
+      }
+    }
+  };
+};

@@ -168,7 +168,8 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     1043: "You have already supported or opposed this DCC.",
     1044: "You may not support or oppose your own sponsored DCC.",
     1045: "You are not authorized to complete a DCC request.",
-    1046: "You must include a valid contractor type for a DCC."
+    1046: "You must include a valid contractor type for a DCC.",
+    1050: "Invalid Supervisor UUID"
   };
 
   const error = errorMessages[errorCode];

@@ -21,3 +21,24 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.selector {
+    max-width: 200px;
+}
+
+.supervisor-field {
+    display: inline-flex;
+    align-items: center;
+}
+
+.new-supervisor-button:disabled {
+    background-color: #888;
+    cursor: not-allowed;
+}
+
+.new-supervisor-id:hover {
+    color: #2971FF;
+}
+.new-supervisor-id {
+    margin: 0px 3px;
+}
