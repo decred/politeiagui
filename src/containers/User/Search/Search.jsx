@@ -2,9 +2,9 @@ import { Formik } from "formik";
 import { BoxTextInput, Button, Card, classNames, Link, Message, RadioButtonGroup, Table } from "pi-ui";
 import React, { useEffect, useState } from "react";
 import HelpMessage from "src/componentsv2/HelpMessage";
-import * as Yup from "yup";
 import { useSearchUser } from "./hooks";
 import styles from "./Search.module.css";
+import * as Joi from "@hapi/joi";
 
 const getFormattedSearchResults = (users = []) =>
   users.map(u => ({
@@ -38,6 +38,18 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
     },
     [usersResult]
   );
+
+  const formSchema = Joi.object({
+    searchTerm: Joi.string()
+      .required(),
+    searchBy: Joi.string()
+  });
+
+  const validate = (values) => {
+    const { error } = formSchema.validate(values);
+    return error;
+  };
+
   return (
     <>
       <TopBanner>
@@ -51,9 +63,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
               searchBy: "email"
             }}
             onSubmit={onSubmit}
-            validationSchema={Yup.object().shape({
-              searchTerm: Yup.string().required("Required")
-            })}
+            validate={validate}
           >
             {({
               values,
