@@ -2,7 +2,8 @@ import React, { useState, useCallback, useMemo } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Formik } from "formik";
-import { Button, Message, BoxTextInput } from "pi-ui";
+import { Button, Message, Text, BoxTextInput, useMediaQuery } from "pi-ui";
+import { Row } from "src/componentsv2/layout";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/componentsv2/MarkdownEditor";
 import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
@@ -29,6 +30,8 @@ const ProposalForm = React.memo(function ProposalForm({
   openFullImageModal,
   initialValues
 }) {
+  const mobile = useMediaQuery("(max-width: 560px)");
+
   const handleDescriptionChange = useCallback(
     v => {
       setFieldValue("description", v);
@@ -66,12 +69,25 @@ const ProposalForm = React.memo(function ProposalForm({
 
   const textAreaProps = useMemo(() => ({ tabIndex: 2 }), []);
 
-  const cancelProposalEdits = useCallback(
-  	v => {
-  		setFieldValue("name", initialValues.name);
-      setFieldValue("description", initialValues.description);
-    },
-    [setFieldValue, initialValues]
+  const FormatHelpButton = () => (
+    <Text
+      weight="semibold"
+      color="gray"
+      className={styles.formatHelpButton}
+      onClick={openMDGuideModal}
+    >
+      Formatting Help
+    </Text>
+  );
+
+  const SubmitButton = () => (
+    <Button
+      type="submit"
+      kind={!isValid || disableSubmit ? "disabled" : "primary"}
+      loading={isSubmitting}
+    >
+      Submit
+    </Button>
   );
 
   return (
@@ -105,33 +121,24 @@ const ProposalForm = React.memo(function ProposalForm({
         onRemove={handleFileRemoval}
         errors={errors}
       />
-      <div className={styles.actionsWrapper}>
-        <Button
-          color="gray"
-          type="button"
-          kind="secondary"
-          className={styles.formatHelpButton}
-          onClick={() => openMDGuideModal()}
-        >
-          Formatting Help
-        </Button>
-        <DraftSaver submitSuccess={submitSuccess} />
-        {values.token &&
-	        <Button 
-	        	type="button"
-	        	kind="secondary"
-	        	onClick={cancelProposalEdits}>
-	        	Cancel
-	        </Button>
-      	}
-        <Button
-          type="submit"
-          kind={!isValid || disableSubmit ? "disabled" : "primary"}
-          loading={isSubmitting}
-        >
-          Submit
-        </Button>
-      </div>
+      {!mobile ? (
+        <Row topMarginSize="s" justify="right">
+          <FormatHelpButton />
+          <DraftSaver submitSuccess={submitSuccess} />
+          <SubmitButton />
+        </Row>
+      ) : (
+        <>
+          <Row topMarginSize="s" justify="right">
+            <DraftSaver submitSuccess={submitSuccess} />
+            <SubmitButton />
+          </Row>
+          <Row topMarginSize="s" justify="right">
+            <FormatHelpButton />
+          </Row>
+        </>
+      )}
+
     </form>
   );
 });
