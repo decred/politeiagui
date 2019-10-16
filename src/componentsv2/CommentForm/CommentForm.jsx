@@ -14,6 +14,12 @@ const CommentForm = ({
   persistKey,
   className
 }) => {
+
+  function validateForm(values) {
+    const { error } = validationSchema.validate(values);
+    return error;
+  }
+
   async function handleSubmit(
     values,
     { resetForm, setSubmitting, setFieldError }
@@ -34,7 +40,7 @@ const CommentForm = ({
         comment: ""
       }}
       loading={!validationSchema}
-      validationSchema={validationSchema}
+      validate={validateForm}
       onSubmit={handleSubmit}
     >
       {formikProps => {

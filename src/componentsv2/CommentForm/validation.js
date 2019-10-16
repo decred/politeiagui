@@ -1,7 +1,7 @@
-import * as Yup from "yup";
+import * as Joi from "@hapi/joi";
 
-const commentValidationSchema = Yup.object().shape({
-  comment: Yup.string().required("Required")
+const commentValidationSchema = Joi.object({
+  comment: Joi.string().required()
 });
 
 export default commentValidationSchema;
