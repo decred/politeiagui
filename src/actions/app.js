@@ -109,12 +109,9 @@ export const onSaveNewProposalV2 = ({ name, description, files }) => (
   dispatch,
   getState
 ) => {
-  const email = sel.loggedInAsEmail(getState());
-  const id = sel.userid(getState());
-  const username = sel.loggedInAsUsername(getState());
-
+  const { email, userid, username } = sel.me(getState());
   return dispatch(
-    onSubmitProposal(email, id, username, name.trim(), description, files)
+    onSubmitProposal(email, userid, username, name.trim(), description, files)
   )
     .then(() => dispatch(onUserProposalCredits()))
     .then(() => sel.newProposalToken(getState()));
@@ -124,7 +121,7 @@ export const onEditProposalV2 = ({ token, name, description, files }) => (
   dispatch,
   getState
 ) => {
-  const email = sel.loggedInAsEmail(getState());
+  const email = sel.meEmail(getState());
   return dispatch(
     onSubmitEditedProposal(email, name, description, files, token)
   ).then(() => dispatch(onFetchProposalApi(token)).then(() => token));
@@ -134,7 +131,7 @@ export const onSaveNewCommentV2 = ({ comment, token, parentID }) => (
   dispatch,
   getState
 ) => {
-  const email = sel.loggedInAsEmail(getState());
+  const email = sel.meEmail(getState());
   return dispatch(onSubmitCommentApi(email, token, comment, parentID));
 };
 
@@ -211,7 +208,7 @@ export const onSaveDraftProposal = ({
 };
 
 export const onLoadDraftProposals = email => (dispatch, getState) => {
-  const key = email || sel.loggedInAsEmail(getState());
+  const key = email || sel.meEmail(getState());
   const stateFromLS = loadStateLocalStorage(key);
   const drafts = sel.draftProposals(stateFromLS) || {};
   dispatch(act.LOAD_DRAFT_PROPOSALS(drafts));

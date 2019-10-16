@@ -41,10 +41,14 @@ const UserDetail = ({
   Tab,
   match
 }) => {
-  const { user, isAdmin, userId, loggedInAsUserId } = useUserDetail({ match });
+  const { 
+    user, 
+    isAdmin, 
+    loggedInAsUserId 
+  } = useUserDetail({ match });
   const {
+    userPubkey, 
     loggedInAsEmail,
-    userPubkey,
     identityImportSuccess
   } = useUserIdentity();
 
@@ -127,7 +131,7 @@ const UserDetail = ({
   );
 
   // TODO: need a loading while user has not been fetched yet
-  return !!user && userId === user.id ? (
+  return !!user ? (
     <>
       <TopBanner>
         <PageDetails

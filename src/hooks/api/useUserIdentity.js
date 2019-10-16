@@ -4,10 +4,10 @@ import { useRedux } from "src/redux";
 import * as sel from "src/selectors";
 
 const mapStateToProps = {
-  userPubkey: sel.userPubkey,
-  user: sel.user,
-  apiMeResponse: sel.apiMeResponse,
-  loggedInAsUserId: sel.userid,
+  userPubkey: sel.mePublicKey,
+  loggedInAsUserId: sel.meUserID,
+  loggedInAsUsername: sel.meUsername,
+  loggedInAsEmail: sel.meEmail,
   identityImportError: sel.identityImportError,
   identityImportSuccess: sel.identityImportSuccess,
   keyMismatch: sel.getKeyMismatch,
@@ -15,8 +15,6 @@ const mapStateToProps = {
   updateUserKeyError: sel.updateUserKeyError,
   shouldAutoVerifyKey: sel.shouldAutoVerifyKey,
   verificationToken: sel.verificationToken,
-  loggedInAsUsername: sel.loggedInAsUsername,
-  loggedInAsEmail: sel.loggedInAsEmail,
   isApiRequestingUpdateUserKey: sel.isApiRequestingUpdateUserKey,
   isApiRequestingMarkUpdateKeyAsExpired: state =>
     sel.isApiRequestingManageUser(state) &&

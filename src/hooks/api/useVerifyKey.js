@@ -3,12 +3,12 @@ import { useRedux } from "src/redux";
 import * as sel from "src/selectors";
 
 const mapStateToProps = {
+  apiMeResponse: sel.me,
+  userPubkey: sel.mePublicKey,
+  loggedInAsEmail: sel.meEmail,
   verifyUserKey: sel.verifyUserKey,
-  apiMeResponse: sel.apiMeResponse,
-  loggedInAsEmail: sel.loggedInAsEmail,
   verifyUserKeyError: sel.verifyUserKeyError,
-  keyMismatch: sel.getKeyMismatch,
-  userPubkey: sel.userPubkey
+  keyMismatch: sel.getKeyMismatch
 };
 const mapDispatchToProps = {
   onVerifyUserKey: act.onVerifyUserKey,

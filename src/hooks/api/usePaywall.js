@@ -5,10 +5,10 @@ import { PAYWALL_STATUS_PAID } from "src/constants";
 import { useConfig } from "src/Config";
 
 const mapStateToProps = {
-  loggedInAsEmail: sel.loggedInAsEmail,
-  paywallAddress: sel.paywallAddress,
-  paywallAmount: sel.paywallAmount,
-  paywallTxNotBefore: sel.paywallTxNotBefore,
+  loggedInAsEmail: sel.meEmail,
+  paywallAddress: sel.mePaywallAddress,
+  paywallAmount: sel.mePaywallAmount,
+  paywallTxNotBefore: sel.mePaywallTxNotBefore,
   userPaywallStatus: sel.getUserPaywallStatus,
   userPaywallConfirmations: sel.getUserPaywallConfirmations,
   userPaywallTxid: sel.getUserPaywallTxid,

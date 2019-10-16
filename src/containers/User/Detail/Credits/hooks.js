@@ -19,10 +19,10 @@ const mapStateToProps = {
   pollingCreditsPayment: sel.pollingCreditsPayment,
   reachedCreditsPaymentPollingLimit: sel.reachedCreditsPaymentPollingLimit,
   proposalPaymentReceived: sel.proposalPaymentReceived,
-  paywallTxid: sel.paywallTxid,
+  paywallTxid: sel.mePaywallTxid,
   user: sel.user,
-  isAdmin: sel.isAdmin,
-  loggedInAsUserId: sel.userid
+  isAdmin: sel.meIsAdmin,
+  loggedInAsUserId: sel.meUserID
 };
 
 const mapDispatchToProps = {

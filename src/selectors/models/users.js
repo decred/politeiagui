@@ -6,7 +6,7 @@ export const userByID = get(["users", "byID"]);
 export const makeGetUserByID = userid =>
   createSelector(
     userByID,
-    get(userid)
+    users => users[userid] || null
   );
 
 export const me = get(["users", "me"]);
@@ -35,6 +35,7 @@ export const mePaywallAmount = createSelector(
   get(["users", "me", "paywallAmount"]),
   amount => amount / 100000000
 );
+
 export const meAlreadyPaid = createSelector(
   mePaywallAddress,
   address => address === ""

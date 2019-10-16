@@ -915,7 +915,7 @@ export const onSetInvoiceStatus = (
 
 export const onSetProposalStatusV2 = (token, status, censorMessage = "") =>
   withCsrf((dispatch, getState, csrf) => {
-    const email = sel.loggedInAsEmail(getState());
+    const email = sel.meEmail(getState());
     dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
     return api
       .proposalSetStatus(email, csrf, token, status, censorMessage)
@@ -1095,7 +1095,7 @@ export const onFetchProposalPaywallDetails = () => dispatch => {
 
 export const onUserProposalCredits = () => (dispatch, getState) => {
   dispatch(act.REQUEST_USER_PROPOSAL_CREDITS());
-  const userid = sel.userid(getState());
+  const userid = sel.meUserID(getState());
   return api
     .userProposalCredits()
     .then(response =>

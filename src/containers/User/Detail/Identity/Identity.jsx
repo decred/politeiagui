@@ -8,6 +8,7 @@ import PrivateKeyDownloadManager from "src/componentsv2/PrivateKeyDownloadManage
 import { PUB_KEY_STATUS_LOADING } from "src/constants";
 import { verifyUserPubkey } from "src/helpers";
 import useUserIdentity from "src/hooks/api/useUserIdentity";
+import { useUserDetail } from "src/containers/User/Detail/hooks";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import * as pki from "src/lib/pki";
 import styles from "./Identity.module.css";
@@ -18,12 +19,11 @@ const fetchKeys = (loggedInAsEmail) =>
     .getKeys(loggedInAsEmail)
     .then(keys => JSON.stringify(keys, null, 2));
 
-const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
+const Identity = ({ history, match, loadingKey, pubkey, id: userID, identities }) => {
   const {
     loggedInAsUserId,
     loggedInAsEmail,
     userPubkey,
-    user,
     identityImportSuccess,
     onUpdateUserKey,
     updateUserKey,
@@ -31,6 +31,9 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
     keyMismatchAction,
     shouldAutoVerifyKey
   } = useUserIdentity();
+  const {
+    user
+  } = useUserDetail({ match });
   const [
     showConfirmModal,
     openConfirmModal,

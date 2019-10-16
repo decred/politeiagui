@@ -4,14 +4,14 @@ import * as act from "src/actions";
 import { useRedux } from "src/redux";
 
 const mapStateToProps = {
-  userPubkey: sel.userPubkey,
-  loggedInAsEmail: sel.loggedInAsEmail,
+  user: sel.me,
+  userPubkey: sel.mePublicKey,
+  loggedInAsEmail: sel.meEmail,
+  loggedInAsUserId: sel.meUserID,
   keyMismatch: sel.getKeyMismatch,
   apiError: sel.apiError,
-  user: sel.apiMeResponse,
-  loggedInAsUserId: sel.userid,
   userCanExecuteActions: sel.userCanExecuteActions,
-  lastLoginTime: sel.lastLoginTimeFromLoginResponse,
+  lastLoginTime: sel.meLastLoginTime,
   onboardViewed: sel.onboardViewed,
   identityImportSuccess: sel.identityImportSuccess,
   isCMS: sel.isCMS,
