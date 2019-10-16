@@ -270,7 +270,7 @@ const Comments = ({
           )}
         </div>
         <ModalConfirmWithReason
-          title={`Censor comment`}
+          title="Censor comment"
           reasonLabel="Censor reason"
           subject="censorComment"
           successTitle="Comment censored"

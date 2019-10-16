@@ -10,7 +10,7 @@ import {
 } from "pi-ui";
 import PropTypes from "prop-types";
 import FormWrapper from "src/componentsv2/FormWrapper";
-import * as Yup from "yup";
+import * as Joi from "@hapi/joi";
 
 const ModalConfirmWithReason = ({
   show,
@@ -24,6 +24,19 @@ const ModalConfirmWithReason = ({
 }) => {
   const [success, setSuccess] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
+
+  const reasonValidationSchema = Joi.object({
+    reason: Joi.string().required()
+  });
+
+  const validateReasonForm = (values) => {
+    const errors = {};
+    const { error } = reasonValidationSchema.validate(values);
+    if (error) {
+      errors.reason = "Required";
+    }
+    return errors;
+  };
 
   const onSubmitReason = async (values, { resetForm, setFieldError }) => {
     setSubmitting(true);
@@ -77,9 +90,7 @@ const ModalConfirmWithReason = ({
           initialValues={{
             reason: ""
           }}
-          validationSchema={Yup.object().shape({
-            reason: Yup.string().required("Required")
-          })}
+          validate={validateReasonForm}
           onSubmit={onSubmitReason}
         >
           {({

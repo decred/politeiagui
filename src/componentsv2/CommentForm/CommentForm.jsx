@@ -15,15 +15,15 @@ const CommentForm = ({
   className
 }) => {
 
-  function validateForm(values) {
+  const validateForm = (values) => {
     const { error } = validationSchema.validate(values);
     return error;
-  }
+  };
 
-  async function handleSubmit(
+  const handleSubmit = async (
     values,
     { resetForm, setSubmitting, setFieldError }
-  ) {
+  ) => {
     try {
       await onSubmit(values.comment);
       setSubmitting(false);
@@ -33,7 +33,8 @@ const CommentForm = ({
       setSubmitting(false);
       setFieldError("global", e);
     }
-  }
+  };
+
   return (
     <Formik
       initialValues={{
