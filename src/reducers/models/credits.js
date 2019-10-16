@@ -10,21 +10,16 @@ const credits = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
     : ({
-        [act.RECEIVE_USER_PROPOSAL_CREDITS]: () => {
-          const {
-            userid,
-            unspentcredits: unspent,
-            spentcredits: spent
-          } = action.payload;
-          return set(["byUserID", userid], { unspent, spent })(state);
-        },
-        [act.RECEIVE_RESCAN_USER_PAYMENTS]: () => {
-          const { userid, newcredits } = action.payload;
-          return update(["byUserID", userid, "unspent"], (unspent = []) => [
-            ...unspent,
-            ...newcredits
-          ])(state);
-        }
+        [act.RECEIVE_USER_PROPOSAL_CREDITS]: () =>
+          set(["byUserID", action.payload.userid], {
+            unspent: action.payload.unspentcredits,
+            spent: action.payload.spentcredits
+          })(state),
+        [act.RECEIVE_RESCAN_USER_PAYMENTS]: () =>
+          update(
+            ["byUserID", action.payload.userid, "unspent"],
+            (unspent = []) => [...unspent, ...action.payload.newcredits]
+          )(state)
       }[action.type] || (() => state))();
 
 export default credits;
