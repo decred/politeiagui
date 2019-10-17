@@ -8,6 +8,20 @@ const DEFAULT_STATE = {
   currentUserID: null
 };
 
+const filterPublicData = byIdData => {
+  const publicData = {};
+  Object.keys(byIdData).map(
+    id =>
+      (publicData[id] = {
+        id,
+        isadmin: byIdData[id].isadmin,
+        username: byIdData[id].username,
+        identities: byIdData[id].identities
+      })
+  );
+  return publicData;
+};
+
 const users = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
@@ -17,7 +31,7 @@ const users = (state = DEFAULT_STATE, action) =>
             ...userData,
             ...action.payload.user
           }))(state),
-        [act.RECEIVE_ME]: () =>
+        [act.RECEIVE_ME || act.RECEIVE_LOGIN]: () =>
           compose(
             set("currentUserID", action.payload.userid),
             update(["byID", action.payload.userid], userData => ({
@@ -26,10 +40,11 @@ const users = (state = DEFAULT_STATE, action) =>
               id: action.payload.userid
             }))
           )(state),
-        [act.RECEIVE_LOGOUT]: () => {
-          console.log(state);
-          return set("currentUserID", null)(state);
-        }
+        [act.RECEIVE_LOGOUT]: () =>
+          compose(
+            set("currentUserID", null),
+            update("byID", data => filterPublicData(data))
+          )(state)
       }[action.type] || (() => state))();
 
 export default users;
