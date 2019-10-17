@@ -29,6 +29,14 @@ span.censor:hover {
     font-size: var(--font-size-normal);
 }
 
+.info {
+    flex-wrap: wrap;
+}
+
+.likesWrapper {
+    margin-left: auto;
+}
+
 .childrenContainer { 
     margin-top: 2rem;
     margin-left: 1.5rem;
