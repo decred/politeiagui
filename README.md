@@ -5,7 +5,7 @@
 Politeiagui is the web frontend used for [Politiea](https://github.com/decred/politeia). Currently, 
 there are two different systems built on top of Politeia and both uses Politeiagui as the web client. They are:
 - Decred's [proposal system](https://proposals.decred.org/). 
-- Decred's [contractor management system](https://cms.decred.org/).
+- Decred's [contractor management system](https://cms.decred.org/) ("CMS").
 
 
 ## Requirements
@@ -35,7 +35,8 @@ Politeiagui uses node.js and the yarn package manager.
     
     To run politeiagui against `politeiawww`, make sure `politeiawww` is running and use the following command:
     
-    `yarn && yarn start`
+    - Run the Proposal app: `yarn && yarn start`
+    - Run the CMS app: `yarn && REACT_APP_PRESET="CMS" yarn start`
 
     **Mock APIs (WARNING: may be out of date)**
 
@@ -47,19 +48,9 @@ Politeiagui uses node.js and the yarn package manager.
 
 To build politeiagui for production deployment, use the following commands:
 
-    yarn && yarn build
-    ls build
+- Build the Proposal app: `yarn && yarn build`
+- Build the CMS app: `yarn && REACT_APP_PRESET="CMS" yarn build`
 
-
-## Development for v2
-
-1. Clone this repository
-2. Install the dependencies and run the application: 
-`yarn && yarn start-v2`
-    
-## Production for v2
-Install the dependencies and build the application:
-`yarn && yarn build-v2`
 
 ## Configuration
 
@@ -85,7 +76,10 @@ REACT_APP_PRESET="POLITEIA"
 ```
 
 If the `REACT_APP_PRESET` is specified, all other specified options in the env
-file will be ignored.
+file will be ignored. Current valid preset options are:
+
+- "POLITEIA"
+- "CMS"
 
 The full table of options is presented below:
 
