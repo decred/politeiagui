@@ -53,7 +53,7 @@ const Identity = ({ history, match, loadingKey, pubkey, id: userID, identities }
     verifyUserPubkey(loggedInAsEmail, userPubkey, keyMismatchAction);
   }, [loggedInAsEmail, userPubkey, keyMismatchAction]);
 
-  const pastIdentities = identities.filter(i => !i.isactive);
+  const pastIdentities = identities && identities.filter(i => !i.isactive);
 
   const updateKey = useCallback(async () => {
     try {

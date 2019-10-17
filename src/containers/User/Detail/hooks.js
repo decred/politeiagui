@@ -33,9 +33,9 @@ export function useUserDetail(ownProps) {
   const mapStateToProps = useMemo(
     () => ({
       user: userSelector,
-      isAdmin: sel.meIsAdmin,
+      isAdmin: sel.currentUserIsAdmin,
       loading: sel.isApiRequestingUser,
-      loggedInAsUserId: sel.meUserID
+      loggedInAsUserId: sel.currentUserID
     }),
     [userSelector]
   );
@@ -50,7 +50,8 @@ export function useUserDetail(ownProps) {
       if (!validateUUID(userid)) {
         throw new Error("Invalid user ID");
       }
-      if (!loading && !user) {
+      const userMissingData = user && !user.identities;
+      if (!loading && (!user || userMissingData)) {
         onFetchUser(userid);
       }
     },
@@ -132,7 +133,7 @@ export function useChangeUsername(ownProps) {
 }
 
 const mapManageUserStateToProps = {
-  user: sel.user,
+  user: sel.currentUser,
   isApiRequestingUpdateUserKey: sel.isApiRequestingUpdateUserKey,
   isApiRequestingMarkAsPaid: state =>
     sel.isApiRequestingManageUser(state) &&

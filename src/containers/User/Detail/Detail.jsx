@@ -130,8 +130,7 @@ const UserDetail = ({
     [tabLabels, onSetIndex, isMobileScreen, index]
   );
 
-  // TODO: need a loading while user has not been fetched yet
-  return !!user ? (
+  return !!user && user.id === loggedInAsUserId ? (
     <>
       <TopBanner>
         <PageDetails

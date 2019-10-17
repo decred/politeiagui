@@ -4,9 +4,9 @@ import * as sel from "src/selectors";
 
 const mapStateToProps = {
   user: sel.user,
-  isAdmin: sel.meIsAdmin,
+  isAdmin: sel.currentUserIsAdmin,
   isApiRequestingEditUser: sel.isApiRequestingEditUser,
-  loggedInAsUserId: sel.meUserID,
+  loggedInAsUserId: sel.currentUserID,
   editUserResponse: sel.apiEditUserResponse,
   editUserError: sel.editUserError,
   initialValues: sel.getEditUserValues

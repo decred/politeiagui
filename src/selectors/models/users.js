@@ -9,34 +9,65 @@ export const makeGetUserByID = userid =>
     users => users[userid] || null
   );
 
-export const me = get(["users", "me"]);
+export const currentUserID = get(["users", "currentUserID"]);
 
-export const meEmail = get(["users", "me", "email"]);
-
-export const meUsername = get(["users", "me", "username"]);
-
-export const meUserID = get(["users", "me", "userid"]);
-
-export const meLastLoginTime = get(["users", "me", "lastlogintime"]);
-
-export const meIsAdmin = get(["users", "me", "isadmin"]);
-
-export const meSessionMaxAge = get(["users", "me", "sessionmaxage"]);
-
-export const mePublicKey = get(["users", "me", "pubkey"]);
-
-export const mePaywallAddress = get(["users", "me", "paywalladdress"]);
-
-export const mePaywallTxid = get(["users", "me", "paywalltxid"]);
-
-export const mePaywallTxNotBefore = get(["users", "me", "paywalltxnotbefore"]);
-
-export const mePaywallAmount = createSelector(
-  get(["users", "me", "paywallAmount"]),
-  amount => amount / 100000000
+export const currentUser = createSelector(
+  userByID,
+  currentUserID,
+  (users, userid) => users[userid]
 );
 
-export const meAlreadyPaid = createSelector(
-  mePaywallAddress,
+export const currentUserEmail = createSelector(
+  currentUser,
+  user => user && user.email
+);
+
+export const currentUserUsername = createSelector(
+  currentUser,
+  user => user && user.username
+);
+
+export const currentUserLastLoginTime = createSelector(
+  currentUser,
+  user => user && user.lastLoginTime
+);
+
+export const currentUserIsAdmin = createSelector(
+  currentUser,
+  user => user && user.isadmin
+);
+
+export const currentUserSessionMaxAge = createSelector(
+  currentUser,
+  user => user && user.email
+);
+
+export const currentUserPublicKey = createSelector(
+  currentUser,
+  user => user && user.pubkey
+);
+
+export const currentUserPaywallAddress = createSelector(
+  currentUser,
+  user => user && user.paywalladdress
+);
+
+export const currentUserPaywallTxid = createSelector(
+  currentUser,
+  user => user && user.paywalltxid
+);
+
+export const currentUserPaywallTxNotBefore = createSelector(
+  currentUser,
+  user => user && user.paywalltxnotbefore
+);
+
+export const currentUserPaywallAmount = createSelector(
+  currentUser,
+  user => user && user.paywallAmount / 100000000
+);
+
+export const currentUserAlreadyPaid = createSelector(
+  currentUserPaywallAddress,
   address => address === ""
 );

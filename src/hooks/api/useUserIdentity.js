@@ -4,10 +4,10 @@ import { useRedux } from "src/redux";
 import * as sel from "src/selectors";
 
 const mapStateToProps = {
-  userPubkey: sel.mePublicKey,
-  loggedInAsUserId: sel.meUserID,
-  loggedInAsUsername: sel.meUsername,
-  loggedInAsEmail: sel.meEmail,
+  userPubkey: sel.currentUserPublicKey,
+  loggedInAsUserId: sel.currentUserID,
+  loggedInAsUsername: sel.currentUserUsername,
+  loggedInAsEmail: sel.currentUserEmail,
   identityImportError: sel.identityImportError,
   identityImportSuccess: sel.identityImportSuccess,
   keyMismatch: sel.getKeyMismatch,

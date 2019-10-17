@@ -109,7 +109,7 @@ export const onSaveNewProposalV2 = ({ name, description, files }) => (
   dispatch,
   getState
 ) => {
-  const { email, userid, username } = sel.me(getState());
+  const { email, userid, username } = sel.currentUser(getState());
   return dispatch(
     onSubmitProposal(email, userid, username, name.trim(), description, files)
   )
@@ -121,7 +121,7 @@ export const onEditProposalV2 = ({ token, name, description, files }) => (
   dispatch,
   getState
 ) => {
-  const email = sel.meEmail(getState());
+  const email = sel.currentUserEmail(getState());
   return dispatch(
     onSubmitEditedProposal(email, name, description, files, token)
   ).then(() => dispatch(onFetchProposalApi(token)).then(() => token));
@@ -131,7 +131,7 @@ export const onSaveNewCommentV2 = ({ comment, token, parentID }) => (
   dispatch,
   getState
 ) => {
-  const email = sel.meEmail(getState());
+  const email = sel.currentUserEmail(getState());
   return dispatch(onSubmitCommentApi(email, token, comment, parentID));
 };
 
@@ -208,7 +208,7 @@ export const onSaveDraftProposal = ({
 };
 
 export const onLoadDraftProposals = email => (dispatch, getState) => {
-  const key = email || sel.meEmail(getState());
+  const key = email || sel.currentUserEmail(getState());
   const stateFromLS = loadStateLocalStorage(key);
   const drafts = sel.draftProposals(stateFromLS) || {};
   dispatch(act.LOAD_DRAFT_PROPOSALS(drafts));
