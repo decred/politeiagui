@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useMemo } from "react";
 import * as act from "src/actions";
 import * as sel from "src/selectors";
-import useInterval from "src/hooks/utils/useInterval";
 import usePaywall from "src/hooks/api/usePaywall";
 import { useRedux } from "src/redux";
 
@@ -18,6 +17,7 @@ const mapStateToProps = {
   proposalPaywallPaymentConfirmations:
     sel.apiProposalPaywallPaymentConfirmations,
   pollingCreditsPayment: sel.pollingCreditsPayment,
+  reachedCreditsPaymentPollingLimit: sel.reachedCreditsPaymentPollingLimit,
   proposalPaymentReceived: sel.proposalPaymentReceived,
   paywallTxid: sel.paywallTxid,
   user: sel.user,
@@ -29,8 +29,10 @@ const mapDispatchToProps = {
   onUserProposalCredits: act.onUserProposalCredits,
   onPurchaseProposalCredits: act.onFetchProposalPaywallDetails,
   onFetchProposalPaywallPayment: act.onFetchProposalPaywallPayment,
+  onPollProposalPaywallPayment: act.onPollProposalPaywallPayment,
   toggleCreditsPaymentPolling: act.toggleCreditsPaymentPolling,
-  toggleProposalPaymentReceived: act.toggleProposalPaymentReceived
+  toggleProposalPaymentReceived: act.toggleProposalPaymentReceived,
+  clearProposalPaymentPollingPointer: act.clearProposalPaymentPollingPointer
 };
 
 export function useCredits(ownProps) {
@@ -53,7 +55,8 @@ export function useCredits(ownProps) {
   const {
     onPurchaseProposalCredits,
     onUserProposalCredits,
-    onFetchProposalPaywallPayment,
+    onPollProposalPaywallPayment,
+    clearProposalPaymentPollingPointer,
     isApiRequestingProposalPaywall,
     isApiRequestingUserProposalCredits,
     user,
@@ -69,7 +72,8 @@ export function useCredits(ownProps) {
     proposalPaywallPaymentConfirmations,
     proposalCreditsUnspent,
     proposalCreditPrice,
-    proposalCreditsPurchases
+    proposalCreditsPurchases,
+    reachedCreditsPaymentPollingLimit
   } = useRedux(ownProps, mapStateToPropsWithCredits, mapDispatchToProps);
   const proposalCredits = proposalCreditsUnspent.length;
   const { isPaid } = usePaywall();
@@ -80,8 +84,11 @@ export function useCredits(ownProps) {
     isUserPageOwner &&
     !proposalCreditPrice &&
     !isApiRequestingProposalPaywall;
-  const shouldFetchPaywallPayment =
-    isPaid && isUserPageOwner && !pollingCreditsPayment;
+  const shouldPollPaywallPayment =
+    isPaid &&
+    isUserPageOwner &&
+    !pollingCreditsPayment &&
+    !reachedCreditsPaymentPollingLimit;
   const shouldFetchProposalCredits =
     isPaid &&
     isUserPageOwner &&
@@ -93,12 +100,6 @@ export function useCredits(ownProps) {
       onPurchaseProposalCredits();
     }
   }, [shouldFetchPurchaseProposalCredits, onPurchaseProposalCredits]);
-
-  useEffect(() => {
-    if (shouldFetchPaywallPayment) {
-      onFetchProposalPaywallPayment();
-    }
-  }, [shouldFetchPaywallPayment, onFetchProposalPaywallPayment]);
 
   useEffect(() => {
     if (shouldFetchProposalCredits) {
@@ -131,7 +132,10 @@ export function useCredits(ownProps) {
     toggleCreditsPaymentPolling,
     pollingCreditsPayment,
     proposalPaymentReceived,
-    toggleProposalPaymentReceived
+    toggleProposalPaymentReceived,
+    onPollProposalPaywallPayment,
+    shouldPollPaywallPayment,
+    clearProposalPaymentPollingPointer
   };
 }
 
@@ -140,19 +144,10 @@ export function usePollProposalCreditsPayment(ownProps) {
     pollingCreditsPayment,
     toggleProposalPaymentReceived,
     toggleCreditsPaymentPolling,
-    onFetchProposalPaywallPayment,
     proposalPaywallPaymentTxid,
     onUserProposalCredits
   } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
   const prevProposalPaywallPaymentTxid = useRef(null);
-
-  const pollingInterval = 10 * 1000; // 10 seconds
-
-  useInterval(
-    pollingInterval,
-    pollingCreditsPayment,
-    onFetchProposalPaywallPayment
-  );
 
   useEffect(() => {
     if (

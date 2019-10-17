@@ -28,8 +28,10 @@ const Credits = () => {
     toggleCreditsPaymentPolling,
     pollingCreditsPayment,
     proposalPaymentReceived,
-    toggleProposalPaymentReceived
-  } = useCredits({ userid: user.id});
+    toggleProposalPaymentReceived,
+    onPollProposalPaywallPayment,
+    shouldPollPaywallPayment
+  } = useCredits({ userid: user.id });
 
   const {
     onRescanUserCredits,
@@ -54,8 +56,22 @@ const Credits = () => {
     closeProposalCreditsModal
   ] = useBooleanState(false);
 
+  useEffect(() => {
+    if (shouldPollPaywallPayment) {
+      toggleCreditsPaymentPolling(true);
+      onPollProposalPaywallPayment(true);
+    }
+  }, [
+    shouldPollPaywallPayment,
+    onPollProposalPaywallPayment,
+    toggleCreditsPaymentPolling
+  ]);
+
   const onStartPollingPayment = () => {
-    toggleCreditsPaymentPolling(true);
+    if (isUserPageOwner) {
+      toggleCreditsPaymentPolling(true);
+      onPollProposalPaywallPayment(false);
+    }
   };
 
   const extraSmall = useMediaQuery("(max-width: 560px)");
@@ -68,7 +84,6 @@ const Credits = () => {
   useEffect(() => {
     if (proposalPaymentReceived) {
       toggleCreditsPaymentPolling(false);
-      toggleProposalPaymentReceived(false);
       closeProposalCreditsModal();
     }
   }, [
@@ -144,7 +159,7 @@ const Credits = () => {
             </div>
             <div className={styles.description}>
               <P className={styles.descriptionParagraph}>
-                <b>Registration Fee:</b> In order to participate on proposals and to submit your own, Politeia requires a small registration fee{" "} of 
+                <b>Registration Fee:</b> In order to participate on proposals and to submit your own, Politeia requires a small registration fee{" "} of
                 <b> exactly 0.1 DCR.</b>
               </P>
             </div>
