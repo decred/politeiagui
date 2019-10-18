@@ -58,7 +58,7 @@ const Identity = ({ history, loadingKey, user}) => {
     } catch (e) {
       throw e;
     }
-  }, [onUpdateUserKey, loggedInAsEmail]);
+  }, [onUpdateUserKey, loggedInAsEmail, userid]);
 
   const [keyData, setKeyData] = useState();
 

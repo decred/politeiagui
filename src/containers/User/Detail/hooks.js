@@ -28,7 +28,7 @@ function validateUUID(str) {
 }
 
 export function useUserDetail(ownProps) {
-  const userid = ownProps.match.params.userid;
+  const userid = ownProps.userid || ownProps.match.params.userid;
   const userSelector = useMemo(() => sel.makeGetUserByID(userid), [userid]);
   const mapStateToProps = useMemo(
     () => ({

@@ -23,7 +23,6 @@ const mapStateToProps = {
 const mapDispatchToProps = {
   keyMismatchAction: act.keyMismatch,
   onIdentityImported: act.onIdentityImported,
-  updateMe: act.updateMe,
   onUpdateUserKey: act.onUpdateUserKey
 };
 

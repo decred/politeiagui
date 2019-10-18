@@ -12,7 +12,6 @@ const mapStateToProps = {
 };
 const mapDispatchToProps = {
   onVerifyUserKey: act.onVerifyUserKey,
-  updateMe: act.updateMe,
   keyMismatchAction: act.keyMismatch
 };
 

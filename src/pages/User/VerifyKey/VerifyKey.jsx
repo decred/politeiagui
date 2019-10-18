@@ -5,17 +5,14 @@ import { withRouter } from "react-router-dom";
 import SingleContentPage from "src/componentsv2/layout/SingleContentPage";
 import { verifyUserPubkey } from "src/helpers";
 import useVerifyKey from "src/hooks/api/useVerifyKey";
-import * as pki from "src/lib/pki";
 import styles from "./VerifyKey.module.css";
 
 const VerifyKey = ({ location, history }) => {
   const {
-    apiMeResponse,
     loggedInAsEmail,
     userPubkey,
     keyMismatchAction,
     verifyUserKey,
-    updateMe,
     verifyUserKeyError,
     onVerifyUserKey
   } = useVerifyKey();
@@ -28,19 +25,13 @@ const VerifyKey = ({ location, history }) => {
       if (verificationtoken && loggedInAsEmail) {
         await onVerifyUserKey(loggedInAsEmail, verificationtoken);
         verifyUserPubkey(loggedInAsEmail, userPubkey, keyMismatchAction);
-        pki.myPubKeyHex(loggedInAsEmail).then(pubkey => {
-          updateMe({
-            ...apiMeResponse,
-            publickey: pubkey
-          });
-        });
         setKeyUpdated(true);
       }
     } catch (e) {
       setKeyUpdated(true);
       throw e;
     }
-  }, [loggedInAsEmail, apiMeResponse, userPubkey, keyMismatchAction, updateMe, onVerifyUserKey, location]);
+  }, [loggedInAsEmail, userPubkey, keyMismatchAction, onVerifyUserKey, location]);
 
   useEffect(() => {
     if (!keyUpdated) {

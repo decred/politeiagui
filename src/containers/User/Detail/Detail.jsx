@@ -19,7 +19,7 @@ const getTabComponents = ({ user, ...rest }) => {
   const mapTabValueToComponent = {
     [tabValues.IDENTITY]: <Identity key="tab-identity" user={user} {...rest} />,
     [tabValues.ACCOUNT]: <Account key="tab-account" {...user} {...rest} />,
-    [tabValues.PREFERENCES]: <Preferences key="tab-preferences" {...rest} />,
+    [tabValues.PREFERENCES]: <Preferences user={user} key="tab-preferences" {...rest} />,
     [tabValues.CREDITS]: <Credits key="tab-credits" user={user} {...rest} />,
     [tabValues.PROPOSALS]: (
       <UserProposals

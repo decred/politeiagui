@@ -3,7 +3,6 @@ import { useRedux } from "src/redux";
 import * as sel from "src/selectors";
 
 const mapStateToProps = {
-  user: sel.user,
   isAdmin: sel.currentUserIsAdmin,
   isApiRequestingEditUser: sel.isApiRequestingEditUser,
   loggedInAsUserId: sel.currentUserID,

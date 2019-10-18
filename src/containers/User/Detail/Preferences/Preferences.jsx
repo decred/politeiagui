@@ -4,9 +4,8 @@ import React, { useState } from "react";
 import { useUserPreferences } from "./hooks.js";
 import styles from "./Preferences.module.css";
 
-const Preferences = () => {
+const Preferences = ({ user }) => {
   const {
-    user,
     loggedInAsUserId,
     editUserError,
     editUserResponse,

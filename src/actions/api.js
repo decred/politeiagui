@@ -273,12 +273,17 @@ export const onLogout = () =>
 
 export const onChangeUsername = (password, newUsername) =>
   withCsrf((dispatch, getState, csrf) => {
+    const userid = sel.currentUserID(getState());
     dispatch(act.REQUEST_CHANGE_USERNAME());
     return api
       .changeUsername(csrf, password, newUsername)
       .then(response =>
         dispatch(
-          act.RECEIVE_CHANGE_USERNAME({ ...response, username: newUsername })
+          act.RECEIVE_CHANGE_USERNAME({
+            ...response,
+            userid,
+            username: newUsername
+          })
         )
       )
       .catch(error => {
@@ -519,7 +524,6 @@ export const onEditUser = preferences =>
       .editUser(csrf, preferences)
       .then(response => {
         dispatch(act.RECEIVE_EDIT_USER(response));
-        dispatch(onFetchUser(preferences.userid));
       })
       .catch(error => {
         dispatch(act.RECEIVE_EDIT_USER(null, error));
@@ -549,7 +553,11 @@ export const onManageUserv2 = (userId, action, reason) =>
     dispatch(act.REQUEST_MANAGE_USER({ userId, action, reason }));
     return api
       .manageUser(csrf, userId, action, reason)
-      .then(response => dispatch(act.RECEIVE_MANAGE_USER(response)))
+      .then(response => {
+        dispatch(act.RECEIVE_MANAGE_USER(response));
+        // Fetches new user information to update cache
+        dispatch(onFetchUser(userId));
+      })
       .catch(error => {
         dispatch(act.RECEIVE_MANAGE_USER(null, error));
       });
