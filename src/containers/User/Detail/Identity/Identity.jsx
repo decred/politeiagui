@@ -19,7 +19,7 @@ const fetchKeys = (loggedInAsEmail) =>
     .then(keys => JSON.stringify(keys, null, 2));
 
 const Identity = ({ history, loadingKey, user}) => {
-  const { id: userID, publickey: pubkey, identities } = user; 
+  const { id: userid, identities } = user; 
   const {
     loggedInAsUserId,
     loggedInAsEmail,
@@ -54,7 +54,7 @@ const Identity = ({ history, loadingKey, user}) => {
 
   const updateKey = useCallback(async () => {
     try {
-      await onUpdateUserKey(loggedInAsEmail);
+      await onUpdateUserKey(loggedInAsEmail, userid);
     } catch (e) {
       throw e;
     }
@@ -116,7 +116,7 @@ const Identity = ({ history, loadingKey, user}) => {
                   </P>
                 </>
               ) : (
-                  (pubkey || userPubkey) && (
+                  userPubkey && (
                     <div
                       className={classNames(
                         styles.fieldHeading,
@@ -136,7 +136,7 @@ const Identity = ({ history, loadingKey, user}) => {
                         Public key stored in your browser:
                       </P>
                       <Text backgroundColor="blueLighter" monospace>
-                        {pubkey || userPubkey}
+                        {userPubkey}
                       </Text>
                     </div>
                   )
@@ -193,7 +193,7 @@ const Identity = ({ history, loadingKey, user}) => {
             RFC 4122</a>, used to identify your user.
       </P>
         <Text backgroundColor="blueLighter" monospace>
-          {userID}
+          {userid}
         </Text>
         <ModalConfirm
           title="Create new identity"

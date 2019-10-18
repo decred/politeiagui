@@ -840,7 +840,7 @@ export const onSubmitComment = (
       });
   });
 
-export const onUpdateUserKey = loggedInAsEmail =>
+export const onUpdateUserKey = (loggedInAsEmail, userid) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_UPDATED_KEY());
     return pki
@@ -858,7 +858,12 @@ export const onUpdateUserKey = loggedInAsEmail =>
                 }
               }
               return dispatch(
-                act.RECEIVE_UPDATED_KEY({ ...response, success: true })
+                act.RECEIVE_UPDATED_KEY({
+                  success: true,
+                  userid,
+                  publickey: pki.toHex(keys.publicKey),
+                  ...response
+                })
               );
             })
         )

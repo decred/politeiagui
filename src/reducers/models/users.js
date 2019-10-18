@@ -22,6 +22,19 @@ const filterPublicData = byIdData => {
   return publicData;
 };
 
+const updateUserPublicKey = (byIdData, userid, newpubkey) => {
+  const updatedData = {};
+  Object.keys(byIdData).map(id =>
+    id === userid
+      ? (updatedData[id] = {
+          ...byIdData[id],
+          publickey: newpubkey
+        })
+      : (updatedData[id] = byIdData[id])
+  );
+  return updatedData;
+};
+
 const users = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
@@ -44,6 +57,14 @@ const users = (state = DEFAULT_STATE, action) =>
           compose(
             set("currentUserID", null),
             update("byID", data => filterPublicData(data))
+          )(state),
+        [act.RECEIVE_UPDATED_KEY]: () =>
+          update("byID", data =>
+            updateUserPublicKey(
+              data,
+              action.payload.userid,
+              action.payload.publickey
+            )
           )(state)
       }[action.type] || (() => state))();
 

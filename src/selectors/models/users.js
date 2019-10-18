@@ -29,7 +29,7 @@ export const currentUserUsername = createSelector(
 
 export const currentUserLastLoginTime = createSelector(
   currentUser,
-  user => user && user.lastLoginTime
+  user => user && user.lastlogintime
 );
 
 export const currentUserIsAdmin = createSelector(
@@ -64,7 +64,7 @@ export const currentUserPaywallTxNotBefore = createSelector(
 
 export const currentUserPaywallAmount = createSelector(
   currentUser,
-  user => user && user.paywallAmount / 100000000
+  user => user && user.paywallamount / 100000000
 );
 
 export const currentUserAlreadyPaid = createSelector(
