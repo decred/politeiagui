@@ -12,8 +12,8 @@ import styles from "./Credits.module.css";
 import { getCsvData, getProposalCreditsPaymentStatus, getTableContentFromPurchases, tableHeaders } from "./helpers.js";
 import { useCredits, useRescanUserCredits } from "./hooks.js";
 
-const Credits = () => {
-  const { user, onManageUser, isApiRequestingMarkAsPaid } = useManageUser();
+const Credits = ({ user }) => {
+  const { onManageUser, isApiRequestingMarkAsPaid } = useManageUser();
   const {
     proposalCreditPrice,
     isAdmin,
