@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom";
+import "pi-ui/dist/index.css";
 
 // lazy load the v2 so it doesn't affect the app bundle size
 // and the styles from old version doesn't affect v2
