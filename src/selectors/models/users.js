@@ -44,7 +44,7 @@ export const currentUserSessionMaxAge = createSelector(
 
 export const currentUserPublicKey = createSelector(
   currentUser,
-  user => user && user.pubkey
+  user => user && user.publickey
 );
 
 export const currentUserPaywallAddress = createSelector(
