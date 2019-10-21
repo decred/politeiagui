@@ -11,7 +11,7 @@ const cspConfigPolicy = {
   "connect-src":
     "'self' faucet.decred.org explorer.dcrdata.org testnet.dcrdata.org testnet.decred.org mainnet.decred.org",
   "manifest-src": "'self'",
-  "img-src:": "'self' data:",
+  "img-src": "'self' data:",
   "font-src": "'self'"
 };
 
