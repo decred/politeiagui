@@ -17,18 +17,15 @@ import useBooleanState from "src/hooks/utils/useBooleanState";
 const ProposalForm = React.memo(function ProposalForm({
   values,
   handleChange,
-  handleBlur,
   handleSubmit,
   isSubmitting,
-  touched,
   setFieldValue,
   errors,
   isValid,
   submitSuccess,
   disableSubmit,
   openMDGuideModal,
-  openFullImageModal,
-  initialValues
+  openFullImageModal
 }) {
   const mobile = useMediaQuery("(max-width: 560px)");
 
@@ -98,11 +95,9 @@ const ProposalForm = React.memo(function ProposalForm({
       <BoxTextInput
         placeholder="Proposal name"
         name="name"
-        tabIndex={1}
         value={values.name}
         onChange={handleChange}
-        onBlur={handleBlur}
-        error={touched.name && errors.name}
+        error={errors.name}
       />
       <MarkdownEditor
         name="description"
@@ -110,9 +105,8 @@ const ProposalForm = React.memo(function ProposalForm({
         value={values.description}
         textAreaProps={textAreaProps}
         onChange={handleDescriptionChange}
-        onBlur={handleBlur}
         placeholder={"Write your proposal"}
-        error={touched.description && errors.description}
+        error={errors.description}
         filesInput={filesInput}
       />
       <ThumbnailGrid
@@ -128,16 +122,16 @@ const ProposalForm = React.memo(function ProposalForm({
           <SubmitButton />
         </Row>
       ) : (
-        <>
-          <Row topMarginSize="s" justify="right">
-            <DraftSaver submitSuccess={submitSuccess} />
-            <SubmitButton />
-          </Row>
-          <Row topMarginSize="s" justify="right">
-            <FormatHelpButton />
-          </Row>
-        </>
-      )}
+          <>
+            <Row topMarginSize="s" justify="right">
+              <DraftSaver submitSuccess={submitSuccess} />
+              <SubmitButton />
+            </Row>
+            <Row topMarginSize="s" justify="right">
+              <FormatHelpButton />
+            </Row>
+          </>
+        )}
 
     </form>
   );
@@ -188,7 +182,6 @@ const ProposalFormWrapper = ({
         }
         loading={!proposalFormValidation}
         validate={proposalFormValidation}
-        validateOnChange={true}
         onSubmit={handleSubmit}
       >
         {props => (

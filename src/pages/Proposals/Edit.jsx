@@ -8,11 +8,11 @@ const PageProposalEdit = ({ history, match }) => {
   const mobile = useMediaQuery("(max-width: 560px)");
 
   const CancelButton = () => (
-    <Button 
+    <Button
       type="button"
       kind="secondary"
       size={mobile ? "sm" : "md"}
-      onClick={() => 
+      onClick={() =>
         history.push(`/proposal/${match.params.token}`)
       }
     >
@@ -25,7 +25,7 @@ const PageProposalEdit = ({ history, match }) => {
       {({ TopBanner, PageDetails, Main }) => (
         <>
           <TopBanner>
-            <PageDetails 
+            <PageDetails
               title="Edit Proposal"
               actionsContent={<CancelButton />}
             />
