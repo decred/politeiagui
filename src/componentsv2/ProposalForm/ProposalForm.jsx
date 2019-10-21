@@ -95,6 +95,7 @@ const ProposalForm = React.memo(function ProposalForm({
       <BoxTextInput
         placeholder="Proposal name"
         name="name"
+        tabIndex={1}
         value={values.name}
         onChange={handleChange}
         error={errors.name}
