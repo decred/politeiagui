@@ -9,10 +9,10 @@ const cspConfigPolicy = {
   "script-src": ["'self'"],
   "style-src": ["'self'"],
   "connect-src":
-    "'self' 'faucet.decred.org' 'explorer.dcrdata.org' 'testnet.dcrdata.org' 'testnet.decred.org' 'mainnet.decred.org'",
+    "'self' faucet.decred.org explorer.dcrdata.org testnet.dcrdata.org testnet.decred.org mainnet.decred.org",
   "manifest-src": "'self'",
   "img-src:": "'self' data:",
-  "font-src": "'self"
+  "font-src": "'self'"
 };
 
 module.exports = function override(config) {
