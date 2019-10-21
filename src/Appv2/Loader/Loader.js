@@ -72,7 +72,7 @@ const Loader = ({ children }) => {
     if (enableCredits && hasUser) {
       onUserProposalCredits();
     }
-  }, [hasUser, onUserProposalCredits]);
+  }, [hasUser, onUserProposalCredits, enableCredits]);
 
   return (
     <LoaderContext.Provider
