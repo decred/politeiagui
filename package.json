@@ -64,8 +64,7 @@
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject",
     "lint": "./node_modules/.bin/eslint src",
-    "precommit": "lint-staged",
-    "test:e2e": "nightwatch -c test/e2e/nightwatch.json"
+    "precommit": "lint-staged"
   },
   "lint-staged": {
     "*.{js, jsx}": [
