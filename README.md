@@ -36,7 +36,7 @@ Politeiagui uses node.js and the yarn package manager.
     To run politeiagui against `politeiawww`, make sure `politeiawww` is running and use the following command:
     
     - Run the Proposal app: `yarn && yarn start`
-    - Run the CMS app: `yarn && REACT_APP_PRESET="CMS" yarn start`
+    - Run the CMS app: `yarn && yarn start:cms`
 
     **Mock APIs (WARNING: may be out of date)**
 
@@ -49,7 +49,7 @@ Politeiagui uses node.js and the yarn package manager.
 To build politeiagui for production deployment, use the following commands:
 
 - Build the Proposal app: `yarn && yarn build`
-- Build the CMS app: `yarn && REACT_APP_PRESET="CMS" yarn build`
+- Build the CMS app: `yarn && yarn build:cms`
 
 
 ## Configuration
