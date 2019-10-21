@@ -55,17 +55,16 @@
     "mockapi": "node mockapi.js",
     "analyze": "source-map-explorer build/static/js/main.*",
     "start": "cross-env HTTPS=true react-app-rewired start",
+    "start:cms": "REACT_APP_PRESET='CMS' cross-env HTTPS=true react-app-rewired start",
     "start-redux-logger": "REACT_APP_USE_REDUX_LOGGER=true cross-env HTTPS=true react-app-rewired start",
     "uidev": "concurrently \"node mockapi.js\" \"react-app-rewired start\"",
     "build": "react-app-rewired build",
-    "build-v2": "REACT_APP_V2=true react-app-rewired build",
+    "build:cms": "REACT_APP_PRESET='CMS' react-app-rewired build",
     "build-staging": "REACT_APP_STAGING=true react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject",
-    "start-v2": "cross-env HTTPS=true REACT_APP_V2=TRUE react-app-rewired start",
     "lint": "./node_modules/.bin/eslint src",
-    "precommit": "lint-staged",
-    "test:e2e": "nightwatch -c test/e2e/nightwatch.json"
+    "precommit": "lint-staged"
   },
   "lint-staged": {
     "*.{js, jsx}": [
