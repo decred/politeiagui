@@ -52,23 +52,12 @@ export const requestApiInfo = (fetchUser = true) => dispatch => {
     });
 };
 
-export const onRequestMe = () => (dispatch, getState) => {
-  const state = getState();
+export const onRequestMe = () => dispatch => {
   dispatch(act.REQUEST_ME());
   return api
     .me()
     .then(response => {
       dispatch(act.RECEIVE_ME(response));
-      if (sel.usePaywall(state)) {
-        dispatch(onUserProposalCredits());
-
-        // Start polling for the user paywall tx, if applicable.
-        const paywallAddress = sel.paywallAddress(state);
-        if (paywallAddress) {
-          dispatch(onPollUserPayment());
-        }
-        return response;
-      }
     })
     .catch(error => {
       dispatch(act.RECEIVE_ME(null, error));
@@ -243,16 +232,12 @@ export const onSearchUser = query => dispatch => {
 };
 
 export const onLogin = ({ email, password }) =>
-  withCsrf((dispatch, getState, csrf) => {
+  withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_LOGIN({ email }));
     return api
       .login(csrf, email, password)
       .then(response => {
         dispatch(act.RECEIVE_LOGIN(response));
-        if (sel.usePaywall(getState())) {
-          dispatch(onUserProposalCredits());
-        }
-        dispatch(closeModal());
         return response;
       })
       .then(() => dispatch(onRequestMe()))

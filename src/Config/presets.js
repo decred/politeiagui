@@ -15,6 +15,7 @@ export const POLITEIA = {
   recordType: constants.RECORD_TYPE_PROPOSAL,
   enableAdminInvite: false,
   enableCommentVote: true,
+  enableCredits: true,
   enablePaywall: true,
   privacyPolicyContent: "privacy-policy",
   testnetGitRepository:
@@ -29,6 +30,7 @@ export const CMS = {
   recordType: constants.RECORD_TYPE_INVOICE,
   enableAdminInvite: true,
   enableCommentVote: false,
+  enableCredits: false,
   enablePaywall: false,
   privacyPolicyContent: "privacy-policy-cms",
   testnetGitRepository: "",
