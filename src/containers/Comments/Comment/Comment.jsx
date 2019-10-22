@@ -55,7 +55,7 @@ const Comment = ({
       )}
       {...props}
     >
-      <div className="justify-space-between">
+      <div className={classNames("justify-space-between", styles.info)}>
         <Join>
           <Link
             className={classNames(
@@ -77,14 +77,16 @@ const Comment = ({
           {!extraSmall && censorButton}
         </Join>
         {!disableLikes && !censored && (
-          <Likes
-            disabled={disableLikesClick}
-            upLikes={likesUpCount}
-            downLikes={likesDownCount}
-            option={likeOption}
-            onLike={onLike}
-            onDislike={onDislike}
-          />
+          <div className={styles.likesWrapper}>
+            <Likes
+              disabled={disableLikesClick}
+              upLikes={likesUpCount}
+              downLikes={likesDownCount}
+              option={likeOption}
+              onLike={onLike}
+              onDislike={onDislike}
+            />
+          </div>
         )}
       </div>
       {extraSmall && censorButton}

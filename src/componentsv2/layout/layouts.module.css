@@ -3,7 +3,7 @@ div.customMain {
     max-width: 100vw;
 }
 
-@media screen and (min-width: 560px) {
+@media screen and (min-width: 561px) {
     div.customMainNoSidebar {
         grid-column: center-start / center-end;
     }

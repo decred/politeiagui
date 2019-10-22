@@ -26,6 +26,8 @@ const mapDispatchToProps = {
   confirmWithModal: act.confirmWithModal,
   setOnboardAsViewed: act.setOnboardAsViewed,
   onLoadDraftProposals: act.onLoadDraftProposals,
+  onPollUserPayment: act.onPollUserPayment,
+  onUserProposalCredits: act.onUserProposalCredits,
   localLogout: act.handleLogout
 };
 

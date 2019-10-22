@@ -18,7 +18,6 @@ export const proposalValidation = ({
   maxmdsize
 }) => values => {
   const errors = {};
-
   if (!values) {
     values = {
       name: "",

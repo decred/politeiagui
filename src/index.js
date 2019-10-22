@@ -10,13 +10,13 @@ const App = lazy(() => import(/* webpackChunkName: "App" */ "./App"));
 const WhichApp = () => {
   return (
     <Suspense fallback={<div />}>
-      {process.env.REACT_APP_V2 ? <AppV2 /> : <App />}
+      {process.env.REACT_APP_PRESET === "CMS" ? <App /> : <AppV2 />}
     </Suspense>
   );
 };
 
 const targetElement =
-  process.env.REACT_APP_V2 || process.env.NODE_ENV === "test"
+  process.env.REACT_APP_PRESET !== "CMS" || process.env.NODE_ENV === "test"
     ? document.getElementById("root")
     : document.body;
 

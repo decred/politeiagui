@@ -9,6 +9,7 @@ import { UserSessionChecker } from "src/containers/User/SessionChecker";
 import { LoginModalProvider } from "src/containers/User/Login";
 import Onboard from "src/containers/User/Onboard";
 import StaticContentProvider from "src/containers/StaticContent";
+import "pi-ui/dist/index.css";
 
 const App = () => {
   useTheme(defaultLightTheme);

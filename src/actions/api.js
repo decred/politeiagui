@@ -52,23 +52,12 @@ export const requestApiInfo = (fetchUser = true) => dispatch => {
     });
 };
 
-export const onRequestMe = () => (dispatch, getState) => {
-  const state = getState();
+export const onRequestMe = () => dispatch => {
   dispatch(act.REQUEST_ME());
   return api
     .me()
     .then(response => {
       dispatch(act.RECEIVE_ME(response));
-      if (sel.usePaywall(state)) {
-        dispatch(onUserProposalCredits());
-
-        // Start polling for the user paywall tx, if applicable.
-        const paywallAddress = sel.paywallAddress(state);
-        if (paywallAddress) {
-          dispatch(onPollUserPayment());
-        }
-        return response;
-      }
     })
     .catch(error => {
       dispatch(act.RECEIVE_ME(null, error));
@@ -243,16 +232,12 @@ export const onSearchUser = query => dispatch => {
 };
 
 export const onLogin = ({ email, password }) =>
-  withCsrf((dispatch, getState, csrf) => {
+  withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_LOGIN({ email }));
     return api
       .login(csrf, email, password)
       .then(response => {
         dispatch(act.RECEIVE_LOGIN(response));
-        if (sel.usePaywall(getState())) {
-          dispatch(onUserProposalCredits());
-        }
-        dispatch(closeModal());
         return response;
       })
       .then(() => dispatch(onRequestMe()))
@@ -269,6 +254,7 @@ export const handleLogout = response => dispatch => {
   dispatch(act.RECEIVE_LOGOUT(response));
   clearStateLocalStorage();
   clearPollingPointer();
+  clearProposalPaymentPollingPointer();
   dispatch(onSetEmail(""));
 };
 
@@ -1270,6 +1256,56 @@ export const onFetchProposalPaywallPayment = () => dispatch => {
   dispatch(act.REQUEST_PROPOSAL_PAYWALL_PAYMENT());
   return api
     .proposalPaywallPayment()
+    .then(response => dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(response)))
+    .catch(error => {
+      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(null, error));
+      throw error;
+    });
+};
+
+const maxRequestLimit = 6;
+let numOfRequests = 0;
+
+let globalProposalPaymentPollingPointer = null;
+
+export const clearProposalPaymentPollingPointer = () => {
+  if (globalProposalPaymentPollingPointer) {
+    clearTimeout(globalProposalPaymentPollingPointer);
+  }
+};
+
+export const setProposalPaymentPollingPointer = proposalPaymentPolling =>
+  (globalProposalPaymentPollingPointer = proposalPaymentPolling);
+
+export const onPollProposalPaywallPayment = isLimited => (
+  dispatch,
+  getState
+) => {
+  const proposalPaymentReceived = sel.proposalPaymentReceived(getState());
+  if (proposalPaymentReceived) {
+    clearProposalPaymentPollingPointer();
+    dispatch(act.TOGGLE_CREDITS_PAYMENT_POLLING(false));
+    return;
+  }
+  dispatch(act.REQUEST_PROPOSAL_PAYWALL_PAYMENT());
+  return api
+    .proposalPaywallPayment()
+    .then(response => {
+      if (isLimited && !response.txid) {
+        numOfRequests++;
+      }
+      if (!isLimited || numOfRequests < maxRequestLimit) {
+        const paymentpolling = setTimeout(
+          () => dispatch(onPollProposalPaywallPayment(isLimited)),
+          POLL_INTERVAL
+        );
+        setProposalPaymentPollingPointer(paymentpolling);
+      } else if (isLimited && numOfRequests === maxRequestLimit) {
+        dispatch(act.TOGGLE_CREDITS_PAYMENT_POLLING_REACHED_LIMIT(true));
+        dispatch(act.TOGGLE_CREDITS_PAYMENT_POLLING(false));
+      }
+      return response;
+    })
     .then(response => dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(response)))
     .catch(error => {
       dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(null, error));
