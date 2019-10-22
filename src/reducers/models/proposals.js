@@ -146,7 +146,26 @@ const proposals = (state = DEFAULT_STATE, action) =>
         [act.RECEIVE_START_VOTE]: () =>
           update("allByStatus", allProps =>
             updateAllByStatus(allProps, ACTIVE_VOTE, action.payload.token)
-          )(state)
+          )(state),
+        [act.RECEIVE_LOGOUT]: () => {
+          const privateProps = [
+            ...state.allByStatus[UNREVIEWED],
+            ...state.allByStatus[CENSORED]
+          ];
+          const filterPrivateProps = update("byToken", propsByToken =>
+            Object.keys(propsByToken)
+              .filter(key => !privateProps.includes(key))
+              .reduce(
+                (res, token) => ({ ...res, [token]: propsByToken[token] }),
+                {}
+              )
+          );
+          return compose(
+            filterPrivateProps,
+            set(["allByStatus", UNREVIEWED], []),
+            set(["allByStatus", CENSORED], [])
+          )(state);
+        }
       }[action.type] || (() => state))();
 
 export default proposals;
