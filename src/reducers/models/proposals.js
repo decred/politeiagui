@@ -14,13 +14,13 @@ import {
 
 // Proposals presentational status returned by the 'tokeninventory' endpoint
 // from the API.
-const UNREVIEWED = "unreviewed";
-const CENSORED = "censored";
-const ABANDONED = "abandoned";
-const PRE_VOTE = "pre";
-const ACTIVE_VOTE = "active";
-const APPROVED = "approved";
-const REJECTED = "rejected";
+export const UNREVIEWED = "unreviewed";
+export const CENSORED = "censored";
+export const ABANDONED = "abandoned";
+export const PRE_VOTE = "pre";
+export const ACTIVE_VOTE = "active";
+export const APPROVED = "approved";
+export const REJECTED = "rejected";
 
 const DEFAULT_STATE = {
   byToken: {},

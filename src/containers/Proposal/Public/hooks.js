@@ -6,7 +6,7 @@ import useTokenInventory from "src/hooks/api/useTokenInventory";
 import useThrowError from "src/hooks/utils/useThrowError";
 
 const mapStateToProps = {
-  proposals: sel.proposalsWithVoteSummary,
+  proposals: sel.proposalsByToken,
   error: or(sel.apiProposalsBatchError, sel.apiPropVoteStatusError)
 };
 

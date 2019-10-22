@@ -5,7 +5,7 @@ import useTokenInventory from "src/hooks/api/useTokenInventory";
 import useThrowError from "src/hooks/utils/useThrowError";
 
 const mapStateToProps = {
-  proposals: sel.unvettedProposals,
+  proposals: sel.proposalsByToken,
   error: sel.apiProposalsBatchError
 };
 
