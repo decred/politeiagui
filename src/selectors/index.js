@@ -6,6 +6,7 @@ export * from "./form";
 export * from "./models/comments";
 export * from "./models/credits";
 export * from "./models/proposals";
+export * from "./models/proposalVotes";
 
 export const selectorMap = fns => (...args) =>
   Object.keys(fns).reduce(

@@ -10,10 +10,10 @@ import {
 
 export function useProposalVote(token) {
   const mapStateToProps = useMemo(() => {
-    const voteSummarySelector = sel.makeGetPropVoteSummary(token);
+    const voteSummarySelector = sel.makeGetProposalVoteSummary(token);
     return {
       voteSummary: voteSummarySelector,
-      bestBlock: sel.getBestBlockFromVoteSummaryResponse
+      bestBlock: sel.bestBlock
     };
   }, [token]);
   const { voteSummary, bestBlock } = useRedux({}, mapStateToProps, {});
