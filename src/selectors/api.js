@@ -5,9 +5,16 @@ import {
 } from "reselect";
 import get from "lodash/fp/get";
 import isEqual from "lodash/isEqual";
+import eq from "lodash/fp/eq";
+import filter from "lodash/fp/filter";
 import compose from "lodash/fp/compose";
 import { and, or, bool, constant, not } from "../lib/fp";
-import { CMSWWWMODE } from "../constants";
+import {
+  PROPOSAL_STATUS_UNREVIEWED,
+  PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_STATUS_ABANDONED,
+  CMSWWWMODE
+} from "../constants";
 // create a "selector creator" that uses lodash.isEqual instead of ===
 const createDeepEqualSelector = createSelectorCreator(defaultMemoize, isEqual);
 
@@ -526,7 +533,19 @@ export const apiUnvettedProposals = or(
   ),
   constant([])
 );
-
+const filtered = status =>
+  compose(
+    filter(
+      compose(
+        eq(status),
+        get("status")
+      )
+    ),
+    apiUnvettedProposals
+  );
+export const unreviewedProposals = filtered(PROPOSAL_STATUS_UNREVIEWED);
+export const abandonedProposals = filtered(PROPOSAL_STATUS_ABANDONED);
+export const censoredProposals = filtered(PROPOSAL_STATUS_CENSORED);
 export const unvettedProposalsIsRequesting = or(
   isApiRequestingInit,
   isApiRequestingUnvetted
