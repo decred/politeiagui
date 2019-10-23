@@ -68,6 +68,14 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
     });
   }, [loggedInAsEmail]);
 
+  const PublicKeyText = () => (pubkey || userPubkey) && (
+    <P className="margin-top-s margin-bottom-s">
+      <Text backgroundColor="blueLighter" monospace>
+        {pubkey || userPubkey}
+      </Text>
+    </P>
+  );
+  
   const isUserPageOwner = user && loggedInAsUserId === user.id;
   return loadingKey === PUB_KEY_STATUS_LOADING ? (
     <div className={styles.spinnerWrapper}>
@@ -75,15 +83,15 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
     </div>
   ) : (
       <Card className="margin-bottom-m" paddingSize="small">
-        {isUserPageOwner && (
+        <Text
+          color="grayDark"
+          weight="semibold"
+          className={styles.fieldHeading}
+        >
+          Public key
+        </Text>
+        {isUserPageOwner ? (
           <>
-            <Text
-              color="grayDark"
-              weight="semibold"
-              className={styles.fieldHeading}
-            >
-              Public key
-            </Text>
             {shouldAutoVerifyKey &&
               updateUserKey &&
               updateUserKey.verificationtoken ? (
@@ -116,31 +124,25 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
                   </P>
                 </>
               ) : (
-                  (pubkey || userPubkey) && (
-                    <div
-                      className={classNames(
-                        styles.fieldHeading,
-                        "margin-bottom-s",
-                        "margin-top-s"
-                      )}
-                    >
-                      <P>
-                        Your public and private keys constitute your identity. The private key
-                        is used to sign your proposals, comments and any up/down votes on
-                        Politeia. You can have only one identity active at a time. Your keys
-                        are stored in your browser by default, so if you use Politeia on multiple
-                        machines you will need to import your keys before you can participate.
+                <div
+                  className={classNames(
+                    styles.fieldHeading,
+                    "margin-bottom-s",
+                    "margin-top-s"
+                  )}
+                >
+                  <P>
+                    Your public and private keys constitute your identity. The private key
+                    is used to sign your proposals, comments and any up/down votes on
+                    Politeia. You can have only one identity active at a time. Your keys
+                    are stored in your browser by default, so if you use Politeia on multiple
+                    machines you will need to import your keys before you can participate.
 
-                      </P>
-                      <P className="margin-bottom-s">
-                        Public key stored in your browser:
-                      </P>
-                      <Text backgroundColor="blueLighter" monospace>
-                        {pubkey || userPubkey}
-                      </Text>
-                    </div>
-                  )
-                )}
+                  </P>
+                  <PublicKeyText />
+                </div>
+              )
+            }
             <div className={styles.buttonsWrapper}>
               <Button size="sm" onClick={openConfirmModal}>
                 Create new identity
@@ -151,14 +153,14 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
               <PrivateKeyDownloadManager keyData={keyData} />
             </div>
           </>
-        )}
+        ) : <PublicKeyText />}
         <Text
           color="grayDark"
           weight="semibold"
           className={classNames(
             styles.fieldHeading,
             "margin-bottom-s",
-            isUserPageOwner && "margin-top-l"
+            "margin-top-l"
           )}
         >
           Past public keys
@@ -170,13 +172,15 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
             "This account only had one active public key until now."
           }
         </P>
-        <Button
-          size="sm"
-          kind={pastIdentities.length === 0 ? "disabled" : "primary"}
-          onClick={openShowAllModal}
-        >
-          Show all
-      </Button>
+        {pastIdentities.length !== 0 && (
+          <Button
+            size="sm"
+            kind="primary"
+            onClick={openShowAllModal}
+          >
+            Show all
+          </Button>
+        )}
         <Text
           color="grayDark"
           weight="semibold"
