@@ -1,16 +1,17 @@
 import { Formik } from "formik";
-import { BoxTextInput, Button, Card, classNames, Link, Message, RadioButtonGroup, Table } from "pi-ui";
+import { BoxTextInput, Button, Card, classNames, Message, RadioButtonGroup, Table } from "pi-ui";
 import React, { useEffect, useState } from "react";
 import HelpMessage from "src/componentsv2/HelpMessage";
 import * as Yup from "yup";
 import { useSearchUser } from "./hooks";
 import styles from "./Search.module.css";
+import Link from "src/componentsv2/Link";
 
 const getFormattedSearchResults = (users = []) =>
   users.map(u => ({
     Username: u.username,
     Email: u.email,
-    ID: <Link href={`/user/${u.id}`}>{u.id}</Link>
+    ID: <Link to={`/user/${u.id}`}>{u.id}</Link>
   }));
 
 const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
