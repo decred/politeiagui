@@ -42,7 +42,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
   const {
     voteSummary,
     voteActive: isVoteActive,
-    voteTimeLeftInWords: voteTimeLeft,
+    voteTimeInWords: voteTime,
     voteBlocksLeft
   } = useProposalVote(censorshiprecord.token);
   const { currentUser } = useLoaderContext();
@@ -53,6 +53,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
     closeFullImageModal
   } = useFullImageModal();
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
+  console.log(hasvoteSummary);
   const proposalToken = censorshiprecord && censorshiprecord.token;
   const proposalURL = `/proposal/${proposalToken}`;
   const isPublic = isPublicProposal(proposal);
@@ -143,15 +144,15 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
                       className={styles.statusTag}
                       {...getProposalStatusTagProps(proposal, voteSummary)}
                     />
+                    <Text
+                      className={styles.timeLeft}
+                      size="small"
+                      color="gray"
+                    >
+                      {`vote end${isVoteActive ? "s" : "ed"} ${voteTime}`}
+                    </Text>
                     {isVoteActive && (
                       <>
-                        <Text
-                          className={styles.timeLeft}
-                          size="small"
-                          color="gray"
-                        >
-                          {`vote ends ${voteTimeLeft}`}
-                        </Text>
                         <Text
                           className="hide-on-mobile"
                           size="small"

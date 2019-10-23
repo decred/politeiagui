@@ -177,8 +177,8 @@ export const getVoteBlocksLeft = (voteSummary, chainHeight) => {
  * @param {Boolean} isTestnet
  * @returns {String} message
  */
-export const getVoteTimeLeftInWords = (voteSummary, chainHeight, isTestnet) => {
-  if (!voteSummary || voteSummary.status !== PROPOSAL_VOTING_ACTIVE) {
+export const getVoteTimeInWords = (voteSummary, chainHeight, isTestnet) => {
+  if (!voteSummary) {
     return "";
   }
   const blocks = getVoteBlocksLeft(voteSummary, chainHeight);
