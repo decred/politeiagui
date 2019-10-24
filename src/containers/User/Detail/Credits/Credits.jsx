@@ -6,14 +6,15 @@ import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
 import ModalPayPaywall from "src/componentsv2/ModalPayPaywall";
 import { MANAGE_USER_CLEAR_USER_PAYWALL } from "src/constants";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import { hasUserPaid } from "../helpers";
 import { useManageUser } from "../hooks.js";
+import usePaywall from "src/hooks/api/usePaywall";
 import styles from "./Credits.module.css";
 import { getCsvData, getProposalCreditsPaymentStatus, getTableContentFromPurchases, tableHeaders } from "./helpers.js";
 import { useCredits, useRescanUserCredits } from "./hooks.js";
 
 const Credits = () => {
   const { user, onManageUser, isApiRequestingMarkAsPaid } = useManageUser();
+  const { isPaid } = usePaywall();
   const {
     proposalCreditPrice,
     isAdmin,
@@ -95,11 +96,6 @@ const Credits = () => {
 
   const isUserPageOwner = user && loggedInAsUserId === user.id;
 
-  const paywallIsPaid = hasUserPaid(
-    user.newuserpaywalltx,
-    user.newuserpaywallamount
-  );
-
   const markAsPaid = reason =>
     onManageUser(user.id, MANAGE_USER_CLEAR_USER_PAYWALL, reason);
 
@@ -135,9 +131,9 @@ const Credits = () => {
                   "margin-top-xs margin-bottom-xs"
                 )}
               >
-                {paywallIsPaid ? "Paid" : "Not paid"}
+                {isPaid ? "Paid" : "Not paid"}
               </Text>
-              {!paywallIsPaid && isUserPageOwner && (
+              {!isPaid && isUserPageOwner && (
                 <Button
                   className="margin-top-s"
                   size="sm"
@@ -146,7 +142,7 @@ const Credits = () => {
                   Pay registration fee
                 </Button>
               )}
-              {!paywallIsPaid && isAdmin && (
+              {!isPaid && isAdmin && (
                 <Button
                   className="margin-top-s"
                   loading={isApiRequestingMarkAsPaid}
@@ -186,7 +182,7 @@ const Credits = () => {
             </div>
           </div>
           <div className={styles.buttonsWrapper}>
-            {isUserPageOwner && paywallIsPaid && (
+            {isUserPageOwner && isPaid && (
               <Button
                 className="margin-top-s"
                 size="sm"
