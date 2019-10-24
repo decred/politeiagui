@@ -2,3 +2,14 @@
   display: flex;
   justify-content: flex-end;
 }
+.inputNumber {
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  width: 5rem;
+  text-align: center;
+  border-bottom: 0.1rem solid var(--color-gray-lighter);
+  font-size: var(--font-size-normal);
+  transition: all 0.25s;
+  line-height: var(--spacing-2);
+}
