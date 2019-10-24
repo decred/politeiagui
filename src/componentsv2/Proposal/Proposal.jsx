@@ -12,7 +12,7 @@ import {
   isPublicProposal,
   isEditableProposal,
   getQuorumInVotes,
-  isVotingFinishedProposal,
+  isVotingFinishedProposal
 } from "src/containers/Proposal/helpers";
 import { useProposalVote } from "src/containers/Proposal/hooks";
 import { useLoaderContext } from "src/Appv2/Loader";
@@ -76,7 +76,6 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
   const onClickFile = f => () => {
     openFullImageModal(f);
   };
-  console.log(proposal, isVoteActive);
   return (
     <>
       <RecordWrapper>
