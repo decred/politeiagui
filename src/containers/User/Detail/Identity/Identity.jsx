@@ -18,7 +18,7 @@ const fetchKeys = (loggedInAsEmail) =>
     .getKeys(loggedInAsEmail)
     .then(keys => JSON.stringify(keys, null, 2));
 
-const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
+const Identity = ({ history, loadingKey, id: userID, identities }) => {
   const {
     loggedInAsUserId,
     loggedInAsEmail,
@@ -50,6 +50,8 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
     verifyUserPubkey(loggedInAsEmail, userPubkey, keyMismatchAction);
   }, [loggedInAsEmail, userPubkey, keyMismatchAction]);
 
+  const pubkey = identities.filter(i => i.isactive)[0].pubkey;
+
   const pastIdentities = identities.filter(i => !i.isactive);
 
   const updateKey = useCallback(async () => {
@@ -68,13 +70,13 @@ const Identity = ({ history, loadingKey, pubkey, id: userID, identities }) => {
     });
   }, [loggedInAsEmail]);
 
-  const PublicKeyText = () => (pubkey || userPubkey) && (
+  const PublicKeyText = () => (pubkey || userPubkey) ? (
     <P className="margin-top-s margin-bottom-s">
       <Text backgroundColor="blueLighter" monospace>
         {pubkey || userPubkey}
       </Text>
     </P>
-  );
+  ) : null;
   
   const isUserPageOwner = user && loggedInAsUserId === user.id;
   return loadingKey === PUB_KEY_STATUS_LOADING ? (
