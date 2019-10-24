@@ -28,6 +28,7 @@ const mapDispatchToProps = {
   onLoadDraftProposals: act.onLoadDraftProposals,
   onPollUserPayment: act.onPollUserPayment,
   onUserProposalCredits: act.onUserProposalCredits,
+  onGetPolicy: act.onGetPolicy,
   localLogout: act.handleLogout
 };
 
