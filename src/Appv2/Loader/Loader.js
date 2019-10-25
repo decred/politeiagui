@@ -18,7 +18,8 @@ const Loader = ({ children }) => {
     user,
     localLogout,
     onPollUserPayment,
-    onUserProposalCredits
+    onUserProposalCredits,
+    onGetPolicy
   } = useLoader();
   const [
     userActiveOnLocalStorage,
@@ -28,19 +29,17 @@ const Loader = ({ children }) => {
   // fetch api info and current user if any
   useEffect(() => {
     async function onInit() {
-      try {
-        const apiInfo = await onRequestApiInfo(false);
-        setApiInfo(apiInfo);
-        if (apiInfo.activeusersession) {
-          await onRequestCurrentUser();
-        }
-        setInitDone(true);
-      } catch (e) {
-        setError(e);
+      const apiInfo = await onRequestApiInfo(false);
+      setApiInfo(apiInfo);
+      if (apiInfo.activeusersession) {
+        await onRequestCurrentUser();
       }
     }
-    onInit();
-  }, [onRequestApiInfo, onRequestCurrentUser]);
+
+    Promise.all([onInit(), onGetPolicy()])
+      .then(() => setInitDone(true))
+      .catch(e => setError(e));
+  }, [onRequestApiInfo, onRequestCurrentUser, onGetPolicy]);
 
   const hasUser = !!user;
 
