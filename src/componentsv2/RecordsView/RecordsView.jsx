@@ -70,8 +70,8 @@ const RecordsView = ({
   const isMobileScreen = useMediaQuery("(max-width:560px)");
 
   const filteredRecords = useMemo(
-    () => getRecordsByTabOption(tabOption, records, filteredTokens),
-    [tabOption, records, filteredTokens]
+    () => getRecordsByTabOption(records, filteredTokens),
+    [records, filteredTokens]
   );
 
   const handleFetchMoreRecords = useCallback(async () => {

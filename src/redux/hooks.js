@@ -6,7 +6,13 @@ import throttle from "lodash/throttle";
 export const reduxContext = React.createContext();
 export const useReduxContext = () => useContext(reduxContext);
 
-export function useRedux(ownProps, mapStateToProps, mapDispatchToProps) {
+const DEFAULT_MAP_DISPATCH = {};
+
+export function useRedux(
+  ownProps,
+  mapStateToProps,
+  mapDispatchToProps = DEFAULT_MAP_DISPATCH
+) {
   const { store: redux } = useReduxContext();
 
   const [state, setState] = useState(redux.getState());
