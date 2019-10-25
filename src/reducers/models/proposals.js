@@ -95,7 +95,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
           compose(
             set(["byToken", proposalToken(action.payload)], action.payload),
             update(["allByStatus", UNREVIEWED], (unreviewdProps = []) =>
-              unreviewdProps.concat([action.payload])
+              unreviewdProps.concat([proposalToken(action.payload)])
             ),
             update(
               ["allProposalsByUserId", action.payload.userid],

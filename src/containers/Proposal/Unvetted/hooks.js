@@ -1,30 +1,32 @@
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useRedux } from "src/redux";
-import useTokenInventory from "src/hooks/api/useTokenInventory";
+import useAPIAction from "src/hooks/utils/useAPIAction";
 import useThrowError from "src/hooks/utils/useThrowError";
 
 const mapStateToProps = {
   proposals: sel.proposalsByToken,
+  allByStatus: sel.allByStatus,
   error: sel.apiProposalsBatchError
 };
 
 const mapDispatchToProps = {
-  onFetchProposalsBatch: act.onFetchProposalsBatch
+  onFetchProposalsBatch: act.onFetchProposalsBatch,
+  onFetchTokenInventory: act.onFetchTokenInventory
 };
 
 export function useUnvettedProposals(ownProps) {
-  const { proposals, error, ...fromRedux } = useRedux(
-    ownProps,
-    mapStateToProps,
-    mapDispatchToProps
-  );
+  const {
+    proposals,
+    error,
+    allByStatus,
+    onFetchTokenInventory,
+    ...fromRedux
+  } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
 
-  const [
-    tokenInventory,
-    errorTokenInventory,
-    loadingTokenInventory
-  ] = useTokenInventory();
+  const [loadingTokenInventory, errorTokenInventory] = useAPIAction(
+    onFetchTokenInventory
+  );
 
   const anyError = errorTokenInventory || error;
 
@@ -32,7 +34,7 @@ export function useUnvettedProposals(ownProps) {
 
   return {
     proposals,
-    proposalsTokens: tokenInventory,
+    proposalsTokens: allByStatus,
     loadingTokenInventory,
     ...fromRedux
   };
