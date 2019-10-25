@@ -20,7 +20,6 @@ const NavigationDrawer = ({ show, fullScreen }) => {
         <HeaderNav />
       </div>
       <SidebarContent />
-      <div className={styles.fillHeight} />
     </div>
   );
 };
