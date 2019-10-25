@@ -26,55 +26,37 @@ const onReceiveLogout = state =>
     })
   )(state);
 
-const onReceiveUpdatedKey = (state, action) =>
-  update("byID", data => {
-    const updatedData = {};
-    Object.keys(data).map(id =>
-      id === action.payload.userid
-        ? (updatedData[id] = {
-            ...data[id],
-            publickey: action.payload.publickey
-          })
-        : (updatedData[id] = data[id])
-    );
-    return updatedData;
-  })(state);
-
-const onReceiveChangeUsername = (state, action) =>
-  update("byID", data => {
-    const updatedData = {};
-    Object.keys(data).map(id =>
-      id === action.payload.userid
-        ? (updatedData[id] = {
-            ...data[id],
-            username: action.payload.username
-          })
-        : (updatedData[id] = data[id])
-    );
-    return updatedData;
-  })(state);
-
 const users = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
     : ({
-        [act.RECEIVE_USER]: () =>
-          update(["byID", action.payload.user.id], userData => ({
+        [act.RECEIVE_USER]: () => {
+          const userid = action.payload.user.id;
+          delete action.payload.user.id;
+          return update(["byID", userid], userData => ({
             ...userData,
-            ...action.payload.user
-          }))(state),
+            ...action.payload.user,
+            userid
+          }))(state);
+        },
         [act.RECEIVE_ME || act.RECEIVE_LOGIN]: () =>
           compose(
             set("currentUserID", action.payload.userid),
             update(["byID", action.payload.userid], userData => ({
               ...userData,
-              ...action.payload,
-              id: action.payload.userid
+              ...action.payload
             }))
           )(state),
         [act.RECEIVE_CHANGE_USERNAME]: () =>
-          onReceiveChangeUsername(state, action),
-        [act.RECEIVE_UPDATED_KEY]: () => onReceiveUpdatedKey(state, action),
+          set(
+            ["byID", state.currentUserID, "username"],
+            action.payload.username
+          )(state),
+        [act.RECEIVE_VERIFIED_KEY]: () =>
+          set(
+            ["byID", state.currentUserID, "publickey"],
+            action.payload.publickey
+          )(state),
         [act.RECEIVE_LOGOUT]: () => onReceiveLogout(state)
       }[action.type] || (() => state))();
 

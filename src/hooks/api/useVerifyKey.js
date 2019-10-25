@@ -3,9 +3,8 @@ import { useRedux } from "src/redux";
 import * as sel from "src/selectors";
 
 const mapStateToProps = {
-  apiMeResponse: sel.currentUser,
   userPubkey: sel.currentUserPublicKey,
-  loggedInAsEmail: sel.currentUserEmail,
+  currentUserEmail: sel.currentUserEmail,
   verifyUserKey: sel.verifyUserKey,
   verifyUserKeyError: sel.verifyUserKeyError,
   keyMismatch: sel.getKeyMismatch

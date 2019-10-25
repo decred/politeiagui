@@ -4,7 +4,10 @@
 import isEqual from "lodash/isEqual";
 import get from "lodash/get";
 import set from "lodash/set";
-import { loggedInAsUsername, loggedInAsEmail } from "../selectors/api";
+import {
+  currentUserUsername,
+  currentUserEmail
+} from "../selectors/models/users";
 
 // Logged in state key refers to the chunck of the state which will be stored
 // in the local storage only while the user stills logged in
@@ -44,9 +47,9 @@ export const clearStateLocalStorage = email => {
 };
 
 const handleSaveApiMe = state => {
-  const email = loggedInAsEmail(state);
+  const email = currentUserEmail(state);
   const proposalcredits = state.app.proposalCredits;
-  const username = loggedInAsUsername(state);
+  const username = currentUserUsername(state);
   const stateFromLs = loadStateLocalStorage() || {};
   const apiMeFromStorage = get(stateFromLs, ["api", "me"], undefined);
   const apiMeResponseFromStorage = get(apiMeFromStorage, "response", undefined);
@@ -66,7 +69,7 @@ const handleSaveApiMe = state => {
 };
 
 export const handleSaveAppDraftProposals = state => {
-  const email = loggedInAsEmail(state);
+  const email = currentUserEmail(state);
   if (!email) {
     return;
   }
@@ -92,7 +95,7 @@ export const handleSaveAppDraftProposals = state => {
 };
 
 const handleSaveAppDraftInvoices = state => {
-  const email = loggedInAsEmail(state);
+  const email = currentUserEmail(state);
   if (!email) {
     return;
   }

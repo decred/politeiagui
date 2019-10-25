@@ -848,13 +848,13 @@ export const onSubmitComment = (
       });
   });
 
-export const onUpdateUserKey = (loggedInAsEmail, userid) =>
+export const onUpdateUserKey = currentUserEmail =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_UPDATED_KEY());
     return pki
       .generateKeys()
       .then(keys =>
-        pki.loadKeys(loggedInAsEmail, keys).then(() =>
+        pki.loadKeys(currentUserEmail, keys).then(() =>
           api
             .updateKeyRequest(csrf, pki.toHex(keys.publicKey))
             .then(response => {
@@ -866,12 +866,7 @@ export const onUpdateUserKey = (loggedInAsEmail, userid) =>
                 }
               }
               return dispatch(
-                act.RECEIVE_UPDATED_KEY({
-                  success: true,
-                  userid,
-                  publickey: pki.toHex(keys.publicKey),
-                  ...response
-                })
+                act.RECEIVE_UPDATED_KEY({ ...response, success: true })
               );
             })
         )
@@ -882,17 +877,25 @@ export const onUpdateUserKey = (loggedInAsEmail, userid) =>
       });
   });
 
-export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
+export const onVerifyUserKey = (currentUserEmail, verificationtoken) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(
-      act.REQUEST_VERIFIED_KEY({ email: loggedInAsEmail, verificationtoken })
+      act.REQUEST_VERIFIED_KEY({ email: currentUserEmail, verificationtoken })
     );
     return api
-      .verifyKeyRequest(csrf, loggedInAsEmail, verificationtoken)
-      .then(response => {
-        dispatch(act.RECEIVE_VERIFIED_KEY({ ...response, success: true }));
-        dispatch(act.SHOULD_AUTO_VERIFY_KEY(false));
-      })
+      .verifyKeyRequest(csrf, currentUserEmail, verificationtoken)
+      .then(response =>
+        pki.myPubKeyHex(currentUserEmail).then(pubkey => {
+          dispatch(
+            act.RECEIVE_VERIFIED_KEY({
+              ...response,
+              success: true,
+              publickey: pubkey
+            })
+          );
+          dispatch(act.SHOULD_AUTO_VERIFY_KEY(false));
+        })
+      )
       .catch(error => {
         dispatch(act.RECEIVE_VERIFIED_KEY(null, error));
       });

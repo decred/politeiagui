@@ -6,7 +6,7 @@ import styles from "./Preferences.module.css";
 
 const Preferences = ({ user }) => {
   const {
-    loggedInAsUserId,
+    currentUserID,
     editUserError,
     editUserResponse,
     isAdmin,
@@ -15,7 +15,7 @@ const Preferences = ({ user }) => {
     onEditUser
   } = useUserPreferences();
   const [showConfirm, setShowConfirm] = useState(false);
-  const isUserPageOwner = user && loggedInAsUserId === user.id;
+  const isUserPageOwner = user && currentUserID === user.userid;
   const handlePreferencesSubmit = (...args) => {
     setShowConfirm(true);
     onEditUser(...args);

@@ -6,8 +6,8 @@ import { useRedux } from "src/redux";
 const mapStateToProps = {
   user: sel.currentUser,
   userPubkey: sel.currentUserPublicKey,
-  loggedInAsEmail: sel.currentUserEmail,
-  loggedInAsUserId: sel.currentUserID,
+  currentUserEmail: sel.currentUserEmail,
+  currentUserID: sel.currentUserID,
   lastLoginTime: sel.currentUserLastLoginTime,
   keyMismatch: sel.getKeyMismatch,
   apiError: sel.apiError,

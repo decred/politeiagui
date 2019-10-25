@@ -24,7 +24,7 @@ const getTabComponents = ({ user, ...rest }) => {
     [tabValues.PROPOSALS]: (
       <UserProposals
         key="tab-proposals"
-        userID={user.id}
+        userID={user.userid}
         withDrafts={rest.isUserPageOwner}
       />
     )
@@ -44,16 +44,16 @@ const UserDetail = ({
   const { 
     user, 
     isAdmin, 
-    loggedInAsUserId 
+    currentUserID 
   } = useUserDetail({ match });
   const {
     userPubkey, 
-    loggedInAsEmail,
+    currentUserEmail,
     identityImportSuccess
   } = useUserIdentity();
 
-  const isUserPageOwner = user && loggedInAsUserId === user.id;
-  const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
+  const isUserPageOwner = user && currentUserID === user.userid;
+  const isAdminOrTheUser = user && (isAdmin || currentUserID === user.userid);
 
   const tabLabels = useMemo(() => {
     const isTabDisabled = tabLabel => {
@@ -86,8 +86,8 @@ const UserDetail = ({
 
   const [pubkey, setPubkey] = useState("");
   const refreshPubKey = useCallback(() => {
-    existing(loggedInAsEmail).then(() => {
-      myPubKeyHex(loggedInAsEmail)
+    existing(currentUserEmail).then(() => {
+      myPubKeyHex(currentUserEmail)
         .then(pubkey => {
           setPubkey(pubkey);
           setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
@@ -96,7 +96,7 @@ const UserDetail = ({
           setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
         });
     });
-  }, [loggedInAsEmail, setPubkey]);
+  }, [currentUserEmail, setPubkey]);
   useEffect(() => {
     if (userPubkey !== pubkey) refreshPubKey();
     if (identityImportSuccess) refreshPubKey();

@@ -5,9 +5,9 @@ import * as sel from "src/selectors";
 
 const mapStateToProps = {
   userPubkey: sel.currentUserPublicKey,
-  loggedInAsUserId: sel.currentUserID,
-  loggedInAsUsername: sel.currentUserUsername,
-  loggedInAsEmail: sel.currentUserEmail,
+  currentUserID: sel.currentUserID,
+  currentUserUsername: sel.currentUserUsername,
+  currentUserEmail: sel.currentUserEmail,
   identityImportError: sel.identityImportError,
   identityImportSuccess: sel.identityImportSuccess,
   keyMismatch: sel.getKeyMismatch,

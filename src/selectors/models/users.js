@@ -3,10 +3,10 @@ import get from "lodash/fp/get";
 
 export const userByID = get(["users", "byID"]);
 
-export const makeGetUserByID = userid =>
+export const makeGetUserByID = userID =>
   createSelector(
     userByID,
-    users => users[userid] || null
+    users => users[userID] || null
   );
 
 export const currentUserID = get(["users", "currentUserID"]);
@@ -14,7 +14,7 @@ export const currentUserID = get(["users", "currentUserID"]);
 export const currentUser = createSelector(
   userByID,
   currentUserID,
-  (users, userid) => users[userid]
+  (users, userID) => users[userID]
 );
 
 export const currentUserEmail = createSelector(

@@ -35,11 +35,11 @@ export function useUserDetail(ownProps) {
       user: userSelector,
       isAdmin: sel.currentUserIsAdmin,
       loading: sel.isApiRequestingUser,
-      loggedInAsUserId: sel.currentUserID
+      currentUserID: sel.currentUserID
     }),
     [userSelector]
   );
-  const { user, isAdmin, loading, loggedInAsUserId, onFetchUser } = useRedux(
+  const { user, isAdmin, loading, currentUserID, onFetchUser } = useRedux(
     ownProps,
     mapStateToProps,
     mapDispatchToProps
@@ -58,7 +58,7 @@ export function useUserDetail(ownProps) {
     [user, userid, loading, onFetchUser]
   );
 
-  return { user, isAdmin, loading, loggedInAsUserId };
+  return { user, isAdmin, loading, currentUserID };
 }
 
 const mapChangePasswordStateToProps = {

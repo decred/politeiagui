@@ -9,7 +9,7 @@ import styles from "./VerifyKey.module.css";
 
 const VerifyKey = ({ location, history }) => {
   const {
-    loggedInAsEmail,
+    currentUserEmail,
     userPubkey,
     keyMismatchAction,
     verifyUserKey,
@@ -22,19 +22,19 @@ const VerifyKey = ({ location, history }) => {
   const verifyAndUpdateLocalKey = useCallback(async () => {
     try {
       const { verificationtoken } = qs.parse(location.search);
-      if (verificationtoken && loggedInAsEmail) {
-        await onVerifyUserKey(loggedInAsEmail, verificationtoken);
-        verifyUserPubkey(loggedInAsEmail, userPubkey, keyMismatchAction);
+      if (verificationtoken && currentUserEmail) {
+        await onVerifyUserKey(currentUserEmail, verificationtoken);
+        verifyUserPubkey(currentUserEmail, userPubkey, keyMismatchAction);
         setKeyUpdated(true);
       }
     } catch (e) {
       setKeyUpdated(true);
       throw e;
     }
-  }, [loggedInAsEmail, userPubkey, keyMismatchAction, onVerifyUserKey, location]);
+  }, [currentUserEmail, userPubkey, keyMismatchAction, onVerifyUserKey, location]);
 
   useEffect(() => {
-    if (!keyUpdated) {
+    if (!keyUpdated && !verifyUserKey) {
       verifyAndUpdateLocalKey();
     }
   }, [verifyAndUpdateLocalKey, keyUpdated]);

@@ -13,6 +13,7 @@ import { getCsvData, getProposalCreditsPaymentStatus, getTableContentFromPurchas
 import { useCredits, useRescanUserCredits } from "./hooks.js";
 
 const Credits = ({ user }) => {
+  const { userid } = user;
   const { onManageUser, isApiRequestingMarkAsPaid } = useManageUser();
   const {
     proposalCreditPrice,
@@ -20,7 +21,7 @@ const Credits = ({ user }) => {
     isApiRequestingUserProposalCredits,
     proposalCredits,
     proposalCreditsPurchases,
-    loggedInAsUserId,
+    currentUserID,
     proposalPaywallAddress,
     proposalPaywallPaymentConfirmations,
     proposalPaywallPaymentTxid,
@@ -31,14 +32,14 @@ const Credits = ({ user }) => {
     toggleProposalPaymentReceived,
     onPollProposalPaywallPayment,
     shouldPollPaywallPayment
-  } = useCredits({ userid: user.id });
+  } = useCredits({ userid });
 
   const {
     onRescanUserCredits,
     errorRescan,
     isLoadingRescan,
     amountOfCreditsAddedOnRescan
-  } = useRescanUserCredits(user.id);
+  } = useRescanUserCredits(userid);
 
   const [
     showMarkAsPaidConfirmModal,
@@ -93,7 +94,7 @@ const Credits = ({ user }) => {
     toggleCreditsPaymentPolling
   ]);
 
-  const isUserPageOwner = user && loggedInAsUserId === user.id;
+  const isUserPageOwner = user && currentUserID === userid;
 
   const paywallIsPaid = hasUserPaid(
     user.newuserpaywalltx,
@@ -101,7 +102,7 @@ const Credits = ({ user }) => {
   );
 
   const markAsPaid = reason =>
-    onManageUser(user.id, MANAGE_USER_CLEAR_USER_PAYWALL, reason);
+    onManageUser(userid, MANAGE_USER_CLEAR_USER_PAYWALL, reason);
 
   const data = getTableContentFromPurchases(
     proposalCreditsPurchases,
@@ -113,7 +114,7 @@ const Credits = ({ user }) => {
     proposalCreditPrice
   );
 
-  const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
+  const isAdminOrTheUser = user && (isAdmin || currentUserID === userid);
 
   return !isAdminOrTheUser ? (
     <Message kind="error">
