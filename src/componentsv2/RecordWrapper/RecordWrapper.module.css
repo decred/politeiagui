@@ -11,6 +11,10 @@
     flex-direction: column;
 }
 
+.subtitleWrapper {
+    flex-wrap: wrap;
+}
+
 .status {
     position: absolute;
     right: 4rem;
@@ -81,5 +85,4 @@ div.seeOnGithubTooltip {
         max-width: 100%;
         margin-top: .5rem;
     }
-
 }

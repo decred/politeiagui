@@ -23,7 +23,11 @@ const PaymentComponent = ({ address, amount, extraSmall, status }) => {
           <H4 weight="bold" className="margin-top-s margin-bottom-xs">
             To address
           </H4>
-          <CopyableText id="payment-address" truncate>
+          <CopyableText
+            id="payment-address"
+            truncate
+            tooltipPlacement={extraSmall ? "bottom" : "right"}
+          >
             {address}
           </CopyableText>
           {!extraSmall && <PaymentStatusTag status={status} />}
