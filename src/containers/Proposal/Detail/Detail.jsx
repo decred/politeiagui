@@ -19,7 +19,7 @@ import {
 import { useProposalVote } from "../hooks";
 import { useRouter } from "src/componentsv2/Router";
 
-const ProposalDetail = ({ TopBanner, Main, match }) => {
+const ProposalDetail = ({ Main, match }) => {
   const { proposal, loading, threadParentID } = useProposal({ match });
   const proposalToken =
     proposal && proposal.censorshiprecord && proposal.censorshiprecord.token;

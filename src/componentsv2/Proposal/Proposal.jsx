@@ -11,7 +11,8 @@ import {
   isAbandonedProposal,
   isPublicProposal,
   isEditableProposal,
-  getQuorumInVotes
+  getQuorumInVotes,
+  isVotingFinishedProposal
 } from "src/containers/Proposal/helpers";
 import { useProposalVote } from "src/containers/Proposal/hooks";
 import { useLoaderContext } from "src/Appv2/Loader";
@@ -42,7 +43,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
   const {
     voteSummary,
     voteActive: isVoteActive,
-    voteTimeLeftInWords: voteTimeLeft,
+    voteTimeInWords: voteTime,
     voteBlocksLeft
   } = useProposalVote(censorshiprecord.token);
   const { currentUser } = useLoaderContext();
@@ -56,6 +57,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
   const proposalToken = censorshiprecord && censorshiprecord.token;
   const proposalURL = `/proposal/${proposalToken}`;
   const isPublic = isPublicProposal(proposal);
+  const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
   const isPublicAccessible = isPublic || isAbandoned;
   const isAuthor = currentUser && currentUser.userid === userid;
@@ -143,15 +145,16 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
                       className={styles.statusTag}
                       {...getProposalStatusTagProps(proposal, voteSummary)}
                     />
+                    {(isVoteActive || isVotingFinished) && (<Text
+                        className={styles.timeLeft}
+                        size="small"
+                        color="gray"
+                      >
+                        {`vote end${isVoteActive ? "s" : "ed"} ${voteTime}`}
+                      </Text>
+                    )}
                     {isVoteActive && (
                       <>
-                        <Text
-                          className={styles.timeLeft}
-                          size="small"
-                          color="gray"
-                        >
-                          {`vote ends ${voteTimeLeft}`}
-                        </Text>
                         <Text
                           className="hide-on-mobile"
                           size="small"
