@@ -5,20 +5,20 @@ import { useRedux } from "src/redux";
 import {
   getVoteBlocksLeft,
   isVoteActiveProposal,
-  getVoteTimeLeftInWords
+  getVoteTimeInWords
 } from "./helpers";
 
 export function useProposalVote(token) {
   const mapStateToProps = useMemo(() => {
-    const voteSummarySelector = sel.makeGetPropVoteSummary(token);
+    const voteSummarySelector = sel.makeGetProposalVoteSummary(token);
     return {
       voteSummary: voteSummarySelector,
-      bestBlock: sel.getBestBlockFromVoteSummaryResponse
+      bestBlock: sel.bestBlock
     };
   }, [token]);
   const { voteSummary, bestBlock } = useRedux({}, mapStateToProps, {});
   const { apiInfo } = useLoaderContext();
-  const voteTimeLeftInWords = getVoteTimeLeftInWords(
+  const voteTimeInWords = getVoteTimeInWords(
     voteSummary,
     bestBlock,
     apiInfo.testnet
@@ -26,5 +26,5 @@ export function useProposalVote(token) {
   const voteBlocksLeft = getVoteBlocksLeft(voteSummary, bestBlock);
   const voteActive = isVoteActiveProposal(voteSummary);
 
-  return { voteSummary, voteTimeLeftInWords, voteBlocksLeft, voteActive };
+  return { voteSummary, voteTimeInWords, voteBlocksLeft, voteActive };
 }

@@ -1,20 +1,8 @@
 /**
- * Filter the records based on a given tab option and an object of records
- * tokens
- * @param {string} tabOption
+ * Filter the records from an array of tokens and object of records by token
  * @param {Array} records
  * @param {Object} recordsTokens
  * @returns {Array} records
  */
-export const getRecordsByTabOption = (tabOption, records, tokens) => {
-  const filterRecordsByTokens = (tokens, records) =>
-    tokens.reduce((filteredRecords, token) => {
-      const foundProp = records.find(
-        prop =>
-          prop && prop.censorshiprecord && token === prop.censorshiprecord.token
-      );
-      return foundProp ? filteredRecords.concat([foundProp]) : filteredRecords;
-    }, []);
-
-  return filterRecordsByTokens(tokens, records);
-};
+export const getRecordsByTabOption = (records, tokens) =>
+  tokens.map(token => records[token]).filter(Boolean);

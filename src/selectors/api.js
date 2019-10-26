@@ -1,10 +1,5 @@
-import {
-  createSelectorCreator,
-  defaultMemoize,
-  createSelector
-} from "reselect";
+import { createSelector } from "reselect";
 import get from "lodash/fp/get";
-import isEqual from "lodash/isEqual";
 import eq from "lodash/fp/eq";
 import filter from "lodash/fp/filter";
 import compose from "lodash/fp/compose";
@@ -15,8 +10,7 @@ import {
   PROPOSAL_STATUS_ABANDONED,
   CMSWWWMODE
 } from "../constants";
-// create a "selector creator" that uses lodash.isEqual instead of ===
-const createDeepEqualSelector = createSelectorCreator(defaultMemoize, isEqual);
+import { createDeepEqualSelector } from "./helpers";
 
 export const getIsApiRequesting = key =>
   bool(get(["api", key, "isRequesting"]));

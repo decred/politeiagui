@@ -2,11 +2,13 @@ import { classNames, CopyableText, H4, Text } from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
 import PaymentFaucet from "../PaymentFaucet";
+import usePaywall from "src/hooks/api/usePaywall";
 import PaymentStatusTag from "../PaymentStatusTag";
 import QRCode from "../QRCode";
 import styles from "./PaymentComponent.module.css";
 
-const PaymentComponent = ({ address, amount, extraSmall, isPaid, status }) => {
+const PaymentComponent = ({ address, amount, extraSmall, status }) => {
+  const { isPaid } = usePaywall();
   return (
     <>
       <div className={classNames(styles.paywallInfo, "margin-top-l")}>
@@ -21,7 +23,11 @@ const PaymentComponent = ({ address, amount, extraSmall, isPaid, status }) => {
           <H4 weight="bold" className="margin-top-s margin-bottom-xs">
             To address
           </H4>
-          <CopyableText id="payment-address" truncate>
+          <CopyableText
+            id="payment-address"
+            truncate
+            tooltipPlacement={extraSmall ? "bottom" : "right"}
+          >
             {address}
           </CopyableText>
           {!extraSmall && <PaymentStatusTag status={status} />}
@@ -36,7 +42,6 @@ PaymentComponent.propTypes = {
   address: PropTypes.string,
   amount: PropTypes.number,
   extraSmall: PropTypes.bool,
-  isPaid: PropTypes.bool,
   status: PropTypes.number,
   mapStatusTag: PropTypes.object
 };

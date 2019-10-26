@@ -62,7 +62,7 @@ export const Title = ({ children, url, ...props }) => {
 export const Subtitle = ({ children }) => {
   return (
     <Join
-      className="margin-top-s"
+      className={classNames("margin-top-s", styles.subtitleWrapper)}
       SeparatorComponent={() => (
         <span className="margin-left-s margin-right-s color-gray">•</span>
       )}

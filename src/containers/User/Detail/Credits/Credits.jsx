@@ -6,8 +6,8 @@ import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
 import ModalPayPaywall from "src/componentsv2/ModalPayPaywall";
 import { MANAGE_USER_CLEAR_USER_PAYWALL } from "src/constants";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import { hasUserPaid } from "../helpers";
 import { useManageUser } from "../hooks.js";
+import usePaywall from "src/hooks/api/usePaywall";
 import styles from "./Credits.module.css";
 import { getCsvData, getProposalCreditsPaymentStatus, getTableContentFromPurchases, tableHeaders } from "./helpers.js";
 import { useCredits, useRescanUserCredits } from "./hooks.js";
@@ -15,6 +15,7 @@ import { useCredits, useRescanUserCredits } from "./hooks.js";
 const Credits = ({ user }) => {
   const { userid } = user;
   const { onManageUser, isApiRequestingMarkAsPaid } = useManageUser();
+  const { isPaid } = usePaywall();
   const {
     proposalCreditPrice,
     isAdmin,
@@ -96,11 +97,6 @@ const Credits = ({ user }) => {
 
   const isUserPageOwner = user && currentUserID === userid;
 
-  const paywallIsPaid = hasUserPaid(
-    user.newuserpaywalltx,
-    user.newuserpaywallamount
-  );
-
   const markAsPaid = reason =>
     onManageUser(userid, MANAGE_USER_CLEAR_USER_PAYWALL, reason);
 
@@ -136,9 +132,9 @@ const Credits = ({ user }) => {
                   "margin-top-xs margin-bottom-xs"
                 )}
               >
-                {paywallIsPaid ? "Paid" : "Not paid"}
+                {isPaid ? "Paid" : "Not paid"}
               </Text>
-              {!paywallIsPaid && isUserPageOwner && (
+              {!isPaid && isUserPageOwner && (
                 <Button
                   className="margin-top-s"
                   size="sm"
@@ -147,7 +143,7 @@ const Credits = ({ user }) => {
                   Pay registration fee
                 </Button>
               )}
-              {!paywallIsPaid && isAdmin && (
+              {!isPaid && isAdmin && (
                 <Button
                   className="margin-top-s"
                   loading={isApiRequestingMarkAsPaid}
@@ -187,7 +183,7 @@ const Credits = ({ user }) => {
             </div>
           </div>
           <div className={styles.buttonsWrapper}>
-            {isUserPageOwner && paywallIsPaid && (
+            {isUserPageOwner && isPaid && (
               <Button
                 className="margin-top-s"
                 size="sm"

@@ -114,7 +114,7 @@ const Comments = ({
 
   useEffect(
     function handleScrollToComments() {
-      const scrollToComments = async () =>
+      const scrollToComments = () =>
         setTimeout(() => {
           document.getElementById("commentArea").scrollIntoView();
         }, 100);
@@ -270,7 +270,7 @@ const Comments = ({
           )}
         </div>
         <ModalConfirmWithReason
-          title={`Censor comment`}
+          title="Censor comment"
           reasonLabel="Censor reason"
           subject="censorComment"
           successTitle="Comment censored"
