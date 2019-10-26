@@ -56,6 +56,15 @@ describe("test app actions (actions/app.js)", () => {
           timestamp: Date.now() / 1000
         }
       }
+    },
+    users: {
+      byID: {
+        testid: {
+          email: "foo@bar.com",
+          username: "foobar"
+        }
+      },
+      currentUserID: "testid"
     }
   };
   const FAKE_COMMENT = {

@@ -39,6 +39,15 @@ describe("save state chunks to local storage (lib/local_storage.js", () => {
           timestamp: Date.now() / 1000
         }
       }
+    },
+    users: {
+      byID: {
+        testid: {
+          email: "foo@bar.com",
+          username: "foobar"
+        }
+      },
+      currentUserID: "testid"
     }
   };
   const getFromLS = key => localStorage.getItem(key);
@@ -61,6 +70,7 @@ describe("save state chunks to local storage (lib/local_storage.js", () => {
     // test that without passing the email nothing will be saved
     const copyState = JSON.parse(JSON.stringify(mockState));
     delete copyState.api.me.response;
+    delete copyState.users.byID[copyState.users.currentUserID].email;
     ls.handleSaveStateToLocalStorage(copyState);
     expect(getFromLS(lsKey)).toBeFalsy();
   });
@@ -91,6 +101,7 @@ describe("save state chunks to local storage (lib/local_storage.js", () => {
     // test that without passing the email nothing will be saved
     const copyState = JSON.parse(JSON.stringify(mockState));
     delete copyState.api.me.response;
+    delete copyState.users.byID[copyState.users.currentUserID].email;
     ls.handleSaveStateToLocalStorage(copyState);
     expect(getFromLS(lsKey)).toBeFalsy();
   });
