@@ -101,7 +101,8 @@ const UserDetail = ({
   const isMobileScreen = useMediaQuery("(max-width:560px)");
 
   const currentTabComponent =
-    user && getTabComponents({
+    user &&
+    getTabComponents({
       user,
       isAdminOrTheUser,
       isUserPageOwner,
@@ -146,11 +147,14 @@ const UserDetail = ({
             </div>
           }
           subtitle={user.email}
+          actionsContent={null}
         >
           {tabs}
         </PageDetails>
       </TopBanner>
-      <Main fillScreen className="main">{currentTabComponent}</Main>
+      <Main fillScreen className="main">
+        {currentTabComponent}
+      </Main>
       <ModalChangeUsername
         validationSchema={validationSchema}
         onChangeUsername={onChangeUsername}
