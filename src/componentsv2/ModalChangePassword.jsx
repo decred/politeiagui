@@ -1,6 +1,13 @@
-import { Button, Modal, TextInput } from "pi-ui";
+import {
+  Button,
+  Modal,
+  TextInput,
+  Icon,
+  getThemeProperty,
+  useTheme
+} from "pi-ui";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import { isEmpty } from "src/helpers";
 
@@ -10,6 +17,7 @@ const ModalChangePassword = ({
   validationSchema,
   onChangePassword
 }) => {
+  const [success, setSuccess] = useState(false);
   const onSubmitChangePassword = async (
     values,
     { resetForm, setSubmitting, setFieldError }
@@ -18,86 +26,119 @@ const ModalChangePassword = ({
       await onChangePassword(values);
       resetForm();
       setSubmitting(false);
-      window.setTimeout(onClose, 200);
+      setSuccess(true);
     } catch (e) {
       setSubmitting(false);
       setFieldError("global", e);
     }
   };
+
+  useEffect(() => {
+    setSuccess(false);
+  }, [show]);
+
+  const theme = useTheme();
+  const colorGray = getThemeProperty(theme, "color-gray");
+  const colorPrimaryDark = getThemeProperty(theme, "color-primary-dark");
+
   return (
-    <Modal title="Change Password" show={show} onClose={onClose}>
-      <FormWrapper
-        initialValues={{
-          existingPassword: "",
-          newPassword: "",
-          newPasswordVerify: ""
-        }}
-        onSubmit={onSubmitChangePassword}
-        loading={!validationSchema}
-        validationSchema={validationSchema}
-      >
-        {({
-          Form,
-          Actions,
-          ErrorMessage,
-          values,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-          errors,
-          touched
-        }) => {
-          const canSubmit =
-            values.existingPassword &&
-            values.newPassword &&
-            values.newPasswordVerify &&
-            isEmpty(errors);
-          return (
-            <Form onSubmit={handleSubmit}>
-              {errors && errors.global && (
-                <ErrorMessage>{errors.global.toString()}</ErrorMessage>
-              )}
-              <TextInput
-                label="Current Password"
-                id="existingPassword"
-                type="password"
-                value={values.existingPassword}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.existingPassword && errors.existingPassword}
-              />
-              <TextInput
-                label="New Password"
-                id="newPassword"
-                type="password"
-                value={values.newPassword}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.newPassword && errors.newPassword}
-              />
-              <TextInput
-                label="Verify Password"
-                id="newPasswordVerify"
-                type="password"
-                value={values.newPasswordVerify}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.newPasswordVerify && errors.newPasswordVerify}
-              />
-              <Actions>
-                <Button
-                  loading={isSubmitting}
-                  kind={canSubmit ? "primary" : "disabled"}
-                  type="submit"
-                >
-                  Change Password
-                </Button>
-              </Actions>
-            </Form>
-          );
-        }}
-      </FormWrapper>
+    <Modal
+      title={success ? "Password successfully changed" : "Change Password"}
+      iconComponent={
+        success && (
+          <Icon
+            type={"checkmark"}
+            size={26}
+            iconColor={colorPrimaryDark}
+            backgroundColor={colorGray}
+          />
+        )
+      }
+      show={show}
+      onClose={onClose}
+    >
+      {!success && (
+        <FormWrapper
+          initialValues={{
+            existingPassword: "",
+            newPassword: "",
+            newPasswordVerify: ""
+          }}
+          onSubmit={onSubmitChangePassword}
+          loading={!validationSchema}
+          validationSchema={validationSchema}
+        >
+          {({
+            Form,
+            Actions,
+            ErrorMessage,
+            values,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+            errors,
+            touched
+          }) => {
+            const canSubmit =
+              values.existingPassword &&
+              values.newPassword &&
+              values.newPasswordVerify &&
+              isEmpty(errors);
+            return (
+              <Form onSubmit={handleSubmit}>
+                {errors && errors.global && (
+                  <ErrorMessage>{errors.global.toString()}</ErrorMessage>
+                )}
+                <TextInput
+                  label="Current Password"
+                  id="existingPassword"
+                  type="password"
+                  value={values.existingPassword}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched.existingPassword && errors.existingPassword}
+                />
+                <TextInput
+                  label="New Password"
+                  id="newPassword"
+                  type="password"
+                  value={values.newPassword}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched.newPassword && errors.newPassword}
+                />
+                <TextInput
+                  label="Verify Password"
+                  id="newPasswordVerify"
+                  type="password"
+                  value={values.newPasswordVerify}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched.newPasswordVerify && errors.newPasswordVerify}
+                />
+                <Actions className="no-padding-bottom">
+                  <Button
+                    loading={isSubmitting}
+                    kind={canSubmit ? "primary" : "disabled"}
+                    type="submit"
+                  >
+                    Change Password
+                  </Button>
+                </Actions>
+              </Form>
+            );
+          }}
+        </FormWrapper>
+      )}
+      {success && (
+        <>
+          {`Your password was successfully changed! `}
+          <div className="justify-right margin-top-m">
+            <Button onClick={onClose}>Ok</Button>
+          </div>
+        </>
+      )}
     </Modal>
   );
 };

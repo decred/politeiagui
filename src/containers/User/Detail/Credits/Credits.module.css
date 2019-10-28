@@ -48,6 +48,13 @@
   }
 }
 
+/* SMALL SCREEN */
+@media screen and (max-width: 768px) {
+  td[data-label="Transaction"]::before {
+    margin-right: 2rem;
+  }
+}
+
 /* EXTRA SMALL SCREEN */
 @media screen and (max-width: 560px){
   .block {

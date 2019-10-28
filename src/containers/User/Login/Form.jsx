@@ -1,9 +1,10 @@
-import { Button, Link as UILink, Text, TextInput } from "pi-ui";
+import { Button, Link as UILink, Text, TextInput, classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import React, { useCallback, useState } from "react";
 import { withRouter } from "react-router-dom";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import ModalPrivacyPolicy from "src/componentsv2/ModalPrivacyPolicy";
+import styles from "./LoginForm.module.css";
 import { useLogin } from "./hooks";
 
 const LoginForm = ({
@@ -100,14 +101,17 @@ const LoginForm = ({
               <UILink
                 gray
                 onClick={handleOnPrivacyPolicyClick}
-                customComponent={props => (
-                  <Text style={{ cursor: "pointer" }} {...props}>
+                customComponent={({ className, ...props }) => (
+                  <Text
+                    className={classNames(className, styles.privacyPolicyTxt)}
+                    {...props}
+                  >
                     {" "}
                     Privacy Policy
                   </Text>
                 )}
               />
-              <Text>
+              <Text className={styles.createAccounTxt}>
                 Don't have an account?{" "}
                 <Link to="/user/signup">Create here!</Link>
               </Text>

@@ -19,11 +19,15 @@
 }
 
 .removeFileIcon {
+    position: relative;
+    top: -0.6rem;
     border: 0;
     margin-left: 5px;
     margin-right: 10px;
     color: #2970ff;
     background-color: transparent;
+    font-size: 1.8rem;
+    position: relative;
     cursor: pointer;
 }
 
@@ -32,6 +36,7 @@
     flex-wrap: wrap;
     margin-bottom: 10px;
     align-items: flex-start;
+    cursor: pointer;
 }
 
 .fileThumbnail {
@@ -48,6 +53,7 @@
     flex-wrap: wrap;
     margin-bottom: 10px;
     align-items: flex-start;
+    cursor: pointer;
 }
 
 .imageThumbnail {

@@ -89,10 +89,17 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
         className={styles.replyForm}
         persistKey={`replying-to-${commentid}-from-${token}`}
         onSubmit={handleSubmitComment}
+        onCancel={handleToggleReplyForm}
         onCommentSubmitted={handleCommentSubmitted}
       />
     ),
-    [commentid, handleSubmitComment, token, handleCommentSubmitted]
+    [
+      commentid,
+      handleSubmitComment,
+      token,
+      handleCommentSubmitted,
+      handleToggleReplyForm
+    ]
   );
 
   const hasChildrenComments = useMemo(
