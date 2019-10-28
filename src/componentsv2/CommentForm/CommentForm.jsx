@@ -9,6 +9,7 @@ import validationSchema from "./validation";
 
 const CommentForm = ({
   onSubmit,
+  onCancel,
   onCommentSubmitted,
   disableSubmit,
   persistKey,
@@ -64,6 +65,11 @@ const CommentForm = ({
               placeholder={"Write a comment"}
             />
             <Row justify="right" topMarginSize="s">
+              {!!onCancel && (
+                <Button type="button" kind="secondary" onClick={onCancel}>
+                  Cancel
+                </Button>
+              )}
               <Button
                 type="submit"
                 kind={!isValid || disableSubmit ? "disabled" : "primary"}
@@ -83,6 +89,7 @@ const CommentForm = ({
 CommentForm.propTypes = {
   className: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func,
   onCommentSubmitted: PropTypes.func,
   disableSubmit: PropTypes.bool,
   persistKey: PropTypes.string
