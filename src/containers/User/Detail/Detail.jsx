@@ -134,7 +134,9 @@ const UserDetail = ({
         <PageDetails
           title={
             <div className={styles.titleWrapper}>
-              <Title>{username || user.username}</Title>
+              <Title>
+                {isUserPageOwner ? username || user.username : user.username}
+              </Title>
               {isUserPageOwner && (
                 <Link
                   href="#"
