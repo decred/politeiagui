@@ -97,7 +97,7 @@ const LoginForm = ({
                 Login
               </Button>
             </Actions>
-            <Footer className={styles.footer}>
+            <Footer>
               <UILink
                 gray
                 onClick={handleOnPrivacyPolicyClick}

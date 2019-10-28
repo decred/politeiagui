@@ -1,14 +1,9 @@
 span.privacyPolicyTxt {
     cursor: pointer;
     margin-right: 1rem;
+    line-height: var(--spacing-3);
 }
 
-/* EXTRA SMALL SCREENS */
-@media screen and (max-width: 560px) {
-    .footer {
-        flex-direction: column;
-    }
-    .createAccounTxt {
-        margin-top: 1rem;        
-    }
-  }
+span.createAccounTxt {
+    line-height: var(--spacing-3)   
+}
