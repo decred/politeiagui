@@ -55,7 +55,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
   } = useFullImageModal();
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
-  const proposalURL = `/proposal/${proposalToken}`;
+  const proposalURL = `/proposals/${proposalToken}`;
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
