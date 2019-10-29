@@ -17,7 +17,7 @@ import { onLocalStorageChange } from "./actions/app";
 import ModalStack from "./components/Modal/ModalStack";
 import { WELCOME_MODAL } from "./components/Modal/modalTypes";
 import { verifyUserPubkey } from "./helpers";
-import Config, { ConfigContext, useConfig } from "./Config";
+import Config, { ConfigContext, useConfig } from "src/containers/Config";
 
 import "snew-classic-ui/static/css/reddit.css";
 import "font-awesome/css/font-awesome.min.css";

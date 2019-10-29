@@ -1,7 +1,7 @@
 import React from "react";
 import { Message, P } from "pi-ui";
 import Link from "./Link";
-import { useLoaderContext } from "src/Appv2/Loader";
+import { useLoaderContext } from "src/containers/Loader";
 
 export const IdentityMessageError = () => {
   const { currentUser } = useLoaderContext();

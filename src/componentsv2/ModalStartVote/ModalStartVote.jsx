@@ -10,7 +10,7 @@ import {
   getThemeProperty
 } from "pi-ui";
 import PropTypes from "prop-types";
-import { useLoaderContext } from "src/Appv2/Loader";
+import { useLoaderContext } from "src/containers/Loader";
 import { validationSchema } from "./validation";
 
 const preDefinedDurations = [2016, 2880, 4032];

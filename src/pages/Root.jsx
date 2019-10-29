@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, withRouter } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import * as sel from "src/selectors";
-import { useConfig } from "src/Config";
+import { useConfig } from "src/containers/Config";
 import { capitalize } from "src/utils/strings";
 import {
   Route,

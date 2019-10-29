@@ -15,7 +15,7 @@ import {
   isVotingFinishedProposal
 } from "src/containers/Proposal/helpers";
 import { useProposalVote } from "src/containers/Proposal/hooks";
-import { useLoaderContext } from "src/Appv2/Loader";
+import { useLoaderContext } from "src/containers/Loader";
 import styles from "./Proposal.module.css";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
 import VotesCount from "./VotesCount";

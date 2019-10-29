@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useLoader } from "./hooks";
 import LoaderScreen from "./LoaderScreen";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
-import { useConfig } from "src/Config";
+import { useConfig } from "src/containers/Config";
 
 export const LoaderContext = createContext();
 export const useLoaderContext = () => useContext(LoaderContext);

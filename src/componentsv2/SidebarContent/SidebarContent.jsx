@@ -1,14 +1,18 @@
 import { Card, classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import React, { useMemo } from "react";
-import { useConfig } from "src/Config";
+import { useConfig } from "src/containers/Config";
 import PaywallMessage from "../PaywallMessage";
 import StaticMarkdown from "../StaticMarkdown/StaticMarkdown";
 import styles from "./SidebarContent.module.css";
 
 const SidebarBlock = ({ children, className, ...props }) => (
   <Card
-    className={classNames(styles.sideBarBlockWrapper, "margin-bottom-m", className)}
+    className={classNames(
+      styles.sideBarBlockWrapper,
+      "margin-bottom-m",
+      className
+    )}
     {...props}
   >
     {children}

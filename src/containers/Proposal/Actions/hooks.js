@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { useLoaderContext } from "src/Appv2/Loader";
+import { useLoaderContext } from "src/containers/Loader";
 import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,

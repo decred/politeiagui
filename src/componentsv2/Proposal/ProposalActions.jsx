@@ -12,7 +12,7 @@ import {
   usePublicProposalActions
 } from "src/containers/Proposal/Actions";
 import AdminContent from "src/componentsv2/AdminContent";
-import { useLoaderContext } from "src/Appv2/Loader";
+import { useLoaderContext } from "src/containers/Loader";
 import styles from "./ProposalActions.module.css";
 
 const UnvettedActions = ({ proposal }) => {

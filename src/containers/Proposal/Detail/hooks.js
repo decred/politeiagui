@@ -6,7 +6,7 @@ import { arg, or } from "src/lib/fp";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useRedux } from "src/redux";
-import { useLoaderContext } from "src/Appv2/Loader";
+import { useLoaderContext } from "src/containers/Loader";
 import { isUnreviewedProposal, isCensoredProposal } from "../helpers";
 
 const mapStateToProps = {

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useLoaderContext } from "src/Appv2/Loader";
+import { useLoaderContext } from "src/containers/Loader";
 
 export function useSessionChecker() {
   const [sessionExpired, setSessionExpired] = useState(false);

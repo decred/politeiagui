@@ -8,8 +8,8 @@ import {
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useRedux } from "src/redux";
-import { useConfig } from "src/Config";
-import { useLoaderContext } from "src/Appv2/Loader";
+import { useConfig } from "src/containers/Config";
+import { useLoaderContext } from "src/containers/Loader";
 
 export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
