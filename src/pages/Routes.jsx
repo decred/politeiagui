@@ -9,7 +9,6 @@ import {
   NotAuthenticatedRoute
 } from "src/containers/Routes";
 import PageNotFound from "./NotFound";
-import PageProposalsAdmin from "./Proposals/Admin";
 import PageProposalDetail from "./Proposals/Detail";
 import PageProposalsPublicList from "./Proposals/PublicList";
 import PageProposalsUnvetted from "./Proposals/UnvettedList";
@@ -127,12 +126,6 @@ const Routes = ({ location }) => {
             title={`New Proposal}`}
             exact
             render={PageProposalNew}
-          />
-          <AdminAuthenticatedRoute
-            path={`/proposals/admin`}
-            title={`Admin Proposals`}
-            exact
-            component={PageProposalsAdmin}
           />
           <Route title="Page Not Found" path="*" component={PageNotFound} />
         </Switch>

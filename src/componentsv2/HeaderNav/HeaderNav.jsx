@@ -4,6 +4,7 @@ import { NavLink, withRouter } from "react-router-dom";
 import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
 import useNavigation from "src/hooks/api/useNavigation";
 import styles from "./HeaderNav.module.css";
+import { ConfigFilter } from "src/containers/Config";
 
 const HeaderNav = ({ history, location }) => {
   const { user, username, onLogout } = useNavigation();
@@ -23,7 +24,9 @@ const HeaderNav = ({ history, location }) => {
   const isOnSearchUsersRoute = location.pathname === "/user/search";
   return user && username ? (
     <div className={styles.loggedInContainer}>
-      <ProposalCreditsIndicator user={user} />
+      <ConfigFilter showIf={config => config.enableCredits}>
+        <ProposalCreditsIndicator user={user} />
+      </ConfigFilter>
       <Dropdown
         className={styles.dropdown}
         itemsListClassName={styles.dropdownList}
