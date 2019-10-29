@@ -29,16 +29,19 @@ const Loader = ({ children }) => {
   // fetch api info and current user if any
   useEffect(() => {
     async function onInit() {
-      const apiInfo = await onRequestApiInfo(false);
-      setApiInfo(apiInfo);
-      if (apiInfo.activeusersession) {
-        await onRequestCurrentUser();
+      try {
+        const apiInfo = await onRequestApiInfo(false);
+        setApiInfo(apiInfo);
+        await onGetPolicy();
+        if (apiInfo.activeusersession) {
+          await onRequestCurrentUser();
+        }
+        setInitDone(true);
+      } catch (e) {
+        setError(e);
       }
     }
-
-    Promise.all([onInit(), onGetPolicy()])
-      .then(() => setInitDone(true))
-      .catch(e => setError(e));
+    onInit();
   }, [onRequestApiInfo, onRequestCurrentUser, onGetPolicy]);
 
   const hasUser = !!user;

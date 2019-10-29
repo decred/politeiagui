@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Text, Tab, Tabs } from "pi-ui";
 import PropTypes from "prop-types";
 import { DiffHTML, FilesDiff } from "src/componentsv2/Diff/Diff";
-import { Header, Title, Author, Event, Subtitle } from "src/componentsv2/RecordWrapper";
+import {
+  Header,
+  Title,
+  Author,
+  Event,
+  Subtitle
+} from "src/componentsv2/RecordWrapper";
 import styles from "./ModalDiff.module.css";
 
 const ModalDiff = ({
@@ -15,6 +21,9 @@ const ModalDiff = ({
   ...props
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+  useEffect(() => {
+    setActiveTabIndex(0);
+  }, [props.show]);
   return (
     <Modal
       onClose={onClose}
@@ -23,24 +32,25 @@ const ModalDiff = ({
     >
       <Header
         title={
-          <Title
-            id={"proposal-title-gfsag"}
-            truncate
-            linesBeforeTruncate={2}
-          >
-
+          <Title id={"proposal-title-gfsag"} truncate linesBeforeTruncate={2}>
             {proposalDetails.name}
           </Title>
         }
         subtitle={
           <Subtitle>
-            <Author username={proposalDetails.username} id={proposalDetails.userid} />
+            <Author
+              username={proposalDetails.username}
+              id={proposalDetails.userid}
+            />
             {proposalDetails.timestamp !== proposalDetails.publishedat &&
               proposalDetails.timestamp !== proposalDetails.abandonedat && (
-              <Event event="edited" timestamp={proposalDetails.timestamp} />
-            )}
+                <Event event="edited" timestamp={proposalDetails.timestamp} />
+              )}
             {proposalDetails.abandonedat && (
-              <Event event={"abandoned"} timestamp={proposalDetails.abandonedat} />
+              <Event
+                event={"abandoned"}
+                timestamp={proposalDetails.abandonedat}
+              />
             )}
             {proposalDetails.version && (
               <Text
@@ -58,10 +68,10 @@ const ModalDiff = ({
         className={styles.diffTabs}
       >
         <Tab label="Text Changes">
-          <DiffHTML oldTextBody={oldText} newTextBody={newText}/>
+          <DiffHTML oldTextBody={oldText} newTextBody={newText} />
         </Tab>
         <Tab label="Attachments Changes">
-          <FilesDiff oldFiles={oldFiles} newFiles={newFiles}/>
+          <FilesDiff oldFiles={oldFiles} newFiles={newFiles} />
         </Tab>
       </Tabs>
     </Modal>

@@ -9,6 +9,7 @@ const DcrTransactionLink = ({ txID }) => {
     <Link
       target="_blank"
       rel="noopener noreferrer"
+      className="use-ellipsis"
       href={`https://${hostName}.dcrdata.org/tx/${txID}`}
     >
       {txID}

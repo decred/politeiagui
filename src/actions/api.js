@@ -96,11 +96,7 @@ export const onPollUserPayment = () => dispatch => {
       }
     })
     .catch(error => {
-      const paymentpolling = setTimeout(
-        () => dispatch(onPollUserPayment()),
-        POLL_INTERVAL
-      );
-      setPollingPointer(paymentpolling);
+      clearPollingPointer();
       throw error;
     });
 };

@@ -79,7 +79,13 @@ const proposals = (state = DEFAULT_STATE, action) =>
         [act.RECEIVE_TOKEN_INVENTORY]: () =>
           update("allByStatus", allProps => ({
             ...allProps,
-            ...action.payload
+            ...Object.keys(action.payload).reduce(
+              (res, status) => ({
+                ...res,
+                [status]: action.payload[status] || []
+              }),
+              {}
+            )
           }))(state),
         [act.RECEIVE_PROPOSAL]: () =>
           set(
@@ -145,6 +151,13 @@ const proposals = (state = DEFAULT_STATE, action) =>
           update("allByStatus", allProps =>
             updateAllByStatus(allProps, ACTIVE_VOTE, action.payload.token)
           )(state),
+        [act.RECEIVE_NEW_COMMENT]: () => {
+          const comment = action.payload;
+          return update(
+            ["byToken", comment.token, "numcomments"],
+            numComments => ++numComments
+          )(state);
+        },
         [act.RECEIVE_LOGOUT]: () => {
           const privateProps = [
             ...state.allByStatus[UNREVIEWED],

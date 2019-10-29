@@ -145,7 +145,8 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
                       className={styles.statusTag}
                       {...getProposalStatusTagProps(proposal, voteSummary)}
                     />
-                    {(isVoteActive || isVotingFinished) && (<Text
+                    {(isVoteActive || isVotingFinished) && (
+                      <Text
                         className={styles.timeLeft}
                         size="small"
                         color="gray"
@@ -229,7 +230,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
                   <DownloadRecord
                     fileName={proposalToken}
                     content={proposal}
-                    className="margin-right-s"
+                    className="margin-right-l"
                     label="Download Proposal Bundle"
                   />
                   {isPublic && !!numcomments && (

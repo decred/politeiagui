@@ -1,15 +1,27 @@
-import { Button, getThemeProperty, Icon, Modal, Text, TextInput, useTheme } from "pi-ui";
+import {
+  Button,
+  getThemeProperty,
+  Icon,
+  Modal,
+  Text,
+  TextInput,
+  useTheme
+} from "pi-ui";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import ReactFileReader from "react-file-reader";
 import FormWrapper from "src/componentsv2/FormWrapper";
-import { INVALID_FILE, INVALID_KEY_PAIR, LOAD_KEY_FAILED, PUBLIC_KEY_MISMATCH } from "src/constants";
+import {
+  INVALID_FILE,
+  INVALID_KEY_PAIR,
+  LOAD_KEY_FAILED,
+  PUBLIC_KEY_MISMATCH
+} from "src/constants";
 import { getJsonData, isEmpty } from "src/helpers";
 import useUserIdentity from "src/hooks/api/useUserIdentity";
 import * as pki from "src/lib/pki";
 
 const auditIdentity = (keys, userPubkey, setFileError) => {
-
   // check that the pubkey matches with the server one
   if (keys.publicKey !== userPubkey) {
     throw new Error(PUBLIC_KEY_MISMATCH);
@@ -37,7 +49,13 @@ const onSelectFiles = (setFileError, setFieldValue) => ({ base64 }) => {
   }
 };
 
-const onSubmitFiles = (onIdentityImported, userPubkey, currentUserEmail, json, setFileError) => {
+const onSubmitFiles = (
+  onIdentityImported,
+  userPubkey,
+  loggedInAsEmail,
+  json,
+  setFileError
+) => {
   try {
     auditIdentity(json, userPubkey, setFileError);
     pki
@@ -62,7 +80,12 @@ const ModalImportIdentity = ({
   successMessage,
   successTitle
 }) => {
-  const { onIdentityImported, userPubkey, currentUserEmail, keyMismatchAction } = useUserIdentity();
+  const {
+    onIdentityImported,
+    userPubkey,
+    loggedInAsEmail,
+    keyMismatchAction
+  } = useUserIdentity();
   const [fileError, setFileError] = useState(null);
   const [success, setSuccess] = useState(null);
   const onSubmitNewIdentity = (
@@ -70,7 +93,13 @@ const ModalImportIdentity = ({
     { resetForm, setSubmitting, setFieldError }
   ) => {
     try {
-      onSubmitFiles(onIdentityImported, userPubkey, currentUserEmail, values, setFileError);
+      onSubmitFiles(
+        onIdentityImported,
+        userPubkey,
+        loggedInAsEmail,
+        values,
+        setFileError
+      );
       resetForm();
       setSuccess(true);
       keyMismatchAction(false);
@@ -100,18 +129,17 @@ const ModalImportIdentity = ({
       onClose={onClose}
       style={{ width: "600px" }}
       iconComponent={
-        !success ? (
-          <Icon type={"info"} size={26} />
-        ) : (
-            <Icon
-              type={"checkmark"}
-              size={26}
-              iconColor={colorPrimaryDark}
-              backgroundColor={colorGray}
-            />
-          )
-      }>
-      {!success ?
+        success && (
+          <Icon
+            type={"checkmark"}
+            size={26}
+            iconColor={colorPrimaryDark}
+            backgroundColor={colorGray}
+          />
+        )
+      }
+    >
+      {!success ? (
         <FormWrapper
           initialValues={{
             publicKey: "",
@@ -133,7 +161,10 @@ const ModalImportIdentity = ({
             errors
           }) => {
             const canSubmit =
-              values.publicKey && values.secretKey && isEmpty(errors) && !fileError;
+              values.publicKey &&
+              values.secretKey &&
+              isEmpty(errors) &&
+              !fileError;
             return (
               <Form onSubmit={handleSubmit}>
                 {errors && errors.global && (
@@ -142,54 +173,67 @@ const ModalImportIdentity = ({
                 {fileError && (
                   <ErrorMessage>{fileError.toString()}</ErrorMessage>
                 )}
-                <div style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
                   <ReactFileReader
                     base64
                     handleFiles={onSelectFiles(setFileError, setFieldValue)}
                     multipleFiles={false}
                     fileTypes="json"
                   >
-                    <Button type="button">
-                      Upload json identity file
-                </Button>
+                    <Button type="button">Upload json identity file</Button>
                   </ReactFileReader>
-                  <Text className="margin-top-l margin-bottom-m" color="grayDark">Or paste in your own</Text>
+                  <Text
+                    className="margin-top-l margin-bottom-m"
+                    color="grayDark"
+                  >
+                    Or paste in your own
+                  </Text>
                 </div>
                 <TextInput
                   id="publicKey"
-                  label="Public key" name="publicKey"
+                  label="Public key"
+                  name="publicKey"
                   value={values.publicKey}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
                 <TextInput
                   id="secretKey"
-                  label="Private key" name="secretKey"
+                  label="Private key"
+                  name="secretKey"
                   value={values.secretKey}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                <Actions>
+                <Actions className="no-padding-bottom">
                   <Button
                     loading={isSubmitting}
                     kind={canSubmit ? "primary" : "disabled"}
                     type="submit"
                   >
                     Submit Identity
-              </Button>
+                  </Button>
                 </Actions>
               </Form>
             );
           }}
         </FormWrapper>
-        :
+      ) : (
         <>
           {successMessage}
           <div className="justify-right margin-top-m">
             <Button onClick={onClose}>Ok</Button>
           </div>
         </>
-      }
+      )}
     </Modal>
   );
 };
