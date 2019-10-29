@@ -1,9 +1,7 @@
 import React from "react";
 import { Switch, withRouter } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import * as sel from "src/selectors";
-import { useConfig } from "src/containers/Config";
-import { capitalize } from "src/utils/strings";
+// import * as sel from "src/selectors";
 import {
   Route,
   AdminAuthenticatedRoute,
@@ -11,11 +9,6 @@ import {
   NotAuthenticatedRoute
 } from "src/containers/Routes";
 import PageNotFound from "./NotFound";
-import PageProposalsAdmin from "./Proposals/Admin";
-import PageProposalDetail from "./Proposals/Detail";
-import PageProposalsPublicList from "./Proposals/PublicList";
-import PageProposalsUnvetted from "./Proposals/UnvettedList";
-import { renderEditRecordRoute, renderNewRecordRoute } from "./routeRenderers";
 import PageUserDetail from "./User/Detail";
 import PageUserLogin from "./User/Login";
 import PageUserPrivacyPolicy from "./User/PrivacyPolicy";
@@ -28,18 +21,11 @@ import PageUserVerifyEmail from "./User/VerifyEmail";
 import PageUserVerifyKey from "./User/VerifyKey";
 
 const Routes = ({ location }) => {
-  const config = useConfig();
-  const { recordType } = config;
   return (
     <TransitionGroup>
       <CSSTransition key={location.key} classNames="fade" timeout={300}>
         <Switch location={location}>
-          <Route
-            path="/"
-            title="Public Proposals"
-            exact
-            component={PageProposalsPublicList}
-          />
+          <Route path="/" title="Login" exact component={PageUserLogin} />
           <NotAuthenticatedRoute
             path="/user/login"
             title="Login"
@@ -99,7 +85,7 @@ const Routes = ({ location }) => {
           />
 
           {/* Record routes */}
-          <AdminAuthenticatedRoute
+          {/* <AdminAuthenticatedRoute
             path={`/${recordType}s/unvetted`}
             title={`Unvetted ${capitalize(recordType)}s`}
             exact
@@ -136,7 +122,7 @@ const Routes = ({ location }) => {
             title={`Admin ${capitalize(recordType)}s`}
             exact
             component={PageProposalsAdmin}
-          />
+          /> */}
           <Route title="Page Not Found" path="*" component={PageNotFound} />
         </Switch>
       </CSSTransition>
