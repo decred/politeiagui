@@ -107,7 +107,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
                 </Title>
               }
               edit={
-                isEditable && <Edit url={`/proposal/${proposalToken}/edit`} />
+                isEditable && <Edit url={`/proposals/${proposalToken}/edit`} />
               }
               subtitle={
                 <Subtitle>
@@ -210,7 +210,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
               <Row justify="space-between">
                 <CommentsLink
                   numOfComments={numcomments}
-                  url={`/proposal/${proposalToken}?scrollToComments=true`}
+                  url={`/proposals/${proposalToken}?scrollToComments=true`}
                 />
                 <GithubLink token={proposalToken} />
               </Row>
