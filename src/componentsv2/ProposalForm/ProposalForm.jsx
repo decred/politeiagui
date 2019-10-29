@@ -162,7 +162,7 @@ const ProposalFormWrapper = ({
         const proposalToken = await onSubmit(values);
         setSubmitting(false);
         setSubmitSuccess(true);
-        history.push(`/proposal/${proposalToken}`);
+        history.push(`/proposals/${proposalToken}`);
         resetForm();
       } catch (e) {
         setSubmitting(false);
