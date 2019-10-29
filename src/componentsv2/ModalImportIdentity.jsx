@@ -52,7 +52,7 @@ const onSelectFiles = (setFileError, setFieldValue) => ({ base64 }) => {
 const onSubmitFiles = (
   onIdentityImported,
   userPubkey,
-  loggedInAsEmail,
+  currentUserEmail,
   json,
   setFileError
 ) => {
@@ -83,7 +83,7 @@ const ModalImportIdentity = ({
   const {
     onIdentityImported,
     userPubkey,
-    loggedInAsEmail,
+    currentUserEmail,
     keyMismatchAction
   } = useUserIdentity();
   const [fileError, setFileError] = useState(null);
@@ -96,7 +96,7 @@ const ModalImportIdentity = ({
       onSubmitFiles(
         onIdentityImported,
         userPubkey,
-        loggedInAsEmail,
+        currentUserEmail,
         values,
         setFileError
       );
