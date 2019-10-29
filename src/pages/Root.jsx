@@ -106,14 +106,14 @@ const Routes = ({ location }) => {
             component={PageProposalsUnvetted}
           />
           <Route
-            path={`/${recordType}/:token`}
+            path={`/${recordType}s/:token`}
             title={`${capitalize(recordType)} Detail`}
             titleSelector={sel.proposalName}
             exact
             component={PageProposalDetail}
           />
           <Route
-            path={`/${recordType}/:token/comments/:commentid`}
+            path={`/${recordType}s/:token/comments/:commentid`}
             title={`${capitalize(recordType)} Detail`}
             titleSelector={sel.proposalName}
             exact
