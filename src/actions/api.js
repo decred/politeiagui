@@ -269,17 +269,12 @@ export const onLogout = () =>
 
 export const onChangeUsername = (password, newUsername) =>
   withCsrf((dispatch, getState, csrf) => {
-    const userid = sel.currentUserID(getState());
     dispatch(act.REQUEST_CHANGE_USERNAME());
     return api
       .changeUsername(csrf, password, newUsername)
       .then(response =>
         dispatch(
-          act.RECEIVE_CHANGE_USERNAME({
-            ...response,
-            userid,
-            username: newUsername
-          })
+          act.RECEIVE_CHANGE_USERNAME({ ...response, username: newUsername })
         )
       )
       .catch(error => {
