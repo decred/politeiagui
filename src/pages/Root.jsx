@@ -11,7 +11,6 @@ import {
   NotAuthenticatedRoute
 } from "src/containers/Routes";
 import PageNotFound from "./NotFound";
-import PageProposalsAdmin from "./Proposals/Admin";
 import PageProposalDetail from "./Proposals/Detail";
 import PageProposalsPublicList from "./Proposals/PublicList";
 import PageProposalsUnvetted from "./Proposals/UnvettedList";
@@ -105,6 +104,12 @@ const Routes = ({ location }) => {
             exact
             component={PageProposalsUnvetted}
           />
+          <AuthenticatedRoute
+            path={`/${recordType}s/new`}
+            title={`New ${capitalize(recordType)}`}
+            exact
+            render={renderNewRecordRoute(config)}
+          />
           <Route
             path={`/${recordType}s/:token`}
             title={`${capitalize(recordType)} Detail`}
@@ -124,18 +129,6 @@ const Routes = ({ location }) => {
             title={`Edit ${capitalize(recordType)}`}
             exact
             render={renderEditRecordRoute(config)}
-          />
-          <AuthenticatedRoute
-            path={`/${recordType}s/new`}
-            title={`New ${capitalize(recordType)}`}
-            exact
-            render={renderNewRecordRoute(config)}
-          />
-          <AdminAuthenticatedRoute
-            path={`/${recordType}s/admin`}
-            title={`Admin ${capitalize(recordType)}s`}
-            exact
-            component={PageProposalsAdmin}
           />
           <Route title="Page Not Found" path="*" component={PageNotFound} />
         </Switch>
