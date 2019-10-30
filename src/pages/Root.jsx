@@ -125,7 +125,7 @@ const Routes = ({ location }) => {
             component={PageProposalDetail}
           />
           <AuthenticatedRoute
-            path={`/${recordType}/:token/edit`}
+            path={`/${recordType}s/:token/edit`}
             title={`Edit ${capitalize(recordType)}`}
             exact
             render={renderEditRecordRoute(config)}
