@@ -1,6 +1,5 @@
 import { Modal, P, Text, useMediaQuery } from "pi-ui";
 import React from "react";
-import { PAYWALL_STATUS_PAID } from "src/constants";
 import usePaywall from "src/hooks/api/usePaywall";
 import PaymentComponent from "../PaymentComponent";
 import PaymentStatusTag from "../PaymentStatusTag";
@@ -8,7 +7,6 @@ import styles from "./ModalPayPaywall.module.css";
 
 const ModalPayPaywall = ({ show, title, onClose }) => {
   const { userPaywallStatus, paywallAmount, paywallAddress } = usePaywall();
-  const isPaid = userPaywallStatus === PAYWALL_STATUS_PAID;
   const extraSmall = useMediaQuery("(max-width: 560px)");
   return (
     <Modal show={show} title={title} onClose={onClose}>
@@ -23,7 +21,6 @@ const ModalPayPaywall = ({ show, title, onClose }) => {
         address={paywallAddress}
         amount={paywallAmount}
         extraSmall={extraSmall}
-        isPaid={isPaid}
         status={userPaywallStatus}
       />
     </Modal>
