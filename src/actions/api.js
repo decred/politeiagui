@@ -409,6 +409,7 @@ export const onFetchTokenInventory = () => dispatch => {
     )
     .catch(error => {
       dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error));
+      throw error;
     });
 };
 
@@ -1153,6 +1154,7 @@ export const onFetchUserProposalsWithVoteSummary = (
     dispatch(act.RECEIVE_USER_PROPOSALS({ proposals, userid, ...response }));
   } catch (e) {
     dispatch(act.RECEIVE_USER_PROPOSALS(null, e));
+    throw e;
   }
 };
 
@@ -1183,6 +1185,7 @@ export const onFetchProposalsBatchVoteSummary = tokens =>
       })
       .catch(error => {
         dispatch(act.RECEIVE_PROPOSALS_VOTE_SUMMARY(null, error));
+        throw error;
       });
   });
 
