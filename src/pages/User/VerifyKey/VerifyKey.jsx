@@ -37,7 +37,7 @@ const VerifyKey = ({ location, history }) => {
     if (!keyUpdated && !verifyUserKey) {
       verifyAndUpdateLocalKey();
     }
-  }, [verifyAndUpdateLocalKey, keyUpdated]);
+  }, [verifyAndUpdateLocalKey, keyUpdated, verifyUserKey]);
 
   const loading = !verifyUserKey && !verifyUserKeyError;
   const success = verifyUserKey && verifyUserKey.success;

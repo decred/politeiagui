@@ -47,6 +47,11 @@ const users = (state = DEFAULT_STATE, action) =>
               ...action.payload
             }))
           )(state),
+        [act.RECEIVE_EDIT_USER]: () =>
+          set(
+            ["byID", state.currentUserID, "emailnotifications"],
+            action.payload.preferences.emailnotifications
+          )(state),
         [act.RECEIVE_CHANGE_USERNAME]: () =>
           set(
             ["byID", state.currentUserID, "username"],

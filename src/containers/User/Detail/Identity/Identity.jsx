@@ -51,7 +51,7 @@ const Identity = ({ history, loadingKey, user}) => {
   }, [currentUserEmail, userPubkey, keyMismatchAction]);
 
   const pastIdentities = identities && identities.filter(i => !i.isactive);
-  const pubkey = identities.filter(i => i.isactive)[0].pubkey;
+  const pubkey = identities && identities.filter(i => i.isactive)[0].pubkey;
 
   const updateKey = useCallback(async () => {
     try {

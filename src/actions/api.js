@@ -516,7 +516,7 @@ export const onEditUser = preferences =>
     return api
       .editUser(csrf, preferences)
       .then(response => {
-        dispatch(act.RECEIVE_EDIT_USER(response));
+        dispatch(act.RECEIVE_EDIT_USER({ ...response, preferences }));
       })
       .catch(error => {
         dispatch(act.RECEIVE_EDIT_USER(null, error));

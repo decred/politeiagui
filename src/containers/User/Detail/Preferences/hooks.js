@@ -8,7 +8,7 @@ const mapStateToProps = {
   currentUserID: sel.currentUserID,
   editUserResponse: sel.apiEditUserResponse,
   editUserError: sel.editUserError,
-  initialValues: sel.getEditUserValues
+  initialValues: sel.currentUserPreferences
 };
 const mapDispatchToProps = {
   onEditUser: act.onEditUserPreferences
