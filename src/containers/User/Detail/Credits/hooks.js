@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useMemo } from "react";
 import * as act from "src/actions";
 import * as sel from "src/selectors";
 import usePaywall from "src/hooks/api/usePaywall";
-import { useUserDetail } from "src/containers/User/Detail/hooks";
 import { useRedux } from "src/redux";
 
 const mapStateToProps = {
@@ -22,7 +21,8 @@ const mapStateToProps = {
   proposalPaymentReceived: sel.proposalPaymentReceived,
   paywallTxid: sel.currentUserPaywallTxid,
   isAdmin: sel.currentUserIsAdmin,
-  currentUserID: sel.currentUserID
+  currentUserID: sel.currentUserID,
+  user: sel.currentUser
 };
 
 const mapDispatchToProps = {
@@ -37,7 +37,6 @@ const mapDispatchToProps = {
 
 export function useCredits(ownProps) {
   const { userid } = ownProps;
-  const user = useUserDetail({ userid });
   const creditsSelector = useMemo(() => sel.makeGetUnspentUserCredits(userid), [
     userid
   ]);
@@ -62,6 +61,7 @@ export function useCredits(ownProps) {
     isApiRequestingUserProposalCredits,
     isAdmin,
     currentUserID,
+    user,
     pollingCreditsPayment,
     toggleCreditsPaymentPolling,
     proposalPaymentReceived,
