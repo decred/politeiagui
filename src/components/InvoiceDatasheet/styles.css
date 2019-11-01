@@ -8,6 +8,10 @@
   padding-left: 10px;
 }
 
+.value-viewer {
+  user-select: text;
+}
+
 .row-handle.cell {
   width: 1rem;
 }
