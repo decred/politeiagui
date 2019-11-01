@@ -55,7 +55,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
   } = useFullImageModal();
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
-  const proposalURL = `/proposal/${proposalToken}`;
+  const proposalURL = `/proposals/${proposalToken}`;
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
@@ -107,7 +107,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
                 </Title>
               }
               edit={
-                isEditable && <Edit url={`/proposal/${proposalToken}/edit`} />
+                isEditable && <Edit url={`/proposals/${proposalToken}/edit`} />
               }
               subtitle={
                 <Subtitle>
@@ -210,7 +210,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
               <Row justify="space-between">
                 <CommentsLink
                   numOfComments={numcomments}
-                  url={`/proposal/${proposalToken}?scrollToComments=true`}
+                  url={`/proposals/${proposalToken}?scrollToComments=true`}
                 />
                 <GithubLink token={proposalToken} />
               </Row>

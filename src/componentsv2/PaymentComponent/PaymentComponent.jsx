@@ -2,13 +2,11 @@ import { classNames, CopyableText, H4, Text } from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
 import PaymentFaucet from "../PaymentFaucet";
-import usePaywall from "src/hooks/api/usePaywall";
 import PaymentStatusTag from "../PaymentStatusTag";
 import QRCode from "../QRCode";
 import styles from "./PaymentComponent.module.css";
 
 const PaymentComponent = ({ address, amount, extraSmall, status }) => {
-  const { isPaid } = usePaywall();
   return (
     <>
       <div className={classNames(styles.paywallInfo, "margin-top-l")}>
@@ -33,7 +31,7 @@ const PaymentComponent = ({ address, amount, extraSmall, status }) => {
           {!extraSmall && <PaymentStatusTag status={status} />}
         </div>
       </div>
-      <PaymentFaucet address={address} amount={amount} isPaid={isPaid} />
+      <PaymentFaucet address={address} amount={amount} />
     </>
   );
 };
