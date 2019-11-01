@@ -117,10 +117,7 @@ export const onReceiveCensorInvoiceComment = (state, action) => {
 
 export const onReceiveManageCmsUser = (state, action) => {
   state = receive("manageCmsUser", state, action);
-  if (action.error) {
-    console.log(action);
-    return state;
-  }
+  if (action.error) return state;
   return {
     ...state,
     user: {
