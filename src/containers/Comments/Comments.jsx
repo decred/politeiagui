@@ -176,6 +176,10 @@ const Comments = ({
     [userEmail, recordToken, commentIDCensorTarget, onCensorComment]
   );
 
+  const numOfDuplicatedComments = numOfComments - state.comments.length;
+  const hasDuplicatedComments =
+    !!state.comments.length && numOfDuplicatedComments > 0;
+
   return (
     <>
       <Card
@@ -214,12 +218,18 @@ const Comments = ({
           </LoggedInContent>
           <div className={styles.commentsHeader}>
             {!isSingleThread && (
-              <H2 className={styles.commentsTitle}>
-                Comments{" "}
-                <span className={styles.commentsCount}>
-                  {state.comments.length || numOfComments}
-                </span>
-              </H2>
+              <div className={styles.titleWrapper}>
+                <H2 className={styles.commentsTitle}>
+                  Comments{" "}
+                  <span className={styles.commentsCount}>{numOfComments}</span>
+                </H2>
+                {hasDuplicatedComments && (
+                  <Text
+                    color="gray"
+                    size="small"
+                  >{`(${numOfDuplicatedComments} duplicate comments omitted)`}</Text>
+                )}
+              </div>
             )}
             <div className={styles.sortContainer}>
               {!!comments && !!comments.length && (
