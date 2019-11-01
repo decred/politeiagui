@@ -79,8 +79,7 @@ export const DEFAULT_STATE = {
   newInvoice: DEFAULT_REQUEST_STATE,
   editInvoice: DEFAULT_REQUEST_STATE,
   payouts: DEFAULT_REQUEST_STATE,
-  tokenInventory: DEFAULT_REQUEST_STATE,
-  manageCmsUser: DEFAULT_REQUEST_STATE
+  tokenInventory: DEFAULT_REQUEST_STATE
 };
 
 const api = (state = DEFAULT_STATE, action) =>

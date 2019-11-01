@@ -50,6 +50,7 @@ export const getTextFromJsonToCsv = file => {
 
 export const getHumanReadableError = (errorCode, errorContext = []) => {
   const genericContactMsg = "please contact Politeia administrators";
+  console.log(errorContext);
   const errorMessages = {
     0: "The operation returned an invalid status.",
     1: "The provided password was invalid.",
@@ -169,7 +170,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     1044: "You may not support or oppose your own sponsored DCC.",
     1045: "You are not authorized to complete a DCC request.",
     1046: "You must include a valid contractor type for a DCC.",
-    1050: "Invalid Supervisor UUID"
+    1050: `Supervisor Error - ${errorContext[0]}`
   };
 
   const error = errorMessages[errorCode];

@@ -94,6 +94,7 @@ const ManageUserTab = ({
 
     await onManageCmsUser(args);
     setSuccess(true);
+    console.log(error);
   }, [
     user.id,
     contractorDomain,
