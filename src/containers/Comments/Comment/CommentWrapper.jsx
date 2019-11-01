@@ -133,7 +133,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
   return (
     <>
       <Comment
-        permalink={`/${recordType}/${recordToken}/comments/${commentid}`}
+        permalink={`/${recordType}s/${recordToken}/comments/${commentid}`}
         censorable={censorable}
         author={username}
         authorID={userid}
