@@ -28,50 +28,35 @@ export const currentUser = createSelector(
   (users, userID) => users[userID]
 );
 
-export const currentUserEmail = createSelector(
-  currentUser,
-  user => user && user.email
-);
+const createUserSelectors = keys =>
+  keys.map(key =>
+    createSelector(
+      currentUser,
+      user => user && user[key]
+    )
+  );
 
-export const currentUserUsername = createSelector(
-  currentUser,
-  user => user && user.username
-);
-
-export const currentUserLastLoginTime = createSelector(
-  currentUser,
-  user => user && user.lastlogintime
-);
-
-export const currentUserIsAdmin = createSelector(
-  currentUser,
-  user => user && user.isadmin
-);
-
-export const currentUserSessionMaxAge = createSelector(
-  currentUser,
-  user => user && user.email
-);
-
-export const currentUserPublicKey = createSelector(
-  currentUser,
-  user => user && user.publickey
-);
-
-export const currentUserPaywallAddress = createSelector(
-  currentUser,
-  user => user && user.paywalladdress
-);
-
-export const currentUserPaywallTxid = createSelector(
-  currentUser,
-  user => user && user.paywalltxid
-);
-
-export const currentUserPaywallTxNotBefore = createSelector(
-  currentUser,
-  user => user && user.paywalltxnotbefore
-);
+export const [
+  currentUserEmail,
+  currentUserUsername,
+  currentUserLastLoginTime,
+  currentUserIsAdmin,
+  currentUserSessionMaxAge,
+  currentUserPublicKey,
+  currentUserPaywallAddress,
+  currentUserPaywallTxid,
+  currentUserPaywallTxNotBefore
+] = createUserSelectors([
+  "email",
+  "username",
+  "lastlogintime",
+  "isadmin",
+  "sessionmaxage",
+  "publickey",
+  "paywalladdress",
+  "paywalltxid",
+  "paywalltxnotbefore"
+]);
 
 export const currentUserPaywallAmount = createSelector(
   currentUser,
