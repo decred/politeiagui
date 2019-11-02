@@ -30,25 +30,13 @@ const ProposalDetail = ({ Main, match }) => {
   const canReceiveComments =
     isPublicProposal(proposal) && !isVotingFinishedProposal(voteSummary);
 
-  const { pastLocations, history } = useRouter();
-
-  const previousLocation = pastLocations[1];
+  const { history } = useRouter();
 
   const returnToPreviousLocation = useCallback(() => history.goBack(), [
     history
   ]);
 
   const goBackLinkFromPreviousLocation = useMemo(() => {
-    if (!previousLocation) return null;
-    let message = "Go back to public proposals";
-    if (previousLocation.pathname.match("/user/*") && previousLocation.search.includes("tab=proposals")){
-      message = "Go back to user account";
-    } else if (previousLocation.pathname === "/proposals/unvetted") {
-      message = "Go back to unvetted proposals";
-    }
-
-    if (!message) return null;
-
     return (
       <div className={styles.returnLinkContainer}>
         <Link
@@ -56,11 +44,11 @@ const ProposalDetail = ({ Main, match }) => {
           className={styles.returnLink}
           onClick={returnToPreviousLocation}
         >
-          &#8592; {message}
+          &#8592; Go back
         </Link>
       </div>
     );
-  }, [previousLocation, returnToPreviousLocation]);
+  }, [returnToPreviousLocation]);
 
   return (
     <>
