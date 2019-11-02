@@ -31,7 +31,8 @@ import {
   onReceiveCensorInvoiceComment,
   onReceiveNewInvoiceComment,
   onReceivePayApprovedInvoices,
-  onReceiveSetStatusInvoice
+  onReceiveSetStatusInvoice,
+  onReceiveManageCmsUser
 } from "./handlersCMS";
 
 export const DEFAULT_STATE = {
@@ -208,6 +209,9 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_EXCHANGE_RATE]: () => receive("exchangeRate", state, action),
     [act.RESET_COMMENTS]: () =>
       resetMultiple(["proposalComments", "invoiceComments"], state),
+    [act.REQUEST_MANAGE_CMS_USER]: () =>
+      request("manageCmsUser", state, action),
+    [act.RECEIVE_MANAGE_CMS_USER]: () => onReceiveManageCmsUser(state, action),
     // === CMS END ===
     [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
       request("proposalPaywallDetails", state, action),
