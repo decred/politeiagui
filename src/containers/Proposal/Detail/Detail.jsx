@@ -41,18 +41,15 @@ const ProposalDetail = ({ Main, match }) => {
   const goBackLinkFromPreviousLocation = useMemo(() => {
     if (!previousLocation) return null;
     let message = "";
-
     switch (previousLocation.pathname) {
-      case "/":
-        message = "Go back to public proposals";
-        break;
       case "/proposals/unvetted":
         message = "Go back to unvetted proposals";
         break;
+      case (previousLocation.pathname.match("/user/*?tab=proposals")):
+        message = "Go back to user account";
+        break;
       default:
-        if (previousLocation.pathname.match("/user/*")) {
-          message = "Go back to user account";
-        }
+        message = "Go back to public proposals";
         break;
     }
 
@@ -80,12 +77,12 @@ const ProposalDetail = ({ Main, match }) => {
             {loading || !proposal ? (
               <ProposalLoader extended />
             ) : (
-              <Proposal
-                proposal={proposal}
-                extended
-                collapseBodyContent={!!threadParentID}
-              />
-            )}
+                <Proposal
+                  proposal={proposal}
+                  extended
+                  collapseBodyContent={!!threadParentID}
+                />
+              )}
             {showCommentArea && (
               <Comments
                 recordAuthorID={proposal.userid}
