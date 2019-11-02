@@ -40,17 +40,11 @@ const ProposalDetail = ({ Main, match }) => {
 
   const goBackLinkFromPreviousLocation = useMemo(() => {
     if (!previousLocation) return null;
-    let message = "";
-    switch (previousLocation.pathname) {
-      case "/proposals/unvetted":
-        message = "Go back to unvetted proposals";
-        break;
-      case (previousLocation.pathname.match("/user/*?tab=proposals")):
-        message = "Go back to user account";
-        break;
-      default:
-        message = "Go back to public proposals";
-        break;
+    let message = "Go back to public proposals";
+    if (previousLocation.pathname.match("/user/*") && previousLocation.search.includes("tab=proposals")){
+      message = "Go back to user account";
+    } else if (previousLocation.pathname === "/proposals/unvetted") {
+      message = "Go back to unvetted proposals";
     }
 
     if (!message) return null;
