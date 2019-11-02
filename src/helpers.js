@@ -50,7 +50,6 @@ export const getTextFromJsonToCsv = file => {
 
 export const getHumanReadableError = (errorCode, errorContext = []) => {
   const genericContactMsg = "please contact Politeia administrators";
-  console.log(errorContext);
   const errorMessages = {
     0: "The operation returned an invalid status.",
     1: "The provided password was invalid.",
