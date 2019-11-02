@@ -86,6 +86,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
           Title,
           CommentsLink,
           GithubLink,
+          ChartsLink,
           CopyLink,
           DownloadRecord,
           Header,
@@ -212,7 +213,10 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
                   numOfComments={numcomments}
                   url={`/proposals/${proposalToken}?scrollToComments=true`}
                 />
-                <GithubLink token={proposalToken} />
+                <div>
+                  <ChartsLink token={proposalToken} />
+                  <GithubLink token={proposalToken} />
+                </div>
               </Row>
             )}
             {extended && files.length > 1 && (
@@ -245,6 +249,7 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
                     className={isPublicAccessible ? styles.copyLink : ""}
                     url={window.location.origin + proposalURL}
                   />
+                  <ChartsLink token={proposalToken} />
                   {isPublicAccessible && <GithubLink token={proposalToken} />}
                 </Row>
               </Row>

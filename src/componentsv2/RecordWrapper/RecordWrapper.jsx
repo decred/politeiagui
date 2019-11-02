@@ -126,6 +126,27 @@ export const Header = ({
   );
 };
 
+export const ChartsLink = ({ token }) => {
+  const { apiInfo } = useLoader();
+  const theme = useTheme();
+  const hoverColor = getThemeProperty(theme, "color-gray");
+  const [ref, isHovered] = useHover();
+  const iconColor = isHovered ? hoverColor : undefined;
+  const hostName = apiInfo.testnet ? "testnet" : "explorer";
+
+  return (
+    <Tooltip
+      className={styles.seeOnGithubTooltip}
+      placement="bottom"
+      content="Voting Charts"
+    >
+      <UILink ref={ref} target="_blank" href={`https://${hostName}.dcrdata.org/proposal/${token}`}>
+        <Icon type="chart" iconColor={iconColor} />
+      </UILink>
+    </Tooltip>
+  );
+};
+
 export const GithubLink = ({ token }) => {
   const { testnetGitRepository, mainnetGitRepository } = useConfig();
   const { apiInfo } = useLoader();
@@ -169,6 +190,7 @@ const RecordWrapper = ({ children, className }) => {
         CommentsLink,
         Link,
         GithubLink,
+        ChartsLink,
         CopyLink,
         DownloadRecord,
         Header,
