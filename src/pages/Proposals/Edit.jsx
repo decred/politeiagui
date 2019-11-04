@@ -13,7 +13,7 @@ const PageProposalEdit = ({ history, match }) => {
       kind="secondary"
       size={mobile ? "sm" : "md"}
       onClick={() =>
-        history.push(`/proposal/${match.params.token}`)
+        history.push(`/proposals/${match.params.token}`)
       }
     >
       Cancel

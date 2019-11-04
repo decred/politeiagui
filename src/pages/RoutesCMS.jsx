@@ -91,22 +91,28 @@ const Routes = ({ location }) => {
             exact
             component={PageProposalsUnvetted}
           />
+          <AuthenticatedRoute
+            path={`/${recordType}s/new`}
+            title={`New ${capitalize(recordType)}`}
+            exact
+            render={renderNewRecordRoute(config)}
+          />
           <Route
-            path={`/${recordType}/:token`}
+            path={`/${recordType}s/:token`}
             title={`${capitalize(recordType)} Detail`}
             titleSelector={sel.proposalName}
             exact
             component={PageProposalDetail}
           />
           <Route
-            path={`/${recordType}/:token/comments/:commentid`}
+            path={`/${recordType}s/:token/comments/:commentid`}
             title={`${capitalize(recordType)} Detail`}
             titleSelector={sel.proposalName}
             exact
             component={PageProposalDetail}
           />
           <AuthenticatedRoute
-            path={`/${recordType}/:token/edit`}
+            path={`/${recordType}s/:token/edit`}
             title={`Edit ${capitalize(recordType)}`}
             exact
             render={renderEditRecordRoute(config)}

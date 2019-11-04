@@ -11,7 +11,6 @@ const ModalBuyProposalCredits = ({
   price,
   initialStep = 0,
   address,
-  isPaid,
   status,
   isPollingCreditsPayment,
   startPollingPayment
@@ -33,7 +32,7 @@ const ModalBuyProposalCredits = ({
   }, [isPollingCreditsPayment, startPollingPayment, modalType]);
 
   const setValue = e => {
-    if(e.target.value === "") {
+    if (e.target.value === "") {
       setDisableNext(true);
       setNumber(e.target.value);
       return;
@@ -54,39 +53,41 @@ const ModalBuyProposalCredits = ({
         address={address}
         amount={(number * price).toFixed(1)}
         extraSmall={extraSmall}
-        isPaid={isPaid}
         status={status}
       />
     </Modal>
   ) : (
-      <Modal
-        show={show}
-        onClose={customOnClose}
-        title="Purchase Proposal Credits"
-        contentStyle={{ width: "100%" }}
-      >
-        <div>
-          <Text>How many credits do you want to buy? </Text>
-          <input
-            value={number}
-            onChange={setValue}
-            type="number"
-            className={styles.inputNumber}
-          />
-        </div>
-        <div className="margin-top-s">
-          <Text color="gray">Each proposal credit costs 0.1 DCR</Text>
-        </div>
-        <div className={classNames("margin-top-l", styles.actionButtons)}>
-          <Button onClick={customOnClose} kind="secondary">
-            Back
+    <Modal
+      show={show}
+      onClose={customOnClose}
+      title="Purchase Proposal Credits"
+      contentStyle={{ width: "100%" }}
+    >
+      <div>
+        <Text>How many credits do you want to buy? </Text>
+        <input
+          value={number}
+          onChange={setValue}
+          type="number"
+          className={styles.inputNumber}
+        />
+      </div>
+      <div className="margin-top-s">
+        <Text color="gray">Each proposal credit costs 0.1 DCR</Text>
+      </div>
+      <div className={classNames("margin-top-l", styles.actionButtons)}>
+        <Button onClick={customOnClose} kind="secondary">
+          Back
         </Button>
-          <Button kind={(disableNext && "disabled") || "primary"} onClick={handleGoToPaymentDetails}>
-            Next
-          </Button>
-        </div>
-      </Modal>
-    );
+        <Button
+          kind={(disableNext && "disabled") || "primary"}
+          onClick={handleGoToPaymentDetails}
+        >
+          Next
+        </Button>
+      </div>
+    </Modal>
+  );
 };
 
 ModalBuyProposalCredits.propTypes = {

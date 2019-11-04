@@ -409,6 +409,7 @@ export const onFetchTokenInventory = () => dispatch => {
     )
     .catch(error => {
       dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error));
+      throw error;
     });
 };
 
@@ -518,6 +519,22 @@ export const onEditUser = preferences =>
       .then(response => dispatch(act.RECEIVE_EDIT_USER(response)))
       .catch(error => {
         dispatch(act.RECEIVE_EDIT_USER(null, error));
+      });
+  });
+
+export const onManageCmsUser = args =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_MANAGE_CMS_USER());
+    const { userid, ...newContractorProps } = args;
+    return api
+      .manageCmsUser(csrf, userid, newContractorProps)
+      .then(response =>
+        dispatch(
+          act.RECEIVE_MANAGE_CMS_USER({ ...response, ...newContractorProps })
+        )
+      )
+      .catch(error => {
+        dispatch(act.RECEIVE_MANAGE_CMS_USER(null, error));
       });
   });
 
@@ -1153,6 +1170,7 @@ export const onFetchUserProposalsWithVoteSummary = (
     dispatch(act.RECEIVE_USER_PROPOSALS({ proposals, userid, ...response }));
   } catch (e) {
     dispatch(act.RECEIVE_USER_PROPOSALS(null, e));
+    throw e;
   }
 };
 
@@ -1183,6 +1201,7 @@ export const onFetchProposalsBatchVoteSummary = tokens =>
       })
       .catch(error => {
         dispatch(act.RECEIVE_PROPOSALS_VOTE_SUMMARY(null, error));
+        throw error;
       });
   });
 
