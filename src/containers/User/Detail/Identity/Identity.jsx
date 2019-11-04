@@ -57,8 +57,6 @@ const Identity = ({ history, loadingKey, id: userID, identities }) => {
     verifyUserPubkey(loggedInAsEmail, userPubkey, keyMismatchAction);
   }, [loggedInAsEmail, userPubkey, keyMismatchAction]);
 
-  console.log(showConfirmModal);
-
   const pubkey = identities.filter(i => i.isactive)[0].pubkey;
 
   const pastIdentities = identities.filter(i => !i.isactive);

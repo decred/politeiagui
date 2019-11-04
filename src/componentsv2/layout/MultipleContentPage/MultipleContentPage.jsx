@@ -12,17 +12,40 @@ import {
 import PropTypes from "prop-types";
 import React from "react";
 import ErrorBoundary from "src/components/ErrorBoundary";
-import NewProposalButton from "src/componentsv2/NewProposalButton";
+import NewButton from "src/componentsv2/NewButton";
 import Header from "src/containers/Header/Header";
 import useScrollToTop from "src/hooks/utils/useScrollToTop";
 import Sidebar from "../../Sidebar";
 import styles from "../layouts.module.css";
+import { useConfig } from "src/containers/Config";
+import usePaywall from "src/hooks/api/usePaywall";
 
 const renderError = error => (
   <Main className={styles.singleContentMain}>
     <Message kind="error">{error.toString()}</Message>
   </Main>
 );
+
+const DefaultNewButton = () => {
+  const {
+    recordType,
+    constants: { RECORD_TYPE_PROPOSAL, RECORD_TYPE_INVOICE }
+  } = useConfig();
+  const { isPaid } = usePaywall();
+  const mapRecordTypeToButton = {
+    [RECORD_TYPE_PROPOSAL]: (
+      <NewButton
+        disabled={!isPaid}
+        label="New Proposal"
+        goTo="/proposals/new"
+      />
+    ),
+    [RECORD_TYPE_INVOICE]: (
+      <NewButton label="New Invoice" goTo="/invoices/new" />
+    )
+  };
+  return mapRecordTypeToButton[recordType] || null;
+};
 
 const Title = props => <H1 {...props} />;
 
@@ -61,7 +84,12 @@ const PageDetails = ({
       {...props}
     >
       <div className={classNames(styles.pageDetailsHeader, headerClassName)}>
-        <div className={classNames(styles.titleAndSubtitleWrapper, titleAndSubtitleWrapperClassName)}>
+        <div
+          className={classNames(
+            styles.titleAndSubtitleWrapper,
+            titleAndSubtitleWrapperClassName
+          )}
+        >
           {titleContent}
           {!!subtitle && <Subtitle>{subtitle}</Subtitle>}
         </div>
@@ -82,7 +110,14 @@ const Tabs = ({ className, ...props }) => (
 );
 
 const Main = ({ className, fillScreen, ...props }) => (
-  <UIMain className={classNames(styles.customMain, fillScreen && styles.customMainNoSidebar, className)} {...props} />
+  <UIMain
+    className={classNames(
+      styles.customMain,
+      fillScreen && styles.customMainNoSidebar,
+      className
+    )}
+    {...props}
+  />
 );
 
 const MultipleContentpage = ({ children, disableScrollToTop, ...props }) => {
@@ -107,7 +142,7 @@ const MultipleContentpage = ({ children, disableScrollToTop, ...props }) => {
 };
 
 PageDetails.defaultProps = {
-  actionsContent: <NewProposalButton />
+  actionsContent: <DefaultNewButton />
 };
 
 MultipleContentpage.propTypes = {

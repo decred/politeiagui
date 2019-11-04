@@ -101,6 +101,12 @@ const Routes = ({ location }) => {
             exact
             component={PageProposalsUnvetted}
           />
+          <AuthenticatedRoute
+            path={`/proposals/new`}
+            title={`New Proposal`}
+            exact
+            render={PageProposalNew}
+          />
           <Route
             path={`/proposals/:token`}
             title={`Proposal Detail`}
@@ -120,12 +126,6 @@ const Routes = ({ location }) => {
             title={`Edit Proposal`}
             exact
             render={PageProposalEdit}
-          />
-          <AuthenticatedRoute
-            path={`/proposals/new`}
-            title={`New Proposal}`}
-            exact
-            render={PageProposalNew}
           />
           <Route title="Page Not Found" path="*" component={PageNotFound} />
         </Switch>

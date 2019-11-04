@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Switch, withRouter } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { useLoaderContext } from "src/containers/Loader";
 // import * as sel from "src/selectors";
 import {
   Route,
@@ -20,12 +21,31 @@ import PageUserSignup from "./User/Signup";
 import PageUserVerifyEmail from "./User/VerifyEmail";
 import PageUserVerifyKey from "./User/VerifyKey";
 
+import PageListUserInvoices from "./Invoices/UserList";
+
+const Redirect = withRouter(({ to, history, location }) => {
+  useEffect(() => {
+    if (location.pathname !== to) {
+      history.push(to);
+    }
+  }, [history, location.pathname]);
+  return null;
+});
+
 const Routes = ({ location }) => {
+  const { currentUser } = useLoaderContext();
+  const loggedIn = !!currentUser;
   return (
     <TransitionGroup>
       <CSSTransition key={location.key} classNames="fade" timeout={300}>
         <Switch location={location}>
-          <Route path="/" title="Login" exact component={PageUserLogin} />
+          <Route exact path="/">
+            {loggedIn ? (
+              <Redirect to="/invoices/me" />
+            ) : (
+              <Redirect to="/user/login" />
+            )}
+          </Route>
           <NotAuthenticatedRoute
             path="/user/login"
             title="Login"
@@ -82,6 +102,13 @@ const Routes = ({ location }) => {
             title="User Detail"
             exact
             component={PageUserDetail}
+          />
+
+          <AuthenticatedRoute
+            path="/invoices/me"
+            title="User Invoices"
+            exact
+            component={PageListUserInvoices}
           />
 
           {/* Record routes */}

@@ -8,7 +8,7 @@ const PageProposalsNew = () => {
       {({ TopBanner, PageDetails, Main }) => (
         <>
           <TopBanner>
-            <PageDetails title="Create Proposal" />
+            <PageDetails title="Create Proposal" actionsContent={null} />
           </TopBanner>
           <Main fillScreen>
             <ProposalNewForm />

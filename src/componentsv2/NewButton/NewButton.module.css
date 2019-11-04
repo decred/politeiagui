@@ -1,4 +1,4 @@
-.newProposalButton {
+.newButton {
     width: 15.5rem;
     padding-right: 0 !important;
     padding-left: 0 !important;
@@ -7,16 +7,9 @@
     justify-content: center;
 }
 
-.newProposalButtonContent::after {
-    content: "New Proposal"
-}
 
 @media screen and (max-width: 560px){
-    .newProposalButtonContent::after {
-        content: "+"
-    }
-
-    .newProposalButton { 
+    .newButton { 
         padding: 0 !important;
         width: 3.2rem;
         height: 3.2rem;
