@@ -42,17 +42,17 @@ table.data-grid {
   width: 100%;
 }
 
-.sheet-container {
+.wrapper {
   display: block;
   padding: 5px;
   width: 100%;
   margin-top: 20px;
 }
 
-.sheet-container table.data-grid tr td.cell:not(.selected){
+.wrapper table.data-grid tr td.cell:not(.selected){
   border: 1px solid #ececec;
 }
-.sheet-container table.data-grid tr td.cell, .sheet-container table.data-grid tr th.cell {
+.wrapper table.data-grid tr td.cell, .wrapper table.data-grid tr th.cell {
   font-size: 12px;
 }
 div.divider {
@@ -68,44 +68,44 @@ pre {
     border-left: 2px solid white;
 }
 
-.table-button {
+.tableButton {
     line-height: 1.4rem !important;
     font-size: 0.8rem;    
     max-height: 1.4rem;
 }
 
-.table-button.add-row {
+.tableButton.add {
     background: #164623;
 }
 
-.table-button.add-row:hover {
+.tableButton.add:hover {
     background: #476b50;
 }
 
-.table-button.remove-row {
+.tableButton.remove {
     background: #e63946;
 }
 
-.table-button.remove-row.disabled {
+.tableButton.remove.disabled {
     background: rgba(0, 0, 0, .08)
 }
 
-.table-button.remove-row:hover {
+.tableButton.remove:hover {
     background: #f17d86;
 }
 
-.total-label {
+.totalLabel {
   color: black;
   font-size: 12px;
   font-weight: bold;
 }
 
-.multiline-cell-value {
+.multilineCellValue {
 	word-break: break-word;
 	white-space: pre-line !important;
 }
 
-.multiline-cell-editor {
+.multilineEditor {
 	resize: vertical;
 	height: 25px;
 }

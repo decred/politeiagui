@@ -22,6 +22,7 @@ import PageUserVerifyEmail from "./User/VerifyEmail";
 import PageUserVerifyKey from "./User/VerifyKey";
 
 import PageListUserInvoices from "./Invoices/UserList";
+import PageInvoicesNew from "./Invoices/New";
 
 const Redirect = withRouter(({ to, history, location }) => {
   useEffect(() => {
@@ -106,9 +107,16 @@ const Routes = ({ location }) => {
 
           <AuthenticatedRoute
             path="/invoices/me"
-            title="User Invoices"
+            title="My Invoices"
             exact
             component={PageListUserInvoices}
+          />
+
+          <AuthenticatedRoute
+            path="/invoices/new"
+            title="New Invoice"
+            exact
+            component={PageInvoicesNew}
           />
 
           {/* Record routes */}
