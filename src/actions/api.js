@@ -480,7 +480,16 @@ export const onFetchUser = userId => dispatch => {
     return dispatch(act.RECEIVE_USER(null, "This is not a valid user ID."));
   return api
     .user(userId)
-    .then(response => dispatch(act.RECEIVE_USER(response)))
+    .then(response =>
+      dispatch(
+        act.RECEIVE_USER({
+          user: {
+            ...response.user,
+            userid: userId
+          }
+        })
+      )
+    )
     .catch(error => {
       dispatch(act.RECEIVE_USER(null, error));
     });

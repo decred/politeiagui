@@ -54,7 +54,7 @@ class PreferencesTab extends React.Component {
       isAdmin,
       loggedInAsUserId
     } = this.props;
-    const isUserPageOwner = user && loggedInAsUserId === user.id;
+    const isUserPageOwner = user && loggedInAsUserId === user.userid;
     return (
       <form
         className="detail-tab-content"

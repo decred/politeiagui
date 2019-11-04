@@ -30,8 +30,9 @@ const UserDetailPage = ({
   isCMS,
   isAdmin
 }) => {
-  const proposals = user && user.id && getSubmittedUserProposals(user.id);
-  const invoices = user && user.id && isCMS && getSubmittedUserInvoices;
+  const proposals =
+    user && user.userid && getSubmittedUserProposals(user.userid);
+  const invoices = user && user.userid && isCMS && getSubmittedUserInvoices;
   return (
     <div className="content user-page" role="main">
       {isLoading && <PageLoadingIcon />}
@@ -42,14 +43,14 @@ const UserDetailPage = ({
         <>
           <div className="detail-header">
             <h1 className="content-title">
-              {loggedInAsUserId === user.id
+              {loggedInAsUserId === user.userid
                 ? loggedInAsUsername
                 : user.username}
               {user.isadmin && (
                 <span className="detail-admin">(admin user)</span>
               )}
             </h1>
-            {loggedInAsUserId === user.id ? (
+            {loggedInAsUserId === user.userid ? (
               <span
                 className="linkish"
                 style={{ marginLeft: "10px" }}
