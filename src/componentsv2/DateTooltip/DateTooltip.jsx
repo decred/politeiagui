@@ -13,7 +13,7 @@ const DateTooltip = ({ timestamp, placement, className, children }) => {
   return (
     <Tooltip
       className={classNames(className, styles.dateTooltip)}
-      content={date.toISOString()}
+      content={date.toLocaleString()}
       placement={placement}
     >
       {children({ timeAgo })}
