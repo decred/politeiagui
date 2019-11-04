@@ -39,6 +39,16 @@ thead .cell:not(.row-handle) {
   height: 100%;
 }
 
+.data-grid-container .data-grid .cell {
+    vertical-align: middle;
+    overflow-y: hidden;
+}
+
+.data-grid-container .data-grid .cell {
+    vertical-align: middle;
+    overflow-y: hidden;
+}
+
 .container {
   max-width: 600px;
   margin: auto;

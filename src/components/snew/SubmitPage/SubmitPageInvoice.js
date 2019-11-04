@@ -44,7 +44,9 @@ const InvoiceSubmit = (props) => {
     onSaveInvoiceDraft,
     draftInvoiceById,
     isDraftSaving,
-    draftButtonText
+    draftButtonText,
+    onFetchSubcontractors,
+    subcontractors
   } = props;
   const [monthOptions, setMonthOptions] = useState(MONTH_OPTIONS);
   const [contractorRate, setContractorRate] = useState(0);
@@ -59,6 +61,11 @@ const InvoiceSubmit = (props) => {
       setMonthOptions(MONTH_OPTIONS);
     }
   }, [year]);
+
+  useEffect(() => {
+    // fetch user subcontractor list
+    onFetchSubcontractors();
+  }, [onFetchSubcontractors]);
 
   // Form is considered 'pristine' if the user has not modified
   // the invoice since saving the draft. To work around this,
@@ -214,6 +221,7 @@ const InvoiceSubmit = (props) => {
                       component={InvoiceDatasheetField}
                       policy={policy}
                       userRate={contractorRate}
+                      subcontractors={subcontractors}
                     />
                   </div>
                   <div>

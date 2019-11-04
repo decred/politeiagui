@@ -34,10 +34,13 @@ export const invoiceInstructions = ({
 ***Payment Address:*** This is the DCR address where you would like to receive payment.  
   
 ***Line Items:***
-  * Type: Currently can be 1 (Labor), 2 (Expense), or 3 (Misc)
+  * Type: Currently can be 1 (Labor), 2 (Expense), 3 (Misc) or 4 (Sub Contractor)
   * Domain: The broad category of work performed/expenses spent (for example, Development, Marketing, Community etc).
   * Subdomain: The specific project or program of which the work or expenses are related (for example, Decrediton, dcrd, NYC Event).
   * Description: A thorough description of the work or expenses.
+  * Proposal Token: The proposal token that proposal refers to.
+  * Sub Contractor ID: If line item is 4 (Sub Contractor), you must provide who is the Sub Contractor.
+  * Sub Contractor Rate: The rate decided upon an agreement between the Supervisor and the Sub Contractor.
   * Labor: The number of hours of work performed.
   * Expenses: The cost of the line item (in USD).
     

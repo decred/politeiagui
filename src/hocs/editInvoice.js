@@ -30,7 +30,8 @@ const editInvoiceConnector = connect(
     year: sel.invoiceFormYear,
     exchangeRate: sel.exchangeRate,
     loadingExchangeRate: sel.isApiRequestingExchangeRate,
-    exchangeRateError: sel.apiExchangeRateError
+    exchangeRateError: sel.apiExchangeRateError,
+    subcontractors: sel.userSubcontractors
   }),
   {
     onFetchData: act.onGetPolicy,
@@ -38,7 +39,8 @@ const editInvoiceConnector = connect(
     onResetInvoice: act.onResetInvoice,
     onSave: act.onEditInvoice,
     onFetchExchangeRate: act.onFetchExchangeRate,
-    onDeleteDraftInvoice: act.onDeleteDraftInvoice
+    onDeleteDraftInvoice: act.onDeleteDraftInvoice,
+    onFetchSubcontractors: act.onFetchUserSubcontractors
   }
 );
 
