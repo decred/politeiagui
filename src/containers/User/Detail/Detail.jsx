@@ -12,6 +12,7 @@ import Credits from "./Credits";
 import styles from "./Detail.module.css";
 import { tabValues } from "./helpers";
 import { useChangeUsername, useUserDetail } from "./hooks";
+import { useConfig } from "src/containers/Config";
 import Identity from "./Identity";
 import Preferences from "./Preferences";
 
@@ -27,7 +28,8 @@ const getTabComponents = ({ user, ...rest }) => {
         userID={user.id}
         withDrafts={rest.isUserPageOwner}
       />
-    )
+    ),
+    [tabValues.INVOICES]: <div>test</div>
   };
   return mapTabValueToComponent;
 };
@@ -48,6 +50,11 @@ const UserDetail = ({
     identityImportSuccess
   } = useUserIdentity();
 
+  const {
+    recordType,
+    constants: { RECORD_TYPE_INVOICE, RECORD_TYPE_PROPOSAL }
+  } = useConfig();
+
   const isUserPageOwner = user && loggedInAsUserId === user.id;
   const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
 
@@ -58,14 +65,34 @@ const UserDetail = ({
 
       return false;
     };
+    const filterByRecordType = tabLabel => {
+      if (recordType === RECORD_TYPE_INVOICE) {
+        return (
+          tabLabel !== tabValues.PROPOSALS &&
+          tabLabel !== tabValues.PREFERENCES &&
+          tabLabel !== tabValues.CREDITS
+        );
+      }
+      if (recordType === RECORD_TYPE_PROPOSAL) {
+        return tabLabel !== tabValues.INVOICES;
+      }
+      return true;
+    };
     return [
       tabValues.IDENTITY,
       tabValues.ACCOUNT,
       tabValues.PREFERENCES,
       tabValues.CREDITS,
-      tabValues.PROPOSALS
-    ].filter(tab => !isTabDisabled(tab));
-  }, [isUserPageOwner, isAdminOrTheUser]);
+      tabValues.PROPOSALS,
+      tabValues.INVOICES
+    ].filter(tab => !isTabDisabled(tab) && filterByRecordType(tab));
+  }, [
+    isUserPageOwner,
+    isAdminOrTheUser,
+    RECORD_TYPE_INVOICE,
+    RECORD_TYPE_PROPOSAL,
+    recordType
+  ]);
 
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
 

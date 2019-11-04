@@ -102,21 +102,21 @@ const Routes = ({ location }) => {
             component={PageProposalsUnvetted}
           />
           <Route
-            path={`/proposal/:token`}
+            path={`/proposals/:token`}
             title={`Proposal Detail`}
             titleSelector={sel.proposalName}
             exact
             component={PageProposalDetail}
           />
           <Route
-            path={`/proposal/:token/comments/:commentid`}
+            path={`/proposals/:token/comments/:commentid`}
             title={`Proposal Detail`}
             titleSelector={sel.proposalName}
             exact
             component={PageProposalDetail}
           />
           <AuthenticatedRoute
-            path={`/proposal/:token/edit`}
+            path={`/proposals/:token/edit`}
             title={`Edit Proposal`}
             exact
             render={PageProposalEdit}
