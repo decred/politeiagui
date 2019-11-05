@@ -30,13 +30,15 @@ const ProposalDetail = ({ Main, match }) => {
   const canReceiveComments =
     isPublicProposal(proposal) && !isVotingFinishedProposal(voteSummary);
 
-  const { history } = useRouter();
+  const { pastLocations, history } = useRouter();
+  const previousLocation = pastLocations[1];
 
   const returnToPreviousLocation = useCallback(() => history.goBack(), [
     history
   ]);
 
   const goBackLinkFromPreviousLocation = useMemo(() => {
+    if (!previousLocation) return null;
     return (
       <div className={styles.returnLinkContainer}>
         <Link
@@ -48,7 +50,7 @@ const ProposalDetail = ({ Main, match }) => {
         </Link>
       </div>
     );
-  }, [returnToPreviousLocation]);
+  }, [previousLocation, returnToPreviousLocation]);
 
   return (
     <>
