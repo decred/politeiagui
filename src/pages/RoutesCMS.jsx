@@ -29,7 +29,7 @@ const Redirect = withRouter(({ to, history, location }) => {
     if (location.pathname !== to) {
       history.push(to);
     }
-  }, [history, location.pathname]);
+  }, [history, location.pathname, to]);
   return null;
 });
 

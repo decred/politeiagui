@@ -31,16 +31,15 @@ function useExchangeRate(month, year) {
 
   const resRate = response && response.exchangerate;
 
-  console.log(month, year, resRate);
-
   useEffect(() => {
-    if (resRate) {
+    const key = getKey(month, year);
+    if (resRate && !rates[key]) {
       setRates({
         ...rates,
-        [getKey(month, year)]: resRate
+        [key]: resRate
       });
     }
-  }, [resRate]);
+  }, [resRate, month, year, setRates, rates]);
 
   return [currRate, loading, error];
 }

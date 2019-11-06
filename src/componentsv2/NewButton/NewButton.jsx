@@ -6,7 +6,7 @@ import styles from "./NewButton.module.css";
 
 const NewButton = ({ history, goTo, label, disabled }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
-  const onClick = useCallback(() => history.push(goTo), []);
+  const onClick = useCallback(() => history.push(goTo), [history, goTo]);
   return (
     <LoggedInContent>
       <Button

@@ -12,7 +12,7 @@ const ExchangeRate = ({ month, year, setFieldValue }) => {
   const [rate, loading] = useExchangeRate(month, year);
   useEffect(() => {
     setFieldValue(rate);
-  }, [rate]);
+  }, [rate, setFieldValue]);
   return (
     <div style={{ display: "grid" }}>
       <Text color="gray">Exchange rate</Text>
