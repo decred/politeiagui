@@ -781,3 +781,12 @@ export const exchangeRate = compose(
 
 export const manageCmsUserResponse = getApiResponse("manageCmsUser");
 export const manageCmsUserError = getApiError("manageCmsUser");
+
+export const apiNewDCCResponse = getApiResponse("newDCC");
+export const newDCCError = getApiError("newDCC");
+export const isApiRequestingNewDCC = getIsApiRequesting("newDCC");
+
+export const newDCCToken = compose(
+  get(["censorshiprecord", "token"]),
+  apiNewDCCResponse
+);

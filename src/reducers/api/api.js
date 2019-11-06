@@ -79,7 +79,8 @@ export const DEFAULT_STATE = {
   newInvoice: DEFAULT_REQUEST_STATE,
   editInvoice: DEFAULT_REQUEST_STATE,
   payouts: DEFAULT_REQUEST_STATE,
-  tokenInventory: DEFAULT_REQUEST_STATE
+  tokenInventory: DEFAULT_REQUEST_STATE,
+  newDCC: DEFAULT_REQUEST_STATE
 };
 
 const api = (state = DEFAULT_STATE, action) =>
@@ -222,6 +223,8 @@ const api = (state = DEFAULT_STATE, action) =>
         request("manageCmsUser", state, action),
       [act.RECEIVE_MANAGE_CMS_USER]: () =>
         onReceiveManageCmsUser(state, action),
+      [act.REQUEST_NEW_DCC]: () => request("newDCC", state, action),
+      [act.RECEIVE_NEW_DCC]: () => receive("newDCC", state, action),
       // === CMS END ===
       [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
         request("proposalPaywallDetails", state, action),

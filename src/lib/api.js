@@ -7,7 +7,8 @@ import get from "lodash/fp/get";
 import MerkleTree from "./merkle";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
-  INVOICE_STATUS_UNREVIEWED
+  INVOICE_STATUS_UNREVIEWED,
+  DCC_STATUS_ACTIVE
 } from "../constants";
 import {
   getHumanReadableError,
@@ -43,6 +44,11 @@ export const convertMarkdownToFile = (markdown) => ({
 });
 export const convertJsonToFile = (json) => ({
   name: "invoice.json",
+  mime: "text/plain; charset=utf-8",
+  payload: utoa(JSON.stringify(json))
+});
+export const convertDCCJsonToFile = json => ({
+  name: "dcc.json",
   mime: "text/plain; charset=utf-8",
   payload: utoa(JSON.stringify(json))
 });
@@ -129,6 +135,28 @@ export const makeCensoredComment = (token, reason, commentid) => ({
   reason
 });
 
+export const makeDCC = (
+  type,
+  nomineeuserid,
+  statement,
+  domain,
+  contractortype
+) => {
+  const { name, mime, payload } = convertDCCJsonToFile({
+    type,
+    nomineeuserid,
+    statement,
+    domain,
+    contractortype
+  });
+  return {
+    name,
+    mime,
+    payload,
+    digest: digestPayload(payload)
+  };
+};
+
 export const signRegister = (email, proposal) => {
   return pki.myPubKeyHex(email).then((publickey) => {
     const digests = proposal.files
@@ -152,6 +180,15 @@ export const signComment = (email, comment) =>
           [comment.token, comment.parentid, comment.comment].join("")
         )
         .then((signature) => ({ ...comment, publickey, signature }))
+    );
+
+export const signDCC = (email, dcc) =>
+  pki
+    .myPubKeyHex(email)
+    .then(publickey =>
+      pki
+        .signStringHex(email, dcc.digest)
+        .then(signature => ({ file: dcc, publickey, signature }))
     );
 
 export const signLikeComment = (email, comment) =>
@@ -606,3 +643,11 @@ export const tokenInventory = () =>
 
 export const exchangeRate = (csrf, month, year) =>
   POST("/invoices/exchangerate", csrf, { month, year }).then(getResponse);
+
+export const newDCC = (csrf, dcc) =>
+  POST("/dcc/new", csrf, dcc).then(({ response: { censorshiprecord } }) => ({
+    ...dcc,
+    censorshiprecord,
+    timestamp: Date.now() / 1000,
+    status: DCC_STATUS_ACTIVE
+  }));

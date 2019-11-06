@@ -104,9 +104,10 @@ export const draftInvoiceById = (state) => {
   const { draftid } = qs.parse(window.location.search);
   return (draftid && drafts && drafts[draftid]) || false;
 };
-export const getUserAlreadyPaid = (state) => state.app.userAlreadyPaid;
-export const getAdminFilterValue = (state) =>
+export const getUserAlreadyPaid = state => state.app.userAlreadyPaid;
+export const getAdminFilterValue = state =>
   parseInt(state.app.adminProposalsShow, 10);
+export const draftDCCs = state => state && state.app && state.app.draftDCCs;
 export const getPublicFilterValue = (state) =>
   parseInt(state.app.publicProposalsShow, 10);
 export const getUserFilterValue = (state) =>
