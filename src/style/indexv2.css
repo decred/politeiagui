@@ -208,6 +208,12 @@
     text-overflow: ellipsis;
 }
 
+/* Cursor helpers */
+
+.cursor-not-allowed {
+    cursor: not-allowed;
+}
+
 
 /* EXTRA SMALL */
 @media screen and (max-width: 560px) {

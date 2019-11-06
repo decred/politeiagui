@@ -32,6 +32,7 @@
     "react-markdown": "^4.2.2",
     "react-mde": "^2.1.2",
     "react-mde-newest": "npm:react-mde",
+    "react-month-picker": "^1.3.11",
     "react-redux": "^7.1.1",
     "react-router-dom": "^4.2.2",
     "react-scripts": "^3.2.0",

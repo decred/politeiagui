@@ -4,6 +4,7 @@ import { Formik } from "formik";
 import InvoiceDatasheet, {
   generateBlankLineItem
 } from "src/componentsv2/InvoiceDatasheet";
+import MonthPickerField from "../MonthPicker/MonthPickerField";
 
 const InvoiceForm = () => {
   return (
@@ -15,12 +16,20 @@ const InvoiceForm = () => {
         contact: "",
         rate: "",
         address: "",
+        date: { year: 2018, month: 4 },
         lineitems: [generateBlankLineItem()]
       }}
     >
       {({ handleChange, values, handleSubmit, errors, setFieldValue }) => {
         return (
           <form onSubmit={handleSubmit}>
+            <div>
+              <MonthPickerField
+                years={[2018, 2019]}
+                name="date"
+                label="Reference month"
+              />
+            </div>
             <BoxTextInput
               placeholder="Contractor name"
               name="name"
