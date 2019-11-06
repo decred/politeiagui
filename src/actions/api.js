@@ -4,7 +4,8 @@ import { PROPOSAL_STATUS_PUBLIC } from "../constants";
 import * as api from "../lib/api";
 import {
   resetNewInvoiceData,
-  resetNewProposalData
+  resetNewProposalData,
+  resetNewDCCData
 } from "../lib/editors_content_backup";
 import { clearStateLocalStorage } from "../lib/local_storage";
 import * as pki from "../lib/pki";
@@ -1413,5 +1414,41 @@ export const onFetchExchangeRate = (month, year) =>
       })
       .catch(error => {
         dispatch(act.RECEIVE_EXCHANGE_RATE(null, error));
+      });
+  });
+
+// DCC actions
+
+export const onSubmitNewDCC = (
+  loggedInAsEmail,
+  userid,
+  username,
+  type,
+  nomineeuserid,
+  statement,
+  domain,
+  contractortype
+) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_NEW_DCC({}));
+    return Promise.resolve(
+      api.makeDCC(type, nomineeuserid, statement, domain, contractortype)
+    )
+      .then(dcc => api.signDCC(loggedInAsEmail, dcc))
+      .then(dcc => api.newDCC(csrf, dcc))
+      .then(dcc => {
+        dispatch(
+          act.RECEIVE_NEW_DCC({
+            ...dcc,
+            numcomments: 0,
+            userid,
+            username
+          })
+        );
+        resetNewDCCData();
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_NEW_DCC(null, error));
+        throw error;
       });
   });

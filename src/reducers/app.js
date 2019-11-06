@@ -34,7 +34,8 @@ export const DEFAULT_STATE = {
   invoiceSortOption: { month: FILTER_ALL_MONTHS, year: getCurrentYear() },
   endPayoutOption: { month: getCurrentMonth(), year: getCurrentYear() },
   startPayoutOption: { month: getCurrentMonth() - 1, year: getCurrentYear() },
-  draftInvoices: null
+  draftInvoices: null,
+  draftDCCs: null
 };
 
 const app = (state = DEFAULT_STATE, action) =>
@@ -145,6 +146,51 @@ const app = (state = DEFAULT_STATE, action) =>
     [act.LOAD_DRAFT_INVOICES]: () => ({
       ...state,
       draftInvoices: action.payload
+    }),
+    [act.REQUEST_SETSTATUS_PROPOSAL]: () => {
+      if (action.error) return state;
+      const { status, token } = action.payload;
+      if (!(token in state.submittedProposals)) return state;
+      else {
+        return {
+          ...state,
+          submittedProposals: {
+            ...state.submittedProposals,
+            [token]: {
+              ...state.submittedProposals[token],
+              status
+            }
+          }
+        };
+      }
+    },
+    [act.SAVE_DRAFT_DCC]: () => {
+      const newDraftDCCs = state.draftDCCs;
+      const draftId = action.payload.id;
+      return {
+        ...state,
+        draftDCCs: {
+          ...newDraftDCCs,
+          newDraft: true,
+          [draftId]: {
+            ...action.payload,
+            draftId
+          }
+        }
+      };
+    },
+    [act.DELETE_DRAFT_DCC]: () => {
+      const draftId = action.payload;
+      if (!state.draftDCCs[draftId]) {
+        return state;
+      }
+      const newDraftDCCs = state.draftDCCs;
+      delete newDraftDCCs[draftId];
+      return { ...state, draftDCCs: newDraftDCCs };
+    },
+    [act.LOAD_DRAFT_INVOICES]: () => ({
+      ...state,
+      draftDCCs: action.payload
     }),
     [act.REQUEST_SETSTATUS_PROPOSAL]: () => {
       if (action.error) return state;

@@ -12,7 +12,8 @@ import {
   handleLogout,
   onInvoicePayouts,
   onRequestMe,
-  onUserProposalCredits
+  onUserProposalCredits,
+  onSubmitNewDCC
 } from "./api";
 import {
   onFetchProposal as onFetchProposalApi,
@@ -21,7 +22,8 @@ import {
 } from "./api";
 import {
   resetNewProposalData,
-  resetNewInvoiceData
+  resetNewInvoiceData,
+  resetNewDCCData
 } from "../lib/editors_content_backup";
 import * as sel from "../selectors";
 import act from "./methods";
@@ -115,6 +117,30 @@ export const onSaveNewProposalV2 = ({ name, description, files }) => (
   )
     .then(() => dispatch(onUserProposalCredits()))
     .then(() => sel.newProposalToken(getState()));
+};
+
+export const onSaveNewDCC = ({
+  type,
+  nomineeid,
+  statement,
+  domain,
+  contractortype
+}) => (dispatch, getState) => {
+  const email = sel.loggedInAsEmail(getState());
+  const id = sel.userid(getState());
+  const username = sel.loggedInAsUsername(getState());
+  return dispatch(
+    onSubmitNewDCC(
+      email,
+      id,
+      username,
+      type,
+      nomineeid,
+      statement,
+      domain,
+      contractortype
+    )
+  ).then(() => sel.newDCCToken(getState()));
 };
 
 export const onEditProposalV2 = ({ token, name, description, files }) => (
@@ -244,6 +270,31 @@ export const onSaveDraftInvoice = ({
     id,
     timestamp: Date.now() / 1000
   });
+};
+
+export const onSaveDraftDCC = ({
+  type,
+  contractortype,
+  domain,
+  statement,
+  nomineeid,
+  draftId
+}) => dispatch => {
+  resetNewDCCData();
+  const id = draftId || uniqueID("draft");
+  dispatch(
+    act.SAVE_DRAFT_DCC({
+      type,
+      contractortype,
+      domain,
+      statement,
+      nomineeid,
+      // files,
+      timestamp: Math.floor(Date.now() / 1000),
+      id
+    })
+  );
+  return id;
 };
 
 export const onLoadDraftInvoices = email => {

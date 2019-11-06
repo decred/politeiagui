@@ -286,7 +286,8 @@ describe("test api reducer", () => {
       proposalPaywallDetails: DEFAULT_REQUEST_STATE,
       email: "",
       keyMismatch: false,
-      lastLoaded: {}
+      lastLoaded: {},
+      newDCC: DEFAULT_REQUEST_STATE
     });
 
     expect(api.default(undefined, { type: "" })).toEqual(api.DEFAULT_STATE);

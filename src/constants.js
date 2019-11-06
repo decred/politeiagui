@@ -10,6 +10,9 @@ export const EXPLORER = "explorer";
 
 // CMS
 export const INVOICE_STATUS_UNREVIEWED = 2;
+export const DCC_STATUS_ACTIVE = 1;
+export const DCC_STATUS_APPROVED = 2;
+export const DCC_STATUS_REJECTED = 3;
 
 // POLITEIA
 
@@ -145,3 +148,20 @@ export const FILTER_ALL_MONTHS = 0;
 
 export const BLOCK_DURATION_TESTNET = 2;
 export const BLOCK_DURATION_MAINNET = 5;
+
+export const CMS_USER_TYPES = [
+  "No type defined",
+  "Direct",
+  "Supervisor",
+  "Sub Contractor"
+];
+
+export const CMS_DOMAINS = [
+  "No domain defined",
+  "Development",
+  "Marketing",
+  "Design",
+  "Research",
+  "Documentation",
+  "Community Management"
+];
