@@ -1,10 +1,51 @@
-import React from "react";
-import { BoxTextInput, Button } from "pi-ui";
+import React, { useEffect } from "react";
+import { BoxTextInput, Button, Spinner, Text } from "pi-ui";
 import { Formik } from "formik";
 import InvoiceDatasheet, {
   generateBlankLineItem
 } from "src/componentsv2/InvoiceDatasheet";
 import MonthPickerField from "../MonthPicker/MonthPickerField";
+import useExchangeRate from "src/hooks/api/useExchangeRate";
+import { getCurrentMonth, getCurrentYear } from "src/helpers";
+
+const ExchangeRate = ({ month, year, setFieldValue }) => {
+  const [rate, loading] = useExchangeRate(month, year);
+  useEffect(() => {
+    setFieldValue(rate);
+  }, [rate]);
+  return (
+    <div style={{ display: "grid" }}>
+      <Text color="gray">Exchange rate</Text>
+      {loading ? <Spinner invert /> : <Text>${rate / 100}</Text>}
+    </div>
+  );
+};
+
+const getInitialDateValue = () => {
+  const currYear = getCurrentYear();
+  const currMonth = getCurrentMonth();
+
+  // case is december
+  if (currMonth === 1) {
+    return {
+      year: currYear - 1,
+      month: 12
+    };
+  }
+
+  return {
+    year: currYear,
+    month: currMonth - 1
+  };
+};
+
+const getMinMaxYearAndMonth = () => {
+  const min = { year: 2018, month: 1 };
+  return {
+    min,
+    max: getInitialDateValue()
+  };
+};
 
 const InvoiceForm = () => {
   return (
@@ -16,19 +57,20 @@ const InvoiceForm = () => {
         contact: "",
         rate: "",
         address: "",
-        date: { year: 2018, month: 4 },
+        date: getInitialDateValue(),
         lineitems: [generateBlankLineItem()]
       }}
     >
       {({ handleChange, values, handleSubmit, errors, setFieldValue }) => {
         return (
           <form onSubmit={handleSubmit}>
-            <div>
+            <div className="justify-space-between">
               <MonthPickerField
-                years={[2018, 2019]}
+                years={getMinMaxYearAndMonth()}
                 name="date"
                 label="Reference month"
               />
+              <ExchangeRate {...values.date} setFieldValue={setFieldValue} />
             </div>
             <BoxTextInput
               placeholder="Contractor name"

@@ -57,7 +57,7 @@ const MonthPickerField = ({ name, label, years, readOnly }) => {
           closePicker();
         };
         return (
-          <>
+          <div>
             <Text color="gray">{label}</Text>
             <div>
               <Picker
@@ -79,7 +79,7 @@ const MonthPickerField = ({ name, label, years, readOnly }) => {
                 </span>
               </Picker>
             </div>
-          </>
+          </div>
         );
       }}
     </FormikConsumer>
@@ -89,7 +89,7 @@ const MonthPickerField = ({ name, label, years, readOnly }) => {
 MonthPickerField.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
-  year: PropTypes.array,
+  year: PropTypes.object,
   readOnly: PropTypes.bool
 };
 
