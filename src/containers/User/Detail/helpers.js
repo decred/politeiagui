@@ -67,3 +67,14 @@ export const isUserDeactivated = isDeactivated => isDeactivated;
  * @return {bool} true/false if timestamp is expired
  */
 export const isExpired = expiryTime => new Date().getTime() > expiryTime * 1000;
+
+/**
+ * Helper to create multiple manage user action
+ *
+ * @param {string} id
+ * @param {string} reason
+ * @param {function} cb
+ * @return {function} function to execute the action
+ */
+export const manageUserActionsFactory = (id, cb) => actions =>
+  actions.map(action => reason => cb(id, action, reason));
