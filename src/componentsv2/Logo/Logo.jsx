@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useMemo, lazy } from "react";
+import React from "react";
 import { useConfig } from "src/containers/Config";
 
-const Logo = ({}) => {
+const Logo = () => {
   const { logoAsset } = useConfig();
   return (
     <img
