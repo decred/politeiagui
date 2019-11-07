@@ -10,6 +10,7 @@ import {
   convertLineItemsToGrid,
   convertGridToLineItems,
   generateBlankLineItem,
+  createTableHeaders,
   SUBTOTAL_COL
 } from "./helpers";
 
@@ -49,6 +50,8 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
     }
   };
 
+  const headers = createTableHeaders();
+
   const removeRowsIsDisabled = grid && grid.length <= 3;
   return (
     <div className={styles.wrapper}>
@@ -57,6 +60,19 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
         valueRenderer={cell => cell.value}
         onContextMenu={(e, cell) => (cell.readOnly ? e.preventDefault() : null)}
         onCellsChanged={handleCellsChange}
+        sheetRenderer={props => (
+          <table className={classNames(props.className, styles.table)}>
+            <thead className={styles.tableHead}>
+              {headers.map(col => (
+                <th className={styles.tableHeadCell}>{col.value}</th>
+              ))}
+            </thead>
+            <tbody>{props.children}</tbody>
+          </table>
+        )}
+        rowRenderer={props => (
+          <tr className={styles.tableRow}>{props.children}</tr>
+        )}
       />
       {!readOnly && (
         <div className="justify-left margin-top-s">

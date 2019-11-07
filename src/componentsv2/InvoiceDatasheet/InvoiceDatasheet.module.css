@@ -1,46 +1,4 @@
 
-.error.cell > div.text {
-  text-align: center;
-}
-
-.value-viewer, .data-editor {
-  text-align: left !important;
-  padding-left: 10px;
-}
-
-.value-viewer {
-  user-select: text;
-}
-
-.row-handle.cell {
-  width: 1rem;
-}
-
-tbody .row-handle.cell, thead .cell:not(.row-handle) {
-  cursor: move;
-}
-
-.data-grid-container table.data-grid tr {
- background: white;
-}
-.data-grid-container table.data-grid .drop-target,  .data-grid-container table.data-grid thead .cell.read-only.drop-target {
-  background: #6F86FC;
-  transition: none;
-  color: white;
-}
-.data-grid-container table.data-grid thead .cell.read-only {
-  transition: none;
-}
-
-.data-grid-container .data-grid .cell > input {
-    width: 100%;
-    height: 100%;
-}
-
-table.data-grid {
-  margin: auto;
-  width: 100%;
-}
 
 .wrapper {
   display: block;
@@ -108,4 +66,40 @@ pre {
 .multilineEditor {
 	resize: vertical;
 	height: 25px;
+}
+
+
+
+.table {
+  table-layout: fixed;
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tableHead {
+  background-color: var(--color-gray-lightest);
+}
+
+.tableCell {
+    max-width: 12rem;
+    min-width: 12rem;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+}
+
+.tableHeadCell {
+  composes: tableCell;
+  height: 5.2rem;
+}
+
+.tableRow > td {
+  height: 5rem !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  max-width: 12rem;
+  min-width: 12rem;
+  text-align: center;
+  text-overflow: ellipsis;
 }

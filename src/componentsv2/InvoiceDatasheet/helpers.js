@@ -73,7 +73,7 @@ export const generateBlankLineItem = () => ({
 });
 
 export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
-  const grid = [createTableHeaders()];
+  const grid = [];
   const { grid: gridBody, expenseTotal, laborTotal, total } = lineItems.reduce(
     (acc, line, idx) => {
       const isLabelReadonly =
@@ -166,7 +166,7 @@ export const convertGridToLineItems = grid => {
   const copyGrid = grid.map(row => [...row]);
   return copyGrid.reduce((acc, rowValues, row) => {
     // skip first and last rows
-    if (row === 0 || row === copyGrid.length - 1) return acc;
+    if (row === copyGrid.length - 1) return acc;
 
     const lineItem = rowValues.reduce((acc, cell, col) => {
       switch (col) {

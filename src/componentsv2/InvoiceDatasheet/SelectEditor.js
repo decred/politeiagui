@@ -1,37 +1,14 @@
 import React from "react";
-import Select from "react-select";
+import MySelect from "../Select";
 
 const customStyles = {
   container: provided => ({
     ...provided,
-    height: 20
-  }),
-  valueContainer: provided => ({
-    ...provided,
-    height: 20,
-    fontWeight: "normal",
-    display: "flex",
-    alignItems: "center"
+    height: "100%"
   }),
   control: provided => ({
     ...provided,
-    minHeight: 20,
-    height: 20
-  }),
-  option: provided => ({
-    ...provided,
-    padding: "4px 8px",
-    textAlign: "left",
-    fontWeight: "normal"
-  }),
-  dropdownIndicator: provided => ({
-    ...provided,
-    padding: 0
-  }),
-  input: provided => ({
-    ...provided,
-    padding: 0,
-    margin: 0
+    height: "100%"
   })
 };
 
@@ -41,15 +18,11 @@ const SelectEditor = ({ value, options, onCommit }) => {
   };
   const getValueObj = value => options.find(op => op.value === value);
   return (
-    <Select
-      classNamePrefix="t"
-      styles={customStyles}
-      autoFocus
-      openOnFocus
-      closeOnSelect
+    <MySelect
       options={options}
       value={getValueObj(value)}
       onChange={handleChange}
+      styles={customStyles}
     />
   );
 };
