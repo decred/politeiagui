@@ -3,11 +3,13 @@ import { useState, useCallback } from "react";
 export default function(initialValue) {
   const [value, setValue] = useState(initialValue);
 
-  const setValueFalse = useCallback(() => {
+  const setValueFalse = useCallback(e => {
+    if (e) e.preventDefault();
     setValue(false);
   }, []);
 
-  const setValueTrue = useCallback(() => {
+  const setValueTrue = useCallback(e => {
+    if (e) e.preventDefault();
     setValue(true);
   }, []);
 
