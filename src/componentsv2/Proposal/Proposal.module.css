@@ -60,6 +60,10 @@ span.statusTag > span {
     overflow: visible;
 }
 
+.statusBarTooltip {
+    width: 225px;
+}
+
 @media screen and (max-width: 560px) {
     .timeLeft {
         margin-top: 0;
