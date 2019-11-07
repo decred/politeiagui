@@ -1386,7 +1386,7 @@ export const onFetchExchangeRate = (month, year) =>
     return api
       .exchangeRate(csrf, +month, +year)
       .then(response => {
-        dispatch(act.RECEIVE_EXCHANGE_RATE(response));
+        dispatch(act.RECEIVE_EXCHANGE_RATE({ ...response, month, year }));
         return response;
       })
       .catch(error => {
