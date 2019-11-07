@@ -1,7 +1,7 @@
 import { classNames, Header as UIHeader, useMediaQuery } from "pi-ui";
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import Logo from "src/assets/pi-logo-light.svg";
+import Logo from "src/componentsv2/Logo";
 import HamburgerMenu from "src/componentsv2/HamburgerMenu";
 import HeaderNav from "src/componentsv2/HeaderNav";
 import NavigationDrawer from "src/componentsv2/NavigationDrawer";
@@ -18,7 +18,7 @@ const Header = ({ noBorder }) => {
         to="/"
         className={extrasmall && showMenu ? styles.hideLogo : styles.showLogo}
       >
-        <img src={Logo} alt="presentation" />
+        <Logo />
       </NavLink>
       {small ? (
         <>

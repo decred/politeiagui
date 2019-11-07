@@ -11,6 +11,7 @@ export const commonDefaults = {
 export const POLITEIA = {
   ...commonDefaults,
   title: "Politeia",
+  logoAsset: "pi-logo-light.svg",
   paywallContent: "paywall-politeia",
   recordType: constants.RECORD_TYPE_PROPOSAL,
   enableAdminInvite: false,
@@ -27,6 +28,7 @@ export const POLITEIA = {
 export const CMS = {
   ...commonDefaults,
   title: "Contractor Management",
+  logoAsset: "cms-logo-light.svg",
   recordType: constants.RECORD_TYPE_INVOICE,
   enableAdminInvite: true,
   enableCommentVote: false,

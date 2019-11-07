@@ -14,6 +14,7 @@ const loadConfig = () => {
   const {
     isStaging: defaultStagingValue,
     title: defaultTitleValue,
+    logoAsset: defaultLogoAsset,
     recordType: defaultRecordType,
     enableAdminInvite: defaultEnableAdminInvite,
     enableCommentVote: defaultEnableCommentVote,
@@ -42,6 +43,7 @@ const loadConfig = () => {
   return {
     isStaging: getConf("IS_STAGING") || defaultStagingValue,
     title: getConf("TITLE") || defaultTitleValue,
+    logoAsset: getConf("LOGO_ASSET") || defaultLogoAsset,
     recordType: getConf("RECORD_TYPE") || defaultRecordType,
     enableAdminInvite:
       getConf("ENABLE_ADMIN_INVITE") || defaultEnableAdminInvite,
