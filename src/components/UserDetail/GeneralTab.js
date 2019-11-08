@@ -208,9 +208,6 @@ class GeneralTab extends React.Component {
     const isAdminOrTheUser =
       user && (isAdmin || loggedInAsUserId === user.userid);
 
-    console.log("IN GENERAL TAB");
-    console.log(loggedInAsUserId);
-    console.log(user);
     return (
       <div className="detail-tab-content">
         {!isCMS && isAdminOrTheUser && (
