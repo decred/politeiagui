@@ -533,6 +533,22 @@ export const onEditUser = preferences =>
       });
   });
 
+export const onManageCmsUser = args =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_MANAGE_CMS_USER());
+    const { userid, ...newContractorProps } = args;
+    return api
+      .manageCmsUser(csrf, userid, newContractorProps)
+      .then(response =>
+        dispatch(
+          act.RECEIVE_MANAGE_CMS_USER({ ...response, ...newContractorProps })
+        )
+      )
+      .catch(error => {
+        dispatch(act.RECEIVE_MANAGE_CMS_USER(null, error));
+      });
+  });
+
 // TODO: erase this after the refactor and make the onManageUserv2 official
 export const onManageUser = (userId, action) =>
   withCsrf((dispatch, getState, csrf) => {

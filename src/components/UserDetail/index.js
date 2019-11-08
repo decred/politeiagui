@@ -6,7 +6,8 @@ import {
   USER_DETAIL_TAB_GENERAL,
   USER_DETAIL_TAB_PREFERENCES,
   USER_DETAIL_TAB_PROPOSALS,
-  USER_DETAIL_TAB_INVOICES
+  USER_DETAIL_TAB_INVOICES,
+  USER_DETAIL_TAB_MANAGE_USER
 } from "../../constants";
 import {
   setQueryStringValue,
@@ -30,6 +31,10 @@ const userDetailOptions = [
   {
     label: "invoices",
     value: USER_DETAIL_TAB_INVOICES
+  },
+  {
+    label: "manageuser",
+    value: USER_DETAIL_TAB_MANAGE_USER
   }
 ];
 

@@ -908,3 +908,6 @@ export const exchangeRate = compose(
   get("exchangerate"),
   apiExchangeRateResponse
 );
+
+export const manageCmsUserResponse = getApiResponse("manageCmsUser");
+export const manageCmsUserError = getApiError("manageCmsUser");

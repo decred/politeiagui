@@ -6,11 +6,13 @@ import GeneralTab from "./GeneralTab";
 import PreferencesTab from "./PreferencesTab";
 import ProposalsTab from "./ProposalsTab";
 import InvoicesTab from "./InvoicesTab";
+import ManageUserTab from "./ManageUserTab";
 import {
   USER_DETAIL_TAB_GENERAL,
   USER_DETAIL_TAB_PREFERENCES,
   USER_DETAIL_TAB_PROPOSALS,
-  USER_DETAIL_TAB_INVOICES
+  USER_DETAIL_TAB_INVOICES,
+  USER_DETAIL_TAB_MANAGE_USER
 } from "../../constants";
 import { CHANGE_USERNAME_MODAL } from "../Modal/modalTypes";
 import userConnector from "../../connectors/user";
@@ -87,13 +89,21 @@ const UserDetailPage = ({
               />
             ) : null}
             {isCMS && isAdmin ? (
-              <Tab
-                title="Invoices"
-                count={invoices.length}
-                selected={tabId === USER_DETAIL_TAB_INVOICES}
-                tabId={USER_DETAIL_TAB_INVOICES}
-                onTabChange={onTabChange}
-              />
+              <>
+                <Tab
+                  title="Invoices"
+                  count={invoices.length}
+                  selected={tabId === USER_DETAIL_TAB_INVOICES}
+                  tabId={USER_DETAIL_TAB_INVOICES}
+                  onTabChange={onTabChange}
+                />
+                <Tab
+                  title="Manage User"
+                  tabId={USER_DETAIL_TAB_MANAGE_USER}
+                  selected={tabId === USER_DETAIL_TAB_MANAGE_USER}
+                  onTabChange={onTabChange}
+                />
+              </>
             ) : null}
           </Tabs>
           {tabId === USER_DETAIL_TAB_GENERAL && (
@@ -106,6 +116,7 @@ const UserDetailPage = ({
           {tabId === USER_DETAIL_TAB_INVOICES && (
             <InvoicesTab count={invoices.length} />
           )}
+          {tabId === USER_DETAIL_TAB_MANAGE_USER && <ManageUserTab />}
         </>
       )}
     </div>
