@@ -26,11 +26,21 @@ pre {
     border-left: 2px solid white;
 }
 
-.tableButton {
+:global(.cell.read-only) {
+  background-color: var(--color-gray-lightest) !important;
+}
+
+:global(.cell) {
+  border: 0 !important;
+  border-left: 0.5px solid var(--color-gray-lightest) !important;
+  border-bottom: 0.5px solid var(--color-gray-lightest) !important;
+}
+
+/* .tableButton {
     line-height: 1.4rem !important;
     font-size: 0.8rem;    
     max-height: 1.4rem;
-}
+} */
 
 .tableButton.add {
     background: #164623;
@@ -102,4 +112,14 @@ pre {
   min-width: 12rem;
   text-align: center;
   text-overflow: ellipsis;
+}
+
+span.tableButton {
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+span.tableButtonDisabled {
+  cursor: not-allowed;
+  color: var(--color-gray);
 }

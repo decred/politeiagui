@@ -107,6 +107,7 @@ const InvoiceForm = () => {
             />
             <InvoiceDatasheet
               value={values.lineitems}
+              userRate={values.rate}
               onChange={v => setFieldValue("lineitems", v)}
             />
             <div className="justify-right">

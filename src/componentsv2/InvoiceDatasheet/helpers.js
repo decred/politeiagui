@@ -72,6 +72,19 @@ export const generateBlankLineItem = () => ({
   subtotal: ""
 });
 
+export const getTotals = lineItems => {
+  return lineItems.reduce(
+    (acc, line) => (
+      {
+        expenseTotal: acc.expenseTotal + line.expenses,
+        laborTotal: acc.laborTotal + line.labor,
+        total: acc.total + line.subtotal
+      },
+      { expenseTotal: 0, laborTotal: 0, total: 0 }
+    )
+  );
+};
+
 export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
   const grid = [];
   const { grid: gridBody, expenseTotal, laborTotal, total } = lineItems.reduce(
@@ -135,28 +148,20 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
     { readOnly: true },
     {
       readOnly: true,
-      component: <span className={styles.totalLabel}>Total</span>,
+      component: <td className={styles.tableHeadCell}>Total</td>,
       forceComponent: true
     },
     {
       readOnly: true,
-      value: (
-        <span className={styles.totalLabel}>
-          {+fromMinutesToHours(laborTotal)}
-        </span>
-      )
+      value: +fromMinutesToHours(laborTotal)
     },
     {
       readOnly: true,
-      value: (
-        <span className={styles.totalLabel}>
-          {+fromUSDCentsToUSDUnits(expenseTotal)}
-        </span>
-      )
+      value: +fromUSDCentsToUSDUnits(expenseTotal)
     },
     {
       readOnly: true,
-      value: <span className="total-label">{total}</span>
+      value: total
     }
   ];
   return grid.concat(gridBody).concat([totalsLine]);
@@ -165,7 +170,7 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
 export const convertGridToLineItems = grid => {
   const copyGrid = grid.map(row => [...row]);
   return copyGrid.reduce((acc, rowValues, row) => {
-    // skip first and last rows
+    // skip last row
     if (row === copyGrid.length - 1) return acc;
 
     const lineItem = rowValues.reduce((acc, cell, col) => {
@@ -260,10 +265,9 @@ export const processExpenseColChange = (grid, { row, col, value }) => {
 export const processSubtotalColChange = (grid, userRate) => {
   // case where user rate changes and grid must recalculate subtotal
   for (const g of grid) {
-    const row = g[0].value;
+    const row = g[0].value - 1;
     const type = g[1].value;
     const value = g[6].value;
-
     if (type === 1) {
       grid = updateGridCell(grid, row, SUBTOTAL_COL, {
         value: value * userRate

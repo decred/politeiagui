@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { classNames } from "pi-ui";
+import { classNames, Link } from "pi-ui";
 import PropTypes from "prop-types";
 import ReactDataSheet from "react-datasheet";
 import dropRight from "lodash/dropRight";
@@ -13,6 +13,26 @@ import {
   createTableHeaders,
   SUBTOTAL_COL
 } from "./helpers";
+
+const TableButton = ({ onClick, disabled, children }) => {
+  return (
+    <Link
+      customComponent={props => (
+        <span
+          {...props}
+          className={classNames(
+            props.className,
+            styles.tableButton,
+            disabled && styles.tableButtonDisabled
+          )}
+          onClick={!disabled ? onClick : () => null}
+        >
+          {children}
+        </span>
+      )}
+    />
+  );
+};
 
 const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
   const [grid, setGrid] = useState([]);
@@ -45,55 +65,48 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
 
   const handleRemoveLastRow = e => {
     e.preventDefault();
-    if (grid.length > 3) {
+    if (grid.length > 2) {
       onChange(dropRight(value, 1));
     }
   };
 
   const headers = createTableHeaders();
 
-  const removeRowsIsDisabled = grid && grid.length <= 3;
+  const removeRowsIsDisabled = grid && grid.length <= 2;
   return (
     <div className={styles.wrapper}>
+      {!readOnly && (
+        <div className="justify-right margin-top-s margin-bottom-s">
+          <TableButton onClick={handleAddNewRow}>Add row</TableButton>
+          <TableButton
+            disabled={removeRowsIsDisabled}
+            onClick={handleRemoveLastRow}
+          >
+            Remove row
+          </TableButton>
+        </div>
+      )}
       <ReactDataSheet
         data={grid}
         valueRenderer={cell => cell.value}
         onContextMenu={(e, cell) => (cell.readOnly ? e.preventDefault() : null)}
         onCellsChanged={handleCellsChange}
-        sheetRenderer={props => (
-          <table className={classNames(props.className, styles.table)}>
-            <thead className={styles.tableHead}>
-              {headers.map(col => (
-                <th className={styles.tableHeadCell}>{col.value}</th>
-              ))}
-            </thead>
-            <tbody>{props.children}</tbody>
-          </table>
-        )}
+        sheetRenderer={props => {
+          return (
+            <table className={classNames(props.className, styles.table)}>
+              <thead className={styles.tableHead}>
+                {headers.map(col => (
+                  <th className={styles.tableHeadCell}>{col.value}</th>
+                ))}
+              </thead>
+              <tbody>{props.children}</tbody>
+            </table>
+          );
+        }}
         rowRenderer={props => (
           <tr className={styles.tableRow}>{props.children}</tr>
         )}
       />
-      {!readOnly && (
-        <div className="justify-left margin-top-s">
-          <button
-            className={classNames(styles.tableButton, styles.add)}
-            onClick={handleAddNewRow}
-          >
-            Add row
-          </button>
-          <button
-            className={classNames(
-              styles.tableButton,
-              styles.remove,
-              removeRowsIsDisabled && styles.disabled
-            )}
-            onClick={handleRemoveLastRow}
-          >
-            Remove row
-          </button>
-        </div>
-      )}
     </div>
   );
 };
