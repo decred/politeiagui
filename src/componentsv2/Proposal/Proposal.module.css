@@ -68,6 +68,7 @@ span.statusTag > span {
     white-space: nowrap;
     font-size: var(--font-size-small);
     color: var(--color-gray);
+    user-select: none;
 }
 
 @media screen and (max-width: 560px) {
