@@ -46,7 +46,6 @@ const getMinMaxYearAndMonth = () => {
     max: getInitialDateValue()
   };
 };
-
 const InvoiceForm = () => {
   return (
     <Formik

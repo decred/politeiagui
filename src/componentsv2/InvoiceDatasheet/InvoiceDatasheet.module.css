@@ -36,6 +36,17 @@ pre {
   border-bottom: 0.5px solid var(--color-gray-lightest) !important;
 }
 
+:global(input.data-editor) {
+  height: 100% !important;
+  width: 100% !important;
+  text-align: left !important;
+  font-size: var(--font-size-normal);
+}
+
+:global(span.value-viewer) {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
 /* .tableButton {
     line-height: 1.4rem !important;
     font-size: 0.8rem;    
@@ -85,6 +96,7 @@ pre {
   border-spacing: 0;
   border-collapse: collapse;
   width: 100%;
+  min-width: 100rem;
 }
 
 .tableHead {
@@ -119,7 +131,15 @@ span.tableButton {
   margin-left: 1rem;
 }
 
+
 span.tableButtonDisabled {
   cursor: not-allowed;
   color: var(--color-gray);
+}
+
+.datasheetWrapper {
+  width: 100%;
+  overflow-y: visible;
+  overflow-x: auto;
+  padding-bottom: 22rem;
 }

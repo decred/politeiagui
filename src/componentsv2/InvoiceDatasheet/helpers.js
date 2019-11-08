@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   fromHoursToMinutes,
   fromUSDCentsToUSDUnits,
@@ -7,6 +7,7 @@ import {
 } from "../../helpers";
 import SelectEditor from "./SelectEditor";
 import MultiLineEditor from "./MultiLineEditor";
+import { useModalEditor } from "./ModalEditor";
 import styles from "./InvoiceDatasheet.module.css";
 
 export const columnTypes = {
@@ -59,6 +60,15 @@ export const selectWrapper = options => props => (
   <SelectEditor {...{ ...props, options }} />
 );
 
+const ModalEditor = props => {
+  const [, , handleOpen] = useModalEditor();
+  useEffect(() => {
+    handleOpen("edit", props);
+  }, [handleOpen, props]);
+
+  return <span>editing...</span>;
+};
+
 export const multiLineWrapper = props => <MultiLineEditor {...{ ...props }} />;
 
 export const generateBlankLineItem = () => ({
@@ -71,19 +81,6 @@ export const generateBlankLineItem = () => ({
   expenses: "",
   subtotal: ""
 });
-
-export const getTotals = lineItems => {
-  return lineItems.reduce(
-    (acc, line) => (
-      {
-        expenseTotal: acc.expenseTotal + line.expenses,
-        laborTotal: acc.laborTotal + line.labor,
-        total: acc.total + line.subtotal
-      },
-      { expenseTotal: 0, laborTotal: 0, total: 0 }
-    )
-  );
-};
 
 export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
   const grid = [];
@@ -112,16 +109,17 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
         {
           readOnly,
           value: line.description,
-          dataEditor: multiLineWrapper,
+          dataEditor: ModalEditor,
           className: styles.multilineCellValue
         },
         {
           readOnly,
-          value: line.proposaltoken,
-          dataEditor: multiLineWrapper,
-          className: styles.multilineCellValue
+          value: line.proposaltoken
         },
-        { readOnly: isLabelReadonly, value: +fromMinutesToHours(line.labor) },
+        {
+          readOnly: isLabelReadonly,
+          value: +fromMinutesToHours(line.labor)
+        },
         {
           readOnly: isExpenseReadonly,
           value: +fromUSDCentsToUSDUnits(line.expenses)
@@ -148,7 +146,7 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
     { readOnly: true },
     {
       readOnly: true,
-      component: <td className={styles.tableHeadCell}>Total</td>,
+      value: "Total",
       forceComponent: true
     },
     {

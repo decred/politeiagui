@@ -4,7 +4,7 @@ import InvoiceForm from "src/componentsv2/InvoiceForm";
 
 const NewInvoiceForm = () => {
   return (
-    <Card className="container">
+    <Card className="container margin-bottom-l">
       <InvoiceForm />
     </Card>
   );

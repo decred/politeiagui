@@ -5,6 +5,8 @@ import ReactDataSheet from "react-datasheet";
 import dropRight from "lodash/dropRight";
 import "react-datasheet/lib/react-datasheet.css";
 import styles from "./InvoiceDatasheet.module.css";
+import { ModalEditorProvider } from "./ModalEditor";
+
 import {
   processCellsChange,
   convertLineItemsToGrid,
@@ -86,27 +88,34 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
           </TableButton>
         </div>
       )}
-      <ReactDataSheet
-        data={grid}
-        valueRenderer={cell => cell.value}
-        onContextMenu={(e, cell) => (cell.readOnly ? e.preventDefault() : null)}
-        onCellsChanged={handleCellsChange}
-        sheetRenderer={props => {
-          return (
-            <table className={classNames(props.className, styles.table)}>
-              <thead className={styles.tableHead}>
-                {headers.map(col => (
-                  <th className={styles.tableHeadCell}>{col.value}</th>
-                ))}
-              </thead>
-              <tbody>{props.children}</tbody>
-            </table>
-          );
-        }}
-        rowRenderer={props => (
-          <tr className={styles.tableRow}>{props.children}</tr>
-        )}
-      />
+
+      <ModalEditorProvider>
+        <div className={styles.datasheetWrapper}>
+          <ReactDataSheet
+            data={grid}
+            valueRenderer={cell => cell.value}
+            onContextMenu={(e, cell) =>
+              cell.readOnly ? e.preventDefault() : null
+            }
+            onCellsChanged={handleCellsChange}
+            sheetRenderer={props => {
+              return (
+                <table className={classNames(props.className, styles.table)}>
+                  <thead className={styles.tableHead}>
+                    {headers.map(col => (
+                      <th className={styles.tableHeadCell}>{col.value}</th>
+                    ))}
+                  </thead>
+                  <tbody>{props.children}</tbody>
+                </table>
+              );
+            }}
+            rowRenderer={props => (
+              <tr className={styles.tableRow}>{props.children}</tr>
+            )}
+          />
+        </div>
+      </ModalEditorProvider>
     </div>
   );
 };
