@@ -1,6 +1,11 @@
 import * as Yup from "yup";
 import { maxLengthMessage, minLengthMessage } from "src/utils/validation";
 
+export const reasonValidationSchema = () =>
+  Yup.object().shape({
+    reason: Yup.string().required("Required")
+  });
+
 export const changePasswordValidationSchema = ({ minpasswordlength }) =>
   Yup.object().shape({
     newPassword: Yup.string()
