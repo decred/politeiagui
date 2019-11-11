@@ -1,7 +1,4 @@
-import compose from "lodash/fp/compose";
-import get from "lodash/fp/get";
-import isEqual from "lodash/isEqual";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import * as act from "src/actions";
 import {
   MANAGE_USER_CLEAR_USER_PAYWALL,
@@ -13,7 +10,7 @@ import {
   MANAGE_USER_UNLOCK
 } from "src/constants";
 import usePolicy from "src/hooks/api/usePolicy";
-import { arg, or } from "src/lib/fp";
+import { or } from "src/lib/fp";
 import { useRedux } from "src/redux";
 import * as sel from "src/selectors";
 import {
@@ -21,20 +18,8 @@ import {
   changeUsernameValidationSchema
 } from "./validation";
 
-const mapStateToProps = {
-  userId: compose(
-    get(["match", "params", "userid"]),
-    arg(1)
-  ),
-  isAdmin: sel.isAdmin,
-  user: sel.user,
-  loading: sel.isApiRequestingUser,
-  loggedInAsUserId: sel.userid
-};
-
 const mapDispatchToProps = {
-  onFetchUser: act.onFetchUser,
-  onResetUser: act.onResetUser
+  onFetchUser: act.onFetchUser
 };
 
 function validateUUID(str) {
@@ -43,30 +28,37 @@ function validateUUID(str) {
 }
 
 export function useUserDetail(ownProps) {
-  const fromRedux = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
-  const { onFetchUser, user: userFromAppState, loading, userId } = fromRedux;
-  const [user, setUser] = useState(null);
-  const userFetched = !!user;
-  // Validate and set user id or throw an error in case it is invalid
-  useEffect(
-    function handleFetchUser() {
-      if (!validateUUID(userId)) {
-        throw new Error("Invalid user ID");
-      }
-      if (
-        !!userFromAppState &&
-        userFromAppState.id === userId &&
-        !isEqual(userFromAppState, user)
-      ) {
-        setUser(userFromAppState);
-      } else if (!loading && !user) {
-        onFetchUser(userId);
-      }
-    },
-    [user, userFromAppState, userId, onFetchUser, userFetched, loading]
+  const userid = ownProps.userid || ownProps.match.params.userid;
+  const userSelector = useMemo(() => sel.makeGetUserByID(userid), [userid]);
+  const mapStateToProps = useMemo(
+    () => ({
+      user: userSelector,
+      isAdmin: sel.currentUserIsAdmin,
+      loading: sel.isApiRequestingUser,
+      currentUserID: sel.currentUserID
+    }),
+    [userSelector]
+  );
+  const { user, isAdmin, loading, currentUserID, onFetchUser } = useRedux(
+    ownProps,
+    mapStateToProps,
+    mapDispatchToProps
   );
 
-  return { ...fromRedux, user };
+  useEffect(
+    function handleFetchUser() {
+      if (!validateUUID(userid)) {
+        throw new Error("Invalid user ID");
+      }
+      const userMissingData = user && !user.identities;
+      if (!loading && (!user || userMissingData)) {
+        onFetchUser(userid);
+      }
+    },
+    [user, userid, loading, onFetchUser]
+  );
+
+  return { user, isAdmin, loading, currentUserID };
 }
 
 const mapChangePasswordStateToProps = {
@@ -141,7 +133,7 @@ export function useChangeUsername(ownProps) {
 }
 
 const mapManageUserStateToProps = {
-  user: sel.user,
+  user: sel.currentUser,
   isApiRequestingUpdateUserKey: sel.isApiRequestingUpdateUserKey,
   isApiRequestingMarkAsPaid: state =>
     sel.isApiRequestingManageUser(state) &&

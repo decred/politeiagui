@@ -12,7 +12,7 @@ export default ({ proposalCreditPrice }) => {
     proposalPaywallPaymentConfirmations,
     proposalPaywallPaymentTxid,
     proposalPaywallPaymentAmount
-  } = useCredits({ userid: user.id });
+  } = useCredits({ userid: user.userid });
   const data = getTableContentFromPurchases(
     proposalCreditsPurchases,
     {

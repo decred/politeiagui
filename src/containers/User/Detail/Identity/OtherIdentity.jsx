@@ -8,21 +8,22 @@ import PublicKeyText from "./components/PublicKeyText";
 import PastKeysSection from "./components/PastKeysSection";
 import UserIdSection from "./components/UserIdSection";
 
-const OtherIdentity = ({ loadingKey, id: userID, identities }) => {
+const OtherIdentity = ({ loadingKey, user }) => {
+  const { userid: userID, identities } = user;
   const {
-    loggedInAsEmail,
+    currentUserEmail,
     userPubkey,
     keyMismatchAction
   } = useUserIdentity();
 
   useEffect(() => {
-    verifyUserPubkey(loggedInAsEmail, userPubkey, keyMismatchAction);
-  }, [loggedInAsEmail, userPubkey, keyMismatchAction]);
+    verifyUserPubkey(currentUserEmail, userPubkey, keyMismatchAction);
+  }, [currentUserEmail, userPubkey, keyMismatchAction]);
 
-  const activeIdentity = identities.filter(i => i.isactive)[0];
+  const activeIdentity = identities && identities.filter(i => i.isactive)[0];
   const pubkey = activeIdentity && activeIdentity.pubkey;
 
-  const pastIdentities = identities.filter(i => !i.isactive);
+  const pastIdentities = identities && identities.filter(i => !i.isactive);
 
   return loadingKey === PUB_KEY_STATUS_LOADING ? (
     <div className={styles.spinnerWrapper}>

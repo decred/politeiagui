@@ -10,7 +10,7 @@ export default ({ pastIdentities }) => {
     openShowAllModal,
     closeShowAllModal
   ] = useBooleanState(false);
-  return (
+  return pastIdentities ? (
     <>
       <Text
         color="grayDark"
@@ -41,6 +41,6 @@ export default ({ pastIdentities }) => {
         <IdentityList full identities={pastIdentities} />
       </Modal>
     </>
-  );
+  ) : null;
 }
 ;

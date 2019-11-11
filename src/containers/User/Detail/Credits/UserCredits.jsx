@@ -22,7 +22,7 @@ const Credits = () => {
     toggleProposalPaymentReceived,
     onPollProposalPaywallPayment,
     shouldPollPaywallPayment
-  } = useCredits({ userid: user.id });
+  } = useCredits({ userid: user.userid });
 
   const [
     showPaywallModal,

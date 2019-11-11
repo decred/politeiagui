@@ -1,21 +1,19 @@
 import { Message } from "pi-ui";
 import React from "react";
-import { useManageUser } from "../hooks.js";
 import { useCredits } from "./hooks.js";
 import AdminCredits from "./AdminCredits";
 import AdminUserCredits from "./AdminUserCredits";
 import UserCredits from "./UserCredits";
 
-const Credits = () => {
-  const { user } = useManageUser();
+const Credits = ({ user }) => {
   const {
-    loggedInAsUserId,
+    currentUserID,
     isAdmin
-  } = useCredits({ userid: user.id });
+  } = useCredits({ userid: user.userid });
 
-  const isUserPageOwner = user && loggedInAsUserId === user.id;
+  const isUserPageOwner = user && currentUserID === user.userid;
 
-  const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
+  const isAdminOrTheUser = user && (isAdmin || currentUserID === user.userid);
 
   return !isAdminOrTheUser ? (
     <Message kind="error">

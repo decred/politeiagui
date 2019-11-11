@@ -163,7 +163,6 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_LIKED_COMMENTS]: () => receive("commentslikes", state, action),
     [act.REQUEST_EDIT_USER]: () => request("editUser", state, action),
     [act.RECEIVE_EDIT_USER]: () => receive("editUser", state, action),
-    [act.RECEIVE_EDIT_USER]: () => receive("editUser", state, action),
     [act.RESET_EDIT_USER]: () => reset("editUser", state, action),
     [act.REQUEST_MANAGE_USER]: () => request("manageUser", state, action),
     [act.RECEIVE_MANAGE_USER]: () => onReceiveManageUser(state, action),

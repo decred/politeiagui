@@ -3,17 +3,15 @@ import useUserIdentity from "src/hooks/api/useUserIdentity";
 import OtherIdentity from "./OtherIdentity";
 import UserIdentity from "./UserIdentity";
 
-const Identity = (props) => {
+const Identity = ({ user, ...props }) => {
   const {
-    loggedInAsUserId,
-    user
+    currentUserID
   } = useUserIdentity();
-
-  const isUserPageOwner = user && loggedInAsUserId === user.id;
+  const isUserPageOwner = user && currentUserID === user.userid;
   return isUserPageOwner ? (
-    <UserIdentity {...props} />
+    <UserIdentity user={user} {...props} />
   ) : (
-    <OtherIdentity {...props} />
+    <OtherIdentity user={user} {...props} />
   );
 };
 

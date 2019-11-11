@@ -15,12 +15,13 @@ import PublicKeyText from "./components/PublicKeyText";
 import PastKeysSection from "./components/PastKeysSection";
 import UserIdSection from "./components/UserIdSection";
 
-const fetchKeys = loggedInAsEmail =>
-  pki.getKeys(loggedInAsEmail).then(keys => JSON.stringify(keys, null, 2));
+const fetchKeys = currentUserEmail =>
+  pki.getKeys(currentUserEmail).then(keys => JSON.stringify(keys, null, 2));
 
-const Identity = ({ history, loadingKey, id: userID, identities }) => {
+const Identity = ({ history, loadingKey, user }) => {
+  const { userid: userID, identities } = user;
   const {
-    loggedInAsEmail,
+    currentUserEmail,
     userPubkey,
     identityImportSuccess,
     onUpdateUserKey,
@@ -40,25 +41,25 @@ const Identity = ({ history, loadingKey, id: userID, identities }) => {
     closeImportIdentityModal
   ] = useBooleanState(false);
   useEffect(() => {
-    verifyUserPubkey(loggedInAsEmail, userPubkey, keyMismatchAction);
-  }, [loggedInAsEmail, userPubkey, keyMismatchAction]);
+    verifyUserPubkey(currentUserEmail, userPubkey, keyMismatchAction);
+  }, [currentUserEmail, userPubkey, keyMismatchAction]);
 
-  const activeIdentity = identities.filter(i => i.isactive)[0];
+  const activeIdentity = identities && identities.filter(i => i.isactive)[0];
   const pubkey = activeIdentity && activeIdentity.pubkey;
 
-  const pastIdentities = identities.filter(i => !i.isactive);
+  const pastIdentities = identities && identities.filter(i => !i.isactive);
 
   const updateKey = useCallback(async () => {
-    await onUpdateUserKey(loggedInAsEmail);
-  }, [onUpdateUserKey, loggedInAsEmail]);
+    await onUpdateUserKey(currentUserEmail);
+  }, [onUpdateUserKey, currentUserEmail]);
 
   const [keyData, setKeyData] = useState();
 
   useEffect(() => {
-    fetchKeys(loggedInAsEmail).then(keyData => {
+    fetchKeys(currentUserEmail).then(keyData => {
       setKeyData(keyData);
     });
-  }, [loggedInAsEmail]);
+  }, [currentUserEmail]);
 
   return loadingKey === PUB_KEY_STATUS_LOADING ? (
     <div className={styles.spinnerWrapper}>
@@ -137,7 +138,7 @@ const Identity = ({ history, loadingKey, id: userID, identities }) => {
         onClose={closeConfirmModal}
         onSubmit={updateKey}
         successTitle="Create new identity"
-        successMessage={`Your new identity has been requested, please check your email at ${loggedInAsEmail} to verify and activate it.
+        successMessage={`Your new identity has been requested, please check your email at ${currentUserEmail} to verify and activate it.
 
           The verification link needs to be open with the same browser that you used to generate this new identity.`}
       />

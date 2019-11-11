@@ -25,14 +25,14 @@ const Credits = () => {
     toggleProposalPaymentReceived,
     onPollProposalPaywallPayment,
     shouldPollPaywallPayment
-  } = useCredits({ userid: user.id });
+  } = useCredits({ userid: user.userid });
 
   const {
     onRescanUserCredits,
     errorRescan,
     isLoadingRescan,
     amountOfCreditsAddedOnRescan
-  } = useRescanUserCredits(user.id);
+  } = useRescanUserCredits(user.userid);
 
   const [
     showMarkAsPaidConfirmModal,
@@ -74,7 +74,7 @@ const Credits = () => {
   ]);
 
   const markAsPaid = reason =>
-    onManageUser(user.id, MANAGE_USER_CLEAR_USER_PAYWALL, reason);
+    onManageUser(user.userid, MANAGE_USER_CLEAR_USER_PAYWALL, reason);
 
   return isApiRequestingUserProposalCredits ? (
     <div className={styles.spinnerWrapper}>

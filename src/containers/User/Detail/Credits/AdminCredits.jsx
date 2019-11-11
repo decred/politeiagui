@@ -15,14 +15,14 @@ const Credits = () => {
   const { isPaid } = usePaywall();
   const {
     proposalCreditPrice
-  } = useCredits({ userid: user.id });
+  } = useCredits({ userid: user.userid });
 
   const {
     onRescanUserCredits,
     errorRescan,
     isLoadingRescan,
     amountOfCreditsAddedOnRescan
-  } = useRescanUserCredits(user.id);
+  } = useRescanUserCredits(user.userid);
 
   const [
     showMarkAsPaidConfirmModal,
@@ -31,7 +31,7 @@ const Credits = () => {
   ] = useBooleanState(false);
 
   const markAsPaid = reason =>
-    onManageUser(user.id, MANAGE_USER_CLEAR_USER_PAYWALL, reason);
+    onManageUser(user.userid, MANAGE_USER_CLEAR_USER_PAYWALL, reason);
 
   return (
     <Card className={classNames("container", "margin-bottom-m")}>

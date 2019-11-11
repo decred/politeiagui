@@ -16,7 +16,7 @@ export default ({ showPaywallModal, closePaywallModal, showProposalCreditsModal,
     toggleCreditsPaymentPolling,
     onPollProposalPaywallPayment,
     toggleProposalPaymentReceived
-  } = useCredits({ userid: user.id });
+  } = useCredits({ userid: user.userid });
 
   const onStartPollingPayment = () => {
     toggleCreditsPaymentPolling(true);

@@ -3,8 +3,8 @@ import * as sel from "src/selectors";
 import { useRedux } from "src/redux";
 
 const mapStateToProps = {
-  username: sel.loggedInAsUsername,
-  user: sel.apiMeResponse
+  username: sel.currentUserUsername,
+  user: sel.currentUser
 };
 
 const mapDispatchToProps = {

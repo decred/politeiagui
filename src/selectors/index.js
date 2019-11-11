@@ -5,6 +5,7 @@ export * from "./external_api";
 export * from "./form";
 export * from "./models/comments";
 export * from "./models/credits";
+export * from "./models/users";
 export * from "./models/proposals";
 export * from "./models/proposalVotes";
 
