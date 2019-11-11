@@ -182,6 +182,8 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
                   max={getQuorumInVotes(voteSummary)}
                   status={getStatusBarData(voteSummary)}
                   markerPosition={`${voteSummary.passpercentage}%`}
+                  markerTooltipText={`${voteSummary.passpercentage}% Yes votes required for approval`}
+                  markerTooltipClassName={styles.statusBarTooltip}
                   renderStatusInfoComponent={
                     <VotesCount
                       isVoteActive={isVoteActive}

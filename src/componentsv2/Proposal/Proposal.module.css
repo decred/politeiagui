@@ -32,6 +32,7 @@
 
 .voteCount {
     display: flex;
+    user-select: none;
 }
 
 .voteCountSearch {
@@ -58,6 +59,16 @@
 
 span.statusTag > span {
     overflow: visible;
+}
+
+.statusBarTooltip {
+    width: 225px;
+}
+
+.quorumTooltip {
+    white-space: nowrap;
+    font-size: var(--font-size-small);
+    color: var(--color-gray);
 }
 
 @media screen and (max-width: 560px) {
