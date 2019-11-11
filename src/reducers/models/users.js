@@ -44,10 +44,7 @@ const users = (state = DEFAULT_STATE, action) =>
         [act.RECEIVE_ME || act.RECEIVE_LOGIN]: () =>
           compose(
             set("currentUserID", action.payload.userid),
-            update(["byID", action.payload.userid], userData => ({
-              ...userData,
-              ...action.payload
-            }))
+            set(["byID", action.payload.userid], action.payload)
           )(state),
         [act.RECEIVE_EDIT_USER]: () =>
           set(

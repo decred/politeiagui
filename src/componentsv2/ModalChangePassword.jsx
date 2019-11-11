@@ -133,7 +133,7 @@ const ModalChangePassword = ({
       )}
       {success && (
         <>
-          {`Your password was successfully changed! `}
+          {"Your password was successfully changed!"}
           <div className="justify-right margin-top-m">
             <Button onClick={onClose}>Ok</Button>
           </div>

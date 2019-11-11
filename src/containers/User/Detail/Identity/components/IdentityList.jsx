@@ -1,7 +1,7 @@
 import { classNames, Text } from "pi-ui";
 import PropTypes from "prop-types";
 import React, { memo } from "react";
-import styles from "./Identity.module.css";
+import styles from "../Identity.module.css";
 
 const IdentityList = memo(({ identities }) => {
   return (

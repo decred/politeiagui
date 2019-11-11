@@ -55,5 +55,5 @@ export const currentUserPaywallAmount = createSelector(
 
 export const currentUserPreferences = createSelector(
   currentUser,
-  user => emailNotificationsToPreferences(user.emailnotifications)
+  user => user && emailNotificationsToPreferences(user.emailnotifications)
 );
