@@ -17,3 +17,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  .erroredCell {
+    background: var(--color-orange-light) !important;
+  }

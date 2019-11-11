@@ -1,11 +1,20 @@
 import React from "react";
-import { Tooltip } from "pi-ui";
+import { Tooltip, classNames } from "pi-ui";
 import styles from "./CellRenderer.module.css";
 
-const CellRenderer = ({ value, cell: { error } }) => {
+const CellRenderer = props => {
+  const {
+    cell: { error }
+  } = props;
   return (
-    <>
-      <div className={styles.value}>{value}</div>
+    <td
+      className={classNames(props.className, error && styles.erroredCell)}
+      onMouseDown={props.onMouseDown}
+      onMouseOver={props.onMouseOver}
+      onDoubleClick={props.onDoubleClick}
+      onContextMenu={props.onContextMenu}
+    >
+      {props.children}
       {error && (
         <Tooltip
           className={styles.errorTooltip}
@@ -14,7 +23,7 @@ const CellRenderer = ({ value, cell: { error } }) => {
           content={error}
         />
       )}
-    </>
+    </td>
   );
 };
 

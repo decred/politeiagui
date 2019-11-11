@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { classNames, Link } from "pi-ui";
+import { classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import ReactDataSheet from "react-datasheet";
 import dropRight from "lodash/dropRight";
@@ -7,6 +7,7 @@ import "react-datasheet/lib/react-datasheet.css";
 import styles from "./InvoiceDatasheet.module.css";
 import { ModalEditorProvider } from "./components/ModalEditor";
 import CellRenderer from "./components/CellRenderer";
+import TableButton from "./components/TableButton";
 
 import {
   processCellsChange,
@@ -16,26 +17,6 @@ import {
   createTableHeaders,
   SUBTOTAL_COL
 } from "./helpers";
-
-const TableButton = ({ onClick, disabled, children }) => {
-  return (
-    <Link
-      customComponent={props => (
-        <span
-          {...props}
-          className={classNames(
-            props.className,
-            styles.tableButton,
-            disabled && styles.tableButtonDisabled
-          )}
-          onClick={!disabled ? onClick : () => null}
-        >
-          {children}
-        </span>
-      )}
-    />
-  );
-};
 
 const InvoiceDatasheet = ({ value, onChange, readOnly, userRate, errors }) => {
   const [grid, setGrid] = useState([]);
@@ -102,10 +83,17 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate, errors }) => {
             sheetRenderer={props => {
               return (
                 <table className={classNames(props.className, styles.table)}>
-                  <thead className={styles.tableHead}>
-                    {headers.map(col => (
-                      <th className={styles.tableHeadCell}>{col.value}</th>
-                    ))}
+                  <thead>
+                    <tr className={styles.tableHead}>
+                      {headers.map((col, idx) => (
+                        <th
+                          key={`header-${idx}`}
+                          className={styles.tableHeadCell}
+                        >
+                          {col.value}
+                        </th>
+                      ))}
+                    </tr>
                   </thead>
                   <tbody>{props.children}</tbody>
                 </table>
@@ -114,7 +102,7 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate, errors }) => {
             rowRenderer={props => (
               <tr className={styles.tableRow}>{props.children}</tr>
             )}
-            valueViewer={CellRenderer}
+            cellRenderer={CellRenderer}
           />
         </div>
       </ModalEditorProvider>

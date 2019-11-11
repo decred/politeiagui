@@ -4,7 +4,6 @@ import {
   fromMinutesToHours,
   fromUSDUnitsToUSDCents
 } from "../../helpers";
-import { classNames } from "pi-ui";
 import { ModalEditorWrapper, selectWrapper } from "./wrappers";
 
 import styles from "./InvoiceDatasheet.module.css";
@@ -22,42 +21,43 @@ export const columnTypes = {
 
 export const { LABOR_COL, EXP_COL, SUBTOTAL_COL } = columnTypes;
 
-const getDropdownOptionsByColumnType = colType => {
-  const domainOptions = [
-    "Development",
-    "Marketing",
-    "Design",
-    "Research",
-    "Documentation",
-    "Community Management"
-  ];
-  const mapColTypeToOptions = {
-    [columnTypes.TYPE_COL]: [
-      {
-        label: "Labor",
-        value: 1
-      },
-      {
-        label: "Expense",
-        value: 2
-      },
-      {
-        label: "Misc",
-        value: 3
-      }
-    ],
-    [columnTypes.DOMAIN_COL]: domainOptions.map(op => ({
-      value: op,
-      label: op
-    }))
-  };
+const domainOptions = [
+  "Development",
+  "Marketing",
+  "Design",
+  "Research",
+  "Documentation",
+  "Community Management"
+];
 
-  return mapColTypeToOptions[colType];
-};
+const getDomainOptions = () =>
+  domainOptions.map(op => ({
+    value: op,
+    label: op
+  }));
+
+const getTypeOptions = () => [
+  {
+    label: "Labor",
+    value: 1
+  },
+  {
+    label: "Expense",
+    value: 2
+  },
+  {
+    label: "Misc",
+    value: 3
+  }
+];
+
+const defaultDomainOption = getDomainOptions()[0].value;
+
+const defaultTypeOption = getTypeOptions()[0].value;
 
 export const generateBlankLineItem = () => ({
-  type: 1,
-  domain: "",
+  type: defaultTypeOption,
+  domain: defaultDomainOption,
   subdomain: "",
   description: "",
   proposaltoken: "",
@@ -80,52 +80,40 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true, errors) => {
           readOnly,
           value: line.type,
           error: rowErrors.type,
-          dataEditor: selectWrapper(
-            getDropdownOptionsByColumnType(columnTypes.TYPE_COL)
-          )
+          dataEditor: selectWrapper(getTypeOptions())
         },
         {
           readOnly,
           value: line.domain,
-          error: rowErrors.domain,
-          dataEditor: selectWrapper(
-            getDropdownOptionsByColumnType(columnTypes.DOMAIN_COL)
-          ),
-          className: classNames(rowErrors.domain && styles.erroredCell)
+          error: false,
+          dataEditor: selectWrapper(getDomainOptions())
         },
         {
           readOnly,
           value: line.subdomain,
-          error: rowErrors.subdomain,
-          className: classNames(rowErrors.subdomain && styles.erroredCell)
+          error: rowErrors.subdomain
         },
         {
           readOnly,
           value: line.description,
           dataEditor: ModalEditorWrapper,
           error: rowErrors.description,
-          className: classNames(
-            styles.multilineCellValue,
-            rowErrors.description && styles.erroredCell
-          )
+          className: styles.multilineCellValue
         },
         {
           readOnly,
           value: line.proposaltoken,
-          error: rowErrors && rowErrors.proposaltoken,
-          className: classNames(rowErrors.proposaltoken && styles.erroredCell)
+          error: rowErrors && rowErrors.proposaltoken
         },
         {
           readOnly: isLabelReadonly,
           value: +fromMinutesToHours(line.labor),
-          error: rowErrors && rowErrors.labor,
-          className: classNames(rowErrors.labor && styles.erroredCell)
+          error: rowErrors && rowErrors.labor
         },
         {
           readOnly: isExpenseReadonly,
           value: +fromUSDCentsToUSDUnits(line.expenses),
-          error: rowErrors.expenses,
-          className: classNames(rowErrors.expenses && styles.erroredCell)
+          error: rowErrors.expenses
         },
         {
           readOnly: true,
