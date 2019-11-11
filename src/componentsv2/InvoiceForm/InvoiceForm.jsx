@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { BoxTextInput, Button, Spinner, Text } from "pi-ui";
 import { Formik } from "formik";
 import InvoiceDatasheet, {
@@ -6,10 +6,13 @@ import InvoiceDatasheet, {
 } from "src/componentsv2/InvoiceDatasheet";
 import MonthPickerField from "../MonthPicker/MonthPickerField";
 import useExchangeRate from "src/hooks/api/useExchangeRate";
+import usePolicy from "src/hooks/api/usePolicy";
 import { getCurrentMonth, getCurrentYear } from "src/helpers";
+import { invoiceValidationSchema, improveLineItemErrors } from "./validation";
 
 const ExchangeRate = ({ month, year, setFieldValue }) => {
   const [rate, loading] = useExchangeRate(month, year);
+
   useEffect(() => {
     setFieldValue(rate);
   }, [rate, setFieldValue]);
@@ -47,6 +50,12 @@ const getMinMaxYearAndMonth = () => {
   };
 };
 const InvoiceForm = () => {
+  const { policy } = usePolicy();
+
+  const validationSchema = useMemo(() => invoiceValidationSchema(policy), [
+    policy
+  ]);
+
   return (
     <Formik
       onSubmit={values => console.log("submit", values)}
@@ -59,8 +68,19 @@ const InvoiceForm = () => {
         date: getInitialDateValue(),
         lineitems: [generateBlankLineItem()]
       }}
+      validationSchema={validationSchema}
     >
-      {({ handleChange, values, handleSubmit, errors, setFieldValue }) => {
+      {({
+        handleChange,
+        handleBlur,
+        values,
+        handleSubmit,
+        errors,
+        setFieldValue,
+        isValid,
+        touched
+      }) => {
+        const lineItemErrors = improveLineItemErrors(errors.lineitems);
         return (
           <form onSubmit={handleSubmit}>
             <div className="justify-space-between">
@@ -77,7 +97,8 @@ const InvoiceForm = () => {
               tabIndex={1}
               value={values.name}
               onChange={handleChange}
-              error={errors.name}
+              onBlur={handleBlur}
+              error={touched.name && errors.name}
             />
             <BoxTextInput
               placeholder="Contractor location"
@@ -85,7 +106,8 @@ const InvoiceForm = () => {
               tabIndex={1}
               value={values.location}
               onChange={handleChange}
-              error={errors.location}
+              onBlur={handleBlur}
+              error={touched.location && errors.location}
             />
             <BoxTextInput
               placeholder="Contractor contact"
@@ -93,7 +115,8 @@ const InvoiceForm = () => {
               tabIndex={1}
               value={values.contact}
               onChange={handleChange}
-              error={errors.contact}
+              onBlur={handleBlur}
+              error={touched.contact && errors.contact}
             />
             <BoxTextInput
               placeholder="Contractor rate"
@@ -102,15 +125,19 @@ const InvoiceForm = () => {
               tabIndex={1}
               value={values.rate}
               onChange={handleChange}
-              error={errors.rate}
+              onBlur={handleBlur}
+              error={touched.rate && errors.rate}
             />
             <InvoiceDatasheet
               value={values.lineitems}
               userRate={values.rate}
+              errors={lineItemErrors}
               onChange={v => setFieldValue("lineitems", v)}
             />
             <div className="justify-right">
-              <Button type="submit">Submit</Button>
+              <Button kind={isValid ? "primary" : "disabled"} type="submit">
+                Submit
+              </Button>
             </div>
           </form>
         );

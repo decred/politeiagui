@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from "react";
 import { Modal, Button } from "pi-ui";
-import ModalProvider from "../ModalProvider";
-import FormWrapper from "../FormWrapper";
+import ModalProvider from "src/componentsv2/ModalProvider";
+import FormWrapper from "src/componentsv2/FormWrapper";
 import styles from "./ModalEditor.module.css";
 
 export const modalEditorContext = createContext();

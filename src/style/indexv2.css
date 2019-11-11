@@ -209,9 +209,13 @@
 }
 
 /* Cursor helpers */
-
 .cursor-not-allowed {
     cursor: not-allowed;
+}
+
+/* Visibility helpers */
+.display-none {
+    display: none;
 }
 
 

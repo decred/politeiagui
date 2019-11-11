@@ -31,6 +31,7 @@ pre {
 }
 
 :global(.cell) {
+  position: relative;
   border: 0 !important;
   border-left: 0.5px solid var(--color-gray-lightest) !important;
   border-bottom: 0.5px solid var(--color-gray-lightest) !important;
@@ -47,11 +48,7 @@ pre {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
-/* .tableButton {
-    line-height: 1.4rem !important;
-    font-size: 0.8rem;    
-    max-height: 1.4rem;
-} */
+
 
 .tableButton.add {
     background: #164623;
@@ -142,4 +139,8 @@ span.tableButtonDisabled {
   overflow-y: visible;
   overflow-x: auto;
   padding-bottom: 22rem;
+}
+
+.erroredCell {
+  background: var(--color-orange-light) !important;
 }

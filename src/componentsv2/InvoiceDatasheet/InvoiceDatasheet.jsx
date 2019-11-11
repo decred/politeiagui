@@ -5,7 +5,8 @@ import ReactDataSheet from "react-datasheet";
 import dropRight from "lodash/dropRight";
 import "react-datasheet/lib/react-datasheet.css";
 import styles from "./InvoiceDatasheet.module.css";
-import { ModalEditorProvider } from "./ModalEditor";
+import { ModalEditorProvider } from "./components/ModalEditor";
+import CellRenderer from "./components/CellRenderer";
 
 import {
   processCellsChange,
@@ -36,7 +37,7 @@ const TableButton = ({ onClick, disabled, children }) => {
   );
 };
 
-const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
+const InvoiceDatasheet = ({ value, onChange, readOnly, userRate, errors }) => {
   const [grid, setGrid] = useState([]);
   const [localUserRate, setLocalUserRate] = useState(userRate);
 
@@ -59,10 +60,10 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
 
   useEffect(
     function updateGridOnValueChange() {
-      const grid = convertLineItemsToGrid(value, readOnly);
+      const grid = convertLineItemsToGrid(value, readOnly, errors);
       setGrid(grid);
     },
-    [value, readOnly]
+    [value, readOnly, errors]
   );
 
   const handleRemoveLastRow = e => {
@@ -113,6 +114,7 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
             rowRenderer={props => (
               <tr className={styles.tableRow}>{props.children}</tr>
             )}
+            valueViewer={CellRenderer}
           />
         </div>
       </ModalEditorProvider>

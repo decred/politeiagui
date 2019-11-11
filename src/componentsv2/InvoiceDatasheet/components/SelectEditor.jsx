@@ -1,5 +1,5 @@
 import React from "react";
-import MySelect from "../Select";
+import Select from "src/componentsv2/Select";
 
 const customStyles = {
   container: provided => ({
@@ -18,7 +18,7 @@ const SelectEditor = ({ value, options, onCommit }) => {
   };
   const getValueObj = value => options.find(op => op.value === value);
   return (
-    <MySelect
+    <Select
       options={options}
       value={getValueObj(value)}
       onChange={handleChange}

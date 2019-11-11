@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
 import {
   fromHoursToMinutes,
   fromUSDCentsToUSDUnits,
   fromMinutesToHours,
   fromUSDUnitsToUSDCents
 } from "../../helpers";
-import SelectEditor from "./SelectEditor";
-import MultiLineEditor from "./MultiLineEditor";
-import { useModalEditor } from "./ModalEditor";
+import { classNames } from "pi-ui";
+import { ModalEditorWrapper, selectWrapper } from "./wrappers";
+
 import styles from "./InvoiceDatasheet.module.css";
 
 export const columnTypes = {
@@ -56,21 +55,6 @@ const getDropdownOptionsByColumnType = colType => {
   return mapColTypeToOptions[colType];
 };
 
-export const selectWrapper = options => props => (
-  <SelectEditor {...{ ...props, options }} />
-);
-
-const ModalEditor = props => {
-  const [, , handleOpen] = useModalEditor();
-  useEffect(() => {
-    handleOpen("edit", props);
-  }, [handleOpen, props]);
-
-  return <span>editing...</span>;
-};
-
-export const multiLineWrapper = props => <MultiLineEditor {...{ ...props }} />;
-
 export const generateBlankLineItem = () => ({
   type: 1,
   domain: "",
@@ -82,18 +66,20 @@ export const generateBlankLineItem = () => ({
   subtotal: ""
 });
 
-export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
+export const convertLineItemsToGrid = (lineItems, readOnly = true, errors) => {
   const grid = [];
   const { grid: gridBody, expenseTotal, laborTotal, total } = lineItems.reduce(
     (acc, line, idx) => {
       const isLabelReadonly =
         line.type === 2 ? true : line.type === 3 ? true : readOnly;
       const isExpenseReadonly = line.type === 1 ? true : readOnly;
+      const rowErrors = (errors && errors[idx]) || {};
       const newLine = [
         { readOnly: true, value: idx + 1 },
         {
           readOnly,
           value: line.type,
+          error: rowErrors.type,
           dataEditor: selectWrapper(
             getDropdownOptionsByColumnType(columnTypes.TYPE_COL)
           )
@@ -101,28 +87,45 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
         {
           readOnly,
           value: line.domain,
+          error: rowErrors.domain,
           dataEditor: selectWrapper(
             getDropdownOptionsByColumnType(columnTypes.DOMAIN_COL)
-          )
+          ),
+          className: classNames(rowErrors.domain && styles.erroredCell)
         },
-        { readOnly, value: line.subdomain },
+        {
+          readOnly,
+          value: line.subdomain,
+          error: rowErrors.subdomain,
+          className: classNames(rowErrors.subdomain && styles.erroredCell)
+        },
         {
           readOnly,
           value: line.description,
-          dataEditor: ModalEditor,
-          className: styles.multilineCellValue
+          dataEditor: ModalEditorWrapper,
+          error: rowErrors.description,
+          className: classNames(
+            styles.multilineCellValue,
+            rowErrors.description && styles.erroredCell
+          )
         },
         {
           readOnly,
-          value: line.proposaltoken
+          value: line.proposaltoken,
+          error: rowErrors && rowErrors.proposaltoken,
+          className: classNames(rowErrors.proposaltoken && styles.erroredCell)
         },
         {
           readOnly: isLabelReadonly,
-          value: +fromMinutesToHours(line.labor)
+          value: +fromMinutesToHours(line.labor),
+          error: rowErrors && rowErrors.labor,
+          className: classNames(rowErrors.labor && styles.erroredCell)
         },
         {
           readOnly: isExpenseReadonly,
-          value: +fromUSDCentsToUSDUnits(line.expenses)
+          value: +fromUSDCentsToUSDUnits(line.expenses),
+          error: rowErrors.expenses,
+          className: classNames(rowErrors.expenses && styles.erroredCell)
         },
         {
           readOnly: true,
