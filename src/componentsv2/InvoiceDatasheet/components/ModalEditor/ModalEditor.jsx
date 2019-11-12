@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import { Modal, Button } from "pi-ui";
 import ModalProvider from "src/componentsv2/ModalProvider";
 import FormWrapper from "src/componentsv2/FormWrapper";
@@ -11,8 +11,9 @@ export const ModalEditorConsumer = modalEditorContext.Consumer;
 export const useModalEditor = () => useContext(modalEditorContext);
 
 export const ModalEditorProvider = ({ children }) => {
+  const modal = useMemo(() => <ModalEditor />, []);
   return (
-    <ModalProvider context={modalEditorContext} modal={<ModalEditor />}>
+    <ModalProvider context={modalEditorContext} modal={modal}>
       {children}
     </ModalProvider>
   );

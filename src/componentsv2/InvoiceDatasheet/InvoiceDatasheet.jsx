@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import ReactDataSheet from "react-datasheet";
@@ -18,26 +18,43 @@ import {
   SUBTOTAL_COL
 } from "./helpers";
 
-const InvoiceDatasheet = ({ value, onChange, readOnly, userRate, errors }) => {
+const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
+  value,
+  onChange,
+  readOnly,
+  userRate,
+  errors
+}) {
   const [grid, setGrid] = useState([]);
-  const [localUserRate, setLocalUserRate] = useState(userRate);
+  const [currentRate, setCurrentRate] = useState(userRate || 0);
 
-  const handleCellsChange = changes => {
-    const { grid: newGrid } = processCellsChange(grid, changes, userRate);
-    const lineItems = convertGridToLineItems(newGrid);
-    onChange(lineItems);
-  };
+  const handleCellsChange = useCallback(
+    changes => {
+      const { grid: newGrid } = processCellsChange(grid, changes, userRate);
+      const lineItems = convertGridToLineItems(newGrid);
+      onChange(lineItems);
+    },
+    [userRate, onChange, grid]
+  );
 
-  if (localUserRate !== userRate) {
-    setLocalUserRate(userRate);
-    handleCellsChange([{ col: SUBTOTAL_COL }]);
-  }
+  useEffect(
+    function updateSubTotalOnUserRateChange() {
+      if (!!userRate && userRate !== currentRate) {
+        setCurrentRate(userRate);
+        handleCellsChange([{ col: SUBTOTAL_COL }]);
+      }
+    },
+    [userRate, handleCellsChange, currentRate, setCurrentRate]
+  );
 
-  const handleAddNewRow = e => {
-    e.preventDefault();
-    const newValue = value.concat([generateBlankLineItem()]);
-    onChange(newValue);
-  };
+  const handleAddNewRow = useCallback(
+    e => {
+      e.preventDefault();
+      const newValue = value.concat([generateBlankLineItem()]);
+      onChange(newValue);
+    },
+    [onChange]
+  );
 
   useEffect(
     function updateGridOnValueChange() {
@@ -47,16 +64,52 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate, errors }) => {
     [value, readOnly, errors]
   );
 
-  const handleRemoveLastRow = e => {
-    e.preventDefault();
-    if (grid.length > 2) {
-      onChange(dropRight(value, 1));
-    }
-  };
+  const handleRemoveLastRow = useCallback(
+    e => {
+      e.preventDefault();
+      if (grid.length > 2) {
+        onChange(dropRight(value, 1));
+      }
+    },
+    [onChange]
+  );
 
-  const headers = createTableHeaders();
+  const headers = useMemo(() => createTableHeaders(), []);
+
+  const onContextMenu = useCallback(
+    (e, cell) => (cell.readOnly ? e.preventDefault() : null),
+    []
+  );
+
+  const valueRenderer = useCallback(cell => cell.value, []);
+
+  const sheetRenderer = useCallback(
+    props => {
+      return (
+        <table className={classNames(props.className, styles.table)}>
+          <thead>
+            <tr className={styles.tableHead}>
+              {headers.map((col, idx) => (
+                <th key={`header-${idx}`} className={styles.tableHeadCell}>
+                  {col.value}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>{props.children}</tbody>
+        </table>
+      );
+    },
+    [headers]
+  );
+
+  const rowRenderer = useCallback(
+    props => <tr className={styles.tableRow}>{props.children}</tr>,
+    []
+  );
 
   const removeRowsIsDisabled = grid && grid.length <= 2;
+
   return (
     <div className={styles.wrapper}>
       {!readOnly && (
@@ -70,45 +123,22 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate, errors }) => {
           </TableButton>
         </div>
       )}
-
       <ModalEditorProvider>
         <div className={styles.datasheetWrapper}>
           <ReactDataSheet
             data={grid}
-            valueRenderer={cell => cell.value}
-            onContextMenu={(e, cell) =>
-              cell.readOnly ? e.preventDefault() : null
-            }
+            valueRenderer={valueRenderer}
+            onContextMenu={onContextMenu}
             onCellsChanged={handleCellsChange}
-            sheetRenderer={props => {
-              return (
-                <table className={classNames(props.className, styles.table)}>
-                  <thead>
-                    <tr className={styles.tableHead}>
-                      {headers.map((col, idx) => (
-                        <th
-                          key={`header-${idx}`}
-                          className={styles.tableHeadCell}
-                        >
-                          {col.value}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>{props.children}</tbody>
-                </table>
-              );
-            }}
-            rowRenderer={props => (
-              <tr className={styles.tableRow}>{props.children}</tr>
-            )}
+            sheetRenderer={sheetRenderer}
+            rowRenderer={rowRenderer}
             cellRenderer={CellRenderer}
           />
         </div>
       </ModalEditorProvider>
     </div>
   );
-};
+});
 
 InvoiceDatasheet.propTypes = {
   value: PropTypes.array.isRequired,

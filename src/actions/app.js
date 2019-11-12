@@ -54,28 +54,26 @@ export const onSetReplyParent = (
     dispatch(reset("form/reply"))
   ]);
 
-export const onSaveNewInvoice = (
-  {
-    month,
-    year,
-    name,
-    location,
-    contact,
-    rate,
-    address,
-    lineitems,
-    exchangerate,
-    files
-  },
-  _,
-  props
-) => (dispatch, getState) => {
-  // const lineItems = convertGridToLineItems(datasheet);
+export const onSaveNewInvoice = ({
+  month,
+  year,
+  name,
+  location,
+  contact,
+  rate,
+  address,
+  lineitems,
+  exchangerate,
+  files
+}) => (dispatch, getState) => {
+  const email = sel.loggedInAsEmail(getState());
+  const id = sel.userid(getState());
+  const username = sel.loggedInAsUsername(getState());
   dispatch(
     onSubmitInvoice(
-      props.loggedInAsEmail,
-      props.userid,
-      props.username,
+      email,
+      id,
+      username,
       +month,
       +year,
       exchangerate,
