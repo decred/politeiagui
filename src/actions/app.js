@@ -69,7 +69,7 @@ export const onSaveNewInvoice = ({
   const email = sel.loggedInAsEmail(getState());
   const id = sel.userid(getState());
   const username = sel.loggedInAsUsername(getState());
-  dispatch(
+  return dispatch(
     onSubmitInvoice(
       email,
       id,
