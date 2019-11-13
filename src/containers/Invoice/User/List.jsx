@@ -1,6 +1,9 @@
 import React from "react";
+import { useUserInvoices } from "./hooks";
 
 const ListUserInvoices = ({ TopBanner, PageDetails, Sidebar, Main }) => {
+  const { loading, invoices } = useUserInvoices();
+  console.log(invoices);
   return (
     <>
       <TopBanner>

@@ -307,13 +307,14 @@ export const onFetchUserProposals = (userid, token) => dispatch => {
     });
 };
 
-export const onFetchUserInvoices = (userid, token) => dispatch => {
-  dispatch(act.REQUEST_USER_INVOICES());
+export const onFetchUserInvoices = userid => dispatch => {
+  dispatch(act.REQUEST_USER_INVOICES({ userid }));
   return api
-    .userInvoices(userid, token)
+    .userInvoices(userid)
     .then(response => dispatch(act.RECEIVE_USER_INVOICES(response)))
     .catch(error => {
       dispatch(act.RECEIVE_USER_INVOICES(null, error));
+      throw error;
     });
 };
 export const onFetchAdminUserInvoices = userid => dispatch => {
