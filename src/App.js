@@ -11,6 +11,7 @@ import Onboard from "src/containers/User/Onboard";
 import StaticContentProvider from "src/containers/StaticContent";
 import "pi-ui/dist/index.css";
 import "./style/indexv2.css";
+import "./validation/setupFormValidators";
 
 const App = () => {
   useTheme(defaultLightTheme);

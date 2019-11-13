@@ -1,12 +1,11 @@
 .thumbnailGrid {
     display: flex;
     flex-flow: row wrap;
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    list-style: none;
 }
 
-.fileError {
-    border: 1px solid #ed6d47;
-}
 
 .fileErrorText {
     color: #ed6d47;
@@ -75,4 +74,17 @@
     font-size: 1.3rem;
     text-align: center;
     margin-top: 30px;
+}
+
+.erroredImage {
+    border: 2px solid var(--color-orange-light);
+}
+
+.fileError {
+    font-size: var(--font-size-small);
+    color: var(--color-orange-light);
+}
+
+.thumbItemWrapper {
+    margin-right: 1rem;
 }

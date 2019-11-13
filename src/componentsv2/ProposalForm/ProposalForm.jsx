@@ -60,7 +60,7 @@ const ProposalForm = React.memo(function ProposalForm({
   );
 
   const filesInput = useMemo(
-    () => <AttachFileInput onChange={handleFilesChange} type="button" />,
+    () => <AttachFileInput small onChange={handleFilesChange} type="button" />,
     [handleFilesChange]
   );
 
@@ -123,17 +123,16 @@ const ProposalForm = React.memo(function ProposalForm({
           <SubmitButton />
         </Row>
       ) : (
-          <>
-            <Row topMarginSize="s" justify="right">
-              <DraftSaver submitSuccess={submitSuccess} />
-              <SubmitButton />
-            </Row>
-            <Row topMarginSize="s" justify="right">
-              <FormatHelpButton />
-            </Row>
-          </>
-        )}
-
+        <>
+          <Row topMarginSize="s" justify="right">
+            <DraftSaver submitSuccess={submitSuccess} />
+            <SubmitButton />
+          </Row>
+          <Row topMarginSize="s" justify="right">
+            <FormatHelpButton />
+          </Row>
+        </>
+      )}
     </form>
   );
 });

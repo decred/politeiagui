@@ -27,10 +27,12 @@ const ModalEditor = ({ value, options, onCommit, onRevert, ...props }) => {
     resetForm();
     props.onClose();
   }
+
   function handleCancel() {
     onRevert();
     props.onClose();
   }
+
   function onKeyDown(keyEvent) {
     if (
       KEYS_TO_STOP_PROPAGATION.find(
@@ -40,6 +42,7 @@ const ModalEditor = ({ value, options, onCommit, onRevert, ...props }) => {
       keyEvent.stopPropagation();
     }
   }
+
   return (
     <>
       <Modal {...props} title="Edit description">
@@ -48,25 +51,27 @@ const ModalEditor = ({ value, options, onCommit, onRevert, ...props }) => {
           enableReinitialize
           initialValues={{ text: value }}
         >
-          {({ Form, Actions, values, handleSubmit, handleChange }) => (
-            <Form>
-              <textarea
-                name="text"
-                onKeyDown={onKeyDown}
-                className={styles.textarea}
-                onChange={handleChange}
-                value={values.text}
-              />
-              <Actions>
-                <Button kind="secondary" type="button" onClick={handleCancel}>
-                  Cancel
-                </Button>
-                <Button type="button" onClick={handleSubmit}>
-                  Save
-                </Button>
-              </Actions>
-            </Form>
-          )}
+          {({ Form, Actions, values, handleSubmit, handleChange }) => {
+            return (
+              <Form>
+                <textarea
+                  name="text"
+                  onKeyDown={onKeyDown}
+                  className={styles.textarea}
+                  onChange={handleChange}
+                  value={values.text}
+                />
+                <Actions>
+                  <Button kind="secondary" type="button" onClick={handleCancel}>
+                    Cancel
+                  </Button>
+                  <Button type="button" onClick={handleSubmit}>
+                    Save
+                  </Button>
+                </Actions>
+              </Form>
+            );
+          }}
         </FormWrapper>
       </Modal>
     </>

@@ -1,4 +1,5 @@
 import * as stringUtils from "./strings";
+
 /**
  * Converts an array of chars into a Regex Expression
  * @param {Array} supportedChars

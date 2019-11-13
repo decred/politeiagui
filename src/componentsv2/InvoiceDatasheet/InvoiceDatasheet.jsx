@@ -53,7 +53,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
       const newValue = value.concat([generateBlankLineItem()]);
       onChange(newValue);
     },
-    [onChange]
+    [onChange, value]
   );
 
   useEffect(
@@ -71,7 +71,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
         onChange(dropRight(value, 1));
       }
     },
-    [onChange]
+    [onChange, value, grid.length]
   );
 
   const headers = useMemo(() => createTableHeaders(), []);

@@ -6,10 +6,14 @@ import InvoiceDatasheet, {
   generateBlankLineItem
 } from "src/componentsv2/InvoiceDatasheet";
 import MonthPickerField from "../MonthPicker/MonthPickerField";
+import AttachFileInput from "src/componentsv2/AttachFileInput";
 import usePolicy from "src/hooks/api/usePolicy";
 import { getInitialDateValue, getMinMaxYearAndMonth } from "./helpers";
 import { invoiceValidationSchema, improveLineItemErrors } from "./validation";
+import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
 import ExchangeRateField from "./ExchangeRateField";
+
+const FileErrors = ({ errors }) => {};
 
 const InvoiceForm = React.memo(function InvoiceForm({
   values,
@@ -31,16 +35,35 @@ const InvoiceForm = React.memo(function InvoiceForm({
       Submit
     </Button>
   );
+
   const handleChangeInvoiceDatasheet = useCallback(
     value => {
       setFieldValue("lineitems", value);
     },
     [setFieldValue]
   );
+
+  const handleFilesChange = useCallback(
+    v => {
+      const files = values.files.concat(v);
+      setFieldValue("files", files);
+    },
+    [setFieldValue, values.files]
+  );
+
   const lineItemErrors = useMemo(
     () => improveLineItemErrors(errors.lineitems),
     [errors.lineitems]
   );
+
+  const handleFileRemoval = useCallback(
+    v => {
+      const fs = values.files.filter(f => f.payload !== v.payload);
+      setFieldValue("files", fs);
+    },
+    [setFieldValue, values.files]
+  );
+
   return (
     <form onSubmit={handleSubmit}>
       {errors && errors.global && (
@@ -100,6 +123,19 @@ const InvoiceForm = React.memo(function InvoiceForm({
         onBlur={handleBlur}
         error={touched.rate && errors.rate}
       />
+      <AttachFileInput
+        label="Attach files"
+        type="button"
+        onChange={handleFilesChange}
+      />
+      <ThumbnailGrid
+        value={values.files}
+        onClick={() => null}
+        onRemove={handleFileRemoval}
+        errorsPerFile={errors.files}
+        // errors={errors}
+      />
+
       <InvoiceDatasheet
         value={values.lineitems}
         userRate={values.rate}
@@ -154,7 +190,8 @@ const InvoiceFormWrapper = ({ onSubmit, history }) => {
         address: "",
         exchangerate: "",
         date: getInitialDateValue(),
-        lineitems: [generateBlankLineItem()]
+        lineitems: [generateBlankLineItem()],
+        files: []
       }}
       validationSchema={validationSchema}
     >

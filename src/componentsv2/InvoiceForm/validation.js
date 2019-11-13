@@ -4,6 +4,7 @@ import { yupFieldMatcher } from "src/utils/validation";
 export const invoiceValidationSchema = ({
   cmscontactsupportedchars,
   cmsnamelocationsupportedchars,
+  validmimetypes,
   maxlocationlength,
   minlocationlength,
   mincontactlength,
@@ -12,7 +13,9 @@ export const invoiceValidationSchema = ({
   maxnamelength,
   minlineitemcollength,
   maxlineitemcollength,
-  invoicefieldsupportedchars
+  invoicefieldsupportedchars,
+  maximagesize,
+  maximages
 }) =>
   Yup.object().shape({
     name: Yup.string()
@@ -64,7 +67,8 @@ export const invoiceValidationSchema = ({
           expense: Yup.number()
         })
       )
-      .min(1)
+      .min(1),
+    files: Yup.array().files(maximagesize, maximages, validmimetypes)
   });
 
 /** Captures a value such as 'lineitems[0].description' */
