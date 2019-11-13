@@ -5,6 +5,7 @@ import api from "./api";
 import modal from "./modal";
 import {
   comments,
+  users,
   credits,
   proposals,
   proposalVotes,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   external_api,
   comments,
   credits,
+  users,
   proposals,
   proposalVotes,
   invoices

@@ -480,7 +480,16 @@ export const onFetchUser = userId => dispatch => {
     return dispatch(act.RECEIVE_USER(null, "This is not a valid user ID."));
   return api
     .user(userId)
-    .then(response => dispatch(act.RECEIVE_USER(response)))
+    .then(response =>
+      dispatch(
+        act.RECEIVE_USER({
+          user: {
+            ...response.user,
+            userid: userId
+          }
+        })
+      )
+    )
     .catch(error => {
       dispatch(act.RECEIVE_USER(null, error));
     });
@@ -516,7 +525,9 @@ export const onEditUser = preferences =>
     dispatch(act.REQUEST_EDIT_USER(preferences));
     return api
       .editUser(csrf, preferences)
-      .then(response => dispatch(act.RECEIVE_EDIT_USER(response)))
+      .then(response => {
+        dispatch(act.RECEIVE_EDIT_USER({ ...response, preferences }));
+      })
       .catch(error => {
         dispatch(act.RECEIVE_EDIT_USER(null, error));
       });
@@ -561,7 +572,11 @@ export const onManageUserv2 = (userId, action, reason) =>
     dispatch(act.REQUEST_MANAGE_USER({ userId, action, reason }));
     return api
       .manageUser(csrf, userId, action, reason)
-      .then(response => dispatch(act.RECEIVE_MANAGE_USER(response)))
+      .then(response => {
+        dispatch(act.RECEIVE_MANAGE_USER(response));
+        // Fetches new user information to update cache
+        dispatch(onFetchUser(userId));
+      })
       .catch(error => {
         dispatch(act.RECEIVE_MANAGE_USER(null, error));
       });
@@ -852,13 +867,13 @@ export const onSubmitComment = (
       });
   });
 
-export const onUpdateUserKey = loggedInAsEmail =>
+export const onUpdateUserKey = currentUserEmail =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_UPDATED_KEY());
     return pki
       .generateKeys()
       .then(keys =>
-        pki.loadKeys(loggedInAsEmail, keys).then(() =>
+        pki.loadKeys(currentUserEmail, keys).then(() =>
           api
             .updateKeyRequest(csrf, pki.toHex(keys.publicKey))
             .then(response => {
@@ -881,17 +896,25 @@ export const onUpdateUserKey = loggedInAsEmail =>
       });
   });
 
-export const onVerifyUserKey = (loggedInAsEmail, verificationtoken) =>
+export const onVerifyUserKey = (currentUserEmail, verificationtoken) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(
-      act.REQUEST_VERIFIED_KEY({ email: loggedInAsEmail, verificationtoken })
+      act.REQUEST_VERIFIED_KEY({ email: currentUserEmail, verificationtoken })
     );
     return api
-      .verifyKeyRequest(csrf, loggedInAsEmail, verificationtoken)
-      .then(response => {
-        dispatch(act.RECEIVE_VERIFIED_KEY({ ...response, success: true }));
-        dispatch(act.SHOULD_AUTO_VERIFY_KEY(false));
-      })
+      .verifyKeyRequest(csrf, currentUserEmail, verificationtoken)
+      .then(response =>
+        pki.myPubKeyHex(currentUserEmail).then(pubkey => {
+          dispatch(
+            act.RECEIVE_VERIFIED_KEY({
+              ...response,
+              success: true,
+              publickey: pubkey
+            })
+          );
+          dispatch(act.SHOULD_AUTO_VERIFY_KEY(false));
+        })
+      )
       .catch(error => {
         dispatch(act.RECEIVE_VERIFIED_KEY(null, error));
       });
@@ -927,7 +950,7 @@ export const onSetInvoiceStatus = (
 
 export const onSetProposalStatusV2 = (token, status, censorMessage = "") =>
   withCsrf((dispatch, getState, csrf) => {
-    const email = sel.loggedInAsEmail(getState());
+    const email = sel.currentUserEmail(getState());
     dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
     return api
       .proposalSetStatus(email, csrf, token, status, censorMessage)
@@ -1107,7 +1130,7 @@ export const onFetchProposalPaywallDetails = () => dispatch => {
 
 export const onUserProposalCredits = () => (dispatch, getState) => {
   dispatch(act.REQUEST_USER_PROPOSAL_CREDITS());
-  const userid = sel.userid(getState());
+  const userid = sel.currentUserID(getState());
   return api
     .userProposalCredits()
     .then(response =>

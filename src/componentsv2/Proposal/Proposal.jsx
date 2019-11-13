@@ -182,6 +182,8 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
                   max={getQuorumInVotes(voteSummary)}
                   status={getStatusBarData(voteSummary)}
                   markerPosition={`${voteSummary.passpercentage}%`}
+                  markerTooltipText={`${voteSummary.passpercentage}% Yes votes required for approval`}
+                  markerTooltipClassName={styles.statusBarTooltip}
                   renderStatusInfoComponent={
                     <VotesCount
                       isVoteActive={isVoteActive}
@@ -214,7 +216,9 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
                   url={`/proposals/${proposalToken}?scrollToComments=true`}
                 />
                 <div>
-                  <ChartsLink token={proposalToken} />
+                  {(isVoteActive || isVotingFinished) && (
+                    <ChartsLink token={proposalToken} />
+                  )}
                   <GithubLink token={proposalToken} />
                 </div>
               </Row>
@@ -249,7 +253,9 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
                     className={isPublicAccessible ? styles.copyLink : ""}
                     url={window.location.origin + proposalURL}
                   />
-                  <ChartsLink token={proposalToken} />
+                  {(isVoteActive || isVotingFinished) && (
+                    <ChartsLink token={proposalToken} />
+                  )}
                   {isPublicAccessible && <GithubLink token={proposalToken} />}
                 </Row>
               </Row>

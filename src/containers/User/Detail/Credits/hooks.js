@@ -19,10 +19,10 @@ const mapStateToProps = {
   pollingCreditsPayment: sel.pollingCreditsPayment,
   reachedCreditsPaymentPollingLimit: sel.reachedCreditsPaymentPollingLimit,
   proposalPaymentReceived: sel.proposalPaymentReceived,
-  paywallTxid: sel.paywallTxid,
-  user: sel.user,
-  isAdmin: sel.isAdmin,
-  loggedInAsUserId: sel.userid
+  paywallTxid: sel.currentUserPaywallTxid,
+  isAdmin: sel.currentUserIsAdmin,
+  currentUserID: sel.currentUserID,
+  user: sel.currentUser
 };
 
 const mapDispatchToProps = {
@@ -59,9 +59,9 @@ export function useCredits(ownProps) {
     clearProposalPaymentPollingPointer,
     isApiRequestingProposalPaywall,
     isApiRequestingUserProposalCredits,
-    user,
     isAdmin,
-    loggedInAsUserId,
+    currentUserID,
+    user,
     pollingCreditsPayment,
     toggleCreditsPaymentPolling,
     proposalPaymentReceived,
@@ -78,7 +78,7 @@ export function useCredits(ownProps) {
   const proposalCredits = proposalCreditsUnspent.length;
   const { isPaid } = usePaywall();
   const proposalCreditsFetched = proposalCredits !== null;
-  const isUserPageOwner = user && loggedInAsUserId === user.id;
+  const isUserPageOwner = user && currentUserID === user.userid;
   const shouldFetchPurchaseProposalCredits =
     isPaid &&
     isUserPageOwner &&
@@ -124,7 +124,7 @@ export function useCredits(ownProps) {
     isApiRequestingUserProposalCredits,
     proposalCredits,
     proposalCreditsPurchases,
-    loggedInAsUserId,
+    currentUserID,
     proposalPaywallAddress,
     proposalPaywallPaymentConfirmations,
     proposalPaywallPaymentTxid,

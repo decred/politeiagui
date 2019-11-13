@@ -5,17 +5,14 @@ import { withRouter } from "react-router-dom";
 import SingleContentPage from "src/componentsv2/layout/SingleContentPage";
 import { verifyUserPubkey } from "src/helpers";
 import useVerifyKey from "src/hooks/api/useVerifyKey";
-import * as pki from "src/lib/pki";
 import styles from "./VerifyKey.module.css";
 
 const VerifyKey = ({ location, history }) => {
   const {
-    apiMeResponse,
-    loggedInAsEmail,
+    currentUserEmail,
     userPubkey,
     keyMismatchAction,
     verifyUserKey,
-    updateMe,
     verifyUserKeyError,
     onVerifyUserKey
   } = useVerifyKey();
@@ -25,28 +22,22 @@ const VerifyKey = ({ location, history }) => {
   const verifyAndUpdateLocalKey = useCallback(async () => {
     try {
       const { verificationtoken } = qs.parse(location.search);
-      if (verificationtoken && loggedInAsEmail) {
-        await onVerifyUserKey(loggedInAsEmail, verificationtoken);
-        verifyUserPubkey(loggedInAsEmail, userPubkey, keyMismatchAction);
-        pki.myPubKeyHex(loggedInAsEmail).then(pubkey => {
-          updateMe({
-            ...apiMeResponse,
-            publickey: pubkey
-          });
-        });
+      if (verificationtoken && currentUserEmail) {
+        await onVerifyUserKey(currentUserEmail, verificationtoken);
+        verifyUserPubkey(currentUserEmail, userPubkey, keyMismatchAction);
         setKeyUpdated(true);
       }
     } catch (e) {
       setKeyUpdated(true);
       throw e;
     }
-  }, [loggedInAsEmail, apiMeResponse, userPubkey, keyMismatchAction, updateMe, onVerifyUserKey, location]);
+  }, [currentUserEmail, userPubkey, keyMismatchAction, onVerifyUserKey, location]);
 
   useEffect(() => {
-    if (!keyUpdated) {
+    if (!keyUpdated && !verifyUserKey) {
       verifyAndUpdateLocalKey();
     }
-  }, [verifyAndUpdateLocalKey, keyUpdated]);
+  }, [verifyAndUpdateLocalKey, keyUpdated, verifyUserKey]);
 
   const loading = !verifyUserKey && !verifyUserKeyError;
   const success = verifyUserKey && verifyUserKey.success;

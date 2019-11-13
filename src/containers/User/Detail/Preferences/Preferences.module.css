@@ -1,11 +1,18 @@
 .submitButton {
   margin: 1rem 0;
+  float: right;
+  width: 1
 }
 
 .confirmMessage {
   margin: 0 0 1rem 0;
 }
 
+.savedIcon {
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+}
 
 /* SMALL WIDTH */
 @media screen and (max-width: 768px){
@@ -19,5 +26,6 @@
 
   .submitButton {
     margin: 1rem;
+    float: right;
   }
 }

@@ -18,14 +18,16 @@ import Preferences from "./Preferences";
 
 const getTabComponents = ({ user, ...rest }) => {
   const mapTabValueToComponent = {
-    [tabValues.IDENTITY]: <Identity key="tab-identity" {...user} {...rest} />,
+    [tabValues.IDENTITY]: <Identity key="tab-identity" user={user} {...rest} />,
     [tabValues.ACCOUNT]: <Account key="tab-account" {...user} {...rest} />,
-    [tabValues.PREFERENCES]: <Preferences key="tab-preferences" {...rest} />,
-    [tabValues.CREDITS]: <Credits key="tab-credits" {...rest} />,
+    [tabValues.PREFERENCES]: (
+      <Preferences user={user} key="tab-preferences" {...rest} />
+    ),
+    [tabValues.CREDITS]: <Credits key="tab-credits" user={user} {...rest} />,
     [tabValues.PROPOSALS]: (
       <UserProposals
         key="tab-proposals"
-        userID={user.id}
+        userID={user.userid}
         withDrafts={rest.isUserPageOwner}
       />
     ),
@@ -43,20 +45,15 @@ const UserDetail = ({
   Tab,
   match
 }) => {
-  const { user, isAdmin, userId, loggedInAsUserId } = useUserDetail({ match });
+  const { user, isAdmin, currentUserID } = useUserDetail({ match });
   const {
-    loggedInAsEmail,
     userPubkey,
+    currentUserEmail,
     identityImportSuccess
   } = useUserIdentity();
 
-  const {
-    recordType,
-    constants: { RECORD_TYPE_INVOICE, RECORD_TYPE_PROPOSAL }
-  } = useConfig();
-
-  const isUserPageOwner = user && loggedInAsUserId === user.id;
-  const isAdminOrTheUser = user && (isAdmin || loggedInAsUserId === user.id);
+  const isUserPageOwner = user && currentUserID === user.userid;
+  const isAdminOrTheUser = user && (isAdmin || currentUserID === user.userid);
 
   const tabLabels = useMemo(() => {
     const isTabDisabled = tabLabel => {
@@ -109,8 +106,8 @@ const UserDetail = ({
 
   const [pubkey, setPubkey] = useState("");
   const refreshPubKey = useCallback(() => {
-    existing(loggedInAsEmail).then(() => {
-      myPubKeyHex(loggedInAsEmail)
+    existing(currentUserEmail).then(() => {
+      myPubKeyHex(currentUserEmail)
         .then(pubkey => {
           setPubkey(pubkey);
           setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
@@ -119,7 +116,7 @@ const UserDetail = ({
           setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
         });
     });
-  }, [loggedInAsEmail, setPubkey]);
+  }, [currentUserEmail, setPubkey]);
   useEffect(() => {
     if (userPubkey !== pubkey) refreshPubKey();
     if (identityImportSuccess) refreshPubKey();
@@ -154,8 +151,7 @@ const UserDetail = ({
     [tabLabels, onSetIndex, isMobileScreen, index]
   );
 
-  // TODO: need a loading while user has not been fetched yet
-  return !!user && userId === user.id ? (
+  return !!user ? (
     <>
       <TopBanner>
         <PageDetails
