@@ -52,6 +52,11 @@ const UserDetail = ({
     identityImportSuccess
   } = useUserIdentity();
 
+  const {
+    recordType,
+    constants: { RECORD_TYPE_INVOICE, RECORD_TYPE_PROPOSAL }
+  } = useConfig();
+
   const isUserPageOwner = user && currentUserID === user.userid;
   const isAdminOrTheUser = user && (isAdmin || currentUserID === user.userid);
 

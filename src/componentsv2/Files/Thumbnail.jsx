@@ -1,5 +1,4 @@
 import React, { useMemo, useCallback } from "react";
-import { Row } from "../layout";
 import styles from "./Files.module.css";
 import { classNames, P } from "pi-ui";
 
@@ -50,7 +49,7 @@ export const ThumbnailGrid = ({
         </li>
       );
     });
-  }, [files, getFileError]);
+  }, [files, getFileError, onClick, onRemove, viewOnly]);
 
   return (
     <>

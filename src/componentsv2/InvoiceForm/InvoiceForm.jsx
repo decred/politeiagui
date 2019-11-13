@@ -149,7 +149,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
 
 const InvoiceFormWrapper = ({ onSubmit, history }) => {
   const { policy } = usePolicy();
-  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [, setSubmitSuccess] = useState(false);
   const validationSchema = useMemo(() => invoiceValidationSchema(policy), [
     policy
   ]);
