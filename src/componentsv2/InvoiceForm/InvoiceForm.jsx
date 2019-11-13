@@ -13,8 +13,6 @@ import { invoiceValidationSchema, improveLineItemErrors } from "./validation";
 import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
 import ExchangeRateField from "./ExchangeRateField";
 
-const FileErrors = ({ errors }) => {};
-
 const InvoiceForm = React.memo(function InvoiceForm({
   values,
   handleChange,
