@@ -1,7 +1,10 @@
 import React, { useCallback, useState } from "react";
 import { useUserInvoices } from "./hooks";
 import Invoice from "src/componentsv2/Invoice";
-import InvoiceFilters from "src/componentsv2/InvoiceFilters";
+import {
+  InvoiceFilterForm,
+  FilterInvoices
+} from "src/componentsv2/InvoiceFilters";
 
 const ListUserInvoices = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const { loading, invoices } = useUserInvoices();
@@ -23,13 +26,14 @@ const ListUserInvoices = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     <>
       <TopBanner>
         <PageDetails title="My invoices">
-          <InvoiceFilters onChange={handleFiltersChange} />
+          <InvoiceFilterForm onChange={handleFiltersChange} />
         </PageDetails>
       </TopBanner>
-      {/* <Sidebar>
-
-      </Sidebar> */}
-      <Main fillScreen>{invoices.map(renderInvoice)}</Main>
+      <Main fillScreen>
+        <FilterInvoices invoices={invoices} filterValues={filters}>
+          {filteredInvoices => filteredInvoices.map(renderInvoice)}
+        </FilterInvoices>
+      </Main>
     </>
   );
 };

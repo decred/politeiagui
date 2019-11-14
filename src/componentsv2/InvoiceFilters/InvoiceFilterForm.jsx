@@ -6,7 +6,7 @@ import {
   getMinMaxYearAndMonth,
   getInitialDateValue
 } from "src/containers/Invoice";
-import styles from "./InvoiceFilters.module.css";
+import styles from "./InvoiceFilterForm.module.css";
 
 const DEFAULT_INITIAL_VALUES = {
   date: getInitialDateValue(),
@@ -20,7 +20,7 @@ const DEFAULT_INITIAL_VALUES = {
   }
 };
 
-const InvoiceFilters = ({ onChange, children }) => {
+const InvoiceFilterForm = ({ onChange, children }) => {
   return (
     <Formik initialValues={DEFAULT_INITIAL_VALUES}>
       {formikProps => {
@@ -82,4 +82,4 @@ const OnChangeFiltersModifier = ({ formikProps }) => {
   return null;
 };
 
-export default InvoiceFilters;
+export default InvoiceFilterForm;

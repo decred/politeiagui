@@ -1,1 +1,2 @@
-export { default } from "./InvoiceFilters";
+export { default as InvoiceFilterForm } from "./InvoiceFilterForm";
+export { default as FilterInvoices } from "./FilterInvoices";
