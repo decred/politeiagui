@@ -8,7 +8,10 @@ import InvoiceDatasheet, {
 import MonthPickerField from "../MonthPicker/MonthPickerField";
 import AttachFileInput from "src/componentsv2/AttachFileInput";
 import usePolicy from "src/hooks/api/usePolicy";
-import { getInitialDateValue, getMinMaxYearAndMonth } from "./helpers";
+import {
+  getInitialDateValue,
+  getMinMaxYearAndMonth
+} from "src/containers/Invoice";
 import { invoiceValidationSchema, improveLineItemErrors } from "./validation";
 import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
 import ExchangeRateField from "./ExchangeRateField";

@@ -1,0 +1,11 @@
+.form {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+}
+
+.checkboxesWrapper {
+    display: flex;
+    justify-content: right;
+}
