@@ -1,4 +1,5 @@
 import React, { useMemo, useCallback } from "react";
+import PropTypes from "prop-types";
 import { Dropdown, DropdownItem, useMediaQuery } from "pi-ui";
 import CheckboxField from "../CheckboxField";
 import styles from "./CheckboxGroupField.module.css";
@@ -42,6 +43,11 @@ const CheckboxGroupField = ({ groupName, options }) => {
   }, []);
 
   return mobile ? renderDropdown(fields) : renderList(fields);
+};
+
+CheckboxGroupField.propTypes = {
+  groupName: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default CheckboxGroupField;

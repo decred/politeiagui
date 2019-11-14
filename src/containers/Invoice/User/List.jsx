@@ -1,17 +1,25 @@
 import React, { useCallback, useState } from "react";
 import { useUserInvoices } from "./hooks";
+import { Spinner } from "pi-ui";
 import Invoice from "src/componentsv2/Invoice";
 import {
   InvoiceFilterForm,
   FilterInvoices
 } from "src/componentsv2/InvoiceFilters";
+import HelpMessage from "src/componentsv2/HelpMessage";
+import styles from "./List.module.css";
 
-const ListUserInvoices = ({ TopBanner, PageDetails, Sidebar, Main }) => {
+const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
   const { loading, invoices } = useUserInvoices();
   const [filters, setFilters] = useState({});
 
   const renderInvoice = useCallback(
-    invoice => <Invoice invoice={invoice} />,
+    invoice => (
+      <Invoice
+        key={`invoice-${invoice.censorshiprecord.token}`}
+        invoice={invoice}
+      />
+    ),
     []
   );
 
@@ -22,6 +30,25 @@ const ListUserInvoices = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     [setFilters]
   );
 
+  const renderEmptyMessage = useCallback(
+    filteredInvoices => {
+      return (
+        !filteredInvoices.length && (
+          <HelpMessage>
+            {invoices.length
+              ? "There are no invoices matching the selected filters"
+              : "You don't have any invoices yet"}
+          </HelpMessage>
+        )
+      );
+    },
+    [invoices]
+  );
+
+  const renderInvoices = useCallback(invoices => invoices.map(renderInvoice), [
+    renderInvoice
+  ]);
+
   return (
     <>
       <TopBanner>
@@ -30,9 +57,21 @@ const ListUserInvoices = ({ TopBanner, PageDetails, Sidebar, Main }) => {
         </PageDetails>
       </TopBanner>
       <Main fillScreen>
-        <FilterInvoices invoices={invoices} filterValues={filters}>
-          {filteredInvoices => filteredInvoices.map(renderInvoice)}
-        </FilterInvoices>
+        {loading && (
+          <div className={styles.spinnerWrapper}>
+            <Spinner invert />
+          </div>
+        )}
+        {!loading && filters && (
+          <FilterInvoices invoices={invoices} filterValues={filters}>
+            {filteredInvoices => (
+              <>
+                {renderInvoices(filteredInvoices)}
+                {renderEmptyMessage(filteredInvoices)}
+              </>
+            )}
+          </FilterInvoices>
+        )}
       </Main>
     </>
   );

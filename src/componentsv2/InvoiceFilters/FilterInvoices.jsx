@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import PropTypes from "prop-types";
 import {
   INVOICE_STATUS_NEW,
@@ -23,7 +23,7 @@ const FilterInvoices = ({ invoices, children, filterValues }) => {
 
   const filterByStatus = useCallback(
     invoice => {
-      if (filters.all) return invoice;
+      if (!filters || filters.all) return true;
 
       switch (invoice.status) {
         case INVOICE_STATUS_NEW:
@@ -44,9 +44,7 @@ const FilterInvoices = ({ invoices, children, filterValues }) => {
     [filters]
   );
 
-  const filteredInvoices = useMemo(() =>
-    invoices.filter(filterByStatus).filter(filterByDate)
-  );
+  const filteredInvoices = invoices.filter(filterByStatus).filter(filterByDate);
 
   return children && children(filteredInvoices);
 };
