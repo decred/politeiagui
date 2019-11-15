@@ -469,6 +469,7 @@ export const onFetchInvoice = (token, version = null) => dispatch => {
     })
     .catch(error => {
       dispatch(act.RECEIVE_INVOICE(null, error));
+      throw error;
     });
 };
 

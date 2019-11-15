@@ -40,6 +40,10 @@ const invoices = (state = DEFAULT_STATE, action) =>
             })),
             update("all", union(userInvoices.map(invoiceToken)))
           )(state);
+        },
+        [act.RECEIVE_INVOICE]: () => {
+          const { invoice } = action.payload;
+          return set(["byToken", invoiceToken(invoice)], invoice)(state);
         }
       }[action.type] || (() => state))();
 

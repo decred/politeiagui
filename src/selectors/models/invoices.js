@@ -28,3 +28,9 @@ export const getCurrentUserInvoices = createSelector(
     return invoices.filter(inv => inv.userid === currUserID);
   }
 );
+
+export const makeGetInvoiceByToken = token =>
+  createSelector(
+    invoicesByToken,
+    get(token)
+  );

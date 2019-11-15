@@ -23,6 +23,7 @@ import PageUserVerifyKey from "./User/VerifyKey";
 
 import PageListUserInvoices from "./Invoices/UserList";
 import PageInvoicesNew from "./Invoices/New";
+import PageInvoiceDetail from "./Invoices/Detail";
 
 const Redirect = withRouter(({ to, history, location }) => {
   useEffect(() => {
@@ -118,7 +119,12 @@ const Routes = ({ location }) => {
             exact
             component={PageInvoicesNew}
           />
-
+          <AuthenticatedRoute
+            path="/invoices/:token"
+            title="Invoice Detail"
+            exact
+            component={PageInvoiceDetail}
+          />
           {/* Record routes */}
           {/* <AdminAuthenticatedRoute
             path={`/${recordType}s/unvetted`}

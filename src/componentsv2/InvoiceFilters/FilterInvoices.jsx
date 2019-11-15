@@ -13,7 +13,7 @@ const FilterInvoices = ({ invoices, children, filterValues }) => {
   const { date, filters } = filterValues;
   const filterByDate = useCallback(
     invoice => {
-      if (!date.month || !date.year) return invoice;
+      if (!date || !date.month || !date.year) return invoice;
       return (
         invoice.input.month === date.month && invoice.input.year === date.year
       );
