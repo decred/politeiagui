@@ -13,15 +13,7 @@ import styles from "./Likes.module.css";
 export const isLiked = action => action === 1 || action === "1";
 export const isDisliked = action => action === -1 || action === "-1";
 
-const Likes = ({
-  upLikes,
-  downLikes,
-  onLike,
-  onDislike,
-  option,
-  disabled,
-  asyncLoading
-}) => {
+const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
   const theme = useTheme();
   const [loading, setLoading] = useState(false);
   const [likeRef, isLikeHovered] = useHover();
@@ -35,28 +27,6 @@ const Likes = ({
     (liked || isLikeHovered) && !isDisabled ? activeColor : defaultColor;
   const dislikeColor =
     (disliked || isDislikeHovered) && !isDisabled ? activeColor : defaultColor;
-
-  async function handleLike() {
-    if (disabled || loading) return;
-    try {
-      setLoading(true);
-      await onLike();
-      setLoading(false);
-    } catch (e) {
-      setLoading(false);
-    }
-  }
-
-  async function handleDislike() {
-    if (disabled || loading) return;
-    try {
-      setLoading(true);
-      await onDislike();
-      setLoading(false);
-    } catch (e) {
-      setLoading(false);
-    }
-  }
 
   const renderCount = useCallback(
     count => (
@@ -77,14 +47,9 @@ const Likes = ({
           disabled={loading || disabled}
           ref={likeRef}
           className={styles.likeBtn}
-          onClick={asyncLoading ? handleLike : onLike}
+          onClick={onLike}
         >
-          <Icon
-            onClick={onLike}
-            iconColor={likeColor}
-            backgroundColor={likeColor}
-            type="like"
-          />
+          <Icon iconColor={likeColor} backgroundColor={likeColor} type="like" />
         </button>
         {renderCount(upLikes)}
       </div>
@@ -93,10 +58,9 @@ const Likes = ({
           disabled={loading || disabled}
           ref={dislikeRef}
           className={styles.likeBtn}
-          onClick={asyncLoading ? handleDislike : onDislike}
+          onClick={onDislike}
         >
           <Icon
-            onClick={onDislike}
             iconColor={dislikeColor}
             backgroundColor={dislikeColor}
             type="dislike"
