@@ -11,8 +11,21 @@ import Onboard from "src/containers/User/Onboard";
 import StaticContentProvider from "src/containers/StaticContent";
 import "pi-ui/dist/index.css";
 
+import SourceSansProLight from "../assets/fonts/source-sans-pro/SourceSansPro-Light.ttf";
+import SourceSansProRegular from "../assets/fonts/source-sans-pro/SourceSansPro-Regular.ttf";
+import SourceSansProSemiBold from "../assets/fonts/source-sans-pro/SourceSansPro-SemiBold.ttf";
+
+const defaultFontConfig = {
+  fontFamilyText: "Source Sans Pro",
+  regularUrl: SourceSansProRegular,
+  semiBoldUrl: SourceSansProSemiBold,
+  lightUrl: SourceSansProLight,
+  format: "truetype"
+};
+
 const App = () => {
-  useTheme(defaultLightTheme);
+  defaultLightTheme["font-family-text"] = "Source Sans Pro";
+  useTheme(defaultLightTheme, defaultFontConfig);
   return (
     <Config>
       <ReduxProvider>
