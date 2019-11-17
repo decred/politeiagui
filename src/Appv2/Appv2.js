@@ -15,7 +15,7 @@ import SourceSansProLight from "../assets/fonts/source-sans-pro/SourceSansPro-Li
 import SourceSansProRegular from "../assets/fonts/source-sans-pro/SourceSansPro-Regular.ttf";
 import SourceSansProSemiBold from "../assets/fonts/source-sans-pro/SourceSansPro-SemiBold.ttf";
 
-const defaultFontConfig = {
+const fontConfig = {
   fontFamilyText: "Source Sans Pro",
   regularUrl: SourceSansProRegular,
   semiBoldUrl: SourceSansProSemiBold,
@@ -25,7 +25,7 @@ const defaultFontConfig = {
 
 const App = () => {
   defaultLightTheme["font-family-text"] = "Source Sans Pro";
-  useTheme(defaultLightTheme, defaultFontConfig);
+  useTheme(defaultLightTheme, fontConfig);
   return (
     <Config>
       <ReduxProvider>
