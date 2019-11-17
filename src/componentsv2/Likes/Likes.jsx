@@ -36,8 +36,6 @@ const Likes = ({
   const dislikeColor =
     (disliked || isDislikeHovered) && !isDisabled ? activeColor : defaultColor;
 
-  // console.log(id, loading);
-
   const handleLike = useCallback(
     async function handleLike() {
       if (disabled || loading) return;
