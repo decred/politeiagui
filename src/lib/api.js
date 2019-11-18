@@ -651,3 +651,6 @@ export const newDCC = (csrf, dcc) =>
     timestamp: Date.now() / 1000,
     status: DCC_STATUS_ACTIVE
   }));
+
+export const dccsByStatus = (csrf, status) =>
+  POST("/dcc", csrf, status).then(getResponse);

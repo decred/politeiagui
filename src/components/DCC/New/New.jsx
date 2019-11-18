@@ -1,10 +1,14 @@
 import React from "react";
 import ReactBody from "react-body";
 import { Field, reduxForm } from "redux-form";
-import { useDCC } from "../hooks";
+import { useNewDCC } from "../hooks";
 import dccConnector from "../../../connectors/dcc";
 import Message from "../../Message";
 import Button from "../../snew/ButtonWithLoadingIcon";
+import {
+  DCC_TYPE_ISSUANCE,
+  DCC_TYPE_REVOCATION
+} from "../../../constants";
 
 const NewDCC = ({
   error,
@@ -22,7 +26,7 @@ const NewDCC = ({
     handleChangeInput: onChange,
     savedDraft,
     fakeLoadingDraft: isLoadingDraft
-  } = useDCC(props);
+  } = useNewDCC(props);
   return (
     <div className="content" role="main">
       <div className="page submit-proposal-page">
@@ -49,11 +53,11 @@ const NewDCC = ({
           <label>DCC Type:</label>
           <div className="dcc-type-options">
             <div className="dcc-type">
-              <input name="dcctype" value={1} onChange={onChange("dcctype")} tabIndex={4} type="radio" />
+              <input name="dcctype" value={DCC_TYPE_ISSUANCE} onChange={onChange("dcctype")} tabIndex={4} type="radio" />
               <label>Issuance</label>
             </div>
             <div className="dcc-type">
-              <input name="dcctype" value={2} onChange={onChange("dcctype")} tabIndex={4} type="radio" />
+              <input name="dcctype" value={DCC_TYPE_REVOCATION} onChange={onChange("dcctype")} tabIndex={4} type="radio" />
               <label>Revocation</label>
             </div>
           </div>

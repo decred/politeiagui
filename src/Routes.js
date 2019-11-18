@@ -53,6 +53,7 @@ import HomeCMS from "./components/HomeCMS";
 import GeneratePayouts from "./components/GeneratePayouts";
 import InvoicePayouts from "./components/InvoicePayouts";
 import NewDCC from "./components/DCC/New";
+import DCCList from "./components/DCC/List";
 
 const RoutesForCMS = () => {
   return (
@@ -145,6 +146,7 @@ const RoutesForCMS = () => {
         exact
       />
       <AuthenticatedRoute path="/dcc/new" component={NewDCC} />
+      <AuthenticatedRoute path="/dccs" component={DCCList} />
       <Route path="/500" component={ErrorPage} />
       <Route path="*" component={NotFound} />
     </Switch>

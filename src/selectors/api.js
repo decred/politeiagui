@@ -790,3 +790,10 @@ export const newDCCToken = compose(
   get(["censorshiprecord", "token"]),
   apiNewDCCResponse
 );
+
+export const apiDCCsResponse = getApiResponse("dccs");
+export const dccsByStatus = compose(
+  get("dccs"),
+  apiDCCsResponse
+);
+export const dccsError = getApiError("dccs");

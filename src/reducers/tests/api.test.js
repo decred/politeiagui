@@ -287,7 +287,8 @@ describe("test api reducer", () => {
       email: "",
       keyMismatch: false,
       lastLoaded: {},
-      newDCC: DEFAULT_REQUEST_STATE
+      newDCC: DEFAULT_REQUEST_STATE,
+      dccs: DEFAULT_REQUEST_STATE
     });
 
     expect(api.default(undefined, { type: "" })).toEqual(api.DEFAULT_STATE);

@@ -14,7 +14,7 @@ const typeOptions = CMS_USER_TYPES.reduce((acc, curr, index) => {
 // format domain options to select form field
 const domainOptions = CMS_DOMAINS.map((d, i) => ({ label: d, value: i }));
 
-export const useDCC = ({ onSubmitDCC, onSaveDraftDCC }) => {
+export const useNewDCC = ({ onSubmitDCC, onSaveDraftDCC }) => {
   const [draftId, setDraftId] = useState(getQueryStringValue("draft"));
   const [requestDone, setRequestDone] = useState(false);
 
@@ -116,4 +116,40 @@ export const useDCC = ({ onSubmitDCC, onSaveDraftDCC }) => {
     savedDraft,
     fakeLoadingDraft
   };
+};
+
+export const useListDCC = ({ onFetchDCCs, dccs }) => {
+  const [loadingDCCs, setLoadingDCCs] = useState(true);
+  const [orderedDCCs, setOrderedDCCs] = useState([]);
+  const [status, setStatus] = useState(1);
+
+  useEffect(() => {
+    async function onFetchData() {
+      setLoadingDCCs(true);
+      await onFetchDCCs(status);
+      setLoadingDCCs(false);
+    }
+    onFetchData();
+  }, [status, onFetchDCCs, setLoadingDCCs]);
+
+  useEffect(() => {
+    const resetDCCs = () => {
+      setOrderedDCCs([]);
+    };
+
+    if (dccs && dccs.length > 0) {
+      setOrderedDCCs(dccs.sort((a, b) => b.timestamp - a.timestamp));
+    } else if (dccs && dccs.length === 0) {
+      resetDCCs();
+    }
+  }, [dccs, setOrderedDCCs]);
+
+  const handleStatusChange = useCallback(
+    s => {
+      setStatus(s);
+    },
+    [setStatus]
+  );
+
+  return { loadingDCCs, orderedDCCs, handleStatusChange, status };
 };

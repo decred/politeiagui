@@ -10,11 +10,13 @@ const newProposalConnector = connect(
     error: sel.newDCCError,
     newDCCResponse: sel.apiNewDCCResponse,
     isLoading: sel.isApiRequestingNewDCC,
-    token: sel.newDCCToken
+    token: sel.newDCCToken,
+    dccs: sel.dccsByStatus
   }),
   {
     onSubmitDCC: act.onSaveNewDCC,
-    onSaveDraftDCC: act.onSaveDraftDCC
+    onSaveDraftDCC: act.onSaveDraftDCC,
+    onFetchDCCs: act.onFetchDCCs
   }
 );
 

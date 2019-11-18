@@ -1477,3 +1477,16 @@ export const onSubmitNewDCC = (
         throw error;
       });
   });
+
+export const onFetchDCCs = status =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_DCCS({}));
+    return api
+      .dccsByStatus(csrf, { status })
+      .then(response => {
+        dispatch(act.RECEIVE_DCCS(response));
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_DCC(null, error));
+      });
+  });
