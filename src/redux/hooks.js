@@ -1,10 +1,13 @@
 import React, { useState, useMemo, useEffect, useContext } from "react";
 import { bindActionCreators } from "redux";
 import { selectorMap } from "src/selectors";
+import { createSelectorHook } from "react-redux";
 import throttle from "lodash/throttle";
 
 export const reduxContext = React.createContext();
 export const useReduxContext = () => useContext(reduxContext);
+
+export const useSelector = createSelectorHook(reduxContext);
 
 const DEFAULT_MAP_DISPATCH = {};
 
