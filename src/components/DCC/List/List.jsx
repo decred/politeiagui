@@ -10,7 +10,8 @@ import {
   DCC_STATUS_REJECTED,
   DCC_STATUS_DEBATE,
   DCC_TYPE_ISSUANCE,
-  DCC_TYPE_REVOCATION
+  DCC_TYPE_REVOCATION,
+  CMS_DOMAINS
 } from "../../../constants";
 
 const statusForDCC = [
@@ -41,12 +42,8 @@ const typesForDCC = {
   [DCC_TYPE_REVOCATION]: "Revocation"
 };
 
-const CardDCC = ({ status, dccpayload, sponsoruserid, sponsorusername, censorshiprecord: { token }, timestamp }) => {
-  const isDCCApproved = status === DCC_STATUS_APPROVED,
-    isDCCActive = status === DCC_STATUS_ACTIVE,
-    isDCCSupported = status === DCC_STATUS_SUPPORTED;
-
-  const { type, nomineeuserid, statement, domain } = dccpayload;
+const CardDCC = ({ dccpayload, sponsoruserid, sponsorusername, censorshiprecord: { token }, timestamp }) => {
+  const { type, nomineeuserid, domain } = dccpayload;
 
   return (
     <div className={`thing thing-proposal id-${token} odd link`}>
@@ -55,13 +52,16 @@ const CardDCC = ({ status, dccpayload, sponsoruserid, sponsorusername, censorshi
         style={{ display: "flex", overflow: "visible" }}
       >
         <a className="title may-blank loggedin" href={`/dcc/${token}`}>
-          {nomineeuserid}
+          {type && <span>{typesForDCC[type]}</span>}: {nomineeuserid}
         </a>
       </span>
       <span
         style={{ display: "flex", flexDirection: "column" }}
         className="tagline"
       >
+        {domain && (
+          <span>domain: {CMS_DOMAINS[domain].toLocaleLowerCase()}</span>
+        )}
         <span className="submitted-by">
           {sponsorusername && (
             <span>
@@ -75,9 +75,6 @@ const CardDCC = ({ status, dccpayload, sponsoruserid, sponsorusername, censorshi
             {"submitted "}
             <DateTooltip createdAt={timestamp} />
           </span>
-        )}
-        {type && (
-          <span>{typesForDCC[type]}</span>
         )}
       </span>
     </div>
