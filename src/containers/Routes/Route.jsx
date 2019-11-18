@@ -4,7 +4,7 @@ import { Route as ReactRoute } from "react-router-dom";
 import { useSelector } from "src/redux";
 
 const useTitleFromState = selector => {
-  const title = useSelector(selector);
+  const title = useSelector(selector || (() => ""));
   return title;
 };
 

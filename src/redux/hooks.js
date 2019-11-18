@@ -12,7 +12,11 @@ export const useDispatch = createDispatchHook(reduxContext);
 
 export function useAction(action) {
   const dispatch = useDispatch();
-  return bindActionCreators(action, dispatch);
+  const boundAction = useMemo(() => bindActionCreators(action, dispatch), [
+    action,
+    dispatch
+  ]);
+  return boundAction;
 }
 
 const DEFAULT_MAP_DISPATCH = {};
