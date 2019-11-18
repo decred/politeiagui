@@ -1,4 +1,5 @@
 import React, { useMemo, useCallback } from "react";
+import get from "lodash/fp/get";
 import { Link } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import Proposal from "src/componentsv2/Proposal";
@@ -10,7 +11,8 @@ import { getCommentBlockedReason } from "./helpers";
 import {
   isPublicProposal,
   isAbandonedProposal,
-  isVotingFinishedProposal
+  isVotingFinishedProposal,
+  getProposalToken
 } from "../helpers";
 import {
   UnvettedActionsProvider,
@@ -20,9 +22,12 @@ import { useProposalVote } from "../hooks";
 import { useRouter } from "src/componentsv2/Router";
 
 const ProposalDetail = ({ Main, match }) => {
-  const { proposal, loading, threadParentID } = useProposal({ match });
-  const proposalToken =
-    proposal && proposal.censorshiprecord && proposal.censorshiprecord.token;
+
+  const tokenFromUrl = get("params.token", match);
+  const threadParentCommentID = get("params.commentid", match);
+  const { proposal, loading, threadParentID } = useProposal(tokenFromUrl, threadParentCommentID);
+  const proposalToken = getProposalToken(proposal);
+
   const { voteSummary } = useProposalVote(proposalToken);
 
   const showCommentArea =
@@ -61,12 +66,12 @@ const ProposalDetail = ({ Main, match }) => {
             {loading || !proposal ? (
               <ProposalLoader extended />
             ) : (
-                <Proposal
-                  proposal={proposal}
-                  extended
-                  collapseBodyContent={!!threadParentID}
-                />
-              )}
+              <Proposal
+                proposal={proposal}
+                extended
+                collapseBodyContent={!!threadParentID}
+              />
+            )}
             {showCommentArea && (
               <Comments
                 recordAuthorID={proposal.userid}
