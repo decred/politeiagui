@@ -1487,6 +1487,6 @@ export const onFetchDCCs = status =>
         dispatch(act.RECEIVE_DCCS(response));
       })
       .catch(error => {
-        dispatch(act.RECEIVE_DCC(null, error));
+        dispatch(act.RECEIVE_DCCS(null, error));
       });
   });

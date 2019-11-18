@@ -82,7 +82,9 @@ const CardDCC = ({ dccpayload, sponsoruserid, sponsorusername, censorshiprecord:
 };
 
 const ListDCC = props => {
-  const { orderedDCCs: dccs, handleStatusChange, status } = useListDCC(props);
+  const { orderedDCCs: dccs, handleStatusChange, status, loadingDCCs: isLoading } = useListDCC(props);
+  const dccsAvailable = dccs && dccs.length > 0 && !isLoading;
+  const emptyDCCList = dccs && dccs.length === 0 && !isLoading;
   return (
     <div className="content" role="main">
       <div className="page ">
@@ -99,9 +101,18 @@ const ListDCC = props => {
             />
           ))}
         </Tabs>
-        {dccs && dccs.length > 0 && dccs.map((dcc, i) => (
+        {dccsAvailable && dccs.map((dcc, i) => (
           <CardDCC {...dcc} key={i}/>
         ))}
+        {emptyDCCList && (
+          <span>No DCCs Available Here</span>
+        )}
+        {isLoading && (
+          <i
+            className="fa fa-circle-o-notch fa-spin left-margin-5"
+            style={{ fontSize: "14px" }}
+          />
+        )}
       </div>
     </div>
   );

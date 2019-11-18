@@ -127,7 +127,9 @@ export const useListDCC = ({ onFetchDCCs, dccs }) => {
     async function onFetchData() {
       setLoadingDCCs(true);
       await onFetchDCCs(status);
-      setLoadingDCCs(false);
+      setTimeout(() => {
+        setLoadingDCCs(false);
+      }, 300);
     }
     onFetchData();
   }, [status, onFetchDCCs, setLoadingDCCs]);
