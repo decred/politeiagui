@@ -5,7 +5,6 @@ import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
 import { isUnreviewedProposal, isCensoredProposal } from "../helpers";
-import why from "src/hooks/utils/useWhyDidYouUpdate";
 
 const proposalWithFilesOrNothing = proposal => {
   return proposal && proposal.files && !!proposal.files.length
@@ -49,13 +48,6 @@ export function useProposal(token, threadParentID) {
   }, [proposalFromState, currentUserId, currentUserIsAdmin]);
 
   const [proposal, setProposal] = useState(getProposal());
-
-  why("detail", {
-    proposal,
-    token,
-    onFetchProposal,
-    onFetchProposalsVoteSummary
-  });
 
   useEffect(
     function fetchProposal() {

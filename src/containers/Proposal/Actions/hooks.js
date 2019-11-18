@@ -50,7 +50,7 @@ export function usePublicActions() {
   const onAuthorize = useAction(act.onAuthorizeVote);
   const onRevoke = useAction(act.onRevokeVote);
 
-  const currentUser = useSelector(sel.currentUser);
+  const currentUserEmail = useSelector(sel.currentUserEmail);
 
   const onAbandonProposal = useCallback(
     proposal => reason =>
@@ -65,33 +65,33 @@ export function usePublicActions() {
   const onAuthorizeVote = useCallback(
     proposal => () =>
       onAuthorize(
-        currentUser.email,
+        currentUserEmail,
         proposal.censorshiprecord.token,
         proposal.version
       ),
-    [onAuthorize, currentUser.email]
+    [onAuthorize, currentUserEmail]
   );
 
   const onRevokeVote = useCallback(
     proposal => () =>
       onRevoke(
-        currentUser.email,
+        currentUserEmail,
         proposal.censorshiprecord.token,
         proposal.version
       ),
-    [onRevoke, currentUser.email]
+    [onRevoke, currentUserEmail]
   );
 
   const onStartVote = useCallback(
     proposal => ({ duration, quorumPercentage, passPercentage }) =>
       onStart(
-        currentUser.email,
+        currentUserEmail,
         proposal.censorshiprecord.token,
         duration,
         quorumPercentage,
         passPercentage
       ),
-    [onStart, currentUser.email]
+    [onStart, currentUserEmail]
   );
 
   return {
