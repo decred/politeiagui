@@ -75,14 +75,13 @@ const RecordsView = ({
   );
 
   const handleFetchMoreRecords = useCallback(async () => {
-    const index = filteredRecords.length;
-
     // make sure tokens being requested are different from the ones
     // already requested
     const recordTokensToBeFetched = difference(
-      filteredTokens.slice(index, index + pageSize),
+      filteredTokens,
       state.requestedTokens
-    );
+    ).slice(0, pageSize);
+
     setHasMore(false);
     const numOfItemsToBeFetched = recordTokensToBeFetched.length;
 
