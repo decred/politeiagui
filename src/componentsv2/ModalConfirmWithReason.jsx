@@ -144,4 +144,4 @@ ModalConfirmWithReason.defaultProps = {
   reasonLabel: "Reason"
 };
 
-export default ModalConfirmWithReason;
+export default React.memo(ModalConfirmWithReason);

@@ -19,21 +19,22 @@ const PaywallMessage = ({ wrapper, ...props }) => {
   const WrapperComponent = wrapper;
 
   return (
-    <>
-      {showMessage ? (
+    showMessage && (
+      <>
         <WrapperComponent {...props}>
           <StaticMarkdown contentName={paywallContent} />
           <Button onClick={openPaywallModal} className="margin-top-m">
             Pay the registration fee
           </Button>
         </WrapperComponent>
-      ) : null}
-      <ModalPayPaywall
-        show={showModal}
-        title="Complete your registration"
-        onClose={closePaywallModal}
-      />
-    </>
+
+        <ModalPayPaywall
+          show={showModal}
+          title="Complete your registration"
+          onClose={closePaywallModal}
+        />
+      </>
+    )
   );
 };
 

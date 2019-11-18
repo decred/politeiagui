@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import { useLoaderContext } from "src/Appv2/Loader";
+import * as sel from "src/selectors";
+import { useSelector } from "src/redux";
 
 export function useSessionChecker() {
+  const currentUser = useSelector(sel.currentUser);
   const [sessionExpired, setSessionExpired] = useState(false);
-  const { currentUser } = useLoaderContext();
 
   const checkUserSession = useCallback(() => {
     if (currentUser && !sessionExpired) {
