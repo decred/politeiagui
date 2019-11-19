@@ -1,7 +1,7 @@
 import React from "react";
 import { Router } from "src/componentsv2/Router";
 import Config from "src/Config";
-import { defaultLightTheme, useTheme } from "pi-ui";
+import { defaultLightTheme, useTheme, useFont } from "pi-ui";
 import { ReduxProvider } from "src/redux";
 import Loader from "./Loader";
 import Routes from "src/pages/Root";
@@ -24,8 +24,8 @@ const fontConfig = {
 };
 
 const App = () => {
-  defaultLightTheme["font-family-text"] = "Source Sans Pro";
-  useTheme(defaultLightTheme, fontConfig);
+  useTheme(defaultLightTheme);
+  useFont(fontConfig);
   return (
     <Config>
       <ReduxProvider>
