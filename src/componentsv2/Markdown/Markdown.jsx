@@ -31,4 +31,4 @@ MarkdownRenderer.prototype = {
   escapeHtml: PropTypes.bool
 };
 
-export default MarkdownRenderer;
+export default React.memo(MarkdownRenderer);

@@ -1,4 +1,5 @@
 import React from "react";
+import get from "lodash/fp/get";
 import { Card, Message } from "pi-ui";
 import { useProposal } from "../Detail/hooks";
 import { useEditProposal } from "./hooks";
@@ -12,7 +13,8 @@ import ProposalForm from "src/componentsv2/ProposalForm/ProposalFormLazy";
 import ProposalFormLoader from "src/componentsv2/ProposalForm/ProposalFormLoader";
 
 const EditProposal = ({ match }) => {
-  const { proposal, loading } = useProposal({ match });
+  const tokenFromUrl = get("params.token", match);
+  const { proposal, loading } = useProposal(tokenFromUrl);
   const { onEditProposal } = useEditProposal();
   const { isPaid } = usePaywall();
   const [, identityError] = useIdentity();

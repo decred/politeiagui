@@ -1,13 +1,10 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { useDocumentTitle } from "src/hooks/utils/useDocumentTitle";
 import { Route as ReactRoute } from "react-router-dom";
-import { useRedux } from "src/redux";
+import { useSelector } from "src/redux";
 
 const useTitleFromState = selector => {
-  const mapStateToProps = useMemo(() => (selector ? { title: selector } : {}), [
-    selector
-  ]);
-  const { title } = useRedux({}, mapStateToProps, {});
+  const title = useSelector(selector || (() => ""));
   return title;
 };
 

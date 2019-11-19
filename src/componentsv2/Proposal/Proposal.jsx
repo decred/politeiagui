@@ -12,7 +12,8 @@ import {
   isPublicProposal,
   isEditableProposal,
   getQuorumInVotes,
-  isVotingFinishedProposal
+  isVotingFinishedProposal,
+  getProposalToken
 } from "src/containers/Proposal/helpers";
 import { useProposalVote } from "src/containers/Proposal/hooks";
 import { useLoaderContext } from "src/Appv2/Loader";
@@ -27,7 +28,24 @@ import ModalFullImage from "src/componentsv2/ModalFullImage";
 import VersionPicker from "src/componentsv2/VersionPicker";
 import { useRouter } from "src/componentsv2/Router";
 
-const Proposal = ({ proposal, extended, collapseBodyContent }) => {
+const ProposalWrapper = props => {
+  const voteProps = useProposalVote(getProposalToken(props.proposal));
+  const { currentUser } = useLoaderContext();
+  const { history } = useRouter();
+  return <Proposal {...{ ...props, ...voteProps, currentUser, history }} />;
+};
+
+const Proposal = React.memo(function Proposal({
+  proposal,
+  extended,
+  collapseBodyContent,
+  voteSummary,
+  voteActive: isVoteActive,
+  voteTimeInWords: voteTime,
+  voteBlocksLeft,
+  currentUser,
+  history
+}) {
   const {
     censorshiprecord,
     files,
@@ -40,14 +58,6 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
     username,
     version
   } = proposal;
-  const {
-    voteSummary,
-    voteActive: isVoteActive,
-    voteTimeInWords: voteTime,
-    voteBlocksLeft
-  } = useProposalVote(censorshiprecord.token);
-  const { currentUser } = useLoaderContext();
-  const { history } = useRouter();
   const {
     showFullImageModal,
     openFullImageModal,
@@ -280,6 +290,6 @@ const Proposal = ({ proposal, extended, collapseBodyContent }) => {
       )}
     </>
   );
-};
+});
 
-export default Proposal;
+export default ProposalWrapper;

@@ -200,3 +200,14 @@ export const getMarkdownContent = files => {
   const markdownFile = files.find(f => f.name === "index.md");
   return getTextFromIndexMd(markdownFile);
 };
+
+/**
+ * Returns the proposal censorship token
+ * @param {Object} proposal
+ * @returns {String} censorhipToken
+ */
+export const getProposalToken = proposal => {
+  return (
+    proposal && proposal.censorshiprecord && proposal.censorshiprecord.token
+  );
+};

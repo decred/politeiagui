@@ -100,14 +100,14 @@ const MobileHeader = ({ title, status, edit }) => (
   </div>
 );
 
-export const Header = ({
+export const Header = React.memo(function Header({
   title,
   subtitle,
   status,
   edit,
   mobile,
   disableMobileView = false
-}) => {
+}) {
   return (
     <div className={styles.header}>
       {!mobile || disableMobileView ? (
@@ -124,7 +124,7 @@ export const Header = ({
       {subtitle}
     </div>
   );
-};
+});
 
 export const ChartsLink = ({ token }) => {
   const { apiInfo } = useLoader();
@@ -140,7 +140,11 @@ export const ChartsLink = ({ token }) => {
       placement="bottom"
       content="Voting Charts"
     >
-      <UILink ref={ref} target="_blank" href={`https://${hostName}.dcrdata.org/proposal/${token}`}>
+      <UILink
+        ref={ref}
+        target="_blank"
+        href={`https://${hostName}.dcrdata.org/proposal/${token}`}
+      >
         <Icon type="chart" iconColor={iconColor} />
       </UILink>
     </Tooltip>

@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
+import { useAction } from "src/redux";
 import usePolicy from "src/hooks/api/usePolicy";
 import { loginValidationSchema } from "./validation";
 
-const mapDispatchToProps = {
-  onLogin: act.onLogin
-};
-
-export function useLogin(ownProps) {
-  const fromRedux = useRedux(ownProps, {}, mapDispatchToProps);
+export function useLogin() {
+  const onLogin = useAction(act.onLogin);
   const { policy, loading: loadingPolicy } = usePolicy();
   const [validationSchema, setValidationSchema] = useState(
     policy ? loginValidationSchema(policy) : null
@@ -24,5 +20,5 @@ export function useLogin(ownProps) {
     [policy, validationSchema]
   );
 
-  return { ...fromRedux, validationSchema, loadingPolicy };
+  return { onLogin, validationSchema, loadingPolicy };
 }
