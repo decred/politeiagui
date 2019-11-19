@@ -7,8 +7,9 @@ import React, {
 } from "react";
 import { Tabs, Tab, useMediaQuery } from "pi-ui";
 import difference from "lodash/difference";
+import union from "lodash/union";
 import LazyList from "src/componentsv2/LazyList";
-import { getRecordsByTabOption } from "./helpers";
+import { getRecordsByTabOption, getRecordToken } from "./helpers";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import HelpMessage from "src/componentsv2/HelpMessage";
 
@@ -75,14 +76,14 @@ const RecordsView = ({
   );
 
   const handleFetchMoreRecords = useCallback(async () => {
-    const index = filteredRecords.length;
-
     // make sure tokens being requested are different from the ones
-    // already requested
+    // already requested or fetched
+    const fetchedTokens = filteredRecords.map(getRecordToken);
     const recordTokensToBeFetched = difference(
-      filteredTokens.slice(index, index + pageSize),
-      state.requestedTokens
-    );
+      filteredTokens,
+      union(state.requestedTokens, fetchedTokens)
+    ).slice(0, pageSize);
+
     setHasMore(false);
     const numOfItemsToBeFetched = recordTokensToBeFetched.length;
 
