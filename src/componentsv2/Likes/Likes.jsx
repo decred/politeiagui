@@ -19,10 +19,9 @@ const Likes = ({
   onLike,
   onDislike,
   option,
-  disabled,
-  id
+  disabled
 }) => {
-  const theme = useTheme();
+  const [theme] = useTheme();
   const [loading, setLoading] = useState(false);
   const [likeRef, isLikeHovered] = useHover();
   const [dislikeRef, isDislikeHovered] = useHover();
