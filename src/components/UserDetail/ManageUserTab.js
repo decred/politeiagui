@@ -86,7 +86,7 @@ const ManageUserTab = ({
 
   const handleManageUser = useCallback(async () => {
     const args = {
-      userid: user.id,
+      userid: user.userid,
       domain: contractorDomain,
       contractortype: contractorType,
       supervisoruserids: newSupervisorIds
@@ -95,7 +95,7 @@ const ManageUserTab = ({
     await onManageCmsUser(args);
     setSuccess(true);
   }, [
-    user.id,
+    user.userid,
     contractorDomain,
     contractorType,
     newSupervisorIds,
