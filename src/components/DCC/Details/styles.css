@@ -1,12 +1,19 @@
-.dcc-details {
+.dcc {
   background-color: white;
   padding: 16px;
   width: 100%;
+  margin-bottom: 16px;
 }
 
-.dcc-details h2 {
-  font-weight: bold;
+.dcc h1 {
   font-size: 1.4rem;
+  font-weight: bold;
+  color: #336699
+}
+
+.dcc h2 {
+  font-weight: bold;
+  font-size: 1.2rem;
   width: 100%;
   border-bottom: 1px solid #ddd;
   display: block;
@@ -15,7 +22,6 @@
 
 .dcc-info {
   padding-bottom: 16px;
-  text-transform: lowercase;
 }
 
 .dcc-info label {
@@ -25,4 +31,12 @@
   display: inline-block;
   font-weight: bold;
   text-transform: none;
+}
+
+.dcc-header .status{
+  color: #a4a4a4;
+  font-size: 0.9rem;
+  margin: 0;
+  text-transform: capitalize;
+  font-weight: bold;
 }

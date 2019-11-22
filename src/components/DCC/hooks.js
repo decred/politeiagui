@@ -15,7 +15,13 @@ const typeOptions = CMS_USER_TYPES.reduce((acc, curr, index) => {
 // format domain options to select form field
 const domainOptions = CMS_DOMAINS.map((d, i) => ({ label: d, value: i }));
 
-export const useNewDCC = ({ onSubmitDCC, onSaveDraftDCC }) => {
+export const useNewDCC = ({
+  onSubmitDCC,
+  onSaveDraftDCC,
+  newToken,
+  history,
+  error
+}) => {
   const [draftId, setDraftId] = useState(getQueryStringValue("draft"));
   const [requestDone, setRequestDone] = useState(false);
 
@@ -83,6 +89,14 @@ export const useNewDCC = ({ onSubmitDCC, onSaveDraftDCC }) => {
       draftId
     ]
   );
+
+  useEffect(() => {
+    if (requestDone && !error && newToken) {
+      setTimeout(() => {
+        history.push(`/dcc/${newToken}`);
+      }, 300);
+    }
+  }, [error, newToken, history, requestDone]);
 
   const handleSubmitDCC = useCallback(
     async event => {
@@ -175,5 +189,11 @@ export const useDCCDetails = ({ onLoadDCC, dcc, token, nomineeUsername }) => {
     [dcc]
   );
 
-  return { dcc, loadingDCC, status, type, nomineeUsername };
+  return {
+    dcc,
+    loadingDCC,
+    status,
+    type,
+    nomineeUsername
+  };
 };

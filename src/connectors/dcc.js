@@ -18,7 +18,7 @@ const dccConnector = connect(
     error: sel.newDCCError,
     newDCCResponse: sel.apiNewDCCResponse,
     isLoading: sel.isApiRequestingNewDCC,
-    newtoken: sel.newDCCToken,
+    newToken: sel.newDCCToken,
     dccs: sel.dccsByStatus,
     dcc: sel.dccDetails,
     nomineeUsername: sel.getUserUsername
