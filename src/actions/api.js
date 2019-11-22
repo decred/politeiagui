@@ -252,6 +252,7 @@ export const handleLogout = response => dispatch => {
   clearPollingPointer();
   clearProposalPaymentPollingPointer();
   dispatch(onSetEmail(""));
+  dispatch(act.RESET_USER_SEARCH());
 };
 
 export const onLogout = () =>

@@ -863,7 +863,7 @@ export const lineItemPayouts = compose(
           token: invoice.censorshiprecord.token,
           labor: (lineItem.labor / 60) * (invoice.input.contractorrate / 100),
           expenses: lineItem.expenses / 100,
-          description: lineItem.description.replace("#", "")
+          description: lineItem.description.replace(/#/g, "")
         }))
       );
     }, []),

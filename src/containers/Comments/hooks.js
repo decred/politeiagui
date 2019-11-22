@@ -7,21 +7,12 @@ import {
 } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
-import { useConfig } from "src/containers/Config";
-import { useLoaderContext } from "src/containers/Loader";
+import { useSelector, useAction } from "src/redux";
+import { useConfig } from "src/Config";
+import { useLoaderContext } from "src/Appv2/Loader";
 
 export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
-
-const mapDispatchToProps = {
-  onSubmitComment: act.onSaveNewCommentV2,
-  onFetchComments: act.onFetchProposalComments,
-  onFetchLikes: act.onFetchLikedComments,
-  onLikeComment: act.onLikeComment,
-  onResetComments: act.onResetComments,
-  onCensorComment: act.onCensorCommentv2
-};
 
 export function useComments(ownProps) {
   const recordToken = ownProps && ownProps.recordToken;
@@ -33,26 +24,19 @@ export function useComments(ownProps) {
     () => sel.makeGetProposalCommentsLikes(recordToken),
     [recordToken]
   );
-  const mapStateToProps = useMemo(
-    () => ({
-      comments: commentsSelector,
-      commentsLikes: commentsLikesSelector,
-      lastVisitTimestamp: sel.visitedProposal,
-      loading: sel.isApiRequestingComments,
-      loadingLikes: sel.isApiRequestingCommentsLikes
-    }),
-    [commentsSelector, commentsLikesSelector]
-  );
 
-  const {
-    comments,
-    onFetchComments,
-    onFetchLikes,
-    onCensorComment,
-    onLikeComment: onLikeCommentAction,
-    commentsLikes,
-    ...fromRedux
-  } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
+  const comments = useSelector(commentsSelector);
+  const commentsLikes = useSelector(commentsLikesSelector);
+  const lastVisitTimestamp = useSelector(sel.visitedProposal);
+  const loading = useSelector(sel.isApiRequestingComments);
+  const loadingLikes = useSelector(sel.isApiRequestingCommentsLikes);
+  const onSubmitComment = useAction(act.onSaveNewCommentV2);
+  const onFetchComments = useAction(act.onFetchProposalComments);
+  const onFetchLikes = useAction(act.onFetchLikedComments);
+  const onLikeCommentAction = useAction(act.onLikeComment);
+  const onResetComments = useAction(act.onResetComments);
+  const onCensorComment = useAction(act.onCensorCommentv2);
+
   const { enableCommentVote, recordType } = useConfig();
   const { currentUser } = useLoaderContext();
   const email = currentUser && currentUser.email;
@@ -116,6 +100,10 @@ export function useComments(ownProps) {
     userEmail: email,
     recordType,
     currentUser,
-    ...fromRedux
+    lastVisitTimestamp,
+    loading,
+    loadingLikes,
+    onSubmitComment,
+    onResetComments
   };
 }

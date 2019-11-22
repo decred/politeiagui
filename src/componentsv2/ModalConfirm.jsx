@@ -104,4 +104,4 @@ ModalConfirm.defaultProps = {
   message: "Are you sure?"
 };
 
-export default ModalConfirm;
+export default React.memo(ModalConfirm);

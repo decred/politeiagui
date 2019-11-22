@@ -1,31 +1,20 @@
 import { useEffect } from "react";
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
+import { useSelector, useAction } from "src/redux";
 import * as sel from "src/selectors";
 
-const mapStateToProps = {
-  policy: sel.policy,
-  loading: sel.isApiRequestingPolicy
-};
-
-const mapDispatchToProps = {
-  onGetPolicy: act.onGetPolicy
-};
-
 function usePolicy() {
-  const { onGetPolicy, policy, loading } = useRedux(
-    {},
-    mapStateToProps,
-    mapDispatchToProps
-  );
+  const policy = useSelector(sel.policy);
+  const loading = useSelector(sel.isApiRequestingPolicy);
+  const onFetchPolicy = useAction(act.onGetPolicy);
 
   useEffect(
     function handleSetValidationSchemaFromPolicy() {
       if (!policy) {
-        onGetPolicy();
+        onFetchPolicy();
       }
     },
-    [policy, onGetPolicy]
+    [policy, onFetchPolicy]
   );
 
   return { policy, loading };

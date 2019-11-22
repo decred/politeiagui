@@ -20,7 +20,7 @@ const Likes = ({
   onDislike,
   option,
   disabled,
-  asyncLoading
+  id
 }) => {
   const theme = useTheme();
   const [loading, setLoading] = useState(false);
@@ -36,27 +36,33 @@ const Likes = ({
   const dislikeColor =
     (disliked || isDislikeHovered) && !isDisabled ? activeColor : defaultColor;
 
-  async function handleLike() {
-    if (disabled || loading) return;
-    try {
-      setLoading(true);
-      await onLike();
-      setLoading(false);
-    } catch (e) {
-      setLoading(false);
-    }
-  }
+  const handleLike = useCallback(
+    async function handleLike() {
+      if (disabled || loading) return;
+      try {
+        setLoading(true);
+        await onLike();
+        setLoading(false);
+      } catch (e) {
+        setLoading(false);
+      }
+    },
+    [disabled, loading, setLoading, onLike]
+  );
 
-  async function handleDislike() {
-    if (disabled || loading) return;
-    try {
-      setLoading(true);
-      await onDislike();
-      setLoading(false);
-    } catch (e) {
-      setLoading(false);
-    }
-  }
+  const handleDislike = useCallback(
+    async function handleDislike() {
+      if (disabled || loading) return;
+      try {
+        setLoading(true);
+        await onDislike();
+        setLoading(false);
+      } catch (e) {
+        setLoading(false);
+      }
+    },
+    [disabled, loading, setLoading, onDislike]
+  );
 
   const renderCount = useCallback(
     count => (
@@ -77,14 +83,9 @@ const Likes = ({
           disabled={loading || disabled}
           ref={likeRef}
           className={styles.likeBtn}
-          onClick={asyncLoading ? handleLike : onLike}
+          onClick={handleLike}
         >
-          <Icon
-            onClick={onLike}
-            iconColor={likeColor}
-            backgroundColor={likeColor}
-            type="like"
-          />
+          <Icon iconColor={likeColor} backgroundColor={likeColor} type="like" />
         </button>
         {renderCount(upLikes)}
       </div>
@@ -93,10 +94,9 @@ const Likes = ({
           disabled={loading || disabled}
           ref={dislikeRef}
           className={styles.likeBtn}
-          onClick={asyncLoading ? handleDislike : onDislike}
+          onClick={handleDislike}
         >
           <Icon
-            onClick={onDislike}
             iconColor={dislikeColor}
             backgroundColor={dislikeColor}
             type="dislike"
@@ -118,7 +118,6 @@ Likes.propTypes = {
 
 Likes.defaultProps = {
   active: false,
-  asyncLoading: true,
   upLikes: 0,
   downLikes: 0
 };

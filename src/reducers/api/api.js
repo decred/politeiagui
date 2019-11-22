@@ -170,6 +170,7 @@ const api = (state = DEFAULT_STATE, action) =>
     [act.RECEIVE_NEW_PROPOSAL]: () => receive("newProposal", state, action),
     [act.REQUEST_USER_SEARCH]: () => request("userSearch", state, action),
     [act.RECEIVE_USER_SEARCH]: () => receive("userSearch", state, action),
+    [act.RESET_USER_SEARCH]: () => reset("userSearch", state, action),
     [act.REQUEST_EDIT_PROPOSAL]: () => request("editProposal", state, action),
     [act.RECEIVE_EDIT_PROPOSAL]: () => receive("editProposal", state, action),
     [act.REQUEST_NEW_COMMENT]: () => request("newComment", state, action),

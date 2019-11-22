@@ -1,7 +1,6 @@
 import { useMemo } from "react";
-import { useLoaderContext } from "src/containers/Loader";
 import * as sel from "src/selectors";
-import { useRedux } from "src/redux";
+import { useSelector } from "src/redux";
 import {
   getVoteBlocksLeft,
   isVoteActiveProposal,
@@ -9,15 +8,13 @@ import {
 } from "./helpers";
 
 export function useProposalVote(token) {
-  const mapStateToProps = useMemo(() => {
-    const voteSummarySelector = sel.makeGetProposalVoteSummary(token);
-    return {
-      voteSummary: voteSummarySelector,
-      bestBlock: sel.bestBlock
-    };
-  }, [token]);
-  const { voteSummary, bestBlock } = useRedux({}, mapStateToProps, {});
-  const { apiInfo } = useLoaderContext();
+  const voteSummarySelector = useMemo(
+    () => sel.makeGetProposalVoteSummary(token),
+    [token]
+  );
+  const voteSummary = useSelector(voteSummarySelector);
+  const bestBlock = useSelector(sel.bestBlock);
+  const apiInfo = useSelector(sel.apiInitResponse);
   const voteTimeInWords = getVoteTimeInWords(
     voteSummary,
     bestBlock,
