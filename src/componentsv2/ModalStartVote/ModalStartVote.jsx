@@ -58,8 +58,8 @@ const ModalStartVote = ({
   );
 
   const [theme] = useTheme();
-  const colorGray = getThemeProperty(theme, "color-gray");
-  const colorPrimaryDark = getThemeProperty(theme, "color-primary-dark");
+  const colorGray = theme ? getThemeProperty(theme, "color-gray") : "";
+  const colorPrimaryDark = theme ? getThemeProperty(theme, "color-primary-dark") : "";
 
   return (
     <Modal

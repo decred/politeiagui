@@ -24,7 +24,10 @@ const fontConfig = {
 };
 
 const App = () => {
-  useTheme(defaultLightTheme);
+  const [theme, setTheme] = useTheme();
+  if (!theme) {
+    setTheme(defaultLightTheme);
+  }
   useFont(fontConfig);
   return (
     <Config>

@@ -129,7 +129,7 @@ export const Header = React.memo(function Header({
 export const ChartsLink = ({ token }) => {
   const { apiInfo } = useLoader();
   const [theme] = useTheme();
-  const hoverColor = getThemeProperty(theme, "color-gray");
+  const hoverColor = theme ? getThemeProperty(theme, "color-gray") : "";
   const [ref, isHovered] = useHover();
   const iconColor = isHovered ? hoverColor : undefined;
   const hostName = apiInfo.testnet ? "testnet" : "explorer";
@@ -156,7 +156,7 @@ export const GithubLink = ({ token }) => {
   const { apiInfo } = useLoader();
   const repoURL = apiInfo.testnet ? testnetGitRepository : mainnetGitRepository;
   const [theme] = useTheme();
-  const hoverColor = getThemeProperty(theme, "color-gray");
+  const hoverColor = theme ? getThemeProperty(theme, "color-gray") : "";
   const [ref, isHovered] = useHover();
   const iconColor = isHovered ? hoverColor : undefined;
 
