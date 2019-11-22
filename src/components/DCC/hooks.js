@@ -1,9 +1,10 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { CMS_USER_TYPES, CMS_DOMAINS } from "../../constants";
 import {
   getQueryStringValue,
   setQueryStringValue
 } from "../../lib/queryString";
+import { getDCCStatus, typesForDCC } from "./helpers";
 
 // remove supervisor option since it ir not available for new dcc
 const typeOptions = CMS_USER_TYPES.reduce((acc, curr, index) => {
@@ -118,7 +119,7 @@ export const useNewDCC = ({ onSubmitDCC, onSaveDraftDCC }) => {
   };
 };
 
-export const useListDCC = ({ onFetchDCCs, dccs }) => {
+export const useListDCC = ({ onFetchDCCsByStatus, dccs }) => {
   const [loadingDCCs, setLoadingDCCs] = useState(true);
   const [orderedDCCs, setOrderedDCCs] = useState([]);
   const [status, setStatus] = useState(1);
@@ -126,13 +127,14 @@ export const useListDCC = ({ onFetchDCCs, dccs }) => {
   useEffect(() => {
     async function onFetchData() {
       setLoadingDCCs(true);
-      await onFetchDCCs(status);
+      await onFetchDCCsByStatus(status);
+      // force timeout
       setTimeout(() => {
         setLoadingDCCs(false);
       }, 300);
     }
     onFetchData();
-  }, [status, onFetchDCCs, setLoadingDCCs]);
+  }, [status, onFetchDCCsByStatus, setLoadingDCCs]);
 
   useEffect(() => {
     const resetDCCs = () => {
@@ -154,4 +156,24 @@ export const useListDCC = ({ onFetchDCCs, dccs }) => {
   );
 
   return { loadingDCCs, orderedDCCs, handleStatusChange, status };
+};
+
+export const useDCCDetails = ({ onLoadDCC, dcc, token, nomineeUsername }) => {
+  const [loadingDCC, setLoadingDCC] = useState(true);
+
+  useEffect(() => {
+    const fetchDCCByToken = async () => {
+      await onLoadDCC(token);
+      setLoadingDCC(false);
+    };
+    fetchDCCByToken();
+  }, [onLoadDCC, token]);
+
+  const status = useMemo(() => dcc && getDCCStatus(dcc.status), [dcc]);
+  const type = useMemo(
+    () => dcc && dcc.dccpayload && typesForDCC[dcc.dccpayload.type],
+    [dcc]
+  );
+
+  return { dcc, loadingDCC, status, type, nomineeUsername };
 };

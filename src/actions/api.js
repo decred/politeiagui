@@ -1478,7 +1478,7 @@ export const onSubmitNewDCC = (
       });
   });
 
-export const onFetchDCCs = status =>
+export const onFetchDCCsByStatus = status =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_DCCS({}));
     return api
@@ -1488,5 +1488,19 @@ export const onFetchDCCs = status =>
       })
       .catch(error => {
         dispatch(act.RECEIVE_DCCS(null, error));
+      });
+  });
+
+export const onFetchDCC = token =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_DCC({}));
+    return api
+      .dccDetails(csrf, token)
+      .then(response => {
+        dispatch(act.RECEIVE_DCC(response));
+      })
+      .then()
+      .catch(error => {
+        dispatch(act.RECEIVE_DCC(null, error));
       });
   });

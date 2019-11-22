@@ -18,7 +18,8 @@ import {
 import {
   onFetchProposal as onFetchProposalApi,
   onSubmitComment as onSubmitCommentApi,
-  onFetchInvoice as onFetchInvoiceApi
+  onFetchInvoice as onFetchInvoiceApi,
+  onFetchDCC as onFetchDCCApi
 } from "./api";
 import {
   resetNewProposalData,
@@ -489,3 +490,16 @@ export const onResetComments = () => act.RESET_COMMENTS();
 
 // CMS
 export const onResetInviteUser = () => act.RESET_INVITE_USER();
+
+export const onLoadDCC = token => (dispatch, getState) => {
+  const fetchedDCCs = sel.dccsByStatus(getState());
+  const dcc =
+    fetchedDCCs &&
+    fetchedDCCs.length > 0 &&
+    fetchedDCCs.find(dcc => dcc.censorshiprecord.token === token);
+  if (dcc) {
+    dispatch(act.SET_DCC(dcc));
+  } else {
+    dispatch(onFetchDCCApi(token));
+  }
+};

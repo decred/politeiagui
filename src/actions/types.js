@@ -293,3 +293,7 @@ export const LOAD_DRAFT_DCCS = "LOAD_DRAFT_DCCS";
 
 export const REQUEST_DCCS = "API_REQUEST_DCCS";
 export const RECEIVE_DCCS = "API_RECEIVE_DCCS";
+
+export const REQUEST_DCC = "API_REQUEST_DCC";
+export const RECEIVE_DCC = "API_RECEIVE_DCC";
+export const SET_DCC = "SET_DCC";

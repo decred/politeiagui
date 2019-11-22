@@ -32,7 +32,8 @@ import {
   onReceiveNewInvoiceComment,
   onReceivePayApprovedInvoices,
   onReceiveSetStatusInvoice,
-  onReceiveManageCmsUser
+  onReceiveManageCmsUser,
+  onSetDCC
 } from "./handlersCMS";
 
 export const DEFAULT_STATE = {
@@ -228,6 +229,7 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.RECEIVE_NEW_DCC]: () => receive("newDCC", state, action),
       [act.REQUEST_DCCS]: () => request("dccs", state, action),
       [act.RECEIVE_DCCS]: () => receive("dccs", state, action),
+      [act.SET_DCC]: () => onSetDCC(state, action),
       // === CMS END ===
       [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
         request("proposalPaywallDetails", state, action),

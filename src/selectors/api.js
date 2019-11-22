@@ -797,3 +797,10 @@ export const dccsByStatus = compose(
   apiDCCsResponse
 );
 export const dccsError = getApiError("dccs");
+
+export const dccDetailsApi = getApiResponse("dcc");
+
+export const dccDetails = compose(
+  get("dcc"),
+  dccDetailsApi
+);

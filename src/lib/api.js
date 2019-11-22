@@ -654,3 +654,6 @@ export const newDCC = (csrf, dcc) =>
 
 export const dccsByStatus = (csrf, status) =>
   POST("/dcc", csrf, status).then(getResponse);
+
+export const dccDetails = (csrf, token) =>
+  GET(`/v1/dcc/${token}`, csrf).then(getResponse);

@@ -1,0 +1,28 @@
+.dcc-details {
+  background-color: white;
+  padding: 16px;
+  width: 100%;
+}
+
+.dcc-details h2 {
+  font-weight: bold;
+  font-size: 1.4rem;
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.dcc-info {
+  padding-bottom: 16px;
+  text-transform: lowercase;
+}
+
+.dcc-info label {
+  font-size: 1rem;
+  color: #555555;
+  padding-right: 1rem;
+  display: inline-block;
+  font-weight: bold;
+  text-transform: none;
+}

@@ -135,3 +135,16 @@ export const onReceiveManageCmsUser = (state, action) => {
     }
   };
 };
+
+export const onSetDCC = (state, action) => {
+  state = receive("dcc", state, action);
+  const dcc = action.payload;
+  if (action.error) return state;
+  return {
+    ...state,
+    dcc: {
+      ...state.dcc,
+      response: { dcc }
+    }
+  };
+};
