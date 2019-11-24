@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Router } from "src/componentsv2/Router";
 import Config from "src/Config";
 import { defaultLightTheme, useTheme, useFont } from "pi-ui";
@@ -24,10 +24,10 @@ const fontConfig = {
 };
 
 const App = () => {
-  const [theme, setTheme] = useTheme();
-  if (!theme) {
+  const [, setTheme] = useTheme();
+  useEffect(() => {
     setTheme(defaultLightTheme);
-  }
+  }, [setTheme]);
   useFont(fontConfig);
   return (
     <Config>
