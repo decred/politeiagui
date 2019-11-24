@@ -1,5 +1,5 @@
 import { getCurrentMonth, getCurrentYear } from "src/helpers";
-
+import { INVOICE_STATUS_NEW, INVOICE_STATUS_UPDATED } from "./constants";
 /**
  * Returns the initial month and year to be applied to a blank invoice form
  * @returns {Object} { year, month}
@@ -43,3 +43,11 @@ export const presentationalInvoiceName = invoice =>
   invoice && invoice.input
     ? `Invoice from ${invoice.input.contractorname} - ${invoice.input.month}/${invoice.input.year}`
     : "";
+
+/**
+ * Returns true if the given invoice wasn't reviewed by an admin yet
+ * @param {Object} invoice
+ */
+export const isUnreviewedInvoice = invoice =>
+  invoice.status === INVOICE_STATUS_NEW ||
+  invoice.status === INVOICE_STATUS_UPDATED;
