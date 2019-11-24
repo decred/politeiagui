@@ -923,31 +923,18 @@ export const onVerifyUserKey = (currentUserEmail, verificationtoken) =>
       });
   });
 
-export const onSetInvoiceStatus = (
-  authorid,
-  loggedInAsEmail,
-  token,
-  status,
-  version,
-  reason = ""
-) =>
+export const onSetInvoiceStatus = (token, status, version, reason = "") =>
   withCsrf((dispatch, getState, csrf) => {
+    const email = sel.currentUserEmail(getState());
     dispatch(act.REQUEST_SETSTATUS_INVOICE({ status, token, reason }));
     return api
-      .invoiceSetStatus(loggedInAsEmail, csrf, token, version, status, reason)
+      .invoiceSetStatus(email, csrf, token, version, status, reason)
       .then(({ invoice }) => {
-        dispatch(
-          act.RECEIVE_SETSTATUS_INVOICE({
-            invoice: {
-              ...invoice,
-              userid: authorid
-            }
-          })
-        );
-        // dispatch(onFetchUnvettedStatus());
+        dispatch(act.RECEIVE_SETSTATUS_INVOICE(invoice));
       })
       .catch(error => {
         dispatch(act.RECEIVE_SETSTATUS_INVOICE(null, error));
+        throw error;
       });
   });
 

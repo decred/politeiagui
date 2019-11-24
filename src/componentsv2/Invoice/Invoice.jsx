@@ -1,31 +1,10 @@
-import { classNames, StatusBar, StatusTag, Text, useMediaQuery } from "pi-ui";
-import React, { useState } from "react";
-// import Markdown from "../Markdown";
-// import ModalSearchVotes from "../ModalSearchVotes";
+import { classNames, StatusTag, Text, useMediaQuery } from "pi-ui";
+import React from "react";
 import RecordWrapper from "../RecordWrapper";
-// import IconButton from "src/componentsv2/IconButton";
 import { getInvoiceStatusTagProps } from "./helpers";
-// import {
-//   getMarkdownContent,
-//   getVotesReceived,
-//   isAbandonedProposal,
-//   isPublicProposal,
-//   isEditableProposal,
-//   getQuorumInVotes,
-//   isVotingFinishedProposal
-// } from "src/containers/Proposal/helpers";
-// import { useProposalVote } from "src/containers/Proposal/hooks";
-// import { useLoaderContext } from "src/containers/Loader";
 import styles from "./Invoice.module.css";
-// import LoggedInContent from "src/componentsv2/LoggedInContent";
-// import VotesCount from "./VotesCount";
-// import DownloadComments from "src/containers/Comments/Download";
-// import ProposalActions from "./ProposalActions";
-// import { useFullImageModal } from "src/componentsv2/ProposalForm/hooks";
-// import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
-// import ModalFullImage from "src/componentsv2/ModalFullImage";
-// import VersionPicker from "src/componentsv2/VersionPicker";
-// import { useRouter } from "src/componentsv2/Router";
+import { InvoiceActions } from "src/containers/Invoice/Actions";
+import { presentationalInvoiceName } from "src/containers/Invoice/helpers";
 
 const Invoice = ({ invoice, extended, collapseBodyContent }) => {
   const {
@@ -74,7 +53,7 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
                   linesBeforeTruncate={2}
                   url={extended ? "" : invoiceURL}
                 >
-                  {`Invoice from ${invContractorName} - ${invoiceMonth}/${invoiceYear}`}
+                  {presentationalInvoiceName(invoice)}
                 </Title>
               }
               subtitle={
@@ -100,6 +79,7 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
                 </Status>
               }
             />
+            <InvoiceActions invoice={invoice} />
           </>
         );
       }}

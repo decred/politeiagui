@@ -33,3 +33,13 @@ export const getMinMaxYearAndMonth = () => {
     max: getInitialDateValue()
   };
 };
+
+/**
+ * Returns a presentational name for a given invoice based on the contractor
+ * name, month and year
+ * @param {Object} invoice
+ */
+export const presentationalInvoiceName = invoice =>
+  invoice && invoice.input
+    ? `Invoice from ${invoice.input.contractorname} - ${invoice.input.month}/${invoice.input.year}`
+    : "";

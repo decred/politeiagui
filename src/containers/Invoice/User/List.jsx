@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { useUserInvoices } from "./hooks";
 import { Spinner } from "pi-ui";
 import Invoice from "src/componentsv2/Invoice";
+import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import {
   InvoiceFilterForm,
   FilterInvoices
@@ -50,7 +51,7 @@ const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
   ]);
 
   return (
-    <>
+    <AdminInvoiceActionsProvider>
       <TopBanner>
         <PageDetails title="My invoices">
           <InvoiceFilterForm onChange={handleFiltersChange} />
@@ -73,7 +74,7 @@ const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
           </FilterInvoices>
         )}
       </Main>
-    </>
+    </AdminInvoiceActionsProvider>
   );
 };
 
