@@ -4,10 +4,10 @@ import {
   TextInput,
   Icon,
   getThemeProperty,
-  useTheme
+  ThemeContext
 } from "pi-ui";
 import PropTypes from "prop-types";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import { isEmpty } from "src/helpers";
 
@@ -37,9 +37,9 @@ const ModalChangePassword = ({
     setSuccess(false);
   }, [show]);
 
-  const [theme] = useTheme();
-  const colorGray = getThemeProperty(theme, "color-gray");
-  const colorPrimaryDark = getThemeProperty(theme, "color-primary-dark");
+  const { currentTheme } = useContext(ThemeContext);
+  const colorGray = getThemeProperty(currentTheme, "color-gray");
+  const colorPrimaryDark = getThemeProperty(currentTheme, "color-primary-dark");
 
   return (
     <Modal

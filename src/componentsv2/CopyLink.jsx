@@ -1,12 +1,12 @@
-import React from "react";
-import { getThemeProperty, useHover, useTheme } from "pi-ui";
+import React, { useContext } from "react";
+import { getThemeProperty, useHover, ThemeContext } from "pi-ui";
 import PropTypes from "prop-types";
 import IconButton from "src/componentsv2/IconButton";
 import CopyToClipboard from "src/componentsv2/CopyToClipboard";
 
 const CopyLink = ({ url, className }) => {
-  const [theme] = useTheme();
-  const hoverColor = getThemeProperty(theme, "color-gray");
+  const { currentTheme } = useContext(ThemeContext);
+  const hoverColor = getThemeProperty(currentTheme, "color-gray");
   const [ref, isHovered] = useHover();
   const iconColor = isHovered ? hoverColor : undefined;
   return (
