@@ -1,24 +1,12 @@
 import * as sel from "src/selectors";
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
+import { useAction, useSelector } from "src/redux";
 import useAPIAction from "src/hooks/utils/useAPIAction";
 import useThrowError from "src/hooks/utils/useThrowError";
 
-const mapStateToProps = {
-  currentUserID: sel.currentUserID,
-  invoices: sel.getCurrentUserInvoices
-};
-
-const mapDispatchToProps = {
-  onFetchUserInvoices: act.onFetchUserInvoices
-};
-
-export function useUserInvoices(ownProps) {
-  const { onFetchUserInvoices, invoices } = useRedux(
-    ownProps,
-    mapStateToProps,
-    mapDispatchToProps
-  );
+export function useUserInvoices() {
+  const invoices = useSelector(sel.getCurrentUserInvoices);
+  const onFetchUserInvoices = useAction(act.onFetchUserInvoices);
 
   const [loading, error] = useAPIAction(onFetchUserInvoices);
 
