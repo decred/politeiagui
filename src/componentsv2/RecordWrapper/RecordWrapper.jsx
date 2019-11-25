@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import styles from "./RecordWrapper.module.css";
 import DateTooltip from "../DateTooltip";
@@ -11,7 +11,7 @@ import {
   Text,
   classNames,
   useHover,
-  ThemeContext,
+  useTheme,
   getThemeProperty,
   Tooltip
 } from "pi-ui";
@@ -128,8 +128,8 @@ export const Header = React.memo(function Header({
 
 export const ChartsLink = ({ token }) => {
   const { apiInfo } = useLoader();
-  const { currentTheme } = useContext(ThemeContext);
-  const hoverColor = getThemeProperty(currentTheme, "color-gray");
+  const { theme } = useTheme();
+  const hoverColor = getThemeProperty(theme, "color-gray");
   const [ref, isHovered] = useHover();
   const iconColor = isHovered ? hoverColor : undefined;
   const hostName = apiInfo.testnet ? "testnet" : "explorer";
@@ -155,8 +155,8 @@ export const GithubLink = ({ token }) => {
   const { testnetGitRepository, mainnetGitRepository } = useConfig();
   const { apiInfo } = useLoader();
   const repoURL = apiInfo.testnet ? testnetGitRepository : mainnetGitRepository;
-  const { currentTheme } = useContext(ThemeContext);
-  const hoverColor = getThemeProperty(currentTheme, "color-gray");
+  const { theme } = useTheme();
+  const hoverColor = getThemeProperty(theme, "color-gray");
   const [ref, isHovered] = useHover();
   const iconColor = isHovered ? hoverColor : undefined;
 

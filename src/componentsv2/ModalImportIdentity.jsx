@@ -5,10 +5,10 @@ import {
   Modal,
   Text,
   TextInput,
-  ThemeContext
+  useTheme
 } from "pi-ui";
 import PropTypes from "prop-types";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import ReactFileReader from "react-file-reader";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import {
@@ -118,9 +118,9 @@ const ModalImportIdentity = ({
     [show]
   );
 
-  const { currentTheme } = useContext(ThemeContext);
-  const colorGray = getThemeProperty(currentTheme, "color-gray");
-  const colorPrimaryDark = getThemeProperty(currentTheme, "color-primary-dark");
+  const { theme } = useTheme;
+  const colorGray = getThemeProperty(theme, "color-gray");
+  const colorPrimaryDark = getThemeProperty(theme, "color-primary-dark");
 
   return (
     <Modal

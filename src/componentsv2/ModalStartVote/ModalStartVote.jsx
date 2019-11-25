@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import {
   Button,
@@ -6,7 +6,7 @@ import {
   TextInput,
   RadioButtonGroup,
   Icon,
-  ThemeContext,
+  useTheme,
   getThemeProperty
 } from "pi-ui";
 import PropTypes from "prop-types";
@@ -57,9 +57,9 @@ const ModalStartVote = ({
     [show]
   );
 
-  const { currentTheme } = useContext(ThemeContext);
-  const colorGray = getThemeProperty(currentTheme, "color-gray");
-  const colorPrimaryDark = getThemeProperty(currentTheme, "color-primary-dark");
+  const { theme } = useTheme();
+  const colorGray = getThemeProperty(theme, "color-gray");
+  const colorPrimaryDark = getThemeProperty(theme, "color-primary-dark");
 
   return (
     <Modal

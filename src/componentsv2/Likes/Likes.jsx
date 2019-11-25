@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import {
   Icon,
-  ThemeContext,
+  useTheme,
   Text,
   getThemeProperty,
   useHover,
@@ -24,9 +24,9 @@ const Likes = ({
   const [loading, setLoading] = useState(false);
   const [likeRef, isLikeHovered] = useHover();
   const [dislikeRef, isDislikeHovered] = useHover();
-  const { currentTheme } = useContext(ThemeContext);
-  const defaultColor = getThemeProperty(currentTheme, "color-gray");
-  const activeColor = getThemeProperty(currentTheme, "color-primary-dark");
+  const { theme } = useTheme();
+  const defaultColor = getThemeProperty(theme, "color-gray");
+  const activeColor = getThemeProperty(theme, "color-primary-dark");
   const liked = isLiked(option);
   const disliked = isDisliked(option);
   const isDisabled = disabled || loading;
