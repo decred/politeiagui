@@ -28,7 +28,8 @@ const dccConnector = connect(
     onSaveDraftDCC: act.onSaveDraftDCC,
     onFetchDCCsByStatus: act.onFetchDCCsByStatus,
     onLoadDCC: act.onLoadDCC,
-    onFetchUser: act.onFetchUser
+    onFetchUser: act.onFetchUser,
+    onSupportOpposeDCC: act.onSupportOpposeDCC
   }
 );
 

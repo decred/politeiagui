@@ -1,5 +1,10 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
-import { CMS_USER_TYPES, CMS_DOMAINS } from "../../constants";
+import {
+  CMS_USER_TYPES,
+  CMS_DOMAINS,
+  DCC_SUPPORT_VOTE,
+  DCC_OPPOSE_VOTE
+} from "../../constants";
 import {
   getQueryStringValue,
   setQueryStringValue
@@ -172,7 +177,15 @@ export const useListDCC = ({ onFetchDCCsByStatus, dccs }) => {
   return { loadingDCCs, orderedDCCs, handleStatusChange, status };
 };
 
-export const useDCCDetails = ({ onLoadDCC, dcc, token, nomineeUsername }) => {
+export const useDCCDetails = ({
+  onLoadDCC,
+  dcc,
+  token,
+  nomineeUsername,
+  userid,
+  onSupportOpposeDCC,
+  loggedInAsEmail
+}) => {
   const [loadingDCC, setLoadingDCC] = useState(true);
 
   useEffect(() => {
@@ -189,11 +202,31 @@ export const useDCCDetails = ({ onLoadDCC, dcc, token, nomineeUsername }) => {
     [dcc]
   );
 
+  const onOpposeDCC = useCallback(async () => {
+    await onSupportOpposeDCC(loggedInAsEmail, token, DCC_SUPPORT_VOTE);
+  }, [token, onSupportOpposeDCC, loggedInAsEmail]);
+
+  const onSupportDCC = useCallback(async () => {
+    await onSupportOpposeDCC(loggedInAsEmail, token, DCC_OPPOSE_VOTE);
+  }, [token, onSupportOpposeDCC, loggedInAsEmail]);
+
+  const userCanVote = useMemo(() => {
+    const hasUserSupported =
+      dcc && dcc.supportuserids && dcc.supportuserids.indexOf(userid) !== -1;
+    const hasUserOpposed =
+      dcc && dcc.againstuserids && dcc.againstuserids.indexOf(userid) !== -1;
+    const isUserSponsor = dcc && dcc.sponsoruserid === userid;
+    return !hasUserSupported && !hasUserOpposed && !isUserSponsor;
+  }, [dcc, userid]);
+
   return {
     dcc,
+    userCanVote,
     loadingDCC,
     status,
     type,
-    nomineeUsername
+    nomineeUsername,
+    onSupportDCC,
+    onOpposeDCC
   };
 };

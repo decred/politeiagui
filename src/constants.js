@@ -172,3 +172,6 @@ export const CMS_DOMAINS = [
   "Documentation",
   "Community Management"
 ];
+
+export const DCC_SUPPORT_VOTE = "aye";
+export const DCC_OPPOSE_VOTE = "nay";

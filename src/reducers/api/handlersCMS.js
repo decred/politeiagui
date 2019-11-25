@@ -148,3 +148,10 @@ export const onSetDCC = (state, action) => {
     }
   };
 };
+
+export const onReceiveSupportOpposeDCC = (state, action) => {
+  state = receive("supportOpposeDCC", state, action);
+  if (action.error) return state;
+  console.log(action);
+  return state;
+};
