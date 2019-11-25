@@ -26,8 +26,8 @@ jobs:
     - name: tests
       run: |
         yarn run uidev &
-        yarn test
         scripts/serverUpChecker.sh
+        yarn test
       env:
         CI: true
     - name: build
