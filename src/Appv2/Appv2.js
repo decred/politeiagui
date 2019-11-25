@@ -27,7 +27,7 @@ const App = () => {
   return (
     <ThemeProvider
       themes={{ light: defaultLightTheme, dark: defaultDarkTheme }}
-      defaultThemeName="dark"
+      defaultThemeName="light"
       fontConfig={fontConfig}
     >
       <Config>
