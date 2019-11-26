@@ -333,7 +333,7 @@ export const onFetchInvoiceComments = token => dispatch => {
   return api
     .invoiceComments(token)
     .then(response => {
-      dispatch(act.RECEIVE_INVOICE_COMMENTS(response));
+      dispatch(act.RECEIVE_INVOICE_COMMENTS({ ...response, token }));
     })
     .catch(error => {
       dispatch(act.RECEIVE_INVOICE_COMMENTS(null, error));

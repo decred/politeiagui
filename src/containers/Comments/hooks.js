@@ -15,6 +15,7 @@ export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
 
 export function useComments(ownProps) {
+  const { enableCommentVote, recordType, constants } = useConfig();
   const recordToken = ownProps && ownProps.recordToken;
   const commentsSelector = useMemo(
     () => sel.makeGetProposalComments(recordToken),
@@ -31,13 +32,16 @@ export function useComments(ownProps) {
   const loading = useSelector(sel.isApiRequestingComments);
   const loadingLikes = useSelector(sel.isApiRequestingCommentsLikes);
   const onSubmitComment = useAction(act.onSaveNewCommentV2);
-  const onFetchComments = useAction(act.onFetchProposalComments);
+  const onFetchComments = useAction(
+    recordType === constants.RECORD_TYPE_PROPOSAL
+      ? act.onFetchProposalComments
+      : act.onFetchInvoiceComments
+  );
   const onFetchLikes = useAction(act.onFetchLikedComments);
   const onLikeCommentAction = useAction(act.onLikeComment);
   const onResetComments = useAction(act.onResetComments);
   const onCensorComment = useAction(act.onCensorCommentv2);
 
-  const { enableCommentVote, recordType } = useConfig();
   const { currentUser } = useLoaderContext();
   const email = currentUser && currentUser.email;
 
