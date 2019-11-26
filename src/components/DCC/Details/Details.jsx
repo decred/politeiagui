@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "../../snew";
-import { useDCCDetails } from "../hooks";
+import { useDCCDetails } from "./hooks";
 import dccConnector from "../../../connectors/dcc";
 import Button from "../../snew/ButtonWithLoadingIcon";
+import Message from "../../Message";
+import * as modalTypes from "../../Modal/modalTypes";
 // import Card from "../List/Card";
 
 const DCCInfo = ({ label = "", children }) => (
@@ -12,16 +14,36 @@ const DCCInfo = ({ label = "", children }) => (
   </div>
 );
 
+// const DCCAdminActions = 
+
 const DCCDetails = props => {
-  const { dcc, status, type, userCanVote, onSupportDCC, onOpposeDCC } = useDCCDetails(props);
+  const {
+    dcc,
+    status,
+    type,
+    userCanVote,
+    onSupportDCC,
+    onOpposeDCC,
+    error,
+    isLoadingOpposeDCC,
+    isLoadingSupportDCC,
+    confirmWithModal
+  } = useDCCDetails(props);
   // FUTURE: Use <RecordWrapper>
   return (
     <div className="content" role="main">
+      <div className="dcc-info">
+        <Link href="/dccs">Go to DCCs</Link>
+      </div>
       {dcc && props.loggedInAsEmail &&
         <>
+          {error && (
+            <Message type="error" header="DCC Voting Error" body={error} />
+          )}
           <div className="dcc dcc-header">
             <h1>{type} for {dcc.nomineeusername}</h1>
             <span className="status">{status}</span>
+            {/* {isAdmin && <DCCAdminActions/>} */}
           </div>
           <div className="dcc">
             <h2>Info</h2>
@@ -41,20 +63,29 @@ const DCCDetails = props => {
             <h2>Votes</h2>
             <DCCInfo label="Support">{dcc.supportuserids.length}</DCCInfo>
             <DCCInfo label="Against">{dcc.againstuserids.length}</DCCInfo>
-            {/* <Button disabled={!userCanVote}>support</Button><Button disabled={!userCanVote}>oppose</Button> */}
             <Button
               className={`togglebutton access-required${!userCanVote &&
                 " not-active disabled"}`}
               name="support"
               text="Support"
-              onClick={onSupportDCC}
-            />
+              isLoading={isLoadingSupportDCC}
+              onClick={() => {
+                confirmWithModal(modalTypes.CONFIRM_ACTION, {
+                  message: "Are you sure you want to support this DCC?"
+                }).then(ok => ok && onSupportDCC());
+              }}
+              />
             <Button
               className={`togglebutton access-required${!userCanVote &&
                 " not-active disabled"}`}
               name="oppose"
               text="Oppose"
-              onClick={onOpposeDCC}
+              isLoading={isLoadingOpposeDCC}
+              onClick={() => {
+                confirmWithModal(modalTypes.CONFIRM_ACTION, {
+                  message: "Are you sure you want to oppose this DCC?"
+                }).then(ok => ok && onOpposeDCC());
+              }}
             />
             {!userCanVote && <span>You have already supported or opposed the given DCC, or either you are the DCC sponsor.</span>}
           </div>

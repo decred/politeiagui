@@ -12,7 +12,7 @@ import * as pki from "../lib/pki";
 import * as sel from "../selectors";
 import act from "./methods";
 import { closeModal, confirmWithModal, openModal } from "./modal";
-import { PAYWALL_STATUS_PAID } from "../constants";
+import { PAYWALL_STATUS_PAID, DCC_SUPPORT_VOTE } from "../constants";
 
 export const onResetProposal = act.RESET_PROPOSAL;
 export const onResetInvoice = act.RESET_INVOICE;
@@ -1515,10 +1515,14 @@ export const onSupportOpposeDCC = (loggedInAsEmail, token, comment) =>
       .then(vote => api.signDCCVote(loggedInAsEmail, vote))
       .then(vote => api.supportOpposeDCC(csrf, vote))
       .then(response => {
-        dispatch(act.RECEIVE_SUPPORT_OPPOSE_DCC(response));
+        dispatch(
+          act.RECEIVE_SUPPORT_OPPOSE_DCC({
+            ...response,
+            isSupport: comment === DCC_SUPPORT_VOTE
+          })
+        );
       })
       .catch(error => {
-        console.log(error);
         dispatch(act.RECEIVE_SUPPORT_OPPOSE_DCC(null, error));
       });
   });

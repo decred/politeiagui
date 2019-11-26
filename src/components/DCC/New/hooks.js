@@ -1,15 +1,9 @@
-import { useState, useCallback, useEffect, useMemo } from "react";
-import {
-  CMS_USER_TYPES,
-  CMS_DOMAINS,
-  DCC_SUPPORT_VOTE,
-  DCC_OPPOSE_VOTE
-} from "../../constants";
+import { useState, useCallback, useEffect } from "react";
+import { CMS_USER_TYPES, CMS_DOMAINS } from "../../../constants";
 import {
   getQueryStringValue,
   setQueryStringValue
-} from "../../lib/queryString";
-import { getDCCStatus, typesForDCC } from "./helpers";
+} from "../../../lib/queryString";
 
 // remove supervisor option since it ir not available for new dcc
 const typeOptions = CMS_USER_TYPES.reduce((acc, curr, index) => {
@@ -135,98 +129,5 @@ export const useNewDCC = ({
     formValues,
     savedDraft,
     fakeLoadingDraft
-  };
-};
-
-export const useListDCC = ({ onFetchDCCsByStatus, dccs }) => {
-  const [loadingDCCs, setLoadingDCCs] = useState(true);
-  const [orderedDCCs, setOrderedDCCs] = useState([]);
-  const [status, setStatus] = useState(1);
-
-  useEffect(() => {
-    async function onFetchData() {
-      setLoadingDCCs(true);
-      await onFetchDCCsByStatus(status);
-      // force timeout
-      setTimeout(() => {
-        setLoadingDCCs(false);
-      }, 300);
-    }
-    onFetchData();
-  }, [status, onFetchDCCsByStatus, setLoadingDCCs]);
-
-  useEffect(() => {
-    const resetDCCs = () => {
-      setOrderedDCCs([]);
-    };
-
-    if (dccs && dccs.length > 0) {
-      setOrderedDCCs(dccs.sort((a, b) => b.timestamp - a.timestamp));
-    } else if (dccs && dccs.length === 0) {
-      resetDCCs();
-    }
-  }, [dccs, setOrderedDCCs]);
-
-  const handleStatusChange = useCallback(
-    s => {
-      setStatus(s);
-    },
-    [setStatus]
-  );
-
-  return { loadingDCCs, orderedDCCs, handleStatusChange, status };
-};
-
-export const useDCCDetails = ({
-  onLoadDCC,
-  dcc,
-  token,
-  nomineeUsername,
-  userid,
-  onSupportOpposeDCC,
-  loggedInAsEmail
-}) => {
-  const [loadingDCC, setLoadingDCC] = useState(true);
-
-  useEffect(() => {
-    const fetchDCCByToken = async () => {
-      await onLoadDCC(token);
-      setLoadingDCC(false);
-    };
-    fetchDCCByToken();
-  }, [onLoadDCC, token]);
-
-  const status = useMemo(() => dcc && getDCCStatus(dcc.status), [dcc]);
-  const type = useMemo(
-    () => dcc && dcc.dccpayload && typesForDCC[dcc.dccpayload.type],
-    [dcc]
-  );
-
-  const onOpposeDCC = useCallback(async () => {
-    await onSupportOpposeDCC(loggedInAsEmail, token, DCC_SUPPORT_VOTE);
-  }, [token, onSupportOpposeDCC, loggedInAsEmail]);
-
-  const onSupportDCC = useCallback(async () => {
-    await onSupportOpposeDCC(loggedInAsEmail, token, DCC_OPPOSE_VOTE);
-  }, [token, onSupportOpposeDCC, loggedInAsEmail]);
-
-  const userCanVote = useMemo(() => {
-    const hasUserSupported =
-      dcc && dcc.supportuserids && dcc.supportuserids.indexOf(userid) !== -1;
-    const hasUserOpposed =
-      dcc && dcc.againstuserids && dcc.againstuserids.indexOf(userid) !== -1;
-    const isUserSponsor = dcc && dcc.sponsoruserid === userid;
-    return !hasUserSupported && !hasUserOpposed && !isUserSponsor;
-  }, [dcc, userid]);
-
-  return {
-    dcc,
-    userCanVote,
-    loadingDCC,
-    status,
-    type,
-    nomineeUsername,
-    onSupportDCC,
-    onOpposeDCC
   };
 };

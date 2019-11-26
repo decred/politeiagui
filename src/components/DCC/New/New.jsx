@@ -1,7 +1,7 @@
 import React from "react";
 import ReactBody from "react-body";
 import { Field, reduxForm } from "redux-form";
-import { useNewDCC } from "../hooks";
+import { useNewDCC } from "./hooks";
 import dccConnector from "../../../connectors/dcc";
 import Message from "../../Message";
 import Button from "../../snew/ButtonWithLoadingIcon";
@@ -11,7 +11,7 @@ import {
 } from "../../../constants";
 
 const NewDCC = ({
-  error,
+  newDCCError: error,
   newDCCResponse,
   isLoading,
   ...props

@@ -138,8 +138,8 @@ export const onReceiveManageCmsUser = (state, action) => {
 
 export const onSetDCC = (state, action) => {
   state = receive("dcc", state, action);
-  const dcc = action.payload;
   if (action.error) return state;
+  const dcc = action.payload;
   return {
     ...state,
     dcc: {
@@ -152,6 +152,26 @@ export const onSetDCC = (state, action) => {
 export const onReceiveSupportOpposeDCC = (state, action) => {
   state = receive("supportOpposeDCC", state, action);
   if (action.error) return state;
-  console.log(action);
+  const { supportuserids, againstuserids } = state.dcc.response.dcc;
+  if (action.payload.isSupport) {
+    supportuserids.push(state.me.response.userid);
+  } else {
+    againstuserids.push(state.me.response.userid);
+  }
+  state = {
+    ...state,
+    dcc: {
+      ...state.dcc,
+      response: {
+        ...state.dcc.response,
+        dcc: {
+          ...state.dcc.response.dcc,
+          supportuserids,
+          againstuserids
+        }
+      }
+    }
+  };
+  console.log(state);
   return state;
 };

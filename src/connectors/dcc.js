@@ -15,13 +15,15 @@ const dccConnector = connect(
     loggedInAsEmail: sel.loggedInAsEmail,
     userid: sel.userid,
     username: sel.loggedInAsUsername,
-    error: sel.newDCCError,
+    newDCCError: sel.newDCCError,
     newDCCResponse: sel.apiNewDCCResponse,
+    supportOpposeError: sel.apiSupportOpposeDCCError,
     isLoading: sel.isApiRequestingNewDCC,
     newToken: sel.newDCCToken,
     dccs: sel.dccsByStatus,
     dcc: sel.dccDetails,
-    nomineeUsername: sel.getUserUsername
+    nomineeUsername: sel.getUserUsername,
+    isAdmin: sel.isAdmin
   }),
   {
     onSubmitDCC: act.onSaveNewDCC,
@@ -29,7 +31,8 @@ const dccConnector = connect(
     onFetchDCCsByStatus: act.onFetchDCCsByStatus,
     onLoadDCC: act.onLoadDCC,
     onFetchUser: act.onFetchUser,
-    onSupportOpposeDCC: act.onSupportOpposeDCC
+    onSupportOpposeDCC: act.onSupportOpposeDCC,
+    confirmWithModal: act.confirmWithModal
   }
 );
 

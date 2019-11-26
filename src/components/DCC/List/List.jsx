@@ -1,6 +1,6 @@
 import React from "react";
 import dccConnector from "../../../connectors/dcc";
-import { useListDCC } from "../hooks";
+import { useListDCC } from "./hooks";
 import { Tabs, Tab } from "../../Tabs";
 import { dccStatusList } from "../helpers";
 import Card from "./Card";
