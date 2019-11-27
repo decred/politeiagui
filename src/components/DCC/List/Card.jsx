@@ -14,7 +14,8 @@ const CardDCC = ({
   sponsorusername,
   censorshiprecord: { token },
   timestamp,
-  nomineeusername
+  nomineeusername,
+  status
 }) => {
   const { type, domain, contractortype } = dccpayload;
 
@@ -35,6 +36,7 @@ const CardDCC = ({
         {domain && (
           <span>{CMS_DOMAINS[domain].toLocaleLowerCase()} - {contractortype && CMS_USER_TYPES[contractortype].toLocaleLowerCase()}</span>
         )}
+        status: {status}
         <span className="submitted-by">
           {sponsorusername && (
             <span>

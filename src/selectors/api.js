@@ -792,7 +792,7 @@ export const newDCCToken = compose(
 );
 
 export const apiDCCsResponse = getApiResponse("dccs");
-export const dccsByStatus = compose(get("dccs"), apiDCCsResponse);
+export const dccsByStatus = compose(get("dccsByStatus"), apiDCCsResponse);
 export const dccsError = getApiError("dccs");
 
 export const dccDetailsApi = getApiResponse("dcc");
@@ -800,3 +800,4 @@ export const dccDetailsApi = getApiResponse("dcc");
 export const dccDetails = compose(get("dcc"), dccDetailsApi);
 
 export const apiSupportOpposeDCCError = getApiError("supportOpposeDCC");
+export const apiSetDCCStatusError = getApiError("setDCCStatus");

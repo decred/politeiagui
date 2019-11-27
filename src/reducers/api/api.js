@@ -33,8 +33,10 @@ import {
   onReceivePayApprovedInvoices,
   onReceiveSetStatusInvoice,
   onReceiveManageCmsUser,
+  onReceiveDCCs,
   onSetDCC,
-  onReceiveSupportOpposeDCC
+  onReceiveSupportOpposeDCC,
+  onReceiveSetDCCStatus
 } from "./handlersCMS";
 
 export const DEFAULT_STATE = {
@@ -229,7 +231,7 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.REQUEST_NEW_DCC]: () => request("newDCC", state, action),
       [act.RECEIVE_NEW_DCC]: () => receive("newDCC", state, action),
       [act.REQUEST_DCCS]: () => request("dccs", state, action),
-      [act.RECEIVE_DCCS]: () => receive("dccs", state, action),
+      [act.RECEIVE_DCCS]: () => onReceiveDCCs(state, action),
       [act.REQUEST_DCC]: () => request("dcc", state, action),
       [act.RECEIVE_DCC]: () => receive("dcc", state, action),
       [act.SET_DCC]: () => onSetDCC(state, action),
@@ -237,6 +239,9 @@ const api = (state = DEFAULT_STATE, action) =>
         request("supportOpposeDCC", state, action),
       [act.RECEIVE_SUPPORT_OPPOSE_DCC]: () =>
         onReceiveSupportOpposeDCC(state, action),
+      [act.REQUEST_SET_DCC_STATUS]: () =>
+        request("setDCCStatus", state, action),
+      [act.RECEIVE_SET_DCC_STATUS]: () => onReceiveSetDCCStatus(state, action),
       // === CMS END ===
       [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
         request("proposalPaywallDetails", state, action),

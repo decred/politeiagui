@@ -671,3 +671,19 @@ export const dccDetails = (csrf, token) =>
 
 export const supportOpposeDCC = (csrf, vote) =>
   POST("/dcc/supportoppose", csrf, vote).then(getResponse);
+
+export const setDCCStatus = (csrf, email, token, status, reason) =>
+  pki
+    .myPubKeyHex(email)
+    .then(publickey =>
+      pki.signStringHex(email, token + status + reason).then(signature => {
+        return POST(`/dcc/${token}/status`, csrf, {
+          status,
+          token,
+          signature,
+          publickey,
+          reason
+        });
+      })
+    )
+    .then(getResponse);

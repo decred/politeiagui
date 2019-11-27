@@ -165,6 +165,51 @@ const app = (state = DEFAULT_STATE, action) =>
           };
         }
       },
+      [act.SAVE_DRAFT_DCC]: () => {
+        const newDraftDCCs = state.draftDCCs;
+        const draftId = action.payload.id;
+        return {
+          ...state,
+          draftDCCs: {
+            ...newDraftDCCs,
+            newDraft: true,
+            [draftId]: {
+              ...action.payload,
+              draftId
+            }
+          }
+        };
+      },
+      [act.DELETE_DRAFT_DCC]: () => {
+        const draftId = action.payload;
+        if (!state.draftDCCs[draftId]) {
+          return state;
+        }
+        const newDraftDCCs = state.draftDCCs;
+        delete newDraftDCCs[draftId];
+        return { ...state, draftDCCs: newDraftDCCs };
+      },
+      [act.LOAD_DRAFT_INVOICES]: () => ({
+        ...state,
+        draftDCCs: action.payload
+      }),
+      [act.REQUEST_SETSTATUS_PROPOSAL]: () => {
+        if (action.error) return state;
+        const { status, token } = action.payload;
+        if (!(token in state.submittedProposals)) return state;
+        else {
+          return {
+            ...state,
+            submittedProposals: {
+              ...state.submittedProposals,
+              [token]: {
+                ...state.submittedProposals[token],
+                status
+              }
+            }
+          };
+        }
+      },
       [act.RESET_LAST_SUBMITTED]: () => ({
         ...state,
         submittedProposals: {
@@ -262,38 +307,10 @@ const app = (state = DEFAULT_STATE, action) =>
           proposalCredits: proposalCredits || state.proposalCredits
         };
       },
-      [act.SAVE_DRAFT_DCC]: () => {
-        const newDraftDCCs = state.draftDCCs;
-        const draftId = action.payload.id;
-        return {
-          ...state,
-          draftDCCs: {
-            ...newDraftDCCs,
-            newDraft: true,
-            [draftId]: {
-              ...action.payload,
-              draftId
-            }
-          }
-        };
-      },
-      [act.DELETE_DRAFT_DCC]: () => {
-        const draftId = action.payload;
-        if (!state.draftDCCs[draftId]) {
-          return state;
-        }
-        const newDraftDCCs = state.draftDCCs;
-        delete newDraftDCCs[draftId];
-        return { ...state, draftDCCs: newDraftDCCs };
-      },
-      [act.LOAD_DRAFT_DCCS]: () => ({
-        ...state,
-        draftDCCs: action.payload
-      }),
       [act.ADD_PROPOSAL_CREDITS]: () => ({
         ...state,
         recentPayments: state.recentPayments
-          ? !state.recentPayments.find((el) => el.txid === action.payload.txid)
+          ? !state.recentPayments.find(el => el.txid === action.payload.txid)
             ? [
                 ...state.recentPayments,
                 {
@@ -335,6 +352,10 @@ const app = (state = DEFAULT_STATE, action) =>
       [act.TOGGLE_PROPOSAL_PAYMENT_RECEIVED]: () => ({
         ...state,
         proposalPaymentReceived: action.payload
+      }),
+      [act.SET_DCCS_CURRENT_STATUS_LIST]: () => ({
+        ...state,
+        dccs: action.payload
       }),
       [act.REDIRECTED_FROM]: () => ({
         ...state,

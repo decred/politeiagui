@@ -23,15 +23,17 @@ const dccConnector = connect(
     dccs: sel.dccsByStatus,
     dcc: sel.dccDetails,
     nomineeUsername: sel.getUserUsername,
-    isAdmin: sel.isAdmin
+    isAdmin: sel.isAdmin,
+    statusChangeError: sel.apiSetDCCStatusError
   }),
   {
     onSubmitDCC: act.onSaveNewDCC,
     onSaveDraftDCC: act.onSaveDraftDCC,
-    onFetchDCCsByStatus: act.onFetchDCCsByStatus,
+    onFetchDCCsByStatus: act.onLoadDCCsByStatus,
     onLoadDCC: act.onLoadDCC,
     onFetchUser: act.onFetchUser,
     onSupportOpposeDCC: act.onSupportOpposeDCC,
+    onSetDCCStatus: act.onSetDCCStatus,
     confirmWithModal: act.confirmWithModal
   }
 );

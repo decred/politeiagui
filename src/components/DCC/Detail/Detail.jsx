@@ -5,7 +5,7 @@ import dccConnector from "../../../connectors/dcc";
 import Button from "../../snew/ButtonWithLoadingIcon";
 import Message from "../../Message";
 import * as modalTypes from "../../Modal/modalTypes";
-// import Card from "../List/Card";
+import { dccChangeStatusList } from "../helpers";
 
 const DCCInfo = ({ label = "", children }) => (
   <div className="dcc-info">
@@ -14,9 +14,7 @@ const DCCInfo = ({ label = "", children }) => (
   </div>
 );
 
-// const DCCAdminActions = 
-
-const DCCDetails = props => {
+const DCCDetail = props => {
   const {
     dcc,
     status,
@@ -24,10 +22,14 @@ const DCCDetails = props => {
     userCanVote,
     onSupportDCC,
     onOpposeDCC,
-    error,
+    supportOpposeError,
+    statusChangeError,
     isLoadingOpposeDCC,
     isLoadingSupportDCC,
-    confirmWithModal
+    confirmWithModal,
+    onChangeDCCStatus,
+    isAdmin,
+    isActiveDCC
   } = useDCCDetails(props);
   // FUTURE: Use <RecordWrapper>
   return (
@@ -37,13 +39,32 @@ const DCCDetails = props => {
       </div>
       {dcc && props.loggedInAsEmail &&
         <>
-          {error && (
-            <Message type="error" header="DCC Voting Error" body={error} />
+          {supportOpposeError && (
+            <Message type="error" header="DCC Voting Error" body={supportOpposeError} />
+          )}
+          {statusChangeError && (
+            <Message type="error" header="DCC Status Change Error" body={statusChangeError} />
           )}
           <div className="dcc dcc-header">
             <h1>{type} for {dcc.nomineeusername}</h1>
             <span className="status">{status}</span>
-            {/* {isAdmin && <DCCAdminActions/>} */}
+            {isAdmin && isActiveDCC && <div className="dcc-admin-actions">
+              {dccChangeStatusList.map(({ label, value: status }, index) => (
+                <Button
+                  key={index}
+                  name={label}
+                  text={label}
+                  onClick={e =>
+                    confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
+                      reasonPlaceholder:
+                        `Please provide a reason to ${label} the DCC`
+                    }).then(
+                      ({ reason, confirm }) =>
+                        confirm && onChangeDCCStatus(status, reason)
+                    ) && e.preventDefault()
+                  }/>
+              ))}
+            </div>}
           </div>
           <div className="dcc">
             <h2>Info</h2>
@@ -95,4 +116,4 @@ const DCCDetails = props => {
   );
 };
 
-export default dccConnector(DCCDetails);
+export default dccConnector(DCCDetail);

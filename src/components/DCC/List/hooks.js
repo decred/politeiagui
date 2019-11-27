@@ -21,13 +21,12 @@ export const useListDCC = ({ onFetchDCCsByStatus, dccs }) => {
     const resetDCCs = () => {
       setOrderedDCCs([]);
     };
-
-    if (dccs && dccs.length > 0) {
-      setOrderedDCCs(dccs.sort((a, b) => b.timestamp - a.timestamp));
-    } else if (dccs && dccs.length === 0) {
+    if (dccs && dccs[status] && dccs[status].length > 0) {
+      setOrderedDCCs(dccs[status].sort((a, b) => b.timestamp - a.timestamp));
+    } else if (dccs && dccs[status] && dccs[status].length === 0) {
       resetDCCs();
     }
-  }, [dccs, setOrderedDCCs]);
+  }, [dccs, setOrderedDCCs, status]);
 
   const handleStatusChange = useCallback(
     s => {

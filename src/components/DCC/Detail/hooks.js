@@ -1,6 +1,10 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { getDCCStatus, typesForDCC } from "../helpers";
-import { DCC_SUPPORT_VOTE, DCC_OPPOSE_VOTE } from "../../../constants";
+import {
+  DCC_SUPPORT_VOTE,
+  DCC_OPPOSE_VOTE,
+  DCC_STATUS_ACTIVE
+} from "../../../constants";
 
 export const useDCCDetails = ({
   onLoadDCC,
@@ -11,7 +15,9 @@ export const useDCCDetails = ({
   onSupportOpposeDCC,
   loggedInAsEmail,
   isAdmin,
-  supportOpposeError: error,
+  supportOpposeError,
+  statusChangeError,
+  onSetDCCStatus,
   confirmWithModal
 }) => {
   const [loadingDCC, setLoadingDCC] = useState(true);
@@ -31,6 +37,9 @@ export const useDCCDetails = ({
     () => dcc && dcc.dccpayload && typesForDCC[dcc.dccpayload.type],
     [dcc]
   );
+  const isActiveDCC = useMemo(() => dcc && dcc.status === DCC_STATUS_ACTIVE, [
+    dcc
+  ]);
 
   const onOpposeDCC = useCallback(async () => {
     setIsLoadingOpposeDCC(true);
@@ -53,6 +62,13 @@ export const useDCCDetails = ({
     return !hasUserSupported && !hasUserOpposed && !isUserSponsor;
   }, [dcc, userid]);
 
+  const onChangeDCCStatus = useCallback(
+    async (status, reason) => {
+      await onSetDCCStatus(loggedInAsEmail, token, status, reason);
+    },
+    [token, onSetDCCStatus, loggedInAsEmail]
+  );
+
   return {
     dcc,
     userCanVote,
@@ -62,10 +78,13 @@ export const useDCCDetails = ({
     nomineeUsername,
     onSupportDCC,
     onOpposeDCC,
-    error,
+    supportOpposeError,
     isLoadingOpposeDCC,
     isLoadingSupportDCC,
     confirmWithModal,
-    isAdmin
+    isAdmin,
+    statusChangeError,
+    onChangeDCCStatus,
+    isActiveDCC
   };
 };

@@ -1484,7 +1484,7 @@ export const onFetchDCCsByStatus = status =>
     return api
       .dccsByStatus(csrf, { status })
       .then(response => {
-        dispatch(act.RECEIVE_DCCS(response));
+        dispatch(act.RECEIVE_DCCS({ ...response, status }));
       })
       .catch(error => {
         dispatch(act.RECEIVE_DCCS(null, error));
@@ -1524,5 +1524,22 @@ export const onSupportOpposeDCC = (loggedInAsEmail, token, comment) =>
       })
       .catch(error => {
         dispatch(act.RECEIVE_SUPPORT_OPPOSE_DCC(null, error));
+      });
+  });
+
+export const onSetDCCStatus = (loggedInAsEmail, token, status, reason) =>
+  withCsrf((dispatch, _, csrf) => {
+    if (!loggedInAsEmail) {
+      dispatch(openModal("LOGIN", {}, null));
+      return;
+    }
+    dispatch(act.REQUEST_SET_DCC_STATUS({}));
+    return api
+      .setDCCStatus(csrf, loggedInAsEmail, token, status, reason)
+      .then(response => {
+        dispatch(act.RECEIVE_SET_DCC_STATUS({ ...response, status, reason }));
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_SET_DCC_STATUS(null, error));
       });
   });

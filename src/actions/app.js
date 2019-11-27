@@ -19,7 +19,8 @@ import {
   onFetchProposal as onFetchProposalApi,
   onSubmitComment as onSubmitCommentApi,
   onFetchInvoice as onFetchInvoiceApi,
-  onFetchDCC as onFetchDCCApi
+  onFetchDCC as onFetchDCCApi,
+  onFetchDCCsByStatus as onFetchDCCsByStatusApi
 } from "./api";
 import {
   resetNewProposalData,
@@ -492,14 +493,32 @@ export const onResetComments = () => act.RESET_COMMENTS();
 export const onResetInviteUser = () => act.RESET_INVITE_USER();
 
 export const onLoadDCC = token => (dispatch, getState) => {
-  const fetchedDCCs = sel.dccsByStatus(getState());
-  const dcc =
-    fetchedDCCs &&
-    fetchedDCCs.length > 0 &&
-    fetchedDCCs.find(dcc => dcc.censorshiprecord.token === token);
+  const fetchedDCCsByStatus = sel.dccsByStatus(getState());
+
+  if (!fetchedDCCsByStatus) {
+    dispatch(onFetchDCCApi(token));
+    return;
+  }
+
+  let dcc = null;
+  for (const status in fetchedDCCsByStatus) {
+    const dccFromStatus = fetchedDCCsByStatus[status].find(
+      d => d.censorshiprecord.token === token
+    );
+    dcc = dccFromStatus ? dccFromStatus : dcc;
+  }
   if (dcc) {
     dispatch(act.SET_DCC(dcc));
   } else {
     dispatch(onFetchDCCApi(token));
+  }
+};
+
+export const onLoadDCCsByStatus = status => (dispatch, getState) => {
+  const fetchedDCCs = sel.dccsByStatus(getState());
+  if (fetchedDCCs && fetchedDCCs[status]) {
+    dispatch(act.SET_DCCS_CURRENT_STATUS_LIST(fetchedDCCs[status]));
+  } else {
+    dispatch(onFetchDCCsByStatusApi(status));
   }
 };
