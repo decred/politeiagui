@@ -132,7 +132,7 @@ export const ChartsLink = ({ token }) => {
   const hoverColor = getThemeProperty(theme, "color-gray");
   const [ref, isHovered] = useHover();
   const iconColor = isHovered ? hoverColor : undefined;
-  const hostName = apiInfo.testnet ? "testnet.dcrdata" : "dcrdata.decred";
+  const hostName = apiInfo.testnet ? "testnet.dcrdata.org" : "dcrdata.decred.org";
 
   return (
     <Tooltip
@@ -143,7 +143,7 @@ export const ChartsLink = ({ token }) => {
       <UILink
         ref={ref}
         target="_blank"
-        href={`https://${hostName}.org/proposal/${token}`}
+        href={`https://${hostName}/proposal/${token}`}
       >
         <Icon type="chart" iconColor={iconColor} />
       </UILink>
