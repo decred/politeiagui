@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Message } from "pi-ui";
-import piLogo from "src/assets/pi-logo-light.svg";
 import styles from "./LoaderScreen.module.css";
+import Logo from "src/componentsv2/Logo";
 
 import { Transition } from "react-transition-group";
 
@@ -32,13 +32,11 @@ const LoaderScreen = ({ error }) => {
     <div className={styles.container}>
       <Transition in={mounted} timeout={duration}>
         {state => (
-          <img
+          <Logo
             style={{
               ...defaultStyle,
               ...transitionStyles[state]
             }}
-            alt="Politeia logo"
-            src={piLogo}
           />
         )}
       </Transition>
