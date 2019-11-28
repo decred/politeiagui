@@ -12,26 +12,21 @@ const DEFAULT_STATE = {
   commentsLikes: { byToken: {}, backup: null }
 };
 
-const onReceiveComments = (state, action) => {
-  const { token, comments, accesstime } = action.payload;
-  // Filter duplicated comments by signature. The latest copy found
-  // will be kept.
-  const filteredComments = uniqBy(reverse(comments), "signature");
-  return compose(
-    set(["comments", "byToken", token], filteredComments),
-    set(["comments", "accessTimeByToken", token], accesstime)
-  )(state);
-};
-
 const comments = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
     : (
         {
-          [act.RECEIVE_PROPOSAL_COMMENTS]: () =>
-            onReceiveComments(state, action),
-          [act.RECEIVE_INVOICE_COMMENTS]: () =>
-            onReceiveComments(state, action),
+          [act.RECEIVE_RECORD_COMMENTS]: () => {
+            const { token, comments, accesstime } = action.payload;
+            // Filter duplicated comments by signature. The latest copy found
+            // will be kept.
+            const filteredComments = uniqBy(reverse(comments), "signature");
+            return compose(
+              set(["comments", "byToken", token], filteredComments),
+              set(["comments", "accessTimeByToken", token], accesstime)
+            )(state);
+          },
           [act.RECEIVE_NEW_COMMENT]: () => {
             const comment = action.payload;
             return update(

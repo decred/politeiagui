@@ -329,14 +329,14 @@ export const onFetchAdminUserInvoices = userid => dispatch => {
 };
 
 export const onFetchInvoiceComments = token => dispatch => {
-  dispatch(act.REQUEST_INVOICE_COMMENTS());
+  dispatch(act.REQUEST_RECORD_COMMENTS());
   return api
     .invoiceComments(token)
     .then(response => {
-      dispatch(act.RECEIVE_INVOICE_COMMENTS({ ...response, token }));
+      dispatch(act.RECEIVE_RECORD_COMMENTS({ ...response, token }));
     })
     .catch(error => {
-      dispatch(act.RECEIVE_INVOICE_COMMENTS(null, error));
+      dispatch(act.RECEIVE__RECORD_COMMENTS(null, error));
     });
 };
 
@@ -500,14 +500,14 @@ export const onFetchUser = userId => dispatch => {
 
 export const onFetchProposalComments = token =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_PROPOSAL_COMMENTS(token));
+    dispatch(act.REQUEST_RECORD_COMMENTS(token));
     return api
       .proposalComments(token, csrf)
       .then(response =>
-        dispatch(act.RECEIVE_PROPOSAL_COMMENTS({ ...response, token }))
+        dispatch(act.RECEIVE_RECORD_COMMENTS({ ...response, token }))
       )
       .catch(error => {
-        dispatch(act.RECEIVE_PROPOSAL_COMMENTS(null, error));
+        dispatch(act.RECEIVE_RECORD_COMMENTS(null, error));
       });
   });
 

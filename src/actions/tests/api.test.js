@@ -565,8 +565,8 @@ describe("test api actions (actions/api.js)", () => {
     const path = `/api/v1/proposals/${FAKE_PROPOSAL_TOKEN}/comments`;
     const params = [FAKE_PROPOSAL_TOKEN];
     await assertApiActionOnSuccess(path, api.onFetchProposalComments, params, [
-      { type: act.REQUEST_PROPOSAL_COMMENTS },
-      { type: act.RECEIVE_PROPOSAL_COMMENTS, error: false }
+      { type: act.REQUEST_RECORD_COMMENTS },
+      { type: act.RECEIVE_RECORD_COMMENTS, error: false }
     ]);
     await assertApiActionOnError(
       path,
@@ -574,11 +574,11 @@ describe("test api actions (actions/api.js)", () => {
       params,
       e => [
         {
-          type: act.REQUEST_PROPOSAL_COMMENTS,
+          type: act.REQUEST_RECORD_COMMENTS,
           error: false,
           payload: FAKE_PROPOSAL_TOKEN
         },
-        { type: act.RECEIVE_PROPOSAL_COMMENTS, error: true, payload: e }
+        { type: act.RECEIVE_RECORD_COMMENTS, error: true, payload: e }
       ]
     );
   });

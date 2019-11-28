@@ -34,6 +34,7 @@ import { commentsReducer, initialState, actions } from "./commentsReducer";
 import { getQueryStringValue } from "src/lib/queryString";
 
 const Comments = ({
+  useNumOfCommentsFromParent,
   numOfComments,
   recordToken,
   recordAuthorID,
@@ -51,6 +52,10 @@ const Comments = ({
     "sort",
     commentSortOptions.SORT_BY_TOP
   );
+
+  const shouldFetchComments = useNumOfCommentsFromParent
+    ? numOfComments > 0
+    : true;
   const {
     onSubmitComment,
     onLikeComment,
@@ -62,10 +67,13 @@ const Comments = ({
     currentUser,
     userEmail,
     ...commentsCtx
-  } = useComments({
-    recordToken,
-    numOfComments
-  });
+  } = useComments(recordToken, shouldFetchComments);
+
+  const commentsCount = useNumOfCommentsFromParent
+    ? numOfComments
+    : comments
+    ? comments.length
+    : 0;
 
   const [, , openLoginModal, closeLoginModal] = useLoginModal();
 
@@ -221,7 +229,7 @@ const Comments = ({
               <div className={styles.titleWrapper}>
                 <H2 className={styles.commentsTitle}>
                   Comments{" "}
-                  <span className={styles.commentsCount}>{numOfComments}</span>
+                  <span className={styles.commentsCount}>{commentsCount}</span>
                 </H2>
                 {hasDuplicatedComments && (
                   <Text

@@ -14,9 +14,8 @@ import { useLoaderContext } from "src/containers/Loader";
 export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
 
-export function useComments(ownProps) {
+export function useComments(recordToken, fetchComments = false) {
   const { enableCommentVote, recordType, constants } = useConfig();
-  const recordToken = ownProps && ownProps.recordToken;
   const commentsSelector = useMemo(
     () => sel.makeGetProposalComments(recordToken),
     [recordToken]
@@ -47,12 +46,11 @@ export function useComments(ownProps) {
 
   const userLoggedIn = !!email;
 
-  const numOfComments = (ownProps && ownProps.numOfComments) || 0;
-  const needsToFetchComments = !!recordToken && !comments && numOfComments > 0;
+  const needsToFetchComments = !!recordToken && !comments && fetchComments;
   const needsToFetchCommentsLikes =
     !!recordToken &&
     !commentsLikes &&
-    numOfComments > 0 &&
+    fetchComments &&
     enableCommentVote &&
     userLoggedIn;
 
