@@ -1504,21 +1504,21 @@ export const onFetchDCC = token =>
       });
   });
 
-export const onSupportOpposeDCC = (loggedInAsEmail, token, comment) =>
+export const onSupportOpposeDCC = (loggedInAsEmail, token, vote) =>
   withCsrf((dispatch, _, csrf) => {
     if (!loggedInAsEmail) {
       dispatch(openModal("LOGIN", {}, null));
       return;
     }
     dispatch(act.REQUEST_SUPPORT_OPPOSE_DCC({}));
-    return Promise.resolve(api.makeDCCVote(token, comment))
-      .then(vote => api.signDCCVote(loggedInAsEmail, vote))
-      .then(vote => api.supportOpposeDCC(csrf, vote))
+    return Promise.resolve(api.makeDCCVote(token, vote))
+      .then(dccvote => api.signDCCVote(loggedInAsEmail, dccvote))
+      .then(dccvote => api.supportOpposeDCC(csrf, dccvote))
       .then(response => {
         dispatch(
           act.RECEIVE_SUPPORT_OPPOSE_DCC({
             ...response,
-            isSupport: comment === DCC_SUPPORT_VOTE
+            isSupport: vote === DCC_SUPPORT_VOTE
           })
         );
       })

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "../../snew";
+import { DateTooltip } from "snew-classic-ui";
 import { useDCCDetails } from "./hooks";
 import dccConnector from "../../../connectors/dcc";
 import Button from "../../snew/ButtonWithLoadingIcon";
@@ -29,7 +30,8 @@ const DCCDetail = props => {
     confirmWithModal,
     onChangeDCCStatus,
     isAdmin,
-    isActiveDCC
+    isActiveDCC,
+    cmsType
   } = useDCCDetails(props);
   // FUTURE: Use <RecordWrapper>
   return (
@@ -48,6 +50,12 @@ const DCCDetail = props => {
           <div className="dcc dcc-header">
             <h1>{type} for {dcc.nomineeusername}</h1>
             <span className="status">{status}</span>
+            {dcc.timestamp && (
+              <div className="submitted-by">
+                {"submitted "}
+                <DateTooltip createdAt={dcc.timestamp} />
+              </div>
+            )}
             {isAdmin && isActiveDCC && <div className="dcc-admin-actions">
               {dccChangeStatusList.map(({ label, value: status }, index) => (
                 <Button
@@ -72,6 +80,7 @@ const DCCDetail = props => {
               {dcc.nomineeusername && <Link href={`/user/${dcc.dccpayload.nomineeuserid}`}>{dcc.nomineeusername}</Link>}
             </DCCInfo>
             <DCCInfo label="Type">{type.toLocaleLowerCase()}</DCCInfo>
+            <DCCInfo label="Contractor Type">{cmsType.toLocaleLowerCase()}</DCCInfo>
             <DCCInfo label="Status">{status.toLocaleLowerCase()}</DCCInfo>
             <DCCInfo label="Status change reason">
               {dcc.statuschangereason}

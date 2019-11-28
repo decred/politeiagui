@@ -157,7 +157,7 @@ export const makeDCC = (
   };
 };
 
-export const makeDCCVote = (token, comment) => ({ token, comment });
+export const makeDCCVote = (token, vote) => ({ token, vote });
 
 export const signRegister = (email, proposal) => {
   return pki.myPubKeyHex(email).then((publickey) => {
@@ -193,13 +193,13 @@ export const signDCC = (email, dcc) =>
         .then(signature => ({ file: dcc, publickey, signature }))
     );
 
-export const signDCCVote = (email, vote) =>
+export const signDCCVote = (email, dccvote) =>
   pki
     .myPubKeyHex(email)
     .then(publickey =>
       pki
-        .signStringHex(email, [vote.token, vote.comment].join(""))
-        .then(signature => ({ ...vote, publickey, signature }))
+        .signStringHex(email, [dccvote.token, dccvote.vote].join(""))
+        .then(signature => ({ ...dccvote, publickey, signature }))
     );
 
 export const signLikeComment = (email, comment) =>

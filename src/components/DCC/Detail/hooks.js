@@ -3,7 +3,8 @@ import { getDCCStatus, typesForDCC } from "../helpers";
 import {
   DCC_SUPPORT_VOTE,
   DCC_OPPOSE_VOTE,
-  DCC_STATUS_ACTIVE
+  DCC_STATUS_ACTIVE,
+  CMS_USER_TYPES
 } from "../../../constants";
 
 export const useDCCDetails = ({
@@ -40,6 +41,10 @@ export const useDCCDetails = ({
   const isActiveDCC = useMemo(() => dcc && dcc.status === DCC_STATUS_ACTIVE, [
     dcc
   ]);
+  const cmsType = useMemo(
+    () => dcc && CMS_USER_TYPES[dcc.dccpayload.contractortype],
+    [dcc]
+  );
 
   const onOpposeDCC = useCallback(async () => {
     setIsLoadingOpposeDCC(true);
@@ -85,6 +90,7 @@ export const useDCCDetails = ({
     isAdmin,
     statusChangeError,
     onChangeDCCStatus,
-    isActiveDCC
+    isActiveDCC,
+    cmsType
   };
 };

@@ -160,7 +160,9 @@ export const CMS_USER_TYPES = [
   "No type defined",
   "Direct",
   "Supervisor",
-  "Sub Contractor"
+  "Sub Contractor",
+  "Nominee",
+  "Revoked"
 ];
 
 export const CMS_DOMAINS = [
