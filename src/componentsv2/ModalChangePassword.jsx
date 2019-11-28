@@ -37,7 +37,7 @@ const ModalChangePassword = ({
     setSuccess(false);
   }, [show]);
 
-  const theme = useTheme();
+  const { theme } = useTheme();
   const colorGray = getThemeProperty(theme, "color-gray");
   const colorPrimaryDark = getThemeProperty(theme, "color-primary-dark");
 

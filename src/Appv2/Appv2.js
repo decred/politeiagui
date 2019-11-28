@@ -1,7 +1,7 @@
 import React from "react";
 import { Router } from "src/componentsv2/Router";
 import Config from "src/Config";
-import { defaultLightTheme, useTheme, useFont } from "pi-ui";
+import { defaultLightTheme, ThemeProvider, defaultDarkTheme } from "pi-ui";
 import { ReduxProvider } from "src/redux";
 import Loader from "./Loader";
 import Routes from "src/pages/Root";
@@ -24,25 +24,29 @@ const fontConfig = {
 };
 
 const App = () => {
-  useTheme(defaultLightTheme);
-  useFont(fontConfig);
   return (
-    <Config>
-      <ReduxProvider>
-        <Loader>
-          <StaticContentProvider>
-            <Onboard />
-            <Router>
-              <LoginModalProvider>
-                <UserSessionChecker>
-                  <Routes />
-                </UserSessionChecker>
-              </LoginModalProvider>
-            </Router>
-          </StaticContentProvider>
-        </Loader>
-      </ReduxProvider>
-    </Config>
+    <ThemeProvider
+      themes={{ light: defaultLightTheme, dark: defaultDarkTheme }}
+      defaultThemeName="light"
+      fontConfig={fontConfig}
+    >
+      <Config>
+        <ReduxProvider>
+          <Loader>
+            <StaticContentProvider>
+              <Onboard />
+              <Router>
+                <LoginModalProvider>
+                  <UserSessionChecker>
+                    <Routes />
+                  </UserSessionChecker>
+                </LoginModalProvider>
+              </Router>
+            </StaticContentProvider>
+          </Loader>
+        </ReduxProvider>
+      </Config>
+    </ThemeProvider>
   );
 };
 

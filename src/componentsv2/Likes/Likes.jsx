@@ -19,13 +19,12 @@ const Likes = ({
   onLike,
   onDislike,
   option,
-  disabled,
-  id
+  disabled
 }) => {
-  const theme = useTheme();
   const [loading, setLoading] = useState(false);
   const [likeRef, isLikeHovered] = useHover();
   const [dislikeRef, isDislikeHovered] = useHover();
+  const { theme } = useTheme();
   const defaultColor = getThemeProperty(theme, "color-gray");
   const activeColor = getThemeProperty(theme, "color-primary-dark");
   const liked = isLiked(option);
