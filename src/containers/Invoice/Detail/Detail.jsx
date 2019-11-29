@@ -5,6 +5,7 @@ import { useInvoice } from "./hooks";
 import Invoice from "src/componentsv2/Invoice";
 import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import Comments from "src/containers/Comments";
+import { isUnreviewedInvoice } from "../helpers";
 
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
@@ -22,8 +23,10 @@ const InvoiceDetail = ({ Main, match }) => {
             recordToken={invoiceToken}
             numOfComments={1}
             threadParentID={threadParentCommentID}
-            readOnly={false}
-            // readOnlyReason={getCommentBlockedReason(proposal, voteSummary)}
+            readOnly={invoice && !isUnreviewedInvoice(invoice)}
+            readOnlyReason={
+              "This invoice can no longer receive comments due its current status."
+            }
           />
         </AdminInvoiceActionsProvider>
       </Main>

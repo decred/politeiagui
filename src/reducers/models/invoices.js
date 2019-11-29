@@ -24,27 +24,34 @@ const invoiceArrayToByTokenObject = invoices =>
 const invoices = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
-    : ({
-        [act.RECEIVE_EXCHANGE_RATE]: () => {
-          const { year, month, exchangerate } = action.payload;
-          return set(["exchangeRates", `${year}-${month}`], exchangerate)(
-            state
-          );
-        },
-        [act.RECEIVE_USER_INVOICES]: () => {
-          const { invoices: userInvoices } = action.payload;
-          return compose(
-            update("byToken", invoices => ({
-              ...invoices,
-              ...invoiceArrayToByTokenObject(userInvoices)
-            })),
-            update("all", union(userInvoices.map(invoiceToken)))
-          )(state);
-        },
-        [act.RECEIVE_INVOICE]: () => {
-          const { invoice } = action.payload;
-          return set(["byToken", invoiceToken(invoice)], invoice)(state);
-        }
-      }[action.type] || (() => state))();
+    : (
+        {
+          [act.RECEIVE_EXCHANGE_RATE]: () => {
+            const { year, month, exchangerate } = action.payload;
+            return set(
+              ["exchangeRates", `${year}-${month}`],
+              exchangerate
+            )(state);
+          },
+          [act.RECEIVE_USER_INVOICES]: () => {
+            const { invoices: userInvoices } = action.payload;
+            return compose(
+              update("byToken", invoices => ({
+                ...invoices,
+                ...invoiceArrayToByTokenObject(userInvoices)
+              })),
+              update("all", union(userInvoices.map(invoiceToken)))
+            )(state);
+          },
+          [act.RECEIVE_INVOICE]: () => {
+            const { invoice } = action.payload;
+            return set(["byToken", invoiceToken(invoice)], invoice)(state);
+          },
+          [act.RECEIVE_SETSTATUS_INVOICE]: () => {
+            const invoice = action.payload;
+            return set(["byToken", invoiceToken(invoice)], invoice)(state);
+          }
+        }[action.type] || (() => state)
+      )();
 
 export default invoices;
