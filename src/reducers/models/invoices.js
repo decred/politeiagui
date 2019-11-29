@@ -21,6 +21,16 @@ const invoiceArrayToByTokenObject = invoices =>
     {}
   );
 
+const onReceiveInvoices = (state, receivedInvoices) => {
+  return compose(
+    update("byToken", invoices => ({
+      ...invoices,
+      ...invoiceArrayToByTokenObject(receivedInvoices)
+    })),
+    update("all", union(receivedInvoices.map(invoiceToken)))
+  )(state);
+};
+
 const invoices = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
@@ -33,16 +43,10 @@ const invoices = (state = DEFAULT_STATE, action) =>
               exchangerate
             )(state);
           },
-          [act.RECEIVE_USER_INVOICES]: () => {
-            const { invoices: userInvoices } = action.payload;
-            return compose(
-              update("byToken", invoices => ({
-                ...invoices,
-                ...invoiceArrayToByTokenObject(userInvoices)
-              })),
-              update("all", union(userInvoices.map(invoiceToken)))
-            )(state);
-          },
+          [act.RECEIVE_USER_INVOICES]: () =>
+            onReceiveInvoices(state, action.payload.invoices),
+          [act.RECEIVE_ADMIN_INVOICES]: () =>
+            onReceiveInvoices(state, action.payload.invoices),
           [act.RECEIVE_INVOICE]: () => {
             const { invoice, payout } = action.payload;
             return set(["byToken", invoiceToken(invoice)], {

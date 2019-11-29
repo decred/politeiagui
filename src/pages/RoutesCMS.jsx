@@ -2,28 +2,18 @@ import React, { useEffect } from "react";
 import { Switch, withRouter } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useLoaderContext } from "src/containers/Loader";
-// import * as sel from "src/selectors";
 import {
   Route,
-  AdminAuthenticatedRoute,
   AuthenticatedRoute,
-  NotAuthenticatedRoute
+  AdminAuthenticatedRoute
 } from "src/containers/Routes";
 import PageNotFound from "./NotFound";
-import PageUserDetail from "./User/Detail";
-import PageUserLogin from "./User/Login";
-import PageUserPrivacyPolicy from "./User/PrivacyPolicy";
-import PageUserRequestResendVerificationEmail from "./User/RequestResendVerificationEmail";
-import PageUserRequestResetPassword from "./User/RequestResetPassword";
-import PageUserResetPassword from "./User/ResetPassword";
-import PageUserSearch from "./User/Search";
-import PageUserSignup from "./User/Signup";
-import PageUserVerifyEmail from "./User/VerifyEmail";
-import PageUserVerifyKey from "./User/VerifyKey";
+import commonRoutes from "./commonRoutes";
 
 import PageListUserInvoices from "./Invoices/UserList";
 import PageInvoicesNew from "./Invoices/New";
 import PageInvoiceDetail from "./Invoices/Detail";
+import PageListAdminInvoices from "./Invoices/AdminList";
 
 const Redirect = withRouter(({ to, history, location }) => {
   useEffect(() => {
@@ -48,76 +38,26 @@ const Routes = ({ location }) => {
               <Redirect to="/user/login" />
             )}
           </Route>
-          <NotAuthenticatedRoute
-            path="/user/login"
-            title="Login"
-            exact
-            component={PageUserLogin}
-          />
-          <NotAuthenticatedRoute
-            path="/user/signup"
-            title="Sign Up"
-            exact
-            component={PageUserSignup}
-          />
-          <NotAuthenticatedRoute
-            path="/user/request-reset-password"
-            title="Reset Password"
-            exact
-            component={PageUserRequestResetPassword}
-          />
-          <NotAuthenticatedRoute
-            path="/user/password/reset"
-            exact
-            component={PageUserResetPassword}
-          />
-          <AuthenticatedRoute
-            path="/user/key/verify"
-            exact
-            component={PageUserVerifyKey}
-          />
-          <NotAuthenticatedRoute
-            path="/user/resend-verification-email"
-            title="Verification Email"
-            exact
-            component={PageUserRequestResendVerificationEmail}
-          />
-          <NotAuthenticatedRoute
-            path="/user/privacy-policy"
-            title="Privacy Policy"
-            exact
-            component={PageUserPrivacyPolicy}
-          />
-          <NotAuthenticatedRoute
-            path="/user/verify"
-            exact
-            component={PageUserVerifyEmail}
-          />
-          <AdminAuthenticatedRoute
-            path="/user/search"
-            title="Search User"
-            exact
-            component={PageUserSearch}
-          />
-          <Route
-            path="/user/:userid"
-            title="User Detail"
-            exact
-            component={PageUserDetail}
-          />
+          {commonRoutes}
 
+          {/* Record routes */}
           <AuthenticatedRoute
             path="/invoices/me"
             title="My Invoices"
             exact
             component={PageListUserInvoices}
           />
-
           <AuthenticatedRoute
             path="/invoices/new"
             title="New Invoice"
             exact
             component={PageInvoicesNew}
+          />
+          <AdminAuthenticatedRoute
+            path="/invoices/admin"
+            title="Admin"
+            exact
+            component={PageListAdminInvoices}
           />
           <AuthenticatedRoute
             path="/invoices/:token"
@@ -125,7 +65,7 @@ const Routes = ({ location }) => {
             exact
             component={PageInvoiceDetail}
           />
-          {/* Record routes */}
+
           {/* <AdminAuthenticatedRoute
             path={`/${recordType}s/unvetted`}
             title={`Unvetted ${capitalize(recordType)}s`}

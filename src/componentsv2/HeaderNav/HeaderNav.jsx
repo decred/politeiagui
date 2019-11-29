@@ -3,16 +3,23 @@ import React from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
 import useNavigation from "src/hooks/api/useNavigation";
+import { useConfig } from "src/containers/Config";
 import styles from "./HeaderNav.module.css";
 import { ConfigFilter } from "src/containers/Config";
 
 const HeaderNav = ({ history, location }) => {
   const { user, username, onLogout } = useNavigation();
+  const { recordType, constants } = useConfig();
+  const adminRoute =
+    recordType === constants.PROPOSAL
+      ? "/proposals/unvetted"
+      : "/invoices/admin";
+
   function goToUserAccount() {
     history.push(`/user/${user.userid}`);
   }
-  function goToUnvetted() {
-    history.push(`/proposals/unvetted`);
+  function goToAdminPage() {
+    history.push(adminRoute);
   }
   function goToPublicProposals() {
     history.push("/");
@@ -20,7 +27,7 @@ const HeaderNav = ({ history, location }) => {
   function goToSearchUsers() {
     history.push("/user/search");
   }
-  const isOnUnvettedRoute = location.pathname === "/proposals/unvetted";
+  const isOnUnvettedRoute = location.pathname === adminRoute;
   const isOnSearchUsersRoute = location.pathname === "/user/search";
   return user && username ? (
     <div className={styles.loggedInContainer}>
@@ -33,7 +40,7 @@ const HeaderNav = ({ history, location }) => {
         title={username}
       >
         {user.isadmin && !isOnUnvettedRoute && (
-          <DropdownItem onClick={goToUnvetted}>Admin</DropdownItem>
+          <DropdownItem onClick={goToAdminPage}>Admin</DropdownItem>
         )}
         {isOnUnvettedRoute && (
           <DropdownItem onClick={goToPublicProposals}>Proposals</DropdownItem>

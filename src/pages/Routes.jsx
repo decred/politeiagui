@@ -5,25 +5,15 @@ import * as sel from "src/selectors";
 import {
   Route,
   AdminAuthenticatedRoute,
-  AuthenticatedRoute,
-  NotAuthenticatedRoute
+  AuthenticatedRoute
 } from "src/containers/Routes";
+import commonRoutes from "./commonRoutes";
 import PageNotFound from "./NotFound";
 import PageProposalDetail from "./Proposals/Detail";
 import PageProposalsPublicList from "./Proposals/PublicList";
 import PageProposalsUnvetted from "./Proposals/UnvettedList";
 import PageProposalNew from "./Proposals/New";
 import PageProposalEdit from "./Proposals/Edit";
-import PageUserDetail from "./User/Detail";
-import PageUserLogin from "./User/Login";
-import PageUserPrivacyPolicy from "./User/PrivacyPolicy";
-import PageUserRequestResendVerificationEmail from "./User/RequestResendVerificationEmail";
-import PageUserRequestResetPassword from "./User/RequestResetPassword";
-import PageUserResetPassword from "./User/ResetPassword";
-import PageUserSearch from "./User/Search";
-import PageUserSignup from "./User/Signup";
-import PageUserVerifyEmail from "./User/VerifyEmail";
-import PageUserVerifyKey from "./User/VerifyKey";
 
 const Routes = ({ location }) => {
   return (
@@ -36,64 +26,7 @@ const Routes = ({ location }) => {
             exact
             component={PageProposalsPublicList}
           />
-          <NotAuthenticatedRoute
-            path="/user/login"
-            title="Login"
-            exact
-            component={PageUserLogin}
-          />
-          <NotAuthenticatedRoute
-            path="/user/signup"
-            title="Sign Up"
-            exact
-            component={PageUserSignup}
-          />
-          <NotAuthenticatedRoute
-            path="/user/request-reset-password"
-            title="Reset Password"
-            exact
-            component={PageUserRequestResetPassword}
-          />
-          <NotAuthenticatedRoute
-            path="/user/password/reset"
-            exact
-            component={PageUserResetPassword}
-          />
-          <AuthenticatedRoute
-            path="/user/key/verify"
-            exact
-            component={PageUserVerifyKey}
-          />
-          <NotAuthenticatedRoute
-            path="/user/resend-verification-email"
-            title="Verification Email"
-            exact
-            component={PageUserRequestResendVerificationEmail}
-          />
-          <NotAuthenticatedRoute
-            path="/user/privacy-policy"
-            title="Privacy Policy"
-            exact
-            component={PageUserPrivacyPolicy}
-          />
-          <NotAuthenticatedRoute
-            path="/user/verify"
-            exact
-            component={PageUserVerifyEmail}
-          />
-          <AdminAuthenticatedRoute
-            path="/user/search"
-            title="Search User"
-            exact
-            component={PageUserSearch}
-          />
-          <Route
-            path="/user/:userid"
-            title="User Detail"
-            exact
-            component={PageUserDetail}
-          />
-
+          {commonRoutes}
           {/* Record routes */}
           <AdminAuthenticatedRoute
             path={`/proposals/unvetted`}
