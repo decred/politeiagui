@@ -38,7 +38,7 @@ class MockedSessionStorage extends MockedLocalStorage {
 global.sessionStorage = new MockedSessionStorage();
 global.localStorage = new MockedLocalStorage();
 
-beforeEach(() => {
+beforeAll(() => {
   //define the dummy driver before each testing execution
   localforage.defineDriver(dummyStorageDriver, function() {
     localforage.setDriver(dummyStorageDriver._driver, function() {
