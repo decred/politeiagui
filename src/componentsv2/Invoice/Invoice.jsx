@@ -18,6 +18,7 @@ import {
 } from "src/containers/Invoice/helpers";
 import Field from "./Field";
 import InvoiceDatasheet from "../InvoiceDatasheet";
+import { convertAtomsToDcr } from "src/utilsv2";
 
 const Invoice = ({ invoice, extended, collapseBodyContent }) => {
   const {
@@ -28,7 +29,8 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
     timestamp,
     userid,
     username,
-    version
+    version,
+    payout
   } = invoice;
 
   const mobile = useMediaQuery("(max-width: 560px)");
@@ -44,8 +46,9 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
   const paymentAddress = input && input.paymentaddress;
   const exchangeRate = input && input.exchangerate;
   const totalHours = getInvoiceTotalHours(invoice);
-  const totalExpenses = getInvoiceTotalExpenses(invoice);
-  const totalAmount = getInvoiceTotalAmount(invoice);
+  const totalExpenses = payout && payout.expensetotal / 100;
+  const totalAmount = payout && payout.total / 100;
+  const totalDcrAmount = payout && convertAtomsToDcr(payout.dcrtotal);
 
   return (
     <RecordWrapper>
@@ -137,6 +140,7 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
                     value={`$${exchangeRate / 100}`}
                   />
                   <Field label="Amount:" value={`$${totalAmount}`} />
+                  <Field label="Amount (dcr):" value={totalDcrAmount} />
                 </Row>
                 <InvoiceDatasheet
                   value={invoice && invoice.input.lineitems}

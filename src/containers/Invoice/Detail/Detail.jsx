@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import get from "lodash/fp/get";
 import { useInvoice } from "./hooks";
 import Invoice from "src/componentsv2/Invoice";
+import InvoiceLoader from "src/componentsv2/Invoice/InvoiceLoader";
 import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import Comments from "src/containers/Comments";
 import { isUnreviewedInvoice } from "../helpers";
@@ -17,7 +18,11 @@ const InvoiceDetail = ({ Main, match }) => {
     <>
       <Main fillScreen>
         <AdminInvoiceActionsProvider>
-          {!!invoice && <Invoice invoice={invoice} extended />}
+          {!!invoice && !loading ? (
+            <Invoice invoice={invoice} extended />
+          ) : (
+            <InvoiceLoader extended />
+          )}
           <Comments
             recordAuthorID={invoice && invoice.userid}
             recordToken={invoiceToken}
