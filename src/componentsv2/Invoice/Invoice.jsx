@@ -1,10 +1,23 @@
-import { classNames, StatusTag, Text, useMediaQuery } from "pi-ui";
+import {
+  classNames,
+  StatusTag,
+  Text,
+  useMediaQuery,
+  CopyableText
+} from "pi-ui";
 import React from "react";
 import RecordWrapper from "../RecordWrapper";
 import { getInvoiceStatusTagProps } from "./helpers";
 import styles from "./Invoice.module.css";
 import { InvoiceActions } from "src/containers/Invoice/Actions";
-import { presentationalInvoiceName } from "src/containers/Invoice/helpers";
+import {
+  presentationalInvoiceName,
+  getInvoiceTotalHours,
+  getInvoiceTotalExpenses,
+  getInvoiceTotalAmount
+} from "src/containers/Invoice/helpers";
+import Field from "./Field";
+import InvoiceDatasheet from "../InvoiceDatasheet";
 
 const Invoice = ({ invoice, extended, collapseBodyContent }) => {
   const {
@@ -25,6 +38,14 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
   const invoiceMonth = input && input.month;
   const invoiceYear = input && input.year;
   const invContractorName = input && input.contractorname;
+  const invContractorLocation = input && input.contractorlocation;
+  const invContractorRate = input && input.contractorrate;
+  const invContractorContact = input && input.contractorcontact;
+  const paymentAddress = input && input.paymentaddress;
+  const exchangeRate = input && input.exchangerate;
+  const totalHours = getInvoiceTotalHours(invoice);
+  const totalExpenses = getInvoiceTotalExpenses(invoice);
+  const totalAmount = getInvoiceTotalAmount(invoice);
 
   return (
     <RecordWrapper>
@@ -79,6 +100,51 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
                 </Status>
               }
             />
+            {extended && (
+              <>
+                <Row topMarginSize="s">
+                  <RecordToken token={invoiceToken} />
+                </Row>
+                <Row justify="space-between" className={styles.topDetails}>
+                  <div className={styles.field}>
+                    <Text weight="semibold">{invContractorName}</Text>
+                    <Text>{invContractorLocation}</Text>
+                    <Text>{invContractorContact}</Text>
+                  </div>
+                  <Field
+                    label={"Pay to Address:"}
+                    value={paymentAddress}
+                    renderValue={addr => (
+                      <CopyableText
+                        id="payment-address"
+                        truncate
+                        tooltipPlacement={"bottom"}
+                      >
+                        {addr}
+                      </CopyableText>
+                    )}
+                  />
+                </Row>
+                <Row justify="space-between" className={styles.topDetails}>
+                  <Field label="Total hours:" value={`${totalHours}h`} />
+                  <Field
+                    label="Contractor Rate:"
+                    value={`$${invContractorRate / 100}`}
+                  />
+                  <Field label="Total expenses:" value={`$${totalExpenses}`} />
+                  <Field
+                    label="Exchange rate:"
+                    value={`$${exchangeRate / 100}`}
+                  />
+                  <Field label="Amount:" value={`$${totalAmount}`} />
+                </Row>
+                <InvoiceDatasheet
+                  value={invoice && invoice.input.lineitems}
+                  readOnly
+                  userRate={invContractorRate / 100}
+                />
+              </>
+            )}
             <InvoiceActions invoice={invoice} />
           </>
         );

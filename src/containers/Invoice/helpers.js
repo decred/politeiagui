@@ -51,3 +51,25 @@ export const presentationalInvoiceName = invoice =>
 export const isUnreviewedInvoice = invoice =>
   invoice.status === INVOICE_STATUS_NEW ||
   invoice.status === INVOICE_STATUS_UPDATED;
+
+export const getInvoiceTotalHours = invoice => {
+  if (!invoice) return 0;
+  return invoice.input.lineitems.reduce((total, item) => {
+    return (total += item.labor / 60);
+  }, 0);
+};
+
+export const getInvoiceTotalExpenses = invoice => {
+  if (!invoice) return 0;
+  return invoice.input.lineitems.reduce((total, item) => {
+    return (total += item.expenses / 100);
+  }, 0);
+};
+
+export const getInvoiceTotalAmount = invoice => {
+  if (!invoice) return 0;
+  const totalHours = getInvoiceTotalHours(invoice);
+  const totalExpenses = getInvoiceTotalExpenses(invoice);
+  const rate = invoice.input.contractorrate / 100;
+  return rate * totalHours + totalExpenses;
+};

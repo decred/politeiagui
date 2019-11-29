@@ -66,13 +66,21 @@ export const generateBlankLineItem = () => ({
   subtotal: ""
 });
 
-export const convertLineItemsToGrid = (lineItems, readOnly = true, errors) => {
+export const convertLineItemsToGrid = (
+  lineItems,
+  readOnly = true,
+  errors,
+  userRate = 0
+) => {
   const grid = [];
   const { grid: gridBody, expenseTotal, laborTotal, total } = lineItems.reduce(
     (acc, line, idx) => {
       const isLabelReadonly =
         line.type === 2 ? true : line.type === 3 ? true : readOnly;
       const isExpenseReadonly = line.type === 1 ? true : readOnly;
+      const laborHours = +fromMinutesToHours(line.labor);
+      const expenses = +fromUSDCentsToUSDUnits(line.expenses);
+      const lineSubTotal = laborHours * userRate + expenses;
       const rowErrors = (errors && errors[idx]) || {};
       const newLine = [
         { readOnly: true, value: idx + 1 },
@@ -107,24 +115,24 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true, errors) => {
         },
         {
           readOnly: isLabelReadonly,
-          value: +fromMinutesToHours(line.labor),
+          value: laborHours,
           error: rowErrors && rowErrors.labor
         },
         {
           readOnly: isExpenseReadonly,
-          value: +fromUSDCentsToUSDUnits(line.expenses),
+          value: expenses,
           error: rowErrors.expenses
         },
         {
           readOnly: true,
-          value: line.subtotal
+          value: lineSubTotal
         }
       ];
       return {
         grid: acc.grid.concat([newLine]),
         expenseTotal: acc.expenseTotal + line.expenses,
         laborTotal: acc.laborTotal + line.labor,
-        total: acc.total + line.subtotal
+        total: acc.total + lineSubTotal
       };
     },
     { grid: [], expenseTotal: 0, laborTotal: 0, total: 0 }

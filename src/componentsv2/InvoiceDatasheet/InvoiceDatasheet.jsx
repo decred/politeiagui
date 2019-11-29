@@ -58,10 +58,10 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
 
   useEffect(
     function updateGridOnValueChange() {
-      const grid = convertLineItemsToGrid(value, readOnly, errors);
+      const grid = convertLineItemsToGrid(value, readOnly, errors, currentRate);
       setGrid(grid);
     },
-    [value, readOnly, errors]
+    [value, readOnly, errors, currentRate]
   );
 
   const handleRemoveLastRow = useCallback(
