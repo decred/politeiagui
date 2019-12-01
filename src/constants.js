@@ -6,7 +6,7 @@ export const CMSWWWMODE = "cmswww";
 export const RECORD_TYPE_PROPOSAL = "proposals";
 export const RECORD_TYPE_INVOICE = "invoices";
 
-export const EXPLORER = "explorer";
+export const EXPLORER = "dcrdata";
 
 // CMS
 export const INVOICE_STATUS_UNREVIEWED = 2;

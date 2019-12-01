@@ -4,7 +4,7 @@ import { useLoaderContext } from "src/Appv2/Loader";
 
 const DcrTransactionLink = ({ txID }) => {
   const { apiInfo } = useLoaderContext();
-  const hostName = apiInfo.testnet ? "testnet.dcrdata.org" : "dcrdata.decred.org";
+  const hostName = apiInfo.testnet ? "testnet.decred.org" : "dcrdata.decred.org";
   return (
     <Link
       target="_blank"

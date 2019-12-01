@@ -3,7 +3,7 @@ import { TESTNET, EXPLORER } from "../constants";
 const getSubdomainForDcrdata = isTestnet => (isTestnet ? TESTNET : EXPLORER);
 
 const dcrdataURL = isTestnet =>
-  `https://${getSubdomainForDcrdata(isTestnet)}.dcrdata.org/api`;
+  `https://${getSubdomainForDcrdata(isTestnet)}.decred.org/api`;
 
 export const dcrddataBlockHeightURL = isTestnet =>
   `${dcrdataURL(isTestnet)}/block/best/height`;
