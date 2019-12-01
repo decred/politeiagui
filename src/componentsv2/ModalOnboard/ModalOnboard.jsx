@@ -22,10 +22,10 @@ const ModalOnboard = ({ show, onClose }) => {
         Politiea” in the sidebar.
       </P>
       <div className="justify-right margin-top-l">
-        <Button kind="secondary" onClick={onClose}>
+        <Button kind="secondary" type="button" onClick={onClose}>
           Maybe later
         </Button>
-        <Button onClick={goToDocs}>Yes, show me more</Button>
+        <Button type="button" onClick={goToDocs}>Yes, show me more</Button>
       </div>
     </Modal>
   );
