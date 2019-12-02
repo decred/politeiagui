@@ -1,4 +1,4 @@
-import { Text, Dropdown, DropdownItem } from "pi-ui";
+import { Text, Dropdown, DropdownItem, Toggle, useTheme } from "pi-ui";
 import React from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
@@ -7,11 +7,12 @@ import styles from "./HeaderNav.module.css";
 
 const HeaderNav = ({ history, location }) => {
   const { user, username, onLogout } = useNavigation();
+  const { themeName, setThemeName } = useTheme();
   function goToUserAccount() {
     history.push(`/user/${user.userid}`);
   }
   function goToUnvetted() {
-    history.push(`/proposals/unvetted`);
+    history.push("/proposals/unvetted");
   }
   function goToPublicProposals() {
     history.push("/");
@@ -21,6 +22,13 @@ const HeaderNav = ({ history, location }) => {
   }
   const isOnUnvettedRoute = location.pathname === "/proposals/unvetted";
   const isOnSearchUsersRoute = location.pathname === "/user/search";
+  const onThemeToggleHandler = () => {
+    if (themeName === "light") {
+      setThemeName("dark");
+    } else {
+      setThemeName("light");
+    }
+  };
   return user && username ? (
     <div className={styles.loggedInContainer}>
       <ProposalCreditsIndicator user={user} />
@@ -41,6 +49,12 @@ const HeaderNav = ({ history, location }) => {
           </DropdownItem>
         )}
         <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
+        <DropdownItem>
+          <div className={styles.themeToggleWrapper}>
+            <Toggle onToggle={onThemeToggleHandler} checked={themeName === "dark"} />
+            <div className={styles.themeToggleLabel}>Night Mode</div>
+          </div>
+        </DropdownItem>
         <DropdownItem onClick={onLogout}>Logout</DropdownItem>
       </Dropdown>
     </div>

@@ -41,6 +41,16 @@ ul.dropdownList {
     width: unset;
 }
 
+.themeToggleWrapper {
+    display: flex;
+    align-items: center;
+    width: 14rem;
+}
+  
+.themeToggleLabel {
+    margin-left: 1rem;
+}
+
 @media screen and (max-width: 1000px) {
     .loggedInContainer {
         width: 100%;
