@@ -132,7 +132,7 @@ export const ChartsLink = ({ token }) => {
   const hoverColor = getThemeProperty(theme, "color-gray");
   const [ref, isHovered] = useHover();
   const iconColor = isHovered ? hoverColor : undefined;
-  const hostName = apiInfo.testnet ? "testnet.dcrdata.org" : "dcrdata.decred.org";
+  const hostName = apiInfo.testnet ? "testnet.decred.org" : "dcrdata.decred.org";
 
   return (
     <Tooltip
