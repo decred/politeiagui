@@ -33,7 +33,11 @@ const Routes = ({ location }) => {
         <Switch location={location}>
           <Route exact path="/">
             {loggedIn ? (
-              <Redirect to="/invoices/me" />
+              currentUser.isadmin ? (
+                <Redirect to="/invoices/admin" />
+              ) : (
+                <Redirect to="/invoices/me" />
+              )
             ) : (
               <Redirect to="/user/login" />
             )}
