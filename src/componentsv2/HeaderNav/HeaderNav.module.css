@@ -12,16 +12,13 @@
 
 .navLink {
     composes: navContainer;
-    color: var(--color-gray-dark);
+    text-decoration: none !important;
+    color: var(--color-gray-dark) !important;
     border-bottom: 2px solid transparent;
 }
 
 .navLink:hover {
-    color: var(--color-primary-dark);
-}
-
-.navLink:hover {
-    color: var(--color-primary-dark);
+    color: var(--color-primary-dark) !important;
 }
 
 .navLinkText {

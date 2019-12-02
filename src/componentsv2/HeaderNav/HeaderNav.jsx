@@ -1,5 +1,6 @@
 import { Text, Dropdown, DropdownItem } from "pi-ui";
-import React from "react";
+import Link from "src/componentsv2/Link";
+import React, { useMemo } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
 import useNavigation from "src/hooks/api/useNavigation";
@@ -7,28 +8,32 @@ import { useConfig } from "src/containers/Config";
 import styles from "./HeaderNav.module.css";
 import { ConfigFilter } from "src/containers/Config";
 
-const HeaderNav = ({ history, location }) => {
+const HeaderNav = ({ history }) => {
   const { user, username, onLogout } = useNavigation();
-  const { recordType, constants } = useConfig();
-  const adminRoute =
-    recordType === constants.PROPOSAL
-      ? "/proposals/unvetted"
-      : "/invoices/admin";
+  const { navMenuPaths } = useConfig();
+
+  const userIsAdmin = user && user.isadmin;
+
+  const menuItems = useMemo(
+    () =>
+      navMenuPaths.map(({ label, path, admin }) => {
+        return (
+          ((admin && userIsAdmin) || !admin) && (
+            <DropdownItem>
+              <Link className={styles.navLink} to={path}>
+                {label}
+              </Link>
+            </DropdownItem>
+          )
+        );
+      }),
+    [userIsAdmin, navMenuPaths]
+  );
 
   function goToUserAccount() {
     history.push(`/user/${user.userid}`);
   }
-  function goToAdminPage() {
-    history.push(adminRoute);
-  }
-  function goToPublicProposals() {
-    history.push("/");
-  }
-  function goToSearchUsers() {
-    history.push("/user/search");
-  }
-  const isOnUnvettedRoute = location.pathname === adminRoute;
-  const isOnSearchUsersRoute = location.pathname === "/user/search";
+
   return user && username ? (
     <div className={styles.loggedInContainer}>
       <ConfigFilter showIf={config => config.enableCredits}>
@@ -39,17 +44,7 @@ const HeaderNav = ({ history, location }) => {
         itemsListClassName={styles.dropdownList}
         title={username}
       >
-        {user.isadmin && !isOnUnvettedRoute && (
-          <DropdownItem onClick={goToAdminPage}>Admin</DropdownItem>
-        )}
-        {isOnUnvettedRoute && (
-          <DropdownItem onClick={goToPublicProposals}>Proposals</DropdownItem>
-        )}
-        {user.isadmin && !isOnSearchUsersRoute && (
-          <DropdownItem onClick={goToSearchUsers}>
-            Search for users
-          </DropdownItem>
-        )}
+        {menuItems}
         <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
         <DropdownItem onClick={onLogout}>Logout</DropdownItem>
       </Dropdown>

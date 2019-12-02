@@ -22,7 +22,12 @@ export const POLITEIA = {
   testnetGitRepository:
     "https://github.com/decred-proposals/testnet3/tree/master",
   mainnetGitRepository:
-    "https://github.com/decred-proposals/mainnet/tree/master"
+    "https://github.com/decred-proposals/mainnet/tree/master",
+  navMenuPaths: [
+    { label: "Proposals", path: "/", admin: false },
+    { label: "Admin", path: "/proposals/unvetted", admin: true },
+    { label: "Search for users", path: "/user/search", admiin: true }
+  ]
 };
 
 export const CMS = {
@@ -36,5 +41,10 @@ export const CMS = {
   enablePaywall: false,
   privacyPolicyContent: "privacy-policy-cms",
   testnetGitRepository: "",
-  mainnetGitRepository: ""
+  mainnetGitRepository: "",
+  navMenuPaths: [
+    { label: "My invoices", path: "/invoices/me", admin: false },
+    { label: "Admin", path: "/invoices/admin", admin: true },
+    { label: "Search for users", path: "/user/search", admiin: true }
+  ]
 };
