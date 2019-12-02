@@ -26,6 +26,7 @@ const NewDCC = ({
     handleChangeInput: onChange,
     savedDraft,
     fakeLoadingDraft: isLoadingDraft
+    // isRevocation
   } = useNewDCC(props);
   return (
     <div className="content" role="main">

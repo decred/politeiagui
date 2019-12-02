@@ -1,5 +1,9 @@
 import { useState, useCallback, useEffect } from "react";
-import { CMS_USER_TYPES, CMS_DOMAINS } from "../../../constants";
+import {
+  CMS_USER_TYPES,
+  CMS_DOMAINS,
+  DCC_TYPE_REVOCATION
+} from "../../../constants";
 import {
   getQueryStringValue,
   setQueryStringValue
@@ -34,6 +38,7 @@ export const useNewDCC = ({
 
   const [savedDraft, setSavedDraft] = useState(false);
   const [fakeLoadingDraft, setFakeLoadingDraft] = useState(false);
+  const [isRevocation, setIsRevocation] = useState(false);
 
   useEffect(
     function updateURLForDraftID() {
@@ -52,6 +57,15 @@ export const useNewDCC = ({
       });
     },
     [formValues, setFormValues]
+  );
+
+  useEffect(
+    function handleDCCTypeChanges() {
+      if (formValues.dcctype === DCC_TYPE_REVOCATION) {
+        setIsRevocation(true);
+      }
+    },
+    [formValues.dcctype, setIsRevocation]
   );
 
   const handleSaveDCCDraft = useCallback(
@@ -128,6 +142,7 @@ export const useNewDCC = ({
     requestDone,
     formValues,
     savedDraft,
-    fakeLoadingDraft
+    fakeLoadingDraft,
+    isRevocation
   };
 };
