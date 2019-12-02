@@ -1,9 +1,17 @@
 import { useState, useCallback, useEffect } from "react";
 
-export const useListDCC = ({ onFetchDCCsByStatus, dccs }) => {
+export const useListDCC = ({ onFetchDCCsByStatus, dccs, onForceFetchDCCs }) => {
   const [loadingDCCs, setLoadingDCCs] = useState(true);
   const [orderedDCCs, setOrderedDCCs] = useState([]);
   const [status, setStatus] = useState(1);
+
+  const onRefreshDCCs = useCallback(
+    () => {
+      onForceFetchDCCs(status);
+    },
+    onForceFetchDCCs,
+    status
+  );
 
   useEffect(() => {
     async function onFetchData() {
@@ -16,7 +24,6 @@ export const useListDCC = ({ onFetchDCCsByStatus, dccs }) => {
     }
     onFetchData();
   }, [status, onFetchDCCsByStatus, setLoadingDCCs]);
-
   useEffect(() => {
     const resetDCCs = () => {
       setOrderedDCCs([]);
@@ -35,5 +42,11 @@ export const useListDCC = ({ onFetchDCCsByStatus, dccs }) => {
     [setStatus]
   );
 
-  return { loadingDCCs, orderedDCCs, handleStatusChange, status };
+  return {
+    loadingDCCs,
+    orderedDCCs,
+    handleStatusChange,
+    status,
+    onRefreshDCCs
+  };
 };

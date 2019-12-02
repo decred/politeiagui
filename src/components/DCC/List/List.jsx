@@ -7,7 +7,7 @@ import Card from "./Card";
 
 
 const ListDCC = props => {
-  const { orderedDCCs: dccs, handleStatusChange, status, loadingDCCs: isLoading } = useListDCC(props);
+  const { orderedDCCs: dccs, handleStatusChange, status, loadingDCCs: isLoading, onRefreshDCCs } = useListDCC(props);
   const dccsAvailable = dccs && dccs.length > 0 && !isLoading;
   const emptyDCCList = dccs && dccs.length === 0 && !isLoading;
   return (
@@ -16,6 +16,10 @@ const ListDCC = props => {
         <h1>
           DCCs
         </h1>
+        <a href="" onClick={e => {
+          e && e.preventDefault();
+          onRefreshDCCs();
+        }}>Refresh</a>
         <Tabs>
           {dccStatusList.map(st => (
             <Tab

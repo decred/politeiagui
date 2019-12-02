@@ -30,6 +30,7 @@ const dccConnector = connect(
     onSubmitDCC: act.onSaveNewDCC,
     onSaveDraftDCC: act.onSaveDraftDCC,
     onFetchDCCsByStatus: act.onLoadDCCsByStatus,
+    onForceFetchDCCs: act.onFetchDCCsByStatus,
     onLoadDCC: act.onLoadDCC,
     onFetchUser: act.onFetchUser,
     onSupportOpposeDCC: act.onSupportOpposeDCC,
