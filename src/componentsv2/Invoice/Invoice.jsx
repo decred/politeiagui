@@ -12,9 +12,7 @@ import styles from "./Invoice.module.css";
 import { InvoiceActions } from "src/containers/Invoice/Actions";
 import {
   presentationalInvoiceName,
-  getInvoiceTotalHours,
-  getInvoiceTotalExpenses,
-  getInvoiceTotalAmount
+  getInvoiceTotalHours
 } from "src/containers/Invoice/helpers";
 import Field from "./Field";
 import InvoiceDatasheet from "../InvoiceDatasheet";
@@ -23,9 +21,9 @@ import { convertAtomsToDcr } from "src/utilsv2";
 const Invoice = ({ invoice, extended, collapseBodyContent }) => {
   const {
     censorshiprecord,
-    file,
+    // file,
     input,
-    status,
+    // status,
     timestamp,
     userid,
     username,
@@ -37,8 +35,6 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
 
   const invoiceToken = censorshiprecord && censorshiprecord.token;
   const invoiceURL = `/invoices/${invoiceToken}`;
-  const invoiceMonth = input && input.month;
-  const invoiceYear = input && input.year;
   const invContractorName = input && input.contractorname;
   const invContractorLocation = input && input.contractorlocation;
   const invContractorRate = input && input.contractorrate;
@@ -57,13 +53,8 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
         Event,
         Row,
         Title,
-        CommentsLink,
-        GithubLink,
-        ChartsLink,
-        DownloadRecord,
         Header,
         Subtitle,
-        Edit,
         Status,
         RecordToken
       }) => {

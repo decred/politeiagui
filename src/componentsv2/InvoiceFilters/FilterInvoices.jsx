@@ -51,7 +51,7 @@ const FilterInvoices = ({ invoices, children, filterValues }) => {
 
 FilterInvoices.propTypes = {
   invoices: PropTypes.array,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.func.isRequired,
   filterValues: PropTypes.object.isRequired
 };
 

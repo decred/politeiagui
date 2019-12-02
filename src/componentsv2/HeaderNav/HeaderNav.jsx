@@ -16,10 +16,10 @@ const HeaderNav = ({ history }) => {
 
   const menuItems = useMemo(
     () =>
-      navMenuPaths.map(({ label, path, admin }) => {
+      navMenuPaths.map(({ label, path, admin }, idx) => {
         return (
           ((admin && userIsAdmin) || !admin) && (
-            <DropdownItem>
+            <DropdownItem key={`link-${idx}`}>
               <Link className={styles.navLink} to={path}>
                 {label}
               </Link>
