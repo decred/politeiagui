@@ -847,6 +847,18 @@ export const onSubmitComment = (
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
     return Promise.resolve(api.makeComment(token, comment, parentid))
       .then(comment => api.signComment(loggedInAsEmail, comment))
+      .then(comment => {
+        // make sure this is not a duplicate comment by comparing to the existent
+        // comments signatures
+        const comments = sel.commentsByToken(getState())[token];
+        const signatureFound = comments.find(
+          cm => cm.signature === comment.signature
+        );
+        if (signatureFound) {
+          throw new Error("That is a duplicate comment.");
+        }
+        return comment;
+      })
       .then(comment => api.newComment(csrf, comment))
       .then(response => {
         const responsecomment = response.comment;
