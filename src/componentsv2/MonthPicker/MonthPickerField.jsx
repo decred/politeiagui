@@ -1,8 +1,8 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Picker from "react-month-picker";
 import "react-month-picker/css/month-picker.css";
-import { Text, classNames } from "pi-ui";
+import { Text, classNames, Checkbox } from "pi-ui";
 import { FormikConsumer } from "formik";
 import styles from "./MonthPickerField.module.css";
 import useBooleanState from "src/hooks/utils/useBooleanState";
@@ -38,7 +38,8 @@ const Arrow = ({ isOpen }) => {
   );
 };
 
-const MonthPickerField = ({ name, label, years, readOnly }) => {
+const MonthPickerField = ({ name, label, years, readOnly, toggleable }) => {
+  const [isDisabled, setDisabled] = useState(false);
   const [isOpen, openPicker, closePicker] = useBooleanState(false);
   const ref = useRef();
 
@@ -49,16 +50,32 @@ const MonthPickerField = ({ name, label, years, readOnly }) => {
   }, [isOpen, readOnly]);
   return (
     <FormikConsumer>
-      {({ setFieldValue, values }) => {
+      {({ setFieldValue, values, initialValues }) => {
         const onChange = (year, month) => {
           if (!!year && !!month) {
             setFieldValue(name, { year, month });
           }
           closePicker();
         };
+        const handleToggle = () => {
+          const newValue = !isDisabled;
+          setDisabled(newValue);
+          if (newValue) {
+            setFieldValue(name, { year: "", month: "" });
+          } else {
+            setFieldValue(name, initialValues[name]);
+          }
+        };
+
         return (
           <div>
-            <Text color="gray">{label}</Text>
+            <div style={{ display: "flex" }}>
+              {toggleable && (
+                <Checkbox checked={!isDisabled} onChange={handleToggle} />
+              )}
+              <Text color="gray">{label}</Text>
+            </div>
+
             <div>
               <Picker
                 ref={ref}
@@ -75,8 +92,8 @@ const MonthPickerField = ({ name, label, years, readOnly }) => {
                   )}
                   onClick={openPicker}
                 >
-                  {makeText(values[name])}
-                  {!readOnly && <Arrow isOpen={isOpen} />}
+                  {!isDisabled ? makeText(values[name]) : "Any"}
+                  {!readOnly && !isDisabled && <Arrow isOpen={isOpen} />}
                 </span>
               </Picker>
             </div>

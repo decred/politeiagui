@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Formik } from "formik";
 import CheckboxGroupField from "src/componentsv2/CheckboxGroupField";
+import CheckboxField from "src/componentsv2/CheckboxField";
 import MonthPickerField from "src/componentsv2/MonthPicker/MonthPickerField";
 import {
   getMinMaxYearAndMonth,
@@ -32,6 +33,7 @@ const InvoiceFilterForm = ({ onChange, children }) => {
                 years={getMinMaxYearAndMonth()}
                 name="date"
                 label="Reference month"
+                toggleable
               />
               <CheckboxGroupField
                 groupName="filters"
