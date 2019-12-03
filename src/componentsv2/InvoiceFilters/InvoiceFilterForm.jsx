@@ -8,6 +8,7 @@ import {
   getInitialDateValue
 } from "src/containers/Invoice";
 import styles from "./InvoiceFilterForm.module.css";
+import UserSearchSelect from "src/containers/User/Search/SearchSelector";
 
 const DEFAULT_INITIAL_VALUES = {
   date: getInitialDateValue(),
@@ -35,6 +36,7 @@ const InvoiceFilterForm = ({ onChange, children }) => {
                 label="Reference month"
                 toggleable
               />
+              <UserSearchSelect />
               <CheckboxGroupField
                 groupName="filters"
                 options={[
