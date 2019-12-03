@@ -5,13 +5,13 @@ export const useListDCC = ({ onFetchDCCsByStatus, dccs, onForceFetchDCCs }) => {
   const [orderedDCCs, setOrderedDCCs] = useState([]);
   const [status, setStatus] = useState(1);
 
-  const onRefreshDCCs = useCallback(
-    () => {
-      onForceFetchDCCs(status);
-    },
-    onForceFetchDCCs,
-    status
-  );
+  const onRefreshDCCs = useCallback(() => {
+    setLoadingDCCs(true);
+    onForceFetchDCCs(status);
+    setTimeout(() => {
+      setLoadingDCCs(false);
+    }, 300);
+  }, [onForceFetchDCCs, status, setLoadingDCCs]);
 
   useEffect(() => {
     async function onFetchData() {

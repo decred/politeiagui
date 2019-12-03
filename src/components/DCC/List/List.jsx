@@ -4,7 +4,7 @@ import { useListDCC } from "./hooks";
 import { Tabs, Tab } from "../../Tabs";
 import { dccStatusList } from "../helpers";
 import Card from "./Card";
-
+// import Button from "../../snew/ButtonWithLoadingIcon";
 
 const ListDCC = props => {
   const { orderedDCCs: dccs, handleStatusChange, status, loadingDCCs: isLoading, onRefreshDCCs } = useListDCC(props);
@@ -16,10 +16,12 @@ const ListDCC = props => {
         <h1>
           DCCs
         </h1>
-        <a href="" onClick={e => {
+        <div className="refresh" isLoading={isLoading} onClick={e => {
           e && e.preventDefault();
           onRefreshDCCs();
-        }}>Refresh</a>
+        }}>
+          Refresh
+        </div>
         <Tabs>
           {dccStatusList.map(st => (
             <Tab

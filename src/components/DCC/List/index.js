@@ -1,2 +1,2 @@
-// import "./styles.css";
+import "./styles.css";
 export { default } from "./List";
