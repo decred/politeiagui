@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Formik } from "formik";
 import CheckboxGroupField from "src/componentsv2/CheckboxGroupField";
-import CheckboxField from "src/componentsv2/CheckboxField";
 import MonthPickerField from "src/componentsv2/MonthPicker/MonthPickerField";
 import {
   getMinMaxYearAndMonth,
@@ -12,6 +11,7 @@ import UserSearchSelect from "src/containers/User/Search/SearchSelector";
 
 const DEFAULT_INITIAL_VALUES = {
   date: getInitialDateValue(),
+  users: [],
   filters: {
     all: true,
     unreviewed: false,
@@ -22,11 +22,14 @@ const DEFAULT_INITIAL_VALUES = {
   }
 };
 
-const InvoiceFilterForm = ({ onChange, children }) => {
+const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
   return (
     <Formik initialValues={DEFAULT_INITIAL_VALUES}>
       {formikProps => {
-        const { values } = formikProps;
+        const { values, setFieldValue } = formikProps;
+        const handleChangeUserSelector = options => {
+          setFieldValue("users", options);
+        };
         return (
           <>
             <form className={styles.form}>
@@ -36,7 +39,12 @@ const InvoiceFilterForm = ({ onChange, children }) => {
                 label="Reference month"
                 toggleable
               />
-              <UserSearchSelect />
+              {!disableUserFilter && (
+                <UserSearchSelect
+                  onChange={handleChangeUserSelector}
+                  value={values.users}
+                />
+              )}
               <CheckboxGroupField
                 groupName="filters"
                 options={[

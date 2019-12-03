@@ -54,7 +54,7 @@ const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
     <AdminInvoiceActionsProvider>
       <TopBanner>
         <PageDetails title="My invoices">
-          <InvoiceFilterForm onChange={handleFiltersChange} />
+          <InvoiceFilterForm onChange={handleFiltersChange} disableUserFilter />
         </PageDetails>
       </TopBanner>
       <Main fillScreen>

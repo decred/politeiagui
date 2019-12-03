@@ -10,7 +10,7 @@ import {
 } from "src/containers/Invoice";
 
 const FilterInvoices = ({ invoices, children, filterValues }) => {
-  const { date, filters } = filterValues;
+  const { date, filters, users } = filterValues;
   const filterByDate = useCallback(
     invoice => {
       if (!date || !date.month || !date.year) return invoice;
@@ -19,6 +19,14 @@ const FilterInvoices = ({ invoices, children, filterValues }) => {
       );
     },
     [date]
+  );
+
+  const filterByUserID = useCallback(
+    invoice =>
+      !users || !users.length
+        ? invoice
+        : users.find(user => user.value === invoice.userid),
+    [users]
   );
 
   const filterByStatus = useCallback(
@@ -44,7 +52,10 @@ const FilterInvoices = ({ invoices, children, filterValues }) => {
     [filters]
   );
 
-  const filteredInvoices = invoices.filter(filterByStatus).filter(filterByDate);
+  const filteredInvoices = invoices
+    .filter(filterByStatus)
+    .filter(filterByDate)
+    .filter(filterByUserID);
 
   return children && children(filteredInvoices);
 };

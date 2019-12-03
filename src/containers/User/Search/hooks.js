@@ -21,13 +21,13 @@ export function useReactiveSearchUser(email, username) {
     if (!!email && !resultsForEmail) {
       onSearchUser({ email });
     }
-  }, [email, resultsForEmail]);
+  }, [email, resultsForEmail, onSearchUser]);
 
   useEffect(() => {
     if (!!username && !resultsForUsername) {
       onSearchUser({ username });
     }
-  }, [username, resultsForUsername]);
+  }, [username, resultsForUsername, onSearchUser]);
 
   return unionBy(resultsForUsername, resultsForEmail, "id");
 }
