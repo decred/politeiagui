@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react";
+import Link from "src/componentsv2/Link";
 import { useAdminInvoices } from "./hooks";
 import { Spinner } from "pi-ui";
 import Invoice from "src/componentsv2/Invoice";
@@ -53,7 +54,14 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
   return (
     <AdminInvoiceActionsProvider>
       <TopBanner>
-        <PageDetails title="Admin">
+        <PageDetails
+          title="Admin"
+          actionsContent={
+            <div>
+              <Link to="user/invite">Invite contractor</Link>
+            </div>
+          }
+        >
           <InvoiceFilterForm onChange={handleFiltersChange} />
         </PageDetails>
       </TopBanner>

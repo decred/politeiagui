@@ -10,3 +10,14 @@
     display: flex;
     justify-content: right;
 }
+
+
+/* SMALL */
+@media screen and (max-width: 768px) {
+    .selector { 
+        width: 100% !important;
+        margin-top: 1rem;
+    }
+  }
+  
+  

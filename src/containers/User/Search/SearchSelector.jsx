@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import Select from "src/componentsv2/Select";
 import { useReactiveSearchUser } from "./hooks";
 import styles from "./SearchSelector.module.css";
 
-const SearchSelector = ({ onChange, value }) => {
+const SearchSelector = ({ onChange, value, className }) => {
   const [inputValue, setInputValue] = useState("");
   const results = useReactiveSearchUser(inputValue, inputValue);
   const options = results.map(result => ({
@@ -14,7 +15,7 @@ const SearchSelector = ({ onChange, value }) => {
   return (
     <Select
       placeholder="Search User"
-      className={styles.select}
+      className={classNames(styles.select, className)}
       value={value}
       onInputChange={newV => setInputValue(newV)}
       onChange={onChange}

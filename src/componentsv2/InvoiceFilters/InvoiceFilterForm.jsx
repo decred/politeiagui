@@ -54,6 +54,7 @@ const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
               {!disableUserFilter && (
                 <UserSearchSelect
                   onChange={handleChangeUserSelector}
+                  className={styles.selector}
                   value={values.users}
                 />
               )}
