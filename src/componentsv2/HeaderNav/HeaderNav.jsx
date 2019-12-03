@@ -51,7 +51,7 @@ const HeaderNav = ({ history, location }) => {
         <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
         <DropdownItem>
           <div className={styles.themeToggleWrapper}>
-            <Toggle onToggle={onThemeToggleHandler} checked={themeName === "dark"} />
+            <Toggle onToggle={onThemeToggleHandler} toggled={themeName === "dark"} />
             <div className={styles.themeToggleLabel}>Night Mode</div>
           </div>
         </DropdownItem>
