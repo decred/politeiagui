@@ -11,7 +11,6 @@ import { ConfigFilter } from "src/containers/Config";
 const HeaderNav = ({ history }) => {
   const { user, username, onLogout } = useNavigation();
   const { navMenuPaths } = useConfig();
-
   const userIsAdmin = user && user.isadmin;
 
   const menuItems = useMemo(

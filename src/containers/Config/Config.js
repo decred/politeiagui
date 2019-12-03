@@ -24,7 +24,8 @@ const loadConfig = () => {
     aboutContent: defaultAboutContent,
     paywallContent: defaultPaywallContent,
     testnetGitRepository: defaultTestnetGitRepository,
-    mainnetGitRepository: defaultMainnetGitRepository
+    mainnetGitRepository: defaultMainnetGitRepository,
+    navMenuPaths
   } = defaultPreset;
   const env = dotenvParse(process.env);
   const getConf = key => env[`REACT_APP_${key}`];
@@ -58,7 +59,8 @@ const loadConfig = () => {
     testnetGitRepository:
       getConf("TESTNET_GIT_REPOSITORY") || defaultTestnetGitRepository,
     mainnetGitRepository:
-      getConf("MAINNET_GIT_REPOSITORY") || defaultMainnetGitRepository
+      getConf("MAINNET_GIT_REPOSITORY") || defaultMainnetGitRepository,
+    navMenuPaths
   };
 };
 
@@ -68,6 +70,7 @@ const loadConfig = () => {
  */
 const Config = ({ children }) => {
   const configOptions = loadConfig();
+  console.log(configOptions);
   return <ConfigProvider {...configOptions}>{children}</ConfigProvider>;
 };
 
