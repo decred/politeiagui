@@ -39,12 +39,7 @@ const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
                 label="Reference month"
                 toggleable
               />
-              {!disableUserFilter && (
-                <UserSearchSelect
-                  onChange={handleChangeUserSelector}
-                  value={values.users}
-                />
-              )}
+
               <CheckboxGroupField
                 groupName="filters"
                 options={[
@@ -56,6 +51,12 @@ const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
                   { name: "paid", label: "Paid" }
                 ]}
               />
+              {!disableUserFilter && (
+                <UserSearchSelect
+                  onChange={handleChangeUserSelector}
+                  value={values.users}
+                />
+              )}
               <HookOnFormChange formikProps={formikProps} onChange={onChange} />
               <OnChangeFiltersModifier formikProps={formikProps} />
             </form>

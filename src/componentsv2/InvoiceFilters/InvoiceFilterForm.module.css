@@ -3,6 +3,7 @@
     width: 100%;
     justify-content: space-between;
     padding-bottom: 1rem;
+    flex-wrap: wrap;
 }
 
 .checkboxesWrapper {
