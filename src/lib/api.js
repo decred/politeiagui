@@ -114,7 +114,7 @@ export const makeInvoice = (
 export const makeComment = (token, comment, parentid) => ({
   token,
   parentid: parentid || TOP_LEVEL_COMMENT_PARENTID,
-  comment: comment.trim()
+  comment
 });
 
 export const makeLikeComment = (token, action, commentid) => ({
