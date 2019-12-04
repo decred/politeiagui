@@ -40,6 +40,13 @@ describe("test api actions (actions/api.js)", () => {
     password: "foobar1234"
   };
   const MOCK_STATE = {
+    comments: {
+      comments: {
+        byToken: {
+          [FAKE_PROPOSAL_TOKEN]: []
+        }
+      }
+    },
     api: {
       me: {
         response: {
