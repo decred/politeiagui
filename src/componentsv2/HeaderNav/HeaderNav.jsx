@@ -35,6 +35,7 @@ const HeaderNav = ({ history, location }) => {
       <Dropdown
         className={styles.dropdown}
         itemsListClassName={styles.dropdownList}
+        closeOnItemClick={false}
         title={username}
       >
         {user.isadmin && !isOnUnvettedRoute && (
