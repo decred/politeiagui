@@ -1,9 +1,14 @@
 .title, .title > h2 {
     color: var(--color-primary-dark) !important;
+    max-width: 100%;
 }
 
-.title {
-    max-width: 100%;
+.abandonedTitle {
+    composes: title;
+}
+
+.abandonedTitle, .abandonedTitle > h2 {
+    color: var(--color-gray) !important;
 }
 
 .header {
@@ -59,7 +64,7 @@ div.seeOnGithubTooltip {
 }
 
 @media screen and (max-width: 560px) {
-    
+
     .status:not(.disableMobileView) {
         position: initial;
         flex-direction: row;
@@ -80,7 +85,7 @@ div.seeOnGithubTooltip {
         display: flex;
         justify-content: flex-end;
     }
-    
+
     .title {
         max-width: 100%;
         margin-top: .5rem;
