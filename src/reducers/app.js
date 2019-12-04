@@ -189,7 +189,7 @@ const app = (state = DEFAULT_STATE, action) =>
         delete newDraftDCCs[draftId];
         return { ...state, draftDCCs: newDraftDCCs };
       },
-      [act.LOAD_DRAFT_INVOICES]: () => ({
+      [act.LOAD_DRAFT_DCCS]: () => ({
         ...state,
         draftDCCs: action.payload
       }),

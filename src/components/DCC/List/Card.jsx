@@ -8,7 +8,7 @@ import {
 
 import { typesForDCC } from "../helpers";
 
-const CardDCC = ({
+export const CardDCC = ({
   dccpayload,
   sponsoruserid,
   sponsorusername,
@@ -56,4 +56,20 @@ const CardDCC = ({
   );
 };
 
-export default CardDCC;
+export const CardDraft = ({
+  timestamp,
+  draftId,
+  statement = ""
+}) => (
+  <div className={`thing thing-proposal id-${draftId} odd link`}>
+    <span
+      className="title"
+      style={{ display: "flex", overflow: "visible" }}
+    >
+      <Link className="title may-blank loggedin" href={`/dcc/new?draftid=${draftId}`}>
+        Draft: <DateTooltip createdAt={timestamp} />
+      </Link>
+    </span>
+    <span>{statement}</span>
+  </div>
+);

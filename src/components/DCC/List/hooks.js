@@ -1,6 +1,13 @@
 import { useState, useCallback, useEffect } from "react";
+import { DCC_STATUS_DRAFTS } from "../../../constants";
 
-export const useListDCC = ({ onFetchDCCsByStatus, dccs, onForceFetchDCCs }) => {
+export const useListDCC = ({
+  onFetchDCCsByStatus,
+  dccs,
+  onForceFetchDCCs,
+  onLoadDraftDCCs,
+  drafts
+}) => {
   const [loadingDCCs, setLoadingDCCs] = useState(true);
   const [orderedDCCs, setOrderedDCCs] = useState([]);
   const [status, setStatus] = useState(1);
@@ -13,17 +20,25 @@ export const useListDCC = ({ onFetchDCCsByStatus, dccs, onForceFetchDCCs }) => {
     }, 300);
   }, [onForceFetchDCCs, status, setLoadingDCCs]);
 
-  useEffect(() => {
-    async function onFetchData() {
-      setLoadingDCCs(true);
-      await onFetchDCCsByStatus(status);
-      // force timeout
-      setTimeout(() => {
-        setLoadingDCCs(false);
-      }, 300);
-    }
-    onFetchData();
-  }, [status, onFetchDCCsByStatus, setLoadingDCCs]);
+  useEffect(
+    function onChangeStatus() {
+      async function onFetchData() {
+        setLoadingDCCs(true);
+        await onFetchDCCsByStatus(status);
+        // force timeout
+        setTimeout(() => {
+          setLoadingDCCs(false);
+        }, 300);
+      }
+      if (status === DCC_STATUS_DRAFTS) {
+        onLoadDraftDCCs();
+      } else {
+        onFetchData();
+      }
+    },
+    [status, onFetchDCCsByStatus, setLoadingDCCs, onLoadDraftDCCs]
+  );
+
   useEffect(() => {
     const resetDCCs = () => {
       setOrderedDCCs([]);
@@ -47,6 +62,7 @@ export const useListDCC = ({ onFetchDCCsByStatus, dccs, onForceFetchDCCs }) => {
     orderedDCCs,
     handleStatusChange,
     status,
-    onRefreshDCCs
+    onRefreshDCCs,
+    drafts
   };
 };

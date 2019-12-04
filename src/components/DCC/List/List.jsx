@@ -3,25 +3,52 @@ import dccConnector from "../../../connectors/dcc";
 import { useListDCC } from "./hooks";
 import { Tabs, Tab } from "../../Tabs";
 import { dccStatusList } from "../helpers";
-import Card from "./Card";
+import { DCC_STATUS_DRAFTS } from "../../../constants";
+import { CardDCC, CardDraft } from "./Card";
 // import Button from "../../snew/ButtonWithLoadingIcon";
 
-const ListDCC = props => {
-  const { orderedDCCs: dccs, handleStatusChange, status, loadingDCCs: isLoading, onRefreshDCCs } = useListDCC(props);
-  const dccsAvailable = dccs && dccs.length > 0 && !isLoading;
+const ListDCC = ({ dccs, isLoading }) => {
   const emptyDCCList = dccs && dccs.length === 0 && !isLoading;
+  const dccsAvailable = dccs && dccs.length > 0 && !isLoading;
+  return <>
+    {dccsAvailable && dccs.map((dcc, i) => (
+      <CardDCC {...dcc} key={i}/>
+    ))}
+    {emptyDCCList && (
+      <span>No DCCs Available Here</span>
+    )}
+  </>;
+};
+
+const ListDraft = ({ drafts }) =>
+  Object.keys(drafts).map((id, index) =>
+    drafts[id] && drafts[id].timestamp &&
+      <CardDraft
+        key={index}
+        draftId={id}
+        timestamp={drafts[id].timestamp}
+        statement={drafts[id].statement}
+      />
+  );
+
+
+const ListWrapper = props => {
+  const {
+    orderedDCCs: dccs,
+    handleStatusChange,
+    status,
+    loadingDCCs: isLoading,
+    onRefreshDCCs,
+    drafts
+  } = useListDCC(props);
+  const isDraftOption = status === DCC_STATUS_DRAFTS;
   return (
     <div className="content" role="main">
       <div className="page ">
-        <h1>
-          DCCs
-        </h1>
-        <div className="refresh" isLoading={isLoading} onClick={e => {
-          e && e.preventDefault();
-          onRefreshDCCs();
-        }}>
+        <h1>DCCs</h1>
+        {!isDraftOption && <div className="refresh" onClick={onRefreshDCCs}>
           Refresh
-        </div>
+        </div>}
         <Tabs>
           {dccStatusList.map(st => (
             <Tab
@@ -31,13 +58,18 @@ const ListDCC = props => {
               onTabChange={() => handleStatusChange(st.value)}
             />
           ))}
+          <div style={{ float: "right" }}>
+            <Tab
+              title="drafts"
+              selected={isDraftOption}
+              onTabChange={() => handleStatusChange(DCC_STATUS_DRAFTS)}
+            />
+          </div>
         </Tabs>
-        {dccsAvailable && dccs.map((dcc, i) => (
-          <Card {...dcc} key={i}/>
-        ))}
-        {emptyDCCList && (
-          <span>No DCCs Available Here</span>
-        )}
+        {isDraftOption ?
+          <ListDraft drafts={drafts || {}}/> :
+          <ListDCC dccs={dccs} isLoading={isLoading}/>
+        }
         {isLoading && (
           <i
             className="fa fa-circle-o-notch fa-spin left-margin-5"
@@ -49,4 +81,4 @@ const ListDCC = props => {
   );
 };
 
-export default dccConnector(ListDCC);
+export default dccConnector(ListWrapper);

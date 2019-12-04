@@ -22,6 +22,7 @@ const dccConnector = connect(
     newToken: sel.newDCCToken,
     dccs: sel.dccsByStatus,
     dcc: sel.dccDetails,
+    drafts: sel.draftDCCs,
     nomineeUsername: sel.getUserUsername,
     isAdmin: sel.isAdmin,
     statusChangeError: sel.apiSetDCCStatusError
@@ -29,6 +30,7 @@ const dccConnector = connect(
   {
     onSubmitDCC: act.onSaveNewDCC,
     onSaveDraftDCC: act.onSaveDraftDCC,
+    onLoadDraftDCCs: act.onLoadDraftDCCs,
     onFetchDCCsByStatus: act.onLoadDCCsByStatus,
     onForceFetchDCCs: act.onFetchDCCsByStatus,
     onLoadDCC: act.onLoadDCC,

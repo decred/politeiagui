@@ -3,7 +3,6 @@ import {
   // DCC_STATUS_SUPPORTED,
   DCC_STATUS_APPROVED,
   DCC_STATUS_REJECTED,
-  // DCC_STATUS_DEBATE,
   DCC_TYPE_ISSUANCE,
   DCC_TYPE_REVOCATION
 } from "../../constants";
@@ -13,10 +12,6 @@ export const dccStatusList = [
     label: "active",
     value: DCC_STATUS_ACTIVE
   },
-  // {
-  //   label: "supported",
-  //   value: DCC_STATUS_SUPPORTED
-  // },
   {
     label: "approved",
     value: DCC_STATUS_APPROVED
@@ -25,10 +20,6 @@ export const dccStatusList = [
     label: "rejected",
     value: DCC_STATUS_REJECTED
   }
-  // {
-  //   label: "debate",
-  //   value: DCC_STATUS_DEBATE
-  // }
 ];
 
 export const dccChangeStatusList = [

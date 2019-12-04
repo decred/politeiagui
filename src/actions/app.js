@@ -294,6 +294,13 @@ export const onSaveDraftDCC = ({
   return id;
 };
 
+export const onLoadDraftDCCs = email => (dispatch, getState) => {
+  const key = email || sel.currentUserEmail(getState());
+  const stateFromLS = loadStateLocalStorage(key);
+  const drafts = sel.draftDCCs(stateFromLS) || {};
+  dispatch(act.LOAD_DRAFT_DCCS(drafts));
+};
+
 export const onLoadDraftInvoices = email => {
   const stateFromLS = loadStateLocalStorage(email);
   const drafts = sel.draftInvoices(stateFromLS) || {};
