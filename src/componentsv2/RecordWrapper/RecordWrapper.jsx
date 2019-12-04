@@ -49,11 +49,11 @@ export const RecordToken = ({ token }) => {
   );
 };
 
-export const Title = ({ children, url, ...props }) => {
+export const Title = ({ children, isAbandoned, url, ...props }) => {
   const SimpleWrapper = props => <div {...props} />;
   const Wrapper = url ? Link : SimpleWrapper;
   return (
-    <Wrapper to={url} className={styles.title}>
+    <Wrapper to={url} className={isAbandoned ? styles.abandonedTitle : styles.title}>
       <H2 {...props}>{children}</H2>
     </Wrapper>
   );
