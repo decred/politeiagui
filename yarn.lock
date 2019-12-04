@@ -9489,7 +9489,7 @@ performance-now@^2.1.0:
 
 "pi-ui@https://github.com/decred/pi-ui":
   version "1.0.0"
-  resolved "https://github.com/decred/pi-ui#bf657f091ef0b76f96f2f0e3b1e64974c9c21d9f"
+  resolved "https://github.com/decred/pi-ui#35b3ddd8882fbe828fab8bb814bac9b9e10acd9c"
   dependencies:
     clamp-js-main "^0.11.5"
     react-spring "^8.0.25"
@@ -11540,8 +11540,6 @@ rxjs@^6.4.0, rxjs@^6.5.2:
   version "6.5.3"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.3.tgz#510e26317f4db91a7eb1de77d9dd9ba0a4899a3a"
   integrity sha512-wuYsAYYFdWTAnAaPoKGNhfpWwKZbJW+HgAJ+mImp+Epl7BG8oNWBCTyRM8gba9k4lk8BgWdoYm21Mo/RYhhbgA==
-  dependencies:
-    tslib "^1.9.0"
 
 safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
