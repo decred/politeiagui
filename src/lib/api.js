@@ -208,7 +208,7 @@ const GET = path =>
 const getOptions = (csrf, json, method) => ({
   headers: {
     Accept: "application/json",
-    "Content-Type": "application/json",
+    "Content-Type": "application/json; charset=utf-8",
     "X-Csrf-Token": csrf
   },
   credentials: "include", // Include cookies
