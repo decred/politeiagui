@@ -70,7 +70,6 @@ const loadConfig = () => {
  */
 const Config = ({ children }) => {
   const configOptions = loadConfig();
-  console.log(configOptions);
   return <ConfigProvider {...configOptions}>{children}</ConfigProvider>;
 };
 

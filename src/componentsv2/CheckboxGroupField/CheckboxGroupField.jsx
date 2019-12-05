@@ -21,8 +21,10 @@ const CheckboxGroupField = ({ groupName, options }) => {
   const renderList = useCallback(elements => {
     return (
       <ul className={styles.groupList}>
-        {elements.map(el => (
-          <li className={styles.groupListItem}>{el}</li>
+        {elements.map((el, idx) => (
+          <li key={`list-item-${idx}`} className={styles.groupListItem}>
+            {el}
+          </li>
         ))}
       </ul>
     );

@@ -208,6 +208,10 @@
     cursor: not-allowed;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 /* Visibility helpers */
 .display-none {
     display: none;

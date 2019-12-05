@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from "react";
-import Link from "src/componentsv2/Link";
+// import Link from "src/componentsv2/Link";
 import { useAdminInvoices } from "./hooks";
-import { Spinner } from "pi-ui";
+import useBooleanState from "src/hooks/utils/useBooleanState";
+import { Spinner, Link } from "pi-ui";
 import Invoice from "src/componentsv2/Invoice";
 import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import {
@@ -9,11 +10,15 @@ import {
   FilterInvoices
 } from "src/componentsv2/InvoiceFilters";
 import HelpMessage from "src/componentsv2/HelpMessage";
+import { ModalInviteContractor } from "src/containers/User/Invite";
 import styles from "./List.module.css";
 
 const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
   const { loading, invoices } = useAdminInvoices();
   const [filters, setFilters] = useState({});
+  const [showInviteModal, openInviteModal, closeInviteModal] = useBooleanState(
+    false
+  );
 
   const renderInvoice = useCallback(
     invoice => (
@@ -58,7 +63,9 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
           title="Admin"
           actionsContent={
             <div>
-              <Link to="user/invite">Invite contractor</Link>
+              <Link className="cursor-pointer" onClick={openInviteModal}>
+                Invite contractor
+              </Link>
             </div>
           }
         >
@@ -82,6 +89,10 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
           </FilterInvoices>
         )}
       </Main>
+      <ModalInviteContractor
+        show={showInviteModal}
+        onClose={closeInviteModal}
+      />
     </AdminInvoiceActionsProvider>
   );
 };

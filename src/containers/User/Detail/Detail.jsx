@@ -30,8 +30,7 @@ const getTabComponents = ({ user, ...rest }) => {
         userID={user.userid}
         withDrafts={rest.isUserPageOwner}
       />
-    ),
-    [tabValues.INVOICES]: <div>test</div>
+    )
   };
   return mapTabValueToComponent;
 };
@@ -54,7 +53,7 @@ const UserDetail = ({
 
   const {
     recordType,
-    constants: { RECORD_TYPE_INVOICE, RECORD_TYPE_PROPOSAL }
+    constants: { RECORD_TYPE_INVOICE }
   } = useConfig();
 
   const isUserPageOwner = user && currentUserID === user.userid;
@@ -75,9 +74,6 @@ const UserDetail = ({
           tabLabel !== tabValues.CREDITS
         );
       }
-      if (recordType === RECORD_TYPE_PROPOSAL) {
-        return tabLabel !== tabValues.INVOICES;
-      }
       return true;
     };
     return [
@@ -85,16 +81,9 @@ const UserDetail = ({
       tabValues.ACCOUNT,
       tabValues.PREFERENCES,
       tabValues.CREDITS,
-      tabValues.PROPOSALS,
-      tabValues.INVOICES
+      tabValues.PROPOSALS
     ].filter(tab => !isTabDisabled(tab) && filterByRecordType(tab));
-  }, [
-    isUserPageOwner,
-    isAdminOrTheUser,
-    RECORD_TYPE_INVOICE,
-    RECORD_TYPE_PROPOSAL,
-    recordType
-  ]);
+  }, [isUserPageOwner, isAdminOrTheUser, RECORD_TYPE_INVOICE, recordType]);
 
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
 

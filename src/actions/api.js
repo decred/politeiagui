@@ -123,7 +123,7 @@ export const withCsrf = fn => (dispatch, getState) => {
   );
 };
 
-export const onInviteUserConfirm = ({ email }) =>
+export const onInviteUserConfirm = email =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_INVITE_USER({ email }));
     return api

@@ -71,7 +71,11 @@ const MonthPickerField = ({ name, label, years, readOnly, toggleable }) => {
           <div>
             <div style={{ display: "flex" }}>
               {toggleable && (
-                <Checkbox checked={!isDisabled} onChange={handleToggle} />
+                <Checkbox
+                  id="checkMonth"
+                  checked={!isDisabled}
+                  onChange={handleToggle}
+                />
               )}
               <Text color="gray">{label}</Text>
             </div>

@@ -3,8 +3,7 @@ export const tabValues = {
   ACCOUNT: "Account",
   PREFERENCES: "Preferences",
   CREDITS: "Credits",
-  PROPOSALS: "Proposals",
-  INVOICES: "Invoices"
+  PROPOSALS: "Proposals"
 };
 
 /**
@@ -35,7 +34,7 @@ export const hasUserPaid = (
   newuserpaywalltx,
   newuserpaywallamount,
   fromPaywall
-) => fromPaywall || (newuserpaywalltx || newuserpaywallamount === 0);
+) => fromPaywall || newuserpaywalltx || newuserpaywallamount === 0;
 
 /**
  * Verifies if the user is locked
