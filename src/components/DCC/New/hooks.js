@@ -23,9 +23,12 @@ export const useNewDCC = ({
   onSaveDraftDCC,
   newToken,
   history,
-  error
+  error,
+  drafts,
+  onLoadDraftDCCs,
+  loggedInAsEmail
 }) => {
-  const [draftId, setDraftId] = useState(getQueryStringValue("draft"));
+  const [draftId, setDraftId] = useState(getQueryStringValue("draftid"));
   const [requestDone, setRequestDone] = useState(false);
 
   const [formValues, setFormValues] = useState({
@@ -43,10 +46,31 @@ export const useNewDCC = ({
   useEffect(
     function updateURLForDraftID() {
       if (draftId) {
-        setQueryStringValue("draft", draftId);
+        setQueryStringValue("draftid", draftId);
       }
     },
     [draftId]
+  );
+
+  useEffect(
+    function onFetchDrafts() {
+      if (draftId && !drafts) {
+        onLoadDraftDCCs(loggedInAsEmail);
+      }
+      if (drafts && draftId) {
+        const draft = drafts[draftId];
+        if (draft) {
+          setFormValues({
+            nomineeid: draft.nomineeid,
+            dccstatement: draft.statement,
+            contractortype: +draft.contractortype,
+            dccdomain: +draft.domain,
+            dcctype: +draft.type
+          });
+        }
+      }
+    },
+    [drafts, onLoadDraftDCCs, draftId, setFormValues, loggedInAsEmail]
   );
 
   const handleChangeInput = useCallback(

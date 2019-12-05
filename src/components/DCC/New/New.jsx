@@ -10,7 +10,7 @@ import {
   DCC_TYPE_REVOCATION
 } from "../../../constants";
 
-const NewDCC = ({
+let NewDCCForm = ({
   newDCCError: error,
   newDCCResponse,
   isLoading,
@@ -26,7 +26,6 @@ const NewDCC = ({
     handleChangeInput: onChange,
     savedDraft,
     fakeLoadingDraft: isLoadingDraft
-    // isRevocation
   } = useNewDCC(props);
   return (
     <div className="content" role="main">
@@ -54,11 +53,24 @@ const NewDCC = ({
           <label>DCC Type:</label>
           <div className="dcc-type-options">
             <div className="dcc-type">
-              <input name="dcctype" value={DCC_TYPE_ISSUANCE} onChange={onChange("dcctype")} tabIndex={4} type="radio" />
+              <input name="dcctype"
+                value={DCC_TYPE_ISSUANCE}
+                onChange={onChange("dcctype")}
+                checked={+values.dcctype === DCC_TYPE_ISSUANCE}
+                tabIndex={4}
+                type="radio"
+                />
               <label>Issuance</label>
             </div>
             <div className="dcc-type">
-              <input name="dcctype" value={DCC_TYPE_REVOCATION} onChange={onChange("dcctype")} tabIndex={4} type="radio" />
+              <input
+                name="dcctype"
+                value={DCC_TYPE_REVOCATION}
+                onChange={onChange("dcctype")}
+                checked={+values.dcctype === DCC_TYPE_REVOCATION}
+                tabIndex={4}
+                type="radio"
+              />
               <label>Revocation</label>
             </div>
           </div>
@@ -136,6 +148,14 @@ const NewDCC = ({
   );
 };
 
-export default reduxForm({
-  form: "form/dcc"
-})(dccConnector(NewDCC));
+NewDCCForm = reduxForm({
+  form: "form/dcc",
+  enableReinitialize: true
+})(NewDCCForm);
+
+const NewDCCWrapper = props => {
+  const { formValues } = useNewDCC(props);
+  return <NewDCCForm {...{ ...props, initialValues: formValues }}/>;
+};
+
+export default dccConnector(NewDCCWrapper);

@@ -139,6 +139,6 @@ const handleSaveAppDraftDCCs = state => {
 export const handleSaveStateToLocalStorage = state => {
   handleSaveApiMe(state);
   handleSaveAppDraftProposals(state);
-  handleSaveAppDraftInvoices(state);
   handleSaveAppDraftDCCs(state);
+  handleSaveAppDraftInvoices(state);
 };

@@ -6,7 +6,8 @@ export const useListDCC = ({
   dccs,
   onForceFetchDCCs,
   onLoadDraftDCCs,
-  drafts
+  drafts,
+  loggedInAsEmail
 }) => {
   const [loadingDCCs, setLoadingDCCs] = useState(true);
   const [orderedDCCs, setOrderedDCCs] = useState([]);
@@ -30,13 +31,18 @@ export const useListDCC = ({
           setLoadingDCCs(false);
         }, 300);
       }
-      if (status === DCC_STATUS_DRAFTS) {
-        onLoadDraftDCCs();
-      } else {
+      if (status !== DCC_STATUS_DRAFTS) {
         onFetchData();
       }
+      onLoadDraftDCCs(loggedInAsEmail);
     },
-    [status, onFetchDCCsByStatus, setLoadingDCCs, onLoadDraftDCCs]
+    [
+      status,
+      onFetchDCCsByStatus,
+      setLoadingDCCs,
+      onLoadDraftDCCs,
+      loggedInAsEmail
+    ]
   );
 
   useEffect(() => {
