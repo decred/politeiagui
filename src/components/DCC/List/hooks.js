@@ -54,13 +54,6 @@ export const useListDCC = ({
     ]
   );
 
-  useEffect(
-    function onUpdateDCCDraft() {
-      console.log("ON UPDATE DCC DRAFT", drafts);
-    },
-    [drafts]
-  );
-
   useEffect(() => {
     const resetDCCs = () => {
       setOrderedDCCs([]);
