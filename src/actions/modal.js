@@ -21,8 +21,8 @@ export const closeAllModals = () => ({
   type: CLOSE_ALL_MODALS
 });
 
-export const confirmWithModal = (modalType, payload) => dispatch =>
-  new Promise(resolve => {
+export const confirmWithModal = (modalType, payload) => (dispatch) =>
+  new Promise((resolve) => {
     dispatch(
       openModal(modalType, payload, function(a, b) {
         resolve(a, b);

@@ -6,7 +6,7 @@ import Message from "./Message";
 import searchUserConnector from "../connectors/userSearch";
 
 class UserLookupPage extends React.PureComponent {
-  handleSubmit = args => {
+  handleSubmit = (args) => {
     this.props.onSearchUser({ [args.parameter]: args.searchusers });
   };
 
@@ -25,8 +25,7 @@ class UserLookupPage extends React.PureComponent {
           style={{ display: "flex", justifyContent: "center", width: "100%" }}
           id="searchusers"
           role="search"
-          onSubmit={handleSubmit(this.handleSubmit)}
-        >
+          onSubmit={handleSubmit(this.handleSubmit)}>
           {isLoading ? (
             <LoadingIcon
               hidden={!isLoading}
@@ -40,8 +39,7 @@ class UserLookupPage extends React.PureComponent {
                   marginBottom: "10px",
                   display: "flex",
                   justifyContent: "space-around"
-                }}
-              >
+                }}>
                 Search by:
                 <label>
                   <Field
@@ -94,7 +92,7 @@ class UserLookupPage extends React.PureComponent {
                   </tr>
                 </thead>
                 <tbody>
-                  {userSearch.users.map(user => (
+                  {userSearch.users.map((user) => (
                     <tr key={user.id}>
                       <td>
                         <Link href={`/user/${user.id}`}>{user.id}</Link>

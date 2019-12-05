@@ -4,7 +4,7 @@ import htmlParser from "react-markdown/plugins/html-parser";
 import xssFilters from "xss-filters";
 import * as modalTypes from "../../Modal/modalTypes";
 
-const diffCheck = node => {
+const diffCheck = (node) => {
   const className = node.attribs.classname;
   return (
     node.type === "tag" &&
@@ -14,7 +14,7 @@ const diffCheck = node => {
 };
 
 export const htmlParserRules = htmlParser({
-  isValidNode: node => {
+  isValidNode: (node) => {
     return node.type !== "script" && diffCheck(node);
   }
 });
@@ -28,8 +28,7 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
     content = ""
   }) => (
     <tr
-      className={"diff-line" + (added ? "-added" : removed ? "-removed" : "")}
-    >
+      className={"diff-line" + (added ? "-added" : removed ? "-removed" : "")}>
       <td className="diff-line-index">{removedIndex}</td>
       <td className="diff-line-index">{addedIndex}</td>
       <td className="diff-line-icon">{added ? "+" : removed ? "-" : ""}</td>
@@ -83,27 +82,27 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
     ...oldCommentBody.filter(lineDiffFunc(newCommentBody)).map(markAsRemoved),
     ...newCommentBody.filter(lineEqFunc(oldCommentBody)).map(markAsUnchanged)
   ];
-  const markAsAdded = elem => ({
+  const markAsAdded = (elem) => ({
     value: elem.value,
     lineIndex: elem.index,
     removed: false,
     added: true
   });
-  const markAsRemoved = elem => ({
+  const markAsRemoved = (elem) => ({
     lineIndex: elem.index,
     removed: elem.value,
     added: false
   });
-  const markAsUnchanged = elem => ({
+  const markAsUnchanged = (elem) => ({
     value: elem.value,
     lineIndex: elem.index,
     removed: false,
     added: false
   });
-  const lineDiffFunc = arr => elem =>
-    !arr.some(arrelem => arrelem.value === elem.value);
-  const lineEqFunc = arr => elem => !lineDiffFunc(arr)(elem);
-  const getLineArray = string =>
+  const lineDiffFunc = (arr) => (elem) =>
+    !arr.some((arrelem) => arrelem.value === elem.value);
+  const lineEqFunc = (arr) => (elem) => !lineDiffFunc(arr)(elem);
+  const getLineArray = (string) =>
     string && string.length
       ? string.split("\n").map((line, index) => ({ value: line, index: index }))
       : [];
@@ -152,8 +151,8 @@ export const insertDiffHTML = (oldTextBody, newTextBody) => {
 };
 
 export const traverseChildren = (el, cb) => {
-  const filterChildren = c =>
-    React.Children.map(c, child => traverseChildren(child, cb));
+  const filterChildren = (c) =>
+    React.Children.map(c, (child) => traverseChildren(child, cb));
   let newElement = null;
   if (el.children) {
     newElement = {
@@ -173,7 +172,7 @@ export const traverseChildren = (el, cb) => {
   return newElement ? cb(newElement) : cb(el);
 };
 
-export const handleFilterXss = el => {
+export const handleFilterXss = (el) => {
   if (typeof el === "string") return el;
   const props = el.props;
   if (!props) {
@@ -236,8 +235,7 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
                 background: "#dcdcdc5c",
                 width: "100%",
                 marginTop: "1em"
-              }}
-            >
+              }}>
               <span style={{ wordWrap: "break-word" }}>
                 {" "}
                 {tmpLink.protocol + "//"}
@@ -254,7 +252,7 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
       ),
       cancelText: "Cancel",
       submitText: "Proceed"
-    }).then(confirm => {
+    }).then((confirm) => {
       if (confirm) {
         const newWindow = window.open();
         newWindow.opener = null;
@@ -271,37 +269,35 @@ const verifyExternalLink = (e, link, confirmWithModal) => {
   }
 };
 
-const imageHandler = confirmWithModal => ({ src, alt }) => {
+const imageHandler = (confirmWithModal) => ({ src, alt }) => {
   return (
     <a
       target="_blank"
       rel="nofollow noopener noreferrer"
-      onClick={e =>
+      onClick={(e) =>
         confirmWithModal && verifyExternalLink(e, src, confirmWithModal)
       }
-      href={src}
-    >
+      href={src}>
       {alt}
     </a>
   );
 };
 
-const linkHandler = confirmWithModal => ({ href, children }) => {
+const linkHandler = (confirmWithModal) => ({ href, children }) => {
   return (
     <a
       target="_blank"
       rel="nofollow noopener noreferrer"
-      onClick={e =>
+      onClick={(e) =>
         confirmWithModal && verifyExternalLink(e, href, confirmWithModal)
       }
-      href={href}
-    >
+      href={href}>
       {children[0]}
     </a>
   );
 };
 
-const rootHandler = filterXss => el => {
+const rootHandler = (filterXss) => (el) => {
   if (filterXss) {
     el = traverseChildren(el, handleFilterXss);
   }

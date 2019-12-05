@@ -29,8 +29,7 @@ const RegisterForm = ({
       id="register-form"
       method="post"
       name="register-form"
-      onSubmit={handleSubmit(onSignup)}
-    >
+      onSubmit={handleSubmit(onSignup)}>
       <input name="op" type="hidden" defaultValue="reg" />
       <input name="dest" type="hidden" defaultValue="/" />
       <div className="c-form-group">
@@ -124,7 +123,9 @@ const RegisterForm = ({
       <div className="c-form-group">
         <Field
           name="global"
-          component={props => <ErrorField title="Cannot sign up" {...props} />}
+          component={(props) => (
+            <ErrorField title="Cannot sign up" {...props} />
+          )}
         />
         {error || apiNewUserError || apiVerifyNewUserError ? (
           <Message
@@ -147,8 +148,7 @@ const RegisterForm = ({
             <Link
               className="c-pull-right resend-verification-link"
               href="/user/resend"
-              tabIndex={2}
-            >
+              tabIndex={2}>
               Resend verification email
             </Link>
           )}

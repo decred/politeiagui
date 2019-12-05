@@ -34,8 +34,7 @@ const VersionPicker = ({ version, onSelectVersion }) => {
         key={i}
         className="version-picker__item"
         style={dropdownItemStyle}
-        onClick={() => onSelectVersion(i.toString())}
-      >{`version ${i}`}</span>
+        onClick={() => onSelectVersion(i.toString())}>{`version ${i}`}</span>
     );
   }
   return (

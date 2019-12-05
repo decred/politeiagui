@@ -357,7 +357,7 @@ describe("test app reducer", () => {
       { action: act.SET_ONBOARD_AS_VIEWED, assertion: { onboardViewed: true } }
     ];
 
-    reducers.map(obj => {
+    reducers.map((obj) => {
       const action = {
         type: obj.action,
         payload: {},
@@ -398,7 +398,7 @@ describe("test app reducer", () => {
       { action: act.REDIRECTED_FROM, key: "redirectedFrom" }
     ];
 
-    reducers.map(obj => {
+    reducers.map((obj) => {
       const act = {
         type: obj.action,
         payload: { data: "any" },

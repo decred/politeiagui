@@ -94,9 +94,9 @@ class GeneralTab extends React.Component {
   };
 
   refreshPubKey = () => {
-    existing(this.props.loggedInAsEmail).then(pubkey => {
+    existing(this.props.loggedInAsEmail).then((pubkey) => {
       if (pubkey) {
-        myPubKeyHex(this.props.loggedInAsEmail).then(pubkey => {
+        myPubKeyHex(this.props.loggedInAsEmail).then((pubkey) => {
           if (!this.unmounting) {
             this.setState({ pubkey, pubkeyStatus: PUB_KEY_STATUS_LOADED });
           }
@@ -157,7 +157,7 @@ class GeneralTab extends React.Component {
     const { onUpdateUserKey, loggedInAsEmail, confirmWithModal } = this.props;
     confirmWithModal(CONFIRM_ACTION, {
       message: "Are you sure you want to generate a new identity?"
-    }).then(confirm => confirm && onUpdateUserKey(loggedInAsEmail));
+    }).then((confirm) => confirm && onUpdateUserKey(loggedInAsEmail));
   };
 
   render() {
@@ -280,16 +280,14 @@ class GeneralTab extends React.Component {
                 <div>
                   <span
                     style={{ fontWeight: "bold", maxWidth: "7em" }}
-                    className="ident-value"
-                  >
+                    className="ident-value">
                     {this.identityHelpPrompt}
                   </span>{" "}
                   <span
                     className="linkish"
                     onClick={() =>
                       this.setState({ showIdentityHelpText: false })
-                    }
-                  >
+                    }>
                     (hide)
                   </span>
                 </div>
@@ -297,8 +295,7 @@ class GeneralTab extends React.Component {
                 <span
                   className="linkish ident-value"
                   style={{ maxWidth: "7em" }}
-                  onClick={() => this.setState({ showIdentityHelpText: true })}
-                >
+                  onClick={() => this.setState({ showIdentityHelpText: true })}>
                   {this.identityHelpPrompt}
                 </span>
               )}
@@ -410,16 +407,14 @@ class GeneralTab extends React.Component {
                   style={{ paddingLeft: "1em" }}
                   onClick={() =>
                     this.setState({ showPastUserIdentities: false })
-                  }
-                >
+                  }>
                   (hide)
                 </span>
               </span>
             ) : (
               <span
                 className="linkish"
-                onClick={() => this.setState({ showPastUserIdentities: true })}
-              >
+                onClick={() => this.setState({ showPastUserIdentities: true })}>
                 Expand
               </span>
             )}
@@ -433,8 +428,7 @@ class GeneralTab extends React.Component {
                         fontWeight: "bold",
                         marginRight: ".75em",
                         lineHeight: "1.5em"
-                      }}
-                    >
+                      }}>
                       {i + 1})
                     </li>
                     <li className="monospace">{identity.pubkey}</li>
@@ -478,8 +472,7 @@ class GeneralTab extends React.Component {
           <Field label="Password">
             <span
               className="linkish"
-              onClick={() => openModal(CHANGE_PASSWORD_MODAL)}
-            >
+              onClick={() => openModal(CHANGE_PASSWORD_MODAL)}>
               Change Password
             </span>
           </Field>
@@ -538,8 +531,7 @@ class GeneralTab extends React.Component {
                   href={dcrdataTxUrl + user.newuserpaywalltx}
                   target="_blank"
                   className="monospace"
-                  rel="noopener noreferrer"
-                >
+                  rel="noopener noreferrer">
                   {user.newuserpaywalltx}
                 </a>
               )}

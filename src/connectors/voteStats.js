@@ -9,7 +9,7 @@ const voteStatsConnector = connect(
     lastBlockHeight: sel.lastBlockHeight,
     isTestnet: sel.isTestNet
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onFetchVoteStatus: act.onFetchProposalVoteStatus

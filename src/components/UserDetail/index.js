@@ -52,13 +52,13 @@ class UserDetail extends Component {
 
   handleUpdateFilterValueForQueryValue = () => {
     const tab = getQueryStringValue("tab");
-    const validTabOption = userDetailOptions.find(op => op.label === tab);
+    const validTabOption = userDetailOptions.find((op) => op.label === tab);
     return validTabOption ? validTabOption.value : USER_DETAIL_TAB_GENERAL;
   };
-  handleUpdateQueryForFilterValueChange = prevState => {
+  handleUpdateQueryForFilterValueChange = (prevState) => {
     const filterValueTabHasChanged = prevState.tabId !== this.state.tabId;
     const selectedOption = userDetailOptions.find(
-      op => op.value === this.state.tabId
+      (op) => op.value === this.state.tabId
     );
     filterValueTabHasChanged &&
       setQueryStringValue("tab", selectedOption.label);

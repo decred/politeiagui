@@ -1,6 +1,6 @@
 import qs from "query-string";
 
-export const setQueryStringWithoutPageReload = qsValue => {
+export const setQueryStringWithoutPageReload = (qsValue) => {
   const newurl =
     window.location.protocol +
     "//" +

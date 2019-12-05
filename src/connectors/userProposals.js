@@ -20,7 +20,7 @@ const userProposalsConnector = connect(
     header: () => LIST_HEADER_USER,
     emptyProposalsMessage: () => "You have not created any proposals yet"
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onFetchUserProposals: act.onFetchUserProposalsWithVoteStatus,
@@ -30,7 +30,7 @@ const userProposalsConnector = connect(
     )
 );
 
-const Wrapper = props => {
+const Wrapper = (props) => {
   const { userid, onFetchUserProposals } = props;
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const Wrapper = props => {
   );
 };
 
-const wrap = Component =>
-  userProposalsConnector(props => <Wrapper {...{ ...props, Component }} />);
+const wrap = (Component) =>
+  userProposalsConnector((props) => <Wrapper {...{ ...props, Component }} />);
 
 export default wrap;

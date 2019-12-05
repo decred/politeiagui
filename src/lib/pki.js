@@ -8,31 +8,31 @@ export const STORAGE_PREFIX = "ed255191~";
 export const IDENTITY_ERROR =
   "User identity not found. You need to restore it from a backup or generate a new one. If this is a verification from an emailed link, please ensure to open it in the same browser where you requested it.";
 
-export const toHex = x => Buffer.from(toUint8Array(x)).toString("hex");
+export const toHex = (x) => Buffer.from(toUint8Array(x)).toString("hex");
 
-export const toByteArray = str => {
+export const toByteArray = (str) => {
   const bytes = new Uint8Array(Math.ceil(str.length / 2));
   for (let i = 0; i < bytes.length; i++)
     bytes[i] = parseInt(str.substr(i * 2, 2), 16);
   return bytes;
 };
 
-export const toUint8Array = obj =>
+export const toUint8Array = (obj) =>
   Object.prototype.toString.call(obj) !== "[object Object]"
     ? obj
-    : Uint8Array.from(Object.keys(obj).map(key => obj[key]));
+    : Uint8Array.from(Object.keys(obj).map((key) => obj[key]));
 
 export const loadKeys = (email, keys) =>
   localforage.setItem(STORAGE_PREFIX + email, keys).then(() => keys);
 export const generateKeys = () => Promise.resolve(nacl.sign.keyPair());
-export const existing = email =>
-  localforage.getItem(STORAGE_PREFIX + email).catch(e => console.warn(e));
-const myKeyPair = email =>
-  existing(email).then(res => res && res.secretKey && res);
-export const myPublicKey = email => myKeyPair(email).then(get("publicKey"));
-export const myPubKeyHex = email =>
+export const existing = (email) =>
+  localforage.getItem(STORAGE_PREFIX + email).catch((e) => console.warn(e));
+const myKeyPair = (email) =>
+  existing(email).then((res) => res && res.secretKey && res);
+export const myPublicKey = (email) => myKeyPair(email).then(get("publicKey"));
+export const myPubKeyHex = (email) =>
   myPublicKey(email)
-    .then(keys => toHex(keys))
+    .then((keys) => toHex(keys))
     .catch(() => {
       throw new Error(IDENTITY_ERROR);
     });
@@ -54,7 +54,7 @@ export const verify = (msg, sig, pubKey) =>
     toUint8Array(pubKey)
   );
 
-export const verifyKeyPair = keys => {
+export const verifyKeyPair = (keys) => {
   const msg = util.decodeUTF8("any");
   const { publicKey, secretKey } = keysFromHex(keys);
   const signature = nacl.sign.detached(
@@ -74,10 +74,10 @@ const keysFromHex = ({ publicKey, secretKey }) => ({
   secretKey: toByteArray(secretKey)
 });
 
-export const getKeys = email =>
-  myKeyPair(email).then(keys => (keys ? keysToHex(keys) : keys));
+export const getKeys = (email) =>
+  myKeyPair(email).then((keys) => (keys ? keysToHex(keys) : keys));
 
 export const importKeys = (email, keys) =>
-  Promise.resolve(keysFromHex(keys)).then(decodedKeys =>
+  Promise.resolve(keysFromHex(keys)).then((decodedKeys) =>
     loadKeys(email, decodedKeys)
   );

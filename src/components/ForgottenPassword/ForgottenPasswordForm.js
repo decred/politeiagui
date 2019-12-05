@@ -17,8 +17,7 @@ const ForgottenPasswordForm = ({
   return (
     <form
       className="forgotten-password-form"
-      onSubmit={handleSubmit(onForgottenPassword)}
-    >
+      onSubmit={handleSubmit(onForgottenPassword)}>
       {error && (
         <Message type="error" header="Forgotten password error" body={error} />
       )}
@@ -56,8 +55,7 @@ const ForgottenPasswordForm = ({
         <button
           className="c-btn c-btn-primary c-pull-right"
           tabIndex={3}
-          type="submit"
-        >
+          type="submit">
           Reset Password
         </button>
       </div>

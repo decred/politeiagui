@@ -56,8 +56,7 @@ const UserDetailPage = ({
               <span
                 className="linkish"
                 style={{ marginLeft: "10px" }}
-                onClick={() => openModal(CHANGE_USERNAME_MODAL)}
-              >
+                onClick={() => openModal(CHANGE_USERNAME_MODAL)}>
                 Change Username
               </span>
             ) : null}

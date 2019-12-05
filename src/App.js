@@ -35,7 +35,7 @@ store.subscribe(
   }, 1000)
 );
 
-const createStorageListener = store => event =>
+const createStorageListener = (store) => (event) =>
   store.dispatch(onLocalStorageChange(event));
 
 class Loader extends Component {
@@ -156,8 +156,7 @@ const HeaderAlertComponent = withRouter(
             <span
               className="linkish"
               style={{ cursor: "pointer" }}
-              onClick={() => history.push(`/user/${loggedInAsUserId}`)}
-            >
+              onClick={() => history.push(`/user/${loggedInAsUserId}`)}>
               account page
             </span>{" "}
             to correct this problem.

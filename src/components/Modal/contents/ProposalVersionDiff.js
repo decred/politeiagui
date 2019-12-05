@@ -41,14 +41,14 @@ class ProposalVersionDiff extends React.Component {
     }
   };
 
-  getProposalText = proposal => {
-    const getMarkdowFile = prop =>
-      prop.files.filter(file => file.name === "index.md")[0];
+  getProposalText = (proposal) => {
+    const getMarkdowFile = (prop) =>
+      prop.files.filter((file) => file.name === "index.md")[0];
     return proposal ? getTextFromIndexMd(getMarkdowFile(proposal)) : "";
   };
 
-  getProposalFilesWithourIndexMd = proposal =>
-    proposal ? proposal.files.filter(file => file.name !== "index.md") : [];
+  getProposalFilesWithourIndexMd = (proposal) =>
+    proposal ? proposal.files.filter((file) => file.name !== "index.md") : [];
 
   render() {
     const { proposal, prevProposal, loading, error } = this.state;

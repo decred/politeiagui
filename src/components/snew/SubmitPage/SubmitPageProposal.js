@@ -12,11 +12,11 @@ import MarkdownHelp from "../../MarkdownHelp";
 import { MANAGE_CREDITS_MODAL } from "../../Modal/modalTypes";
 import { PROPOSAL_GUIDELINES } from "../../../constants";
 
-const ToggledMarkdown = props => (
+const ToggledMarkdown = (props) => (
   <MarkdownEditorField input={props.input} toggledStyle={true} />
 );
 
-const ProposalSubmit = props => {
+const ProposalSubmit = (props) => {
   const {
     isLoading,
     PageLoadingIcon,
@@ -66,7 +66,7 @@ const ProposalSubmit = props => {
             <div className="spacer">
               <Field
                 name="global"
-                component={props => (
+                component={(props) => (
                   <ErrorField title="Cannot submit proposal" {...props} />
                 )}
               />
@@ -86,8 +86,7 @@ const ProposalSubmit = props => {
                           flex: "1",
                           display: "flex",
                           justifyContent: "flex-end"
-                        }}
-                      >
+                        }}>
                         <span style={{ color: "#777" }}>
                           <i className="fa fa-edit right-margin-5" />
                           Editing
@@ -112,8 +111,7 @@ const ProposalSubmit = props => {
                           target="_blank"
                           rel="noopener noreferrer"
                           href={PROPOSAL_GUIDELINES}
-                          style={{ fontSize: "1.01em" }}
-                        >
+                          style={{ fontSize: "1.01em" }}>
                           Learn how to format your proposal
                         </a>
                         <Field
@@ -135,8 +133,7 @@ const ProposalSubmit = props => {
                       name="submit"
                       type="submit"
                       value="form"
-                      onClick={handleSubmit(onSave)}
-                    >
+                      onClick={handleSubmit(onSave)}>
                       {!editingMode ? "submit" : "update"}
                     </button>
                     <ButtonWithLoadingIcon
@@ -154,8 +151,7 @@ const ProposalSubmit = props => {
                         credit.
                         <span
                           className="linkish"
-                          onClick={() => openModal(MANAGE_CREDITS_MODAL)}
-                        >
+                          onClick={() => openModal(MANAGE_CREDITS_MODAL)}>
                           {" "}
                           Click here
                         </span>{" "}
@@ -167,8 +163,7 @@ const ProposalSubmit = props => {
                         fontSize: "16px",
                         display: "flex",
                         paddingTop: "1em"
-                      }}
-                    >
+                      }}>
                       <b>NOTE:&nbsp;</b> Drafts are locally stored in the
                       browser and will NOT be available across different
                       browsers or devices.

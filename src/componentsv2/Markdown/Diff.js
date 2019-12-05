@@ -33,8 +33,7 @@ const DiffHeader = ({
               className="linkish"
               style={{ marginRight: "10px" }}
               onClick={onToggleFilesDiff}
-              href=""
-            >
+              href="">
               {filesDiff ? "Text Changes" : "Attachments changes"}
               {isNewFile && <span className="new-file-indicator" />}
             </span>
@@ -59,14 +58,12 @@ const DiffBody = ({
     <div className="diff-text-preview-toggle" onClick={onToggleTextDiffPreview}>
       <div
         className={!preview ? "diff-active-toggle" : ""}
-        onClick={!preview ? onToggleTextDiffPreview : null}
-      >
+        onClick={!preview ? onToggleTextDiffPreview : null}>
         View version {version}
       </div>
       <div
         className={preview ? "diff-active-toggle" : ""}
-        onClick={preview ? onToggleTextDiffPreview : null}
-      >
+        onClick={preview ? onToggleTextDiffPreview : null}>
         Text changes
       </div>
     </div>
@@ -86,18 +83,18 @@ const getFilesDiff = (newFiles, oldFiles, filesDiffFunc) => [
   ...newFiles.filter(filesEqFunc(oldFiles)) // for unchanged files
 ];
 
-const markAsAdded = elem => ({ ...elem, added: true });
-const markAsRemoved = elem => ({ ...elem, removed: true });
-const filesDiffFunc = arr => elem =>
+const markAsAdded = (elem) => ({ ...elem, added: true });
+const markAsRemoved = (elem) => ({ ...elem, removed: true });
+const filesDiffFunc = (arr) => (elem) =>
   !arr.some(
-    arrelem => arrelem.name === elem.name && arrelem.payload === elem.payload
+    (arrelem) => arrelem.name === elem.name && arrelem.payload === elem.payload
   );
-const filesEqFunc = arr => elem => !filesDiffFunc(arr)(elem);
+const filesEqFunc = (arr) => (elem) => !filesDiffFunc(arr)(elem);
 // This function allows us to know if the file has changed or not, in order to display the red dot
 // to indicate the Files Diff
-const hasFilesChanged = filesDiff =>
+const hasFilesChanged = (filesDiff) =>
   filesDiff.length > 0 &&
-  filesDiff.filter(file => file.added || file.removed).length > 0;
+  filesDiff.filter((file) => file.added || file.removed).length > 0;
 
 const withDiffStyle = {
   zIndex: 9999,
@@ -107,15 +104,15 @@ const withDiffStyle = {
 
 class Diff extends React.Component {
   state = { filesDiff: false, textDiffPreview: false };
-  handleToggleFilesDiff = e => {
+  handleToggleFilesDiff = (e) => {
     e.preventDefault();
-    this.setState(state => ({
+    this.setState((state) => ({
       filesDiff: !state.filesDiff
     }));
   };
-  handleToggleTextDiffPreview = e => {
+  handleToggleTextDiffPreview = (e) => {
     e.preventDefault();
-    this.setState(state => ({
+    this.setState((state) => ({
       textDiffPreview: !state.textDiffPreview
     }));
   };

@@ -30,7 +30,7 @@ export const commentsReducer = (state, action) => {
 
       // New comment added: find the new comment and add it to the state
       if (action.comments.length > state.comments.length) {
-        const addedComment = maxBy(action.comments, c => +c.commentid);
+        const addedComment = maxBy(action.comments, (c) => +c.commentid);
         return {
           ...state,
           comments: [addedComment].concat(state.comments)
@@ -39,9 +39,9 @@ export const commentsReducer = (state, action) => {
       // Comment updated: find and update the comments with changes
       return {
         ...state,
-        comments: state.comments.map(comment => {
+        comments: state.comments.map((comment) => {
           const commentFromNewComments = action.comments.find(
-            c => c.commentid === comment.commentid
+            (c) => c.commentid === comment.commentid
           );
           if (!isEqual(comment, commentFromNewComments)) {
             return commentFromNewComments;

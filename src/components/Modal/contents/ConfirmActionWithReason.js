@@ -17,7 +17,7 @@ class ConfirmActionWithReason extends React.Component {
     this.textAreaRef.focus();
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({ reason: event.target.value });
   };
 
@@ -52,8 +52,7 @@ class ConfirmActionWithReason extends React.Component {
         submitText="Submit"
         cancelText="Cancel"
         onCancel={this.handleCancel}
-        onSubmit={this.handleConfirm}
-      >
+        onSubmit={this.handleConfirm}>
         {this.state.error && (
           <Message type="error" title="Error" body={this.state.error} />
         )}
@@ -64,7 +63,7 @@ class ConfirmActionWithReason extends React.Component {
               me.payload.reasonPlaceholder ||
               "Please provide a reason for this action"
             }
-            ref={ref => (this.textAreaRef = ref)}
+            ref={(ref) => (this.textAreaRef = ref)}
             value={this.state.reason}
             onChange={this.handleChange}
           />

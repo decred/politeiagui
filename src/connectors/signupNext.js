@@ -13,7 +13,7 @@ const signupNextConnector = connect(
     isRequestingVerifyNewUser: sel.isApiRequestingVerifyNewUser,
     isCMS: sel.isCMS
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onResetNewUser: act.onResetNewUser
@@ -22,7 +22,4 @@ const signupNextConnector = connect(
     )
 );
 
-export default compose(
-  withRouter,
-  signupNextConnector
-);
+export default compose(withRouter, signupNextConnector);

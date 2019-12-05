@@ -96,7 +96,7 @@ export const formatInvoiceData = (invoice, idx) => invoiceToT3(invoice, idx);
 const getChildComments = ({ tree, comments }, parentid) =>
   map(
     compose(
-      data => ({
+      (data) => ({
         kind: "t1",
         data: {
           ...data,
@@ -108,7 +108,7 @@ const getChildComments = ({ tree, comments }, parentid) =>
           }
         }
       }),
-      id => comments[id]
+      (id) => comments[id]
     ),
     get(parentid || TOP_LEVEL_COMMENT_PARENTID, tree) || []
   );
@@ -123,12 +123,12 @@ const getTree = ({ tree, comments }, commentid, tempThreadTree) => {
         [commentid]: tree[commentid]
       };
       tree[commentid] &&
-        tree[commentid].forEach(item => getChildren(tree, item));
+        tree[commentid].forEach((item) => getChildren(tree, item));
     };
     const getParents = (tree, commentid) => {
       const firstlevel = Object.keys(tree);
-      firstlevel.forEach(key => {
-        if (tree[key].find(item => item === commentid)) {
+      firstlevel.forEach((key) => {
+        if (tree[key].find((item) => item === commentid)) {
           // find the comment parent
           newTree = {
             ...newTree,
@@ -141,7 +141,7 @@ const getTree = ({ tree, comments }, commentid, tempThreadTree) => {
     getChildren(tree, commentid);
     getParents(tree, commentid);
     if (tempThreadTree) {
-      Object.keys(tempThreadTree).forEach(newKey => {
+      Object.keys(tempThreadTree).forEach((newKey) => {
         newTree = {
           ...newTree,
           [newKey]: union(newTree[newKey], tempThreadTree[newKey])
@@ -156,7 +156,7 @@ const getTree = ({ tree, comments }, commentid, tempThreadTree) => {
 // compose JS reduce and getTree, will return a {tree, comments} object
 export const buildCommentsTree = (comments, commentid, tempThreadTree) =>
   compose(
-    obj => getTree(obj, commentid, tempThreadTree),
+    (obj) => getTree(obj, commentid, tempThreadTree),
     reduce(
       (
         r,
@@ -204,17 +204,16 @@ export const buildCommentsTree = (comments, commentid, tempThreadTree) =>
   )(comments);
 
 export const commentsToT1 = (comments, commentid, tempThreadTree) => {
-  return compose(
-    getChildComments,
-    comments => buildCommentsTree(comments, commentid, tempThreadTree)
+  return compose(getChildComments, (comments) =>
+    buildCommentsTree(comments, commentid, tempThreadTree)
   )(comments);
 };
 
 // create data structure with all the comments on thread uniquely
-export const buildSetOfComments = tree => {
+export const buildSetOfComments = (tree) => {
   const set = new Set();
-  Object.keys(tree).forEach(key => {
-    tree[key] && tree[key].forEach(item => item && set.add(item));
+  Object.keys(tree).forEach((key) => {
+    tree[key] && tree[key].forEach((item) => item && set.add(item));
     key && key !== "0" && set.add(key);
   });
   return set;

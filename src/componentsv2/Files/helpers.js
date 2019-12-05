@@ -1,6 +1,6 @@
 export function getFormattedFiles(files) {
   const formattedFiles = [];
-  files.forEach(r => {
+  files.forEach((r) => {
     const [event, file] = r;
     formattedFiles.push({
       name: file.name,

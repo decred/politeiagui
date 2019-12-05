@@ -10,8 +10,7 @@ const LoadingIcon = ({ hidden, width, className, style }) => (
         height: width * 1.25 + "px"
       },
       style
-    )}
-  >
+    )}>
     <div className="hoverimage" />
     <div
       className="logo"

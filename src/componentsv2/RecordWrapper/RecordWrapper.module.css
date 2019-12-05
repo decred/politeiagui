@@ -1,93 +1,94 @@
-.title, .title > h2 {
-    color: var(--color-primary-dark) !important;
-    max-width: 100%;
+.title,
+.title > h2 {
+  color: var(--color-primary-dark) !important;
+  max-width: 100%;
 }
 
 .abandonedTitle {
-    composes: title;
+  composes: title;
 }
 
-.abandonedTitle, .abandonedTitle > h2 {
-    color: var(--color-gray) !important;
+.abandonedTitle,
+.abandonedTitle > h2 {
+  color: var(--color-gray) !important;
 }
 
 .header {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .subtitleWrapper {
-    flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .status {
-    position: absolute;
-    right: 4rem;
-    top: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    flex: 1;
+  position: absolute;
+  right: 4rem;
+  top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex: 1;
 }
 
 .editButton {
-    margin-top: .7rem;
-    margin-left: 1rem;
+  margin-top: 0.7rem;
+  margin-left: 1rem;
 }
 
 .titleWrapper {
-    display: flex;
+  display: flex;
 }
 
 .titleEditWrapper {
-    max-width: calc(100% - 28rem);
-    display: flex;
+  max-width: calc(100% - 28rem);
+  display: flex;
 }
 
 .commentsLink {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .commentsLink > span {
-    color: var(--color-primary-dark);
-    font-weight: var(--font-weight-semi-bold);
-    margin-right: 0.2rem;
+  color: var(--color-primary-dark);
+  font-weight: var(--font-weight-semi-bold);
+  margin-right: 0.2rem;
 }
 
 div.seeOnGithubTooltip {
-    white-space: nowrap;
-    font-size: var(--font-size-small);
-    padding-right: 1.2rem;
-    padding-left: 1.2rem;
-    color: var(--color-gray);
+  white-space: nowrap;
+  font-size: var(--font-size-small);
+  padding-right: 1.2rem;
+  padding-left: 1.2rem;
+  color: var(--color-gray);
 }
 
 @media screen and (max-width: 560px) {
+  .status:not(.disableMobileView) {
+    position: initial;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
 
-    .status:not(.disableMobileView) {
-        position: initial;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
-    }
+  .titleWrapper {
+    flex-direction: column-reverse;
+  }
 
-    .titleWrapper {
-        flex-direction: column-reverse;
-    }
+  .titleEditWrapper {
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
 
-    .titleEditWrapper {
-        flex-wrap: wrap;
-        max-width: 100%;
-    }
+  .titleStatusWrapper {
+    display: flex;
+    justify-content: flex-end;
+  }
 
-    .titleStatusWrapper {
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .title {
-        max-width: 100%;
-        margin-top: .5rem;
-    }
+  .title {
+    max-width: 100%;
+    margin-top: 0.5rem;
+  }
 }

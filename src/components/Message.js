@@ -25,8 +25,7 @@ const Message = ({
   return (
     <div
       className={"message-ct message-" + type + className}
-      style={{ height: height }}
-    >
+      style={{ height: height }}>
       <div className="message-icon" style={{ lineHeight: height }}>
         {icon}
       </div>
@@ -48,8 +47,7 @@ const Message = ({
               cursor: "pointer",
               fontSize: "15px"
             }}
-            onClick={onDismissClick}
-          >
+            onClick={onDismissClick}>
             ✖
           </span>
         </span>

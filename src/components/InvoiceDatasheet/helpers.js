@@ -21,7 +21,7 @@ export const columnTypes = {
 
 export const { LABOR_COL, EXP_COL, SUBTOTAL_COL } = columnTypes;
 
-const getDropdownOptionsByColumnType = colType => {
+const getDropdownOptionsByColumnType = (colType) => {
   const domainOptions = [
     "Development",
     "Marketing",
@@ -45,7 +45,7 @@ const getDropdownOptionsByColumnType = colType => {
         value: 3
       }
     ],
-    [columnTypes.DOMAIN_COL]: domainOptions.map(op => ({
+    [columnTypes.DOMAIN_COL]: domainOptions.map((op) => ({
       value: op,
       label: op
     }))
@@ -54,11 +54,13 @@ const getDropdownOptionsByColumnType = colType => {
   return mapColTypeToOptions[colType];
 };
 
-export const selectWrapper = options => props => (
+export const selectWrapper = (options) => (props) => (
   <SelectEditor {...{ ...props, options }} />
 );
 
-export const multiLineWrapper = props => <MultiLineEditor {...{ ...props }} />;
+export const multiLineWrapper = (props) => (
+  <MultiLineEditor {...{ ...props }} />
+);
 
 export const generateBlankLineItem = () => ({
   type: 1,
@@ -159,8 +161,8 @@ export const convertLineItemsToGrid = (lineItems, readOnly = true) => {
   return grid.concat(gridBody).concat([totalsLine]);
 };
 
-export const convertGridToLineItems = grid => {
-  const copyGrid = grid.map(row => [...row]);
+export const convertGridToLineItems = (grid) => {
+  const copyGrid = grid.map((row) => [...row]);
   return copyGrid.reduce((acc, rowValues, row) => {
     // skip first and last rows
     if (row === 0 || row === copyGrid.length - 1) return acc;
@@ -193,7 +195,7 @@ export const convertGridToLineItems = grid => {
 };
 
 export const lineitemsWithSubtotal = (lineItems, rate) =>
-  lineItems.map(l => {
+  lineItems.map((l) => {
     return l.type === 1
       ? {
           ...l,

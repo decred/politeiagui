@@ -3,21 +3,17 @@ import get from "lodash/fp/get";
 
 export const creditsByUserID = get(["credits", "byUserID"]);
 
-export const makeGetUnspentUserCredits = userid =>
-  createSelector(
-    creditsByUserID,
-    creditsByUserID =>
-      creditsByUserID[userid] ? creditsByUserID[userid].unspent : []
+export const makeGetUnspentUserCredits = (userid) =>
+  createSelector(creditsByUserID, (creditsByUserID) =>
+    creditsByUserID[userid] ? creditsByUserID[userid].unspent : []
   );
 
-export const makeGetSpentUserCredits = userid =>
-  createSelector(
-    creditsByUserID,
-    creditsByUserID =>
-      creditsByUserID[userid] ? creditsByUserID[userid].spent : []
+export const makeGetSpentUserCredits = (userid) =>
+  createSelector(creditsByUserID, (creditsByUserID) =>
+    creditsByUserID[userid] ? creditsByUserID[userid].spent : []
   );
 
-export const makeGetUserCreditsPurchasesByTx = userid => {
+export const makeGetUserCreditsPurchasesByTx = (userid) => {
   const spentUserCredits = makeGetSpentUserCredits(userid);
   const unspentUserCredits = makeGetUnspentUserCredits(userid);
 

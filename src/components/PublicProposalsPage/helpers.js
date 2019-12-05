@@ -11,8 +11,8 @@ export const tabValues = {
   ABANDONED: "abandoned"
 };
 
-export const validTabValue = value =>
-  Object.keys(tabValues).find(k => tabValues[k] === value);
+export const validTabValue = (value) =>
+  Object.keys(tabValues).find((k) => tabValues[k] === value);
 
 export const getInitialTabValue = () => {
   const tabOption = getQueryStringValue("tab");
@@ -21,7 +21,7 @@ export const getInitialTabValue = () => {
     : tabValues.IN_DISCUSSION;
 };
 
-export const setTabValueInQS = tab => setQueryStringValue("tab", tab);
+export const setTabValueInQS = (tab) => setQueryStringValue("tab", tab);
 
 export const getProposalTokensByTabOption = (tabOption, proposalsTokens) => {
   if (!proposalsTokens) return [];
@@ -50,7 +50,7 @@ export const getProposalsByTabOption = (
   const filterProposalsByTokens = (tokens, proposals) =>
     tokens.reduce((filteredProposals, token) => {
       const foundProp = proposals.find(
-        prop =>
+        (prop) =>
           prop && prop.censorshiprecord && token === prop.censorshiprecord.token
       );
       return foundProp

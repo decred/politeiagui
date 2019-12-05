@@ -24,8 +24,7 @@ const LoginFormSide = ({
         method="post"
         onSubmit={handleSubmit(({ email, passwordSide }) =>
           onLogin({ email: email, password: passwordSide })
-        )}
-      >
+        )}>
         <input name="op" type="hidden" defaultValue="login-main" />
         <Field
           id="user_login"
@@ -53,7 +52,7 @@ const LoginFormSide = ({
         ) : null}
         <Field
           name="global"
-          component={props => <ErrorField title="Cannot login" {...props} />}
+          component={(props) => <ErrorField title="Cannot login" {...props} />}
         />
         <div id="remember-me">
           <input
@@ -66,8 +65,7 @@ const LoginFormSide = ({
           <Link
             className="recover-password"
             href="/privacy-policy"
-            style={{ marginRight: "10px" }}
-          >
+            style={{ marginRight: "10px" }}>
             Privacy Policy
           </Link>
           <Link className="recover-password" href="/password">

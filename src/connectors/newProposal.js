@@ -95,11 +95,8 @@ class NewProposalWrapper extends Component {
   };
 }
 
-const wrap = Component => props => (
+const wrap = (Component) => (props) => (
   <NewProposalWrapper {...{ ...props, Component }} />
 );
 
-export default compose(
-  newProposalConnector,
-  wrap
-);
+export default compose(newProposalConnector, wrap);

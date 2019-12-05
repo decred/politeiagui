@@ -4,7 +4,7 @@ import modalConnector from "../../../connectors/modal";
 import { PI_DOCS } from "../../../constants";
 
 class WelcomeModal extends React.Component {
-  openInNewTab = url => {
+  openInNewTab = (url) => {
     const win = window.open(url, "_blank");
     win.focus();
   };
@@ -27,8 +27,7 @@ class WelcomeModal extends React.Component {
         submitText={"Yes, show me more"}
         cancelText={"Maybe later"}
         onCancel={this.handleCancel}
-        onSubmit={this.handleConfirm}
-      >
+        onSubmit={this.handleConfirm}>
         <div style={{ display: "grid", padding: "1em", fontSize: "1.15em" }}>
           <strong
             style={{
@@ -36,8 +35,7 @@ class WelcomeModal extends React.Component {
               fontSize: "1.05em",
               marginBottom: "1em",
               fontWeight: "1.2em"
-            }}
-          >
+            }}>
             Are you new to Politeia? Would you like to read more on how all of
             this works?
           </strong>
@@ -46,8 +44,7 @@ class WelcomeModal extends React.Component {
               textAlign: "center",
               marginTop: ".5em",
               fontStyle: "italic"
-            }}
-          >
+            }}>
             The following information can be reviewed by clicking 'Learn More
             about Politiea' in the sidebar.
           </span>

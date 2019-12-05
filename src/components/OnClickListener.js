@@ -10,7 +10,7 @@ class OnClickListener extends React.Component {
     };
   }
 
-  handleOnClick = event => {
+  handleOnClick = (event) => {
     const { clicks } = this.state;
     const { disabled } = this.props;
     this.setState({ clicks: clicks + 1 });

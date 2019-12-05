@@ -6,7 +6,7 @@ const setLocalStorageValue = (key, value) => {
   localStorage.setItem(key, serializedValue);
 };
 
-const getLocalStorageValue = key => {
+const getLocalStorageValue = (key) => {
   const serializedState = localStorage.getItem(key);
   return JSON.parse(serializedState);
 };
@@ -25,7 +25,7 @@ export default function useLocalStorage(key, initialValue) {
   });
 
   const onSetValue = useCallback(
-    newValue => {
+    (newValue) => {
       try {
         setLocalStorageValue(key, newValue);
         setStoredValue(newValue);
@@ -37,7 +37,7 @@ export default function useLocalStorage(key, initialValue) {
   );
 
   const onStorageChange = useCallback(
-    event => {
+    (event) => {
       if (event.key !== key) {
         return;
       }

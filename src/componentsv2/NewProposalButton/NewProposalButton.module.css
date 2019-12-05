@@ -1,24 +1,24 @@
 .newProposalButton {
-    width: 15.5rem;
-    padding-right: 0 !important;
-    padding-left: 0 !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 15.5rem;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .newProposalButtonContent::after {
-    content: "New Proposal"
+  content: "New Proposal";
 }
 
-@media screen and (max-width: 560px){
-    .newProposalButtonContent::after {
-        content: "+"
-    }
+@media screen and (max-width: 560px) {
+  .newProposalButtonContent::after {
+    content: "+";
+  }
 
-    .newProposalButton { 
-        padding: 0 !important;
-        width: 3.2rem;
-        height: 3.2rem;
-    }
+  .newProposalButton {
+    padding: 0 !important;
+    width: 3.2rem;
+    height: 3.2rem;
+  }
 }

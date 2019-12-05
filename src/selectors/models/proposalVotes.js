@@ -5,8 +5,5 @@ export const summaryByToken = get(["proposalVotes", "byToken"]);
 
 export const bestBlock = get(["proposalVotes", "bestBlock"]);
 
-export const makeGetProposalVoteSummary = token =>
-  createSelector(
-    summaryByToken,
-    get(token)
-  );
+export const makeGetProposalVoteSummary = (token) =>
+  createSelector(summaryByToken, get(token));

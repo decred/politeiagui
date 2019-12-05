@@ -74,7 +74,7 @@ function getErrorMessage(policy, errorType, filename = "") {
   return errors[errorType];
 }
 
-const validatePipe = (...fs) => x => fs.reduce((v, f) => f(v), x);
+const validatePipe = (...fs) => (x) => fs.reduce((v, f) => f(v), x);
 
 function validateMaxImages({ files, errors, policy }) {
   if (files.length > policy.maximages) {
@@ -89,7 +89,7 @@ function validateMaxImages({ files, errors, policy }) {
 }
 
 function validateMaxSize({ files, errors, policy }) {
-  const newFiles = files.filter(file => {
+  const newFiles = files.filter((file) => {
     if (file.size > policy.maximagesize) {
       errors.push(getErrorMessage(policy, errorTypes.MAX_SIZE, file.name));
       return false;
@@ -104,7 +104,7 @@ function validateMaxSize({ files, errors, policy }) {
 }
 
 function validateMimeTypes({ files, errors, policy }) {
-  const newFiles = files.filter(file => {
+  const newFiles = files.filter((file) => {
     if (policy.validmimetypes.indexOf(file.mime) < 0) {
       errors.push(getErrorMessage(policy, errorTypes.INVALID_MIME, file.name));
       return false;

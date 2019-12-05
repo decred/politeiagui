@@ -8,9 +8,9 @@
 .diff-text-preview-toggle div {
   width: 50%;
   float: left;
-  text-align: center
+  text-align: center;
 }
-.diff-active-toggle{
+.diff-active-toggle {
   background-color: white;
   cursor: default;
 }
@@ -36,7 +36,7 @@
 }
 .lineIcon {
   font-weight: bold;
-  width: 1em
+  width: 1em;
 }
 .lineContent {
   width: 500px;
@@ -107,4 +107,3 @@
     padding-left: 1rem;
   }
 }
-  

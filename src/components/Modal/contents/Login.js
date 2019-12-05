@@ -40,8 +40,7 @@ class Login extends React.Component {
       <ModalContentWrapper
         title={title}
         cancelText="Close"
-        onClose={this.handleClose}
-      >
+        onClose={this.handleClose}>
         <div
           style={{
             display: "flex",
@@ -49,8 +48,7 @@ class Login extends React.Component {
             padding: "20px 8px",
             minHeight: "360px",
             alignItems: "center"
-          }}
-        >
+          }}>
           <div style={{ width: "320px" }}>
             <div style={{ marginBottom: "34px" }}>
               <h1 style={{ margin: "0px" }}>Login</h1>
@@ -58,8 +56,7 @@ class Login extends React.Component {
               <Link
                 onClick={closeModal}
                 href="/user/signup"
-                className="login-required"
-              >
+                className="login-required">
                 create an account
               </Link>
             </div>

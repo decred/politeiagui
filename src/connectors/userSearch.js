@@ -10,7 +10,7 @@ const searchUserConnector = connect(
     error: sel.apiUserSearchError,
     isLoading: sel.isApiRequestingUserSearch
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onSearchUser: act.onSearchUser

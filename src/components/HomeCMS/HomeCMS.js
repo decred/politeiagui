@@ -22,7 +22,7 @@ const getPreviousMonthAndYear = () => {
 const UserReminders = ({ invoices }) => {
   const { month, year } = getPreviousMonthAndYear();
   const hasSubmittedInvoiceInTheCurrentYearAndMonth = invoices.find(
-    inv => invoiceYear(inv) === year && invoiceMonth(inv) === month
+    (inv) => invoiceYear(inv) === year && invoiceMonth(inv) === month
   );
 
   return (
@@ -43,13 +43,13 @@ const AdminReminders = ({ invoices }) => {
   const { month, year } = getPreviousMonthAndYear();
 
   const invoicesWaitingForReview = invoices.filter(
-    inv => inv.status === INVOICE_STATUS_NEW
+    (inv) => inv.status === INVOICE_STATUS_NEW
   );
   const newInvoicesForThePreviousMonth = invoices.filter(
-    inv => invoiceYear(inv) === year && invoiceMonth(inv) === month
+    (inv) => invoiceYear(inv) === year && invoiceMonth(inv) === month
   );
   const newInvoicesUnreviewed = newInvoicesForThePreviousMonth.filter(
-    inv => inv.status === INVOICE_STATUS_NEW
+    (inv) => inv.status === INVOICE_STATUS_NEW
   );
 
   return (

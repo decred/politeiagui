@@ -1,25 +1,25 @@
 .attachButton {
-    font-size: var(--font-size-small);
-    padding: .3rem .6rem;
+  font-size: var(--font-size-small);
+  padding: 0.3rem 0.6rem;
 }
 
 .container {
-    width: "100%"
+  width: "100%";
 }
 
 .previewContainer {
-    max-width: 100%;
-    min-width: 100%;
-    padding: 2rem;
-    border: 1px solid transparent;
-    border-bottom: 1px solid var(--color-gray-lighter);
-    min-height: 20rem;
+  max-width: 100%;
+  min-width: 100%;
+  padding: 2rem;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--color-gray-lighter);
+  min-height: 20rem;
 }
 
 .previewContainer.nothingToPreview p {
-    color: var(--color-gray-blueish);
+  color: var(--color-gray-blueish);
 }
 
 .previewContainer.nothingToPreview {
-    padding: 2rem 0;
+  padding: 2rem 0;
 }

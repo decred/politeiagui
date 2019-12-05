@@ -16,7 +16,7 @@ import {
 } from "./constants.js";
 import * as pki from "./lib/pki";
 
-export const getProposalStatus = proposalStatus =>
+export const getProposalStatus = (proposalStatus) =>
   get(proposalStatus, [
     "Invalid",
     "Not found",
@@ -29,8 +29,8 @@ export const getProposalStatus = proposalStatus =>
     "Approved"
   ]);
 
-export const utoa = str => window.btoa(unescape(encodeURIComponent(str)));
-export const atou = str => decodeURIComponent(escape(window.atob(str)));
+export const utoa = (str) => window.btoa(unescape(encodeURIComponent(str)));
+export const atou = (str) => decodeURIComponent(escape(window.atob(str)));
 
 // This function extracts the content of index.md's payload. The payload is
 // formatted as:
@@ -38,12 +38,12 @@ export const atou = str => decodeURIComponent(escape(window.atob(str)));
 //  <proposal name>\n
 //  <proposal description>
 //
-export const getTextFromIndexMd = file => {
+export const getTextFromIndexMd = (file) => {
   const text = atou(file.payload);
   return text.substring(text.indexOf("\n\n") + 1).trim();
 };
 
-export const getTextFromJsonToCsv = file => {
+export const getTextFromJsonToCsv = (file) => {
   const json = JSON.parse(atou(file.payload));
   return json;
 };
@@ -71,9 +71,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     15: "The provided proposal name was invalid.",
     16: "The SHA256 checksum for one of the files was incorrect.",
     17: "The Base64 encoding for one of the files was incorrect.",
-    18: `The MIME type detected for ${
-      errorContext[0]
-    } did not match the provided MIME type. MIME type: ${errorContext[1]}`,
+    18: `The MIME type detected for ${errorContext[0]} did not match the provided MIME type. MIME type: ${errorContext[1]}`,
     19: "The MIME type for one of the files is not supported.",
     20: "The proposal cannot be set to that status.",
     21: "The provided public key was invalid.",
@@ -187,11 +185,11 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
 };
 
 // Copied from https://stackoverflow.com/a/43131635
-export const hexToArray = hex =>
-  new Uint8Array(hex.match(/[\da-f]{2}/gi).map(h => parseInt(h, 16)));
+export const hexToArray = (hex) =>
+  new Uint8Array(hex.match(/[\da-f]{2}/gi).map((h) => parseInt(h, 16)));
 
 // Copied from https://stackoverflow.com/a/21797381
-export const base64ToArrayBuffer = base64 => {
+export const base64ToArrayBuffer = (base64) => {
   const binary_string = window.atob(base64);
   const len = binary_string.length;
   const bytes = new Uint8Array(len);
@@ -202,7 +200,7 @@ export const base64ToArrayBuffer = base64 => {
 };
 
 // Copied from https://stackoverflow.com/a/33918579
-export const arrayBufferToWordArray = ab => {
+export const arrayBufferToWordArray = (ab) => {
   const i8a = new Uint8Array(ab);
   const a = [];
   for (let i = 0; i < i8a.length; i += 4) {
@@ -237,7 +235,7 @@ export const getRandomColor = () => {
   return color;
 };
 
-export const uniqueID = prefix =>
+export const uniqueID = (prefix) =>
   prefix +
   "_" +
   Math.random()
@@ -245,7 +243,7 @@ export const uniqueID = prefix =>
     .substr(2, 9);
 
 export const verifyUserPubkey = (email, keyToBeMatched, keyMismatchAction) =>
-  pki.getKeys(email).then(keys => {
+  pki.getKeys(email).then((keys) => {
     const res = keys ? keys.publicKey !== keyToBeMatched : true;
     keyMismatchAction(res);
   });
@@ -264,7 +262,7 @@ export const multiplyFloatingNumbers = (num1, num2) => {
   return (num1 * num2) / Math.pow(10, cont1 + cont2);
 };
 
-export const isProposalApproved = vs => {
+export const isProposalApproved = (vs) => {
   const hasReachedQuorom =
     vs.totalvotes >= (vs.numofeligiblevotes * vs.quorumpercentage) / 100;
   const yesOption = vs.optionsresult && vs.optionsresult[1];
@@ -275,7 +273,7 @@ export const isProposalApproved = vs => {
   return hasReachedQuorom && hasPassed;
 };
 
-export const countPublicProposals = proposals => {
+export const countPublicProposals = (proposals) => {
   const defaultObj = {
     [PROPOSAL_VOTING_ACTIVE]: 0,
     [PROPOSAL_VOTING_NOT_AUTHORIZED]: 0,
@@ -298,7 +296,7 @@ export const countPublicProposals = proposals => {
     : defaultObj;
 };
 
-export const proposalsArrayToObject = arr =>
+export const proposalsArrayToObject = (arr) =>
   arr
     ? arr.reduce((acc, cur) => {
         return {
@@ -313,11 +311,11 @@ export const removeProposalsDuplicates = (arr1, arr2) => {
     ...proposalsArrayToObject(arr1),
     ...proposalsArrayToObject(arr2)
   };
-  return Object.keys(mergedObj).map(item => mergedObj[item]);
+  return Object.keys(mergedObj).map((item) => mergedObj[item]);
 };
 
 // CMS HELPERS
-export const renderInvoiceStatus = status => {
+export const renderInvoiceStatus = (status) => {
   return mapInvoiceStatusToMessage[status] || "Invalid Invoice Status";
 };
 
@@ -330,8 +328,8 @@ const mapInvoiceStatusToMessage = {
   [INVOICE_STATUS_PAID]: "Invoice paid"
 };
 
-export const formatDate = date => {
-  const twoChars = v => (v < 10 ? `0${v}` : v);
+export const formatDate = (date) => {
+  const twoChars = (v) => (v < 10 ? `0${v}` : v);
   const d = new Date(date * 1000);
   const year = d.getUTCFullYear();
   const month = twoChars(d.getUTCMonth());
@@ -342,7 +340,7 @@ export const formatDate = date => {
   return `${year}-${month}-${day}-${hours}:${minutes}:${seconds}`;
 };
 
-export const getJsonData = base64 => {
+export const getJsonData = (base64) => {
   const data = atob(base64.split(",").pop());
   try {
     const json = JSON.parse(data);
@@ -353,7 +351,7 @@ export const getJsonData = base64 => {
   }
 };
 
-export const setQueryStringWithoutPageReload = qs => {
+export const setQueryStringWithoutPageReload = (qs) => {
   const newurl =
     window.location.protocol +
     "//" +
@@ -368,13 +366,13 @@ const DELIMITER_CHAR = ",";
 const COMMENT_CHAR = "#";
 const LINE_DELIMITER = "\n";
 
-export const isComment = line => line[0] === COMMENT_CHAR;
+export const isComment = (line) => line[0] === COMMENT_CHAR;
 
 const split = (string, delimiter) => string.split(delimiter);
 
-export const splitLine = string => split(string, LINE_DELIMITER);
+export const splitLine = (string) => split(string, LINE_DELIMITER);
 
-export const splitColumn = string => split(string, DELIMITER_CHAR);
+export const splitColumn = (string) => split(string, DELIMITER_CHAR);
 
 const jsonCsvMap = (line, linenum) => ({
   linenum,
@@ -386,7 +384,7 @@ const jsonCsvMap = (line, linenum) => ({
   totalcost: +line[5]
 });
 
-export const csvToJson = csv =>
+export const csvToJson = (csv) =>
   splitLine(csv)
     .map(splitColumn)
     .map(jsonCsvMap);
@@ -401,11 +399,11 @@ export const getCurrentYear = () => {
   return d.getFullYear();
 };
 
-export const fromMinutesToHours = minutes =>
+export const fromMinutesToHours = (minutes) =>
   parseFloat(minutes / 60).toFixed(2);
-export const fromHoursToMinutes = hours => parseInt(hours * 60, 10);
-export const fromUSDCentsToUSDUnits = cents =>
+export const fromHoursToMinutes = (hours) => parseInt(hours * 60, 10);
+export const fromUSDCentsToUSDUnits = (cents) =>
   parseFloat(cents / 100).toFixed(2);
-export const fromUSDUnitsToUSDCents = units => parseInt(units * 100, 10);
+export const fromUSDUnitsToUSDCents = (units) => parseInt(units * 100, 10);
 
-export const isEmpty = obj => Object.keys(obj).length === 0;
+export const isEmpty = (obj) => Object.keys(obj).length === 0;

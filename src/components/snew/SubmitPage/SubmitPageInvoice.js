@@ -20,7 +20,7 @@ import { invoiceInstructions } from "./helpers";
 const YEAR_OPTIONS = [2018, 2019];
 const MONTH_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-const InvoiceSubmit = props => {
+const InvoiceSubmit = (props) => {
   const {
     isLoading,
     onSave,
@@ -83,7 +83,7 @@ const InvoiceSubmit = props => {
     change("year", value);
   };
 
-  const handleContractorRateChange = e =>
+  const handleContractorRateChange = (e) =>
     !isNaN(e.target.valueAsNumber)
       ? setContractorRate(e.target.valueAsNumber)
       : setContractorRate(0);
@@ -104,7 +104,7 @@ const InvoiceSubmit = props => {
             <div className="spacer">
               <Field
                 name="global"
-                component={props => (
+                component={(props) => (
                   <ErrorField title="Cannot submit invoice" {...props} />
                 )}
               />
@@ -115,8 +115,7 @@ const InvoiceSubmit = props => {
                       display: "flex",
                       width: "100%",
                       alignItems: "flex-end"
-                    }}
-                  >
+                    }}>
                     <Field
                       name="month"
                       component={SelectField}
@@ -148,8 +147,7 @@ const InvoiceSubmit = props => {
                         fontSize: "0.75em",
                         maxWidth: "200px",
                         paddingBottom: "10px"
-                      }}
-                    >
+                      }}>
                       <span>
                         Exchange Rate:{" "}
                         <b>{`${fromUSDCentsToUSDUnits(exchangeRate)} USD`}</b>
@@ -161,13 +159,11 @@ const InvoiceSubmit = props => {
                     style={{
                       display: "flex",
                       justifyContent: "space-between"
-                    }}
-                  >
+                    }}>
                     <div
                       style={{
                         paddingRight: "20px"
-                      }}
-                    >
+                      }}>
                       <Field
                         name="name"
                         label="Contractor name"
@@ -265,8 +261,7 @@ const InvoiceSubmit = props => {
                         fontSize: "16px",
                         display: "flex",
                         paddingTop: "1em"
-                      }}
-                    >
+                      }}>
                       <b>NOTE:&nbsp;</b> Drafts are locally stored in the
                       browser and will NOT be available across different
                       browsers or devices.

@@ -1,78 +1,78 @@
 .thumbnailGrid {
-    display: flex;
-    flex-flow: row wrap;
-    margin-bottom: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  margin-bottom: 10px;
 }
 
 .fileError {
-    border: 1px solid #ed6d47;
+  border: 1px solid #ed6d47;
 }
 
 .fileErrorText {
-    color: #ed6d47;
-    font-size: 1.3rem;
-    margin-bottom: 5px;
+  color: #ed6d47;
+  font-size: 1.3rem;
+  margin-bottom: 5px;
 }
 
 .marginRight {
-    margin-right: 15px;
+  margin-right: 15px;
 }
 
 .removeFileIcon {
-    position: relative;
-    top: -0.6rem;
-    border: 0;
-    margin-left: 5px;
-    margin-right: 10px;
-    color: #2970ff;
-    background-color: transparent;
-    font-size: 1.8rem;
-    position: relative;
-    cursor: pointer;
+  position: relative;
+  top: -0.6rem;
+  border: 0;
+  margin-left: 5px;
+  margin-right: 10px;
+  color: #2970ff;
+  background-color: transparent;
+  font-size: 1.8rem;
+  position: relative;
+  cursor: pointer;
 }
 
 .fileThumbnailWrapper {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-    align-items: flex-start;
-    cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  align-items: flex-start;
+  cursor: pointer;
 }
 
 .fileThumbnail {
-    transition: box-shadow .3s;
-    width: 125px;
-    height: 90px;
-    border-radius: 2px;
-    border: 1px solid #ed6d47;
-    background-color: #E6EAED;
+  transition: box-shadow 0.3s;
+  width: 125px;
+  height: 90px;
+  border-radius: 2px;
+  border: 1px solid #ed6d47;
+  background-color: #e6eaed;
 }
 
 .imageThumbnailWrapper {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-    align-items: flex-start;
-    cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  align-items: flex-start;
+  cursor: pointer;
 }
 
 .imageThumbnail {
-    transition: box-shadow .3s;
-    width: 125px;
-    height: 90px;
-    border-radius: 2px;
+  transition: box-shadow 0.3s;
+  width: 125px;
+  height: 90px;
+  border-radius: 2px;
 }
 
 .imageThumbnail:hover {
-    box-shadow: 0 0 10px rgba(33,33,33,.2); 
+  box-shadow: 0 0 10px rgba(33, 33, 33, 0.2);
 }
 
 .fileThumbnail:hover {
-    box-shadow: 0 0 10px rgba(33,33,33,.2); 
+  box-shadow: 0 0 10px rgba(33, 33, 33, 0.2);
 }
 
 .fileThumbnailText {
-    font-size: 1.3rem;
-    text-align: center;
-    margin-top: 30px;
+  font-size: 1.3rem;
+  text-align: center;
+  margin-top: 30px;
 }
