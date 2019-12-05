@@ -37,7 +37,8 @@ const dccConnector = connect(
     onFetchUser: act.onFetchUser,
     onSupportOpposeDCC: act.onSupportOpposeDCC,
     onSetDCCStatus: act.onSetDCCStatus,
-    confirmWithModal: act.confirmWithModal
+    confirmWithModal: act.confirmWithModal,
+    onDeleteDraftDCC: act.onDeleteDraftDCC
   }
 );
 

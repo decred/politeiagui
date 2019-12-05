@@ -311,6 +311,10 @@ export const onDeleteDraftInvoice = (draftId) => {
   return act.DELETE_DRAFT_INVOICE(draftId);
 };
 
+export const onDeleteDraftDCC = draftId => {
+  return act.DELETE_DRAFT_DCC(draftId);
+};
+
 export const onSaveChangeUsername = ({ password, newUsername }) => (
   dispatch,
   getState

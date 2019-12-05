@@ -7,7 +7,9 @@ export const useListDCC = ({
   onForceFetchDCCs,
   onLoadDraftDCCs,
   drafts,
-  loggedInAsEmail
+  loggedInAsEmail,
+  confirmWithModal,
+  onDeleteDraftDCC
 }) => {
   const [loadingDCCs, setLoadingDCCs] = useState(true);
   const [orderedDCCs, setOrderedDCCs] = useState([]);
@@ -20,6 +22,13 @@ export const useListDCC = ({
       setLoadingDCCs(false);
     }, 300);
   }, [onForceFetchDCCs, status, setLoadingDCCs]);
+
+  const onDeleteDraft = useCallback(
+    id => {
+      onDeleteDraftDCC(id);
+    },
+    [onDeleteDraftDCC]
+  );
 
   useEffect(
     function onChangeStatus() {
@@ -43,6 +52,13 @@ export const useListDCC = ({
       onLoadDraftDCCs,
       loggedInAsEmail
     ]
+  );
+
+  useEffect(
+    function onUpdateDCCDraft() {
+      console.log("ON UPDATE DCC DRAFT", drafts);
+    },
+    [drafts]
   );
 
   useEffect(() => {
@@ -69,6 +85,8 @@ export const useListDCC = ({
     handleStatusChange,
     status,
     onRefreshDCCs,
-    drafts
+    drafts,
+    onDeleteDraft,
+    confirmWithModal
   };
 };

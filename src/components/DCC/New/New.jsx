@@ -5,12 +5,13 @@ import { useNewDCC } from "./hooks";
 import dccConnector from "../../../connectors/dcc";
 import Message from "../../Message";
 import Button from "../../snew/ButtonWithLoadingIcon";
+import { Link } from "../../snew";
 import {
   DCC_TYPE_ISSUANCE,
   DCC_TYPE_REVOCATION
 } from "../../../constants";
 
-let NewDCCForm = ({
+let NewDCC = ({
   newDCCError: error,
   newDCCResponse,
   isLoading,
@@ -48,8 +49,11 @@ let NewDCCForm = ({
             body="DCC Draft Saved Successfully"
           />
         )}
+        <Link href="/dccs">Go to DCCs</Link>
+
         <form className="new-dcc-form" onSubmit={handleSubmitDCC}>
           <div className="new-dcc-title">New DCC</div>
+
           <label>DCC Type:</label>
           <div className="dcc-type-options">
             <div className="dcc-type">
@@ -74,6 +78,7 @@ let NewDCCForm = ({
               <label>Revocation</label>
             </div>
           </div>
+
           <label>Nominee User ID:</label>
           <Field
             autoFocus
@@ -88,6 +93,7 @@ let NewDCCForm = ({
             // label="Nominee User ID"
             tabIndex={4}
           />
+
           <label>Statement:</label>
           <Field
             className="c-form-control"
@@ -100,6 +106,7 @@ let NewDCCForm = ({
             placeholder="Your statement to support the DCC"
             tabIndex={4}
           />
+
           <label>Domain:</label>
           <select
             className="c-form-control"
@@ -114,6 +121,7 @@ let NewDCCForm = ({
               <option key={value} value={value}>{label}</option>
             ))}
           </select>
+
           <label>Contractor Type:</label>
           <select
             className="c-form-control"
@@ -128,6 +136,7 @@ let NewDCCForm = ({
               <option key={value} value={value}>{label}</option>
             ))}
           </select>
+
           <div className="submit-wrapper">
             <Button
               type="submit"
@@ -148,14 +157,14 @@ let NewDCCForm = ({
   );
 };
 
-NewDCCForm = reduxForm({
-  form: "form/dcc",
+NewDCC = reduxForm({
+  form: "form/record",
   enableReinitialize: true
-})(NewDCCForm);
+})(NewDCC);
 
 const NewDCCWrapper = props => {
   const { formValues } = useNewDCC(props);
-  return <NewDCCForm {...{ ...props, initialValues: formValues }}/>;
+  return <NewDCC {...{ ...props, initialValues: formValues }}/>;
 };
 
 export default dccConnector(NewDCCWrapper);

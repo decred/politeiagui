@@ -226,7 +226,7 @@ export const handleSaveCSVEditorsContent = (state) => {
   updateInvoiceFormData(state);
 };
 
-export const getDCCBackupKey = (key, path) => `invoice-${key}::${path}`;
+export const getDCCBackupKey = (key, path) => `dcc-${key}::${path}`;
 
 export const NEW_DCC_PATH = "/dcc/new";
 

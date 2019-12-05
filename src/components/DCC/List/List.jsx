@@ -5,7 +5,7 @@ import { Tabs, Tab } from "../../Tabs";
 import { dccStatusList } from "../helpers";
 import { DCC_STATUS_DRAFTS } from "../../../constants";
 import { CardDCC, CardDraft } from "./Card";
-// import Button from "../../snew/ButtonWithLoadingIcon";
+import * as modalTypes from "../../Modal/modalTypes";
 
 const ListDCC = ({ dccs, isLoading }) => {
   const emptyDCCList = dccs && dccs.length === 0 && !isLoading;
@@ -20,16 +20,24 @@ const ListDCC = ({ dccs, isLoading }) => {
   </>;
 };
 
-const ListDraft = ({ drafts }) =>
-  Object.keys(drafts).map((id, index) =>
-    drafts[id] && drafts[id].timestamp &&
-      <CardDraft
-        key={index}
-        draftId={id}
-        timestamp={drafts[id].timestamp}
-        statement={drafts[id].statement}
-      />
+const ListDraft = ({ drafts, onDeleteDraft }) => {
+  const draftList = Object.keys(drafts).reduce((acc, id, index) =>
+    drafts[id] && drafts[id].timestamp ?
+      [
+        ...acc,
+        <CardDraft
+          key={index}
+          draftId={id}
+          onDeleteDraft={onDeleteDraft(id)}
+          timestamp={drafts[id].timestamp}
+          statement={drafts[id].statement}
+        />
+      ] :
+      acc,
+    []
   );
+  return draftList.length > 0 ? draftList : (<span>No Drafts Available Here</span>);
+};
 
 
 const ListWrapper = props => {
@@ -39,7 +47,9 @@ const ListWrapper = props => {
     status,
     loadingDCCs: isLoading,
     onRefreshDCCs,
-    drafts
+    drafts,
+    onDeleteDraft,
+    confirmWithModal
   } = useListDCC(props);
   const isDraftOption = status === DCC_STATUS_DRAFTS;
   return (
@@ -67,7 +77,11 @@ const ListWrapper = props => {
           </div>
         </Tabs>
         {isDraftOption ?
-          <ListDraft drafts={drafts || {}}/> :
+          <ListDraft drafts={drafts || {}} onDeleteDraft={id => e => {
+            confirmWithModal(modalTypes.CONFIRM_ACTION, {
+              message: "Are you sure you want to delete this DCC?"
+            }).then(ok => ok && onDeleteDraft(id)) && e.preventDefault();
+          }}/> :
           <ListDCC dccs={dccs} isLoading={isLoading}/>
         }
         {isLoading && (

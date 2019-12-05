@@ -59,7 +59,8 @@ export const CardDCC = ({
 export const CardDraft = ({
   timestamp,
   draftId,
-  statement = ""
+  statement = "",
+  onDeleteDraft
 }) => (
   <div className={`thing thing-proposal id-${draftId} odd link`}>
     <span
@@ -71,5 +72,15 @@ export const CardDraft = ({
       </Link>
     </span>
     <span>{statement}</span>
+    <div className="tagline proposal-draft">
+      Saved as draft
+      <span
+        className="delete-draft"
+        onClick={onDeleteDraft}
+      >
+        <i className="fa fa-trash" />
+        Delete
+      </span>
+    </div>
   </div>
 );
