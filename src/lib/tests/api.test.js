@@ -158,7 +158,7 @@ describe("api integration modules (lib/api.js)", () => {
       status: "200",
       headers
     };
-    let response = new Response('{"foo": "bar"}', initResponse);
+    let response = new Response("{\"foo\": \"bar\"}", initResponse);
 
     let parsedResponse = await api.parseResponse(response);
     expect(parsedResponse).toEqual({
@@ -166,7 +166,7 @@ describe("api integration modules (lib/api.js)", () => {
       csrfToken:
         "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca9"
     });
-    response = new Response('{ "errorcode": 1}', initResponse);
+    response = new Response("{ \"errorcode\": 1}", initResponse);
     try {
       parsedResponse = await api.parseResponse(response);
     } catch (e) {
@@ -179,7 +179,7 @@ describe("api integration modules (lib/api.js)", () => {
       status: "200",
       headers
     };
-    response = new Response('{"foo": "bar"}', initResponse);
+    response = new Response("{\"foo\": \"bar\"}", initResponse);
     try {
       parsedResponse = await api.parseResponse(response);
     } catch (e) {
