@@ -29,12 +29,12 @@
 }
 
 .rightGreyBorder {
-    border-right: 1px solid var(--color-gray-lighter);
+    border-right: 1px solid var(--separator-color);
 }
 
 .activeNavLink {
     color: var(--color-primary-dark);
-    border-bottom: 2px solid var(--color-yellow);
+    border-bottom: 4px solid var(--active-nav-border-color);
 }
 
 ul.dropdownList {
