@@ -2,7 +2,7 @@ import React from "react";
 import * as components from "./manifest";
 
 const comps = { ...components };
-const snew = Component => props =>
+const snew = (Component) => (props) =>
   Component ? <Component {...{ ...comps, ...props }} /> : null;
 export const AccountActivityBox = (comps.AccountActivityBox = snew(
   comps.AccountActivityBox

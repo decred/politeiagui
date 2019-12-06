@@ -1,25 +1,25 @@
 .titleWrapper {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .searchBox {
-    width: 24rem;
-    margin-right: 2rem;
+  width: 24rem;
+  margin-right: 2rem;
 }
 
 .searchBox > input {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 .searchButton {
-    max-height: 4.2rem;
+  max-height: 4.2rem;
 }
 
 .searchByRadioGroup {
-    padding-left: 0.1rem;
+  padding-left: 0.1rem;
 }
 
 .searchByRadioButton {
-    margin-right: 3rem;
+  margin-right: 3rem;
 }

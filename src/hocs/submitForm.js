@@ -63,7 +63,7 @@ class SubmitFormContainer extends Component {
   };
 }
 
-const wrap = Component => props => (
+const wrap = (Component) => (props) => (
   <SubmitFormContainer {...{ ...props, Component }} />
 );
 

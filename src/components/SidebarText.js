@@ -34,7 +34,7 @@ const resourcesText = `
  * [Downloads Overview](https://decred.org/downloads/)
 `;
 
-const SidebarText = props => (
+const SidebarText = (props) => (
   <div style={{ display: "flex", flexDirection: "column" }}>
     <UserBadge />
     <PaywallAlert />

@@ -92,8 +92,7 @@ class SessionExpiresIndicator extends React.Component {
         intervalPeriod={1000}
         onInterval={this.intervalProcedure}
         onFinishInterval={this.finishInterval}
-        active={this.state.activateInterval}
-      >
+        active={this.state.activateInterval}>
         {timer ? (
           <div className="session-expiration">
             {"current session expires "}

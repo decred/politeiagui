@@ -26,7 +26,7 @@ const loadConfig = () => {
     mainnetGitRepository: defaultMainnetGitRepository
   } = defaultPreset;
   const env = dotenvParse(process.env);
-  const getConf = key => env[`REACT_APP_${key}`];
+  const getConf = (key) => env[`REACT_APP_${key}`];
 
   const presetName = getConf("PRESET");
   if (presetName) {

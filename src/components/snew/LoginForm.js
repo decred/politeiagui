@@ -22,8 +22,7 @@ const LoginForm = ({
       id="login-form"
       method="post"
       name="login-form"
-      onSubmit={onLogin ? handleSubmit(onLogin) : null}
-    >
+      onSubmit={onLogin ? handleSubmit(onLogin) : null}>
       <input name="op" type="hidden" defaultValue="login" />
       <input name="dest" type="hidden" defaultValue="/" />
       <div className="c-form-group">
@@ -63,7 +62,7 @@ const LoginForm = ({
         ) : null}
         <Field
           name="global"
-          component={props => <ErrorField title="Cannot login" {...props} />}
+          component={(props) => <ErrorField title="Cannot login" {...props} />}
         />
       </div>
       <div className="c-checkbox">
@@ -81,15 +80,13 @@ const LoginForm = ({
         <Link
           className="c-pull-right reset-password-link"
           href="/password"
-          tabIndex={4}
-        >
+          tabIndex={4}>
           Reset Password
         </Link>
         <Link
           className="c-pull-right reset-password-link"
           href="/privacy-policy"
-          tabIndex={4}
-        >
+          tabIndex={4}>
           Privacy Policy
         </Link>
       </div>

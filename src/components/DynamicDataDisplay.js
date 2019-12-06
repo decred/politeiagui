@@ -44,14 +44,13 @@ const DynamicDataDisplayWrapper = ({
 }) => (
   <ErrorBoundary
     displayError={!isLoading}
-    errorRenderer={error => (
+    errorRenderer={(error) => (
       <RetryError
         errorTitle={errorTitle}
         errorMessage={typeof error === "object" ? error.toString() : error}
         onRetry={onFetch}
       />
-    )}
-  >
+    )}>
     <DynamicDataDisplay {...{ ...props, onFetch, isLoading }} />
   </ErrorBoundary>
 );

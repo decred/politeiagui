@@ -19,10 +19,7 @@ import {
 
 const userCMSConnector = connect(
   sel.selectorMap({
-    userId: compose(
-      get(["match", "params", "userId"]),
-      arg(1)
-    ),
+    userId: compose(get(["match", "params", "userId"]), arg(1)),
     loggedInAsUserId: sel.userid,
     user: sel.user,
     error: sel.apiUserError,
@@ -48,31 +45,31 @@ const userCMSConnector = connect(
     userPubkey: sel.userPubkey,
     loggedInAsUsername: sel.loggedInAsUsername,
     isApiRequestingUpdateUserKey: sel.isApiRequestingUpdateUserKey,
-    isApiRequestingMarkNewUserAsExpired: state =>
+    isApiRequestingMarkNewUserAsExpired: (state) =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
-    isApiRequestingMarkUpdateKeyAsExpired: state =>
+    isApiRequestingMarkUpdateKeyAsExpired: (state) =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) ===
         MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
-    isApiRequestingMarkResetPasswordAsExpired: state =>
+    isApiRequestingMarkResetPasswordAsExpired: (state) =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) ===
         MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
-    isApiRequestingUnlockUser: state =>
+    isApiRequestingUnlockUser: (state) =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_UNLOCK,
-    isApiRequestingDeactivateUser: state =>
+    isApiRequestingDeactivateUser: (state) =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_DEACTIVATE,
-    isApiRequestingReactivateUser: state =>
+    isApiRequestingReactivateUser: (state) =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_REACTIVATE,
     manageUserResponse: sel.manageUserResponse,
     manageCmsUserResponse: sel.manageCmsUserResponse,
     manageCmsUserError: sel.manageCmsUserError
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onFetchUserProposals: act.onFetchUserProposals,
@@ -90,7 +87,4 @@ const userCMSConnector = connect(
     )
 );
 
-export default compose(
-  withRouter,
-  userCMSConnector
-);
+export default compose(withRouter, userCMSConnector);

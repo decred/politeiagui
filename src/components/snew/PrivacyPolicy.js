@@ -13,8 +13,7 @@ class PrivacyPolicy extends React.Component {
       <div
         className="content page signup-next-step-page"
         role="main"
-        style={{ minHeight: "calc(100vh - 350px)" }}
-      >
+        style={{ minHeight: "calc(100vh - 350px)" }}>
         <div className="text-wrapper">
           <div className="centered">
             {!isCMS ? (
@@ -44,8 +43,7 @@ class PrivacyPolicy extends React.Component {
                           ? TESTNET_PROPOSALS_REPOSITORY
                           : MAINNET_PROPOSALS_REPOSITORY
                       }
-                      style={{ fontSize: "1.01em" }}
-                    >
+                      style={{ fontSize: "1.01em" }}>
                       {`${
                         isTestnet
                           ? TESTNET_PROPOSALS_REPOSITORY

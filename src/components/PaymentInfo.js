@@ -5,7 +5,7 @@ import Status from "./Paywall/Status";
 import DcrdataTxLink from "./DcrdataTxLink";
 import { PAYWALL_STATUS_LACKING_CONFIRMATIONS } from "../constants";
 
-const copyToClipboard = str => {
+const copyToClipboard = (str) => {
   const el = document.createElement("textarea");
   el.value = str;
   document.body.appendChild(el);
@@ -48,8 +48,7 @@ const PaymentPanel = ({
                 width: "100px"
               }}
               text="Copy address to clipboard"
-              position="bottom"
-            >
+              position="bottom">
               <span
                 className="address-viewer_menu_option fa fa-copy"
                 onClick={() => copyToClipboard(paywallAddress)}

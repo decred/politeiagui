@@ -11,8 +11,7 @@ const SubmitButton = ({ onClick, text, disabled }) => (
   <button
     className={`btn ${disabled ? "not-active disabled" : ""}`}
     onClick={onClick}
-    disabled={disabled}
-  >
+    disabled={disabled}>
     {text}
   </button>
 );
@@ -39,8 +38,7 @@ class ModalContentWrapper extends React.Component {
           <div style={{ display: "flex", justifyContent: "flex-end", flex: 1 }}>
             <span
               style={{ fontSize: "18px", cursor: "pointer" }}
-              onClick={onClose}
-            >
+              onClick={onClose}>
               ✖
             </span>
           </div>

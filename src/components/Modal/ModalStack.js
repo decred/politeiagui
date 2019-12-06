@@ -14,7 +14,7 @@ class ModalStack extends React.Component {
   componentDidUpdate(prevProps) {
     const { openedModals, location, closeAllModals } = this.props;
     const welcomeModalOpened = openedModals.find(
-      modal => modal.type === WELCOME_MODAL
+      (modal) => modal.type === WELCOME_MODAL
     );
     const { modals } = this.state;
     let modalChanged = false;
@@ -42,13 +42,12 @@ class ModalStack extends React.Component {
     }
   }
 
-  renderModalContent = modalData => (
+  renderModalContent = (modalData) => (
     <Modal
       key={modalData.type}
       onClose={this.props.closeAllModals}
       disableCloseOnClick={modalData.options.disableCloseOnClick}
-      disableCloseOnEsc={modalData.options.disableCloseOnEsc}
-    >
+      disableCloseOnEsc={modalData.options.disableCloseOnEsc}>
       <ModalContent modalData={modalData} />
     </Modal>
   );

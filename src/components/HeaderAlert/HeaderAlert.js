@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Message from "../Message";
 
-const HeaderAlert = props => (
+const HeaderAlert = (props) => (
   <div className={`header-alert ${props.className}`} style={props.style}>
     <Message type="error" header="Action needed" body={props.children} />
   </div>

@@ -18,7 +18,7 @@ export class FilesField extends React.Component {
     };
   }
 
-  handleFilesChange = files => {
+  handleFilesChange = (files) => {
     const {
       input,
       meta: { dispatch },
@@ -66,15 +66,13 @@ export class FilesField extends React.Component {
               base64
               multipleFiles
               fileTypes={policy.validmimetypes}
-              handleFiles={this.handleFilesChange}
-            >
+              handleFiles={this.handleFilesChange}>
               <div className="button-wrapper">
                 <button
                   className={`togglebutton access-required${
                     !userCanExecuteActions ? " not-active disabled" : ""
                   }`}
-                  style={buttonStyle}
-                >
+                  style={buttonStyle}>
                   {placeholder}
                 </button>
                 <div className="attach-requirements">

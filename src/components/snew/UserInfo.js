@@ -32,22 +32,19 @@ class UserInfo extends React.Component {
                   {isCMS ? (
                     <li
                       className="dropdown-list-item"
-                      onClick={() => history.push("/user/invoices")}
-                    >
+                      onClick={() => history.push("/user/invoices")}>
                       Invoices
                     </li>
                   ) : (
                     <li
                       className="dropdown-list-item"
-                      onClick={() => history.push("/user/proposals")}
-                    >
+                      onClick={() => history.push("/user/proposals")}>
                       Proposals
                     </li>
                   )}
                   <li
                     className="dropdown-list-item"
-                    onClick={() => history.push(`/user/${loggedInAsUserId}`)}
-                  >
+                    onClick={() => history.push(`/user/${loggedInAsUserId}`)}>
                     Account
                   </li>
                   <li
@@ -60,8 +57,7 @@ class UserInfo extends React.Component {
                             `/${isCMS ? "invoices" : "proposals"}/new`
                           )
                         : null
-                    }
-                  >
+                    }>
                     {isCMS ? "Submit Invoice" : "Submit Proposal"}
                   </li>
                   <li
@@ -69,8 +65,7 @@ class UserInfo extends React.Component {
                     onClick={() => {
                       history.push("/user/logout");
                       onLogout();
-                    }}
-                  >
+                    }}>
                     <form className="logout hover" />
                     Log out
                   </li>

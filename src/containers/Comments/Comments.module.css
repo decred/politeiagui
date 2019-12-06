@@ -1,49 +1,46 @@
-
 div.commentAreaContainer {
-    margin-top: 1rem;
-    margin-bottom: var(--spacing-medium);
+  margin-top: 1rem;
+  margin-bottom: var(--spacing-medium);
 }
 
 div.commentsWrapper {
-    padding: 0 2.6rem 2rem 2.6rem;
+  padding: 0 2.6rem 2rem 2.6rem;
 }
 
 .commentsHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
 }
 
 h2.commentsTitle {
-    font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-regular);
 }
 
 .commentsCount {
-    color: var(--color-gray);
-    padding-left: .3rem;
+  color: var(--color-gray);
+  padding-left: 0.3rem;
 }
 
 .sortContainer {
-    width: 60px;
+  width: 60px;
 }
 
 .notAllowedMessageContent {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
+@media screen and (max-width: 560px) {
+  div.commentsWrapper {
+    padding: 0 0 2rem 0;
+  }
 
-@media screen and (max-width: 560px){
-    div.commentsWrapper {
-        padding: 0 0 2rem 0;
-    }
-
-    .commentsHeaderWrapper {
-        padding-left: 1.4rem;
-        padding-right: 1.4rem;
-    }
-
+  .commentsHeaderWrapper {
+    padding-left: 1.4rem;
+    padding-right: 1.4rem;
+  }
 }

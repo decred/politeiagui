@@ -30,7 +30,7 @@ const InvoicePayoutsPage = ({
   };
   useEffect(fetchInvoicePayouts, []);
 
-  const csvData = lineItemPayouts.map(p => ({
+  const csvData = lineItemPayouts.map((p) => ({
     ...p,
     combinedtotal: p.labor + p.expenses
   }));
@@ -62,8 +62,7 @@ const InvoicePayoutsPage = ({
             <Link
               style={{ marginLeft: "24px" }}
               href="/admin/"
-              onClick={() => null}
-            >
+              onClick={() => null}>
               Back
             </Link>
           </>

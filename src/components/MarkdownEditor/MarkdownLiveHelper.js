@@ -34,7 +34,7 @@ class MarkdownLiveHelper extends React.Component {
     });
   };
 
-  renderMessages = findersResults => {
+  renderMessages = (findersResults) => {
     return (
       <ul style={{ paddingLeft: "20px" }}>
         {findersResults.map((result, i) => (

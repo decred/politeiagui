@@ -19,7 +19,7 @@ export function proposalNameValidator(name, supportedChars) {
   return matches.length === name.length;
 }
 
-export const validateURL = text => {
+export const validateURL = (text) => {
   const validUrl = urlValidator(text);
   if (validUrl.error) {
     throw new SubmissionError({

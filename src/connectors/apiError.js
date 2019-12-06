@@ -9,7 +9,4 @@ const connector = connect(
   })
 );
 
-export default compose(
-  withRouter,
-  connector
-);
+export default compose(withRouter, connector);

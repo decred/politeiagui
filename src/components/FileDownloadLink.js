@@ -9,8 +9,7 @@ const FileDownloadLink = ({
   <a
     style={{ display: "inline" }}
     href={`data:${mime},${encodeURIComponent(data)}`}
-    download={filename}
-  >
+    download={filename}>
     {children}
   </a>
 );

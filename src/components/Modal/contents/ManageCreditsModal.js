@@ -40,11 +40,13 @@ class ProposalCreditsModal extends React.Component {
             Proposal Credits: <b>{proposalCredits}</b>
           </span>
           <div
-            style={{ display: "flex", width: "100%", justifyContent: "center" }}
-          >
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "center"
+            }}>
             <button
-              onClick={() => openModal(modalTypes.PURCHASE_CREDITS_MODAL)}
-            >
+              onClick={() => openModal(modalTypes.PURCHASE_CREDITS_MODAL)}>
               Purchase Credits
             </button>
             <ButtonWithLoadingIcon

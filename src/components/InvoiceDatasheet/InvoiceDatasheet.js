@@ -16,7 +16,7 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
   const [grid, setGrid] = useState([]);
   const [localUserRate, setLocalUserRate] = useState(userRate);
 
-  const handleCellsChange = changes => {
+  const handleCellsChange = (changes) => {
     const { grid: newGrid } = processCellsChange(grid, changes, userRate);
     const lineItems = convertGridToLineItems(newGrid);
     onChange(lineItems);
@@ -27,7 +27,7 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
     handleCellsChange([{ col: SUBTOTAL_COL }]);
   }
 
-  const handleAddNewRow = e => {
+  const handleAddNewRow = (e) => {
     e.preventDefault();
     const newValue = value.concat([generateBlankLineItem()]);
     onChange(newValue);
@@ -41,7 +41,7 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
     [value, readOnly]
   );
 
-  const handleRemoveLastRow = e => {
+  const handleRemoveLastRow = (e) => {
     e.preventDefault();
     if (grid.length > 3) {
       onChange(dropRight(value, 1));
@@ -53,7 +53,7 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
     <div className="sheet-container">
       <ReactDataSheet
         data={grid}
-        valueRenderer={cell => cell.value}
+        valueRenderer={(cell) => cell.value}
         onContextMenu={(e, cell) => (cell.readOnly ? e.preventDefault() : null)}
         onCellsChanged={handleCellsChange}
       />
@@ -63,8 +63,7 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
             display: "flex",
             justifyContent: "flex-start",
             marginTop: "1em"
-          }}
-        >
+          }}>
           <button className="table-button add-row" onClick={handleAddNewRow}>
             Add row
           </button>
@@ -72,8 +71,7 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
             className={`table-button remove-row ${
               removeRowsIsDisabled ? "disabled" : ""
             }`}
-            onClick={handleRemoveLastRow}
-          >
+            onClick={handleRemoveLastRow}>
             Remove row
           </button>
         </div>

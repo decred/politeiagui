@@ -135,26 +135,26 @@ export function useChangeUsername(ownProps) {
 const mapManageUserStateToProps = {
   user: sel.currentUser,
   isApiRequestingUpdateUserKey: sel.isApiRequestingUpdateUserKey,
-  isApiRequestingMarkAsPaid: state =>
+  isApiRequestingMarkAsPaid: (state) =>
     sel.isApiRequestingManageUser(state) &&
     sel.manageUserAction(state) === MANAGE_USER_CLEAR_USER_PAYWALL,
-  isApiRequestingMarkNewUserAsExpired: state =>
+  isApiRequestingMarkNewUserAsExpired: (state) =>
     sel.isApiRequestingManageUser(state) &&
     sel.manageUserAction(state) === MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
-  isApiRequestingMarkUpdateKeyAsExpired: state =>
+  isApiRequestingMarkUpdateKeyAsExpired: (state) =>
     sel.isApiRequestingManageUser(state) &&
     sel.manageUserAction(state) === MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
-  isApiRequestingMarkResetPasswordAsExpired: state =>
+  isApiRequestingMarkResetPasswordAsExpired: (state) =>
     sel.isApiRequestingManageUser(state) &&
     sel.manageUserAction(state) ===
       MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
-  isApiRequestingUnlockUser: state =>
+  isApiRequestingUnlockUser: (state) =>
     sel.isApiRequestingManageUser(state) &&
     sel.manageUserAction(state) === MANAGE_USER_UNLOCK,
-  isApiRequestingDeactivateUser: state =>
+  isApiRequestingDeactivateUser: (state) =>
     sel.isApiRequestingManageUser(state) &&
     sel.manageUserAction(state) === MANAGE_USER_DEACTIVATE,
-  isApiRequestingReactivateUser: state =>
+  isApiRequestingReactivateUser: (state) =>
     sel.isApiRequestingManageUser(state) &&
     sel.manageUserAction(state) === MANAGE_USER_REACTIVATE,
   manageUserResponse: sel.manageUserResponse
@@ -176,7 +176,7 @@ export function useMarkAsPaidModal() {
   const [showMarkAsPaidConfirmModal, setShowMarkAsPaidConfirmModal] = useState(
     false
   );
-  const openMarkAsPaidModal = e => {
+  const openMarkAsPaidModal = (e) => {
     e.preventDefault();
     setShowMarkAsPaidConfirmModal(true);
   };

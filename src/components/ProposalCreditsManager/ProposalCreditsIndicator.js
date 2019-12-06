@@ -45,20 +45,17 @@ class ProposalCreditsIndicator extends React.Component {
         onInterval={onFetchProposalPaywallPayment}
         active={pollingCreditsPayment}
         executeOnIntervalBeforeFirstInterval={true}
-        onFinishInterval={this.onFinishInterval}
-      >
+        onFinishInterval={this.onFinishInterval}>
         <Tooltip
           text="Proposal credits are purchased to submit proposals. Click here for more information."
-          position="bottom"
-        >
+          position="bottom">
           <div
             className="user-proposal-credits"
             onClick={() =>
               userPaywallStatus !== PAYWALL_STATUS_PAID
                 ? openModal(PAYWALL_MODAL)
                 : openModal(MANAGE_CREDITS_MODAL)
-            }
-          >
+            }>
             <div className="proposal-credits-text">
               {(proposalCredits || 0) +
                 " proposal credit" +

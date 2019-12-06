@@ -20,7 +20,7 @@ export const createDeepEqualSelector = createSelectorCreator(
 
 // this function maps the emailnotifications user property received from
 // the server to our UI preferences presentation
-export const emailNotificationsToPreferences = emailnotifications => ({
+export const emailNotificationsToPreferences = (emailnotifications) => ({
   "myproposalnotifications-statuschange": !!(
     emailnotifications & NOTIFICATION_EMAIL_MY_PROPOSAL_STATUS_CHANGE
   ),

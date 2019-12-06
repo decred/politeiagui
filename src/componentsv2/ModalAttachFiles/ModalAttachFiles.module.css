@@ -1,5 +1,5 @@
 .wrapper {
-  width:  632px;
+  width: 632px;
 }
 
 .selectFileWrapper {
@@ -9,14 +9,12 @@
 }
 
 .greyText {
-  color: #8997A5;
+  color: #8997a5;
 }
 
 @media screen and (max-width: 700px) {
-    
   .wrapper {
     width: 100%;
     max-width: 632px;
   }
-
 }

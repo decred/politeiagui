@@ -11,50 +11,50 @@
 }
 
 .navLink {
-    composes: navContainer;
-    color: var(--color-gray-dark);
-    border-bottom: 2px solid transparent;
+  composes: navContainer;
+  color: var(--color-gray-dark);
+  border-bottom: 2px solid transparent;
 }
 
 .navLink:hover {
-    color: var(--color-primary-dark);
+  color: var(--color-primary-dark);
 }
 
 .navLink:hover {
-    color: var(--color-primary-dark);
+  color: var(--color-primary-dark);
 }
 
 .navLinkText {
-    padding: 0 2rem;
+  padding: 0 2rem;
 }
 
 .rightGreyBorder {
-    border-right: 1px solid var(--color-gray-lighter);
+  border-right: 1px solid var(--color-gray-lighter);
 }
 
 .activeNavLink {
-    color: var(--color-primary-dark);
-    border-bottom: 2px solid var(--color-yellow);
+  color: var(--color-primary-dark);
+  border-bottom: 2px solid var(--color-yellow);
 }
 
 ul.dropdownList {
-    width: unset;
+  width: unset;
 }
 
 @media screen and (max-width: 1000px) {
-    .loggedInContainer {
-        width: 100%;
-    }
+  .loggedInContainer {
+    width: 100%;
+  }
 
-    div.dropdown {
-        position: relative;
-        right: 1rem;
-    }
+  div.dropdown {
+    position: relative;
+    right: 1rem;
+  }
 }
 
 @media screen and (max-width: 560px) {
-    div.dropdown {
-        position: relative;
-        right: 2.4rem;
-    }
+  div.dropdown {
+    position: relative;
+    right: 2.4rem;
+  }
 }

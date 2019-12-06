@@ -44,12 +44,14 @@ export const CustomContent = ({
 }) => {
   const invalidProposalComment =
     !isLoading &&
-    (commentid && comments && !comments.find(c => c.commentid === commentid));
+    commentid &&
+    comments &&
+    !comments.find((c) => c.commentid === commentid);
   const invalidInvoiceComment =
     !isLoading &&
-    (commentid &&
-      invoiceComments &&
-      !invoiceComments.find(c => c.commentid === commentid));
+    commentid &&
+    invoiceComments &&
+    !invoiceComments.find((c) => c.commentid === commentid);
   const showList =
     (listings && listings.length > 0) ||
     (proposals && proposals.length > 0) ||
@@ -83,8 +85,7 @@ export const CustomContent = ({
                   alignItems: "center"
                 }
               : {}
-          }
-        >
+          }>
           <h1 className="content-title">{header}</h1>
           {showLookUp && (
             <div>
@@ -93,22 +94,19 @@ export const CustomContent = ({
                   <Link
                     style={{ marginRight: "24px" }}
                     href="/admin/invoicepayouts"
-                    onClick={() => null}
-                  >
+                    onClick={() => null}>
                     Payout summaries
                   </Link>
                   <Link
                     style={{ marginRight: "24px" }}
                     href="/admin/payouts"
-                    onClick={() => null}
-                  >
+                    onClick={() => null}>
                     Generate payouts
                   </Link>
                   <Link
                     style={{ marginRight: "24px" }}
                     href="/admin/invite"
-                    onClick={() => null}
-                  >
+                    onClick={() => null}>
                     Invite new contractor
                   </Link>
                 </>
@@ -116,8 +114,7 @@ export const CustomContent = ({
               <Link
                 style={{ marginRight: "24px" }}
                 href="/admin/users"
-                onClick={() => null}
-              >
+                onClick={() => null}>
                 <i className="fa fa-search right-margin-5" />
                 Search users
               </Link>
@@ -177,8 +174,7 @@ export const CustomContent = ({
                   width: "100%",
                   maxWidth: "1000px",
                   textAlign: "center"
-                }}
-              >
+                }}>
                 <button
                   style={{ marginTop: "15px" }}
                   className="c-btn c-btn-primary"
@@ -195,8 +191,7 @@ export const CustomContent = ({
                             ? lastLoadedProposal.censorshiprecord.token
                             : null
                         )
-                  }
-                >
+                  }>
                   Load More
                 </button>
               </div>

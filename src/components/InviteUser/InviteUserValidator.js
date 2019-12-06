@@ -1,7 +1,7 @@
 import { emailValidator, isRequiredValidator } from "../../validators/util";
 import { SubmissionError } from "redux-form";
 
-const validate = values => {
+const validate = (values) => {
   if (!isRequiredValidator(values.email)) {
     throw new SubmissionError({ _error: "All fields are required" });
   }

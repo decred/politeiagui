@@ -38,7 +38,7 @@ class SearchVotesModal extends React.Component {
     this.props.closeModal();
   }
 
-  renderField = field => (
+  renderField = (field) => (
     <div>
       <input
         {...field.input}
@@ -57,14 +57,12 @@ class SearchVotesModal extends React.Component {
     return (
       <ModalContentWrapper
         title={"Search votes - " + this.props.me.payload.title}
-        onClose={this.props.closeModal}
-      >
+        onClose={this.props.closeModal}>
         <div className="content" role="main">
           <form
             className="search-form"
             style={{ display: "flex", justifyContent: "center", width: "100%" }}
-            onSubmit={handleSubmit(this.handleSubmit)}
-          >
+            onSubmit={handleSubmit(this.handleSubmit)}>
             {isLoading ? (
               <i
                 className="fa fa-circle-o-notch fa-spin right-margin-5"

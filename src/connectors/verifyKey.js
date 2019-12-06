@@ -13,7 +13,7 @@ const verifyKeyConnector = connect(
     keyMismatch: sel.getKeyMismatch,
     userPubkey: sel.userPubkey
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onVerifyUserKey: act.onVerifyUserKey,

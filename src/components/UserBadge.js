@@ -15,8 +15,7 @@ const UserBadge = ({ userPaywallStatus, loggedInAsEmail }) => {
         display: "flex",
         flexDirection: "row",
         justifyContent: "center"
-      }}
-    >
+      }}>
       <div className="col-sm-1">
         <Tooltip
           tipStyle={{
@@ -26,8 +25,7 @@ const UserBadge = ({ userPaywallStatus, loggedInAsEmail }) => {
             width: "100px"
           }}
           text="To complete your registration, please pay the registration fee"
-          position="bottom"
-        >
+          position="bottom">
           <div className="roundbadge-grey hollow">
             <span className="fa fa-user-times fa-lg grey" aria-hidden="true" />
           </div>
@@ -40,8 +38,7 @@ const UserBadge = ({ userPaywallStatus, loggedInAsEmail }) => {
         display: "flex",
         flexDirection: "row",
         justifyContent: "center"
-      }}
-    >
+      }}>
       <div className="col-sm-1">
         <Tooltip
           tipStyle={{
@@ -52,8 +49,7 @@ const UserBadge = ({ userPaywallStatus, loggedInAsEmail }) => {
           }}
           text="We detected your payment and we're waiting for
             server confirmations"
-          position="bottom"
-        >
+          position="bottom">
           <div className="roundbadge-waiting hollow">
             <span className="fa fa-user-times fa-lg" aria-hidden="true" />
           </div>
@@ -66,8 +62,7 @@ const UserBadge = ({ userPaywallStatus, loggedInAsEmail }) => {
         display: "flex",
         flexDirection: "row",
         justifyContent: "center"
-      }}
-    >
+      }}>
       <div className="col-sm-1">
         <Tooltip
           tipStyle={{
@@ -77,8 +72,7 @@ const UserBadge = ({ userPaywallStatus, loggedInAsEmail }) => {
             width: "100px"
           }}
           text="Account verified. Welcome to Politeia!"
-          position="bottom"
-        >
+          position="bottom">
           <div className="roundbadge-paid hollow">
             <span className="fa fa-user fa-lg" aria-hidden="true" />
           </div>

@@ -8,7 +8,7 @@ export default connect(
   sel.selectorMap({
     isTestnet: sel.isTestNet
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         closeModal: closeModal,

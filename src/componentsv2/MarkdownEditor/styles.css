@@ -1,106 +1,104 @@
 .mde-header {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: .5rem 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
 }
 
 .mde-preview {
-    min-height: 200px !important;
+  min-height: 200px !important;
 }
 
 .mde-header-group {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    padding-right: 1rem;
-    border-right: 1px solid var(--color-gray-lighter);
-    margin-right: 1rem;
-    list-style-type: none;
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 1rem;
+  border-right: 1px solid var(--color-gray-lighter);
+  margin-right: 1rem;
+  list-style-type: none;
 }
 
 .mde-header ul:last-child:not(:only-of-type) {
-    max-width: 20px;
-    border: none;
-    padding: 0;
-    margin: 0;
+  max-width: 20px;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
 .mde-header ul:only-of-type {
-    margin-right: 0;
-    border-right: none;
-    padding-right: 0;
+  margin-right: 0;
+  border-right: none;
+  padding-right: 0;
 }
 
 .mde-header ul:only-of-type .mde-header-item button {
-    background: none;
+  background: none;
 }
 
 .mde-header-item:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 .react-mde .grip {
-   display: none;
+  display: none;
 }
 
 .mde-tabs button,
 .mde-header-group:not(:last-child) .mde-header-item button {
-    background: none;
+  background: none;
 }
 
 .mde-text {
-    font-family: var(--font-family-text);
-    font-weight: var(--font-weight-regular);
-    max-width: 100%;
-    min-width: 100%;
-    padding: 2rem;
-    min-height: 20rem;
-    border: 1px solid var(--color-gray-lighter);
-    line-height: 1.5;
-    font-size: var(--font-size-regular);
-    -webkit-appearance: none;
+  font-family: var(--font-family-text);
+  font-weight: var(--font-weight-regular);
+  max-width: 100%;
+  min-width: 100%;
+  padding: 2rem;
+  min-height: 20rem;
+  border: 1px solid var(--color-gray-lighter);
+  line-height: 1.5;
+  font-size: var(--font-size-regular);
+  -webkit-appearance: none;
 }
 
 .mde-text::placeholder {
-    color: var(--color-gray-light);
+  color: var(--color-gray-light);
 }
 
 .mde-header-item {
-    margin-right: 1rem;
-    
+  margin-right: 1rem;
 }
 
 .mde-header-item button {
-    border: none;
-    cursor: pointer;
+  border: none;
+  cursor: pointer;
 }
 
-
 .mde-tabs button {
-    cursor: pointer;
-    color: var(--color-gray);
-    border: none;
-    font-size: var(--font-size-small) !important;
+  cursor: pointer;
+  color: var(--color-gray);
+  border: none;
+  font-size: var(--font-size-small) !important;
 }
 
 .mde-tabs button:focus {
-    outline: none;
+  outline: none;
 }
 
 .mde-tabs button:hover {
-    color: var(--color-primary-dark);
+  color: var(--color-primary-dark);
 }
 
 .mde-tabs button.selected {
-    color: var(--color-primary-dark) !important;
+  color: var(--color-primary-dark) !important;
 }
 
 .mde-tabs > :first-child {
-    padding-right: 1rem;
-    border-right: 1px solid var(--color-gray-lighter);
+  padding-right: 1rem;
+  border-right: 1px solid var(--color-gray-lighter);
 }
 
 .mde-tabs > :last-child {
-    padding-left: 1rem;
+  padding-left: 1rem;
 }

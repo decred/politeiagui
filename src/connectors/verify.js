@@ -10,7 +10,7 @@ const verifyConnector = connect(
     verifyNewUserError: sel.apiVerifyNewUserError,
     isCMS: sel.isCMS
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onVerify: act.onVerifyNewUser

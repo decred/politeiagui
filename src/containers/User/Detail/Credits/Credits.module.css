@@ -15,7 +15,8 @@
   color: var(--color-gray);
 }
 
-.title, .status {
+.title,
+.status {
   display: block;
 }
 
@@ -40,9 +41,8 @@
   width: 14rem;
 }
 
-
 /* HUGE SCREEN */
-@media screen and (min-width: 1400px){
+@media screen and (min-width: 1400px) {
   .block {
     justify-content: start;
   }
@@ -56,7 +56,7 @@
 }
 
 /* EXTRA SMALL SCREEN */
-@media screen and (max-width: 560px){
+@media screen and (max-width: 560px) {
   .block {
     flex-direction: column;
   }

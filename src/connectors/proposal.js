@@ -12,12 +12,12 @@ import { buildCommentsTree, buildSetOfComments } from "../lib/snew";
 const proposalConnector = connect(
   sel.selectorMap({
     token: compose(
-      t => (t ? t.toLowerCase() : t),
+      (t) => (t ? t.toLowerCase() : t),
       get(["match", "params", "token"]),
       arg(1)
     ),
     commentid: compose(
-      t => (t ? t.toLowerCase() : t),
+      (t) => (t ? t.toLowerCase() : t),
       get(["match", "params", "commentid"]),
       arg(1)
     ),
@@ -43,7 +43,7 @@ const proposalConnector = connect(
     openedModals: sel.getopenedModals,
     isCMS: sel.isCMS
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onFetchData: act.onFetchProposalApp,
@@ -62,7 +62,7 @@ class Wrapper extends React.PureComponent {
     this.props.onSetReplyParent();
   }
 
-  handleViewAllClick = e => {
+  handleViewAllClick = (e) => {
     e && e.preventDefault() && e.stopPropagation();
     !this.props.isCMS
       ? this.props.history.push(`/proposals/${this.props.token}`)
@@ -87,8 +87,8 @@ class Wrapper extends React.PureComponent {
   }
 }
 
-const wrap = Component =>
+const wrap = (Component) =>
   withRouter(
-    proposalConnector(props => <Wrapper {...{ ...props, Component }} />)
+    proposalConnector((props) => <Wrapper {...{ ...props, Component }} />)
   );
 export default wrap;
