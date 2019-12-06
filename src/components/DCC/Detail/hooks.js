@@ -4,7 +4,8 @@ import {
   DCC_SUPPORT_VOTE,
   DCC_OPPOSE_VOTE,
   DCC_STATUS_ACTIVE,
-  CMS_USER_TYPES
+  CMS_USER_TYPES,
+  CMS_DOMAINS
 } from "../../../constants";
 
 export const useDCCDetails = ({
@@ -45,6 +46,9 @@ export const useDCCDetails = ({
     () => dcc && CMS_USER_TYPES[dcc.dccpayload.contractortype],
     [dcc]
   );
+  const domain = useMemo(() => dcc && CMS_DOMAINS[dcc.dccpayload.domain], [
+    dcc
+  ]);
 
   const onOpposeDCC = useCallback(async () => {
     setIsLoadingOpposeDCC(true);
@@ -80,6 +84,7 @@ export const useDCCDetails = ({
     loadingDCC,
     status,
     type,
+    domain,
     nomineeUsername,
     onSupportDCC,
     onOpposeDCC,
