@@ -174,5 +174,8 @@ export const CMS_DOMAINS = [
   "Community Management"
 ];
 
+export const DCC_DIRECT_CONTRACTOR_TYPE = 1;
+export const DCC_SUB_CONTRACTOR_TYPE = 3;
+
 export const DCC_SUPPORT_VOTE = "aye";
 export const DCC_OPPOSE_VOTE = "nay";

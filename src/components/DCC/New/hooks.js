@@ -2,7 +2,9 @@ import { useState, useCallback, useEffect } from "react";
 import {
   CMS_USER_TYPES,
   CMS_DOMAINS,
-  DCC_TYPE_REVOCATION
+  DCC_TYPE_REVOCATION,
+  DCC_DIRECT_CONTRACTOR_TYPE,
+  DCC_SUB_CONTRACTOR_TYPE
 } from "../../../constants";
 import {
   getQueryStringValue,
@@ -10,10 +12,20 @@ import {
 } from "../../../lib/queryString";
 
 // remove supervisor option since it ir not available for new dcc
-const typeOptions = CMS_USER_TYPES.reduce((acc, curr, index) => {
-  if (curr === "Supervisor") return [...acc];
-  return [...acc, { label: curr, value: index }];
-}, []);
+const typeOptions = [
+  {
+    label: CMS_USER_TYPES[0],
+    value: 0
+  },
+  {
+    label: CMS_USER_TYPES[DCC_DIRECT_CONTRACTOR_TYPE],
+    value: DCC_DIRECT_CONTRACTOR_TYPE
+  },
+  {
+    label: CMS_USER_TYPES[DCC_SUB_CONTRACTOR_TYPE],
+    value: DCC_SUB_CONTRACTOR_TYPE
+  }
+];
 
 // format domain options to select form field
 const domainOptions = CMS_DOMAINS.map((d, i) => ({ label: d, value: i }));
