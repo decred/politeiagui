@@ -54,7 +54,7 @@ import GeneratePayouts from "./components/GeneratePayouts";
 import InvoicePayouts from "./components/InvoicePayouts";
 import NewDCC from "./components/DCC/New";
 import DCCList from "./components/DCC/List";
-import DCCDetail from "./components/DCC/Detail";
+import DCCDetail from "./components/DCC/Details";
 
 const RoutesForCMS = () => {
   return (
