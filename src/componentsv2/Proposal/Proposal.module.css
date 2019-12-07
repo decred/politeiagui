@@ -14,7 +14,6 @@
 
 .version {
     line-height: var(--spacing-2);
-    color: var(--color-gray) !important;
 }
 
 .versionPicker > div > span {
