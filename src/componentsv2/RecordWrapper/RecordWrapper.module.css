@@ -50,6 +50,10 @@
     margin-right: 0.2rem;
 }
 
+.commentsLink > span.darkCommentsNumber {
+    color: var(--text-active-tab-color);
+}
+
 div.seeOnGithubTooltip {
     white-space: nowrap;
     font-size: var(--font-size-small);

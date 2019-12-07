@@ -176,13 +176,16 @@ export const GithubLink = ({ token }) => {
   );
 };
 
-export const CommentsLink = ({ numOfComments, url }) => (
-  <Link to={url} gray className={styles.commentsLink}>
+export const CommentsLink = ({ numOfComments, url }) => {
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
+  return (
+  <Link to={url} gray={!isDarkTheme} dark={isDarkTheme} className={styles.commentsLink}>
     <Icon type="discuss" className="margin-right-s" />
-    <span>{numOfComments}</span>
+    <span className={isDarkTheme && styles.darkCommentsNumber}>{numOfComments}</span>
     Comments
-  </Link>
-);
+  </Link>);
+};
 
 export const DownloadRecord = DownloadJSON;
 

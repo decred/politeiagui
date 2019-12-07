@@ -138,7 +138,7 @@ const Proposal = React.memo(function Proposal({
                     <Text
                       id={`proposal-${proposalToken}-version`}
                       className={classNames(styles.version)}
-                      color="gray"
+                      color={ isDarkTheme ? "secondaryDark" : "gray" }
                       truncate
                     >{`version ${version}`}</Text>
                   )}
