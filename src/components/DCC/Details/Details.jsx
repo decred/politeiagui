@@ -104,7 +104,7 @@ const DCCDetail = props => {
             <DCCInfo label="Against">{dcc.againstuserids.length}</DCCInfo>
 
             <Button
-              className={`togglebutton access-required${!userCanVote &&
+              className={`togglebutton access-required${(!userCanVote || !isActiveDCC) &&
                 " not-active disabled"}`}
               name="support"
               text="Support"
@@ -116,7 +116,7 @@ const DCCDetail = props => {
               }}
               />
             <Button
-              className={`togglebutton access-required${!userCanVote &&
+              className={`togglebutton access-required${(!userCanVote || !isActiveDCC) &&
                 " not-active disabled"}`}
               name="oppose"
               text="Oppose"
