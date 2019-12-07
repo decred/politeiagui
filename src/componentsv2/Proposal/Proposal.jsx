@@ -1,4 +1,4 @@
-import { classNames, StatusBar, StatusTag, Text, useMediaQuery } from "pi-ui";
+import { classNames, StatusBar, StatusTag, Text, useMediaQuery, useTheme } from "pi-ui";
 import React, { useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
@@ -74,6 +74,8 @@ const Proposal = React.memo(function Proposal({
   const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
   const mobile = useMediaQuery("(max-width: 560px)");
   const [showSearchVotesModal, setShowSearchVotesModal] = useState(false);
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
   function handleCloseSearchVotesModal() {
     setShowSearchVotesModal(false);
   }
@@ -160,7 +162,7 @@ const Proposal = React.memo(function Proposal({
                       <Text
                         className={styles.timeLeft}
                         size="small"
-                        color="gray"
+                        color={ isDarkTheme ? "secondaryDark" : "gray" }
                       >
                         {`vote end${isVoteActive ? "s" : "ed"} ${voteTime}`}
                       </Text>
@@ -170,7 +172,7 @@ const Proposal = React.memo(function Proposal({
                         <Text
                           className="hide-on-mobile"
                           size="small"
-                          color="gray"
+                          color={ isDarkTheme ? "secondaryDark" : "gray" }
                         >
                           {`${voteBlocksLeft} blocks left`}
                         </Text>

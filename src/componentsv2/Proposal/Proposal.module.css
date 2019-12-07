@@ -71,6 +71,10 @@ span.statusTag > span {
     color: var(--color-gray);
 }
 
+.votesReceived {
+    color: var(--text-active-tab-color) !important;
+}
+
 @media screen and (max-width: 560px) {
     .timeLeft {
         margin-top: 0;
