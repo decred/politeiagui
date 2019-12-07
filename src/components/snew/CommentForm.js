@@ -46,8 +46,7 @@ const CommentForm = ({
       <form
         className="usertext cloneable warn-on-unload"
         style={hide ? { display: "none" } : {}}
-        onSubmit={onSave}
-      >
+        onSubmit={onSave}>
         {error ? (
           <Message type="error" header="Error creating comment" body={error} />
         ) : null}
@@ -89,11 +88,10 @@ const CommentForm = ({
                 <span
                   className="linkish option active"
                   tabIndex={100}
-                  onClick={e => {
+                  onClick={(e) => {
                     onToggleMarkdownHelp();
                     e.preventDefault();
-                  }}
-                >
+                  }}>
                   formatting help
                 </span>
               </span>
@@ -102,8 +100,7 @@ const CommentForm = ({
                   className="reddiquette"
                   href="/help/contentpolicy"
                   tabIndex={100}
-                  target="_blank"
-                >
+                  target="_blank">
                   content policy
                 </Link>
               )}
@@ -114,8 +111,7 @@ const CommentForm = ({
                   }`}
                   type="submit"
                   style={{ marginBottom: "5px" }}
-                  disabled={!userCanExecuteActions}
-                >
+                  disabled={!userCanExecuteActions}>
                   save
                 </button>
                 {(onClose && (
@@ -125,8 +121,7 @@ const CommentForm = ({
                     }`}
                     onClick={() => onClose()}
                     type="button"
-                    disabled={!userCanExecuteActions}
-                  >
+                    disabled={!userCanExecuteActions}>
                     cancel
                   </button>
                 )) ||

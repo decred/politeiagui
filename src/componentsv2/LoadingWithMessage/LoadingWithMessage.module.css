@@ -1,9 +1,9 @@
 .wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .text {
-    margin-left: 10px;
+  margin-left: 10px;
 }

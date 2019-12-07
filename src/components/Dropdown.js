@@ -13,7 +13,7 @@ class Dropdown extends Component {
   }
   handleTriggerClick() {
     if (this.props.disabled) return;
-    this.setState(state => ({
+    this.setState((state) => ({
       isopen: !state.isopen
     }));
   }

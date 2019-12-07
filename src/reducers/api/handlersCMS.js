@@ -3,7 +3,8 @@ import get from "lodash/fp/get";
 import map from "lodash/fp/map";
 import { receive, reset } from "../util";
 
-const getInvoiceToken = invoice => get(["censorshiprecord", "token"], invoice);
+const getInvoiceToken = (invoice) =>
+  get(["censorshiprecord", "token"], invoice);
 
 export const onReceivePayApprovedInvoices = (state, action) => {
   state = receive("payApproved", state, action);
@@ -24,7 +25,7 @@ export const onReceiveSetStatusInvoice = (state, action) => {
   );
   const updatedInvoiceStatus = get(["payload", "invoice", "status"], action);
 
-  const updateInvoiceStatus = invoice =>
+  const updateInvoiceStatus = (invoice) =>
     updatedInvoiceToken === getInvoiceToken(invoice)
       ? cloneDeep({ ...invoice, status: updatedInvoiceStatus })
       : invoice;
@@ -105,7 +106,7 @@ export const onReceiveCensorInvoiceComment = (state, action) => {
       ...state.invoiceComments,
       response: {
         ...state.invoiceComments.response,
-        comments: state.invoiceComments.response.comments.map(c => {
+        comments: state.invoiceComments.response.comments.map((c) => {
           return c.commentid === action.payload
             ? { ...c, comment: "", censored: true }
             : c;

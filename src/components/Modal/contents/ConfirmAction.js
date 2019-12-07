@@ -25,8 +25,7 @@ class ConfirmAction extends React.Component {
         cancelText={me.payload.cancelText || "No"}
         onCancel={this.handleCancel}
         onSubmit={this.handleConfirm}
-        onClose={this.handleCancel}
-      >
+        onClose={this.handleCancel}>
         <div
           style={
             me.payload.altStyle || {
@@ -36,16 +35,14 @@ class ConfirmAction extends React.Component {
               minHeight: "80px",
               alignItems: "center"
             }
-          }
-        >
+          }>
           <span
             style={{
               fontSize: "16px",
               textAlign: "center",
               maxWidth: "100%",
               wordBreak: "break-word"
-            }}
-          >
+            }}>
             {me.payload.message || "Do you confirm this action?"}
           </span>
         </div>

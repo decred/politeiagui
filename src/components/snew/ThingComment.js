@@ -11,7 +11,7 @@ import {
 import Message from "../Message";
 
 class ThingComment extends React.PureComponent {
-  handlePermalinkClick = e => {
+  handlePermalinkClick = (e) => {
     e && e.preventDefault && e.preventDefault();
     !this.props.isCMS
       ? this.props.history.push(
@@ -21,7 +21,7 @@ class ThingComment extends React.PureComponent {
           `/invoices/${this.props.invoiceToken}/comments/${this.props.id}`
         );
   };
-  handleCommentCensor = e => {
+  handleCommentCensor = (e) => {
     e && e.preventDefault && e.preventDefault();
     this.props.onCensorComment(
       this.props.loggedInAsEmail,
@@ -42,7 +42,7 @@ class ThingComment extends React.PureComponent {
         element.scrollHeight > 530
       );
     });
-    overflowDivs.forEach(overflowDiv => {
+    overflowDivs.forEach((overflowDiv) => {
       const readMore = document.createElement("a");
       readMore.innerHTML = "Read More";
       overflowDiv.className = "collapsed";

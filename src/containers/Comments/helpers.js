@@ -13,7 +13,7 @@ export const commentSortOptions = {
  * @param {String} sortOption
  * @returns {Object} selectOption
  */
-export const createSelectOptionFromSortOption = sortOption => ({
+export const createSelectOptionFromSortOption = (sortOption) => ({
   label: sortOption,
   value: sortOption
 });
@@ -23,7 +23,7 @@ export const createSelectOptionFromSortOption = sortOption => ({
  * @returns {Array} sortSelectOptions
  */
 export const getSortOptionsForSelect = () =>
-  Object.keys(commentSortOptions).map(key =>
+  Object.keys(commentSortOptions).map((key) =>
     createSelectOptionFromSortOption(commentSortOptions[key])
   );
 
@@ -32,7 +32,7 @@ export const getSortOptionsForSelect = () =>
  * @param {String} sortOption
  * @returns {Function} sorterFunction
  */
-export const getSort = sortOption => {
+export const getSort = (sortOption) => {
   const mapOptionToSort = {
     [commentSortOptions.SORT_BY_NEW]: orderBy(["timestamp"], ["desc"]),
     [commentSortOptions.SORT_BY_OLD]: orderBy(["timestamp"], ["asc"]),

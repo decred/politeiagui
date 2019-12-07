@@ -22,10 +22,8 @@ const SuccessPage = ({ email }) => (
         <p>
           If you're sure you should have received an email, join the{" "}
           <code>#support:decred.org</code> channel on{" "}
-          <a href="https://www.decred.org/matrix/">
-            Matrix
-          </a>{" "}
-          to get assistance from Politeia administrators.
+          <a href="https://www.decred.org/matrix/">Matrix</a> to get assistance
+          from Politeia administrators.
         </p>
       </div>
     </div>

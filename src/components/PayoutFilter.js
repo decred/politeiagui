@@ -17,12 +17,12 @@ class PayoutFilter extends React.Component {
     this.props.handleResetDateFilter && this.props.handleResetDateFilter();
   }
 
-  onSetMonthSortOption = option => {
+  onSetMonthSortOption = (option) => {
     const { yearFilterValue } = this.props;
     this.props.handleChangeDateFilter(option.value, yearFilterValue);
   };
 
-  onSetYearSortOption = option => {
+  onSetYearSortOption = (option) => {
     const { monthFilterValue } = this.props;
     this.props.handleChangeDateFilter(monthFilterValue, option.value);
   };
@@ -30,10 +30,10 @@ class PayoutFilter extends React.Component {
   render() {
     const { header, monthFilterValue, yearFilterValue } = this.props;
     const selectedYear = invoiceFilterYearOptions.find(
-      op => op.value === yearFilterValue
+      (op) => op.value === yearFilterValue
     );
     const selectedMonth =
-      invoiceFilterMonthOptions.find(op => op.value === monthFilterValue) ||
+      invoiceFilterMonthOptions.find((op) => op.value === monthFilterValue) ||
       monthFilterValue === FILTER_ALL_MONTHS;
 
     return (
@@ -43,7 +43,7 @@ class PayoutFilter extends React.Component {
           classNamePrefix="sort-select"
           value={selectedMonth}
           onChange={this.onSetMonthSortOption}
-          options={invoiceFilterMonthOptions.map(op => op)}
+          options={invoiceFilterMonthOptions.map((op) => op)}
           components={{
             ClearIndicator: null
           }}
@@ -52,7 +52,7 @@ class PayoutFilter extends React.Component {
           classNamePrefix="sort-select"
           value={selectedYear}
           onChange={this.onSetYearSortOption}
-          options={invoiceFilterYearOptions.map(op => op)}
+          options={invoiceFilterYearOptions.map((op) => op)}
           components={{
             ClearIndicator: null
           }}

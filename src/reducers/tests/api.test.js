@@ -23,7 +23,7 @@ import {
   testResetReducer
 } from "./helpers";
 
-const getUserFromState = state => state.user.response.user;
+const getUserFromState = (state) => state.user.response.user;
 
 describe("test api reducer", () => {
   const MOCK_STATE = {
@@ -146,11 +146,11 @@ describe("test api reducer", () => {
 
   const getCommentVoteFromState = (state, token, commentid) =>
     state.commentslikes.response.commentslikes.filter(
-      cv => cv.token === token && cv.commentid === commentid
+      (cv) => cv.token === token && cv.commentid === commentid
     )[0];
   const getProposalCommentFromState = (state, token, commentid) =>
     state.proposalComments.response.comments.filter(
-      c => c.token === token && c.commentid === commentid
+      (c) => c.token === token && c.commentid === commentid
     )[0];
 
   const assertStateAfterCommentVote = (
@@ -630,7 +630,8 @@ describe("test api reducer", () => {
   });
 
   test("correctly updates the state for onReceiveManageUser", () => {
-    const getUserFromState = state => get(["user", "response", "user"], state);
+    const getUserFromState = (state) =>
+      get(["user", "response", "user"], state);
     const updateStateForManageUser = (state, manageUserAction) => {
       // simulate the update of state for 'REQUEST_MANAGE_USER'
       const stateAfterRequest = set(state, ["manageUser", "payload"], {

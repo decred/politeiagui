@@ -17,7 +17,7 @@ import { getTextFromIndexMd } from "src/helpers";
  * Returns the total amount of votes received by a given proposal voteSummary
  * @param {Object} voteSummary
  */
-export const getVotesReceived = voteSummary => {
+export const getVotesReceived = (voteSummary) => {
   if (!voteSummary) {
     return 0;
   }
@@ -31,7 +31,7 @@ export const getVotesReceived = voteSummary => {
  * Return the votes quorum of a given proposal vote status
  * @param {Object} voteSummary
  */
-export const getQuorumInVotes = voteSummary =>
+export const getQuorumInVotes = (voteSummary) =>
   Math.trunc(
     (voteSummary.eligibletickets * voteSummary.quorumpercentage) / 100
   );
@@ -41,7 +41,7 @@ export const getQuorumInVotes = voteSummary =>
  * @param {Object} proposal
  * @returns {Boolean} isPublic
  */
-export const isPublicProposal = proposal => {
+export const isPublicProposal = (proposal) => {
   return !!proposal && proposal.status === PROPOSAL_STATUS_PUBLIC;
 };
 
@@ -50,7 +50,7 @@ export const isPublicProposal = proposal => {
  * @param {Object} proposal
  * @returns {Boolean} isUnreviewed
  */
-export const isUnreviewedProposal = proposal => {
+export const isUnreviewedProposal = (proposal) => {
   return (
     proposal.status === PROPOSAL_STATUS_UNREVIEWED ||
     proposal.status === PROPOSAL_STATUS_UNREVIEWED_CHANGES
@@ -62,7 +62,7 @@ export const isUnreviewedProposal = proposal => {
  * @param {Object} proposal
  * @returns {Boolean} isCensored
  */
-export const isCensoredProposal = proposal => {
+export const isCensoredProposal = (proposal) => {
   return proposal.status === PROPOSAL_STATUS_CENSORED;
 };
 
@@ -72,7 +72,7 @@ export const isCensoredProposal = proposal => {
  * @param {Object} voteSummary
  * @returns {Boolean} isVotingNotAuthorized
  */
-export const isVotingNotAuthorizedProposal = voteSummary => {
+export const isVotingNotAuthorizedProposal = (voteSummary) => {
   return !!voteSummary && voteSummary.status === PROPOSAL_VOTING_NOT_AUTHORIZED;
 };
 
@@ -82,7 +82,7 @@ export const isVotingNotAuthorizedProposal = voteSummary => {
  * @param {Object} voteSummary
  * @returns {Boolean} isVotingFinished
  */
-export const isVotingFinishedProposal = voteSummary => {
+export const isVotingFinishedProposal = (voteSummary) => {
   return !!voteSummary && voteSummary.status === PROPOSAL_VOTING_FINISHED;
 };
 
@@ -118,7 +118,7 @@ export const isUnderDiscussionProposal = (proposal, voteSummary) => {
  * @param {Object} proposal
  * @returns {Boolean} isAbandoned
  */
-export const isAbandonedProposal = proposal => {
+export const isAbandonedProposal = (proposal) => {
   return proposal.status === PROPOSAL_STATUS_ABANDONED;
 };
 
@@ -145,7 +145,7 @@ export const isApprovedProposal = (proposal, voteSummary) => {
     return false;
   }
 
-  const yesVotes = results.find(op => op.option.id === "yes").votesreceived;
+  const yesVotes = results.find((op) => op.option.id === "yes").votesreceived;
 
   return yesVotes > (passpercentage * totalVotes) / 100;
 };
@@ -155,7 +155,7 @@ export const isApprovedProposal = (proposal, voteSummary) => {
  * @param {Object} voteSummary
  * @returns {Boolean} isVoteActiceProposal
  */
-export const isVoteActiveProposal = voteSummary =>
+export const isVoteActiveProposal = (voteSummary) =>
   !!voteSummary && voteSummary.status === PROPOSAL_VOTING_ACTIVE;
 
 /**
@@ -196,8 +196,8 @@ export const getVoteTimeInWords = (voteSummary, chainHeight, isTestnet) => {
  * @param {Array} files
  * @returns {String} markdownContent
  */
-export const getMarkdownContent = files => {
-  const markdownFile = files.find(f => f.name === "index.md");
+export const getMarkdownContent = (files) => {
+  const markdownFile = files.find((f) => f.name === "index.md");
   return getTextFromIndexMd(markdownFile);
 };
 
@@ -206,7 +206,7 @@ export const getMarkdownContent = files => {
  * @param {Object} proposal
  * @returns {String} censorhipToken
  */
-export const getProposalToken = proposal => {
+export const getProposalToken = (proposal) => {
   return (
     proposal && proposal.censorshiprecord && proposal.censorshiprecord.token
   );

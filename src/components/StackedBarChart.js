@@ -63,7 +63,7 @@ const StackedBarChart = ({
 }) => {
   const dataToDisplay =
     displayValuesForLabel &&
-    data.filter(d => d.label === displayValuesForLabel)[0];
+    data.filter((d) => d.label === displayValuesForLabel)[0];
   const labelToDisplay =
     dataToDisplay && `${dataToDisplay.label}: ${dataToDisplay.value}%`;
 
@@ -75,11 +75,10 @@ const StackedBarChart = ({
       style={{
         ...wrapperStyle,
         ...style
-      }}
-    >
+      }}>
       {labelToDisplay && <span style={labelStyle}>{labelToDisplay}</span>}
       {data
-        .filter(dr => dr.label === displayValuesForLabel)
+        .filter((dr) => dr.label === displayValuesForLabel)
         .map((dr, idx) => (
           <span
             key={`data-${idx}`}
@@ -99,8 +98,7 @@ const StackedBarChart = ({
             ...barStyle,
             ...threesholdStyle,
             width: `${threeshold}%`
-          }}
-        >
+          }}>
           <span style={threesholdTextStyle}>
             <Tooltip
               tipStyle={{
@@ -110,8 +108,7 @@ const StackedBarChart = ({
                 fontWeight: "normal"
               }}
               text="pass percentage"
-              position="right"
-            >
+              position="right">
               {threeshold}%
             </Tooltip>
           </span>

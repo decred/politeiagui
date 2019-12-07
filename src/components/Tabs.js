@@ -19,8 +19,7 @@ export const Tab = ({ title, count, tabId, selected, onTabChange }) => {
   return (
     <span
       className={"tab" + (selected ? " tab-selected" : "")}
-      onClick={() => onTabChange(tabId)}
-    >
+      onClick={() => onTabChange(tabId)}>
       {title} {countIcon}
     </span>
   );

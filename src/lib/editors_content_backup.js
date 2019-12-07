@@ -7,7 +7,7 @@ import { generateBlankLineItem } from "../components/InvoiceDatasheet/helpers";
 
 export const NEW_PROPOSAL_PATH = "/proposals/new";
 
-export const getProposalPath = location => {
+export const getProposalPath = (location) => {
   const { pathname, search } = location;
   const { draftid } = qs.parse(search);
   const path = draftid ? `${pathname}-${draftid}` : pathname;
@@ -19,7 +19,7 @@ export const PROPOSAL_FORM_DESC = "description";
 
 export const getProposalBackupKey = (key, path) => `proposal-${key}::${path}`;
 
-const updateProposalFormData = state => {
+const updateProposalFormData = (state) => {
   const proposalFormState = state.form["form/record"];
   const newProposalData = (proposalFormState && proposalFormState.values) || {};
   const name = newProposalData[PROPOSAL_FORM_NAME];
@@ -63,14 +63,14 @@ export const getNewProposalData = () => {
   };
 };
 
-export const handleSaveTextEditorsContent = state => {
+export const handleSaveTextEditorsContent = (state) => {
   updateProposalFormData(state);
 };
 
 //CMS
 export const NEW_INVOICE_PATH = "/invoices/new";
 
-export const getInvoicePath = location => {
+export const getInvoicePath = (location) => {
   const { pathname, search } = location;
   const { draftid } = qs.parse(search);
   const path = draftid ? `${pathname}-${draftid}` : pathname;
@@ -88,7 +88,7 @@ export const INVOICE_FORM_RATE = "rate";
 
 export const getInvoiceBackupKey = (key, path) => `invoice-${key}::${path}`;
 
-const updateInvoiceFormData = state => {
+const updateInvoiceFormData = (state) => {
   const invoiceFormState = state.form["form/record"];
   const newInvoiceData = (invoiceFormState && invoiceFormState.values) || {};
 
@@ -222,6 +222,6 @@ export const getNewInvoiceData = () => {
   };
 };
 
-export const handleSaveCSVEditorsContent = state => {
+export const handleSaveCSVEditorsContent = (state) => {
   updateInvoiceFormData(state);
 };

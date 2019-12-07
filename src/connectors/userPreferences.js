@@ -7,10 +7,7 @@ import * as act from "../actions";
 
 const userPreferencesConnector = connect(
   sel.selectorMap({
-    userId: compose(
-      get(["match", "params", "userId"]),
-      arg(1)
-    ),
+    userId: compose(get(["match", "params", "userId"]), arg(1)),
     loggedInAsUserId: sel.userid,
     user: sel.user,
     isAdmin: sel.isAdmin,

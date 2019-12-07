@@ -6,7 +6,8 @@ const ModalOnboard = ({ show, onClose }) => {
   function goToDocs() {
     var win = window.open(
       "https://docs.decred.org/governance/politeia/overview/",
-      "_blank"
+      "_blank",
+      "noopener=true,noreferrer=true"
     );
     win.focus();
     onClose();

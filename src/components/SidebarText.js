@@ -29,12 +29,12 @@ const resourcesText = `
  * [Documentation](https://docs.decred.org/)
  * [Getting Started](https://decred.org/#guide)
  * [Source Code on Github](https://github.com/decred/)
- * [Network Status](https://stats.decred.org/) & [Block Explorer](https://mainnet.decred.org/)
+ * [Block Explorer](https://dcrdata.decred.org/)
  * [Voting Status](https://voting.decred.org/)
  * [Downloads Overview](https://decred.org/downloads/)
 `;
 
-const SidebarText = props => (
+const SidebarText = (props) => (
   <div style={{ display: "flex", flexDirection: "column" }}>
     <UserBadge />
     <PaywallAlert />

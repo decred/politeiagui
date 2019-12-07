@@ -9,13 +9,12 @@
   }
 
   .transactionIdLink {
-    width: 80%
+    width: 80%;
   }
 }
 
-
 /* EXTRA SMALL */
-@media screen and (max-width: 560px){
+@media screen and (max-width: 560px) {
   .transactionIdMessage {
     padding: 2rem 1rem;
   }
@@ -26,7 +25,7 @@
 }
 
 /* EXTRA EXTRA SMALL */
-@media screen and (max-width: 410px){
+@media screen and (max-width: 410px) {
   .transactionIdMessage {
     padding: 2rem 0rem;
   }

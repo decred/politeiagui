@@ -13,8 +13,7 @@ const ChangeUsernameForm = ({
 }) => (
   <form
     className="change-username-form"
-    onSubmit={handleSubmit(onChangeUsername)}
-  >
+    onSubmit={handleSubmit(onChangeUsername)}>
     {error && (
       <Message type="error" header="Cannot change username" body={error} />
     )}

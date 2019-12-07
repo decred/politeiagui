@@ -59,7 +59,7 @@ class PasswordReset extends Component {
       .onVerifyResetPassword(
         assign({ newpassword: props.newPassword }, this.getQueryParams())
       )
-      .catch(error => {
+      .catch((error) => {
         throw new SubmissionError({
           _error: error.message
         });

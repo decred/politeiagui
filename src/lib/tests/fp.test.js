@@ -1,10 +1,10 @@
 import * as fp from "../fp";
 
 describe("test functional programming lib (lib/fp.js)", () => {
-  const random = a => a;
+  const random = (a) => a;
   const truthyFunc = () => true;
   const falsyFunc = () => false;
-  const notFunc = a => !a;
+  const notFunc = (a) => !a;
   test("arg", () => {
     const result = fp.arg(2)("a", "b", "c");
     expect(result).toEqual("c");
@@ -19,7 +19,7 @@ describe("test functional programming lib (lib/fp.js)", () => {
     expect(result).toEqual(false);
   });
   test("bool", () => {
-    const random = a => a;
+    const random = (a) => a;
     const result = fp.bool(random)(4);
     expect(typeof result).toEqual("boolean");
     expect(result).toBeTruthy();

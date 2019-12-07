@@ -15,12 +15,12 @@ export const loggedInStateKey = "state";
 
 // Persistent state key refers to the chunck of state which will persist
 // in the local storage even if the user logs out
-export const persistentStateKey = email => `state-${email}`;
+export const persistentStateKey = (email) => `state-${email}`;
 
-export const stateKey = email =>
+export const stateKey = (email) =>
   email ? persistentStateKey(email) : loggedInStateKey;
 
-export const loadStateLocalStorage = email => {
+export const loadStateLocalStorage = (email) => {
   try {
     const serializedState = localStorage.getItem(stateKey(email));
     if (!serializedState) return undefined;
@@ -39,14 +39,14 @@ export const saveStateLocalStorage = (state, email = "") => {
   }
 };
 
-export const clearStateLocalStorage = email => {
+export const clearStateLocalStorage = (email) => {
   const key = stateKey(email);
   if (localStorage.getItem(key)) {
     localStorage.setItem(key, "");
   }
 };
 
-const handleSaveApiMe = state => {
+const handleSaveApiMe = (state) => {
   const email = currentUserEmail(state);
   const proposalcredits = state.app.proposalCredits;
   const username = currentUserUsername(state);
@@ -68,7 +68,7 @@ const handleSaveApiMe = state => {
   }
 };
 
-export const handleSaveAppDraftProposals = state => {
+export const handleSaveAppDraftProposals = (state) => {
   const email = currentUserEmail(state);
   if (!email) {
     return;
@@ -94,7 +94,7 @@ export const handleSaveAppDraftProposals = state => {
   }
 };
 
-const handleSaveAppDraftInvoices = state => {
+const handleSaveAppDraftInvoices = (state) => {
   const email = currentUserEmail(state);
   if (!email) {
     return;
@@ -120,7 +120,7 @@ const handleSaveAppDraftInvoices = state => {
   }
 };
 
-export const handleSaveStateToLocalStorage = state => {
+export const handleSaveStateToLocalStorage = (state) => {
   handleSaveApiMe(state);
   handleSaveAppDraftProposals(state);
   handleSaveAppDraftInvoices(state);

@@ -17,8 +17,7 @@ const PasswordResetForm = ({
   return (
     <form
       className="reset-password-form"
-      onSubmit={handleSubmit(onPasswordReset)}
-    >
+      onSubmit={handleSubmit(onPasswordReset)}>
       {error && (
         <Message type="error" header="Password reset error" body={error} />
       )}
@@ -56,8 +55,7 @@ const PasswordResetForm = ({
         <button
           className="c-btn c-btn-primary c-pull-right"
           tabIndex={3}
-          type="submit"
-        >
+          type="submit">
           Reset Password
         </button>
       </div>

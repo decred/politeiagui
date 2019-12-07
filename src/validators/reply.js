@@ -11,9 +11,7 @@ const validate = ({ values, keyMismatch }, policy) => {
     values.comment.length > policy.maxcommentlength
   ) {
     throw new SubmissionError({
-      _error: `The comment must be less than ${
-        policy.maxcommentlength
-      } characters long`
+      _error: `The comment must be less than ${policy.maxcommentlength} characters long`
     });
   }
   validateURL(values.comment);

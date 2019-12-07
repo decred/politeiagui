@@ -20,8 +20,8 @@ class MockedLocalStorage {
       [key]: value
     };
   };
-  getItem = key => this.keyValue[key];
-  removeItem = key => {
+  getItem = (key) => this.keyValue[key];
+  removeItem = (key) => {
     delete this.keyValue[key];
   };
   clear = () => {
@@ -38,7 +38,7 @@ class MockedSessionStorage extends MockedLocalStorage {
 global.sessionStorage = new MockedSessionStorage();
 global.localStorage = new MockedLocalStorage();
 
-beforeEach(() => {
+beforeAll(() => {
   //define the dummy driver before each testing execution
   localforage.defineDriver(dummyStorageDriver, function() {
     localforage.setDriver(dummyStorageDriver._driver, function() {
@@ -67,7 +67,7 @@ describe("test redux actions assertions", () => {
     const testAction = () => ({
       type: "TEST_ACTION"
     });
-    const someAction = () => dispatch => {
+    const someAction = () => (dispatch) => {
       dispatch(testAction());
     };
     expect(someAction()).toDispatchActions({ type: "TEST_ACTION" }, true);

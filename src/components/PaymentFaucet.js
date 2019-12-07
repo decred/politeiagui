@@ -4,7 +4,7 @@ import ButtonWithLoadingIcon from "./snew/ButtonWithLoadingIcon";
 import Message from "./Message";
 
 const FAUCET_BASE_URL = "https://testnet.dcrdata.org/explorer/tx";
-const getFaucetUrl = txid => `${FAUCET_BASE_URL}/${txid}`;
+const getFaucetUrl = (txid) => `${FAUCET_BASE_URL}/${txid}`;
 
 const PaymentFaucet = ({
   // from connector props
@@ -43,8 +43,7 @@ const PaymentFaucet = ({
             className="paywall-payment-sent"
             href={getFaucetUrl(payWithFaucetTxId)}
             target="_blank"
-            rel="noopener noreferrer"
-          >
+            rel="noopener noreferrer">
             {payWithFaucetTxId}
           </a>{" "}
           to the address; it may take a few minutes to be confirmed.
@@ -64,6 +63,6 @@ class Wrapper extends React.Component {
   }
 }
 
-const wrap = Component => props => <Wrapper {...{ ...props, Component }} />;
+const wrap = (Component) => (props) => <Wrapper {...{ ...props, Component }} />;
 
 export default paymentFaucetConnector(wrap(PaymentFaucet));

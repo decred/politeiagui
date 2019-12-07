@@ -1,85 +1,84 @@
 .commentWrapper {
-    margin-bottom: 2rem;
-    padding: 1rem 1.4rem;
+  margin-bottom: 2rem;
+  padding: 1rem 1.4rem;
 }
 
 .reply {
-    cursor: pointer;
-    margin-right: 1rem;
+  cursor: pointer;
+  margin-right: 1rem;
 }
 
 span.censor {
-    cursor: pointer;
-    color: #ED6D47;
-    margin-right: 1rem;
+  cursor: pointer;
+  color: #ed6d47;
+  margin-right: 1rem;
 }
 
 span.censor:hover {
-    color: #E25025;
+  color: #e25025;
 }
 
 .censored {
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    background-color: #FEF5F3;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #fef5f3;
 }
 
 .timeAgo {
-    font-size: var(--font-size-normal);
+  font-size: var(--font-size-normal);
 }
 
 .info {
-    flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .likesWrapper {
-    margin-left: auto;
+  margin-left: auto;
 }
 
-.childrenContainer { 
-    margin-top: 2rem;
-    margin-left: 1.5rem;
-    border-left: 1px solid var(--color-gray-lighter);
+.childrenContainer {
+  margin-top: 2rem;
+  margin-left: 1.5rem;
+  border-left: 1px solid var(--color-gray-lighter);
 }
 
 .showReplies {
-    display: block;
-    cursor: pointer;
-    background: var(--color-gray-lighter);
-    color: var(--color-primary-dark);
-    width: 2.8rem;
-    text-align: center;
-    margin-right: 1rem;
+  display: block;
+  cursor: pointer;
+  background: var(--color-gray-lighter);
+  color: var(--color-primary-dark);
+  width: 2.8rem;
+  text-align: center;
+  margin-right: 1rem;
 }
 
 .reply:hover {
-    color: var(--color-primary-dark);
+  color: var(--color-primary-dark);
 }
 
-
 .commentAuthor {
-    font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-semi-bold);
 }
 
 .recordAuthor {
-    color: var(--color-gold);
+  color: var(--color-gold);
 }
 
 .permalinkTooltip {
-    white-space: nowrap;
-    font-size: var(--font-size-small);
-    color: var(--color-gray);
+  white-space: nowrap;
+  font-size: var(--font-size-small);
+  color: var(--color-gray);
 }
 
 .copyLinkIcon {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .highlightAsNew {
-    background-color: var(--color-gray-lightest);
+  background-color: var(--color-gray-lightest);
 }
 
 .replyForm {
-    padding-left: 1.4rem;
+  padding-left: 1.4rem;
 }

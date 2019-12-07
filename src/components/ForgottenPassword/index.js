@@ -33,7 +33,7 @@ class ForgottenPassword extends Component {
 
   onForgottenPassword(props) {
     validate(props);
-    return this.props.onResetPassword(props).catch(error => {
+    return this.props.onResetPassword(props).catch((error) => {
       throw new SubmissionError({
         _error: error.message
       });

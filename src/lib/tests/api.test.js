@@ -31,6 +31,11 @@ describe("api integration modules (lib/api.js)", () => {
     "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8";
   const COMMENT = "I dont like this prop";
 
+  beforeAll(async () => {
+    const keys = await pki.generateKeys(EMAIL);
+    await pki.loadKeys(EMAIL, keys);
+  });
+
   test("converts a markdown to a file", () => {
     const file = api.convertMarkdownToFile(MARKDOWN);
     expect(file).toEqual({
@@ -125,8 +130,6 @@ describe("api integration modules (lib/api.js)", () => {
   test("signs a proposal", async () => {
     expect.assertions(3);
     const proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE]);
-    const keys = await pki.generateKeys(EMAIL);
-    await pki.loadKeys(EMAIL, keys);
     const pubKey = await pki.myPubKeyHex(EMAIL);
     const signedProposal = await api.signRegister(EMAIL, proposal);
     expect(signedProposal.publickey).toEqual(pubKey);
@@ -137,8 +140,6 @@ describe("api integration modules (lib/api.js)", () => {
   test("signs a comment", async () => {
     expect.assertions(3);
     const comment = api.makeComment(COMMENT_TOKEN, COMMENT);
-    const keys = await pki.generateKeys(EMAIL);
-    await pki.loadKeys(EMAIL, keys);
     const pubKey = await pki.myPubKeyHex(EMAIL);
     const signedComment = await api.signComment(EMAIL, comment);
     expect(signedComment.publickey).toEqual(pubKey);
@@ -190,7 +191,7 @@ describe("api integration modules (lib/api.js)", () => {
     expect.assertions(3);
     const PATH = "/api/";
     const MOCK_RESULT = await import(`${MOCKS_PATH}/GET.json`).then(
-      d => d.default
+      (d) => d.default
     );
 
     // set csrf token header
@@ -239,8 +240,6 @@ describe("api integration modules (lib/api.js)", () => {
 
   test("verify new user (api/v1/user/verify)", async () => {
     const PATH = "/api/v1/user/verify";
-    const keys = await pki.generateKeys(EMAIL);
-    await pki.loadKeys(EMAIL, keys);
     await assertRouteIsCalledWithQueryParams(
       PATH,
       {
@@ -345,8 +344,6 @@ describe("api integration modules (lib/api.js)", () => {
   });
 
   test("verify key (api/v1/user/key/verify)", async () => {
-    const keys = await pki.generateKeys(EMAIL);
-    await pki.loadKeys(EMAIL, keys);
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/key/verify",
       api.verifyKeyRequest,
@@ -402,8 +399,6 @@ describe("api integration modules (lib/api.js)", () => {
   });
 
   test("set proposal status (api/v1/proposals/:token/status)", async () => {
-    const keys = await pki.generateKeys(EMAIL);
-    await pki.loadKeys(EMAIL, keys);
     await assertPOSTOnRouteIsCalled(
       "express:/api/v1/proposals/:token/status",
       api.proposalSetStatus,
@@ -436,8 +431,6 @@ describe("api integration modules (lib/api.js)", () => {
   });
 
   test("start vote (api/v1/proposals/startvote)", async () => {
-    const keys = await pki.generateKeys(EMAIL);
-    await pki.loadKeys(EMAIL, keys);
     await assertPOSTOnRouteIsCalled(
       "/api/v1/proposals/startvote",
       api.startVote,
@@ -515,8 +508,6 @@ describe("api integration modules (lib/api.js)", () => {
   });
 
   test("authorize vote to start (api/v1/proposals/authorizevote)", async () => {
-    const keys = await pki.generateKeys(EMAIL);
-    await pki.loadKeys(EMAIL, keys);
     await assertPOSTOnRouteIsCalled(
       "/api/v1/proposals/authorizevote",
       api.proposalAuthorizeOrRevokeVote,

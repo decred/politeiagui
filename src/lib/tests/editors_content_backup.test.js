@@ -21,7 +21,7 @@ describe("Persist editors content on session storage", () => {
     }
   };
 
-  const getFromSS = key => sessionStorage.getItem(key);
+  const getFromSS = (key) => sessionStorage.getItem(key);
 
   test("backup new proposal content into to session storage", () => {
     const path = ecb.NEW_PROPOSAL_PATH;

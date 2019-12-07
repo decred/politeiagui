@@ -1,12 +1,12 @@
 .deleteDraft {
-    font-size: var(--font-size-xxlarge);
-    color: var(--color-gray);
-    cursor: pointer;
-    background: none;
-    border: 0;
-    outline: none;
+  font-size: var(--font-size-xxlarge);
+  color: var(--color-gray);
+  cursor: pointer;
+  background: none;
+  border: 0;
+  outline: none;
 }
 
 .deleteDraft:hover {
-    color: var(--color-primary-dark);
+  color: var(--color-primary-dark);
 }

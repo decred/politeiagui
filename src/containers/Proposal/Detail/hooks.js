@@ -6,7 +6,7 @@ import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
 import { isUnreviewedProposal, isCensoredProposal } from "../helpers";
 
-const proposalWithFilesOrNothing = proposal => {
+const proposalWithFilesOrNothing = (proposal) => {
   return proposal && proposal.files && !!proposal.files.length
     ? proposal
     : null;

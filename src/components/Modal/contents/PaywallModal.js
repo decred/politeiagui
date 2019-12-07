@@ -6,8 +6,7 @@ import Paywall from "../../Paywall";
 const PaywallModal = ({ closeModal }) => (
   <ModalContentWrapper
     title={"Complete your registration"}
-    onClose={closeModal}
-  >
+    onClose={closeModal}>
     <Paywall />
   </ModalContentWrapper>
 );

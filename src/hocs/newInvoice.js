@@ -80,11 +80,8 @@ class NewInvoiceContainer extends Component {
   };
 }
 
-const wrap = Component => props => (
+const wrap = (Component) => (props) => (
   <NewInvoiceContainer {...{ ...props, Component }} />
 );
 
-export default compose(
-  newInvoiceConnector,
-  wrap
-);
+export default compose(newInvoiceConnector, wrap);

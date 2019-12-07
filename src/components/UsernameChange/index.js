@@ -19,7 +19,7 @@ class ChangeUsername extends Component {
     };
     validate(props, policy);
 
-    return this.props.onChangeUsername(props).catch(error => {
+    return this.props.onChangeUsername(props).catch((error) => {
       throw new SubmissionError({
         _error: error.message
       });

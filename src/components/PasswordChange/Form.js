@@ -13,8 +13,7 @@ const ChangePasswordForm = ({
 }) => (
   <form
     className="change-password-form"
-    onSubmit={handleSubmit(onChangePassword)}
-  >
+    onSubmit={handleSubmit(onChangePassword)}>
     {error && (
       <Message type="error" header="Cannot change password" body={error} />
     )}

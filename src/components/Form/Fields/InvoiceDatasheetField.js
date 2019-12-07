@@ -20,8 +20,7 @@ const CollapsableErrors = ({ errors }) => {
             fontWeight: "bold",
             display: "flex"
           }}
-          onClick={handleToggleErrorsVisibility}
-        >
+          onClick={handleToggleErrorsVisibility}>
           <span>{`${showErrors ? "Hide" : "Display"} ${
             errors.length
           } validation errors`}</span>

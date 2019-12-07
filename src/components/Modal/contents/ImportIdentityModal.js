@@ -15,8 +15,7 @@ const ImportIdentityModal = ({ closeAllModals }) => (
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column"
-      }}
-    >
+      }}>
       <PrivateKeyImportManager />
       <h2
         style={{
@@ -24,8 +23,7 @@ const ImportIdentityModal = ({ closeAllModals }) => (
           width: "100%",
           textAlign: "center",
           padding: "1em"
-        }}
-      >
+        }}>
         Or Paste in Your Own
       </h2>
       <PrivateKeyFormManager />

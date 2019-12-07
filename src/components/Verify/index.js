@@ -20,7 +20,7 @@ class Verify extends Component {
       return;
     }
 
-    props.onVerify(email, verificationtoken).catch(err => {
+    props.onVerify(email, verificationtoken).catch((err) => {
       console.error(err.stack || err);
     });
   }

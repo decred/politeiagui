@@ -30,8 +30,7 @@ const VoteStatusLabel = ({ status }) => {
         style={{
           ...spanStyle,
           color: "#41bf53"
-        }}
-      >
+        }}>
         {mapVoteStatusToMessage[status]}
       </span>
     ),
@@ -40,8 +39,7 @@ const VoteStatusLabel = ({ status }) => {
         style={{
           ...spanStyle,
           color: "#091440"
-        }}
-      >
+        }}>
         {mapVoteStatusToMessage[status]}
       </span>
     ),
@@ -50,8 +48,7 @@ const VoteStatusLabel = ({ status }) => {
         style={{
           ...spanStyle,
           color: "#8997a5"
-        }}
-      >
+        }}>
         {mapVoteStatusToMessage[status]}
       </span>
     ),
@@ -60,8 +57,7 @@ const VoteStatusLabel = ({ status }) => {
         style={{
           ...spanStyle,
           color: "#d69400"
-        }}
-      >
+        }}>
         {mapVoteStatusToMessage[status]}
       </span>
     )
@@ -71,10 +67,10 @@ const VoteStatusLabel = ({ status }) => {
 
 const getPercentage = (received, total) =>
   Number.parseFloat((received / total) * 100).toFixed(2);
-const sortOptionYesFirst = a => (a.id === "yes" ? -1 : 1);
+const sortOptionYesFirst = (a) => (a.id === "yes" ? -1 : 1);
 
 class Stats extends React.Component {
-  getColor = optionId => {
+  getColor = (optionId) => {
     switch (optionId) {
       case "yes":
         return "#def9f7";
@@ -99,7 +95,7 @@ class Stats extends React.Component {
         color: this.getColor(option.id)
       }))
       .sort(sortOptionYesFirst);
-  renderStats = option => {
+  renderStats = (option) => {
     const optionStyle = {
       display: "flex",
       marginRight: "8px"
@@ -120,8 +116,7 @@ class Stats extends React.Component {
               width: "36px"
             }}
             text="Yes"
-            position="bottom"
-          >
+            position="bottom">
             <span>
               <span style={optionIdStyle}>{` ✔ ${option.votesReceived}`}</span>
             </span>
@@ -135,8 +130,7 @@ class Stats extends React.Component {
               width: "29px"
             }}
             text="No"
-            position="bottom"
-          >
+            position="bottom">
             <span style={{ marginRight: "25px" }}>
               <span style={optionIdStyle}>{` ✖ ${option.votesReceived}`}</span>
             </span>
@@ -145,8 +139,8 @@ class Stats extends React.Component {
       </span>
     );
   };
-  getChartData = options =>
-    options.map(op => ({
+  getChartData = (options) =>
+    options.map((op) => ({
       label: op.id,
       value: op.percentage,
       color: op.color
@@ -167,15 +161,13 @@ class Stats extends React.Component {
           width: "90px"
         }}
         text={"Voting ends at block #" + endHeight}
-        position="bottom"
-      >
+        position="bottom">
         <div
           style={{
             display: "flex",
             alignItems: "center",
             flexDirection: "column"
-          }}
-        >
+          }}>
           <span>
             {blocks === 0 ? "last block left" : blocks + " blocks left"}
           </span>
@@ -228,7 +220,7 @@ class Stats extends React.Component {
               <p>zero votes</p>
             </div>
           ) : null}
-          {showStats && options.map(op => this.renderStats(op))}
+          {showStats && options.map((op) => this.renderStats(op))}
           {endHeight && currentHeight && !isPreVoting
             ? this.getTimeInBlocks(endHeight, currentHeight)
             : null}
@@ -252,14 +244,12 @@ class Stats extends React.Component {
                   minWidth: "300px"
                 }}
                 text={`Quorum minimum is ${quorumPercentage}% of ${numOfEligibleVotes} elegible votes`}
-                position="right"
-              >
+                position="right">
                 <span
                   style={{
                     marginLeft: "5px",
                     color: totalVotes < quorumInVotes ? "#FFA07A" : "green"
-                  }}
-                >
+                  }}>
                   {`${totalVotes}/${quorumInVotes} votes`}
                 </span>
               </Tooltip>

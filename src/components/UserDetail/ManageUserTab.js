@@ -32,16 +32,14 @@ const NewSupervisorId = ({ id, onRemoveId, isLast }) => {
       }}
       onMouseLeave={() => {
         setShow(false);
-      }}
-    >
+      }}>
       {id}
       {show && (
         <span
           style={{ cursor: "pointer" }}
           onClick={() => {
             onRemoveId(id);
-          }}
-        >
+          }}>
           ✖
         </span>
       )}
@@ -66,7 +64,7 @@ const ManageUserTab = ({
   const [newSupervisorId, setNewSupervisorId] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const handleAddSupervisorId = e => {
+  const handleAddSupervisorId = (e) => {
     e.preventDefault();
     const isNewId = newSupervisorIds.indexOf(newSupervisorId) === -1;
     if (isNewId) {
@@ -75,9 +73,9 @@ const ManageUserTab = ({
     }
   };
 
-  const handleRemoveId = currentId => {
+  const handleRemoveId = (currentId) => {
     const supervisorIdsWithoutCurrentId = newSupervisorIds.filter(
-      sid => sid !== currentId
+      (sid) => sid !== currentId
     );
     setNewSupervisorIds(supervisorIdsWithoutCurrentId);
   };
@@ -116,15 +114,14 @@ const ManageUserTab = ({
               body="User Updated Successfully"
             />
           )}
-          <Field label="User ID">{user.id}</Field>
+          <Field label="User ID">{user.userid}</Field>
           <FieldSeparator />
           <Field label="Contractor Type">
             <select
               value={contractorType}
-              onChange={event => {
+              onChange={(event) => {
                 setContractorType(parseInt(event.target.value));
-              }}
-            >
+              }}>
               {typeOptions.map((option, i) => (
                 <option key={i} value={i}>
                   {option}
@@ -136,10 +133,9 @@ const ManageUserTab = ({
           <Field label="Domain">
             <select
               value={contractorDomain}
-              onChange={event => {
+              onChange={(event) => {
                 setContractorDomain(parseInt(event.target.value));
-              }}
-            >
+              }}>
               {domainOptions.map((option, i) => (
                 <option key={i} value={i}>
                   {option}
@@ -174,7 +170,7 @@ const ManageUserTab = ({
                 component="input"
                 type="text"
                 placeholder="New Supervisor Id"
-                onChange={event => {
+                onChange={(event) => {
                   setNewSupervisorId(event.target.value);
                 }}
                 tabIndex={4}
@@ -182,8 +178,7 @@ const ManageUserTab = ({
               <button
                 className="new-supervisor-button"
                 disabled={!handleAddButtonEnabled()}
-                onClick={handleAddSupervisorId}
-              >
+                onClick={handleAddSupervisorId}>
                 +
               </button>
             </div>
@@ -191,12 +186,11 @@ const ManageUserTab = ({
           <FieldSeparator />
           <button
             onClick={() => {
-              confirmWithModal(modalTypes.CONFIRM_ACTION, {}).then(ok => {
+              confirmWithModal(modalTypes.CONFIRM_ACTION, {}).then((ok) => {
                 if (ok) handleManageUser();
               });
             }}
-            type="submit"
-          >
+            type="submit">
             update user
           </button>
         </>

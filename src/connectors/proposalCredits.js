@@ -22,7 +22,7 @@ export default connect(
     proposalPaymentReceived: sel.proposalPaymentReceived,
     paywallTxid: sel.paywallTxid
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onUserProposalCredits: act.onUserProposalCredits,

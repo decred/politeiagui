@@ -13,14 +13,17 @@
   position: relative;
 }
 
-.navIcon, .navIcon::before, .navIcon::after {
+.navIcon,
+.navIcon::before,
+.navIcon::after {
   display: inline-block;
   width: 2rem;
   height: 3px;
   background-color: var(--color-primary-dark);
 }
 
-.navIcon::before, .navIcon::after {
+.navIcon::before,
+.navIcon::after {
   position: absolute;
   content: "";
   left: 0;

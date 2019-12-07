@@ -54,8 +54,7 @@ const PaymentInfoContent = ({
           fontSize: "16px",
           width: "100%",
           marginBottom: "20px"
-        }}
-      >
+        }}>
         {!isWaitingConfirmation
           ? `To complete the purchase of ${numCreditsToPurchase} credit(s), please follow the instructions below:`
           : "Your payment has been detected. You proposal credits will be updated once it reaches the required number of confirmations."}
@@ -85,7 +84,7 @@ class Purchase extends React.Component {
     };
   }
 
-  onUpdateCreditsToPurchase = event => {
+  onUpdateCreditsToPurchase = (event) => {
     const numCreditsToPurchase = parseInt(event.target.value, 10);
     if (numCreditsToPurchase < 1) {
       return;
@@ -131,7 +130,7 @@ class Purchase extends React.Component {
     }
   }
 
-  goToStep = step => this.setState({ step });
+  goToStep = (step) => this.setState({ step });
 
   render() {
     const { step, numCreditsToPurchase } = this.state;
@@ -191,8 +190,7 @@ class Purchase extends React.Component {
             <button
               className={`left ${awaitingConfirmations ? "disabled" : ""}`}
               disabled={awaitingConfirmations}
-              onClick={() => this.goToStep(SELECT_AMOUNT)}
-            >
+              onClick={() => this.goToStep(SELECT_AMOUNT)}>
               Previous
             </button>
           ) : null}
@@ -200,8 +198,7 @@ class Purchase extends React.Component {
             <button
               className="right"
               disabled={numCreditsToPurchase < 1}
-              onClick={() => this.goToStep(PAYMENT_INFO)}
-            >
+              onClick={() => this.goToStep(PAYMENT_INFO)}>
               Next
             </button>
           ) : null}

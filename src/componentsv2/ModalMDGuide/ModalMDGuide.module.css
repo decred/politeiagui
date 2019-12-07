@@ -1,38 +1,38 @@
 .table {
-    margin-top: 2rem;
+  margin-top: 2rem;
 }
 .blockWrapper {
-    display: flex;
-    width: 100%;
-    justify-content: center;
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }
 .quotedText {
-    border-left: .25em solid #dfe2e5;
-    max-width: 10rem;
-    color: #6a737d;
-    padding: 0 1em;
+  border-left: 0.25em solid #dfe2e5;
+  max-width: 10rem;
+  color: #6a737d;
+  padding: 0 1em;
 }
 .codeBlock {
-    padding: 8px;
-    overflow: auto;
-    width: 14rem;
-    border: 1px solid #eeeed2;
-    background-color: #fcfcf7;
-    border-radius: 2px;
-    margin-top: 25px;
+  padding: 8px;
+  overflow: auto;
+  width: 14rem;
+  border: 1px solid #eeeed2;
+  background-color: #fcfcf7;
+  border-radius: 2px;
+  margin-top: 25px;
 }
 .tableBodyCell {
-    width: 20rem;
-    padding: 2rem 0;
+  width: 20rem;
+  padding: 2rem 0;
 }
 
 @media screen and (max-width: 768px) {
-    .tableBodyCell {
-        width: 100%;
-        height: auto;
-    }
+  .tableBodyCell {
+    width: 100%;
+    height: auto;
+  }
 
-    .blockWrapper {
-        justify-content: flex-end;
-    }
+  .blockWrapper {
+    justify-content: flex-end;
+  }
 }

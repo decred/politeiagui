@@ -4,11 +4,8 @@ import get from "lodash/fp/get";
 
 export const userByID = get(["users", "byID"]);
 
-export const makeGetUserByID = userID =>
-  createSelector(
-    userByID,
-    users => users[userID] || null
-  );
+export const makeGetUserByID = (userID) =>
+  createSelector(userByID, (users) => users[userID] || null);
 
 export const currentUserID = get(["users", "currentUserID"]);
 
@@ -18,13 +15,8 @@ export const currentUser = createSelector(
   (users, userID) => users[userID]
 );
 
-const createUserSelectors = keys =>
-  keys.map(key =>
-    createSelector(
-      currentUser,
-      user => user && user[key]
-    )
-  );
+const createUserSelectors = (keys) =>
+  keys.map((key) => createSelector(currentUser, (user) => user && user[key]));
 
 export const [
   currentUserEmail,
@@ -50,10 +42,10 @@ export const [
 
 export const currentUserPaywallAmount = createSelector(
   currentUser,
-  user => user && user.paywallamount / 100000000
+  (user) => user && user.paywallamount / 100000000
 );
 
 export const currentUserPreferences = createSelector(
   currentUser,
-  user => user && emailNotificationsToPreferences(user.emailnotifications)
+  (user) => user && emailNotificationsToPreferences(user.emailnotifications)
 );

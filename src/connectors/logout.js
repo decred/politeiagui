@@ -8,7 +8,7 @@ export default connect(
     isLoading: sel.isApiRequestingLogout,
     error: sel.apiLogoutError
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onLogout: act.onLogout

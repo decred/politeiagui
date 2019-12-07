@@ -3,7 +3,7 @@ import React from "react";
 import useFaucet from "./hooks";
 import styles from "./PaymentFaucet.module.css";
 
-const FAUCET_BASE_URL = "https://testnet.dcrdata.org/explorer/tx";
+const FAUCET_BASE_URL = "https://testnet.decred.org/explorer/tx";
 const getFaucetUrl = txid => `${FAUCET_BASE_URL}/${txid}`;
 
 const PaymentFaucet = ({ address, amount }) => {
