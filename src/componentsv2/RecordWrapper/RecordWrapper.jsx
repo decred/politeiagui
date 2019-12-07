@@ -136,12 +136,10 @@ export const Header = React.memo(function Header({
 
 export const ChartsLink = ({ token }) => {
   const { apiInfo } = useLoader();
-  const { theme, themeName } = useTheme();
+  const { theme } = useTheme();
   const hoverColor = getThemeProperty(theme, "color-gray");
-  const isDarkTheme = themeName === "dark";
-  const defaultColor =  isDarkTheme ? getThemeProperty(theme, "dark-icon-color") : undefined;
   const [ref, isHovered] = useHover();
-  const iconColor = isHovered ? hoverColor : defaultColor;
+  const iconColor = isHovered ? hoverColor : undefined;
   const hostName = apiInfo.testnet ? "testnet.dcrdata.org" : "dcrdata.decred.org";
 
   return (
@@ -165,12 +163,10 @@ export const GithubLink = ({ token }) => {
   const { testnetGitRepository, mainnetGitRepository } = useConfig();
   const { apiInfo } = useLoader();
   const repoURL = apiInfo.testnet ? testnetGitRepository : mainnetGitRepository;
-  const { theme, themeName } = useTheme();
+  const { theme } = useTheme();
   const hoverColor = getThemeProperty(theme, "color-gray");
-  const isDarkTheme = themeName === "dark";
-  const defaultColor =  isDarkTheme ? getThemeProperty(theme, "dark-icon-color") : undefined;
   const [ref, isHovered] = useHover();
-  const iconColor = isHovered ? hoverColor : defaultColor;
+  const iconColor = isHovered ? hoverColor : undefined;
 
   return (
     <Tooltip
@@ -186,13 +182,11 @@ export const GithubLink = ({ token }) => {
 };
 
 export const CommentsLink = ({ numOfComments, url }) => {
-  const { themeName, theme } = useTheme();
+  const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
-  const defaultBgColor =  isDarkTheme ? getThemeProperty(theme, "text-color") : undefined;
-  const defaultColor =  isDarkTheme ? getThemeProperty(theme, "dark-icon-color") : undefined;
   return (
   <Link to={url} gray={!isDarkTheme} dark={isDarkTheme} className={styles.commentsLink}>
-    <Icon type="discuss" backgroundColor={defaultBgColor} iconColor={defaultColor} className="margin-right-s" />
+    <Icon type="discuss" className="margin-right-s" />
     <span className={isDarkTheme && styles.darkCommentsNumber}>{numOfComments}</span>
     Comments
   </Link>);

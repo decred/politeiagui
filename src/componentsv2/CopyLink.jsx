@@ -5,12 +5,10 @@ import IconButton from "src/componentsv2/IconButton";
 import CopyToClipboard from "src/componentsv2/CopyToClipboard";
 
 const CopyLink = ({ url, className }) => {
-  const { theme, themeName } = useTheme();
+  const { theme } = useTheme();
   const hoverColor = getThemeProperty(theme, "color-gray");
-  const isDarkTheme = themeName === "dark";
-  const defaultColor =  isDarkTheme ? getThemeProperty(theme, "dark-icon-color") : undefined;
   const [ref, isHovered] = useHover();
-  const iconColor = isHovered ? hoverColor : defaultColor;
+  const iconColor = isHovered ? hoverColor : undefined;
   return (
     <CopyToClipboard value={url} tooltipText="Copy link">
       {({ onCopyToClipboard }) => (
