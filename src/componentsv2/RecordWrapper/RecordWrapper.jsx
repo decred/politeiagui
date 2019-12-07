@@ -26,17 +26,20 @@ export const Author = ({ username, id }) => (
   <Link to={`/user/${id}`}>{username}</Link>
 );
 
-export const Event = ({ event, timestamp }) => (
+export const Event = ({ event, timestamp }) => {
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
+  return (
   <DateTooltip timestamp={timestamp} placement="bottom">
     {({ timeAgo }) => (
       <Text
         id={`event-${event}-${timestamp}`}
-        color="gray"
+        color={ isDarkTheme ? "secondaryDark" : "gray" }
         truncate
       >{`${event} ${timeAgo}`}</Text>
     )}
-  </DateTooltip>
-);
+  </DateTooltip>);
+};
 
 export const RecordToken = ({ token }) => {
   return (
