@@ -63,11 +63,16 @@ export const Title = ({ children, url, ...props }) => {
 };
 
 export const Subtitle = ({ children }) => {
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
   return (
     <Join
       className={classNames("margin-top-s", styles.subtitleWrapper)}
       SeparatorComponent={() => (
-        <span className="margin-left-s margin-right-s color-gray">•</span>
+        <span className={classNames(
+          isDarkTheme ? "color-primary-dark" : "color-gray",
+          "margin-left-s margin-right-s")}>
+            •</span>
       )}
     >
       {children}
@@ -131,10 +136,12 @@ export const Header = React.memo(function Header({
 
 export const ChartsLink = ({ token }) => {
   const { apiInfo } = useLoader();
-  const { theme } = useTheme();
+  const { theme, themeName } = useTheme();
   const hoverColor = getThemeProperty(theme, "color-gray");
+  const isDarkTheme = themeName === "dark";
+  const defaultColor =  isDarkTheme ? getThemeProperty(theme, "dark-icon-color") : undefined;
   const [ref, isHovered] = useHover();
-  const iconColor = isHovered ? hoverColor : undefined;
+  const iconColor = isHovered ? hoverColor : defaultColor;
   const hostName = apiInfo.testnet ? "testnet.dcrdata.org" : "dcrdata.decred.org";
 
   return (

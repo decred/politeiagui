@@ -1,11 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { classNames } from "pi-ui";
+import { classNames, useTheme } from "pi-ui";
 import styles from "./Join.module.css";
 
-const DefaultSeparator = () => (
-  <span className="margin-left-s margin-right-s color-gray">•</span>
-);
+const DefaultSeparator = () => {
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
+  return (<span className={classNames(
+    isDarkTheme ? "color-primary-dark" : "color-gray",
+    "margin-left-s margin-right-s")}>
+      •</span>
+    );
+};
 
 export const Join = ({ children, SeparatorComponent, className }) => {
   const childrenArray = React.Children.toArray(children).filter(c => !!c);
