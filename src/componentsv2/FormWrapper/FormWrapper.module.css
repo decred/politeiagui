@@ -27,12 +27,12 @@
 }
 
 .footer {
-    width: 100%;
-    display: flex;
-    padding: 4rem 0;
-    border-top: 1px solid var(--separator-color);
-    justify-content: space-between;
-    flex-wrap: wrap;
+  width: 100%;
+  display: flex;
+  padding: 4rem 0;
+  border-top: 1px solid var(--separator-color);
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .loader {

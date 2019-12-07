@@ -159,13 +159,13 @@
 }
 
 .color-primary-dark {
-    color: var(--color-primary-dark);
+  color: var(--color-primary-dark);
 }
 
 /* container: class to be aplied to all major content wrappers */
 .container {
   padding: 2rem var(--container-padding-right) 2rem
-    var(--container-padding-left);
+  var(--container-padding-left);
 }
 
 .main {

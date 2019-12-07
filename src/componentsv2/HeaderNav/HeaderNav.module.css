@@ -29,12 +29,12 @@
 }
 
 .rightGreyBorder {
-    border-right: 1px solid var(--separator-color);
+  border-right: 1px solid var(--separator-color);
 }
 
 .activeNavLink {
-    color: var(--color-primary-dark);
-    border-bottom: 4px solid var(--active-nav-border-color);
+  color: var(--color-primary-dark);
+  border-bottom: 4px solid var(--active-nav-border-color);
 }
 
 ul.dropdownList {
@@ -42,13 +42,13 @@ ul.dropdownList {
 }
 
 .themeToggleWrapper {
-    display: flex;
-    align-items: center;
-    width: 14rem;
+  display: flex;
+  align-items: center;
+  width: 14rem;
 }
   
 .themeToggleLabel {
-    margin-left: 1rem;
+  margin-left: 1rem;
 }
 
 @media screen and (max-width: 1000px) {

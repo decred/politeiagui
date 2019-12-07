@@ -13,7 +13,7 @@
 }
 
 .version {
-    line-height: var(--spacing-2);
+  line-height: var(--spacing-2);
 }
 
 .versionPicker > div > span {
@@ -70,7 +70,7 @@ span.statusTag > span {
 }
 
 .votesReceived {
-    color: var(--text-active-tab-color) !important;
+  color: var(--text-active-tab-color) !important;
 }
 
 @media screen and (max-width: 560px) {
