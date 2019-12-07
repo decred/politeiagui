@@ -138,7 +138,7 @@ const Proposal = React.memo(function Proposal({
                     <Text
                       id={`proposal-${proposalToken}-version`}
                       className={classNames(styles.version)}
-                      color={ isDarkTheme ? "secondaryDark" : "gray" }
+                      color={ isDarkTheme ? "primaryDark" : "gray" }
                       truncate
                     >{`version ${version}`}</Text>
                   )}
@@ -162,7 +162,7 @@ const Proposal = React.memo(function Proposal({
                       <Text
                         className={styles.timeLeft}
                         size="small"
-                        color={ isDarkTheme ? "secondaryDark" : "gray" }
+                        color={ isDarkTheme ? "primaryDark" : "gray" }
                       >
                         {`vote end${isVoteActive ? "s" : "ed"} ${voteTime}`}
                       </Text>
@@ -172,7 +172,7 @@ const Proposal = React.memo(function Proposal({
                         <Text
                           className="hide-on-mobile"
                           size="small"
-                          color={ isDarkTheme ? "secondaryDark" : "gray" }
+                          color={ isDarkTheme ? "primaryDark" : "gray" }
                         >
                           {`${voteBlocksLeft} blocks left`}
                         </Text>

@@ -57,7 +57,7 @@ const ModalDiff = ({
             {proposalDetails.version && (
               <Text
                 id={`proposal-${proposalDetails.proposalToken}-version`}
-                color={ isDarkTheme ? "secondaryDark" : "gray" }
+                color={ isDarkTheme ? "primaryDark" : "gray" }
                 className={styles.version}
               >{`version ${proposalDetails.version}`}</Text>
             )}

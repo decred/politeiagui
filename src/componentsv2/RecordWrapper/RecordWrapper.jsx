@@ -34,7 +34,7 @@ export const Event = ({ event, timestamp }) => {
     {({ timeAgo }) => (
       <Text
         id={`event-${event}-${timestamp}`}
-        color={ isDarkTheme ? "secondaryDark" : "gray" }
+        color={ isDarkTheme ? "primaryDark" : "gray" }
         truncate
       >{`${event} ${timeAgo}`}</Text>
     )}
@@ -158,10 +158,12 @@ export const GithubLink = ({ token }) => {
   const { testnetGitRepository, mainnetGitRepository } = useConfig();
   const { apiInfo } = useLoader();
   const repoURL = apiInfo.testnet ? testnetGitRepository : mainnetGitRepository;
-  const { theme } = useTheme();
+  const { theme, themeName } = useTheme();
   const hoverColor = getThemeProperty(theme, "color-gray");
+  const isDarkTheme = themeName === "dark";
+  const defaultColor =  isDarkTheme ? getThemeProperty(theme, "dark-icon-color") : undefined;
   const [ref, isHovered] = useHover();
-  const iconColor = isHovered ? hoverColor : undefined;
+  const iconColor = isHovered ? hoverColor : defaultColor;
 
   return (
     <Tooltip
@@ -177,11 +179,13 @@ export const GithubLink = ({ token }) => {
 };
 
 export const CommentsLink = ({ numOfComments, url }) => {
-  const { themeName } = useTheme();
+  const { themeName, theme } = useTheme();
   const isDarkTheme = themeName === "dark";
+  const defaultBgColor =  isDarkTheme ? getThemeProperty(theme, "text-color") : undefined;
+  const defaultColor =  isDarkTheme ? getThemeProperty(theme, "dark-icon-color") : undefined;
   return (
   <Link to={url} gray={!isDarkTheme} dark={isDarkTheme} className={styles.commentsLink}>
-    <Icon type="discuss" className="margin-right-s" />
+    <Icon type="discuss" backgroundColor={defaultBgColor} iconColor={defaultColor} className="margin-right-s" />
     <span className={isDarkTheme && styles.darkCommentsNumber}>{numOfComments}</span>
     Comments
   </Link>);

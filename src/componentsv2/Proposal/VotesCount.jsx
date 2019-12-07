@@ -29,11 +29,11 @@ const VotesCount = ({
           )}
           <Tooltip className={styles.quorumTooltip} content={`${votesReceived} votes cast, quorum requirement is ${quorumVotes} votes`}>
             <Text className={styles.votesReceived} size="small">{votesReceived}</Text>
-            <Text color={ isDarkTheme ? "secondaryDark" : "gray" } size="small">/{`${quorumVotes} votes`}</Text>
+            <Text color={ isDarkTheme ? "primaryDark" : "gray" } size="small">/{`${quorumVotes} votes`}</Text>
           </Tooltip>
         </>
       ) : isVoteActive ? (
-        <Text color={ isDarkTheme ? "secondaryDark" : "gray" } size="small">
+        <Text color={ isDarkTheme ? "primaryDark" : "gray" } size="small">
           {votesLeft > 0 ? votesLeft : ""}
           {" votes left"}
         </Text>
