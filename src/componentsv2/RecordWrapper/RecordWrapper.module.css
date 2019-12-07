@@ -12,6 +12,11 @@
   color: var(--color-gray) !important;
 }
 
+.darkAbandonedTitle,
+.darkAbandonedTitle > h2 {
+  color: var(--tab-count-background) !important;
+}
+
 .header {
   display: flex;
   flex-direction: column;
