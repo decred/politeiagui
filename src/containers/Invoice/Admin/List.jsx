@@ -44,7 +44,7 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
           <HelpMessage>
             {invoices.length
               ? "There are no invoices matching the selected filters"
-              : "You don't have any invoices yet"}
+              : "There are no invoices submitted yet"}
           </HelpMessage>
         )
       );

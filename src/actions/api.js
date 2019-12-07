@@ -926,7 +926,9 @@ export const onVerifyUserKey = (currentUserEmail, verificationtoken) =>
 export const onSetInvoiceStatus = (token, status, version, reason = "") =>
   withCsrf((dispatch, getState, csrf) => {
     const email = sel.currentUserEmail(getState());
-    dispatch(act.REQUEST_SETSTATUS_INVOICE({ status, token, reason }));
+    dispatch(
+      act.REQUEST_SETSTATUS_INVOICE({ status, token, reason, version, email })
+    );
     return api
       .invoiceSetStatus(email, csrf, token, version, status, reason)
       .then(({ invoice }) => {
