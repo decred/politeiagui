@@ -27,9 +27,8 @@ const App = () => {
   return (
     <ThemeProvider
       themes={{ light: defaultLightTheme, dark: defaultDarkTheme }}
-      defaultThemeName="dark" // todo: change back to light
-      fontConfig={fontConfig}
-    >
+      defaultThemeName="light"
+      fontConfig={fontConfig}>
       <Config>
         <ReduxProvider>
           <Loader>

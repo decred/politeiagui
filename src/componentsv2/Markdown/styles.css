@@ -1,7 +1,7 @@
 .markdown-body {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-  color: #24292e;
+  color: var(--text-color);
   font-family: "Source Sans Prop", sans-serif;
   font-size: var(--font-size-regular);
   line-height: 1.5;
