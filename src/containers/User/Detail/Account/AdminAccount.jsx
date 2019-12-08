@@ -75,7 +75,7 @@ const AdminAccount = ({
     closePasswordModal
   ] = useBooleanState(false);
 
-  const { onChangePassword, changePasswordValidationSchema } = useChangePassword();
+  const { onChangePassword, validationSchema: changePasswordValidationSchema } = useChangePassword();
 
   return (
     <Card className={classNames("container", "margin-bottom-m")}>
