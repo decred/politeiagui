@@ -190,7 +190,7 @@ export const CommentsLink = ({ numOfComments, url }) => {
   return (
   <Link to={url} gray={!isDarkTheme} dark={isDarkTheme} className={styles.commentsLink}>
     <Icon type="discuss" className="margin-right-s" />
-    <span className={isDarkTheme && styles.darkCommentsNumber}>{numOfComments}</span>
+    <span className={classNames(isDarkTheme && styles.darkCommentsNumber)}>{numOfComments}</span>
     Comments
   </Link>);
 };
