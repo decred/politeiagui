@@ -63,8 +63,8 @@ export const invoiceValidationSchema = ({
             .matches(
               ...yupFieldMatcher("Description", invoicefieldsupportedchars)
             ),
-          labour: Yup.number(),
-          expense: Yup.number()
+          labor: Yup.number().min(0),
+          expenses: Yup.number().min(0)
         })
       )
       .min(1),

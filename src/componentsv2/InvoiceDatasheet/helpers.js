@@ -61,7 +61,7 @@ export const generateBlankLineItem = () => ({
   subdomain: "",
   description: "",
   proposaltoken: "",
-  labor: "",
+  labor: 0,
   expenses: "",
   subtotal: ""
 });

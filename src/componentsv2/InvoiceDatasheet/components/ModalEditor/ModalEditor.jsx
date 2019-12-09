@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo } from "react";
+import React, { createContext, useContext, useMemo, useEffect } from "react";
 import { Modal, Button } from "pi-ui";
 import ModalProvider from "src/componentsv2/ModalProvider";
 import FormWrapper from "src/componentsv2/FormWrapper";
@@ -19,11 +19,24 @@ export const ModalEditorProvider = ({ children }) => {
   );
 };
 
-const KEYS_TO_STOP_PROPAGATION = [13, 37, 38, 39, 40];
+// key codes
+const ENTER_KEY = 13;
+const LEFT_ARROW_KEY = 37;
+const UP_ARROW_KEY = 38;
+const RIGHT_ARROW_KEY = 39;
+const DOWN_ARROW_KEY = 40;
+
+const KEYS_TO_STOP_PROPAGATION = [
+  ENTER_KEY,
+  LEFT_ARROW_KEY,
+  UP_ARROW_KEY,
+  RIGHT_ARROW_KEY,
+  DOWN_ARROW_KEY
+];
 
 const ModalEditor = ({ value, options, onCommit, onRevert, ...props }) => {
   function handleDone(values, { resetForm }) {
-    onCommit && onCommit(values.text);
+    onCommit && onCommit(values.description);
     resetForm();
     props.onClose();
   }
@@ -43,23 +56,45 @@ const ModalEditor = ({ value, options, onCommit, onRevert, ...props }) => {
     }
   }
 
+  useEffect(() => {
+    const el = document.getElementById("itemDescription");
+    if (el && props.show) {
+      setTimeout(() => {
+        el.focus();
+      }, 100);
+    }
+  }, [props.show]);
+
   return (
     <>
       <Modal {...props} title="Edit description">
         <FormWrapper
           onSubmit={handleDone}
           enableReinitialize
-          initialValues={{ text: value }}
+          initialValues={{ description: value || "" }}
         >
-          {({ Form, Actions, values, handleSubmit, handleChange }) => {
+          {({
+            Form,
+            Actions,
+            values,
+            handleSubmit,
+            setFieldValue,
+            handleBlur
+          }) => {
+            const handleChangeTextArea = e => {
+              e.stopPropagation();
+              setFieldValue("description", e.target.value);
+            };
             return (
               <Form>
                 <textarea
+                  id="itemDescription"
                   name="text"
                   onKeyDown={onKeyDown}
                   className={styles.textarea}
-                  onChange={handleChange}
+                  onChange={handleChangeTextArea}
                   value={values.text}
+                  onBlur={handleBlur}
                 />
                 <Actions>
                   <Button kind="secondary" type="button" onClick={handleCancel}>

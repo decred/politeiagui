@@ -4,18 +4,21 @@ import styles from "./CellRenderer.module.css";
 
 const CellRenderer = props => {
   const {
-    cell: { error }
+    cell: { error, readOnly }
   } = props;
   return (
     <td
-      className={classNames(props.className, error && styles.erroredCell)}
+      className={classNames(
+        props.className,
+        !readOnly && error && styles.erroredCell
+      )}
       onMouseDown={props.onMouseDown}
       onMouseOver={props.onMouseOver}
       onDoubleClick={props.onDoubleClick}
       onContextMenu={props.onContextMenu}
     >
       {props.children}
-      {error && (
+      {error && !readOnly && (
         <Tooltip
           className={styles.errorTooltip}
           contentClassName={styles.errorTooltipContent}
