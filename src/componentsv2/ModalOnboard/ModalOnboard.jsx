@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Button, P } from "pi-ui";
+import { Modal, Button } from "pi-ui";
 import StaticMarkdown from "src/componentsv2/StaticMarkdown";
 import { useConfig } from "src/containers/Config";
 

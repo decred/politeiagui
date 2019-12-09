@@ -25,10 +25,15 @@ const fontConfig = {
   format: "truetype"
 };
 
+const themes = {
+  light: defaultLightTheme,
+  dark: defaultDarkTheme
+};
+
 const App = () => {
   return (
     <ThemeProvider
-      themes={{ light: defaultLightTheme, dark: defaultDarkTheme }}
+      themes={themes}
       defaultThemeName="light"
       fontConfig={fontConfig}
     >
