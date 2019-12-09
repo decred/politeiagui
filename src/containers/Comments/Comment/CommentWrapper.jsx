@@ -52,7 +52,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
   }, [showReplies]);
 
   const handleSubmitComment = useCallback(
-    async comment => {
+    comment => {
       return onSubmitComment({
         comment,
         token,
