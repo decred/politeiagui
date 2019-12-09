@@ -55,8 +55,8 @@
   "scripts": {
     "mockapi": "node mockapi.js",
     "analyze": "source-map-explorer build/static/js/main.*",
-    "start": "cross-env HTTPS=true react-app-rewired start",
-    "start:cms": "REACT_APP_PRESET='CMS' cross-env HTTPS=true react-app-rewired start",
+    "start": "REACT_APP_WEBSITE_NAME='Politeia' cross-env HTTPS=true react-app-rewired start",
+    "start:cms": "REACT_APP_PRESET='cms' REACT_APP_WEBSITE_NAME='Contractor Managment System' cross-env HTTPS=true react-app-rewired start",
     "start-redux-logger": "REACT_APP_USE_REDUX_LOGGER=true cross-env HTTPS=true react-app-rewired start",
     "uidev": "concurrently \"node mockapi.js\" \"react-app-rewired start\"",
     "build": "react-app-rewired build",

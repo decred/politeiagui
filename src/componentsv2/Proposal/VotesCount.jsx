@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Text, useMediaQuery, Tooltip } from "pi-ui";
-import iconSearchSmall from "src/assets/search-small.svg";
+import iconSearchSmall from "src/assets/images/search-small.svg";
 import styles from "./Proposal.module.css";
 
 const VotesCount = ({
@@ -25,7 +25,10 @@ const VotesCount = ({
               src={iconSearchSmall}
             />
           )}
-          <Tooltip className={styles.quorumTooltip} content={`${votesReceived} votes cast, quorum requirement is ${quorumVotes} votes`}>
+          <Tooltip
+            className={styles.quorumTooltip}
+            content={`${votesReceived} votes cast, quorum requirement is ${quorumVotes} votes`}
+          >
             <Text size="small">{votesReceived}/</Text>
             <Text color="gray" size="small">{`${quorumVotes} votes`}</Text>
           </Tooltip>

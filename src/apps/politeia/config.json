@@ -1,0 +1,21 @@
+{
+    "title": "Politeia",
+    "logoLight": "pi-logo-light.svg",
+    "logoDark": "pi-logo-dark.svg",
+    "paywallContent": "paywall-politeia",
+    "recordType": "proposal",
+    "enableAdminInvite": false,
+    "enableCommentVote": true,
+    "enableCredits": true,
+    "enablePaywall": true,
+    "privacyPolicyContent": "privacy-policy",
+    "testnetGitRepository":
+      "https://github.com/decred-proposals/testnet3/tree/master",
+    "mainnetGitRepository":
+      "https://github.com/decred-proposals/mainnet/tree/master",
+    "navMenuPaths": [
+      { "label": "Proposals", "path": "/", "admin": false },
+      { "label": "Admin", "path": "/proposals/unvetted", "admin": true },
+      { "label": "Search for users", "path": "/user/search", "admin": true }
+    ]
+  }

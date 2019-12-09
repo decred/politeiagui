@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
 import PropTypes from "prop-types";
-import { constants } from "./presets";
+import { constants } from "./helpers";
 
 export const ConfigContext = createContext();
 

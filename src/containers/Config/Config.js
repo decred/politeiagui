@@ -1,67 +1,23 @@
 import dotenvParse from "dotenv-parse-variables";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ConfigProvider } from "./ConfigProvider";
-import * as presets from "./presets";
+import politeiaConfig from "src/apps/politeia/config.json";
 
-const defaultPreset = presets.POLITEIA;
+const env = dotenvParse(process.env);
+const getEnvVariable = key => env[`REACT_APP_${key}`];
+
+const defaultPreset = politeiaConfig;
 
 /**
- * loadConfig will override any default option with the options specified
- * through the enviroment variables. If a preset name is specified, all
- * other options will be ignored and the preset will be returned instead.
+ * loadConfig will try to import the config.json from 'src/apps/<preset_name'
+ * if the preset name is not provided, it will return the default config.
  */
-const loadConfig = () => {
-  const {
-    isStaging: defaultStagingValue,
-    title: defaultTitleValue,
-    logoAsset: defaultLogoAsset,
-    recordType: defaultRecordType,
-    enableAdminInvite: defaultEnableAdminInvite,
-    enableCommentVote: defaultEnableCommentVote,
-    enableCredits: defaultEnableCredits,
-    enablePaywall: defaultEnablePaywall,
-    privacyPolicyContent: defaultprivacyPolicyContent,
-    aboutContent: defaultAboutContent,
-    paywallContent: defaultPaywallContent,
-    testnetGitRepository: defaultTestnetGitRepository,
-    mainnetGitRepository: defaultMainnetGitRepository,
-    navMenuPaths
-  } = defaultPreset;
-  const env = dotenvParse(process.env);
-  const getConf = key => env[`REACT_APP_${key}`];
+const loadConfig = async () => {
+  const presetName = getEnvVariable("PRESET");
+  if (!presetName) return defaultPreset;
 
-  const presetName = getConf("PRESET");
-  if (presetName) {
-    if (!presets[presetName]) {
-      throw new Error(
-        "Invalid preset. Valid presets name are POLITEIA and CMS."
-      );
-    }
-
-    return presets[presetName];
-  }
-
-  return {
-    isStaging: getConf("IS_STAGING") || defaultStagingValue,
-    title: getConf("TITLE") || defaultTitleValue,
-    logoAsset: getConf("LOGO_ASSET") || defaultLogoAsset,
-    recordType: getConf("RECORD_TYPE") || defaultRecordType,
-    enableAdminInvite:
-      getConf("ENABLE_ADMIN_INVITE") || defaultEnableAdminInvite,
-    enableCommentVote:
-      getConf("ENABLE_COMMENT_VOTE") || defaultEnableCommentVote,
-    enableCredits: getConf("ENABLE_CREDITS") || defaultEnableCredits,
-    enablePaywall: getConf("ENABLE_PAYWALL") || defaultEnablePaywall,
-    privacyPolicyContent:
-      getConf("PRIVACY_POLICY_CONTENT") || defaultprivacyPolicyContent,
-    aboutContent: getConf("ABOUT_CONTENT") || defaultAboutContent,
-    paywallContent: getConf("PAYWALL_CONTENT") || defaultPaywallContent,
-    testnetGitRepository:
-      getConf("TESTNET_GIT_REPOSITORY") || defaultTestnetGitRepository,
-    mainnetGitRepository:
-      getConf("MAINNET_GIT_REPOSITORY") || defaultMainnetGitRepository,
-    navMenuPaths
-  };
+  const configModule = await import(`src/apps/${presetName}/config.json`);
+  return configModule.default;
 };
 
 /**
@@ -69,8 +25,30 @@ const loadConfig = () => {
  * if any is specified.
  */
 const Config = ({ children }) => {
-  const configOptions = loadConfig();
-  return <ConfigProvider {...configOptions}>{children}</ConfigProvider>;
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [configOptions, setConfig] = useState(null);
+  useEffect(() => {
+    async function initConfig() {
+      try {
+        setLoading(true);
+        const cfg = await loadConfig();
+        setLoading(false);
+        setConfig(cfg);
+      } catch (e) {
+        setLoading(false);
+        setError(e);
+      }
+    }
+    initConfig();
+  }, []);
+
+  return (
+    <ConfigProvider {...{ ...configOptions }}>
+      {!loading && !error && configOptions && children}
+      {error}
+    </ConfigProvider>
+  );
 };
 
 export default Config;
