@@ -45,6 +45,7 @@ pre {
 }
 
 :global(span.value-viewer) {
+  max-height: 10rem;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }

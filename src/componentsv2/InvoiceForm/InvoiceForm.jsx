@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { BoxTextInput, Button, Message } from "pi-ui";
 import { Formik } from "formik";
 import { withRouter } from "react-router-dom";
@@ -27,6 +27,13 @@ const InvoiceForm = React.memo(function InvoiceForm({
   touched,
   isValid
 }) {
+  // scroll to top in case of global error
+  useEffect(() => {
+    if (errors.global) {
+      window.scrollTo(0, 0);
+    }
+  }, [errors]);
+
   const SubmitButton = () => (
     <Button
       type="submit"
