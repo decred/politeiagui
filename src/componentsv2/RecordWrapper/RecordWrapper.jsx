@@ -128,11 +128,11 @@ export const Header = React.memo(function Header({
 
 export const ChartsLink = ({ token }) => {
   const { apiInfo } = useLoader();
-  const theme = useTheme();
+  const { theme } = useTheme();
   const hoverColor = getThemeProperty(theme, "color-gray");
   const [ref, isHovered] = useHover();
   const iconColor = isHovered ? hoverColor : undefined;
-  const hostName = apiInfo.testnet ? "testnet" : "explorer";
+  const hostName = apiInfo.testnet ? "testnet.decred.org" : "dcrdata.decred.org";
 
   return (
     <Tooltip
@@ -143,7 +143,7 @@ export const ChartsLink = ({ token }) => {
       <UILink
         ref={ref}
         target="_blank"
-        href={`https://${hostName}.dcrdata.org/proposal/${token}`}
+        href={`https://${hostName}/proposal/${token}`}
       >
         <Icon type="chart" iconColor={iconColor} />
       </UILink>
@@ -155,7 +155,7 @@ export const GithubLink = ({ token }) => {
   const { testnetGitRepository, mainnetGitRepository } = useConfig();
   const { apiInfo } = useLoader();
   const repoURL = apiInfo.testnet ? testnetGitRepository : mainnetGitRepository;
-  const theme = useTheme();
+  const { theme } = useTheme();
   const hoverColor = getThemeProperty(theme, "color-gray");
   const [ref, isHovered] = useHover();
   const iconColor = isHovered ? hoverColor : undefined;

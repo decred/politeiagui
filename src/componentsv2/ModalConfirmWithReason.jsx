@@ -5,8 +5,8 @@ import {
   Modal,
   TextInput,
   Icon,
-  useTheme,
-  getThemeProperty
+  getThemeProperty,
+  useTheme
 } from "pi-ui";
 import PropTypes from "prop-types";
 import FormWrapper from "src/componentsv2/FormWrapper";
@@ -43,7 +43,7 @@ const ModalConfirmWithReason = ({
     }
   }, [show]);
 
-  const theme = useTheme();
+  const { theme } = useTheme();
   const colorGray = getThemeProperty(theme, "color-gray");
   const colorPrimaryDark = getThemeProperty(theme, "color-primary-dark");
 

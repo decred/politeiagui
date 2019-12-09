@@ -95,7 +95,7 @@ const ManageUserTab = ({
     await onManageCmsUser(args);
     setSuccess(true);
   }, [
-    user.id,
+    user.userid,
     contractorDomain,
     contractorType,
     newSupervisorIds,
@@ -116,7 +116,7 @@ const ManageUserTab = ({
               body="User Updated Successfully"
             />
           )}
-          <Field label="User ID">{user.id}</Field>
+          <Field label="User ID">{user.userid}</Field>
           <FieldSeparator />
           <Field label="Contractor Type">
             <select

@@ -89,10 +89,14 @@ describe("test app actions (actions/app.js)", () => {
     lineitems: [],
     files: []
   };
+
+  beforeAll(() => {
+    // send status 200 to every unmatched request
+    fetchMock.post("/", {}, { overwriteRoutes: true }).catch({});
+  });
+
   beforeEach(() => {
-    //send status 200 to every unmatched request
     fetchMock.restore();
-    fetchMock.post("/", {}).catch({});
   });
 
   test("set reply parent and reset form reply", async () => {
@@ -249,7 +253,7 @@ describe("test app actions (actions/app.js)", () => {
   });
 
   test("on save draft invoice action", () => {
-    expect(app.onSaveDraftInvoice(FAKE_PROPOSAL)).toDispatchActions(
+    expect(app.onSaveDraftInvoice(FAKE_INVOICE)).toDispatchActions(
       [
         {
           type: act.SAVE_DRAFT_INVOICE,
