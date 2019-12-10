@@ -5,7 +5,7 @@ import {
   useMediaQuery,
   CopyableText
 } from "pi-ui";
-import React from "react";
+import React, { useMemo } from "react";
 import RecordWrapper from "../RecordWrapper";
 import { getInvoiceStatusTagProps } from "./helpers";
 import styles from "./Invoice.module.css";
@@ -17,11 +17,12 @@ import {
 import Field from "./Field";
 import InvoiceDatasheet from "../InvoiceDatasheet";
 import { convertAtomsToDcr } from "src/utilsv2";
+import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
 
 const Invoice = ({ invoice, extended, collapseBodyContent }) => {
   const {
     censorshiprecord,
-    // file,
+    file,
     input,
     // status,
     timestamp,
@@ -45,6 +46,12 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
   const totalExpenses = payout && payout.expensetotal / 100;
   const totalAmount = payout && payout.total / 100;
   const totalDcrAmount = payout && convertAtomsToDcr(payout.dcrtotal);
+
+  // record attchments without the invoice file
+  const invoiceAttachments = useMemo(
+    () => file.filter(f => !f.mime.includes("text/")),
+    [file]
+  );
 
   return (
     <RecordWrapper>
@@ -133,6 +140,19 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
                   <Field label="Amount:" value={`$${totalAmount}`} />
                   <Field label="Amount (dcr):" value={totalDcrAmount} />
                 </Row>
+                {extended && !!invoiceAttachments.length && (
+                  <Row
+                    className={styles.filesRow}
+                    justify="left"
+                    topMarginSize="s"
+                  >
+                    <ThumbnailGrid
+                      value={invoiceAttachments}
+                      onClick={() => null}
+                      viewOnly={true}
+                    />
+                  </Row>
+                )}
                 <InvoiceDatasheet
                   value={invoice && invoice.input.lineitems}
                   readOnly
