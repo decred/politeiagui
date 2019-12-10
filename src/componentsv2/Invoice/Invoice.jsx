@@ -49,7 +49,7 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
 
   // record attchments without the invoice file
   const invoiceAttachments = useMemo(
-    () => file.filter(f => !f.mime.includes("text/")),
+    () => (file || []).filter(f => !f.mime.includes("text/")),
     [file]
   );
 
