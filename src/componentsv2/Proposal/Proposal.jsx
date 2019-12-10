@@ -1,4 +1,4 @@
-import { classNames, StatusBar, StatusTag, Text, useMediaQuery, useTheme } from "pi-ui";
+import { classNames, StatusBar, StatusTag, Text, useMediaQuery } from "pi-ui";
 import React, { useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
@@ -74,8 +74,6 @@ const Proposal = React.memo(function Proposal({
   const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
   const mobile = useMediaQuery("(max-width: 560px)");
   const [showSearchVotesModal, setShowSearchVotesModal] = useState(false);
-  const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
   function handleCloseSearchVotesModal() {
     setShowSearchVotesModal(false);
   }
@@ -139,7 +137,6 @@ const Proposal = React.memo(function Proposal({
                     <Text
                       id={`proposal-${proposalToken}-version`}
                       className={classNames(styles.version)}
-                      color={ isDarkTheme ? "primaryDark" : "gray" }
                       truncate
                     >{`version ${version}`}</Text>
                   )}
@@ -163,7 +160,6 @@ const Proposal = React.memo(function Proposal({
                       <Text
                         className={styles.timeLeft}
                         size="small"
-                        color={ isDarkTheme ? "primaryDark" : "gray" }
                       >
                         {`vote end${isVoteActive ? "s" : "ed"} ${voteTime}`}
                       </Text>
@@ -171,9 +167,10 @@ const Proposal = React.memo(function Proposal({
                     {isVoteActive && (
                       <>
                         <Text
-                          className="hide-on-mobile"
+                          className={classNames(
+                            "hide-on-mobile",
+                            styles.blocksLeft)}
                           size="small"
-                          color={ isDarkTheme ? "primaryDark" : "gray" }
                         >
                           {`${voteBlocksLeft} blocks left`}
                         </Text>

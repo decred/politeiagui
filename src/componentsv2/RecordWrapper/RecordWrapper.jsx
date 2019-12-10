@@ -27,14 +27,12 @@ export const Author = ({ username, id }) => (
 );
 
 export const Event = ({ event, timestamp }) => {
-  const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
   return (
   <DateTooltip timestamp={timestamp} placement="bottom">
     {({ timeAgo }) => (
       <Text
         id={`event-${event}-${timestamp}`}
-        color={ isDarkTheme ? "primaryDark" : "gray" }
+        className={styles.eventTooltip}
         truncate
       >{`${event} ${timeAgo}`}</Text>
     )}
@@ -66,16 +64,11 @@ export const Title = ({ children, isAbandoned, url, ...props }) => {
 };
 
 export const Subtitle = ({ children }) => {
-  const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
   return (
     <Join
       className={classNames("margin-top-s", styles.subtitleWrapper)}
       SeparatorComponent={() => (
-        <span className={classNames(
-          isDarkTheme ? "color-primary-dark" : "color-gray",
-          "margin-left-s margin-right-s")}>
-            •</span>
+        <span className="text-secondary-color margin-left-s margin-right-s">•</span>
       )}
     >
       {children}

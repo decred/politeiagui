@@ -1,14 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { classNames, useTheme } from "pi-ui";
+import { classNames } from "pi-ui";
 import styles from "./Join.module.css";
 
 const DefaultSeparator = () => {
-  const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
-  return (<span className={classNames(
-    isDarkTheme ? "color-primary-dark" : "color-gray",
-    "margin-left-s margin-right-s")}>
+  return (<span className="text-secondary-color margin-left-s margin-right-s">
       •</span>
     );
 };

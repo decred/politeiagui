@@ -27,6 +27,10 @@
   flex-wrap: wrap;
 }
 
+.eventTooltip {
+  color: var(--text-secondary-color) !important;
+}
+
 .status {
   position: absolute;
   right: 4rem;

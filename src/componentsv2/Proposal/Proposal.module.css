@@ -8,12 +8,18 @@
   margin-bottom: 10px;
 }
 
+.blocksLeft {
+  color: var(--text-secondary-color) !important;
+}
+
 .timeLeft {
   margin-top: 0.5rem;
+  color: var(--text-secondary-color) !important;
 }
 
 .version {
   line-height: var(--spacing-2);
+  color: var(--text-secondary-color) !important;
 }
 
 .versionPicker > div > span {
@@ -71,6 +77,14 @@ span.statusTag > span {
   white-space: nowrap;
   font-size: var(--font-size-small);
   color: var(--color-gray);
+}
+
+.votesQuorum {
+  color: var(--text-secondary-color) !important;
+}
+
+.votesLeft {
+  color: var(--text-secondary-color) !important;
 }
 
 .votesReceived {
