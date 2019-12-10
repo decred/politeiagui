@@ -6,7 +6,7 @@ import { Button, Message, Text, BoxTextInput, useMediaQuery } from "pi-ui";
 import { Row } from "src/componentsv2/layout";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/componentsv2/MarkdownEditor";
-import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
+import ThumbnailGrid from "src/componentsv2/Files";
 import AttachFileInput from "src/componentsv2/AttachFileInput";
 import ModalFullImage from "src/componentsv2/ModalFullImage";
 import ModalMDGuide from "src/componentsv2/ModalMDGuide";
@@ -123,17 +123,16 @@ const ProposalForm = React.memo(function ProposalForm({
           <SubmitButton />
         </Row>
       ) : (
-          <>
-            <Row topMarginSize="s" justify="right">
-              <DraftSaver submitSuccess={submitSuccess} />
-              <SubmitButton />
-            </Row>
-            <Row topMarginSize="s" justify="right">
-              <FormatHelpButton />
-            </Row>
-          </>
-        )}
-
+        <>
+          <Row topMarginSize="s" justify="right">
+            <DraftSaver submitSuccess={submitSuccess} />
+            <SubmitButton />
+          </Row>
+          <Row topMarginSize="s" justify="right">
+            <FormatHelpButton />
+          </Row>
+        </>
+      )}
     </form>
   );
 });

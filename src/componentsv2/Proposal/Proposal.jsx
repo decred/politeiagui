@@ -23,7 +23,7 @@ import VotesCount from "./VotesCount";
 import DownloadComments from "src/containers/Comments/Download";
 import ProposalActions from "./ProposalActions";
 import { useFullImageModal } from "src/componentsv2/ProposalForm/hooks";
-import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
+import ThumbnailGrid from "src/componentsv2/Files";
 import ModalFullImage from "src/componentsv2/ModalFullImage";
 import VersionPicker from "src/componentsv2/VersionPicker";
 import { useRouter } from "src/componentsv2/Router";
