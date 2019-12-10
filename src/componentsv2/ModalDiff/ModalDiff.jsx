@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Text, Tab, Tabs, useTheme } from "pi-ui";
+import { Modal, Text, Tab, Tabs } from "pi-ui";
 import PropTypes from "prop-types";
 import { DiffHTML, FilesDiff } from "src/componentsv2/Diff/Diff";
 import {
@@ -21,8 +21,6 @@ const ModalDiff = ({
   ...props
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
   useEffect(() => {
     setActiveTabIndex(0);
   }, [props.show]);
@@ -57,7 +55,6 @@ const ModalDiff = ({
             {proposalDetails.version && (
               <Text
                 id={`proposal-${proposalDetails.proposalToken}-version`}
-                color={ isDarkTheme ? "primaryDark" : "gray" }
                 className={styles.version}
               >{`version ${proposalDetails.version}`}</Text>
             )}
