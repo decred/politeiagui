@@ -3,11 +3,10 @@ import PropTypes from "prop-types";
 import { classNames } from "pi-ui";
 import styles from "./Join.module.css";
 
-const DefaultSeparator = () => {
-  return (<span className="text-secondary-color margin-left-s margin-right-s">
+const DefaultSeparator = () => (
+  <span className="text-secondary-color margin-left-s margin-right-s">
       •</span>
-    );
-};
+);
 
 export const Join = ({ children, SeparatorComponent, className }) => {
   const childrenArray = React.Children.toArray(children).filter(c => !!c);
