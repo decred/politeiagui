@@ -14,7 +14,7 @@ export const TextThumbnail = ({ file, viewOnly, onRemove }) => (
     <div className={styles.fileThumbnail}>
       <P className={styles.fileThumbnailText}>.txt</P>
     </div>
-    {!viewOnly && RemoveButton(file, onRemove)}
+    {!viewOnly && <RemoveButton file={file} onRemove={onRemove} />}
   </div>
 );
 

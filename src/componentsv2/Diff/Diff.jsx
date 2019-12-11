@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { classNames } from "pi-ui";
 import { diffWordsWithSpace } from "diff";
 import { arrayDiff, lineDiffFunc, getLineArray, getFilesDiff } from "./helpers";
@@ -7,6 +7,7 @@ import styles from "./Diff.module.css";
 import HelpMessage from "src/componentsv2/HelpMessage";
 import { ImageThumbnail, TextThumbnail } from "src/componentsv2/Files";
 import ModalFullImage from "src/componentsv2/ModalFullImage";
+import useBooleanState from "src/hooks/utils/useBooleanState";
 
 const handleDiffLine = (
   line,
@@ -76,25 +77,22 @@ export const DiffHTML = ({ oldTextBody, newTextBody }) => {
 };
 
 const FileWrapper = ({ file, className }) => {
-  const [showFullImageModal, setShowFullImageModal] = useState(false);
-  const showModal = file => () => {
-    setShowFullImageModal(file);
-  };
-  const closeModal = () => {
-    setShowFullImageModal(false);
-  };
+  const [showImageModal, openImageModal, closeImageModal] = useBooleanState(
+    false
+  );
+
   return file.mime.includes("image") ? (
     <>
       <ImageThumbnail
         className={className}
         file={file}
         viewOnly={true}
-        onClick={showModal}
+        onClick={openImageModal}
       />
       <ModalFullImage
         image={file}
-        show={!!showFullImageModal}
-        onClose={closeModal}
+        show={showImageModal}
+        onClose={closeImageModal}
       />
     </>
   ) : (

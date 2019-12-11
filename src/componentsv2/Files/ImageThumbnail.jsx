@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { classNames } from "pi-ui";
 import styles from "./Files.module.css";
@@ -10,23 +10,28 @@ export const ImageThumbnail = ({
   onClick,
   onRemove,
   className
-}) => (
-  <div
-    className={classNames(
-      styles.imageThumbnailWrapper,
-      viewOnly && styles.marginRight,
-      className
-    )}
-  >
-    <img
-      onClick={onClick(file)}
-      className={styles.imageThumbnail}
-      alt={file.name}
-      src={`data:${file.mime};base64,${file.payload}`}
-    />
-    {!viewOnly && <RemoveButton file={file} onRemove={onRemove} />}
-  </div>
-);
+}) => {
+  const handleClick = useCallback(() => {
+    onClick(file);
+  }, [onClick, file]);
+  return (
+    <div
+      className={classNames(
+        styles.imageThumbnailWrapper,
+        viewOnly && styles.marginRight,
+        className
+      )}
+    >
+      <img
+        onClick={handleClick}
+        className={styles.imageThumbnail}
+        alt={file.name}
+        src={`data:${file.mime};base64,${file.payload}`}
+      />
+      {!viewOnly && <RemoveButton file={file} onRemove={onRemove} />}
+    </div>
+  );
+};
 
 ImageThumbnail.propTypes = {
   file: PropTypes.object.isRequired,

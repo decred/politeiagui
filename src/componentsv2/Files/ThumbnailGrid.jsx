@@ -1,18 +1,30 @@
-import React from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { Row } from "../layout";
 import styles from "./Files.module.css";
 import ImageThumbnail from "./ImageThumbnail";
 import TextThumbnail from "./TextThumbnail";
+import useHighlightedItem from "src/hooks/utils/useHighlightItem";
+import ModalFullImage from "src/componentsv2/ModalFullImage";
 
 export const ThumbnailGrid = ({
   value = [],
-  onClick,
   onRemove,
   errors = [],
   viewOnly = false
 }) => {
+  const [
+    imageOnModal,
+    setImageOnModal,
+    closeImageOnModal
+  ] = useHighlightedItem();
   const files = value.filter(f => f.name !== "index.md");
+  const handleSetImageOnModal = useCallback(
+    file => {
+      setImageOnModal(file);
+    },
+    [setImageOnModal]
+  );
   return (
     <>
       <ThumbnailGridErrors errors={errors} />
@@ -27,7 +39,7 @@ export const ThumbnailGrid = ({
               key={`img-${key}`}
               file={f}
               viewOnly={viewOnly}
-              onClick={onClick}
+              onClick={handleSetImageOnModal}
               onRemove={onRemove}
             />
           ) : (
@@ -35,12 +47,16 @@ export const ThumbnailGrid = ({
               key={`txt-${key}`}
               file={f}
               viewOnly={viewOnly}
-              onClick={onClick}
               onRemove={onRemove}
             />
           )
         )}
       </Row>
+      <ModalFullImage
+        image={imageOnModal}
+        show={!!imageOnModal}
+        onClose={closeImageOnModal}
+      />
     </>
   );
 };
@@ -64,7 +80,7 @@ ThumbnailGrid.propTypes = {
   value: PropTypes.array,
   onClick: PropTypes.func,
   onRemove: PropTypes.func,
-  errors: PropTypes.array,
+  errors: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   viewOnly: PropTypes.bool
 };
 
