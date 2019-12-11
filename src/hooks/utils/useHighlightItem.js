@@ -3,7 +3,7 @@ import { useState, useCallback } from "react";
 export default function useHighlightedItem(initialItem) {
   const [item, setItem] = useState(initialItem || null);
   const setHighlightedItem = useCallback(
-    f => {
+    (f) => {
       setItem(f);
     },
     [setItem]
