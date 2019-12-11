@@ -1,6 +1,6 @@
 .title,
 .title > h2 {
-  color: var(--text-active-tab-color) !important;
+  color: var(--tab-text-active-color) !important;
   max-width: 100%;
 }
 
@@ -67,7 +67,7 @@
 }
 
 .commentsLink > span.darkCommentsNumber {
-  color: var(--text-active-tab-color);
+  color: var(--tab-text-active-color);
 }
 
 div.seeOnGithubTooltip {
