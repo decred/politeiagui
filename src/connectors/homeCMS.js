@@ -18,7 +18,7 @@ const homeCMSConnector = connect(
     userInvoices: sel.apiUserInvoices,
     adminInvoices: sel.apiAdminInvoices
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onFetchUserInvoices: act.onFetchUserInvoices,

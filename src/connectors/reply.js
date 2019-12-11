@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 const replyConnector = connect(
   sel.selectorMap({
     commentid: compose(
-      t => (t ? t.toLowerCase() : t),
+      (t) => (t ? t.toLowerCase() : t),
       get(["match", "params", "commentid"]),
       arg(1)
     ),
@@ -93,7 +93,7 @@ class Wrapper extends React.PureComponent {
     );
   }
 
-  onChange = value => {
+  onChange = (value) => {
     this.setState({ commentValue: value, validationError: "" });
   };
 
@@ -138,9 +138,6 @@ class Wrapper extends React.PureComponent {
   }
 }
 
-const wrap = Component =>
-  replyConnector(props => <Wrapper {...{ ...props, Component }} />);
-export default compose(
-  withRouter,
-  wrap
-);
+const wrap = (Component) =>
+  replyConnector((props) => <Wrapper {...{ ...props, Component }} />);
+export default compose(withRouter, wrap);

@@ -4,9 +4,9 @@ import modalConnector from "../connectors/modal";
 import FancyRadioButton from "./FancyRadioButton";
 
 const preDefinedDurations = [2016, 2880, 4032];
-const getDurationOptions = isTesnet => {
+const getDurationOptions = (isTesnet) => {
   const blockDuration = isTesnet ? 2 : 5;
-  return preDefinedDurations.map(nb => ({
+  return preDefinedDurations.map((nb) => ({
     value: nb,
     text: `${Math.round((nb * blockDuration) / 60 / 24)} days`
   }));
@@ -28,9 +28,9 @@ class StartVoteModal extends React.Component {
       passError: ""
     };
   }
-  onChangeDuration = duration => this.setState({ duration });
+  onChangeDuration = (duration) => this.setState({ duration });
 
-  onChangeQuorumPercentage = event => {
+  onChangeQuorumPercentage = (event) => {
     const quorumPercentage = parseInt(event.target.value, 10);
     if (quorumPercentage > MAX_QUORUM || quorumPercentage < 0) {
       return;
@@ -44,7 +44,7 @@ class StartVoteModal extends React.Component {
     });
   };
 
-  onChangePassPercentage = event => {
+  onChangePassPercentage = (event) => {
     const passPercentage = parseInt(event.target.value, 10);
     if (passPercentage > MAX_PASS || passPercentage < 0) {
       return;
@@ -92,16 +92,14 @@ class StartVoteModal extends React.Component {
         onClose={closeModal}
         onSubmit={this.handleSubmit}
         submitDisabled={!canStartVote}
-        submitText="Start Vote"
-      >
+        submitText="Start Vote">
         <form
           style={{
             padding: "10px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center"
-          }}
-        >
+          }}>
           <label>Duration:</label>
           <FancyRadioButton
             style={{ marginTop: "5px" }}

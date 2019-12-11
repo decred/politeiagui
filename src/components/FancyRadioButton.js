@@ -13,8 +13,7 @@ const FancyRadioButton = ({ options, value, onChange, style = {} }) => {
         <label
           className={getOptionClass(idx, op.value)}
           key={`op-${idx}`}
-          onClick={() => onChange(op.value)}
-        >
+          onClick={() => onChange(op.value)}>
           <span>{op.text}</span>
         </label>
       ))}

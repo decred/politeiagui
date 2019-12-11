@@ -8,8 +8,7 @@ const DcrdataTxLink = ({ isTestnet, txId, isTxId }) => {
     <a
       href={`https://${network}.dcrdata.org/tx/${txId}`}
       target="_blank"
-      rel="noopener noreferrer"
-    >
+      rel="noopener noreferrer">
       {txId}
     </a>
   );

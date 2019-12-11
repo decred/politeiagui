@@ -1,21 +1,21 @@
 .reminder-list {
-    list-style-type: none;
+  list-style-type: none;
 }
 .reminders-title {
-    font-size: 1.2em;
+  font-size: 1.2em;
 }
 .reminder-item {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 .reminder-item_icon {
-    margin-right: 5px;
-    color: blue;
+  margin-right: 5px;
+  color: blue;
 }
 
 .reminder-item_icon.done {
-    color: green;
+  color: green;
 }
 
 .reminder-item_text {
-    margin-right: 5px;
+  margin-right: 5px;
 }

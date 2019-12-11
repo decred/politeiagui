@@ -25,7 +25,7 @@ const renderProposal = (record, index) => (
 
 const PlaceHolder = () => <div className="card-placeholder" />;
 
-const getListLoadingPlaceholders = numberOfItems => {
+const getListLoadingPlaceholders = (numberOfItems) => {
   const placeholders = [];
   for (let i = 0; i < numberOfItems; i++) {
     placeholders.push(<PlaceHolder key={`placeholder-${i}`} />);
@@ -64,7 +64,7 @@ const PublicProposals = ({
   const [state, dispatch] = useReducer(reducer, initialState);
   const { itemsOnLoad } = state;
 
-  const handleTabChange = newTabValue => setTabOption(newTabValue);
+  const handleTabChange = (newTabValue) => setTabOption(newTabValue);
   const filteredTokens = getProposalTokensByTabOption(
     tabOption,
     proposalsTokens

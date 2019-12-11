@@ -21,8 +21,7 @@ const InviteUserForm = ({
     <div>
       <form
         className="reset-password-form"
-        onSubmit={handleSubmit(onInviteUser)}
-      >
+        onSubmit={handleSubmit(onInviteUser)}>
         {error && <Message type="error" header=" error" body={error} />}
         <Field name="global" component={ErrorField} />
         <div className="c-form-group">
@@ -44,8 +43,7 @@ const InviteUserForm = ({
           <button
             className="c-btn c-btn-primary c-pull-right"
             tabIndex={3}
-            type="submit"
-          >
+            type="submit">
             Invite User
           </button>
         </div>

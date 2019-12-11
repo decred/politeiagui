@@ -16,7 +16,7 @@ const usernameValidator = ({
     .max(maxusernamelength, maxLengthMessage("username", maxusernamelength))
     .required("Required");
 
-export const requestResetValidationSchema = policy =>
+export const requestResetValidationSchema = (policy) =>
   Yup.object().shape({
     username: usernameValidator(policy),
     email: Yup.string()
@@ -34,7 +34,7 @@ export const resetValidationSchema = ({ minpasswordlength }) =>
       .required("Required")
   });
 
-export const urlParamsValidationSchema = policy =>
+export const urlParamsValidationSchema = (policy) =>
   Yup.object().shape({
     username: usernameValidator(policy),
     verificationtoken: Yup.string().required("Verification token is required")

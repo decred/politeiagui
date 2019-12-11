@@ -44,8 +44,7 @@ const PaywallAlert = ({
               <br />
               <span
                 className="linkish"
-                onClick={() => openModal(PAYWALL_MODAL)}
-              >
+                onClick={() => openModal(PAYWALL_MODAL)}>
                 Pay the registration fee
               </span>
             </div>
@@ -62,8 +61,7 @@ const PaywallAlert = ({
               <br /> <br />
               <span
                 className="linkish"
-                onClick={() => openModal(PAYWALL_MODAL)}
-              >
+                onClick={() => openModal(PAYWALL_MODAL)}>
                 Check the payment status
               </span>
             </div>

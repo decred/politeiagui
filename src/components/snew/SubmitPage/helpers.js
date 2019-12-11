@@ -1,4 +1,4 @@
-const concatSupportedChars = supportedChars =>
+const concatSupportedChars = (supportedChars) =>
   supportedChars.reduce((str, v) => str + v, "");
 
 export const invoiceInstructions = ({

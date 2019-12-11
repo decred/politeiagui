@@ -13,8 +13,7 @@ const MarkdownHelp = () => (
           style={{
             backgroundColor: "#ffff99",
             textAlign: "center"
-          }}
-        >
+          }}>
           <td>
             <em>you type:</em>
           </td>

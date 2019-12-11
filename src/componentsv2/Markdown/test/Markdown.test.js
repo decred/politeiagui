@@ -13,7 +13,7 @@ it("filter potencial 'XSS' attackers", () => {
       renderers={customRenderers(true)}
     />
   );
-  wrapper.find("LinkRenderer").forEach(el => {
+  wrapper.find("LinkRenderer").forEach((el) => {
     expect(["x-javascript:alert('XSS')", "javascript:void(0)"]).toContain(
       el.prop("url")
     );

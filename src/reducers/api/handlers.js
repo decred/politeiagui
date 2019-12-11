@@ -21,7 +21,7 @@ import {
 } from "../../constants";
 import { receive } from "../util";
 
-const getProposalToken = prop => get(["censorshiprecord", "token"], prop);
+const getProposalToken = (prop) => get(["censorshiprecord", "token"], prop);
 
 export const onReceiveSetStatus = (state, action) => {
   state = receive("setStatusProposal", state, action);
@@ -34,7 +34,7 @@ export const onReceiveSetStatus = (state, action) => {
 
   const viewedProposal = get(["proposal", "response", "proposal"], state);
 
-  const updateProposalStatus = proposal =>
+  const updateProposalStatus = (proposal) =>
     getProposalToken(updatedProposal) === getProposalToken(proposal)
       ? updatedProposal
       : proposal;
@@ -45,7 +45,7 @@ export const onReceiveSetStatus = (state, action) => {
   if (updatedProposal.status === PROPOSAL_STATUS_PUBLIC) {
     // remove from unvetted list
     unvettedProps = unvettedProps.filter(
-      proposal =>
+      (proposal) =>
         getProposalToken(updatedProposal) !== getProposalToken(proposal)
     );
     // add to vetted list
@@ -101,7 +101,7 @@ export const onReceiveCensoredComment = (state, action) => {
       ...state.proposalComments,
       response: {
         ...state.proposalComments.response,
-        comments: state.proposalComments.response.comments.map(c => {
+        comments: state.proposalComments.response.comments.map((c) => {
           return c.commentid === action.payload.commentid
             ? { ...c, comment: "", censored: true }
             : c;
@@ -116,13 +116,13 @@ export const onReceiveNewComment = (state, action) => {
   if (action.error) return state;
   const proposalToken = action.payload.token;
   let newProposals = [];
-  const incNumOfComments = proposal => ({
+  const incNumOfComments = (proposal) => ({
     ...proposal,
     numcomments: proposal.numcomments + 1
   });
 
   if (state.vetted.response && state.vetted.response.proposals) {
-    newProposals = state.vetted.response.proposals.map(p =>
+    newProposals = state.vetted.response.proposals.map((p) =>
       getProposalToken(p) === proposalToken ? incNumOfComments(p) : p
     );
   }
@@ -173,7 +173,7 @@ export const onReceiveNewComment = (state, action) => {
   };
 };
 
-export const onResetSyncLikeComment = state => {
+export const onResetSyncLikeComment = (state) => {
   const { backup: commentsLikesBackup } = state.commentslikes;
   const { backup: proposalCommentsBackup } = state.proposalComments;
   return {
@@ -233,7 +233,9 @@ export const onReceiveSyncLikeComment = (state, action) => {
   let reducedVotes = null;
   const cvfound =
     commentslikes &&
-    commentslikes.find(cv => cv.commentid === commentid && cv.token === token);
+    commentslikes.find(
+      (cv) => cv.commentid === commentid && cv.token === token
+    );
 
   if (cvfound) {
     reducedVotes = commentslikes.reduce(
@@ -276,7 +278,7 @@ export const onReceiveSyncLikeComment = (state, action) => {
       backup: comments,
       response: {
         ...state.proposalComments.response,
-        comments: state.proposalComments.response.comments.map(el =>
+        comments: state.proposalComments.response.comments.map((el) =>
           el.commentid === commentid
             ? {
                 ...el,
@@ -352,9 +354,9 @@ export const onUpdateTokenInventory = (
 
   const newTokenInventory = Object.keys(tokenInventory).reduce((inv, key) => {
     const tokens = tokenInventory[key] || [];
-    const foundToken = tokens.find(t => t === token);
+    const foundToken = tokens.find((t) => t === token);
     if (foundToken && key !== newTokenInventoryStatus)
-      return { ...inv, [key]: tokens.filter(t => t !== token) };
+      return { ...inv, [key]: tokens.filter((t) => t !== token) };
 
     if (!foundToken && key === newTokenInventoryStatus)
       return { ...inv, [key]: [token].concat(tokens) };
@@ -372,7 +374,7 @@ export const onUpdateTokenInventory = (
 };
 
 export const receiveProposals = (key, proposals, state) => {
-  const isUnvetted = prop =>
+  const isUnvetted = (prop) =>
     prop.status === PROPOSAL_STATUS_UNREVIEWED ||
     prop.status === PROPOSAL_STATUS_CENSORED ||
     prop.status === PROPOSAL_STATUS_UNREVIEWED_CHANGES;
@@ -385,7 +387,7 @@ export const receiveProposals = (key, proposals, state) => {
   const vettedProps =
     (state.vetted.response && state.vetted.response.proposals) || [];
   const incomingUnvettedProps = proposals.filter(isUnvetted);
-  const incomingVettedProps = proposals.filter(prop => !isUnvetted(prop));
+  const incomingVettedProps = proposals.filter((prop) => !isUnvetted(prop));
 
   return {
     ...state,

@@ -2,21 +2,21 @@ import { useState, useEffect } from "react";
 import { proposal as onFetchProposal } from "src/lib/api.js";
 import { getTextFromIndexMd } from "src/helpers";
 
-const getProposalText = proposal => {
-  const getMarkdowFile = prop =>
-    prop.files.filter(file => file.name === "index.md")[0];
+const getProposalText = (proposal) => {
+  const getMarkdowFile = (prop) =>
+    prop.files.filter((file) => file.name === "index.md")[0];
   return proposal ? getTextFromIndexMd(getMarkdowFile(proposal)) : "";
 };
 
-const getProposalFilesWithoutIndexMd = proposal =>
-  proposal ? proposal.files.filter(file => file.name !== "index.md") : [];
+const getProposalFilesWithoutIndexMd = (proposal) =>
+  proposal ? proposal.files.filter((file) => file.name !== "index.md") : [];
 
 export function useVersionPicker(ownProps) {
   const [selectedVersion, setSelectedVersion] = useState(ownProps.version);
   const [proposalDiff, setProposalDiff] = useState();
   const [showModal, setShowModal] = useState(false);
 
-  const onChangeVersion = v => {
+  const onChangeVersion = (v) => {
     setSelectedVersion(v);
     setShowModal(true);
   };

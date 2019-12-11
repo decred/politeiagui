@@ -14,8 +14,7 @@ const ResendVerificationEmailForm = ({
 }) => (
   <form
     className="resend-verification-form"
-    onSubmit={handleSubmit(onResendVerificationEmail)}
-  >
+    onSubmit={handleSubmit(onResendVerificationEmail)}>
     {error && (
       <Message type="error" header="Resend verification error" body={error} />
     )}
@@ -39,8 +38,7 @@ const ResendVerificationEmailForm = ({
         <button
           className="c-btn c-btn-primary c-pull-right"
           tabIndex={3}
-          type="submit"
-        >
+          type="submit">
           Resend verification email
         </button>
       </div>

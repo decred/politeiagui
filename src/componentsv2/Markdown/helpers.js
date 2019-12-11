@@ -4,14 +4,14 @@ import htmlParser from "react-markdown/plugins/html-parser";
 import ModalExternalLink from "../ModalExternalLink";
 
 export const htmlParserRules = htmlParser({
-  isValidNode: node => {
+  isValidNode: (node) => {
     return node.type !== "script";
   }
 });
 
 export const traverseChildren = (el, cb) => {
-  const filterChildren = c =>
-    React.Children.map(c, child => traverseChildren(child, cb));
+  const filterChildren = (c) =>
+    React.Children.map(c, (child) => traverseChildren(child, cb));
   let newElement = null;
   if (el.children) {
     newElement = {
@@ -31,7 +31,7 @@ export const traverseChildren = (el, cb) => {
   return newElement ? cb(newElement) : cb(el);
 };
 
-export const handleFilterXss = el => {
+export const handleFilterXss = (el) => {
   if (typeof el === "string") return el;
   const props = el.props;
   if (!props) {
@@ -49,7 +49,7 @@ export const handleFilterXss = el => {
   };
 };
 
-const isExternalLink = link => {
+const isExternalLink = (link) => {
   // e.preventDefault();
   // Does this to prevent xss attacks
   const tmpLink = document.createElement("a");
@@ -89,7 +89,7 @@ const linkHandler = ({ href, children }) => {
   return <LinkRenderer url={href}>{children}</LinkRenderer>;
 };
 
-const rootHandler = filterXss => el => {
+const rootHandler = (filterXss) => (el) => {
   if (filterXss) {
     el = traverseChildren(el, handleFilterXss);
   }
@@ -97,7 +97,7 @@ const rootHandler = filterXss => el => {
   return <div {...props}>{children}</div>;
 };
 
-export const customRenderers = filterXss => {
+export const customRenderers = (filterXss) => {
   const rootRenderer = rootHandler(filterXss);
 
   return {

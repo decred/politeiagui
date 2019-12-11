@@ -66,7 +66,7 @@ class Wrapper extends Component {
           this.props.history.push("/");
         }
       })
-      .catch(e => {
+      .catch((e) => {
         throw new SubmissionError({
           _error: e.message
         });
@@ -74,11 +74,7 @@ class Wrapper extends Component {
   }
 }
 
-const wrap = Component =>
-  loginConnector(props => <Wrapper {...{ ...props, Component }} />);
+const wrap = (Component) =>
+  loginConnector((props) => <Wrapper {...{ ...props, Component }} />);
 
-export default compose(
-  withRouter,
-  reduxForm({ form: "form/login" }),
-  wrap
-);
+export default compose(withRouter, reduxForm({ form: "form/login" }), wrap);

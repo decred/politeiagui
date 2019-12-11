@@ -8,7 +8,7 @@ const forgottenPasswordNextConnector = connect(
   sel.selectorMap({
     email: sel.resetPassEmail || sel.forgottenPassEmail
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         resetForgottenPassword: act.resetForgottenPassword,
@@ -30,8 +30,8 @@ class Wrapper extends Component {
   }
 }
 
-const wrap = Component =>
-  forgottenPasswordNextConnector(props => (
+const wrap = (Component) =>
+  forgottenPasswordNextConnector((props) => (
     <Wrapper {...{ ...props, Component }} />
   ));
 export default wrap;

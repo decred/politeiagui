@@ -59,8 +59,7 @@ const ThingLinkInvoice = ({
       <div className="entry unvoted">
         <span
           className="title"
-          style={{ display: "flex", overflow: "visible" }}
-        >
+          style={{ display: "flex", overflow: "visible" }}>
           <Link className="title may-blank loggedin" href={url} tabIndex={rank}>
             {title}
           </Link>
@@ -71,13 +70,11 @@ const ThingLinkInvoice = ({
                 display: "flex",
                 justifyContent: "flex-end",
                 alignItems: "flex-start"
-              }}
-            >
+              }}>
               <Link
                 href={`/invoices/${id}/edit`}
                 className="edit-proposal right-margin-10"
-                onClick={() => null}
-              >
+                onClick={() => null}>
                 <i className="fa fa-edit right-margin-5" />
                 Edit
               </Link>
@@ -86,8 +83,7 @@ const ThingLinkInvoice = ({
         </span>
         <span
           style={{ display: "flex", flexDirection: "column" }}
-          className="tagline"
-        >
+          className="tagline">
           <span className="submitted-by">
             {author && (
               <span>
@@ -118,9 +114,8 @@ const ThingLinkInvoice = ({
               onClick={() => {
                 confirmWithModal(modalTypes.CONFIRM_ACTION, {
                   message: "Are you sure you want to delete this draft?"
-                }).then(ok => ok && onDeleteDraftInvoice(draftId));
-              }}
-            >
+                }).then((ok) => ok && onDeleteDraftInvoice(draftId));
+              }}>
               <i className="fa fa-trash" />
               Delete
             </span>
@@ -134,7 +129,7 @@ const ThingLinkInvoice = ({
                   className={`c-btn c-btn-primary${
                     !userCanExecuteActions ? " not-active disabled" : ""
                   }`}
-                  onClick={e =>
+                  onClick={(e) =>
                     confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
                       reasonPlaceholder:
                         "Please provide a reason to reject this invoice"
@@ -164,11 +159,11 @@ const ThingLinkInvoice = ({
                   className={`c-btn c-btn-primary${
                     !userCanExecuteActions ? " not-active disabled" : ""
                   }`}
-                  onClick={e =>
+                  onClick={(e) =>
                     confirmWithModal(modalTypes.CONFIRM_ACTION, {
                       message: "Are you sure you want to approve this invoice?"
                     }).then(
-                      confirm =>
+                      (confirm) =>
                         confirm &&
                         onChangeStatus(
                           authorid,
@@ -193,11 +188,11 @@ const ThingLinkInvoice = ({
                   className={`c-btn c-btn-primary${
                     !userCanExecuteActions ? " not-active disabled" : ""
                   }`}
-                  onClick={e =>
+                  onClick={(e) =>
                     confirmWithModal(modalTypes.CONFIRM_ACTION, {
                       message: "Are you sure you want to dispute this invoice?"
                     }).then(
-                      confirm =>
+                      (confirm) =>
                         confirm &&
                         onChangeStatus(
                           authorid,

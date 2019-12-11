@@ -19,7 +19,7 @@ export const changePasswordValidationSchema = ({ minpasswordlength }) =>
       .required("Required")
   });
 
-const buildUsernameRegex = supportedChars => {
+const buildUsernameRegex = (supportedChars) => {
   let regex = supportedChars.reduce((str, v) => str + v, "^[");
   regex += "]*$";
   return new RegExp(regex);

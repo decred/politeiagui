@@ -150,7 +150,7 @@ describe("api integration modules (lib/api.js)", () => {
   test("parses a response", async () => {
     expect.assertions(3);
     let headers = new Headers({
-      "content-type": "application/json",
+      "content-type": "application/json; charset=utf-8",
       "X-Csrf-Token":
         "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca9"
     });
@@ -191,7 +191,7 @@ describe("api integration modules (lib/api.js)", () => {
     expect.assertions(3);
     const PATH = "/api/";
     const MOCK_RESULT = await import(`${MOCKS_PATH}/GET.json`).then(
-      d => d.default
+      (d) => d.default
     );
 
     // set csrf token header

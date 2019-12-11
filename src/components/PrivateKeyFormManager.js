@@ -10,15 +10,14 @@ const INVALID_SECRET_KEY =
 const INVALID_KEY_PAIR = "The provided key pair is not valid.";
 const LOAD_KEY_FAILED =
   "Sorry, something went wrong while importing the identity file, please try again. If the error persists, contact the Politeia support.";
-const lower = value => value && value.toLowerCase();
+const lower = (value) => value && value.toLowerCase();
 
 class PrivateKeyFormManager extends React.Component {
   render() {
     return (
       <form
         className="import-identity-form"
-        onSubmit={this.props.handleSubmit(this.handleKeys)}
-      >
+        onSubmit={this.props.handleSubmit(this.handleKeys)}>
         <div style={{ width: "45em" }} className="c-form-group">
           <Field
             className="c-form-control"
@@ -48,8 +47,7 @@ class PrivateKeyFormManager extends React.Component {
               this.props.submitting || this.props.pristine || this.props.invalid
             }
             style={{ margin: "2em 0 2em 0" }}
-            className="c-btn c-btn-primary c-pull-right"
-          >
+            className="c-btn c-btn-primary c-pull-right">
             Submit Identity
           </button>
           <button
@@ -57,8 +55,7 @@ class PrivateKeyFormManager extends React.Component {
             disabled={this.props.submitting || this.props.pristine}
             style={{ margin: "2em 0 2em 0", background: "#bf4153" }}
             onClick={this.props.reset}
-            className="c-btn c-btn-primary c-pull-left"
-          >
+            className="c-btn c-btn-primary c-pull-left">
             Clear Values
           </button>
         </div>
@@ -67,7 +64,7 @@ class PrivateKeyFormManager extends React.Component {
   }
 
   //Checks to make sure user input has been receieved by both forms
-  checkFormInput = values => {
+  checkFormInput = (values) => {
     if (values) {
       return false;
     } else {
@@ -77,7 +74,7 @@ class PrivateKeyFormManager extends React.Component {
 
   // Handles user-inputted keys by using props to save form values into store
   // Uses same logic as OnSelectFiles from privKeyImportManager except 'props' is subsituted in place of 'keys'
-  handleKeys = props => {
+  handleKeys = (props) => {
     const { onIdentityImported, closeModal } = this.props;
     props = {
       ...props,
@@ -91,7 +88,7 @@ class PrivateKeyFormManager extends React.Component {
         .then(() => {
           onIdentityImported("Successfully imported identity") && closeModal();
         })
-        .catch(e => {
+        .catch((e) => {
           console.error(e.stack);
           onIdentityImported(null, LOAD_KEY_FAILED);
         });
@@ -102,7 +99,7 @@ class PrivateKeyFormManager extends React.Component {
   };
 
   //Same as one from privKeyImportManager except it checks form input instead of uploaded file
-  auditIdentity = props => {
+  auditIdentity = (props) => {
     const { userPubkey } = this.props;
 
     // check that the pubkey matches with the server one

@@ -10,7 +10,7 @@ export default connect(
     payWithFaucetTxId: sel.payWithFaucetTxId,
     payWithFaucetError: sel.payWithFaucetError
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         payWithFaucet: act.payWithFaucet,

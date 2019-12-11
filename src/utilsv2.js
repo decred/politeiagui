@@ -19,7 +19,7 @@ const months = [
  * @param {number} atoms - amount in atoms
  * @return {number} dcr - amount in dcr
  */
-export const convertAtomsToDcr = atoms => atoms / 100000000;
+export const convertAtomsToDcr = (atoms) => atoms / 100000000;
 
 /**
  * Formats unix timestamp to a UTC string date
@@ -27,7 +27,7 @@ export const convertAtomsToDcr = atoms => atoms / 100000000;
  * @param {number} unixtimestamp - unix timestamp
  * @return {string} date - date formated in UTC String
  */
-export const formatUnixTimestamp = unixtimestamp =>
+export const formatUnixTimestamp = (unixtimestamp) =>
   new Date(unixtimestamp * 1000).toUTCString();
 
 /**
@@ -37,7 +37,7 @@ export const formatUnixTimestamp = unixtimestamp =>
  * @return {string} date - date formated in dd mmm yyyy
  */
 
-export const formatShortUnixTimestamp = unixtimestamp => {
+export const formatShortUnixTimestamp = (unixtimestamp) => {
   const currentdate = new Date(unixtimestamp * 1000);
   return `${currentdate.getUTCDate()} ${
     months[currentdate.getUTCMonth()]

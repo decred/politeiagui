@@ -22,7 +22,7 @@ export default connect(
     emptyProposalsMessage: sel.getVettedEmptyProposalsMessage,
     proposalsTokens: sel.apiTokenInventoryResponse
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onFetchVettedByTokens: act.onFetchVettedByTokens,

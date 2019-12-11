@@ -31,9 +31,7 @@ const validate = (values, dispatch, props) => {
   if (checkProposalName(props, values)) {
     throw new SubmissionError({
       _error:
-        `The proposal name must be between ${
-          props.policy.minproposalnamelength
-        } and ${props.policy.maxproposalnamelength} characters long ` +
+        `The proposal name must be between ${props.policy.minproposalnamelength} and ${props.policy.maxproposalnamelength} characters long ` +
         `and only contain the following characters: ${props.policy.proposalnamesupportedchars.join(
           " "
         )}`
@@ -93,9 +91,7 @@ const warn = (values, props) => {
   if (props.policy) {
     const nameLengthLimit = props.policy.maxproposalnamelength - 10;
     if (values.name && values.name.trim().length > nameLengthLimit) {
-      warnings.name = `The proposal name is close to the limit of ${
-        props.policy.maxproposalnamelength
-      } characters. Current Length: ${values.name.length}.`;
+      warnings.name = `The proposal name is close to the limit of ${props.policy.maxproposalnamelength} characters. Current Length: ${values.name.length}.`;
     }
   }
   return warnings;

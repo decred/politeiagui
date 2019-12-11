@@ -20,7 +20,7 @@ class RecordDetail extends React.Component {
       accessTime: 0
     };
   }
-  resolveTabTitle = prevProps => {
+  resolveTabTitle = (prevProps) => {
     const { isCMS, record } = this.props;
     const proposal = !isCMS && record;
     const proposalNameHasBeenUpdated =
@@ -38,14 +38,14 @@ class RecordDetail extends React.Component {
       onFetchProposalVoteStatus(token);
     }
   };
-  resolveFetchLikedComments = prevProps => {
+  resolveFetchLikedComments = (prevProps) => {
     const userJustFetched =
       !prevProps.loggedInAsEmail && this.props.loggedInAsEmail;
     if (userJustFetched) {
       this.props.onFetchLikedComments(this.props.token);
     }
   };
-  resolveFetchProposalVoteStatus = prevProps => {
+  resolveFetchProposalVoteStatus = (prevProps) => {
     const { isCMS, record, onFetchProposalVoteStatus, token } = this.props;
     const proposal = !isCMS && record;
     const proposalIsPublic = proposal.status === PROPOSAL_STATUS_PUBLIC;

@@ -24,7 +24,7 @@ class PrivateKeyImportManager extends React.Component {
     }
   }
   componentDidMount() {
-    this.fetchKeys().then(keyData => {
+    this.fetchKeys().then((keyData) => {
       if (!this.unmounting) {
         this.setState({ keyData });
       }
@@ -41,8 +41,7 @@ class PrivateKeyImportManager extends React.Component {
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "column"
-        }}
-      >
+        }}>
         {this.props.identityImportError && this.state.showErrorMessage && (
           <Message
             type="error"
@@ -54,8 +53,7 @@ class PrivateKeyImportManager extends React.Component {
           base64
           handleFiles={this.onSelectFiles.bind(this)}
           multipleFiles={false}
-          fileTypes="json"
-        >
+          fileTypes="json">
           <button style={{ marginRight: "0" }}>
             Upload JSON Identity File
           </button>
@@ -67,10 +65,10 @@ class PrivateKeyImportManager extends React.Component {
   fetchKeys() {
     return pki
       .getKeys(this.props.loggedInAsEmail)
-      .then(keys => JSON.stringify(keys, null, 2));
+      .then((keys) => JSON.stringify(keys, null, 2));
   }
 
-  auditIdentity = keys => {
+  auditIdentity = (keys) => {
     const { userPubkey } = this.props;
 
     // check that the pubkey matches with the server one
@@ -94,7 +92,7 @@ class PrivateKeyImportManager extends React.Component {
         .then(() => {
           onIdentityImported("Successfully imported identity") && closeModal();
         })
-        .catch(e => {
+        .catch((e) => {
           console.error(e.stack);
           onIdentityImported(null, LOAD_KEY_FAILED);
         });

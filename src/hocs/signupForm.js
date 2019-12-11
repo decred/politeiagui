@@ -67,7 +67,7 @@ class SignupFormContainer extends Component {
 
     const promise = this.props.onSignupConfirm(args, this.props.isCMS);
     if (promise) {
-      return promise.catch(e => {
+      return promise.catch((e) => {
         throw new SubmissionError({
           _error: e.message
         });
@@ -88,10 +88,10 @@ class SignupFormContainer extends Component {
   }
 }
 
-const wrap = Component =>
-  appConnector(props => {
+const wrap = (Component) =>
+  appConnector((props) => {
     const connector = signupConnector;
-    const Comp = connector(otherProps => (
+    const Comp = connector((otherProps) => (
       <SignupFormContainer {...{ ...otherProps, ...props, Component }} />
     ));
     return <Comp />;

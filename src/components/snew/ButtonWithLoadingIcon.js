@@ -11,8 +11,7 @@ const ButtonWithLoadingIcon = ({
     <button
       className={`btn ${isLoading ? "loading" : ""} ${className}`}
       {...props}
-      onClick={isLoading ? () => null : props.onClick}
-    >
+      onClick={isLoading ? () => null : props.onClick}>
       {isLoading ? (
         <i
           className="fa fa-circle-o-notch fa-spin right-margin-5"

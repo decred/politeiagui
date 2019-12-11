@@ -39,14 +39,14 @@ class DateFilter extends React.Component {
     }
   }
 
-  onSetMonthSortOption = option => {
+  onSetMonthSortOption = (option) => {
     const { yearFilterValue } = this.props;
     setQueryStringValue("month", option.value);
 
     this.props.handleChangeDateFilter(option.value, yearFilterValue);
   };
 
-  onSetYearSortOption = option => {
+  onSetYearSortOption = (option) => {
     const { monthFilterValue } = this.props;
     setQueryStringValue("year", option.value);
 
@@ -61,10 +61,10 @@ class DateFilter extends React.Component {
   render() {
     const { header, monthFilterValue, yearFilterValue } = this.props;
     const selectedYear = invoiceFilterYearOptions.find(
-      op => op.value === yearFilterValue
+      (op) => op.value === yearFilterValue
     );
     const selectedMonth =
-      invoiceFilterMonthOptions.find(op => op.value === monthFilterValue) ||
+      invoiceFilterMonthOptions.find((op) => op.value === monthFilterValue) ||
       monthFilterValue === FILTER_ALL_MONTHS;
 
     return header && header !== CMS_DEFAULT_TAB_TITLE ? (
@@ -73,7 +73,7 @@ class DateFilter extends React.Component {
           classNamePrefix="sort-select"
           value={selectedMonth}
           onChange={this.onSetMonthSortOption}
-          options={invoiceFilterMonthOptions.map(op => op)}
+          options={invoiceFilterMonthOptions.map((op) => op)}
           components={{
             ClearIndicator: null
           }}
@@ -82,7 +82,7 @@ class DateFilter extends React.Component {
           classNamePrefix="sort-select"
           value={selectedYear}
           onChange={this.onSetYearSortOption}
-          options={invoiceFilterYearOptions.map(op => op)}
+          options={invoiceFilterYearOptions.map((op) => op)}
           components={{
             ClearIndicator: null
           }}

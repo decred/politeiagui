@@ -44,7 +44,7 @@ class MultiLineEditor extends React.Component {
         onChange={this.handleInputChange}
         onKeyDownCapture={this.handleOnKeyDownCapture}
         onKeyDown={onKeyDown}
-        ref={textAreaRef => (this.textAreaRef = textAreaRef)}
+        ref={(textAreaRef) => (this.textAreaRef = textAreaRef)}
       />
     );
   }

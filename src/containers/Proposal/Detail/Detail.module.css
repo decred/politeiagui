@@ -1,29 +1,29 @@
 .customMain {
-    background: none !important;
-    overflow: hidden;
+  background: none !important;
+  overflow: hidden;
 }
 
 .customHeader {
-    margin-top: 1.9rem;
-    margin-bottom: 1.9rem;
+  margin-top: 1.9rem;
+  margin-bottom: 1.9rem;
 }
 
 .customTitleAndSubtitleWrapper {
-    justify-content: center;
+  justify-content: center;
 }
 
 .returnLink {
-    cursor: pointer;
-    font-size: var(--font-size-small);
+  cursor: pointer;
+  font-size: var(--font-size-small);
 }
 
 .returnLinkContainer {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 /* EXTRA SMALL */
 @media screen and (max-width: 560px) {
-   .returnLinkContainer {
-       padding-left: var(--container-padding-left);
-   }
+  .returnLinkContainer {
+    padding-left: var(--container-padding-left);
+  }
 }

@@ -23,7 +23,7 @@ const GeneratePayoutsPage = ({
   };
   useEffect(fetchPayouts, []);
 
-  const csvData = payouts.map(p => ({
+  const csvData = payouts.map((p) => ({
     ...p,
     approvedtime: new Date(p.approvedtime * 1000).toString(),
     combinedtotal: p.labortotal + p.expensetotal
@@ -69,11 +69,11 @@ const GeneratePayoutsPage = ({
           <div className=" payouts-btn-pay-invoices">
             <ButtonWithLoadingIcon
               className="inverse"
-              onClick={e =>
+              onClick={(e) =>
                 confirmWithModal(modalTypes.CONFIRM_ACTION, {
                   message:
                     "Are you sure you want to set all of these approved invoices to paid?"
-                }).then(confirm => confirm && onPayApprovedInvoices()) &&
+                }).then((confirm) => confirm && onPayApprovedInvoices()) &&
                 e.preventDefault()
               }
               text="Set invoices to paid"

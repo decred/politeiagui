@@ -18,10 +18,7 @@ import {
 
 const userConnector = connect(
   sel.selectorMap({
-    userId: compose(
-      get(["match", "params", "userId"]),
-      arg(1)
-    ),
+    userId: compose(get(["match", "params", "userId"]), arg(1)),
     loggedInAsUserId: sel.userid,
     user: sel.user,
     error: sel.apiUserError,
@@ -53,33 +50,33 @@ const userConnector = connect(
     amountOfCreditsAddedOnRescan: sel.amountOfCreditsAddedOnRescan,
     rescanUserId: sel.apiRescanUserPaymentsUserId,
     isApiRequestingUpdateUserKey: sel.isApiRequestingUpdateUserKey,
-    isApiRequestingMarkAsPaid: state =>
+    isApiRequestingMarkAsPaid: (state) =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_CLEAR_USER_PAYWALL,
-    isApiRequestingMarkNewUserAsExpired: state =>
+    isApiRequestingMarkNewUserAsExpired: (state) =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION,
-    isApiRequestingMarkUpdateKeyAsExpired: state =>
+    isApiRequestingMarkUpdateKeyAsExpired: (state) =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) ===
         MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
-    isApiRequestingMarkResetPasswordAsExpired: state =>
+    isApiRequestingMarkResetPasswordAsExpired: (state) =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) ===
         MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION,
-    isApiRequestingUnlockUser: state =>
+    isApiRequestingUnlockUser: (state) =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_UNLOCK,
-    isApiRequestingDeactivateUser: state =>
+    isApiRequestingDeactivateUser: (state) =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_DEACTIVATE,
-    isApiRequestingReactivateUser: state =>
+    isApiRequestingReactivateUser: (state) =>
       sel.isApiRequestingManageUser(state) &&
       sel.manageUserAction(state) === MANAGE_USER_REACTIVATE,
     manageUserResponse: sel.manageUserResponse,
     isCMS: sel.isCMS
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onFetchUserProposals: act.onFetchUserProposalsWithVoteStatus,
@@ -99,7 +96,4 @@ const userConnector = connect(
     )
 );
 
-export default compose(
-  withRouter,
-  userConnector
-);
+export default compose(withRouter, userConnector);

@@ -20,7 +20,7 @@ const CommentForm = ({
     { resetForm, setSubmitting, setFieldError }
   ) {
     try {
-      await onSubmit(values.comment);
+      await onSubmit(values.comment.trim());
       setSubmitting(false);
       resetForm();
       onCommentSubmitted && onCommentSubmitted();

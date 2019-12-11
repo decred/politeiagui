@@ -10,7 +10,7 @@ pem.createCertificate({ days: 365, selfSigned: true }, function(err, keys) {
   });
   app.use(function(req, res, next) {
     res.setHeader("X-Csrf-Token", "itsafake");
-    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
     res.setHeader(

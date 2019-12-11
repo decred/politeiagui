@@ -8,7 +8,7 @@ export class OnKeyListener extends React.Component {
       isEventListener: false
     };
   }
-  handleKeyUp = e => {
+  handleKeyUp = (e) => {
     const { keyCode, disabled, onKeyPress } = this.props;
     const pressedEscKey = e.keyCode === keyCode && !disabled;
     if (pressedEscKey && onKeyPress) onKeyPress();

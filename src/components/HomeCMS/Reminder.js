@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "../snew";
 
-const getIcon = done => (done ? "✔" : "ℹ︎");
+const getIcon = (done) => (done ? "✔" : "ℹ︎");
 
 export const ReminderList = ({ children, title }) => (
   <>

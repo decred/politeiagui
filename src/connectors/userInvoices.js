@@ -26,7 +26,7 @@ const userInvoicesConnector = connect(
     monthFilterValue: sel.getMonthFilterValue,
     yearFilterValue: sel.getYearFilterValue
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onFetchUserInvoices: act.onFetchUserInvoices,
@@ -71,7 +71,7 @@ class Wrapper extends Component {
   }
 }
 
-const wrap = Component =>
-  userInvoicesConnector(props => <Wrapper {...{ ...props, Component }} />);
+const wrap = (Component) =>
+  userInvoicesConnector((props) => <Wrapper {...{ ...props, Component }} />);
 
 export default wrap;

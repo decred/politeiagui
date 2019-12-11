@@ -8,8 +8,7 @@ const SubmitTextSidebox = ({ Link, loggedInAsEmail, userPaywallStatus }) => {
     <div className="spacer">
       <div className="sidebox submit submit-text">
         <div
-          className={`morelink ${isPaywallPaid ? "" : " not-active disabled"}`}
-        >
+          className={`morelink ${isPaywallPaid ? "" : " not-active disabled"}`}>
           <Link
             className="login-required access-required"
             data-event-action="submit"

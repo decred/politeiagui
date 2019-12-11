@@ -17,7 +17,7 @@ import PasswordSection from "./components/PasswordSection";
 import PaywallSection from "./components/PaywallSection";
 
 const AdminAccount = ({
-  id,
+  userid,
   newuserverificationtoken,
   newuserverificationexpiry,
   newuserpaywalladdress,
@@ -46,7 +46,7 @@ const AdminAccount = ({
   const isActivationLoading =
     isApiRequestingDeactivateUser || isApiRequestingReactivateUser;
 
-  const [deactivateUser, reactivateUser, markVerificationTokenAsExpired, markResetPasswordTokenAsExpired, markUpdateKeyAsExpired] = manageUserActionsFactory(id, onManageUser)([MANAGE_USER_DEACTIVATE, MANAGE_USER_REACTIVATE, MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION, MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION, MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION]);
+  const [deactivateUser, reactivateUser, markVerificationTokenAsExpired, markResetPasswordTokenAsExpired, markUpdateKeyAsExpired] = manageUserActionsFactory(userid, onManageUser)([MANAGE_USER_DEACTIVATE, MANAGE_USER_REACTIVATE, MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION, MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION, MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION]);
 
   const [
     showMarkPasswordAsExpiredConfirmModal,
@@ -75,7 +75,7 @@ const AdminAccount = ({
     closePasswordModal
   ] = useBooleanState(false);
 
-  const { onChangePassword, changePasswordValidationSchema } = useChangePassword();
+  const { onChangePassword, validationSchema: changePasswordValidationSchema } = useChangePassword();
 
   return (
     <Card className={classNames("container", "margin-bottom-m")}>

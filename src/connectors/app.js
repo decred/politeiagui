@@ -7,7 +7,7 @@ const appConnector = connect(
     isCMS: sel.isCMS,
     loggedInAsEmail: sel.loggedInAsEmail
   }),
-  dispatch => bindActionCreators({}, dispatch)
+  (dispatch) => bindActionCreators({}, dispatch)
 );
 
 export default appConnector;

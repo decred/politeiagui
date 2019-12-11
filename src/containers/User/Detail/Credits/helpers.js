@@ -18,7 +18,7 @@ export const tableHeaders = [
   "Date"
 ];
 
-const getRowDataForCreditsPurchase = purchase => ({
+const getRowDataForCreditsPurchase = (purchase) => ({
   Type: "Credits",
   Amount: purchase.numberPurchased,
   "DCRs Paid": purchase.price
@@ -48,7 +48,10 @@ export const getTableContentFromPurchases = (
   pendingTransaction,
   creditPrice
 ) =>
-  orderBy(["timestamp"], ["desc"])(
+  orderBy(
+    ["timestamp"],
+    ["desc"]
+  )(
     proposalCreditPurchases.map(getRowDataForCreditsPurchase).concat(
       pendingTransaction && pendingTransaction.txID
         ? [
@@ -64,15 +67,15 @@ export const getTableContentFromPurchases = (
           ]
         : []
     )
-  ).map(item => {
+  ).map((item) => {
     delete item.timestamp;
     return item;
   });
 
-export const getCsvData = data =>
+export const getCsvData = (data) =>
   data
-    .filter(d => !d.confirming)
-    .map(d => ({
+    .filter((d) => !d.confirming)
+    .map((d) => ({
       ...d,
       datePurchased: d.datePurchased
         ? formatUnixTimestamp(d.datePurchased)

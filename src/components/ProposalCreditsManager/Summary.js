@@ -4,10 +4,10 @@ import { CONFIRMATIONS_REQUIRED } from "../../constants";
 import DcrdataTxLink from "../DcrdataTxLink";
 import ExportToCsv from "../ExportToCsv";
 
-const getCsvData = data =>
+const getCsvData = (data) =>
   data
-    .filter(d => !d.confirming)
-    .map(d => ({
+    .filter((d) => !d.confirming)
+    .map((d) => ({
       ...d,
       datePurchased: d.datePurchased ? formatDate(d.datePurchased) : "",
       price: d.type === "fee" ? "" : d.price,
@@ -56,8 +56,7 @@ const ProposalCreditsSummary = ({
               "datePurchased",
               "type"
             ]}
-            filename="payment_history"
-          >
+            filename="payment_history">
             <button className="inverse credits-purchase-menu__button">
               {"Export to CSV"}
             </button>
@@ -113,8 +112,7 @@ const ProposalCreditsSummary = ({
                   {creditPurchase.confirming ? (
                     <div
                       className="user-proposal-credits-cell"
-                      style={{ color: "#ff8100" }}
-                    >
+                      style={{ color: "#ff8100" }}>
                       <div>waiting confirmations: </div>(
                       {creditPurchase.confirmations} of {CONFIRMATIONS_REQUIRED}
                       )

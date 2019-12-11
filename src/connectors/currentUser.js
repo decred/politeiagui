@@ -17,7 +17,7 @@ const currentUserConnector = connect(
     loggedInAsUserId: sel.userid,
     isCMS: sel.isCMS
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onLogout: act.onLogout,
