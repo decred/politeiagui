@@ -19,7 +19,7 @@ const ModalPayPaywall = ({ show, title, onClose }) => {
       </P>
       <PaymentComponent
         address={paywallAddress}
-        amount={paywallAmount}
+        amount={+paywallAmount}
         extraSmall={extraSmall}
         status={userPaywallStatus}
       />
