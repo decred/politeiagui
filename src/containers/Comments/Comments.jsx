@@ -182,8 +182,8 @@ const Comments = ({
 
   const singleThreadCommentCannotBeAccessed =
     isSingleThread &&
-    comments &&
-    !comments.find((c) => c.commentid === threadParentID);
+    ((comments && !comments.find((c) => c.commentid === threadParentID)) ||
+      numOfComments === 0);
 
   return (
     <>
