@@ -59,7 +59,7 @@ const apiSuccess = (dispatch, action, cb) => (res) => {
 
 const apiError = (dispatch, action, cb) => (e) => {
   dispatch(action(null, e));
-  cb && cb(e);
+  cb && cb();
   throw e;
 };
 
@@ -504,7 +504,7 @@ export const onFetchUnvetted = (token) => (dispatch) => {
   dispatch(act.REQUEST_UNVETTED());
   const [statusSuccess, statusError] = createApiCallbackHandlers(
     dispatch,
-    act.RECEIVE_UNVETTED_STATUS
+    act.RECEIVE_UNVETTED
   );
   return apiActionHandler("unvetted", statusSuccess, statusError, token);
 };
@@ -978,6 +978,7 @@ export const onSubmitComment = (
 // TODO: refactor to improve readability
 export const onUpdateUserKey = (currentUserEmail) =>
   withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_UPDATED_KEY());
     return pki
       .generateKeys()
       .then((keys) =>
