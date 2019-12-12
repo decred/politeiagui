@@ -61,6 +61,7 @@
   font-size: var(--font-size-regular);
   background: var(--card-background);
   -webkit-appearance: none;
+  color: var(--color-text);
 }
 
 .mde-text::placeholder {

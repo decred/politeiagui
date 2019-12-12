@@ -1,6 +1,7 @@
 import { Text, Dropdown, DropdownItem, Toggle, useTheme } from "pi-ui";
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink, withRouter } from "react-router-dom";
+import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
 import useNavigation from "src/hooks/api/useNavigation";
 import styles from "./HeaderNav.module.css";
@@ -22,11 +23,24 @@ const HeaderNav = ({ history, location }) => {
   }
   const isOnUnvettedRoute = location.pathname === "/proposals/unvetted";
   const isOnSearchUsersRoute = location.pathname === "/user/search";
+  const [
+    darkThemeOnLocalStorage,
+    setDarkThemeOnLocalStorage
+  ] = useLocalStorage("darkTheme", false);
+
+  useEffect(() => {
+    if (darkThemeOnLocalStorage && themeName === "light") {
+      setThemeName("dark");
+    }
+  }, [darkThemeOnLocalStorage, setThemeName, themeName]);
+
   const onThemeToggleHandler = () => {
     if (themeName === "light") {
+      setDarkThemeOnLocalStorage(true);
       setThemeName("dark");
     } else {
       setThemeName("light");
+      setDarkThemeOnLocalStorage(false);
     }
   };
   return user && username ? (
