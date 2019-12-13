@@ -5,7 +5,6 @@ import styles from "../Identity.module.css";
 export default ({ id }) =>
   <>
     <Text
-        color="grayDark"
         weight="semibold"
         className={classNames(
           styles.block,

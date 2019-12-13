@@ -13,7 +13,6 @@ export default ({ pastIdentities }) => {
   return pastIdentities ? (
     <>
       <Text
-        color="grayDark"
         weight="semibold"
         className={classNames(
           styles.block,
