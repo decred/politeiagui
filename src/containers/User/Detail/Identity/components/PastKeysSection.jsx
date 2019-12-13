@@ -16,6 +16,7 @@ export default ({ pastIdentities }) => {
         color="grayDark"
         weight="semibold"
         className={classNames(
+          styles.block,
           styles.fieldHeading,
           "margin-bottom-s",
           "margin-top-l"
