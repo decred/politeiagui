@@ -15,7 +15,7 @@ const AttachFiles = ({ onChange, label, small, acceptedFiles, ...props }) => {
   ] = useBooleanState(false);
 
   const handleOnChange = useCallback(
-    v => {
+    (v) => {
       onChange(v);
       closeAttachFileModal();
     },
@@ -27,8 +27,7 @@ const AttachFiles = ({ onChange, label, small, acceptedFiles, ...props }) => {
       <span
         className={classNames(styles.attachFileButton, small && styles.small)}
         onClick={openAttachFileModal}
-        {...props}
-      >
+        {...props}>
         {label}
         <img alt="Attach" src={attachSVG} />
       </span>
@@ -42,5 +41,4 @@ const AttachFiles = ({ onChange, label, small, acceptedFiles, ...props }) => {
     </>
   );
 };
-
 export default AttachFiles;
