@@ -40,6 +40,10 @@
   margin-right: 0;
 }
 
+li.mde-header-item > button {
+  background: none;
+}
+
 .react-mde .grip {
   display: none;
 }
