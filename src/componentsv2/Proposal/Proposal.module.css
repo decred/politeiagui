@@ -8,13 +8,18 @@
   margin-bottom: 10px;
 }
 
+.blocksLeft {
+  color: var(--text-secondary-color) !important;
+}
+
 .timeLeft {
   margin-top: 0.5rem;
+  color: var(--text-secondary-color) !important;
 }
 
 .version {
   line-height: var(--spacing-2);
-  color: var(--color-gray) !important;
+  color: var(--text-secondary-color) !important;
 }
 
 .versionPicker > div > span {
@@ -26,7 +31,7 @@
   padding: var(--spacing-2) 0;
   border-width: 1px 0;
   border-style: solid;
-  border-color: var(--color-gray-lighter);
+  border-color: var(--separator-color);
 }
 
 .voteCount {
@@ -52,6 +57,10 @@
   margin-right: 1rem;
 }
 
+.abandonedProposal {
+  background: var(--dimmed-card-background) !important;
+}
+
 .proposalActions {
   margin: 0;
 }
@@ -68,6 +77,18 @@ span.statusTag > span {
   white-space: nowrap;
   font-size: var(--font-size-small);
   color: var(--color-gray);
+}
+
+.votesQuorum {
+  color: var(--text-secondary-color) !important;
+}
+
+.votesLeft {
+  color: var(--text-secondary-color) !important;
+}
+
+.votesReceived {
+  color: var(--tab-text-active-color) !important;
 }
 
 @media screen and (max-width: 560px) {

@@ -1,4 +1,4 @@
-import { Card, Spinner, Text } from "pi-ui";
+import { Card, Spinner, Text, classNames } from "pi-ui";
 import React, { useEffect } from "react";
 import { PUB_KEY_STATUS_LOADING } from "src/constants";
 import { verifyUserPubkey } from "src/helpers";
@@ -31,7 +31,7 @@ const OtherIdentity = ({ loadingKey, user }) => {
     </div>
   ) : (
     <Card className="margin-bottom-m" paddingSize="small">
-      <Text color="grayDark" weight="semibold" className={styles.fieldHeading}>
+      <Text color="grayDark" weight="semibold" className={classNames(styles.fieldHeading, styles.block)}>
         Public key
       </Text>
       <PublicKeyText pubkey={pubkey} />

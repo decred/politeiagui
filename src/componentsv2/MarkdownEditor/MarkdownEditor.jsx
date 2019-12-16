@@ -19,7 +19,7 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
 
   useEffect(() => {
     const textarea = document.getElementsByClassName("mde-text")[0];
-    if (!!textarea) {
+    if (textarea) {
       textarea.placeholder = placeholder;
     }
   }, [tab, placeholder]);

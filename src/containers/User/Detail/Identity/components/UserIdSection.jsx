@@ -5,9 +5,9 @@ import styles from "../Identity.module.css";
 export default ({ id }) =>
   <>
     <Text
-        color="grayDark"
         weight="semibold"
         className={classNames(
+          styles.block,
           styles.fieldHeading,
           "margin-bottom-s",
           "margin-top-l"

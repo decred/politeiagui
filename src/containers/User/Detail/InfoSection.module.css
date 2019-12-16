@@ -3,6 +3,10 @@
   min-width: 150px;
 }
 
+.darkLabel {
+  color: var(--tab-hover-color);
+}
+
 .sectionWrapper {
   display: flex;
   justify-content: flex-start;

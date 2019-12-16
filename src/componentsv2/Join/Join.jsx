@@ -4,7 +4,8 @@ import { classNames } from "pi-ui";
 import styles from "./Join.module.css";
 
 const DefaultSeparator = () => (
-  <span className="margin-left-s margin-right-s color-gray">•</span>
+  <span className="text-secondary-color margin-left-s margin-right-s">
+      •</span>
 );
 
 export const Join = ({ children, SeparatorComponent, className }) => {

@@ -88,7 +88,7 @@ const Proposal = React.memo(function Proposal({
   };
   return (
     <>
-      <RecordWrapper>
+      <RecordWrapper className={ classNames(isAbandoned && styles.abandonedProposal)}>
         {({
           Author,
           Event,
@@ -137,7 +137,6 @@ const Proposal = React.memo(function Proposal({
                     <Text
                       id={`proposal-${proposalToken}-version`}
                       className={classNames(styles.version)}
-                      color="gray"
                       truncate
                     >{`version ${version}`}</Text>
                   )}
@@ -161,7 +160,6 @@ const Proposal = React.memo(function Proposal({
                       <Text
                         className={styles.timeLeft}
                         size="small"
-                        color="gray"
                       >
                         {`vote end${isVoteActive ? "s" : "ed"} ${voteTime}`}
                       </Text>
@@ -169,9 +167,10 @@ const Proposal = React.memo(function Proposal({
                     {isVoteActive && (
                       <>
                         <Text
-                          className="hide-on-mobile"
+                          className={classNames(
+                            "hide-on-mobile",
+                            styles.blocksLeft)}
                           size="small"
-                          color="gray"
                         >
                           {`${voteBlocksLeft} blocks left`}
                         </Text>

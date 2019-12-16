@@ -31,46 +31,45 @@ export const Event = ({ event, timestamp }) => (
     {({ timeAgo }) => (
       <Text
         id={`event-${event}-${timestamp}`}
-        color="gray"
+        className={styles.eventTooltip}
         truncate
       >{`${event} ${timeAgo}`}</Text>
     )}
   </DateTooltip>
 );
 
-export const RecordToken = ({ token }) => {
-  return (
-    <div className="align-center overflow-hidden">
-      <Icon type="sign" className="margin-right-xs" />
-      <Text id={`proposal-token-${token}`} truncate>
-        {token}
-      </Text>
-    </div>
-  );
-};
+export const RecordToken = ({ token }) => (
+  <div className="align-center overflow-hidden">
+    <Icon type="sign" className="margin-right-xs" />
+    <Text id={`proposal-token-${token}`} truncate>
+      {token}
+    </Text>
+  </div>
+);
 
 export const Title = ({ children, isAbandoned, url, ...props }) => {
   const SimpleWrapper = props => <div {...props} />;
   const Wrapper = url ? Link : SimpleWrapper;
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
+  const titleClass = isAbandoned ? (isDarkTheme ? styles.darkAbandonedTitle : styles.abandonedTitle) : styles.title;
   return (
-    <Wrapper to={url} className={isAbandoned ? styles.abandonedTitle : styles.title}>
+    <Wrapper to={url} className={titleClass}>
       <H2 {...props}>{children}</H2>
     </Wrapper>
   );
 };
 
-export const Subtitle = ({ children }) => {
-  return (
-    <Join
-      className={classNames("margin-top-s", styles.subtitleWrapper)}
-      SeparatorComponent={() => (
-        <span className="margin-left-s margin-right-s color-gray">•</span>
-      )}
-    >
-      {children}
-    </Join>
-  );
-};
+export const Subtitle = ({ children }) => (
+  <Join
+    className={classNames("margin-top-s", styles.subtitleWrapper)}
+    SeparatorComponent={() => (
+      <span className="text-secondary-color margin-left-s margin-right-s">•</span>
+    )}
+  >
+    {children}
+  </Join>
+);
 
 export const Edit = ({ url }) => (
   <Link to={url}>
@@ -119,8 +118,8 @@ export const Header = React.memo(function Header({
           <div className={styles.titleStatusWrapper}>{status}</div>
         </div>
       ) : (
-        <MobileHeader title={title} status={status} edit={edit} />
-      )}
+          <MobileHeader title={title} status={status} edit={edit} />
+        )}
       {subtitle}
     </div>
   );
@@ -173,39 +172,40 @@ export const GithubLink = ({ token }) => {
   );
 };
 
-export const CommentsLink = ({ numOfComments, url }) => (
-  <Link to={url} gray className={styles.commentsLink}>
-    <Icon type="discuss" className="margin-right-s" />
-    <span>{numOfComments}</span>
-    Comments
-  </Link>
-);
+export const CommentsLink = ({ numOfComments, url }) => {
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
+  return (
+    <Link to={url} gray={!isDarkTheme} dark={isDarkTheme} className={styles.commentsLink}>
+      <Icon type="discuss" className="margin-right-s" />
+      <span className={classNames(isDarkTheme && styles.darkCommentsNumber)}>{numOfComments}</span>
+      Comments
+  </Link>);
+};
 
 export const DownloadRecord = DownloadJSON;
 
-const RecordWrapper = ({ children, className }) => {
-  return (
-    <Card className={classNames("container margin-bottom-m", className)}>
-      {children({
-        Author,
-        Event,
-        Row,
-        Title,
-        CommentsLink,
-        Link,
-        GithubLink,
-        ChartsLink,
-        CopyLink,
-        DownloadRecord,
-        Header,
-        Subtitle,
-        Edit,
-        Status,
-        RecordToken
-      })}
-    </Card>
-  );
-};
+const RecordWrapper = ({ children, className }) => (
+  <Card className={classNames("container margin-bottom-m", className)}>
+    {children({
+      Author,
+      Event,
+      Row,
+      Title,
+      CommentsLink,
+      Link,
+      GithubLink,
+      ChartsLink,
+      CopyLink,
+      DownloadRecord,
+      Header,
+      Subtitle,
+      Edit,
+      Status,
+      RecordToken
+    })}
+  </Card>
+);
 
 RecordWrapper.propTypes = {
   children: PropTypes.func.isRequired,
