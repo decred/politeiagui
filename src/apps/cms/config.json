@@ -1,7 +1,7 @@
 {
   "title": "Contractor Management",
   "logoLight": "cms-logo-light.svg",
-  "logoDark": "cms-logo-dark.svg",
+  "logoDark": "cms-logo-light.svg",
   "recordType": "invoice",
   "aboutContent": "about-politeia",
   "enableAdminInvite": true,

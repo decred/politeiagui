@@ -1,7 +1,8 @@
-import { Text, Dropdown, DropdownItem } from "pi-ui";
+import { Text, Dropdown, DropdownItem, Toggle, useTheme } from "pi-ui";
+import React, { useEffect, useMemo } from "react";
 import Link from "src/componentsv2/Link";
-import React, { useMemo } from "react";
 import { NavLink, withRouter } from "react-router-dom";
+import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
 import useNavigation from "src/hooks/api/useNavigation";
 import { useConfig } from "src/containers/Config";
@@ -12,6 +13,7 @@ const HeaderNav = ({ history }) => {
   const { user, username, onLogout } = useNavigation();
   const { navMenuPaths } = useConfig();
   const userIsAdmin = user && user.isadmin;
+  const { themeName, setThemeName } = useTheme();
 
   const menuItems = useMemo(
     () =>
@@ -33,18 +35,52 @@ const HeaderNav = ({ history }) => {
     history.push(`/user/${user.userid}`);
   }
 
+  const [darkThemeOnLocalStorage, setDarkThemeOnLocalStorage] = useLocalStorage(
+    "darkTheme",
+    false
+  );
+
+  useEffect(() => {
+    if (darkThemeOnLocalStorage && themeName === "light") {
+      setThemeName("dark");
+    }
+  }, [darkThemeOnLocalStorage, setThemeName, themeName]);
+
+  const onThemeToggleHandler = () => {
+    if (themeName === "light") {
+      setDarkThemeOnLocalStorage(true);
+      setThemeName("dark");
+    } else {
+      setThemeName("light");
+      setDarkThemeOnLocalStorage(false);
+    }
+  };
+
   return user && username ? (
     <div className={styles.loggedInContainer}>
-      <ConfigFilter showIf={config => config.enableCredits}>
+      <ConfigFilter showIf={(config) => config.enableCredits}>
         <ProposalCreditsIndicator user={user} />
       </ConfigFilter>
       <Dropdown
         className={styles.dropdown}
         itemsListClassName={styles.dropdownList}
-        title={username}
-      >
+        closeOnItemClick={false}
+        title={username}>
         {menuItems}
         <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
+        <DropdownItem>
+          <div className={styles.themeToggleWrapper}>
+            <Toggle
+              onToggle={onThemeToggleHandler}
+              toggled={themeName === "dark"}
+            />
+            <div
+              onClick={onThemeToggleHandler}
+              className={styles.themeToggleLabel}>
+              Dark Mode
+            </div>
+          </div>
+        </DropdownItem>
         <DropdownItem onClick={onLogout}>Logout</DropdownItem>
       </Dropdown>
     </div>
@@ -53,8 +89,7 @@ const HeaderNav = ({ history }) => {
       <NavLink
         className={styles.navLink}
         activeClassName={styles.activeNavLink}
-        to="/user/login"
-      >
+        to="/user/login">
         <Text className={`${styles.navLinkText} ${styles.rightGreyBorder}`}>
           Log in
         </Text>
@@ -62,8 +97,7 @@ const HeaderNav = ({ history }) => {
       <NavLink
         className={styles.navLink}
         activeClassName={styles.activeNavLink}
-        to="/user/signup"
-      >
+        to="/user/signup">
         <Text className={styles.navLinkText}>Sign up</Text>
       </NavLink>
     </nav>

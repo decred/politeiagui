@@ -7,3 +7,7 @@
   flex: 50%;
   justify-content: center;
 }
+
+.version {
+  color: var(--text-secondary-color);
+}

@@ -18,7 +18,6 @@ const Comment = ({
   createdAt,
   censored,
   highlightAuthor,
-  likesCount,
   likesUpCount,
   likesDownCount,
   likeOption,

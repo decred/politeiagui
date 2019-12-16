@@ -54,7 +54,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
         <Sidebar />
         <Main className={styles.customMain}>
           <PublicActionsProvider>
-            {isLoadingTokenInventory ? 
+            {isLoadingTokenInventory ?
               <div className={styles.spinnerWrapper}>
                 <Spinner invert />
               </div>

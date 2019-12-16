@@ -86,7 +86,7 @@ const AdminAccount = ({
       )}
       <AddressSection address={newuserpaywalladdress} />
       <PaywallSection amount={newuserpaywallamount} timestamp={newuserpaywalltxnotbefore} />
-      <Text color="grayDark" weight="semibold" className={styles.subtitle}>Security</Text>
+      <Text weight="semibold" className={styles.subtitle}>Security</Text>
       <InfoSection
         label="Failed login attempts:"
         info={failedloginattempts}

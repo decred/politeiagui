@@ -67,7 +67,7 @@ const Identity = ({ history, loadingKey, user }) => {
     </div>
   ) : (
     <Card className="margin-bottom-m" paddingSize="small">
-      <Text color="grayDark" weight="semibold" className={styles.fieldHeading}>
+      <Text weight="semibold" className={classNames(styles.fieldHeading, styles.block)}>
         Public key
       </Text>
         {shouldAutoVerifyKey &&
@@ -104,7 +104,7 @@ const Identity = ({ history, loadingKey, user }) => {
         ) : (
           <div
             className={classNames(
-              styles.fieldHeading,
+              styles.block,
               "margin-bottom-s",
               "margin-top-s"
             )}

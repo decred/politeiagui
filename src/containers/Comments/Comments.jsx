@@ -91,7 +91,7 @@ const Comments = ({
   const isSingleThread = !!threadParentID;
 
   const handleSubmitComment = useCallback(
-    comment => {
+    (comment) => {
       return onSubmitComment({
         comment,
         token: recordToken,
@@ -102,7 +102,7 @@ const Comments = ({
   );
 
   const handleSetSortOption = useCallback(
-    option => {
+    (option) => {
       setSortOption(option.value);
       dispatch({
         type: actions.SORT,
@@ -173,7 +173,7 @@ const Comments = ({
   );
 
   const handleCensorComment = useCallback(
-    reason => {
+    (reason) => {
       return onCensorComment(
         userEmail,
         recordToken,
@@ -188,12 +188,16 @@ const Comments = ({
   const hasDuplicatedComments =
     !!state.comments.length && numOfDuplicatedComments > 0;
 
+  const singleThreadCommentCannotBeAccessed =
+    isSingleThread &&
+    ((comments && !comments.find((c) => c.commentid === threadParentID)) ||
+      numOfComments === 0);
+
   return (
     <>
       <Card
         id="commentArea"
-        className={classNames(styles.commentAreaContainer, className)}
-      >
+        className={classNames(styles.commentAreaContainer, className)}>
         <div className={classNames("container", styles.commentsHeaderWrapper)}>
           <LoggedInContent
             fallback={
@@ -201,8 +205,7 @@ const Comments = ({
                 onLoginClick={handleOpenLoginModal}
                 onSignupClick={onRedirectToSignup}
               />
-            }
-          >
+            }>
             <Or>
               {readOnly && (
                 <Message kind="blocked" title={"Comments are not allowed"}>
@@ -234,8 +237,7 @@ const Comments = ({
                 {hasDuplicatedComments && (
                   <Text
                     color="gray"
-                    size="small"
-                  >{`(${numOfDuplicatedComments} duplicate comments omitted)`}</Text>
+                    size="small">{`(${numOfDuplicatedComments} duplicate comments omitted)`}</Text>
                 )}
               </div>
             )}
@@ -260,7 +262,7 @@ const Comments = ({
         <div className={styles.commentsWrapper}>
           {loading ? (
             commentLoaders
-          ) : (
+          ) : !singleThreadCommentCannotBeAccessed ? (
             <CommentContext.Provider
               value={{
                 onSubmitComment,
@@ -276,8 +278,7 @@ const Comments = ({
                 openCensorModal: setCommentIDCensorTarget,
                 openLoginModal: handleOpenLoginModal,
                 ...commentsCtx
-              }}
-            >
+              }}>
               <CommentsListWrapper
                 lastTimeAccessed={lastVisitTimestamp}
                 threadParentID={threadParentID}
@@ -285,6 +286,12 @@ const Comments = ({
                 comments={state.comments}
               />
             </CommentContext.Provider>
+          ) : null}
+          {singleThreadCommentCannotBeAccessed && (
+            <Message kind="error">
+              The comment you are trying to access does not exist or it is a
+              duplicated. Return to the full thread to select a valid comment.
+            </Message>
           )}
         </div>
         <ModalConfirmWithReason

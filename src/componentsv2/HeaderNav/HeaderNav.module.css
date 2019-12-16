@@ -13,12 +13,12 @@
 .navLink {
   composes: navContainer;
   text-decoration: none !important;
-  color: var(--color-gray-dark) !important;
+  color: var(--tab-text-color) !important;
   border-bottom: 2px solid transparent;
 }
 
 .navLink:hover {
-  color: var(--color-primary-dark) !important;
+  color: var(--tab-hover-color) !important;
 }
 
 .navLinkText {
@@ -26,16 +26,28 @@
 }
 
 .rightGreyBorder {
-  border-right: 1px solid var(--color-gray-lighter);
+  border-right: 1px solid var(--separator-color);
 }
 
 .activeNavLink {
   color: var(--color-primary-dark);
-  border-bottom: 2px solid var(--color-yellow);
+  border-bottom: 4px solid var(--active-nav-border-color);
 }
 
 ul.dropdownList {
   width: unset;
+}
+
+.themeToggleWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 14rem;
+}
+
+.themeToggleLabel {
+  margin-left: 1rem;
+  margin-top: 0.3rem;
 }
 
 @media screen and (max-width: 1000px) {

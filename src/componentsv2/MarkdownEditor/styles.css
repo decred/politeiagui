@@ -40,6 +40,10 @@
   margin-right: 0;
 }
 
+li.mde-header-item > button {
+  background: none;
+}
+
 .react-mde .grip {
   display: none;
 }
@@ -59,7 +63,9 @@
   border: 1px solid var(--color-gray-lighter);
   line-height: 1.5;
   font-size: var(--font-size-regular);
+  background: var(--card-background);
   -webkit-appearance: none;
+  color: var(--color-text);
 }
 
 .mde-text::placeholder {

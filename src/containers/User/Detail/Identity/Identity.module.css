@@ -1,4 +1,8 @@
 .fieldHeading {
+  color: var(--tab-text-active-color) !important;
+}
+
+.block {
   display: block;
 }
 

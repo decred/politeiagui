@@ -1,12 +1,15 @@
 import React from "react";
 import RecordWrapper from "../RecordWrapper";
-import { useMediaQuery } from "pi-ui";
+import { useMediaQuery, useTheme, getThemeProperty } from "pi-ui";
 
 import ContentLoader from "react-content-loader";
 
 const ProposalLoader = ({ extended }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
   const yOffset = extended ? 100 : 0;
+  const { theme } = useTheme();
+  const primaryColor = getThemeProperty(theme, "card-background");
+  const secondaryColor = getThemeProperty(theme, "dimmed-card-background");
   return (
     <RecordWrapper>
       {() =>
@@ -15,8 +18,8 @@ const ProposalLoader = ({ extended }) => {
             height={extended ? 300 : 170}
             width={400}
             speed={2}
-            primaryColor="#f3f3f3"
-            secondaryColor="#ecebeb"
+            primaryColor={primaryColor}
+            secondaryColor={secondaryColor}
           >
             <rect x="0" y="0" width="180" height="10" />
             <rect x="0" y="20" width="360" height="20" />
@@ -44,8 +47,8 @@ const ProposalLoader = ({ extended }) => {
             height={extended ? 240 : 100}
             width={800}
             speed={2}
-            primaryColor="#f3f3f3"
-            secondaryColor="#ecebeb"
+            primaryColor={primaryColor}
+            secondaryColor={secondaryColor}
           >
             <rect x="0" y="0" width="600" height="20" />
             <rect x="700" y="0" width="100" height="20" />
