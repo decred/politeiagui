@@ -6,16 +6,14 @@ const MarkdownHelp = ({ helpText, markdownReferenceUrl }) => (
     className="markdown-help"
     href={markdownReferenceUrl}
     target="_blank"
-    rel="noopener noreferrer"
-  >
+    rel="noopener noreferrer">
     <svg
       aria-hidden="true"
       className="markdown-help-svg"
       height="16"
       version="1.1"
       viewBox="0 0 16 16"
-      width="16"
-    >
+      width="16">
       <path
         fillRule="evenodd"
         d={

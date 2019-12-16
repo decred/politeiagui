@@ -71,94 +71,73 @@ import {
 
 export const replyTo = or(get(["app", "replyParent"]), constant(0));
 
-export const proposal = state => {
+export const proposal = (state) => {
   const proposal = apiProposal(state) || {};
 
   return proposal;
 };
 
-export const invoice = state => {
+export const invoice = (state) => {
   const invoice = apiInvoice(state) || {};
 
   return invoice;
 };
 
-export const proposalCredits = state => state.app.proposalCredits;
+export const proposalCredits = (state) => state.app.proposalCredits;
 
-export const getLastSubmittedProposal = state =>
+export const getLastSubmittedProposal = (state) =>
   state.app.submittedProposals.lastSubmitted;
-export const newProposalInitialValues = state =>
+export const newProposalInitialValues = (state) =>
   state.app.draftProposals.initialValues || {};
-export const draftProposals = state =>
+export const draftProposals = (state) =>
   state && state.app && state.app.draftProposals;
-export const draftProposalById = state => {
+export const draftProposalById = (state) => {
   const drafts = draftProposals(state);
   const { draftid } = qs.parse(window.location.search);
   return (draftid && drafts && drafts[draftid]) || false;
 };
-export const draftInvoices = state => {
+export const draftInvoices = (state) => {
   return state && state.app && state.app.draftInvoices;
 };
-export const draftInvoiceById = state => {
+export const draftInvoiceById = (state) => {
   const drafts = draftInvoices(state);
   const { draftid } = qs.parse(window.location.search);
   return (draftid && drafts && drafts[draftid]) || false;
 };
-export const getUserAlreadyPaid = state => state.app.userAlreadyPaid;
-export const getAdminFilterValue = state =>
+export const getUserAlreadyPaid = (state) => state.app.userAlreadyPaid;
+export const getAdminFilterValue = (state) =>
   parseInt(state.app.adminProposalsShow, 10);
-export const getPublicFilterValue = state =>
+export const getPublicFilterValue = (state) =>
   parseInt(state.app.publicProposalsShow, 10);
-export const getUserFilterValue = state =>
+export const getUserFilterValue = (state) =>
   parseInt(state.app.userProposalsShow, 10);
-export const getStartMonthPayoutFilterValue = state =>
+export const getStartMonthPayoutFilterValue = (state) =>
   state.app.startPayoutOption &&
   parseInt(state.app.startPayoutOption.month, 10);
-export const getEndMonthPayoutFilterValue = state =>
+export const getEndMonthPayoutFilterValue = (state) =>
   state.app.endPayoutOption && parseInt(state.app.endPayoutOption.month, 10);
-export const getStartYearPayoutFilterValue = state =>
+export const getStartYearPayoutFilterValue = (state) =>
   state.app.startPayoutOption && parseInt(state.app.startPayoutOption.year, 10);
-export const getEndYearPayoutFilterValue = state =>
+export const getEndYearPayoutFilterValue = (state) =>
   state.app.endPayoutOption && parseInt(state.app.endPayoutOption.year, 10);
-export const getMonthFilterValue = state =>
+export const getMonthFilterValue = (state) =>
   state.app.invoiceSortOption &&
   parseInt(state.app.invoiceSortOption.month, 10);
-export const getYearFilterValue = state =>
+export const getYearFilterValue = (state) =>
   state.app.invoiceSortOption && parseInt(state.app.invoiceSortOption.year, 10);
-export const isMarkdown = compose(
-  eq("index.md"),
-  get("name")
-);
-export const isJSON = compose(
-  eq("invoice.json"),
-  get("name")
-);
-export const getProposalFiles = compose(
-  get("files"),
-  proposal
-);
-export const getInvoiceFiles = compose(
-  get("file"),
-  invoice
-);
-export const getMarkdownFile = compose(
-  find(isMarkdown),
-  getProposalFiles
-);
+export const isMarkdown = compose(eq("index.md"), get("name"));
+export const isJSON = compose(eq("invoice.json"), get("name"));
+export const getProposalFiles = compose(get("files"), proposal);
+export const getInvoiceFiles = compose(get("file"), invoice);
+export const getMarkdownFile = compose(find(isMarkdown), getProposalFiles);
 export const getNotMarkdownFile = compose(
   filter(not(isMarkdown)),
   getProposalFiles
 );
-export const getInvoiceJSON = compose(
-  find(isJSON),
-  getInvoiceFiles
-);
-export const getNotJSONFile = compose(
-  filter(not(isJSON)),
-  getInvoiceFiles
-);
+export const getInvoiceJSON = compose(find(isJSON), getInvoiceFiles);
+export const getNotJSONFile = compose(filter(not(isJSON)), getInvoiceFiles);
 
-export const getEditProposalValues = state => {
+export const getEditProposalValues = (state) => {
   const { name } = proposal(state);
 
   const files = name ? getNotMarkdownFile(state) : [];
@@ -170,7 +149,7 @@ export const getEditProposalValues = state => {
   };
 };
 
-export const getEditUserValues = state => {
+export const getEditUserValues = (state) => {
   let emailNotifications;
 
   if (apiEditUserResponse(state)) {
@@ -212,7 +191,7 @@ export const getEditUserValues = state => {
   };
 };
 
-export const resolveEditUserValues = prefs => {
+export const resolveEditUserValues = (prefs) => {
   return {
     emailnotifications:
       (prefs["myproposalnotifications-statuschange"]
@@ -245,7 +224,7 @@ export const resolveEditUserValues = prefs => {
   };
 };
 
-export const getUserPaywallStatus = state => {
+export const getUserPaywallStatus = (state) => {
   if (isCMS(state)) return CMS_PAYWALL_STATUS;
   if (userAlreadyPaid(state)) {
     return PAYWALL_STATUS_PAID;
@@ -253,48 +232,48 @@ export const getUserPaywallStatus = state => {
 
   return state.app.userPaywallStatus || PAYWALL_STATUS_WAITING;
 };
-export const getUserPaywallConfirmations = state => {
+export const getUserPaywallConfirmations = (state) => {
   if (userAlreadyPaid(state)) {
     return null;
   }
   return state.app.userPaywallConfirmations;
 };
 
-export const getUserPaywallTxid = state => {
+export const getUserPaywallTxid = (state) => {
   if (userAlreadyPaid(state)) {
     return null;
   }
   return state.app.userPaywallTxid;
 };
 
-export const userHasPaid = state => {
+export const userHasPaid = (state) => {
   return getUserPaywallStatus(state) === PAYWALL_STATUS_PAID;
 };
-export const userCanExecuteActions = state => {
+export const userCanExecuteActions = (state) => {
   return userHasPaid(state) && !getKeyMismatch(state);
 };
 
-export const isProposalStatusApproved = state =>
+export const isProposalStatusApproved = (state) =>
   state.app.isProposalStatusApproved;
-export const activeVotesEndHeight = state => state.app.activeVotesEndHeight;
+export const activeVotesEndHeight = (state) => state.app.activeVotesEndHeight;
 
-export const proposalComments = state => apiProposalComments(state);
+export const proposalComments = (state) => apiProposalComments(state);
 
-export const invoiceComments = state => apiInvoiceComments(state);
+export const invoiceComments = (state) => apiInvoiceComments(state);
 
-export const getTempThreadTree = state => state.app.replyThreadTree;
+export const getTempThreadTree = (state) => state.app.replyThreadTree;
 
-export const unvettedProposals = state => {
+export const unvettedProposals = (state) => {
   const unvettedProposals = apiUnvettedProposals(state);
   return unvettedProposals;
 };
 
-export const vettedProposals = state => {
+export const vettedProposals = (state) => {
   const vettedProposals = apiVettedProposals(state);
   return vettedProposals;
 };
 
-export const getUnvettedFilteredProposals = state => {
+export const getUnvettedFilteredProposals = (state) => {
   const filterValue = getAdminFilterValue(state);
   const proposals = unvettedProposals(state);
 
@@ -303,7 +282,7 @@ export const getUnvettedFilteredProposals = state => {
   }
 
   return proposals
-    .filter(proposal => {
+    .filter((proposal) => {
       // alow propos with status of unreviewed changes be filtered along with general unreviewed props
       if (
         proposal.status === PROPOSAL_STATUS_UNREVIEWED_CHANGES &&
@@ -316,12 +295,12 @@ export const getUnvettedFilteredProposals = state => {
     .sort((a, b) => b.timestamp - a.timestamp);
 };
 
-export const getVettedFilteredProposals = state => {
+export const getVettedFilteredProposals = (state) => {
   const vettedProps = vettedProposals(state);
   const filterValue = getPublicFilterValue(state);
   if (!filterValue) return vettedProps;
   return vettedProps
-    .filter(prop => {
+    .filter((prop) => {
       const propVoteStatus = getPropVoteStatus(state)(
         prop.censorshiprecord.token
       ).status;
@@ -367,17 +346,17 @@ export const getVettedFilteredProposals = state => {
     .sort((a, b) => b.timestamp - a.timestamp);
 };
 
-export const getDraftProposals = state => {
+export const getDraftProposals = (state) => {
   const draftsObj = draftProposals(state) || {};
   const drafts = Object.keys(draftsObj)
     .filter(
-      key => ["newDraft", "lastSubmitted", "originalName"].indexOf(key) === -1
+      (key) => ["newDraft", "lastSubmitted", "originalName"].indexOf(key) === -1
     )
-    .map(key => draftsObj[key]);
+    .map((key) => draftsObj[key]);
   return drafts;
 };
 
-export const getSubmittedUserInvoices = state => {
+export const getSubmittedUserInvoices = (state) => {
   const invoices = apiUserInvoices(state);
 
   const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
@@ -385,8 +364,8 @@ export const getSubmittedUserInvoices = state => {
   return sortByNewestFirst(invoices);
 };
 
-export const getSubmittedUserProposals = state => userID => {
-  const isUserProp = prop => prop.userid === userID;
+export const getSubmittedUserProposals = (state) => (userID) => {
+  const isUserProp = (prop) => prop.userid === userID;
   const vettedProps = vettedProposals(state).filter(isUserProp);
   const unvettedProps = unvettedProposals(state).filter(isUserProp);
 
@@ -397,13 +376,13 @@ export const getSubmittedUserProposals = state => userID => {
 
 export const getUserProposalsWithVoteStatus = (state, { userID }) => {
   const userProposals = getSubmittedUserProposals(state)(userID);
-  return userProposals.map(prop => ({
+  return userProposals.map((prop) => ({
     ...prop,
     voteStatus: getPropVoteStatus(state)(prop.censorshiprecord.token)
   }));
 };
 
-export const getUserProposals = state => {
+export const getUserProposals = (state) => {
   const userFilterValue = getUserFilterValue(state);
   const userID = userid(state);
 
@@ -417,7 +396,7 @@ export const getUserProposals = state => {
 };
 
 // TODO: call getUserInvoicesCountByStatus
-export const getUserInvoicesFilterCounts = state => {
+export const getUserInvoicesFilterCounts = (state) => {
   let invoices = apiUserInvoices(state);
   const { month, year } = state.app.invoiceSortOption;
   if (month !== FILTER_ALL_MONTHS) {
@@ -434,7 +413,7 @@ export const getUserInvoicesFilterCounts = state => {
   return userInvoiceCounts;
 };
 
-export const getAdminInvoicesCountByStatus = state => {
+export const getAdminInvoicesCountByStatus = (state) => {
   let invoices = apiAdminInvoices(state);
   const { month, year } = state.app.invoiceSortOption;
   if (month !== FILTER_ALL_MONTHS) {
@@ -443,7 +422,7 @@ export const getAdminInvoicesCountByStatus = state => {
   return getInvoicesCountByStatus(invoices);
 };
 
-export const getInvoicesCountByStatus = invoices => {
+export const getInvoicesCountByStatus = (invoices) => {
   return invoices
     ? {
         [INVOICE_STATUS_NEW]: getInvoicesByStatus(invoices, INVOICE_STATUS_NEW)
@@ -476,19 +455,19 @@ export const getInvoicesCountByStatus = invoices => {
 const getInvoicesByStatus = (invoices, status) =>
   status === INVOICE_FILTER_ALL
     ? invoices
-    : invoices.filter(i => i.status === status);
+    : invoices.filter((i) => i.status === status);
 
 const getInvoicesByYear = (invoices, year) =>
   year === getCurrentYear()
     ? invoices
-    : invoices.filter(i => i.input.year === year);
+    : invoices.filter((i) => i.input.year === year);
 
 const getInvoicesByMonth = (invoices = [], month) =>
   month === FILTER_ALL_MONTHS
     ? invoices
-    : invoices.filter(i => i.input.month === month);
+    : invoices.filter((i) => i.input.month === month);
 
-export const getAdminInvoices = state => {
+export const getAdminInvoices = (state) => {
   const invoices = apiAdminInvoices(state);
   const adminFilterValue = getAdminFilterValue(state);
   const monthFilter = getMonthFilterValue(state);
@@ -503,7 +482,7 @@ export const getAdminInvoices = state => {
   return invoicesByStatus && invoicesByYear && invoicesByMonth;
 };
 
-export const getUserInvoices = state => {
+export const getUserInvoices = (state) => {
   const invoices = apiUserInvoices(state);
   const userFilterValue = getUserFilterValue(state);
   const monthFilter = getMonthFilterValue(state);
@@ -522,20 +501,20 @@ export const getUserInvoices = state => {
   }
 };
 
-export const getDraftInvoices = state => {
+export const getDraftInvoices = (state) => {
   const draftsObj = draftInvoices(state) || {};
   const drafts = Object.keys(draftsObj)
     .filter(
-      key => ["newDraft", "lastSubmitted", "originalName"].indexOf(key) === -1
+      (key) => ["newDraft", "lastSubmitted", "originalName"].indexOf(key) === -1
     )
-    .map(key => draftsObj[key]);
+    .map((key) => draftsObj[key]);
 
   const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
 
   return sortByNewestFirst(drafts);
 };
 
-export const getUserProposalFilterCounts = state => {
+export const getUserProposalFilterCounts = (state) => {
   const userId = userid(state);
   const proposalFilterCounts = {
     [PROPOSAL_USER_FILTER_SUBMITTED]: getSubmittedUserProposals(state)(userId)
@@ -550,7 +529,7 @@ export const getUserProposalFilterCounts = state => {
   return proposalFilterCounts;
 };
 
-export const getUnvettedProposalFilterCounts = state => {
+export const getUnvettedProposalFilterCounts = (state) => {
   const usResponse = apiUnvettedStatusResponse(state);
   return usResponse
     ? {
@@ -566,10 +545,10 @@ export const getUnvettedProposalFilterCounts = state => {
 };
 
 const countAbandonedProposals = (proposals = []) =>
-  proposals.filter(p => p.status === PROPOSAL_STATUS_ABANDONED).length;
+  proposals.filter((p) => p.status === PROPOSAL_STATUS_ABANDONED).length;
 
 const countApprovedProps = (votesstatus = []) =>
-  votesstatus.filter(vs => {
+  votesstatus.filter((vs) => {
     if (vs.status === PROPOSAL_VOTING_FINISHED) {
       return isProposalApproved(vs);
     }
@@ -577,14 +556,14 @@ const countApprovedProps = (votesstatus = []) =>
   }).length;
 
 const countRejectedProps = (votesstatus = []) =>
-  votesstatus.filter(vs => {
+  votesstatus.filter((vs) => {
     if (vs.status === PROPOSAL_VOTING_FINISHED) {
       return !isProposalApproved(vs);
     }
     return false;
   }).length;
 
-export const getVettedProposalFilterCounts = state => {
+export const getVettedProposalFilterCounts = (state) => {
   if (isCMS(state))
     return {
       [PROPOSAL_STATUS_ABANDONED]: 0,
@@ -616,7 +595,7 @@ export const getVettedProposalFilterCounts = state => {
   };
 };
 
-export const getUnvettedEmptyProposalsMessage = state => {
+export const getUnvettedEmptyProposalsMessage = (state) => {
   switch (getAdminFilterValue(state)) {
     case PROPOSAL_STATUS_UNREVIEWED:
       return "There are no proposals to review";
@@ -627,7 +606,7 @@ export const getUnvettedEmptyProposalsMessage = state => {
   }
 };
 
-export const getVettedEmptyProposalsMessage = state => {
+export const getVettedEmptyProposalsMessage = (state) => {
   switch (getPublicFilterValue(state)) {
     case PROPOSAL_VOTING_ACTIVE:
       return "There are no proposals being actively voted on";
@@ -644,32 +623,32 @@ export const getVettedEmptyProposalsMessage = state => {
   }
 };
 
-export const votesEndHeight = state => state.app.votesEndHeight || {};
+export const votesEndHeight = (state) => state.app.votesEndHeight || {};
 
-export const getCsrfIsNeeded = state =>
+export const getCsrfIsNeeded = (state) =>
   state.app ? state.app.csrfIsNeeded : null;
 
-export const isShowingSignupConfirmation = state =>
+export const isShowingSignupConfirmation = (state) =>
   state.app.isShowingSignupConfirmation;
 
-export const shouldAutoVerifyKey = state => state.app.shouldVerifyKey;
+export const shouldAutoVerifyKey = (state) => state.app.shouldVerifyKey;
 
-export const identityImportError = state =>
+export const identityImportError = (state) =>
   state.app.identityImportResult && state.app.identityImportResult.errorMsg;
 
-export const identityImportSuccess = state =>
+export const identityImportSuccess = (state) =>
   state.app.identityImportResult && state.app.identityImportResult.successMsg;
 
-export const onboardViewed = state => state.app.onboardViewed;
+export const onboardViewed = (state) => state.app.onboardViewed;
 
-export const commentsSortOption = state => state.app.commentsSortOption;
+export const commentsSortOption = (state) => state.app.commentsSortOption;
 
-export const pollingCreditsPayment = state => state.app.pollingCreditsPayment;
+export const pollingCreditsPayment = (state) => state.app.pollingCreditsPayment;
 
-export const reachedCreditsPaymentPollingLimit = state =>
+export const reachedCreditsPaymentPollingLimit = (state) =>
   state.app.reachedCreditsPaymentPollingLimit;
 
-export const proposalPaymentReceived = state =>
+export const proposalPaymentReceived = (state) =>
   state.app.proposalPaymentReceived;
 
-export const redirectedFrom = state => state.app.redirectedFrom;
+export const redirectedFrom = (state) => state.app.redirectedFrom;

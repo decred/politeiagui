@@ -10,8 +10,7 @@ const SidebarSearch = ({ error, isSaving, onFind, handleSubmit }) => (
       className="search-form"
       id="search"
       role="search"
-      onSubmit={handleSubmit(onFind)}
-    >
+      onSubmit={handleSubmit(onFind)}>
       <Field
         name="censorship"
         component="input"

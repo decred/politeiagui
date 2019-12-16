@@ -11,7 +11,7 @@ import { arg, or } from "../lib/fp";
 const submitConnector = connect(
   sel.selectorMap({
     token: compose(
-      t => (t ? t.toLowerCase() : t),
+      (t) => (t ? t.toLowerCase() : t),
       get(["match", "params", "token"]),
       arg(1)
     ),
@@ -100,12 +100,8 @@ class SubmitWrapper extends Component {
   };
 }
 
-const wrapSubmit = Component => props => (
+const wrapSubmit = (Component) => (props) => (
   <SubmitWrapper {...{ ...props, Component }} />
 );
 
-export default compose(
-  submitConnector,
-  withRouter,
-  wrapSubmit
-);
+export default compose(submitConnector, withRouter, wrapSubmit);

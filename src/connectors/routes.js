@@ -6,7 +6,7 @@ const routeConnector = connect(
   sel.selectorMap({
     isCMS: sel.isCMS
   }),
-  dispatch => bindActionCreators({}, dispatch)
+  (dispatch) => bindActionCreators({}, dispatch)
 );
 
 export default routeConnector;

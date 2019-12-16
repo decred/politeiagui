@@ -47,7 +47,7 @@ describe("test actions/external_api", () => {
     //test when payment fails
     store.clearActions();
     setPostErrorResponse(faucetPath, {}, { status: 404 });
-    await store.dispatch(ea.payWithFaucet.apply(null, params)).catch(e => {
+    await store.dispatch(ea.payWithFaucet.apply(null, params)).catch((e) => {
       expect(store.getActions()).toEqual([
         {
           type: act.REQUEST_PAYWALL_PAYMENT_WITH_FAUCET,

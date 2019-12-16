@@ -58,8 +58,7 @@ class PreferencesTab extends React.Component {
     return (
       <form
         className="detail-tab-content"
-        onSubmit={handleSubmit(this.onEditUser)}
-      >
+        onSubmit={handleSubmit(this.onEditUser)}>
         {this.state.showEditUserMessage && (
           <Fragment>
             {editUserError && (

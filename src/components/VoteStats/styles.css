@@ -1,10 +1,10 @@
 .voteStatsWrapper {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    border: 1px solid #bbb;
-    margin-top: 10px;
-    border-radius: 8px;
-    max-width: 600px;
-    cursor: default;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: 1px solid #bbb;
+  margin-top: 10px;
+  border-radius: 8px;
+  max-width: 600px;
+  cursor: default;
 }

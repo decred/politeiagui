@@ -67,7 +67,7 @@ class InviteUser extends Component {
       .onInviteUserConfirm(
         assign({ email: props.email }, this.getQueryParams())
       )
-      .catch(error => {
+      .catch((error) => {
         throw new SubmissionError({
           _error: error.message
         });

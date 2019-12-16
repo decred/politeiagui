@@ -1,27 +1,28 @@
 .payouts-table {
-    width: 100%;
+  width: 100%;
 }
 
 .payouts-table > tbody > tr:nth-child(even) {
-    background-color: #dddddd;
+  background-color: #dddddd;
 }
 
-.payouts-table > tbody > tr > td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
+.payouts-table > tbody > tr > td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
 }
 
-.payouts-table > tbody > tr > th  {
-    font-weight: bold;
+.payouts-table > tbody > tr > th {
+  font-weight: bold;
 }
 
 .payouts-btn-export-to-csv {
-    float: right;
-    margin: 0 0 20px;
+  float: right;
+  margin: 0 0 20px;
 }
 
 .payouts-btn-pay-invoices {
-    float: right;
-    margin: 20px -12px;
+  float: right;
+  margin: 20px -12px;
 }

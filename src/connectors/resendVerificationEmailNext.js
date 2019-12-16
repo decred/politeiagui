@@ -8,7 +8,7 @@ const resendVerificationEmailNextConnector = connect(
   sel.selectorMap({
     email: sel.emailForResendVerification
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         resetResendVerificationEmail: act.resetResendVerificationEmail
@@ -28,8 +28,8 @@ class Wrapper extends Component {
   }
 }
 
-const wrap = Component =>
-  resendVerificationEmailNextConnector(props => (
+const wrap = (Component) =>
+  resendVerificationEmailNextConnector((props) => (
     <Wrapper {...{ ...props, Component }} />
   ));
 export default wrap;

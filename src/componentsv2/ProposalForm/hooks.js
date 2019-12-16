@@ -14,7 +14,7 @@ export function useProposalForm() {
 export function useFullImageModal() {
   const [showFullImageModal, setShowFullImageModal] = useState(false);
   const openFullImageModal = useCallback(
-    f => {
+    (f) => {
       setShowFullImageModal(f);
     },
     [setShowFullImageModal]

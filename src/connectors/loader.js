@@ -18,7 +18,7 @@ export default connect(
     isModeFetched: sel.isModeFetched,
     apiInfo: sel.apiInitResponse
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onInit: act.requestApiInfo,

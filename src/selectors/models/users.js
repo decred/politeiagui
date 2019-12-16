@@ -11,8 +11,8 @@ export const queryResultsByUsername = get([
   "queryByUsername"
 ]);
 
-export const makeGetUserByID = userID =>
-  createSelector(userByID, users => users[userID] || null);
+export const makeGetUserByID = (userID) =>
+  createSelector(userByID, (users) => users[userID] || null);
 
 export const currentUserID = get(["users", "currentUserID"]);
 
@@ -22,8 +22,8 @@ export const currentUser = createSelector(
   (users, userID) => users[userID]
 );
 
-const createUserSelectors = keys =>
-  keys.map(key => createSelector(currentUser, user => user && user[key]));
+const createUserSelectors = (keys) =>
+  keys.map((key) => createSelector(currentUser, (user) => user && user[key]));
 
 export const [
   currentUserEmail,
@@ -49,32 +49,32 @@ export const [
 
 export const currentUserPaywallAmount = createSelector(
   currentUser,
-  user => user && user.paywallamount / 100000000
+  (user) => user && user.paywallamount / 100000000
 );
 
 export const currentUserPreferences = createSelector(
   currentUser,
-  user => user && emailNotificationsToPreferences(user.emailnotifications)
+  (user) => user && emailNotificationsToPreferences(user.emailnotifications)
 );
 
-export const makeGetSearchResultsByEmail = email =>
+export const makeGetSearchResultsByEmail = (email) =>
   createSelector(
     searchResultsByID,
     queryResultsByEmail,
     (allResults, idsByEmail) => {
       const results = idsByEmail[email];
       if (!results) return null;
-      return results.map(id => allResults[id]);
+      return results.map((id) => allResults[id]);
     }
   );
 
-export const makeGetSearchResultsByUsername = username =>
+export const makeGetSearchResultsByUsername = (username) =>
   createSelector(
     searchResultsByID,
     queryResultsByUsername,
     (allResults, idsByUsn) => {
       const results = idsByUsn[username];
       if (!results) return null;
-      return results.map(id => allResults[id]);
+      return results.map((id) => allResults[id]);
     }
   );

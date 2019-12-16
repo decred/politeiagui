@@ -10,19 +10,16 @@ export const allByStatus = createDeepEqualSelector(
   ({ allByStatus }) => allByStatus
 );
 
-export const makeGetProposalByToken = token =>
-  createSelector(
-    proposalsByToken,
-    get(token)
-  );
+export const makeGetProposalByToken = (token) =>
+  createSelector(proposalsByToken, get(token));
 
-export const makeGetUserProposals = userId =>
+export const makeGetUserProposals = (userId) =>
   createSelector(
     allProposalsByUserID,
     proposalsByToken,
     (propsByUserID, propsByToken) => {
       const userProps = (propsByUserID[userId] || [])
-        .map(token => propsByToken[token])
+        .map((token) => propsByToken[token])
         .filter(Boolean);
       const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
       return sortByNewestFirst(userProps);

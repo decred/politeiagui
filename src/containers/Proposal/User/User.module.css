@@ -1,14 +1,14 @@
 .selectContainer {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
 }
 .select {
-    min-width: 10rem;
+  min-width: 10rem;
 }
 
-@media screen and (max-width: 768px){ 
-    .selectContainer {
-        padding-right: .5rem;
-    }
+@media screen and (max-width: 768px) {
+  .selectContainer {
+    padding-right: 0.5rem;
+  }
 }

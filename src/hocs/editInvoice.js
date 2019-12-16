@@ -11,7 +11,7 @@ import { lineitemsWithSubtotal } from "../components/InvoiceDatasheet/helpers";
 const editInvoiceConnector = connect(
   sel.selectorMap({
     token: compose(
-      t => (t ? t.toLowerCase() : t),
+      (t) => (t ? t.toLowerCase() : t),
       get(["match", "params", "token"]),
       arg(1)
     ),
@@ -116,11 +116,8 @@ class EditInvoiceContainer extends Component {
   onCancel = () => this.props.history.push(`/invoices/${this.props.token}`);
 }
 
-const wrap = Component => props => (
+const wrap = (Component) => (props) => (
   <EditInvoiceContainer {...{ ...props, Component }} />
 );
 
-export default compose(
-  editInvoiceConnector,
-  wrap
-);
+export default compose(editInvoiceConnector, wrap);

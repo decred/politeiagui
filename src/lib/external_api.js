@@ -1,11 +1,11 @@
 import { TESTNET, EXPLORER } from "../constants";
 
-const getSubdomainForDcrdata = isTestnet => (isTestnet ? TESTNET : EXPLORER);
+const getSubdomainForDcrdata = (isTestnet) => (isTestnet ? TESTNET : EXPLORER);
 
-const dcrdataURL = isTestnet =>
+const dcrdataURL = (isTestnet) =>
   `https://${getSubdomainForDcrdata(isTestnet)}.decred.org/api`;
 
-export const dcrddataBlockHeightURL = isTestnet =>
+export const dcrddataBlockHeightURL = (isTestnet) =>
   `${dcrdataURL(isTestnet)}/block/best/height`;
 
 const dcrdataAddressURL = (isTestnet, address) =>
@@ -36,8 +36,8 @@ const POST = (path, params, method = "POST") => {
   });
 };
 
-const getRawTransactions = url => {
-  return fetch(url).then(r => {
+const getRawTransactions = (url) => {
+  return fetch(url).then((r) => {
     // work around when transactions are not paid and dcrdata api returns Unprocessable Entity
     if (r.statusText === "Unprocessable Entity") {
       return null;
@@ -46,12 +46,12 @@ const getRawTransactions = url => {
   });
 };
 
-const addressFromTestnet = addr => addr[0] === "T";
+const addressFromTestnet = (addr) => addr[0] === "T";
 
-export const getHeightByDcrdata = isTestnet =>
+export const getHeightByDcrdata = (isTestnet) =>
   getRawTransactions(dcrddataBlockHeightURL(isTestnet));
 
-export const getPaymentsByAddressDcrdata = address => {
+export const getPaymentsByAddressDcrdata = (address) => {
   const isTestnet = addressFromTestnet(address);
   return getRawTransactions(dcrdataAddressURL(isTestnet, address));
 };

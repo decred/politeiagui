@@ -46,7 +46,7 @@ class VerifyKey extends Component {
       loggedInAsEmail
     ) {
       verifyUserPubkey(loggedInAsEmail, userPubkey, keyMismatchAction);
-      pki.myPubKeyHex(loggedInAsEmail).then(pubkey => {
+      pki.myPubKeyHex(loggedInAsEmail).then((pubkey) => {
         if (pubkey !== apiMeResponse.publickey) {
           this.props.updateMe({
             ...this.props.apiMeResponse,

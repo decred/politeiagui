@@ -51,7 +51,7 @@ export function useRedux(
   ]);
 }
 
-export const useStoreSubscribe = callbackFn => {
+export const useStoreSubscribe = (callbackFn) => {
   const { store } = useReduxContext();
   return store.subscribe(
     throttle(() => {

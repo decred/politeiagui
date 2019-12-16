@@ -56,14 +56,12 @@ class TogglerLayout extends React.Component {
         <div style={toggleContainerStyle}>
           <span
             style={toggleWriteStyle}
-            onClick={() => this.setState({ previewActive: false })}
-          >
+            onClick={() => this.setState({ previewActive: false })}>
             Write
           </span>
           <span
             style={togglePreviewStyle}
-            onClick={() => this.setState({ previewActive: true })}
-          >
+            onClick={() => this.setState({ previewActive: true })}>
             Preview
           </span>
         </div>
@@ -108,7 +106,7 @@ class MarkdownEditor extends React.Component {
     return customCommands;
   };
 
-  handleValueChange = value => {
+  handleValueChange = (value) => {
     if (!this.props.toggledStyle) {
       this.textArea.style.height = "auto";
       this.textArea.style.height = this.textArea.scrollHeight + "px";
@@ -117,7 +115,7 @@ class MarkdownEditor extends React.Component {
     onChange(value.text);
   };
 
-  handleCommand = command => {
+  handleCommand = (command) => {
     const { value, onChange } = this.props;
     const newValue = command.execute(value, getSelection(this.textArea));
     onChange(newValue.text);
@@ -147,7 +145,7 @@ class MarkdownEditor extends React.Component {
       <ReactMdeTextArea
         onChange={this.handleValueChange}
         value={{ text: value }}
-        textAreaRef={c => (this.textArea = c)}
+        textAreaRef={(c) => (this.textArea = c)}
       />
     );
     const Preview = <MarkdownPreview body={value} />;
@@ -165,7 +163,7 @@ class MarkdownEditor extends React.Component {
             textAreaProps={{
               style: { overflowY: "auto", resize: "vertical" }
             }}
-            textAreaRef={c => (this.textArea = c)}
+            textAreaRef={(c) => (this.textArea = c)}
           />
         }
         Preview={<MarkdownPreview body={value} fullWidth />}

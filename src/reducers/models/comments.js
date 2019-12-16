@@ -47,7 +47,7 @@ const comments = (state = DEFAULT_STATE, action) =>
             const commentsLikes = state.commentsLikes.byToken[token];
             const backupForCommentLikes = cloneDeep(commentsLikes);
             const comments = state.comments.byToken[token];
-            const isTargetCommentLike = commentLike =>
+            const isTargetCommentLike = (commentLike) =>
               commentLike.commentid === commentid &&
               commentLike.token === token;
             const oldCommentLike =
@@ -66,18 +66,18 @@ const comments = (state = DEFAULT_STATE, action) =>
               "commentid"
             );
 
-            const updateCommentResultAndTotalVotes = comment => {
+            const updateCommentResultAndTotalVotes = (comment) => {
               if (comment.commentid !== commentid) return comment;
               const oldActionEqualsNewAction = oldAction === newAction;
 
-              const calcNewTotalVotes = value =>
+              const calcNewTotalVotes = (value) =>
                 value +
                 (oldActionEqualsNewAction ? -1 : oldAction === 0 ? 1 : 0);
-              const calcNewResultVotes = value =>
+              const calcNewResultVotes = (value) =>
                 value +
                 (oldActionEqualsNewAction ? -oldAction : newAction - oldAction);
 
-              const calcPerActionVotes = action => (value = 0) => {
+              const calcPerActionVotes = (action) => (value = 0) => {
                 if (newAction === action) {
                   if (oldActionEqualsNewAction) return --value;
                   return ++value;
@@ -98,7 +98,7 @@ const comments = (state = DEFAULT_STATE, action) =>
               set(["commentsLikes", "backup"], backupForCommentLikes),
               set(["commentsLikes", "byToken", token], newCommentsLikes),
               set(["comments", "backup"], comments),
-              update(["comments", "byToken", token], value =>
+              update(["comments", "byToken", token], (value) =>
                 value.map(updateCommentResultAndTotalVotes)
               )
             )(state);
@@ -122,7 +122,7 @@ const comments = (state = DEFAULT_STATE, action) =>
           },
           [act.RECEIVE_CENSOR_COMMENT]: () => {
             const { commentid, token } = action.payload;
-            const censorTargetComment = comment => {
+            const censorTargetComment = (comment) => {
               if (comment.commentid !== commentid) return comment;
               return {
                 ...comment,
@@ -131,7 +131,7 @@ const comments = (state = DEFAULT_STATE, action) =>
               };
             };
             return compose(
-              update(["comments", "byToken", token], comments =>
+              update(["comments", "byToken", token], (comments) =>
                 comments.map(censorTargetComment)
               )
             )(state);

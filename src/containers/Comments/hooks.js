@@ -80,9 +80,9 @@ export function useComments(recordToken, fetchComments = false) {
   );
 
   const getCommentLikeOption = useCallback(
-    commentID => {
+    (commentID) => {
       const actionData = (commentsLikes || []).find(
-        cl => cl.commentid === commentID
+        (cl) => cl.commentid === commentID
       );
       if (actionData) {
         return actionData.action;

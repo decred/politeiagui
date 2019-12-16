@@ -1,9 +1,9 @@
-
 .error.cell > div.text {
   text-align: center;
 }
 
-.value-viewer, .data-editor {
+.value-viewer,
+.data-editor {
   text-align: left !important;
   padding-left: 10px;
 }
@@ -16,15 +16,17 @@
   width: 1rem;
 }
 
-tbody .row-handle.cell, thead .cell:not(.row-handle) {
+tbody .row-handle.cell,
+thead .cell:not(.row-handle) {
   cursor: move;
 }
 
 .data-grid-container table.data-grid tr {
- background: white;
+  background: white;
 }
-.data-grid-container table.data-grid .drop-target,  .data-grid-container table.data-grid thead .cell.read-only.drop-target {
-  background: #6F86FC;
+.data-grid-container table.data-grid .drop-target,
+.data-grid-container table.data-grid thead .cell.read-only.drop-target {
+  background: #6f86fc;
   transition: none;
   color: white;
 }
@@ -33,8 +35,8 @@ tbody .row-handle.cell, thead .cell:not(.row-handle) {
 }
 
 .data-grid-container .data-grid .cell > input {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 table.data-grid {
@@ -49,49 +51,50 @@ table.data-grid {
   margin-top: 20px;
 }
 
-.sheet-container table.data-grid tr td.cell:not(.selected){
+.sheet-container table.data-grid tr td.cell:not(.selected) {
   border: 1px solid #ececec;
 }
-.sheet-container table.data-grid tr td.cell, .sheet-container table.data-grid tr th.cell {
+.sheet-container table.data-grid tr td.cell,
+.sheet-container table.data-grid tr th.cell {
   font-size: 12px;
 }
 div.divider {
   margin: 40px 0px;
   height: 1px;
   width: 100%;
-  background-color: #EEE;
+  background-color: #eee;
 }
 pre {
-      display: inline-block;
-    background: #333;
-    padding: 10px 30px;
-    border-left: 2px solid white;
+  display: inline-block;
+  background: #333;
+  padding: 10px 30px;
+  border-left: 2px solid white;
 }
 
 .table-button {
-    line-height: 1.4rem !important;
-    font-size: 0.8rem;    
-    max-height: 1.4rem;
+  line-height: 1.4rem !important;
+  font-size: 0.8rem;
+  max-height: 1.4rem;
 }
 
 .table-button.add-row {
-    background: #164623;
+  background: #164623;
 }
 
 .table-button.add-row:hover {
-    background: #476b50;
+  background: #476b50;
 }
 
 .table-button.remove-row {
-    background: #e63946;
+  background: #e63946;
 }
 
 .table-button.remove-row.disabled {
-    background: rgba(0, 0, 0, .08)
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .table-button.remove-row:hover {
-    background: #f17d86;
+  background: #f17d86;
 }
 
 .total-label {
@@ -101,11 +104,11 @@ pre {
 }
 
 .multiline-cell-value {
-	word-break: break-word;
-	white-space: pre-line !important;
+  word-break: break-word;
+  white-space: pre-line !important;
 }
 
 .multiline-cell-editor {
-	resize: vertical;
-	height: 25px;
+  resize: vertical;
+  height: 25px;
 }

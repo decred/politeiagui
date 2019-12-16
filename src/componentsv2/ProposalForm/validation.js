@@ -16,7 +16,7 @@ export const proposalValidation = ({
   maximages,
   maximagesize,
   maxmdsize
-}) => values => {
+}) => (values) => {
   const errors = {};
   if (!values) {
     values = {
@@ -53,7 +53,7 @@ export const proposalValidation = ({
     It corresponds to the index file, so a proposal can only accept image
     attachments until this policy changes.
   */
-  const validMimeTypes = validmimetypes.filter(m => m.startsWith("image/"));
+  const validMimeTypes = validmimetypes.filter((m) => m.startsWith("image/"));
   const validatedFiles = [];
   errors.files = [];
 

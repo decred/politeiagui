@@ -108,18 +108,18 @@ class ProposalFilter extends React.Component {
   componentDidUpdate(prevProps) {
     this.handleUpdateQueryForFilterValueChange(prevProps);
   }
-  handleUpdateFilterValueForQueryValue = props => {
+  handleUpdateFilterValueForQueryValue = (props) => {
     const { location, header, handleChangeFilterValue } = props;
     const { tab } = qs.parse(location.search);
     const tabOptions = mapHeaderToOptions[header];
     if (!tabOptions) return;
 
-    const validTabOption = tabOptions.find(op => op.label === tab);
+    const validTabOption = tabOptions.find((op) => op.label === tab);
     if (validTabOption) {
       handleChangeFilterValue(validTabOption.value);
     }
   };
-  handleUpdateQueryForFilterValueChange = prevProps => {
+  handleUpdateQueryForFilterValueChange = (prevProps) => {
     const { header } = this.props;
     const filterValueTabHasChanged =
       prevProps.filterValue !== this.props.filterValue;
@@ -128,7 +128,7 @@ class ProposalFilter extends React.Component {
 
     const selectedOption =
       (tabOptions &&
-        tabOptions.find(op => op.value === this.props.filterValue)) ||
+        tabOptions.find((op) => op.value === this.props.filterValue)) ||
       {};
     const optionLabel = selectedOption.label;
 
@@ -145,7 +145,7 @@ class ProposalFilter extends React.Component {
     } = this.props;
     return mapHeaderToOptions[header] ? (
       <Tabs>
-        {mapHeaderToOptions[header].map(op => (
+        {mapHeaderToOptions[header].map((op) => (
           <Tab
             key={op.value}
             title={op.label}

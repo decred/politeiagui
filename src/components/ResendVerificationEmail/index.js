@@ -34,7 +34,7 @@ class ResendVerificationEmail extends Component {
 
     const promise = this.props.onResendVerificationEmailConfirm(props);
     if (promise) {
-      return promise.catch(e => {
+      return promise.catch((e) => {
         throw new SubmissionError({
           _error: e.message
         });

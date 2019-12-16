@@ -34,8 +34,8 @@ function tryingParagraphWithOneNewline(value) {
 const mistakeFinders = [tryingParagraphWithOneNewline];
 
 export function applyMistakeFinders(value) {
-  const findersResults = mistakeFinders.map(f => f(value));
-  const anyMistake = findersResults.filter(r => r.mistake).length > 0;
+  const findersResults = mistakeFinders.map((f) => f(value));
+  const anyMistake = findersResults.filter((r) => r.mistake).length > 0;
   return {
     findersResults,
     anyMistake

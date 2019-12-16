@@ -9,12 +9,12 @@ import * as act from "../actions";
 const invoiceConnector = connect(
   sel.selectorMap({
     token: compose(
-      t => (t ? t.toLowerCase() : t),
+      (t) => (t ? t.toLowerCase() : t),
       get(["match", "params", "token"]),
       arg(1)
     ),
     commentid: compose(
-      t => (t ? t.toLowerCase() : t),
+      (t) => (t ? t.toLowerCase() : t),
       get(["match", "params", "commentid"]),
       arg(1)
     ),
@@ -30,7 +30,7 @@ const invoiceConnector = connect(
     isCMS: sel.isCMS,
     comments: sel.invoiceComments
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onFetchData: act.onFetchInvoiceApp,

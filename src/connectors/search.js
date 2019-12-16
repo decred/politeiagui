@@ -16,7 +16,7 @@ class SearchWrapper extends Component {
   }
 }
 
-const wrapSearch = Component => props => (
+const wrapSearch = (Component) => (props) => (
   <SearchWrapper {...{ ...props, Component }} />
 );
 

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 export const exportToCsv = (data, fields, filename) => {
   const csvContent = data.reduce((acc, info) => {
     let row = "";
-    fields.forEach(f => (row += `"${info[f]}",`));
+    fields.forEach((f) => (row += `"${info[f]}",`));
     return acc + row + "\n";
   }, "");
   const titles = fields.reduce((acc, f) => acc + `"${f}",`, "");

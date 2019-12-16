@@ -1,23 +1,22 @@
 .noBorder {
-    border: 0 !important;
+  border: 0 !important;
 }
 
 .showLogo {
-    transition: 0.2s all;
-    opacity: 1;
-    transform: translateX(0);
+  transition: 0.2s all;
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .hideLogo {
-    composes: showLogo;
-    opacity: 0;
-    transform: translateX(-6rem);
+  composes: showLogo;
+  opacity: 0;
+  transform: translateX(-6rem);
 }
 
 /* SMALL */
 @media screen and (max-width: 768px) {
-    .customHeader {
-        padding: 0 var(--spacing-small);
-    }
+  .customHeader {
+    padding: 0 var(--spacing-small);
+  }
 }
-

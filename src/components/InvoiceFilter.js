@@ -74,7 +74,7 @@ class InvoiceFilter extends React.Component {
     const { filterValue, header } = this.props;
     const filterOptions = mapHeaderToOptions[header] || [];
     const validFilterOption = filterOptions.find(
-      op => op && op.value === filterValue
+      (op) => op && op.value === filterValue
     );
     // if the filter option set is not valid for the current available
     // filter options, set the first valid option.
@@ -85,18 +85,18 @@ class InvoiceFilter extends React.Component {
   componentDidUpdate(prevProps) {
     this.handleUpdateQueryForFilterValueChange(prevProps);
   }
-  handleUpdateFilterValueForQueryValue = props => {
+  handleUpdateFilterValueForQueryValue = (props) => {
     const { location, header, handleChangeFilterValue } = props;
     const { tab } = qs.parse(location.search);
     const tabOptions = mapHeaderToOptions[header];
     if (!tabOptions) return;
 
-    const validTabOption = tabOptions.find(op => op.label === tab);
+    const validTabOption = tabOptions.find((op) => op.label === tab);
     if (validTabOption) {
       handleChangeFilterValue(validTabOption.value);
     }
   };
-  handleUpdateQueryForFilterValueChange = prevProps => {
+  handleUpdateQueryForFilterValueChange = (prevProps) => {
     const { header } = this.props;
     const filterValueTabHasChanged =
       prevProps.filterValue !== this.props.filterValue;
@@ -104,7 +104,8 @@ class InvoiceFilter extends React.Component {
     if (!tabOptions) return;
 
     const selectedOption =
-      tabOptions && tabOptions.find(op => op.value === this.props.filterValue);
+      tabOptions &&
+      tabOptions.find((op) => op.value === this.props.filterValue);
     const optionLabel = selectedOption && selectedOption.label;
 
     if (filterValueTabHasChanged) {
@@ -120,7 +121,7 @@ class InvoiceFilter extends React.Component {
     } = this.props;
     return mapHeaderToOptions[header] ? (
       <Tabs>
-        {mapHeaderToOptions[header].map(op => (
+        {mapHeaderToOptions[header].map((op) => (
           <Tab
             key={op.value}
             title={op.label}

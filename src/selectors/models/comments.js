@@ -8,14 +8,14 @@ export const commentsLikesByToken = get([
   "byToken"
 ]);
 
-export const makeGetProposalComments = token =>
+export const makeGetProposalComments = (token) =>
   createSelector(
     commentsByToken,
-    commentsByToken => commentsByToken[token] || null
+    (commentsByToken) => commentsByToken[token] || null
   );
 
-export const makeGetProposalCommentsLikes = token =>
+export const makeGetProposalCommentsLikes = (token) =>
   createSelector(
     commentsLikesByToken,
-    commentsLikesByToken => commentsLikesByToken[token] || null
+    (commentsLikesByToken) => commentsLikesByToken[token] || null
   );

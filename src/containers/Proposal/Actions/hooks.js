@@ -20,7 +20,7 @@ export function useUnvettedActions() {
   const onSetProposalStatus = useAction(act.onSetProposalStatusV2);
 
   const onCensorProposal = useCallback(
-    proposal => reason =>
+    (proposal) => (reason) =>
       onSetProposalStatus(
         proposal.censorshiprecord.token,
         PROPOSAL_STATUS_CENSORED,
@@ -30,7 +30,7 @@ export function useUnvettedActions() {
   );
 
   const onApproveProposal = useCallback(
-    proposal => () =>
+    (proposal) => () =>
       onSetProposalStatus(
         proposal.censorshiprecord.token,
         PROPOSAL_STATUS_PUBLIC
@@ -53,7 +53,7 @@ export function usePublicActions() {
   const currentUserEmail = useSelector(sel.currentUserEmail);
 
   const onAbandonProposal = useCallback(
-    proposal => reason =>
+    (proposal) => (reason) =>
       onSetProposalStatus(
         proposal.censorshiprecord.token,
         PROPOSAL_STATUS_ABANDONED,
@@ -63,7 +63,7 @@ export function usePublicActions() {
   );
 
   const onAuthorizeVote = useCallback(
-    proposal => () =>
+    (proposal) => () =>
       onAuthorize(
         currentUserEmail,
         proposal.censorshiprecord.token,
@@ -73,7 +73,7 @@ export function usePublicActions() {
   );
 
   const onRevokeVote = useCallback(
-    proposal => () =>
+    (proposal) => () =>
       onRevoke(
         currentUserEmail,
         proposal.censorshiprecord.token,
@@ -83,7 +83,7 @@ export function usePublicActions() {
   );
 
   const onStartVote = useCallback(
-    proposal => ({ duration, quorumPercentage, passPercentage }) =>
+    (proposal) => ({ duration, quorumPercentage, passPercentage }) =>
       onStart(
         currentUserEmail,
         proposal.censorshiprecord.token,

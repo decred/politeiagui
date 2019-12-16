@@ -14,7 +14,7 @@ introduce yourself. We always like to know who is interested in the project and 
     - a title and clear description
     - as much relevant information possible
 
-- Evaluate if this bug wouldn't be better placed in the [Politeia] repository instead. Politeiagui issues are intentended to bugs which affects the UI directly. If the bug requires backend work, first create an issue on Politeia. If you are not sure where it belongs, feel free to ask us.
+- Evaluate if this bug wouldn't be better placed in the [Politeia](https://github.com/decred/politeia) repository instead. Politeiagui issues are intentended to bugs which affects the UI directly. If the bug requires backend work, first create an issue on Politeia. If you are not sure where it belongs, feel free to ask us.
 
 **Do you want to add a new feature or change an existing one?**
 

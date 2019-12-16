@@ -16,7 +16,7 @@ export default connect(
     verificationToken: sel.verificationToken,
     isTestnet: sel.isTestNet
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onResetAppPaywallInfo: act.onResetPaywallInfo

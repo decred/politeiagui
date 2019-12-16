@@ -5,8 +5,8 @@ import * as stringUtils from "./strings";
  * @param {Array} supportedChars
  * @return {RegExp} regex expression from supported chars
  */
-export const buildRegexFromSupportedChars = supportedChars => {
-  const charNeedsEscaping = c => c === "/" || c === "." || c === "-";
+export const buildRegexFromSupportedChars = (supportedChars) => {
+  const charNeedsEscaping = (c) => c === "/" || c === "." || c === "-";
   const concatedChars = supportedChars.reduce(
     (str, char) => (charNeedsEscaping(char) ? str + `\\${char}` : str + char),
     ""
@@ -20,7 +20,7 @@ export const buildRegexFromSupportedChars = supportedChars => {
  * @param {Array} supportedChars
  * @returns {string} string of valid chars
  */
-export const buildValidCharsStrFromSupportedChars = supportedChars =>
+export const buildValidCharsStrFromSupportedChars = (supportedChars) =>
   supportedChars.reduce((str, v) => str + v, "");
 
 /**
@@ -101,7 +101,7 @@ export const maxFileSizeMessage = () => "Files size can be at most 512kb";
  * Returns a generic error message for exceeding the maximum number
  * of attached files in a proposal
  */
-export const maxFilesExceededMessage = max =>
+export const maxFilesExceededMessage = (max) =>
   `Proposals must have at most ${max} attached images`;
 
 /**
@@ -109,5 +109,5 @@ export const maxFilesExceededMessage = max =>
  * attached files
  * @param {Array} validMimeTypes
  */
-export const validMimeTypesMessage = validMimeTypes =>
+export const validMimeTypesMessage = (validMimeTypes) =>
   `Files must have a valid mime type: ${validMimeTypes}`;

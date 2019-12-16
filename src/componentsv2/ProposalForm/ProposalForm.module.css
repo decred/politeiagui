@@ -1,26 +1,24 @@
-.actionsWrapper { 
-    display: flex;
-    flex-wrap: wrap-reverse;
-    justify-content: flex-end;
+.actionsWrapper {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: flex-end;
 }
 
 .formatHelpButton {
-    border: 0;
-    color: #8997A5;
-    font-weight: 400;
-    cursor: pointer;
-    padding-top: 10px;
-    padding-right: 40px;
+  border: 0;
+  color: #8997a5;
+  font-weight: 400;
+  cursor: pointer;
+  padding-top: 10px;
+  padding-right: 40px;
 }
 
 .formatHelpButton:hover {
-    color: var(--color-gray-dark);
+  color: var(--color-gray-dark);
 }
 
-
-@media screen and (max-width: 560px) { 
-
-    .formatHelpButton {
-        padding-right: 0;
-    }
+@media screen and (max-width: 560px) {
+  .formatHelpButton {
+    padding-right: 0;
+  }
 }

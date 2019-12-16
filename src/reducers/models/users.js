@@ -13,15 +13,15 @@ const DEFAULT_STATE = {
   }
 };
 
-const skip = () => value => value;
+const skip = () => (value) => value;
 
-const onReceiveLogout = state =>
+const onReceiveLogout = (state) =>
   compose(
     set("currentUserID", null),
-    update("byID", data => {
+    update("byID", (data) => {
       const publicData = {};
       Object.keys(data).map(
-        id =>
+        (id) =>
           (publicData[id] = {
             id,
             userid: data[id].userid,
@@ -43,7 +43,7 @@ const users = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_USER]: () => {
             const userid = action.payload.user.id;
             delete action.payload.user.id;
-            return update(["byID", userid], userData => ({
+            return update(["byID", userid], (userData) => ({
               ...userData,
               ...action.payload.user,
               userid
@@ -79,11 +79,11 @@ const users = (state = DEFAULT_STATE, action) =>
               (res, user) => ({ ...res, [user.id]: user }),
               {}
             );
-            const usersIds = users.map(user => user.id);
+            const usersIds = users.map((user) => user.id);
             const searchedByEmail = !!email;
             const searchedByUsername = !!username;
             return compose(
-              update("search.resultsByID", users => ({
+              update("search.resultsByID", (users) => ({
                 ...users,
                 ...usersByID
               })),

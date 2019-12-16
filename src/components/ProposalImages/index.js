@@ -31,16 +31,14 @@ class ProposalImages extends Component {
             <div
               key={`prop-image-${idx}`}
               style={this.getStyleForDiffMode(removed, added)}
-              className="attached-image-ct"
-            >
+              className="attached-image-ct">
               <div style={{ display: "flex", alignItems: "center" }}>
                 <h5 className="attached-image-title">{name}</h5>
                 {!readOnly && (
                   <span
                     className="attached-image-remove"
                     onClick={() => this.onRemove(idx)}
-                    title="Remove image"
-                  >
+                    title="Remove image">
                     ✖
                   </span>
                 )}

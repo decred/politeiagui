@@ -9,7 +9,7 @@ export default connect(
     isLoading: sel.isApiRequestingPropVoteResults,
     error: sel.apiPropVoteStatusError
   }),
-  dispatch =>
+  (dispatch) =>
     bindActionCreators(
       {
         onFetchProposalVoteResults: act.onFetchProposalVoteResults

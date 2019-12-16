@@ -16,7 +16,7 @@ const mapStateToProps = {
   shouldAutoVerifyKey: sel.shouldAutoVerifyKey,
   verificationToken: sel.verificationToken,
   isApiRequestingUpdateUserKey: sel.isApiRequestingUpdateUserKey,
-  isApiRequestingMarkUpdateKeyAsExpired: state =>
+  isApiRequestingMarkUpdateKeyAsExpired: (state) =>
     sel.isApiRequestingManageUser(state) &&
     sel.manageUserAction(state) === MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION
 };

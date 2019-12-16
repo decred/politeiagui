@@ -35,8 +35,7 @@ const ToggleIcon = (type, onClick) => (
         width: "145px"
       }}
       text={`${type === "expand" ? "Show" : "Hide"} proposal body`}
-      position="right"
-    >
+      position="right">
       <button className="collapse-icon-button" onClick={onClick}>
         <i className={`fa fa-${type}`} />
       </button>
@@ -51,9 +50,9 @@ class ThingLinkComp extends React.Component {
       expanded: !this.props.commentid
     };
   }
-  handleExpandToggle = e => {
+  handleExpandToggle = (e) => {
     e && e.preventDefault() && e.stopPropagation();
-    this.setState(state => ({ expanded: !state.expanded }));
+    this.setState((state) => ({ expanded: !state.expanded }));
   };
   render() {
     const {
@@ -140,7 +139,8 @@ class ThingLinkComp extends React.Component {
     const userCanAuthorizeTheVote =
       currentUserIsTheAuthor &&
       voteStatus &&
-      (voteStatus === PROPOSAL_VOTING_NOT_AUTHORIZED && !isAbandoned);
+      voteStatus === PROPOSAL_VOTING_NOT_AUTHORIZED &&
+      !isAbandoned;
     const userCanRevokeVote =
       currentUserIsTheAuthor && voteStatus === PROPOSAL_VOTING_AUTHORIZED;
     const adminCanStartTheVote =
@@ -210,11 +210,12 @@ class ThingLinkComp extends React.Component {
         data-timestamp={created_utc}
         data-type="link"
         data-url={url}
-        id={`thing_${name}`}
-      >
+        id={`thing_${name}`}>
         <p className="parent" />
         {thumbnail &&
-        !["image", "default", "nsfw", "self"].find(sub => sub === thumbnail) ? (
+        !["image", "default", "nsfw", "self"].find(
+          (sub) => sub === thumbnail
+        ) ? (
           <Link to={url} className="thumbnail may-blank loggedin">
             <img alt="Thumb" height={70} src={thumbnail} width={70} />
           </Link>
@@ -225,8 +226,7 @@ class ThingLinkComp extends React.Component {
         <div className="entry unvoted">
           <span
             className="title"
-            style={{ display: "flex", overflow: "visible", cursor: "pointer" }}
-          >
+            style={{ display: "flex", overflow: "visible", cursor: "pointer" }}>
             <Link to={url} className="right-margin-5">
               {title}{" "}
               {review_status === PROPOSAL_STATUS_UNREVIEWED_CHANGES ? (
@@ -236,7 +236,7 @@ class ThingLinkComp extends React.Component {
 
             {expanded && (displayVersion || isAbandoned) && version > 1 ? (
               <VersionPicker
-                onSelectVersion={selVersion => {
+                onSelectVersion={(selVersion) => {
                   openModal(modalTypes.PROPOSAL_VERSION_DIFF, {
                     version: selVersion,
                     token: id
@@ -256,13 +256,11 @@ class ThingLinkComp extends React.Component {
                 display: "flex",
                 justifyContent: "flex-end",
                 alignItems: "flex-start"
-              }}
-            >
+              }}>
               {isEditable ? (
                 <Link
                   to={`/proposals/${id}/edit`}
-                  className="edit-proposal right-margin-10"
-                >
+                  className="edit-proposal right-margin-10">
                   <i className="fa fa-edit right-margin-5" />
                   Edit
                 </Link>
@@ -271,8 +269,7 @@ class ThingLinkComp extends React.Component {
                   wrapperStyle={{ marginRight: "10px" }}
                   tipStyle={{ top: "20px", fontSize: "14px" }}
                   text="Revoke vote authorization to edit your proposal again."
-                  position="bottom"
-                >
+                  position="bottom">
                   <span style={{ color: "#bbb", cursor: "not-allowed" }}>
                     <i className="fa fa-edit right-margin-5" />
                     Edit
@@ -283,8 +280,7 @@ class ThingLinkComp extends React.Component {
                 <Tooltip
                   tipStyle={{ top: "20px", fontSize: "14px" }}
                   text="Check this proposal’s content on our GitHub repository. There you can find proposal's metadata and its comments journals."
-                  position="bottom"
-                >
+                  position="bottom">
                   <a
                     style={{ color: "#777" }}
                     href={
@@ -294,8 +290,7 @@ class ThingLinkComp extends React.Component {
                     }
                     target="_blank"
                     className="blue-link"
-                    rel="noopener noreferrer"
-                  >
+                    rel="noopener noreferrer">
                     <i className="fa fa-github right-margin-5" />
                     See on GitHub
                   </a>
@@ -305,8 +300,7 @@ class ThingLinkComp extends React.Component {
           </span>
           <span
             style={{ display: "flex", flexDirection: "column" }}
-            className="tagline"
-          >
+            className="tagline">
             <span className="submitted-by">
               {author && (
                 <span>
@@ -362,9 +356,8 @@ class ThingLinkComp extends React.Component {
                 onClick={() => {
                   confirmWithModal(modalTypes.CONFIRM_ACTION, {
                     message: "Are you sure you want to delete this draft?"
-                  }).then(ok => ok && onDeleteDraftProposal(draftId));
-                }}
-              >
+                  }).then((ok) => ok && onDeleteDraftProposal(draftId));
+                }}>
                 <i className="fa fa-trash" />
                 Delete
               </span>
@@ -379,8 +372,7 @@ class ThingLinkComp extends React.Component {
                     style={{
                       marginTop: "0.4166667em",
                       marginBottom: "0.4166667em"
-                    }}
-                  >
+                    }}>
                     Your proposal has been created, but it will not be public
                     until an admin approves it. You can{" "}
                     <DownloadBundle
@@ -391,8 +383,7 @@ class ThingLinkComp extends React.Component {
                     <a
                       href="https://github.com/decred/politeia/tree/master/politeiad/cmd/politeia_verify"
                       target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                      rel="noopener noreferrer">
                       politeia_verify tool
                     </a>{" "}
                     to prove that your submission has been accepted for review
@@ -439,7 +430,7 @@ class ThingLinkComp extends React.Component {
                   className={`c-btn c-btn-primary${
                     !userCanExecuteActions ? " not-active disabled" : ""
                   }`}
-                  onClick={e =>
+                  onClick={(e) =>
                     confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
                       reasonPlaceholder:
                         "Please provide a reason to censor this proposal"
@@ -465,11 +456,11 @@ class ThingLinkComp extends React.Component {
                   className={`c-btn c-btn-primary${
                     !userCanExecuteActions ? " not-active disabled" : ""
                   }`}
-                  onClick={e =>
+                  onClick={(e) =>
                     confirmWithModal(modalTypes.CONFIRM_ACTION, {
                       message: "Are you sure you want to publish this proposal?"
                     }).then(
-                      confirm =>
+                      (confirm) =>
                         confirm &&
                         onChangeStatus(
                           authorid,
@@ -492,7 +483,7 @@ class ThingLinkComp extends React.Component {
                 className={`c-btn c-btn-primary${
                   !userCanExecuteActions ? " not-active disabled" : ""
                 }`}
-                onClick={e =>
+                onClick={(e) =>
                   openModal(
                     modalTypes.START_VOTE_MODAL,
                     {},
@@ -513,7 +504,7 @@ class ThingLinkComp extends React.Component {
                 className={`c-btn c-btn-primary${
                   !userCanExecuteActions ? " not-active disabled" : ""
                 }`}
-                onClick={e =>
+                onClick={(e) =>
                   confirmWithModal(modalTypes.CONFIRM_ACTION, {
                     message: (
                       <span>
@@ -522,7 +513,7 @@ class ThingLinkComp extends React.Component {
                       </span>
                     )
                   }).then(
-                    confirm =>
+                    (confirm) =>
                       confirm && onAuthorizeVote(loggedInAsEmail, id, version)
                   ) && e.preventDefault()
                 }
@@ -537,7 +528,7 @@ class ThingLinkComp extends React.Component {
                 className={`c-btn c-btn-primary${
                   !userCanExecuteActions ? " not-active disabled" : ""
                 }`}
-                onClick={e =>
+                onClick={(e) =>
                   confirmWithModal(modalTypes.CONFIRM_ACTION, {
                     message: (
                       <span>
@@ -546,7 +537,7 @@ class ThingLinkComp extends React.Component {
                       </span>
                     )
                   }).then(
-                    confirm =>
+                    (confirm) =>
                       confirm && onRevokeVote(loggedInAsEmail, id, version)
                   ) && e.preventDefault()
                 }
@@ -563,7 +554,7 @@ class ThingLinkComp extends React.Component {
                   className={`c-btn c-btn-primary${
                     !userCanExecuteActions ? " not-active disabled" : ""
                   }`}
-                  onClick={e =>
+                  onClick={(e) =>
                     confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
                       reasonPlaceholder:
                         "Please provide a reason for marking this proposal as abandoned"
@@ -590,15 +581,13 @@ class ThingLinkComp extends React.Component {
             className="flat-list buttons"
             style={{
               display: "flex"
-            }}
-          >
+            }}>
             {isVetted ? (
               <li>
                 <Link
                   className="bylink comments may-blank proposal-permalink"
                   data-event-action="comments"
-                  to={`${url}?comments=true`}
-                >
+                  to={`${url}?comments=true`}>
                   {listOrDetailViewComments || ""}{" "}
                   {listOrDetailViewComments <= 1 ? "comment" : "comments"}
                 </Link>
@@ -609,8 +598,7 @@ class ThingLinkComp extends React.Component {
                 <Link
                   className="bylink comments may-blank proposal-permalink"
                   data-event-action="permalink"
-                  to={permalink}
-                >
+                  to={permalink}>
                   permalink
                 </Link>
               </li>
@@ -621,15 +609,14 @@ class ThingLinkComp extends React.Component {
                   className="bylink comments may-blank proposal-permalink"
                   to=""
                   target="_blank"
-                  onClick={e => {
+                  onClick={(e) => {
                     e.preventDefault();
                     openModal(
                       modalTypes.SEARCH_PROPOSAL_VOTES,
                       { id: id, title: title },
                       null
                     );
-                  }}
-                >
+                  }}>
                   search votes
                 </Link>
               </li>

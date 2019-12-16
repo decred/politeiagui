@@ -32,7 +32,7 @@ class CommentArea extends React.Component {
     // and valid, the sort option should be changed.
     const sort = getQueryStringValue("sort");
     const validSortOptionFromQueryString =
-      sort && [SORT_BY_NEW, SORT_BY_OLD, SORT_BY_TOP].find(o => o === sort);
+      sort && [SORT_BY_NEW, SORT_BY_OLD, SORT_BY_TOP].find((o) => o === sort);
     if (validSortOptionFromQueryString) {
       this.props.onSetCommentsSortOption({ value: sort, label: sort });
     }
@@ -46,7 +46,7 @@ class CommentArea extends React.Component {
       window.scrollTo(0, window.scrollY - additionalHeightToBypassHeader);
     }
   };
-  onSetCommentsSortOption = option => {
+  onSetCommentsSortOption = (option) => {
     // set the coment option in the query string
     setQueryStringValue("sort", option.value);
 
@@ -83,8 +83,7 @@ class CommentArea extends React.Component {
               Single comment thread.{" "}
               <a
                 href={!props.isCMS ? `proposals/${token}` : `invoices/${token}`}
-                onClick={onViewAllClick}
-              >
+                onClick={onViewAllClick}>
                 View all
               </a>
             </span>
@@ -97,17 +96,19 @@ class CommentArea extends React.Component {
               <div className="comments-sort">
                 <span className="">Sort by:</span>
                 <Select
-                  onKeyDown={e => e.keyCode === 8 && e.preventDefault()}
+                  onKeyDown={(e) => e.keyCode === 8 && e.preventDefault()}
                   classNamePrefix="sort-select"
                   isSearchable={false}
                   isClearable={false}
                   escapeClearsValue={false}
                   value={commentsSortOption}
                   onChange={this.onSetCommentsSortOption}
-                  options={[SORT_BY_NEW, SORT_BY_OLD, SORT_BY_TOP].map(op => ({
-                    value: op,
-                    label: op
-                  }))}
+                  options={[SORT_BY_NEW, SORT_BY_OLD, SORT_BY_TOP].map(
+                    (op) => ({
+                      value: op,
+                      label: op
+                    })
+                  )}
                 />
               </div>
             ) : null,

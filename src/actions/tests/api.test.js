@@ -40,6 +40,13 @@ describe("test api actions (actions/api.js)", () => {
     password: "foobar1234"
   };
   const MOCK_STATE = {
+    comments: {
+      comments: {
+        byToken: {
+          [FAKE_PROPOSAL_TOKEN]: []
+        }
+      }
+    },
     api: {
       me: {
         response: {
@@ -83,7 +90,7 @@ describe("test api actions (actions/api.js)", () => {
     await expect(fn.apply(null, params)).toDispatchActionsWithState(
       MOCK_STATE,
       expectedActions,
-      e => {
+      (e) => {
         if (e) {
           console.log(
             "Action was supposed to be success but instead was errored:",
@@ -159,7 +166,7 @@ describe("test api actions (actions/api.js)", () => {
     const store = mockStore(MOCK_STATE);
     setGetErrorResponse(path);
     localStorage.setItem("state", "any");
-    await store.dispatch(api.requestApiInfo()).catch(e => {
+    await store.dispatch(api.requestApiInfo()).catch((e) => {
       expect(store.getActions()).toEqual([
         { type: act.REQUEST_INIT_SESSION, error: false },
         { type: act.RECEIVE_INIT_SESSION, error: true, payload: e }
@@ -191,7 +198,7 @@ describe("test api actions (actions/api.js)", () => {
     setGetErrorResponse(path);
     localStorage.setItem("state", "any");
     expect(localStorage.getItem("state")).toBeTruthy();
-    await store.dispatch(api.onRequestMe()).catch(e => {
+    await store.dispatch(api.onRequestMe()).catch((e) => {
       expect(store.getActions()).toEqual([
         { type: act.REQUEST_ME, error: false, payload: undefined },
         { type: act.RECEIVE_ME, error: true, payload: e }
@@ -226,7 +233,7 @@ describe("test api actions (actions/api.js)", () => {
     );
 
     //test it handles an error response
-    await assertApiActionOnError(path, api.onGetPolicy, [], e => [
+    await assertApiActionOnError(path, api.onGetPolicy, [], (e) => [
       { type: act.REQUEST_POLICY, error: false, payload: undefined },
       { type: act.RECEIVE_POLICY, error: true, payload: e }
     ]);
@@ -268,7 +275,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onCreateNewUser,
       [FAKE_USER],
-      e => [
+      (e) => [
         {
           type: act.REQUEST_NEW_USER,
           payload: { email: FAKE_USER.email },
@@ -290,7 +297,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onVerifyNewUser,
       [email, verificationToken],
-      e => [
+      (e) => [
         {
           type: act.REQUEST_VERIFY_NEW_USER,
           error: false,
@@ -341,7 +348,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onLogin,
       [FAKE_USER],
-      e => [
+      (e) => [
         {
           type: act.REQUEST_LOGIN,
           error: false,
@@ -388,7 +395,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onChangeUsername,
       params,
-      e => [
+      (e) => [
         { type: act.REQUEST_CHANGE_USERNAME, error: false, payload: undefined },
         { type: act.RECEIVE_CHANGE_USERNAME, error: true, payload: e }
       ],
@@ -415,7 +422,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onChangePassword,
       params,
-      e => [
+      (e) => [
         { type: act.REQUEST_CHANGE_PASSWORD, error: false, payload: undefined },
         { type: act.RECEIVE_CHANGE_PASSWORD, error: true, payload: e }
       ],
@@ -445,7 +452,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onFetchUserProposals,
       params,
-      e => [
+      (e) => [
         { type: act.REQUEST_USER_PROPOSALS, error: false, payload: undefined },
         { type: act.RECEIVE_USER_PROPOSALS, error: true, payload: e }
       ],
@@ -465,7 +472,7 @@ describe("test api actions (actions/api.js)", () => {
       [],
       [{ type: act.REQUEST_VETTED }, { type: act.RECEIVE_VETTED, error: false }]
     );
-    await assertApiActionOnError(path, api.onFetchVetted, [], e => [
+    await assertApiActionOnError(path, api.onFetchVetted, [], (e) => [
       { type: act.REQUEST_VETTED, error: false, payload: undefined },
       { type: act.RECEIVE_VETTED, error: true, payload: e }
     ]);
@@ -482,7 +489,7 @@ describe("test api actions (actions/api.js)", () => {
         { type: act.RECEIVE_UNVETTED, error: false }
       ]
     );
-    await assertApiActionOnError(path, api.onFetchUnvetted, [], e => [
+    await assertApiActionOnError(path, api.onFetchUnvetted, [], (e) => [
       { type: act.REQUEST_UNVETTED, error: false, payload: undefined },
       { type: act.RECEIVE_UNVETTED, error: true, payload: e }
     ]);
@@ -502,18 +509,23 @@ describe("test api actions (actions/api.js)", () => {
         payload: { token: FAKE_PROPOSAL_TOKEN }
       }
     ]);
-    await assertApiActionOnError(path, api.onFetchLikedComments, params, e => [
-      {
-        type: act.REQUEST_LIKED_COMMENTS,
-        error: false,
-        payload: FAKE_PROPOSAL_TOKEN
-      },
-      {
-        type: act.RECEIVE_LIKED_COMMENTS,
-        error: true,
-        payload: e
-      }
-    ]);
+    await assertApiActionOnError(
+      path,
+      api.onFetchLikedComments,
+      params,
+      (e) => [
+        {
+          type: act.REQUEST_LIKED_COMMENTS,
+          error: false,
+          payload: FAKE_PROPOSAL_TOKEN
+        },
+        {
+          type: act.RECEIVE_LIKED_COMMENTS,
+          error: true,
+          payload: e
+        }
+      ]
+    );
   });
 
   test("on fetch proposal action", async () => {
@@ -522,7 +534,7 @@ describe("test api actions (actions/api.js)", () => {
     await assertApiActionOnSuccess(path, api.onFetchProposal, params, [
       { type: act.REQUEST_PROPOSAL }
     ]);
-    await assertApiActionOnError(path, api.onFetchProposal, params, e => [
+    await assertApiActionOnError(path, api.onFetchProposal, params, (e) => [
       {
         type: act.REQUEST_PROPOSAL,
         error: false,
@@ -543,7 +555,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onFetchProposalComments,
       params,
-      e => [
+      (e) => [
         {
           type: act.REQUEST_RECORD_COMMENTS,
           error: false,
@@ -578,7 +590,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onSubmitProposal,
       params,
-      e => [
+      (e) => [
         {
           type: act.REQUEST_NEW_PROPOSAL,
           error: false,
@@ -620,7 +632,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onSubmitComment,
       params,
-      e => [
+      (e) => [
         {
           type: act.REQUEST_NEW_COMMENT,
           error: false,
@@ -659,7 +671,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onLikeComment,
       params,
-      e => [
+      (e) => [
         {
           type: act.REQUEST_LIKE_COMMENT,
           error: false,
@@ -703,7 +715,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onUpdateUserKey,
       params,
-      e => [
+      (e) => [
         { type: act.REQUEST_UPDATED_KEY, error: false, payload: undefined },
         { type: act.RECEIVE_UPDATED_KEY, error: true, payload: e }
       ],
@@ -733,7 +745,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onVerifyUserKey,
       params,
-      e => [
+      (e) => [
         {
           type: act.REQUEST_VERIFIED_KEY,
           error: false,
@@ -783,7 +795,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onForgottenPasswordRequest,
       params,
-      e => [
+      (e) => [
         {
           type: act.REQUEST_FORGOTTEN_PASSWORD_REQUEST,
           error: false,
@@ -835,7 +847,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onPasswordResetRequest,
       params,
-      e => [
+      (e) => [
         {
           type: act.REQUEST_PASSWORD_RESET_REQUEST,
           error: false,
@@ -884,7 +896,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onFetchProposalsVoteStatus,
       [],
-      e => [
+      (e) => [
         {
           type: act.REQUEST_PROPOSALS_VOTE_STATUS,
           error: false,
@@ -914,7 +926,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onFetchProposalVoteStatus,
       params,
-      e => [
+      (e) => [
         {
           type: act.REQUEST_PROPOSAL_VOTE_STATUS,
           error: false,
@@ -993,7 +1005,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onSubmitEditedProposal,
       params,
-      e => [
+      (e) => [
         {
           type: act.REQUEST_EDIT_PROPOSAL,
           error: false,
@@ -1039,7 +1051,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onAuthorizeVote,
       params,
-      e => [
+      (e) => [
         requestAction,
         { type: act.RECEIVE_AUTHORIZE_VOTE, error: true, payload: e }
       ],
@@ -1095,7 +1107,7 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onRescanUserPayments,
       [userid],
-      e => [
+      (e) => [
         requestAction,
         {
           type: act.RECEIVE_RESCAN_USER_PAYMENTS,

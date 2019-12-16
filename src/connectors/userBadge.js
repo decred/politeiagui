@@ -7,7 +7,7 @@ const userBadgeConnector = connect(
     userPaywallStatus: sel.getUserPaywallStatus,
     loggedInAsEmail: sel.loggedInAsEmail
   }),
-  dispatch => bindActionCreators({}, dispatch)
+  (dispatch) => bindActionCreators({}, dispatch)
 );
 
 export default userBadgeConnector;

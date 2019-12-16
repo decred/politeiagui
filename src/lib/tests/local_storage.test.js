@@ -50,7 +50,7 @@ describe("save state chunks to local storage (lib/local_storage.js", () => {
       currentUserID: "testid"
     }
   };
-  const getFromLS = key => localStorage.getItem(key);
+  const getFromLS = (key) => localStorage.getItem(key);
   test("save state to local storage without passing email as parameter", () => {
     ls.handleSaveStateToLocalStorage(mockState);
     expect(getFromLS(ls.loggedInStateKey)).toBeTruthy();

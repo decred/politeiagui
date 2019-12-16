@@ -42,13 +42,13 @@ import * as modalTypes from "../components/Modal/modalTypes";
 
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
 
-export const onRouteChange = () => dispatch => {
+export const onRouteChange = () => (dispatch) => {
   dispatch(cleanErrors());
 };
 
-export const onSetReplyParent = (
-  parentId = TOP_LEVEL_COMMENT_PARENTID
-) => dispatch =>
+export const onSetReplyParent = (parentId = TOP_LEVEL_COMMENT_PARENTID) => (
+  dispatch
+) =>
   Promise.all([
     dispatch(act.SET_REPLY_PARENT(parentId)),
     dispatch(reset("form/reply"))
@@ -133,11 +133,9 @@ export const onSaveNewCommentV2 = ({ comment, token, parentID }) => (
   return dispatch(onSubmitCommentApi(email, token, comment, parentID));
 };
 
-export const onEditProposal = (
-  { name, description, files },
-  _,
-  props
-) => dispatch =>
+export const onEditProposal = ({ name, description, files }, _, props) => (
+  dispatch
+) =>
   dispatch(
     onSubmitEditedProposal(
       props.loggedInAsEmail,
@@ -165,7 +163,7 @@ export const onEditInvoice = (
   },
   _,
   props
-) => dispatch => {
+) => (dispatch) => {
   dispatch(
     onSubmitEditedInvoice(
       props.loggedInAsEmail,
@@ -185,12 +183,9 @@ export const onEditInvoice = (
     )
   );
 };
-export const onSaveDraftProposal = ({
-  name,
-  description,
-  files,
-  draftId
-}) => dispatch => {
+export const onSaveDraftProposal = ({ name, description, files, draftId }) => (
+  dispatch
+) => {
   resetNewProposalData();
   const id = draftId || uniqueID("draft");
   dispatch(
@@ -205,14 +200,14 @@ export const onSaveDraftProposal = ({
   return id;
 };
 
-export const onLoadDraftProposals = email => (dispatch, getState) => {
+export const onLoadDraftProposals = (email) => (dispatch, getState) => {
   const key = email || sel.currentUserEmail(getState());
   const stateFromLS = loadStateLocalStorage(key);
   const drafts = sel.draftProposals(stateFromLS) || {};
   dispatch(act.LOAD_DRAFT_PROPOSALS(drafts));
 };
 
-export const onDeleteDraftProposal = draftId =>
+export const onDeleteDraftProposal = (draftId) =>
   act.DELETE_DRAFT_PROPOSAL(draftId);
 
 export const onSaveDraftInvoice = ({
@@ -244,13 +239,13 @@ export const onSaveDraftInvoice = ({
   });
 };
 
-export const onLoadDraftInvoices = email => {
+export const onLoadDraftInvoices = (email) => {
   const stateFromLS = loadStateLocalStorage(email);
   const drafts = sel.draftInvoices(stateFromLS) || {};
   return act.LOAD_DRAFT_INVOICES(drafts);
 };
 
-export const onDeleteDraftInvoice = draftId => {
+export const onDeleteDraftInvoice = (draftId) => {
   return act.DELETE_DRAFT_INVOICE(draftId);
 };
 
@@ -270,26 +265,26 @@ export const onSaveChangePassword = ({ existingPassword, newPassword }) => (
     sel.newProposalToken(getState())
   );
 
-export const onFetchProposalApp = token => dispatch =>
+export const onFetchProposalApp = (token) => (dispatch) =>
   dispatch(onFetchProposalApi(token)).then(() =>
     dispatch(onFetchProposalComments(token))
   );
 
-export const onFetchInvoiceApp = (token, version = null) => dispatch =>
+export const onFetchInvoiceApp = (token, version = null) => (dispatch) =>
   dispatch(onFetchInvoiceApi(token, version)).then(() =>
     dispatch(onFetchInvoiceComments(token))
   );
 
-export const onLoadMe = me => dispatch => {
+export const onLoadMe = (me) => (dispatch) => {
   dispatch(act.LOAD_ME(me));
 };
 
 export const onResetPaywallInfo = () => act.RESET_PAYWALL_INFO();
-export const onChangeAdminFilter = option =>
+export const onChangeAdminFilter = (option) =>
   act.CHANGE_ADMIN_FILTER_VALUE(option);
-export const onChangePublicFilter = option =>
+export const onChangePublicFilter = (option) =>
   act.CHANGE_PUBLIC_FILTER_VALUE(option);
-export const onChangeUserFilter = option =>
+export const onChangeUserFilter = (option) =>
   act.CHANGE_USER_FILTER_VALUE(option);
 
 export const onChangeStartPayoutDateFilter = (month, year) => (
@@ -330,18 +325,18 @@ export const onChangeDateFilter = (month, year) =>
 
 export const onResetDateFilter = () => act.RESET_DATE_FILTER();
 
-export const onChangeProposalStatusApproved = status =>
+export const onChangeProposalStatusApproved = (status) =>
   act.SET_PROPOSAL_APPROVED(status);
 
 export const onIdentityImported = (successMsg, errorMsg = "") =>
   act.IDENTITY_IMPORTED({ errorMsg, successMsg });
 
-export const onSubmitCommentApp = (...args) => dispatch =>
+export const onSubmitCommentApp = (...args) => (dispatch) =>
   dispatch(onSubmitCommentApi(...args)).then(() =>
     dispatch(onSetReplyParent())
   );
 
-export const onLocalStorageChange = event => async (dispatch, getState) => {
+export const onLocalStorageChange = (event) => async (dispatch, getState) => {
   const state = getState();
 
   if (event.key !== loggedInStateKey) {
@@ -425,16 +420,16 @@ export const setOnboardAsViewed = () => act.SET_ONBOARD_AS_VIEWED();
 
 export const resetLastSubmittedProposal = () => act.RESET_LAST_SUBMITTED();
 
-export const onSetCommentsSortOption = option =>
+export const onSetCommentsSortOption = (option) =>
   act.SET_COMMENTS_SORT_OPTION(option);
 
-export const toggleCreditsPaymentPolling = bool =>
+export const toggleCreditsPaymentPolling = (bool) =>
   act.TOGGLE_CREDITS_PAYMENT_POLLING(bool);
 
-export const toggleProposalPaymentReceived = bool =>
+export const toggleProposalPaymentReceived = (bool) =>
   act.TOGGLE_PROPOSAL_PAYMENT_RECEIVED(bool);
 
-export const onEditUserPreferences = preferences => dispatch =>
+export const onEditUserPreferences = (preferences) => (dispatch) =>
   dispatch(onEditUser(sel.resolveEditUserValues(preferences)));
 
 export const onResetComments = () => act.RESET_COMMENTS();

@@ -7,7 +7,7 @@ const privacyConnector = connect(
     isCMS: sel.isCMS,
     isTestnet: sel.isTestNet
   }),
-  dispatch => bindActionCreators({}, dispatch)
+  (dispatch) => bindActionCreators({}, dispatch)
 );
 
 export default privacyConnector;

@@ -1,17 +1,16 @@
 .newButton {
-    width: 15.5rem;
-    padding-right: 0 !important;
-    padding-left: 0 !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 15.5rem;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-
-@media screen and (max-width: 560px){
-    .newButton { 
-        padding: 0 !important;
-        width: 3.2rem;
-        height: 3.2rem;
-    }
+@media screen and (max-width: 560px) {
+  .newButton {
+    padding: 0 !important;
+    width: 3.2rem;
+    height: 3.2rem;
+  }
 }

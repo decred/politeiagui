@@ -10,7 +10,7 @@ export * from "./models/proposals";
 export * from "./models/proposalVotes";
 export * from "./models/invoices";
 
-export const selectorMap = fns => (...args) =>
+export const selectorMap = (fns) => (...args) =>
   Object.keys(fns).reduce(
     (res, key) => ({ ...res, [key]: fns[key](...args) }),
     {}

@@ -28,7 +28,8 @@
     align-items: flex-start;
   }
 
-  .buttonsWrapper > a, .buttonsWrapper > button {
+  .buttonsWrapper > a,
+  .buttonsWrapper > button {
     margin: 1rem 0 0 0 !important;
   }
 }

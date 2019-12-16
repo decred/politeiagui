@@ -16,14 +16,14 @@ import {
  * @param {Object} voteSummary
  * @returns {Array} status bar data
  */
-export const getStatusBarData = voteSummary => {
+export const getStatusBarData = (voteSummary) => {
   return voteSummary.results
-    .map(op => ({
+    .map((op) => ({
       label: op.option.id,
       amount: op.votesreceived,
       color: op.option.id === "yes" ? "#41BE53" : "#ED6D47"
     }))
-    .sort(a => (a.label === "yes" ? -1 : 1));
+    .sort((a) => (a.label === "yes" ? -1 : 1));
 };
 
 export const getProposalStatusTagProps = (proposal, voteSummary) => {
