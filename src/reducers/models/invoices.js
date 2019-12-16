@@ -10,9 +10,9 @@ const DEFAULT_STATE = {
   exchangeRates: {}
 };
 
-const invoiceToken = proposal => proposal.censorshiprecord.token;
+const invoiceToken = (proposal) => proposal.censorshiprecord.token;
 
-const invoiceArrayToByTokenObject = invoices =>
+const invoiceArrayToByTokenObject = (invoices) =>
   invoices.reduce(
     (invoicesByToken, invoice) => ({
       ...invoicesByToken,
@@ -23,7 +23,7 @@ const invoiceArrayToByTokenObject = invoices =>
 
 const onReceiveInvoices = (state, receivedInvoices) => {
   return compose(
-    update("byToken", invoices => ({
+    update("byToken", (invoices) => ({
       ...invoices,
       ...invoiceArrayToByTokenObject(receivedInvoices)
     })),

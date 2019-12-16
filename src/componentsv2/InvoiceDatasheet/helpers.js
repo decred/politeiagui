@@ -31,7 +31,7 @@ const domainOptions = [
 ];
 
 const getDomainOptions = () =>
-  domainOptions.map(op => ({
+  domainOptions.map((op) => ({
     value: op,
     label: op
   }));
@@ -164,8 +164,8 @@ export const convertLineItemsToGrid = (
   return grid.concat(gridBody).concat([totalsLine]);
 };
 
-export const convertGridToLineItems = grid => {
-  const copyGrid = grid.map(row => [...row]);
+export const convertGridToLineItems = (grid) => {
+  const copyGrid = grid.map((row) => [...row]);
   return copyGrid.reduce((acc, rowValues, row) => {
     // skip last row
     if (row === copyGrid.length - 1) return acc;
@@ -198,7 +198,7 @@ export const convertGridToLineItems = grid => {
 };
 
 export const lineitemsWithSubtotal = (lineItems, rate) =>
-  lineItems.map(l => {
+  lineItems.map((l) => {
     return l.type === 1
       ? {
           ...l,

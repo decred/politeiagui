@@ -1,12 +1,12 @@
 .groupList {
-    display: flex;
-    list-style: none;
+  display: flex;
+  list-style: none;
 }
 
 .groupListItem {
-    margin-left: var(--spacing-small);
+  margin-left: var(--spacing-small);
 }
 
 .groupDropdownItem {
-    width: 100%;
+  width: 100%;
 }

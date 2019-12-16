@@ -3,10 +3,10 @@ import * as Yup from "yup";
 /**
  * Add method 'maxByteSize' for files size validation
  */
-Yup.addMethod(Yup.number, "maxByteSize", bytesSize => {
+Yup.addMethod(Yup.number, "maxByteSize", (bytesSize) => {
   return Yup.mixed().test({
     name: "maxByteSize",
-    test: value => value <= bytesSize,
+    test: (value) => value <= bytesSize,
     message: `File size must be less or equal than ${bytesSize / 1024}kb`
   });
 });

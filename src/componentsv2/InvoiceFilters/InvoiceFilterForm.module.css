@@ -1,23 +1,20 @@
 .form {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    padding-bottom: 1rem;
-    flex-wrap: wrap;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
 .checkboxesWrapper {
-    display: flex;
-    justify-content: right;
+  display: flex;
+  justify-content: right;
 }
-
 
 /* SMALL */
 @media screen and (max-width: 768px) {
-    .selector { 
-        width: 100% !important;
-        margin-top: 1rem;
-    }
+  .selector {
+    width: 100% !important;
+    margin-top: 1rem;
   }
-  
-  
+}

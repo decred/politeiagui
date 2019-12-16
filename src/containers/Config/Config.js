@@ -4,7 +4,7 @@ import { ConfigProvider } from "./ConfigProvider";
 import politeiaConfig from "src/apps/politeia/config.json";
 
 const env = dotenvParse(process.env);
-const getEnvVariable = key => env[`REACT_APP_${key}`];
+const getEnvVariable = (key) => env[`REACT_APP_${key}`];
 
 const defaultPreset = politeiaConfig;
 

@@ -7,7 +7,7 @@ import {
   INVOICE_STATUS_PAID
 } from "src/containers/Invoice";
 
-export const getInvoiceStatusTagProps = invoice => {
+export const getInvoiceStatusTagProps = (invoice) => {
   switch (invoice.status) {
     case INVOICE_STATUS_NEW:
     case INVOICE_STATUS_UPDATED:

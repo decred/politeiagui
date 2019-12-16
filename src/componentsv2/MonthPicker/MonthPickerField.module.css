@@ -1,29 +1,29 @@
 .arrowAnchor {
-    position: relative;
-    height: 100%;
-    width: 20px;
+  position: relative;
+  height: 100%;
+  width: 20px;
 }
 
-.arrowAnchor:after{
-    content:"";
-    width: 0;
-    height: 0;
-    border: 5px solid transparent;
-    border-color: var(--color-gray) transparent transparent transparent;
-    position: absolute;
-    top: 6px;
-    right: 3px;
+.arrowAnchor:after {
+  content: "";
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-color: var(--color-gray) transparent transparent transparent;
+  position: absolute;
+  top: 6px;
+  right: 3px;
 }
 
 .arrowAnchorOpen {
-    composes: arrowAnchor;
+  composes: arrowAnchor;
 }
 .arrowAnchorOpen:after {
-    top: 3px;
-    border-color: transparent transparent var(--color-primary) transparent;
+  top: 3px;
+  border-color: transparent transparent var(--color-primary) transparent;
 }
 
 .valueWrapper {
-    cursor: pointer;
-    display: inline-flex;
+  cursor: pointer;
+  display: inline-flex;
 }

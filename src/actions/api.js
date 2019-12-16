@@ -221,7 +221,7 @@ export const onSearchUser = (query) => (dispatch) => {
   dispatch(act.REQUEST_USER_SEARCH());
   return api
     .searchUser(query)
-    .then((res) => dispatch(act.RECEIVE_USER_SEARCH(res)))
+    .then((res) => dispatch(act.RECEIVE_USER_SEARCH({ ...res, query })))
     .catch((err) => {
       dispatch(act.RECEIVE_USER_SEARCH(null, err));
       throw err;

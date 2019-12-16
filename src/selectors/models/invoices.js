@@ -14,22 +14,22 @@ export const allInvoices = createSelector(
   allInvoicesTokens,
   invoicesByToken,
   (tokens, invByToken) => {
-    return sortByNewestFirst(tokens.map(token => invByToken[token]));
+    return sortByNewestFirst(tokens.map((token) => invByToken[token]));
   }
 );
 
-export const makeGetInvoicesByUserID = userID =>
-  createSelector(allInvoices, invoices =>
-    invoices.filter(inv => inv.userid === userID)
+export const makeGetInvoicesByUserID = (userID) =>
+  createSelector(allInvoices, (invoices) =>
+    invoices.filter((inv) => inv.userid === userID)
   );
 
 export const getCurrentUserInvoices = createSelector(
   allInvoices,
   currentUserID,
   (invoices, currUserID) => {
-    return invoices.filter(inv => inv.userid === currUserID);
+    return invoices.filter((inv) => inv.userid === currUserID);
   }
 );
 
-export const makeGetInvoiceByToken = token =>
+export const makeGetInvoiceByToken = (token) =>
   createSelector(invoicesByToken, get(token));

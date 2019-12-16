@@ -1,22 +1,21 @@
 {
-    "title": "Contractor Management",
-    "logoLight": "cms-logo-light.svg",
-    "logoDark":  "cms-logo-dark.svg",
-    "recordType": "invoice",
-    "aboutContent": "about-politeia",
-    "enableAdminInvite": true,
-    "enableCommentVote": false,
-    "enableCredits": false,
-    "enablePaywall": false,
-    "onBoardContent": "onboard-cms",
-    "onBoardLink": "https://docs.decred.org/contributing/overview/",
-    "privacyPolicyContent": "privacy-policy-cms",
-    "testnetGitRepository": "",
-    "mainnetGitRepository": "",
-    "navMenuPaths": [
-      { "label": "My invoices", "path": "/invoices/me", "admin": false },
-      { "label": "Admin", "path": "/invoices/admin", "admin": true },
-      { "label": "Search for users", "path": "/user/search", "admin": true }
-    ]
-  }
-  
+  "title": "Contractor Management",
+  "logoLight": "cms-logo-light.svg",
+  "logoDark": "cms-logo-dark.svg",
+  "recordType": "invoice",
+  "aboutContent": "about-politeia",
+  "enableAdminInvite": true,
+  "enableCommentVote": false,
+  "enableCredits": false,
+  "enablePaywall": false,
+  "onBoardContent": "onboard-cms",
+  "onBoardLink": "https://docs.decred.org/contributing/overview/",
+  "privacyPolicyContent": "privacy-policy-cms",
+  "testnetGitRepository": "",
+  "mainnetGitRepository": "",
+  "navMenuPaths": [
+    { "label": "My invoices", "path": "/invoices/me", "admin": false },
+    { "label": "Admin", "path": "/invoices/admin", "admin": true },
+    { "label": "Search for users", "path": "/user/search", "admin": true }
+  ]
+}

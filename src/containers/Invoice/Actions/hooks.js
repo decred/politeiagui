@@ -14,7 +14,7 @@ export const useAdminInvoiceActions = () =>
 export const useAdminActions = () => {
   const onSetInvoiceStatus = useAction(act.onSetInvoiceStatus);
   const onRejectInvoice = useCallback(
-    invoice => reason =>
+    (invoice) => (reason) =>
       onSetInvoiceStatus(
         invoice.censorshiprecord.token,
         INVOICE_STATUS_REJECTED,
@@ -25,7 +25,7 @@ export const useAdminActions = () => {
   );
 
   const onApproveInvoice = useCallback(
-    invoice => () =>
+    (invoice) => () =>
       onSetInvoiceStatus(
         invoice.censorshiprecord.token,
         INVOICE_STATUS_APPROVED,
@@ -35,7 +35,7 @@ export const useAdminActions = () => {
   );
 
   const onDisputeInvoice = useCallback(
-    invoice => () =>
+    (invoice) => () =>
       onSetInvoiceStatus(
         invoice.censorshiprecord.token,
         INVOICE_STATUS_DISPUTED,

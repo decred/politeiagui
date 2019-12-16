@@ -4,7 +4,7 @@ import { ConfigConsumer } from "./ConfigProvider";
 
 const ConfigFilter = ({ showIf, children }) => (
   <ConfigConsumer>
-    {config => (showIf(config) ? children : null)}
+    {(config) => (showIf(config) ? children : null)}
   </ConfigConsumer>
 );
 
