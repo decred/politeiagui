@@ -51,7 +51,7 @@ const ModalBuyProposalCredits = ({
       {extraSmall && <PaymentStatusTag status={status} />}
       <PaymentComponent
         address={address}
-        amount={(number * price).toFixed(1)}
+        amount={+(number * price).toFixed(1)}
         extraSmall={extraSmall}
         status={status}
       />
