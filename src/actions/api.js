@@ -851,9 +851,8 @@ export const onSubmitComment = (
         // make sure this is not a duplicate comment by comparing to the existent
         // comments signatures
         const comments = sel.commentsByToken(getState())[token];
-        const signatureFound = comments.find(
-          (cm) => cm.signature === comment.signature
-        );
+        const signatureFound =
+          comments && comments.find((cm) => cm.signature === comment.signature);
         if (signatureFound) {
           throw new Error("That is a duplicate comment.");
         }
