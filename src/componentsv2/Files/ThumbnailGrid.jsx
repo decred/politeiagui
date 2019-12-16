@@ -6,6 +6,7 @@ import ImageThumbnail from "./ImageThumbnail";
 import TextThumbnail from "./TextThumbnail";
 import useHighlightedItem from "src/hooks/utils/useHighlightItem";
 import ModalFullImage from "src/componentsv2/ModalFullImage";
+import ThumbnailGridErrors from "./ThumbnailGridErrors";
 
 export const ThumbnailGrid = ({
   value = [],
@@ -18,9 +19,9 @@ export const ThumbnailGrid = ({
     setImageOnModal,
     closeImageOnModal
   ] = useHighlightedItem();
-  const files = value.filter(f => f.name !== "index.md");
+  const files = value.filter((f) => f.name !== "index.md");
   const handleSetImageOnModal = useCallback(
-    file => {
+    (file) => {
       setImageOnModal(file);
     },
     [setImageOnModal]
@@ -31,8 +32,7 @@ export const ThumbnailGrid = ({
       <Row
         className={styles.thumbnailGrid}
         justify="left"
-        topMarginSize={errors ? "s" : "m"}
-      >
+        topMarginSize={errors ? "s" : "m"}>
         {files.map((f, key) =>
           f.mime.includes("image") ? (
             <ImageThumbnail
@@ -58,21 +58,6 @@ export const ThumbnailGrid = ({
         onClose={closeImageOnModal}
       />
     </>
-  );
-};
-
-const ThumbnailGridErrors = ({ errors }) => {
-  const fileErrors = errors.files || [];
-  const uniqueErrors = Array.isArray(fileErrors)
-    ? [...new Set(fileErrors)]
-    : [fileErrors];
-  return uniqueErrors.map(
-    err =>
-      err && (
-        <p key={err} className={styles.fileErrorText}>
-          {err}
-        </p>
-      )
   );
 };
 
