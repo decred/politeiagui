@@ -22,9 +22,7 @@ import LoggedInContent from "src/componentsv2/LoggedInContent";
 import VotesCount from "./VotesCount";
 import DownloadComments from "src/containers/Comments/Download";
 import ProposalActions from "./ProposalActions";
-import { useFullImageModal } from "src/componentsv2/ProposalForm/hooks";
-import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
-import ModalFullImage from "src/componentsv2/ModalFullImage";
+import ThumbnailGrid from "src/componentsv2/Files";
 import VersionPicker from "src/componentsv2/VersionPicker";
 import { useRouter } from "src/componentsv2/Router";
 
@@ -58,11 +56,7 @@ const Proposal = React.memo(function Proposal({
     username,
     version
   } = proposal;
-  const {
-    showFullImageModal,
-    openFullImageModal,
-    closeFullImageModal
-  } = useFullImageModal();
+
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
   const proposalURL = `/proposals/${proposalToken}`;
@@ -83,9 +77,6 @@ const Proposal = React.memo(function Proposal({
   function goToFullProposal() {
     history.push(proposalURL);
   }
-  const onClickFile = f => () => {
-    openFullImageModal(f);
-  };
   return (
     <>
       <RecordWrapper className={ classNames(isAbandoned && styles.abandonedProposal)}>
@@ -235,11 +226,7 @@ const Proposal = React.memo(function Proposal({
             )}
             {extended && files.length > 1 && (
               <Row className={styles.filesRow} justify="left" topMarginSize="s">
-                <ThumbnailGrid
-                  value={files}
-                  onClick={onClickFile}
-                  viewOnly={true}
-                />
+                <ThumbnailGrid value={files} viewOnly={true} />
               </Row>
             )}
             {extended && (
@@ -281,13 +268,6 @@ const Proposal = React.memo(function Proposal({
         onClose={handleCloseSearchVotesModal}
         proposal={proposal}
       />
-      {extended && (
-        <ModalFullImage
-          image={showFullImageModal}
-          show={!!showFullImageModal}
-          onClose={closeFullImageModal}
-        />
-      )}
     </>
   );
 });
