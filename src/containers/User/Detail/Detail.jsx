@@ -11,7 +11,7 @@ import Account from "./Account";
 import Credits from "./Credits";
 import styles from "./Detail.module.css";
 import { tabValues } from "./helpers";
-import { useChangeUsername } from "./hooks";
+import useChangeUsername from "./hooks/useChangeUsername";
 import useUserDetail from "./hooks/useUserDetail";
 import Identity from "./Identity";
 import Preferences from "./Preferences";

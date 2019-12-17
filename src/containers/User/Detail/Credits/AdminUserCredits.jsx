@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
 import { MANAGE_USER_CLEAR_USER_PAYWALL } from "src/constants";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import { useManageUser } from "../hooks.js";
+import useManageUser from "../hooks/useManageUser";
 import usePaywall from "src/hooks/api/usePaywall";
 import styles from "./Credits.module.css";
 import { useCredits, useRescanUserCredits } from "./hooks.js";
