@@ -11,7 +11,8 @@ import Account from "./Account";
 import Credits from "./Credits";
 import styles from "./Detail.module.css";
 import { tabValues } from "./helpers";
-import { useChangeUsername, useUserDetail } from "./hooks";
+import { useChangeUsername } from "./hooks";
+import useUserDetail from "./hooks/useUserDetail";
 import Identity from "./Identity";
 import Preferences from "./Preferences";
 
@@ -19,7 +20,9 @@ const getTabComponents = ({ user, ...rest }) => {
   const mapTabValueToComponent = {
     [tabValues.IDENTITY]: <Identity key="tab-identity" user={user} {...rest} />,
     [tabValues.ACCOUNT]: <Account key="tab-account" {...user} {...rest} />,
-    [tabValues.PREFERENCES]: <Preferences user={user} key="tab-preferences" {...rest} />,
+    [tabValues.PREFERENCES]: (
+      <Preferences user={user} key="tab-preferences" {...rest} />
+    ),
     [tabValues.CREDITS]: <Credits key="tab-credits" user={user} {...rest} />,
     [tabValues.PROPOSALS]: (
       <UserProposals
@@ -41,13 +44,10 @@ const UserDetail = ({
   Tab,
   match
 }) => {
-  const { 
-    user, 
-    isAdmin, 
-    currentUserID 
-  } = useUserDetail({ match });
+  const userID = match.params.userid;
+  const { user, isAdmin, currentUserID } = useUserDetail(userID);
   const {
-    userPubkey, 
+    userPubkey,
     currentUserEmail,
     identityImportSuccess
   } = useUserIdentity();
@@ -56,7 +56,7 @@ const UserDetail = ({
   const isAdminOrTheUser = user && (isAdmin || currentUserID === user.userid);
 
   const tabLabels = useMemo(() => {
-    const isTabDisabled = tabLabel => {
+    const isTabDisabled = (tabLabel) => {
       if (tabLabel === tabValues.PREFERENCES && !isUserPageOwner) return true;
       if (tabLabel === tabValues.CREDITS && !isAdminOrTheUser) return true;
 
@@ -68,14 +68,14 @@ const UserDetail = ({
       tabValues.PREFERENCES,
       tabValues.CREDITS,
       tabValues.PROPOSALS
-    ].filter(tab => !isTabDisabled(tab));
+    ].filter((tab) => !isTabDisabled(tab));
   }, [isUserPageOwner, isAdminOrTheUser]);
 
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
 
   // Change Username Modal
   const [showUsernameModal, setShowUsernameModal] = useState(false);
-  const openUsernameModal = e => {
+  const openUsernameModal = (e) => {
     e.preventDefault();
     setShowUsernameModal(true);
   };
@@ -88,7 +88,7 @@ const UserDetail = ({
   const refreshPubKey = useCallback(() => {
     existing(currentUserEmail).then(() => {
       myPubKeyHex(currentUserEmail)
-        .then(pubkey => {
+        .then((pubkey) => {
           setPubkey(pubkey);
           setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
         })
@@ -121,9 +121,8 @@ const UserDetail = ({
         onSelectTab={onSetIndex}
         className={isMobileScreen ? "padding-bottom-s" : ""}
         activeTabIndex={index}
-        mode={isMobileScreen ? "dropdown" : "horizontal"}
-      >
-        {tabLabels.map(label => (
+        mode={isMobileScreen ? "dropdown" : "horizontal"}>
+        {tabLabels.map((label) => (
           <Tab key={`tab-${label}`} label={label} />
         ))}
       </Tabs>
@@ -144,16 +143,14 @@ const UserDetail = ({
                 <Link
                   href="#"
                   onClick={openUsernameModal}
-                  className={styles.titleLink}
-                >
+                  className={styles.titleLink}>
                   Change Username
                 </Link>
               )}
             </div>
           }
           subtitle={user.email}
-          actionsContent={null}
-        >
+          actionsContent={null}>
           {tabs}
         </PageDetails>
       </TopBanner>

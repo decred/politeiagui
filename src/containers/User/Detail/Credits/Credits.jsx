@@ -6,10 +6,7 @@ import AdminUserCredits from "./AdminUserCredits";
 import UserCredits from "./UserCredits";
 
 const Credits = ({ user }) => {
-  const {
-    currentUserID,
-    isAdmin
-  } = useCredits({ userid: user.userid });
+  const { currentUserID, isAdmin } = useCredits({ userid: user.userid });
 
   const isUserPageOwner = user && currentUserID === user.userid;
 
@@ -20,11 +17,11 @@ const Credits = ({ user }) => {
       Only admins or the user himself can access this route.
     </Message>
   ) : isAdmin && !isUserPageOwner ? (
-    <AdminCredits />
+    <AdminCredits user={user} />
   ) : !isAdmin && isUserPageOwner ? (
-    <UserCredits />
+    <UserCredits user={user} />
   ) : (
-    <AdminUserCredits />
+    <AdminUserCredits user={user} />
   );
 };
 

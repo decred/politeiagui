@@ -13,8 +13,12 @@ import ProposalCreditsSection from "./components/ProposalCreditsSection";
 import RescanSection from "./components/RescanSection.jsx";
 import CreditHistorySection from "./components/CreditHistorySection.jsx";
 
-const Credits = () => {
-  const { user, onManageUser, isApiRequestingMarkAsPaid } = useManageUser();
+const Credits = ({ user }) => {
+  const userID = user && user.userid;
+  const [markAsPaid, isApiRequestingMarkAsPaid] = useManageUser(
+    MANAGE_USER_CLEAR_USER_PAYWALL,
+    userID
+  );
   const { isPaid } = usePaywall();
   const {
     proposalCreditPrice,
@@ -25,14 +29,14 @@ const Credits = () => {
     toggleProposalPaymentReceived,
     onPollProposalPaywallPayment,
     shouldPollPaywallPayment
-  } = useCredits({ userid: user.userid });
+  } = useCredits({ userid: userID });
 
   const {
     onRescanUserCredits,
     errorRescan,
     isLoadingRescan,
     amountOfCreditsAddedOnRescan
-  } = useRescanUserCredits(user.userid);
+  } = useRescanUserCredits(userID);
 
   const [
     showMarkAsPaidConfirmModal,
@@ -73,24 +77,30 @@ const Credits = () => {
     toggleCreditsPaymentPolling
   ]);
 
-  const markAsPaid = reason =>
-    onManageUser(user.userid, MANAGE_USER_CLEAR_USER_PAYWALL, reason);
-
   return isApiRequestingUserProposalCredits ? (
     <div className={styles.spinnerWrapper}>
       <Spinner invert />
     </div>
   ) : (
     <Card className={classNames("container", "margin-bottom-m")}>
-      <RegistrationFeeSection isPaid={isPaid} isAdmin isUser openPaywallModal={openPaywallModal} isApiRequestingMarkAsPaid={isApiRequestingMarkAsPaid} openMarkAsPaidModal={openMarkAsPaidModal} />
-      <ProposalCreditsSection proposalCredits={proposalCredits} proposalCreditPrice={proposalCreditPrice} />
+      <RegistrationFeeSection
+        isPaid={isPaid}
+        isAdmin
+        isUser
+        openPaywallModal={openPaywallModal}
+        isApiRequestingMarkAsPaid={isApiRequestingMarkAsPaid}
+        openMarkAsPaidModal={openMarkAsPaidModal}
+      />
+      <ProposalCreditsSection
+        proposalCredits={proposalCredits}
+        proposalCreditPrice={proposalCreditPrice}
+      />
       <div className={styles.buttonsWrapper}>
         {isPaid && (
           <Button
             className="margin-top-s"
             size="sm"
-            onClick={openProposalCreditsModal}
-          >
+            onClick={openProposalCreditsModal}>
             Purchase more
           </Button>
         )}
@@ -98,13 +108,18 @@ const Credits = () => {
           onClick={onRescanUserCredits}
           loading={isLoadingRescan}
           className="margin-top-s"
-          size="sm"
-        >
+          size="sm">
           Rescan
         </Button>
       </div>
-      <RescanSection amountOfCreditsAddedOnRescan={amountOfCreditsAddedOnRescan} errorRescan={errorRescan} />
-      <CreditHistorySection proposalCreditPrice={proposalCreditPrice} />
+      <RescanSection
+        amountOfCreditsAddedOnRescan={amountOfCreditsAddedOnRescan}
+        errorRescan={errorRescan}
+      />
+      <CreditHistorySection
+        user={user}
+        proposalCreditPrice={proposalCreditPrice}
+      />
       <ModalConfirmWithReason
         subject="markUserPaywallAsPaid"
         onSubmit={markAsPaid}
@@ -115,6 +130,7 @@ const Credits = () => {
         onClose={closeMarkAsPaidModal}
       />
       <UserModals
+        user={user}
         showPaywallModal={showPaywallModal}
         closePaywallModal={closePaywallModal}
         showProposalCreditsModal={showProposalCreditsModal}

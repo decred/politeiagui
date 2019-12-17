@@ -1,7 +1,6 @@
 import { Button, Card, classNames, Spinner } from "pi-ui";
 import React, { useEffect } from "react";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import { useManageUser } from "../hooks.js";
 import usePaywall from "src/hooks/api/usePaywall";
 import styles from "./Credits.module.css";
 import { useCredits } from "./hooks.js";
@@ -10,8 +9,7 @@ import RegistrationFeeSection from "./components/RegistrationFeeSection";
 import ProposalCreditsSection from "./components/ProposalCreditsSection";
 import CreditHistorySection from "./components/CreditHistorySection.jsx";
 
-const Credits = () => {
-  const { user } = useManageUser();
+const Credits = ({ user }) => {
   const { isPaid } = usePaywall();
   const {
     proposalCreditPrice,
@@ -64,14 +62,21 @@ const Credits = () => {
     </div>
   ) : (
     <Card className={classNames("container", "margin-bottom-m")}>
-      <RegistrationFeeSection isPaid={isPaid} isAdmin={false} isUser openPaywallModal={openPaywallModal} />
-      <ProposalCreditsSection proposalCredits={proposalCredits} proposalCreditPrice={proposalCreditPrice} />
+      <RegistrationFeeSection
+        isPaid={isPaid}
+        isAdmin={false}
+        isUser
+        openPaywallModal={openPaywallModal}
+      />
+      <ProposalCreditsSection
+        proposalCredits={proposalCredits}
+        proposalCreditPrice={proposalCreditPrice}
+      />
       {isPaid && (
         <Button
           className="margin-top-s"
           size="sm"
-          onClick={openProposalCreditsModal}
-        >
+          onClick={openProposalCreditsModal}>
           Purchase more
         </Button>
       )}

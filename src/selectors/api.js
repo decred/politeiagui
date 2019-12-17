@@ -71,6 +71,13 @@ export const isApiRequestingProposalsVoteSummary = getIsApiRequesting(
 );
 export const isApiRequestingEditUser = getIsApiRequesting("editUser");
 export const isApiRequestingManageUser = getIsApiRequesting("manageUser");
+
+export const makeIsApiRequestingManageUserByAction = (action) =>
+  createSelector(
+    (state) =>
+      isApiRequestingManageUser(state) && manageUserAction(state) === action
+  );
+
 export const isApiRequestingEditProposal = getIsApiRequesting("editProposal");
 export const isApiRequestingEditInvoice = getIsApiRequesting("editInvoice");
 
