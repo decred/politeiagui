@@ -13,7 +13,7 @@ export default function useValidationSchema(schemaCreator) {
         setValidationSchema(schemaCreator(policy));
       }
     },
-    [policy, validationSchema]
+    [policy, validationSchema, schemaCreator]
   );
 
   return validationSchema;
