@@ -6,7 +6,8 @@ import AdminUserCredits from "./AdminUserCredits";
 import UserCredits from "./UserCredits";
 
 const Credits = ({ user }) => {
-  const { currentUserID, isAdmin } = useCredits({ userid: user.userid });
+  const userID = user && user.userid;
+  const { currentUserID, isAdmin } = useCredits(userID);
 
   const isUserPageOwner = user && currentUserID === user.userid;
 

@@ -10,6 +10,7 @@ import ProposalCreditsSection from "./components/ProposalCreditsSection";
 import CreditHistorySection from "./components/CreditHistorySection.jsx";
 
 const Credits = ({ user }) => {
+  const userID = user && user.userid;
   const { isPaid } = usePaywall();
   const {
     proposalCreditPrice,
@@ -20,7 +21,7 @@ const Credits = ({ user }) => {
     toggleProposalPaymentReceived,
     onPollProposalPaywallPayment,
     shouldPollPaywallPayment
-  } = useCredits({ userid: user.userid });
+  } = useCredits(userID);
 
   const [
     showPaywallModal,
@@ -80,7 +81,10 @@ const Credits = ({ user }) => {
           Purchase more
         </Button>
       )}
-      <CreditHistorySection proposalCreditPrice={proposalCreditPrice} />
+      <CreditHistorySection
+        user={user}
+        proposalCreditPrice={proposalCreditPrice}
+      />
       <UserModals
         showPaywallModal={showPaywallModal}
         closePaywallModal={closePaywallModal}

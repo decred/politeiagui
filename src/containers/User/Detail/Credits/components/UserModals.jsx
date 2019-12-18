@@ -11,6 +11,7 @@ export default ({
   showProposalCreditsModal,
   closeProposalCreditsModal
 }) => {
+  const userID = user && user.userid;
   const {
     proposalCreditPrice,
     proposalPaywallAddress,
@@ -20,7 +21,7 @@ export default ({
     toggleCreditsPaymentPolling,
     onPollProposalPaywallPayment,
     toggleProposalPaymentReceived
-  } = useCredits({ userid: user.userid });
+  } = useCredits(userID);
 
   const onStartPollingPayment = () => {
     toggleCreditsPaymentPolling(true);

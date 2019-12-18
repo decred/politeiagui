@@ -17,7 +17,7 @@ const Credits = ({ user }) => {
     userID
   );
   const { isPaid } = usePaywall();
-  const { proposalCreditPrice } = useCredits({ userid: userID });
+  const { proposalCreditPrice } = useCredits(userID);
 
   const {
     onRescanUserCredits,

@@ -29,7 +29,7 @@ const Credits = ({ user }) => {
     toggleProposalPaymentReceived,
     onPollProposalPaywallPayment,
     shouldPollPaywallPayment
-  } = useCredits({ userid: userID });
+  } = useCredits(userID);
 
   const {
     onRescanUserCredits,
