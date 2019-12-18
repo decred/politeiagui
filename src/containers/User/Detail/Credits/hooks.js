@@ -35,14 +35,13 @@ const mapDispatchToProps = {
   clearProposalPaymentPollingPointer: act.clearProposalPaymentPollingPointer
 };
 
-export function useCredits(ownProps) {
-  const { userid } = ownProps;
-  const creditsSelector = useMemo(() => sel.makeGetUnspentUserCredits(userid), [
-    userid
+export function useCredits(userID) {
+  const creditsSelector = useMemo(() => sel.makeGetUnspentUserCredits(userID), [
+    userID
   ]);
   const creditsPurchasesSelector = useMemo(
-    () => sel.makeGetUserCreditsPurchasesByTx(userid),
-    [userid]
+    () => sel.makeGetUserCreditsPurchasesByTx(userID),
+    [userID]
   );
   const mapStateToPropsWithCredits = useMemo(
     () => ({
@@ -74,7 +73,7 @@ export function useCredits(ownProps) {
     proposalCreditPrice,
     proposalCreditsPurchases,
     reachedCreditsPaymentPollingLimit
-  } = useRedux(ownProps, mapStateToPropsWithCredits, mapDispatchToProps);
+  } = useRedux(null, mapStateToPropsWithCredits, mapDispatchToProps);
   const proposalCredits = proposalCreditsUnspent.length;
   const { isPaid } = usePaywall();
   const proposalCreditsFetched = proposalCredits !== null;
