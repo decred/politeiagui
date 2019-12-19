@@ -41,7 +41,12 @@ const InvoicePayoutsPage = ({
     "proposaltoken",
     "expenses",
     "labor",
-    "combinedtotal"
+    "combinedtotal",
+    "username",
+    "month",
+    "year",
+    "paiddate",
+    "amountreceived"
   ];
   return loggedInAsEmail ? (
     loading ? (
@@ -83,7 +88,10 @@ const InvoicePayoutsPage = ({
         </div>
 
         <div style={{ paddingLeft: "24px" }}>
-          <ExportToCsv data={csvData} fields={csvFields} filename={"payouts"}>
+          <ExportToCsv
+            data={csvData}
+            fields={csvFields}
+            filename={"payouts.csv"}>
             <button className="inverse payouts-btn-export-to-csv ">
               {"Export to CSV"}
             </button>
