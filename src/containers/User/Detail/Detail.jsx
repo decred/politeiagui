@@ -16,6 +16,7 @@ import useChangeUsername from "./hooks/useChangeUsername";
 import useUserDetail from "./hooks/useUserDetail";
 import Identity from "./Identity";
 import Preferences from "./Preferences";
+import ManageContractor from "./ManageContractor";
 
 const getTabComponents = ({ user, ...rest }) => {
   const mapTabValueToComponent = {
@@ -31,7 +32,8 @@ const getTabComponents = ({ user, ...rest }) => {
         userID={user.userid}
         withDrafts={rest.isUserPageOwner}
       />
-    )
+    ),
+    [tabValues.MANAGE_DCC]: <ManageContractor />
   };
   return mapTabValueToComponent;
 };
@@ -55,7 +57,7 @@ const UserDetail = ({
 
   const {
     recordType,
-    constants: { RECORD_TYPE_INVOICE }
+    constants: { RECORD_TYPE_INVOICE, RECORD_TYPE_PROPOSAL }
   } = useConfig();
 
   const isUserPageOwner = user && currentUserID === user.userid;
@@ -76,6 +78,9 @@ const UserDetail = ({
           tabLabel !== tabValues.CREDITS
         );
       }
+      if (recordType === RECORD_TYPE_PROPOSAL) {
+        return tabLabel !== tabValues.MANAGE_DCC;
+      }
       return true;
     };
     return [
@@ -83,7 +88,8 @@ const UserDetail = ({
       tabValues.ACCOUNT,
       tabValues.PREFERENCES,
       tabValues.CREDITS,
-      tabValues.PROPOSALS
+      tabValues.PROPOSALS,
+      tabValues.MANAGE_DCC
     ].filter((tab) => !isTabDisabled(tab) && filterByRecordType(tab));
   }, [isUserPageOwner, isAdminOrTheUser, RECORD_TYPE_INVOICE, recordType]);
 
