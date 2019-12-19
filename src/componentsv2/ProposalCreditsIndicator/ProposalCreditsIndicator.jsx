@@ -6,7 +6,8 @@ import { useCredits } from "src/containers/User/Detail/Credits/hooks.js";
 import styles from "./ProposalCreditsIndicator.module.css";
 
 const ProposalCreditsIndicator = ({ user, history }) => {
-  const { proposalCredits } = useCredits({ userid: user.userid });
+  const userID = user && user.userid;
+  const { proposalCredits } = useCredits(userID);
   usePollProposalCreditsPayment();
   const pushToProposalCredits = () =>
     history.push(`/user/${user.userid}?tab=credits`);
@@ -17,8 +18,7 @@ const ProposalCreditsIndicator = ({ user, history }) => {
         className={styles.proposalCreditsButton}
         size="sm"
         kind="primary"
-        onClick={pushToProposalCredits}
-      >
+        onClick={pushToProposalCredits}>
         <span>+</span>
       </Button>
     </div>

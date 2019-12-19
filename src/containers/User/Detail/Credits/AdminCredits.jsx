@@ -3,26 +3,28 @@ import React from "react";
 import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
 import { MANAGE_USER_CLEAR_USER_PAYWALL } from "src/constants";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import { useManageUser } from "../hooks.js";
+import useManageUser from "../hooks/useManageUser";
 import usePaywall from "src/hooks/api/usePaywall";
 import { useCredits, useRescanUserCredits } from "./hooks.js";
 import RegistrationFeeSection from "./components/RegistrationFeeSection";
 import ProposalCreditsSection from "./components/ProposalCreditsSection";
 import RescanSection from "./components/RescanSection.jsx";
 
-const Credits = () => {
-  const { user, onManageUser, isApiRequestingMarkAsPaid } = useManageUser();
+const Credits = ({ user }) => {
+  const userID = user && user.userid;
+  const [markAsPaid, isApiRequestingMarkAsPaid] = useManageUser(
+    MANAGE_USER_CLEAR_USER_PAYWALL,
+    userID
+  );
   const { isPaid } = usePaywall();
-  const {
-    proposalCreditPrice
-  } = useCredits({ userid: user.userid });
+  const { proposalCreditPrice } = useCredits(userID);
 
   const {
     onRescanUserCredits,
     errorRescan,
     isLoadingRescan,
     amountOfCreditsAddedOnRescan
-  } = useRescanUserCredits(user.userid);
+  } = useRescanUserCredits(userID);
 
   const [
     showMarkAsPaidConfirmModal,
@@ -30,22 +32,30 @@ const Credits = () => {
     closeMarkAsPaidModal
   ] = useBooleanState(false);
 
-  const markAsPaid = reason =>
-    onManageUser(user.userid, MANAGE_USER_CLEAR_USER_PAYWALL, reason);
-
   return (
     <Card className={classNames("container", "margin-bottom-m")}>
-      <RegistrationFeeSection isPaid={isPaid} isAdmin isUser={false} isApiRequestingMarkAsPaid={isApiRequestingMarkAsPaid} openMarkAsPaidModal={openMarkAsPaidModal} />
-      <ProposalCreditsSection proposalCredits={user.proposalcredits} proposalCreditPrice={proposalCreditPrice} />
+      <RegistrationFeeSection
+        isPaid={isPaid}
+        isAdmin
+        isUser={false}
+        isApiRequestingMarkAsPaid={isApiRequestingMarkAsPaid}
+        openMarkAsPaidModal={openMarkAsPaidModal}
+      />
+      <ProposalCreditsSection
+        proposalCredits={user.proposalcredits}
+        proposalCreditPrice={proposalCreditPrice}
+      />
       <Button
         onClick={onRescanUserCredits}
         loading={isLoadingRescan}
         className="margin-top-s"
-        size="sm"
-      >
+        size="sm">
         Rescan
       </Button>
-      <RescanSection amountOfCreditsAddedOnRescan={amountOfCreditsAddedOnRescan} errorRescan={errorRescan} />
+      <RescanSection
+        amountOfCreditsAddedOnRescan={amountOfCreditsAddedOnRescan}
+        errorRescan={errorRescan}
+      />
       <ModalConfirmWithReason
         subject="markUserPaywallAsPaid"
         onSubmit={markAsPaid}

@@ -17,7 +17,7 @@ import {
 import Field from "./Field";
 import InvoiceDatasheet from "../InvoiceDatasheet";
 import { convertAtomsToDcr } from "src/utilsv2";
-import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
+import ThumbnailGrid from "src/componentsv2/Files";
 
 const Invoice = ({ invoice, extended, collapseBodyContent }) => {
   const {
@@ -49,7 +49,7 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
 
   // record attchments without the invoice file
   const invoiceAttachments = useMemo(
-    () => (file || []).filter(f => !f.mime.includes("text/")),
+    () => (file || []).filter((f) => !f.mime.includes("text/")),
     [file]
   );
 
@@ -73,8 +73,7 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
                   id={`invoice-title-${invoiceToken}`}
                   truncate
                   linesBeforeTruncate={2}
-                  url={extended ? "" : invoiceURL}
-                >
+                  url={extended ? "" : invoiceURL}>
                   {presentationalInvoiceName(invoice)}
                 </Title>
               }
@@ -87,8 +86,7 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
                       id={`invoice-${invoiceToken}-version`}
                       className={classNames(styles.version)}
                       color="gray"
-                      truncate
-                    >{`version ${version}`}</Text>
+                      truncate>{`version ${version}`}</Text>
                   )}
                 </Subtitle>
               }
@@ -115,12 +113,11 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
                   <Field
                     label={"Pay to Address:"}
                     value={paymentAddress}
-                    renderValue={addr => (
+                    renderValue={(addr) => (
                       <CopyableText
                         id="payment-address"
                         truncate
-                        tooltipPlacement={"bottom"}
-                      >
+                        tooltipPlacement={"bottom"}>
                         {addr}
                       </CopyableText>
                     )}
@@ -144,8 +141,7 @@ const Invoice = ({ invoice, extended, collapseBodyContent }) => {
                   <Row
                     className={styles.filesRow}
                     justify="left"
-                    topMarginSize="s"
-                  >
+                    topMarginSize="s">
                     <ThumbnailGrid
                       value={invoiceAttachments}
                       onClick={() => null}

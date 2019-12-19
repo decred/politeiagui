@@ -13,7 +13,7 @@ import {
   getMinMaxYearAndMonth
 } from "src/containers/Invoice";
 import { invoiceValidationSchema, improveLineItemErrors } from "./validation";
-import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
+import ThumbnailGrid from "src/componentsv2/Files";
 import ExchangeRateField from "./ExchangeRateField";
 
 const InvoiceForm = React.memo(function InvoiceForm({
@@ -38,21 +38,20 @@ const InvoiceForm = React.memo(function InvoiceForm({
     <Button
       type="submit"
       kind={!isValid ? "disabled" : "primary"}
-      loading={isSubmitting}
-    >
+      loading={isSubmitting}>
       Submit
     </Button>
   );
 
   const handleChangeInvoiceDatasheet = useCallback(
-    value => {
+    (value) => {
       setFieldValue("lineitems", value);
     },
     [setFieldValue]
   );
 
   const handleFilesChange = useCallback(
-    v => {
+    (v) => {
       const files = values.files.concat(v);
       setFieldValue("files", files);
     },
@@ -65,8 +64,8 @@ const InvoiceForm = React.memo(function InvoiceForm({
   );
 
   const handleFileRemoval = useCallback(
-    v => {
-      const fs = values.files.filter(f => f.payload !== v.payload);
+    (v) => {
+      const fs = values.files.filter((f) => f.payload !== v.payload);
       setFieldValue("files", fs);
     },
     [setFieldValue, values.files]
@@ -201,9 +200,8 @@ const InvoiceFormWrapper = ({ onSubmit, history }) => {
         lineitems: [generateBlankLineItem()],
         files: []
       }}
-      validationSchema={validationSchema}
-    >
-      {props => {
+      validationSchema={validationSchema}>
+      {(props) => {
         return <InvoiceForm {...props} />;
       }}
     </Formik>

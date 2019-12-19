@@ -1,7 +1,7 @@
 import { Card, classNames } from "pi-ui";
 import React from "react";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import { useChangePassword } from "../hooks";
+import useChangePassword from "../hooks/useChangePassword";
 import ModalChangePassword from "src/componentsv2/ModalChangePassword";
 import AdminSection from "./components/AdminSection";
 import AddressSection from "./components/AddressSection";
@@ -22,7 +22,10 @@ const UserAccount = ({
     closePasswordModal
   ] = useBooleanState(false);
 
-  const { onChangePassword, validationSchema: changePasswordValidationSchema } = useChangePassword();
+  const {
+    onChangePassword,
+    validationSchema: changePasswordValidationSchema
+  } = useChangePassword();
 
   return (
     <Card className={classNames("container", "margin-bottom-m")}>
@@ -30,7 +33,10 @@ const UserAccount = ({
       <EmailSection token={newuserverificationtoken} />
       <PasswordSection onClick={openPasswordModal} />
       <AddressSection address={newuserpaywalladdress} />
-      <PaywallSection amount={newuserpaywallamount} timestamp={newuserpaywalltxnotbefore} />
+      <PaywallSection
+        amount={newuserpaywallamount}
+        timestamp={newuserpaywalltxnotbefore}
+      />
       <ModalChangePassword
         onChangePassword={onChangePassword}
         validationSchema={changePasswordValidationSchema}

@@ -6,12 +6,11 @@ import { Button, Message, Text, BoxTextInput, useMediaQuery } from "pi-ui";
 import { Row } from "src/componentsv2/layout";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/componentsv2/MarkdownEditor";
-import { ThumbnailGrid } from "src/componentsv2/Files/Thumbnail";
+import ThumbnailGrid from "src/componentsv2/Files";
 import AttachFileInput from "src/componentsv2/AttachFileInput";
-import ModalFullImage from "src/componentsv2/ModalFullImage";
 import ModalMDGuide from "src/componentsv2/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
-import { useProposalForm, useFullImageModal } from "./hooks";
+import { useProposalForm } from "./hooks";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 
 const ProposalForm = React.memo(function ProposalForm({
@@ -50,13 +49,6 @@ const ProposalForm = React.memo(function ProposalForm({
       setFieldValue("files", fs);
     },
     [setFieldValue, values.files]
-  );
-
-  const onClickFile = useCallback(
-    f => () => {
-      openFullImageModal(f);
-    },
-    [openFullImageModal]
   );
 
   const filesInput = useMemo(
@@ -112,7 +104,6 @@ const ProposalForm = React.memo(function ProposalForm({
       />
       <ThumbnailGrid
         value={values.files}
-        onClick={onClickFile}
         onRemove={handleFileRemoval}
         errors={errors}
       />
@@ -148,11 +139,6 @@ const ProposalFormWrapper = ({
     openMDGuideModal,
     closeMDGuideModal
   ] = useBooleanState(false);
-  const {
-    showFullImageModal,
-    openFullImageModal,
-    closeFullImageModal
-  } = useFullImageModal();
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { proposalFormValidation } = useProposalForm();
   const handleSubmit = useCallback(
@@ -190,18 +176,12 @@ const ProposalFormWrapper = ({
               ...props,
               submitSuccess,
               disableSubmit,
-              openFullImageModal,
               openMDGuideModal,
               initialValues
             }}
           />
         )}
       </Formik>
-      <ModalFullImage
-        image={showFullImageModal}
-        show={!!showFullImageModal}
-        onClose={closeFullImageModal}
-      />
       <ModalMDGuide show={showMDGuideModal} onClose={closeMDGuideModal} />
     </>
   );

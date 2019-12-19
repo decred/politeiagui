@@ -1,12 +1,13 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { classNames } from "pi-ui";
 import { diffWordsWithSpace } from "diff";
 import { arrayDiff, lineDiffFunc, getLineArray, getFilesDiff } from "./helpers";
 import DiffLine from "./DiffLine";
 import styles from "./Diff.module.css";
 import HelpMessage from "src/componentsv2/HelpMessage";
-import { ImageThumbnail, TextThumbnail } from "src/componentsv2/Files/Thumbnail";
+import { ImageThumbnail, TextThumbnail } from "src/componentsv2/Files";
 import ModalFullImage from "src/componentsv2/ModalFullImage";
+import useBooleanState from "src/hooks/utils/useBooleanState";
 
 const handleDiffLine = (
   line,
@@ -69,43 +70,33 @@ export const DiffHTML = ({ oldTextBody, newTextBody }) => {
       });
   }, [newTextBody, oldTextBody]);
   return (
-    <table
-      className={styles.diffTable}
-      cellSpacing="0"
-      cellPadding="0"
-    >
+    <table className={styles.diffTable} cellSpacing="0" cellPadding="0">
       <tbody>{linesDiff}</tbody>
     </table>
   );
 };
 
 const FileWrapper = ({ file, className }) => {
-  const [showFullImageModal, setShowFullImageModal] = useState(false);
-  const showModal = file => () => {
-    setShowFullImageModal(file);
-  };
-  const closeModal = () => {
-    setShowFullImageModal(false);
-  };
+  const [showImageModal, openImageModal, closeImageModal] = useBooleanState(
+    false
+  );
+
   return file.mime.includes("image") ? (
     <>
       <ImageThumbnail
         className={className}
         file={file}
         viewOnly={true}
-        onClick={showModal}
+        onClick={openImageModal}
       />
       <ModalFullImage
         image={file}
-        show={!!showFullImageModal}
-        onClose={closeModal}
+        show={showImageModal}
+        onClose={closeImageModal}
       />
     </>
   ) : (
-    <TextThumbnail
-      file={file}
-      viewOnly
-    />
+    <TextThumbnail file={file} viewOnly />
   );
 };
 
@@ -115,25 +106,25 @@ export const FilesDiff = ({ oldFiles, newFiles }) => {
     <table className={classNames(styles.diffTable)}>
       <tbody>
         <tr className={styles.files}>
-          {files.length > 0 ? files.map((file, key) => {
-            return file.added ? (
-              <td key={key}>
-                <FileWrapper file={file} className={styles.fileAdded}/>
-              </td>
-            ) : file.removed ? (
-              <td key={key}>
-                <FileWrapper file={file} className={styles.fileRemoved}/>
-              </td>
-            ) : (
-              <td key={key}>
-                <FileWrapper file={file} className={styles.fileUnchanged}/>
-              </td>
-            );
-          }) : (
+          {files.length > 0 ? (
+            files.map((file, key) => {
+              return file.added ? (
+                <td key={key}>
+                  <FileWrapper file={file} className={styles.fileAdded} />
+                </td>
+              ) : file.removed ? (
+                <td key={key}>
+                  <FileWrapper file={file} className={styles.fileRemoved} />
+                </td>
+              ) : (
+                <td key={key}>
+                  <FileWrapper file={file} className={styles.fileUnchanged} />
+                </td>
+              );
+            })
+          ) : (
             <td className={styles.noFiles}>
-              <HelpMessage>
-                There are no attachment changes
-              </HelpMessage>
+              <HelpMessage>There are no attachment changes</HelpMessage>
             </td>
           )}
         </tr>
