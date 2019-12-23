@@ -557,6 +557,19 @@ export const onManageCmsUser = (args) =>
       });
   });
 
+export const onManageCmsUserV2 = (userID, domain, type, supervisorIDs) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_MANAGE_CMS_USER());
+    return api
+      .manageCmsUser(csrf, userID, domain, type, supervisorIDs)
+      .then((response) =>
+        dispatch(act.RECEIVE_MANAGE_CMS_USER({ ...response }))
+      )
+      .catch((error) => {
+        dispatch(act.RECEIVE_MANAGE_CMS_USER(null, error));
+      });
+  });
+
 // TODO: erase this after the refactor and make the onManageUserv2 official
 export const onManageUser = (userId, action) =>
   withCsrf((dispatch, getState, csrf) => {

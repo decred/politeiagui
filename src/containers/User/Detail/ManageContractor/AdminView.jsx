@@ -1,11 +1,14 @@
 import { Card, classNames } from "pi-ui";
-import PropTypes from "prop-types";
-import React from "react";
+import React, { useCallback } from "react";
+import { Spinner, Button } from "pi-ui";
 import { SelectField } from "src/componentsv2/Select";
 import InfoSection from "../InfoSection.jsx";
 import { selectTypeOptions, selectDomainOptions } from "./helpers";
 import UserSearchSelect from "src/containers/User/Search/SearchSelector";
 import { Formik } from "formik";
+import { useAction } from "src/redux";
+import { onManageCmsUserV2 } from "src/actions";
+import styles from "./ManageContractor.module.css";
 
 const selectStyles = {
   container: (provided) => ({
@@ -21,16 +24,45 @@ const selectSupervisorStyles = {
   })
 };
 
-const ManageContractor = ({}) => {
-  return (
+const ManageContractor = ({ user }) => {
+  const { domain, contractortype, userid } = user;
+  const onUpdateContractor = useAction(onManageCmsUserV2);
+  const isLoading = domain === undefined || contractortype === undefined;
+
+  const handleSubmitForm = useCallback(
+    async (values, { setSubmitting, setFieldError }) => {
+      console.log(values);
+      try {
+        await onUpdateContractor(
+          userid,
+          values.domain,
+          values.type,
+          values.users.map((user) => user.value)
+        );
+        setSubmitting(false);
+      } catch (e) {
+        setFieldError("global", e);
+        setSubmitting(false);
+      }
+    },
+    []
+  );
+
+  return isLoading ? (
+    <div className={styles.spinnerWrapper}>
+      <Spinner invert />
+    </div>
+  ) : (
     <Card className={classNames("container", "margin-bottom-m")}>
-      <Formik initialValues={{ domain: 1, type: 1, users: [] }}>
-        {({ values, setFieldValue }) => {
+      <Formik
+        onSubmit={handleSubmitForm}
+        initialValues={{ domain, type: contractortype, users: [] }}>
+        {({ values, setFieldValue, handleSubmit, isSubmitting, dirty }) => {
           const handleChangeUserSelector = (options) => {
             setFieldValue("users", options);
           };
           return (
-            <form>
+            <form onSubmit={handleSubmit}>
               <InfoSection
                 className="no-margin-top"
                 label="Type:"
@@ -62,6 +94,12 @@ const ManageContractor = ({}) => {
                   />
                 }
               />
+              <Button
+                kind={dirty ? "primary" : "disabled"}
+                loading={isSubmitting}
+                type="submit">
+                Update
+              </Button>
             </form>
           );
         }}

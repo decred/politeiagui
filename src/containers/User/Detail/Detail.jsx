@@ -33,7 +33,7 @@ const getTabComponents = ({ user, ...rest }) => {
         withDrafts={rest.isUserPageOwner}
       />
     ),
-    [tabValues.MANAGE_DCC]: <ManageContractor />
+    [tabValues.MANAGE_DCC]: <ManageContractor user={user} />
   };
   return mapTabValueToComponent;
 };

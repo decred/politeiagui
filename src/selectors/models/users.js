@@ -78,3 +78,11 @@ export const makeGetSearchResultsByUsername = (username) =>
       return results.map((id) => allResults[id]);
     }
   );
+
+export const makeGetUsersByArrayOfIDs = (userIDs) =>
+  createSelector(userByID, (users) => {
+    userIDs.reduce((res, userID) => {
+      if (users[userID]) return { ...res, [userID]: users[userID] };
+      return res;
+    }, {});
+  });

@@ -10,7 +10,7 @@ const DEFAULT_STATE = {
   exchangeRates: {}
 };
 
-const invoiceToken = (proposal) => proposal.censorshiprecord.token;
+const invoiceToken = (invoice) => invoice.censorshiprecord.token;
 
 const invoiceArrayToByTokenObject = (invoices) =>
   invoices.reduce(
