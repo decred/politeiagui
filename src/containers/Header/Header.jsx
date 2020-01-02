@@ -1,4 +1,4 @@
-import { classNames, Header as UIHeader, useMediaQuery, useTheme } from "pi-ui";
+import { classNames, Header as UIHeader, useMediaQuery } from "pi-ui";
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "src/componentsv2/Logo";

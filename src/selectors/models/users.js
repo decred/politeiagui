@@ -81,7 +81,7 @@ export const makeGetSearchResultsByUsername = (username) =>
 
 export const makeGetUsersByArrayOfIDs = (userIDs) =>
   createSelector(userByID, (users) => {
-    userIDs.reduce((res, userID) => {
+    return userIDs.reduce((res, userID) => {
       if (users[userID]) return { ...res, [userID]: users[userID] };
       return res;
     }, {});

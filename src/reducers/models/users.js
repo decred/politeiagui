@@ -69,6 +69,15 @@ const users = (state = DEFAULT_STATE, action) =>
               ["byID", state.currentUserID, "publickey"],
               action.payload.publickey
             )(state),
+          [act.RECEIVE_MANAGE_CMS_USER]: () => {
+            const { domain, type, supervisorIDs, userID } = action.payload;
+            return update(["byID", userID], (user) => ({
+              ...user,
+              domain,
+              contractortype: type,
+              supervisoruserids: supervisorIDs
+            }))(state);
+          },
           [act.RECEIVE_LOGOUT]: () => onReceiveLogout(state),
           [act.RECEIVE_USER_SEARCH]: () => {
             const {

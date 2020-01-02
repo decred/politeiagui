@@ -13,7 +13,7 @@ export default function useMultipleUsers(userIDs) {
   ]);
   const users = useSelector(usersSelector);
   const userIDsToBeFeched = useMemo(() => {
-    const idsFromState = users.map((u) => u.userid);
+    const idsFromState = Object.keys(users);
     return difference(userIDs, idsFromState);
   }, [users, userIDs]);
 
@@ -26,14 +26,14 @@ export default function useMultipleUsers(userIDs) {
         setLoading(false);
       } catch (e) {
         setLoading(false);
-        setError(error);
+        setError(e);
       }
     }
 
-    if (!loading) {
+    if (!loading && !!userIDsToBeFeched.length) {
       fetchAllUsers(userIDsToBeFeched);
     }
-  }, [userIDsToBeFeched]);
+  }, [userIDsToBeFeched, loading, onFetchUser]);
 
   return [users, loading, error];
 }

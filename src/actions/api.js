@@ -563,10 +563,19 @@ export const onManageCmsUserV2 = (userID, domain, type, supervisorIDs) =>
     return api
       .manageCmsUser(csrf, userID, domain, type, supervisorIDs)
       .then((response) =>
-        dispatch(act.RECEIVE_MANAGE_CMS_USER({ ...response }))
+        dispatch(
+          act.RECEIVE_MANAGE_CMS_USER({
+            ...response,
+            userID,
+            domain,
+            type,
+            supervisorIDs
+          })
+        )
       )
       .catch((error) => {
         dispatch(act.RECEIVE_MANAGE_CMS_USER(null, error));
+        throw error;
       });
   });
 

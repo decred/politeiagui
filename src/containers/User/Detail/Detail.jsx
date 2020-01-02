@@ -91,7 +91,13 @@ const UserDetail = ({
       tabValues.PROPOSALS,
       tabValues.MANAGE_DCC
     ].filter((tab) => !isTabDisabled(tab) && filterByRecordType(tab));
-  }, [isUserPageOwner, isAdminOrTheUser, RECORD_TYPE_INVOICE, recordType]);
+  }, [
+    isUserPageOwner,
+    isAdminOrTheUser,
+    RECORD_TYPE_INVOICE,
+    RECORD_TYPE_PROPOSAL,
+    recordType
+  ]);
 
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
 
