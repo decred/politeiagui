@@ -1,11 +1,11 @@
-const typeOptions = [
+export const typeOptions = [
   "No type defined",
   "Direct",
   "Supervisor",
   "Sub Contractor"
 ];
 
-const domainOptions = [
+export const domainOptions = [
   "No domain defined",
   "Development",
   "Marketing",

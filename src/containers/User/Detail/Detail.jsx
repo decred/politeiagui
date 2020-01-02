@@ -67,6 +67,7 @@ const UserDetail = ({
     const isTabDisabled = (tabLabel) => {
       if (tabLabel === tabValues.PREFERENCES && !isUserPageOwner) return true;
       if (tabLabel === tabValues.CREDITS && !isAdminOrTheUser) return true;
+      if (tabLabel === tabValues.MANAGE_DCC && !isAdminOrTheUser) return true;
 
       return false;
     };
