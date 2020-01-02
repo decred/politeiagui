@@ -120,7 +120,7 @@ const handleSaveAppDraftInvoices = (state) => {
   }
 };
 
-const handleSaveAppDraftDCCs = state => {
+const handleSaveAppDraftDCCs = (state) => {
   const email = currentUserEmail(state);
   if (!email) return;
   const stateFromLs = loadStateLocalStorage(email) || {};
@@ -136,7 +136,7 @@ const handleSaveAppDraftDCCs = state => {
   }
 };
 
-export const handleSaveStateToLocalStorage = state => {
+export const handleSaveStateToLocalStorage = (state) => {
   handleSaveApiMe(state);
   handleSaveAppDraftProposals(state);
   handleSaveAppDraftDCCs(state);

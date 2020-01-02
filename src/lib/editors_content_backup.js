@@ -230,7 +230,7 @@ export const getDCCBackupKey = (key, path) => `dcc-${key}::${path}`;
 
 export const NEW_DCC_PATH = "/dcc/new";
 
-export const getDCCPath = location => {
+export const getDCCPath = (location) => {
   const { pathname, search } = location;
   const { draftid } = qs.parse(search);
   const path = draftid ? `${pathname}-${draftid}` : pathname;
@@ -243,7 +243,7 @@ export const DCC_FORM_STATEMENT = "dccstatement";
 export const DCC_FORM_DOMAIN = "dccdomain";
 export const DCC_FORM_CONTRACTOR_TYPE = "contractortype";
 
-const updateDCCFormData = state => {
+const updateDCCFormData = (state) => {
   const dccFormState = state.form["form/dcc"];
   const newDCCData = (dccFormState && dccFormState.values) || {};
 
@@ -317,6 +317,6 @@ export const resetNewDCCData = () => {
   );
 };
 
-export const handleSaveDCCContent = state => {
+export const handleSaveDCCContent = (state) => {
   updateDCCFormData(state);
 };

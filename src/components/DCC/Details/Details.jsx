@@ -35,6 +35,17 @@ const DCCDetail = props => {
     cmsType
   } = useDCCDetails(props);
   // FUTURE: Use <RecordWrapper>
+
+  const confirmChangeDCCStatus = ({ label, status }) => e =>
+    confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
+      reasonPlaceholder:
+        `Please provide a reason to ${label} the DCC`
+    }).then(
+      ({ reason, confirm }) =>
+        confirm && onChangeDCCStatus(status, reason)
+    ) && e.preventDefault();
+
+
   return (
     <div className="content" role="main">
       <div className="dcc-info">
@@ -65,15 +76,7 @@ const DCCDetail = props => {
                     key={index}
                     name={label}
                     text={label}
-                    onClick={e =>
-                      confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {
-                        reasonPlaceholder:
-                          `Please provide a reason to ${label} the DCC`
-                      }).then(
-                        ({ reason, confirm }) =>
-                          confirm && onChangeDCCStatus(status, reason)
-                      ) && e.preventDefault()
-                    }/>
+                    onClick={confirmChangeDCCStatus({ label, status })}/>
                 ))}
               </div>
             )}

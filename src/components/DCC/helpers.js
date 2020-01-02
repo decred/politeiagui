@@ -46,7 +46,7 @@ export const typesForDCC = {
   [DCC_TYPE_REVOCATION]: "Revocation"
 };
 
-export const getDCCStatus = status => {
-  const { label } = dccStatusList.find(st => st.value === status);
+export const getDCCStatus = (status) => {
+  const { label } = dccStatusList.find((st) => st.value === status);
   return label;
 };

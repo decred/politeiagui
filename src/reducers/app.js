@@ -310,7 +310,7 @@ const app = (state = DEFAULT_STATE, action) =>
       [act.ADD_PROPOSAL_CREDITS]: () => ({
         ...state,
         recentPayments: state.recentPayments
-          ? !state.recentPayments.find(el => el.txid === action.payload.txid)
+          ? !state.recentPayments.find((el) => el.txid === action.payload.txid)
             ? [
                 ...state.recentPayments,
                 {

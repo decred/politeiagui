@@ -86,7 +86,7 @@ export const useNewDCC = ({
   );
 
   const handleChangeInput = useCallback(
-    name => ({ target: { value: v } }) => {
+    (name) => ({ target: { value: v } }) => {
       setFormValues({
         ...formValues,
         [name]: v
@@ -105,7 +105,7 @@ export const useNewDCC = ({
   );
 
   const handleSaveDCCDraft = useCallback(
-    event => {
+    (event) => {
       event && event.preventDefault();
       const {
         nomineeid,
@@ -148,7 +148,7 @@ export const useNewDCC = ({
   }, [error, newToken, history, requestDone]);
 
   const handleSubmitDCC = useCallback(
-    async event => {
+    async (event) => {
       event && event.preventDefault();
       const {
         nomineeid,

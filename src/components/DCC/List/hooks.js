@@ -24,7 +24,7 @@ export const useListDCC = ({
   }, [onForceFetchDCCs, status, setLoadingDCCs]);
 
   const onDeleteDraft = useCallback(
-    id => {
+    (id) => {
       onDeleteDraftDCC(id);
     },
     [onDeleteDraftDCC]
@@ -66,7 +66,7 @@ export const useListDCC = ({
   }, [dccs, setOrderedDCCs, status]);
 
   const handleStatusChange = useCallback(
-    s => {
+    (s) => {
       setStatus(s);
     },
     [setStatus]

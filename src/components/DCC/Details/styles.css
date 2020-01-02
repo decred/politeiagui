@@ -8,7 +8,7 @@
 .dcc h1 {
   font-size: 1.4rem;
   font-weight: bold;
-  color: #336699
+  color: #336699;
 }
 
 .dcc h2 {
@@ -33,7 +33,7 @@
   text-transform: none;
 }
 
-.dcc-header .status{
+.dcc-header .status {
   color: #a4a4a4;
   font-size: 0.9rem;
   margin: 0;

@@ -18,23 +18,19 @@ export const CardDCC = ({
   status
 }) => {
   const { type, domain, contractortype } = dccpayload;
+  const cmsDomain = domain && CMS_DOMAINS[domain].toLocaleLowerCase();
+  const cmsContractorType = contractortype && CMS_USER_TYPES[contractortype].toLocaleLowerCase();
 
   return (
     <div className={`thing thing-proposal id-${token} odd link`}>
-      <span
-        className="title"
-        style={{ display: "flex", overflow: "visible" }}
-      >
+      <span className="title">
         <Link className="title may-blank loggedin" href={`/dcc/${token}`}>
           {type && <span>{typesForDCC[type]} for {nomineeusername}</span>}
         </Link>
       </span>
-      <span
-        style={{ display: "flex", flexDirection: "column" }}
-        className="tagline"
-      >
-        {domain && (
-          <span>{CMS_DOMAINS[domain].toLocaleLowerCase()} - {contractortype && CMS_USER_TYPES[contractortype].toLocaleLowerCase()}</span>
+      <span className="tagline">
+        {cmsDomain && cmsContractorType &&(
+          <span>{cmsDomain} - {cmsContractorType}</span>
         )}
         status: {status}
         <span className="submitted-by">
@@ -63,10 +59,7 @@ export const CardDraft = ({
   onDeleteDraft
 }) => (
   <div className={`thing thing-proposal id-${draftId} odd link`}>
-    <span
-      className="title"
-      style={{ display: "flex", overflow: "visible" }}
-    >
+    <span className="title">
       <Link className="title may-blank loggedin" href={`/dcc/new?draftid=${draftId}`}>
         Draft: <DateTooltip createdAt={timestamp} />
       </Link>

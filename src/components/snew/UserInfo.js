@@ -66,8 +66,7 @@ class UserInfo extends React.Component {
                     }`}
                     onClick={() =>
                       userCanExecuteActions ? history.push("/dccs") : null
-                    }
-                  >
+                    }>
                     DCCs
                   </li>
                   <li
@@ -76,8 +75,7 @@ class UserInfo extends React.Component {
                     }`}
                     onClick={() =>
                       userCanExecuteActions ? history.push("/dcc/new") : null
-                    }
-                  >
+                    }>
                     Submit DCC
                   </li>
                   <li

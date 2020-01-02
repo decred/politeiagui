@@ -1459,9 +1459,9 @@ export const onSubmitNewDCC = (
     return Promise.resolve(
       api.makeDCC(type, nomineeuserid, statement, domain, contractortype)
     )
-      .then(dcc => api.signDCC(loggedInAsEmail, dcc))
-      .then(dcc => api.newDCC(csrf, dcc))
-      .then(dcc => {
+      .then((dcc) => api.signDCC(loggedInAsEmail, dcc))
+      .then((dcc) => api.newDCC(csrf, dcc))
+      .then((dcc) => {
         dispatch(
           act.RECEIVE_NEW_DCC({
             ...dcc,
@@ -1472,34 +1472,34 @@ export const onSubmitNewDCC = (
         );
         resetNewDCCData();
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(act.RECEIVE_NEW_DCC(null, error));
         throw error;
       });
   });
 
-export const onFetchDCCsByStatus = status =>
+export const onFetchDCCsByStatus = (status) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_DCCS({}));
     return api
       .dccsByStatus(csrf, { status })
-      .then(response => {
+      .then((response) => {
         dispatch(act.RECEIVE_DCCS({ ...response, status }));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(act.RECEIVE_DCCS(null, error));
       });
   });
 
-export const onFetchDCC = token =>
+export const onFetchDCC = (token) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_DCC({}));
     return api
       .dccDetails(csrf, token)
-      .then(response => {
+      .then((response) => {
         dispatch(act.RECEIVE_DCC(response));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(act.RECEIVE_DCC(null, error));
       });
   });
@@ -1512,9 +1512,9 @@ export const onSupportOpposeDCC = (loggedInAsEmail, token, vote) =>
     }
     dispatch(act.REQUEST_SUPPORT_OPPOSE_DCC({}));
     return Promise.resolve(api.makeDCCVote(token, vote))
-      .then(dccvote => api.signDCCVote(loggedInAsEmail, dccvote))
-      .then(dccvote => api.supportOpposeDCC(csrf, dccvote))
-      .then(response => {
+      .then((dccvote) => api.signDCCVote(loggedInAsEmail, dccvote))
+      .then((dccvote) => api.supportOpposeDCC(csrf, dccvote))
+      .then((response) => {
         dispatch(
           act.RECEIVE_SUPPORT_OPPOSE_DCC({
             ...response,
@@ -1522,7 +1522,7 @@ export const onSupportOpposeDCC = (loggedInAsEmail, token, vote) =>
           })
         );
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(act.RECEIVE_SUPPORT_OPPOSE_DCC(null, error));
       });
   });
@@ -1536,10 +1536,10 @@ export const onSetDCCStatus = (loggedInAsEmail, token, status, reason) =>
     dispatch(act.REQUEST_SET_DCC_STATUS({}));
     return api
       .setDCCStatus(csrf, loggedInAsEmail, token, status, reason)
-      .then(response => {
+      .then((response) => {
         dispatch(act.RECEIVE_SET_DCC_STATUS({ ...response, status, reason }));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(act.RECEIVE_SET_DCC_STATUS(null, error));
       });
   });

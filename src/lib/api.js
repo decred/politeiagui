@@ -47,7 +47,7 @@ export const convertJsonToFile = (json) => ({
   mime: "text/plain; charset=utf-8",
   payload: utoa(JSON.stringify(json))
 });
-export const convertDCCJsonToFile = json => ({
+export const convertDCCJsonToFile = (json) => ({
   name: "dcc.json",
   mime: "text/plain; charset=utf-8",
   payload: utoa(JSON.stringify(json))
@@ -187,19 +187,19 @@ export const signComment = (email, comment) =>
 export const signDCC = (email, dcc) =>
   pki
     .myPubKeyHex(email)
-    .then(publickey =>
+    .then((publickey) =>
       pki
         .signStringHex(email, dcc.digest)
-        .then(signature => ({ file: dcc, publickey, signature }))
+        .then((signature) => ({ file: dcc, publickey, signature }))
     );
 
 export const signDCCVote = (email, dccvote) =>
   pki
     .myPubKeyHex(email)
-    .then(publickey =>
+    .then((publickey) =>
       pki
         .signStringHex(email, [dccvote.token, dccvote.vote].join(""))
-        .then(signature => ({ ...dccvote, publickey, signature }))
+        .then((signature) => ({ ...dccvote, publickey, signature }))
     );
 
 export const signLikeComment = (email, comment) =>
@@ -675,8 +675,8 @@ export const supportOpposeDCC = (csrf, vote) =>
 export const setDCCStatus = (csrf, email, token, status, reason) =>
   pki
     .myPubKeyHex(email)
-    .then(publickey =>
-      pki.signStringHex(email, token + status + reason).then(signature => {
+    .then((publickey) =>
+      pki.signStringHex(email, token + status + reason).then((signature) => {
         return POST(`/dcc/${token}/status`, csrf, {
           status,
           token,

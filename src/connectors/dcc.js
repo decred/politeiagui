@@ -8,7 +8,7 @@ import { arg } from "../lib/fp";
 const dccConnector = connect(
   sel.selectorMap({
     token: compose(
-      t => (t ? t.toLowerCase() : t),
+      (t) => (t ? t.toLowerCase() : t),
       get(["match", "params", "token"]),
       arg(1)
     ),

@@ -43,6 +43,10 @@ import {
 import { fromUSDUnitsToUSDCents, uniqueID } from "../helpers";
 import { openModal } from "./modal";
 import * as modalTypes from "../components/Modal/modalTypes";
+import flow from "lodash/fp/flow";
+import flatten from "lodash/fp/flatten";
+import values from "lodash/fp/values";
+import find from "lodash/fp/find";
 
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
 
@@ -276,7 +280,7 @@ export const onSaveDraftDCC = ({
   statement,
   nomineeid,
   draftId
-}) => dispatch => {
+}) => (dispatch) => {
   resetNewDCCData();
   const id = draftId || uniqueID("draft");
   dispatch(
@@ -294,14 +298,13 @@ export const onSaveDraftDCC = ({
   return id;
 };
 
-export const onLoadDraftDCCs = email => {
-  // const key = email || sel.currentUserEmail(getState());
+export const onLoadDraftDCCs = (email) => {
   const stateFromLS = loadStateLocalStorage(email);
   const drafts = sel.draftDCCs(stateFromLS) || {};
   return act.LOAD_DRAFT_DCCS(drafts);
 };
 
-export const onLoadDraftInvoices = email => {
+export const onLoadDraftInvoices = (email) => {
   const stateFromLS = loadStateLocalStorage(email);
   const drafts = sel.draftInvoices(stateFromLS) || {};
   return act.LOAD_DRAFT_INVOICES(drafts);
@@ -311,7 +314,7 @@ export const onDeleteDraftInvoice = (draftId) => {
   return act.DELETE_DRAFT_INVOICE(draftId);
 };
 
-export const onDeleteDraftDCC = draftId => {
+export const onDeleteDraftDCC = (draftId) => {
   return act.DELETE_DRAFT_DCC(draftId);
 };
 
@@ -503,7 +506,7 @@ export const onResetComments = () => act.RESET_COMMENTS();
 // CMS
 export const onResetInviteUser = () => act.RESET_INVITE_USER();
 
-export const onLoadDCC = token => (dispatch, getState) => {
+export const onLoadDCC = (token) => (dispatch, getState) => {
   const fetchedDCCsByStatus = sel.dccsByStatus(getState());
 
   if (!fetchedDCCsByStatus) {
@@ -511,13 +514,12 @@ export const onLoadDCC = token => (dispatch, getState) => {
     return;
   }
 
-  let dcc = null;
-  for (const status in fetchedDCCsByStatus) {
-    const dccFromStatus = fetchedDCCsByStatus[status].find(
-      d => d.censorshiprecord.token === token
-    );
-    dcc = dccFromStatus ? dccFromStatus : dcc;
-  }
+  const dcc = flow(
+    values,
+    flatten,
+    find((dcc) => dcc.censorshiprecord.token === token)
+  )(fetchedDCCsByStatus);
+
   if (dcc) {
     dispatch(act.SET_DCC(dcc));
   } else {
@@ -525,7 +527,7 @@ export const onLoadDCC = token => (dispatch, getState) => {
   }
 };
 
-export const onLoadDCCsByStatus = status => (dispatch, getState) => {
+export const onLoadDCCsByStatus = (status) => (dispatch, getState) => {
   const fetchedDCCs = sel.dccsByStatus(getState());
   if (fetchedDCCs && fetchedDCCs[status]) {
     dispatch(act.SET_DCCS_CURRENT_STATUS_LIST(fetchedDCCs[status]));

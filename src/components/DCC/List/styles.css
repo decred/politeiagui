@@ -3,3 +3,21 @@
   padding: 0px;
   cursor: pointer;
 }
+
+.title {
+  display: flex;
+  overflow: visible;
+}
+
+.tagline {
+  flex-direction: column;
+  display: flex;
+}
+
+.draftTab { 
+  float: right;
+}
+
+.loadingIcon {
+  font-size: 14px;
+}
