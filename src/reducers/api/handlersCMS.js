@@ -135,3 +135,89 @@ export const onReceiveManageCmsUser = (state, action) => {
     }
   };
 };
+
+export const onReceiveDCCs = (state, action) => {
+  const oldState = { ...state };
+  state = receive("dccs", state, action);
+  if (action.error) return state;
+  const hasPreviouslyFetchedDCCs =
+    oldState.dccs &&
+    oldState.dccs.response &&
+    oldState.dccs.response.dccsByStatus;
+  const fetchedDCCs = hasPreviouslyFetchedDCCs
+    ? { ...oldState.dccs.response.dccsByStatus }
+    : {};
+  const newDCCList = {
+    [action.payload.status]: action.payload.dccs
+  };
+  const x = {
+    ...state,
+    dccs: {
+      ...state.dccs,
+      response: {
+        dccsByStatus: {
+          ...fetchedDCCs,
+          ...newDCCList
+        }
+      }
+    }
+  };
+  return x;
+};
+
+export const onSetDCC = (state, action) => {
+  state = receive("dcc", state, action);
+  if (action.error) return state;
+  const dcc = action.payload;
+  return {
+    ...state,
+    dcc: {
+      ...state.dcc,
+      response: { dcc }
+    }
+  };
+};
+
+export const onReceiveSupportOpposeDCC = (state, action) => {
+  state = receive("supportOpposeDCC", state, action);
+  if (action.error) return state;
+  const { supportuserids, againstuserids } = state.dcc.response.dcc;
+  if (action.payload.isSupport) {
+    supportuserids.push(state.me.response.userid);
+  } else {
+    againstuserids.push(state.me.response.userid);
+  }
+  return {
+    ...state,
+    dcc: {
+      ...state.dcc,
+      response: {
+        ...state.dcc.response,
+        dcc: {
+          ...state.dcc.response.dcc,
+          supportuserids,
+          againstuserids
+        }
+      }
+    }
+  };
+};
+
+export const onReceiveSetDCCStatus = (state, action) => {
+  state = receive("setDCCStatus", state, action);
+  if (action.error) return state;
+  return {
+    ...state,
+    dcc: {
+      ...state.dcc,
+      response: {
+        ...state.dcc.response,
+        dcc: {
+          ...state.dcc.response.dcc,
+          status: action.payload.status,
+          statuschangereason: action.payload.reason
+        }
+      }
+    }
+  };
+};

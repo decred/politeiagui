@@ -781,3 +781,23 @@ export const exchangeRate = compose(
 
 export const manageCmsUserResponse = getApiResponse("manageCmsUser");
 export const manageCmsUserError = getApiError("manageCmsUser");
+
+export const apiNewDCCResponse = getApiResponse("newDCC");
+export const newDCCError = getApiError("newDCC");
+export const isApiRequestingNewDCC = getIsApiRequesting("newDCC");
+
+export const newDCCToken = compose(
+  get(["censorshiprecord", "token"]),
+  apiNewDCCResponse
+);
+
+export const apiDCCsResponse = getApiResponse("dccs");
+export const dccsByStatus = compose(get("dccsByStatus"), apiDCCsResponse);
+export const dccsError = getApiError("dccs");
+
+export const dccDetailsApi = getApiResponse("dcc");
+
+export const dccDetails = compose(get("dcc"), dccDetailsApi);
+
+export const apiSupportOpposeDCCError = getApiError("supportOpposeDCC");
+export const apiSetDCCStatusError = getApiError("setDCCStatus");
