@@ -4,7 +4,7 @@
 }
 
 .darkLabel {
-  color: var(--tab-hover-color);
+  color: var(--dropdown-item-hover-color);
 }
 
 .sectionWrapper {
