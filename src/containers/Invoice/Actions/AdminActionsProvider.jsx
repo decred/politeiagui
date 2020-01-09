@@ -28,7 +28,7 @@ const AdminActionsProvider = ({ children }) => {
   ] = useBooleanState(false);
 
   // set the invoice target before executing the function
-  const withInvoiceTarget = fn => invoice => {
+  const withInvoiceTarget = (fn) => (invoice) => {
     setTargetInvoice(invoice);
     fn();
   };
@@ -39,8 +39,7 @@ const AdminActionsProvider = ({ children }) => {
         onReject: withInvoiceTarget(openRejectModal),
         onApprove: withInvoiceTarget(openApproveModal),
         onDispute: withInvoiceTarget(openDisputeModal)
-      }}
-    >
+      }}>
       <>
         {children}
         <ModalConfirmWithReason
@@ -70,7 +69,7 @@ const AdminActionsProvider = ({ children }) => {
           title={`Dispute ${presentationalInvoiceName(targetInvoice)}`}
           message="Are you sure you want to dispute this invoice?"
           onSubmit={onDisputeInvoice(targetInvoice)}
-          successTitle="Invoice approved"
+          successTitle="Invoice on dispute"
           successMessage={
             <Text>The invoice has been successfully disputed!</Text>
           }

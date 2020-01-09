@@ -66,9 +66,7 @@ export const onSaveNewInvoice = ({
   exchangerate,
   files
 }) => (dispatch, getState) => {
-  const email = sel.loggedInAsEmail(getState());
-  const id = sel.userid(getState());
-  const username = sel.loggedInAsUsername(getState());
+  const { email, userid: id, username } = sel.currentUser(getState());
   return dispatch(
     onSubmitInvoice(
       email,

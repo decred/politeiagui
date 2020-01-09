@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-// import Link from "src/componentsv2/Link";
 import { useAdminInvoices } from "./hooks";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import { Spinner, Link } from "pi-ui";
@@ -21,7 +20,7 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
   );
 
   const renderInvoice = useCallback(
-    invoice => (
+    (invoice) => (
       <Invoice
         key={`invoice-${invoice.censorshiprecord.token}`}
         invoice={invoice}
@@ -31,14 +30,14 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
   );
 
   const handleFiltersChange = useCallback(
-    values => {
+    (values) => {
       setFilters(values);
     },
     [setFilters]
   );
 
   const renderEmptyMessage = useCallback(
-    filteredInvoices => {
+    (filteredInvoices) => {
       return (
         !filteredInvoices.length && (
           <HelpMessage>
@@ -52,9 +51,10 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
     [invoices]
   );
 
-  const renderInvoices = useCallback(invoices => invoices.map(renderInvoice), [
-    renderInvoice
-  ]);
+  const renderInvoices = useCallback(
+    (invoices) => invoices.map(renderInvoice),
+    [renderInvoice]
+  );
 
   return (
     <AdminInvoiceActionsProvider>
@@ -67,8 +67,7 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
                 Invite contractor
               </Link>
             </div>
-          }
-        >
+          }>
           <InvoiceFilterForm onChange={handleFiltersChange} />
         </PageDetails>
       </TopBanner>
@@ -80,7 +79,7 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
         )}
         {!loading && filters && (
           <FilterInvoices invoices={invoices} filterValues={filters}>
-            {filteredInvoices => (
+            {(filteredInvoices) => (
               <>
                 {renderInvoices(filteredInvoices)}
                 {renderEmptyMessage(filteredInvoices)}
