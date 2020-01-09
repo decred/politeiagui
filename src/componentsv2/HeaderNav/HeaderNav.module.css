@@ -45,12 +45,11 @@ ul.dropdownList {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 14rem;
 }
 
 .themeToggleLabel {
   margin-left: 1rem;
-  margin-top: 0.3rem;
+  margin-top: 0.1rem;
 }
 
 @media screen and (max-width: 1000px) {
