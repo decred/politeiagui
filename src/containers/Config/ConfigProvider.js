@@ -19,14 +19,30 @@ export const ConfigProvider = ({ children, ...configOptions }) => (
 );
 
 ConfigProvider.propTypes = {
-  isStaging: PropTypes.bool,
   title: PropTypes.string,
+  logoLight: PropTypes.string,
+  logoDark: PropTypes.string,
   recordType: PropTypes.oneOf([
     constants.RECORD_TYPE_INVOICE,
     constants.RECORD_TYPE_PROPOSAL
   ]),
+  aboutContent: PropTypes.string,
   enableAdminInvite: PropTypes.bool,
-  enableCommentVote: PropTypes.bool
+  enableCommentVote: PropTypes.bool,
+  enableCredits: PropTypes.bool,
+  enablePaywall: PropTypes.bool,
+  onBoardContent: PropTypes.string,
+  onBoardLink: PropTypes.string,
+  privacyPolicyContent: PropTypes.string,
+  testnetGitRepository: PropTypes.string,
+  mainnetGitRepository: PropTypes.string,
+  navMenuPaths: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      path: PropTypes.string,
+      admin: PropTypes.bool
+    })
+  )
 };
 
 export default ConfigProvider;
