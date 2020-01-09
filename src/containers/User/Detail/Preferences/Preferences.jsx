@@ -40,8 +40,8 @@ const Preferences = ({ user }) => {
           <form onSubmit={handleSubmit}>
             <div>
               <Message className={styles.marginHorizontal1} kind="info">
-                Currently, each notification email is only attempted to be sent once. 
-                If the email cannot be delivered in the initial attempt, for whatever 
+                Currently, each notification email is only attempted to be sent once.
+                If the email cannot be delivered in the initial attempt, for whatever
                 reason, Politeia won't try to resend it.
               </Message>
               <Card className="container margin-top-s">
@@ -49,29 +49,29 @@ const Preferences = ({ user }) => {
                 <Field
                   component={Checkbox}
                   checked={values["myproposalnotifications-statuschange"]}
-                  onChange={event => 
+                  onChange={event =>
                     customSetFieldValue(
-                      "myproposalnotifications-statuschange", 
+                      "myproposalnotifications-statuschange",
                       event.target.checked
                     )
                   }
-                  className="margin-top-m" 
-                  id="1" 
-                  name="myproposalnotifications-statuschange" 
+                  className="margin-top-m"
+                  id="1"
+                  name="myproposalnotifications-statuschange"
                   label="Proposal approved or censored"
                 />
                 <Field
                   component={Checkbox}
                   checked={values["myproposalnotifications-votestarted"]}
-                  onChange={event => 
+                  onChange={event =>
                     customSetFieldValue(
-                      "myproposalnotifications-votestarted", 
+                      "myproposalnotifications-votestarted",
                       event.target.checked
                     )
                   }
-                  className="margin-top-m" 
-                  id="2" 
-                  name="myproposalnotifications-votestarted" 
+                  className="margin-top-m"
+                  id="2"
+                  name="myproposalnotifications-votestarted"
                   label="Voting started for proposal"
                 />
               </Card>
@@ -81,37 +81,37 @@ const Preferences = ({ user }) => {
                   component={Checkbox}
                   checked={values["regularproposalnotifications-vetted"]}
                   onChange={event => customSetFieldValue("regularproposalnotifications-vetted", event.target.checked)}
-                  className="margin-top-m" 
-                  id="3" 
-                  name="regularproposalnotifications-vetted" 
+                  className="margin-top-m"
+                  id="3"
+                  name="regularproposalnotifications-vetted"
                   label="New proposal published"
                 />
                 <Field
                   component={Checkbox}
                   checked={values["regularproposalnotifications-edited"]}
-                  onChange={event => 
+                  onChange={event =>
                     customSetFieldValue(
-                      "regularproposalnotifications-edited", 
+                      "regularproposalnotifications-edited",
                       event.target.checked
                     )
                   }
-                  className="margin-top-m" 
-                  id="4" 
-                  name="regularproposalnotifications-edited" 
+                  className="margin-top-m"
+                  id="4"
+                  name="regularproposalnotifications-edited"
                   label="Proposal edited"
                 />
                 <Field
                   component={Checkbox}
                   checked={values["regularproposalnotifications-votestarted"]}
-                  onChange={event => 
+                  onChange={event =>
                     customSetFieldValue(
-                      "regularproposalnotifications-votestarted", 
+                      "regularproposalnotifications-votestarted",
                       event.target.checked
                     )
                   }
-                  className="margin-top-m" 
-                  id="5" 
-                  name="regularproposalnotifications-votestarted" 
+                  className="margin-top-m"
+                  id="5"
+                  name="regularproposalnotifications-votestarted"
                   label="Voting started for proposal"
                 />
               </Card>
@@ -121,29 +121,29 @@ const Preferences = ({ user }) => {
                   <Field
                     component={Checkbox}
                     checked={values["adminproposalnotifications-new"]}
-                    onChange={event => 
+                    onChange={event =>
                       customSetFieldValue(
-                        "adminproposalnotifications-new", 
+                        "adminproposalnotifications-new",
                         event.target.checked
                       )
                     }
-                    className="margin-top-m" 
-                    id="6" 
-                    name="adminproposalnotifications-new" 
+                    className="margin-top-m"
+                    id="6"
+                    name="adminproposalnotifications-new"
                     label="New proposal submitted"
                   />
                   <Field
                     component={Checkbox}
                     checked={values["adminproposalnotifications-voteauthorized"]}
-                    onChange={event => 
+                    onChange={event =>
                       customSetFieldValue(
-                        "adminproposalnotifications-voteauthorized", 
+                        "adminproposalnotifications-voteauthorized",
                         event.target.checked
                       )
                     }
-                    className="margin-top-m" 
-                    id="7" 
-                    name="adminproposalnotifications-voteauthorized" 
+                    className="margin-top-m"
+                    id="7"
+                    name="adminproposalnotifications-voteauthorized"
                     label="Voting authorized for proposal"
                   />
                 </Card>
@@ -153,57 +153,57 @@ const Preferences = ({ user }) => {
                 <Field
                   component={Checkbox}
                   checked={values["commentnotifications-proposal"]}
-                  onChange={event => 
+                  onChange={event =>
                     customSetFieldValue(
-                      "commentnotifications-proposal", 
+                      "commentnotifications-proposal",
                       event.target.checked
                     )
                   }
-                  className="margin-top-m" 
-                  id="8" 
-                  name="commentnotifications-proposal" 
+                  className="margin-top-m"
+                  id="8"
+                  name="commentnotifications-proposal"
                   label="New comment on your proposal"
                 />
                 <Field
                   component={Checkbox}
                   checked={values["commentnotifications-comment"]}
-                  onChange={event => 
+                  onChange={event =>
                     customSetFieldValue(
-                      "commentnotifications-comment", 
+                      "commentnotifications-comment",
                       event.target.checked
                     )
                   }
-                  className="margin-top-m" 
-                  id="9" 
-                  name="commentnotifications-comment" 
+                  className="margin-top-m"
+                  id="9"
+                  name="commentnotifications-comment"
                   label="New comment reply to your comment"
                 />
               </Card>
-              <Button 
-                width={195} 
-                type="submit" 
-                loading={isApiRequestingEditUser} 
-                kind={showConfirm ? "disabled" : "primary"} 
+              <Button
+                width={195}
+                type="submit"
+                loading={isApiRequestingEditUser}
+                kind={showConfirm ? "disabled" : "primary"}
                 className={classNames(styles.submitButton, "margin-bottom-m")}
               >
                 {showConfirm && editUserResponse ? (
                   <div className={styles.savedIcon}>
-                    Saved 
-                    <Icon 
-                      type="checkmark" 
-                      backgroundColor="#e6eaed" 
-                      size="lg" 
-                      iconColor="#8997a5" 
+                    Saved
+                    <Icon
+                      type="checkmark"
+                      backgroundColor="#e6eaed"
+                      size="lg"
+                      iconColor="#8997a5"
                     />
                   </div>
                 ) : "Save preferences"}
               </Button>
               {showConfirm && editUserError && (
-                <Message 
-                  className={styles.confirmMessage} 
+                <Message
+                  className={styles.confirmMessage}
                   kind="error"
                 >
-                  {editUserError}  
+                  {editUserError}
                 </Message>
               )}
             </div>
