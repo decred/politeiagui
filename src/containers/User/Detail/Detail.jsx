@@ -33,7 +33,7 @@ const getTabComponents = ({ user, ...rest }) => {
         withDrafts={rest.isUserPageOwner}
       />
     ),
-    [tabValues.MANAGE_DCC]: <ManageContractor user={user} />
+    [tabValues.MANAGE_DCC]: <ManageContractor user={user} {...rest} />
   };
   return mapTabValueToComponent;
 };
@@ -49,6 +49,7 @@ const UserDetail = ({
 }) => {
   const userID = match.params.userid;
   const { user, isAdmin, currentUserID } = useUserDetail(userID);
+
   const {
     userPubkey,
     currentUserEmail,
