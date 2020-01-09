@@ -18,7 +18,7 @@ import PageListAdminInvoices from "./Invoices/AdminList";
 const Redirect = withRouter(({ to, history, location }) => {
   useEffect(() => {
     if (location.pathname !== to) {
-      history.push(to);
+      history.push({ pathname: to, search: location.search });
     }
   }, [history, location.pathname, to]);
   return null;
@@ -41,6 +41,9 @@ const Routes = ({ location }) => {
             ) : (
               <Redirect to="/user/login" />
             )}
+          </Route>
+          <Route exact path="/register">
+            <Redirect to="/user/signup" />
           </Route>
           {commonRoutes}
 
