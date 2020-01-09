@@ -22,6 +22,7 @@ import AddressSection from "./components/AddressSection";
 import EmailSection from "./components/EmailSection";
 import PasswordSection from "./components/PasswordSection";
 import PaywallSection from "./components/PaywallSection";
+import { useConfig } from "src/containers/Config";
 
 const AdminAccount = ({
   userid,
@@ -40,6 +41,7 @@ const AdminAccount = ({
   isadmin, // from the user API return
   isUserPageOwner
 }) => {
+  const { enablePaywall } = useConfig();
   const [deactivateUser, isApiRequestingDeactivateUser] = useManageUser(
     MANAGE_USER_DEACTIVATE,
     userid
@@ -101,11 +103,15 @@ const AdminAccount = ({
       <AdminSection isadmin={isadmin} />
       <EmailSection token={newuserverificationtoken} />
       {isUserPageOwner && <PasswordSection onClick={openPasswordModal} />}
-      <AddressSection address={newuserpaywalladdress} />
-      <PaywallSection
-        amount={newuserpaywallamount}
-        timestamp={newuserpaywalltxnotbefore}
-      />
+      {enablePaywall && (
+        <>
+          <AddressSection address={newuserpaywalladdress} />
+          <PaywallSection
+            amount={newuserpaywallamount}
+            timestamp={newuserpaywalltxnotbefore}
+          />
+        </>
+      )}
       <Text weight="semibold" className={styles.subtitle}>
         Security
       </Text>

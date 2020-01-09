@@ -8,6 +8,7 @@ import AddressSection from "./components/AddressSection";
 import EmailSection from "./components/EmailSection";
 import PasswordSection from "./components/PasswordSection";
 import PaywallSection from "./components/PaywallSection";
+import { useConfig } from "src/containers/Config";
 
 const UserAccount = ({
   newuserverificationtoken,
@@ -16,6 +17,7 @@ const UserAccount = ({
   newuserpaywalltxnotbefore,
   isadmin // from the user API return
 }) => {
+  const { enablePaywall } = useConfig();
   const [
     showPasswordModal,
     openPasswordModal,
@@ -32,11 +34,15 @@ const UserAccount = ({
       <AdminSection isadmin={isadmin} />
       <EmailSection token={newuserverificationtoken} />
       <PasswordSection onClick={openPasswordModal} />
-      <AddressSection address={newuserpaywalladdress} />
-      <PaywallSection
-        amount={newuserpaywallamount}
-        timestamp={newuserpaywalltxnotbefore}
-      />
+      {enablePaywall && (
+        <>
+          <AddressSection address={newuserpaywalladdress} />
+          <PaywallSection
+            amount={newuserpaywallamount}
+            timestamp={newuserpaywalltxnotbefore}
+          />
+        </>
+      )}
       <ModalChangePassword
         onChangePassword={onChangePassword}
         validationSchema={changePasswordValidationSchema}
