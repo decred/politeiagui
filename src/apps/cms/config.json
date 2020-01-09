@@ -3,7 +3,7 @@
   "logoLight": "cms-logo-light.svg",
   "logoDark": "cms-logo-light.svg",
   "recordType": "invoice",
-  "aboutContent": "about-politeia",
+  "aboutContent": "",
   "enableAdminInvite": true,
   "enableCommentVote": false,
   "enableCredits": false,

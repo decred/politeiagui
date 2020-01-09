@@ -13,8 +13,7 @@ const SidebarBlock = ({ children, className, ...props }) => (
       "margin-bottom-m",
       className
     )}
-    {...props}
-  >
+    {...props}>
     {children}
   </Card>
 );
@@ -31,9 +30,11 @@ const SidebarContent = ({ wrapper }) => {
           className={classNames(styles.sideBarBlockWrapper, "margin-bottom-s")}
           marker
         />
-        <SidebarBlock>
-          <StaticMarkdown contentName={aboutContent} />
-        </SidebarBlock>
+        {!!aboutContent && (
+          <SidebarBlock>
+            <StaticMarkdown contentName={aboutContent} />
+          </SidebarBlock>
+        )}
       </WrapperComponent>
     ),
     [aboutContent]
