@@ -22,10 +22,6 @@
   color: var(--text-secondary-color) !important;
 }
 
-.versionPicker > div > span {
-  color: var(--color-gray) !important;
-}
-
 .markdownContainer {
   margin-top: var(--spacing-2);
   padding: var(--spacing-2) 0;
