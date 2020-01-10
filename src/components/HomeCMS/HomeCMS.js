@@ -12,8 +12,8 @@ const invoiceYear = get(["input", "year"]);
 const invoiceMonth = get(["input", "month"]);
 
 const getPreviousMonthAndYear = () => {
-  const currentMonth = getCurrentMonth();
-  const currentYear = getCurrentYear();
+  const { month: currentMonth } = getCurrentMonth();
+  const { year: currentYear } = getCurrentYear();
   const month = currentMonth === 1 ? 12 : currentMonth - 1;
   const year = currentMonth === 1 ? currentYear - 1 : currentYear;
   return { month, year };

@@ -459,7 +459,7 @@ const getInvoicesByStatus = (invoices, status) =>
     : invoices.filter((i) => i.status === status);
 
 const getInvoicesByYear = (invoices, year) =>
-  year === getCurrentYear()
+  year === getCurrentYear().year
     ? invoices
     : invoices.filter((i) => i.input.year === year);
 

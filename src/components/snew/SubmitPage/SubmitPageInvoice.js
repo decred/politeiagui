@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import ReactBody from "react-body";
 import ErrorField from "../../Form/Fields/ErrorField";
 import SelectField from "../../Form/Fields/SelectField";
@@ -17,7 +17,6 @@ import {
 } from "../../../helpers";
 import { invoiceInstructions } from "./helpers";
 
-const YEAR_OPTIONS = [2018, 2019, 2020];
 const MONTH_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 const InvoiceSubmit = (props) => {
@@ -46,20 +45,20 @@ const InvoiceSubmit = (props) => {
     isDraftSaving,
     draftButtonText
   } = props;
-  const [monthOptions, setMonthOptions] = useState(MONTH_OPTIONS);
+  const { currentYearMonthOptions } = getCurrentMonth();
+  const [monthOptions, setMonthOptions] = useState(currentYearMonthOptions);
   const [contractorRate, setContractorRate] = useState(0);
 
-  const yearOptions =
-    getCurrentMonth() === 1
-      ? YEAR_OPTIONS.slice(0, YEAR_OPTIONS.length - 1)
-      : YEAR_OPTIONS;
+  const { yearOptions, year: currentYear } = useMemo(
+    () => getCurrentYear(),
+    []
+  );
 
   useEffect(() => {
     // limit the months options up to the current month if
     // year is the current year
-    if (+year === getCurrentYear()) {
-      const newMonths = MONTH_OPTIONS.slice(0, getCurrentMonth() - 1);
-      setMonthOptions(newMonths);
+    if (+year === currentYear) {
+      setMonthOptions(currentYearMonthOptions);
     } else {
       setMonthOptions(MONTH_OPTIONS);
     }

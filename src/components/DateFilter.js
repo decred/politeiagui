@@ -54,7 +54,7 @@ class DateFilter extends React.Component {
   };
 
   onResetSortOptions = () => {
-    this.props.handleChangeDateFilter(FILTER_ALL_MONTHS, getCurrentYear());
+    this.props.handleChangeDateFilter(FILTER_ALL_MONTHS, getCurrentYear().year);
     removeQueryStringsFromUrl(window.location.href, "year", "month");
   };
 

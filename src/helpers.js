@@ -1,5 +1,11 @@
 import CryptoJS from "crypto-js";
 import get from "lodash/fp/get";
+import flow from "lodash/fp/flow";
+import filter from "lodash/fp/filter";
+import lessThan from "lodash/fp/lt";
+import isEqualfp from "lodash/fp/isEqual";
+import range from "lodash/fp/range";
+import { or } from "./lib/fp";
 import { INVALID_FILE } from "./constants";
 import {
   INVOICE_STATUS_APPROVED,
@@ -365,6 +371,7 @@ export const setQueryStringWithoutPageReload = (qs) => {
 const DELIMITER_CHAR = ",";
 const COMMENT_CHAR = "#";
 const LINE_DELIMITER = "\n";
+const INITIAL_YEAR = 2018;
 
 export const isComment = (line) => line[0] === COMMENT_CHAR;
 
@@ -391,12 +398,24 @@ export const csvToJson = (csv) =>
 
 export const getCurrentMonth = () => {
   const d = new Date();
-  return d.getMonth() + 1;
+  const month = d.getMonth() + 1;
+
+  const currentYearMonthOptions = flow(
+    range(),
+    filter(or(isEqualfp(1), lessThan(month)))
+  )(1, 13);
+  return { month, currentYearMonthOptions };
 };
 
 export const getCurrentYear = () => {
   const d = new Date();
-  return d.getFullYear();
+  const year = d.getFullYear();
+
+  const yearOptions = flow(
+    range(),
+    filter((y) => y < year + d.getMonth())
+  )(INITIAL_YEAR, year);
+  return { year, yearOptions };
 };
 
 export const fromMinutesToHours = (minutes) =>
