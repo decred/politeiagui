@@ -130,7 +130,7 @@ const UserDetail = ({
     [tabLabels, onSetIndex, isMobileScreen, index]
   );
 
-  return !!user ? (
+  return user ? (
     <>
       <TopBanner>
         <PageDetails

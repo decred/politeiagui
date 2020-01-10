@@ -45,11 +45,11 @@ const SignupForm = () => {
     setModalOpen(false);
   };
 
-  async function onSubmit(...args) {
+  const onSubmit = (...args) => {
     setModalOpen(true);
     setOnModalConfirm(() => onConfirm(...args));
     setOnModalCancel(() => onCancel(...args));
-  }
+  };
 
   return (
     <>
@@ -64,8 +64,7 @@ const SignupForm = () => {
         initialValues={initialValues}
         loading={!validationSchema}
         validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
+        onSubmit={onSubmit}>
         {({
           Form,
           Title,
@@ -171,12 +170,10 @@ const SignupForm = () => {
         }
       </FormWrapper>
       <DevelopmentOnlyContent
-        show={signupResponse && signupResponse.verificationtoken}
-      >
+        show={signupResponse && signupResponse.verificationtoken}>
         <RouterLink
           to={`/user/verify?email=${email}&verificationtoken=${signupResponse &&
-            signupResponse.verificationtoken}`}
-        >
+            signupResponse.verificationtoken}`}>
           Verify email
         </RouterLink>
       </DevelopmentOnlyContent>
