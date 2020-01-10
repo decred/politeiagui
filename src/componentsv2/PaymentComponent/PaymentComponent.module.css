@@ -11,6 +11,7 @@
 .qrcodeWrapper {
   width: 10rem;
   min-width: 10rem;
+  background-color: var(--color-white);
 }
 
 .infoWrapper {
