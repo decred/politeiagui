@@ -39,7 +39,7 @@ div.customPageDetails {
 }
 
 .subtitle {
-  color: var(--color-gray);
+  color: var(--subtitle-color);
   font-size: var(--font-size-small);
 }
 
