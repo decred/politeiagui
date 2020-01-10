@@ -4,7 +4,7 @@ import styles from "./ModalOnboard.module.css";
 
 const ModalOnboard = ({ show, onClose }) => {
   function goToDocs() {
-    var win = window.open(
+    const win = window.open(
       "https://docs.decred.org/governance/politeia/overview/",
       "_blank",
       "noopener=true,noreferrer=true"

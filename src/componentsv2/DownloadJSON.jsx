@@ -15,7 +15,7 @@ const DownloadJSON = ({
     fileDownload(data, `${fileName}.json`);
   }
 
-  return !!customComponent ? (
+  return customComponent ? (
     customComponent({ onDownload })
   ) : (
     <Link
