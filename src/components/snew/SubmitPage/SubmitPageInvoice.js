@@ -17,7 +17,7 @@ import {
 } from "../../../helpers";
 import { invoiceInstructions } from "./helpers";
 
-const YEAR_OPTIONS = [2018, 2019];
+const YEAR_OPTIONS = [2018, 2019, 2020];
 const MONTH_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 const InvoiceSubmit = (props) => {
@@ -48,6 +48,11 @@ const InvoiceSubmit = (props) => {
   } = props;
   const [monthOptions, setMonthOptions] = useState(MONTH_OPTIONS);
   const [contractorRate, setContractorRate] = useState(0);
+
+  const yearOptions =
+    getCurrentMonth() === 1
+      ? YEAR_OPTIONS.slice(0, YEAR_OPTIONS.length - 1)
+      : YEAR_OPTIONS;
 
   useEffect(() => {
     // limit the months options up to the current month if
@@ -129,7 +134,7 @@ const InvoiceSubmit = (props) => {
                       component={SelectField}
                       tabIndex={1}
                       type="text"
-                      options={YEAR_OPTIONS}
+                      options={yearOptions}
                       label="Year"
                       disabled={editingMode}
                       onChange={handleYearChange}

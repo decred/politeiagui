@@ -185,6 +185,12 @@ export const resetNewInvoiceData = () => {
 };
 
 export const getNewInvoiceData = () => {
+  const isFirstMonth = getCurrentMonth() === 1;
+  const defaultYearValue = isFirstMonth
+    ? getCurrentYear() - 1
+    : getCurrentYear();
+  const defaultMonthValue = isFirstMonth ? 12 : getCurrentMonth();
+
   return {
     address:
       sessionStorage.getItem(
@@ -206,11 +212,11 @@ export const getNewInvoiceData = () => {
     month:
       sessionStorage.getItem(
         getInvoiceBackupKey(INVOICE_FORM_MONTH, NEW_INVOICE_PATH)
-      ) || getCurrentMonth() - 1,
+      ) || defaultMonthValue,
     year:
       sessionStorage.getItem(
         getInvoiceBackupKey(INVOICE_FORM_YEAR, NEW_INVOICE_PATH)
-      ) || getCurrentYear(),
+      ) || defaultYearValue,
     name:
       sessionStorage.getItem(
         getInvoiceBackupKey(INVOICE_FORM_NAME, NEW_INVOICE_PATH)
