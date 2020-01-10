@@ -50,8 +50,7 @@ const LoginForm = ({
         }}
         loading={!validationSchema}
         validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
+        onSubmit={onSubmit}>
         {({
           Form,
           Title,
@@ -76,6 +75,7 @@ const LoginForm = ({
               id={emailId}
               label="Email"
               name="email"
+              autoComplete="email"
               value={values.email}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -86,6 +86,7 @@ const LoginForm = ({
               label="Password"
               type="password"
               name="password"
+              autoComplete="current-password"
               value={values.password}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -104,8 +105,7 @@ const LoginForm = ({
                 customComponent={({ className, ...props }) => (
                   <Text
                     className={classNames(className, styles.privacyPolicyTxt)}
-                    {...props}
-                  >
+                    {...props}>
                     {" "}
                     Privacy Policy
                   </Text>

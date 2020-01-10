@@ -64,8 +64,7 @@ const SignupForm = () => {
         initialValues={initialValues}
         loading={!validationSchema}
         validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
+        onSubmit={onSubmit}>
         {({
           Form,
           Title,
@@ -91,6 +90,7 @@ const SignupForm = () => {
                 label="Email"
                 id="signupemail"
                 name="email"
+                autoComplete="email"
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -100,6 +100,7 @@ const SignupForm = () => {
                 label="Username"
                 id="username"
                 name="username"
+                autoComplete="username"
                 value={values.username}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -111,6 +112,7 @@ const SignupForm = () => {
                 label="Password"
                 type="password"
                 name="password"
+                autoComplete="new-password"
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -121,6 +123,7 @@ const SignupForm = () => {
                 label="Verify Password"
                 type="password"
                 name="verify_password"
+                autoComplete="new-password"
                 value={values.verify_password}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -171,12 +174,10 @@ const SignupForm = () => {
         }
       </FormWrapper>
       <DevelopmentOnlyContent
-        show={signupResponse && signupResponse.verificationtoken}
-      >
+        show={signupResponse && signupResponse.verificationtoken}>
         <RouterLink
           to={`/user/verify?email=${email}&verificationtoken=${signupResponse &&
-            signupResponse.verificationtoken}`}
-        >
+            signupResponse.verificationtoken}`}>
           Verify email
         </RouterLink>
       </DevelopmentOnlyContent>
