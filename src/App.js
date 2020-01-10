@@ -54,6 +54,7 @@ class Loader extends Component {
         this.props.onLoadDraftProposals(this.props.loggedInAsEmail);
       } else {
         this.props.onLoadDraftInvoices(this.props.loggedInAsEmail);
+        this.props.onLoadDraftDCCs(this.props.loggedInAsEmail);
       }
     }
 

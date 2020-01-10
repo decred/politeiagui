@@ -7,7 +7,8 @@ import get from "lodash/fp/get";
 import MerkleTree from "./merkle";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
-  INVOICE_STATUS_UNREVIEWED
+  INVOICE_STATUS_UNREVIEWED,
+  DCC_STATUS_ACTIVE
 } from "../constants";
 import {
   getHumanReadableError,
@@ -43,6 +44,11 @@ export const convertMarkdownToFile = (markdown) => ({
 });
 export const convertJsonToFile = (json) => ({
   name: "invoice.json",
+  mime: "text/plain; charset=utf-8",
+  payload: utoa(JSON.stringify(json))
+});
+export const convertDCCJsonToFile = (json) => ({
+  name: "dcc.json",
   mime: "text/plain; charset=utf-8",
   payload: utoa(JSON.stringify(json))
 });
@@ -129,6 +135,30 @@ export const makeCensoredComment = (token, reason, commentid) => ({
   reason
 });
 
+export const makeDCC = (
+  type,
+  nomineeuserid,
+  statement,
+  domain,
+  contractortype
+) => {
+  const { name, mime, payload } = convertDCCJsonToFile({
+    type,
+    nomineeuserid,
+    statement,
+    domain,
+    contractortype
+  });
+  return {
+    name,
+    mime,
+    payload,
+    digest: digestPayload(payload)
+  };
+};
+
+export const makeDCCVote = (token, vote) => ({ token, vote });
+
 export const signRegister = (email, proposal) => {
   return pki.myPubKeyHex(email).then((publickey) => {
     const digests = proposal.files
@@ -152,6 +182,24 @@ export const signComment = (email, comment) =>
           [comment.token, comment.parentid, comment.comment].join("")
         )
         .then((signature) => ({ ...comment, publickey, signature }))
+    );
+
+export const signDCC = (email, dcc) =>
+  pki
+    .myPubKeyHex(email)
+    .then((publickey) =>
+      pki
+        .signStringHex(email, dcc.digest)
+        .then((signature) => ({ file: dcc, publickey, signature }))
+    );
+
+export const signDCCVote = (email, dccvote) =>
+  pki
+    .myPubKeyHex(email)
+    .then((publickey) =>
+      pki
+        .signStringHex(email, [dccvote.token, dccvote.vote].join(""))
+        .then((signature) => ({ ...dccvote, publickey, signature }))
     );
 
 export const signLikeComment = (email, comment) =>
@@ -606,3 +654,36 @@ export const tokenInventory = () =>
 
 export const exchangeRate = (csrf, month, year) =>
   POST("/invoices/exchangerate", csrf, { month, year }).then(getResponse);
+
+export const newDCC = (csrf, dcc) =>
+  POST("/dcc/new", csrf, dcc).then(({ response: { censorshiprecord } }) => ({
+    ...dcc,
+    censorshiprecord,
+    timestamp: Date.now() / 1000,
+    status: DCC_STATUS_ACTIVE
+  }));
+
+export const dccsByStatus = (csrf, status) =>
+  POST("/dcc", csrf, status).then(getResponse);
+
+export const dccDetails = (csrf, token) =>
+  GET(`/v1/dcc/${token}`, csrf).then(getResponse);
+
+export const supportOpposeDCC = (csrf, vote) =>
+  POST("/dcc/supportoppose", csrf, vote).then(getResponse);
+
+export const setDCCStatus = (csrf, email, token, status, reason) =>
+  pki
+    .myPubKeyHex(email)
+    .then((publickey) =>
+      pki.signStringHex(email, token + status + reason).then((signature) => {
+        return POST(`/dcc/${token}/status`, csrf, {
+          status,
+          token,
+          signature,
+          publickey,
+          reason
+        });
+      })
+    )
+    .then(getResponse);
