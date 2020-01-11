@@ -78,6 +78,10 @@ div.seeOnGithubTooltip {
   color: var(--color-gray);
 }
 
+div.darkSeeOnGithubTooltip {
+  color: var(--color-text);
+}
+
 @media screen and (max-width: 560px) {
   .status:not(.disableMobileView) {
     position: initial;
