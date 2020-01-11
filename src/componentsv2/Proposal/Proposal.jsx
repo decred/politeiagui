@@ -137,7 +137,7 @@ const Proposal = React.memo(function Proposal({
                   )}
                   {extended && version > 1 && (
                     <VersionPicker
-                      className={classNames(styles.versionPicker)}
+                      className={classNames(styles.versionPicker, isDarkTheme && styles.darkVersionPicker)}
                       version={version}
                       token={proposalToken}
                     />
