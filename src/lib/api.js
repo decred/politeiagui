@@ -691,3 +691,8 @@ export const setDCCStatus = (csrf, email, token, status, reason) =>
     )
     .then(getResponse);
 
+export const dccComments = (token) =>
+  GET(`/v1/dcc/${token}/comments`).then(getResponse);
+
+export const newDCCComment = (csrf, dcc) =>
+  POST("/dcc/newcomment", csrf, dcc).then(getResponse);

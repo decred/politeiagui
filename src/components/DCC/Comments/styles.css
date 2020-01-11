@@ -1,0 +1,29 @@
+.dccComment {
+  background-color: white;
+  padding: 10px;
+  border-bottom: solid #eee 1px;
+  margin: 0px 1em;
+}
+
+.dccCommentHeader {
+}
+
+.tagline > .author {
+  color: #2971ff;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.tagline > .datetime {
+  color: #98abba;
+  font-size: 12px;
+}
+
+.dccComments {
+  background-color: white;
+}
+
+.dccComments h2 {
+  padding: 10px;
+  font-size: 1.5em;
+}

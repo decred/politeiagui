@@ -24,7 +24,8 @@ import {
   apiEditUserResponse,
   apiEditUserPayload,
   isCMS,
-  apiAdminInvoices
+  apiAdminInvoices,
+  apiDCCComments
 } from "./api";
 import {
   PAYWALL_STATUS_PAID,
@@ -261,6 +262,8 @@ export const activeVotesEndHeight = (state) => state.app.activeVotesEndHeight;
 export const proposalComments = (state) => apiProposalComments(state);
 
 export const invoiceComments = (state) => apiInvoiceComments(state);
+
+export const dccComments = (state) => apiDCCComments(state);
 
 export const getTempThreadTree = (state) => state.app.replyThreadTree;
 

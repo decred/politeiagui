@@ -12,7 +12,13 @@ const dccConnector = connect(
       get(["match", "params", "token"]),
       arg(1)
     ),
+    commentid: compose(
+      (t) => (t ? t.toLowerCase() : t),
+      get(["match", "params", "commentid"]),
+      arg(1)
+    ),
     loggedInAsEmail: sel.loggedInAsEmail,
+    tempThreadTree: sel.getTempThreadTree,
     userid: sel.userid,
     username: sel.loggedInAsUsername,
     newDCCError: sel.newDCCError,
@@ -25,7 +31,9 @@ const dccConnector = connect(
     drafts: sel.draftDCCs,
     nomineeUsername: sel.getUserUsername,
     isAdmin: sel.isAdmin,
-    statusChangeError: sel.apiSetDCCStatusError
+    statusChangeError: sel.apiSetDCCStatusError,
+    comments: sel.dccComments,
+    commentsError: sel.apiDCCCommentsError
   }),
   {
     onSubmitDCC: act.onSaveNewDCC,
@@ -38,7 +46,9 @@ const dccConnector = connect(
     onSupportOpposeDCC: act.onSupportOpposeDCC,
     onSetDCCStatus: act.onSetDCCStatus,
     confirmWithModal: act.confirmWithModal,
-    onDeleteDraftDCC: act.onDeleteDraftDCC
+    onDeleteDraftDCC: act.onDeleteDraftDCC,
+    onFetchComments: act.onFetchDCCComments,
+    onSubmitComment: act.onSubmitComment
   }
 );
 

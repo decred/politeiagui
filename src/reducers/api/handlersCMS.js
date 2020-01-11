@@ -221,3 +221,50 @@ export const onReceiveSetDCCStatus = (state, action) => {
     }
   };
 };
+
+export const onReceiveNewDCCComment = (state, action) => {
+  state = receive("newComment", state, action);
+  if (action.error) return state;
+  return {
+    ...state,
+    dccComments: {
+      ...state.dccComments,
+      response: {
+        ...state.dccComments.response,
+        comments: [
+          ...state.dccComments.response.comments,
+          {
+            ...state.newComment.payload,
+            token: state.dcc.poyload,
+            userid: state.newComment.response.userid,
+            username: state.me.response.username,
+            isadmin: state.me.response.isadmin,
+            totalvotes: 0,
+            resultvotes: 0,
+            commentid: state.newComment.response.commentid,
+            timestamp: Date.now() / 1000
+          }
+        ]
+      }
+    }
+  };
+};
+
+export const onReceiveCensorDCCComment = (state, action) => {
+  state = receive("censorComment", state, action);
+  if (action.error) return state;
+  return {
+    ...state,
+    dccComments: {
+      ...state.dccComments,
+      response: {
+        ...state.dccComments.response,
+        comments: state.dccComments.response.comments.map((c) => {
+          return c.commentid === action.payload
+            ? { ...c, comment: "", censored: true }
+            : c;
+        })
+      }
+    }
+  };
+};
