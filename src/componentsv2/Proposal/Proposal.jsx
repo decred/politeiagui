@@ -1,4 +1,4 @@
-import { classNames, StatusBar, StatusTag, Text, useMediaQuery } from "pi-ui";
+import { classNames, StatusBar, StatusTag, Text, useMediaQuery, useTheme } from "pi-ui";
 import React, { useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
@@ -68,6 +68,10 @@ const Proposal = React.memo(function Proposal({
   const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
   const mobile = useMediaQuery("(max-width: 560px)");
   const [showSearchVotesModal, setShowSearchVotesModal] = useState(false);
+
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
+
   function handleCloseSearchVotesModal() {
     setShowSearchVotesModal(false);
   }
@@ -198,7 +202,7 @@ const Proposal = React.memo(function Proposal({
             )}
             {extended && !!files.length && !collapseBodyContent && (
               <Markdown
-                className={styles.markdownContainer}
+                className={classNames(styles.markdownContainer, isDarkTheme && "dark")}
                 body={getMarkdownContent(files)}
               />
             )}

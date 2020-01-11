@@ -265,6 +265,10 @@
   padding: 0 1em;
 }
 
+.dark .markdown-body blockquote {
+  border-left: 0.25em solid var(--container-color);
+}
+
 .markdown-body blockquote > :first-child {
   margin-top: 0;
 }
@@ -307,6 +311,11 @@
 .markdown-body h2 {
   border-bottom: 1px solid #eaecef;
   padding-bottom: 0.3em;
+}
+
+.dark .markdown-body h1,
+.dark .markdown-body h2 {
+  border-bottom: 1px solid var(--container-color);
 }
 
 .markdown-body h2 {

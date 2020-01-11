@@ -39,7 +39,7 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
           body={markdown || "Nothing to preview"}
         />
       ),
-    []
+    [isDarkTheme]
   );
 
   const getIcon = useMemo(() => getCommandIcon(filesInput), [filesInput]);
