@@ -16,7 +16,7 @@
 }
 
 .darkDescriptionParagraph {
-  border-left: 1px solid var(--container-color);
+  border-left: 1px solid var(--separator-color);
   color: var(--subtitle-color);
 }
 
