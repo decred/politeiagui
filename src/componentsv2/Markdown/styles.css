@@ -452,6 +452,11 @@
   padding: 16px;
 }
 
+.dark .markdown-body .highlight pre,
+.dark .markdown-body pre {
+  background-color: var(--header-color);
+}
+
 .markdown-body pre code {
   background-color: transparent;
   border: 0;
