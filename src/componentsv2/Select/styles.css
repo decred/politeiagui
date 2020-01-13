@@ -59,12 +59,14 @@ div.customSelect__menu {
 div.customSelect__option {
   text-align: center;
   color: var(--tab-text-color);
+  background-color: var(--card-background);
 }
 div.customSelect__option--is-focused {
   color: var(--dropdown-item-hover-color);
-  background-color: var(--card-background);
 }
 div.customSelect__option--is-selected {
   color: var(--dropdown-item-hover-color);
+}
+div.customSelect__option:active {
   background-color: var(--card-background);
 }
