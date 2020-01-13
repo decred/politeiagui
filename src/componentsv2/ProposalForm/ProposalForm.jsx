@@ -28,14 +28,14 @@ const ProposalForm = React.memo(function ProposalForm({
   const mobile = useMediaQuery("(max-width: 560px)");
 
   const handleDescriptionChange = useCallback(
-    v => {
+    (v) => {
       setFieldValue("description", v);
     },
     [setFieldValue]
   );
 
   const handleFilesChange = useCallback(
-    v => {
+    (v) => {
       const files = values.files.concat(v);
       setFieldValue("files", files);
     },
@@ -43,8 +43,8 @@ const ProposalForm = React.memo(function ProposalForm({
   );
 
   const handleFileRemoval = useCallback(
-    v => {
-      const fs = values.files.filter(f => f.payload !== v.payload);
+    (v) => {
+      const fs = values.files.filter((f) => f.payload !== v.payload);
       setFieldValue("files", fs);
     },
     [setFieldValue, values.files]
@@ -62,8 +62,7 @@ const ProposalForm = React.memo(function ProposalForm({
       weight="semibold"
       color="gray"
       className={styles.formatHelpButton}
-      onClick={openMDGuideModal}
-    >
+      onClick={openMDGuideModal}>
       Formatting Help
     </Text>
   );
@@ -72,8 +71,7 @@ const ProposalForm = React.memo(function ProposalForm({
     <Button
       type="submit"
       kind={!isValid || disableSubmit ? "disabled" : "primary"}
-      loading={isSubmitting}
-    >
+      loading={isSubmitting}>
       Submit
     </Button>
   );
@@ -167,9 +165,8 @@ const ProposalFormWrapper = ({
         }
         loading={!proposalFormValidation}
         validate={proposalFormValidation}
-        onSubmit={handleSubmit}
-      >
-        {props => (
+        onSubmit={handleSubmit}>
+        {(props) => (
           <ProposalForm
             {...{
               ...props,

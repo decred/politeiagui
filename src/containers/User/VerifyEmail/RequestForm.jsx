@@ -41,11 +41,11 @@ const RequestVerificationEmailForm = () => {
     setModalOpen(false);
   };
 
-  async function onSubmit(...args) {
+  const onSubmit = (...args) => {
     setModalOpen(true);
     setOnModalConfirm(() => onConfirm(...args));
     setOnModalCancel(() => onCancel(...args));
-  }
+  };
 
   return (
     <>

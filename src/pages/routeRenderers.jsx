@@ -7,7 +7,7 @@ const PageProposalsNew = lazy(() =>
 const PageInvoicesNew = lazy(() =>
   import(/* webpackChunkName: "PageInvoicesNew" */ "./Invoices/New")
 );
-const PageProposalEdit = lazy(() => 
+const PageProposalEdit = lazy(() =>
   import(/* webpackChunkName: "PageProposalEdit" */ "./Proposals/Edit")
 );
 const PageInvoiceEdit = lazy(() =>
@@ -42,4 +42,4 @@ export const renderEditRecordRoute = ({ recordType, constants }) => props => {
     [constants.RECORD_TYPE_PROPOSAL]: PageProposalEdit
   };
   return renderComponent(mapRecordTypeToComponent, recordType, props);
-}
+};

@@ -4,7 +4,7 @@ import { FormikConsumer } from "formik";
 import { useDraftProposals } from "src/containers/Proposal/User/hooks";
 import { getQueryStringValue, setQueryStringValue } from "src/lib/queryString";
 
-const DraftSaver = ({ values, setValues, dirty, submitSuccess, ...propos }) => {
+const DraftSaver = ({ values, setValues, dirty, submitSuccess }) => {
   const [draftId, setDraftId] = useState(getQueryStringValue("draft"));
   const {
     draftProposals,
@@ -35,7 +35,7 @@ const DraftSaver = ({ values, setValues, dirty, submitSuccess, ...propos }) => {
 
   useEffect(
     function updateURLForDraftID() {
-      if (!!draftId) {
+      if (draftId) {
         setQueryStringValue("draft", draftId);
       }
     },
@@ -75,17 +75,16 @@ const DraftSaver = ({ values, setValues, dirty, submitSuccess, ...propos }) => {
       width={150}
       kind={saving || !canSaveDraft ? "disabled" : "secondary"}
       loading={saving}
-      onClick={handleSave}
-    >
+      onClick={handleSave}>
       {saved ? "Saved ✓" : "Save Draft"}
     </Button>
   );
 };
 
-const Wrapper = props => {
+const Wrapper = (props) => {
   return (
     <FormikConsumer>
-      {formikProps => {
+      {(formikProps) => {
         return <DraftSaver {...{ ...props, ...formikProps }} />;
       }}
     </FormikConsumer>
