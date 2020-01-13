@@ -10,6 +10,10 @@
   justify-content: space-between;
 }
 
+.noCreditsContainer {
+  justify-content: center !important;
+}
+
 .navLink {
   composes: navContainer;
   text-decoration: none !important;
@@ -65,5 +69,9 @@ ul.dropdownList {
   div.dropdown {
     position: relative;
     right: 2.4rem;
+  }
+
+  div.noCreditsDropdown {
+    right: 0 !important;
   }
 }

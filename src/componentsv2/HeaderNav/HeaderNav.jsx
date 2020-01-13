@@ -1,4 +1,11 @@
-import { Text, Dropdown, DropdownItem, Toggle, useTheme } from "pi-ui";
+import {
+  Text,
+  Dropdown,
+  DropdownItem,
+  Toggle,
+  useTheme,
+  classNames
+} from "pi-ui";
 import React, { useEffect, useMemo } from "react";
 import Link from "src/componentsv2/Link";
 import { NavLink, withRouter } from "react-router-dom";
@@ -11,7 +18,7 @@ import { ConfigFilter } from "src/containers/Config";
 
 const HeaderNav = ({ history }) => {
   const { user, username, onLogout } = useNavigation();
-  const { navMenuPaths } = useConfig();
+  const { navMenuPaths, enableCredits } = useConfig();
   const userIsAdmin = user && user.isadmin;
   const { themeName, setThemeName } = useTheme();
 
@@ -57,12 +64,19 @@ const HeaderNav = ({ history }) => {
   };
 
   return user && username ? (
-    <div className={styles.loggedInContainer}>
+    <div
+      className={classNames(
+        styles.loggedInContainer,
+        !enableCredits && styles.noCreditsContainer
+      )}>
       <ConfigFilter showIf={(config) => config.enableCredits}>
         <ProposalCreditsIndicator user={user} />
       </ConfigFilter>
       <Dropdown
-        className={styles.dropdown}
+        className={classNames(
+          styles.dropdown,
+          !enableCredits && styles.noCreditsDropdown
+        )}
         itemsListClassName={styles.dropdownList}
         closeOnItemClick={false}
         title={username}>
