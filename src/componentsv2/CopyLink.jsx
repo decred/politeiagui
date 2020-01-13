@@ -6,7 +6,7 @@ import CopyToClipboard from "src/componentsv2/CopyToClipboard";
 
 const CopyLink = ({ url, className }) => {
   const { theme } = useTheme();
-  const hoverColor = getThemeProperty(theme, "color-gray");
+  const hoverColor = getThemeProperty(theme, "icon-hover-color");
   const [ref, isHovered] = useHover();
   const iconColor = isHovered ? hoverColor : undefined;
   return (

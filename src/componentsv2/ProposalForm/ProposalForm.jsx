@@ -23,8 +23,7 @@ const ProposalForm = React.memo(function ProposalForm({
   isValid,
   submitSuccess,
   disableSubmit,
-  openMDGuideModal,
-  openFullImageModal
+  openMDGuideModal
 }) {
   const mobile = useMediaQuery("(max-width: 560px)");
 

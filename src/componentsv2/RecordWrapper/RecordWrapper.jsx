@@ -128,14 +128,17 @@ export const Header = React.memo(function Header({
 export const ChartsLink = ({ token }) => {
   const { apiInfo } = useLoader();
   const { theme } = useTheme();
-  const hoverColor = getThemeProperty(theme, "color-gray");
+  const hoverColor = getThemeProperty(theme, "icon-hover-color");
   const [ref, isHovered] = useHover();
   const iconColor = isHovered ? hoverColor : undefined;
   const hostName = apiInfo.testnet ? "testnet.decred.org" : "dcrdata.decred.org";
 
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
+
   return (
     <Tooltip
-      className={styles.seeOnGithubTooltip}
+      className={classNames(styles.seeOnGithubTooltip, isDarkTheme && styles.darkSeeOnGithubTooltip)}
       placement="bottom"
       content="Voting Charts"
     >
@@ -155,13 +158,16 @@ export const GithubLink = ({ token }) => {
   const { apiInfo } = useLoader();
   const repoURL = apiInfo.testnet ? testnetGitRepository : mainnetGitRepository;
   const { theme } = useTheme();
-  const hoverColor = getThemeProperty(theme, "color-gray");
+  const hoverColor = getThemeProperty(theme, "icon-hover-color");
   const [ref, isHovered] = useHover();
   const iconColor = isHovered ? hoverColor : undefined;
 
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
+
   return (
     <Tooltip
-      className={styles.seeOnGithubTooltip}
+      className={classNames(styles.seeOnGithubTooltip, isDarkTheme && styles.darkSeeOnGithubTooltip)}
       placement="bottom"
       content="See on GitHub"
     >

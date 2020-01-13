@@ -15,14 +15,23 @@
   color: var(--color-gray);
 }
 
+.darkDescriptionParagraph {
+  border-left: 1px solid var(--separator-color);
+  color: var(--subtitle-color);
+}
+
 .title,
 .status {
   display: block;
 }
 
 .title {
-  font-weight: var(--font-weight-semi-bold);
-  color: var(--color-gray-blueish);
+  font-weight: var(--font-weight-semi-bold) !important;
+  color: var(--color-gray-blueish) !important;
+}
+
+.darkTitle {
+  color: var(--tab-text-active-color) !important;
 }
 
 .spinnerWrapper {
