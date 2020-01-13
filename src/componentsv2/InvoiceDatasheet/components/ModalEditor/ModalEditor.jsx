@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useMemo, useEffect } from "react";
-import { Modal, Button } from "pi-ui";
+import { Modal, Button, TextInput } from "pi-ui";
 import ModalProvider from "src/componentsv2/ModalProvider";
 import FormWrapper from "src/componentsv2/FormWrapper";
-import styles from "./ModalEditor.module.css";
 
 export const modalEditorContext = createContext();
 
@@ -49,7 +48,7 @@ const ModalEditor = ({ value, options, onCommit, onRevert, ...props }) => {
   function onKeyDown(keyEvent) {
     if (
       KEYS_TO_STOP_PROPAGATION.find(
-        key => (keyEvent.charCode || keyEvent.keyCode) === key
+        (key) => (keyEvent.charCode || keyEvent.keyCode) === key
       )
     ) {
       keyEvent.stopPropagation();
@@ -63,6 +62,11 @@ const ModalEditor = ({ value, options, onCommit, onRevert, ...props }) => {
         el.focus();
       }, 100);
     }
+    return () => {
+      if (el && !props.show) {
+        el.value = "";
+      }
+    };
   }, [props.show]);
 
   return (
@@ -71,8 +75,7 @@ const ModalEditor = ({ value, options, onCommit, onRevert, ...props }) => {
         <FormWrapper
           onSubmit={handleDone}
           enableReinitialize
-          initialValues={{ description: value || "" }}
-        >
+          initialValues={{ description: value || "" }}>
           {({
             Form,
             Actions,
@@ -81,19 +84,20 @@ const ModalEditor = ({ value, options, onCommit, onRevert, ...props }) => {
             setFieldValue,
             handleBlur
           }) => {
-            const handleChangeTextArea = e => {
+            const handleChangeTextArea = (e) => {
               e.stopPropagation();
               setFieldValue("description", e.target.value);
             };
+            console.log(values);
             return (
               <Form>
-                <textarea
+                <TextInput
                   id="itemDescription"
-                  name="text"
+                  name="description"
                   onKeyDown={onKeyDown}
-                  className={styles.textarea}
+                  label="Description"
                   onChange={handleChangeTextArea}
-                  value={values.text}
+                  value={values.description}
                   onBlur={handleBlur}
                 />
                 <Actions>
