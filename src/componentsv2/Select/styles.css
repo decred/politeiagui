@@ -9,7 +9,7 @@
   width: 0;
   height: 0;
   border: 5px solid transparent;
-  border-color: var(--color-gray) transparent transparent transparent;
+  border-color: var(--select-anchor-color) transparent transparent transparent;
   position: absolute;
   top: -3px;
   right: 3px;
@@ -35,7 +35,8 @@ div.customSelect__control {
   border-radius: 2px !important;
   min-height: 24px;
   min-width: 56px;
-  border-color: var(--color-gray-lighter) !important;
+  border-color: var(--select-border-color) !important;
+  background-color: var(--card-background);
 }
 
 div.customSelect__control--menu-is-open {
@@ -52,16 +53,20 @@ div.customSelect__menu {
   -webkit-box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.16);
   -moz-box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.16);
   box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.16);
+  background-color: var(--card-background);
 }
 
 div.customSelect__option {
   text-align: center;
-  color: var(--color-gray);
+  color: var(--tab-text-color);
+  background-color: var(--card-background);
 }
 div.customSelect__option--is-focused {
-  background-color: white;
-  color: var(--color-primary-dark);
+  color: var(--dropdown-item-hover-color);
 }
 div.customSelect__option--is-selected {
-  background-color: white;
+  color: var(--dropdown-item-hover-color);
+}
+div.customSelect__option:active {
+  background-color: var(--card-background);
 }
