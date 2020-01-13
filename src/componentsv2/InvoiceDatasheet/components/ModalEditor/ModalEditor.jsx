@@ -88,7 +88,6 @@ const ModalEditor = ({ value, options, onCommit, onRevert, ...props }) => {
               e.stopPropagation();
               setFieldValue("description", e.target.value);
             };
-            console.log(values);
             return (
               <Form>
                 <TextInput
