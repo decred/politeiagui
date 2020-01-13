@@ -20,7 +20,7 @@ const Redirect = withRouter(({ to, history, location }) => {
     if (location.pathname !== to) {
       history.push({ pathname: to, search: location.search });
     }
-  }, [history, location.pathname, to]);
+  }, [history, location.pathname, to, location.search]);
   return null;
 });
 
