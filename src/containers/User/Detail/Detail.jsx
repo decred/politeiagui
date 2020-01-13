@@ -85,21 +85,29 @@ const UserDetail = ({
   const [loadingKey, setKeyAsLoaded] = useState(PUB_KEY_STATUS_LOADING);
 
   const [pubkey, setPubkey] = useState("");
-  const refreshPubKey = useCallback(() => {
-    existing(currentUserEmail).then(() => {
-      myPubKeyHex(currentUserEmail)
-        .then((pubkey) => {
-          setPubkey(pubkey);
-          setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
-        })
-        .catch(() => {
-          setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
-        });
-    });
-  }, [currentUserEmail, setPubkey]);
+  const refreshPubKey = useCallback(
+    (isSubscribed) =>
+      existing(currentUserEmail).then(() => {
+        myPubKeyHex(currentUserEmail)
+          .then((pubkey) => {
+            if (isSubscribed) {
+              setPubkey(pubkey);
+              setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
+            }
+          })
+          .catch(() => {
+            if (isSubscribed) {
+              setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
+            }
+          });
+      }),
+    [currentUserEmail, setPubkey]
+  );
   useEffect(() => {
-    if (userPubkey !== pubkey) refreshPubKey();
-    if (identityImportSuccess) refreshPubKey();
+    let isSubscribed = true;
+    if (userPubkey !== pubkey || identityImportSuccess)
+      refreshPubKey(isSubscribed);
+    return () => (isSubscribed = false);
   }, [refreshPubKey, userPubkey, pubkey, identityImportSuccess]);
 
   const isMobileScreen = useMediaQuery("(max-width:560px)");
@@ -130,7 +138,7 @@ const UserDetail = ({
     [tabLabels, onSetIndex, isMobileScreen, index]
   );
 
-  return !!user ? (
+  return user ? (
     <>
       <TopBanner>
         <PageDetails
