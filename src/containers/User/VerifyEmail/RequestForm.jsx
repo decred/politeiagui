@@ -61,8 +61,7 @@ const RequestVerificationEmailForm = () => {
           email: ""
         }}
         validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
+        onSubmit={onSubmit}>
         {({
           Form,
           Title,
@@ -80,6 +79,7 @@ const RequestVerificationEmailForm = () => {
               <TextInput
                 label="Email"
                 id="email"
+                autoComplete="email"
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -100,8 +100,7 @@ const RequestVerificationEmailForm = () => {
       <DevelopmentOnlyContent show={response && response.verificationtoken}>
         <Link
           to={`/user/verify?email=${email}&verificationtoken=${response &&
-            response.verificationtoken}`}
-        >
+            response.verificationtoken}`}>
           Verify email
         </Link>
       </DevelopmentOnlyContent>
