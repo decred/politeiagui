@@ -1,5 +1,11 @@
 import CryptoJS from "crypto-js";
 import get from "lodash/fp/get";
+import flow from "lodash/fp/flow";
+import filter from "lodash/fp/filter";
+import lessThan from "lodash/fp/lt";
+import isEqualfp from "lodash/fp/isEqual";
+import range from "lodash/fp/range";
+import { or } from "./lib/fp";
 import { INVALID_FILE } from "./constants";
 import {
   INVOICE_STATUS_APPROVED,
@@ -389,6 +395,12 @@ export const csvToJson = (csv) =>
     .map(splitColumn)
     .map(jsonCsvMap);
 
+export const getMonthOptions = () => {
+  const d = new Date();
+  const month = d.getMonth() + 1;
+  return flow(range(), filter(or(isEqualfp(1), lessThan(month))))(1, 13);
+};
+
 export const getCurrentMonth = () => {
   const d = new Date();
   return d.getMonth() + 1;
@@ -397,6 +409,12 @@ export const getCurrentMonth = () => {
 export const getCurrentYear = () => {
   const d = new Date();
   return d.getFullYear();
+};
+
+export const getYearOptions = (initial, lastYear) => {
+  const d = new Date();
+  const isYearValid = (y) => y < lastYear + d.getMonth();
+  return flow(range(), filter(isYearValid))(initial, lastYear + 1);
 };
 
 export const fromMinutesToHours = (minutes) =>

@@ -13,11 +13,12 @@ import DynamicDataDisplay from "../../DynamicDataDisplay";
 import {
   fromUSDCentsToUSDUnits,
   getCurrentYear,
-  getCurrentMonth
+  getYearOptions,
+  getMonthOptions
 } from "../../../helpers";
 import { invoiceInstructions } from "./helpers";
+import { INITIAL_YEAR } from "../../../constants";
 
-const YEAR_OPTIONS = [2018, 2019];
 const MONTH_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 const InvoiceSubmit = (props) => {
@@ -46,15 +47,17 @@ const InvoiceSubmit = (props) => {
     isDraftSaving,
     draftButtonText
   } = props;
-  const [monthOptions, setMonthOptions] = useState(MONTH_OPTIONS);
+  const currentYearMonthOptions = getMonthOptions();
+  const currentYear = getCurrentYear();
+  const yearOptions = getYearOptions(INITIAL_YEAR, currentYear);
+  const [monthOptions, setMonthOptions] = useState(currentYearMonthOptions);
   const [contractorRate, setContractorRate] = useState(0);
 
   useEffect(() => {
     // limit the months options up to the current month if
     // year is the current year
-    if (+year === getCurrentYear()) {
-      const newMonths = MONTH_OPTIONS.slice(0, getCurrentMonth() - 1);
-      setMonthOptions(newMonths);
+    if (+year === currentYear) {
+      setMonthOptions(currentYearMonthOptions);
     } else {
       setMonthOptions(MONTH_OPTIONS);
     }
@@ -129,7 +132,7 @@ const InvoiceSubmit = (props) => {
                       component={SelectField}
                       tabIndex={1}
                       type="text"
-                      options={YEAR_OPTIONS}
+                      options={yearOptions}
                       label="Year"
                       disabled={editingMode}
                       onChange={handleYearChange}

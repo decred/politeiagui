@@ -33,7 +33,10 @@ export const DEFAULT_STATE = {
   redirectedFrom: null,
   invoiceSortOption: { month: FILTER_ALL_MONTHS, year: getCurrentYear() },
   endPayoutOption: { month: getCurrentMonth(), year: getCurrentYear() },
-  startPayoutOption: { month: getCurrentMonth() - 1, year: getCurrentYear() },
+  startPayoutOption: {
+    month: getCurrentMonth() - 1,
+    year: getCurrentYear()
+  },
   draftInvoices: null,
   draftDCCs: null
 };
