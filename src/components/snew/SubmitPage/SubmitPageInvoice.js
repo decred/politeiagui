@@ -61,7 +61,7 @@ const InvoiceSubmit = (props) => {
     } else {
       setMonthOptions(MONTH_OPTIONS);
     }
-  }, [year]);
+  }, [year, currentYearMonthOptions, currentYear]);
 
   // Form is considered 'pristine' if the user has not modified
   // the invoice since saving the draft. To work around this,
