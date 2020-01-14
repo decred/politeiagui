@@ -31,11 +31,11 @@ export const DEFAULT_STATE = {
   pollingCreditsPayment: false,
   reachedCreditsPaymentPollingLimit: false,
   redirectedFrom: null,
-  invoiceSortOption: { month: FILTER_ALL_MONTHS, year: getCurrentYear().year },
-  endPayoutOption: { month: getCurrentMonth(), year: getCurrentYear().year },
+  invoiceSortOption: { month: FILTER_ALL_MONTHS, year: getCurrentYear() },
+  endPayoutOption: { month: getCurrentMonth(), year: getCurrentYear() },
   startPayoutOption: {
     month: getCurrentMonth() - 1,
-    year: getCurrentYear().year
+    year: getCurrentYear()
   },
   draftInvoices: null,
   draftDCCs: null
@@ -260,7 +260,7 @@ const app = (state = DEFAULT_STATE, action) =>
         invoiceSortOption: {
           ...state.invoiceSortOption,
           month: FILTER_ALL_MONTHS,
-          year: getCurrentYear().year
+          year: getCurrentYear()
         }
       }),
       [act.CHANGE_START_PAYOUT_DATE_FILTER]: () => ({
@@ -272,7 +272,7 @@ const app = (state = DEFAULT_STATE, action) =>
         startPayoutOption: {
           ...state.startPayoutOption,
           month: getCurrentMonth() - 1,
-          year: getCurrentYear().year
+          year: getCurrentYear()
         }
       }),
       [act.CHANGE_END_PAYOUT_DATE_FILTER]: () => ({
@@ -284,7 +284,7 @@ const app = (state = DEFAULT_STATE, action) =>
         endPayoutOption: {
           ...state.endPayoutOption,
           month: getCurrentMonth(),
-          year: getCurrentYear().year
+          year: getCurrentYear()
         }
       }),
       [act.RESET_PAYWALL_INFO]: () => ({ ...state, userAlreadyPaid: null }),

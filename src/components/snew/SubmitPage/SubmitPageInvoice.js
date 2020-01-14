@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ReactBody from "react-body";
 import ErrorField from "../../Form/Fields/ErrorField";
 import SelectField from "../../Form/Fields/SelectField";
@@ -13,9 +13,11 @@ import DynamicDataDisplay from "../../DynamicDataDisplay";
 import {
   fromUSDCentsToUSDUnits,
   getCurrentYear,
-  getCurrentMonth
+  getYearOptions,
+  getMonthOptions
 } from "../../../helpers";
 import { invoiceInstructions } from "./helpers";
+import { INITIAL_YEAR } from "../../../constants";
 
 const MONTH_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
@@ -45,14 +47,11 @@ const InvoiceSubmit = (props) => {
     isDraftSaving,
     draftButtonText
   } = props;
-  const { currentYearMonthOptions } = getCurrentMonth();
+  const currentYearMonthOptions = getMonthOptions();
+  const currentYear = getCurrentYear();
+  const yearOptions = getYearOptions(INITIAL_YEAR, currentYear);
   const [monthOptions, setMonthOptions] = useState(currentYearMonthOptions);
   const [contractorRate, setContractorRate] = useState(0);
-
-  const { yearOptions, year: currentYear } = useMemo(
-    () => getCurrentYear(),
-    []
-  );
 
   useEffect(() => {
     // limit the months options up to the current month if

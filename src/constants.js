@@ -19,6 +19,7 @@ export const DCC_TYPE_REVOCATION = 2;
 
 // CMS
 export const INVOICE_STATUS_UNREVIEWED = 2;
+export const INITIAL_YEAR = 2018;
 
 // POLITEIA
 

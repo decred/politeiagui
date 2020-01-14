@@ -371,7 +371,6 @@ export const setQueryStringWithoutPageReload = (qs) => {
 const DELIMITER_CHAR = ",";
 const COMMENT_CHAR = "#";
 const LINE_DELIMITER = "\n";
-const INITIAL_YEAR = 2018;
 
 export const isComment = (line) => line[0] === COMMENT_CHAR;
 
@@ -396,26 +395,26 @@ export const csvToJson = (csv) =>
     .map(splitColumn)
     .map(jsonCsvMap);
 
-export const getCurrentMonth = () => {
+export const getMonthOptions = () => {
   const d = new Date();
   const month = d.getMonth() + 1;
+  return flow(range(), filter(or(isEqualfp(1), lessThan(month))))(1, 13);
+};
 
-  const currentYearMonthOptions = flow(
-    range(),
-    filter(or(isEqualfp(1), lessThan(month)))
-  )(1, 13);
-  return { month, currentYearMonthOptions };
+export const getCurrentMonth = () => {
+  const d = new Date();
+  return d.getMonth() + 1;
 };
 
 export const getCurrentYear = () => {
   const d = new Date();
-  const year = d.getFullYear();
+  return d.getFullYear();
+};
 
-  const yearOptions = flow(
-    range(),
-    filter((y) => y < year + d.getMonth())
-  )(INITIAL_YEAR, year);
-  return { year, yearOptions };
+export const getYearOptions = (initial, lastYear) => {
+  const d = new Date();
+  const isYearValid = (y) => y < lastYear + d.getMonth();
+  return flow(range(), filter(isYearValid))(initial, lastYear + 1);
 };
 
 export const fromMinutesToHours = (minutes) =>
