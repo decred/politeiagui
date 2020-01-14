@@ -16,6 +16,7 @@
 .darkAbandonedTitle,
 .darkAbandonedTitle > h2 {
   color: var(--tab-count-background) !important;
+  max-width: 100%;
 }
 
 .header {
@@ -52,6 +53,7 @@
 
 .titleEditWrapper {
   max-width: calc(100% - 28rem);
+  display: flex;
 }
 
 .commentsLink {
