@@ -7,6 +7,7 @@ import compose from "lodash/fp/compose";
 import { withRouter } from "react-router-dom";
 import validate from "../validators/reply";
 import { connect } from "react-redux";
+import { useDCC } from "../components/DCC/DCCProvider";
 
 const replyConnector = connect(
   sel.selectorMap({
@@ -35,7 +36,8 @@ const replyConnector = connect(
     userid: sel.userid,
     invoice: sel.invoice,
     invoiceToken: sel.invoiceToken,
-    isCMS: sel.isCMS
+    isCMS: sel.isCMS,
+    dccToken: sel.dccToken
   }),
   {
     onFetchData: act.onGetPolicy,
@@ -111,7 +113,9 @@ class Wrapper extends React.PureComponent {
       policy,
       commentid,
       invoiceToken,
-      isCMS
+      isCMS,
+      dccToken,
+      isDCC
     } = this.props;
     const { commentValue } = this.state;
     const comment = commentValue.trim();
@@ -124,11 +128,12 @@ class Wrapper extends React.PureComponent {
     return this.props
       .onSubmitComment(
         loggedInAsEmail,
-        token || invoiceToken,
+        token || invoiceToken || dccToken,
         comment,
         replyTo,
         commentid,
-        isCMS
+        isCMS,
+        isDCC
       )
       .then(() => this.resetForm());
   }
@@ -139,5 +144,8 @@ class Wrapper extends React.PureComponent {
 }
 
 const wrap = (Component) =>
-  replyConnector((props) => <Wrapper {...{ ...props, Component }} />);
+  replyConnector((props) => {
+    const { isDCC } = useDCC();
+    return <Wrapper {...{ ...props, Component, isDCC }} />;
+  });
 export default compose(withRouter, wrap);

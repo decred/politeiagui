@@ -7,6 +7,7 @@ import Button from "../../snew/ButtonWithLoadingIcon";
 import Message from "../../Message";
 import * as modalTypes from "../../Modal/modalTypes";
 import { dccChangeStatusList } from "../helpers";
+import Comments from "../Comments";
 
 const DCCInfo = ({ label = "", children }) => (
   <div className="dcc-info">
@@ -134,6 +135,7 @@ const DCCDetail = props => {
           </div>
         </>
       }
+      <Comments {...props}/>
     </div>
   );
 };

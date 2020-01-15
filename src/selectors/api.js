@@ -810,5 +810,18 @@ export const dccDetailsApi = getApiResponse("dcc");
 
 export const dccDetails = compose(get("dcc"), dccDetailsApi);
 
+export const dccToken = compose(get(["censorshiprecord", "token"]), dccDetails);
+
 export const apiSupportOpposeDCCError = getApiError("supportOpposeDCC");
 export const apiSetDCCStatusError = getApiError("setDCCStatus");
+
+const apiDCCCommentsResponse = getApiResponse("dccComments");
+export const apiDCCComments = or(
+  compose(get("comments"), apiDCCCommentsResponse),
+  constant([])
+);
+
+export const apiDCCCommentsError = or(
+  getApiError("dccComments"),
+  getApiError("newComment")
+);

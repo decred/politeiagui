@@ -148,7 +148,11 @@ const RoutesForCMS = () => {
       />
       <AuthenticatedRoute path="/dcc/new" component={NewDCC} />
       <AuthenticatedRoute path="/dccs" component={DCCList} />
-      <AuthenticatedRoute path="/dcc/:token" component={DCCDetail} />
+      <AuthenticatedRoute path="/dcc/:token" exact component={DCCDetail} />
+      <AuthenticatedRoute
+        path="/dcc/:token/comments/:commentid"
+        component={DCCDetail}
+      />
       <Route path="/500" component={ErrorPage} />
       <Route path="*" component={NotFound} />
     </Switch>

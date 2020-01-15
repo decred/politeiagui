@@ -655,7 +655,7 @@ export const tokenInventory = () =>
 export const exchangeRate = (csrf, month, year) =>
   POST("/invoices/exchangerate", csrf, { month, year }).then(getResponse);
 
-export const userSubcontractors = csrf =>
+export const userSubcontractors = (csrf) =>
   GET("/v1/user/subcontractors", csrf).then(getResponse);
 
 export const newDCC = (csrf, dcc) =>
@@ -691,3 +691,8 @@ export const setDCCStatus = (csrf, email, token, status, reason) =>
     )
     .then(getResponse);
 
+export const dccComments = (token) =>
+  GET(`/v1/dcc/${token}/comments`).then(getResponse);
+
+export const newDCCComment = (csrf, dcc) =>
+  POST("/dcc/newcomment", csrf, dcc).then(getResponse);

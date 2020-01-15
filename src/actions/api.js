@@ -795,7 +795,13 @@ export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
       });
   });
 
-export const onCensorComment = (loggedInAsEmail, token, commentid, isCms) =>
+export const onCensorComment = (
+  loggedInAsEmail,
+  token,
+  commentid,
+  isCms,
+  isDCC
+) =>
   withCsrf((dispatch, getState, csrf) => {
     return dispatch(
       confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {})
@@ -813,7 +819,9 @@ export const onCensorComment = (loggedInAsEmail, token, commentid, isCms) =>
                 ? dispatch(
                     act.RECEIVE_CENSOR_COMMENT({ commentid, token }, null)
                   )
-                : dispatch(act.RECEIVE_CENSOR_INVOICE_COMMENT(commentid, null));
+                : !isDCC
+                ? dispatch(act.RECEIVE_CENSOR_INVOICE_COMMENT(commentid, null))
+                : dispatch(act.RECEIVE_CENSOR_DCC_COMMENT(commentid, null));
             }
           })
           .catch((error) => {
@@ -847,7 +855,8 @@ export const onSubmitComment = (
   comment,
   parentid,
   commentid,
-  isCMS = false
+  isCMS = false,
+  isDCC = false
 ) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
@@ -864,11 +873,17 @@ export const onSubmitComment = (
         }
         return comment;
       })
-      .then((comment) => api.newComment(csrf, comment))
+      .then((comment) => {
+        return isDCC
+          ? api.newDCCComment(csrf, comment)
+          : api.newComment(csrf, comment);
+      })
       .then((response) => {
         const responsecomment = response.comment;
         !isCMS
           ? dispatch(act.RECEIVE_NEW_COMMENT(responsecomment))
+          : isDCC
+          ? dispatch(act.RECEIVE_NEW_DCC_COMMENT(responsecomment))
           : dispatch(act.RECEIVE_NEW_INVOICE_COMMENT(responsecomment));
         commentid &&
           dispatch(
@@ -1447,10 +1462,10 @@ export const onFetchUserSubcontractors = () =>
     dispatch(act.REQUEST_USER_SUBCONTRACTORS({}));
     return api
       .userSubcontractors(csrf)
-      .then(response => {
+      .then((response) => {
         dispatch(act.RECEIVE_USER_SUBCONTRACTORS(response));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(act.RECEIVE_USER_SUBCONTRACTORS(null, error));
       });
   });
@@ -1517,6 +1532,18 @@ export const onFetchDCC = (token) =>
       });
   });
 
+export const onFetchDCCComments = (token) => (dispatch) => {
+  dispatch(act.REQUEST_DCC_COMMENTS());
+  return api
+    .dccComments(token)
+    .then((response) => {
+      dispatch(act.RECEIVE_DCC_COMMENTS(response));
+    })
+    .catch((error) => {
+      dispatch(act.RECEIVE_DCC_COMMENTS(null, error));
+    });
+};
+
 export const onSupportOpposeDCC = (loggedInAsEmail, token, vote) =>
   withCsrf((dispatch, _, csrf) => {
     if (!loggedInAsEmail) {
@@ -1555,4 +1582,4 @@ export const onSetDCCStatus = (loggedInAsEmail, token, status, reason) =>
       .catch((error) => {
         dispatch(act.RECEIVE_SET_DCC_STATUS(null, error));
       });
-    });
+  });

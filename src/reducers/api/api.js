@@ -36,7 +36,9 @@ import {
   onReceiveDCCs,
   onSetDCC,
   onReceiveSupportOpposeDCC,
-  onReceiveSetDCCStatus
+  onReceiveSetDCCStatus,
+  onReceiveNewDCCComment,
+  onReceiveCensorDCCComment
 } from "./handlersCMS";
 
 export const DEFAULT_STATE = {
@@ -246,6 +248,12 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.REQUEST_SET_DCC_STATUS]: () =>
         request("setDCCStatus", state, action),
       [act.RECEIVE_SET_DCC_STATUS]: () => onReceiveSetDCCStatus(state, action),
+      [act.REQUEST_DCC_COMMENTS]: () => request("dccComments", state, action),
+      [act.RECEIVE_DCC_COMMENTS]: () => receive("dccComments", state, action),
+      [act.RECEIVE_NEW_DCC_COMMENT]: () =>
+        onReceiveNewDCCComment(state, action),
+      [act.RECEIVE_CENSOR_DCC_COMMENT]: () =>
+        onReceiveCensorDCCComment(state, action),
       // === CMS END ===
       [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
         request("proposalPaywallDetails", state, action),
