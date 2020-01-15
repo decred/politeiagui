@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-// import { useDCC } from "../DCCProvider";
 
 export const useDCCComments = ({
   dcc,
