@@ -1462,10 +1462,10 @@ export const onFetchUserSubcontractors = () =>
     dispatch(act.REQUEST_USER_SUBCONTRACTORS({}));
     return api
       .userSubcontractors(csrf)
-      .then(response => {
+      .then((response) => {
         dispatch(act.RECEIVE_USER_SUBCONTRACTORS(response));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(act.RECEIVE_USER_SUBCONTRACTORS(null, error));
       });
   });
@@ -1582,4 +1582,4 @@ export const onSetDCCStatus = (loggedInAsEmail, token, status, reason) =>
       .catch((error) => {
         dispatch(act.RECEIVE_SET_DCC_STATUS(null, error));
       });
-    });
+  });

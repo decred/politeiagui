@@ -66,8 +66,8 @@ const getDropdownOptionsByColumnType = (colType) => {
   return mapColTypeToOptions[colType];
 };
 
-const getSubcontractorOptions = subcontractors =>
-  subcontractors.map(sc => ({
+const getSubcontractorOptions = (subcontractors) =>
+  subcontractors.map((sc) => ({
     value: sc.id,
     label: sc.username
   }));
