@@ -1,8 +1,10 @@
 import React from "react";
-import { Modal, P, Table } from "pi-ui";
+import { Modal, P, Table, useTheme, classNames } from "pi-ui";
 import styles from "./ModalMDGuide.module.css";
 
 const MDGuideTable = () => {
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
   const buildRow = (label, content) => ({
     "You type": label,
     "You see": content
@@ -39,7 +41,7 @@ const MDGuideTable = () => {
         <span className="spaces">        </span>return false
       </div>,
       <div className={styles.blockWrapper}>
-        <pre className={styles.codeBlock}>
+        <pre className={classNames(styles.codeBlock, isDarkTheme && styles.darkCodeBlock)}>
           if 1 * 2 != 3:
           <br />
           return false
