@@ -788,6 +788,11 @@ export const exchangeRate = compose(
 export const manageCmsUserResponse = getApiResponse("manageCmsUser");
 export const manageCmsUserError = getApiError("manageCmsUser");
 
+export const userSubcontractors = compose(
+  get("users"),
+  getApiResponse("userSubcontractors")
+);
+
 export const apiNewDCCResponse = getApiResponse("newDCC");
 export const newDCCError = getApiError("newDCC");
 export const isApiRequestingNewDCC = getIsApiRequesting("newDCC");

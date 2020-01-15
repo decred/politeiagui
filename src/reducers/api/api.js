@@ -228,6 +228,10 @@ const api = (state = DEFAULT_STATE, action) =>
         request("manageCmsUser", state, action),
       [act.RECEIVE_MANAGE_CMS_USER]: () =>
         onReceiveManageCmsUser(state, action),
+      [act.REQUEST_USER_SUBCONTRACTORS]: () =>
+        request("userSubcontractors", state, action),
+      [act.RECEIVE_USER_SUBCONTRACTORS]: () =>
+        receive("userSubcontractors", state, action),
       [act.REQUEST_NEW_DCC]: () => request("newDCC", state, action),
       [act.RECEIVE_NEW_DCC]: () => receive("newDCC", state, action),
       [act.REQUEST_DCCS]: () => request("dccs", state, action),

@@ -1442,6 +1442,19 @@ export const onFetchExchangeRate = (month, year) =>
       });
   });
 
+export const onFetchUserSubcontractors = () =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_USER_SUBCONTRACTORS({}));
+    return api
+      .userSubcontractors(csrf)
+      .then(response => {
+        dispatch(act.RECEIVE_USER_SUBCONTRACTORS(response));
+      })
+      .catch(error => {
+        dispatch(act.RECEIVE_USER_SUBCONTRACTORS(null, error));
+      });
+  });
+
 // DCC actions
 
 export const onSubmitNewDCC = (
@@ -1542,4 +1555,4 @@ export const onSetDCCStatus = (loggedInAsEmail, token, status, reason) =>
       .catch((error) => {
         dispatch(act.RECEIVE_SET_DCC_STATUS(null, error));
       });
-  });
+    });
