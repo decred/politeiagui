@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "pi-ui";
-import { useConfig } from "src/Config";
+import { useConfig } from "src/containers/Config";
 import Link from "src/componentsv2/Link";
 import StaticMarkdown from "./StaticMarkdown";
 

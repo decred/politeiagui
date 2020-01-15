@@ -17,7 +17,7 @@ const comments = (state = DEFAULT_STATE, action) =>
     ? state
     : (
         {
-          [act.RECEIVE_PROPOSAL_COMMENTS]: () => {
+          [act.RECEIVE_RECORD_COMMENTS]: () => {
             const { token, comments, accesstime } = action.payload;
             // Filter duplicated comments by signature. The latest copy found
             // will be kept.

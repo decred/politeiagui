@@ -124,7 +124,7 @@ export const withCsrf = (fn) => (dispatch, getState) => {
   );
 };
 
-export const onInviteUserConfirm = ({ email }) =>
+export const onInviteUserConfirm = (email) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_INVITE_USER({ email }));
     return api
@@ -221,7 +221,7 @@ export const onSearchUser = (query) => (dispatch) => {
   dispatch(act.REQUEST_USER_SEARCH());
   return api
     .searchUser(query)
-    .then((res) => dispatch(act.RECEIVE_USER_SEARCH(res)))
+    .then((res) => dispatch(act.RECEIVE_USER_SEARCH({ ...res, query })))
     .catch((err) => {
       dispatch(act.RECEIVE_USER_SEARCH(null, err));
       throw err;
@@ -316,6 +316,7 @@ export const onFetchUserInvoices = (userid, token) => (dispatch) => {
     .then((response) => dispatch(act.RECEIVE_USER_INVOICES(response)))
     .catch((error) => {
       dispatch(act.RECEIVE_USER_INVOICES(null, error));
+      throw error;
     });
 };
 export const onFetchAdminUserInvoices = (userid) => (dispatch) => {
@@ -329,14 +330,15 @@ export const onFetchAdminUserInvoices = (userid) => (dispatch) => {
 };
 
 export const onFetchInvoiceComments = (token) => (dispatch) => {
-  dispatch(act.REQUEST_INVOICE_COMMENTS());
+  dispatch(act.REQUEST_RECORD_COMMENTS());
   return api
     .invoiceComments(token)
     .then((response) => {
-      dispatch(act.RECEIVE_INVOICE_COMMENTS(response));
+      dispatch(act.RECEIVE_RECORD_COMMENTS({ ...response, token }));
     })
     .catch((error) => {
-      dispatch(act.RECEIVE_INVOICE_COMMENTS(null, error));
+      dispatch(act.RECEIVE__RECORD_COMMENTS(null, error));
+      throw error;
     });
 };
 
@@ -469,6 +471,7 @@ export const onFetchInvoice = (token, version = null) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(act.RECEIVE_INVOICE(null, error));
+      throw error;
     });
 };
 
@@ -477,8 +480,12 @@ export const onFetchUser = (userId) => (dispatch) => {
   dispatch(act.REQUEST_USER(userId));
   const regexp = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   const valid = regexp.test(userId);
-  if (!valid)
-    return dispatch(act.RECEIVE_USER(null, "This is not a valid user ID."));
+  if (!valid) {
+    const error = new Error("This is not a valid user ID.");
+    dispatch(act.RECEIVE_USER(null, error));
+    throw error;
+  }
+
   return api
     .user(userId)
     .then((response) =>
@@ -493,19 +500,20 @@ export const onFetchUser = (userId) => (dispatch) => {
     )
     .catch((error) => {
       dispatch(act.RECEIVE_USER(null, error));
+      throw error;
     });
 };
 
 export const onFetchProposalComments = (token) =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_PROPOSAL_COMMENTS(token));
+    dispatch(act.REQUEST_RECORD_COMMENTS(token));
     return api
       .proposalComments(token, csrf)
       .then((response) =>
-        dispatch(act.RECEIVE_PROPOSAL_COMMENTS({ ...response, token }))
+        dispatch(act.RECEIVE_RECORD_COMMENTS({ ...response, token }))
       )
       .catch((error) => {
-        dispatch(act.RECEIVE_PROPOSAL_COMMENTS(null, error));
+        dispatch(act.RECEIVE_RECORD_COMMENTS(null, error));
       });
   });
 
@@ -547,6 +555,28 @@ export const onManageCmsUser = (args) =>
       )
       .catch((error) => {
         dispatch(act.RECEIVE_MANAGE_CMS_USER(null, error));
+      });
+  });
+
+export const onManageCmsUserV2 = (userID, domain, type, supervisorIDs) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_MANAGE_CMS_USER());
+    return api
+      .manageCmsUser(csrf, userID, domain, type, supervisorIDs)
+      .then((response) =>
+        dispatch(
+          act.RECEIVE_MANAGE_CMS_USER({
+            ...response,
+            userID,
+            domain,
+            type,
+            supervisorIDs
+          })
+        )
+      )
+      .catch((error) => {
+        dispatch(act.RECEIVE_MANAGE_CMS_USER(null, error));
+        throw error;
       });
   });
 
@@ -932,31 +962,20 @@ export const onVerifyUserKey = (currentUserEmail, verificationtoken) =>
       });
   });
 
-export const onSetInvoiceStatus = (
-  authorid,
-  loggedInAsEmail,
-  token,
-  status,
-  version,
-  reason = ""
-) =>
+export const onSetInvoiceStatus = (token, status, version, reason = "") =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_SETSTATUS_INVOICE({ status, token, reason }));
+    const email = sel.currentUserEmail(getState());
+    dispatch(
+      act.REQUEST_SETSTATUS_INVOICE({ status, token, reason, version, email })
+    );
     return api
-      .invoiceSetStatus(loggedInAsEmail, csrf, token, version, status, reason)
+      .invoiceSetStatus(email, csrf, token, version, status, reason)
       .then(({ invoice }) => {
-        dispatch(
-          act.RECEIVE_SETSTATUS_INVOICE({
-            invoice: {
-              ...invoice,
-              userid: authorid
-            }
-          })
-        );
-        // dispatch(onFetchUnvettedStatus());
+        dispatch(act.RECEIVE_SETSTATUS_INVOICE(invoice));
       })
       .catch((error) => {
         dispatch(act.RECEIVE_SETSTATUS_INVOICE(null, error));
+        throw error;
       });
   });
 
@@ -1429,9 +1448,11 @@ export const onFetchExchangeRate = (month, year) =>
     return api
       .exchangeRate(csrf, +month, +year)
       .then((response) => {
-        dispatch(act.RECEIVE_EXCHANGE_RATE(response));
+        dispatch(act.RECEIVE_EXCHANGE_RATE({ ...response, month, year }));
+        return response;
       })
       .catch((error) => {
         dispatch(act.RECEIVE_EXCHANGE_RATE(null, error));
+        throw error;
       });
   });

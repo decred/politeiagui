@@ -1,11 +1,13 @@
 import React from "react";
-import { Modal, Button, P } from "pi-ui";
-import styles from "./ModalOnboard.module.css";
+import { Modal, Button } from "pi-ui";
+import StaticMarkdown from "src/componentsv2/StaticMarkdown";
+import { useConfig } from "src/containers/Config";
 
 const ModalOnboard = ({ show, onClose }) => {
+  const { onBoardContent, onBoardLink } = useConfig();
   function goToDocs() {
     var win = window.open(
-      "https://docs.decred.org/governance/politeia/overview/",
+      onBoardLink,
       "_blank",
       "noopener=true,noreferrer=true"
     );
@@ -13,15 +15,8 @@ const ModalOnboard = ({ show, onClose }) => {
     onClose();
   }
   return (
-    <Modal show={show} onClose={onClose} title={"Welcome to Politeia!"}>
-      <P>
-        Are you new to Politeia? Would you like to read more on how all of this
-        works?
-      </P>
-      <P className={styles.extraText}>
-        The following information can be reviewed by clicking “Learn More about
-        Politiea” in the sidebar.
-      </P>
+    <Modal show={show} onClose={onClose}>
+      <StaticMarkdown contentName={onBoardContent} />
       <div className="justify-right margin-top-l">
         <Button kind="secondary" onClick={onClose}>
           Maybe later

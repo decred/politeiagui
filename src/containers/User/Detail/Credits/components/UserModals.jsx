@@ -1,12 +1,17 @@
 import React from "react";
-import { useManageUser } from "../../hooks.js";
 import { useCredits } from "../hooks.js";
 import ModalBuyProposalCredits from "src/componentsv2/ModalBuyProposalCredits";
 import ModalPayPaywall from "src/componentsv2/ModalPayPaywall";
 import { getProposalCreditsPaymentStatus } from "../helpers.js";
 
-export default ({ showPaywallModal, closePaywallModal, showProposalCreditsModal, closeProposalCreditsModal }) => {
-  const { user } = useManageUser();
+export default ({
+  user,
+  showPaywallModal,
+  closePaywallModal,
+  showProposalCreditsModal,
+  closeProposalCreditsModal
+}) => {
+  const userID = user && user.userid;
   const {
     proposalCreditPrice,
     proposalPaywallAddress,
@@ -16,7 +21,7 @@ export default ({ showPaywallModal, closePaywallModal, showProposalCreditsModal,
     toggleCreditsPaymentPolling,
     onPollProposalPaywallPayment,
     toggleProposalPaymentReceived
-  } = useCredits({ userid: user.userid });
+  } = useCredits(userID);
 
   const onStartPollingPayment = () => {
     toggleCreditsPaymentPolling(true);
@@ -31,24 +36,24 @@ export default ({ showPaywallModal, closePaywallModal, showProposalCreditsModal,
   return (
     <>
       <ModalPayPaywall
-          show={showPaywallModal}
-          title="Complete your registration"
-          onClose={closePaywallModal}
-        />
-        <ModalBuyProposalCredits
-          show={showProposalCreditsModal}
-          title="Purchase Proposal Credits"
-          price={proposalCreditPrice}
-          address={proposalPaywallAddress}
-          startPollingPayment={onStartPollingPayment}
-          status={getProposalCreditsPaymentStatus(
-            proposalPaywallPaymentConfirmations,
-            proposalPaywallPaymentTxid
-          )}
-          initialStep={proposalPaywallPaymentTxid ? 1 : 0}
-          isPollingCreditsPayment={pollingCreditsPayment}
-          onClose={customCloseProposalCreditsModal}
-        />
+        show={showPaywallModal}
+        title="Complete your registration"
+        onClose={closePaywallModal}
+      />
+      <ModalBuyProposalCredits
+        show={showProposalCreditsModal}
+        title="Purchase Proposal Credits"
+        price={proposalCreditPrice}
+        address={proposalPaywallAddress}
+        startPollingPayment={onStartPollingPayment}
+        status={getProposalCreditsPaymentStatus(
+          proposalPaywallPaymentConfirmations,
+          proposalPaywallPaymentTxid
+        )}
+        initialStep={proposalPaywallPaymentTxid ? 1 : 0}
+        isPollingCreditsPayment={pollingCreditsPayment}
+        onClose={customCloseProposalCreditsModal}
+      />
     </>
   );
 };

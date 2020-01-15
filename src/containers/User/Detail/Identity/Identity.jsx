@@ -4,9 +4,7 @@ import OtherIdentity from "./OtherIdentity";
 import UserIdentity from "./UserIdentity";
 
 const Identity = ({ user, ...props }) => {
-  const {
-    currentUserID
-  } = useUserIdentity();
+  const { currentUserID } = useUserIdentity();
   const isUserPageOwner = user && currentUserID === user.userid;
   return isUserPageOwner ? (
     <UserIdentity user={user} {...props} />

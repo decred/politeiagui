@@ -1,12 +1,17 @@
 .attachFileButton {
   padding: 0;
-  height: 24px;
-  width: 24px;
+  max-width: 12rem;
   display: flex;
+  color: white;
   align-items: center;
   justify-content: center;
   background-color: var(--color-primary);
   border-radius: 0.5rem;
+}
+
+.small {
+  height: 24px;
+  width: 24px;
 }
 
 .attachFileButton:hover {

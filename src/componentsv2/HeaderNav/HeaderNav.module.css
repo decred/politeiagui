@@ -10,18 +10,19 @@
   justify-content: space-between;
 }
 
+.noCreditsContainer {
+  justify-content: center !important;
+}
+
 .navLink {
   composes: navContainer;
-  color: var(--color-gray-dark);
+  text-decoration: none !important;
+  color: var(--tab-text-color) !important;
   border-bottom: 2px solid transparent;
 }
 
 .navLink:hover {
-  color: var(--color-primary-dark);
-}
-
-.navLink:hover {
-  color: var(--color-primary-dark);
+  color: var(--tab-hover-color) !important;
 }
 
 .navLinkText {
@@ -68,5 +69,9 @@ ul.dropdownList {
   div.dropdown {
     position: relative;
     right: 2.4rem;
+  }
+
+  div.noCreditsDropdown {
+    right: 0 !important;
   }
 }

@@ -3,6 +3,13 @@ import { emailNotificationsToPreferences } from "../helpers";
 import get from "lodash/fp/get";
 
 export const userByID = get(["users", "byID"]);
+export const searchResultsByID = get(["users", "search", "resultsByID"]);
+export const queryResultsByEmail = get(["users", "search", "queryByEmail"]);
+export const queryResultsByUsername = get([
+  "users",
+  "search",
+  "queryByUsername"
+]);
 
 export const makeGetUserByID = (userID) =>
   createSelector(userByID, (users) => users[userID] || null);
@@ -49,3 +56,33 @@ export const currentUserPreferences = createSelector(
   currentUser,
   (user) => user && emailNotificationsToPreferences(user.emailnotifications)
 );
+
+export const makeGetSearchResultsByEmail = (email) =>
+  createSelector(
+    searchResultsByID,
+    queryResultsByEmail,
+    (allResults, idsByEmail) => {
+      const results = idsByEmail[email];
+      if (!results) return null;
+      return results.map((id) => allResults[id]);
+    }
+  );
+
+export const makeGetSearchResultsByUsername = (username) =>
+  createSelector(
+    searchResultsByID,
+    queryResultsByUsername,
+    (allResults, idsByUsn) => {
+      const results = idsByUsn[username];
+      if (!results) return null;
+      return results.map((id) => allResults[id]);
+    }
+  );
+
+export const makeGetUsersByArrayOfIDs = (userIDs) =>
+  createSelector(userByID, (users) => {
+    return userIDs.reduce((res, userID) => {
+      if (users[userID]) return { ...res, [userID]: users[userID] };
+      return res;
+    }, {});
+  });

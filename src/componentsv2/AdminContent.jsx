@@ -1,4 +1,4 @@
-import { useLoaderContext } from "src/Appv2/Loader";
+import { useLoaderContext } from "src/containers/Loader";
 import PropTypes from "prop-types";
 
 const AdminContent = ({ children, fallback }) => {

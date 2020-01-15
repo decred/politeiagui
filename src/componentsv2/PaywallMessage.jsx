@@ -1,7 +1,7 @@
 import { Button } from "pi-ui";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
-import { useConfig } from "src/Config";
+import { useConfig } from "src/containers/Config";
 import usePaywall from "src/hooks/api/usePaywall";
 import ModalPayPaywall from "./ModalPayPaywall/ModalPayPaywall";
 import StaticMarkdown from "./StaticMarkdown";

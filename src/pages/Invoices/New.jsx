@@ -1,16 +1,18 @@
 import React from "react";
 import MultipleContentPage from "src/componentsv2/layout/MultipleContentPage";
+import NewInvoiceForm from "src/containers/Invoice/New";
 
 const PageInvoicesNew = () => {
   return (
-    <MultipleContentPage>
+    <MultipleContentPage topBannerHeight={90}>
       {({ TopBanner, PageDetails, Sidebar, Main }) => (
         <>
           <TopBanner>
-            <PageDetails title="Create Invoice" />
+            <PageDetails title="Create Invoice" actionsContent={null} />
           </TopBanner>
-          <Sidebar />
-          <Main>Main Content</Main>
+          <Main fillScreen>
+            <NewInvoiceForm />
+          </Main>
         </>
       )}
     </MultipleContentPage>

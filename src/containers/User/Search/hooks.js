@@ -1,17 +1,40 @@
+import { useMemo, useEffect } from "react";
+import unionBy from "lodash/unionBy";
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
+import { useAction, useSelector } from "src/redux";
 import * as sel from "src/selectors";
 
-const mapStateToProps = {
-  searchResult: sel.apiUserSearchResponse
-};
+export function useReactiveSearchUser(email, username) {
+  const onSearchUser = useAction(act.onSearchUser);
+  const resultForEmailSelector = useMemo(
+    () => sel.makeGetSearchResultsByEmail(email),
+    [email]
+  );
+  const resultForUsernameSelector = useMemo(
+    () => sel.makeGetSearchResultsByUsername(username),
+    [username]
+  );
+  const resultsForEmail = useSelector(resultForEmailSelector);
+  const resultsForUsername = useSelector(resultForUsernameSelector);
 
-const mapDispatchToProps = {
-  onSearchUser: act.onSearchUser
-};
+  useEffect(() => {
+    if (!!email && !resultsForEmail) {
+      onSearchUser({ email });
+    }
+  }, [email, resultsForEmail, onSearchUser]);
 
-export function useSearchUser(ownProps) {
-  const fromRedux = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
+  useEffect(() => {
+    if (!!username && !resultsForUsername) {
+      onSearchUser({ username });
+    }
+  }, [username, resultsForUsername, onSearchUser]);
 
-  return fromRedux;
+  return unionBy(resultsForUsername, resultsForEmail, "id");
+}
+
+export function useSearchUser() {
+  const searchResult = useSelector(sel.apiUserSearchResponse);
+  const onSearchUser = useAction(act.onSearchUser);
+
+  return { searchResult, onSearchUser };
 }

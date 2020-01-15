@@ -13,7 +13,7 @@ const StaticContentProvider = ({ children }) => {
         return contents[contentName];
       }
       try {
-        const module = await import(`src/contents/${contentName}.md`);
+        const module = await import(`src/assets/copies/${contentName}.md`);
         const markdownContent = await fetch(module.default);
         const text = await markdownContent.text();
         setContents({ ...contents, [contentName]: text });

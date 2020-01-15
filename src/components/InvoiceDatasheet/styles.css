@@ -39,10 +39,6 @@ thead .cell:not(.row-handle) {
   height: 100%;
 }
 
-.container {
-  max-width: 600px;
-  margin: auto;
-}
 table.data-grid {
   margin: auto;
   width: 100%;
