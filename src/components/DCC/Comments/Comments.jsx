@@ -14,7 +14,7 @@ const DCCComments = (props) => {
     token,
     dcc
   } = useDCCComments(props);
-  return <div className="dccComments commentarea">
+  return <div className="commentarea">
     <CommentArea {...props} dcc={dcc} comments={comments} numofcomments={comments.length}/>
     <Content
       {...{
