@@ -156,7 +156,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
   );
 });
 
-const InvoiceFormWrapper = ({ onSubmit, history }) => {
+const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
   const { policy } = usePolicy();
   const [, setSubmitSuccess] = useState(false);
   const validationSchema = useMemo(() => invoiceValidationSchema(policy), [
@@ -170,14 +170,16 @@ const InvoiceFormWrapper = ({ onSubmit, history }) => {
           date: { month, year },
           ...others
         } = values;
-        const proposalToken = await onSubmit({
+        const token = await onSubmit({
           ...others,
           month,
           year
         });
+        // Token from new invoice or from edit invoice
+        const invoiceToken = token || values.token;
         setSubmitting(false);
-        setSubmitSuccess(true);
-        history.push(`/invoices/${proposalToken}`);
+        setSubmitSuccess(true); 
+        history.push(`/invoices/${invoiceToken}`);
         resetForm();
       } catch (e) {
         setSubmitting(false);
@@ -190,7 +192,7 @@ const InvoiceFormWrapper = ({ onSubmit, history }) => {
   return (
     <Formik
       onSubmit={handleSubmit}
-      initialValues={{
+      initialValues={ initialValues || {
         name: "",
         location: "",
         contact: "",

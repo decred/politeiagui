@@ -134,7 +134,7 @@ span.tableButtonDisabled {
   width: 100%;
   overflow-y: visible;
   overflow-x: auto;
-  padding-bottom: 22rem;
+  padding-bottom: 5rem;
 }
 
 .erroredCell {

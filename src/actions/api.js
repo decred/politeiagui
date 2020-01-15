@@ -737,7 +737,7 @@ export const onSubmitEditedProposal = (
   });
 
 export const onSubmitEditedInvoice = (
-  loggedInAsEmail,
+  email,
   userid,
   username,
   month,
@@ -781,7 +781,7 @@ export const onSubmitEditedInvoice = (
         files
       )
     )
-      .then((invoice) => api.signRegister(loggedInAsEmail, invoice))
+      .then((invoice) => api.signRegister(email, invoice))
       .then((invoice) => api.editInvoice(csrf, { ...invoice, token }))
       .then((invoice) => {
         dispatch(
