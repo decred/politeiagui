@@ -31,7 +31,13 @@ const VerifyKey = ({ location, history }) => {
       setKeyUpdated(true);
       throw e;
     }
-  }, [currentUserEmail, userPubkey, keyMismatchAction, onVerifyUserKey, location]);
+  }, [
+    currentUserEmail,
+    userPubkey,
+    keyMismatchAction,
+    onVerifyUserKey,
+    location
+  ]);
 
   useEffect(() => {
     if (!keyUpdated && !verifyUserKey) {
@@ -50,23 +56,24 @@ const VerifyKey = ({ location, history }) => {
         {loading && "Loading ..."}
         {error && (
           <div className={styles.container}>
-          <div className={styles.iconAndTextWrapper}>
-            <div className={styles.iconWrapper}>
-              <Icon
-                type="alert"
-                size="xlg"
-                backgroundColor="#ed6d47"
-                iconColor="white"
-              />
+            <div className={styles.iconAndTextWrapper}>
+              <div className={styles.iconWrapper}>
+                <Icon
+                  type="alert"
+                  size="xlg"
+                  backgroundColor="#ed6d47"
+                  iconColor="white"
+                />
+              </div>
+              <Text className="margin-left-s">{error.message}</Text>
             </div>
-            <Text className="margin-left-s">
-              {error.message}
-            </Text>
+            <Button
+              className={classNames("margin-top-l", styles.btn)}
+              onClick={pushToHome}
+              type="button">
+              Ok, go to home
+            </Button>
           </div>
-          <Button className={classNames("margin-top-l", styles.btn)} onClick={pushToHome} type="button">
-            Ok, go to proposals
-          </Button>
-        </div>
         )}
         {success && (
           <div className={styles.container}>
@@ -77,9 +84,14 @@ const VerifyKey = ({ location, history }) => {
                 backgroundColor="#41bf53"
                 iconColor="white"
               />
-              <Text className="margin-left-s">You have verified and activated your new identity.</Text>
+              <Text className="margin-left-s">
+                You have verified and activated your new identity.
+              </Text>
             </div>
-            <Button className={classNames("margin-top-l", styles.btn)} onClick={pushToHome} type="button">
+            <Button
+              className={classNames("margin-top-l", styles.btn)}
+              onClick={pushToHome}
+              type="button">
               Ok, go to proposals
             </Button>
           </div>

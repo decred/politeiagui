@@ -8,14 +8,14 @@ import {
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
-import { useConfig } from "src/Config";
-import { useLoaderContext } from "src/Appv2/Loader";
+import { useConfig } from "src/containers/Config";
+import { useLoaderContext } from "src/containers/Loader";
 
 export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
 
-export function useComments(ownProps) {
-  const recordToken = ownProps && ownProps.recordToken;
+export function useComments(recordToken, fetchComments = false) {
+  const { enableCommentVote, recordType, constants } = useConfig();
   const commentsSelector = useMemo(
     () => sel.makeGetProposalComments(recordToken),
     [recordToken]
@@ -31,24 +31,26 @@ export function useComments(ownProps) {
   const loading = useSelector(sel.isApiRequestingComments);
   const loadingLikes = useSelector(sel.isApiRequestingCommentsLikes);
   const onSubmitComment = useAction(act.onSaveNewCommentV2);
-  const onFetchComments = useAction(act.onFetchProposalComments);
+  const onFetchComments = useAction(
+    recordType === constants.RECORD_TYPE_PROPOSAL
+      ? act.onFetchProposalComments
+      : act.onFetchInvoiceComments
+  );
   const onFetchLikes = useAction(act.onFetchLikedComments);
   const onLikeCommentAction = useAction(act.onLikeComment);
   const onResetComments = useAction(act.onResetComments);
   const onCensorComment = useAction(act.onCensorCommentv2);
 
-  const { enableCommentVote, recordType } = useConfig();
   const { currentUser } = useLoaderContext();
   const email = currentUser && currentUser.email;
 
   const userLoggedIn = !!email;
 
-  const numOfComments = (ownProps && ownProps.numOfComments) || 0;
-  const needsToFetchComments = !!recordToken && !comments && numOfComments > 0;
+  const needsToFetchComments = !!recordToken && !comments && fetchComments;
   const needsToFetchCommentsLikes =
     !!recordToken &&
     !commentsLikes &&
-    numOfComments > 0 &&
+    fetchComments &&
     enableCommentVote &&
     userLoggedIn;
 

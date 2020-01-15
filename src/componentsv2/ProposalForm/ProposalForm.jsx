@@ -51,7 +51,7 @@ const ProposalForm = React.memo(function ProposalForm({
   );
 
   const filesInput = useMemo(
-    () => <AttachFileInput onChange={handleFilesChange} type="button" />,
+    () => <AttachFileInput small onChange={handleFilesChange} type="button" />,
     [handleFilesChange]
   );
 

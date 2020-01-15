@@ -6,6 +6,7 @@ import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "src/constants";
 import UserProposals from "src/containers/Proposal/User";
 import useUserIdentity from "src/hooks/api/useUserIdentity";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
+import { useConfig } from "src/containers/Config";
 import { existing, myPubKeyHex } from "src/lib/pki";
 import Account from "./Account";
 import Credits from "./Credits";
@@ -15,6 +16,7 @@ import useChangeUsername from "./hooks/useChangeUsername";
 import useUserDetail from "./hooks/useUserDetail";
 import Identity from "./Identity";
 import Preferences from "./Preferences";
+import ManageContractor from "./ManageContractor";
 
 const getTabComponents = ({ user, ...rest }) => {
   const mapTabValueToComponent = {
@@ -30,7 +32,8 @@ const getTabComponents = ({ user, ...rest }) => {
         userID={user.userid}
         withDrafts={rest.isUserPageOwner}
       />
-    )
+    ),
+    [tabValues.MANAGE_DCC]: <ManageContractor user={user} {...rest} />
   };
   return mapTabValueToComponent;
 };
@@ -52,6 +55,11 @@ const UserDetail = ({
     identityImportSuccess
   } = useUserIdentity();
 
+  const {
+    recordType,
+    constants: { RECORD_TYPE_INVOICE, RECORD_TYPE_PROPOSAL }
+  } = useConfig();
+
   const isUserPageOwner = user && currentUserID === user.userid;
   const isAdminOrTheUser = user && (isAdmin || currentUserID === user.userid);
 
@@ -59,17 +67,38 @@ const UserDetail = ({
     const isTabDisabled = (tabLabel) => {
       if (tabLabel === tabValues.PREFERENCES && !isUserPageOwner) return true;
       if (tabLabel === tabValues.CREDITS && !isAdminOrTheUser) return true;
+      if (tabLabel === tabValues.MANAGE_DCC && !isAdminOrTheUser) return true;
 
       return false;
+    };
+    const filterByRecordType = (tabLabel) => {
+      if (recordType === RECORD_TYPE_INVOICE) {
+        return (
+          tabLabel !== tabValues.PROPOSALS &&
+          tabLabel !== tabValues.PREFERENCES &&
+          tabLabel !== tabValues.CREDITS
+        );
+      }
+      if (recordType === RECORD_TYPE_PROPOSAL) {
+        return tabLabel !== tabValues.MANAGE_DCC;
+      }
+      return true;
     };
     return [
       tabValues.IDENTITY,
       tabValues.ACCOUNT,
       tabValues.PREFERENCES,
       tabValues.CREDITS,
-      tabValues.PROPOSALS
-    ].filter((tab) => !isTabDisabled(tab));
-  }, [isUserPageOwner, isAdminOrTheUser]);
+      tabValues.PROPOSALS,
+      tabValues.MANAGE_DCC
+    ].filter((tab) => !isTabDisabled(tab) && filterByRecordType(tab));
+  }, [
+    isUserPageOwner,
+    isAdminOrTheUser,
+    RECORD_TYPE_INVOICE,
+    RECORD_TYPE_PROPOSAL,
+    recordType
+  ]);
 
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
 
@@ -85,24 +114,18 @@ const UserDetail = ({
   const [loadingKey, setKeyAsLoaded] = useState(PUB_KEY_STATUS_LOADING);
 
   const [pubkey, setPubkey] = useState("");
-  const refreshPubKey = useCallback(
-    (isSubscribed) =>
-      existing(currentUserEmail).then(() => {
-        myPubKeyHex(currentUserEmail)
-          .then((pubkey) => {
-            if (isSubscribed) {
-              setPubkey(pubkey);
-              setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
-            }
-          })
-          .catch(() => {
-            if (isSubscribed) {
-              setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
-            }
-          });
-      }),
-    [currentUserEmail, setPubkey]
-  );
+  const refreshPubKey = useCallback(() => {
+    existing(currentUserEmail).then(() => {
+      myPubKeyHex(currentUserEmail)
+        .then((pubkey) => {
+          setPubkey(pubkey);
+          setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
+        })
+        .catch(() => {
+          setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
+        });
+    });
+  }, [currentUserEmail, setPubkey]);
   useEffect(() => {
     let isSubscribed = true;
     if (userPubkey !== pubkey || identityImportSuccess)

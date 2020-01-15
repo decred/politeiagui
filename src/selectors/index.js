@@ -8,6 +8,7 @@ export * from "./models/credits";
 export * from "./models/users";
 export * from "./models/proposals";
 export * from "./models/proposalVotes";
+export * from "./models/invoices";
 
 export const selectorMap = (fns) => (...args) =>
   Object.keys(fns).reduce(

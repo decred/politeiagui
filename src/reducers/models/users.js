@@ -5,8 +5,15 @@ import update from "lodash/fp/update";
 
 const DEFAULT_STATE = {
   byID: {},
-  currentUserID: null
+  currentUserID: null,
+  search: {
+    resultsByID: {},
+    queryByEmail: {},
+    queryByUsername: {}
+  }
 };
+
+const skip = () => (value) => value;
 
 const onReceiveLogout = (state) =>
   compose(
@@ -62,7 +69,41 @@ const users = (state = DEFAULT_STATE, action) =>
               ["byID", state.currentUserID, "publickey"],
               action.payload.publickey
             )(state),
-          [act.RECEIVE_LOGOUT]: () => onReceiveLogout(state)
+          [act.RECEIVE_MANAGE_CMS_USER]: () => {
+            const { domain, type, supervisorIDs, userID } = action.payload;
+            return update(["byID", userID], (user) => ({
+              ...user,
+              domain,
+              contractortype: type,
+              supervisoruserids: supervisorIDs
+            }))(state);
+          },
+          [act.RECEIVE_LOGOUT]: () => onReceiveLogout(state),
+          [act.RECEIVE_USER_SEARCH]: () => {
+            const {
+              users,
+              query: { email, username }
+            } = action.payload;
+            const usersByID = users.reduce(
+              (res, user) => ({ ...res, [user.id]: user }),
+              {}
+            );
+            const usersIds = users.map((user) => user.id);
+            const searchedByEmail = !!email;
+            const searchedByUsername = !!username;
+            return compose(
+              update("search.resultsByID", (users) => ({
+                ...users,
+                ...usersByID
+              })),
+              searchedByEmail
+                ? set(["search", "queryByEmail", email], usersIds)
+                : skip(),
+              searchedByUsername
+                ? set(["search", "queryByUsername", username], usersIds)
+                : skip()
+            )(state);
+          }
         }[action.type] || (() => state)
       )();
 

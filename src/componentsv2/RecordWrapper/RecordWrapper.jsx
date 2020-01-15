@@ -17,8 +17,8 @@ import {
 } from "pi-ui";
 import { Row } from "../layout";
 import Link from "../Link";
-import { useConfig } from "src/Config";
-import { useLoader } from "src/Appv2/Loader";
+import { useConfig } from "src/containers/Config";
+import { useLoader } from "src/containers/Loader";
 import Join from "../Join";
 import CopyLink from "../CopyLink";
 

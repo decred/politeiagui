@@ -759,12 +759,12 @@ describe("test api reducer", () => {
       { action: act.REQUEST_PROPOSAL, key: "proposal", type: "request" },
       { action: act.RECEIVE_PROPOSAL, key: "proposal", type: "receive" },
       {
-        action: act.REQUEST_PROPOSAL_COMMENTS,
+        action: act.REQUEST_RECORD_COMMENTS,
         key: "proposalComments",
         type: "request"
       },
       {
-        action: act.RECEIVE_PROPOSAL_COMMENTS,
+        action: act.RECEIVE_RECORD_COMMENTS,
         key: "proposalComments",
         type: "receive"
       },

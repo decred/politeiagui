@@ -346,8 +346,19 @@ export const editUser = (csrf, { emailnotifications }) =>
 export const manageUser = (csrf, userid, action, reason) =>
   POST("/user/manage", csrf, { userid, action, reason }).then(getResponse);
 
-export const manageCmsUser = (csrf, userid, newUserProps) =>
-  POST("/user/manage", csrf, { userid, ...newUserProps });
+export const manageCmsUser = (
+  csrf,
+  userid,
+  domain,
+  contractortype,
+  supervisoruserids
+) =>
+  POST("/user/manage", csrf, {
+    userid,
+    domain,
+    contractortype,
+    supervisoruserids
+  });
 
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);

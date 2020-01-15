@@ -3,7 +3,14 @@ import form from "./form";
 import app from "./app";
 import api from "./api";
 import modal from "./modal";
-import { comments, credits, users, proposals, proposalVotes } from "./models";
+import {
+  comments,
+  users,
+  credits,
+  proposals,
+  proposalVotes,
+  invoices
+} from "./models";
 import external_api from "./external_api";
 
 const rootReducer = combineReducers({
@@ -16,7 +23,8 @@ const rootReducer = combineReducers({
   credits,
   users,
   proposals,
-  proposalVotes
+  proposalVotes,
+  invoices
 });
 
 export default rootReducer;

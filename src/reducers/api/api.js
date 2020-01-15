@@ -159,9 +159,9 @@ const api = (state = DEFAULT_STATE, action) =>
         receive("unvettedStatus", state, action),
       [act.REQUEST_PROPOSAL]: () => request("proposal", state, action),
       [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
-      [act.REQUEST_PROPOSAL_COMMENTS]: () =>
+      [act.REQUEST_RECORD_COMMENTS]: () =>
         request("proposalComments", state, action),
-      [act.RECEIVE_PROPOSAL_COMMENTS]: () =>
+      [act.RECEIVE_RECORD_COMMENTS]: () =>
         receive("proposalComments", state, action),
       [act.REQUEST_LIKE_COMMENT]: () => request("likeComment", state, action),
       [act.RECEIVE_LIKE_COMMENT]: () => receive("likeComment", state, action),
@@ -208,9 +208,9 @@ const api = (state = DEFAULT_STATE, action) =>
         receive("adminInvoices", state, action),
       [act.REQUEST_INVOICE]: () => request("invoice", state, action),
       [act.RECEIVE_INVOICE]: () => receive("invoice", state, action),
-      [act.REQUEST_INVOICE_COMMENTS]: () =>
+      [act.REQUEST_RECORD_COMMENTS]: () =>
         request("invoiceComments", state, action),
-      [act.RECEIVE_INVOICE_COMMENTS]: () =>
+      [act.RECEIVE_RECORD_COMMENTS]: () =>
         receive("invoiceComments", state, action),
       [act.RECEIVE_NEW_INVOICE_COMMENT]: () =>
         onReceiveNewInvoiceComment(state, action),

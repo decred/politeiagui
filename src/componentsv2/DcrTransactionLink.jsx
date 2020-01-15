@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "pi-ui";
-import { useLoaderContext } from "src/Appv2/Loader";
+import { useLoaderContext } from "src/containers/Loader";
 
 const DcrTransactionLink = ({ txID }) => {
   const { apiInfo } = useLoaderContext();

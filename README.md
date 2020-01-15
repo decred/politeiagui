@@ -54,47 +54,33 @@ To build politeiagui for production deployment, use the following commands:
 
 ## Configuration
 
-Politeiagui allow customization of settings and features toggling from enviroment variables. 
-To make this process easier we use [dotenv](https://github.com/motdotla/dotenv). 
+Politeiagui allow customization of settings and features toggling by providing a set of configuration options. The configuration is loaded based on the  "preset name" which must be
+provided through an enviroment variable called "REACT_APP_PRESET".
 
-Specify your config options by creating a `.env` file in the root folder of the project. All 
-variables must be preceded by "REACT_APP" as follow:
+The configs can be found inside `src/apps/<preset_name>`.
 
-**/.env:**
 
-```dosini
-REACT_APP_TITLE="Politeia"
-REACT_APP_STAGING=false
-```
+Currently, two presets are supported, they are:
+- politeia: the set of configurations for the Proposals website.
+- cms: the set of configurations for the Contractor Managament System.
 
-It is also possible to specify a preset to be used:
-
-**/.env:**
-
-```dosini
-REACT_APP_PRESET="POLITEIA"
-```
-
-If the `REACT_APP_PRESET` is specified, all other specified options in the env
-file will be ignored. Current valid preset options are:
-
-- "POLITEIA"
-- "CMS"
-
-The full table of options is presented below:
+The full table of configuration options is presented below:
 
 | Option                 | POLITEIA (default)                                         | CMS                     | Description                                                                                                |
 |------------------------|------------------------------------------------------------|-------------------------|------------------------------------------------------------------------------------------------------------|
-| TITLE                  | "Politeia"                                                 | "Contractor Management" | The title to be used for the website                                                                       |
-| RECORD_TYPE            | "proposal"                                                 | "invoice"               | The main record type name                                                                                  |
-| ENABLE_ADMIN_INVITE    | false                                                      | true                    | To enable or not the UI elements required for admin invite                                                 |
-| ENABLE_COMMENT_VOTE    | true                                                       | false                   | To enable or not the vote on comments                                                                      |
-| TESTNET_GIT_REPOSITORY | "https://github.com/decred-proposals/testnet3/tree/master" | ""                      | The testnet git repository where the public records are stored                                             |
-| MAINNET_GIT_REPOSITORY | "https://github.com/decred-proposals/mainnet/tree/master"  | ""                      | The mainnet git repository where the public records are stored                                             |
-| PAYWALL_CONTENT        | "paywall-politeia"                                         | ""                       | Indicate what is the name of the markdown file under `src/contents` to be used for the paywall copy        |
-| PRIVACY_POLICY_CONTENT | "privacy-policy"                                           | "privacy-policy-cms"    | Indicate what is the name of the markdown file under `src/contents` to be used for the privacy policy copy |
+| title                 | "Politeia"                                                 | "Contractor Management" | The title to be used for the website                                                                       |
+| logoLight                 | "pi-logo-light.svg"                                                 | "cms-logo-light.svg" | Indicates what is the name of the light logo file under `src/assets/images`                                                                     |
+| logoDark                | "pi-logo-dark.svg"                                                 | "cms-logo-dark.svg" | Indicates what is the name of the dark logo file under `src/assets/images`                                                                     |
+| recordType          | "proposal"                                                 | "invoice"               | The main record type name                                                                                  |
+| enableAdminInvite   | false                                                      | true                    | To enable or not the UI elements required for admin invite                                                 |
+| enableCommentVote    | true                                                       | false                   | To enable or not the vote on comments                                                                      |
+| testnetGitRepository | "https://github.com/decred-proposals/testnet3/tree/master" | ""                      | The testnet git repository where the public records are stored                                             |
+| mainnetGitRepository | "https://github.com/decred-proposals/mainnet/tree/master"  | ""                      | The mainnet git repository where the public records are stored                                             |
+| paywallContent        | "paywall-politeia"                                         | ""                       | Indicates what is the name of the markdown file under `src/assets/copies` to be used for the paywall copy        |
+| privacyPolicyContent | "privacy-policy"                                           | "privacy-policy-cms"    | Indicates what is the name of the markdown file under `src/assets/copies` to be used for the privacy policy copy |
+| navMenuPaths | see src/apps/politeia/config.json                                          | see src/apps/cms/config.json             | Custom menu paths to be shown in the navigation menu dropdown |
 
-**Important:** Currently it's only possible to use the CMS or the POLITEIA presets fully. If you want to mix the options from one preset with another, you'll need to modify the code and the API accordingly.
+**Important:** Currently it's only possible to use the CMS or the POLITEIA presets fully. If you want to create your own app config, you'll need to modify the code and the API accordingly.
 
 ## Testing 
 
