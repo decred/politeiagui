@@ -19,7 +19,7 @@ import InvoiceDatasheet from "../InvoiceDatasheet";
 import { convertAtomsToDcr } from "src/utilsv2";
 import ThumbnailGrid from "src/componentsv2/Files";
 
-const Invoice = ({ invoice, extended, collapseBodyContent }) => {
+const Invoice = ({ invoice, extended }) => {
   const {
     censorshiprecord,
     file,
