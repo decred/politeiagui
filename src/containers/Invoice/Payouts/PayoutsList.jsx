@@ -38,22 +38,23 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
         {!loading && payouts && (
           <Table
             bodyCellClassName={styles.tableBodyCell}
+            headClassName={styles.tableHead}
             data={payouts.map(({ approvedtime, year, month, contractorname, contractorrate, labortotal, expensetotal, total, exchangerate, dcrtotal, address }) => {
-            return {
-              approvedtime: new Date(approvedtime * 1000).toUTCString(),
-              year,
-              month,
-              contractorname,
-              contractorrate: contractorrate / 100,
-              labortotal: labortotal / 100,
-              expensetotal: expensetotal / 100,
-              total: total / 100,
-              exchangerate: exchangerate / 100,
-              dcrtotal: dcrtotal / 100000000,
-              address
-            };
-          })}
-          headers={["Approved Time", "Year", "Month", "Name", "Rate(USD)", "Labor Total(USD)", "Expense Total(USD)", "Combined Total(USD)", "Exchange Rate(USD)", "Total Payment(DCR)", "Address"]}>
+              return {
+                approvedtime: new Date(approvedtime * 1000).toUTCString(),
+                year,
+                month,
+                contractorname,
+                contractorrate: contractorrate / 100,
+                labortotal: labortotal / 100,
+                expensetotal: expensetotal / 100,
+                total: total / 100,
+                exchangerate: exchangerate / 100,
+                dcrtotal: dcrtotal / 100000000,
+                address
+              };
+            })}
+            headers={["Approved Time", "Year", "Month", "Name", "Rate(USD)", "Labor Total(USD)", "Expense Total(USD)", "Combined Total(USD)", "Exchange Rate(USD)", "Total Payment(DCR)", "Address"]}>
           </Table>
         )}
       </Main>

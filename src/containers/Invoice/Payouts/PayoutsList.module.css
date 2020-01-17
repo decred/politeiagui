@@ -11,4 +11,9 @@
 
 .tableBodyCell {
   word-wrap: break-word;
+  border-bottom: 0.1rem solid var(--color-white) !important;
+}
+
+.tableHead {
+  background-color: var(--color-white) !important;
 }
