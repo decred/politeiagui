@@ -20,7 +20,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
   values,
   handleChange,
   handleSubmit,
-  handleBlur,
   isSubmitting,
   setFieldValue,
   errors,
@@ -90,7 +89,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
         tabIndex={1}
         value={values.name}
         onChange={handleChange}
-        onBlur={handleBlur}
         error={touched.name && errors.name}
       />
       <BoxTextInput
@@ -99,7 +97,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
         tabIndex={1}
         value={values.location}
         onChange={handleChange}
-        onBlur={handleBlur}
         error={touched.location && errors.location}
       />
       <BoxTextInput
@@ -108,7 +105,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
         tabIndex={1}
         value={values.contact}
         onChange={handleChange}
-        onBlur={handleBlur}
         error={touched.contact && errors.contact}
       />
       <BoxTextInput
@@ -117,7 +113,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
         tabIndex={1}
         value={values.address}
         onChange={handleChange}
-        onBlur={handleBlur}
         error={touched.contact && errors.address}
       />
       <BoxTextInput
@@ -127,7 +122,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
         tabIndex={1}
         value={values.rate}
         onChange={handleChange}
-        onBlur={handleBlur}
         error={touched.rate && errors.rate}
       />
       <AttachFileInput
