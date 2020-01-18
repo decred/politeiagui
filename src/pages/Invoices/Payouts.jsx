@@ -1,6 +1,7 @@
 import React from "react";
 import MultipleContentPage from "../../componentsv2/layout/MultipleContentPage";
 import PayoutsList from "src/containers/Invoice/Payouts";
+import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 
 const PageGeneratePayoutsList = () => {
   return (
@@ -8,7 +9,11 @@ const PageGeneratePayoutsList = () => {
       disableScrollToTop
       topBannerHeight={90}
     >
-      {props => <PayoutsList {...props} />}
+      {props =>
+        <AdminInvoiceActionsProvider>
+          <PayoutsList {...props} />
+        </AdminInvoiceActionsProvider>
+      }
     </MultipleContentPage>
   );
 };

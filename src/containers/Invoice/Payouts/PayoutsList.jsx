@@ -2,36 +2,44 @@ import React from "react";
 import { Link, Spinner, Table } from "pi-ui";
 import { useAdminPayouts } from "./hooks";
 import ExportToCsv from "src/componentsv2/ExportToCsv";
-import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import { Row } from "src/componentsv2/layout";
 import styles from "./PayoutsList.module.css";
+import { useAdminInvoiceActions } from "../Actions";
+
 
 const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
+  if (!useAdminInvoiceActions()) {
+    throw Error(
+      "Admin invoices actions requires an 'AdminActionsProvider' on a higher level of the component tree. "
+    );
+  }
   const { loading, payouts } = useAdminPayouts();
+  const { onPay } = useAdminInvoiceActions();
+  const actions = !loading && payouts && payouts.length ? (
+    <Row justify="space-between" className={styles.actionsWrapper}>
+      <div>
+        <ExportToCsv
+          data={payouts}
+          fields={["approvedtime", "year", "month", "contractorname", "contractorrate", "labortotal", "expensetotal", "total", "exchangerate", "dcrtotal", "address"]}
+          filename="payouts">
+          <Link className="cursor-pointer">
+            Export To Csv
+        </Link>
+        </ExportToCsv>
+      </div>
+      <div>
+        <Link className="cursor-pointer" onClick={onPay}>
+          Set Invoices To Paid
+      </Link>
+      </div>
+    </Row>) : null;
+
   return (
-    <AdminInvoiceActionsProvider>
+    <>
       <TopBanner>
         <PageDetails
           title="Payouts"
-          actionsContent={
-            <Row justify="space-between" className={styles.actionsWrapper}>
-              <div>
-                <ExportToCsv
-                  data={payouts}
-                  fields={["approvedtime", "year", "month", "contractorname", "contractorrate", "labortotal", "expensetotal", "total", "exchangerate", "dcrtotal", "address"]}
-                  filename="payouts">
-                  <Link className="cursor-pointer">
-                    Export To Csv
-                  </Link>
-                </ExportToCsv>
-              </div>
-              <div>
-                <Link className="cursor-pointer">
-                  Set Invoices To Paid
-                </Link>
-              </div>
-            </Row>
-          }
+          actionsContent={actions}
         >
         </PageDetails>
       </TopBanner>
@@ -41,7 +49,7 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
             <Spinner invert />
           </div>
         )}
-        {!loading && payouts && (
+        {!loading && payouts && payouts.length ? (
           <Table
             bodyCellClassName={styles.tableBodyCell}
             headClassName={styles.tableHead}
@@ -62,9 +70,9 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
             })}
             headers={["Approved Time", "Year", "Month", "Name", "Rate(USD)", "Labor Total(USD)", "Expense Total(USD)", "Combined Total(USD)", "Exchange Rate(USD)", "Total Payment(DCR)", "Address"]}>
           </Table>
-        )}
+        ) : null}
       </Main>
-    </AdminInvoiceActionsProvider>
+    </>
   );
 };
 
