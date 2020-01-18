@@ -8,11 +8,6 @@ import { useAdminInvoiceActions } from "../Actions";
 
 
 const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
-  if (!useAdminInvoiceActions()) {
-    throw Error(
-      "Admin invoices actions requires an 'AdminActionsProvider' on a higher level of the component tree. "
-    );
-  }
   const { loading, payouts } = useAdminPayouts();
   const { onPay } = useAdminInvoiceActions();
   const actions = !loading && payouts && payouts.length ? (
