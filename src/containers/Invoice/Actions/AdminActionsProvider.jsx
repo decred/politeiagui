@@ -91,7 +91,7 @@ const AdminActionsProvider = ({ children }) => {
           onSubmit={onPayApprovedInvoices}
           successTitle="Inovices paid"
           successMessage={
-            <Text>The approved invoices have been successfully paid!</Text>
+            <Text>The invoices have been successfully updated!</Text>
           }
           show={showPayModal}
           onClose={closePayModal}
