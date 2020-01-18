@@ -1,9 +1,10 @@
 import React from "react";
 import { Link, Spinner, Table } from "pi-ui";
 import { useAdminPayouts } from "./hooks";
+import ExportToCsv from "src/componentsv2/ExportToCsv";
 import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
-import styles from "./PayoutsList.module.css";
 import { Row } from "src/componentsv2/layout";
+import styles from "./PayoutsList.module.css";
 
 const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
   const { loading, payouts } = useAdminPayouts();
@@ -15,9 +16,14 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
           actionsContent={
             <Row justify="space-between" className={styles.actionsWrapper}>
               <div>
-                <Link className="cursor-pointer">
-                  Export To Csv
-                </Link>
+                <ExportToCsv
+                  data={payouts}
+                  fields={["approvedtime", "year", "month", "contractorname", "contractorrate", "labortotal", "expensetotal", "total", "exchangerate", "dcrtotal", "address"]}
+                  filename="payouts">
+                  <Link className="cursor-pointer">
+                    Export To Csv
+                  </Link>
+                </ExportToCsv>
               </div>
               <div>
                 <Link className="cursor-pointer">
