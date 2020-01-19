@@ -49,7 +49,6 @@ const UserDetail = ({
 }) => {
   const userID = match.params.userid;
   const { user, isAdmin, currentUserID } = useUserDetail(userID);
-
   const {
     userPubkey,
     currentUserEmail,
