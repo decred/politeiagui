@@ -120,8 +120,25 @@ const handleSaveAppDraftInvoices = (state) => {
   }
 };
 
+const handleSaveAppDraftDCCs = (state) => {
+  const email = currentUserEmail(state);
+  if (!email) return;
+  const stateFromLs = loadStateLocalStorage(email) || {};
+  const draftDCCsFromStore = state.app.draftDCCs;
+  const draftDCCsFromLocalStorage = get(stateFromLs, ["app", "draftDCCs"], {});
+
+  if (
+    draftDCCsFromStore &&
+    !isEqual(draftDCCsFromStore, draftDCCsFromLocalStorage)
+  ) {
+    const newValue = set(stateFromLs, ["app", "draftDCCs"], draftDCCsFromStore);
+    saveStateLocalStorage(newValue, email);
+  }
+};
+
 export const handleSaveStateToLocalStorage = (state) => {
   handleSaveApiMe(state);
   handleSaveAppDraftProposals(state);
+  handleSaveAppDraftDCCs(state);
   handleSaveAppDraftInvoices(state);
 };

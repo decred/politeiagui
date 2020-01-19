@@ -2,7 +2,7 @@ import React from "react";
 import FileReaderInput from "react-file-reader-input";
 import { getFormattedFiles } from "./helpers";
 
-const FilesInput = ({ onChange, children, acceptedFiles, multiple }) => {
+const FilesInput = ({ onChange, children, acceptedFiles }) => {
   function handleFilesChange(e, files) {
     const formattedFiles = getFormattedFiles(files);
     onChange(formattedFiles);

@@ -6,7 +6,7 @@ import { useConfig } from "src/containers/Config";
 const ModalOnboard = ({ show, onClose }) => {
   const { onBoardContent, onBoardLink } = useConfig();
   function goToDocs() {
-    var win = window.open(
+    const win = window.open(
       onBoardLink,
       "_blank",
       "noopener=true,noreferrer=true"

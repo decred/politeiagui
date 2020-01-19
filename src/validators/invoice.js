@@ -41,7 +41,7 @@ const invoiceValidationSchema = ({
         Yup.object().shape({
           type: Yup.string()
             .required("required")
-            .oneOf(["1", "2", "3"]),
+            .oneOf(["1", "2", "3", "4"]),
           domain: Yup.string()
             .required("required")
             .min(minlineitemcollength)
@@ -60,7 +60,17 @@ const invoiceValidationSchema = ({
             .matches(
               ...yupFieldMatcher("Description", invoicefieldsupportedchars)
             ),
-          labour: Yup.number(),
+          labor: Yup.number(),
+          subuserid: Yup.string().when("type", (type, schema) =>
+            +type === 4 ? schema.required("required") : schema
+          ),
+          subrate: Yup.number().when("type", (type, schema) =>
+            +type === 4
+              ? schema
+                  .min(500, "must be greater or equal 5")
+                  .max(50000, "must be less or equal 500")
+              : schema
+          ),
           expense: Yup.number()
         })
       )

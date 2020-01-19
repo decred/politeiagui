@@ -1,4 +1,4 @@
-import { classNames, CopyableText, H4, Text } from "pi-ui";
+import { classNames, CopyableText, H4, Text, useTheme } from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
 import PaymentFaucet from "../PaymentFaucet";
@@ -7,9 +7,11 @@ import QRCode from "../QRCode";
 import styles from "./PaymentComponent.module.css";
 
 const PaymentComponent = ({ address, amount, extraSmall, status }) => {
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
   return (
     <>
-      <div className={classNames(styles.paywallInfo, "margin-top-l")}>
+      <div className={classNames(styles.paywallInfo, isDarkTheme && styles.dark, "margin-top-l")}>
         <div className={styles.qrcodeWrapper}>
           <QRCode addr={address} />
         </div>

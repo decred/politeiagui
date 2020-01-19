@@ -61,6 +61,24 @@ class UserInfo extends React.Component {
                     {isCMS ? "Submit Invoice" : "Submit Proposal"}
                   </li>
                   <li
+                    className={`dropdown-list-item ${
+                      !userCanExecuteActions ? "disabled" : ""
+                    }`}
+                    onClick={() =>
+                      userCanExecuteActions ? history.push("/dccs") : null
+                    }>
+                    DCCs
+                  </li>
+                  <li
+                    className={`dropdown-list-item ${
+                      !userCanExecuteActions ? "disabled" : ""
+                    }`}
+                    onClick={() =>
+                      userCanExecuteActions ? history.push("/dcc/new") : null
+                    }>
+                    Submit DCC
+                  </li>
+                  <li
                     className="dropdown-list-item logout-button"
                     onClick={() => {
                       history.push("/user/logout");

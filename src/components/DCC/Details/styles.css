@@ -1,0 +1,42 @@
+.dcc {
+  background-color: white;
+  padding: 16px;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.dcc h1 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #336699;
+}
+
+.dcc h2 {
+  font-weight: bold;
+  font-size: 1.2rem;
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.dcc-info {
+  padding-bottom: 16px;
+}
+
+.dcc-info label {
+  font-size: 1rem;
+  color: #555555;
+  padding-right: 1rem;
+  display: inline-block;
+  font-weight: bold;
+  text-transform: none;
+}
+
+.dcc-header .status {
+  color: #a4a4a4;
+  font-size: 0.9rem;
+  margin: 0;
+  text-transform: capitalize;
+  font-weight: bold;
+}

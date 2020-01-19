@@ -65,7 +65,7 @@
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject",
     "prettify": "prettier --write 'src/**/*.{js,css,json}'",
-    "lint": "./node_modules/.bin/eslint src",
+    "lint": "./node_modules/.bin/eslint src --ext .js --ext .jsx",
     "precommit": "lint-staged"
   },
   "lint-staged": {

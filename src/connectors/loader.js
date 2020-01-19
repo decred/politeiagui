@@ -28,7 +28,8 @@ export default connect(
         confirmWithModal: act.confirmWithModal,
         setOnboardAsViewed: act.setOnboardAsViewed,
         onLoadDraftProposals: act.onLoadDraftProposals,
-        onLoadDraftInvoices: act.onLoadDraftInvoices
+        onLoadDraftInvoices: act.onLoadDraftInvoices,
+        onLoadDraftDCCs: act.onLoadDraftDCCs
       },
       dispatch
     )

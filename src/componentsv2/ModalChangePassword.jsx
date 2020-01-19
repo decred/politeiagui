@@ -9,6 +9,7 @@ import {
 import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
 import FormWrapper from "src/componentsv2/FormWrapper";
+import HiddenUsernameField from "src/componentsv2/HiddenUsernameField";
 import { isEmpty } from "src/helpers";
 
 const ModalChangePassword = ({
@@ -55,8 +56,7 @@ const ModalChangePassword = ({
         )
       }
       show={show}
-      onClose={onClose}
-    >
+      onClose={onClose}>
       {!success && (
         <FormWrapper
           initialValues={{
@@ -66,8 +66,7 @@ const ModalChangePassword = ({
           }}
           onSubmit={onSubmitChangePassword}
           loading={!validationSchema}
-          validationSchema={validationSchema}
-        >
+          validationSchema={validationSchema}>
           {({
             Form,
             Actions,
@@ -90,10 +89,12 @@ const ModalChangePassword = ({
                 {errors && errors.global && (
                   <ErrorMessage>{errors.global.toString()}</ErrorMessage>
                 )}
+                <HiddenUsernameField />
                 <TextInput
                   label="Current Password"
                   id="existingPassword"
                   type="password"
+                  autoComplete="current-password"
                   value={values.existingPassword}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -103,6 +104,7 @@ const ModalChangePassword = ({
                   label="New Password"
                   id="newPassword"
                   type="password"
+                  autoComplete="new-password"
                   value={values.newPassword}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -112,6 +114,7 @@ const ModalChangePassword = ({
                   label="Verify Password"
                   id="newPasswordVerify"
                   type="password"
+                  autoComplete="new-password"
                   value={values.newPasswordVerify}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -121,8 +124,7 @@ const ModalChangePassword = ({
                   <Button
                     loading={isSubmitting}
                     kind={canSubmit ? "primary" : "disabled"}
-                    type="submit"
-                  >
+                    type="submit">
                     Change Password
                   </Button>
                 </Actions>

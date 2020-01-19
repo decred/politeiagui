@@ -8,10 +8,16 @@ const PayoutRow = ({
   expenses,
   labor,
   proposaltoken,
-  subdomain
+  subdomain,
+  month,
+  year,
+  paiddate,
+  amountreceived
 }) => {
   return (
     <tr>
+      <td>{month}</td>
+      <td>{year}</td>
       <td>{token}</td>
       <td>{domain}</td>
       <td>{subdomain}</td>
@@ -20,6 +26,8 @@ const PayoutRow = ({
       <td>{expenses}</td>
       <td>{labor}</td>
       <td>{expenses + labor}</td>
+      <td>{paiddate}</td>
+      <td>{amountreceived}</td>
     </tr>
   );
 };
@@ -29,6 +37,8 @@ const PayoutsTable = ({ lineItemPayouts }) => {
     <table className="payouts-table">
       <tbody>
         <tr>
+          <th>Month</th>
+          <th>Year</th>
           <th>Invoice Token</th>
           <th>Domain</th>
           <th>Sub Domain</th>
@@ -37,6 +47,8 @@ const PayoutsTable = ({ lineItemPayouts }) => {
           <th>Expenses (USD)</th>
           <th>Labor (USD)</th>
           <th>Total (USD)</th>
+          <th>Paid Date</th>
+          <th>Amount Received</th>
         </tr>
         {lineItemPayouts.map((payout, idx) => (
           <PayoutRow key={`payout-${idx}`} {...payout} />

@@ -7,7 +7,7 @@
   justify-content: center;
 }
 .quotedText {
-  border-left: 0.25em solid #dfe2e5;
+  border-left: 0.25em solid var(--separator-color);
   max-width: 10rem;
   color: #6a737d;
   padding: 0 1em;
@@ -20,6 +20,10 @@
   background-color: #fcfcf7;
   border-radius: 2px;
   margin-top: 25px;
+}
+.darkCodeBlock {
+  border: 0;
+  background-color: var(--header-color);
 }
 .tableBodyCell {
   width: 20rem;

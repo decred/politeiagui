@@ -17,17 +17,22 @@ class ThingComment extends React.PureComponent {
       ? this.props.history.push(
           `/proposals/${this.props.token}/comments/${this.props.id}`
         )
-      : this.props.history.push(
+      : !this.props.isDCC
+      ? this.props.history.push(
           `/invoices/${this.props.invoiceToken}/comments/${this.props.id}`
+        )
+      : this.props.history.push(
+          `/dcc/${this.props.dccToken}/comments/${this.props.id}`
         );
   };
   handleCommentCensor = (e) => {
     e && e.preventDefault && e.preventDefault();
     this.props.onCensorComment(
       this.props.loggedInAsEmail,
-      this.props.token || this.props.invoiceToken,
+      this.props.token || this.props.invoiceToken || this.props.dccToken,
       this.props.id,
-      this.props.isCMS
+      this.props.isCMS,
+      !!this.props.dccToken
     );
   };
   handleCommentMaxHeight = () => {
