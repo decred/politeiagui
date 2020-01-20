@@ -60,7 +60,7 @@ const Invoice = ({ invoice, extended }) => {
   return (
     <RecordWrapper>
       {({
-        Author, 
+        Author,
         Event,
         Row,
         Title,

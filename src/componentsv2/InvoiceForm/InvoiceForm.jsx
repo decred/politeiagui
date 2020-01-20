@@ -172,7 +172,7 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
         // Token from new invoice or from edit invoice
         const invoiceToken = token || values.token;
         setSubmitting(false);
-        setSubmitSuccess(true); 
+        setSubmitSuccess(true);
         history.push(`/invoices/${invoiceToken}`);
         resetForm();
       } catch (e) {

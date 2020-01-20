@@ -8,7 +8,5 @@ const mapDispatchToProps = {
 };
 
 export function useEditInvoice(ownProps) {
-  const fromRedux = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
-
-  return fromRedux;
+  return useRedux(ownProps, mapStateToProps, mapDispatchToProps);
 }
