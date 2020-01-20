@@ -46,7 +46,6 @@ const DCCDetail = props => {
         confirm && onChangeDCCStatus(status, reason)
     ) && e.preventDefault();
 
-
   return (
     <div className="content" role="main">
       <div className="dcc-info">
@@ -104,8 +103,8 @@ const DCCDetail = props => {
             <p className="dcc-info">{dcc.dccpayload.statement}</p>
 
             <h2>Votes</h2>
-            <DCCInfo label="Support">{dcc.supportuserids.length}</DCCInfo>
-            <DCCInfo label="Against">{dcc.againstuserids.length}</DCCInfo>
+            <DCCInfo label="Support">{dcc.supportusernames}</DCCInfo>
+            <DCCInfo label="Against">{dcc.againstusernames}</DCCInfo>
 
             <Button
               className={`togglebutton access-required${(!userCanVote || !isActiveDCC) &&
