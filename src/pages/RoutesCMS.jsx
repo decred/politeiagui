@@ -17,6 +17,8 @@ import PageInvoiceDetail from "./Invoices/Detail";
 import PageListAdminInvoices from "./Invoices/AdminList";
 import PageGeneratePayoutsList from "./Invoices/Payouts";
 import PageInvoicePayouts from "./Invoices/InvoicePayouts";
+import PageDccDetail from "./DCCs/Detail";
+import PageDccList from "./DCCs/List";
 
 const Redirect = withRouter(({ to, history, location }) => {
   useEffect(() => {
@@ -94,6 +96,19 @@ const Routes = ({ location }) => {
             exact
             component={PageInvoicePayouts}
           />
+          <AuthenticatedRoute
+            path="/dccs"
+            title="DCCs"
+            exact
+            component={PageDccList}
+          />
+          <AuthenticatedRoute
+            path="/dccs/:token"
+            title="DCC Detail"
+            exact
+            component={PageDccDetail}
+          />
+
           {/* <AdminAuthenticatedRoute
             path={`/${recordType}s/unvetted`}
             title={`Unvetted ${capitalize(recordType)}s`}

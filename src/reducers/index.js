@@ -9,7 +9,8 @@ import {
   credits,
   proposals,
   proposalVotes,
-  invoices
+  invoices,
+  dccs
 } from "./models";
 import external_api from "./external_api";
 
@@ -24,7 +25,8 @@ const rootReducer = combineReducers({
   users,
   proposals,
   proposalVotes,
-  invoices
+  invoices,
+  dccs
 });
 
 export default rootReducer;

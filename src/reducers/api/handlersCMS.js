@@ -204,7 +204,7 @@ export const onReceiveSupportOpposeDCC = (state, action) => {
 };
 
 export const onReceiveSetDCCStatus = (state, action) => {
-  state = receive("setDCCStatus", state, action);
+  state = receive("setDccStatus", state, action);
   if (action.error) return state;
   return {
     ...state,

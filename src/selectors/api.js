@@ -808,12 +808,12 @@ export const dccsError = getApiError("dccs");
 
 export const dccDetailsApi = getApiResponse("dcc");
 
-export const dccDetails = compose(get("dcc"), dccDetailsApi);
+export const dcc = compose(get("dcc"), dccDetailsApi);
 
-export const dccToken = compose(get(["censorshiprecord", "token"]), dccDetails);
+export const dccToken = compose(get(["censorshiprecord", "token"]), dcc);
 
 export const apiSupportOpposeDCCError = getApiError("supportOpposeDCC");
-export const apiSetDCCStatusError = getApiError("setDCCStatus");
+export const apiSetDCCStatusError = getApiError("setDccStatus");
 
 const apiDCCCommentsResponse = getApiResponse("dccComments");
 export const apiDCCComments = or(

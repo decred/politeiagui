@@ -1522,7 +1522,7 @@ export const onSubmitNewDCC = (
       });
   });
 
-export const onFetchDCCsByStatus = (status) =>
+export const onFetchDccsByStatus = (status) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_DCCS({}));
     return api
@@ -1535,7 +1535,7 @@ export const onFetchDCCsByStatus = (status) =>
       });
   });
 
-export const onFetchDCC = (token) =>
+export const onFetchDcc = (token) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_DCC({}));
     return api
@@ -1548,7 +1548,7 @@ export const onFetchDCC = (token) =>
       });
   });
 
-export const onFetchDCCComments = (token) => (dispatch) => {
+export const onFetchDccComments = (token) => (dispatch) => {
   dispatch(act.REQUEST_DCC_COMMENTS());
   return api
     .dccComments(token)
@@ -1591,7 +1591,7 @@ export const onSetDCCStatus = (loggedInAsEmail, token, status, reason) =>
     }
     dispatch(act.REQUEST_SET_DCC_STATUS({}));
     return api
-      .setDCCStatus(csrf, loggedInAsEmail, token, status, reason)
+      .setDccStatus(csrf, loggedInAsEmail, token, status, reason)
       .then((response) => {
         dispatch(act.RECEIVE_SET_DCC_STATUS({ ...response, status, reason }));
       })
