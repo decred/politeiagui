@@ -97,9 +97,8 @@ export const draftProposalById = (state) => {
   const { draftid } = qs.parse(window.location.search);
   return (draftid && drafts && drafts[draftid]) || false;
 };
-export const draftInvoices = (state) => {
-  return state && state.app && state.app.draftInvoices;
-};
+export const draftInvoices = (state) =>
+  state && state.app && state.app.draftInvoices;
 export const draftInvoiceById = (state) => {
   const drafts = draftInvoices(state);
   const { draftid } = qs.parse(window.location.search);

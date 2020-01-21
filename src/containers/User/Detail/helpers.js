@@ -4,6 +4,7 @@ export const tabValues = {
   PREFERENCES: "Preferences",
   CREDITS: "Credits",
   PROPOSALS: "Proposals",
+  DRAFT_INVOICES: "Draft Invoices",
   MANAGE_DCC: "Manage Contractor"
 };
 

@@ -3,7 +3,7 @@ import { Card } from "pi-ui";
 import InvoiceForm from "src/componentsv2/InvoiceForm";
 import { useNewInvoice } from "./hooks";
 
-const NewInvoiceForm = () => {
+const NewInvoice = () => {
   const { onSubmitInvoice } = useNewInvoice();
   return (
     <Card className="container margin-bottom-l">
@@ -12,4 +12,4 @@ const NewInvoiceForm = () => {
   );
 };
 
-export default NewInvoiceForm;
+export default NewInvoice;

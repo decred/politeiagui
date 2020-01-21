@@ -94,7 +94,7 @@ export const handleSaveAppDraftProposals = (state) => {
   }
 };
 
-const handleSaveAppDraftInvoices = (state) => {
+export const handleSaveAppDraftInvoices = (state) => {
   const email = currentUserEmail(state);
   if (!email) {
     return;

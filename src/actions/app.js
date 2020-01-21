@@ -240,8 +240,7 @@ export const onDeleteDraftProposal = (draftId) =>
   act.DELETE_DRAFT_PROPOSAL(draftId);
 
 export const onSaveDraftInvoice = ({
-  month,
-  year,
+  date,
   name,
   location,
   contact,
@@ -250,22 +249,24 @@ export const onSaveDraftInvoice = ({
   lineitems,
   files,
   draftId
-}) => {
+}) => (dispatch) => {
   resetNewInvoiceData();
   const id = draftId || uniqueID("draft");
-  return act.SAVE_DRAFT_INVOICE({
-    month,
-    year,
-    name,
-    location,
-    contact,
-    rate,
-    address,
-    lineitems,
-    files,
-    id,
-    timestamp: Date.now() / 1000
-  });
+  dispatch(
+    act.SAVE_DRAFT_INVOICE({
+      date,
+      name,
+      location,
+      contact,
+      rate,
+      address,
+      lineitems,
+      files,
+      id,
+      timestamp: Date.now() / 1000
+    })
+  );
+  return id;
 };
 
 export const onSaveDraftDCC = ({
@@ -299,10 +300,13 @@ export const onLoadDraftDCCs = (email) => {
   return act.LOAD_DRAFT_DCCS(drafts);
 };
 
-export const onLoadDraftInvoices = (email) => {
-  const stateFromLS = loadStateLocalStorage(email);
+export const onLoadDraftInvoices = (email) => (dispatch, getState) => {
+  const key = email || sel.currentUserEmail(getState());
+  const stateFromLS = loadStateLocalStorage(key);
   const drafts = sel.draftInvoices(stateFromLS) || {};
-  return act.LOAD_DRAFT_INVOICES(drafts);
+  console.log("loading draft invoices");
+  console.log(drafts);
+  dispatch(act.LOAD_DRAFT_INVOICES(drafts));
 };
 
 export const onDeleteDraftInvoice = (draftId) => {

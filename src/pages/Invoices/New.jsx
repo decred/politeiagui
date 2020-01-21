@@ -1,6 +1,6 @@
 import React from "react";
 import MultipleContentPage from "src/componentsv2/layout/MultipleContentPage";
-import NewInvoiceForm from "src/containers/Invoice/New";
+import InvoiceNewForm from "src/containers/Invoice/New";
 
 const PageInvoicesNew = () => {
   return (
@@ -11,7 +11,7 @@ const PageInvoicesNew = () => {
             <PageDetails title="Create Invoice" actionsContent={null} />
           </TopBanner>
           <Main fillScreen>
-            <NewInvoiceForm />
+            <InvoiceNewForm />
           </Main>
         </>
       )}

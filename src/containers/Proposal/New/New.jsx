@@ -7,12 +7,8 @@ import usePaywall from "src/hooks/api/usePaywall";
 import useIdentity from "src/hooks/api/useIdentity";
 import { useNewProposal } from "./hooks";
 
-const NewProposal = ({ draftId }) => {
-  const {
-    onSubmitProposal,
-    onSaveDraftProposal,
-    onDeleteDraftProposal
-  } = useNewProposal();
+const NewProposal = () => {
+  const { onSubmitProposal } = useNewProposal();
   const { isPaid } = usePaywall();
   const [, identityError] = useIdentity();
   return (
@@ -26,11 +22,8 @@ const NewProposal = ({ draftId }) => {
         {!!identityError && <IdentityMessageError />}
       </Or>
       <ProposalForm
-        draftId={draftId}
         disableSubmit={!isPaid || !!identityError}
         onSubmit={onSubmitProposal}
-        onSaveDraft={onSaveDraftProposal}
-        onDeleteDraft={onDeleteDraftProposal}
       />
     </Card>
   );
