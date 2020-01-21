@@ -5,9 +5,7 @@ import {
   Modal,
   TextInput,
   RadioButtonGroup,
-  Icon,
-  useTheme,
-  getThemeProperty
+  Icon
 } from "pi-ui";
 import PropTypes from "prop-types";
 import { useLoaderContext } from "src/Appv2/Loader";
@@ -57,10 +55,6 @@ const ModalStartVote = ({
     [show]
   );
 
-  const { theme } = useTheme();
-  const colorGray = getThemeProperty(theme, "color-gray");
-  const colorPrimaryDark = getThemeProperty(theme, "color-primary-dark");
-
   return (
     <Modal
       style={{ width: "600px" }}
@@ -75,8 +69,6 @@ const ModalStartVote = ({
           <Icon
             type={"checkmark"}
             size={26}
-            iconColor={colorPrimaryDark}
-            backgroundColor={colorGray}
           />
         )
       }

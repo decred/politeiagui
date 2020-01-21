@@ -5,7 +5,7 @@
 }
 
 .dark {
-  background-color: var(--btn-background-color);
+  background-color: var(--header-color);
 }
 
 .qrcodeWrapper {
