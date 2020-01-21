@@ -15,7 +15,7 @@ import {
   onSetDCC,
   onReceiveSupportOpposeDCC,
   onReceiveSetDCCStatus,
-  onReceiveNewDCCComment,
+  onReceiveNewDccComment,
   onReceiveCensorDCCComment
 } from "./handlersCMS";
 
@@ -64,7 +64,7 @@ export const DEFAULT_STATE = {
   editInvoice: DEFAULT_REQUEST_STATE,
   payouts: DEFAULT_REQUEST_STATE,
   tokenInventory: DEFAULT_REQUEST_STATE,
-  newDCC: DEFAULT_REQUEST_STATE,
+  newDcc: DEFAULT_REQUEST_STATE,
   dccs: DEFAULT_REQUEST_STATE
 };
 
@@ -180,8 +180,8 @@ const api = (state = DEFAULT_STATE, action) =>
         request("userSubcontractors", state, action),
       [act.RECEIVE_USER_SUBCONTRACTORS]: () =>
         receive("userSubcontractors", state, action),
-      [act.REQUEST_NEW_DCC]: () => request("newDCC", state, action),
-      [act.RECEIVE_NEW_DCC]: () => receive("newDCC", state, action),
+      [act.REQUEST_NEW_DCC]: () => request("newDcc", state, action),
+      [act.RECEIVE_NEW_DCC]: () => receive("newDcc", state, action),
       [act.REQUEST_DCCS]: () => request("dccs", state, action),
       [act.RECEIVE_DCCS]: () => onReceiveDCCs(state, action),
       [act.REQUEST_DCC]: () => request("dcc", state, action),
@@ -197,7 +197,7 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.REQUEST_DCC_COMMENTS]: () => request("dccComments", state, action),
       [act.RECEIVE_DCC_COMMENTS]: () => receive("dccComments", state, action),
       [act.RECEIVE_NEW_DCC_COMMENT]: () =>
-        onReceiveNewDCCComment(state, action),
+        onReceiveNewDccComment(state, action),
       [act.RECEIVE_CENSOR_DCC_COMMENT]: () =>
         onReceiveCensorDCCComment(state, action),
       // === CMS END ===

@@ -4,7 +4,7 @@ import * as api from "../lib/api";
 import {
   resetNewInvoiceData,
   resetNewProposalData,
-  resetNewDCCData
+  resetNewDccData
 } from "../lib/editors_content_backup";
 import { clearStateLocalStorage } from "../lib/local_storage";
 import * as pki from "../lib/pki";
@@ -1227,9 +1227,22 @@ export const onFetchUserSubcontractors = () =>
       });
   });
 
+export const onFetchCmsUsers = () =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_CMS_USERS({}));
+    return api
+      .cmsUsers(csrf)
+      .then((response) => {
+        dispatch(act.RECEIVE_CMS_USERS(response));
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_CMS_USERS(null, error));
+      });
+  });
+
 // DCC actions
 
-export const onSubmitNewDCC = (
+export const onSubmitNewDcc = (
   loggedInAsEmail,
   userid,
   username,
@@ -1244,8 +1257,8 @@ export const onSubmitNewDCC = (
     return Promise.resolve(
       api.makeDCC(type, nomineeuserid, statement, domain, contractortype)
     )
-      .then((dcc) => api.signDCC(loggedInAsEmail, dcc))
-      .then((dcc) => api.newDCC(csrf, dcc))
+      .then((dcc) => api.signDcc(loggedInAsEmail, dcc))
+      .then((dcc) => api.newDcc(csrf, dcc))
       .then((dcc) => {
         dispatch(
           act.RECEIVE_NEW_DCC({
@@ -1255,7 +1268,7 @@ export const onSubmitNewDCC = (
             username
           })
         );
-        resetNewDCCData();
+        resetNewDccData();
       })
       .catch((error) => {
         dispatch(act.RECEIVE_NEW_DCC(null, error));
@@ -1309,7 +1322,7 @@ export const onSupportOpposeDCC = (loggedInAsEmail, token, vote) =>
     }
     dispatch(act.REQUEST_SUPPORT_OPPOSE_DCC({}));
     return Promise.resolve(api.makeDCCVote(token, vote))
-      .then((dccvote) => api.signDCCVote(loggedInAsEmail, dccvote))
+      .then((dccvote) => api.signDccVote(loggedInAsEmail, dccvote))
       .then((dccvote) => api.supportOpposeDCC(csrf, dccvote))
       .then((response) => {
         dispatch(

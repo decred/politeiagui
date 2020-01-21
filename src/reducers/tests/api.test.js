@@ -49,7 +49,7 @@ describe("test api reducer", () => {
       email: "",
       keyMismatch: false,
       lastLoaded: {},
-      newDCC: DEFAULT_REQUEST_STATE,
+      newDcc: DEFAULT_REQUEST_STATE,
       dccs: DEFAULT_REQUEST_STATE
     });
 

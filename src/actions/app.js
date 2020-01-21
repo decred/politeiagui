@@ -8,7 +8,7 @@ import {
   onSubmitEditedInvoice,
   onFetchInvoiceComments,
   onUserProposalCredits,
-  onSubmitNewDCC
+  onSubmitNewDcc
 } from "./api";
 import {
   onFetchProposal as onFetchProposalApi,
@@ -21,7 +21,7 @@ import {
 import {
   resetNewProposalData,
   resetNewInvoiceData,
-  resetNewDCCData
+  resetNewDccData
 } from "../lib/editors_content_backup";
 import * as sel from "../selectors";
 import act from "./methods";
@@ -77,7 +77,7 @@ export const onSaveNewProposal = ({ name, description, files }) => (
     .then(() => sel.newProposalToken(getState()));
 };
 
-export const onSaveNewDCC = ({
+export const onSaveNewDcc = ({
   type,
   nomineeid,
   statement,
@@ -86,7 +86,7 @@ export const onSaveNewDCC = ({
 }) => (dispatch, getState) => {
   const { email, userid, username } = sel.currentUser(getState());
   return dispatch(
-    onSubmitNewDCC(
+    onSubmitNewDcc(
       email,
       userid,
       username,
@@ -96,7 +96,7 @@ export const onSaveNewDCC = ({
       domain,
       contractortype
     )
-  ).then(() => sel.newDCCToken(getState()));
+  ).then(() => sel.newDccToken(getState()));
 };
 
 export const onEditProposal = ({ token, name, description, files }) => (
@@ -218,7 +218,7 @@ export const onSaveDraftDCC = ({
   nomineeid,
   draftId
 }) => (dispatch) => {
-  resetNewDCCData();
+  resetNewDccData();
   const id = draftId || uniqueID("draft");
   dispatch(
     act.SAVE_DRAFT_DCC({

@@ -4,7 +4,10 @@ import {
   DCC_STATUS_REJECTED,
   DCC_STATUS_DRAFTS,
   DCC_TYPE_ISSUANCE,
-  DCC_TYPE_REVOCATION
+  DCC_TYPE_REVOCATION,
+  CONTRACTOR_TYPE_NOMINEE,
+  CONTRACTOR_TYPE_REVOKED,
+  CONTRACTOR_TYPE_SUPERVISOR
 } from "./constants";
 import isEmpty from "lodash/isEmpty";
 import { CMS_USER_TYPES, CMS_DOMAINS } from "../../constants";
@@ -94,3 +97,44 @@ export const isRevocationDcc = (dcc) =>
  * @param {Object} dcc
  */
 export const isDccActive = (dcc) => dcc && dcc.status === DCC_STATUS_ACTIVE;
+
+/**
+ * Returns domain options for selectors
+ */
+export const getDomainOptions = () =>
+  CMS_DOMAINS.map((label, value) => ({ label, value }));
+
+/**
+ * Returns contractor type options for selectors
+ */
+export const getContractorTypeOptions = () =>
+  CMS_USER_TYPES.reduce(
+    (acc, label, value) =>
+      value === CONTRACTOR_TYPE_NOMINEE ||
+      value === CONTRACTOR_TYPE_REVOKED ||
+      value === CONTRACTOR_TYPE_SUPERVISOR
+        ? [...acc]
+        : [...acc, { label, value }],
+    []
+  );
+
+/**
+ * Retuns DCC type options for selectors
+ */
+export const getDccTypeOptions = () => [
+  {
+    label: dccTypes[DCC_TYPE_ISSUANCE],
+    value: DCC_TYPE_ISSUANCE
+  },
+  {
+    label: dccTypes[DCC_TYPE_REVOCATION],
+    value: DCC_TYPE_REVOCATION
+  }
+];
+
+/**
+ * Returns user options for DCC from user object list
+ * @param {Array} users
+ */
+export const getNomineeOptions = (users) =>
+  users.map(({ username, id }) => ({ label: username, value: id }));

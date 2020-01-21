@@ -1,6 +1,11 @@
 import { createSelector } from "reselect";
 import { emailNotificationsToPreferences } from "../helpers";
 import get from "lodash/fp/get";
+import castArray from "lodash/fp/castArray";
+import pick from "lodash/fp/pick";
+import compose from "lodash/fp/compose";
+import values from "lodash/fp/values";
+import flatten from "lodash/fp/flatten";
 
 export const userByID = get(["users", "byID"]);
 export const searchResultsByID = get(["users", "search", "resultsByID"]);
@@ -9,6 +14,11 @@ export const queryResultsByUsername = get([
   "users",
   "search",
   "queryByUsername"
+]);
+export const cmsUsersByContractorType = get([
+  "users",
+  "cms",
+  "byContractorType"
 ]);
 
 export const makeGetUserByID = (userID) =>
@@ -85,4 +95,10 @@ export const makeGetUsersByArrayOfIDs = (userIDs) =>
       if (users[userID]) return { ...res, [userID]: users[userID] };
       return res;
     }, {});
+  });
+
+export const makeGetUsersByContractorTypes = (contractorTypes) =>
+  createSelector(cmsUsersByContractorType, (users) => {
+    const contractorTypesArray = castArray(contractorTypes);
+    return compose(flatten, values, pick(contractorTypesArray))(users);
   });

@@ -127,7 +127,7 @@ export const onReceiveDCCs = (state, action) => {
   const fetchedDCCs = hasPreviouslyFetchedDCCs
     ? { ...oldState.dccs.response.dccsByStatus }
     : {};
-  const newDCCList = {
+  const newDccList = {
     [action.payload.status]: action.payload.dccs
   };
   const x = {
@@ -137,7 +137,7 @@ export const onReceiveDCCs = (state, action) => {
       response: {
         dccsByStatus: {
           ...fetchedDCCs,
-          ...newDCCList
+          ...newDccList
         }
       }
     }
@@ -202,7 +202,7 @@ export const onReceiveSetDCCStatus = (state, action) => {
   };
 };
 
-export const onReceiveNewDCCComment = (state, action) => {
+export const onReceiveNewDccComment = (state, action) => {
   state = receive("newComment", state, action);
   if (action.error) return state;
   return {

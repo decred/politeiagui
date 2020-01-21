@@ -184,7 +184,7 @@ export const signComment = (email, comment) =>
         .then((signature) => ({ ...comment, publickey, signature }))
     );
 
-export const signDCC = (email, dcc) =>
+export const signDcc = (email, dcc) =>
   pki
     .myPubKeyHex(email)
     .then((publickey) =>
@@ -193,7 +193,7 @@ export const signDCC = (email, dcc) =>
         .then((signature) => ({ file: dcc, publickey, signature }))
     );
 
-export const signDCCVote = (email, dccvote) =>
+export const signDccVote = (email, dccvote) =>
   pki
     .myPubKeyHex(email)
     .then((publickey) =>
@@ -669,7 +669,7 @@ export const exchangeRate = (csrf, month, year) =>
 export const userSubcontractors = (csrf) =>
   GET("/v1/user/subcontractors", csrf).then(getResponse);
 
-export const newDCC = (csrf, dcc) =>
+export const newDcc = (csrf, dcc) =>
   POST("/dcc/new", csrf, dcc).then(({ response: { censorshiprecord } }) => ({
     ...dcc,
     censorshiprecord,
@@ -707,3 +707,5 @@ export const dccComments = (token) =>
 
 export const newDccComment = (csrf, dcc) =>
   POST("/dcc/newcomment", csrf, dcc).then(getResponse);
+
+export const cmsUsers = (csrf) => GET("/v1/cmsusers", csrf).then(getResponse);
