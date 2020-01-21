@@ -209,6 +209,6 @@ InvoiceFormWrapper.propTypes = {
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func,
   history: PropTypes.object
-}
+};
 
 export default withRouter(InvoiceFormWrapper);

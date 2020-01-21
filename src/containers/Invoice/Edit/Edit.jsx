@@ -14,7 +14,7 @@ const EditInvoice = ({ match }) => {
   const { onEditInvoice } = useEditInvoice();
   const { invoice, loading } = useInvoice(tokenFromUrl);
   const isInvoiceLoaded = !loading && !!invoice;
-  
+
   const initialValues = invoice ?
     {
       token: tokenFromUrl,
@@ -33,7 +33,7 @@ const EditInvoice = ({ match }) => {
 
   return (
     <Card className="container margin-bottom-l">
-      {isInvoiceLoaded ? 
+      {isInvoiceLoaded ?
           <InvoiceForm initialValues={initialValues} onSubmit={onEditInvoice} />
         :
           <InvoiceLoader extended />
