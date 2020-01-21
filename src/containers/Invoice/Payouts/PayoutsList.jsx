@@ -75,9 +75,9 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
 };
 
 PayoutsList.propTypes = {
-  TopBanner: PropTypes.node.isRequired,
-  PageDetails: PropTypes.node.isRequired,
-  Main: PropTypes.node.isRequired
+  TopBanner: PropTypes.func.isRequired,
+  PageDetails: PropTypes.func.isRequired,
+  Main: PropTypes.func.isRequired
 };
 
 export default PayoutsList;
