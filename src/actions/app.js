@@ -12,16 +12,20 @@ import {
   handleLogout,
   onInvoicePayouts,
   onRequestMe,
-  onUserProposalCredits
+  onUserProposalCredits,
+  onSubmitNewDCC
 } from "./api";
 import {
   onFetchProposal as onFetchProposalApi,
   onSubmitComment as onSubmitCommentApi,
-  onFetchInvoice as onFetchInvoiceApi
+  onFetchInvoice as onFetchInvoiceApi,
+  onFetchDCC as onFetchDCCApi,
+  onFetchDCCsByStatus as onFetchDCCsByStatusApi
 } from "./api";
 import {
   resetNewProposalData,
-  resetNewInvoiceData
+  resetNewInvoiceData,
+  resetNewDCCData
 } from "../lib/editors_content_backup";
 import * as sel from "../selectors";
 import act from "./methods";
@@ -39,6 +43,10 @@ import {
 import { fromUSDUnitsToUSDCents, uniqueID } from "../helpers";
 import { openModal } from "./modal";
 import * as modalTypes from "../components/Modal/modalTypes";
+import flow from "lodash/fp/flow";
+import flatten from "lodash/fp/flatten";
+import values from "lodash/fp/values";
+import find from "lodash/fp/find";
 
 export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
 
@@ -113,6 +121,30 @@ export const onSaveNewProposalV2 = ({ name, description, files }) => (
     .then(() => sel.newProposalToken(getState()));
 };
 
+export const onSaveNewDCC = ({
+  type,
+  nomineeid,
+  statement,
+  domain,
+  contractortype
+}) => (dispatch, getState) => {
+  const email = sel.loggedInAsEmail(getState());
+  const id = sel.userid(getState());
+  const username = sel.loggedInAsUsername(getState());
+  return dispatch(
+    onSubmitNewDCC(
+      email,
+      id,
+      username,
+      type,
+      nomineeid,
+      statement,
+      domain,
+      contractortype
+    )
+  ).then(() => sel.newDCCToken(getState()));
+};
+
 export const onEditProposalV2 = ({ token, name, description, files }) => (
   dispatch,
   getState
@@ -146,27 +178,25 @@ export const onEditProposal = ({ name, description, files }, _, props) => (
 
 export const onResetUser = () => act.RESET_USER();
 
-export const onEditInvoice = (
-  {
-    month,
-    year,
-    name,
-    location,
-    contact,
-    rate,
-    address,
-    lineitems,
-    exchangerate,
-    files
-  },
-  _,
-  props
-) => (dispatch) => {
-  dispatch(
+export const onEditInvoice = ({
+  token,
+  month,
+  year,
+  name,
+  location,
+  contact,
+  rate,
+  address,
+  lineitems,
+  exchangerate,
+  files
+}) => (dispatch, getState) => {
+  const { email, userid, username } = sel.currentUser(getState());
+  return dispatch(
     onSubmitEditedInvoice(
-      props.loggedInAsEmail,
-      props.userid,
-      props.username,
+      email,
+      userid,
+      username,
       +month,
       +year,
       exchangerate,
@@ -177,10 +207,11 @@ export const onEditInvoice = (
       address,
       lineitems,
       files,
-      props.token
+      token
     )
   );
 };
+
 export const onSaveDraftProposal = ({ name, description, files, draftId }) => (
   dispatch
 ) => {
@@ -237,6 +268,37 @@ export const onSaveDraftInvoice = ({
   });
 };
 
+export const onSaveDraftDCC = ({
+  type,
+  contractortype,
+  domain,
+  statement,
+  nomineeid,
+  draftId
+}) => (dispatch) => {
+  resetNewDCCData();
+  const id = draftId || uniqueID("draft");
+  dispatch(
+    act.SAVE_DRAFT_DCC({
+      type,
+      contractortype,
+      domain,
+      statement,
+      nomineeid,
+      // files,
+      timestamp: Math.floor(Date.now() / 1000),
+      id
+    })
+  );
+  return id;
+};
+
+export const onLoadDraftDCCs = (email) => {
+  const stateFromLS = loadStateLocalStorage(email);
+  const drafts = sel.draftDCCs(stateFromLS) || {};
+  return act.LOAD_DRAFT_DCCS(drafts);
+};
+
 export const onLoadDraftInvoices = (email) => {
   const stateFromLS = loadStateLocalStorage(email);
   const drafts = sel.draftInvoices(stateFromLS) || {};
@@ -245,6 +307,10 @@ export const onLoadDraftInvoices = (email) => {
 
 export const onDeleteDraftInvoice = (draftId) => {
   return act.DELETE_DRAFT_INVOICE(draftId);
+};
+
+export const onDeleteDraftDCC = (draftId) => {
+  return act.DELETE_DRAFT_DCC(draftId);
 };
 
 export const onSaveChangeUsername = ({ password, newUsername }) => (
@@ -434,3 +500,33 @@ export const onResetComments = () => act.RESET_COMMENTS();
 
 // CMS
 export const onResetInviteUser = () => act.RESET_INVITE_USER();
+
+export const onLoadDCC = (token) => (dispatch, getState) => {
+  const fetchedDCCsByStatus = sel.dccsByStatus(getState());
+
+  if (!fetchedDCCsByStatus) {
+    dispatch(onFetchDCCApi(token));
+    return;
+  }
+
+  const dcc = flow(
+    values,
+    flatten,
+    find((dcc) => dcc.censorshiprecord.token === token)
+  )(fetchedDCCsByStatus);
+
+  if (dcc) {
+    dispatch(act.SET_DCC(dcc));
+  } else {
+    dispatch(onFetchDCCApi(token));
+  }
+};
+
+export const onLoadDCCsByStatus = (status) => (dispatch, getState) => {
+  const fetchedDCCs = sel.dccsByStatus(getState());
+  if (fetchedDCCs && fetchedDCCs[status]) {
+    dispatch(act.SET_DCCS_CURRENT_STATUS_LIST(fetchedDCCs[status]));
+  } else {
+    dispatch(onFetchDCCsByStatusApi(status));
+  }
+};

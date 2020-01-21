@@ -8,8 +8,18 @@ export const RECORD_TYPE_INVOICE = "invoices";
 
 export const EXPLORER = "dcrdata";
 
+// DCC
+export const DCC_STATUS_ACTIVE = 1;
+export const DCC_STATUS_APPROVED = 2;
+export const DCC_STATUS_REJECTED = 3;
+export const DCC_STATUS_DRAFTS = 4;
+
+export const DCC_TYPE_ISSUANCE = 1;
+export const DCC_TYPE_REVOCATION = 2;
+
 // CMS
 export const INVOICE_STATUS_UNREVIEWED = 2;
+export const INITIAL_YEAR = 2018;
 
 // POLITEIA
 
@@ -145,3 +155,28 @@ export const FILTER_ALL_MONTHS = 0;
 
 export const BLOCK_DURATION_TESTNET = 2;
 export const BLOCK_DURATION_MAINNET = 5;
+
+export const CMS_USER_TYPES = [
+  "No type defined",
+  "Direct",
+  "Supervisor",
+  "Sub Contractor",
+  "Nominee",
+  "Revoked"
+];
+
+export const CMS_DOMAINS = [
+  "No domain defined",
+  "Development",
+  "Marketing",
+  "Design",
+  "Research",
+  "Documentation",
+  "Community Management"
+];
+
+export const DCC_DIRECT_CONTRACTOR_TYPE = 1;
+export const DCC_SUB_CONTRACTOR_TYPE = 3;
+
+export const DCC_SUPPORT_VOTE = "aye";
+export const DCC_OPPOSE_VOTE = "nay";

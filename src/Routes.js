@@ -52,6 +52,9 @@ import InviteUserSuccess from "./components/InviteUser/SuccessPage";
 import HomeCMS from "./components/HomeCMS";
 import GeneratePayouts from "./components/GeneratePayouts";
 import InvoicePayouts from "./components/InvoicePayouts";
+import NewDCC from "./components/DCC/New";
+import DCCList from "./components/DCC/List";
+import DCCDetail from "./components/DCC/Details";
 
 const RoutesForCMS = () => {
   return (
@@ -142,6 +145,13 @@ const RoutesForCMS = () => {
         path="/admin/invite/next"
         component={adminCMS(InviteUserSuccess)}
         exact
+      />
+      <AuthenticatedRoute path="/dcc/new" component={NewDCC} />
+      <AuthenticatedRoute path="/dccs" component={DCCList} />
+      <AuthenticatedRoute path="/dcc/:token" exact component={DCCDetail} />
+      <AuthenticatedRoute
+        path="/dcc/:token/comments/:commentid"
+        component={DCCDetail}
       />
       <Route path="/500" component={ErrorPage} />
       <Route path="*" component={NotFound} />

@@ -29,34 +29,34 @@ const Routes = ({ location }) => {
           {commonRoutes}
           {/* Record routes */}
           <AdminAuthenticatedRoute
-            path={`/proposals/unvetted`}
-            title={`Unvetted Proposals`}
+            path={"/proposals/unvetted"}
+            title={"Unvetted Proposals"}
             exact
             component={PageProposalsUnvetted}
           />
           <AuthenticatedRoute
-            path={`/proposals/new`}
-            title={`New Proposal`}
+            path={"/proposals/new"}
+            title={"New Proposal"}
             exact
             render={PageProposalNew}
           />
           <Route
-            path={`/proposals/:token`}
-            title={`Proposal Detail`}
+            path={"/proposals/:token"}
+            title={"Proposal Detail"}
             titleSelector={sel.proposalName}
             exact
             component={PageProposalDetail}
           />
           <Route
-            path={`/proposals/:token/comments/:commentid`}
-            title={`Proposal Detail`}
+            path={"/proposals/:token/comments/:commentid"}
+            title={"Proposal Detail"}
             titleSelector={sel.proposalName}
             exact
             component={PageProposalDetail}
           />
           <AuthenticatedRoute
-            path={`/proposals/:token/edit`}
-            title={`Edit Proposal`}
+            path={"/proposals/:token/edit"}
+            title={"Edit Proposal"}
             exact
             render={PageProposalEdit}
           />

@@ -4,9 +4,14 @@
   padding: 2rem 3rem;
 }
 
+.dark {
+  background-color: var(--btn-background-color);
+}
+
 .qrcodeWrapper {
   width: 10rem;
   min-width: 10rem;
+  background-color: var(--color-white);
 }
 
 .infoWrapper {

@@ -8,6 +8,7 @@ import { arg, or } from "../lib/fp";
 import * as sel from "../selectors";
 import * as act from "../actions";
 import { buildCommentsTree, buildSetOfComments } from "../lib/snew";
+import { useDCC } from "../components/DCC/DCCProvider";
 
 const proposalConnector = connect(
   sel.selectorMap({
@@ -41,7 +42,8 @@ const proposalConnector = connect(
     otherFiles: sel.getNotMarkdownFile,
     commentsSortOption: sel.commentsSortOption,
     openedModals: sel.getopenedModals,
-    isCMS: sel.isCMS
+    isCMS: sel.isCMS,
+    dccComments: sel.dccComments
   }),
   (dispatch) =>
     bindActionCreators(
@@ -66,14 +68,18 @@ class Wrapper extends React.PureComponent {
     e && e.preventDefault() && e.stopPropagation();
     !this.props.isCMS
       ? this.props.history.push(`/proposals/${this.props.token}`)
-      : this.props.history.push(`/invoices/${this.props.token}`);
+      : !this.props.isDCC
+      ? this.props.history.push(`/invoices/${this.props.token}`)
+      : this.props.history.push(`/dcc/${this.props.token}`);
   };
 
   render() {
     const { Component, ...props } = this.props;
     const { tree } = !props.isCMS
       ? buildCommentsTree(props.comments, props.commentid)
-      : buildCommentsTree(props.invoiceComments, props.commentid);
+      : !props.isDCC
+      ? buildCommentsTree(props.invoiceComments, props.commentid)
+      : buildCommentsTree(props.dccComments, props.commentid);
     const commentsSet = buildSetOfComments(tree);
     return (
       <Component
@@ -89,6 +95,9 @@ class Wrapper extends React.PureComponent {
 
 const wrap = (Component) =>
   withRouter(
-    proposalConnector((props) => <Wrapper {...{ ...props, Component }} />)
+    proposalConnector((props) => {
+      const { isDCC } = useDCC();
+      return <Wrapper {...{ ...props, Component, isDCC }} />;
+    })
   );
 export default wrap;

@@ -11,7 +11,9 @@ import {
   SORT_BY_NEW,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   INVOICE_STATUS_INVALID,
-  INVOICE_STATUS_NOTFOUND
+  INVOICE_STATUS_NOTFOUND,
+  DCC_STATUS_APPROVED,
+  DCC_STATUS_REJECTED
 } from "../../constants";
 import {
   setQueryStringValue,
@@ -64,8 +66,15 @@ class CommentArea extends React.Component {
       token,
       numofcomments,
       invoice,
+      dcc,
+      isDCC,
       ...props
     } = this.props;
+    const hideDCCComments =
+      isDCC &&
+      dcc &&
+      (dcc.status === DCC_STATUS_REJECTED ||
+        dcc.status === DCC_STATUS_APPROVED);
     const hideComments =
       (Object.keys(proposal).length === 0 ||
         proposal.status === PROPOSAL_STATUS_UNREVIEWED ||
@@ -74,7 +83,7 @@ class CommentArea extends React.Component {
       (Object.keys(invoice).length === 0 ||
         invoice.status === INVOICE_STATUS_INVALID ||
         invoice.status === INVOICE_STATUS_NOTFOUND);
-    return hideComments ? null : (
+    return hideComments && hideDCCComments ? null : (
       <CommentAreaBase
         {...{
           ...props,
@@ -82,7 +91,13 @@ class CommentArea extends React.Component {
             <span>
               Single comment thread.{" "}
               <a
-                href={!props.isCMS ? `proposals/${token}` : `invoices/${token}`}
+                href={
+                  !props.isCMS
+                    ? `proposals/${token}`
+                    : !isDCC
+                    ? `invoices/${token}`
+                    : `dcc/${token}`
+                }
                 onClick={onViewAllClick}>
                 View all
               </a>
@@ -92,7 +107,7 @@ class CommentArea extends React.Component {
           name: TOP_LEVEL_COMMENT_PARENTID,
           num_comments: numofcomments,
           SorterComponent: () =>
-            comments && numofcomments > 0 ? (
+            comments && numofcomments > 0 && !isDCC ? (
               <div className="comments-sort">
                 <span className="">Sort by:</span>
                 <Select

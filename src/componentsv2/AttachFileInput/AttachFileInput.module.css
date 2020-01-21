@@ -7,6 +7,7 @@
   justify-content: center;
   background-color: var(--color-primary);
   border-radius: 0.5rem;
+  cursor: pointer;
 }
 
 .small {

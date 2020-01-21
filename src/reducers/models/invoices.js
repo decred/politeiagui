@@ -54,6 +54,10 @@ const invoices = (state = DEFAULT_STATE, action) =>
               payout
             })(state);
           },
+          [act.RECEIVE_EDIT_INVOICE]: () => {
+            const { invoice } = action.payload;
+            return set(["byToken", invoiceToken(invoice)], invoice)(state);
+          },
           [act.RECEIVE_SETSTATUS_INVOICE]: () => {
             const invoice = action.payload;
             return set(["byToken", invoiceToken(invoice)], invoice)(state);

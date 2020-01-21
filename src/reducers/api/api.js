@@ -32,7 +32,13 @@ import {
   onReceiveNewInvoiceComment,
   onReceivePayApprovedInvoices,
   onReceiveSetStatusInvoice,
-  onReceiveManageCmsUser
+  onReceiveManageCmsUser,
+  onReceiveDCCs,
+  onSetDCC,
+  onReceiveSupportOpposeDCC,
+  onReceiveSetDCCStatus,
+  onReceiveNewDCCComment,
+  onReceiveCensorDCCComment
 } from "./handlersCMS";
 
 export const DEFAULT_STATE = {
@@ -79,7 +85,9 @@ export const DEFAULT_STATE = {
   newInvoice: DEFAULT_REQUEST_STATE,
   editInvoice: DEFAULT_REQUEST_STATE,
   payouts: DEFAULT_REQUEST_STATE,
-  tokenInventory: DEFAULT_REQUEST_STATE
+  tokenInventory: DEFAULT_REQUEST_STATE,
+  newDCC: DEFAULT_REQUEST_STATE,
+  dccs: DEFAULT_REQUEST_STATE
 };
 
 const api = (state = DEFAULT_STATE, action) =>
@@ -222,6 +230,30 @@ const api = (state = DEFAULT_STATE, action) =>
         request("manageCmsUser", state, action),
       [act.RECEIVE_MANAGE_CMS_USER]: () =>
         onReceiveManageCmsUser(state, action),
+      [act.REQUEST_USER_SUBCONTRACTORS]: () =>
+        request("userSubcontractors", state, action),
+      [act.RECEIVE_USER_SUBCONTRACTORS]: () =>
+        receive("userSubcontractors", state, action),
+      [act.REQUEST_NEW_DCC]: () => request("newDCC", state, action),
+      [act.RECEIVE_NEW_DCC]: () => receive("newDCC", state, action),
+      [act.REQUEST_DCCS]: () => request("dccs", state, action),
+      [act.RECEIVE_DCCS]: () => onReceiveDCCs(state, action),
+      [act.REQUEST_DCC]: () => request("dcc", state, action),
+      [act.RECEIVE_DCC]: () => receive("dcc", state, action),
+      [act.SET_DCC]: () => onSetDCC(state, action),
+      [act.REQUEST_SUPPORT_OPPOSE_DCC]: () =>
+        request("supportOpposeDCC", state, action),
+      [act.RECEIVE_SUPPORT_OPPOSE_DCC]: () =>
+        onReceiveSupportOpposeDCC(state, action),
+      [act.REQUEST_SET_DCC_STATUS]: () =>
+        request("setDCCStatus", state, action),
+      [act.RECEIVE_SET_DCC_STATUS]: () => onReceiveSetDCCStatus(state, action),
+      [act.REQUEST_DCC_COMMENTS]: () => request("dccComments", state, action),
+      [act.RECEIVE_DCC_COMMENTS]: () => receive("dccComments", state, action),
+      [act.RECEIVE_NEW_DCC_COMMENT]: () =>
+        onReceiveNewDCCComment(state, action),
+      [act.RECEIVE_CENSOR_DCC_COMMENT]: () =>
+        onReceiveCensorDCCComment(state, action),
       // === CMS END ===
       [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
         request("proposalPaywallDetails", state, action),

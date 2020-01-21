@@ -5,7 +5,7 @@ import NewInvoiceForm from "src/containers/Invoice/New";
 const PageInvoicesNew = () => {
   return (
     <MultipleContentPage topBannerHeight={90}>
-      {({ TopBanner, PageDetails, Sidebar, Main }) => (
+      {({ TopBanner, PageDetails, Main }) => (
         <>
           <TopBanner>
             <PageDetails title="Create Invoice" actionsContent={null} />

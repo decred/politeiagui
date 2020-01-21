@@ -27,3 +27,8 @@ export const getInvoiceStatusTagProps = (invoice) => {
       break;
   }
 };
+
+export const isEditableInvoice = (status) =>
+  status === INVOICE_STATUS_NEW ||
+  status === INVOICE_STATUS_UPDATED ||
+  status === INVOICE_STATUS_DISPUTED;

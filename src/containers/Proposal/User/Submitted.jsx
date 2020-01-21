@@ -12,14 +12,14 @@ import HelpMessage from "src/componentsv2/HelpMessage";
 
 const PAGE_SIZE = 20;
 
-const Proposals = props => {
+const Proposals = (props) => {
   const {
     proposals,
     loading,
     numOfUserProposals,
     onFetchUserProposals
   } = useUserProposals(props);
-  const renderProposal = record => {
+  const renderProposal = (record) => {
     return <Proposal key={record.censorshiprecord.token} proposal={record} />;
   };
 
@@ -39,6 +39,7 @@ const Proposals = props => {
       setHasMore(false);
       await onFetchUserProposals(userID, lastProposalToken);
     } catch (e) {
+      console.error(e);
       throw e;
     }
   }

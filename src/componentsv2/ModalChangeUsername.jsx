@@ -56,8 +56,7 @@ const ModalChangeUsername = ({
         )
       }
       show={show}
-      onClose={onClose}
-    >
+      onClose={onClose}>
       {!success && (
         <FormWrapper
           initialValues={{
@@ -66,8 +65,7 @@ const ModalChangeUsername = ({
           }}
           onSubmit={onSubmitChangeUsername}
           loading={!validationSchema}
-          validationSchema={validationSchema}
-        >
+          validationSchema={validationSchema}>
           {({
             Form,
             Actions,
@@ -90,7 +88,8 @@ const ModalChangeUsername = ({
                 <TextInput
                   label="New Username"
                   id="newUsername"
-                  type="username"
+                  type="text"
+                  autoComplete="username"
                   value={values.newUsername}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -100,6 +99,7 @@ const ModalChangeUsername = ({
                   label="Password"
                   id="password"
                   type="password"
+                  autoComplete="current-password"
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -109,8 +109,7 @@ const ModalChangeUsername = ({
                   <Button
                     loading={isSubmitting}
                     kind={canSubmit ? "primary" : "disabled"}
-                    type="submit"
-                  >
+                    type="submit">
                     Change Username
                   </Button>
                 </Actions>

@@ -20,6 +20,8 @@ const formReducer = reducer.plugin({
         return state;
       case act.SAVE_DRAFT_INVOICE:
         return state;
+      case act.SAVE_DRAFT_DCC:
+        return state;
       default:
         return state;
     }

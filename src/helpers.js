@@ -1,5 +1,11 @@
 import CryptoJS from "crypto-js";
 import get from "lodash/fp/get";
+import flow from "lodash/fp/flow";
+import filter from "lodash/fp/filter";
+import lessThan from "lodash/fp/lt";
+import isEqualfp from "lodash/fp/isEqual";
+import range from "lodash/fp/range";
+import { or } from "./lib/fp";
 import { INVALID_FILE } from "./constants";
 import {
   INVOICE_STATUS_APPROVED,
@@ -167,6 +173,8 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     1044: "You may not support or oppose your own sponsored DCC.",
     1045: "You are not authorized to complete a DCC request.",
     1046: "You must include a valid contractor type for a DCC.",
+    1047: "You must be a Supervisor Contractor to submit a Sub Contractor line item",
+    1048: "You must supply a UserID for a Sub Contractor line item",
     1050: `Supervisor Error - ${errorContext[0]}`
   };
 
@@ -389,6 +397,12 @@ export const csvToJson = (csv) =>
     .map(splitColumn)
     .map(jsonCsvMap);
 
+export const getMonthOptions = () => {
+  const d = new Date();
+  const month = d.getMonth() + 1;
+  return flow(range(), filter(or(isEqualfp(1), lessThan(month))))(1, 13);
+};
+
 export const getCurrentMonth = () => {
   const d = new Date();
   return d.getMonth() + 1;
@@ -397,6 +411,12 @@ export const getCurrentMonth = () => {
 export const getCurrentYear = () => {
   const d = new Date();
   return d.getFullYear();
+};
+
+export const getYearOptions = (initial, lastYear) => {
+  const d = new Date();
+  const isYearValid = (y) => y < lastYear + d.getMonth();
+  return flow(range(), filter(isYearValid))(initial, lastYear + 1);
 };
 
 export const fromMinutesToHours = (minutes) =>

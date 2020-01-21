@@ -12,7 +12,13 @@ import {
   SUBTOTAL_COL
 } from "./helpers";
 
-const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
+const InvoiceDatasheet = ({
+  value,
+  onChange,
+  readOnly,
+  userRate,
+  subcontractors
+}) => {
   const [grid, setGrid] = useState([]);
   const [localUserRate, setLocalUserRate] = useState(userRate);
 
@@ -35,10 +41,10 @@ const InvoiceDatasheet = ({ value, onChange, readOnly, userRate }) => {
 
   useEffect(
     function updateGridOnValueChange() {
-      const grid = convertLineItemsToGrid(value, readOnly);
+      const grid = convertLineItemsToGrid(value, readOnly, subcontractors);
       setGrid(grid);
     },
-    [value, readOnly]
+    [value, readOnly, subcontractors]
   );
 
   const handleRemoveLastRow = (e) => {

@@ -8,7 +8,7 @@ const saveData = debounce((key, data) => {
   window.sessionStorage.setItem(key, JSON.stringify(data));
 }, DEBOUNCE_DELAY);
 
-const getData = key => {
+const getData = (key) => {
   const data = window.sessionStorage.getItem(key);
   return data ? JSON.parse(data) : undefined;
 };
@@ -16,7 +16,7 @@ const getData = key => {
 const Persist = ({ name, values, setValues }) => {
   useEffect(() => {
     const data = getData(name);
-    if (!!data) {
+    if (data) {
       setValues(data);
     }
   }, [name, setValues]);
@@ -31,7 +31,7 @@ const Persist = ({ name, values, setValues }) => {
 const FormikPersist = ({ name }) => {
   return (
     <FormikConsumer>
-      {formikProps => {
+      {(formikProps) => {
         return <Persist name={name} {...formikProps} />;
       }}
     </FormikConsumer>

@@ -49,7 +49,6 @@ const UserDetail = ({
 }) => {
   const userID = match.params.userid;
   const { user, isAdmin, currentUserID } = useUserDetail(userID);
-
   const {
     userPubkey,
     currentUserEmail,
@@ -128,8 +127,10 @@ const UserDetail = ({
     });
   }, [currentUserEmail, setPubkey]);
   useEffect(() => {
-    if (userPubkey !== pubkey) refreshPubKey();
-    if (identityImportSuccess) refreshPubKey();
+    let isSubscribed = true;
+    if (userPubkey !== pubkey || identityImportSuccess)
+      refreshPubKey(isSubscribed);
+    return () => (isSubscribed = false);
   }, [refreshPubKey, userPubkey, pubkey, identityImportSuccess]);
 
   const isMobileScreen = useMediaQuery("(max-width:560px)");
@@ -160,7 +161,7 @@ const UserDetail = ({
     [tabLabels, onSetIndex, isMobileScreen, index]
   );
 
-  return !!user ? (
+  return user ? (
     <>
       <TopBanner>
         <PageDetails

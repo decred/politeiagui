@@ -12,6 +12,7 @@ import commonRoutes from "./commonRoutes";
 
 import PageListUserInvoices from "./Invoices/UserList";
 import PageInvoicesNew from "./Invoices/New";
+import PageInvoiceEdit from "./Invoices/Edit";
 import PageInvoiceDetail from "./Invoices/Detail";
 import PageListAdminInvoices from "./Invoices/AdminList";
 import PageGeneratePayoutsList from "./Invoices/Payouts";
@@ -79,7 +80,12 @@ const Routes = ({ location }) => {
             exact
             component={PageGeneratePayoutsList}
           />
-
+          <AuthenticatedRoute
+            path="/invoices/:token/edit"
+            title="Edit Invoice"
+            exact
+            component={PageInvoiceEdit}
+          />
           {/* <AdminAuthenticatedRoute
             path={`/${recordType}s/unvetted`}
             title={`Unvetted ${capitalize(recordType)}s`}
