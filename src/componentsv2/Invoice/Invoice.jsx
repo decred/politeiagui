@@ -6,6 +6,7 @@ import {
   CopyableText
 } from "pi-ui";
 import React, { useMemo } from "react";
+import PropTypes from "prop-types";
 import RecordWrapper from "../RecordWrapper";
 import { getInvoiceStatusTagProps, isEditableInvoice } from "./helpers";
 import styles from "./Invoice.module.css";
@@ -170,6 +171,10 @@ const Invoice = ({ invoice, extended }) => {
       }}
     </RecordWrapper>
   );
+};
+
+Invoice.propTypes = {
+  invoice: PropTypes.object.isRequired
 };
 
 export default Invoice;

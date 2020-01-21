@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
+import PropTypes from "prop-types";
 import { BoxTextInput, Button, Message } from "pi-ui";
 import { Formik } from "formik";
 import { withRouter } from "react-router-dom";
@@ -203,5 +204,11 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
     </Formik>
   );
 };
+
+InvoiceFormWrapper.propTypes = {
+  initialValues: PropTypes.object,
+  onSubmit: PropTypes.func,
+  history: PropTypes.object
+}
 
 export default withRouter(InvoiceFormWrapper);

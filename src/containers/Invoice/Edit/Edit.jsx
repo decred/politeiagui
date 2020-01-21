@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import get from "lodash/fp/get";
 import { withRouter } from "react-router-dom";
 import { Card } from "pi-ui";
@@ -10,9 +11,10 @@ import InvoiceForm from "src/componentsv2/InvoiceForm";
 
 const EditInvoice = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
-  const { invoice, loading } = useInvoice(tokenFromUrl);
   const { onEditInvoice } = useEditInvoice();
-
+  const { invoice, loading } = useInvoice(tokenFromUrl);
+  const isInvoiceLoaded = !loading && !!invoice;
+  
   const initialValues = invoice ?
     {
       token: tokenFromUrl,
@@ -31,13 +33,17 @@ const EditInvoice = ({ match }) => {
 
   return (
     <Card className="container margin-bottom-l">
-      {!loading && !!invoice ? 
+      {isInvoiceLoaded ? 
           <InvoiceForm initialValues={initialValues} onSubmit={onEditInvoice} />
         :
           <InvoiceLoader extended />
       }
     </Card>
   );
+};
+
+EditInvoice.propTypes = {
+  match: PropTypes.object
 };
 
 export default withRouter(EditInvoice);
