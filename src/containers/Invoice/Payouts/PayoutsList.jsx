@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Spinner, Table } from "pi-ui";
+import { convertAtomsToDcr } from "src/utilsv2";
 import { useAdminPayouts } from "./hooks";
 import ExportToCsv from "src/componentsv2/ExportToCsv";
 import { Row } from "src/componentsv2/layout";
@@ -10,7 +11,8 @@ import { useAdminInvoiceActions } from "../Actions";
 const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
   const { loading, payouts } = useAdminPayouts();
   const { onPay } = useAdminInvoiceActions();
-  const actions = !loading && payouts && payouts.length ? (
+  const { hasPayouts } = !loading && payouts && payouts.length;
+  const actions = hasPayouts && (
     <Row justify="space-between" className={styles.actionsWrapper}>
       <div>
         <ExportToCsv
@@ -27,7 +29,7 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
           Set Invoices To Paid
       </Link>
       </div>
-    </Row>) : null;
+    </Row>);
 
   return (
     <>
@@ -44,7 +46,7 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
             <Spinner invert />
           </div>
         )}
-        {!loading && payouts && payouts.length ? (
+        {hasPayouts && (
           <Table
             bodyCellClassName={styles.tableBodyCell}
             headClassName={styles.tableHead}
@@ -59,13 +61,13 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
                 expensetotal: expensetotal / 100,
                 total: total / 100,
                 exchangerate: exchangerate / 100,
-                dcrtotal: dcrtotal / 100000000,
+                dcrtotal: convertAtomsToDcr(dcrtotal),
                 address
               };
             })}
             headers={["Approved Time", "Year", "Month", "Name", "Rate(USD)", "Labor Total(USD)", "Expense Total(USD)", "Combined Total(USD)", "Exchange Rate(USD)", "Total Payment(DCR)", "Address"]}>
           </Table>
-        ) : null}
+        )}
       </Main>
     </>
   );
