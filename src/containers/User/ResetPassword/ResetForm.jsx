@@ -43,8 +43,7 @@ const ResetForm = () => {
       validationSchema={validationSchema}
       loading={!validationSchema}
       onSubmit={onSubmit}
-      enableReinitialize
-    >
+      enableReinitialize>
       {({
         Form,
         Title,
@@ -68,6 +67,7 @@ const ResetForm = () => {
               id="newpassword"
               label="Password"
               type="password"
+              autoComplete="current-password"
               value={values.newpassword}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -77,6 +77,7 @@ const ResetForm = () => {
               id="verify_password"
               label="Confirm Password"
               type="password"
+              autoComplete="current-password"
               value={values.verify_password}
               onChange={handleChange}
               onBlur={handleBlur}

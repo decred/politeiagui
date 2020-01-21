@@ -60,7 +60,7 @@ li.mde-header-item > button {
   min-width: 100%;
   padding: 2rem;
   min-height: 20rem;
-  border: 1px solid var(--color-gray-lighter);
+  border: 1px solid var(--text-input-color);
   line-height: 1.5;
   font-size: var(--font-size-regular);
   background: var(--card-background);
@@ -69,7 +69,7 @@ li.mde-header-item > button {
 }
 
 .mde-text::placeholder {
-  color: var(--color-gray-light);
+  color: var(--text-input-color);
 }
 
 .mde-header-item {
@@ -83,7 +83,7 @@ li.mde-header-item > button {
 
 .mde-tabs button {
   cursor: pointer;
-  color: var(--color-gray);
+  color: var(--tab-text-color);
   border: none;
   font-size: var(--font-size-small) !important;
 }
@@ -93,16 +93,16 @@ li.mde-header-item > button {
 }
 
 .mde-tabs button:hover {
-  color: var(--color-primary-dark);
+  color: var(--tab-text-active-color) !important;
 }
 
 .mde-tabs button.selected {
-  color: var(--color-primary-dark) !important;
+  color: var(--tab-text-active-color) !important;
 }
 
 .mde-tabs > :first-child {
   padding-right: 1rem;
-  border-right: 1px solid var(--color-gray-lighter);
+  border-right: 1px solid var(--separator-color);
 }
 
 .mde-tabs > :last-child {

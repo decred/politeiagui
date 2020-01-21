@@ -19,6 +19,7 @@ const thingLinkConnector = connect(
     getVoteStatus: sel.getPropVoteStatus,
     comments: sel.proposalComments,
     invoiceComments: sel.invoiceComments,
+    dccComments: sel.dccComments,
     loggedInAsEmail: sel.loggedInAsEmail,
     csrf: sel.csrf,
     isCMS: sel.isCMS

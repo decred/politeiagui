@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Text, classNames, useMediaQuery } from "pi-ui";
+import { Text, classNames, useMediaQuery, useTheme } from "pi-ui";
 import styles from "./Comment.module.css";
 import DateTooltip from "src/componentsv2/DateTooltip";
 import Markdown from "src/componentsv2/Markdown";
@@ -44,6 +44,9 @@ const Comment = ({
       Censor
     </Text>
   );
+
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
 
   return (
     <div
@@ -90,7 +93,7 @@ const Comment = ({
       </div>
       {extraSmall && censorButton}
       {!censored ? (
-        <Markdown className="margin-top-s" body={commentBody} />
+        <Markdown className={classNames(isDarkTheme && "dark", "margin-top-s")} body={commentBody} />
       ) : (
         <Markdown className={styles.censored} body="Censored by moderators " />
       )}

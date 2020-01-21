@@ -22,6 +22,7 @@ const getMiddlewares = () => {
   const loggerMiddleware = createLogger();
   const isProductionEnv = process.env.NODE_ENV === "production";
   const reduxLoggerIsOn = process.env.REACT_APP_USE_REDUX_LOGGER;
+  // const reduxLoggerIsOn = true;
   const middlewares = [
     thunkMiddleware,
     !isProductionEnv && reduxLoggerIsOn && loggerMiddleware

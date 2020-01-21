@@ -21,7 +21,8 @@ const newInvoiceConnector = connect(
     loadingExchangeRate: sel.isApiRequestingExchangeRate,
     exchangeRateError: sel.apiExchangeRateError,
     draftInvoiceById: sel.draftInvoiceById,
-    draftInvoice: sel.draftInvoiceById
+    draftInvoice: sel.draftInvoiceById,
+    subcontractors: sel.userSubcontractors
   }),
   {
     onFetchData: act.onGetPolicy,
@@ -29,7 +30,8 @@ const newInvoiceConnector = connect(
     onResetInvoice: act.onResetInvoice,
     onFetchExchangeRate: act.onFetchExchangeRate,
     onSaveInvoiceDraft: act.onSaveDraftInvoice,
-    onDeleteDraftInvoice: act.onDeleteDraftInvoice
+    onDeleteDraftInvoice: act.onDeleteDraftInvoice,
+    onFetchSubcontractors: act.onFetchUserSubcontractors
   }
 );
 

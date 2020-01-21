@@ -3,24 +3,12 @@ import userConnector from "../../connectors/userCMS";
 import * as modalTypes from "../Modal/modalTypes";
 import Field, { FieldSeparator } from "../DescriptiveField";
 import { Field as ReduxField, reduxForm } from "redux-form";
+import trim from "lodash/fp/trim";
 import Message from "../Message";
-
-const typeOptions = [
-  "No type defined",
-  "Direct",
-  "Supervisor",
-  "Sub Contractor"
-];
-
-const domainOptions = [
-  "No domain defined",
-  "Development",
-  "Marketing",
-  "Design",
-  "Research",
-  "Documentation",
-  "Community Management"
-];
+import {
+  CMS_USER_TYPES as typeOptions,
+  CMS_DOMAINS as domainOptions
+} from "../../constants";
 
 const NewSupervisorId = ({ id, onRemoveId, isLast }) => {
   const [show, setShow] = useState(false);
@@ -68,7 +56,7 @@ const ManageUserTab = ({
     e.preventDefault();
     const isNewId = newSupervisorIds.indexOf(newSupervisorId) === -1;
     if (isNewId) {
-      setNewSupervisorIds([...newSupervisorIds, newSupervisorId]);
+      setNewSupervisorIds([...newSupervisorIds, trim(newSupervisorId)]);
       setNewSupervisorId("");
     }
   };

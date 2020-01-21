@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import distance from "date-fns/distance_in_words";
-import { Tooltip, classNames } from "pi-ui";
+import { Tooltip, classNames, useTheme } from "pi-ui";
 import styles from "./DateTooltip.module.css";
 
 const getTimeAgo = timestamp =>
@@ -10,9 +10,13 @@ const getTimeAgo = timestamp =>
 const DateTooltip = ({ timestamp, placement, className, children }) => {
   const date = new Date(timestamp * 1000);
   const timeAgo = useMemo(() => getTimeAgo(timestamp), [timestamp]);
+
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
+
   return (
     <Tooltip
-      className={classNames(className, styles.dateTooltip)}
+      className={classNames(className, styles.dateTooltip, isDarkTheme && styles.darkDateTooltip)}
       content={date.toLocaleString()}
       placement={placement}
     >

@@ -40,6 +40,7 @@ export const CustomContent = ({
   yearFilterValue,
   invoiceComments,
   loggedInAsEmail,
+  dccComments,
   ...props
 }) => {
   const invalidProposalComment =
@@ -52,6 +53,11 @@ export const CustomContent = ({
     commentid &&
     invoiceComments &&
     !invoiceComments.find((c) => c.commentid === commentid);
+  const invalidDCCComment =
+    !isLoading &&
+    commentid &&
+    comments &&
+    !dccComments.find((c) => c.commentid === commentid);
   const showList =
     (listings && listings.length > 0) ||
     (proposals && proposals.length > 0) ||
@@ -67,7 +73,7 @@ export const CustomContent = ({
     <Message type="error" header="Error loading proposals" body={error} />
   ) : isLoading ? (
     <PageLoadingIcon key="content" />
-  ) : invalidProposalComment && invalidInvoiceComment ? (
+  ) : invalidProposalComment && invalidInvoiceComment && invalidDCCComment ? (
     <Message
       type="error"
       header="Comment not found"

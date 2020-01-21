@@ -15,8 +15,8 @@ import PublicKeyText from "./components/PublicKeyText";
 import PastKeysSection from "./components/PastKeysSection";
 import UserIdSection from "./components/UserIdSection";
 
-const fetchKeys = currentUserEmail =>
-  pki.getKeys(currentUserEmail).then(keys => JSON.stringify(keys, null, 2));
+const fetchKeys = (currentUserEmail) =>
+  pki.getKeys(currentUserEmail).then((keys) => JSON.stringify(keys, null, 2));
 
 const Identity = ({ history, loadingKey, user }) => {
   const { userid: userID, identities } = user;
@@ -44,10 +44,10 @@ const Identity = ({ history, loadingKey, user }) => {
     verifyUserPubkey(currentUserEmail, userPubkey, keyMismatchAction);
   }, [currentUserEmail, userPubkey, keyMismatchAction]);
 
-  const activeIdentity = identities && identities.filter(i => i.isactive)[0];
+  const activeIdentity = identities && identities.filter((i) => i.isactive)[0];
   const pubkey = activeIdentity && activeIdentity.pubkey;
 
-  const pastIdentities = identities && identities.filter(i => !i.isactive);
+  const pastIdentities = identities && identities.filter((i) => !i.isactive);
 
   const updateKey = useCallback(async () => {
     await onUpdateUserKey(currentUserEmail);
@@ -56,9 +56,11 @@ const Identity = ({ history, loadingKey, user }) => {
   const [keyData, setKeyData] = useState();
 
   useEffect(() => {
-    fetchKeys(currentUserEmail).then(keyData => {
-      setKeyData(keyData);
+    let isSubscribed = true;
+    fetchKeys(currentUserEmail).then((keyData) => {
+      if (isSubscribed) setKeyData(keyData);
     });
+    return () => (isSubscribed = false);
   }, [currentUserEmail]);
 
   return loadingKey === PUB_KEY_STATUS_LOADING ? (
@@ -67,68 +69,68 @@ const Identity = ({ history, loadingKey, user }) => {
     </div>
   ) : (
     <Card className="margin-bottom-m" paddingSize="small">
-      <Text weight="semibold" className={classNames(styles.fieldHeading, styles.block)}>
+      <Text
+        weight="semibold"
+        className={classNames(styles.fieldHeading, styles.block)}>
         Public key
       </Text>
-        {shouldAutoVerifyKey &&
-        updateUserKey &&
-        updateUserKey.verificationtoken ? (
-          <DevelopmentOnlyContent style={{ margin: "1rem 0 1rem 0" }} show>
-            <Button
-              type="button"
-              onClick={() =>
-                history.push(
-                  `/user/key/verify?verificationtoken=${updateUserKey.verificationtoken}`
-                )
-              }
-            >
-              Auto verify key
-            </Button>
-          </DevelopmentOnlyContent>
-        ) : keyMismatch && !identityImportSuccess ? (
-          <>
-            <Message className="margin-top-s" kind="error">
-              Your key is invalid or inexistent. Please create/import one.
-            </Message>
-            <P className="margin-top-s">
-              The public key on the Politeia server differs from the key on
-              your browser. This is usually caused from the local data on your
-              browser being cleared or by using a different browser.
-            </P>
-            <P className="margin-bottom-s">
-              You can fix this by importing your old identity, logging in with
-              the proper browser, or by creating a new identity (destroying
-              your old identity)
-            </P>
-          </>
-        ) : (
-          <div
-            className={classNames(
-              styles.block,
-              "margin-bottom-s",
-              "margin-top-s"
-            )}
-          >
-            <P>
-              Your public and private keys constitute your identity. The
-              private key is used to sign your proposals, comments and any
-              up/down votes on Politeia. You can have only one identity active
-              at a time. Your keys are stored in your browser by default, so
-              if you use Politeia on multiple machines you will need to import
-              your keys before you can participate.
-            </P>
-            <PublicKeyText pubkey={pubkey} />
-          </div>
-        )}
-        <div className={styles.buttonsWrapper}>
-          <Button size="sm" onClick={openConfirmModal}>
-            Create new identity
+      {shouldAutoVerifyKey &&
+      updateUserKey &&
+      updateUserKey.verificationtoken ? (
+        <DevelopmentOnlyContent style={{ margin: "1rem 0 1rem 0" }} show>
+          <Button
+            type="button"
+            onClick={() =>
+              history.push(
+                `/user/key/verify?verificationtoken=${updateUserKey.verificationtoken}`
+              )
+            }>
+            Auto verify key
           </Button>
-          <Button size="sm" onClick={openImportIdentityModal}>
-            Import identity
-          </Button>
-          <PrivateKeyDownloadManager keyData={keyData} />
+        </DevelopmentOnlyContent>
+      ) : keyMismatch && !identityImportSuccess ? (
+        <>
+          <Message className="margin-top-s" kind="error">
+            Your key is invalid or inexistent. Please create/import one.
+          </Message>
+          <P className="margin-top-s">
+            The public key on the Politeia server differs from the key on your
+            browser. This is usually caused from the local data on your browser
+            being cleared or by using a different browser.
+          </P>
+          <P className="margin-bottom-s">
+            You can fix this by importing your old identity, logging in with the
+            proper browser, or by creating a new identity (destroying your old
+            identity)
+          </P>
+        </>
+      ) : (
+        <div
+          className={classNames(
+            styles.block,
+            "margin-bottom-s",
+            "margin-top-s"
+          )}>
+          <P>
+            Your public and private keys constitute your identity. The private
+            key is used to sign your proposals, comments and any up/down votes
+            on Politeia. You can have only one identity active at a time. Your
+            keys are stored in your browser by default, so if you use Politeia
+            on multiple machines you will need to import your keys before you
+            can participate.
+          </P>
+          <PublicKeyText pubkey={pubkey} />
         </div>
+      )}
+      <div className={styles.buttonsWrapper}>
+        <Button size="sm" onClick={openConfirmModal}>
+          Create new identity
+        </Button>
+        <Button size="sm" onClick={openImportIdentityModal}>
+          Import identity
+        </Button>
+        <PrivateKeyDownloadManager keyData={keyData} />
+      </div>
       <PastKeysSection pastIdentities={pastIdentities} />
       <UserIdSection id={userID} />
       <ModalConfirm

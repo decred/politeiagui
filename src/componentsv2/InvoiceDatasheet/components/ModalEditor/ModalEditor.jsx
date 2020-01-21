@@ -33,7 +33,7 @@ const KEYS_TO_STOP_PROPAGATION = [
   DOWN_ARROW_KEY
 ];
 
-const ModalEditor = ({ value, options, onCommit, onRevert, ...props }) => {
+const ModalEditor = ({ value, onCommit, onRevert, ...props }) => {
   function handleDone(values, { resetForm }) {
     onCommit && onCommit(values.description);
     resetForm();

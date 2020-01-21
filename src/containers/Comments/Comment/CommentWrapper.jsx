@@ -26,7 +26,6 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     comment: commentText,
     token,
     commentid,
-    resultvotes,
     censored,
     timestamp,
     username,
@@ -52,7 +51,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
   }, [showReplies]);
 
   const handleSubmitComment = useCallback(
-    comment => {
+    (comment) => {
       return onSubmitComment({
         comment,
         token,
@@ -105,7 +104,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
   const hasChildrenComments = useMemo(
     () =>
       !!React.Children.toArray(children).filter(
-        child =>
+        (child) =>
           child.props && child.props.comments && !!child.props.comments.length
       ).length,
     [children]
@@ -148,7 +147,6 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
           (userLoggedIn && (identityError || paywallMissing))
         }
         disableReply={readOnly || !!identityError || paywallMissing}
-        likesCount={resultvotes}
         likesUpCount={upvotes}
         likesDownCount={downvotes}
         likeOption={getCommentLikeOption(commentid)}
