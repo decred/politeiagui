@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Spinner, Table } from "pi-ui";
+import PropTypes from "prop-types";
 import { convertAtomsToDcr } from "src/utilsv2";
 import { useAdminPayouts } from "./hooks";
 import ExportToCsv from "src/componentsv2/ExportToCsv";
@@ -11,7 +12,7 @@ import { useAdminInvoiceActions } from "../Actions";
 const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
   const { loading, payouts } = useAdminPayouts();
   const { onPay } = useAdminInvoiceActions();
-  const { hasPayouts } = !loading && payouts && payouts.length;
+  const hasPayouts = !!(!loading && payouts && payouts.length);
   const actions = hasPayouts && (
     <Row justify="space-between" className={styles.actionsWrapper}>
       <div>
@@ -71,6 +72,12 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
       </Main>
     </>
   );
+};
+
+PayoutsList.propTypes = {
+  TopBanner: PropTypes.node.isRequired,
+  PageDetails: PropTypes.node.isRequired,
+  Main: PropTypes.node.isRequired
 };
 
 export default PayoutsList;
