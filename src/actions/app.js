@@ -178,27 +178,25 @@ export const onEditProposal = ({ name, description, files }, _, props) => (
 
 export const onResetUser = () => act.RESET_USER();
 
-export const onEditInvoice = (
-  {
-    month,
-    year,
-    name,
-    location,
-    contact,
-    rate,
-    address,
-    lineitems,
-    exchangerate,
-    files
-  },
-  _,
-  props
-) => (dispatch) => {
-  dispatch(
+export const onEditInvoice = ({
+  token,
+  month,
+  year,
+  name,
+  location,
+  contact,
+  rate,
+  address,
+  lineitems,
+  exchangerate,
+  files
+}) => (dispatch, getState) => {
+  const { email, userid, username } = sel.currentUser(getState());
+  return dispatch(
     onSubmitEditedInvoice(
-      props.loggedInAsEmail,
-      props.userid,
-      props.username,
+      email,
+      userid,
+      username,
       +month,
       +year,
       exchangerate,
@@ -209,10 +207,11 @@ export const onEditInvoice = (
       address,
       lineitems,
       files,
-      props.token
+      token
     )
   );
 };
+
 export const onSaveDraftProposal = ({ name, description, files, draftId }) => (
   dispatch
 ) => {

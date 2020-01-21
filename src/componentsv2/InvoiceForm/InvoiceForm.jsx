@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
+import PropTypes from "prop-types";
 import { BoxTextInput, Button, Message } from "pi-ui";
 import { Formik } from "formik";
 import { withRouter } from "react-router-dom";
@@ -20,7 +21,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
   values,
   handleChange,
   handleSubmit,
-  handleBlur,
   isSubmitting,
   setFieldValue,
   errors,
@@ -90,7 +90,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
         tabIndex={1}
         value={values.name}
         onChange={handleChange}
-        onBlur={handleBlur}
         error={touched.name && errors.name}
       />
       <BoxTextInput
@@ -99,7 +98,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
         tabIndex={1}
         value={values.location}
         onChange={handleChange}
-        onBlur={handleBlur}
         error={touched.location && errors.location}
       />
       <BoxTextInput
@@ -108,7 +106,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
         tabIndex={1}
         value={values.contact}
         onChange={handleChange}
-        onBlur={handleBlur}
         error={touched.contact && errors.contact}
       />
       <BoxTextInput
@@ -117,7 +114,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
         tabIndex={1}
         value={values.address}
         onChange={handleChange}
-        onBlur={handleBlur}
         error={touched.contact && errors.address}
       />
       <BoxTextInput
@@ -127,7 +123,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
         tabIndex={1}
         value={values.rate}
         onChange={handleChange}
-        onBlur={handleBlur}
         error={touched.rate && errors.rate}
       />
       <AttachFileInput
@@ -156,7 +151,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
   );
 });
 
-const InvoiceFormWrapper = ({ onSubmit, history }) => {
+const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
   const { policy } = usePolicy();
   const [, setSubmitSuccess] = useState(false);
   const validationSchema = useMemo(() => invoiceValidationSchema(policy), [
@@ -170,14 +165,16 @@ const InvoiceFormWrapper = ({ onSubmit, history }) => {
           date: { month, year },
           ...others
         } = values;
-        const proposalToken = await onSubmit({
+        const token = await onSubmit({
           ...others,
           month,
           year
         });
+        // Token from new invoice or from edit invoice
+        const invoiceToken = token || values.token;
         setSubmitting(false);
         setSubmitSuccess(true);
-        history.push(`/invoices/${proposalToken}`);
+        history.push(`/invoices/${invoiceToken}`);
         resetForm();
       } catch (e) {
         setSubmitting(false);
@@ -190,7 +187,7 @@ const InvoiceFormWrapper = ({ onSubmit, history }) => {
   return (
     <Formik
       onSubmit={handleSubmit}
-      initialValues={{
+      initialValues={ initialValues || {
         name: "",
         location: "",
         contact: "",
@@ -207,5 +204,11 @@ const InvoiceFormWrapper = ({ onSubmit, history }) => {
     </Formik>
   );
 };
+
+InvoiceFormWrapper.propTypes = {
+  initialValues: PropTypes.object,
+  onSubmit: PropTypes.func,
+  history: PropTypes.object
+}
 
 export default withRouter(InvoiceFormWrapper);

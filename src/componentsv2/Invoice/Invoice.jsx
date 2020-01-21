@@ -6,8 +6,9 @@ import {
   CopyableText
 } from "pi-ui";
 import React, { useMemo } from "react";
+import PropTypes from "prop-types";
 import RecordWrapper from "../RecordWrapper";
-import { getInvoiceStatusTagProps } from "./helpers";
+import { getInvoiceStatusTagProps, isEditableInvoice } from "./helpers";
 import styles from "./Invoice.module.css";
 import { InvoiceActions } from "src/containers/Invoice/Actions";
 import {
@@ -18,13 +19,14 @@ import Field from "./Field";
 import InvoiceDatasheet from "../InvoiceDatasheet";
 import { convertAtomsToDcr } from "src/utilsv2";
 import ThumbnailGrid from "src/componentsv2/Files";
+import { useLoaderContext } from "src/containers/Loader";
 
 const Invoice = ({ invoice, extended }) => {
   const {
     censorshiprecord,
     file,
     input,
-    // status,
+    status,
     timestamp,
     userid,
     username,
@@ -34,6 +36,9 @@ const Invoice = ({ invoice, extended }) => {
 
   const mobile = useMediaQuery("(max-width: 560px)");
 
+  const { currentUser } = useLoaderContext();
+  const isAuthor = userid === currentUser.userid;
+  const isEditable = isAuthor && isEditableInvoice(status);
   const invoiceToken = censorshiprecord && censorshiprecord.token;
   const invoiceURL = `/invoices/${invoiceToken}`;
   const invContractorName = input && input.contractorname;
@@ -63,6 +68,7 @@ const Invoice = ({ invoice, extended }) => {
         Header,
         Subtitle,
         Status,
+        Edit,
         RecordToken
       }) => {
         return (
@@ -97,6 +103,9 @@ const Invoice = ({ invoice, extended }) => {
                     {...getInvoiceStatusTagProps(invoice)}
                   />
                 </Status>
+              }
+              edit={
+                isEditable && <Edit url={`/invoices/${invoiceToken}/edit`} />
               }
             />
             {extended && (
@@ -162,6 +171,10 @@ const Invoice = ({ invoice, extended }) => {
       }}
     </RecordWrapper>
   );
+};
+
+Invoice.propTypes = {
+  invoice: PropTypes.object.isRequired
 };
 
 export default Invoice;
