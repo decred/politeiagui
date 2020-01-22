@@ -52,7 +52,7 @@ export const getDCCStatus = (status) => {
 };
 
 const separateName = (length) => (name, index) =>
-  index < length - 1 ? name + ", " : name;
+  index < length - 1 ? `${name}, ` : name;
 
 export const getVotesUsernameList = (names) =>
   names.map(separateName(names.length));
