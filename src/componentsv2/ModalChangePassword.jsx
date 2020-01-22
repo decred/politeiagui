@@ -39,8 +39,8 @@ const ModalChangePassword = ({
   }, [show]);
 
   const { theme } = useTheme();
-  const colorGray = getThemeProperty(theme, "color-gray");
-  const colorPrimaryDark = getThemeProperty(theme, "color-primary-dark");
+  const successIconBgColor = getThemeProperty(theme, "success-icon-background-color");
+  const iconCheckmarkColor = getThemeProperty(theme, "success-icon-checkmark-color");
 
   return (
     <Modal
@@ -50,8 +50,8 @@ const ModalChangePassword = ({
           <Icon
             type={"checkmark"}
             size={26}
-            iconColor={colorPrimaryDark}
-            backgroundColor={colorGray}
+            iconColor={iconCheckmarkColor}
+            backgroundColor={successIconBgColor}
           />
         )
       }

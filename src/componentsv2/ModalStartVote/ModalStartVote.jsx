@@ -5,7 +5,9 @@ import {
   Modal,
   TextInput,
   RadioButtonGroup,
-  Icon
+  Icon,
+  useTheme,
+  getThemeProperty
 } from "pi-ui";
 import PropTypes from "prop-types";
 import { useLoaderContext } from "src/Appv2/Loader";
@@ -31,6 +33,9 @@ const ModalStartVote = ({
   const [success, setSuccess] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
   const { apiInfo } = useLoaderContext();
+  const { theme } = useTheme();
+  const successIconBgColor = getThemeProperty(theme, "success-icon-background-color");
+  const iconCheckmarkColor = getThemeProperty(theme, "success-icon-checkmark-color");
   const onSubmitChangePassword = async (
     values,
     { resetForm, setFieldError }
@@ -68,6 +73,8 @@ const ModalStartVote = ({
         ) : (
           <Icon
             type={"checkmark"}
+            iconColor={iconCheckmarkColor}
+            backgroundColor={successIconBgColor}
             size={26}
           />
         )

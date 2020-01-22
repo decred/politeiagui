@@ -1,4 +1,4 @@
-import { Button, Icon, Modal, Text } from "pi-ui";
+import { Button, Icon, Modal, Text, useTheme, getThemeProperty } from "pi-ui";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import FormWrapper from "src/componentsv2/FormWrapper";
@@ -14,6 +14,10 @@ const ModalConfirm = ({
 }) => {
   const [success, setSuccess] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
+
+  const { theme } = useTheme();
+  const successIconBgColor = getThemeProperty(theme, "success-icon-background-color");
+  const iconCheckmarkColor = getThemeProperty(theme, "success-icon-checkmark-color");
 
   const onSubmitForm = async (_, { resetForm, setFieldError }) => {
     setSubmitting(true);
@@ -49,6 +53,8 @@ const ModalConfirm = ({
         ) : (
           <Icon
             type={"checkmark"}
+            iconColor={iconCheckmarkColor}
+            backgroundColor={successIconBgColor}
             size={26}
           />
         )
