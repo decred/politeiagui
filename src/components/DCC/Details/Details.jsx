@@ -6,7 +6,7 @@ import dccConnector from "../../../connectors/dcc";
 import Button from "../../snew/ButtonWithLoadingIcon";
 import Message from "../../Message";
 import * as modalTypes from "../../Modal/modalTypes";
-import { dccChangeStatusList } from "../helpers";
+import { dccChangeStatusList, getVotesUsernameList } from "../helpers";
 import Comments from "../Comments";
 
 const DCCInfo = ({ label = "", children }) => (
@@ -103,8 +103,8 @@ const DCCDetail = props => {
             <p className="dcc-info">{dcc.dccpayload.statement}</p>
 
             <h2>Votes</h2>
-            <DCCInfo label="Support">{dcc.supportusernames}</DCCInfo>
-            <DCCInfo label="Against">{dcc.againstusernames}</DCCInfo>
+            <DCCInfo label="Support">{getVotesUsernameList(dcc.supportusernames)}</DCCInfo>
+            <DCCInfo label="Against">{getVotesUsernameList(dcc.againstusernames)}</DCCInfo>
 
             <Button
               className={`togglebutton access-required${(!userCanVote || !isActiveDCC) &&

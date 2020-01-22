@@ -50,3 +50,9 @@ export const getDCCStatus = (status) => {
   const { label } = dccStatusList.find((st) => st.value === status);
   return label;
 };
+
+const separateName = (length) => (name, index) =>
+  index < length - 1 ? name + ", " : name;
+
+export const getVotesUsernameList = (names) =>
+  names.map(separateName(names.length));
