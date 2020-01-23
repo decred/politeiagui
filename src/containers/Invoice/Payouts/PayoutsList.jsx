@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { convertAtomsToDcr } from "src/utilsv2";
 import { useAdminPayouts } from "./hooks";
 import ExportToCsv from "src/componentsv2/ExportToCsv";
+import HelpMessage from "src/componentsv2/HelpMessage";
 import { Row } from "src/componentsv2/layout";
 import styles from "./PayoutsList.module.css";
 import { useAdminInvoiceActions } from "../Actions";
@@ -68,6 +69,12 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
             headers={["Approved Time", "Year", "Month", "Name", "Rate(USD)", "Labor Total(USD)", "Expense Total(USD)", "Combined Total(USD)", "Exchange Rate(USD)", "Total Payment(DCR)", "Address"]}>
           </Table>
         )}
+        {!hasPayouts && (
+          <HelpMessage>
+            {"There are no approved invoices!"}
+          </HelpMessage>
+        )
+        }
       </Main>
     </>
   );
