@@ -1,7 +1,7 @@
 import React from "react";
-import { Link, Button, Spinner, Table, CopyableText } from "pi-ui";
+import { Link, Button, Spinner, Table, CopyableText, classNames } from "pi-ui";
 import PropTypes from "prop-types";
-import { convertAtomsToDcr } from "src/utilsv2";
+import { convertAtomsToDcr, formatShortUnixTimestamp } from "src/utilsv2";
 import { useAdminPayouts } from "./hooks";
 import ExportToCsv from "src/componentsv2/ExportToCsv";
 import HelpMessage from "src/componentsv2/HelpMessage";
@@ -14,23 +14,7 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
   const { loading, payouts } = useAdminPayouts();
   const { onPay } = useAdminInvoiceActions();
   const hasPayouts = !!(!loading && payouts && payouts.length);
-  const actions = hasPayouts && (
-    <Row noMargin={true} justify="space-between" className={styles.actionsWrapper}>
-        <ExportToCsv
-          data={payouts}
-          fields={["approvedtime", "year", "month", "contractorname", "contractorrate", "labortotal", "expensetotal", "total", "exchangerate", "dcrtotal", "address"]}
-          filename="payouts"
-          className={styles.csvActionWrapper}>
-          <Link className="cursor-pointer">
-            Export To Csv
-          </Link>
-        </ExportToCsv>
-      <div>
-        <Button className="cursor-pointer" onClick={onPay}>
-          Set Invoices To Paid
-        </Button>
-      </div>
-    </Row>);
+  const actions = hasPayouts && (<Button className={classNames("cursor-pointer", styles.payBtn)} onClick={onPay}>Set Invoices To Paid</Button>);
 
   return (
     <>
@@ -48,32 +32,43 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
           </div>
         )}
         {hasPayouts && (
-          <Table
-            bodyCellClassName={styles.tableBodyCell}
-            headClassName={styles.tableHead}
-            data={payouts.map(({ approvedtime, year, month, contractorname, contractorrate, labortotal, expensetotal, total, exchangerate, dcrtotal, address }) => {
-              return {
-                approvedtime: new Date(approvedtime * 1000).toUTCString(),
-                year,
-                month,
-                contractorname,
-                contractorrate: contractorrate / 100,
-                labortotal: labortotal / 100,
-                expensetotal: expensetotal / 100,
-                total: total / 100,
-                exchangerate: exchangerate / 100,
-                dcrtotal: convertAtomsToDcr(dcrtotal),
-                  address: <CopyableText
-                  truncate
-                  id={`payment-address-${approvedtime}`}
-                  className={styles.copyableText}
-                  tooltipPlacement={"bottom"}>
-                    {address}
-                </CopyableText>
-              };
-            })}
-            headers={["Approved Time", "Year", "Month", "Name", "Rate(USD)", "Labor Total(USD)", "Expense Total(USD)", "Combined Total(USD)", "Exchange Rate(USD)", "Total Payment(DCR)", "Address"]}>
-          </Table>
+          <>
+            <Table
+              bodyCellClassName={styles.tableBodyCell}
+              headClassName={styles.tableHead}
+              data={payouts.map(({ approvedtime, year, month, contractorname, contractorrate, labortotal, expensetotal, total, exchangerate, dcrtotal, address }) => {
+                return {
+                  approvedtime: formatShortUnixTimestamp(approvedtime),
+                  month: `${month}/${year}`,
+                  contractorname,
+                  contractorrate: contractorrate / 100,
+                  labortotal: labortotal / 100,
+                  expensetotal: expensetotal / 100,
+                  total: total / 100,
+                  exchangerate: exchangerate / 100,
+                  dcrtotal: convertAtomsToDcr(dcrtotal),
+                    address: <CopyableText
+                    truncate
+                    id={`payment-address-${approvedtime}`}
+                    className={styles.copyableText}
+                    tooltipPlacement={"bottom"}>
+                      {address}
+                  </CopyableText>
+                };
+              })}
+              headers={["Approved Time", "Date", "Name", "Rate(USD)", "Labor Total(USD)", "Expense Total(USD)", "Combined Total(USD)", "Exchange Rate(USD)", "Total Payment(DCR)", "Address"]}>
+            </Table>
+            <Row noMargin justify="right">
+              <ExportToCsv
+                data={payouts}
+                fields={["approvedtime", "year", "month", "contractorname", "contractorrate", "labortotal", "expensetotal", "total", "exchangerate", "dcrtotal", "address"]}
+                filename="payouts">
+                <Link className="cursor-pointer">
+                  Export To Csv
+                </Link>
+              </ExportToCsv>
+            </Row>
+          </>
         )}
         {!hasPayouts && (
           <HelpMessage>

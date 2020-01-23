@@ -5,13 +5,8 @@
   align-items: center;
 }
 
-.actionsWrapper {
-  width: 35rem;
-}
-
-.csvActionWrapper {
-  display: flex;
-  align-items: flex-end;
+.payBtn {
+  min-width: 21.7rem;
 }
 
 .tableBodyCell {
