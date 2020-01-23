@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Button, Spinner, Table } from "pi-ui";
+import { Link, Button, Spinner, Table, CopyableText } from "pi-ui";
 import PropTypes from "prop-types";
 import { convertAtomsToDcr } from "src/utilsv2";
 import { useAdminPayouts } from "./hooks";
@@ -63,7 +63,13 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
                 total: total / 100,
                 exchangerate: exchangerate / 100,
                 dcrtotal: convertAtomsToDcr(dcrtotal),
-                address
+                  address: <CopyableText
+                  truncate
+                  id={`payment-address-${approvedtime}`}
+                  className={styles.copyableText}
+                  tooltipPlacement={"bottom"}>
+                    {address}
+                </CopyableText>
               };
             })}
             headers={["Approved Time", "Year", "Month", "Name", "Rate(USD)", "Labor Total(USD)", "Expense Total(USD)", "Combined Total(USD)", "Exchange Rate(USD)", "Total Payment(DCR)", "Address"]}>
