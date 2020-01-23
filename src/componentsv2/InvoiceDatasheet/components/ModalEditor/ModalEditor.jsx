@@ -73,6 +73,7 @@ const ModalEditor = ({ value, onCommit, onRevert, ...props }) => {
     <>
       <Modal {...props} title="Edit description">
         <FormWrapper
+          name="edit-description"
           onSubmit={handleDone}
           enableReinitialize
           initialValues={{ description: value || "" }}>
@@ -103,7 +104,7 @@ const ModalEditor = ({ value, onCommit, onRevert, ...props }) => {
                   <Button kind="secondary" type="button" onClick={handleCancel}>
                     Cancel
                   </Button>
-                  <Button type="button" onClick={handleSubmit}>
+                  <Button type="submit" onClick={handleSubmit}>
                     Save
                   </Button>
                 </Actions>
