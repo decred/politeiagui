@@ -17,13 +17,13 @@ export const exportToCsv = (data, fields, filename) => {
   link.click();
 };
 
-const ExportToCsv = ({ children, data, fields, filename }) => {
+const ExportToCsv = ({ children, data, fields, filename, className }) => {
   const handleExportToCsv = () => {
     exportToCsv(data, fields, filename);
   };
   return (
     <>
-      <span onClick={handleExportToCsv}>{children}</span>
+      <span className={className} onClick={handleExportToCsv}>{children}</span>
       <div id="csv-hidden-div" style={{ display: "none" }} />
     </>
   );
@@ -32,7 +32,8 @@ const ExportToCsv = ({ children, data, fields, filename }) => {
 ExportToCsv.propTypes = {
   children: PropTypes.node.isRequired,
   data: PropTypes.array.isRequired,
-  filename: PropTypes.string.isRequired
+  filename: PropTypes.string.isRequired,
+  className: PropTypes.string
 };
 
 export default ExportToCsv;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Spinner, Table } from "pi-ui";
+import { Link, Button, Spinner, Table } from "pi-ui";
 import PropTypes from "prop-types";
 import { convertAtomsToDcr } from "src/utilsv2";
 import { useAdminPayouts } from "./hooks";
@@ -14,21 +14,20 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
   const { onPay } = useAdminInvoiceActions();
   const hasPayouts = !!(!loading && payouts && payouts.length);
   const actions = hasPayouts && (
-    <Row justify="space-between" className={styles.actionsWrapper}>
-      <div>
+    <Row noMargin={true} justify="space-between" className={styles.actionsWrapper}>
         <ExportToCsv
           data={payouts}
           fields={["approvedtime", "year", "month", "contractorname", "contractorrate", "labortotal", "expensetotal", "total", "exchangerate", "dcrtotal", "address"]}
-          filename="payouts">
+          filename="payouts"
+          className={styles.csvActionWrapper}>
           <Link className="cursor-pointer">
             Export To Csv
-        </Link>
+          </Link>
         </ExportToCsv>
-      </div>
       <div>
-        <Link className="cursor-pointer" onClick={onPay}>
+        <Button className="cursor-pointer" onClick={onPay}>
           Set Invoices To Paid
-      </Link>
+        </Button>
       </div>
     </Row>);
 

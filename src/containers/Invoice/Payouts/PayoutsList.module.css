@@ -6,7 +6,12 @@
 }
 
 .actionsWrapper {
-  width: 25rem;
+  width: 35rem;
+}
+
+.csvActionWrapper {
+  display: flex;
+  align-items: center;
 }
 
 .tableBodyCell {
