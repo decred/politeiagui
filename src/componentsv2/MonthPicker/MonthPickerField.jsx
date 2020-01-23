@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useLayoutEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Picker from "react-month-picker";
 import "react-month-picker/css/month-picker.css";
@@ -26,9 +26,9 @@ const pickerLang = {
   to: "To"
 };
 
-const makeText = m => {
+const makeText = (m) => {
   if (m && m.year && m.month)
-    return pickerLang.months[m.month - 1] + " " + m.year;
+    return `${pickerLang.months[m.month - 1]} ${m.year}`;
   return "?";
 };
 
@@ -43,11 +43,11 @@ const MonthPickerField = ({ name, label, years, readOnly, toggleable }) => {
   const [isOpen, openPicker, closePicker] = useBooleanState(false);
   const ref = useRef();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isOpen && !readOnly) {
       ref.current.show();
     }
-  }, [isOpen, readOnly]);
+  });
   return (
     <FormikConsumer>
       {({ setFieldValue, values, initialValues }) => {
@@ -81,25 +81,27 @@ const MonthPickerField = ({ name, label, years, readOnly, toggleable }) => {
             </div>
 
             <div>
-              <Picker
-                ref={ref}
-                years={years}
-                value={values[name]}
-                lang={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
-                onChange={onChange}
-                onDismiss={onChange}
-              >
-                <span
-                  className={classNames(
-                    styles.valueWrapper,
-                    readOnly && "cursor-not-allowed"
-                  )}
-                  onClick={openPicker}
-                >
-                  {!isDisabled ? makeText(values[name]) : "Any"}
-                  {!readOnly && !isDisabled && <Arrow isOpen={isOpen} />}
-                </span>
-              </Picker>
+              {isDisabled ? (
+                <span className="cursor-not-allowed">Any</span>
+              ) : (
+                <Picker
+                  ref={ref}
+                  years={years}
+                  value={values[name]}
+                  lang={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
+                  onChange={onChange}
+                  onDismiss={onChange}>
+                  <span
+                    className={classNames(
+                      styles.valueWrapper,
+                      readOnly && "cursor-not-allowed"
+                    )}
+                    onClick={openPicker}>
+                    {makeText(values[name])}
+                    {!readOnly && <Arrow isOpen={isOpen} />}
+                  </span>
+                </Picker>
+              )}
             </div>
           </div>
         );
