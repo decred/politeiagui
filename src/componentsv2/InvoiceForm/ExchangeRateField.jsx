@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect } from "react";
 import { Text, Spinner } from "pi-ui";
 import { FormikConsumer } from "formik";
+import { usdFormatter } from "src/utilsv2";
+
 import useExchangeRate from "src/hooks/api/useExchangeRate";
 
 export const ExchangeRateField = ({ month, year, onChange, name }) => {
   const [rate, loading] = useExchangeRate(month, year);
   const handleChange = useCallback(
-    rate => {
+    (rate) => {
       onChange(name, rate);
     },
     [onChange, name]
@@ -17,7 +19,11 @@ export const ExchangeRateField = ({ month, year, onChange, name }) => {
   return (
     <div style={{ display: "grid" }}>
       <Text color="gray">Exchange rate</Text>
-      {loading ? <Spinner invert /> : <Text>${rate / 100}</Text>}
+      {loading ? (
+        <Spinner invert />
+      ) : (
+        <Text>{usdFormatter.format(rate / 100)}</Text>
+      )}
     </div>
   );
 };
