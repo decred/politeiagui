@@ -17,7 +17,7 @@ import {
 } from "src/containers/Invoice/helpers";
 import Field from "./Field";
 import InvoiceDatasheet from "../InvoiceDatasheet";
-import { convertAtomsToDcr } from "src/utilsv2";
+import { convertAtomsToDcr, usdFormatter } from "src/utilsv2";
 import ThumbnailGrid from "src/componentsv2/Files";
 import { useLoaderContext } from "src/containers/Loader";
 
@@ -136,14 +136,20 @@ const Invoice = ({ invoice, extended }) => {
                   <Field label="Total hours:" value={`${totalHours}h`} />
                   <Field
                     label="Contractor Rate:"
-                    value={`$${invContractorRate / 100}`}
+                    value={usdFormatter.format(invContractorRate / 100)}
                   />
-                  <Field label="Total expenses:" value={`$${totalExpenses}`} />
+                  <Field
+                    label="Total expenses:"
+                    value={usdFormatter.format(totalExpenses)}
+                  />
                   <Field
                     label="Exchange rate:"
-                    value={`$${exchangeRate / 100}`}
+                    value={usdFormatter.format(exchangeRate / 100)}
                   />
-                  <Field label="Amount:" value={`$${totalAmount}`} />
+                  <Field
+                    label="Amount:"
+                    value={usdFormatter.format(totalAmount)}
+                  />
                   <Field label="Amount (dcr):" value={totalDcrAmount} />
                 </Row>
                 {extended && !!invoiceAttachments.length && (
