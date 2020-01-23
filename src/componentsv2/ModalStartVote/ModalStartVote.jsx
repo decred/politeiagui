@@ -33,6 +33,9 @@ const ModalStartVote = ({
   const [success, setSuccess] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
   const { apiInfo } = useLoaderContext();
+  const { theme } = useTheme();
+  const successIconBgColor = getThemeProperty(theme, "success-icon-background-color");
+  const iconCheckmarkColor = getThemeProperty(theme, "success-icon-checkmark-color");
   const onSubmitChangePassword = async (
     values,
     { resetForm, setFieldError }
@@ -57,10 +60,6 @@ const ModalStartVote = ({
     [show]
   );
 
-  const { theme } = useTheme();
-  const colorGray = getThemeProperty(theme, "color-gray");
-  const colorPrimaryDark = getThemeProperty(theme, "color-primary-dark");
-
   return (
     <Modal
       style={{ width: "600px" }}
@@ -74,9 +73,9 @@ const ModalStartVote = ({
         ) : (
           <Icon
             type={"checkmark"}
+            iconColor={iconCheckmarkColor}
+            backgroundColor={successIconBgColor}
             size={26}
-            iconColor={colorPrimaryDark}
-            backgroundColor={colorGray}
           />
         )
       }
