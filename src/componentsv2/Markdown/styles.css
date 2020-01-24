@@ -8,6 +8,10 @@
   word-wrap: break-word;
 }
 
+.dark .markdown-body {
+  color: var(--tab-text-active-color)
+}
+
 .markdown-body details {
   display: block;
 }
