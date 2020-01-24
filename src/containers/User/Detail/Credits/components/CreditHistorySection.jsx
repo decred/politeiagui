@@ -40,7 +40,7 @@ export default ({ proposalCreditPrice, user }) => {
         <Link style={{ cursor: "pointer" }}>Export to csv</Link>
       </ExportToCsv>
       <div className="margin-top-s">
-        <Table linesPerPage={1} data={data} headers={tableHeaders} />
+        <Table data={data} headers={tableHeaders} />
       </div>
     </div>
   ) : null;
