@@ -201,7 +201,7 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
       }}
       validationSchema={validationSchema}>
       {(props) => (
-        <InvoiceForm {...{...props, submitSuccess }} />
+        <InvoiceForm {...{ ...props, submitSuccess }} />
       )}
     </Formik>
   );

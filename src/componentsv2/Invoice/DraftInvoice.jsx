@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import RecordWrapper from "../RecordWrapper";
 import {
   presentationalDraftInvoiceName
@@ -49,6 +50,11 @@ const DraftInvoice = ({ draft, onDelete }) => {
       </RecordWrapper>
     </>
   );
+};
+
+DraftInvoice.propTypes = {
+  draft: PropTypes.object,
+  onDelete: PropTypes.func
 };
 
 export default React.memo(DraftInvoice);
