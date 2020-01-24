@@ -304,8 +304,6 @@ export const onLoadDraftInvoices = (email) => (dispatch, getState) => {
   const key = email || sel.currentUserEmail(getState());
   const stateFromLS = loadStateLocalStorage(key);
   const drafts = sel.draftInvoices(stateFromLS) || {};
-  console.log("loading draft invoices");
-  console.log(drafts);
   dispatch(act.LOAD_DRAFT_INVOICES(drafts));
 };
 

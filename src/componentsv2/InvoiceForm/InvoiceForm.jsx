@@ -155,7 +155,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
 
 const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
   const { policy } = usePolicy();
-  const [, setSubmitSuccess] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const validationSchema = useMemo(() => invoiceValidationSchema(policy), [
     policy
   ]);
@@ -200,9 +200,9 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
         files: []
       }}
       validationSchema={validationSchema}>
-      {(props) => {
-        return <InvoiceForm {...props} />;
-      }}
+      {(props) => (
+        <InvoiceForm {...{...props, submitSuccess }} />
+      )}
     </Formik>
   );
 };
