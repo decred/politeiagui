@@ -51,7 +51,7 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
                     truncate
                     id={`payment-address-${approvedtime}`}
                     className={styles.copyableText}
-                    tooltipPlacement={"bottom"}>
+                    tooltipPlacement={"left"}>
                       {address}
                   </CopyableText>
                 };
