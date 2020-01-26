@@ -1,5 +1,5 @@
 # Build image
-FROM node:12.13
+FROM node:12.14
 
 LABEL description="politeiagui build"
 LABEL version="1.0"
