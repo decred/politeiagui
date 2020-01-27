@@ -2,7 +2,16 @@ import React, { useState, useCallback, useMemo } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Formik } from "formik";
-import { Button, Message, Text, BoxTextInput, useMediaQuery, useTheme, classNames } from "pi-ui";
+import {
+  Button,
+  Message,
+  Text,
+  BoxTextInput,
+  useMediaQuery,
+  useTheme,
+  Link,
+  classNames
+} from "pi-ui";
 import { Row } from "src/componentsv2/layout";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/componentsv2/MarkdownEditor";
@@ -63,10 +72,27 @@ const ProposalForm = React.memo(function ProposalForm({
   const FormatHelpButton = () => (
     <Text
       weight="semibold"
-      className={classNames(styles.formatHelpButton, isDarkTheme && styles.darkFormatHelpButton)}
+      className={classNames(
+        styles.formatHelpButton,
+        isDarkTheme && styles.darkFormatHelpButton
+      )}
       onClick={openMDGuideModal}>
       Formatting Help
     </Text>
+  );
+
+  const ProposalGuidelinesButton = () => (
+    <Link
+      weight="semibold"
+      target="_blank"
+      rel="noopener noreferrer"
+      className={classNames(
+        styles.proposalGuidelinesButton,
+        isDarkTheme && styles.darkProposalGuidelinesButton
+      )}
+      href="https://docs.decred.org/governance/politeia/proposal-guidelines/">
+      Proposal Guidelines
+    </Link>
   );
 
   const SubmitButton = () => (
@@ -109,6 +135,7 @@ const ProposalForm = React.memo(function ProposalForm({
       {!mobile ? (
         <Row topMarginSize="s" justify="right">
           <FormatHelpButton />
+          <ProposalGuidelinesButton />
           <DraftSaver submitSuccess={submitSuccess} />
           <SubmitButton />
         </Row>
@@ -120,6 +147,7 @@ const ProposalForm = React.memo(function ProposalForm({
           </Row>
           <Row topMarginSize="s" justify="right">
             <FormatHelpButton />
+            <ProposalGuidelinesButton />
           </Row>
         </>
       )}
