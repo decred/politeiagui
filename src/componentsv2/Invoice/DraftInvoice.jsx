@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "pi-ui";
 import RecordWrapper from "../RecordWrapper";
 import {
   presentationalDraftInvoiceName
@@ -29,13 +30,14 @@ const DraftInvoice = ({ draft, onDelete }) => {
                 </Title>
               }
               status={
-                <Status disableMobileView>
-                  <button
+                <Status>
+                  <Link
+                    href="#"
                     onClick={handleDeleteDraft}
                     className={styles.deleteDraft}
                   >
-                    &times;
-                  </button>
+                    Delete
+                  </Link>
                 </Status>
               }
               edit={<Edit url={`/invoices/new?draft=${draftId}`} />}

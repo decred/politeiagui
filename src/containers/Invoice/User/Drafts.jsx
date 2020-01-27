@@ -29,7 +29,10 @@ const Drafts = () => {
   }, [onDeleteDraftInvoice, setTargetDraftID, targetDraftID]);
 
   const drafts = draftInvoices
-    ? Object.values(draftInvoices).filter(draft => !!draft.draftId)
+    ? Object
+        .values(draftInvoices)
+        .filter(draft => !!draft.draftId)
+        .sort((a, b) => b.timestamp - a.timestamp)
     : [];
 
   return (
