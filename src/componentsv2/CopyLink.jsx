@@ -10,14 +10,17 @@ const CopyLink = ({ url, className }) => {
   const hoverColor = getThemeProperty(theme, "icon-hover-color");
   const darkIconColor = getThemeProperty(theme, "text-color");
   const [ref, isHovered] = useHover();
-  const iconColor = isHovered ? hoverColor : isDarkTheme ? darkIconColor : undefined;
+  const iconColor = isHovered
+    ? hoverColor
+    : isDarkTheme
+    ? darkIconColor
+    : undefined;
   return (
-    <CopyToClipboard value={url} tooltipText="Copy link">
+    <CopyToClipboard value={url} tooltipText="Copy link" className={className}>
       {({ onCopyToClipboard }) => (
         <IconButton
           ref={ref}
           iconColor={iconColor}
-          className={className}
           type="link"
           onClick={onCopyToClipboard}
         />
