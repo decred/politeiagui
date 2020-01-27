@@ -18,7 +18,6 @@ const onReceiveLogout = (state) =>
           (publicData[id] = {
             id,
             userid: data[id].userid,
-            email: data[id].email,
             isadmin: data[id].isadmin,
             username: data[id].username,
             identities: data[id].identities
