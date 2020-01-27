@@ -9,7 +9,7 @@
 }
 
 .dark .markdown-body {
-  color: var(--tab-text-active-color)
+  color: var(--tab-text-active-color);
 }
 
 .markdown-body details {

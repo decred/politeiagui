@@ -4,8 +4,9 @@ import { useSelector, useAction } from "src/redux";
 
 export default function useNavigation() {
   const user = useSelector(sel.currentUser);
+  const isCMS = useSelector(sel.isCMS);
   const username = user && user.username;
   const onLogout = useAction(act.onLogout);
   const handleLogout = useAction(act.handleLogout);
-  return { user, username, onLogout, handleLogout };
+  return { user, username, onLogout, handleLogout, isCMS };
 }
