@@ -248,8 +248,10 @@ export const onLogin = ({ email, password }) =>
 // handleLogout handles all the procedure to be done once the user is logged out
 // it can be called either when the logout request has been successful or when the
 // session has already expired
-export const handleLogout = (response) => (dispatch) => {
-  dispatch(act.RECEIVE_LOGOUT(response));
+export const handleLogout = (response, isCMS) => (dispatch) => {
+  isCMS
+    ? dispatch(act.RECEIVE_CMS_LOGOUT(response))
+    : dispatch(act.RECEIVE_LOGOUT(response));
   clearStateLocalStorage();
   clearPollingPointer();
   clearProposalPaymentPollingPointer();
@@ -257,13 +259,14 @@ export const handleLogout = (response) => (dispatch) => {
   dispatch(act.RESET_USER_SEARCH());
 };
 
-export const onLogout = () =>
+export const onLogout = (isCMS) =>
   withCsrf((dispatch, getState, csrf) => {
+    console.log(isCMS);
     dispatch(act.REQUEST_LOGOUT());
     return api
       .logout(csrf)
       .then((response) => {
-        dispatch(handleLogout(response));
+        dispatch(handleLogout(response, isCMS));
       })
       .catch((error) => {
         dispatch(act.RECEIVE_LOGOUT(null, error));

@@ -27,6 +27,16 @@ const onReceiveLogout = (state) =>
     })
   )(state);
 
+const onReceiveCMSLogout = (state) =>
+  compose(
+    set("currentUserID", null),
+    update("byID", (data) => {
+      const publicData = {};
+      Object.keys(data).map((id) => (publicData[id] = {}));
+      return publicData;
+    })
+  )(state);
+
 const users = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
@@ -61,7 +71,14 @@ const users = (state = DEFAULT_STATE, action) =>
               ["byID", state.currentUserID, "publickey"],
               action.payload.publickey
             )(state),
-          [act.RECEIVE_LOGOUT]: () => onReceiveLogout(state)
+          [act.RECEIVE_LOGOUT]: () => {
+            console.log(state);
+            return onReceiveLogout(state);
+          },
+          [act.RECEIVE_CMS_LOGOUT]: () => {
+            console.log(state);
+            return onReceiveCMSLogout(state);
+          }
         }[action.type] || (() => state)
       )();
 

@@ -7,7 +7,7 @@ import useNavigation from "src/hooks/api/useNavigation";
 import styles from "./HeaderNav.module.css";
 
 const HeaderNav = ({ history, location }) => {
-  const { user, username, onLogout } = useNavigation();
+  const { user, username, onLogout, isCMS } = useNavigation();
   const { themeName, setThemeName } = useTheme();
   function goToUserAccount() {
     history.push(`/user/${user.userid}`);
@@ -23,10 +23,10 @@ const HeaderNav = ({ history, location }) => {
   }
   const isOnUnvettedRoute = location.pathname === "/proposals/unvetted";
   const isOnSearchUsersRoute = location.pathname === "/user/search";
-  const [
-    darkThemeOnLocalStorage,
-    setDarkThemeOnLocalStorage
-  ] = useLocalStorage("darkTheme", false);
+  const [darkThemeOnLocalStorage, setDarkThemeOnLocalStorage] = useLocalStorage(
+    "darkTheme",
+    false
+  );
 
   useEffect(() => {
     if (darkThemeOnLocalStorage && themeName === "light") {
@@ -50,8 +50,7 @@ const HeaderNav = ({ history, location }) => {
         className={styles.dropdown}
         itemsListClassName={styles.dropdownList}
         closeOnItemClick={false}
-        title={username}
-      >
+        title={username}>
         {user.isadmin && !isOnUnvettedRoute && (
           <DropdownItem onClick={goToUnvetted}>Admin</DropdownItem>
         )}
@@ -66,11 +65,18 @@ const HeaderNav = ({ history, location }) => {
         <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
         <DropdownItem>
           <div className={styles.themeToggleWrapper}>
-            <Toggle onToggle={onThemeToggleHandler} toggled={themeName === "dark"} />
-            <div onClick={onThemeToggleHandler} className={styles.themeToggleLabel}>Dark Mode</div>
+            <Toggle
+              onToggle={onThemeToggleHandler}
+              toggled={themeName === "dark"}
+            />
+            <div
+              onClick={onThemeToggleHandler}
+              className={styles.themeToggleLabel}>
+              Dark Mode
+            </div>
           </div>
         </DropdownItem>
-        <DropdownItem onClick={onLogout}>Logout</DropdownItem>
+        <DropdownItem onClick={() => onLogout(isCMS)}>Logout</DropdownItem>
       </Dropdown>
     </div>
   ) : (
@@ -78,8 +84,7 @@ const HeaderNav = ({ history, location }) => {
       <NavLink
         className={styles.navLink}
         activeClassName={styles.activeNavLink}
-        to="/user/login"
-      >
+        to="/user/login">
         <Text className={`${styles.navLinkText} ${styles.rightGreyBorder}`}>
           Log in
         </Text>
@@ -87,8 +92,7 @@ const HeaderNav = ({ history, location }) => {
       <NavLink
         className={styles.navLink}
         activeClassName={styles.activeNavLink}
-        to="/user/signup"
-      >
+        to="/user/signup">
         <Text className={styles.navLinkText}>Sign up</Text>
       </NavLink>
     </nav>
