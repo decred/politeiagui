@@ -8,12 +8,13 @@ import InvoiceDatasheet, {
 } from "src/componentsv2/InvoiceDatasheet";
 import MonthPickerField from "../MonthPicker/MonthPickerField";
 import AttachFileInput from "src/componentsv2/AttachFileInput";
-import usePolicy from "src/hooks/api/usePolicy";
 import {
   getInitialDateValue,
   getMinMaxYearAndMonth
 } from "src/containers/Invoice";
+import usePolicy from "src/hooks/api/usePolicy";
 import { invoiceValidationSchema, improveLineItemErrors } from "./validation";
+import DraftSaver from "./DraftSaver";
 import ThumbnailGrid from "src/componentsv2/Files";
 import ExchangeRateField from "./ExchangeRateField";
 
@@ -25,7 +26,8 @@ const InvoiceForm = React.memo(function InvoiceForm({
   setFieldValue,
   errors,
   touched,
-  isValid
+  isValid,
+  submitSuccess
 }) {
   // scroll to top in case of global error
   useEffect(() => {
@@ -137,7 +139,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
         errorsPerFile={errors.files}
         // errors={errors}
       />
-
       <InvoiceDatasheet
         value={values.lineitems}
         userRate={values.rate}
@@ -145,6 +146,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
         onChange={handleChangeInvoiceDatasheet}
       />
       <div className="justify-right">
+        <DraftSaver submitSuccess={submitSuccess} />
         <SubmitButton />
       </div>
     </form>
@@ -153,7 +155,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
 
 const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
   const { policy } = usePolicy();
-  const [, setSubmitSuccess] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const validationSchema = useMemo(() => invoiceValidationSchema(policy), [
     policy
   ]);
@@ -187,7 +189,7 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
   return (
     <Formik
       onSubmit={handleSubmit}
-      initialValues={ initialValues || {
+      initialValues={initialValues || {
         name: "",
         location: "",
         contact: "",
@@ -198,9 +200,9 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
         files: []
       }}
       validationSchema={validationSchema}>
-      {(props) => {
-        return <InvoiceForm {...props} />;
-      }}
+      {(props) => (
+        <InvoiceForm {...{ ...props, submitSuccess }} />
+      )}
     </Formik>
   );
 };
