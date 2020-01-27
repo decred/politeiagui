@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Message from "./Message";
+import { Message } from "pi-ui";
 
 const defaulErrorRenderer = (error, title) => (
-  <Message header={title} type="error" body={error.toString()} />
+  <Message title={title} header={title} kind="error">{error.toString()}</Message>
 );
 
 class ErrorBoundary extends Component {
