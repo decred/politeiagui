@@ -135,7 +135,8 @@ const comments = (state = DEFAULT_STATE, action) =>
                 comments.map(censorTargetComment)
               )
             )(state);
-          }
+          },
+          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();
 
