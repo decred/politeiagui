@@ -74,7 +74,7 @@ const ProposalForm = React.memo(function ProposalForm({
       weight="semibold"
       className={classNames(
         styles.formatHelpButton,
-        isDarkTheme && styles.darkFormatHelpButton
+        isDarkTheme && styles.darkButton
       )}
       onClick={openMDGuideModal}>
       Formatting Help
@@ -88,7 +88,7 @@ const ProposalForm = React.memo(function ProposalForm({
       rel="noopener noreferrer"
       className={classNames(
         styles.proposalGuidelinesButton,
-        isDarkTheme && styles.darkProposalGuidelinesButton
+        isDarkTheme && styles.darkButton
       )}
       href="https://docs.decred.org/governance/politeia/proposal-guidelines/">
       Proposal Guidelines
