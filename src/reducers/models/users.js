@@ -71,14 +71,8 @@ const users = (state = DEFAULT_STATE, action) =>
               ["byID", state.currentUserID, "publickey"],
               action.payload.publickey
             )(state),
-          [act.RECEIVE_LOGOUT]: () => {
-            console.log(state);
-            return onReceiveLogout(state);
-          },
-          [act.RECEIVE_CMS_LOGOUT]: () => {
-            console.log(state);
-            return onReceiveCMSLogout(state);
-          }
+          [act.RECEIVE_LOGOUT]: () => onReceiveLogout(state),
+          [act.RECEIVE_CMS_LOGOUT]: () => onReceiveCMSLogout(state)
         }[action.type] || (() => state)
       )();
 

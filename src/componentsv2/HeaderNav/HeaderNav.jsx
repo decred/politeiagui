@@ -1,5 +1,5 @@
 import { Text, Dropdown, DropdownItem, Toggle, useTheme } from "pi-ui";
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
@@ -27,6 +27,10 @@ const HeaderNav = ({ history, location }) => {
     "darkTheme",
     false
   );
+
+  const onLogoutClick = useCallback(() => {
+    onLogout(isCMS);
+  }, [onLogout, isCMS]);
 
   useEffect(() => {
     if (darkThemeOnLocalStorage && themeName === "light") {
@@ -76,7 +80,7 @@ const HeaderNav = ({ history, location }) => {
             </div>
           </div>
         </DropdownItem>
-        <DropdownItem onClick={() => onLogout(isCMS)}>Logout</DropdownItem>
+        <DropdownItem onClick={onLogoutClick}>Logout</DropdownItem>
       </Dropdown>
     </div>
   ) : (

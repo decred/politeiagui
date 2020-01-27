@@ -261,7 +261,6 @@ export const handleLogout = (response, isCMS) => (dispatch) => {
 
 export const onLogout = (isCMS) =>
   withCsrf((dispatch, getState, csrf) => {
-    console.log(isCMS);
     dispatch(act.REQUEST_LOGOUT());
     return api
       .logout(csrf)
