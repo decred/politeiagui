@@ -4,7 +4,7 @@
   justify-content: flex-end;
 }
 
-.darkFormatHelpButton {
+.darkButton {
   color: var(--tab-text-color) !important;
 }
 
@@ -14,15 +14,20 @@
   font-weight: 400;
   cursor: pointer;
   padding-top: 10px;
-  padding-right: 40px;
+  padding-right: var(--spacing-4);
 }
 
 .formatHelpButton:hover {
   color: var(--color-gray-dark);
 }
 
+.proposalGuidelinesButton {
+  composes: formatHelpButton;
+  text-decoration: none !important;
+}
+
 @media screen and (max-width: 560px) {
   .formatHelpButton {
-    padding-right: 0;
+    padding-right: var(--spacing-1);
   }
 }
