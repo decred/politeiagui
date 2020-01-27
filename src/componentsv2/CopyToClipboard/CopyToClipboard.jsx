@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Tooltip, useTheme, classNames } from "pi-ui";
 import styles from "./CopyToClipboard.module.css";
 
-const copyToClipboard = str => {
+const copyToClipboard = (str) => {
   const el = document.createElement("textarea");
   el.value = str;
   document.body.appendChild(el);
@@ -11,8 +11,7 @@ const copyToClipboard = str => {
   document.body.removeChild(el);
 };
 
-const CopyToClipboard = ({ children, value, tooltipText }) => {
-
+const CopyToClipboard = ({ children, value, tooltipText, className }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
 
@@ -26,10 +25,13 @@ const CopyToClipboard = ({ children, value, tooltipText }) => {
   };
   return (
     <Tooltip
-      className={classNames(styles.copyTooltip, isDarkTheme && styles.darkCopyTooltip)}
+      className={classNames(
+        styles.copyTooltip,
+        isDarkTheme && styles.darkCopyTooltip,
+        className
+      )}
       placement="bottom"
-      content={feedbackActive ? "Copied!" : tooltipText}
-    >
+      content={feedbackActive ? "Copied!" : tooltipText}>
       {children({ onCopyToClipboard })}
     </Tooltip>
   );
