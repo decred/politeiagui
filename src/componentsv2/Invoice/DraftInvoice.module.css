@@ -1,6 +1,7 @@
 .deleteDraft {
-  margin-top: 10px;
   color: var(--color-orange) !important;
+  border: 0 !important;
+  padding: 0 !important;
 }
 
 .deleteDraft:hover {
