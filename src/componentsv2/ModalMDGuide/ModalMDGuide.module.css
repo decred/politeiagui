@@ -6,6 +6,20 @@
   width: 100%;
   justify-content: center;
 }
+
+.dark h1,
+.dark h2 {
+  border-bottom: 1px solid var(--separator-color) !important;
+}
+
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5 {
+  color: var(--tab-text-active-color) !important;
+}
+
 .quotedText {
   border-left: 0.25em solid var(--separator-color);
   max-width: 10rem;
@@ -21,7 +35,7 @@
   border-radius: 2px;
   margin-top: 25px;
 }
-.darkCodeBlock{
+.darkCodeBlock {
   border: 0;
   background-color: var(--header-color);
 }

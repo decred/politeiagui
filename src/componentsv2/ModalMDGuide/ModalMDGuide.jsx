@@ -1,5 +1,17 @@
 import React from "react";
-import { Modal, P, Table, useTheme, classNames } from "pi-ui";
+import {
+  Modal,
+  P,
+  Table,
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  H6,
+  useTheme,
+  classNames
+} from "pi-ui";
 import styles from "./ModalMDGuide.module.css";
 
 const MDGuideTable = () => {
@@ -10,6 +22,12 @@ const MDGuideTable = () => {
     "You see": content
   });
   const tableContent = [
+    buildRow("# header1", <H1>header1</H1>),
+    buildRow("## header2", <H2>header2</H2>),
+    buildRow("### header3", <H3>header3</H3>),
+    buildRow("#### header4", <H4>header4</H4>),
+    buildRow("##### header5", <H5>header5</H5>),
+    buildRow("###### header6", <H6>header6</H6>),
     buildRow("*italics*", <i>italics</i>),
     buildRow("**bold**", <b>bold</b>),
     buildRow("~~strikethrough~~", <s>strikethrough</s>),
@@ -41,7 +59,11 @@ const MDGuideTable = () => {
         <span className="spaces">        </span>return false
       </div>,
       <div className={styles.blockWrapper}>
-        <pre className={classNames(styles.codeBlock, isDarkTheme && styles.darkCodeBlock)}>
+        <pre
+          className={classNames(
+            styles.codeBlock,
+            isDarkTheme && styles.darkCodeBlock
+          )}>
           if 1 * 2 != 3:
           <br />
           return false
@@ -58,7 +80,11 @@ const MDGuideTable = () => {
       <Table
         data={tableContent}
         wrapperClassName={styles.table}
-        bodyCellClassName={styles.tableBodyCell}
+        bodyCellClassName={classNames(
+          styles.tableBodyCell,
+          "markdown-body",
+          isDarkTheme && styles.dark
+        )}
         headers={["You type", "You see"]}
       />
     </>
@@ -72,8 +98,7 @@ const ModalMDGuide = ({ title = "Formatting Help", onClose, ...props }) => {
       onClose={onClose}
       {...props}
       contentStyle={{ width: "100%" }}
-      titleStyle={{ paddingRight: "4rem" }}
-    >
+      titleStyle={{ paddingRight: "4rem" }}>
       <MDGuideTable />
     </Modal>
   );
