@@ -24,6 +24,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
   handleSubmit,
   isSubmitting,
   setFieldValue,
+  setFieldTouched,
   errors,
   touched,
   isValid,
@@ -73,6 +74,11 @@ const InvoiceForm = React.memo(function InvoiceForm({
     [setFieldValue, values.files]
   );
 
+  const handleChangeWithTouched = (field) => (e) => {
+    setFieldTouched(field, true);
+    handleChange(e);
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       {errors && errors.global && (
@@ -91,32 +97,32 @@ const InvoiceForm = React.memo(function InvoiceForm({
         name="name"
         tabIndex={1}
         value={values.name}
-        onChange={handleChange}
         error={touched.name && errors.name}
+        onChange={handleChangeWithTouched("name")}
       />
       <BoxTextInput
         placeholder="Contractor location"
         name="location"
         tabIndex={1}
         value={values.location}
-        onChange={handleChange}
         error={touched.location && errors.location}
+        onChange={handleChangeWithTouched("location")}
       />
       <BoxTextInput
         placeholder="Contractor contact"
         name="contact"
         tabIndex={1}
         value={values.contact}
-        onChange={handleChange}
         error={touched.contact && errors.contact}
+        onChange={handleChangeWithTouched("contact")}
       />
       <BoxTextInput
         placeholder="Payment address"
         name="address"
         tabIndex={1}
         value={values.address}
-        onChange={handleChange}
-        error={touched.contact && errors.address}
+        error={touched.address && errors.address}
+        onChange={handleChangeWithTouched("address")}
       />
       <BoxTextInput
         placeholder="Contractor rate"
@@ -124,8 +130,8 @@ const InvoiceForm = React.memo(function InvoiceForm({
         type="number"
         tabIndex={1}
         value={values.rate}
-        onChange={handleChange}
         error={touched.rate && errors.rate}
+        onChange={handleChangeWithTouched("rate")}
       />
       <AttachFileInput
         label="Attach files"
@@ -137,7 +143,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
         onClick={() => null}
         onRemove={handleFileRemoval}
         errorsPerFile={errors.files}
-        // errors={errors}
       />
       <InvoiceDatasheet
         value={values.lineitems}
@@ -156,7 +161,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
 const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
   const { policy } = usePolicy();
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const validationSchema = useMemo(() => invoiceValidationSchema(policy), [
+  const invoiceFormValidation = useMemo(() => invoiceValidationSchema(policy), [
     policy
   ]);
 
@@ -199,7 +204,7 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
         lineitems: [generateBlankLineItem()],
         files: []
       }}
-      validationSchema={validationSchema}>
+      validationSchema={invoiceFormValidation}>
       {(props) => (
         <InvoiceForm {...{ ...props, submitSuccess }} />
       )}
