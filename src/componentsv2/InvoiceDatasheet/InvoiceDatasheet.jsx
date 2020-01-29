@@ -8,6 +8,7 @@ import styles from "./InvoiceDatasheet.module.css";
 import { ModalEditorProvider } from "./components/ModalEditor";
 import CellRenderer from "./components/CellRenderer";
 import TableButton from "./components/TableButton";
+import usePolicy from "src/hooks/api/usePolicy";
 
 import {
   processCellsChange,
@@ -26,6 +27,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   errors,
   proposalsTokens
 }) {
+  const { policy } = usePolicy();
   const [grid, setGrid] = useState([]);
   const [currentRate, setCurrentRate] = useState(userRate || 0);
 
@@ -51,18 +53,25 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   const handleAddNewRow = useCallback(
     e => {
       e.preventDefault();
-      const newValue = value.concat([generateBlankLineItem()]);
+      const newValue = value.concat([generateBlankLineItem(policy)]);
       onChange(newValue);
     },
-    [onChange, value]
+    [onChange, value, policy]
   );
 
   useEffect(
     function updateGridOnValueChange() {
-      const grid = convertLineItemsToGrid(value, readOnly, errors, currentRate, proposalsTokens);
+      const grid = convertLineItemsToGrid(
+        value,
+        readOnly,
+        errors,
+        currentRate,
+        policy,
+        proposalsTokens
+      );
       setGrid(grid);
     },
-    [value, readOnly, errors, currentRate, proposalsTokens]
+    [value, readOnly, errors, currentRate, policy, proposalsTokens]
   );
 
   const handleRemoveLastRow = useCallback(

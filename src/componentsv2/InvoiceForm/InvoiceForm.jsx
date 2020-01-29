@@ -225,7 +225,16 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history, approvedProposal
   return (
     <Formik
       onSubmit={handleSubmit}
-      initialValues={formInitialValues}
+      initialValues={initialValues || {
+        name: "",
+        location: "",
+        contact: "",
+        address: "",
+        exchangerate: "",
+        date: getInitialDateValue(),
+        lineitems: [generateBlankLineItem(policy)],
+        files: []
+      }}
       isInitialValid={isInitialValid}
       validationSchema={invoiceFormValidation}>
       {(props) => (
