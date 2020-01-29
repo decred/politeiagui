@@ -83,6 +83,10 @@ span.statusTag > span {
   color: var(--color-gray);
 }
 
+.darkQuorumTooltip {
+  color: var(--text-color);
+}
+
 .votesQuorum {
   color: var(--text-secondary-color) !important;
 }

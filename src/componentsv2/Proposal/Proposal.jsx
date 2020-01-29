@@ -131,7 +131,7 @@ const Proposal = React.memo(function Proposal({
                   {version > 1 && !extended && !mobile && (
                     <Text
                       id={`proposal-${proposalToken}-version`}
-                      className={classNames(styles.version)}
+                      className={styles.version}
                       truncate
                     >{`version ${version}`}</Text>
                   )}
@@ -251,7 +251,7 @@ const Proposal = React.memo(function Proposal({
                 </Row>
                 <Row className={styles.proposalActions}>
                   <CopyLink
-                    className={isPublicAccessible ? styles.copyLink : ""}
+                    className={classNames(isPublicAccessible && styles.copyLink)}
                     url={window.location.origin + proposalURL}
                   />
                   {(isVoteActive || isVotingFinished) && (
