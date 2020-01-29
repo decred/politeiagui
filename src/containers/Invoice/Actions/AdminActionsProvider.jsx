@@ -11,11 +11,14 @@ const AdminActionsProvider = ({ children }) => {
   const {
     onRejectInvoice,
     onApproveInvoice,
-    onDisputeInvoice
+    onDisputeInvoice,
+    onPayApprovedInvoices
   } = useAdminActions();
-  const [showRejectModal, openRejectModal, closeRejectrModal] = useBooleanState(
-    false
-  );
+  const [
+    showRejectModal,
+    openRejectModal,
+    closeRejectrModal
+  ] = useBooleanState(false);
   const [
     showApproveModal,
     openApproveModal,
@@ -25,6 +28,11 @@ const AdminActionsProvider = ({ children }) => {
     showDisputeModal,
     openDisputeModal,
     closeDisputeModal
+  ] = useBooleanState(false);
+  const [
+    showPayModal,
+    openPayModal,
+    closePayModal
   ] = useBooleanState(false);
 
   // set the invoice target before executing the function
@@ -38,7 +46,8 @@ const AdminActionsProvider = ({ children }) => {
       value={{
         onReject: withInvoiceTarget(openRejectModal),
         onApprove: withInvoiceTarget(openApproveModal),
-        onDispute: withInvoiceTarget(openDisputeModal)
+        onDispute: withInvoiceTarget(openDisputeModal),
+        onPay: openPayModal
       }}>
       <>
         {children}
@@ -75,6 +84,17 @@ const AdminActionsProvider = ({ children }) => {
           }
           show={showDisputeModal}
           onClose={closeDisputeModal}
+        />
+        <ModalConfirm
+          title="Pay approved invoices"
+          message="Are you sure you want to set all of these approved invoices to paid?"
+          onSubmit={onPayApprovedInvoices}
+          successTitle="Inovices paid"
+          successMessage={
+            <Text>The invoices have been successfully updated!</Text>
+          }
+          show={showPayModal}
+          onClose={closePayModal}
         />
       </>
     </adminInvoicesActionsContext.Provider>

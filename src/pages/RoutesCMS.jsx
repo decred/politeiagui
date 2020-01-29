@@ -15,6 +15,7 @@ import PageInvoicesNew from "./Invoices/New";
 import PageInvoiceEdit from "./Invoices/Edit";
 import PageInvoiceDetail from "./Invoices/Detail";
 import PageListAdminInvoices from "./Invoices/AdminList";
+import PageGeneratePayoutsList from "./Invoices/Payouts";
 
 const Redirect = withRouter(({ to, history, location }) => {
   useEffect(() => {
@@ -72,6 +73,12 @@ const Routes = ({ location }) => {
             title="Invoice Detail"
             exact
             component={PageInvoiceDetail}
+          />
+          <AdminAuthenticatedRoute
+            path="/admin/payouts"
+            title="Payouts"
+            exact
+            component={PageGeneratePayoutsList}
           />
           <AuthenticatedRoute
             path="/invoices/:token/edit"

@@ -13,6 +13,7 @@ export const useAdminInvoiceActions = () =>
 
 export const useAdminActions = () => {
   const onSetInvoiceStatus = useAction(act.onSetInvoiceStatus);
+  const onPayApprovedInvoices = useAction(act.onPayApprovedInvoices);
   const onRejectInvoice = useCallback(
     (invoice) => (reason) =>
       onSetInvoiceStatus(
@@ -47,6 +48,7 @@ export const useAdminActions = () => {
   return {
     onRejectInvoice,
     onApproveInvoice,
-    onDisputeInvoice
+    onDisputeInvoice,
+    onPayApprovedInvoices
   };
 };
