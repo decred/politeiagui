@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Text, useMediaQuery, Tooltip } from "pi-ui";
+import { Text, useMediaQuery, Tooltip, useTheme, classNames } from "pi-ui";
 import iconSearchSmall from "src/assets/search-small.svg";
 import styles from "./Proposal.module.css";
 
@@ -12,6 +12,8 @@ const VotesCount = ({
 }) => {
   const isMobileScreen = useMediaQuery("(max-width:560px)");
   const votesLeft = quorumVotes - votesReceived;
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
 
   return (
     <div className={styles.voteCount}>
@@ -25,7 +27,7 @@ const VotesCount = ({
               src={iconSearchSmall}
             />
           )}
-          <Tooltip className={styles.quorumTooltip} content={`${votesReceived} votes cast, quorum requirement is ${quorumVotes} votes`}>
+          <Tooltip className={classNames(styles.quorumTooltip, isDarkTheme && styles.darkQuorumTooltip)} content={`${votesReceived} votes cast, quorum requirement is ${quorumVotes} votes`}>
             <Text className={styles.votesReceived} size="small">{votesReceived}</Text>
             <Text className={styles.votesQuorum} size="small">/{`${quorumVotes} votes`}</Text>
           </Tooltip>
