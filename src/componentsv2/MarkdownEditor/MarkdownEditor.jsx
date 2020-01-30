@@ -34,7 +34,8 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
           className={classNames(
             styles.previewContainer,
             !markdown && styles.nothingToPreview,
-            isDarkTheme && styles.dark
+            isDarkTheme && !markdown && styles.darkNothingToPreview,
+            isDarkTheme && "dark"
           )}
           body={markdown || "Nothing to preview"}
         />

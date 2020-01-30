@@ -20,7 +20,7 @@
   color: var(--color-gray-blueish);
 }
 
-.dark.previewContainer.nothingToPreview p {
+.darkNothingToPreview.previewContainer.nothingToPreview p {
   color: var(--text-color);
 }
 
