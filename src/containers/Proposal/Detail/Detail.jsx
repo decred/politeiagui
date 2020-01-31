@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from "react";
 import get from "lodash/fp/get";
-import { Link } from "pi-ui";
+import { Link, classNames, useTheme } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import Proposal from "src/componentsv2/Proposal";
 import styles from "./Detail.module.css";
@@ -30,6 +30,9 @@ const ProposalDetail = ({ Main, match }) => {
 
   const { voteSummary } = useProposalVote(proposalToken);
 
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
+
   const showCommentArea =
     proposal && (isPublicProposal(proposal) || isAbandonedProposal(proposal));
   const canReceiveComments =
@@ -47,15 +50,14 @@ const ProposalDetail = ({ Main, match }) => {
     return (
       <div className={styles.returnLinkContainer}>
         <Link
-          gray
-          className={styles.returnLink}
+          className={classNames(styles.returnLink, isDarkTheme && styles.darkReturnLink)}
           onClick={returnToPreviousLocation}
         >
           &#8592; Go back
         </Link>
       </div>
     );
-  }, [previousLocation, returnToPreviousLocation]);
+  }, [previousLocation, returnToPreviousLocation, isDarkTheme]);
 
   return (
     <>

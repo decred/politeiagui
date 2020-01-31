@@ -65,7 +65,7 @@ li.mde-header-item > button {
   font-size: var(--font-size-regular);
   background: var(--card-background);
   -webkit-appearance: none;
-  color: var(--color-text);
+  color: var(--text-color);
 }
 
 .mde-text::placeholder {

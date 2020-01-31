@@ -80,7 +80,7 @@ div.seeOnGithubTooltip {
 }
 
 div.darkSeeOnGithubTooltip {
-  color: var(--color-text);
+  color: var(--text-color);
 }
 
 @media screen and (max-width: 560px) {
