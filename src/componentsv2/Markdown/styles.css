@@ -271,6 +271,7 @@
 
 .dark .markdown-body blockquote {
   border-left: 0.25em solid var(--separator-color);
+  color: var(--text-color);
 }
 
 .markdown-body blockquote > :first-child {
@@ -341,6 +342,10 @@
 .markdown-body h6 {
   color: #6a737d;
   font-size: 0.85em;
+}
+
+.dark .markdown-body h6 {
+  color: var(--text-color);
 }
 
 .markdown-body ol,

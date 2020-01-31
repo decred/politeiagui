@@ -78,7 +78,7 @@ span.censor:hover {
 }
 
 .highlightAsNew {
-  background-color: var(--color-gray-lightest);
+  background-color: var(--comment-new-background);
 }
 
 .replyForm {

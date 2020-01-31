@@ -15,6 +15,11 @@
 .returnLink {
   cursor: pointer;
   font-size: var(--font-size-small);
+  color: var(--color-gray) !important;
+}
+
+.darkReturnLink {
+  color: var(--text-color) !important;
 }
 
 .returnLinkContainer {
