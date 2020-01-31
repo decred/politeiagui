@@ -34,7 +34,7 @@ const ProposalForm = React.memo(function ProposalForm({
   disableSubmit,
   openMDGuideModal
 }) {
-  const mobile = useMediaQuery("(max-width: 560px)");
+  const smallTablet = useMediaQuery("(max-width: 685px)");
 
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
@@ -132,7 +132,7 @@ const ProposalForm = React.memo(function ProposalForm({
         onRemove={handleFileRemoval}
         errors={errors}
       />
-      {!mobile ? (
+      {!smallTablet ? (
         <Row topMarginSize="s" justify="right">
           <FormatHelpButton />
           <ProposalGuidelinesButton />

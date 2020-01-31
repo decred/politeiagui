@@ -26,8 +26,12 @@
   text-decoration: none !important;
 }
 
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 685px) {
   .formatHelpButton {
     padding-right: var(--spacing-1);
+  }
+
+  .proposalGuidelinesButton {
+    padding-right: 0 !important;
   }
 }

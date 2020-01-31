@@ -18,6 +18,5 @@
 /* EXTRA EXTRA SMALL ADJUSTMENT */
 @media screen and (max-width: 361px) {
   .titleLink {
-    line-height: var(--spacing-1);
   }
 }

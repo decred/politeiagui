@@ -24,7 +24,7 @@ const UnvettedActions = ({ proposal }) => {
 
   const { onCensor, onApprove } = useUnvettedProposalActions();
 
-  const withProposal = fn => () => {
+  const withProposal = (fn) => () => {
     fn(proposal);
   };
 
@@ -36,8 +36,7 @@ const UnvettedActions = ({ proposal }) => {
             onClick={withProposal(onCensor)}
             className={classNames("margin-right-s", styles.reportButton)}
             noBorder
-            kind="secondary"
-          >
+            kind="secondary">
             Report as spam
           </Button>
           <Button onClick={withProposal(onApprove)}>Approve</Button>
@@ -63,7 +62,7 @@ const PublicActions = ({ proposal, voteSummary }) => {
     onStartVote
   } = usePublicProposalActions();
 
-  const withProposal = fn => () => {
+  const withProposal = (fn) => () => {
     fn(proposal);
   };
 
@@ -77,7 +76,7 @@ const PublicActions = ({ proposal, voteSummary }) => {
         {isProposalOwner &&
           (!isVotingStartAuthorized ? (
             <Button onClick={withProposal(onAuthorizeVote)}>
-              Authorize voting to start
+              Authorize voting
             </Button>
           ) : (
             <Button onClick={withProposal(onRevokeVote)}>
