@@ -35,7 +35,7 @@ div.customPageDetails {
 .titleAndSubtitleWrapper {
   display: flex;
   flex-direction: column;
-  width: 75%;
+  width: 100%;
 }
 
 .subtitle {
@@ -105,10 +105,6 @@ div.customPageDetails {
 @media screen and (max-width: 560px) {
   .card {
     padding: 2rem 3rem;
-  }
-
-  .titleAndSubtitleWrapper {
-    width: 85%;
   }
 
   .singleContentMain {
