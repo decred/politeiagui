@@ -14,7 +14,7 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
   const { loading, payouts } = useAdminPayouts();
   const { onPay } = useAdminInvoiceActions();
   const hasPayouts = !!(!loading && payouts && payouts.length);
-  const actions = hasPayouts && (<Button className={classNames("cursor-pointer", styles.payBtn)} onClick={onPay}>Set Invoices To Paid</Button>);
+  const actions = hasPayouts && (<Button className={classNames("cursor-pointer", styles.payBtn)} onClick={onPay}>Set invoices to paid</Button>);
 
   return (
     <>
