@@ -207,14 +207,6 @@ describe("test api actions (actions/api.js)", () => {
     });
   });
 
-  test("update me action", () => {
-    const payload = "any";
-    expect(api.updateMe(payload)).toDispatchActions(
-      { type: act.UPDATE_ME, payload },
-      done
-    );
-  });
-
   test("on get policy action", async () => {
     const path = "/api/v1/policy";
     //test it handles a successful response
@@ -462,37 +454,6 @@ describe("test api actions (actions/api.js)", () => {
         }
       }
     );
-  });
-
-  test("on fetch vetted action", async () => {
-    const path = "/api/v1/proposals/vetted";
-    await assertApiActionOnSuccess(
-      path,
-      api.onFetchVetted,
-      [],
-      [{ type: act.REQUEST_VETTED }, { type: act.RECEIVE_VETTED, error: false }]
-    );
-    await assertApiActionOnError(path, api.onFetchVetted, [], (e) => [
-      { type: act.REQUEST_VETTED, error: false, payload: undefined },
-      { type: act.RECEIVE_VETTED, error: true, payload: e }
-    ]);
-  });
-
-  test("on fetch unvetted action", async () => {
-    const path = "/api/v1/proposals/unvetted";
-    await assertApiActionOnSuccess(
-      path,
-      api.onFetchUnvetted,
-      [],
-      [
-        { type: act.REQUEST_UNVETTED },
-        { type: act.RECEIVE_UNVETTED, error: false }
-      ]
-    );
-    await assertApiActionOnError(path, api.onFetchUnvetted, [], (e) => [
-      { type: act.REQUEST_UNVETTED, error: false, payload: undefined },
-      { type: act.RECEIVE_UNVETTED, error: true, payload: e }
-    ]);
   });
 
   test("on fetch liked comments action", async () => {
@@ -812,13 +773,6 @@ describe("test api actions (actions/api.js)", () => {
     );
   });
 
-  test("reset forgotten password action", () => {
-    expect(api.resetForgottenPassword()).toDispatchActions(
-      { type: act.RESET_FORGOTTEN_PASSWORD_REQUEST },
-      done
-    );
-  });
-
   test("on password reset request action", async () => {
     const path = "/api/v1/user/password/reset";
     const verificationtoken = "any";
@@ -877,64 +831,6 @@ describe("test api actions (actions/api.js)", () => {
   test("verify user payment with politeia action", async () => {
     // TODO: verify if this function can be improved to dispatch actions
     // as all other api request actions currently do
-  });
-
-  test("on fetch votes status", async () => {
-    const path = "/api/v1/proposals/votestatus";
-
-    await assertApiActionOnSuccess(
-      path,
-      api.onFetchProposalsVoteStatus,
-      [],
-      [
-        { type: act.REQUEST_PROPOSALS_VOTE_STATUS },
-        { type: act.RECEIVE_PROPOSALS_VOTE_STATUS, error: false }
-      ]
-    );
-
-    await assertApiActionOnError(
-      path,
-      api.onFetchProposalsVoteStatus,
-      [],
-      (e) => [
-        {
-          type: act.REQUEST_PROPOSALS_VOTE_STATUS,
-          error: false,
-          payload: undefined
-        },
-        { type: act.RECEIVE_PROPOSALS_VOTE_STATUS, error: true, payload: e }
-      ]
-    );
-  });
-
-  test("on fetch vote status for a single proposal", async () => {
-    const path = "/api/v1/proposals/any/votestatus";
-    const token = "any";
-    const params = [token];
-
-    await assertApiActionOnSuccess(
-      path,
-      api.onFetchProposalVoteStatus,
-      params,
-      [
-        { type: act.REQUEST_PROPOSAL_VOTE_STATUS },
-        { type: act.RECEIVE_PROPOSAL_VOTE_STATUS, error: false }
-      ]
-    );
-
-    await assertApiActionOnError(
-      path,
-      api.onFetchProposalVoteStatus,
-      params,
-      (e) => [
-        {
-          type: act.REQUEST_PROPOSAL_VOTE_STATUS,
-          error: false,
-          payload: { token }
-        },
-        { type: act.RECEIVE_PROPOSAL_VOTE_STATUS, error: true, payload: e }
-      ]
-    );
   });
 
   test("on fetch user details action", async () => {

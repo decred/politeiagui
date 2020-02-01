@@ -39,7 +39,7 @@ export function useComments(recordToken, fetchComments = false) {
   const onFetchLikes = useAction(act.onFetchLikedComments);
   const onLikeCommentAction = useAction(act.onLikeComment);
   const onResetComments = useAction(act.onResetComments);
-  const onCensorComment = useAction(act.onCensorCommentv2);
+  const onCensorComment = useAction(act.onCensorComment);
 
   const { currentUser } = useLoaderContext();
   const email = currentUser && currentUser.email;
