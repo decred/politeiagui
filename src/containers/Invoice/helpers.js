@@ -45,6 +45,15 @@ export const presentationalInvoiceName = (invoice) =>
     : "";
 
 /**
+ * Returns a presentational name for a draft invoice
+ * @param {Object} invoice
+ */
+export const presentationalDraftInvoiceName = (draft) =>
+  draft
+    ? `Invoice from ${draft.name} - ${draft.date.month}/${draft.date.year}`
+    : "";
+
+/**
  * Returns true if the given invoice wasn't reviewed by an admin yet
  * @param {Object} invoice
  */

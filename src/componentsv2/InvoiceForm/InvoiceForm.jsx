@@ -8,12 +8,13 @@ import InvoiceDatasheet, {
 } from "src/componentsv2/InvoiceDatasheet";
 import MonthPickerField from "../MonthPicker/MonthPickerField";
 import AttachFileInput from "src/componentsv2/AttachFileInput";
-import usePolicy from "src/hooks/api/usePolicy";
 import {
   getInitialDateValue,
   getMinMaxYearAndMonth
 } from "src/containers/Invoice";
+import usePolicy from "src/hooks/api/usePolicy";
 import { invoiceValidationSchema, improveLineItemErrors } from "./validation";
+import DraftSaver from "./DraftSaver";
 import ThumbnailGrid from "src/componentsv2/Files";
 import ExchangeRateField from "./ExchangeRateField";
 
@@ -23,9 +24,11 @@ const InvoiceForm = React.memo(function InvoiceForm({
   handleSubmit,
   isSubmitting,
   setFieldValue,
+  setFieldTouched,
   errors,
   touched,
-  isValid
+  isValid,
+  submitSuccess
 }) {
   // scroll to top in case of global error
   useEffect(() => {
@@ -71,6 +74,11 @@ const InvoiceForm = React.memo(function InvoiceForm({
     [setFieldValue, values.files]
   );
 
+  const handleChangeWithTouched = (field) => (e) => {
+    setFieldTouched(field, true);
+    handleChange(e);
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       {errors && errors.global && (
@@ -89,32 +97,32 @@ const InvoiceForm = React.memo(function InvoiceForm({
         name="name"
         tabIndex={1}
         value={values.name}
-        onChange={handleChange}
         error={touched.name && errors.name}
+        onChange={handleChangeWithTouched("name")}
       />
       <BoxTextInput
         placeholder="Contractor location"
         name="location"
         tabIndex={1}
         value={values.location}
-        onChange={handleChange}
         error={touched.location && errors.location}
+        onChange={handleChangeWithTouched("location")}
       />
       <BoxTextInput
         placeholder="Contractor contact"
         name="contact"
         tabIndex={1}
         value={values.contact}
-        onChange={handleChange}
         error={touched.contact && errors.contact}
+        onChange={handleChangeWithTouched("contact")}
       />
       <BoxTextInput
         placeholder="Payment address"
         name="address"
         tabIndex={1}
         value={values.address}
-        onChange={handleChange}
-        error={touched.contact && errors.address}
+        error={touched.address && errors.address}
+        onChange={handleChangeWithTouched("address")}
       />
       <BoxTextInput
         placeholder="Contractor rate"
@@ -122,8 +130,8 @@ const InvoiceForm = React.memo(function InvoiceForm({
         type="number"
         tabIndex={1}
         value={values.rate}
-        onChange={handleChange}
         error={touched.rate && errors.rate}
+        onChange={handleChangeWithTouched("rate")}
       />
       <AttachFileInput
         label="Attach files"
@@ -135,9 +143,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
         onClick={() => null}
         onRemove={handleFileRemoval}
         errorsPerFile={errors.files}
-        // errors={errors}
       />
-
       <InvoiceDatasheet
         value={values.lineitems}
         userRate={values.rate}
@@ -145,6 +151,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
         onChange={handleChangeInvoiceDatasheet}
       />
       <div className="justify-right">
+        <DraftSaver submitSuccess={submitSuccess} />
         <SubmitButton />
       </div>
     </form>
@@ -153,8 +160,8 @@ const InvoiceForm = React.memo(function InvoiceForm({
 
 const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
   const { policy } = usePolicy();
-  const [, setSubmitSuccess] = useState(false);
-  const validationSchema = useMemo(() => invoiceValidationSchema(policy), [
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const invoiceFormValidation = useMemo(() => invoiceValidationSchema(policy), [
     policy
   ]);
 
@@ -187,7 +194,7 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
   return (
     <Formik
       onSubmit={handleSubmit}
-      initialValues={ initialValues || {
+      initialValues={initialValues || {
         name: "",
         location: "",
         contact: "",
@@ -197,10 +204,10 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
         lineitems: [generateBlankLineItem()],
         files: []
       }}
-      validationSchema={validationSchema}>
-      {(props) => {
-        return <InvoiceForm {...props} />;
-      }}
+      validationSchema={invoiceFormValidation}>
+      {(props) => (
+        <InvoiceForm {...{ ...props, submitSuccess }} />
+      )}
     </Formik>
   );
 };

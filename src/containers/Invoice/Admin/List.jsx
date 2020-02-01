@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { useAdminInvoices } from "./hooks";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import { Spinner, Link } from "pi-ui";
+import { Spinner, Link as UILink } from "pi-ui";
+import Link from "src/componentsv2/Link";
 import Invoice from "src/componentsv2/Invoice";
 import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import {
@@ -11,6 +12,7 @@ import {
 import HelpMessage from "src/componentsv2/HelpMessage";
 import { ModalInviteContractor } from "src/containers/User/Invite";
 import styles from "./List.module.css";
+import { Row } from "src/componentsv2/layout";
 
 const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
   const { loading, invoices } = useAdminInvoices();
@@ -62,11 +64,16 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
         <PageDetails
           title="Admin"
           actionsContent={
-            <div>
-              <Link className="cursor-pointer" onClick={openInviteModal}>
-                Invite contractor
-              </Link>
-            </div>
+            <Row justify="space-between" className={styles.actionsWrapper}>
+              <div>
+                <UILink className="cursor-pointer" onClick={openInviteModal}>
+                  Invite contractor
+                </UILink>
+              </div>
+              <div>
+                <Link className="cursor-pointer" to="/admin/payouts">Generate Payouts</Link>
+              </div>
+            </Row>
           }>
           <InvoiceFilterForm onChange={handleFiltersChange} />
         </PageDetails>
