@@ -33,7 +33,6 @@ const PayoutsDateRange = ({ onChange, children }) => {
                 name="eDate"
                 label="End"
               />
-
               <HookOnFormChange formikProps={formikProps} onChange={onChange} />
             </form>
             {children && children(values)}

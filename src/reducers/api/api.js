@@ -365,7 +365,7 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.REQUEST_GENERATE_PAYOUTS]: () => request("payouts", state, action),
       [act.RECEIVE_GENERATE_PAYOUTS]: () => receive("payouts", state, action),
       [act.REQUEST_INVOICE_PAYOUTS]: () =>
-        receive("invoicePayouts", state, action),
+        request("invoicePayouts", state, action),
       [act.RECEIVE_INVOICE_PAYOUTS]: () =>
         receive("invoicePayouts", state, action),
       [act.REQUEST_PAY_APPROVED]: () => request("payApproved", state, action),
