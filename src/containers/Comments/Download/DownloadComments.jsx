@@ -4,7 +4,7 @@ import DownloadJSON from "src/componentsv2/DownloadJSON";
 import { useDownloadComments } from "./hooks";
 
 const DownloadComments = ({ recordToken, className }) => {
-  const { comments } = useDownloadComments();
+  const { comments } = useDownloadComments(recordToken);
   return (
     !!comments &&
     !!comments.length && (

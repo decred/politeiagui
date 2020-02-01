@@ -719,16 +719,6 @@ describe("test api actions (actions/api.js)", () => {
     );
   });
 
-  test("redirected From action ", () => {
-    expect(api.redirectedFrom("any")).toDispatchActions(
-      {
-        type: act.REDIRECTED_FROM,
-        payload: "any"
-      },
-      done
-    );
-  });
-
   test("reset redirected from action", () => {
     expect(api.resetRedirectedFrom()).toDispatchActions(
       [{ type: act.RESET_REDIRECTED_FROM }],

@@ -4,14 +4,12 @@ import {
   PAYWALL_STATUS_PAID,
   PROPOSAL_FILTER_ALL,
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_USER_FILTER_SUBMITTED,
-  SORT_BY_TOP
+  PROPOSAL_USER_FILTER_SUBMITTED
 } from "../constants";
 import { getCurrentYear, getCurrentMonth } from "../helpers";
 import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 
 export const DEFAULT_STATE = {
-  isShowingSignupConfirmation: false,
   replyParent: TOP_LEVEL_COMMENT_PARENTID,
   newProposal: {
     name: "",
@@ -26,11 +24,8 @@ export const DEFAULT_STATE = {
   submittedProposals: {},
   draftProposals: null,
   identityImportResult: { errorMsg: "", successMsg: "" },
-  onboardViewed: false,
-  commentsSortOption: { value: SORT_BY_TOP, label: SORT_BY_TOP },
   pollingCreditsPayment: false,
   reachedCreditsPaymentPollingLimit: false,
-  redirectedFrom: null,
   invoiceSortOption: { month: FILTER_ALL_MONTHS, year: getCurrentYear() },
   endPayoutOption: { month: getCurrentMonth(), year: getCurrentYear() },
   startPayoutOption: {
@@ -220,24 +215,12 @@ const app = (state = DEFAULT_STATE, action) =>
           lastSubmitted: false
         }
       }),
-      [act.SET_PROPOSAL_APPROVED]: () => ({
-        ...state,
-        isProposalStatusApproved: action.payload
-      }),
       [act.SET_VOTES_END_HEIGHT]: () => ({
         ...state,
         votesEndHeight: {
           ...state.votesEndHeight,
           [action.payload.token]: action.payload.endheight
         }
-      }),
-      [act.REQUEST_SIGNUP_CONFIRMATION]: () => ({
-        ...state,
-        isShowingSignupConfirmation: true
-      }),
-      [act.RESET_SIGNUP_CONFIRMATION]: () => ({
-        ...state,
-        isShowingSignupConfirmation: false
       }),
       [act.CHANGE_ADMIN_FILTER_VALUE]: () => ({
         ...state,
@@ -339,11 +322,6 @@ const app = (state = DEFAULT_STATE, action) =>
         ...state,
         identityImportResult: action.payload
       }),
-      [act.SET_ONBOARD_AS_VIEWED]: () => ({ ...state, onboardViewed: true }),
-      [act.SET_COMMENTS_SORT_OPTION]: () => ({
-        ...state,
-        commentsSortOption: action.payload
-      }),
       [act.TOGGLE_CREDITS_PAYMENT_POLLING]: () => ({
         ...state,
         pollingCreditsPayment: action.payload
@@ -360,11 +338,6 @@ const app = (state = DEFAULT_STATE, action) =>
         ...state,
         dccs: action.payload
       }),
-      [act.REDIRECTED_FROM]: () => ({
-        ...state,
-        redirectedFrom: action.payload
-      }),
-      [act.RESET_REDIRECTED_FROM]: () => ({ ...state, redirectedFrom: null }),
       [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
     }[action.type] || (() => state)
   )());

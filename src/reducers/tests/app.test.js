@@ -25,12 +25,6 @@ describe("test app reducer", () => {
     });
   };
 
-  const assertReducerEqualsAssertion = (state, action, assertion) => {
-    const newstate = app(state, action);
-
-    expect(newstate).toEqual(assertion);
-  };
-
   test("default tests for app reducer", () => {
     const action = {
       type: act.SET_REPLY_PARENT,
@@ -344,58 +338,19 @@ describe("test app reducer", () => {
     });
   });
 
-  test("correctly test simpler reducers with assertion", () => {
-    const reducers = [
-      {
-        action: act.REQUEST_SIGNUP_CONFIRMATION,
-        assertion: { isShowingSignupConfirmation: true }
-      },
-      {
-        action: act.RESET_SIGNUP_CONFIRMATION,
-        assertion: { isShowingSignupConfirmation: false }
-      },
-      { action: act.SET_ONBOARD_AS_VIEWED, assertion: { onboardViewed: true } }
-    ];
-
-    reducers.map((obj) => {
-      const action = {
-        type: obj.action,
-        payload: {},
-        error: false
-      };
-
-      assertReducerEqualsAssertion({}, action, obj.assertion);
-    });
-  });
-
-  test("reset redirectFrom action", () => {
-    const action = {
-      type: act.RESET_REDIRECTED_FROM
-    };
-
-    const state = app({}, action);
-
-    expect(state).toEqual({
-      redirectedFrom: null
-    });
-  });
-
   test("correctly test reducers that only sets payload to informed key", () => {
     const reducers = [
       { action: act.LOAD_DRAFT_PROPOSALS, key: "draftProposals" },
-      { action: act.SET_PROPOSAL_APPROVED, key: "isProposalStatusApproved" },
       { action: act.CHANGE_ADMIN_FILTER_VALUE, key: "adminProposalsShow" },
       { action: act.CHANGE_PUBLIC_FILTER_VALUE, key: "publicProposalsShow" },
       { action: act.CHANGE_USER_FILTER_VALUE, key: "userProposalsShow" },
       { action: act.CSRF_NEEDED, key: "csrfIsNeeded" },
       { action: act.SHOULD_AUTO_VERIFY_KEY, key: "shouldVerifyKey" },
       { action: act.IDENTITY_IMPORTED, key: "identityImportResult" },
-      { action: act.SET_COMMENTS_SORT_OPTION, key: "commentsSortOption" },
       {
         action: act.TOGGLE_CREDITS_PAYMENT_POLLING,
         key: "pollingCreditsPayment"
-      },
-      { action: act.REDIRECTED_FROM, key: "redirectedFrom" }
+      }
     ];
 
     reducers.map((obj) => {
