@@ -68,7 +68,6 @@ const Preferences = ({ user }) => {
                   id="2"
                   name="myproposalnotifications-votestarted"
                   label="Voting started for proposal"
-                  tabIndex="1"
                 />
               </Card>
               <Card className="container margin-top-s">
