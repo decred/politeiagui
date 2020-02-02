@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import ExportToCsv from "src/componentsv2/ExportToCsv";
 import { convertAtomsToDcr } from "src/utilsv2";
 import { Row } from "src/componentsv2/layout";
+import HelpMessage from "src/componentsv2/HelpMessage";
 import { PayoutsDateRange } from "src/componentsv2/PayoutsDateRange";
 import { useInvoicePayouts } from "./hooks";
 import styles from "./PayoutSummaries.module.css";
@@ -92,6 +93,11 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
               </ExportToCsv>
             </Row>
           </>
+        )}
+        {!hasLineItemPayouts && (
+          <HelpMessage>
+            {"No payouts in the given time range!"}
+          </HelpMessage>
         )}
       </Main>
     </>

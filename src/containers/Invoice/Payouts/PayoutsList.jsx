@@ -74,8 +74,7 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
           <HelpMessage>
             {"There are no approved invoices!"}
           </HelpMessage>
-        )
-        }
+        )}
       </Main>
     </>
   );

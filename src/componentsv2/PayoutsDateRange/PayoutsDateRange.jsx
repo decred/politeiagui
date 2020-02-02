@@ -25,12 +25,11 @@ const PayoutsDateRange = ({ onChange, children }) => {
         return (
           <>
             <form className={styles.form}>
-            <MonthPickerField
+              <MonthPickerField
                 years={datesRange}
                 name="sDate"
                 label="Start"
               />
-
               <MonthPickerField
                 className={"margin-left-s"}
                 years={datesRange}
