@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import { Formik } from "formik";
 
 import MonthPickerField from "src/componentsv2/MonthPicker/MonthPickerField";
@@ -51,6 +52,10 @@ const HookOnFormChange = ({ formikProps, onChange }) => {
     onChange(formikProps.values);
   }, [formikProps.values, onChange]);
   return null;
+};
+
+PayoutsDateRange.propTypes = {
+  onChange: PropTypes.func.isRequired
 };
 
 export default PayoutsDateRange;

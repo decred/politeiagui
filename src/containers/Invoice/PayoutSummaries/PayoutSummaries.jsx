@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Spinner, Link, Table, CopyableText } from "pi-ui";
+import PropTypes from "prop-types";
 import ExportToCsv from "src/componentsv2/ExportToCsv";
 import { convertAtomsToDcr } from "src/utilsv2";
 import { Row } from "src/componentsv2/layout";
@@ -95,6 +96,12 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
       </Main>
     </>
   );
+};
+
+InvoicePayoutsList.propTypes = {
+  TopBanner: PropTypes.func.isRequired,
+  PageDetails: PropTypes.func.isRequired,
+  Main: PropTypes.func.isRequired
 };
 
 export default InvoicePayoutsList;
