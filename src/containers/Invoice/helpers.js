@@ -1,5 +1,15 @@
 import { getCurrentMonth, getCurrentYear } from "src/helpers";
 import { INVOICE_STATUS_NEW, INVOICE_STATUS_UPDATED } from "./constants";
+
+/**
+ * Returns the previous month (and year) to be used as initial start date in date range
+ * @returns {Object} { year, month}
+ */
+export const getPreviousMonthDateValue = () => {
+  const { month, year } = getInitialDateValue();
+  return getLastMonth(month, year);
+};
+
 /**
  * Returns the initial month and year to be applied to a blank invoice form
  * @returns {Object} { year, month}
@@ -8,17 +18,25 @@ export const getInitialDateValue = () => {
   const currYear = getCurrentYear();
   const currMonth = getCurrentMonth();
 
+  return getLastMonth(currMonth, currYear);
+};
+
+/**
+ * Gets current month & year and calculates last month
+ * @returns {Object} { year, month}
+ */
+const getLastMonth = (month, year) => {
   // case is december
-  if (currMonth === 1) {
+  if (month === 1) {
     return {
-      year: currYear - 1,
+      year: year - 1,
       month: 12
     };
   }
 
   return {
-    year: currYear,
-    month: currMonth - 1
+    year,
+    month: month - 1
   };
 };
 

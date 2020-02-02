@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Spinner, Link } from "pi-ui";
+import { Spinner, Link, Table, CopyableText } from "pi-ui";
+import ExportToCsv from "src/componentsv2/ExportToCsv";
+import { convertAtomsToDcr } from "src/utilsv2";
 import { Row } from "src/componentsv2/layout";
 import { PayoutsDateRange } from "src/componentsv2/PayoutsDateRange";
 import { useInvoicePayouts } from "./hooks";
@@ -28,25 +30,67 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
     },
     [setDates]
   );
-
   return (
     <>
       <TopBanner>
         <PageDetails
           title="Line Item Payouts"
-          actionsContent={<Row><Link className="cursor-pointer">Export To Csv</Link></Row>}
+          actionsContent={null}
         >
           <PayoutsDateRange onChange={handleDatesChange}></PayoutsDateRange>
         </PageDetails>
       </TopBanner>
-      <Main>
+      <Main fillScreen>
         {loading && (
           <div className={styles.spinnerWrapper}>
             <Spinner invert />
           </div>
         )}
         {hasLineItemPayouts && (
-          lineItemPayouts.length
+          <>
+            <Table
+              bodyCellClassName={styles.tableBodyCell}
+              headClassName={styles.tableHead}
+              data={lineItemPayouts.map(({ year, month, token, domain, subdomain, description, proposaltoken, expenses, labor, paiddate, amountreceived }) => {
+                return {
+                  month: `${month}/${year}`,
+                  invoicetoken: token && <CopyableText
+                    truncate
+                    id={`invoice-token-${token}`}
+                    className={styles.copyableText}
+                    tooltipPlacement={"left"}>
+                    {token}
+                  </CopyableText>,
+                  domain,
+                  subdomain,
+                  description,
+                  proposaltoken: proposaltoken && <CopyableText
+                    truncate
+                    id={`invoice-token-${proposaltoken}`}
+                    className={styles.copyableText}
+                    tooltipPlacement={"left"}>
+                    {proposaltoken}
+                  </CopyableText>,
+                  expenses,
+                  labor,
+                  total: labor + expenses,
+                  paiddate,
+                  amountreceived: convertAtomsToDcr(amountreceived)
+                };
+              })}
+              headers={["Date", "Invoice Token", "Domain", "Sub Domain", "Description", "Proposal Token", "Expense (USD)", "Labor (USD)", "Total (USD)", "Paid Date", "Amount Received"]}>
+            </Table>
+            <Row noMargin justify="right">
+              <ExportToCsv
+                data={lineItemPayouts}
+                fields={["year", "month", "token", "domain", "subdomain", "description", "proposaltoken", "expenses", "labor", "paiddate", "amountreceived"]}
+                filename="payouts">
+                <Link className="cursor-pointer">
+                  Export To Csv
+                </Link>
+              </ExportToCsv>
+            </Row>
+          </>
         )}
       </Main>
     </>
