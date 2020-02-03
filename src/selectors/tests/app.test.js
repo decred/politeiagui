@@ -2,9 +2,6 @@ import * as sel from "../app";
 import { MOCK_STATE } from "./mock_state";
 import {
   PAYWALL_STATUS_PAID,
-  PROPOSAL_VOTING_ACTIVE,
-  PROPOSAL_VOTING_FINISHED,
-  PROPOSAL_VOTING_NOT_AUTHORIZED,
   PAYWALL_STATUS_LACKING_CONFIRMATIONS
 } from "../../constants";
 
@@ -54,32 +51,6 @@ describe("test app selector", () => {
     expect(sel.draftProposals(MOCK_STATE)).toEqual(
       MOCK_STATE.app.draftProposals
     );
-  });
-
-  it("test selector getVettedProposalFilterCounts", () => {
-    expect(sel.getVettedProposalFilterCounts(MOCK_STATE)).toBeDefined();
-  });
-
-  it("test selector getVettedEmptyProposalsMessage", () => {
-    expect(sel.getVettedEmptyProposalsMessage(MOCK_STATE)).toBeDefined();
-
-    expect(
-      sel.getVettedEmptyProposalsMessage({
-        app: { publicProposalsShow: PROPOSAL_VOTING_ACTIVE }
-      })
-    ).toBeDefined();
-
-    expect(
-      sel.getVettedEmptyProposalsMessage({
-        app: { publicProposalsShow: PROPOSAL_VOTING_FINISHED }
-      })
-    ).toBeDefined();
-
-    expect(
-      sel.getVettedEmptyProposalsMessage({
-        app: { publicProposalsShow: PROPOSAL_VOTING_NOT_AUTHORIZED }
-      })
-    ).toBeDefined();
   });
 
   it("test selector getCsrfIsNeeded", () => {
