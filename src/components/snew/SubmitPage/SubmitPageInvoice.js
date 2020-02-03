@@ -14,8 +14,7 @@ import {
   fromUSDCentsToUSDUnits,
   getCurrentYear,
   getYearOptions,
-  getMonthOptions,
-  getPreviousMonthAndYear
+  getMonthOptions
 } from "../../../helpers";
 import { invoiceInstructions } from "./helpers";
 import { INITIAL_YEAR } from "../../../constants";
@@ -50,21 +49,23 @@ const InvoiceSubmit = (props) => {
     onFetchSubcontractors,
     subcontractors
   } = props;
-  const currentYearMonthOptions = getMonthOptions();
   const currentYear = getCurrentYear();
   const yearOptions = getYearOptions(INITIAL_YEAR, currentYear);
-  const [monthOptions, setMonthOptions] = useState(currentYearMonthOptions);
+  const [monthOptions, setMonthOptions] = useState([]);
   const [contractorRate, setContractorRate] = useState(0);
+
+  console.log(month, year, yearOptions);
 
   useEffect(() => {
     // limit the months options up to the current month if
     // year is the current year
     if (+year === currentYear) {
+      const currentYearMonthOptions = getMonthOptions();
       setMonthOptions(currentYearMonthOptions);
     } else {
       setMonthOptions(MONTH_OPTIONS);
     }
-  }, [year, currentYearMonthOptions, currentYear]);
+  }, [year, currentYear]);
 
   useEffect(() => {
     // fetch user subcontractor list
@@ -84,11 +85,7 @@ const InvoiceSubmit = (props) => {
 
   const handleFetchExchangeRate = useCallback(() => {
     if (month && year) {
-      const { month: prevMonth, year: prevYear } = getPreviousMonthAndYear(
-        month,
-        year
-      );
-      onFetchExchangeRate(prevMonth, prevYear);
+      onFetchExchangeRate(month, year);
     }
   }, [month, year, onFetchExchangeRate]);
 
@@ -152,7 +149,8 @@ const InvoiceSubmit = (props) => {
 
                     <DynamicDataDisplay
                       onFetch={handleFetchExchangeRate}
-                      refreshTriggers={[month, year]}
+                      month={month}
+                      year={year}
                       isLoading={loadingExchangeRate}
                       error={exchangeRateError}
                       errorTitle={"Failed to fetch exchange rate"}

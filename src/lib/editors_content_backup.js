@@ -185,10 +185,12 @@ export const resetNewInvoiceData = () => {
 };
 
 export const getNewInvoiceData = () => {
+  console.log("oieieee");
   const getDefaultDate = () => {
     const isFirstMonth = getCurrentMonth() === 1;
     const year = isFirstMonth ? getCurrentYear() - 1 : getCurrentYear();
-    const month = isFirstMonth ? 12 : getCurrentMonth();
+    const month = isFirstMonth ? 12 : getCurrentMonth() - 1;
+    console.log(year, month, "new");
     return { year, month };
   };
 
