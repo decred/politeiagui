@@ -9,12 +9,6 @@ import {
 } from "../../constants";
 
 describe("test app selector", () => {
-  it("test selector proposal", () => {
-    expect(sel.proposal(MOCK_STATE)).toEqual(
-      MOCK_STATE.api.proposal.response.proposal
-    );
-  });
-
   it("test selectors userHasPaid and userCanExecute actions", () => {
     // userCanExecuteActions && userHasPaid
     expect(sel.userHasPaid(MOCK_STATE)).toBeFalsy();
@@ -54,23 +48,6 @@ describe("test app selector", () => {
       api: { ...MOCK_STATE.api, me: { response: { paywalladdress: "" } } }
     };
     expect(sel.getUserPaywallConfirmations(state)).toEqual(null);
-  });
-
-  it("test selector unvettedProposals", () => {
-    expect(sel.unvettedProposals(MOCK_STATE)).toEqual(
-      MOCK_STATE.api.unvetted.response.proposals
-    );
-  });
-
-  it("test selector vettedProposals", () => {
-    // vettedProposals
-    expect(sel.vettedProposals(MOCK_STATE)).toEqual(
-      MOCK_STATE.api.vetted.response.proposals
-    );
-  });
-
-  it("test selector getDraftProposals", () => {
-    expect(sel.getDraftProposals(MOCK_STATE)).toEqual([]);
   });
 
   it("test selectors draftProposals", () => {
@@ -119,18 +96,8 @@ describe("test app selector", () => {
     );
   });
 
-  it("test selector proposalCredits", () => {
-    expect(sel.proposalCredits(MOCK_STATE)).toEqual(
-      MOCK_STATE.app.proposalCredits
-    );
-  });
-
   it("test pollingCreditsPayment selector", () => {
     expect(sel.pollingCreditsPayment(MOCK_STATE)).toBeFalsy();
-  });
-
-  it("test selector getDraftInvoices", () => {
-    expect(sel.getDraftInvoices(MOCK_STATE)).toEqual([]);
   });
 
   it("test selectors draftInvoices and draftInvoiceById", () => {

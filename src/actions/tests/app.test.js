@@ -8,10 +8,7 @@ import {
   onChangePassword,
   onFetchProposalComments
 } from "../api";
-import {
-  onFetchProposal as onFetchProposalApi,
-  onSubmitComment as onSubmitCommentApi
-} from "../api";
+import { onFetchProposal as onFetchProposalApi } from "../api";
 import { done } from "./helpers";
 
 describe("test app actions (actions/app.js)", () => {
@@ -67,11 +64,7 @@ describe("test app actions (actions/app.js)", () => {
       currentUserID: "testid"
     }
   };
-  const FAKE_COMMENT = {
-    comment: "fake comment",
-    token: "fake_token",
-    parentid: 0
-  };
+
   const FAKE_PROPOSAL = {
     token: "fake_token",
     name: "fake name",
@@ -194,26 +187,6 @@ describe("test app actions (actions/app.js)", () => {
     const option = "any";
     expect(app.onChangeUserFilter(option)).toDispatchActions(
       { type: act.CHANGE_USER_FILTER_VALUE, payload: option },
-      done
-    );
-  });
-
-  test("on change proposal status to approved action", () => {
-    const status = "any";
-    expect(app.onChangeProposalStatusApproved(status)).toDispatchActions(
-      { type: act.SET_PROPOSAL_APPROVED, payload: status },
-      done
-    );
-  });
-
-  test("on submit comment action", async () => {
-    const { token, comment, parentid } = FAKE_COMMENT;
-    const { email } = FAKE_USER;
-    await expect(
-      app.onSubmitCommentApp(email, token, comment, parentid)
-    ).toDispatchActionsWithState(
-      MOCK_STATE,
-      [onSubmitCommentApi(email, token, comment, parentid)],
       done
     );
   });

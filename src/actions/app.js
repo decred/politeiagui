@@ -9,7 +9,6 @@ import {
   onSubmitInvoice,
   onSubmitEditedInvoice,
   onFetchInvoiceComments,
-  onInvoicePayouts,
   onUserProposalCredits,
   onSubmitNewDCC
 } from "./api";
@@ -341,64 +340,11 @@ export const onChangePublicFilter = (option) =>
 export const onChangeUserFilter = (option) =>
   act.CHANGE_USER_FILTER_VALUE(option);
 
-export const onChangeStartPayoutDateFilter = (month, year) => (
-  dispatch,
-  getState
-) => {
-  const start = new Date(year, month - 1);
-  const end = new Date(
-    sel.getEndYearPayoutFilterValue(getState()),
-    sel.getEndMonthPayoutFilterValue(getState()) - 1
-  );
-
-  dispatch(onInvoicePayouts(start.valueOf() / 1000, end.valueOf() / 1000));
-  dispatch(act.CHANGE_START_PAYOUT_DATE_FILTER({ month, year }));
-};
-
-export const onResetStartPayoutDateFilter = () =>
-  act.RESET_START_PAYOUT_DATE_FILTER();
-
-export const onChangeEndPayoutDateFilter = (month, year) => (
-  dispatch,
-  getState
-) => {
-  const end = new Date(year, month - 1);
-  const start = new Date(
-    sel.getStartYearPayoutFilterValue(getState()),
-    sel.getStartMonthPayoutFilterValue(getState()) - 1
-  );
-  dispatch(onInvoicePayouts(start.valueOf() / 1000, end.valueOf() / 1000));
-  dispatch(act.CHANGE_END_PAYOUT_DATE_FILTER({ month, year }));
-};
-
-export const onResetEndPayoutDateFilter = () =>
-  act.RESET_END_PAYOUT_DATE_FILTER();
-
-export const onChangeDateFilter = (month, year) =>
-  act.CHANGE_DATE_FILTER({ month, year });
-
-export const onResetDateFilter = () => act.RESET_DATE_FILTER();
-
-export const onChangeProposalStatusApproved = (status) =>
-  act.SET_PROPOSAL_APPROVED(status);
-
 export const onIdentityImported = (successMsg, errorMsg = "") =>
   act.IDENTITY_IMPORTED({ errorMsg, successMsg });
 
-export const onSubmitCommentApp = (...args) => (dispatch) =>
-  dispatch(onSubmitCommentApi(...args)).then(() =>
-    dispatch(onSetReplyParent())
-  );
-
 export const keyMismatch = (payload) => (dispatch) =>
   dispatch(act.KEY_MISMATCH(payload));
-
-export const setOnboardAsViewed = () => act.SET_ONBOARD_AS_VIEWED();
-
-export const resetLastSubmittedProposal = () => act.RESET_LAST_SUBMITTED();
-
-export const onSetCommentsSortOption = (option) =>
-  act.SET_COMMENTS_SORT_OPTION(option);
 
 export const toggleCreditsPaymentPolling = (bool) =>
   act.TOGGLE_CREDITS_PAYMENT_POLLING(bool);
@@ -410,9 +356,6 @@ export const onEditUserPreferences = (preferences) => (dispatch) =>
   dispatch(onEditUser(sel.resolveEditUserValues(preferences)));
 
 export const onResetComments = () => act.RESET_COMMENTS();
-
-// CMS
-export const onResetInviteUser = () => act.RESET_INVITE_USER();
 
 export const onLoadDCC = (token) => (dispatch, getState) => {
   const fetchedDCCsByStatus = sel.dccsByStatus(getState());
