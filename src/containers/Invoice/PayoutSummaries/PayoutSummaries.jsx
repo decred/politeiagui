@@ -10,9 +10,12 @@ import { useInvoicePayouts } from "./hooks";
 import styles from "./PayoutSummaries.module.css";
 
 const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
-  const [dates, setDates] = useState({});
+  const [dates, setDates] = useState({
+    sDate: null,
+    eDate: null
+  });
   const { loading, lineItemPayouts, onInvoicePayouts } = useInvoicePayouts();
-  const hasLineItemPayouts = !!(!loading && lineItemPayouts && lineItemPayouts.length);
+  const hasLineItemPayouts = !loading && lineItemPayouts && lineItemPayouts.length > 0;
   const fetchInvoicePayouts = () => {
     if (!dates.sDate || !dates.eDate) {
       return;
@@ -68,7 +71,7 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
                   description,
                   proposaltoken: proposaltoken && <CopyableText
                     truncate
-                    id={`invoice-token-${proposaltoken}`}
+                    id={`proposal-token-${proposaltoken}`}
                     className={styles.copyableText}
                     tooltipPlacement={"left"}>
                     {proposaltoken}

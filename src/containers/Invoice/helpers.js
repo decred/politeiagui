@@ -10,6 +10,13 @@ export const getPreviousMonthDateValue = () => {
   return getLastMonth(month, year);
 };
 
+export const getCurrentDateValue = () => {
+  return {
+    month: getCurrentMonth(),
+    year: getCurrentYear()
+  };
+};
+
 /**
  * Returns the initial month and year to be applied to a blank invoice form
  * @returns {Object} { year, month}
