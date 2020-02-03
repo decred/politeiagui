@@ -188,7 +188,7 @@ export const getNewInvoiceData = () => {
   const getDefaultDate = () => {
     const isFirstMonth = getCurrentMonth() === 1;
     const year = isFirstMonth ? getCurrentYear() - 1 : getCurrentYear();
-    const month = isFirstMonth ? 12 : getCurrentMonth();
+    const month = isFirstMonth ? 12 : getCurrentMonth() - 1;
     return { year, month };
   };
 

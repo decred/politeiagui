@@ -6,21 +6,19 @@ import { PageLoadingIcon } from "../snew";
 import Message from "../Message";
 import { INVOICE_STATUS_NEW } from "../../constants";
 import Reminder, { ReminderList } from "./Reminder";
-import { getCurrentMonth, getCurrentYear } from "../../helpers";
+import {
+  getCurrentMonth,
+  getCurrentYear,
+  getPreviousMonthAndYear
+} from "../../helpers";
 
 const invoiceYear = get(["input", "year"]);
 const invoiceMonth = get(["input", "month"]);
 
-const getPreviousMonthAndYear = () => {
+const UserReminders = ({ invoices }) => {
   const currentMonth = getCurrentMonth();
   const currentYear = getCurrentYear();
-  const month = currentMonth === 1 ? 12 : currentMonth - 1;
-  const year = currentMonth === 1 ? currentYear - 1 : currentYear;
-  return { month, year };
-};
-
-const UserReminders = ({ invoices }) => {
-  const { month, year } = getPreviousMonthAndYear();
+  const { month, year } = getPreviousMonthAndYear(currentMonth, currentYear);
   const hasSubmittedInvoiceInTheCurrentYearAndMonth = invoices.find(
     (inv) => invoiceYear(inv) === year && invoiceMonth(inv) === month
   );

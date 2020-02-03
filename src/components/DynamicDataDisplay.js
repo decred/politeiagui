@@ -8,14 +8,14 @@ const DynamicDataDisplay = ({
   isLoading,
   loadingMessage,
   error,
-  refreshTriggers,
+  month,
+  year,
   onFetch,
   style = {}
 }) => {
-  const refetchTrigger = JSON.stringify(refreshTriggers);
   useEffect(() => {
     onFetch();
-  }, [refetchTrigger, onFetch]);
+  }, [month, year, onFetch]);
 
   if (error) throw error;
 
@@ -64,7 +64,8 @@ DynamicDataDisplay.propTypes = {
     PropTypes.object
   ]),
   errorMessage: PropTypes.string,
-  refreshTriggers: PropTypes.array.isRequired,
+  month: PropTypes.number,
+  year: PropTypes.number,
   onFetch: PropTypes.func.isRequired,
   style: PropTypes.object
 };
