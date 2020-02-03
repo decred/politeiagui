@@ -4,18 +4,18 @@ import { Formik } from "formik";
 
 import MonthPickerField from "src/componentsv2/MonthPicker/MonthPickerField";
 import {
-  getMinMaxYearAndMonth,
+  getPayoutsMinMaxYearAndMonth,
   getCurrentDateValue,
-  getPreviousMonthDateValue
+  getInitialDateValue
 } from "src/containers/Invoice";
 import styles from "./PayoutsDateRange.module.css";
 
 const DEFAULT_INITIAL_VALUES = {
-  sDate: getPreviousMonthDateValue(),
+  sDate: getInitialDateValue(),
   eDate: getCurrentDateValue()
 };
 
-const datesRange = getMinMaxYearAndMonth();
+const datesRange = getPayoutsMinMaxYearAndMonth();
 
 const PayoutsDateRange = ({ onChange, children }) => {
   return (
