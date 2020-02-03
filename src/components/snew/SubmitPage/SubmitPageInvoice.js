@@ -54,8 +54,6 @@ const InvoiceSubmit = (props) => {
   const [monthOptions, setMonthOptions] = useState([]);
   const [contractorRate, setContractorRate] = useState(0);
 
-  console.log(month, year, yearOptions);
-
   useEffect(() => {
     // limit the months options up to the current month if
     // year is the current year
@@ -149,8 +147,8 @@ const InvoiceSubmit = (props) => {
 
                     <DynamicDataDisplay
                       onFetch={handleFetchExchangeRate}
-                      month={month}
-                      year={year}
+                      month={+month}
+                      year={+year}
                       isLoading={loadingExchangeRate}
                       error={exchangeRateError}
                       errorTitle={"Failed to fetch exchange rate"}

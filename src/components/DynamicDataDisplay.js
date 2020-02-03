@@ -64,7 +64,8 @@ DynamicDataDisplay.propTypes = {
     PropTypes.object
   ]),
   errorMessage: PropTypes.string,
-  refreshTrigger: PropTypes.string,
+  month: PropTypes.number,
+  year: PropTypes.number,
   onFetch: PropTypes.func.isRequired,
   style: PropTypes.object
 };
