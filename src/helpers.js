@@ -413,6 +413,12 @@ export const getCurrentYear = () => {
   return d.getFullYear();
 };
 
+export const getPreviousMonthAndYear = (currentMonth, currentYear) => {
+  const month = currentMonth === 1 ? 12 : currentMonth - 1;
+  const year = currentMonth === 1 ? currentYear - 1 : currentYear;
+  return { month, year };
+};
+
 export const getYearOptions = (initial, lastYear) => {
   const d = new Date();
   const isYearValid = (y) => y < lastYear + d.getMonth();

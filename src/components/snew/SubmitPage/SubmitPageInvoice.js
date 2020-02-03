@@ -14,7 +14,8 @@ import {
   fromUSDCentsToUSDUnits,
   getCurrentYear,
   getYearOptions,
-  getMonthOptions
+  getMonthOptions,
+  getPreviousMonthAndYear
 } from "../../../helpers";
 import { invoiceInstructions } from "./helpers";
 import { INITIAL_YEAR } from "../../../constants";
@@ -83,7 +84,11 @@ const InvoiceSubmit = (props) => {
 
   const handleFetchExchangeRate = useCallback(() => {
     if (month && year) {
-      onFetchExchangeRate(month, year);
+      const { month: prevMonth, year: prevYear } = getPreviousMonthAndYear(
+        month,
+        year
+      );
+      onFetchExchangeRate(prevMonth, prevYear);
     }
   }, [month, year, onFetchExchangeRate]);
 
