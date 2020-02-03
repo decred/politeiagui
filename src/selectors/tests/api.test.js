@@ -2,10 +2,6 @@ import * as sel from "../api";
 import { MOCK_STATE } from "./mock_state";
 
 describe("test api selectors", () => {
-  const FAKE_USER = {
-    email: "test@emai"
-  };
-
   const FAKE_PAYWALL = {
     address: "T_fake_address",
     amount: 1000000000,
@@ -14,7 +10,6 @@ describe("test api selectors", () => {
 
   const FAKE_PUBKEY = "fake_pub_key";
   const FAKE_CSRF = "fake_csrf_token";
-  const FAKE_TOKEN = "fake_token";
 
   test("testing higher order selectors", () => {
     // isRequesting
@@ -48,31 +43,6 @@ describe("test api selectors", () => {
       sel.proposalCreditPrice({ api: { proposalPaywallDetails: {} } })
     ).toEqual(0);
 
-    // proposalCreditPurchases
-    expect(sel.proposalCreditPurchases({})).toEqual([]);
-    expect(sel.proposalCreditPurchases(MOCK_STATE)).toEqual([
-      {
-        price:
-          MOCK_STATE.api.userProposalCredits.response.spentcredits[0].price /
-          100000000,
-        datePurchased:
-          MOCK_STATE.api.userProposalCredits.response.spentcredits[0]
-            .datepurchased,
-        numberPurchased: 1,
-        txId: MOCK_STATE.api.userProposalCredits.response.spentcredits[0].txid
-      },
-      {
-        price:
-          MOCK_STATE.api.userProposalCredits.response.unspentcredits[0].price /
-          100000000,
-        datePurchased:
-          MOCK_STATE.api.userProposalCredits.response.unspentcredits[0]
-            .datepurchased,
-        numberPurchased: 1,
-        txId: MOCK_STATE.api.userProposalCredits.response.unspentcredits[0].txid
-      }
-    ]);
-
     // userAlreadyPaid
     expect(sel.userAlreadyPaid(MOCK_STATE)).toEqual(false);
 
@@ -105,37 +75,6 @@ describe("test api selectors", () => {
     state = { api: { ...MOCK_STATE.api, newUser: {}, me: {} } };
 
     expect(sel.paywallTxNotBefore(state)).toEqual(null);
-
-    state = { api: { ...MOCK_STATE.api, startVote: {} } };
-
-    // getPropVoteStatus
-    expect(
-      sel.getPropVoteStatus(MOCK_STATE)(
-        "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8"
-      )
-    ).toEqual(MOCK_STATE.api.proposalVoteStatus.response);
-
-    state = { api: { ...MOCK_STATE.api, proposalVoteStatus: {} } };
-
-    expect(sel.getPropVoteStatus(MOCK_STATE)("fake_token")).toEqual(
-      MOCK_STATE.api.proposalsVoteStatus.response["fake_token"]
-    );
-
-    expect(sel.getPropVoteStatus(MOCK_STATE)("fake_token2")).toEqual(
-      MOCK_STATE.api.proposalsVoteStatus.response["fake_token2"]
-    );
-
-    expect(sel.getPropVoteStatus(MOCK_STATE)("fake_token5234")).toEqual({});
-
-    state = {
-      api: {
-        ...MOCK_STATE.api,
-        proposalVoteStatus: {},
-        proposalsVoteStatus: {}
-      }
-    };
-
-    expect(sel.getPropVoteStatus(state)("fake_token2")).toEqual({});
   });
 
   test("testing composed selectors", () => {
@@ -149,12 +88,6 @@ describe("test api selectors", () => {
 
     expect(sel.csrf(MOCK_STATE)).toEqual(FAKE_CSRF);
 
-    expect(sel.newUserEmail(MOCK_STATE)).toEqual(FAKE_USER.email);
-
-    expect(sel.forgottenPassEmail(MOCK_STATE)).toEqual(FAKE_USER.email);
-
-    expect(sel.emailForResendVerification(MOCK_STATE)).toEqual(FAKE_USER.email);
-
     expect(sel.isTestNet(MOCK_STATE)).toEqual(true);
 
     expect(sel.serverPubkey(MOCK_STATE)).toEqual(FAKE_PUBKEY);
@@ -165,13 +98,7 @@ describe("test api selectors", () => {
       MOCK_STATE.api.proposal.response.proposal
     );
 
-    expect(sel.proposalToken(MOCK_STATE)).toEqual(FAKE_TOKEN);
-
     expect(sel.user(MOCK_STATE)).toEqual(MOCK_STATE.api.user.response.user);
-
-    expect(sel.newProposalMerkle(MOCK_STATE)).toEqual(
-      MOCK_STATE.api.newProposal.response.censorshiprecord.merkle
-    );
 
     expect(sel.newProposalToken(MOCK_STATE)).toEqual(
       MOCK_STATE.api.newProposal.response.censorshiprecord.token
@@ -208,24 +135,10 @@ describe("test api selectors", () => {
     expect(sel.manageUserAction(MOCK_STATE)).toEqual(
       MOCK_STATE.api.manageUser.payload.action
     );
-
-    expect(sel.lastLoginTimeFromLoginResponse(MOCK_STATE)).toEqual(
-      MOCK_STATE.api.login.response.lastlogintime
-    );
-
-    expect(sel.editProposalToken(MOCK_STATE)).toEqual(
-      MOCK_STATE.api.editProposal.response.proposal.censorshiprecord.token
-    );
   });
 
   test("testing or selectors", () => {
     let state;
-    // isApiRequesting
-    expect(sel.isApiRequesting(MOCK_STATE)).toEqual(true);
-
-    state = { api: { ...MOCK_STATE.api, init: { isRequesting: false } } };
-
-    expect(sel.isApiRequesting(state)).toEqual(true);
 
     state = {
       api: {
@@ -235,68 +148,6 @@ describe("test api selectors", () => {
         init: { isRequesting: false }
       }
     };
-
-    expect(sel.isApiRequesting(state)).toEqual(false);
-
-    // apiError
-    expect(sel.apiError(MOCK_STATE)).toEqual(true);
-
-    state = { api: { ...MOCK_STATE.api, init: { error: false } } };
-
-    expect(sel.apiError(state)).toEqual("errormsg");
-
-    state = {
-      api: {
-        ...MOCK_STATE.api,
-        init: { error: false },
-        newUser: { error: false }
-      }
-    };
-
-    expect(sel.apiError(state)).toEqual(false);
-
-    // email
-    expect(sel.loggedInAsEmail(MOCK_STATE)).toEqual("testme@email.com");
-
-    expect(sel.email(MOCK_STATE)).toEqual("testme@email.com");
-
-    state = { api: { ...MOCK_STATE.api, me: { response: { email: null } } } };
-
-    expect(sel.email(state)).toEqual("testlogin@email.com");
-
-    expect(sel.loggedInAsEmail(state)).toEqual(false);
-
-    state = {
-      api: {
-        ...MOCK_STATE.api,
-        me: { response: { email: null } },
-        login: { payload: { email: null } }
-      }
-    };
-
-    expect(sel.email(state)).toEqual(false);
-
-    // username
-    expect(sel.loggedInAsUsername(MOCK_STATE)).toEqual("testusername2");
-
-    state = {
-      api: {
-        ...MOCK_STATE.api,
-        changeUsername: { response: { username: null } }
-      }
-    };
-
-    expect(sel.loggedInAsUsername(state)).toEqual("testusername");
-
-    state = {
-      api: {
-        ...MOCK_STATE.api,
-        changeUsername: { response: { username: null } },
-        me: { response: { username: null } }
-      }
-    };
-
-    expect(sel.loggedInAsUsername(state)).toEqual(false);
 
     // isAdmin
     expect(sel.isAdmin(MOCK_STATE)).toEqual(true);

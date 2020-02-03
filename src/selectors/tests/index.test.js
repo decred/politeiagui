@@ -7,7 +7,6 @@ describe("test index selector", () => {
 
     expect(
       sel.selectorMap({
-        email: sel.email,
         isAdmin: sel.isAdmin
       })(MOCK_STATE)
     ).toEqual({ email: "testme@email.com", isAdmin: true });

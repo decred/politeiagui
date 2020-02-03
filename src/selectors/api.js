@@ -1,16 +1,8 @@
 import { createSelector } from "reselect";
 import get from "lodash/fp/get";
-import eq from "lodash/fp/eq";
-import filter from "lodash/fp/filter";
 import compose from "lodash/fp/compose";
-import { and, or, bool, constant, not } from "../lib/fp";
-import {
-  PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_STATUS_CENSORED,
-  PROPOSAL_STATUS_ABANDONED,
-  CMSWWWMODE
-} from "../constants";
-import { createDeepEqualSelector } from "./helpers";
+import { or, bool, constant, not } from "../lib/fp";
+import { CMSWWWMODE } from "../constants";
 
 export const getIsApiRequesting = (key) =>
   bool(get(["api", key, "isRequesting"]));
@@ -41,13 +33,9 @@ export const isApiRequestingResendVerificationEmail = getIsApiRequesting(
   "resendVerificationEmail"
 );
 export const isApiRequestingPasswordReset = getIsApiRequesting("passwordReset");
-const isApiRequestingVetted = getIsApiRequesting("vetted");
 export const isApiRequestingUnvetted = getIsApiRequesting("unvetted");
 const isApiRequestingUserProposals = getIsApiRequesting("userProposals");
 const isApiRequestingProposal = getIsApiRequesting("proposal");
-const isApiRequestingNewProposal = getIsApiRequesting("newProposal");
-const isApiRequestingNewInvoice = getIsApiRequesting("newInvoice");
-const isApiRequestingInvoice = getIsApiRequesting("invoice");
 export const isApiRequestingUserSearch = getIsApiRequesting("userSearch");
 export const isApiRequestingUser = getIsApiRequesting("user");
 export const isApiRequestingNewComment = getIsApiRequesting("newComment");
@@ -63,9 +51,7 @@ export const isApiRequestingPropVoteStatus = getIsApiRequesting(
 export const isApiRequestingPropVoteResults = getIsApiRequesting(
   "proposalVoteResults"
 );
-export const isApiRequestingProposalsBatch = getIsApiRequesting(
-  "proposalsBatch"
-);
+
 export const isApiRequestingProposalsVoteSummary = getIsApiRequesting(
   "proposalsVoteSummary"
 );
@@ -81,14 +67,6 @@ export const makeIsApiRequestingManageUserByAction = (action) =>
 export const isApiRequestingEditProposal = getIsApiRequesting("editProposal");
 export const isApiRequestingEditInvoice = getIsApiRequesting("editInvoice");
 
-const apiNewUserPayload = getApiPayload("newUser");
-const apiLoginPayload = getApiPayload("login");
-const apiForgottenPasswordPayload = getApiPayload("forgottenPassword");
-const apiResendVerificationEmailPayload = getApiPayload(
-  "resendVerificationEmail"
-);
-const apiNewProposalPayload = getApiPayload("newProposal");
-const apiNewInvoicePayload = getApiPayload("newInvoice");
 const apiSetStatusProposalPayload = getApiPayload("setStatusProposal");
 const apiManageUserPayload = getApiPayload("manageUser");
 
@@ -111,15 +89,10 @@ export const verifyResetPasswordResponse = getApiResponse(
 );
 export const apiVettedResponse = getApiResponse("vetted");
 const apiUserProposalsResponse = getApiResponse("userProposals");
-const apiUnvettedResponse = getApiResponse("unvetted");
 const apiProposalResponse = getApiResponse("proposal");
-const apiInvoiceResponse = getApiResponse("invoice");
-const apiProposalCommentsResponse = getApiResponse("proposalComments");
-const apiInvoiceCommentsResponse = getApiResponse("invoiceComments");
+
 const apiNewProposalResponse = getApiResponse("newProposal");
 const apiNewInvoiceResponse = getApiResponse("newInvoice");
-const apiUserInvoicesResponse = getApiResponse("userInvoices");
-export const userInvoicesError = getApiError("userInvoices");
 const apiSetStatusProposalResponse = getApiResponse("setStatusProposal");
 export const apiUserSearchResponse = getApiResponse("userSearch");
 export const verifyNewUser = getApiResponse("verifyNewUser");
@@ -127,47 +100,14 @@ export const updateUserKey = getApiResponse("updateUserKey");
 export const verifyUserKey = getApiResponse("verifyUserKey");
 export const updateUserKeyError = getApiError("updateUserKey");
 export const verifyUserKeyError = getApiError("verifyUserKey");
-const apiCommentsLikesResponse = getApiResponse("commentslikes");
 export const apiEditUserPayload = getApiPayload("editUser");
 export const apiEditUserResponse = getApiResponse("editUser");
 export const editUserError = getApiError("editUser");
-export const manageUserResponse = getApiResponse("manageUser");
-
-export const apiLikeCommentResponse = getApiResponse("likeComment");
-export const apiLikeCommentError = getApiError("likeComment");
-export const apiLikeCommentPayload = getApiPayload("likeComment");
-
-export const apiPropsVoteStatusResponse = getApiResponse("proposalsVoteStatus");
-export const apiPropsVoteStatusError = getApiError("proposalsVoteStatus");
 
 export const apiPropVoteStatusResponse = getApiResponse("proposalVoteStatus");
 export const apiPropVoteStatusError = getApiError("proposalVoteStatusError");
 
 export const apiPropVoteResultsResponse = getApiResponse("proposalVoteResults");
-export const apiPropVoteResultsError = getApiError("proposalVoteResultsError");
-
-export const apiAuthorizeVoteResponse = getApiResponse("authorizeVote");
-export const apiAuthorizeVotePayload = getApiPayload("authorizeVote");
-export const apiAuthorizeVoteError = getApiError("authorizeVote");
-export const isApiRequestingAuthorizeVote = getIsApiRequesting("authorizeVote");
-export const apiAuthorizeVoteToken = compose(
-  get("token"),
-  apiAuthorizeVotePayload
-);
-
-export const apiStartVoteResponse = getApiResponse("startVote");
-export const apiStartVotePayload = getApiPayload("startVote");
-export const apiStartVoteError = getApiError("startVote");
-export const isApiRequestingStartVote = getIsApiRequesting("startVote");
-export const apiStartVoteToken = compose(get("token"), apiStartVotePayload);
-
-export const isApiRequestingSetProposalStatusByToken = (state) => (token) => {
-  return (
-    setStatusProposalIsRequesting(state) &&
-    setStatusProposalToken(state) === token &&
-    setStatusProposalStatus(state)
-  );
-};
 
 const apiProposalPaywallDetailsResponse = getApiResponse(
   "proposalPaywallDetails"
@@ -188,134 +128,27 @@ export const proposalCreditPrice = (state) => {
   // Amount returned from the server is in atoms, so convert to dcr.
   return creditPrice / 100000000;
 };
-export const proposalPaywallTxNotBefore = compose(
-  get("paywalltxnotbefore"),
-  apiProposalPaywallDetailsResponse
-);
+
 export const isApiRequestingProposalPaywall = getIsApiRequesting(
   "proposalPaywallDetails"
 );
 export const proposalPaywallError = getApiError("proposalPaywallDetails");
 
-export const isApiRequestingUpdateProposalCredits = getIsApiRequesting(
-  "updateProposalCredits"
-);
-export const updateProposalCreditsError = getApiError("updateProposalCredits");
-export const apiUserProposalCreditsResponse = getApiResponse(
-  "userProposalCredits"
-);
-export const proposalCreditPurchases = (state) => {
-  const r = apiUserProposalCreditsResponse(state);
-  if (!r || !r.spentcredits || !r.unspentcredits) {
-    return [];
-  }
-
-  const purchasesMap = {};
-  [...r.spentcredits, ...r.unspentcredits].forEach((credit) => {
-    if (credit.txid in purchasesMap) {
-      purchasesMap[credit.txid].numberPurchased++;
-    } else {
-      purchasesMap[credit.txid] = {
-        price: credit.price / 100000000,
-        datePurchased: credit.datepurchased,
-        numberPurchased: 1,
-        txId: credit.txid
-      };
-    }
-  });
-
-  return Object.values(purchasesMap).sort(
-    (a, b) => a.datePurchased - b.datePurchased
-  );
-};
 export const isApiRequestingUserProposalCredits = getIsApiRequesting(
   "userProposalCredits"
 );
-export const userProposalCreditsError = getApiError("userProposalCredits");
 
 export const apiInitError = getApiError("init");
-export const apiCensorCommentError = getApiError("censorComment");
-export const apiNewUserError = or(apiInitError, getApiError("newUser"));
-export const apiUserError = getApiError("user");
-export const apiChangePasswordError = or(
-  apiInitError,
-  getApiError("changePassword")
-);
-export const apiChangeUsernameError = or(
-  apiInitError,
-  getApiError("changeUsername")
-);
-export const apiVerifyNewUserError = or(
-  apiInitError,
-  getApiError("verifyNewUser")
-);
-export const apiForgottenPasswordError = or(
-  apiInitError,
-  getApiError("forgottenPassword")
-);
-export const apiPasswordResetError = or(
-  apiInitError,
-  getApiError("passwordReset")
-);
-export const apiLoginError = or(apiInitError, getApiError("login"));
-export const apiLogoutError = getApiError("logout");
-export const apiUserSearchError = getApiError("userSearch");
-const apiVettedError = getApiError("vetted");
+
 const apiUserProposalsError = getApiError("userProposals");
-export const apiUnvettedError = getApiError("unvetted");
+
 const apiProposalError = getApiError("proposal");
-const apiNewProposalError = getApiError("newProposal");
-const apiNewInvoiceError = getApiError("newInvoice");
-const apiUserInvoicesError = getApiError("userInvoices");
-const apiSetStatusProposalError = getApiError("setStatusProposal");
-const apiCommentsLikesError = getApiError("commentslikes");
-export const apiError = or(
-  apiInitError,
-  apiNewUserError,
-  apiChangePasswordError,
-  apiChangeUsernameError,
-  apiVerifyNewUserError,
-  apiCensorCommentError,
-  apiLoginError,
-  apiLogoutError,
-  apiVettedError,
-  apiUserProposalsError,
-  apiProposalError,
-  apiUserSearchError,
-  apiNewProposalError,
-  apiCommentsLikesError,
-  apiSetStatusProposalError
-);
 
 export const csrf = compose(get("csrfToken"), apiInitResponse);
-
-export const newUserEmail = compose(get("email"), apiNewUserPayload);
-export const forgottenPassEmail = compose(
-  get("email"),
-  apiForgottenPasswordPayload
-);
-export const emailForResendVerification = compose(
-  get("email"),
-  apiResendVerificationEmailPayload
-);
-
-export const email = or(
-  compose(get("email"), apiMeResponse),
-  compose(get("email"), apiLoginPayload)
-);
-
-export const loggedInAsEmail = or(compose(get("email"), apiMeResponse));
-
-export const lastLoginTime = or(compose(get("lastlogintime"), apiMeResponse));
 
 export const getUserUsername = or(
   compose(get("username"), apiChangeUsernameResponse),
   compose(get("username"), apiUserResponse)
-);
-
-export const loggedInAsUsername = or(
-  compose(get("username"), apiChangeUsernameResponse),
-  compose(get("username"), apiMeResponse)
 );
 
 export const isAdmin = bool(
@@ -336,120 +169,18 @@ export const userAlreadyPaid = bool((state) => {
   return false;
 });
 
-export const paywallAddress = compose(get("paywalladdress"), apiMeResponse);
-export const paywallTxid = compose(get("paywalltxid"), apiMeResponse);
-
-export const paywallAmount = (state) => {
-  let paywallAmount = 0;
-  if (state.api.me && state.api.me.response) {
-    paywallAmount = state.api.me.response.paywallamount;
-  }
-
-  // Amount returned from the server is in atoms, so convert to dcr.
-  return paywallAmount / 100000000;
-};
-
-export const paywallTxNotBefore = (state) => {
-  if (state.api.me && state.api.me.response) {
-    return state.api.me.response.paywalltxnotbefore;
-  }
-
-  return null;
-};
-
 export const isTestNet = compose(get("testnet"), apiInitResponse);
 export const isMainNet = not(isTestNet);
-
-export const getPropVoteStatus = createDeepEqualSelector(
-  apiPropsVoteStatusResponse,
-  (vsResponse) => {
-    const getVoteStatusByToken = (token) =>
-      (vsResponse && vsResponse[token]) || {};
-    return getVoteStatusByToken;
-  }
-);
-
-export const makeGetPropVoteStatus = (token) => {
-  return createSelector(apiPropsVoteStatusResponse, (vsResponse) =>
-    vsResponse ? vsResponse[token] : null
-  );
-};
 
 export const apiPropsVoteSummaryError = getApiError(
   "proposalsVoteSummaryError"
 );
 
-const apiPropsVoteSummaries = getApiResponse("proposalsVoteSummary");
-export const makeGetPropVoteSummary = (token) => {
-  return createSelector(apiPropsVoteSummaries, (vsResponse) =>
-    vsResponse ? vsResponse[token] : null
-  );
-};
-
-export const getBestBlockFromVoteSummaryResponse = createSelector(
-  apiPropsVoteSummaries,
-  (vsResponse) => vsResponse && vsResponse.bestblock
-);
-
-export const proposalWithVoteStatus = (state) => {
-  const proposal = apiProposal(state);
-  const voteStatus = proposal
-    ? getPropVoteStatus(state)(proposal.censorshiprecord.token)
-    : {};
-  return (
-    !!proposal && {
-      ...proposal,
-      voteStatus
-    }
-  );
-};
-
 export const userid = (state) =>
   (state.api.me.response && state.api.me.response.userid) ||
   (state.api.login.response && state.api.login.response.userid);
 
-export const censoredComment = (state) => state.api.censorComment.response;
-
-export const getApiLastLoaded = (key) => get(["api", "lastLoaded", key]);
-
-export const lastLoadedUnvettedProposal = getApiLastLoaded("unvetted");
-export const lastLoadedVettedProposal = getApiLastLoaded("vetted");
-export const lastLoadedUserProposal = getApiLastLoaded("userProposals");
-export const lastLoadedUserDetailProposal = getApiLastLoaded("user");
-
-export const serverPubkey = compose(get("pubkey"), apiInitResponse);
-export const userPubkey = compose(get("publickey"), apiMeResponse);
-export const commentsLikes = or(
-  compose(get("commentslikes"), apiCommentsLikesResponse),
-  constant(null)
-);
 export const policy = apiPolicyResponse;
-export const isLoadingSubmit = or(
-  isApiRequestingPolicy,
-  isApiRequestingInit,
-  isApiRequestingEditProposal
-);
-export const apiVettedProposals = or(
-  compose(get("proposals"), apiVettedResponse),
-  constant([])
-);
-
-export const proposalsWithVoteSummary = createDeepEqualSelector(
-  apiVettedProposals,
-  (proposals) =>
-    proposals.map((prop) => ({
-      ...prop,
-      voteSummary: {}
-    }))
-);
-
-export const vettedProposalsIsRequesting = isApiRequestingVetted;
-export const vettedProposalsError = or(apiInitError, apiVettedError);
-
-export const apiUserProposals = or(
-  compose(get("proposals"), apiUserProposalsResponse),
-  constant([])
-);
 
 export const numOfUserProposals = compose(
   get("numofproposals"),
@@ -458,94 +189,35 @@ export const numOfUserProposals = compose(
 
 export const userProposalsIsRequesting = isApiRequestingUserProposals;
 export const userProposalsError = or(apiInitError, apiUserProposalsError);
-export const apiUnvettedProposals = or(
-  compose(get("proposals"), apiUnvettedResponse),
-  constant([])
-);
-const filtered = (status) =>
-  compose(filter(compose(eq(status), get("status"))), apiUnvettedProposals);
-export const unreviewedProposals = filtered(PROPOSAL_STATUS_UNREVIEWED);
-export const abandonedProposals = filtered(PROPOSAL_STATUS_ABANDONED);
-export const censoredProposals = filtered(PROPOSAL_STATUS_CENSORED);
-export const unvettedProposalsIsRequesting = or(
-  isApiRequestingInit,
-  isApiRequestingUnvetted
-);
-export const unvettedProposalsError = or(apiInitError, apiUnvettedError);
+
 export const apiProposal = compose(get("proposal"), apiProposalResponse);
-export const apiInvoice = compose(get("invoice"), apiInvoiceResponse);
-export const proposalPayload = (state) => state.api.proposal.payload;
+
 export const proposalToken = compose(
   get(["censorshiprecord", "token"]),
   apiProposal
 );
-export const proposalStatus = compose(get("status"), apiProposal);
-
-export const proposalAuthor = compose(get(["username"]), apiProposal);
 
 export const proposalName = compose(get(["name"]), apiProposal);
 
-export const apiProposalComments = or(
-  compose(get("comments"), apiProposalCommentsResponse),
-  constant([])
-);
-
 export const apiProposalsBatchError = getApiError("proposalsBatch");
 
-export const apiInvoiceComments = or(
-  compose(get("comments"), apiInvoiceCommentsResponse),
-  constant([])
-);
 export const proposalIsRequesting = or(
   isApiRequestingInit,
   isApiRequestingProposal
 );
-export const invoiceIsRequesting = isApiRequestingInvoice;
+
 export const proposalError = or(apiInitError, apiProposalError);
-export const user = compose(get("user"), apiUserResponse);
-export const newUserResponse = bool(apiNewUserResponse);
-export const newProposalIsRequesting = isApiRequestingNewProposal;
-export const newInvoiceIsRequesting = isApiRequestingNewInvoice;
-export const newProposalError = apiNewProposalError;
-export const newInvoiceError = apiNewInvoiceError;
-export const userInvoiceError = apiUserInvoicesError;
-export const newProposalMerkle = compose(
-  get(["censorshiprecord", "merkle"]),
-  apiNewProposalResponse
-);
+
 export const newProposalToken = compose(
   get(["censorshiprecord", "token"]),
   apiNewProposalResponse
 );
-export const newProposalSignature = compose(
-  get(["censorshiprecord", "signature"]),
-  apiNewProposalResponse
-);
-export const newProposalName = compose(get("name"), apiNewProposalPayload);
-export const newProposalDescription = compose(
-  get("description"),
-  apiNewProposalPayload
-);
-export const newProposalFiles = compose(get("files"), apiNewProposalPayload);
-export const newInvoiceMerkle = compose(
-  get(["censorshiprecord", "merkle"]),
-  apiNewInvoiceResponse
-);
+
 export const newInvoiceToken = compose(
   get(["censorshiprecord", "token"]),
   apiNewInvoiceResponse
 );
-export const newInvoiceSignature = compose(
-  get(["censorshiprecord", "signature"]),
-  apiNewInvoiceResponse
-);
-export const newInvoiceYear = compose(get("year"), apiNewInvoicePayload);
-export const newInvoiceMonth = compose(get("month"), apiNewInvoicePayload);
-export const newInvoiceFiles = compose(get("files"), apiNewInvoicePayload);
-export const apiUserInvoices = compose(
-  get("invoices"),
-  apiUserInvoicesResponse
-);
+
 export const setStatusProposal = compose(
   get("status"),
   apiSetStatusProposalResponse
@@ -559,34 +231,17 @@ export const setStatusProposalStatus = compose(
   get("status"),
   apiSetStatusProposalPayload
 );
-export const setStatusProposalError = apiSetStatusProposalError;
+
 export const verificationToken = compose(
   get("verificationtoken"),
   apiNewUserResponse
 );
 export const getKeyMismatch = (state) => state.api.keyMismatch;
 export const manageUserAction = compose(get("action"), apiManageUserPayload);
-export const lastLoginTimeFromLoginResponse = compose(
-  get("lastlogintime"),
-  apiLoginResponse
-);
-export const lastLoginTimeFromMeResponse = compose(
-  get("lastlogintime"),
-  apiMeResponse
-);
-export const sessionMaxAge = compose(get("sessionmaxage"), apiMeResponse);
 
 export const visitedProposal = compose(
   get("accesstime"),
   getApiResponse("proposalComments")
-);
-
-export const apiEditProposalResponse = getApiResponse("editProposal");
-export const apiEditProposalError = getApiError("editProposal");
-export const apiEditProposalPayload = getApiPayload("editProposal");
-export const editProposalToken = compose(
-  get(["proposal", "censorshiprecord", "token"]),
-  apiEditProposalResponse
 );
 
 export const apiProposalPaywallPaymentResponse = getApiResponse(
@@ -628,38 +283,6 @@ export const amountOfCreditsAddedOnRescan = (state) => {
   return newCredits && newCredits.length;
 };
 
-export const apiTokenInventoryResponse = getApiResponse("tokenInventory");
-export const apiTokenInventoryError = getApiError("tokenInventory");
-export const apiTokenInventoryPayload = getApiPayload("tokenInventory");
-export const apiTokenInventoryIsRequesting = getIsApiRequesting(
-  "tokenInventory"
-);
-
-export const isApiRequesting = or(
-  isApiRequestingInit,
-  isApiRequestingUnvettedStatus,
-  isApiRequestingPolicy,
-  isApiRequestingNewUser,
-  isApiRequestingVerifyNewUser,
-  isApiRequestingLogin,
-  isApiRequestingLogout,
-  isApiRequestingForgottenPassword,
-  isApiRequestingResendVerificationEmail,
-  isApiRequestingPasswordReset,
-  isApiRequestingVetted,
-  isApiRequestingUnvetted,
-  isApiRequestingUserProposals,
-  isApiRequestingProposal,
-  isApiRequestingNewProposal,
-  isApiRequestingUser,
-  isApiRequestingNewComment,
-  isApiRequestingSetStatusProposal,
-  isApiRequestingStartVote,
-  isApiRequestingPropsVoteStatus,
-  isApiRequestingPropVoteStatus,
-  isApiRequestingPropVoteResults
-);
-
 export const resetPasswordResponse = getApiResponse("resetPassword");
 
 export const isApiRequestingComments = or(
@@ -672,118 +295,12 @@ export const isApiRequestingCommentsLikes = getIsApiRequesting("commentslikes");
 // CMS Selectors
 const mode = compose(get("mode"), apiInitResponse);
 
-export const isModeFetched = (state) => {
-  if (mode(state) === undefined) {
-    return false;
-  } else {
-    return true;
-  }
-};
-
 export const isCMS = (state) => mode(state) === CMSWWWMODE;
-
-export const invoiceToken = compose(
-  get(["censorshiprecord", "token"]),
-  apiInvoice
-);
-
-export const inviteUserResponse = getApiResponse("inviteUser");
-export const isApiRequestingInviteUser = getIsApiRequesting("inviteUser");
-
-export const isApiRequestingPayInvoices = getIsApiRequesting("payApproved");
-
-export const isApiRequestingAdminInvoices = getIsApiRequesting("adminInvoices");
-export const adminInvoicesResponse = getApiResponse("adminInvoices");
-export const apiAdminInvoices = compose(get("invoices"), adminInvoicesResponse);
-export const resetPassEmail = compose(
-  get("email"),
-  getApiPayload("resetPassword")
-);
-export const adminInvoicesError = getApiError("adminInvoices");
-
-export const isApiRequestingUserInvoices = getIsApiRequesting("userInvoices");
-
-export const isApiRequestingSetStatusInvoice = getIsApiRequesting(
-  "setStatusInvoice"
-);
-export const setStatusInvoicePayload = getApiPayload("setStatusInvoice");
-export const setStatusInvoicePayloadToken = compose(
-  get("token"),
-  setStatusInvoicePayload
-);
-export const setStatusInvoicePayloadStatus = compose(
-  get("status"),
-  setStatusInvoicePayload
-);
-
-export const invoicePayoutsResponse = getApiResponse("invoicePayouts");
-export const invoicePayoutsError = getApiError("invoicePayouts");
-export const isApiRequestingInvoicePayouts = getIsApiRequesting(
-  "invoicePayouts"
-);
-export const invoicePayouts = compose(get("invoices"), invoicePayoutsResponse);
-
-// TODO: Use createSelector instead of compose once we refactor the CMS connectors
-// b/c the createSelector doesn't work properly whe used in combination with the selectorMap
-export const lineItemPayouts = compose(
-  (lineItems) => lineItems.sort((a, b) => a.timestamp - b.timestamp),
-  (invoices = []) =>
-    invoices.reduce((lineItems, invoice) => {
-      return lineItems.concat(
-        invoice.input.lineitems.map((lineItem) => ({
-          ...lineItem,
-          timestamp: invoice.timestamp,
-          token: invoice.censorshiprecord.token,
-          labor: (lineItem.labor / 60) * (invoice.input.contractorrate / 100),
-          expenses: lineItem.expenses / 100,
-          description: lineItem.description.replace(/#/g, ""),
-          month: invoice.input.month,
-          year: invoice.input.year,
-          paiddate: new Date(
-            invoice.payment.timelastupdated * 1000
-          ).toLocaleString(),
-          amountreceived: invoice.payment.amountreceived / 100000000
-        }))
-      );
-    }, []),
-  invoicePayouts
-);
 
 export const generatePayoutsResponse = getApiResponse("payouts");
 export const generatePayoutsError = getApiError("payouts");
 export const isApiRequestingGeneratePayouts = getIsApiRequesting("payouts");
 export const payouts = compose(get("payouts"), generatePayoutsResponse);
-
-export const isApiRequestingSetInvoiceStatusByToken = (state) => (token) => {
-  return (
-    isApiRequestingSetStatusInvoice(state) &&
-    setStatusInvoicePayloadToken(state) === token &&
-    setStatusInvoicePayloadStatus(state)
-  );
-};
-
-export const usePaywall = and(not(isCMS));
-
-export const apiEditInvoiceResponse = getApiResponse("editInvoice");
-export const apiEditInvoiceError = getApiError("editInvoice");
-
-export const editInvoiceToken = compose(
-  get(["invoice", "censorshiprecord", "token"]),
-  apiEditInvoiceResponse
-);
-
-export const visitedInvoice = compose(
-  get("accesstime"),
-  getApiResponse("invoiceComments")
-);
-
-export const apiExchangeRateResponse = getApiResponse("exchangeRate");
-export const apiExchangeRateError = getApiError("exchangeRate");
-export const isApiRequestingExchangeRate = getIsApiRequesting("exchangeRate");
-export const exchangeRate = compose(
-  get("exchangerate"),
-  apiExchangeRateResponse
-);
 
 export const manageCmsUserResponse = getApiResponse("manageCmsUser");
 export const manageCmsUserError = getApiError("manageCmsUser");

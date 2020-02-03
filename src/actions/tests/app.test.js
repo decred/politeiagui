@@ -3,7 +3,6 @@ import * as app from "../app";
 import * as act from "../types";
 import * as ls from "../../lib/local_storage";
 import {
-  onSubmitProposal,
   onChangeUsername,
   onChangePassword,
   onFetchProposalComments
@@ -97,30 +96,6 @@ describe("test app actions (actions/app.js)", () => {
       [
         { type: act.SET_REPLY_PARENT },
         { type: "@@redux-form/RESET", meta: { form: "form/reply" } }
-      ],
-      done
-    );
-  });
-  test("save new proposal action", async () => {
-    const props = {
-      loggedInAsEmail: FAKE_USER.email,
-      userid: FAKE_USER.id,
-      username: FAKE_USER.username
-    };
-    const proposal = FAKE_PROPOSAL;
-    await expect(
-      app.onSaveNewProposal(proposal, null, props)
-    ).toDispatchActionsWithState(
-      MOCK_STATE,
-      [
-        onSubmitProposal(
-          props.loggedInAsEmail,
-          props.userid,
-          props.username,
-          proposal.name,
-          proposal.description,
-          proposal.files
-        )
       ],
       done
     );

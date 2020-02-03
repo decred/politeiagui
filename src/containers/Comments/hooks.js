@@ -30,7 +30,7 @@ export function useComments(recordToken, fetchComments = false) {
   const lastVisitTimestamp = useSelector(sel.visitedProposal);
   const loading = useSelector(sel.isApiRequestingComments);
   const loadingLikes = useSelector(sel.isApiRequestingCommentsLikes);
-  const onSubmitComment = useAction(act.onSaveNewCommentV2);
+  const onSubmitComment = useAction(act.onSaveNewComment);
   const onFetchComments = useAction(
     recordType === constants.RECORD_TYPE_PROPOSAL
       ? act.onFetchProposalComments

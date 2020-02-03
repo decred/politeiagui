@@ -81,22 +81,7 @@ export const onSaveNewInvoice = ({
   ).then(() => sel.newInvoiceToken(getState()));
 };
 
-export const onSaveNewProposal = ({ name, description, files }, _, props) => (
-  dispatch,
-  getState
-) =>
-  dispatch(
-    onSubmitProposal(
-      props.loggedInAsEmail,
-      props.userid,
-      props.username,
-      name.trim(),
-      description,
-      files
-    )
-  ).then(() => sel.newProposalToken(getState()));
-
-export const onSaveNewProposalV2 = ({ name, description, files }) => (
+export const onSaveNewProposal = ({ name, description, files }) => (
   dispatch,
   getState
 ) => {
@@ -115,13 +100,11 @@ export const onSaveNewDCC = ({
   domain,
   contractortype
 }) => (dispatch, getState) => {
-  const email = sel.loggedInAsEmail(getState());
-  const id = sel.userid(getState());
-  const username = sel.loggedInAsUsername(getState());
+  const { email, userid, username } = sel.currentUser(getState());
   return dispatch(
     onSubmitNewDCC(
       email,
-      id,
+      userid,
       username,
       type,
       nomineeid,
@@ -132,7 +115,7 @@ export const onSaveNewDCC = ({
   ).then(() => sel.newDCCToken(getState()));
 };
 
-export const onEditProposalV2 = ({ token, name, description, files }) => (
+export const onEditProposal = ({ token, name, description, files }) => (
   dispatch,
   getState
 ) => {
@@ -142,26 +125,13 @@ export const onEditProposalV2 = ({ token, name, description, files }) => (
   ).then(() => dispatch(onFetchProposalApi(token)).then(() => token));
 };
 
-export const onSaveNewCommentV2 = ({ comment, token, parentID }) => (
+export const onSaveNewComment = ({ comment, token, parentID }) => (
   dispatch,
   getState
 ) => {
   const email = sel.currentUserEmail(getState());
   return dispatch(onSubmitCommentApi(email, token, comment, parentID));
 };
-
-export const onEditProposal = ({ name, description, files }, _, props) => (
-  dispatch
-) =>
-  dispatch(
-    onSubmitEditedProposal(
-      props.loggedInAsEmail,
-      name.trim(),
-      description,
-      files,
-      props.token
-    )
-  );
 
 export const onResetUser = () => act.RESET_USER();
 

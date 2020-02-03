@@ -4,7 +4,7 @@ import { useRedux } from "src/redux";
 const mapStateToProps = {};
 
 const mapDispatchToProps = {
-  onEditProposal: act.onEditProposalV2
+  onEditProposal: act.onEditProposal
 };
 
 export function useEditProposal(ownProps) {
