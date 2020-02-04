@@ -246,7 +246,7 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.RECEIVE_SUPPORT_OPPOSE_DCC]: () =>
         onReceiveSupportOpposeDCC(state, action),
       [act.REQUEST_SET_DCC_STATUS]: () =>
-        request("setDccStatus", state, action),
+        request("setDCCStatus", state, action),
       [act.RECEIVE_SET_DCC_STATUS]: () => onReceiveSetDCCStatus(state, action),
       [act.REQUEST_DCC_COMMENTS]: () => request("dccComments", state, action),
       [act.RECEIVE_DCC_COMMENTS]: () => receive("dccComments", state, action),

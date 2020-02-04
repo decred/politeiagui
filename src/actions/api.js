@@ -1591,7 +1591,7 @@ export const onSetDCCStatus = (loggedInAsEmail, token, status, reason) =>
     }
     dispatch(act.REQUEST_SET_DCC_STATUS({}));
     return api
-      .setDccStatus(csrf, loggedInAsEmail, token, status, reason)
+      .setDCCStatus(csrf, loggedInAsEmail, token, status, reason)
       .then((response) => {
         dispatch(act.RECEIVE_SET_DCC_STATUS({ ...response, status, reason }));
       })

@@ -813,7 +813,7 @@ export const dcc = compose(get("dcc"), dccDetailsApi);
 export const dccToken = compose(get(["censorshiprecord", "token"]), dcc);
 
 export const apiSupportOpposeDCCError = getApiError("supportOpposeDCC");
-export const apiSetDCCStatusError = getApiError("setDccStatus");
+export const apiSetDCCStatusError = getApiError("setDCCStatus");
 
 const apiDCCCommentsResponse = getApiResponse("dccComments");
 export const apiDCCComments = or(

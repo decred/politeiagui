@@ -686,7 +686,7 @@ export const dccDetails = (csrf, token) =>
 export const supportOpposeDCC = (csrf, vote) =>
   POST("/dcc/supportoppose", csrf, vote).then(getResponse);
 
-export const setDccStatus = (csrf, email, token, status, reason) =>
+export const setDCCStatus = (csrf, email, token, status, reason) =>
   pki
     .myPubKeyHex(email)
     .then((publickey) =>
