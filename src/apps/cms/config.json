@@ -15,7 +15,7 @@
   "mainnetGitRepository": "",
   "navMenuPaths": [
     { "label": "My invoices", "path": "/invoices/me", "admin": false },
-    { "label": "Admin", "path": "/invoices/admin", "admin": true },
+    { "label": "Admin", "path": "/admin/invoices", "admin": true },
     { "label": "DCCs", "path": "/dccs", "admin": true },
     { "label": "Search for users", "path": "/user/search", "admin": true }
   ]

@@ -20,7 +20,8 @@ import {
   onSubmitComment as onSubmitCommentApi,
   onFetchInvoice as onFetchInvoiceApi,
   onFetchDcc as onFetchDccApi,
-  onFetchDccsByStatus as onFetchDccsByStatusApi
+  onFetchDccsByStatus as onFetchDccsByStatusApi,
+  onSubmitDccComment as onSubmitDccCommentApi
 } from "./api";
 import {
   resetNewProposalData,
@@ -531,4 +532,12 @@ export const onLoadDccsByStatus = (status) => (dispatch, getState) => {
   } else {
     dispatch(onFetchDccsByStatusApi(status));
   }
+};
+
+export const onSaveNewDccCommentV2 = ({ comment, token, parentID }) => (
+  dispatch,
+  getState
+) => {
+  const email = sel.currentUserEmail(getState());
+  return dispatch(onSubmitDccCommentApi(email, token, comment, parentID));
 };

@@ -1,15 +1,11 @@
 import {
-  // classNames,
   StatusTag,
   Text
-  // useMediaQuery
-  // CopyableText
 } from "pi-ui";
 import React from "react";
 import RecordWrapper from "src/componentsv2/RecordWrapper";
 import Field from "./Field";
 import styles from "./DCC.module.css";
-// import { DccActions } from "src/containers/DCC/Actions";
 import {
   presentationalDccName,
   getDccStatusTagProps,
@@ -30,16 +26,12 @@ const Dcc = ({ dcc, extended }) => {
     nomineeusername,
     sponsorusername,
     statuschangereason
-    // status,
   } = dcc;
-
-  // const mobile = useMediaQuery("(max-width: 560px)");
 
   const dccToken = censorshiprecord && censorshiprecord.token;
   const dccURL = `/dccs/${dccToken}`;
   const dccDomain = dccpayload && dccpayload.domain;
   const dccContractorType = dccpayload && dccpayload.contractortype;
-  // const dccNomineeUserID = dccpayload && dccpayload.nomineeuserid;
   const dccStatement = dccpayload && dccpayload.statement;
 
   return (
@@ -125,7 +117,6 @@ const Dcc = ({ dcc, extended }) => {
                 </Row>}
               </>
             )}
-            {/* <DccActions dcc={dcc} /> */}
           </>
         );
       }}
@@ -133,4 +124,4 @@ const Dcc = ({ dcc, extended }) => {
   );
 };
 
-export default Dcc;
+export default React.memo(Dcc);

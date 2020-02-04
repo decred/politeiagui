@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Switch, withRouter } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useLoaderContext } from "src/containers/Loader";
+import { DccProvider } from "src/containers/DCC";
 import {
   Route,
   AuthenticatedRoute,
@@ -32,6 +33,7 @@ const Redirect = withRouter(({ to, history, location }) => {
 const Routes = ({ location }) => {
   const { currentUser } = useLoaderContext();
   const loggedIn = !!currentUser;
+
   return (
     <TransitionGroup>
       <CSSTransition key={location.key} classNames="fade" timeout={300}>
@@ -96,67 +98,68 @@ const Routes = ({ location }) => {
             exact
             component={PageInvoicePayouts}
           />
-          <AuthenticatedRoute
-            path="/dccs"
-            title="DCCs"
-            exact
-            component={PageDccList}
-          />
-          <AuthenticatedRoute
-            path="/dccs/:token"
-            title="DCC Detail"
-            exact
-            component={PageDccDetail}
-          />
-
-          {/* <AdminAuthenticatedRoute
-            path={`/${recordType}s/unvetted`}
-            title={`Unvetted ${capitalize(recordType)}s`}
-            exact
-            component={PageProposalsUnvetted}
-          />
-          <AuthenticatedRoute
-            path={`/${recordType}s/new`}
-            title={`New ${capitalize(recordType)}`}
-            exact
-            render={renderNewRecordRoute(config)}
-          />
-          <Route
-            path={`/${recordType}s/:token`}
-            title={`${capitalize(recordType)} Detail`}
-            titleSelector={sel.proposalName}
-            exact
-            component={PageProposalDetail}
-          />
-          <Route
-            path={`/${recordType}s/:token/comments/:commentid`}
-            title={`${capitalize(recordType)} Detail`}
-            titleSelector={sel.proposalName}
-            exact
-            component={PageProposalDetail}
-          />
-          <AuthenticatedRoute
-            path={`/${recordType}s/:token/edit`}
-            title={`Edit ${capitalize(recordType)}`}
-            exact
-            render={renderEditRecordRoute(config)}
-          />
-          <AuthenticatedRoute
-            path={`/${recordType}s/new`}
-            title={`New ${capitalize(recordType)}`}
-            exact
-            render={renderNewRecordRoute(config)}
-          />
-          <AdminAuthenticatedRoute
-            path={`/${recordType}s/admin`}
-            title={`Admin ${capitalize(recordType)}s`}
-            exact
-            component={PageProposalsAdmin}
-          /> */}
-          <Route title="Page Not Found" path="*" component={PageNotFound} />
-        </Switch>
-      </CSSTransition>
-    </TransitionGroup>
+          <DccProvider>
+            <AuthenticatedRoute
+              path="/dccs"
+              title="DCCs"
+              exact
+              component={PageDccList}
+            />
+            <AuthenticatedRoute
+              path="/dccs/:token"
+              title="DCC Detail"
+              exact
+              component={PageDccDetail}
+            />
+          </DccProvider>
+            {/* <AdminAuthenticatedRoute
+              path={`/${recordType}s/unvetted`}
+              title={`Unvetted ${capitalize(recordType)}s`}
+              exact
+              component={PageProposalsUnvetted}
+            />
+            <AuthenticatedRoute
+              path={`/${recordType}s/new`}
+              title={`New ${capitalize(recordType)}`}
+              exact
+              render={renderNewRecordRoute(config)}
+            />
+            <Route
+              path={`/${recordType}s/:token`}
+              title={`${capitalize(recordType)} Detail`}
+              titleSelector={sel.proposalName}
+              exact
+              component={PageProposalDetail}
+            />
+            <Route
+              path={`/${recordType}s/:token/comments/:commentid`}
+              title={`${capitalize(recordType)} Detail`}
+              titleSelector={sel.proposalName}
+              exact
+              component={PageProposalDetail}
+            />
+            <AuthenticatedRoute
+              path={`/${recordType}s/:token/edit`}
+              title={`Edit ${capitalize(recordType)}`}
+              exact
+              render={renderEditRecordRoute(config)}
+            />
+            <AuthenticatedRoute
+              path={`/${recordType}s/new`}
+              title={`New ${capitalize(recordType)}`}
+              exact
+              render={renderNewRecordRoute(config)}
+            />
+            <AdminAuthenticatedRoute
+              path={`/${recordType}s/admin`}
+              title={`Admin ${capitalize(recordType)}s`}
+              exact
+              component={PageProposalsAdmin}
+            /> */}
+            <Route title="Page Not Found" path="*" component={PageNotFound} />
+          </Switch>
+        </CSSTransition>
+      </TransitionGroup>
   );
 };
 

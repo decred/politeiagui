@@ -31,8 +31,8 @@ const dccArrayToByStatusObject = (dccs) =>
     {}
   );
 
-const onReceiveDccs = (state, receivedDccs) => {
-  const x = compose(
+const onReceiveDccs = (state, receivedDccs) =>
+  compose(
     update("byToken", (dccs) => ({
       ...dccs,
       ...dccArrayToByTokenObject(receivedDccs)
@@ -43,8 +43,11 @@ const onReceiveDccs = (state, receivedDccs) => {
       ...dccArrayToByStatusObject(receivedDccs)
     }))
   )(state);
-  return x;
-};
+
+const onReceiveDcc = (state, receivedDcc) =>
+  set(["byToken", dccToken(receivedDcc)], {
+    ...receivedDcc
+  })(state);
 
 const dccs = (state = DEFAULT_STATE, action) =>
   action.error
@@ -52,12 +55,7 @@ const dccs = (state = DEFAULT_STATE, action) =>
     : (
         {
           [act.RECEIVE_DCCS]: () => onReceiveDccs(state, action.payload.dccs),
-          [act.RECEIVE_DCC]: () => {
-            const { dcc } = action.payload;
-            return set(["byToken", dccToken(dcc)], {
-              ...dcc
-            })(state);
-          }
+          [act.RECEIVE_DCC]: () => onReceiveDcc(state, action.payload.dcc)
         }[action.type] || (() => state)
       )();
 

@@ -4,7 +4,6 @@ import get from "lodash/fp/get";
 import { useDcc } from "./hooks";
 import Dcc from "src/componentsv2/DCC";
 import DccLoader from "src/componentsv2/DCC/DCCLoader";
-// import { AdminDccActionsProvider } from "src/containers/DCC/Actions";
 import Comments from "src/containers/Comments";
 import { isDccActive } from "../helpers";
 
@@ -17,21 +16,21 @@ const DccDetail = ({ Main, match }) => {
   return (
     <>
       <Main fillScreen>
-          {!!dcc && !loading ? (
-            <Dcc dcc={dcc} extended />
-          ) : (
-            <DccLoader extended />
-          )}
-          <Comments
-            recordAuthorID={dcc && dcc.sponsoruserid}
-            recordToken={dccToken}
-            numOfComments={1}
-            threadParentID={threadParentCommentID}
-            readOnly={dcc && !isDccActive(dcc)}
-            readOnlyReason={
-              "This DCC can no longer receive comments due its current status."
-            }
-          />
+        {dcc && !loading ? (
+          <Dcc dcc={dcc} extended />
+        ) : (
+          <DccLoader extended />
+        )}
+        <Comments
+          recordAuthorID={dcc && dcc.sponsoruserid}
+          recordToken={dccToken}
+          numOfComments={1}
+          threadParentID={threadParentCommentID}
+          readOnly={dcc && !isDccActive(dcc)}
+          readOnlyReason={
+            "This DCC can no longer receive comments due its current status."
+          }
+        />
       </Main>
     </>
   );
