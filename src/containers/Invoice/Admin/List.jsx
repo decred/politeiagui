@@ -71,7 +71,10 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
                 </UILink>
               </div>
               <div>
-                <Link className="cursor-pointer" to="/admin/payouts">Generate Payouts</Link>
+                <Link className="cursor-pointer" to="/admin/payouts">Generate payouts</Link>
+              </div>
+              <div>
+                <Link className="cursor-pointer" to="/admin/invoicepayouts">Payout summaries</Link>
               </div>
             </Row>
           }>

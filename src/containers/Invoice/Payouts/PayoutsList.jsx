@@ -13,8 +13,8 @@ import { useAdminInvoiceActions } from "../Actions";
 const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
   const { loading, payouts } = useAdminPayouts();
   const { onPay } = useAdminInvoiceActions();
-  const hasPayouts = !!(!loading && payouts && payouts.length);
-  const actions = hasPayouts && (<Button className={classNames("cursor-pointer", styles.payBtn)} onClick={onPay}>Set Invoices To Paid</Button>);
+  const hasPayouts = !loading && payouts && payouts.length > 0;
+  const actions = hasPayouts && (<Button className={classNames("cursor-pointer", styles.payBtn)} onClick={onPay}>Set invoices to paid</Button>);
 
   return (
     <>
@@ -74,8 +74,7 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
           <HelpMessage>
             {"There are no approved invoices!"}
           </HelpMessage>
-        )
-        }
+        )}
       </Main>
     </>
   );
