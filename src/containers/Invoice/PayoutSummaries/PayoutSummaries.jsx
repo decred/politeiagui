@@ -83,7 +83,7 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
                   amountreceived: convertAtomsToDcr(amountreceived)
                 };
               })}
-              headers={["Date", "Invoice Token", "Domain", "Sub Domain", "Description", "Proposal Token", "Expense (USD)", "Labor (USD)", "Total (USD)", "Paid Date", "Amount Received"]}>
+              headers={["Date", "Invoice Token", "Domain", "Sub Domain", "Description", "Proposal Token", "Expense(USD)", "Labor(USD)", "Total(USD)", "Paid Date", "Amount Received(DCR)"]}>
             </Table>
             <Row noMargin justify="right">
               <ExportToCsv
