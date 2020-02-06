@@ -1,23 +1,23 @@
 import { useState, useCallback } from "react";
 import useEventListener from "./useEventListener";
 
-const setLocalStorageValue = (key, value) => {
+const setSessionStorageValue = (key, value) => {
   const serializedValue = JSON.stringify(value);
-  localStorage.setItem(key, serializedValue);
+  sessionStorage.setItem(key, serializedValue);
 };
 
-const getLocalStorageValue = (key) => {
-  const serializedState = localStorage.getItem(key);
+const getSessionStorageValue = (key) => {
+  const serializedState = sessionStorage.getItem(key);
   return JSON.parse(serializedState);
 };
 
-export default function useLocalStorage(key, initialValue) {
+export default function useSessionStorage(key, initialValue) {
   const [error, setError] = useState(null);
 
   // initialize the state value
   const [storedValue, setStoredValue] = useState(() => {
     try {
-      return getLocalStorageValue(key) || initialValue;
+      return getSessionStorageValue(key) || initialValue;
     } catch (e) {
       setError(e);
       return initialValue;
@@ -27,7 +27,7 @@ export default function useLocalStorage(key, initialValue) {
   const onSetValue = useCallback(
     (newValue) => {
       try {
-        setLocalStorageValue(key, newValue);
+        setSessionStorageValue(key, newValue);
         setStoredValue(newValue);
       } catch (e) {
         setError(e);
@@ -51,7 +51,7 @@ export default function useLocalStorage(key, initialValue) {
     }
   };
 
-  useEventListener("storage", onStorageChange);
+  useEventListener("session", onStorageChange);
   if (error) console.log(error);
 
   return [storedValue, onSetValue, error];
