@@ -7,7 +7,7 @@
   right: 0;
   opacity: 0.5;
   width: 40rem;
-  transform: translateX(410px);
+  transform: translateX(41rem);
   background-color: var(--container-color);
   transition: all 0.2s;
   box-shadow: 0.5rem 2rem 2rem 0 var(--color-shadow-light);
