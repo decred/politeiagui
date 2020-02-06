@@ -1,5 +1,5 @@
 import { classNames, Header as UIHeader, useMediaQuery, useTheme } from "pi-ui";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "src/assets/pi-logo-light.svg";
 import DarkLogo from "src/assets/pi-logo-dark.svg";
@@ -12,7 +12,10 @@ const Header = ({ noBorder }) => {
   const small = useMediaQuery("(max-width: 1000px)");
   const extrasmall = useMediaQuery("(max-width: 560px)");
   const [showMenu, setShowMenu] = useState(false);
-  const toggleShowMenu = () => setShowMenu(!showMenu);
+  const toggleShowMenu = useCallback(() => setShowMenu(!showMenu), [
+    showMenu,
+    setShowMenu
+  ]);
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
   const LogoSrc = isDarkTheme ? DarkLogo : Logo;
@@ -20,14 +23,17 @@ const Header = ({ noBorder }) => {
     <UIHeader className={classNames(noBorder && styles.noBorder)}>
       <NavLink
         to="/"
-        className={extrasmall && showMenu ? styles.hideLogo : styles.showLogo}
-      >
+        className={extrasmall && showMenu ? styles.hideLogo : styles.showLogo}>
         <img src={LogoSrc} alt="presentation" />
       </NavLink>
       {small ? (
         <>
           <HamburgerMenu toggleShowMenu={toggleShowMenu} showMenu={showMenu} />
-          <NavigationDrawer show={showMenu} fullScreen={extrasmall} />
+          <NavigationDrawer
+            show={showMenu}
+            fullScreen={extrasmall}
+            toggleShowMenu={toggleShowMenu}
+          />
         </>
       ) : (
         <HeaderNav />

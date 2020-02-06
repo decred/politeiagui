@@ -1,7 +1,7 @@
 .navigationDrawer {
   position: fixed;
-  margin-top: 6rem;
   z-index: var(--z-index-5);
+  margin-top: 6rem;
   height: 100%;
   top: 0;
   right: 0;
@@ -11,6 +11,19 @@
   background-color: var(--container-color);
   transition: all 0.2s;
   box-shadow: 0.5rem 2rem 2rem 0px var(--color-shadow-light);
+}
+
+.navigationDrawerHeader {
+  width: 400px;
+  top: 0;
+  right: 0;
+  position: fixed;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 6rem;
+  background-color: var(--header-color);
+  z-index: var(--z-index-1);
 }
 
 .navigationDrawerFullScreen {
@@ -33,4 +46,15 @@
   padding: 0 var(--container-padding-right) 0 var(--container-padding-left);
   background-color: var(--card-background);
   transition: background-color 0.5s ease;
+}
+
+@media screen and (max-width: 1000px) {
+  .navigationDrawerHeader {
+    padding: 0 5rem;
+  }
+}
+@media screen and (max-width: 768px) {
+  .navigationDrawerHeader {
+    padding: 0 3rem;
+  }
 }
