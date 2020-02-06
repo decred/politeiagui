@@ -17,6 +17,7 @@ import { invoiceValidationSchema, improveLineItemErrors } from "./validation";
 import DraftSaver from "./DraftSaver";
 import ThumbnailGrid from "src/componentsv2/Files";
 import ExchangeRateField from "./ExchangeRateField";
+import useSessionStorage from "src/hooks/utils/useSessionStorage";
 
 const InvoiceForm = React.memo(function InvoiceForm({
   values,
@@ -28,7 +29,8 @@ const InvoiceForm = React.memo(function InvoiceForm({
   errors,
   touched,
   isValid,
-  submitSuccess
+  submitSuccess,
+  setSessionStorageInvoice
 }) {
   // scroll to top in case of global error
   useEffect(() => {
@@ -76,6 +78,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
 
   const handleChangeWithTouched = (field) => (e) => {
     setFieldTouched(field, true);
+    setSessionStorageInvoice(values);
     handleChange(e);
   };
 
@@ -191,22 +194,31 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
     [history, onSubmit]
   );
 
+  const FORM_INITIAL_VALUES = {
+    name: "",
+    location: "",
+    contact: "",
+    address: "",
+    exchangerate: "",
+    date: getInitialDateValue(),
+    lineitems: [generateBlankLineItem()],
+    files: []
+  };
+  let formInitialValues = initialValues || FORM_INITIAL_VALUES;
+  const [sessionStorageInvoice, setSessionStorageInvoice] = useSessionStorage(
+    "invoice",
+    null
+  );
+  if (sessionStorageInvoice !== null) {
+    formInitialValues = sessionStorageInvoice;
+  }
   return (
     <Formik
       onSubmit={handleSubmit}
-      initialValues={initialValues || {
-        name: "",
-        location: "",
-        contact: "",
-        address: "",
-        exchangerate: "",
-        date: getInitialDateValue(),
-        lineitems: [generateBlankLineItem()],
-        files: []
-      }}
+      initialValues={formInitialValues}
       validationSchema={invoiceFormValidation}>
       {(props) => (
-        <InvoiceForm {...{ ...props, submitSuccess }} />
+        <InvoiceForm {...{ ...props, submitSuccess, setSessionStorageInvoice }} />
       )}
     </Formik>
   );
@@ -215,6 +227,7 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
 InvoiceFormWrapper.propTypes = {
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func,
+  setSessionStorageInvoice: PropTypes.func,
   history: PropTypes.object
 };
 
