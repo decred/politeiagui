@@ -16,6 +16,7 @@ import PageInvoiceEdit from "./Invoices/Edit";
 import PageInvoiceDetail from "./Invoices/Detail";
 import PageListAdminInvoices from "./Invoices/AdminList";
 import PageGeneratePayoutsList from "./Invoices/Payouts";
+import PageInvoicePayouts from "./Invoices/InvoicePayouts";
 
 const Redirect = withRouter(({ to, history, location }) => {
   useEffect(() => {
@@ -36,7 +37,7 @@ const Routes = ({ location }) => {
           <Route exact path="/">
             {loggedIn ? (
               currentUser.isadmin ? (
-                <Redirect to="/invoices/admin" />
+                <Redirect to="/admin/invoices" />
               ) : (
                 <Redirect to="/invoices/me" />
               )
@@ -62,17 +63,24 @@ const Routes = ({ location }) => {
             exact
             component={PageInvoicesNew}
           />
-          <AdminAuthenticatedRoute
-            path="/invoices/admin"
-            title="Admin"
-            exact
-            component={PageListAdminInvoices}
-          />
           <AuthenticatedRoute
             path="/invoices/:token"
             title="Invoice Detail"
             exact
             component={PageInvoiceDetail}
+          />
+          <AuthenticatedRoute
+            path="/invoices/:token/edit"
+            title="Edit Invoice"
+            exact
+            component={PageInvoiceEdit}
+          />
+          {/* Admin routes */}
+          <AdminAuthenticatedRoute
+            path="/admin/invoices"
+            title="Admin"
+            exact
+            component={PageListAdminInvoices}
           />
           <AdminAuthenticatedRoute
             path="/admin/payouts"
@@ -80,11 +88,11 @@ const Routes = ({ location }) => {
             exact
             component={PageGeneratePayoutsList}
           />
-          <AuthenticatedRoute
-            path="/invoices/:token/edit"
-            title="Edit Invoice"
+          <AdminAuthenticatedRoute
+            path="/admin/invoicepayouts"
+            title="Line Item Payouts"
             exact
-            component={PageInvoiceEdit}
+            component={PageInvoicePayouts}
           />
           {/* <AdminAuthenticatedRoute
             path={`/${recordType}s/unvetted`}

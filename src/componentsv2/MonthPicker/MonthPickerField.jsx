@@ -38,7 +38,7 @@ const Arrow = ({ isOpen }) => {
   );
 };
 
-const MonthPickerField = ({ name, label, years, readOnly, toggleable }) => {
+const MonthPickerField = ({ name, label, years, readOnly, toggleable, className }) => {
   const [isDisabled, setDisabled] = useState(false);
   const [isOpen, openPicker, closePicker] = useBooleanState(false);
   const ref = useRef();
@@ -68,7 +68,7 @@ const MonthPickerField = ({ name, label, years, readOnly, toggleable }) => {
         };
 
         return (
-          <div>
+          <div className={className}>
             <div style={{ display: "flex" }}>
               {toggleable && (
                 <Checkbox
@@ -114,7 +114,8 @@ MonthPickerField.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   year: PropTypes.object,
-  readOnly: PropTypes.bool
+  readOnly: PropTypes.bool,
+  className: PropTypes.string
 };
 
 MonthPickerField.defaultProps = {

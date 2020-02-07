@@ -353,7 +353,7 @@ export const manageCmsUser = (
   contractortype,
   supervisoruserids
 ) =>
-  POST("/user/manage", csrf, {
+  POST("/admin/managecms", csrf, {
     userid,
     domain,
     contractortype,

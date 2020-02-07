@@ -10,7 +10,7 @@ import MonthPickerField from "../MonthPicker/MonthPickerField";
 import AttachFileInput from "src/componentsv2/AttachFileInput";
 import {
   getInitialDateValue,
-  getMinMaxYearAndMonth
+  getInvoiceMinMaxYearAndMonth
 } from "src/containers/Invoice";
 import usePolicy from "src/hooks/api/usePolicy";
 import { invoiceValidationSchema, improveLineItemErrors } from "./validation";
@@ -96,7 +96,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
       )}
       <div className="justify-space-between">
         <MonthPickerField
-          years={getMinMaxYearAndMonth()}
+          years={getInvoiceMinMaxYearAndMonth()}
           name="date"
           label="Reference month"
         />
