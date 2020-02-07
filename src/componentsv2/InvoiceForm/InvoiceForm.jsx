@@ -51,8 +51,12 @@ const InvoiceForm = React.memo(function InvoiceForm({
   const handleChangeInvoiceDatasheet = useCallback(
     (value) => {
       setFieldValue("lineitems", value);
+      setSessionStorageInvoice({
+        ...values,
+        "lineitems": value
+      });
     },
-    [setFieldValue]
+    [setFieldValue, values, setSessionStorageInvoice]
   );
 
   const handleFilesChange = useCallback(
@@ -78,7 +82,10 @@ const InvoiceForm = React.memo(function InvoiceForm({
 
   const handleChangeWithTouched = (field) => (e) => {
     setFieldTouched(field, true);
-    setSessionStorageInvoice(values);
+    setSessionStorageInvoice({
+      ...values,
+      [field]: e.target.value
+    });
     handleChange(e);
   };
 
