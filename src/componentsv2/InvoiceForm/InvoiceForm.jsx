@@ -175,33 +175,6 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history, approvedProposal
   const invoiceFormValidation = useMemo(() => invoiceValidationSchema(policy), [
     policy
   ]);
-
-  const handleSubmit = useCallback(
-    async (values, { resetForm, setSubmitting, setFieldError }) => {
-      try {
-        const {
-          date: { month, year },
-          ...others
-        } = values;
-        const token = await onSubmit({
-          ...others,
-          month,
-          year
-        });
-        // Token from new invoice or from edit invoice
-        const invoiceToken = token || values.token;
-        setSubmitting(false);
-        setSubmitSuccess(true);
-        history.push(`/invoices/${invoiceToken}`);
-        resetForm();
-      } catch (e) {
-        setSubmitting(false);
-        setFieldError("global", e);
-      }
-    },
-    [history, onSubmit]
-  );
-
   const FORM_INITIAL_VALUES = {
     name: "",
     location: "",
@@ -220,6 +193,33 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history, approvedProposal
   if (sessionStorageInvoice !== null) {
     formInitialValues = sessionStorageInvoice;
   }
+  const handleSubmit = useCallback(
+    async (values, { resetForm, setSubmitting, setFieldError }) => {
+      try {
+        const {
+          date: { month, year },
+          ...others
+        } = values;
+        const token = await onSubmit({
+          ...others,
+          month,
+          year
+        });
+        // Token from new invoice or from edit invoice
+        const invoiceToken = token || values.token;
+        setSubmitting(false);
+        setSubmitSuccess(true);
+        history.push(`/invoices/${invoiceToken}`);
+        setSessionStorageInvoice(null);
+        resetForm();
+      } catch (e) {
+        setSubmitting(false);
+        setFieldError("global", e);
+      }
+    },
+    [history, onSubmit, setSessionStorageInvoice]
+  );
+
   return (
     <Formik
       onSubmit={handleSubmit}
