@@ -39,7 +39,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
       window.scrollTo(0, 0);
     }
   }, [errors]);
-  console.log(approvedProposalsTokens);
   const SubmitButton = () => (
     <Button
       type="submit"
@@ -160,6 +159,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
         userRate={values.rate}
         errors={lineItemErrors}
         onChange={handleChangeInvoiceDatasheet}
+        proposalsTokens={approvedProposalsTokens}
       />
       <div className="justify-right">
         <DraftSaver submitSuccess={submitSuccess} />

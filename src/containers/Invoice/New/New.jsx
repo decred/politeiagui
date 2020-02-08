@@ -14,7 +14,7 @@ const NewInvoice = () => {
 
   return (
     <Card className="container margin-bottom-l">
-      <InvoiceForm onSubmit={onSubmitInvoice} approvedProposalsTokens={approvedProposalsTokens} />
+      <InvoiceForm onSubmit={onSubmitInvoice} approvedProposalsTokens={approvedProposalsTokens || []} />
     </Card>
   );
 };
