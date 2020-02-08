@@ -30,7 +30,8 @@ const InvoiceForm = React.memo(function InvoiceForm({
   touched,
   isValid,
   submitSuccess,
-  setSessionStorageInvoice
+  setSessionStorageInvoice,
+  approvedProposalsTokens
 }) {
   // scroll to top in case of global error
   useEffect(() => {
@@ -38,7 +39,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
       window.scrollTo(0, 0);
     }
   }, [errors]);
-
+  console.log(approvedProposalsTokens);
   const SubmitButton = () => (
     <Button
       type="submit"
@@ -168,7 +169,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
   );
 });
 
-const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
+const InvoiceFormWrapper = ({ initialValues, onSubmit, history, approvedProposalsTokens }) => {
   const { policy } = usePolicy();
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const invoiceFormValidation = useMemo(() => invoiceValidationSchema(policy), [
@@ -225,13 +226,14 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
       initialValues={formInitialValues}
       validationSchema={invoiceFormValidation}>
       {(props) => (
-        <InvoiceForm {...{ ...props, submitSuccess, setSessionStorageInvoice }} />
+        <InvoiceForm {...{ ...props, submitSuccess, setSessionStorageInvoice, approvedProposalsTokens }} />
       )}
     </Formik>
   );
 };
 
 InvoiceFormWrapper.propTypes = {
+  approvedProposalsTokens: PropTypes.array.isRequired,
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func,
   setSessionStorageInvoice: PropTypes.func,

@@ -27,6 +27,7 @@ const STATUS_ERR = {
 };
 
 const apiBase = "/api";
+const apiBaseProposals = "/proposals-api";
 const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
 const getResponse = get("response");
 
@@ -250,8 +251,10 @@ export const parseResponse = (response) =>
     return { response: json, csrfToken: response.headers.get("X-Csrf-Token") };
   });
 
-const GET = (path) =>
-  fetch(apiBase + path, { credentials: "include" }).then(parseResponse);
+const GET = (path, isMocked = false) =>
+  fetch(isMocked ? apiBaseProposals + path : apiBase + path, {
+    credentials: "include"
+  }).then(parseResponse);
 
 const getOptions = (csrf, json, method) => ({
   headers: {
@@ -661,7 +664,7 @@ export const payApprovedInvoices = () =>
   GET("/v1/admin/payinvoices").then(getResponse);
 
 export const tokenInventory = () =>
-  GET("/v1/proposals/tokeninventory").then(getResponse);
+  GET("/v1/proposals/tokeninventory", true).then(getResponse);
 
 export const exchangeRate = (csrf, month, year) =>
   POST("/invoices/exchangerate", csrf, { month, year }).then(getResponse);
