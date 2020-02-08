@@ -5,8 +5,7 @@ import { useNewInvoice } from "./hooks";
 
 const NewInvoice = () => {
   const { onSubmitInvoice, onFetchTokenInventory, proposalsTokens } = useNewInvoice();
-  //TODO: changed rejected => approved
-  const approvedProposalsTokens = useMemo(() => proposalsTokens && proposalsTokens.rejected, [proposalsTokens]);
+  const approvedProposalsTokens = useMemo(() => proposalsTokens && proposalsTokens.approved, [proposalsTokens]);
 
   useEffect(() => {
     onFetchTokenInventory();
