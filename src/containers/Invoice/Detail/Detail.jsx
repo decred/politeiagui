@@ -11,15 +11,14 @@ import { isUnreviewedInvoice } from "../helpers";
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
-
-  const { invoice, loading } = useInvoice(invoiceToken);
+  const { invoice, loading, approvedProposalsTokens } = useInvoice(invoiceToken);
 
   return (
     <>
       <Main fillScreen>
         <AdminInvoiceActionsProvider>
           {!!invoice && !loading ? (
-            <Invoice invoice={invoice} extended />
+            <Invoice invoice={invoice} extended approvedProposalsTokens={approvedProposalsTokens || []} />
           ) : (
             <InvoiceLoader extended />
           )}

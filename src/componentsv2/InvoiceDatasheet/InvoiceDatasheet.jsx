@@ -144,7 +144,8 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
 InvoiceDatasheet.propTypes = {
   value: PropTypes.array.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  proposalsTokens: PropTypes.array.isRequired
 };
 
 InvoiceDatasheet.defaultProps = {

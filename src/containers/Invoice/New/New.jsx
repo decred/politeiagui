@@ -1,15 +1,10 @@
-import React, { useEffect, useMemo } from "react";
+import React from "react";
 import { Card } from "pi-ui";
 import InvoiceForm from "src/componentsv2/InvoiceForm";
 import { useNewInvoice } from "./hooks";
 
 const NewInvoice = () => {
-  const { onSubmitInvoice, onFetchTokenInventory, proposalsTokens } = useNewInvoice();
-  const approvedProposalsTokens = useMemo(() => proposalsTokens && proposalsTokens.approved, [proposalsTokens]);
-
-  useEffect(() => {
-    onFetchTokenInventory();
-  }, [onFetchTokenInventory]);
+  const { onSubmitInvoice, approvedProposalsTokens } = useNewInvoice();
 
   return (
     <Card className="container margin-bottom-l">
