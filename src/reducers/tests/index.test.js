@@ -1,6 +1,5 @@
 import rootReducer from "../index";
 import { createStore } from "redux";
-import form from "../form";
 import app from "../app";
 import api from "../api";
 import external_api from "../external_api";
@@ -17,7 +16,5 @@ describe("test reducers combination on index", () => {
     expect(store.getState().api).toEqual(api(undefined, {}));
 
     expect(store.getState().external_api).toEqual(external_api(undefined, {}));
-
-    expect(store.getState().form).toEqual(form(undefined, {}));
   });
 });
