@@ -719,13 +719,6 @@ describe("test api actions (actions/api.js)", () => {
     );
   });
 
-  test("reset redirected from action", () => {
-    expect(api.resetRedirectedFrom()).toDispatchActions(
-      [{ type: act.RESET_REDIRECTED_FROM }],
-      done
-    );
-  });
-
   test("on forgotten password request action", async () => {
     const path = "/api/v1/user/password/reset";
     const params = [FAKE_USER];
@@ -802,25 +795,6 @@ describe("test api actions (actions/api.js)", () => {
       {},
       methods.POST
     );
-  });
-
-  test("on key mismatch action", () => {
-    expect(api.keyMismatch("any")).toDispatchActions(
-      { type: act.KEY_MISMATCH, payload: "any" },
-      done
-    );
-  });
-
-  test("reset passsword request action", () => {
-    expect(api.resetPasswordReset()).toDispatchActions(
-      { type: act.RESET_RESET_PASSWORD },
-      done
-    );
-  });
-
-  test("verify user payment with politeia action", async () => {
-    // TODO: verify if this function can be improved to dispatch actions
-    // as all other api request actions currently do
   });
 
   test("on fetch user details action", async () => {
