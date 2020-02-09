@@ -310,6 +310,39 @@ export const userSubcontractors = compose(
   getApiResponse("userSubcontractors")
 );
 
+export const invoicePayoutsResponse = getApiResponse("invoicePayouts");
+export const invoicePayoutsError = getApiError("invoicePayouts");
+export const isApiRequestingInvoicePayouts = getIsApiRequesting(
+  "invoicePayouts"
+);
+export const invoicePayouts = compose(get("invoices"), invoicePayoutsResponse);
+
+// TODO: Use createSelector instead of compose once we refactor the CMS connectors
+// b/c the createSelector doesn't work properly whe used in combination with the selectorMap
+export const lineItemPayouts = compose(
+  (lineItems) => lineItems.sort((a, b) => a.timestamp - b.timestamp),
+  (invoices = []) =>
+    invoices.reduce((lineItems, invoice) => {
+      return lineItems.concat(
+        invoice.input.lineitems.map((lineItem) => ({
+          ...lineItem,
+          timestamp: invoice.timestamp,
+          token: invoice.censorshiprecord.token,
+          labor: (lineItem.labor / 60) * (invoice.input.contractorrate / 100),
+          expenses: lineItem.expenses / 100,
+          description: lineItem.description.replace(/#/g, ""),
+          month: invoice.input.month,
+          year: invoice.input.year,
+          paiddate: new Date(
+            invoice.payment.timelastupdated * 1000
+          ).toLocaleString(),
+          amountreceived: invoice.payment.amountreceived / 100000000
+        }))
+      );
+    }, []),
+  invoicePayouts
+);
+
 export const apiNewDCCResponse = getApiResponse("newDCC");
 export const newDCCError = getApiError("newDCC");
 export const isApiRequestingNewDCC = getIsApiRequesting("newDCC");
