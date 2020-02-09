@@ -20,6 +20,7 @@ export default ({ id }) =>
       <Link
         href="http://tools.ietf.org/html/rfc4122"
         target="_blank"
+        rel="nofollow noopener noreferrer"
       >
         RFC 4122
       </Link>, used to identify your user.

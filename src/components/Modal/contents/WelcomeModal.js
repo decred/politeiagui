@@ -5,7 +5,10 @@ import { PI_DOCS } from "../../../constants";
 
 class WelcomeModal extends React.Component {
   openInNewTab = (url) => {
-    const win = window.open(url, "_blank");
+    const win = window.open();
+    win.opener = null;
+    win.location.href = url;
+    win.target = "_blank";
     win.focus();
   };
   handleCancel = () => {
