@@ -24,7 +24,6 @@ export function useComments(recordToken, fetchComments = false) {
     () => sel.makeGetProposalCommentsLikes(recordToken),
     [recordToken]
   );
-  console.log("recordType", recordType);
   const comments = useSelector(commentsSelector);
   const commentsLikes = useSelector(commentsLikesSelector);
   const lastVisitTimestamp = useSelector(sel.visitedProposal);
