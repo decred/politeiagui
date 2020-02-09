@@ -44,7 +44,6 @@
     "redux-thunk": "^2.2.0",
     "reselect": "^4.0.0",
     "showdown": "^1.9.1",
-    "snew-classic-ui": "https://github.com/decred/snew-classic-ui",
     "source-map-explorer": "^1.8.0",
     "tweetnacl": "^1.0.1",
     "tweetnacl-util": "^0.15.0",

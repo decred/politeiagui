@@ -10,11 +10,7 @@ import { clearStateLocalStorage } from "../lib/local_storage";
 import * as pki from "../lib/pki";
 import * as sel from "../selectors";
 import act from "./methods";
-import { closeModal, openModal } from "./modal";
 import { PAYWALL_STATUS_PAID, DCC_SUPPORT_VOTE } from "../constants";
-
-export const onResetProposal = act.RESET_PROPOSAL;
-export const onResetInvoice = act.RESET_INVOICE;
 
 export const onSetEmail = act.SET_EMAIL;
 
@@ -65,8 +61,6 @@ export const onRequestMe = () => (dispatch) => {
       throw error;
     });
 };
-
-export const cleanErrors = act.CLEAN_ERRORS;
 
 let globalpollingpointer = null;
 
@@ -128,7 +122,6 @@ export const onInviteUserConfirm = (email) =>
       .inviteNewUser(csrf, email)
       .then((response) => {
         dispatch(act.RECEIVE_INVITE_USER(response));
-        dispatch(closeModal());
       })
       .catch((error) => {
         if (error.toString() === "Error: No available storage method found.") {
@@ -153,7 +146,6 @@ export const onCreateNewUser = ({ email, username, password }) =>
       .newUser(csrf, email, username, password)
       .then((response) => {
         dispatch(act.RECEIVE_NEW_USER(response));
-        dispatch(closeModal());
       })
       .catch((error) => {
         if (error.toString() === "Error: No available storage method found.") {
@@ -183,7 +175,6 @@ export const onCreateNewUserCMS = ({
       .register(csrf, email, username, password, verificationtoken)
       .then((response) => {
         dispatch(act.RECEIVE_NEW_USER(response));
-        dispatch(closeModal());
       })
       .catch((error) => {
         if (error.toString() === "Error: No available storage method found.") {
@@ -713,7 +704,6 @@ export const onSubmitEditedInvoice = (
 export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
   withCsrf((dispatch, getState, csrf) => {
     if (!loggedInAsEmail) {
-      dispatch(openModal("LOGIN", {}, null));
       return;
     }
     dispatch(act.REQUEST_LIKE_COMMENT({ commentid, token }));
@@ -1320,7 +1310,6 @@ export const onFetchDCCComments = (token) => (dispatch) => {
 export const onSupportOpposeDCC = (loggedInAsEmail, token, vote) =>
   withCsrf((dispatch, _, csrf) => {
     if (!loggedInAsEmail) {
-      dispatch(openModal("LOGIN", {}, null));
       return;
     }
     dispatch(act.REQUEST_SUPPORT_OPPOSE_DCC({}));
@@ -1343,7 +1332,6 @@ export const onSupportOpposeDCC = (loggedInAsEmail, token, vote) =>
 export const onSetDCCStatus = (loggedInAsEmail, token, status, reason) =>
   withCsrf((dispatch, _, csrf) => {
     if (!loggedInAsEmail) {
-      dispatch(openModal("LOGIN", {}, null));
       return;
     }
     dispatch(act.REQUEST_SET_DCC_STATUS({}));

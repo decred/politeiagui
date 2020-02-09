@@ -16,7 +16,6 @@ import {
   onReceiveManageUser,
   onReceiveNewComment,
   onReceiveProposals,
-  onReceiveProposalsVoteStatus,
   onReceiveProposalsVoteSummary,
   onReceiveProposalVoteResults,
   onReceiveProposalVoteStatus,
@@ -103,12 +102,6 @@ const api = (state = DEFAULT_STATE, action) =>
           }
           return acc;
         }, {}),
-      [act.LOAD_ME]: () => {
-        return {
-          ...state,
-          me: action.payload
-        };
-      },
       [act.REQUEST_ME]: () => request("me", state, action),
       [act.RECEIVE_ME]: () => receive("me", state, action),
       [act.UPDATE_ME]: () => receive("me", state, action),
@@ -144,19 +137,10 @@ const api = (state = DEFAULT_STATE, action) =>
         request("tokenInventory", state, action),
       [act.RECEIVE_TOKEN_INVENTORY]: () =>
         receive("tokenInventory", state, action),
-      [act.REQUEST_VETTED]: () => request("vetted", state, action),
-      [act.RECEIVE_VETTED]: () => onReceiveProposals("vetted", state, action),
-      [act.REQUEST_UNVETTED]: () => request("unvetted", state, action),
-      [act.RECEIVE_UNVETTED]: () =>
-        onReceiveProposals("unvetted", state, action),
       [act.REQUEST_PROPOSALS_BATCH]: () =>
         request("proposalsBatch", state, action),
       [act.RECEIVE_PROPOSALS_BATCH]: () =>
         onReceiveProposals("proposalsBatch", state, action),
-      [act.REQUEST_UNVETTED_STATUS]: () =>
-        request("unvettedStatus", state, action),
-      [act.RECEIVE_UNVETTED_STATUS]: () =>
-        receive("unvettedStatus", state, action),
       [act.REQUEST_PROPOSAL]: () => request("proposal", state, action),
       [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
       [act.REQUEST_RECORD_COMMENTS]: () =>
@@ -293,8 +277,6 @@ const api = (state = DEFAULT_STATE, action) =>
         request("passwordReset", state, action),
       [act.RECEIVE_PASSWORD_RESET_REQUEST]: () =>
         receive("passwordReset", state, action),
-      [act.RESET_PROPOSAL]: () =>
-        resetMultiple(["newProposal", "editProposal", "proposal"], state),
       [act.RESET_INVOICE]: () =>
         resetMultiple(["newInvoice", "editInvoice"], state),
       [act.REQUEST_SETSTATUS_PROPOSAL]: () =>
@@ -313,15 +295,7 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.REQUEST_VERIFIED_KEY]: () => request("verifyUserKey", state, action),
       [act.RECEIVE_VERIFIED_KEY]: () => receive("verifyUserKey", state, action),
       [act.KEY_MISMATCH]: () => ({ ...state, keyMismatch: action.payload }),
-      [act.REQUEST_USERNAMES_BY_ID]: () =>
-        request("usernamesById", state, action),
-      [act.RECEIVE_USERNAMES_BY_ID]: () =>
-        receive("usernamesById", state, action),
       [act.REQUEST_LOGOUT]: () => request("logout", state, action),
-      [act.REQUEST_PROPOSALS_VOTE_STATUS]: () =>
-        request("proposalsVoteStatus", state, action),
-      [act.RECEIVE_PROPOSALS_VOTE_STATUS]: () =>
-        onReceiveProposalsVoteStatus(state, action),
       [act.REQUEST_PROPOSALS_VOTE_SUMMARY]: () =>
         request("proposalsVoteSummary", state, action),
       [act.RECEIVE_PROPOSALS_VOTE_SUMMARY]: () =>
@@ -390,18 +364,6 @@ const api = (state = DEFAULT_STATE, action) =>
           };
         }
         return receive("logout", state, action);
-      },
-      [act.SET_PROPOSAL_CREDITS]: () => {
-        return {
-          ...state,
-          me: {
-            ...state.me,
-            response: {
-              ...state.me.response,
-              proposalcredits: action.payload
-            }
-          }
-        };
       }
     }[action.type] || (() => state)
   )());

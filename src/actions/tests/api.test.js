@@ -259,8 +259,7 @@ describe("test api actions (actions/api.js)", () => {
         payload: { email: FAKE_USER.email },
         error: false
       },
-      { type: act.RECEIVE_NEW_USER, error: false, payload: { success: true } },
-      { type: act.CLOSE_MODAL }
+      { type: act.RECEIVE_NEW_USER, error: false, payload: { success: true } }
     ]);
 
     await assertApiActionOnError(

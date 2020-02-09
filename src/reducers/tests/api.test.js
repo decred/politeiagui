@@ -301,14 +301,6 @@ describe("test api reducer", () => {
 
     expect(api.default({}, action)).toEqual({ keyMismatch: action.payload });
 
-    // load me action
-    action = {
-      type: act.LOAD_ME,
-      payload: "me data"
-    };
-
-    expect(api.default({}, action)).toEqual({ me: action.payload });
-
     // set email action
     action = {
       type: act.SET_EMAIL,
@@ -316,31 +308,6 @@ describe("test api reducer", () => {
     };
 
     expect(api.default({}, action)).toEqual({ email: action.payload });
-
-    // clean errors action
-    action = {
-      type: act.CLEAN_ERRORS
-    };
-
-    const state = {
-      me: {
-        error: true
-      },
-      api: {
-        error: true
-      },
-      app: "test"
-    };
-
-    expect(api.default(state, action)).toEqual({
-      me: {
-        error: null
-      },
-      api: {
-        error: null
-      },
-      app: "test"
-    });
   });
 
   test("correctly updates the state for onReceiveSyncLikeComment", () => {

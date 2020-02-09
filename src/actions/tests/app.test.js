@@ -91,16 +91,6 @@ describe("test app actions (actions/app.js)", () => {
     fetchMock.restore();
   });
 
-  test("set reply parent and reset form reply", async () => {
-    await expect(app.onSetReplyParent(0)).toDispatchActions(
-      [
-        { type: act.SET_REPLY_PARENT },
-        { type: "@@redux-form/RESET", meta: { form: "form/reply" } }
-      ],
-      done
-    );
-  });
-
   test("save change username action", async () => {
     const params = {
       password: FAKE_USER.password,
@@ -130,38 +120,6 @@ describe("test app actions (actions/app.js)", () => {
     await expect(app.onFetchProposalApp(token)).toDispatchActionsWithState(
       MOCK_STATE,
       [onFetchProposalApi(token), onFetchProposalComments(token)],
-      done
-    );
-  });
-
-  test("load me action", () => {
-    const { me } = MOCK_STATE.api;
-    expect(app.onLoadMe(me)).toDispatchActions(
-      { type: act.LOAD_ME, payload: me },
-      done
-    );
-  });
-
-  test("on change admin filter action", () => {
-    const option = "any";
-    expect(app.onChangeAdminFilter(option)).toDispatchActions(
-      { type: act.CHANGE_ADMIN_FILTER_VALUE, payload: option },
-      done
-    );
-  });
-
-  test("on change public filter action", () => {
-    const option = "any";
-    expect(app.onChangePublicFilter(option)).toDispatchActions(
-      { type: act.CHANGE_PUBLIC_FILTER_VALUE, payload: option },
-      done
-    );
-  });
-
-  test("on change user filter action", () => {
-    const option = "any";
-    expect(app.onChangeUserFilter(option)).toDispatchActions(
-      { type: act.CHANGE_USER_FILTER_VALUE, payload: option },
       done
     );
   });

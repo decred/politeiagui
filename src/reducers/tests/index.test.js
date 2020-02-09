@@ -3,7 +3,6 @@ import { createStore } from "redux";
 import form from "../form";
 import app from "../app";
 import api from "../api";
-import modal from "../modal";
 import external_api from "../external_api";
 
 describe("test reducers combination on index", () => {
@@ -20,7 +19,5 @@ describe("test reducers combination on index", () => {
     expect(store.getState().external_api).toEqual(external_api(undefined, {}));
 
     expect(store.getState().form).toEqual(form(undefined, {}));
-
-    expect(store.getState().modal).toEqual(modal(undefined, {}));
   });
 });

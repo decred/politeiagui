@@ -1,5 +1,3 @@
-import Promise from "promise";
-import { reset } from "redux-form";
 import {
   onSubmitProposal,
   onChangeUsername,
@@ -26,28 +24,13 @@ import {
 } from "../lib/editors_content_backup";
 import * as sel from "../selectors";
 import act from "./methods";
-import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
-import { onEditUser, cleanErrors } from "./api";
+import { onEditUser } from "./api";
 import { loadStateLocalStorage } from "../lib/local_storage";
 import { fromUSDUnitsToUSDCents, uniqueID } from "../helpers";
 import flow from "lodash/fp/flow";
 import flatten from "lodash/fp/flatten";
 import values from "lodash/fp/values";
 import find from "lodash/fp/find";
-
-export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
-
-export const onRouteChange = () => (dispatch) => {
-  dispatch(cleanErrors());
-};
-
-export const onSetReplyParent = (parentId = TOP_LEVEL_COMMENT_PARENTID) => (
-  dispatch
-) =>
-  Promise.all([
-    dispatch(act.SET_REPLY_PARENT(parentId)),
-    dispatch(reset("form/reply"))
-  ]);
 
 export const onSaveNewInvoice = ({
   month,
@@ -298,17 +281,7 @@ export const onFetchInvoiceApp = (token, version = null) => (dispatch) =>
     dispatch(onFetchInvoiceComments(token))
   );
 
-export const onLoadMe = (me) => (dispatch) => {
-  dispatch(act.LOAD_ME(me));
-};
-
 export const onResetPaywallInfo = () => act.RESET_PAYWALL_INFO();
-export const onChangeAdminFilter = (option) =>
-  act.CHANGE_ADMIN_FILTER_VALUE(option);
-export const onChangePublicFilter = (option) =>
-  act.CHANGE_PUBLIC_FILTER_VALUE(option);
-export const onChangeUserFilter = (option) =>
-  act.CHANGE_USER_FILTER_VALUE(option);
 
 export const onIdentityImported = (successMsg, errorMsg = "") =>
   act.IDENTITY_IMPORTED({ errorMsg, successMsg });
