@@ -3,7 +3,7 @@ import { Formik } from "formik";
 import CheckboxGroupField from "src/componentsv2/CheckboxGroupField";
 import MonthPickerField from "src/componentsv2/MonthPicker/MonthPickerField";
 import {
-  getMinMaxYearAndMonth,
+  getInvoiceMinMaxYearAndMonth,
   getInitialDateValue
 } from "src/containers/Invoice";
 import styles from "./InvoiceFilterForm.module.css";
@@ -34,7 +34,7 @@ const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
           <>
             <form className={styles.form}>
               <MonthPickerField
-                years={getMinMaxYearAndMonth()}
+                years={getInvoiceMinMaxYearAndMonth()}
                 name="date"
                 label="Reference month"
                 toggleable
