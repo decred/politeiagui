@@ -21,7 +21,7 @@ const invoiceArrayToByTokenObject = (invoices) =>
     {}
   );
 
-const onReceiveInvoices = (state, receivedInvoices) => {
+const onReceiveInvoices = (state, receivedInvoices = []) => {
   return compose(
     update("byToken", (invoices) => ({
       ...invoices,
