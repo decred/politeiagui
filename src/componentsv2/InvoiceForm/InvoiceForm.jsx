@@ -39,6 +39,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
     }
   }, [errors]);
 
+  console.log(isValid);
   const SubmitButton = () => (
     <Button
       type="submit"
@@ -219,10 +220,12 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
   if (sessionStorageInvoice !== null) {
     formInitialValues = sessionStorageInvoice;
   }
+  const isInitialValid = invoiceFormValidation.isValidSync(formInitialValues);
   return (
     <Formik
       onSubmit={handleSubmit}
       initialValues={formInitialValues}
+      isInitialValid={isInitialValid}
       validationSchema={invoiceFormValidation}>
       {(props) => (
         <InvoiceForm {...{ ...props, submitSuccess, setSessionStorageInvoice }} />
