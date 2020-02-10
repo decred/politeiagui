@@ -27,7 +27,6 @@ const STATUS_ERR = {
 };
 
 const apiBase = "/api";
-const apiBaseProposals = "/proposals-api";
 const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
 const getResponse = get("response");
 
@@ -251,8 +250,8 @@ export const parseResponse = (response) =>
     return { response: json, csrfToken: response.headers.get("X-Csrf-Token") };
   });
 
-const GET = (path, isMocked = false) =>
-  fetch(isMocked ? apiBaseProposals + path : apiBase + path, {
+const GET = (path) =>
+  fetch(apiBase + path, {
     credentials: "include"
   }).then(parseResponse);
 
