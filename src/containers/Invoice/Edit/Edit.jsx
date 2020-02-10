@@ -12,7 +12,8 @@ import InvoiceForm from "src/componentsv2/InvoiceForm";
 const EditInvoice = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
   const { onEditInvoice } = useEditInvoice();
-  const { invoice, loading } = useInvoice(tokenFromUrl);
+  const { invoice, loading, approvedProposalsTokens } = useInvoice(tokenFromUrl);
+
   const isInvoiceLoaded = !loading && !!invoice;
 
   const initialValues = invoice ?
@@ -34,7 +35,7 @@ const EditInvoice = ({ match }) => {
   return (
     <Card className="container margin-bottom-l">
       {isInvoiceLoaded ?
-          <InvoiceForm initialValues={initialValues} onSubmit={onEditInvoice} />
+          <InvoiceForm initialValues={initialValues} onSubmit={onEditInvoice} approvedProposalsTokens={approvedProposalsTokens || []} />
         :
           <InvoiceLoader extended />
       }

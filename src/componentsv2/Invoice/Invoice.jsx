@@ -21,7 +21,7 @@ import { convertAtomsToDcr, usdFormatter } from "src/utilsv2";
 import ThumbnailGrid from "src/componentsv2/Files";
 import { useLoaderContext } from "src/containers/Loader";
 
-const Invoice = ({ invoice, extended }) => {
+const Invoice = ({ invoice, extended, approvedProposalsTokens }) => {
   const {
     censorshiprecord,
     file,
@@ -168,6 +168,7 @@ const Invoice = ({ invoice, extended }) => {
                   value={invoice && invoice.input.lineitems}
                   readOnly
                   userRate={invContractorRate / 100}
+                  proposalsTokens={approvedProposalsTokens || []}
                 />
               </>
             )}
@@ -180,7 +181,8 @@ const Invoice = ({ invoice, extended }) => {
 };
 
 Invoice.propTypes = {
-  invoice: PropTypes.object.isRequired
+  invoice: PropTypes.object.isRequired,
+  approvedProposalsTokens: PropTypes.array
 };
 
 export default Invoice;

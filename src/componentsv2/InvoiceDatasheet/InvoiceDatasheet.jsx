@@ -23,7 +23,8 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   onChange,
   readOnly,
   userRate,
-  errors
+  errors,
+  proposalsTokens
 }) {
   const [grid, setGrid] = useState([]);
   const [currentRate, setCurrentRate] = useState(userRate || 0);
@@ -58,10 +59,10 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
 
   useEffect(
     function updateGridOnValueChange() {
-      const grid = convertLineItemsToGrid(value, readOnly, errors, currentRate);
+      const grid = convertLineItemsToGrid(value, readOnly, errors, currentRate, proposalsTokens);
       setGrid(grid);
     },
-    [value, readOnly, errors, currentRate]
+    [value, readOnly, errors, currentRate, proposalsTokens]
   );
 
   const handleRemoveLastRow = useCallback(
@@ -143,7 +144,8 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
 InvoiceDatasheet.propTypes = {
   value: PropTypes.array.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  proposalsTokens: PropTypes.array.isRequired
 };
 
 InvoiceDatasheet.defaultProps = {

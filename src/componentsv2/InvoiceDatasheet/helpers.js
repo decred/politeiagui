@@ -70,7 +70,8 @@ export const convertLineItemsToGrid = (
   lineItems,
   readOnly = true,
   errors,
-  userRate = 0
+  userRate = 0,
+  proposalsTokens
 ) => {
   const grid = [];
   const { grid: gridBody, expenseTotal, laborTotal, total } = lineItems.reduce(
@@ -111,7 +112,12 @@ export const convertLineItemsToGrid = (
         {
           readOnly,
           value: line.proposaltoken,
-          error: rowErrors && rowErrors.proposaltoken
+          error: rowErrors && rowErrors.proposaltoken,
+          dataEditor: selectWrapper(
+            proposalsTokens.map((token) => {
+              return { label: token, value: token };
+            })
+          )
         },
         {
           readOnly: isLabelReadonly,
