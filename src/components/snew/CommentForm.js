@@ -99,6 +99,7 @@ const CommentForm = ({
                 <Link
                   className="reddiquette"
                   href="/help/contentpolicy"
+                  rel="nofollow noopener noreferrer"
                   tabIndex={100}
                   target="_blank">
                   content policy

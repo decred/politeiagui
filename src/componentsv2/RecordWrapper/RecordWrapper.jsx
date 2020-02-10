@@ -145,6 +145,7 @@ export const ChartsLink = ({ token }) => {
       <UILink
         ref={ref}
         target="_blank"
+        rel="nofollow noopener noreferrer"
         href={`https://${hostName}/proposal/${token}`}
       >
         <Icon type="chart" iconColor={iconColor} />
@@ -171,7 +172,7 @@ export const GithubLink = ({ token }) => {
       placement="bottom"
       content="See on GitHub"
     >
-      <UILink ref={ref} target="_blank" href={`${repoURL}/${token}`}>
+      <UILink ref={ref} rel="nofollow noopener noreferrer" target="_blank" href={`${repoURL}/${token}`}>
         <Icon type="github" iconColor={iconColor} />
       </UILink>
     </Tooltip>
