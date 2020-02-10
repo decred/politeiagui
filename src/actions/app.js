@@ -19,8 +19,9 @@ import {
   onFetchProposal as onFetchProposalApi,
   onSubmitComment as onSubmitCommentApi,
   onFetchInvoice as onFetchInvoiceApi,
-  onFetchDCC as onFetchDCCApi,
-  onFetchDCCsByStatus as onFetchDCCsByStatusApi
+  onFetchDcc as onFetchDccApi,
+  onFetchDccsByStatus as onFetchDccsByStatusApi,
+  onSubmitDccComment as onSubmitDccCommentApi
 } from "./api";
 import {
   resetNewProposalData,
@@ -507,7 +508,7 @@ export const onLoadDCC = (token) => (dispatch, getState) => {
   const fetchedDCCsByStatus = sel.dccsByStatus(getState());
 
   if (!fetchedDCCsByStatus) {
-    dispatch(onFetchDCCApi(token));
+    dispatch(onFetchDccApi(token));
     return;
   }
 
@@ -520,15 +521,23 @@ export const onLoadDCC = (token) => (dispatch, getState) => {
   if (dcc) {
     dispatch(act.SET_DCC(dcc));
   } else {
-    dispatch(onFetchDCCApi(token));
+    dispatch(onFetchDccApi(token));
   }
 };
 
-export const onLoadDCCsByStatus = (status) => (dispatch, getState) => {
+export const onLoadDccsByStatus = (status) => (dispatch, getState) => {
   const fetchedDCCs = sel.dccsByStatus(getState());
   if (fetchedDCCs && fetchedDCCs[status]) {
     dispatch(act.SET_DCCS_CURRENT_STATUS_LIST(fetchedDCCs[status]));
   } else {
-    dispatch(onFetchDCCsByStatusApi(status));
+    dispatch(onFetchDccsByStatusApi(status));
   }
+};
+
+export const onSaveNewDccCommentV2 = ({ comment, token, parentID }) => (
+  dispatch,
+  getState
+) => {
+  const email = sel.currentUserEmail(getState());
+  return dispatch(onSubmitDccCommentApi(email, token, comment, parentID));
 };

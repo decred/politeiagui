@@ -29,7 +29,7 @@ const renderError = error => (
 const DefaultNewButton = () => {
   const {
     recordType,
-    constants: { RECORD_TYPE_PROPOSAL, RECORD_TYPE_INVOICE }
+    constants: { RECORD_TYPE_PROPOSAL, RECORD_TYPE_INVOICE, RECORD_TYPE_DCC }
   } = useConfig();
   const { isPaid } = usePaywall();
   const mapRecordTypeToButton = {
@@ -42,6 +42,9 @@ const DefaultNewButton = () => {
     ),
     [RECORD_TYPE_INVOICE]: (
       <NewButton label="New Invoice" goTo="/invoices/new" />
+    ),
+    [RECORD_TYPE_DCC]: (
+      <NewButton label="New DCC" goTo="/dccs/new" />
     )
   };
   return mapRecordTypeToButton[recordType] || null;

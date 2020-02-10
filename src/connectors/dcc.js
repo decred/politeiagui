@@ -39,15 +39,15 @@ const dccConnector = connect(
     onSubmitDCC: act.onSaveNewDCC,
     onSaveDraftDCC: act.onSaveDraftDCC,
     onLoadDraftDCCs: act.onLoadDraftDCCs,
-    onFetchDCCsByStatus: act.onLoadDCCsByStatus,
-    onForceFetchDCCs: act.onFetchDCCsByStatus,
+    onFetchDccsByStatus: act.onLoadDccsByStatus,
+    onForceFetchDCCs: act.onFetchDccsByStatus,
     onLoadDCC: act.onLoadDCC,
     onFetchUser: act.onFetchUser,
     onSupportOpposeDCC: act.onSupportOpposeDCC,
     onSetDCCStatus: act.onSetDCCStatus,
     confirmWithModal: act.confirmWithModal,
     onDeleteDraftDCC: act.onDeleteDraftDCC,
-    onFetchComments: act.onFetchDCCComments,
+    onFetchComments: act.onFetchDccComments,
     onSubmitComment: act.onSubmitComment
   }
 );

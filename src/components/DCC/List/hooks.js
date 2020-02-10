@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { DCC_STATUS_DRAFTS } from "../../../constants";
 
 export const useListDCC = ({
-  onFetchDCCsByStatus,
+  onFetchDccsByStatus,
   dccs,
   onForceFetchDCCs,
   onLoadDraftDCCs,
@@ -34,7 +34,7 @@ export const useListDCC = ({
     function onChangeStatus() {
       async function onFetchData() {
         setLoadingDCCs(true);
-        await onFetchDCCsByStatus(status);
+        await onFetchDccsByStatus(status);
         // force timeout
         setTimeout(() => {
           setLoadingDCCs(false);
@@ -47,7 +47,7 @@ export const useListDCC = ({
     },
     [
       status,
-      onFetchDCCsByStatus,
+      onFetchDccsByStatus,
       setLoadingDCCs,
       onLoadDraftDCCs,
       loggedInAsEmail

@@ -705,5 +705,5 @@ export const setDCCStatus = (csrf, email, token, status, reason) =>
 export const dccComments = (token) =>
   GET(`/v1/dcc/${token}/comments`).then(getResponse);
 
-export const newDCCComment = (csrf, dcc) =>
+export const newDccComment = (csrf, dcc) =>
   POST("/dcc/newcomment", csrf, dcc).then(getResponse);
