@@ -39,7 +39,6 @@ const InvoiceForm = React.memo(function InvoiceForm({
     }
   }, [errors]);
 
-  console.log(isValid);
   const SubmitButton = () => (
     <Button
       type="submit"
