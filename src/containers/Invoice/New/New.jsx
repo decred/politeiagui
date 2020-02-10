@@ -4,10 +4,11 @@ import InvoiceForm from "src/componentsv2/InvoiceForm";
 import { useNewInvoice } from "./hooks";
 
 const NewInvoice = () => {
-  const { onSubmitInvoice } = useNewInvoice();
+  const { onSubmitInvoice, approvedProposalsTokens } = useNewInvoice();
+
   return (
     <Card className="container margin-bottom-l">
-      <InvoiceForm onSubmit={onSubmitInvoice} />
+      <InvoiceForm onSubmit={onSubmitInvoice} approvedProposalsTokens={approvedProposalsTokens || []} />
     </Card>
   );
 };

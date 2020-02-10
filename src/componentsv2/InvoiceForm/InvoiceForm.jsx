@@ -30,7 +30,8 @@ const InvoiceForm = React.memo(function InvoiceForm({
   touched,
   isValid,
   submitSuccess,
-  setSessionStorageInvoice
+  setSessionStorageInvoice,
+  approvedProposalsTokens
 }) {
   // scroll to top in case of global error
   useEffect(() => {
@@ -159,6 +160,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
         userRate={values.rate}
         errors={lineItemErrors}
         onChange={handleChangeInvoiceDatasheet}
+        proposalsTokens={approvedProposalsTokens}
       />
       <div className="justify-right">
         <DraftSaver submitSuccess={submitSuccess} />
@@ -168,39 +170,9 @@ const InvoiceForm = React.memo(function InvoiceForm({
   );
 });
 
-const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
+const InvoiceFormWrapper = ({ initialValues, onSubmit, history, approvedProposalsTokens }) => {
   const { policy } = usePolicy();
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const invoiceFormValidation = useMemo(() => invoiceValidationSchema(policy), [
-    policy
-  ]);
-
-  const handleSubmit = useCallback(
-    async (values, { resetForm, setSubmitting, setFieldError }) => {
-      try {
-        const {
-          date: { month, year },
-          ...others
-        } = values;
-        const token = await onSubmit({
-          ...others,
-          month,
-          year
-        });
-        // Token from new invoice or from edit invoice
-        const invoiceToken = token || values.token;
-        setSubmitting(false);
-        setSubmitSuccess(true);
-        history.push(`/invoices/${invoiceToken}`);
-        resetForm();
-      } catch (e) {
-        setSubmitting(false);
-        setFieldError("global", e);
-      }
-    },
-    [history, onSubmit]
-  );
-
   const FORM_INITIAL_VALUES = {
     name: "",
     location: "",
@@ -219,7 +191,37 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
   if (sessionStorageInvoice !== null) {
     formInitialValues = sessionStorageInvoice;
   }
+  const invoiceFormValidation = useMemo(() => invoiceValidationSchema(policy), [
+    policy
+  ]);
   const isInitialValid = invoiceFormValidation.isValidSync(formInitialValues);
+  const handleSubmit = useCallback(
+    async (values, { resetForm, setSubmitting, setFieldError }) => {
+      try {
+        const {
+          date: { month, year },
+          ...others
+        } = values;
+        const token = await onSubmit({
+          ...others,
+          month,
+          year
+        });
+        // Token from new invoice or from edit invoice
+        const invoiceToken = token || values.token;
+        setSubmitting(false);
+        setSubmitSuccess(true);
+        history.push(`/invoices/${invoiceToken}`);
+        setSessionStorageInvoice(null);
+        resetForm();
+      } catch (e) {
+        setSubmitting(false);
+        setFieldError("global", e);
+      }
+    },
+    [history, onSubmit, setSessionStorageInvoice]
+  );
+
   return (
     <Formik
       onSubmit={handleSubmit}
@@ -227,13 +229,14 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history }) => {
       isInitialValid={isInitialValid}
       validationSchema={invoiceFormValidation}>
       {(props) => (
-        <InvoiceForm {...{ ...props, submitSuccess, setSessionStorageInvoice }} />
+        <InvoiceForm {...{ ...props, submitSuccess, setSessionStorageInvoice, approvedProposalsTokens }} />
       )}
     </Formik>
   );
 };
 
 InvoiceFormWrapper.propTypes = {
+  approvedProposalsTokens: PropTypes.array.isRequired,
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func,
   setSessionStorageInvoice: PropTypes.func,
