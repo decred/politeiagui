@@ -173,6 +173,9 @@ const InvoiceForm = React.memo(function InvoiceForm({
 const InvoiceFormWrapper = ({ initialValues, onSubmit, history, approvedProposalsTokens }) => {
   const { policy } = usePolicy();
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const invoiceFormValidation = useMemo(() => invoiceValidationSchema(policy), [
+    policy
+  ]);
   const FORM_INITIAL_VALUES = {
     name: "",
     location: "",
@@ -191,9 +194,6 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history, approvedProposal
   if (sessionStorageInvoice !== null) {
     formInitialValues = sessionStorageInvoice;
   }
-  const invoiceFormValidation = useMemo(() => invoiceValidationSchema(policy), [
-    policy
-  ]);
   const isInitialValid = invoiceFormValidation.isValidSync(formInitialValues);
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
