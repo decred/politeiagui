@@ -251,9 +251,7 @@ export const parseResponse = (response) =>
   });
 
 const GET = (path) =>
-  fetch(apiBase + path, {
-    credentials: "include"
-  }).then(parseResponse);
+  fetch(apiBase + path, { credentials: "include" }).then(parseResponse);
 
 const getOptions = (csrf, json, method) => ({
   headers: {
@@ -663,7 +661,7 @@ export const payApprovedInvoices = () =>
   GET("/v1/admin/payinvoices").then(getResponse);
 
 export const tokenInventory = () =>
-  GET("/v1/proposals/tokeninventory", true).then(getResponse);
+  GET("/v1/proposals/tokeninventory").then(getResponse);
 
 export const exchangeRate = (csrf, month, year) =>
   POST("/invoices/exchangerate", csrf, { month, year }).then(getResponse);
