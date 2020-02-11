@@ -4,15 +4,11 @@ import {
   PAYWALL_STATUS_PAID,
   PROPOSAL_FILTER_ALL,
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_USER_FILTER_SUBMITTED,
-  SORT_BY_TOP
+  PROPOSAL_USER_FILTER_SUBMITTED
 } from "../constants";
 import { getCurrentYear, getCurrentMonth } from "../helpers";
-import { TOP_LEVEL_COMMENT_PARENTID } from "../lib/api";
 
 export const DEFAULT_STATE = {
-  isShowingSignupConfirmation: false,
-  replyParent: TOP_LEVEL_COMMENT_PARENTID,
   newProposal: {
     name: "",
     description: ""
@@ -26,11 +22,8 @@ export const DEFAULT_STATE = {
   submittedProposals: {},
   draftProposals: null,
   identityImportResult: { errorMsg: "", successMsg: "" },
-  onboardViewed: false,
-  commentsSortOption: { value: SORT_BY_TOP, label: SORT_BY_TOP },
   pollingCreditsPayment: false,
   reachedCreditsPaymentPollingLimit: false,
-  redirectedFrom: null,
   invoiceSortOption: { month: FILTER_ALL_MONTHS, year: getCurrentYear() },
   endPayoutOption: { month: getCurrentMonth(), year: getCurrentYear() },
   startPayoutOption: {
@@ -44,10 +37,6 @@ export const DEFAULT_STATE = {
 const app = (state = DEFAULT_STATE, action) =>
   ((
     {
-      [act.SET_REPLY_PARENT]: () => ({
-        ...state,
-        replyParent: action.payload || TOP_LEVEL_COMMENT_PARENTID
-      }),
       [act.RECEIVE_NEW_PROPOSAL]: () =>
         action.error
           ? state
@@ -220,73 +209,6 @@ const app = (state = DEFAULT_STATE, action) =>
           lastSubmitted: false
         }
       }),
-      [act.SET_PROPOSAL_APPROVED]: () => ({
-        ...state,
-        isProposalStatusApproved: action.payload
-      }),
-      [act.SET_VOTES_END_HEIGHT]: () => ({
-        ...state,
-        votesEndHeight: {
-          ...state.votesEndHeight,
-          [action.payload.token]: action.payload.endheight
-        }
-      }),
-      [act.REQUEST_SIGNUP_CONFIRMATION]: () => ({
-        ...state,
-        isShowingSignupConfirmation: true
-      }),
-      [act.RESET_SIGNUP_CONFIRMATION]: () => ({
-        ...state,
-        isShowingSignupConfirmation: false
-      }),
-      [act.CHANGE_ADMIN_FILTER_VALUE]: () => ({
-        ...state,
-        adminProposalsShow: action.payload
-      }),
-      [act.CHANGE_PUBLIC_FILTER_VALUE]: () => ({
-        ...state,
-        publicProposalsShow: action.payload
-      }),
-      [act.CHANGE_USER_FILTER_VALUE]: () => ({
-        ...state,
-        userProposalsShow: action.payload
-      }),
-      [act.CHANGE_DATE_FILTER]: () => ({
-        ...state,
-        invoiceSortOption: action.payload
-      }),
-      [act.RESET_DATE_FILTER]: () => ({
-        ...state,
-        invoiceSortOption: {
-          ...state.invoiceSortOption,
-          month: FILTER_ALL_MONTHS,
-          year: getCurrentYear()
-        }
-      }),
-      [act.CHANGE_START_PAYOUT_DATE_FILTER]: () => ({
-        ...state,
-        startPayoutOption: action.payload
-      }),
-      [act.RESET_START_PAYOUT_DATE_FILTER]: () => ({
-        ...state,
-        startPayoutOption: {
-          ...state.startPayoutOption,
-          month: getCurrentMonth() - 1,
-          year: getCurrentYear()
-        }
-      }),
-      [act.CHANGE_END_PAYOUT_DATE_FILTER]: () => ({
-        ...state,
-        endPayoutOption: action.payload
-      }),
-      [act.RESET_END_PAYOUT_DATE_FILTER]: () => ({
-        ...state,
-        endPayoutOption: {
-          ...state.endPayoutOption,
-          month: getCurrentMonth(),
-          year: getCurrentYear()
-        }
-      }),
       [act.RESET_PAYWALL_INFO]: () => ({ ...state, userAlreadyPaid: null }),
       [act.UPDATE_USER_PAYWALL_STATUS]: () => ({
         ...state,
@@ -295,40 +217,9 @@ const app = (state = DEFAULT_STATE, action) =>
         userAlreadyPaid: action.payload.status === PAYWALL_STATUS_PAID,
         userPaywallConfirmations: action.payload.currentNumberOfConfirmations
       }),
-      [act.SET_PROPOSAL_CREDITS]: () => ({
-        ...state,
-        proposalCredits: action.payload || 0
-      }),
       [act.SUBTRACT_PROPOSAL_CREDITS]: () => ({
         ...state,
         proposalCredits: state.proposalCredits - (action.payload || 0)
-      }),
-      [act.LOAD_ME]: () => {
-        const proposalCredits = action.payload.response.proposalcredits;
-        return {
-          ...state,
-          proposalCredits: proposalCredits || state.proposalCredits
-        };
-      },
-      [act.ADD_PROPOSAL_CREDITS]: () => ({
-        ...state,
-        recentPayments: state.recentPayments
-          ? !state.recentPayments.find((el) => el.txid === action.payload.txid)
-            ? [
-                ...state.recentPayments,
-                {
-                  txid: action.payload.txid,
-                  amount: action.payload.amount
-                }
-              ]
-            : [...state.recentPayments]
-          : [
-              {
-                txid: action.payload.txid,
-                amount: action.payload.amount
-              }
-            ],
-        proposalCredits: state.proposalCredits + (action.payload.amount || 0)
       }),
       [act.CSRF_NEEDED]: () => ({ ...state, csrfIsNeeded: action.payload }),
       [act.SHOULD_AUTO_VERIFY_KEY]: () => ({
@@ -338,11 +229,6 @@ const app = (state = DEFAULT_STATE, action) =>
       [act.IDENTITY_IMPORTED]: () => ({
         ...state,
         identityImportResult: action.payload
-      }),
-      [act.SET_ONBOARD_AS_VIEWED]: () => ({ ...state, onboardViewed: true }),
-      [act.SET_COMMENTS_SORT_OPTION]: () => ({
-        ...state,
-        commentsSortOption: action.payload
       }),
       [act.TOGGLE_CREDITS_PAYMENT_POLLING]: () => ({
         ...state,
@@ -360,11 +246,6 @@ const app = (state = DEFAULT_STATE, action) =>
         ...state,
         dccs: action.payload
       }),
-      [act.REDIRECTED_FROM]: () => ({
-        ...state,
-        redirectedFrom: action.payload
-      }),
-      [act.RESET_REDIRECTED_FROM]: () => ({ ...state, redirectedFrom: null }),
       [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
     }[action.type] || (() => state)
   )());

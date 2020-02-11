@@ -4,7 +4,7 @@ import { useRedux } from "src/redux";
 const mapStateToProps = {};
 
 const mapDispatchToProps = {
-  onSubmitProposal: act.onSaveNewProposalV2
+  onSubmitProposal: act.onSaveNewProposal
 };
 
 export function useNewProposal(ownProps) {

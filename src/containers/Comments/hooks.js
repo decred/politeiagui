@@ -32,7 +32,7 @@ export function useComments(recordToken, fetchComments = false) {
   const onSubmitComment = useAction(
     recordType === constants.RECORD_TYPE_DCC
       ? act.onSaveNewDccCommentV2
-      : act.onSaveNewCommentV2
+      : act.onSaveNewComment
   );
   const onFetchComments = useAction(
     recordType === constants.RECORD_TYPE_PROPOSAL
@@ -44,7 +44,7 @@ export function useComments(recordToken, fetchComments = false) {
   const onFetchLikes = useAction(act.onFetchLikedComments);
   const onLikeCommentAction = useAction(act.onLikeComment);
   const onResetComments = useAction(act.onResetComments);
-  const onCensorComment = useAction(act.onCensorCommentv2);
+  const onCensorComment = useAction(act.onCensorComment);
 
   const { currentUser } = useLoaderContext();
   const email = currentUser && currentUser.email;

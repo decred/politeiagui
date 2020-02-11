@@ -7,7 +7,7 @@ import { selectTypeOptions, selectDomainOptions } from "./helpers";
 import UserSearchSelect from "src/containers/User/Search/SearchSelector";
 import { Formik } from "formik";
 import { useAction } from "src/redux";
-import { onManageCmsUserV2 } from "src/actions";
+import { onManageCmsUser } from "src/actions";
 import styles from "./ManageContractor.module.css";
 import useMultipleUsers from "../../hooks/useMultipleUsers";
 
@@ -27,7 +27,7 @@ const selectSupervisorStyles = {
 
 const ManageContractor = ({ user }) => {
   const { domain, contractortype, userid, supervisoruserids = [] } = user;
-  const onUpdateContractor = useAction(onManageCmsUserV2);
+  const onUpdateContractor = useAction(onManageCmsUser);
   const [updated, setUpdated] = useState(false);
 
   const [users, loadingUsers] = useMultipleUsers(supervisoruserids);

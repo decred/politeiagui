@@ -1,10 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import App from "./App.js";
 
-const targetElement =
-  process.env.NODE_ENV === "test"
-    ? document.body
-    : document.getElementById("root");
+const targetElement = document.getElementById("root");
 
 ReactDOM.render(<App />, targetElement);
