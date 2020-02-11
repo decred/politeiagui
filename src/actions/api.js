@@ -759,7 +759,7 @@ export const onSubmitComment = (
         return comment;
       })
       .then((comment) => {
-        api.newComment(csrf, comment);
+        return api.newComment(csrf, comment);
       })
       .then((response) => {
         const responsecomment = response.comment;

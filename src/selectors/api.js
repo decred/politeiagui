@@ -353,7 +353,6 @@ export const newDCCToken = compose(
 );
 
 export const apiDCCsResponse = getApiResponse("dccs");
-export const dccsByStatus = compose(get("dccsByStatus"), apiDCCsResponse);
 export const dccsError = getApiError("dccs");
 
 export const dccDetailsApi = getApiResponse("dcc");
