@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
@@ -11,7 +11,6 @@ export function useInvoice(invoiceToken) {
   );
   const invoice = useSelector(invoiceSelector);
   const onFetchInvoice = useAction(act.onFetchInvoice);
-
   const requestParams = useMemo(() => [invoiceToken], [invoiceToken]);
   const [loading, error] = useAPIAction(
     onFetchInvoice,
@@ -19,5 +18,16 @@ export function useInvoice(invoiceToken) {
     !invoice || !invoice.payout
   );
 
-  return { invoice, loading, error };
+  const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
+  const proposalsTokens = useSelector(sel.apiTokenInventoryResponse);
+  const approvedProposalsTokens = useMemo(
+    () => proposalsTokens && proposalsTokens.approved,
+    [proposalsTokens]
+  );
+
+  useEffect(() => {
+    !proposalsTokens && onFetchTokenInventory();
+  }, [onFetchTokenInventory, proposalsTokens]);
+
+  return { invoice, loading, error, approvedProposalsTokens };
 }

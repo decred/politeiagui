@@ -1,5 +1,7 @@
+import { useMemo, useEffect } from "react";
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
+import * as sel from "src/selectors";
+import { useRedux, useSelector, useAction } from "src/redux";
 
 const mapStateToProps = {};
 
@@ -8,7 +10,24 @@ const mapDispatchToProps = {
 };
 
 export function useNewInvoice(ownProps) {
-  const fromRedux = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
+  const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
+  const proposalsTokens = useSelector(sel.apiTokenInventoryResponse);
+  const approvedProposalsTokens = useMemo(
+    () => proposalsTokens && proposalsTokens.approved,
+    [proposalsTokens]
+  );
 
-  return fromRedux;
+  useEffect(() => {
+    !proposalsTokens && onFetchTokenInventory();
+  }, [onFetchTokenInventory, proposalsTokens]);
+
+  const { onSubmitInvoice } = useRedux(
+    ownProps,
+    mapStateToProps,
+    mapDispatchToProps
+  );
+  return {
+    onSubmitInvoice,
+    approvedProposalsTokens
+  };
 }

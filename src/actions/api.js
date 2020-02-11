@@ -741,9 +741,7 @@ export const onSubmitComment = (
   token,
   comment,
   parentid,
-  commentid,
-  isCMS = false,
-  isDCC = false
+  commentid
 ) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
@@ -761,17 +759,11 @@ export const onSubmitComment = (
         return comment;
       })
       .then((comment) => {
-        return isDCC
-          ? api.newDCCComment(csrf, comment)
-          : api.newComment(csrf, comment);
+        api.newComment(csrf, comment);
       })
       .then((response) => {
         const responsecomment = response.comment;
-        !isCMS
-          ? dispatch(act.RECEIVE_NEW_COMMENT(responsecomment))
-          : isDCC
-          ? dispatch(act.RECEIVE_NEW_DCC_COMMENT(responsecomment))
-          : dispatch(act.RECEIVE_NEW_INVOICE_COMMENT(responsecomment));
+        dispatch(act.RECEIVE_NEW_COMMENT(responsecomment));
         commentid &&
           dispatch(
             act.RECEIVE_NEW_THREAD_COMMENT({
@@ -1269,7 +1261,7 @@ export const onSubmitNewDCC = (
       });
   });
 
-export const onFetchDCCsByStatus = (status) =>
+export const onFetchDccsByStatus = (status) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_DCCS({}));
     return api
@@ -1282,7 +1274,7 @@ export const onFetchDCCsByStatus = (status) =>
       });
   });
 
-export const onFetchDCC = (token) =>
+export const onFetchDcc = (token) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_DCC({}));
     return api
@@ -1295,15 +1287,16 @@ export const onFetchDCC = (token) =>
       });
   });
 
-export const onFetchDCCComments = (token) => (dispatch) => {
-  dispatch(act.REQUEST_DCC_COMMENTS());
+export const onFetchDccComments = (token) => (dispatch) => {
+  dispatch(act.REQUEST_RECORD_COMMENTS());
   return api
     .dccComments(token)
     .then((response) => {
-      dispatch(act.RECEIVE_DCC_COMMENTS(response));
+      dispatch(act.RECEIVE_RECORD_COMMENTS({ ...response, token }));
     })
     .catch((error) => {
-      dispatch(act.RECEIVE_DCC_COMMENTS(null, error));
+      dispatch(act.RECEIVE_RECORD_COMMENTS(null, error));
+      throw error;
     });
 };
 
@@ -1342,5 +1335,32 @@ export const onSetDCCStatus = (loggedInAsEmail, token, status, reason) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_SET_DCC_STATUS(null, error));
+      });
+  });
+
+export const onSubmitDccComment = (loggedInAsEmail, token, comment, parentid) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
+    return Promise.resolve(api.makeComment(token, comment, parentid))
+      .then((comment) => api.signComment(loggedInAsEmail, comment))
+      .then((comment) => {
+        // make sure this is not a duplicate comment by comparing to the existent
+        // comments signatures
+        const comments = sel.commentsByToken(getState())[token];
+        const signatureFound =
+          comments && comments.find((cm) => cm.signature === comment.signature);
+        if (signatureFound) {
+          throw new Error("That is a duplicate comment.");
+        }
+        return comment;
+      })
+      .then((comment) => api.newDccComment(csrf, comment))
+      .then((response) => {
+        const responsecomment = response.comment;
+        dispatch(act.RECEIVE_NEW_COMMENT(responsecomment));
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_NEW_COMMENT(null, error));
+        throw error;
       });
   });

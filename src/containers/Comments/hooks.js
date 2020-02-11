@@ -24,16 +24,21 @@ export function useComments(recordToken, fetchComments = false) {
     () => sel.makeGetProposalCommentsLikes(recordToken),
     [recordToken]
   );
-
   const comments = useSelector(commentsSelector);
   const commentsLikes = useSelector(commentsLikesSelector);
   const lastVisitTimestamp = useSelector(sel.visitedProposal);
   const loading = useSelector(sel.isApiRequestingComments);
   const loadingLikes = useSelector(sel.isApiRequestingCommentsLikes);
-  const onSubmitComment = useAction(act.onSaveNewComment);
+  const onSubmitComment = useAction(
+    recordType === constants.RECORD_TYPE_DCC
+      ? act.onSaveNewDccCommentV2
+      : act.onSaveNewComment
+  );
   const onFetchComments = useAction(
     recordType === constants.RECORD_TYPE_PROPOSAL
       ? act.onFetchProposalComments
+      : recordType === constants.RECORD_TYPE_DCC
+      ? act.onFetchDccComments
       : act.onFetchInvoiceComments
   );
   const onFetchLikes = useAction(act.onFetchLikedComments);
