@@ -183,7 +183,7 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history, approvedProposal
     address: "",
     exchangerate: "",
     date: getInitialDateValue(),
-    lineitems: [generateBlankLineItem()],
+    lineitems: [generateBlankLineItem(policy)],
     files: []
   };
   let formInitialValues = initialValues || FORM_INITIAL_VALUES;
