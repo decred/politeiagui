@@ -7,7 +7,8 @@ import union from "lodash/fp/union";
 const DEFAULT_STATE = {
   byToken: {},
   all: [],
-  exchangeRates: {}
+  exchangeRates: {},
+  subContractors: null
 };
 
 const invoiceToken = (invoice) => invoice.censorshiprecord.token;
@@ -42,6 +43,10 @@ const invoices = (state = DEFAULT_STATE, action) =>
               ["exchangeRates", `${year}-${month}`],
               exchangerate
             )(state);
+          },
+          [act.RECEIVE_USER_SUBCONTRACTORS]: () => {
+            const { users } = action.payload;
+            return set("subContractors", users)(state);
           },
           [act.RECEIVE_USER_INVOICES]: () =>
             onReceiveInvoices(state, action.payload.invoices),

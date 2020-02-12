@@ -64,6 +64,16 @@ export const invoiceValidationSchema = ({
               ...yupFieldMatcher("Description", invoicefieldsupportedchars)
             ),
           labor: Yup.number().min(0),
+          subuserid: Yup.string().when("type", (type, schema) =>
+            +type === 4 ? schema.required("required") : schema
+          ),
+          subrate: Yup.number().when("type", (type, schema) =>
+            +type === 4
+              ? schema
+                  .min(500, "must be greater or equal 5")
+                  .max(50000, "must be less or equal 500")
+              : schema
+          ),
           expenses: Yup.number().min(0)
         })
       )

@@ -14,18 +14,34 @@ export const columnTypes = {
   SUBDOMAIN_COL: 3,
   DESC_COL: 4,
   PROP_TOKEN_COL: 5,
-  LABOR_COL: 6,
-  EXP_COL: 7,
-  SUBTOTAL_COL: 8
+  SUBCONTRACTOR_COL: 6,
+  SUBRATE_COL: 7,
+  LABOR_COL: 8,
+  EXP_COL: 9,
+  SUBTOTAL_COL: 10
 };
 
-export const { LABOR_COL, EXP_COL, SUBTOTAL_COL } = columnTypes;
+export const {
+  SUBCONTRACTOR_COL,
+  SUBRATE_COL,
+  LABOR_COL,
+  EXP_COL,
+  SUBTOTAL_COL
+} = columnTypes;
 
 const capitalizeFirstLetter = (string) =>
   string[0].toUpperCase() + string.substring(1);
 
 const defaultLineItemTypeOption = (policyLineItemTypes) =>
   policyLineItemTypes[0].type;
+
+const getSubcontractorOptions = (subContractors) =>
+  subContractors
+    ? subContractors.map((sc) => ({
+        value: sc.id,
+        label: sc.username
+      }))
+    : [];
 
 const defaultDomainOption = (policyDomains) =>
   capitalizeFirstLetter(policyDomains[0].description);
@@ -38,7 +54,9 @@ export const generateBlankLineItem = (policy) => ({
   proposaltoken: "",
   labor: 0,
   expenses: "",
-  subtotal: ""
+  subtotal: "",
+  subuserid: "",
+  subrate: 0
 });
 
 export const convertLineItemsToGrid = (
@@ -47,7 +65,8 @@ export const convertLineItemsToGrid = (
   errors,
   userRate = 0,
   policy,
-  proposalsTokens
+  proposalsTokens,
+  subContractors
 ) => {
   const {
     supporteddomains: policyDomains,
@@ -56,12 +75,18 @@ export const convertLineItemsToGrid = (
   const grid = [];
   const { grid: gridBody, expenseTotal, laborTotal, total } = lineItems.reduce(
     (acc, line, idx) => {
-      const isLabelReadonly =
+      const isLaborReadonly =
         line.type === 2 ? true : line.type === 3 ? true : readOnly;
-      const isExpenseReadonly = line.type === 1 ? true : readOnly;
+      const isSubContractorReadonly = line.type !== 4 ? true : readOnly;
+      const isExpenseReadonly =
+        line.type === 1 || line.type === 4 ? true : readOnly;
       const laborHours = +fromMinutesToHours(line.labor);
       const expenses = +fromUSDCentsToUSDUnits(line.expenses);
-      const lineSubTotal = laborHours * userRate + expenses;
+      const subRate = +fromUSDCentsToUSDUnits(line.subrate);
+      const lineSubTotal =
+        line.type !== 4
+          ? laborHours * userRate + expenses
+          : laborHours * subRate;
       const rowErrors = (errors && errors[idx]) || {};
       const newLine = [
         { readOnly: true, value: idx + 1 },
@@ -109,7 +134,16 @@ export const convertLineItemsToGrid = (
           )
         },
         {
-          readOnly: isLabelReadonly,
+          readOnly: isSubContractorReadonly,
+          value: line.subuserid,
+          dataEditor: selectWrapper(getSubcontractorOptions(subContractors))
+        },
+        {
+          readOnly: isSubContractorReadonly,
+          value: +fromUSDCentsToUSDUnits(line.subrate)
+        },
+        {
+          readOnly: isLaborReadonly,
           value: laborHours,
           error: rowErrors && rowErrors.labor
         },
@@ -133,6 +167,8 @@ export const convertLineItemsToGrid = (
     { grid: [], expenseTotal: 0, laborTotal: 0, total: 0 }
   );
   const totalsLine = [
+    { readOnly: true },
+    { readOnly: true },
     { readOnly: true },
     { readOnly: true },
     { readOnly: true },
@@ -177,6 +213,10 @@ export const convertGridToLineItems = (grid) => {
           return { ...acc, description: cell.value };
         case columnTypes.PROP_TOKEN_COL:
           return { ...acc, proposaltoken: cell.value };
+        case columnTypes.SUBCONTRACTOR_COL:
+          return { ...acc, subuserid: cell.value };
+        case columnTypes.SUBRATE_COL:
+          return { ...acc, subrate: fromUSDUnitsToUSDCents(+cell.value) };
         case columnTypes.LABOR_COL:
           return { ...acc, labor: fromHoursToMinutes(+cell.value) };
         case columnTypes.EXP_COL:
@@ -192,19 +232,6 @@ export const convertGridToLineItems = (grid) => {
   }, []);
 };
 
-export const lineitemsWithSubtotal = (lineItems, rate) =>
-  lineItems.map((l) => {
-    return l.type === 1
-      ? {
-          ...l,
-          subtotal: +fromMinutesToHours(l.labor) * +fromUSDCentsToUSDUnits(rate)
-        }
-      : {
-          ...l,
-          subtotal: +fromUSDCentsToUSDUnits(l.expenses)
-        };
-  });
-
 export const createTableHeaders = () => [
   { readOnly: true, value: "", width: 25 },
   { value: "Type", width: 120, readOnly: true },
@@ -212,6 +239,8 @@ export const createTableHeaders = () => [
   { value: "Subdomain", width: 175, readOnly: true },
   { value: "Description", readOnly: true },
   { value: "Proposal Token", readOnly: true },
+  { value: "Subcontr. ID", readOnly: true },
+  { value: "Subcontr. Rate (USD)", readOnly: true },
   { value: "Labor (hours)", width: 60, readOnly: true },
   { value: "Expense (USD)", width: 60, readOnly: true },
   { value: "Subtotal (USD)", width: 60, readOnly: true }
@@ -239,12 +268,41 @@ export const processTypeColChange = (grid, { row, col, value }) => {
     grid = updateGridCell(grid, row, LABOR_COL, { readOnly: false });
   }
 
+  console.log(value);
+  // if value is 4, the expense column must be 0 and readOnly
+  if (+value === 4) {
+    grid = updateGridCell(grid, row, SUBCONTRACTOR_COL, { readOnly: false });
+    grid = updateGridCell(grid, row, SUBRATE_COL, {
+      value: 0,
+      readOnly: false
+    });
+    grid = updateGridCell(grid, row, EXP_COL, { readOnly: true });
+  }
+
+  return updateGridCell(grid, row, col, { value });
+};
+
+export const processSubRateColChange = (grid, { row, col, value }) => {
+  const labor = grid[row][columnTypes.LABOR_COL].value;
+  grid = updateGridCell(grid, row, SUBTOTAL_COL, { value: value * labor });
   return updateGridCell(grid, row, col, { value });
 };
 
 export const processLaborColChange = (grid, { row, col, value }, userRate) => {
   // updates subtotal upon labor value entry
-  grid = updateGridCell(grid, row, SUBTOTAL_COL, { value: value * userRate });
+  const type = grid[row][columnTypes.TYPE_COL].value;
+  const subRate = grid[row][columnTypes.SUBRATE_COL].value;
+
+  // user rate
+  if (type === 1) {
+    grid = updateGridCell(grid, row, SUBTOTAL_COL, { value: value * userRate });
+  }
+
+  // sub contractor rate
+  if (type === 4) {
+    grid = updateGridCell(grid, row, SUBTOTAL_COL, { value: value * subRate });
+  }
+
   return updateGridCell(grid, row, col, { value });
 };
 
@@ -258,11 +316,19 @@ export const processSubtotalColChange = (grid, userRate) => {
   // case where user rate changes and grid must recalculate subtotal
   for (const g of grid) {
     const row = g[0].value - 1;
-    const type = g[1].value;
-    const value = g[6].value;
+    const type = g[columnTypes.TYPE_COL].value;
+    const value = g[columnTypes.LABOR_COL].value;
+    const subRate = g[columnTypes.SUBRATE_COL].value;
+
     if (type === 1) {
       grid = updateGridCell(grid, row, SUBTOTAL_COL, {
         value: value * userRate
+      });
+    }
+
+    if (type === 4) {
+      grid = updateGridCell(grid, row, SUBTOTAL_COL, {
+        value: value * subRate
       });
     }
   }
@@ -281,6 +347,9 @@ export const processCellsChange = (currentGrid, changes, userRate = 0) => {
           return acc;
         case columnTypes.EXP_COL:
           acc.grid = processExpenseColChange(acc.grid, change);
+          return acc;
+        case columnTypes.SUBRATE_COL:
+          acc.grid = processSubRateColChange(acc.grid, change);
           return acc;
         case columnTypes.SUBTOTAL_COL:
           acc.grid = processSubtotalColChange(acc.grid, userRate);
