@@ -21,43 +21,18 @@ export const columnTypes = {
 
 export const { LABOR_COL, EXP_COL, SUBTOTAL_COL } = columnTypes;
 
-const domainOptions = [
-  "Development",
-  "Marketing",
-  "Design",
-  "Research",
-  "Documentation",
-  "Community Management"
-];
+const capitalizeFirstLetter = (string) =>
+  string[0].toUpperCase() + string.substring(1);
 
-const getDomainOptions = () =>
-  domainOptions.map((op) => ({
-    value: op,
-    label: op
-  }));
+const defaultLineItemTypeOption = (policyLineItemTypes) =>
+  policyLineItemTypes[0].type;
 
-const getTypeOptions = () => [
-  {
-    label: "Labor",
-    value: 1
-  },
-  {
-    label: "Expense",
-    value: 2
-  },
-  {
-    label: "Misc",
-    value: 3
-  }
-];
+const defaultDomainOption = (policyDomains) =>
+  capitalizeFirstLetter(policyDomains[0].description);
 
-const defaultDomainOption = getDomainOptions()[0].value;
-
-const defaultTypeOption = getTypeOptions()[0].value;
-
-export const generateBlankLineItem = () => ({
-  type: defaultTypeOption,
-  domain: defaultDomainOption,
+export const generateBlankLineItem = (policy) => ({
+  type: defaultLineItemTypeOption(policy.supportedlineitemtypes),
+  domain: defaultDomainOption(policy.supporteddomains),
   subdomain: "",
   description: "",
   proposaltoken: "",
@@ -71,8 +46,13 @@ export const convertLineItemsToGrid = (
   readOnly = true,
   errors,
   userRate = 0,
+  policy,
   proposalsTokens
 ) => {
+  const {
+    supporteddomains: policyDomains,
+    supportedlineitemtypes: policyLineItemTypes
+  } = policy;
   const grid = [];
   const { grid: gridBody, expenseTotal, laborTotal, total } = lineItems.reduce(
     (acc, line, idx) => {
@@ -89,13 +69,23 @@ export const convertLineItemsToGrid = (
           readOnly,
           value: line.type,
           error: rowErrors.type,
-          dataEditor: selectWrapper(getTypeOptions())
+          dataEditor: selectWrapper(
+            policyLineItemTypes.map((op) => ({
+              value: op.type,
+              label: capitalizeFirstLetter(op.description)
+            }))
+          )
         },
         {
           readOnly,
           value: line.domain,
           error: false,
-          dataEditor: selectWrapper(getDomainOptions())
+          dataEditor: selectWrapper(
+            policyDomains.map((op) => ({
+              value: capitalizeFirstLetter(op.description),
+              label: capitalizeFirstLetter(op.description)
+            }))
+          )
         },
         {
           readOnly,

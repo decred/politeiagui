@@ -44,7 +44,7 @@ export const invoiceValidationSchema = ({
         Yup.object().shape({
           type: Yup.string()
             .required("required")
-            .oneOf(["1", "2", "3"]),
+            .oneOf(["1", "2", "3", "4"]),
           domain: Yup.string()
             .required("required")
             .min(minlineitemcollength)
