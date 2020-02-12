@@ -19,7 +19,7 @@ export function useInvoice(invoiceToken) {
   );
 
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
-  const proposalsTokens = useSelector(sel.apiTokenInventoryResponse);
+  const proposalsTokens = useSelector(sel.allByStatus);
   const approvedProposalsTokens = useMemo(
     () => proposalsTokens && proposalsTokens.approved,
     [proposalsTokens]
