@@ -25,12 +25,21 @@ const onReceiveLogout = (state) =>
           (publicData[id] = {
             id,
             userid: data[id].userid,
-            email: data[id].email,
             isadmin: data[id].isadmin,
             username: data[id].username,
             identities: data[id].identities
           })
       );
+      return publicData;
+    })
+  )(state);
+
+const onReceiveCMSLogout = (state) =>
+  compose(
+    set("currentUserID", null),
+    update("byID", (data) => {
+      const publicData = {};
+      Object.keys(data).map((id) => (publicData[id] = {}));
       return publicData;
     })
   )(state);
@@ -78,7 +87,6 @@ const users = (state = DEFAULT_STATE, action) =>
               supervisoruserids: supervisorIDs
             }))(state);
           },
-          [act.RECEIVE_LOGOUT]: () => onReceiveLogout(state),
           [act.RECEIVE_USER_SEARCH]: () => {
             const {
               users,
@@ -103,7 +111,9 @@ const users = (state = DEFAULT_STATE, action) =>
                 ? set(["search", "queryByUsername", username], usersIds)
                 : skip()
             )(state);
-          }
+          },
+          [act.RECEIVE_LOGOUT]: () => onReceiveLogout(state),
+          [act.RECEIVE_CMS_LOGOUT]: () => onReceiveCMSLogout(state)
         }[action.type] || (() => state)
       )();
 

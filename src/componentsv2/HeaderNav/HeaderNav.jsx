@@ -6,9 +6,9 @@ import {
   useTheme,
   classNames
 } from "pi-ui";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useCallback } from "react";
 import Link from "src/componentsv2/Link";
-import { NavLink, withRouter } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
 import useNavigation from "src/hooks/api/useNavigation";
@@ -16,11 +16,11 @@ import { useConfig } from "src/containers/Config";
 import styles from "./HeaderNav.module.css";
 import { ConfigFilter } from "src/containers/Config";
 
-const HeaderNav = ({ history }) => {
-  const { user, username, onLogout } = useNavigation();
+const HeaderNav = () => {
+  const { user, username, onLogout, isCMS } = useNavigation();
   const { navMenuPaths, enableCredits } = useConfig();
-  const userIsAdmin = user && user.isadmin;
   const { themeName, setThemeName } = useTheme();
+  const userIsAdmin = user && user.isadmin;
 
   const menuItems = useMemo(
     () =>
@@ -38,14 +38,14 @@ const HeaderNav = ({ history }) => {
     [userIsAdmin, navMenuPaths]
   );
 
-  function goToUserAccount() {
-    history.push(`/user/${user.userid}`);
-  }
-
   const [darkThemeOnLocalStorage, setDarkThemeOnLocalStorage] = useLocalStorage(
     "darkTheme",
     false
   );
+
+  const onLogoutClick = useCallback(() => {
+    onLogout(isCMS);
+  }, [onLogout, isCMS]);
 
   useEffect(() => {
     if (darkThemeOnLocalStorage && themeName === "light") {
@@ -81,7 +81,6 @@ const HeaderNav = ({ history }) => {
         closeOnItemClick={false}
         title={username}>
         {menuItems}
-        <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
         <DropdownItem>
           <div className={styles.themeToggleWrapper}>
             <Toggle
@@ -95,7 +94,7 @@ const HeaderNav = ({ history }) => {
             </div>
           </div>
         </DropdownItem>
-        <DropdownItem onClick={onLogout}>Logout</DropdownItem>
+        <DropdownItem onClick={onLogoutClick}>Logout</DropdownItem>
       </Dropdown>
     </div>
   ) : (
@@ -118,4 +117,4 @@ const HeaderNav = ({ history }) => {
   );
 };
 
-export default withRouter(HeaderNav);
+export default HeaderNav;
