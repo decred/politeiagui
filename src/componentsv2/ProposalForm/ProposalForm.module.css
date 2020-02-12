@@ -4,9 +4,13 @@
   justify-content: flex-end;
 }
 
+.darkFormatHelpButton {
+  color: var(--tab-text-color) !important;
+}
+
 .formatHelpButton {
   border: 0;
-  color: #8997a5;
+  color: var(--color-gray);
   font-weight: 400;
   cursor: pointer;
   padding-top: 10px;
