@@ -1,17 +1,22 @@
 import { useMemo, useEffect } from "react";
 import * as act from "src/actions";
 import * as sel from "src/selectors";
-import { useRedux, useSelector, useAction } from "src/redux";
+import { useSelector, useAction } from "src/redux";
 
-const mapStateToProps = {};
+export function useNewInvoice() {
+  const onSubmitInvoice = useAction(act.onSaveNewInvoice);
 
-const mapDispatchToProps = {
-  onSubmitInvoice: act.onSaveNewInvoice
-};
+  return {
+    onSubmitInvoice
+  };
+}
 
-export function useNewInvoice(ownProps) {
+// TODO: this hooks needs to be reviewed since we cannot call the
+// proposals token inventory route from the same API when running cms
+// this should be fetched either from testnet or mainnet websites
+export function useApprovedProposalsTokens() {
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
-  const proposalsTokens = useSelector(sel.apiTokenInventoryResponse);
+  const proposalsTokens = useSelector(sel.allByStatus);
   const approvedProposalsTokens = useMemo(
     () => proposalsTokens && proposalsTokens.approved,
     [proposalsTokens]
@@ -21,13 +26,5 @@ export function useNewInvoice(ownProps) {
     !proposalsTokens && onFetchTokenInventory();
   }, [onFetchTokenInventory, proposalsTokens]);
 
-  const { onSubmitInvoice } = useRedux(
-    ownProps,
-    mapStateToProps,
-    mapDispatchToProps
-  );
-  return {
-    onSubmitInvoice,
-    approvedProposalsTokens
-  };
+  return approvedProposalsTokens;
 }

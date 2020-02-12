@@ -109,6 +109,8 @@ export const apiPropVoteStatusError = getApiError("proposalVoteStatusError");
 
 export const apiPropVoteResultsResponse = getApiResponse("proposalVoteResults");
 
+export const apiTokenInventoryResponse = getApiResponse("tokenInventory");
+
 const apiProposalPaywallDetailsResponse = getApiResponse(
   "proposalPaywallDetails"
 );
