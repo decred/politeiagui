@@ -1,5 +1,5 @@
 import { classNames, Header as UIHeader, useMediaQuery } from "pi-ui";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "src/componentsv2/Logo";
 import HamburgerMenu from "src/componentsv2/HamburgerMenu";
@@ -11,7 +11,10 @@ const Header = ({ noBorder }) => {
   const small = useMediaQuery("(max-width: 1000px)");
   const extrasmall = useMediaQuery("(max-width: 560px)");
   const [showMenu, setShowMenu] = useState(false);
-  const toggleShowMenu = () => setShowMenu(!showMenu);
+  const toggleShowMenu = useCallback(() => setShowMenu(!showMenu), [
+    showMenu,
+    setShowMenu
+  ]);
   return (
     <UIHeader className={classNames(noBorder && styles.noBorder)}>
       <NavLink
@@ -22,7 +25,11 @@ const Header = ({ noBorder }) => {
       {small ? (
         <>
           <HamburgerMenu toggleShowMenu={toggleShowMenu} showMenu={showMenu} />
-          <NavigationDrawer show={showMenu} fullScreen={extrasmall} />
+          <NavigationDrawer
+            show={showMenu}
+            fullScreen={extrasmall}
+            toggleShowMenu={toggleShowMenu}
+          />
         </>
       ) : (
         <HeaderNav />

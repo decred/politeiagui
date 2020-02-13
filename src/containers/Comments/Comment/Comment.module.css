@@ -6,6 +6,7 @@
 .reply {
   cursor: pointer;
   margin-right: 1rem;
+  color: var(--tab-text-color) !important;
 }
 
 span.censor {
@@ -22,11 +23,12 @@ span.censor:hover {
   padding: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: #fef5f3;
+  background-color: var(--comment-censored-background);
 }
 
 .timeAgo {
   font-size: var(--font-size-normal);
+  color: var(--text-secondary-color) !important;
 }
 
 .info {
@@ -46,8 +48,8 @@ span.censor:hover {
 .showReplies {
   display: block;
   cursor: pointer;
-  background: var(--color-gray-lighter);
-  color: var(--color-primary-dark);
+  background: var(--tab-count-background);
+  color: var(--comment-like-color-active);
   width: 2.8rem;
   text-align: center;
   margin-right: 1rem;
@@ -76,7 +78,7 @@ span.censor:hover {
 }
 
 .highlightAsNew {
-  background-color: var(--color-gray-lightest);
+  background-color: var(--comment-new-background);
 }
 
 .replyForm {

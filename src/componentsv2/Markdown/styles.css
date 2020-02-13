@@ -8,6 +8,10 @@
   word-wrap: break-word;
 }
 
+.dark .markdown-body {
+  color: var(--tab-text-active-color);
+}
+
 .markdown-body details {
   display: block;
 }
@@ -267,6 +271,7 @@
 
 .dark .markdown-body blockquote {
   border-left: 0.25em solid var(--separator-color);
+  color: var(--text-color);
 }
 
 .markdown-body blockquote > :first-child {
@@ -339,6 +344,10 @@
   font-size: 0.85em;
 }
 
+.dark .markdown-body h6 {
+  color: var(--text-color);
+}
+
 .markdown-body ol,
 .markdown-body ul {
   padding-left: 2em;
@@ -393,17 +402,16 @@
 
 .markdown-body table td,
 .markdown-body table th {
-  border: 1px solid #dfe2e5;
+  border: 1px solid var(--md-table-cell-border-color);
   padding: 6px 13px;
 }
 
 .markdown-body table tr {
-  background-color: #fff;
-  border-top: 1px solid #c6cbd1;
+  background-color: var(--md-table-odd-row-background);
 }
 
 .markdown-body table tr:nth-child(2n) {
-  background-color: #f6f8fa;
+  background-color: var(--md-table-even-row-background);
 }
 
 .markdown-body img {

@@ -4,21 +4,34 @@
   justify-content: flex-end;
 }
 
+.darkButton {
+  color: var(--tab-text-color) !important;
+}
+
 .formatHelpButton {
   border: 0;
-  color: #8997a5;
+  color: var(--color-gray);
   font-weight: 400;
   cursor: pointer;
   padding-top: 10px;
-  padding-right: 40px;
+  padding-right: var(--spacing-4);
 }
 
 .formatHelpButton:hover {
   color: var(--color-gray-dark);
 }
 
-@media screen and (max-width: 560px) {
+.proposalGuidelinesButton {
+  composes: formatHelpButton;
+  text-decoration: none !important;
+}
+
+@media screen and (max-width: 685px) {
   .formatHelpButton {
-    padding-right: 0;
+    padding-right: var(--spacing-1);
+  }
+
+  .proposalGuidelinesButton {
+    padding-right: 0 !important;
   }
 }

@@ -2,10 +2,8 @@ import CryptoJS from "crypto-js";
 import get from "lodash/fp/get";
 import flow from "lodash/fp/flow";
 import filter from "lodash/fp/filter";
-import lessThan from "lodash/fp/lt";
-import isEqualfp from "lodash/fp/isEqual";
+import gte from "lodash/fp/gt";
 import range from "lodash/fp/range";
-import { or } from "./lib/fp";
 import { INVALID_FILE } from "./constants";
 import {
   INVOICE_STATUS_APPROVED,
@@ -398,9 +396,8 @@ export const csvToJson = (csv) =>
     .map(jsonCsvMap);
 
 export const getMonthOptions = () => {
-  const d = new Date();
-  const month = d.getMonth() + 1;
-  return flow(range(), filter(or(isEqualfp(1), lessThan(month))))(1, 13);
+  const month = getCurrentMonth();
+  return flow(range(), filter(gte(month)))(1, 13);
 };
 
 export const getCurrentMonth = () => {
@@ -413,9 +410,14 @@ export const getCurrentYear = () => {
   return d.getFullYear();
 };
 
+export const getPreviousMonthAndYear = (currentMonth, currentYear) => {
+  const month = currentMonth === 1 ? 12 : currentMonth - 1;
+  const year = currentMonth === 1 ? currentYear - 1 : currentYear;
+  return { month, year };
+};
+
 export const getYearOptions = (initial, lastYear) => {
-  const d = new Date();
-  const isYearValid = (y) => y < lastYear + d.getMonth();
+  const isYearValid = (y) => y < lastYear + getCurrentMonth() - 1;
   return flow(range(), filter(isYearValid))(initial, lastYear + 1);
 };
 

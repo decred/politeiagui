@@ -19,7 +19,7 @@ const headingRenderer = ({ level, children }) => {
 };
 
 const linkRenderer = ({ href, children }) => (
-  <Link href={href} target="_blank">
+  <Link href={href} rel="nofollow noopener noreferrer" target="_blank">
     {children}
   </Link>
 );

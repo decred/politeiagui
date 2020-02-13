@@ -10,17 +10,10 @@ import {
 } from "pi-ui";
 import styles from "./Likes.module.css";
 
-export const isLiked = action => action === 1 || action === "1";
-export const isDisliked = action => action === -1 || action === "-1";
+export const isLiked = (action) => action === 1 || action === "1";
+export const isDisliked = (action) => action === -1 || action === "-1";
 
-const Likes = ({
-  upLikes,
-  downLikes,
-  onLike,
-  onDislike,
-  option,
-  disabled
-}) => {
+const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
   const [loading, setLoading] = useState(false);
   const [likeRef, isLikeHovered] = useHover();
   const [dislikeRef, isDislikeHovered] = useHover();
@@ -29,11 +22,9 @@ const Likes = ({
   const activeColor = getThemeProperty(theme, "comment-like-color-active");
   const liked = isLiked(option);
   const disliked = isDisliked(option);
-  const isDisabled = disabled || loading;
-  const likeColor =
-    (liked || isLikeHovered) && !isDisabled ? activeColor : defaultColor;
+  const likeColor = liked || isLikeHovered ? activeColor : defaultColor;
   const dislikeColor =
-    (disliked || isDislikeHovered) && !isDisabled ? activeColor : defaultColor;
+    disliked || isDislikeHovered ? activeColor : defaultColor;
 
   const handleLike = useCallback(
     async function handleLike() {
@@ -64,11 +55,10 @@ const Likes = ({
   );
 
   const renderCount = useCallback(
-    count => (
+    (count) => (
       <Text
         size="small"
-        className={classNames(styles.likesResult, "unselectable")}
-      >
+        className={classNames(styles.likesResult, "unselectable")}>
         {count}
       </Text>
     ),
@@ -82,8 +72,7 @@ const Likes = ({
           disabled={loading || disabled}
           ref={likeRef}
           className={styles.likeBtn}
-          onClick={handleLike}
-        >
+          onClick={handleLike}>
           <Icon iconColor={likeColor} backgroundColor={likeColor} type="like" />
         </button>
         {renderCount(upLikes)}
@@ -93,8 +82,7 @@ const Likes = ({
           disabled={loading || disabled}
           ref={dislikeRef}
           className={styles.likeBtn}
-          onClick={handleDislike}
-        >
+          onClick={handleDislike}>
           <Icon
             iconColor={dislikeColor}
             backgroundColor={dislikeColor}

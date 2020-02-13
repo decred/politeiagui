@@ -74,13 +74,13 @@
 div.seeOnGithubTooltip {
   white-space: nowrap;
   font-size: var(--font-size-small);
-  padding-right: 1.2rem;
-  padding-left: 1.2rem;
+  margin-right: 1.2rem;
+  margin-left: 1.2rem;
   color: var(--color-gray);
 }
 
 div.darkSeeOnGithubTooltip {
-  color: var(--color-text);
+  color: var(--text-color);
 }
 
 @media screen and (max-width: 560px) {

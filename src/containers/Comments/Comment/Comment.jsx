@@ -70,7 +70,7 @@ const Comment = ({
           </Link>
           <DateTooltip timestamp={createdAt} placement="bottom">
             {({ timeAgo }) => (
-              <Link className={styles.timeAgo} to={permalink} gray>
+              <Link className={styles.timeAgo} to={permalink}>
                 {timeAgo}
               </Link>
             )}
@@ -103,7 +103,6 @@ const Comment = ({
             <LoggedInContent>
               <Text
                 weight="semibold"
-                color="gray"
                 className={styles.reply}
                 onClick={onClickReply}
               >

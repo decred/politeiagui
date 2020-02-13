@@ -6,7 +6,7 @@
 .leftLikeBox {
   composes: likeBox;
   padding-right: 1rem;
-  border-right: 1px solid var(--color-gray-lighter);
+  border-right: 1px solid var(--separator-color);
 }
 
 .rightLikeBox {

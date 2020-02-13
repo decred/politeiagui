@@ -1,5 +1,5 @@
 # Build image
-FROM node:12.13
+FROM node:12.14
 
 LABEL description="politeiagui build"
 LABEL version="1.0"
@@ -22,5 +22,6 @@ LABEL version="1.0"
 LABEL maintainer "jholdstock@decred.org"
 
 COPY conf/nginx.conf /etc/nginx/conf.d/default.conf
+COPY conf/headers.conf /etc/nginx/conf.d/headers.conf
 
 COPY --from=0 /root/build /usr/share/nginx/html

@@ -54,7 +54,7 @@
 }
 
 .copyLink {
-  margin-right: 2.4rem;
+  margin-right: 1.2rem;
 }
 
 .downloadCommentsLink {
@@ -81,6 +81,10 @@ span.statusTag > span {
   white-space: nowrap;
   font-size: var(--font-size-small);
   color: var(--color-gray);
+}
+
+.darkQuorumTooltip {
+  color: var(--text-color);
 }
 
 .votesQuorum {

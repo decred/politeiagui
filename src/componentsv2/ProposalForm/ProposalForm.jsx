@@ -2,7 +2,16 @@ import React, { useState, useCallback, useMemo } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Formik } from "formik";
-import { Button, Message, Text, BoxTextInput, useMediaQuery } from "pi-ui";
+import {
+  Button,
+  Message,
+  Text,
+  BoxTextInput,
+  useMediaQuery,
+  useTheme,
+  Link,
+  classNames
+} from "pi-ui";
 import { Row } from "src/componentsv2/layout";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/componentsv2/MarkdownEditor";
@@ -25,7 +34,10 @@ const ProposalForm = React.memo(function ProposalForm({
   disableSubmit,
   openMDGuideModal
 }) {
-  const mobile = useMediaQuery("(max-width: 560px)");
+  const smallTablet = useMediaQuery("(max-width: 685px)");
+
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
 
   const handleDescriptionChange = useCallback(
     (v) => {
@@ -60,11 +72,27 @@ const ProposalForm = React.memo(function ProposalForm({
   const FormatHelpButton = () => (
     <Text
       weight="semibold"
-      color="gray"
-      className={styles.formatHelpButton}
+      className={classNames(
+        styles.formatHelpButton,
+        isDarkTheme && styles.darkButton
+      )}
       onClick={openMDGuideModal}>
       Formatting Help
     </Text>
+  );
+
+  const ProposalGuidelinesButton = () => (
+    <Link
+      weight="semibold"
+      target="_blank"
+      rel="noopener noreferrer"
+      className={classNames(
+        styles.proposalGuidelinesButton,
+        isDarkTheme && styles.darkButton
+      )}
+      href="https://docs.decred.org/governance/politeia/proposal-guidelines/">
+      Proposal Guidelines
+    </Link>
   );
 
   const SubmitButton = () => (
@@ -104,9 +132,10 @@ const ProposalForm = React.memo(function ProposalForm({
         onRemove={handleFileRemoval}
         errors={errors}
       />
-      {!mobile ? (
+      {!smallTablet ? (
         <Row topMarginSize="s" justify="right">
           <FormatHelpButton />
+          <ProposalGuidelinesButton />
           <DraftSaver submitSuccess={submitSuccess} />
           <SubmitButton />
         </Row>
@@ -118,6 +147,7 @@ const ProposalForm = React.memo(function ProposalForm({
           </Row>
           <Row topMarginSize="s" justify="right">
             <FormatHelpButton />
+            <ProposalGuidelinesButton />
           </Row>
         </>
       )}

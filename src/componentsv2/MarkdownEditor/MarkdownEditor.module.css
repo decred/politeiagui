@@ -12,12 +12,16 @@
   min-width: 100%;
   padding: 2rem;
   border: 1px solid transparent;
-  border-bottom: 1px solid var(--color-gray-lighter);
+  border-bottom: 1px solid var(--separator-color);
   min-height: 20rem;
 }
 
 .previewContainer.nothingToPreview p {
   color: var(--color-gray-blueish);
+}
+
+.darkNothingToPreview.previewContainer.nothingToPreview p {
+  color: var(--text-color);
 }
 
 .previewContainer.nothingToPreview {
