@@ -1,30 +1,22 @@
-import { useMemo, useEffect } from "react";
+import * as external_api from "src/lib/external_api";
 import * as act from "src/actions";
 import * as sel from "src/selectors";
-import { useSelector, useAction } from "src/redux";
+import { useAction, useSelector } from "src/redux";
+import { useEffect, useState } from "react";
 
 export function useNewInvoice() {
-  const onSubmitInvoice = useAction(act.onSaveNewInvoice);
-
   return {
-    onSubmitInvoice
+    onSubmitInvoice: useAction(act.onSaveNewInvoice)
   };
 }
 
-// TODO: this hooks needs to be reviewed since we cannot call the
-// proposals token inventory route from the same API when running cms
-// this should be fetched either from testnet or mainnet websites
 export function useApprovedProposalsTokens() {
-  const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
-  const proposalsTokens = useSelector(sel.allByStatus);
-  const approvedProposalsTokens = useMemo(
-    () => proposalsTokens && proposalsTokens.approved,
-    [proposalsTokens]
-  );
-
+  const isTestnet = useSelector(sel.isTestNet);
+  const [approvedTokens, setApprovedTokens] = useState([]);
   useEffect(() => {
-    !proposalsTokens && onFetchTokenInventory();
-  }, [onFetchTokenInventory, proposalsTokens]);
-
-  return approvedProposalsTokens;
+    external_api
+      .getCmsApprovedProposalsTokens(isTestnet)
+      .then((res) => setApprovedTokens(res));
+  }, [isTestnet]);
+  return approvedTokens;
 }
