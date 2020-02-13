@@ -11,7 +11,6 @@ import {
   onReceiveNewInvoiceComment,
   onReceivePayApprovedInvoices,
   onReceiveSetStatusInvoice,
-  onReceiveManageCmsUser,
   onReceiveDCCs,
   onSetDCC,
   onReceiveSupportOpposeDCC,
@@ -177,8 +176,6 @@ const api = (state = DEFAULT_STATE, action) =>
         resetMultiple(["proposalComments", "invoiceComments"], state),
       [act.REQUEST_MANAGE_CMS_USER]: () =>
         request("manageCmsUser", state, action),
-      [act.RECEIVE_MANAGE_CMS_USER]: () =>
-        onReceiveManageCmsUser(state, action),
       [act.REQUEST_USER_SUBCONTRACTORS]: () =>
         request("userSubcontractors", state, action),
       [act.RECEIVE_USER_SUBCONTRACTORS]: () =>
