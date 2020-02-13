@@ -8,7 +8,7 @@ import {
 } from "pi-ui";
 import React, { useEffect, useMemo, useCallback } from "react";
 import Link from "src/componentsv2/Link";
-import { NavLink } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
 import useNavigation from "src/hooks/api/useNavigation";
@@ -16,7 +16,7 @@ import { useConfig } from "src/containers/Config";
 import styles from "./HeaderNav.module.css";
 import { ConfigFilter } from "src/containers/Config";
 
-const HeaderNav = () => {
+const HeaderNav = ({ history }) => {
   const { user, username, onLogout, isCMS } = useNavigation();
   const { navMenuPaths, enableCredits } = useConfig();
   const { themeName, setThemeName } = useTheme();
@@ -42,6 +42,10 @@ const HeaderNav = () => {
     "darkTheme",
     false
   );
+
+  const goToUserAccount = useCallback(() => {
+    history.push(`/user/${user.userid}`);
+  }, [history, user.userid]);
 
   const onLogoutClick = useCallback(() => {
     onLogout(isCMS);
@@ -81,6 +85,7 @@ const HeaderNav = () => {
         closeOnItemClick={false}
         title={username}>
         {menuItems}
+        <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
         <DropdownItem>
           <div className={styles.themeToggleWrapper}>
             <Toggle
@@ -117,4 +122,4 @@ const HeaderNav = () => {
   );
 };
 
-export default HeaderNav;
+export default withRouter(HeaderNav);
