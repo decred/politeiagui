@@ -14,9 +14,9 @@ export function useApprovedProposalsTokens() {
   const isTestnet = useSelector(sel.isTestNet);
   const [approvedTokens, setApprovedTokens] = useState([]);
   useEffect(() => {
-    external_api
-      .getCmsApprovedProposalsTokens(isTestnet)
-      .then((res) => setApprovedTokens(res));
+    external_api.getCmsApprovedProposalsTokens(isTestnet).then((res) => {
+      setApprovedTokens(res.approved);
+    });
   }, [isTestnet]);
   return approvedTokens;
 }
