@@ -19,8 +19,9 @@ import { ConfigFilter } from "src/containers/Config";
 const HeaderNav = ({ history }) => {
   const { user, username, onLogout, isCMS } = useNavigation();
   const { navMenuPaths, enableCredits } = useConfig();
+  const { isadmin, userid } = user || {};
   const { themeName, setThemeName } = useTheme();
-  const userIsAdmin = user && user.isadmin;
+  const userIsAdmin = user && isadmin;
 
   const menuItems = useMemo(
     () =>
@@ -44,8 +45,8 @@ const HeaderNav = ({ history }) => {
   );
 
   const goToUserAccount = useCallback(() => {
-    history.push(`/user/${user.userid}`);
-  }, [history, user.userid]);
+    history.push(`/user/${userid}`);
+  }, [history, userid]);
 
   const onLogoutClick = useCallback(() => {
     onLogout(isCMS);
