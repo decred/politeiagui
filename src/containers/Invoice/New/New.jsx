@@ -5,13 +5,12 @@ import { useNewInvoice, useApprovedProposalsTokens } from "./hooks";
 
 const NewInvoice = () => {
   const { onSubmitInvoice } = useNewInvoice();
-  const approvedProposalsTokens = useApprovedProposalsTokens();
-
+  const approvedTokens = useApprovedProposalsTokens();
   return (
     <Card className="container margin-bottom-l">
       <InvoiceForm
         onSubmit={onSubmitInvoice}
-        approvedProposalsTokens={approvedProposalsTokens || []}
+        approvedProposalsTokens={approvedTokens}
       />
     </Card>
   );
