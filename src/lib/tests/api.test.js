@@ -1,5 +1,6 @@
 import fetchMock from "fetch-mock";
 import * as api from "../api";
+import * as help from "../../helpers";
 import * as pki from "../pki.js";
 import { getHumanReadableError } from "../../helpers";
 import {
@@ -45,11 +46,6 @@ describe("api integration modules (lib/api.js)", () => {
     });
   });
 
-  test("digests a payload", () => {
-    const digested = api.digestPayload(FILE.payload);
-    expect(digested).toEqual(FILE_DIGESTED_PAYLOAD);
-  });
-
   test("make a proposal", () => {
     let proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE]);
     let fileFromMarkdown = api.convertMarkdownToFile(
@@ -59,7 +55,7 @@ describe("api integration modules (lib/api.js)", () => {
       files: [
         {
           ...fileFromMarkdown,
-          digest: api.digestPayload(fileFromMarkdown.payload)
+          digest: help.digestPayload(fileFromMarkdown.payload)
         },
         {
           ...FILE,
@@ -76,7 +72,7 @@ describe("api integration modules (lib/api.js)", () => {
       files: [
         {
           ...fileFromMarkdown,
-          digest: api.digestPayload(fileFromMarkdown.payload)
+          digest: help.digestPayload(fileFromMarkdown.payload)
         }
       ]
     });
@@ -90,7 +86,7 @@ describe("api integration modules (lib/api.js)", () => {
       files: [
         {
           ...fileFromMarkdown,
-          digest: api.digestPayload(fileFromMarkdown.payload)
+          digest: help.digestPayload(fileFromMarkdown.payload)
         }
       ]
     });
@@ -430,12 +426,13 @@ describe("api integration modules (lib/api.js)", () => {
     expect(result.timestamp).toBeDefined();
   });
 
-  test("start vote (api/v1/proposals/startvote)", async () => {
-    await assertPOSTOnRouteIsCalled(
-      "/api/v1/proposals/startvote",
-      api.startVote,
-      [EMAIL, FAKE_CSRF, PROPOSAL_TOKEN, 2]
-    );
+  test("start vote (api/v2/vote/start)", async () => {
+    await assertPOSTOnRouteIsCalled("/api/v2/vote/start", api.startVote, [
+      EMAIL,
+      FAKE_CSRF,
+      PROPOSAL_TOKEN,
+      2
+    ]);
   });
 
   test("get proposal vote status (api/v1/proposals/token/votestatus)", async () => {
@@ -487,12 +484,6 @@ describe("api integration modules (lib/api.js)", () => {
       ACTION,
       REASON
     ]);
-  });
-
-  test("it correctly returns the hex encoded SHA3-256 of a string", () => {
-    expect(api.digest("password")).toEqual(
-      "c0067d4af4e87f00dbac63b6156828237059172d1bbeac67427345d6a9fda484"
-    );
   });
 
   test("edit a proposal (api/v1/proposals/edit)", async () => {
