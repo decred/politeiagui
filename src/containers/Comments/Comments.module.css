@@ -24,7 +24,9 @@ h2.commentsTitle {
 }
 
 .sortContainer {
-  width: 60px;
+  width: 19rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .notAllowedMessageContent {
@@ -32,6 +34,17 @@ h2.commentsTitle {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+}
+
+.modeToggleWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modeToggleLabel {
+  margin-left: 1rem;
+  margin-top: 0.1rem;
 }
 
 @media screen and (max-width: 560px) {
