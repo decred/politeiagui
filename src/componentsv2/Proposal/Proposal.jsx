@@ -1,4 +1,11 @@
-import { classNames, StatusBar, StatusTag, Text, useMediaQuery, useTheme } from "pi-ui";
+import {
+  classNames,
+  StatusBar,
+  StatusTag,
+  Text,
+  useMediaQuery,
+  useTheme
+} from "pi-ui";
 import React, { useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
@@ -15,7 +22,7 @@ import {
   isVotingFinishedProposal,
   getProposalToken
 } from "src/containers/Proposal/helpers";
-import { useProposalVote } from "src/containers/Proposal/hooks";
+import useProposalVote from "src/containers/Proposal/hooks/useProposalVote";
 import { useLoaderContext } from "src/Appv2/Loader";
 import styles from "./Proposal.module.css";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
@@ -26,7 +33,7 @@ import ThumbnailGrid from "src/componentsv2/Files";
 import VersionPicker from "src/componentsv2/VersionPicker";
 import { useRouter } from "src/componentsv2/Router";
 
-const ProposalWrapper = props => {
+const ProposalWrapper = (props) => {
   const voteProps = useProposalVote(getProposalToken(props.proposal));
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
@@ -83,7 +90,8 @@ const Proposal = React.memo(function Proposal({
   }
   return (
     <>
-      <RecordWrapper className={ classNames(isAbandoned && styles.abandonedProposal)}>
+      <RecordWrapper
+        className={classNames(isAbandoned && styles.abandonedProposal)}>
         {({
           Author,
           Event,
@@ -108,8 +116,7 @@ const Proposal = React.memo(function Proposal({
                   isAbandoned={isAbandoned}
                   truncate
                   linesBeforeTruncate={2}
-                  url={extended ? "" : proposalURL}
-                >
+                  url={extended ? "" : proposalURL}>
                   {name}
                 </Title>
               }
@@ -132,12 +139,14 @@ const Proposal = React.memo(function Proposal({
                     <Text
                       id={`proposal-${proposalToken}-version`}
                       className={styles.version}
-                      truncate
-                    >{`version ${version}`}</Text>
+                      truncate>{`version ${version}`}</Text>
                   )}
                   {extended && version > 1 && (
                     <VersionPicker
-                      className={classNames(styles.versionPicker, isDarkTheme && styles.darkVersionPicker)}
+                      className={classNames(
+                        styles.versionPicker,
+                        isDarkTheme && styles.darkVersionPicker
+                      )}
                       version={version}
                       token={proposalToken}
                     />
@@ -152,10 +161,7 @@ const Proposal = React.memo(function Proposal({
                       {...getProposalStatusTagProps(proposal, voteSummary)}
                     />
                     {(isVoteActive || isVotingFinished) && (
-                      <Text
-                        className={styles.timeLeft}
-                        size="small"
-                      >
+                      <Text className={styles.timeLeft} size="small">
                         {`vote end${isVoteActive ? "s" : "ed"} ${voteTime}`}
                       </Text>
                     )}
@@ -164,9 +170,9 @@ const Proposal = React.memo(function Proposal({
                         <Text
                           className={classNames(
                             "hide-on-mobile",
-                            styles.blocksLeft)}
-                          size="small"
-                        >
+                            styles.blocksLeft
+                          )}
+                          size="small">
                           {`${voteBlocksLeft} blocks left`}
                         </Text>
                       </>
@@ -202,7 +208,10 @@ const Proposal = React.memo(function Proposal({
             )}
             {extended && !!files.length && !collapseBodyContent && (
               <Markdown
-                className={classNames(styles.markdownContainer, isDarkTheme && "dark")}
+                className={classNames(
+                  styles.markdownContainer,
+                  isDarkTheme && "dark"
+                )}
                 body={getMarkdownContent(files)}
               />
             )}
@@ -251,7 +260,9 @@ const Proposal = React.memo(function Proposal({
                 </Row>
                 <Row className={styles.proposalActions}>
                   <CopyLink
-                    className={classNames(isPublicAccessible && styles.copyLink)}
+                    className={classNames(
+                      isPublicAccessible && styles.copyLink
+                    )}
                     url={window.location.origin + proposalURL}
                   />
                   {(isVoteActive || isVotingFinished) && (
