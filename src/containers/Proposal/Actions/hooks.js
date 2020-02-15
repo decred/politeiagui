@@ -89,7 +89,8 @@ export function usePublicActions() {
         proposal.censorshiprecord.token,
         duration,
         quorumPercentage,
-        passPercentage
+        passPercentage,
+        proposal.version
       ),
     [onStart, currentUserEmail]
   );
