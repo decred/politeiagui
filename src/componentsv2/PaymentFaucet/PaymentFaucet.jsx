@@ -4,7 +4,7 @@ import useFaucet from "./hooks";
 import styles from "./PaymentFaucet.module.css";
 
 const FAUCET_BASE_URL = "https://testnet.decred.org/explorer/tx";
-const getFaucetUrl = txid => `${FAUCET_BASE_URL}/${txid}`;
+const getFaucetUrl = (txid) => `${FAUCET_BASE_URL}/${txid}`;
 
 const PaymentFaucet = ({ address, amount }) => {
   const {
@@ -25,8 +25,7 @@ const PaymentFaucet = ({ address, amount }) => {
           <Button
             className="margin-top-s"
             loading={isApiRequestingPayWithFaucet}
-            onClick={() => payWithFaucet(address, amount)}
-          >
+            onClick={() => payWithFaucet(address, amount)}>
             Pay with Faucet
           </Button>
         )}
@@ -46,8 +45,7 @@ const PaymentFaucet = ({ address, amount }) => {
               id="transactionLink"
               truncate
               rel="noopener noreferrer"
-              className={styles.transactionIdLink}
-            >
+              className={styles.transactionIdLink}>
               {payWithFaucetTxId}
             </Link>
           </Message>
