@@ -4,7 +4,7 @@ import {
   fromMinutesToHours,
   fromUSDUnitsToUSDCents
 } from "../../helpers";
-import { ModalEditorWrapper, selectWrapper } from "./wrappers";
+import { selectWrapper } from "./wrappers";
 
 import styles from "./InvoiceDatasheet.module.css";
 
@@ -95,7 +95,6 @@ export const convertLineItemsToGrid = (
         {
           readOnly,
           value: line.description,
-          dataEditor: ModalEditorWrapper,
           error: rowErrors.description,
           className: styles.multilineCellValue
         },
