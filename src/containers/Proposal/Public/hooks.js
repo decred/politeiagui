@@ -1,29 +1,22 @@
+import { useMemo } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { or } from "src/lib/fp";
-import { useRedux } from "src/redux";
+import { useSelector, useAction } from "src/redux";
 import useAPIAction from "src/hooks/utils/useAPIAction";
 import useThrowError from "src/hooks/utils/useThrowError";
 
-const mapStateToProps = {
-  proposals: sel.proposalsByToken,
-  allByStatus: sel.allByStatus,
-  error: or(sel.apiProposalsBatchError, sel.apiPropVoteStatusError)
-};
+export function usePublicProposals() {
+  const proposals = useSelector(sel.proposalsByToken);
+  const allByStatus = useSelector(sel.allByStatus);
+  const errorSelector = useMemo(
+    () => or(sel.apiProposalsBatchError, sel.apiPropVoteStatusError),
+    []
+  );
+  const error = useSelector(errorSelector);
 
-const mapDispatchToProps = {
-  onFetchProposalsBatch: act.onFetchProposalsBatch,
-  onFetchTokenInventory: act.onFetchTokenInventory
-};
-
-export function usePublicProposals(ownProps) {
-  const {
-    proposals,
-    onFetchProposalsBatch,
-    allByStatus,
-    onFetchTokenInventory,
-    error
-  } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
+  const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
+  const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
 
   const [isLoadingTokenInventory, errorTokenInventory] = useAPIAction(
     onFetchTokenInventory
