@@ -1,14 +1,8 @@
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
+import { useAction } from "src/redux";
 
-const mapStateToProps = {};
+export function useNewProposal() {
+  const onSubmitProposal = useAction(act.onSaveNewProposalV2);
 
-const mapDispatchToProps = {
-  onSubmitProposal: act.onSaveNewProposalV2
-};
-
-export function useNewProposal(ownProps) {
-  const fromRedux = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
-
-  return fromRedux;
+  return { onSubmitProposal };
 }
