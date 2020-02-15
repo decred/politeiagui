@@ -1,29 +1,25 @@
 import { useEffect, useState } from "react";
 import * as act from "src/actions";
 import * as sel from "src/selectors";
-import { useRedux } from "src/redux";
+import { useAction, useSelector } from "src/redux";
 import {
   requestResendEmailValidationSchema,
   urlParamsValidationSchema
 } from "./validation";
 import { getQueryStringValues } from "src/lib/queryString";
 
-const mapStateToProps = {
-  resendVerificationEmailResponse: sel.resendVerificationEmailResponse
-};
+export function useRequestResendVerificationEmail() {
+  const resendVerificationEmailResponse = useSelector(
+    sel.resendVerificationEmailResponse
+  );
 
-const mapDispatchToProps = {
-  onVerify: act.onVerifyNewUser,
-  onResendVerificationEmail: act.onResendVerificationEmailConfirm,
-  resetResendVerificationEmail: act.resetResendVerificationEmail
-};
+  const onResendVerificationEmail = useAction(
+    act.onResendVerificationEmailConfirm
+  );
+  const resetResendVerificationEmail = useAction(
+    act.resetResendVerificationEmail
+  );
 
-export function useRequestResendVerificationEmail(ownProps) {
-  const {
-    onResendVerificationEmail,
-    resendVerificationEmailResponse,
-    resetResendVerificationEmail
-  } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
   const validationSchema = requestResendEmailValidationSchema();
   useEffect(() => {
     return function cleanUp() {
@@ -37,11 +33,11 @@ export function useRequestResendVerificationEmail(ownProps) {
   };
 }
 
-export function useVerifyUserEmail(ownProps) {
+export function useVerifyUserEmail() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
-  const { onVerify } = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
+  const onVerify = useAction(act.onVerifyNewUser);
 
   // validate url parameters for email and verification token and verify user
   useEffect(() => {
