@@ -6,7 +6,7 @@ import { useSelector, useAction } from "src/redux";
 import useAPIAction from "src/hooks/utils/useAPIAction";
 import useThrowError from "src/hooks/utils/useThrowError";
 
-export function usePublicProposals() {
+export default function useProposalsBatch() {
   const proposals = useSelector(sel.proposalsByToken);
   const allByStatus = useSelector(sel.allByStatus);
   const errorSelector = useMemo(
