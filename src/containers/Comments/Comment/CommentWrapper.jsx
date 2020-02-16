@@ -4,7 +4,7 @@ import CommentForm from "src/componentsv2/CommentForm/CommentFormLazy";
 import { useComment } from "../hooks";
 import Comment from "./Comment";
 
-const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
+const CommentWrapper = ({ comment, children, numOfReplies, isFlatMode, ...props }) => {
   const {
     onSubmitComment,
     onLikeComment,
@@ -119,10 +119,10 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
     () => (
       <>
         {showReplyForm && commentForm}
-        {showReplies && hasChildrenComments && replies}
+        {showReplies && hasChildrenComments && !isFlatMode && replies}
       </>
     ),
-    [showReplyForm, showReplies, hasChildrenComments, commentForm, replies]
+    [showReplyForm, showReplies, hasChildrenComments, commentForm, isFlatMode, replies]
   );
 
   const handleClickCensor = useCallback(() => {
@@ -153,6 +153,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, ...props }) => {
         onLike={handleLikeComment}
         onDislike={handleDislikeComment}
         showReplies={showReplies}
+        isFlatMode={isFlatMode}
         onClickCensor={handleClickCensor}
         onClickReply={handleToggleReplyForm}
         onClickShowReplies={handleToggleReplies}

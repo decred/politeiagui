@@ -35,6 +35,7 @@ const Comment = ({
   numOfNewHiddenReplies,
   highlightAsNew,
   censorable,
+  isFlatMode,
   ...props
 }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
@@ -97,32 +98,33 @@ const Comment = ({
       ) : (
         <Markdown className={styles.censored} body="Censored by moderators " />
       )}
-      <div className="justify-space-between margin-top-s">
-        <div className="justify-left">
-          {!disableReply && (
-            <LoggedInContent>
-              <Text
-                weight="semibold"
-                className={styles.reply}
-                onClick={onClickReply}
-              >
-                Reply
-              </Text>
-            </LoggedInContent>
-          )}
-          {numOfReplies > 0 && (
-            <span className={styles.showReplies} onClick={onClickShowReplies}>
-              {showReplies ? "-" : `+${numOfReplies}`}
-            </span>
-          )}
-          {numOfNewHiddenReplies > 0 && !showReplies && (
-            <Text color="green">{`${numOfNewHiddenReplies} new`}</Text>
-          )}
+      {!isFlatMode && (
+        <div className="justify-space-between margin-top-s">
+          <div className="justify-left">
+            {!disableReply && (
+              <LoggedInContent>
+                <Text
+                  weight="semibold"
+                  className={styles.reply}
+                  onClick={onClickReply}
+                >
+                  Reply
+                </Text>
+              </LoggedInContent>
+            )}
+            {numOfReplies > 0 && (
+              <span className={styles.showReplies} onClick={onClickShowReplies}>
+                {showReplies ? "-" : `+${numOfReplies}`}
+              </span>
+            )}
+            {numOfNewHiddenReplies > 0 && !showReplies && (
+              <Text color="green">{`${numOfNewHiddenReplies} new`}</Text>
+            )}
+          </div>
+          <CopyLink url={window.location.origin + permalink} />
         </div>
-        <CopyLink url={window.location.origin + permalink} />
-      </div>
-    </div>
-  );
+      )}
+  </div>);
 };
 
 Comment.propTypes = {

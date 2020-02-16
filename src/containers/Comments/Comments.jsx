@@ -294,6 +294,7 @@ const Comments = ({
                 threadParentID={threadParentID}
                 currentUserID={currentUser && currentUser.userid}
                 comments={state.comments}
+                isFlatMode={isFlatCommentsMode}
               />
             </CommentContext.Provider>
           ) : null}
