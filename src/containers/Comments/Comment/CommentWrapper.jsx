@@ -118,7 +118,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, isFlatMode, ...props 
   );
 
   const contextLink = useMemo(
-    () => isFlatMode && parentid &&  <Link className={styles.contextLink} to={`/${recordType}s/${recordToken}/comments/${parentid}`}>see in context</Link>,
+    () => isFlatMode && parentid > 0 &&  <Link className={styles.contextLink} to={`/${recordType}s/${recordToken}/comments/${parentid}`}>see in context</Link>,
     [isFlatMode]
   );
 
