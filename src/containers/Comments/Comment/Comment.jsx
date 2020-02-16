@@ -98,32 +98,30 @@ const Comment = ({
       ) : (
         <Markdown className={styles.censored} body="Censored by moderators " />
       )}
-      {!isFlatMode && (
-        <div className="justify-space-between margin-top-s">
-          <div className="justify-left">
-            {!disableReply && (
-              <LoggedInContent>
-                <Text
-                  weight="semibold"
-                  className={styles.reply}
-                  onClick={onClickReply}
-                >
-                  Reply
-                </Text>
-              </LoggedInContent>
-            )}
-            {numOfReplies > 0 && (
-              <span className={styles.showReplies} onClick={onClickShowReplies}>
-                {showReplies ? "-" : `+${numOfReplies}`}
-              </span>
-            )}
-            {numOfNewHiddenReplies > 0 && !showReplies && (
-              <Text color="green">{`${numOfNewHiddenReplies} new`}</Text>
-            )}
-          </div>
-          <CopyLink url={window.location.origin + permalink} />
+      <div className="justify-space-between margin-top-s">
+        <div className="justify-left">
+          {!disableReply && (
+            <LoggedInContent>
+              <Text
+                weight="semibold"
+                className={styles.reply}
+                onClick={onClickReply}
+              >
+                Reply
+              </Text>
+            </LoggedInContent>
+          )}
+          {numOfReplies > 0 && !isFlatMode &&  (
+            <span className={styles.showReplies} onClick={onClickShowReplies}>
+              {showReplies ? "-" : `+${numOfReplies}`}
+            </span>
+          )}
+          {numOfNewHiddenReplies > 0 && !showReplies && !isFlatMode && (
+            <Text color="green">{`${numOfNewHiddenReplies} new`}</Text>
+          )}
         </div>
-      )}
+        <CopyLink url={window.location.origin + permalink} />
+      </div>
   </div>);
 };
 
