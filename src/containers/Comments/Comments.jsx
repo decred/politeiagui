@@ -32,6 +32,7 @@ import { useLoginModal } from "src/containers/User/Login";
 import WhatAreYourThoughts from "src/componentsv2/WhatAreYourThoughts";
 import { commentsReducer, initialState, actions } from "./commentsReducer";
 import { getQueryStringValue } from "src/lib/queryString";
+import useLocalStorage from "src/hooks/utils/useLocalStorage";
 
 const Comments = ({
   numOfComments,
@@ -48,6 +49,15 @@ const Comments = ({
   const [state, dispatch] = useReducer(commentsReducer, initialState);
   const [commentIDCensorTarget, setCommentIDCensorTarget] = useState(null);
   const [isFlatCommentsMode, setIsFlatCommentsMode] = useState(false);
+  const [flatModeOnLocalStorage, setflatModeOnLocalStorage] = useLocalStorage(
+    "flatComments",
+    false
+  );
+  useEffect(() => {
+    if (flatModeOnLocalStorage && !isFlatCommentsMode) {
+      setIsFlatCommentsMode(true);
+    }
+  }, [flatModeOnLocalStorage, isFlatCommentsMode]);
   const [sortOption, setSortOption] = useQueryString(
     "sort",
     commentSortOptions.SORT_BY_TOP
@@ -178,8 +188,10 @@ const Comments = ({
   );
 
   const handleCommentsModeToggle = useCallback(() => {
-    setIsFlatCommentsMode(!isFlatCommentsMode);
-  }, [isFlatCommentsMode]);
+    const newFlagValue = !isFlatCommentsMode;
+    setIsFlatCommentsMode(newFlagValue);
+    setflatModeOnLocalStorage(newFlagValue);
+  }, [isFlatCommentsMode, setflatModeOnLocalStorage]);
 
   const numOfDuplicatedComments = numOfComments - state.comments.length;
   const hasDuplicatedComments =
