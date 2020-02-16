@@ -57,7 +57,7 @@ const Comments = ({
     if (flatModeOnLocalStorage && !isFlatCommentsMode && !threadParentID) {
       setIsFlatCommentsMode(true);
     }
-  }, [flatModeOnLocalStorage, isFlatCommentsMode]);
+  }, [flatModeOnLocalStorage, isFlatCommentsMode, threadParentID]);
   const [sortOption, setSortOption] = useQueryString(
     "sort",
     commentSortOptions.SORT_BY_TOP
