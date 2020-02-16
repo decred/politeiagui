@@ -20,11 +20,11 @@
   border-color: transparent transparent var(--color-primary) transparent;
 }
 div.customSelect__value-container {
-  padding: 0.2rem 0 0.2rem 4px;
+  padding: 0.2rem 0 0.2rem 0.4rem;
 }
 
 div.customSelect__indicator {
-  padding: 0.2rem 4px 0.2rem 0px;
+  padding: 0.2rem 0.4rem 0.2rem 0;
 }
 
 .customSelect__indicator-separator {
