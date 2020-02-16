@@ -24,7 +24,7 @@ h2.commentsTitle {
 }
 
 .sortContainer {
-  width: 19rem;
+  width: 18rem;
   display: flex;
   justify-content: space-between;
 }
@@ -43,7 +43,7 @@ h2.commentsTitle {
 }
 
 .modeToggleLabel {
-  margin-left: 1rem;
+  margin-left: 0.5rem;
   margin-top: 0.1rem;
 }
 
