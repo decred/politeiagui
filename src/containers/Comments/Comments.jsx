@@ -54,7 +54,7 @@ const Comments = ({
     false
   );
   useEffect(() => {
-    if (flatModeOnLocalStorage && !isFlatCommentsMode) {
+    if (flatModeOnLocalStorage && !isFlatCommentsMode && !threadParentID) {
       setIsFlatCommentsMode(true);
     }
   }, [flatModeOnLocalStorage, isFlatCommentsMode]);

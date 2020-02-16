@@ -59,7 +59,7 @@ const CommentsListWrapper = ({
     function generateNestedComments() {
       // flat mode: keep comments array flat
       if (isFlatMode) {
-        setNestedComments(comments);
+        setNestedComments(comments.map(c => createComputedComment(c, comments, lastTimeAccessed, currentUserID)));
         return;
       }
       // single thread mode: find the childrens of the thread parent comment

@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import styles from "./Comment.module.css";
 import CommentForm from "src/componentsv2/CommentForm/CommentFormLazy";
+import Link from "src/componentsv2/Link";
 import { useComment } from "../hooks";
 import Comment from "./Comment";
 
@@ -33,7 +34,8 @@ const CommentWrapper = ({ comment, children, numOfReplies, isFlatMode, ...props 
     isNew,
     upvotes,
     downvotes,
-    sumOfNewDescendants
+    sumOfNewDescendants,
+    parentid
   } = comment;
 
   const isRecordAuthor = recordAuthorID === userid;
@@ -115,6 +117,11 @@ const CommentWrapper = ({ comment, children, numOfReplies, isFlatMode, ...props 
     [children]
   );
 
+  const contextLink = useMemo(
+    () => isFlatMode && parentid &&  <Link className={styles.contextLink} to={`/${recordType}s/${recordToken}/comments/${parentid}`}>see in context</Link>,
+    [isFlatMode]
+  );
+
   const commentContent = useMemo(
     () => (
       <>
@@ -133,6 +140,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, isFlatMode, ...props 
     <>
       <Comment
         permalink={`/${recordType}s/${recordToken}/comments/${commentid}`}
+        seeInContextLink={contextLink}
         censorable={censorable}
         author={username}
         authorID={userid}

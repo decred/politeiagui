@@ -36,6 +36,7 @@ const Comment = ({
   highlightAsNew,
   censorable,
   isFlatMode,
+  seeInContextLink,
   ...props
 }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
@@ -78,6 +79,7 @@ const Comment = ({
           </DateTooltip>
           {highlightAsNew && !extraSmall && <Text color="gray">new</Text>}
           {!extraSmall && censorButton}
+          {!extraSmall && seeInContextLink}
         </Join>
         {!disableLikes && !censored && (
           <div className={styles.likesWrapper}>
@@ -93,6 +95,7 @@ const Comment = ({
         )}
       </div>
       {extraSmall && censorButton}
+      {extraSmall && seeInContextLink}
       {!censored ? (
         <Markdown className={classNames(isDarkTheme && "dark", "margin-top-s")} body={commentBody} />
       ) : (
