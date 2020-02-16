@@ -241,7 +241,7 @@ const Comments = ({
             <div className={styles.sortContainer}>
               {!!comments && !!comments.length && (
                 <>
-                  <div className={styles.modeToggleWrapper}>
+                  {!isSingleThread && <div className={styles.modeToggleWrapper}>
                     <Toggle
                       onToggle={handleCommentsModeToggle}
                       toggled={isFlatCommentsMode}
@@ -251,7 +251,7 @@ const Comments = ({
                       className={styles.modeToggleLabel}>
                       Flat Mode
                     </div>
-                  </div>
+                  </div>}
                   <Select
                     isSearchable={false}
                     value={selectValue}
