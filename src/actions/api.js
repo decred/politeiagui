@@ -1140,11 +1140,18 @@ export const keyMismatch = (payload) => (dispatch) =>
 export const resetPasswordReset = () => (dispatch) =>
   dispatch(act.RESET_RESET_PASSWORD());
 
-export const onStartVote = (loggedInAsEmail, token, duration, quorum, pass) =>
+export const onStartVote = (
+  loggedInAsEmail,
+  token,
+  duration,
+  quorum,
+  pass,
+  version
+) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_START_VOTE({ token }));
     return api
-      .startVote(loggedInAsEmail, csrf, token, duration, quorum, pass)
+      .startVote(loggedInAsEmail, csrf, token, duration, quorum, pass, version)
       .then((response) => {
         dispatch(onFetchProposalsBatchVoteSummary([token]));
         dispatch(act.RECEIVE_START_VOTE({ ...response, token, success: true }));
