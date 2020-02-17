@@ -49,6 +49,9 @@ const Comment = ({
 
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
+  const showNewReplies = numOfNewHiddenReplies > 0 && !showReplies && !isFlatMode;
+  const isThread = numOfReplies > 0 && !isFlatMode;
+  console.log(seeInContextLink);
 
   return (
     <div
@@ -114,12 +117,12 @@ const Comment = ({
               </Text>
             </LoggedInContent>
           )}
-          {numOfReplies > 0 && !isFlatMode &&  (
+          {isThread &&  (
             <span className={styles.showReplies} onClick={onClickShowReplies}>
               {showReplies ? "-" : `+${numOfReplies}`}
             </span>
           )}
-          {numOfNewHiddenReplies > 0 && !showReplies && !isFlatMode && (
+          {showNewReplies && (
             <Text color="green">{`${numOfNewHiddenReplies} new`}</Text>
           )}
         </div>
