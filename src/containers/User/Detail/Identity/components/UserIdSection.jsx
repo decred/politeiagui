@@ -18,7 +18,7 @@ export default ({ id }) =>
     <P className="margin-bottom-s">
       Unique 16-byte UUID, as defined in{" "}
       <Link
-        href="http://tools.ietf.org/html/rfc4122"
+        href="https://tools.ietf.org/html/rfc4122"
         target="_blank"
         rel="nofollow noopener noreferrer"
       >

@@ -4,7 +4,7 @@ const MarkdownHelp = () => (
   <div className="markhelp">
     <p style={{ width: "100%" }}>
       We use a slightly-customized version of{" "}
-      <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a>{" "}
+      <a href="https://daringfireball.net/projects/markdown/syntax">Markdown</a>{" "}
       for formatting. See below for some basics
     </p>
     <table className="md">
