@@ -5,7 +5,6 @@ import ReactDataSheet from "react-datasheet";
 import dropRight from "lodash/dropRight";
 import "react-datasheet/lib/react-datasheet.css";
 import styles from "./InvoiceDatasheet.module.css";
-import { ModalEditorProvider } from "./components/ModalEditor";
 import CellRenderer from "./components/CellRenderer";
 import TableButton from "./components/TableButton";
 import usePolicy from "src/hooks/api/usePolicy";
@@ -32,7 +31,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   const [currentRate, setCurrentRate] = useState(userRate || 0);
 
   const handleCellsChange = useCallback(
-    changes => {
+    (changes) => {
       const { grid: newGrid } = processCellsChange(grid, changes, userRate);
       const lineItems = convertGridToLineItems(newGrid);
       onChange(lineItems);
@@ -51,7 +50,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   );
 
   const handleAddNewRow = useCallback(
-    e => {
+    (e) => {
       e.preventDefault();
       const newValue = value.concat([generateBlankLineItem(policy)]);
       onChange(newValue);
@@ -75,7 +74,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   );
 
   const handleRemoveLastRow = useCallback(
-    e => {
+    (e) => {
       e.preventDefault();
       if (grid.length > 2) {
         onChange(dropRight(value, 1));
@@ -91,10 +90,10 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
     []
   );
 
-  const valueRenderer = useCallback(cell => cell.value, []);
+  const valueRenderer = useCallback((cell) => cell.value, []);
 
   const sheetRenderer = useCallback(
-    props => {
+    (props) => {
       return (
         <table className={classNames(props.className, styles.table)}>
           <thead>
@@ -114,7 +113,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   );
 
   const rowRenderer = useCallback(
-    props => <tr className={styles.tableRow}>{props.children}</tr>,
+    (props) => <tr className={styles.tableRow}>{props.children}</tr>,
     []
   );
 
@@ -127,25 +126,22 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
           <TableButton onClick={handleAddNewRow}>Add row</TableButton>
           <TableButton
             disabled={removeRowsIsDisabled}
-            onClick={handleRemoveLastRow}
-          >
+            onClick={handleRemoveLastRow}>
             Remove row
           </TableButton>
         </div>
       )}
-      <ModalEditorProvider>
-        <div className={styles.datasheetWrapper}>
-          <ReactDataSheet
-            data={grid}
-            valueRenderer={valueRenderer}
-            onContextMenu={onContextMenu}
-            onCellsChanged={handleCellsChange}
-            sheetRenderer={sheetRenderer}
-            rowRenderer={rowRenderer}
-            cellRenderer={CellRenderer}
-          />
-        </div>
-      </ModalEditorProvider>
+      <div className={styles.datasheetWrapper}>
+        <ReactDataSheet
+          data={grid}
+          valueRenderer={valueRenderer}
+          onContextMenu={onContextMenu}
+          onCellsChanged={handleCellsChange}
+          sheetRenderer={sheetRenderer}
+          rowRenderer={rowRenderer}
+          cellRenderer={CellRenderer}
+        />
+      </div>
     </div>
   );
 });
