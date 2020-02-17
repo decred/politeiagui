@@ -117,54 +117,10 @@ const Routes = ({ location }) => {
             exact
             component={withDcc(PageDccDetail)}
           />
-            {/* <AdminAuthenticatedRoute
-              path={`/${recordType}s/unvetted`}
-              title={`Unvetted ${capitalize(recordType)}s`}
-              exact
-              component={PageProposalsUnvetted}
-            />
-            <AuthenticatedRoute
-              path={`/${recordType}s/new`}
-              title={`New ${capitalize(recordType)}`}
-              exact
-              render={renderNewRecordRoute(config)}
-            />
-            <Route
-              path={`/${recordType}s/:token`}
-              title={`${capitalize(recordType)} Detail`}
-              titleSelector={sel.proposalName}
-              exact
-              component={PageProposalDetail}
-            />
-            <Route
-              path={`/${recordType}s/:token/comments/:commentid`}
-              title={`${capitalize(recordType)} Detail`}
-              titleSelector={sel.proposalName}
-              exact
-              component={PageProposalDetail}
-            />
-            <AuthenticatedRoute
-              path={`/${recordType}s/:token/edit`}
-              title={`Edit ${capitalize(recordType)}`}
-              exact
-              render={renderEditRecordRoute(config)}
-            />
-            <AuthenticatedRoute
-              path={`/${recordType}s/new`}
-              title={`New ${capitalize(recordType)}`}
-              exact
-              render={renderNewRecordRoute(config)}
-            />
-            <AdminAuthenticatedRoute
-              path={`/${recordType}s/admin`}
-              title={`Admin ${capitalize(recordType)}s`}
-              exact
-              component={PageProposalsAdmin}
-            /> */}
-            <Route title="Page Not Found" path="*" component={PageNotFound} />
-          </Switch>
-        </CSSTransition>
-      </TransitionGroup>
+          <Route title="Page Not Found" path="*" component={PageNotFound} />
+        </Switch>
+      </CSSTransition>
+    </TransitionGroup>
   );
 };
 

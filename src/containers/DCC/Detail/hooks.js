@@ -12,11 +12,7 @@ export function useDcc(dccToken) {
   const onFetchDcc = useAction(act.onFetchDcc);
 
   const requestParams = useMemo(() => [dccToken], [dccToken]);
-  const [loading, error] = useAPIAction(
-    onFetchDcc,
-    requestParams,
-    !dcc || !dcc.payout
-  );
+  const [loading, error] = useAPIAction(onFetchDcc, requestParams, !dcc);
 
   return { dcc, loading, error };
 }
