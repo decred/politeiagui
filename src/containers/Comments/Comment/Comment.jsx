@@ -51,7 +51,6 @@ const Comment = ({
   const isDarkTheme = themeName === "dark";
   const showNewReplies = numOfNewHiddenReplies > 0 && !showReplies && !isFlatMode;
   const isThread = numOfReplies > 0 && !isFlatMode;
-  console.log(seeInContextLink);
 
   return (
     <div

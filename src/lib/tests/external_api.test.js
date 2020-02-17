@@ -17,7 +17,6 @@ describe("test external api lib (lib/api.js)", () => {
       ea.getHeightByDcrdata,
       [true]
     );
-    // console.log(fetchMock.spy());
     await assertGETOnRouteIsCalled(
       `${dcrdataExplorerUrl}/block/best/height`,
       ea.getHeightByDcrdata,
