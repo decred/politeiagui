@@ -83,7 +83,7 @@ export function usePublicActions() {
   );
 
   const onStartVote = useCallback(
-    ({ censorshiprecord: { token }, version }) => ({
+    ({ censorshiprecord: { token } = { token: "" }, version }) => ({
       duration,
       quorumPercentage,
       passPercentage
