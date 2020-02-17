@@ -16,7 +16,7 @@ export const dccValidationSchema = () =>
       .max(6),
     contractortype: Yup.number()
       .when("type", issuanceFieldValidator)
-      .max(3)
+      .max(5)
   });
 
 const issuanceFieldValidator = (type, schema) =>

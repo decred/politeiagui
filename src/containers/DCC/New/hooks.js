@@ -1,24 +1,22 @@
 import { useAction, useSelector } from "src/redux";
 import * as act from "src/actions";
 import * as sel from "src/selectors";
-import {
-  DCC_FULL_USER_CONTRACTOR_TYPES,
-  CONTRACTOR_TYPE_NOMINEE
-} from "../constants";
+import { CONTRACTOR_TYPE_NOMINEE } from "../constants";
 import useAPIAction from "src/hooks/utils/useAPIAction";
 
 export function useNewDcc() {
   const onFetchUsers = useAction(act.onFetchCmsUsers);
   const onSubmitDcc = useAction(act.onSaveNewDcc);
 
-  const fullUsersSelector = sel.makeGetUsersByContractorTypes(
-    DCC_FULL_USER_CONTRACTOR_TYPES
-  );
+  const [loading, error] = useAPIAction(onFetchUsers);
+
+  const user = useSelector(sel.currentCmsUser);
+
   const nomineeUsersSelector = sel.makeGetUsersByContractorTypes(
     CONTRACTOR_TYPE_NOMINEE
   );
 
-  const fullUsers = useSelector(fullUsersSelector);
+  const fullUsers = useSelector(sel.usersByCurrentDomain);
   const nomineeUsers = useSelector(nomineeUsersSelector);
 
   const users = {
@@ -26,12 +24,11 @@ export function useNewDcc() {
     nominee: nomineeUsers
   };
 
-  const [loading, error] = useAPIAction(onFetchUsers);
-
   return {
     loading,
     error,
     onSubmitDcc,
-    users
+    users,
+    user
   };
 }

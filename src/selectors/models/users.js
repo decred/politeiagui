@@ -20,6 +20,8 @@ export const cmsUsersByContractorType = get([
   "cms",
   "byContractorType"
 ]);
+export const cmsUsersByDomain = get(["users", "cms", "byDomain"]);
+export const cmsUserByID = get(["users", "cms", "byID"]);
 
 export const makeGetUserByID = (userID) =>
   createSelector(userByID, (users) => users[userID] || null);
@@ -28,6 +30,12 @@ export const currentUserID = get(["users", "currentUserID"]);
 
 export const currentUser = createSelector(
   userByID,
+  currentUserID,
+  (users, userID) => users[userID]
+);
+
+export const currentCmsUser = createSelector(
+  cmsUserByID,
   currentUserID,
   (users, userID) => users[userID]
 );
@@ -102,3 +110,12 @@ export const makeGetUsersByContractorTypes = (contractorTypes) =>
     const contractorTypesArray = castArray(contractorTypes);
     return compose(flatten, values, pick(contractorTypesArray))(users);
   });
+
+export const usersByCurrentDomain = createSelector(
+  cmsUsersByDomain,
+  currentCmsUser,
+  (usersByDomain, user) => {
+    const domain = user && user.domain;
+    return get(domain)(usersByDomain);
+  }
+);

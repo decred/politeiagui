@@ -13,7 +13,9 @@ import {
   getContractorTypeOptions,
   getDccTypeOptions,
   getNomineeOptions,
-  DCC_TYPE_ISSUANCE
+  DCC_TYPE_ISSUANCE,
+  DCC_TYPE_REVOCATION,
+  CONTRACTOR_TYPE_REVOKED
 } from "src/containers/DCC";
 
 const Select = ({ error, ...props }) => (
@@ -38,12 +40,23 @@ const DccForm = React.memo(function DccForm({
   cmsUsers,
   setSessionStorageDcc
 }) {
+  const [isIssuance, setIsIssuance] = useState();
+
   // scroll to top in case of global error
   useEffect(() => {
     if (errors.global) {
       window.scrollTo(0, 0);
     }
   }, [errors]);
+
+  useEffect(() => {
+    if (values.type === DCC_TYPE_ISSUANCE) {
+      setIsIssuance(true);
+    } else if (values.type === DCC_TYPE_REVOCATION) {
+      setFieldValue("contractortype", CONTRACTOR_TYPE_REVOKED);
+      setIsIssuance(false);
+    }
+  }, [values.type]);
 
   const SubmitButton = () => (
     <Button
@@ -78,7 +91,6 @@ const DccForm = React.memo(function DccForm({
     setFieldValue(field, e.value);
   };
 
-  const isIssuance = useMemo(() => values.type === DCC_TYPE_ISSUANCE, [values.type]);
   return (
     <form onSubmit={handleSubmit}>
       {errors && errors.global && (
@@ -95,6 +107,13 @@ const DccForm = React.memo(function DccForm({
         className={styles.radioButton}
       />
 
+      <Select
+        name="domain"
+        options={getDomainOptions()}
+        placeholder="Domain"
+        error={touched.domain && errors.domain}
+        onChange={handleChangeSelector("domain")}
+      />
       { isIssuance ? (
         <>
           <Select
@@ -103,13 +122,6 @@ const DccForm = React.memo(function DccForm({
             placeholder="Nominee"
             error={touched.nomineeid && errors.nomineeid}
             onChange={handleChangeSelector("nomineeid")}
-          />
-          <Select
-            name="domain"
-            options={getDomainOptions()}
-            placeholder="Domain"
-            error={touched.domain && errors.domain}
-            onChange={handleChangeSelector("domain")}
           />
           <Select
             name="contractortype"
@@ -143,12 +155,29 @@ const DccForm = React.memo(function DccForm({
   );
 });
 
-const DccFormWrapper = ({ initialValues, onSubmit, history, cmsUsers }) => {
+const DccFormWrapper = ({ initialValues, onSubmit, history, cmsUsers, userDomain }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { policy } = usePolicy();
-  const dccFormValidation = useMemo(() => dccValidationSchema(policy), [
+  const dccFormValidation = useMemo(() => dccValidationSchema(policy, userDomain), [
     policy
   ]);
+
+  const FORM_INITIAL_VALUES = {
+    type: 0,
+    nomineeid: "",
+    statement: "",
+    domain: userDomain,
+    contractortype: 0
+  };
+
+  let formInitialValues = initialValues || FORM_INITIAL_VALUES;
+  const [sessionStorageDcc, setSessionStorageDcc] = useSessionStorage(
+    "dcc",
+    null
+  );
+  if (sessionStorageDcc !== null) {
+    formInitialValues = sessionStorageDcc;
+  }
 
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
@@ -166,24 +195,8 @@ const DccFormWrapper = ({ initialValues, onSubmit, history, cmsUsers }) => {
         setFieldError("global", e);
       }
     },
-    [history, onSubmit]
+    [history, onSubmit, setSessionStorageDcc]
   );
-
-  const FORM_INITIAL_VALUES = {
-    type: "",
-    nomineeid: "",
-    statement: "",
-    domain: "",
-    contractortype: ""
-  };
-  let formInitialValues = initialValues || FORM_INITIAL_VALUES;
-  const [sessionStorageDcc, setSessionStorageDcc] = useSessionStorage(
-    "dcc",
-    null
-  );
-  if (sessionStorageDcc !== null) {
-    formInitialValues = sessionStorageDcc;
-  }
 
   return (
     <Formik

@@ -5,11 +5,11 @@ import DccLoader from "src/componentsv2/DCC/DCCLoader";
 import { useNewDcc } from "./hooks";
 
 const NewDcc = () => {
-  const { onSubmitDcc, users, loading } = useNewDcc();
+  const { onSubmitDcc, users, loading, user } = useNewDcc();
   return (
     <Card className="container margin-bottom-l">
-      {users && !loading ? (
-        <DccForm onSubmit={onSubmitDcc} cmsUsers={users}/>
+      {users && user && !loading ? (
+        <DccForm onSubmit={onSubmitDcc} cmsUsers={users} userDomain={user.domain}/>
       ) : (
         <DccLoader extended />
       )}

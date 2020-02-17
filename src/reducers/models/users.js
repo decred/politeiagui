@@ -12,7 +12,9 @@ const DEFAULT_STATE = {
     queryByUsername: {}
   },
   cms: {
-    byContractorType: {}
+    byContractorType: {},
+    byDomain: {},
+    byID: {}
   }
 };
 
@@ -119,14 +121,31 @@ const users = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_CMS_LOGOUT]: () => onReceiveCMSLogout(state),
           [act.RECEIVE_CMS_USERS]: () => {
             const { users } = action.payload;
-            const usersByContractorType = users.reduce((res, user) => {
+            const byContractorType = users.reduce((res, user) => {
               const usersFromContractorType = res[user.contractortype] || [];
               return {
                 ...res,
                 [user.contractortype]: [user, ...usersFromContractorType]
               };
             }, {});
-            return set("cms.byContractorType", usersByContractorType)(state);
+            const byDomain = users.reduce((res, user) => {
+              const usersFromDomain = res[user.domain] || [];
+              return {
+                ...res,
+                [user.domain]: [user, ...usersFromDomain]
+              };
+            }, {});
+            const byID = users.reduce((res, user) => {
+              return {
+                ...res,
+                [user.id]: user
+              };
+            }, {});
+            return set("cms", {
+              byContractorType,
+              byDomain,
+              byID
+            })(state);
           }
         }[action.type] || (() => state)
       )();
