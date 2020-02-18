@@ -93,7 +93,7 @@ export const convertLineItemsToGrid = (
         {
           readOnly,
           value: line.type,
-          error: rowErrors.type,
+          error: rowErrors && rowErrors.type,
           dataEditor: selectWrapper(
             policyLineItemTypes.map((op) => ({
               value: op.type,
@@ -115,12 +115,12 @@ export const convertLineItemsToGrid = (
         {
           readOnly,
           value: line.subdomain,
-          error: rowErrors.subdomain
+          error: rowErrors && rowErrors.subdomain
         },
         {
           readOnly,
           value: line.description,
-          error: rowErrors.description,
+          error: rowErrors && rowErrors.description,
           className: styles.multilineCellValue
         },
         {
@@ -136,10 +136,12 @@ export const convertLineItemsToGrid = (
         {
           readOnly: isSubContractorReadonly,
           value: line.subuserid,
+          error: rowErrors && rowErrors.subuserid,
           dataEditor: selectWrapper(getSubcontractorOptions(subContractors))
         },
         {
           readOnly: isSubContractorReadonly,
+          error: rowErrors && rowErrors.subrate,
           value: +fromUSDCentsToUSDUnits(line.subrate)
         },
         {
@@ -150,7 +152,7 @@ export const convertLineItemsToGrid = (
         {
           readOnly: isExpenseReadonly,
           value: expenses,
-          error: rowErrors.expenses
+          error: rowErrors && rowErrors.expenses
         },
         {
           readOnly: true,
