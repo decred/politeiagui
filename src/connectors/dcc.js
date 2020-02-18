@@ -43,7 +43,7 @@ const dccConnector = connect(
     onForceFetchDCCs: act.onFetchDccsByStatus,
     onLoadDCC: act.onLoadDCC,
     onFetchUser: act.onFetchUser,
-    onSupportOpposeDCC: act.onSupportOpposeDCC,
+    onSupportOpposeDcc: act.onSupportOpposeDcc,
     onSetDCCStatus: act.onSetDCCStatus,
     confirmWithModal: act.confirmWithModal,
     onDeleteDraftDCC: act.onDeleteDraftDCC,

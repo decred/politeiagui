@@ -10,6 +10,9 @@ import {
   CONTRACTOR_TYPE_SUPERVISOR
 } from "./constants";
 import isEmpty from "lodash/isEmpty";
+import some from "lodash/fp/some";
+import isEqual from "lodash/fp/isEqual";
+import { or } from "src/lib/fp";
 import { CMS_USER_TYPES, CMS_DOMAINS } from "../../constants";
 
 const dccTypes = {
@@ -144,3 +147,56 @@ export const getDccTypeOptions = () => [
  */
 export const getNomineeOptions = (users) =>
   users.map(({ username, id }) => ({ label: username, value: id }));
+/**
+ * Return if dcc's status is not active using fp approach
+ * @param {Object} dcc
+ */
+export const isDccNotActiveFP = (dcc) => () => !isDccActive(dcc);
+
+/**
+ * Returns a status list for StatusBar component
+ * @param {Array} supportuserids
+ * @param {Array} againstuserids
+ */
+export const dccSupportOpposeStatus = (supportuserids, againstuserids) => [
+  {
+    label: "Support",
+    amount: supportuserids.length,
+    color: "green"
+  },
+  {
+    label: "Against",
+    amount: againstuserids.length,
+    color: "orange"
+  }
+];
+
+/**
+ * Returns an object list with shape { label: username, value: id }
+ * from 2 arrays of the same size
+ * @param {Array} idList List of ids
+ * @param {Array} usernameList List of usernames
+ */
+export const dccSupportOpposeList = (idList, usernameList) =>
+  idList.map((id, index) => ({ label: usernameList[index], value: id }));
+
+/**
+ * Returns if userid is on idArray using fp approach
+ * @param {Array} idArray
+ * @param {String} userid
+ */
+export const isUserIdOn = (idArray) => (userid) =>
+  some((id) => id === userid)(idArray);
+
+/**
+ * Returns if dcc support/oppose action is available
+ * @param {String} userid
+ * @param {Object} dcc
+ */
+export const isDccSupportOpposeAvailable = (userid, dcc) =>
+  !or(
+    isUserIdOn(dcc.supportuserids),
+    isUserIdOn(dcc.againstuserids),
+    isEqual(dcc.sponsoruserid),
+    isDccNotActiveFP(dcc)
+  )(userid);

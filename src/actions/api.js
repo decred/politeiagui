@@ -1317,19 +1317,20 @@ export const onFetchDccComments = (token) => (dispatch) => {
     });
 };
 
-export const onSupportOpposeDCC = (loggedInAsEmail, token, vote) =>
-  withCsrf((dispatch, _, csrf) => {
-    if (!loggedInAsEmail) {
-      return;
-    }
+export const onSupportOpposeDcc = (token, vote) =>
+  withCsrf((dispatch, getState, csrf) => {
+    const { email, username, userid } = sel.currentUser(getState());
     dispatch(act.REQUEST_SUPPORT_OPPOSE_DCC({}));
     return Promise.resolve(api.makeDCCVote(token, vote))
-      .then((dccvote) => api.signDccVote(loggedInAsEmail, dccvote))
+      .then((dccvote) => api.signDccVote(email, dccvote))
       .then((dccvote) => api.supportOpposeDCC(csrf, dccvote))
       .then((response) => {
         dispatch(
           act.RECEIVE_SUPPORT_OPPOSE_DCC({
             ...response,
+            token,
+            username,
+            userid,
             isSupport: vote === DCC_SUPPORT_VOTE
           })
         );

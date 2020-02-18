@@ -17,6 +17,7 @@ import {
   isDccActive,
   isDccApproved
 } from "src/containers/DCC/helpers";
+import SupportOppose from "src/containers/DCC/Actions/SupportOppose";
 
 const Dcc = ({ dcc, extended }) => {
   const {
@@ -30,6 +31,7 @@ const Dcc = ({ dcc, extended }) => {
     timereviewed
   } = dcc;
 
+  const isActive = isDccActive(dcc);
   const dccToken = censorshiprecord && censorshiprecord.token;
   const dccURL = `/dccs/${dccToken}`;
   const dccDomain = dccpayload && dccpayload.domain;
@@ -112,12 +114,15 @@ const Dcc = ({ dcc, extended }) => {
                     <Text>{presentationalStatement(dccStatement)}</Text>
                   </div>
                 </Row>
-                {!isDccActive(dcc) && <Row justify="space-between" className={styles.topDetails}>
-                  <div className={styles.field}>
-                    <Text size="small">Status change reason</Text>
-                    <Text>{statuschangereason}</Text>
-                  </div>
-                </Row>}
+                {!isActive &&
+                  <Row justify="space-between" className={styles.topDetails}>
+                    <div className={styles.field}>
+                      <Text size="small">Status change reason</Text>
+                      <Text>{statuschangereason}</Text>
+                    </div>
+                  </Row>
+                }
+                <SupportOppose className={styles.topDetails} token={dccToken} dcc={dcc}/>
               </>
             )}
           </>
