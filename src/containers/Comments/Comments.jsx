@@ -187,6 +187,14 @@ const Comments = ({
     [userEmail, recordToken, commentIDCensorTarget, onCensorComment]
   );
 
+  const handleCommentLike = useCallback((commentID, action) => {
+    onLikeComment(commentID, action);
+    dispatch({
+      type: actions.SORT,
+      sortOption
+    });
+  }, [sortOption, onLikeComment]);
+
   const handleCommentsModeToggle = useCallback(() => {
     const newFlagValue = !isFlatCommentsMode;
     setIsFlatCommentsMode(newFlagValue);
@@ -288,7 +296,7 @@ const Comments = ({
             <CommentContext.Provider
               value={{
                 onSubmitComment,
-                onLikeComment,
+                onLikeComment: handleCommentLike,
                 recordAuthorID,
                 recordToken,
                 threadParentID,
