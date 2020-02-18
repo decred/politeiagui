@@ -43,13 +43,13 @@ function useAPIAction(action, args = DEFAULT_ARGS, enabled = true) {
   const actionArgs = useRef(args);
   const areArgsMatched =
     args && actionArgs.current && areArgsEqual(args, actionArgs.current);
-  const cached = areArgsMatched ? actionArgs.current : args;
+  const cachedArgs = areArgsMatched ? actionArgs.current : args;
 
   useEffect(() => {
-    actionArgs.current = cached;
-  }, [cached]);
+    actionArgs.current = cachedArgs;
+  }, [cachedArgs]);
 
-  return useApplyAction(action, cached, enabled);
+  return useApplyAction(action, cachedArgs, enabled);
 }
 
 export default useAPIAction;
