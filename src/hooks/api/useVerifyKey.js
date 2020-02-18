@@ -1,21 +1,24 @@
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
+import { useAction, useSelector } from "src/redux";
 import * as sel from "src/selectors";
 
-const mapStateToProps = {
-  userPubkey: sel.currentUserPublicKey,
-  currentUserEmail: sel.currentUserEmail,
-  verifyUserKey: sel.verifyUserKey,
-  verifyUserKeyError: sel.verifyUserKeyError,
-  keyMismatch: sel.getKeyMismatch
-};
-const mapDispatchToProps = {
-  onVerifyUserKey: act.onVerifyUserKey,
-  keyMismatchAction: act.keyMismatch
-};
+export default function useVerifyKey() {
+  const userPubkey = useSelector(sel.currentUserPublicKey);
+  const currentUserEmail = useSelector(sel.currentUserEmail);
+  const keyMismatch = useSelector(sel.getKeyMismatch);
+  const verifyUserKey = useSelector(sel.verifyUserKey);
+  const verifyUserKeyError = useSelector(sel.verifyUserKeyError);
 
-export default function useVerifyKey(ownProps) {
-  const fromRedux = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
+  const onVerifyUserKey = useAction(act.onVerifyUserKey);
+  const keyMismatchAction = useAction(act.keyMismatch);
 
-  return fromRedux;
+  return {
+    userPubkey,
+    currentUserEmail,
+    keyMismatch,
+    verifyUserKey,
+    verifyUserKeyError,
+    onVerifyUserKey,
+    keyMismatchAction
+  };
 }

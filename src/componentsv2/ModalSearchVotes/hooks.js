@@ -1,25 +1,14 @@
 import { useEffect } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
-
-const mapStateToProps = {
-  proposalVoteResults: sel.apiPropVoteResultsResponse,
-  loading: sel.isApiRequestingPropVoteResults,
-  error: sel.apiPropVoteStatusError
-};
-
-const mapDispatchToProps = {
-  onFetchProposalVoteResults: act.onFetchProposalVoteResults
-};
+import { useSelector, useAction } from "src/redux";
 
 export const useSearchVotes = (proposalToken, modalOpen) => {
-  const {
-    onFetchProposalVoteResults,
-    proposalVoteResults,
-    loading,
-    error
-  } = useRedux({}, mapStateToProps, mapDispatchToProps);
+  const proposalVoteResults = useSelector(sel.apiPropVoteResultsResponse);
+  const loading = useSelector(sel.isApiRequestingPropVoteResults);
+  const error = useSelector(sel.apiPropVoteStatusError);
+  const onFetchProposalVoteResults = useAction(act.onFetchProposalVoteResults);
+
   useEffect(
     function fetchVotes() {
       if (modalOpen) {

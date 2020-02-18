@@ -5,9 +5,9 @@ import {
   getVoteBlocksLeft,
   isVoteActiveProposal,
   getVoteTimeInWords
-} from "./helpers";
+} from "../helpers";
 
-export function useProposalVote(token) {
+export default function useProposalVote(token) {
   const voteSummarySelector = useMemo(
     () => sel.makeGetProposalVoteSummary(token),
     [token]
