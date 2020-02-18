@@ -190,8 +190,9 @@ export const onSaveDraftInvoice = ({
   lineitems,
   files,
   draftId
-}) => (dispatch) => {
-  resetNewInvoiceData();
+}) => (dispatch, getState) => {
+  const policy = sel.policy(getState());
+  resetNewInvoiceData(policy);
   const id = draftId || uniqueID("draft");
   dispatch(
     act.SAVE_DRAFT_INVOICE({

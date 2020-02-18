@@ -233,17 +233,17 @@ export const convertGridToLineItems = (grid) => {
 };
 
 export const createTableHeaders = () => [
-  { readOnly: true, value: "", width: 25 },
-  { value: "Type", width: 120, readOnly: true },
-  { value: "Domain", width: 175, readOnly: true },
-  { value: "Subdomain", width: 175, readOnly: true },
+  { readOnly: true, value: "", width: 40 },
+  { value: "Type", readOnly: true, width: 80 },
+  { value: "Domain", readOnly: true },
+  { value: "Subdomain", readOnly: true },
   { value: "Description", readOnly: true },
   { value: "Proposal Token", readOnly: true },
   { value: "Subcontr. ID", readOnly: true },
   { value: "Subcontr. Rate (USD)", readOnly: true },
-  { value: "Labor (hours)", width: 60, readOnly: true },
-  { value: "Expense (USD)", width: 60, readOnly: true },
-  { value: "Subtotal (USD)", width: 60, readOnly: true }
+  { value: "Labor (hours)", readOnly: true },
+  { value: "Expense (USD)", readOnly: true },
+  { value: "Subtotal (USD)", readOnly: true }
 ];
 
 export const updateGridCell = (grid, row, col, values) => {
@@ -268,7 +268,6 @@ export const processTypeColChange = (grid, { row, col, value }) => {
     grid = updateGridCell(grid, row, LABOR_COL, { readOnly: false });
   }
 
-  console.log(value);
   // if value is 4, the expense column must be 0 and readOnly
   if (+value === 4) {
     grid = updateGridCell(grid, row, SUBCONTRACTOR_COL, { readOnly: false });

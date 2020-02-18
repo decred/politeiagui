@@ -101,7 +101,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
           <thead>
             <tr className={styles.tableHead}>
               {headers.map((col, idx) => (
-                <th key={`header-${idx}`} className={styles.tableHeadCell}>
+                <th key={`header-${idx}`} className={styles.tableHeadCell} width={col.width}>
                   {col.value}
                 </th>
               ))}
