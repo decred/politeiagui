@@ -189,17 +189,24 @@ const Comments = ({
 
   const handleCommentLike = useCallback((commentID, action) => {
     onLikeComment(commentID, action);
-    dispatch({
-      type: actions.SORT,
-      sortOption
-    });
+    // re-sort comments in `top` sort mode
+    if (sortOption === commentSortOptions.SORT_BY_TOP) {
+      dispatch({
+        type: actions.SORT,
+        sortOption
+      });
+    }
   }, [sortOption, onLikeComment]);
 
   const handleCommentsModeToggle = useCallback(() => {
     const newFlagValue = !isFlatCommentsMode;
     setIsFlatCommentsMode(newFlagValue);
     setflatModeOnLocalStorage(newFlagValue);
-  }, [isFlatCommentsMode, setflatModeOnLocalStorage]);
+    dispatch({
+      type: actions.SORT,
+      sortOption
+    });
+  }, [isFlatCommentsMode, setflatModeOnLocalStorage, sortOption]);
 
   const numOfDuplicatedComments = numOfComments - state.comments.length;
   const hasDuplicatedComments =
