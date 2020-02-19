@@ -4,6 +4,8 @@ import flow from "lodash/fp/flow";
 import filter from "lodash/fp/filter";
 import gte from "lodash/fp/gt";
 import range from "lodash/fp/range";
+import { sha3_256 } from "js-sha3";
+
 import { INVALID_FILE } from "./constants";
 import {
   INVOICE_STATUS_APPROVED,
@@ -32,6 +34,13 @@ export const getProposalStatus = (proposalStatus) =>
     "Rejected",
     "Approved"
   ]);
+
+export const digestPayload = (payload) =>
+  CryptoJS.SHA256(
+    arrayBufferToWordArray(base64ToArrayBuffer(payload))
+  ).toString(CryptoJS.enc.Hex);
+
+export const digest = (payload) => sha3_256(payload);
 
 export const utoa = (str) => window.btoa(unescape(encodeURIComponent(str)));
 export const atou = (str) => decodeURIComponent(escape(window.atob(str)));
@@ -188,6 +197,16 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
   }
 
   return error;
+};
+
+export const objectToBuffer = (obj) => Buffer.from(JSON.stringify(obj));
+
+export const bufferToBase64String = (buf) => buf.toString("base64");
+
+export const objectToSHA256 = (obj) => {
+  const buffer = objectToBuffer(obj);
+  const base64 = bufferToBase64String(buffer);
+  return digestPayload(base64);
 };
 
 // Copied from https://stackoverflow.com/a/43131635

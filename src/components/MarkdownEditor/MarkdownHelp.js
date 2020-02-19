@@ -33,7 +33,7 @@ MarkdownHelp.propTypes = {
 
 MarkdownHelp.defaultProps = {
   helpText: "Markdown styling is supported",
-  markdownReferenceUrl: "http://commonmark.org/help/"
+  markdownReferenceUrl: "https://commonmark.org/help/"
 };
 
 export default MarkdownHelp;

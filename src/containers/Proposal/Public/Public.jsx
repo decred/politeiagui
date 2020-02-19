@@ -2,13 +2,13 @@ import React, { useCallback, useMemo } from "react";
 import { Spinner } from "pi-ui";
 import styles from "./PublicProposals.module.css";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
-import { usePublicProposals } from "./hooks";
+import useProposalsBatch from "../hooks/useProposalsBatch";
 import Proposal from "src/componentsv2/Proposal";
 import ProposalLoader from "src/componentsv2/Proposal/ProposalLoader";
 import { PublicActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/componentsv2/RecordsView";
 
-const renderProposal = record => {
+const renderProposal = (record) => {
   return <Proposal key={record.censorshiprecord.token} proposal={record} />;
 };
 
@@ -27,9 +27,9 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     proposals,
     proposalsTokens,
     onFetchProposalsBatch
-  } = usePublicProposals();
+  } = useProposalsBatch();
 
-  const getEmptyMessage = useCallback(tab => {
+  const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
       [tabValues.IN_DISCUSSION]: "No proposals under dicussion",
       [tabValues.VOTING]: "No proposals voting",
@@ -54,13 +54,13 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
         <Sidebar />
         <Main className={styles.customMain}>
           <PublicActionsProvider>
-            {isLoadingTokenInventory ?
+            {isLoadingTokenInventory ? (
               <div className={styles.spinnerWrapper}>
                 <Spinner invert />
               </div>
-            :
+            ) : (
               proposalsTokens && !isLoading && content
-            }
+            )}
           </PublicActionsProvider>
         </Main>
       </>
@@ -78,8 +78,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       displayTabCount={!!proposalsTokens}
       placeholder={ProposalLoader}
       getEmptyMessage={getEmptyMessage}
-      dropdownTabsForMobile={true}
-    >
+      dropdownTabsForMobile={true}>
       {content}
     </RecordsView>
   );
