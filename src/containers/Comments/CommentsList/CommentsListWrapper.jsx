@@ -51,11 +51,17 @@ const CommentsListWrapper = ({
   comments,
   threadParentID,
   lastTimeAccessed,
-  currentUserID
+  currentUserID,
+  isFlatMode
 }) => {
   const [nestedComments, setNestedComments] = useState([]);
   useEffect(
     function generateNestedComments() {
+      // flat mode: keep comments array flat
+      if (isFlatMode) {
+        setNestedComments(comments.map(c => createComputedComment(c, comments, lastTimeAccessed, currentUserID)));
+        return;
+      }
       // single thread mode: find the childrens of the thread parent comment
       const isSingleThred = threadParentID && !!comments.length;
       if (isSingleThred) {
@@ -75,9 +81,9 @@ const CommentsListWrapper = ({
       const result = getChildren(comments, 0, lastTimeAccessed, currentUserID);
       setNestedComments(result);
     },
-    [comments, threadParentID, currentUserID, lastTimeAccessed]
+    [comments, threadParentID, currentUserID, isFlatMode, lastTimeAccessed]
   );
-  return <CommentsList comments={nestedComments} />;
+  return <CommentsList comments={nestedComments} isFlatMode={isFlatMode} />;
 };
 
 export default React.memo(CommentsListWrapper);

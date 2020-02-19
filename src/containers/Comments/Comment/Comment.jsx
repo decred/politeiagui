@@ -35,6 +35,8 @@ const Comment = ({
   numOfNewHiddenReplies,
   highlightAsNew,
   censorable,
+  isFlatMode,
+  seeInContextLink,
   ...props
 }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
@@ -47,6 +49,8 @@ const Comment = ({
 
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
+  const showNewReplies = numOfNewHiddenReplies > 0 && !showReplies && !isFlatMode;
+  const isThread = numOfReplies > 0 && !isFlatMode;
 
   return (
     <div
@@ -77,6 +81,7 @@ const Comment = ({
           </DateTooltip>
           {highlightAsNew && !extraSmall && <Text color="gray">new</Text>}
           {!extraSmall && censorButton}
+          {!extraSmall && seeInContextLink}
         </Join>
         {!disableLikes && !censored && (
           <div className={styles.likesWrapper}>
@@ -92,6 +97,7 @@ const Comment = ({
         )}
       </div>
       {extraSmall && censorButton}
+      {extraSmall && seeInContextLink}
       {!censored ? (
         <Markdown className={classNames(isDarkTheme && "dark", "margin-top-s")} body={commentBody} />
       ) : (
@@ -110,19 +116,18 @@ const Comment = ({
               </Text>
             </LoggedInContent>
           )}
-          {numOfReplies > 0 && (
+          {isThread &&  (
             <span className={styles.showReplies} onClick={onClickShowReplies}>
               {showReplies ? "-" : `+${numOfReplies}`}
             </span>
           )}
-          {numOfNewHiddenReplies > 0 && !showReplies && (
+          {showNewReplies && (
             <Text color="green">{`${numOfNewHiddenReplies} new`}</Text>
           )}
         </div>
         <CopyLink url={window.location.origin + permalink} />
       </div>
-    </div>
-  );
+  </div>);
 };
 
 Comment.propTypes = {
