@@ -562,6 +562,7 @@ export const onSubmitInvoice = (
       .then((invoice) => api.signRegister(loggedInAsEmail, invoice))
       .then((invoice) => api.newInvoice(csrf, invoice))
       .then((invoice) => {
+        const policy = sel.policy(getState());
         dispatch(
           act.RECEIVE_NEW_INVOICE({
             ...invoice,
@@ -570,7 +571,7 @@ export const onSubmitInvoice = (
             username
           })
         );
-        resetNewInvoiceData();
+        resetNewInvoiceData(policy);
       })
       .catch((error) => {
         dispatch(act.RECEIVE_NEW_INVOICE(null, error));
@@ -654,7 +655,8 @@ export const onSubmitEditedInvoice = (
   files,
   token
 ) =>
-  withCsrf((dispatch, _, csrf) => {
+  withCsrf((dispatch, getState, csrf) => {
+    const policy = sel.policy(getState());
     dispatch(
       act.REQUEST_EDIT_INVOICE({
         month,
@@ -694,11 +696,11 @@ export const onSubmitEditedInvoice = (
             username
           })
         );
-        resetNewInvoiceData();
+        resetNewInvoiceData(policy);
       })
       .catch((error) => {
         dispatch(act.RECEIVE_EDIT_INVOICE(null, error));
-        resetNewInvoiceData();
+        resetNewInvoiceData(policy);
         throw error;
       });
   });

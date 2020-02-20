@@ -5,8 +5,8 @@ import { currentUserID } from "./users";
 
 export const invoicesByToken = get(["invoices", "byToken"]);
 export const allInvoicesTokens = get(["invoices", "all"]);
-
 export const exchangeRates = get(["invoices", "exchangeRates"]);
+export const subContractors = get(["invoices", "subContractors"]);
 
 const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
 

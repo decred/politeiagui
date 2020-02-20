@@ -149,7 +149,7 @@ const updateInvoiceFormData = (state) => {
   );
 };
 
-export const resetNewInvoiceData = () => {
+export const resetNewInvoiceData = (policy) => {
   sessionStorage.setItem(
     getInvoiceBackupKey(INVOICE_FORM_ADDRESS, NEW_INVOICE_PATH),
     ""
@@ -160,7 +160,7 @@ export const resetNewInvoiceData = () => {
   );
   sessionStorage.setItem(
     getInvoiceBackupKey(INVOICE_FORM_LINE_ITEMS, NEW_INVOICE_PATH),
-    JSON.stringify([generateBlankLineItem()])
+    JSON.stringify([generateBlankLineItem(policy)])
   );
   sessionStorage.setItem(
     getInvoiceBackupKey(INVOICE_FORM_LOCATION, NEW_INVOICE_PATH),

@@ -42,9 +42,9 @@ export const invoiceValidationSchema = ({
     lineitems: Yup.array()
       .of(
         Yup.object().shape({
-          type: Yup.string()
+          type: Yup.number()
             .required("required")
-            .oneOf(["1", "2", "3", "4"]),
+            .oneOf([1, 2, 3, 4]),
           domain: Yup.string()
             .required("required")
             .min(minlineitemcollength)
@@ -64,6 +64,17 @@ export const invoiceValidationSchema = ({
               ...yupFieldMatcher("Description", invoicefieldsupportedchars)
             ),
           labor: Yup.number().min(0),
+          subuserid: Yup.string().when("type", (type, schema) =>
+            type === 4 ? schema.required("required") : schema
+          ),
+          subrate: Yup.number().when("type", (type, schema) =>
+            type === 4
+              ? schema
+                  .required("required")
+                  .min(500, "must be greater or equal to 5")
+                  .max(50000, "must be less or equal to 500")
+              : schema
+          ),
           expenses: Yup.number().min(0)
         })
       )

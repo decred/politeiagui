@@ -8,7 +8,7 @@ import styles from "./InvoiceDatasheet.module.css";
 import CellRenderer from "./components/CellRenderer";
 import TableButton from "./components/TableButton";
 import usePolicy from "src/hooks/api/usePolicy";
-
+import useSubContractors from "src/hooks/api/useSubContractors";
 import {
   processCellsChange,
   convertLineItemsToGrid,
@@ -27,6 +27,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   proposalsTokens
 }) {
   const { policy } = usePolicy();
+  const { subContractors } = useSubContractors();
   const [grid, setGrid] = useState([]);
   const [currentRate, setCurrentRate] = useState(userRate || 0);
 
@@ -66,11 +67,12 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
         errors,
         currentRate,
         policy,
-        proposalsTokens
+        proposalsTokens,
+        subContractors
       );
       setGrid(grid);
     },
-    [value, readOnly, errors, currentRate, policy, proposalsTokens]
+    [value, readOnly, errors, currentRate, policy, proposalsTokens, subContractors]
   );
 
   const handleRemoveLastRow = useCallback(
@@ -99,7 +101,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
           <thead>
             <tr className={styles.tableHead}>
               {headers.map((col, idx) => (
-                <th key={`header-${idx}`} className={styles.tableHeadCell}>
+                <th key={`header-${idx}`} className={styles.tableHeadCell} width={col.width}>
                   {col.value}
                 </th>
               ))}
