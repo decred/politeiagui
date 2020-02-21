@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { P, Button, Modal, TextInput, Icon } from "pi-ui";
 import PropTypes from "prop-types";
+import CheckboxField from "src/componentsv2/CheckboxField";
 import FormWrapper from "src/componentsv2/FormWrapper";
 import * as Yup from "yup";
 import { useInviteContractor } from "./hooks";
@@ -13,7 +14,7 @@ const ModalInviteContractor = ({ show, onClose }) => {
   const onInvite = async (values, { resetForm, setFieldError }) => {
     setSubmitting(true);
     try {
-      await onInviteContractor(values.email);
+      await onInviteContractor(values);
       resetForm();
       setSubmitting(false);
       setSuccess(true);
@@ -55,12 +56,14 @@ const ModalInviteContractor = ({ show, onClose }) => {
       {!success && (
         <FormWrapper
           initialValues={{
-            reason: ""
+            email: "",
+            isTemp: false
           }}
           validationSchema={Yup.object().shape({
             email: Yup.string()
               .email("Invalid email")
-              .required("Required")
+              .required("Required"),
+            isTemp: Yup.boolean()
           })}
           onSubmit={onInvite}
         >
@@ -88,6 +91,10 @@ const ModalInviteContractor = ({ show, onClose }) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={touched.email && errors.email}
+              />
+              <CheckboxField
+                name="isTemp"
+                label="Temporary Invite"
               />
               <Actions className="no-padding-bottom">
                 <Button loading={isSubmitting} type="submit">
