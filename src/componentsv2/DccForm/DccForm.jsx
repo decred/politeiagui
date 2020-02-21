@@ -56,7 +56,7 @@ const DccForm = React.memo(function DccForm({
       setFieldValue("contractortype", CONTRACTOR_TYPE_REVOKED);
       setIsIssuance(false);
     }
-  }, [values.type]);
+  }, [values.type, setFieldValue]);
 
   const SubmitButton = () => (
     <Button
@@ -159,7 +159,8 @@ const DccFormWrapper = ({ initialValues, onSubmit, history, cmsUsers, userDomain
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { policy } = usePolicy();
   const dccFormValidation = useMemo(() => dccValidationSchema(policy, userDomain), [
-    policy
+    policy,
+    userDomain
   ]);
 
   const FORM_INITIAL_VALUES = {
@@ -178,6 +179,8 @@ const DccFormWrapper = ({ initialValues, onSubmit, history, cmsUsers, userDomain
   if (sessionStorageDcc !== null) {
     formInitialValues = sessionStorageDcc;
   }
+
+  const isInitialValid = dccFormValidation.isValidSync(formInitialValues);
 
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
@@ -202,6 +205,7 @@ const DccFormWrapper = ({ initialValues, onSubmit, history, cmsUsers, userDomain
     <Formik
       onSubmit={handleSubmit}
       initialValues={formInitialValues}
+      isInitialValid={isInitialValid}
       validationSchema={dccFormValidation}
       >
       {(props) => (
