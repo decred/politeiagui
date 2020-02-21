@@ -1,6 +1,11 @@
 import { createSelector } from "reselect";
 import { emailNotificationsToPreferences } from "../helpers";
 import get from "lodash/fp/get";
+import castArray from "lodash/fp/castArray";
+import pick from "lodash/fp/pick";
+import compose from "lodash/fp/compose";
+import values from "lodash/fp/values";
+import flatten from "lodash/fp/flatten";
 
 export const userByID = get(["users", "byID"]);
 export const searchResultsByID = get(["users", "search", "resultsByID"]);
@@ -10,6 +15,13 @@ export const queryResultsByUsername = get([
   "search",
   "queryByUsername"
 ]);
+export const cmsUsersByContractorType = get([
+  "users",
+  "cms",
+  "byContractorType"
+]);
+export const cmsUsersByDomain = get(["users", "cms", "byDomain"]);
+export const cmsUserByID = get(["users", "cms", "byID"]);
 
 export const makeGetUserByID = (userID) =>
   createSelector(userByID, (users) => users[userID] || null);
@@ -18,6 +30,12 @@ export const currentUserID = get(["users", "currentUserID"]);
 
 export const currentUser = createSelector(
   userByID,
+  currentUserID,
+  (users, userID) => users[userID]
+);
+
+export const currentCmsUser = createSelector(
+  cmsUserByID,
   currentUserID,
   (users, userID) => users[userID]
 );
@@ -86,3 +104,18 @@ export const makeGetUsersByArrayOfIDs = (userIDs) =>
       return res;
     }, {});
   });
+
+export const makeGetUsersByContractorTypes = (contractorTypes) =>
+  createSelector(cmsUsersByContractorType, (users) => {
+    const contractorTypesArray = castArray(contractorTypes);
+    return compose(flatten, values, pick(contractorTypesArray))(users);
+  });
+
+export const usersByCurrentDomain = createSelector(
+  cmsUsersByDomain,
+  currentCmsUser,
+  (usersByDomain, user) => {
+    const domain = user && user.domain;
+    return get(domain)(usersByDomain);
+  }
+);

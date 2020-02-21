@@ -10,6 +10,11 @@ const DEFAULT_STATE = {
     resultsByID: {},
     queryByEmail: {},
     queryByUsername: {}
+  },
+  cms: {
+    byContractorType: {},
+    byDomain: {},
+    byID: {}
   }
 };
 
@@ -113,7 +118,35 @@ const users = (state = DEFAULT_STATE, action) =>
             )(state);
           },
           [act.RECEIVE_LOGOUT]: () => onReceiveLogout(state),
-          [act.RECEIVE_CMS_LOGOUT]: () => onReceiveCMSLogout(state)
+          [act.RECEIVE_CMS_LOGOUT]: () => onReceiveCMSLogout(state),
+          [act.RECEIVE_CMS_USERS]: () => {
+            const { users } = action.payload;
+            const byContractorType = users.reduce((res, user) => {
+              const usersFromContractorType = res[user.contractortype] || [];
+              return {
+                ...res,
+                [user.contractortype]: [user, ...usersFromContractorType]
+              };
+            }, {});
+            const byDomain = users.reduce((res, user) => {
+              const usersFromDomain = res[user.domain] || [];
+              return {
+                ...res,
+                [user.domain]: [user, ...usersFromDomain]
+              };
+            }, {});
+            const byID = users.reduce((res, user) => {
+              return {
+                ...res,
+                [user.id]: user
+              };
+            }, {});
+            return set("cms", {
+              byContractorType,
+              byDomain,
+              byID
+            })(state);
+          }
         }[action.type] || (() => state)
       )();
 

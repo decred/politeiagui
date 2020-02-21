@@ -343,13 +343,13 @@ export const lineItemPayouts = compose(
   invoicePayouts
 );
 
-export const apiNewDCCResponse = getApiResponse("newDCC");
-export const newDCCError = getApiError("newDCC");
-export const isApiRequestingNewDCC = getIsApiRequesting("newDCC");
+export const apiNewDccResponse = getApiResponse("newDcc");
+export const newDccError = getApiError("newDcc");
+export const isApiRequestingNewDcc = getIsApiRequesting("newDcc");
 
-export const newDCCToken = compose(
+export const newDccToken = compose(
   get(["censorshiprecord", "token"]),
-  apiNewDCCResponse
+  apiNewDccResponse
 );
 
 export const apiDCCsResponse = getApiResponse("dccs");
