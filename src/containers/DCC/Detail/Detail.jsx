@@ -24,7 +24,6 @@ const DccDetail = ({ Main, match }) => {
         <Comments
           recordAuthorID={dcc && dcc.sponsoruserid}
           recordToken={dccToken}
-          numOfComments={1}
           threadParentID={threadParentCommentID}
           readOnly={dcc && !isDccActive(dcc)}
           readOnlyReason={

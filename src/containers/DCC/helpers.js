@@ -99,6 +99,12 @@ export const isRevocationDcc = (dcc) =>
 export const isDccActive = (dcc) => dcc && dcc.status === DCC_STATUS_ACTIVE;
 
 /**
+ * Returns if dcc's status is approved
+ * @param {Object} dcc
+ */
+export const isDccApproved = (dcc) => dcc && dcc.status === DCC_STATUS_APPROVED;
+
+/**
  * Returns domain options for selectors
  */
 export const getDomainOptions = () =>

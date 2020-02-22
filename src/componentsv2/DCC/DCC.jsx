@@ -14,18 +14,20 @@ import {
   presentationalDccDomain,
   presentationalStatement,
   isRevocationDcc,
-  isDccActive
+  isDccActive,
+  isDccApproved
 } from "src/containers/DCC/helpers";
 
 const Dcc = ({ dcc, extended }) => {
   const {
     censorshiprecord,
     dccpayload,
-    timestamp,
+    timesubmitted,
     sponsoruserid,
     nomineeusername,
     sponsorusername,
-    statuschangereason
+    statuschangereason,
+    timereviewed
   } = dcc;
 
   const dccToken = censorshiprecord && censorshiprecord.token;
@@ -71,7 +73,8 @@ const Dcc = ({ dcc, extended }) => {
                       {presentationalDccDomain(dccDomain)}
                     </Text>
                   }
-                  <Event event="submitted" timestamp={timestamp} />
+                  <Event event="submitted" timestamp={timesubmitted} />
+                  {timereviewed && <Event event={isDccApproved(dcc) ? "approved" : "rejected"} timestamp={timereviewed} />}
                 </Subtitle>
               }
               status={

@@ -25,7 +25,6 @@ const InvoiceDetail = ({ Main, match }) => {
           <Comments
             recordAuthorID={invoice && invoice.userid}
             recordToken={invoiceToken}
-            numOfComments={1}
             threadParentID={threadParentCommentID}
             readOnly={invoice && !isUnreviewedInvoice(invoice)}
             readOnlyReason={

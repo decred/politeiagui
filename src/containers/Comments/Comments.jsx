@@ -34,7 +34,6 @@ import { commentsReducer, initialState, actions } from "./commentsReducer";
 import { getQueryStringValue } from "src/lib/queryString";
 
 const Comments = ({
-  useNumOfCommentsFromParent,
   numOfComments,
   recordToken,
   recordAuthorID,
@@ -53,9 +52,6 @@ const Comments = ({
     commentSortOptions.SORT_BY_TOP
   );
 
-  const shouldFetchComments = useNumOfCommentsFromParent
-    ? numOfComments > 0
-    : true;
   const {
     onSubmitComment,
     onLikeComment,
@@ -67,11 +63,9 @@ const Comments = ({
     currentUser,
     userEmail,
     ...commentsCtx
-  } = useComments(recordToken, shouldFetchComments);
+  } = useComments(recordToken);
 
-  const commentsCount = useNumOfCommentsFromParent
-    ? numOfComments
-    : comments
+  const commentsCount = comments
     ? comments.length
     : 0;
 
