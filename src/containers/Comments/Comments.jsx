@@ -226,7 +226,7 @@ const Comments = ({
                 </Message>
               )}
               {!isPaid && paywallEnabled && (
-                <Message kind="error" contentClassName={styles.messageContent}>
+                <Message kind="error">
                   <P>
                     You won't be able to submit comments or proposals before paying the paywall,
                     please visit your <Link to={`/user/${currentUser.userid}?tab=credits`}>account</Link> page to

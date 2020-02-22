@@ -7,7 +7,6 @@ import Link from "src/componentsv2/Link";
 import usePaywall from "src/hooks/api/usePaywall";
 import useIdentity from "src/hooks/api/useIdentity";
 import { useNewProposal } from "./hooks";
-import styles from "./New.module.css";
 
 const NewProposal = ({ draftId }) => {
   const {
@@ -22,7 +21,7 @@ const NewProposal = ({ draftId }) => {
     <Card className="container">
       <Or>
         {!isPaid && (
-          <Message contentClassName={styles.messageContent} kind="error">
+          <Message kind="error">
             <P>
               You won't be able to submit comments or proposals before paying the paywall,
               please visit your <Link to={`/user/${currentUser.userid}?tab=credits`}>account</Link> page to

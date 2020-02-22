@@ -12,7 +12,6 @@ import { IdentityMessageError } from "src/componentsv2/IdentityErrorIndicators";
 import ProposalForm from "src/componentsv2/ProposalForm/ProposalFormLazy";
 import Link from "src/componentsv2/Link";
 import ProposalFormLoader from "src/componentsv2/ProposalForm/ProposalFormLoader";
-import styles from "./Edit.module.css";
 
 const EditProposal = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
@@ -34,7 +33,7 @@ const EditProposal = ({ match }) => {
     <Card className={"container"}>
       <Or>
         {!isPaid && (
-          <Message contentClassName={styles.messageContent} kind="error">
+          <Message kind="error">
             <P>
               You won't be able to submit comments or proposals before paying the paywall,
               please visit your <Link to={`/user/${currentUser.userid}?tab=credits`}>account</Link> page to

@@ -47,10 +47,6 @@ h2.commentsTitle {
   margin-top: 0.1rem;
 }
 
-.messageContent {
-  flex-direction: row !important;
-}
-
 @media screen and (max-width: 560px) {
   div.commentsWrapper {
     padding: 0 0 2rem 0;
