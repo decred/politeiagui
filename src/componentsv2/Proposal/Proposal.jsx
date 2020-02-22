@@ -75,6 +75,11 @@ const Proposal = React.memo(function Proposal({
   const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
   const mobile = useMediaQuery("(max-width: 560px)");
   const [showSearchVotesModal, setShowSearchVotesModal] = useState(false);
+  const showEditedDate = version > 1 && timestamp !== publishedat && !abandonedat && !mobile;
+  const showPublishedDate = publishedat && !mobile;
+  const showExtendedVersionPicker = extended && version > 1;
+  const showAbandonedDate = abandonedat && !mobile;
+  const showVersionAsText = version > 1 && !extended && !mobile;
 
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
@@ -126,22 +131,22 @@ const Proposal = React.memo(function Proposal({
               subtitle={
                 <Subtitle>
                   <Author username={username} id={userid} />
-                  {publishedat && !mobile && (
+                  {showPublishedDate && (
                     <Event event="published" timestamp={publishedat} />
                   )}
-                  {timestamp !== publishedat && !abandonedat && !mobile && (
+                  {showEditedDate && (
                     <Event event="edited" timestamp={timestamp} />
                   )}
-                  {abandonedat && !mobile && (
+                  {showAbandonedDate && (
                     <Event event={"abandoned"} timestamp={abandonedat} />
                   )}
-                  {version > 1 && !extended && !mobile && (
+                  {showVersionAsText && (
                     <Text
                       id={`proposal-${proposalToken}-version`}
                       className={styles.version}
                       truncate>{`version ${version}`}</Text>
                   )}
-                  {extended && version > 1 && (
+                  {showExtendedVersionPicker && (
                     <VersionPicker
                       className={classNames(
                         styles.versionPicker,
