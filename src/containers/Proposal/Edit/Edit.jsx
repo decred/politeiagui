@@ -1,6 +1,6 @@
 import React from "react";
 import get from "lodash/fp/get";
-import { Card, Message } from "pi-ui";
+import { Card, Message, P } from "pi-ui";
 import { useProposal } from "../Detail/hooks";
 import { useEditProposal } from "./hooks";
 import { withRouter } from "react-router-dom";
@@ -10,12 +10,13 @@ import useIdentity from "src/hooks/api/useIdentity";
 import Or from "src/componentsv2/Or";
 import { IdentityMessageError } from "src/componentsv2/IdentityErrorIndicators";
 import ProposalForm from "src/componentsv2/ProposalForm/ProposalFormLazy";
+import Link from "src/componentsv2/Link";
 import ProposalFormLoader from "src/componentsv2/ProposalForm/ProposalFormLoader";
 
 const EditProposal = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
   const { proposal, loading } = useProposal(tokenFromUrl);
-  const { onEditProposal } = useEditProposal();
+  const { onEditProposal, currentUser } = useEditProposal();
   const { isPaid } = usePaywall();
   const [, identityError] = useIdentity();
 
@@ -33,7 +34,11 @@ const EditProposal = ({ match }) => {
       <Or>
         {!isPaid && (
           <Message kind="error">
-            You must pay the paywall to create a proposal
+            <P>
+              You won't be able to submit comments or proposals before paying the paywall,
+              please visit your <Link to={`/user/${currentUser.userid}?tab=credits`}>account</Link> page to
+              correct this problem.
+            </P>
           </Message>
         )}
         {!!identityError && <IdentityMessageError />}

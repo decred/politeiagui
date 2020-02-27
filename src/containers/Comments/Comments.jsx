@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { Card, H2, Text, Message, classNames, Toggle } from "pi-ui";
+import { Card, H2, Text, Message, classNames, Toggle, P } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import styles from "./Comments.module.css";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
@@ -227,7 +227,11 @@ const Comments = ({
               )}
               {!isPaid && paywallEnabled && (
                 <Message kind="error">
-                  You must pay the paywall to submit comments.
+                  <P>
+                    You won't be able to submit comments or proposals before paying the paywall,
+                    please visit your <Link to={`/user/${currentUser.userid}?tab=credits`}>account</Link> page to
+                    correct this problem.
+                  </P>
                 </Message>
               )}
               {!readOnly && !!identityError && <IdentityMessageError />}
