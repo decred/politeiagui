@@ -1,16 +1,20 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Modal, Tabs, Tab, Card } from "pi-ui";
 import Link from "src/componentsv2/Link";
 import styles from "./ModalVotesList.module.css";
 
-const VotesList = ({ options, currentID }) =>
-  options.length
-    ? options.map(op => (
-      <Card key={op.value} marker={op.value === currentID} className={styles.list}>
-        <Link to={`/user/${op.value}`} >{op.label}</Link>
-      </Card>
-    ))
-    : <Card>No votes yet</Card>;
+const VotesList = ({ options, currentID }) => (
+  <div className={styles.list}>
+    {options.length
+      ? options.map(op => (
+        <Card key={op.value} marker={op.value === currentID} className={styles.card}>
+          <Link to={`/user/${op.value}`} >{op.label}</Link>
+        </Card>
+      ))
+      : <Card>No votes yet</Card>}
+  </div>
+);
 
 const ModalVotesList = ({ supportList, againstList, neutralList, show, onClose, currentID }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -34,6 +38,21 @@ const ModalVotesList = ({ supportList, againstList, neutralList, show, onClose, 
       </Tabs>
     </Modal>
   );
+};
+
+const elementListShape = PropTypes.shape({
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired
+});
+
+ModalVotesList.propTypes = {
+  supportList: PropTypes.arrayOf(elementListShape),
+  opposeList: PropTypes.arrayOf(elementListShape),
+  neutralList: PropTypes.arrayOf(elementListShape),
+  show: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  currentID: PropTypes.string.isRequired
+
 };
 
 export default ModalVotesList;
