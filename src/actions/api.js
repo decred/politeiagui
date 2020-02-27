@@ -119,7 +119,7 @@ export const onInviteUserConfirm = ({ email, isTemp }) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_INVITE_USER({ email }));
     return api
-      .inviteNewUser(csrf, { email, isTemp })
+      .inviteNewUser(csrf, { email, temp: isTemp })
       .then((response) => {
         dispatch(act.RECEIVE_INVITE_USER(response));
       })
