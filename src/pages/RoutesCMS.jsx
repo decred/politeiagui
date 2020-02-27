@@ -75,6 +75,12 @@ const Routes = ({ location }) => {
             component={PageInvoiceDetail}
           />
           <AuthenticatedRoute
+            path="/invoices/:token/comments/:commentid"
+            title="Invoice Detail"
+            exact
+            component={PageInvoiceDetail}
+          />
+          <AuthenticatedRoute
             path="/invoices/:token/edit"
             title="Edit Invoice"
             exact
@@ -113,6 +119,12 @@ const Routes = ({ location }) => {
           />
           <AuthenticatedRoute
             path="/dccs/:token"
+            title="DCC Detail"
+            exact
+            component={withDcc(PageDccDetail)}
+          />
+          <AuthenticatedRoute
+            path="/dccs/:token/comments/:commentid"
             title="DCC Detail"
             exact
             component={withDcc(PageDccDetail)}
