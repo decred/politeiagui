@@ -18,7 +18,7 @@ import useBooleanState from "src/hooks/utils/useBooleanState";
 import ModalConfirm from "src/componentsv2/ModalConfirm";
 
 const SupportOpposeActions = ({ dcc, token, className }) => {
-  const { onSupportDcc, onOpposeDcc, userID } = useDccActions(token);
+  const { onSupportDcc, onOpposeDcc, userID, isContractor, loading, error } = useDccActions(token);
   const [supportOpposeAction, setSupportOpposeAction] = useState(() => {});
   const [
     showVotingModal,
@@ -49,7 +49,10 @@ const SupportOpposeActions = ({ dcc, token, className }) => {
     openConfirmModal();
   }, [setSupportOpposeAction, openConfirmModal, onOpposeDcc]);
 
-  const isVotingAvailable = useMemo(() => isDccSupportOpposeAvailable(userID, dcc), [dcc, userID]);
+  const isVotingAvailable = useMemo(() => (
+      isDccSupportOpposeAvailable(userID, dcc)
+      && isContractor
+    ), [dcc, userID, isContractor]);
 
   const supportButton = (
     <Button onClick={handleSupportDcc}>Support</Button>
@@ -59,7 +62,10 @@ const SupportOpposeActions = ({ dcc, token, className }) => {
     <Button kind="secondary" onClick={handleOpposeDcc}>Oppose</Button>
   );
 
-  return <>
+  return !loading && <>
+    {error && <Message kind="error">
+      User not logged in
+    </Message>}
     <div className={className}>
       <StatusBar
         status={dccSupportOpposeStatus(supportuserids, againstuserids)}

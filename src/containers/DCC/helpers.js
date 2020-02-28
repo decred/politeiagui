@@ -5,6 +5,7 @@ import {
   DCC_STATUS_DRAFTS,
   DCC_TYPE_ISSUANCE,
   DCC_TYPE_REVOCATION,
+  DCC_DOMAIN_INVALID,
   CONTRACTOR_TYPE_NOMINEE,
   CONTRACTOR_TYPE_REVOKED,
   CONTRACTOR_TYPE_SUPERVISOR
@@ -200,3 +201,14 @@ export const isDccSupportOpposeAvailable = (userid, dcc) =>
     isEqual(dcc.sponsoruserid),
     isDccNotActiveFP(dcc)
   )(userid);
+
+/**
+ * Returns if cms user is a valid contractor
+ * @param {Number} contractortype
+ * @param {Number} domain
+ */
+export const isUserValidContractor = (user) =>
+  user &&
+  user.domain !== DCC_DOMAIN_INVALID &&
+  user.contractortype !== CONTRACTOR_TYPE_REVOKED &&
+  user.contractortype !== CONTRACTOR_TYPE_NOMINEE;

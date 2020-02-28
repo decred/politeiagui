@@ -51,7 +51,7 @@ ModalVotesList.propTypes = {
   neutralList: PropTypes.arrayOf(elementListShape),
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  currentID: PropTypes.string.isRequired
+  currentID: PropTypes.string
 
 };
 
