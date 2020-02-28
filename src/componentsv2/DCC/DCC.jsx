@@ -17,7 +17,7 @@ import {
   isDccActive,
   isDccApproved
 } from "src/containers/DCC/helpers";
-import SupportOppose from "src/containers/DCC/Actions/SupportOppose";
+import { SupportOppose, DccActions } from "src/containers/DCC/Actions";
 
 const Dcc = ({ dcc, extended }) => {
   const {
@@ -77,6 +77,7 @@ const Dcc = ({ dcc, extended }) => {
                   }
                   <Event event="submitted" timestamp={timesubmitted} />
                   {timereviewed && <Event event={isDccApproved(dcc) ? "approved" : "rejected"} timestamp={timereviewed} />}
+                  {!isActive && !extended && <Text>{statuschangereason}</Text>}
                 </Subtitle>
               }
               status={
@@ -125,6 +126,7 @@ const Dcc = ({ dcc, extended }) => {
                 <SupportOppose className={styles.topDetails} token={dccToken} dcc={dcc}/>
               </>
             )}
+            <DccActions dcc={dcc} extended={extended}/>
           </>
         );
       }}

@@ -13,7 +13,6 @@ import {
   onReceiveSetStatusInvoice,
   onReceiveDCCs,
   onSetDCC,
-  onReceiveSetDCCStatus,
   onReceiveNewDccComment,
   onReceiveCensorDCCComment
 } from "./handlersCMS";
@@ -192,7 +191,8 @@ const api = (state = DEFAULT_STATE, action) =>
         receive("supportOpposeDCC", state, action),
       [act.REQUEST_SET_DCC_STATUS]: () =>
         request("setDCCStatus", state, action),
-      [act.RECEIVE_SET_DCC_STATUS]: () => onReceiveSetDCCStatus(state, action),
+      [act.RECEIVE_SET_DCC_STATUS]: () =>
+        receive("setDccStatus", state, action),
       [act.REQUEST_DCC_COMMENTS]: () => request("dccComments", state, action),
       [act.RECEIVE_DCC_COMMENTS]: () => receive("dccComments", state, action),
       [act.RECEIVE_NEW_DCC_COMMENT]: () =>

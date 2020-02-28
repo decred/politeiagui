@@ -4,6 +4,7 @@ import { Spinner, Tabs, Tab } from "pi-ui";
 import Dcc from "src/componentsv2/DCC";
 import HelpMessage from "src/componentsv2/HelpMessage";
 import styles from "./List.module.css";
+import { AdminDccActionsProvider } from "src/containers/DCC/Actions";
 
 const ListUserDccs = ({ TopBanner, PageDetails, Main }) => {
   const { loading, dccs, handleTabChange, status } = useDccs();
@@ -41,10 +42,10 @@ const ListUserDccs = ({ TopBanner, PageDetails, Main }) => {
           </div>
         )}
         {!loading && dccs && (
-          <>
+          <AdminDccActionsProvider>
             {renderDccs(dccs)}
             {renderEmptyMessage(dccs)}
-          </>
+          </AdminDccActionsProvider>
         )}
       </Main>
     </>
