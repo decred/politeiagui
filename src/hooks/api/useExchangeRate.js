@@ -1,25 +1,14 @@
 import { useMemo } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
+import { useSelector, useAction } from "src/redux";
 import useAPIAction from "src/hooks/utils/useAPIAction";
-
-const mapStateToProps = {
-  exchangeRates: sel.exchangeRates
-};
-
-const mapDispatchToProps = {
-  onFetchExchangeRate: act.onFetchExchangeRate
-};
 
 const getKey = (moth, year) => `${year}-${moth}`;
 
 function useExchangeRate(month, year) {
-  const { onFetchExchangeRate, exchangeRates } = useRedux(
-    {},
-    mapStateToProps,
-    mapDispatchToProps
-  );
+  const exchangeRates = useSelector(sel.exchangeRates);
+  const onFetchExchangeRate = useAction(act.onFetchExchangeRate);
 
   const currRate = exchangeRates[getKey(month, year)];
   const needsFetching = !currRate;

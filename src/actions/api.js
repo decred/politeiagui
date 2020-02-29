@@ -960,11 +960,18 @@ export const onPasswordResetRequest = ({
       });
   });
 
-export const onStartVote = (loggedInAsEmail, token, duration, quorum, pass) =>
+export const onStartVote = (
+  loggedInAsEmail,
+  token,
+  duration,
+  quorum,
+  pass,
+  version
+) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_START_VOTE({ token }));
     return api
-      .startVote(loggedInAsEmail, csrf, token, duration, quorum, pass)
+      .startVote(loggedInAsEmail, csrf, token, duration, quorum, pass, version)
       .then((response) => {
         dispatch(onFetchProposalsBatchVoteSummary([token]));
         dispatch(act.RECEIVE_START_VOTE({ ...response, token, success: true }));
@@ -1382,3 +1389,43 @@ export const onSubmitDccComment = (loggedInAsEmail, token, comment, parentid) =>
         throw error;
       });
   });
+
+// DCC actions
+
+export const onFetchDCCsByStatus = (status) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_DCCS({}));
+    return api
+      .dccsByStatus(csrf, { status })
+      .then((response) => {
+        dispatch(act.RECEIVE_DCCS({ ...response, status }));
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_DCCS(null, error));
+      });
+  });
+
+export const onFetchDCC = (token) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_DCC({}));
+    return api
+      .dccDetails(csrf, token)
+      .then((response) => {
+        dispatch(act.RECEIVE_DCC(response));
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_DCC(null, error));
+      });
+  });
+
+export const onFetchDCCComments = (token) => (dispatch) => {
+  dispatch(act.REQUEST_DCC_COMMENTS());
+  return api
+    .dccComments(token)
+    .then((response) => {
+      dispatch(act.RECEIVE_DCC_COMMENTS(response));
+    })
+    .catch((error) => {
+      dispatch(act.RECEIVE_DCC_COMMENTS(null, error));
+    });
+};

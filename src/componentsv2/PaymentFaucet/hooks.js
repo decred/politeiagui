@@ -1,25 +1,23 @@
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
+import { useSelector, useAction } from "src/redux";
 import * as sel from "src/selectors";
 
-const mapStateToProps = {
-  isTestnet: sel.isTestNet,
-  isApiRequestingPayWithFaucet: sel.isApiRequestingPayWithFaucet,
-  payWithFaucetTxId: sel.payWithFaucetTxId,
-  payWithFaucetError: sel.payWithFaucetError
-};
-
-const mapDispatchToProps = {
-  payWithFaucet: act.payWithFaucet,
-  resetFaucet: act.resetPaywallPaymentWithFaucet
-};
-
-export default function useFaucet(ownProps) {
-  const { policy, ...fromRedux } = useRedux(
-    ownProps,
-    mapStateToProps,
-    mapDispatchToProps
+export default function useFaucet() {
+  const isTestnet = useSelector(sel.isTestNet);
+  const isApiRequestingPayWithFaucet = useSelector(
+    sel.isApiRequestingPayWithFaucet
   );
+  const payWithFaucetTxId = useSelector(sel.payWithFaucetTxId);
+  const payWithFaucetError = useSelector(sel.payWithFaucetError);
 
-  return { ...fromRedux, policy };
+  const payWithFaucet = useAction(act.payWithFaucet);
+  const resetFaucet = useAction(act.resetPaywallPaymentWithFaucet);
+  return {
+    isTestnet,
+    isApiRequestingPayWithFaucet,
+    payWithFaucetTxId,
+    payWithFaucetError,
+    payWithFaucet,
+    resetFaucet
+  };
 }

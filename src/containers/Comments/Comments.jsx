@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { Card, H2, Text, Message, classNames } from "pi-ui";
+import { Card, H2, Text, Message, classNames, Toggle, P } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import styles from "./Comments.module.css";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
@@ -32,6 +32,7 @@ import { useLoginModal } from "src/containers/User/Login";
 import WhatAreYourThoughts from "src/componentsv2/WhatAreYourThoughts";
 import { commentsReducer, initialState, actions } from "./commentsReducer";
 import { getQueryStringValue } from "src/lib/queryString";
+import useLocalStorage from "src/hooks/utils/useLocalStorage";
 
 const Comments = ({
   numOfComments,
@@ -47,6 +48,16 @@ const Comments = ({
   const { isPaid, paywallEnabled } = usePaywall();
   const [state, dispatch] = useReducer(commentsReducer, initialState);
   const [commentIDCensorTarget, setCommentIDCensorTarget] = useState(null);
+  const [isFlatCommentsMode, setIsFlatCommentsMode] = useState(false);
+  const [flatModeOnLocalStorage, setflatModeOnLocalStorage] = useLocalStorage(
+    "flatComments",
+    false
+  );
+  useEffect(() => {
+    if (flatModeOnLocalStorage && !isFlatCommentsMode && !threadParentID) {
+      setIsFlatCommentsMode(true);
+    }
+  }, [flatModeOnLocalStorage, isFlatCommentsMode, threadParentID]);
   const [sortOption, setSortOption] = useQueryString(
     "sort",
     commentSortOptions.SORT_BY_TOP
@@ -178,6 +189,16 @@ const Comments = ({
     [userEmail, recordToken, commentIDCensorTarget, onCensorComment]
   );
 
+  const handleCommentsModeToggle = useCallback(() => {
+    const newFlagValue = !isFlatCommentsMode;
+    setIsFlatCommentsMode(newFlagValue);
+    setflatModeOnLocalStorage(newFlagValue);
+    dispatch({
+      type: actions.SORT,
+      sortOption
+    });
+  }, [isFlatCommentsMode, setflatModeOnLocalStorage, sortOption]);
+
   const numOfDuplicatedComments = numOfComments - state.comments.length;
   const hasDuplicatedComments =
     !!state.comments.length && numOfDuplicatedComments > 0;
@@ -208,7 +229,11 @@ const Comments = ({
               )}
               {!isPaid && paywallEnabled && (
                 <Message kind="error">
-                  You must pay the paywall to submit comments.
+                  <P>
+                    You won't be able to submit comments or proposals before paying the paywall,
+                    please visit your <Link to={`/user/${currentUser.userid}?tab=credits`}>account</Link> page to
+                    correct this problem.
+                  </P>
                 </Message>
               )}
               {!readOnly && !!identityError && <IdentityMessageError />}
@@ -237,12 +262,25 @@ const Comments = ({
             )}
             <div className={styles.sortContainer}>
               {!!comments && !!comments.length && (
-                <Select
-                  isSearchable={false}
-                  value={selectValue}
-                  onChange={handleSetSortOption}
-                  options={selectOptions}
-                />
+                <>
+                  {!isSingleThread && <div className={styles.modeToggleWrapper}>
+                    <Toggle
+                      onToggle={handleCommentsModeToggle}
+                      toggled={isFlatCommentsMode}
+                    />
+                    <div
+                      onClick={handleCommentsModeToggle}
+                      className={styles.modeToggleLabel}>
+                      Flat Mode
+                    </div>
+                  </div>}
+                  <Select
+                    isSearchable={false}
+                    value={selectValue}
+                    onChange={handleSetSortOption}
+                    options={selectOptions}
+                  />
+                </>
               )}
             </div>
             {isSingleThread && (
@@ -278,6 +316,7 @@ const Comments = ({
                 threadParentID={threadParentID}
                 currentUserID={currentUser && currentUser.userid}
                 comments={state.comments}
+                isFlatMode={isFlatCommentsMode}
               />
             </CommentContext.Provider>
           ) : null}

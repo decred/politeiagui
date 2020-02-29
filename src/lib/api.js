@@ -1,8 +1,6 @@
 import "isomorphic-fetch";
-import CryptoJS from "crypto-js";
 import * as pki from "./pki";
 import qs from "query-string";
-import { sha3_256 } from "js-sha3";
 import get from "lodash/fp/get";
 import MerkleTree from "./merkle";
 import {
@@ -12,8 +10,9 @@ import {
 } from "../constants";
 import {
   getHumanReadableError,
-  base64ToArrayBuffer,
-  arrayBufferToWordArray,
+  digestPayload,
+  digest,
+  objectToSHA256,
   utoa
 } from "../helpers";
 
@@ -26,16 +25,11 @@ const STATUS_ERR = {
   404: "Not found"
 };
 
+const VOTE_TYPE_STANDARD = 1;
+
 const apiBase = "/api";
 const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
 const getResponse = get("response");
-
-export const digestPayload = (payload) =>
-  CryptoJS.SHA256(
-    arrayBufferToWordArray(base64ToArrayBuffer(payload))
-  ).toString(CryptoJS.enc.Hex);
-
-export const digest = (payload) => sha3_256(payload);
 
 export const convertMarkdownToFile = (markdown) => ({
   name: "index.md",
@@ -264,8 +258,10 @@ const getOptions = (csrf, json, method) => ({
   body: JSON.stringify(json)
 });
 
-const POST = (path, csrf, json) =>
-  fetch(getUrl(path), getOptions(csrf, json, "POST")).then(parseResponse);
+const POST = (path, csrf, json, version = "v1") =>
+  fetch(getUrl(path, version), getOptions(csrf, json, "POST")).then(
+    parseResponse
+  );
 
 const PUT = (path, csrf, json) =>
   fetch(getUrl(path), getOptions(csrf, json, "PUT")).then(parseResponse);
@@ -548,38 +544,49 @@ export const startVote = (
   token,
   duration,
   quorumpercentage,
-  passpercentage
-) =>
-  pki
+  passpercentage,
+  proposalversion
+) => {
+  const vote = {
+    token,
+    proposalversion: +proposalversion,
+    type: VOTE_TYPE_STANDARD,
+    mask: 3,
+    duration,
+    quorumpercentage,
+    passpercentage,
+    options: [
+      {
+        id: "no",
+        description: "Don't approve proposal",
+        bits: 1
+      },
+      {
+        id: "yes",
+        description: "Approve proposal",
+        bits: 2
+      }
+    ]
+  };
+  const hash = objectToSHA256(vote);
+  return pki
     .myPubKeyHex(email)
     .then((publickey) =>
-      pki.signStringHex(email, token).then((signature) =>
-        POST("/proposals/startvote", csrf, {
-          vote: {
-            token,
-            mask: 3,
-            duration,
-            quorumpercentage,
-            passpercentage,
-            options: [
-              {
-                id: "no",
-                description: "Don't approve proposal",
-                bits: 1
-              },
-              {
-                id: "yes",
-                description: "Approve proposal",
-                bits: 2
-              }
-            ]
+      pki.signStringHex(email, hash).then((signature) => {
+        return POST(
+          "/vote/start",
+          csrf,
+          {
+            vote,
+            signature,
+            publickey
           },
-          signature,
-          publickey
-        })
-      )
+          "v2"
+        );
+      })
     )
     .then(getResponse);
+};
 
 export const proposalsVoteStatus = () =>
   GET("/v1/proposals/votestatus").then(getResponse);

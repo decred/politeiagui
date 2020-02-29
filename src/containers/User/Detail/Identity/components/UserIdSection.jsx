@@ -2,7 +2,7 @@ import React from "react";
 import { classNames, Text, P, Link } from "pi-ui";
 import styles from "../Identity.module.css";
 
-export default ({ id }) =>
+export default ({ id }) => (
   <>
     <Text
       weight="semibold"
@@ -11,21 +11,21 @@ export default ({ id }) =>
         styles.fieldHeading,
         "margin-bottom-s",
         "margin-top-l"
-      )}
-    >
+      )}>
       User ID
-      </Text>
+    </Text>
     <P className="margin-bottom-s">
       Unique 16-byte UUID, as defined in{" "}
       <Link
-        href="http://tools.ietf.org/html/rfc4122"
+        href="https://tools.ietf.org/html/rfc4122"
         target="_blank"
-        rel="nofollow noopener noreferrer"
-      >
+        rel="nofollow noopener noreferrer">
         RFC 4122
-      </Link>, used to identify your user.
-      </P>
+      </Link>
+      , used to identify your user.
+    </P>
     <Text backgroundColor="blueLighter" monospace>
       {id}
     </Text>
-  </>;
+  </>
+);
