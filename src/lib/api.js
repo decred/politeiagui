@@ -620,10 +620,8 @@ export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
 
 // CMS
-export const inviteNewUser = (csrf, email) =>
-  POST("/invite", csrf, {
-    email
-  }).then(getResponse);
+export const inviteNewUser = (csrf, payload) =>
+  POST("/invite", csrf, payload).then(getResponse);
 
 export const newInvoice = (csrf, invoice) =>
   POST("/invoices/new", csrf, invoice).then(
