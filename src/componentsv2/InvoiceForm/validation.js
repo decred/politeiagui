@@ -24,7 +24,6 @@ export const invoiceValidationSchema = ({
       .max(maxnamelength)
       .matches(...yupFieldMatcher("Name", cmsnamelocationsupportedchars)),
     location: Yup.string()
-      .required("required")
       .min(minlocationlength)
       .max(maxlocationlength)
       .matches(...yupFieldMatcher("Location", cmsnamelocationsupportedchars)),

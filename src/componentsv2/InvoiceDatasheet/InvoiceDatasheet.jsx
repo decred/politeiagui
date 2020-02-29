@@ -125,11 +125,11 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
     <div className={styles.wrapper}>
       {!readOnly && (
         <div className="justify-right margin-top-s margin-bottom-s">
-          <TableButton onClick={handleAddNewRow}>Add row</TableButton>
+          <TableButton onClick={handleAddNewRow}>Add item</TableButton>
           <TableButton
             disabled={removeRowsIsDisabled}
             onClick={handleRemoveLastRow}>
-            Remove row
+            Remove item
           </TableButton>
         </div>
       )}
