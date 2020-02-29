@@ -13,7 +13,6 @@ import {
   onReceiveSetStatusInvoice,
   onReceiveDCCs,
   onSetDCC,
-  onReceiveSupportOpposeDCC,
   onReceiveSetDCCStatus,
   onReceiveNewDccComment,
   onReceiveCensorDCCComment
@@ -190,7 +189,7 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.REQUEST_SUPPORT_OPPOSE_DCC]: () =>
         request("supportOpposeDCC", state, action),
       [act.RECEIVE_SUPPORT_OPPOSE_DCC]: () =>
-        onReceiveSupportOpposeDCC(state, action),
+        receive("supportOpposeDCC", state, action),
       [act.REQUEST_SET_DCC_STATUS]: () =>
         request("setDCCStatus", state, action),
       [act.RECEIVE_SET_DCC_STATUS]: () => onReceiveSetDCCStatus(state, action),

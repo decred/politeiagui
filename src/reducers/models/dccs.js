@@ -49,13 +49,42 @@ const onReceiveDcc = (state, receivedDcc) =>
     ...receivedDcc
   })(state);
 
+const onReceiveSupportOpposeDcc = (state, payload) => {
+  const { token, userid, username, isSupport } = payload;
+
+  const support = compose(
+    update(["byToken", token, "supportuserids"], (supportids) => [
+      ...supportids,
+      userid
+    ]),
+    update(["byToken", token, "supportusernames"], (supportusernames) => [
+      ...supportusernames,
+      username
+    ])
+  );
+
+  const oppose = compose(
+    update(["byToken", token, "againstuserids"], (againstids) => [
+      ...againstids,
+      userid
+    ]),
+    update(["byToken", token, "againstusernames"], (againstusernames) => [
+      ...againstusernames,
+      username
+    ])
+  );
+  return isSupport ? support(state) : oppose(state);
+};
+
 const dccs = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
     : (
         {
           [act.RECEIVE_DCCS]: () => onReceiveDccs(state, action.payload.dccs),
-          [act.RECEIVE_DCC]: () => onReceiveDcc(state, action.payload.dcc)
+          [act.RECEIVE_DCC]: () => onReceiveDcc(state, action.payload.dcc),
+          [act.RECEIVE_SUPPORT_OPPOSE_DCC]: () =>
+            onReceiveSupportOpposeDcc(state, action.payload)
         }[action.type] || (() => state)
       )();
 

@@ -20,9 +20,12 @@ export const DCC_DOMAINS = [
   "Documentation",
   "Community Management"
 ];
+export const DCC_DOMAIN_INVALID = 0;
 
 export const DCC_FULL_USER_CONTRACTOR_TYPES = [
   CONTRACTOR_TYPE_DIRECT,
   CONTRACTOR_TYPE_SUPERVISOR,
   CONTRACTOR_TYPE_SUBCONTRACTOR
 ];
+export const DCC_SUPPORT_ACTION = "aye";
+export const DCC_OPPOSE_ACTION = "nay";
