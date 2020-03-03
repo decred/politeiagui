@@ -8,9 +8,6 @@ const GoBackLink = () => {
   const isDarkTheme = themeName === "dark";
   const { pastLocations, history } = useRouter();
   const previousLocation = pastLocations[1];
-  const returnToPreviousLocation = useCallback(() => history.goBack(), [
-    history
-  ]);
 
   const goBackLinkFromPreviousLocation = useMemo(() => {
     if (!previousLocation) return null;
@@ -21,13 +18,13 @@ const GoBackLink = () => {
             styles.returnLink,
             isDarkTheme && styles.darkReturnLink
           )}
-          onClick={returnToPreviousLocation}
+          onClick={history.goBack()}
         >
           &#8592; Go back
         </Link>
       </div>
     );
-  }, [previousLocation, returnToPreviousLocation, isDarkTheme]);
+  }, [previousLocation, isDarkTheme]);
 
   return goBackLinkFromPreviousLocation;
 };
