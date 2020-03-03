@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo } from "react";
 import { Link, classNames, useTheme } from "pi-ui";
 import { useRouter } from "src/componentsv2/Router";
 import styles from "./GoBackLink.module.css";
