@@ -79,6 +79,7 @@ const Comments = ({
   });
 
   const [, , openLoginModal, closeLoginModal] = useLoginModal();
+  const { userid } = currentUser || {};
 
   const handleOpenLoginModal = useCallback(() => {
     openLoginModal("commentsLoginModal", {
@@ -229,7 +230,7 @@ const Comments = ({
                 <Message kind="error">
                   <P>
                     You won't be able to submit comments or proposals before paying the paywall,
-                    please visit your <Link to={`/user/${currentUser.userid}?tab=credits`}>account</Link> page to
+                    please visit your <Link to={`/user/${userid}?tab=credits`}>account</Link> page to
                     correct this problem.
                   </P>
                 </Message>
