@@ -6,16 +6,17 @@ import Dcc from "src/componentsv2/DCC";
 import DccLoader from "src/componentsv2/DCC/DCCLoader";
 import Comments from "src/containers/Comments";
 import { isDccActive } from "../helpers";
+import { GoBackLink } from "src/componentsv2/Router";
 
 const DccDetail = ({ Main, match }) => {
   const dccToken = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
-
   const { dcc, loading } = useDcc(dccToken);
 
   return (
     <>
       <Main fillScreen>
+        <GoBackLink />
         {dcc && !loading ? (
           <Dcc dcc={dcc} extended />
         ) : (

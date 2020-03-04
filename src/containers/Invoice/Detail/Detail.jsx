@@ -7,6 +7,7 @@ import InvoiceLoader from "src/componentsv2/Invoice/InvoiceLoader";
 import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import Comments from "src/containers/Comments";
 import { isUnreviewedInvoice } from "../helpers";
+import { GoBackLink } from "src/componentsv2/Router";
 
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
@@ -16,6 +17,7 @@ const InvoiceDetail = ({ Main, match }) => {
   return (
     <>
       <Main fillScreen>
+        <GoBackLink />
         <AdminInvoiceActionsProvider>
           {!!invoice && !loading ? (
             <Invoice invoice={invoice} extended approvedProposalsTokens={approvedProposalsTokens || []} />
