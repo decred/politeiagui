@@ -14,24 +14,18 @@ import {
   onFetchProposal as onFetchProposalApi,
   onSubmitComment as onSubmitCommentApi,
   onFetchInvoice as onFetchInvoiceApi,
-  onFetchDcc as onFetchDccApi,
   onFetchDccsByStatus as onFetchDccsByStatusApi,
   onSubmitDccComment as onSubmitDccCommentApi
 } from "./api";
 import {
   resetNewProposalData,
-  resetNewInvoiceData,
-  resetNewDccData
+  resetNewInvoiceData
 } from "../lib/editors_content_backup";
 import * as sel from "../selectors";
 import act from "./methods";
 import { onEditUser } from "./api";
 import { loadStateLocalStorage } from "../lib/local_storage";
 import { fromUSDUnitsToUSDCents, uniqueID } from "../helpers";
-import flow from "lodash/fp/flow";
-import flatten from "lodash/fp/flatten";
-import values from "lodash/fp/values";
-import find from "lodash/fp/find";
 
 export const onSaveNewInvoice = ({
   month,
@@ -211,37 +205,6 @@ export const onSaveDraftInvoice = ({
   return id;
 };
 
-export const onSaveDraftDCC = ({
-  type,
-  contractortype,
-  domain,
-  statement,
-  nomineeid,
-  draftId
-}) => (dispatch) => {
-  resetNewDccData();
-  const id = draftId || uniqueID("draft");
-  dispatch(
-    act.SAVE_DRAFT_DCC({
-      type,
-      contractortype,
-      domain,
-      statement,
-      nomineeid,
-      // files,
-      timestamp: Math.floor(Date.now() / 1000),
-      id
-    })
-  );
-  return id;
-};
-
-export const onLoadDraftDCCs = (email) => {
-  const stateFromLS = loadStateLocalStorage(email);
-  const drafts = sel.draftDCCs(stateFromLS) || {};
-  return act.LOAD_DRAFT_DCCS(drafts);
-};
-
 export const onLoadDraftInvoices = (email) => (dispatch, getState) => {
   const key = email || sel.currentUserEmail(getState());
   const stateFromLS = loadStateLocalStorage(key);
@@ -251,10 +214,6 @@ export const onLoadDraftInvoices = (email) => (dispatch, getState) => {
 
 export const onDeleteDraftInvoice = (draftId) => {
   return act.DELETE_DRAFT_INVOICE(draftId);
-};
-
-export const onDeleteDraftDCC = (draftId) => {
-  return act.DELETE_DRAFT_DCC(draftId);
 };
 
 export const onSaveChangeUsername = ({ password, newUsername }) => (
@@ -301,27 +260,6 @@ export const onEditUserPreferences = (preferences) => (dispatch) =>
   dispatch(onEditUser(sel.resolveEditUserValues(preferences)));
 
 export const onResetComments = () => act.RESET_COMMENTS();
-
-export const onLoadDCC = (token) => (dispatch, getState) => {
-  const fetchedDCCsByStatus = sel.dccsByStatus(getState());
-
-  if (!fetchedDCCsByStatus) {
-    dispatch(onFetchDccApi(token));
-    return;
-  }
-
-  const dcc = flow(
-    values,
-    flatten,
-    find((dcc) => dcc.censorshiprecord.token === token)
-  )(fetchedDCCsByStatus);
-
-  if (dcc) {
-    dispatch(act.SET_DCC(dcc));
-  } else {
-    dispatch(onFetchDccApi(token));
-  }
-};
 
 export const onLoadDccsByStatus = (status) => (dispatch, getState) => {
   const fetchedDCCs = sel.dccsByStatus(getState());
