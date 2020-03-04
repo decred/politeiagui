@@ -17,6 +17,7 @@ const EditProposal = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
   const { proposal, loading } = useProposal(tokenFromUrl);
   const { onEditProposal, currentUser } = useEditProposal();
+  const { userid } = currentUser || {};
   const { isPaid } = usePaywall();
   const [, identityError] = useIdentity();
 
@@ -36,7 +37,7 @@ const EditProposal = ({ match }) => {
           <Message kind="error">
             <P>
               You won't be able to submit comments or proposals before paying the paywall,
-              please visit your <Link to={`/user/${currentUser.userid}?tab=credits`}>account</Link> page to
+              please visit your <Link to={`/user/${userid}?tab=credits`}>account</Link> page to
               correct this problem.
             </P>
           </Message>
