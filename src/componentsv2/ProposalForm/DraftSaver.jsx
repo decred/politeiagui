@@ -72,7 +72,6 @@ const DraftSaver = ({ values, setValues, dirty, submitSuccess }) => {
   return (
     <Button
       type="button"
-      width={150}
       kind={saving || !canSaveDraft ? "disabled" : "secondary"}
       loading={saving}
       onClick={handleSave}>
