@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Message } from "pi-ui";
-import piLogo from "src/assets/pi-logo-light.svg";
+import { Message, useTheme, classNames } from "pi-ui";
+import logoLight from "src/assets/pi-logo-light.svg";
+import logoDark from "src/assets/pi-logo-dark.svg";
+import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import styles from "./LoaderScreen.module.css";
 
 import { Transition } from "react-transition-group";
@@ -21,6 +23,19 @@ const transitionStyles = {
 
 const LoaderScreen = ({ error }) => {
   const [mounted, setMounted] = useState(false);
+  const { themeName, setThemeName } = useTheme();
+  const logoSrc = themeName === "dark" ? logoDark : logoLight;
+  const [darkThemeOnLocalStorage] = useLocalStorage(
+    "darkTheme",
+    false
+  );
+
+  useEffect(() => {
+    if (darkThemeOnLocalStorage && themeName === "light") {
+      setThemeName("dark");
+    }
+  }, [darkThemeOnLocalStorage, setThemeName, themeName]);
+
   useEffect(() => {
     setMounted(true);
     return () => {
@@ -29,7 +44,7 @@ const LoaderScreen = ({ error }) => {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div className={classNames(styles.container, styles.dark)}>
       <Transition in={mounted} timeout={duration}>
         {state => (
           <img
@@ -38,7 +53,7 @@ const LoaderScreen = ({ error }) => {
               ...transitionStyles[state]
             }}
             alt="Politeia logo"
-            src={piLogo}
+            src={logoSrc}
           />
         )}
       </Transition>

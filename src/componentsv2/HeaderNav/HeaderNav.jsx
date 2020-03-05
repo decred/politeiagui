@@ -1,5 +1,5 @@
 import { Text, Dropdown, DropdownItem, Toggle, useTheme } from "pi-ui";
-import React, { useEffect, useCallback } from "react";
+import React, { useCallback } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
@@ -23,7 +23,7 @@ const HeaderNav = ({ history, location }) => {
   }
   const isOnUnvettedRoute = location.pathname === "/proposals/unvetted";
   const isOnSearchUsersRoute = location.pathname === "/user/search";
-  const [darkThemeOnLocalStorage, setDarkThemeOnLocalStorage] = useLocalStorage(
+  const [, setDarkThemeOnLocalStorage] = useLocalStorage(
     "darkTheme",
     false
   );
@@ -31,12 +31,6 @@ const HeaderNav = ({ history, location }) => {
   const onLogoutClick = useCallback(() => {
     onLogout(isCMS);
   }, [onLogout, isCMS]);
-
-  useEffect(() => {
-    if (darkThemeOnLocalStorage && themeName === "light") {
-      setThemeName("dark");
-    }
-  }, [darkThemeOnLocalStorage, setThemeName, themeName]);
 
   const onThemeToggleHandler = () => {
     if (themeName === "light") {
