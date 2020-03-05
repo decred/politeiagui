@@ -1,7 +1,7 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
-import { useAction, useSelector, useRedux, useStoreSubscribe } from "src/redux";
+import { useAction, useSelector, useStoreSubscribe } from "src/redux";
 import useAPIAction from "src/hooks/utils/useAPIAction";
 import useThrowError from "src/hooks/utils/useThrowError";
 import { handleSaveAppDraftInvoices } from "src/lib/local_storage";
@@ -18,23 +18,13 @@ export function useUserInvoices() {
 }
 
 export function useDraftInvoices() {
-  const mapStateToProps = useMemo(
-    () => ({
-      draftInvoices: sel.draftInvoices
-    }),
-    []
-  );
-  const mapDispatchToProps = useMemo(
-    () => ({
-      onLoadDraftInvoices: act.onLoadDraftInvoices,
-      onSaveDraftInvoice: act.onSaveDraftInvoice,
-      onDeleteDraftInvoice: act.onDeleteDraftInvoice
-    }),
-    []
-  );
-  const fromRedux = useRedux({}, mapStateToProps, mapDispatchToProps);
+  const onLoadDraftInvoices = useAction(act.onLoadDraftInvoices);
+  const onSaveDraftInvoice = useAction(act.onSaveDraftInvoice);
+  const onDeleteDraftInvoice = useAction(act.onDeleteDraftInvoice);
+
+  const draftInvoices = useSelector(sel.draftInvoices);
+
   const [unsubscribe] = useState(useStoreSubscribe(handleSaveAppDraftInvoices));
-  const { onLoadDraftInvoices, draftInvoices } = fromRedux;
 
   useEffect(() => {
     if (!draftInvoices) {
@@ -49,5 +39,10 @@ export function useDraftInvoices() {
     [unsubscribe]
   );
 
-  return fromRedux;
+  return {
+    onLoadDraftInvoices,
+    draftInvoices,
+    onSaveDraftInvoice,
+    onDeleteDraftInvoice
+  };
 }

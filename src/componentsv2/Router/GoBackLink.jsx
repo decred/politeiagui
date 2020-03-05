@@ -24,7 +24,7 @@ const GoBackLink = () => {
         </Link>
       </div>
     );
-  }, [previousLocation, isDarkTheme]);
+  }, [previousLocation, isDarkTheme, history]);
 
   return goBackLinkFromPreviousLocation;
 };

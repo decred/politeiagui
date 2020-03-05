@@ -8,7 +8,8 @@ const StaticContentProvider = ({ children }) => {
   const [contents, setContents] = useState({});
 
   const getContent = useCallback(
-    async contentName => {
+    async (contentName) => {
+      if (!contentName) return "";
       if (contents[contentName]) {
         return contents[contentName];
       }

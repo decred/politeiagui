@@ -48,10 +48,6 @@ const HeaderNav = ({ history }) => {
     history.push(`/user/${userid}`);
   }, [history, userid]);
 
-  const goToDccs = useCallback(() => {
-    history.push("/dccs/");
-  }, [history]);
-
   const onLogoutClick = useCallback(() => {
     onLogout(isCMS);
   }, [onLogout, isCMS]);
@@ -90,7 +86,6 @@ const HeaderNav = ({ history }) => {
         closeOnItemClick={false}
         title={username}>
         {menuItems}
-        <DropdownItem onClick={goToDccs}>DCCs</DropdownItem>
         <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
         <DropdownItem>
           <div className={styles.themeToggleWrapper}>

@@ -1,14 +1,9 @@
 import * as act from "src/actions";
-import { useRedux } from "src/redux";
+import { useAction } from "src/redux";
+import { useLoaderContext } from "src/containers/Loader";
 
-const mapStateToProps = {};
-
-const mapDispatchToProps = {
-  onSubmitProposal: act.onSaveNewProposal
-};
-
-export function useNewProposal(ownProps) {
-  const fromRedux = useRedux(ownProps, mapStateToProps, mapDispatchToProps);
-
-  return fromRedux;
+export function useNewProposal() {
+  const onSubmitProposal = useAction(act.onSaveNewProposal);
+  const { currentUser } = useLoaderContext();
+  return { onSubmitProposal, currentUser };
 }

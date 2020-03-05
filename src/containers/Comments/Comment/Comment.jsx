@@ -35,6 +35,8 @@ const Comment = ({
   numOfNewHiddenReplies,
   highlightAsNew,
   censorable,
+  isFlatMode,
+  seeInContextLink,
   ...props
 }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
@@ -47,6 +49,9 @@ const Comment = ({
 
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
+  const showNewReplies =
+    numOfNewHiddenReplies > 0 && !showReplies && !isFlatMode;
+  const isThread = numOfReplies > 0 && !isFlatMode;
 
   return (
     <div
@@ -55,8 +60,7 @@ const Comment = ({
         highlightAsNew && styles.highlightAsNew,
         className
       )}
-      {...props}
-    >
+      {...props}>
       <div className={classNames("justify-space-between", styles.info)}>
         <Join>
           <Link
@@ -64,8 +68,7 @@ const Comment = ({
               styles.commentAuthor,
               highlightAuthor && styles.recordAuthor
             )}
-            to={`/user/${authorID}`}
-          >
+            to={`/user/${authorID}`}>
             {author}
           </Link>
           <DateTooltip timestamp={createdAt} placement="bottom">
@@ -77,6 +80,7 @@ const Comment = ({
           </DateTooltip>
           {highlightAsNew && !extraSmall && <Text color="gray">new</Text>}
           {!extraSmall && censorButton}
+          {!extraSmall && seeInContextLink}
         </Join>
         {!disableLikes && !censored && (
           <div className={styles.likesWrapper}>
@@ -92,8 +96,12 @@ const Comment = ({
         )}
       </div>
       {extraSmall && censorButton}
+      {extraSmall && seeInContextLink}
       {!censored ? (
-        <Markdown className={classNames(isDarkTheme && "dark", "margin-top-s")} body={commentBody} />
+        <Markdown
+          className={classNames(isDarkTheme && "dark", "margin-top-s")}
+          body={commentBody}
+        />
       ) : (
         <Markdown className={styles.censored} body="Censored by moderators " />
       )}
@@ -104,18 +112,17 @@ const Comment = ({
               <Text
                 weight="semibold"
                 className={styles.reply}
-                onClick={onClickReply}
-              >
+                onClick={onClickReply}>
                 Reply
               </Text>
             </LoggedInContent>
           )}
-          {numOfReplies > 0 && (
+          {isThread && (
             <span className={styles.showReplies} onClick={onClickShowReplies}>
               {showReplies ? "-" : `+${numOfReplies}`}
             </span>
           )}
-          {numOfNewHiddenReplies > 0 && !showReplies && (
+          {showNewReplies && (
             <Text color="green">{`${numOfNewHiddenReplies} new`}</Text>
           )}
         </div>

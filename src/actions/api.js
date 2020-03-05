@@ -960,11 +960,18 @@ export const onPasswordResetRequest = ({
       });
   });
 
-export const onStartVote = (loggedInAsEmail, token, duration, quorum, pass) =>
+export const onStartVote = (
+  loggedInAsEmail,
+  token,
+  duration,
+  quorum,
+  pass,
+  version
+) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_START_VOTE({ token }));
     return api
-      .startVote(loggedInAsEmail, csrf, token, duration, quorum, pass)
+      .startVote(loggedInAsEmail, csrf, token, duration, quorum, pass, version)
       .then((response) => {
         dispatch(onFetchProposalsBatchVoteSummary([token]));
         dispatch(act.RECEIVE_START_VOTE({ ...response, token, success: true }));
@@ -1337,22 +1344,6 @@ export const onSupportOpposeDcc = (token, vote) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_SUPPORT_OPPOSE_DCC(null, error));
-      });
-  });
-
-export const onSetDCCStatus = (loggedInAsEmail, token, status, reason) =>
-  withCsrf((dispatch, _, csrf) => {
-    if (!loggedInAsEmail) {
-      return;
-    }
-    dispatch(act.REQUEST_SET_DCC_STATUS({}));
-    return api
-      .setDCCStatus(csrf, loggedInAsEmail, token, status, reason)
-      .then((response) => {
-        dispatch(act.RECEIVE_SET_DCC_STATUS({ ...response, status, reason }));
-      })
-      .catch((error) => {
-        dispatch(act.RECEIVE_SET_DCC_STATUS(null, error));
       });
   });
 

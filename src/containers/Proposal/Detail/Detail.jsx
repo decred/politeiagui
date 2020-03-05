@@ -17,13 +17,16 @@ import {
   UnvettedActionsProvider,
   PublicActionsProvider
 } from "src/containers/Proposal/Actions";
-import { useProposalVote } from "../hooks";
+import useProposalVote from "../hooks/useProposalVote";
 import { GoBackLink } from "src/componentsv2/Router";
 
 const ProposalDetail = ({ Main, match }) => {
   const tokenFromUrl = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
-  const { proposal, loading, threadParentID } = useProposal(tokenFromUrl, threadParentCommentID);
+  const { proposal, loading, threadParentID } = useProposal(
+    tokenFromUrl,
+    threadParentCommentID
+  );
   const proposalToken = getProposalToken(proposal);
   const { voteSummary } = useProposalVote(proposalToken);
   const showCommentArea =

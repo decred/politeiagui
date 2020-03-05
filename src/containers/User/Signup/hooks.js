@@ -2,27 +2,18 @@ import { useEffect, useState } from "react";
 import * as act from "src/actions";
 import { useConfig } from "src/containers/Config";
 import { getQueryStringValues } from "src/lib/queryString";
-import { useRedux } from "src/redux";
+import { useSelector, useAction } from "src/redux";
 import usePolicy from "src/hooks/api/usePolicy";
 import * as sel from "src/selectors";
 import { signupValidationSchema } from "./validation";
 
-const mapStateToProps = {
-  signupResponse: sel.apiNewUserResponse
-};
+export function useSignup() {
+  const signupResponse = useSelector(sel.apiNewUserResponse);
 
-const mapDispatchToProps = {
-  onCreateNewUser: act.onCreateNewUser,
-  onCreateNewUseFromAdminInvitation: act.onCreateNewUserCMS,
-  onResetSignup: act.onResetNewUser
-};
+  const onCreateNewUser = useAction(act.onCreateNewUser);
+  const onCreateNewUseFromAdminInvitation = useAction(act.onCreateNewUser);
+  const onResetSignup = useAction(act.onResetNewUser);
 
-export function useSignup(ownProps) {
-  const { onResetSignup, ...fromRedux } = useRedux(
-    ownProps,
-    mapStateToProps,
-    mapDispatchToProps
-  );
   const { enableAdminInvite } = useConfig();
   const { policy } = usePolicy();
   const [validationSchema, setValidationSchema] = useState(
@@ -40,8 +31,8 @@ export function useSignup(ownProps) {
 
   // Switch between signup methods accordingly to the config 'enableAdminInvite'
   const onSignup = enableAdminInvite
-    ? fromRedux.onCreateNewUseFromAdminInvitation
-    : fromRedux.onCreateNewUser;
+    ? onCreateNewUseFromAdminInvitation
+    : onCreateNewUser;
 
   useEffect(() => {
     return function resetSignup() {
@@ -60,7 +51,7 @@ export function useSignup(ownProps) {
   };
 
   return {
-    ...fromRedux,
+    signupResponse,
     validationSchema,
     onSignup,
     enableAdminInvite,

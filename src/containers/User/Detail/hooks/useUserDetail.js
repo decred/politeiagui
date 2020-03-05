@@ -13,7 +13,7 @@ export default function useUserDetail(userID) {
   const onFetchUser = useAction(act.onFetchUser);
   const userMissingData = !user || (user && !user.identities);
   const needsFetch = !!userID && userMissingData;
-  const args = useMemo(() => [userID], [userID]);
+  const args = [userID];
   const [loading, error] = useAPIAction(onFetchUser, args, needsFetch);
 
   useThrowError(error);

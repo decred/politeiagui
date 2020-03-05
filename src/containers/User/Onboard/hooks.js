@@ -1,12 +1,8 @@
-import { useRedux } from "src/redux";
+import { useSelector } from "src/redux";
 import * as sel from "src/selectors";
 
-const mapStateToProps = {
-  loginResponse: sel.apiLoginResponse
-};
-
 export const useUserOnboard = () => {
-  const { loginResponse } = useRedux({}, mapStateToProps, {});
+  const loginResponse = useSelector(sel.apiLoginResponse);
   return {
     firstUserAccess: !!loginResponse && !loginResponse.lastlogintime
   };

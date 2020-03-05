@@ -2,22 +2,13 @@ import { useEffect, useState } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import usePolicy from "src/hooks/api/usePolicy";
-import { useRedux } from "src/redux";
+import { useSelector, useAction } from "src/redux";
 import {
   resetValidationSchema,
   requestResetValidationSchema,
   urlParamsValidationSchema
 } from "./validation";
 import { getQueryStringValues } from "src/lib/queryString";
-
-const mapStateToProps = {
-  requestResetResponse: sel.resetPasswordResponse
-};
-
-const mapDispatchToProps = {
-  onVerifyResetPassword: act.onVerifyResetPassword,
-  onResetPassword: act.onResetPassword
-};
 
 function useValidationSchemaFromPolicy(schemaFn) {
   const [validationSchema, setValidationSchema] = useState(null);
@@ -34,26 +25,21 @@ function useValidationSchemaFromPolicy(schemaFn) {
   return validationSchema;
 }
 
-export function useResetPassword(ownProps) {
-  const { onResetPassword, requestResetResponse } = useRedux(
-    ownProps,
-    mapStateToProps,
-    mapDispatchToProps
-  );
+export function useResetPassword() {
+  const requestResetResponse = useSelector(sel.resetPasswordResponse);
+  const onResetPassword = useAction(act.onResetPassword);
   const validationSchema = useValidationSchemaFromPolicy(
     requestResetValidationSchema
   );
+
   return { onResetPassword, validationSchema, requestResetResponse };
 }
 
-export function useVerifyResetPassword(ownProps) {
+export function useVerifyResetPassword() {
   const [initialValues, setInitialValues] = useState({});
   const [invalidParamsError, setInvalidParamsError] = useState(false);
-  const { onVerifyResetPassword } = useRedux(
-    ownProps,
-    mapStateToProps,
-    mapDispatchToProps
-  );
+
+  const onVerifyResetPassword = useAction(act.onVerifyResetPassword);
 
   const resetPasswordValidationSchema = useValidationSchemaFromPolicy(
     resetValidationSchema

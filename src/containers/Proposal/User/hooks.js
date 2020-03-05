@@ -2,30 +2,20 @@ import { useEffect, useState, useMemo } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { or } from "src/lib/fp";
-import { useRedux, useStoreSubscribe } from "src/redux";
+import { useStoreSubscribe, useSelector, useAction } from "src/redux";
 import { handleSaveAppDraftProposals } from "src/lib/local_storage";
 import useThrowError from "src/hooks/utils/useThrowError";
 
 export function useDraftProposals() {
-  const mapStateToProps = useMemo(
-    () => ({
-      draftProposals: sel.draftProposals
-    }),
-    []
-  );
-  const mapDispatchToProps = useMemo(
-    () => ({
-      onLoadDraftProposals: act.onLoadDraftProposals,
-      onSaveDraftProposal: act.onSaveDraftProposal,
-      onDeleteDraftProposal: act.onDeleteDraftProposal
-    }),
-    []
-  );
-  const fromRedux = useRedux({}, mapStateToProps, mapDispatchToProps);
+  const draftProposals = useSelector(sel.draftProposals);
+
+  const onLoadDraftProposals = useAction(act.onLoadDraftProposals);
+  const onSaveDraftProposal = useAction(act.onSaveDraftProposal);
+  const onDeleteDraftProposal = useAction(act.onDeleteDraftProposal);
+
   const [unsubscribe] = useState(
     useStoreSubscribe(handleSaveAppDraftProposals)
   );
-  const { onLoadDraftProposals, draftProposals } = fromRedux;
 
   useEffect(() => {
     // load draft proposals from localStorage
@@ -41,37 +31,51 @@ export function useDraftProposals() {
     [unsubscribe]
   );
 
-  return fromRedux;
+  return {
+    draftProposals,
+    onLoadDraftProposals,
+    onSaveDraftProposal,
+    onDeleteDraftProposal
+  };
 }
 
 export function useUserProposals(ownProps) {
   const { userID } = ownProps;
 
-  const mapDisptachToProps = useMemo(
-    () => ({
-      onFetchUserProposals: act.onFetchUserProposalsWithVoteSummary
-    }),
-    []
-  );
+  const proposalsSelector = useMemo(() => sel.makeGetUserProposals(userID), [
+    userID
+  ]);
 
-  const mapStateToProps = useMemo(() => {
-    const proposalsSelector = sel.makeGetUserProposals(userID);
-    return {
-      proposals: proposalsSelector,
-      numOfUserProposals: sel.numOfUserProposals,
-      loading: or(
+  const loadingSelector = useMemo(
+    () =>
+      or(
         sel.userProposalsIsRequesting,
         sel.isApiRequestingProposalsVoteSummary
       ),
-      error: or(sel.userProposalsError, sel.apiPropsVoteSummaryError)
-    };
-  }, [userID]);
+    []
+  );
 
-  const fromRedux = useRedux(ownProps, mapStateToProps, mapDisptachToProps);
+  const errorSelector = useMemo(
+    () => or(sel.userProposalsError, sel.apiPropsVoteSummaryError),
+    []
+  );
 
-  const { error } = fromRedux;
+  const proposals = useSelector(proposalsSelector);
+  const numOfUserProposals = useSelector(sel.numOfUserProposals);
+  const loading = useSelector(loadingSelector);
+  const error = useSelector(errorSelector);
+
+  const onFetchUserProposals = useAction(
+    act.onFetchUserProposalsWithVoteSummary
+  );
 
   useThrowError(error);
 
-  return { ...fromRedux };
+  return {
+    proposals,
+    numOfUserProposals,
+    loading,
+    error,
+    onFetchUserProposals
+  };
 }

@@ -1,4 +1,4 @@
-  import { Link, useMediaQuery } from "pi-ui";
+import { Link, useMediaQuery } from "pi-ui";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
@@ -34,11 +34,7 @@ const getTabComponents = ({ user, ...rest }) => {
         withDrafts={rest.isUserPageOwner}
       />
     ),
-    [tabValues.DRAFT_INVOICES]: (
-      <UserDraftInvoices
-        key="tab-invoices"
-      />
-    ),
+    [tabValues.DRAFT_INVOICES]: <UserDraftInvoices key="tab-invoices" />,
     [tabValues.MANAGE_DCC]: <ManageContractor user={user} {...rest} />
   };
   return mapTabValueToComponent;
@@ -124,18 +120,24 @@ const UserDetail = ({
   const [loadingKey, setKeyAsLoaded] = useState(PUB_KEY_STATUS_LOADING);
 
   const [pubkey, setPubkey] = useState("");
-  const refreshPubKey = useCallback(() => {
-    existing(currentUserEmail).then(() => {
-      myPubKeyHex(currentUserEmail)
-        .then((pubkey) => {
-          setPubkey(pubkey);
-          setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
-        })
-        .catch(() => {
-          setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
-        });
-    });
-  }, [currentUserEmail, setPubkey]);
+  const refreshPubKey = useCallback(
+    (isSubscribed) =>
+      existing(currentUserEmail).then(() => {
+        myPubKeyHex(currentUserEmail)
+          .then((pubkey) => {
+            if (isSubscribed) {
+              setPubkey(pubkey);
+              setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
+            }
+          })
+          .catch(() => {
+            if (isSubscribed) {
+              setKeyAsLoaded(PUB_KEY_STATUS_LOADED);
+            }
+          });
+      }),
+    [currentUserEmail, setPubkey]
+  );
   useEffect(() => {
     let isSubscribed = true;
     if (userPubkey !== pubkey || identityImportSuccess)
