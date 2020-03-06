@@ -174,7 +174,7 @@ export const getVoteBlocksLeft = (voteSummary, chainHeight) => {
  * @param {Object} voteSummary
  * @param {Number} chainHeight
  * @param {Boolean} isTestnet
- * @returns {Number} { inWords: string, timestamp: ms timestamp }
+ * @returns {Number}
  */
 export const getVoteEndTimestamp = (voteSummary, chainHeight, isTestnet) => {
   if (!voteSummary) {

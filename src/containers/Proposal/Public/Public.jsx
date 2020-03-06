@@ -9,7 +9,6 @@ import { PublicActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/componentsv2/RecordsView";
 
 const renderProposal = (record) => {
-  console.log(record);
   return <Proposal key={record.censorshiprecord.token} proposal={record} />;
 };
 
