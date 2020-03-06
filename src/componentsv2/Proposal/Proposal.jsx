@@ -46,7 +46,7 @@ const Proposal = React.memo(function Proposal({
   collapseBodyContent,
   voteSummary,
   voteActive: isVoteActive,
-  voteTimeInWords: voteTime,
+  voteEndTimestamp,
   voteBlocksLeft,
   currentUser,
   history
@@ -166,9 +166,7 @@ const Proposal = React.memo(function Proposal({
                       {...getProposalStatusTagProps(proposal, voteSummary)}
                     />
                     {(isVoteActive || isVotingFinished) && (
-                      <Text className={styles.timeLeft} size="small">
-                        {`vote end${isVoteActive ? "s" : "ed"} ${voteTime}`}
-                      </Text>
+                      <Event event={`vote end${isVoteActive ? "s" : "ed"}`} timestamp={voteEndTimestamp} className={styles.timeLeft} size="small" />
                     )}
                     {isVoteActive && (
                       <>

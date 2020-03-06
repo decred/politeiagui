@@ -4,7 +4,7 @@ import { useSelector } from "src/redux";
 import {
   getVoteBlocksLeft,
   isVoteActiveProposal,
-  getVoteTimeInWords
+  getVoteEndTimestamp
 } from "../helpers";
 
 export default function useProposalVote(token) {
@@ -15,7 +15,7 @@ export default function useProposalVote(token) {
   const voteSummary = useSelector(voteSummarySelector);
   const bestBlock = useSelector(sel.bestBlock);
   const apiInfo = useSelector(sel.apiInitResponse);
-  const voteTimeInWords = getVoteTimeInWords(
+  const voteEndTimestamp = getVoteEndTimestamp(
     voteSummary,
     bestBlock,
     apiInfo.testnet
@@ -23,5 +23,5 @@ export default function useProposalVote(token) {
   const voteBlocksLeft = getVoteBlocksLeft(voteSummary, bestBlock);
   const voteActive = isVoteActiveProposal(voteSummary);
 
-  return { voteSummary, voteTimeInWords, voteBlocksLeft, voteActive };
+  return { voteSummary, voteBlocksLeft, voteActive, voteEndTimestamp };
 }

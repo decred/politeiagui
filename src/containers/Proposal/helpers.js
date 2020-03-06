@@ -1,4 +1,3 @@
-import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 import {
   BLOCK_DURATION_MAINNET,
   BLOCK_DURATION_TESTNET,
@@ -171,13 +170,13 @@ export const getVoteBlocksLeft = (voteSummary, chainHeight) => {
 };
 
 /**
- * Return a "human readable" message of how long will take until the voting ends
+ * Returns a timestamp of vote end date
  * @param {Object} voteSummary
  * @param {Number} chainHeight
  * @param {Boolean} isTestnet
- * @returns {String} message
+ * @returns {Number} { inWords: string, timestamp: ms timestamp }
  */
-export const getVoteTimeInWords = (voteSummary, chainHeight, isTestnet) => {
+export const getVoteEndTimestamp = (voteSummary, chainHeight, isTestnet) => {
   if (!voteSummary) {
     return "";
   }
@@ -186,9 +185,8 @@ export const getVoteTimeInWords = (voteSummary, chainHeight, isTestnet) => {
     ? blocks * BLOCK_DURATION_TESTNET
     : blocks * BLOCK_DURATION_MAINNET;
   const mili = blockTimeMinutes * 60000;
-  const dateMs = new Date(mili + Date.now()); // gets time in ms
-
-  return distanceInWordsToNow(dateMs, { addSuffix: true });
+  const dateMs = new Date(mili + Date.now());
+  return Math.round(dateMs / 1000); // returns unix timestamp
 };
 
 /**
