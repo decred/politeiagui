@@ -273,7 +273,6 @@ const Comments = ({
                     </div>
                   </div>}
                   <Select
-                    isSearchable={false}
                     value={selectValue}
                     onChange={handleSetSortOption}
                     options={selectOptions}
