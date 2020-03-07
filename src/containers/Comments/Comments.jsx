@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { Card, H2, Text, Message, classNames, Toggle, P } from "pi-ui";
+import { Card, H2, Text, Message, classNames, Toggle, P, Select } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import styles from "./Comments.module.css";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
@@ -15,7 +15,6 @@ import { useComments, CommentContext } from "./hooks";
 import CommentsListWrapper from "./CommentsList/CommentsListWrapper";
 import CommentLoader from "./Comment/CommentLoader";
 import Link from "src/componentsv2/Link";
-import Select from "src/componentsv2/Select";
 import Or from "src/componentsv2/Or";
 import useQueryString from "src/hooks/utils/useQueryString";
 import {
