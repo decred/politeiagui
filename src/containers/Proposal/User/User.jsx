@@ -45,7 +45,6 @@ const ProposalsUser = ({ userID, withDrafts = false }) => {
       {withDrafts && (
         <div className={styles.selectContainer}>
           <Select
-            isSearchable={false}
             className={styles.select}
             value={proposalsFilter}
             onChange={onSetFilterOption}
