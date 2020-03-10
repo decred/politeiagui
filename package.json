@@ -11,7 +11,7 @@
     "dompurify": "^2.0.7",
     "dotenv-parse-variables": "^0.2.3",
     "font-awesome": "^4.7.0",
-    "formik": "^1.5.8",
+    "formik": "^2.1.4",
     "js-file-download": "^0.4.9",
     "js-sha3": "^0.8.0",
     "localforage": "^1.7.3",

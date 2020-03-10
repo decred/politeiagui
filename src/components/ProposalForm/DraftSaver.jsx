@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "pi-ui";
-import { FormikConsumer } from "formik";
+import { useFormikContext } from "formik";
 import { useDraftProposals } from "src/containers/Proposal/User/hooks";
 import { getQueryStringValue, setQueryStringValue } from "src/lib/queryString";
 
-const DraftSaver = ({ values, setValues, dirty, submitSuccess }) => {
+const DraftSaver = ({ submitSuccess }) => {
+  const { values, setValues, dirty } = useFormikContext();
   const [draftId, setDraftId] = useState(getQueryStringValue("draft"));
   const {
     draftProposals,
@@ -87,14 +88,4 @@ const DraftSaver = ({ values, setValues, dirty, submitSuccess }) => {
   );
 };
 
-const Wrapper = (props) => {
-  return (
-    <FormikConsumer>
-      {(formikProps) => {
-        return <DraftSaver {...{ ...props, ...formikProps }} />;
-      }}
-    </FormikConsumer>
-  );
-};
-
-export default Wrapper;
+export default DraftSaver;

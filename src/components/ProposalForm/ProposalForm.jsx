@@ -278,30 +278,29 @@ const ProposalFormWrapper = ({
     },
     [history, onSubmit, onFetchProposalsBatch]
   );
+  const formikProps = {
+    initialValues: initialValues || {
+      type: PROPOSAL_TYPE_REGULAR,
+      rfpDeadline: null,
+      rfpLink: "",
+      name: "",
+      description: "",
+      files: []
+    },
+    onSubmit: handleSubmit,
+    validate: proposalFormValidation,
+    loading: !proposalFormValidation
+  };
   return (
     <>
-      <Formik
-        initialValues={
-          initialValues || {
-            type: PROPOSAL_TYPE_REGULAR,
-            rfpDeadline: null,
-            rfpLink: "",
-            name: "",
-            description: "",
-            files: []
-          }
-        }
-        loading={!proposalFormValidation}
-        validate={proposalFormValidation}
-        onSubmit={handleSubmit}>
+      <Formik {...{ ...formikProps }}>
         {(props) => (
           <ProposalForm
             {...{
               ...props,
-              submitSuccess,
               disableSubmit,
               openMDGuideModal: openMdModal,
-              initialValues
+              submitSuccess
             }}
           />
         )}
