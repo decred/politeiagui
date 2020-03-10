@@ -12,7 +12,8 @@ const AdminActionsProvider = ({ children }) => {
     onRejectInvoice,
     onApproveInvoice,
     onDisputeInvoice,
-    onPayApprovedInvoices
+    onPayApprovedInvoices,
+    nextInvoice
   } = useAdminActions();
   const [
     showRejectModal,
@@ -47,7 +48,8 @@ const AdminActionsProvider = ({ children }) => {
         onReject: withInvoiceTarget(openRejectModal),
         onApprove: withInvoiceTarget(openApproveModal),
         onDispute: withInvoiceTarget(openDisputeModal),
-        onPay: openPayModal
+        onPay: openPayModal,
+        nextInvoice
       }}>
       <>
         {children}
