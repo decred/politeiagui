@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useCallback } from "react";
-import Select from "src/componentsv2/Select";
+import { Select } from "pi-ui";
 import Drafts from "./Drafts";
 import Submitted from "./Submitted";
 import styles from "./User.module.css";
@@ -45,7 +45,6 @@ const ProposalsUser = ({ userID, withDrafts = false }) => {
       {withDrafts && (
         <div className={styles.selectContainer}>
           <Select
-            isSearchable={false}
             className={styles.select}
             value={proposalsFilter}
             onChange={onSetFilterOption}
