@@ -10,7 +10,8 @@ import {
   useMediaQuery,
   useTheme,
   Link,
-  classNames
+  classNames,
+  Select
 } from "pi-ui";
 import { Row } from "src/componentsv2/layout";
 import styles from "./ProposalForm.module.css";
@@ -21,6 +22,10 @@ import ModalMDGuide from "src/componentsv2/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import useBooleanState from "src/hooks/utils/useBooleanState";
+import {
+  getProposalTypeOptionsForSelect,
+  newProposalType
+} from "./helpers.js";
 
 const ProposalForm = React.memo(function ProposalForm({
   values,
@@ -35,13 +40,21 @@ const ProposalForm = React.memo(function ProposalForm({
   openMDGuideModal
 }) {
   const smallTablet = useMediaQuery("(max-width: 685px)");
-
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
 
   const handleDescriptionChange = useCallback(
     (v) => {
       setFieldValue("description", v);
+    },
+    [setFieldValue]
+  );
+
+  const selectOptions = useMemo(() => getProposalTypeOptionsForSelect(), []);
+
+  const handleProposalTypeChange = useCallback(
+    (option) => {
+      setFieldValue("type", option);
     },
     [setFieldValue]
   );
@@ -109,6 +122,12 @@ const ProposalForm = React.memo(function ProposalForm({
       {errors && errors.global && (
         <Message kind="error">{errors.global.toString()}</Message>
       )}
+      <Select
+        value={values.type}
+        onChange={handleProposalTypeChange}
+        options={selectOptions}
+        className={styles.selectWrapper}
+      />
       <BoxTextInput
         placeholder="Proposal name"
         name="name"
@@ -188,6 +207,7 @@ const ProposalFormWrapper = ({
       <Formik
         initialValues={
           initialValues || {
+            type: newProposalType.REGULAR_PROPOSAL,
             name: "",
             description: "",
             files: []

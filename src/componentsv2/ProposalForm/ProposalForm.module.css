@@ -8,6 +8,15 @@
   color: var(--tab-text-color) !important;
 }
 
+.selectWrapper {
+  width: 20rem;
+  height: 4.4rem;
+}
+
+.selectWrapper > div {
+  height: 100%;
+}
+
 .formatHelpButton {
   border: 0;
   color: var(--color-gray);
