@@ -49,7 +49,7 @@
     "tweetnacl-util": "^0.15.0",
     "typescript": "^3.7.5",
     "xss-filters": "^1.2.7",
-    "yup": "^0.28.0"
+    "yup": "0.28.3"
   },
   "scripts": {
     "mockapi": "node mockapi.js",
