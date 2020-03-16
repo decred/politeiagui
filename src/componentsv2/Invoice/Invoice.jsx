@@ -172,7 +172,7 @@ const Invoice = ({ invoice, extended, approvedProposalsTokens }) => {
                 />
               </>
             )}
-            <InvoiceActions invoice={invoice} />
+            <InvoiceActions invoice={invoice} extended={extended} />
           </>
         );
       }}

@@ -6,25 +6,26 @@ import {
   Dropdown,
   DropdownItem
 } from "pi-ui";
+import Link from "src/componentsv2/Link";
 import { useAdminInvoiceActions } from "./hooks";
 import AdminContent from "src/componentsv2/AdminContent";
-import { isUnreviewedInvoice } from "../helpers";
+import { isUnreviewedInvoice, presentationalInvoiceName } from "../helpers";
 
-const InvoiceActions = ({ invoice }) => {
+const InvoiceActions = ({ invoice, extended }) => {
   if (!useAdminInvoiceActions()) {
     throw Error(
       "Admin invoices actions requires an 'AdminActionsProvider' on a higher level of the component tree. "
     );
   }
   const mobile = useMediaQuery("(max-width: 560px)");
-  const { onApprove, onReject, onDispute } = useAdminInvoiceActions();
-
+  const { onApprove, onReject, onDispute, nextInvoice } = useAdminInvoiceActions();
   const withInvoice = useCallback(
     fn => () => {
       fn(invoice);
     },
     [invoice]
   );
+
 
   const approveButton = (
     <Button onClick={withInvoice(onApprove)}>Approve</Button>
@@ -49,9 +50,8 @@ const InvoiceActions = ({ invoice }) => {
       Dispute
     </Button>
   );
-
   return (
-    isUnreviewedInvoice(invoice) && (
+    isUnreviewedInvoice(invoice) ? (
       <AdminContent>
         <div className="justify-right margin-top-m">
           {!mobile ? (
@@ -69,7 +69,11 @@ const InvoiceActions = ({ invoice }) => {
           )}
         </div>
       </AdminContent>
-    )
+    ) : extended && nextInvoice ? (
+      <AdminContent>
+        <Link to={nextInvoice.censorshiprecord.token}>Go to next invoice: {presentationalInvoiceName(nextInvoice)}</Link>
+      </AdminContent>
+    ) : null
   );
 };
 
