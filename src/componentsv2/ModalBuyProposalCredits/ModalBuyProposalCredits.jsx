@@ -33,8 +33,6 @@ const ModalBuyProposalCredits = ({
   const [modalType, setModalType] = useState(initialStep);
   function handleGoToPaymentDetails(values) {
     setModalType(1);
-    console.log(values);
-    console.log(values.number);
     setNumber(+values.number);
   }
   useEffect(() => {
@@ -72,7 +70,6 @@ const ModalBuyProposalCredits = ({
           handleSubmit,
           errors
         }) => {
-          console.log(errors);
           const disableNext = (errors && errors.number) || !+values.number;
           return (
             <Form onSubmit={handleSubmit}>
