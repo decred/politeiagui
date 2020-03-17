@@ -14,6 +14,10 @@
   padding-left: 1rem;
 }
 
+.likeBoxSpinner {
+  padding-right: 2.5rem;
+}
+
 .likeBtn {
   cursor: pointer;
   border: none;

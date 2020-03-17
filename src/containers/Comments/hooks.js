@@ -30,6 +30,7 @@ export function useComments(ownProps) {
   const lastVisitTimestamp = useSelector(sel.visitedProposal);
   const loading = useSelector(sel.isApiRequestingComments);
   const loadingLikes = useSelector(sel.isApiRequestingCommentsLikes);
+  const loadingLikeAction = useSelector(sel.isApiRequestingLikeComment);
   const onSubmitComment = useAction(act.onSaveNewCommentV2);
   const onFetchComments = useAction(act.onFetchProposalComments);
   const onFetchLikes = useAction(act.onFetchLikedComments);
@@ -103,6 +104,7 @@ export function useComments(ownProps) {
     lastVisitTimestamp,
     loading,
     loadingLikes,
+    loadingLikeAction,
     onSubmitComment,
     onResetComments
   };
