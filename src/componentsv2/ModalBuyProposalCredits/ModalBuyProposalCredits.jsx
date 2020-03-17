@@ -24,7 +24,7 @@ const ModalBuyProposalCredits = ({
   isPollingCreditsPayment,
   startPollingPayment
 }) => {
-  const [number, setNumber] = useState(1);
+  const [creditsNumber, setNumber] = useState(1);
   const customOnClose = () => {
     onClose();
     // Wait the transition finish to change the modal type
@@ -33,7 +33,7 @@ const ModalBuyProposalCredits = ({
   const [modalType, setModalType] = useState(initialStep);
   function handleGoToPaymentDetails(values) {
     setModalType(1);
-    setNumber(+values.number);
+    setNumber(+values.creditsNumber);
   }
   useEffect(() => {
     if (!isPollingCreditsPayment && modalType === 1) startPollingPayment();
@@ -45,7 +45,7 @@ const ModalBuyProposalCredits = ({
       {extraSmall && <PaymentStatusTag status={status} />}
       <PaymentComponent
         address={address}
-        amount={+(number * price).toFixed(1)}
+        amount={+(creditsNumber * price).toFixed(1)}
         extraSmall={extraSmall}
         status={status}
       />
@@ -58,7 +58,7 @@ const ModalBuyProposalCredits = ({
       contentStyle={{ width: "100%" }}>
       <FormWrapper
         initialValues={{
-          number: "1"
+          creditsNumber: "1"
         }}
         validationSchema={validationSchema}
         onSubmit={handleGoToPaymentDetails}>
@@ -70,19 +70,20 @@ const ModalBuyProposalCredits = ({
           handleSubmit,
           errors
         }) => {
-          const disableNext = (errors && errors.number) || !+values.number;
+          const disableNext =
+            (errors && errors.creditsNumber) || !+values.creditsNumber;
           return (
             <Form onSubmit={handleSubmit}>
               <div>
                 <Text>How many credits do you want to buy? </Text>
                 <NumberInput
-                  id="number"
-                  name="number"
-                  value={values.number}
+                  id="creditsNumber"
+                  name="creditsNumber"
+                  value={values.creditsNumber}
                   onChange={handleChange}
                 />
-                {errors && errors.number && (
-                  <ErrorMessage>{errors.number}</ErrorMessage>
+                {errors && errors.creditsNumber && (
+                  <ErrorMessage>{errors.creditsNumber}</ErrorMessage>
                 )}
               </div>
               <div className="margin-top-s">
