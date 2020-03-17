@@ -5,6 +5,7 @@ import compose from "lodash/fp/compose";
 import get from "lodash/fp/get";
 import union from "lodash/fp/union";
 import concat from "lodash/fp/concat";
+import isEmpty from "lodash/isEmpty";
 
 const DEFAULT_STATE = {
   byToken: {},
@@ -34,19 +35,28 @@ const dccArrayToByStatusObject = (dccs) =>
   );
 
 const dccByStatusRemoveByToken = (dccs, token) =>
-  dccs.reduce(
-    (dccsByStatus, dcc) =>
-      dcc.censorshiprecord.token === token
-        ? dccsByStatus
-        : [...dccsByStatus, dcc],
-    []
-  );
+  !isEmpty(dccs)
+    ? dccs.reduce(
+        (dccsByStatus, dcc) =>
+          dcc.censorshiprecord.token === token
+            ? dccsByStatus
+            : [...dccsByStatus, dcc],
+        []
+      )
+    : dccs;
 
-const dccByStatusAddDcc = (dccs = [], newDcc, status, statuschangereason) =>
+const dccByStatusAddDcc = (
+  dccs = [],
+  newDcc,
+  status,
+  statuschangereason,
+  timereviewed
+) =>
   concat({
     ...newDcc,
     status,
-    statuschangereason
+    statuschangereason,
+    timereviewed
   })(dccs);
 
 const onReceiveDccs = (state, receivedDccs) =>
@@ -97,14 +107,27 @@ const onReceiveSupportOpposeDcc = (state, payload) => {
 const onReceiveSetDccStatus = (state, payload) => {
   const { status: newStatus, reason, token } = payload;
   const { status: oldStatus, ...dcc } = get(["byToken", token])(state);
+  const timereviewed = Date.now() / 1000;
 
   return compose(
     update(["byStatus", oldStatus], (dccsByOldDccStatus) =>
       dccByStatusRemoveByToken(dccsByOldDccStatus, token)
     ),
     update(["byStatus", newStatus], (dccsByNewDccStatus) =>
-      dccByStatusAddDcc(dccsByNewDccStatus, dcc, newStatus, reason)
-    )
+      dccByStatusAddDcc(
+        dccsByNewDccStatus,
+        dcc,
+        newStatus,
+        reason,
+        timereviewed
+      )
+    ),
+    set(["byToken", token], {
+      ...dcc,
+      status: newStatus,
+      statuschangereason: reason,
+      timereviewed
+    })
   )(state);
 };
 

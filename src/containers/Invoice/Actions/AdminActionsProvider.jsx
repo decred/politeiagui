@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { useAdminActions, adminInvoicesActionsContext } from "./hooks";
 import { Text } from "pi-ui";
 import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
 import ModalConfirm from "src/componentsv2/ModalConfirm";
 import useBooleanState from "src/hooks/utils/useBooleanState";
+import useAsyncState from "src/hooks/utils/useAsyncState";
 import { presentationalInvoiceName } from "src/containers/Invoice/helpers";
 
 const AdminActionsProvider = ({ children }) => {
-  const [targetInvoice, setTargetInvoice] = useState("");
+  const [targetInvoice, setTargetInvoice] = useAsyncState("");
   const {
     onRejectInvoice,
     onApproveInvoice,
@@ -37,8 +38,8 @@ const AdminActionsProvider = ({ children }) => {
   ] = useBooleanState(false);
 
   // set the invoice target before executing the function
-  const withInvoiceTarget = (fn) => (invoice) => {
-    setTargetInvoice(invoice);
+  const withInvoiceTarget = (fn) => async (invoice) => {
+    await setTargetInvoice(invoice);
     fn();
   };
 

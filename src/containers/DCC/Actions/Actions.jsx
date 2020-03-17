@@ -40,7 +40,7 @@ const DccActions = ({ dcc, extended }) => {
     </Button>
   );
 
-  return isDccActive(dcc) && (
+  return isDccActive(dcc) ? (
     <AdminContent>
       <div className="margin-top-m">
         {!extended && !mobile ? (
@@ -49,14 +49,14 @@ const DccActions = ({ dcc, extended }) => {
             {approveButton}
           </div>
         ) : (
-          <Dropdown title="Approve/Reject Dcc">
+          <Dropdown title="Approve/Reject DCC">
             <DropdownItem>{approveButton}</DropdownItem>
             <DropdownItem>{rejectButton}</DropdownItem>
           </Dropdown>
         )}
       </div>
     </AdminContent>
-  );
+  ) : null;
 };
 
 export default DccActions;

@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { useAdminActions, adminDccsActionsContext } from "./hooks";
 import { Text } from "pi-ui";
 import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
 import useBooleanState from "src/hooks/utils/useBooleanState";
+import useAsyncState from "src/hooks/utils/useAsyncState";
 import { presentationalDccName } from "src/containers/DCC/helpers";
 
 const AdminActionsProvider = ({ children }) => {
-  const [targetDcc, setTargetDcc] = useState("");
+  const [targetDcc, setTargetDcc] = useAsyncState("");
   const {
     onRejectDcc,
     onApproveDcc
@@ -23,8 +24,8 @@ const AdminActionsProvider = ({ children }) => {
   ] = useBooleanState(false);
 
   // set the dcc target before executing the function
-  const withDccTarget = (fn) => (dcc) => {
-    setTargetDcc(dcc);
+  const withDccTarget = (fn) => async (dcc) => {
+    await setTargetDcc(dcc);
     fn();
   };
 

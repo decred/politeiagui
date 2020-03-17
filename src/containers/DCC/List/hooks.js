@@ -28,5 +28,5 @@ export function useDccs() {
 
   useThrowError(error);
 
-  return { dccs, loading, status, handleTabChange };
+  return { dccs: dccs || [], loading, status, handleTabChange };
 }
