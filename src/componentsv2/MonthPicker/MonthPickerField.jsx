@@ -40,7 +40,7 @@ const MonthPickerField = ({ name, label, years, readOnly, toggleable, className 
   const togglePicker = () => {
     if(!isOpen) {
       openPicker();
-    } else if (isOpen) {
+    } else {
       closePicker();
     }
   };
