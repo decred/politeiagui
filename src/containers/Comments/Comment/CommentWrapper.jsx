@@ -170,13 +170,13 @@ const CommentWrapper = ({ comment, children, numOfReplies, isFlatMode, ...props 
           readOnly ||
           (userLoggedIn && (identityError || paywallMissing))
         }
-        loadingLikeAction={loadingLikeAction[commentid]}
         disableReply={readOnly || !!identityError || paywallMissing}
         likesUpCount={upvotes}
         likesDownCount={downvotes}
         likeOption={getCommentLikeOption(commentid)}
         onLike={handleLikeComment}
         onDislike={handleDislikeComment}
+        loadingLikeAction={loadingLikeAction[commentid]}
         showReplies={showReplies}
         isFlatMode={isFlatMode}
         onClickCensor={handleClickCensor}

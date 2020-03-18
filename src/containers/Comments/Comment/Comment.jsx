@@ -88,7 +88,7 @@ const Comment = ({
           <div className={styles.likesWrapper}>
             <Likes
               disabled={disableLikesClick}
-              loading={loadingLikeAction}
+              apiLoading={!!loadingLikeAction}
               upLikes={likesUpCount}
               downLikes={likesDownCount}
               option={likeOption}

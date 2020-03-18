@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   Icon,
@@ -14,7 +14,8 @@ import styles from "./Likes.module.css";
 export const isLiked = (action) => action === 1 || action === "1";
 export const isDisliked = (action) => action === -1 || action === "-1";
 
-const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled, loading }) => {
+const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled, apiLoading }) => {
+  const [loading, setLoading] = useState(false);
   const [likeRef, isLikeHovered] = useHover();
   const [dislikeRef, isDislikeHovered] = useHover();
   const { theme } = useTheme();
@@ -26,20 +27,30 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled, loadin
   const dislikeColor =
     disliked || isDislikeHovered ? activeColor : defaultColor;
 
+  useEffect(() => {
+    if (apiLoading) {
+      setTimeout(() => setLoading(true), 1000);
+    } else if (loading) {
+        setLoading(false);
+      }
+  },
+    [apiLoading, loading, setLoading]
+  );
+
   const handleLike = useCallback(
     async function handleLike() {
-      if (disabled || loading) return;
+      if (disabled) return;
       await onLike();
     },
-    [disabled, loading, onLike]
+    [disabled, onLike]
   );
 
   const handleDislike = useCallback(
     async function handleDislike() {
-      if (disabled || loading) return;
+      if (disabled) return;
       await onDislike();
     },
-    [disabled, loading, onDislike]
+    [disabled, onDislike]
   );
 
   const renderCount = useCallback(
@@ -55,11 +66,15 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled, loadin
 
   return (
     <div className="align-center">
-      {!loading ? (
+      {loading && apiLoading ?  (
+        <div className={styles.likeBoxSpinner}>
+          <Spinner invert />
+        </div>
+      ) : (
       <>
         <div className={styles.leftLikeBox}>
           <button
-            disabled={loading || disabled}
+            disabled={disabled}
             ref={likeRef}
             className={styles.likeBtn}
             onClick={handleLike}>
@@ -73,7 +88,7 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled, loadin
         </div>
         <div className={styles.rightLikeBox}>
           <button
-            disabled={loading || disabled}
+            disabled={disabled}
             ref={dislikeRef}
             className={styles.likeBtn}
             onClick={handleDislike}>
@@ -86,10 +101,6 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled, loadin
           {renderCount(downLikes)}
         </div>
       </>
-      ) : (
-        <div className={styles.likeBoxSpinner}>
-          <Spinner invert />
-        </div>
       )}
     </div>
   );
