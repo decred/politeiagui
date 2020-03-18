@@ -1,8 +1,6 @@
-import React, { useRef, useLayoutEffect, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import Picker from "react-month-picker";
-import "react-month-picker/css/month-picker.css";
-import { Text, classNames, Checkbox } from "pi-ui";
+import { Text, classNames, Checkbox, DatePicker } from "pi-ui";
 import { FormikConsumer } from "formik";
 import styles from "./MonthPickerField.module.css";
 import useBooleanState from "src/hooks/utils/useBooleanState";
@@ -21,9 +19,7 @@ const pickerLang = {
     "October",
     "November",
     "December"
-  ],
-  from: "From",
-  to: "To"
+  ]
 };
 
 const makeText = (m) => {
@@ -41,13 +37,13 @@ const Arrow = ({ isOpen }) => {
 const MonthPickerField = ({ name, label, years, readOnly, toggleable, className }) => {
   const [isDisabled, setDisabled] = useState(false);
   const [isOpen, openPicker, closePicker] = useBooleanState(false);
-  const ref = useRef();
-
-  useLayoutEffect(() => {
-    if (isOpen && !readOnly) {
-      ref.current.show();
+  const togglePicker = () => {
+    if(!isOpen) {
+      openPicker();
+    } else if (isOpen) {
+      closePicker();
     }
-  });
+  };
   return (
     <FormikConsumer>
       {({ setFieldValue, values, initialValues }) => {
@@ -84,8 +80,9 @@ const MonthPickerField = ({ name, label, years, readOnly, toggleable, className 
               {isDisabled ? (
                 <span className="cursor-not-allowed">Any</span>
               ) : (
-                <Picker
-                  ref={ref}
+                <DatePicker
+                  show={isOpen && !readOnly}
+                  isMonthsMode={true}
                   years={years}
                   value={values[name]}
                   lang={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
@@ -96,11 +93,11 @@ const MonthPickerField = ({ name, label, years, readOnly, toggleable, className 
                       styles.valueWrapper,
                       readOnly && "cursor-not-allowed"
                     )}
-                    onClick={openPicker}>
+                    onClick={togglePicker}>
                     {makeText(values[name])}
                     {!readOnly && <Arrow isOpen={isOpen} />}
                   </span>
-                </Picker>
+                </DatePicker>
               )}
             </div>
           </div>
