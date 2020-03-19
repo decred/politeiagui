@@ -144,7 +144,6 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     1009: "Invalid payment address",
     1010: "Malformed line item submitted",
     1011: "Invoice missing contractor name",
-    1012: "Invoice missing contractor location",
     1013: "Invoice missing contractor contact",
     1014: "Invoice missing contractor rate",
     1015: "Invoice has invalid contractor rate",
