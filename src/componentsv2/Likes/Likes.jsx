@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { delay } from "lodash";
 import {
   Icon,
   useTheme,
@@ -29,10 +30,10 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled, apiLoa
 
   useEffect(() => {
     if (apiLoading) {
-      setTimeout(() => setLoading(true), 1000);
+      delay(() => setLoading(true), 1000);
     } else if (loading) {
-        setLoading(false);
-      }
+      setLoading(false);
+    }
   },
     [apiLoading, loading, setLoading]
   );
