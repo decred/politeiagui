@@ -53,7 +53,7 @@ module.exports = {
     "no-var": "error",
     "prefer-const": "error",
     "arrow-spacing": "error",
-    "react-hooks/exhaustive-deps": 1,
+    "react-hooks/exhaustive-deps": 2,
     "react/jsx-uses-vars": 1,
     "react/jsx-uses-react": 1,
     "react/jsx-no-target-blank": [2, { enforceDynamicLinks: "always" }]
