@@ -31,7 +31,7 @@ export const DEFAULT_STATE = {
     year: getCurrentYear()
   },
   draftInvoices: null,
-  draftDCCs: null
+  draftDccs: null
 };
 
 const app = (state = DEFAULT_STATE, action) =>
@@ -139,6 +139,35 @@ const app = (state = DEFAULT_STATE, action) =>
       [act.LOAD_DRAFT_INVOICES]: () => ({
         ...state,
         draftInvoices: action.payload
+      }),
+      [act.SAVE_DRAFT_DCC]: () => {
+        const newDraftDccs = state.draftDccs;
+        const draftId = action.payload.id;
+        return {
+          ...state,
+          draftDccs: {
+            ...newDraftDccs,
+            newDraft: true,
+            lastSubmitted: draftId,
+            [draftId]: {
+              ...action.payload,
+              draftId
+            }
+          }
+        };
+      },
+      [act.DELETE_DRAFT_DCC]: () => {
+        const draftId = action.payload;
+        if (!state.draftDccs[draftId]) {
+          return state;
+        }
+        const newDraftDccs = state.draftDccs;
+        delete newDraftDccs[draftId];
+        return { ...state, draftDccs: newDraftDccs };
+      },
+      [act.LOAD_DRAFT_DCCS]: () => ({
+        ...state,
+        draftDccs: action.payload
       }),
       [act.REQUEST_SETSTATUS_PROPOSAL]: () => {
         if (action.error) return state;

@@ -76,6 +76,15 @@ export const presentationalDccName = (dcc) =>
     : "";
 
 /**
+ * Returns a presentational name for a draft dcc
+ * @param {Object} dcc
+ */
+export const presentationalDraftDccName = (draft) =>
+  draft && draft.type && draft.nomineeUsername
+    ? `${dccTypes[draft.type]} DCC draft for ${draft.nomineeUsername}`
+    : "";
+
+/**
  * Returns a presentational name for DCC Contractor Types
  * @param {Number} type
  */

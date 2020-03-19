@@ -7,6 +7,7 @@ import usePolicy from "src/hooks/api/usePolicy";
 import { dccValidationSchema } from "./validation";
 import { SelectField } from "src/componentsv2/Select";
 import useSessionStorage from "src/hooks/utils/useSessionStorage";
+import DraftSaver from "./DraftSaver";
 import styles from "./DccForm.module.css";
 import {
   getDomainOptions,
@@ -38,9 +39,11 @@ const DccForm = React.memo(function DccForm({
   touched,
   isValid,
   cmsUsers,
-  setSessionStorageDcc
+  setSessionStorageDcc,
+  submitSuccess
 }) {
   const [isIssuance, setIsIssuance] = useState();
+  const [nomineeUsername, setNomineeUsername] = useState();
 
   // scroll to top in case of global error
   useEffect(() => {
@@ -91,6 +94,12 @@ const DccForm = React.memo(function DccForm({
     setFieldValue(field, e.value);
   };
 
+  const handleChangeNomineeSelector = (e) => {
+    setFieldTouched("nomineeid", true);
+    setFieldValue("nomineeid", e.value);
+    setNomineeUsername(e.label);
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       {errors && errors.global && (
@@ -121,7 +130,7 @@ const DccForm = React.memo(function DccForm({
             options={getNomineeOptions(cmsUsers.nominee)}
             placeholder="Nominee"
             error={touched.nomineeid && errors.nomineeid}
-            onChange={handleChangeSelector("nomineeid")}
+            onChange={handleChangeNomineeSelector}
           />
           <Select
             name="contractortype"
@@ -137,7 +146,7 @@ const DccForm = React.memo(function DccForm({
           options={getNomineeOptions(cmsUsers.full)}
           placeholder="Nominee"
           error={touched.nomineeid && errors.nomineeid}
-          onChange={handleChangeSelector("nomineeid")}
+          onChange={handleChangeNomineeSelector}
         />
       )}
       <BoxTextInput
@@ -149,7 +158,8 @@ const DccForm = React.memo(function DccForm({
         onChange={handleChangeWithTouched("statement")}
       />
       <div className="justify-right">
-        <SubmitButton />
+        <DraftSaver {...{ nomineeUsername, submitSuccess }}/>
+        <SubmitButton/>
       </div>
     </form>
   );
@@ -190,9 +200,9 @@ const DccFormWrapper = ({ initialValues, onSubmit, history, cmsUsers, userDomain
         const dccToken = token || values.token;
         setSubmitting(false);
         setSubmitSuccess(true);
-        resetForm();
-        setSessionStorageDcc(null);
         history.push(`/dccs/${dccToken}`);
+        setSessionStorageDcc(null);
+        resetForm();
       } catch (e) {
         setSubmitting(false);
         setFieldError("global", e);
@@ -220,7 +230,8 @@ DccFormWrapper.propTypes = {
   onSubmit: PropTypes.func,
   setSessionStorageDcc: PropTypes.func,
   setDccType: PropTypes.func,
-  history: PropTypes.object
+  history: PropTypes.object,
+  cmsUsers: PropTypes.object
 };
 
 export default withRouter(DccFormWrapper);

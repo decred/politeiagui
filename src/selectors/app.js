@@ -27,7 +27,7 @@ export const draftInvoiceById = (state) => {
 };
 export const getUserAlreadyPaid = (state) => state.app.userAlreadyPaid;
 
-export const draftDCCs = (state) => state && state.app && state.app.draftDCCs;
+export const draftDccs = (state) => state && state.app && state.app.draftDccs;
 
 export const resolveEditUserValues = (prefs) => {
   return {
