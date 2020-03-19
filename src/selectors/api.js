@@ -136,6 +136,11 @@ export const manageUserResponse = getApiResponse("manageUser");
 export const apiLikeCommentResponse = getApiResponse("likeComment");
 export const apiLikeCommentError = getApiError("likeComment");
 export const apiLikeCommentPayload = getApiPayload("likeComment");
+export const isApiRequestingLikeComment = get([
+  "api",
+  "likeComment",
+  "isRequesting"
+]);
 
 export const apiPropsVoteStatusResponse = getApiResponse("proposalsVoteStatus");
 export const apiPropsVoteStatusError = getApiError("proposalsVoteStatus");

@@ -773,7 +773,6 @@ describe("test api reducer", () => {
         key: "invoice",
         type: "request"
       },
-      { action: act.REQUEST_LIKE_COMMENT, key: "likeComment", type: "request" },
       { action: act.RECEIVE_LIKE_COMMENT, key: "likeComment", type: "receive" },
       {
         action: act.REQUEST_LIKED_COMMENTS,

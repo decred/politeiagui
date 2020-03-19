@@ -19,7 +19,7 @@ import {
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_NOT_AUTHORIZED
 } from "../../constants";
-import { receive } from "../util";
+import { request, receive } from "../util";
 
 const getProposalToken = (prop) => get(["censorshiprecord", "token"], prop);
 
@@ -584,6 +584,20 @@ export const onReceiveProposalVoteStatus = (state, action) => {
       response: {
         ...proposalsVoteStatus,
         [action.payload.token]: { ...action.payload }
+      }
+    }
+  };
+};
+
+export const onRequestLikeComment = (state, action) => {
+  state = request("likeComment", state, action);
+  const id = action.payload.commentid;
+  return {
+    ...state,
+    likeComment: {
+      ...state.likeComment,
+      isRequesting: {
+        [id]: true
       }
     }
   };

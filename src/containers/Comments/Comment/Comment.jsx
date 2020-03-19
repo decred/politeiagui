@@ -37,6 +37,7 @@ const Comment = ({
   censorable,
   isFlatMode,
   seeInContextLink,
+  loadingLikeAction,
   ...props
 }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
@@ -87,6 +88,7 @@ const Comment = ({
           <div className={styles.likesWrapper}>
             <Likes
               disabled={disableLikesClick}
+              apiLoading={!!loadingLikeAction}
               upLikes={likesUpCount}
               downLikes={likesDownCount}
               option={likeOption}
