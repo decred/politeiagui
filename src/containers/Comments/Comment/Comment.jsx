@@ -37,6 +37,7 @@ const Comment = ({
   censorable,
   isFlatMode,
   seeInContextLink,
+  loadingLikeAction,
   ...props
 }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
@@ -49,8 +50,7 @@ const Comment = ({
 
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
-  const showNewReplies =
-    numOfNewHiddenReplies > 0 && !showReplies && !isFlatMode;
+  const showNewReplies = numOfNewHiddenReplies > 0 && !showReplies && !isFlatMode;
   const isThread = numOfReplies > 0 && !isFlatMode;
 
   return (
@@ -86,6 +86,7 @@ const Comment = ({
           <div className={styles.likesWrapper}>
             <Likes
               disabled={disableLikesClick}
+              apiLoading={!!loadingLikeAction}
               upLikes={likesUpCount}
               downLikes={likesDownCount}
               option={likeOption}
@@ -98,10 +99,7 @@ const Comment = ({
       {extraSmall && censorButton}
       {extraSmall && seeInContextLink}
       {!censored ? (
-        <Markdown
-          className={classNames(isDarkTheme && "dark", "margin-top-s")}
-          body={commentBody}
-        />
+        <Markdown className={classNames(isDarkTheme && "dark", "margin-top-s")} body={commentBody} />
       ) : (
         <Markdown className={styles.censored} body="Censored by moderators " />
       )}
@@ -117,7 +115,7 @@ const Comment = ({
               </Text>
             </LoggedInContent>
           )}
-          {isThread && (
+          {isThread &&  (
             <span className={styles.showReplies} onClick={onClickShowReplies}>
               {showReplies ? "-" : `+${numOfReplies}`}
             </span>
@@ -128,8 +126,7 @@ const Comment = ({
         </div>
         <CopyLink url={window.location.origin + permalink} />
       </div>
-    </div>
-  );
+  </div>);
 };
 
 Comment.propTypes = {

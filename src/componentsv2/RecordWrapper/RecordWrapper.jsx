@@ -26,13 +26,14 @@ export const Author = ({ username, id }) => (
   <Link to={`/user/${id}`}>{username}</Link>
 );
 
-export const Event = ({ event, timestamp }) => (
+export const Event = ({ event, timestamp, className, size }) => (
   <DateTooltip timestamp={timestamp} placement="bottom">
     {({ timeAgo }) => (
       <Text
         id={`event-${event}-${timestamp}`}
-        className={styles.eventTooltip}
+        className={ classNames(styles.eventTooltip, className)}
         truncate
+        size={size}
       >{`${event} ${timeAgo}`}</Text>
     )}
   </DateTooltip>

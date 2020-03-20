@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Message } from "pi-ui";
+import { Message, useTheme, classNames } from "pi-ui";
 import styles from "./LoaderScreen.module.css";
 import Logo from "src/componentsv2/Logo";
+import useLocalStorage from "src/hooks/utils/useLocalStorage";
 
 import { Transition } from "react-transition-group";
 
@@ -21,6 +22,18 @@ const transitionStyles = {
 
 const LoaderScreen = ({ error }) => {
   const [mounted, setMounted] = useState(false);
+  const { themeName, setThemeName } = useTheme();
+  const [darkThemeOnLocalStorage] = useLocalStorage(
+    "darkTheme",
+    false
+  );
+
+  useEffect(() => {
+    if (darkThemeOnLocalStorage && themeName === "light") {
+      setThemeName("dark");
+    }
+  }, [darkThemeOnLocalStorage, setThemeName, themeName]);
+
   useEffect(() => {
     setMounted(true);
     return () => {
@@ -29,7 +42,7 @@ const LoaderScreen = ({ error }) => {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div className={classNames(styles.container, styles.dark)}>
       <Transition in={mounted} timeout={duration}>
         {state => (
           <Logo

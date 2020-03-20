@@ -9,7 +9,11 @@ import useIdentity from "src/hooks/api/useIdentity";
 import { useNewProposal } from "./hooks";
 
 const NewProposal = () => {
-  const { onSubmitProposal, currentUser } = useNewProposal();
+  const {
+    onSubmitProposal,
+    currentUser
+  } = useNewProposal();
+  const { userid } = currentUser || {};
   const { isPaid } = usePaywall();
   const [, identityError] = useIdentity();
   return (
@@ -18,12 +22,9 @@ const NewProposal = () => {
         {!isPaid && (
           <Message kind="error">
             <P>
-              You won't be able to submit comments or proposals before paying
-              the paywall, please visit your{" "}
-              <Link to={`/user/${currentUser.userid}?tab=credits`}>
-                account
-              </Link>{" "}
-              page to correct this problem.
+              You won't be able to submit comments or proposals before paying the paywall,
+              please visit your <Link to={`/user/${userid}?tab=credits`}>account</Link> page to
+              correct this problem.
             </P>
           </Message>
         )}

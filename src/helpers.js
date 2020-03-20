@@ -4,6 +4,9 @@ import flow from "lodash/fp/flow";
 import filter from "lodash/fp/filter";
 import gte from "lodash/fp/gt";
 import range from "lodash/fp/range";
+import * as pki from "./lib/pki";
+import { sha3_256 } from "js-sha3";
+
 import { INVALID_FILE } from "./constants";
 import {
   INVOICE_STATUS_APPROVED,
@@ -18,8 +21,6 @@ import {
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_VOTING_NOT_AUTHORIZED
 } from "./constants.js";
-import * as pki from "./lib/pki";
-import { sha3_256 } from "js-sha3";
 
 export const getProposalStatus = (proposalStatus) =>
   get(proposalStatus, [

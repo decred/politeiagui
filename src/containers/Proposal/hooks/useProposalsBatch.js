@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { equals } from "lodash/fp";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { or } from "src/lib/fp";
@@ -14,6 +15,10 @@ export default function useProposalsBatch() {
     []
   );
   const error = useSelector(errorSelector);
+  const tokenInventory = useSelector(sel.tokenInventory);
+
+  const showLoadingIndicator =
+    !tokenInventory || !equals(allByStatus, tokenInventory);
 
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
@@ -29,7 +34,7 @@ export default function useProposalsBatch() {
   return {
     proposals,
     onFetchProposalsBatch,
-    isLoadingTokenInventory,
+    isLoadingTokenInventory: showLoadingIndicator && isLoadingTokenInventory,
     proposalsTokens: allByStatus
   };
 }

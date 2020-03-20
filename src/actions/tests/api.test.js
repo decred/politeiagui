@@ -622,7 +622,8 @@ describe("test api actions (actions/api.js)", () => {
     await store.dispatch(api.onLikeComment.apply(null, params));
     const dispatchedActions = store.getActions();
     expect(dispatchedActions[0].type).toEqual(act.REQUEST_LIKE_COMMENT);
-    expect(dispatchedActions[1].type).toEqual(act.RECEIVE_SYNC_LIKE_COMMENT);
+    expect(dispatchedActions[1].type).toEqual(act.RECEIVE_LIKE_COMMENT);
+    expect(dispatchedActions[2].type).toEqual(act.RECEIVE_SYNC_LIKE_COMMENT);
 
     const keys = await pki.generateKeys(FAKE_USER.email);
     await pki.loadKeys(FAKE_USER.email, keys);
@@ -636,11 +637,6 @@ describe("test api actions (actions/api.js)", () => {
           type: act.REQUEST_LIKE_COMMENT,
           error: false,
           payload: { commentid, token: FAKE_PROPOSAL_TOKEN }
-        },
-        {
-          type: act.RECEIVE_SYNC_LIKE_COMMENT,
-          error: false,
-          payload: { commentid, token: FAKE_PROPOSAL_TOKEN, action: up_action }
         },
         {
           type: act.RESET_SYNC_LIKE_COMMENT,

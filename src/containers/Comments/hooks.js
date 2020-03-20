@@ -41,6 +41,7 @@ export function useComments(recordToken) {
       ? act.onFetchDccComments
       : act.onFetchInvoiceComments
   );
+  const loadingLikeAction = useSelector(sel.isApiRequestingLikeComment);
   const onFetchLikes = useAction(act.onFetchLikedComments);
   const onLikeCommentAction = useAction(act.onLikeComment);
   const onResetComments = useAction(act.onResetComments);
@@ -106,6 +107,7 @@ export function useComments(recordToken) {
     lastVisitTimestamp,
     loading,
     loadingLikes,
+    loadingLikeAction,
     onSubmitComment,
     onResetComments
   };

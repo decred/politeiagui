@@ -23,7 +23,7 @@ import {
   getProposalToken
 } from "src/containers/Proposal/helpers";
 import useProposalVote from "src/containers/Proposal/hooks/useProposalVote";
-import { useLoaderContext } from "src/containers/Loader";
+import { useLoaderContext } from "src/Appv2/Loader";
 import styles from "./Proposal.module.css";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
 import VotesCount from "./VotesCount";
@@ -46,7 +46,7 @@ const Proposal = React.memo(function Proposal({
   collapseBodyContent,
   voteSummary,
   voteActive: isVoteActive,
-  voteTimeInWords: voteTime,
+  voteEndTimestamp,
   voteBlocksLeft,
   currentUser,
   history
@@ -75,8 +75,7 @@ const Proposal = React.memo(function Proposal({
   const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
   const mobile = useMediaQuery("(max-width: 560px)");
   const [showSearchVotesModal, setShowSearchVotesModal] = useState(false);
-  const showEditedDate =
-    version > 1 && timestamp !== publishedat && !abandonedat && !mobile;
+  const showEditedDate = version > 1 && timestamp !== publishedat && !abandonedat && !mobile;
   const showPublishedDate = publishedat && !mobile;
   const showExtendedVersionPicker = extended && version > 1;
   const showAbandonedDate = abandonedat && !mobile;
@@ -167,9 +166,7 @@ const Proposal = React.memo(function Proposal({
                       {...getProposalStatusTagProps(proposal, voteSummary)}
                     />
                     {(isVoteActive || isVotingFinished) && (
-                      <Text className={styles.timeLeft} size="small">
-                        {`vote end${isVoteActive ? "s" : "ed"} ${voteTime}`}
-                      </Text>
+                      <Event event={`vote end${isVoteActive ? "s" : "ed"}`} timestamp={voteEndTimestamp} className={styles.timeLeft} size="small" />
                     )}
                     {isVoteActive && (
                       <>

@@ -5,64 +5,52 @@ import Link from "src/componentsv2/Link";
 import { useComment } from "../hooks";
 import Comment from "./Comment";
 
-const ContextLink = React.memo(({ parentid, recordToken, recordType }) => (
-  <Link
-    className={styles.contextLink}
-    to={`/${recordType}s/${recordToken}/comments/${parentid}`}>
-    see in context
-  </Link>
-));
+const ContextLink = React.memo(({
+  parentid,
+  recordToken,
+  recordType
+}) => <Link className={styles.contextLink} to={`/${recordType}s/${recordToken}/comments/${parentid}`}>see in context</Link>);
 
-const Replies = React.memo(({ children }) => (
-  <div className={styles.childrenContainer}>{children}</div>
-));
+const Replies = React.memo(({ children }) => <div className={styles.childrenContainer}>{children}</div>);
 
-const CommentContent = React.memo(
-  ({
-    showReplyForm,
-    commentid,
-    token,
-    handleSubmitComment,
-    handleToggleReplyForm,
-    handleCommentSubmitted,
-    isThread,
-    children
-  }) => {
-    const commentForm = useMemo(
-      () => (
-        <CommentForm
-          className={styles.replyForm}
-          persistKey={`replying-to-${commentid}-from-${token}`}
-          onSubmit={handleSubmitComment}
-          onCancel={handleToggleReplyForm}
-          onCommentSubmitted={handleCommentSubmitted}
-        />
-      ),
-      [
-        commentid,
-        handleSubmitComment,
-        token,
-        handleCommentSubmitted,
-        handleToggleReplyForm
-      ]
-    );
-
-    return (
-      <>
-        {showReplyForm && commentForm}
-        {isThread && children}
-      </>
-    );
-  }
-);
-
-const CommentWrapper = ({
-  comment,
-  children,
-  numOfReplies,
-  isFlatMode,
-  ...props
+const CommentContent = React.memo(({
+  showReplyForm,
+  commentid,
+  token,
+  handleSubmitComment,
+  handleToggleReplyForm,
+  handleCommentSubmitted,
+  isThread,
+  children
 }) => {
+  const commentForm = useMemo(
+    () => (
+      <CommentForm
+        className={styles.replyForm}
+        persistKey={`replying-to-${commentid}-from-${token}`}
+        onSubmit={handleSubmitComment}
+        onCancel={handleToggleReplyForm}
+        onCommentSubmitted={handleCommentSubmitted}
+      />
+    ),
+    [
+      commentid,
+      handleSubmitComment,
+      token,
+      handleCommentSubmitted,
+      handleToggleReplyForm
+    ]
+  );
+
+  return (
+    <>
+      {showReplyForm && commentForm}
+      {isThread && children}
+    </>
+  );
+});
+
+const CommentWrapper = ({ comment, children, numOfReplies, isFlatMode, ...props }) => {
   const {
     onSubmitComment,
     onLikeComment,
@@ -70,6 +58,7 @@ const CommentWrapper = ({
     enableCommentVote,
     recordAuthorID,
     loadingLikes,
+    loadingLikeAction,
     userLoggedIn,
     recordToken,
     recordType,
@@ -156,13 +145,11 @@ const CommentWrapper = ({
     return openCensorModal(commentid);
   }, [commentid, openCensorModal]);
 
-  const contextLink = isFlatReply && (
-    <ContextLink
-      parentid={parentid}
-      recordToken={recordToken}
-      recordType={recordType}
-    />
-  );
+  const contextLink = isFlatReply && <ContextLink
+    parentid={parentid}
+    recordToken={recordToken}
+    recordType={recordType}
+  />;
 
   return (
     <>
@@ -179,6 +166,7 @@ const CommentWrapper = ({
         disableLikes={!enableCommentVote}
         disableLikesClick={
           loadingLikes ||
+          !!loadingLikeAction ||
           readOnly ||
           (userLoggedIn && (identityError || paywallMissing))
         }
@@ -188,6 +176,7 @@ const CommentWrapper = ({
         likeOption={getCommentLikeOption(commentid)}
         onLike={handleLikeComment}
         onDislike={handleDislikeComment}
+        loadingLikeAction={loadingLikeAction[commentid]}
         showReplies={showReplies}
         isFlatMode={isFlatMode}
         onClickCensor={handleClickCensor}
@@ -205,7 +194,8 @@ const CommentWrapper = ({
         handleSubmitComment={handleSubmitComment}
         handleToggleReplyForm={handleToggleReplyForm}
         handleCommentSubmitted={handleCommentSubmitted}
-        isThread={isThread}>
+        isThread={isThread}
+      >
         <Replies>{children}</Replies>
       </CommentContent>
     </>

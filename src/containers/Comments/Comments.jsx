@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { Card, H2, Text, Message, classNames, Toggle, P } from "pi-ui";
+import { Card, H2, Text, Message, classNames, Toggle, P, Select } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import styles from "./Comments.module.css";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
@@ -15,7 +15,6 @@ import { useComments, CommentContext } from "./hooks";
 import CommentsListWrapper from "./CommentsList/CommentsListWrapper";
 import CommentLoader from "./Comment/CommentLoader";
 import Link from "src/componentsv2/Link";
-import Select from "src/componentsv2/Select";
 import Or from "src/componentsv2/Or";
 import useQueryString from "src/hooks/utils/useQueryString";
 import {
@@ -81,6 +80,7 @@ const Comments = ({
     : 0;
 
   const [, , openLoginModal, closeLoginModal] = useLoginModal();
+  const { userid } = currentUser || {};
 
   const handleOpenLoginModal = useCallback(() => {
     openLoginModal("commentsLoginModal", {
@@ -231,7 +231,7 @@ const Comments = ({
                 <Message kind="error">
                   <P>
                     You won't be able to submit comments or proposals before paying the paywall,
-                    please visit your <Link to={`/user/${currentUser.userid}?tab=credits`}>account</Link> page to
+                    please visit your <Link to={`/user/${userid}?tab=credits`}>account</Link> page to
                     correct this problem.
                   </P>
                 </Message>
@@ -275,7 +275,6 @@ const Comments = ({
                     </div>
                   </div>}
                   <Select
-                    isSearchable={false}
                     value={selectValue}
                     onChange={handleSetSortOption}
                     options={selectOptions}

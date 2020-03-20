@@ -7,6 +7,10 @@
   flex-direction: column;
 }
 
+.container.dark {
+  background-color: var(--header-color);
+}
+
 .container > img {
   max-width: 300px;
 }
