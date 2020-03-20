@@ -9,6 +9,10 @@ export const allByStatus = createDeepEqualSelector(
   get(["proposals"]),
   ({ allByStatus }) => allByStatus
 );
+export const tokenInventory = createDeepEqualSelector(
+  get(["api"]),
+  ({ tokenInventory }) => tokenInventory.response
+);
 
 export const makeGetProposalByToken = (token) =>
   createSelector(proposalsByToken, get(token));
