@@ -4,17 +4,12 @@ import { Spinner, Tabs, Tab } from "pi-ui";
 import Dcc from "src/componentsv2/DCC";
 import HelpMessage from "src/componentsv2/HelpMessage";
 import styles from "./List.module.css";
+import { AdminDccActionsProvider } from "src/containers/DCC/Actions";
+import isEmpty from "lodash/isEmpty";
+import { presentationalStatus } from "../helpers";
 
-const ListUserDccs = ({ TopBanner, PageDetails, Main }) => {
+const ListDccs = ({ TopBanner, PageDetails, Main }) => {
   const { loading, dccs, handleTabChange, status } = useDccs();
-
-  const renderEmptyMessage = filteredDccs => !filteredDccs.length && (
-      <HelpMessage>
-        {dccs.length
-          ? "There are no DCCs matching the selected filters"
-          : "You don't have any DCCs yet"}
-      </HelpMessage>
-    );
 
   const renderDccs = dccs => dccs && dccs.map((dcc) =>
     <Dcc
@@ -41,14 +36,18 @@ const ListUserDccs = ({ TopBanner, PageDetails, Main }) => {
           </div>
         )}
         {!loading && dccs && (
-          <>
+          <AdminDccActionsProvider>
             {renderDccs(dccs)}
-            {renderEmptyMessage(dccs)}
-          </>
+          </AdminDccActionsProvider>
+        )}
+        {!loading && isEmpty(dccs) && (
+          <HelpMessage>
+            There are no {presentationalStatus(status)} DCCs
+          </HelpMessage>
         )}
       </Main>
     </>
   );
 };
 
-export default ListUserDccs;
+export default ListDccs;

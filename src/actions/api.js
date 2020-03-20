@@ -1347,6 +1347,25 @@ export const onSupportOpposeDcc = (token, vote) =>
       });
   });
 
+export const onSetDccStatus = (token, status, reason) =>
+  withCsrf((dispatch, getState, csrf) => {
+    const { email } = sel.currentUser(getState());
+    if (!email) {
+      return;
+    }
+    dispatch(act.REQUEST_SET_DCC_STATUS({}));
+    return api
+      .setDCCStatus(csrf, email, token, status, reason)
+      .then((response) => {
+        dispatch(
+          act.RECEIVE_SET_DCC_STATUS({ ...response, status, reason, token })
+        );
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_SET_DCC_STATUS(null, error));
+      });
+  });
+
 export const onSubmitDccComment = (loggedInAsEmail, token, comment, parentid) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));

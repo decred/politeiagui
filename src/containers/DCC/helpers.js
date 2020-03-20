@@ -21,6 +21,12 @@ const dccTypes = {
   [DCC_TYPE_ISSUANCE]: "Issuance"
 };
 
+const dccStatusList = {
+  [DCC_STATUS_ACTIVE]: "active",
+  [DCC_STATUS_APPROVED]: "approved",
+  [DCC_STATUS_REJECTED]: "rejected"
+};
+
 /**
  * Returns the corresponding type's name
  * @param {Number} type
@@ -88,6 +94,12 @@ export const presentationalDccDomain = (domain) => CMS_DOMAINS[domain];
  */
 export const presentationalStatement = (statement) =>
   isEmpty(statement) ? "No statement provided" : statement;
+
+/**
+ * Returns a presentational dcc status
+ * @param {Object} dcc
+ */
+export const presentationalStatus = (status) => dccStatusList[status];
 
 /**
  * Returns if dcc is revocation

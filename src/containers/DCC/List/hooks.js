@@ -10,11 +10,9 @@ export function useDccs() {
   const [status, setStatus] = useState(DCC_STATUS_ACTIVE);
 
   const dccsByStatus = useSelector(sel.dccsByStatus);
-  const onLoadDccsByStatus = useAction(act.onLoadDccsByStatus);
+  const onFetchDccs = useAction(act.onFetchDccsByStatus);
 
-  const requestParams = useMemo(() => [status], [status]);
-
-  const [loading, error] = useAPIAction(onLoadDccsByStatus, requestParams);
+  const [loading, error] = useAPIAction(onFetchDccs);
 
   const dccs = useMemo(() => dccsByStatus && dccsByStatus[status], [
     dccsByStatus,
@@ -30,5 +28,5 @@ export function useDccs() {
 
   useThrowError(error);
 
-  return { dccs, loading, status, handleTabChange };
+  return { dccs: dccs || [], loading, status, handleTabChange };
 }

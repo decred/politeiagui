@@ -2,7 +2,10 @@ import * as act from "src/actions/types";
 import set from "lodash/fp/set";
 import update from "lodash/fp/update";
 import compose from "lodash/fp/compose";
+import get from "lodash/fp/get";
 import union from "lodash/fp/union";
+import concat from "lodash/fp/concat";
+import isEmpty from "lodash/isEmpty";
 
 const DEFAULT_STATE = {
   byToken: {},
@@ -30,6 +33,31 @@ const dccArrayToByStatusObject = (dccs) =>
     }),
     {}
   );
+
+const dccByStatusRemoveByToken = (dccs, token) =>
+  !isEmpty(dccs)
+    ? dccs.reduce(
+        (dccsByStatus, dcc) =>
+          dcc.censorshiprecord.token === token
+            ? dccsByStatus
+            : [...dccsByStatus, dcc],
+        []
+      )
+    : dccs;
+
+const dccByStatusAddDcc = (
+  dccs = [],
+  newDcc,
+  status,
+  statuschangereason,
+  timereviewed
+) =>
+  concat({
+    ...newDcc,
+    status,
+    statuschangereason,
+    timereviewed
+  })(dccs);
 
 const onReceiveDccs = (state, receivedDccs) =>
   compose(
@@ -76,6 +104,33 @@ const onReceiveSupportOpposeDcc = (state, payload) => {
   return isSupport ? support(state) : oppose(state);
 };
 
+const onReceiveSetDccStatus = (state, payload) => {
+  const { status: newStatus, reason, token } = payload;
+  const { status: oldStatus, ...dcc } = get(["byToken", token])(state);
+  const timereviewed = Date.now() / 1000;
+
+  return compose(
+    update(["byStatus", oldStatus], (dccsByOldDccStatus) =>
+      dccByStatusRemoveByToken(dccsByOldDccStatus, token)
+    ),
+    update(["byStatus", newStatus], (dccsByNewDccStatus) =>
+      dccByStatusAddDcc(
+        dccsByNewDccStatus,
+        dcc,
+        newStatus,
+        reason,
+        timereviewed
+      )
+    ),
+    set(["byToken", token], {
+      ...dcc,
+      status: newStatus,
+      statuschangereason: reason,
+      timereviewed
+    })
+  )(state);
+};
+
 const dccs = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
@@ -84,7 +139,9 @@ const dccs = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_DCCS]: () => onReceiveDccs(state, action.payload.dccs),
           [act.RECEIVE_DCC]: () => onReceiveDcc(state, action.payload.dcc),
           [act.RECEIVE_SUPPORT_OPPOSE_DCC]: () =>
-            onReceiveSupportOpposeDcc(state, action.payload)
+            onReceiveSupportOpposeDcc(state, action.payload),
+          [act.RECEIVE_SET_DCC_STATUS]: () =>
+            onReceiveSetDccStatus(state, action.payload)
         }[action.type] || (() => state)
       )();
 
