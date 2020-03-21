@@ -1,7 +1,7 @@
 import React from "react";
 import { classNames } from "pi-ui";
 import styles from "./Diff.module.css";
-import Markdown from "src/componentsv2/Markdown";
+import Markdown from "src/components/Markdown";
 import PropTypes from "prop-types";
 
 const DiffLine = ({ added = false, removed = false, content = "" }) => {

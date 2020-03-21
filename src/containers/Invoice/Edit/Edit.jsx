@@ -7,8 +7,8 @@ import { useInvoice } from "../Detail/hooks";
 import { useApprovedProposalsTokens } from "../New/hooks";
 import { useEditInvoice } from "./hooks";
 import { fromUSDCentsToUSDUnits } from "src/helpers";
-import InvoiceLoader from "src/componentsv2/Invoice/InvoiceLoader";
-import InvoiceForm from "src/componentsv2/InvoiceForm";
+import InvoiceLoader from "src/components/Invoice/InvoiceLoader";
+import InvoiceForm from "src/components/InvoiceForm";
 
 const EditInvoice = ({ match }) => {
   const tokenFromUrl = get("params.token", match);

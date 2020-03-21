@@ -1,7 +1,7 @@
 import { Link, useMediaQuery } from "pi-ui";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { withRouter } from "react-router-dom";
-import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
+import ModalChangeUsername from "src/components/ModalChangeUsername";
 import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "src/constants";
 import UserProposals from "src/containers/Proposal/User";
 import UserDraftInvoices from "src/containers/Invoice/User/Drafts";

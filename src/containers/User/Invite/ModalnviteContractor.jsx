@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { P, Button, Modal, TextInput, Icon } from "pi-ui";
 import PropTypes from "prop-types";
-import CheckboxField from "src/componentsv2/CheckboxField";
-import FormWrapper from "src/componentsv2/FormWrapper";
+import CheckboxField from "src/components/CheckboxField";
+import FormWrapper from "src/components/FormWrapper";
 import * as Yup from "yup";
 import { useInviteContractor } from "./hooks";
 

@@ -2,12 +2,12 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import get from "lodash/fp/get";
 import { useInvoice } from "./hooks";
-import Invoice from "src/componentsv2/Invoice";
-import InvoiceLoader from "src/componentsv2/Invoice/InvoiceLoader";
+import Invoice from "src/components/Invoice";
+import InvoiceLoader from "src/components/Invoice/InvoiceLoader";
 import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import Comments from "src/containers/Comments";
 import { isUnreviewedInvoice } from "../helpers";
-import { GoBackLink } from "src/componentsv2/Router";
+import { GoBackLink } from "src/components/Router";
 
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useMediaQuery } from "pi-ui";
-import MultipleContentPage from "src/componentsv2/layout/MultipleContentPage";
+import MultipleContentPage from "src/components/layout/MultipleContentPage";
 import ListDccs from "src/containers/DCC/List";
 
 const DccList = () => {

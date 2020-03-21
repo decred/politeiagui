@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Text, Tab, Tabs } from "pi-ui";
 import PropTypes from "prop-types";
-import { DiffHTML, FilesDiff } from "src/componentsv2/Diff/Diff";
+import { DiffHTML, FilesDiff } from "src/components/Diff/Diff";
 import {
   Header,
   Title,
   Author,
   Event,
   Subtitle
-} from "src/componentsv2/RecordWrapper";
+} from "src/components/RecordWrapper";
 import styles from "./ModalDiff.module.css";
 
 const ModalDiff = ({

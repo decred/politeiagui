@@ -2,12 +2,12 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import get from "lodash/fp/get";
 import { useDcc } from "./hooks";
-import Dcc from "src/componentsv2/DCC";
-import DccLoader from "src/componentsv2/DCC/DCCLoader";
+import Dcc from "src/components/DCC";
+import DccLoader from "src/components/DCC/DCCLoader";
 import Comments from "src/containers/Comments";
 import { AdminDccActionsProvider } from "src/containers/DCC/Actions";
 import { isDccActive } from "../helpers";
-import { GoBackLink } from "src/componentsv2/Router";
+import { GoBackLink } from "src/components/Router";
 
 const DccDetail = ({ Main, match }) => {
   const dccToken = get("params.token", match);

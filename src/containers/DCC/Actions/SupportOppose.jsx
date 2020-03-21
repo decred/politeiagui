@@ -14,9 +14,9 @@ import {
   isDccSupportOpposeAvailable
 } from "../helpers";
 import { useDccActions } from "./hooks";
-import ModalVotesList from "src/componentsv2/ModalVotesList";
+import ModalVotesList from "src/components/ModalVotesList";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import ModalConfirm from "src/componentsv2/ModalConfirm";
+import ModalConfirm from "src/components/ModalConfirm";
 
 const SupportOpposeActions = ({ dcc, token, className }) => {
   const { onSupportDcc, onOpposeDcc, userID, isContractor, loading, error } = useDccActions(token);

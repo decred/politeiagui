@@ -1,10 +1,10 @@
 import { classNames, Header as UIHeader, useMediaQuery } from "pi-ui";
 import React, { useState, useCallback } from "react";
 import { NavLink } from "react-router-dom";
-import Logo from "src/componentsv2/Logo";
-import HamburgerMenu from "src/componentsv2/HamburgerMenu";
-import HeaderNav from "src/componentsv2/HeaderNav";
-import NavigationDrawer from "src/componentsv2/NavigationDrawer";
+import Logo from "src/components/Logo";
+import HamburgerMenu from "src/components/HamburgerMenu";
+import HeaderNav from "src/components/HeaderNav";
+import NavigationDrawer from "src/components/NavigationDrawer";
 import styles from "./Header.module.css";
 
 const Header = ({ noBorder }) => {

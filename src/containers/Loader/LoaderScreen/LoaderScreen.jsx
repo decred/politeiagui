@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Message, useTheme, classNames } from "pi-ui";
 import styles from "./LoaderScreen.module.css";
-import Logo from "src/componentsv2/Logo";
+import Logo from "src/components/Logo";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 
 import { Transition } from "react-transition-group";

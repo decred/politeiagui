@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Modal, Tabs, Tab, Card } from "pi-ui";
-import Link from "src/componentsv2/Link";
+import Link from "src/components/Link";
 import styles from "./ModalVotesList.module.css";
 
 const VotesList = ({ options, currentID }) => (

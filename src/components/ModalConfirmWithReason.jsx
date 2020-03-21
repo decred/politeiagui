@@ -9,7 +9,7 @@ import {
   useTheme
 } from "pi-ui";
 import PropTypes from "prop-types";
-import FormWrapper from "src/componentsv2/FormWrapper";
+import FormWrapper from "src/components/FormWrapper";
 import * as Yup from "yup";
 
 const ModalConfirmWithReason = ({

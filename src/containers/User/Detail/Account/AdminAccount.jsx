@@ -1,7 +1,7 @@
 import { Button, Card, Text, classNames } from "pi-ui";
 import React from "react";
-import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
-import ModalChangePassword from "src/componentsv2/ModalChangePassword";
+import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
+import ModalChangePassword from "src/components/ModalChangePassword";
 import { reasonValidationSchema } from "../validation";
 import {
   MANAGE_USER_DEACTIVATE,

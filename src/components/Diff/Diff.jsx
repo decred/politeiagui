@@ -4,9 +4,9 @@ import { diffWordsWithSpace } from "diff";
 import { arrayDiff, lineDiffFunc, getLineArray, getFilesDiff } from "./helpers";
 import DiffLine from "./DiffLine";
 import styles from "./Diff.module.css";
-import HelpMessage from "src/componentsv2/HelpMessage";
-import { ImageThumbnail, TextThumbnail } from "src/componentsv2/Files";
-import ModalFullImage from "src/componentsv2/ModalFullImage";
+import HelpMessage from "src/components/HelpMessage";
+import { ImageThumbnail, TextThumbnail } from "src/components/Files";
+import ModalFullImage from "src/components/ModalFullImage";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 
 const handleDiffLine = (

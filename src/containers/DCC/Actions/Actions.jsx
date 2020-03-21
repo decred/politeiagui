@@ -7,7 +7,7 @@ import {
   DropdownItem
 } from "pi-ui";
 import { useAdminDccActions } from "./hooks";
-import AdminContent from "src/componentsv2/AdminContent";
+import AdminContent from "src/components/AdminContent";
 import { isDccActive } from "../helpers";
 
 const DccActions = ({ dcc, extended }) => {

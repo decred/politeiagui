@@ -1,5 +1,5 @@
 import React from "react";
-import { Router } from "src/componentsv2/Router";
+import { Router } from "src/components/Router";
 import Config from "src/containers/Config";
 import { defaultLightTheme, ThemeProvider, defaultDarkTheme } from "pi-ui";
 import { ReduxProvider } from "src/redux";

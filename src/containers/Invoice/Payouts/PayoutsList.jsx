@@ -3,9 +3,9 @@ import { Link, Button, Spinner, Table, CopyableText, classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import { convertAtomsToDcr, formatShortUnixTimestamp } from "src/utilsv2";
 import { useAdminPayouts } from "./hooks";
-import ExportToCsv from "src/componentsv2/ExportToCsv";
-import HelpMessage from "src/componentsv2/HelpMessage";
-import { Row } from "src/componentsv2/layout";
+import ExportToCsv from "src/components/ExportToCsv";
+import HelpMessage from "src/components/HelpMessage";
+import { Row } from "src/components/layout";
 import styles from "./PayoutsList.module.css";
 import { useAdminInvoiceActions } from "../Actions";
 

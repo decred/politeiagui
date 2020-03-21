@@ -6,9 +6,9 @@ import {
   Dropdown,
   DropdownItem
 } from "pi-ui";
-import Link from "src/componentsv2/Link";
+import Link from "src/components/Link";
 import { useAdminInvoiceActions } from "./hooks";
-import AdminContent from "src/componentsv2/AdminContent";
+import AdminContent from "src/components/AdminContent";
 import { isUnreviewedInvoice, presentationalInvoiceName } from "../helpers";
 
 const InvoiceActions = ({ invoice, extended }) => {

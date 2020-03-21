@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Button, useMediaQuery } from "pi-ui";
-import MultipleContentPage from "src/componentsv2/layout/MultipleContentPage";
+import MultipleContentPage from "src/components/layout/MultipleContentPage";
 import EditInvoice from "src/containers/Invoice/Edit";
 
 const PageInvoiceEdit = ({ history, match }) => {

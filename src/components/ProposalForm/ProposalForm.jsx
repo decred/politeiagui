@@ -12,12 +12,12 @@ import {
   Link,
   classNames
 } from "pi-ui";
-import { Row } from "src/componentsv2/layout";
+import { Row } from "src/components/layout";
 import styles from "./ProposalForm.module.css";
-import MarkdownEditor from "src/componentsv2/MarkdownEditor";
-import ThumbnailGrid from "src/componentsv2/Files";
-import AttachFileInput from "src/componentsv2/AttachFileInput";
-import ModalMDGuide from "src/componentsv2/ModalMDGuide";
+import MarkdownEditor from "src/components/MarkdownEditor";
+import ThumbnailGrid from "src/components/Files";
+import AttachFileInput from "src/components/AttachFileInput";
+import ModalMDGuide from "src/components/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import useBooleanState from "src/hooks/utils/useBooleanState";

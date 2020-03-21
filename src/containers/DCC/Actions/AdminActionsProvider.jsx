@@ -1,7 +1,7 @@
 import React from "react";
 import { useAdminActions, adminDccsActionsContext } from "./hooks";
 import { Text } from "pi-ui";
-import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
+import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import useAsyncState from "src/hooks/utils/useAsyncState";
 import { presentationalDccName } from "src/containers/DCC/helpers";

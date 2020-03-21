@@ -1,8 +1,8 @@
 import React from "react";
 import { useAdminActions, adminInvoicesActionsContext } from "./hooks";
 import { Text } from "pi-ui";
-import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
-import ModalConfirm from "src/componentsv2/ModalConfirm";
+import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
+import ModalConfirm from "src/components/ModalConfirm";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import useAsyncState from "src/hooks/utils/useAsyncState";
 import { presentationalInvoiceName } from "src/containers/Invoice/helpers";

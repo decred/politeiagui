@@ -4,7 +4,7 @@ import React from "react";
 import HeaderNav from "../HeaderNav";
 import SidebarContent from "../SidebarContent";
 import styles from "./NavigationDrawer.module.css";
-import HamburgerMenu from "src/componentsv2/HamburgerMenu";
+import HamburgerMenu from "src/components/HamburgerMenu";
 
 const NavigationDrawer = ({ show, fullScreen, toggleShowMenu }) => {
   useLockBodyScrollOnTrue(show);

@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "pi-ui";
-import InvoiceForm from "src/componentsv2/InvoiceForm";
+import InvoiceForm from "src/components/InvoiceForm";
 import { useNewInvoice, useApprovedProposalsTokens } from "./hooks";
 
 const NewInvoice = () => {

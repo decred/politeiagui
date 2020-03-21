@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Dropdown, DropdownItem } from "pi-ui";
-import ModalDiff from "src/componentsv2/ModalDiff";
+import ModalDiff from "src/components/ModalDiff";
 import { useVersionPicker } from "./hooks";
 
 const VersionPicker = ({ version, token, className }) => {

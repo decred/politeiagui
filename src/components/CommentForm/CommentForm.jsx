@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Formik } from "formik";
-import FormikPersist from "src/componentsv2/FormikPersist";
+import FormikPersist from "src/components/FormikPersist";
 import { Button, Message } from "pi-ui";
 import { Row } from "../layout";
-import MarkdownEditor from "src/componentsv2/MarkdownEditor";
+import MarkdownEditor from "src/components/MarkdownEditor";
 import validationSchema from "./validation";
 
 const CommentForm = ({

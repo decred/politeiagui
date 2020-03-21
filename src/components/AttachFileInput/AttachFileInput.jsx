@@ -4,7 +4,7 @@ import styles from "./AttachFileInput.module.css";
 import attachSVG from "./attach-file.svg";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import usePolicy from "src/hooks/api/usePolicy";
-import ModalAttachFiles from "src/componentsv2/ModalAttachFiles";
+import ModalAttachFiles from "src/components/ModalAttachFiles";
 
 const AttachFiles = ({ onChange, label, small, acceptedFiles, ...props }) => {
   const { policy } = usePolicy();

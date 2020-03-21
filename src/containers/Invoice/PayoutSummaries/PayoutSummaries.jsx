@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Spinner, Link, Table, CopyableText } from "pi-ui";
 import PropTypes from "prop-types";
-import ExportToCsv from "src/componentsv2/ExportToCsv";
+import ExportToCsv from "src/components/ExportToCsv";
 import { convertAtomsToDcr } from "src/utilsv2";
-import { Row } from "src/componentsv2/layout";
-import HelpMessage from "src/componentsv2/HelpMessage";
-import { PayoutsDateRange } from "src/componentsv2/PayoutsDateRange";
+import { Row } from "src/components/layout";
+import HelpMessage from "src/components/HelpMessage";
+import { PayoutsDateRange } from "src/components/PayoutsDateRange";
 import { useInvoicePayouts } from "./hooks";
 import styles from "./PayoutSummaries.module.css";
 

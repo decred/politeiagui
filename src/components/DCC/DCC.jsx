@@ -3,7 +3,7 @@ import {
   Text
 } from "pi-ui";
 import React from "react";
-import RecordWrapper from "src/componentsv2/RecordWrapper";
+import RecordWrapper from "src/components/RecordWrapper";
 import Field from "./Field";
 import styles from "./DCC.module.css";
 import {

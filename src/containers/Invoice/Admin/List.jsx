@@ -2,17 +2,17 @@ import React, { useCallback, useState } from "react";
 import { useAdminInvoices } from "./hooks";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import { Spinner, Link as UILink } from "pi-ui";
-import Link from "src/componentsv2/Link";
-import Invoice from "src/componentsv2/Invoice";
+import Link from "src/components/Link";
+import Invoice from "src/components/Invoice";
 import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import {
   InvoiceFilterForm,
   FilterInvoices
-} from "src/componentsv2/InvoiceFilters";
-import HelpMessage from "src/componentsv2/HelpMessage";
+} from "src/components/InvoiceFilters";
+import HelpMessage from "src/components/HelpMessage";
 import { ModalInviteContractor } from "src/containers/User/Invite";
 import styles from "./List.module.css";
-import { Row } from "src/componentsv2/layout";
+import { Row } from "src/components/layout";
 
 const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
   const { loading, invoices } = useAdminInvoices();

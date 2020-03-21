@@ -8,10 +8,10 @@ import React, {
 import { Tabs, Tab, useMediaQuery } from "pi-ui";
 import difference from "lodash/difference";
 import union from "lodash/union";
-import LazyList from "src/componentsv2/LazyList";
+import LazyList from "src/components/LazyList";
 import { getRecordsByTabOption, getRecordToken } from "./helpers";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
-import HelpMessage from "src/componentsv2/HelpMessage";
+import HelpMessage from "src/components/HelpMessage";
 
 const DEFAULT_PAGE_SIZE = 4;
 

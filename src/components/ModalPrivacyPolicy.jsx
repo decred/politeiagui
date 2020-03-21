@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal } from "pi-ui";
 import { useConfig } from "src/containers/Config";
-import Link from "src/componentsv2/Link";
+import Link from "src/components/Link";
 import StaticMarkdown from "./StaticMarkdown";
 
 const ModalPrivacyPolicy = props => {

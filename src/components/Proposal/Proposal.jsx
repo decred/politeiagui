@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
-import IconButton from "src/componentsv2/IconButton";
+import IconButton from "src/components/IconButton";
 import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
 import {
   getMarkdownContent,
@@ -25,13 +25,13 @@ import {
 import useProposalVote from "src/containers/Proposal/hooks/useProposalVote";
 import { useLoaderContext } from "src/containers/Loader";
 import styles from "./Proposal.module.css";
-import LoggedInContent from "src/componentsv2/LoggedInContent";
+import LoggedInContent from "src/components/LoggedInContent";
 import VotesCount from "./VotesCount";
 import DownloadComments from "src/containers/Comments/Download";
 import ProposalActions from "./ProposalActions";
-import ThumbnailGrid from "src/componentsv2/Files";
-import VersionPicker from "src/componentsv2/VersionPicker";
-import { useRouter } from "src/componentsv2/Router";
+import ThumbnailGrid from "src/components/Files";
+import VersionPicker from "src/components/VersionPicker";
+import { useRouter } from "src/components/Router";
 
 const ProposalWrapper = (props) => {
   const voteProps = useProposalVote(getProposalToken(props.proposal));

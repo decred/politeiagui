@@ -1,8 +1,8 @@
 import React from "react";
 import { getThemeProperty, useHover, useTheme } from "pi-ui";
 import PropTypes from "prop-types";
-import IconButton from "src/componentsv2/IconButton";
-import CopyToClipboard from "src/componentsv2/CopyToClipboard";
+import IconButton from "src/components/IconButton";
+import CopyToClipboard from "src/components/CopyToClipboard";
 
 const CopyLink = ({ url, className }) => {
   const { theme, themeName } = useTheme();

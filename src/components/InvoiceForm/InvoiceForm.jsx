@@ -5,9 +5,9 @@ import { Formik } from "formik";
 import { withRouter } from "react-router-dom";
 import InvoiceDatasheet, {
   generateBlankLineItem
-} from "src/componentsv2/InvoiceDatasheet";
+} from "src/components/InvoiceDatasheet";
 import MonthPickerField from "../MonthPicker/MonthPickerField";
-import AttachFileInput from "src/componentsv2/AttachFileInput";
+import AttachFileInput from "src/components/AttachFileInput";
 import {
   getInitialDateValue,
   getInvoiceMinMaxYearAndMonth
@@ -15,7 +15,7 @@ import {
 import usePolicy from "src/hooks/api/usePolicy";
 import { invoiceValidationSchema, improveLineItemErrors } from "./validation";
 import DraftSaver from "./DraftSaver";
-import ThumbnailGrid from "src/componentsv2/Files";
+import ThumbnailGrid from "src/components/Files";
 import ExchangeRateField from "./ExchangeRateField";
 import useSessionStorage from "src/hooks/utils/useSessionStorage";
 

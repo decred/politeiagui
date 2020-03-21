@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Formik } from "formik";
-import CheckboxGroupField from "src/componentsv2/CheckboxGroupField";
-import MonthPickerField from "src/componentsv2/MonthPicker/MonthPickerField";
+import CheckboxGroupField from "src/components/CheckboxGroupField";
+import MonthPickerField from "src/components/MonthPicker/MonthPickerField";
 import {
   getInvoiceMinMaxYearAndMonth,
   getInitialDateValue

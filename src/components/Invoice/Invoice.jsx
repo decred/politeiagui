@@ -18,7 +18,7 @@ import {
 import Field from "./Field";
 import InvoiceDatasheet from "../InvoiceDatasheet";
 import { convertAtomsToDcr, usdFormatter } from "src/utilsv2";
-import ThumbnailGrid from "src/componentsv2/Files";
+import ThumbnailGrid from "src/components/Files";
 import { useLoaderContext } from "src/containers/Loader";
 
 const Invoice = ({ invoice, extended, approvedProposalsTokens }) => {

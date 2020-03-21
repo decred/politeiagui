@@ -1,11 +1,11 @@
 import React from "react";
 import get from "lodash/fp/get";
 import { withRouter } from "react-router-dom";
-import Proposal from "src/componentsv2/Proposal";
+import Proposal from "src/components/Proposal";
 import styles from "./Detail.module.css";
 import { useProposal } from "./hooks";
 import Comments from "src/containers/Comments";
-import ProposalLoader from "src/componentsv2/Proposal/ProposalLoader";
+import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { getCommentBlockedReason } from "./helpers";
 import {
   isPublicProposal,
@@ -18,7 +18,7 @@ import {
   PublicActionsProvider
 } from "src/containers/Proposal/Actions";
 import useProposalVote from "../hooks/useProposalVote";
-import { GoBackLink } from "src/componentsv2/Router";
+import { GoBackLink } from "src/components/Router";
 
 const ProposalDetail = ({ Main, match }) => {
   const tokenFromUrl = get("params.token", match);

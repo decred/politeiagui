@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Button } from "pi-ui";
-import StaticMarkdown from "src/componentsv2/StaticMarkdown";
+import StaticMarkdown from "src/components/StaticMarkdown";
 import { useConfig } from "src/containers/Config";
 
 const ModalOnboard = ({ show, onClose }) => {

@@ -1,5 +1,5 @@
 import React from "react";
-import MultipleContentPage from "../../componentsv2/layout/MultipleContentPage";
+import MultipleContentPage from "../../components/layout/MultipleContentPage";
 import PayoutsList from "src/containers/Invoice/Payouts";
 import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 

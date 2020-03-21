@@ -11,8 +11,8 @@ import {
 } from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
-import ErrorBoundary from "src/componentsv2/ErrorBoundary";
-import NewButton from "src/componentsv2/NewButton";
+import ErrorBoundary from "src/components/ErrorBoundary";
+import NewButton from "src/components/NewButton";
 import Header from "src/containers/Header/Header";
 import useScrollToTop from "src/hooks/utils/useScrollToTop";
 import Sidebar from "../../Sidebar";

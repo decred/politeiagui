@@ -2,7 +2,7 @@ import { Card, classNames } from "pi-ui";
 import React from "react";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import useChangePassword from "../hooks/useChangePassword";
-import ModalChangePassword from "src/componentsv2/ModalChangePassword";
+import ModalChangePassword from "src/components/ModalChangePassword";
 import AdminSection from "./components/AdminSection";
 import AddressSection from "./components/AddressSection";
 import EmailSection from "./components/EmailSection";

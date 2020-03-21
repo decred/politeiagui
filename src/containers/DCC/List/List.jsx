@@ -1,8 +1,8 @@
 import React from "react";
 import { useDccs } from "./hooks";
 import { Spinner, Tabs, Tab } from "pi-ui";
-import Dcc from "src/componentsv2/DCC";
-import HelpMessage from "src/componentsv2/HelpMessage";
+import Dcc from "src/components/DCC";
+import HelpMessage from "src/components/HelpMessage";
 import styles from "./List.module.css";
 import { AdminDccActionsProvider } from "src/containers/DCC/Actions";
 import isEmpty from "lodash/isEmpty";

@@ -5,7 +5,7 @@ import styles from "./Files.module.css";
 import ImageThumbnail from "./ImageThumbnail";
 import TextThumbnail from "./TextThumbnail";
 import useHighlightedItem from "src/hooks/utils/useHighlightItem";
-import ModalFullImage from "src/componentsv2/ModalFullImage";
+import ModalFullImage from "src/components/ModalFullImage";
 import ThumbnailGridErrors from "./ThumbnailGridErrors";
 
 export const ThumbnailGrid = ({

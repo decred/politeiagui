@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, useMediaQuery } from "pi-ui";
 import { withRouter } from "react-router-dom";
-import MultipleContentPage from "src/componentsv2/layout/MultipleContentPage";
+import MultipleContentPage from "src/components/layout/MultipleContentPage";
 import ProposalEdit from "src/containers/Proposal/Edit";
 
 const PageProposalEdit = ({ history, match }) => {

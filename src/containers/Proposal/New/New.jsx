@@ -1,9 +1,9 @@
 import { Message, Card, P } from "pi-ui";
 import React from "react";
-import ProposalForm from "src/componentsv2/ProposalForm/ProposalFormLazy";
-import { IdentityMessageError } from "src/componentsv2/IdentityErrorIndicators";
-import Or from "src/componentsv2/Or";
-import Link from "src/componentsv2/Link";
+import ProposalForm from "src/components/ProposalForm/ProposalFormLazy";
+import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
+import Or from "src/components/Or";
+import Link from "src/components/Link";
 import usePaywall from "src/hooks/api/usePaywall";
 import useIdentity from "src/hooks/api/useIdentity";
 import { useNewProposal } from "./hooks";

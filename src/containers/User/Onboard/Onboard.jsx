@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import ModalOnboard from "src/componentsv2/ModalOnboard";
+import ModalOnboard from "src/components/ModalOnboard";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import { useUserOnboard } from "./hooks";
 

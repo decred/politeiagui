@@ -3,7 +3,7 @@ This lib is designed to handle persisting data for the text editors using sessio
 */
 import qs from "query-string";
 import { getCurrentMonth, getCurrentYear } from "../helpers";
-import { generateBlankLineItem } from "../componentsv2/InvoiceDatasheet/helpers";
+import { generateBlankLineItem } from "../components/InvoiceDatasheet/helpers";
 
 export const NEW_PROPOSAL_PATH = "/proposals/new";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, P, Button } from "pi-ui";
 import styles from "./ModalAttachFiles.module.css";
-import FilesInput from "src/componentsv2/Files/Input";
+import FilesInput from "src/components/Files/Input";
 import usePolicy from "src/hooks/api/usePolicy";
 
 const ModalAttachFiles = ({

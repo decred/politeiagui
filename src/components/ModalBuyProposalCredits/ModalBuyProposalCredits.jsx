@@ -8,7 +8,7 @@ import {
 } from "pi-ui";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import FormWrapper from "src/componentsv2/FormWrapper";
+import FormWrapper from "src/components/FormWrapper";
 import PaymentComponent from "../PaymentComponent";
 import PaymentStatusTag from "../PaymentStatusTag";
 import styles from "./ModalBuyProposalCredits.module.css";

@@ -2,7 +2,7 @@ import { Button, classNames, Icon, Text } from "pi-ui";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
-import SingleContentPage from "src/componentsv2/layout/SingleContentPage";
+import SingleContentPage from "src/components/layout/SingleContentPage";
 import { verifyUserPubkey } from "src/helpers";
 import useVerifyKey from "src/hooks/api/useVerifyKey";
 import styles from "./VerifyKey.module.css";

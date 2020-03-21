@@ -8,14 +8,14 @@ import React, {
 import { Card, H2, Text, Message, classNames, Toggle, P, Select } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import styles from "./Comments.module.css";
-import LoggedInContent from "src/componentsv2/LoggedInContent";
-import CommentForm from "src/componentsv2/CommentForm/CommentFormLazy";
-import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
+import LoggedInContent from "src/components/LoggedInContent";
+import CommentForm from "src/components/CommentForm/CommentFormLazy";
+import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import { useComments, CommentContext } from "./hooks";
 import CommentsListWrapper from "./CommentsList/CommentsListWrapper";
 import CommentLoader from "./Comment/CommentLoader";
-import Link from "src/componentsv2/Link";
-import Or from "src/componentsv2/Or";
+import Link from "src/components/Link";
+import Or from "src/components/Or";
 import useQueryString from "src/hooks/utils/useQueryString";
 import {
   getSortOptionsForSelect,
@@ -26,9 +26,9 @@ import {
 import useIdentity from "src/hooks/api/useIdentity";
 import usePaywall from "src/hooks/api/usePaywall";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import { IdentityMessageError } from "src/componentsv2/IdentityErrorIndicators";
+import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
 import { useLoginModal } from "src/containers/User/Login";
-import WhatAreYourThoughts from "src/componentsv2/WhatAreYourThoughts";
+import WhatAreYourThoughts from "src/components/WhatAreYourThoughts";
 import { commentsReducer, initialState, actions } from "./commentsReducer";
 import { getQueryStringValue } from "src/lib/queryString";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";

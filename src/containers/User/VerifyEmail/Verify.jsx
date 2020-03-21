@@ -1,7 +1,7 @@
 import React from "react";
 import { useVerifyUserEmail } from "./hooks";
 import { H2, P } from "pi-ui";
-import LoadingWithMessage from "src/componentsv2/LoadingWithMessage";
+import LoadingWithMessage from "src/components/LoadingWithMessage";
 
 const VerifyEmail = () => {
   const { success, loading, error } = useVerifyUserEmail();

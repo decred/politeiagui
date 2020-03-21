@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useUserProposals } from "./hooks";
-import Proposal from "src/componentsv2/Proposal";
-import ProposalLoader from "src/componentsv2/Proposal/ProposalLoader";
+import Proposal from "src/components/Proposal";
+import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import {
   UnvettedActionsProvider,
   PublicActionsProvider
 } from "src/containers/Proposal/Actions";
-import LazyList from "src/componentsv2/LazyList";
-import LoadingPlaceholders from "src/componentsv2/LoadingPlaceholders";
-import HelpMessage from "src/componentsv2/HelpMessage";
+import LazyList from "src/components/LazyList";
+import LoadingPlaceholders from "src/components/LoadingPlaceholders";
+import HelpMessage from "src/components/HelpMessage";
 
 const PAGE_SIZE = 20;
 

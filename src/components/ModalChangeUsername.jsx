@@ -8,7 +8,7 @@ import {
 } from "pi-ui";
 import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
-import FormWrapper from "src/componentsv2/FormWrapper";
+import FormWrapper from "src/components/FormWrapper";
 import { isEmpty } from "src/helpers";
 
 const ModalChangeUsername = ({

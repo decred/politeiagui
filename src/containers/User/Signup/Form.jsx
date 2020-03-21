@@ -1,10 +1,10 @@
 import { Button, Text, TextInput, H2, P } from "pi-ui";
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import DevelopmentOnlyContent from "src/componentsv2/DevelopmentOnlyContent";
-import EmailSentMessage from "src/componentsv2/EmailSentMessage";
-import FormWrapper from "src/componentsv2/FormWrapper";
-import ModalIdentityWarning from "src/componentsv2/ModalIdentityWarning";
+import DevelopmentOnlyContent from "src/components/DevelopmentOnlyContent";
+import EmailSentMessage from "src/components/EmailSentMessage";
+import FormWrapper from "src/components/FormWrapper";
+import ModalIdentityWarning from "src/components/ModalIdentityWarning";
 import { useSignup } from "./hooks";
 
 const SignupForm = () => {

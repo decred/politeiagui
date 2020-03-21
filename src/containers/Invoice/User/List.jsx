@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from "react";
 import { useUserInvoices } from "./hooks";
 import { Spinner } from "pi-ui";
-import Invoice from "src/componentsv2/Invoice";
+import Invoice from "src/components/Invoice";
 import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import {
   InvoiceFilterForm,
   FilterInvoices
-} from "src/componentsv2/InvoiceFilters";
-import HelpMessage from "src/componentsv2/HelpMessage";
+} from "src/components/InvoiceFilters";
+import HelpMessage from "src/components/HelpMessage";
 import styles from "./List.module.css";
 
 const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {

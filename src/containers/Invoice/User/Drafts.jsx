@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { Text } from "pi-ui";
 import { useDraftInvoices } from "./hooks";
-import DraftInvoice from "src/componentsv2/Invoice/DraftInvoice";
+import DraftInvoice from "src/components/Invoice/DraftInvoice";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import ModalConfirm from "src/componentsv2/ModalConfirm";
-import HelpMessage from "src/componentsv2/HelpMessage";
+import ModalConfirm from "src/components/ModalConfirm";
+import HelpMessage from "src/components/HelpMessage";
 
 const Drafts = () => {
   const { draftInvoices, onDeleteDraftInvoice } = useDraftInvoices();

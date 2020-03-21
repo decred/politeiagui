@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import FormWrapper from "src/componentsv2/FormWrapper";
+import FormWrapper from "src/components/FormWrapper";
 import {
   Button,
   Modal,

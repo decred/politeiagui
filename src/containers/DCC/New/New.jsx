@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "pi-ui";
-import DccForm from "src/componentsv2/DccForm";
-import DccLoader from "src/componentsv2/DCC/DCCLoader";
+import DccForm from "src/components/DccForm";
+import DccLoader from "src/components/DCC/DCCLoader";
 import { useNewDcc } from "./hooks";
 
 const NewDcc = () => {

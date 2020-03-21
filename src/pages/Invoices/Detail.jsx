@@ -1,5 +1,5 @@
 import React from "react";
-import MultipleContentPage from "src/componentsv2/layout/MultipleContentPage";
+import MultipleContentPage from "src/components/layout/MultipleContentPage";
 import InvoiceDetail from "src/containers/Invoice/Detail";
 
 const InvoiceDetailPage = () => {

@@ -1,7 +1,7 @@
 import { Button, Icon, Modal, Text, useTheme, getThemeProperty } from "pi-ui";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import FormWrapper from "src/componentsv2/FormWrapper";
+import FormWrapper from "src/components/FormWrapper";
 
 const ModalConfirm = ({
   show,

@@ -10,7 +10,7 @@ import {
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import ReactFileReader from "react-file-reader";
-import FormWrapper from "src/componentsv2/FormWrapper";
+import FormWrapper from "src/components/FormWrapper";
 import {
   INVALID_FILE,
   INVALID_KEY_PAIR,
