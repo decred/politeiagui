@@ -1,5 +1,5 @@
 import React from "react";
-import Select from "src/componentsv2/Select";
+import { Select } from "pi-ui";
 
 const customStyles = {
   container: provided => ({

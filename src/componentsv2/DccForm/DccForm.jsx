@@ -1,11 +1,10 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import { BoxTextInput, Button, Message, RadioButtonGroup, classNames } from "pi-ui";
+import { BoxTextInput, Button, Message, RadioButtonGroup, classNames, Select as SelectField } from "pi-ui";
 import { Formik } from "formik";
 import { withRouter } from "react-router-dom";
 import usePolicy from "src/hooks/api/usePolicy";
 import { dccValidationSchema } from "./validation";
-import { SelectField } from "src/componentsv2/Select";
 import useSessionStorage from "src/hooks/utils/useSessionStorage";
 import styles from "./DccForm.module.css";
 import {

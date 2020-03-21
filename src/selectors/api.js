@@ -137,6 +137,11 @@ export const proposalPaywallError = getApiError("proposalPaywallDetails");
 export const isApiRequestingUserProposalCredits = getIsApiRequesting(
   "userProposalCredits"
 );
+export const isApiRequestingLikeComment = get([
+  "api",
+  "likeComment",
+  "isRequesting"
+]);
 
 export const apiInitError = getApiError("init");
 

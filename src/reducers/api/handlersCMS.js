@@ -1,7 +1,7 @@
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/fp/get";
 import map from "lodash/fp/map";
-import { receive, reset } from "../util";
+import { receive, reset, request } from "../util";
 
 const getInvoiceToken = (invoice) =>
   get(["censorshiprecord", "token"], invoice);
@@ -219,6 +219,20 @@ export const onReceiveCensorDCCComment = (state, action) => {
             ? { ...c, comment: "", censored: true }
             : c;
         })
+      }
+    }
+  };
+};
+
+export const onRequestLikeComment = (state, action) => {
+  state = request("likeComment", state, action);
+  const id = action.payload.commentid;
+  return {
+    ...state,
+    likeComment: {
+      ...state.likeComment,
+      isRequesting: {
+        [id]: true
       }
     }
   };

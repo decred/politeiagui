@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Text, useMediaQuery, Tooltip, useTheme, classNames } from "pi-ui";
-import iconSearchSmall from "src/assets/search-small.svg";
+import iconSearchSmall from "src/assets/images/search-small.svg";
 import styles from "./Proposal.module.css";
 
 const VotesCount = ({

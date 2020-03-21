@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { classNames } from "pi-ui";
+import { classNames, Select } from "pi-ui";
 import PropTypes from "prop-types";
-import Select from "src/componentsv2/Select";
 import { useReactiveSearchUser } from "./hooks";
 import styles from "./SearchSelector.module.css";
 
