@@ -6,8 +6,8 @@ import {
   reset,
   resetMultiple
 } from "../util";
+import { onRequestLikeComment } from "./handlers";
 import {
-  onRequestLikeComment,
   onReceiveCensorInvoiceComment,
   onReceiveNewInvoiceComment,
   onReceivePayApprovedInvoices,
