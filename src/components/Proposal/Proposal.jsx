@@ -75,7 +75,8 @@ const Proposal = React.memo(function Proposal({
   const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
   const mobile = useMediaQuery("(max-width: 560px)");
   const [showSearchVotesModal, setShowSearchVotesModal] = useState(false);
-  const showEditedDate = version > 1 && timestamp !== publishedat && !abandonedat && !mobile;
+  const showEditedDate =
+    version > 1 && timestamp !== publishedat && !abandonedat && !mobile;
   const showPublishedDate = publishedat && !mobile;
   const showExtendedVersionPicker = extended && version > 1;
   const showAbandonedDate = abandonedat && !mobile;
@@ -166,7 +167,12 @@ const Proposal = React.memo(function Proposal({
                       {...getProposalStatusTagProps(proposal, voteSummary)}
                     />
                     {(isVoteActive || isVotingFinished) && (
-                      <Event event={`vote end${isVoteActive ? "s" : "ed"}`} timestamp={voteEndTimestamp} className={styles.timeLeft} size="small" />
+                      <Event
+                        event={`vote end${isVoteActive ? "s" : "ed"}`}
+                        timestamp={voteEndTimestamp}
+                        className={styles.timeLeft}
+                        size="small"
+                      />
                     )}
                     {isVoteActive && (
                       <>
@@ -246,7 +252,7 @@ const Proposal = React.memo(function Proposal({
               </Row>
             )}
             {extended && (
-              <Row className={styles.lastRow}>
+              <Row className={styles.lastRow} justify="space-between">
                 <Row className={styles.downloadLinksWrapper} noMargin>
                   <DownloadRecord
                     fileName={proposalToken}
