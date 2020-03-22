@@ -45,7 +45,7 @@ const Proposals = (props) => {
   }
 
   const numOfProsalsLoaded = proposals.length;
-  const initialFetchDone = numOfUserProposals !== undefined;
+  const initialFetchDone = !!proposals.length;
 
   useEffect(() => {
     const hasMoreRecordsToLoad =
@@ -58,7 +58,6 @@ const Proposals = (props) => {
   const itemsToBeLoaded =
     amountOfMissingProposals > PAGE_SIZE ? PAGE_SIZE : amountOfMissingProposals;
 
-  // TODO: need a loading while user has not been fetched yet
   return (
     <UnvettedActionsProvider>
       <PublicActionsProvider>
