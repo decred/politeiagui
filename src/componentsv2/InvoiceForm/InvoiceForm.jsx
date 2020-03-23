@@ -239,7 +239,7 @@ const InvoiceFormWrapper = ({
         setFieldError("global", e);
       }
     },
-    [history, onSubmit, setSessionStorageInvoice]
+    [history, onSubmit, setSessionStorageInvoice, onUpdateUser]
   );
 
   return loading ? (
