@@ -70,14 +70,18 @@ export const setPollingPointer = (paymentpolling) => {
 };
 
 const POLL_INTERVAL = 10 * 1000;
-export const onPollUserPayment = () => (dispatch) => {
+export const onPollUserPayment = () => (dispatch, getState) => {
+  const userid = sel.currentUserID(getState());
   return api
     .verifyUserPayment()
     .then((response) => response.haspaid)
     .then((verified) => {
       if (verified) {
         dispatch(
-          act.UPDATE_USER_PAYWALL_STATUS({ status: PAYWALL_STATUS_PAID })
+          act.UPDATE_USER_PAYWALL_STATUS({
+            status: PAYWALL_STATUS_PAID,
+            userid
+          })
         );
       } else {
         const paymentpolling = setTimeout(
@@ -984,12 +988,13 @@ export const onStartVote = (
       });
   });
 
-export const onFetchProposalPaywallDetails = () => (dispatch) => {
+export const onFetchProposalPaywallDetails = () => (dispatch, getState) => {
   dispatch(act.REQUEST_PROPOSAL_PAYWALL_DETAILS());
+  const userid = sel.currentUserID(getState());
   return api
     .proposalPaywallDetails()
     .then((response) =>
-      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS(response))
+      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS({ ...response, userid }))
     )
     .catch((error) => {
       dispatch(act.RECEIVE_PROPOSAL_PAYWALL_DETAILS(null, error));
@@ -1093,12 +1098,13 @@ export const onRevokeVote = (email, token, version) =>
       });
   });
 
-export const onFetchProposalPaywallPayment = () => (dispatch) => {
+export const onFetchProposalPaywallPayment = () => (dispatch, getState) => {
+  const userid = sel.currentUserID(getState());
   dispatch(act.REQUEST_PROPOSAL_PAYWALL_PAYMENT());
   return api
     .proposalPaywallPayment()
     .then((response) =>
-      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(response))
+      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT({ ...response, userid }))
     )
     .catch((error) => {
       dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(null, error));
@@ -1124,6 +1130,7 @@ export const onPollProposalPaywallPayment = (isLimited) => (
   dispatch,
   getState
 ) => {
+  const userid = sel.currentUserID(getState());
   const proposalPaymentReceived = sel.proposalPaymentReceived(getState());
   if (proposalPaymentReceived) {
     clearProposalPaymentPollingPointer();
@@ -1150,7 +1157,7 @@ export const onPollProposalPaywallPayment = (isLimited) => (
       return response;
     })
     .then((response) =>
-      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(response))
+      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT({ ...response, userid }))
     )
     .catch((error) => {
       dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(null, error));

@@ -19,8 +19,7 @@ const Credits = ({ user }) => {
     MANAGE_USER_CLEAR_USER_PAYWALL,
     userID
   );
-  const { isPaid } = usePaywall();
-
+  const { isPaid } = usePaywall(userID);
   const {
     proposalCreditPrice,
     isApiRequestingUserProposalCredits,
@@ -42,12 +41,14 @@ const Credits = ({ user }) => {
   useEffect(() => {
     if (shouldPollPaywallPayment) {
       toggleCreditsPaymentPolling(true);
+      toggleProposalPaymentReceived(false);
       onPollProposalPaywallPayment(true);
     }
   }, [
     shouldPollPaywallPayment,
     onPollProposalPaywallPayment,
-    toggleCreditsPaymentPolling
+    toggleCreditsPaymentPolling,
+    toggleProposalPaymentReceived
   ]);
 
   const {
@@ -75,7 +76,6 @@ const Credits = ({ user }) => {
     }
   }, [
     proposalPaymentReceived,
-    toggleProposalPaymentReceived,
     toggleCreditsPaymentPolling,
     handleCloseModal
   ]);

@@ -1,18 +1,25 @@
+import { useMemo } from "react";
 import * as act from "src/actions";
-import { useAction, useSelector } from "src/redux";
 import * as sel from "src/selectors";
-import { PAYWALL_STATUS_PAID } from "src/constants";
-import { useConfig } from "src/containers/Config";
+import { useAction, useSelector } from "src/redux";
+import { useConfig } from "src/Config";
 
 function usePaywall() {
   const currentUserEmail = useSelector(sel.currentUserEmail);
+  const currentUserID = useSelector(sel.currentUserID);
   const paywallAddress = useSelector(sel.currentUserPaywallAddress);
   const paywallAmount = useSelector(sel.currentUserPaywallAmount);
   const paywallTxNotBefore = useSelector(sel.currentUserPaywallTxNotBefore);
-  const userPaywallStatus = useSelector(sel.getUserPaywallStatus);
-  const userPaywallConfirmations = useSelector(sel.getUserPaywallConfirmations);
-  const userPaywallTxid = useSelector(sel.getUserPaywallTxid);
-  const userAlreadyPaid = useSelector(sel.getUserAlreadyPaid);
+  const userIsPaidSelector = useMemo(
+    () => sel.makeGetUserIsPaid(currentUserID),
+    [currentUserID]
+  );
+  const userPaywallStatusSelector = useMemo(
+    () => sel.makeGetPaywallAddress(currentUserID),
+    [currentUserID]
+  );
+  const userIsPaid = useSelector(userIsPaidSelector);
+  const userPaywallStatus = useSelector(userPaywallStatusSelector);
   const verificationToken = useSelector(sel.verificationToken);
   const isTestnet = useSelector(sel.isTestNet);
 
@@ -26,13 +33,10 @@ function usePaywall() {
     paywallAmount,
     paywallTxNotBefore,
     userPaywallStatus,
-    userPaywallConfirmations,
-    userPaywallTxid,
-    userAlreadyPaid,
     verificationToken,
     isTestnet,
     onResetAppPaywallInfo,
-    isPaid: userPaywallStatus === PAYWALL_STATUS_PAID,
+    isPaid: userIsPaid,
     paywallEnabled: enablePaywall
   };
 }
