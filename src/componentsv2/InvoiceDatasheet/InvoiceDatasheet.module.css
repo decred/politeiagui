@@ -5,19 +5,11 @@
   margin-top: 20px;
 }
 
-.wrapper table.data-grid tr td.cell:not(.selected) {
-  border: 1px solid #ececec;
-}
 .wrapper table.data-grid tr td.cell,
 .wrapper table.data-grid tr th.cell {
   font-size: 12px;
 }
-div.divider {
-  margin: 40px 0px;
-  height: 1px;
-  width: 100%;
-  background-color: #eee;
-}
+
 pre {
   display: inline-block;
   background: #333;
@@ -26,14 +18,15 @@ pre {
 }
 
 :global(.cell.read-only) {
-  background-color: var(--color-gray-lightest) !important;
+  background-color: var(--datasheet-read-only-background) !important;
+  color: var(--datasheet-read-only-text-color) !important;
 }
 
 :global(.cell) {
   position: relative;
   border: 0 !important;
-  border-left: 0.5px solid var(--color-gray-lightest) !important;
-  border-bottom: 0.5px solid var(--color-gray-lightest) !important;
+  border-left: 0.5px solid var(--datasheet-border-color) !important;
+  border-bottom: 0.5px solid var(--datasheet-border-color) !important;
 }
 
 :global(input.data-editor) {
@@ -41,6 +34,7 @@ pre {
   width: 100% !important;
   text-align: left !important;
   font-size: var(--font-size-normal);
+  color: var(--text-color);
 }
 
 :global(span.value-viewer) {
@@ -49,40 +43,9 @@ pre {
   text-overflow: ellipsis !important;
 }
 
-.tableButton.add {
-  background: #164623;
-}
-
-.tableButton.add:hover {
-  background: #476b50;
-}
-
-.tableButton.remove {
-  background: #e63946;
-}
-
-.tableButton.remove.disabled {
-  background: rgba(0, 0, 0, 0.08);
-}
-
-.tableButton.remove:hover {
-  background: #f17d86;
-}
-
-.totalLabel {
-  color: black;
-  font-size: 12px;
-  font-weight: bold;
-}
-
 .multilineCellValue {
   word-break: break-word;
   white-space: pre-line !important;
-}
-
-.multilineEditor {
-  resize: vertical;
-  height: 25px;
 }
 
 .table {
@@ -91,13 +54,15 @@ pre {
   border-collapse: collapse;
   width: 100%;
   min-width: 100rem;
+  background-color: transparent;
 }
 
 .tableHead {
-  background-color: var(--color-gray-lightest);
+  background-color: var(--datasheet-read-only-background);
 }
 
 .tableCell {
+  border: 1px solid var(--datasheet-border-color);
   max-width: 12rem;
   min-width: 12rem;
   overflow: hidden;
@@ -120,23 +85,9 @@ pre {
   text-overflow: ellipsis;
 }
 
-span.tableButton {
-  cursor: pointer;
-  margin-left: 1rem;
-}
-
-span.tableButtonDisabled {
-  cursor: not-allowed;
-  color: var(--color-gray);
-}
-
 .datasheetWrapper {
   width: 100%;
   overflow-y: visible;
   overflow-x: auto;
   padding-bottom: 5rem;
-}
-
-.erroredCell {
-  background: var(--color-orange-light) !important;
 }
