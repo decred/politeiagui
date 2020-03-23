@@ -5,7 +5,7 @@ module.exports = {
     jest: true,
     es6: true
   },
-  plugins: ["react"],
+  plugins: ["react", "react-hooks"],
   parser: "babel-eslint",
   parserOptions: {
     ecmaVersion: 2017,
@@ -53,6 +53,7 @@ module.exports = {
     "no-var": "error",
     "prefer-const": "error",
     "arrow-spacing": "error",
+    "react-hooks/exhaustive-deps": 2,
     "react/jsx-uses-vars": 1,
     "react/jsx-uses-react": 1,
     "react/jsx-no-target-blank": [2, { enforceDynamicLinks: "always" }]
