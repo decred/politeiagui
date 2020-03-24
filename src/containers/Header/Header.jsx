@@ -5,12 +5,15 @@ import Logo from "src/componentsv2/Logo";
 import HamburgerMenu from "src/componentsv2/HamburgerMenu";
 import HeaderNav from "src/componentsv2/HeaderNav";
 import NavigationDrawer from "src/componentsv2/NavigationDrawer";
+import { useConfig } from "src/containers/Config";
 import styles from "./Header.module.css";
 
 const Header = ({ noBorder }) => {
   const small = useMediaQuery("(max-width: 1000px)");
   const extrasmall = useMediaQuery("(max-width: 560px)");
   const [showMenu, setShowMenu] = useState(false);
+  const { javascriptEnabled } = useConfig();
+  const url = javascriptEnabled ? "/" : "/javascript/";
   const toggleShowMenu = useCallback(() => setShowMenu(!showMenu), [
     showMenu,
     setShowMenu
@@ -18,7 +21,7 @@ const Header = ({ noBorder }) => {
   return (
     <UIHeader className={classNames(noBorder && styles.noBorder)}>
       <NavLink
-        to="/"
+        to={url}
         className={extrasmall && showMenu ? styles.hideLogo : styles.showLogo}>
         <Logo />
       </NavLink>
