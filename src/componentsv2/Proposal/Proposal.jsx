@@ -73,7 +73,7 @@ const Proposal = React.memo(function Proposal({
     `/proposals/${proposalToken}` : `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}`;
   const commentsURL = javascriptEnabled ?
     `/proposals/${proposalToken}?scrollToComments=true` :
-    `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}${encodeURIComponent("?scrollToComments=true")}`;
+    `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}?scrollToComments=true`;
   const authorURL = javascriptEnabled ?
     `/user/${userid}` : `${NOJS_ROUTE_PREFIX}/user/${userid}`;
   const isPublic = isPublicProposal(proposal);

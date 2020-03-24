@@ -12,7 +12,6 @@ import LazyList from "src/componentsv2/LazyList";
 import { getRecordsByTabOption, getRecordToken } from "./helpers";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import HelpMessage from "src/componentsv2/HelpMessage";
-import { setEncodedQueryString } from "src/lib/queryString";
 import { useConfig } from "src/containers/Config";
 import { NOJS_ROUTE_PREFIX } from "src/constants";
 
@@ -152,7 +151,7 @@ const RecordsView = ({
           key={`tab2-${label}`}
           count={displayTabCount ? getPropsCountByTab(label) : ""}
           label={
-            <a href={setEncodedQueryString(NOJS_ROUTE_PREFIX, "?tab="+label.toLowerCase())}>
+            <a href={`${NOJS_ROUTE_PREFIX}/?tab=${label.toLowerCase()}`}>
               {label}
             </a>
           }
