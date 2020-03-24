@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Button } from "pi-ui";
 import { FormikConsumer } from "formik";
 import { useDraftDccs } from "src/containers/DCC/User/hooks";
-import { getQueryStringValue, setQueryStringValue } from "src/lib/queryString";
+import useQueryString from "src/hooks/utils/useQueryString";
+import delay from "lodash/delay";
 
-const DraftSaver = ({ values, setValues, submitSuccess, nomineeUsername }) => {
-  const [draftId, setDraftId] = useState(getQueryStringValue("draft"));
+const DraftSaver = ({ values, setValues, submitSuccess }) => {
+  const [draftId, setDraftId] = useQueryString("draft");
   const {
     draftDccs,
     onDeleteDraftDcc: onDelete,
@@ -14,33 +15,24 @@ const DraftSaver = ({ values, setValues, submitSuccess, nomineeUsername }) => {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const canSaveDraft = values && !!values.type && !!nomineeUsername && !saved;
+  const canSaveDraft = values && !!values.type && !!values.nomineeid && !saved;
 
   const executeFakeLoading = () => {
     setSaving(true);
-    setTimeout(() => {
+    delay(() => {
       setSaved(true);
       setSaving(false);
     }, 300);
   };
 
   const handleSave = () => {
-    const id = onSave({ id: draftId, nomineeUsername, ...values });
+    const id = onSave({ id: draftId, ...values });
     // first time saving this draft
     if (!draftId) {
       setDraftId(id);
     }
     executeFakeLoading();
   };
-
-  useEffect(
-    function updateURLForDraftID() {
-      if (draftId) {
-        setQueryStringValue("draft", draftId);
-      }
-    },
-    [draftId]
-  );
 
   useEffect(
     function resetSaved() {
@@ -51,7 +43,7 @@ const DraftSaver = ({ values, setValues, submitSuccess, nomineeUsername }) => {
 
   useEffect(
     function handleSubmitSuccess() {
-      if (submitSuccess && !!draftId) {
+      if (submitSuccess && draftId) {
         onDelete(draftId);
       }
     },
@@ -61,24 +53,9 @@ const DraftSaver = ({ values, setValues, submitSuccess, nomineeUsername }) => {
   useEffect(
     function handleInitializeFormFromDraft() {
       const foundDraftDcc =
-        !!draftDccs && draftId && draftDccs[draftId];
+        draftDccs && draftId && draftDccs[draftId];
       if (foundDraftDcc) {
-        const {
-          type,
-          nomineeid,
-          statement,
-          domain,
-          contractortype,
-          draftId
-        } = foundDraftDcc;
-        setValues({
-          type,
-          nomineeid,
-          statement,
-          domain,
-          contractortype,
-          draftId
-        });
+        setValues(foundDraftDcc);
       }
     },
     [draftDccs, draftId, setValues]

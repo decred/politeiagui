@@ -286,7 +286,7 @@ export const onSaveDraftDcc = ({
   domain,
   contractortype,
   id: draftId,
-  nomineeUsername
+  nomineeusername
 }) => (dispatch) => {
   resetNewDccData();
   const id = draftId || uniqueID("draft");
@@ -298,7 +298,7 @@ export const onSaveDraftDcc = ({
       domain,
       contractortype,
       id,
-      nomineeUsername,
+      nomineeusername,
       timestamp: Date.now() / 1000
     })
   );

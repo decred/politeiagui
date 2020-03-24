@@ -43,7 +43,6 @@ const DccForm = React.memo(function DccForm({
   submitSuccess
 }) {
   const [isIssuance, setIsIssuance] = useState();
-  const [nomineeUsername, setNomineeUsername] = useState();
 
   // scroll to top in case of global error
   useEffect(() => {
@@ -97,7 +96,7 @@ const DccForm = React.memo(function DccForm({
   const handleChangeNomineeSelector = (e) => {
     setFieldTouched("nomineeid", true);
     setFieldValue("nomineeid", e.value);
-    setNomineeUsername(e.label);
+    setFieldValue("nomineeusername", e.label);
   };
 
   return (
@@ -158,7 +157,7 @@ const DccForm = React.memo(function DccForm({
         onChange={handleChangeWithTouched("statement")}
       />
       <div className="justify-right">
-        <DraftSaver {...{ nomineeUsername, submitSuccess }}/>
+        <DraftSaver {...{ submitSuccess }}/>
         <SubmitButton/>
       </div>
     </form>

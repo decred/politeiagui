@@ -80,8 +80,8 @@ export const presentationalDccName = (dcc) =>
  * @param {Object} dcc
  */
 export const presentationalDraftDccName = (draft) =>
-  draft && draft.type && draft.nomineeUsername
-    ? `${dccTypes[draft.type]} DCC draft for ${draft.nomineeUsername}`
+  draft && draft.type && draft.nomineeusername
+    ? `${dccTypes[draft.type]} DCC draft for ${draft.nomineeusername}`
     : "";
 
 /**
@@ -233,3 +233,11 @@ export const isUserValidContractor = (user) =>
   user.domain !== DCC_DOMAIN_INVALID &&
   user.contractortype !== CONTRACTOR_TYPE_REVOKED &&
   user.contractortype !== CONTRACTOR_TYPE_NOMINEE;
+
+/**
+ * Retuns a sorted dcc list by timestamp
+ * @param {Object} unorderedDccs
+ */
+export const sortDccsByTimestamp = (unorderedDccs) =>
+  unorderedDccs &&
+  Object.values(unorderedDccs).sort((a, b) => b.timestamp - a.timestamp);

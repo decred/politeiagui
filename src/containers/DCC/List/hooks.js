@@ -4,7 +4,7 @@ import * as act from "src/actions";
 import { useAction, useSelector, useStoreSubscribe } from "src/redux";
 import useAPIAction from "src/hooks/utils/useAPIAction";
 import useThrowError from "src/hooks/utils/useThrowError";
-import { DCC_STATUS_ACTIVE } from "src/containers/DCC/constants";
+import { DCC_STATUS_ACTIVE, sortDccsByTimestamp } from "src/containers/DCC";
 import { handleSaveAppDraftDccs } from "src/lib/local_storage";
 
 export function useDccs() {
@@ -17,10 +17,8 @@ export function useDccs() {
 
   const dccs = useMemo(() => {
     const unorderedDccs = dccsByStatus && dccsByStatus[status];
-    return (
-      unorderedDccs &&
-      Object.values(unorderedDccs).sort((a, b) => b.timestamp - a.timestamp)
-    );
+    const sortedDccs = sortDccsByTimestamp(unorderedDccs);
+    return sortedDccs;
   }, [dccsByStatus, status]);
 
   const handleTabChange = useCallback(
@@ -51,7 +49,7 @@ export function useDraftDccs() {
   }, [onLoadDraftDccs, draftDccs]);
 
   useEffect(
-    function unsubscribeToStore() {
+    function unsubscribeFromStore() {
       return unsubscribe;
     },
     [unsubscribe]

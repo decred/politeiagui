@@ -18,7 +18,7 @@ export function useDraftDccs() {
   }, [onLoadDraftDccs]);
 
   useEffect(
-    function unsubscribeToStore() {
+    function unsubscribeFromStore() {
       return unsubscribe;
     },
     [unsubscribe]
