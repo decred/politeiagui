@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import { BoxTextInput, Button, Message } from "pi-ui";
+import { BoxTextInput, Button, Message, Spinner } from "pi-ui";
 import { Formik } from "formik";
 import { withRouter } from "react-router-dom";
 import InvoiceDatasheet, {
@@ -13,11 +13,15 @@ import {
   getInvoiceMinMaxYearAndMonth
 } from "src/containers/Invoice";
 import usePolicy from "src/hooks/api/usePolicy";
+import useUserDetail from "src/hooks/api/useUserDetail";
 import { invoiceValidationSchema, improveLineItemErrors } from "./validation";
 import DraftSaver from "./DraftSaver";
 import ThumbnailGrid from "src/components/Files";
 import ExchangeRateField from "./ExchangeRateField";
 import useSessionStorage from "src/hooks/utils/useSessionStorage";
+import { useAction } from "src/redux";
+import { onEditUser } from "src/actions";
+import styles from "./InvoiceForm.module.css";
 
 const InvoiceForm = React.memo(function InvoiceForm({
   values,
@@ -54,7 +58,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
       setFieldValue("lineitems", value);
       setSessionStorageInvoice({
         ...values,
-        "lineitems": value
+        lineitems: value
       });
     },
     [setFieldValue, values, setSessionStorageInvoice]
@@ -170,16 +174,23 @@ const InvoiceForm = React.memo(function InvoiceForm({
   );
 });
 
-const InvoiceFormWrapper = ({ initialValues, onSubmit, history, approvedProposalsTokens }) => {
+const InvoiceFormWrapper = ({
+  initialValues,
+  onSubmit,
+  history,
+  approvedProposalsTokens
+}) => {
   const { policy } = usePolicy();
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const { user, loading } = useUserDetail();
+  const onUpdateUser = useAction(onEditUser);
   const invoiceFormValidation = useMemo(() => invoiceValidationSchema(policy), [
     policy
   ]);
   const FORM_INITIAL_VALUES = {
-    name: "",
-    location: "",
-    contact: "",
+    name: user.contractorname,
+    location: user.contractorlocation,
+    contact: user.contractorcontact,
     address: "",
     exchangerate: "",
     date: getInitialDateValue(),
@@ -195,6 +206,7 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history, approvedProposal
     formInitialValues = sessionStorageInvoice;
   }
   const isInitialValid = invoiceFormValidation.isValidSync(formInitialValues);
+
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
@@ -211,6 +223,14 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history, approvedProposal
         const invoiceToken = token || values.token;
         setSubmitting(false);
         setSubmitSuccess(true);
+        const userDetails = {
+          githubname: "",
+          matrixname: "",
+          contractorname: others.name,
+          contractorlocation: others.location,
+          contractorcontact: others.contact
+        };
+        onUpdateUser(userDetails);
         history.push(`/invoices/${invoiceToken}`);
         setSessionStorageInvoice(null);
         resetForm();
@@ -219,17 +239,28 @@ const InvoiceFormWrapper = ({ initialValues, onSubmit, history, approvedProposal
         setFieldError("global", e);
       }
     },
-    [history, onSubmit, setSessionStorageInvoice]
+    [history, onSubmit, setSessionStorageInvoice, onUpdateUser]
   );
 
-  return (
+  return loading ? (
+    <div className={styles.spinnerWrapper}>
+      <Spinner invert />
+    </div>
+  ) : (
     <Formik
       onSubmit={handleSubmit}
       initialValues={formInitialValues}
       isInitialValid={isInitialValid}
       validationSchema={invoiceFormValidation}>
       {(props) => (
-        <InvoiceForm {...{ ...props, submitSuccess, setSessionStorageInvoice, approvedProposalsTokens }} />
+        <InvoiceForm
+          {...{
+            ...props,
+            submitSuccess,
+            setSessionStorageInvoice,
+            approvedProposalsTokens
+          }}
+        />
       )}
     </Formik>
   );
