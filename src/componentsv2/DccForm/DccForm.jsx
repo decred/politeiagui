@@ -51,6 +51,7 @@ const DccForm = React.memo(function DccForm({
     }
   }, [errors]);
 
+
   useEffect(() => {
     if (values.type === DCC_TYPE_ISSUANCE) {
       setIsIssuance(true);
@@ -90,6 +91,10 @@ const DccForm = React.memo(function DccForm({
 
   const handleChangeSelector = (field) => (e) => {
     setFieldTouched(field, true);
+    setSessionStorageDcc({
+      ...values,
+      [field]: e.value
+    });
     setFieldValue(field, e.value);
   };
 
@@ -97,6 +102,11 @@ const DccForm = React.memo(function DccForm({
     setFieldTouched("nomineeid", true);
     setFieldValue("nomineeid", e.value);
     setFieldValue("nomineeusername", e.label);
+    setSessionStorageDcc({
+      ...values,
+      "nomineeid": e.value,
+      "nomineeusername": e.label
+    });
   };
 
   return (
@@ -185,6 +195,9 @@ const DccFormWrapper = ({ initialValues, onSubmit, history, cmsUsers, userDomain
     "dcc",
     null
   );
+
+  console.log("form initial values", formInitialValues, sessionStorageDcc);
+
   if (sessionStorageDcc !== null) {
     formInitialValues = sessionStorageDcc;
   }
