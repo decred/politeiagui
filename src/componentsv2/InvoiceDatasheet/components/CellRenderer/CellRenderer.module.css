@@ -21,3 +21,7 @@
 .erroredCell {
   background: var(--color-orange-light) !important;
 }
+
+.erroredCell > input {
+  color: #303030;
+}
