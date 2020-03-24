@@ -10,6 +10,7 @@ import LoggedInContent from "src/componentsv2/LoggedInContent";
 import Likes from "src/componentsv2/Likes";
 import CopyLink from "src/componentsv2/CopyLink";
 import { useConfig } from "src/containers/Config";
+import { NOJS_ROUTE_PREFIX } from "src/constants";
 
 const Comment = ({
   className,
@@ -56,7 +57,7 @@ const Comment = ({
   const isThread = numOfReplies > 0 && !isFlatMode;
 
   const authorURL = javascriptEnabled ?
-    `/user/${authorID}` : `/nojavascript/user/${authorID}`;
+    `/user/${authorID}` : `${NOJS_ROUTE_PREFIX}/user/${authorID}`;
 
   return (
     <div

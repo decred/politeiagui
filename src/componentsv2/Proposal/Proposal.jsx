@@ -11,6 +11,7 @@ import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/componentsv2/IconButton";
+import { NOJS_ROUTE_PREFIX } from "src/constants";
 import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
 import {
   getMarkdownContent,
@@ -69,12 +70,12 @@ const Proposal = React.memo(function Proposal({
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
   const proposalURL = javascriptEnabled ?
-    `/proposals/${proposalToken}` : `/nojavascript/proposals/${proposalToken}`;
+    `/proposals/${proposalToken}` : `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}`;
   const commentsURL = javascriptEnabled ?
     `/proposals/${proposalToken}?scrollToComments=true` :
-    `/nojavascript/proposals/${proposalToken}${encodeURIComponent("?scrollToComments=true")}`;
+    `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}${encodeURIComponent("?scrollToComments=true")}`;
   const authorURL = javascriptEnabled ?
-    `/user/${userid}` : `/nojavascript/user/${userid}`;
+    `/user/${userid}` : `${NOJS_ROUTE_PREFIX}/user/${userid}`;
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);

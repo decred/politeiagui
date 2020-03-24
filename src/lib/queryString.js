@@ -10,10 +10,11 @@ export const setQueryStringWithoutPageReload = (qsValue) => {
   window.history.pushState({ path: newurl }, "", newurl);
 };
 
-export const setEncodedQueryString = (qsValue) =>
+export const setEncodedQueryString = (prefix = "", qsValue) =>
   window.location.protocol +
   "//" +
   window.location.host +
+  prefix +
   window.location.pathname +
   encodeURIComponent(qsValue);
 

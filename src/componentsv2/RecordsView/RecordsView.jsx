@@ -14,6 +14,7 @@ import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithInde
 import HelpMessage from "src/componentsv2/HelpMessage";
 import { setEncodedQueryString } from "src/lib/queryString";
 import { useConfig } from "src/containers/Config";
+import { NOJS_ROUTE_PREFIX } from "src/constants";
 
 const DEFAULT_PAGE_SIZE = 4;
 
@@ -151,7 +152,7 @@ const RecordsView = ({
           key={`tab2-${label}`}
           count={displayTabCount ? getPropsCountByTab(label) : ""}
           label={
-            <a href={setEncodedQueryString("?tab="+label.toLowerCase())}>
+            <a href={setEncodedQueryString(NOJS_ROUTE_PREFIX, "?tab="+label.toLowerCase())}>
               {label}
             </a>
           }
