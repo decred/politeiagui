@@ -9,6 +9,7 @@ import Link from "src/componentsv2/Link";
 import LoggedInContent from "src/componentsv2/LoggedInContent";
 import Likes from "src/componentsv2/Likes";
 import CopyLink from "src/componentsv2/CopyLink";
+import { useConfig } from "src/containers/Config";
 
 const Comment = ({
   className,
@@ -40,6 +41,7 @@ const Comment = ({
   ...props
 }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
+  const { javascriptEnabled } = useConfig();
 
   const censorButton = !censored && censorable && (
     <Text weight="semibold" className={styles.censor} onClick={onClickCensor}>
@@ -52,6 +54,9 @@ const Comment = ({
   const showNewReplies =
     numOfNewHiddenReplies > 0 && !showReplies && !isFlatMode;
   const isThread = numOfReplies > 0 && !isFlatMode;
+
+  const authorURL = javascriptEnabled ?
+    `/user/${authorID}` : `/nojavascript/user/${authorID}`;
 
   return (
     <div
@@ -68,7 +73,7 @@ const Comment = ({
               styles.commentAuthor,
               highlightAuthor && styles.recordAuthor
             )}
-            to={`/user/${authorID}`}>
+            to={authorURL}>
             {author}
           </Link>
           <DateTooltip timestamp={createdAt} placement="bottom">

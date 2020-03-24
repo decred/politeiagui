@@ -32,6 +32,7 @@ import ProposalActions from "./ProposalActions";
 import ThumbnailGrid from "src/componentsv2/Files";
 import VersionPicker from "src/componentsv2/VersionPicker";
 import { useRouter } from "src/componentsv2/Router";
+import { useConfig } from "src/containers/Config";
 
 const ProposalWrapper = (props) => {
   const voteProps = useProposalVote(getProposalToken(props.proposal));
@@ -63,10 +64,17 @@ const Proposal = React.memo(function Proposal({
     username,
     version
   } = proposal;
+  const { javascriptEnabled } = useConfig();
 
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
-  const proposalURL = `/proposals/${proposalToken}`;
+  const proposalURL = javascriptEnabled ?
+    `/proposals/${proposalToken}` : `/nojavascript/proposals/${proposalToken}`;
+  const commentsURL = javascriptEnabled ?
+    `/proposals/${proposalToken}?scrollToComments=true` :
+    `/nojavascript/proposals/${proposalToken}${encodeURIComponent("?scrollToComments=true")}`;
+  const authorURL = javascriptEnabled ?
+    `/user/${userid}` : `/nojavascript/user/${userid}`;
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
@@ -131,7 +139,7 @@ const Proposal = React.memo(function Proposal({
               }
               subtitle={
                 <Subtitle>
-                  <Author username={username} id={userid} />
+                  <Author username={username} url={authorURL} />
                   {showPublishedDate && (
                     <Event event="published" timestamp={publishedat} />
                   )}
@@ -233,7 +241,7 @@ const Proposal = React.memo(function Proposal({
               <Row justify="space-between">
                 <CommentsLink
                   numOfComments={numcomments}
-                  url={`/proposals/${proposalToken}?scrollToComments=true`}
+                  url={commentsURL}
                 />
                 <div>
                   {(isVoteActive || isVotingFinished) && (
