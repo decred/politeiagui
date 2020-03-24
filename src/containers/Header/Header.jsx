@@ -6,6 +6,7 @@ import HamburgerMenu from "src/componentsv2/HamburgerMenu";
 import HeaderNav from "src/componentsv2/HeaderNav";
 import NavigationDrawer from "src/componentsv2/NavigationDrawer";
 import { useConfig } from "src/containers/Config";
+import { NOJS_ROUTE_PREFIX } from "src/constants";
 import styles from "./Header.module.css";
 
 const Header = ({ noBorder }) => {
@@ -13,7 +14,7 @@ const Header = ({ noBorder }) => {
   const extrasmall = useMediaQuery("(max-width: 560px)");
   const [showMenu, setShowMenu] = useState(false);
   const { javascriptEnabled } = useConfig();
-  const url = javascriptEnabled ? "/" : "/javascript/";
+  const url = javascriptEnabled ? "/" : NOJS_ROUTE_PREFIX;
   const toggleShowMenu = useCallback(() => setShowMenu(!showMenu), [
     showMenu,
     setShowMenu
