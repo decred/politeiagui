@@ -6,14 +6,16 @@ import useAPIAction from "src/hooks/utils/useAPIAction";
 import * as sel from "src/selectors";
 
 export default function useUserDetail(userID) {
-  const userSelector = useMemo(() => sel.makeGetUserByID(userID), [userID]);
+  const meUserID = useSelector(sel.userid);
+  const uid = userID || meUserID;
+  const userSelector = useMemo(() => sel.makeGetUserByID(uid), [uid]);
   const user = useSelector(userSelector);
   const isAdmin = useSelector(sel.currentUserIsAdmin);
   const currentUserID = useSelector(sel.currentUserID);
   const onFetchUser = useAction(act.onFetchUser);
   const userMissingData = !user || (user && !user.identities);
-  const needsFetch = !!userID && userMissingData;
-  const args = [userID];
+  const needsFetch = !!uid && userMissingData;
+  const args = [uid];
   const [loading, error] = useAPIAction(onFetchUser, args, needsFetch);
 
   useThrowError(error);
