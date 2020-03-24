@@ -11,6 +11,7 @@ import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
+import { NOJS_ROUTE_PREFIX } from "src/constants";
 import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
 import {
   getMarkdownContent,
@@ -32,6 +33,7 @@ import ProposalActions from "./ProposalActions";
 import ThumbnailGrid from "src/components/Files";
 import VersionPicker from "src/components/VersionPicker";
 import { useRouter } from "src/components/Router";
+import { useConfig } from "src/containers/Config";
 
 const ProposalWrapper = (props) => {
   const voteProps = useProposalVote(getProposalToken(props.proposal));
@@ -63,10 +65,17 @@ const Proposal = React.memo(function Proposal({
     username,
     version
   } = proposal;
+  const { javascriptEnabled } = useConfig();
 
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
-  const proposalURL = `/proposals/${proposalToken}`;
+  const proposalURL = javascriptEnabled ?
+    `/proposals/${proposalToken}` : `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}`;
+  const commentsURL = javascriptEnabled ?
+    `/proposals/${proposalToken}?scrollToComments=true` :
+    `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}?scrollToComments=true`;
+  const authorURL = javascriptEnabled ?
+    `/user/${userid}` : `${NOJS_ROUTE_PREFIX}/user/${userid}`;
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
@@ -131,7 +140,7 @@ const Proposal = React.memo(function Proposal({
               }
               subtitle={
                 <Subtitle>
-                  <Author username={username} id={userid} />
+                  <Author username={username} url={authorURL} />
                   {showPublishedDate && (
                     <Event event="published" timestamp={publishedat} />
                   )}
@@ -236,7 +245,7 @@ const Proposal = React.memo(function Proposal({
               <Row justify="space-between">
                 <CommentsLink
                   numOfComments={numcomments}
-                  url={`/proposals/${proposalToken}?scrollToComments=true`}
+                  url={commentsURL}
                 />
                 <div>
                   {(isVoteActive || isVotingFinished) && (

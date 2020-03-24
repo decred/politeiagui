@@ -151,3 +151,11 @@ export const CMS_DOMAINS = [
   "Documentation",
   "Community Management"
 ];
+
+export const DCC_DIRECT_CONTRACTOR_TYPE = 1;
+export const DCC_SUB_CONTRACTOR_TYPE = 3;
+
+export const DCC_SUPPORT_VOTE = "aye";
+export const DCC_OPPOSE_VOTE = "nay";
+
+export const NOJS_ROUTE_PREFIX = "/nojavascript";

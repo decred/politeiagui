@@ -12,6 +12,8 @@ import LazyList from "src/components/LazyList";
 import { getRecordsByTabOption, getRecordToken } from "./helpers";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import HelpMessage from "src/components/HelpMessage";
+import { useConfig } from "src/containers/Config";
+import { NOJS_ROUTE_PREFIX } from "src/constants";
 
 const DEFAULT_PAGE_SIZE = 4;
 
@@ -62,6 +64,7 @@ const RecordsView = ({
   const [hasMoreToLoad, setHasMore] = useState(true);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { itemsOnLoad } = state;
+  const { javascriptEnabled } = useConfig();
 
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
   const tabOption = tabLabels[index];
@@ -141,6 +144,22 @@ const RecordsView = ({
     [tabLabels, displayTabCount, getPropsCountByTab]
   );
 
+  const nojsTabs = useMemo(
+    () =>
+      tabLabels.map(label => (
+        <Tab
+          key={`tab2-${label}`}
+          count={displayTabCount ? getPropsCountByTab(label) : ""}
+          label={
+            <a href={`${NOJS_ROUTE_PREFIX}/?tab=${label.toLowerCase()}`}>
+              {label}
+            </a>
+          }
+        />
+      )),
+    [tabLabels, displayTabCount, getPropsCountByTab]
+  );
+
   const loadingPlaceholders = useMemo(
     () => (
       <LoadingPlaceholders
@@ -161,7 +180,7 @@ const RecordsView = ({
         className={useDropdownTabs ? "padding-bottom-s" : ""}
         mode={useDropdownTabs ? "dropdown" : "horizontal"}
       >
-        {tabs}
+        {javascriptEnabled ? tabs : nojsTabs }
       </Tabs>
     ),
     content: (
