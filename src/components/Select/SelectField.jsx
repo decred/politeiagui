@@ -1,5 +1,5 @@
 import React from "react";
-import Select from "./Select";
+import { Select } from "pi-ui";
 import { FormikConsumer } from "formik";
 
 const getSelectValue = (formValue, options) =>

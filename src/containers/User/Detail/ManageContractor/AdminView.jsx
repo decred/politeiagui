@@ -1,6 +1,6 @@
-import { Card, classNames, Select as SelectField } from "pi-ui";
+import { Card, classNames, Spinner, Button, Message } from "pi-ui";
+import SelectField from "src/components/Select/SelectField";
 import React, { useCallback, useMemo, useState } from "react";
-import { Spinner, Button, Message } from "pi-ui";
 import InfoSection from "../InfoSection.jsx";
 import { selectTypeOptions, selectDomainOptions } from "./helpers";
 import UserSearchSelect from "src/containers/User/Search/SearchSelector";

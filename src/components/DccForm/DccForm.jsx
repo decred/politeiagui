@@ -1,7 +1,14 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import { BoxTextInput, Button, Message, RadioButtonGroup, classNames, Select as SelectField } from "pi-ui";
+import {
+  BoxTextInput,
+  Button,
+  Message,
+  RadioButtonGroup,
+  classNames
+} from "pi-ui";
 import { Formik } from "formik";
+import SelectField from "src/components/Select/SelectField";
 import { withRouter } from "react-router-dom";
 import usePolicy from "src/hooks/api/usePolicy";
 import { dccValidationSchema } from "./validation";
@@ -18,11 +25,10 @@ import {
 } from "src/containers/DCC";
 
 const Select = ({ error, ...props }) => (
-  <div className={classNames(styles.formSelect, error && styles.formSelectError)}>
-    <SelectField {...props}/>
-    { error &&
-      <p className={styles.errorMsg}>{error}</p>
-    }
+  <div
+    className={classNames(styles.formSelect, error && styles.formSelectError)}>
+    <SelectField {...props} />
+    {error && <p className={styles.errorMsg}>{error}</p>}
   </div>
 );
 
@@ -79,7 +85,7 @@ const DccForm = React.memo(function DccForm({
     setFieldTouched("type", true);
     setSessionStorageDcc({
       ...values,
-      "type": e.value
+      type: e.value
     });
     setFieldValue("type", e.value);
     setFieldValue("nomineeid", "");
@@ -113,7 +119,7 @@ const DccForm = React.memo(function DccForm({
         error={touched.domain && errors.domain}
         onChange={handleChangeSelector("domain")}
       />
-      { isIssuance ? (
+      {isIssuance ? (
         <>
           <Select
             name="nomineeid"
@@ -154,13 +160,19 @@ const DccForm = React.memo(function DccForm({
   );
 });
 
-const DccFormWrapper = ({ initialValues, onSubmit, history, cmsUsers, userDomain }) => {
+const DccFormWrapper = ({
+  initialValues,
+  onSubmit,
+  history,
+  cmsUsers,
+  userDomain
+}) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { policy } = usePolicy();
-  const dccFormValidation = useMemo(() => dccValidationSchema(policy, userDomain), [
-    policy,
-    userDomain
-  ]);
+  const dccFormValidation = useMemo(
+    () => dccValidationSchema(policy, userDomain),
+    [policy, userDomain]
+  );
 
   const FORM_INITIAL_VALUES = {
     type: 0,
@@ -205,10 +217,11 @@ const DccFormWrapper = ({ initialValues, onSubmit, history, cmsUsers, userDomain
       onSubmit={handleSubmit}
       initialValues={formInitialValues}
       isInitialValid={isInitialValid}
-      validationSchema={dccFormValidation}
-      >
+      validationSchema={dccFormValidation}>
       {(props) => (
-        <DccForm {...{ ...props, submitSuccess, setSessionStorageDcc, cmsUsers }} />
+        <DccForm
+          {...{ ...props, submitSuccess, setSessionStorageDcc, cmsUsers }}
+        />
       )}
     </Formik>
   );
