@@ -14,7 +14,7 @@ const Header = ({ noBorder }) => {
   const extrasmall = useMediaQuery("(max-width: 560px)");
   const [showMenu, setShowMenu] = useState(false);
   const { javascriptEnabled } = useConfig();
-  const url = javascriptEnabled ? "/" : NOJS_ROUTE_PREFIX;
+  const url = javascriptEnabled ? "/" : NOJS_ROUTE_PREFIX + "/";
   const toggleShowMenu = useCallback(() => setShowMenu(!showMenu), [
     showMenu,
     setShowMenu
