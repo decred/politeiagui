@@ -11,7 +11,7 @@ export function useSignup() {
   const signupResponse = useSelector(sel.apiNewUserResponse);
 
   const onCreateNewUser = useAction(act.onCreateNewUser);
-  const onCreateNewUseFromAdminInvitation = useAction(act.onCreateNewUser);
+  const onCreateNewUseFromAdminInvitation = useAction(act.onCreateNewUserCMS);
   const onResetSignup = useAction(act.onResetNewUser);
 
   const { enableAdminInvite } = useConfig();
