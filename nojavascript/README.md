@@ -9,7 +9,7 @@
 Rule:
 
 `
-location /nojavascript {
+location /nojavascript/ {
     rewrite ^/nojavascript/(.*)$ /$1 break;
     proxy_pass http://127.0.0.1:9090;
     }
