@@ -196,8 +196,6 @@ const DccFormWrapper = ({ initialValues, onSubmit, history, cmsUsers, userDomain
     null
   );
 
-  console.log("form initial values", formInitialValues, sessionStorageDcc);
-
   if (sessionStorageDcc !== null) {
     formInitialValues = sessionStorageDcc;
   }
