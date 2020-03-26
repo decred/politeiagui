@@ -36,7 +36,7 @@ const Drafts = () => {
     : [];
 
   return (
-    <>
+    <div className="margin-top-m">
       {drafts.length ? (
         drafts.map(draft => (
           <DraftInvoice
@@ -59,7 +59,7 @@ const Drafts = () => {
         onClose={closeDeleteModal}
         onSubmit={handleDeleteDraft}
       />
-    </>
+    </div>
   );
 };
 
