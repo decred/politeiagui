@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import get from "lodash/fp/get";
 import { useDcc } from "./hooks";
 import Dcc from "src/components/DCC";
-import DccLoader from "src/components/DCC/DCCLoader";
+import DccLoader from "src/components/DCC/DccLoader";
 import Comments from "src/containers/Comments";
 import { AdminDccActionsProvider } from "src/containers/DCC/Actions";
 import { isDccActive } from "../helpers";
