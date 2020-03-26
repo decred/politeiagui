@@ -19,7 +19,8 @@ import {
 } from "./api";
 import {
   resetNewProposalData,
-  resetNewInvoiceData
+  resetNewInvoiceData,
+  resetNewDccData
 } from "../lib/editors_content_backup";
 import * as sel from "../selectors";
 import act from "./methods";
@@ -276,4 +277,41 @@ export const onSaveNewDccCommentV2 = ({ comment, token, parentID }) => (
 ) => {
   const email = sel.currentUserEmail(getState());
   return dispatch(onSubmitDccCommentApi(email, token, comment, parentID));
+};
+
+export const onSaveDraftDcc = ({
+  type,
+  nomineeid,
+  statement,
+  domain,
+  contractortype,
+  id: draftId,
+  nomineeusername
+}) => (dispatch) => {
+  resetNewDccData();
+  const id = draftId || uniqueID("draft");
+  dispatch(
+    act.SAVE_DRAFT_DCC({
+      type,
+      nomineeid,
+      statement,
+      domain,
+      contractortype,
+      id,
+      nomineeusername,
+      timestamp: Date.now() / 1000
+    })
+  );
+  return id;
+};
+
+export const onLoadDraftDccs = (email) => (dispatch, getState) => {
+  const key = email || sel.currentUserEmail(getState());
+  const stateFromLS = loadStateLocalStorage(key);
+  const drafts = sel.draftDccs(stateFromLS) || {};
+  dispatch(act.LOAD_DRAFT_DCCS(drafts));
+};
+
+export const onDeleteDraftDcc = (draftId) => {
+  return act.DELETE_DRAFT_DCC(draftId);
 };

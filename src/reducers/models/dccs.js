@@ -29,7 +29,10 @@ const dccArrayToByStatusObject = (dccs) =>
   dccs.reduce(
     (dccsByStatus, dcc) => ({
       ...dccsByStatus,
-      [dccStatus(dcc)]: [...(dccsByStatus[dccStatus(dcc)] || []), dcc]
+      [dccStatus(dcc)]: {
+        ...(dccsByStatus[dccStatus(dcc)] || []),
+        [dccToken(dcc)]: dcc
+      }
     }),
     {}
   );
@@ -130,6 +133,15 @@ const onReceiveSetDccStatus = (state, payload) => {
     })
   )(state);
 };
+const onReceiveDraftDcc = (state, draft) =>
+  set(["drafts", draft.id], {
+    ...draft
+  })(state);
+
+const onReceiveDrafts = (state, drafts) =>
+  set("drafts", {
+    ...drafts
+  })(state);
 
 const dccs = (state = DEFAULT_STATE, action) =>
   action.error
@@ -141,7 +153,9 @@ const dccs = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_SUPPORT_OPPOSE_DCC]: () =>
             onReceiveSupportOpposeDcc(state, action.payload),
           [act.RECEIVE_SET_DCC_STATUS]: () =>
-            onReceiveSetDccStatus(state, action.payload)
+            onReceiveSetDccStatus(state, action.payload),
+          [act.SAVE_DRAFT_DCC]: () => onReceiveDraftDcc(state, action.payload),
+          [act.LOAD_DRAFT_DCCS]: () => onReceiveDrafts(state, action.payload)
         }[action.type] || (() => state)
       )();
 

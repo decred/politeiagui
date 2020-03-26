@@ -1,13 +1,13 @@
 import React, { useState, useCallback } from "react";
 import { Text } from "pi-ui";
-import { useDraftInvoices } from "./hooks";
-import DraftInvoice from "src/componentsv2/Invoice/DraftInvoice";
+import { useDraftDccs } from "./hooks";
+import DraftDcc from "src/componentsv2/DCC/DraftDcc";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import ModalConfirm from "src/componentsv2/ModalConfirm";
 import HelpMessage from "src/componentsv2/HelpMessage";
 
 const Drafts = () => {
-  const { draftInvoices, onDeleteDraftInvoice } = useDraftInvoices();
+  const { draftDccs, onDeleteDraftDcc } = useDraftDccs();
   const [targetDraftID, setTargetDraftID] = useState("");
   const [
     showDeleteDraftModal,
@@ -24,14 +24,14 @@ const Drafts = () => {
   );
 
   const handleDeleteDraft = useCallback(() => {
-    onDeleteDraftInvoice(targetDraftID);
+    onDeleteDraftDcc(targetDraftID);
     setTargetDraftID("");
-  }, [onDeleteDraftInvoice, setTargetDraftID, targetDraftID]);
+  }, [onDeleteDraftDcc, setTargetDraftID, targetDraftID]);
 
-  const drafts = draftInvoices
+  const drafts = draftDccs
     ? Object
-        .values(draftInvoices)
-        .filter(draft => !!draft.draftId)
+        .values(draftDccs)
+        .filter(draft => !!draft.id)
         .sort((a, b) => b.timestamp - a.timestamp)
     : [];
 
@@ -39,8 +39,8 @@ const Drafts = () => {
     <div className="margin-top-m">
       {drafts.length ? (
         drafts.map(draft => (
-          <DraftInvoice
-            key={`draft-${draft.draftId}`}
+          <DraftDcc
+            key={`draft-${draft.id}`}
             onDelete={handleOpenDeleteDraftModal}
             draft={draft}
           />
@@ -49,11 +49,11 @@ const Drafts = () => {
         <HelpMessage>No drafts available</HelpMessage>
       )}
       <ModalConfirm
-        title={"Delete draft invoice"}
+        title={"Delete draft DCC"}
         message="Are you sure you want to delete this draft?"
-        successTitle="Draft invoice deleted"
+        successTitle="Draft DCC deleted"
         successMessage={
-          <Text>The draft invoice has been successfully deleted!</Text>
+          <Text>The draft DCC has been successfully deleted!</Text>
         }
         show={showDeleteDraftModal}
         onClose={closeDeleteModal}
