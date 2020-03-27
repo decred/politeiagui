@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import DownloadJSON from "src/componentsv2/DownloadJSON";
+import DownloadJSON from "src/components/DownloadJSON";
 import { useDownloadComments } from "./hooks";
 
 const DownloadComments = ({ recordToken, className }) => {
-  const { comments } = useDownloadComments();
+  const { comments } = useDownloadComments(recordToken);
   return (
     !!comments &&
     !!comments.length && (

@@ -1,6 +1,6 @@
 import { Button, H2, P, TextInput } from "pi-ui";
 import React, { useState } from "react";
-import FormWrapper from "src/componentsv2/FormWrapper";
+import FormWrapper from "src/components/FormWrapper";
 import { useVerifyResetPassword } from "./hooks";
 
 const SuccessContent = () => (

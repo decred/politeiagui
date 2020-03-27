@@ -1,11 +1,10 @@
-import { classNames, Header as UIHeader, useMediaQuery, useTheme } from "pi-ui";
+import { classNames, Header as UIHeader, useMediaQuery } from "pi-ui";
 import React, { useState, useCallback } from "react";
 import { NavLink } from "react-router-dom";
-import Logo from "src/assets/pi-logo-light.svg";
-import DarkLogo from "src/assets/pi-logo-dark.svg";
-import HamburgerMenu from "src/componentsv2/HamburgerMenu";
-import HeaderNav from "src/componentsv2/HeaderNav";
-import NavigationDrawer from "src/componentsv2/NavigationDrawer";
+import Logo from "src/components/Logo";
+import HamburgerMenu from "src/components/HamburgerMenu";
+import HeaderNav from "src/components/HeaderNav";
+import NavigationDrawer from "src/components/NavigationDrawer";
 import styles from "./Header.module.css";
 
 const Header = ({ noBorder }) => {
@@ -16,15 +15,12 @@ const Header = ({ noBorder }) => {
     showMenu,
     setShowMenu
   ]);
-  const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
-  const LogoSrc = isDarkTheme ? DarkLogo : Logo;
   return (
     <UIHeader className={classNames(noBorder && styles.noBorder)}>
       <NavLink
         to="/"
         className={extrasmall && showMenu ? styles.hideLogo : styles.showLogo}>
-        <img src={LogoSrc} alt="presentation" />
+        <Logo />
       </NavLink>
       {small ? (
         <>

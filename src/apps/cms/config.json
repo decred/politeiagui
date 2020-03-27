@@ -1,0 +1,22 @@
+{
+  "title": "Contractor Management",
+  "logoLight": "cms-logo-light.svg",
+  "logoDark": "cms-logo-light.svg",
+  "recordType": "invoice",
+  "aboutContent": "",
+  "enableAdminInvite": true,
+  "enableCommentVote": false,
+  "enableCredits": false,
+  "enablePaywall": false,
+  "onBoardContent": "onboard-cms",
+  "onBoardLink": "https://docs.decred.org/contributing/overview/",
+  "privacyPolicyContent": "privacy-policy-cms",
+  "testnetGitRepository": "",
+  "mainnetGitRepository": "",
+  "navMenuPaths": [
+    { "label": "My invoices", "path": "/invoices/me", "admin": false },
+    { "label": "Admin", "path": "/admin/invoices", "admin": true },
+    { "label": "DCCs", "path": "/dccs", "admin": true },
+    { "label": "Search for users", "path": "/user/search", "admin": true }
+  ]
+}

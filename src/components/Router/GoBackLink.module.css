@@ -1,0 +1,20 @@
+.returnLink {
+  cursor: pointer;
+  font-size: var(--font-size-small);
+  color: var(--color-gray) !important;
+}
+
+.darkReturnLink {
+  color: var(--text-color) !important;
+}
+
+.returnLinkContainer {
+  margin-bottom: 1rem;
+}
+
+/* EXTRA SMALL */
+@media screen and (max-width: 560px) {
+  .returnLinkContainer {
+    padding-left: var(--container-padding-left);
+  }
+}

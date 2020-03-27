@@ -17,7 +17,7 @@ export const useUnvettedProposalActions = () =>
   useContext(UnvettedProposalsActionsContext);
 
 export function useUnvettedActions() {
-  const onSetProposalStatus = useAction(act.onSetProposalStatusV2);
+  const onSetProposalStatus = useAction(act.onSetProposalStatus);
 
   const onCensorProposal = useCallback(
     (proposal) => (reason) =>
@@ -45,7 +45,7 @@ export function useUnvettedActions() {
 }
 
 export function usePublicActions() {
-  const onSetProposalStatus = useAction(act.onSetProposalStatusV2);
+  const onSetProposalStatus = useAction(act.onSetProposalStatus);
   const onStart = useAction(act.onStartVote);
   const onAuthorize = useAction(act.onAuthorizeVote);
   const onRevoke = useAction(act.onRevokeVote);

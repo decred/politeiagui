@@ -1,7 +1,7 @@
 import React from "react";
 import { useCredits } from "../hooks.js";
-import ModalBuyProposalCredits from "src/componentsv2/ModalBuyProposalCredits";
-import ModalPayPaywall from "src/componentsv2/ModalPayPaywall";
+import ModalBuyProposalCredits from "src/components/ModalBuyProposalCredits";
+import ModalPayPaywall from "src/components/ModalPayPaywall";
 import { getProposalCreditsPaymentStatus } from "../helpers.js";
 
 export default ({

@@ -178,7 +178,7 @@ export const signComment = (email, comment) =>
         .then((signature) => ({ ...comment, publickey, signature }))
     );
 
-export const signDCC = (email, dcc) =>
+export const signDcc = (email, dcc) =>
   pki
     .myPubKeyHex(email)
     .then((publickey) =>
@@ -187,7 +187,7 @@ export const signDCC = (email, dcc) =>
         .then((signature) => ({ file: dcc, publickey, signature }))
     );
 
-export const signDCCVote = (email, dccvote) =>
+export const signDccVote = (email, dccvote) =>
   pki
     .myPubKeyHex(email)
     .then((publickey) =>
@@ -334,16 +334,25 @@ export const proposalPaywallDetails = () =>
 export const userProposalCredits = () =>
   GET("/v1/user/proposals/credits").then(getResponse);
 
-export const editUser = (csrf, { emailnotifications }) =>
-  POST("/user/edit", csrf, {
-    emailnotifications
-  }).then(getResponse);
+export const editUser = (csrf, params) =>
+  POST("/user/edit", csrf, params).then(getResponse);
 
 export const manageUser = (csrf, userid, action, reason) =>
   POST("/user/manage", csrf, { userid, action, reason }).then(getResponse);
 
-export const manageCmsUser = (csrf, userid, newUserProps) =>
-  POST("/user/manage", csrf, { userid, ...newUserProps });
+export const manageCmsUser = (
+  csrf,
+  userid,
+  domain,
+  contractortype,
+  supervisoruserids
+) =>
+  POST("/admin/managecms", csrf, {
+    userid,
+    domain,
+    contractortype,
+    supervisoruserids
+  });
 
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);
@@ -616,10 +625,8 @@ export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
 
 // CMS
-export const inviteNewUser = (csrf, email) =>
-  POST("/invite", csrf, {
-    email
-  }).then(getResponse);
+export const inviteNewUser = (csrf, payload) =>
+  POST("/invite", csrf, payload).then(getResponse);
 
 export const newInvoice = (csrf, invoice) =>
   POST("/invoices/new", csrf, invoice).then(
@@ -665,7 +672,7 @@ export const exchangeRate = (csrf, month, year) =>
 export const userSubcontractors = (csrf) =>
   GET("/v1/user/subcontractors", csrf).then(getResponse);
 
-export const newDCC = (csrf, dcc) =>
+export const newDcc = (csrf, dcc) =>
   POST("/dcc/new", csrf, dcc).then(({ response: { censorshiprecord } }) => ({
     ...dcc,
     censorshiprecord,
@@ -701,5 +708,7 @@ export const setDCCStatus = (csrf, email, token, status, reason) =>
 export const dccComments = (token) =>
   GET(`/v1/dcc/${token}/comments`).then(getResponse);
 
-export const newDCCComment = (csrf, dcc) =>
+export const newDccComment = (csrf, dcc) =>
   POST("/dcc/newcomment", csrf, dcc).then(getResponse);
+
+export const cmsUsers = (csrf) => GET("/v1/cmsusers", csrf).then(getResponse);

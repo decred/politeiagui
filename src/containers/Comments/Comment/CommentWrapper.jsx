@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import styles from "./Comment.module.css";
-import CommentForm from "src/componentsv2/CommentForm/CommentFormLazy";
-import Link from "src/componentsv2/Link";
+import CommentForm from "src/components/CommentForm/CommentFormLazy";
+import Link from "src/components/Link";
 import { useComment } from "../hooks";
 import Comment from "./Comment";
 
@@ -58,6 +58,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, isFlatMode, ...props 
     enableCommentVote,
     recordAuthorID,
     loadingLikes,
+    loadingLikeAction,
     userLoggedIn,
     recordToken,
     recordType,
@@ -165,6 +166,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, isFlatMode, ...props 
         disableLikes={!enableCommentVote}
         disableLikesClick={
           loadingLikes ||
+          !!loadingLikeAction ||
           readOnly ||
           (userLoggedIn && (identityError || paywallMissing))
         }
@@ -174,6 +176,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, isFlatMode, ...props 
         likeOption={getCommentLikeOption(commentid)}
         onLike={handleLikeComment}
         onDislike={handleDislikeComment}
+        loadingLikeAction={loadingLikeAction[commentid]}
         showReplies={showReplies}
         isFlatMode={isFlatMode}
         onClickCensor={handleClickCensor}

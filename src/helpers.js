@@ -4,6 +4,7 @@ import flow from "lodash/fp/flow";
 import filter from "lodash/fp/filter";
 import gte from "lodash/fp/gt";
 import range from "lodash/fp/range";
+import * as pki from "./lib/pki";
 import { sha3_256 } from "js-sha3";
 
 import { INVALID_FILE } from "./constants";
@@ -20,7 +21,6 @@ import {
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_VOTING_NOT_AUTHORIZED
 } from "./constants.js";
-import * as pki from "./lib/pki";
 
 export const getProposalStatus = (proposalStatus) =>
   get(proposalStatus, [
@@ -145,7 +145,6 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     1009: "Invalid payment address",
     1010: "Malformed line item submitted",
     1011: "Invoice missing contractor name",
-    1012: "Invoice missing contractor location",
     1013: "Invoice missing contractor contact",
     1014: "Invoice missing contractor rate",
     1015: "Invoice has invalid contractor rate",

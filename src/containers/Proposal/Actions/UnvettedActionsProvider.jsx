@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useUnvettedActions, UnvettedProposalsActionsContext } from "./hooks";
 import { Text } from "pi-ui";
-import Link from "src/componentsv2/Link";
-import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
-import ModalConfirm from "src/componentsv2/ModalConfirm";
+import Link from "src/components/Link";
+import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
+import ModalConfirm from "src/components/ModalConfirm";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 
 const UnvettedActionsProvider = ({ children }) => {

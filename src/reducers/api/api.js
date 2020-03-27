@@ -1,43 +1,20 @@
 import * as act from "../../actions/types";
 import {
-  PROPOSAL_VOTING_ACTIVE,
-  PROPOSAL_VOTING_AUTHORIZED,
-  PROPOSAL_VOTING_NOT_AUTHORIZED
-} from "../../constants";
-import {
   DEFAULT_REQUEST_STATE,
   receive,
   request,
   reset,
   resetMultiple
 } from "../util";
-import {
-  onReceiveCensoredComment,
-  onReceiveManageUser,
-  onReceiveNewComment,
-  onReceiveProposals,
-  onReceiveProposalsVoteStatus,
-  onReceiveProposalsVoteSummary,
-  onReceiveProposalVoteResults,
-  onReceiveProposalVoteStatus,
-  onReceiveRescanUserPayments,
-  onReceiveSetStatus,
-  onReceiveSyncLikeComment,
-  onReceiveUser,
-  onReceiveVoteStatusChange,
-  onResetSyncLikeComment
-} from "./handlers";
+import { onRequestLikeComment } from "./handlers";
 import {
   onReceiveCensorInvoiceComment,
   onReceiveNewInvoiceComment,
   onReceivePayApprovedInvoices,
   onReceiveSetStatusInvoice,
-  onReceiveManageCmsUser,
   onReceiveDCCs,
   onSetDCC,
-  onReceiveSupportOpposeDCC,
-  onReceiveSetDCCStatus,
-  onReceiveNewDCCComment,
+  onReceiveNewDccComment,
   onReceiveCensorDCCComment
 } from "./handlersCMS";
 
@@ -86,7 +63,7 @@ export const DEFAULT_STATE = {
   editInvoice: DEFAULT_REQUEST_STATE,
   payouts: DEFAULT_REQUEST_STATE,
   tokenInventory: DEFAULT_REQUEST_STATE,
-  newDCC: DEFAULT_REQUEST_STATE,
+  newDcc: DEFAULT_REQUEST_STATE,
   dccs: DEFAULT_REQUEST_STATE
 };
 
@@ -94,21 +71,6 @@ const api = (state = DEFAULT_STATE, action) =>
   ((
     {
       [act.SET_EMAIL]: () => ({ ...state, email: action.payload }),
-      [act.CLEAN_ERRORS]: () =>
-        Object.keys(state).reduce((acc, curr) => {
-          if (typeof state[curr] === "object") {
-            acc[curr] = Object.assign({}, state[curr], { error: null });
-          } else {
-            acc[curr] = state[curr];
-          }
-          return acc;
-        }, {}),
-      [act.LOAD_ME]: () => {
-        return {
-          ...state,
-          me: action.payload
-        };
-      },
       [act.REQUEST_ME]: () => request("me", state, action),
       [act.RECEIVE_ME]: () => receive("me", state, action),
       [act.UPDATE_ME]: () => receive("me", state, action),
@@ -124,7 +86,7 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.RECEIVE_VERIFY_NEW_USER]: () =>
         receive("verifyNewUser", state, action),
       [act.REQUEST_USER]: () => request("user", state, action),
-      [act.RECEIVE_USER]: () => onReceiveUser(state, action),
+      [act.RECEIVE_USER]: () => receive("user", state),
       [act.RESET_USER]: () => reset("user", state, action),
       [act.REQUEST_LOGIN]: () => request("login", state, action),
       [act.RECEIVE_LOGIN]: () => receive("login", state, action),
@@ -138,40 +100,25 @@ const api = (state = DEFAULT_STATE, action) =>
         receive("changePassword", state, action),
       [act.REQUEST_USER_PROPOSALS]: () =>
         request("userProposals", state, action),
-      [act.RECEIVE_USER_PROPOSALS]: () =>
-        onReceiveProposals("userProposals", state, action),
+      [act.RECEIVE_USER_PROPOSALS]: () => receive("userProposals", state),
       [act.REQUEST_TOKEN_INVENTORY]: () =>
         request("tokenInventory", state, action),
       [act.RECEIVE_TOKEN_INVENTORY]: () =>
         receive("tokenInventory", state, action),
-      [act.REQUEST_VETTED]: () => request("vetted", state, action),
-      [act.RECEIVE_VETTED]: () => onReceiveProposals("vetted", state, action),
-      [act.REQUEST_UNVETTED]: () => request("unvetted", state, action),
-      [act.RECEIVE_UNVETTED]: () =>
-        onReceiveProposals("unvetted", state, action),
       [act.REQUEST_PROPOSALS_BATCH]: () =>
         request("proposalsBatch", state, action),
-      [act.RECEIVE_PROPOSALS_BATCH]: () =>
-        onReceiveProposals("proposalsBatch", state, action),
-      [act.REQUEST_UNVETTED_STATUS]: () =>
-        request("unvettedStatus", state, action),
-      [act.RECEIVE_UNVETTED_STATUS]: () =>
-        receive("unvettedStatus", state, action),
+      [act.RECEIVE_PROPOSALS_BATCH]: () => receive("proposalsBatch", state),
       [act.REQUEST_PROPOSAL]: () => request("proposal", state, action),
       [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
-      [act.REQUEST_PROPOSAL_COMMENTS]: () =>
+      [act.REQUEST_RECORD_COMMENTS]: () =>
         request("proposalComments", state, action),
-      [act.RECEIVE_PROPOSAL_COMMENTS]: () =>
+      [act.RECEIVE_RECORD_COMMENTS]: () =>
         receive("proposalComments", state, action),
-      [act.REQUEST_LIKE_COMMENT]: () => request("likeComment", state, action),
+      [act.REQUEST_LIKE_COMMENT]: () => onRequestLikeComment(state, action),
       [act.RECEIVE_LIKE_COMMENT]: () => receive("likeComment", state, action),
       [act.REQUEST_CENSOR_COMMENT]: () =>
         request("censorComment", state, action),
-      [act.RECEIVE_CENSOR_COMMENT]: () =>
-        onReceiveCensoredComment(state, action),
-      [act.RECEIVE_SYNC_LIKE_COMMENT]: () =>
-        onReceiveSyncLikeComment(state, action),
-      [act.RESET_SYNC_LIKE_COMMENT]: () => onResetSyncLikeComment(state),
+      [act.RECEIVE_CENSOR_COMMENT]: () => receive("censorComment", state),
       [act.REQUEST_LIKED_COMMENTS]: () =>
         request("commentslikes", state, action),
       [act.RECEIVE_LIKED_COMMENTS]: () =>
@@ -180,7 +127,7 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.RECEIVE_EDIT_USER]: () => receive("editUser", state, action),
       [act.RESET_EDIT_USER]: () => reset("editUser", state, action),
       [act.REQUEST_MANAGE_USER]: () => request("manageUser", state, action),
-      [act.RECEIVE_MANAGE_USER]: () => onReceiveManageUser(state, action),
+      [act.RECEIVE_MANAGE_USER]: () => receive("manageUser", state),
       [act.REQUEST_NEW_PROPOSAL]: () => request("newProposal", state, action),
       [act.RECEIVE_NEW_PROPOSAL]: () => receive("newProposal", state, action),
       [act.REQUEST_USER_SEARCH]: () => request("userSearch", state, action),
@@ -189,7 +136,7 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.REQUEST_EDIT_PROPOSAL]: () => request("editProposal", state, action),
       [act.RECEIVE_EDIT_PROPOSAL]: () => receive("editProposal", state, action),
       [act.REQUEST_NEW_COMMENT]: () => request("newComment", state, action),
-      [act.RECEIVE_NEW_COMMENT]: () => onReceiveNewComment(state, action),
+      [act.RECEIVE_NEW_COMMENT]: () => receive("newComment", state),
       // == CMS START ==
       [act.REQUEST_INVITE_USER]: () => request("inviteUser", state, action),
       [act.RECEIVE_INVITE_USER]: () => receive("inviteUser", state, action),
@@ -208,9 +155,9 @@ const api = (state = DEFAULT_STATE, action) =>
         receive("adminInvoices", state, action),
       [act.REQUEST_INVOICE]: () => request("invoice", state, action),
       [act.RECEIVE_INVOICE]: () => receive("invoice", state, action),
-      [act.REQUEST_INVOICE_COMMENTS]: () =>
+      [act.REQUEST_RECORD_COMMENTS]: () =>
         request("invoiceComments", state, action),
-      [act.RECEIVE_INVOICE_COMMENTS]: () =>
+      [act.RECEIVE_RECORD_COMMENTS]: () =>
         receive("invoiceComments", state, action),
       [act.RECEIVE_NEW_INVOICE_COMMENT]: () =>
         onReceiveNewInvoiceComment(state, action),
@@ -228,14 +175,12 @@ const api = (state = DEFAULT_STATE, action) =>
         resetMultiple(["proposalComments", "invoiceComments"], state),
       [act.REQUEST_MANAGE_CMS_USER]: () =>
         request("manageCmsUser", state, action),
-      [act.RECEIVE_MANAGE_CMS_USER]: () =>
-        onReceiveManageCmsUser(state, action),
       [act.REQUEST_USER_SUBCONTRACTORS]: () =>
         request("userSubcontractors", state, action),
       [act.RECEIVE_USER_SUBCONTRACTORS]: () =>
         receive("userSubcontractors", state, action),
-      [act.REQUEST_NEW_DCC]: () => request("newDCC", state, action),
-      [act.RECEIVE_NEW_DCC]: () => receive("newDCC", state, action),
+      [act.REQUEST_NEW_DCC]: () => request("newDcc", state, action),
+      [act.RECEIVE_NEW_DCC]: () => receive("newDcc", state, action),
       [act.REQUEST_DCCS]: () => request("dccs", state, action),
       [act.RECEIVE_DCCS]: () => onReceiveDCCs(state, action),
       [act.REQUEST_DCC]: () => request("dcc", state, action),
@@ -244,14 +189,15 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.REQUEST_SUPPORT_OPPOSE_DCC]: () =>
         request("supportOpposeDCC", state, action),
       [act.RECEIVE_SUPPORT_OPPOSE_DCC]: () =>
-        onReceiveSupportOpposeDCC(state, action),
+        receive("supportOpposeDCC", state, action),
       [act.REQUEST_SET_DCC_STATUS]: () =>
         request("setDCCStatus", state, action),
-      [act.RECEIVE_SET_DCC_STATUS]: () => onReceiveSetDCCStatus(state, action),
+      [act.RECEIVE_SET_DCC_STATUS]: () =>
+        receive("setDccStatus", state, action),
       [act.REQUEST_DCC_COMMENTS]: () => request("dccComments", state, action),
       [act.RECEIVE_DCC_COMMENTS]: () => receive("dccComments", state, action),
       [act.RECEIVE_NEW_DCC_COMMENT]: () =>
-        onReceiveNewDCCComment(state, action),
+        onReceiveNewDccComment(state, action),
       [act.RECEIVE_CENSOR_DCC_COMMENT]: () =>
         onReceiveCensorDCCComment(state, action),
       // === CMS END ===
@@ -293,65 +239,32 @@ const api = (state = DEFAULT_STATE, action) =>
         request("passwordReset", state, action),
       [act.RECEIVE_PASSWORD_RESET_REQUEST]: () =>
         receive("passwordReset", state, action),
-      [act.RESET_PROPOSAL]: () =>
-        resetMultiple(["newProposal", "editProposal", "proposal"], state),
-      [act.RESET_INVOICE]: () =>
-        resetMultiple(["newInvoice", "editInvoice"], state),
       [act.REQUEST_SETSTATUS_PROPOSAL]: () =>
         request("setStatusProposal", state, action),
-      [act.RECEIVE_SETSTATUS_PROPOSAL]: () => onReceiveSetStatus(state, action),
-      [act.RECEIVE_START_VOTE]: () =>
-        onReceiveVoteStatusChange(
-          "startVote",
-          PROPOSAL_VOTING_ACTIVE,
-          state,
-          action
-        ),
+      [act.RECEIVE_SETSTATUS_PROPOSAL]: () =>
+        receive("setStatusProposal", state),
+      [act.RECEIVE_START_VOTE]: () => receive("startVote", state),
       [act.REQUEST_START_VOTE]: () => request("startVote", state, action),
       [act.REQUEST_UPDATED_KEY]: () => request("updateUserKey", state, action),
       [act.RECEIVE_UPDATED_KEY]: () => receive("updateUserKey", state, action),
       [act.REQUEST_VERIFIED_KEY]: () => request("verifyUserKey", state, action),
       [act.RECEIVE_VERIFIED_KEY]: () => receive("verifyUserKey", state, action),
       [act.KEY_MISMATCH]: () => ({ ...state, keyMismatch: action.payload }),
-      [act.REQUEST_USERNAMES_BY_ID]: () =>
-        request("usernamesById", state, action),
-      [act.RECEIVE_USERNAMES_BY_ID]: () =>
-        receive("usernamesById", state, action),
       [act.REQUEST_LOGOUT]: () => request("logout", state, action),
-      [act.REQUEST_PROPOSALS_VOTE_STATUS]: () =>
-        request("proposalsVoteStatus", state, action),
-      [act.RECEIVE_PROPOSALS_VOTE_STATUS]: () =>
-        onReceiveProposalsVoteStatus(state, action),
       [act.REQUEST_PROPOSALS_VOTE_SUMMARY]: () =>
         request("proposalsVoteSummary", state, action),
       [act.RECEIVE_PROPOSALS_VOTE_SUMMARY]: () =>
-        onReceiveProposalsVoteSummary(state, action),
-      [act.REQUEST_PROPOSAL_VOTE_STATUS]: () =>
-        request("proposalVoteStatus", state, action),
-      [act.RECEIVE_PROPOSAL_VOTE_STATUS]: () =>
-        onReceiveProposalVoteStatus(state, action),
+        receive("proposalsVoteSummary", state, {}),
       [act.REQUEST_PROPOSAL_VOTE_RESULTS]: () =>
         request("proposalVoteResults", state, action),
       [act.RECEIVE_PROPOSAL_VOTE_RESULTS]: () =>
-        onReceiveProposalVoteResults("proposalVoteResults", state, action),
+        receive("proposalVoteResults", state, {}),
       [act.REQUEST_AUTHORIZE_VOTE]: () =>
         request("authorizeVote", state, action),
-      [act.RECEIVE_AUTHORIZE_VOTE]: () =>
-        onReceiveVoteStatusChange(
-          "authorizeVote",
-          PROPOSAL_VOTING_AUTHORIZED,
-          state,
-          action
-        ),
+      [act.RECEIVE_AUTHORIZE_VOTE]: () => receive("authorizeVote", state, {}),
       [act.REQUEST_REVOKE_AUTH_VOTE]: () =>
         request("authorizeVote", state, action),
-      [act.RECEIVE_REVOKE_AUTH_VOTE]: () =>
-        onReceiveVoteStatusChange(
-          "authorizeVote",
-          PROPOSAL_VOTING_NOT_AUTHORIZED,
-          state,
-          action
-        ),
+      [act.RECEIVE_REVOKE_AUTH_VOTE]: () => receive("authorizeVote", state, {}),
       [act.REQUEST_PROPOSAL_PAYWALL_PAYMENT]: () =>
         request("proposalPaywallPayment", state, action),
       [act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT]: () =>
@@ -359,13 +272,13 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.REQUEST_RESCAN_USER_PAYMENTS]: () =>
         request("rescanUserPayments", state, action),
       [act.RECEIVE_RESCAN_USER_PAYMENTS]: () =>
-        onReceiveRescanUserPayments(state, action),
+        receive("rescanUserPayments", state, {}),
       [act.RESET_RESCAN_USER_PAYMENTS]: () =>
         reset("rescanUserPayments", state, action),
       [act.REQUEST_GENERATE_PAYOUTS]: () => request("payouts", state, action),
       [act.RECEIVE_GENERATE_PAYOUTS]: () => receive("payouts", state, action),
       [act.REQUEST_INVOICE_PAYOUTS]: () =>
-        receive("invoicePayouts", state, action),
+        request("invoicePayouts", state, action),
       [act.RECEIVE_INVOICE_PAYOUTS]: () =>
         receive("invoicePayouts", state, action),
       [act.REQUEST_PAY_APPROVED]: () => request("payApproved", state, action),
@@ -390,18 +303,6 @@ const api = (state = DEFAULT_STATE, action) =>
           };
         }
         return receive("logout", state, action);
-      },
-      [act.SET_PROPOSAL_CREDITS]: () => {
-        return {
-          ...state,
-          me: {
-            ...state.me,
-            response: {
-              ...state.me.response,
-              proposalcredits: action.payload
-            }
-          }
-        };
       }
     }[action.type] || (() => state)
   )());

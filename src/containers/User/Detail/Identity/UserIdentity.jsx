@@ -1,10 +1,10 @@
 import { Button, Card, classNames, Message, P, Spinner, Text } from "pi-ui";
 import React, { useCallback, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
-import DevelopmentOnlyContent from "src/componentsv2/DevelopmentOnlyContent";
-import ModalConfirm from "src/componentsv2/ModalConfirm";
-import ModalImportIdentity from "src/componentsv2/ModalImportIdentity";
-import PrivateKeyDownloadManager from "src/componentsv2/PrivateKeyDownloadManager";
+import DevelopmentOnlyContent from "src/components/DevelopmentOnlyContent";
+import ModalConfirm from "src/components/ModalConfirm";
+import ModalImportIdentity from "src/components/ModalImportIdentity";
+import PrivateKeyDownloadManager from "src/components/PrivateKeyDownloadManager";
 import { PUB_KEY_STATUS_LOADING } from "src/constants";
 import { verifyUserPubkey } from "src/helpers";
 import useUserIdentity from "src/hooks/api/useUserIdentity";

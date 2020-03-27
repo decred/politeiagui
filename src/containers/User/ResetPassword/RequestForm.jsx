@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { TextInput, Button } from "pi-ui";
-import FormWrapper from "src/componentsv2/FormWrapper";
-import EmailSentMessage from "src/componentsv2/EmailSentMessage";
+import FormWrapper from "src/components/FormWrapper";
+import EmailSentMessage from "src/components/EmailSentMessage";
 import { useResetPassword } from "./hooks";
-import DevelopmentOnlyContent from "src/componentsv2/DevelopmentOnlyContent";
+import DevelopmentOnlyContent from "src/components/DevelopmentOnlyContent";
 
 const RequestForm = () => {
   const {

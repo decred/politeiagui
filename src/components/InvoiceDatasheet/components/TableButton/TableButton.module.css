@@ -1,0 +1,9 @@
+span.tableButton {
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+span.tableButtonDisabled {
+  cursor: not-allowed;
+  color: var(--color-gray);
+}

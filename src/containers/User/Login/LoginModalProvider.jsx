@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
-import ModalProvider from "src/componentsv2/ModalProvider";
-import ModalLogin from "src/componentsv2/ModalLogin";
+import ModalProvider from "src/components/ModalProvider";
+import ModalLogin from "src/components/ModalLogin";
 
 const loginModalContext = createContext();
 export const useLoginModal = () => useContext(loginModalContext);

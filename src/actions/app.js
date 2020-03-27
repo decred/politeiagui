@@ -1,5 +1,3 @@
-import Promise from "promise";
-import { reset } from "redux-form";
 import {
   onSubmitProposal,
   onChangeUsername,
@@ -9,81 +7,45 @@ import {
   onSubmitInvoice,
   onSubmitEditedInvoice,
   onFetchInvoiceComments,
-  handleLogout,
-  onInvoicePayouts,
-  onRequestMe,
   onUserProposalCredits,
-  onSubmitNewDCC
+  onSubmitNewDcc
 } from "./api";
 import {
   onFetchProposal as onFetchProposalApi,
   onSubmitComment as onSubmitCommentApi,
   onFetchInvoice as onFetchInvoiceApi,
-  onFetchDCC as onFetchDCCApi,
-  onFetchDCCsByStatus as onFetchDCCsByStatusApi
+  onFetchDccsByStatus as onFetchDccsByStatusApi,
+  onSubmitDccComment as onSubmitDccCommentApi
 } from "./api";
 import {
   resetNewProposalData,
   resetNewInvoiceData,
-  resetNewDCCData
+  resetNewDccData
 } from "../lib/editors_content_backup";
 import * as sel from "../selectors";
 import act from "./methods";
-import { TOP_LEVEL_COMMENT_PARENTID, apiInfo } from "../lib/api";
-import { onEditUser, cleanErrors } from "./api";
-import { loadStateLocalStorage, loggedInStateKey } from "../lib/local_storage";
-import {
-  PROPOSAL_VOTING_ACTIVE,
-  PROPOSAL_VOTING_NOT_AUTHORIZED,
-  PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_FILTER_ALL,
-  PROPOSAL_APPROVED,
-  PROPOSAL_REJECTED
-} from "../constants";
+import { onEditUser } from "./api";
+import { loadStateLocalStorage } from "../lib/local_storage";
 import { fromUSDUnitsToUSDCents, uniqueID } from "../helpers";
-import { openModal } from "./modal";
-import * as modalTypes from "../components/Modal/modalTypes";
-import flow from "lodash/fp/flow";
-import flatten from "lodash/fp/flatten";
-import values from "lodash/fp/values";
-import find from "lodash/fp/find";
 
-export const SET_REPLY_PARENT = "SET_REPLY_PARENT";
-
-export const onRouteChange = () => (dispatch) => {
-  dispatch(cleanErrors());
-};
-
-export const onSetReplyParent = (parentId = TOP_LEVEL_COMMENT_PARENTID) => (
-  dispatch
-) =>
-  Promise.all([
-    dispatch(act.SET_REPLY_PARENT(parentId)),
-    dispatch(reset("form/reply"))
-  ]);
-
-export const onSaveNewInvoice = (
-  {
-    month,
-    year,
-    name,
-    location,
-    contact,
-    rate,
-    address,
-    lineitems,
-    exchangerate,
-    files
-  },
-  _,
-  props
-) => (dispatch, getState) => {
-  // const lineItems = convertGridToLineItems(datasheet);
-  dispatch(
+export const onSaveNewInvoice = ({
+  month,
+  year,
+  name,
+  location,
+  contact,
+  rate,
+  address,
+  lineitems,
+  exchangerate,
+  files
+}) => (dispatch, getState) => {
+  const { email, userid: id, username } = sel.currentUser(getState());
+  return dispatch(
     onSubmitInvoice(
-      props.loggedInAsEmail,
-      props.userid,
-      props.username,
+      email,
+      id,
+      username,
       +month,
       +year,
       exchangerate,
@@ -98,22 +60,7 @@ export const onSaveNewInvoice = (
   ).then(() => sel.newInvoiceToken(getState()));
 };
 
-export const onSaveNewProposal = ({ name, description, files }, _, props) => (
-  dispatch,
-  getState
-) =>
-  dispatch(
-    onSubmitProposal(
-      props.loggedInAsEmail,
-      props.userid,
-      props.username,
-      name.trim(),
-      description,
-      files
-    )
-  ).then(() => sel.newProposalToken(getState()));
-
-export const onSaveNewProposalV2 = ({ name, description, files }) => (
+export const onSaveNewProposal = ({ name, description, files }) => (
   dispatch,
   getState
 ) => {
@@ -125,20 +72,18 @@ export const onSaveNewProposalV2 = ({ name, description, files }) => (
     .then(() => sel.newProposalToken(getState()));
 };
 
-export const onSaveNewDCC = ({
+export const onSaveNewDcc = ({
   type,
   nomineeid,
   statement,
   domain,
   contractortype
 }) => (dispatch, getState) => {
-  const email = sel.loggedInAsEmail(getState());
-  const id = sel.userid(getState());
-  const username = sel.loggedInAsUsername(getState());
+  const { email, userid, username } = sel.currentUser(getState());
   return dispatch(
-    onSubmitNewDCC(
+    onSubmitNewDcc(
       email,
-      id,
+      userid,
       username,
       type,
       nomineeid,
@@ -146,10 +91,10 @@ export const onSaveNewDCC = ({
       domain,
       contractortype
     )
-  ).then(() => sel.newDCCToken(getState()));
+  ).then(() => sel.newDccToken(getState()));
 };
 
-export const onEditProposalV2 = ({ token, name, description, files }) => (
+export const onEditProposal = ({ token, name, description, files }) => (
   dispatch,
   getState
 ) => {
@@ -159,7 +104,7 @@ export const onEditProposalV2 = ({ token, name, description, files }) => (
   ).then(() => dispatch(onFetchProposalApi(token)).then(() => token));
 };
 
-export const onSaveNewCommentV2 = ({ comment, token, parentID }) => (
+export const onSaveNewComment = ({ comment, token, parentID }) => (
   dispatch,
   getState
 ) => {
@@ -167,42 +112,27 @@ export const onSaveNewCommentV2 = ({ comment, token, parentID }) => (
   return dispatch(onSubmitCommentApi(email, token, comment, parentID));
 };
 
-export const onEditProposal = ({ name, description, files }, _, props) => (
-  dispatch
-) =>
-  dispatch(
-    onSubmitEditedProposal(
-      props.loggedInAsEmail,
-      name.trim(),
-      description,
-      files,
-      props.token
-    )
-  );
-
 export const onResetUser = () => act.RESET_USER();
 
-export const onEditInvoice = (
-  {
-    month,
-    year,
-    name,
-    location,
-    contact,
-    rate,
-    address,
-    lineitems,
-    exchangerate,
-    files
-  },
-  _,
-  props
-) => (dispatch) => {
-  dispatch(
+export const onEditInvoice = ({
+  token,
+  month,
+  year,
+  name,
+  location,
+  contact,
+  rate,
+  address,
+  lineitems,
+  exchangerate,
+  files
+}) => (dispatch, getState) => {
+  const { email, userid, username } = sel.currentUser(getState());
+  return dispatch(
     onSubmitEditedInvoice(
-      props.loggedInAsEmail,
-      props.userid,
-      props.username,
+      email,
+      userid,
+      username,
       +month,
       +year,
       exchangerate,
@@ -213,10 +143,11 @@ export const onEditInvoice = (
       address,
       lineitems,
       files,
-      props.token
+      token
     )
   );
 };
+
 export const onSaveDraftProposal = ({ name, description, files, draftId }) => (
   dispatch
 ) => {
@@ -245,8 +176,7 @@ export const onDeleteDraftProposal = (draftId) =>
   act.DELETE_DRAFT_PROPOSAL(draftId);
 
 export const onSaveDraftInvoice = ({
-  month,
-  year,
+  date,
   name,
   location,
   contact,
@@ -255,59 +185,32 @@ export const onSaveDraftInvoice = ({
   lineitems,
   files,
   draftId
-}) => {
-  resetNewInvoiceData();
-  const id = draftId || uniqueID("draft");
-  return act.SAVE_DRAFT_INVOICE({
-    month,
-    year,
-    name,
-    location,
-    contact,
-    rate,
-    address,
-    lineitems,
-    files,
-    id,
-    timestamp: Date.now() / 1000
-  });
-};
-
-export const onSaveDraftDCC = ({
-  type,
-  contractortype,
-  domain,
-  statement,
-  nomineeid,
-  draftId
-}) => (dispatch) => {
-  resetNewDCCData();
+}) => (dispatch, getState) => {
+  const policy = sel.policy(getState());
+  resetNewInvoiceData(policy);
   const id = draftId || uniqueID("draft");
   dispatch(
-    act.SAVE_DRAFT_DCC({
-      type,
-      contractortype,
-      domain,
-      statement,
-      nomineeid,
-      // files,
-      timestamp: Math.floor(Date.now() / 1000),
-      id
+    act.SAVE_DRAFT_INVOICE({
+      date,
+      name,
+      location,
+      contact,
+      rate,
+      address,
+      lineitems,
+      files,
+      id,
+      timestamp: Date.now() / 1000
     })
   );
   return id;
 };
 
-export const onLoadDraftDCCs = (email) => {
-  const stateFromLS = loadStateLocalStorage(email);
-  const drafts = sel.draftDCCs(stateFromLS) || {};
-  return act.LOAD_DRAFT_DCCS(drafts);
-};
-
-export const onLoadDraftInvoices = (email) => {
-  const stateFromLS = loadStateLocalStorage(email);
+export const onLoadDraftInvoices = (email) => (dispatch, getState) => {
+  const key = email || sel.currentUserEmail(getState());
+  const stateFromLS = loadStateLocalStorage(key);
   const drafts = sel.draftInvoices(stateFromLS) || {};
-  return act.LOAD_DRAFT_INVOICES(drafts);
+  dispatch(act.LOAD_DRAFT_INVOICES(drafts));
 };
 
 export const onDeleteDraftInvoice = (draftId) => {
@@ -344,153 +247,13 @@ export const onFetchInvoiceApp = (token, version = null) => (dispatch) =>
     dispatch(onFetchInvoiceComments(token))
   );
 
-export const onLoadMe = (me) => (dispatch) => {
-  dispatch(act.LOAD_ME(me));
-};
-
 export const onResetPaywallInfo = () => act.RESET_PAYWALL_INFO();
-export const onChangeAdminFilter = (option) =>
-  act.CHANGE_ADMIN_FILTER_VALUE(option);
-export const onChangePublicFilter = (option) =>
-  act.CHANGE_PUBLIC_FILTER_VALUE(option);
-export const onChangeUserFilter = (option) =>
-  act.CHANGE_USER_FILTER_VALUE(option);
-
-export const onChangeStartPayoutDateFilter = (month, year) => (
-  dispatch,
-  getState
-) => {
-  const start = new Date(year, month - 1);
-  const end = new Date(
-    sel.getEndYearPayoutFilterValue(getState()),
-    sel.getEndMonthPayoutFilterValue(getState()) - 1
-  );
-
-  dispatch(onInvoicePayouts(start.valueOf() / 1000, end.valueOf() / 1000));
-  dispatch(act.CHANGE_START_PAYOUT_DATE_FILTER({ month, year }));
-};
-
-export const onResetStartPayoutDateFilter = () =>
-  act.RESET_START_PAYOUT_DATE_FILTER();
-
-export const onChangeEndPayoutDateFilter = (month, year) => (
-  dispatch,
-  getState
-) => {
-  const end = new Date(year, month - 1);
-  const start = new Date(
-    sel.getStartYearPayoutFilterValue(getState()),
-    sel.getStartMonthPayoutFilterValue(getState()) - 1
-  );
-  dispatch(onInvoicePayouts(start.valueOf() / 1000, end.valueOf() / 1000));
-  dispatch(act.CHANGE_END_PAYOUT_DATE_FILTER({ month, year }));
-};
-
-export const onResetEndPayoutDateFilter = () =>
-  act.RESET_END_PAYOUT_DATE_FILTER();
-
-export const onChangeDateFilter = (month, year) =>
-  act.CHANGE_DATE_FILTER({ month, year });
-
-export const onResetDateFilter = () => act.RESET_DATE_FILTER();
-
-export const onChangeProposalStatusApproved = (status) =>
-  act.SET_PROPOSAL_APPROVED(status);
 
 export const onIdentityImported = (successMsg, errorMsg = "") =>
   act.IDENTITY_IMPORTED({ errorMsg, successMsg });
 
-export const onSubmitCommentApp = (...args) => (dispatch) =>
-  dispatch(onSubmitCommentApi(...args)).then(() =>
-    dispatch(onSetReplyParent())
-  );
-
-export const onLocalStorageChange = (event) => async (dispatch, getState) => {
-  const state = getState();
-
-  if (event.key !== loggedInStateKey) {
-    return;
-  }
-
-  const apiMeResponse = sel.apiMeResponse(state);
-
-  const localUserDataDeleted = !event.newValue;
-
-  // user local data was cleared but the user data in the app
-  // state is also empty so there is nothing to do here
-  if (localUserDataDeleted && !apiMeResponse) {
-    return;
-  }
-
-  // request the api info to see if there is an active user
-  const apiInfoResponse = await apiInfo();
-  const userActive = apiInfoResponse.activeusersession;
-
-  // user is not active so we just trigger the logout action
-  // to clear the app state
-  if (!userActive) {
-    dispatch(handleLogout());
-    dispatch(
-      openModal(
-        modalTypes.LOGIN,
-        {
-          title: "Your session has expired. Please log in again.",
-          redirectAfterLogin: window.location.pathname
-        },
-        null
-      )
-    );
-    return;
-  }
-
-  // From this point we know the user is active and the local storage
-  // has changed. Because of it we can no longer trust the data saved in there.
-  // Hence, we update the user data by querying it from the api.
-  dispatch(onRequestMe());
-};
-
-export const selectDefaultPublicFilterValue = (dispatch, getState) => {
-  const filterValue = selectDefaultFilterValue(
-    sel.getVettedProposalFilterCounts(getState()),
-    [
-      PROPOSAL_VOTING_ACTIVE,
-      PROPOSAL_VOTING_NOT_AUTHORIZED,
-      PROPOSAL_FILTER_ALL,
-      PROPOSAL_APPROVED,
-      PROPOSAL_REJECTED
-    ]
-  );
-  dispatch(onChangePublicFilter(filterValue));
-};
-
-export const selectDefaultAdminFilterValue = (dispatch, getState) => {
-  const filterValue = selectDefaultFilterValue(
-    sel.getUnvettedProposalFilterCounts(getState()),
-    [PROPOSAL_STATUS_UNREVIEWED, PROPOSAL_FILTER_ALL]
-  );
-  dispatch(onChangeAdminFilter(filterValue));
-};
-
-// Chooses a sensible default filter - don't pick a filter with 0 proposals.
-const selectDefaultFilterValue = (
-  proposalFilterCounts,
-  defaultFilterPreferences
-) => {
-  for (const filterPreference of defaultFilterPreferences) {
-    if ((proposalFilterCounts[filterPreference] || 0) > 0) {
-      return filterPreference;
-    }
-  }
-
-  return defaultFilterPreferences[defaultFilterPreferences.length - 1];
-};
-
-export const setOnboardAsViewed = () => act.SET_ONBOARD_AS_VIEWED();
-
-export const resetLastSubmittedProposal = () => act.RESET_LAST_SUBMITTED();
-
-export const onSetCommentsSortOption = (option) =>
-  act.SET_COMMENTS_SORT_OPTION(option);
+export const keyMismatch = (payload) => (dispatch) =>
+  dispatch(act.KEY_MISMATCH(payload));
 
 export const toggleCreditsPaymentPolling = (bool) =>
   act.TOGGLE_CREDITS_PAYMENT_POLLING(bool);
@@ -503,35 +266,56 @@ export const onEditUserPreferences = (preferences) => (dispatch) =>
 
 export const onResetComments = () => act.RESET_COMMENTS();
 
-// CMS
-export const onResetInviteUser = () => act.RESET_INVITE_USER();
-
-export const onLoadDCC = (token) => (dispatch, getState) => {
-  const fetchedDCCsByStatus = sel.dccsByStatus(getState());
-
-  if (!fetchedDCCsByStatus) {
-    dispatch(onFetchDCCApi(token));
-    return;
-  }
-
-  const dcc = flow(
-    values,
-    flatten,
-    find((dcc) => dcc.censorshiprecord.token === token)
-  )(fetchedDCCsByStatus);
-
-  if (dcc) {
-    dispatch(act.SET_DCC(dcc));
-  } else {
-    dispatch(onFetchDCCApi(token));
-  }
-};
-
-export const onLoadDCCsByStatus = (status) => (dispatch, getState) => {
+export const onLoadDccsByStatus = (status) => (dispatch, getState) => {
   const fetchedDCCs = sel.dccsByStatus(getState());
   if (fetchedDCCs && fetchedDCCs[status]) {
     dispatch(act.SET_DCCS_CURRENT_STATUS_LIST(fetchedDCCs[status]));
   } else {
-    dispatch(onFetchDCCsByStatusApi(status));
+    dispatch(onFetchDccsByStatusApi(status));
   }
+};
+
+export const onSaveNewDccCommentV2 = ({ comment, token, parentID }) => (
+  dispatch,
+  getState
+) => {
+  const email = sel.currentUserEmail(getState());
+  return dispatch(onSubmitDccCommentApi(email, token, comment, parentID));
+};
+
+export const onSaveDraftDcc = ({
+  type,
+  nomineeid,
+  statement,
+  domain,
+  contractortype,
+  id: draftId,
+  nomineeusername
+}) => (dispatch) => {
+  resetNewDccData();
+  const id = draftId || uniqueID("draft");
+  dispatch(
+    act.SAVE_DRAFT_DCC({
+      type,
+      nomineeid,
+      statement,
+      domain,
+      contractortype,
+      id,
+      nomineeusername,
+      timestamp: Date.now() / 1000
+    })
+  );
+  return id;
+};
+
+export const onLoadDraftDccs = (email) => (dispatch, getState) => {
+  const key = email || sel.currentUserEmail(getState());
+  const stateFromLS = loadStateLocalStorage(key);
+  const drafts = sel.draftDccs(stateFromLS) || {};
+  dispatch(act.LOAD_DRAFT_DCCS(drafts));
+};
+
+export const onDeleteDraftDcc = (draftId) => {
+  return act.DELETE_DRAFT_DCC(draftId);
 };

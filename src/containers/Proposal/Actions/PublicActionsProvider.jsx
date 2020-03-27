@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Text } from "pi-ui";
-import Link from "src/componentsv2/Link";
+import Link from "src/components/Link";
 import { PublicProposalsActionsContext, usePublicActions } from "./hooks";
-import ModalConfirm from "src/componentsv2/ModalConfirm";
-import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
-import ModalStartVote from "src/componentsv2/ModalStartVote";
+import ModalConfirm from "src/components/ModalConfirm";
+import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
+import ModalStartVote from "src/components/ModalStartVote";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 
 const PublicActionsProvider = ({ children }) => {

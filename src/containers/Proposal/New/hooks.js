@@ -1,9 +1,9 @@
 import * as act from "src/actions";
 import { useAction } from "src/redux";
-import { useLoaderContext } from "src/Appv2/Loader";
+import { useLoaderContext } from "src/containers/Loader";
 
 export function useNewProposal() {
-  const onSubmitProposal = useAction(act.onSaveNewProposalV2);
+  const onSubmitProposal = useAction(act.onSaveNewProposal);
   const { currentUser } = useLoaderContext();
   return { onSubmitProposal, currentUser };
 }

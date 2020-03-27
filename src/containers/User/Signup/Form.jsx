@@ -1,10 +1,10 @@
-import { Button, Text, TextInput } from "pi-ui";
+import { Button, Text, TextInput, H2, P } from "pi-ui";
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import DevelopmentOnlyContent from "src/componentsv2/DevelopmentOnlyContent";
-import EmailSentMessage from "src/componentsv2/EmailSentMessage";
-import FormWrapper from "src/componentsv2/FormWrapper";
-import ModalIdentityWarning from "src/componentsv2/ModalIdentityWarning";
+import DevelopmentOnlyContent from "src/components/DevelopmentOnlyContent";
+import EmailSentMessage from "src/components/EmailSentMessage";
+import FormWrapper from "src/components/FormWrapper";
+import ModalIdentityWarning from "src/components/ModalIdentityWarning";
 import { useSignup } from "./hooks";
 
 const SignupForm = () => {
@@ -154,7 +154,7 @@ const SignupForm = () => {
                 </Text>
               </Footer>
             </Form>
-          ) : (
+          ) : !enableAdminInvite ? (
             <EmailSentMessage
               title="Please check your inbox to verify your registration"
               email={email}
@@ -166,10 +166,17 @@ const SignupForm = () => {
                   <Link to="/user/request-reset-password">
                     reset your password
                   </Link>{" "}
-                  instead.
+                  `` instead.
                 </>
               ]}
             />
+          ) : (
+            <>
+              <H2>Account created successfully</H2>
+              <P style={{ marginTop: "2rem" }}>
+                You may <Link to="/user/login">login</Link> to your account now.
+              </P>
+            </>
           )
         }
       </FormWrapper>

@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { Text } from "pi-ui";
 import { useDraftProposals } from "./hooks";
-import DraftProposal from "src/componentsv2/Proposal/DraftProposal";
+import DraftProposal from "src/components/Proposal/DraftProposal";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import ModalConfirm from "src/componentsv2/ModalConfirm";
-import HelpMessage from "src/componentsv2/HelpMessage";
+import ModalConfirm from "src/components/ModalConfirm";
+import HelpMessage from "src/components/HelpMessage";
 
 const Drafts = () => {
   const { draftProposals, onDeleteDraftProposal } = useDraftProposals();

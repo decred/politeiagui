@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useConfig } from "src/Config";
+import { useConfig } from "src/containers/Config";
 
 const setDocumentTitle = (title) => (document.title = title);
 

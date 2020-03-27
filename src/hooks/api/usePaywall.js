@@ -2,7 +2,7 @@ import * as act from "src/actions";
 import { useAction, useSelector } from "src/redux";
 import * as sel from "src/selectors";
 import { PAYWALL_STATUS_PAID } from "src/constants";
-import { useConfig } from "src/Config";
+import { useConfig } from "src/containers/Config";
 
 function usePaywall() {
   const currentUserEmail = useSelector(sel.currentUserEmail);

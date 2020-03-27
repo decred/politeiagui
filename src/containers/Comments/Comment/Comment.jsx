@@ -2,13 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Text, classNames, useMediaQuery, useTheme } from "pi-ui";
 import styles from "./Comment.module.css";
-import DateTooltip from "src/componentsv2/DateTooltip";
-import Markdown from "src/componentsv2/Markdown";
-import Join from "src/componentsv2/Join";
-import Link from "src/componentsv2/Link";
-import LoggedInContent from "src/componentsv2/LoggedInContent";
-import Likes from "src/componentsv2/Likes";
-import CopyLink from "src/componentsv2/CopyLink";
+import DateTooltip from "src/components/DateTooltip";
+import Markdown from "src/components/Markdown";
+import Join from "src/components/Join";
+import Link from "src/components/Link";
+import LoggedInContent from "src/components/LoggedInContent";
+import Likes from "src/components/Likes";
+import CopyLink from "src/components/CopyLink";
 
 const Comment = ({
   className,
@@ -37,6 +37,7 @@ const Comment = ({
   censorable,
   isFlatMode,
   seeInContextLink,
+  loadingLikeAction,
   ...props
 }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
@@ -59,8 +60,7 @@ const Comment = ({
         highlightAsNew && styles.highlightAsNew,
         className
       )}
-      {...props}
-    >
+      {...props}>
       <div className={classNames("justify-space-between", styles.info)}>
         <Join>
           <Link
@@ -68,8 +68,7 @@ const Comment = ({
               styles.commentAuthor,
               highlightAuthor && styles.recordAuthor
             )}
-            to={`/user/${authorID}`}
-          >
+            to={`/user/${authorID}`}>
             {author}
           </Link>
           <DateTooltip timestamp={createdAt} placement="bottom">
@@ -87,6 +86,7 @@ const Comment = ({
           <div className={styles.likesWrapper}>
             <Likes
               disabled={disableLikesClick}
+              apiLoading={!!loadingLikeAction}
               upLikes={likesUpCount}
               downLikes={likesDownCount}
               option={likeOption}
@@ -110,8 +110,7 @@ const Comment = ({
               <Text
                 weight="semibold"
                 className={styles.reply}
-                onClick={onClickReply}
-              >
+                onClick={onClickReply}>
                 Reply
               </Text>
             </LoggedInContent>

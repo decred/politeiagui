@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as act from "src/actions";
-import { useConfig } from "src/Config";
+import { useConfig } from "src/containers/Config";
 import { getQueryStringValues } from "src/lib/queryString";
 import { useSelector, useAction } from "src/redux";
 import usePolicy from "src/hooks/api/usePolicy";
@@ -11,7 +11,7 @@ export function useSignup() {
   const signupResponse = useSelector(sel.apiNewUserResponse);
 
   const onCreateNewUser = useAction(act.onCreateNewUser);
-  const onCreateNewUseFromAdminInvitation = useAction(act.onCreateNewUser);
+  const onCreateNewUseFromAdminInvitation = useAction(act.onCreateNewUserCMS);
   const onResetSignup = useAction(act.onResetNewUser);
 
   const { enableAdminInvite } = useConfig();

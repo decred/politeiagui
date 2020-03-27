@@ -5,14 +5,14 @@ const DEFAULT_ARGS = [];
 function useApplyAction(action, args = DEFAULT_ARGS, enabled = true) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [fired, setFired] = useState(false);
+  const [response, setResponse] = useState(null);
   useEffect(() => {
     async function executeAction() {
       setLoading(true);
       try {
-        await action.apply(null, args);
+        const res = await action.apply(null, args);
         setLoading(false);
-        setFired(true);
+        setResponse(res);
       } catch (e) {
         setLoading(false);
         setError(e);
@@ -22,7 +22,7 @@ function useApplyAction(action, args = DEFAULT_ARGS, enabled = true) {
       executeAction();
     }
   }, [action, args, enabled]);
-  return [loading, error, fired];
+  return [loading, error, response];
 }
 
 function areArgsEqual(newArgs, oldArgs) {
