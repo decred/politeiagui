@@ -1,8 +1,5 @@
 import React, { useCallback } from "react";
 import {
-  Button,
-  classNames,
-  useMediaQuery,
   Dropdown,
   DropdownItem
 } from "pi-ui";
@@ -10,13 +7,12 @@ import { useAdminDccActions } from "./hooks";
 import AdminContent from "src/components/AdminContent";
 import { isDccActive } from "../helpers";
 
-const DccActions = ({ dcc, extended }) => {
+const DccActions = ({ dcc, className }) => {
   if (!useAdminDccActions()) {
     throw Error(
       "Admin dccs actions requires an 'AdminActionsProvider' on a higher level of the component tree. "
     );
   }
-  const mobile = useMediaQuery("(max-width: 560px)");
   const { onApprove, onReject } = useAdminDccActions();
 
   const withDcc = useCallback(
@@ -26,34 +22,13 @@ const DccActions = ({ dcc, extended }) => {
     [dcc]
   );
 
-  const approveButton = (
-    <Button onClick={withDcc(onApprove)}>Approve</Button>
-  );
-  const rejectButton = (
-    <Button
-      onClick={withDcc(onReject)}
-      className={classNames("margin-right-s")}
-      noBorder
-      kind="secondary"
-    >
-      Reject
-    </Button>
-  );
-
   return isDccActive(dcc) ? (
     <AdminContent>
-      <div className="margin-top-m">
-        {!extended && !mobile ? (
-          <div className="justify-right">
-            {rejectButton}
-            {approveButton}
-          </div>
-        ) : (
-          <Dropdown title="Approve/Reject DCC">
-            <DropdownItem>{approveButton}</DropdownItem>
-            <DropdownItem>{rejectButton}</DropdownItem>
-          </Dropdown>
-        )}
+      <div className={className}>
+        <Dropdown title="Approve/Reject DCC" itemsListClassName="full-width">
+          <DropdownItem onClick={withDcc(onApprove)}>Approve</DropdownItem>
+          <DropdownItem onClick={withDcc(onReject)}>Reject</DropdownItem>
+        </Dropdown>
       </div>
     </AdminContent>
   ) : null;

@@ -8,7 +8,8 @@ import {
   DCC_DOMAIN_INVALID,
   CONTRACTOR_TYPE_NOMINEE,
   CONTRACTOR_TYPE_REVOKED,
-  CONTRACTOR_TYPE_SUPERVISOR
+  CONTRACTOR_TYPE_SUPERVISOR,
+  CONTRACTOR_TYPE_INVALID
 } from "./constants";
 import isEmpty from "lodash/isEmpty";
 import some from "lodash/fp/some";
@@ -232,7 +233,8 @@ export const isUserValidContractor = (user) =>
   user &&
   user.domain !== DCC_DOMAIN_INVALID &&
   user.contractortype !== CONTRACTOR_TYPE_REVOKED &&
-  user.contractortype !== CONTRACTOR_TYPE_NOMINEE;
+  user.contractortype !== CONTRACTOR_TYPE_NOMINEE &&
+  user.contractortype !== CONTRACTOR_TYPE_INVALID;
 
 /**
  * Retuns a sorted dcc list by timestamp
@@ -241,3 +243,12 @@ export const isUserValidContractor = (user) =>
 export const sortDccsByTimestamp = (unorderedDccs) =>
   unorderedDccs &&
   Object.values(unorderedDccs).sort((a, b) => b.timestamp - a.timestamp);
+
+/**
+ * Returns if user can submit dccs
+ * @param {Object} user
+ */
+export const userCanSubmitDccs = (user) =>
+  (user && user.domain !== DCC_DOMAIN_INVALID) ||
+  (user.contractortype !== CONTRACTOR_TYPE_REVOKED &&
+    user.contractortype !== CONTRACTOR_TYPE_NOMINEE);

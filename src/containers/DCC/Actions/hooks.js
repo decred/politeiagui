@@ -21,7 +21,7 @@ export const useDccActions = (dccToken) => {
   const onFetchUsers = useAction(act.onFetchCmsUsers);
   const user = useSelector(sel.currentCmsUser);
   const userID = useSelector(sel.currentUserID);
-  const [loading, error] = useAPIAction(onFetchUsers, null, !user);
+  const [loading, error] = useAPIAction(onFetchUsers, null, !!user);
 
   const onSupportDcc = () => onSupportOpposeDcc(dccToken, DCC_SUPPORT_ACTION);
   const onOpposeDcc = () => onSupportOpposeDcc(dccToken, DCC_OPPOSE_ACTION);

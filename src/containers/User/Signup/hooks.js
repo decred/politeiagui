@@ -14,7 +14,7 @@ export function useSignup() {
   const onCreateNewUseFromAdminInvitation = useAction(act.onCreateNewUserCMS);
   const onResetSignup = useAction(act.onResetNewUser);
 
-  const { enableAdminInvite } = useConfig();
+  const { enableAdminInvite, recordType, constants } = useConfig();
   const { policy } = usePolicy();
   const [validationSchema, setValidationSchema] = useState(
     policy ? signupValidationSchema(policy, enableAdminInvite) : null
@@ -33,6 +33,8 @@ export function useSignup() {
   const onSignup = enableAdminInvite
     ? onCreateNewUseFromAdminInvitation
     : onCreateNewUser;
+
+  const isCms = recordType !== constants.RECORD_TYPE_PROPOSAL;
 
   useEffect(() => {
     return function resetSignup() {
@@ -55,6 +57,7 @@ export function useSignup() {
     validationSchema,
     onSignup,
     enableAdminInvite,
-    initialValues
+    initialValues,
+    isCms
   };
 }

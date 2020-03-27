@@ -113,6 +113,12 @@ const onReceiveSetDccStatus = (state, payload) => {
   const timereviewed = Date.now() / 1000;
 
   return compose(
+    set(["byToken", token], {
+      ...dcc,
+      status: newStatus,
+      statuschangereason: reason,
+      timereviewed
+    }),
     update(["byStatus", oldStatus], (dccsByOldDccStatus) =>
       dccByStatusRemoveByToken(dccsByOldDccStatus, token)
     ),
@@ -124,13 +130,7 @@ const onReceiveSetDccStatus = (state, payload) => {
         reason,
         timereviewed
       )
-    ),
-    set(["byToken", token], {
-      ...dcc,
-      status: newStatus,
-      statuschangereason: reason,
-      timereviewed
-    })
+    )
   )(state);
 };
 const onReceiveDraftDcc = (state, draft) =>
