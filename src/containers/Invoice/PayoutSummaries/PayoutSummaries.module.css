@@ -1,0 +1,14 @@
+.spinnerWrapper {
+  display: flex;
+  height: 50%;
+  justify-content: center;
+  align-items: center;
+}
+
+.tableBodyCell {
+  border-bottom: 0.1rem solid var(--color-white) !important;
+}
+
+.tableHead {
+  background-color: var(--color-white) !important;
+}

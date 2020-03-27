@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useRouter } from "src/componentsv2/Router";
+import { useRouter } from "src/components/Router";
 
 /**
  * Watch for route changes and triggers the callbackFn when

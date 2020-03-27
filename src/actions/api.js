@@ -1,21 +1,16 @@
 import Promise from "promise";
-import * as modalTypes from "../components/Modal/modalTypes";
 import { PROPOSAL_STATUS_PUBLIC } from "../constants";
 import * as api from "../lib/api";
 import {
   resetNewInvoiceData,
   resetNewProposalData,
-  resetNewDCCData
+  resetNewDccData
 } from "../lib/editors_content_backup";
 import { clearStateLocalStorage } from "../lib/local_storage";
 import * as pki from "../lib/pki";
 import * as sel from "../selectors";
 import act from "./methods";
-import { closeModal, confirmWithModal, openModal } from "./modal";
 import { PAYWALL_STATUS_PAID, DCC_SUPPORT_VOTE } from "../constants";
-
-export const onResetProposal = act.RESET_PROPOSAL;
-export const onResetInvoice = act.RESET_INVOICE;
 
 export const onSetEmail = act.SET_EMAIL;
 
@@ -66,11 +61,6 @@ export const onRequestMe = () => (dispatch) => {
       throw error;
     });
 };
-
-export const updateMe = (payload) => (dispatch) =>
-  dispatch(act.UPDATE_ME(payload));
-
-export const cleanErrors = act.CLEAN_ERRORS;
 
 let globalpollingpointer = null;
 
@@ -125,14 +115,13 @@ export const withCsrf = (fn) => (dispatch, getState) => {
   );
 };
 
-export const onInviteUserConfirm = ({ email }) =>
+export const onInviteUserConfirm = ({ email, temp }) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_INVITE_USER({ email }));
     return api
-      .inviteNewUser(csrf, email)
+      .inviteNewUser(csrf, { email, temp })
       .then((response) => {
         dispatch(act.RECEIVE_INVITE_USER(response));
-        dispatch(closeModal());
       })
       .catch((error) => {
         if (error.toString() === "Error: No available storage method found.") {
@@ -157,7 +146,6 @@ export const onCreateNewUser = ({ email, username, password }) =>
       .newUser(csrf, email, username, password)
       .then((response) => {
         dispatch(act.RECEIVE_NEW_USER(response));
-        dispatch(closeModal());
       })
       .catch((error) => {
         if (error.toString() === "Error: No available storage method found.") {
@@ -187,7 +175,6 @@ export const onCreateNewUserCMS = ({
       .register(csrf, email, username, password, verificationtoken)
       .then((response) => {
         dispatch(act.RECEIVE_NEW_USER(response));
-        dispatch(closeModal());
       })
       .catch((error) => {
         if (error.toString() === "Error: No available storage method found.") {
@@ -222,7 +209,7 @@ export const onSearchUser = (query) => (dispatch) => {
   dispatch(act.REQUEST_USER_SEARCH());
   return api
     .searchUser(query)
-    .then((res) => dispatch(act.RECEIVE_USER_SEARCH(res)))
+    .then((res) => dispatch(act.RECEIVE_USER_SEARCH({ ...res, query })))
     .catch((err) => {
       dispatch(act.RECEIVE_USER_SEARCH(null, err));
       throw err;
@@ -319,6 +306,7 @@ export const onFetchUserInvoices = (userid, token) => (dispatch) => {
     .then((response) => dispatch(act.RECEIVE_USER_INVOICES(response)))
     .catch((error) => {
       dispatch(act.RECEIVE_USER_INVOICES(null, error));
+      throw error;
     });
 };
 export const onFetchAdminUserInvoices = (userid) => (dispatch) => {
@@ -332,14 +320,15 @@ export const onFetchAdminUserInvoices = (userid) => (dispatch) => {
 };
 
 export const onFetchInvoiceComments = (token) => (dispatch) => {
-  dispatch(act.REQUEST_INVOICE_COMMENTS());
+  dispatch(act.REQUEST_RECORD_COMMENTS());
   return api
     .invoiceComments(token)
     .then((response) => {
-      dispatch(act.RECEIVE_INVOICE_COMMENTS(response));
+      dispatch(act.RECEIVE_RECORD_COMMENTS({ ...response, token }));
     })
     .catch((error) => {
-      dispatch(act.RECEIVE_INVOICE_COMMENTS(null, error));
+      dispatch(act.RECEIVE__RECORD_COMMENTS(null, error));
+      throw error;
     });
 };
 
@@ -353,16 +342,6 @@ export const onFetchAdminInvoices = () =>
         dispatch(act.RECEIVE_ADMIN_INVOICES(null, error));
       });
   });
-
-export const onFetchVetted = (token) => (dispatch) => {
-  dispatch(act.REQUEST_VETTED());
-  return api
-    .vetted(token)
-    .then((response) => dispatch(act.RECEIVE_VETTED(response)))
-    .catch((error) => {
-      dispatch(act.RECEIVE_VETTED(null, error));
-    });
-};
 
 export const onFetchProposalsBatch = (tokens, fetchVoteStatus = true) =>
   withCsrf(async (dispatch, _, csrf) => {
@@ -380,30 +359,6 @@ export const onFetchProposalsBatch = (tokens, fetchVoteStatus = true) =>
     }
   });
 
-export const onFetchVettedByTokens = (tokens, fetchVoteStatus = true) => async (
-  dispatch
-) => {
-  dispatch(act.REQUEST_VETTED(tokens));
-  try {
-    let promises = tokens.map((t) => api.proposal(t));
-
-    if (fetchVoteStatus) {
-      const voteStatusPromises = tokens.map((t) =>
-        dispatch(onFetchProposalVoteStatus(t))
-      );
-      promises = promises.concat(voteStatusPromises);
-    }
-    const res = await Promise.all(promises);
-
-    // filter only proposals responses
-    const proposals = res.filter((r) => r && r.proposal).map((r) => r.proposal);
-
-    return dispatch(act.RECEIVE_VETTED({ proposals }));
-  } catch (error) {
-    dispatch(act.RECEIVE_VETTED(null, error));
-  }
-};
-
 export const onFetchTokenInventory = () => (dispatch) => {
   dispatch(act.REQUEST_TOKEN_INVENTORY());
   return api
@@ -414,26 +369,6 @@ export const onFetchTokenInventory = () => (dispatch) => {
     .catch((error) => {
       dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error));
       throw error;
-    });
-};
-
-export const onFetchUnvettedStatus = () => (dispatch) => {
-  dispatch(act.REQUEST_UNVETTED_STATUS());
-  return api
-    .status()
-    .then((response) => dispatch(act.RECEIVE_UNVETTED_STATUS(response)))
-    .catch((error) => {
-      dispatch(act.RECEIVE_UNVETTED_STATUS(null, error));
-    });
-};
-
-export const onFetchUnvetted = (token) => (dispatch) => {
-  dispatch(act.REQUEST_UNVETTED());
-  return api
-    .unvetted(token)
-    .then((response) => dispatch(act.RECEIVE_UNVETTED(response)))
-    .catch((error) => {
-      dispatch(act.RECEIVE_UNVETTED(null, error));
     });
 };
 
@@ -472,6 +407,7 @@ export const onFetchInvoice = (token, version = null) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(act.RECEIVE_INVOICE(null, error));
+      throw error;
     });
 };
 
@@ -506,14 +442,14 @@ export const onFetchUser = (userId) => (dispatch) => {
 
 export const onFetchProposalComments = (token) =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_PROPOSAL_COMMENTS(token));
+    dispatch(act.REQUEST_RECORD_COMMENTS(token));
     return api
       .proposalComments(token, csrf)
       .then((response) =>
-        dispatch(act.RECEIVE_PROPOSAL_COMMENTS({ ...response, token }))
+        dispatch(act.RECEIVE_RECORD_COMMENTS({ ...response, token }))
       )
       .catch((error) => {
-        dispatch(act.RECEIVE_PROPOSAL_COMMENTS(null, error));
+        dispatch(act.RECEIVE_RECORD_COMMENTS(null, error));
       });
   });
 
@@ -542,41 +478,29 @@ export const onEditUser = (preferences) =>
       });
   });
 
-export const onManageCmsUser = (args) =>
-  withCsrf((dispatch, getState, csrf) => {
+export const onManageCmsUser = (userID, domain, type, supervisorIDs) =>
+  withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_MANAGE_CMS_USER());
-    const { userid, ...newContractorProps } = args;
     return api
-      .manageCmsUser(csrf, userid, newContractorProps)
+      .manageCmsUser(csrf, userID, domain, type, supervisorIDs)
       .then((response) =>
         dispatch(
-          act.RECEIVE_MANAGE_CMS_USER({ ...response, ...newContractorProps })
+          act.RECEIVE_MANAGE_CMS_USER({
+            ...response,
+            userID,
+            domain,
+            type,
+            supervisorIDs
+          })
         )
       )
       .catch((error) => {
         dispatch(act.RECEIVE_MANAGE_CMS_USER(null, error));
+        throw error;
       });
   });
 
-// TODO: erase this after the refactor and make the onManageUserv2 official
-export const onManageUser = (userId, action) =>
-  withCsrf((dispatch, getState, csrf) => {
-    return dispatch(
-      confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {})
-    ).then(({ confirm, reason }) => {
-      if (confirm) {
-        dispatch(act.REQUEST_MANAGE_USER({ userId, action, reason }));
-        return api
-          .manageUser(csrf, userId, action, reason)
-          .then((response) => dispatch(act.RECEIVE_MANAGE_USER(response)))
-          .catch((error) => {
-            dispatch(act.RECEIVE_MANAGE_USER(null, error));
-          });
-      }
-    });
-  });
-
-export const onManageUserv2 = (userId, action, reason) =>
+export const onManageUser = (userId, action, reason) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_MANAGE_USER({ userId, action, reason }));
     return api
@@ -638,6 +562,7 @@ export const onSubmitInvoice = (
       .then((invoice) => api.signRegister(loggedInAsEmail, invoice))
       .then((invoice) => api.newInvoice(csrf, invoice))
       .then((invoice) => {
+        const policy = sel.policy(getState());
         dispatch(
           act.RECEIVE_NEW_INVOICE({
             ...invoice,
@@ -646,7 +571,7 @@ export const onSubmitInvoice = (
             username
           })
         );
-        resetNewInvoiceData();
+        resetNewInvoiceData(policy);
       })
       .catch((error) => {
         dispatch(act.RECEIVE_NEW_INVOICE(null, error));
@@ -715,7 +640,7 @@ export const onSubmitEditedProposal = (
   });
 
 export const onSubmitEditedInvoice = (
-  loggedInAsEmail,
+  email,
   userid,
   username,
   month,
@@ -730,7 +655,8 @@ export const onSubmitEditedInvoice = (
   files,
   token
 ) =>
-  withCsrf((dispatch, _, csrf) => {
+  withCsrf((dispatch, getState, csrf) => {
+    const policy = sel.policy(getState());
     dispatch(
       act.REQUEST_EDIT_INVOICE({
         month,
@@ -759,7 +685,7 @@ export const onSubmitEditedInvoice = (
         files
       )
     )
-      .then((invoice) => api.signRegister(loggedInAsEmail, invoice))
+      .then((invoice) => api.signRegister(email, invoice))
       .then((invoice) => api.editInvoice(csrf, { ...invoice, token }))
       .then((invoice) => {
         dispatch(
@@ -770,11 +696,11 @@ export const onSubmitEditedInvoice = (
             username
           })
         );
-        resetNewInvoiceData();
+        resetNewInvoiceData(policy);
       })
       .catch((error) => {
         dispatch(act.RECEIVE_EDIT_INVOICE(null, error));
-        resetNewInvoiceData();
+        resetNewInvoiceData(policy);
         throw error;
       });
   });
@@ -782,7 +708,6 @@ export const onSubmitEditedInvoice = (
 export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
   withCsrf((dispatch, getState, csrf) => {
     if (!loggedInAsEmail) {
-      dispatch(openModal("LOGIN", {}, null));
       return;
     }
     dispatch(act.REQUEST_LIKE_COMMENT({ commentid, token }));
@@ -799,43 +724,7 @@ export const onLikeComment = (loggedInAsEmail, token, commentid, action) =>
       });
   });
 
-export const onCensorComment = (
-  loggedInAsEmail,
-  token,
-  commentid,
-  isCms,
-  isDCC
-) =>
-  withCsrf((dispatch, getState, csrf) => {
-    return dispatch(
-      confirmWithModal(modalTypes.CONFIRM_ACTION_WITH_REASON, {})
-    ).then(({ confirm, reason }) => {
-      if (confirm) {
-        dispatch(act.REQUEST_CENSOR_COMMENT({ commentid, token }));
-        return Promise.resolve(
-          api.makeCensoredComment(token, reason, commentid)
-        )
-          .then((comment) => api.signCensorComment(loggedInAsEmail, comment))
-          .then((comment) => api.censorComment(csrf, comment))
-          .then((response) => {
-            if (response.receipt) {
-              !isCms
-                ? dispatch(
-                    act.RECEIVE_CENSOR_COMMENT({ commentid, token }, null)
-                  )
-                : !isDCC
-                ? dispatch(act.RECEIVE_CENSOR_INVOICE_COMMENT(commentid, null))
-                : dispatch(act.RECEIVE_CENSOR_DCC_COMMENT(commentid, null));
-            }
-          })
-          .catch((error) => {
-            dispatch(act.RECEIVE_CENSOR_COMMENT(null, error));
-          });
-      }
-    });
-  });
-
-export const onCensorCommentv2 = (email, token, commentid, reason) => {
+export const onCensorComment = (email, token, commentid, reason) => {
   return withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_CENSOR_COMMENT({ commentid, token }));
     return Promise.resolve(api.makeCensoredComment(token, reason, commentid))
@@ -858,9 +747,7 @@ export const onSubmitComment = (
   token,
   comment,
   parentid,
-  commentid,
-  isCMS = false,
-  isDCC = false
+  commentid
 ) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
@@ -878,17 +765,11 @@ export const onSubmitComment = (
         return comment;
       })
       .then((comment) => {
-        return isDCC
-          ? api.newDCCComment(csrf, comment)
-          : api.newComment(csrf, comment);
+        return api.newComment(csrf, comment);
       })
       .then((response) => {
         const responsecomment = response.comment;
-        !isCMS
-          ? dispatch(act.RECEIVE_NEW_COMMENT(responsecomment))
-          : isDCC
-          ? dispatch(act.RECEIVE_NEW_DCC_COMMENT(responsecomment))
-          : dispatch(act.RECEIVE_NEW_INVOICE_COMMENT(responsecomment));
+        dispatch(act.RECEIVE_NEW_COMMENT(responsecomment));
         commentid &&
           dispatch(
             act.RECEIVE_NEW_THREAD_COMMENT({
@@ -957,35 +838,24 @@ export const onVerifyUserKey = (currentUserEmail, verificationtoken) =>
       });
   });
 
-export const onSetInvoiceStatus = (
-  authorid,
-  loggedInAsEmail,
-  token,
-  status,
-  version,
-  reason = ""
-) =>
+export const onSetInvoiceStatus = (token, status, version, reason = "") =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_SETSTATUS_INVOICE({ status, token, reason }));
+    const email = sel.currentUserEmail(getState());
+    dispatch(
+      act.REQUEST_SETSTATUS_INVOICE({ status, token, reason, version, email })
+    );
     return api
-      .invoiceSetStatus(loggedInAsEmail, csrf, token, version, status, reason)
+      .invoiceSetStatus(email, csrf, token, version, status, reason)
       .then(({ invoice }) => {
-        dispatch(
-          act.RECEIVE_SETSTATUS_INVOICE({
-            invoice: {
-              ...invoice,
-              userid: authorid
-            }
-          })
-        );
-        // dispatch(onFetchUnvettedStatus());
+        dispatch(act.RECEIVE_SETSTATUS_INVOICE(invoice));
       })
       .catch((error) => {
         dispatch(act.RECEIVE_SETSTATUS_INVOICE(null, error));
+        throw error;
       });
   });
 
-export const onSetProposalStatusV2 = (token, status, censorMessage = "") =>
+export const onSetProposalStatus = (token, status, censorMessage = "") =>
   withCsrf((dispatch, getState, csrf) => {
     const email = sel.currentUserEmail(getState());
     dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
@@ -1007,43 +877,6 @@ export const onSetProposalStatusV2 = (token, status, censorMessage = "") =>
       });
   });
 
-export const onSetProposalStatus = (
-  authorid,
-  loggedInAsEmail,
-  token,
-  status,
-  censorMessage = ""
-) => {
-  return withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
-    if (status === PROPOSAL_STATUS_PUBLIC) {
-      dispatch(act.SET_PROPOSAL_APPROVED(true));
-    }
-    return api
-      .proposalSetStatus(loggedInAsEmail, csrf, token, status, censorMessage)
-      .then(({ proposal }) => {
-        dispatch(
-          act.RECEIVE_SETSTATUS_PROPOSAL({
-            proposal
-          })
-        );
-        if (status === PROPOSAL_STATUS_PUBLIC) {
-          dispatch(onFetchProposalVoteStatus(token));
-        }
-        dispatch(onFetchUnvettedStatus());
-      })
-      .catch((error) => {
-        dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
-        throw error;
-      });
-  });
-};
-
-export const redirectedFrom = (location) => (dispatch) =>
-  dispatch(act.REDIRECTED_FROM(location));
-export const resetRedirectedFrom = () => (dispatch) =>
-  dispatch(act.RESET_REDIRECTED_FROM());
-
 export const onForgottenPasswordRequest = ({ email }) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_FORGOTTEN_PASSWORD_REQUEST({ email }));
@@ -1058,11 +891,6 @@ export const onForgottenPasswordRequest = ({ email }) =>
       });
   });
 
-export const resetForgottenPassword = () => (dispatch) =>
-  dispatch(act.RESET_FORGOTTEN_PASSWORD_REQUEST());
-
-// XXXX: Do not use this action for production code before the following
-// PR is meged: https://github.com/decred/politeia/pull/937
 export const onResetPassword = ({ username, email }) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_RESET_PASSWORD({ username, email }));
@@ -1075,8 +903,6 @@ export const onResetPassword = ({ username, email }) =>
       });
   });
 
-// XXXX: Do not use this action for production code before the following
-// PR is meged: https://github.com/decred/politeia/pull/937
 export const onVerifyResetPassword = ({
   username,
   verificationtoken,
@@ -1136,12 +962,6 @@ export const onPasswordResetRequest = ({
       });
   });
 
-export const keyMismatch = (payload) => (dispatch) =>
-  dispatch(act.KEY_MISMATCH(payload));
-
-export const resetPasswordReset = () => (dispatch) =>
-  dispatch(act.RESET_RESET_PASSWORD());
-
 export const onStartVote = (
   loggedInAsEmail,
   token,
@@ -1189,40 +1009,6 @@ export const onUserProposalCredits = () => (dispatch, getState) => {
     });
 };
 
-export const onFetchProposalsVoteStatus = () => (dispatch) => {
-  dispatch(act.REQUEST_PROPOSALS_VOTE_STATUS());
-  return api
-    .proposalsVoteStatus()
-    .then((response) =>
-      dispatch(
-        act.RECEIVE_PROPOSALS_VOTE_STATUS({ ...response, success: true })
-      )
-    )
-    .catch((error) => {
-      dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS(null, error));
-      throw error;
-    });
-};
-
-export const onFetchUserProposalsWithVoteStatus = (userid, token) => async (
-  dispatch
-) => {
-  dispatch(act.REQUEST_USER_PROPOSALS({ userid }));
-  try {
-    const { proposals, ...response } = await api.userProposals(userid, token);
-    const publicPropsTokens = proposals
-      .filter((prop) => prop.status === PROPOSAL_STATUS_PUBLIC)
-      .map((prop) => prop.censorshiprecord.token);
-
-    if (publicPropsTokens.length) {
-      await dispatch(onFetchProposalsVoteStatusByTokens(publicPropsTokens));
-    }
-    dispatch(act.RECEIVE_USER_PROPOSALS({ proposals, userid, ...response }));
-  } catch (e) {
-    dispatch(act.RECEIVE_USER_PROPOSALS(null, e));
-  }
-};
-
 export const onFetchUserProposalsWithVoteSummary = (userid, token) => async (
   dispatch
 ) => {
@@ -1243,22 +1029,6 @@ export const onFetchUserProposalsWithVoteSummary = (userid, token) => async (
   }
 };
 
-export const onFetchProposalsVoteStatusByTokens = (tokens) => async (
-  dispatch
-) => {
-  dispatch(act.REQUEST_PROPOSALS_VOTE_STATUS({ tokens }));
-  try {
-    const promises = tokens.map((token) => api.proposalVoteStatus(token));
-    const res = await Promise.all(promises);
-    dispatch(
-      act.RECEIVE_PROPOSALS_VOTE_STATUS({ votesstatus: res, success: true })
-    );
-  } catch (e) {
-    dispatch(act.RECEIVE_PROPOSALS_VOTE_STATUS(null, e));
-    throw e;
-  }
-};
-
 export const onFetchProposalsBatchVoteSummary = (tokens) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_VOTE_SUMMARY({ tokens }));
@@ -1275,21 +1045,6 @@ export const onFetchProposalsBatchVoteSummary = (tokens) =>
         throw error;
       });
   });
-
-export const onFetchProposalVoteStatus = (token) => (dispatch) => {
-  dispatch(act.REQUEST_PROPOSAL_VOTE_STATUS({ token }));
-  return api
-    .proposalVoteStatus(token)
-    .then((response) => {
-      dispatch(
-        act.RECEIVE_PROPOSAL_VOTE_STATUS({ ...response, success: true })
-      );
-      return response;
-    })
-    .catch((error) => {
-      dispatch(act.RECEIVE_PROPOSAL_VOTE_STATUS(null, error));
-    });
-};
 
 export const onFetchProposalVoteResults = (token) => (dispatch) => {
   dispatch(act.REQUEST_PROPOSAL_VOTE_RESULTS({ token }));
@@ -1461,10 +1216,12 @@ export const onFetchExchangeRate = (month, year) =>
     return api
       .exchangeRate(csrf, +month, +year)
       .then((response) => {
-        dispatch(act.RECEIVE_EXCHANGE_RATE(response));
+        dispatch(act.RECEIVE_EXCHANGE_RATE({ ...response, month, year }));
+        return response;
       })
       .catch((error) => {
         dispatch(act.RECEIVE_EXCHANGE_RATE(null, error));
+        throw error;
       });
   });
 
@@ -1481,9 +1238,22 @@ export const onFetchUserSubcontractors = () =>
       });
   });
 
+export const onFetchCmsUsers = () =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_CMS_USERS({}));
+    return api
+      .cmsUsers(csrf)
+      .then((response) => {
+        dispatch(act.RECEIVE_CMS_USERS(response));
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_CMS_USERS(null, error));
+      });
+  });
+
 // DCC actions
 
-export const onSubmitNewDCC = (
+export const onSubmitNewDcc = (
   loggedInAsEmail,
   userid,
   username,
@@ -1498,8 +1268,8 @@ export const onSubmitNewDCC = (
     return Promise.resolve(
       api.makeDCC(type, nomineeuserid, statement, domain, contractortype)
     )
-      .then((dcc) => api.signDCC(loggedInAsEmail, dcc))
-      .then((dcc) => api.newDCC(csrf, dcc))
+      .then((dcc) => api.signDcc(loggedInAsEmail, dcc))
+      .then((dcc) => api.newDcc(csrf, dcc))
       .then((dcc) => {
         dispatch(
           act.RECEIVE_NEW_DCC({
@@ -1509,7 +1279,7 @@ export const onSubmitNewDCC = (
             username
           })
         );
-        resetNewDCCData();
+        resetNewDccData();
       })
       .catch((error) => {
         dispatch(act.RECEIVE_NEW_DCC(null, error));
@@ -1517,7 +1287,7 @@ export const onSubmitNewDCC = (
       });
   });
 
-export const onFetchDCCsByStatus = (status) =>
+export const onFetchDccsByStatus = (status) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_DCCS({}));
     return api
@@ -1530,7 +1300,7 @@ export const onFetchDCCsByStatus = (status) =>
       });
   });
 
-export const onFetchDCC = (token) =>
+export const onFetchDcc = (token) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_DCC({}));
     return api
@@ -1543,32 +1313,33 @@ export const onFetchDCC = (token) =>
       });
   });
 
-export const onFetchDCCComments = (token) => (dispatch) => {
-  dispatch(act.REQUEST_DCC_COMMENTS());
+export const onFetchDccComments = (token) => (dispatch) => {
+  dispatch(act.REQUEST_RECORD_COMMENTS());
   return api
     .dccComments(token)
     .then((response) => {
-      dispatch(act.RECEIVE_DCC_COMMENTS(response));
+      dispatch(act.RECEIVE_RECORD_COMMENTS({ ...response, token }));
     })
     .catch((error) => {
-      dispatch(act.RECEIVE_DCC_COMMENTS(null, error));
+      dispatch(act.RECEIVE_RECORD_COMMENTS(null, error));
+      throw error;
     });
 };
 
-export const onSupportOpposeDCC = (loggedInAsEmail, token, vote) =>
-  withCsrf((dispatch, _, csrf) => {
-    if (!loggedInAsEmail) {
-      dispatch(openModal("LOGIN", {}, null));
-      return;
-    }
+export const onSupportOpposeDcc = (token, vote) =>
+  withCsrf((dispatch, getState, csrf) => {
+    const { email, username, userid } = sel.currentUser(getState());
     dispatch(act.REQUEST_SUPPORT_OPPOSE_DCC({}));
     return Promise.resolve(api.makeDCCVote(token, vote))
-      .then((dccvote) => api.signDCCVote(loggedInAsEmail, dccvote))
+      .then((dccvote) => api.signDccVote(email, dccvote))
       .then((dccvote) => api.supportOpposeDCC(csrf, dccvote))
       .then((response) => {
         dispatch(
           act.RECEIVE_SUPPORT_OPPOSE_DCC({
             ...response,
+            token,
+            username,
+            userid,
             isSupport: vote === DCC_SUPPORT_VOTE
           })
         );
@@ -1578,19 +1349,48 @@ export const onSupportOpposeDCC = (loggedInAsEmail, token, vote) =>
       });
   });
 
-export const onSetDCCStatus = (loggedInAsEmail, token, status, reason) =>
-  withCsrf((dispatch, _, csrf) => {
-    if (!loggedInAsEmail) {
-      dispatch(openModal("LOGIN", {}, null));
+export const onSetDccStatus = (token, status, reason) =>
+  withCsrf((dispatch, getState, csrf) => {
+    const { email } = sel.currentUser(getState());
+    if (!email) {
       return;
     }
     dispatch(act.REQUEST_SET_DCC_STATUS({}));
     return api
-      .setDCCStatus(csrf, loggedInAsEmail, token, status, reason)
+      .setDCCStatus(csrf, email, token, status, reason)
       .then((response) => {
-        dispatch(act.RECEIVE_SET_DCC_STATUS({ ...response, status, reason }));
+        dispatch(
+          act.RECEIVE_SET_DCC_STATUS({ ...response, status, reason, token })
+        );
       })
       .catch((error) => {
         dispatch(act.RECEIVE_SET_DCC_STATUS(null, error));
+      });
+  });
+
+export const onSubmitDccComment = (loggedInAsEmail, token, comment, parentid) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
+    return Promise.resolve(api.makeComment(token, comment, parentid))
+      .then((comment) => api.signComment(loggedInAsEmail, comment))
+      .then((comment) => {
+        // make sure this is not a duplicate comment by comparing to the existent
+        // comments signatures
+        const comments = sel.commentsByToken(getState())[token];
+        const signatureFound =
+          comments && comments.find((cm) => cm.signature === comment.signature);
+        if (signatureFound) {
+          throw new Error("That is a duplicate comment.");
+        }
+        return comment;
+      })
+      .then((comment) => api.newDccComment(csrf, comment))
+      .then((response) => {
+        const responsecomment = response.comment;
+        dispatch(act.RECEIVE_NEW_COMMENT(responsecomment));
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_NEW_COMMENT(null, error));
+        throw error;
       });
   });

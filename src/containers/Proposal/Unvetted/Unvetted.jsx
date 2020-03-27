@@ -1,10 +1,10 @@
 import React, { useCallback } from "react";
 import useProposalsBatch from "../hooks/useProposalsBatch";
-import Proposal from "src/componentsv2/Proposal";
-import ProposalLoader from "src/componentsv2/Proposal/ProposalLoader";
+import Proposal from "src/components/Proposal";
+import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
 import { UnvettedActionsProvider } from "src/containers/Proposal/Actions";
-import RecordsView from "src/componentsv2/RecordsView";
+import RecordsView from "src/components/RecordsView";
 
 const renderProposal = (prop) => (
   <Proposal key={prop.censorshiprecord.token} proposal={prop} />

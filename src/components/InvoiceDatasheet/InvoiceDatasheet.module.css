@@ -1,0 +1,93 @@
+.wrapper {
+  display: block;
+  padding: 5px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.wrapper table.data-grid tr td.cell,
+.wrapper table.data-grid tr th.cell {
+  font-size: 12px;
+}
+
+pre {
+  display: inline-block;
+  background: #333;
+  padding: 10px 30px;
+  border-left: 2px solid white;
+}
+
+:global(.cell.read-only) {
+  background-color: var(--datasheet-read-only-background) !important;
+  color: var(--datasheet-read-only-text-color) !important;
+}
+
+:global(.cell) {
+  position: relative;
+  border: 0 !important;
+  border-left: 0.5px solid var(--datasheet-border-color) !important;
+  border-bottom: 0.5px solid var(--datasheet-border-color) !important;
+}
+
+:global(input.data-editor) {
+  height: 100% !important;
+  width: 100% !important;
+  text-align: left !important;
+  font-size: var(--font-size-normal);
+  color: var(--text-color);
+}
+
+:global(span.value-viewer) {
+  max-height: 10rem;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.multilineCellValue {
+  word-break: break-word;
+  white-space: pre-line !important;
+}
+
+.table {
+  table-layout: fixed;
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 100rem;
+  background-color: transparent;
+}
+
+.tableHead {
+  background-color: var(--datasheet-read-only-background);
+}
+
+.tableCell {
+  border: 1px solid var(--datasheet-border-color);
+  max-width: 12rem;
+  min-width: 12rem;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+}
+
+.tableHeadCell {
+  composes: tableCell;
+  height: 5.2rem;
+}
+
+.tableRow > td {
+  height: 5rem !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  max-width: 12rem;
+  min-width: 12rem;
+  text-align: center;
+  text-overflow: ellipsis;
+}
+
+.datasheetWrapper {
+  width: 100%;
+  overflow-y: visible;
+  overflow-x: auto;
+  padding-bottom: 5rem;
+}

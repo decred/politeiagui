@@ -1,6 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import SingleContentPage from "src/componentsv2/layout/SingleContentPage";
+import SingleContentPage from "src/components/layout/SingleContentPage";
 import { H1, Button } from "pi-ui";
 import notFoundImage from "./notFound.svg";
 import styles from "./NotFound.module.css";

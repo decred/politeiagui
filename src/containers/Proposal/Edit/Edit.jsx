@@ -7,11 +7,11 @@ import { withRouter } from "react-router-dom";
 import { getMarkdownContent } from "src/containers/Proposal/helpers";
 import usePaywall from "src/hooks/api/usePaywall";
 import useIdentity from "src/hooks/api/useIdentity";
-import Or from "src/componentsv2/Or";
-import { IdentityMessageError } from "src/componentsv2/IdentityErrorIndicators";
-import ProposalForm from "src/componentsv2/ProposalForm/ProposalFormLazy";
-import Link from "src/componentsv2/Link";
-import ProposalFormLoader from "src/componentsv2/ProposalForm/ProposalFormLoader";
+import Or from "src/components/Or";
+import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
+import ProposalForm from "src/components/ProposalForm/ProposalFormLazy";
+import Link from "src/components/Link";
+import ProposalFormLoader from "src/components/ProposalForm/ProposalFormLoader";
 
 const EditProposal = ({ match }) => {
   const tokenFromUrl = get("params.token", match);

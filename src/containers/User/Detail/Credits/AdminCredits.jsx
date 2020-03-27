@@ -1,6 +1,6 @@
 import { Button, Card, classNames } from "pi-ui";
 import React from "react";
-import ModalConfirmWithReason from "src/componentsv2/ModalConfirmWithReason";
+import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import { MANAGE_USER_CLEAR_USER_PAYWALL } from "src/constants";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import useManageUser from "../hooks/useManageUser";

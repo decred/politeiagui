@@ -2,8 +2,8 @@ import { Button, Link as UILink, Text, TextInput, classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import React, { useCallback, useState } from "react";
 import { withRouter } from "react-router-dom";
-import FormWrapper from "src/componentsv2/FormWrapper";
-import ModalPrivacyPolicy from "src/componentsv2/ModalPrivacyPolicy";
+import FormWrapper from "src/components/FormWrapper";
+import ModalPrivacyPolicy from "src/components/ModalPrivacyPolicy";
 import styles from "./LoginForm.module.css";
 import { useLogin } from "./hooks";
 

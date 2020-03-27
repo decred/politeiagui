@@ -94,7 +94,7 @@ export const handleSaveAppDraftProposals = (state) => {
   }
 };
 
-const handleSaveAppDraftInvoices = (state) => {
+export const handleSaveAppDraftInvoices = (state) => {
   const email = currentUserEmail(state);
   if (!email) {
     return;
@@ -120,18 +120,20 @@ const handleSaveAppDraftInvoices = (state) => {
   }
 };
 
-const handleSaveAppDraftDCCs = (state) => {
+export const handleSaveAppDraftDccs = (state) => {
   const email = currentUserEmail(state);
-  if (!email) return;
+  if (!email) {
+    return;
+  }
   const stateFromLs = loadStateLocalStorage(email) || {};
-  const draftDCCsFromStore = state.app.draftDCCs;
-  const draftDCCsFromLocalStorage = get(stateFromLs, ["app", "draftDCCs"], {});
+  const draftDccsFromStore = state.app.draftDccs;
+  const draftDccsLocalStorage = get(stateFromLs, ["app", "draftDccs"], {});
 
   if (
-    draftDCCsFromStore &&
-    !isEqual(draftDCCsFromStore, draftDCCsFromLocalStorage)
+    draftDccsFromStore &&
+    !isEqual(draftDccsFromStore, draftDccsLocalStorage)
   ) {
-    const newValue = set(stateFromLs, ["app", "draftDCCs"], draftDCCsFromStore);
+    const newValue = set(stateFromLs, ["app", "draftDccs"], draftDccsFromStore);
     saveStateLocalStorage(newValue, email);
   }
 };
@@ -139,6 +141,6 @@ const handleSaveAppDraftDCCs = (state) => {
 export const handleSaveStateToLocalStorage = (state) => {
   handleSaveApiMe(state);
   handleSaveAppDraftProposals(state);
-  handleSaveAppDraftDCCs(state);
+  handleSaveAppDraftDccs(state);
   handleSaveAppDraftInvoices(state);
 };

@@ -56,6 +56,13 @@ export const getPaymentsByAddressDcrdata = (address) => {
   return getRawTransactions(dcrdataAddressURL(isTestnet, address));
 };
 
+export const getCmsApprovedProposalsTokens = (isTestnet) => {
+  const url = `https://${
+    isTestnet ? "test-proposals" : "proposals"
+  }.decred.org/api/v1/proposals/tokeninventory`;
+  return fetch(url).then((res) => res.json());
+};
+
 export const payWithFaucet = (address, amount) => {
   const data = {
     address,

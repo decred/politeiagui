@@ -6,7 +6,7 @@ import {
 } from "../helpers.js";
 import { useCredits } from "../hooks.js";
 import { Table, Text, Link, useMediaQuery } from "pi-ui";
-import ExportToCsv from "src/componentsv2/ExportToCsv.jsx";
+import ExportToCsv from "src/components/ExportToCsv.jsx";
 
 export default ({ proposalCreditPrice, user }) => {
   const userID = user && user.userid;

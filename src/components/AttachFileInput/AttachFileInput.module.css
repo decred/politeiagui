@@ -1,0 +1,20 @@
+.attachFileButton {
+  padding: 0;
+  max-width: 12rem;
+  display: flex;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.small {
+  height: 24px;
+  width: 24px;
+}
+
+.attachFileButton:hover {
+  background-color: var(--color-blue-alt);
+}

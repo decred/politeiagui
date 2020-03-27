@@ -1,20 +1,23 @@
 import { Link, useMediaQuery } from "pi-ui";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { withRouter } from "react-router-dom";
-import ModalChangeUsername from "src/componentsv2/ModalChangeUsername";
+import ModalChangeUsername from "src/components/ModalChangeUsername";
 import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "src/constants";
 import UserProposals from "src/containers/Proposal/User";
 import useUserIdentity from "src/hooks/api/useUserIdentity";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
+import useUserDetail from "src/hooks/api/useUserDetail";
+import { useConfig } from "src/containers/Config";
 import { existing, myPubKeyHex } from "src/lib/pki";
+import Drafts from "./Drafts";
 import Account from "./Account";
 import Credits from "./Credits";
 import styles from "./Detail.module.css";
 import { tabValues } from "./helpers";
 import useChangeUsername from "./hooks/useChangeUsername";
-import useUserDetail from "./hooks/useUserDetail";
 import Identity from "./Identity";
 import Preferences from "./Preferences";
+import ManageContractor from "./ManageContractor";
 
 const getTabComponents = ({ user, ...rest }) => {
   const mapTabValueToComponent = {
@@ -30,7 +33,9 @@ const getTabComponents = ({ user, ...rest }) => {
         userID={user.userid}
         withDrafts={rest.isUserPageOwner}
       />
-    )
+    ),
+    [tabValues.DRAFTS]: <Drafts key="tab-invoices" />,
+    [tabValues.MANAGE_DCC]: <ManageContractor user={user} {...rest} />
   };
   return mapTabValueToComponent;
 };
@@ -52,6 +57,11 @@ const UserDetail = ({
     identityImportSuccess
   } = useUserIdentity();
 
+  const {
+    recordType,
+    constants: { RECORD_TYPE_INVOICE, RECORD_TYPE_PROPOSAL }
+  } = useConfig();
+
   const isUserPageOwner = user && currentUserID === user.userid;
   const isAdminOrTheUser = user && (isAdmin || currentUserID === user.userid);
 
@@ -59,17 +69,42 @@ const UserDetail = ({
     const isTabDisabled = (tabLabel) => {
       if (tabLabel === tabValues.PREFERENCES && !isUserPageOwner) return true;
       if (tabLabel === tabValues.CREDITS && !isAdminOrTheUser) return true;
+      if (tabLabel === tabValues.MANAGE_DCC && !isAdminOrTheUser) return true;
 
       return false;
+    };
+    const filterByRecordType = (tabLabel) => {
+      if (recordType === RECORD_TYPE_INVOICE) {
+        return (
+          tabLabel !== tabValues.PROPOSALS &&
+          tabLabel !== tabValues.PREFERENCES &&
+          tabLabel !== tabValues.CREDITS
+        );
+      }
+      if (recordType === RECORD_TYPE_PROPOSAL) {
+        return (
+          tabLabel !== tabValues.MANAGE_DCC &&
+          tabLabel !== tabValues.DRAFTS
+        );
+      }
+      return true;
     };
     return [
       tabValues.IDENTITY,
       tabValues.ACCOUNT,
       tabValues.PREFERENCES,
       tabValues.CREDITS,
-      tabValues.PROPOSALS
-    ].filter((tab) => !isTabDisabled(tab));
-  }, [isUserPageOwner, isAdminOrTheUser]);
+      tabValues.PROPOSALS,
+      tabValues.DRAFTS,
+      tabValues.MANAGE_DCC
+    ].filter((tab) => !isTabDisabled(tab) && filterByRecordType(tab));
+  }, [
+    isUserPageOwner,
+    isAdminOrTheUser,
+    RECORD_TYPE_INVOICE,
+    RECORD_TYPE_PROPOSAL,
+    recordType
+  ]);
 
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
 

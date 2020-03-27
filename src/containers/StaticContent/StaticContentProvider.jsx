@@ -8,12 +8,13 @@ const StaticContentProvider = ({ children }) => {
   const [contents, setContents] = useState({});
 
   const getContent = useCallback(
-    async contentName => {
+    async (contentName) => {
+      if (!contentName) return "";
       if (contents[contentName]) {
         return contents[contentName];
       }
       try {
-        const module = await import(`src/contents/${contentName}.md`);
+        const module = await import(`src/assets/copies/${contentName}.md`);
         const markdownContent = await fetch(module.default);
         const text = await markdownContent.text();
         setContents({ ...contents, [contentName]: text });

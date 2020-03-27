@@ -1,11 +1,11 @@
 import { Formik } from "formik";
 import { BoxTextInput, Button, Card, classNames, Message, RadioButtonGroup, Table } from "pi-ui";
 import React, { useEffect, useState } from "react";
-import HelpMessage from "src/componentsv2/HelpMessage";
+import HelpMessage from "src/components/HelpMessage";
 import * as Yup from "yup";
 import { useSearchUser } from "./hooks";
 import styles from "./Search.module.css";
-import Link from "src/componentsv2/Link";
+import Link from "src/components/Link";
 
 const getFormattedSearchResults = (users = []) =>
   users.map(u => ({

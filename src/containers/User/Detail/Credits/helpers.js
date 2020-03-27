@@ -1,7 +1,7 @@
 import orderBy from "lodash/fp/orderBy";
 import { StatusTag } from "pi-ui";
 import React from "react";
-import DcrTransactionLink from "src/componentsv2/DcrTransactionLink";
+import DcrTransactionLink from "src/components/DcrTransactionLink";
 import {
   PAYWALL_STATUS_LACKING_CONFIRMATIONS,
   PAYWALL_STATUS_PAID,

@@ -4,7 +4,7 @@ import { useSelector, useAction } from "src/redux";
 import * as sel from "src/selectors";
 
 export default function useManageUser(manageUserAction, userID) {
-  const onManageUser = useAction(act.onManageUserv2);
+  const onManageUser = useAction(act.onManageUser);
   const loadingSelector = useMemo(
     () => sel.makeIsApiRequestingManageUserByAction(manageUserAction),
     [manageUserAction]

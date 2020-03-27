@@ -36,23 +36,20 @@ export default function useLocalStorage(key, initialValue) {
     [key, setError]
   );
 
-  const onStorageChange = useCallback(
-    (event) => {
-      if (event.key !== key) {
-        return;
-      }
+  const onStorageChange = (event) => {
+    if (event.key !== key) {
+      return;
+    }
 
-      if (event.newValue !== event.oldValue) {
-        try {
-          const parsedValue = JSON.parse(event.newValue);
-          setStoredValue(parsedValue);
-        } catch (e) {
-          setError(e);
-        }
+    if (event.newValue !== event.oldValue) {
+      try {
+        const parsedValue = JSON.parse(event.newValue);
+        setStoredValue(parsedValue);
+      } catch (e) {
+        setError(e);
       }
-    },
-    [key, setStoredValue, setError]
-  );
+    }
+  };
 
   useEventListener("storage", onStorageChange);
   if (error) console.log(error);

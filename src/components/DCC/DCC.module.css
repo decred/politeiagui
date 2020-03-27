@@ -1,0 +1,25 @@
+span.statusTag > span {
+  overflow: visible;
+}
+
+.topDetails {
+  display: flex;
+  padding: 1rem;
+  border-top: 1px solid var(--color-gray-lighter);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldLabel {
+  color: var(--color-gray-blueish);
+}
+
+/* EXTRA SMALL SCREENS*/
+@media screen and (max-width: 560px) {
+  .topDetails {
+    flex-direction: column;
+  }
+}

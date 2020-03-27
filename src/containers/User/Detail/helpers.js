@@ -3,7 +3,9 @@ export const tabValues = {
   ACCOUNT: "Account",
   PREFERENCES: "Preferences",
   CREDITS: "Credits",
-  PROPOSALS: "Proposals"
+  PROPOSALS: "Proposals",
+  DRAFTS: "Drafts",
+  MANAGE_DCC: "Manage Contractor"
 };
 
 /**

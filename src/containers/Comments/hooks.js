@@ -8,14 +8,14 @@ import {
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
-import { useConfig } from "src/Config";
-import { useLoaderContext } from "src/Appv2/Loader";
+import { useConfig } from "src/containers/Config";
+import { useLoaderContext } from "src/containers/Loader";
 
 export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
 
-export function useComments(ownProps) {
-  const recordToken = ownProps && ownProps.recordToken;
+export function useComments(recordToken) {
+  const { enableCommentVote, recordType, constants } = useConfig();
   const commentsSelector = useMemo(
     () => sel.makeGetProposalComments(recordToken),
     [recordToken]
@@ -24,34 +24,37 @@ export function useComments(ownProps) {
     () => sel.makeGetProposalCommentsLikes(recordToken),
     [recordToken]
   );
-
   const comments = useSelector(commentsSelector);
   const commentsLikes = useSelector(commentsLikesSelector);
   const lastVisitTimestamp = useSelector(sel.visitedProposal);
   const loading = useSelector(sel.isApiRequestingComments);
   const loadingLikes = useSelector(sel.isApiRequestingCommentsLikes);
+  const onSubmitComment = useAction(
+    recordType === constants.RECORD_TYPE_DCC
+      ? act.onSaveNewDccCommentV2
+      : act.onSaveNewComment
+  );
+  const onFetchComments = useAction(
+    recordType === constants.RECORD_TYPE_PROPOSAL
+      ? act.onFetchProposalComments
+      : recordType === constants.RECORD_TYPE_DCC
+      ? act.onFetchDccComments
+      : act.onFetchInvoiceComments
+  );
   const loadingLikeAction = useSelector(sel.isApiRequestingLikeComment);
-  const onSubmitComment = useAction(act.onSaveNewCommentV2);
-  const onFetchComments = useAction(act.onFetchProposalComments);
   const onFetchLikes = useAction(act.onFetchLikedComments);
   const onLikeCommentAction = useAction(act.onLikeComment);
   const onResetComments = useAction(act.onResetComments);
-  const onCensorComment = useAction(act.onCensorCommentv2);
+  const onCensorComment = useAction(act.onCensorComment);
 
-  const { enableCommentVote, recordType } = useConfig();
   const { currentUser } = useLoaderContext();
   const email = currentUser && currentUser.email;
 
   const userLoggedIn = !!email;
 
-  const numOfComments = (ownProps && ownProps.numOfComments) || 0;
-  const needsToFetchComments = !!recordToken && !comments && numOfComments > 0;
+  const needsToFetchComments = !!recordToken && !comments;
   const needsToFetchCommentsLikes =
-    !!recordToken &&
-    !commentsLikes &&
-    numOfComments > 0 &&
-    enableCommentVote &&
-    userLoggedIn;
+    !!recordToken && !commentsLikes && enableCommentVote && userLoggedIn;
 
   useEffect(
     function handleFetchOfComments() {

@@ -43,3 +43,16 @@ export const formatShortUnixTimestamp = (unixtimestamp) => {
     months[currentdate.getUTCMonth()]
   } ${currentdate.getUTCFullYear()}`;
 };
+
+/**
+ * Returns a formatter to format a number to US standard currency string. Example: const f = currencyFormatter("USD"); f.format(2500) // $2,500.00
+ * @param {string} currency
+ */
+export const currencyFormatter = (currency) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currency
+  });
+
+/** exports an usdFormatter */
+export const usdFormatter = currencyFormatter("USD");

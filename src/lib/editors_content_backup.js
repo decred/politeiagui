@@ -149,7 +149,7 @@ const updateInvoiceFormData = (state) => {
   );
 };
 
-export const resetNewInvoiceData = () => {
+export const resetNewInvoiceData = (policy) => {
   sessionStorage.setItem(
     getInvoiceBackupKey(INVOICE_FORM_ADDRESS, NEW_INVOICE_PATH),
     ""
@@ -160,7 +160,7 @@ export const resetNewInvoiceData = () => {
   );
   sessionStorage.setItem(
     getInvoiceBackupKey(INVOICE_FORM_LINE_ITEMS, NEW_INVOICE_PATH),
-    JSON.stringify([generateBlankLineItem()])
+    JSON.stringify([generateBlankLineItem(policy)])
   );
   sessionStorage.setItem(
     getInvoiceBackupKey(INVOICE_FORM_LOCATION, NEW_INVOICE_PATH),
@@ -252,13 +252,13 @@ export const DCC_FORM_CONTRACTOR_TYPE = "contractortype";
 
 const updateDCCFormData = (state) => {
   const dccFormState = state.form["form/dcc"];
-  const newDCCData = (dccFormState && dccFormState.values) || {};
+  const newDccData = (dccFormState && dccFormState.values) || {};
 
-  const type = newDCCData[DCC_FORM_TYPE];
-  const nomineeuserid = newDCCData[DCC_FORM_NOMINEE_ID];
-  const statement = newDCCData[DCC_FORM_STATEMENT];
-  const domain = newDCCData[DCC_FORM_DOMAIN];
-  const contractortype = newDCCData[DCC_FORM_CONTRACTOR_TYPE];
+  const type = newDccData[DCC_FORM_TYPE];
+  const nomineeuserid = newDccData[DCC_FORM_NOMINEE_ID];
+  const statement = newDccData[DCC_FORM_STATEMENT];
+  const domain = newDccData[DCC_FORM_DOMAIN];
+  const contractortype = newDccData[DCC_FORM_CONTRACTOR_TYPE];
 
   if (!type && !nomineeuserid && !statement && !domain && !contractortype) {
     return;
@@ -267,27 +267,27 @@ const updateDCCFormData = (state) => {
   const path = getDCCPath(window.location);
   sessionStorage.setItem(
     getDCCBackupKey(DCC_FORM_CONTRACTOR_TYPE, path),
-    newDCCData[DCC_FORM_CONTRACTOR_TYPE]
+    newDccData[DCC_FORM_CONTRACTOR_TYPE]
   );
   sessionStorage.setItem(
     getDCCBackupKey(DCC_FORM_DOMAIN, path),
-    newDCCData[DCC_FORM_DOMAIN]
+    newDccData[DCC_FORM_DOMAIN]
   );
   sessionStorage.setItem(
     getDCCBackupKey(DCC_FORM_STATEMENT, path),
-    newDCCData[DCC_FORM_STATEMENT]
+    newDccData[DCC_FORM_STATEMENT]
   );
   sessionStorage.setItem(
     getDCCBackupKey(DCC_FORM_TYPE, path),
-    newDCCData[DCC_FORM_TYPE]
+    newDccData[DCC_FORM_TYPE]
   );
   sessionStorage.setItem(
     getDCCBackupKey(DCC_FORM_NOMINEE_ID, path),
-    newDCCData[DCC_FORM_NOMINEE_ID]
+    newDccData[DCC_FORM_NOMINEE_ID]
   );
 };
 
-export const getNewDCCData = () => {
+export const getNewDccData = () => {
   return {
     dcctype:
       sessionStorage.getItem(getDCCBackupKey(DCC_FORM_TYPE, NEW_DCC_PATH)) ||
@@ -310,7 +310,7 @@ export const getNewDCCData = () => {
   };
 };
 
-export const resetNewDCCData = () => {
+export const resetNewDccData = () => {
   sessionStorage.setItem(getDCCBackupKey(DCC_FORM_TYPE, NEW_DCC_PATH), "");
   sessionStorage.setItem(
     getDCCBackupKey(DCC_FORM_CONTRACTOR_TYPE, NEW_DCC_PATH),
