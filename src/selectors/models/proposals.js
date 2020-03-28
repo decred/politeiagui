@@ -5,6 +5,10 @@ import { createDeepEqualSelector } from "../helpers";
 
 export const proposalsByToken = get(["proposals", "byToken"]);
 export const allProposalsByUserID = get(["proposals", "allProposalsByUserId"]);
+export const numOfProposalsByUserId = get([
+  "proposals",
+  "numOfProposalsByUserId"
+]);
 export const allByStatus = createDeepEqualSelector(
   get(["proposals"]),
   ({ allByStatus }) => allByStatus
@@ -16,6 +20,9 @@ export const tokenInventory = createDeepEqualSelector(
 
 export const makeGetProposalByToken = (token) =>
   createSelector(proposalsByToken, get(token));
+
+export const makeGetNumOfProposalsByUserId = (userId) =>
+  createSelector(numOfProposalsByUserId, get(userId));
 
 export const makeGetUserProposals = (userId) =>
   createSelector(

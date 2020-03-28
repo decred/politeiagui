@@ -45,7 +45,7 @@ const Proposals = (props) => {
   }
 
   const numOfProsalsLoaded = proposals.length;
-  const initialFetchDone = !!proposals.length;
+  const initialFetchDone = numOfProsalsLoaded === numOfUserProposals;
 
   useEffect(() => {
     const hasMoreRecordsToLoad =

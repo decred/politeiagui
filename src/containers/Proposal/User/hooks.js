@@ -45,6 +45,10 @@ export function useUserProposals(ownProps) {
   const proposalsSelector = useMemo(() => sel.makeGetUserProposals(userID), [
     userID
   ]);
+  const numOfUserProposalsSelector = useMemo(
+    () => sel.makeGetNumOfProposalsByUserId(userID),
+    [userID]
+  );
 
   const loadingSelector = useMemo(
     () =>
@@ -61,7 +65,8 @@ export function useUserProposals(ownProps) {
   );
 
   const proposals = useSelector(proposalsSelector);
-  const numOfUserProposals = useSelector(sel.numOfUserProposals);
+  const numOfUserProposals = useSelector(numOfUserProposalsSelector);
+
   const loading = useSelector(loadingSelector);
   const error = useSelector(errorSelector);
 
