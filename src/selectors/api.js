@@ -88,7 +88,6 @@ export const verifyResetPasswordResponse = getApiResponse(
   "verifyResetPassword"
 );
 export const apiVettedResponse = getApiResponse("vetted");
-const apiUserProposalsResponse = getApiResponse("userProposals");
 const apiProposalResponse = getApiResponse("proposal");
 
 const apiNewProposalResponse = getApiResponse("newProposal");
@@ -186,11 +185,6 @@ export const userid = (state) =>
   (state.api.login.response && state.api.login.response.userid);
 
 export const policy = apiPolicyResponse;
-
-export const numOfUserProposals = compose(
-  get("numofproposals"),
-  apiUserProposalsResponse
-);
 
 export const userProposalsIsRequesting = isApiRequestingUserProposals;
 export const userProposalsError = or(apiInitError, apiUserProposalsError);
