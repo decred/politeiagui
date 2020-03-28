@@ -7,7 +7,7 @@ import {
   PAYWALL_STATUS_PAID,
   PAYWALL_STATUS_WAITING
 } from "src/constants";
-import { formatShortUnixTimestamp, formatUnixTimestamp } from "src/utilsv2";
+import { formatShortUnixTimestamp, formatUnixTimestamp } from "src/utils";
 
 export const tableHeaders = [
   "Type",

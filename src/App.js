@@ -10,7 +10,7 @@ import { LoginModalProvider } from "src/containers/User/Login";
 import Onboard from "src/containers/User/Onboard";
 import StaticContentProvider from "src/containers/StaticContent";
 import "pi-ui/dist/index.css";
-import "src/style/indexv2.css";
+import "src/style/index.css";
 import "src/validation/setupFormValidators";
 
 import SourceSansProLight from "src/assets/fonts/source-sans-pro/SourceSansPro-Light.ttf";

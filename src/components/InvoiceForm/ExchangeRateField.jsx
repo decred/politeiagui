@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { Text, Spinner } from "pi-ui";
 import { FormikConsumer } from "formik";
-import { usdFormatter } from "src/utilsv2";
+import { usdFormatter } from "src/utils";
 
 import useExchangeRate from "src/hooks/api/useExchangeRate";
 
