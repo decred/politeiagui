@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Formik } from "formik";
 import CheckboxGroupField from "src/components/CheckboxGroupField";
-import MonthPickerField from "src/components/MonthPicker/MonthPickerField";
+import MonthPickerField from "src/components/MonthPickerField";
 import {
   getInvoiceMinMaxYearAndMonth,
   getInitialDateValue
@@ -25,9 +25,9 @@ const DEFAULT_INITIAL_VALUES = {
 const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
   return (
     <Formik initialValues={DEFAULT_INITIAL_VALUES}>
-      {formikProps => {
+      {(formikProps) => {
         const { values, setFieldValue } = formikProps;
-        const handleChangeUserSelector = options => {
+        const handleChangeUserSelector = (options) => {
           setFieldValue("users", options);
         };
         return (

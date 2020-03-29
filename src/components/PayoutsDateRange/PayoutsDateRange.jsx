@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Formik } from "formik";
 
-import MonthPickerField from "src/components/MonthPicker/MonthPickerField";
+import MonthPickerField from "src/components/MonthPickerField";
 import {
   getPayoutsMinMaxYearAndMonth,
   getCurrentDateValue,
@@ -20,16 +20,12 @@ const datesRange = getPayoutsMinMaxYearAndMonth();
 const PayoutsDateRange = ({ onChange, children }) => {
   return (
     <Formik initialValues={DEFAULT_INITIAL_VALUES}>
-      {formikProps => {
+      {(formikProps) => {
         const { values } = formikProps;
         return (
           <>
             <form className={styles.form}>
-              <MonthPickerField
-                years={datesRange}
-                name="sDate"
-                label="Start"
-              />
+              <MonthPickerField years={datesRange} name="sDate" label="Start" />
               <MonthPickerField
                 className={"margin-left-s"}
                 years={datesRange}

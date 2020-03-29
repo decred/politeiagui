@@ -14,6 +14,7 @@ import {
   Select
 } from "pi-ui";
 import { Row } from "src/components/layout";
+import DatePickerField from "../DatePickerField";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/components/MarkdownEditor";
 import ThumbnailGrid from "src/components/Files";
@@ -22,10 +23,10 @@ import ModalMDGuide from "src/components/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import {
-  getProposalTypeOptionsForSelect,
-  newProposalType
-} from "./helpers.js";
+import { getProposalTypeOptionsForSelect, newProposalType } from "./helpers.js";
+
+// TODO: replace
+import { getInvoiceMinMaxYearAndMonth } from "src/containers/Invoice";
 
 const ProposalForm = React.memo(function ProposalForm({
   values,
@@ -42,6 +43,7 @@ const ProposalForm = React.memo(function ProposalForm({
   const smallTablet = useMediaQuery("(max-width: 685px)");
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
+  const isRfp = values.type === newProposalType.RFP_PROPOSAL;
 
   const handleDescriptionChange = useCallback(
     (v) => {
@@ -122,12 +124,23 @@ const ProposalForm = React.memo(function ProposalForm({
       {errors && errors.global && (
         <Message kind="error">{errors.global.toString()}</Message>
       )}
-      <Select
-        value={values.type}
-        onChange={handleProposalTypeChange}
-        options={selectOptions}
-        className={styles.selectWrapper}
-      />
+      <Row>
+        <Select
+          value={values.type}
+          onChange={handleProposalTypeChange}
+          options={selectOptions}
+          className={styles.selectWrapper}
+        />
+        {isRfp && (
+          <DatePickerField
+            className={styles.datePicker}
+            years={getInvoiceMinMaxYearAndMonth()}
+            value={values.RfpDeadline}
+            name="rfpDeadline"
+            label="Deadline"
+          />
+        )}
+      </Row>
       <BoxTextInput
         placeholder="Proposal name"
         name="name"
@@ -208,6 +221,7 @@ const ProposalFormWrapper = ({
         initialValues={
           initialValues || {
             type: newProposalType.REGULAR_PROPOSAL,
+            rfpDeadline: { year: 2020, day: 29, month: 3 },
             name: "",
             description: "",
             files: []

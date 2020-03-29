@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 import InvoiceDatasheet, {
   generateBlankLineItem
 } from "src/components/InvoiceDatasheet";
-import MonthPickerField from "../MonthPicker/MonthPickerField";
+import MonthPickerField from "../MonthPickerField";
 import AttachFileInput from "src/components/AttachFileInput";
 import {
   getInitialDateValue,

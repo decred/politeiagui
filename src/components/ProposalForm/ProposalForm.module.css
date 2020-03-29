@@ -17,6 +17,12 @@
   height: 100%;
 }
 
+.datePicker {
+  margin-left: 2rem;
+  width: 20rem;
+  height: 4.4rem;
+}
+
 .formatHelpButton {
   border: 0;
   color: var(--color-gray);

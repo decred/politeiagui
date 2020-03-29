@@ -34,11 +34,18 @@ const Arrow = ({ isOpen }) => {
   );
 };
 
-const MonthPickerField = ({ name, label, years, readOnly, toggleable, className }) => {
+const MonthPickerField = ({
+  name,
+  label,
+  years,
+  readOnly,
+  toggleable,
+  className
+}) => {
   const [isDisabled, setDisabled] = useState(false);
   const [isOpen, openPicker, closePicker] = useBooleanState(false);
   const togglePicker = () => {
-    if(!isOpen) {
+    if (!isOpen) {
       openPicker();
     } else {
       closePicker();
@@ -86,8 +93,7 @@ const MonthPickerField = ({ name, label, years, readOnly, toggleable, className 
                   years={years}
                   value={values[name]}
                   lang={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
-                  onChange={onChange}
-                  onDismiss={onChange}>
+                  onChange={onChange}>
                   <span
                     className={classNames(
                       styles.valueWrapper,
