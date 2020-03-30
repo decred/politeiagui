@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import * as act from "src/actions";
 import * as sel from "src/selectors";
 import { useAction, useSelector } from "src/redux";
-import { useConfig } from "src/Config";
+import { useConfig } from "src/containers/Config";
 
 function usePaywall() {
   const currentUserEmail = useSelector(sel.currentUserEmail);
