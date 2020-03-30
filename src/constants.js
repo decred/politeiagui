@@ -17,6 +17,12 @@ export const DCC_STATUS_DRAFTS = 4;
 export const DCC_TYPE_ISSUANCE = 1;
 export const DCC_TYPE_REVOCATION = 2;
 
+export const DCC_DIRECT_CONTRACTOR_TYPE = 1;
+export const DCC_SUB_CONTRACTOR_TYPE = 3;
+
+export const DCC_SUPPORT_VOTE = "aye";
+export const DCC_OPPOSE_VOTE = "nay";
+
 // CMS
 export const INVOICE_STATUS_UNREVIEWED = 2;
 export const INITIAL_YEAR = 2018;
@@ -145,9 +151,3 @@ export const CMS_DOMAINS = [
   "Documentation",
   "Community Management"
 ];
-
-export const DCC_DIRECT_CONTRACTOR_TYPE = 1;
-export const DCC_SUB_CONTRACTOR_TYPE = 3;
-
-export const DCC_SUPPORT_VOTE = "aye";
-export const DCC_OPPOSE_VOTE = "nay";

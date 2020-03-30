@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import distance from "date-fns/distance_in_words";
 import { Tooltip, classNames, useTheme } from "pi-ui";
 import styles from "./DateTooltip.module.css";
-import { formatUnixTimestamp } from "src/utilsv2";
+import { formatUnixTimestamp } from "src/utils";
 
 const getTimeAgo = (timestamp) =>
   distance(new Date(), new Date(timestamp * 1000), { addSuffix: true });

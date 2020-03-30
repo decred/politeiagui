@@ -275,7 +275,7 @@ export const onLoadDccsByStatus = (status) => (dispatch, getState) => {
   }
 };
 
-export const onSaveNewDccCommentV2 = ({ comment, token, parentID }) => (
+export const onSaveNewDccComment = ({ comment, token, parentID }) => (
   dispatch,
   getState
 ) => {
