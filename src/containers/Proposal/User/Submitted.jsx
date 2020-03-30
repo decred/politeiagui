@@ -44,14 +44,14 @@ const Proposals = (props) => {
     }
   }
 
-  const numOfProsalsLoaded = proposals.length;
-  const initialFetchDone = !!proposals.length;
+  const numOfProposalsLoaded = proposals.length;
+  const initialFetchDone = numOfProposalsLoaded === numOfUserProposals;
 
   useEffect(() => {
     const hasMoreRecordsToLoad =
-      !initialFetchDone || numOfProsalsLoaded < numOfUserProposals;
+      !initialFetchDone || numOfProposalsLoaded < numOfUserProposals;
     setHasMore(hasMoreRecordsToLoad);
-  }, [numOfProsalsLoaded, numOfUserProposals, initialFetchDone]);
+  }, [numOfProposalsLoaded, numOfUserProposals, initialFetchDone]);
 
   const amountOfMissingProposals =
     numOfUserProposals - amountOfProposalsFetched;

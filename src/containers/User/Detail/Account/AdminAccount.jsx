@@ -11,7 +11,7 @@ import {
   MANAGE_USER_REACTIVATE
 } from "src/constants";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import { formatUnixTimestamp } from "src/utilsv2";
+import { formatUnixTimestamp } from "src/utils";
 import { isExpired, isUserDeactivated, isUserLocked } from "../helpers";
 import useManageUser from "../hooks/useManageUser";
 import useChangePassword from "../hooks/useChangePassword";

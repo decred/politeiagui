@@ -17,7 +17,7 @@ import {
 } from "src/containers/Invoice/helpers";
 import Field from "./Field";
 import InvoiceDatasheet from "../InvoiceDatasheet";
-import { convertAtomsToDcr, usdFormatter } from "src/utilsv2";
+import { convertAtomsToDcr, usdFormatter } from "src/utils";
 import ThumbnailGrid from "src/components/Files";
 import { useLoaderContext } from "src/containers/Loader";
 

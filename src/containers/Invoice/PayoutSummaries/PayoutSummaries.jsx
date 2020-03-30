@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Spinner, Link, Table, CopyableText } from "pi-ui";
 import PropTypes from "prop-types";
 import ExportToCsv from "src/components/ExportToCsv";
-import { convertAtomsToDcr } from "src/utilsv2";
+import { convertAtomsToDcr } from "src/utils";
 import { Row } from "src/components/layout";
 import HelpMessage from "src/components/HelpMessage";
 import { PayoutsDateRange } from "src/components/PayoutsDateRange";
@@ -15,7 +15,8 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
     eDate: null
   });
   const { loading, lineItemPayouts, onInvoicePayouts } = useInvoicePayouts();
-  const hasLineItemPayouts = !loading && lineItemPayouts && lineItemPayouts.length > 0;
+  const hasLineItemPayouts =
+    !loading && lineItemPayouts && lineItemPayouts.length > 0;
   const fetchInvoicePayouts = () => {
     if (!dates.sDate || !dates.eDate) {
       return;
@@ -38,10 +39,7 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
   return (
     <>
       <TopBanner>
-        <PageDetails
-          title="Line Item Payouts"
-          actionsContent={null}
-        >
+        <PageDetails title="Line Item Payouts" actionsContent={null}>
           <PayoutsDateRange onChange={handleDatesChange}></PayoutsDateRange>
         </PageDetails>
       </TopBanner>
@@ -56,51 +54,88 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
             <Table
               bodyCellClassName={styles.tableBodyCell}
               headClassName={styles.tableHead}
-              data={lineItemPayouts.map(({ year, month, token, domain, subdomain, description, proposaltoken, expenses, labor, paiddate, amountreceived }) => {
-                return {
-                  month: `${month}/${year}`,
-                  invoicetoken: token && <CopyableText
-                    truncate
-                    id={`invoice-token-${token}`}
-                    className={styles.copyableText}
-                    tooltipPlacement={"left"}>
-                    {token}
-                  </CopyableText>,
+              data={lineItemPayouts.map(
+                ({
+                  year,
+                  month,
+                  token,
                   domain,
                   subdomain,
                   description,
-                  proposaltoken: proposaltoken && <CopyableText
-                    truncate
-                    id={`proposal-token-${proposaltoken}`}
-                    className={styles.copyableText}
-                    tooltipPlacement={"left"}>
-                    {proposaltoken}
-                  </CopyableText>,
+                  proposaltoken,
                   expenses,
                   labor,
-                  total: labor + expenses,
                   paiddate,
-                  amountreceived: convertAtomsToDcr(amountreceived)
-                };
-              })}
-              headers={["Date", "Invoice Token", "Domain", "Sub Domain", "Description", "Proposal Token", "Expense(USD)", "Labor(USD)", "Total(USD)", "Paid Date", "Amount Received(DCR)"]}>
-            </Table>
+                  amountreceived
+                }) => {
+                  return {
+                    month: `${month}/${year}`,
+                    invoicetoken: token && (
+                      <CopyableText
+                        truncate
+                        id={`invoice-token-${token}`}
+                        className={styles.copyableText}
+                        tooltipPlacement={"left"}>
+                        {token}
+                      </CopyableText>
+                    ),
+                    domain,
+                    subdomain,
+                    description,
+                    proposaltoken: proposaltoken && (
+                      <CopyableText
+                        truncate
+                        id={`proposal-token-${proposaltoken}`}
+                        className={styles.copyableText}
+                        tooltipPlacement={"left"}>
+                        {proposaltoken}
+                      </CopyableText>
+                    ),
+                    expenses,
+                    labor,
+                    total: labor + expenses,
+                    paiddate,
+                    amountreceived: convertAtomsToDcr(amountreceived)
+                  };
+                }
+              )}
+              headers={[
+                "Date",
+                "Invoice Token",
+                "Domain",
+                "Sub Domain",
+                "Description",
+                "Proposal Token",
+                "Expense(USD)",
+                "Labor(USD)",
+                "Total(USD)",
+                "Paid Date",
+                "Amount Received(DCR)"
+              ]}></Table>
             <Row noMargin justify="right">
               <ExportToCsv
                 data={lineItemPayouts}
-                fields={["year", "month", "token", "domain", "subdomain", "description", "proposaltoken", "expenses", "labor", "paiddate", "amountreceived"]}
+                fields={[
+                  "year",
+                  "month",
+                  "token",
+                  "domain",
+                  "subdomain",
+                  "description",
+                  "proposaltoken",
+                  "expenses",
+                  "labor",
+                  "paiddate",
+                  "amountreceived"
+                ]}
                 filename="payouts">
-                <Link className="cursor-pointer">
-                  Export To Csv
-                </Link>
+                <Link className="cursor-pointer">Export To Csv</Link>
               </ExportToCsv>
             </Row>
           </>
         )}
         {!hasLineItemPayouts && (
-          <HelpMessage>
-            {"No payouts in the given time range!"}
-          </HelpMessage>
+          <HelpMessage>{"No payouts in the given time range!"}</HelpMessage>
         )}
       </Main>
     </>

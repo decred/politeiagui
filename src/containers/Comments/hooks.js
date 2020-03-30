@@ -31,7 +31,7 @@ export function useComments(recordToken) {
   const loadingLikes = useSelector(sel.isApiRequestingCommentsLikes);
   const onSubmitComment = useAction(
     recordType === constants.RECORD_TYPE_DCC
-      ? act.onSaveNewDccCommentV2
+      ? act.onSaveNewDccComment
       : act.onSaveNewComment
   );
   const onFetchComments = useAction(
