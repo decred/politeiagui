@@ -20,6 +20,7 @@ const ModalLogin = ({ title = "Login", onLoggedIn, onClose, ...props }) => {
         redirectToPrivacyPolicyRoute
         emailId="modalloginemail"
         passwordId="modalloginpassword"
+        renderPrivacyPolicyModal={false}
       />
     </Modal>
   );

@@ -13,7 +13,8 @@ const LoginForm = ({
   redirectToPrivacyPolicyRoute,
   history,
   emailId,
-  passwordId
+  passwordId,
+  renderPrivacyPolicyModal
 }) => {
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
   const { onLogin, validationSchema } = useLogin();
@@ -119,10 +120,12 @@ const LoginForm = ({
           </Form>
         )}
       </FormWrapper>
-      <ModalPrivacyPolicy
-        show={showPrivacyPolicy}
-        onClose={() => setShowPrivacyPolicy(false)}
-      />
+      {renderPrivacyPolicyModal && (
+        <ModalPrivacyPolicy
+          show={showPrivacyPolicy}
+          onClose={() => setShowPrivacyPolicy(false)}
+        />
+      )}
     </>
   );
 };
@@ -131,12 +134,14 @@ LoginForm.propTypes = {
   hideTitle: PropTypes.bool,
   onLoggedIn: PropTypes.func,
   emailId: PropTypes.string,
-  passwordId: PropTypes.string
+  passwordId: PropTypes.string,
+  renderPrivacyPolicyModal: PropTypes.bool
 };
 
 LoginForm.defaultProps = {
   emailId: "loginemail",
-  passwordId: "loginpassword"
+  passwordId: "loginpassword",
+  renderPrivacyPolicyModal: true
 };
 
 export default withRouter(LoginForm);
