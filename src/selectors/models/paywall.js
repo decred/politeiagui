@@ -5,9 +5,7 @@ import { PAYWALL_STATUS_PAID, PAYWALL_STATUS_WAITING } from "src/constants";
 export const paywallByUserID = get(["paywall", "byUserID"]);
 
 export const makeGetPaywallByUserID = (userID) =>
-  createSelector(paywallByUserID, (paywall) =>
-    paywall[userID] ? paywall[userID] : null
-  );
+  createSelector(paywallByUserID, get(userID));
 
 export const makeGetUserPaywallStatus = (userID) =>
   createSelector(makeGetPaywallByUserID(userID), (paywall) =>
