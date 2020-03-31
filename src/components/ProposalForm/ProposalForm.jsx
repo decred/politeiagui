@@ -203,7 +203,14 @@ const ProposalFormWrapper = ({
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
-        const proposalToken = await onSubmit(values);
+        const {
+          type: { value },
+          ...others
+        } = values;
+        const proposalToken = await onSubmit({
+          ...others,
+          type: value
+        });
         setSubmitting(false);
         setSubmitSuccess(true);
         history.push(`/proposals/${proposalToken}`);

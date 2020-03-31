@@ -60,13 +60,25 @@ export const onSaveNewInvoice = ({
   ).then(() => sel.newInvoiceToken(getState()));
 };
 
-export const onSaveNewProposal = ({ name, description, files }) => (
-  dispatch,
-  getState
-) => {
+export const onSaveNewProposal = ({
+  name,
+  description,
+  files,
+  rfpDeadline,
+  type
+}) => (dispatch, getState) => {
   const { email, userid, username } = sel.currentUser(getState());
   return dispatch(
-    onSubmitProposal(email, userid, username, name.trim(), description, files)
+    onSubmitProposal(
+      email,
+      userid,
+      username,
+      name.trim(),
+      description,
+      rfpDeadline,
+      type,
+      files
+    )
   )
     .then(() => dispatch(onUserProposalCredits()))
     .then(() => sel.newProposalToken(getState()));

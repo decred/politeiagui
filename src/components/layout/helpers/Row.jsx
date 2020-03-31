@@ -5,7 +5,8 @@ import { classNames } from "pi-ui";
 export const Row = ({
   children,
   topMarginSize,
-  justify = "left",
+  justify,
+  align,
   noMargin,
   className,
   hide,
@@ -16,6 +17,7 @@ export const Row = ({
       className={classNames(
         !noMargin && `margin-top-${topMarginSize}`,
         `justify-${justify}`,
+        `align-${align}`,
         className
       )}
       onClick={onClick}>
@@ -27,6 +29,7 @@ Row.propTypes = {
   children: PropTypes.node,
   topMarginSize: PropTypes.oneOf(["s", "m", "l"]),
   justify: PropTypes.oneOf(["left", "right", "space-between", "center"]),
+  align: PropTypes.oneOf(["start", "end", "center", "stretch"]),
   hide: PropTypes.bool,
   noMargin: PropTypes.bool,
   onClick: PropTypes.func
@@ -35,6 +38,7 @@ Row.propTypes = {
 Row.defaultProps = {
   topMarginSize: "m",
   justify: "left",
+  align: "stretch",
   hide: false,
   noMargin: false
 };

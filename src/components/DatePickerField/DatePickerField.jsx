@@ -36,6 +36,7 @@ const DatePickerField = ({ name, label, years, className }) => {
               <Row
                 className={styles.box}
                 justify="space-between"
+                align="center"
                 noMargin
                 onClick={togglePicker}>
                 {value ? `${value.month}/${value.day}/${value.year}` : label}
