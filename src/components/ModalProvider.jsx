@@ -1,38 +1,39 @@
-import React, { useState, useEffect, useCallback } from "react";
-import useBooleanState from "src/hooks/utils/useBooleanState";
+import React, { useState, createContext } from "react";
 
-const ModalProvider = ({ children, modal, context }) => {
-  const [modalProps, setModalProps] = useState({});
-  const [id, setId] = useState(undefined);
-  const [showModal, openModal, closeModal] = useBooleanState(false);
+export const modalContext = createContext();
 
-  const handleOpen = useCallback(
-    (id, props = {}) => {
-      setId(id);
-      setModalProps(props);
-      openModal();
-    },
-    [openModal]
-  );
+const initialState = {
+  component: () => null,
+  props: {
+    show: false
+  }
+};
 
-  useEffect(
-    function resetModalProps() {
-      if (!showModal) {
-        setModalProps({});
+const ModalProvider = ({ children }) => {
+  const [modal, setModal] = useState(initialState);
+  const handleOpenModal = function handleOpenModal(modal, props = {}) {
+    setModal({
+      component: modal,
+      props: {
+        show: true,
+        ...props
       }
-    },
-    [showModal]
-  );
+    });
+  };
 
+  const handleCloseModal = function handleCloseModal() {
+    setModal(initialState);
+  };
+
+  const props = {
+    onClose: handleCloseModal,
+    ...modal.props
+  };
   return (
-    <context.Provider value={[id, showModal, handleOpen, closeModal]}>
+    <modalContext.Provider value={[handleOpenModal, handleCloseModal]}>
       {children}
-      {React.cloneElement(modal, {
-        show: showModal,
-        onClose: closeModal,
-        ...modalProps
-      })}
-    </context.Provider>
+      <modal.component {...props} />
+    </modalContext.Provider>
   );
 };
 

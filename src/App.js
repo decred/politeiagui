@@ -6,9 +6,9 @@ import { ReduxProvider } from "src/redux";
 import Loader from "src/containers/Loader";
 import Routes from "src/pages";
 import { UserSessionChecker } from "src/containers/User/SessionChecker";
-import { LoginModalProvider } from "src/containers/User/Login";
 import Onboard from "src/containers/User/Onboard";
 import StaticContentProvider from "src/containers/StaticContent";
+import ModalProvider from "src/components/ModalProvider";
 import "pi-ui/dist/index.css";
 import "src/style/index.css";
 import "src/validation/setupFormValidators";
@@ -47,11 +47,11 @@ const App = () => {
             <StaticContentProvider>
               <Onboard />
               <Router>
-                <LoginModalProvider>
+                <ModalProvider>
                   <UserSessionChecker>
                     <Routes />
                   </UserSessionChecker>
-                </LoginModalProvider>
+                </ModalProvider>
               </Router>
             </StaticContentProvider>
           </Loader>
