@@ -8,7 +8,8 @@ export const Row = ({
   justify = "left",
   noMargin,
   className,
-  hide
+  hide,
+  onClick
 }) =>
   !hide && (
     <div
@@ -17,7 +18,7 @@ export const Row = ({
         `justify-${justify}`,
         className
       )}
-    >
+      onClick={onClick}>
       {children}
     </div>
   );
@@ -27,7 +28,8 @@ Row.propTypes = {
   topMarginSize: PropTypes.oneOf(["s", "m", "l"]),
   justify: PropTypes.oneOf(["left", "right", "space-between", "center"]),
   hide: PropTypes.bool,
-  noMargin: PropTypes.bool
+  noMargin: PropTypes.bool,
+  onClick: PropTypes.func
 };
 
 Row.defaultProps = {
