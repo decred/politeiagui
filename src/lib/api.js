@@ -3,10 +3,12 @@ import * as pki from "./pki";
 import qs from "query-string";
 import get from "lodash/fp/get";
 import MerkleTree from "./merkle";
+import { convertObjectToUnixTimestamp } from "src/utils";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
   INVOICE_STATUS_UNREVIEWED,
-  DCC_STATUS_ACTIVE
+  DCC_STATUS_ACTIVE,
+  PROPOSAL_TYPE_RFP
 } from "../constants";
 import {
   getHumanReadableError,
@@ -36,20 +38,30 @@ export const convertMarkdownToFile = (markdown) => ({
   mime: "text/plain; charset=utf-8",
   payload: utoa(markdown)
 });
-export const convertJsonToFile = (json) => ({
-  name: "invoice.json",
-  mime: "text/plain; charset=utf-8",
-  payload: utoa(JSON.stringify(json))
-});
-export const convertDCCJsonToFile = (json) => ({
-  name: "dcc.json",
+export const convertJsonToFile = (json, name) => ({
+  name,
   mime: "text/plain; charset=utf-8",
   payload: utoa(JSON.stringify(json))
 });
 
-export const makeProposal = (name, markdown, attachments = []) => ({
+export const makeProposal = (
+  name,
+  markdown,
+  rfpDeadline,
+  type,
+  attachments = []
+) => ({
   files: [
     convertMarkdownToFile(name + "\n\n" + markdown),
+    convertJsonToFile(
+      {
+        linkby:
+          type === PROPOSAL_TYPE_RFP
+            ? convertObjectToUnixTimestamp(rfpDeadline)
+            : undefined
+      },
+      "data.json"
+    ),
     ...(attachments || [])
   ].map(({ name, mime, payload }) => ({
     name,
@@ -71,18 +83,21 @@ export const makeInvoice = (
   lineItems,
   files = []
 ) => {
-  const { name, mime, payload } = convertJsonToFile({
-    version: 1,
-    month,
-    year,
-    exchangerate,
-    contractorname,
-    contractorlocation,
-    contractorcontact,
-    contractorrate,
-    paymentaddress,
-    lineItems
-  });
+  const { name, mime, payload } = convertJsonToFile(
+    {
+      version: 1,
+      month,
+      year,
+      exchangerate,
+      contractorname,
+      contractorlocation,
+      contractorcontact,
+      contractorrate,
+      paymentaddress,
+      lineItems
+    },
+    "invoice.json"
+  );
 
   return {
     id: "",
@@ -136,13 +151,16 @@ export const makeDCC = (
   domain,
   contractortype
 ) => {
-  const { name, mime, payload } = convertDCCJsonToFile({
-    type,
-    nomineeuserid,
-    statement,
-    domain,
-    contractortype
-  });
+  const { name, mime, payload } = convertJsonToFile(
+    {
+      type,
+      nomineeuserid,
+      statement,
+      domain,
+      contractortype
+    },
+    "dcc.json"
+  );
   return {
     name,
     mime,

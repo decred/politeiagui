@@ -592,8 +592,12 @@ export const onSubmitProposal = (
 ) =>
   withCsrf((dispatch, getState, csrf) => {
     // TODO: use type to add data.json file to files array
-    dispatch(act.REQUEST_NEW_PROPOSAL({ name, description, files }));
-    return Promise.resolve(api.makeProposal(name, description, files))
+    dispatch(
+      act.REQUEST_NEW_PROPOSAL({ name, description, rfpDeadline, type, files })
+    );
+    return Promise.resolve(
+      api.makeProposal(name, description, rfpDeadline, type, files)
+    )
       .then((proposal) => api.signRegister(loggedInAsEmail, proposal))
       .then((proposal) => api.newProposal(csrf, proposal))
       .then((proposal) => {

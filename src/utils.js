@@ -22,6 +22,13 @@ const months = [
 export const convertAtomsToDcr = (atoms) => atoms / 100000000;
 
 /**
+ * Converts { day, month, year } object to unix timestamp
+ * @param {object} date
+ */
+export const convertObjectToUnixTimestamp = ({ day, month, year }) =>
+  new Date(Date.UTC(year, month - 1, day)).getTime();
+
+/**
  * Formats unix timestamp to a UTC string date
  *
  * @param {number} unixtimestamp - unix timestamp

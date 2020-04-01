@@ -5,9 +5,9 @@ import { Formik } from "formik";
 import MonthPickerField from "src/components/MonthPickerField";
 import {
   getPayoutsMinMaxYearAndMonth,
-  getCurrentDateValue,
   getInitialDateValue
 } from "src/containers/Invoice";
+import { getCurrentDateValue } from "src/helpers";
 import styles from "./PayoutsDateRange.module.css";
 
 const DEFAULT_INITIAL_VALUES = {
