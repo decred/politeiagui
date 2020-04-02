@@ -9,8 +9,7 @@ import StaticMarkdown from "./StaticMarkdown";
 
 const PaywallMessage = ({ wrapper, ...props }) => {
   const { paywallContent } = useConfig();
-  const { userPaywallStatus, paywallAmount } = usePaywall();
-  const showMessage = userPaywallStatus < 2 && paywallAmount > 0;
+  const { isPaid } = usePaywall();
   const WrapperComponent = wrapper;
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const openPaywallModal = () =>
@@ -19,7 +18,7 @@ const PaywallMessage = ({ wrapper, ...props }) => {
       onClose: handleCloseModal
     });
   return (
-    showMessage && (
+    !isPaid && (
       <>
         <WrapperComponent {...props}>
           <StaticMarkdown contentName={paywallContent} />
