@@ -591,7 +591,6 @@ export const onSubmitProposal = (
   files
 ) =>
   withCsrf((dispatch, getState, csrf) => {
-    // TODO: use type to add data.json file to files array
     dispatch(
       act.REQUEST_NEW_PROPOSAL({ name, description, rfpDeadline, type, files })
     );
