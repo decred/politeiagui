@@ -14,7 +14,8 @@ const SignupForm = () => {
     initialValues,
     signupResponse,
     validationSchema,
-    enableAdminInvite
+    enableAdminInvite,
+    isCms
   } = useSignup();
   const [onModalConfirm, setOnModalConfirm] = useState(() => dumbFunc);
   const [onModalCancel, setOnModalCancel] = useState(() => dumbFunc);
@@ -59,6 +60,7 @@ const SignupForm = () => {
         confirmMessage="I understand, sign me up"
         onClose={onModalCancel}
         onConfirm={onModalConfirm}
+        isCms={isCms}
       />
       <FormWrapper
         initialValues={initialValues}

@@ -52,7 +52,12 @@ export function useComments(recordToken) {
 
   const userLoggedIn = !!email;
 
-  const needsToFetchComments = !!recordToken && !comments;
+  // comments are not public on cms. User needs to be logged in
+  const isPublic = recordType === constants.RECORD_TYPE_PROPOSAL;
+  const needsToFetchComments = isPublic
+    ? !!recordToken && !comments
+    : !!recordToken && !comments && userLoggedIn;
+
   const needsToFetchCommentsLikes =
     !!recordToken && !commentsLikes && enableCommentVote && userLoggedIn;
 

@@ -4,7 +4,7 @@
 }
 
 .searchBox {
-  width: 24rem;
+  max-width: 24rem;
   margin-right: 2rem;
 }
 

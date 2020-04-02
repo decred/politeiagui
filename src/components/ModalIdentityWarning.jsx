@@ -7,7 +7,8 @@ const ModalIdentityWarning = ({
   onClose,
   show,
   onConfirm,
-  confirmMessage
+  confirmMessage,
+  isCms
 }) => (
     <Modal
       style={{ maxWidth: "70rem" }}
@@ -17,7 +18,7 @@ const ModalIdentityWarning = ({
       iconType="info"
       iconSize="lg"
     >
-      <P>
+      { !isCms ? <P>
         Politeia will send you a link to verify your email address. You must open
         this link in the same browser. After verifying your email, Politeia will
         create your Politeia “identity”, which consists of a public/private
@@ -25,7 +26,13 @@ const ModalIdentityWarning = ({
         your identity and allow submission of proposals, commenting, voting, and
         other Politeia functions. After completing the signup process, you can
         export your identity (public/private keys) to another browser at any time.
-    </P>
+      </P> : <P>
+        CMS will create your CMS “identity”, which consists of a public/private
+        cryptographic key pair and browser cookie. This is necessary to verify
+        your identity and allow submission of invoices, DCCs, commenting, and
+        other CMS functions. After completing the signup process, you can
+        export your identity (public/private keys) to another browser at any time.
+      </P> }
       <Button
         style={{
           float: "right",
@@ -42,7 +49,8 @@ ModalIdentityWarning.propTypes = {
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
-  confirmMessage: PropTypes.string
+  confirmMessage: PropTypes.string,
+  isCms: PropTypes.bool
 };
 
 ModalIdentityWarning.defaultProps = {

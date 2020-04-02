@@ -17,6 +17,21 @@ span.statusTag > span {
   color: var(--color-gray-blueish);
 }
 
+.supportOpposeButtons {
+  float: right;
+  padding-bottom: 1rem;
+}
+
+.supportOpposeBar {
+  width: 100%;
+  padding: 1rem;
+  border-top: 1px solid var(--color-gray-lighter);
+}
+
+.dccActions {
+  margin: 2rem 0;
+}
+
 /* EXTRA SMALL SCREENS*/
 @media screen and (max-width: 560px) {
   .topDetails {

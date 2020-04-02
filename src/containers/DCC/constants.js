@@ -6,6 +6,7 @@ export const DCC_STATUS_DRAFTS = 4;
 export const DCC_TYPE_ISSUANCE = 1;
 export const DCC_TYPE_REVOCATION = 2;
 
+export const CONTRACTOR_TYPE_INVALID = 0;
 export const CONTRACTOR_TYPE_DIRECT = 1;
 export const CONTRACTOR_TYPE_SUPERVISOR = 2;
 export const CONTRACTOR_TYPE_SUBCONTRACTOR = 3;

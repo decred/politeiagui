@@ -2,7 +2,12 @@ import { useAction, useSelector } from "src/redux";
 import * as act from "src/actions";
 import * as sel from "src/selectors";
 import { CONTRACTOR_TYPE_NOMINEE } from "../constants";
+import { isUserValidContractor } from "../helpers";
 import useAPIAction from "src/hooks/utils/useAPIAction";
+import isEqual from "lodash/isEqual";
+
+const removeCurrentUser = (users, user) =>
+  users && users.filter((u) => !isEqual(u, user));
 
 export function useNewDcc() {
   const onFetchUsers = useAction(act.onFetchCmsUsers);
@@ -20,15 +25,18 @@ export function useNewDcc() {
   const nomineeUsers = useSelector(nomineeUsersSelector);
 
   const users = {
-    full: fullUsers,
+    full: removeCurrentUser(fullUsers, user),
     nominee: nomineeUsers
   };
+
+  const isUserValid = isUserValidContractor(user);
 
   return {
     loading,
     error,
     onSubmitDcc,
     users,
-    user
+    user,
+    isUserValid
   };
 }
