@@ -2,6 +2,8 @@ import dotenvParse from "dotenv-parse-variables";
 import React, { useState, useEffect } from "react";
 import { ConfigProvider } from "./ConfigProvider";
 import politeiaConfig from "src/apps/politeia/config.json";
+import { mergeAll } from "lodash/fp";
+import { getQueryStringValue } from "src/lib/queryString";
 
 const env = dotenvParse(process.env);
 const getEnvVariable = (key) => env[`REACT_APP_${key}`];
@@ -9,15 +11,28 @@ const getEnvVariable = (key) => env[`REACT_APP_${key}`];
 const defaultPreset = politeiaConfig;
 
 /**
+ * runtimeConfig returns config set at runtime.
+ */
+const runtimeConfig = {
+  /**
+   * javascriptEnabled indicates if the server detected a client with
+   * disabled javascript rendering via rendertron.
+   */
+
+  javascriptEnabled: !getQueryStringValue("nojavascript")
+};
+
+/**
  * loadConfig will try to import the config.json from 'src/apps/<preset_name'
  * if the preset name is not provided, it will return the default config.
  */
 const loadConfig = async () => {
   const presetName = getEnvVariable("PRESET");
-  if (!presetName) return defaultPreset;
+  if (!presetName) return mergeAll([defaultPreset, runtimeConfig]);
 
   const configModule = await import(`src/apps/${presetName}/config.json`);
-  return configModule.default;
+
+  return mergeAll([configModule.default, runtimeConfig]);
 };
 
 /**
@@ -28,6 +43,7 @@ const Config = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [configOptions, setConfig] = useState(null);
+
   useEffect(() => {
     async function initConfig() {
       try {

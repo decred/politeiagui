@@ -9,6 +9,8 @@ import Link from "src/components/Link";
 import LoggedInContent from "src/components/LoggedInContent";
 import Likes from "src/components/Likes";
 import CopyLink from "src/components/CopyLink";
+import { useConfig } from "src/containers/Config";
+import { NOJS_ROUTE_PREFIX } from "src/constants";
 
 const Comment = ({
   className,
@@ -41,6 +43,7 @@ const Comment = ({
   ...props
 }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
+  const { javascriptEnabled } = useConfig();
 
   const censorButton = !censored && censorable && (
     <Text weight="semibold" className={styles.censor} onClick={onClickCensor}>
@@ -52,6 +55,9 @@ const Comment = ({
   const isDarkTheme = themeName === "dark";
   const showNewReplies = numOfNewHiddenReplies > 0 && !showReplies && !isFlatMode;
   const isThread = numOfReplies > 0 && !isFlatMode;
+
+  const authorURL = javascriptEnabled ?
+    `/user/${authorID}` : `${NOJS_ROUTE_PREFIX}/user/${authorID}`;
 
   return (
     <div
@@ -68,7 +74,7 @@ const Comment = ({
               styles.commentAuthor,
               highlightAuthor && styles.recordAuthor
             )}
-            to={`/user/${authorID}`}>
+            to={authorURL}>
             {author}
           </Link>
           <DateTooltip timestamp={createdAt} placement="bottom">

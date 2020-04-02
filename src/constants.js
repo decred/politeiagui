@@ -151,3 +151,5 @@ export const CMS_DOMAINS = [
   "Documentation",
   "Community Management"
 ];
+
+export const NOJS_ROUTE_PREFIX = "/nojavascript";

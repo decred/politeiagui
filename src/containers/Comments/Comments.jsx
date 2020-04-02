@@ -227,7 +227,7 @@ const Comments = ({
                   {readOnlyReason}
                 </Message>
               )}
-              {!isPaid && paywallEnabled && (
+              {!isPaid && paywallEnabled && currentUser && (
                 <Message kind="error">
                   <P>
                     You won't be able to submit comments or proposals before paying the paywall,

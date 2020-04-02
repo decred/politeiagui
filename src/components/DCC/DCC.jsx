@@ -65,7 +65,7 @@ const Dcc = ({ dcc, extended }) => {
               }
               subtitle={
                 <Subtitle>
-                  <Author username={sponsorusername} id={sponsoruserid} />
+                  <Author username={sponsorusername} url={`/user/${sponsoruserid}`} />
                   { !extended && !isRevocationDcc(dcc) &&
                     <Text>
                       {presentationalDccContractorType(dccContractorType)}
