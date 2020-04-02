@@ -17,7 +17,10 @@ import {
   RANDOM_ERROR_RESPONSE
 } from "./helpers";
 import { getHumanReadableError } from "../../helpers";
-import { MANAGE_USER_CLEAR_USER_PAYWALL } from "../../constants";
+import {
+  MANAGE_USER_CLEAR_USER_PAYWALL,
+  PROPOSAL_TYPE_REGULAR
+} from "../../constants";
 
 const mockStore = configureStore([thunk]);
 
@@ -29,6 +32,8 @@ describe("test api actions (actions/api.js)", () => {
   };
   const FAKE_CSRF = "fake_csrf_token";
   const FAKE_PROPOSAL_NAME = "Fake prop name";
+  const FAKE_PROPOSAL_TYPE = PROPOSAL_TYPE_REGULAR;
+  const FAKE_RFP_DEADLINE = undefined;
   const FAKE_PROPOSAL_DESCRIPTION = "Fake prop description";
   const FAKE_PROPOSAL_TOKEN = "fake_prop_token";
   const FAKE_PROPOSAL_VERSION = "2";
@@ -534,6 +539,8 @@ describe("test api actions (actions/api.js)", () => {
       FAKE_USER.username,
       FAKE_PROPOSAL_NAME,
       FAKE_PROPOSAL_DESCRIPTION,
+      FAKE_RFP_DEADLINE,
+      FAKE_PROPOSAL_TYPE,
       []
     ];
 
@@ -557,6 +564,8 @@ describe("test api actions (actions/api.js)", () => {
           payload: {
             name: FAKE_PROPOSAL_NAME,
             description: FAKE_PROPOSAL_DESCRIPTION,
+            fpDeadline: FAKE_RFP_DEADLINE,
+            type: FAKE_PROPOSAL_TYPE,
             files: []
           }
         },
