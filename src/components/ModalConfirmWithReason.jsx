@@ -44,8 +44,14 @@ const ModalConfirmWithReason = ({
   }, [show]);
 
   const { theme } = useTheme();
-  const successIconBgColor = getThemeProperty(theme, "success-icon-background-color");
-  const iconCheckmarkColor = getThemeProperty(theme, "success-icon-checkmark-color");
+  const successIconBgColor = getThemeProperty(
+    theme,
+    "success-icon-background-color"
+  );
+  const iconCheckmarkColor = getThemeProperty(
+    theme,
+    "success-icon-checkmark-color"
+  );
 
   return (
     <Modal
@@ -56,17 +62,16 @@ const ModalConfirmWithReason = ({
       onClose={onClose}
       iconComponent={
         !success ? (
-          <Icon type={"info"} size={26} />
+          <Icon type={"info"} width={26} />
         ) : (
           <Icon
             type={"checkmark"}
-            size={26}
+            width={26}
             iconColor={iconCheckmarkColor}
             backgroundColor={successIconBgColor}
           />
         )
-      }
-    >
+      }>
       {!success && (
         <P style={{ marginBottom: "20px" }}>
           Please, provide a reason for this action.
@@ -80,8 +85,7 @@ const ModalConfirmWithReason = ({
           validationSchema={Yup.object().shape({
             reason: Yup.string().required("Required")
           })}
-          onSubmit={onSubmitReason}
-        >
+          onSubmit={onSubmitReason}>
           {({
             Form,
             Actions,

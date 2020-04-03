@@ -14,9 +14,9 @@ import { useLoaderContext } from "src/containers/Loader";
 import { validationSchema } from "./validation";
 
 const preDefinedDurations = [2016, 2880, 4032];
-const getDurationOptions = isTesnet => {
+const getDurationOptions = (isTesnet) => {
   const blockDuration = isTesnet ? 2 : 5;
-  return preDefinedDurations.map(nb => ({
+  return preDefinedDurations.map((nb) => ({
     value: nb,
     label: `${Math.round((nb * blockDuration) / 60 / 24)} days (${nb} blocks)`
   }));
@@ -34,8 +34,14 @@ const ModalStartVote = ({
   const [isSubmitting, setSubmitting] = useState(false);
   const { apiInfo } = useLoaderContext();
   const { theme } = useTheme();
-  const successIconBgColor = getThemeProperty(theme, "success-icon-background-color");
-  const iconCheckmarkColor = getThemeProperty(theme, "success-icon-checkmark-color");
+  const successIconBgColor = getThemeProperty(
+    theme,
+    "success-icon-background-color"
+  );
+  const iconCheckmarkColor = getThemeProperty(
+    theme,
+    "success-icon-checkmark-color"
+  );
   const onSubmitChangePassword = async (
     values,
     { resetForm, setFieldError }
@@ -69,17 +75,16 @@ const ModalStartVote = ({
       onClose={onClose}
       iconComponent={
         !success ? (
-          <Icon type={"info"} size={26} />
+          <Icon type={"info"} width={26} />
         ) : (
           <Icon
             type={"checkmark"}
             iconColor={iconCheckmarkColor}
             backgroundColor={successIconBgColor}
-            size={26}
+            width={26}
           />
         )
-      }
-    >
+      }>
       {!success && (
         <FormWrapper
           initialValues={{
@@ -88,8 +93,7 @@ const ModalStartVote = ({
             passPercentage: 60
           }}
           validationSchema={validationSchema}
-          onSubmit={onSubmitChangePassword}
-        >
+          onSubmit={onSubmitChangePassword}>
           {({
             Form,
             Actions,
@@ -141,8 +145,7 @@ const ModalStartVote = ({
                   <Button
                     loading={isSubmitting}
                     kind={canSubmit ? "primary" : "disabled"}
-                    type="submit"
-                  >
+                    type="submit">
                     Start Vote
                   </Button>
                 </Actions>
