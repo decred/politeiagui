@@ -62,11 +62,12 @@ const ModalConfirmWithReason = ({
       onClose={onClose}
       iconComponent={
         !success ? (
-          <Icon type={"info"} width={26} />
+          <Icon type={"info"} width={26} height={26} />
         ) : (
           <Icon
             type={"checkmark"}
             width={26}
+            height={26}
             iconColor={iconCheckmarkColor}
             backgroundColor={successIconBgColor}
           />

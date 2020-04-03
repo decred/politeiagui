@@ -139,6 +139,7 @@ const ModalImportIdentity = ({
           <Icon
             type={"checkmark"}
             width={26}
+            height={26}
             iconColor={iconCheckmarkColor}
             backgroundColor={successIconBgColor}
           />

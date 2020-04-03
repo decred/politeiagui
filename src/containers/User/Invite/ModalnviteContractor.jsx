@@ -32,9 +32,9 @@ const ModalInviteContractor = ({ show, onClose }) => {
   const icon = useMemo(
     () =>
       !success ? (
-        <Icon type={"mail"} width={26} />
+        <Icon type={"mail"} width={26} height={26} />
       ) : (
-        <Icon type={"mailCheck"} width={26} />
+        <Icon type={"mailCheck"} width={26} height={26} />
       ),
     [success]
   );
