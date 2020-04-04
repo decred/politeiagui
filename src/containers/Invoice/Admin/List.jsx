@@ -1,7 +1,13 @@
 import React, { useCallback, useState } from "react";
 import { useAdminInvoices } from "./hooks";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import { Spinner, Link as UILink } from "pi-ui";
+import {
+  Spinner,
+  Link as UILink,
+  useMediaQuery,
+  Dropdown,
+  DropdownItem
+} from "pi-ui";
 import Link from "src/components/Link";
 import Invoice from "src/components/Invoice";
 import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
@@ -13,6 +19,40 @@ import HelpMessage from "src/components/HelpMessage";
 import { ModalInviteContractor } from "src/containers/User/Invite";
 import styles from "./List.module.css";
 import { Row } from "src/components/layout";
+
+const ActionsContent = ({ openInviteModal }) => {
+  const mobile = useMediaQuery("(max-width: 560px)");
+
+  const inviteContractorLink = (
+    <UILink className="cursor-pointer" onClick={openInviteModal}>
+      Invite contractor
+    </UILink>
+  );
+  const generatePayoutsLink = (
+    <Link className="cursor-pointer" to="/admin/payouts">Generate payouts</Link>
+  );
+  const payoutSummariesLink = (
+    <Link className="cursor-pointer" to="/admin/invoicepayouts">Payout summaries</Link>
+  );
+
+  return (
+    <div>
+      {!mobile ? (
+        <Row justify="space-between" className={styles.actionsWrapper}>
+          {inviteContractorLink}
+          {generatePayoutsLink}
+          {payoutSummariesLink}
+        </Row>
+      ) : (
+        <Dropdown title="Actions" className={styles.actionsWrapper}>
+          <DropdownItem>{inviteContractorLink}</DropdownItem>
+          <DropdownItem>{generatePayoutsLink}</DropdownItem>
+          <DropdownItem>{payoutSummariesLink}</DropdownItem>
+        </Dropdown>
+      )}
+    </div>
+  );
+};
 
 const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
   const { loading, invoices } = useAdminInvoices();
@@ -63,21 +103,7 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
       <TopBanner>
         <PageDetails
           title="Admin"
-          actionsContent={
-            <Row justify="space-between" className={styles.actionsWrapper}>
-              <div>
-                <UILink className="cursor-pointer" onClick={openInviteModal}>
-                  Invite contractor
-                </UILink>
-              </div>
-              <div>
-                <Link className="cursor-pointer" to="/admin/payouts">Generate payouts</Link>
-              </div>
-              <div>
-                <Link className="cursor-pointer" to="/admin/invoicepayouts">Payout summaries</Link>
-              </div>
-            </Row>
-          }>
+          actionsContent={<ActionsContent openInviteModal={openInviteModal}/>}>
           <InvoiceFilterForm onChange={handleFiltersChange} />
         </PageDetails>
       </TopBanner>

@@ -375,16 +375,6 @@ export const getJsonData = (base64) => {
   }
 };
 
-export const setQueryStringWithoutPageReload = (qs) => {
-  const newurl =
-    window.location.protocol +
-    "//" +
-    window.location.host +
-    window.location.pathname +
-    qs;
-  window.history.pushState({ path: newurl }, "", newurl);
-};
-
 // CSV
 const DELIMITER_CHAR = ",";
 const COMMENT_CHAR = "#";

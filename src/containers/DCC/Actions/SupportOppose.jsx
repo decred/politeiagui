@@ -6,7 +6,8 @@ import {
   StatusBar,
   useMediaQuery,
   Link,
-  Message
+  Message,
+  classNames
 } from "pi-ui";
 import {
   dccSupportOpposeStatus,
@@ -18,7 +19,7 @@ import ModalVotesList from "src/components/ModalVotesList";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import ModalConfirm from "src/components/ModalConfirm";
 
-const SupportOpposeActions = ({ dcc, token, className }) => {
+const SupportOpposeActions = ({ dcc, token, className, buttonsClassName }) => {
   const { onSupportDcc, onOpposeDcc, userID, isContractor, loading, error } = useDccActions(token);
   const [supportOpposeAction, setSupportOpposeAction] = useState(() => {});
   const [
@@ -75,7 +76,7 @@ const SupportOpposeActions = ({ dcc, token, className }) => {
       />
     </div>
     {isVotingAvailable && !mobile && (
-      <div className="margin-top-s justify-right">
+      <div className={classNames("margin-top-s justify-right", buttonsClassName)}>
         {supportButton}
         {opposeButton}
       </div>

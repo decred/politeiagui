@@ -71,7 +71,8 @@ ConfigProvider.propTypes = {
       path: PropTypes.string,
       admin: PropTypes.bool
     })
-  )
+  ),
+  javascriptEnabled: PropTypes.bool
 };
 
 CustomConfigProvider.propTypes = {

@@ -40,7 +40,7 @@ const ModalDiff = ({
           <Subtitle>
             <Author
               username={proposalDetails.username}
-              id={proposalDetails.userid}
+              url={`/user/${proposalDetails.userid}`}
             />
             {proposalDetails.timestamp !== proposalDetails.publishedat &&
               proposalDetails.timestamp !== proposalDetails.abandonedat && (

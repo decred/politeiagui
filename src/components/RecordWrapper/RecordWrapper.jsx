@@ -22,8 +22,8 @@ import { useLoader } from "src/containers/Loader";
 import Join from "../Join";
 import CopyLink from "../CopyLink";
 
-export const Author = ({ username, id }) => (
-  <Link to={`/user/${id}`}>{username}</Link>
+export const Author = ({ username, url }) => (
+  <Link to={url}>{username}</Link>
 );
 
 export const Event = ({ event, timestamp, className, size }) => (

@@ -37,7 +37,7 @@ const Invoice = ({ invoice, extended, approvedProposalsTokens }) => {
   const mobile = useMediaQuery("(max-width: 560px)");
 
   const { currentUser } = useLoaderContext();
-  const isAuthor = userid === currentUser.userid;
+  const isAuthor = currentUser && userid === currentUser.userid;
   const isEditable = isAuthor && isEditableInvoice(status);
   const invoiceToken = censorshiprecord && censorshiprecord.token;
   const invoiceURL = `/invoices/${invoiceToken}`;
@@ -85,7 +85,7 @@ const Invoice = ({ invoice, extended, approvedProposalsTokens }) => {
               }
               subtitle={
                 <Subtitle>
-                  <Author username={username} id={userid} />
+                  <Author username={username} url={`/user/${userid}`} />
                   <Event event="edited" timestamp={timestamp} />
                   {version > 1 && !mobile && (
                     <Text

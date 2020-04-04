@@ -1,6 +1,7 @@
 import {
   StatusTag,
-  Text
+  Text,
+  classNames
 } from "pi-ui";
 import React from "react";
 import RecordWrapper from "src/components/RecordWrapper";
@@ -64,7 +65,7 @@ const Dcc = ({ dcc, extended }) => {
               }
               subtitle={
                 <Subtitle>
-                  <Author username={sponsorusername} id={sponsoruserid} />
+                  <Author username={sponsorusername} url={`/user/${sponsoruserid}`} />
                   { !extended && !isRevocationDcc(dcc) &&
                     <Text>
                       {presentationalDccContractorType(dccContractorType)}
@@ -94,7 +95,7 @@ const Dcc = ({ dcc, extended }) => {
                 <Row topMarginSize="s">
                   <RecordToken token={dccToken} />
                 </Row>
-                <Row justify="space-between" className={styles.topDetails}>
+                <Row justify="space-between" bottomMarginSize="m" className={styles.topDetails}>
                   <Field
                     label="Type"
                     value={presentationalDccType(dcc)}
@@ -123,10 +124,15 @@ const Dcc = ({ dcc, extended }) => {
                     </div>
                   </Row>
                 }
-                <SupportOppose className={styles.topDetails} token={dccToken} dcc={dcc}/>
+                <SupportOppose
+                  className={styles.supportOpposeBar}
+                  buttonsClassName={styles.supportOpposeButtons}
+                  dcc={dcc}
+                  token={dccToken}
+                />
               </>
             )}
-            <DccActions dcc={dcc} extended={extended}/>
+            <DccActions dcc={dcc} className={classNames(!extended && "justify-right margin-bottom-xs", styles.dccActions)}/>
           </>
         );
       }}

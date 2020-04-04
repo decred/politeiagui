@@ -10,7 +10,6 @@ import {
 import { Formik } from "formik";
 import SelectField from "src/components/Select/SelectField";
 import { withRouter } from "react-router-dom";
-import usePolicy from "src/hooks/api/usePolicy";
 import { dccValidationSchema } from "./validation";
 import useSessionStorage from "src/hooks/utils/useSessionStorage";
 import DraftSaver from "./DraftSaver";
@@ -45,7 +44,8 @@ const DccForm = React.memo(function DccForm({
   isValid,
   cmsUsers,
   setSessionStorageDcc,
-  submitSuccess
+  submitSuccess,
+  isUserValid
 }) {
   const [isIssuance, setIsIssuance] = useState();
 
@@ -66,14 +66,14 @@ const DccForm = React.memo(function DccForm({
     }
   }, [values.type, setFieldValue]);
 
-  const SubmitButton = () => (
+  const SubmitButton = useCallback(() => (
     <Button
       type="submit"
-      kind={!isValid ? "disabled" : "primary"}
+      kind={!isValid || !isUserValid ? "disabled" : "primary"}
       loading={isSubmitting}>
       Submit
     </Button>
-  );
+  ), [isValid, isSubmitting, isUserValid]);
 
   const handleChangeWithTouched = (field) => (e) => {
     setFieldTouched(field, true);
@@ -120,6 +120,10 @@ const DccForm = React.memo(function DccForm({
         <Message kind="error">{errors.global.toString()}</Message>
       )}
 
+      {!isUserValid && (
+        <Message kind="error">You don't have the contractor status required to complete a DCC request</Message>
+      )}
+
       <RadioButtonGroup
         label="DCC Type"
         name="type"
@@ -145,6 +149,7 @@ const DccForm = React.memo(function DccForm({
             placeholder="Nominee"
             error={touched.nomineeid && errors.nomineeid}
             onChange={handleChangeNomineeSelector}
+            isDisabled={!values.type}
           />
           <Select
             name="contractortype"
@@ -161,6 +166,7 @@ const DccForm = React.memo(function DccForm({
           placeholder="Nominee"
           error={touched.nomineeid && errors.nomineeid}
           onChange={handleChangeNomineeSelector}
+          isDisabled={!values.type}
         />
       )}
       <BoxTextInput
@@ -184,13 +190,13 @@ const DccFormWrapper = ({
   onSubmit,
   history,
   cmsUsers,
-  userDomain
+  userDomain,
+  isUserValid
 }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const { policy } = usePolicy();
   const dccFormValidation = useMemo(
-    () => dccValidationSchema(policy, userDomain),
-    [policy, userDomain]
+    () => dccValidationSchema(),
+    []
   );
 
   const FORM_INITIAL_VALUES = {
@@ -240,7 +246,7 @@ const DccFormWrapper = ({
       validationSchema={dccFormValidation}>
       {(props) => (
         <DccForm
-          {...{ ...props, submitSuccess, setSessionStorageDcc, cmsUsers }}
+          {...{ ...props, submitSuccess, setSessionStorageDcc, cmsUsers, isUserValid }}
         />
       )}
     </Formik>
