@@ -10,6 +10,7 @@ import {
   useMediaQuery,
   useTheme,
   Link,
+  Icon,
   classNames
 } from "pi-ui";
 import { Row } from "src/components/layout";
@@ -23,15 +24,18 @@ import ModalMDGuide from "src/components/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import { PROPOSAL_TYPE_REGULAR, PROPOSAL_TYPE_RFP } from "src/constants";
+import {
+  PROPOSAL_TYPE_REGULAR,
+  PROPOSAL_TYPE_RFP,
+  PROPOSAL_TYPE_RFP_SUBMISSION
+} from "src/constants";
 import {
   getProposalTypeOptionsForSelect,
   getRfpMinMaxDates
 } from "./helpers.js";
 
 const Select = ({ error, ...props }) => (
-  <div
-    className={classNames(styles.formSelect, error && styles.formSelectError)}>
+  <div className={classNames(error && styles.formSelectError)}>
     <SelectField {...props} />
     {error && <p className={styles.errorMsg}>{error}</p>}
   </div>
@@ -55,6 +59,7 @@ const ProposalForm = React.memo(function ProposalForm({
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
   const isRfp = values.type.value === PROPOSAL_TYPE_RFP;
+  const isRfpSubmission = values.type.value === PROPOSAL_TYPE_RFP_SUBMISSION;
 
   const handleDescriptionChange = useCallback(
     (v) => {
@@ -65,10 +70,10 @@ const ProposalForm = React.memo(function ProposalForm({
 
   const selectOptions = useMemo(() => getProposalTypeOptionsForSelect(), []);
 
-  const handleProposalTypeChange = useCallback(
-    (option) => {
-      setFieldTouched("type", true);
-      setFieldValue("type", option);
+  const handleSelectFiledChange = useCallback(
+    (fieldName) => (option) => {
+      setFieldTouched(fieldName, true);
+      setFieldValue(fieldName, option);
     },
     [setFieldValue, setFieldTouched]
   );
@@ -138,10 +143,10 @@ const ProposalForm = React.memo(function ProposalForm({
       <Row>
         <Select
           name="type"
-          onChange={handleProposalTypeChange}
+          onChange={handleSelectFiledChange("type")}
           options={selectOptions}
           error={touched.type && errors.type}
-          className={styles.selectWrapper}
+          className={classNames(styles.typeSelectWrapper, styles.selectWrapper)}
         />
         {isRfp && (
           <DatePickerField
@@ -151,6 +156,29 @@ const ProposalForm = React.memo(function ProposalForm({
             name="rfpDeadline"
             label="Deadline"
           />
+        )}
+        {isRfpSubmission && (
+          <Row noMargin align="center">
+            <div className={classNames("margin-left-s", "margin-right-s")}>
+              <Icon
+                type={"horizontalLink"}
+                viewBox="0 0 24 16"
+                width={24}
+                height={16}
+              />
+            </div>
+            <Select
+              name="submissionLink"
+              onChange={handleSelectFiledChange("type")}
+              options={[]}
+              error={touched.submissionLink && errors.submissionLink}
+              placeholder="Choose RFP proposal"
+              className={classNames(
+                styles.rfpLinkSelectWrapper,
+                styles.selectWrapper
+              )}
+            />
+          </Row>
         )}
       </Row>
       <BoxTextInput
@@ -240,7 +268,7 @@ const ProposalFormWrapper = ({
         initialValues={
           initialValues || {
             type: PROPOSAL_TYPE_REGULAR,
-            rfpDeadline: { year: 2020, day: 1, month: 4 }, // TODO: get today/tomorrow's date
+            rfpDeadline: { year: 2020, day: 1, month: 4 }, // TODO: make datepicker work with no initial value
             name: "",
             description: "",
             files: []
