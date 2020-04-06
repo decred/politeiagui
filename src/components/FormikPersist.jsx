@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import debounce from "lodash/debounce";
-import { FormikConsumer } from "formik";
+import { useFormikContext } from "formik";
 
 const DEBOUNCE_DELAY = 300;
 
@@ -13,7 +13,8 @@ const getData = (key) => {
   return data ? JSON.parse(data) : undefined;
 };
 
-const Persist = ({ name, values, setValues }) => {
+const Persist = ({ name }) => {
+  const { values, setValues } = useFormikContext();
   useEffect(() => {
     const data = getData(name);
     if (data) {
@@ -28,14 +29,4 @@ const Persist = ({ name, values, setValues }) => {
   return null;
 };
 
-const FormikPersist = ({ name }) => {
-  return (
-    <FormikConsumer>
-      {(formikProps) => {
-        return <Persist name={name} {...formikProps} />;
-      }}
-    </FormikConsumer>
-  );
-};
-
-export default FormikPersist;
+export default Persist;

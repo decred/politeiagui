@@ -233,12 +233,15 @@ const DccFormWrapper = ({
     [history, onSubmit, setSessionStorageDcc]
   );
 
+  const formikProps = {
+    initialValues: formInitialValues,
+    isInitialValid,
+    validationSchema: dccFormValidation,
+    onSubmit: handleSubmit
+  };
+
   return (
-    <Formik
-      onSubmit={handleSubmit}
-      initialValues={formInitialValues}
-      isInitialValid={isInitialValid}
-      validationSchema={dccFormValidation}>
+    <Formik {...{ ...formikProps }}>
       {(props) => (
         <DccForm
           {...{

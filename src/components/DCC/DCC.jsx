@@ -64,6 +64,7 @@ const Dcc = ({ dcc, extended }) => {
                   <Author
                     username={sponsorusername}
                     url={`/user/${sponsoruserid}`}
+                    id={sponsoruserid}
                   />
                   {!extended && !isRevocationDcc(dcc) && (
                     <Text>

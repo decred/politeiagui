@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "pi-ui";
-import { FormikConsumer } from "formik";
+import { useFormikContext } from "formik";
 import { useDraftInvoices } from "src/containers/Invoice/User/hooks";
 import { getQueryStringValue, setQueryStringValue } from "src/lib/queryString";
 
-const DraftSaver = ({ values, setValues, submitSuccess }) => {
+const DraftSaver = ({ submitSuccess }) => {
   const [draftId, setDraftId] = useState(getQueryStringValue("draft"));
   const {
     draftInvoices,
     onDeleteDraftInvoice: onDelete,
     onSaveDraftInvoice: onSave
   } = useDraftInvoices();
+  const { values, setValues } = useFormikContext();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -98,14 +99,4 @@ const DraftSaver = ({ values, setValues, submitSuccess }) => {
   );
 };
 
-const Wrapper = (props) => {
-  return (
-    <FormikConsumer>
-      {(formikProps) => {
-        return <DraftSaver {...{ ...props, ...formikProps }} />;
-      }}
-    </FormikConsumer>
-  );
-};
-
-export default Wrapper;
+export default DraftSaver;

@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "pi-ui";
-import { FormikConsumer } from "formik";
+import { useFormikContext } from "formik";
 import { useDraftDccs } from "src/containers/DCC/User/hooks";
 import useQueryString from "src/hooks/utils/useQueryString";
 import delay from "lodash/delay";
 
-const DraftSaver = ({ values, setValues, submitSuccess }) => {
+const DraftSaver = ({ submitSuccess }) => {
   const [draftId, setDraftId] = useQueryString("draft");
   const {
     draftDccs,
     onDeleteDraftDcc: onDelete,
     onSaveDraftDcc: onSave
   } = useDraftDccs();
+  const { values, setValues } = useFormikContext();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -70,14 +71,4 @@ const DraftSaver = ({ values, setValues, submitSuccess }) => {
   );
 };
 
-const Wrapper = (props) => {
-  return (
-    <FormikConsumer>
-      {(formikProps) => {
-        return <DraftSaver {...{ ...props, ...formikProps }} />;
-      }}
-    </FormikConsumer>
-  );
-};
-
-export default Wrapper;
+export default DraftSaver;
