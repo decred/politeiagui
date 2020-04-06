@@ -268,7 +268,7 @@ const ProposalFormWrapper = ({
         initialValues={
           initialValues || {
             type: PROPOSAL_TYPE_REGULAR,
-            rfpDeadline: { year: 2020, day: 1, month: 4 }, // TODO: make datepicker work with no initial value
+            rfpDeadline: null,
             name: "",
             description: "",
             files: []
