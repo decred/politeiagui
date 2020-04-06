@@ -353,7 +353,9 @@ export const onFetchProposalsBatch = (tokens, fetchVoteStatus = true) =>
       }
       const response = await Promise.all(promises);
       const proposals = response.find((res) => res && res.proposals).proposals;
+      const summaries = response.find((res) => res && res.summaries).summaries;
       dispatch(act.RECEIVE_PROPOSALS_BATCH({ proposals }));
+      return [proposals, summaries];
     } catch (e) {
       dispatch(act.RECEIVE_PROPOSALS_BATCH(null, e));
     }

@@ -17,7 +17,7 @@ import {
   UnvettedActionsProvider,
   PublicActionsProvider
 } from "src/containers/Proposal/Actions";
-import useProposalVote from "../hooks/useProposalVote";
+import { useProposalVote } from "../hooks";
 import { GoBackLink } from "src/components/Router";
 
 const ProposalDetail = ({ Main, match }) => {

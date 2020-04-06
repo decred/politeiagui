@@ -23,6 +23,7 @@ import AttachFileInput from "src/components/AttachFileInput";
 import ModalMDGuide from "src/components/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
+import { useProposalsBatch } from "src/containers/Proposal/hooks";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import {
   PROPOSAL_TYPE_REGULAR,
@@ -33,6 +34,7 @@ import {
   getProposalTypeOptionsForSelect,
   getRfpMinMaxDates
 } from "./helpers.js";
+import { isActiveApprovedRFP } from "src/containers/Proposal/helpers";
 
 const Select = ({ error, ...props }) => (
   <div className={classNames(error && styles.formSelectError)}>
@@ -238,6 +240,7 @@ const ProposalFormWrapper = ({
   ] = useBooleanState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { proposalFormValidation } = useProposalForm();
+  const { onFetchProposalsBatch } = useProposalsBatch();
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
@@ -245,6 +248,17 @@ const ProposalFormWrapper = ({
           type: { value },
           ...others
         } = values;
+        const [[proposal], summaries] = (await onFetchProposalsBatch([
+          values.submissionLink
+        ])) || [[], null];
+        const voteSummary = summaries && summaries[values.submissionLink];
+        if (
+          !proposal ||
+          !voteSummary ||
+          !isActiveApprovedRFP(proposal, voteSummary)
+        ) {
+          setFieldError("global", "Invalid RFP token!");
+        }
         const proposalToken = await onSubmit({
           ...others,
           type: value
@@ -258,7 +272,7 @@ const ProposalFormWrapper = ({
         setFieldError("global", e);
       }
     },
-    [history, onSubmit]
+    [history, onSubmit, onFetchProposalsBatch]
   );
   return (
     <>
@@ -267,6 +281,7 @@ const ProposalFormWrapper = ({
           initialValues || {
             type: PROPOSAL_TYPE_REGULAR,
             rfpDeadline: null,
+            submissionLink: "",
             name: "",
             description: "",
             files: []
