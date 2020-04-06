@@ -8870,7 +8870,7 @@ performance-now@^2.1.0:
 
 "pi-ui@https://github.com/decred/pi-ui":
   version "1.0.0"
-  resolved "https://github.com/decred/pi-ui#d8da126ffc5c091f496d2977ba65956e85b2bb45"
+  resolved "https://github.com/decred/pi-ui#1910f0892dc69fd6380afc7bb0b6882e9c269d91"
   dependencies:
     "@babel/plugin-transform-react-jsx-development" "^7.9.0"
     clamp-js-main "^0.11.5"

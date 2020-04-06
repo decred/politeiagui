@@ -19,26 +19,31 @@
   margin-top: 0.3rem;
 }
 
-.selectWrapper {
-  height: 4.4rem;
-}
-
-.selectWrapper > div {
-  height: 100%;
-}
-
 .typeSelectWrapper {
+  height: 4.4rem;
   width: 20rem;
 }
 
-.rfpLinkSelectWrapper {
-  width: 50rem;
+.typeSelectWrapper > div {
+  height: 100%;
 }
 
 .datePicker {
   margin-left: 2rem;
   width: 20rem;
   height: 4.4rem;
+}
+
+.rfpLinkIcon {
+  display: flex;
+  align-items: center;
+  height: 4.4rem;
+  margin-left: var(--spacing-small);
+  margin-right: var(--spacing-small);
+}
+
+.rfpLinkToken > input {
+  margin-top: 0;
 }
 
 .formatHelpButton {

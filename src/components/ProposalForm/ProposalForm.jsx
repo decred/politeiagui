@@ -140,13 +140,13 @@ const ProposalForm = React.memo(function ProposalForm({
       {errors && errors.global && (
         <Message kind="error">{errors.global.toString()}</Message>
       )}
-      <Row>
+      <Row noMargin>
         <Select
           name="type"
           onChange={handleSelectFiledChange("type")}
           options={selectOptions}
           error={touched.type && errors.type}
-          className={classNames(styles.typeSelectWrapper, styles.selectWrapper)}
+          className={classNames(styles.typeSelectWrapper)}
         />
         {isRfp && (
           <DatePickerField
@@ -158,8 +158,8 @@ const ProposalForm = React.memo(function ProposalForm({
           />
         )}
         {isRfpSubmission && (
-          <Row noMargin align="center">
-            <div className={classNames("margin-left-s", "margin-right-s")}>
+          <>
+            <div className={styles.rfpLinkIcon}>
               <Icon
                 type={"horizontalLink"}
                 viewBox="0 0 24 16"
@@ -167,18 +167,16 @@ const ProposalForm = React.memo(function ProposalForm({
                 height={16}
               />
             </div>
-            <Select
+            <BoxTextInput
+              placeholder="RFP token"
               name="submissionLink"
-              onChange={handleSelectFiledChange("type")}
-              options={[]}
+              tabIndex={1}
+              value={values.submissionLink}
+              onChange={handleChange}
+              className={styles.rfpLinkToken}
               error={touched.submissionLink && errors.submissionLink}
-              placeholder="Choose RFP proposal"
-              className={classNames(
-                styles.rfpLinkSelectWrapper,
-                styles.selectWrapper
-              )}
             />
-          </Row>
+          </>
         )}
       </Row>
       <BoxTextInput
