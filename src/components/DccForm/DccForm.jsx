@@ -1,7 +1,6 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
-  BoxTextInput,
   Button,
   Message,
   RadioButtonGroup,
@@ -23,6 +22,7 @@ import {
   DCC_TYPE_REVOCATION,
   CONTRACTOR_TYPE_REVOKED
 } from "src/containers/DCC";
+import MarkdownEditor from "src/components/MarkdownEditor";
 
 const Select = ({ error, ...props }) => (
   <div
@@ -34,7 +34,6 @@ const Select = ({ error, ...props }) => (
 
 const DccForm = React.memo(function DccForm({
   values,
-  handleChange,
   handleSubmit,
   isSubmitting,
   setFieldValue,
@@ -75,15 +74,6 @@ const DccForm = React.memo(function DccForm({
     </Button>
   ), [isValid, isSubmitting, isUserValid]);
 
-  const handleChangeWithTouched = (field) => (e) => {
-    setFieldTouched(field, true);
-    setSessionStorageDcc({
-      ...values,
-      [field]: e.target.value
-    });
-    handleChange(e);
-  };
-
   const handleChangeDccType = (e) => {
     setFieldTouched("type", true);
     setSessionStorageDcc({
@@ -92,6 +82,15 @@ const DccForm = React.memo(function DccForm({
     });
     setFieldValue("type", e.value);
     setFieldValue("nomineeid", "");
+  };
+
+  const handleChangeStatement = (value) => {
+    setSessionStorageDcc({
+      ...values,
+      "statement": value
+    });
+    setFieldTouched("statement", true);
+    setFieldValue("statement", value);
   };
 
   const handleChangeSelector = (field) => (e) => {
@@ -169,13 +168,13 @@ const DccForm = React.memo(function DccForm({
           isDisabled={!values.type}
         />
       )}
-      <BoxTextInput
-        placeholder="Statement"
+      <MarkdownEditor
         name="statement"
-        tabIndex={1}
         value={values.statement}
+        onChange={handleChangeStatement}
+        placeholder="Statement"
         error={touched.statement && errors.statement}
-        onChange={handleChangeWithTouched("statement")}
+        className={styles.statement}
       />
       <div className="justify-right">
         <DraftSaver {...{ submitSuccess }}/>
