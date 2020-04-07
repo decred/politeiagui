@@ -28,6 +28,10 @@
   height: 100%;
 }
 
+.typeRow {
+  margin-bottom: 2rem;
+}
+
 .datePicker {
   margin-left: 2rem;
   width: 20rem;
@@ -44,6 +48,10 @@
 
 .rfpLinkToken > input {
   margin-top: 0;
+}
+
+.rfpLinkToken > p {
+  display: none;
 }
 
 .formatHelpButton {

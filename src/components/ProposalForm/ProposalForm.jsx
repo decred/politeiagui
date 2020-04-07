@@ -142,7 +142,7 @@ const ProposalForm = React.memo(function ProposalForm({
       {errors && errors.global && (
         <Message kind="error">{errors.global.toString()}</Message>
       )}
-      <Row noMargin>
+      <Row className={styles.typeRow}>
         <Select
           name="type"
           onChange={handleSelectFiledChange("type")}
@@ -245,23 +245,28 @@ const ProposalFormWrapper = ({
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
         const {
-          type: { value },
+          type: { value: proposalType },
           ...others
         } = values;
-        const [[proposal], summaries] = (await onFetchProposalsBatch([
-          values.submissionLink
-        ])) || [[], null];
-        const voteSummary = summaries && summaries[values.submissionLink];
         if (
-          !proposal ||
-          !voteSummary ||
-          !isActiveApprovedRFP(proposal, voteSummary)
+          values.submissionLink &&
+          proposalType === PROPOSAL_TYPE_RFP_SUBMISSION
         ) {
-          setFieldError("global", "Invalid RFP token!");
+          const [[proposal], summaries] = (await onFetchProposalsBatch([
+            values.submissionLink
+          ])) || [[], null];
+          const voteSummary = summaries && summaries[values.submissionLink];
+          if (
+            !proposal ||
+            !voteSummary ||
+            !isActiveApprovedRFP(proposal, voteSummary)
+          ) {
+            throw Error("Invalid RFP token!");
+          }
         }
         const proposalToken = await onSubmit({
           ...others,
-          type: value
+          type: proposalType
         });
         setSubmitting(false);
         setSubmitSuccess(true);
