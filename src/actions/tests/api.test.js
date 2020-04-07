@@ -464,9 +464,6 @@ describe("test api actions (actions/api.js)", () => {
   test("on fetch liked comments action", async () => {
     const path = `path:/api/v1/user/proposals/${FAKE_PROPOSAL_TOKEN}/commentslikes`;
     const params = [FAKE_PROPOSAL_TOKEN, FAKE_USER.id];
-    // fetchMock.get(path, {}, { query: {
-    //   userid: FAKE_USER.id
-    // } })
     await assertApiActionOnSuccess(path, api.onFetchLikedComments, params, [
       { type: act.REQUEST_LIKED_COMMENTS },
       {
@@ -853,6 +850,9 @@ describe("test api actions (actions/api.js)", () => {
       FAKE_USER.email,
       FAKE_PROPOSAL_NAME,
       FAKE_PROPOSAL_DESCRIPTION,
+      FAKE_RFP_DEADLINE,
+      FAKE_PROPOSAL_TYPE,
+      FAKE_RFP_LINK,
       [],
       FAKE_PROPOSAL_TOKEN
     ];
@@ -879,6 +879,9 @@ describe("test api actions (actions/api.js)", () => {
           payload: {
             name: FAKE_PROPOSAL_NAME,
             description: FAKE_PROPOSAL_DESCRIPTION,
+            rfpDeadline: FAKE_RFP_DEADLINE,
+            type: FAKE_PROPOSAL_TYPE,
+            rfpLink: FAKE_RFP_LINK,
             files: []
           }
         },
