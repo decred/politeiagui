@@ -19,7 +19,9 @@ export const ThumbnailGrid = ({
     setImageOnModal,
     closeImageOnModal
   ] = useHighlightedItem();
-  const files = value.filter((f) => f.name !== "index.md");
+  const files = value.filter(
+    (f) => f.name !== "index.md" && f.name !== "data.json"
+  );
   const handleSetImageOnModal = useCallback(
     (file) => {
       setImageOnModal(file);

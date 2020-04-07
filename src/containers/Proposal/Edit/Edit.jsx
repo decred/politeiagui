@@ -40,7 +40,9 @@ const EditProposal = ({ match }) => {
         rfpDeadline: proposal.linkby,
         rfpLink: proposal.linkto,
         description: getMarkdownContent(proposal.files),
-        files: proposal.files.filter((p) => p.name !== "index.md")
+        files: proposal.files.filter(
+          (p) => p.name !== "index.md" && p.name !== "data.json"
+        )
       }
     : null;
 
