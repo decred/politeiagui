@@ -24,6 +24,7 @@ describe("api integration modules (lib/api.js)", () => {
   const PROPOSAL_TOKEN = "FAKE_TOKEN";
   const PROPOSAL_VERSION = "2";
   const RFP_DEADLINE = undefined;
+  const RFP_LINK = undefined;
   const MARKDOWN = "# This is a test proposal";
   const FILE = {
     name: "example.jpeg",
@@ -56,6 +57,7 @@ describe("api integration modules (lib/api.js)", () => {
       MARKDOWN,
       RFP_DEADLINE,
       PROPOSAL_TYPE,
+      RFP_LINK,
       [FILE]
     );
     const fileFromMarkdown = api.convertMarkdownToFile(
@@ -88,7 +90,8 @@ describe("api integration modules (lib/api.js)", () => {
       PROPOSAL_NAME,
       MARKDOWN,
       RFP_DEADLINE,
-      PROPOSAL_TYPE
+      PROPOSAL_TYPE,
+      RFP_LINK
     );
     expect(proposal).toEqual({
       files: [
@@ -109,6 +112,7 @@ describe("api integration modules (lib/api.js)", () => {
       MARKDOWN,
       RFP_DEADLINE,
       PROPOSAL_TYPE,
+      RFP_LINK,
       false
     );
     expect(proposal).toEqual({

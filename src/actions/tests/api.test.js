@@ -34,6 +34,7 @@ describe("test api actions (actions/api.js)", () => {
   const FAKE_PROPOSAL_NAME = "Fake prop name";
   const FAKE_PROPOSAL_TYPE = PROPOSAL_TYPE_REGULAR;
   const FAKE_RFP_DEADLINE = undefined;
+  const FAKE_RFP_LINK = undefined;
   const FAKE_PROPOSAL_DESCRIPTION = "Fake prop description";
   const FAKE_PROPOSAL_TOKEN = "fake_prop_token";
   const FAKE_PROPOSAL_VERSION = "2";
@@ -541,6 +542,7 @@ describe("test api actions (actions/api.js)", () => {
       FAKE_PROPOSAL_DESCRIPTION,
       FAKE_RFP_DEADLINE,
       FAKE_PROPOSAL_TYPE,
+      FAKE_RFP_LINK,
       []
     ];
 
@@ -564,8 +566,9 @@ describe("test api actions (actions/api.js)", () => {
           payload: {
             name: FAKE_PROPOSAL_NAME,
             description: FAKE_PROPOSAL_DESCRIPTION,
-            fpDeadline: FAKE_RFP_DEADLINE,
+            rfpDeadline: FAKE_RFP_DEADLINE,
             type: FAKE_PROPOSAL_TYPE,
+            rfpLink: FAKE_RFP_LINK,
             files: []
           }
         },
