@@ -17,6 +17,11 @@ span.statusTag > span {
   color: var(--color-gray-blueish);
 }
 
+.statement {
+  white-space: pre-line;
+  padding-top: 0.5rem;
+}
+
 .supportOpposeButtons {
   float: right;
   padding-bottom: 1rem;

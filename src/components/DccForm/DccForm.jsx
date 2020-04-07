@@ -4,9 +4,10 @@ import {
   Button,
   Message,
   RadioButtonGroup,
-  classNames
+  classNames,
+  TextArea
 } from "pi-ui";
-import { Formik } from "formik";
+import { Formik, Field } from "formik";
 import SelectField from "src/components/Select/SelectField";
 import { withRouter } from "react-router-dom";
 import { dccValidationSchema } from "./validation";
@@ -22,7 +23,7 @@ import {
   DCC_TYPE_REVOCATION,
   CONTRACTOR_TYPE_REVOKED
 } from "src/containers/DCC";
-import MarkdownEditor from "src/components/MarkdownEditor";
+import usePolicy from "src/hooks/api/usePolicy";
 
 const Select = ({ error, ...props }) => (
   <div
@@ -84,13 +85,13 @@ const DccForm = React.memo(function DccForm({
     setFieldValue("nomineeid", "");
   };
 
-  const handleChangeStatement = (value) => {
+  const handleChangeStatement = (e) => {
     setSessionStorageDcc({
       ...values,
-      "statement": value
+      "statement": e.target.value
     });
     setFieldTouched("statement", true);
-    setFieldValue("statement", value);
+    setFieldValue("statement", e.target.value);
   };
 
   const handleChangeSelector = (field) => (e) => {
@@ -168,13 +169,13 @@ const DccForm = React.memo(function DccForm({
           isDisabled={!values.type}
         />
       )}
-      <MarkdownEditor
+      <Field
+        component={TextArea}
         name="statement"
         value={values.statement}
         onChange={handleChangeStatement}
         placeholder="Statement"
         error={touched.statement && errors.statement}
-        className={styles.statement}
       />
       <div className="justify-right">
         <DraftSaver {...{ submitSuccess }}/>
@@ -193,9 +194,10 @@ const DccFormWrapper = ({
   isUserValid
 }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const { policy } = usePolicy();
   const dccFormValidation = useMemo(
-    () => dccValidationSchema(),
-    []
+    () => dccValidationSchema(policy),
+    [policy]
   );
 
   const FORM_INITIAL_VALUES = {

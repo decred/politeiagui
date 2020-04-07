@@ -19,7 +19,6 @@ import {
   isDccApproved
 } from "src/containers/DCC/helpers";
 import { SupportOppose, DccActions } from "src/containers/DCC/Actions";
-import Markdown from "src/components/Markdown";
 
 const Dcc = ({ dcc, extended }) => {
   const {
@@ -114,7 +113,7 @@ const Dcc = ({ dcc, extended }) => {
                 <Row justify="space-between" className={styles.topDetails}>
                   <div className={styles.field}>
                     <Text size="small">Statement</Text>
-                    <Markdown body={presentationalStatement(dccStatement)}/>
+                    <Text className={styles.statement}>{presentationalStatement(dccStatement)}</Text>
                   </div>
                 </Row>
                 {!isActive &&
