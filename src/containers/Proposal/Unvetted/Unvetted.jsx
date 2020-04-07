@@ -21,9 +21,7 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
     onFetchProposalsBatch
   } = useProposalsBatch();
 
-  function handleFetchRecords(tokens) {
-    return onFetchProposalsBatch(tokens, false);
-  }
+  const handleFetchRecords = (tokens) => onFetchProposalsBatch(tokens, false);
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
