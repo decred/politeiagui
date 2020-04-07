@@ -171,12 +171,12 @@ const ProposalForm = React.memo(function ProposalForm({
             </div>
             <BoxTextInput
               placeholder="RFP token"
-              name="submissionLink"
+              name="rfpLink"
               tabIndex={1}
-              value={values.submissionLink}
+              value={values.rfpLink}
               onChange={handleChange}
               className={styles.rfpLinkToken}
-              error={touched.submissionLink && errors.submissionLink}
+              error={touched.rfpLink && errors.rfpLink}
             />
           </>
         )}
@@ -248,14 +248,11 @@ const ProposalFormWrapper = ({
           type: { value: proposalType },
           ...others
         } = values;
-        if (
-          values.submissionLink &&
-          proposalType === PROPOSAL_TYPE_RFP_SUBMISSION
-        ) {
+        if (values.rfpLink && proposalType === PROPOSAL_TYPE_RFP_SUBMISSION) {
           const [[proposal], summaries] = (await onFetchProposalsBatch([
-            values.submissionLink
+            values.rfpLink
           ])) || [[], null];
-          const voteSummary = summaries && summaries[values.submissionLink];
+          const voteSummary = summaries && summaries[values.rfpLink];
           if (
             !proposal ||
             !voteSummary ||
@@ -286,7 +283,7 @@ const ProposalFormWrapper = ({
           initialValues || {
             type: PROPOSAL_TYPE_REGULAR,
             rfpDeadline: null,
-            submissionLink: "",
+            rfpLink: "",
             name: "",
             description: "",
             files: []

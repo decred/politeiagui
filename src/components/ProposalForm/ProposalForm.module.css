@@ -46,6 +46,10 @@
   margin-right: var(--spacing-small);
 }
 
+.rfpLinkToken {
+  width: 50rem;
+}
+
 .rfpLinkToken > input {
   margin-top: 0;
 }

@@ -592,14 +592,22 @@ export const onSubmitProposal = (
   description,
   rfpDeadline,
   type,
+  rfpLink,
   files
 ) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(
-      act.REQUEST_NEW_PROPOSAL({ name, description, rfpDeadline, type, files })
+      act.REQUEST_NEW_PROPOSAL({
+        name,
+        description,
+        rfpDeadline,
+        type,
+        rfpLink,
+        files
+      })
     );
     return Promise.resolve(
-      api.makeProposal(name, description, rfpDeadline, type, files)
+      api.makeProposal(name, description, rfpDeadline, type, rfpLink, files)
     )
       .then((proposal) => api.signRegister(loggedInAsEmail, proposal))
       .then((proposal) => api.newProposal(csrf, proposal))

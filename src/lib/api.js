@@ -8,7 +8,8 @@ import {
   PROPOSAL_STATUS_UNREVIEWED,
   INVOICE_STATUS_UNREVIEWED,
   DCC_STATUS_ACTIVE,
-  PROPOSAL_TYPE_RFP
+  PROPOSAL_TYPE_RFP,
+  PROPOSAL_TYPE_RFP_SUBMISSION
 } from "../constants";
 import {
   getHumanReadableError,
@@ -49,6 +50,7 @@ export const makeProposal = (
   markdown,
   rfpDeadline,
   type,
+  rfpLink,
   attachments = []
 ) => ({
   files: [
@@ -58,7 +60,8 @@ export const makeProposal = (
         linkby:
           type === PROPOSAL_TYPE_RFP
             ? convertObjectToUnixTimestamp(rfpDeadline)
-            : undefined
+            : undefined,
+        linkto: type === PROPOSAL_TYPE_RFP_SUBMISSION ? rfpLink : undefined
       },
       "data.json"
     ),

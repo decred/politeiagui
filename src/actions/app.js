@@ -65,6 +65,7 @@ export const onSaveNewProposal = ({
   description,
   files,
   rfpDeadline,
+  rfpLink,
   type
 }) => (dispatch, getState) => {
   const { email, userid, username } = sel.currentUser(getState());
@@ -77,6 +78,7 @@ export const onSaveNewProposal = ({
       description,
       rfpDeadline,
       type,
+      rfpLink,
       files
     )
   )
