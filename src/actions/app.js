@@ -108,13 +108,27 @@ export const onSaveNewDcc = ({
   ).then(() => sel.newDccToken(getState()));
 };
 
-export const onEditProposal = ({ token, name, description, files }) => (
-  dispatch,
-  getState
-) => {
+export const onEditProposal = ({
+  token,
+  name,
+  description,
+  files,
+  rfpDeadline,
+  type,
+  rfpLink
+}) => (dispatch, getState) => {
   const email = sel.currentUserEmail(getState());
   return dispatch(
-    onSubmitEditedProposal(email, name, description, files, token)
+    onSubmitEditedProposal(
+      email,
+      name,
+      description,
+      rfpDeadline,
+      type,
+      rfpLink,
+      files,
+      token
+    )
   ).then(() => dispatch(onFetchProposalApi(token)).then(() => token));
 };
 

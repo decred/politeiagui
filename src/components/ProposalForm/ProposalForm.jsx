@@ -60,8 +60,8 @@ const ProposalForm = React.memo(function ProposalForm({
   const smallTablet = useMediaQuery("(max-width: 685px)");
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
-  const isRfp = values.type.value === PROPOSAL_TYPE_RFP;
-  const isRfpSubmission = values.type.value === PROPOSAL_TYPE_RFP_SUBMISSION;
+  const isRfp = values.type === PROPOSAL_TYPE_RFP;
+  const isRfpSubmission = values.type === PROPOSAL_TYPE_RFP_SUBMISSION;
 
   const handleDescriptionChange = useCallback(
     (v) => {
@@ -75,7 +75,7 @@ const ProposalForm = React.memo(function ProposalForm({
   const handleSelectFiledChange = useCallback(
     (fieldName) => (option) => {
       setFieldTouched(fieldName, true);
-      setFieldValue(fieldName, option);
+      setFieldValue(fieldName, option.value);
     },
     [setFieldValue, setFieldTouched]
   );
@@ -244,15 +244,12 @@ const ProposalFormWrapper = ({
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
-        const {
-          type: { value: proposalType },
-          ...others
-        } = values;
-        if (values.rfpLink && proposalType === PROPOSAL_TYPE_RFP_SUBMISSION) {
+        const { type, rfpLink, ...others } = values;
+        if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
           const [[proposal], summaries] = (await onFetchProposalsBatch([
-            values.rfpLink
+            rfpLink
           ])) || [[], null];
-          const voteSummary = summaries && summaries[values.rfpLink];
+          const voteSummary = summaries && summaries[rfpLink];
           if (
             !proposal ||
             !voteSummary ||
@@ -263,7 +260,8 @@ const ProposalFormWrapper = ({
         }
         const proposalToken = await onSubmit({
           ...others,
-          type: proposalType
+          type,
+          rfpLink
         });
         setSubmitting(false);
         setSubmitSuccess(true);

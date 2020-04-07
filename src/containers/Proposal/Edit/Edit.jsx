@@ -9,7 +9,6 @@ import useIdentity from "src/hooks/api/useIdentity";
 import Or from "src/components/Or";
 import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
 import ProposalForm from "src/components/ProposalForm/ProposalFormLazy";
-import { getProposalTypeOptionByKey } from "src/components/ProposalForm/helpers";
 import Link from "src/components/Link";
 import ProposalFormLoader from "src/components/ProposalForm/ProposalFormLoader";
 import {
@@ -30,13 +29,12 @@ const EditProposal = ({ match }) => {
     ? {
         token: match.params.token,
         name: proposal.name,
-        type: getProposalTypeOptionByKey(
-          proposal.linkby
+        type:
+          proposal && proposal.linkby
             ? PROPOSAL_TYPE_RFP
             : proposal.linkto
             ? PROPOSAL_TYPE_RFP_SUBMISSION
-            : PROPOSAL_TYPE_REGULAR
-        ),
+            : PROPOSAL_TYPE_REGULAR,
         rfpDeadline: proposal.linkby,
         rfpLink: proposal.linkto,
         description: getMarkdownContent(proposal.files),

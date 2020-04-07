@@ -638,12 +638,26 @@ export const onSubmitEditedProposal = (
   loggedInAsEmail,
   name,
   description,
+  rfpDeadline,
+  type,
+  rfpLink,
   files,
   token
 ) =>
   withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_EDIT_PROPOSAL({ name, description, files }));
-    return Promise.resolve(api.makeProposal(name, description, files))
+    dispatch(
+      act.REQUEST_EDIT_PROPOSAL({
+        name,
+        description,
+        files,
+        rfpDeadline,
+        rfpLink,
+        type
+      })
+    );
+    return Promise.resolve(
+      api.makeProposal(name, description, rfpDeadline, type, rfpLink, files)
+    )
       .then((proposal) => api.signRegister(loggedInAsEmail, proposal))
       .then((proposal) => api.editProposal(csrf, { ...proposal, token }))
       .then((proposal) => {

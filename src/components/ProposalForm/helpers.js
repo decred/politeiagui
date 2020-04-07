@@ -33,13 +33,3 @@ export const getProposalTypeOptionsForSelect = () =>
       value
     })
   );
-
-/**
- * Returns the proposal type select option by type enum value.
- * @param {string} value proposal type enum value
- * @returns {object} selectOption
- */
-export const getProposalTypeOptionByKey = (value) => ({
-  label: typesLabels[value],
-  value
-});
