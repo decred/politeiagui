@@ -23,7 +23,7 @@ export const getRfpMinMaxDates = () => {
 };
 
 /**
- * Return the proposal type select options.
+ * Returns the proposal type select options.
  * @returns {Array} sortSelectOptions
  */
 export const getProposalTypeOptionsForSelect = () =>
@@ -33,3 +33,13 @@ export const getProposalTypeOptionsForSelect = () =>
       value
     })
   );
+
+/**
+ * Returns the proposal type select option by type enum value.
+ * @param {string} value proposal type enum value
+ * @returns {object} selectOption
+ */
+export const getProposalTypeOptionByKey = (value) => ({
+  label: typesLabels[value],
+  value
+});
