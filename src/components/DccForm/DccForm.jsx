@@ -1,13 +1,13 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
-  BoxTextInput,
   Button,
   Message,
   RadioButtonGroup,
-  classNames
+  classNames,
+  TextArea
 } from "pi-ui";
-import { Formik } from "formik";
+import { Formik, Field } from "formik";
 import SelectField from "src/components/Select/SelectField";
 import { withRouter } from "react-router-dom";
 import { dccValidationSchema } from "./validation";
@@ -23,6 +23,7 @@ import {
   DCC_TYPE_REVOCATION,
   CONTRACTOR_TYPE_REVOKED
 } from "src/containers/DCC";
+import usePolicy from "src/hooks/api/usePolicy";
 
 const Select = ({ error, ...props }) => (
   <div
@@ -34,7 +35,6 @@ const Select = ({ error, ...props }) => (
 
 const DccForm = React.memo(function DccForm({
   values,
-  handleChange,
   handleSubmit,
   isSubmitting,
   setFieldValue,
@@ -75,15 +75,6 @@ const DccForm = React.memo(function DccForm({
     </Button>
   ), [isValid, isSubmitting, isUserValid]);
 
-  const handleChangeWithTouched = (field) => (e) => {
-    setFieldTouched(field, true);
-    setSessionStorageDcc({
-      ...values,
-      [field]: e.target.value
-    });
-    handleChange(e);
-  };
-
   const handleChangeDccType = (e) => {
     setFieldTouched("type", true);
     setSessionStorageDcc({
@@ -92,6 +83,15 @@ const DccForm = React.memo(function DccForm({
     });
     setFieldValue("type", e.value);
     setFieldValue("nomineeid", "");
+  };
+
+  const handleChangeStatement = (e) => {
+    setSessionStorageDcc({
+      ...values,
+      "statement": e.target.value
+    });
+    setFieldTouched("statement", true);
+    setFieldValue("statement", e.target.value);
   };
 
   const handleChangeSelector = (field) => (e) => {
@@ -169,13 +169,14 @@ const DccForm = React.memo(function DccForm({
           isDisabled={!values.type}
         />
       )}
-      <BoxTextInput
-        placeholder="Statement"
+      <Field
+        component={TextArea}
         name="statement"
-        tabIndex={1}
         value={values.statement}
+        onChange={handleChangeStatement}
+        placeholder="Statement"
+        id="statement"
         error={touched.statement && errors.statement}
-        onChange={handleChangeWithTouched("statement")}
       />
       <div className="justify-right">
         <DraftSaver {...{ submitSuccess }}/>
@@ -194,9 +195,10 @@ const DccFormWrapper = ({
   isUserValid
 }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const { policy } = usePolicy();
   const dccFormValidation = useMemo(
-    () => dccValidationSchema(),
-    []
+    () => dccValidationSchema(policy),
+    [policy]
   );
 
   const FORM_INITIAL_VALUES = {
