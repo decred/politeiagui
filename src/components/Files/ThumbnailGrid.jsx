@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { Row } from "../layout";
 import styles from "./Files.module.css";
 import ImageThumbnail from "./ImageThumbnail";
 import TextThumbnail from "./TextThumbnail";
-import useHighlightedItem from "src/hooks/utils/useHighlightItem";
 import ModalFullImage from "src/components/ModalFullImage";
+import useModalContext from "src/hooks/utils/useModalContext";
 import ThumbnailGridErrors from "./ThumbnailGridErrors";
 
 export const ThumbnailGrid = ({
@@ -14,18 +14,14 @@ export const ThumbnailGrid = ({
   errors = [],
   viewOnly = false
 }) => {
-  const [
-    imageOnModal,
-    setImageOnModal,
-    closeImageOnModal
-  ] = useHighlightedItem();
   const files = value.filter((f) => f.name !== "index.md");
-  const handleSetImageOnModal = useCallback(
-    (file) => {
-      setImageOnModal(file);
-    },
-    [setImageOnModal]
-  );
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+  const openFullImageModal = (file) => {
+    handleOpenModal(ModalFullImage, {
+      image: file,
+      onClose: handleCloseModal
+    });
+  };
   return (
     <>
       <ThumbnailGridErrors errors={errors} />
@@ -39,7 +35,7 @@ export const ThumbnailGrid = ({
               key={`img-${key}`}
               file={f}
               viewOnly={viewOnly}
-              onClick={handleSetImageOnModal}
+              onClick={openFullImageModal}
               onRemove={onRemove}
             />
           ) : (
@@ -52,11 +48,6 @@ export const ThumbnailGrid = ({
           )
         )}
       </Row>
-      <ModalFullImage
-        image={imageOnModal}
-        show={!!imageOnModal}
-        onClose={closeImageOnModal}
-      />
     </>
   );
 };

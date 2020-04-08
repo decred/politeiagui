@@ -6,7 +6,6 @@ import { ReduxProvider } from "src/redux";
 import Loader from "src/containers/Loader";
 import Routes from "src/pages";
 import { UserSessionChecker } from "src/containers/User/SessionChecker";
-import Onboard from "src/containers/User/Onboard";
 import StaticContentProvider from "src/containers/StaticContent";
 import ModalProvider from "src/components/ModalProvider";
 import "pi-ui/dist/index.css";
@@ -45,7 +44,6 @@ const App = () => {
         <ReduxProvider>
           <Loader>
             <StaticContentProvider>
-              <Onboard />
               <Router>
                 <ModalProvider>
                   <UserSessionChecker>

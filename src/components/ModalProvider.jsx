@@ -1,6 +1,6 @@
 import React, { useState, createContext } from "react";
 
-export const modalContext = createContext();
+export const modalContext = createContext({ component: () => null, props: {} });
 
 const initialState = {
   component: () => null,

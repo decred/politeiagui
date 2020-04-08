@@ -1,6 +1,5 @@
 import { Card, classNames } from "pi-ui";
 import React from "react";
-import useBooleanState from "src/hooks/utils/useBooleanState";
 import useChangePassword from "../hooks/useChangePassword";
 import ModalChangePassword from "src/components/ModalChangePassword";
 import AdminSection from "./components/AdminSection";
@@ -9,6 +8,7 @@ import EmailSection from "./components/EmailSection";
 import PasswordSection from "./components/PasswordSection";
 import PaywallSection from "./components/PaywallSection";
 import { useConfig } from "src/containers/Config";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 const UserAccount = ({
   newuserverificationtoken,
@@ -18,22 +18,27 @@ const UserAccount = ({
   isadmin // from the user API return
 }) => {
   const { enablePaywall } = useConfig();
-  const [
-    showPasswordModal,
-    openPasswordModal,
-    closePasswordModal
-  ] = useBooleanState(false);
+
+  const [handleOpenModal, handleCloseModal] = useModalContext();
 
   const {
     onChangePassword,
     validationSchema: changePasswordValidationSchema
   } = useChangePassword();
 
+  const handleChangePasswordModal = () => {
+    handleOpenModal(ModalChangePassword, {
+      onChangePassword: onChangePassword,
+      validationSchema: changePasswordValidationSchema,
+      onClose: handleCloseModal
+    });
+  };
+
   return (
     <Card className={classNames("container", "margin-bottom-m")}>
       <AdminSection isadmin={isadmin} />
       <EmailSection token={newuserverificationtoken} />
-      <PasswordSection onClick={openPasswordModal} />
+      <PasswordSection onClick={handleChangePasswordModal} />
       {enablePaywall && (
         <>
           <AddressSection address={newuserpaywalladdress} />
@@ -43,12 +48,6 @@ const UserAccount = ({
           />
         </>
       )}
-      <ModalChangePassword
-        onChangePassword={onChangePassword}
-        validationSchema={changePasswordValidationSchema}
-        show={showPasswordModal}
-        onClose={closePasswordModal}
-      />
     </Card>
   );
 };

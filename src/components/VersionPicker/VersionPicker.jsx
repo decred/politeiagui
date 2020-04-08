@@ -1,17 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Dropdown, DropdownItem } from "pi-ui";
-import ModalDiff from "src/components/ModalDiff";
 import { useVersionPicker } from "./hooks";
 
 const VersionPicker = ({ version, token, className }) => {
-  const {
-    disablePicker,
-    onChangeVersion,
-    showModal,
-    onToggleModal,
-    proposalDiff
-  } = useVersionPicker({ version, token });
+  const { disablePicker, onChangeVersion } = useVersionPicker({
+    version,
+    token
+  });
 
   const getVersionsOptions = () => {
     const versions = [];
@@ -21,28 +17,23 @@ const VersionPicker = ({ version, token, className }) => {
     return versions;
   };
 
-  return !disablePicker && (
-    <>
-      <Dropdown title={`version ${version}`} className={className} itemsListClassName={className}>
-        {getVersionsOptions().map(v => (
-          <DropdownItem key={v} onClick={() => { onChangeVersion(v); }}>
+  return (
+    !disablePicker && (
+      <Dropdown
+        title={`version ${version}`}
+        className={className}
+        itemsListClassName={className}>
+        {getVersionsOptions().map((v) => (
+          <DropdownItem
+            key={v}
+            onClick={() => {
+              onChangeVersion(v);
+            }}>
             version {v}
           </DropdownItem>
         ))}
       </Dropdown>
-      { proposalDiff && (
-        <ModalDiff
-          onClose={onToggleModal}
-          show={showModal}
-          proposalDetails={proposalDiff.details}
-          oldText={proposalDiff.oldText}
-          oldFiles={proposalDiff.oldFiles}
-          newText={proposalDiff.newText}
-          newFiles={proposalDiff.newFiles}
-
-        />
-      )}
-    </>
+    )
   );
 };
 

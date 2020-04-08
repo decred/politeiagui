@@ -8,12 +8,12 @@ import PrivateKeyDownloadManager from "src/components/PrivateKeyDownloadManager"
 import { PUB_KEY_STATUS_LOADING } from "src/constants";
 import { verifyUserPubkey } from "src/helpers";
 import useUserIdentity from "src/hooks/api/useUserIdentity";
-import useBooleanState from "src/hooks/utils/useBooleanState";
 import * as pki from "src/lib/pki";
 import styles from "./Identity.module.css";
 import PublicKeyText from "./components/PublicKeyText";
 import PastKeysSection from "./components/PastKeysSection";
 import UserIdSection from "./components/UserIdSection";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 const fetchKeys = (currentUserEmail) =>
   pki.getKeys(currentUserEmail).then((keys) => JSON.stringify(keys, null, 2));
@@ -30,16 +30,7 @@ const Identity = ({ history, loadingKey, user }) => {
     keyMismatchAction,
     shouldAutoVerifyKey
   } = useUserIdentity();
-  const [
-    showConfirmModal,
-    openConfirmModal,
-    closeConfirmModal
-  ] = useBooleanState(false);
-  const [
-    showImportIdentityModal,
-    openImportIdentityModal,
-    closeImportIdentityModal
-  ] = useBooleanState(false);
+
   useEffect(() => {
     verifyUserPubkey(currentUserEmail, userPubkey, keyMismatchAction);
   }, [currentUserEmail, userPubkey, keyMismatchAction]);
@@ -54,6 +45,27 @@ const Identity = ({ history, loadingKey, user }) => {
   }, [onUpdateUserKey, currentUserEmail]);
 
   const [keyData, setKeyData] = useState();
+
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  const handleOpenCreateNewIdentityModal = () => {
+    handleOpenModal(ModalConfirm, {
+      title: "Create new identity",
+      message: "Are you sure you want to generate a new identity?",
+      onClose: handleCloseModal,
+      onSubmit: updateKey,
+      successTitle: "Create new identity",
+      successMessage: `Your new identity has been requested, please check your email at ${currentUserEmail} to verify and activate it.
+
+      The verification link needs to be open with the same browser that you used to generate this new identity.`
+    });
+  };
+
+  const handleOpenImportIdentityModal = () => {
+    handleOpenModal(ModalImportIdentity, {
+      onClose: handleCloseModal
+    });
+  };
 
   useEffect(() => {
     let isSubscribed = true;
@@ -123,31 +135,16 @@ const Identity = ({ history, loadingKey, user }) => {
         </div>
       )}
       <div className={styles.buttonsWrapper}>
-        <Button size="sm" onClick={openConfirmModal}>
+        <Button size="sm" onClick={handleOpenCreateNewIdentityModal}>
           Create new identity
         </Button>
-        <Button size="sm" onClick={openImportIdentityModal}>
+        <Button size="sm" onClick={handleOpenImportIdentityModal}>
           Import identity
         </Button>
         <PrivateKeyDownloadManager keyData={keyData} />
       </div>
       <PastKeysSection pastIdentities={pastIdentities} />
       <UserIdSection id={userID} />
-      <ModalConfirm
-        title="Create new identity"
-        message="Are you sure you want to generate a new identity?"
-        show={showConfirmModal}
-        onClose={closeConfirmModal}
-        onSubmit={updateKey}
-        successTitle="Create new identity"
-        successMessage={`Your new identity has been requested, please check your email at ${currentUserEmail} to verify and activate it.
-
-          The verification link needs to be open with the same browser that you used to generate this new identity.`}
-      />
-      <ModalImportIdentity
-        show={showImportIdentityModal}
-        onClose={closeImportIdentityModal}
-      />
     </Card>
   );
 };

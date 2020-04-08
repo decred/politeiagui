@@ -7,7 +7,7 @@ import styles from "./Diff.module.css";
 import HelpMessage from "src/components/HelpMessage";
 import { ImageThumbnail, TextThumbnail } from "src/components/Files";
 import ModalFullImage from "src/components/ModalFullImage";
-import useBooleanState from "src/hooks/utils/useBooleanState";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 const handleDiffLine = (
   line,
@@ -22,7 +22,7 @@ const handleDiffLine = (
   diffLine.push(
     <DiffLine
       key={index}
-      removed={removed}
+      removed={!!removed}
       added={added}
       content={diffStrings}
       removedIndex={added ? newTextLineCounter : oldTextLineCounter}
@@ -77,9 +77,13 @@ export const DiffHTML = ({ oldTextBody, newTextBody }) => {
 };
 
 const FileWrapper = ({ file, className }) => {
-  const [showImageModal, openImageModal, closeImageModal] = useBooleanState(
-    false
-  );
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+  const openFullImageModal = (file) => {
+    handleOpenModal(ModalFullImage, {
+      image: file,
+      onClose: handleCloseModal
+    });
+  };
 
   return file.mime.includes("image") ? (
     <>
@@ -87,12 +91,7 @@ const FileWrapper = ({ file, className }) => {
         className={className}
         file={file}
         viewOnly={true}
-        onClick={openImageModal}
-      />
-      <ModalFullImage
-        image={file}
-        show={showImageModal}
-        onClose={closeImageModal}
+        onClick={openFullImageModal}
       />
     </>
   ) : (

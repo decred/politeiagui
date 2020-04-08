@@ -11,8 +11,7 @@ const DiffLine = ({ added = false, removed = false, content = "" }) => {
       className={classNames(
         added && styles.lineAdded,
         removed && styles.lineRemoved
-      )}
-    >
+      )}>
       <td className={styles.lineContent}>
         <Markdown body={line} />
       </td>
@@ -22,8 +21,8 @@ const DiffLine = ({ added = false, removed = false, content = "" }) => {
 
 DiffLine.propTypes = {
   added: PropTypes.bool,
-  removed: PropTypes.bool || PropTypes.string,
-  content: PropTypes.array || PropTypes.string
+  removed: PropTypes.bool,
+  content: PropTypes.oneOfType(PropTypes.array, PropTypes.string)
 };
 
 export default DiffLine;

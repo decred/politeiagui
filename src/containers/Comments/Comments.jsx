@@ -21,11 +21,11 @@ import {
   getSortOptionsForSelect,
   createSelectOptionFromSortOption,
   commentSortOptions,
+  handleCommentCensoringInfo,
   NUMBER_OF_LIST_PLACEHOLDERS
 } from "./helpers";
 import useIdentity from "src/hooks/api/useIdentity";
 import usePaywall from "src/hooks/api/usePaywall";
-import useBooleanState from "src/hooks/utils/useBooleanState";
 import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
 import ModalLogin from "src/components/ModalLogin";
 import useModalContext from "src/hooks/utils/useModalContext";
@@ -49,7 +49,6 @@ const Comments = ({
   const [, identityError] = useIdentity();
   const { isPaid, paywallEnabled } = usePaywall();
   const [state, dispatch] = useReducer(commentsReducer, initialState);
-  const [commentIDCensorTarget, setCommentIDCensorTarget] = useState(null);
   const [isFlatCommentsMode, setIsFlatCommentsMode] = useState(false);
   const [flatModeOnLocalStorage, setflatModeOnLocalStorage] = useLocalStorage(
     "flatComments",
@@ -82,13 +81,6 @@ const Comments = ({
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const { userid } = currentUser || {};
-
-  const handleOpenLoginModal = useCallback(() => {
-    handleOpenModal(ModalLogin, {
-      id: COMMENTS_LOGIN_MODAL_ID,
-      onLoggedIn: handleCloseModal
-    });
-  }, [handleOpenModal, handleCloseModal]);
 
   const onRedirectToSignup = () => {
     history.push("/user/signup");
@@ -166,29 +158,36 @@ const Comments = ({
     return contents;
   }, [numOfComments, loading]);
 
-  const [showCensorModal, openCensorModal, closeCensorModal] = useBooleanState(
-    false
-  );
+  const handleOpenLoginModal = useCallback(() => {
+    handleOpenModal(ModalLogin, {
+      id: COMMENTS_LOGIN_MODAL_ID,
+      onLoggedIn: handleCloseModal
+    });
+  }, [handleOpenModal, handleCloseModal]);
 
-  useEffect(
-    function handleCensorCommentModal() {
-      if (commentIDCensorTarget) {
-        openCensorModal();
-      }
-    },
-    [commentIDCensorTarget, openCensorModal]
-  );
-
-  const handleCensorComment = useCallback(
-    (reason) => {
-      return onCensorComment(
+  const handleCensorCommentModal = useCallback(
+    function handleCensorCommentModal(id) {
+      const handleCensorComment = handleCommentCensoringInfo(
+        onCensorComment,
         userEmail,
         recordToken,
-        commentIDCensorTarget,
-        reason
+        id
       );
+      handleOpenModal(ModalConfirmWithReason, {
+        title: "Censor comment",
+        reasonLabel: "Censor reason",
+        subject: "censorComment",
+        successTitle: "Comment censored",
+        successMessage: (
+          <Text>The comment has been successfully censored.</Text>
+        ),
+        onSubmit: handleCensorComment,
+        onClose() {
+          return handleCloseModal();
+        }
+      });
     },
-    [userEmail, recordToken, commentIDCensorTarget, onCensorComment]
+    [handleCloseModal, handleOpenModal, onCensorComment, recordToken, userEmail]
   );
 
   const handleCommentsModeToggle = useCallback(() => {
@@ -311,7 +310,7 @@ const Comments = ({
                 identityError,
                 paywallMissing,
                 isAdmin: currentUser && currentUser.isadmin,
-                openCensorModal: setCommentIDCensorTarget,
+                openCensorModal: handleCensorCommentModal,
                 openLoginModal: handleOpenLoginModal,
                 ...commentsCtx
               }}>
@@ -331,21 +330,6 @@ const Comments = ({
             </Message>
           )}
         </div>
-        <ModalConfirmWithReason
-          title="Censor comment"
-          reasonLabel="Censor reason"
-          subject="censorComment"
-          successTitle="Comment censored"
-          successMessage={
-            <Text>The comment has been successfully censored.</Text>
-          }
-          show={showCensorModal}
-          onSubmit={handleCensorComment}
-          onClose={() => {
-            setCommentIDCensorTarget(null);
-            return closeCensorModal();
-          }}
-        />
       </Card>
     </>
   );

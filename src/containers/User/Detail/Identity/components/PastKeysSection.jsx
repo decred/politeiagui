@@ -1,15 +1,28 @@
 import React from "react";
 import { classNames, Text, Button, P, Modal } from "pi-ui";
 import styles from "../Identity.module.css";
-import useBooleanState from "src/hooks/utils/useBooleanState";
 import IdentityList from "./IdentityList";
+import useModalContext from "src/hooks/utils/useModalContext";
+
+function KeysModal({ pastIdentities, ...props }) {
+  return (
+    <Modal {...props}>
+      <IdentityList full identities={pastIdentities} />
+    </Modal>
+  );
+}
 
 export default ({ pastIdentities }) => {
-  const [
-    showShowAllModal,
-    openShowAllModal,
-    closeShowAllModal
-  ] = useBooleanState(false);
+  const [handleOpenModal, handleCloseModal] = useModalContext(false);
+
+  const handleOpenKeysModal = () => {
+    handleOpenModal(KeysModal, {
+      onClose: handleCloseModal,
+      title: "Past public keys",
+      pastIdentities
+    });
+  };
+
   return pastIdentities ? (
     <>
       <Text
@@ -19,8 +32,7 @@ export default ({ pastIdentities }) => {
           styles.fieldHeading,
           "margin-bottom-s",
           "margin-top-l"
-        )}
-      >
+        )}>
         Past public keys
       </Text>
       <P>
@@ -29,18 +41,10 @@ export default ({ pastIdentities }) => {
           : "This account only had one active public key until now."}
       </P>
       {pastIdentities.length !== 0 && (
-        <Button size="sm" kind="primary" onClick={openShowAllModal}>
+        <Button size="sm" kind="primary" onClick={handleOpenKeysModal}>
           Show all
         </Button>
       )}
-      <Modal
-        show={showShowAllModal}
-        onClose={closeShowAllModal}
-        title="Past public keys"
-      >
-        <IdentityList full identities={pastIdentities} />
-      </Modal>
     </>
   ) : null;
-}
-;
+};
