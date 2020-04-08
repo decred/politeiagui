@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { classNames, DatePicker, Icon } from "pi-ui";
+import { classNames, DatePicker, Icon, Text } from "pi-ui";
 import { FormikConsumer } from "formik";
 import styles from "./DatePickerField.module.css";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import { Row } from "../layout";
 
-const DatePickerField = ({ name, label, years, className }) => {
+const DatePickerField = ({ name, placeholder, years, className }) => {
   const [isOpen, openPicker, closePicker] = useBooleanState(false);
   const togglePicker = () => {
     if (!isOpen) {
@@ -39,7 +39,10 @@ const DatePickerField = ({ name, label, years, className }) => {
                 align="center"
                 noMargin
                 onClick={togglePicker}>
-                {value ? `${value.month}/${value.day}/${value.year}` : label}
+                {value && `${value.month}/${value.day}/${value.year}`}
+                {!value && (
+                  <Text className={styles.placeholder}>{placeholder}</Text>
+                )}
                 <Icon type="calendar" />
               </Row>
             </DatePicker>

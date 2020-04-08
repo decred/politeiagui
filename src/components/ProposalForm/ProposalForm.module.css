@@ -77,6 +77,10 @@
 }
 
 @media screen and (max-width: 685px) {
+  .rfpLinkToken {
+    width: auto;
+  }
+
   .formatHelpButton {
     padding-right: var(--spacing-1);
   }

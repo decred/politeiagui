@@ -141,6 +141,7 @@ const ProposalForm = React.memo(function ProposalForm({
         <Message kind="error">{errors.global.toString()}</Message>
       )}
       <Row
+        noMargin
         className={classNames(
           styles.typeRow,
           isRfpSubmission && styles.typeRowNoMargin
@@ -157,7 +158,7 @@ const ProposalForm = React.memo(function ProposalForm({
             years={getRfpMinMaxDates()}
             value={values.RfpDeadline}
             name="rfpDeadline"
-            label="Deadline"
+            placeholder="Deadline"
           />
         )}
         {isRfpSubmission && (
