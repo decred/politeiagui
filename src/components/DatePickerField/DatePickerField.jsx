@@ -17,7 +17,7 @@ const DatePickerField = ({ name, label, years, className }) => {
   };
   return (
     <FormikConsumer>
-      {({ setFieldValue, values }) => {
+      {({ setFieldValue, values, errors }) => {
         const onChange = (year, month, day) => {
           if (!!year && !!month && !!day) {
             setFieldValue(name, { year, month, day });
@@ -43,6 +43,7 @@ const DatePickerField = ({ name, label, years, className }) => {
                 <Icon type="calendar" />
               </Row>
             </DatePicker>
+            {errors && errors[name]}
           </div>
         );
       }}

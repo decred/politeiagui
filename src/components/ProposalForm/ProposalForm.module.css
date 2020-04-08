@@ -32,6 +32,10 @@
   margin-bottom: 2rem;
 }
 
+.typeRowNoMargin {
+  margin-bottom: 0;
+}
+
 .datePicker {
   margin-left: 2rem;
   width: 20rem;
@@ -52,10 +56,6 @@
 
 .rfpLinkToken > input {
   margin-top: 0;
-}
-
-.rfpLinkToken > p {
-  display: none;
 }
 
 .formatHelpButton {

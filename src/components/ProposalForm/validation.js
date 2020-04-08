@@ -8,6 +8,8 @@ import {
   validMimeTypesMessage
 } from "src/utils/validation";
 
+import { PROPOSAL_TYPE_RFP, PROPOSAL_TYPE_RFP_SUBMISSION } from "src/constants";
+
 export const proposalValidation = ({
   proposalnamesupportedchars,
   maxproposalnamelength,
@@ -18,12 +20,31 @@ export const proposalValidation = ({
   maxmdsize
 }) => (values) => {
   const errors = {};
+  console.log(values);
   if (!values) {
     values = {
       name: "",
       description: "",
+      type: null,
+      rfpLink: "",
+      rfpDeadline: null,
       files: []
     };
+  }
+
+  // Propsaol type validation
+  if (!values.type) {
+    errors.type = "Required";
+  }
+
+  // RFP deadline validation
+  if (values.type === PROPOSAL_TYPE_RFP && !values.rfpDeadline) {
+    errors.rfpDeadline = "Required";
+  }
+
+  // RFP deadline validation
+  if (values.type === PROPOSAL_TYPE_RFP_SUBMISSION && !values.rfpLink) {
+    errors.rfpLink = "Required";
   }
 
   // Name value validation
@@ -75,6 +96,6 @@ export const proposalValidation = ({
   if (errors.files.length === 0) delete errors.files;
 
   values.files = validatedFiles;
-
+  console.log(errors);
   return errors;
 };

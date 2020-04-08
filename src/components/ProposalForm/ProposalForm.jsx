@@ -36,13 +36,6 @@ import {
 } from "./helpers.js";
 import { isActiveApprovedRFP } from "src/containers/Proposal/helpers";
 
-const Select = ({ error, ...props }) => (
-  <div className={classNames(error && styles.formSelectError)}>
-    <SelectField {...props} />
-    {error && <p className={styles.errorMsg}>{error}</p>}
-  </div>
-);
-
 const ProposalForm = React.memo(function ProposalForm({
   values,
   handleChange,
@@ -79,6 +72,11 @@ const ProposalForm = React.memo(function ProposalForm({
     },
     [setFieldValue, setFieldTouched]
   );
+
+  const handleChangeWithTouched = (field) => (e) => {
+    setFieldTouched(field, true);
+    handleChange(e);
+  };
 
   const handleFilesChange = useCallback(
     (v) => {
@@ -142,12 +140,15 @@ const ProposalForm = React.memo(function ProposalForm({
       {errors && errors.global && (
         <Message kind="error">{errors.global.toString()}</Message>
       )}
-      <Row className={styles.typeRow}>
-        <Select
+      <Row
+        className={classNames(
+          styles.typeRow,
+          isRfpSubmission && styles.typeRowNoMargin
+        )}>
+        <SelectField
           name="type"
           onChange={handleSelectFiledChange("type")}
           options={selectOptions}
-          error={touched.type && errors.type}
           className={classNames(styles.typeSelectWrapper)}
         />
         {isRfp && (
@@ -174,7 +175,7 @@ const ProposalForm = React.memo(function ProposalForm({
               name="rfpLink"
               tabIndex={1}
               value={values.rfpLink}
-              onChange={handleChange}
+              onChange={handleChangeWithTouched("rfpLink")}
               className={styles.rfpLinkToken}
               error={touched.rfpLink && errors.rfpLink}
             />
@@ -186,8 +187,8 @@ const ProposalForm = React.memo(function ProposalForm({
         name="name"
         tabIndex={1}
         value={values.name}
-        onChange={handleChange}
-        error={errors.name}
+        onChange={handleChangeWithTouched("name")}
+        error={touched.name && errors.name}
       />
       <MarkdownEditor
         name="description"
@@ -196,7 +197,7 @@ const ProposalForm = React.memo(function ProposalForm({
         textAreaProps={textAreaProps}
         onChange={handleDescriptionChange}
         placeholder={"Write your proposal"}
-        error={errors.description}
+        error={touched.name && errors.description}
         filesInput={filesInput}
       />
       <ThumbnailGrid
