@@ -20,7 +20,6 @@ export const proposalValidation = ({
   maxmdsize
 }) => (values) => {
   const errors = {};
-  console.log(values);
   if (!values) {
     values = {
       name: "",
@@ -96,6 +95,5 @@ export const proposalValidation = ({
   if (errors.files.length === 0) delete errors.files;
 
   values.files = validatedFiles;
-  console.log(errors);
   return errors;
 };

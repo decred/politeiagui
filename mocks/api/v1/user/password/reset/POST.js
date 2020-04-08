@@ -1,7 +1,7 @@
 module.exports = function(request, response) {
   let body = [];
   request
-    .on("data", chunk => {
+    .on("data", (chunk) => {
       body.push(chunk);
     })
     .on("end", () => {
@@ -35,7 +35,6 @@ function handlePasswordReset(body, response) {
   if (body.email === "test@error.com") {
     return response.end(JSON.stringify({ errorcode: 2 }));
   }
-  console.log(body.verificationtoken);
   if (body.verificationtoken === "invalid") {
     return response.end(JSON.stringify({ errorcode: 3 }));
   }
