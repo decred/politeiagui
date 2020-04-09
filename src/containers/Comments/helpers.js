@@ -59,7 +59,6 @@ export const sortComments = (sortOption, comments) => {
  * @param {string} reason
  */
 export function handleCommentCensoringInfo(cb, ...args) {
-  console.log(args.id);
   return function handleSubmitReason(reason) {
     cb(...args, reason);
   };
