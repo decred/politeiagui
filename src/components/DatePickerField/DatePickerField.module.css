@@ -1,5 +1,5 @@
 .box {
-  border: 0.1rem solid var(--select-border-color);
+  border: 0.1rem solid var(--input-border-color);
   border-radius: 0.2rem;
   height: 4.4rem;
   min-width: 6rem;
