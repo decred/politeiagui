@@ -1,7 +1,8 @@
 import * as Yup from "yup";
 import { DCC_TYPE_ISSUANCE } from "src/containers/DCC";
+import { yupFieldMatcher } from "src/utils/validation";
 
-export const dccValidationSchema = () =>
+export const dccValidationSchema = ({ cmsstatementsupportedchars }) =>
   Yup.object().shape({
     nomineeid: Yup.string().required("required"),
     type: Yup.number()
@@ -10,7 +11,8 @@ export const dccValidationSchema = () =>
       .max(2),
     statement: Yup.string()
       .required("required")
-      .max(5000),
+      .max(5000)
+      .matches(...yupFieldMatcher("Statement", cmsstatementsupportedchars)),
     domain: Yup.number()
       .when("type", issuanceFieldValidator)
       .max(6),

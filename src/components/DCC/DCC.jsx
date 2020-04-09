@@ -113,7 +113,7 @@ const Dcc = ({ dcc, extended }) => {
                 <Row justify="space-between" className={styles.topDetails}>
                   <div className={styles.field}>
                     <Text size="small">Statement</Text>
-                    <Text>{presentationalStatement(dccStatement)}</Text>
+                    <Text className={styles.statement}>{presentationalStatement(dccStatement)}</Text>
                   </div>
                 </Row>
                 {!isActive &&
