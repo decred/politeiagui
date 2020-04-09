@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import * as act from "src/actions";
-import useThrowError from "src/hooks/utils/useThrowError";
 import { useAction, useSelector } from "src/redux";
 import useAPIAction from "src/hooks/utils/useAPIAction";
 import * as sel from "src/selectors";
@@ -16,9 +15,7 @@ export default function useUserDetail(userID) {
   const userMissingData = !user || (user && !user.identities);
   const needsFetch = !!uid && userMissingData;
   const args = [uid];
-  const [loading, error] = useAPIAction(onFetchUser, args, needsFetch);
-
-  useThrowError(error);
+  const [loading] = useAPIAction(onFetchUser, args, needsFetch);
 
   return { user, isAdmin, loading, currentUserID };
 }
