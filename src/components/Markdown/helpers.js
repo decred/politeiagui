@@ -64,8 +64,6 @@ const isExternalLink = (link) => {
 const LinkRenderer = ({ url, children }) => {
   const [handleOpenModal, handleCloseModal] = useModalContext();
 
-  console.log(handleOpenModal);
-
   function onLinkClick(e) {
     if (isExternalLink(url)) {
       e.preventDefault();
