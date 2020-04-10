@@ -136,7 +136,7 @@ export function useCredits(userID) {
   ]);
 
   useEffect(() => {
-    if (proposalPaywallPaymentTxid === undefined) {
+    if (!proposalPaywallPaymentTxid) {
       onFetchProposalPaywallPayment();
     }
   }, [proposalPaywallPaymentTxid, onFetchProposalPaywallPayment]);
