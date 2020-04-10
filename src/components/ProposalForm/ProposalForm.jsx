@@ -54,7 +54,7 @@ const ProposalForm = React.memo(function ProposalForm({
   const smallTablet = useMediaQuery("(max-width: 685px)");
   const { themeName } = useTheme();
   const {
-    policy: { maxlinkbyperiod, mixlinkbyperiod }
+    policy: { minlinkbyperiod, maxlinkbyperiod }
   } = usePolicy();
   const isDarkTheme = themeName === "dark";
   const isRfp = values.type === PROPOSAL_TYPE_RFP;
@@ -70,8 +70,8 @@ const ProposalForm = React.memo(function ProposalForm({
   const selectOptions = useMemo(() => getProposalTypeOptionsForSelect(), []);
 
   const deadlineRange = useMemo(
-    () => getRfpMinMaxDates(mixlinkbyperiod, maxlinkbyperiod),
-    [maxlinkbyperiod, mixlinkbyperiod]
+    () => getRfpMinMaxDates(minlinkbyperiod, maxlinkbyperiod),
+    [maxlinkbyperiod, minlinkbyperiod]
   );
 
   const handleSelectFiledChange = useCallback(
