@@ -20,7 +20,8 @@ const credits = (state = DEFAULT_STATE, action) =>
             update(
               ["byUserID", action.payload.userid, "unspent"],
               (unspent = []) => [...unspent, ...action.payload.newcredits]
-            )(state)
+            )(state),
+          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();
 

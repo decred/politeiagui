@@ -19,6 +19,15 @@ const paywall = (state = DEFAULT_STATE, action) =>
               isPaid: paywalladdress === ""
             }))(state);
           },
+          [act.RECEIVE_USER]: () => {
+            const { userid, newuserpaywalltx } = action.payload.user;
+            const paywall = state.byUserID[userid];
+            const isPaid = paywall ? paywall.isPaid : false;
+            return update(["byUserID", userid], (paywall) => ({
+              ...paywall,
+              isPaid: isPaid || newuserpaywalltx !== ""
+            }))(state);
+          },
           [act.RECEIVE_PROPOSAL_PAYWALL_DETAILS]: () => {
             const userid = action.payload.userid;
             delete action.payload.userid;
@@ -53,7 +62,8 @@ const paywall = (state = DEFAULT_STATE, action) =>
               ...paywall,
               faucetTxid: txid
             }))(state);
-          }
+          },
+          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();
 

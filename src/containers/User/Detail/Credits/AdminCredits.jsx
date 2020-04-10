@@ -16,10 +16,8 @@ const Credits = ({ user }) => {
     MANAGE_USER_CLEAR_USER_PAYWALL,
     userID
   );
-  const { isPaid } = usePaywall();
-
-  const { proposalCreditPrice } = useCredits(userID);
-
+  const { isPaid } = usePaywall(userID);
+  const { proposalCredits, proposalCreditPrice } = useCredits(userID);
   const {
     onRescanUserCredits,
     errorRescan,
@@ -50,7 +48,7 @@ const Credits = ({ user }) => {
         openMarkAsPaidModal={handleOpenMarkAsPaid}
       />
       <ProposalCreditsSection
-        proposalCredits={user.proposalcredits}
+        proposalCredits={proposalCredits}
         proposalCreditPrice={proposalCreditPrice}
       />
       <Button
