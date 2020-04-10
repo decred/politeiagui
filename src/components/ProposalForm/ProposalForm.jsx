@@ -73,7 +73,7 @@ const ProposalForm = React.memo(function ProposalForm({
     () => getRfpMinMaxDates(mixlinkbyperiod, maxlinkbyperiod),
     [maxlinkbyperiod, mixlinkbyperiod]
   );
-  console.log(deadlineRange);
+
   const handleSelectFiledChange = useCallback(
     (fieldName) => (option) => {
       setFieldTouched(fieldName, true);
