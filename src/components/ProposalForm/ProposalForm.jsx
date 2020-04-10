@@ -24,6 +24,7 @@ import ModalMDGuide from "src/components/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import { useProposalsBatch } from "src/containers/Proposal/hooks";
+import usePolicy from "src/hooks/api/usePolicy";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import {
   PROPOSAL_TYPE_REGULAR,
@@ -52,6 +53,9 @@ const ProposalForm = React.memo(function ProposalForm({
 }) {
   const smallTablet = useMediaQuery("(max-width: 685px)");
   const { themeName } = useTheme();
+  const {
+    policy: { maxlinkbyperiod, mixlinkbyperiod }
+  } = usePolicy();
   const isDarkTheme = themeName === "dark";
   const isRfp = values.type === PROPOSAL_TYPE_RFP;
   const isRfpSubmission = values.type === PROPOSAL_TYPE_RFP_SUBMISSION;
@@ -65,6 +69,11 @@ const ProposalForm = React.memo(function ProposalForm({
 
   const selectOptions = useMemo(() => getProposalTypeOptionsForSelect(), []);
 
+  const deadlineRange = useMemo(
+    () => getRfpMinMaxDates(mixlinkbyperiod, maxlinkbyperiod),
+    [maxlinkbyperiod, mixlinkbyperiod]
+  );
+  console.log(deadlineRange);
   const handleSelectFiledChange = useCallback(
     (fieldName) => (option) => {
       setFieldTouched(fieldName, true);
@@ -155,7 +164,7 @@ const ProposalForm = React.memo(function ProposalForm({
         {isRfp && (
           <DatePickerField
             className={styles.datePicker}
-            years={getRfpMinMaxDates()}
+            years={deadlineRange}
             value={values.RfpDeadline}
             name="rfpDeadline"
             placeholder="Deadline"

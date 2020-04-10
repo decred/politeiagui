@@ -3,7 +3,7 @@ import {
   PROPOSAL_TYPE_RFP,
   PROPOSAL_TYPE_RFP_SUBMISSION
 } from "src/constants";
-import { getCurrentDateValue } from "src/helpers";
+import { formatUnixTimestampToObj } from "src/utils";
 
 const typesLabels = {
   [PROPOSAL_TYPE_REGULAR]: "Regular proposal",
@@ -11,14 +11,11 @@ const typesLabels = {
   [PROPOSAL_TYPE_RFP_SUBMISSION]: "RFP submission"
 };
 
-export const getRfpMinMaxDates = () => {
-  const { month: currentMonth, year: currentYear } = getCurrentDateValue();
+export const getRfpMinMaxDates = (minlinkby, maxlinkby) => {
+  const currentTimeSec = new Date().getTime() / 1000;
   return {
-    min: { month: currentMonth, year: currentYear, day: 1 },
-    max:
-      currentMonth === 12
-        ? { month: 1, day: 1, year: currentYear + 1 }
-        : { month: currentMonth + 1, year: currentYear, day: 1 }
+    min: formatUnixTimestampToObj(currentTimeSec + +minlinkby),
+    max: formatUnixTimestampToObj(currentTimeSec + +maxlinkby)
   };
 };
 

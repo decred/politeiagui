@@ -42,7 +42,7 @@ export const formatUnixTimestamp = (unixtimestamp) =>
  * @param {number} unixtimestamp - unix seconds timestamp
  * @return {object} date - { day, month, year } object
  */
-export const formUnixTimestampToObj = (unixtimestamp) => {
+export const formatUnixTimestampToObj = (unixtimestamp) => {
   console.log(unixtimestamp);
   const date = new Date(unixtimestamp * 1000);
   return {
