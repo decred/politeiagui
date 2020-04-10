@@ -17,6 +17,7 @@ import {
   PROPOSAL_TYPE_RFP_SUBMISSION
 } from "src/constants";
 import { getMarkdownContent } from "../helpers";
+import { formUnixTimestampToObj } from "src/utils";
 
 const EditProposal = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
@@ -35,7 +36,7 @@ const EditProposal = ({ match }) => {
             : proposal.linkto
             ? PROPOSAL_TYPE_RFP_SUBMISSION
             : PROPOSAL_TYPE_REGULAR,
-        rfpDeadline: proposal.linkby,
+        rfpDeadline: formUnixTimestampToObj(proposal.linkby),
         rfpLink: proposal.linkto,
         description: getMarkdownContent(proposal.files),
         files: proposal.files.filter(

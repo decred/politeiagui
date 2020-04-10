@@ -22,14 +22,14 @@ const months = [
 export const convertAtomsToDcr = (atoms) => atoms / 100000000;
 
 /**
- * Converts { day, month, year } object to unix timestamp
+ * Converts { day, month, year } object to unix second timestamp
  * @param {object} date
  */
 export const convertObjectToUnixTimestamp = ({ day, month, year }) =>
-  new Date(Date.UTC(year, month - 1, day)).getTime();
+  new Date(Date.UTC(year, month - 1, day)).getTime() / 1000;
 
 /**
- * Formats unix timestamp to a UTC string date
+ * Formats unix seconds timestamp to a UTC string date
  *
  * @param {number} unixtimestamp - unix timestamp
  * @return {string} date - date formated in UTC String
@@ -38,9 +38,24 @@ export const formatUnixTimestamp = (unixtimestamp) =>
   new Date(unixtimestamp * 1000).toUTCString();
 
 /**
- * Formats unix timestamp to a short UTC string date
+ * Formats unix seconds timestamp to an { day, month, year} object
+ * @param {number} unixtimestamp - unix seconds timestamp
+ * @return {object} date - { day, month, year } object
+ */
+export const formUnixTimestampToObj = (unixtimestamp) => {
+  console.log(unixtimestamp);
+  const date = new Date(unixtimestamp * 1000);
+  return {
+    day: date.getUTCDate(),
+    month: date.getUTCMonth() + 1,
+    year: date.getUTCFullYear()
+  };
+};
+
+/**
+ * Formats unix seconds timestamp to a short UTC string date
  *
- * @param {number} unixtimestamp - unix timestamp
+ * @param {number} unixtimestamp - unix seconds timestamp
  * @return {string} date - date formated in dd mmm yyyy
  */
 
