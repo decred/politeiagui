@@ -261,11 +261,11 @@ const ProposalFormWrapper = ({
             rfpLink
           ])) || [[], null];
           const voteSummary = summaries && summaries[rfpLink];
-          if (
+          const isInvalidToken =
             !proposal ||
             !voteSummary ||
-            !isActiveApprovedRFP(proposal, voteSummary)
-          ) {
+            !isActiveApprovedRFP(proposal, voteSummary);
+          if (isInvalidToken) {
             throw Error("Invalid RFP token!");
           }
         }
