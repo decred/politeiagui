@@ -207,7 +207,7 @@ const ProposalForm = React.memo(function ProposalForm({
         textAreaProps={textAreaProps}
         onChange={handleDescriptionChange}
         placeholder={"Write your proposal"}
-        error={touched.name && errors.description}
+        error={touched.description && errors.description}
         filesInput={filesInput}
       />
       <ThumbnailGrid
