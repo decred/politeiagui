@@ -174,11 +174,8 @@ const ProposalForm = React.memo(function ProposalForm({
             <Tooltip
               contentClassName={styles.deadlineTooltip}
               placement={smallTablet ? "left" : "bottom"}
-              content="Once the RFP submission deadline expires, an admin can start the
-              voting process on the RFP submissions at any time. This is a new type
-              of vote called a runoff vote. When an admin starts the runoff vote,
-              the voting period on all public, non-abandoned RFP submissions will
-              begin simultaneously">
+              content="The deadline for the rfp submissions,
+              it can be edited at any point before the voting has been started and should be at least two weeks from now.">
               <div className={styles.iconWrapper}>
                 <Icon type="info" size={smallTablet ? "md" : "lg"} />
               </div>
