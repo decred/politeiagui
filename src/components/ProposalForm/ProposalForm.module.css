@@ -42,12 +42,17 @@
   height: 4.4rem;
 }
 
-.rfpLinkIcon {
+.iconWrapper {
   display: flex;
   align-items: center;
   height: 4.4rem;
   margin-left: var(--spacing-small);
   margin-right: var(--spacing-small);
+}
+
+.deadlineTooltip {
+  font-size: var(--font-size-small);
+  width: 50rem;
 }
 
 .rfpLinkToken {

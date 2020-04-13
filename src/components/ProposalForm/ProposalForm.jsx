@@ -11,7 +11,8 @@ import {
   useTheme,
   Link,
   Icon,
-  classNames
+  classNames,
+  Tooltip
 } from "pi-ui";
 import { Row } from "src/components/layout";
 import DatePickerField from "../DatePickerField";
@@ -162,17 +163,31 @@ const ProposalForm = React.memo(function ProposalForm({
           className={classNames(styles.typeSelectWrapper)}
         />
         {isRfp && (
-          <DatePickerField
-            className={styles.datePicker}
-            years={deadlineRange}
-            value={values.RfpDeadline}
-            name="rfpDeadline"
-            placeholder="Deadline"
-          />
+          <>
+            <DatePickerField
+              className={styles.datePicker}
+              years={deadlineRange}
+              value={values.RfpDeadline}
+              name="rfpDeadline"
+              placeholder="Deadline"
+            />
+            <Tooltip
+              contentClassName={styles.deadlineTooltip}
+              placement={smallTablet ? "left" : "bottom"}
+              content="Once the RFP submission deadline expires, an admin can start the
+              voting process on the RFP submissions at any time. This is a new type
+              of vote called a runoff vote. When an admin starts the runoff vote,
+              the voting period on all public, non-abandoned RFP submissions will
+              begin simultaneously">
+              <div className={styles.iconWrapper}>
+                <Icon type="info" size={smallTablet ? "md" : "lg"} />
+              </div>
+            </Tooltip>
+          </>
         )}
         {isRfpSubmission && (
           <>
-            <div className={styles.rfpLinkIcon}>
+            <div className={styles.iconWrapper}>
               <Icon
                 type={"horizontalLink"}
                 viewBox="0 0 24 16"
