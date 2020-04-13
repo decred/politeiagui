@@ -1,14 +1,13 @@
 import { Button, Text, TextInput, H2, P } from "pi-ui";
-import React, { useState } from "react";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import DevelopmentOnlyContent from "src/components/DevelopmentOnlyContent";
 import EmailSentMessage from "src/components/EmailSentMessage";
 import FormWrapper from "src/components/FormWrapper";
-import ModalIdentityWarning from "src/components/ModalIdentityWarning";
 import { useSignup } from "./hooks";
+import useIdentityWarningModal from "../hooks/useIdentityWarningModal";
 
 const SignupForm = () => {
-  const dumbFunc = () => null;
   const {
     onSignup,
     initialValues,
@@ -17,56 +16,21 @@ const SignupForm = () => {
     enableAdminInvite,
     isCms
   } = useSignup();
-  const [onModalConfirm, setOnModalConfirm] = useState(() => dumbFunc);
-  const [onModalCancel, setOnModalCancel] = useState(() => dumbFunc);
-  const [email, setEmail] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
 
-  // We check that the email has been set to consider the signup as successful
+  const { handleSubmitAction, email } = useIdentityWarningModal({
+    asyncSubmit: onSignup,
+    isCms: isCms
+  });
+
   const signupSuccess = !!email;
-
-  const onConfirm = (
-    values,
-    { setSubmitting, resetForm, setFieldError }
-  ) => async () => {
-    setModalOpen(false);
-    try {
-      await onSignup(values);
-      setSubmitting(false);
-      setEmail(values.email);
-      resetForm();
-    } catch (e) {
-      setSubmitting(false);
-      setFieldError("global", e);
-    }
-  };
-
-  const onCancel = (_, { setSubmitting }) => () => {
-    setSubmitting(false);
-    setModalOpen(false);
-  };
-
-  const onSubmit = (...args) => {
-    setModalOpen(true);
-    setOnModalConfirm(() => onConfirm(...args));
-    setOnModalCancel(() => onCancel(...args));
-  };
 
   return (
     <>
-      <ModalIdentityWarning
-        show={modalOpen}
-        title={"Before you sign up"}
-        confirmMessage="I understand, sign me up"
-        onClose={onModalCancel}
-        onConfirm={onModalConfirm}
-        isCms={isCms}
-      />
       <FormWrapper
         initialValues={initialValues}
         loading={!validationSchema}
         validationSchema={validationSchema}
-        onSubmit={onSubmit}>
+        onSubmit={handleSubmitAction}>
         {({
           Form,
           Title,
