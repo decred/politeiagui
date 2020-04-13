@@ -174,7 +174,7 @@ const ProposalForm = React.memo(function ProposalForm({
             <Tooltip
               contentClassName={styles.deadlineTooltip}
               placement={smallTablet ? "left" : "bottom"}
-              content="The deadline for the rfp submissions,
+              content="The deadline for the RFP submissions,
               it can be edited at any point before the voting has been started and should be at least two weeks from now.">
               <div className={styles.iconWrapper}>
                 <Icon type="info" size={smallTablet ? "md" : "lg"} />
