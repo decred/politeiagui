@@ -23,7 +23,8 @@ RUN git clone https://github.com/GoogleChrome/rendertron.git \
     && npm run build \
     # Patching Puppeteer launch arguments \
     && DEFAULT_ARGS="\['--no-sandbox'\]" \
-    && ARGS="\['--no-sandbox', '--disable-dev-shm-usage', '--ignore-certificate-errors'\], ignoreHTTPSErrors: true" \
+    && ARGS="\['--no-sandbox', '--disable-dev-shm-usage'\]" \
+# To disable HTTPS check  replace previous line with  && ARGS="\['--no-sandbox', '--disable-dev-shm-usage', '--ignore-certificate-errors'\], ignoreHTTPSErrors: true" \
     && sed -i "s/$DEFAULT_ARGS/$ARGS/g" build/rendertron.js
 #Make user
 RUN groupadd -r rendertronuser && useradd -r -g rendertronuser -G audio,video rendertronuser \
