@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useMemo, useCallback } from "react";
 import {
   Button,
   Dropdown,
@@ -16,22 +16,19 @@ import {
 } from "../helpers";
 import { useDccActions } from "./hooks";
 import ModalVotesList from "src/components/ModalVotesList";
-import useBooleanState from "src/hooks/utils/useBooleanState";
 import ModalConfirm from "src/components/ModalConfirm";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 const SupportOpposeActions = ({ dcc, token, className, buttonsClassName }) => {
-  const { onSupportDcc, onOpposeDcc, userID, isContractor, loading, error } = useDccActions(token);
-  const [supportOpposeAction, setSupportOpposeAction] = useState(() => {});
-  const [
-    showVotingModal,
-    openVotingModal,
-    closeVotingModal
-  ] = useBooleanState(false);
-  const [
-    showConfirmModal,
-    openConfirmModal,
-    closeConfirmModal
-  ] = useBooleanState(false);
+  const {
+    onSupportDcc,
+    onOpposeDcc,
+    userID,
+    isContractor,
+    loading,
+    error
+  } = useDccActions(token);
+
   const mobile = useMediaQuery("(max-width: 560px)");
 
   const {
@@ -41,66 +38,83 @@ const SupportOpposeActions = ({ dcc, token, className, buttonsClassName }) => {
     againstusernames
   } = dcc;
 
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  const handleOpenVotesList = () => {
+    handleOpenModal(ModalVotesList, {
+      supportList: dccSupportOpposeList(supportuserids, supportusernames),
+      againstList: dccSupportOpposeList(againstuserids, againstusernames),
+      onClose: handleCloseModal,
+      currentID: userID
+    });
+  };
+
+  const handleOpenModalConfirm = useCallback(
+    (action) => {
+      handleOpenModal(ModalConfirm, {
+        onClose: handleCloseModal,
+        onSubmit: action,
+        title: "Support/Oppose DCC"
+      });
+    },
+    [handleCloseModal, handleOpenModal]
+  );
+
   const handleSupportDcc = useCallback(() => {
-    setSupportOpposeAction(() => onSupportDcc);
-    openConfirmModal();
-  }, [setSupportOpposeAction, openConfirmModal, onSupportDcc]);
+    handleOpenModalConfirm(onSupportDcc);
+  }, [handleOpenModalConfirm, onSupportDcc]);
 
   const handleOpposeDcc = useCallback(() => {
-    setSupportOpposeAction(() => onOpposeDcc);
-    openConfirmModal();
-  }, [setSupportOpposeAction, openConfirmModal, onOpposeDcc]);
+    handleOpenModalConfirm(onOpposeDcc);
+  }, [handleOpenModalConfirm, onOpposeDcc]);
 
-  const isVotingAvailable = useMemo(() => (
-      isDccSupportOpposeAvailable(userID, dcc)
-      && isContractor
-    ), [dcc, userID, isContractor]);
-
-  const supportButton = (
-    <Button onClick={handleSupportDcc}>Support</Button>
+  const isVotingAvailable = useMemo(
+    () => isDccSupportOpposeAvailable(userID, dcc) && isContractor,
+    [dcc, userID, isContractor]
   );
+
+  const supportButton = <Button onClick={handleSupportDcc}>Support</Button>;
 
   const opposeButton = (
-    <Button kind="secondary" onClick={handleOpposeDcc}>Oppose</Button>
+    <Button kind="secondary" onClick={handleOpposeDcc}>
+      Oppose
+    </Button>
   );
 
-  return !loading && <>
-    {error && <Message kind="error">
-      User not logged in
-    </Message>}
-    <div className={className}>
-      <StatusBar
-        status={dccSupportOpposeStatus(supportuserids, againstuserids)}
-        showMarker={false}
-        renderStatusInfoComponent={<Link href="#" onClick={openVotingModal}>Votes</Link>}
-      />
-    </div>
-    {isVotingAvailable && !mobile && (
-      <div className={classNames("margin-top-s justify-right", buttonsClassName)}>
-        {supportButton}
-        {opposeButton}
-      </div>
-    )}
-    {isVotingAvailable && mobile && (
-      <Dropdown title="Support/Oppose">
-        <DropdownItem>{supportButton}</DropdownItem>
-        <DropdownItem>{opposeButton}</DropdownItem>
-      </Dropdown>
-    )}
-    <ModalVotesList
-      show={showVotingModal}
-      supportList={dccSupportOpposeList(supportuserids, supportusernames)}
-      againstList={dccSupportOpposeList(againstuserids, againstusernames)}
-      onClose={closeVotingModal}
-      currentID={userID}
-    />
-    <ModalConfirm
-      show={showConfirmModal}
-      onClose={closeConfirmModal}
-      onSubmit={supportOpposeAction}
-      title="Support/Oppose DCC"
-    />
-  </>;
+  return (
+    !loading && (
+      <>
+        {error && <Message kind="error">User not logged in</Message>}
+        <div className={className}>
+          <StatusBar
+            status={dccSupportOpposeStatus(supportuserids, againstuserids)}
+            showMarker={false}
+            renderStatusInfoComponent={
+              <Link href="#" onClick={handleOpenVotesList}>
+                Votes
+              </Link>
+            }
+          />
+        </div>
+        {isVotingAvailable && !mobile && (
+          <div
+            className={classNames(
+              "margin-top-s justify-right",
+              buttonsClassName
+            )}>
+            {supportButton}
+            {opposeButton}
+          </div>
+        )}
+        {isVotingAvailable && mobile && (
+          <Dropdown title="Support/Oppose">
+            <DropdownItem>{supportButton}</DropdownItem>
+            <DropdownItem>{opposeButton}</DropdownItem>
+          </Dropdown>
+        )}
+      </>
+    )
+  );
 };
 
 export default SupportOpposeActions;

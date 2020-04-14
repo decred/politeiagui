@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import xssFilters from "xss-filters";
 import htmlParser from "react-markdown/plugins/html-parser";
 import ModalExternalLink from "../ModalExternalLink";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 export const htmlParserRules = htmlParser({
   isValidNode: (node) => {
@@ -61,23 +62,21 @@ const isExternalLink = (link) => {
 };
 
 const LinkRenderer = ({ url, children }) => {
-  const [modalState, setModalState] = useState(false);
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
   function onLinkClick(e) {
     if (isExternalLink(url)) {
       e.preventDefault();
-      setModalState(true);
+      handleOpenModal(ModalExternalLink, {
+        onClose: handleCloseModal,
+        link: url
+      });
     }
   }
-  function onCloseModal() {
-    setModalState(false);
-  }
   return (
-    <>
-      <a href={url} onClick={onLinkClick}>
-        {children}
-      </a>
-      <ModalExternalLink show={modalState} onClose={onCloseModal} link={url} />
-    </>
+    <a href={url} onClick={onLinkClick}>
+      {children}
+    </a>
   );
 };
 

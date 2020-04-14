@@ -10,7 +10,6 @@ import {
   MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION,
   MANAGE_USER_REACTIVATE
 } from "src/constants";
-import useBooleanState from "src/hooks/utils/useBooleanState";
 import { formatUnixTimestamp } from "src/utils";
 import { isExpired, isUserDeactivated, isUserLocked } from "../helpers";
 import useManageUser from "../hooks/useManageUser";
@@ -23,6 +22,7 @@ import EmailSection from "./components/EmailSection";
 import PasswordSection from "./components/PasswordSection";
 import PaywallSection from "./components/PaywallSection";
 import { useConfig } from "src/containers/Config";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 const AdminAccount = ({
   userid,
@@ -66,43 +66,89 @@ const AdminAccount = ({
   const isActivationLoading =
     isApiRequestingDeactivateUser || isApiRequestingReactivateUser;
 
-  const [
-    showMarkPasswordAsExpiredConfirmModal,
-    openMarkPasswordAsExpiredConfirmModal,
-    closeMarkPasswordAsExpiredConfirmModal
-  ] = useBooleanState(false);
-  const [
-    showMarkVerificationTokenAsExpiredConfirmModal,
-    openMarkVerificationTokenAsExpiredConfirmModal,
-    closeMarkVerificationTokenAsExpiredConfirmModal
-  ] = useBooleanState(false);
-  const [
-    showMarkUpdateKeyAsExpiredConfirmModal,
-    openMarkUpdateKeyAsExpiredConfirmModal,
-    closeMarkUpdateKeyAsExpiredConfirmModal
-  ] = useBooleanState(false);
-  const [
-    showActivationConfirmModal,
-    openActivationModal,
-    closeActivationModal
-  ] = useBooleanState(false);
-
-  const [
-    showPasswordModal,
-    openPasswordModal,
-    closePasswordModal
-  ] = useBooleanState(false);
-
   const {
     onChangePassword,
     validationSchema: changePasswordValidationSchema
   } = useChangePassword();
 
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  const handleOpenPasswordExpireModal = () => {
+    handleOpenModal(ModalConfirmWithReason, {
+      subject: "expireResetPasswordToken",
+      onSubmit: markResetPasswordTokenAsExpired,
+      validationSchema: reasonValidationSchema,
+      onClose: handleCloseModal,
+      successTitle: "Reset password token marked as expired",
+      successMessage: (
+        <Text>
+          The reset password token has been successfully marked as expired.
+        </Text>
+      )
+    });
+  };
+
+  const handleOpenVerificationTokenExpireModal = () => {
+    handleOpenModal(ModalConfirmWithReason, {
+      subject: "expireVerificationToken",
+      onSubmit: markVerificationTokenAsExpired,
+      validationSchema: reasonValidationSchema,
+      onClose: handleCloseModal,
+      successTitle: "Verification token marked as expired",
+      successMessage: (
+        <Text>
+          The verification token has been successfully marked as expired.
+        </Text>
+      )
+    });
+  };
+
+  const handleOpenUpdateKeyExpireModal = () => {
+    handleOpenModal(ModalConfirmWithReason, {
+      subject: "expireUpdateKey",
+      onSubmit: markUpdateKeyAsExpired,
+      validationSchema: reasonValidationSchema,
+      onClose: handleCloseModal,
+      successTitle: "Update key token marked as expired",
+      successMessage: (
+        <Text>
+          The update key token has been successfully marked as expired.
+        </Text>
+      )
+    });
+  };
+
+  const handleOpenDeactivateReactivateUserModal = () => {
+    handleOpenModal(ModalConfirmWithReason, {
+      subject: "deactivateOrReactivateUser",
+      onSubmit: isdeactivated ? reactivateUser : deactivateUser,
+      validationSchema: reasonValidationSchema,
+      onClose: handleCloseModal,
+      successTitle: isdeactivated ? "User deactivated" : "User activated",
+      successMessage: (
+        <Text>
+          The user has been successfully{" "}
+          {isdeactivated ? "deactivated" : "activated"}.
+        </Text>
+      )
+    });
+  };
+
+  const handleOpenChangePasswordModal = () => {
+    handleOpenModal(ModalChangePassword, {
+      onChangePassword: onChangePassword,
+      validationSchema: changePasswordValidationSchema,
+      onClose: handleCloseModal
+    });
+  };
+
   return (
     <Card className={classNames("container", "margin-bottom-m")}>
       <AdminSection isadmin={isadmin} />
       <EmailSection token={newuserverificationtoken} />
-      {isUserPageOwner && <PasswordSection onClick={openPasswordModal} />}
+      {isUserPageOwner && (
+        <PasswordSection onClick={handleOpenChangePasswordModal} />
+      )}
       {enablePaywall && (
         <>
           <AddressSection address={newuserpaywalladdress} />
@@ -126,7 +172,7 @@ const AdminAccount = ({
           className="margin-top-s"
           loading={isActivationLoading}
           size="sm"
-          onClick={openActivationModal}>
+          onClick={handleOpenDeactivateReactivateUserModal}>
           Deactivate
         </Button>
       ) : (
@@ -134,7 +180,7 @@ const AdminAccount = ({
           className="margin-top-s"
           loading={isActivationLoading}
           size="sm"
-          onClick={openActivationModal}>
+          onClick={handleOpenDeactivateReactivateUserModal}>
           Reactivate
         </Button>
       )}
@@ -163,7 +209,7 @@ const AdminAccount = ({
               loading={isApiRequestingMarkResetPasswordAsExpired}
               size="sm"
               className="margin-top-s"
-              onClick={openMarkPasswordAsExpiredConfirmModal}>
+              onClick={handleOpenPasswordExpireModal}>
               Mark as expired
             </Button>
           )}
@@ -194,7 +240,7 @@ const AdminAccount = ({
               loading={isApiRequestingMarkNewUserAsExpired}
               className="margin-top-s"
               size="sm"
-              onClick={openMarkVerificationTokenAsExpiredConfirmModal}>
+              onClick={handleOpenVerificationTokenExpireModal}>
               Mark as expired
             </Button>
           )}
@@ -225,71 +271,12 @@ const AdminAccount = ({
               loading={isApiRequestingMarkUpdateKeyAsExpired}
               className="margin-top-s"
               size="sm"
-              onClick={openMarkUpdateKeyAsExpiredConfirmModal}>
+              onClick={handleOpenUpdateKeyExpireModal}>
               Mark as expired
             </Button>
           )}
         </>
       )}
-      <ModalConfirmWithReason
-        subject="expireResetPasswordToken"
-        onSubmit={markResetPasswordTokenAsExpired}
-        validationSchema={reasonValidationSchema}
-        show={showMarkPasswordAsExpiredConfirmModal}
-        onClose={closeMarkPasswordAsExpiredConfirmModal}
-        successTitle="Reset password token marked as expired"
-        successMessage={
-          <Text>
-            The reset password token has been successfully marked as expired.
-          </Text>
-        }
-      />
-      <ModalConfirmWithReason
-        subject="expireVerificationToken"
-        onSubmit={markVerificationTokenAsExpired}
-        validationSchema={reasonValidationSchema}
-        show={showMarkVerificationTokenAsExpiredConfirmModal}
-        onClose={closeMarkVerificationTokenAsExpiredConfirmModal}
-        successTitle="Verification token marked as expired"
-        successMessage={
-          <Text>
-            The verification token has been successfully marked as expired.
-          </Text>
-        }
-      />
-      <ModalConfirmWithReason
-        subject="expireUpdateKey"
-        onSubmit={markUpdateKeyAsExpired}
-        validationSchema={reasonValidationSchema}
-        show={showMarkUpdateKeyAsExpiredConfirmModal}
-        onClose={closeMarkUpdateKeyAsExpiredConfirmModal}
-        successTitle="Update key token marked as expired"
-        successMessage={
-          <Text>
-            The update key token has been successfully marked as expired.
-          </Text>
-        }
-      />
-      <ModalConfirmWithReason
-        subject="deactivateOrReactivateUser"
-        onSubmit={isdeactivated ? reactivateUser : deactivateUser}
-        validationSchema={reasonValidationSchema}
-        show={showActivationConfirmModal}
-        onClose={closeActivationModal}
-        successTitle={isdeactivated ? "User deactivated" : "User activated"}
-        successMessage={
-          <Text>
-            The user has been successfully{" "}
-            {isdeactivated ? "deactivated" : "activated"}.
-          </Text>
-        }
-      />
-      <ModalChangePassword
-        onChangePassword={onChangePassword}
-        validationSchema={changePasswordValidationSchema}
-        show={showPasswordModal}
-        onClose={closePasswordModal}
-      />
     </Card>
   );
 };

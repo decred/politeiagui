@@ -3,6 +3,10 @@ import * as act from "src/actions";
 import * as sel from "src/selectors";
 import usePaywall from "src/hooks/api/usePaywall";
 import { useSelector, useAction } from "src/redux";
+import useModalContext from "src/hooks/utils/useModalContext";
+import ModalBuyProposalCredits from "src/components/ModalBuyProposalCredits";
+import ModalPayPaywall from "src/components/ModalPayPaywall";
+import { getProposalCreditsPaymentStatus } from "./helpers.js";
 
 export function useCredits(userID) {
   const proposalPaywallAddress = useSelector(sel.proposalPaywallAddress);
@@ -186,5 +190,60 @@ export function useRescanUserCredits(userID) {
     errorRescan,
     isLoadingRescan,
     amountOfCreditsAddedOnRescan
+  };
+}
+
+export function useUserPaymentModals(user) {
+  const userID = user && user.userid;
+  const {
+    proposalCreditPrice,
+    proposalPaywallAddress,
+    proposalPaywallPaymentConfirmations,
+    proposalPaywallPaymentTxid,
+    pollingCreditsPayment,
+    toggleCreditsPaymentPolling,
+    onPollProposalPaywallPayment,
+    toggleProposalPaymentReceived
+  } = useCredits(userID);
+
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  const onStartPollingPayment = () => {
+    toggleCreditsPaymentPolling(true);
+    onPollProposalPaywallPayment(false);
+  };
+
+  const customCloseProposalCreditsModal = () => {
+    toggleProposalPaymentReceived(false);
+    handleCloseModal();
+  };
+
+  const handleOpenPaywallModal = () => {
+    handleOpenModal(ModalPayPaywall, {
+      title: "Complete your registration",
+      onClose: handleCloseModal
+    });
+  };
+
+  const handleOpenBuyCreditsModal = () => {
+    handleOpenModal(ModalBuyProposalCredits, {
+      title: "Purchase Proposal Credits",
+      price: proposalCreditPrice,
+      address: proposalPaywallAddress,
+      startPollingPayment: onStartPollingPayment,
+      status: getProposalCreditsPaymentStatus(
+        proposalPaywallPaymentConfirmations,
+        proposalPaywallPaymentTxid
+      ),
+      initialStep: proposalPaywallPaymentTxid ? 1 : 0,
+      isPollingCreditsPayment: pollingCreditsPayment,
+      onClose: customCloseProposalCreditsModal
+    });
+  };
+
+  return {
+    handleOpenPaywallModal,
+    handleOpenBuyCreditsModal,
+    handleCloseModal
   };
 }

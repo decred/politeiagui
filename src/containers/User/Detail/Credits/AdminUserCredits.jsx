@@ -2,16 +2,16 @@ import { Button, Card, classNames, Spinner } from "pi-ui";
 import React, { useEffect } from "react";
 import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import { MANAGE_USER_CLEAR_USER_PAYWALL } from "src/constants";
-import useBooleanState from "src/hooks/utils/useBooleanState";
 import useManageUser from "../hooks/useManageUser";
 import usePaywall from "src/hooks/api/usePaywall";
 import styles from "./Credits.module.css";
 import { useCredits, useRescanUserCredits } from "./hooks.js";
-import UserModals from "./components/UserModals";
 import RegistrationFeeSection from "./components/RegistrationFeeSection";
 import ProposalCreditsSection from "./components/ProposalCreditsSection";
 import RescanSection from "./components/RescanSection.jsx";
 import CreditHistorySection from "./components/CreditHistorySection.jsx";
+import { useUserPaymentModals } from "./hooks";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 const Credits = ({ user }) => {
   const userID = user && user.userid;
@@ -20,6 +20,7 @@ const Credits = ({ user }) => {
     userID
   );
   const { isPaid } = usePaywall();
+
   const {
     proposalCreditPrice,
     isApiRequestingUserProposalCredits,
@@ -38,22 +39,6 @@ const Credits = ({ user }) => {
     amountOfCreditsAddedOnRescan
   } = useRescanUserCredits(userID);
 
-  const [
-    showMarkAsPaidConfirmModal,
-    openMarkAsPaidModal,
-    closeMarkAsPaidModal
-  ] = useBooleanState(false);
-  const [
-    showPaywallModal,
-    openPaywallModal,
-    closePaywallModal
-  ] = useBooleanState(false);
-  const [
-    showProposalCreditsModal,
-    openProposalCreditsModal,
-    closeProposalCreditsModal
-  ] = useBooleanState(false);
-
   useEffect(() => {
     if (shouldPollPaywallPayment) {
       toggleCreditsPaymentPolling(true);
@@ -65,16 +50,34 @@ const Credits = ({ user }) => {
     toggleCreditsPaymentPolling
   ]);
 
+  const {
+    handleOpenPaywallModal,
+    handleOpenBuyCreditsModal
+  } = useUserPaymentModals(user);
+
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  const handleOpenMarkAsPaidModal = () => {
+    handleOpenModal(ModalConfirmWithReason, {
+      subject: "markUserPaywallAsPaid",
+      onSubmit: markAsPaid,
+      title: "Mark user paywall as paid",
+      successTitle: "Paywall marked as paid",
+      successMessage: "The user paywall was successfully marked as paid!",
+      onClose: handleCloseModal
+    });
+  };
+
   useEffect(() => {
     if (proposalPaymentReceived) {
       toggleCreditsPaymentPolling(false);
-      closeProposalCreditsModal();
+      handleCloseModal();
     }
   }, [
     proposalPaymentReceived,
     toggleProposalPaymentReceived,
-    closeProposalCreditsModal,
-    toggleCreditsPaymentPolling
+    toggleCreditsPaymentPolling,
+    handleCloseModal
   ]);
 
   return isApiRequestingUserProposalCredits ? (
@@ -87,9 +90,9 @@ const Credits = ({ user }) => {
         isPaid={isPaid}
         isAdmin
         isUser
-        openPaywallModal={openPaywallModal}
+        openPaywallModal={handleOpenPaywallModal}
         isApiRequestingMarkAsPaid={isApiRequestingMarkAsPaid}
-        openMarkAsPaidModal={openMarkAsPaidModal}
+        openMarkAsPaidModal={handleOpenMarkAsPaidModal}
       />
       <ProposalCreditsSection
         proposalCredits={proposalCredits}
@@ -100,7 +103,7 @@ const Credits = ({ user }) => {
           <Button
             className="margin-top-s"
             size="sm"
-            onClick={openProposalCreditsModal}>
+            onClick={handleOpenBuyCreditsModal}>
             Purchase more
           </Button>
         )}
@@ -119,22 +122,6 @@ const Credits = ({ user }) => {
       <CreditHistorySection
         user={user}
         proposalCreditPrice={proposalCreditPrice}
-      />
-      <ModalConfirmWithReason
-        subject="markUserPaywallAsPaid"
-        onSubmit={markAsPaid}
-        show={showMarkAsPaidConfirmModal}
-        title="Mark user paywall as paid"
-        successTitle="Paywall marked as paid"
-        successMessage="The user paywall was successfully marked as paid!"
-        onClose={closeMarkAsPaidModal}
-      />
-      <UserModals
-        user={user}
-        showPaywallModal={showPaywallModal}
-        closePaywallModal={closePaywallModal}
-        showProposalCreditsModal={showProposalCreditsModal}
-        closeProposalCreditsModal={closeProposalCreditsModal}
       />
     </Card>
   );

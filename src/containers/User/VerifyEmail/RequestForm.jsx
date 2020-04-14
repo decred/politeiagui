@@ -1,11 +1,11 @@
 import { Button, TextInput } from "pi-ui";
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import DevelopmentOnlyContent from "src/components/DevelopmentOnlyContent";
 import EmailSentMessage from "src/components/EmailSentMessage";
 import FormWrapper from "src/components/FormWrapper";
-import ModalIdentityWarning from "src/components/ModalIdentityWarning";
 import { useRequestResendVerificationEmail } from "./hooks";
+import useIdentityWarningModal from "../hooks/useIdentityWarningModal";
 
 const RequestVerificationEmailForm = () => {
   const {
@@ -13,55 +13,21 @@ const RequestVerificationEmailForm = () => {
     onResendVerificationEmail,
     resendVerificationEmailResponse: response
   } = useRequestResendVerificationEmail();
-  const [onModalConfirm, setOnModalConfirm] = useState(() => () => null);
-  const [onModalCancel, setOnModalCancel] = useState(() => () => null);
-  const [email, setEmail] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
+
+  const { handleSubmitAction, email } = useIdentityWarningModal({
+    asyncSubmit: onResendVerificationEmail
+  });
 
   const success = !!email;
 
-  const onConfirm = (
-    values,
-    { setSubmitting, resetForm, setFieldError }
-  ) => async () => {
-    setModalOpen(false);
-    try {
-      await onResendVerificationEmail(values);
-      setSubmitting(false);
-      setEmail(values.email);
-      resetForm();
-    } catch (e) {
-      setSubmitting(false);
-      setFieldError("global", e);
-    }
-  };
-
-  const onCancel = (_, { setSubmitting }) => () => {
-    setSubmitting(false);
-    setModalOpen(false);
-  };
-
-  const onSubmit = (...args) => {
-    setModalOpen(true);
-    setOnModalConfirm(() => onConfirm(...args));
-    setOnModalCancel(() => onCancel(...args));
-  };
-
   return (
     <>
-      <ModalIdentityWarning
-        show={modalOpen}
-        title={"Before you continue"}
-        confirmMessage="I understand, continue"
-        onClose={onModalCancel}
-        onConfirm={onModalConfirm}
-      />
       <FormWrapper
         initialValues={{
           email: ""
         }}
         validationSchema={validationSchema}
-        onSubmit={onSubmit}>
+        onSubmit={handleSubmitAction}>
         {({
           Form,
           Title,

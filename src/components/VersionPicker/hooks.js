@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { proposal as onFetchProposal } from "src/lib/api.js";
 import { getTextFromIndexMd } from "src/helpers";
+import ModalDiff from "src/components/ModalDiff";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 const getProposalText = (proposal) => {
   const getMarkdowFile = (prop) =>
@@ -13,15 +15,22 @@ const getProposalFilesWithoutIndexMd = (proposal) =>
 
 export function useVersionPicker(ownProps) {
   const [selectedVersion, setSelectedVersion] = useState(ownProps.version);
-  const [proposalDiff, setProposalDiff] = useState();
-  const [showModal, setShowModal] = useState(false);
+  const [handleOpenModal, handleCloseModal] = useModalContext();
 
-  const onChangeVersion = (v) => {
+  const onChangeVersion = async (v) => {
     setSelectedVersion(v);
-    setShowModal(true);
-  };
-  const onToggleModal = () => {
-    setShowModal(!showModal);
+    const proposalDiff = await fetchProposalsVersions(
+      ownProps.token,
+      selectedVersion
+    );
+    handleOpenModal(ModalDiff, {
+      proposalDetails: proposalDiff.details,
+      onClose: handleCloseModal,
+      oldText: proposalDiff.oldText,
+      oldFiles: proposalDiff.oldFiles,
+      newText: proposalDiff.newText,
+      newFiles: proposalDiff.newFiles
+    });
   };
 
   async function fetchProposalsVersions(token, version) {
@@ -31,29 +40,20 @@ export function useVersionPicker(ownProps) {
       const prevProposalResponse = await onFetchProposal(token, version - 1);
       prevProposal = prevProposalResponse.proposal;
     }
-    setProposalDiff({
+    return {
       details: proposal,
       oldFiles: getProposalFilesWithoutIndexMd(prevProposal),
       newFiles: getProposalFilesWithoutIndexMd(proposal),
       newText: getProposalText(proposal),
       oldText: getProposalText(prevProposal)
-    });
+    };
   }
 
   const disablePicker = ownProps.version === "1";
 
-  useEffect(() => {
-    if (showModal) {
-      fetchProposalsVersions(ownProps.token, selectedVersion);
-    }
-  }, [selectedVersion, showModal, ownProps.token]);
-
   return {
     disablePicker,
     selectedVersion,
-    onChangeVersion,
-    showModal,
-    onToggleModal,
-    proposalDiff
+    onChangeVersion
   };
 }

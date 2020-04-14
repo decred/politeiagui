@@ -18,6 +18,7 @@ import useChangeUsername from "./hooks/useChangeUsername";
 import Identity from "./Identity";
 import Preferences from "./Preferences";
 import ManageContractor from "./ManageContractor";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 const getTabComponents = ({ user, ...rest }) => {
   const mapTabValueToComponent = {
@@ -83,8 +84,7 @@ const UserDetail = ({
       }
       if (recordType === RECORD_TYPE_PROPOSAL) {
         return (
-          tabLabel !== tabValues.MANAGE_DCC &&
-          tabLabel !== tabValues.DRAFTS
+          tabLabel !== tabValues.MANAGE_DCC && tabLabel !== tabValues.DRAFTS
         );
       }
       return true;
@@ -108,13 +108,6 @@ const UserDetail = ({
 
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
 
-  // Change Username Modal
-  const [showUsernameModal, setShowUsernameModal] = useState(false);
-  const openUsernameModal = (e) => {
-    e.preventDefault();
-    setShowUsernameModal(true);
-  };
-  const closeUsernameModal = () => setShowUsernameModal(false);
   const { username, onChangeUsername, validationSchema } = useChangeUsername();
 
   const [loadingKey, setKeyAsLoaded] = useState(PUB_KEY_STATUS_LOADING);
@@ -173,6 +166,17 @@ const UserDetail = ({
     [tabLabels, onSetIndex, isMobileScreen, index]
   );
 
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  const handleOpenChangeUsernameModal = (e) => {
+    e.preventDefault();
+    handleOpenModal(ModalChangeUsername, {
+      validationSchema: validationSchema,
+      onChangeUsername: onChangeUsername,
+      onClose: handleCloseModal
+    });
+  };
+
   return user ? (
     <>
       <TopBanner>
@@ -185,7 +189,7 @@ const UserDetail = ({
               {isUserPageOwner && (
                 <Link
                   href="#"
-                  onClick={openUsernameModal}
+                  onClick={handleOpenChangeUsernameModal}
                   className={styles.titleLink}>
                   Change Username
                 </Link>
@@ -200,12 +204,6 @@ const UserDetail = ({
       <Main fillScreen className="main">
         {currentTabComponent}
       </Main>
-      <ModalChangeUsername
-        validationSchema={validationSchema}
-        onChangeUsername={onChangeUsername}
-        show={showUsernameModal}
-        onClose={closeUsernameModal}
-      />
     </>
   ) : null;
 };
