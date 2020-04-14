@@ -51,12 +51,12 @@ const UserDetail = ({
   match
 }) => {
   const userID = match.params.userid;
-  const { user, isAdmin, currentUserID } = useUserDetail(userID);
   const {
     userPubkey,
     currentUserEmail,
     identityImportSuccess
   } = useUserIdentity();
+  const { user, isAdmin, currentUserID } = useUserDetail(userID);
 
   const {
     recordType,
