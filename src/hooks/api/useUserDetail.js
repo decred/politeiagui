@@ -8,12 +8,12 @@ import useThrowError from "../utils/useThrowError";
 export default function useUserDetail(userID) {
   const isCMS = useSelector(sel.isCMS);
   const meUserID = useSelector(sel.userid);
-  const isPublicCms = isCMS && !meUserID;
+  const currentUserID = useSelector(sel.currentUserID);
+  const isPublicCms = isCMS && !currentUserID;
   const uid = !isPublicCms ? userID || meUserID : undefined;
   const userSelector = useMemo(() => sel.makeGetUserByID(uid), [uid]);
   const user = useSelector(userSelector);
   const isAdmin = useSelector(sel.currentUserIsAdmin);
-  const currentUserID = useSelector(sel.currentUserID);
   const onFetchUser = useAction(act.onFetchUser);
   const userMissingData = !user || (user && !user.identities);
   const needsFetch = !!uid && userMissingData;
