@@ -14,8 +14,10 @@ import PageProposalsPublicList from "./Proposals/PublicList";
 import PageProposalsUnvetted from "./Proposals/UnvettedList";
 import PageProposalNew from "./Proposals/New";
 import PageProposalEdit from "./Proposals/Edit";
+import useOnboardModal from "src/hooks/utils/useOnboardModal";
 
 const Routes = ({ location }) => {
+  useOnboardModal();
   return (
     <TransitionGroup>
       <CSSTransition key={location.key} classNames="fade" timeout={300}>

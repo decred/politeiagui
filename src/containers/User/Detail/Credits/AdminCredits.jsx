@@ -2,13 +2,13 @@ import { Button, Card, classNames } from "pi-ui";
 import React from "react";
 import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import { MANAGE_USER_CLEAR_USER_PAYWALL } from "src/constants";
-import useBooleanState from "src/hooks/utils/useBooleanState";
 import useManageUser from "../hooks/useManageUser";
 import usePaywall from "src/hooks/api/usePaywall";
 import { useCredits, useRescanUserCredits } from "./hooks.js";
 import RegistrationFeeSection from "./components/RegistrationFeeSection";
 import ProposalCreditsSection from "./components/ProposalCreditsSection";
 import RescanSection from "./components/RescanSection.jsx";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 const Credits = ({ user }) => {
   const userID = user && user.userid;
@@ -17,6 +17,7 @@ const Credits = ({ user }) => {
     userID
   );
   const { isPaid } = usePaywall();
+
   const { proposalCreditPrice } = useCredits(userID);
 
   const {
@@ -26,11 +27,18 @@ const Credits = ({ user }) => {
     amountOfCreditsAddedOnRescan
   } = useRescanUserCredits(userID);
 
-  const [
-    showMarkAsPaidConfirmModal,
-    openMarkAsPaidModal,
-    closeMarkAsPaidModal
-  ] = useBooleanState(false);
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  const handleOpenMarkAsPaid = () => {
+    handleOpenModal(ModalConfirmWithReason, {
+      subject: "markUserPaywallAsPaid",
+      onSubmit: markAsPaid,
+      title: "Mark user paywall as paid",
+      successTitle: "Paywall marked as paid",
+      successMessage: "The user paywall was successfully marked as paid!",
+      onClose: handleCloseModal
+    });
+  };
 
   return (
     <Card className={classNames("container", "margin-bottom-m")}>
@@ -39,7 +47,7 @@ const Credits = ({ user }) => {
         isAdmin
         isUser={false}
         isApiRequestingMarkAsPaid={isApiRequestingMarkAsPaid}
-        openMarkAsPaidModal={openMarkAsPaidModal}
+        openMarkAsPaidModal={handleOpenMarkAsPaid}
       />
       <ProposalCreditsSection
         proposalCredits={user.proposalcredits}
@@ -55,15 +63,6 @@ const Credits = ({ user }) => {
       <RescanSection
         amountOfCreditsAddedOnRescan={amountOfCreditsAddedOnRescan}
         errorRescan={errorRescan}
-      />
-      <ModalConfirmWithReason
-        subject="markUserPaywallAsPaid"
-        onSubmit={markAsPaid}
-        show={showMarkAsPaidConfirmModal}
-        title="Mark user paywall as paid"
-        successTitle="Paywall marked as paid"
-        successMessage="The user paywall was successfully marked as paid!"
-        onClose={closeMarkAsPaidModal}
       />
     </Card>
   );

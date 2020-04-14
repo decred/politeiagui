@@ -26,7 +26,6 @@ import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import { useProposalsBatch } from "src/containers/Proposal/hooks";
 import usePolicy from "src/hooks/api/usePolicy";
-import useBooleanState from "src/hooks/utils/useBooleanState";
 import {
   PROPOSAL_TYPE_REGULAR,
   PROPOSAL_TYPE_RFP,
@@ -37,6 +36,7 @@ import {
   getRfpMinMaxDates
 } from "./helpers.js";
 import { isActiveApprovedRFP } from "src/containers/Proposal/helpers";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 const ProposalForm = React.memo(function ProposalForm({
   values,
@@ -256,11 +256,12 @@ const ProposalFormWrapper = ({
   disableSubmit,
   history
 }) => {
-  const [
-    showMDGuideModal,
-    openMDGuideModal,
-    closeMDGuideModal
-  ] = useBooleanState(false);
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+  const openMdModal = useCallback(() => {
+    handleOpenModal(ModalMDGuide, {
+      onClose: handleCloseModal
+    });
+  }, [handleCloseModal, handleOpenModal]);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { proposalFormValidation } = useProposalForm();
   const { onFetchProposalsBatch } = useProposalsBatch();
@@ -319,13 +320,12 @@ const ProposalFormWrapper = ({
               ...props,
               submitSuccess,
               disableSubmit,
-              openMDGuideModal,
+              openMDGuideModal: openMdModal,
               initialValues
             }}
           />
         )}
       </Formik>
-      <ModalMDGuide show={showMDGuideModal} onClose={closeMDGuideModal} />
     </>
   );
 };

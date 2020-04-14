@@ -13,14 +13,14 @@ const ModalLogin = ({ title = "Login", onLoggedIn, onClose, ...props }) => {
       iconSize="lg"
       {...props}
       contentStyle={{ width: "100%" }}
-      titleStyle={{ paddingRight: "4rem" }}
-    >
+      titleStyle={{ paddingRight: "4rem" }}>
       <LoginForm
         onLoggedIn={onLoggedIn}
         hideTitle
         redirectToPrivacyPolicyRoute
         emailId="modalloginemail"
         passwordId="modalloginpassword"
+        renderPrivacyPolicyModal={false}
       />
     </Modal>
   );

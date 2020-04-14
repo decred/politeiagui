@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "src/components/Router";
 
 /**
@@ -11,9 +11,15 @@ import { useRouter } from "src/components/Router";
  */
 function useOnRouteChange(callbackFn) {
   const { location } = useRouter();
+  const mountedRef = useRef(false);
+
   useEffect(() => {
-    callbackFn();
-  }, [location.pathname, callbackFn]);
+    if (mountedRef.current) {
+      callbackFn();
+    } else {
+      mountedRef.current = true;
+    }
+  }, [callbackFn, location.pathname]);
 }
 
 export default useOnRouteChange;

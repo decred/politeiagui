@@ -188,9 +188,9 @@ const InvoiceFormWrapper = ({
     policy
   ]);
   const FORM_INITIAL_VALUES = {
-    name: user.contractorname,
-    location: user.contractorlocation,
-    contact: user.contractorcontact,
+    name: user ? user.contractorname : "",
+    location: user ? user.contractorlocation : "",
+    contact: user ? user.contractorcontact : "",
     address: "",
     exchangerate: "",
     date: getInitialDateValue(),

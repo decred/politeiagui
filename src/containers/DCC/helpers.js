@@ -244,11 +244,11 @@ export const sortDccsByTimestamp = (unorderedDccs) =>
   unorderedDccs &&
   Object.values(unorderedDccs).sort((a, b) => b.timestamp - a.timestamp);
 
-/**
- * Returns if user can submit dccs
- * @param {Object} user
+/*
+ * This helper function uses currying to apply a callback to a draftId in order to delete it
+ * @param {int} draftId
+ * @param {func} cb
  */
-export const userCanSubmitDccs = (user) =>
-  (user && user.domain !== DCC_DOMAIN_INVALID) ||
-  (user.contractortype !== CONTRACTOR_TYPE_REVOKED &&
-    user.contractortype !== CONTRACTOR_TYPE_NOMINEE);
+export const handleDeleteDraft = (draftId, cb) => () => {
+  cb(draftId);
+};

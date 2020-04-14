@@ -6,7 +6,7 @@ import {
   useMediaQuery,
   useTheme
 } from "pi-ui";
-import React, { useState } from "react";
+import React from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
@@ -32,6 +32,7 @@ import DownloadComments from "src/containers/Comments/Download";
 import ProposalActions from "./ProposalActions";
 import ThumbnailGrid from "src/components/Files";
 import VersionPicker from "src/components/VersionPicker";
+import useModalContext from "src/hooks/utils/useModalContext";
 import { useRouter } from "src/components/Router";
 import { useConfig } from "src/containers/Config";
 
@@ -85,7 +86,6 @@ const Proposal = React.memo(function Proposal({
   const isAuthor = currentUser && currentUser.userid === userid;
   const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
   const mobile = useMediaQuery("(max-width: 560px)");
-  const [showSearchVotesModal, setShowSearchVotesModal] = useState(false);
   const showEditedDate =
     version > 1 && timestamp !== publishedat && !abandonedat && !mobile;
   const showPublishedDate = publishedat && !mobile;
@@ -93,15 +93,18 @@ const Proposal = React.memo(function Proposal({
   const showAbandonedDate = abandonedat && !mobile;
   const showVersionAsText = version > 1 && !extended && !mobile;
 
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  const openSearchVotesModal = () => {
+    handleOpenModal(ModalSearchVotes, {
+      onClose: handleCloseModal,
+      proposal: proposal
+    });
+  };
+
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
 
-  function handleCloseSearchVotesModal() {
-    setShowSearchVotesModal(false);
-  }
-  function handleOpenSearchVotesModal() {
-    setShowSearchVotesModal(true);
-  }
   function goToFullProposal() {
     history.push(proposalURL);
   }
@@ -220,7 +223,7 @@ const Proposal = React.memo(function Proposal({
                       isVoteActive={isVoteActive}
                       quorumVotes={getQuorumInVotes(voteSummary)}
                       votesReceived={getVotesReceived(voteSummary)}
-                      onSearchVotes={handleOpenSearchVotesModal}
+                      onSearchVotes={openSearchVotesModal}
                     />
                   }
                 />
@@ -295,11 +298,6 @@ const Proposal = React.memo(function Proposal({
           </>
         )}
       </RecordWrapper>
-      <ModalSearchVotes
-        show={showSearchVotesModal}
-        onClose={handleCloseSearchVotesModal}
-        proposal={proposal}
-      />
     </>
   );
 });

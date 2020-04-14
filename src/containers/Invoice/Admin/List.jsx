@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
 import { useAdminInvoices } from "./hooks";
-import useBooleanState from "src/hooks/utils/useBooleanState";
 import {
   Spinner,
   Link as UILink,
@@ -19,6 +18,7 @@ import HelpMessage from "src/components/HelpMessage";
 import { ModalInviteContractor } from "src/containers/User/Invite";
 import styles from "./List.module.css";
 import { Row } from "src/components/layout";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 const ActionsContent = ({ openInviteModal }) => {
   const mobile = useMediaQuery("(max-width: 560px)");
@@ -29,10 +29,14 @@ const ActionsContent = ({ openInviteModal }) => {
     </UILink>
   );
   const generatePayoutsLink = (
-    <Link className="cursor-pointer" to="/admin/payouts">Generate payouts</Link>
+    <Link className="cursor-pointer" to="/admin/payouts">
+      Generate payouts
+    </Link>
   );
   const payoutSummariesLink = (
-    <Link className="cursor-pointer" to="/admin/invoicepayouts">Payout summaries</Link>
+    <Link className="cursor-pointer" to="/admin/invoicepayouts">
+      Payout summaries
+    </Link>
   );
 
   return (
@@ -57,10 +61,14 @@ const ActionsContent = ({ openInviteModal }) => {
 const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
   const { loading, invoices } = useAdminInvoices();
   const [filters, setFilters] = useState({});
-  const [showInviteModal, openInviteModal, closeInviteModal] = useBooleanState(
-    false
-  );
 
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  const handleOpenInviteContractorModal = () => {
+    handleOpenModal(ModalInviteContractor, {
+      onClose: handleCloseModal
+    });
+  };
   const renderInvoice = useCallback(
     (invoice) => (
       <Invoice
@@ -103,7 +111,9 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
       <TopBanner>
         <PageDetails
           title="Admin"
-          actionsContent={<ActionsContent openInviteModal={openInviteModal}/>}>
+          actionsContent={
+            <ActionsContent openInviteModal={handleOpenInviteContractorModal} />
+          }>
           <InvoiceFilterForm onChange={handleFiltersChange} />
         </PageDetails>
       </TopBanner>
@@ -124,10 +134,6 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
           </FilterInvoices>
         )}
       </Main>
-      <ModalInviteContractor
-        show={showInviteModal}
-        onClose={closeInviteModal}
-      />
     </AdminInvoiceActionsProvider>
   );
 };

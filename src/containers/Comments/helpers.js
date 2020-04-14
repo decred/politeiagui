@@ -52,3 +52,14 @@ export const sortComments = (sortOption, comments) => {
   const sorter = getSort(sortOption);
   return sorter(comments);
 };
+
+/**
+ * This function use currying to efficiently handle comment censoring
+ * @param {int} id
+ * @param {string} reason
+ */
+export function handleCommentCensoringInfo(cb, ...args) {
+  return function handleSubmitReason(reason) {
+    cb(...args, reason);
+  };
+}

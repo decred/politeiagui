@@ -3,12 +3,10 @@ import { useAdminActions, adminInvoicesActionsContext } from "./hooks";
 import { Text } from "pi-ui";
 import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import ModalConfirm from "src/components/ModalConfirm";
-import useBooleanState from "src/hooks/utils/useBooleanState";
-import useAsyncState from "src/hooks/utils/useAsyncState";
 import { presentationalInvoiceName } from "src/containers/Invoice/helpers";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 const AdminActionsProvider = ({ children }) => {
-  const [targetInvoice, setTargetInvoice] = useAsyncState("");
   const {
     onRejectInvoice,
     onApproveInvoice,
@@ -16,90 +14,65 @@ const AdminActionsProvider = ({ children }) => {
     onPayApprovedInvoices,
     nextInvoice
   } = useAdminActions();
-  const [
-    showRejectModal,
-    openRejectModal,
-    closeRejectrModal
-  ] = useBooleanState(false);
-  const [
-    showApproveModal,
-    openApproveModal,
-    closeApproveModal
-  ] = useBooleanState(false);
-  const [
-    showDisputeModal,
-    openDisputeModal,
-    closeDisputeModal
-  ] = useBooleanState(false);
-  const [
-    showPayModal,
-    openPayModal,
-    closePayModal
-  ] = useBooleanState(false);
 
-  // set the invoice target before executing the function
-  const withInvoiceTarget = (fn) => async (invoice) => {
-    await setTargetInvoice(invoice);
-    fn();
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  const hanleOpenRejectModal = (invoice) => {
+    handleOpenModal(ModalConfirmWithReason, {
+      title: `Reject ${presentationalInvoiceName(invoice)}`,
+      reasonLabel: "Reject reason",
+      subject: "rejectInvoice",
+      onSubmit: onRejectInvoice(invoice),
+      successTitle: "Invoice censored",
+      successMessage: <Text>The invoice has been successfully rejected!</Text>,
+      onClose: handleCloseModal
+    });
+  };
+
+  const hanleOpenApproveModal = (invoice) => {
+    handleOpenModal(ModalConfirm, {
+      title: `Approve ${presentationalInvoiceName(invoice)}`,
+      message: "Are you sure you want to approve this invoice?",
+      onSubmit: onApproveInvoice(invoice),
+      successTitle: "Invoice approved",
+      successMessage: <Text>The invoice has been successfully approved!</Text>,
+      onClose: handleCloseModal
+    });
+  };
+
+  const hanleOpenDisputeModal = (invoice) => {
+    handleOpenModal(ModalConfirm, {
+      title: `Dispute ${presentationalInvoiceName(invoice)}`,
+      message: "Are you sure you want to dispute this invoice?",
+      onSubmit: onDisputeInvoice(invoice),
+      successTitle: "Invoice on dispute",
+      successMessage: <Text>The invoice has been successfully disputed!</Text>,
+      onClose: handleCloseModal
+    });
+  };
+
+  const hanleOpenPayModal = () => {
+    handleOpenModal(ModalConfirm, {
+      title: "Pay approved invoices",
+      message:
+        "Are you sure you want to set all of these approved invoices to paid?",
+      onSubmit: onPayApprovedInvoices,
+      successTitle: "Inovices paid",
+      successMessage: <Text>The invoices have been successfully updated!</Text>,
+      onClose: handleCloseModal
+    });
   };
 
   return (
     <adminInvoicesActionsContext.Provider
       value={{
-        onReject: withInvoiceTarget(openRejectModal),
-        onApprove: withInvoiceTarget(openApproveModal),
-        onDispute: withInvoiceTarget(openDisputeModal),
-        onPay: openPayModal,
+        onReject: hanleOpenRejectModal,
+        onApprove: hanleOpenApproveModal,
+        onDispute: hanleOpenDisputeModal,
+        onPay: hanleOpenPayModal,
         nextInvoice
       }}>
-      <>
-        {children}
-        <ModalConfirmWithReason
-          title={`Reject ${presentationalInvoiceName(targetInvoice)}`}
-          reasonLabel="Reject reason"
-          subject="rejectInvoice"
-          onSubmit={onRejectInvoice(targetInvoice)}
-          successTitle="Invoice censored"
-          successMessage={
-            <Text>The invoice has been successfully rejected!</Text>
-          }
-          show={showRejectModal}
-          onClose={closeRejectrModal}
-        />
-        <ModalConfirm
-          title={`Approve ${presentationalInvoiceName(targetInvoice)}`}
-          message="Are you sure you want to approve this invoice?"
-          onSubmit={onApproveInvoice(targetInvoice)}
-          successTitle="Invoice approved"
-          successMessage={
-            <Text>The invoice has been successfully approved!</Text>
-          }
-          show={showApproveModal}
-          onClose={closeApproveModal}
-        />
-        <ModalConfirm
-          title={`Dispute ${presentationalInvoiceName(targetInvoice)}`}
-          message="Are you sure you want to dispute this invoice?"
-          onSubmit={onDisputeInvoice(targetInvoice)}
-          successTitle="Invoice on dispute"
-          successMessage={
-            <Text>The invoice has been successfully disputed!</Text>
-          }
-          show={showDisputeModal}
-          onClose={closeDisputeModal}
-        />
-        <ModalConfirm
-          title="Pay approved invoices"
-          message="Are you sure you want to set all of these approved invoices to paid?"
-          onSubmit={onPayApprovedInvoices}
-          successTitle="Inovices paid"
-          successMessage={
-            <Text>The invoices have been successfully updated!</Text>
-          }
-          show={showPayModal}
-          onClose={closePayModal}
-        />
-      </>
+      {children}
     </adminInvoicesActionsContext.Provider>
   );
 };
