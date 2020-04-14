@@ -3,10 +3,13 @@ import * as act from "src/actions";
 import { useAction, useSelector } from "src/redux";
 import useAPIAction from "src/hooks/utils/useAPIAction";
 import * as sel from "src/selectors";
+import useThrowError from "../utils/useThrowError";
 
 export default function useUserDetail(userID) {
+  const isCMS = useSelector(sel.isCMS);
   const meUserID = useSelector(sel.userid);
-  const uid = userID || meUserID;
+  const isPublicCms = isCMS && !meUserID;
+  const uid = !isPublicCms ? userID || meUserID : undefined;
   const userSelector = useMemo(() => sel.makeGetUserByID(uid), [uid]);
   const user = useSelector(userSelector);
   const isAdmin = useSelector(sel.currentUserIsAdmin);
@@ -15,7 +18,9 @@ export default function useUserDetail(userID) {
   const userMissingData = !user || (user && !user.identities);
   const needsFetch = !!uid && userMissingData;
   const args = [uid];
-  const [loading] = useAPIAction(onFetchUser, args, needsFetch);
+  const [loading, error] = useAPIAction(onFetchUser, args, needsFetch);
+
+  useThrowError(error);
 
   return { user, isAdmin, loading, currentUserID };
 }
