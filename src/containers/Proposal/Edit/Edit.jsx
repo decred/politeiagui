@@ -36,7 +36,8 @@ const EditProposal = ({ match }) => {
             : proposal.linkto
             ? PROPOSAL_TYPE_RFP_SUBMISSION
             : PROPOSAL_TYPE_REGULAR,
-        rfpDeadline: formatUnixTimestampToObj(proposal.linkby),
+        rfpDeadline:
+          proposal.linkby && formatUnixTimestampToObj(proposal.linkby),
         rfpLink: proposal.linkto,
         description: getMarkdownContent(proposal.files),
         files: proposal.files.filter(
