@@ -8,6 +8,7 @@ import values from "lodash/fp/values";
 import flatten from "lodash/fp/flatten";
 
 export const userByID = get(["users", "byID"]);
+export const searchResults = get(["users", "search", "results"]);
 export const searchResultsByID = get(["users", "search", "resultsByID"]);
 export const queryResultsByEmail = get(["users", "search", "queryByEmail"]);
 export const queryResultsByUsername = get([
@@ -22,7 +23,12 @@ export const cmsUsersByContractorType = get([
 ]);
 export const cmsUsersByDomain = get(["users", "cms", "byDomain"]);
 export const cmsUserByID = get(["users", "cms", "byID"]);
-
+export const newUser = get(["users", "newUser"]);
+export const newUserVerificationToken = get([
+  "users",
+  "newUser",
+  "verificationtoken"
+]);
 export const makeGetUserByID = (userID) =>
   createSelector(userByID, (users) => users[userID] || null);
 
@@ -52,7 +58,12 @@ export const [
   currentUserPublicKey,
   currentUserPaywallAddress,
   currentUserPaywallTxid,
-  currentUserPaywallTxNotBefore
+  currentUserPaywallTxNotBefore,
+  currentUserKeyVerificationToken,
+  currentUserVerifiedKey,
+  currentUserEdited,
+  currentUserResetPassword,
+  currentUserResendVerificationToken
 ] = createUserSelectors([
   "email",
   "username",
@@ -62,7 +73,12 @@ export const [
   "publickey",
   "paywalladdress",
   "paywalltxid",
-  "paywalltxnotbefore"
+  "paywalltxnotbefore",
+  "verificationtoken",
+  "verifiedkey",
+  "edited",
+  "resetpassword",
+  "resendverificationtoken"
 ]);
 
 export const currentUserPaywallAmount = createSelector(

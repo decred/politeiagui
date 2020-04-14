@@ -41,7 +41,12 @@ const proposalVotes = (state = DEFAULT_STATE, action) =>
               PROPOSAL_VOTING_NOT_AUTHORIZED
             ),
           [act.RECEIVE_START_VOTE]: () =>
-            receiveVoteStatusChange(state, action, PROPOSAL_VOTING_ACTIVE)
+            receiveVoteStatusChange(state, action, PROPOSAL_VOTING_ACTIVE),
+          [act.RECEIVE_PROPOSAL_VOTE_RESULTS]: () =>
+            update(["byToken", action.payload.token], (propVotes) => ({
+              ...propVotes,
+              ...action.payload
+            }))
         }[action.type] || (() => state)
       )();
 

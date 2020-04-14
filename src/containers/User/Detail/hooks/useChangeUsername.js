@@ -5,7 +5,7 @@ import * as sel from "src/selectors";
 import { changeUsernameValidationSchema } from "../validation";
 
 export default function useChangeUsername() {
-  const username = useSelector(sel.getUserUsername);
+  const username = useSelector(sel.currentUserUsername);
   const onChangeUsername = useAction(act.onSaveChangeUsername);
   const validationSchema = useValidationSchema(changeUsernameValidationSchema);
 

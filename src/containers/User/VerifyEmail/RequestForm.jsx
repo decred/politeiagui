@@ -11,7 +11,7 @@ const RequestVerificationEmailForm = () => {
   const {
     validationSchema,
     onResendVerificationEmail,
-    resendVerificationEmailResponse: response
+    currentUserResendVerificationToken: response
   } = useRequestResendVerificationEmail();
 
   const { handleSubmitAction, email } = useIdentityWarningModal({

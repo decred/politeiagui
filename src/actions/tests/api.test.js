@@ -366,8 +366,7 @@ describe("test api actions (actions/api.js)", () => {
       [],
       [
         { type: act.REQUEST_LOGOUT },
-        { type: act.RECEIVE_LOGOUT, error: false },
-        api.onSetEmail("")
+        { type: act.RECEIVE_LOGOUT, error: false }
       ],
       {},
       methods.POST
@@ -723,84 +722,6 @@ describe("test api actions (actions/api.js)", () => {
     );
   });
 
-  test("on forgotten password request action", async () => {
-    const path = "/api/v1/user/password/reset";
-    const params = [FAKE_USER];
-
-    await assertApiActionOnSuccess(
-      path,
-      api.onForgottenPasswordRequest,
-      params,
-      [
-        { type: act.REQUEST_FORGOTTEN_PASSWORD_REQUEST },
-        { type: act.RECEIVE_FORGOTTEN_PASSWORD_REQUEST, error: false }
-      ],
-      {},
-      methods.POST
-    );
-
-    await assertApiActionOnError(
-      path,
-      api.onForgottenPasswordRequest,
-      params,
-      (e) => [
-        {
-          type: act.REQUEST_FORGOTTEN_PASSWORD_REQUEST,
-          error: false,
-          payload: { email: FAKE_USER.email }
-        },
-        {
-          type: act.RECEIVE_FORGOTTEN_PASSWORD_REQUEST,
-          error: true,
-          payload: e
-        }
-      ],
-      {},
-      methods.POST
-    );
-  });
-
-  test("on password reset request action", async () => {
-    const path = "/api/v1/user/password/reset";
-    const verificationtoken = "any";
-    const { email, password } = FAKE_USER;
-    const params = [
-      {
-        email,
-        verificationtoken,
-        newpassword: password
-      }
-    ];
-
-    await assertApiActionOnSuccess(
-      path,
-      api.onPasswordResetRequest,
-      params,
-      [
-        { type: act.REQUEST_PASSWORD_RESET_REQUEST },
-        { type: act.RECEIVE_PASSWORD_RESET_REQUEST, error: false }
-      ],
-      {},
-      methods.POST
-    );
-
-    await assertApiActionOnError(
-      path,
-      api.onPasswordResetRequest,
-      params,
-      (e) => [
-        {
-          type: act.REQUEST_PASSWORD_RESET_REQUEST,
-          error: false,
-          payload: { email, verificationtoken, newpassword: password }
-        },
-        { type: act.RECEIVE_PASSWORD_RESET_REQUEST, error: true, payload: e }
-      ],
-      {},
-      methods.POST
-    );
-  });
-
   test("on fetch user details action", async () => {
     const USER_ID = "6193b76b-4834-48c3-886e-f201af6dae7d";
     const path = `/api/v1/user/${USER_ID}`;
@@ -811,7 +732,6 @@ describe("test api actions (actions/api.js)", () => {
       api.onFetchUser,
       [USER_ID],
       [
-        { type: act.RESET_EDIT_USER, error: false },
         { type: act.REQUEST_USER, error: false, payload: USER_ID },
         {
           type: act.RECEIVE_USER,

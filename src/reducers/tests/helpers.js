@@ -16,7 +16,6 @@ export const testRequestReducer = (reducer, key, state, action) => {
       ...state[key],
       payload: action.error ? null : action.payload,
       isRequesting: action.error ? false : true,
-      response: null,
       error: action.error ? action.payload : null
     }
   });
@@ -33,7 +32,6 @@ export const testReceiveProposalsReducer = (reducer, key, state, action) => {
     [key]: {
       ...state[key],
       isRequesting: false,
-      response: action.error ? null : { ...action.payload },
       error: action.error ? action.payload : null
     }
   });
@@ -50,7 +48,6 @@ export const testReceiveReducer = (reducer, key, state, action) => {
     [key]: {
       ...state[key],
       isRequesting: false,
-      response: action.error ? null : action.payload,
       error: action.error ? action.payload : null
     }
   });

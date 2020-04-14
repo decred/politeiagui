@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import app from "./app";
 import api from "./api";
+import external_api from "./external_api";
 import {
   comments,
   users,
@@ -8,10 +9,10 @@ import {
   proposals,
   proposalVotes,
   invoices,
+  invoicePayouts,
   dccs,
   paywall
 } from "./models";
-import external_api from "./external_api";
 
 const rootReducer = combineReducers({
   app,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   proposals,
   proposalVotes,
   invoices,
+  invoicePayouts,
   dccs,
   paywall
 });

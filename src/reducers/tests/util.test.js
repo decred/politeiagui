@@ -21,7 +21,6 @@ describe("test util reducers (request, receive, reset)", () => {
       apiRequestTest: {
         payload: action.payload,
         isRequesting: true,
-        response: null,
         error: null
       }
     });
@@ -35,7 +34,6 @@ describe("test util reducers (request, receive, reset)", () => {
       apiRequestTest: {
         payload: null,
         isRequesting: false,
-        response: null,
         error: action.payload
       }
     });
@@ -56,7 +54,6 @@ describe("test util reducers (request, receive, reset)", () => {
       ...MOCK_STATE,
       apiReceiveTest: {
         isRequesting: false,
-        response: action.payload,
         error: null
       }
     });
@@ -69,7 +66,6 @@ describe("test util reducers (request, receive, reset)", () => {
       ...MOCK_STATE,
       apiReceiveTest: {
         isRequesting: false,
-        response: null,
         error: action.payload
       }
     });
@@ -81,7 +77,6 @@ describe("test util reducers (request, receive, reset)", () => {
       apitest: {
         payload: "misc data",
         isRequesting: true,
-        response: null,
         error: null
       }
     };
@@ -110,7 +105,6 @@ describe("test util reducers (request, receive, reset)", () => {
       apitest: {
         payload: action.payload,
         isRequesting: true,
-        response: null,
         error: null
       }
     });
@@ -122,7 +116,6 @@ describe("test util reducers (request, receive, reset)", () => {
       apitest: {
         payload: action.payload,
         isRequesting: false,
-        response: action.payload,
         error: null
       }
     });

@@ -3,6 +3,11 @@ import get from "lodash/fp/get";
 
 export const creditsByUserID = get(["credits", "byUserID"]);
 
+export const makeGetCreditsAddedOnRescan = (userid) =>
+  createSelector(creditsByUserID, (creditsByUserID) =>
+    creditsByUserID[userid] ? creditsByUserID[userid].newcredits : null
+  );
+
 export const makeGetUnspentUserCredits = (userid) =>
   createSelector(creditsByUserID, (creditsByUserID) =>
     creditsByUserID[userid] ? creditsByUserID[userid].unspent : []

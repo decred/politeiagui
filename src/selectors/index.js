@@ -7,6 +7,7 @@ export * from "./models/users";
 export * from "./models/proposals";
 export * from "./models/proposalVotes";
 export * from "./models/invoices";
+export * from "./models/invoicePayouts";
 export * from "./models/dccs";
 export * from "./models/paywall";
 

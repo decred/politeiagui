@@ -17,7 +17,7 @@ export const makeGetPaywallCreditPrice = (userID) =>
     paywall ? paywall.creditprice / 100000000 : null
   );
 
-const getUserPaywallStatus = (paywall) => {
+export const getUserPaywallStatus = (paywall) => {
   if (paywall.isPaid) {
     return PAYWALL_STATUS_PAID;
   }

@@ -17,11 +17,16 @@ const credits = (state = DEFAULT_STATE, action) =>
               spent: action.payload.spentcredits
             })(state),
           [act.RECEIVE_RESCAN_USER_PAYMENTS]: () =>
-            update(
-              ["byUserID", action.payload.userid, "unspent"],
-              (unspent = []) => [...unspent, ...action.payload.newcredits]
-            )(state),
-          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
+            update(["byUserID", action.payload.userid], (credits) => ({
+              ...credits,
+              unspent: [...credits.unspent, ...action.payload.newcredits],
+              newcredits: action.payload.newcredits.length
+            }))(state),
+          [act.RESET_RESCAN_USER_PAYMENTS]: () =>
+            update(["byUserID", action.payload], (credits) => ({
+              ...credits,
+              newcredits: null
+            }))(state)
         }[action.type] || (() => state)
       )();
 

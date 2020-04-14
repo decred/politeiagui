@@ -8,7 +8,8 @@ const DEFAULT_STATE = {
   byToken: {},
   all: [],
   exchangeRates: {},
-  subContractors: null
+  subContractors: null,
+  newInvoiceToken: null
 };
 
 const invoiceToken = (invoice) => invoice.censorshiprecord.token;
@@ -66,7 +67,15 @@ const invoices = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_SETSTATUS_INVOICE]: () => {
             const invoice = action.payload;
             return set(["byToken", invoiceToken(invoice)], invoice)(state);
-          }
+          },
+          [act.RECEIVE_NEW_INVOICE]: () => {
+            const invoice = action.payload;
+            return set(
+              "newInvoiceToken",
+              invoice.censorshiprecord.token
+            )(state);
+          },
+          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();
 

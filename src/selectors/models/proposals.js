@@ -17,6 +17,7 @@ export const tokenInventory = createDeepEqualSelector(
   get(["api"]),
   ({ tokenInventory }) => tokenInventory.response
 );
+export const newProposalToken = get(["proposals", "newProposalToken"]);
 
 export const makeGetProposalByToken = (token) =>
   createSelector(proposalsByToken, get(token));
@@ -35,4 +36,9 @@ export const makeGetUserProposals = (userId) =>
       const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
       return sortByNewestFirst(userProps);
     }
+  );
+
+export const makeGetProposalName = (token) =>
+  createSelector(makeGetProposalByToken(token), (proposal) =>
+    proposal ? proposal.name : null
   );

@@ -213,18 +213,22 @@ export function usePollProposalCreditsPayment() {
 export function useRescanUserCredits(userID) {
   const errorRescan = useSelector(sel.apiRescanUserPaymentsError);
   const isLoadingRescan = useSelector(sel.isApiRequestingRescanUserPayments);
+  const amountOfCreditsAddedOnRescanSelector = useMemo(
+    () => sel.makeGetCreditsAddedOnRescan(userID),
+    [userID]
+  );
   const amountOfCreditsAddedOnRescan = useSelector(
-    sel.amountOfCreditsAddedOnRescan
+    amountOfCreditsAddedOnRescanSelector
   );
 
   const onRescan = useAction(act.onRescanUserPayments);
   const onResetRescan = useAction(act.onResetRescanUserPayments);
 
   useEffect(() => {
-    if (amountOfCreditsAddedOnRescan !== undefined) {
-      setTimeout(() => onResetRescan(), 3000);
+    if (amountOfCreditsAddedOnRescan !== null) {
+      setTimeout(() => onResetRescan(userID), 3000);
     }
-  }, [amountOfCreditsAddedOnRescan, onResetRescan]);
+  }, [amountOfCreditsAddedOnRescan, onResetRescan, userID]);
 
   const onRescanUserCredits = useCallback(() => {
     onRescan(userID);

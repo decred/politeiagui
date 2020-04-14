@@ -1,6 +1,5 @@
 export const DEFAULT_REQUEST_STATE = {
   isRequesting: false,
-  response: null,
   error: null
 };
 
@@ -10,7 +9,6 @@ export const request = (key, state, { payload, error }) => ({
     ...state[key],
     payload: error ? null : payload,
     isRequesting: error ? false : true,
-    response: state[key] ? state[key].response : null,
     error: error ? payload : null
   }
 });
@@ -20,7 +18,6 @@ export const receive = (key, state, { payload, error } = {}) => ({
   [key]: {
     ...state[key],
     isRequesting: false,
-    response: error ? null : payload,
     error: error ? payload : null
   }
 });

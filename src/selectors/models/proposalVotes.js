@@ -7,3 +7,13 @@ export const bestBlock = get(["proposalVotes", "bestBlock"]);
 
 export const makeGetProposalVoteSummary = (token) =>
   createSelector(summaryByToken, get(token));
+
+export const makeGetProposalVoteResults = (token) =>
+  createSelector(
+    makeGetProposalVoteSummary(token),
+    (summary) =>
+      summary && {
+        castvotes: summary.castvotes,
+        startvotereply: summary.startvotereply
+      }
+  );

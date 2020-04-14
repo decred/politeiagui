@@ -1,6 +1,5 @@
 import app from "../app";
 import * as act from "../../actions/types";
-import { PAYWALL_STATUS_PAID } from "../../constants";
 
 describe("test app reducer", () => {
   const MOCK_STATE = {
@@ -23,56 +22,6 @@ describe("test app reducer", () => {
       [key]: action.payload
     });
   };
-
-  test("correctly updates state for receiving new proposals", () => {
-    const act1 = {
-      type: act.RECEIVE_NEW_PROPOSAL,
-      payload: {
-        censorshiprecord: {
-          token: "tok"
-        },
-        data: "dat"
-      },
-      error: false
-    };
-
-    let state = app(MOCK_STATE, act1);
-
-    expect(state).toEqual({
-      ...MOCK_STATE,
-      submittedProposals: {
-        lastSubmitted: act1.payload.censorshiprecord.token,
-        [act1.payload.censorshiprecord.token]: act1.payload
-      }
-    });
-
-    const act2 = {
-      ...act1,
-      payload: {
-        censorshiprecord: {
-          token: "tok2"
-        }
-      }
-    };
-
-    state = app(state, act2);
-
-    expect(state).toEqual({
-      ...MOCK_STATE,
-      submittedProposals: {
-        lastSubmitted: act2.payload.censorshiprecord.token,
-        [act2.payload.censorshiprecord.token]: act2.payload,
-        [act1.payload.censorshiprecord.token]: act1.payload
-      }
-    });
-
-    const act3 = {
-      ...act1,
-      error: true
-    };
-
-    expect(app(MOCK_STATE, act3)).toEqual(MOCK_STATE);
-  });
 
   test("correctly saves or overwrites draft proposals to state", () => {
     const action = {
@@ -149,64 +98,6 @@ describe("test app reducer", () => {
     });
 
     expect(app(state, action)).toEqual(state);
-  });
-
-  test("correctly set proposal status", () => {
-    const action = {
-      type: act.REQUEST_SETSTATUS_PROPOSAL,
-      payload: {
-        token: "draft",
-        status: "reviewing"
-      },
-      error: false
-    };
-
-    const state = {
-      ...MOCK_STATE,
-      submittedProposals: {
-        draft: {
-          status: "pending"
-        }
-      }
-    };
-
-    const newstate = app(state, action);
-
-    expect(newstate).toEqual({
-      ...MOCK_STATE,
-      submittedProposals: {
-        draft: {
-          status: action.payload.status
-        }
-      }
-    });
-
-    action.payload.token = "random";
-
-    expect(app(state, action)).toEqual(state);
-
-    action.error = true;
-
-    expect(app(state, action)).toEqual(state);
-  });
-
-  test("correctly updates paywall status", () => {
-    const action = {
-      type: act.UPDATE_USER_PAYWALL_STATUS,
-      payload: {
-        status: 0,
-        currentNumberOfConfirmations: 0
-      },
-      error: false
-    };
-
-    const state = app({}, action);
-
-    expect(state).toEqual({
-      userPaywallStatus: action.payload.status,
-      userAlreadyPaid: action.payload.status === PAYWALL_STATUS_PAID,
-      userPaywallConfirmations: action.payload.currentNumberOfConfirmations
-    });
   });
 
   test("correctly test reducers that only sets payload to informed key", () => {
