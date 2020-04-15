@@ -619,7 +619,10 @@ export const onSubmitProposal = (
             userid,
             username,
             name,
-            description
+            description,
+            type,
+            rfpLink,
+            files
           })
         );
         resetNewProposalData();
