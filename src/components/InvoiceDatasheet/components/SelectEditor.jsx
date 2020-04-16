@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Select } from "pi-ui";
+import useAsyncState from "src/hooks/utils/useAsyncState";
 
 const customStyles = {
   container: provided => ({
@@ -12,15 +13,23 @@ const customStyles = {
   })
 };
 
-const SelectEditor = ({ value, options, onCommit }) => {
-  const handleChange = ({ value }) => {
+const SelectEditor = ({ value, options, onChange, onCommit }) => {
+  const getValueObj = useCallback((value) => (
+    options.find(op => op.value === value)
+  ), [options]);
+
+  const [newValue, setNewValue] = useAsyncState(getValueObj(value));
+
+  const handleChange = useCallback(async ({ value }) => {
+    await setNewValue(getValueObj(value));
+    onChange(value);
     onCommit(value);
-  };
-  const getValueObj = value => options.find(op => op.value === value);
+  }, [setNewValue, getValueObj, onChange, onCommit]);
+
   return (
     <Select
       options={options}
-      value={getValueObj(value)}
+      value={newValue}
       onChange={handleChange}
       styles={customStyles}
     />
