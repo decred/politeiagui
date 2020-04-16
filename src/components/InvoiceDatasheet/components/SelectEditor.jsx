@@ -14,11 +14,11 @@ const customStyles = {
 };
 
 const SelectEditor = ({ value, options, onChange, onCommit }) => {
-  const [newValue, setNewValue] = useAsyncState(getValueObj(value));
-
   const getValueObj = useCallback((value) => (
     options.find(op => op.value === value)
   ), [options]);
+
+  const [newValue, setNewValue] = useAsyncState(getValueObj(value));
 
   const handleChange = useCallback(async ({ value }) => {
     await setNewValue(getValueObj(value));
