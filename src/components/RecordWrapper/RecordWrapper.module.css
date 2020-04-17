@@ -57,6 +57,11 @@
   align-items: center;
 }
 
+.mobileRfpTag {
+  height: 2.5rem;
+  width: 4rem;
+}
+
 .commentsLink {
   display: flex;
   align-items: center;

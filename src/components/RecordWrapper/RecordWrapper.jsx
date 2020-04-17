@@ -92,9 +92,12 @@ export const Status = ({ children, disableMobileView, className }) => (
   </div>
 );
 
-const MobileHeader = ({ title, status, edit }) => (
+const MobileHeader = ({ title, status, edit, showRFPTag }) => (
   <div className={styles.titleWrapper}>
-    <div className={styles.titleEditWrapper}>{title}</div>
+    <div className={styles.titleEditWrapper}>
+      {showRFPTag && <RFPTag className={styles.mobileRfpTag} />}
+      {title}
+    </div>
     <div className={styles.titleStatusWrapper}>
       {status}
       {edit}
@@ -102,10 +105,10 @@ const MobileHeader = ({ title, status, edit }) => (
   </div>
 );
 
-const RFPTag = React.memo(() => (
+const RFPTag = React.memo(({ className }) => (
   <img
     alt="rfp"
-    className={classNames("margin-right-s", "margin-top-xs")}
+    className={classNames("margin-right-s", "margin-top-xs", className)}
     src={rfpTag}
   />
 ));
@@ -131,7 +134,12 @@ export const Header = React.memo(function Header({
           <div className={styles.titleStatusWrapper}>{status}</div>
         </div>
       ) : (
-        <MobileHeader title={title} status={status} edit={edit} />
+        <MobileHeader
+          title={title}
+          showRFPTag={showRFPTag}
+          status={status}
+          edit={edit}
+        />
       )}
       {subtitle}
     </div>
