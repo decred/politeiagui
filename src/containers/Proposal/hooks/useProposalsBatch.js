@@ -30,7 +30,6 @@ export default function useProposalsBatch() {
   const anyError = errorTokenInventory || error;
 
   useThrowError(anyError);
-
   return {
     proposals,
     onFetchProposalsBatch,

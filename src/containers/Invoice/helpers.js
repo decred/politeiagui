@@ -1,16 +1,9 @@
-import { getCurrentMonth, getCurrentYear } from "src/helpers";
+import {
+  getCurrentMonth,
+  getCurrentYear,
+  getCurrentDateValue
+} from "src/helpers";
 import { INVOICE_STATUS_NEW, INVOICE_STATUS_UPDATED } from "./constants";
-
-/**
- * Returns the current date as object {month, year}
- * @returns {Object} { year, month}
- */
-export const getCurrentDateValue = () => {
-  return {
-    month: getCurrentMonth(),
-    year: getCurrentYear()
-  };
-};
 
 /**
  * Returns the initial month and year to be applied to a blank invoice form

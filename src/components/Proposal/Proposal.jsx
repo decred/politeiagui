@@ -23,7 +23,7 @@ import {
   isVotingFinishedProposal,
   getProposalToken
 } from "src/containers/Proposal/helpers";
-import useProposalVote from "src/containers/Proposal/hooks/useProposalVote";
+import { useProposalVote } from "src/containers/Proposal/hooks";
 import { useLoaderContext } from "src/containers/Loader";
 import styles from "./Proposal.module.css";
 import LoggedInContent from "src/components/LoggedInContent";
@@ -70,13 +70,15 @@ const Proposal = React.memo(function Proposal({
 
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
-  const proposalURL = javascriptEnabled ?
-    `/proposals/${proposalToken}` : `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}`;
-  const commentsURL = javascriptEnabled ?
-    `/proposals/${proposalToken}?scrollToComments=true` :
-    `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}?scrollToComments=true`;
-  const authorURL = javascriptEnabled ?
-    `/user/${userid}` : `${NOJS_ROUTE_PREFIX}/user/${userid}`;
+  const proposalURL = javascriptEnabled
+    ? `/proposals/${proposalToken}`
+    : `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}`;
+  const commentsURL = javascriptEnabled
+    ? `/proposals/${proposalToken}?scrollToComments=true`
+    : `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}?scrollToComments=true`;
+  const authorURL = javascriptEnabled
+    ? `/user/${userid}`
+    : `${NOJS_ROUTE_PREFIX}/user/${userid}`;
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
@@ -246,10 +248,7 @@ const Proposal = React.memo(function Proposal({
             )}
             {isPublicAccessible && !extended && (
               <Row justify="space-between">
-                <CommentsLink
-                  numOfComments={numcomments}
-                  url={commentsURL}
-                />
+                <CommentsLink numOfComments={numcomments} url={commentsURL} />
                 <div>
                   {(isVoteActive || isVotingFinished) && (
                     <ChartsLink token={proposalToken} />

@@ -10,9 +10,13 @@ import {
   useMediaQuery,
   useTheme,
   Link,
-  classNames
+  Icon,
+  classNames,
+  Tooltip
 } from "pi-ui";
 import { Row } from "src/components/layout";
+import DatePickerField from "../DatePickerField";
+import SelectField from "src/components/Select/SelectField";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/components/MarkdownEditor";
 import ThumbnailGrid from "src/components/Files";
@@ -20,6 +24,18 @@ import AttachFileInput from "src/components/AttachFileInput";
 import ModalMDGuide from "src/components/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
+import { useProposalsBatch } from "src/containers/Proposal/hooks";
+import usePolicy from "src/hooks/api/usePolicy";
+import {
+  PROPOSAL_TYPE_REGULAR,
+  PROPOSAL_TYPE_RFP,
+  PROPOSAL_TYPE_RFP_SUBMISSION
+} from "src/constants";
+import {
+  getProposalTypeOptionsForSelect,
+  getRfpMinMaxDates
+} from "./helpers.js";
+import { isActiveApprovedRFP } from "src/containers/Proposal/helpers";
 import useModalContext from "src/hooks/utils/useModalContext";
 
 const ProposalForm = React.memo(function ProposalForm({
@@ -28,16 +44,22 @@ const ProposalForm = React.memo(function ProposalForm({
   handleSubmit,
   isSubmitting,
   setFieldValue,
+  setFieldTouched,
   errors,
   isValid,
+  touched,
   submitSuccess,
   disableSubmit,
   openMDGuideModal
 }) {
   const smallTablet = useMediaQuery("(max-width: 685px)");
-
   const { themeName } = useTheme();
+  const {
+    policy: { minlinkbyperiod, maxlinkbyperiod }
+  } = usePolicy();
   const isDarkTheme = themeName === "dark";
+  const isRfp = values.type === PROPOSAL_TYPE_RFP;
+  const isRfpSubmission = values.type === PROPOSAL_TYPE_RFP_SUBMISSION;
 
   const handleDescriptionChange = useCallback(
     (v) => {
@@ -45,6 +67,26 @@ const ProposalForm = React.memo(function ProposalForm({
     },
     [setFieldValue]
   );
+
+  const selectOptions = useMemo(() => getProposalTypeOptionsForSelect(), []);
+
+  const deadlineRange = useMemo(
+    () => getRfpMinMaxDates(minlinkbyperiod, maxlinkbyperiod),
+    [maxlinkbyperiod, minlinkbyperiod]
+  );
+
+  const handleSelectFiledChange = useCallback(
+    (fieldName) => (option) => {
+      setFieldTouched(fieldName, true);
+      setFieldValue(fieldName, option.value);
+    },
+    [setFieldValue, setFieldTouched]
+  );
+
+  const handleChangeWithTouched = (field) => (e) => {
+    setFieldTouched(field, true);
+    handleChange(e);
+  };
 
   const handleFilesChange = useCallback(
     (v) => {
@@ -103,19 +145,72 @@ const ProposalForm = React.memo(function ProposalForm({
       Submit
     </Button>
   );
-
   return (
     <form onSubmit={handleSubmit}>
       {errors && errors.global && (
         <Message kind="error">{errors.global.toString()}</Message>
       )}
+      <Row
+        noMargin
+        className={classNames(
+          styles.typeRow,
+          isRfpSubmission && styles.typeRowNoMargin
+        )}>
+        <SelectField
+          name="type"
+          onChange={handleSelectFiledChange("type")}
+          options={selectOptions}
+          className={classNames(styles.typeSelectWrapper)}
+        />
+        {isRfp && (
+          <>
+            <DatePickerField
+              className={styles.datePicker}
+              years={deadlineRange}
+              value={values.RfpDeadline}
+              name="rfpDeadline"
+              placeholder="Deadline"
+            />
+            <Tooltip
+              contentClassName={styles.deadlineTooltip}
+              placement={smallTablet ? "left" : "bottom"}
+              content="The deadline for the RFP submissions,
+              it can be edited at any point before the voting has been started and should be at least two weeks from now.">
+              <div className={styles.iconWrapper}>
+                <Icon type="info" size={smallTablet ? "md" : "lg"} />
+              </div>
+            </Tooltip>
+          </>
+        )}
+        {isRfpSubmission && (
+          <>
+            <div className={styles.iconWrapper}>
+              <Icon
+                type={"horizontalLink"}
+                viewBox="0 0 24 16"
+                width={24}
+                height={16}
+              />
+            </div>
+            <BoxTextInput
+              placeholder="RFP token"
+              name="rfpLink"
+              tabIndex={1}
+              value={values.rfpLink}
+              onChange={handleChangeWithTouched("rfpLink")}
+              className={styles.rfpLinkToken}
+              error={touched.rfpLink && errors.rfpLink}
+            />
+          </>
+        )}
+      </Row>
       <BoxTextInput
         placeholder="Proposal name"
         name="name"
         tabIndex={1}
         value={values.name}
-        onChange={handleChange}
-        error={errors.name}
+        onChange={handleChangeWithTouched("name")}
+        error={touched.name && errors.name}
       />
       <MarkdownEditor
         name="description"
@@ -124,7 +219,7 @@ const ProposalForm = React.memo(function ProposalForm({
         textAreaProps={textAreaProps}
         onChange={handleDescriptionChange}
         placeholder={"Write your proposal"}
-        error={errors.description}
+        error={touched.description && errors.description}
         filesInput={filesInput}
       />
       <ThumbnailGrid
@@ -169,10 +264,29 @@ const ProposalFormWrapper = ({
   }, [handleCloseModal, handleOpenModal]);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { proposalFormValidation } = useProposalForm();
+  const { onFetchProposalsBatch } = useProposalsBatch();
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
-        const proposalToken = await onSubmit(values);
+        const { type, rfpLink, ...others } = values;
+        if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
+          const [[proposal], summaries] = (await onFetchProposalsBatch([
+            rfpLink
+          ])) || [[], null];
+          const voteSummary = summaries && summaries[rfpLink];
+          const isInvalidToken =
+            !proposal ||
+            !voteSummary ||
+            !isActiveApprovedRFP(proposal, voteSummary);
+          if (isInvalidToken) {
+            throw Error("Invalid RFP token!");
+          }
+        }
+        const proposalToken = await onSubmit({
+          ...others,
+          type,
+          rfpLink
+        });
         setSubmitting(false);
         setSubmitSuccess(true);
         history.push(`/proposals/${proposalToken}`);
@@ -182,13 +296,16 @@ const ProposalFormWrapper = ({
         setFieldError("global", e);
       }
     },
-    [history, onSubmit]
+    [history, onSubmit, onFetchProposalsBatch]
   );
   return (
     <>
       <Formik
         initialValues={
           initialValues || {
+            type: PROPOSAL_TYPE_REGULAR,
+            rfpDeadline: null,
+            rfpLink: "",
             name: "",
             description: "",
             files: []

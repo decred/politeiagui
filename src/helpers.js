@@ -418,6 +418,13 @@ export const getCurrentYear = () => {
   return d.getFullYear();
 };
 
+export const getCurrentDateValue = () => {
+  return {
+    month: getCurrentMonth(),
+    year: getCurrentYear()
+  };
+};
+
 export const getPreviousMonthAndYear = (currentMonth, currentYear) => {
   const month = currentMonth === 1 ? 12 : currentMonth - 1;
   const year = currentMonth === 1 ? currentYear - 1 : currentYear;

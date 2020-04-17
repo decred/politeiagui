@@ -125,7 +125,7 @@ const RecordsView = ({
   }, [filteredTokens, filteredRecords.length]);
 
   const getPropsCountByTab = useCallback(
-    tab => {
+    (tab) => {
       if (!recordTokensByTab) return "";
       return (recordTokensByTab[tab] || []).length;
     },
@@ -134,7 +134,7 @@ const RecordsView = ({
 
   const tabs = useMemo(
     () =>
-      tabLabels.map(label => (
+      tabLabels.map((label) => (
         <Tab
           key={`tab-${label}`}
           count={displayTabCount ? getPropsCountByTab(label) : ""}
@@ -146,7 +146,7 @@ const RecordsView = ({
 
   const nojsTabs = useMemo(
     () =>
-      tabLabels.map(label => (
+      tabLabels.map((label) => (
         <Tab
           key={`tab2-${label}`}
           count={displayTabCount ? getPropsCountByTab(label) : ""}
@@ -178,9 +178,8 @@ const RecordsView = ({
         onSelectTab={onSetIndex}
         activeTabIndex={index}
         className={useDropdownTabs ? "padding-bottom-s" : ""}
-        mode={useDropdownTabs ? "dropdown" : "horizontal"}
-      >
-        {javascriptEnabled ? tabs : nojsTabs }
+        mode={useDropdownTabs ? "dropdown" : "horizontal"}>
+        {javascriptEnabled ? tabs : nojsTabs}
       </Tabs>
     ),
     content: (

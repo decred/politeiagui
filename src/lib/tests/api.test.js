@@ -2,13 +2,15 @@ import fetchMock from "fetch-mock";
 import * as api from "../api";
 import * as help from "../../helpers";
 import * as pki from "../pki.js";
-import { getHumanReadableError } from "../../helpers";
 import {
   assertGETOnRouteIsCalled,
   assertRouteIsCalledWithQueryParams,
   assertPOSTOnRouteIsCalled
 } from "./support/helpers";
-import { PROPOSAL_STATUS_UNREVIEWED } from "../../constants";
+import {
+  PROPOSAL_STATUS_UNREVIEWED,
+  PROPOSAL_TYPE_REGULAR
+} from "../../constants";
 
 describe("api integration modules (lib/api.js)", () => {
   const MOCKS_PATH = "../../../mocks/api/";
@@ -18,8 +20,11 @@ describe("api integration modules (lib/api.js)", () => {
   const PASSWORD = "foobarpassword";
   const VERIFICATION_TOKEN = "thisIsAVerificationToken";
   const PROPOSAL_NAME = "Test prop";
+  const PROPOSAL_TYPE = PROPOSAL_TYPE_REGULAR;
   const PROPOSAL_TOKEN = "FAKE_TOKEN";
   const PROPOSAL_VERSION = "2";
+  const RFP_DEADLINE = undefined;
+  const RFP_LINK = undefined;
   const MARKDOWN = "# This is a test proposal";
   const FILE = {
     name: "example.jpeg",
@@ -47,9 +52,22 @@ describe("api integration modules (lib/api.js)", () => {
   });
 
   test("make a proposal", () => {
-    let proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE]);
-    let fileFromMarkdown = api.convertMarkdownToFile(
+    let proposal = api.makeProposal(
+      PROPOSAL_NAME,
+      MARKDOWN,
+      RFP_DEADLINE,
+      PROPOSAL_TYPE,
+      RFP_LINK,
+      [FILE]
+    );
+    const fileFromMarkdown = api.convertMarkdownToFile(
       PROPOSAL_NAME + "\n\n" + MARKDOWN
+    );
+    const dataJsonFile = api.convertJsonToFile(
+      {
+        linkby: undefined
+      },
+      "data.json"
     );
     expect(proposal).toEqual({
       files: [
@@ -58,35 +76,54 @@ describe("api integration modules (lib/api.js)", () => {
           digest: help.digestPayload(fileFromMarkdown.payload)
         },
         {
+          ...dataJsonFile,
+          digest: help.digestPayload(dataJsonFile.payload)
+        },
+        {
           ...FILE,
           digest: FILE_DIGESTED_PAYLOAD
         }
       ]
     });
     // test without providing attachment object
-    proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN);
-    fileFromMarkdown = api.convertMarkdownToFile(
-      PROPOSAL_NAME + "\n\n" + MARKDOWN
+    proposal = api.makeProposal(
+      PROPOSAL_NAME,
+      MARKDOWN,
+      RFP_DEADLINE,
+      PROPOSAL_TYPE,
+      RFP_LINK
     );
     expect(proposal).toEqual({
       files: [
         {
           ...fileFromMarkdown,
           digest: help.digestPayload(fileFromMarkdown.payload)
+        },
+        {
+          ...dataJsonFile,
+          digest: help.digestPayload(dataJsonFile.payload)
         }
       ]
     });
 
     // test with a falsy attachment
-    proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, false);
-    fileFromMarkdown = api.convertMarkdownToFile(
-      PROPOSAL_NAME + "\n\n" + MARKDOWN
+    proposal = api.makeProposal(
+      PROPOSAL_NAME,
+      MARKDOWN,
+      RFP_DEADLINE,
+      PROPOSAL_TYPE,
+      RFP_LINK,
+      false
     );
     expect(proposal).toEqual({
       files: [
         {
           ...fileFromMarkdown,
           digest: help.digestPayload(fileFromMarkdown.payload)
+        },
+        {
+          ...dataJsonFile,
+          digest: help.digestPayload(dataJsonFile.payload)
         }
       ]
     });
@@ -154,7 +191,7 @@ describe("api integration modules (lib/api.js)", () => {
       status: "200",
       headers
     };
-    let response = new Response("{\"foo\": \"bar\"}", initResponse);
+    let response = new Response(JSON.stringify({ foo: "bar" }), initResponse);
 
     let parsedResponse = await api.parseResponse(response);
     expect(parsedResponse).toEqual({
@@ -162,11 +199,11 @@ describe("api integration modules (lib/api.js)", () => {
       csrfToken:
         "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca9"
     });
-    response = new Response("{ \"errorcode\": 1}", initResponse);
+    response = new Response(JSON.stringify({ errorcode: 1 }), initResponse);
     try {
       parsedResponse = await api.parseResponse(response);
     } catch (e) {
-      expect(e).toEqual(new Error(getHumanReadableError(1)));
+      expect(e).toEqual(new Error(help.getHumanReadableError(1)));
     }
 
     // test with an unexpected headers object
@@ -175,7 +212,7 @@ describe("api integration modules (lib/api.js)", () => {
       status: "200",
       headers
     };
-    response = new Response("{\"foo\": \"bar\"}", initResponse);
+    response = new Response(JSON.stringify({ foo: "bar" }), initResponse);
     try {
       parsedResponse = await api.parseResponse(response);
     } catch (e) {

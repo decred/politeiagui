@@ -60,13 +60,27 @@ export const onSaveNewInvoice = ({
   ).then(() => sel.newInvoiceToken(getState()));
 };
 
-export const onSaveNewProposal = ({ name, description, files }) => (
-  dispatch,
-  getState
-) => {
+export const onSaveNewProposal = ({
+  name,
+  description,
+  files,
+  rfpDeadline,
+  rfpLink,
+  type
+}) => (dispatch, getState) => {
   const { email, userid, username } = sel.currentUser(getState());
   return dispatch(
-    onSubmitProposal(email, userid, username, name.trim(), description, files)
+    onSubmitProposal(
+      email,
+      userid,
+      username,
+      name.trim(),
+      description,
+      rfpDeadline,
+      type,
+      rfpLink,
+      files
+    )
   )
     .then(() => dispatch(onUserProposalCredits()))
     .then(() => sel.newProposalToken(getState()));
@@ -94,13 +108,27 @@ export const onSaveNewDcc = ({
   ).then(() => sel.newDccToken(getState()));
 };
 
-export const onEditProposal = ({ token, name, description, files }) => (
-  dispatch,
-  getState
-) => {
+export const onEditProposal = ({
+  token,
+  name,
+  description,
+  files,
+  rfpDeadline,
+  type,
+  rfpLink
+}) => (dispatch, getState) => {
   const email = sel.currentUserEmail(getState());
   return dispatch(
-    onSubmitEditedProposal(email, name, description, files, token)
+    onSubmitEditedProposal(
+      email,
+      name,
+      description,
+      rfpDeadline,
+      type,
+      rfpLink,
+      files,
+      token
+    )
   ).then(() => dispatch(onFetchProposalApi(token)).then(() => token));
 };
 
@@ -148,9 +176,15 @@ export const onEditInvoice = ({
   );
 };
 
-export const onSaveDraftProposal = ({ name, description, files, draftId }) => (
-  dispatch
-) => {
+export const onSaveDraftProposal = ({
+  name,
+  description,
+  rfpDeadline,
+  type,
+  rfpLink,
+  files,
+  draftId
+}) => (dispatch) => {
   resetNewProposalData();
   const id = draftId || uniqueID("draft");
   dispatch(
@@ -158,6 +192,9 @@ export const onSaveDraftProposal = ({ name, description, files, draftId }) => (
       name: name ? name.trim() : "",
       description,
       files,
+      rfpDeadline,
+      type,
+      rfpLink,
       timestamp: Math.floor(Date.now() / 1000),
       id
     })

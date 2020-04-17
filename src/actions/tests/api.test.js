@@ -17,7 +17,10 @@ import {
   RANDOM_ERROR_RESPONSE
 } from "./helpers";
 import { getHumanReadableError } from "../../helpers";
-import { MANAGE_USER_CLEAR_USER_PAYWALL } from "../../constants";
+import {
+  MANAGE_USER_CLEAR_USER_PAYWALL,
+  PROPOSAL_TYPE_REGULAR
+} from "../../constants";
 
 const mockStore = configureStore([thunk]);
 
@@ -29,6 +32,9 @@ describe("test api actions (actions/api.js)", () => {
   };
   const FAKE_CSRF = "fake_csrf_token";
   const FAKE_PROPOSAL_NAME = "Fake prop name";
+  const FAKE_PROPOSAL_TYPE = PROPOSAL_TYPE_REGULAR;
+  const FAKE_RFP_DEADLINE = undefined;
+  const FAKE_RFP_LINK = undefined;
   const FAKE_PROPOSAL_DESCRIPTION = "Fake prop description";
   const FAKE_PROPOSAL_TOKEN = "fake_prop_token";
   const FAKE_PROPOSAL_VERSION = "2";
@@ -458,9 +464,6 @@ describe("test api actions (actions/api.js)", () => {
   test("on fetch liked comments action", async () => {
     const path = `path:/api/v1/user/proposals/${FAKE_PROPOSAL_TOKEN}/commentslikes`;
     const params = [FAKE_PROPOSAL_TOKEN, FAKE_USER.id];
-    // fetchMock.get(path, {}, { query: {
-    //   userid: FAKE_USER.id
-    // } })
     await assertApiActionOnSuccess(path, api.onFetchLikedComments, params, [
       { type: act.REQUEST_LIKED_COMMENTS },
       {
@@ -534,6 +537,9 @@ describe("test api actions (actions/api.js)", () => {
       FAKE_USER.username,
       FAKE_PROPOSAL_NAME,
       FAKE_PROPOSAL_DESCRIPTION,
+      FAKE_RFP_DEADLINE,
+      FAKE_PROPOSAL_TYPE,
+      FAKE_RFP_LINK,
       []
     ];
 
@@ -557,6 +563,9 @@ describe("test api actions (actions/api.js)", () => {
           payload: {
             name: FAKE_PROPOSAL_NAME,
             description: FAKE_PROPOSAL_DESCRIPTION,
+            rfpDeadline: FAKE_RFP_DEADLINE,
+            type: FAKE_PROPOSAL_TYPE,
+            rfpLink: FAKE_RFP_LINK,
             files: []
           }
         },
@@ -841,6 +850,9 @@ describe("test api actions (actions/api.js)", () => {
       FAKE_USER.email,
       FAKE_PROPOSAL_NAME,
       FAKE_PROPOSAL_DESCRIPTION,
+      FAKE_RFP_DEADLINE,
+      FAKE_PROPOSAL_TYPE,
+      FAKE_RFP_LINK,
       [],
       FAKE_PROPOSAL_TOKEN
     ];
@@ -867,6 +879,9 @@ describe("test api actions (actions/api.js)", () => {
           payload: {
             name: FAKE_PROPOSAL_NAME,
             description: FAKE_PROPOSAL_DESCRIPTION,
+            rfpDeadline: FAKE_RFP_DEADLINE,
+            type: FAKE_PROPOSAL_TYPE,
+            rfpLink: FAKE_RFP_LINK,
             files: []
           }
         },

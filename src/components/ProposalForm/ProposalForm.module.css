@@ -8,6 +8,62 @@
   color: var(--tab-text-color) !important;
 }
 
+.formSelectError {
+  padding-bottom: 0.5em;
+}
+
+.errorMsg {
+  color: var(--color-orange);
+  font-size: var(--font-size-small);
+  min-height: 2rem;
+  margin-top: 0.3rem;
+}
+
+.typeSelectWrapper {
+  height: 4.4rem;
+  width: 20rem;
+}
+
+.typeSelectWrapper > div {
+  height: 100%;
+}
+
+.typeRow {
+  margin-bottom: 2rem;
+}
+
+.typeRowNoMargin {
+  margin-bottom: 0;
+}
+
+.datePicker {
+  margin-left: 2rem;
+  width: 20rem;
+  height: 4.4rem;
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  height: 4.4rem;
+  margin-left: var(--spacing-small);
+  margin-right: var(--spacing-small);
+}
+
+.deadlineTooltip {
+  font-size: var(--font-size-small);
+  width: 50rem;
+}
+
+.rfpLinkToken {
+  width: 50rem;
+}
+
+.rfpLinkToken > input {
+  margin-top: 0;
+  height: 4.4rem;
+}
+
 .formatHelpButton {
   border: 0;
   color: var(--color-gray);
@@ -27,6 +83,10 @@
 }
 
 @media screen and (max-width: 685px) {
+  .rfpLinkToken {
+    width: auto;
+  }
+
   .formatHelpButton {
     padding-right: var(--spacing-1);
   }

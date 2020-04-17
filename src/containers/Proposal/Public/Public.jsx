@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from "react";
 import { Spinner } from "pi-ui";
 import styles from "./PublicProposals.module.css";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
-import useProposalsBatch from "../hooks/useProposalsBatch";
+import { useProposalsBatch } from "../hooks";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { PublicActionsProvider } from "src/containers/Proposal/Actions";

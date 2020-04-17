@@ -357,7 +357,11 @@ export const onFetchProposalsBatch = (tokens, fetchVoteStatus = true) =>
       }
       const response = await Promise.all(promises);
       const proposals = response.find((res) => res && res.proposals).proposals;
+      const summaries =
+        fetchVoteStatus &&
+        response.find((res) => res && res.summaries).summaries;
       dispatch(act.RECEIVE_PROPOSALS_BATCH({ proposals }));
+      return [proposals, summaries];
     } catch (e) {
       dispatch(act.RECEIVE_PROPOSALS_BATCH(null, e));
     }
@@ -590,11 +594,25 @@ export const onSubmitProposal = (
   username,
   name,
   description,
+  rfpDeadline,
+  type,
+  rfpLink,
   files
 ) =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_NEW_PROPOSAL({ name, description, files }));
-    return Promise.resolve(api.makeProposal(name, description, files))
+    dispatch(
+      act.REQUEST_NEW_PROPOSAL({
+        name,
+        description,
+        rfpDeadline,
+        type,
+        rfpLink,
+        files
+      })
+    );
+    return Promise.resolve(
+      api.makeProposal(name, description, rfpDeadline, type, rfpLink, files)
+    )
       .then((proposal) => api.signRegister(loggedInAsEmail, proposal))
       .then((proposal) => api.newProposal(csrf, proposal))
       .then((proposal) => {
@@ -605,7 +623,10 @@ export const onSubmitProposal = (
             userid,
             username,
             name,
-            description
+            description,
+            type,
+            rfpLink,
+            files
           })
         );
         resetNewProposalData();
@@ -624,12 +645,26 @@ export const onSubmitEditedProposal = (
   loggedInAsEmail,
   name,
   description,
+  rfpDeadline,
+  type,
+  rfpLink,
   files,
   token
 ) =>
   withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_EDIT_PROPOSAL({ name, description, files }));
-    return Promise.resolve(api.makeProposal(name, description, files))
+    dispatch(
+      act.REQUEST_EDIT_PROPOSAL({
+        name,
+        description,
+        files,
+        rfpDeadline,
+        rfpLink,
+        type
+      })
+    );
+    return Promise.resolve(
+      api.makeProposal(name, description, rfpDeadline, type, rfpLink, files)
+    )
       .then((proposal) => api.signRegister(loggedInAsEmail, proposal))
       .then((proposal) => api.editProposal(csrf, { ...proposal, token }))
       .then((proposal) => {

@@ -40,8 +40,22 @@ export const getQuorumInVotes = (voteSummary) =>
  * @param {Object} proposal
  * @returns {Boolean} isPublic
  */
-export const isPublicProposal = (proposal) => {
-  return !!proposal && proposal.status === PROPOSAL_STATUS_PUBLIC;
+export const isPublicProposal = (proposal) =>
+  !!proposal && proposal.status === PROPOSAL_STATUS_PUBLIC;
+
+/**
+ * Returns true if the given proposal is an approved RFP
+ * and it's deadline didn;t expire yet
+ * @param {Object} proposal
+ * @param {Object} voteSummary
+ * @returns {Boolean} isActiveApproved
+ */
+export const isActiveApprovedRFP = (proposal, voteSummary) => {
+  return (
+    isApprovedProposal(proposal, voteSummary) &&
+    proposal.linkby &&
+    new Date().getTime() < +proposal.linkby
+  );
 };
 
 /**
@@ -49,21 +63,17 @@ export const isPublicProposal = (proposal) => {
  * @param {Object} proposal
  * @returns {Boolean} isUnreviewed
  */
-export const isUnreviewedProposal = (proposal) => {
-  return (
-    proposal.status === PROPOSAL_STATUS_UNREVIEWED ||
-    proposal.status === PROPOSAL_STATUS_UNREVIEWED_CHANGES
-  );
-};
+export const isUnreviewedProposal = (proposal) =>
+  proposal.status === PROPOSAL_STATUS_UNREVIEWED ||
+  proposal.status === PROPOSAL_STATUS_UNREVIEWED_CHANGES;
 
 /**
  * Returns true if the given proposal is censored
  * @param {Object} proposal
  * @returns {Boolean} isCensored
  */
-export const isCensoredProposal = (proposal) => {
-  return proposal.status === PROPOSAL_STATUS_CENSORED;
-};
+export const isCensoredProposal = (proposal) =>
+  proposal.status === PROPOSAL_STATUS_CENSORED;
 
 /**
  * Returns true if the given proposal is public, but voting
@@ -71,9 +81,8 @@ export const isCensoredProposal = (proposal) => {
  * @param {Object} voteSummary
  * @returns {Boolean} isVotingNotAuthorized
  */
-export const isVotingNotAuthorizedProposal = (voteSummary) => {
-  return !!voteSummary && voteSummary.status === PROPOSAL_VOTING_NOT_AUTHORIZED;
-};
+export const isVotingNotAuthorizedProposal = (voteSummary) =>
+  !!voteSummary && voteSummary.status === PROPOSAL_VOTING_NOT_AUTHORIZED;
 
 /**
  * Returns true if the given proposal is public, but voting
@@ -81,9 +90,8 @@ export const isVotingNotAuthorizedProposal = (voteSummary) => {
  * @param {Object} voteSummary
  * @returns {Boolean} isVotingFinished
  */
-export const isVotingFinishedProposal = (voteSummary) => {
-  return !!voteSummary && voteSummary.status === PROPOSAL_VOTING_FINISHED;
-};
+export const isVotingFinishedProposal = (voteSummary) =>
+  !!voteSummary && voteSummary.status === PROPOSAL_VOTING_FINISHED;
 
 /**
  * Returns true if the given proposal is editable
@@ -91,12 +99,9 @@ export const isVotingFinishedProposal = (voteSummary) => {
  * @param {Object} voteSummary
  * @returns {Boolean} isEditable
  */
-export const isEditableProposal = (proposal, voteSummary) => {
-  return (
-    isUnreviewedProposal(proposal) ||
-    (isPublicProposal(proposal) && isVotingNotAuthorizedProposal(voteSummary))
-  );
-};
+export const isEditableProposal = (proposal, voteSummary) =>
+  isUnreviewedProposal(proposal) ||
+  (isPublicProposal(proposal) && isVotingNotAuthorizedProposal(voteSummary));
 
 /**
  * Returns true if the given proposal is under discussion
@@ -104,22 +109,18 @@ export const isEditableProposal = (proposal, voteSummary) => {
  * @param {Object} voteSummary
  * @returns {Boolean} isUnderDiscussion
  */
-export const isUnderDiscussionProposal = (proposal, voteSummary) => {
-  return (
-    isPublicProposal(proposal) &&
-    !isVoteActiveProposal(voteSummary) &&
-    !isVotingFinishedProposal(voteSummary)
-  );
-};
+export const isUnderDiscussionProposal = (proposal, voteSummary) =>
+  isPublicProposal(proposal) &&
+  !isVoteActiveProposal(voteSummary) &&
+  !isVotingFinishedProposal(voteSummary);
 
 /**
  * Returns true if the given proposal is abandoned
  * @param {Object} proposal
  * @returns {Boolean} isAbandoned
  */
-export const isAbandonedProposal = (proposal) => {
-  return proposal.status === PROPOSAL_STATUS_ABANDONED;
-};
+export const isAbandonedProposal = (proposal) =>
+  proposal.status === PROPOSAL_STATUS_ABANDONED;
 
 /**
  * Returns true if the given proposal is approved
@@ -132,8 +133,8 @@ export const isApprovedProposal = (proposal, voteSummary) => {
     return false;
   }
   const {
-    quorumpercentage,
-    passpercentage,
+    quorumpercentage = 0,
+    passpercentage = 0,
     eligibletickets: numofeligiblevotes,
     results
   } = voteSummary;
@@ -204,8 +205,5 @@ export const getMarkdownContent = (files) => {
  * @param {Object} proposal
  * @returns {String} censorhipToken
  */
-export const getProposalToken = (proposal) => {
-  return (
-    proposal && proposal.censorshiprecord && proposal.censorshiprecord.token
-  );
-};
+export const getProposalToken = (proposal) =>
+  proposal && proposal.censorshiprecord && proposal.censorshiprecord.token;

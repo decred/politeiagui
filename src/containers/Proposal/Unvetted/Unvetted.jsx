@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import useProposalsBatch from "../hooks/useProposalsBatch";
+import { useProposalsBatch } from "../hooks";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
@@ -21,9 +21,7 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
     onFetchProposalsBatch
   } = useProposalsBatch();
 
-  function handleFetchRecords(tokens) {
-    return onFetchProposalsBatch(tokens, false);
-  }
+  const handleFetchRecords = (tokens) => onFetchProposalsBatch(tokens, false);
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {

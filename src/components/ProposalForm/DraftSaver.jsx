@@ -63,8 +63,15 @@ const DraftSaver = ({ values, setValues, dirty, submitSuccess }) => {
       const foundDraftProposal =
         !!draftProposals && draftId && draftProposals[draftId];
       if (foundDraftProposal && !dirty) {
-        const { name, description, files } = foundDraftProposal;
-        setValues({ name, description, files });
+        const {
+          name,
+          description,
+          files,
+          type,
+          rfpDeadline,
+          rfpLink
+        } = foundDraftProposal;
+        setValues({ name, description, files, type, rfpDeadline, rfpLink });
       }
     },
     [draftProposals, dirty, draftId, setValues]

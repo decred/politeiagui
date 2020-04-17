@@ -27,9 +27,18 @@ const VotesCount = ({
               src={iconSearchSmall}
             />
           )}
-          <Tooltip className={classNames(styles.quorumTooltip, isDarkTheme && styles.darkQuorumTooltip)} content={`${votesReceived} votes cast, quorum requirement is ${quorumVotes} votes`}>
-            <Text className={styles.votesReceived} size="small">{votesReceived}</Text>
-            <Text className={styles.votesQuorum} size="small">/{`${quorumVotes} votes`}</Text>
+          <Tooltip
+            className={classNames(
+              styles.quorumTooltip,
+              isDarkTheme && styles.darkQuorumTooltip
+            )}
+            content={`${votesReceived} votes cast, quorum requirement is ${quorumVotes} votes`}>
+            <Text className={styles.votesReceived} size="small">
+              {votesReceived}
+            </Text>
+            <Text className={styles.votesQuorum} size="small">
+              /{`${quorumVotes} votes`}
+            </Text>
           </Tooltip>
         </>
       ) : isVoteActive ? (
