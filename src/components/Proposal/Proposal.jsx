@@ -6,13 +6,18 @@ import {
   useMediaQuery,
   useTheme
 } from "pi-ui";
-import React from "react";
+import React, { useMemo } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
-import { NOJS_ROUTE_PREFIX } from "src/constants";
-import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
+import {
+  getProposalStatusTagProps,
+  getStatusBarData,
+  getProposalUrl,
+  getCommentsUrl,
+  getAuthorUrl
+} from "./helpers";
 import {
   getMarkdownContent,
   getVotesReceived,
@@ -65,22 +70,31 @@ const Proposal = React.memo(function Proposal({
     userid,
     username,
     version,
-    linkby
+    linkby,
+    linkto
   } = proposal;
-  const isRFP = !!linkby;
+  const isRfp = !!linkby;
+  const isRfpSubmission = !!linkto;
   const { javascriptEnabled } = useConfig();
 
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
-  const proposalURL = javascriptEnabled
-    ? `/proposals/${proposalToken}`
-    : `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}`;
-  const commentsURL = javascriptEnabled
-    ? `/proposals/${proposalToken}?scrollToComments=true`
-    : `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}?scrollToComments=true`;
-  const authorURL = javascriptEnabled
-    ? `/user/${userid}`
-    : `${NOJS_ROUTE_PREFIX}/user/${userid}`;
+  const proposalURL = useMemo(
+    () => getProposalUrl(proposalToken, javascriptEnabled),
+    [proposalToken, javascriptEnabled]
+  );
+  const commentsURL = useMemo(
+    () => getCommentsUrl(proposalToken, javascriptEnabled),
+    [proposalToken, javascriptEnabled]
+  );
+  const authorURL = useMemo(() => getAuthorUrl(userid, javascriptEnabled), [
+    userid,
+    javascriptEnabled
+  ]);
+  const rfpProposalLink = useMemo(
+    () => isRfpSubmission && getProposalUrl(linkto, javascriptEnabled),
+    [isRfpSubmission, javascriptEnabled, linkto]
+  );
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
@@ -115,13 +129,14 @@ const Proposal = React.memo(function Proposal({
       <RecordWrapper
         className={classNames(
           isAbandoned && styles.abandonedProposal,
-          isRFP && styles.rfpProposal
+          (isRfp || isRfpSubmission) && styles.rfpProposal
         )}>
         {({
           Author,
           Event,
           Row,
           Title,
+          RfpProposalLink,
           CommentsLink,
           GithubLink,
           ChartsLink,
@@ -148,7 +163,11 @@ const Proposal = React.memo(function Proposal({
               edit={
                 isEditable && <Edit url={`/proposals/${proposalToken}/edit`} />
               }
-              showRFPTag={isRFP}
+              isRfp={isRfp}
+              isRfpSubmission={isRfpSubmission}
+              rfpProposalLink={
+                <RfpProposalLink url={rfpProposalLink} rfpTitle="test" />
+              }
               subtitle={
                 <Subtitle>
                   <Author username={username} url={authorURL} />

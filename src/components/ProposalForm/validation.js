@@ -41,7 +41,7 @@ export const proposalValidation = ({
     errors.rfpDeadline = "Required";
   }
 
-  // RFP deadline validation
+  // RFP submission token validation
   if (values.type === PROPOSAL_TYPE_RFP_SUBMISSION && !values.rfpLink) {
     errors.rfpLink = "Required";
   }

@@ -92,10 +92,10 @@ export const Status = ({ children, disableMobileView, className }) => (
   </div>
 );
 
-const MobileHeader = ({ title, status, edit, showRFPTag }) => (
+const MobileHeader = ({ title, status, edit, isRfp }) => (
   <div className={styles.titleWrapper}>
     <div className={styles.titleEditWrapper}>
-      {showRFPTag && <RFPTag className={styles.mobileRfpTag} />}
+      {isRfp && <RfpTag className={styles.mobileRfpTag} />}
       {title}
     </div>
     <div className={styles.titleStatusWrapper}>
@@ -105,7 +105,7 @@ const MobileHeader = ({ title, status, edit, showRFPTag }) => (
   </div>
 );
 
-const RFPTag = React.memo(({ className }) => (
+const RfpTag = React.memo(({ className }) => (
   <img
     alt="rfp"
     className={classNames("margin-right-s", "margin-top-xs", className)}
@@ -120,27 +120,25 @@ export const Header = React.memo(function Header({
   edit,
   mobile,
   disableMobileView = false,
-  showRFPTag
+  isRfp,
+  isRfpSubmission,
+  rfpProposalLink
 }) {
   return (
     <div className={styles.header}>
       {!mobile || disableMobileView ? (
         <div className={styles.titleWrapper}>
           <div className={styles.titleEditWrapper}>
-            {showRFPTag && <RFPTag />}
+            {isRfp && <RfpTag />}
             {title}
             {edit}
           </div>
           <div className={styles.titleStatusWrapper}>{status}</div>
         </div>
       ) : (
-        <MobileHeader
-          title={title}
-          showRFPTag={showRFPTag}
-          status={status}
-          edit={edit}
-        />
+        <MobileHeader title={title} isRfp={isRfp} status={status} edit={edit} />
       )}
+      {isRfpSubmission && rfpProposalLink}
       {subtitle}
     </div>
   );
@@ -227,6 +225,13 @@ export const CommentsLink = ({ numOfComments, url }) => {
   );
 };
 
+export const RfpProposalLink = ({ url, rfpTitle }) => (
+  <div>
+    <span>Proposed for </span>
+    <Link to={url}>{rfpTitle}</Link>
+  </div>
+);
+
 export const DownloadRecord = DownloadJSON;
 
 const RecordWrapper = ({ children, className }) => (
@@ -236,6 +241,7 @@ const RecordWrapper = ({ children, className }) => (
       Event,
       Row,
       Title,
+      RfpProposalLink,
       CommentsLink,
       Link,
       GithubLink,
