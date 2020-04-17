@@ -65,6 +65,10 @@
   background: var(--dimmed-card-background) !important;
 }
 
+.rfpProposal {
+  border-left: 2px solid #1b41b3;
+}
+
 .proposalActions {
   margin: 0;
 }
@@ -100,6 +104,10 @@ span.statusTag > span {
 }
 
 @media screen and (max-width: 560px) {
+  .rfpProposal {
+    border-left: 1px solid #1b41b3;
+  }
+
   .timeLeft {
     margin-top: 0;
   }

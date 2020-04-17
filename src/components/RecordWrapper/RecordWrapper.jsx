@@ -229,27 +229,30 @@ export const CommentsLink = ({ numOfComments, url }) => {
 
 export const DownloadRecord = DownloadJSON;
 
-const RecordWrapper = ({ children, className }) => (
-  <Card className={classNames("container margin-bottom-m", className)}>
-    {children({
-      Author,
-      Event,
-      Row,
-      Title,
-      CommentsLink,
-      Link,
-      GithubLink,
-      ChartsLink,
-      CopyLink,
-      DownloadRecord,
-      Header,
-      Subtitle,
-      Edit,
-      Status,
-      RecordToken
-    })}
-  </Card>
-);
+const RecordWrapper = ({ children, className }) => {
+  console.log(className);
+  return (
+    <Card className={classNames("container margin-bottom-m", className)}>
+      {children({
+        Author,
+        Event,
+        Row,
+        Title,
+        CommentsLink,
+        Link,
+        GithubLink,
+        ChartsLink,
+        CopyLink,
+        DownloadRecord,
+        Header,
+        Subtitle,
+        Edit,
+        Status,
+        RecordToken
+      })}
+    </Card>
+  );
+};
 
 RecordWrapper.propTypes = {
   children: PropTypes.func.isRequired,

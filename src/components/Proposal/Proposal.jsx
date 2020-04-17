@@ -113,7 +113,10 @@ const Proposal = React.memo(function Proposal({
   return (
     <>
       <RecordWrapper
-        className={classNames(isAbandoned && styles.abandonedProposal)}>
+        className={classNames(
+          isAbandoned && styles.abandonedProposal,
+          isRFP && styles.rfpProposal
+        )}>
         {({
           Author,
           Event,
