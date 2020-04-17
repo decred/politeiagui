@@ -53,20 +53,22 @@ describe("test api actions (actions/api.js)", () => {
         }
       }
     },
-    api: {
+    app: {
       me: {
-        response: {
-          paywalladdress: FAKE_PAYWALL.address,
-          paywallamount: FAKE_PAYWALL.amount,
-          paywalltxnotbefore: FAKE_PAYWALL.txNotBefore,
-          csrfToken: FAKE_CSRF
-        }
+        paywalladdress: FAKE_PAYWALL.address,
+        paywallamount: FAKE_PAYWALL.amount,
+        paywalltxnotbefore: FAKE_PAYWALL.txNotBefore,
+        csrfToken: FAKE_CSRF
       },
       init: {
-        response: {
-          csrfToken: FAKE_CSRF
-        }
+        csrfToken: FAKE_CSRF
       }
+    },
+    users: {
+      byID: {
+        [FAKE_USER.id]: FAKE_USER
+      },
+      currentUserID: FAKE_USER.id
     }
   };
 
@@ -77,20 +79,21 @@ describe("test api actions (actions/api.js)", () => {
     params,
     expectedActions,
     options = {},
-    method = methods.GET
+    method = methods.GET,
+    response = RANDOM_SUCCESS_RESPONSE
   ) => {
     switch (method) {
       case methods.GET:
-        setGetSuccessResponse(path, options);
+        setGetSuccessResponse(path, options, response);
         break;
       case methods.POST:
-        setPostSuccessResponse(path, options);
+        setPostSuccessResponse(path, options, response);
         break;
       case methods.PUT:
-        setPutSuccessResponse(path, options);
+        setPutSuccessResponse(path, options, response);
         break;
       default:
-        setGetSuccessResponse(path, options);
+        setGetSuccessResponse(path, options, response);
     }
 
     await expect(fn.apply(null, params)).toDispatchActionsWithState(
@@ -428,28 +431,40 @@ describe("test api actions (actions/api.js)", () => {
   });
 
   test("on fetch user proposals action", async () => {
-    const path = "/api/v1/user/proposals";
+    const path = "path:/api/v1/user/proposals";
     const params = [FAKE_USER.id];
     await assertApiActionOnSuccess(
       path,
-      api.onFetchUserProposals,
+      api.onFetchUserProposalsWithVoteSummary,
       params,
       [
-        { type: act.REQUEST_USER_PROPOSALS },
+        {
+          type: act.REQUEST_USER_PROPOSALS,
+          error: false,
+          payload: { userid: FAKE_USER.id }
+        },
         { type: act.RECEIVE_USER_PROPOSALS, error: false }
       ],
       {
         query: {
           userid: FAKE_USER.id
         }
+      },
+      methods.GET,
+      {
+        proposals: []
       }
     );
     await assertApiActionOnError(
       path,
-      api.onFetchUserProposals,
+      api.onFetchUserProposalsWithVoteSummary,
       params,
       (e) => [
-        { type: act.REQUEST_USER_PROPOSALS, error: false, payload: undefined },
+        {
+          type: act.REQUEST_USER_PROPOSALS,
+          error: false,
+          payload: { userid: FAKE_USER.id }
+        },
         { type: act.RECEIVE_USER_PROPOSALS, error: true, payload: e }
       ],
       {
@@ -913,8 +928,6 @@ describe("test api actions (actions/api.js)", () => {
   // TODO: for the following tests
   // needs to decouple modal confirmation from the
   // actions so it can be tested
-  // test("on start vote", async () => {
-  // });
-  // test("on submit status proposal", () => {
-  // });
+  test("on start vote", async () => {});
+  test("on submit status proposal", () => {});
 });

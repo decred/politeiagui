@@ -39,7 +39,6 @@ export function useSignup() {
       onResetSignup();
     };
   }, [onResetSignup]);
-  const isCms = recordType !== constants.RECORD_TYPE_PROPOSAL;
 
   // Set intial values
   const { email, verificationtoken } = getQueryStringValues();

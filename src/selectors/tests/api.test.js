@@ -4,8 +4,8 @@ import { MOCK_STATE } from "./mock_state";
 describe("test api selectors", () => {
   test("testing higher order selectors", () => {
     // isRequesting
-    expect(sel.getIsApiRequesting("init")({})).toEqual(false);
-    expect(sel.getIsApiRequesting("init")(MOCK_STATE)).toEqual(true);
+    expect(sel.getIsApiRequesting("startVote")({})).toEqual(false);
+    expect(sel.getIsApiRequesting("startVote")(MOCK_STATE)).toEqual(true);
 
     // payload
     expect(sel.getApiPayload("newUser")({})).toEqual(undefined);
