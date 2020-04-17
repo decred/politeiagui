@@ -1,5 +1,6 @@
 import { Button, Link, Message, P } from "pi-ui";
 import React from "react";
+import useNavigation from "src/hooks/api/useNavigation";
 import useFaucet from "./hooks";
 import styles from "./PaymentFaucet.module.css";
 
@@ -7,6 +8,7 @@ const FAUCET_BASE_URL = "https://testnet.decred.org/explorer/tx";
 const getFaucetUrl = (txid) => `${FAUCET_BASE_URL}/${txid}`;
 
 const PaymentFaucet = ({ address, amount }) => {
+  const { user } = useNavigation();
   const {
     payWithFaucetError,
     payWithFaucet,
@@ -25,7 +27,7 @@ const PaymentFaucet = ({ address, amount }) => {
           <Button
             className="margin-top-s"
             loading={isApiRequestingPayWithFaucet}
-            onClick={() => payWithFaucet(address, amount)}>
+            onClick={() => payWithFaucet(address, amount, user.userid)}>
             Pay with Faucet
           </Button>
         )}

@@ -1,3 +1,4 @@
+
 import {
   Button,
   classNames,
@@ -35,8 +36,15 @@ const ModalBuyProposalCredits = ({
     setModalType(1);
     setNumber(+values.creditsNumber);
   }
+
   useEffect(() => {
-    if (!isPollingCreditsPayment && modalType === 1) startPollingPayment();
+    setModalType(initialStep);
+  }, [initialStep]);
+
+  useEffect(() => {
+    if (!isPollingCreditsPayment && modalType === 1) {
+      startPollingPayment();
+    }
   }, [isPollingCreditsPayment, startPollingPayment, modalType]);
 
   const extraSmall = useMediaQuery("(max-width: 560px)");

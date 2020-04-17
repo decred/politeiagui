@@ -9,32 +9,36 @@ import ModalPayPaywall from "src/components/ModalPayPaywall";
 import { getProposalCreditsPaymentStatus } from "./helpers.js";
 
 export function useCredits(userID) {
-  const proposalPaywallAddress = useSelector(sel.proposalPaywallAddress);
-  const proposalCreditPrice = useSelector(sel.proposalCreditPrice);
   const isApiRequestingProposalPaywall = useSelector(
     sel.isApiRequestingProposalPaywall
   );
   const isApiRequestingUserProposalCredits = useSelector(
     sel.isApiRequestingUserProposalCredits
   );
-  const proposalPaywallPaymentTxid = useSelector(
-    sel.apiProposalPaywallPaymentTxid
+  const proposalPaywallAddressSelector = useMemo(
+    () => sel.makeGetPaywallAddress(userID),
+    [userID]
   );
-  const proposalPaywallPaymentAmount = useSelector(
-    sel.apiProposalPaywallPaymentAmount
+  const proposalCreditPriceSelector = useMemo(
+    () => sel.makeGetPaywallCreditPrice(userID),
+    [userID]
   );
-  const proposalPaywallPaymentConfirmations = useSelector(
-    sel.apiProposalPaywallPaymentConfirmations
+  const proposalPaywallPaymentTxidSelector = useMemo(
+    () => sel.makeGetPaywallTxid(userID),
+    [userID]
   );
-  const pollingCreditsPayment = useSelector(sel.pollingCreditsPayment);
-  const reachedCreditsPaymentPollingLimit = useSelector(
-    sel.reachedCreditsPaymentPollingLimit
+  const proposalPaywallPaymentAmountSelector = useMemo(
+    () => sel.makeGetPaywallAmount(userID),
+    [userID]
   );
-  const proposalPaymentReceived = useSelector(sel.proposalPaymentReceived);
-  const isAdmin = useSelector(sel.currentUserIsAdmin);
-  const currentUserID = useSelector(sel.currentUserID);
-  const user = useSelector(sel.currentUser);
-
+  const proposalPaywallPaymentConfirmationsSelector = useMemo(
+    () => sel.makeGetPaywallConfirmations(userID),
+    [userID]
+  );
+  const paywallFaucetTxidSelector = useMemo(
+    () => sel.makeGetPaywallFaucetTxid(userID),
+    [userID]
+  );
   const creditsSelector = useMemo(() => sel.makeGetUnspentUserCredits(userID), [
     userID
   ]);
@@ -42,13 +46,35 @@ export function useCredits(userID) {
     () => sel.makeGetUserCreditsPurchasesByTx(userID),
     [userID]
   );
-
+  const proposalPaywallAddress = useSelector(proposalPaywallAddressSelector);
+  const proposalCreditPrice = useSelector(proposalCreditPriceSelector);
+  const proposalPaywallPaymentTxid = useSelector(
+    proposalPaywallPaymentTxidSelector
+  );
+  const proposalPaywallPaymentAmount = useSelector(
+    proposalPaywallPaymentAmountSelector
+  );
+  const proposalPaywallPaymentConfirmations = useSelector(
+    proposalPaywallPaymentConfirmationsSelector
+  );
   const proposalCreditsUnspent = useSelector(creditsSelector);
   const proposalCreditsPurchases = useSelector(creditsPurchasesSelector);
+  const paywallFaucetTxid = useSelector(paywallFaucetTxidSelector);
+
+  const pollingCreditsPayment = useSelector(sel.pollingCreditsPayment);
+  const reachedCreditsPaymentPollingLimit = useSelector(
+    sel.reachedCreditsPaymentPollingLimit
+  );
+  const proposalPaymentReceived = useSelector(sel.proposalPaymentReceived);
+  const isAdmin = useSelector(sel.currentUserIsAdmin);
+  const currentUserID = useSelector(sel.currentUserID);
 
   const onUserProposalCredits = useAction(act.onUserProposalCredits);
   const onPurchaseProposalCredits = useAction(
     act.onFetchProposalPaywallDetails
+  );
+  const onFetchProposalPaywallPayment = useAction(
+    act.onFetchProposalPaywallPayment
   );
   const onPollProposalPaywallPayment = useAction(
     act.onPollProposalPaywallPayment
@@ -62,23 +88,25 @@ export function useCredits(userID) {
   const clearProposalPaymentPollingPointer = useAction(
     act.clearProposalPaymentPollingPointer
   );
-
+  const { isPaid } = usePaywall(userID);
   const proposalCredits = proposalCreditsUnspent.length;
-  const { isPaid } = usePaywall();
   const proposalCreditsFetched = proposalCredits !== null;
-  const isUserPageOwner = user && currentUserID === user.userid;
+  const isUserPageOwner = currentUserID === userID;
   const shouldFetchPurchaseProposalCredits =
     isPaid &&
+    !!userID &&
     isUserPageOwner &&
     !proposalCreditPrice &&
     !isApiRequestingProposalPaywall;
   const shouldPollPaywallPayment =
     isPaid &&
     isUserPageOwner &&
+    proposalPaywallPaymentTxid !== "" &&
     !pollingCreditsPayment &&
     !reachedCreditsPaymentPollingLimit;
   const shouldFetchProposalCredits =
     isPaid &&
+    userID &&
     isUserPageOwner &&
     !isApiRequestingUserProposalCredits &&
     !proposalCreditsFetched;
@@ -98,17 +126,24 @@ export function useCredits(userID) {
   useEffect(() => {
     if (!pollingCreditsPayment && proposalPaywallPaymentTxid) {
       toggleCreditsPaymentPolling(true);
+      onPollProposalPaywallPayment(false);
     }
   }, [
     pollingCreditsPayment,
+    proposalPaywallPaymentTxid,
     toggleCreditsPaymentPolling,
-    proposalPaywallPaymentTxid
+    onPollProposalPaywallPayment
   ]);
+
+  useEffect(() => {
+    if (!proposalPaywallPaymentTxid) {
+      onFetchProposalPaywallPayment();
+    }
+  }, [proposalPaywallPaymentTxid, onFetchProposalPaywallPayment]);
 
   return {
     proposalCreditPrice,
     isAdmin,
-    user,
     isApiRequestingUserProposalCredits,
     proposalCredits,
     proposalCreditsPurchases,
@@ -123,16 +158,24 @@ export function useCredits(userID) {
     toggleProposalPaymentReceived,
     onPollProposalPaywallPayment,
     shouldPollPaywallPayment,
-    clearProposalPaymentPollingPointer
+    clearProposalPaymentPollingPointer,
+    paywallFaucetTxid
   };
 }
 
 export function usePollProposalCreditsPayment() {
+  const currentUserID = useSelector(sel.currentUserID);
+  const proposalPaywallPaymentTxidSelector = useMemo(
+    () => sel.makeGetPaywallTxid(currentUserID),
+    [currentUserID]
+  );
   const proposalPaywallPaymentTxid = useSelector(
-    sel.apiProposalPaywallPaymentTxid
+    proposalPaywallPaymentTxidSelector
+  );
+  const onFetchProposalPaywallDetails = useAction(
+    act.onFetchProposalPaywallDetails
   );
   const pollingCreditsPayment = useSelector(sel.pollingCreditsPayment);
-
   const onUserProposalCredits = useAction(act.onUserProposalCredits);
   const toggleCreditsPaymentPolling = useAction(
     act.toggleCreditsPaymentPolling
@@ -152,14 +195,16 @@ export function usePollProposalCreditsPayment() {
       toggleProposalPaymentReceived(true);
       toggleCreditsPaymentPolling(false);
       onUserProposalCredits();
+      onFetchProposalPaywallDetails();
     }
     prevProposalPaywallPaymentTxid.current = proposalPaywallPaymentTxid;
   }, [
-    proposalPaywallPaymentTxid,
     pollingCreditsPayment,
-    onUserProposalCredits,
+    proposalPaywallPaymentTxid,
     toggleProposalPaymentReceived,
-    toggleCreditsPaymentPolling
+    toggleCreditsPaymentPolling,
+    onUserProposalCredits,
+    onFetchProposalPaywallDetails
   ]);
 
   return {};

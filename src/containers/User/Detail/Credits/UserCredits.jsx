@@ -10,14 +10,14 @@ import { useUserPaymentModals } from "./hooks";
 
 const Credits = ({ user }) => {
   const userID = user && user.userid;
-  const { isPaid } = usePaywall();
+  const { isPaid } = usePaywall(userID);
   const {
     proposalCreditPrice,
     isApiRequestingUserProposalCredits,
     proposalCredits,
     toggleCreditsPaymentPolling,
-    proposalPaymentReceived,
     toggleProposalPaymentReceived,
+    proposalPaymentReceived,
     onPollProposalPaywallPayment,
     shouldPollPaywallPayment
   } = useCredits(userID);
@@ -31,12 +31,14 @@ const Credits = ({ user }) => {
   useEffect(() => {
     if (shouldPollPaywallPayment) {
       toggleCreditsPaymentPolling(true);
+      toggleProposalPaymentReceived(false);
       onPollProposalPaywallPayment(true);
     }
   }, [
     shouldPollPaywallPayment,
     onPollProposalPaywallPayment,
-    toggleCreditsPaymentPolling
+    toggleCreditsPaymentPolling,
+    toggleProposalPaymentReceived
   ]);
 
   useEffect(() => {
@@ -46,9 +48,8 @@ const Credits = ({ user }) => {
     }
   }, [
     proposalPaymentReceived,
-    toggleProposalPaymentReceived,
-    handleCloseModal,
-    toggleCreditsPaymentPolling
+    toggleCreditsPaymentPolling,
+    handleCloseModal
   ]);
 
   return isApiRequestingUserProposalCredits ? (

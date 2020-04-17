@@ -5,3 +5,4 @@ export { default as proposals } from "./proposals";
 export { default as proposalVotes } from "./proposalVotes";
 export { default as invoices } from "./invoices";
 export { default as dccs } from "./dccs";
+export { default as paywall } from "./paywall";
