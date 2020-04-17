@@ -64,8 +64,10 @@ const Proposal = React.memo(function Proposal({
     timestamp,
     userid,
     username,
-    version
+    version,
+    linkby
   } = proposal;
+  const isRFP = !!linkby;
   const { javascriptEnabled } = useConfig();
 
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
@@ -143,6 +145,7 @@ const Proposal = React.memo(function Proposal({
               edit={
                 isEditable && <Edit url={`/proposals/${proposalToken}/edit`} />
               }
+              showRFPTag={isRFP}
               subtitle={
                 <Subtitle>
                   <Author username={username} url={authorURL} />

@@ -54,6 +54,7 @@
 .titleEditWrapper {
   max-width: calc(100% - 28rem);
   display: flex;
+  align-items: center;
 }
 
 .commentsLink {

@@ -21,20 +21,18 @@ import { useConfig } from "src/containers/Config";
 import { useLoader } from "src/containers/Loader";
 import Join from "../Join";
 import CopyLink from "../CopyLink";
+import rfpTag from "src/assets/images/rfp-tag.svg";
 
-export const Author = ({ username, url }) => (
-  <Link to={url}>{username}</Link>
-);
+export const Author = ({ username, url }) => <Link to={url}>{username}</Link>;
 
 export const Event = ({ event, timestamp, className, size }) => (
   <DateTooltip timestamp={timestamp} placement="bottom">
     {({ timeAgo }) => (
       <Text
         id={`event-${event}-${timestamp}`}
-        className={ classNames(styles.eventTooltip, className)}
+        className={classNames(styles.eventTooltip, className)}
         truncate
-        size={size}
-      >{`${event} ${timeAgo}`}</Text>
+        size={size}>{`${event} ${timeAgo}`}</Text>
     )}
   </DateTooltip>
 );
@@ -49,11 +47,15 @@ export const RecordToken = ({ token }) => (
 );
 
 export const Title = ({ children, isAbandoned, url, ...props }) => {
-  const SimpleWrapper = props => <div {...props} />;
+  const SimpleWrapper = (props) => <div {...props} />;
   const Wrapper = url ? Link : SimpleWrapper;
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
-  const titleClass = isAbandoned ? (isDarkTheme ? styles.darkAbandonedTitle : styles.abandonedTitle) : styles.title;
+  const titleClass = isAbandoned
+    ? isDarkTheme
+      ? styles.darkAbandonedTitle
+      : styles.abandonedTitle
+    : styles.title;
   return (
     <Wrapper to={url} className={titleClass}>
       <H2 {...props}>{children}</H2>
@@ -65,9 +67,10 @@ export const Subtitle = ({ children }) => (
   <Join
     className={classNames("margin-top-s", styles.subtitleWrapper)}
     SeparatorComponent={() => (
-      <span className="text-secondary-color margin-left-s margin-right-s">•</span>
-    )}
-  >
+      <span className="text-secondary-color margin-left-s margin-right-s">
+        •
+      </span>
+    )}>
     {children}
   </Join>
 );
@@ -84,8 +87,7 @@ export const Status = ({ children, disableMobileView, className }) => (
       styles.status,
       disableMobileView && styles.disableMobileView,
       className
-    )}
-  >
+    )}>
     {children}
   </div>
 );
@@ -100,27 +102,37 @@ const MobileHeader = ({ title, status, edit }) => (
   </div>
 );
 
+const RFPTag = React.memo(() => (
+  <img
+    alt="rfp"
+    className={classNames("margin-right-s", "margin-top-xs")}
+    src={rfpTag}
+  />
+));
+
 export const Header = React.memo(function Header({
   title,
   subtitle,
   status,
   edit,
   mobile,
-  disableMobileView = false
+  disableMobileView = false,
+  showRFPTag
 }) {
   return (
     <div className={styles.header}>
       {!mobile || disableMobileView ? (
         <div className={styles.titleWrapper}>
           <div className={styles.titleEditWrapper}>
+            {showRFPTag && <RFPTag />}
             {title}
             {edit}
           </div>
           <div className={styles.titleStatusWrapper}>{status}</div>
         </div>
       ) : (
-          <MobileHeader title={title} status={status} edit={edit} />
-        )}
+        <MobileHeader title={title} status={status} edit={edit} />
+      )}
       {subtitle}
     </div>
   );
@@ -132,23 +144,26 @@ export const ChartsLink = ({ token }) => {
   const hoverColor = getThemeProperty(theme, "icon-hover-color");
   const [ref, isHovered] = useHover();
   const iconColor = isHovered ? hoverColor : undefined;
-  const hostName = apiInfo.testnet ? "testnet.decred.org" : "dcrdata.decred.org";
+  const hostName = apiInfo.testnet
+    ? "testnet.decred.org"
+    : "dcrdata.decred.org";
 
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
 
   return (
     <Tooltip
-      className={classNames(styles.seeOnGithubTooltip, isDarkTheme && styles.darkSeeOnGithubTooltip)}
+      className={classNames(
+        styles.seeOnGithubTooltip,
+        isDarkTheme && styles.darkSeeOnGithubTooltip
+      )}
       placement="bottom"
-      content="Voting Charts"
-    >
+      content="Voting Charts">
       <UILink
         ref={ref}
         target="_blank"
         rel="nofollow noopener noreferrer"
-        href={`https://${hostName}/proposal/${token}`}
-      >
+        href={`https://${hostName}/proposal/${token}`}>
         <Icon type="chart" iconColor={iconColor} />
       </UILink>
     </Tooltip>
@@ -169,11 +184,17 @@ export const GithubLink = ({ token }) => {
 
   return (
     <Tooltip
-      className={classNames(styles.seeOnGithubTooltip, isDarkTheme && styles.darkSeeOnGithubTooltip)}
+      className={classNames(
+        styles.seeOnGithubTooltip,
+        isDarkTheme && styles.darkSeeOnGithubTooltip
+      )}
       placement="bottom"
-      content="See on GitHub"
-    >
-      <UILink ref={ref} rel="nofollow noopener noreferrer" target="_blank" href={`${repoURL}/${token}`}>
+      content="See on GitHub">
+      <UILink
+        ref={ref}
+        rel="nofollow noopener noreferrer"
+        target="_blank"
+        href={`${repoURL}/${token}`}>
         <Icon type="github" iconColor={iconColor} />
       </UILink>
     </Tooltip>
@@ -184,11 +205,18 @@ export const CommentsLink = ({ numOfComments, url }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
   return (
-    <Link to={url} gray={!isDarkTheme} dark={isDarkTheme} className={styles.commentsLink}>
+    <Link
+      to={url}
+      gray={!isDarkTheme}
+      dark={isDarkTheme}
+      className={styles.commentsLink}>
       <Icon type="discuss" className="margin-right-s" />
-      <span className={classNames(isDarkTheme && styles.darkCommentsNumber)}>{numOfComments}</span>
+      <span className={classNames(isDarkTheme && styles.darkCommentsNumber)}>
+        {numOfComments}
+      </span>
       Comments
-  </Link>);
+    </Link>
+  );
 };
 
 export const DownloadRecord = DownloadJSON;
