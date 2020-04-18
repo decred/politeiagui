@@ -11,11 +11,17 @@ const typesLabels = {
   [PROPOSAL_TYPE_RFP_SUBMISSION]: "RFP submission"
 };
 
-export const getRfpMinMaxDates = (minlinkby, maxlinkby) => {
+/**
+ * Returns the available dates range as objects { min,max } for RFP linkby
+ * using policy provided values
+ * @param {number} minlinkbyperiod min possible linkby period as seconds unix
+ * @param {number} maxlinkbyperiod max possible linkby period as seconds unix
+ */
+export const getRfpMinMaxDates = (minlinkbyperiod, maxlinkbyperiod) => {
   const currentTimeSec = new Date().getTime() / 1000;
   return {
-    min: formatUnixTimestampToObj(currentTimeSec + +minlinkby),
-    max: formatUnixTimestampToObj(currentTimeSec + +maxlinkby)
+    min: formatUnixTimestampToObj(currentTimeSec + +minlinkbyperiod),
+    max: formatUnixTimestampToObj(currentTimeSec + +maxlinkbyperiod)
   };
 };
 

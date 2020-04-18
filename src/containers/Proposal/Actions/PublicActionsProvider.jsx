@@ -77,7 +77,8 @@ const PublicActionsProvider = ({ children }) => {
           under the <Link to="/?tab=voting">Voting</Link> tab.
         </Text>
       ),
-      onClose: handleCloseModal
+      onClose: handleCloseModal,
+      proposal
     });
   };
 

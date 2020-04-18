@@ -13,6 +13,17 @@ import {
 import { getTextFromIndexMd } from "src/helpers";
 
 /**
+ * Returns true if RFP's linkby meets the minimum period
+ * @param {number} minlinkbyperiod min possible linkby period as seconds unix
+ */
+export const isRfpReadyToVote = (proposalLinkBy, minlinkbyperiod) => {
+  const currentTimeSec = new Date().getTime() / 1000;
+  return (
+    Math.round(currentTimeSec + minlinkbyperiod) < proposalLinkBy - 1728000
+  );
+};
+
+/**
  * Returns the total amount of votes received by a given proposal voteSummary
  * @param {Object} voteSummary
  */

@@ -12,6 +12,8 @@ import {
 import PropTypes from "prop-types";
 import { useLoaderContext } from "src/containers/Loader";
 import { validationSchema } from "./validation";
+import usePolicy from "src/hooks/api/usePolicy";
+import { isRfpReadyToVote } from "src/containers/Proposal/helpers";
 
 const preDefinedDurations = [2016, 2880, 4032];
 const getDurationOptions = (isTesnet) => {
@@ -28,12 +30,16 @@ const ModalStartVote = ({
   onSubmit,
   title,
   successMessage,
-  successTitle
+  successTitle,
+  proposal
 }) => {
   const [success, setSuccess] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
   const { apiInfo } = useLoaderContext();
   const { theme } = useTheme();
+  const {
+    policy: { minlinkbyperiod }
+  } = usePolicy();
   const successIconBgColor = getThemeProperty(
     theme,
     "success-icon-background-color"
@@ -42,12 +48,16 @@ const ModalStartVote = ({
     theme,
     "success-icon-checkmark-color"
   );
-  const onSubmitChangePassword = async (
-    values,
-    { resetForm, setFieldError }
-  ) => {
+  const onSubmitStartVote = async (values, { resetForm, setFieldError }) => {
     setSubmitting(true);
     try {
+      const { linkby } = proposal;
+      const isRfp = !!linkby;
+      if (isRfp && !isRfpReadyToVote(linkby, minlinkbyperiod)) {
+        throw Error(
+          "RFP deadline should meet the minimum period to start voting"
+        );
+      }
       await onSubmit(values);
       resetForm();
       setSubmitting(false);
@@ -93,7 +103,7 @@ const ModalStartVote = ({
             passPercentage: 60
           }}
           validationSchema={validationSchema}
-          onSubmit={onSubmitChangePassword}>
+          onSubmit={onSubmitStartVote}>
           {({
             Form,
             Actions,
