@@ -6,7 +6,7 @@ import {
   useMediaQuery,
   useTheme
 } from "pi-ui";
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
@@ -28,7 +28,10 @@ import {
   isVotingFinishedProposal,
   getProposalToken
 } from "src/containers/Proposal/helpers";
-import { useProposalVote } from "src/containers/Proposal/hooks";
+import {
+  useProposalVote,
+  useProposalsBatch
+} from "src/containers/Proposal/hooks";
 import { useLoaderContext } from "src/containers/Loader";
 import styles from "./Proposal.module.css";
 import LoggedInContent from "src/components/LoggedInContent";
@@ -43,9 +46,25 @@ import { useConfig } from "src/containers/Config";
 
 const ProposalWrapper = (props) => {
   const voteProps = useProposalVote(getProposalToken(props.proposal));
+  const { onFetchProposalsBatch } = useProposalsBatch();
+  const [proposedFor, setProposedFor] = useState(null);
+  const { linkto } = props.proposal;
+  useEffect(() => {
+    async function fetchRfpProposal() {
+      const [[rfpProposal]] = await onFetchProposalsBatch([linkto]);
+      setProposedFor(rfpProposal && rfpProposal.name);
+    }
+    if (linkto) {
+      fetchRfpProposal();
+    }
+  }, [linkto, onFetchProposalsBatch, setProposedFor]);
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
-  return <Proposal {...{ ...props, ...voteProps, currentUser, history }} />;
+  return (
+    <Proposal
+      {...{ ...props, ...voteProps, currentUser, history, proposedFor }}
+    />
+  );
 };
 
 const Proposal = React.memo(function Proposal({
@@ -57,7 +76,8 @@ const Proposal = React.memo(function Proposal({
   voteEndTimestamp,
   voteBlocksLeft,
   currentUser,
-  history
+  history,
+  proposedFor
 }) {
   const {
     censorshiprecord,
@@ -114,7 +134,7 @@ const Proposal = React.memo(function Proposal({
   const openSearchVotesModal = () => {
     handleOpenModal(ModalSearchVotes, {
       onClose: handleCloseModal,
-      proposal: proposal
+      proposal
     });
   };
 
@@ -166,7 +186,7 @@ const Proposal = React.memo(function Proposal({
               isRfp={isRfp}
               isRfpSubmission={isRfpSubmission}
               rfpProposalLink={
-                <RfpProposalLink url={rfpProposalLink} rfpTitle="test" />
+                <RfpProposalLink url={rfpProposalLink} rfpTitle={proposedFor} />
               }
               subtitle={
                 <Subtitle>

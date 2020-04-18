@@ -225,12 +225,22 @@ export const CommentsLink = ({ numOfComments, url }) => {
   );
 };
 
-export const RfpProposalLink = ({ url, rfpTitle }) => (
-  <div>
-    <span>Proposed for </span>
-    <Link to={url}>{rfpTitle}</Link>
-  </div>
-);
+export const RfpProposalLink = ({ url, rfpTitle }) => {
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === "dark";
+  return (
+    <div className={styles.rfpLink}>
+      <span
+        className={classNames(
+          !isDarkTheme && styles.proposedFor,
+          isDarkTheme && styles.darkProposedFor
+        )}>
+        Proposed for{" "}
+      </span>
+      <Link to={url}>{rfpTitle}</Link>
+    </div>
+  );
+};
 
 export const DownloadRecord = DownloadJSON;
 

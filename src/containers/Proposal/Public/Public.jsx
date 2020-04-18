@@ -8,9 +8,9 @@ import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { PublicActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
 
-const renderProposal = (record) => {
-  return <Proposal key={record.censorshiprecord.token} proposal={record} />;
-};
+const renderProposal = (record) => (
+  <Proposal key={record.censorshiprecord.token} proposal={record} />
+);
 
 const tabLabels = [
   tabValues.IN_DISCUSSION,
