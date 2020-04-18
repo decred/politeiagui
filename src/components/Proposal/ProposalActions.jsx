@@ -69,11 +69,14 @@ const PublicActions = ({ proposal, voteSummary }) => {
   const isProposalOwner =
     currentUser && proposal && currentUser.userid === proposal.userid;
 
+  const isRfpSubmission = !!proposal.linkto;
+
   const isVotingStartAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
   return (
     isUnderDiscussionProposal(proposal, voteSummary) && (
       <div className="justify-right margin-top-m">
         {isProposalOwner &&
+          !isRfpSubmission &&
           (!isVotingStartAuthorized ? (
             <Button onClick={withProposal(onAuthorizeVote)}>
               Authorize voting
