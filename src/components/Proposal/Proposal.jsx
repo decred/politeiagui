@@ -46,18 +46,18 @@ import { useConfig } from "src/containers/Config";
 
 const ProposalWrapper = (props) => {
   const voteProps = useProposalVote(getProposalToken(props.proposal));
-  const { onFetchProposalsBatch } = useProposalsBatch();
+  const { onFetchProposalsBatch, isLoading } = useProposalsBatch();
   const [proposedFor, setProposedFor] = useState(null);
   const { linkto } = props.proposal;
   useEffect(() => {
     async function fetchRfpProposal() {
-      const [[rfpProposal]] = await onFetchProposalsBatch([linkto]);
+      const [[rfpProposal]] = await onFetchProposalsBatch([linkto], false);
       setProposedFor(rfpProposal && rfpProposal.name);
     }
-    if (linkto) {
+    if (linkto && !proposedFor && !isLoading) {
       fetchRfpProposal();
     }
-  }, [linkto, onFetchProposalsBatch, setProposedFor]);
+  }, [linkto, onFetchProposalsBatch, setProposedFor, proposedFor, isLoading]);
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (
