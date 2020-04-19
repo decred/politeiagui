@@ -14,8 +14,9 @@ import { useLoaderContext } from "src/containers/Loader";
 import { validationSchema } from "./validation";
 import usePolicy from "src/hooks/api/usePolicy";
 import { isRfpReadyToVote } from "src/containers/Proposal/helpers";
+import { VOTE_TYPE_STANDARD, VOTE_TYPE_RUNOFF } from "src/constants";
 
-const preDefinedDurations = [2016, 2880, 4032];
+const preDefinedDurations = [10, 2880, 4032];
 const getDurationOptions = (isTesnet) => {
   const blockDuration = isTesnet ? 2 : 5;
   return preDefinedDurations.map((nb) => ({
@@ -31,7 +32,8 @@ const ModalStartVote = ({
   title,
   successMessage,
   successTitle,
-  proposal
+  proposal,
+  voteType
 }) => {
   const [success, setSuccess] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
@@ -53,7 +55,11 @@ const ModalStartVote = ({
     try {
       const { linkby } = proposal;
       const isRfp = !!linkby;
-      if (isRfp && !isRfpReadyToVote(linkby, minlinkbyperiod)) {
+      if (
+        isRfp &&
+        voteType === VOTE_TYPE_STANDARD &&
+        !isRfpReadyToVote(linkby, minlinkbyperiod)
+      ) {
         throw Error(
           "RFP deadline should meet the minimum period to start voting"
         );
@@ -182,7 +188,8 @@ ModalStartVote.propTypes = {
   onClose: PropTypes.func,
   onSubmit: PropTypes.func,
   successTitle: PropTypes.string,
-  successMessage: PropTypes.node
+  successMessage: PropTypes.node,
+  voteType: PropTypes.oneOf([VOTE_TYPE_STANDARD, VOTE_TYPE_RUNOFF]).isRequired
 };
 
 ModalStartVote.defaultProps = {

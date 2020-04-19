@@ -6,6 +6,7 @@ import ModalConfirm from "src/components/ModalConfirm";
 import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import ModalStartVote from "src/components/ModalStartVote";
 import useModalContext from "src/hooks/utils/useModalContext";
+import { VOTE_TYPE_STANDARD, VOTE_TYPE_RUNOFF } from "src/constants";
 
 const PublicActionsProvider = ({ children }) => {
   const {
@@ -70,6 +71,7 @@ const PublicActionsProvider = ({ children }) => {
   const handleStartVoteModal = (proposal) => {
     handleOpenModal(ModalStartVote, {
       title: `Start vote - ${proposal.name}`,
+      voteType: VOTE_TYPE_STANDARD,
       onSubmit: onStartVote(proposal),
       successTitle: "Proposal vote started",
       successMessage: (
@@ -86,6 +88,7 @@ const PublicActionsProvider = ({ children }) => {
   const handleStartRunoffVoteModal = (proposal) => {
     handleOpenModal(ModalStartVote, {
       title: `Start runoff vote - ${proposal.name}`,
+      voteType: VOTE_TYPE_RUNOFF,
       onSubmit: onStartRunoffVote(proposal),
       successTitle: "Proposal runoff vote started",
       message: "Are you sure you want to start runoff vote?",
