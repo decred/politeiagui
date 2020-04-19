@@ -60,7 +60,8 @@ const PublicActions = ({ proposal, voteSummary }) => {
     onAuthorizeVote,
     onRevokeVote,
     onAbandon,
-    onStartVote
+    onStartVote,
+    onStartRunoffVote
   } = usePublicProposalActions();
 
   const withProposal = (fn) => () => {
@@ -99,7 +100,9 @@ const PublicActions = ({ proposal, voteSummary }) => {
       )}
       {isRfpReadyToRunoff(proposal, voteSummary) && (
         <div className="justify-right margin-top-m">
-          <Button>Start Runoff Vote</Button>
+          <Button onClick={withProposal(onStartRunoffVote)}>
+            Start Runoff Vote
+          </Button>
         </div>
       )}
     </>

@@ -42,15 +42,11 @@ export const isApiRequestingNewComment = getIsApiRequesting("newComment");
 export const isApiRequestingSetStatusProposal = getIsApiRequesting(
   "setStatusProposal"
 );
-export const isApiRequestingPropsVoteStatus = getIsApiRequesting(
-  "proposalsVoteStatus"
-);
-export const isApiRequestingPropVoteStatus = getIsApiRequesting(
-  "proposalVoteStatus"
-);
+
 export const isApiRequestingPropVoteResults = getIsApiRequesting(
   "proposalVoteResults"
 );
+export const proposalVoteResultsError = getApiError("proposalVoteResults");
 
 export const isApiRequestingProposalsVoteSummary = getIsApiRequesting(
   "proposalsVoteSummary"
@@ -102,9 +98,6 @@ export const verifyUserKeyError = getApiError("verifyUserKey");
 export const apiEditUserPayload = getApiPayload("editUser");
 export const apiEditUserResponse = getApiResponse("editUser");
 export const editUserError = getApiError("editUser");
-
-export const apiPropVoteStatusResponse = getApiResponse("proposalVoteStatus");
-export const apiPropVoteStatusError = getApiError("proposalVoteStatusError");
 
 export const apiPropVoteResultsResponse = getApiResponse("proposalVoteResults");
 

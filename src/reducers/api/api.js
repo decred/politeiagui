@@ -35,8 +35,6 @@ export const DEFAULT_STATE = {
   adminInvoices: DEFAULT_REQUEST_STATE,
   proposalComments: DEFAULT_REQUEST_STATE,
   invoiceComments: DEFAULT_REQUEST_STATE,
-  proposalsVoteStatus: DEFAULT_REQUEST_STATE,
-  proposalVoteStatus: DEFAULT_REQUEST_STATE,
   commentslikes: DEFAULT_REQUEST_STATE,
   userProposals: DEFAULT_REQUEST_STATE,
   newProposal: DEFAULT_REQUEST_STATE,
@@ -245,6 +243,9 @@ const api = (state = DEFAULT_STATE, action) =>
         receive("setStatusProposal", state),
       [act.RECEIVE_START_VOTE]: () => receive("startVote", state),
       [act.REQUEST_START_VOTE]: () => request("startVote", state, action),
+      [act.RECEIVE_START_RUNOFF_VOTE]: () => receive("startRunoffVote", state),
+      [act.REQUEST_START_RUNOFF_VOTE]: () =>
+        request("startRunoffVote", state, action),
       [act.REQUEST_UPDATED_KEY]: () => request("updateUserKey", state, action),
       [act.RECEIVE_UPDATED_KEY]: () => receive("updateUserKey", state, action),
       [act.REQUEST_VERIFIED_KEY]: () => request("verifyUserKey", state, action),

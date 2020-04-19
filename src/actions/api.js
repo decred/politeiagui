@@ -1023,6 +1023,39 @@ export const onStartVote = (
       });
   });
 
+export const onStartRunoffVote = (
+  loggedInAsEmail,
+  token,
+  duration,
+  quorum,
+  pass,
+  version,
+  linkedfrom
+) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_START_RUNOFF_VOTE({ token }));
+    return api
+      .startRunoffVote(
+        loggedInAsEmail,
+        csrf,
+        token,
+        duration,
+        quorum,
+        pass,
+        version
+      )
+      .then((response) => {
+        dispatch(onFetchProposalsBatchVoteSummary([linkedfrom]));
+        dispatch(
+          act.REQUEST_START_RUNOFF_VOTE({ ...response, token, success: true })
+        );
+      })
+      .catch((error) => {
+        dispatch(act.REQUEST_START_RUNOFF_VOTE(null, error));
+        throw error;
+      });
+  });
+
 export const onFetchProposalPaywallDetails = () => (dispatch, getState) => {
   dispatch(act.REQUEST_PROPOSAL_PAYWALL_DETAILS());
   const userid = sel.currentUserID(getState());

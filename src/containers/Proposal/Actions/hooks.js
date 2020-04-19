@@ -47,6 +47,7 @@ export function useUnvettedActions() {
 export function usePublicActions() {
   const onSetProposalStatus = useAction(act.onSetProposalStatus);
   const onStart = useAction(act.onStartVote);
+  const onStartRunoff = useAction(act.onStartRunoffVote);
   const onAuthorize = useAction(act.onAuthorizeVote);
   const onRevoke = useAction(act.onRevokeVote);
 
@@ -99,10 +100,29 @@ export function usePublicActions() {
     [onStart, currentUserEmail]
   );
 
+  const onStartRunoffVote = useCallback(
+    ({
+      censorshiprecord: { token } = { token: null },
+      version,
+      linkedfrom
+    }) => ({ duration, quorumPercentage, passPercentage }) =>
+      onStartRunoff(
+        currentUserEmail,
+        token,
+        duration,
+        quorumPercentage,
+        passPercentage,
+        version,
+        linkedfrom
+      ),
+    [onStartRunoff, currentUserEmail]
+  );
+
   return {
     onAbandonProposal,
     onAuthorizeVote,
     onRevokeVote,
-    onStartVote
+    onStartVote,
+    onStartRunoffVote
   };
 }

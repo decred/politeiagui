@@ -9,7 +9,9 @@ import {
   INVOICE_STATUS_UNREVIEWED,
   DCC_STATUS_ACTIVE,
   PROPOSAL_TYPE_RFP,
-  PROPOSAL_TYPE_RFP_SUBMISSION
+  PROPOSAL_TYPE_RFP_SUBMISSION,
+  VOTE_TYPE_STANDARD,
+  VOTE_TYPE_RUNOFF
 } from "../constants";
 import {
   getHumanReadableError,
@@ -27,8 +29,6 @@ const STATUS_ERR = {
   403: "Forbidden",
   404: "Not found"
 };
-
-const VOTE_TYPE_STANDARD = 1;
 
 const apiBase = "/api";
 const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
@@ -557,6 +557,35 @@ export const editProposal = (csrf, proposal) =>
 export const newComment = (csrf, comment) =>
   POST("/comments/new", csrf, comment).then(getResponse);
 
+const votePayloadWithType = ({
+  type,
+  proposalversion,
+  duration,
+  quorumpercentage,
+  passpercentage,
+  token
+}) => ({
+  token,
+  proposalversion: +proposalversion,
+  type,
+  mask: 3,
+  duration,
+  quorumpercentage,
+  passpercentage,
+  options: [
+    {
+      id: "no",
+      description: "Don't approve proposal",
+      bits: 1
+    },
+    {
+      id: "yes",
+      description: "Approve proposal",
+      bits: 2
+    }
+  ]
+});
+
 export const startVote = (
   email,
   csrf,
@@ -566,33 +595,20 @@ export const startVote = (
   passpercentage,
   proposalversion
 ) => {
-  const vote = {
+  const vote = votePayloadWithType({
     token,
-    proposalversion: +proposalversion,
+    proposalversion,
     type: VOTE_TYPE_STANDARD,
-    mask: 3,
     duration,
     quorumpercentage,
-    passpercentage,
-    options: [
-      {
-        id: "no",
-        description: "Don't approve proposal",
-        bits: 1
-      },
-      {
-        id: "yes",
-        description: "Approve proposal",
-        bits: 2
-      }
-    ]
-  };
+    passpercentage
+  });
   const hash = objectToSHA256(vote);
   return pki
     .myPubKeyHex(email)
     .then((publickey) =>
-      pki.signStringHex(email, hash).then((signature) => {
-        return POST(
+      pki.signStringHex(email, hash).then((signature) =>
+        POST(
           "/vote/start",
           csrf,
           {
@@ -601,16 +617,44 @@ export const startVote = (
             publickey
           },
           "v2"
-        );
-      })
+        )
+      )
     )
     .then(getResponse);
 };
 
-export const proposalsVoteStatus = () =>
-  GET("/v1/proposals/votestatus").then(getResponse);
-export const proposalVoteStatus = (token) =>
-  GET(`/v1/proposals/${token}/votestatus`).then(getResponse);
+export const startRunoffVote = (
+  email,
+  csrf,
+  token,
+  duration,
+  quorumpercentage,
+  passpercentage,
+  proposalversion
+) => {
+  const vote = votePayloadWithType({
+    token,
+    proposalversion,
+    type: VOTE_TYPE_RUNOFF,
+    duration,
+    quorumpercentage,
+    passpercentage
+  });
+  const hash = objectToSHA256(vote);
+  return pki
+    .myPubKeyHex(email)
+    .then((publickey) =>
+      pki.signStringHex(email, hash).then((signature) =>
+        POST("/vote/startrunoff", csrf, {
+          vote,
+          signature,
+          publickey
+        })
+      )
+    )
+    .then(getResponse);
+};
+
 export const proposalsBatchVoteSummary = (csrf, tokens) =>
   POST("/proposals/batchvotesummary", csrf, {
     tokens

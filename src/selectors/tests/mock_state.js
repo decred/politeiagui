@@ -261,26 +261,6 @@ export const MOCK_STATE = {
         creditprice: 200000000
       }
     },
-    proposalVoteStatus: {
-      response: {
-        token:
-          "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8"
-      }
-    },
-    proposalsVoteStatus: {
-      response: {
-        "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8": {
-          token:
-            "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca8"
-        },
-        fake_token: {
-          token: "fake_token"
-        },
-        fake_token2: {
-          token: "fake_token2"
-        }
-      }
-    },
     proposalComments: {
       response: {
         comments: [

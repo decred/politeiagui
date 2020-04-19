@@ -12,7 +12,8 @@ const PublicActionsProvider = ({ children }) => {
     onAbandonProposal,
     onAuthorizeVote,
     onRevokeVote,
-    onStartVote
+    onStartVote,
+    onStartRunoffVote
   } = usePublicActions();
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
@@ -82,13 +83,31 @@ const PublicActionsProvider = ({ children }) => {
     });
   };
 
+  const handleStartRunoffVoteModal = (proposal) => {
+    handleOpenModal(ModalStartVote, {
+      title: `Start runoff vote - ${proposal.name}`,
+      onSubmit: onStartRunoffVote(proposal),
+      successTitle: "Proposal runoff vote started",
+      message: "Are you sure you want to start runoff vote?",
+      successMessage: (
+        <Text>
+          RFP runoff vote has been successfully started! Now RFP's submissions
+          will appear under the <Link to="/?tab=voting">Voting</Link> tab.
+        </Text>
+      ),
+      onClose: handleCloseModal,
+      proposal
+    });
+  };
+
   return (
     <PublicProposalsActionsContext.Provider
       value={{
         onAbandon: handleOpenAbandonModal,
         onAuthorizeVote: handleOpenAuthorizeVoteModal,
         onRevokeVote: handleOpenRevokeVoteModal,
-        onStartVote: handleStartVoteModal
+        onStartVote: handleStartVoteModal,
+        onStartRunoffVote: handleStartRunoffVoteModal
       }}>
       {children}
     </PublicProposalsActionsContext.Provider>

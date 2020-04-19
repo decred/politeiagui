@@ -6,7 +6,7 @@ import { useSelector, useAction } from "src/redux";
 export const useSearchVotes = (proposalToken, modalOpen) => {
   const proposalVoteResults = useSelector(sel.apiPropVoteResultsResponse);
   const loading = useSelector(sel.isApiRequestingPropVoteResults);
-  const error = useSelector(sel.apiPropVoteStatusError);
+  const error = useSelector(sel.proposalVoteResultsError);
   const onFetchProposalVoteResults = useAction(act.onFetchProposalVoteResults);
 
   useEffect(

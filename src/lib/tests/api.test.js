@@ -472,22 +472,6 @@ describe("api integration modules (lib/api.js)", () => {
     ]);
   });
 
-  test("get proposal vote status (api/v1/proposals/token/votestatus)", async () => {
-    await assertGETOnRouteIsCalled(
-      "/api/v1/proposals/token/votestatus",
-      api.proposalVoteStatus,
-      ["token"]
-    );
-  });
-
-  test("get proposals vote status (api/v1/proposals/votestatus)", async () => {
-    await assertGETOnRouteIsCalled(
-      "/api/v1/proposals/votestatus",
-      api.proposalsVoteStatus,
-      []
-    );
-  });
-
   test("fetch proposal paywall details (api/v1/proposals/paywall)", async () => {
     await assertGETOnRouteIsCalled(
       "/api/v1/proposals/paywall",
