@@ -645,11 +645,16 @@ export const startRunoffVote = (
     .myPubKeyHex(email)
     .then((publickey) =>
       pki.signStringHex(email, hash).then((signature) =>
-        POST("/vote/startrunoff", csrf, {
-          vote,
-          signature,
-          publickey
-        })
+        POST(
+          "/vote/startrunoff",
+          csrf,
+          {
+            vote,
+            signature,
+            publickey
+          },
+          "v2"
+        )
       )
     )
     .then(getResponse);
