@@ -15,7 +15,7 @@ import { validationSchema } from "./validation";
 import usePolicy from "src/hooks/api/usePolicy";
 import { isRfpReadyToVote } from "src/containers/Proposal/helpers";
 
-const preDefinedDurations = [10, 2880, 4032];
+const preDefinedDurations = [2016, 2880, 4032];
 const getDurationOptions = (isTesnet) => {
   const blockDuration = isTesnet ? 2 : 5;
   return preDefinedDurations.map((nb) => ({
@@ -54,9 +54,6 @@ const ModalStartVote = ({
       const { linkby } = proposal;
       const isRfp = !!linkby;
       if (isRfp && !isRfpReadyToVote(linkby, minlinkbyperiod)) {
-        console.log(
-          "RFP deadline should meet the minimum period to start voting"
-        );
         throw Error(
           "RFP deadline should meet the minimum period to start voting"
         );
