@@ -76,6 +76,7 @@ export const isRfpReadyToVote = (proposalLinkBy, minlinkbyperiod) => {
  */
 export const isRfpReadyToRunoff = (proposal, voteSummary) =>
   isApprovedProposal(proposal, voteSummary) &&
+  isVotingFinishedProposal(voteSummary) &&
   proposal.linkby &&
   new Date().getTime() / 1000 > +proposal.linkby;
 
