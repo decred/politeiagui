@@ -28,10 +28,7 @@ import {
   isVotingFinishedProposal,
   getProposalToken
 } from "src/containers/Proposal/helpers";
-import {
-  useProposalVote,
-  useProposalsBatch
-} from "src/containers/Proposal/hooks";
+import { useProposalVote } from "src/containers/Proposal/hooks";
 import { useLoaderContext } from "src/containers/Loader";
 import styles from "./Proposal.module.css";
 import LoggedInContent from "src/components/LoggedInContent";
@@ -45,8 +42,13 @@ import { useRouter } from "src/components/Router";
 import { useConfig } from "src/containers/Config";
 
 const ProposalWrapper = (props) => {
-  const voteProps = useProposalVote(getProposalToken(props.proposal));
-  const { onFetchProposalsBatch, isLoading } = useProposalsBatch();
+  const {
+    voteSummary,
+    voteBlocksLeft,
+    voteActive,
+    voteEndTimestamp,
+    onFetchProposalsBatch
+  } = useProposalVote(getProposalToken(props.proposal));
   const [proposedFor, setProposedFor] = useState(null);
   const { linkto } = props.proposal;
   useEffect(() => {
@@ -54,15 +56,24 @@ const ProposalWrapper = (props) => {
       const [[rfpProposal]] = await onFetchProposalsBatch([linkto], false);
       setProposedFor(rfpProposal && rfpProposal.name);
     }
-    if (linkto && !proposedFor && !isLoading) {
+    if (linkto && !proposedFor) {
       fetchRfpProposal();
     }
-  }, [linkto, onFetchProposalsBatch, setProposedFor, proposedFor, isLoading]);
+  }, [linkto, onFetchProposalsBatch, setProposedFor, proposedFor]);
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (
     <Proposal
-      {...{ ...props, ...voteProps, currentUser, history, proposedFor }}
+      {...{
+        ...props,
+        voteSummary,
+        voteBlocksLeft,
+        voteActive,
+        voteEndTimestamp,
+        currentUser,
+        history,
+        proposedFor
+      }}
     />
   );
 };

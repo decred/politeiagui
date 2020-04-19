@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import * as sel from "src/selectors";
-import { useSelector } from "src/redux";
+import * as act from "src/actions";
+import { useSelector, useAction } from "src/redux";
 import {
   getVoteBlocksLeft,
   isVoteActiveProposal,
@@ -15,6 +16,7 @@ export default function useProposalVote(token) {
   const voteSummary = useSelector(voteSummarySelector);
   const bestBlock = useSelector(sel.bestBlock);
   const apiInfo = useSelector(sel.apiInitResponse);
+  const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const voteEndTimestamp = getVoteEndTimestamp(
     voteSummary,
     bestBlock,
@@ -23,5 +25,11 @@ export default function useProposalVote(token) {
   const voteBlocksLeft = getVoteBlocksLeft(voteSummary, bestBlock);
   const voteActive = isVoteActiveProposal(voteSummary);
 
-  return { voteSummary, voteBlocksLeft, voteActive, voteEndTimestamp };
+  return {
+    voteSummary,
+    voteBlocksLeft,
+    voteActive,
+    voteEndTimestamp,
+    onFetchProposalsBatch
+  };
 }

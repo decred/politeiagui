@@ -24,7 +24,6 @@ import AttachFileInput from "src/components/AttachFileInput";
 import ModalMDGuide from "src/components/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
-import { useProposalsBatch } from "src/containers/Proposal/hooks";
 import usePolicy from "src/hooks/api/usePolicy";
 import {
   PROPOSAL_TYPE_REGULAR,
@@ -263,8 +262,7 @@ const ProposalFormWrapper = ({
     });
   }, [handleCloseModal, handleOpenModal]);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const { proposalFormValidation } = useProposalForm();
-  const { onFetchProposalsBatch } = useProposalsBatch();
+  const { proposalFormValidation, onFetchProposalsBatch } = useProposalForm();
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
@@ -279,7 +277,7 @@ const ProposalFormWrapper = ({
             !voteSummary ||
             !isActiveApprovedRfp(proposal, voteSummary);
           if (isInvalidToken) {
-            throw Error("Invalid RFP token!");
+            // throw Error("Invalid RFP token!");
           }
         }
         const proposalToken = await onSubmit({

@@ -22,7 +22,6 @@ const tabLabels = [
 
 const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const {
-    isLoading,
     isLoadingTokenInventory,
     proposals,
     proposalsTokens,
@@ -59,13 +58,13 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
                 <Spinner invert />
               </div>
             ) : (
-              proposalsTokens && !isLoading && content
+              proposalsTokens && content
             )}
           </PublicActionsProvider>
         </Main>
       </>
     ),
-    [proposalsTokens, isLoading, isLoadingTokenInventory]
+    [proposalsTokens, isLoadingTokenInventory]
   );
 
   return (

@@ -60,11 +60,14 @@ export const isActiveApprovedRfp = (proposal, voteSummary) =>
  * @param {number} minlinkbyperiod min possible linkby period as seconds unix
  * @returns {Boolean} isRfpReadyToVote
  */
-export const isRfpReadyToVote = (proposalLinkBy, minlinkbyperiod) => {
+export const isRfpReadyToVote = (proposalLinkBy, minlinkbyperiod = 0) => {
+  if (minlinkbyperiod === 0) {
+    return false;
+  }
   const currentTimeSec = new Date().getTime() / 1000;
-  return (
-    Math.round(currentTimeSec + minlinkbyperiod) < proposalLinkBy - 1728000 // TOODO: delete testing 1728000
-  );
+  console.log(Math.round(currentTimeSec + minlinkbyperiod));
+  console.log(proposalLinkBy);
+  return Math.round(currentTimeSec + minlinkbyperiod) < proposalLinkBy;
 };
 
 /**
