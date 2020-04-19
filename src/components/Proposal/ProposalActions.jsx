@@ -5,7 +5,8 @@ import {
   isUnreviewedProposal,
   isAbandonedProposal,
   isVotingNotAuthorizedProposal,
-  isUnderDiscussionProposal
+  isUnderDiscussionProposal,
+  isRfpReadyToRunoff
 } from "src/containers/Proposal/helpers";
 import {
   useUnvettedProposalActions,
@@ -73,28 +74,35 @@ const PublicActions = ({ proposal, voteSummary }) => {
 
   const isVotingStartAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
   return (
-    isUnderDiscussionProposal(proposal, voteSummary) && (
-      <div className="justify-right margin-top-m">
-        {isProposalOwner &&
-          !isRfpSubmission &&
-          (!isVotingStartAuthorized ? (
-            <Button onClick={withProposal(onAuthorizeVote)}>
-              Authorize voting
-            </Button>
-          ) : (
-            <Button onClick={withProposal(onRevokeVote)}>
-              Revoke voting authorization
-            </Button>
-          ))}
-        <AdminContent>
-          {!isVotingStartAuthorized ? (
-            <Button onClick={withProposal(onAbandon)}>Abandon</Button>
-          ) : (
-            <Button onClick={withProposal(onStartVote)}>Start Vote</Button>
-          )}
-        </AdminContent>
-      </div>
-    )
+    <>
+      {isUnderDiscussionProposal(proposal, voteSummary) && (
+        <div className="justify-right margin-top-m">
+          {isProposalOwner &&
+            !isRfpSubmission &&
+            (!isVotingStartAuthorized ? (
+              <Button onClick={withProposal(onAuthorizeVote)}>
+                Authorize voting
+              </Button>
+            ) : (
+              <Button onClick={withProposal(onRevokeVote)}>
+                Revoke voting authorization
+              </Button>
+            ))}
+          <AdminContent>
+            {!isVotingStartAuthorized ? (
+              <Button onClick={withProposal(onAbandon)}>Abandon</Button>
+            ) : (
+              <Button onClick={withProposal(onStartVote)}>Start Vote</Button>
+            )}
+          </AdminContent>
+        </div>
+      )}
+      {isRfpReadyToRunoff(proposal, voteSummary) && (
+        <div className="justify-right margin-top-m">
+          <Button>Start Runoff Vote</Button>
+        </div>
+      )}
+    </>
   );
 };
 

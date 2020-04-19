@@ -13,22 +13,11 @@ import {
 import { getTextFromIndexMd } from "src/helpers";
 
 /**
- * Returns true if RFP's linkby meets the minimum period
- * @param {number} minlinkbyperiod min possible linkby period as seconds unix
- */
-export const isRfpReadyToVote = (proposalLinkBy, minlinkbyperiod) => {
-  const currentTimeSec = new Date().getTime() / 1000;
-  return (
-    Math.round(currentTimeSec + minlinkbyperiod) < proposalLinkBy - 1728000 // TOODO: delete testing 1728000
-  );
-};
-
-/**
  * Returns the total amount of votes received by a given proposal voteSummary
  * @param {Object} voteSummary
  */
 export const getVotesReceived = (voteSummary) => {
-  if (!voteSummary) {
+  if (!voteSummary || !voteSummary.results) {
     return 0;
   }
   return voteSummary.results.reduce(
@@ -56,18 +45,39 @@ export const isPublicProposal = (proposal) =>
 
 /**
  * Returns true if the given proposal is an approved RFP
- * and it's deadline didn;t expire yet
+ * and it's deadline didn't expire yet
  * @param {Object} proposal
  * @param {Object} voteSummary
  * @returns {Boolean} isActiveApproved
  */
-export const isActiveApprovedRFP = (proposal, voteSummary) => {
+export const isActiveApprovedRfp = (proposal, voteSummary) =>
+  isApprovedProposal(proposal, voteSummary) &&
+  proposal.linkby &&
+  new Date().getTime() < +proposal.linkby;
+
+/**
+ * Returns true if RFP's linkby meets the minimum period
+ * @param {number} minlinkbyperiod min possible linkby period as seconds unix
+ * @returns {Boolean} isRfpReadyToVote
+ */
+export const isRfpReadyToVote = (proposalLinkBy, minlinkbyperiod) => {
+  const currentTimeSec = new Date().getTime() / 1000;
   return (
-    isApprovedProposal(proposal, voteSummary) &&
-    proposal.linkby &&
-    new Date().getTime() < +proposal.linkby
+    Math.round(currentTimeSec + minlinkbyperiod) < proposalLinkBy - 1728000 // TOODO: delete testing 1728000
   );
 };
+
+/**
+ * Returns true if RFP was approved & deadline already expired
+ * which means RFP ready to start runoff vote
+ * @param {Object} proposal
+ * @param {Object} voteSummary
+ * @returns {Boolean} isActiveApproved
+ */
+export const isRfpReadyToRunoff = (proposal, voteSummary) =>
+  isApprovedProposal(proposal, voteSummary) &&
+  proposal.linkby &&
+  new Date().getTime() / 1000 > +proposal.linkby;
 
 /**
  * Returns true if the given proposal is unreviewed

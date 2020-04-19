@@ -35,7 +35,7 @@ import {
   getProposalTypeOptionsForSelect,
   getRfpMinMaxDates
 } from "./helpers.js";
-import { isActiveApprovedRFP } from "src/containers/Proposal/helpers";
+import { isActiveApprovedRfp } from "src/containers/Proposal/helpers";
 import useModalContext from "src/hooks/utils/useModalContext";
 
 const ProposalForm = React.memo(function ProposalForm({
@@ -277,7 +277,7 @@ const ProposalFormWrapper = ({
           const isInvalidToken =
             !proposal ||
             !voteSummary ||
-            !isActiveApprovedRFP(proposal, voteSummary);
+            !isActiveApprovedRfp(proposal, voteSummary);
           if (isInvalidToken) {
             throw Error("Invalid RFP token!");
           }
