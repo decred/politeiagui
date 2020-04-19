@@ -53,7 +53,7 @@ const ProposalWrapper = (props) => {
   const { linkto } = props.proposal;
   useEffect(() => {
     async function fetchRfpProposal() {
-      const [[rfpProposal]] = await onFetchProposalsBatch([linkto], false);
+      const [[rfpProposal]] = await onFetchProposalsBatch([linkto]);
       setProposedFor(rfpProposal && rfpProposal.name);
     }
     if (linkto && !proposedFor) {
