@@ -138,6 +138,8 @@ const Proposal = React.memo(function Proposal({
     });
   };
 
+  const isNotExtendedRfpOrSubmission = (isRfp || isRfpSubmission) && !extended;
+
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
 
@@ -149,7 +151,7 @@ const Proposal = React.memo(function Proposal({
       <RecordWrapper
         className={classNames(
           isAbandoned && styles.abandonedProposal,
-          (isRfp || isRfpSubmission) && !extended && styles.rfpProposal
+          isNotExtendedRfpOrSubmission && styles.rfpProposal
         )}>
         {({
           Author,
