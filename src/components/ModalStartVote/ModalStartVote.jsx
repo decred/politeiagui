@@ -131,7 +131,6 @@ const ModalStartVote = ({
             errors,
             touched
           }) => {
-            console.log({ isValid, values, errors });
             const handleChangeDuration = (v) =>
               setFieldValue("duration", v.value);
 
