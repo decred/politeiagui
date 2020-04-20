@@ -6,18 +6,12 @@ import {
   useMediaQuery,
   useTheme
 } from "pi-ui";
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
-import {
-  getProposalStatusTagProps,
-  getStatusBarData,
-  getProposalUrl,
-  getCommentsUrl,
-  getAuthorUrl
-} from "./helpers";
+import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
 import {
   getMarkdownContent,
   getVotesReceived,
@@ -30,7 +24,8 @@ import {
 } from "src/containers/Proposal/helpers";
 import {
   useProposalVote,
-  useProposalsBatch
+  useProposalsBatch,
+  useProposalURLs
 } from "src/containers/Proposal/hooks";
 import { useLoaderContext } from "src/containers/Loader";
 import styles from "./Proposal.module.css";
@@ -42,7 +37,6 @@ import ThumbnailGrid from "src/components/Files";
 import VersionPicker from "src/components/VersionPicker";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useRouter } from "src/components/Router";
-import { useConfig } from "src/containers/Config";
 
 const ProposalWrapper = (props) => {
   const voteProps = useProposalVote(getProposalToken(props.proposal));
@@ -95,26 +89,16 @@ const Proposal = React.memo(function Proposal({
   } = proposal;
   const isRfp = !!linkby;
   const isRfpSubmission = !!linkto;
-  const { javascriptEnabled } = useConfig();
+  const isNotExtendedRfpOrSubmission = (isRfp || isRfpSubmission) && !extended;
 
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
-  const proposalURL = useMemo(
-    () => getProposalUrl(proposalToken, javascriptEnabled),
-    [proposalToken, javascriptEnabled]
-  );
-  const commentsURL = useMemo(
-    () => getCommentsUrl(proposalToken, javascriptEnabled),
-    [proposalToken, javascriptEnabled]
-  );
-  const authorURL = useMemo(() => getAuthorUrl(userid, javascriptEnabled), [
-    userid,
-    javascriptEnabled
-  ]);
-  const rfpProposalLink = useMemo(
-    () => isRfpSubmission && getProposalUrl(linkto, javascriptEnabled),
-    [isRfpSubmission, javascriptEnabled, linkto]
-  );
+  const {
+    proposalURL,
+    authorURL,
+    commentsURL,
+    rfpProposalURL
+  } = useProposalURLs(proposalToken, userid, isRfpSubmission, linkto);
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
@@ -137,8 +121,6 @@ const Proposal = React.memo(function Proposal({
       proposal
     });
   };
-
-  const isNotExtendedRfpOrSubmission = (isRfp || isRfpSubmission) && !extended;
 
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
@@ -188,7 +170,7 @@ const Proposal = React.memo(function Proposal({
               isRfp={isRfp}
               isRfpSubmission={isRfpSubmission}
               rfpProposalLink={
-                <RfpProposalLink url={rfpProposalLink} rfpTitle={proposedFor} />
+                <RfpProposalLink url={rfpProposalURL} rfpTitle={proposedFor} />
               }
               subtitle={
                 <Subtitle>

@@ -8,7 +8,8 @@ import {
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
-  PROPOSAL_STATUS_CENSORED
+  PROPOSAL_STATUS_CENSORED,
+  NOJS_ROUTE_PREFIX
 } from "../../constants";
 import { getTextFromIndexMd } from "src/helpers";
 
@@ -207,3 +208,16 @@ export const getMarkdownContent = (files) => {
  */
 export const getProposalToken = (proposal) =>
   proposal && proposal.censorshiprecord && proposal.censorshiprecord.token;
+
+export const getProposalUrl = (token, javascriptEnabled) =>
+  javascriptEnabled
+    ? `/proposals/${token}`
+    : `${NOJS_ROUTE_PREFIX}/proposals/${token}`;
+
+export const getCommentsUrl = (proposalToken, javascriptEnabled) =>
+  javascriptEnabled
+    ? `/proposals/${proposalToken}?scrollToComments=true`
+    : `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}?scrollToComments=true`;
+
+export const getAuthorUrl = (userid, javascriptEnabled) =>
+  javascriptEnabled ? `/user/${userid}` : `${NOJS_ROUTE_PREFIX}/user/${userid}`;
