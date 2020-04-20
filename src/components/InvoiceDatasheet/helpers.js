@@ -127,7 +127,6 @@ export const convertLineItemsToGrid = (
             error: rowErrors && rowErrors.description
           }),
           valueViewer: multilineTextWrapper()
-          // className: styles.multilineCellValue
         },
         {
           readOnly,
