@@ -11,6 +11,13 @@
   justify-content: right;
 }
 
+.dateFilters {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 30rem;
+}
+
 /* SMALL */
 @media screen and (max-width: 768px) {
   .selector {

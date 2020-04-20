@@ -36,10 +36,9 @@ const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
               <MonthPickerField
                 years={getInvoiceMinMaxYearAndMonth()}
                 name="date"
-                label="Reference month"
+                label="By Date"
                 toggleable
               />
-
               <CheckboxGroupField
                 groupName="filters"
                 options={[

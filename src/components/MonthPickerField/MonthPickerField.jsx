@@ -22,9 +22,15 @@ const pickerLang = {
   ]
 };
 
+const isAllMonths = (date) => date.month === "all";
+
 const makeText = (m) => {
-  if (m && m.year && m.month)
-    return `${pickerLang.months[m.month - 1]} ${m.year}`;
+  if (m && m.year && m.month) {
+    return !isAllMonths(m)
+      ? `${pickerLang.months[m.month - 1]} ${m.year}`
+      : `${m.year}`;
+  }
+
   return "?";
 };
 
@@ -90,6 +96,7 @@ const MonthPickerField = ({
                 <DatePicker
                   show={isOpen && !readOnly}
                   isMonthsMode={true}
+                  enableAllMonths={true}
                   years={years}
                   value={values[name]}
                   lang={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
