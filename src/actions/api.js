@@ -1051,7 +1051,7 @@ export const onStartRunoffVote = (
         );
       })
       .catch((error) => {
-        dispatch(act.REQUEST_START_RUNOFF_VOTE(null, error));
+        dispatch(act.RECIEVE_START_RUNOFF_VOTE(null, error));
         throw error;
       });
   });
