@@ -110,7 +110,7 @@ const ProposalForm = React.memo(function ProposalForm({
 
   const textAreaProps = useMemo(() => ({ tabIndex: 2 }), []);
 
-  const FormatHelpButton = useMemo(
+  const FormatHelpButton = useCallback(
     () => (
       <Text
         weight="semibold"
@@ -125,7 +125,7 @@ const ProposalForm = React.memo(function ProposalForm({
     [isDarkTheme, openMDGuideModal]
   );
 
-  const ProposalGuidelinesButton = useMemo(
+  const ProposalGuidelinesButton = useCallback(
     () => (
       <Link
         weight="semibold"
@@ -142,7 +142,7 @@ const ProposalForm = React.memo(function ProposalForm({
     [isDarkTheme]
   );
 
-  const SubmitButton = useMemo(
+  const SubmitButton = useCallback(
     () => (
       <Button
         type="submit"
