@@ -62,9 +62,7 @@ export const isActiveApprovedRfp = (proposal, voteSummary) =>
  */
 export const isRfpReadyToVote = (proposalLinkBy, minlinkbyperiod) => {
   const currentTimeSec = new Date().getTime() / 1000;
-  return (
-    Math.round(currentTimeSec + minlinkbyperiod) < proposalLinkBy - 1728000 // TOODO: delete testing 1728000
-  );
+  return Math.round(currentTimeSec + minlinkbyperiod) < proposalLinkBy;
 };
 
 /**
