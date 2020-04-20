@@ -110,39 +110,48 @@ const ProposalForm = React.memo(function ProposalForm({
 
   const textAreaProps = useMemo(() => ({ tabIndex: 2 }), []);
 
-  const FormatHelpButton = () => (
-    <Text
-      weight="semibold"
-      className={classNames(
-        styles.formatHelpButton,
-        isDarkTheme && styles.darkButton
-      )}
-      onClick={openMDGuideModal}>
-      Formatting Help
-    </Text>
+  const FormatHelpButton = useMemo(
+    () => (
+      <Text
+        weight="semibold"
+        className={classNames(
+          styles.formatHelpButton,
+          isDarkTheme && styles.darkButton
+        )}
+        onClick={openMDGuideModal}>
+        Formatting Help
+      </Text>
+    ),
+    [isDarkTheme, openMDGuideModal]
   );
 
-  const ProposalGuidelinesButton = () => (
-    <Link
-      weight="semibold"
-      target="_blank"
-      rel="noopener noreferrer"
-      className={classNames(
-        styles.proposalGuidelinesButton,
-        isDarkTheme && styles.darkButton
-      )}
-      href="https://docs.decred.org/governance/politeia/proposal-guidelines/">
-      Proposal Guidelines
-    </Link>
+  const ProposalGuidelinesButton = useMemo(
+    () => (
+      <Link
+        weight="semibold"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={classNames(
+          styles.proposalGuidelinesButton,
+          isDarkTheme && styles.darkButton
+        )}
+        href="https://docs.decred.org/governance/politeia/proposal-guidelines/">
+        Proposal Guidelines
+      </Link>
+    ),
+    [isDarkTheme]
   );
 
-  const SubmitButton = () => (
-    <Button
-      type="submit"
-      kind={!isValid || disableSubmit ? "disabled" : "primary"}
-      loading={isSubmitting}>
-      Submit
-    </Button>
+  const SubmitButton = useMemo(
+    () => (
+      <Button
+        type="submit"
+        kind={!isValid || disableSubmit ? "disabled" : "primary"}
+        loading={isSubmitting}>
+        Submit
+      </Button>
+    ),
+    [isSubmitting, disableSubmit, isValid]
   );
   return (
     <form onSubmit={handleSubmit}>
@@ -277,7 +286,7 @@ const ProposalFormWrapper = ({
             !voteSummary ||
             !isActiveApprovedRfp(proposal, voteSummary);
           if (isInvalidToken) {
-            // throw Error("Invalid RFP token!");
+            throw Error("Invalid RFP token!");
           }
         }
         const proposalToken = await onSubmit({

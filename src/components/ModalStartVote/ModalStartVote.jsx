@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import FormWrapper from "src/components/FormWrapper";
 import {
   Button,
@@ -82,6 +82,17 @@ const ModalStartVote = ({
     [show]
   );
 
+  const initialValues = useMemo(
+    () => ({
+      duration: preDefinedDurations[0],
+      quorumPercentage: 20,
+      passPercentage: 60
+    }),
+    []
+  );
+
+  const isInitialValid = validationSchema.isValidSync(initialValues);
+
   return (
     <Modal
       style={{ width: "600px" }}
@@ -103,18 +114,16 @@ const ModalStartVote = ({
       }>
       {!success && (
         <FormWrapper
-          initialValues={{
-            duration: preDefinedDurations[0],
-            quorumPercentage: 20,
-            passPercentage: 60
-          }}
+          initialValues={initialValues}
           validationSchema={validationSchema}
+          isInitialValid={isInitialValid}
           onSubmit={onSubmitStartVote}>
           {({
             Form,
             Actions,
             ErrorMessage,
             values,
+            isValid,
             handleChange,
             handleBlur,
             handleSubmit,
@@ -122,10 +131,10 @@ const ModalStartVote = ({
             errors,
             touched
           }) => {
-            const canSubmit = true;
-            function handleChangeDuration(v) {
+            console.log({ isValid, values, errors });
+            const handleChangeDuration = (v) =>
               setFieldValue("duration", v.value);
-            }
+
             return (
               <Form onSubmit={handleSubmit}>
                 {errors && errors.global && (
@@ -160,7 +169,7 @@ const ModalStartVote = ({
                 <Actions className="no-padding-bottom">
                   <Button
                     loading={isSubmitting}
-                    kind={canSubmit ? "primary" : "disabled"}
+                    kind={isValid ? "primary" : "disabled"}
                     type="submit">
                     Start Vote
                   </Button>
