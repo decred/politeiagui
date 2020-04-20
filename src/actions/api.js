@@ -1047,7 +1047,7 @@ export const onStartRunoffVote = (
       .then((response) => {
         dispatch(onFetchProposalsBatchVoteSummary([linkedfrom]));
         dispatch(
-          act.REQUEST_START_RUNOFF_VOTE({ ...response, token, success: true })
+          act.RECIEVE_START_RUNOFF_VOTE({ ...response, token, success: true })
         );
       })
       .catch((error) => {
