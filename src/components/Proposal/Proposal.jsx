@@ -6,12 +6,11 @@ import {
   useMediaQuery,
   useTheme
 } from "pi-ui";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
-import { NOJS_ROUTE_PREFIX } from "src/constants";
 import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
 import {
   getMarkdownContent,
@@ -23,7 +22,11 @@ import {
   isVotingFinishedProposal,
   getProposalToken
 } from "src/containers/Proposal/helpers";
-import { useProposalVote } from "src/containers/Proposal/hooks";
+import {
+  useProposalVote,
+  useProposalsBatch,
+  useProposalURLs
+} from "src/containers/Proposal/hooks";
 import { useLoaderContext } from "src/containers/Loader";
 import styles from "./Proposal.module.css";
 import LoggedInContent from "src/components/LoggedInContent";
@@ -34,13 +37,28 @@ import ThumbnailGrid from "src/components/Files";
 import VersionPicker from "src/components/VersionPicker";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useRouter } from "src/components/Router";
-import { useConfig } from "src/containers/Config";
 
 const ProposalWrapper = (props) => {
   const voteProps = useProposalVote(getProposalToken(props.proposal));
+  const { onFetchProposalsBatch, isLoading } = useProposalsBatch();
+  const [proposedFor, setProposedFor] = useState(null);
+  const { linkto } = props.proposal;
+  useEffect(() => {
+    async function fetchRfpProposal() {
+      const [[rfpProposal]] = await onFetchProposalsBatch([linkto], false);
+      setProposedFor(rfpProposal && rfpProposal.name);
+    }
+    if (linkto && !proposedFor && !isLoading) {
+      fetchRfpProposal();
+    }
+  }, [linkto, onFetchProposalsBatch, setProposedFor, proposedFor, isLoading]);
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
-  return <Proposal {...{ ...props, ...voteProps, currentUser, history }} />;
+  return (
+    <Proposal
+      {...{ ...props, ...voteProps, currentUser, history, proposedFor }}
+    />
+  );
 };
 
 const Proposal = React.memo(function Proposal({
@@ -52,7 +70,8 @@ const Proposal = React.memo(function Proposal({
   voteEndTimestamp,
   voteBlocksLeft,
   currentUser,
-  history
+  history,
+  proposedFor
 }) {
   const {
     censorshiprecord,
@@ -64,21 +83,22 @@ const Proposal = React.memo(function Proposal({
     timestamp,
     userid,
     username,
-    version
+    version,
+    linkby,
+    linkto
   } = proposal;
-  const { javascriptEnabled } = useConfig();
+  const isRfp = !!linkby;
+  const isRfpSubmission = !!linkto;
+  const isNotExtendedRfpOrSubmission = (isRfp || isRfpSubmission) && !extended;
 
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
-  const proposalURL = javascriptEnabled
-    ? `/proposals/${proposalToken}`
-    : `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}`;
-  const commentsURL = javascriptEnabled
-    ? `/proposals/${proposalToken}?scrollToComments=true`
-    : `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}?scrollToComments=true`;
-  const authorURL = javascriptEnabled
-    ? `/user/${userid}`
-    : `${NOJS_ROUTE_PREFIX}/user/${userid}`;
+  const {
+    proposalURL,
+    authorURL,
+    commentsURL,
+    rfpProposalURL
+  } = useProposalURLs(proposalToken, userid, isRfpSubmission, linkto);
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
@@ -98,7 +118,7 @@ const Proposal = React.memo(function Proposal({
   const openSearchVotesModal = () => {
     handleOpenModal(ModalSearchVotes, {
       onClose: handleCloseModal,
-      proposal: proposal
+      proposal
     });
   };
 
@@ -111,12 +131,16 @@ const Proposal = React.memo(function Proposal({
   return (
     <>
       <RecordWrapper
-        className={classNames(isAbandoned && styles.abandonedProposal)}>
+        className={classNames(
+          isAbandoned && styles.abandonedProposal,
+          isNotExtendedRfpOrSubmission && styles.rfpProposal
+        )}>
         {({
           Author,
           Event,
           Row,
           Title,
+          RfpProposalLink,
           CommentsLink,
           GithubLink,
           ChartsLink,
@@ -142,6 +166,11 @@ const Proposal = React.memo(function Proposal({
               }
               edit={
                 isEditable && <Edit url={`/proposals/${proposalToken}/edit`} />
+              }
+              isRfp={isRfp}
+              isRfpSubmission={isRfpSubmission}
+              rfpProposalLink={
+                <RfpProposalLink url={rfpProposalURL} rfpTitle={proposedFor} />
               }
               subtitle={
                 <Subtitle>

@@ -51,9 +51,27 @@
   display: flex;
 }
 
+.rfpLink {
+  font-size: var(--font-size-small);
+}
+
+.darkProposedFor {
+  color: var(--text-color);
+}
+
+.proposedFor {
+  color: var(--color-gray);
+}
+
 .titleEditWrapper {
   max-width: calc(100% - 28rem);
   display: flex;
+  align-items: center;
+}
+
+.mobileRfpTag {
+  height: 2.5rem;
+  width: 4rem;
 }
 
 .commentsLink {
