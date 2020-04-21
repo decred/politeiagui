@@ -8,30 +8,49 @@ import {
   INVOICE_STATUS_APPROVED,
   INVOICE_STATUS_PAID
 } from "src/containers/Invoice";
+import flow from "lodash/fp/flow";
+import filter from "lodash/fp/filter";
 
 const FilterInvoices = ({ invoices, children, filterValues }) => {
   const { date, filters, users } = filterValues;
+
   const filterByDate = useCallback(
-    invoice => {
+    filter((invoice) => {
       if (!date || !date.month || !date.year) return invoice;
       if (date.month === "all") return invoice.input.year === date.year;
       return (
         invoice.input.month === date.month && invoice.input.year === date.year
       );
-    },
+    }),
+    [date]
+  );
+
+  const filterByRange = useCallback(
+    filter((invoice) => {
+      if (!date || !date.start || !date.end) return invoice;
+      const start = new Date(date.start.year, date.start.month).getTime();
+      const end = new Date(date.end.year, date.end.month).getTime();
+      const invoiceDate = new Date(
+        invoice.input.year,
+        invoice.input.month
+      ).getTime();
+
+      return invoiceDate >= start && invoiceDate <= end;
+    }),
     [date]
   );
 
   const filterByUserID = useCallback(
-    invoice =>
+    filter((invoice) =>
       !users || !users.length
         ? invoice
-        : users.find(user => user.value === invoice.userid),
+        : users.find((user) => user.value === invoice.userid)
+    ),
     [users]
   );
 
   const filterByStatus = useCallback(
-    invoice => {
+    filter((invoice) => {
       if (!filters || filters.all) return true;
 
       switch (invoice.status) {
@@ -49,14 +68,16 @@ const FilterInvoices = ({ invoices, children, filterValues }) => {
         default:
           return false;
       }
-    },
+    }),
     [filters]
   );
 
-  const filteredInvoices = invoices
-    .filter(filterByStatus)
-    .filter(filterByDate)
-    .filter(filterByUserID);
+  const filteredInvoices = flow(
+    filterByStatus,
+    filterByDate,
+    filterByRange,
+    filterByUserID
+  )(invoices);
 
   return children && children(filteredInvoices);
 };

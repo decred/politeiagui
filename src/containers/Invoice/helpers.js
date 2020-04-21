@@ -1,8 +1,11 @@
 import {
   getCurrentMonth,
   getCurrentYear,
-  getCurrentDateValue
+  getCurrentDateValue,
+  getYearAndMonthFromDate,
+  getCurrentDefaultMonthAndYear
 } from "src/helpers";
+import isEqual from "lodash/isEqual";
 import { INVOICE_STATUS_NEW, INVOICE_STATUS_UPDATED } from "./constants";
 
 /**
@@ -98,4 +101,35 @@ export const getInvoiceTotalAmount = (invoice) => {
   const totalExpenses = getInvoiceTotalExpenses(invoice);
   const rate = invoice.input.contractorrate / 100;
   return rate * totalHours + totalExpenses;
+};
+
+export const sortDateRange = (initialRangeValue, finalRangeValue) => {
+  if (isEqual(initialRangeValue, finalRangeValue)) return initialRangeValue;
+
+  const { month: initialMonth, year: initialYear } = initialRangeValue;
+  const { month: finalMonth, year: finalYear } = finalRangeValue;
+  const initialDate = new Date(initialYear, initialMonth).getTime();
+  const finalDate = new Date(finalYear, finalMonth).getTime();
+
+  if (initialDate > finalDate) {
+    return {
+      start: finalRangeValue,
+      end: initialRangeValue
+    };
+  }
+
+  return {
+    start: initialRangeValue,
+    end: finalRangeValue
+  };
+};
+
+export const getPreviousMonthsRange = (range) => {
+  const end = getCurrentDefaultMonthAndYear();
+  const previous = new Date();
+  previous.setMonth(previous.getMonth() - range + 1);
+  return {
+    start: getYearAndMonthFromDate(previous),
+    end
+  };
 };

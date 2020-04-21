@@ -4,6 +4,7 @@ import { Text, classNames, Checkbox, DatePicker } from "pi-ui";
 import { FormikConsumer } from "formik";
 import styles from "./MonthPickerField.module.css";
 import useBooleanState from "src/hooks/utils/useBooleanState";
+import { sortDateRange } from "src/containers/Invoice";
 
 const pickerLang = {
   months: [
@@ -23,6 +24,7 @@ const pickerLang = {
 };
 
 const isAllMonths = (date) => date.month === "all";
+const isRange = (date) => date && date.start && date.end;
 
 const makeText = (m) => {
   if (m && m.year && m.month) {
@@ -30,7 +32,11 @@ const makeText = (m) => {
       ? `${pickerLang.months[m.month - 1]} ${m.year}`
       : `${m.year}`;
   }
-
+  if (isRange(m)) {
+    return `${pickerLang.months[m.start.month - 1]} ${m.start.year} - ${
+      pickerLang.months[m.end.month - 1]
+    } ${m.end.year}`;
+  }
   return "?";
 };
 
@@ -46,10 +52,13 @@ const MonthPickerField = ({
   years,
   readOnly,
   toggleable,
-  className
+  className,
+  multiChoice,
+  enableAllMonths
 }) => {
   const [isDisabled, setDisabled] = useState(false);
   const [isOpen, openPicker, closePicker] = useBooleanState(false);
+  const [initialRange, setInitialRange] = useState();
   const togglePicker = () => {
     if (!isOpen) {
       openPicker();
@@ -57,15 +66,38 @@ const MonthPickerField = ({
       closePicker();
     }
   };
+  const clearInitialRange = () => {
+    setInitialRange();
+  };
+
   return (
     <FormikConsumer>
       {({ setFieldValue, values, initialValues }) => {
         const onChange = (year, month) => {
-          if (!!year && !!month) {
-            setFieldValue(name, { year, month });
+          if (!year || !month) {
+            closePicker();
+            return;
           }
-          closePicker();
+          if (month === "all") {
+            setFieldValue(name, { year, month });
+            closePicker();
+            return;
+          }
+          if (!multiChoice) {
+            setFieldValue(name, { year, month });
+            closePicker();
+            return;
+          }
+          if (initialRange) {
+            setFieldValue(name, sortDateRange(initialRange, { year, month }));
+            clearInitialRange();
+            closePicker();
+            return;
+          } else {
+            setInitialRange({ year, month });
+          }
         };
+
         const handleToggle = () => {
           const newValue = !isDisabled;
           setDisabled(newValue);
@@ -88,31 +120,29 @@ const MonthPickerField = ({
               )}
               <Text color="gray">{label}</Text>
             </div>
-
-            <div>
-              {isDisabled ? (
-                <span className="cursor-not-allowed">Any</span>
-              ) : (
-                <DatePicker
-                  show={isOpen && !readOnly}
-                  isMonthsMode={true}
-                  enableAllMonths={true}
-                  years={years}
-                  value={values[name]}
-                  lang={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
-                  onChange={onChange}>
-                  <span
-                    className={classNames(
-                      styles.valueWrapper,
-                      readOnly && "cursor-not-allowed"
-                    )}
-                    onClick={togglePicker}>
-                    {makeText(values[name])}
-                    {!readOnly && <Arrow isOpen={isOpen} />}
-                  </span>
-                </DatePicker>
-              )}
-            </div>
+            {isDisabled ? (
+              <span className="cursor-not-allowed">Any</span>
+            ) : (
+              <DatePicker
+                show={isOpen && !readOnly}
+                isMonthsMode={true}
+                enableAllMonths={enableAllMonths}
+                years={years}
+                values={values[name]}
+                multiChoice={multiChoice}
+                lang={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
+                onChange={onChange}>
+                <span
+                  className={classNames(
+                    styles.valueWrapper,
+                    readOnly && "cursor-not-allowed"
+                  )}
+                  onClick={togglePicker}>
+                  {makeText(values[name])}
+                  {!readOnly && <Arrow isOpen={isOpen} />}
+                </span>
+              </DatePicker>
+            )}
           </div>
         );
       }}

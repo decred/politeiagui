@@ -425,11 +425,16 @@ export const getCurrentDateValue = () => {
   };
 };
 
-export const getPreviousMonthAndYear = (currentMonth, currentYear) => {
-  const month = currentMonth === 1 ? 12 : currentMonth - 1;
-  const year = currentMonth === 1 ? currentYear - 1 : currentYear;
-  return { month, year };
-};
+export const getDateFromYearAndMonth = ({ year, month }) =>
+  new Date(year, month);
+
+export const getYearAndMonthFromDate = (date) =>
+  date && { year: date.getFullYear(), month: date.getMonth() };
+
+export const getCurrentDefaultMonthAndYear = () => ({
+  month: getCurrentMonth() - 1,
+  year: getCurrentYear()
+});
 
 export const getYearOptions = (initial, lastYear) => {
   const isYearValid = (y) => y < lastYear + getCurrentMonth() - 1;

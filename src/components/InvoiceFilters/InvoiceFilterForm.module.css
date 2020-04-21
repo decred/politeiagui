@@ -8,20 +8,42 @@
 
 .checkboxesWrapper {
   display: flex;
-  justify-content: right;
+  justify-content: flex-start;
+  align-self: center;
 }
 
-.dateFilters {
+.topFilters {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  width: 30rem;
+  width: 100%;
+}
+
+.monthPicker {
+  flex-grow: 4;
+}
+
+.presetDates {
+  justify-content: flex-end;
+  display: flex;
+  align-items: center;
+}
+.presetDates a {
+  margin-left: 2rem;
 }
 
 /* SMALL */
 @media screen and (max-width: 768px) {
   .selector {
     width: 100% !important;
-    margin-top: 1rem;
+    margin: 1rem 0;
+    order: 3;
+    align-self: center;
+  }
+  .presetDates {
+    align-self: flex-start;
+  }
+
+  .presetDates a {
+    margin-left: 1rem;
   }
 }

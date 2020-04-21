@@ -85,7 +85,11 @@ const Invoice = ({ invoice, extended, approvedProposalsTokens }) => {
               }
               subtitle={
                 <Subtitle>
-                  <Author username={username} url={`/user/${userid}`} />
+                  <Author
+                    username={username}
+                    url={`/user/${userid}`}
+                    id={userid}
+                  />
                   <Event event="edited" timestamp={timestamp} />
                   {version > 1 && !mobile && (
                     <Text
