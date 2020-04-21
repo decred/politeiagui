@@ -50,6 +50,7 @@ export function usePublicActions() {
   const onStartRunoff = useAction(act.onStartRunoffVote);
   const onAuthorize = useAction(act.onAuthorizeVote);
   const onRevoke = useAction(act.onRevokeVote);
+  const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
 
   const currentUserEmail = useSelector(sel.currentUserEmail);
 
@@ -101,19 +102,14 @@ export function usePublicActions() {
   );
 
   const onStartRunoffVote = useCallback(
-    ({
-      censorshiprecord: { token } = { token: null },
-      version,
-      linkedfrom
-    }) => ({ duration, quorumPercentage, passPercentage }) =>
+    (token, votes) => ({ duration, quorumPercentage, passPercentage }) =>
       onStartRunoff(
         currentUserEmail,
         token,
         duration,
         quorumPercentage,
         passPercentage,
-        version,
-        linkedfrom
+        votes
       ),
     [onStartRunoff, currentUserEmail]
   );
@@ -123,6 +119,7 @@ export function usePublicActions() {
     onAuthorizeVote,
     onRevokeVote,
     onStartVote,
-    onStartRunoffVote
+    onStartRunoffVote,
+    onFetchProposalsBatch
   };
 }

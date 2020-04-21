@@ -1,3 +1,4 @@
+import Promise from "promise";
 import "isomorphic-fetch";
 import * as pki from "./pki";
 import qs from "query-string";
@@ -630,33 +631,40 @@ export const startRunoffVote = (
   duration,
   quorumpercentage,
   passpercentage,
-  proposalversion
+  votes // [{ token, proposalVersion }, ...]
 ) => {
-  const vote = votePayloadWithType({
-    token,
-    proposalversion,
-    type: VOTE_TYPE_RUNOFF,
-    duration,
-    quorumpercentage,
-    passpercentage
-  });
-  const hash = objectToSHA256(vote);
+  const submissionsVotes = votes.map((vote) =>
+    votePayloadWithType({
+      ...vote,
+      type: VOTE_TYPE_RUNOFF,
+      duration,
+      quorumpercentage,
+      passpercentage
+    })
+  );
   return pki
     .myPubKeyHex(email)
-    .then((publickey) =>
-      pki.signStringHex(email, hash).then((signature) =>
+    .then((publickey) => {
+      return Promise.all(
+        submissionsVotes.map((vote) =>
+          pki.signStringHex(email, objectToSHA256(vote))
+        )
+      ).then((signatures) =>
         POST(
           "/vote/startrunoff",
           csrf,
           {
-            vote,
-            signature,
-            publickey
+            startvotes: signatures.map((signature, index) => ({
+              vote: submissionsVotes[index],
+              signature,
+              publickey
+            })),
+            token
           },
           "v2"
         )
-      )
-    )
+      );
+    })
     .then(getResponse);
 };
 

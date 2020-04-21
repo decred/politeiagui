@@ -1029,8 +1029,7 @@ export const onStartRunoffVote = (
   duration,
   quorum,
   pass,
-  version,
-  linkedfrom
+  votes
 ) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_START_RUNOFF_VOTE({ token }));
@@ -1042,10 +1041,11 @@ export const onStartRunoffVote = (
         duration,
         quorum,
         pass,
-        version
+        votes
       )
       .then((response) => {
-        dispatch(onFetchProposalsBatchVoteSummary([linkedfrom]));
+        const submissionsTokens = votes.map((vote) => vote.token);
+        dispatch(onFetchProposalsBatchVoteSummary([submissionsTokens]));
         dispatch(
           act.RECIEVE_START_RUNOFF_VOTE({ ...response, token, success: true })
         );

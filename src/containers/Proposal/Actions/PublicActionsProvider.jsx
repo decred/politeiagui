@@ -14,10 +14,13 @@ const PublicActionsProvider = ({ children }) => {
     onAuthorizeVote,
     onRevokeVote,
     onStartVote,
-    onStartRunoffVote
+    onStartRunoffVote,
+    onFetchProposalsBatch
   } = usePublicActions();
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  // TODO: add usecallback for all handlers!
 
   const handleOpenAbandonModal = (proposal) => {
     handleOpenModal(ModalConfirmWithReason, {
@@ -85,11 +88,21 @@ const PublicActionsProvider = ({ children }) => {
     });
   };
 
-  const handleStartRunoffVoteModal = (proposal) => {
+  const handleStartRunoffVoteModal = async (proposal) => {
+    const [submissions] = await onFetchProposalsBatch(proposal.linkedfrom);
+    const submissionVotes = submissions.map(
+      ({ censorshiprecord: { token } = { token: null }, version }) => ({
+        token,
+        proposalversion: version
+      })
+    );
     handleOpenModal(ModalStartVote, {
       title: `Start runoff vote - ${proposal.name}`,
       voteType: VOTE_TYPE_RUNOFF,
-      onSubmit: onStartRunoffVote(proposal),
+      onSubmit: onStartRunoffVote(
+        proposal.censorshiprecord.token,
+        submissionVotes
+      ),
       successTitle: "Proposal runoff vote started",
       message: "Are you sure you want to start runoff vote?",
       successMessage: (
