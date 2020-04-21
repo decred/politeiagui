@@ -1045,7 +1045,7 @@ export const onStartRunoffVote = (
       )
       .then((response) => {
         const submissionsTokens = votes.map((vote) => vote.token);
-        dispatch(onFetchProposalsBatchVoteSummary([submissionsTokens]));
+        dispatch(onFetchProposalsBatchVoteSummary([...submissionsTokens]));
         dispatch(
           act.RECIEVE_START_RUNOFF_VOTE({ ...response, token, success: true })
         );
