@@ -99,33 +99,41 @@ const PublicActionsProvider = ({ children }) => {
     [handleOpenModal, handleCloseModal, onStartVote]
   );
 
-  const handleStartRunoffVoteModal = async (proposal) => {
-    const [submissions] = await onFetchProposalsBatch(proposal.linkedfrom);
-    const submissionVotes = submissions.map(
-      ({ censorshiprecord: { token } = { token: null }, version }) => ({
-        token,
-        proposalversion: version
-      })
-    );
-    handleOpenModal(ModalStartVote, {
-      title: `Start runoff vote - ${proposal.name}`,
-      voteType: VOTE_TYPE_RUNOFF,
-      onSubmit: onStartRunoffVote(
-        proposal.censorshiprecord.token,
-        submissionVotes
-      ),
-      successTitle: "Proposal runoff vote started",
-      message: "Are you sure you want to start runoff vote?",
-      successMessage: (
-        <Text>
-          RFP runoff vote has been successfully started! Now RFP's submissions
-          will appear under the <Link to="/?tab=voting">Voting</Link> tab.
-        </Text>
-      ),
-      onClose: handleCloseModal,
-      proposal
-    });
-  };
+  const handleStartRunoffVoteModal = useCallback(
+    async (proposal) => {
+      const [submissions] = await onFetchProposalsBatch(proposal.linkedfrom);
+      const submissionVotes = submissions.map(
+        ({ censorshiprecord: { token } = { token: null }, version }) => ({
+          token,
+          proposalversion: version
+        })
+      );
+      handleOpenModal(ModalStartVote, {
+        title: `Start runoff vote - ${proposal.name}`,
+        voteType: VOTE_TYPE_RUNOFF,
+        onSubmit: onStartRunoffVote(
+          proposal.censorshiprecord.token,
+          submissionVotes
+        ),
+        successTitle: "Proposal runoff vote started",
+        message: "Are you sure you want to start runoff vote?",
+        successMessage: (
+          <Text>
+            RFP runoff vote has been successfully started! Now RFP's submissions
+            will appear under the <Link to="/?tab=voting">Voting</Link> tab.
+          </Text>
+        ),
+        onClose: handleCloseModal,
+        proposal
+      });
+    },
+    [
+      handleCloseModal,
+      handleOpenModal,
+      onStartRunoffVote,
+      onFetchProposalsBatch
+    ]
+  );
 
   return (
     <PublicProposalsActionsContext.Provider
