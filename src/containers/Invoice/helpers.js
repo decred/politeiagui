@@ -103,31 +103,36 @@ export const getInvoiceTotalAmount = (invoice) => {
   return rate * totalHours + totalExpenses;
 };
 
-export const sortDateRange = (initialRangeValue, finalRangeValue) => {
-  if (isEqual(initialRangeValue, finalRangeValue)) return initialRangeValue;
+export const sortDateRange = (firstSelectedDate, secondSelectedDate) => {
+  if (isEqual(firstSelectedDate, secondSelectedDate)) return firstSelectedDate;
 
-  const { month: initialMonth, year: initialYear } = initialRangeValue;
-  const { month: finalMonth, year: finalYear } = finalRangeValue;
-  const initialDate = new Date(initialYear, initialMonth).getTime();
-  const finalDate = new Date(finalYear, finalMonth).getTime();
+  const { month: firstMonth, year: firstYear } = firstSelectedDate;
+  const { month: secondMonth, year: secondYear } = secondSelectedDate;
 
-  if (initialDate > finalDate) {
+  const firstSelectedTime = new Date(firstYear, firstMonth).getTime();
+  const secondSelectedTime = new Date(secondYear, secondMonth).getTime();
+
+  if (firstSelectedTime > secondSelectedTime) {
     return {
-      start: finalRangeValue,
-      end: initialRangeValue
+      start: secondSelectedDate,
+      end: firstSelectedDate
     };
   }
 
   return {
-    start: initialRangeValue,
-    end: finalRangeValue
+    start: firstSelectedDate,
+    end: secondSelectedDate
   };
 };
 
 export const getPreviousMonthsRange = (range) => {
   const end = getCurrentDefaultMonthAndYear();
+
+  // Tweak from Date API. If month is negative, it returns the last month of the
+  //   previous year. See: https://www.w3schools.com/jsref/jsref_setmonth.asp
   const previous = new Date();
   previous.setMonth(previous.getMonth() - range + 1);
+
   return {
     start: getYearAndMonthFromDate(previous),
     end

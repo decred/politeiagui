@@ -157,3 +157,5 @@ export const CMS_DOMAINS = [
 ];
 
 export const NOJS_ROUTE_PREFIX = "/nojavascript";
+
+export const INVALID_DATE = "Invalid Date. Please provide a Date Object.";
