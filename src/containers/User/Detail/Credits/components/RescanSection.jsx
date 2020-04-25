@@ -1,7 +1,7 @@
 import React from "react";
 import { Message } from "pi-ui";
 
-export default ({ amountOfCreditsAddedOnRescan, errorRescan }) => 
+export default ({ amountOfCreditsAddedOnRescan, errorRescan }) =>
   <>
     {amountOfCreditsAddedOnRescan !== null &&
      amountOfCreditsAddedOnRescan !== undefined && (
