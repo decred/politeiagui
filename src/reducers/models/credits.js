@@ -16,12 +16,18 @@ const credits = (state = DEFAULT_STATE, action) =>
               unspent: action.payload.unspentcredits,
               spent: action.payload.spentcredits
             })(state),
-          [act.RECEIVE_RESCAN_USER_PAYMENTS]: () =>
-            update(["byUserID", action.payload.userid], (credits) => ({
+          [act.RECEIVE_RESCAN_USER_PAYMENTS]: () => {
+            const userid = action.payload.userid;
+            const newcredits = action.payload.newcredits;
+            const unspent = state.byUserID[userid]
+              ? [...state.byUserID[userid].unspent, ...newcredits]
+              : [...newcredits];
+            return update(["byUserID", userid], (credits) => ({
               ...credits,
-              unspent: [...credits.unspent, ...action.payload.newcredits],
-              newcredits: action.payload.newcredits.length
-            }))(state),
+              unspent: unspent,
+              newcredits: newcredits.length
+            }))(state);
+          },
           [act.RESET_RESCAN_USER_PAYMENTS]: () =>
             update(["byUserID", action.payload], (credits) => ({
               ...credits,

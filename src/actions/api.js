@@ -786,8 +786,8 @@ export const onUpdateUserKey = (currentUserEmail) =>
             .then((response) => {
               const { verificationtoken } = response;
               if (verificationtoken) {
-                const { testnet } = getState().api.init.response;
-                if (testnet) {
+                const isTestnet = sel.isTestNet(getState());
+                if (isTestnet) {
                   dispatch(act.SHOULD_AUTO_VERIFY_KEY(true));
                 }
               }
