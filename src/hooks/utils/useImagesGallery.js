@@ -20,7 +20,8 @@ function useImagesGallery(images) {
         onClose: handleCloseModal,
         onNext: () => openImageFromIndex(nextIndex),
         onPrevious: () => openImageFromIndex(prevIndex),
-        navigatorText: `${idx + 1}/${images.length}`
+        navigatorText: `${idx + 1}/${images.length}`,
+        withNavigation: true
       });
     },
     [handleCloseModal, handleOpenModal, images]

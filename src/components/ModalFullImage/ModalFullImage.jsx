@@ -10,6 +10,7 @@ const ModalFullImage = ({
   onPrevious,
   onNext,
   navigatorText,
+  withNavigation,
   ...props
 }) => {
   const imgSrc = image ? `data:${image.mime};base64,${image.payload}` : "";
@@ -30,26 +31,28 @@ const ModalFullImage = ({
       show={show}
       wrapperClassName={styles.wrapper}
       contentClassName={styles.content}>
-      <div className={styles.navigator}>
-        <Card className={styles.navigatorCard}>
-          {onPrevious && (
-            <Icon
-              className={styles.navigatorIcon}
-              onClick={onPrevious}
-              type="left"
-            />
-          )}
-          <span className="padding-x-s">{navigatorText}</span>
-          {onNext && (
-            <Icon
-              className={styles.navigatorIcon}
-              onClick={onNext}
-              type="right"
-              size="lg"
-            />
-          )}
-        </Card>
-      </div>
+      {withNavigation && (
+        <div className={styles.navigator}>
+          <Card className={styles.navigatorCard}>
+            {onPrevious && (
+              <Icon
+                className={styles.navigatorIcon}
+                onClick={onPrevious}
+                type="left"
+              />
+            )}
+            <span className="padding-x-s">{navigatorText}</span>
+            {onNext && (
+              <Icon
+                className={styles.navigatorIcon}
+                onClick={onNext}
+                type="right"
+                size="lg"
+              />
+            )}
+          </Card>
+        </div>
+      )}
       <img alt={imgAlt} style={{ width: "100%" }} src={imgSrc} />
     </Modal>
   );
@@ -60,7 +63,8 @@ ModalFullImage.propTypes = {
   show: PropTypes.bool,
   onPrevious: PropTypes.func,
   onNext: PropTypes.func,
-  navigatorText: PropTypes.string
+  navigatorText: PropTypes.string,
+  withNavigation: PropTypes.bool
 };
 
 export default ModalFullImage;
