@@ -6,6 +6,7 @@ import ImageThumbnail from "./ImageThumbnail";
 import TextThumbnail from "./TextThumbnail";
 import ModalFullImage from "src/components/ModalFullImage";
 import useModalContext from "src/hooks/utils/useModalContext";
+import useImagesGallery from "src/hooks/utils/useImagesGallery";
 import ThumbnailGridErrors from "./ThumbnailGridErrors";
 
 export const ThumbnailGrid = ({
@@ -17,13 +18,16 @@ export const ThumbnailGrid = ({
   const files = value.filter(
     (f) => f.name !== "index.md" && f.name !== "data.json"
   );
-  const [handleOpenModal, handleCloseModal] = useModalContext();
-  const openFullImageModal = (file) => {
-    handleOpenModal(ModalFullImage, {
-      image: file,
-      onClose: handleCloseModal
-    });
+  // const [handleOpenModal, handleCloseModal] = useModalContext();
+  const openImageFromIdx = useImagesGallery(files);
+  const openFullImageModal = (idx) => {
+    openImageFromIdx(idx);
   };
+
+  /**
+   * const openFrom = useImagesGallery([...images]);
+   * openFrom(idx)
+   */
   return (
     <>
       <ThumbnailGridErrors errors={errors} />
@@ -37,7 +41,7 @@ export const ThumbnailGrid = ({
               key={`img-${key}`}
               file={f}
               viewOnly={viewOnly}
-              onClick={openFullImageModal}
+              onClick={() => openFullImageModal(key)}
               onRemove={onRemove}
             />
           ) : (
