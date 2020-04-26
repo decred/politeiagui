@@ -1,0 +1,25 @@
+.wrapper {
+  max-width: 100vw;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.content {
+  padding: 1rem;
+}
+
+.navigator {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-small);
+}
+
+.navigatorIcon {
+  cursor: pointer;
+}
+
+.navigatorCard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

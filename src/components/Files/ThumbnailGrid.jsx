@@ -4,8 +4,6 @@ import { Row } from "../layout";
 import styles from "./Files.module.css";
 import ImageThumbnail from "./ImageThumbnail";
 import TextThumbnail from "./TextThumbnail";
-import ModalFullImage from "src/components/ModalFullImage";
-import useModalContext from "src/hooks/utils/useModalContext";
 import useImagesGallery from "src/hooks/utils/useImagesGallery";
 import ThumbnailGridErrors from "./ThumbnailGridErrors";
 
@@ -24,10 +22,6 @@ export const ThumbnailGrid = ({
     openImageFromIdx(idx);
   };
 
-  /**
-   * const openFrom = useImagesGallery([...images]);
-   * openFrom(idx)
-   */
   return (
     <>
       <ThumbnailGridErrors errors={errors} />
