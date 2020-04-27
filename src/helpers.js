@@ -428,17 +428,11 @@ export const getCurrentDateValue = () => {
 export const getDateFromYearAndMonth = ({ year, month }) =>
   new Date(year, month);
 
-export const getYearAndMonthFromDate = (date) => {
-  try {
-    const d = new Date(date);
-    const isValidDate =
-      date && !!date.getTime && !!d.getTime && d.getTime() === date.getTime();
+export const isValidDate = (date) => date instanceof Date && !isNaN(date);
 
-    if (!isValidDate) throw new Error(INVALID_DATE);
-    return { year: date.getFullYear(), month: date.getMonth() };
-  } catch (e) {
-    throw new Error(INVALID_DATE);
-  }
+export const getYearAndMonthFromDate = (date) => {
+  if (!isValidDate(date)) throw new Error(INVALID_DATE);
+  return { year: date.getFullYear(), month: date.getMonth() };
 };
 
 export const getCurrentDefaultMonthAndYear = () => ({
