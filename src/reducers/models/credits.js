@@ -14,7 +14,8 @@ const credits = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_USER_PROPOSAL_CREDITS]: () =>
             set(["byUserID", action.payload.userid], {
               unspent: action.payload.unspentcredits,
-              spent: action.payload.spentcredits
+              spent: action.payload.spentcredits,
+              newcredits: null
             })(state),
           [act.RECEIVE_RESCAN_USER_PAYMENTS]: () => {
             const userid = action.payload.userid;
