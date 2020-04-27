@@ -16,9 +16,9 @@ export const ThumbnailGrid = ({
   const files = value.filter(
     (f) => f.name !== "index.md" && f.name !== "data.json"
   );
-  // const [handleOpenModal, handleCloseModal] = useModalContext();
+
   const openImageFromIdx = useImagesGallery(files);
-  const openFullImageModal = (idx) => {
+  const openFullImageModal = (idx) => () => {
     openImageFromIdx(idx);
   };
 
@@ -35,7 +35,7 @@ export const ThumbnailGrid = ({
               key={`img-${key}`}
               file={f}
               viewOnly={viewOnly}
-              onClick={() => openFullImageModal(key)}
+              onClick={openFullImageModal(key)}
               onRemove={onRemove}
             />
           ) : (
