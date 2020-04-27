@@ -53,7 +53,7 @@ export function useUserProposals(ownProps) {
   const loadingSelector = useMemo(
     () =>
       or(
-        sel.userProposalsIsRequesting,
+        sel.isApiRequestingUserProposals,
         sel.isApiRequestingProposalsVoteSummary
       ),
     []

@@ -5,8 +5,8 @@ import { useSelector } from "src/redux";
 import * as sel from "src/selectors";
 
 export default function useOnboardModal() {
-  const loginResponse = useSelector(sel.apiLoginResponse);
-  const firstUserAccess = loginResponse && !loginResponse.lastlogintime;
+  const currentUser = useSelector(sel.currentUser);
+  const firstUserAccess = currentUser && !currentUser.lastlogintime;
   const [showOnboard, setShowOnboard] = useState(firstUserAccess);
 
   const [handleOpenModal, handleCloseModal] = useModalContext();

@@ -32,7 +32,8 @@ const DEFAULT_STATE = {
     [REJECTED]: []
   },
   allProposalsByUserId: {},
-  numOfProposalsByUserId: {}
+  numOfProposalsByUserId: {},
+  newProposalToken: null
 };
 
 const mapReviewStatusToTokenInventoryStatus = {
@@ -112,7 +113,8 @@ const proposals = (state = DEFAULT_STATE, action) =>
               update(
                 ["numOfProposalsByUserId", action.payload.userid],
                 (numOfProps = 0) => ++numOfProps
-              )
+              ),
+              set("newProposalToken", action.payload.censorshiprecord.token)
             )(state),
           [act.RECEIVE_SETSTATUS_PROPOSAL]: () =>
             compose(

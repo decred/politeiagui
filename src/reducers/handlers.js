@@ -1,4 +1,4 @@
-import { request } from "../util";
+import { request } from "./util";
 
 export const onRequestLikeComment = (state, action) => {
   state = request("likeComment", state, action);

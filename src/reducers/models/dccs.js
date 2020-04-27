@@ -10,7 +10,8 @@ import isEmpty from "lodash/isEmpty";
 const DEFAULT_STATE = {
   byToken: {},
   all: [],
-  byStatus: {}
+  byStatus: {},
+  newDccToken: null
 };
 
 const dccToken = (dcc) => dcc.censorshiprecord.token;
@@ -122,12 +123,15 @@ const dccs = (state = DEFAULT_STATE, action) =>
         {
           [act.RECEIVE_DCCS]: () => onReceiveDccs(state, action.payload.dccs),
           [act.RECEIVE_DCC]: () => onReceiveDcc(state, action.payload.dcc),
+          [act.RECEIVE_NEW_DCC]: () =>
+            set("newDccToken", action.payload.censorshiprecord.token)(state),
           [act.RECEIVE_SUPPORT_OPPOSE_DCC]: () =>
             onReceiveSupportOpposeDcc(state, action.payload),
           [act.RECEIVE_SET_DCC_STATUS]: () =>
             onReceiveSetDccStatus(state, action.payload),
           [act.SAVE_DRAFT_DCC]: () => onReceiveDraftDcc(state, action.payload),
-          [act.LOAD_DRAFT_DCCS]: () => onReceiveDrafts(state, action.payload)
+          [act.LOAD_DRAFT_DCCS]: () => onReceiveDrafts(state, action.payload),
+          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();
 

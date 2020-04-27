@@ -1,7 +1,6 @@
 import { useMemo } from "react";
-import * as act from "src/actions";
 import * as sel from "src/selectors";
-import { useAction, useSelector } from "src/redux";
+import { useSelector } from "src/redux";
 import { useConfig } from "src/containers/Config";
 
 function usePaywall(userID) {
@@ -18,10 +17,6 @@ function usePaywall(userID) {
   );
   const userIsPaid = useSelector(userIsPaidSelector);
   const userPaywallStatus = useSelector(userPaywallStatusSelector);
-  const verificationToken = useSelector(sel.verificationToken);
-  const isTestnet = useSelector(sel.isTestNet);
-
-  const onResetAppPaywallInfo = useAction(act.onResetPaywallInfo);
 
   const { enablePaywall } = useConfig();
 
@@ -31,9 +26,6 @@ function usePaywall(userID) {
     paywallAmount,
     paywallTxNotBefore,
     userPaywallStatus,
-    verificationToken,
-    isTestnet,
-    onResetAppPaywallInfo,
     isPaid: userIsPaid,
     paywallEnabled: enablePaywall
   };

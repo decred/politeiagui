@@ -9,11 +9,10 @@ export default function useUserIdentity() {
   const currentUserEmail = useSelector(sel.currentUserEmail);
   const identityImportError = useSelector(sel.identityImportError);
   const identityImportSuccess = useSelector(sel.identityImportSuccess);
-  const keyMismatch = useSelector(sel.getKeyMismatch);
-  const updateUserKey = useSelector(sel.updateUserKey);
+  const keyMismatch = useSelector(sel.keyMismatch);
+  const updateUserKeyToken = useSelector(sel.currentUserKeyVerificationToken);
   const updateUserKeyError = useSelector(sel.updateUserKeyError);
   const shouldAutoVerifyKey = useSelector(sel.shouldAutoVerifyKey);
-  const verificationToken = useSelector(sel.verificationToken);
 
   const keyMismatchAction = useAction(act.keyMismatch);
   const onIdentityImported = useAction(act.onIdentityImported);
@@ -27,10 +26,9 @@ export default function useUserIdentity() {
     identityImportError,
     identityImportSuccess,
     keyMismatch,
-    updateUserKey,
+    updateUserKeyToken,
     updateUserKeyError,
     shouldAutoVerifyKey,
-    verificationToken,
     keyMismatchAction,
     onIdentityImported,
     onUpdateUserKey

@@ -6,7 +6,7 @@ import { currentUserID } from "./users";
 export const dccsByToken = get(["dccs", "byToken"]);
 export const allDccsTokens = get(["dccs", "all"]);
 export const dccsByStatus = get(["dccs", "byStatus"]);
-
+export const newDccToken = get(["dccs", "newDccToken"]);
 const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
 
 export const allDccs = createSelector(

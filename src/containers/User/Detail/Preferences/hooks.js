@@ -6,7 +6,7 @@ export function useUserPreferences() {
   const isAdmin = useSelector(sel.currentUserIsAdmin);
   const isApiRequestingEditUser = useSelector(sel.isApiRequestingEditUser);
   const currentUserID = useSelector(sel.currentUserID);
-  const editUserResponse = useSelector(sel.apiEditUserResponse);
+  const editUserResponse = useSelector(sel.currentUserEdited);
   const editUserError = useSelector(sel.editUserError);
   const initialValues = useSelector(sel.currentUserPreferences);
 

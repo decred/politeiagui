@@ -335,23 +335,6 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
-  test("reset password (api/v1/user/password/reset)", async () => {
-    await assertPOSTOnRouteIsCalled(
-      "/api/v1/user/password/reset",
-      api.forgottenPasswordRequest,
-      [FAKE_CSRF, EMAIL]
-    );
-  });
-
-  test("verify reset password (api/v1/user/password/reset)", async () => {
-    fetchMock.restore();
-    await assertPOSTOnRouteIsCalled(
-      "/api/v1/user/password/reset",
-      api.passwordResetRequest,
-      [FAKE_CSRF, EMAIL, VERIFICATION_TOKEN, "mynewpassword"]
-    );
-  });
-
   test("resend verification email (api/v1/user/new/resend)", async () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/new/resend",
@@ -386,18 +369,6 @@ describe("api integration modules (lib/api.js)", () => {
 
   test("get policy (api/v1/policy)", async () => {
     await assertGETOnRouteIsCalled("/api/v1/policy", api.policy, []);
-  });
-
-  test("get vetted proposals (api/v1/proposals/vetted)", async () => {
-    await assertGETOnRouteIsCalled("/api/v1/proposals/vetted", api.vetted, []);
-  });
-
-  test("get unvetted proposals (api/v1/proposals/unvetted)", async () => {
-    await assertGETOnRouteIsCalled(
-      "/api/v1/proposals/unvetted",
-      api.unvetted,
-      []
-    );
   });
 
   test("get proposal (api/v1/proposals/:token)", async () => {
@@ -470,22 +441,6 @@ describe("api integration modules (lib/api.js)", () => {
       PROPOSAL_TOKEN,
       2
     ]);
-  });
-
-  test("get proposal vote status (api/v1/proposals/token/votestatus)", async () => {
-    await assertGETOnRouteIsCalled(
-      "/api/v1/proposals/token/votestatus",
-      api.proposalVoteStatus,
-      ["token"]
-    );
-  });
-
-  test("get proposals vote status (api/v1/proposals/votestatus)", async () => {
-    await assertGETOnRouteIsCalled(
-      "/api/v1/proposals/votestatus",
-      api.proposalsVoteStatus,
-      []
-    );
   });
 
   test("fetch proposal paywall details (api/v1/proposals/paywall)", async () => {

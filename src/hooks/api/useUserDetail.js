@@ -7,10 +7,9 @@ import useThrowError from "../utils/useThrowError";
 
 export default function useUserDetail(userID) {
   const isCMS = useSelector(sel.isCMS);
-  const meUserID = useSelector(sel.userid);
   const currentUserID = useSelector(sel.currentUserID);
   const isPublicCms = isCMS && !currentUserID;
-  const uid = !isPublicCms ? userID || meUserID : undefined;
+  const uid = !isPublicCms ? userID || currentUserID : undefined;
   const userSelector = useMemo(() => sel.makeGetUserByID(uid), [uid]);
   const user = useSelector(userSelector);
   const isAdmin = useSelector(sel.currentUserIsAdmin);

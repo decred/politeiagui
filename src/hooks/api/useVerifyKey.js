@@ -5,8 +5,8 @@ import * as sel from "src/selectors";
 export default function useVerifyKey() {
   const userPubkey = useSelector(sel.currentUserPublicKey);
   const currentUserEmail = useSelector(sel.currentUserEmail);
-  const keyMismatch = useSelector(sel.getKeyMismatch);
-  const verifyUserKey = useSelector(sel.verifyUserKey);
+  const keyMismatch = useSelector(sel.keyMismatch);
+  const verifyUserKey = useSelector(sel.currentUserVerifiedKey);
   const verifyUserKeyError = useSelector(sel.verifyUserKeyError);
 
   const onVerifyUserKey = useAction(act.onVerifyUserKey);

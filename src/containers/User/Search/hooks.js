@@ -33,7 +33,7 @@ export function useReactiveSearchUser(email, username) {
 }
 
 export function useSearchUser() {
-  const searchResult = useSelector(sel.apiUserSearchResponse);
+  const searchResult = useSelector(sel.searchResults);
   const onSearchUser = useAction(act.onSearchUser);
 
   return { searchResult, onSearchUser };

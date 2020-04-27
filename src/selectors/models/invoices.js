@@ -7,6 +7,7 @@ export const invoicesByToken = get(["invoices", "byToken"]);
 export const allInvoicesTokens = get(["invoices", "all"]);
 export const exchangeRates = get(["invoices", "exchangeRates"]);
 export const subContractors = get(["invoices", "subContractors"]);
+export const newInvoiceToken = get(["invoices", "newInvoiceToken"]);
 
 const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
 

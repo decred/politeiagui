@@ -26,7 +26,7 @@ function useValidationSchemaFromPolicy(schemaFn) {
 }
 
 export function useResetPassword() {
-  const requestResetResponse = useSelector(sel.resetPasswordResponse);
+  const requestResetResponse = useSelector(sel.currentUserResetPassword);
   const onResetPassword = useAction(act.onResetPassword);
   const validationSchema = useValidationSchemaFromPolicy(
     requestResetValidationSchema

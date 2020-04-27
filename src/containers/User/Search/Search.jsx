@@ -30,14 +30,13 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
       setSearchError(e);
     }
   }
-  const usersResult = searchResult && searchResult.users;
   useEffect(
     function updateFoundUsers() {
-      if (usersResult) {
-        setFoundUsers(getFormattedSearchResults(usersResult));
+      if (searchResult) {
+        setFoundUsers(getFormattedSearchResults(searchResult));
       }
     },
-    [usersResult]
+    [searchResult]
   );
   return (
     <>

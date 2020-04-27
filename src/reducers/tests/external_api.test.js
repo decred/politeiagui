@@ -33,26 +33,9 @@ describe("test external_api reducer", () => {
     );
   });
 
-  test("tests last block height reducers, involving request and receive", () => {
-    const request_action = {
-      type: act.REQUEST_GET_LAST_BLOCK_HEIGHT,
-      payload: "data",
-      error: false
-    };
-
-    const receive_action = {
-      type: act.RECEIVE_GET_LAST_BLOCK_HEIGHT,
-      payload: "data",
-      error: false
-    };
-
-    testRequestReducer(external_api, "blockHeight", MOCK_STATE, request_action);
-    testReceiveReducer(external_api, "blockHeight", MOCK_STATE, receive_action);
-  });
-
   test("default tests on external_api reducer", () => {
     expect(DEFAULT_STATE).toEqual({
-      payWithFaucet: { isRequesting: false, response: null, error: null }
+      payWithFaucet: { isRequesting: false, error: null }
     });
 
     expect(external_api(MOCK_STATE, {})).toEqual(MOCK_STATE);

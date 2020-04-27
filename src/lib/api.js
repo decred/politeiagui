@@ -406,16 +406,9 @@ export const changePassword = (csrf, currentpassword, newpassword) =>
     newpassword: digest(newpassword)
   }).then(getResponse);
 
-export const forgottenPasswordRequest = (csrf, email) =>
-  POST("/user/password/reset", csrf, { email }).then(getResponse);
-
-// XXXX: this route hasn't been merged into the master of the backend.
-// Pull request: https://github.com/decred/politeia/pull/937
 export const resetPassword = (csrf, username, email) =>
   POST("/user/password/reset", csrf, { username, email }).then(getResponse);
 
-// XXXX: this route hasn't been merged into the master of the backend.
-// Pull request: https://github.com/decred/politeia/pull/937
 export const verifyResetPassword = (
   csrf,
   username,
@@ -437,18 +430,6 @@ export const resendVerificationEmailRequest = (csrf, email) =>
       POST("/user/new/resend", csrf, { email, publickey }).then(getResponse)
     );
 
-export const passwordResetRequest = (
-  csrf,
-  email,
-  verificationtoken,
-  newpassword
-) =>
-  POST("/user/password/reset", csrf, {
-    email,
-    verificationtoken,
-    newpassword: digest(newpassword)
-  }).then(getResponse);
-
 export const updateKeyRequest = (csrf, publickey) =>
   POST("/user/key", csrf, { publickey }).then(getResponse);
 
@@ -462,19 +443,6 @@ export const verifyKeyRequest = (csrf, email, verificationtoken) =>
     );
 
 export const policy = () => GET("/v1/policy").then(getResponse);
-export const vetted = (after) => {
-  return !after
-    ? GET("/v1/proposals/vetted").then(getResponse)
-    : GET(`/v1/proposals/vetted?${qs.stringify({ after })}`).then(getResponse);
-};
-
-export const unvetted = (after) => {
-  return !after
-    ? GET("/v1/proposals/unvetted").then(getResponse)
-    : GET(`/v1/proposals/unvetted?${qs.stringify({ after })}`).then(
-        getResponse
-      );
-};
 
 export const userProposals = (userid, after) => {
   return !after
@@ -487,7 +455,6 @@ export const userProposals = (userid, after) => {
 export const searchUser = (obj) =>
   GET(`/v1/users?${qs.stringify(obj)}`).then(getResponse);
 
-export const status = () => GET("/v1/proposals/stats").then(getResponse);
 export const proposal = (token, version = null) =>
   GET(`/v1/proposals/${token}` + (version ? `?version=${version}` : "")).then(
     getResponse
@@ -607,10 +574,6 @@ export const startVote = (
     .then(getResponse);
 };
 
-export const proposalsVoteStatus = () =>
-  GET("/v1/proposals/votestatus").then(getResponse);
-export const proposalVoteStatus = (token) =>
-  GET(`/v1/proposals/${token}/votestatus`).then(getResponse);
 export const proposalsBatchVoteSummary = (csrf, tokens) =>
   POST("/proposals/batchvotesummary", csrf, {
     tokens
@@ -645,6 +608,9 @@ export const proposalPaywallPayment = () =>
 export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
 
+export const tokenInventory = () =>
+  GET("/v1/proposals/tokeninventory").then(getResponse);
+
 // CMS
 export const inviteNewUser = (csrf, payload) =>
   POST("/invite", csrf, payload).then(getResponse);
@@ -672,9 +638,6 @@ export const userInvoices = () => GET("/v1/user/invoices").then(getResponse);
 export const adminInvoices = (csrf) =>
   POST("/admin/invoices", csrf, {}).then(getResponse);
 
-export const adminUserInvoices = (userid) =>
-  GET(`/v1/admin/userinvoices?${qs.stringify({ userid })}`).then(getResponse);
-
 export const generatePayouts = (csrf) =>
   POST("/admin/generatepayouts", csrf, {}).then(getResponse);
 
@@ -683,9 +646,6 @@ export const invoicePayouts = (csrf, starttime, endtime) =>
 
 export const payApprovedInvoices = () =>
   GET("/v1/admin/payinvoices").then(getResponse);
-
-export const tokenInventory = () =>
-  GET("/v1/proposals/tokeninventory").then(getResponse);
 
 export const exchangeRate = (csrf, month, year) =>
   POST("/invoices/exchangerate", csrf, { month, year }).then(getResponse);
