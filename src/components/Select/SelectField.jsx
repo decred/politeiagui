@@ -1,11 +1,16 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Select } from "pi-ui";
 import { FormikConsumer } from "formik";
 
 const getSelectValue = (formValue, options) =>
   options.find((op) => op.value === formValue);
 
-const SelectField = ({ name, options, ...props }) => {
+const SelectField = ({
+  name,
+  options,
+  ...props
+}) => {
   return (
     <FormikConsumer>
       {({ values, setFieldValue }) => {
@@ -22,6 +27,16 @@ const SelectField = ({ name, options, ...props }) => {
       }}
     </FormikConsumer>
   );
+};
+
+SelectField.propTypes = {
+  name: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.number
+    })
+  ).isRequired
 };
 
 export default SelectField;

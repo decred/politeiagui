@@ -4,10 +4,12 @@ import CheckboxGroupField from "src/components/CheckboxGroupField";
 import MonthPickerField from "src/components/MonthPickerField";
 import {
   getInvoiceMinMaxYearAndMonth,
-  getInitialDateValue
+  getInitialDateValue,
+  getPreviousMonthsRange
 } from "src/containers/Invoice";
 import styles from "./InvoiceFilterForm.module.css";
 import UserSearchSelect from "src/containers/User/Search/SearchSelector";
+import { Link } from "pi-ui";
 
 const DEFAULT_INITIAL_VALUES = {
   date: getInitialDateValue(),
@@ -30,27 +32,51 @@ const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
         const handleChangeUserSelector = (options) => {
           setFieldValue("users", options);
         };
+
+        const handleLastMonths = (length) => (e) => {
+          e && e.preventDefault();
+          setFieldValue("date", getPreviousMonthsRange(length));
+        };
+
         return (
           <>
             <form className={styles.form}>
-              <MonthPickerField
-                years={getInvoiceMinMaxYearAndMonth()}
-                name="date"
-                label="Reference month"
-                toggleable
-              />
-
-              <CheckboxGroupField
-                groupName="filters"
-                options={[
-                  { name: "all", label: "All" },
-                  { name: "unreviewed", label: "Unreviewed" },
-                  { name: "disputed", label: "Disputed" },
-                  { name: "approved", label: "Approved" },
-                  { name: "rejected", label: "Rejected" },
-                  { name: "paid", label: "Paid" }
-                ]}
-              />
+              <div className={styles.topFilters}>
+                <MonthPickerField
+                  years={getInvoiceMinMaxYearAndMonth()}
+                  name="date"
+                  label="By Date"
+                  toggleable
+                  multiChoice
+                  enableAllMonths
+                  className={styles.monthPicker}
+                />
+                <div className={styles.checkboxesWrapper}>
+                  <CheckboxGroupField
+                    groupName="filters"
+                    options={[
+                      { name: "all", label: "All" },
+                      { name: "unreviewed", label: "Unreviewed" },
+                      { name: "disputed", label: "Disputed" },
+                      { name: "approved", label: "Approved" },
+                      { name: "rejected", label: "Rejected" },
+                      { name: "paid", label: "Paid" }
+                    ]}
+                  />
+                </div>
+              </div>
+              <div className={styles.presetDates}>
+                Last:
+                <Link onClick={handleLastMonths(3)} href="">
+                  3 months
+                </Link>
+                <Link onClick={handleLastMonths(6)} href="">
+                  6 months
+                </Link>
+                <Link onClick={handleLastMonths(12)} href="">
+                  12 months
+                </Link>
+              </div>
               {!disableUserFilter && (
                 <UserSearchSelect
                   onChange={handleChangeUserSelector}

@@ -7,7 +7,7 @@ import range from "lodash/fp/range";
 import * as pki from "./lib/pki";
 import { sha3_256 } from "js-sha3";
 
-import { INVALID_FILE } from "./constants";
+import { INVALID_FILE, INVALID_DATE } from "./constants";
 import {
   INVOICE_STATUS_APPROVED,
   INVOICE_STATUS_DISPUTED,
@@ -425,11 +425,20 @@ export const getCurrentDateValue = () => {
   };
 };
 
-export const getPreviousMonthAndYear = (currentMonth, currentYear) => {
-  const month = currentMonth === 1 ? 12 : currentMonth - 1;
-  const year = currentMonth === 1 ? currentYear - 1 : currentYear;
-  return { month, year };
+export const getDateFromYearAndMonth = ({ year, month }) =>
+  new Date(year, month);
+
+export const isValidDate = (date) => date instanceof Date && !isNaN(date);
+
+export const getYearAndMonthFromDate = (date) => {
+  if (!isValidDate(date)) throw new Error(INVALID_DATE);
+  return { year: date.getFullYear(), month: date.getMonth() };
 };
+
+export const getCurrentDefaultMonthAndYear = () => ({
+  month: getCurrentMonth() - 1,
+  year: getCurrentYear()
+});
 
 export const getYearOptions = (initial, lastYear) => {
   const isYearValid = (y) => y < lastYear + getCurrentMonth() - 1;
