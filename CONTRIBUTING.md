@@ -35,12 +35,19 @@ introduce yourself. We always like to know who is interested in the project and 
 **How to write the perfect pull request:**
 
 - Ensure the PR description clearly describes the problem and solution. Include the relevant issue number if applicable.
+
 - Include a list with the actions relevant to your PR in the description.
+
 - Make sure you test your PR before opening it.
+
 - Make sure your code is readable and well organized.
+
 - Make sure you follow the React best practices. If you are not experienced with the framework, don't worry! Show up on matrix and we will be glad to help you.
+
 - If your PR changes something in the UI, please add some screenshots in both light and dark modes.
+
 - Be explicit about *what* feedback you want: a quick pair of eyes on the code, discussion on the technical approach, critique on design, etc.
+
 - Be explicit about *when* you want feedback, if the Pull Request is work in progress, say so by adding the [WIP] tag or opening a Draft.
 
 **Do you intend to work on an issue but you don't know which one to pick?**
