@@ -4,8 +4,9 @@ import { Row } from "../layout";
 import styles from "./Files.module.css";
 import ImageThumbnail from "./ImageThumbnail";
 import TextThumbnail from "./TextThumbnail";
-import useImagesGallery from "src/hooks/utils/useImagesGallery";
 import ThumbnailGridErrors from "./ThumbnailGridErrors";
+import ModalFullImage from "src/components/ModalFullImage";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 export const ThumbnailGrid = ({
   value = [],
@@ -17,9 +18,14 @@ export const ThumbnailGrid = ({
     (f) => f.name !== "index.md" && f.name !== "data.json"
   );
 
-  const openImageFromIdx = useImagesGallery(files);
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
   const openFullImageModal = (idx) => () => {
-    openImageFromIdx(idx);
+    handleOpenModal(ModalFullImage, {
+      images: files,
+      onClose: handleCloseModal,
+      initialIndex: idx
+    });
   };
 
   return (

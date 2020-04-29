@@ -1,27 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Modal, Icon, Card } from "pi-ui";
 import useEventListener from "src/hooks/utils/useEventListener";
 import styles from "./ModalFullImage.module.css";
 
-const ModalFullImage = ({
-  image,
-  show,
-  onPrevious,
-  onNext,
-  navigatorText,
-  withNavigation,
-  ...props
-}) => {
-  const imgSrc = image ? `data:${image.mime};base64,${image.payload}` : "";
-  const imgAlt = image ? image.name : "image";
+const ModalFullImage = ({ images, show, initialIndex = 0, ...props }) => {
+  const [currentImageIdx, setCurrentImageIdx] = useState(initialIndex);
+  const currentImage = images[currentImageIdx];
+  const imgSrc = currentImage
+    ? `data:${currentImage.mime};base64,${currentImage.payload}`
+    : "";
+  const imgAlt = currentImage ? currentImage.name : "image";
+
+  const withNavigation = images && images.length > 0;
+
+  function showNextImage() {
+    // go to next image or reset index to 0 if there are no subsequent images
+    const nextIndex =
+      images.length > currentImageIdx + 1 ? currentImageIdx + 1 : 0;
+    setCurrentImageIdx(nextIndex);
+  }
+
+  function showPreviousImage() {
+    // go to previous index or set to latest index if there are no preceding images
+    const prevIndex =
+      currentImageIdx === 0 ? images.length - 1 : currentImageIdx - 1;
+    setCurrentImageIdx(prevIndex);
+  }
 
   useEventListener("keydown", ({ key }) => {
     if (key === "ArrowLeft") {
-      onPrevious && onPrevious();
+      showPreviousImage();
     }
     if (key === "ArrowRight") {
-      onNext && onNext();
+      showNextImage();
     }
   });
 
@@ -34,22 +46,20 @@ const ModalFullImage = ({
       {withNavigation && (
         <div className={styles.navigator}>
           <Card className={styles.navigatorCard}>
-            {onPrevious && (
-              <Icon
-                className={styles.navigatorIcon}
-                onClick={onPrevious}
-                type="left"
-              />
-            )}
-            <span className="padding-x-s">{navigatorText}</span>
-            {onNext && (
-              <Icon
-                className={styles.navigatorIcon}
-                onClick={onNext}
-                type="right"
-                size="lg"
-              />
-            )}
+            <Icon
+              className={styles.navigatorIcon}
+              onClick={showPreviousImage}
+              type="left"
+            />
+            <span className="padding-x-s">{`${currentImageIdx + 1}/${
+              images.length
+            }`}</span>
+            <Icon
+              className={styles.navigatorIcon}
+              onClick={showNextImage}
+              type="right"
+              size="lg"
+            />
           </Card>
         </div>
       )}
@@ -59,7 +69,7 @@ const ModalFullImage = ({
 };
 
 ModalFullImage.propTypes = {
-  image: PropTypes.object,
+  images: PropTypes.arrayOf(PropTypes.object),
   show: PropTypes.bool,
   onPrevious: PropTypes.func,
   onNext: PropTypes.func,
