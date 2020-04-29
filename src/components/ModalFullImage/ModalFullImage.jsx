@@ -12,7 +12,8 @@ const ModalFullImage = ({ images, show, initialIndex = 0, ...props }) => {
     : "";
   const imgAlt = currentImage ? currentImage.name : "image";
 
-  const withNavigation = images && images.length > 0;
+  // only allow navigating back and forth if there are multiple images
+  const canNavigate = images && images.length > 1;
 
   function showNextImage() {
     // go to next image or reset index to 0 if there are no subsequent images
@@ -30,10 +31,10 @@ const ModalFullImage = ({ images, show, initialIndex = 0, ...props }) => {
 
   useEventListener("keydown", ({ key }) => {
     if (key === "ArrowLeft") {
-      showPreviousImage();
+      canNavigate && showPreviousImage();
     }
     if (key === "ArrowRight") {
-      showNextImage();
+      canNavigate && showNextImage();
     }
   });
 
@@ -43,26 +44,28 @@ const ModalFullImage = ({ images, show, initialIndex = 0, ...props }) => {
       show={show}
       wrapperClassName={styles.wrapper}
       contentClassName={styles.content}>
-      {withNavigation && (
-        <div className={styles.navigator}>
-          <Card className={styles.navigatorCard}>
+      <div className={styles.navigator}>
+        <Card className={styles.navigatorCard}>
+          {canNavigate && (
             <Icon
               className={styles.navigatorIcon}
               onClick={showPreviousImage}
               type="left"
             />
-            <span className="padding-x-s">{`${currentImageIdx + 1}/${
-              images.length
-            }`}</span>
+          )}
+          <span className="padding-x-s">{`${currentImageIdx + 1}/${
+            images.length
+          }`}</span>
+          {canNavigate && (
             <Icon
               className={styles.navigatorIcon}
               onClick={showNextImage}
               type="right"
               size="lg"
             />
-          </Card>
-        </div>
-      )}
+          )}
+        </Card>
+      </div>
       <img alt={imgAlt} style={{ width: "100%" }} src={imgSrc} />
     </Modal>
   );
