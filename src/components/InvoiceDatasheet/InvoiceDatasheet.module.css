@@ -81,13 +81,14 @@ pre {
 }
 
 .tableRow > td {
-  height: 5rem !important;
+  height: 4rem !important;
   vertical-align: middle !important;
   text-align: center !important;
   max-width: 12rem;
   min-width: 12rem;
   text-align: center;
   text-overflow: ellipsis;
+  font-size: var(--font-size-small);
 }
 
 .datasheetWrapper {
