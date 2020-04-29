@@ -4,9 +4,11 @@ import {
   fromMinutesToHours,
   fromUSDUnitsToUSDCents
 } from "../../helpers";
-import { selectWrapper } from "./wrappers";
-
-import styles from "./InvoiceDatasheet.module.css";
+import {
+  selectWrapper,
+  textAreaWrapper,
+  multilineTextWrapper
+} from "./wrappers";
 
 export const columnTypes = {
   TYPE_COL: 1,
@@ -121,7 +123,10 @@ export const convertLineItemsToGrid = (
           readOnly,
           value: line.description,
           error: rowErrors && rowErrors.description,
-          className: styles.multilineCellValue
+          dataEditor: textAreaWrapper({
+            error: rowErrors && rowErrors.description
+          }),
+          valueViewer: multilineTextWrapper()
         },
         {
           readOnly,
