@@ -15,7 +15,10 @@ _Example:_ This diff adds a new provider to handle the mentioned issue, so user 
 > If your PR adds a new feature, it might be a good idea to describe what is the proper use for it. Remember to clarify this in your code.
 
 _Example:_ This hook can be used every time you want to fetch the User data.
+### Dependencies
+> Link the dependencies (if needed) from backend and/or pi-ui
 
+*Example:* Depends on [politeia#pr]() and [pi-ui#pr]()
 ### UI Changes Screenshot
 
 > Add images that illustrate the UI changes, by adding at least 2 pics regarding the previous version and the one that the PR is implementing.
