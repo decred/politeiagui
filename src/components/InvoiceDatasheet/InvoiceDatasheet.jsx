@@ -72,7 +72,15 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
       );
       setGrid(grid);
     },
-    [value, readOnly, errors, currentRate, policy, proposalsTokens, subContractors]
+    [
+      value,
+      readOnly,
+      errors,
+      currentRate,
+      policy,
+      proposalsTokens,
+      subContractors
+    ]
   );
 
   const handleRemoveLastRow = useCallback(
@@ -101,7 +109,10 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
           <thead>
             <tr className={styles.tableHead}>
               {headers.map((col, idx) => (
-                <th key={`header-${idx}`} className={styles.tableHeadCell} width={col.width}>
+                <th
+                  key={`header-${idx}`}
+                  className={styles.tableHeadCell}
+                  style={{ minWidth: col.width, width: col.width }}>
                   {col.value}
                 </th>
               ))}
