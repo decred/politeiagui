@@ -240,17 +240,17 @@ export const convertGridToLineItems = (grid) => {
 };
 
 export const createTableHeaders = () => [
-  { readOnly: true, value: "", width: 20 },
-  { value: "Type", readOnly: true, width: 40 },
-  { value: "Domain", readOnly: true, width: 120 },
-  { value: "Subdomain", readOnly: true, width: 140 },
-  { value: "Description", readOnly: true, width: 300 },
-  { value: "Proposal Token", readOnly: true, width: 100 },
-  { value: "Subcontr. ID", readOnly: true, width: 100 },
-  { value: "Subcontr. Rate (USD)", readOnly: true, width: 80 },
-  { value: "Labor (hours)", readOnly: true, width: 70 },
-  { value: "Expense (USD)", readOnly: true, width: 75 },
-  { value: "Subtotal (USD)", readOnly: true, width: 75 }
+  { readOnly: true, value: "", width: "2rem" },
+  { value: "Type", readOnly: true, width: "4rem" },
+  { value: "Domain", readOnly: true, width: "12rem" },
+  { value: "Subdomain", readOnly: true, width: "14rem" },
+  { value: "Description", readOnly: true, width: "30rem" },
+  { value: "Proposal Token", readOnly: true, width: "10rem" },
+  { value: "Subcontr. ID", readOnly: true, width: "10rem" },
+  { value: "Subcontr. Rate (USD)", readOnly: true, width: "8rem" },
+  { value: "Labor (hours)", readOnly: true, width: "7rem" },
+  { value: "Expense (USD)", readOnly: true, width: "7.5rem" },
+  { value: "Subtotal (USD)", readOnly: true, width: "7.5rem" }
 ];
 
 export const updateGridCell = (grid, row, col, values) => {
