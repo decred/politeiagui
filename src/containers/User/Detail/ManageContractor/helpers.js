@@ -5,6 +5,16 @@ export const typeOptions = [
   "Sub Contractor"
 ];
 
+export const typeViewOptions = [
+  "No type defined",
+  "Direct",
+  "Supervisor",
+  "Sub Contractor",
+  "Not a contractor",
+  "Dormant",
+  "Nominee"
+];
+
 export const domainOptions = [
   "No domain defined",
   "Development",

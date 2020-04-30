@@ -22,6 +22,7 @@ export const DCC_DOMAINS = [
   "Community Management"
 ];
 export const DCC_DOMAIN_INVALID = 0;
+export const DCC_DOMAIN_DEVELOPER = 1;
 
 export const DCC_FULL_USER_CONTRACTOR_TYPES = [
   CONTRACTOR_TYPE_DIRECT,

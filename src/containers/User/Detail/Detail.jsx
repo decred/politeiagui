@@ -36,7 +36,7 @@ const getTabComponents = ({ user, ...rest }) => {
       />
     ),
     [tabValues.DRAFTS]: <Drafts key="tab-invoices" />,
-    [tabValues.MANAGE_DCC]: <ManageContractor user={user} {...rest} />
+    [tabValues.MANAGE_DCC]: <ManageContractor userID={user.userid} {...rest} />
   };
   return mapTabValueToComponent;
 };

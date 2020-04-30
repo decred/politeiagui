@@ -2,6 +2,7 @@ import { classNames, useTheme } from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
 import styles from "./InfoSection.module.css";
+import isEmpty from "lodash/isEmpty";
 
 const InfoSection = ({
   label,
@@ -23,9 +24,13 @@ const InfoSection = ({
       <span
         className={classNames(styles.label, isDarkTheme && styles.darkLabel)}
         style={alignLabelCenter && { alignSelf: "center" }}>
-        {label}
+        {label}:
       </span>
-      <span className={styles.info}>{info}</span>
+      {!isEmpty(info) ? (
+        <span className={styles.info}>{info}</span>
+      ) : (
+        <span className={styles.noInfo}>No information provided</span>
+      )}
     </div>
   );
 };

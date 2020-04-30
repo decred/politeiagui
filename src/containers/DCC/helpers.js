@@ -6,6 +6,7 @@ import {
   DCC_TYPE_ISSUANCE,
   DCC_TYPE_REVOCATION,
   DCC_DOMAIN_INVALID,
+  DCC_DOMAIN_DEVELOPER,
   CONTRACTOR_TYPE_NOMINEE,
   CONTRACTOR_TYPE_REVOKED,
   CONTRACTOR_TYPE_SUPERVISOR,
@@ -236,6 +237,12 @@ export const isUserValidContractor = (user) =>
   user.contractortype !== CONTRACTOR_TYPE_NOMINEE &&
   user.contractortype !== CONTRACTOR_TYPE_INVALID;
 
+/**
+ * Returns if cms user is a developer
+ * @param {Object} user
+ */
+export const isUserDeveloper = (user) =>
+  isUserValidContractor(user) && user.domain === DCC_DOMAIN_DEVELOPER;
 /**
  * Retuns a sorted dcc list by timestamp
  * @param {Object} unorderedDccs
