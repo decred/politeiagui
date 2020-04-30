@@ -9,6 +9,7 @@ import { Transition } from "react-transition-group";
 const duration = 300;
 
 const defaultStyle = {
+  maxWidth: "20rem",
   transition: `opacity ${duration}ms ease-in-out`,
   opacity: 0
 };
@@ -23,10 +24,7 @@ const transitionStyles = {
 const LoaderScreen = ({ error }) => {
   const [mounted, setMounted] = useState(false);
   const { themeName, setThemeName } = useTheme();
-  const [darkThemeOnLocalStorage] = useLocalStorage(
-    "darkTheme",
-    false
-  );
+  const [darkThemeOnLocalStorage] = useLocalStorage("darkTheme", false);
 
   useEffect(() => {
     if (darkThemeOnLocalStorage && themeName === "light") {
@@ -44,7 +42,7 @@ const LoaderScreen = ({ error }) => {
   return (
     <div className={classNames(styles.container, styles.dark)}>
       <Transition in={mounted} timeout={duration}>
-        {state => (
+        {(state) => (
           <Logo
             style={{
               ...defaultStyle,
