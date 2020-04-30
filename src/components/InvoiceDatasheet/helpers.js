@@ -240,17 +240,17 @@ export const convertGridToLineItems = (grid) => {
 };
 
 export const createTableHeaders = () => [
-  { readOnly: true, value: "", width: 40 },
-  { value: "Type", readOnly: true, width: 80 },
-  { value: "Domain", readOnly: true },
-  { value: "Subdomain", readOnly: true },
-  { value: "Description", readOnly: true },
-  { value: "Proposal Token", readOnly: true },
-  { value: "Subcontr. ID", readOnly: true },
-  { value: "Subcontr. Rate (USD)", readOnly: true },
-  { value: "Labor (hours)", readOnly: true },
-  { value: "Expense (USD)", readOnly: true },
-  { value: "Subtotal (USD)", readOnly: true }
+  { readOnly: true, value: "", width: 20 },
+  { value: "Type", readOnly: true, width: 40 },
+  { value: "Domain", readOnly: true, width: 120 },
+  { value: "Subdomain", readOnly: true, width: 140 },
+  { value: "Description", readOnly: true, width: 300 },
+  { value: "Proposal Token", readOnly: true, width: 100 },
+  { value: "Subcontr. ID", readOnly: true, width: 100 },
+  { value: "Subcontr. Rate (USD)", readOnly: true, width: 80 },
+  { value: "Labor (hours)", readOnly: true, width: 70 },
+  { value: "Expense (USD)", readOnly: true, width: 75 },
+  { value: "Subtotal (USD)", readOnly: true, width: 75 }
 ];
 
 export const updateGridCell = (grid, row, col, values) => {
