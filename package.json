@@ -65,6 +65,11 @@
     "lint": "./node_modules/.bin/eslint src --ext .js --ext .jsx",
     "precommit": "lint-staged"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     "*.{js, jsx}": [
       "yarn prettify",
