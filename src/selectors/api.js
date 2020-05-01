@@ -53,11 +53,11 @@ export const makeIsApiRequestingManageUserByAction = (action) =>
       isApiRequestingManageUser(state) && manageUserAction(state) === action
   );
 
-export const apiPropVoteStatusError = getApiError("proposalVoteStatusError");
 export const updateUserKeyError = getApiError("updateUserKey");
 export const verifyUserKeyError = getApiError("verifyUserKey");
 export const editUserError = getApiError("editUser");
 export const apiInitError = getApiError("init");
+export const propVoteResultsError = getApiError("proposalVoteResults");
 const apiUserProposalsError = getApiError("userProposals");
 const apiProposalError = getApiError("proposal");
 export const apiPropsVoteSummaryError = getApiError(
