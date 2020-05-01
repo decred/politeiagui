@@ -1,12 +1,6 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import {
-  Button,
-  Message,
-  RadioButtonGroup,
-  classNames,
-  TextArea
-} from "pi-ui";
+import { Button, Message, RadioButtonGroup, classNames, TextArea } from "pi-ui";
 import { Formik, Field } from "formik";
 import SelectField from "src/components/Select/SelectField";
 import { withRouter } from "react-router-dom";
@@ -56,7 +50,6 @@ const DccForm = React.memo(function DccForm({
     }
   }, [errors]);
 
-
   useEffect(() => {
     if (values.type === DCC_TYPE_ISSUANCE) {
       setIsIssuance(true);
@@ -66,14 +59,17 @@ const DccForm = React.memo(function DccForm({
     }
   }, [values.type, setFieldValue]);
 
-  const SubmitButton = useCallback(() => (
-    <Button
-      type="submit"
-      kind={!isValid || !isUserValid ? "disabled" : "primary"}
-      loading={isSubmitting}>
-      Submit
-    </Button>
-  ), [isValid, isSubmitting, isUserValid]);
+  const SubmitButton = useCallback(
+    () => (
+      <Button
+        type="submit"
+        kind={!isValid || !isUserValid ? "disabled" : "primary"}
+        loading={isSubmitting}>
+        Submit
+      </Button>
+    ),
+    [isValid, isSubmitting, isUserValid]
+  );
 
   const handleChangeDccType = (e) => {
     setFieldTouched("type", true);
@@ -88,7 +84,7 @@ const DccForm = React.memo(function DccForm({
   const handleChangeStatement = (e) => {
     setSessionStorageDcc({
       ...values,
-      "statement": e.target.value
+      statement: e.target.value
     });
     setFieldTouched("statement", true);
     setFieldValue("statement", e.target.value);
@@ -109,8 +105,8 @@ const DccForm = React.memo(function DccForm({
     setFieldValue("nomineeusername", e.label);
     setSessionStorageDcc({
       ...values,
-      "nomineeid": e.value,
-      "nomineeusername": e.label
+      nomineeid: e.value,
+      nomineeusername: e.label
     });
   };
 
@@ -121,7 +117,10 @@ const DccForm = React.memo(function DccForm({
       )}
 
       {!isUserValid && (
-        <Message kind="error">You don't have the contractor status required to complete a DCC request</Message>
+        <Message kind="error">
+          You don't have the contractor status required to complete a DCC
+          request
+        </Message>
       )}
 
       <RadioButtonGroup
@@ -179,8 +178,8 @@ const DccForm = React.memo(function DccForm({
         error={touched.statement && errors.statement}
       />
       <div className="justify-right">
-        <DraftSaver {...{ submitSuccess }}/>
-        <SubmitButton/>
+        <DraftSaver {...{ submitSuccess }} />
+        <SubmitButton />
       </div>
     </form>
   );
@@ -196,10 +195,9 @@ const DccFormWrapper = ({
 }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { policy } = usePolicy();
-  const dccFormValidation = useMemo(
-    () => dccValidationSchema(policy),
-    [policy]
-  );
+  const dccFormValidation = useMemo(() => dccValidationSchema(policy), [
+    policy
+  ]);
 
   const FORM_INITIAL_VALUES = {
     type: 0,
@@ -248,7 +246,13 @@ const DccFormWrapper = ({
       validationSchema={dccFormValidation}>
       {(props) => (
         <DccForm
-          {...{ ...props, submitSuccess, setSessionStorageDcc, cmsUsers, isUserValid }}
+          {...{
+            ...props,
+            submitSuccess,
+            setSessionStorageDcc,
+            cmsUsers,
+            isUserValid
+          }}
         />
       )}
     </Formik>

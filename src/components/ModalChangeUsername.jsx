@@ -39,8 +39,14 @@ const ModalChangeUsername = ({
   }, [show]);
 
   const { theme } = useTheme();
-  const successIconBgColor = getThemeProperty(theme, "success-icon-background-color");
-  const iconCheckmarkColor = getThemeProperty(theme, "success-icon-checkmark-color");
+  const successIconBgColor = getThemeProperty(
+    theme,
+    "success-icon-background-color"
+  );
+  const iconCheckmarkColor = getThemeProperty(
+    theme,
+    "success-icon-checkmark-color"
+  );
 
   return (
     <Modal

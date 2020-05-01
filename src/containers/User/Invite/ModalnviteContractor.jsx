@@ -46,8 +46,7 @@ const ModalInviteContractor = ({ show, onClose }) => {
       title={success ? "Invite sent!" : "Invite Contractor"}
       show={show}
       onClose={onClose}
-      iconComponent={icon}
-    >
+      iconComponent={icon}>
       {!success && (
         <P style={{ marginBottom: "20px" }}>
           Please, provide the email to where to send the invitation
@@ -60,13 +59,10 @@ const ModalInviteContractor = ({ show, onClose }) => {
             isTemp: false
           }}
           validationSchema={Yup.object().shape({
-            email: Yup.string()
-              .email("Invalid email")
-              .required("Required"),
+            email: Yup.string().email("Invalid email").required("Required"),
             isTemp: Yup.boolean()
           })}
-          onSubmit={onInvite}
-        >
+          onSubmit={onInvite}>
           {({
             Form,
             Actions,
@@ -92,10 +88,7 @@ const ModalInviteContractor = ({ show, onClose }) => {
                 onBlur={handleBlur}
                 error={touched.email && errors.email}
               />
-              <CheckboxField
-                name="isTemp"
-                label="Temporary Invite"
-              />
+              <CheckboxField name="isTemp" label="Temporary Invite" />
               <Actions className="no-padding-bottom">
                 <Button loading={isSubmitting} type="submit">
                   Invite

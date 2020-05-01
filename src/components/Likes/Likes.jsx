@@ -15,7 +15,15 @@ import styles from "./Likes.module.css";
 export const isLiked = (action) => action === 1 || action === "1";
 export const isDisliked = (action) => action === -1 || action === "-1";
 
-const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled, apiLoading }) => {
+const Likes = ({
+  upLikes,
+  downLikes,
+  onLike,
+  onDislike,
+  option,
+  disabled,
+  apiLoading
+}) => {
   const [loading, setLoading] = useState(false);
   const [likeRef, isLikeHovered] = useHover();
   const [dislikeRef, isDislikeHovered] = useHover();
@@ -34,9 +42,7 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled, apiLoa
     } else if (loading) {
       setLoading(false);
     }
-  },
-    [apiLoading, loading, setLoading]
-  );
+  }, [apiLoading, loading, setLoading]);
 
   const handleLike = useCallback(
     async function handleLike() {
@@ -67,41 +73,41 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled, apiLoa
 
   return (
     <div className="align-center">
-      {loading && apiLoading ?  (
+      {loading && apiLoading ? (
         <div className={styles.likeBoxSpinner}>
           <Spinner invert />
         </div>
       ) : (
-      <>
-        <div className={styles.leftLikeBox}>
-          <button
-            disabled={disabled}
-            ref={likeRef}
-            className={styles.likeBtn}
-            onClick={handleLike}>
-            <Icon
-              iconColor={likeColor}
-              backgroundColor={likeColor}
-              type="like"
-            />
-          </button>
-          {renderCount(upLikes)}
-        </div>
-        <div className={styles.rightLikeBox}>
-          <button
-            disabled={disabled}
-            ref={dislikeRef}
-            className={styles.likeBtn}
-            onClick={handleDislike}>
-            <Icon
-              iconColor={dislikeColor}
-              backgroundColor={dislikeColor}
-              type="dislike"
-            />
-          </button>
-          {renderCount(downLikes)}
-        </div>
-      </>
+        <>
+          <div className={styles.leftLikeBox}>
+            <button
+              disabled={disabled}
+              ref={likeRef}
+              className={styles.likeBtn}
+              onClick={handleLike}>
+              <Icon
+                iconColor={likeColor}
+                backgroundColor={likeColor}
+                type="like"
+              />
+            </button>
+            {renderCount(upLikes)}
+          </div>
+          <div className={styles.rightLikeBox}>
+            <button
+              disabled={disabled}
+              ref={dislikeRef}
+              className={styles.likeBtn}
+              onClick={handleDislike}>
+              <Icon
+                iconColor={dislikeColor}
+                backgroundColor={dislikeColor}
+                type="dislike"
+              />
+            </button>
+            {renderCount(downLikes)}
+          </div>
+        </>
       )}
     </div>
   );

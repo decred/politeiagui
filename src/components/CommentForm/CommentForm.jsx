@@ -36,9 +36,8 @@ const CommentForm = ({
       }}
       loading={!validationSchema}
       validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      {formikProps => {
+      onSubmit={handleSubmit}>
+      {(formikProps) => {
         const {
           values,
           handleBlur,
@@ -73,8 +72,7 @@ const CommentForm = ({
               <Button
                 type="submit"
                 kind={!isValid || disableSubmit ? "disabled" : "primary"}
-                loading={isSubmitting}
-              >
+                loading={isSubmitting}>
                 Add comment
               </Button>
             </Row>

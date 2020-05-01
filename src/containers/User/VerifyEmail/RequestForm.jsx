@@ -65,8 +65,9 @@ const RequestVerificationEmailForm = () => {
       </FormWrapper>
       <DevelopmentOnlyContent show={response && response.verificationtoken}>
         <Link
-          to={`/user/verify?email=${email}&verificationtoken=${response &&
-            response.verificationtoken}`}>
+          to={`/user/verify?email=${email}&verificationtoken=${
+            response && response.verificationtoken
+          }`}>
           Verify email
         </Link>
       </DevelopmentOnlyContent>

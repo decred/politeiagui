@@ -26,8 +26,7 @@ const DraftDcc = ({ draft, onDelete }) => {
                   id={`dcc-${id}`}
                   truncate
                   linesBeforeTruncate={2}
-                  url={`/dccs/new?draft=${id}`}
-                >
+                  url={`/dccs/new?draft=${id}`}>
                   {presentationalDraftDccName(draft)}
                 </Title>
               }
@@ -37,8 +36,7 @@ const DraftDcc = ({ draft, onDelete }) => {
                     kind="secondary"
                     size="sm"
                     className={styles.deleteDraft}
-                    onClick={handleDeleteDraft}
-                  >
+                    onClick={handleDeleteDraft}>
                     Delete
                   </Button>
                 </Status>
@@ -47,8 +45,12 @@ const DraftDcc = ({ draft, onDelete }) => {
               subtitle={
                 <Subtitle>
                   <Event keepOnMobile event="edited" timestamp={timestamp} />
-                  { domain && <Text id="draft-domain">{presentationalDccDomain(domain)}</Text> }
-                  { statement && (
+                  {domain && (
+                    <Text id="draft-domain">
+                      {presentationalDccDomain(domain)}
+                    </Text>
+                  )}
+                  {statement && (
                     <Text truncate={true} id="draft-statement">
                       {presentationalStatement(statement)}
                     </Text>

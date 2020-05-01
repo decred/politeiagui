@@ -6,33 +6,42 @@ import styles from "./ModalVotesList.module.css";
 
 const VotesList = ({ options, currentID }) => (
   <div className={styles.list}>
-    {options.length
-      ? options.map(op => (
-        <Card key={op.value} marker={op.value === currentID} className={styles.card}>
-          <Link to={`/user/${op.value}`} >{op.label}</Link>
+    {options.length ? (
+      options.map((op) => (
+        <Card
+          key={op.value}
+          marker={op.value === currentID}
+          className={styles.card}>
+          <Link to={`/user/${op.value}`}>{op.label}</Link>
         </Card>
       ))
-      : <Card>No votes yet</Card>}
+    ) : (
+      <Card>No votes yet</Card>
+    )}
   </div>
 );
 
-const ModalVotesList = ({ supportList, againstList, neutralList, show, onClose, currentID }) => {
+const ModalVotesList = ({
+  supportList,
+  againstList,
+  neutralList,
+  show,
+  onClose,
+  currentID
+}) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   return (
-    <Modal
-      onClose={onClose}
-      show={show}
-    >
+    <Modal onClose={onClose} show={show}>
       <Tabs onSelectTab={setActiveTabIndex} activeTabIndex={activeTabIndex}>
         <Tab label="support" count={supportList.length}>
-          <VotesList options={supportList} currentID={currentID}/>
+          <VotesList options={supportList} currentID={currentID} />
         </Tab>
         <Tab label="against" count={againstList.length}>
-          <VotesList options={againstList} currentID={currentID}/>
+          <VotesList options={againstList} currentID={currentID} />
         </Tab>
         {neutralList && (
           <Tab label="neutral" count={neutralList.length}>
-            <VotesList options={neutralList} currentID={currentID}/>
+            <VotesList options={neutralList} currentID={currentID} />
           </Tab>
         )}
       </Tabs>
@@ -52,7 +61,6 @@ ModalVotesList.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   currentID: PropTypes.string
-
 };
 
 export default ModalVotesList;

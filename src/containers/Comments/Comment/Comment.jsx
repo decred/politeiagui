@@ -53,11 +53,13 @@ const Comment = ({
 
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
-  const showNewReplies = numOfNewHiddenReplies > 0 && !showReplies && !isFlatMode;
+  const showNewReplies =
+    numOfNewHiddenReplies > 0 && !showReplies && !isFlatMode;
   const isThread = numOfReplies > 0 && !isFlatMode;
 
-  const authorURL = javascriptEnabled ?
-    `/user/${authorID}` : `${NOJS_ROUTE_PREFIX}/user/${authorID}`;
+  const authorURL = javascriptEnabled
+    ? `/user/${authorID}`
+    : `${NOJS_ROUTE_PREFIX}/user/${authorID}`;
 
   return (
     <div
@@ -105,7 +107,10 @@ const Comment = ({
       {extraSmall && censorButton}
       {extraSmall && seeInContextLink}
       {!censored ? (
-        <Markdown className={classNames(isDarkTheme && "dark", "margin-top-s")} body={commentBody} />
+        <Markdown
+          className={classNames(isDarkTheme && "dark", "margin-top-s")}
+          body={commentBody}
+        />
       ) : (
         <Markdown className={styles.censored} body="Censored by moderators " />
       )}
@@ -121,7 +126,7 @@ const Comment = ({
               </Text>
             </LoggedInContent>
           )}
-          {isThread &&  (
+          {isThread && (
             <span className={styles.showReplies} onClick={onClickShowReplies}>
               {showReplies ? "-" : `+${numOfReplies}`}
             </span>
@@ -132,7 +137,8 @@ const Comment = ({
         </div>
         <CopyLink url={window.location.origin + permalink} />
       </div>
-  </div>);
+    </div>
+  );
 };
 
 Comment.propTypes = {

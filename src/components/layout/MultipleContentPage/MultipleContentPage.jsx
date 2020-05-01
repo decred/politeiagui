@@ -20,7 +20,7 @@ import styles from "../layouts.module.css";
 import { useConfig } from "src/containers/Config";
 import usePaywall from "src/hooks/api/usePaywall";
 
-const renderError = error => (
+const renderError = (error) => (
   <Main className={styles.singleContentMain}>
     <Message kind="error">{error.toString()}</Message>
   </Main>
@@ -43,16 +43,14 @@ const DefaultNewButton = () => {
     [RECORD_TYPE_INVOICE]: (
       <NewButton label="New Invoice" goTo="/invoices/new" />
     ),
-    [RECORD_TYPE_DCC]: (
-      <NewButton label="New DCC" goTo="/dccs/new" />
-    )
+    [RECORD_TYPE_DCC]: <NewButton label="New DCC" goTo="/dccs/new" />
   };
   return mapRecordTypeToButton[recordType] || null;
 };
 
-const Title = props => <H1 {...props} />;
+const Title = (props) => <H1 {...props} />;
 
-const Subtitle = props => (
+const Subtitle = (props) => (
   <span className={styles.subtitle} {...props}>
     {props.children}
   </span>
@@ -74,8 +72,7 @@ const PageDetails = ({
         id="page-title"
         truncate
         linesBeforeTruncate={2}
-        className={styles.pageDetailsTitle}
-      >
+        className={styles.pageDetailsTitle}>
         {title}
       </H1>
     ) : (
@@ -84,15 +81,13 @@ const PageDetails = ({
   return (
     <PageDetailsUI
       className={classNames(styles.customPageDetails, className)}
-      {...props}
-    >
+      {...props}>
       <div className={classNames(styles.pageDetailsHeader, headerClassName)}>
         <div
           className={classNames(
             styles.titleAndSubtitleWrapper,
             titleAndSubtitleWrapperClassName
-          )}
-        >
+          )}>
           {titleContent}
           {!!subtitle && <Subtitle>{subtitle}</Subtitle>}
         </div>

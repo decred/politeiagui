@@ -8,7 +8,7 @@ const CheckboxGroupField = ({ groupName, options }) => {
   const mobile = useMediaQuery("(max-width: 760px)");
 
   const fields = useMemo(() => {
-    const getCheckBoxName = name => `${groupName}.${name}`;
+    const getCheckBoxName = (name) => `${groupName}.${name}`;
     return options.map((op, idx) => (
       <CheckboxField
         key={`check-${idx}`}
@@ -18,7 +18,7 @@ const CheckboxGroupField = ({ groupName, options }) => {
     ));
   }, [options, groupName]);
 
-  const renderList = useCallback(elements => {
+  const renderList = useCallback((elements) => {
     return (
       <ul className={styles.groupList}>
         {elements.map((el, idx) => (
@@ -30,18 +30,16 @@ const CheckboxGroupField = ({ groupName, options }) => {
     );
   }, []);
 
-  const renderDropdown = useCallback(elements => {
+  const renderDropdown = useCallback((elements) => {
     return (
       <Dropdown
         closeOnItemClick={false}
         title="Filter by status"
-        className={styles.groupDropdown}
-      >
+        className={styles.groupDropdown}>
         {elements.map((el, idx) => (
           <DropdownItem
             key={`checkbox-${idx}`}
-            className={styles.groupDropdownItem}
-          >
+            className={styles.groupDropdownItem}>
             {el}
           </DropdownItem>
         ))}

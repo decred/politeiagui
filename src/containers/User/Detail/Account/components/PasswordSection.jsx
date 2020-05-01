@@ -2,7 +2,7 @@ import React from "react";
 import InfoSection from "../../InfoSection.jsx";
 import { Button } from "pi-ui";
 
-export default ({ onClick }) =>
+export default ({ onClick }) => (
   <InfoSection
     label="Password:"
     alignLabelCenter
@@ -11,6 +11,5 @@ export default ({ onClick }) =>
         Change Password
       </Button>
     }
-  />;
-
-
+  />
+);

@@ -3,14 +3,18 @@ import RecordWrapper from "../RecordWrapper";
 import { useMediaQuery, getThemeProperty, useTheme } from "pi-ui";
 import ContentLoader from "react-content-loader";
 
-const ExtraSmallContentLoader = ({ extended, yOffset, primaryColor, secondaryColor }) => (
+const ExtraSmallContentLoader = ({
+  extended,
+  yOffset,
+  primaryColor,
+  secondaryColor
+}) => (
   <ContentLoader
     height={extended ? 300 : 170}
     width={400}
     speed={2}
     primaryColor={primaryColor}
-    secondaryColor={secondaryColor}
-  >
+    secondaryColor={secondaryColor}>
     <rect x="0" y="0" width="180" height="10" />
     <rect x="0" y="20" width="360" height="20" />
     <rect x="0" y="60" width="80" height="20" />
@@ -34,14 +38,18 @@ const ExtraSmallContentLoader = ({ extended, yOffset, primaryColor, secondaryCol
   </ContentLoader>
 );
 
-const RegularContentLoader = ({ extended, yOffset, primaryColor, secondaryColor }) => (
+const RegularContentLoader = ({
+  extended,
+  yOffset,
+  primaryColor,
+  secondaryColor
+}) => (
   <ContentLoader
     height={extended ? 240 : 100}
     width={800}
     speed={2}
     primaryColor={primaryColor}
-    secondaryColor={secondaryColor}
-  >
+    secondaryColor={secondaryColor}>
     <rect x="0" y="0" width="600" height="20" />
     <rect x="700" y="0" width="100" height="20" />
     <rect x="0" y="40" width="100" height="10" />
@@ -76,9 +84,13 @@ const DccLoader = ({ extended }) => {
     <RecordWrapper>
       {() =>
         extraSmall ? (
-          <ExtraSmallContentLoader {...{ extended, yOffset, primaryColor, secondaryColor }}/>
+          <ExtraSmallContentLoader
+            {...{ extended, yOffset, primaryColor, secondaryColor }}
+          />
         ) : (
-          <RegularContentLoader {...{ extended, yOffset, primaryColor, secondaryColor }}/>
+          <RegularContentLoader
+            {...{ extended, yOffset, primaryColor, secondaryColor }}
+          />
         )
       }
     </RecordWrapper>

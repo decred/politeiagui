@@ -5,7 +5,7 @@ const CommentForm = lazy(() =>
   import(/* webpackChunkName: "CommentForm" */ "./CommentForm")
 );
 
-const CommentFormLazy = props => (
+const CommentFormLazy = (props) => (
   <Suspense fallback={<CommentFormLoader />}>
     <CommentForm {...props} />
   </Suspense>

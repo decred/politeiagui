@@ -8,7 +8,14 @@ const Account = ({
   isAdmin, // from the logged in user
   isUserPageOwner,
   ...props
-}) => isAdmin ? <AdminAccount isUserPageOwner={isUserPageOwner} {...props} /> : !isAdmin && isUserPageOwner ? <UserAccount  {...props} /> : <OtherAccount isadmin={props.isadmin} />;
+}) =>
+  isAdmin ? (
+    <AdminAccount isUserPageOwner={isUserPageOwner} {...props} />
+  ) : !isAdmin && isUserPageOwner ? (
+    <UserAccount {...props} />
+  ) : (
+    <OtherAccount isadmin={props.isadmin} />
+  );
 
 Account.propTypes = {
   newuserpaywalladdress: PropTypes.string,

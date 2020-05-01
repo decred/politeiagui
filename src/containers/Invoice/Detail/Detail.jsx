@@ -12,7 +12,9 @@ import { GoBackLink } from "src/components/Router";
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
-  const { invoice, loading, approvedProposalsTokens } = useInvoice(invoiceToken);
+  const { invoice, loading, approvedProposalsTokens } = useInvoice(
+    invoiceToken
+  );
 
   return (
     <>
@@ -20,7 +22,11 @@ const InvoiceDetail = ({ Main, match }) => {
         <GoBackLink />
         <AdminInvoiceActionsProvider>
           {!!invoice && !loading ? (
-            <Invoice invoice={invoice} extended approvedProposalsTokens={approvedProposalsTokens || []} />
+            <Invoice
+              invoice={invoice}
+              extended
+              approvedProposalsTokens={approvedProposalsTokens || []}
+            />
           ) : (
             <InvoiceLoader extended />
           )}

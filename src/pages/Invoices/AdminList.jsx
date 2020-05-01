@@ -8,9 +8,8 @@ const PageListAdminInvoices = () => {
   return (
     <MultipleContentPage
       disableScrollToTop
-      topBannerHeight={mobile ? 160 : 140}
-    >
-      {props => <ListAdminInvoices {...props} />}
+      topBannerHeight={mobile ? 160 : 140}>
+      {(props) => <ListAdminInvoices {...props} />}
     </MultipleContentPage>
   );
 };

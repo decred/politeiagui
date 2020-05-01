@@ -28,8 +28,7 @@ const ModalDiff = ({
     <Modal
       onClose={onClose}
       {...props}
-      contentStyle={{ width: "100%", minHeight: "40rem" }}
-    >
+      contentStyle={{ width: "100%", minHeight: "40rem" }}>
       <Header
         title={
           <Title id={"proposal-title-gfsag"} truncate linesBeforeTruncate={2}>
@@ -55,8 +54,9 @@ const ModalDiff = ({
             {proposalDetails.version && (
               <Text
                 id={`proposal-${proposalDetails.proposalToken}-version`}
-                className={styles.version}
-              >{`version ${proposalDetails.version}`}</Text>
+                className={
+                  styles.version
+                }>{`version ${proposalDetails.version}`}</Text>
             )}
           </Subtitle>
         }
@@ -64,8 +64,7 @@ const ModalDiff = ({
       <Tabs
         onSelectTab={setActiveTabIndex}
         activeTabIndex={activeTabIndex}
-        className={styles.diffTabs}
-      >
+        className={styles.diffTabs}>
         <Tab label="Text Changes">
           <DiffHTML oldTextBody={oldText} newTextBody={newText} />
         </Tab>
