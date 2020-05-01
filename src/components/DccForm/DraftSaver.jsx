@@ -52,8 +52,7 @@ const DraftSaver = ({ values, setValues, submitSuccess }) => {
 
   useEffect(
     function handleInitializeFormFromDraft() {
-      const foundDraftDcc =
-        draftDccs && draftId && draftDccs[draftId];
+      const foundDraftDcc = draftDccs && draftId && draftDccs[draftId];
       if (foundDraftDcc) {
         setValues(foundDraftDcc);
       }
@@ -63,7 +62,6 @@ const DraftSaver = ({ values, setValues, submitSuccess }) => {
   return (
     <Button
       type="button"
-      width={150}
       kind={saving || !canSaveDraft ? "disabled" : "secondary"}
       loading={saving}
       onClick={handleSave}>
