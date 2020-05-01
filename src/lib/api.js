@@ -52,7 +52,6 @@ export const makeProposal = (
   rfpLink,
   attachments = []
 ) => ({
-  // TODO: add RFPs info as metadata
   files: [
     convertMarkdownToFile(name + "\n\n" + markdown),
     ...(attachments || [])
