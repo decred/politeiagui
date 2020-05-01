@@ -48,7 +48,6 @@ const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
                   label="By Date"
                   toggleable
                   multiChoice
-                  enableAllMonths
                   className={styles.monthPicker}
                 />
                 <div className={styles.checkboxesWrapper}>

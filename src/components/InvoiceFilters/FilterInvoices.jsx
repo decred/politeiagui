@@ -13,7 +13,6 @@ import filter from "lodash/fp/filter";
 
 const FilterInvoices = ({ invoices, children, filterValues }) => {
   const { date, filters, users } = filterValues;
-
   const filterByDate = useCallback(
     filter((invoice) => {
       if (!date || !date.month || !date.year) return invoice;
@@ -27,15 +26,24 @@ const FilterInvoices = ({ invoices, children, filterValues }) => {
 
   const filterByRange = useCallback(
     filter((invoice) => {
-      if (!date || !date.start || !date.end) return invoice;
-      const start = new Date(date.start.year, date.start.month).getTime();
-      const end = new Date(date.end.year, date.end.month).getTime();
+      if (!date) return invoice;
+      if (!(date.length && date.length > 1)) return invoice;
+      const [firstDateSelected, secondDateSelected] = date;
+      if (!firstDateSelected || !secondDateSelected) return invoices;
+      const first = new Date(
+        firstDateSelected.year,
+        firstDateSelected.month
+      ).getTime();
+      const second = new Date(
+        secondDateSelected.year,
+        secondDateSelected.month
+      ).getTime();
       const invoiceDate = new Date(
         invoice.input.year,
         invoice.input.month
       ).getTime();
 
-      return invoiceDate >= start && invoiceDate <= end;
+      return invoiceDate >= first && invoiceDate <= second;
     }),
     [date]
   );
