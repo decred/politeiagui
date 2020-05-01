@@ -176,16 +176,16 @@ export const makeDCC = (
 
 export const makeDCCVote = (token, vote) => ({ token, vote });
 
-export const signRegister = (email, proposal) => {
+export const signRegister = (email, record) => {
   return pki.myPubKeyHex(email).then((publickey) => {
-    const digests = [...proposal.files, ...proposal.metadata]
+    const digests = [...record.files, ...(record.metadata || [])]
       .map((x) => Buffer.from(get("digest", x), "hex"))
       .sort(Buffer.compare);
     const tree = new MerkleTree(digests);
     const root = tree.getRoot().toString("hex");
     return pki
       .signStringHex(email, root)
-      .then((signature) => ({ ...proposal, publickey, signature }));
+      .then((signature) => ({ ...record, publickey, signature }));
   });
 };
 
