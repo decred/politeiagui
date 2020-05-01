@@ -177,6 +177,9 @@ export const makeDCC = (
 export const makeDCCVote = (token, vote) => ({ token, vote });
 
 export const signRegister = (email, record) => {
+  if (typeof email !== "string" || typeof record !== "object") {
+    throw Error("signRegister: Invalid params");
+  }
   return pki.myPubKeyHex(email).then((publickey) => {
     const digests = [...record.files, ...(record.metadata || [])]
       .map((x) => Buffer.from(get("digest", x), "hex"))
