@@ -8,12 +8,10 @@ import * as sel from "src/selectors";
 import { signupValidationSchema } from "./validation";
 
 export function useSignup() {
-  const signupResponse = useSelector(sel.apiNewUserResponse);
-
+  const signupResponse = useSelector(sel.newUser);
   const onCreateNewUser = useAction(act.onCreateNewUser);
   const onCreateNewUseFromAdminInvitation = useAction(act.onCreateNewUserCMS);
   const onResetSignup = useAction(act.onResetNewUser);
-
   const { enableAdminInvite, recordType, constants } = useConfig();
   const { policy } = usePolicy();
   const [validationSchema, setValidationSchema] = useState(

@@ -15,7 +15,7 @@ export default function useProposalVote(token) {
   );
   const voteSummary = useSelector(voteSummarySelector);
   const bestBlock = useSelector(sel.bestBlock);
-  const apiInfo = useSelector(sel.apiInitResponse);
+  const apiInfo = useSelector(sel.init);
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const voteEndTimestamp = getVoteEndTimestamp(
     voteSummary,

@@ -4,13 +4,12 @@ import * as pki from "./pki";
 import qs from "query-string";
 import get from "lodash/fp/get";
 import MerkleTree from "./merkle";
-import { convertObjectToUnixTimestamp } from "src/utils";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
   INVOICE_STATUS_UNREVIEWED,
   DCC_STATUS_ACTIVE,
-  PROPOSAL_TYPE_RFP,
-  PROPOSAL_TYPE_RFP_SUBMISSION,
+  // PROPOSAL_TYPE_RFP,
+  // PROPOSAL_TYPE_RFP_SUBMISSION,
   VOTE_TYPE_STANDARD,
   VOTE_TYPE_RUNOFF
 } from "../constants";
@@ -19,7 +18,9 @@ import {
   digestPayload,
   digest,
   objectToSHA256,
-  utoa
+  utoa,
+  objectToBuffer,
+  bufferToBase64String
 } from "../helpers";
 
 export const TOP_LEVEL_COMMENT_PARENTID = "0";
@@ -56,23 +57,26 @@ export const makeProposal = (
 ) => ({
   files: [
     convertMarkdownToFile(name + "\n\n" + markdown),
-    convertJsonToFile(
-      {
-        linkby:
-          type === PROPOSAL_TYPE_RFP
-            ? convertObjectToUnixTimestamp(rfpDeadline)
-            : undefined,
-        linkto: type === PROPOSAL_TYPE_RFP_SUBMISSION ? rfpLink : undefined
-      },
-      "data.json"
-    ),
     ...(attachments || [])
   ].map(({ name, mime, payload }) => ({
     name,
     mime,
     payload,
     digest: digestPayload(payload)
-  }))
+  })),
+  metadata: [
+    {
+      hint: "proposalmetadata",
+      payload: bufferToBase64String(
+        objectToBuffer({
+          name
+        })
+      ),
+      digest: objectToSHA256({
+        name
+      })
+    }
+  ]
 });
 
 export const makeInvoice = (
@@ -177,7 +181,7 @@ export const makeDCCVote = (token, vote) => ({ token, vote });
 
 export const signRegister = (email, proposal) => {
   return pki.myPubKeyHex(email).then((publickey) => {
-    const digests = proposal.files
+    const digests = [...proposal.files, ...proposal.metadata]
       .map((x) => Buffer.from(get("digest", x), "hex"))
       .sort(Buffer.compare);
     const tree = new MerkleTree(digests);
@@ -407,16 +411,9 @@ export const changePassword = (csrf, currentpassword, newpassword) =>
     newpassword: digest(newpassword)
   }).then(getResponse);
 
-export const forgottenPasswordRequest = (csrf, email) =>
-  POST("/user/password/reset", csrf, { email }).then(getResponse);
-
-// XXXX: this route hasn't been merged into the master of the backend.
-// Pull request: https://github.com/decred/politeia/pull/937
 export const resetPassword = (csrf, username, email) =>
   POST("/user/password/reset", csrf, { username, email }).then(getResponse);
 
-// XXXX: this route hasn't been merged into the master of the backend.
-// Pull request: https://github.com/decred/politeia/pull/937
 export const verifyResetPassword = (
   csrf,
   username,
@@ -438,18 +435,6 @@ export const resendVerificationEmailRequest = (csrf, email) =>
       POST("/user/new/resend", csrf, { email, publickey }).then(getResponse)
     );
 
-export const passwordResetRequest = (
-  csrf,
-  email,
-  verificationtoken,
-  newpassword
-) =>
-  POST("/user/password/reset", csrf, {
-    email,
-    verificationtoken,
-    newpassword: digest(newpassword)
-  }).then(getResponse);
-
 export const updateKeyRequest = (csrf, publickey) =>
   POST("/user/key", csrf, { publickey }).then(getResponse);
 
@@ -463,19 +448,6 @@ export const verifyKeyRequest = (csrf, email, verificationtoken) =>
     );
 
 export const policy = () => GET("/v1/policy").then(getResponse);
-export const vetted = (after) => {
-  return !after
-    ? GET("/v1/proposals/vetted").then(getResponse)
-    : GET(`/v1/proposals/vetted?${qs.stringify({ after })}`).then(getResponse);
-};
-
-export const unvetted = (after) => {
-  return !after
-    ? GET("/v1/proposals/unvetted").then(getResponse)
-    : GET(`/v1/proposals/unvetted?${qs.stringify({ after })}`).then(
-        getResponse
-      );
-};
 
 export const userProposals = (userid, after) => {
   return !after
@@ -488,7 +460,6 @@ export const userProposals = (userid, after) => {
 export const searchUser = (obj) =>
   GET(`/v1/users?${qs.stringify(obj)}`).then(getResponse);
 
-export const status = () => GET("/v1/proposals/stats").then(getResponse);
 export const proposal = (token, version = null) =>
   GET(`/v1/proposals/${token}` + (version ? `?version=${version}` : "")).then(
     getResponse
@@ -702,6 +673,9 @@ export const proposalPaywallPayment = () =>
 export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
 
+export const tokenInventory = () =>
+  GET("/v1/proposals/tokeninventory").then(getResponse);
+
 // CMS
 export const inviteNewUser = (csrf, payload) =>
   POST("/invite", csrf, payload).then(getResponse);
@@ -729,9 +703,6 @@ export const userInvoices = () => GET("/v1/user/invoices").then(getResponse);
 export const adminInvoices = (csrf) =>
   POST("/admin/invoices", csrf, {}).then(getResponse);
 
-export const adminUserInvoices = (userid) =>
-  GET(`/v1/admin/userinvoices?${qs.stringify({ userid })}`).then(getResponse);
-
 export const generatePayouts = (csrf) =>
   POST("/admin/generatepayouts", csrf, {}).then(getResponse);
 
@@ -740,9 +711,6 @@ export const invoicePayouts = (csrf, starttime, endtime) =>
 
 export const payApprovedInvoices = () =>
   GET("/v1/admin/payinvoices").then(getResponse);
-
-export const tokenInventory = () =>
-  GET("/v1/proposals/tokeninventory").then(getResponse);
 
 export const exchangeRate = (csrf, month, year) =>
   POST("/invoices/exchangerate", csrf, { month, year }).then(getResponse);

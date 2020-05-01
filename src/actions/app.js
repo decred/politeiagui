@@ -2,19 +2,15 @@ import {
   onSubmitProposal,
   onChangeUsername,
   onChangePassword,
-  onFetchProposalComments,
   onSubmitEditedProposal,
   onSubmitInvoice,
   onSubmitEditedInvoice,
-  onFetchInvoiceComments,
   onUserProposalCredits,
   onSubmitNewDcc
 } from "./api";
 import {
   onFetchProposal as onFetchProposalApi,
   onSubmitComment as onSubmitCommentApi,
-  onFetchInvoice as onFetchInvoiceApi,
-  onFetchDccsByStatus as onFetchDccsByStatusApi,
   onSubmitDccComment as onSubmitDccCommentApi
 } from "./api";
 import {
@@ -140,8 +136,6 @@ export const onSaveNewComment = ({ comment, token, parentID }) => (
   return dispatch(onSubmitCommentApi(email, token, comment, parentID));
 };
 
-export const onResetUser = () => act.RESET_USER();
-
 export const onEditInvoice = ({
   token,
   month,
@@ -254,37 +248,12 @@ export const onDeleteDraftInvoice = (draftId) => {
   return act.DELETE_DRAFT_INVOICE(draftId);
 };
 
-export const onDeleteDraftDCC = (draftId) => {
-  return act.DELETE_DRAFT_DCC(draftId);
-};
-
-export const onSaveChangeUsername = ({ password, newUsername }) => (
-  dispatch,
-  getState
-) =>
-  dispatch(onChangeUsername(password, newUsername)).then(() =>
-    sel.newProposalToken(getState())
-  );
+export const onSaveChangeUsername = ({ password, newUsername }) => (dispatch) =>
+  dispatch(onChangeUsername(password, newUsername));
 
 export const onSaveChangePassword = ({ existingPassword, newPassword }) => (
-  dispatch,
-  getState
-) =>
-  dispatch(onChangePassword(existingPassword, newPassword)).then(() =>
-    sel.newProposalToken(getState())
-  );
-
-export const onFetchProposalApp = (token) => (dispatch) =>
-  dispatch(onFetchProposalApi(token)).then(() =>
-    dispatch(onFetchProposalComments(token))
-  );
-
-export const onFetchInvoiceApp = (token, version = null) => (dispatch) =>
-  dispatch(onFetchInvoiceApi(token, version)).then(() =>
-    dispatch(onFetchInvoiceComments(token))
-  );
-
-export const onResetPaywallInfo = () => act.RESET_PAYWALL_INFO();
+  dispatch
+) => dispatch(onChangePassword(existingPassword, newPassword));
 
 export const onIdentityImported = (successMsg, errorMsg = "") =>
   act.IDENTITY_IMPORTED({ errorMsg, successMsg });
@@ -300,17 +269,6 @@ export const toggleProposalPaymentReceived = (bool) =>
 
 export const onEditUserPreferences = (preferences) => (dispatch) =>
   dispatch(onEditUser(sel.resolveEditUserValues(preferences)));
-
-export const onResetComments = () => act.RESET_COMMENTS();
-
-export const onLoadDccsByStatus = (status) => (dispatch, getState) => {
-  const fetchedDCCs = sel.dccsByStatus(getState());
-  if (fetchedDCCs && fetchedDCCs[status]) {
-    dispatch(act.SET_DCCS_CURRENT_STATUS_LIST(fetchedDCCs[status]));
-  } else {
-    dispatch(onFetchDccsByStatusApi(status));
-  }
-};
 
 export const onSaveNewDccComment = ({ comment, token, parentID }) => (
   dispatch,

@@ -155,6 +155,16 @@
   padding-bottom: var(--spacing-small);
 }
 
+.padding-x-s {
+  padding-left: var(--spacing-small);
+  padding-right: var(--spacing-small);
+}
+
+.padding-y-s {
+  padding-top: var(--spacing-small);
+  padding-bottom: var(--spacing-small);
+}
+
 .overflow-hidden {
   overflow: hidden;
 }

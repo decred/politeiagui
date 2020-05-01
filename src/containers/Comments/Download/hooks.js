@@ -6,7 +6,7 @@ export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
 
 export function useDownloadComments(token) {
-  const commentsSelector = useMemo(() => sel.makeGetProposalComments(token), [
+  const commentsSelector = useMemo(() => sel.makeGetRecordComments(token), [
     token
   ]);
   const comments = useSelector(commentsSelector);

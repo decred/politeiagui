@@ -63,12 +63,6 @@ describe("api integration modules (lib/api.js)", () => {
     const fileFromMarkdown = api.convertMarkdownToFile(
       PROPOSAL_NAME + "\n\n" + MARKDOWN
     );
-    const dataJsonFile = api.convertJsonToFile(
-      {
-        linkby: undefined
-      },
-      "data.json"
-    );
     expect(proposal).toEqual({
       files: [
         {
@@ -76,12 +70,21 @@ describe("api integration modules (lib/api.js)", () => {
           digest: help.digestPayload(fileFromMarkdown.payload)
         },
         {
-          ...dataJsonFile,
-          digest: help.digestPayload(dataJsonFile.payload)
-        },
-        {
           ...FILE,
           digest: FILE_DIGESTED_PAYLOAD
+        }
+      ],
+      metadata: [
+        {
+          hint: "proposalmetadata",
+          payload: help.bufferToBase64String(
+            help.objectToBuffer({
+              name: PROPOSAL_NAME
+            })
+          ),
+          digest: help.objectToSHA256({
+            name: PROPOSAL_NAME
+          })
         }
       ]
     });
@@ -98,10 +101,19 @@ describe("api integration modules (lib/api.js)", () => {
         {
           ...fileFromMarkdown,
           digest: help.digestPayload(fileFromMarkdown.payload)
-        },
+        }
+      ],
+      metadata: [
         {
-          ...dataJsonFile,
-          digest: help.digestPayload(dataJsonFile.payload)
+          hint: "proposalmetadata",
+          payload: help.bufferToBase64String(
+            help.objectToBuffer({
+              name: PROPOSAL_NAME
+            })
+          ),
+          digest: help.objectToSHA256({
+            name: PROPOSAL_NAME
+          })
         }
       ]
     });
@@ -120,10 +132,19 @@ describe("api integration modules (lib/api.js)", () => {
         {
           ...fileFromMarkdown,
           digest: help.digestPayload(fileFromMarkdown.payload)
-        },
+        }
+      ],
+      metadata: [
         {
-          ...dataJsonFile,
-          digest: help.digestPayload(dataJsonFile.payload)
+          hint: "proposalmetadata",
+          payload: help.bufferToBase64String(
+            help.objectToBuffer({
+              name: PROPOSAL_NAME
+            })
+          ),
+          digest: help.objectToSHA256({
+            name: PROPOSAL_NAME
+          })
         }
       ]
     });
@@ -335,23 +356,6 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
-  test("reset password (api/v1/user/password/reset)", async () => {
-    await assertPOSTOnRouteIsCalled(
-      "/api/v1/user/password/reset",
-      api.forgottenPasswordRequest,
-      [FAKE_CSRF, EMAIL]
-    );
-  });
-
-  test("verify reset password (api/v1/user/password/reset)", async () => {
-    fetchMock.restore();
-    await assertPOSTOnRouteIsCalled(
-      "/api/v1/user/password/reset",
-      api.passwordResetRequest,
-      [FAKE_CSRF, EMAIL, VERIFICATION_TOKEN, "mynewpassword"]
-    );
-  });
-
   test("resend verification email (api/v1/user/new/resend)", async () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/new/resend",
@@ -386,18 +390,6 @@ describe("api integration modules (lib/api.js)", () => {
 
   test("get policy (api/v1/policy)", async () => {
     await assertGETOnRouteIsCalled("/api/v1/policy", api.policy, []);
-  });
-
-  test("get vetted proposals (api/v1/proposals/vetted)", async () => {
-    await assertGETOnRouteIsCalled("/api/v1/proposals/vetted", api.vetted, []);
-  });
-
-  test("get unvetted proposals (api/v1/proposals/unvetted)", async () => {
-    await assertGETOnRouteIsCalled(
-      "/api/v1/proposals/unvetted",
-      api.unvetted,
-      []
-    );
   });
 
   test("get proposal (api/v1/proposals/:token)", async () => {

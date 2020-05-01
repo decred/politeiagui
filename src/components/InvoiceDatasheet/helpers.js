@@ -4,9 +4,11 @@ import {
   fromMinutesToHours,
   fromUSDUnitsToUSDCents
 } from "../../helpers";
-import { selectWrapper } from "./wrappers";
-
-import styles from "./InvoiceDatasheet.module.css";
+import {
+  selectWrapper,
+  textAreaWrapper,
+  multilineTextWrapper
+} from "./wrappers";
 
 export const columnTypes = {
   TYPE_COL: 1,
@@ -121,7 +123,10 @@ export const convertLineItemsToGrid = (
           readOnly,
           value: line.description,
           error: rowErrors && rowErrors.description,
-          className: styles.multilineCellValue
+          dataEditor: textAreaWrapper({
+            error: rowErrors && rowErrors.description
+          }),
+          valueViewer: multilineTextWrapper()
         },
         {
           readOnly,
@@ -235,17 +240,17 @@ export const convertGridToLineItems = (grid) => {
 };
 
 export const createTableHeaders = () => [
-  { readOnly: true, value: "", width: 40 },
-  { value: "Type", readOnly: true, width: 80 },
-  { value: "Domain", readOnly: true },
-  { value: "Subdomain", readOnly: true },
-  { value: "Description", readOnly: true },
-  { value: "Proposal Token", readOnly: true },
-  { value: "Subcontr. ID", readOnly: true },
-  { value: "Subcontr. Rate (USD)", readOnly: true },
-  { value: "Labor (hours)", readOnly: true },
-  { value: "Expense (USD)", readOnly: true },
-  { value: "Subtotal (USD)", readOnly: true }
+  { readOnly: true, value: "", width: "2rem" },
+  { value: "Type", readOnly: true, width: "4rem" },
+  { value: "Domain", readOnly: true, width: "12rem" },
+  { value: "Subdomain", readOnly: true, width: "14rem" },
+  { value: "Description", readOnly: true, width: "30rem" },
+  { value: "Proposal Token", readOnly: true, width: "10rem" },
+  { value: "Subcontr. ID", readOnly: true, width: "10rem" },
+  { value: "Subcontr. Rate (USD)", readOnly: true, width: "8rem" },
+  { value: "Labor (hours)", readOnly: true, width: "7rem" },
+  { value: "Expense (USD)", readOnly: true, width: "7.5rem" },
+  { value: "Subtotal (USD)", readOnly: true, width: "7.5rem" }
 ];
 
 export const updateGridCell = (grid, row, col, values) => {

@@ -1,86 +1,41 @@
 import * as act from "../actions/types";
-import {
-  FILTER_ALL_MONTHS,
-  PAYWALL_STATUS_PAID,
-  PROPOSAL_FILTER_ALL,
-  PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_USER_FILTER_SUBMITTED
-} from "../constants";
-import { getCurrentYear, getCurrentMonth } from "../helpers";
 
 export const DEFAULT_STATE = {
-  newProposal: {
-    name: "",
-    description: ""
-  },
-  replyThreadTree: {},
-  adminProposalsShow: PROPOSAL_STATUS_UNREVIEWED,
-  publicProposalsShow: PROPOSAL_FILTER_ALL,
-  userProposalsShow: PROPOSAL_USER_FILTER_SUBMITTED,
-  proposalCredits: 0,
-  recentPayments: [],
-  submittedProposals: {},
+  init: {},
+  policy: {},
+  keyMismatch: false,
   draftProposals: null,
+  draftInvoices: null,
+  draftDccs: null,
+  csrfIsNeeded: null,
+  shouldVerifyKey: false,
   identityImportResult: { errorMsg: "", successMsg: "" },
   pollingCreditsPayment: false,
   reachedCreditsPaymentPollingLimit: false,
-  invoiceSortOption: { month: FILTER_ALL_MONTHS, year: getCurrentYear() },
-  endPayoutOption: { month: getCurrentMonth(), year: getCurrentYear() },
-  startPayoutOption: {
-    month: getCurrentMonth() - 1,
-    year: getCurrentYear()
-  },
-  draftInvoices: null,
-  draftDccs: null
+  proposalPaymentReceived: false
 };
 
 const app = (state = DEFAULT_STATE, action) =>
   ((
     {
-      [act.RECEIVE_NEW_PROPOSAL]: () =>
+      [act.RECEIVE_INIT_SESSION]: () =>
         action.error
           ? state
           : {
               ...state,
-              submittedProposals: {
-                ...state.submittedProposals,
-                lastSubmitted: action.payload.censorshiprecord.token,
-                [action.payload.censorshiprecord.token]: action.payload
-              }
+              init: action.payload
             },
-      [act.RECEIVE_NEW_THREAD_COMMENT]: () => {
-        const {
-          id,
-          comment: { parentid, commentid }
-        } = action.payload;
-        const tree = state.replyThreadTree[id];
-        if (tree) {
-          const parentBranch = tree[parentid];
-          const updatedParentBranch = parentBranch
-            ? [...parentBranch, commentid]
-            : [commentid];
-          return {
-            ...state,
-            replyThreadTree: {
-              ...state.replyThreadTree,
-              [id]: {
-                ...state.replyThreadTree[id],
-                [parentid]: updatedParentBranch
-              }
-            }
-          };
-        }
-        return {
-          ...state,
-          replyThreadTree: {
-            ...state.replyThreadTree,
-            [id]: {
-              ...state.replyThreadTree[id],
-              [parentid]: [commentid]
-            }
-          }
-        };
-      },
+      [act.RECEIVE_POLICY]: () =>
+        action.error
+          ? state
+          : {
+              ...state,
+              policy: action.payload
+            },
+      [act.KEY_MISMATCH]: () => ({
+        ...state,
+        keyMismatch: action.payload
+      }),
       [act.SAVE_DRAFT_PROPOSAL]: () => {
         const newDraftProposals = state.draftProposals;
         const draftId = action.payload.id;
@@ -169,59 +124,6 @@ const app = (state = DEFAULT_STATE, action) =>
         ...state,
         draftDccs: action.payload
       }),
-      [act.REQUEST_SETSTATUS_PROPOSAL]: () => {
-        if (action.error) return state;
-        const { status, token } = action.payload;
-        if (!(token in state.submittedProposals)) return state;
-        else {
-          return {
-            ...state,
-            submittedProposals: {
-              ...state.submittedProposals,
-              [token]: {
-                ...state.submittedProposals[token],
-                status
-              }
-            }
-          };
-        }
-      },
-      [act.REQUEST_SETSTATUS_PROPOSAL]: () => {
-        if (action.error) return state;
-        const { status, token } = action.payload;
-        if (!(token in state.submittedProposals)) return state;
-        else {
-          return {
-            ...state,
-            submittedProposals: {
-              ...state.submittedProposals,
-              [token]: {
-                ...state.submittedProposals[token],
-                status
-              }
-            }
-          };
-        }
-      },
-      [act.RESET_LAST_SUBMITTED]: () => ({
-        ...state,
-        submittedProposals: {
-          ...state.submittedProposals,
-          lastSubmitted: false
-        }
-      }),
-      [act.RESET_PAYWALL_INFO]: () => ({ ...state, userAlreadyPaid: null }),
-      [act.UPDATE_USER_PAYWALL_STATUS]: () => ({
-        ...state,
-        userPaywallStatus: action.payload.status,
-        userPaywallTxid: action.payload.txid,
-        userAlreadyPaid: action.payload.status === PAYWALL_STATUS_PAID,
-        userPaywallConfirmations: action.payload.currentNumberOfConfirmations
-      }),
-      [act.SUBTRACT_PROPOSAL_CREDITS]: () => ({
-        ...state,
-        proposalCredits: state.proposalCredits - (action.payload || 0)
-      }),
       [act.CSRF_NEEDED]: () => ({ ...state, csrfIsNeeded: action.payload }),
       [act.SHOULD_AUTO_VERIFY_KEY]: () => ({
         ...state,
@@ -243,11 +145,10 @@ const app = (state = DEFAULT_STATE, action) =>
         ...state,
         proposalPaymentReceived: action.payload
       }),
-      [act.SET_DCCS_CURRENT_STATUS_LIST]: () => ({
-        ...state,
-        dccs: action.payload
-      }),
-      [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
+      [act.RECEIVE_LOGOUT]: () => ({
+        ...DEFAULT_STATE,
+        policy: state.policy
+      })
     }[action.type] || (() => state)
   )());
 

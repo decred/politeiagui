@@ -1,13 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
 
 export const useSearchVotes = (proposalToken, modalOpen) => {
-  const proposalVoteResults = useSelector(sel.apiPropVoteResultsResponse);
   const loading = useSelector(sel.isApiRequestingPropVoteResults);
   const error = useSelector(sel.proposalVoteResultsError);
   const onFetchProposalVoteResults = useAction(act.onFetchProposalVoteResults);
+  const proposalVoteResultsSelector = useMemo(
+    () => sel.makeGetProposalVoteResults(proposalToken),
+    [proposalToken]
+  );
+  const proposalVoteResults = useSelector(proposalVoteResultsSelector);
 
   useEffect(
     function fetchVotes() {

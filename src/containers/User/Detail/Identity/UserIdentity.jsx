@@ -25,7 +25,7 @@ const Identity = ({ history, loadingKey, user }) => {
     userPubkey,
     identityImportSuccess,
     onUpdateUserKey,
-    updateUserKey,
+    updateUserKeyToken,
     keyMismatch,
     keyMismatchAction,
     shouldAutoVerifyKey
@@ -87,14 +87,13 @@ const Identity = ({ history, loadingKey, user }) => {
         Public key
       </Text>
       {shouldAutoVerifyKey &&
-      updateUserKey &&
-      updateUserKey.verificationtoken ? (
+      updateUserKeyToken ? (
         <DevelopmentOnlyContent style={{ margin: "1rem 0 1rem 0" }} show>
           <Button
             type="button"
             onClick={() =>
               history.push(
-                `/user/key/verify?verificationtoken=${updateUserKey.verificationtoken}`
+                `/user/key/verify?verificationtoken=${updateUserKeyToken}`
               )
             }>
             Auto verify key

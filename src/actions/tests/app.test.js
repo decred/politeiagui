@@ -2,12 +2,7 @@ import fetchMock from "fetch-mock";
 import * as app from "../app";
 import * as act from "../types";
 import * as ls from "../../lib/local_storage";
-import {
-  onChangeUsername,
-  onChangePassword,
-  onFetchProposalComments
-} from "../api";
-import { onFetchProposal as onFetchProposalApi } from "../api";
+import { onChangeUsername, onChangePassword } from "../api";
 import { done } from "./helpers";
 
 describe("test app actions (actions/app.js)", () => {
@@ -76,11 +71,6 @@ describe("test app actions (actions/app.js)", () => {
     username: "foobar",
     password: "foobar1234"
   };
-  const FAKE_INVOICE = {
-    token: "fake_token",
-    lineitems: [],
-    files: []
-  };
 
   beforeAll(() => {
     // send status 200 to every unmatched request
@@ -115,15 +105,6 @@ describe("test app actions (actions/app.js)", () => {
     );
   });
 
-  test("fetch proposal action", async () => {
-    const { token } = FAKE_PROPOSAL;
-    await expect(app.onFetchProposalApp(token)).toDispatchActionsWithState(
-      MOCK_STATE,
-      [onFetchProposalApi(token), onFetchProposalComments(token)],
-      done
-    );
-  });
-
   test("on save draft proposal action", () => {
     expect(app.onSaveDraftProposal(FAKE_PROPOSAL)).toDispatchActions(
       [
@@ -154,18 +135,6 @@ describe("test app actions (actions/app.js)", () => {
     const id = "draft_id";
     expect(app.onDeleteDraftProposal(id)).toDispatchActions(
       [{ type: act.DELETE_DRAFT_PROPOSAL, payload: id }],
-      done
-    );
-  });
-
-  test("on save draft invoice action", () => {
-    expect(app.onSaveDraftInvoice(FAKE_INVOICE)).toDispatchActions(
-      [
-        {
-          type: act.SAVE_DRAFT_INVOICE,
-          payload: { name: FAKE_INVOICE.name }
-        }
-      ],
       done
     );
   });

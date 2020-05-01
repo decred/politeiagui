@@ -80,7 +80,7 @@ const FileWrapper = ({ file, className }) => {
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const openFullImageModal = (file) => {
     handleOpenModal(ModalFullImage, {
-      image: file,
+      images: [file],
       onClose: handleCloseModal
     });
   };

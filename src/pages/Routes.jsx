@@ -1,7 +1,6 @@
 import React from "react";
 import { Switch, withRouter } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import * as sel from "src/selectors";
 import {
   Route,
   AdminAuthenticatedRoute,
@@ -45,14 +44,12 @@ const Routes = ({ location }) => {
           <Route
             path={"/proposals/:token"}
             title={"Proposal Detail"}
-            titleSelector={sel.proposalName}
             exact
             component={PageProposalDetail}
           />
           <Route
             path={"/proposals/:token/comments/:commentid"}
             title={"Proposal Detail"}
-            titleSelector={sel.proposalName}
             exact
             component={PageProposalDetail}
           />

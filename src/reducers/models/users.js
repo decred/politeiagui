@@ -7,6 +7,7 @@ const DEFAULT_STATE = {
   byID: {},
   currentUserID: null,
   search: {
+    results: [],
     resultsByID: {},
     queryByEmail: {},
     queryByUsername: {}
@@ -15,7 +16,8 @@ const DEFAULT_STATE = {
     byContractorType: {},
     byDomain: {},
     byID: {}
-  }
+  },
+  newUser: {}
 };
 
 const skip = () => (value) => value;
@@ -69,9 +71,12 @@ const users = (state = DEFAULT_STATE, action) =>
               set(["byID", action.payload.userid], action.payload)
             )(state),
           [act.RECEIVE_EDIT_USER]: () =>
-            set(
-              ["byID", state.currentUserID, "emailnotifications"],
-              action.payload.preferences.emailnotifications
+            compose(
+              set(
+                ["byID", state.currentUserID, "emailnotifications"],
+                action.payload.preferences.emailnotifications
+              ),
+              set(["byID", state.currentUserID, "edited"], action.payload)
             )(state),
           [act.RECEIVE_CHANGE_USERNAME]: () =>
             set(
@@ -79,10 +84,11 @@ const users = (state = DEFAULT_STATE, action) =>
               action.payload.username
             )(state),
           [act.RECEIVE_VERIFIED_KEY]: () =>
-            set(
-              ["byID", state.currentUserID, "publickey"],
-              action.payload.publickey
-            )(state),
+            update(["byID", state.currentUserID], (user) => ({
+              ...user,
+              publickey: action.payload.publickey,
+              verifiedkey: action.payload
+            }))(state),
           [act.RECEIVE_MANAGE_CMS_USER]: () => {
             const { domain, type, supervisorIDs, userID } = action.payload;
             return update(["byID", userID], (user) => ({
@@ -105,6 +111,7 @@ const users = (state = DEFAULT_STATE, action) =>
             const searchedByEmail = !!email;
             const searchedByUsername = !!username;
             return compose(
+              set(["search", "results"], users),
               update("search.resultsByID", (users) => ({
                 ...users,
                 ...usersByID
@@ -146,7 +153,30 @@ const users = (state = DEFAULT_STATE, action) =>
               byDomain,
               byID
             })(state);
-          }
+          },
+          [act.RECEIVE_RESEND_VERIFICATION_EMAIL]: () =>
+            set(
+              ["byID", state.currentUserID, "resendverificationtoken"],
+              action.payload
+            )(state),
+          [act.RESET_RESEND_VERIFICATION_EMAIL]: () =>
+            set(
+              ["byID", state.currentUserID, "resendverificationtoken"],
+              null
+            )(state),
+          [act.RECEIVE_RESET_PASSWORD]: () =>
+            set(
+              ["byID", state.currentUserID, "resetpassword"],
+              action.payload
+            )(state),
+          [act.RECEIVE_UPDATED_KEY]: () =>
+            update(["byID", state.currentUserID], (user) => ({
+              ...user,
+              ...action.payload
+            }))(state),
+          [act.RECEIVE_NEW_USER]: () => set("newUser", action.payload)(state),
+          [act.RESET_NEW_USER]: () =>
+            set("newUser", DEFAULT_STATE.newUser)(state)
         }[action.type] || (() => state)
       )();
 

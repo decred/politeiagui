@@ -1,8 +1,11 @@
 import {
   getCurrentMonth,
   getCurrentYear,
-  getCurrentDateValue
+  getCurrentDateValue,
+  getYearAndMonthFromDate,
+  getCurrentDefaultMonthAndYear
 } from "src/helpers";
+import isEqual from "lodash/isEqual";
 import { INVOICE_STATUS_NEW, INVOICE_STATUS_UPDATED } from "./constants";
 
 /**
@@ -98,4 +101,40 @@ export const getInvoiceTotalAmount = (invoice) => {
   const totalExpenses = getInvoiceTotalExpenses(invoice);
   const rate = invoice.input.contractorrate / 100;
   return rate * totalHours + totalExpenses;
+};
+
+export const sortDateRange = (firstSelectedDate, secondSelectedDate) => {
+  if (isEqual(firstSelectedDate, secondSelectedDate)) return firstSelectedDate;
+
+  const { month: firstMonth, year: firstYear } = firstSelectedDate;
+  const { month: secondMonth, year: secondYear } = secondSelectedDate;
+
+  const firstSelectedTime = new Date(firstYear, firstMonth).getTime();
+  const secondSelectedTime = new Date(secondYear, secondMonth).getTime();
+
+  if (firstSelectedTime > secondSelectedTime) {
+    return {
+      start: secondSelectedDate,
+      end: firstSelectedDate
+    };
+  }
+
+  return {
+    start: firstSelectedDate,
+    end: secondSelectedDate
+  };
+};
+
+export const getPreviousMonthsRange = (range) => {
+  const end = getCurrentDefaultMonthAndYear();
+
+  // Tweak from Date API. If month is negative, it returns the last month of the
+  //   previous year. See: https://www.w3schools.com/jsref/jsref_setmonth.asp
+  const previous = new Date();
+  previous.setMonth(previous.getMonth() - range + 1);
+
+  return {
+    start: getYearAndMonthFromDate(previous),
+    end
+  };
 };

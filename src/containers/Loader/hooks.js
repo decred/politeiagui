@@ -4,7 +4,7 @@ import { useSelector, useAction } from "src/redux";
 
 export function useLoader() {
   const user = useSelector(sel.currentUser);
-  const apiInfo = useSelector(sel.apiInitResponse);
+  const apiInfo = useSelector(sel.init);
   const onRequestApiInfo = useAction(act.requestApiInfo);
   const onRequestCurrentUser = useAction(act.onRequestMe);
   const localLogout = useAction(act.handleLogout);

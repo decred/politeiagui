@@ -17,16 +17,20 @@ export const useComment = () => useContext(CommentContext);
 export function useComments(recordToken) {
   const { enableCommentVote, recordType, constants } = useConfig();
   const commentsSelector = useMemo(
-    () => sel.makeGetProposalComments(recordToken),
+    () => sel.makeGetRecordComments(recordToken),
     [recordToken]
   );
   const commentsLikesSelector = useMemo(
-    () => sel.makeGetProposalCommentsLikes(recordToken),
+    () => sel.makeGetRecordCommentsLikes(recordToken),
+    [recordToken]
+  );
+  const lastVisitTimestampSelector = useMemo(
+    () => sel.makeGetLastAccessTime(recordToken),
     [recordToken]
   );
   const comments = useSelector(commentsSelector);
   const commentsLikes = useSelector(commentsLikesSelector);
-  const lastVisitTimestamp = useSelector(sel.visitedProposal);
+  const lastVisitTimestamp = useSelector(lastVisitTimestampSelector);
   const loading = useSelector(sel.isApiRequestingComments);
   const loadingLikes = useSelector(sel.isApiRequestingCommentsLikes);
   const onSubmitComment = useAction(
@@ -44,7 +48,6 @@ export function useComments(recordToken) {
   const loadingLikeAction = useSelector(sel.isApiRequestingLikeComment);
   const onFetchLikes = useAction(act.onFetchLikedComments);
   const onLikeCommentAction = useAction(act.onLikeComment);
-  const onResetComments = useAction(act.onResetComments);
   const onCensorComment = useAction(act.onCensorComment);
 
   const { currentUser } = useLoaderContext();
@@ -113,7 +116,6 @@ export function useComments(recordToken) {
     loading,
     loadingLikes,
     loadingLikeAction,
-    onSubmitComment,
-    onResetComments
+    onSubmitComment
   };
 }

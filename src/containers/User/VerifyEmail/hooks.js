@@ -9,8 +9,8 @@ import {
 import { getQueryStringValues } from "src/lib/queryString";
 
 export function useRequestResendVerificationEmail() {
-  const resendVerificationEmailResponse = useSelector(
-    sel.resendVerificationEmailResponse
+  const currentUserResendVerificationToken = useSelector(
+    sel.currentUserResendVerificationToken
   );
 
   const onResendVerificationEmail = useAction(
@@ -29,7 +29,7 @@ export function useRequestResendVerificationEmail() {
   return {
     validationSchema,
     onResendVerificationEmail,
-    resendVerificationEmailResponse
+    currentUserResendVerificationToken
   };
 }
 
