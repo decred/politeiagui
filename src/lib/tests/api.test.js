@@ -63,12 +63,6 @@ describe("api integration modules (lib/api.js)", () => {
     const fileFromMarkdown = api.convertMarkdownToFile(
       PROPOSAL_NAME + "\n\n" + MARKDOWN
     );
-    const dataJsonFile = api.convertJsonToFile(
-      {
-        linkby: undefined
-      },
-      "data.json"
-    );
     expect(proposal).toEqual({
       files: [
         {
@@ -76,12 +70,21 @@ describe("api integration modules (lib/api.js)", () => {
           digest: help.digestPayload(fileFromMarkdown.payload)
         },
         {
-          ...dataJsonFile,
-          digest: help.digestPayload(dataJsonFile.payload)
-        },
-        {
           ...FILE,
           digest: FILE_DIGESTED_PAYLOAD
+        }
+      ],
+      metadata: [
+        {
+          hint: "proposalmetadata",
+          payload: help.bufferToBase64String(
+            help.objectToBuffer({
+              name: PROPOSAL_NAME
+            })
+          ),
+          digest: help.objectToSHA256({
+            name: PROPOSAL_NAME
+          })
         }
       ]
     });
@@ -98,10 +101,19 @@ describe("api integration modules (lib/api.js)", () => {
         {
           ...fileFromMarkdown,
           digest: help.digestPayload(fileFromMarkdown.payload)
-        },
+        }
+      ],
+      metadata: [
         {
-          ...dataJsonFile,
-          digest: help.digestPayload(dataJsonFile.payload)
+          hint: "proposalmetadata",
+          payload: help.bufferToBase64String(
+            help.objectToBuffer({
+              name: PROPOSAL_NAME
+            })
+          ),
+          digest: help.objectToSHA256({
+            name: PROPOSAL_NAME
+          })
         }
       ]
     });
@@ -120,10 +132,19 @@ describe("api integration modules (lib/api.js)", () => {
         {
           ...fileFromMarkdown,
           digest: help.digestPayload(fileFromMarkdown.payload)
-        },
+        }
+      ],
+      metadata: [
         {
-          ...dataJsonFile,
-          digest: help.digestPayload(dataJsonFile.payload)
+          hint: "proposalmetadata",
+          payload: help.bufferToBase64String(
+            help.objectToBuffer({
+              name: PROPOSAL_NAME
+            })
+          ),
+          digest: help.objectToSHA256({
+            name: PROPOSAL_NAME
+          })
         }
       ]
     });
