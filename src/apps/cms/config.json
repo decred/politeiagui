@@ -1,7 +1,7 @@
 {
   "title": "Contractor Management",
-  "logoLight": "cms-logo.png",
-  "logoDark": "cms-logo.png",
+  "logoLight": "cms-logo-light.svg",
+  "logoDark": "cms-logo-dark.svg",
   "recordType": "invoice",
   "aboutContent": "",
   "enableAdminInvite": true,

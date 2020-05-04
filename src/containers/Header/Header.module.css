@@ -3,6 +3,7 @@
 }
 
 .showLogo {
+  display: flex;
   transition: 0.2s all;
   opacity: 1;
   transform: translateX(0);
