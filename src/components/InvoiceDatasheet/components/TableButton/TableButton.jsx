@@ -5,7 +5,7 @@ import styles from "./TableButton.module.css";
 const TableButton = ({ onClick, disabled, children }) => {
   return (
     <Link
-      customComponent={props => (
+      customComponent={(props) => (
         <span
           {...props}
           className={classNames(
@@ -13,8 +13,7 @@ const TableButton = ({ onClick, disabled, children }) => {
             styles.tableButton,
             disabled && styles.tableButtonDisabled
           )}
-          onClick={!disabled ? onClick : () => null}
-        >
+          onClick={!disabled ? onClick : () => null}>
           {children}
         </span>
       )}

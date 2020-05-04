@@ -7,7 +7,15 @@ const HelpMessage = ({ className, children }) => {
   const isDarkTheme = themeName === "dark";
   return (
     <div className={classNames("justify-center", styles.container)}>
-      <Text textAlign="center" className={classNames(className, styles.helpMessage, isDarkTheme && styles.dark)}>{children}</Text>
+      <Text
+        textAlign="center"
+        className={classNames(
+          className,
+          styles.helpMessage,
+          isDarkTheme && styles.dark
+        )}>
+        {children}
+      </Text>
     </div>
   );
 };

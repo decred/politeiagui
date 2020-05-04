@@ -18,29 +18,34 @@ const EditInvoice = ({ match }) => {
 
   const isInvoiceLoaded = !loading && !!invoice;
 
-  const initialValues = invoice ?
-    {
-      token: tokenFromUrl,
-      name: invoice.input.contractorname,
-      location: invoice.input.contractorlocation,
-      contact: invoice.input.contractorcontact,
-      address: invoice.input.paymentaddress,
-      rate: fromUSDCentsToUSDUnits(invoice.input.contractorrate),
-      date: {
-        month: invoice.input.month,
-        year: invoice.input.year
-      },
-      files: invoice.input.files,
-      lineitems: invoice.input.lineitems
-    } : null;
+  const initialValues = invoice
+    ? {
+        token: tokenFromUrl,
+        name: invoice.input.contractorname,
+        location: invoice.input.contractorlocation,
+        contact: invoice.input.contractorcontact,
+        address: invoice.input.paymentaddress,
+        rate: fromUSDCentsToUSDUnits(invoice.input.contractorrate),
+        date: {
+          month: invoice.input.month,
+          year: invoice.input.year
+        },
+        files: invoice.input.files,
+        lineitems: invoice.input.lineitems
+      }
+    : null;
 
   return (
     <Card className="container margin-bottom-l">
-      {isInvoiceLoaded ?
-          <InvoiceForm initialValues={initialValues} onSubmit={onEditInvoice} approvedProposalsTokens={approvedTokens} />
-        :
-          <InvoiceLoader extended />
-      }
+      {isInvoiceLoaded ? (
+        <InvoiceForm
+          initialValues={initialValues}
+          onSubmit={onEditInvoice}
+          approvedProposalsTokens={approvedTokens}
+        />
+      ) : (
+        <InvoiceLoader extended />
+      )}
     </Card>
   );
 };
@@ -50,4 +55,3 @@ EditInvoice.propTypes = {
 };
 
 export default withRouter(EditInvoice);
-

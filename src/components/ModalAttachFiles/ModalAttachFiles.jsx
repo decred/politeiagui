@@ -31,8 +31,7 @@ const ModalAttachFiles = ({
             <Button
               className={styles.selectFileButton}
               type="submit"
-              kind={"primary"}
-            >
+              kind={"primary"}>
               Select file
             </Button>
           </FilesInput>

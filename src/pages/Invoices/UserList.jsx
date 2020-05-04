@@ -5,7 +5,7 @@ import ListUserInvoices from "src/containers/Invoice/User/List";
 const PageListUserInvoices = () => {
   return (
     <MultipleContentPage disableScrollToTop>
-      {props => <ListUserInvoices {...props} />}
+      {(props) => <ListUserInvoices {...props} />}
     </MultipleContentPage>
   );
 };

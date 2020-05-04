@@ -7,14 +7,14 @@ import { isUserAdmin } from "../helpers";
 const OtherAccount = ({
   isadmin // from the user API return
 }) => (
-    <Card className={classNames("container", "margin-bottom-m")}>
-      <InfoSection
-        className="no-margin-top"
-        label="Admin:"
-        info={isUserAdmin(isadmin) ? "Yes" : "No"}
-      />
-    </Card>
-  );
+  <Card className={classNames("container", "margin-bottom-m")}>
+    <InfoSection
+      className="no-margin-top"
+      label="Admin:"
+      info={isUserAdmin(isadmin) ? "Yes" : "No"}
+    />
+  </Card>
+);
 
 OtherAccount.propTypes = {
   isadmin: PropTypes.bool

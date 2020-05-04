@@ -7,7 +7,9 @@ const WhatAreYourThoughts = ({ onLoginClick, onSignupClick }) => {
   const isDarkTheme = themeName === "dark";
   return (
     <div className={styles.wrapper}>
-      <Text className={classNames(styles.text, isDarkTheme && styles.darkText)}>What are your thoughts?</Text>
+      <Text className={classNames(styles.text, isDarkTheme && styles.darkText)}>
+        What are your thoughts?
+      </Text>
       <div className={styles.buttonsWrapper}>
         {onLoginClick && (
           <Button kind="secondary" onClick={onLoginClick}>

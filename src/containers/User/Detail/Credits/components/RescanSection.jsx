@@ -1,7 +1,7 @@
 import React from "react";
 import { Message } from "pi-ui";
 
-export default ({ amountOfCreditsAddedOnRescan, errorRescan }) =>
+export default ({ amountOfCreditsAddedOnRescan, errorRescan }) => (
   <>
     {amountOfCreditsAddedOnRescan !== null && (
       <Message className="margin-top-s" kind="success">
@@ -14,4 +14,5 @@ export default ({ amountOfCreditsAddedOnRescan, errorRescan }) =>
         {errorRescan.toString()}
       </Message>
     )}
-  </>;
+  </>
+);

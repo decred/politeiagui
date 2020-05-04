@@ -2,9 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Button } from "pi-ui";
 import RecordWrapper from "../RecordWrapper";
-import {
-  presentationalDraftInvoiceName
-} from "src/containers/Invoice/helpers";
+import { presentationalDraftInvoiceName } from "src/containers/Invoice/helpers";
 import styles from "./DraftInvoice.module.css";
 
 const DraftInvoice = ({ draft, onDelete }) => {
@@ -24,8 +22,7 @@ const DraftInvoice = ({ draft, onDelete }) => {
                   id={`invoice-${draftId}`}
                   truncate
                   linesBeforeTruncate={2}
-                  url={`/invoices/new?draft=${draftId}`}
-                >
+                  url={`/invoices/new?draft=${draftId}`}>
                   {presentationalDraftInvoiceName(draft)}
                 </Title>
               }
@@ -35,8 +32,7 @@ const DraftInvoice = ({ draft, onDelete }) => {
                     kind="secondary"
                     size="sm"
                     className={styles.deleteDraft}
-                    onClick={handleDeleteDraft}
-                  >
+                    onClick={handleDeleteDraft}>
                     Delete
                   </Button>
                 </Status>

@@ -19,8 +19,7 @@ const DraftProposal = ({ draft, onDelete }) => {
                   id={`proposal-title-${draftId}`}
                   truncate
                   linesBeforeTruncate={2}
-                  url={`/proposals/new?draft=${draftId}`}
-                >
+                  url={`/proposals/new?draft=${draftId}`}>
                   {name}
                 </Title>
               }
@@ -28,8 +27,7 @@ const DraftProposal = ({ draft, onDelete }) => {
                 <Status disableMobileView>
                   <button
                     onClick={handleDeleteDraft}
-                    className={styles.deleteDraft}
-                  >
+                    className={styles.deleteDraft}>
                     &times;
                   </button>
                 </Status>

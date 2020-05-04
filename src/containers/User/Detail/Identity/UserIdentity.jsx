@@ -86,8 +86,7 @@ const Identity = ({ history, loadingKey, user }) => {
         className={classNames(styles.fieldHeading, styles.block)}>
         Public key
       </Text>
-      {shouldAutoVerifyKey &&
-      updateUserKeyToken ? (
+      {shouldAutoVerifyKey && updateUserKeyToken ? (
         <DevelopmentOnlyContent style={{ margin: "1rem 0 1rem 0" }} show>
           <Button
             type="button"

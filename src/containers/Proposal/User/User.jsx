@@ -20,7 +20,7 @@ const ProposalsUser = ({ userID, withDrafts = false }) => {
   const [proposalsFilter, setProposalsFilter] = useState(filterOptions[0]);
 
   const onSetFilterOption = useCallback(
-    option => {
+    (option) => {
       setProposalsFilter(option);
     },
     [setProposalsFilter]

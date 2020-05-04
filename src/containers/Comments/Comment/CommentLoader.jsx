@@ -10,8 +10,7 @@ const CommentLoader = () => {
       width={extraSmall ? 400 : 600}
       speed={2}
       primaryColor="#f3f3f3"
-      secondaryColor="#ecebeb"
-    >
+      secondaryColor="#ecebeb">
       <rect
         x="0"
         y="10"

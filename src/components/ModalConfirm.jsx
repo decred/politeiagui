@@ -16,8 +16,14 @@ const ModalConfirm = ({
   const [isSubmitting, setSubmitting] = useState(false);
 
   const { theme } = useTheme();
-  const successIconBgColor = getThemeProperty(theme, "success-icon-background-color");
-  const iconCheckmarkColor = getThemeProperty(theme, "success-icon-checkmark-color");
+  const successIconBgColor = getThemeProperty(
+    theme,
+    "success-icon-background-color"
+  );
+  const iconCheckmarkColor = getThemeProperty(
+    theme,
+    "success-icon-checkmark-color"
+  );
 
   const onSubmitForm = async (_, { resetForm, setFieldError }) => {
     setSubmitting(true);
@@ -58,8 +64,7 @@ const ModalConfirm = ({
             size={26}
           />
         )
-      }
-    >
+      }>
       {!success && (
         <FormWrapper initialValues={{}} onSubmit={onSubmitForm}>
           {({ Form, Actions, ErrorMessage, handleSubmit, errors }) => (

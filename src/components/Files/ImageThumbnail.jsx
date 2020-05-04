@@ -20,8 +20,7 @@ export const ImageThumbnail = ({
         styles.imageThumbnailWrapper,
         viewOnly && styles.marginRight,
         className
-      )}
-    >
+      )}>
       <img
         onClick={handleClick}
         className={styles.imageThumbnail}

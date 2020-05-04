@@ -74,11 +74,7 @@ const Credits = ({ user }) => {
       toggleCreditsPaymentPolling(false);
       handleCloseModal();
     }
-  }, [
-    proposalPaymentReceived,
-    toggleCreditsPaymentPolling,
-    handleCloseModal
-  ]);
+  }, [proposalPaymentReceived, toggleCreditsPaymentPolling, handleCloseModal]);
 
   return isApiRequestingUserProposalCredits ? (
     <div className={styles.spinnerWrapper}>

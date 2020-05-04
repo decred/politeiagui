@@ -9,9 +9,8 @@ const DccList = () => {
   return (
     <MultipleContentPage
       disableScrollToTop
-      topBannerHeight={mobile ? 160 : 140}
-    >
-      {props => <ListDccs {...props} />}
+      topBannerHeight={mobile ? 160 : 140}>
+      {(props) => <ListDccs {...props} />}
     </MultipleContentPage>
   );
 };

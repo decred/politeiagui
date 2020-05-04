@@ -5,7 +5,7 @@ import PublicProposals from "src/containers/Proposal/Public";
 const PublicList = () => {
   return (
     <MultipleContentPage disableScrollToTop>
-      {props => <PublicProposals {...props} />}
+      {(props) => <PublicProposals {...props} />}
     </MultipleContentPage>
   );
 };

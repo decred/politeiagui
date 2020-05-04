@@ -28,7 +28,7 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
   }, [tab, placeholder]);
 
   const generateMarkdownPreview = useCallback(
-    markdown =>
+    (markdown) =>
       Promise.resolve(
         <Markdown
           className={classNames(
