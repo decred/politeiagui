@@ -24,7 +24,7 @@ const Header = ({ noBorder }) => {
       <NavLink
         to={url}
         className={extrasmall && showMenu ? styles.hideLogo : styles.showLogo}>
-        <Logo style={{ maxWidth: "20rem" }} />
+        <Logo />
       </NavLink>
       {small ? (
         <>
