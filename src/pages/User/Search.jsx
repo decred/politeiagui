@@ -5,7 +5,7 @@ import Search from "src/containers/User/Search";
 const PageUserSearch = () => {
   return (
     <MultipleContentPage topBannerHeight={220}>
-      {props => <Search {...props} />}
+      {(props) => <Search {...props} />}
     </MultipleContentPage>
   );
 };

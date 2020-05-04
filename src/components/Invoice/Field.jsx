@@ -12,8 +12,7 @@ const Field = ({ label, value, renderValue }) => {
       ) : (
         <Text
           size="large"
-          className={classNames("margin-top-xs margin-bottom-xs")}
-        >
+          className={classNames("margin-top-xs margin-bottom-xs")}>
           {value}
         </Text>
       )}

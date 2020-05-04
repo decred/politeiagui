@@ -18,14 +18,18 @@ const InvoiceActions = ({ invoice, extended }) => {
     );
   }
   const mobile = useMediaQuery("(max-width: 560px)");
-  const { onApprove, onReject, onDispute, nextInvoice } = useAdminInvoiceActions();
+  const {
+    onApprove,
+    onReject,
+    onDispute,
+    nextInvoice
+  } = useAdminInvoiceActions();
   const withInvoice = useCallback(
-    fn => () => {
+    (fn) => () => {
       fn(invoice);
     },
     [invoice]
   );
-
 
   const approveButton = (
     <Button onClick={withInvoice(onApprove)}>Approve</Button>
@@ -35,8 +39,7 @@ const InvoiceActions = ({ invoice, extended }) => {
       onClick={withInvoice(onReject)}
       className={classNames("margin-right-s")}
       noBorder
-      kind="secondary"
-    >
+      kind="secondary">
       Reject
     </Button>
   );
@@ -45,36 +48,35 @@ const InvoiceActions = ({ invoice, extended }) => {
       onClick={withInvoice(onDispute)}
       className={classNames("margin-right-s")}
       noBorder
-      kind="secondary"
-    >
+      kind="secondary">
       Dispute
     </Button>
   );
-  return (
-    isUnreviewedInvoice(invoice) ? (
-      <AdminContent>
-        <div className="justify-right margin-top-m">
-          {!mobile ? (
-            <>
-              {rejectButton}
-              {disputeButton}
-              {approveButton}
-            </>
-          ) : (
-            <Dropdown title="Actions">
-              <DropdownItem>{approveButton}</DropdownItem>
-              <DropdownItem>{rejectButton}</DropdownItem>
-              <DropdownItem>{disputeButton}</DropdownItem>
-            </Dropdown>
-          )}
-        </div>
-      </AdminContent>
-    ) : extended && nextInvoice ? (
-      <AdminContent>
-        <Link to={nextInvoice.censorshiprecord.token}>Go to next invoice: {presentationalInvoiceName(nextInvoice)}</Link>
-      </AdminContent>
-    ) : null
-  );
+  return isUnreviewedInvoice(invoice) ? (
+    <AdminContent>
+      <div className="justify-right margin-top-m">
+        {!mobile ? (
+          <>
+            {rejectButton}
+            {disputeButton}
+            {approveButton}
+          </>
+        ) : (
+          <Dropdown title="Actions">
+            <DropdownItem>{approveButton}</DropdownItem>
+            <DropdownItem>{rejectButton}</DropdownItem>
+            <DropdownItem>{disputeButton}</DropdownItem>
+          </Dropdown>
+        )}
+      </div>
+    </AdminContent>
+  ) : extended && nextInvoice ? (
+    <AdminContent>
+      <Link to={nextInvoice.censorshiprecord.token}>
+        Go to next invoice: {presentationalInvoiceName(nextInvoice)}
+      </Link>
+    </AdminContent>
+  ) : null;
 };
 
 export default InvoiceActions;

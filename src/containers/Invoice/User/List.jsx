@@ -15,7 +15,7 @@ const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
   const [filters, setFilters] = useState({});
 
   const renderInvoice = useCallback(
-    invoice => (
+    (invoice) => (
       <Invoice
         key={`invoice-${invoice.censorshiprecord.token}`}
         invoice={invoice}
@@ -25,14 +25,14 @@ const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
   );
 
   const handleFiltersChange = useCallback(
-    values => {
+    (values) => {
       setFilters(values);
     },
     [setFilters]
   );
 
   const renderEmptyMessage = useCallback(
-    filteredInvoices => {
+    (filteredInvoices) => {
       return (
         !filteredInvoices.length && (
           <HelpMessage>
@@ -46,9 +46,10 @@ const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
     [invoices]
   );
 
-  const renderInvoices = useCallback(invoices => invoices.map(renderInvoice), [
-    renderInvoice
-  ]);
+  const renderInvoices = useCallback(
+    (invoices) => invoices.map(renderInvoice),
+    [renderInvoice]
+  );
 
   return (
     <AdminInvoiceActionsProvider>
@@ -65,7 +66,7 @@ const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
         )}
         {!loading && filters && (
           <FilterInvoices invoices={invoices} filterValues={filters}>
-            {filteredInvoices => (
+            {(filteredInvoices) => (
               <>
                 {renderInvoices(filteredInvoices)}
                 {renderEmptyMessage(filteredInvoices)}

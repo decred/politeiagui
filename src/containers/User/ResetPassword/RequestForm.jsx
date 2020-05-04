@@ -33,8 +33,7 @@ const RequestForm = () => {
             setSubmitting(false);
             setFieldError("global", e);
           }
-        }}
-      >
+        }}>
         {({
           Form,
           Title,
@@ -85,12 +84,10 @@ const RequestForm = () => {
         }
       </FormWrapper>
       <DevelopmentOnlyContent
-        show={requestResetResponse && requestResetResponse.verificationtoken}
-      >
+        show={requestResetResponse && requestResetResponse.verificationtoken}>
         <Link
           to={`/user/password/reset?username=${username}&verificationtoken=${requestResetResponse &&
-            requestResetResponse.verificationtoken}`}
-        >
+            requestResetResponse.verificationtoken}`}>
           Reset password
         </Link>
       </DevelopmentOnlyContent>

@@ -5,7 +5,7 @@ import DccDetail from "src/containers/DCC/Detail";
 const DccDetailPage = () => {
   return (
     <MultipleContentPage topBannerHeight={0}>
-      {props => {
+      {(props) => {
         return <DccDetail {...props} />;
       }}
     </MultipleContentPage>

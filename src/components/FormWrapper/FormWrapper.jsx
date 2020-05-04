@@ -45,7 +45,7 @@ const FormWrapper = ({ children, loading, ...props }) => {
     <Loader />
   ) : (
     <Formik {...props}>
-      {props =>
+      {(props) =>
         children({ ...props, Actions, Footer, Title, Form, ErrorMessage, Link })
       }
     </Formik>

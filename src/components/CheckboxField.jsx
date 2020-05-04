@@ -8,7 +8,7 @@ const CheckboxField = ({ name, label }) => {
   return (
     <FormikConsumer>
       {({ values, setFieldValue }) => {
-        const handleCheckboxChange = event => {
+        const handleCheckboxChange = (event) => {
           setFieldValue(name, event.target.checked);
         };
         return (

@@ -4,14 +4,15 @@ import { useLoaderContext } from "src/containers/Loader";
 
 const DcrTransactionLink = ({ txID }) => {
   const { apiInfo } = useLoaderContext();
-  const hostName = apiInfo.testnet ? "testnet.decred.org" : "dcrdata.decred.org";
+  const hostName = apiInfo.testnet
+    ? "testnet.decred.org"
+    : "dcrdata.decred.org";
   return (
     <Link
       target="_blank"
       rel="noopener noreferrer"
       className="use-ellipsis"
-      href={`https://${hostName}/tx/${txID}`}
-    >
+      href={`https://${hostName}/tx/${txID}`}>
       {txID}
     </Link>
   );

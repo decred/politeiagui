@@ -7,13 +7,7 @@ const Field = ({ label, value, renderValue }) => {
   return (
     <div className={styles.field}>
       <Text size="small">{label}</Text>
-      {renderValue ? (
-        renderValue(value)
-      ) : (
-        <Text size="large">
-          {value}
-        </Text>
-      )}
+      {renderValue ? renderValue(value) : <Text size="large">{value}</Text>}
     </div>
   );
 };

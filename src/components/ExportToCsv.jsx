@@ -4,7 +4,7 @@ import React from "react";
 export const exportToCsv = (data, fields, filename) => {
   const csvContent = data.reduce((acc, info) => {
     let row = "";
-    fields.forEach(f => (row += `"${info[f]}",`));
+    fields.forEach((f) => (row += `"${info[f]}",`));
     return acc + row + "\n";
   }, "");
   const titles = fields.reduce((acc, f) => acc + `"${f}",`, "");
@@ -23,7 +23,9 @@ const ExportToCsv = ({ children, data, fields, filename, className }) => {
   };
   return (
     <>
-      <span className={className} onClick={handleExportToCsv}>{children}</span>
+      <span className={className} onClick={handleExportToCsv}>
+        {children}
+      </span>
       <div id="csv-hidden-div" style={{ display: "none" }} />
     </>
   );

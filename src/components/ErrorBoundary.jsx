@@ -3,7 +3,9 @@ import PropTypes from "prop-types";
 import { Message } from "pi-ui";
 
 const defaulErrorRenderer = (error, title) => (
-  <Message title={title} header={title} kind="error">{error.toString()}</Message>
+  <Message title={title} header={title} kind="error">
+    {error.toString()}
+  </Message>
 );
 
 class ErrorBoundary extends Component {

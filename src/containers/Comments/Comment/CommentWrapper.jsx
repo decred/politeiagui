@@ -5,52 +5,64 @@ import Link from "src/components/Link";
 import { useComment } from "../hooks";
 import Comment from "./Comment";
 
-const ContextLink = React.memo(({
-  parentid,
-  recordToken,
-  recordType
-}) => <Link className={styles.contextLink} to={`/${recordType}s/${recordToken}/comments/${parentid}`}>see in context</Link>);
+const ContextLink = React.memo(({ parentid, recordToken, recordType }) => (
+  <Link
+    className={styles.contextLink}
+    to={`/${recordType}s/${recordToken}/comments/${parentid}`}>
+    see in context
+  </Link>
+));
 
-const Replies = React.memo(({ children }) => <div className={styles.childrenContainer}>{children}</div>);
+const Replies = React.memo(({ children }) => (
+  <div className={styles.childrenContainer}>{children}</div>
+));
 
-const CommentContent = React.memo(({
-  showReplyForm,
-  commentid,
-  token,
-  handleSubmitComment,
-  handleToggleReplyForm,
-  handleCommentSubmitted,
-  isThread,
-  children
+const CommentContent = React.memo(
+  ({
+    showReplyForm,
+    commentid,
+    token,
+    handleSubmitComment,
+    handleToggleReplyForm,
+    handleCommentSubmitted,
+    isThread,
+    children
+  }) => {
+    const commentForm = useMemo(
+      () => (
+        <CommentForm
+          className={styles.replyForm}
+          persistKey={`replying-to-${commentid}-from-${token}`}
+          onSubmit={handleSubmitComment}
+          onCancel={handleToggleReplyForm}
+          onCommentSubmitted={handleCommentSubmitted}
+        />
+      ),
+      [
+        commentid,
+        handleSubmitComment,
+        token,
+        handleCommentSubmitted,
+        handleToggleReplyForm
+      ]
+    );
+
+    return (
+      <>
+        {showReplyForm && commentForm}
+        {isThread && children}
+      </>
+    );
+  }
+);
+
+const CommentWrapper = ({
+  comment,
+  children,
+  numOfReplies,
+  isFlatMode,
+  ...props
 }) => {
-  const commentForm = useMemo(
-    () => (
-      <CommentForm
-        className={styles.replyForm}
-        persistKey={`replying-to-${commentid}-from-${token}`}
-        onSubmit={handleSubmitComment}
-        onCancel={handleToggleReplyForm}
-        onCommentSubmitted={handleCommentSubmitted}
-      />
-    ),
-    [
-      commentid,
-      handleSubmitComment,
-      token,
-      handleCommentSubmitted,
-      handleToggleReplyForm
-    ]
-  );
-
-  return (
-    <>
-      {showReplyForm && commentForm}
-      {isThread && children}
-    </>
-  );
-});
-
-const CommentWrapper = ({ comment, children, numOfReplies, isFlatMode, ...props }) => {
   const {
     onSubmitComment,
     onLikeComment,
@@ -145,11 +157,13 @@ const CommentWrapper = ({ comment, children, numOfReplies, isFlatMode, ...props 
     return openCensorModal(commentid);
   }, [commentid, openCensorModal]);
 
-  const contextLink = isFlatReply && <ContextLink
-    parentid={parentid}
-    recordToken={recordToken}
-    recordType={recordType}
-  />;
+  const contextLink = isFlatReply && (
+    <ContextLink
+      parentid={parentid}
+      recordToken={recordToken}
+      recordType={recordType}
+    />
+  );
 
   return (
     <>
@@ -194,8 +208,7 @@ const CommentWrapper = ({ comment, children, numOfReplies, isFlatMode, ...props 
         handleSubmitComment={handleSubmitComment}
         handleToggleReplyForm={handleToggleReplyForm}
         handleCommentSubmitted={handleCommentSubmitted}
-        isThread={isThread}
-      >
+        isThread={isThread}>
         <Replies>{children}</Replies>
       </CommentContent>
     </>

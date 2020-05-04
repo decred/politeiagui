@@ -1,8 +1,5 @@
 import React, { useCallback } from "react";
-import {
-  Dropdown,
-  DropdownItem
-} from "pi-ui";
+import { Dropdown, DropdownItem } from "pi-ui";
 import { useAdminDccActions } from "./hooks";
 import AdminContent from "src/components/AdminContent";
 import { isDccActive } from "../helpers";
@@ -16,7 +13,7 @@ const DccActions = ({ dcc, className }) => {
   const { onApprove, onReject } = useAdminDccActions();
 
   const withDcc = useCallback(
-    fn => () => {
+    (fn) => () => {
       fn(dcc);
     },
     [dcc]

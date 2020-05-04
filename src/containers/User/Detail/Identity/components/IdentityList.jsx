@@ -6,8 +6,12 @@ import styles from "../Identity.module.css";
 const IdentityList = memo(({ identities }) => {
   return (
     <ol className={classNames(styles.identityList, "margin-bottom-s")}>
-      {identities.map(identity => (
-        <li className="margin-top-l" key={identity.pubkey}><Text backgroundColor="blueLighter" monospace>{identity.pubkey}</Text></li>
+      {identities.map((identity) => (
+        <li className="margin-top-l" key={identity.pubkey}>
+          <Text backgroundColor="blueLighter" monospace>
+            {identity.pubkey}
+          </Text>
+        </li>
       ))}
     </ol>
   );

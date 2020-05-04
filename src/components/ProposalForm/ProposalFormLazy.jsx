@@ -5,7 +5,7 @@ const ProposalForm = lazy(() =>
   import(/* webpackChunkName: "ProposalForm" */ "./ProposalForm")
 );
 
-const ProposalFormLazy = props => (
+const ProposalFormLazy = (props) => (
   <Suspense fallback={<ProposalFormLoader />}>
     <ProposalForm {...props} />
   </Suspense>

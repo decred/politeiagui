@@ -20,8 +20,7 @@ const GoBackLink = () => {
             styles.returnLink,
             isDarkTheme && styles.darkReturnLink
           )}
-          onClick={() => history.goBack()}
-        >
+          onClick={() => history.goBack()}>
           {backArrow} Go back
         </Link>
       </div>
