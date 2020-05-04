@@ -19,10 +19,10 @@ function _initStorage(options) {
 
 function clear(callback) {
   const self = this;
-  const promise = new Promise(function (resolve, reject) {
+  const promise = new Promise(function(resolve, reject) {
     self
       .ready()
-      .then(function () {
+      .then(function() {
         const db = self._dbInfo.db;
 
         for (const key in db) {
@@ -50,10 +50,10 @@ function getItem(key, callback) {
     key = String(key);
   }
 
-  const promise = new Promise(function (resolve, reject) {
+  const promise = new Promise(function(resolve, reject) {
     self
       .ready()
-      .then(function () {
+      .then(function() {
         try {
           const db = self._dbInfo.db;
           const result = db[key];
@@ -72,10 +72,10 @@ function getItem(key, callback) {
 function iterate(callback) {
   const self = this;
 
-  const promise = new Promise(function (resolve, reject) {
+  const promise = new Promise(function(resolve, reject) {
     self
       .ready()
-      .then(function () {
+      .then(function() {
         try {
           const db = self._dbInfo.db;
 
@@ -98,10 +98,10 @@ function iterate(callback) {
 
 function key(n, callback) {
   const self = this;
-  const promise = new Promise(function (resolve, reject) {
+  const promise = new Promise(function(resolve, reject) {
     self
       .ready()
-      .then(function () {
+      .then(function() {
         const db = self._dbInfo.db;
         let result = null;
         let index = 0;
@@ -130,10 +130,10 @@ function key(n, callback) {
 
 function keys(callback) {
   const self = this;
-  const promise = new Promise(function (resolve, reject) {
+  const promise = new Promise(function(resolve, reject) {
     self
       .ready()
-      .then(function () {
+      .then(function() {
         const db = self._dbInfo.db;
         const keys = [];
 
@@ -154,10 +154,10 @@ function keys(callback) {
 
 function length(callback) {
   const self = this;
-  const promise = new Promise(function (resolve, reject) {
+  const promise = new Promise(function(resolve, reject) {
     self
       .keys()
-      .then(function (keys) {
+      .then(function(keys) {
         resolve(keys.length);
       })
       .catch(reject);
@@ -176,10 +176,10 @@ function removeItem(key, callback) {
     key = String(key);
   }
 
-  const promise = new Promise(function (resolve, reject) {
+  const promise = new Promise(function(resolve, reject) {
     self
       .ready()
-      .then(function () {
+      .then(function() {
         const db = self._dbInfo.db;
         if (Object.prototype.hasOwnProperty.call(db, key)) {
           delete db[key];
@@ -204,10 +204,10 @@ function setItem(key, value, callback) {
     key = String(key);
   }
 
-  const promise = new Promise(function (resolve, reject) {
+  const promise = new Promise(function(resolve, reject) {
     self
       .ready()
-      .then(function () {
+      .then(function() {
         // Convert undefined values to null.
         // https://github.com/mozilla/localForage/pull/42
         if (value === undefined) {
@@ -230,10 +230,10 @@ function setItem(key, value, callback) {
 function executeCallback(promise, callback) {
   if (callback) {
     promise.then(
-      function (result) {
+      function(result) {
         callback(null, result);
       },
-      function (error) {
+      function(error) {
         callback(error);
       }
     );

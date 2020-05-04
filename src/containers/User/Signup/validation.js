@@ -15,7 +15,9 @@ export const signupValidationSchema = (
   withVerificationToken
 ) =>
   Yup.object().shape({
-    email: Yup.string().email("Invalid email").required("Required"),
+    email: Yup.string()
+      .email("Invalid email")
+      .required("Required"),
     username: Yup.string()
       .matches(...yupFieldMatcher("username", usernamesupportedchars))
       .min(minusernamelength, minLengthMessage("username", minusernamelength))

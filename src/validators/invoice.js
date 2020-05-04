@@ -39,7 +39,9 @@ const invoiceValidationSchema = ({
     lineitems: Yup.array()
       .of(
         Yup.object().shape({
-          type: Yup.string().required("required").oneOf(["1", "2", "3", "4"]),
+          type: Yup.string()
+            .required("required")
+            .oneOf(["1", "2", "3", "4"]),
           domain: Yup.string()
             .required("required")
             .min(minlineitemcollength)

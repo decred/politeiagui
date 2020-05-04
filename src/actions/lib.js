@@ -17,7 +17,7 @@ export const callAfterMinimumWait = (callback, waitTimeMs) => {
   let args = null;
   let timedOut = false;
 
-  const revisedCallback = function () {
+  const revisedCallback = function() {
     if (!timedOut) {
       args = arguments;
       return;

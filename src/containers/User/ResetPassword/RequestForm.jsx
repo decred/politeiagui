@@ -86,9 +86,8 @@ const RequestForm = () => {
       <DevelopmentOnlyContent
         show={requestResetResponse && requestResetResponse.verificationtoken}>
         <Link
-          to={`/user/password/reset?username=${username}&verificationtoken=${
-            requestResetResponse && requestResetResponse.verificationtoken
-          }`}>
+          to={`/user/password/reset?username=${username}&verificationtoken=${requestResetResponse &&
+            requestResetResponse.verificationtoken}`}>
           Reset password
         </Link>
       </DevelopmentOnlyContent>

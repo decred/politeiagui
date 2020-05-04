@@ -149,9 +149,8 @@ const SignupForm = () => {
       <DevelopmentOnlyContent
         show={signupResponse && signupResponse.verificationtoken}>
         <RouterLink
-          to={`/user/verify?email=${email}&verificationtoken=${
-            signupResponse && signupResponse.verificationtoken
-          }`}>
+          to={`/user/verify?email=${email}&verificationtoken=${signupResponse &&
+            signupResponse.verificationtoken}`}>
           Verify email
         </RouterLink>
       </DevelopmentOnlyContent>

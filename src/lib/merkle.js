@@ -4,7 +4,10 @@ import crypto from "crypto";
 // hash algorithm
 function sha256(data) {
   // returns Buffer
-  return crypto.createHash("sha256").update(data).digest();
+  return crypto
+    .createHash("sha256")
+    .update(data)
+    .digest();
 }
 
 /**
