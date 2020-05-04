@@ -61,9 +61,13 @@
     "build-staging": "REACT_APP_STAGING=true react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject",
-    "prettify": "prettier --write 'src/**/*.{js,css,json}'",
-    "lint": "./node_modules/.bin/eslint src --ext .js --ext .jsx",
-    "precommit": "lint-staged"
+    "prettify": "prettier --write 'src/**/*.{js,jsx,css,json}'",
+    "lint": "./node_modules/.bin/eslint src --ext .js --ext .jsx"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "*.{js, jsx}": [
