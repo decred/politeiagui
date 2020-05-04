@@ -16,18 +16,38 @@ import SourceSansProLight from "src/assets/fonts/source-sans-pro/SourceSansPro-L
 import SourceSansProRegular from "src/assets/fonts/source-sans-pro/SourceSansPro-Regular.ttf";
 import SourceSansProSemiBold from "src/assets/fonts/source-sans-pro/SourceSansPro-SemiBold.ttf";
 
-const fontConfig = {
-  fontFamilyText: "Source Sans Pro",
-  regularUrl: SourceSansProRegular,
-  semiBoldUrl: SourceSansProSemiBold,
-  lightUrl: SourceSansProLight,
-  format: "truetype"
+const themeCustomVariables = {
+  "font-family-text": "Source Sans Pro"
 };
 
 const themes = {
-  light: defaultLightTheme,
-  dark: defaultDarkTheme
+  light: { ...defaultLightTheme, ...themeCustomVariables },
+  dark: { ...defaultDarkTheme, ...themeCustomVariables }
 };
+
+const fonts = [
+  {
+    "font-family": "Source Sans Pro",
+    src: `url(${SourceSansProLight}) format("truetype")`,
+    "font-weight": defaultLightTheme["font-weight-light"],
+    "font-style": "normal",
+    "font-display": "swap"
+  },
+  {
+    "font-family": "Source Sans Pro",
+    src: `url(${SourceSansProRegular}) format("truetype")`,
+    "font-weight": defaultLightTheme["font-weight-regular"],
+    "font-style": "normal",
+    "font-display": "swap"
+  },
+  {
+    "font-family": "Source Sans Pro",
+    src: `url(${SourceSansProSemiBold}) format("truetype")`,
+    "font-weight": defaultLightTheme["font-weight-semi-bold"],
+    "font-style": "normal",
+    "font-display": "swap"
+  }
+];
 
 const App = () => {
   // This is a temporary fix to avoid an issue during the tests
@@ -36,10 +56,7 @@ const App = () => {
   }
 
   return (
-    <ThemeProvider
-      themes={themes}
-      defaultThemeName="light"
-      fontConfig={fontConfig}>
+    <ThemeProvider themes={themes} defaultThemeName="light" fonts={fonts}>
       <Config>
         <ReduxProvider>
           <Loader>
