@@ -8,8 +8,8 @@ import {
   PROPOSAL_STATUS_UNREVIEWED,
   INVOICE_STATUS_UNREVIEWED,
   DCC_STATUS_ACTIVE,
-  // PROPOSAL_TYPE_RFP,
-  // PROPOSAL_TYPE_RFP_SUBMISSION,
+  PROPOSAL_TYPE_RFP,
+  PROPOSAL_TYPE_RFP_SUBMISSION,
   VOTE_TYPE_STANDARD,
   VOTE_TYPE_RUNOFF
 } from "../constants";
@@ -22,6 +22,7 @@ import {
   objectToBuffer,
   bufferToBase64String
 } from "../helpers";
+import { convertObjectToUnixTimestamp } from "src/utils";
 
 export const TOP_LEVEL_COMMENT_PARENTID = "0";
 
@@ -69,11 +70,21 @@ export const makeProposal = (
       hint: "proposalmetadata",
       payload: bufferToBase64String(
         objectToBuffer({
-          name
+          name,
+          linkby:
+            type === PROPOSAL_TYPE_RFP
+              ? convertObjectToUnixTimestamp(rfpDeadline)
+              : undefined,
+          linkto: type === PROPOSAL_TYPE_RFP_SUBMISSION ? rfpLink : undefined
         })
       ),
       digest: objectToSHA256({
-        name
+        name,
+        linkby:
+          type === PROPOSAL_TYPE_RFP
+            ? convertObjectToUnixTimestamp(rfpDeadline)
+            : undefined,
+        linkto: type === PROPOSAL_TYPE_RFP_SUBMISSION ? rfpLink : undefined
       })
     }
   ]
