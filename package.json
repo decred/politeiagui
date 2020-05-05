@@ -89,7 +89,6 @@
   "devDependencies": {
     "connect": "^3.7.0",
     "connect-api-mocker": "^1.7.0",
-    "cross-env": "^5.2.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "enzyme-to-json": "^3.4.3",
