@@ -5,7 +5,7 @@ import UnvettedProposals from "src/containers/Proposal/Unvetted";
 const UnvettedList = () => {
   return (
     <MultipleContentPage disableScrollToTop>
-      {props => <UnvettedProposals {...props} />}
+      {(props) => <UnvettedProposals {...props} />}
     </MultipleContentPage>
   );
 };

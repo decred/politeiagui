@@ -20,7 +20,7 @@ const DownloadJSON = ({
   ) : (
     <Link
       {...props}
-      customComponent={props => (
+      customComponent={(props) => (
         <span style={{ cursor: "pointer" }} {...props} onClick={onDownload}>
           {label}
         </span>

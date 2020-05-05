@@ -5,7 +5,7 @@ import UserDetail from "src/containers/User/Detail";
 const PageUserDetail = () => {
   return (
     <MultipleContentPage>
-      {props => <UserDetail {...props} />}
+      {(props) => <UserDetail {...props} />}
     </MultipleContentPage>
   );
 };

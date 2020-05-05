@@ -11,21 +11,20 @@ import { presentationalStatus } from "../helpers";
 const ListDccs = ({ TopBanner, PageDetails, Main }) => {
   const { loading, dccs, handleTabChange, status } = useDccs();
 
-  const renderDccs = dccs => dccs && dccs.map((dcc) =>
-    <Dcc
-      key={`dcc-${dcc.censorshiprecord.token}`}
-      dcc={dcc}
-    />
-  );
+  const renderDccs = (dccs) =>
+    dccs &&
+    dccs.map((dcc) => (
+      <Dcc key={`dcc-${dcc.censorshiprecord.token}`} dcc={dcc} />
+    ));
 
   return (
     <>
       <TopBanner>
         <PageDetails title="DCCs">
           <Tabs onSelectTab={handleTabChange} activeTabIndex={status - 1}>
-            <Tab label="Active"/>
-            <Tab label="Approved"/>
-            <Tab label="Rejected"/>
+            <Tab label="Active" />
+            <Tab label="Approved" />
+            <Tab label="Rejected" />
           </Tabs>
         </PageDetails>
       </TopBanner>
@@ -36,9 +35,7 @@ const ListDccs = ({ TopBanner, PageDetails, Main }) => {
           </div>
         )}
         {!loading && dccs && (
-          <AdminDccActionsProvider>
-            {renderDccs(dccs)}
-          </AdminDccActionsProvider>
+          <AdminDccActionsProvider>{renderDccs(dccs)}</AdminDccActionsProvider>
         )}
         {!loading && isEmpty(dccs) && (
           <HelpMessage>

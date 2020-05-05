@@ -12,10 +12,7 @@ const PageInvoiceEdit = ({ history, match }) => {
       type="button"
       kind="secondary"
       size={mobile ? "sm" : "md"}
-      onClick={() =>
-        history.push(`/invoices/${match.params.token}`)
-      }
-    >
+      onClick={() => history.push(`/invoices/${match.params.token}`)}>
       Cancel
     </Button>
   );
@@ -25,7 +22,10 @@ const PageInvoiceEdit = ({ history, match }) => {
       {({ TopBanner, PageDetails, Main }) => (
         <>
           <TopBanner>
-            <PageDetails title="Edit Invoice" actionsContent={<CancelButton />} />
+            <PageDetails
+              title="Edit Invoice"
+              actionsContent={<CancelButton />}
+            />
           </TopBanner>
           <Main fillScreen>
             <EditInvoice />

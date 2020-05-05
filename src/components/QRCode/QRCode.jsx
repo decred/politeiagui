@@ -4,11 +4,7 @@ import React from "react";
 
 const QRCode = ({ addr }) => {
   const qr_img = qr.imageSync("decred:" + addr, { type: "svg" });
-  return (
-    <div
-      dangerouslySetInnerHTML={{ __html: qr_img }}
-    />
-  );
+  return <div dangerouslySetInnerHTML={{ __html: qr_img }} />;
 };
 
 QRCode.propTypes = {

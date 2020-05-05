@@ -5,11 +5,10 @@ import styles from "./Files.module.css";
 const RemoveButton = ({ file, onRemove }) => (
   <button
     className={styles.removeFileIcon}
-    onClick={e => {
+    onClick={(e) => {
       e.preventDefault();
       onRemove(file);
-    }}
-  >
+    }}>
     &times;
   </button>
 );

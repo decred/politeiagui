@@ -102,10 +102,10 @@ export const getCommandsList = (withFileInput = false) => {
  * @param {string} commandName
  * @returns {Object} React node
  */
-export const getCommandIcon = filesInput => commandName => {
+export const getCommandIcon = (filesInput) => (commandName) => {
   if (commandName === "attach") {
     return <>{filesInput}</>;
   }
-  const command = commands.find(c => c.command === commandName);
+  const command = commands.find((c) => c.command === commandName);
   return <img alt={commandName} src={command.iconSrc} />;
 };

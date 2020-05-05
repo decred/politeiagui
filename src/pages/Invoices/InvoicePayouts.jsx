@@ -5,15 +5,12 @@ import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 
 const PageInvoicePayouts = () => {
   return (
-    <MultipleContentPage
-      disableScrollToTop
-      topBannerHeight={140}
-    >
-      {props =>
+    <MultipleContentPage disableScrollToTop topBannerHeight={140}>
+      {(props) => (
         <AdminInvoiceActionsProvider>
           <PayoutSummaries {...props} />
         </AdminInvoiceActionsProvider>
-      }
+      )}
     </MultipleContentPage>
   );
 };

@@ -22,6 +22,11 @@
   align-items: flex-start;
 }
 
+.noInfo {
+  color: var(--var-text-color-light);
+  opacity: 50%;
+}
+
 /* SMALL */
 @media screen and (max-width: 768px) {
   .label,

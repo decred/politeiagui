@@ -452,6 +452,19 @@ export const onEditUser = (preferences) =>
       });
   });
 
+export const onEditCmsUser = (cmsUserInfo) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_EDIT_CMS_USER(cmsUserInfo));
+    return api
+      .editUser(csrf, cmsUserInfo)
+      .then((response) => {
+        dispatch(act.RECEIVE_EDIT_CMS_USER({ ...response, ...cmsUserInfo }));
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_EDIT_CMS_USER(null, error));
+      });
+  });
+
 export const onManageCmsUser = (userID, domain, type, supervisorIDs) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_MANAGE_CMS_USER());

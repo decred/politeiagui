@@ -11,7 +11,12 @@ const PaymentComponent = ({ address, amount, extraSmall, status }) => {
   const isDarkTheme = themeName === "dark";
   return (
     <>
-      <div className={classNames(styles.paywallInfo, isDarkTheme && styles.dark, "margin-top-l")}>
+      <div
+        className={classNames(
+          styles.paywallInfo,
+          isDarkTheme && styles.dark,
+          "margin-top-l"
+        )}>
         <div className={styles.qrcodeWrapper}>
           <QRCode addr={address} />
         </div>
@@ -26,8 +31,7 @@ const PaymentComponent = ({ address, amount, extraSmall, status }) => {
           <CopyableText
             id="payment-address"
             truncate
-            tooltipPlacement={extraSmall ? "bottom" : "right"}
-          >
+            tooltipPlacement={extraSmall ? "bottom" : "right"}>
             {address}
           </CopyableText>
           {!extraSmall && <PaymentStatusTag status={status} />}

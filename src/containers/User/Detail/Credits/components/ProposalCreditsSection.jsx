@@ -8,23 +8,29 @@ export default ({ proposalCredits, proposalCreditPrice }) => {
   return (
     <div className={classNames(styles.block, "margin-top-l")}>
       <div className={styles.blockDetails}>
-        <Text className={classNames(styles.title, isDarkTheme && styles.darkTitle)}>Proposal Credits</Text>
+        <Text
+          className={classNames(styles.title, isDarkTheme && styles.darkTitle)}>
+          Proposal Credits
+        </Text>
         <Text
           size="large"
           className={classNames(
             styles.status,
             "margin-top-xs margin-bottom-xs"
-          )}
-        >
+          )}>
           {proposalCredits}
         </Text>
       </div>
       <div className={styles.description}>
-        <P className={classNames(styles.descriptionParagraph, isDarkTheme && styles.darkDescriptionParagraph)}>
+        <P
+          className={classNames(
+            styles.descriptionParagraph,
+            isDarkTheme && styles.darkDescriptionParagraph
+          )}>
           <b>Proposal credits:</b> each proposal submission requires{" "}
           <b>1 proposal</b> credit which costs{" "}
           <b>exactly {proposalCreditPrice || 0.1} DCR</b>.
-      </P>
+        </P>
       </div>
     </div>
   );

@@ -3,8 +3,8 @@ import CommentsList from "./CommentsList";
 
 const getChildren = (comments, commentId, lastTimeAccessed, currentUserID) => {
   return (
-    comments.filter(comment => +comment.parentid === +commentId) || []
-  ).map(comment =>
+    comments.filter((comment) => +comment.parentid === +commentId) || []
+  ).map((comment) =>
     createComputedComment(comment, comments, lastTimeAccessed, currentUserID)
   );
 };
@@ -30,7 +30,7 @@ const createComputedComment = (
     comment.timestamp > lastTimeAccessed;
 
   // count how many of the childrens are new comments
-  const numOfNewChildren = children.filter(c => c.isNew).length;
+  const numOfNewChildren = children.filter((c) => c.isNew).length;
 
   // sum of all new descendants, including childrens
   const sumOfNewDescendants = children.reduce(
@@ -59,14 +59,18 @@ const CommentsListWrapper = ({
     function generateNestedComments() {
       // flat mode: keep comments array flat
       if (isFlatMode) {
-        setNestedComments(comments.map(c => createComputedComment(c, comments, lastTimeAccessed, currentUserID)));
+        setNestedComments(
+          comments.map((c) =>
+            createComputedComment(c, comments, lastTimeAccessed, currentUserID)
+          )
+        );
         return;
       }
       // single thread mode: find the childrens of the thread parent comment
       const isSingleThred = threadParentID && !!comments.length;
       if (isSingleThred) {
         const singleThreadParent = comments.find(
-          c => +c.commentid === +threadParentID
+          (c) => +c.commentid === +threadParentID
         );
         setNestedComments([
           createComputedComment(

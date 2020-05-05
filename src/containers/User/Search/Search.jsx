@@ -1,5 +1,13 @@
 import { Formik } from "formik";
-import { BoxTextInput, Button, Card, classNames, Message, RadioButtonGroup, Table } from "pi-ui";
+import {
+  BoxTextInput,
+  Button,
+  Card,
+  classNames,
+  Message,
+  RadioButtonGroup,
+  Table
+} from "pi-ui";
 import React, { useEffect, useState } from "react";
 import HelpMessage from "src/components/HelpMessage";
 import * as Yup from "yup";
@@ -8,7 +16,7 @@ import styles from "./Search.module.css";
 import Link from "src/components/Link";
 
 const getFormattedSearchResults = (users = []) =>
-  users.map(u => ({
+  users.map((u) => ({
     Username: u.username,
     Email: u.email,
     ID: <Link to={`/user/${u.id}`}>{u.id}</Link>
@@ -43,8 +51,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
       <TopBanner>
         <PageDetails
           actionsContent={null}
-          title={<Title className="margin-right-m">Search</Title>}
-        >
+          title={<Title className="margin-right-m">Search</Title>}>
           <Formik
             initialValues={{
               searchTerm: "",
@@ -53,8 +60,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
             onSubmit={onSubmit}
             validationSchema={Yup.object().shape({
               searchTerm: Yup.string().required("Required")
-            })}
-          >
+            })}>
             {({
               values,
               handleChange,
@@ -92,8 +98,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                       onClick={handleSubmit}
                       type="submit"
                       loading={isSubmitting}
-                      kind={isValid ? "primary" : "disabled"}
-                    >
+                      kind={isValid ? "primary" : "disabled"}>
                       Search
                     </Button>
                   </div>
@@ -111,8 +116,8 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
             <Table data={foundUsers} headers={["Username", "Email", "ID"]} />
           </Card>
         ) : (
-              <HelpMessage>No users to show</HelpMessage>
-            )}
+          <HelpMessage>No users to show</HelpMessage>
+        )}
       </Main>
     </>
   );

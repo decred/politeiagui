@@ -1,8 +1,4 @@
-import {
-  StatusTag,
-  Text,
-  classNames
-} from "pi-ui";
+import { StatusTag, Text, classNames } from "pi-ui";
 import React from "react";
 import RecordWrapper from "src/components/RecordWrapper";
 import Field from "./Field";
@@ -65,19 +61,25 @@ const Dcc = ({ dcc, extended }) => {
               }
               subtitle={
                 <Subtitle>
-                  <Author username={sponsorusername} url={`/user/${sponsoruserid}`} />
-                  { !extended && !isRevocationDcc(dcc) &&
+                  <Author
+                    username={sponsorusername}
+                    url={`/user/${sponsoruserid}`}
+                  />
+                  {!extended && !isRevocationDcc(dcc) && (
                     <Text>
                       {presentationalDccContractorType(dccContractorType)}
                     </Text>
-                  }
-                  { !extended &&
-                    <Text>
-                      {presentationalDccDomain(dccDomain)}
-                    </Text>
-                  }
+                  )}
+                  {!extended && (
+                    <Text>{presentationalDccDomain(dccDomain)}</Text>
+                  )}
                   <Event event="submitted" timestamp={timesubmitted} />
-                  {timereviewed && <Event event={isDccApproved(dcc) ? "approved" : "rejected"} timestamp={timereviewed} />}
+                  {timereviewed && (
+                    <Event
+                      event={isDccApproved(dcc) ? "approved" : "rejected"}
+                      timestamp={timereviewed}
+                    />
+                  )}
                   {!isActive && !extended && <Text>{statuschangereason}</Text>}
                 </Subtitle>
               }
@@ -95,35 +97,39 @@ const Dcc = ({ dcc, extended }) => {
                 <Row topMarginSize="s">
                   <RecordToken token={dccToken} />
                 </Row>
-                <Row justify="space-between" bottomMarginSize="m" className={styles.topDetails}>
-                  <Field
-                    label="Type"
-                    value={presentationalDccType(dcc)}
-                  />
+                <Row
+                  justify="space-between"
+                  bottomMarginSize="m"
+                  className={styles.topDetails}>
+                  <Field label="Type" value={presentationalDccType(dcc)} />
                   <Field label="Nominee" value={nomineeusername} />
                   <Field
                     label="Domain"
                     value={presentationalDccDomain(dccDomain)}
                   />
-                  { !isRevocationDcc(dcc) && <Field
-                    label="Contractor Type"
-                    value={presentationalDccContractorType(dccContractorType)}
-                  /> }
+                  {!isRevocationDcc(dcc) && (
+                    <Field
+                      label="Contractor Type"
+                      value={presentationalDccContractorType(dccContractorType)}
+                    />
+                  )}
                 </Row>
                 <Row justify="space-between" className={styles.topDetails}>
                   <div className={styles.field}>
                     <Text size="small">Statement</Text>
-                    <Text className={styles.statement}>{presentationalStatement(dccStatement)}</Text>
+                    <Text className={styles.statement}>
+                      {presentationalStatement(dccStatement)}
+                    </Text>
                   </div>
                 </Row>
-                {!isActive &&
+                {!isActive && (
                   <Row justify="space-between" className={styles.topDetails}>
                     <div className={styles.field}>
                       <Text size="small">Status change reason</Text>
                       <Text>{statuschangereason}</Text>
                     </div>
                   </Row>
-                }
+                )}
                 <SupportOppose
                   className={styles.supportOpposeBar}
                   buttonsClassName={styles.supportOpposeButtons}
@@ -132,7 +138,13 @@ const Dcc = ({ dcc, extended }) => {
                 />
               </>
             )}
-            <DccActions dcc={dcc} className={classNames(!extended && "justify-right margin-bottom-xs", styles.dccActions)}/>
+            <DccActions
+              dcc={dcc}
+              className={classNames(
+                !extended && "justify-right margin-bottom-xs",
+                styles.dccActions
+              )}
+            />
           </>
         );
       }}

@@ -10,20 +10,16 @@ import UserIdSection from "./components/UserIdSection";
 
 const OtherIdentity = ({ loadingKey, user }) => {
   const { userid: userID, identities } = user;
-  const {
-    currentUserEmail,
-    userPubkey,
-    keyMismatchAction
-  } = useUserIdentity();
+  const { currentUserEmail, userPubkey, keyMismatchAction } = useUserIdentity();
 
   useEffect(() => {
     verifyUserPubkey(currentUserEmail, userPubkey, keyMismatchAction);
   }, [currentUserEmail, userPubkey, keyMismatchAction]);
 
-  const activeIdentity = identities && identities.filter(i => i.isactive)[0];
+  const activeIdentity = identities && identities.filter((i) => i.isactive)[0];
   const pubkey = activeIdentity && activeIdentity.pubkey;
 
-  const pastIdentities = identities && identities.filter(i => !i.isactive);
+  const pastIdentities = identities && identities.filter((i) => !i.isactive);
 
   return loadingKey === PUB_KEY_STATUS_LOADING ? (
     <div className={styles.spinnerWrapper}>
@@ -31,7 +27,10 @@ const OtherIdentity = ({ loadingKey, user }) => {
     </div>
   ) : (
     <Card className="margin-bottom-m" paddingSize="small">
-      <Text color="grayDark" weight="semibold" className={classNames(styles.fieldHeading, styles.block)}>
+      <Text
+        color="grayDark"
+        weight="semibold"
+        className={classNames(styles.fieldHeading, styles.block)}>
         Public key
       </Text>
       <PublicKeyText pubkey={pubkey} />

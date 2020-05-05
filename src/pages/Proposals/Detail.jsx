@@ -5,7 +5,7 @@ import ProposalDetail from "src/containers/Proposal/Detail";
 const ProposalDetailPage = () => {
   return (
     <MultipleContentPage topBannerHeight={0}>
-      {props => {
+      {(props) => {
         return <ProposalDetail {...props} />;
       }}
     </MultipleContentPage>

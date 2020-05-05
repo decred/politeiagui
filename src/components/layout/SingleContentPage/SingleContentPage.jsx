@@ -6,7 +6,9 @@ import ErrorBoundary from "src/components/ErrorBoundary";
 import Header from "src/containers/Header";
 import useScrollToTop from "src/hooks/utils/useScrollToTop";
 
-const renderError = error => <Message kind="error">{error.toString()}</Message>;
+const renderError = (error) => (
+  <Message kind="error">{error.toString()}</Message>
+);
 
 const SingleContentPage = ({
   children,
@@ -20,8 +22,7 @@ const SingleContentPage = ({
       <Header noBorder={true} />
       <Main
         fill
-        className={classNames(styles.singleContentMain, styles[contentWidth])}
-      >
+        className={classNames(styles.singleContentMain, styles[contentWidth])}>
         <ErrorBoundary errorRenderer={renderError}>
           {noCardWrap ? (
             children
