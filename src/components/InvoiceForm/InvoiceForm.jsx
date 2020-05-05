@@ -13,19 +13,17 @@ import {
   getInvoiceMinMaxYearAndMonth
 } from "src/containers/Invoice";
 import usePolicy from "src/hooks/api/usePolicy";
-import useUserDetail from "src/hooks/api/useUserDetail";
 import {
   invoiceValidationSchema,
   improveLineItemErrors,
   generateFilesValidatorByPolicy
 } from "./validation";
+import useContractor from "src/containers/User/Detail/hooks/useContractor";
 import DraftSaver from "./DraftSaver";
 import ThumbnailGrid from "src/components/Files";
 import ExchangeRateField from "./ExchangeRateField";
 import useSessionStorage from "src/hooks/utils/useSessionStorage";
 import useScrollFormOnError from "src/hooks/utils/useScrollFormOnError";
-import { useAction } from "src/redux";
-import { onEditUser } from "src/actions";
 import styles from "./InvoiceForm.module.css";
 
 const InvoiceForm = React.memo(function InvoiceForm({
@@ -38,14 +36,16 @@ const InvoiceForm = React.memo(function InvoiceForm({
   setFieldError,
   errors,
   touched,
-  isValid,
+  isValid: isFormValid,
   submitSuccess,
   setSessionStorageInvoice,
   approvedProposalsTokens,
-  validateFiles
+  validateFiles,
+  requireGitHubName
 }) {
   const files = values.files;
   useScrollFormOnError(errors && errors.global);
+  const isValid = isFormValid && !requireGitHubName;
   const SubmitButton = () => (
     <Button
       type="submit"
@@ -104,6 +104,12 @@ const InvoiceForm = React.memo(function InvoiceForm({
     <form onSubmit={handleSubmit}>
       {errors && errors.global && (
         <Message kind="error">{errors.global.toString()}</Message>
+      )}
+      {requireGitHubName && (
+        <Message kind="warning" className="margin-bottom-m">
+          Update your GitHub Username information on Account > Manage Contractor
+          to submit an Invoice
+        </Message>
       )}
       <div className="justify-space-between">
         <MonthPickerField
@@ -188,8 +194,13 @@ const InvoiceFormWrapper = ({
 }) => {
   const { policy } = usePolicy();
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const { user, loading } = useUserDetail();
-  const onUpdateUser = useAction(onEditUser);
+  const {
+    user,
+    loading,
+    requireGitHubName,
+    onUpdateContractorInfo
+  } = useContractor();
+
   const invoiceFormValidation = useMemo(() => invoiceValidationSchema(policy), [
     policy
   ]);
@@ -230,18 +241,19 @@ const InvoiceFormWrapper = ({
           month,
           year
         });
+
         // Token from new invoice or from edit invoice
         const invoiceToken = token || values.token;
         setSubmitting(false);
         setSubmitSuccess(true);
         const userDetails = {
-          githubname: "",
-          matrixname: "",
+          githubname: user.githubname,
+          matrixname: user.matrixname,
           contractorname: others.name,
           contractorlocation: others.location,
           contractorcontact: others.contact
         };
-        onUpdateUser(userDetails);
+        onUpdateContractorInfo(userDetails);
         history.push(`/invoices/${invoiceToken}`);
         setSessionStorageInvoice(null);
         resetForm();
@@ -250,7 +262,7 @@ const InvoiceFormWrapper = ({
         setFieldError("global", e);
       }
     },
-    [history, onSubmit, setSessionStorageInvoice, onUpdateUser]
+    [history, onSubmit, setSessionStorageInvoice, onUpdateContractorInfo, user]
   );
   return loading ? (
     <div className={styles.spinnerWrapper}>
@@ -269,7 +281,8 @@ const InvoiceFormWrapper = ({
             submitSuccess,
             setSessionStorageInvoice,
             approvedProposalsTokens,
-            validateFiles
+            validateFiles,
+            requireGitHubName
           }}
         />
       )}

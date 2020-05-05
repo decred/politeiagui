@@ -78,6 +78,11 @@ const users = (state = DEFAULT_STATE, action) =>
               ),
               set(["byID", state.currentUserID, "edited"], action.payload)
             )(state),
+          [act.RECEIVE_EDIT_CMS_USER]: () =>
+            update(["byID", state.currentUserID], (currentUser) => ({
+              ...currentUser,
+              ...action.payload
+            }))(state),
           [act.RECEIVE_CHANGE_USERNAME]: () =>
             set(
               ["byID", state.currentUserID, "username"],

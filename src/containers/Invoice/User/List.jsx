@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useUserInvoices } from "./hooks";
-import { Spinner } from "pi-ui";
+import { Spinner, Message } from "pi-ui";
 import Invoice from "src/components/Invoice";
 import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import {
@@ -8,10 +8,12 @@ import {
   FilterInvoices
 } from "src/components/InvoiceFilters";
 import HelpMessage from "src/components/HelpMessage";
+import useContractor from "src/containers/User/Detail/hooks/useContractor";
 import styles from "./List.module.css";
 
 const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
   const { loading, invoices } = useUserInvoices();
+  const { requireGitHubName } = useContractor();
   const [filters, setFilters] = useState({});
 
   const renderInvoice = useCallback(
@@ -59,6 +61,12 @@ const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
         </PageDetails>
       </TopBanner>
       <Main fillScreen>
+        {requireGitHubName && (
+          <Message kind="warning" className="margin-bottom-m">
+            Update your GitHub Username information on Account > Manage
+            Contractor
+          </Message>
+        )}
         {loading && (
           <div className={styles.spinnerWrapper}>
             <Spinner invert />
