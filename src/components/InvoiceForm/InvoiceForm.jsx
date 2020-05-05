@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback, useEffect } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { BoxTextInput, Button, Message, Spinner } from "pi-ui";
 import { Formik } from "formik";
@@ -23,6 +23,7 @@ import DraftSaver from "./DraftSaver";
 import ThumbnailGrid from "src/components/Files";
 import ExchangeRateField from "./ExchangeRateField";
 import useSessionStorage from "src/hooks/utils/useSessionStorage";
+import useScrollFormOnError from "src/hooks/utils/useScrollFormOnError";
 import { useAction } from "src/redux";
 import { onEditUser } from "src/actions";
 import styles from "./InvoiceForm.module.css";
@@ -44,15 +45,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
   validateFiles
 }) {
   const files = values.files;
-  useEffect(
-    function scrollToTopOnGlobalError() {
-      if (errors.global) {
-        window.scrollTo(0, 0);
-      }
-    },
-    [errors]
-  );
-
+  useScrollFormOnError(errors && errors.global);
   const SubmitButton = () => (
     <Button
       type="submit"
@@ -92,9 +85,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
 
   const handleFileRemoval = useCallback(
     (v) => {
-      const fs = files.filter(
-        (f) => f.payload !== v.payload && f.name !== v.name
-      );
+      const fs = files.filter((f) => f.payload !== v.payload);
       setFieldValue("files", fs);
     },
     [setFieldValue, files]
