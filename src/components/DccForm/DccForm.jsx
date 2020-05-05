@@ -6,6 +6,7 @@ import SelectField from "src/components/Select/SelectField";
 import { withRouter } from "react-router-dom";
 import { dccValidationSchema } from "./validation";
 import useSessionStorage from "src/hooks/utils/useSessionStorage";
+import useScrollFormOnError from "src/hooks/utils/useScrollFormOnError";
 import DraftSaver from "./DraftSaver";
 import styles from "./DccForm.module.css";
 import {
@@ -42,13 +43,7 @@ const DccForm = React.memo(function DccForm({
   isUserValid
 }) {
   const [isIssuance, setIsIssuance] = useState();
-
-  // scroll to top in case of global error
-  useEffect(() => {
-    if (errors.global) {
-      window.scrollTo(0, 0);
-    }
-  }, [errors]);
+  useScrollFormOnError(errors && errors.global);
 
   useEffect(() => {
     if (values.type === DCC_TYPE_ISSUANCE) {
