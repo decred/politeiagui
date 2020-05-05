@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback, useEffect } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { BoxTextInput, Button, Message, Spinner } from "pi-ui";
 import { Formik } from "formik";
@@ -14,11 +14,16 @@ import {
 } from "src/containers/Invoice";
 import usePolicy from "src/hooks/api/usePolicy";
 import useUserDetail from "src/hooks/api/useUserDetail";
-import { invoiceValidationSchema, improveLineItemErrors } from "./validation";
+import {
+  invoiceValidationSchema,
+  improveLineItemErrors,
+  generateFilesValidatorByPolicy
+} from "./validation";
 import DraftSaver from "./DraftSaver";
 import ThumbnailGrid from "src/components/Files";
 import ExchangeRateField from "./ExchangeRateField";
 import useSessionStorage from "src/hooks/utils/useSessionStorage";
+import useScrollFormOnError from "src/hooks/utils/useScrollFormOnError";
 import { useAction } from "src/redux";
 import { onEditUser } from "src/actions";
 import styles from "./InvoiceForm.module.css";
@@ -30,20 +35,17 @@ const InvoiceForm = React.memo(function InvoiceForm({
   isSubmitting,
   setFieldValue,
   setFieldTouched,
+  setFieldError,
   errors,
   touched,
   isValid,
   submitSuccess,
   setSessionStorageInvoice,
-  approvedProposalsTokens
+  approvedProposalsTokens,
+  validateFiles
 }) {
-  // scroll to top in case of global error
-  useEffect(() => {
-    if (errors.global) {
-      window.scrollTo(0, 0);
-    }
-  }, [errors]);
-
+  const files = values.files;
+  useScrollFormOnError(errors && errors.global);
   const SubmitButton = () => (
     <Button
       type="submit"
@@ -66,10 +68,14 @@ const InvoiceForm = React.memo(function InvoiceForm({
 
   const handleFilesChange = useCallback(
     (v) => {
-      const files = values.files.concat(v);
-      setFieldValue("files", files);
+      const fs = files.concat(v);
+      const errors = validateFiles(fs);
+      if (errors && errors.files) {
+        setFieldError("global", errors.files.join(" "));
+      }
+      setFieldValue("files", fs, false);
     },
-    [setFieldValue, values.files]
+    [setFieldValue, files, validateFiles, setFieldError]
   );
 
   const lineItemErrors = useMemo(
@@ -79,10 +85,10 @@ const InvoiceForm = React.memo(function InvoiceForm({
 
   const handleFileRemoval = useCallback(
     (v) => {
-      const fs = values.files.filter((f) => f.payload !== v.payload);
+      const fs = files.filter((f) => f.payload !== v.payload);
       setFieldValue("files", fs);
     },
-    [setFieldValue, values.files]
+    [setFieldValue, files]
   );
 
   const handleChangeWithTouched = (field) => (e) => {
@@ -154,7 +160,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
         onChange={handleFilesChange}
       />
       <ThumbnailGrid
-        value={values.files}
+        value={files}
         onClick={() => null}
         onRemove={handleFileRemoval}
         errorsPerFile={errors.files}
@@ -187,6 +193,9 @@ const InvoiceFormWrapper = ({
   const invoiceFormValidation = useMemo(() => invoiceValidationSchema(policy), [
     policy
   ]);
+  const validateFiles = useMemo(() => generateFilesValidatorByPolicy(policy), [
+    policy
+  ]);
   const FORM_INITIAL_VALUES = {
     name: user ? user.contractorname : "",
     location: user ? user.contractorlocation : "",
@@ -197,13 +206,15 @@ const InvoiceFormWrapper = ({
     lineitems: [generateBlankLineItem(policy)],
     files: []
   };
-  let formInitialValues = initialValues || FORM_INITIAL_VALUES;
+  let formInitialValues = initialValues
+    ? { ...FORM_INITIAL_VALUES, ...initialValues }
+    : FORM_INITIAL_VALUES;
   const [sessionStorageInvoice, setSessionStorageInvoice] = useSessionStorage(
     "invoice",
     null
   );
   if (sessionStorageInvoice !== null) {
-    formInitialValues = sessionStorageInvoice;
+    formInitialValues = { ...FORM_INITIAL_VALUES, ...sessionStorageInvoice };
   }
   const isInitialValid = invoiceFormValidation.isValidSync(formInitialValues);
 
@@ -241,7 +252,6 @@ const InvoiceFormWrapper = ({
     },
     [history, onSubmit, setSessionStorageInvoice, onUpdateUser]
   );
-
   return loading ? (
     <div className={styles.spinnerWrapper}>
       <Spinner invert />
@@ -258,7 +268,8 @@ const InvoiceFormWrapper = ({
             ...props,
             submitSuccess,
             setSessionStorageInvoice,
-            approvedProposalsTokens
+            approvedProposalsTokens,
+            validateFiles
           }}
         />
       )}

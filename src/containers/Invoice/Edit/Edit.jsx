@@ -30,7 +30,9 @@ const EditInvoice = ({ match }) => {
           month: invoice.input.month,
           year: invoice.input.year
         },
-        files: invoice.input.files,
+        files: invoice.file
+          ? invoice.file.filter((p) => p.name !== "invoice.json")
+          : [],
         lineitems: invoice.input.lineitems
       }
     : null;
