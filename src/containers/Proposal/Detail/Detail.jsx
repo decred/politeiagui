@@ -43,7 +43,6 @@ const ProposalDetail = ({ Main, match }) => {
   const canReceiveComments =
     isPublicProposal(proposal) && !isVotingFinishedProposal(voteSummary);
 
-  console.log(proposal);
   return (
     <>
       <Main className={styles.customMain} fillScreen>
