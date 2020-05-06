@@ -35,6 +35,7 @@ import { isActiveApprovedRfp } from "src/containers/Proposal/helpers";
 import useModalContext from "src/hooks/utils/useModalContext";
 import FormatHelpButton from "./FormatHelpButton";
 import SubmitButton from "./SubmitButton";
+import ProposalGuidelinesButton from "./ProposalGuidelinesButton";
 
 const ProposalForm = React.memo(function ProposalForm({
   values,
