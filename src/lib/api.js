@@ -629,25 +629,35 @@ export const startRunoffVote = (
   );
   return pki
     .myPubKeyHex(email)
-    .then((publickey) => {
-      return Promise.all(
+    .then(async (publickey) => {
+      const voteSignatures = await Promise.all(
         submissionsVotes.map((vote) =>
           pki.signStringHex(email, objectToSHA256(vote))
         )
-      ).then((signatures) =>
-        POST(
-          "/vote/startrunoff",
-          csrf,
-          {
-            startvotes: signatures.map((signature, index) => ({
-              vote: submissionsVotes[index],
-              signature,
-              publickey
-            })),
-            token
-          },
-          "v2"
+      );
+      const voteAuthSignatures = await Promise.all(
+        votes.map(({ token, proposalVersion: version }) =>
+          pki.signStringHex(email, `${token}${version}authorize`)
         )
+      );
+      return POST(
+        "/vote/startrunoff",
+        csrf,
+        {
+          startvotes: voteSignatures.map((signature, index) => ({
+            vote: submissionsVotes[index],
+            signature,
+            publickey
+          })),
+          authorizevotes: voteAuthSignatures.map((signature, index) => ({
+            action: "authorize",
+            token: votes[index].token,
+            signature,
+            publickey
+          })),
+          token
+        },
+        "v2"
       );
     })
     .then(getResponse);
@@ -670,14 +680,16 @@ export const proposalAuthorizeOrRevokeVote = (
   pki
     .myPubKeyHex(email)
     .then((publickey) =>
-      pki.signStringHex(email, token + version + action).then((signature) =>
-        POST("/proposals/authorizevote", csrf, {
-          action,
-          token,
-          signature,
-          publickey
-        })
-      )
+      pki
+        .signStringHex(email, `${token}${version}${action}`)
+        .then((signature) =>
+          POST("/proposals/authorizevote", csrf, {
+            action,
+            token,
+            signature,
+            publickey
+          })
+        )
     )
     .then(getResponse);
 
