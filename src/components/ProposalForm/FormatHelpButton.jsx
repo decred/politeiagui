@@ -1,3 +1,4 @@
+import React from "react";
 import { Text, classNames } from "pi-ui";
 import styles from "./ProposalForm.module.css";
 
