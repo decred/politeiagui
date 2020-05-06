@@ -20,8 +20,8 @@ const typesLabels = {
 export const getRfpMinMaxDates = (minlinkbyperiod, maxlinkbyperiod) => {
   const currentTimeSec = new Date().getTime() / 1000;
   return {
-    min: formatUnixTimestampToObj(currentTimeSec + +minlinkbyperiod),
-    max: formatUnixTimestampToObj(currentTimeSec + +maxlinkbyperiod)
+    min: formatUnixTimestampToObj(currentTimeSec + Number(minlinkbyperiod)),
+    max: formatUnixTimestampToObj(currentTimeSec + Number(maxlinkbyperiod))
   };
 };
 

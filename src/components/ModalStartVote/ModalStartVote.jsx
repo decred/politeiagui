@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import FormWrapper from "src/components/FormWrapper";
 import {
   Button,
@@ -82,15 +82,11 @@ const ModalStartVote = ({
     [show]
   );
 
-  const initialValues = useMemo(
-    () => ({
-      duration: preDefinedDurations[0],
-      quorumPercentage: 20,
-      passPercentage: 60
-    }),
-    []
-  );
-
+  const initialValues = {
+    duration: preDefinedDurations[0],
+    quorumPercentage: 20,
+    passPercentage: 60
+  };
   const isInitialValid = validationSchema.isValidSync(initialValues);
 
   return (

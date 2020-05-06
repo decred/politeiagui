@@ -3,13 +3,10 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Formik } from "formik";
 import {
-  Button,
   Message,
-  Text,
   BoxTextInput,
   useMediaQuery,
   useTheme,
-  Link,
   Icon,
   classNames,
   Tooltip
@@ -36,6 +33,8 @@ import {
 } from "./helpers.js";
 import { isActiveApprovedRfp } from "src/containers/Proposal/helpers";
 import useModalContext from "src/hooks/utils/useModalContext";
+import FormatHelpButton from "./FormatHelpButton";
+import SubmitButton from "./SubmitButton";
 
 const ProposalForm = React.memo(function ProposalForm({
   values,
@@ -110,49 +109,6 @@ const ProposalForm = React.memo(function ProposalForm({
 
   const textAreaProps = useMemo(() => ({ tabIndex: 2 }), []);
 
-  const FormatHelpButton = useCallback(
-    () => (
-      <Text
-        weight="semibold"
-        className={classNames(
-          styles.formatHelpButton,
-          isDarkTheme && styles.darkButton
-        )}
-        onClick={openMDGuideModal}>
-        Formatting Help
-      </Text>
-    ),
-    [isDarkTheme, openMDGuideModal]
-  );
-
-  const ProposalGuidelinesButton = useCallback(
-    () => (
-      <Link
-        weight="semibold"
-        target="_blank"
-        rel="noopener noreferrer"
-        className={classNames(
-          styles.proposalGuidelinesButton,
-          isDarkTheme && styles.darkButton
-        )}
-        href="https://docs.decred.org/governance/politeia/proposal-guidelines/">
-        Proposal Guidelines
-      </Link>
-    ),
-    [isDarkTheme]
-  );
-
-  const SubmitButton = useCallback(
-    () => (
-      <Button
-        type="submit"
-        kind={!isValid || disableSubmit ? "disabled" : "primary"}
-        loading={isSubmitting}>
-        Submit
-      </Button>
-    ),
-    [isSubmitting, disableSubmit, isValid]
-  );
   return (
     <form onSubmit={handleSubmit}>
       {errors && errors.global && (
@@ -237,20 +193,34 @@ const ProposalForm = React.memo(function ProposalForm({
       />
       {!smallTablet ? (
         <Row topMarginSize="s" justify="right">
-          <FormatHelpButton />
-          <ProposalGuidelinesButton />
+          <FormatHelpButton
+            isDarkTheme={isDarkTheme}
+            openMDGuideModal={openMDGuideModal}
+          />
+          <ProposalGuidelinesButton isDarkTheme={isDarkTheme} />
           <DraftSaver submitSuccess={submitSuccess} />
-          <SubmitButton />
+          <SubmitButton
+            isSubmitting={isSubmitting}
+            disableSubmit={disableSubmit}
+            isValid={isValid}
+          />
         </Row>
       ) : (
         <>
           <Row topMarginSize="s" justify="right">
             <DraftSaver submitSuccess={submitSuccess} />
-            <SubmitButton />
+            <SubmitButton
+              isSubmitting={isSubmitting}
+              disableSubmit={disableSubmit}
+              isValid={isValid}
+            />
           </Row>
           <Row topMarginSize="s" justify="right">
-            <FormatHelpButton />
-            <ProposalGuidelinesButton />
+            <FormatHelpButton
+              isDarkTheme={isDarkTheme}
+              openMDGuideModal={openMDGuideModal}
+            />
+            <ProposalGuidelinesButton isDarkTheme={isDarkTheme} />
           </Row>
         </>
       )}
