@@ -12,6 +12,7 @@ import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
 import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
+import useProposalBatchWithoutRedux from "src/hooks/api/useProposalBatchWithoutRedux";
 import {
   getMarkdownContent,
   getVotesReceived,
@@ -42,20 +43,18 @@ const ProposalWrapper = (props) => {
     voteSummary,
     voteBlocksLeft,
     voteActive,
-    voteEndTimestamp,
-    onFetchProposalsBatch
+    voteEndTimestamp
   } = useProposalVote(getProposalToken(props.proposal));
   const [proposedFor, setProposedFor] = useState(null);
   const { linkto } = props.proposal;
+  const [[rfpProposal]] = useProposalBatchWithoutRedux(
+    linkto ? [linkto] : null
+  ) || [[]];
   useEffect(() => {
-    async function fetchRfpProposal() {
-      const [[rfpProposal]] = await onFetchProposalsBatch([linkto]);
+    if (rfpProposal) {
       setProposedFor(rfpProposal && rfpProposal.name);
     }
-    if (linkto && !proposedFor) {
-      fetchRfpProposal();
-    }
-  }, [linkto, onFetchProposalsBatch, setProposedFor, proposedFor]);
+  }, [rfpProposal]);
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (
