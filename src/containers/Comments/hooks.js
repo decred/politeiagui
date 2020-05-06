@@ -51,6 +51,7 @@ export function useComments(recordToken) {
   const onCensorComment = useAction(act.onCensorComment);
 
   const { currentUser } = useLoaderContext();
+  const userid = currentUser && currentUser.userid;
   const email = currentUser && currentUser.email;
 
   const userLoggedIn = !!email;
@@ -84,9 +85,9 @@ export function useComments(recordToken) {
 
   const onLikeComment = useCallback(
     (commentID, action) => {
-      onLikeCommentAction(email, recordToken, commentID, action);
+      onLikeCommentAction(userid, recordToken, commentID, action);
     },
-    [recordToken, email, onLikeCommentAction]
+    [recordToken, userid, onLikeCommentAction]
   );
 
   const getCommentLikeOption = useCallback(

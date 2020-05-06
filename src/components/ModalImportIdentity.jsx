@@ -52,14 +52,14 @@ const onSelectFiles = (setFileError, setFieldValue) => ({ base64 }) => {
 const onSubmitFiles = (
   onIdentityImported,
   userPubkey,
-  currentUserEmail,
+  currentUserID,
   json,
   setFileError
 ) => {
   try {
     auditIdentity(json, userPubkey, setFileError);
     pki
-      .importKeys(currentUserEmail, json)
+      .importKeys(currentUserID, json)
       .then(() => {
         onIdentityImported("Successfully imported identity");
       })
@@ -83,7 +83,7 @@ const ModalImportIdentity = ({
   const {
     onIdentityImported,
     userPubkey,
-    currentUserEmail,
+    currentUserID,
     keyMismatchAction
   } = useUserIdentity();
   const [fileError, setFileError] = useState(null);
@@ -96,7 +96,7 @@ const ModalImportIdentity = ({
       onSubmitFiles(
         onIdentityImported,
         userPubkey,
-        currentUserEmail,
+        currentUserID,
         values,
         setFileError
       );

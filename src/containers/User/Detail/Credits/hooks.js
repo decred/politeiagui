@@ -89,7 +89,8 @@ export function useCredits(userID) {
     act.clearProposalPaymentPollingPointer
   );
   const { isPaid } = usePaywall(userID);
-  const proposalCredits = proposalCreditsUnspent.length;
+  const proposalCredits =
+    proposalCreditsUnspent && proposalCreditsUnspent.length;
   const proposalCreditsFetched = proposalCredits !== null;
   const isUserPageOwner = currentUserID === userID;
   const shouldFetchPurchaseProposalCredits =

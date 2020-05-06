@@ -36,10 +36,9 @@ export const onSaveNewInvoice = ({
   exchangerate,
   files
 }) => (dispatch, getState) => {
-  const { email, userid: id, username } = sel.currentUser(getState());
+  const { userid: id, username } = sel.currentUser(getState());
   return dispatch(
     onSubmitInvoice(
-      email,
       id,
       username,
       +month,
@@ -64,10 +63,9 @@ export const onSaveNewProposal = ({
   rfpLink,
   type
 }) => (dispatch, getState) => {
-  const { email, userid, username } = sel.currentUser(getState());
+  const { userid, username } = sel.currentUser(getState());
   return dispatch(
     onSubmitProposal(
-      email,
       userid,
       username,
       name.trim(),
@@ -89,10 +87,9 @@ export const onSaveNewDcc = ({
   domain,
   contractortype
 }) => (dispatch, getState) => {
-  const { email, userid, username } = sel.currentUser(getState());
+  const { userid, username } = sel.currentUser(getState());
   return dispatch(
     onSubmitNewDcc(
-      email,
       userid,
       username,
       type,
@@ -113,10 +110,10 @@ export const onEditProposal = ({
   type,
   rfpLink
 }) => (dispatch, getState) => {
-  const email = sel.currentUserEmail(getState());
+  const userid = sel.currentUserID(getState());
   return dispatch(
     onSubmitEditedProposal(
-      email,
+      userid,
       name,
       description,
       rfpDeadline,
@@ -132,8 +129,8 @@ export const onSaveNewComment = ({ comment, token, parentID }) => (
   dispatch,
   getState
 ) => {
-  const email = sel.currentUserEmail(getState());
-  return dispatch(onSubmitCommentApi(email, token, comment, parentID));
+  const userid = sel.currentUserID(getState());
+  return dispatch(onSubmitCommentApi(userid, token, comment, parentID));
 };
 
 export const onEditInvoice = ({
@@ -149,10 +146,9 @@ export const onEditInvoice = ({
   exchangerate,
   files
 }) => (dispatch, getState) => {
-  const { email, userid, username } = sel.currentUser(getState());
+  const { userid, username } = sel.currentUser(getState());
   return dispatch(
     onSubmitEditedInvoice(
-      email,
       userid,
       username,
       +month,
@@ -274,8 +270,8 @@ export const onSaveNewDccComment = ({ comment, token, parentID }) => (
   dispatch,
   getState
 ) => {
-  const email = sel.currentUserEmail(getState());
-  return dispatch(onSubmitDccCommentApi(email, token, comment, parentID));
+  const userid = sel.currentUserID(getState());
+  return dispatch(onSubmitDccCommentApi(userid, token, comment, parentID));
 };
 
 export const onSaveDraftDcc = ({

@@ -210,6 +210,9 @@ export const onSearchUser = (query) => (dispatch) => {
     });
 };
 
+// onLogin handles a user's login. If it is his first login on the app
+// after registering, his key will be saved under his email. If so, it
+// changes the storage key to his uuid.
 export const onLogin = ({ email, password }) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_LOGIN({ email }));
@@ -217,7 +220,13 @@ export const onLogin = ({ email, password }) =>
       .login(csrf, email, password)
       .then((response) => {
         dispatch(act.RECEIVE_LOGIN(response));
-        return response;
+        const { userid } = response;
+        pki.needStorageKeyReplace(email).then((needReplace) => {
+          if (needReplace) {
+            pki.replaceStorageKey(email, userid);
+          }
+          return response;
+        });
       })
       .then(() => dispatch(onRequestMe()))
       .catch((error) => {
@@ -503,7 +512,6 @@ export const onManageUser = (userId, action, reason) =>
   });
 
 export const onSubmitInvoice = (
-  currentUserEmail,
   userid,
   username,
   month,
@@ -546,7 +554,7 @@ export const onSubmitInvoice = (
         files
       )
     )
-      .then((invoice) => api.signRegister(currentUserEmail, invoice))
+      .then((invoice) => api.signRegister(userid, invoice))
       .then((invoice) => api.newInvoice(csrf, invoice))
       .then((invoice) => {
         const policy = sel.policy(getState());
@@ -568,7 +576,6 @@ export const onSubmitInvoice = (
   });
 
 export const onSubmitProposal = (
-  currentUserEmail,
   userid,
   username,
   name,
@@ -592,7 +599,7 @@ export const onSubmitProposal = (
     return Promise.resolve(
       api.makeProposal(name, description, rfpDeadline, type, rfpLink, files)
     )
-      .then((proposal) => api.signRegister(currentUserEmail, proposal))
+      .then((proposal) => api.signRegister(userid, proposal))
       .then((proposal) => api.newProposal(csrf, proposal))
       .then((proposal) => {
         dispatch(
@@ -618,7 +625,7 @@ export const onSubmitProposal = (
   });
 
 export const onSubmitEditedProposal = (
-  currentUserEmail,
+  userid,
   name,
   description,
   rfpDeadline,
@@ -641,7 +648,7 @@ export const onSubmitEditedProposal = (
     return Promise.resolve(
       api.makeProposal(name, description, rfpDeadline, type, rfpLink, files)
     )
-      .then((proposal) => api.signRegister(currentUserEmail, proposal))
+      .then((proposal) => api.signRegister(userid, proposal))
       .then((proposal) => api.editProposal(csrf, { ...proposal, token }))
       .then((proposal) => {
         dispatch(act.RECEIVE_EDIT_PROPOSAL(proposal));
@@ -655,7 +662,6 @@ export const onSubmitEditedProposal = (
   });
 
 export const onSubmitEditedInvoice = (
-  email,
   userid,
   username,
   month,
@@ -700,7 +706,7 @@ export const onSubmitEditedInvoice = (
         files
       )
     )
-      .then((invoice) => api.signRegister(email, invoice))
+      .then((invoice) => api.signRegister(userid, invoice))
       .then((invoice) => api.editInvoice(csrf, { ...invoice, token }))
       .then((invoice) => {
         dispatch(
@@ -720,14 +726,14 @@ export const onSubmitEditedInvoice = (
       });
   });
 
-export const onLikeComment = (currentUserEmail, token, commentid, action) =>
+export const onLikeComment = (currentUserID, token, commentid, action) =>
   withCsrf((dispatch, _, csrf) => {
-    if (!currentUserEmail) {
+    if (!currentUserID) {
       return;
     }
     dispatch(act.REQUEST_LIKE_COMMENT({ commentid, token }));
     return Promise.resolve(api.makeLikeComment(token, action, commentid))
-      .then((comment) => api.signLikeComment(currentUserEmail, comment))
+      .then((comment) => api.signLikeComment(currentUserID, comment))
       .then((comment) => api.likeComment(csrf, comment))
       .then(() => {
         dispatch(act.RECEIVE_LIKE_COMMENT({ token }));
@@ -739,11 +745,11 @@ export const onLikeComment = (currentUserEmail, token, commentid, action) =>
       });
   });
 
-export const onCensorComment = (email, token, commentid, reason) => {
+export const onCensorComment = (userid, token, commentid, reason) => {
   return withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_CENSOR_COMMENT({ commentid, token }));
     return Promise.resolve(api.makeCensoredComment(token, reason, commentid))
-      .then((comment) => api.signCensorComment(email, comment))
+      .then((comment) => api.signCensorComment(userid, comment))
       .then((comment) => api.censorComment(csrf, comment))
       .then((response) => {
         if (response.receipt) {
@@ -757,11 +763,11 @@ export const onCensorComment = (email, token, commentid, reason) => {
   });
 };
 
-export const onSubmitComment = (currentUserEmail, token, comment, parentid) =>
+export const onSubmitComment = (currentUserID, token, comment, parentid) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
     return Promise.resolve(api.makeComment(token, comment, parentid))
-      .then((comment) => api.signComment(currentUserEmail, comment))
+      .then((comment) => api.signComment(currentUserID, comment))
       .then((comment) => {
         // make sure this is not a duplicate comment by comparing to the existent
         // comments signatures
@@ -787,13 +793,13 @@ export const onSubmitComment = (currentUserEmail, token, comment, parentid) =>
       });
   });
 
-export const onUpdateUserKey = (currentUserEmail) =>
+export const onUpdateUserKey = (currentUserID) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_UPDATED_KEY());
     return pki
       .generateKeys()
       .then((keys) =>
-        pki.loadKeys(currentUserEmail, keys).then(() =>
+        pki.loadKeys(currentUserID, keys).then(() =>
           api
             .updateKeyRequest(csrf, pki.toHex(keys.publicKey))
             .then((response) => {
@@ -816,15 +822,13 @@ export const onUpdateUserKey = (currentUserEmail) =>
       });
   });
 
-export const onVerifyUserKey = (currentUserEmail, verificationtoken) =>
+export const onVerifyUserKey = (currentUserID, verificationtoken) =>
   withCsrf((dispatch, _, csrf) => {
-    dispatch(
-      act.REQUEST_VERIFIED_KEY({ email: currentUserEmail, verificationtoken })
-    );
+    dispatch(act.REQUEST_VERIFIED_KEY({ verificationtoken }));
     return api
-      .verifyKeyRequest(csrf, currentUserEmail, verificationtoken)
+      .verifyKeyRequest(csrf, currentUserID, verificationtoken)
       .then((response) =>
-        pki.myPubKeyHex(currentUserEmail).then((pubkey) => {
+        pki.myPubKeyHex(currentUserID).then((pubkey) => {
           dispatch(
             act.RECEIVE_VERIFIED_KEY({
               ...response,
@@ -842,12 +846,12 @@ export const onVerifyUserKey = (currentUserEmail, verificationtoken) =>
 
 export const onSetInvoiceStatus = (token, status, version, reason = "") =>
   withCsrf((dispatch, getState, csrf) => {
-    const email = sel.currentUserEmail(getState());
+    const userid = sel.currentUserID(getState());
     dispatch(
-      act.REQUEST_SETSTATUS_INVOICE({ status, token, reason, version, email })
+      act.REQUEST_SETSTATUS_INVOICE({ status, token, reason, version, userid })
     );
     return api
-      .invoiceSetStatus(email, csrf, token, version, status, reason)
+      .invoiceSetStatus(userid, csrf, token, version, status, reason)
       .then(({ invoice }) => {
         dispatch(act.RECEIVE_SETSTATUS_INVOICE(invoice));
       })
@@ -859,10 +863,10 @@ export const onSetInvoiceStatus = (token, status, version, reason = "") =>
 
 export const onSetProposalStatus = (token, status, censorMessage = "") =>
   withCsrf((dispatch, getState, csrf) => {
-    const email = sel.currentUserEmail(getState());
+    const userid = sel.currentUserID(getState());
     dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
     return api
-      .proposalSetStatus(email, csrf, token, status, censorMessage)
+      .proposalSetStatus(userid, csrf, token, status, censorMessage)
       .then(({ proposal }) => {
         dispatch(
           act.RECEIVE_SETSTATUS_PROPOSAL({
@@ -924,18 +928,11 @@ export const onResendVerificationEmailConfirm = ({ email }) =>
 export const resetResendVerificationEmail = () => (dispatch) =>
   dispatch(act.RESET_RESEND_VERIFICATION_EMAIL());
 
-export const onStartVote = (
-  currentUserEmail,
-  token,
-  duration,
-  quorum,
-  pass,
-  version
-) =>
+export const onStartVote = (userid, token, duration, quorum, pass, version) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_START_VOTE({ token }));
     return api
-      .startVote(currentUserEmail, csrf, token, duration, quorum, pass, version)
+      .startVote(userid, csrf, token, duration, quorum, pass, version)
       .then((response) => {
         dispatch(onFetchProposalsBatchVoteSummary([token]));
         dispatch(act.RECEIVE_START_VOTE({ ...response, token, success: true }));
@@ -1024,11 +1021,11 @@ export const onFetchProposalVoteResults = (token) => (dispatch) => {
     });
 };
 
-export const onAuthorizeVote = (email, token, version) =>
+export const onAuthorizeVote = (userid, token, version) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_AUTHORIZE_VOTE({ token }));
     return api
-      .proposalAuthorizeOrRevokeVote(csrf, "authorize", token, email, version)
+      .proposalAuthorizeOrRevokeVote(csrf, "authorize", token, userid, version)
       .then((response) =>
         dispatch(
           act.RECEIVE_AUTHORIZE_VOTE({ ...response, token, success: true })
@@ -1040,11 +1037,11 @@ export const onAuthorizeVote = (email, token, version) =>
       });
   });
 
-export const onRevokeVote = (email, token, version) =>
+export const onRevokeVote = (userid, token, version) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_REVOKE_AUTH_VOTE({ token }));
     return api
-      .proposalAuthorizeOrRevokeVote(csrf, "revoke", token, email, version)
+      .proposalAuthorizeOrRevokeVote(csrf, "revoke", token, userid, version)
       .then((response) =>
         dispatch(
           act.RECEIVE_REVOKE_AUTH_VOTE({ ...response, token, success: true })
@@ -1219,8 +1216,7 @@ export const onFetchCmsUsers = () =>
 // DCC actions
 
 export const onSubmitNewDcc = (
-  currentUserEmail,
-  userid,
+  currentUserID,
   username,
   type,
   nomineeuserid,
@@ -1233,14 +1229,14 @@ export const onSubmitNewDcc = (
     return Promise.resolve(
       api.makeDCC(type, nomineeuserid, statement, domain, contractortype)
     )
-      .then((dcc) => api.signDcc(currentUserEmail, dcc))
+      .then((dcc) => api.signDcc(currentUserID, dcc))
       .then((dcc) => api.newDcc(csrf, dcc))
       .then((dcc) => {
         dispatch(
           act.RECEIVE_NEW_DCC({
             ...dcc,
             numcomments: 0,
-            userid,
+            currentUserID,
             username
           })
         );
@@ -1293,10 +1289,10 @@ export const onFetchDccComments = (token) => (dispatch) => {
 
 export const onSupportOpposeDcc = (token, vote) =>
   withCsrf((dispatch, getState, csrf) => {
-    const { email, username, userid } = sel.currentUser(getState());
+    const { username, userid } = sel.currentUser(getState());
     dispatch(act.REQUEST_SUPPORT_OPPOSE_DCC({}));
     return Promise.resolve(api.makeDCCVote(token, vote))
-      .then((dccvote) => api.signDccVote(email, dccvote))
+      .then((dccvote) => api.signDccVote(userid, dccvote))
       .then((dccvote) => api.supportOpposeDCC(csrf, dccvote))
       .then((response) => {
         dispatch(
@@ -1316,13 +1312,13 @@ export const onSupportOpposeDcc = (token, vote) =>
 
 export const onSetDccStatus = (token, status, reason) =>
   withCsrf((dispatch, getState, csrf) => {
-    const { email } = sel.currentUser(getState());
-    if (!email) {
+    const userid = sel.currentUserID(getState());
+    if (!userid) {
       return;
     }
     dispatch(act.REQUEST_SET_DCC_STATUS({}));
     return api
-      .setDCCStatus(csrf, email, token, status, reason)
+      .setDCCStatus(csrf, userid, token, status, reason)
       .then((response) => {
         dispatch(
           act.RECEIVE_SET_DCC_STATUS({ ...response, status, reason, token })
@@ -1333,16 +1329,11 @@ export const onSetDccStatus = (token, status, reason) =>
       });
   });
 
-export const onSubmitDccComment = (
-  currentUserEmail,
-  token,
-  comment,
-  parentid
-) =>
+export const onSubmitDccComment = (currentUserID, token, comment, parentid) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
     return Promise.resolve(api.makeComment(token, comment, parentid))
-      .then((comment) => api.signComment(currentUserEmail, comment))
+      .then((comment) => api.signComment(currentUserID, comment))
       .then((comment) => {
         // make sure this is not a duplicate comment by comparing to the existent
         // comments signatures

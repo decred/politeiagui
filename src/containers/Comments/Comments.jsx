@@ -73,7 +73,6 @@ const Comments = ({
     recordType,
     lastVisitTimestamp,
     currentUser,
-    userEmail,
     ...commentsCtx
   } = useComments(recordToken);
 
@@ -169,7 +168,7 @@ const Comments = ({
     function handleCensorCommentModal(id) {
       const handleCensorComment = handleCommentCensoringInfo(
         onCensorComment,
-        userEmail,
+        userid,
         recordToken,
         id
       );
@@ -187,7 +186,7 @@ const Comments = ({
         }
       });
     },
-    [handleCloseModal, handleOpenModal, onCensorComment, recordToken, userEmail]
+    [handleCloseModal, handleOpenModal, onCensorComment, recordToken, userid]
   );
 
   const handleCommentsModeToggle = useCallback(() => {

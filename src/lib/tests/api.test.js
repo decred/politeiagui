@@ -17,6 +17,7 @@ describe("api integration modules (lib/api.js)", () => {
   const FAKE_CSRF = "itsafake";
   const EMAIL = "foo@bar.com";
   const USERNAME = "foo";
+  const USERID = "2";
   const PASSWORD = "foobarpassword";
   const VERIFICATION_TOKEN = "thisIsAVerificationToken";
   const PROPOSAL_NAME = "Test prop";
@@ -38,8 +39,8 @@ describe("api integration modules (lib/api.js)", () => {
   const COMMENT = "I dont like this prop";
 
   beforeAll(async () => {
-    const keys = await pki.generateKeys(EMAIL);
-    await pki.loadKeys(EMAIL, keys);
+    const keys = await pki.generateKeys(USERID);
+    await pki.loadKeys(USERID, keys);
   });
 
   test("converts a markdown to a file", () => {
@@ -184,8 +185,8 @@ describe("api integration modules (lib/api.js)", () => {
   test("signs a proposal", async () => {
     expect.assertions(3);
     const proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE]);
-    const pubKey = await pki.myPubKeyHex(EMAIL);
-    const signedProposal = await api.signRegister(EMAIL, proposal);
+    const pubKey = await pki.myPubKeyHex(USERID);
+    const signedProposal = await api.signRegister(USERID, proposal);
     expect(signedProposal.publickey).toEqual(pubKey);
     expect(signedProposal.files).toEqual(proposal.files);
     expect(signedProposal.signature).toBeTruthy();
@@ -194,8 +195,8 @@ describe("api integration modules (lib/api.js)", () => {
   test("signs a comment", async () => {
     expect.assertions(3);
     const comment = api.makeComment(COMMENT_TOKEN, COMMENT);
-    const pubKey = await pki.myPubKeyHex(EMAIL);
-    const signedComment = await api.signComment(EMAIL, comment);
+    const pubKey = await pki.myPubKeyHex(USERID);
+    const signedComment = await api.signComment(USERID, comment);
     expect(signedComment.publickey).toEqual(pubKey);
     expect(signedComment.token).toEqual(comment.token);
     expect(signedComment.signature).toBeTruthy();
@@ -427,7 +428,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "express:/api/v1/proposals/:token/status",
       api.proposalSetStatus,
-      [EMAIL, FAKE_CSRF, PROPOSAL_TOKEN, 2]
+      [USERID, FAKE_CSRF, PROPOSAL_TOKEN, 2]
     );
   });
 
