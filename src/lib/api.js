@@ -636,7 +636,7 @@ export const startRunoffVote = (
         )
       );
       const voteAuthSignatures = await Promise.all(
-        votes.map(({ token, proposalVersion: version }) =>
+        submissionsVotes.map(({ token, proposalversion: version }) =>
           pki.signStringHex(email, `${token}${version}authorize`)
         )
       );
