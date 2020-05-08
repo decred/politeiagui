@@ -3,7 +3,11 @@ import * as api from "src/lib/api";
 import * as sel from "src/selectors";
 import { useSelector } from "src/redux";
 
-export default function useProposalBatchWithoutRedux(tokens) {
+export default function useProposalBatchWithoutRedux(
+  tokens,
+  fetchPropsoals = true,
+  fetchVoteSummary = true
+) {
   const csrf = useSelector(sel.csrf);
   const [proposalsWithVoteSummaries, setProposalsWithVoteSummaries] = useState(
     null
@@ -11,14 +15,16 @@ export default function useProposalBatchWithoutRedux(tokens) {
   useEffect(() => {
     if (tokens) {
       Promise.all([
-        api.proposalsBatch(csrf, tokens),
-        api.proposalsBatchVoteSummary(csrf, tokens)
+        fetchPropsoals && api.proposalsBatch(csrf, tokens),
+        fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens)
       ]).then((res) => {
-        const proposals = res.find((res) => res && res.proposals).proposals;
-        const summaries = res.find((res) => res && res.summaries).summaries;
+        const proposals =
+          fetchPropsoals && res.find((res) => res && res.proposals).proposals;
+        const summaries =
+          fetchVoteSummary && res.find((res) => res && res.summaries).summaries;
         setProposalsWithVoteSummaries([proposals, summaries]);
       });
     }
-  }, [tokens, csrf]);
+  }, [tokens, csrf, fetchPropsoals, fetchVoteSummary]);
   return proposalsWithVoteSummaries;
 }

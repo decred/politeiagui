@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, classNames } from "pi-ui";
 import {
   isPublicProposal,
@@ -6,12 +6,14 @@ import {
   isAbandonedProposal,
   isVotingNotAuthorizedProposal,
   isUnderDiscussionProposal,
-  isRfpReadyToRunoff
+  isRfpReadyToRunoff,
+  isVoteActiveProposal
 } from "src/containers/Proposal/helpers";
 import {
   useUnvettedProposalActions,
   usePublicProposalActions
 } from "src/containers/Proposal/Actions";
+import useProposalBatchWithoutRedux from "src/hooks/api/useProposalBatchWithoutRedux";
 import AdminContent from "src/components/AdminContent";
 import { useLoaderContext } from "src/containers/Loader";
 import styles from "./ProposalActions.module.css";
@@ -74,6 +76,31 @@ const PublicActions = ({ proposal, voteSummary }) => {
   const isRfpSubmission = !!proposal.linkto;
 
   const isVotingStartAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
+
+  const rfpLinkedSubmissions = proposal.linkedfrom;
+  const [hasNoSubmissionUnderVote, setHasNoSubmissionUnderVote] = useState(
+    false
+  );
+  const [, rfpSubmissionsVoteSummaries] = useProposalBatchWithoutRedux(
+    rfpLinkedSubmissions ? rfpLinkedSubmissions : null,
+    false,
+    true
+  ) || [[]];
+  useEffect(() => {
+    // check if RFP submissions are already under vote => hide `start runoff vote` action
+    if (rfpSubmissionsVoteSummaries) {
+      setHasNoSubmissionUnderVote(
+        !isVoteActiveProposal(
+          rfpSubmissionsVoteSummaries[rfpLinkedSubmissions[0]]
+        )
+      );
+    }
+  }, [
+    rfpLinkedSubmissions,
+    rfpSubmissionsVoteSummaries,
+    setHasNoSubmissionUnderVote,
+    hasNoSubmissionUnderVote
+  ]);
   return (
     <>
       {isUnderDiscussionProposal(proposal, voteSummary) && (
@@ -98,7 +125,7 @@ const PublicActions = ({ proposal, voteSummary }) => {
           </AdminContent>
         </div>
       )}
-      {isRfpReadyToRunoff(proposal, voteSummary) && (
+      {isRfpReadyToRunoff(proposal, voteSummary) && hasNoSubmissionUnderVote && (
         <div className="justify-right margin-top-m">
           <Button onClick={withProposal(onStartRunoffVote)}>
             Start Runoff Vote

@@ -48,7 +48,9 @@ const ProposalWrapper = (props) => {
   const [proposedFor, setProposedFor] = useState(null);
   const { linkto } = props.proposal;
   const [[rfpProposal]] = useProposalBatchWithoutRedux(
-    linkto ? [linkto] : null
+    linkto ? [linkto] : null,
+    true,
+    false
   ) || [[]];
   useEffect(() => {
     if (rfpProposal) {
