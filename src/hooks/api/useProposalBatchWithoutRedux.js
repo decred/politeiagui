@@ -12,19 +12,33 @@ export default function useProposalBatchWithoutRedux(
   const [proposalsWithVoteSummaries, setProposalsWithVoteSummaries] = useState(
     null
   );
+  const [isRequesting, setIsRequesting] = useState(false);
   useEffect(() => {
-    if (tokens) {
-      Promise.all([
+    const fetchProposals = async () => {
+      const res = await Promise.all([
         fetchPropsoals && api.proposalsBatch(csrf, tokens),
         fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens)
-      ]).then((res) => {
-        const proposals =
-          fetchPropsoals && res.find((res) => res && res.proposals).proposals;
-        const summaries =
-          fetchVoteSummary && res.find((res) => res && res.summaries).summaries;
-        setProposalsWithVoteSummaries([proposals, summaries]);
-      });
+      ]);
+      const proposals =
+        fetchPropsoals && res.find((res) => res && res.proposals).proposals;
+      const summaries =
+        fetchVoteSummary && res.find((res) => res && res.summaries).summaries;
+      setProposalsWithVoteSummaries([proposals, summaries]);
+      setIsRequesting(false);
+    };
+
+    if (tokens && !proposalsWithVoteSummaries && !isRequesting) {
+      setIsRequesting(true);
+      fetchProposals();
     }
-  }, [tokens, csrf, fetchPropsoals, fetchVoteSummary]);
+  }, [
+    tokens,
+    isRequesting,
+
+    csrf,
+    fetchPropsoals,
+    fetchVoteSummary,
+    proposalsWithVoteSummaries
+  ]);
   return proposalsWithVoteSummaries;
 }
