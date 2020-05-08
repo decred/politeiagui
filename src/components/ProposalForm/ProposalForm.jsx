@@ -113,7 +113,9 @@ const ProposalForm = React.memo(function ProposalForm({
   return (
     <form onSubmit={handleSubmit}>
       {errors && errors.global && (
-        <Message kind="error">{errors.global.toString()}</Message>
+        <Message className="margin-bottom-m" kind="error">
+          {errors.global.toString()}
+        </Message>
       )}
       <Row
         noMargin
