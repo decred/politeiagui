@@ -260,11 +260,7 @@ export const getRandomColor = () => {
 };
 
 export const uniqueID = (prefix) =>
-  prefix +
-  "_" +
-  Math.random()
-    .toString(36)
-    .substr(2, 9);
+  prefix + "_" + Math.random().toString(36).substr(2, 9);
 
 export const verifyUserPubkey = (email, keyToBeMatched, keyMismatchAction) =>
   pki.getKeys(email).then((keys) => {
@@ -399,9 +395,7 @@ const jsonCsvMap = (line, linenum) => ({
 });
 
 export const csvToJson = (csv) =>
-  splitLine(csv)
-    .map(splitColumn)
-    .map(jsonCsvMap);
+  splitLine(csv).map(splitColumn).map(jsonCsvMap);
 
 export const getMonthOptions = () => {
   const month = getCurrentMonth();
