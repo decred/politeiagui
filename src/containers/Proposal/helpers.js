@@ -153,22 +153,8 @@ export const isApprovedProposal = (proposal, voteSummary) => {
   if (!proposal || !voteSummary || !isPublicProposal(proposal)) {
     return false;
   }
-  const {
-    quorumpercentage = 0,
-    passpercentage = 0,
-    eligibletickets: numofeligiblevotes,
-    results
-  } = voteSummary;
-  const totalVotes = getVotesReceived(voteSummary);
-  const quorumInVotes = (quorumpercentage * numofeligiblevotes) / 100;
-  const quorumPasses = totalVotes >= quorumInVotes;
-  if (!quorumPasses) {
-    return false;
-  }
-
-  const yesVotes = results.find((op) => op.option.id === "yes").votesreceived;
-
-  return yesVotes > (passpercentage * totalVotes) / 100;
+  const { approved } = voteSummary;
+  return approved;
 };
 
 /**
