@@ -30,6 +30,7 @@ import {
 import { useLoaderContext } from "src/containers/Loader";
 import styles from "./Proposal.module.css";
 import LoggedInContent from "src/components/LoggedInContent";
+import ProposalsList from "../ProposalsList/ProposalsList";
 import VotesCount from "./VotesCount";
 import DownloadComments from "src/containers/Comments/Download";
 import ProposalActions from "./ProposalActions";
@@ -46,17 +47,18 @@ const ProposalWrapper = (props) => {
     voteEndTimestamp
   } = useProposalVote(getProposalToken(props.proposal));
   const [proposedFor, setProposedFor] = useState(null);
-  const { linkto } = props.proposal;
-  const [[rfpProposal]] = useProposalBatchWithoutRedux(
-    linkto ? [linkto] : null,
+  const { linkto, linkedfrom } = props.proposal;
+  const [proposals, voteSummaries] = useProposalBatchWithoutRedux(
+    linkto ? [linkto] : linkedfrom ? linkedfrom : null,
     true,
-    false
+    !!linkedfrom
   ) || [[]];
   useEffect(() => {
-    if (rfpProposal) {
+    if (linkto && proposals && proposals[0]) {
+      const rfpProposal = proposals[0];
       setProposedFor(rfpProposal && rfpProposal.name);
     }
-  }, [rfpProposal]);
+  }, [linkto, proposals]);
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (
@@ -69,7 +71,11 @@ const ProposalWrapper = (props) => {
         voteEndTimestamp,
         currentUser,
         history,
-        proposedFor
+        proposedFor,
+        rfpSubmissions: linkedfrom && {
+          proposals,
+          voteSummaries
+        }
       }}
     />
   );
@@ -85,7 +91,8 @@ const Proposal = React.memo(function Proposal({
   voteBlocksLeft,
   currentUser,
   history,
-  proposedFor
+  proposedFor,
+  rfpSubmissions
 }) {
   const {
     censorshiprecord,
@@ -104,7 +111,6 @@ const Proposal = React.memo(function Proposal({
   const isRfp = !!linkby;
   const isRfpSubmission = !!linkto;
   const isNotExtendedRfpOrSubmission = (isRfp || isRfpSubmission) && !extended;
-
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
   const {
@@ -272,6 +278,7 @@ const Proposal = React.memo(function Proposal({
                 />
               </Row>
             )}
+            {rfpSubmissions && <ProposalsList data={rfpSubmissions} />}
             {extended && !!files.length && !collapseBodyContent && (
               <Markdown
                 className={classNames(
