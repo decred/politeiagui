@@ -7,7 +7,8 @@ import {
   isVotingNotAuthorizedProposal,
   isUnderDiscussionProposal,
   isRfpReadyToRunoff,
-  isVoteActiveProposal
+  isVoteActiveProposal,
+  isVotingFinishedProposal
 } from "src/containers/Proposal/helpers";
 import {
   useUnvettedProposalActions,
@@ -78,9 +79,7 @@ const PublicActions = ({ proposal, voteSummary }) => {
   const isVotingStartAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
 
   const rfpLinkedSubmissions = proposal.linkedfrom;
-  const [hasNoSubmissionUnderVote, setHasNoSubmissionUnderVote] = useState(
-    false
-  );
+  const [submssionsDidntVote, setSubmissionDidntVote] = useState(false);
   const [, rfpSubmissionsVoteSummaries] = useProposalBatchWithoutRedux(
     rfpLinkedSubmissions ? rfpLinkedSubmissions : null,
     false,
@@ -89,17 +88,20 @@ const PublicActions = ({ proposal, voteSummary }) => {
   useEffect(() => {
     // check if RFP submissions are already under vote => hide `start runoff vote` action
     if (rfpSubmissionsVoteSummaries) {
-      setHasNoSubmissionUnderVote(
+      setSubmissionDidntVote(
         !isVoteActiveProposal(
           rfpSubmissionsVoteSummaries[rfpLinkedSubmissions[0]]
-        )
+        ) &&
+          !isVotingFinishedProposal(
+            rfpSubmissionsVoteSummaries[rfpLinkedSubmissions[0]]
+          )
       );
     }
   }, [
     rfpLinkedSubmissions,
     rfpSubmissionsVoteSummaries,
-    setHasNoSubmissionUnderVote,
-    hasNoSubmissionUnderVote
+    setSubmissionDidntVote,
+    submssionsDidntVote
   ]);
   return (
     <>
@@ -125,7 +127,7 @@ const PublicActions = ({ proposal, voteSummary }) => {
           </AdminContent>
         </div>
       )}
-      {isRfpReadyToRunoff(proposal, voteSummary) && hasNoSubmissionUnderVote && (
+      {isRfpReadyToRunoff(proposal, voteSummary) && submssionsDidntVote && (
         <div className="justify-right margin-top-m">
           <Button onClick={withProposal(onStartRunoffVote)}>
             Start Runoff Vote
