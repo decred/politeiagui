@@ -192,8 +192,8 @@ export const onSaveDraftProposal = ({
   return id;
 };
 
-export const onLoadDraftProposals = (email) => (dispatch, getState) => {
-  const key = email || sel.currentUserEmail(getState());
+export const onLoadDraftProposals = (uuid) => (dispatch, getState) => {
+  const key = uuid || sel.currentUserID(getState());
   const stateFromLS = loadStateLocalStorage(key);
   const drafts = sel.draftProposals(stateFromLS) || {};
   dispatch(act.LOAD_DRAFT_PROPOSALS(drafts));
@@ -233,8 +233,8 @@ export const onSaveDraftInvoice = ({
   return id;
 };
 
-export const onLoadDraftInvoices = (email) => (dispatch, getState) => {
-  const key = email || sel.currentUserEmail(getState());
+export const onLoadDraftInvoices = (uuid) => (dispatch, getState) => {
+  const key = uuid || sel.currentUserID(getState());
   const stateFromLS = loadStateLocalStorage(key);
   const drafts = sel.draftInvoices(stateFromLS) || {};
   dispatch(act.LOAD_DRAFT_INVOICES(drafts));
@@ -300,8 +300,8 @@ export const onSaveDraftDcc = ({
   return id;
 };
 
-export const onLoadDraftDccs = (email) => (dispatch, getState) => {
-  const key = email || sel.currentUserEmail(getState());
+export const onLoadDraftDccs = (uuid) => (dispatch, getState) => {
+  const key = uuid || sel.currentUserID(getState());
   const stateFromLS = loadStateLocalStorage(key);
   const drafts = sel.draftDccs(stateFromLS) || {};
   dispatch(act.LOAD_DRAFT_DCCS(drafts));

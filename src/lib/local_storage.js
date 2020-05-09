@@ -4,10 +4,7 @@
 import isEqual from "lodash/isEqual";
 import get from "lodash/get";
 import set from "lodash/set";
-import {
-  currentUserUsername,
-  currentUserEmail
-} from "../selectors/models/users";
+import { currentUserID } from "../selectors/models/users";
 
 // Logged in state key refers to the chunck of the state which will be stored
 // in the local storage only while the user stills logged in
@@ -15,14 +12,14 @@ export const loggedInStateKey = "state";
 
 // Persistent state key refers to the chunck of state which will persist
 // in the local storage even if the user logs out
-export const persistentStateKey = (email) => `state-${email}`;
+export const persistentStateKey = (uuid) => `state-${uuid}`;
 
-export const stateKey = (email) =>
-  email ? persistentStateKey(email) : loggedInStateKey;
+export const stateKey = (uuid) =>
+  uuid ? persistentStateKey(uuid) : loggedInStateKey;
 
-export const loadStateLocalStorage = (email) => {
+export const loadStateLocalStorage = (uuid) => {
   try {
-    const serializedState = localStorage.getItem(stateKey(email));
+    const serializedState = localStorage.getItem(stateKey(uuid));
     if (!serializedState) return undefined;
     else return JSON.parse(serializedState);
   } catch (err) {
@@ -30,50 +27,28 @@ export const loadStateLocalStorage = (email) => {
   }
 };
 
-export const saveStateLocalStorage = (state, email = "") => {
+export const saveStateLocalStorage = (state, uuid = "") => {
   try {
     const serializedState = JSON.stringify(state);
-    localStorage.setItem(stateKey(email), serializedState);
+    localStorage.setItem(stateKey(uuid), serializedState);
   } catch (err) {
     console.log(err);
   }
 };
 
-export const clearStateLocalStorage = (email) => {
-  const key = stateKey(email);
+export const clearStateLocalStorage = (uuid) => {
+  const key = stateKey(uuid);
   if (localStorage.getItem(key)) {
     localStorage.setItem(key, "");
   }
 };
 
-const handleSaveApiMe = (state) => {
-  const email = currentUserEmail(state);
-  const proposalcredits = state.app.proposalCredits;
-  const username = currentUserUsername(state);
-  const stateFromLs = loadStateLocalStorage() || {};
-  const apiMeFromStorage = get(stateFromLs, ["api", "me"], undefined);
-  const apiMeResponseFromStorage = get(apiMeFromStorage, "response", undefined);
-  const apiMe = get(state, ["api", "me"], undefined);
-  const apiMeResponse = get(apiMe, "response", undefined);
-  const customResponse = {
-    ...apiMeResponse,
-    username,
-    email,
-    proposalcredits
-  };
-  if (apiMeResponse && !isEqual(apiMeResponseFromStorage, customResponse)) {
-    saveStateLocalStorage(
-      set(stateFromLs, ["api", "me", "response"], customResponse)
-    );
-  }
-};
-
 export const handleSaveAppDraftProposals = (state) => {
-  const email = currentUserEmail(state);
-  if (!email) {
+  const uuid = currentUserID(state);
+  if (!uuid) {
     return;
   }
-  const stateFromLs = loadStateLocalStorage(email) || {};
+  const stateFromLs = loadStateLocalStorage(uuid) || {};
   const draftProposalsFromStore = state.app.draftProposals;
   const draftProposalsLocalStorage = get(
     stateFromLs,
@@ -90,16 +65,16 @@ export const handleSaveAppDraftProposals = (state) => {
       ["app", "draftProposals"],
       draftProposalsFromStore
     );
-    saveStateLocalStorage(newValue, email);
+    saveStateLocalStorage(newValue, uuid);
   }
 };
 
 export const handleSaveAppDraftInvoices = (state) => {
-  const email = currentUserEmail(state);
-  if (!email) {
+  const uuid = currentUserID(state);
+  if (!uuid) {
     return;
   }
-  const stateFromLs = loadStateLocalStorage(email) || {};
+  const stateFromLs = loadStateLocalStorage(uuid) || {};
   const draftInvoicesFromStore = state.app.draftInvoices;
   const draftInvoicesLocalStorage = get(
     stateFromLs,
@@ -116,16 +91,16 @@ export const handleSaveAppDraftInvoices = (state) => {
       ["app", "draftInvoices"],
       draftInvoicesFromStore
     );
-    saveStateLocalStorage(newValue, email);
+    saveStateLocalStorage(newValue, uuid);
   }
 };
 
 export const handleSaveAppDraftDccs = (state) => {
-  const email = currentUserEmail(state);
-  if (!email) {
+  const uuid = currentUserID(state);
+  if (!uuid) {
     return;
   }
-  const stateFromLs = loadStateLocalStorage(email) || {};
+  const stateFromLs = loadStateLocalStorage(uuid) || {};
   const draftDccsFromStore = state.app.draftDccs;
   const draftDccsLocalStorage = get(stateFromLs, ["app", "draftDccs"], {});
 
@@ -134,12 +109,11 @@ export const handleSaveAppDraftDccs = (state) => {
     !isEqual(draftDccsFromStore, draftDccsLocalStorage)
   ) {
     const newValue = set(stateFromLs, ["app", "draftDccs"], draftDccsFromStore);
-    saveStateLocalStorage(newValue, email);
+    saveStateLocalStorage(newValue, uuid);
   }
 };
 
 export const handleSaveStateToLocalStorage = (state) => {
-  handleSaveApiMe(state);
   handleSaveAppDraftProposals(state);
   handleSaveAppDraftDccs(state);
   handleSaveAppDraftInvoices(state);
