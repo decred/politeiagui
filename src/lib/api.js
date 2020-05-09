@@ -312,8 +312,8 @@ export const apiInfo = () =>
 
 export const newUser = (csrf, email, username, password) =>
   pki.generateKeys().then((keys) =>
-    pki.loadKeys(email, keys).then(() =>
-      pki.myPubKeyHex(email).then((publickey) =>
+    pki.loadKeys(username, keys).then(() =>
+      pki.myPubKeyHex(username).then((publickey) =>
         POST("/user/new", csrf, {
           email,
           username,
@@ -326,8 +326,8 @@ export const newUser = (csrf, email, username, password) =>
 
 export const register = (csrf, email, username, password, verificationtoken) =>
   pki.generateKeys().then((keys) =>
-    pki.loadKeys(email, keys).then(() =>
-      pki.myPubKeyHex(email).then((publickey) =>
+    pki.loadKeys(username, keys).then(() =>
+      pki.myPubKeyHex(username).then((publickey) =>
         POST("/register", csrf, {
           email,
           username,
@@ -426,11 +426,11 @@ export const verifyResetPassword = (
     newpassword: digest(newpassword)
   }).then(getResponse);
 
-export const resendVerificationEmailRequest = (csrf, email) =>
+export const resendVerificationEmailRequest = (csrf, email, username) =>
   pki
     .generateKeys()
-    .then((keys) => pki.loadKeys(email, keys))
-    .then(() => pki.myPubKeyHex(email))
+    .then((keys) => pki.loadKeys(username, keys))
+    .then(() => pki.myPubKeyHex(username))
     .then((publickey) =>
       POST("/user/new/resend", csrf, { email, publickey }).then(getResponse)
     );

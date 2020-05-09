@@ -911,11 +911,11 @@ export const onVerifyResetPassword = ({
       });
   });
 
-export const onResendVerificationEmailConfirm = ({ email }) =>
+export const onResendVerificationEmailConfirm = ({ username, email }) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_RESEND_VERIFICATION_EMAIL({ email }));
     return api
-      .resendVerificationEmailRequest(csrf, email)
+      .resendVerificationEmailRequest(csrf, email, username)
       .then((response) =>
         dispatch(act.RECEIVE_RESEND_VERIFICATION_EMAIL(response))
       )
