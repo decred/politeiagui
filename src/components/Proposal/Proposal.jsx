@@ -280,7 +280,9 @@ const Proposal = React.memo(function Proposal({
                 />
               </Row>
             )}
-            {rfpSubmissions && <ProposalsList data={rfpSubmissions} />}
+            {extended && rfpSubmissions && (
+              <ProposalsList data={rfpSubmissions} />
+            )}
             {extended && !!files.length && !collapseBodyContent && (
               <Markdown
                 className={classNames(

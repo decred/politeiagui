@@ -1,3 +1,38 @@
 .title {
   font-size: 2rem !important;
+  flex-basis: 33%;
+}
+
+.statusBarTooltip {
+  width: 22.5rem;
+}
+
+span.statusTag > span {
+  overflow: visible;
+}
+
+.status {
+  position: relative;
+  right: 0;
+  top: 0;
+}
+
+.itemTitle {
+  flex-basis: 33%;
+}
+
+.itemWrapper {
+  height: 6.1rem;
+}
+
+.statusBarWrapper {
+  flex-basis: 33%;
+}
+
+.timeLeft {
+  flex-basis: 33%;
+}
+
+.blocksLeft {
+  flex-basis: 33%;
 }
