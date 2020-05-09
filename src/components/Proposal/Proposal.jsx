@@ -48,6 +48,8 @@ const ProposalWrapper = (props) => {
   } = useProposalVote(getProposalToken(props.proposal));
   const [proposedFor, setProposedFor] = useState(null);
   const { linkto, linkedfrom } = props.proposal;
+  // if linkto provided => this is a submission => fetch RFP to display link
+  // else if linkedFrom is provided this is an RFP => fetch submssions batch & vote summaries to display list
   const [proposals, voteSummaries] = useProposalBatchWithoutRedux(
     linkto ? [linkto] : linkedfrom ? linkedfrom : null,
     true,
