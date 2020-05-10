@@ -33,6 +33,10 @@ span.statusTag > span {
   flex-basis: 33%;
 }
 
+.voteEvent {
+  color: var(--color-primary-dark) !important;
+}
+
 .blocksLeft {
   flex-basis: 33%;
 }

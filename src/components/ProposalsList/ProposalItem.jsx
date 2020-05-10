@@ -35,7 +35,8 @@ const ProposalItem = ({ proposal, voteSummary }) => {
       <Row
         className={styles.itemWrapper}
         justify="space-between"
-        align="center">
+        align="center"
+        noMargin>
         <div className={styles.itemTitle}>{proposal.name}</div>
         {hasvoteSummary && (
           <Row className={styles.statusBarWrapper} noMargin>
@@ -56,12 +57,14 @@ const ProposalItem = ({ proposal, voteSummary }) => {
           </Row>
         )}
         {(isVoteActive || isVotingFinished) && (
-          <Event
-            event={`vote end${isVoteActive ? "s" : "ed"}`}
-            timestamp={voteEndTimestamp}
-            className={styles.timeLeft}
-            size="small"
-          />
+          <Row className={styles.timeLeft} justify="center" noMargin>
+            <Event
+              event={`vote end${isVoteActive ? "s" : "ed"}`}
+              timestamp={voteEndTimestamp}
+              className={styles.voteEvent}
+              size="small"
+            />
+          </Row>
         )}
         {isVoteActive && (
           <>
