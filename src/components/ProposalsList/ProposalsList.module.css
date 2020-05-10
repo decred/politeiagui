@@ -23,6 +23,7 @@ span.statusTag > span {
 
 .itemWrapper {
   height: 6.1rem;
+  border-bottom: 1px solid var(--separator-color);
 }
 
 .statusBarWrapper {

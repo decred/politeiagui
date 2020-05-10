@@ -134,6 +134,7 @@ const Proposal = React.memo(function Proposal({
   const showExtendedVersionPicker = extended && version > 1;
   const showAbandonedDate = abandonedat && !mobile;
   const showVersionAsText = version > 1 && !extended && !mobile;
+  const showRfpSubmissions = extended && !!rfpSubmissions;
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
 
@@ -280,14 +281,13 @@ const Proposal = React.memo(function Proposal({
                 />
               </Row>
             )}
-            {extended && rfpSubmissions && (
-              <ProposalsList data={rfpSubmissions} />
-            )}
+            {showRfpSubmissions && <ProposalsList data={rfpSubmissions} />}
             {extended && !!files.length && !collapseBodyContent && (
               <Markdown
                 className={classNames(
                   styles.markdownContainer,
-                  isDarkTheme && "dark"
+                  isDarkTheme && "dark",
+                  showRfpSubmissions && styles.rfpMarkdownContainer
                 )}
                 body={getMarkdownContent(files)}
               />

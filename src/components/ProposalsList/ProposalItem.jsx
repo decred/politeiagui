@@ -37,7 +37,9 @@ const ProposalItem = ({ proposal, voteSummary }) => {
         justify="space-between"
         align="center"
         noMargin>
-        <div className={styles.itemTitle}>{proposal.name}</div>
+        <Text className={styles.itemTitle} color="primaryDark">
+          {proposal.name}
+        </Text>
         {hasvoteSummary && (
           <Row className={styles.statusBarWrapper} noMargin>
             <StatusBar
