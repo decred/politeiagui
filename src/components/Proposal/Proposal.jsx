@@ -6,7 +6,7 @@ import {
   useMediaQuery,
   useTheme
 } from "pi-ui";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
@@ -21,7 +21,8 @@ import {
   isEditableProposal,
   getQuorumInVotes,
   isVotingFinishedProposal,
-  getProposalToken
+  getProposalToken,
+  goToFullProposal
 } from "src/containers/Proposal/helpers";
 import {
   useProposalVote,
@@ -152,9 +153,6 @@ const Proposal = React.memo(function Proposal({
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
 
-  const goToFullProposal = useCallback(() => {
-    history.push(proposalURL);
-  }, [history, proposalURL]);
   return (
     <>
       <RecordWrapper
@@ -301,7 +299,7 @@ const Proposal = React.memo(function Proposal({
                 type="expand"
                 className="margin-top-m"
                 size={"xlg"}
-                onClick={goToFullProposal}
+                onClick={() => goToFullProposal(history, proposalURL)}
               />
             )}
             {isPublicAccessible && !extended && (

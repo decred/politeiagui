@@ -1,11 +1,12 @@
-import React, { useCallback } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { StatusBar, StatusTag, Text, classNames, Icon } from "pi-ui";
 import VotesCount from "../Proposal/VotesCount";
 import { Row } from "../layout";
 import {
   getVotesReceived,
-  getQuorumInVotes
+  getQuorumInVotes,
+  goToFullProposal
 } from "src/containers/Proposal/helpers";
 import {
   getProposalStatusTagProps,
@@ -43,9 +44,6 @@ const ProposalItem = ({
   );
   const { voteEndTimestamp } = useProposalVoteTimeInfo(voteSummary);
 
-  const goToFullProposal = useCallback(() => {
-    history.push(proposalURL);
-  }, [history, proposalURL]);
   return (
     proposal &&
     voteSummary && (
@@ -53,7 +51,7 @@ const ProposalItem = ({
         className={styles.itemWrapper}
         justify="space-between"
         align="center"
-        onClick={goToFullProposal}
+        onClick={() => goToFullProposal(history, proposalURL)}
         noMargin>
         <div className={classNames(styles.itemTitle, "flex-column")}>
           <Text color="primaryDark">{name}</Text>
