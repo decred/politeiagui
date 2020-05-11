@@ -84,10 +84,10 @@ export const importKeys = (uuid, keys) =>
     loadKeys(uuid, decodedKeys)
   );
 
-export const needStorageKeyReplace = (email) =>
+export const needStorageKeyReplace = (username) =>
   localforage
     .keys()
-    .then((keys) => (keys.includes(STORAGE_PREFIX + email) ? true : false));
+    .then((keys) => (keys.includes(STORAGE_PREFIX + username) ? true : false));
 export const replaceStorageKey = (oldKey, newKey) =>
   myKeyPair(oldKey).then((keys) =>
     loadKeys(newKey, keys).then(() =>

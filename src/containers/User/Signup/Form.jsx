@@ -17,7 +17,7 @@ const SignupForm = () => {
     isCms
   } = useSignup();
 
-  const { handleSubmitAction, email } = useIdentityWarningModal({
+  const { handleSubmitAction, email, username } = useIdentityWarningModal({
     asyncSubmit: onSignup,
     isCms: isCms
   });
@@ -149,8 +149,9 @@ const SignupForm = () => {
       <DevelopmentOnlyContent
         show={signupResponse && signupResponse.verificationtoken}>
         <RouterLink
-          to={`/user/verify?email=${email}&verificationtoken=${signupResponse &&
-            signupResponse.verificationtoken}`}>
+          to={`/user/verify?email=${email}&verificationtoken=${
+            signupResponse && signupResponse.verificationtoken}&username=${username}
+          `}>
           Verify email
         </RouterLink>
       </DevelopmentOnlyContent>

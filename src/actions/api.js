@@ -188,10 +188,12 @@ export const onCreateNewUserCMS = ({
       });
   });
 
-export const onVerifyNewUser = (email, verificationToken) => (dispatch) => {
+export const onVerifyNewUser = (email, verificationToken, username) => (
+  dispatch
+) => {
   dispatch(act.REQUEST_VERIFY_NEW_USER({ email, verificationToken }));
   return api
-    .verifyNewUser(email, verificationToken)
+    .verifyNewUser(email, verificationToken, username)
     .then((res) => dispatch(act.RECEIVE_VERIFY_NEW_USER(res)))
     .catch((err) => {
       dispatch(act.RECEIVE_VERIFY_NEW_USER(null, err));
@@ -220,10 +222,10 @@ export const onLogin = ({ email, password }) =>
       .login(csrf, email, password)
       .then((response) => {
         dispatch(act.RECEIVE_LOGIN(response));
-        const { userid } = response;
-        pki.needStorageKeyReplace(email).then((needReplace) => {
+        const { userid, username } = response;
+        pki.needStorageKeyReplace(username).then((needReplace) => {
           if (needReplace) {
-            pki.replaceStorageKey(email, userid);
+            pki.replaceStorageKey(username, userid);
           }
           return response;
         });

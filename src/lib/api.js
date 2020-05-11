@@ -339,9 +339,9 @@ export const register = (csrf, email, username, password, verificationtoken) =>
     )
   );
 
-export const verifyNewUser = (email, verificationToken) => {
+export const verifyNewUser = (email, verificationToken, username) => {
   return pki
-    .signStringHex(email, verificationToken)
+    .signStringHex(username, verificationToken)
     .then((signature) =>
       GET(
         "/v1/user/verify?" +

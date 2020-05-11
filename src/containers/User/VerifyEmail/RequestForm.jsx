@@ -14,7 +14,7 @@ const RequestVerificationEmailForm = () => {
     currentUserResendVerificationToken: response
   } = useRequestResendVerificationEmail();
 
-  const { handleSubmitAction, email } = useIdentityWarningModal({
+  const { handleSubmitAction, email, username } = useIdentityWarningModal({
     asyncSubmit: onResendVerificationEmail
   });
 
@@ -24,6 +24,7 @@ const RequestVerificationEmailForm = () => {
     <>
       <FormWrapper
         initialValues={{
+          username: "",
           email: ""
         }}
         validationSchema={validationSchema}
@@ -74,8 +75,9 @@ const RequestVerificationEmailForm = () => {
       </FormWrapper>
       <DevelopmentOnlyContent show={response && response.verificationtoken}>
         <Link
-          to={`/user/verify?email=${email}&verificationtoken=${response &&
-            response.verificationtoken}`}>
+          to={`/user/verify?email=${email}&verificationtoken=${
+            response && response.verificationtoken}&username=${username}`}
+        >
           Verify email
         </Link>
       </DevelopmentOnlyContent>
