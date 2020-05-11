@@ -24,6 +24,8 @@ export const toUint8Array = (obj) =>
 
 export const loadKeys = (uuid, keys) =>
   localforage.setItem(STORAGE_PREFIX + uuid, keys).then(() => keys);
+export const removeKeys = (uuid) =>
+  localforage.removeItem(STORAGE_PREFIX + uuid);
 export const generateKeys = () => Promise.resolve(nacl.sign.keyPair());
 export const existing = (uuid) =>
   localforage.getItem(STORAGE_PREFIX + uuid).catch((e) => console.warn(e));

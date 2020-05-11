@@ -57,7 +57,7 @@ const Loader = ({ children }) => {
   // this is usefull for reflecting logout across different tabs
   useEffect(() => {
     if (!userActiveOnLocalStorage) {
-      localLogout();
+      localLogout(false);
     }
   }, [userActiveOnLocalStorage, localLogout]);
 

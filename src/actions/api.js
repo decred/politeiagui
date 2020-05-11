@@ -235,25 +235,42 @@ export const onLogin = ({ email, password }) =>
       });
   });
 
-// handleLogout handles all the procedure to be done once the user is logged out
-// it can be called either when the logout request has been successful or when the
+// handleLogout calls the correct logout handler according to the user selected
+// option between a normal logout or a permanent logout.
+export const handleLogout = (isPermanent, userid) => (dispatch) =>
+  isPermanent
+    ? dispatch(handlePermanentLogout(userid))
+    : dispatch(handleNormalLogout);
+
+// handleNormalLogout handles all the procedure to be done once the user is logged out.
+// It can be called either when the logout request has been successful or when the
 // session has already expired
-export const handleLogout = (response, isCMS) => (dispatch) => {
-  isCMS
-    ? dispatch(act.RECEIVE_CMS_LOGOUT(response))
-    : dispatch(act.RECEIVE_LOGOUT(response));
+export const handleNormalLogout = () => {
   clearStateLocalStorage();
   clearPollingPointer();
   clearProposalPaymentPollingPointer();
 };
 
-export const onLogout = (isCMS) =>
-  withCsrf((dispatch, _, csrf) => {
+// handlePermanentLogout handles the logout procedures while deleting all user related
+// information from the browser storage and cache.
+export const handlePermanentLogout = async (userid) => {
+  await pki.removeKeys(userid);
+  clearStateLocalStorage(userid);
+  clearPollingPointer();
+  clearProposalPaymentPollingPointer();
+};
+
+export const onLogout = (isCMS, isPermanent) =>
+  withCsrf((dispatch, getState, csrf) => {
+    const userid = sel.currentUserID(getState());
     dispatch(act.REQUEST_LOGOUT());
     return api
       .logout(csrf)
       .then((response) => {
-        dispatch(handleLogout(response, isCMS));
+        isCMS
+          ? dispatch(act.RECEIVE_CMS_LOGOUT(response))
+          : dispatch(act.RECEIVE_LOGOUT(response));
+        dispatch(handleLogout(isPermanent, userid));
       })
       .catch((error) => {
         dispatch(act.RECEIVE_LOGOUT(null, error));
