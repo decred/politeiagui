@@ -39,7 +39,7 @@ describe("api integration modules (lib/api.js)", () => {
   const COMMENT = "I dont like this prop";
 
   beforeAll(async () => {
-    const keys = await pki.generateKeys(USERID);
+    const keys = await pki.generateKeys();
     await pki.loadKeys(USERID, keys);
   });
 
@@ -302,7 +302,7 @@ describe("api integration modules (lib/api.js)", () => {
         verificationToken: VERIFICATION_TOKEN
       },
       api.verifyNewUser,
-      [EMAIL, VERIFICATION_TOKEN]
+      [EMAIL, VERIFICATION_TOKEN, USERNAME]
     );
   });
 
@@ -385,7 +385,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/user/key/verify",
       api.verifyKeyRequest,
-      [FAKE_CSRF, EMAIL, VERIFICATION_TOKEN]
+      [FAKE_CSRF, USERID, VERIFICATION_TOKEN]
     );
   });
 
@@ -458,7 +458,7 @@ describe("api integration modules (lib/api.js)", () => {
 
   test("start vote (api/v2/vote/start)", async () => {
     await assertPOSTOnRouteIsCalled("/api/v2/vote/start", api.startVote, [
-      EMAIL,
+      USERID,
       FAKE_CSRF,
       PROPOSAL_TOKEN,
       2
@@ -516,7 +516,7 @@ describe("api integration modules (lib/api.js)", () => {
     await assertPOSTOnRouteIsCalled(
       "/api/v1/proposals/authorizevote",
       api.proposalAuthorizeOrRevokeVote,
-      [FAKE_CSRF, "authorize", PROPOSAL_TOKEN, EMAIL, PROPOSAL_VERSION]
+      [FAKE_CSRF, "authorize", PROPOSAL_TOKEN, USERID, PROPOSAL_VERSION]
     );
   });
 });

@@ -5,7 +5,8 @@ describe("save state chunks to local storage (lib/local_storage.js", () => {
       me: {
         response: {
           email: "foo@bar.com",
-          username: "foobar"
+          username: "foobar",
+          userid: "testid"
         }
       },
       changeUsername: {
@@ -51,18 +52,18 @@ describe("save state chunks to local storage (lib/local_storage.js", () => {
     }
   };
   const getFromLS = (key) => localStorage.getItem(key);
-  test("save state to local storage without passing email as parameter", () => {
+  test("save state to local storage without passing uuid as parameter", () => {
     ls.handleSaveStateToLocalStorage(mockState);
-    expect(getFromLS(ls.loggedInStateKey)).toBeTruthy();
+    expect(getFromLS(ls.stateKey(mockState.users.currentUserID))).toBeTruthy();
   });
 
   test("save draft proposal to local storage", () => {
-    const { email } = mockState.api.me.response;
-    const lsKey = ls.stateKey(email);
+    const { userid } = mockState.api.me.response;
+    const lsKey = ls.stateKey(userid);
 
     ls.handleSaveStateToLocalStorage(mockState);
     expect(getFromLS(lsKey)).toBeTruthy();
-    expect(ls.loadStateLocalStorage(email)).toEqual({
+    expect(ls.loadStateLocalStorage(userid)).toEqual({
       app: mockState.app
     });
 
@@ -70,53 +71,41 @@ describe("save state chunks to local storage (lib/local_storage.js", () => {
     // test that without passing the email nothing will be saved
     const copyState = JSON.parse(JSON.stringify(mockState));
     delete copyState.api.me.response;
-    delete copyState.users.byID[copyState.users.currentUserID].email;
+    delete copyState.users;
     ls.handleSaveStateToLocalStorage(copyState);
     expect(getFromLS(lsKey)).toBeFalsy();
   });
 
-  test("save user info (api.me) to local storage", () => {
-    const lsKey = ls.loggedInStateKey;
-
-    ls.handleSaveStateToLocalStorage(mockState);
-    expect(getFromLS(lsKey)).toBeTruthy();
-    expect(ls.loadStateLocalStorage()).toEqual({
-      api: {
-        me: mockState.api.me
-      }
-    });
-  });
-
   test("save draft invoice to local storage", () => {
-    const { email } = mockState.api.me.response;
-    const lsKey = ls.stateKey(email);
+    const { userid } = mockState.api.me.response;
+    const lsKey = ls.stateKey(userid);
 
     ls.handleSaveStateToLocalStorage(mockState);
     expect(getFromLS(lsKey)).toBeTruthy();
-    expect(ls.loadStateLocalStorage(email)).toEqual({
+    expect(ls.loadStateLocalStorage(userid)).toEqual({
       app: mockState.app
     });
 
     localStorage.setItem(lsKey, "");
-    // test that without passing the email nothing will be saved
+    // test that without passing the uuid nothing will be saved
     const copyState = JSON.parse(JSON.stringify(mockState));
     delete copyState.api.me.response;
-    delete copyState.users.byID[copyState.users.currentUserID].email;
+    delete copyState.users;
     ls.handleSaveStateToLocalStorage(copyState);
     expect(getFromLS(lsKey)).toBeFalsy();
   });
 
   test("clear state from local storage", () => {
-    const { email } = mockState.api.me.response;
+    const { userid } = mockState.api.me.response;
     const lsKey1 = ls.loggedInStateKey;
-    const lsKey2 = ls.stateKey(email);
+    const lsKey2 = ls.stateKey(userid);
     ls.handleSaveStateToLocalStorage(mockState);
-    expect(getFromLS(lsKey1)).toBeTruthy();
+    expect(getFromLS(lsKey1)).toBeFalsy();
     ls.clearStateLocalStorage();
     expect(getFromLS(lsKey1)).toBeFalsy();
 
     expect(getFromLS(lsKey2)).toBeTruthy();
-    ls.clearStateLocalStorage(email);
+    ls.clearStateLocalStorage(userid);
     expect(getFromLS(lsKey2)).toBeFalsy();
   });
 });
