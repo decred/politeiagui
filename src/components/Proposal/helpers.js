@@ -46,7 +46,9 @@ export const getProposalStatusTagProps = (proposal, voteSummary) => {
       case PROPOSAL_VOTING_NOT_AUTHORIZED:
         return {
           type: "blackTime",
-          text: "Waiting for author to authorize voting"
+          text: proposal.linkto
+            ? "Waiting for runoff vote to start"
+            : "Waiting for author to authorize voting"
         };
       case PROPOSAL_VOTING_AUTHORIZED:
         return {
