@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import thunkMiddleware from "redux-thunk";
-import { createLogger } from "redux-logger";
 import rootReducer from "../reducers";
 
 const getComposer = () => {
@@ -19,14 +18,7 @@ const getComposer = () => {
 };
 
 const getMiddlewares = () => {
-  const loggerMiddleware = createLogger();
-  const isProductionEnv = process.env.NODE_ENV === "production";
-  const reduxLoggerIsOn = process.env.REACT_APP_USE_REDUX_LOGGER;
-  // const reduxLoggerIsOn = true;
-  const middlewares = [
-    thunkMiddleware,
-    !isProductionEnv && reduxLoggerIsOn && loggerMiddleware
-  ].filter(Boolean);
+  const middlewares = [thunkMiddleware];
 
   return middlewares;
 };
