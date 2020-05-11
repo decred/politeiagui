@@ -970,11 +970,11 @@ export const onStartRunoffVote = (
         const submissionsTokens = votes.map((vote) => vote.token);
         dispatch(onFetchProposalsBatchVoteSummary([...submissionsTokens]));
         dispatch(
-          act.RECIEVE_START_RUNOFF_VOTE({ ...response, token, success: true })
+          act.RECEIVE_START_RUNOFF_VOTE({ ...response, token, success: true })
         );
       })
       .catch((error) => {
-        dispatch(act.RECIEVE_START_RUNOFF_VOTE(null, error));
+        dispatch(act.RECEIVE_START_RUNOFF_VOTE(null, error));
         throw error;
       });
   });
