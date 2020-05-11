@@ -84,7 +84,7 @@ const PublicActions = ({ proposal, voteSummary }) => {
     rfpLinkedSubmissions ? rfpLinkedSubmissions : null,
     false,
     true
-  ) || [[]];
+  );
   useEffect(() => {
     // check if RFP submissions are already under vote => hide `start runoff vote` action
     if (rfpSubmissionsVoteSummaries) {

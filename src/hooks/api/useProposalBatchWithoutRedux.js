@@ -40,5 +40,5 @@ export default function useProposalBatchWithoutRedux(
     fetchVoteSummary,
     proposalsWithVoteSummaries
   ]);
-  return proposalsWithVoteSummaries;
+  return proposalsWithVoteSummaries || [[]];
 }
