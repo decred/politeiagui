@@ -8,15 +8,15 @@ import { useInviteContractor } from "./hooks";
 
 const ModalInviteContractor = ({ show, onClose }) => {
   const [success, setSuccess] = useState(false);
-  const [isSubmitting, setSubmitting] = useState(false);
   const { onInviteContractor } = useInviteContractor();
 
-  const onInvite = async (values, { resetForm, setFieldError }) => {
-    setSubmitting(true);
+  const onInvite = async (
+    values,
+    { resetForm, setFieldError, setSubmitting }
+  ) => {
     try {
       await onInviteContractor(values);
       resetForm();
-      setSubmitting(false);
       setSuccess(true);
     } catch (e) {
       setSubmitting(false);
@@ -42,7 +42,6 @@ const ModalInviteContractor = ({ show, onClose }) => {
   return (
     <Modal
       style={{ width: "600px" }}
-      disableClose={isSubmitting}
       title={success ? "Invite sent!" : "Invite Contractor"}
       show={show}
       onClose={onClose}
@@ -72,6 +71,7 @@ const ModalInviteContractor = ({ show, onClose }) => {
             handleBlur,
             handleSubmit,
             errors,
+            isSubmitting,
             touched
           }) => (
             <Form onSubmit={handleSubmit}>
