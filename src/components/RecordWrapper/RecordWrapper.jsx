@@ -274,7 +274,7 @@ RecordWrapper.propTypes = {
 
 Author.propTypes = {
   username: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired
+  url: PropTypes.string.isRequired
 };
 
 Event.propTypes = {
