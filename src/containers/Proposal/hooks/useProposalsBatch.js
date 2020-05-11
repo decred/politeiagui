@@ -11,7 +11,7 @@ export default function useProposalsBatch() {
   const proposals = useSelector(sel.proposalsByToken);
   const allByStatus = useSelector(sel.allByStatus);
   const errorSelector = useMemo(
-    () => or(sel.apiProposalsBatchError, sel.apiPropVoteStatusError),
+    () => or(sel.apiProposalsBatchError, sel.apiPropsVoteSummaryError),
     []
   );
   const error = useSelector(errorSelector);

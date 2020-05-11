@@ -1,16 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, classNames } from "pi-ui";
 import {
   isPublicProposal,
   isUnreviewedProposal,
   isAbandonedProposal,
   isVotingNotAuthorizedProposal,
-  isUnderDiscussionProposal
+  isUnderDiscussionProposal,
+  isRfpReadyToRunoff,
+  isVoteActiveProposal,
+  isVotingFinishedProposal
 } from "src/containers/Proposal/helpers";
 import {
   useUnvettedProposalActions,
   usePublicProposalActions
 } from "src/containers/Proposal/Actions";
+import useProposalBatchWithoutRedux from "src/hooks/api/useProposalBatchWithoutRedux";
 import AdminContent from "src/components/AdminContent";
 import { useLoaderContext } from "src/containers/Loader";
 import styles from "./ProposalActions.module.css";
@@ -59,7 +63,8 @@ const PublicActions = ({ proposal, voteSummary }) => {
     onAuthorizeVote,
     onRevokeVote,
     onAbandon,
-    onStartVote
+    onStartVote,
+    onStartRunoffVote
   } = usePublicProposalActions();
 
   const withProposal = (fn) => () => {
@@ -69,29 +74,67 @@ const PublicActions = ({ proposal, voteSummary }) => {
   const isProposalOwner =
     currentUser && proposal && currentUser.userid === proposal.userid;
 
+  const isRfpSubmission = !!proposal.linkto;
+
   const isVotingStartAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
+
+  const rfpLinkedSubmissions = proposal.linkedfrom;
+  const [submssionsDidntVote, setSubmissionDidntVote] = useState(false);
+  const [, rfpSubmissionsVoteSummaries] = useProposalBatchWithoutRedux(
+    rfpLinkedSubmissions ? rfpLinkedSubmissions : null,
+    false,
+    true
+  ) || [[]];
+  useEffect(() => {
+    // check if RFP submissions are already under vote => hide `start runoff vote` action
+    if (rfpSubmissionsVoteSummaries) {
+      setSubmissionDidntVote(
+        !isVoteActiveProposal(
+          rfpSubmissionsVoteSummaries[rfpLinkedSubmissions[0]]
+        ) &&
+          !isVotingFinishedProposal(
+            rfpSubmissionsVoteSummaries[rfpLinkedSubmissions[0]]
+          )
+      );
+    }
+  }, [
+    rfpLinkedSubmissions,
+    rfpSubmissionsVoteSummaries,
+    setSubmissionDidntVote,
+    submssionsDidntVote
+  ]);
   return (
-    isUnderDiscussionProposal(proposal, voteSummary) && (
-      <div className="justify-right margin-top-m">
-        {isProposalOwner &&
-          (!isVotingStartAuthorized ? (
-            <Button onClick={withProposal(onAuthorizeVote)}>
-              Authorize voting
-            </Button>
-          ) : (
-            <Button onClick={withProposal(onRevokeVote)}>
-              Revoke voting authorization
-            </Button>
-          ))}
-        <AdminContent>
-          {!isVotingStartAuthorized ? (
-            <Button onClick={withProposal(onAbandon)}>Abandon</Button>
-          ) : (
-            <Button onClick={withProposal(onStartVote)}>Start Vote</Button>
-          )}
-        </AdminContent>
-      </div>
-    )
+    <>
+      {isUnderDiscussionProposal(proposal, voteSummary) && (
+        <div className="justify-right margin-top-m">
+          {isProposalOwner &&
+            !isRfpSubmission &&
+            (!isVotingStartAuthorized ? (
+              <Button onClick={withProposal(onAuthorizeVote)}>
+                Authorize voting
+              </Button>
+            ) : (
+              <Button onClick={withProposal(onRevokeVote)}>
+                Revoke voting authorization
+              </Button>
+            ))}
+          <AdminContent>
+            {!isVotingStartAuthorized ? (
+              <Button onClick={withProposal(onAbandon)}>Abandon</Button>
+            ) : (
+              <Button onClick={withProposal(onStartVote)}>Start Vote</Button>
+            )}
+          </AdminContent>
+        </div>
+      )}
+      {isRfpReadyToRunoff(proposal, voteSummary) && submssionsDidntVote && (
+        <div className="justify-right margin-top-m">
+          <Button onClick={withProposal(onStartRunoffVote)}>
+            Start Runoff Vote
+          </Button>
+        </div>
+      )}
+    </>
   );
 };
 

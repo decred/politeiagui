@@ -28,7 +28,7 @@ const POST = (path, params, method = "POST") => {
     },
     method,
     body: formBody
-  }).then(function(response) {
+  }).then(function (response) {
     if (response.status >= 400) {
       throw new Error("Bad response from server");
     }

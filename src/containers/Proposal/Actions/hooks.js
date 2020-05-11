@@ -47,8 +47,10 @@ export function useUnvettedActions() {
 export function usePublicActions() {
   const onSetProposalStatus = useAction(act.onSetProposalStatus);
   const onStart = useAction(act.onStartVote);
+  const onStartRunoff = useAction(act.onStartRunoffVote);
   const onAuthorize = useAction(act.onAuthorizeVote);
   const onRevoke = useAction(act.onRevokeVote);
+  const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
 
   const currentUserID = useSelector(sel.currentUserID);
 
@@ -99,10 +101,25 @@ export function usePublicActions() {
     [onStart, currentUserID]
   );
 
+  const onStartRunoffVote = useCallback(
+    (token, votes) => ({ duration, quorumPercentage, passPercentage }) =>
+      onStartRunoff(
+        currentUserID,
+        token,
+        duration,
+        quorumPercentage,
+        passPercentage,
+        votes
+      ),
+    [onStartRunoff, currentUserID]
+  );
+
   return {
     onAbandonProposal,
     onAuthorizeVote,
     onRevokeVote,
-    onStartVote
+    onStartVote,
+    onStartRunoffVote,
+    onFetchProposalsBatch
   };
 }

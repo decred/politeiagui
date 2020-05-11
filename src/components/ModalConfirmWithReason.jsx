@@ -23,14 +23,14 @@ const ModalConfirmWithReason = ({
   successTitle
 }) => {
   const [success, setSuccess] = useState(false);
-  const [isSubmitting, setSubmitting] = useState(false);
 
-  const onSubmitReason = async (values, { resetForm, setFieldError }) => {
-    setSubmitting(true);
+  const onSubmitReason = async (
+    values,
+    { resetForm, setFieldError, setSubmitting }
+  ) => {
     try {
       await onSubmit(values.reason);
       resetForm();
-      setSubmitting(false);
       setSuccess(true);
     } catch (e) {
       setSubmitting(false);
@@ -56,7 +56,6 @@ const ModalConfirmWithReason = ({
   return (
     <Modal
       style={{ width: "600px" }}
-      disableClose={isSubmitting}
       title={(success && successTitle) || title}
       show={show}
       onClose={onClose}
@@ -95,7 +94,8 @@ const ModalConfirmWithReason = ({
             handleBlur,
             handleSubmit,
             errors,
-            touched
+            touched,
+            isSubmitting
           }) => (
             <Form onSubmit={handleSubmit}>
               {errors && errors.global && (

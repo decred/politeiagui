@@ -19,16 +19,12 @@ const usernameValidator = ({
 export const requestResetValidationSchema = (policy) =>
   Yup.object().shape({
     username: usernameValidator(policy),
-    email: Yup.string()
-      .email("Invalid email")
-      .required("Required")
+    email: Yup.string().email("Invalid email").required("Required")
   });
 
 export const resetValidationSchema = ({ minpasswordlength }) =>
   Yup.object().shape({
-    newpassword: Yup.string()
-      .min(minpasswordlength)
-      .required("Required"),
+    newpassword: Yup.string().min(minpasswordlength).required("Required"),
     verify_password: Yup.string()
       .oneOf([Yup.ref("newpassword")], "Passwords must match")
       .required("Required")

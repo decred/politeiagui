@@ -18,7 +18,7 @@ import { getTextFromIndexMd } from "src/helpers";
  * @param {Object} voteSummary
  */
 export const getVotesReceived = (voteSummary) => {
-  if (!voteSummary) {
+  if (!voteSummary || !voteSummary.results) {
     return 0;
   }
   return voteSummary.results.reduce(
@@ -46,18 +46,38 @@ export const isPublicProposal = (proposal) =>
 
 /**
  * Returns true if the given proposal is an approved RFP
- * and it's deadline didn;t expire yet
+ * and it's deadline didn't expire yet
  * @param {Object} proposal
  * @param {Object} voteSummary
  * @returns {Boolean} isActiveApproved
  */
-export const isActiveApprovedRFP = (proposal, voteSummary) => {
-  return (
-    isApprovedProposal(proposal, voteSummary) &&
-    proposal.linkby &&
-    new Date().getTime() < +proposal.linkby
-  );
+export const isActiveApprovedRfp = (proposal, voteSummary) =>
+  isApprovedProposal(proposal, voteSummary) &&
+  proposal.linkby &&
+  new Date().getTime() < Number(proposal.linkby);
+
+/**
+ * Returns true if RFP's linkby meets the minimum period
+ * @param {number} minlinkbyperiod min possible linkby period as seconds unix
+ * @returns {Boolean} isRfpReadyToVote
+ */
+export const isRfpReadyToVote = (proposalLinkBy, minlinkbyperiod) => {
+  const currentTimeSec = new Date().getTime() / 1000;
+  return Math.round(currentTimeSec + minlinkbyperiod) < proposalLinkBy;
 };
+
+/**
+ * Returns true if RFP was approved & deadline already expired
+ * which means RFP ready to start runoff vote
+ * @param {Object} proposal
+ * @param {Object} voteSummary
+ * @returns {Boolean} isActiveApproved
+ */
+export const isRfpReadyToRunoff = (proposal, voteSummary) =>
+  isApprovedProposal(proposal, voteSummary) &&
+  isVotingFinishedProposal(voteSummary) &&
+  proposal.linkby &&
+  new Date().getTime() / 1000 > Number(proposal.linkby);
 
 /**
  * Returns true if the given proposal is unreviewed
@@ -133,22 +153,8 @@ export const isApprovedProposal = (proposal, voteSummary) => {
   if (!proposal || !voteSummary || !isPublicProposal(proposal)) {
     return false;
   }
-  const {
-    quorumpercentage = 0,
-    passpercentage = 0,
-    eligibletickets: numofeligiblevotes,
-    results
-  } = voteSummary;
-  const totalVotes = getVotesReceived(voteSummary);
-  const quorumInVotes = (quorumpercentage * numofeligiblevotes) / 100;
-  const quorumPasses = totalVotes >= quorumInVotes;
-  if (!quorumPasses) {
-    return false;
-  }
-
-  const yesVotes = results.find((op) => op.option.id === "yes").votesreceived;
-
-  return yesVotes > (passpercentage * totalVotes) / 100;
+  const { approved } = voteSummary;
+  return approved;
 };
 
 /**

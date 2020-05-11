@@ -3,13 +3,10 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Formik } from "formik";
 import {
-  Button,
   Message,
-  Text,
   BoxTextInput,
   useMediaQuery,
   useTheme,
-  Link,
   Icon,
   classNames,
   Tooltip
@@ -24,7 +21,6 @@ import AttachFileInput from "src/components/AttachFileInput";
 import ModalMDGuide from "src/components/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
-import { useProposalsBatch } from "src/containers/Proposal/hooks";
 import usePolicy from "src/hooks/api/usePolicy";
 import {
   PROPOSAL_TYPE_REGULAR,
@@ -35,8 +31,11 @@ import {
   getProposalTypeOptionsForSelect,
   getRfpMinMaxDates
 } from "./helpers.js";
-import { isActiveApprovedRFP } from "src/containers/Proposal/helpers";
+import { isActiveApprovedRfp } from "src/containers/Proposal/helpers";
 import useModalContext from "src/hooks/utils/useModalContext";
+import FormatHelpButton from "./FormatHelpButton";
+import SubmitButton from "./SubmitButton";
+import ProposalGuidelinesButton from "./ProposalGuidelinesButton";
 
 const ProposalForm = React.memo(function ProposalForm({
   values,
@@ -111,44 +110,12 @@ const ProposalForm = React.memo(function ProposalForm({
 
   const textAreaProps = useMemo(() => ({ tabIndex: 2 }), []);
 
-  const FormatHelpButton = () => (
-    <Text
-      weight="semibold"
-      className={classNames(
-        styles.formatHelpButton,
-        isDarkTheme && styles.darkButton
-      )}
-      onClick={openMDGuideModal}>
-      Formatting Help
-    </Text>
-  );
-
-  const ProposalGuidelinesButton = () => (
-    <Link
-      weight="semibold"
-      target="_blank"
-      rel="noopener noreferrer"
-      className={classNames(
-        styles.proposalGuidelinesButton,
-        isDarkTheme && styles.darkButton
-      )}
-      href="https://docs.decred.org/governance/politeia/proposal-guidelines/">
-      Proposal Guidelines
-    </Link>
-  );
-
-  const SubmitButton = () => (
-    <Button
-      type="submit"
-      kind={!isValid || disableSubmit ? "disabled" : "primary"}
-      loading={isSubmitting}>
-      Submit
-    </Button>
-  );
   return (
     <form onSubmit={handleSubmit}>
       {errors && errors.global && (
-        <Message kind="error">{errors.global.toString()}</Message>
+        <Message className="margin-bottom-m" kind="error">
+          {errors.global.toString()}
+        </Message>
       )}
       <Row
         noMargin
@@ -229,20 +196,34 @@ const ProposalForm = React.memo(function ProposalForm({
       />
       {!smallTablet ? (
         <Row topMarginSize="s" justify="right">
-          <FormatHelpButton />
-          <ProposalGuidelinesButton />
+          <FormatHelpButton
+            isDarkTheme={isDarkTheme}
+            openMDGuideModal={openMDGuideModal}
+          />
+          <ProposalGuidelinesButton isDarkTheme={isDarkTheme} />
           <DraftSaver submitSuccess={submitSuccess} />
-          <SubmitButton />
+          <SubmitButton
+            isSubmitting={isSubmitting}
+            disableSubmit={disableSubmit}
+            isValid={isValid}
+          />
         </Row>
       ) : (
         <>
           <Row topMarginSize="s" justify="right">
             <DraftSaver submitSuccess={submitSuccess} />
-            <SubmitButton />
+            <SubmitButton
+              isSubmitting={isSubmitting}
+              disableSubmit={disableSubmit}
+              isValid={isValid}
+            />
           </Row>
           <Row topMarginSize="s" justify="right">
-            <FormatHelpButton />
-            <ProposalGuidelinesButton />
+            <FormatHelpButton
+              isDarkTheme={isDarkTheme}
+              openMDGuideModal={openMDGuideModal}
+            />
+            <ProposalGuidelinesButton isDarkTheme={isDarkTheme} />
           </Row>
         </>
       )}
@@ -263,8 +244,7 @@ const ProposalFormWrapper = ({
     });
   }, [handleCloseModal, handleOpenModal]);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const { proposalFormValidation } = useProposalForm();
-  const { onFetchProposalsBatch } = useProposalsBatch();
+  const { proposalFormValidation, onFetchProposalsBatch } = useProposalForm();
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
@@ -277,7 +257,7 @@ const ProposalFormWrapper = ({
           const isInvalidToken =
             !proposal ||
             !voteSummary ||
-            !isActiveApprovedRFP(proposal, voteSummary);
+            !isActiveApprovedRfp(proposal, voteSummary);
           if (isInvalidToken) {
             throw Error("Invalid RFP token!");
           }

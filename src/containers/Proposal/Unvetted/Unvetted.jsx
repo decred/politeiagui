@@ -15,7 +15,6 @@ const tabLabels = [tabValues.UNREVIEWED, tabValues.CENSORED];
 const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
   const {
     proposals,
-    loading,
     proposalsTokens,
     isLoadingTokenInventory: loadingTokenInventory,
     onFetchProposalsBatch
@@ -48,7 +47,7 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
           </TopBanner>
           <Main fillScreen>
             <UnvettedActionsProvider>
-              {proposalsTokens && !loading && content}
+              {proposalsTokens && content}
             </UnvettedActionsProvider>
           </Main>
         </>

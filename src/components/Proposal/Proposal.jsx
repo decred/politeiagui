@@ -12,6 +12,7 @@ import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
 import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
+import useProposalBatchWithoutRedux from "src/hooks/api/useProposalBatchWithoutRedux";
 import {
   getMarkdownContent,
   getVotesReceived,
@@ -24,7 +25,6 @@ import {
 } from "src/containers/Proposal/helpers";
 import {
   useProposalVote,
-  useProposalsBatch,
   useProposalURLs
 } from "src/containers/Proposal/hooks";
 import { useLoaderContext } from "src/containers/Loader";
@@ -39,24 +39,38 @@ import useModalContext from "src/hooks/utils/useModalContext";
 import { useRouter } from "src/components/Router";
 
 const ProposalWrapper = (props) => {
-  const voteProps = useProposalVote(getProposalToken(props.proposal));
-  const { onFetchProposalsBatch, isLoading } = useProposalsBatch();
+  const {
+    voteSummary,
+    voteBlocksLeft,
+    voteActive,
+    voteEndTimestamp
+  } = useProposalVote(getProposalToken(props.proposal));
   const [proposedFor, setProposedFor] = useState(null);
   const { linkto } = props.proposal;
+  const [[rfpProposal]] = useProposalBatchWithoutRedux(
+    linkto ? [linkto] : null,
+    true,
+    false
+  ) || [[]];
   useEffect(() => {
-    async function fetchRfpProposal() {
-      const [[rfpProposal]] = await onFetchProposalsBatch([linkto], false);
+    if (rfpProposal) {
       setProposedFor(rfpProposal && rfpProposal.name);
     }
-    if (linkto && !proposedFor && !isLoading) {
-      fetchRfpProposal();
-    }
-  }, [linkto, onFetchProposalsBatch, setProposedFor, proposedFor, isLoading]);
+  }, [rfpProposal]);
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (
     <Proposal
-      {...{ ...props, ...voteProps, currentUser, history, proposedFor }}
+      {...{
+        ...props,
+        voteSummary,
+        voteBlocksLeft,
+        voteActive,
+        voteEndTimestamp,
+        currentUser,
+        history,
+        proposedFor
+      }}
     />
   );
 };

@@ -40,8 +40,8 @@ global.localStorage = new MockedLocalStorage();
 
 beforeAll(() => {
   //define the dummy driver before each testing execution
-  localforage.defineDriver(dummyStorageDriver, function() {
-    localforage.setDriver(dummyStorageDriver._driver, function() {
+  localforage.defineDriver(dummyStorageDriver, function () {
+    localforage.setDriver(dummyStorageDriver._driver, function () {
       //ok
       localforage.clear();
     });
