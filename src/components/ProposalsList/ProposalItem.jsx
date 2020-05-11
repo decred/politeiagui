@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import PropTypes from "prop-types";
 import { StatusBar, StatusTag, Text, classNames, Icon } from "pi-ui";
 import VotesCount from "../Proposal/VotesCount";
 import { Row } from "../layout";
@@ -126,5 +127,9 @@ const ProposalItem = ({
   );
 };
 
-// TODO: add props types
+ProposalItem.propTypes = {
+  proposal: PropTypes.object.isRequired,
+  voteSummary: PropTypes.object.isRequired
+};
+
 export default ProposalItem;
