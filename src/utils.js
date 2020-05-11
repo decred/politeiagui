@@ -43,7 +43,6 @@ export const formatUnixTimestamp = (unixtimestamp) =>
  * @return {object} date - { day, month, year } object
  */
 export const formatUnixTimestampToObj = (unixtimestamp) => {
-  console.log(unixtimestamp);
   const date = new Date(unixtimestamp * 1000);
   return {
     day: date.getUTCDate(),

@@ -946,6 +946,39 @@ export const onStartVote = (
       });
   });
 
+export const onStartRunoffVote = (
+  loggedInAsEmail,
+  token,
+  duration,
+  quorum,
+  pass,
+  votes
+) =>
+  withCsrf((dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_START_RUNOFF_VOTE({ token }));
+    return api
+      .startRunoffVote(
+        loggedInAsEmail,
+        csrf,
+        token,
+        duration,
+        quorum,
+        pass,
+        votes
+      )
+      .then((response) => {
+        const submissionsTokens = votes.map((vote) => vote.token);
+        dispatch(onFetchProposalsBatchVoteSummary([...submissionsTokens]));
+        dispatch(
+          act.RECIEVE_START_RUNOFF_VOTE({ ...response, token, success: true })
+        );
+      })
+      .catch((error) => {
+        dispatch(act.RECIEVE_START_RUNOFF_VOTE(null, error));
+        throw error;
+      });
+  });
+
 export const onFetchProposalPaywallDetails = () => (dispatch, getState) => {
   dispatch(act.REQUEST_PROPOSAL_PAYWALL_DETAILS());
   const userid = sel.currentUserID(getState());

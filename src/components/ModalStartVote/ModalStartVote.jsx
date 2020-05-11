@@ -12,6 +12,9 @@ import {
 import PropTypes from "prop-types";
 import { useLoaderContext } from "src/containers/Loader";
 import { validationSchema } from "./validation";
+import usePolicy from "src/hooks/api/usePolicy";
+import { isRfpReadyToVote } from "src/containers/Proposal/helpers";
+import { VOTE_TYPE_STANDARD, VOTE_TYPE_RUNOFF } from "src/constants";
 
 const preDefinedDurations = [2016, 2880, 4032];
 const getDurationOptions = (isTesnet) => {
@@ -28,12 +31,17 @@ const ModalStartVote = ({
   onSubmit,
   title,
   successMessage,
-  successTitle
+  successTitle,
+  proposal,
+  voteType
 }) => {
   const [success, setSuccess] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
   const { apiInfo } = useLoaderContext();
   const { theme } = useTheme();
+  const {
+    policy: { minlinkbyperiod }
+  } = usePolicy();
   const successIconBgColor = getThemeProperty(
     theme,
     "success-icon-background-color"
@@ -42,12 +50,20 @@ const ModalStartVote = ({
     theme,
     "success-icon-checkmark-color"
   );
-  const onSubmitChangePassword = async (
-    values,
-    { resetForm, setFieldError }
-  ) => {
+  const onSubmitStartVote = async (values, { resetForm, setFieldError }) => {
     setSubmitting(true);
     try {
+      const { linkby } = proposal;
+      const isRfp = !!linkby;
+      if (
+        isRfp &&
+        voteType === VOTE_TYPE_STANDARD &&
+        !isRfpReadyToVote(linkby, minlinkbyperiod)
+      ) {
+        throw Error(
+          "RFP deadline should meet the minimum period to start voting"
+        );
+      }
       await onSubmit(values);
       resetForm();
       setSubmitting(false);
@@ -65,6 +81,13 @@ const ModalStartVote = ({
     },
     [show]
   );
+
+  const initialValues = {
+    duration: preDefinedDurations[0],
+    quorumPercentage: 20,
+    passPercentage: 60
+  };
+  const isInitialValid = validationSchema.isValidSync(initialValues);
 
   return (
     <Modal
@@ -87,18 +110,16 @@ const ModalStartVote = ({
       }>
       {!success && (
         <FormWrapper
-          initialValues={{
-            duration: preDefinedDurations[0],
-            quorumPercentage: 20,
-            passPercentage: 60
-          }}
+          initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={onSubmitChangePassword}>
+          isInitialValid={isInitialValid}
+          onSubmit={onSubmitStartVote}>
           {({
             Form,
             Actions,
             ErrorMessage,
             values,
+            isValid,
             handleChange,
             handleBlur,
             handleSubmit,
@@ -106,10 +127,9 @@ const ModalStartVote = ({
             errors,
             touched
           }) => {
-            const canSubmit = true;
-            function handleChangeDuration(v) {
+            const handleChangeDuration = (v) =>
               setFieldValue("duration", v.value);
-            }
+
             return (
               <Form onSubmit={handleSubmit}>
                 {errors && errors.global && (
@@ -144,7 +164,7 @@ const ModalStartVote = ({
                 <Actions className="no-padding-bottom">
                   <Button
                     loading={isSubmitting}
-                    kind={canSubmit ? "primary" : "disabled"}
+                    kind={isValid ? "primary" : "disabled"}
                     type="submit">
                     Start Vote
                   </Button>
@@ -172,7 +192,8 @@ ModalStartVote.propTypes = {
   onClose: PropTypes.func,
   onSubmit: PropTypes.func,
   successTitle: PropTypes.string,
-  successMessage: PropTypes.node
+  successMessage: PropTypes.node,
+  voteType: PropTypes.oneOf([VOTE_TYPE_STANDARD, VOTE_TYPE_RUNOFF]).isRequired
 };
 
 ModalStartVote.defaultProps = {

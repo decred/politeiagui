@@ -1,3 +1,4 @@
+import Promise from "promise";
 import "isomorphic-fetch";
 import * as pki from "./pki";
 import qs from "query-string";
@@ -6,7 +7,11 @@ import MerkleTree from "./merkle";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
   INVOICE_STATUS_UNREVIEWED,
-  DCC_STATUS_ACTIVE
+  DCC_STATUS_ACTIVE,
+  PROPOSAL_TYPE_RFP,
+  PROPOSAL_TYPE_RFP_SUBMISSION,
+  VOTE_TYPE_STANDARD,
+  VOTE_TYPE_RUNOFF
 } from "../constants";
 import {
   getHumanReadableError,
@@ -17,6 +22,7 @@ import {
   objectToBuffer,
   bufferToBase64String
 } from "../helpers";
+import { convertObjectToUnixTimestamp } from "src/utils";
 
 export const TOP_LEVEL_COMMENT_PARENTID = "0";
 
@@ -26,8 +32,6 @@ const STATUS_ERR = {
   403: "Forbidden",
   404: "Not found"
 };
-
-const VOTE_TYPE_STANDARD = 1;
 
 const apiBase = "/api";
 const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
@@ -66,11 +70,21 @@ export const makeProposal = (
       hint: "proposalmetadata",
       payload: bufferToBase64String(
         objectToBuffer({
-          name
+          name,
+          linkby:
+            type === PROPOSAL_TYPE_RFP
+              ? convertObjectToUnixTimestamp(rfpDeadline)
+              : undefined,
+          linkto: type === PROPOSAL_TYPE_RFP_SUBMISSION ? rfpLink : undefined
         })
       ),
       digest: objectToSHA256({
-        name
+        name,
+        linkby:
+          type === PROPOSAL_TYPE_RFP
+            ? convertObjectToUnixTimestamp(rfpDeadline)
+            : undefined,
+        linkto: type === PROPOSAL_TYPE_RFP_SUBMISSION ? rfpLink : undefined
       })
     }
   ]
@@ -529,6 +543,35 @@ export const editProposal = (csrf, proposal) =>
 export const newComment = (csrf, comment) =>
   POST("/comments/new", csrf, comment).then(getResponse);
 
+const votePayloadWithType = ({
+  type,
+  proposalversion,
+  duration,
+  quorumpercentage,
+  passpercentage,
+  token
+}) => ({
+  token,
+  proposalversion: +proposalversion,
+  type,
+  mask: 3,
+  duration,
+  quorumpercentage,
+  passpercentage,
+  options: [
+    {
+      id: "no",
+      description: "Don't approve proposal",
+      bits: 1
+    },
+    {
+      id: "yes",
+      description: "Approve proposal",
+      bits: 2
+    }
+  ]
+});
+
 export const startVote = (
   email,
   csrf,
@@ -538,33 +581,20 @@ export const startVote = (
   passpercentage,
   proposalversion
 ) => {
-  const vote = {
+  const vote = votePayloadWithType({
     token,
-    proposalversion: +proposalversion,
+    proposalversion,
     type: VOTE_TYPE_STANDARD,
-    mask: 3,
     duration,
     quorumpercentage,
-    passpercentage,
-    options: [
-      {
-        id: "no",
-        description: "Don't approve proposal",
-        bits: 1
-      },
-      {
-        id: "yes",
-        description: "Approve proposal",
-        bits: 2
-      }
-    ]
-  };
+    passpercentage
+  });
   const hash = objectToSHA256(vote);
   return pki
     .myPubKeyHex(email)
     .then((publickey) =>
-      pki.signStringHex(email, hash).then((signature) => {
-        return POST(
+      pki.signStringHex(email, hash).then((signature) =>
+        POST(
           "/vote/start",
           csrf,
           {
@@ -573,9 +603,63 @@ export const startVote = (
             publickey
           },
           "v2"
-        );
-      })
+        )
+      )
     )
+    .then(getResponse);
+};
+
+export const startRunoffVote = (
+  email,
+  csrf,
+  token,
+  duration,
+  quorumpercentage,
+  passpercentage,
+  votes // [{ token, proposalVersion }, ...]
+) => {
+  const submissionsVotes = votes.map((vote) =>
+    votePayloadWithType({
+      ...vote,
+      type: VOTE_TYPE_RUNOFF,
+      duration,
+      quorumpercentage,
+      passpercentage
+    })
+  );
+  return pki
+    .myPubKeyHex(email)
+    .then(async (publickey) => {
+      const voteSignatures = await Promise.all(
+        submissionsVotes.map((vote) =>
+          pki.signStringHex(email, objectToSHA256(vote))
+        )
+      );
+      const voteAuthSignatures = await Promise.all(
+        submissionsVotes.map(({ token, proposalversion: version }) =>
+          pki.signStringHex(email, `${token}${version}authorize`)
+        )
+      );
+      return POST(
+        "/vote/startrunoff",
+        csrf,
+        {
+          startvotes: voteSignatures.map((signature, index) => ({
+            vote: submissionsVotes[index],
+            signature,
+            publickey
+          })),
+          authorizevotes: voteAuthSignatures.map((signature, index) => ({
+            action: "authorize",
+            token: votes[index].token,
+            signature,
+            publickey
+          })),
+          token
+        },
+        "v2"
+      );
+    })
     .then(getResponse);
 };
 
@@ -596,14 +680,16 @@ export const proposalAuthorizeOrRevokeVote = (
   pki
     .myPubKeyHex(email)
     .then((publickey) =>
-      pki.signStringHex(email, token + version + action).then((signature) =>
-        POST("/proposals/authorizevote", csrf, {
-          action,
-          token,
-          signature,
-          publickey
-        })
-      )
+      pki
+        .signStringHex(email, `${token}${version}${action}`)
+        .then((signature) =>
+          POST("/proposals/authorizevote", csrf, {
+            action,
+            token,
+            signature,
+            publickey
+          })
+        )
     )
     .then(getResponse);
 

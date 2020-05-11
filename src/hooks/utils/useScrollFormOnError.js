@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export default function(globalError) {
+export default function (globalError) {
   useEffect(
     function scrollToTopOnGlobalError() {
       if (globalError) {

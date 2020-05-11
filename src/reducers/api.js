@@ -157,6 +157,9 @@ const api = (state = DEFAULT_STATE, action) =>
         receive("setStatusProposal", state),
       [act.REQUEST_START_VOTE]: () => request("startVote", state, action),
       [act.RECEIVE_START_VOTE]: () => receive("startVote", state),
+      [act.RECEIVE_START_RUNOFF_VOTE]: () => receive("startRunoffVote", state),
+      [act.REQUEST_START_RUNOFF_VOTE]: () =>
+        request("startRunoffVote", state, action),
       [act.REQUEST_UPDATED_KEY]: () => request("updateUserKey", state, action),
       [act.RECEIVE_UPDATED_KEY]: () => receive("updateUserKey", state, action),
       [act.REQUEST_VERIFIED_KEY]: () => request("verifyUserKey", state, action),

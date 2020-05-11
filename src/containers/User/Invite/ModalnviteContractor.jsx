@@ -59,9 +59,7 @@ const ModalInviteContractor = ({ show, onClose }) => {
             isTemp: false
           }}
           validationSchema={Yup.object().shape({
-            email: Yup.string()
-              .email("Invalid email")
-              .required("Required"),
+            email: Yup.string().email("Invalid email").required("Required"),
             isTemp: Yup.boolean()
           })}
           onSubmit={onInvite}>

@@ -8,6 +8,7 @@ const MAX_PASS_PERCENTAGE = 100;
 
 export const validationSchema = Yup.object().shape({
   quorumPercentage: Yup.number()
+    .required("required")
     .min(
       MIN_QUORUM_PERCENTAGE,
       minAmountMessage("quorum percentage", MIN_QUORUM_PERCENTAGE)
@@ -17,6 +18,7 @@ export const validationSchema = Yup.object().shape({
       maxAmountMessage("quorum percentage", MAX_QUORUM_PERCENTAGE)
     ),
   passPercentage: Yup.number()
+    .required("required")
     .min(
       MIN_PASS_PERCENTAGE,
       minAmountMessage("pass percentage", MIN_PASS_PERCENTAGE)
