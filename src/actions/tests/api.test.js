@@ -291,12 +291,12 @@ describe("test api actions (actions/api.js)", () => {
   test("on verify new user action", async () => {
     const path = "/api/v1/user/verify";
     const verificationToken = "any";
-    const { email } = FAKE_USER;
+    const { email, username } = FAKE_USER;
 
     await assertApiActionOnError(
       path,
       api.onVerifyNewUser,
-      [email, verificationToken],
+      [email, verificationToken, username],
       (e) => [
         {
           type: act.REQUEST_VERIFY_NEW_USER,
@@ -316,7 +316,7 @@ describe("test api actions (actions/api.js)", () => {
     await assertApiActionOnSuccess(
       path,
       api.onVerifyNewUser,
-      [email, verificationToken],
+      [email, verificationToken, username],
       [
         {
           type: act.REQUEST_VERIFY_NEW_USER,
