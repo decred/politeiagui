@@ -36,7 +36,6 @@ const ModalStartVote = ({
   voteType
 }) => {
   const [success, setSuccess] = useState(false);
-  const [isSubmitting, setSubmitting] = useState(false);
   const { apiInfo } = useLoaderContext();
   const { theme } = useTheme();
   const {
@@ -50,8 +49,10 @@ const ModalStartVote = ({
     theme,
     "success-icon-checkmark-color"
   );
-  const onSubmitStartVote = async (values, { resetForm, setFieldError }) => {
-    setSubmitting(true);
+  const onSubmitStartVote = async (
+    values,
+    { resetForm, setFieldError, setSubmitting }
+  ) => {
     try {
       const { linkby } = proposal;
       const isRfp = !!linkby;
@@ -66,7 +67,6 @@ const ModalStartVote = ({
       }
       await onSubmit(values);
       resetForm();
-      setSubmitting(false);
       setSuccess(true);
     } catch (e) {
       setSubmitting(false);
@@ -92,7 +92,6 @@ const ModalStartVote = ({
   return (
     <Modal
       style={{ width: "600px" }}
-      disableClose={isSubmitting}
       title={(success && successTitle) || title}
       show={show}
       onClose={onClose}
@@ -125,6 +124,7 @@ const ModalStartVote = ({
             handleSubmit,
             setFieldValue,
             errors,
+            isSubmitting,
             touched
           }) => {
             const handleChangeDuration = (v) =>
