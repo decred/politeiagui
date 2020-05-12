@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useAction, useSelector, useStoreSubscribe } from "src/redux";
@@ -6,8 +6,13 @@ import useAPIAction from "src/hooks/utils/useAPIAction";
 import useThrowError from "src/hooks/utils/useThrowError";
 import { handleSaveAppDraftInvoices } from "src/lib/local_storage";
 
-export function useUserInvoices() {
-  const invoices = useSelector(sel.getCurrentUserInvoices);
+export function useUserInvoices(userid) {
+  const currentUserID = useSelector(sel.currentUserID);
+  const userID = userid || currentUserID;
+  const invoicesSelector = useMemo(() => sel.makeGetInvoicesByUserID(userID), [
+    userID
+  ]);
+  const invoices = useSelector(invoicesSelector);
   const onFetchUserInvoices = useAction(act.onFetchUserInvoices);
 
   const [loading, error] = useAPIAction(onFetchUserInvoices);
