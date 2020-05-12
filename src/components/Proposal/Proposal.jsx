@@ -54,18 +54,17 @@ const ProposalWrapper = (props) => {
   const isSubmission = !!linkto;
   const isRFP = !!linkedfrom;
   const batchTokens = isSubmission ? [linkto] : isRFP ? linkedfrom : null;
-  const fetchVoteSummary = !!linkedfrom;
   const [proposals, voteSummaries] = useProposalBatchWithoutRedux(
     batchTokens,
     true,
-    fetchVoteSummary
+    isRFP
   );
   useEffect(() => {
-    if (linkto && proposals && proposals[0]) {
+    if (isSubmission && proposals && proposals[0]) {
       const rfpProposal = proposals[0];
       setProposedFor(rfpProposal && rfpProposal.name);
     }
-  }, [linkto, proposals]);
+  }, [isSubmission, proposals]);
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (
@@ -79,7 +78,7 @@ const ProposalWrapper = (props) => {
         currentUser,
         history,
         proposedFor,
-        rfpSubmissions: linkedfrom && {
+        rfpSubmissions: isRFP && {
           proposals,
           voteSummaries
         }
@@ -299,7 +298,7 @@ const Proposal = React.memo(function Proposal({
                 type="expand"
                 className="margin-top-m"
                 size={"xlg"}
-                onClick={() => goToFullProposal(history, proposalURL)}
+                onClick={goToFullProposal(history, proposalURL)}
               />
             )}
             {isPublicAccessible && !extended && (

@@ -51,7 +51,7 @@ const ProposalItem = ({
         className={styles.itemWrapper}
         justify="space-between"
         align="center"
-        onClick={() => goToFullProposal(history, proposalURL)}
+        onClick={goToFullProposal(history, proposalURL)}
         noMargin>
         <div className={classNames(styles.itemTitle, "flex-column")}>
           <Text color="primaryDark">{name}</Text>

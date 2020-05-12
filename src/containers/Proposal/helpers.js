@@ -228,6 +228,5 @@ export const getCommentsUrl = (proposalToken, javascriptEnabled) =>
 export const getAuthorUrl = (userid, javascriptEnabled) =>
   javascriptEnabled ? `/user/${userid}` : `${NOJS_ROUTE_PREFIX}/user/${userid}`;
 
-export const goToFullProposal = (history, proposalURL) => {
+export const goToFullProposal = (history, proposalURL) => () =>
   history.push(proposalURL);
-};

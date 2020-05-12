@@ -41,12 +41,13 @@ export const getAuthorUrl = (userid, javascriptEnabled) =>
   javascriptEnabled ? `/user/${userid}` : `${NOJS_ROUTE_PREFIX}/user/${userid}`;
 
 export const getProposalStatusTagProps = (proposal, voteSummary) => {
+  const isRfpSubmission = !!proposal.linkto;
   if (isPublicProposal(proposal) && !!voteSummary) {
     switch (voteSummary.status) {
       case PROPOSAL_VOTING_NOT_AUTHORIZED:
         return {
           type: "blackTime",
-          text: proposal.linkto
+          text: isRfpSubmission
             ? "Waiting for runoff vote to start"
             : "Waiting for author to authorize voting"
         };
