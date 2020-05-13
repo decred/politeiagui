@@ -279,10 +279,10 @@ export const onChangePassword = (password, newPassword) =>
       });
   });
 
-export const onFetchUserInvoices = (userid, token) => (dispatch) => {
+export const onFetchUserInvoices = () => (dispatch) => {
   dispatch(act.REQUEST_USER_INVOICES());
   return api
-    .userInvoices(userid, token)
+    .userInvoices()
     .then((response) => dispatch(act.RECEIVE_USER_INVOICES(response)))
     .catch((error) => {
       dispatch(act.RECEIVE_USER_INVOICES(null, error));
