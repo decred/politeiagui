@@ -73,9 +73,6 @@ export function useCredits(userID) {
   const onPurchaseProposalCredits = useAction(
     act.onFetchProposalPaywallDetails
   );
-  const onFetchProposalPaywallPayment = useAction(
-    act.onFetchProposalPaywallPayment
-  );
   const onPollProposalPaywallPayment = useAction(
     act.onPollProposalPaywallPayment
   );
@@ -122,24 +119,6 @@ export function useCredits(userID) {
       onUserProposalCredits();
     }
   }, [shouldFetchProposalCredits, onUserProposalCredits]);
-
-  useEffect(() => {
-    if (!pollingCreditsPayment && proposalPaywallPaymentTxid) {
-      toggleCreditsPaymentPolling(true);
-      onPollProposalPaywallPayment(false);
-    }
-  }, [
-    pollingCreditsPayment,
-    proposalPaywallPaymentTxid,
-    toggleCreditsPaymentPolling,
-    onPollProposalPaywallPayment
-  ]);
-
-  useEffect(() => {
-    if (!proposalPaywallPaymentTxid) {
-      onFetchProposalPaywallPayment();
-    }
-  }, [proposalPaywallPaymentTxid, onFetchProposalPaywallPayment]);
 
   return {
     proposalCreditPrice,
