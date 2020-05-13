@@ -31,7 +31,20 @@ const DatePickerField = ({ name, placeholder, years, className }) => {
               show={isOpen}
               years={years}
               value={values[name]}
-              lang={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
+              lang={[
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec"
+              ]}
               onChange={onChange}>
               <Row
                 className={styles.box}
