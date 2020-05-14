@@ -5,6 +5,7 @@ import styles from "./ProposalsList.module.css";
 import ProposalItem from "./ProposalItem";
 
 const ProposalsList = ({ data: { proposals, voteSummaries } }) => {
+  console.log(proposals);
   return (
     <div className="margin-top-l">
       <Text
@@ -13,13 +14,15 @@ const ProposalsList = ({ data: { proposals, voteSummaries } }) => {
         weight="semibold">
         Submitted Proposals
       </Text>
-      {proposals.map((proposal, index) => (
-        <ProposalItem
-          key={index}
-          proposal={proposal}
-          voteSummary={voteSummaries[proposals[index].censorshiprecord.token]}
-        />
-      ))}
+      {proposals
+        .sort((a, b) => a.status - b.status)
+        .map((proposal, index) => (
+          <ProposalItem
+            key={index}
+            proposal={proposal}
+            voteSummary={voteSummaries[proposals[index].censorshiprecord.token]}
+          />
+        ))}
     </div>
   );
 };
