@@ -5,6 +5,7 @@ import { FormikConsumer } from "formik";
 import styles from "./DatePickerField.module.css";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import { Row } from "../layout";
+import { MONTHS_LABELS } from "src/constants";
 
 const DatePickerField = ({ name, placeholder, years, className }) => {
   const [isOpen, openPicker, closePicker] = useBooleanState(false);
@@ -31,20 +32,7 @@ const DatePickerField = ({ name, placeholder, years, className }) => {
               show={isOpen}
               years={years}
               value={values[name]}
-              lang={[
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec"
-              ]}
+              lang={MONTHS_LABELS}
               onChange={onChange}>
               <Row
                 className={styles.box}

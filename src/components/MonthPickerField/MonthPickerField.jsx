@@ -5,23 +5,7 @@ import { FormikConsumer } from "formik";
 import styles from "./MonthPickerField.module.css";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 import { sortDateRange } from "src/containers/Invoice";
-
-const pickerLang = {
-  months: [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  ]
-};
+import { MONTHS_LABELS } from "src/constants";
 
 const isAllMonths = (date) => date.month === "all";
 const isRange = (date) => date && date.start && date.end;
@@ -29,12 +13,12 @@ const isRange = (date) => date && date.start && date.end;
 const makeText = (m) => {
   if (m && m.year && m.month) {
     return !isAllMonths(m)
-      ? `${pickerLang.months[m.month - 1]} ${m.year}`
+      ? `${MONTHS_LABELS[m.month - 1]} ${m.year}`
       : `${m.year}`;
   }
   if (isRange(m)) {
-    return `${pickerLang.months[m.start.month - 1]} ${m.start.year} - ${
-      pickerLang.months[m.end.month - 1]
+    return `${MONTHS_LABELS[m.start.month - 1]} ${m.start.year} - ${
+      MONTHS_LABELS[m.end.month - 1]
     } ${m.end.year}`;
   }
   return "?";
@@ -130,20 +114,7 @@ const MonthPickerField = ({
                 years={years}
                 values={values[name]}
                 multiChoice={multiChoice}
-                lang={[
-                  "Jan",
-                  "Feb",
-                  "Mar",
-                  "Apr",
-                  "May",
-                  "Jun",
-                  "Jul",
-                  "Aug",
-                  "Sep",
-                  "Oct",
-                  "Nov",
-                  "Dec"
-                ]}
+                lang={MONTHS_LABELS}
                 onChange={onChange}>
                 <span
                   className={classNames(

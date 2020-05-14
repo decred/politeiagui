@@ -161,4 +161,19 @@ export const CMS_DOMAINS = [
 
 export const NOJS_ROUTE_PREFIX = "/nojavascript";
 
+export const MONTHS_LABELS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec"
+];
+
 export const INVALID_DATE = "Invalid Date. Please provide a Date Object.";
