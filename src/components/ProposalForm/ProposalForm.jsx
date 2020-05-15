@@ -260,7 +260,7 @@ const ProposalFormWrapper = ({
           }
           if (!isActiveApprovedRfp(proposal, voteSummary)) {
             throw Error(
-              "Make sure RFP was aprroved and deadline hasn't expired"
+              "Make sure token is associated with an approved & not expired RFP"
             );
           }
         }
