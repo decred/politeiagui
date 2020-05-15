@@ -254,12 +254,14 @@ const ProposalFormWrapper = ({
             rfpLink
           ])) || [[], null];
           const voteSummary = summaries && summaries[rfpLink];
-          const isInvalidToken =
-            !proposal ||
-            !voteSummary ||
-            !isActiveApprovedRfp(proposal, voteSummary);
+          const isInvalidToken = !proposal || !voteSummary;
           if (isInvalidToken) {
             throw Error("Proposal not found!");
+          }
+          if (!isActiveApprovedRfp(proposal, voteSummary)) {
+            throw Error(
+              "Make sure RFP was aprroved and deadline hasn't expired"
+            );
           }
         }
         const proposalToken = await onSubmit({
