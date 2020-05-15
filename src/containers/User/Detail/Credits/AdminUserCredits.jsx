@@ -12,6 +12,7 @@ import RescanSection from "./components/RescanSection.jsx";
 import CreditHistorySection from "./components/CreditHistorySection.jsx";
 import { useUserPaymentModals } from "./hooks";
 import useModalContext from "src/hooks/utils/useModalContext";
+import { useConfig } from "src/containers/Config";
 
 const Credits = ({ user }) => {
   const userID = user && user.userid;
@@ -20,6 +21,7 @@ const Credits = ({ user }) => {
     userID
   );
   const { isPaid } = usePaywall(userID);
+  const { paywallEnabled } = useConfig();
   const {
     proposalCreditPrice,
     isApiRequestingUserProposalCredits,
@@ -95,21 +97,23 @@ const Credits = ({ user }) => {
         proposalCreditPrice={proposalCreditPrice}
       />
       <div className={styles.buttonsWrapper}>
-        {isPaid && (
-          <Button
-            className="margin-top-s"
-            size="sm"
-            onClick={handleOpenBuyCreditsModal}>
-            Purchase more
-          </Button>
+        {isPaid && paywallEnabled && (
+          <>
+            <Button
+              className="margin-top-s"
+              size="sm"
+              onClick={handleOpenBuyCreditsModal}>
+              Purchase more
+            </Button>
+            <Button
+              onClick={onRescanUserCredits}
+              loading={isLoadingRescan}
+              className="margin-top-s"
+              size="sm">
+              Rescan
+            </Button>
+          </>
         )}
-        <Button
-          onClick={onRescanUserCredits}
-          loading={isLoadingRescan}
-          className="margin-top-s"
-          size="sm">
-          Rescan
-        </Button>
       </div>
       <RescanSection
         amountOfCreditsAddedOnRescan={amountOfCreditsAddedOnRescan}

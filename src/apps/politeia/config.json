@@ -8,7 +8,6 @@
   "enableAdminInvite": false,
   "enableCommentVote": true,
   "enableCredits": true,
-  "enablePaywall": true,
   "onBoardContent": "onboard-pi",
   "onBoardLink": "https://docs.decred.org/governance/politeia/overview/",
   "privacyPolicyContent": "privacy-policy",

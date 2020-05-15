@@ -7,6 +7,7 @@ import useModalContext from "src/hooks/utils/useModalContext";
 import ModalBuyProposalCredits from "src/components/ModalBuyProposalCredits";
 import ModalPayPaywall from "src/components/ModalPayPaywall";
 import { getProposalCreditsPaymentStatus } from "./helpers.js";
+import { useConfig } from "src/containers/Config";
 
 export function useCredits(userID) {
   const isApiRequestingProposalPaywall = useSelector(
@@ -86,16 +87,19 @@ export function useCredits(userID) {
     act.clearProposalPaymentPollingPointer
   );
   const { isPaid } = usePaywall(userID);
+  const { paywallEnabled } = useConfig();
   const proposalCredits = proposalCreditsUnspent.length;
   const proposalCreditsFetched = proposalCredits !== null;
   const isUserPageOwner = currentUserID === userID;
   const shouldFetchPurchaseProposalCredits =
+    paywallEnabled &&
     isPaid &&
     !!userID &&
     isUserPageOwner &&
     !proposalCreditPrice &&
     !isApiRequestingProposalPaywall;
   const shouldPollPaywallPayment =
+    paywallEnabled &&
     isPaid &&
     isUserPageOwner &&
     proposalPaywallPaymentTxid !== "" &&
