@@ -259,7 +259,7 @@ const ProposalFormWrapper = ({
             !voteSummary ||
             !isActiveApprovedRfp(proposal, voteSummary);
           if (isInvalidToken) {
-            throw Error("Invalid RFP token!");
+            throw Error("Proposal not found!");
           }
         }
         const proposalToken = await onSubmit({
