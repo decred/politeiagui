@@ -8,9 +8,7 @@ import styles from "./Admin.module.css";
 
 const InvoicesAdmin = ({ userID }) => {
   const { loading, invoices } = useAdminInvoices();
-  const userInovices = invoices.filter((inv) =>
-    inv.userid === userID
-  );
+  const userInovices = invoices.filter((inv) => inv.userid === userID);
   const renderInvoice = useCallback(
     (invoice) => (
       <Invoice
