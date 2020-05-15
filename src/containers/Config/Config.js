@@ -67,8 +67,8 @@ const Config = ({ children }) => {
     <ConfigProvider
       {...{
         ...configOptions,
-        enablePaywall: paywallenabled,
-        enableCredits: paywallenabled
+        enablePaywall: !!paywallenabled,
+        enableCredits: !!paywallenabled
       }}>
       {!loading && !error && configOptions && children}
       {error}
