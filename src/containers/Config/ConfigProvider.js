@@ -59,6 +59,7 @@ ConfigProvider.propTypes = {
   enableAdminInvite: PropTypes.bool,
   enableCommentVote: PropTypes.bool,
   enableCredits: PropTypes.bool,
+  enablePaywall: PropTypes.bool,
   onBoardContent: PropTypes.string,
   onBoardLink: PropTypes.string,
   privacyPolicyContent: PropTypes.string,
