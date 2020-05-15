@@ -42,19 +42,25 @@ export const proposalValidation = ({
   }
 
   // RFP submission token validation
-  if (values.type === PROPOSAL_TYPE_RFP_SUBMISSION && !values.rfpLink) {
-    errors.rfpLink = "Required";
+  if (values.type === PROPOSAL_TYPE_RFP_SUBMISSION) {
+    if (!values.rfpLink) {
+      errors.rfpLink = "Required";
+    }
+    const tokenRegex = /[0-9a-f]{64}/g;
+    if (!values.rfpLink.match(tokenRegex)) {
+      errors.rfpLink = "64 characters long hex string";
+    }
   }
 
   // Name value validation
-  const regex = buildRegexFromSupportedChars(proposalnamesupportedchars);
+  const nameRegex = buildRegexFromSupportedChars(proposalnamesupportedchars);
   if (values.name.trim().length < minproposalnamelength) {
     errors.name = minLengthMessage("name", minproposalnamelength);
   }
   if (values.name.trim().length > maxproposalnamelength) {
     errors.name = maxLengthMessage("name", maxproposalnamelength);
   }
-  if (!values.name.match(regex)) {
+  if (!values.name.match(nameRegex)) {
     errors.name = invalidMessage("name", proposalnamesupportedchars);
   }
   if (!values.name) {
