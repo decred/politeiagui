@@ -4,6 +4,7 @@ import { ConfigProvider } from "./ConfigProvider";
 import politeiaConfig from "src/apps/politeia/config.json";
 import { mergeAll } from "lodash/fp";
 import { getQueryStringValue } from "src/lib/queryString";
+import usePolicy from "src/hooks/api/usePolicy";
 
 const env = dotenvParse(process.env);
 const getEnvVariable = (key) => env[`REACT_APP_${key}`];
@@ -43,6 +44,9 @@ const Config = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [configOptions, setConfig] = useState(null);
+  const {
+    policy: { paywallenabled }
+  } = usePolicy();
 
   useEffect(() => {
     async function initConfig() {
@@ -60,7 +64,12 @@ const Config = ({ children }) => {
   }, []);
 
   return (
-    <ConfigProvider {...{ ...configOptions }}>
+    <ConfigProvider
+      {...{
+        ...configOptions,
+        enablePaywall: paywallenabled,
+        enableCredits: paywallenabled
+      }}>
       {!loading && !error && configOptions && children}
       {error}
     </ConfigProvider>

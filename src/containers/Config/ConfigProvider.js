@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useMemo } from "react";
 import PropTypes from "prop-types";
 import { constants } from "./helpers";
-import usePolicy from "src/hooks/api/usePolicy";
 
 export const ConfigContext = createContext();
 
@@ -9,18 +8,9 @@ const CustomConfigContext = createContext();
 
 export const ConfigConsumer = ConfigContext.Consumer;
 
-// Overwrite app config enablePaywall with the option sent from the server
-const injectBackendPaywall = (obj) => (paywallOption) => ({
-  ...obj,
-  enablePaywall: paywallOption
-});
-
 export const useConfig = () => {
   const defaultConfig = useContext(ConfigContext);
   const customConfig = useContext(CustomConfigContext);
-  const {
-    policy: { paywallenabled }
-  } = usePolicy();
 
   const config = useMemo(
     () =>
@@ -33,7 +23,7 @@ export const useConfig = () => {
     [customConfig, defaultConfig]
   );
 
-  return injectBackendPaywall(config)(paywallenabled);
+  return config;
 };
 
 /**
