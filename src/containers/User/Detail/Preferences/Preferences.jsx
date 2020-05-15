@@ -1,24 +1,8 @@
-import { Formik, useField } from "formik";
+import { Field, Formik } from "formik";
 import { Button, Card, Checkbox, classNames, H2, Icon, Message } from "pi-ui";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useUserPreferences } from "./hooks.js";
 import styles from "./Preferences.module.css";
-
-const CheckboxField = React.memo(({ setShowConfirm, label, className, id, ...props }) => {
-  const [field, { value }] = useField(props);
-  useEffect(() => {
-    setShowConfirm(false);
-  }, [value, setShowConfirm]);
-  return (
-    <Checkbox {...{
-      label,
-      className,
-      id,
-      checked: value,
-      ...field
-    }}/>
-  );
-});
 
 const Preferences = ({ user }) => {
   const {
@@ -42,7 +26,11 @@ const Preferences = ({ user }) => {
       onSubmit={handlePreferencesSubmit}
       enableReinitialize={true}>
       {(formikProps) => {
-        const { handleSubmit } = formikProps;
+        const { handleSubmit, setFieldValue, values } = formikProps;
+        const customSetFieldValue = (...props) => {
+          setShowConfirm(false);
+          setFieldValue(...props);
+        };
         return (
           <form onSubmit={handleSubmit}>
             <div>
@@ -53,15 +41,29 @@ const Preferences = ({ user }) => {
               </Message>
               <Card className="container margin-top-s">
                 <H2>Email notifications for my proposals</H2>
-                <CheckboxField
-                  setShowConfirm={setShowConfirm}
+                <Field
+                  component={Checkbox}
+                  checked={values["myproposalnotifications-statuschange"]}
+                  onChange={(event) =>
+                    customSetFieldValue(
+                      "myproposalnotifications-statuschange",
+                      event.target.checked
+                    )
+                  }
                   className="margin-top-m"
                   id="1"
                   name="myproposalnotifications-statuschange"
                   label="Proposal approved or censored"
                 />
-                <CheckboxField
-                  setShowConfirm={setShowConfirm}
+                <Field
+                  component={Checkbox}
+                  checked={values["myproposalnotifications-votestarted"]}
+                  onChange={(event) =>
+                    customSetFieldValue(
+                      "myproposalnotifications-votestarted",
+                      event.target.checked
+                    )
+                  }
                   className="margin-top-m"
                   id="2"
                   name="myproposalnotifications-votestarted"
@@ -70,22 +72,43 @@ const Preferences = ({ user }) => {
               </Card>
               <Card className="container margin-top-s">
                 <H2>Email notifications for others' proposals</H2>
-                <CheckboxField
-                  setShowConfirm={setShowConfirm}
+                <Field
+                  component={Checkbox}
+                  checked={values["regularproposalnotifications-vetted"]}
+                  onChange={(event) =>
+                    customSetFieldValue(
+                      "regularproposalnotifications-vetted",
+                      event.target.checked
+                    )
+                  }
                   className="margin-top-m"
                   id="3"
                   name="regularproposalnotifications-vetted"
                   label="New proposal published"
                 />
-                <CheckboxField
-                  setShowConfirm={setShowConfirm}
+                <Field
+                  component={Checkbox}
+                  checked={values["regularproposalnotifications-edited"]}
+                  onChange={(event) =>
+                    customSetFieldValue(
+                      "regularproposalnotifications-edited",
+                      event.target.checked
+                    )
+                  }
                   className="margin-top-m"
                   id="4"
                   name="regularproposalnotifications-edited"
                   label="Proposal edited"
                 />
-                <CheckboxField
-                  setShowConfirm={setShowConfirm}
+                <Field
+                  component={Checkbox}
+                  checked={values["regularproposalnotifications-votestarted"]}
+                  onChange={(event) =>
+                    customSetFieldValue(
+                      "regularproposalnotifications-votestarted",
+                      event.target.checked
+                    )
+                  }
                   className="margin-top-m"
                   id="5"
                   name="regularproposalnotifications-votestarted"
@@ -95,15 +118,31 @@ const Preferences = ({ user }) => {
               {isAdmin && isUserPageOwner && (
                 <Card className="container margin-top-s">
                   <H2>Admin email notifications</H2>
-                  <CheckboxField
-                    setShowConfirm={setShowConfirm}
+                  <Field
+                    component={Checkbox}
+                    checked={values["adminproposalnotifications-new"]}
+                    onChange={(event) =>
+                      customSetFieldValue(
+                        "adminproposalnotifications-new",
+                        event.target.checked
+                      )
+                    }
                     className="margin-top-m"
                     id="6"
                     name="adminproposalnotifications-new"
                     label="New proposal submitted"
                   />
-                  <CheckboxField
-                    setShowConfirm={setShowConfirm}
+                  <Field
+                    component={Checkbox}
+                    checked={
+                      values["adminproposalnotifications-voteauthorized"]
+                    }
+                    onChange={(event) =>
+                      customSetFieldValue(
+                        "adminproposalnotifications-voteauthorized",
+                        event.target.checked
+                      )
+                    }
                     className="margin-top-m"
                     id="7"
                     name="adminproposalnotifications-voteauthorized"
@@ -113,15 +152,29 @@ const Preferences = ({ user }) => {
               )}
               <Card className="container margin-top-s">
                 <H2>Comment email notifications</H2>
-                <CheckboxField
-                  setShowConfirm={setShowConfirm}
+                <Field
+                  component={Checkbox}
+                  checked={values["commentnotifications-proposal"]}
+                  onChange={(event) =>
+                    customSetFieldValue(
+                      "commentnotifications-proposal",
+                      event.target.checked
+                    )
+                  }
                   className="margin-top-m"
                   id="8"
                   name="commentnotifications-proposal"
                   label="New comment on your proposal"
                 />
-                <CheckboxField
-                  setShowConfirm={setShowConfirm}
+                <Field
+                  component={Checkbox}
+                  checked={values["commentnotifications-comment"]}
+                  onChange={(event) =>
+                    customSetFieldValue(
+                      "commentnotifications-comment",
+                      event.target.checked
+                    )
+                  }
                   className="margin-top-m"
                   id="9"
                   name="commentnotifications-comment"

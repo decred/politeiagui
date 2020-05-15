@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Text, classNames, Checkbox, DatePicker } from "pi-ui";
-import { FormikConsumer } from "formik";
+import { useFormikContext } from "formik";
 import styles from "./MonthPickerField.module.css";
 import useBooleanState from "src/hooks/utils/useBooleanState";
 
@@ -60,6 +60,8 @@ const MonthPickerField = ({
 }) => {
   const [isDisabled, setDisabled] = useState(false);
   const [isOpen, openPicker, closePicker] = useBooleanState(false);
+  const { setFieldValue, values, initialValues } = useFormikContext();
+
   const togglePicker = () => {
     if (!isOpen) {
       openPicker();
@@ -68,82 +70,76 @@ const MonthPickerField = ({
     }
   };
 
+  const onChange = (year, month, idx) => {
+    const selectedDate = { year, month };
+    if (!year || !month) {
+      closePicker();
+      return;
+    }
+    if (!multiChoice) {
+      setFieldValue(name, { year, month });
+      closePicker();
+      return;
+    }
+    if (values[name].length) {
+      const newValues = [...values[name]];
+      newValues[idx] = { year, month };
+      setFieldValue(name, newValues);
+      return;
+    } else {
+      setFieldValue(name, [selectedDate, selectedDate]);
+    }
+    if (isSecondSelection(idx)) {
+      closePicker();
+      return;
+    }
+  };
+
+  const handleToggle = () => {
+    const newValue = !isDisabled;
+    setDisabled(newValue);
+    if (newValue) {
+      setFieldValue(name, { year: "", month: "" });
+    } else {
+      setFieldValue(name, initialValues[name]);
+    }
+  };
+
   return (
-    <FormikConsumer>
-      {({ setFieldValue, values, initialValues }) => {
-        const onChange = (year, month, idx) => {
-          const selectedDate = { year, month };
-          if (!year || !month) {
-            closePicker();
-            return;
-          }
-          if (!multiChoice) {
-            setFieldValue(name, { year, month });
-            closePicker();
-            return;
-          }
-          if (values[name].length) {
-            const newValues = [...values[name]];
-            newValues[idx] = { year, month };
-            setFieldValue(name, newValues);
-            return;
-          } else {
-            setFieldValue(name, [selectedDate, selectedDate]);
-          }
-          if (isSecondSelection(idx)) {
-            closePicker();
-            return;
-          }
-        };
-
-        const handleToggle = () => {
-          const newValue = !isDisabled;
-          setDisabled(newValue);
-          if (newValue) {
-            setFieldValue(name, { year: "", month: "" });
-          } else {
-            setFieldValue(name, initialValues[name]);
-          }
-        };
-
-        return (
-          <div className={className}>
-            <div style={{ display: "flex" }}>
-              {toggleable && (
-                <Checkbox
-                  id="checkMonth"
-                  checked={!isDisabled}
-                  onChange={handleToggle}
-                />
-              )}
-              <Text color="gray">{label}</Text>
-            </div>
-            {isDisabled ? (
-              <span className="cursor-not-allowed">Any</span>
-            ) : (
-              <DatePicker
-                show={isOpen && !readOnly}
-                isMonthsMode={true}
-                isRange={multiChoice}
-                years={years}
-                value={values[name]}
-                lang={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
-                onChange={onChange}>
-                <span
-                  className={classNames(
-                    styles.valueWrapper,
-                    readOnly && "cursor-not-allowed"
-                  )}
-                  onClick={togglePicker}>
-                  {makeText(values[name])}
-                  {!readOnly && <Arrow isOpen={isOpen} />}
-                </span>
-              </DatePicker>
+    <div className={className}>
+      <div style={{ display: "flex" }}>
+        {toggleable && (
+          <Checkbox
+            id="checkMonth"
+            checked={!isDisabled}
+            onChange={handleToggle}
+          />
+        )}
+        <Text color="gray">{label}</Text>
+      </div>
+      {isDisabled ? (
+        <span className="cursor-not-allowed">Any</span>
+      ) : (
+        <DatePicker
+          show={isOpen && !readOnly}
+          isMonthsMode={true}
+          isRange={multiChoice}
+          years={years}
+          value={values[name]}
+          lang={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
+          onChange={onChange}>
+          <span
+            className={classNames(
+              styles.valueWrapper,
+              readOnly && "cursor-not-allowed"
             )}
-          </div>
-        );
-      }}
-    </FormikConsumer>
+            onClick={togglePicker}>
+            {makeText(values[name])}
+            {!readOnly && <Arrow isOpen={isOpen} />}
+          </span>
+        </DatePicker>
+      )}
+    </div>
   );
 };
 
