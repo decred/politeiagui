@@ -6,6 +6,7 @@
   "aboutContent": "",
   "enableAdminInvite": true,
   "enableCommentVote": false,
+  "enablePaywall": false,
   "enableCredits": false,
   "onBoardContent": "onboard-cms",
   "onBoardLink": "https://docs.decred.org/contributing/overview/",

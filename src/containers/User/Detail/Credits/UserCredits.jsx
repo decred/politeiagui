@@ -7,12 +7,10 @@ import RegistrationFeeSection from "./components/RegistrationFeeSection";
 import ProposalCreditsSection from "./components/ProposalCreditsSection";
 import CreditHistorySection from "./components/CreditHistorySection.jsx";
 import { useUserPaymentModals } from "./hooks";
-import { useConfig } from "src/containers/Config";
 
 const Credits = ({ user }) => {
   const userID = user && user.userid;
-  const { isPaid } = usePaywall(userID);
-  const { paywallEnabled } = useConfig();
+  const { isPaid, paywallEnabled } = usePaywall(userID);
   const {
     proposalCreditPrice,
     isApiRequestingUserProposalCredits,

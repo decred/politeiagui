@@ -12,7 +12,6 @@ import RescanSection from "./components/RescanSection.jsx";
 import CreditHistorySection from "./components/CreditHistorySection.jsx";
 import { useUserPaymentModals } from "./hooks";
 import useModalContext from "src/hooks/utils/useModalContext";
-import { useConfig } from "src/containers/Config";
 
 const Credits = ({ user }) => {
   const userID = user && user.userid;
@@ -20,8 +19,7 @@ const Credits = ({ user }) => {
     MANAGE_USER_CLEAR_USER_PAYWALL,
     userID
   );
-  const { isPaid } = usePaywall(userID);
-  const { paywallEnabled } = useConfig();
+  const { isPaid, paywallEnabled } = usePaywall(userID);
   const {
     proposalCreditPrice,
     isApiRequestingUserProposalCredits,
