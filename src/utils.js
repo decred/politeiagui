@@ -23,10 +23,11 @@ export const convertAtomsToDcr = (atoms) => atoms / 100000000;
 
 /**
  * Converts { day, month, year } object to unix second timestamp
+ * uses 23:59 of that day as time.
  * @param {object} date
  */
 export const convertObjectToUnixTimestamp = ({ day, month, year }) =>
-  new Date(Date.UTC(year, month - 1, day)).getTime() / 1000;
+  new Date(Date.UTC(year, month - 1, day, 23, 59)).getTime() / 1000;
 
 /**
  * Formats unix seconds timestamp to a UTC string date
