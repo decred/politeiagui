@@ -33,6 +33,14 @@ Politeiagui uses node.js and the yarn package manager.
    - Run the Proposal app: `yarn && yarn start`
    - Run the CMS app: `yarn && yarn start:cms`
 
+   **Switching between Proposals and CMS**
+
+   You can have two separate data directories for Proposals and CMS. Use the `--datadir=` flag when starting politeiad and pass a different directory for each app. For example:
+
+   `politeiad --buildcache --datadir="~/Library/Application\ Support/Cms"`
+
+   Doing this, you don't have to erase and populate your DB again when switching from one app to another.
+
    **Mock APIs (WARNING: may be out of date)**
 
    To run politeiagui using mock APIs that do not communicate with `politeiawww` (useful for working on UI changes only), run the following command:

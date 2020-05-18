@@ -18,7 +18,7 @@ function usePaywall(userID) {
   const userIsPaid = useSelector(userIsPaidSelector);
   const userPaywallStatus = useSelector(userPaywallStatusSelector);
 
-  const { enablePaywall } = useConfig();
+  const { enablePaywall, enableCredits } = useConfig();
 
   return {
     currentUserEmail,
@@ -27,7 +27,8 @@ function usePaywall(userID) {
     paywallTxNotBefore,
     userPaywallStatus,
     isPaid: userIsPaid,
-    paywallEnabled: enablePaywall
+    paywallEnabled: enablePaywall,
+    creditsEnabled: enableCredits
   };
 }
 

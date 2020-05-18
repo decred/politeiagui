@@ -73,9 +73,6 @@ export function useCredits(userID) {
   const onPurchaseProposalCredits = useAction(
     act.onFetchProposalPaywallDetails
   );
-  const onFetchProposalPaywallPayment = useAction(
-    act.onFetchProposalPaywallPayment
-  );
   const onPollProposalPaywallPayment = useAction(
     act.onPollProposalPaywallPayment
   );
@@ -88,18 +85,19 @@ export function useCredits(userID) {
   const clearProposalPaymentPollingPointer = useAction(
     act.clearProposalPaymentPollingPointer
   );
-  const { isPaid } = usePaywall(userID);
-  const proposalCredits =
-    proposalCreditsUnspent && proposalCreditsUnspent.length;
+  const { isPaid, paywallEnabled, creditsEnabled } = usePaywall(userID);
+  const proposalCredits = proposalCreditsUnspent.length;
   const proposalCreditsFetched = proposalCredits !== null;
   const isUserPageOwner = currentUserID === userID;
   const shouldFetchPurchaseProposalCredits =
+    creditsEnabled &&
     isPaid &&
     !!userID &&
     isUserPageOwner &&
     !proposalCreditPrice &&
     !isApiRequestingProposalPaywall;
   const shouldPollPaywallPayment =
+    paywallEnabled &&
     isPaid &&
     isUserPageOwner &&
     proposalPaywallPaymentTxid !== "" &&
@@ -123,24 +121,6 @@ export function useCredits(userID) {
       onUserProposalCredits();
     }
   }, [shouldFetchProposalCredits, onUserProposalCredits]);
-
-  useEffect(() => {
-    if (!pollingCreditsPayment && proposalPaywallPaymentTxid) {
-      toggleCreditsPaymentPolling(true);
-      onPollProposalPaywallPayment(false);
-    }
-  }, [
-    pollingCreditsPayment,
-    proposalPaywallPaymentTxid,
-    toggleCreditsPaymentPolling,
-    onPollProposalPaywallPayment
-  ]);
-
-  useEffect(() => {
-    if (!proposalPaywallPaymentTxid) {
-      onFetchProposalPaywallPayment();
-    }
-  }, [proposalPaywallPaymentTxid, onFetchProposalPaywallPayment]);
 
   return {
     proposalCreditPrice,

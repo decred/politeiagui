@@ -111,11 +111,11 @@ export const withCsrf = (fn) => (dispatch, getState) => {
   );
 };
 
-export const onInviteUserConfirm = ({ email, temp }) =>
+export const onInviteUserConfirm = ({ email, isTemp }) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_INVITE_USER({ email }));
     return api
-      .inviteNewUser(csrf, { email, temp })
+      .inviteNewUser(csrf, { email, temp: isTemp })
       .then((response) => {
         dispatch(act.RECEIVE_INVITE_USER(response));
       })
@@ -307,10 +307,10 @@ export const onChangePassword = (password, newPassword) =>
       });
   });
 
-export const onFetchUserInvoices = (userid, token) => (dispatch) => {
+export const onFetchUserInvoices = () => (dispatch) => {
   dispatch(act.REQUEST_USER_INVOICES());
   return api
-    .userInvoices(userid, token)
+    .userInvoices()
     .then((response) => dispatch(act.RECEIVE_USER_INVOICES(response)))
     .catch((error) => {
       dispatch(act.RECEIVE_USER_INVOICES(null, error));

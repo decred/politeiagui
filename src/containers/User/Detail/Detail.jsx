@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/components/ModalChangeUsername";
 import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "src/constants";
 import UserProposals from "src/containers/Proposal/User";
+import AdminInvoices from "src/containers/Invoice/Admin";
 import useUserIdentity from "src/hooks/api/useUserIdentity";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import useUserDetail from "src/hooks/api/useUserDetail";
@@ -35,6 +36,7 @@ const getTabComponents = ({ user, ...rest }) => {
         withDrafts={rest.isUserPageOwner}
       />
     ),
+    [tabValues.INVOICES]: <AdminInvoices userID={user.userid} />,
     [tabValues.DRAFTS]: <Drafts key="tab-invoices" />,
     [tabValues.MANAGE_DCC]: <ManageContractor userID={user.userid} {...rest} />
   };
@@ -70,6 +72,7 @@ const UserDetail = ({
       if (tabLabel === tabValues.PREFERENCES && !isUserPageOwner) return true;
       if (tabLabel === tabValues.CREDITS && !isAdminOrTheUser) return true;
       if (tabLabel === tabValues.MANAGE_DCC && !isAdminOrTheUser) return true;
+      if (tabLabel === tabValues.INVOICES && !isAdmin) return true;
 
       return false;
     };
@@ -83,7 +86,9 @@ const UserDetail = ({
       }
       if (recordType === RECORD_TYPE_PROPOSAL) {
         return (
-          tabLabel !== tabValues.MANAGE_DCC && tabLabel !== tabValues.DRAFTS
+          tabLabel !== tabValues.MANAGE_DCC &&
+          tabLabel !== tabValues.DRAFTS &&
+          tabLabel !== tabValues.INVOICES
         );
       }
       return true;
@@ -94,12 +99,14 @@ const UserDetail = ({
       tabValues.PREFERENCES,
       tabValues.CREDITS,
       tabValues.PROPOSALS,
+      tabValues.INVOICES,
       tabValues.DRAFTS,
       tabValues.MANAGE_DCC
     ].filter((tab) => !isTabDisabled(tab) && filterByRecordType(tab));
   }, [
     isUserPageOwner,
     isAdminOrTheUser,
+    isAdmin,
     RECORD_TYPE_INVOICE,
     RECORD_TYPE_PROPOSAL,
     recordType
