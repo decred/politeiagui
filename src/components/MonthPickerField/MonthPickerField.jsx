@@ -59,7 +59,6 @@ const MonthPickerField = ({
   multiChoice
 }) => {
   const [isDisabled, setDisabled] = useState(false);
-  const [multiChoiceState, setMultiChoiceState] = useState(multiChoice);
   const [isOpen, openPicker, closePicker] = useBooleanState(false);
   const togglePicker = () => {
     if (!isOpen) {
@@ -84,20 +83,11 @@ const MonthPickerField = ({
             return;
           }
           if (values[name].length) {
-            const isDuplicated = values[name].some(
-              (val) => val.month === month && val.year === year
-            );
-            if (isDuplicated) {
-              setFieldValue(name, { year, month });
-              setMultiChoiceState(false);
-              return;
-            }
             const newValues = [...values[name]];
             newValues[idx] = { year, month };
             setFieldValue(name, newValues);
             return;
           } else {
-            setMultiChoiceState(true);
             setFieldValue(name, [selectedDate, selectedDate]);
           }
           if (isSecondSelection(idx)) {
@@ -134,7 +124,7 @@ const MonthPickerField = ({
               <DatePicker
                 show={isOpen && !readOnly}
                 isMonthsMode={true}
-                isRange={multiChoiceState}
+                isRange={multiChoice}
                 years={years}
                 value={values[name]}
                 lang={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
