@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { H2, Message } from "pi-ui";
 import InfoSection from "../InfoSection.jsx";
-import { typeViewOptions, domainOptions } from "./helpers";
+import { typeOptions, domainOptions } from "./helpers";
 
 const UserDccInfo = ({ contractorType, domain, supervisorIds }) => (
   <>
@@ -60,7 +60,7 @@ const ManageContractorUserView = ({
       )}
       {!hideDccInfo && (
         <UserDccInfo
-          contractorType={typeViewOptions[contractortype]}
+          contractorType={typeOptions[contractortype]}
           domain={domainOptions[domain]}
           supervisorIds={supervisoruserids}
         />

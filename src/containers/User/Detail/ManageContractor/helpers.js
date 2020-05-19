@@ -2,17 +2,11 @@ export const typeOptions = [
   "No type defined",
   "Direct",
   "Supervisor",
-  "Sub Contractor"
-];
-
-export const typeViewOptions = [
-  "No type defined",
-  "Direct",
-  "Supervisor",
   "Sub Contractor",
-  "Not a contractor",
-  "Dormant",
-  "Nominee"
+  "Nominee",
+  "Revoked",
+  "Temp. Contractor",
+  "Revoked Temp."
 ];
 
 export const domainOptions = [
