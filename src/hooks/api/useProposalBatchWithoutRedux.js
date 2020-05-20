@@ -1,28 +1,26 @@
 import { useState, useEffect } from "react";
-import * as api from "src/lib/api";
-import * as sel from "src/selectors";
-import { useSelector } from "src/redux";
+import * as act from "src/actions";
+import { useAction } from "src/redux";
 
 export default function useProposalBatchWithoutRedux(
   tokens,
   fetchPropsoals = true,
   fetchVoteSummary = true
 ) {
-  const csrf = useSelector(sel.csrf);
+  const onFetchProposalsBatchWithoutState = useAction(
+    act.onFetchProposalsBatchWithoutState
+  );
   const [proposalsWithVoteSummaries, setProposalsWithVoteSummaries] = useState(
     null
   );
   const [isRequesting, setIsRequesting] = useState(false);
   useEffect(() => {
     const fetchProposals = async () => {
-      const res = await Promise.all([
-        fetchPropsoals && api.proposalsBatch(csrf, tokens),
-        fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens)
-      ]);
-      const proposals =
-        fetchPropsoals && res.find((res) => res && res.proposals).proposals;
-      const summaries =
-        fetchVoteSummary && res.find((res) => res && res.summaries).summaries;
+      const [proposals, summaries] = await onFetchProposalsBatchWithoutState(
+        tokens,
+        fetchProposals,
+        fetchVoteSummary
+      );
       setProposalsWithVoteSummaries([proposals, summaries]);
       setIsRequesting(false);
     };
@@ -34,8 +32,7 @@ export default function useProposalBatchWithoutRedux(
   }, [
     tokens,
     isRequesting,
-
-    csrf,
+    onFetchProposalsBatchWithoutState,
     fetchPropsoals,
     fetchVoteSummary,
     proposalsWithVoteSummaries

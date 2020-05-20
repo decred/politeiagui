@@ -314,6 +314,23 @@ export const onFetchAdminInvoices = () =>
       });
   });
 
+export const onFetchProposalsBatchWithoutState = (
+  tokens,
+  fetchPropsoals = true,
+  fetchVoteSummary = true
+) =>
+  withCsrf(async (_, __, csrf) => {
+    const res = await Promise.all([
+      fetchPropsoals && api.proposalsBatch(csrf, tokens),
+      fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens)
+    ]);
+    const proposals =
+      fetchPropsoals && res.find((res) => res && res.proposals).proposals;
+    const summaries =
+      fetchVoteSummary && res.find((res) => res && res.summaries).summaries;
+    return [proposals, summaries];
+  });
+
 export const onFetchProposalsBatch = (tokens, fetchVoteStatus = true) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));

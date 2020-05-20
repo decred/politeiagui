@@ -5,10 +5,12 @@ import { proposalValidation } from "./validation";
 
 export function useProposalForm() {
   const { policy } = usePolicy();
-  const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
+  const onFetchProposalsBatchWithoutState = useAction(
+    act.onFetchProposalsBatchWithoutState
+  );
   return {
     proposalFormValidation: policy && proposalValidation(policy),
-    onFetchProposalsBatch,
+    onFetchProposalsBatchWithoutState,
     policy
   };
 }

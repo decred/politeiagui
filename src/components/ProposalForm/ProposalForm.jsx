@@ -248,15 +248,22 @@ const ProposalFormWrapper = ({
     });
   }, [handleCloseModal, handleOpenModal]);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const { proposalFormValidation, onFetchProposalsBatch } = useProposalForm();
+  const {
+    proposalFormValidation,
+    onFetchProposalsBatchWithoutState
+  } = useProposalForm();
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
         const { type, rfpLink, ...others } = values;
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
-          const [[proposal], summaries] = (await onFetchProposalsBatch([
-            rfpLink
-          ])) || [[], null];
+          const [
+            [proposal],
+            summaries
+          ] = (await onFetchProposalsBatchWithoutState([rfpLink])) || [
+            [],
+            null
+          ];
           const voteSummary = summaries && summaries[rfpLink];
           const isInvalidToken = !proposal || !voteSummary;
           if (isInvalidToken) {
@@ -282,7 +289,7 @@ const ProposalFormWrapper = ({
         setFieldError("global", e);
       }
     },
-    [history, onSubmit, onFetchProposalsBatch]
+    [history, onSubmit, onFetchProposalsBatchWithoutState]
   );
   return (
     <>
