@@ -10,7 +10,7 @@ import { useUserPaymentModals } from "./hooks";
 
 const Credits = ({ user }) => {
   const userID = user && user.userid;
-  const { isPaid } = usePaywall(userID);
+  const { isPaid, paywallEnabled } = usePaywall(userID);
   const {
     proposalCreditPrice,
     isApiRequestingUserProposalCredits,
@@ -64,7 +64,7 @@ const Credits = ({ user }) => {
         proposalCredits={proposalCredits}
         proposalCreditPrice={proposalCreditPrice}
       />
-      {isPaid && (
+      {isPaid && paywallEnabled && (
         <Button
           className="margin-top-s"
           size="sm"

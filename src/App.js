@@ -57,8 +57,8 @@ const App = () => {
 
   return (
     <ThemeProvider themes={themes} defaultThemeName="light" fonts={fonts}>
-      <Config>
-        <ReduxProvider>
+      <ReduxProvider>
+        <Config>
           <Loader>
             <StaticContentProvider>
               <Router>
@@ -70,8 +70,8 @@ const App = () => {
               </Router>
             </StaticContentProvider>
           </Loader>
-        </ReduxProvider>
-      </Config>
+        </Config>
+      </ReduxProvider>
     </ThemeProvider>
   );
 };

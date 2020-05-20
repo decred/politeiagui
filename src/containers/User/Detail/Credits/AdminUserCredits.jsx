@@ -19,7 +19,7 @@ const Credits = ({ user }) => {
     MANAGE_USER_CLEAR_USER_PAYWALL,
     userID
   );
-  const { isPaid } = usePaywall(userID);
+  const { isPaid, paywallEnabled } = usePaywall(userID);
   const {
     proposalCreditPrice,
     isApiRequestingUserProposalCredits,
@@ -95,21 +95,23 @@ const Credits = ({ user }) => {
         proposalCreditPrice={proposalCreditPrice}
       />
       <div className={styles.buttonsWrapper}>
-        {isPaid && (
-          <Button
-            className="margin-top-s"
-            size="sm"
-            onClick={handleOpenBuyCreditsModal}>
-            Purchase more
-          </Button>
+        {isPaid && paywallEnabled && (
+          <>
+            <Button
+              className="margin-top-s"
+              size="sm"
+              onClick={handleOpenBuyCreditsModal}>
+              Purchase more
+            </Button>
+            <Button
+              onClick={onRescanUserCredits}
+              loading={isLoadingRescan}
+              className="margin-top-s"
+              size="sm">
+              Rescan
+            </Button>
+          </>
         )}
-        <Button
-          onClick={onRescanUserCredits}
-          loading={isLoadingRescan}
-          className="margin-top-s"
-          size="sm">
-          Rescan
-        </Button>
       </div>
       <RescanSection
         amountOfCreditsAddedOnRescan={amountOfCreditsAddedOnRescan}
