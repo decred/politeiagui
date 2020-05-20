@@ -38,9 +38,7 @@ export const saveStateLocalStorage = (state, uuid = "") => {
 
 export const clearStateLocalStorage = (uuid) => {
   const key = stateKey(uuid);
-  if (localStorage.getItem(key)) {
-    localStorage.setItem(key, "");
-  }
+  localStorage.removeItem(key);
 };
 
 export const handleSaveAppDraftProposals = (state) => {
