@@ -6,7 +6,7 @@ import { FormikConsumer } from "formik";
 const getSelectValue = (formValue, options) =>
   options.find((op) => op.value === formValue);
 
-const SelectField = ({ name, options, ...props }) => {
+const SelectField = ({ name, options, disabled, ...props }) => {
   return (
     <FormikConsumer>
       {({ values, setFieldValue }) => {
@@ -18,6 +18,7 @@ const SelectField = ({ name, options, ...props }) => {
             value={getSelectValue(values[name], options)}
             onChange={onSelectChange}
             options={options}
+            isDisabled={disabled}
             {...props}></Select>
         );
       }}

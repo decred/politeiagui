@@ -16,12 +16,13 @@ import {
   PROPOSAL_TYPE_RFP,
   PROPOSAL_TYPE_RFP_SUBMISSION
 } from "src/constants";
-import { getMarkdownContent } from "../helpers";
+import { getMarkdownContent, isPublicProposal } from "../helpers";
 import { formatUnixTimestampToObj } from "src/utils";
 
 const EditProposal = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
   const { proposal, loading } = useProposal(tokenFromUrl);
+  const isPublic = isPublicProposal(proposal);
   const { onEditProposal, currentUser } = useEditProposal();
   const { userid } = currentUser || {};
   const { isPaid } = usePaywall();
@@ -62,7 +63,11 @@ const EditProposal = ({ match }) => {
         {!!identityError && <IdentityMessageError />}
       </Or>
       {!loading && !!proposal ? (
-        <ProposalForm initialValues={initialValues} onSubmit={onEditProposal} />
+        <ProposalForm
+          initialValues={initialValues}
+          onSubmit={onEditProposal}
+          isPublic={isPublic}
+        />
       ) : (
         <ProposalFormLoader />
       )}

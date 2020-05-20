@@ -49,7 +49,8 @@ const ProposalForm = React.memo(function ProposalForm({
   touched,
   submitSuccess,
   disableSubmit,
-  openMDGuideModal
+  openMDGuideModal,
+  isPublic
 }) {
   const smallTablet = useMediaQuery("(max-width: 685px)");
   const { themeName } = useTheme();
@@ -126,6 +127,7 @@ const ProposalForm = React.memo(function ProposalForm({
         <SelectField
           name="type"
           onChange={handleSelectFiledChange("type")}
+          disabled={isPublic}
           options={selectOptions}
           className={classNames(styles.typeSelectWrapper)}
         />
@@ -164,6 +166,7 @@ const ProposalForm = React.memo(function ProposalForm({
               name="rfpLink"
               tabIndex={1}
               value={values.rfpLink}
+              disabled={isPublic}
               onChange={handleChangeWithTouched("rfpLink")}
               className={styles.rfpLinkToken}
               error={touched.rfpLink && errors.rfpLink}
@@ -235,7 +238,8 @@ const ProposalFormWrapper = ({
   initialValues,
   onSubmit,
   disableSubmit,
-  history
+  history,
+  isPublic
 }) => {
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const openMdModal = useCallback(() => {
@@ -303,7 +307,8 @@ const ProposalFormWrapper = ({
               submitSuccess,
               disableSubmit,
               openMDGuideModal: openMdModal,
-              initialValues
+              initialValues,
+              isPublic
             }}
           />
         )}
