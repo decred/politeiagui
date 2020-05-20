@@ -2,13 +2,18 @@ import {
   buildRegexFromSupportedChars,
   minLengthMessage,
   maxLengthMessage,
+  exactLengthMessage,
   maxFileSizeMessage,
   invalidMessage,
   maxFilesExceededMessage,
   validMimeTypesMessage
 } from "src/utils/validation";
 
-import { PROPOSAL_TYPE_RFP, PROPOSAL_TYPE_RFP_SUBMISSION } from "src/constants";
+import {
+  PROPOSAL_TYPE_RFP,
+  PROPOSAL_TYPE_RFP_SUBMISSION,
+  CENSORSHIP_TOKEN_LENGTH
+} from "src/constants";
 
 export const proposalValidation = ({
   proposalnamesupportedchars,
@@ -46,9 +51,12 @@ export const proposalValidation = ({
     if (!values.rfpLink) {
       errors.rfpLink = "Required";
     }
-    const tokenRegex = /[0-9a-f]{64}/g;
+    if (values.rfpLink.trim().length !== CENSORSHIP_TOKEN_LENGTH) {
+      errors.rfpLink = exactLengthMessage("token", CENSORSHIP_TOKEN_LENGTH);
+    }
+    const tokenRegex = /[0-9a-f]+/g;
     if (!values.rfpLink.match(tokenRegex)) {
-      errors.rfpLink = "64 characters long hex string";
+      errors.rfpLink = invalidMessage("Token", ["a-f", "0-9"]);
     }
   }
 

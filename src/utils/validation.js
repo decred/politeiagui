@@ -64,6 +64,14 @@ export const minLengthMessage = (fieldName, minLenght) =>
   )} must be at least ${minLenght} characters`;
 
 /**
+ * Returns a generic error message for exceeding the exact length
+ * @param {string} fieldName
+ * @param {number} length
+ */
+export const exactLengthMessage = (fieldName, length) =>
+  `${stringUtils.capitalize(fieldName)} must be exactly ${length} characters`;
+
+/**
  * Returns a generic error message for exceeding the maximum length
  * @param {string} fieldName
  * @param {number} maxLength

@@ -8,6 +8,8 @@ export const RECORD_TYPE_INVOICE = "invoices";
 
 export const EXPLORER = "dcrdata";
 
+export const CENSORSHIP_TOKEN_LENGTH = 64;
+
 // DCC
 export const DCC_STATUS_ACTIVE = 1;
 export const DCC_STATUS_APPROVED = 2;
@@ -126,9 +128,6 @@ export const INVOICE_STATUS_PAID = 7; // Invoice has been paid
 
 export const INVOICE_FILTER_ALL = 99;
 export const PROPOSAL_USER_FILTER_DRAFT_INVOICES = 100;
-
-// export const INVOICE_USER_FILTER_DRAFT = 1;
-// export const INVOICE_USER_FILTER_NEW = 2;
 
 export const CMS_LIST_HEADER_ADMIN = "Admin Invoices";
 export const CMS_LIST_HEADER_USER = "Your Invoices";
