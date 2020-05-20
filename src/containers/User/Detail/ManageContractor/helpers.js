@@ -3,7 +3,6 @@ export const typeOptions = [
   "Direct",
   "Supervisor",
   "Sub Contractor",
-  "Nominee",
   "Revoked",
   "Temp. Contractor",
   "Revoked Temp."
