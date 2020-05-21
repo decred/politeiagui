@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import { H1, Message, Spinner, classNames } from "pi-ui";
 import { Formik, Form as FormikForm, useFormikContext } from "formik";
 import Link from "../Link";
@@ -153,6 +154,13 @@ export const FormWrapperWithCache = ({
       }
     </Formik>
   );
+};
+
+FormWrapperWithCache.propTypes = {
+  formName: PropTypes.string.isRequired,
+  initialValues: PropTypes.object,
+  validationSchema: PropTypes.object,
+  onSubmit: PropTypes.func
 };
 
 export default FormWrapper;
