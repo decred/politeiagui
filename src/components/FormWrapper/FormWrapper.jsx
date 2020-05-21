@@ -1,12 +1,10 @@
 import React, { useEffect } from "react";
 import { H1, Message, Spinner, classNames } from "pi-ui";
-import { Formik, useField, Form as FormikForm, useFormikContext } from "formik";
+import { Formik, Form as FormikForm, useFormikContext } from "formik";
 import Link from "../Link";
 import styles from "./FormWrapper.module.css";
-import MarkdownEditor from "src/components/MarkdownEditor";
 import useSessionStorage from "src/hooks/utils/useSessionStorage";
 import useScrollFormOnError from "src/hooks/utils/useScrollFormOnError";
-import AttachFileInput from "src/components/AttachFileInput";
 import {
   Select,
   TextArea,
@@ -75,55 +73,6 @@ const FormWithCache = ({ onChange, values, errors }) => {
   return RecordForm;
 };
 
-const FilesInput = ({ name, label, type, className }) => {
-  const [field, , helpers] = useField(name);
-  const { value } = field;
-  const { setValue } = helpers;
-
-  const handleFilesChange = (v) => {
-    const files = value.concat(v);
-    setValue(files);
-  };
-
-  return (
-    <AttachFileInput
-      label={label}
-      type={type}
-      onChange={handleFilesChange}
-      className={className}
-    />
-  );
-};
-
-const MarkdownInput = ({
-  name,
-  className,
-  placeholder,
-  textAreaProps,
-  enableFilesInput
-}) => {
-  const [, meta, helpers] = useField(name);
-  const { error, touched, value } = meta;
-  const { setValue } = helpers;
-
-  const handleMarkdownChange = (v) => {
-    setValue(v);
-  };
-
-  return (
-    <MarkdownEditor
-      name={name}
-      className={className}
-      value={value}
-      textAreaProps={textAreaProps}
-      onChange={handleMarkdownChange}
-      placeholder={placeholder}
-      error={touched && error}
-      filesInput={enableFilesInput && FilesInput}
-    />
-  );
-};
-
 const FormWrapper = ({ children, loading, ...props }) => {
   return loading ? (
     <Loader />
@@ -189,8 +138,6 @@ export const FormWrapperWithCache = ({
         children({
           ...formProps,
           TextInput,
-          FilesInput,
-          MarkdownInput,
           Select,
           TextArea,
           Form: FormWithCache({
