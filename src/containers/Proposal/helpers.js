@@ -54,7 +54,14 @@ export const isPublicProposal = (proposal) =>
 export const isActiveApprovedRfp = (proposal, voteSummary) =>
   isApprovedProposal(proposal, voteSummary) &&
   proposal.linkby &&
-  Math.round(new Date().getTime() / 1000) < Number(proposal.linkby);
+  isActiveRfp(proposal.linkby);
+
+/**
+ * Return true if RFP is still active and didn't expire
+ * @param {number} linkby RFP deadline timestamp in seconds
+ */
+export const isActiveRfp = (linkby) =>
+  Math.round(new Date().getTime() / 1000) < Number(linkby);
 
 /**
  * Returns true if RFP's linkby meets the minimum period

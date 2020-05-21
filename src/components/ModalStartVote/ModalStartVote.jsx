@@ -16,7 +16,7 @@ import usePolicy from "src/hooks/api/usePolicy";
 import { isRfpReadyToVote } from "src/containers/Proposal/helpers";
 import { VOTE_TYPE_STANDARD, VOTE_TYPE_RUNOFF } from "src/constants";
 
-const preDefinedDurations = [2016, 2880, 4032];
+const preDefinedDurations = [2, 2880, 4032];
 const getDurationOptions = (isTesnet) => {
   const blockDuration = isTesnet ? 2 : 5;
   return preDefinedDurations.map((nb) => ({

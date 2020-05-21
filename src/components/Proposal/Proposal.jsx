@@ -18,6 +18,7 @@ import {
   getVotesReceived,
   isAbandonedProposal,
   isPublicProposal,
+  isActiveRfp,
   isEditableProposal,
   getQuorumInVotes,
   isVotingFinishedProposal,
@@ -116,6 +117,7 @@ const Proposal = React.memo(function Proposal({
   } = proposal;
   const isRfp = !!linkby;
   const isRfpSubmission = !!linkto;
+  const isRfpActive = isRfp && isActiveRfp(linkby);
   const isNotExtendedRfpOrSubmission = (isRfp || isRfpSubmission) && !extended;
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
@@ -199,6 +201,12 @@ const Proposal = React.memo(function Proposal({
               subtitle={
                 <Subtitle>
                   <Author username={username} url={authorURL} />
+                  {isRfp && (
+                    <Event
+                      event={`${isRfpActive ? "expires" : "expired"}`}
+                      timestamp={linkby}
+                    />
+                  )}
                   {showPublishedDate && (
                     <Event event="published" timestamp={publishedat} />
                   )}
@@ -206,7 +214,7 @@ const Proposal = React.memo(function Proposal({
                     <Event event="edited" timestamp={timestamp} />
                   )}
                   {showAbandonedDate && (
-                    <Event event={"abandoned"} timestamp={abandonedat} />
+                    <Event event="abandoned" timestamp={abandonedat} />
                   )}
                   {showVersionAsText && (
                     <Text
