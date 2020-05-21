@@ -1,9 +1,9 @@
 import * as Yup from "yup";
 import { minAmountMessage, maxAmountMessage } from "src/utils/validation";
 
-const MIN_QUORUM_PERCENTAGE = 0;
+const MIN_QUORUM_PERCENTAGE = 20;
 const MAX_QUORUM_PERCENTAGE = 100;
-const MIN_PASS_PERCENTAGE = 0;
+const MIN_PASS_PERCENTAGE = 60;
 const MAX_PASS_PERCENTAGE = 100;
 
 export const validationSchema = Yup.object().shape({
