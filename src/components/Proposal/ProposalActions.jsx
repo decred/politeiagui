@@ -67,8 +67,8 @@ const PublicActions = ({ proposal, voteSummary }) => {
     onStartRunoffVote
   } = usePublicProposalActions();
 
-  const withProposal = (fn) => () => {
-    fn(proposal);
+  const withProposal = (fn, cb) => () => {
+    fn(proposal, cb);
   };
 
   const isProposalOwner =
@@ -80,7 +80,10 @@ const PublicActions = ({ proposal, voteSummary }) => {
 
   const rfpLinkedSubmissions = proposal.linkedfrom;
   const [submssionsDidntVote, setSubmissionDidntVote] = useState(false);
-  const [, rfpSubmissionsVoteSummaries] = useProposalBatchWithoutRedux(
+  const {
+    data: [, rfpSubmissionsVoteSummaries],
+    resetData
+  } = useProposalBatchWithoutRedux(
     rfpLinkedSubmissions ? rfpLinkedSubmissions : null,
     false,
     true
@@ -96,6 +99,8 @@ const PublicActions = ({ proposal, voteSummary }) => {
             rfpSubmissionsVoteSummaries[rfpLinkedSubmissions[0]]
           )
       );
+    } else {
+      setSubmissionDidntVote(false);
     }
   }, [
     rfpLinkedSubmissions,
@@ -129,7 +134,7 @@ const PublicActions = ({ proposal, voteSummary }) => {
       )}
       {isRfpReadyToRunoff(proposal, voteSummary) && submssionsDidntVote && (
         <div className="justify-right margin-top-m">
-          <Button onClick={withProposal(onStartRunoffVote)}>
+          <Button onClick={withProposal(onStartRunoffVote, resetData)}>
             Start Runoff Vote
           </Button>
         </div>

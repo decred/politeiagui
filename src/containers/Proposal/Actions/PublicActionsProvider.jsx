@@ -15,7 +15,7 @@ const PublicActionsProvider = ({ children }) => {
     onRevokeVote,
     onStartVote,
     onStartRunoffVote,
-    onFetchProposalsBatch
+    onFetchProposalsBatchWithoutState
   } = usePublicActions();
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
@@ -100,8 +100,10 @@ const PublicActionsProvider = ({ children }) => {
   );
 
   const handleStartRunoffVoteModal = useCallback(
-    async (proposal) => {
-      const [submissions] = await onFetchProposalsBatch(proposal.linkedfrom);
+    async (proposal, cb) => {
+      const [submissions] = await onFetchProposalsBatchWithoutState(
+        proposal.linkedfrom
+      );
       const submissionVotes = submissions.map(
         ({ censorshiprecord: { token } = { token: null }, version }) => ({
           token,
@@ -113,7 +115,8 @@ const PublicActionsProvider = ({ children }) => {
         voteType: VOTE_TYPE_RUNOFF,
         onSubmit: onStartRunoffVote(
           proposal.censorshiprecord.token,
-          submissionVotes
+          submissionVotes,
+          cb
         ),
         successTitle: "Proposal runoff vote started",
         message: "Are you sure you want to start runoff vote?",
@@ -131,7 +134,7 @@ const PublicActionsProvider = ({ children }) => {
       handleCloseModal,
       handleOpenModal,
       onStartRunoffVote,
-      onFetchProposalsBatch
+      onFetchProposalsBatchWithoutState
     ]
   );
 

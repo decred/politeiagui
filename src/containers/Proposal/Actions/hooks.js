@@ -21,20 +21,21 @@ export function useUnvettedActions() {
 
   const onCensorProposal = useCallback(
     (proposal) => (reason) =>
-      onSetProposalStatus(
-        proposal.censorshiprecord.token,
-        PROPOSAL_STATUS_CENSORED,
-        reason
-      ),
+      onSetProposalStatus({
+        token: proposal.censorshiprecord.token,
+        status: PROPOSAL_STATUS_CENSORED,
+        censorMessage: reason
+      }),
     [onSetProposalStatus]
   );
 
   const onApproveProposal = useCallback(
     (proposal) => () =>
-      onSetProposalStatus(
-        proposal.censorshiprecord.token,
-        PROPOSAL_STATUS_PUBLIC
-      ),
+      onSetProposalStatus({
+        token: proposal.censorshiprecord.token,
+        status: PROPOSAL_STATUS_PUBLIC,
+        linkto: proposal.linkto
+      }),
     [onSetProposalStatus]
   );
 
@@ -50,17 +51,19 @@ export function usePublicActions() {
   const onStartRunoff = useAction(act.onStartRunoffVote);
   const onAuthorize = useAction(act.onAuthorizeVote);
   const onRevoke = useAction(act.onRevokeVote);
-  const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
+  const onFetchProposalsBatchWithoutState = useAction(
+    act.onFetchProposalsBatchWithoutState
+  );
 
   const currentUserEmail = useSelector(sel.currentUserEmail);
 
   const onAbandonProposal = useCallback(
     (proposal) => (reason) =>
-      onSetProposalStatus(
-        proposal.censorshiprecord.token,
-        PROPOSAL_STATUS_ABANDONED,
-        reason
-      ),
+      onSetProposalStatus({
+        token: proposal.censorshiprecord.token,
+        status: PROPOSAL_STATUS_ABANDONED,
+        censorMessage: reason
+      }),
     [onSetProposalStatus]
   );
 
@@ -102,15 +105,21 @@ export function usePublicActions() {
   );
 
   const onStartRunoffVote = useCallback(
-    (token, votes) => ({ duration, quorumPercentage, passPercentage }) =>
-      onStartRunoff(
+    (token, votes, cb) => async ({
+      duration,
+      quorumPercentage,
+      passPercentage
+    }) => {
+      await onStartRunoff(
         currentUserEmail,
         token,
         duration,
         quorumPercentage,
         passPercentage,
         votes
-      ),
+      );
+      cb && cb();
+    },
     [onStartRunoff, currentUserEmail]
   );
 
@@ -120,6 +129,6 @@ export function usePublicActions() {
     onRevokeVote,
     onStartVote,
     onStartRunoffVote,
-    onFetchProposalsBatch
+    onFetchProposalsBatchWithoutState
   };
 }

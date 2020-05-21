@@ -13,6 +13,7 @@ export default function useProposalBatchWithoutRedux(
   const [proposalsWithVoteSummaries, setProposalsWithVoteSummaries] = useState(
     null
   );
+  const resetData = () => setProposalsWithVoteSummaries(null);
   const [isRequesting, setIsRequesting] = useState(false);
   useEffect(() => {
     const fetchProposals = async () => {
@@ -37,5 +38,5 @@ export default function useProposalBatchWithoutRedux(
     fetchVoteSummary,
     proposalsWithVoteSummaries
   ]);
-  return proposalsWithVoteSummaries || [[]];
+  return { data: proposalsWithVoteSummaries || [[]], resetData };
 }

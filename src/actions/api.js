@@ -331,18 +331,18 @@ export const onFetchProposalsBatchWithoutState = (
     return [proposals, summaries];
   });
 
-export const onFetchProposalsBatch = (tokens, fetchVoteStatus = true) =>
+export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
     try {
       const promises = [api.proposalsBatch(csrf, tokens)];
-      if (fetchVoteStatus) {
+      if (fetchVoteSummary) {
         promises.push(dispatch(onFetchProposalsBatchVoteSummary(tokens)));
       }
       const response = await Promise.all(promises);
       const proposals = response.find((res) => res && res.proposals).proposals;
       const summaries =
-        fetchVoteStatus &&
+        fetchVoteSummary &&
         response.find((res) => res && res.summaries).summaries;
       dispatch(act.RECEIVE_PROPOSALS_BATCH({ proposals }));
       return [proposals, summaries];
@@ -874,7 +874,12 @@ export const onSetInvoiceStatus = (token, status, version, reason = "") =>
       });
   });
 
-export const onSetProposalStatus = (token, status, censorMessage = "") =>
+export const onSetProposalStatus = ({
+  token,
+  status,
+  linkto,
+  censorMessage = ""
+}) =>
   withCsrf((dispatch, getState, csrf) => {
     const email = sel.currentUserEmail(getState());
     dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
@@ -888,6 +893,9 @@ export const onSetProposalStatus = (token, status, censorMessage = "") =>
         );
         if (status === PROPOSAL_STATUS_PUBLIC) {
           dispatch(onFetchProposalsBatchVoteSummary([token]));
+          if (linkto) {
+            dispatch(onFetchProposalsBatch([linkto]));
+          }
         }
       })
       .catch((error) => {
@@ -971,7 +979,7 @@ export const onStartRunoffVote = (
   pass,
   votes
 ) =>
-  withCsrf((dispatch, getState, csrf) => {
+  withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_START_RUNOFF_VOTE({ token }));
     return api
       .startRunoffVote(
@@ -985,7 +993,7 @@ export const onStartRunoffVote = (
       )
       .then((response) => {
         const submissionsTokens = votes.map((vote) => vote.token);
-        dispatch(onFetchProposalsBatchVoteSummary([...submissionsTokens]));
+        dispatch(onFetchProposalsBatch([...submissionsTokens, token]));
         dispatch(
           act.RECEIVE_START_RUNOFF_VOTE({ ...response, token, success: true })
         );

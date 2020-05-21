@@ -55,11 +55,9 @@ const ProposalWrapper = (props) => {
   const isSubmission = !!linkto;
   const isRFP = !!linkedfrom;
   const batchTokens = isSubmission ? [linkto] : isRFP ? linkedfrom : null;
-  const [proposals, voteSummaries] = useProposalBatchWithoutRedux(
-    batchTokens,
-    true,
-    isRFP
-  );
+  const {
+    data: [proposals, voteSummaries]
+  } = useProposalBatchWithoutRedux(batchTokens, true, isRFP);
   useEffect(() => {
     if (isSubmission && proposals && proposals[0]) {
       const rfpProposal = proposals[0];
