@@ -3,6 +3,7 @@ export const typeOptions = [
   "Direct",
   "Supervisor",
   "Sub Contractor",
+  "Nominee",
   "Revoked",
   "Temp. Contractor",
   "Revoked Temp."
@@ -18,10 +19,12 @@ export const domainOptions = [
   "Community Management"
 ];
 
-export const selectTypeOptions = typeOptions.map((op, idx) => ({
-  value: idx,
-  label: op
-}));
+export const selectTypeOptions = typeOptions
+  .map((op, idx) => ({
+    value: idx,
+    label: op
+  }))
+  .filter((option) => option.value !== 4); // filter out 'Nominee' from select possible values
 
 export const selectDomainOptions = domainOptions.map((op, idx) => ({
   value: idx,
