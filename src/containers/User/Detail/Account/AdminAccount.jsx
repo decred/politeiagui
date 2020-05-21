@@ -161,10 +161,10 @@ const AdminAccount = ({
       <Text weight="semibold" className={styles.subtitle}>
         Security
       </Text>
-      <InfoSection label="Failed login attempts:" info={failedloginattempts} />
+      <InfoSection label="Failed login attempts" info={failedloginattempts} />
       <InfoSection
         noMargin
-        label="Locked:"
+        label="Locked"
         info={isUserLocked(islocked) ? "Yes" : "No"}
       />
       {!isUserDeactivated(isdeactivated) ? (
