@@ -30,3 +30,13 @@ export const selectDomainOptions = domainOptions.map((op, idx) => ({
   value: idx,
   label: op
 }));
+
+export const getSupervisorsOptions = (supervisors, currentUserID) =>
+  supervisors &&
+  Array.isArray(supervisors) &&
+  supervisors
+    .filter(({ id }) => id !== currentUserID)
+    .map(({ username, id }) => ({
+      label: username,
+      value: id
+    }));
