@@ -16,12 +16,12 @@ import usePolicy from "src/hooks/api/usePolicy";
 import { isRfpReadyToVote } from "src/containers/Proposal/helpers";
 import { VOTE_TYPE_STANDARD, VOTE_TYPE_RUNOFF } from "src/constants";
 
-const possibleDurationValue = (isTesnet) =>
+const possibleDurationValues = (isTesnet) =>
   isTesnet ? [10, 1000, 2016] : [2016, 2880, 4032];
 
 const getDurationOptions = (isTesnet) => {
   const blockDuration = isTesnet ? 2 : 5;
-  return possibleDurationValue(isTesnet).map((nb) => {
+  return possibleDurationValues(isTesnet).map((nb) => {
     const durationInDays = Math.round((nb * blockDuration) / 60 / 24);
     return {
       value: nb,
@@ -90,7 +90,7 @@ const ModalStartVote = ({
   );
 
   const initialValues = {
-    duration: possibleDurationValue(apiInfo.testnet)[0],
+    duration: possibleDurationValues(apiInfo.testnet)[0],
     quorumPercentage: 20,
     passPercentage: 60
   };

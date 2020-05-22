@@ -257,10 +257,10 @@ const ProposalFormWrapper = ({
       try {
         const { type, rfpLink, ...others } = values;
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
-          const submissionWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
+          const rfpWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
             [rfpLink]
           )) || [[], null];
-          const [[proposal], summaries] = submissionWithVoteSummaries;
+          const [[proposal], summaries] = rfpWithVoteSummaries;
           const voteSummary = summaries && summaries[rfpLink];
           const isInvalidToken = !proposal || !voteSummary;
           if (isInvalidToken) {
