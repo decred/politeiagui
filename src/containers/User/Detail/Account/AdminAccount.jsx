@@ -195,7 +195,7 @@ const AdminAccount = ({
           />
           <InfoSection
             noMargin
-            label="Expires:"
+            label="Expires"
             info={
               isExpired(resetpasswordverificationexpiry) ? (
                 <span>Expired</span>
@@ -226,7 +226,7 @@ const AdminAccount = ({
           />
           <InfoSection
             noMargin
-            label="Expires:"
+            label="Expires"
             info={
               isExpired(newuserverificationexpiry) ? (
                 <span>Expired</span>
@@ -257,7 +257,7 @@ const AdminAccount = ({
           />
           <InfoSection
             noMargin
-            label="Expires:"
+            label="Expires"
             info={
               isExpired(updatekeyverificationexpiry) ? (
                 <span>Expired</span>
