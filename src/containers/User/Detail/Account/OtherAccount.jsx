@@ -10,7 +10,7 @@ const OtherAccount = ({
   <Card className={classNames("container", "margin-bottom-m")}>
     <InfoSection
       className="no-margin-top"
-      label="Admin:"
+      label="Admin"
       info={isUserAdmin(isadmin) ? "Yes" : "No"}
     />
   </Card>

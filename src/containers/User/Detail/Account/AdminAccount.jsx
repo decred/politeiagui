@@ -161,10 +161,10 @@ const AdminAccount = ({
       <Text weight="semibold" className={styles.subtitle}>
         Security
       </Text>
-      <InfoSection label="Failed login attempts:" info={failedloginattempts} />
+      <InfoSection label="Failed login attempts" info={failedloginattempts} />
       <InfoSection
         noMargin
-        label="Locked:"
+        label="Locked"
         info={isUserLocked(islocked) ? "Yes" : "No"}
       />
       {!isUserDeactivated(isdeactivated) ? (
@@ -190,12 +190,12 @@ const AdminAccount = ({
             Password
           </Text>
           <InfoSection
-            label="Reset password token:"
+            label="Reset password token"
             info={resetpasswordverificationtoken}
           />
           <InfoSection
             noMargin
-            label="Expires:"
+            label="Expires"
             info={
               isExpired(resetpasswordverificationexpiry) ? (
                 <span>Expired</span>
@@ -221,12 +221,12 @@ const AdminAccount = ({
             Verification token
           </Text>
           <InfoSection
-            label="Verification token:"
+            label="Verification token"
             info={newuserverificationtoken}
           />
           <InfoSection
             noMargin
-            label="Expires:"
+            label="Expires"
             info={
               isExpired(newuserverificationexpiry) ? (
                 <span>Expired</span>
@@ -252,12 +252,12 @@ const AdminAccount = ({
             Update key
           </Text>
           <InfoSection
-            label="Update key token:"
+            label="Update key token"
             info={updatekeyverificationtoken}
           />
           <InfoSection
             noMargin
-            label="Expires:"
+            label="Expires"
             info={
               isExpired(updatekeyverificationexpiry) ? (
                 <span>Expired</span>

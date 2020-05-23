@@ -4,7 +4,7 @@ import { Button } from "pi-ui";
 
 export default ({ onClick }) => (
   <InfoSection
-    label="Password:"
+    label="Password"
     alignLabelCenter
     info={
       <Button size="sm" onClick={onClick}>
