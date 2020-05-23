@@ -190,7 +190,7 @@ const AdminAccount = ({
             Password
           </Text>
           <InfoSection
-            label="Reset password token:"
+            label="Reset password token"
             info={resetpasswordverificationtoken}
           />
           <InfoSection
@@ -221,7 +221,7 @@ const AdminAccount = ({
             Verification token
           </Text>
           <InfoSection
-            label="Verification token:"
+            label="Verification token"
             info={newuserverificationtoken}
           />
           <InfoSection
@@ -252,7 +252,7 @@ const AdminAccount = ({
             Update key
           </Text>
           <InfoSection
-            label="Update key token:"
+            label="Update key token"
             info={updatekeyverificationtoken}
           />
           <InfoSection
