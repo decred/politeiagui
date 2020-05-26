@@ -36,6 +36,10 @@ import useLocalStorage from "src/hooks/utils/useLocalStorage";
 
 const COMMENTS_LOGIN_MODAL_ID = "commentsLoginModal";
 
+// Anchoring issue ref: see https://github.com/decred/politeiagui/issues/1941
+const TEMP_ANCHORING_MINUTE = 58;
+const ANCHORING_TIMEOUT_MS = 5 * 60 * 1000; // 5' in ms
+
 const Comments = ({
   numOfComments,
   recordToken,
@@ -209,6 +213,46 @@ const Comments = ({
     ((comments && !comments.find((c) => c.commentid === threadParentID)) ||
       numOfComments === 0);
 
+  // Temporarily block comments due to git anchoring: See https://github.com/decred/politeiagui/issues/1941
+  const getTimeLeftToAnchor = () => {
+    const date = new Date();
+    const timeLeft =
+      TEMP_ANCHORING_MINUTE * 60000 -
+      date.getMinutes() * 60000 -
+      date.getSeconds() * 1000 -
+      date.getMilliseconds();
+    return timeLeft;
+  };
+
+  const [isAnchoring, setIsAchoring] = useState(getTimeLeftToAnchor() <= 0);
+  const handleToggleAnchoring = useCallback(() => {
+    setIsAchoring(!isAnchoring);
+  }, [setIsAchoring, isAnchoring]);
+
+  useEffect(
+    function anchoringModeListener() {
+      let timeout = null;
+      if (isAnchoring) {
+        timeout = setTimeout(handleToggleAnchoring, ANCHORING_TIMEOUT_MS);
+      }
+      return () => {
+        if (timeout) clearTimeout(timeout);
+      };
+    },
+    [isAnchoring, handleToggleAnchoring]
+  );
+  useEffect(
+    function commentsAllowedListener() {
+      let timeout = null;
+      if (!isAnchoring) {
+        timeout = setTimeout(handleToggleAnchoring, getTimeLeftToAnchor());
+      }
+      return () => {
+        if (timeout) clearTimeout(timeout);
+      };
+    },
+    [isAnchoring, handleToggleAnchoring]
+  );
   return (
     <>
       <Card
@@ -238,13 +282,21 @@ const Comments = ({
                   </P>
                 </Message>
               )}
+              {isAnchoring && (
+                <Message kind="blocked">
+                  Commenting temporarily unavailable while an hourly censorship
+                  resistance routine is in progress. Sorry for the
+                  inconvenience. This will be fixed soon. Check back in 5
+                  minutes.
+                </Message>
+              )}
               {!readOnly && !!identityError && <IdentityMessageError />}
             </Or>
             {!isSingleThread && !readOnly && (
               <CommentForm
                 persistKey={`commenting-on-${recordToken}`}
                 onSubmit={handleSubmitComment}
-                disableSubmit={!!identityError || paywallMissing}
+                disableSubmit={!!identityError || paywallMissing || isAnchoring}
               />
             )}
           </LoggedInContent>
