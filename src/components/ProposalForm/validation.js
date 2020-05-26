@@ -126,8 +126,8 @@ const validateRfpSubmissionToken = (rfpLink) => {
   if (!rfpLink) {
     return "Required";
   }
-  const tokenRegex = /[0-9a-f]+/g;
-  if (!rfpLink.match(tokenRegex)) {
+  const tokenRegex = /[^0-9a-f]/g;
+  if (rfpLink.match(tokenRegex)) {
     return invalidMessage("Token", ["a-f", "0-9"]);
   }
   if (rfpLink.trim().length !== CENSORSHIP_TOKEN_LENGTH) {
