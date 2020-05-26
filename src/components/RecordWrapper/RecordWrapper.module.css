@@ -85,6 +85,10 @@
   margin-right: 0.2rem;
 }
 
+.commentsLink > span.commentsNumber {
+  margin-right: 0.5rem;
+}
+
 .commentsLink > span.darkCommentsNumber {
   color: var(--tab-text-active-color);
 }

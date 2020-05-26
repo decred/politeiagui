@@ -30,12 +30,17 @@
   color: var(--text-color) !important;
 }
 
-.markdownContainer {
+.markdownContainer:not(.rfpMarkdownContainer) {
   margin-top: var(--spacing-2);
   padding: var(--spacing-2) 0;
   border-width: 1px 0;
   border-style: solid;
   border-color: var(--separator-color);
+}
+
+.rfpMarkdownContainer {
+  padding: var(--spacing-3) 0;
+  border-bottom: 1px solid var(--separator-color);
 }
 
 .voteCount {
@@ -78,7 +83,7 @@ span.statusTag > span {
 }
 
 .statusBarTooltip {
-  width: 225px;
+  width: 22.5rem;
 }
 
 .quorumTooltip {

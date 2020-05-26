@@ -24,7 +24,7 @@
   width: 20rem;
 }
 
-.typeSelectWrapper > div {
+.typeSelectWrapper [class*="customSelect__control"] {
   height: 100%;
 }
 

@@ -4,37 +4,21 @@ import { Text, classNames, Checkbox, DatePicker } from "pi-ui";
 import { FormikConsumer } from "formik";
 import styles from "./MonthPickerField.module.css";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-
-const pickerLang = {
-  months: [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  ]
-};
+import { MONTHS_LABELS } from "src/constants";
 
 const isSecondSelection = (index) => index === 1;
 const isRange = (values) => values instanceof Array;
 
 const makeText = (m) => {
   if (m && m.year && m.month) {
-    return `${pickerLang.months[m.month - 1]} ${m.year}`;
+    return `${MONTHS_LABELS[m.month - 1]} ${m.year}`;
   }
   if (isRange(m)) {
     const firstDateLabel = m[0]
-      ? `${pickerLang.months[m[0].month - 1]} ${m[0].year}`
+      ? `${MONTHS_LABELS[m[0].month - 1]} ${m[0].year}`
       : "";
     const secondDateLabel = m[1]
-      ? `${pickerLang.months[m[1].month - 1]} ${m[1].year}`
+      ? `${MONTHS_LABELS[m[1].month - 1]} ${m[1].year}`
       : "";
     return firstDateLabel === secondDateLabel
       ? firstDateLabel
@@ -127,7 +111,7 @@ const MonthPickerField = ({
                 isRange={multiChoice}
                 years={years}
                 value={values[name]}
-                lang={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
+                lang={MONTHS_LABELS}
                 onChange={onChange}>
                 <span
                   className={classNames(

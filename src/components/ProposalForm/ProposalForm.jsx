@@ -49,7 +49,8 @@ const ProposalForm = React.memo(function ProposalForm({
   touched,
   submitSuccess,
   disableSubmit,
-  openMDGuideModal
+  openMDGuideModal,
+  isPublic
 }) {
   const smallTablet = useMediaQuery("(max-width: 685px)");
   const { themeName } = useTheme();
@@ -126,6 +127,7 @@ const ProposalForm = React.memo(function ProposalForm({
         <SelectField
           name="type"
           onChange={handleSelectFiledChange("type")}
+          disabled={isPublic}
           options={selectOptions}
           className={classNames(styles.typeSelectWrapper)}
         />
@@ -164,6 +166,7 @@ const ProposalForm = React.memo(function ProposalForm({
               name="rfpLink"
               tabIndex={1}
               value={values.rfpLink}
+              disabled={isPublic}
               onChange={handleChangeWithTouched("rfpLink")}
               className={styles.rfpLinkToken}
               error={touched.rfpLink && errors.rfpLink}
@@ -235,7 +238,8 @@ const ProposalFormWrapper = ({
   initialValues,
   onSubmit,
   disableSubmit,
-  history
+  history,
+  isPublic
 }) => {
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const openMdModal = useCallback(() => {
@@ -244,22 +248,28 @@ const ProposalFormWrapper = ({
     });
   }, [handleCloseModal, handleOpenModal]);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const { proposalFormValidation, onFetchProposalsBatch } = useProposalForm();
+  const {
+    proposalFormValidation,
+    onFetchProposalsBatchWithoutState
+  } = useProposalForm();
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
         const { type, rfpLink, ...others } = values;
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
-          const [[proposal], summaries] = (await onFetchProposalsBatch([
-            rfpLink
-          ])) || [[], null];
+          const rfpWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
+            [rfpLink]
+          )) || [[], null];
+          const [[proposal], summaries] = rfpWithVoteSummaries;
           const voteSummary = summaries && summaries[rfpLink];
-          const isInvalidToken =
-            !proposal ||
-            !voteSummary ||
-            !isActiveApprovedRfp(proposal, voteSummary);
+          const isInvalidToken = !proposal || !voteSummary;
           if (isInvalidToken) {
-            throw Error("Invalid RFP token!");
+            throw Error("Proposal not found!");
+          }
+          if (!isActiveApprovedRfp(proposal, voteSummary)) {
+            throw Error(
+              "Make sure token is associated with an approved & not expired RFP"
+            );
           }
         }
         const proposalToken = await onSubmit({
@@ -276,7 +286,7 @@ const ProposalFormWrapper = ({
         setFieldError("global", e);
       }
     },
-    [history, onSubmit, onFetchProposalsBatch]
+    [history, onSubmit, onFetchProposalsBatchWithoutState]
   );
   return (
     <>
@@ -301,7 +311,8 @@ const ProposalFormWrapper = ({
               submitSuccess,
               disableSubmit,
               openMDGuideModal: openMdModal,
-              initialValues
+              initialValues,
+              isPublic
             }}
           />
         )}
