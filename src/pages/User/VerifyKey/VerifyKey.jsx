@@ -92,7 +92,7 @@ const VerifyKey = ({ location, history }) => {
               className={classNames("margin-top-l", styles.btn)}
               onClick={pushToHome}
               type="button">
-              Ok, go to proposals
+              Ok, go to invoices
             </Button>
           </div>
         )}
