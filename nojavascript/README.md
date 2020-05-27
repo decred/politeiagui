@@ -17,10 +17,10 @@ location /nojavascript/ {
 
 
 
-### Build the docker images using the command `./build.sh` it will ask for an input for the hostname. It is very important that the host is accessible from inside the docker images. This is usually example.com.
+### Build the docker images using the command `./build.sh`. 
 
 
-#### If this is not possible start the docker images with the ["--add-host"](https://docs.docker.com/engine/reference/run/#managing-etchosts) command. You might also need to setup a docker [internal network](https://docs.docker.com/engine/reference/commandline/network_create/). When properly setup you should be able to `curl 'https://example.com'` from inside docker and it should return the contents of `https://example.com`.
+#### It is very important that the host is accessible from inside the docker images. This is usually example.com. If this is not possible start the docker images with the ["--add-host"](https://docs.docker.com/engine/reference/run/#managing-etchosts) command. You might also need to setup a docker [internal network](https://docs.docker.com/engine/reference/commandline/network_create/). When properly setup you should be able to `curl 'https://example.com'` from inside docker and it should return the contents of `https://example.com`.
 
 ## Start rendertronmain 
 
@@ -32,11 +32,11 @@ Docker command:
 
 ## Start rentertronnginx
 
-If you use the below command the location `$HOME/.nginx/longcache/cache `is used to store the cache.  Because the contents of the politeia site keeps changing cache only lasts 10 minutes. This can be edited in the file `build.sh`. Delete the contents of this folder if you are having cache issues.
+If you use the below command the location `$HOME/.nginx/longcache/cache `is used to store the cache.  Because the contents of the politeia site keeps changing cache only lasts 10 minutes. This can be edited in the file `/Nginx/nginx.conf.template`. Delete the contents of this folder if you are having cache issues.
 
 Docker command:
 
-`docker run -v $HOME/.nginx/longcache/cache:/var/cache/nginx -d --rm -p 9090:80 decred/rendertronnginx:latest`
+`docker run  -e PIHOSTNAME={HOSTNAMEHERE} -v $HOME/.nginx/longcache/cache:/var/cache/nginx -d --rm -p 9090:80 decred/rendertronnginx:latest`
 
 ## Final checks. 
 
