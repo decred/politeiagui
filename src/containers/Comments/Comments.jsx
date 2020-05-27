@@ -235,9 +235,7 @@ const Comments = ({
       if (isAnchoring) {
         timeout = setTimeout(handleToggleAnchoring, ANCHORING_TIMEOUT_MS);
       }
-      return () => {
-        if (timeout) clearTimeout(timeout);
-      };
+      return () => timeout && clearTimeout(timeout);
     },
     [isAnchoring, handleToggleAnchoring]
   );
@@ -247,9 +245,7 @@ const Comments = ({
       if (!isAnchoring) {
         timeout = setTimeout(handleToggleAnchoring, getTimeLeftToAnchor());
       }
-      return () => {
-        if (timeout) clearTimeout(timeout);
-      };
+      return () => timeout && clearTimeout(timeout);
     },
     [isAnchoring, handleToggleAnchoring]
   );
