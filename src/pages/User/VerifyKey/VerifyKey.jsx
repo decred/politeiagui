@@ -14,7 +14,8 @@ const VerifyKey = ({ location, history }) => {
     keyMismatchAction,
     verifyUserKey,
     verifyUserKeyError,
-    onVerifyUserKey
+    onVerifyUserKey,
+    isCMS
   } = useVerifyKey();
 
   const [keyUpdated, setKeyUpdated] = useState(false);
@@ -88,12 +89,21 @@ const VerifyKey = ({ location, history }) => {
                 You have verified and activated your new identity.
               </Text>
             </div>
-            <Button
-              className={classNames("margin-top-l", styles.btn)}
-              onClick={pushToHome}
-              type="button">
-              Ok, go to invoices
-            </Button>
+            {isCMS ? (
+              <Button
+                className={classNames("margin-top-l", styles.btn)}
+                onClick={pushToHome}
+                type="button">
+                Ok, go to invoices
+              </Button>
+            ) : (
+              <Button
+                className={classNames("margin-top-l", styles.btn)}
+                onClick={pushToHome}
+                type="button">
+                Ok, go to proposals
+              </Button>
+            )}
           </div>
         )}
       </div>

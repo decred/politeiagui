@@ -12,6 +12,8 @@ export default function useVerifyKey() {
   const onVerifyUserKey = useAction(act.onVerifyUserKey);
   const keyMismatchAction = useAction(act.keyMismatch);
 
+  const isCMS = useSelector(sel.isCMS);
+
   return {
     userPubkey,
     currentUserEmail,
@@ -19,6 +21,7 @@ export default function useVerifyKey() {
     verifyUserKey,
     verifyUserKeyError,
     onVerifyUserKey,
-    keyMismatchAction
+    keyMismatchAction,
+    isCMS
   };
 }
