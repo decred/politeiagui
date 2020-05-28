@@ -17,6 +17,7 @@ export const receive = (key, state, { payload, error } = {}) => ({
   ...state,
   [key]: {
     ...state[key],
+    response: payload,
     isRequesting: false,
     error: error ? payload : null
   }
