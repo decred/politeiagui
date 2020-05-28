@@ -50,6 +50,7 @@ const VerifyKey = ({ location, history }) => {
   const success = verifyUserKey && verifyUserKey.success;
   const error = verifyUserKeyError;
   const pushToHome = useCallback(() => history.push("/"), [history]);
+  const successButtonText = (isCMS ? 'Ok, go to invoices' : 'Ok, go to proposals')
 
   return (
     <SingleContentPage>
@@ -89,21 +90,12 @@ const VerifyKey = ({ location, history }) => {
                 You have verified and activated your new identity.
               </Text>
             </div>
-            {isCMS ? (
-              <Button
-                className={classNames("margin-top-l", styles.btn)}
-                onClick={pushToHome}
-                type="button">
-                Ok, go to invoices
-              </Button>
-            ) : (
-              <Button
-                className={classNames("margin-top-l", styles.btn)}
-                onClick={pushToHome}
-                type="button">
-                Ok, go to proposals
-              </Button>
-            )}
+            <Button
+              className={classNames("margin-top-l", styles.btn)}
+              onClick={pushToHome}
+              type="button">
+              {successButtonText}
+            </Button>
           </div>
         )}
       </div>
