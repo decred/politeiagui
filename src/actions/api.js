@@ -909,7 +909,10 @@ export const onResetPassword = ({ username, email }) =>
     dispatch(act.REQUEST_RESET_PASSWORD({ username, email }));
     return api
       .resetPassword(csrf, username, email)
-      .then((response) => dispatch(act.RECEIVE_RESET_PASSWORD(response)))
+      .then((response) => {
+        dispatch(act.RECEIVE_RESET_PASSWORD(response));
+        return response;
+      })
       .catch((error) => {
         dispatch(act.RECEIVE_RESET_PASSWORD(null, error));
         throw error;

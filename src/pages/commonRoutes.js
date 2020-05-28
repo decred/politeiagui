@@ -12,6 +12,7 @@ import PageUserPrivacyPolicy from "./User/PrivacyPolicy";
 import PageUserRequestResendVerificationEmail from "./User/RequestResendVerificationEmail";
 import PageUserRequestResetPassword from "./User/RequestResetPassword";
 import PageUserResetPassword from "./User/ResetPassword";
+import PageRequestPasswordMessage from "./User/ResetPasswordMessage";
 import PageUserSearch from "./User/Search";
 import PageUserSignup from "./User/Signup";
 import PageUserVerifyEmail from "./User/VerifyEmail";
@@ -38,6 +39,13 @@ const commonRoutes = [
     exact
     key="request-reset-password-route"
     component={PageUserRequestResetPassword}
+  />,
+  <NotAuthenticatedRoute
+    path="/user/reset-password-message"
+    title="Reset Password"
+    exact
+    key="reset-password-message-route"
+    component={PageRequestPasswordMessage}
   />,
   <NotAuthenticatedRoute
     path="/user/password/reset"

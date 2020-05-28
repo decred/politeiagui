@@ -169,11 +169,6 @@ const users = (state = DEFAULT_STATE, action) =>
               ["byID", state.currentUserID, "resendverificationtoken"],
               null
             )(state),
-          [act.RECEIVE_RESET_PASSWORD]: () =>
-            set(
-              ["byID", state.currentUserID, "resetpassword"],
-              action.payload
-            )(state),
           [act.RECEIVE_UPDATED_KEY]: () =>
             update(["byID", state.currentUserID], (user) => ({
               ...user,
