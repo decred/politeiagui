@@ -3,20 +3,31 @@ export const DEFAULT_REQUEST_STATE = {
   error: null
 };
 
-export const request = (key, state, { payload, error }) => ({
-  ...state,
-  [key]: {
-    ...state[key],
-    payload: error ? null : payload,
-    isRequesting: error ? false : true,
-    error: error ? payload : null
-  }
-});
+export const request = (key, state, { payload, error }) =>
+  payload
+    ? {
+        ...state,
+        [key]: {
+          ...state[key],
+          payload: error ? null : payload,
+          isRequesting: error ? false : true,
+          error: error ? payload : null
+        }
+      }
+    : {
+        ...state,
+        [key]: {
+          ...state[key],
+          isRequesting: error ? false : true,
+          error: error ? payload : null
+        }
+      };
 
 export const receive = (key, state, { payload, error } = {}) => ({
   ...state,
   [key]: {
     ...state[key],
+    payload: error ? null : payload,
     isRequesting: false,
     error: error ? payload : null
   }

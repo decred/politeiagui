@@ -15,7 +15,7 @@ export const allByStatus = createDeepEqualSelector(
 );
 export const tokenInventory = createDeepEqualSelector(
   get(["api"]),
-  ({ tokenInventory }) => tokenInventory.response
+  ({ tokenInventory }) => tokenInventory.payload
 );
 export const newProposalToken = get(["proposals", "newProposalToken"]);
 

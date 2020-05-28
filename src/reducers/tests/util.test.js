@@ -54,7 +54,8 @@ describe("test util reducers (request, receive, reset)", () => {
       ...MOCK_STATE,
       apiReceiveTest: {
         isRequesting: false,
-        error: null
+        error: null,
+        payload: action.payload
       }
     });
 
@@ -66,7 +67,8 @@ describe("test util reducers (request, receive, reset)", () => {
       ...MOCK_STATE,
       apiReceiveTest: {
         isRequesting: false,
-        error: action.payload
+        error: action.payload,
+        payload: null
       }
     });
   });
