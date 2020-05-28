@@ -94,7 +94,9 @@ const ModalStartVote = ({
     quorumPercentage: 20,
     passPercentage: 60
   };
-  const isInitialValid = validationSchema.isValidSync(initialValues);
+  const isInitialValid = validationSchema(apiInfo.tesnet).isValidSync(
+    initialValues
+  );
 
   return (
     <Modal
@@ -117,7 +119,7 @@ const ModalStartVote = ({
       {!success && (
         <FormWrapper
           initialValues={initialValues}
-          validationSchema={validationSchema}
+          validationSchema={validationSchema(apiInfo.testnet)}
           isInitialValid={isInitialValid}
           onSubmit={onSubmitStartVote}>
           {({
