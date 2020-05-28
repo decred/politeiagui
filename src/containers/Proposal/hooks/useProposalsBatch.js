@@ -24,7 +24,9 @@ export default function useProposalsBatch() {
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
 
   const [isLoadingTokenInventory, errorTokenInventory] = useAPIAction(
-    onFetchTokenInventory
+    onFetchTokenInventory,
+    null,
+    showLoadingIndicator
   );
 
   const anyError = errorTokenInventory || error;
