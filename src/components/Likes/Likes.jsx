@@ -81,7 +81,6 @@ const Likes = ({
         <>
           <div className={styles.leftLikeBox}>
             <button
-              disabled={disabled}
               ref={likeRef}
               className={styles.likeBtn}
               onClick={handleLike}>
@@ -95,7 +94,6 @@ const Likes = ({
           </div>
           <div className={styles.rightLikeBox}>
             <button
-              disabled={disabled}
               ref={dislikeRef}
               className={styles.likeBtn}
               onClick={handleDislike}>
