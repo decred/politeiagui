@@ -46,8 +46,7 @@
   display: flex;
   align-items: center;
   height: 4.4rem;
-  margin-left: var(--spacing-small);
-  margin-right: var(--spacing-small);
+  justify-content: center;
 }
 
 .deadlineTooltip {
@@ -99,7 +98,7 @@
 
   .tooltipWrapper {
     margin-top: 2rem;
-    flex-basis: 5%;
+    flex-basis: 10%;
   }
 
   .formatHelpButton {
