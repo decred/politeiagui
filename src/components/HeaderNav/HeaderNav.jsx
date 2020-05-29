@@ -105,6 +105,16 @@ const HeaderNav = ({ history }) => {
     </div>
   ) : (
     <nav className={styles.navContainer}>
+      <div
+        className={classNames(styles.themeToggleWrapper, styles.publicWrapper)}>
+        <Toggle
+          onToggle={onThemeToggleHandler}
+          toggled={themeName === "dark"}
+        />
+        <div onClick={onThemeToggleHandler} className={styles.themeToggleLabel}>
+          Dark Mode
+        </div>
+      </div>
       <NavLink
         className={styles.navLink}
         activeClassName={styles.activeNavLink}
