@@ -38,7 +38,7 @@
 
 .datePicker {
   margin-left: 2rem;
-  width: 20rem;
+  flex-basis: 20rem;
   height: 4.4rem;
 }
 
@@ -56,7 +56,7 @@
 }
 
 .rfpLinkToken {
-  width: 50rem;
+  flex-basis: 50rem;
 }
 
 .rfpLinkToken > input {
@@ -82,9 +82,24 @@
   text-decoration: none !important;
 }
 
+.topMargin {
+  margin-top: 2rem;
+}
+
 @media screen and (max-width: 685px) {
+  .datePicker {
+    composes: topMargin;
+    margin-left: 0;
+    flex-basis: 90%;
+  }
+
   .rfpLinkToken {
-    width: auto;
+    flex-basis: 100%;
+  }
+
+  .tooltipWrapper {
+    composes: topMargin;
+    flex-basis: 5%;
   }
 
   .formatHelpButton {
