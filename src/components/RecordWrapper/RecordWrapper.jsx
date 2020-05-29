@@ -108,7 +108,7 @@ const MobileHeader = ({ title, status, edit, isRfp }) => (
 const RfpTag = React.memo(({ className }) => (
   <img
     alt="rfp"
-    className={classNames("margin-right-s", "margin-top-xs", className)}
+    className={classNames("margin-right-s", className)}
     src={rfpTag}
   />
 ));
