@@ -159,16 +159,6 @@ const users = (state = DEFAULT_STATE, action) =>
               byID
             })(state);
           },
-          [act.RECEIVE_RESEND_VERIFICATION_EMAIL]: () =>
-            set(
-              ["byID", state.currentUserID, "resendverificationtoken"],
-              action.payload
-            )(state),
-          [act.RESET_RESEND_VERIFICATION_EMAIL]: () =>
-            set(
-              ["byID", state.currentUserID, "resendverificationtoken"],
-              null
-            )(state),
           [act.RECEIVE_UPDATED_KEY]: () =>
             update(["byID", state.currentUserID], (user) => ({
               ...user,

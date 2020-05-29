@@ -1,30 +1,31 @@
-import React, { useCallback } from "react";
-import { withRouter } from "react-router-dom";
+import React, { useState, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { TextInput, Button } from "pi-ui";
 import FormWrapper from "src/components/FormWrapper";
+import EmailSentMessage from "src/components/EmailSentMessage";
 import { useResetPassword } from "./hooks";
+import DevelopmentOnlyContent from "src/components/DevelopmentOnlyContent";
 
-const RequestForm = ({ history }) => {
+const RequestForm = () => {
   const { validationSchema, onResetPassword } = useResetPassword();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [verificationToken, setVerificationToken] = useState();
+  const success = !!username && !!email;
   const onSubmit = useCallback(
     async (values, { setSubmitting, setFieldError }) => {
       try {
-        const token = await onResetPassword(values);
-
+        const response = await onResetPassword(values);
         setSubmitting(false);
-        history.push(
-          `/user/reset-password-message?username=${values.username}${
-            token && token.verificationtoken
-              ? `&verificationtoken=${token.verificationtoken}`
-              : ""
-          }`
-        );
+        setUsername(values.username);
+        setEmail(values.email);
+        setVerificationToken(response.verificationtoken);
       } catch (e) {
         setSubmitting(false);
         setFieldError("global", e);
       }
     },
-    [onResetPassword, history]
+    [onResetPassword]
   );
   return (
     <>
@@ -47,38 +48,51 @@ const RequestForm = ({ history }) => {
           errors,
           touched,
           isSubmitting
-        }) => (
-          <Form onSubmit={handleSubmit}>
-            <Title>Reset Password</Title>
-            {errors && errors.global && (
-              <ErrorMessage>{errors.global.toString()}</ErrorMessage>
-            )}
-            <TextInput
-              label="Username"
-              id="username"
-              value={values.username}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.username && errors.username}
+        }) =>
+          !success ? (
+            <Form onSubmit={handleSubmit}>
+              <Title>Reset Password</Title>
+              {errors && errors.global && (
+                <ErrorMessage>{errors.global.toString()}</ErrorMessage>
+              )}
+              <TextInput
+                label="Username"
+                id="username"
+                value={values.username}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.username && errors.username}
+              />
+              <TextInput
+                label="Email"
+                id="email"
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.email && errors.email}
+              />
+              <Actions>
+                <Button loading={isSubmitting} type="submit">
+                  Reset Password
+                </Button>
+              </Actions>
+            </Form>
+          ) : (
+            <EmailSentMessage
+              email={email}
+              title={"Please check your mailbox to reset your password"}
             />
-            <TextInput
-              label="Email"
-              id="email"
-              value={values.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.email && errors.email}
-            />
-            <Actions>
-              <Button loading={isSubmitting} type="submit">
-                Reset Password
-              </Button>
-            </Actions>
-          </Form>
-        )}
+          )
+        }
       </FormWrapper>
+      <DevelopmentOnlyContent show={verificationToken}>
+        <Link
+          to={`/user/password/reset?username=${username}&verificationtoken=${verificationToken}`}>
+          Reset password
+        </Link>
+      </DevelopmentOnlyContent>
     </>
   );
 };
 
-export default withRouter(RequestForm);
+export default RequestForm;

@@ -1,22 +1,34 @@
+import React, { useState, useCallback } from "react";
 import { Button, TextInput } from "pi-ui";
-import React from "react";
 import { Link } from "react-router-dom";
 import DevelopmentOnlyContent from "src/components/DevelopmentOnlyContent";
 import EmailSentMessage from "src/components/EmailSentMessage";
 import FormWrapper from "src/components/FormWrapper";
 import { useRequestResendVerificationEmail } from "./hooks";
-import useIdentityWarningModal from "../hooks/useIdentityWarningModal";
 
 const RequestVerificationEmailForm = () => {
   const {
     validationSchema,
-    onResendVerificationEmail,
-    currentUserResendVerificationToken: response
+    onResendVerificationEmail
   } = useRequestResendVerificationEmail();
 
-  const { handleSubmitAction, email } = useIdentityWarningModal({
-    asyncSubmit: onResendVerificationEmail
-  });
+  const [email, setEmail] = useState();
+  const [devToken, setDevToken] = useState();
+
+  const handleSubmitAction = useCallback(
+    async (values, { setSubmitting, resetForm, setFieldError }) => {
+      try {
+        const response = await onResendVerificationEmail(values);
+        setSubmitting(false);
+        setEmail(values.email);
+        setDevToken(response && response.verificationtoken);
+        resetForm();
+      } catch (error) {
+        setFieldError("global", error);
+      }
+    },
+    [setEmail, onResendVerificationEmail]
+  );
 
   const success = !!email;
 
@@ -63,11 +75,8 @@ const RequestVerificationEmailForm = () => {
           )
         }
       </FormWrapper>
-      <DevelopmentOnlyContent show={response && response.verificationtoken}>
-        <Link
-          to={`/user/verify?email=${email}&verificationtoken=${
-            response && response.verificationtoken
-          }`}>
+      <DevelopmentOnlyContent show={devToken}>
+        <Link to={`/user/verify?email=${email}&verificationtoken=${devToken}`}>
           Verify email
         </Link>
       </DevelopmentOnlyContent>

@@ -940,9 +940,10 @@ export const onResendVerificationEmailConfirm = ({ email }) =>
     dispatch(act.REQUEST_RESEND_VERIFICATION_EMAIL({ email }));
     return api
       .resendVerificationEmailRequest(csrf, email)
-      .then((response) =>
-        dispatch(act.RECEIVE_RESEND_VERIFICATION_EMAIL(response))
-      )
+      .then((response) => {
+        dispatch(act.RECEIVE_RESEND_VERIFICATION_EMAIL(response));
+        return response;
+      })
       .catch((error) => {
         dispatch(act.RECEIVE_RESEND_VERIFICATION_EMAIL(null, error));
         throw error;
