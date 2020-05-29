@@ -88,7 +88,7 @@
 
 @media screen and (max-width: 685px) {
   .datePicker {
-    composes: topMargin;
+    margin-top: 2rem;
     margin-left: 0;
     flex-basis: 90%;
   }
@@ -98,7 +98,7 @@
   }
 
   .tooltipWrapper {
-    composes: topMargin;
+    margin-top: 2rem;
     flex-basis: 5%;
   }
 
