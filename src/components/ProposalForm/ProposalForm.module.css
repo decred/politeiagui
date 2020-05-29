@@ -81,6 +81,10 @@
   text-decoration: none !important;
 }
 
+.tooltipWrapper {
+  flex-basis: 4rem;
+}
+
 .topMargin {
   margin-top: 2rem;
 }
