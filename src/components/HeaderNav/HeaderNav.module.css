@@ -18,7 +18,7 @@
   composes: navContainer;
   text-decoration: none !important;
   color: var(--tab-text-color) !important;
-  border-bottom: 2px solid transparent;
+  border-bottom: 0.2rem solid transparent;
 }
 
 .navLink:hover {
@@ -30,12 +30,12 @@
 }
 
 .rightGreyBorder {
-  border-right: 1px solid var(--separator-color);
+  border-right: 0.1rem solid var(--separator-color);
 }
 
 .activeNavLink {
   color: var(--color-primary-dark);
-  border-bottom: 4px solid var(--active-nav-border-color);
+  border-bottom: 0.4rem solid var(--active-nav-border-color);
 }
 
 ul.dropdownList {
@@ -50,7 +50,7 @@ ul.dropdownList {
 
 .publicWrapper {
   padding: 0 2rem;
-  border-bottom: 2px solid transparent;
+  border-bottom: 0.2rem solid transparent;
 }
 
 .themeToggleLabel {
