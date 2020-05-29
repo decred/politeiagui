@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import * as act from "src/actions";
-// import * as sel from "src/selectors";
 import { useAction } from "src/redux";
 import {
   requestResendEmailValidationSchema,
