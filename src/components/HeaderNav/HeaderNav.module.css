@@ -48,6 +48,11 @@ ul.dropdownList {
   justify-content: space-between;
 }
 
+.publicWrapper {
+  padding: 0 2rem;
+  border-bottom: 2px solid transparent;
+}
+
 .themeToggleLabel {
   margin-left: 1rem;
   margin-top: 0.1rem;
