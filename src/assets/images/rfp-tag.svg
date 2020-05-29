@@ -1,12 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50" height="25" viewBox="0 0 50 25">
-  <defs>
-    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
-      <stop offset="0" stop-color="#1b41b3"/>
-      <stop offset="1" stop-color="#1b41b3"/>
-    </linearGradient>
-  </defs>
-  <g id="Group_3184" data-name="Group 3184">
-    <rect data-name="Rectangle 1827" width="50" height="25" rx="2" fill="url(#linear-gradient)"/>
-    <text textLength="35px" fill="#fff" font-size="14px" x="7px" y="17px" font-weight="600">RFP</text>
-  </g>
+<svg width="40" height="25" viewBox="0 0 40 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M38 0H2C0.89543 0 0 0.89543 0 2V23C0 24.1046 0.89543 25 2 25H38C39.1046 25 40 24.1046 40 23V2C40 0.89543 39.1046 0 38 0Z" fill="url(#paint0_linear)"/>
+<path d="M8 18H9.8583V14.0856H11.4603L13.7191 18H15.8017L13.3026 13.8257C14.5521 13.4128 15.3852 12.4954 15.3852 10.9664C15.3852 8.73395 13.7191 8 11.5404 8H8V18ZM9.8583 12.6789V9.42202H11.3482C12.7739 9.42202 13.5589 9.81957 13.5589 10.9664C13.5589 12.0979 12.7739 12.6789 11.3482 12.6789H9.8583Z" fill="white"/>
+<path d="M17.4805 18H19.3388V13.8257H23.1515V12.3272H19.3388V9.49847H23.8084V8H17.4805V18Z" fill="white"/>
+<path d="M25.6469 18H27.5052V14.3303H29.0111C31.2699 14.3303 33 13.3058 33 11.0887C33 8.76453 31.2699 8 28.947 8H25.6469V18ZM27.5052 12.9083V9.42202H28.8028C30.3567 9.42202 31.1737 9.83486 31.1737 11.0887C31.1737 12.3119 30.4208 12.9083 28.8669 12.9083H27.5052Z" fill="white"/>
+<defs>
+<linearGradient id="paint0_linear" x1="20" y1="0" x2="20" y2="25" gradientUnits="userSpaceOnUse">
+<stop stop-color="#1B41B3"/>
+<stop offset="1" stop-color="#1B41B3"/>
+</linearGradient>
+</defs>
 </svg>
