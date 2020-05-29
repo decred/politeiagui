@@ -25,10 +25,6 @@
   outline: none;
 }
 
-.likeBtn:disabled {
-  cursor: not-allowed;
-}
-
 .likesResult {
   display: block;
   line-height: 16px !important;
