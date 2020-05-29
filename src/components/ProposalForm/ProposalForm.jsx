@@ -120,6 +120,7 @@ const ProposalForm = React.memo(function ProposalForm({
       )}
       <Row
         noMargin
+        wrap={smallTablet}
         className={classNames(
           styles.typeRow,
           isRfpSubmission && styles.typeRowNoMargin
@@ -142,6 +143,7 @@ const ProposalForm = React.memo(function ProposalForm({
             />
             <Tooltip
               contentClassName={styles.deadlineTooltip}
+              className={styles.tooltipWrapper}
               placement={smallTablet ? "left" : "bottom"}
               content="The deadline for the RFP submissions,
               it can be edited at any point before the voting has been started and should be at least two weeks from now.">
@@ -153,14 +155,16 @@ const ProposalForm = React.memo(function ProposalForm({
         )}
         {isRfpSubmission && (
           <>
-            <div className={styles.iconWrapper}>
-              <Icon
-                type={"horizontalLink"}
-                viewBox="0 0 24 16"
-                width={24}
-                height={16}
-              />
-            </div>
+            {!smallTablet && (
+              <div className={styles.iconWrapper}>
+                <Icon
+                  type={"horizontalLink"}
+                  viewBox="0 0 24 16"
+                  width={24}
+                  height={16}
+                />
+              </div>
+            )}
             <BoxTextInput
               placeholder="RFP token"
               name="rfpLink"
@@ -168,7 +172,10 @@ const ProposalForm = React.memo(function ProposalForm({
               value={values.rfpLink}
               disabled={isPublic}
               onChange={handleChangeWithTouched("rfpLink")}
-              className={styles.rfpLinkToken}
+              className={classNames(
+                styles.rfpLinkToken,
+                smallTablet && styles.topMargin
+              )}
               error={touched.rfpLink && errors.rfpLink}
             />
           </>

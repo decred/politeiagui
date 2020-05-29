@@ -76,6 +76,10 @@ div.customPageDetails {
   grid-column: 4 / 12 !important;
 }
 
+.wrap {
+  flex-wrap: wrap;
+}
+
 /* HUGE SCREENS */
 @media screen and (min-width: 1400px) {
   .narrow {
