@@ -55,9 +55,21 @@ export function useProposal(token, threadParentID) {
         return;
       }
       onFetchProposal(token);
-      onFetchProposalsVoteSummary([token]);
     },
     [proposal, token, onFetchProposal, onFetchProposalsVoteSummary]
+  );
+  useEffect(
+    // fetch vote summary only when proposal details loaded => full token is avaliable in redux store
+    // thus can be used to fetch vote summary
+    function fetchVoteSummary() {
+      if (proposalFromState) {
+        const {
+          censorshiprecord: { token }
+        } = proposalFromState;
+        onFetchProposalsVoteSummary([token]);
+      }
+    },
+    [proposalFromState, onFetchProposalsVoteSummary]
   );
 
   useEffect(
