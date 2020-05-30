@@ -222,18 +222,35 @@ export const getMarkdownContent = (files) => {
 export const getProposalToken = (proposal) =>
   proposal && proposal.censorshiprecord && proposal.censorshiprecord.token;
 
-export const getProposalUrl = (token, javascriptEnabled) =>
-  javascriptEnabled
-    ? `/proposals/${token}`
+/**
+ * Retruns the propsoal url using a given token
+ * if full token is passed (64 chars hex) then first 7 chars used
+ * @param {String} token proposal token
+ * @param {boolean} isJsEnabled true if Javascript is enabled
+ */
+export const getProposalUrl = (token, isJsEnabled) =>
+  isJsEnabled
+    ? `/proposals/${token.substring(0, 7)}`
     : `${NOJS_ROUTE_PREFIX}/proposals/${token}`;
 
-export const getCommentsUrl = (proposalToken, javascriptEnabled) =>
-  javascriptEnabled
-    ? `/proposals/${proposalToken}?scrollToComments=true`
-    : `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}?scrollToComments=true`;
+/**
+ * Retruns the url proposal's comments section using a given token
+ * if full token is passed (64 chars hex) then first 7 chars used
+ * @param {String} token proposal token
+ * @param {boolean} isJsEnabled true if Javascript is enabled
+ */
+export const getCommentsUrl = (token, isJsEnabled) =>
+  isJsEnabled
+    ? `/proposals/${token.substring(0, 7)}?scrollToComments=true`
+    : `${NOJS_ROUTE_PREFIX}/proposals/${token}?scrollToComments=true`;
 
-export const getAuthorUrl = (userid, javascriptEnabled) =>
-  javascriptEnabled ? `/user/${userid}` : `${NOJS_ROUTE_PREFIX}/user/${userid}`;
+/**
+ * Returns author's account URL
+ * @param {String} userid author user id
+ * @param {boolean} isJsEnabled true if Javascript is enabled
+ */
+export const getAuthorUrl = (userid, isJsEnabled) =>
+  isJsEnabled ? `/user/${userid}` : `${NOJS_ROUTE_PREFIX}/user/${userid}`;
 
 export const goToFullProposal = (history, proposalURL) => () =>
   history.push(proposalURL);

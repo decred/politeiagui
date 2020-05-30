@@ -2,8 +2,7 @@ import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_NOT_AUTHORIZED,
-  PROPOSAL_VOTING_FINISHED,
-  NOJS_ROUTE_PREFIX
+  PROPOSAL_VOTING_FINISHED
 } from "../../constants";
 import {
   isApprovedProposal,
@@ -26,19 +25,6 @@ export const getStatusBarData = (voteSummary) => {
     }))
     .sort((a) => (a.label === "yes" ? -1 : 1));
 };
-
-export const getProposalUrl = (token, javascriptEnabled) =>
-  javascriptEnabled
-    ? `/proposals/${token}`
-    : `${NOJS_ROUTE_PREFIX}/proposals/${token}`;
-
-export const getCommentsUrl = (proposalToken, javascriptEnabled) =>
-  javascriptEnabled
-    ? `/proposals/${proposalToken}?scrollToComments=true`
-    : `${NOJS_ROUTE_PREFIX}/proposals/${proposalToken}?scrollToComments=true`;
-
-export const getAuthorUrl = (userid, javascriptEnabled) =>
-  javascriptEnabled ? `/user/${userid}` : `${NOJS_ROUTE_PREFIX}/user/${userid}`;
 
 export const getProposalStatusTagProps = (proposal, voteSummary) => {
   const isRfpSubmission = !!proposal.linkto;
