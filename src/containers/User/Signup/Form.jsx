@@ -132,7 +132,7 @@ const SignupForm = () => {
                   <Link to="/user/request-reset-password">
                     reset your password
                   </Link>{" "}
-                  `` instead.
+                  instead.
                 </>
               ]}
             />
