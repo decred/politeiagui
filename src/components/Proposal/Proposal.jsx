@@ -173,8 +173,7 @@ const Proposal = React.memo(function Proposal({
           Header,
           Subtitle,
           Edit,
-          Status,
-          RecordToken
+          Status
         }) => (
           <>
             <Header
@@ -266,7 +265,15 @@ const Proposal = React.memo(function Proposal({
             />
             {extended && (
               <Row topMarginSize="s">
-                <RecordToken token={proposalToken} />
+                <Text id={`proposal-token-${proposalToken}`} truncate>
+                  {proposalToken}
+                </Text>
+                <CopyLink
+                  className={classNames(
+                    isPublicAccessible && styles.copyLink && "margin-left-s"
+                  )}
+                  url={proposalToken}
+                />
               </Row>
             )}
             {hasvoteSummary && (
