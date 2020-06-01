@@ -473,5 +473,3 @@ export const isAnchoring = (
   );
   return timeDiffMinutes >= 0 && timeDiffMinutes < anchoringDuration;
 };
-
-isAnchoring();
