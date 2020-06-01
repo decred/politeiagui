@@ -447,3 +447,31 @@ export const fromUSDCentsToUSDUnits = (cents) =>
 export const fromUSDUnitsToUSDCents = (units) => parseInt(units * 100, 10);
 
 export const isEmpty = (obj) => Object.keys(obj).length === 0;
+
+/** Pure function that given 2 UNIX timestamps returns the differnce between them in minutes */
+export const getTimeDiffInMinutes = (d1, d2) => {
+  return (d1 - d2) / 60e3;
+};
+
+/** This is a temporary fix to prevent comments and proposals submissions during anchoring time  */
+/**
+ * @function isAnchoring
+ * @param {string} anchoringStartTime UTC time to prevent submissions in HH:MM format
+ * @param {number} anchoringDuration Duration in minutes
+ */
+export const isAnchoring = (
+  anchoringStartTime = "06:58",
+  anchoringDuration = 10
+) => {
+  const targetDate = new Date();
+  const [startHour, startMinute] = anchoringStartTime.split(":");
+  targetDate.setUTCHours(startHour);
+  targetDate.setUTCMinutes(startMinute);
+  const timeDiffMinutes = getTimeDiffInMinutes(
+    new Date().getTime(),
+    targetDate.getTime()
+  );
+  return timeDiffMinutes >= 0 && timeDiffMinutes < anchoringDuration;
+};
+
+isAnchoring();
