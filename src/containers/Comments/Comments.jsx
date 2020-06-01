@@ -205,42 +205,6 @@ const Comments = ({
     ((comments && !comments.find((c) => c.commentid === threadParentID)) ||
       numOfComments === 0);
 
-  // Temporarily block comments due to git anchoring: See https://github.com/decred/politeiagui/issues/1941
-  // const getTimeLeftToAnchor = () => {
-  //   const date = new Date();
-  //   const timeLeft =
-  //     TEMP_ANCHORING_MINUTE * 60000 -
-  //     date.getMinutes() * 60000 -
-  //     date.getSeconds() * 1000 -
-  //     date.getMilliseconds();
-  //   return timeLeft;
-  // };
-
-  // const [isAnchoring, setIsAchoring] = useState(getTimeLeftToAnchor() <= 0);
-  // const handleToggleAnchoring = useCallback(() => {
-  //   setIsAchoring(!isAnchoring);
-  // }, [setIsAchoring, isAnchoring]);
-
-  // useEffect(
-  //   function anchoringModeListener() {
-  //     let timeout = null;
-  //     if (isAnchoring) {
-  //       timeout = setTimeout(handleToggleAnchoring, ANCHORING_TIMEOUT_MS);
-  //     }
-  //     return () => timeout && clearTimeout(timeout);
-  //   },
-  //   [isAnchoring, handleToggleAnchoring]
-  // );
-  // useEffect(
-  //   function commentsAllowedListener() {
-  //     let timeout = null;
-  //     if (!isAnchoring) {
-  //       timeout = setTimeout(handleToggleAnchoring, getTimeLeftToAnchor());
-  //     }
-  //     return () => timeout && clearTimeout(timeout);
-  //   },
-  //   [isAnchoring, handleToggleAnchoring]
-  // );
   return (
     <>
       <Card
