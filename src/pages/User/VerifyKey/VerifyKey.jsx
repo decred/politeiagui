@@ -50,7 +50,9 @@ const VerifyKey = ({ location, history }) => {
   const success = verifyUserKey && verifyUserKey.success;
   const error = verifyUserKeyError;
   const pushToHome = useCallback(() => history.push("/"), [history]);
-  const successButtonText = (isCMS ? "Ok, go to invoices" : "Ok, go to proposals");
+  const successButtonText = isCMS
+    ? "Ok, go to invoices"
+    : "Ok, go to proposals";
 
   return (
     <SingleContentPage>
