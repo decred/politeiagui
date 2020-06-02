@@ -22,31 +22,33 @@ export const toUint8Array = (obj) =>
     ? obj
     : Uint8Array.from(Object.keys(obj).map((key) => obj[key]));
 
-export const loadKeys = (email, keys) =>
-  localforage.setItem(STORAGE_PREFIX + email, keys).then(() => keys);
+export const loadKeys = (uuid, keys) =>
+  localforage.setItem(STORAGE_PREFIX + uuid, keys).then(() => keys);
+export const removeKeys = (uuid) =>
+  localforage.removeItem(STORAGE_PREFIX + uuid);
 export const generateKeys = () => Promise.resolve(nacl.sign.keyPair());
-export const existing = (email) =>
-  localforage.getItem(STORAGE_PREFIX + email).catch((e) => console.warn(e));
-const myKeyPair = (email) =>
-  existing(email).then((res) => res && res.secretKey && res);
-export const myPublicKey = (email) => myKeyPair(email).then(get("publicKey"));
-export const myPubKeyHex = (email) =>
-  myPublicKey(email)
+export const existing = (uuid) =>
+  localforage.getItem(STORAGE_PREFIX + uuid).catch((e) => console.warn(e));
+const myKeyPair = (uuid) =>
+  existing(uuid).then((res) => res && res.secretKey && res);
+export const myPublicKey = (uuid) => myKeyPair(uuid).then(get("publicKey"));
+export const myPubKeyHex = (uuid) =>
+  myPublicKey(uuid)
     .then((keys) => toHex(keys))
     .catch(() => {
       throw new Error(IDENTITY_ERROR);
     });
-export const sign = (email, msg) =>
-  myKeyPair(email)
+export const sign = (uuid, msg) =>
+  myKeyPair(uuid)
     .then(({ secretKey }) =>
       nacl.sign.detached(toUint8Array(msg), toUint8Array(secretKey))
     )
     .catch(() => {
       throw new Error(IDENTITY_ERROR);
     });
-export const signString = (email, msg) => sign(email, util.decodeUTF8(msg));
-export const signHex = (email, msg) => sign(email, msg).then(toHex);
-export const signStringHex = (email, msg) => signString(email, msg).then(toHex);
+export const signString = (uuid, msg) => sign(uuid, util.decodeUTF8(msg));
+export const signHex = (uuid, msg) => sign(uuid, msg).then(toHex);
+export const signStringHex = (uuid, msg) => signString(uuid, msg).then(toHex);
 export const verify = (msg, sig, pubKey) =>
   nacl.sign.detached.verify(
     toUint8Array(msg),
@@ -74,10 +76,21 @@ const keysFromHex = ({ publicKey, secretKey }) => ({
   secretKey: toByteArray(secretKey)
 });
 
-export const getKeys = (email) =>
-  myKeyPair(email).then((keys) => (keys ? keysToHex(keys) : keys));
+export const getKeys = (uuid) =>
+  myKeyPair(uuid).then((keys) => (keys ? keysToHex(keys) : keys));
 
-export const importKeys = (email, keys) =>
+export const importKeys = (uuid, keys) =>
   Promise.resolve(keysFromHex(keys)).then((decodedKeys) =>
-    loadKeys(email, decodedKeys)
+    loadKeys(uuid, decodedKeys)
+  );
+
+export const needStorageKeyReplace = (username) =>
+  localforage
+    .keys()
+    .then((keys) => (keys.includes(STORAGE_PREFIX + username) ? true : false));
+export const replaceStorageKey = (oldKey, newKey) =>
+  myKeyPair(oldKey).then((keys) =>
+    loadKeys(newKey, keys).then(() =>
+      localforage.removeItem(STORAGE_PREFIX + oldKey)
+    )
   );

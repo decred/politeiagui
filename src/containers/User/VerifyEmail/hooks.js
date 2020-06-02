@@ -40,12 +40,16 @@ export function useVerifyUserEmail() {
     async function validateUrlParamsAndVerifyUser() {
       try {
         setLoading(true);
-        const { email, verificationtoken } = getQueryStringValues();
-        const valid = await schema.isValid({ email, verificationtoken });
+        const { email, verificationtoken, username } = getQueryStringValues();
+        const valid = await schema.isValid({
+          username,
+          email,
+          verificationtoken
+        });
         if (!valid) {
           throw new Error("Invalid email or verification token");
         }
-        await onVerify(email, verificationtoken);
+        await onVerify(email, verificationtoken, username);
         setLoading(false);
         setSuccess(true);
       } catch (error) {

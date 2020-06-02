@@ -5,6 +5,7 @@ import ModalIdentityWarning from "src/components/ModalIdentityWarning";
 export default function useIdentityWarningModal({ asyncSubmit, isCms }) {
   const [handleOpenModal, handleCloseModal] = useModelContext();
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
 
   const onConfirm = (
     values,
@@ -15,6 +16,7 @@ export default function useIdentityWarningModal({ asyncSubmit, isCms }) {
       await asyncSubmit(values);
       setSubmitting(false);
       setEmail(values.email);
+      setUsername(values.username);
       resetForm();
     } catch (e) {
       setSubmitting(false);
@@ -39,6 +41,7 @@ export default function useIdentityWarningModal({ asyncSubmit, isCms }) {
 
   return {
     handleSubmitAction: onSubmit,
-    email
+    email,
+    username
   };
 }

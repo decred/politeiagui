@@ -262,8 +262,8 @@ export const getRandomColor = () => {
 export const uniqueID = (prefix) =>
   prefix + "_" + Math.random().toString(36).substr(2, 9);
 
-export const verifyUserPubkey = (email, keyToBeMatched, keyMismatchAction) =>
-  pki.getKeys(email).then((keys) => {
+export const verifyUserPubkey = (userid, keyToBeMatched, keyMismatchAction) =>
+  pki.getKeys(userid).then((keys) => {
     const res = keys ? keys.publicKey !== keyToBeMatched : true;
     keyMismatchAction(res);
   });

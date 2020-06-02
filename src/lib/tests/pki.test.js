@@ -26,32 +26,32 @@ describe("Key pair generation and storage handlers (lib/pki.js)", () => {
 
   test("generate a key pair and save it with localforage", async () => {
     expect.assertions(1);
-    const EMAIL = "foo@bar.com";
+    const ID = "2";
     let keys = await pki.generateKeys();
-    await pki.loadKeys(EMAIL, keys);
-    keys = await localforage.getItem(pki.STORAGE_PREFIX + EMAIL);
+    await pki.loadKeys(ID, keys);
+    keys = await localforage.getItem(pki.STORAGE_PREFIX + ID);
     expect(keys).toBeTruthy();
   });
 
   test("returns an existing keypair saved with localforage", async () => {
     expect.assertions(2);
-    const EMAIL = "foo@bar.com";
+    const ID = "2";
     let keys = await pki.generateKeys();
-    await pki.loadKeys(EMAIL, keys);
-    keys = await pki.existing(EMAIL);
-    const pubKey = await pki.myPublicKey(EMAIL);
+    await pki.loadKeys(ID, keys);
+    keys = await pki.existing(ID);
+    const pubKey = await pki.myPublicKey(ID);
     expect(keys).toBeTruthy();
     expect(pubKey).toBeTruthy();
   });
 
   test("sign and verify a message using email and public key", async () => {
     expect.assertions(1);
-    const EMAIL = "foo@bar.com";
+    const ID = "2";
     const MSG = "hey";
     const keys = await pki.generateKeys();
-    await pki.loadKeys(EMAIL, keys);
-    const pubKey = await pki.myPublicKey(EMAIL);
-    const signature = await pki.signString(EMAIL, MSG);
+    await pki.loadKeys(ID, keys);
+    const pubKey = await pki.myPublicKey(ID);
+    const signature = await pki.signString(ID, MSG);
     const verification = await pki.verify(
       util.decodeUTF8(MSG),
       signature,
@@ -63,16 +63,16 @@ describe("Key pair generation and storage handlers (lib/pki.js)", () => {
   test("import keys on hex format and save it with local forage", async () => {
     expect.assertions(1);
     const keysOnHexFormat = pki.keysToHex(nacl.sign.keyPair());
-    const EMAIL = "foo@bar.com";
-    await pki.importKeys(EMAIL, keysOnHexFormat);
-    const keysSaved = await localforage.getItem(pki.STORAGE_PREFIX + EMAIL);
+    const ID = "2";
+    await pki.importKeys(ID, keysOnHexFormat);
+    const keysSaved = await localforage.getItem(pki.STORAGE_PREFIX + ID);
     expect(keysSaved).toBeTruthy();
   });
 
   test("return falsy for a not found key", async () => {
     expect.assertions(1);
-    const UNEXISTENT_EMAIL = "a@a.com";
-    const keys = await pki.existing(UNEXISTENT_EMAIL);
+    const UNEXISTENT_ID = "0";
+    const keys = await pki.existing(UNEXISTENT_ID);
     expect(keys).toBeFalsy();
   });
 });

@@ -148,6 +148,10 @@ const app = (state = DEFAULT_STATE, action) =>
       [act.RECEIVE_LOGOUT]: () => ({
         ...DEFAULT_STATE,
         policy: state.policy
+      }),
+      [act.RECEIVE_CMS_LOGOUT]: () => ({
+        ...DEFAULT_STATE,
+        policy: state.policy
       })
     }[action.type] || (() => state)
   )());

@@ -10,18 +10,26 @@ import React, { useEffect, useMemo, useCallback } from "react";
 import Link from "src/components/Link";
 import { NavLink, withRouter } from "react-router-dom";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
-import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
 import useNavigation from "src/hooks/api/useNavigation";
+import useModalContext from "src/hooks/utils/useModalContext";
 import { useConfig } from "src/containers/Config";
-import styles from "./HeaderNav.module.css";
+import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
 import { ConfigFilter } from "src/containers/Config";
+import ModalLogout from "src/components/ModalLogout";
+import styles from "./HeaderNav.module.css";
 
 const HeaderNav = ({ history }) => {
-  const { user, username, onLogout, isCMS } = useNavigation();
+  const { user, username } = useNavigation();
   const { navMenuPaths, enableCredits } = useConfig();
   const { isadmin, userid } = user || {};
   const { themeName, setThemeName } = useTheme();
   const userIsAdmin = user && isadmin;
+
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+  const openModalLogout = () =>
+    handleOpenModal(ModalLogout, {
+      onClose: handleCloseModal
+    });
 
   const menuItems = useMemo(
     () =>
@@ -47,10 +55,6 @@ const HeaderNav = ({ history }) => {
   const goToUserAccount = useCallback(() => {
     history.push(`/user/${userid}`);
   }, [history, userid]);
-
-  const onLogoutClick = useCallback(() => {
-    onLogout(isCMS);
-  }, [onLogout, isCMS]);
 
   useEffect(() => {
     if (darkThemeOnLocalStorage && themeName === "light") {
@@ -100,7 +104,7 @@ const HeaderNav = ({ history }) => {
             </div>
           </div>
         </DropdownItem>
-        <DropdownItem onClick={onLogoutClick}>Logout</DropdownItem>
+        <DropdownItem onClick={openModalLogout}>Logout</DropdownItem>
       </Dropdown>
     </div>
   ) : (

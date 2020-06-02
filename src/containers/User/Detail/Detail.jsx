@@ -53,11 +53,7 @@ const UserDetail = ({
   match
 }) => {
   const userID = match.params.userid;
-  const {
-    userPubkey,
-    currentUserEmail,
-    identityImportSuccess
-  } = useUserIdentity();
+  const { userPubkey, identityImportSuccess } = useUserIdentity();
   const { user, isAdmin, currentUserID } = useUserDetail(userID);
 
   const {
@@ -122,8 +118,8 @@ const UserDetail = ({
   const [pubkey, setPubkey] = useState("");
   const refreshPubKey = useCallback(
     (isSubscribed) =>
-      existing(currentUserEmail).then(() => {
-        myPubKeyHex(currentUserEmail)
+      existing(currentUserID).then(() => {
+        myPubKeyHex(currentUserID)
           .then((pubkey) => {
             if (isSubscribed) {
               setPubkey(pubkey);
@@ -136,7 +132,7 @@ const UserDetail = ({
             }
           });
       }),
-    [currentUserEmail, setPubkey]
+    [currentUserID, setPubkey]
   );
   useEffect(() => {
     let isSubscribed = true;
