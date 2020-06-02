@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import * as act from "src/actions";
-import * as sel from "src/selectors";
-import { useAction, useSelector } from "src/redux";
+import { useAction } from "src/redux";
 import {
   requestResendEmailValidationSchema,
   urlParamsValidationSchema
@@ -9,10 +8,6 @@ import {
 import { getQueryStringValues } from "src/lib/queryString";
 
 export function useRequestResendVerificationEmail() {
-  const currentUserResendVerificationToken = useSelector(
-    sel.currentUserResendVerificationToken
-  );
-
   const onResendVerificationEmail = useAction(
     act.onResendVerificationEmailConfirm
   );
@@ -28,8 +23,7 @@ export function useRequestResendVerificationEmail() {
   }, [resetResendVerificationEmail]);
   return {
     validationSchema,
-    onResendVerificationEmail,
-    currentUserResendVerificationToken
+    onResendVerificationEmail
   };
 }
 

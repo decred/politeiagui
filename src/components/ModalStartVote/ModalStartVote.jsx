@@ -16,13 +16,20 @@ import usePolicy from "src/hooks/api/usePolicy";
 import { isRfpReadyToVote } from "src/containers/Proposal/helpers";
 import { VOTE_TYPE_STANDARD, VOTE_TYPE_RUNOFF } from "src/constants";
 
-const preDefinedDurations = [2016, 2880, 4032];
+const possibleDurationValues = (isTesnet) =>
+  isTesnet ? [10, 1000, 2016] : [2016, 2880, 4032];
+
 const getDurationOptions = (isTesnet) => {
   const blockDuration = isTesnet ? 2 : 5;
-  return preDefinedDurations.map((nb) => ({
-    value: nb,
-    label: `${Math.round((nb * blockDuration) / 60 / 24)} days (${nb} blocks)`
-  }));
+  return possibleDurationValues(isTesnet).map((nb) => {
+    const durationInDays = Math.round((nb * blockDuration) / 60 / 24);
+    return {
+      value: nb,
+      label: `${
+        durationInDays === 0 ? "less than a day" : `${durationInDays} days`
+      } (${nb} blocks)`
+    };
+  });
 };
 
 const ModalStartVote = ({
@@ -83,11 +90,13 @@ const ModalStartVote = ({
   );
 
   const initialValues = {
-    duration: preDefinedDurations[0],
+    duration: possibleDurationValues(apiInfo.testnet)[0],
     quorumPercentage: 20,
     passPercentage: 60
   };
-  const isInitialValid = validationSchema.isValidSync(initialValues);
+  const isInitialValid = validationSchema(apiInfo.tesnet).isValidSync(
+    initialValues
+  );
 
   return (
     <Modal
@@ -110,7 +119,7 @@ const ModalStartVote = ({
       {!success && (
         <FormWrapper
           initialValues={initialValues}
-          validationSchema={validationSchema}
+          validationSchema={validationSchema(apiInfo.testnet)}
           isInitialValid={isInitialValid}
           onSubmit={onSubmitStartVote}>
           {({

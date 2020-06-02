@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { TextInput, Button } from "pi-ui";
 import FormWrapper from "src/components/FormWrapper";
@@ -7,14 +7,26 @@ import { useResetPassword } from "./hooks";
 import DevelopmentOnlyContent from "src/components/DevelopmentOnlyContent";
 
 const RequestForm = () => {
-  const {
-    validationSchema,
-    onResetPassword,
-    requestResetResponse
-  } = useResetPassword();
+  const { validationSchema, onResetPassword } = useResetPassword();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [verificationToken, setVerificationToken] = useState();
   const success = !!username && !!email;
+  const onSubmit = useCallback(
+    async (values, { setSubmitting, setFieldError }) => {
+      try {
+        const response = await onResetPassword(values);
+        setSubmitting(false);
+        setUsername(values.username);
+        setEmail(values.email);
+        setVerificationToken(response.verificationtoken);
+      } catch (e) {
+        setSubmitting(false);
+        setFieldError("global", e);
+      }
+    },
+    [onResetPassword]
+  );
   return (
     <>
       <FormWrapper
@@ -23,17 +35,7 @@ const RequestForm = () => {
           email: ""
         }}
         validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting, setFieldError }) => {
-          try {
-            await onResetPassword(values);
-            setSubmitting(false);
-            setUsername(values.username);
-            setEmail(values.email);
-          } catch (e) {
-            setSubmitting(false);
-            setFieldError("global", e);
-          }
-        }}>
+        onSubmit={onSubmit}>
         {({
           Form,
           Title,
@@ -83,12 +85,9 @@ const RequestForm = () => {
           )
         }
       </FormWrapper>
-      <DevelopmentOnlyContent
-        show={requestResetResponse && requestResetResponse.verificationtoken}>
+      <DevelopmentOnlyContent show={verificationToken}>
         <Link
-          to={`/user/password/reset?username=${username}&verificationtoken=${
-            requestResetResponse && requestResetResponse.verificationtoken
-          }`}>
+          to={`/user/password/reset?username=${username}&verificationtoken=${verificationToken}`}>
           Reset password
         </Link>
       </DevelopmentOnlyContent>

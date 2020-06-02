@@ -18,10 +18,12 @@ import {
   getVotesReceived,
   isAbandonedProposal,
   isPublicProposal,
+  isActiveRfp,
   isEditableProposal,
   getQuorumInVotes,
   isVotingFinishedProposal,
-  getProposalToken
+  getProposalToken,
+  goToFullProposal
 } from "src/containers/Proposal/helpers";
 import {
   useProposalVote,
@@ -30,6 +32,7 @@ import {
 import { useLoaderContext } from "src/containers/Loader";
 import styles from "./Proposal.module.css";
 import LoggedInContent from "src/components/LoggedInContent";
+import ProposalsList from "../ProposalsList/ProposalsList";
 import VotesCount from "./VotesCount";
 import DownloadComments from "src/containers/Comments/Download";
 import ProposalActions from "./ProposalActions";
@@ -46,17 +49,21 @@ const ProposalWrapper = (props) => {
     voteEndTimestamp
   } = useProposalVote(getProposalToken(props.proposal));
   const [proposedFor, setProposedFor] = useState(null);
-  const { linkto } = props.proposal;
-  const [[rfpProposal]] = useProposalBatchWithoutRedux(
-    linkto ? [linkto] : null,
-    true,
-    false
-  ) || [[]];
+  const { linkto, linkedfrom } = props.proposal;
+  // if linkto provided => this is a submission => fetch RFP to display link
+  // else if linkedFrom is provided this is an RFP => fetch submssions batch & vote summaries to display list
+  const isSubmission = !!linkto;
+  const isRFP = !!linkedfrom;
+  const batchTokens = isSubmission ? [linkto] : isRFP ? linkedfrom : null;
+  const {
+    data: [proposals, voteSummaries]
+  } = useProposalBatchWithoutRedux(batchTokens, true, isRFP);
   useEffect(() => {
-    if (rfpProposal) {
+    if (isSubmission && proposals && proposals[0]) {
+      const rfpProposal = proposals[0];
       setProposedFor(rfpProposal && rfpProposal.name);
     }
-  }, [rfpProposal]);
+  }, [isSubmission, proposals]);
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (
@@ -69,7 +76,11 @@ const ProposalWrapper = (props) => {
         voteEndTimestamp,
         currentUser,
         history,
-        proposedFor
+        proposedFor,
+        rfpSubmissions: isRFP && {
+          proposals,
+          voteSummaries
+        }
       }}
     />
   );
@@ -85,7 +96,8 @@ const Proposal = React.memo(function Proposal({
   voteBlocksLeft,
   currentUser,
   history,
-  proposedFor
+  proposedFor,
+  rfpSubmissions
 }) {
   const {
     censorshiprecord,
@@ -103,8 +115,8 @@ const Proposal = React.memo(function Proposal({
   } = proposal;
   const isRfp = !!linkby;
   const isRfpSubmission = !!linkto;
+  const isRfpActive = isRfp && isActiveRfp(linkby);
   const isNotExtendedRfpOrSubmission = (isRfp || isRfpSubmission) && !extended;
-
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
   const {
@@ -126,6 +138,7 @@ const Proposal = React.memo(function Proposal({
   const showExtendedVersionPicker = extended && version > 1;
   const showAbandonedDate = abandonedat && !mobile;
   const showVersionAsText = version > 1 && !extended && !mobile;
+  const showRfpSubmissions = extended && !!rfpSubmissions;
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
 
@@ -139,9 +152,6 @@ const Proposal = React.memo(function Proposal({
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
 
-  function goToFullProposal() {
-    history.push(proposalURL);
-  }
   return (
     <>
       <RecordWrapper
@@ -189,6 +199,12 @@ const Proposal = React.memo(function Proposal({
               subtitle={
                 <Subtitle>
                   <Author username={username} url={authorURL} />
+                  {isRfp && (
+                    <Event
+                      event={`${isRfpActive ? "expires" : "expired"}`}
+                      timestamp={linkby}
+                    />
+                  )}
                   {showPublishedDate && (
                     <Event event="published" timestamp={publishedat} />
                   )}
@@ -196,7 +212,7 @@ const Proposal = React.memo(function Proposal({
                     <Event event="edited" timestamp={timestamp} />
                   )}
                   {showAbandonedDate && (
-                    <Event event={"abandoned"} timestamp={abandonedat} />
+                    <Event event="abandoned" timestamp={abandonedat} />
                   )}
                   {showVersionAsText && (
                     <Text
@@ -272,11 +288,13 @@ const Proposal = React.memo(function Proposal({
                 />
               </Row>
             )}
+            {showRfpSubmissions && <ProposalsList data={rfpSubmissions} />}
             {extended && !!files.length && !collapseBodyContent && (
               <Markdown
                 className={classNames(
                   styles.markdownContainer,
-                  isDarkTheme && "dark"
+                  isDarkTheme && "dark",
+                  showRfpSubmissions && styles.rfpMarkdownContainer
                 )}
                 body={getMarkdownContent(files)}
               />
@@ -286,7 +304,7 @@ const Proposal = React.memo(function Proposal({
                 type="expand"
                 className="margin-top-m"
                 size={"xlg"}
-                onClick={goToFullProposal}
+                onClick={goToFullProposal(history, proposalURL)}
               />
             )}
             {isPublicAccessible && !extended && (

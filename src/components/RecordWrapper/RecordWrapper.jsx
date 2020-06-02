@@ -108,7 +108,7 @@ const MobileHeader = ({ title, status, edit, isRfp }) => (
 const RfpTag = React.memo(({ className }) => (
   <img
     alt="rfp"
-    className={classNames("margin-right-s", "margin-top-xs", className)}
+    className={classNames("margin-right-s", className)}
     src={rfpTag}
   />
 ));
@@ -207,7 +207,12 @@ export const GithubLink = ({ token }) => {
   );
 };
 
-export const CommentsLink = ({ numOfComments, url }) => {
+export const CommentsLink = ({
+  numOfComments,
+  url,
+  showIcon = true,
+  className
+}) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
   return (
@@ -215,9 +220,13 @@ export const CommentsLink = ({ numOfComments, url }) => {
       to={url}
       gray={!isDarkTheme}
       dark={isDarkTheme}
-      className={styles.commentsLink}>
-      <Icon type="discuss" className="margin-right-s" />
-      <span className={classNames(isDarkTheme && styles.darkCommentsNumber)}>
+      className={classNames(styles.commentsLink, className)}>
+      {showIcon && <Icon type="discuss" className="margin-right-s" />}
+      <span
+        className={classNames(
+          styles.commentsNumber,
+          isDarkTheme && styles.darkCommentsNumber
+        )}>
         {numOfComments}
       </span>
       Comments

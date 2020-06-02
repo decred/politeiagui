@@ -22,6 +22,7 @@ import ModalMDGuide from "src/components/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import usePolicy from "src/hooks/api/usePolicy";
+import { isAnchoring } from "src/helpers";
 import {
   PROPOSAL_TYPE_REGULAR,
   PROPOSAL_TYPE_RFP,
@@ -49,7 +50,8 @@ const ProposalForm = React.memo(function ProposalForm({
   touched,
   submitSuccess,
   disableSubmit,
-  openMDGuideModal
+  openMDGuideModal,
+  isPublic
 }) {
   const smallTablet = useMediaQuery("(max-width: 685px)");
   const { themeName } = useTheme();
@@ -119,6 +121,7 @@ const ProposalForm = React.memo(function ProposalForm({
       )}
       <Row
         noMargin
+        wrap={smallTablet}
         className={classNames(
           styles.typeRow,
           isRfpSubmission && styles.typeRowNoMargin
@@ -126,6 +129,7 @@ const ProposalForm = React.memo(function ProposalForm({
         <SelectField
           name="type"
           onChange={handleSelectFiledChange("type")}
+          disabled={isPublic}
           options={selectOptions}
           className={classNames(styles.typeSelectWrapper)}
         />
@@ -140,6 +144,7 @@ const ProposalForm = React.memo(function ProposalForm({
             />
             <Tooltip
               contentClassName={styles.deadlineTooltip}
+              className={styles.tooltipWrapper}
               placement={smallTablet ? "left" : "bottom"}
               content="The deadline for the RFP submissions,
               it can be edited at any point before the voting has been started and should be at least two weeks from now.">
@@ -151,21 +156,27 @@ const ProposalForm = React.memo(function ProposalForm({
         )}
         {isRfpSubmission && (
           <>
-            <div className={styles.iconWrapper}>
-              <Icon
-                type={"horizontalLink"}
-                viewBox="0 0 24 16"
-                width={24}
-                height={16}
-              />
-            </div>
+            {!smallTablet && (
+              <div className={styles.iconWrapper}>
+                <Icon
+                  type={"horizontalLink"}
+                  viewBox="0 0 24 16"
+                  width={24}
+                  height={16}
+                />
+              </div>
+            )}
             <BoxTextInput
               placeholder="RFP token"
               name="rfpLink"
               tabIndex={1}
               value={values.rfpLink}
+              disabled={isPublic}
               onChange={handleChangeWithTouched("rfpLink")}
-              className={styles.rfpLinkToken}
+              className={classNames(
+                styles.rfpLinkToken,
+                smallTablet && styles.topMargin
+              )}
               error={touched.rfpLink && errors.rfpLink}
             />
           </>
@@ -235,7 +246,8 @@ const ProposalFormWrapper = ({
   initialValues,
   onSubmit,
   disableSubmit,
-  history
+  history,
+  isPublic
 }) => {
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const openMdModal = useCallback(() => {
@@ -244,22 +256,33 @@ const ProposalFormWrapper = ({
     });
   }, [handleCloseModal, handleOpenModal]);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const { proposalFormValidation, onFetchProposalsBatch } = useProposalForm();
+  const {
+    proposalFormValidation,
+    onFetchProposalsBatchWithoutState
+  } = useProposalForm();
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
+        if (isAnchoring()) {
+          throw new Error(
+            "Submitting proposals is temporarily unavailable while a daily censorship resistance routine is in progress. Sorry for the inconvenience. This will be fixed soon. Check back in 10 minutes."
+          );
+        }
         const { type, rfpLink, ...others } = values;
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
-          const [[proposal], summaries] = (await onFetchProposalsBatch([
-            rfpLink
-          ])) || [[], null];
+          const rfpWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
+            [rfpLink]
+          )) || [[], null];
+          const [[proposal], summaries] = rfpWithVoteSummaries;
           const voteSummary = summaries && summaries[rfpLink];
-          const isInvalidToken =
-            !proposal ||
-            !voteSummary ||
-            !isActiveApprovedRfp(proposal, voteSummary);
+          const isInvalidToken = !proposal || !voteSummary;
           if (isInvalidToken) {
-            throw Error("Invalid RFP token!");
+            throw Error("Proposal not found!");
+          }
+          if (!isActiveApprovedRfp(proposal, voteSummary)) {
+            throw Error(
+              "Make sure token is associated with an approved & not expired RFP"
+            );
           }
         }
         const proposalToken = await onSubmit({
@@ -269,14 +292,15 @@ const ProposalFormWrapper = ({
         });
         setSubmitting(false);
         setSubmitSuccess(true);
-        history.push(`/proposals/${proposalToken}`);
+        // use short prefix when navigating to propsoal page
+        history.push(`/proposals/${proposalToken.substring(0, 7)}`);
         resetForm();
       } catch (e) {
         setSubmitting(false);
         setFieldError("global", e);
       }
     },
-    [history, onSubmit, onFetchProposalsBatch]
+    [history, onSubmit, onFetchProposalsBatchWithoutState]
   );
   return (
     <>
@@ -301,7 +325,8 @@ const ProposalFormWrapper = ({
               submitSuccess,
               disableSubmit,
               openMDGuideModal: openMdModal,
-              initialValues
+              initialValues,
+              isPublic
             }}
           />
         )}

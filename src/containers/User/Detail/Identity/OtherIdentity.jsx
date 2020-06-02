@@ -10,11 +10,7 @@ import UserIdSection from "./components/UserIdSection";
 
 const OtherIdentity = ({ loadingKey, user }) => {
   const { userid: userID, identities } = user;
-  const {
-    currentUserID,
-    userPubkey,
-    keyMismatchAction
-  } = useUserIdentity();
+  const { currentUserID, userPubkey, keyMismatchAction } = useUserIdentity();
 
   useEffect(() => {
     verifyUserPubkey(currentUserID, userPubkey, keyMismatchAction);

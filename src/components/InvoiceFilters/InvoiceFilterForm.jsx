@@ -4,7 +4,6 @@ import CheckboxGroupField from "src/components/CheckboxGroupField";
 import MonthPickerField from "src/components/MonthPickerField";
 import {
   getInvoiceMinMaxYearAndMonth,
-  getInitialDateValue,
   getPreviousMonthsRange
 } from "src/containers/Invoice";
 import styles from "./InvoiceFilterForm.module.css";
@@ -12,7 +11,7 @@ import UserSearchSelect from "src/containers/User/Search/SearchSelector";
 import { Link } from "pi-ui";
 
 const DEFAULT_INITIAL_VALUES = {
-  date: getInitialDateValue(),
+  date: getPreviousMonthsRange(2),
   users: [],
   filters: {
     all: true,
@@ -48,7 +47,6 @@ const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
                   label="By Date"
                   toggleable
                   multiChoice
-                  enableAllMonths
                   className={styles.monthPicker}
                 />
                 <div className={styles.checkboxesWrapper}>

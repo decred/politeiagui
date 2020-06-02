@@ -24,7 +24,7 @@
   width: 20rem;
 }
 
-.typeSelectWrapper > div {
+.typeSelectWrapper [class*="customSelect__control"] {
   height: 100%;
 }
 
@@ -38,7 +38,7 @@
 
 .datePicker {
   margin-left: 2rem;
-  width: 20rem;
+  flex-basis: 20rem;
   height: 4.4rem;
 }
 
@@ -46,8 +46,7 @@
   display: flex;
   align-items: center;
   height: 4.4rem;
-  margin-left: var(--spacing-small);
-  margin-right: var(--spacing-small);
+  justify-content: center;
 }
 
 .deadlineTooltip {
@@ -56,7 +55,7 @@
 }
 
 .rfpLinkToken {
-  width: 50rem;
+  flex-basis: 50rem;
 }
 
 .rfpLinkToken > input {
@@ -82,9 +81,28 @@
   text-decoration: none !important;
 }
 
+.tooltipWrapper {
+  flex-basis: 4rem;
+}
+
+.topMargin {
+  margin-top: 2rem;
+}
+
 @media screen and (max-width: 685px) {
+  .datePicker {
+    margin-top: 2rem;
+    margin-left: 0;
+    flex-basis: 90%;
+  }
+
   .rfpLinkToken {
-    width: auto;
+    flex-basis: 100%;
+  }
+
+  .tooltipWrapper {
+    margin-top: 2rem;
+    flex-basis: 10%;
   }
 
   .formatHelpButton {

@@ -132,7 +132,7 @@ const SignupForm = () => {
                   <Link to="/user/request-reset-password">
                     reset your password
                   </Link>{" "}
-                  `` instead.
+                  instead.
                 </>
               ]}
             />
@@ -150,7 +150,8 @@ const SignupForm = () => {
         show={signupResponse && signupResponse.verificationtoken}>
         <RouterLink
           to={`/user/verify?email=${email}&verificationtoken=${
-            signupResponse && signupResponse.verificationtoken}&username=${username}
+            signupResponse && signupResponse.verificationtoken
+          }&username=${username}
           `}>
           Verify email
         </RouterLink>

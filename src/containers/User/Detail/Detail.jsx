@@ -53,10 +53,7 @@ const UserDetail = ({
   match
 }) => {
   const userID = match.params.userid;
-  const {
-    userPubkey,
-    identityImportSuccess
-  } = useUserIdentity();
+  const { userPubkey, identityImportSuccess } = useUserIdentity();
   const { user, isAdmin, currentUserID } = useUserDetail(userID);
 
   const {

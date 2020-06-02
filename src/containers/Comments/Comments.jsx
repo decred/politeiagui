@@ -22,6 +22,7 @@ import {
   createSelectOptionFromSortOption,
   commentSortOptions,
   handleCommentCensoringInfo,
+  handleCommentSubmission,
   NUMBER_OF_LIST_PLACEHOLDERS
 } from "./helpers";
 import useIdentity from "src/hooks/api/useIdentity";
@@ -88,15 +89,10 @@ const Comments = ({
   const paywallMissing = paywallEnabled && !isPaid;
   const isSingleThread = !!threadParentID;
 
-  const handleSubmitComment = useCallback(
-    (comment) => {
-      return onSubmitComment({
-        comment,
-        token: recordToken,
-        parentID: 0
-      });
-    },
-    [recordToken, onSubmitComment]
+  const handleSubmitComment = handleCommentSubmission(
+    onSubmitComment,
+    recordToken,
+    0
   );
 
   const handleSetSortOption = useCallback(

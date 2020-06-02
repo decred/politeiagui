@@ -47,6 +47,7 @@ export const testReceiveReducer = (reducer, key, state, action) => {
     ...state,
     [key]: {
       ...state[key],
+      payload: action.error ? null : action.payload,
       isRequesting: false,
       error: action.error ? action.payload : null
     }

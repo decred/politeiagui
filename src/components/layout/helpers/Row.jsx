@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import styles from "../layouts.module.css";
 import { classNames } from "pi-ui";
 
 export const Row = ({
@@ -10,6 +11,7 @@ export const Row = ({
   noMargin,
   className,
   hide,
+  wrap,
   onClick
 }) =>
   !hide && (
@@ -18,6 +20,7 @@ export const Row = ({
         !noMargin && `margin-top-${topMarginSize}`,
         `justify-${justify}`,
         `align-${align}`,
+        wrap && styles.wrap,
         className
       )}
       onClick={onClick}>
@@ -32,6 +35,7 @@ Row.propTypes = {
   align: PropTypes.oneOf(["start", "end", "center", "stretch"]),
   hide: PropTypes.bool,
   noMargin: PropTypes.bool,
+  wrap: PropTypes.bool,
   onClick: PropTypes.func
 };
 
@@ -39,6 +43,7 @@ Row.defaultProps = {
   topMarginSize: "m",
   justify: "left",
   align: "stretch",
+  wrap: false,
   hide: false,
   noMargin: false
 };

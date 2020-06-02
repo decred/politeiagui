@@ -15,12 +15,21 @@ export const allByStatus = createDeepEqualSelector(
 );
 export const tokenInventory = createDeepEqualSelector(
   get(["api"]),
-  ({ tokenInventory }) => tokenInventory.response
+  ({ tokenInventory }) => tokenInventory.payload
 );
 export const newProposalToken = get(["proposals", "newProposalToken"]);
 
 export const makeGetProposalByToken = (token) =>
-  createSelector(proposalsByToken, get(token));
+  createSelector(proposalsByToken, (propsByToken) => {
+    const proposal = propsByToken[token];
+    if (proposal) return proposal;
+    const proposalsTokens = Object.keys(propsByToken);
+    // check if the provided token is prefix of original token
+    const matchedTokenByPrefix = proposalsTokens.find(
+      (key) => key.substring(0, 7) === token
+    );
+    return propsByToken[matchedTokenByPrefix];
+  });
 
 export const makeGetNumOfProposalsByUserId = (userId) =>
   createSelector(numOfProposalsByUserId, get(userId));

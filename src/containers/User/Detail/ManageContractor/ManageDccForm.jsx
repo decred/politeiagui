@@ -1,24 +1,29 @@
-import { Spinner, Button, Message, H2 } from "pi-ui";
+import { Spinner, Button, Message, H2, Select } from "pi-ui";
 import SelectField from "src/components/Select/SelectField";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useState, useMemo } from "react";
 import InfoSection from "../InfoSection.jsx";
-import { selectTypeOptions, selectDomainOptions } from "./helpers";
-import UserSearchSelect from "src/containers/User/Search/SearchSelector";
+import {
+  selectTypeOptions,
+  selectDomainOptions,
+  getSupervisorsOptions
+} from "./helpers";
 import { Formik } from "formik";
 import styles from "./ManageContractor.module.css";
-import useMultipleUsers from "../../hooks/useMultipleUsers";
+import useSupervisors from "src/hooks/api/useSupervisors";
 
 const selectStyles = {
   container: (provided) => ({
     ...provided,
-    width: "200px"
+    width: "200px",
+    minWidth: "200px"
   })
 };
 
 const selectSupervisorStyles = {
   container: (provided) => ({
     ...provided,
-    width: "100%"
+    width: "100%",
+    minWidth: "200px"
   })
 };
 
@@ -26,21 +31,23 @@ const ManageDccForm = ({ onUpdate, user }) => {
   const { domain, contractortype, userid, supervisoruserids = [] } = user;
   const [updated, setUpdated] = useState(false);
 
-  const [users, loadingUsers] = useMultipleUsers(supervisoruserids);
-  const isLoading =
-    domain === undefined || contractortype === undefined || loadingUsers;
+  const { loading: loadingSupervisors, supervisors } = useSupervisors();
 
-  const usersInitialValue = useMemo(
-    () =>
-      Object.keys(users).map((uid) => {
-        const currUser = users[uid];
-        return {
-          value: currUser.userid,
-          label: `${currUser.username} | ${currUser.email}`
-        };
-      }),
-    [users]
+  const supervisorsOptions = useMemo(
+    () => getSupervisorsOptions(supervisors, userid),
+    [supervisors, userid]
   );
+
+  const initialSupervisorOptions = useMemo(
+    () =>
+      supervisorsOptions.filter((option) =>
+        supervisoruserids.some((supervisorid) => supervisorid === option.value)
+      ),
+    [supervisorsOptions, supervisoruserids]
+  );
+
+  const isLoading =
+    domain === undefined || contractortype === undefined || loadingSupervisors;
 
   const handleSubmitForm = useCallback(
     async (values, { setSubmitting, setFieldError, resetForm }) => {
@@ -69,10 +76,11 @@ const ManageDccForm = ({ onUpdate, user }) => {
   ) : (
     <Formik
       onSubmit={handleSubmitForm}
+      enableReinitialize={true}
       initialValues={{
         domain,
         type: contractortype,
-        users: usersInitialValue
+        users: initialSupervisorOptions
       }}>
       {({
         values,
@@ -85,7 +93,7 @@ const ManageDccForm = ({ onUpdate, user }) => {
         const handleChangeUserSelector = (options) => {
           setFieldValue("users", options);
         };
-        const submitEnabled = dirty && !loadingUsers;
+        const submitEnabled = dirty && !loadingSupervisors;
         return (
           <>
             <form onSubmit={handleSubmit}>
@@ -120,10 +128,13 @@ const ManageDccForm = ({ onUpdate, user }) => {
                 <InfoSection
                   label="Supervisors"
                   info={
-                    <UserSearchSelect
-                      onChange={handleChangeUserSelector}
-                      styles={selectSupervisorStyles}
+                    <Select
+                      placeholder="Select Supervisor"
                       value={values.users}
+                      onChange={handleChangeUserSelector}
+                      isMulti
+                      options={supervisorsOptions}
+                      styles={selectSupervisorStyles}
                     />
                   }
                 />

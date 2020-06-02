@@ -1,0 +1,46 @@
+.title {
+  font-size: 2rem !important;
+  flex-basis: 25%;
+}
+
+.statusBarTooltip {
+  width: 22.5rem;
+}
+
+span.statusTag > span {
+  overflow: visible;
+}
+
+.statusWrapper {
+  height: 100%;
+}
+
+.status {
+  position: relative;
+  right: 0;
+  top: 0;
+}
+
+.itemTitle {
+  flex-basis: 30%;
+}
+
+.commentsLink {
+  font-size: var(--font-size-small);
+}
+
+.itemWrapper {
+  height: 6.1rem;
+  border-bottom: 1px solid var(--separator-color);
+  cursor: pointer;
+}
+
+.statusBarWrapper,
+.timeLeftPassed {
+  flex-basis: 30%;
+  height: 100%;
+}
+
+.voteEvent {
+  color: var(--color-primary-dark) !important;
+}

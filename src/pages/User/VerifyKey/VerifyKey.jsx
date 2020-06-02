@@ -14,7 +14,8 @@ const VerifyKey = ({ location, history }) => {
     keyMismatchAction,
     verifyUserKey,
     verifyUserKeyError,
-    onVerifyUserKey
+    onVerifyUserKey,
+    isCMS
   } = useVerifyKey();
 
   const [keyUpdated, setKeyUpdated] = useState(false);
@@ -31,13 +32,7 @@ const VerifyKey = ({ location, history }) => {
       setKeyUpdated(true);
       throw e;
     }
-  }, [
-    currentUserID,
-    userPubkey,
-    keyMismatchAction,
-    onVerifyUserKey,
-    location
-  ]);
+  }, [currentUserID, userPubkey, keyMismatchAction, onVerifyUserKey, location]);
 
   useEffect(() => {
     if (!keyUpdated && !verifyUserKey) {
@@ -49,6 +44,9 @@ const VerifyKey = ({ location, history }) => {
   const success = verifyUserKey && verifyUserKey.success;
   const error = verifyUserKeyError;
   const pushToHome = useCallback(() => history.push("/"), [history]);
+  const successButtonText = isCMS
+    ? "Ok, go to invoices"
+    : "Ok, go to proposals";
 
   return (
     <SingleContentPage>
@@ -92,7 +90,7 @@ const VerifyKey = ({ location, history }) => {
               className={classNames("margin-top-l", styles.btn)}
               onClick={pushToHome}
               type="button">
-              Ok, go to proposals
+              {successButtonText}
             </Button>
           </div>
         )}

@@ -342,18 +342,35 @@ export const onFetchAdminInvoices = () =>
       });
   });
 
-export const onFetchProposalsBatch = (tokens, fetchVoteStatus = true) =>
+export const onFetchProposalsBatchWithoutState = (
+  tokens,
+  fetchPropsoals = true,
+  fetchVoteSummary = true
+) =>
+  withCsrf(async (_, __, csrf) => {
+    const res = await Promise.all([
+      fetchPropsoals && api.proposalsBatch(csrf, tokens),
+      fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens)
+    ]);
+    const proposals =
+      fetchPropsoals && res.find((res) => res && res.proposals).proposals;
+    const summaries =
+      fetchVoteSummary && res.find((res) => res && res.summaries).summaries;
+    return [proposals, summaries];
+  });
+
+export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
     try {
       const promises = [api.proposalsBatch(csrf, tokens)];
-      if (fetchVoteStatus) {
+      if (fetchVoteSummary) {
         promises.push(dispatch(onFetchProposalsBatchVoteSummary(tokens)));
       }
       const response = await Promise.all(promises);
       const proposals = response.find((res) => res && res.proposals).proposals;
       const summaries =
-        fetchVoteStatus &&
+        fetchVoteSummary &&
         response.find((res) => res && res.summaries).summaries;
       dispatch(act.RECEIVE_PROPOSALS_BATCH({ proposals }));
       return [proposals, summaries];
@@ -880,7 +897,12 @@ export const onSetInvoiceStatus = (token, status, version, reason = "") =>
       });
   });
 
-export const onSetProposalStatus = (token, status, censorMessage = "") =>
+export const onSetProposalStatus = ({
+  token,
+  status,
+  linkto,
+  censorMessage = ""
+}) =>
   withCsrf((dispatch, getState, csrf) => {
     const userid = sel.currentUserID(getState());
     dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
@@ -894,6 +916,9 @@ export const onSetProposalStatus = (token, status, censorMessage = "") =>
         );
         if (status === PROPOSAL_STATUS_PUBLIC) {
           dispatch(onFetchProposalsBatchVoteSummary([token]));
+          if (linkto) {
+            dispatch(onFetchProposalsBatch([linkto]));
+          }
         }
       })
       .catch((error) => {
@@ -907,7 +932,10 @@ export const onResetPassword = ({ username, email }) =>
     dispatch(act.REQUEST_RESET_PASSWORD({ username, email }));
     return api
       .resetPassword(csrf, username, email)
-      .then((response) => dispatch(act.RECEIVE_RESET_PASSWORD(response)))
+      .then((response) => {
+        dispatch(act.RECEIVE_RESET_PASSWORD(response));
+        return response;
+      })
       .catch((error) => {
         dispatch(act.RECEIVE_RESET_PASSWORD(null, error));
         throw error;
@@ -935,9 +963,10 @@ export const onResendVerificationEmailConfirm = ({ username, email }) =>
     dispatch(act.REQUEST_RESEND_VERIFICATION_EMAIL({ email }));
     return api
       .resendVerificationEmailRequest(csrf, email, username)
-      .then((response) =>
-        dispatch(act.RECEIVE_RESEND_VERIFICATION_EMAIL(response))
-      )
+      .then((response) => {
+        dispatch(act.RECEIVE_RESEND_VERIFICATION_EMAIL(response));
+        return response;
+      })
       .catch((error) => {
         dispatch(act.RECEIVE_RESEND_VERIFICATION_EMAIL(null, error));
         throw error;
@@ -984,13 +1013,13 @@ export const onStartRunoffVote = (
       )
       .then((response) => {
         const submissionsTokens = votes.map((vote) => vote.token);
-        dispatch(onFetchProposalsBatchVoteSummary([...submissionsTokens]));
+        dispatch(onFetchProposalsBatch([...submissionsTokens, token]));
         dispatch(
-          act.RECIEVE_START_RUNOFF_VOTE({ ...response, token, success: true })
+          act.RECEIVE_START_RUNOFF_VOTE({ ...response, token, success: true })
         );
       })
       .catch((error) => {
-        dispatch(act.RECIEVE_START_RUNOFF_VOTE(null, error));
+        dispatch(act.RECEIVE_START_RUNOFF_VOTE(null, error));
         throw error;
       });
   });

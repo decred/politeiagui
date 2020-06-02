@@ -31,3 +31,29 @@ describe("test helpers functions", () => {
     );
   });
 });
+
+describe("test getTimeDiffInMinutes function", () => {
+  test("it should return 0 when d2 == d1", () => {
+    expect(help.getTimeDiffInMinutes(1591030381, 1591030381)).toEqual(0);
+  });
+
+  test("it should return positive when d1 > d2", () => {
+    expect(
+      help.getTimeDiffInMinutes(1591030521000, 1591030381000)
+    ).toBeGreaterThan(0);
+  });
+
+  test("it should return negative when d1 < d2", () => {
+    expect(
+      help.getTimeDiffInMinutes(1591030381000, 1591030700000)
+    ).toBeLessThan(0);
+  });
+
+  test("it should return correctly within the same hour", () => {
+    expect(help.getTimeDiffInMinutes(1591030200000, 1591029900000)).toEqual(5);
+  });
+
+  test("it should return correctly when the hour overflows", () => {
+    expect(help.getTimeDiffInMinutes(1591031100000, 1591030500000)).toEqual(10);
+  });
+});

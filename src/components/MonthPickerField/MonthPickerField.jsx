@@ -4,38 +4,25 @@ import { Text, classNames, Checkbox, DatePicker } from "pi-ui";
 import { FormikConsumer } from "formik";
 import styles from "./MonthPickerField.module.css";
 import useBooleanState from "src/hooks/utils/useBooleanState";
-import { sortDateRange } from "src/containers/Invoice";
+import { MONTHS_LABELS } from "src/constants";
 
-const pickerLang = {
-  months: [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  ]
-};
-
-const isAllMonths = (date) => date.month === "all";
-const isRange = (date) => date && date.start && date.end;
+const isSecondSelection = (index) => index === 1;
+const isRange = (values) => values instanceof Array;
 
 const makeText = (m) => {
   if (m && m.year && m.month) {
-    return !isAllMonths(m)
-      ? `${pickerLang.months[m.month - 1]} ${m.year}`
-      : `${m.year}`;
+    return `${MONTHS_LABELS[m.month - 1]} ${m.year}`;
   }
   if (isRange(m)) {
-    return `${pickerLang.months[m.start.month - 1]} ${m.start.year} - ${
-      pickerLang.months[m.end.month - 1]
-    } ${m.end.year}`;
+    const firstDateLabel = m[0]
+      ? `${MONTHS_LABELS[m[0].month - 1]} ${m[0].year}`
+      : "";
+    const secondDateLabel = m[1]
+      ? `${MONTHS_LABELS[m[1].month - 1]} ${m[1].year}`
+      : "";
+    return firstDateLabel === secondDateLabel
+      ? firstDateLabel
+      : `${firstDateLabel} - ${secondDateLabel}`;
   }
   return "?";
 };
@@ -53,12 +40,10 @@ const MonthPickerField = ({
   readOnly,
   toggleable,
   className,
-  multiChoice,
-  enableAllMonths
+  multiChoice
 }) => {
   const [isDisabled, setDisabled] = useState(false);
   const [isOpen, openPicker, closePicker] = useBooleanState(false);
-  const [initialRange, setInitialRange] = useState();
   const togglePicker = () => {
     if (!isOpen) {
       openPicker();
@@ -66,20 +51,13 @@ const MonthPickerField = ({
       closePicker();
     }
   };
-  const clearInitialRange = () => {
-    setInitialRange();
-  };
 
   return (
     <FormikConsumer>
       {({ setFieldValue, values, initialValues }) => {
-        const onChange = (year, month) => {
+        const onChange = (year, month, idx) => {
+          const selectedDate = { year, month };
           if (!year || !month) {
-            closePicker();
-            return;
-          }
-          if (month === "all") {
-            setFieldValue(name, { year, month });
             closePicker();
             return;
           }
@@ -88,13 +66,17 @@ const MonthPickerField = ({
             closePicker();
             return;
           }
-          if (initialRange) {
-            setFieldValue(name, sortDateRange(initialRange, { year, month }));
-            clearInitialRange();
-            closePicker();
+          if (values[name].length) {
+            const newValues = [...values[name]];
+            newValues[idx] = { year, month };
+            setFieldValue(name, newValues);
             return;
           } else {
-            setInitialRange({ year, month });
+            setFieldValue(name, [selectedDate, selectedDate]);
+          }
+          if (isSecondSelection(idx)) {
+            closePicker();
+            return;
           }
         };
 
@@ -126,11 +108,10 @@ const MonthPickerField = ({
               <DatePicker
                 show={isOpen && !readOnly}
                 isMonthsMode={true}
-                enableAllMonths={enableAllMonths}
+                isRange={multiChoice}
                 years={years}
-                values={values[name]}
-                multiChoice={multiChoice}
-                lang={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
+                value={values[name]}
+                lang={MONTHS_LABELS}
                 onChange={onChange}>
                 <span
                   className={classNames(
