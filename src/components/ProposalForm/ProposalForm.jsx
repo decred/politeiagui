@@ -292,7 +292,8 @@ const ProposalFormWrapper = ({
         });
         setSubmitting(false);
         setSubmitSuccess(true);
-        history.push(`/proposals/${proposalToken}`);
+        // use short prefix when navigating to propsoal page
+        history.push(`/proposals/${proposalToken.substring(0, 7)}`);
         resetForm();
       } catch (e) {
         setSubmitting(false);
