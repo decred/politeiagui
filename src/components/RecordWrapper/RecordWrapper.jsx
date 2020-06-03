@@ -128,7 +128,11 @@ export const Header = React.memo(function Header({
     <div className={styles.header}>
       {!mobile || disableMobileView ? (
         <div className={styles.titleWrapper}>
-          <div className={styles.titleEditWrapper}>
+          <div
+            className={classNames(
+              styles.titleEditWrapper,
+              isRfp && styles.rfpTitleWrapper
+            )}>
             {isRfp && <RfpTag />}
             {title}
             {edit}
