@@ -22,6 +22,28 @@ import {
 
 const noop = () => {};
 
+export const SheetRenderer = ({ headers, ...props }) => (
+  <table className={classNames(props.className, styles.table)}>
+    <thead>
+      <tr className={styles.tableHead}>
+        {headers.map((col, idx) => (
+          <th
+            key={`header-${idx}`}
+            className={styles.tableHeadCell}
+            style={{ minWidth: col.width, width: col.width }}>
+            {col.value}
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>{props.children}</tbody>
+  </table>
+);
+
+export const TableRow = ({ children, className }) => (
+  <tr className={classNames(styles.tableRow, className)}>{children}</tr>
+);
+
 const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   value,
   onChange,
@@ -159,30 +181,12 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   const valueRenderer = useCallback((cell) => cell.value, []);
 
   const sheetRenderer = useCallback(
-    (props) => {
-      return (
-        <table className={classNames(props.className, styles.table)}>
-          <thead>
-            <tr className={styles.tableHead}>
-              {headers.map((col, idx) => (
-                <th
-                  key={`header-${idx}`}
-                  className={styles.tableHeadCell}
-                  style={{ minWidth: col.width, width: col.width }}>
-                  {col.value}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>{props.children}</tbody>
-        </table>
-      );
-    },
+    (props) => <SheetRenderer {...props} headers={headers} />,
     [headers]
   );
 
   const rowRenderer = useCallback(
-    (props) => <tr className={styles.tableRow}>{props.children}</tr>,
+    (props) => <TableRow>{props.children}</TableRow>,
     []
   );
 
@@ -192,7 +196,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
     // Get all unique normalized errors
     const uniqueErrArr = flowRight([
       uniq,
-      () => errors.flatMap((error) => Object.values(error))
+      () => errors && errors.flatMap((error) => Object.values(error))
     ])();
     return uniqueErrArr && uniqueErrArr.length ? (
       <div>

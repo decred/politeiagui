@@ -61,6 +61,14 @@ export const generateBlankLineItem = (policy) => ({
   subrate: 0
 });
 
+export const getTotalsLine = (lineLength, totals, commonProps = {}) =>
+  lineLength > totals.length
+    ? [
+        ...new Array(lineLength - totals.length).fill(commonProps),
+        ...totals.map((item) => ({ ...item, ...commonProps }))
+      ]
+    : totals;
+
 export const convertLineItemsToGrid = (
   lineItems,
   readOnly = true,
@@ -173,32 +181,17 @@ export const convertLineItemsToGrid = (
     },
     { grid: [], expenseTotal: 0, laborTotal: 0, total: 0 }
   );
-  const totalsLine = [
-    { readOnly: true },
-    { readOnly: true },
-    { readOnly: true },
-    { readOnly: true },
-    { readOnly: true },
-    { readOnly: true },
-    { readOnly: true },
-    {
-      readOnly: true,
-      value: "Total",
-      forceComponent: true
-    },
-    {
-      readOnly: true,
-      value: +fromMinutesToHours(laborTotal)
-    },
-    {
-      readOnly: true,
-      value: +fromUSDCentsToUSDUnits(expenseTotal)
-    },
-    {
-      readOnly: true,
-      value: total
-    }
+
+  const totals = [
+    { value: "Total", forceComponent: true },
+    { value: +fromMinutesToHours(laborTotal) },
+    { value: +fromUSDCentsToUSDUnits(expenseTotal) },
+    { value: total }
   ];
+
+  const totalsLine = getTotalsLine(gridBody[0].length, totals, {
+    readOnly: true
+  });
   return grid.concat(gridBody).concat([totalsLine]);
 };
 

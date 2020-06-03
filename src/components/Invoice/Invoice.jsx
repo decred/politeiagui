@@ -3,7 +3,8 @@ import {
   StatusTag,
   Text,
   useMediaQuery,
-  CopyableText
+  CopyableText,
+  useTheme
 } from "pi-ui";
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
@@ -20,6 +21,7 @@ import InvoiceDatasheet from "../InvoiceDatasheet";
 import { convertAtomsToDcr, usdFormatter } from "src/utils";
 import ThumbnailGrid from "src/components/Files";
 import { useLoaderContext } from "src/containers/Loader";
+import VersionPicker from "src/components/VersionPicker";
 
 const Invoice = ({ invoice, extended, approvedProposalsTokens }) => {
   const {
@@ -37,6 +39,7 @@ const Invoice = ({ invoice, extended, approvedProposalsTokens }) => {
   const mobile = useMediaQuery("(max-width: 560px)");
 
   const { currentUser } = useLoaderContext();
+  const { themeName } = useTheme();
   const isAuthor = currentUser && userid === currentUser.userid;
   const isEditable = isAuthor && isEditableInvoice(status);
   const invoiceToken = censorshiprecord && censorshiprecord.token;
@@ -51,6 +54,10 @@ const Invoice = ({ invoice, extended, approvedProposalsTokens }) => {
   const totalExpenses = payout && payout.expensetotal / 100;
   const totalAmount = payout && payout.total / 100;
   const totalDcrAmount = payout && convertAtomsToDcr(payout.dcrtotal);
+  const showExtendedVersionPicker = extended && version > 1;
+  const showVersionAsText = version > 1 && !extended && !mobile;
+
+  const isDarkTheme = themeName === "dark";
 
   // record attchments without the invoice file
   const invoiceAttachments = useMemo(
@@ -91,12 +98,22 @@ const Invoice = ({ invoice, extended, approvedProposalsTokens }) => {
                     id={userid}
                   />
                   <Event event="edited" timestamp={timestamp} />
-                  {version > 1 && !mobile && (
+                  {showVersionAsText && (
                     <Text
                       id={`invoice-${invoiceToken}-version`}
                       className={classNames(styles.version)}
                       color="gray"
                       truncate>{`version ${version}`}</Text>
+                  )}
+                  {showExtendedVersionPicker && (
+                    <VersionPicker
+                      className={classNames(
+                        styles.versionPicker,
+                        isDarkTheme && styles.darkVersionPicker
+                      )}
+                      version={version}
+                      token={invoiceToken}
+                    />
                   )}
                 </Subtitle>
               }

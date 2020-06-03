@@ -1,17 +1,19 @@
-const markAsAdded = (elem) => ({
+import isEqual from "lodash/fp/isEqual";
+
+const markLineAsAdded = (elem) => ({
   value: elem.value,
   lineIndex: elem.index,
   removed: false,
   added: true
 });
 
-const markAsRemoved = (elem) => ({
+const markLineAsRemoved = (elem) => ({
   lineIndex: elem.index,
   removed: elem.value,
   added: false
 });
 
-const markAsUnchanged = (elem) => ({
+const markLineAsUnchanged = (elem) => ({
   value: elem.value,
   lineIndex: elem.index,
   removed: false,
@@ -19,9 +21,9 @@ const markAsUnchanged = (elem) => ({
 });
 
 export const arrayDiff = (newCommentBody, oldCommentBody, lineDiffFunc) => [
-  ...newCommentBody.filter(lineDiffFunc(oldCommentBody)).map(markAsAdded),
-  ...oldCommentBody.filter(lineDiffFunc(newCommentBody)).map(markAsRemoved),
-  ...newCommentBody.filter(lineEqFunc(oldCommentBody)).map(markAsUnchanged)
+  ...newCommentBody.filter(lineDiffFunc(oldCommentBody)).map(markLineAsAdded),
+  ...oldCommentBody.filter(lineDiffFunc(newCommentBody)).map(markLineAsRemoved),
+  ...newCommentBody.filter(lineEqFunc(oldCommentBody)).map(markLineAsUnchanged)
 ];
 
 export const lineDiffFunc = (arr) => (elem) =>
@@ -34,8 +36,8 @@ export const getLineArray = (string) =>
     ? string.split("\n\n").map((line, index) => ({ value: line, index: index }))
     : [];
 
-const markFileAsAdded = (elem) => ({ ...elem, added: true });
-const markFileAsRemoved = (elem) => ({ ...elem, removed: true });
+const markAsAdded = (elem) => ({ ...elem, added: true });
+const markAsRemoved = (elem) => ({ ...elem, removed: true });
 
 const filesDiffFunc = (arr) => (elem) =>
   !arr.some(
@@ -44,7 +46,20 @@ const filesDiffFunc = (arr) => (elem) =>
 const filesEqFunc = (arr) => (elem) => !filesDiffFunc(arr)(elem);
 
 export const getFilesDiff = (newFiles, oldFiles) => [
-  ...newFiles.filter(filesDiffFunc(oldFiles)).map(markFileAsAdded),
-  ...oldFiles.filter(filesDiffFunc(newFiles)).map(markFileAsRemoved),
+  ...newFiles.filter(filesDiffFunc(oldFiles)).map(markAsAdded),
+  ...oldFiles.filter(filesDiffFunc(newFiles)).map(markAsRemoved),
   ...newFiles.filter(filesEqFunc(oldFiles)) // for unchanged files
 ];
+
+const itemsDiffFunc = (arr) => (elem) => !arr.some(isEqual(elem));
+const itemsEqFunc = (arr) => (elem) => !itemsDiffFunc(arr)(elem);
+
+export const getLineitemsDiff = (newItems = [], oldItems = []) =>
+  [
+    ...newItems.filter(itemsDiffFunc(oldItems)).map(markAsAdded),
+    ...oldItems.filter(itemsDiffFunc(newItems)).map(markAsRemoved),
+    ...newItems.filter(itemsEqFunc(oldItems))
+  ].sort((a, b) => a.index - b.index);
+
+export const setLineitemParams = (lineItems = [], params = {}) =>
+  lineItems.map((line, index) => ({ ...params, ...line, index }));
