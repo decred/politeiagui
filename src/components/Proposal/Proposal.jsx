@@ -4,7 +4,8 @@ import {
   StatusTag,
   Text,
   useMediaQuery,
-  useTheme
+  useTheme,
+  CopyableText
 } from "pi-ui";
 import React, { useEffect, useState } from "react";
 import Markdown from "../Markdown";
@@ -265,15 +266,13 @@ const Proposal = React.memo(function Proposal({
             />
             {extended && (
               <Row topMarginSize="s">
-                <Text id={`proposal-token-${proposalToken}`} truncate>
+                <CopyableText
+                  className={styles.copyableText}
+                  id={`proposal-token-${proposalToken}`}
+                  truncate
+                  tooltipPlacement={"bottom"}>
                   {proposalToken}
-                </Text>
-                <CopyLink
-                  className={classNames(
-                    isPublicAccessible && styles.copyLink && "margin-left-s"
-                  )}
-                  url={proposalToken}
-                />
+                </CopyableText>
               </Row>
             )}
             {hasvoteSummary && (
