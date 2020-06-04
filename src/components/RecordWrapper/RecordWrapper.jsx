@@ -75,8 +75,8 @@ export const Subtitle = ({ children }) => (
   </Join>
 );
 
-export const Edit = ({ url }) => (
-  <Link to={url}>
+export const Edit = ({ url, tabIndex }) => (
+  <Link to={url || ""} tabIndex={tabIndex}>
     <Icon type="edit" className={styles.editButton} />
   </Link>
 );

@@ -2,6 +2,14 @@
   margin-top: var(--spacing-small);
 }
 
+.authorizeTooltip {
+  width: 22rem;
+}
+
+.disabled > * {
+  pointer-events: none;
+}
+
 .filesRow {
   display: flex;
   flex-flow: row wrap;
