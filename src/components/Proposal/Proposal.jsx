@@ -203,7 +203,7 @@ const Proposal = React.memo(function Proposal({
                   <Tooltip
                     placement={mobile ? "left" : "right"}
                     content="You have to revoke the voting authorization to edit the proposal"
-                    className={classNames(styles.disabled)}
+                    className={styles.disabled}
                     contentClassName={styles.authorizeTooltip}>
                     <Edit tabIndex={-1} />
                   </Tooltip>
