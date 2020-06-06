@@ -44,6 +44,7 @@ const EditInvoice = ({ match }) => {
           initialValues={initialValues}
           onSubmit={onEditInvoice}
           approvedProposalsTokens={approvedTokens}
+          editMode
         />
       ) : (
         <InvoiceLoader extended />
