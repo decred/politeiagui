@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import PropTypes from "prop-types";
 import { classNames } from "pi-ui";
 import { diffWordsWithSpace } from "diff";
 import { arrayDiff, lineDiffFunc, getLineArray, getFilesDiff } from "./helpers";
@@ -130,4 +131,23 @@ export const FilesDiff = ({ oldFiles, newFiles }) => {
       </tbody>
     </table>
   );
+};
+
+export const DiffText = ({ newText, oldText }) => {
+  const diff = diffWordsWithSpace(oldText, newText);
+  return diff.map((elem, index) => (
+    <span
+      key={index}
+      className={classNames(
+        elem.added && styles.lineAdded,
+        elem.removed && styles.lineRemoved
+      )}>
+      {elem.value}
+    </span>
+  ));
+};
+
+DiffText.propTypes = {
+  newText: PropTypes.string.isRequired,
+  oldText: PropTypes.string
 };

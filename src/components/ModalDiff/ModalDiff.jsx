@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Text, Tab, Tabs } from "pi-ui";
 import PropTypes from "prop-types";
-import { DiffHTML, FilesDiff } from "src/components/Diff/Diff";
+import { DiffHTML, FilesDiff, DiffText } from "src/components/Diff/Diff";
 import {
   Header,
   Title,
@@ -17,6 +17,8 @@ const ModalDiff = ({
   newText,
   oldFiles,
   newFiles,
+  newTitle,
+  oldTitle,
   proposalDetails,
   ...props
 }) => {
@@ -32,7 +34,7 @@ const ModalDiff = ({
       <Header
         title={
           <Title id={"proposal-title-gfsag"} truncate linesBeforeTruncate={2}>
-            {proposalDetails.name}
+            <DiffText oldText={oldTitle} newText={newTitle} />
           </Title>
         }
         subtitle={
@@ -64,7 +66,8 @@ const ModalDiff = ({
       <Tabs
         onSelectTab={setActiveTabIndex}
         activeTabIndex={activeTabIndex}
-        className={styles.diffTabs}>
+        className={styles.diffTabs}
+        contentClassName={styles.diffTabContent}>
         <Tab label="Text Changes">
           <DiffHTML oldTextBody={oldText} newTextBody={newText} />
         </Tab>

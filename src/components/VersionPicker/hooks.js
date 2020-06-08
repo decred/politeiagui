@@ -19,17 +19,16 @@ export function useVersionPicker(ownProps) {
 
   const onChangeVersion = async (v) => {
     setSelectedVersion(v);
-    const proposalDiff = await fetchProposalsVersions(
-      ownProps.token,
-      selectedVersion
-    );
+    const proposalDiff = await fetchProposalsVersions(ownProps.token, v);
     handleOpenModal(ModalDiff, {
       proposalDetails: proposalDiff.details,
       onClose: handleCloseModal,
       oldText: proposalDiff.oldText,
       oldFiles: proposalDiff.oldFiles,
       newText: proposalDiff.newText,
-      newFiles: proposalDiff.newFiles
+      newFiles: proposalDiff.newFiles,
+      oldTitle: proposalDiff.oldTitle,
+      newTitle: proposalDiff.newTitle
     });
   };
 
@@ -45,7 +44,9 @@ export function useVersionPicker(ownProps) {
       oldFiles: getProposalFilesWithoutIndexMd(prevProposal),
       newFiles: getProposalFilesWithoutIndexMd(proposal),
       newText: getProposalText(proposal),
-      oldText: getProposalText(prevProposal)
+      oldText: getProposalText(prevProposal),
+      newTitle: proposal.name,
+      oldTitle: prevProposal.name
     };
   }
 
