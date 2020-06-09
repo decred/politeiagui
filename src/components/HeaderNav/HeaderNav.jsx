@@ -7,7 +7,6 @@ import {
   classNames
 } from "pi-ui";
 import React, { useEffect, useMemo, useCallback } from "react";
-import Link from "src/components/Link";
 import { NavLink, withRouter } from "react-router-dom";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import useNavigation from "src/hooks/api/useNavigation";
@@ -34,17 +33,16 @@ const HeaderNav = ({ history }) => {
   const menuItems = useMemo(
     () =>
       navMenuPaths.map(({ label, path, admin }, idx) => {
+        const onMenuItemClick = (path) => () => history.push(path);
         return (
           ((admin && userIsAdmin) || !admin) && (
-            <DropdownItem key={`link-${idx}`}>
-              <Link className={styles.navLink} to={path}>
-                {label}
-              </Link>
+            <DropdownItem key={`link-${idx}`} onClick={onMenuItemClick(path)}>
+              {label}
             </DropdownItem>
           )
         );
       }),
-    [userIsAdmin, navMenuPaths]
+    [history, navMenuPaths, userIsAdmin]
   );
 
   const [darkThemeOnLocalStorage, setDarkThemeOnLocalStorage] = useLocalStorage(
@@ -91,17 +89,13 @@ const HeaderNav = ({ history }) => {
         title={username}>
         {menuItems}
         <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
-        <DropdownItem>
+        <DropdownItem onClick={onThemeToggleHandler}>
           <div className={styles.themeToggleWrapper}>
             <Toggle
               onToggle={onThemeToggleHandler}
               toggled={themeName === "dark"}
             />
-            <div
-              onClick={onThemeToggleHandler}
-              className={styles.themeToggleLabel}>
-              Dark Mode
-            </div>
+            <div className={styles.themeToggleLabel}>Dark Mode</div>
           </div>
         </DropdownItem>
         <DropdownItem onClick={openModalLogout}>Logout</DropdownItem>
