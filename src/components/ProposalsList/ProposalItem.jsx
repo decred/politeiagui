@@ -1,6 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { StatusBar, StatusTag, Text, classNames, Icon } from "pi-ui";
+import {
+  StatusBar,
+  StatusTag,
+  Text,
+  classNames,
+  Icon,
+  useMediaQuery
+} from "pi-ui";
 import VotesCount from "../Proposal/VotesCount";
 import { Row } from "../layout";
 import {
@@ -44,6 +51,8 @@ const ProposalItem = ({
   );
   const { voteEndTimestamp } = useProposalVoteTimeInfo(voteSummary);
 
+  const mobile = useMediaQuery("(max-width: 760px)");
+
   return (
     proposal &&
     voteSummary && (
@@ -84,7 +93,7 @@ const ProposalItem = ({
             />
           </Row>
         )}
-        {(isVoteActive || isVotingFinished) && (
+        {(isVoteActive || isVotingFinished) && !mobile && (
           <Row
             className={styles.timeLeftPassed}
             justify="center"
