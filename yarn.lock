@@ -9107,9 +9107,10 @@ performance-now@^2.1.0:
 
 "pi-ui@https://github.com/decred/pi-ui":
   version "1.0.0"
-  resolved "https://github.com/decred/pi-ui#bd184c6c60704474e8be23a1f680d081a2c2472e"
+  resolved "https://github.com/decred/pi-ui#fc945d9d6c57a9949ec34cc3c4a38f8eada3286d"
   dependencies:
     clamp-js-main "^0.11.5"
+    lodash "^4.17.15"
     react-select "2.4.4"
     react-select-event "^4.1.4"
     react-spring "^8.0.25"

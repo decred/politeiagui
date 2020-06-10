@@ -8,6 +8,17 @@
   justify-content: center;
 }
 
+.diffTabContent {
+  overflow-y: scroll;
+  max-height: calc(70vh - 20rem);
+}
+
 .version {
   color: var(--text-secondary-color);
+}
+
+@media screen and (max-width: 560px) {
+  .diffTabContent {
+    max-height: calc(70vh);
+  }
 }
