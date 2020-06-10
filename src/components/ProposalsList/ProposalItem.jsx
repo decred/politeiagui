@@ -52,7 +52,7 @@ const ProposalItem = ({
   const { voteEndTimestamp } = useProposalVoteTimeInfo(voteSummary);
 
   const mobile = useMediaQuery("(max-width: 760px)");
-  const extraSmallMobile = useMediaQuery("(max-width: 500px)");
+  const extraSmallMobile = useMediaQuery("(max-width: 560px)");
 
   return (
     proposal &&
