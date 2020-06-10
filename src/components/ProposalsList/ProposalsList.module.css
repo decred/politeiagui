@@ -52,10 +52,12 @@ span.statusTag > span {
     height: 100%;
     margin: var(--spacing-1) auto;
     flex-direction: column;
-    align-items: space-between;
     padding: 0.5rem;
   }
   .itemWrapper > * {
     margin: 0.5rem;
+  }
+  .statusBarWrapper {
+    width: 100%;
   }
 }

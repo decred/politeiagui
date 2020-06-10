@@ -52,6 +52,7 @@ const ProposalItem = ({
   const { voteEndTimestamp } = useProposalVoteTimeInfo(voteSummary);
 
   const mobile = useMediaQuery("(max-width: 760px)");
+  const extraSmallMobile = useMediaQuery("(max-width: 500px)");
 
   return (
     proposal &&
@@ -59,7 +60,7 @@ const ProposalItem = ({
       <Row
         className={styles.itemWrapper}
         justify="space-between"
-        align="center"
+        align={extraSmallMobile ? "flex-start" : "center"}
         onClick={goToFullProposal(history, proposalURL)}
         noMargin>
         <div className={classNames(styles.itemTitle, "flex-column")}>
