@@ -20,7 +20,6 @@ const Placeholder = () => (
 
 const ProposalsList = ({ data: { proposals, voteSummaries } }) => {
   const hasSubmissions = proposals.length > 0;
-  console.log(hasSubmissions);
   return (
     <div className="margin-top-l">
       <Text
