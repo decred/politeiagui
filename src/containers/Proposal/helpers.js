@@ -211,7 +211,7 @@ export const getVoteEndTimestamp = (voteSummary, chainHeight, isTestnet) => {
  */
 export const getMarkdownContent = (files) => {
   const markdownFile = files.find((f) => f.name === "index.md");
-  return getTextFromIndexMd(markdownFile);
+  return markdownFile ? getTextFromIndexMd(markdownFile) : "";
 };
 
 /**

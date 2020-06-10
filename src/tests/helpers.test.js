@@ -5,6 +5,15 @@ const FILE = {
   mime: "image/jpeg",
   payload: "VGVzdCBwcm9wCiMgVGhpcyBpcyBhIHRlc3QgcHJvcG9zYWw="
 };
+
+const MD_FILE = {
+  mime: "text/plain; charset=utf-8",
+  name: "index.md",
+  payload: "cHJvcG9zYWwgbmFtZQoKcHJvcG9zYWwgZGVzY3JpcHRpb24="
+};
+
+const PROPOSAL_TEXT = "proposal name\n\nproposal description";
+
 const FILE_DIGESTED_PAYLOAD =
   "3973715772c4e0d41fc98fb67e97ad2436dca47961ac78a0757be43053d5af8c";
 
@@ -29,6 +38,16 @@ describe("test helpers functions", () => {
     expect(help.digest("password")).toEqual(
       "c0067d4af4e87f00dbac63b6156828237059172d1bbeac67427345d6a9fda484"
     );
+  });
+
+  test("it should return the proposal description from a md file", () => {
+    expect(help.getTextFromIndexMd(MD_FILE)).toEqual("proposal description");
+    expect(help.getTextFromIndexMd()).toEqual("");
+  });
+
+  test("it correctly encodes text into md files", () => {
+    expect(help.getIndexMdFromText(PROPOSAL_TEXT)).toEqual(MD_FILE);
+    expect(help.getIndexMdFromText()).toEqual({ ...MD_FILE, payload: "" });
   });
 });
 
