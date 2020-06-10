@@ -30,6 +30,7 @@ span.statusTag > span {
 }
 
 .itemWrapper {
+  padding: 0.5rem;
   height: 6.1rem;
   border-bottom: 1px solid var(--separator-color);
   cursor: pointer;
@@ -43,4 +44,20 @@ span.statusTag > span {
 
 .voteEvent {
   color: var(--color-primary-dark) !important;
+}
+
+/* EXTRA SMALL SCREENS*/
+@media screen and (max-width: 560px) {
+  .itemWrapper {
+    height: 100%;
+    margin: var(--spacing-1) auto;
+    flex-direction: column;
+    padding: 0.5rem;
+  }
+  .itemWrapper > * {
+    margin: 0.5rem;
+  }
+  .statusBarWrapper {
+    width: 100%;
+  }
 }
