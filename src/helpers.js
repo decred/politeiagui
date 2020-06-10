@@ -51,10 +51,17 @@ export const atou = (str) => decodeURIComponent(escape(window.atob(str)));
 //  <proposal name>\n
 //  <proposal description>
 //
-export const getTextFromIndexMd = (file) => {
+export const getTextFromIndexMd = (file = {}) => {
+  if (!file.payload) return "";
   const text = atou(file.payload);
   return text.substring(text.indexOf("\n\n") + 1).trim();
 };
+
+export const getIndexMdFromText = (text = "") => ({
+  name: "index.md",
+  mime: "text/plain; charset=utf-8",
+  payload: utoa(text)
+});
 
 export const getTextFromJsonToCsv = (file) => {
   const json = JSON.parse(atou(file.payload));

@@ -9,6 +9,7 @@ import {
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES
 } from "../../constants";
+import { getIndexMdFromText } from "src/helpers";
 
 // Proposals presentational status returned by the 'tokeninventory' endpoint
 // from the API.
@@ -55,6 +56,9 @@ const proposalArrayToByTokenObject = (proposals) =>
     {}
   );
 
+const proposalIndexFile = (name = "", description = "") =>
+  getIndexMdFromText([name, description].join("\n\n"));
+
 const updateAllByStatus = (allByStatus, newStatus, token) =>
   Object.keys(allByStatus).reduce((inv, key) => {
     const tokens = allByStatus[key] || [];
@@ -99,9 +103,18 @@ const proposals = (state = DEFAULT_STATE, action) =>
               ["byToken", proposalToken(action.payload.proposal)],
               action.payload.proposal
             )(state),
-          [act.RECEIVE_NEW_PROPOSAL]: () =>
-            compose(
-              set(["byToken", proposalToken(action.payload)], action.payload),
+          [act.RECEIVE_NEW_PROPOSAL]: () => {
+            // creates the index.md file
+            const indexFile = proposalIndexFile(
+              action.payload.name,
+              action.payload.description
+            );
+
+            return compose(
+              set(["byToken", proposalToken(action.payload)], {
+                ...action.payload,
+                files: [...action.payload.files, indexFile]
+              }),
               update(["allByStatus", UNREVIEWED], (unreviewdProps = []) =>
                 unreviewdProps.concat([proposalToken(action.payload)])
               ),
@@ -115,7 +128,8 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 (numOfProps = 0) => ++numOfProps
               ),
               set("newProposalToken", action.payload.censorshiprecord.token)
-            )(state),
+            )(state);
+          },
           [act.RECEIVE_SETSTATUS_PROPOSAL]: () =>
             compose(
               set(
