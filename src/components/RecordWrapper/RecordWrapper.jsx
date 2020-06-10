@@ -13,7 +13,8 @@ import {
   useHover,
   useTheme,
   getThemeProperty,
-  Tooltip
+  Tooltip,
+  CopyableText
 } from "pi-ui";
 import { Row } from "../layout";
 import Link from "../Link";
@@ -37,12 +38,24 @@ export const Event = ({ event, timestamp, className, size }) => (
   </DateTooltip>
 );
 
-export const RecordToken = ({ token }) => (
-  <div className="align-center overflow-hidden">
-    <Icon type="sign" className="margin-right-xs" />
-    <Text id={`proposal-token-${token}`} truncate>
-      {token}
-    </Text>
+export const RecordToken = ({ token, isCopyable }) => (
+  <div className={styles.recordToken}>
+    {isCopyable && (
+      <CopyableText
+        id={`proposal-token-${token}`}
+        truncate
+        tooltipPlacement={"bottom"}>
+        {token}
+      </CopyableText>
+    )}
+    {!isCopyable && (
+      <>
+        <Icon type="sign" className="margin-right-xs" />
+        <Text id={`proposal-token-${token}`} truncate>
+          {token}
+        </Text>
+      </>
+    )}
   </div>
 );
 
@@ -298,6 +311,14 @@ Event.propTypes = {
 
 Event.defaultProps = {
   show: true
+};
+
+RecordToken.propTypes = {
+  token: PropTypes.string.isRequired,
+  isCopyable: PropTypes.bool
+};
+RecordToken.defaultProps = {
+  isCopyable: false
 };
 
 export default RecordWrapper;
