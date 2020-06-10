@@ -5,7 +5,8 @@ import {
   Text,
   useMediaQuery,
   useTheme,
-  CopyableText
+  CopyableText,
+  Tooltip
 } from "pi-ui";
 import React, { useEffect, useState } from "react";
 import Markdown from "../Markdown";
@@ -24,6 +25,7 @@ import {
   getQuorumInVotes,
   isVotingFinishedProposal,
   getProposalToken,
+  isVotingNotAuthorizedProposal,
   goToFullProposal
 } from "src/containers/Proposal/helpers";
 import {
@@ -131,6 +133,7 @@ const Proposal = React.memo(function Proposal({
   const isAbandoned = isAbandonedProposal(proposal);
   const isPublicAccessible = isPublic || isAbandoned;
   const isAuthor = currentUser && currentUser.userid === userid;
+  const isVotingAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
   const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
   const mobile = useMediaQuery("(max-width: 560px)");
   const showEditedDate =
@@ -188,8 +191,23 @@ const Proposal = React.memo(function Proposal({
                   {name}
                 </Title>
               }
+              /**
+               * if the proposal is editable: show Edit icon
+               * if the proposal is not editable and the voting is authorized: show Edit icon wrapped by tooltip
+               * otherwise: do not show Edit icon
+               * */
               edit={
-                isEditable && <Edit url={`/proposals/${proposalToken}/edit`} />
+                isEditable ? (
+                  <Edit url={`/proposals/${proposalToken}/edit`} />
+                ) : isVotingAuthorized ? (
+                  <Tooltip
+                    placement={mobile ? "left" : "right"}
+                    content="You have to revoke the voting authorization to edit the proposal"
+                    className={styles.disabled}
+                    contentClassName={styles.authorizeTooltip}>
+                    <Edit tabIndex={-1} />
+                  </Tooltip>
+                ) : null
               }
               isRfp={isRfp}
               isRfpSubmission={isRfpSubmission}

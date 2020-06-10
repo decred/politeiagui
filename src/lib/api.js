@@ -190,71 +190,71 @@ export const makeDCC = (
 
 export const makeDCCVote = (token, vote) => ({ token, vote });
 
-export const signRegister = (email, record) => {
-  if (typeof email !== "string" || typeof record !== "object") {
+export const signRegister = (userid, record) => {
+  if (typeof userid !== "string" || typeof record !== "object") {
     throw Error("signRegister: Invalid params");
   }
-  return pki.myPubKeyHex(email).then((publickey) => {
+  return pki.myPubKeyHex(userid).then((publickey) => {
     const digests = [...record.files, ...(record.metadata || [])]
       .map((x) => Buffer.from(get("digest", x), "hex"))
       .sort(Buffer.compare);
     const tree = new MerkleTree(digests);
     const root = tree.getRoot().toString("hex");
     return pki
-      .signStringHex(email, root)
+      .signStringHex(userid, root)
       .then((signature) => ({ ...record, publickey, signature }));
   });
 };
 
-export const signComment = (email, comment) =>
+export const signComment = (userid, comment) =>
   pki
-    .myPubKeyHex(email)
+    .myPubKeyHex(userid)
     .then((publickey) =>
       pki
         .signStringHex(
-          email,
+          userid,
           [comment.token, comment.parentid, comment.comment].join("")
         )
         .then((signature) => ({ ...comment, publickey, signature }))
     );
 
-export const signDcc = (email, dcc) =>
+export const signDcc = (userid, dcc) =>
   pki
-    .myPubKeyHex(email)
+    .myPubKeyHex(userid)
     .then((publickey) =>
       pki
-        .signStringHex(email, dcc.digest)
+        .signStringHex(userid, dcc.digest)
         .then((signature) => ({ file: dcc, publickey, signature }))
     );
 
-export const signDccVote = (email, dccvote) =>
+export const signDccVote = (userid, dccvote) =>
   pki
-    .myPubKeyHex(email)
+    .myPubKeyHex(userid)
     .then((publickey) =>
       pki
-        .signStringHex(email, [dccvote.token, dccvote.vote].join(""))
+        .signStringHex(userid, [dccvote.token, dccvote.vote].join(""))
         .then((signature) => ({ ...dccvote, publickey, signature }))
     );
 
-export const signLikeComment = (email, comment) =>
+export const signLikeComment = (userid, comment) =>
   pki
-    .myPubKeyHex(email)
+    .myPubKeyHex(userid)
     .then((publickey) =>
       pki
         .signStringHex(
-          email,
+          userid,
           [comment.token, comment.commentid, comment.action].join("")
         )
         .then((signature) => ({ ...comment, publickey, signature }))
     );
 
-export const signCensorComment = (email, comment) =>
+export const signCensorComment = (userid, comment) =>
   pki
-    .myPubKeyHex(email)
+    .myPubKeyHex(userid)
     .then((publickey) =>
       pki
         .signStringHex(
-          email,
+          userid,
           [comment.token, comment.commentid, comment.reason].join("")
         )
         .then((signature) => ({ ...comment, publickey, signature }))
@@ -326,8 +326,8 @@ export const apiInfo = () =>
 
 export const newUser = (csrf, email, username, password) =>
   pki.generateKeys().then((keys) =>
-    pki.loadKeys(email, keys).then(() =>
-      pki.myPubKeyHex(email).then((publickey) =>
+    pki.loadKeys(username, keys).then(() =>
+      pki.myPubKeyHex(username).then((publickey) =>
         POST("/user/new", csrf, {
           email,
           username,
@@ -340,8 +340,8 @@ export const newUser = (csrf, email, username, password) =>
 
 export const register = (csrf, email, username, password, verificationtoken) =>
   pki.generateKeys().then((keys) =>
-    pki.loadKeys(email, keys).then(() =>
-      pki.myPubKeyHex(email).then((publickey) =>
+    pki.loadKeys(username, keys).then(() =>
+      pki.myPubKeyHex(username).then((publickey) =>
         POST("/register", csrf, {
           email,
           username,
@@ -353,9 +353,9 @@ export const register = (csrf, email, username, password, verificationtoken) =>
     )
   );
 
-export const verifyNewUser = (email, verificationToken) => {
+export const verifyNewUser = (email, verificationToken, username) => {
   return pki
-    .signStringHex(email, verificationToken)
+    .signStringHex(username, verificationToken)
     .then((signature) =>
       GET(
         "/v1/user/verify?" +
@@ -440,11 +440,11 @@ export const verifyResetPassword = (
     newpassword: digest(newpassword)
   }).then(getResponse);
 
-export const resendVerificationEmailRequest = (csrf, email) =>
+export const resendVerificationEmailRequest = (csrf, email, username) =>
   pki
     .generateKeys()
-    .then((keys) => pki.loadKeys(email, keys))
-    .then(() => pki.myPubKeyHex(email))
+    .then((keys) => pki.loadKeys(username, keys))
+    .then(() => pki.myPubKeyHex(username))
     .then((publickey) =>
       POST("/user/new/resend", csrf, { email, publickey }).then(getResponse)
     );
@@ -452,9 +452,9 @@ export const resendVerificationEmailRequest = (csrf, email) =>
 export const updateKeyRequest = (csrf, publickey) =>
   POST("/user/key", csrf, { publickey }).then(getResponse);
 
-export const verifyKeyRequest = (csrf, email, verificationtoken) =>
+export const verifyKeyRequest = (csrf, userid, verificationtoken) =>
   pki
-    .signStringHex(email, verificationtoken)
+    .signStringHex(userid, verificationtoken)
     .then((signature) =>
       POST("/user/key/verify", csrf, { signature, verificationtoken }).then(
         getResponse
@@ -493,28 +493,37 @@ export const logout = (csrf) =>
     return {};
   });
 
-export const proposalSetStatus = (email, csrf, token, status, censorMsg) =>
+export const proposalSetStatus = (userid, csrf, token, status, censorMsg) =>
   pki
-    .myPubKeyHex(email)
+    .myPubKeyHex(userid)
     .then((publickey) =>
-      pki.signStringHex(email, token + status + censorMsg).then((signature) => {
-        return POST(`/proposals/${token}/status`, csrf, {
-          proposalstatus: status,
-          token,
-          signature,
-          publickey,
-          statuschangemessage: censorMsg
-        });
-      })
+      pki
+        .signStringHex(userid, token + status + censorMsg)
+        .then((signature) => {
+          return POST(`/proposals/${token}/status`, csrf, {
+            proposalstatus: status,
+            token,
+            signature,
+            publickey,
+            statuschangemessage: censorMsg
+          });
+        })
     )
     .then(getResponse);
 
-export const invoiceSetStatus = (email, csrf, token, version, status, reason) =>
+export const invoiceSetStatus = (
+  userid,
+  csrf,
+  token,
+  version,
+  status,
+  reason
+) =>
   pki
-    .myPubKeyHex(email)
+    .myPubKeyHex(userid)
     .then((publickey) =>
       pki
-        .signStringHex(email, token + version + status + reason)
+        .signStringHex(userid, token + version + status + reason)
         .then((signature) => {
           return POST(`/invoices/${token}/status`, csrf, {
             status,
@@ -573,7 +582,7 @@ const votePayloadWithType = ({
 });
 
 export const startVote = (
-  email,
+  userid,
   csrf,
   token,
   duration,
@@ -591,9 +600,9 @@ export const startVote = (
   });
   const hash = objectToSHA256(vote);
   return pki
-    .myPubKeyHex(email)
+    .myPubKeyHex(userid)
     .then((publickey) =>
-      pki.signStringHex(email, hash).then((signature) =>
+      pki.signStringHex(userid, hash).then((signature) =>
         POST(
           "/vote/start",
           csrf,
@@ -610,7 +619,7 @@ export const startVote = (
 };
 
 export const startRunoffVote = (
-  email,
+  userid,
   csrf,
   token,
   duration,
@@ -628,16 +637,16 @@ export const startRunoffVote = (
     })
   );
   return pki
-    .myPubKeyHex(email)
+    .myPubKeyHex(userid)
     .then(async (publickey) => {
       const voteSignatures = await Promise.all(
         submissionsVotes.map((vote) =>
-          pki.signStringHex(email, objectToSHA256(vote))
+          pki.signStringHex(userid, objectToSHA256(vote))
         )
       );
       const voteAuthSignatures = await Promise.all(
         submissionsVotes.map(({ token, proposalversion: version }) =>
-          pki.signStringHex(email, `${token}${version}authorize`)
+          pki.signStringHex(userid, `${token}${version}authorize`)
         )
       );
       return POST(
@@ -674,14 +683,14 @@ export const proposalAuthorizeOrRevokeVote = (
   csrf,
   action,
   token,
-  email,
+  userid,
   version
 ) =>
   pki
-    .myPubKeyHex(email)
+    .myPubKeyHex(userid)
     .then((publickey) =>
       pki
-        .signStringHex(email, `${token}${version}${action}`)
+        .signStringHex(userid, `${token}${version}${action}`)
         .then((signature) =>
           POST("/proposals/authorizevote", csrf, {
             action,
@@ -761,11 +770,11 @@ export const dccDetails = (csrf, token) =>
 export const supportOpposeDCC = (csrf, vote) =>
   POST("/dcc/supportoppose", csrf, vote).then(getResponse);
 
-export const setDCCStatus = (csrf, email, token, status, reason) =>
+export const setDCCStatus = (csrf, userid, token, status, reason) =>
   pki
-    .myPubKeyHex(email)
+    .myPubKeyHex(userid)
     .then((publickey) =>
-      pki.signStringHex(email, token + status + reason).then((signature) => {
+      pki.signStringHex(userid, token + status + reason).then((signature) => {
         return POST(`/dcc/${token}/status`, csrf, {
           status,
           token,

@@ -22,6 +22,7 @@ import ModalMDGuide from "src/components/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import usePolicy from "src/hooks/api/usePolicy";
+import { isAnchoring } from "src/helpers";
 import {
   PROPOSAL_TYPE_REGULAR,
   PROPOSAL_TYPE_RFP,
@@ -262,6 +263,11 @@ const ProposalFormWrapper = ({
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
+        if (isAnchoring()) {
+          throw new Error(
+            "Submitting proposals is temporarily unavailable while a daily censorship resistance routine is in progress. Sorry for the inconvenience. This will be fixed soon. Check back in 10 minutes."
+          );
+        }
         const { type, rfpLink, ...others } = values;
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
           const rfpWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
@@ -286,7 +292,8 @@ const ProposalFormWrapper = ({
         });
         setSubmitting(false);
         setSubmitSuccess(true);
-        history.push(`/proposals/${proposalToken}`);
+        // use short prefix when navigating to propsoal page
+        history.push(`/proposals/${proposalToken.substring(0, 7)}`);
         resetForm();
       } catch (e) {
         setSubmitting(false);

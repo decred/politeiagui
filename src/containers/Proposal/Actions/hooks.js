@@ -55,7 +55,7 @@ export function usePublicActions() {
     act.onFetchProposalsBatchWithoutState
   );
 
-  const currentUserEmail = useSelector(sel.currentUserEmail);
+  const currentUserID = useSelector(sel.currentUserID);
 
   const onAbandonProposal = useCallback(
     (proposal) => (reason) =>
@@ -70,21 +70,21 @@ export function usePublicActions() {
   const onAuthorizeVote = useCallback(
     (proposal) => () =>
       onAuthorize(
-        currentUserEmail,
+        currentUserID,
         proposal.censorshiprecord.token,
         proposal.version
       ),
-    [onAuthorize, currentUserEmail]
+    [onAuthorize, currentUserID]
   );
 
   const onRevokeVote = useCallback(
     (proposal) => () =>
       onRevoke(
-        currentUserEmail,
+        currentUserID,
         proposal.censorshiprecord.token,
         proposal.version
       ),
-    [onRevoke, currentUserEmail]
+    [onRevoke, currentUserID]
   );
 
   const onStartVote = useCallback(
@@ -94,14 +94,14 @@ export function usePublicActions() {
       passPercentage
     }) =>
       onStart(
-        currentUserEmail,
+        currentUserID,
         token,
         duration,
         quorumPercentage,
         passPercentage,
         version
       ),
-    [onStart, currentUserEmail]
+    [onStart, currentUserID]
   );
 
   const onStartRunoffVote = useCallback(
@@ -111,7 +111,7 @@ export function usePublicActions() {
       passPercentage
     }) => {
       await onStartRunoff(
-        currentUserEmail,
+        currentUserID,
         token,
         duration,
         quorumPercentage,
@@ -120,7 +120,7 @@ export function usePublicActions() {
       );
       cb && cb();
     },
-    [onStartRunoff, currentUserEmail]
+    [onStartRunoff, currentUserID]
   );
 
   return {

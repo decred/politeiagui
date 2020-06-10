@@ -13,13 +13,13 @@ const useIdentity = () => {
   const { initDone, currentUser } = useLoaderContext();
 
   const userLoggedIn = initDone && !!currentUser;
-  const userEmail = !!currentUser && currentUser.email;
+  const userid = !!currentUser && currentUser.userid;
   const userActivePublicKey = !!currentUser && currentUser.publickey;
 
   useEffect(() => {
     async function verifyIdentity() {
       try {
-        const keys = await pki.getKeys(userEmail);
+        const keys = await pki.getKeys(userid);
 
         if (!keys) {
           throw new Error(IDENTITY_NOT_FOUND);
@@ -40,10 +40,10 @@ const useIdentity = () => {
       }
     }
 
-    if (userLoggedIn && userEmail) {
+    if (userLoggedIn && userid) {
       verifyIdentity();
     }
-  }, [userLoggedIn, userEmail, userActivePublicKey]);
+  }, [userLoggedIn, userid, userActivePublicKey]);
 
   return [identity, error];
 };

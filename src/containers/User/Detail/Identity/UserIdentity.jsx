@@ -15,13 +15,14 @@ import PastKeysSection from "./components/PastKeysSection";
 import UserIdSection from "./components/UserIdSection";
 import useModalContext from "src/hooks/utils/useModalContext";
 
-const fetchKeys = (currentUserEmail) =>
-  pki.getKeys(currentUserEmail).then((keys) => JSON.stringify(keys, null, 2));
+const fetchKeys = (currentUserID) =>
+  pki.getKeys(currentUserID).then((keys) => JSON.stringify(keys, null, 2));
 
 const Identity = ({ history, loadingKey, user }) => {
   const { userid: userID, identities } = user;
   const {
     currentUserEmail,
+    currentUserID,
     userPubkey,
     identityImportSuccess,
     onUpdateUserKey,
@@ -32,8 +33,8 @@ const Identity = ({ history, loadingKey, user }) => {
   } = useUserIdentity();
 
   useEffect(() => {
-    verifyUserPubkey(currentUserEmail, userPubkey, keyMismatchAction);
-  }, [currentUserEmail, userPubkey, keyMismatchAction]);
+    verifyUserPubkey(currentUserID, userPubkey, keyMismatchAction);
+  }, [currentUserID, userPubkey, keyMismatchAction]);
 
   const activeIdentity = identities && identities.filter((i) => i.isactive)[0];
   const pubkey = activeIdentity && activeIdentity.pubkey;
@@ -41,8 +42,8 @@ const Identity = ({ history, loadingKey, user }) => {
   const pastIdentities = identities && identities.filter((i) => !i.isactive);
 
   const updateKey = useCallback(async () => {
-    await onUpdateUserKey(currentUserEmail);
-  }, [onUpdateUserKey, currentUserEmail]);
+    await onUpdateUserKey(currentUserID);
+  }, [onUpdateUserKey, currentUserID]);
 
   const [keyData, setKeyData] = useState();
 
@@ -69,11 +70,11 @@ const Identity = ({ history, loadingKey, user }) => {
 
   useEffect(() => {
     let isSubscribed = true;
-    fetchKeys(currentUserEmail).then((keyData) => {
+    fetchKeys(currentUserID).then((keyData) => {
       if (isSubscribed) setKeyData(keyData);
     });
     return () => (isSubscribed = false);
-  }, [currentUserEmail]);
+  }, [currentUserID]);
 
   return loadingKey === PUB_KEY_STATUS_LOADING ? (
     <div className={styles.spinnerWrapper}>

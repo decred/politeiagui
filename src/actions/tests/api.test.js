@@ -291,12 +291,12 @@ describe("test api actions (actions/api.js)", () => {
   test("on verify new user action", async () => {
     const path = "/api/v1/user/verify";
     const verificationToken = "any";
-    const { email } = FAKE_USER;
+    const { email, username } = FAKE_USER;
 
     await assertApiActionOnError(
       path,
       api.onVerifyNewUser,
-      [email, verificationToken],
+      [email, verificationToken, username],
       (e) => [
         {
           type: act.REQUEST_VERIFY_NEW_USER,
@@ -316,7 +316,7 @@ describe("test api actions (actions/api.js)", () => {
     await assertApiActionOnSuccess(
       path,
       api.onVerifyNewUser,
-      [email, verificationToken],
+      [email, verificationToken, username],
       [
         {
           type: act.REQUEST_VERIFY_NEW_USER,
@@ -546,7 +546,6 @@ describe("test api actions (actions/api.js)", () => {
   test("on submit proposal", async () => {
     const path = "/api/v1/proposals/new";
     const params = [
-      FAKE_USER.email,
       FAKE_USER.id,
       FAKE_USER.username,
       FAKE_PROPOSAL_NAME,
@@ -556,6 +555,9 @@ describe("test api actions (actions/api.js)", () => {
       FAKE_RFP_LINK,
       []
     ];
+
+    const keys = await pki.generateKeys();
+    await pki.loadKeys(FAKE_USER.id, keys);
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -593,14 +595,9 @@ describe("test api actions (actions/api.js)", () => {
   test("on submit comment action", async () => {
     const path = "/api/v1/comments/new";
     const parentId = 0;
-    const params = [
-      FAKE_USER.email,
-      FAKE_PROPOSAL_TOKEN,
-      FAKE_COMMENT,
-      parentId
-    ];
-    const keys = await pki.generateKeys(FAKE_USER.email);
-    await pki.loadKeys(FAKE_USER.email, keys);
+    const params = [FAKE_USER.id, FAKE_PROPOSAL_TOKEN, FAKE_COMMENT, parentId];
+    const keys = await pki.generateKeys(FAKE_USER.id);
+    await pki.loadKeys(FAKE_USER.id, keys);
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -637,7 +634,7 @@ describe("test api actions (actions/api.js)", () => {
     const commentid = 0;
     const up_action = 1;
     //const down_action = -1;
-    const params = [FAKE_USER.email, FAKE_PROPOSAL_TOKEN, commentid, up_action];
+    const params = [FAKE_USER.id, FAKE_PROPOSAL_TOKEN, commentid, up_action];
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -648,8 +645,8 @@ describe("test api actions (actions/api.js)", () => {
     expect(dispatchedActions[1].type).toEqual(act.RECEIVE_LIKE_COMMENT);
     expect(dispatchedActions[2].type).toEqual(act.RECEIVE_SYNC_LIKE_COMMENT);
 
-    const keys = await pki.generateKeys(FAKE_USER.email);
-    await pki.loadKeys(FAKE_USER.email, keys);
+    const keys = await pki.generateKeys(FAKE_USER.id);
+    await pki.loadKeys(FAKE_USER.id, keys);
 
     await assertApiActionOnError(
       path,
@@ -679,7 +676,7 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on update user key", async () => {
     const path = "/api/v1/user/key";
-    const params = [FAKE_USER.email];
+    const params = [FAKE_USER.ID];
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -706,10 +703,10 @@ describe("test api actions (actions/api.js)", () => {
   test("on verify user key", async () => {
     const path = "/api/v1/user/key/verify";
     const verificationtoken = "any";
-    const params = [FAKE_USER.email, verificationtoken];
+    const params = [FAKE_USER.id, verificationtoken];
 
-    const keys = await pki.generateKeys(FAKE_USER.email);
-    await pki.loadKeys(FAKE_USER.email, keys);
+    const keys = await pki.generateKeys();
+    await pki.loadKeys(FAKE_USER.id, keys);
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -728,7 +725,7 @@ describe("test api actions (actions/api.js)", () => {
         {
           type: act.REQUEST_VERIFIED_KEY,
           error: false,
-          payload: { email: FAKE_USER.email, verificationtoken }
+          payload: { verificationtoken }
         },
         { type: act.RECEIVE_VERIFIED_KEY, error: true, payload: e }
       ],
@@ -782,7 +779,7 @@ describe("test api actions (actions/api.js)", () => {
   test("on edit proposal action", async () => {
     const path = "/api/v1/proposals/edit";
     const params = [
-      FAKE_USER.email,
+      FAKE_USER.id,
       FAKE_PROPOSAL_NAME,
       FAKE_PROPOSAL_DESCRIPTION,
       FAKE_RFP_DEADLINE,
@@ -791,8 +788,8 @@ describe("test api actions (actions/api.js)", () => {
       [],
       FAKE_PROPOSAL_TOKEN
     ];
-    const keys = await pki.generateKeys(FAKE_USER.email);
-    await pki.loadKeys(FAKE_USER.email, keys);
+    const keys = await pki.generateKeys(FAKE_USER.id);
+    await pki.loadKeys(FAKE_USER.id, keys);
 
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
@@ -829,11 +826,7 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on authorize vote on proposal action", async () => {
     const path = "/api/v1/proposals/authorizevote";
-    const params = [
-      FAKE_USER.email,
-      FAKE_PROPOSAL_TOKEN,
-      FAKE_PROPOSAL_VERSION
-    ];
+    const params = [FAKE_USER.id, FAKE_PROPOSAL_TOKEN, FAKE_PROPOSAL_VERSION];
     const requestAction = {
       type: act.REQUEST_AUTHORIZE_VOTE,
       error: false,
@@ -841,8 +834,8 @@ describe("test api actions (actions/api.js)", () => {
         token: FAKE_PROPOSAL_TOKEN
       }
     };
-    const keys = await pki.generateKeys(FAKE_USER.email);
-    await pki.loadKeys(FAKE_USER.email, keys);
+    const keys = await pki.generateKeys(FAKE_USER.id);
+    await pki.loadKeys(FAKE_USER.id, keys);
 
     setPostSuccessResponse(path);
     const store = getMockedStore();

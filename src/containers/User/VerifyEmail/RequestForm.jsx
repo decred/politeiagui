@@ -36,6 +36,7 @@ const RequestVerificationEmailForm = () => {
     <>
       <FormWrapper
         initialValues={{
+          username: "",
           email: ""
         }}
         validationSchema={validationSchema}
@@ -54,6 +55,15 @@ const RequestVerificationEmailForm = () => {
           !success ? (
             <Form onSubmit={handleSubmit}>
               <Title>Resend Verification Email</Title>
+              <TextInput
+                label="Username"
+                id="username"
+                autoComplete="username"
+                value={values.username}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.username && errors.username}
+              />
               <TextInput
                 label="Email"
                 id="email"

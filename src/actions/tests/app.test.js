@@ -13,7 +13,8 @@ describe("test app actions (actions/app.js)", () => {
         response: {
           csrfToken: FAKE_CSRF,
           email: "foo@bar.com",
-          username: "foobar"
+          username: "foobar",
+          userid: "testid"
         }
       },
       init: {
@@ -118,9 +119,9 @@ describe("test app actions (actions/app.js)", () => {
   });
 
   test("on load draft proposals", () => {
-    const { email } = MOCK_STATE.api.me.response;
+    const { userid } = MOCK_STATE.api.me.response;
     ls.handleSaveStateToLocalStorage(MOCK_STATE);
-    expect(app.onLoadDraftProposals(email)).toDispatchActions(
+    expect(app.onLoadDraftProposals(userid)).toDispatchActions(
       [
         {
           type: act.LOAD_DRAFT_PROPOSALS,
@@ -140,9 +141,9 @@ describe("test app actions (actions/app.js)", () => {
   });
 
   test("on load draft invoices", () => {
-    const { email } = MOCK_STATE.api.me.response;
+    const { userid } = MOCK_STATE.api.me.response;
     ls.handleSaveStateToLocalStorage(MOCK_STATE);
-    expect(app.onLoadDraftInvoices(email)).toDispatchActions(
+    expect(app.onLoadDraftInvoices(userid)).toDispatchActions(
       [
         {
           type: act.LOAD_DRAFT_INVOICES,

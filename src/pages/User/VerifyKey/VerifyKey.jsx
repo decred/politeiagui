@@ -9,7 +9,7 @@ import styles from "./VerifyKey.module.css";
 
 const VerifyKey = ({ location, history }) => {
   const {
-    currentUserEmail,
+    currentUserID,
     userPubkey,
     keyMismatchAction,
     verifyUserKey,
@@ -23,22 +23,16 @@ const VerifyKey = ({ location, history }) => {
   const verifyAndUpdateLocalKey = useCallback(async () => {
     try {
       const { verificationtoken } = qs.parse(location.search);
-      if (verificationtoken && currentUserEmail) {
-        await onVerifyUserKey(currentUserEmail, verificationtoken);
-        verifyUserPubkey(currentUserEmail, userPubkey, keyMismatchAction);
+      if (verificationtoken && currentUserID) {
+        await onVerifyUserKey(currentUserID, verificationtoken);
+        verifyUserPubkey(currentUserID, userPubkey, keyMismatchAction);
         setKeyUpdated(true);
       }
     } catch (e) {
       setKeyUpdated(true);
       throw e;
     }
-  }, [
-    currentUserEmail,
-    userPubkey,
-    keyMismatchAction,
-    onVerifyUserKey,
-    location
-  ]);
+  }, [currentUserID, userPubkey, keyMismatchAction, onVerifyUserKey, location]);
 
   useEffect(() => {
     if (!keyUpdated && !verifyUserKey) {
@@ -50,7 +44,9 @@ const VerifyKey = ({ location, history }) => {
   const success = verifyUserKey && verifyUserKey.success;
   const error = verifyUserKeyError;
   const pushToHome = useCallback(() => history.push("/"), [history]);
-  const successButtonText = (isCMS ? "Ok, go to invoices" : "Ok, go to proposals");
+  const successButtonText = isCMS
+    ? "Ok, go to invoices"
+    : "Ok, go to proposals";
 
   return (
     <SingleContentPage>
