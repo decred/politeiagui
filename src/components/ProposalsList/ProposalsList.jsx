@@ -1,21 +1,26 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Text, classNames } from "pi-ui";
+import { Text, classNames, useTheme, getThemeProperty } from "pi-ui";
 import styles from "./ProposalsList.module.css";
 import ProposalItem from "./ProposalItem";
 import LoadingPlaceholders from "src/components/LoadingPlaceholders";
 import ContentLoader from "react-content-loader";
 
-const Placeholder = () => (
-  <ContentLoader
-    height={420}
-    width={800}
-    speed={2}
-    primaryColor="#f3f3f3"
-    secondaryColor="#ecebeb">
-    <rect x="0" y="30" width="800" height="200" />
-  </ContentLoader>
-);
+const Placeholder = () => {
+  const { theme } = useTheme();
+  const primaryColor = getThemeProperty(theme, "color-gray-lightest");
+  const secondaryColor = getThemeProperty(theme, "color-gray-lighter");
+  return (
+    <ContentLoader
+      height={420}
+      width={800}
+      speed={2}
+      primaryColor={primaryColor}
+      secondaryColor={secondaryColor}>
+      <rect x="0" y="30" width="800" height="200" />
+    </ContentLoader>
+  );
+};
 
 const ProposalsList = ({ data: { proposals, voteSummaries } }) => {
   const hasSubmissions = proposals.length > 0;
