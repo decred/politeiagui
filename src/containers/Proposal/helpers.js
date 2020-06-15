@@ -129,7 +129,8 @@ export const isVotingFinishedProposal = (voteSummary) =>
  */
 export const isEditableProposal = (proposal, voteSummary) =>
   isUnreviewedProposal(proposal) ||
-  (isPublicProposal(proposal) && isVotingNotAuthorizedProposal(voteSummary));
+  (isUnderDiscussionProposal(proposal, voteSummary) &&
+    isVotingNotAuthorizedProposal(voteSummary));
 
 /**
  * Returns true if the given proposal is under discussion
