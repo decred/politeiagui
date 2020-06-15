@@ -14,7 +14,8 @@ import {
   useTheme,
   getThemeProperty,
   Tooltip,
-  CopyableText
+  CopyableText,
+  useMediaQuery
 } from "pi-ui";
 import { Row } from "../layout";
 import Link from "../Link";
@@ -38,26 +39,29 @@ export const Event = ({ event, timestamp, className, size }) => (
   </DateTooltip>
 );
 
-export const RecordToken = ({ token, isCopyable }) => (
-  <div className={styles.recordToken}>
-    {isCopyable && (
-      <CopyableText
-        id={`proposal-token-${token}`}
-        truncate
-        tooltipPlacement={"bottom"}>
-        {token}
-      </CopyableText>
-    )}
-    {!isCopyable && (
-      <>
-        <Icon type="sign" className="margin-right-xs" />
-        <Text id={`proposal-token-${token}`} truncate>
+export const RecordToken = ({ token, isCopyable }) => {
+  const shouldPlaceTooltipLeft = useMediaQuery("(max-width: 560px)");
+  return (
+    <div className={styles.recordToken}>
+      {isCopyable && (
+        <CopyableText
+          id={`proposal-token-${token}`}
+          truncate
+          tooltipPlacement={shouldPlaceTooltipLeft ? "left" : "bottom"}>
           {token}
-        </Text>
-      </>
-    )}
-  </div>
-);
+        </CopyableText>
+      )}
+      {!isCopyable && (
+        <>
+          <Icon type="sign" className="margin-right-xs" />
+          <Text id={`proposal-token-${token}`} truncate>
+            {token}
+          </Text>
+        </>
+      )}
+    </div>
+  );
+};
 
 export const Title = ({ children, isAbandoned, url, ...props }) => {
   const SimpleWrapper = (props) => <div {...props} />;

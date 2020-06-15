@@ -32,7 +32,8 @@ const VotesCount = ({
               styles.quorumTooltip,
               isDarkTheme && styles.darkQuorumTooltip
             )}
-            content={`${votesReceived} votes cast, quorum requirement is ${quorumVotes} votes`}>
+            content={`${votesReceived} votes cast, quorum requirement is ${quorumVotes} votes`}
+            placement="left">
             <Text className={styles.votesReceived} size="small">
               {votesReceived}
             </Text>
