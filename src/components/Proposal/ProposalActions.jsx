@@ -14,7 +14,6 @@ import {
   useUnvettedProposalActions,
   usePublicProposalActions
 } from "src/containers/Proposal/Actions";
-import useProposalBatchWithoutRedux from "src/hooks/api/useProposalBatchWithoutRedux";
 import AdminContent from "src/components/AdminContent";
 import { useLoaderContext } from "src/containers/Loader";
 import styles from "./ProposalActions.module.css";
@@ -50,7 +49,12 @@ const UnvettedActions = ({ proposal }) => {
   );
 };
 
-const PublicActions = ({ proposal, voteSummary }) => {
+const PublicActions = ({
+  proposal,
+  voteSummary,
+  rfpSubmissionsVoteSummaries,
+  resetRfpSubmissionsData
+}) => {
   if (!usePublicProposalActions()) {
     throw Error(
       "PublicActions requires an PublicActionsProvider on a higher level of the component tree. "
@@ -80,14 +84,6 @@ const PublicActions = ({ proposal, voteSummary }) => {
 
   const rfpLinkedSubmissions = proposal.linkedfrom;
   const [submssionsDidntVote, setSubmissionDidntVote] = useState(false);
-  const {
-    data: [, rfpSubmissionsVoteSummaries],
-    resetData
-  } = useProposalBatchWithoutRedux(
-    rfpLinkedSubmissions ? rfpLinkedSubmissions : null,
-    false,
-    true
-  );
   useEffect(() => {
     // check if RFP submissions are already under vote => hide `start runoff vote` action
     if (rfpSubmissionsVoteSummaries) {
@@ -134,7 +130,8 @@ const PublicActions = ({ proposal, voteSummary }) => {
       )}
       {isRfpReadyToRunoff(proposal, voteSummary) && submssionsDidntVote && (
         <div className="justify-right margin-top-m">
-          <Button onClick={withProposal(onStartRunoffVote, resetData)}>
+          <Button
+            onClick={withProposal(onStartRunoffVote, resetRfpSubmissionsData)}>
             Start Runoff Vote
           </Button>
         </div>

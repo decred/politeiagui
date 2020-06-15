@@ -59,7 +59,8 @@ const ProposalWrapper = (props) => {
   const isRFP = !!linkedfrom;
   const batchTokens = isSubmission ? [linkto] : isRFP ? linkedfrom : null;
   const {
-    data: [proposals, voteSummaries]
+    data: [proposals, voteSummaries],
+    resetData: resetRfpSubmissionsData
   } = useProposalBatchWithoutRedux(batchTokens, true, isRFP);
   useEffect(() => {
     if (isSubmission && proposals && proposals[0]) {
@@ -83,7 +84,8 @@ const ProposalWrapper = (props) => {
         rfpSubmissions: isRFP && {
           proposals,
           voteSummaries
-        }
+        },
+        resetRfpSubmissionsData
       }}
     />
   );
@@ -100,7 +102,8 @@ const Proposal = React.memo(function Proposal({
   currentUser,
   history,
   proposedFor,
-  rfpSubmissions
+  rfpSubmissions,
+  resetRfpSubmissionsData
 }) {
   const {
     censorshiprecord,
@@ -378,7 +381,14 @@ const Proposal = React.memo(function Proposal({
               </Row>
             )}
             <LoggedInContent>
-              <ProposalActions proposal={proposal} voteSummary={voteSummary} />
+              <ProposalActions
+                proposal={proposal}
+                voteSummary={voteSummary}
+                resetRfpSubmissionsData={resetRfpSubmissionsData}
+                rfpSubmissionsVoteSummaries={
+                  isRfp && rfpSubmissions.voteSummaries
+                }
+              />
             </LoggedInContent>
           </>
         )}
