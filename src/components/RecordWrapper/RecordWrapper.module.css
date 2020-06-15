@@ -110,6 +110,12 @@ div.darkSeeOnGithubTooltip {
   color: var(--text-color);
 }
 
+.recordToken {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+}
+
 @media screen and (max-width: 560px) {
   .status:not(.disableMobileView) {
     position: initial;

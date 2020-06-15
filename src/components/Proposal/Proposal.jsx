@@ -5,7 +5,6 @@ import {
   Text,
   useMediaQuery,
   useTheme,
-  CopyableText,
   Tooltip
 } from "pi-ui";
 import React, { useEffect, useState } from "react";
@@ -180,7 +179,8 @@ const Proposal = React.memo(function Proposal({
           Header,
           Subtitle,
           Edit,
-          Status
+          Status,
+          RecordToken
         }) => (
           <>
             <Header
@@ -287,13 +287,7 @@ const Proposal = React.memo(function Proposal({
             />
             {extended && (
               <Row topMarginSize="s">
-                <CopyableText
-                  className={styles.copyableText}
-                  id={`proposal-token-${proposalToken}`}
-                  truncate
-                  tooltipPlacement={"bottom"}>
-                  {proposalToken}
-                </CopyableText>
+                <RecordToken token={proposalToken} isCopyable />
               </Row>
             )}
             {hasvoteSummary && (
