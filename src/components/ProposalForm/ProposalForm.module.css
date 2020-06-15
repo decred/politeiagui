@@ -47,6 +47,7 @@
   align-items: center;
   height: 4.4rem;
   justify-content: center;
+  padding: 0.8rem;
 }
 
 .deadlineTooltip {
@@ -68,7 +69,7 @@
   color: var(--color-gray);
   font-weight: 400;
   cursor: pointer;
-  padding-top: 10px;
+  padding-top: 1rem;
   padding-right: var(--spacing-4);
 }
 
