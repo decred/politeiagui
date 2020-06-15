@@ -22,6 +22,10 @@
   background: var(--color-orange-light) !important;
 }
 
+.erroredCell > * {
+  color: var(--color-gray-dark);
+}
+
 .erroredCell > input {
-  color: #303030;
+  color: var(--color-gray-dark);
 }
