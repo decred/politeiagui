@@ -1,4 +1,11 @@
-import { classNames, CopyableText, H4, Text, useTheme } from "pi-ui";
+import {
+  classNames,
+  CopyableText,
+  H4,
+  Text,
+  useTheme,
+  useMediaQuery
+} from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
 import PaymentFaucet from "../PaymentFaucet";
@@ -9,6 +16,7 @@ import styles from "./PaymentComponent.module.css";
 const PaymentComponent = ({ address, amount, extraSmall, status }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
+  const shouldPlaceTooltipBottom = useMediaQuery("(max-width: 675px)");
   return (
     <>
       <div
@@ -31,7 +39,7 @@ const PaymentComponent = ({ address, amount, extraSmall, status }) => {
           <CopyableText
             id="payment-address"
             truncate
-            tooltipPlacement={extraSmall ? "bottom" : "right"}>
+            tooltipPlacement={shouldPlaceTooltipBottom ? "bottom" : "right"}>
             {address}
           </CopyableText>
           {!extraSmall && <PaymentStatusTag status={status} />}
@@ -45,7 +53,6 @@ const PaymentComponent = ({ address, amount, extraSmall, status }) => {
 PaymentComponent.propTypes = {
   address: PropTypes.string,
   amount: PropTypes.number,
-  extraSmall: PropTypes.bool,
   status: PropTypes.number,
   mapStatusTag: PropTypes.object
 };
