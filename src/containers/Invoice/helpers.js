@@ -102,11 +102,20 @@ export const getInvoiceTotalAmount = (invoice) => {
   return rate * totalHours + totalExpenses;
 };
 
+/**
+ * Returns min, max of a date range as array of two items.
+ * the first item is the beginning and second is current date obj
+ * @param {Number} range - number of months included in range
+ */
 export const getPreviousMonthsRange = (range) => {
-  // Tweak from Date API. If month is negative, it returns the last month of the
-  //   previous year. See: https://www.w3schools.com/jsref/jsref_setmonth.asp
-  const previous = new Date();
-  previous.setMonth(previous.getMonth() - range + 1);
-
-  return [getYearAndMonthFromDate(previous), getCurrentDefaultMonthAndYear()];
+  const minDate = new Date();
+  const currentMonth = minDate.getMonth();
+  const currentYear = minDate.getFullYear();
+  if (currentMonth > range - 1) {
+    minDate.setMonth(currentMonth - range + 1);
+  } else {
+    minDate.setMonth(12 - (range - currentMonth - 1));
+    minDate.setFullYear(currentYear - 1);
+  }
+  return [getYearAndMonthFromDate(minDate), getCurrentDefaultMonthAndYear()];
 };

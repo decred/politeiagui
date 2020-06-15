@@ -446,7 +446,10 @@ export const isValidDate = (date) => date instanceof Date && !isNaN(date);
 
 export const getYearAndMonthFromDate = (date) => {
   if (!isValidDate(date)) throw new Error(INVALID_DATE);
-  return { year: date.getFullYear(), month: date.getMonth() };
+  return {
+    year: date.getFullYear(),
+    month: date.getMonth() === 0 ? 12 : date.getMonth()
+  };
 };
 
 export const getCurrentDefaultMonthAndYear = () => ({

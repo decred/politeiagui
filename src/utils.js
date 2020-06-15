@@ -58,7 +58,6 @@ export const formatUnixTimestampToObj = (unixtimestamp) => {
  * @param {number} unixtimestamp - unix seconds timestamp
  * @return {string} date - date formated in dd mmm yyyy
  */
-
 export const formatShortUnixTimestamp = (unixtimestamp) => {
   const currentdate = new Date(unixtimestamp * 1000);
   return `${currentdate.getUTCDate()} ${
