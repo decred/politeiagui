@@ -202,7 +202,7 @@ const Proposal = React.memo(function Proposal({
               edit={
                 isEditable ? (
                   <Edit url={`/proposals/${proposalToken}/edit`} />
-                ) : isVotingAuthorized ? (
+                ) : isVotingAuthorized && !isVotingFinished && !isVoteActive ? (
                   <Tooltip
                     placement={mobile ? "left" : "right"}
                     content="You have to revoke the voting authorization to edit the proposal"
