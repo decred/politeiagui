@@ -1,16 +1,20 @@
 import React from "react";
-import { useMediaQuery } from "pi-ui";
+import { useMediaQuery, useTheme, getThemeProperty } from "pi-ui";
 import ContentLoader from "react-content-loader";
 
 const CommentLoader = () => {
+  const { theme } = useTheme();
+
+  const primaryColor = getThemeProperty(theme, "card-background");
+  const secondaryColor = getThemeProperty(theme, "dimmed-card-background");
   const extraSmall = useMediaQuery("(max-width: 560px)");
   return (
     <ContentLoader
       height={100}
       width={extraSmall ? 400 : 600}
       speed={2}
-      primaryColor="#f3f3f3"
-      secondaryColor="#ecebeb">
+      primaryColor={primaryColor}
+      secondaryColor={secondaryColor}>
       <rect
         x="0"
         y="10"
