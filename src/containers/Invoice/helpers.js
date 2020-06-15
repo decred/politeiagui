@@ -2,7 +2,6 @@ import {
   getCurrentMonth,
   getCurrentYear,
   getCurrentDateValue,
-  getYearAndMonthFromDate,
   getCurrentDefaultMonthAndYear
 } from "src/helpers";
 import { INVOICE_STATUS_NEW, INVOICE_STATUS_UPDATED } from "./constants";
@@ -109,13 +108,19 @@ export const getInvoiceTotalAmount = (invoice) => {
  */
 export const getPreviousMonthsRange = (range) => {
   const minDate = new Date();
-  const currentMonth = minDate.getMonth();
-  const currentYear = minDate.getFullYear();
-  if (currentMonth > range - 1) {
-    minDate.setMonth(currentMonth - range + 1);
+  let minMonth = minDate.getMonth() + 1;
+  let minYear = minDate.getFullYear();
+  if (minMonth > range) {
+    minMonth = minMonth - range;
   } else {
-    minDate.setMonth(12 - (range - currentMonth - 1));
-    minDate.setFullYear(currentYear - 1);
+    minMonth = 12 - (range - minMonth);
+    minYear = minYear - 1;
   }
-  return [getYearAndMonthFromDate(minDate), getCurrentDefaultMonthAndYear()];
+  return [
+    {
+      month: minMonth,
+      year: minYear
+    },
+    getCurrentDefaultMonthAndYear()
+  ];
 };
