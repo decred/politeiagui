@@ -174,5 +174,3 @@ export const MONTHS_LABELS = [
   "Nov",
   "Dec"
 ];
-
-export const INVALID_DATE = "Invalid Date. Please provide a Date Object.";
