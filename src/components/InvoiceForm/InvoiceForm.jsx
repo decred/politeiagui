@@ -41,7 +41,8 @@ const InvoiceForm = React.memo(function InvoiceForm({
   setSessionStorageInvoice,
   approvedProposalsTokens,
   validateFiles,
-  requireGitHubName
+  requireGitHubName,
+  isEditing
 }) {
   const files = values.files;
   useScrollFormOnError(errors && errors.global);
@@ -58,12 +59,13 @@ const InvoiceForm = React.memo(function InvoiceForm({
   const handleChangeInvoiceDatasheet = useCallback(
     (value) => {
       setFieldValue("lineitems", value);
-      setSessionStorageInvoice({
-        ...values,
-        lineitems: value
-      });
+      !isEditing &&
+        setSessionStorageInvoice({
+          ...values,
+          lineitems: value
+        });
     },
-    [setFieldValue, values, setSessionStorageInvoice]
+    [setFieldValue, values, setSessionStorageInvoice, isEditing]
   );
 
   const handleFilesChange = useCallback(
@@ -93,10 +95,11 @@ const InvoiceForm = React.memo(function InvoiceForm({
 
   const handleChangeWithTouched = (field) => (e) => {
     setFieldTouched(field, true);
-    setSessionStorageInvoice({
-      ...values,
-      [field]: e.target.value
-    });
+    !isEditing &&
+      setSessionStorageInvoice({
+        ...values,
+        [field]: e.target.value
+      });
     handleChange(e);
   };
 
@@ -190,7 +193,8 @@ const InvoiceFormWrapper = ({
   initialValues,
   onSubmit,
   history,
-  approvedProposalsTokens
+  approvedProposalsTokens,
+  editMode
 }) => {
   const { policy } = usePolicy();
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -282,7 +286,8 @@ const InvoiceFormWrapper = ({
             setSessionStorageInvoice,
             approvedProposalsTokens,
             validateFiles,
-            requireGitHubName
+            requireGitHubName,
+            isEditing: editMode
           }}
         />
       )}
@@ -295,7 +300,8 @@ InvoiceFormWrapper.propTypes = {
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func,
   setSessionStorageInvoice: PropTypes.func,
-  history: PropTypes.object
+  history: PropTypes.object,
+  editMode: PropTypes.bool
 };
 
 export default withRouter(InvoiceFormWrapper);
