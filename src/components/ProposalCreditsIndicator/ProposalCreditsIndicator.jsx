@@ -1,9 +1,10 @@
-import { Button, Text } from "pi-ui";
+import { Text } from "pi-ui";
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { usePollProposalCreditsPayment } from "src/containers/User/Detail/Credits/hooks";
 import { useCredits } from "src/containers/User/Detail/Credits/hooks.js";
 import styles from "./ProposalCreditsIndicator.module.css";
+import plusIcon from "./assets/plus.svg";
 
 const ProposalCreditsIndicator = ({ user, history }) => {
   const userID = user && user.userid;
@@ -14,13 +15,11 @@ const ProposalCreditsIndicator = ({ user, history }) => {
   return (
     <div className={styles.wrapper}>
       <Text>proposal credits: {user && proposalCredits}</Text>
-      <Button
+      <img
         className={styles.proposalCreditsButton}
-        size="sm"
-        kind="primary"
-        onClick={pushToProposalCredits}>
-        <span>+</span>
-      </Button>
+        src={plusIcon}
+        onClick={pushToProposalCredits}
+      />
     </div>
   );
 };
