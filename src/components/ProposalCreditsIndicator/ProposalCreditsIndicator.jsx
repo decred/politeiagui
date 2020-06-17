@@ -16,6 +16,7 @@ const ProposalCreditsIndicator = ({ user, history }) => {
     <div className={styles.wrapper}>
       <Text>proposal credits: {user && proposalCredits}</Text>
       <img
+        alt="purchase proposal credits"
         className={styles.proposalCreditsButton}
         src={plusIcon}
         onClick={pushToProposalCredits}
