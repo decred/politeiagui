@@ -77,3 +77,9 @@ export const currencyFormatter = (currency) =>
 
 /** exports an usdFormatter */
 export const usdFormatter = currencyFormatter("USD");
+
+/** Exports a simple formatter that takes cents and returns in dollars and label */
+export const formatCentsToUSD = (centsInput) => {
+  const dollars = centsInput / 100;
+  return dollars.toFixed(2) + " USD";
+};
