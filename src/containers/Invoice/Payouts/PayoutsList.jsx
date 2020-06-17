@@ -1,7 +1,11 @@
 import React from "react";
 import { Link, Button, Spinner, Table, CopyableText, classNames } from "pi-ui";
 import PropTypes from "prop-types";
-import { convertAtomsToDcr, formatShortUnixTimestamp, formatCentsToUSD } from "src/utils";
+import {
+  convertAtomsToDcr,
+  formatShortUnixTimestamp,
+  formatCentsToUSD
+} from "src/utils";
 import { useAdminPayouts } from "./hooks";
 import ExportToCsv from "src/components/ExportToCsv";
 import HelpMessage from "src/components/HelpMessage";
@@ -114,8 +118,7 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
                       dcrtotal: convertAtomsToDcr(dcrtotal) + " DCR"
                     };
                   }
-                )
-                }
+                )}
                 fields={[
                   "approvedtime",
                   "year",
