@@ -8,11 +8,11 @@ import ContentLoader from "react-content-loader";
 
 const Placeholder = () => {
   const { theme } = useTheme();
-  const primaryColor = getThemeProperty(theme, "color-gray-lightest");
-  const secondaryColor = getThemeProperty(theme, "color-gray-lighter");
+  const primaryColor = getThemeProperty(theme, "card-background");
+  const secondaryColor = getThemeProperty(theme, "dimmed-card-background");
   return (
     <ContentLoader
-      height={420}
+      height={220}
       width={800}
       speed={2}
       primaryColor={primaryColor}
@@ -45,7 +45,7 @@ const ProposalsList = ({ data: { proposals, voteSummaries } }) => {
             />
           ))
       ) : (
-        <LoadingPlaceholders numberOfItems={2} placeholder={Placeholder} />
+        <LoadingPlaceholders numberOfItems={1} placeholder={Placeholder} />
       )}
     </div>
   );
