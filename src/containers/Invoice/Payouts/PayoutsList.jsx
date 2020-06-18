@@ -1,7 +1,11 @@
 import React from "react";
 import { Link, Button, Spinner, Table, CopyableText, classNames } from "pi-ui";
 import PropTypes from "prop-types";
-import { convertAtomsToDcr, formatShortUnixTimestamp } from "src/utils";
+import {
+  convertAtomsToDcr,
+  formatShortUnixTimestamp,
+  formatCentsToUSD
+} from "src/utils";
 import { useAdminPayouts } from "./hooks";
 import ExportToCsv from "src/components/ExportToCsv";
 import HelpMessage from "src/components/HelpMessage";
@@ -55,12 +59,12 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
                     approvedtime: formatShortUnixTimestamp(approvedtime),
                     month: `${month}/${year}`,
                     contractorname,
-                    contractorrate: contractorrate / 100,
-                    labortotal: labortotal / 100,
-                    expensetotal: expensetotal / 100,
-                    total: total / 100,
-                    exchangerate: exchangerate / 100,
-                    dcrtotal: convertAtomsToDcr(dcrtotal),
+                    contractorrate: formatCentsToUSD(contractorrate),
+                    labortotal: formatCentsToUSD(labortotal),
+                    expensetotal: formatCentsToUSD(expensetotal),
+                    total: formatCentsToUSD(total),
+                    exchangerate: formatCentsToUSD(exchangerate),
+                    dcrtotal: convertAtomsToDcr(dcrtotal) + " DCR",
                     address: (
                       <CopyableText
                         truncate
@@ -87,7 +91,34 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
               ]}></Table>
             <Row noMargin justify="right">
               <ExportToCsv
-                data={payouts}
+                data={payouts.map(
+                  ({
+                    approvedtime,
+                    year,
+                    month,
+                    contractorname,
+                    contractorrate,
+                    labortotal,
+                    expensetotal,
+                    total,
+                    exchangerate,
+                    address,
+                    dcrtotal
+                  }) => {
+                    return {
+                      approvedtime: formatShortUnixTimestamp(approvedtime),
+                      month: `${month}/${year}`,
+                      contractorname,
+                      contractorrate: formatCentsToUSD(contractorrate),
+                      labortotal: formatCentsToUSD(labortotal),
+                      expensetotal: formatCentsToUSD(expensetotal),
+                      total: formatCentsToUSD(total),
+                      exchangerate: formatCentsToUSD(exchangerate),
+                      address: address,
+                      dcrtotal: convertAtomsToDcr(dcrtotal) + " DCR"
+                    };
+                  }
+                )}
                 fields={[
                   "approvedtime",
                   "year",
@@ -98,8 +129,8 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
                   "expensetotal",
                   "total",
                   "exchangerate",
-                  "dcrtotal",
-                  "address"
+                  "address",
+                  "dcrtotal"
                 ]}
                 filename="payouts">
                 <Link className="cursor-pointer">Export To Csv</Link>
