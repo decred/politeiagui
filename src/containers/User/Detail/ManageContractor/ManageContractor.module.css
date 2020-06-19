@@ -1,6 +1,7 @@
 .spinnerWrapper {
   display: flex;
   height: 50%;
+  min-height: 200px;
   justify-content: center;
   align-items: center;
 }
