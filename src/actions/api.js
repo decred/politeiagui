@@ -497,13 +497,24 @@ export const onEditUser = (preferences) =>
       });
   });
 
+const filterFalsy = (obj) =>
+  Object.entries(obj).reduce(
+    (acc, [key, value]) => (value ? ((acc[key] = value), acc) : acc),
+    {}
+  );
+
 export const onEditCmsUser = (cmsUserInfo) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_EDIT_CMS_USER(cmsUserInfo));
     return api
       .editUser(csrf, cmsUserInfo)
       .then((response) => {
-        dispatch(act.RECEIVE_EDIT_CMS_USER({ ...response, ...cmsUserInfo }));
+        dispatch(
+          act.RECEIVE_EDIT_CMS_USER({
+            ...response,
+            ...filterFalsy(cmsUserInfo)
+          })
+        );
       })
       .catch((error) => {
         dispatch(act.RECEIVE_EDIT_CMS_USER(null, error));
