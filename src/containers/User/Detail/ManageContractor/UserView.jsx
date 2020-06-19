@@ -23,7 +23,11 @@ const UserDccInfo = ({
         }
       />
     </div>
-    {showEdit && <Button onClick={onToggleDccEdit}>Edit</Button>}
+    {showEdit && (
+      <Button className="margin-bottom-m" onClick={onToggleDccEdit}>
+        Edit
+      </Button>
+    )}
   </>
 );
 

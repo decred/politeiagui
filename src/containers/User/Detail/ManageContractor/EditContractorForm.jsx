@@ -45,7 +45,6 @@ export default function EditContractorForm({ onEdit, user, onClose }) {
               <TextInput
                 label="Contractor Name"
                 name="contractorname"
-                tabIndex={1}
                 value={values.contractorname}
                 error={errors.contractorname}
                 onChange={handleChange}
@@ -53,7 +52,6 @@ export default function EditContractorForm({ onEdit, user, onClose }) {
               <TextInput
                 label="GitHub Username"
                 name="githubname"
-                tabIndex={1}
                 value={values.githubname}
                 error={errors.githubname}
                 onChange={handleChange}
@@ -61,7 +59,6 @@ export default function EditContractorForm({ onEdit, user, onClose }) {
               <TextInput
                 label="Matrix Name"
                 name="matrixname"
-                tabIndex={1}
                 value={values.matrixname}
                 error={errors.matrixname}
                 onChange={handleChange}
@@ -69,7 +66,6 @@ export default function EditContractorForm({ onEdit, user, onClose }) {
               <TextInput
                 label="Contractor Location"
                 name="contractorlocation"
-                tabIndex={1}
                 value={values.contractorlocation}
                 error={errors.contractorlocation}
                 onChange={handleChange}
@@ -77,7 +73,6 @@ export default function EditContractorForm({ onEdit, user, onClose }) {
               <TextInput
                 label="Contractor Contact"
                 name="contractorcontact"
-                tabIndex={1}
                 value={values.contractorcontact}
                 error={errors.contractorcontact}
                 onChange={handleChange}
