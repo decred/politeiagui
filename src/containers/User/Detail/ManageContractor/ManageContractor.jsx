@@ -1,14 +1,15 @@
-import React, { useState, useCallback } from "react";
-import { classNames, Card, Link, Icon } from "pi-ui";
+import React, { useState } from "react";
+import { classNames, Card } from "pi-ui";
 import ManageDccForm from "./ManageDccForm";
 import UserView from "./UserView";
 import EditContractorForm from "./EditContractorForm";
 import useContractor from "../hooks/useContractor";
-import styles from "./ManageContractor.module.css";
 import isEmpty from "lodash/isEmpty";
 
 const ManageContractor = ({ userID, isUserPageOwner }) => {
-  const [editMode, setEditMode] = useState(false);
+  const [showDccForm, setShowDccForm] = useState(true);
+  const [showContractorInfoForm, setShowContractorInfoForm] = useState(true);
+
   const {
     user,
     isAdmin,
@@ -18,23 +19,20 @@ const ManageContractor = ({ userID, isUserPageOwner }) => {
     requireGitHubName
   } = useContractor(userID);
 
-  const onToggleEditMode = useCallback(
-    (e) => {
-      e && e.preventDefault();
-      setEditMode(!editMode);
-    },
-    [setEditMode, editMode]
-  );
+  const onToggleDccEdit = () => {
+    console.log("oi");
+    setShowDccForm(!showDccForm);
+  };
+  const onToggleContractorInfoEdit = () =>
+    setShowContractorInfoForm(!showContractorInfoForm);
 
   const enableEditMode = isUserPageOwner || isAdmin;
+  const canEditDccInfo = isAdmin && !showDccForm;
+  const canEditContractorInfo = isUserPageOwner && !showContractorInfoForm;
+
   return (
     <Card className={classNames("container", "margin-bottom-m")}>
-      {enableEditMode && (
-        <Link onClick={onToggleEditMode} className={styles.editDcc}>
-          <Icon type="edit" />
-        </Link>
-      )}
-      {isAdmin && editMode && (
+      {canEditDccInfo && (
         <div className="margin-bottom-m">
           <ManageDccForm user={user} onUpdate={onUpdateDccInfo} />
         </div>
@@ -43,14 +41,19 @@ const ManageContractor = ({ userID, isUserPageOwner }) => {
         user={user}
         showGitHubName={isDeveloper || !isEmpty(user.githubname)}
         requireGitHubName={requireGitHubName && isUserPageOwner}
-        hideDccInfo={isAdmin && editMode}
-        hideContractorInfo={isUserPageOwner && editMode}
+        hideDccInfo={canEditDccInfo}
+        hideContractorInfo={canEditContractorInfo}
+        enableEditMode={enableEditMode}
+        showDccForm={showDccForm}
+        showContractorInfoForm={showContractorInfoForm}
+        onToggleDccEdit={onToggleDccEdit}
+        onToggleContractorInfoEdit={onToggleContractorInfoEdit}
       />
-      {isUserPageOwner && editMode && (
+      {canEditContractorInfo && (
         <EditContractorForm
           onEdit={onUpdateContractorInfo}
           user={user}
-          onClose={onToggleEditMode}
+          onClose={onToggleContractorInfoEdit}
         />
       )}
     </Card>
