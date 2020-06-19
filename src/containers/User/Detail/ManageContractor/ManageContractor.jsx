@@ -19,10 +19,7 @@ const ManageContractor = ({ userID, isUserPageOwner }) => {
     requireGitHubName
   } = useContractor(userID);
 
-  const onToggleDccEdit = () => {
-    console.log("oi");
-    setShowDccForm(!showDccForm);
-  };
+  const onToggleDccEdit = () => setShowDccForm(!showDccForm);
   const onToggleContractorInfoEdit = () =>
     setShowContractorInfoForm(!showContractorInfoForm);
 
