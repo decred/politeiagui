@@ -48,6 +48,8 @@ pre {
 }
 
 .multilineCellValue {
+  user-select: text;
+  cursor: text;
   word-break: break-word;
   white-space: pre-line !important;
   padding: 0 0.5rem;

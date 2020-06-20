@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  useMemo
+} from "react";
 import { classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import ReactDataSheet from "react-datasheet";
@@ -17,6 +23,8 @@ import {
   createTableHeaders,
   SUBTOTAL_COL
 } from "./helpers";
+
+const noop = () => {};
 
 const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   value,
@@ -82,6 +90,31 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
       subContractors
     ]
   );
+
+  const handleCopy = (e) => {
+    const selection = document.getSelection();
+    if (window.clipboardData && window.clipboardData.setData) {
+      window.clipboardData.setData("Text", selection.toString());
+    } else {
+      e.clipboardData.setData("text/plain", selection.toString());
+    }
+    e.preventDefault();
+    /**
+     *  The next line is necessary to not run the callback for the event listener attached to the document by react-spreadsheet
+     */
+    e.stopPropagation();
+  };
+
+  /**
+   * This hook adds a listener to a copy action in the document.body. Adding it to the document.body allow us to overwrite the one added by react-spreadsheet to the document.
+   */
+  useEffect(function customCopy() {
+    document.body.addEventListener("copy", handleCopy);
+
+    return function removeCopyListener() {
+      document.body.removeEventListener("copy", handleCopy);
+    };
+  }, []);
 
   const handleRemoveLastRow = useCallback(
     (e) => {
@@ -149,7 +182,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
           data={grid}
           valueRenderer={valueRenderer}
           onContextMenu={onContextMenu}
-          onCellsChanged={handleCellsChange}
+          onCellsChanged={!readOnly ? handleCellsChange : noop}
           sheetRenderer={sheetRenderer}
           rowRenderer={rowRenderer}
           cellRenderer={CellRenderer}
