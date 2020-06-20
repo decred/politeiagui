@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useLayoutEffect,
-  useCallback,
-  useMemo
-} from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import ReactDataSheet from "react-datasheet";
@@ -108,13 +102,18 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   /**
    * This hook adds a listener to a copy action in the document.body. Adding it to the document.body allow us to overwrite the one added by react-spreadsheet to the document.
    */
-  useEffect(function customCopy() {
-    document.body.addEventListener("copy", handleCopy);
+  useEffect(
+    function customCopy() {
+      if (readOnly) {
+        document.body.addEventListener("copy", handleCopy);
 
-    return function removeCopyListener() {
-      document.body.removeEventListener("copy", handleCopy);
-    };
-  }, []);
+        return function removeCopyListener() {
+          document.body.removeEventListener("copy", handleCopy);
+        };
+      }
+    },
+    [readOnly]
+  );
 
   const handleRemoveLastRow = useCallback(
     (e) => {
