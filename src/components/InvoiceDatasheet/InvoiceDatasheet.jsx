@@ -33,7 +33,6 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
 
   const handleCellsChange = useCallback(
     (changes) => {
-      console.log(changes);
       const { grid: newGrid } = processCellsChange(grid, changes, userRate);
       const lineItems = convertGridToLineItems(newGrid);
       onChange(lineItems);
