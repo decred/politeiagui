@@ -94,13 +94,15 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
     }
     e.preventDefault();
     /**
-     *  The next line is necessary to not run the callback for the event listener attached to the document by react-spreadsheet
+     *  The next line is necessary to not run the callback for the event
+     * listener attached to the document by react-spreadsheet
      */
     e.stopPropagation();
   };
 
   /**
-   * This hook adds a listener to a copy action in the document.body. Adding it to the document.body allow us to overwrite the one added by react-spreadsheet to the document.
+   * This hook adds a listener to a copy action in the document.body.
+   * Adding it to the document.body allow us to overwrite the one added by react-spreadsheet to the document.
    */
   useEffect(
     function customCopy() {
