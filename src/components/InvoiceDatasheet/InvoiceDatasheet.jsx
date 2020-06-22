@@ -54,7 +54,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
 
   const handleAddNewRow = useCallback(
     (e) => {
-      e.preventDefault();
+      e && e.preventDefault();
       const newValue = value.concat([generateBlankLineItem(policy)]);
       onChange(newValue);
     },
@@ -116,6 +116,26 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
     },
     [readOnly]
   );
+  const handlePaste = (str) => {
+    // Track number of lines pasted
+    let rowCount = 0;
+
+    // Parse pasted comma-separated values
+    const grid = str.split(/\r\n|\n|\r/).map(function (row) {
+      rowCount++;
+      return row.split("\t");
+    });
+
+    // Add new rows programtically in case the user wants to paste more lines than the number currently available
+    let newValue = value;
+    for (let i = value.length; i < rowCount; i++) {
+      newValue = newValue.concat([generateBlankLineItem(policy)]);
+    }
+    // Update state
+    onChange(newValue);
+
+    return grid;
+  };
 
   const handleRemoveLastRow = useCallback(
     (e) => {
@@ -181,6 +201,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
       <div className={styles.datasheetWrapper}>
         <ReactDataSheet
           data={grid}
+          parsePaste={handlePaste}
           valueRenderer={valueRenderer}
           onContextMenu={onContextMenu}
           onCellsChanged={!readOnly ? handleCellsChange : noop}
