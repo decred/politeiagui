@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { classNames } from "pi-ui";
+import { classNames, H2, P } from "pi-ui";
 import PropTypes from "prop-types";
 import ReactDataSheet from "react-datasheet";
 import dropRight from "lodash/dropRight";
+import flowRight from "lodash/flowRight";
+import uniq from "lodash/uniq";
 import "react-datasheet/lib/react-datasheet.css";
 import styles from "./InvoiceDatasheet.module.css";
 import CellRenderer from "./components/CellRenderer";
@@ -153,8 +155,26 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
 
   const removeRowsIsDisabled = grid && grid.length <= 2;
 
+  const renderErrors = () => {
+    // Get all unique normalized errors
+    const uniqueErrArr = flowRight([
+      uniq,
+      () => errors.flatMap((error) => Object.values(error))
+    ])();
+    return uniqueErrArr && uniqueErrArr.length ? (
+      <div>
+        <H2 className={styles.invoiceError}>Errors</H2>
+        {uniqueErrArr.map((err, i) => (
+          <P key={i} className={styles.invoiceError}>
+            {err.charAt(0).toUpperCase() + err.slice(1)}
+          </P>
+        ))}
+      </div>
+    ) : null;
+  };
   return (
     <div className={styles.wrapper}>
+      {renderErrors()}
       {!readOnly && (
         <div className="justify-right margin-top-s margin-bottom-s">
           <TableButton onClick={handleAddNewRow}>Add item</TableButton>

@@ -106,7 +106,7 @@ export const convertLineItemsToGrid = (
         {
           readOnly,
           value: line.domain,
-          error: false,
+          error: rowErrors && rowErrors.domain,
           dataEditor: selectWrapper(
             policyDomains.map((op) => ({
               value: capitalizeFirstLetter(op.description),
