@@ -18,6 +18,8 @@ import {
   SUBTOTAL_COL
 } from "./helpers";
 
+const noop = () => {};
+
 const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   value,
   onChange,
@@ -83,6 +85,37 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
     ]
   );
 
+  const handleCopy = (e) => {
+    const selection = document.getSelection();
+    if (window.clipboardData && window.clipboardData.setData) {
+      window.clipboardData.setData("Text", selection.toString());
+    } else {
+      e.clipboardData.setData("text/plain", selection.toString());
+    }
+    e.preventDefault();
+    /**
+     *  The next line is necessary to not run the callback for the event
+     * listener attached to the document by react-spreadsheet
+     */
+    e.stopPropagation();
+  };
+
+  /**
+   * This hook adds a listener to a copy action in the document.body.
+   * Adding it to the document.body allow us to overwrite the one added by react-spreadsheet to the document.
+   */
+  useEffect(
+    function customCopy() {
+      if (readOnly) {
+        document.body.addEventListener("copy", handleCopy);
+
+        return function removeCopyListener() {
+          document.body.removeEventListener("copy", handleCopy);
+        };
+      }
+    },
+    [readOnly]
+  );
   const handlePaste = (str) => {
     // Track number of lines pasted
     let rowCount = 0;
@@ -171,7 +204,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
           parsePaste={handlePaste}
           valueRenderer={valueRenderer}
           onContextMenu={onContextMenu}
-          onCellsChanged={handleCellsChange}
+          onCellsChanged={!readOnly ? handleCellsChange : noop}
           sheetRenderer={sheetRenderer}
           rowRenderer={rowRenderer}
           cellRenderer={CellRenderer}
