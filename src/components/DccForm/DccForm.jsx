@@ -121,8 +121,7 @@ const DccForm = React.memo(function DccForm({
       {isUserValid && (
         <Message kind="info">
           Before creating a new DCC the nominee must be invited to CMS by an
-          admin. You can ask an admin to invite the nominee in the DCR
-          Contractors channel on matrix.
+          admin. Please contact an admin on DCR Contractors channel on matrix.
         </Message>
       )}
 
