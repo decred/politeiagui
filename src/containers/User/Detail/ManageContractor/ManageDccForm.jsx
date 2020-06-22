@@ -1,4 +1,4 @@
-import { Spinner, Button, Message, H2, Select } from "pi-ui";
+import { Button, Message, H2, Select } from "pi-ui";
 import SelectField from "src/components/Select/SelectField";
 import React, { useCallback, useState, useMemo } from "react";
 import InfoSection from "../InfoSection.jsx";
@@ -46,9 +46,6 @@ const ManageDccForm = ({ onUpdate, user }) => {
     [supervisorsOptions, supervisoruserids]
   );
 
-  const isLoading =
-    domain === undefined || contractortype === undefined || loadingSupervisors;
-
   const handleSubmitForm = useCallback(
     async (values, { setSubmitting, setFieldError, resetForm }) => {
       try {
@@ -69,11 +66,7 @@ const ManageDccForm = ({ onUpdate, user }) => {
     [onUpdate, userid]
   );
 
-  return isLoading ? (
-    <div className={styles.spinnerWrapper}>
-      <Spinner invert />
-    </div>
-  ) : (
+  return (
     <Formik
       onSubmit={handleSubmitForm}
       enableReinitialize={true}

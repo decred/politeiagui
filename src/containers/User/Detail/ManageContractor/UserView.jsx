@@ -1,10 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { H2, Message } from "pi-ui";
+import { H2, Message, Button } from "pi-ui";
 import InfoSection from "../InfoSection.jsx";
 import { typeOptions, domainOptions } from "./helpers";
 
-const UserDccInfo = ({ contractorType, domain, supervisorIds }) => (
+const UserDccInfo = ({
+  contractorType,
+  domain,
+  supervisorIds,
+  showEdit,
+  onToggleDccEdit
+}) => (
   <>
     <H2>DCC Info</H2>
     <div className="margin-top-s margin-bottom-s">
@@ -17,6 +23,11 @@ const UserDccInfo = ({ contractorType, domain, supervisorIds }) => (
         }
       />
     </div>
+    {showEdit && (
+      <Button className="margin-bottom-m" onClick={onToggleDccEdit}>
+        Edit
+      </Button>
+    )}
   </>
 );
 
@@ -26,7 +37,9 @@ const UserContractorInfo = ({
   contractorcontact,
   contractorname,
   contractorlocation,
-  showGitHubName
+  showGitHubName,
+  showEdit,
+  onToggleContractorInfoEdit
 }) => (
   <>
     <H2>Contractor Info</H2>
@@ -38,6 +51,7 @@ const UserContractorInfo = ({
       <InfoSection label="Matrix Name" info={matrixname} />
       <InfoSection label="Location" info={contractorlocation} />
       <InfoSection label="Contact" info={contractorcontact} />
+      {showEdit && <Button onClick={onToggleContractorInfoEdit}>Edit</Button>}
     </div>
   </>
 );
@@ -47,7 +61,11 @@ const ManageContractorUserView = ({
   showGitHubName,
   requireGitHubName,
   hideDccInfo,
-  hideContractorInfo
+  hideContractorInfo,
+  showDccForm,
+  showContractorInfoForm,
+  onToggleDccEdit,
+  onToggleContractorInfoEdit
 }) => {
   const { domain, contractortype, supervisoruserids = [] } = user;
 
@@ -63,10 +81,19 @@ const ManageContractorUserView = ({
           contractorType={typeOptions[contractortype]}
           domain={domainOptions[domain]}
           supervisorIds={supervisoruserids}
+          showEdit={showDccForm}
+          onToggleDccEdit={onToggleDccEdit}
         />
       )}
       {!hideContractorInfo && (
-        <UserContractorInfo {...{ ...user, showGitHubName }} />
+        <UserContractorInfo
+          {...{
+            ...user,
+            showGitHubName,
+            showEdit: showContractorInfoForm,
+            onToggleContractorInfoEdit
+          }}
+        />
       )}
     </>
   );
