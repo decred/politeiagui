@@ -104,3 +104,8 @@ pre {
   display: flex;
   align-items: center;
 }
+
+.invoiceError {
+  color: var(--color-orange) !important;
+  margin-bottom: 0 !important;
+}
