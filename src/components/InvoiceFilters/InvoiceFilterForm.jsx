@@ -27,12 +27,11 @@ const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
   return (
     <Formik
       initialValues={
-        JSON.parse(localStorage.getItem("adminFilters")) ||
+        JSON.parse(localStorage.getItem("invoiceFilters")) ||
         DEFAULT_INITIAL_VALUES
       }>
       {(formikProps) => {
         const { values, setFieldValue } = formikProps;
-        console.log(values);
         const handleChangeUserSelector = (options) => {
           setFieldValue("users", options);
         };

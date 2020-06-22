@@ -82,7 +82,7 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
   const handleFiltersChange = useCallback(
     (values) => {
       setFilters(values);
-      localStorage.setItem("adminFilters", JSON.stringify(values));
+      localStorage.setItem("invoiceFilters", JSON.stringify(values));
     },
     [setFilters]
   );
