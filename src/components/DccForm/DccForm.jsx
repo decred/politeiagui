@@ -118,6 +118,14 @@ const DccForm = React.memo(function DccForm({
         </Message>
       )}
 
+      {isUserValid && (
+        <Message kind="info">
+          Before creating a new DCC the nominee must be invited to CMS by an
+          admin. You can ask an admin to invite the nominee in the DCR
+          Contractors channel on matrix.
+        </Message>
+      )}
+
       <RadioButtonGroup
         label="DCC Type"
         name="type"
