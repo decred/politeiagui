@@ -129,20 +129,25 @@ const PublicActions = ({
         </div>
       )}
       {isRfpReadyToRunoff(proposal, voteSummary) && submssionsDidntVote && (
-        <div className="justify-right margin-top-m">
-          <Button
-            onClick={withProposal(onStartRunoffVote, resetRfpSubmissionsData)}>
-            Start Runoff Vote
-          </Button>
-        </div>
+        <AdminContent>
+          <div className="justify-right margin-top-m">
+            <Button
+              onClick={withProposal(
+                onStartRunoffVote,
+                resetRfpSubmissionsData
+              )}>
+              Start Runoff Vote
+            </Button>
+          </div>
+        </AdminContent>
       )}
     </>
   );
 };
 
-const ProposalActions = ({ proposal, voteSummary }) => {
+const ProposalActions = ({ proposal, ...props }) => {
   return isPublicProposal(proposal) || isAbandonedProposal(proposal) ? (
-    <PublicActions proposal={proposal} voteSummary={voteSummary} />
+    <PublicActions {...{ ...props, proposal }} />
   ) : (
     <UnvettedActions proposal={proposal} />
   );
