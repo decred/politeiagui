@@ -192,7 +192,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
     // Get all unique normalized errors
     const uniqueErrArr = flowRight([
       uniq,
-      () => errors.flatMap((error) => Object.values(error))
+      () => errors && errors.flatMap((error) => Object.values(error))
     ])();
     return uniqueErrArr && uniqueErrArr.length ? (
       <div>
