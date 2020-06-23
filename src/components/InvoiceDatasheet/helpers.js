@@ -55,7 +55,7 @@ export const generateBlankLineItem = (policy) => ({
   description: "",
   proposaltoken: "",
   labor: 0,
-  expenses: "",
+  expenses: 0,
   subtotal: "",
   subuserid: "",
   subrate: 0
