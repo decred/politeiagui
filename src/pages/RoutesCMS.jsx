@@ -18,6 +18,8 @@ import PageInvoiceDetail from "./Invoices/Detail";
 import PageListAdminInvoices from "./Invoices/AdminList";
 import PageGeneratePayoutsList from "./Invoices/Payouts";
 import PageInvoicePayouts from "./Invoices/InvoicePayouts";
+import PageProposalBillingSummary from "./Invoices/ProposalBillingSummary";
+import PageProposalBillingDetails from "./Invoices/ProposalBillingDetails";
 import PageDccDetail from "./DCCs/Detail";
 import PageDccList from "./DCCs/List";
 import PageDccNew from "./DCCs/New";
@@ -104,6 +106,18 @@ const Routes = ({ location }) => {
             title="Line Item Payouts"
             exact
             component={PageInvoicePayouts}
+          />
+          <AdminAuthenticatedRoute
+            path="/admin/proposalsbilling"
+            title="Proposals Billing Summary"
+            exact
+            component={PageProposalBillingSummary}
+          />
+          <AdminAuthenticatedRoute
+            path="/admin/proposalsbilling/:token"
+            title="Proposal Billing Details"
+            exact
+            component={PageProposalBillingDetails}
           />
           <AuthenticatedRoute
             path="/dccs"

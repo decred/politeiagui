@@ -1271,6 +1271,33 @@ export const onPayApprovedInvoices = () => (dispatch) => {
     });
 };
 
+export const onGetSpendingSummary = () => (dispatch) => {
+  dispatch(act.REQUEST_SPENDING_SUMMARY({}));
+  return api
+    .getSpendingSummary()
+    .then((response) => {
+      dispatch(act.RECEIVE_SPENDING_SUMMARY(response));
+    })
+    .catch((error) => {
+      dispatch(act.RECEIVE_SPENDING_SUMMARY(null, error));
+    });
+};
+
+export const onFetchSpendingDetails = (token) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_SPENDING_DETAILS({ token }));
+    return api
+      .getSpendingDetails(csrf, token)
+      .then((response) => {
+        dispatch(act.RECEIVE_SPENDING_DETAILS({ ...response }));
+        return response;
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_SPENDING_DETAILS(null, error));
+        throw error;
+      });
+  });
+
 export const onFetchExchangeRate = (month, year) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_EXCHANGE_RATE({ month, year }));

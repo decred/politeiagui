@@ -1,0 +1,25 @@
+.spinnerWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  margin-bottom: 2rem;
+  display: flex;
+}
+
+.title {
+  flex-grow: 1;
+}
+
+.titleLink {
+  color: var(--tab-text-active-color) !important;
+}
+
+.billed {
+  margin-left: 2rem;
+  display: flex;
+  align-self: flex-start;
+  justify-content: flex-end;
+}

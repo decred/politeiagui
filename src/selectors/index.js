@@ -10,6 +10,7 @@ export * from "./models/invoices";
 export * from "./models/invoicePayouts";
 export * from "./models/dccs";
 export * from "./models/paywall";
+export * from "./models/proposalBilling";
 
 export const selectorMap = (fns) => (...args) =>
   Object.keys(fns).reduce(

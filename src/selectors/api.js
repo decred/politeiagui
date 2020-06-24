@@ -72,3 +72,11 @@ export const apiRescanUserPaymentsError = getApiError("rescanUserPayments");
 export const isApiRequestingInvoicePayouts = getIsApiRequesting(
   "invoicePayouts"
 );
+
+export const isApiRequestingProposalBillingSummary = getIsApiRequesting(
+  "spendingSummary"
+);
+
+export const isApiRequestingProposalBillingDetails = getIsApiRequesting(
+  "spendingDetails"
+);
