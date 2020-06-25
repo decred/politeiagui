@@ -25,7 +25,11 @@ const DEFAULT_INITIAL_VALUES = {
 
 const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
   return (
-    <Formik initialValues={DEFAULT_INITIAL_VALUES}>
+    <Formik
+      initialValues={
+        JSON.parse(localStorage.getItem("invoiceFilters")) ||
+        DEFAULT_INITIAL_VALUES
+      }>
       {(formikProps) => {
         const { values, setFieldValue } = formikProps;
         const handleChangeUserSelector = (options) => {
