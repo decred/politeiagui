@@ -16,10 +16,10 @@ import {
 } from "src/containers/User/Detail/ManageContractor/helpers";
 import HelpMessage from "src/components/HelpMessage";
 import SelectField from "src/components/Select/SelectField";
-import * as Yup from "yup";
 import { useSearchUser } from "./hooks";
 import styles from "./Search.module.css";
 import Link from "src/components/Link";
+import { searchSchema } from "./validation";
 
 const getFormattedSearchResults = (users = []) =>
   users.map((u) => ({
@@ -83,16 +83,15 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
               searchBy: "email"
             }}
             onSubmit={onSubmit}
-            validationSchema={Yup.object().shape({
-              searchTerm: Yup.string().required("Required")
-            })}>
+            validationSchema={searchSchema({ isCMS })}>
             {({
               values,
               handleChange,
               handleSubmit,
               isSubmitting,
               setFieldValue,
-              isValid
+              isValid,
+              errors
             }) => {
               const handleChangeSearchBy = (v) => {
                 setFieldValue("searchBy", v.value);
@@ -102,6 +101,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
               const isByEmail = values.searchBy === "email";
               const isByUsername = values.searchBy === "username";
               const showTextBox = isByUsername || isByEmail;
+              console.log({ errors, isValid });
               return (
                 <form>
                   <RadioButtonGroup
