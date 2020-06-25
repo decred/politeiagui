@@ -4,10 +4,7 @@ import { Dropdown, DropdownItem } from "pi-ui";
 import { useVersionPicker } from "./hooks";
 
 const VersionPicker = ({ version, token, className }) => {
-  const { disablePicker, onChangeVersion } = useVersionPicker({
-    version,
-    token
-  });
+  const { disablePicker, onChangeVersion } = useVersionPicker(version, token);
 
   const getVersionsOptions = () => {
     const versions = [];

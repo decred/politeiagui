@@ -94,6 +94,28 @@
   border: 1rem solid #ffdce0 !important;
 }
 
+.lineitemsRemoved {
+  background-color: #ffdce0 !important;
+}
+
+.lineitemsRemovedDark {
+  background-color: #4c383a !important;
+}
+
+.lineitemsAdded {
+  background-color: #e6ffed !important;
+}
+
+.lineitemsAddedDark {
+  background-color: #253c2b !important;
+}
+
+.multiline {
+  word-break: break-word;
+  white-space: pre-line !important;
+  padding: 0 0.5rem;
+}
+
 @media screen and (max-width: 560px) {
   .lineContent {
     width: calc(100vw - 8rem);

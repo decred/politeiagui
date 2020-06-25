@@ -2,13 +2,23 @@ import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import { classNames } from "pi-ui";
 import { diffWordsWithSpace } from "diff";
-import { arrayDiff, lineDiffFunc, getLineArray, getFilesDiff } from "./helpers";
+import {
+  arrayDiff,
+  lineDiffFunc,
+  getLineArray,
+  getFilesDiff,
+  getLineitemsDiff,
+  setLineitemParams
+} from "./helpers";
 import DiffLine from "./DiffLine";
 import styles from "./Diff.module.css";
 import HelpMessage from "src/components/HelpMessage";
 import { ImageThumbnail, TextThumbnail } from "src/components/Files";
 import ModalFullImage from "src/components/ModalFullImage";
 import useModalContext from "src/hooks/utils/useModalContext";
+import DiffLineitemsDatasheet from "./DiffLineitems";
+import { SheetRenderer } from "src/components/InvoiceDatasheet/InvoiceDatasheet";
+import { createTableHeaders } from "src/components/InvoiceDatasheet";
 
 const handleDiffLine = (
   line,
@@ -145,6 +155,23 @@ export const DiffText = ({ newText, oldText }) => {
       {elem.value}
     </span>
   ));
+};
+
+export const DiffInvoices = ({ oldData, newData, className }) => {
+  const newLineitems = setLineitemParams(newData.lineitems, {
+    rate: newData.contractorrate
+  });
+  const oldLineitems = setLineitemParams(oldData.lineitems, {
+    rate: oldData.contractorrate
+  });
+
+  const lineitemsDiff = getLineitemsDiff(newLineitems, oldLineitems);
+
+  return (
+    <SheetRenderer headers={createTableHeaders()} className={className}>
+      <DiffLineitemsDatasheet lineItems={lineitemsDiff} />
+    </SheetRenderer>
+  );
 };
 
 DiffText.propTypes = {

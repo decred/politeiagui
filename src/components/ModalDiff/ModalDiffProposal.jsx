@@ -11,7 +11,7 @@ import {
 } from "src/components/RecordWrapper";
 import styles from "./ModalDiff.module.css";
 
-const ModalDiff = ({
+const ModalDiffProposal = ({
   onClose,
   oldText,
   newText,
@@ -78,7 +78,7 @@ const ModalDiff = ({
     </Modal>
   );
 };
-ModalDiff.propTypes = {
+ModalDiffProposal.propTypes = {
   onClose: PropTypes.func.isRequired,
   oldText: PropTypes.string,
   newText: PropTypes.string,
@@ -87,4 +87,4 @@ ModalDiff.propTypes = {
   proposalDetails: PropTypes.object
 };
 
-export default ModalDiff;
+export default ModalDiffProposal;

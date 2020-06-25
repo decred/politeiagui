@@ -17,6 +17,16 @@
   color: var(--text-secondary-color);
 }
 
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.lineitemsWrapper {
+  width: 100%;
+  overflow: scroll;
+}
+
 @media screen and (max-width: 560px) {
   .diffTabContent {
     max-height: calc(70vh);
