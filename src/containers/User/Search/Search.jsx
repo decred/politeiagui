@@ -99,7 +99,9 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
               };
               const isByDomain = values.searchBy === "domain";
               const isByType = values.searchBy === "contractortype";
-              const showTextBox = !isByDomain && !isByType;
+              const isByEmail = values.searchBy === "email";
+              const isByUsername = values.searchBy === "username";
+              const showTextBox = isByUsername || isByEmail;
               return (
                 <form>
                   <RadioButtonGroup
@@ -117,7 +119,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                         className={styles.searchBox}
                         value={values.searchTerm}
                         onChange={handleChange}
-                        placeholder="User email or username"
+                        placeholder={isByEmail ? "User email" : "Username"}
                       />
                     )}
                     {isByType && (
@@ -125,6 +127,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                         name="type"
                         className={styles.select}
                         options={selectTypeOptions}
+                        placeholder="Choose contractor type"
                       />
                     )}
                     {isByDomain && (
@@ -132,6 +135,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                         name="domain"
                         className={styles.select}
                         options={selectDomainOptions}
+                        placeholder="Choose a domain"
                       />
                     )}
                     <Button
