@@ -33,7 +33,7 @@ const ProposalBillingSummary = ({ TopBanner, PageDetails, Main }) => {
                   <Link
                     to={`/admin/proposalsbilling/${token}`}
                     className={styles.titleLink}>
-                    <H2>{title || "Awesome prop Title Mock"}</H2>
+                    <H2>{title}</H2>
                   </Link>
                 </div>
                 <div className={styles.billed}>

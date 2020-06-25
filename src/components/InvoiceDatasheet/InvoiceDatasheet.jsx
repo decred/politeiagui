@@ -47,6 +47,7 @@ export const TableRow = ({ children, className }) => (
 
 const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   value,
+  omit,
   onChange,
   readOnly,
   userRate,
@@ -104,8 +105,14 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
         errors,
         currentRate,
         policy,
+<<<<<<< HEAD
         proposalsOptions,
         subContractors
+=======
+        proposalsTokens,
+        subContractors,
+        omit
+>>>>>>> feat: add Details implementation
       );
       setGrid(grid);
     },
@@ -115,8 +122,14 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
       errors,
       currentRate,
       policy,
+<<<<<<< HEAD
       proposalsOptions,
       subContractors
+=======
+      proposalsTokens,
+      subContractors,
+      omit
+>>>>>>> feat: add Details implementation
     ]
   );
 
@@ -182,7 +195,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
     [onChange, value, grid.length]
   );
 
-  const headers = useMemo(() => createTableHeaders(), []);
+  const headers = useMemo(() => createTableHeaders(omit), [omit]);
 
   const onContextMenu = useCallback(
     (e, cell) => (cell.readOnly ? e.preventDefault() : null),
@@ -251,6 +264,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
 
 InvoiceDatasheet.propTypes = {
   value: PropTypes.array.isRequired,
+  omit: PropTypes.array,
   readOnly: PropTypes.bool.isRequired,
   onChange: PropTypes.func,
   proposals: PropTypes.array.isRequired

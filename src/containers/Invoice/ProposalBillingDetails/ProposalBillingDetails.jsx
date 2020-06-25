@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import { Spinner } from "pi-ui";
+import { Spinner, Card } from "pi-ui";
 import { useProposalBillingDetails } from "./hooks";
 import get from "lodash/fp/get";
+import InvoiceDatasheet from "src/components/InvoiceDatasheet";
 import styles from "./ProposalBillingDetails.module.css";
 
 const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
@@ -18,13 +19,32 @@ const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
   return (
     <>
       <TopBanner>
-        <PageDetails title="Proposal Billing" actionsContent={null} />
+        <PageDetails
+          title={`Proposal Billing Details: ${
+            proposalBillingDetails ? proposalBillingDetails.title : ""
+          }`}
+          subtitle={proposalBillingDetails ? proposalBillingDetails.token : ""}
+          actionsContent={null}
+        />
       </TopBanner>
       <Main fillScreen>
         {loading && !proposalBillingDetails && (
           <div className={styles.spinnerWrapper}>
             <Spinner invert />
           </div>
+        )}
+        {proposalBillingDetails && (
+          <Card paddingSize="small">
+            <InvoiceDatasheet
+              value={proposalBillingDetails.invoices[0].input.lineitems}
+              omit={["proposaltoken"]}
+              readOnly
+              userRate={
+                proposalBillingDetails.invoices[0].input.contractorrate / 100
+              }
+              proposalsTokens={[]}
+            />
+          </Card>
         )}
       </Main>
     </>
