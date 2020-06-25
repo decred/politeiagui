@@ -35,6 +35,7 @@ export function useReactiveSearchUser(email, username) {
 export function useSearchUser() {
   const searchResult = useSelector(sel.searchResults);
   const onSearchUser = useAction(act.onSearchUser);
+  const isCMS = useSelector(sel.isCMS);
 
-  return { searchResult, onSearchUser };
+  return { searchResult, onSearchUser, isCMS };
 }

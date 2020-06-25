@@ -12,6 +12,16 @@
   margin-top: 0;
 }
 
+.select {
+  height: 4.6rem;
+  width: 24rem;
+  margin: 0 2rem 2rem 0;
+}
+
+.select [class*="customSelect__control"] {
+  height: 97%;
+}
+
 .searchButton {
   max-height: 4.2rem;
 }

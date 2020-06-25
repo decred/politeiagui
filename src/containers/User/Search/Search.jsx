@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Formik } from "formik";
 import {
   BoxTextInput,
@@ -9,7 +10,12 @@ import {
   Table
 } from "pi-ui";
 import React, { useEffect, useState } from "react";
+import {
+  selectTypeOptions,
+  selectDomainOptions
+} from "src/containers/User/Detail/ManageContractor/helpers";
 import HelpMessage from "src/components/HelpMessage";
+import SelectField from "src/components/Select/SelectField";
 import * as Yup from "yup";
 import { useSearchUser } from "./hooks";
 import styles from "./Search.module.css";
@@ -23,9 +29,27 @@ const getFormattedSearchResults = (users = []) =>
   }));
 
 const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
-  const { onSearchUser, searchResult } = useSearchUser();
+  const { onSearchUser, searchResult, isCMS } = useSearchUser();
   const [searchError, setSearchError] = useState(null);
   const [foundUsers, setFoundUsers] = useState([]);
+
+  const searchOptions = useMemo(() => {
+    const options = [
+      { value: "email", label: "Email" },
+      { value: "username", label: "Username" }
+    ];
+    // If CMS mode, add two more filter options
+    if (isCMS) {
+      options.push(
+        ...[
+          { value: "domain", label: "Domain" },
+          { value: "contractortype", label: "Contractor type" }
+        ]
+      );
+    }
+    return options;
+  }, [isCMS]);
+
   async function onSubmit(values, { setSubmitting }) {
     try {
       setSearchError(null);
@@ -38,6 +62,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
       setSearchError(e);
     }
   }
+
   useEffect(
     function updateFoundUsers() {
       if (searchResult) {
@@ -69,30 +94,46 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
               setFieldValue,
               isValid
             }) => {
-              function handleChangeSearchBy(v) {
+              const handleChangeSearchBy = (v) => {
                 setFieldValue("searchBy", v.value);
-              }
+              };
+              const isByDomain = values.searchBy === "domain";
+              const isByType = values.searchBy === "contractortype";
+              const showTextBox = !isByDomain && !isByType;
               return (
                 <form>
                   <RadioButtonGroup
                     className={styles.searchByRadioGroup}
                     optionClassName={styles.searchByRadioButton}
                     label=""
-                    options={[
-                      { value: "email", label: "By email" },
-                      { value: "username", label: "By username" }
-                    ]}
+                    options={searchOptions}
                     value={values.searchBy}
                     onChange={handleChangeSearchBy}
                   />
                   <div className="justify-left margin-top-m">
-                    <BoxTextInput
-                      name="searchTerm"
-                      className={styles.searchBox}
-                      value={values.searchTerm}
-                      onChange={handleChange}
-                      placeholder="User email or username"
-                    />
+                    {showTextBox && (
+                      <BoxTextInput
+                        name="searchTerm"
+                        className={styles.searchBox}
+                        value={values.searchTerm}
+                        onChange={handleChange}
+                        placeholder="User email or username"
+                      />
+                    )}
+                    {isByType && (
+                      <SelectField
+                        name="type"
+                        className={styles.select}
+                        options={selectTypeOptions}
+                      />
+                    )}
+                    {isByDomain && (
+                      <SelectField
+                        name="domain"
+                        className={styles.select}
+                        options={selectDomainOptions}
+                      />
+                    )}
                     <Button
                       className={styles.searchButton}
                       onClick={handleSubmit}
