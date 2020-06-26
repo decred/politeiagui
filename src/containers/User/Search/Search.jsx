@@ -12,7 +12,9 @@ import {
 import React, { useEffect, useState } from "react";
 import {
   selectTypeOptions,
-  selectDomainOptions
+  selectDomainOptions,
+  domainOptions,
+  typeOptions
 } from "src/containers/User/Detail/ManageContractor/helpers";
 import HelpMessage from "src/components/HelpMessage";
 import SelectField from "src/components/Select/SelectField";
@@ -21,12 +23,20 @@ import styles from "./Search.module.css";
 import Link from "src/components/Link";
 import { searchSchema } from "./validation";
 
-const getFormattedSearchResults = (users = []) =>
-  users.map((u) => ({
-    Username: u.username,
-    Email: u.email,
-    ID: <Link to={`/user/${u.id}`}>{u.id}</Link>
-  }));
+const getFormattedSearchResults = (users = [], isCMS) =>
+  users.map((u) =>
+    !isCMS
+      ? {
+          Username: u.username,
+          Email: u.email,
+          ID: <Link to={`/user/${u.id}`}>{u.id}</Link>
+        }
+      : {
+          Username: <Link to={`/user/${u.id}`}>{u.username}</Link>,
+          Domain: domainOptions[u.domain],
+          Type: typeOptions[u.contractortype]
+        }
+  );
 
 const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
   const { onSearchUser, searchResult, isCMS } = useSearchUser();
@@ -77,10 +87,10 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
   useEffect(
     function updateFoundUsers() {
       if (searchResult) {
-        setFoundUsers(getFormattedSearchResults(searchResult));
+        setFoundUsers(getFormattedSearchResults(searchResult, isCMS));
       }
     },
-    [searchResult]
+    [searchResult, isCMS]
   );
   return (
     <>
@@ -172,7 +182,14 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
           <Message kind="error">{searchError.toString()}</Message>
         ) : foundUsers && !!foundUsers.length ? (
           <Card className={classNames("container", "margin-bottom-m")}>
-            <Table data={foundUsers} headers={["Username", "Email", "ID"]} />
+            <Table
+              data={foundUsers}
+              headers={
+                !isCMS
+                  ? ["Username", "Email", "ID"]
+                  : ["Username", "Domain", "Type"]
+              }
+            />
           </Card>
         ) : (
           <HelpMessage>No users to show</HelpMessage>
