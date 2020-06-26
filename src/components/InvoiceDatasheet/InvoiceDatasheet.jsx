@@ -223,18 +223,16 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
         </div>
       )}
       <div className={styles.datasheetWrapper}>
-        <div className={styles.datasheetContent}>
-          <ReactDataSheet
-            data={grid}
-            parsePaste={handlePaste}
-            valueRenderer={valueRenderer}
-            onContextMenu={onContextMenu}
-            onCellsChanged={!readOnly ? handleCellsChange : noop}
-            sheetRenderer={sheetRenderer}
-            rowRenderer={rowRenderer}
-            cellRenderer={CellRenderer}
-          />
-        </div>
+        <ReactDataSheet
+          data={grid}
+          parsePaste={handlePaste}
+          valueRenderer={valueRenderer}
+          onContextMenu={onContextMenu}
+          onCellsChanged={!readOnly ? handleCellsChange : noop}
+          sheetRenderer={sheetRenderer}
+          rowRenderer={rowRenderer}
+          cellRenderer={CellRenderer}
+        />
       </div>
     </div>
   );
