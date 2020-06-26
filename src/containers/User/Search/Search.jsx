@@ -34,20 +34,16 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
   const [foundUsers, setFoundUsers] = useState([]);
 
   const searchOptions = useMemo(() => {
-    const options = [
+    if (isCMS) {
+      return [
+        { value: "domain", label: "Domain" },
+        { value: "contractortype", label: "Contractor type" }
+      ];
+    }
+    return [
       { value: "email", label: "Email" },
       { value: "username", label: "Username" }
     ];
-    // If CMS mode, add two more filter options
-    if (isCMS) {
-      options.push(
-        ...[
-          { value: "domain", label: "Domain" },
-          { value: "contractortype", label: "Contractor type" }
-        ]
-      );
-    }
-    return options;
   }, [isCMS]);
 
   async function onSubmit(values, { setSubmitting }) {
@@ -95,10 +91,12 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
           <Formik
             initialValues={{
               searchTerm: "",
-              searchBy: "email"
+              searchBy: !isCMS ? "email" : "domain",
+              contractortype: undefined,
+              domain: undefined
             }}
             onSubmit={onSubmit}
-            validationSchema={searchSchema({ isCMS })}>
+            validationSchema={searchSchema}>
             {({
               values,
               handleChange,
@@ -114,8 +112,6 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
               const isByDomain = values.searchBy === "domain";
               const isByType = values.searchBy === "contractortype";
               const isByEmail = values.searchBy === "email";
-              const isByUsername = values.searchBy === "username";
-              const showTextBox = isByUsername || isByEmail;
               return (
                 <form>
                   <RadioButtonGroup
@@ -127,7 +123,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                     onChange={handleChangeSearchBy}
                   />
                   <div className="justify-left margin-top-m">
-                    {showTextBox && (
+                    {!isCMS && (
                       <BoxTextInput
                         name="searchTerm"
                         className={styles.searchBox}
@@ -138,7 +134,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                     )}
                     {isByType && (
                       <SelectField
-                        name="type"
+                        name="contractortype"
                         className={styles.select}
                         options={selectTypeOptions}
                         value={values.contractortype}
