@@ -474,6 +474,9 @@ export const userProposals = (userid, after) => {
 export const searchUser = (obj) =>
   GET(`/v1/users?${qs.stringify(obj)}`).then(getResponse);
 
+export const searchCmsUsers = (obj) =>
+  GET(`/v1/cmsusers?${qs.stringify(obj)}`).then(getResponse);
+
 export const proposal = (token, version = null) =>
   GET(`/v1/proposals/${token}` + (version ? `?version=${version}` : "")).then(
     getResponse

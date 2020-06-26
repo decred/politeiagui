@@ -53,9 +53,24 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
   async function onSubmit(values, { setSubmitting }) {
     try {
       setSearchError(null);
-      await onSearchUser({
-        [values.searchBy]: values.searchTerm
-      });
+      const isByDomain = values.searchBy === "domain";
+      const isByType = values.searchBy === "contractortype";
+      const isByEmail = values.searchBy === "email";
+      const isByUsername = values.searchBy === "username";
+
+      await onSearchUser(
+        {
+          [values.searchBy]:
+            isByUsername || isByEmail
+              ? values.searchTerm
+              : isByType
+              ? values.contractortype.value
+              : isByDomain
+              ? values.domain.value
+              : ""
+        },
+        isCMS
+      );
       setSubmitting(false);
     } catch (e) {
       setSubmitting(false);
@@ -90,18 +105,17 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
               handleSubmit,
               isSubmitting,
               setFieldValue,
-              isValid,
-              errors
+              isValid
             }) => {
-              const handleChangeSearchBy = (v) => {
+              const handleChangeSearchBy = (v) =>
                 setFieldValue("searchBy", v.value);
-              };
+              const handleChangeSelectField = (field) => (v) =>
+                setFieldValue(field, v);
               const isByDomain = values.searchBy === "domain";
               const isByType = values.searchBy === "contractortype";
               const isByEmail = values.searchBy === "email";
               const isByUsername = values.searchBy === "username";
               const showTextBox = isByUsername || isByEmail;
-              console.log({ errors, isValid });
               return (
                 <form>
                   <RadioButtonGroup
@@ -127,6 +141,8 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                         name="type"
                         className={styles.select}
                         options={selectTypeOptions}
+                        value={values.contractortype}
+                        onChange={handleChangeSelectField("contractortype")}
                         placeholder="Choose contractor type"
                       />
                     )}
@@ -135,6 +151,8 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                         name="domain"
                         className={styles.select}
                         options={selectDomainOptions}
+                        value={values.domain}
+                        onChange={handleChangeSelectField("domain")}
                         placeholder="Choose a domain"
                       />
                     )}
