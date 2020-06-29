@@ -95,9 +95,8 @@ pre {
 
 .datasheetWrapper {
   width: 100%;
-  overflow-y: visible;
+  padding-bottom: 16rem;
   overflow-x: auto;
-  padding-bottom: 5rem;
 }
 
 .textWrapper {
