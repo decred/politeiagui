@@ -19,7 +19,7 @@
 }
 
 .select [class*="customSelect__control"] {
-  height: 97%;
+  height: calc(100% - 0.5rem);
 }
 
 .searchButton {
