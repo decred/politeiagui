@@ -145,6 +145,8 @@ const Proposal = React.memo(function Proposal({
   const showAbandonedDate = abandonedat && !mobile;
   const showVersionAsText = version > 1 && !extended && !mobile;
   const showRfpSubmissions = extended && !!rfpSubmissions;
+  const showEditIcon =
+    currentUser && isVotingAuthorized && !isVotingFinished && !isVoteActive;
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
 
@@ -202,7 +204,7 @@ const Proposal = React.memo(function Proposal({
               edit={
                 isEditable ? (
                   <Edit url={`/proposals/${proposalToken}/edit`} />
-                ) : isVotingAuthorized && !isVotingFinished && !isVoteActive ? (
+                ) : showEditIcon ? (
                   <Tooltip
                     placement={mobile ? "left" : "right"}
                     content="You have to revoke the voting authorization to edit the proposal"
