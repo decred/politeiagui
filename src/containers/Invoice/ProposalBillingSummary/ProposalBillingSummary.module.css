@@ -4,6 +4,10 @@
   align-items: center;
 }
 
+.searchWrapper {
+  flex: auto;
+}
+
 .card {
   margin-bottom: 2rem;
   display: flex;

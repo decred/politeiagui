@@ -61,6 +61,7 @@ const PageDetails = ({
   title,
   subtitle,
   actionsContent,
+  actionsClassName,
   children,
   headerClassName,
   titleAndSubtitleWrapperClassName,
@@ -91,7 +92,10 @@ const PageDetails = ({
           {titleContent}
           {!!subtitle && <Subtitle>{subtitle}</Subtitle>}
         </div>
-        <div className={styles.pageDetailsActions}>{actionsContent}</div>
+        <div
+          className={classNames(styles.pageDetailsActions, actionsClassName)}>
+          {actionsContent}
+        </div>
       </div>
 
       {children}
