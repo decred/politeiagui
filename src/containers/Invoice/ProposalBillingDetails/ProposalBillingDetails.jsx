@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import { Spinner, Card, Table } from "pi-ui";
+import { Spinner, Card, Table, H3 } from "pi-ui";
 import { useProposalBillingDetails } from "./hooks";
 import get from "lodash/fp/get";
 import Link from "src/components/Link";
@@ -77,6 +77,10 @@ const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
               data={getDetailsData(proposalBillingDetails.invoices)}
               headers={HEADERS}
             />
+            <H3 className={styles.totalText}>
+              Total:{" "}
+              {usdFormatter.format(proposalBillingDetails.totalbilled / 100)}
+            </H3>
           </Card>
         )}
       </Main>
