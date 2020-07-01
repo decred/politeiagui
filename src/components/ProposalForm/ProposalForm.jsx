@@ -279,7 +279,7 @@ const ProposalFormWrapper = ({
           if (isInvalidToken) {
             throw Error("Proposal not found!");
           }
-          if (!isActiveApprovedRfp(proposal, voteSummary)) {
+          if (!isPublic && !isActiveApprovedRfp(proposal, voteSummary)) {
             throw Error(
               "Make sure token is associated with an approved & not expired RFP"
             );
@@ -300,7 +300,7 @@ const ProposalFormWrapper = ({
         setFieldError("global", e);
       }
     },
-    [history, onSubmit, onFetchProposalsBatchWithoutState]
+    [history, onSubmit, onFetchProposalsBatchWithoutState, isPublic]
   );
   return (
     <>
