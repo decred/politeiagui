@@ -67,7 +67,6 @@ const EditProposal = ({ match }) => {
           initialValues={initialValues}
           onSubmit={onEditProposal}
           isPublic={isPublic}
-          isEdit={true}
         />
       ) : (
         <ProposalFormLoader />
