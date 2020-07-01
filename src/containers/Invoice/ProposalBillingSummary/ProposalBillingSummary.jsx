@@ -11,21 +11,21 @@ const ProposalBillingSummary = ({ TopBanner, PageDetails, Main }) => {
     proposalsBilled,
     loading
   } = useProposalBillingSummary();
+
   useEffect(() => {
-    getSpendingSummary();
-  }, [getSpendingSummary]);
+    !proposalsBilled && getSpendingSummary();
+  }, [getSpendingSummary, proposalsBilled]);
   return (
     <>
       <TopBanner>
         <PageDetails title="Proposal Billing" actionsContent={null} />
       </TopBanner>
       <Main fillScreen>
-        {loading && !proposalsBilled && (
+        {loading || !proposalsBilled ? (
           <div className={styles.spinnerWrapper}>
             <Spinner invert />
           </div>
-        )}
-        {proposalsBilled &&
+        ) : (
           proposalsBilled.map(({ token, title, totalbilled }) => {
             return (
               <Card paddingSize="small" className={styles.card} key={token}>
@@ -41,7 +41,8 @@ const ProposalBillingSummary = ({ TopBanner, PageDetails, Main }) => {
                 </div>
               </Card>
             );
-          })}
+          })
+        )}
       </Main>
     </>
   );

@@ -2,15 +2,11 @@ import { createSelector } from "reselect";
 import get from "lodash/fp/get";
 import orderBy from "lodash/fp/orderBy";
 
-const proposals = get(["proposalBilling", "proposals"]);
+const proposals = get(["proposalBilling", "proposalsList"]);
+const details = get(["proposalBilling", "proposalDetails"]);
 
-export const proposalsBilled = createSelector(
-  proposals,
-  (proposals = {}) => Object.values(proposals),
-  orderBy(["totalbilled"], ["desc"])
+export const proposalsBilled = createSelector(proposals, (proposals) =>
+  proposals ? orderBy(["totalbilled"], ["desc"], proposals) : null
 );
 
-export const proposalBillingDetails = (token) =>
-  createSelector(proposals, (proposals = {}) => {
-    return proposals[token];
-  });
+export const proposalBillingDetails = details;
