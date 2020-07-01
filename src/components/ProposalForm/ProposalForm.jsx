@@ -247,7 +247,8 @@ const ProposalFormWrapper = ({
   onSubmit,
   disableSubmit,
   history,
-  isPublic
+  isPublic,
+  isEdit
 }) => {
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const openMdModal = useCallback(() => {
@@ -279,7 +280,7 @@ const ProposalFormWrapper = ({
           if (isInvalidToken) {
             throw Error("Proposal not found!");
           }
-          if (!isActiveApprovedRfp(proposal, voteSummary)) {
+          if (!isEdit && !isActiveApprovedRfp(proposal, voteSummary)) {
             throw Error(
               "Make sure token is associated with an approved & not expired RFP"
             );
@@ -300,7 +301,7 @@ const ProposalFormWrapper = ({
         setFieldError("global", e);
       }
     },
-    [history, onSubmit, onFetchProposalsBatchWithoutState]
+    [history, onSubmit, onFetchProposalsBatchWithoutState, isEdit]
   );
   return (
     <>
