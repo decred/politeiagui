@@ -201,10 +201,10 @@ export const onVerifyNewUser = (email, verificationToken, username) => (
     });
 };
 
-export const onSearchUser = (query) => (dispatch) => {
+export const onSearchUser = (query, isCMS) => (dispatch) => {
   dispatch(act.REQUEST_USER_SEARCH());
-  return api
-    .searchUser(query)
+  const apiReq = !isCMS ? api.searchUser(query) : api.searchCmsUsers(query);
+  return apiReq
     .then((res) => dispatch(act.RECEIVE_USER_SEARCH({ ...res, query })))
     .catch((err) => {
       dispatch(act.RECEIVE_USER_SEARCH(null, err));
