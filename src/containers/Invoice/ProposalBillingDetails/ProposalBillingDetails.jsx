@@ -4,7 +4,7 @@ import { Spinner, Card, Table, H3 } from "pi-ui";
 import { useProposalBillingDetails } from "./hooks";
 import get from "lodash/fp/get";
 import Link from "src/components/Link";
-import { usdFormatter } from "src/utils";
+import { usdFormatter, formatCentsToUSD } from "src/utils";
 
 import styles from "./ProposalBillingDetails.module.css";
 
@@ -78,8 +78,7 @@ const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
               headers={HEADERS}
             />
             <H3 className={styles.totalText}>
-              Total:{" "}
-              {usdFormatter.format(proposalBillingDetails.totalbilled / 100)}
+              Total: {formatCentsToUSD(proposalBillingDetails.totalbilled)}
             </H3>
           </Card>
         )}
