@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import SelectEditor from "./components/SelectEditor";
 import TextArea from "./components/TextArea";
 import {
@@ -11,6 +11,9 @@ import LazySelector from "./components/LazySelector";
 import { isEmpty } from "src/helpers";
 import { Spinner } from "pi-ui";
 import useApprovedProposals from "src/hooks/api/useApprovedProposals";
+import { getProposalsOptions } from "./helpers";
+import drop from "lodash/drop";
+import take from "lodash/take";
 
 const PROPOSAL_PAGE_SIZE = 20;
 
@@ -73,24 +76,48 @@ export const proposalViewWrapper = (proposals) => ({ cell: { value } }) => {
   );
 };
 
-export const proposalSelectWrapper = (options) => (props) => {
+export const proposalSelectWrapper = (initialOptions) => (props) => {
   const {
-    remainingTokens,
-    onFetchRemainingProposalsBatch,
-    error
+    proposals,
+    proposalsTokens,
+    onFetchProposalsBatch
   } = useApprovedProposals();
 
-  const onLoadMoreOptions = useCallback(() => {
-    onFetchRemainingProposalsBatch(PROPOSAL_PAGE_SIZE);
-  }, [onFetchRemainingProposalsBatch]);
+  const [needsFetch, setNeedsFetch] = useState(
+    proposalsTokens.length > proposals.length
+  );
+  const [loading, setLoading] = useState(false);
+
+  const [options, setOptions] = useState(initialOptions);
+
+  const fetchProposalsBatch = useCallback(async () => {
+    const remainingTokens = drop(proposalsTokens, options.length);
+    const tokenParams = take(remainingTokens, PROPOSAL_PAGE_SIZE);
+    setLoading(true);
+    const res = await onFetchProposalsBatch(tokenParams, false);
+    const fetchedProposals = res && res[0];
+    setNeedsFetch(remainingTokens.length - fetchedProposals.length > 0);
+    setLoading(false);
+    const newOptions = [...options, ...getProposalsOptions(fetchedProposals)];
+    setOptions(newOptions);
+    return;
+  }, [proposalsTokens, onFetchProposalsBatch, options, setOptions]);
 
   return (
-    <LazySelector
-      options={options}
-      onFetch={onLoadMoreOptions}
-      needsFetch={remainingTokens.length > 0}
-      error={error}
-      {...props}
-    />
+    <>
+      {!loading && (
+        <LazySelector
+          options={options}
+          onFetch={fetchProposalsBatch}
+          needsFetch={needsFetch}
+          {...props}
+        />
+      )}
+      {loading && (
+        <div className="margin-top-s">
+          <Spinner invert />
+        </div>
+      )}
+    </>
   );
 };
