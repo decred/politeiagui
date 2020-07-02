@@ -4,7 +4,7 @@ import get from "lodash/fp/get";
 import { withRouter } from "react-router-dom";
 import { Card } from "pi-ui";
 import { useInvoice } from "../Detail/hooks";
-import { useApprovedProposalsTokens } from "../New/hooks";
+import useApprovedProposals from "src/hooks/api/useApprovedProposals";
 import { useEditInvoice } from "./hooks";
 import { fromUSDCentsToUSDUnits } from "src/helpers";
 import InvoiceLoader from "src/components/Invoice/InvoiceLoader";
@@ -14,7 +14,7 @@ const EditInvoice = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
   const { onEditInvoice } = useEditInvoice();
   const { invoice, loading } = useInvoice(tokenFromUrl);
-  const approvedTokens = useApprovedProposalsTokens();
+  const { proposals } = useApprovedProposals();
 
   const isInvoiceLoaded = !loading && !!invoice;
 
@@ -43,7 +43,7 @@ const EditInvoice = ({ match }) => {
         <InvoiceForm
           initialValues={initialValues}
           onSubmit={onEditInvoice}
-          approvedProposalsTokens={approvedTokens}
+          approvedProposals={proposals}
           editMode
         />
       ) : (

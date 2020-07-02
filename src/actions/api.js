@@ -344,16 +344,16 @@ export const onFetchAdminInvoices = () =>
 
 export const onFetchProposalsBatchWithoutState = (
   tokens,
-  fetchPropsoals = true,
+  fetchProposals = true,
   fetchVoteSummary = true
 ) =>
   withCsrf(async (_, __, csrf) => {
     const res = await Promise.all([
-      fetchPropsoals && api.proposalsBatch(csrf, tokens),
+      fetchProposals && api.proposalsBatch(csrf, tokens),
       fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens)
     ]);
     const proposals =
-      fetchPropsoals && res.find((res) => res && res.proposals).proposals;
+      fetchProposals && res.find((res) => res && res.proposals).proposals;
     const summaries =
       fetchVoteSummary && res.find((res) => res && res.summaries).summaries;
     return [proposals, summaries];

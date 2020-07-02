@@ -39,7 +39,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
   isValid: isFormValid,
   submitSuccess,
   setSessionStorageInvoice,
-  approvedProposalsTokens,
+  approvedProposals,
   validateFiles,
   requireGitHubName,
   isEditing
@@ -179,7 +179,7 @@ const InvoiceForm = React.memo(function InvoiceForm({
         userRate={values.rate}
         errors={lineItemErrors}
         onChange={handleChangeInvoiceDatasheet}
-        proposalsTokens={approvedProposalsTokens}
+        proposals={approvedProposals}
       />
       <div className="justify-right">
         <DraftSaver submitSuccess={submitSuccess} />
@@ -193,7 +193,7 @@ const InvoiceFormWrapper = ({
   initialValues,
   onSubmit,
   history,
-  approvedProposalsTokens,
+  approvedProposals,
   editMode
 }) => {
   const { policy } = usePolicy();
@@ -284,7 +284,7 @@ const InvoiceFormWrapper = ({
             ...props,
             submitSuccess,
             setSessionStorageInvoice,
-            approvedProposalsTokens,
+            approvedProposals,
             validateFiles,
             requireGitHubName,
             isEditing: editMode
@@ -296,7 +296,7 @@ const InvoiceFormWrapper = ({
 };
 
 InvoiceFormWrapper.propTypes = {
-  approvedProposalsTokens: PropTypes.array.isRequired,
+  approvedProposals: PropTypes.array.isRequired,
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func,
   setSessionStorageInvoice: PropTypes.func,

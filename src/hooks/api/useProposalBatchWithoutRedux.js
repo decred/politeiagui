@@ -4,7 +4,7 @@ import { useAction } from "src/redux";
 
 export default function useProposalBatchWithoutRedux(
   tokens,
-  fetchPropsoals = true,
+  fetchProposals = true,
   fetchVoteSummary = true
 ) {
   const onFetchProposalsBatchWithoutState = useAction(
@@ -16,7 +16,7 @@ export default function useProposalBatchWithoutRedux(
   const resetData = () => setProposalsWithVoteSummaries(null);
   const [isRequesting, setIsRequesting] = useState(false);
   useEffect(() => {
-    const fetchProposals = async () => {
+    const onFetchProposals = async () => {
       const [proposals, summaries] = await onFetchProposalsBatchWithoutState(
         tokens,
         fetchProposals,
@@ -28,13 +28,13 @@ export default function useProposalBatchWithoutRedux(
 
     if (tokens && !proposalsWithVoteSummaries && !isRequesting) {
       setIsRequesting(true);
-      fetchProposals();
+      onFetchProposals();
     }
   }, [
     tokens,
     isRequesting,
     onFetchProposalsBatchWithoutState,
-    fetchPropsoals,
+    fetchProposals,
     fetchVoteSummary,
     proposalsWithVoteSummaries
   ]);

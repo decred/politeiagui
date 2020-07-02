@@ -11,6 +11,7 @@ import CellRenderer from "./components/CellRenderer";
 import TableButton from "./components/TableButton";
 import usePolicy from "src/hooks/api/usePolicy";
 import useSubContractors from "src/hooks/api/useSubContractors";
+
 import {
   processCellsChange,
   convertLineItemsToGrid,
@@ -50,12 +51,22 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   readOnly,
   userRate,
   errors,
-  proposalsTokens
+  proposals
 }) {
   const { policy } = usePolicy();
   const { subContractors } = useSubContractors();
   const [grid, setGrid] = useState([]);
   const [currentRate, setCurrentRate] = useState(userRate || 0);
+
+  const proposalsOptions = useMemo(
+    () =>
+      proposals &&
+      proposals.map((p) => ({
+        label: p.name,
+        value: p.censorshiprecord.token
+      })),
+    [proposals]
+  );
 
   const handleCellsChange = useCallback(
     (changes) => {
@@ -93,7 +104,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
         errors,
         currentRate,
         policy,
-        proposalsTokens,
+        proposalsOptions,
         subContractors
       );
       setGrid(grid);
@@ -104,7 +115,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
       errors,
       currentRate,
       policy,
-      proposalsTokens,
+      proposalsOptions,
       subContractors
     ]
   );
@@ -242,7 +253,7 @@ InvoiceDatasheet.propTypes = {
   value: PropTypes.array.isRequired,
   readOnly: PropTypes.bool.isRequired,
   onChange: PropTypes.func,
-  proposalsTokens: PropTypes.array.isRequired
+  proposals: PropTypes.array.isRequired
 };
 
 InvoiceDatasheet.defaultProps = {
