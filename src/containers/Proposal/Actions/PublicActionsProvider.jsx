@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import { Text } from "pi-ui";
 import Link from "src/components/Link";
 import { PublicProposalsActionsContext, usePublicActions } from "./hooks";
+import { isAbandonedProposal } from "src/containers/Proposal/helpers";
 import ModalConfirm from "src/components/ModalConfirm";
 import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import ModalStartVote from "src/components/ModalStartVote";
@@ -104,7 +105,11 @@ const PublicActionsProvider = ({ children }) => {
       const [submissions] = await onFetchProposalsBatchWithoutState(
         proposal.linkedfrom
       );
-      const submissionVotes = submissions.map(
+      // Filter abandoned submmsions out.
+      const publicSubmissions = submissions.filter(
+        (prop) => !isAbandonedProposal(prop)
+      );
+      const submissionVotes = publicSubmissions.map(
         ({ censorshiprecord: { token } = { token: null }, version }) => ({
           token,
           proposalversion: version
