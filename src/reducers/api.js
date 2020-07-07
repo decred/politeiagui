@@ -28,6 +28,7 @@ export const DEFAULT_STATE = {
   editProposal: DEFAULT_REQUEST_STATE,
   newComment: DEFAULT_REQUEST_STATE,
   proposalPaywallDetails: DEFAULT_REQUEST_STATE,
+  proposalOwnerBilling: DEFAULT_REQUEST_STATE,
   userProposalCredits: DEFAULT_REQUEST_STATE,
   resetPassword: DEFAULT_REQUEST_STATE,
   verifyResetPassword: DEFAULT_REQUEST_STATE,
@@ -105,6 +106,10 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.RECEIVE_PROPOSALS_BATCH]: () => receive("proposalsBatch", state),
       [act.REQUEST_PROPOSAL]: () => request("proposal", state, action),
       [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
+      [act.REQUEST_PROPOSAL_BILLING]: () =>
+        request("proposalOwnerBilling", state, action),
+      [act.RECEIVE_PROPOSAL_BILLING]: () =>
+        receive("proposalOwnerBilling", state, action),
       [act.REQUEST_RECORD_COMMENTS]: () =>
         request("proposalComments", state, action),
       [act.RECEIVE_RECORD_COMMENTS]: () =>
