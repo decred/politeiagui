@@ -6,16 +6,8 @@ const DEFAULT_STATE = {
   proposalDetails: null
 };
 
-// const normalizeProposalBilling = (proposals) =>
-//   proposals.reduce((acc, cur) => {
-//     return {
-//       ...acc,
-//       [cur.token]: cur
-//     };
-//   }, {});
-
-const proposalBilling = (state = DEFAULT_STATE, action) => {
-  return action.error
+const proposalBilling = (state = DEFAULT_STATE, action) =>
+  action.error
     ? state
     : (
         {
@@ -26,5 +18,5 @@ const proposalBilling = (state = DEFAULT_STATE, action) => {
           [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();
-};
+
 export default proposalBilling;

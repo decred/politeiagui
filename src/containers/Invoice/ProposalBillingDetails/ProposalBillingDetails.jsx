@@ -23,9 +23,8 @@ const getInvoiceTotal = (rate, lineItems) => {
   return laborInHours * rate; // total
 };
 
-const getDetailsData = (invoices) => {
-  const formattedData =
-    invoices &&
+const getDetailsData = (invoices) =>
+  (invoices &&
     invoices.map(({ username, userid, censorshiprecord: { token }, input }) => {
       const totalUsd = getInvoiceTotal(input.contractorrate, input.lineitems);
       const totalDcr = totalUsd / input.exchangerate;
@@ -37,9 +36,8 @@ const getDetailsData = (invoices) => {
         "Total (USD)": usdFormatter.format(totalUsd / 100),
         Invoice: <Link to={`/invoices/${token}`}>{token}</Link>
       };
-    });
-  return formattedData || [];
-};
+    })) ||
+  [];
 
 const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
   const tokenFromUrl = get("params.token", match);
