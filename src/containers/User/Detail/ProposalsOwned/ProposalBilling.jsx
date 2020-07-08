@@ -55,7 +55,7 @@ const ProposalTitle = ({ title, onClick }) => (
   </Text>
 );
 
-const ProposalBilling = ({ token }) => {
+const ProposalBilling = ({ token, title }) => {
   const { billingInfo, getProposalBillingInfo } = useProposalsOwnedBilling(
     token
   );
@@ -68,7 +68,7 @@ const ProposalBilling = ({ token }) => {
   const showLoading = showInfo && !billingInfo;
   return (
     <Card paddingSize="small" className="margin-bottom-m">
-      <ProposalTitle title={token} onClick={handleProposalClick} />
+      <ProposalTitle title={title} onClick={handleProposalClick} />
       {showBillingInfo && <BillingInfo lineItems={billingInfo.lineitems} />}
       {showLoading && (
         <div className="margin-top-m">
