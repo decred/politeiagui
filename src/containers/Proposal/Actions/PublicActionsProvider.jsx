@@ -105,15 +105,16 @@ const PublicActionsProvider = ({ children }) => {
       const [submissions] = await onFetchProposalsBatchWithoutState(
         proposal.linkedfrom
       );
-      // Filter abandoned submmsions out.
-      const publicSubmissions = submissions.filter(
-        (prop) => !isAbandonedProposal(prop)
-      );
-      const submissionVotes = publicSubmissions.map(
-        ({ censorshiprecord: { token } = { token: null }, version }) => ({
-          token,
-          proposalversion: version
-        })
+      // Filter abandoned submmsions out & maps to proposal tokens.
+      const submissionVotes = submissions.flatMap((prop) =>
+        isAbandonedProposal(prop)
+          ? []
+          : [
+              {
+                token: prop.censorshiprecord.token,
+                proposalversion: prop.version
+              }
+            ]
       );
       handleOpenModal(ModalStartVote, {
         title: `Start runoff vote - ${proposal.name}`,
