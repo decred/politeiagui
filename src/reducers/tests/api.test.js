@@ -36,6 +36,7 @@ describe("test api reducer", () => {
       verifyResetPassword: DEFAULT_REQUEST_STATE,
       resendVerificationEmail: DEFAULT_REQUEST_STATE,
       setStatusProposal: DEFAULT_REQUEST_STATE,
+      proposalOwnerBilling: DEFAULT_REQUEST_STATE,
       startVote: DEFAULT_REQUEST_STATE,
       updateUserKey: DEFAULT_REQUEST_STATE,
       verifyUserKey: DEFAULT_REQUEST_STATE,
