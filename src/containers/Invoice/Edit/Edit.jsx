@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import get from "lodash/fp/get";
 import { withRouter } from "react-router-dom";
@@ -9,12 +9,12 @@ import { useEditInvoice } from "./hooks";
 import { fromUSDCentsToUSDUnits } from "src/helpers";
 import InvoiceLoader from "src/components/Invoice/InvoiceLoader";
 import InvoiceForm from "src/components/InvoiceForm";
+import { getProposalsTokensFromInvoice } from "../helpers";
 
 const EditInvoice = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
   const { onEditInvoice } = useEditInvoice();
   const { invoice, loading } = useInvoice(tokenFromUrl);
-  const { proposals } = useApprovedProposals();
 
   const isInvoiceLoaded = !loading && !!invoice;
 
@@ -36,6 +36,13 @@ const EditInvoice = ({ match }) => {
         lineitems: invoice.input.lineitems
       }
     : null;
+
+  const proposalsTokens = useMemo(
+    () => getProposalsTokensFromInvoice(invoice),
+    [invoice]
+  );
+
+  const { proposals } = useApprovedProposals(proposalsTokens);
 
   return (
     <Card className="container margin-bottom-l">

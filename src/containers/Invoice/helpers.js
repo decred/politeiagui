@@ -5,6 +5,10 @@ import {
   getCurrentDefaultMonthAndYear
 } from "src/helpers";
 import { INVOICE_STATUS_NEW, INVOICE_STATUS_UPDATED } from "./constants";
+import flow from "lodash/fp/flow";
+import map from "lodash/fp/map";
+import filter from "lodash/fp/filter";
+import uniq from "lodash/fp/uniq";
 
 /**
  * Returns the initial month and year to be applied to a blank invoice form
@@ -124,3 +128,13 @@ export const getPreviousMonthsRange = (range) => {
     getCurrentDefaultMonthAndYear()
   ];
 };
+
+export const getProposalsTokensFromInvoice = (invoice) =>
+  invoice &&
+  invoice.input &&
+  invoice.input.lineitems &&
+  flow(
+    map(({ proposaltoken }) => proposaltoken),
+    uniq,
+    filter((t) => t !== "")
+  )(invoice.input.lineitems);

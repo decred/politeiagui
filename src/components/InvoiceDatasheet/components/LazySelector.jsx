@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { Select } from "pi-ui";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
+import { Select, Spinner } from "pi-ui";
 
 const fetchingOption = {
   isFetchingOption: true,
@@ -7,8 +7,16 @@ const fetchingOption = {
   value: ""
 };
 
-const LazySelector = ({ options, onFetch, needsFetch, onChange, onCommit }) => {
+const LazySelector = ({
+  options,
+  onFetch,
+  needsFetch,
+  onChange,
+  onCommit,
+  error = null
+}) => {
   const [selected, setSelected] = useState();
+  const [loading, setLoading] = useState(false);
   const getValueObj = useCallback(
     (value) => options.find((op) => op.value === value),
     [options]
@@ -17,6 +25,7 @@ const LazySelector = ({ options, onFetch, needsFetch, onChange, onCommit }) => {
   const handleChange = useCallback(
     ({ isFetchingOption = false, value }) => {
       if (isFetchingOption) {
+        setLoading(true);
         onFetch();
       } else {
         setSelected(getValueObj(value));
@@ -31,7 +40,23 @@ const LazySelector = ({ options, onFetch, needsFetch, onChange, onCommit }) => {
     () => (needsFetch ? [...options, fetchingOption] : options),
     [options, needsFetch]
   );
-  return <Select options={ops} value={selected} onChange={handleChange} />;
+
+  useEffect(
+    function onOptionsChangeOrError() {
+      return () => {
+        setLoading(false);
+      };
+    },
+    [options, error]
+  );
+
+  return loading ? (
+    <div className="margin-top-s">
+      <Spinner invert />
+    </div>
+  ) : (
+    <Select options={ops} value={selected} onChange={handleChange} />
+  );
 };
 
 export default LazySelector;
