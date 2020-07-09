@@ -217,6 +217,7 @@ const InvoiceFormWrapper = ({
     contact: user ? user.contractorcontact : "",
     address: "",
     exchangerate: "",
+    rate: "",
     date: getInitialDateValue(),
     lineitems: [generateBlankLineItem(policy)],
     files: []
