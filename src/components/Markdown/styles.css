@@ -465,8 +465,9 @@
   border-radius: 3px;
   font-size: 85%;
   line-height: 1.45;
-  overflow: auto;
+  overflow: scroll;
   padding: 16px;
+  max-width: 100%;
 }
 
 .dark .markdown-body .highlight pre,
