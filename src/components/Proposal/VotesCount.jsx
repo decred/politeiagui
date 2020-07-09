@@ -43,9 +43,10 @@ const VotesCount = ({
           </Tooltip>
         </>
       ) : isVoteActive ? (
-        <Text className={styles.votesLeft} size="small">
-          {votesLeft > 0 ? votesLeft : ""}
-          {" votes left"}
+        <Text
+          className={classNames(styles.votesLeft, styles.quorumReached)}
+          size="small">
+          {votesLeft > 0 ? `${votesLeft} votes left` : "quorum reached"}
         </Text>
       ) : null}
     </div>
