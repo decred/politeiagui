@@ -7,13 +7,11 @@ LABEL maintainer "jholdstock@decred.org"
 # Install rendertron
 RUN git clone https://github.com/GoogleChrome/rendertron.git --branch 3.0.0 --single-branch\
     && cd rendertron \
+    # Uncomment below line to disable ssl check
+    #&& sed -i "55s/.*/        puppeteerArgs: ['--no-sandbox','--ignore-certificate-errors']/" src/config.ts \
     && npm install \
-    && npm run build \
-    # Patching Puppeteer launch arguments \
-    && DEFAULT_ARGS="\['--no-sandbox'\]" \
-    && ARGS="\['--no-sandbox', '--disable-dev-shm-usage'\]" \
-    # To disable HTTPS check  replace previous line with  && ARGS="\['--no-sandbox', '--disable-dev-shm-usage', '--ignore-certificate-errors'\], ignoreHTTPSErrors: true" \
-    && sed -i "s/$DEFAULT_ARGS/$ARGS/g" build/rendertron.js
+    && npm run build
+
 
 FROM node:14.5.0-stretch-slim
 
