@@ -1,7 +1,7 @@
 import React from "react";
 import { useMediaQuery } from "pi-ui";
 import MultipleContentPage from "src/components/layout/MultipleContentPage";
-import ListAdminInvoices from "src/containers/Invoice/Admin/List";
+import ListAdminInvoices from "src/containers/Invoice/List/List";
 
 const PageListAdminInvoices = () => {
   const mobile = useMediaQuery("(max-width: 760px)");
