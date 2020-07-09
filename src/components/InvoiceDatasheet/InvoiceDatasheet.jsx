@@ -61,7 +61,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
     (changes) => {
       const { grid: newGrid } = processCellsChange(grid, changes, userRate);
       const lineItems = convertGridToLineItems(newGrid);
-      onChange(lineItems);
+      onChange && onChange(lineItems);
     },
     [userRate, onChange, grid]
   );
