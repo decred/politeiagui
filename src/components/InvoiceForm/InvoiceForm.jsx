@@ -219,7 +219,6 @@ const InvoiceFormWrapper = ({
     exchangerate: "",
     date: getInitialDateValue(),
     lineitems: [generateBlankLineItem(policy)],
-    rate: "",
     files: []
   };
   let formInitialValues = initialValues
