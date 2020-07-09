@@ -110,8 +110,8 @@ const InvoiceForm = React.memo(function InvoiceForm({
       )}
       {requireGitHubName && (
         <Message kind="warning" className="margin-bottom-m">
-          Update your GitHub Username information on Account > Manage Contractor
-          to submit an Invoice
+          Update your GitHub Username information on Account {">"} Manage
+          Contractor to submit an Invoice
         </Message>
       )}
       <div className="justify-space-between">
