@@ -118,7 +118,7 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
     <AdminInvoiceActionsProvider>
       <TopBanner>
         <PageDetails
-          title="Admin"
+          title="All Invoices"
           actionsContent={
             <ActionsContent openInviteModal={handleOpenInviteContractorModal} />
           }>
