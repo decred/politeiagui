@@ -10,37 +10,47 @@ import styles from "./InvoiceFilterForm.module.css";
 import UserSearchSelect from "src/containers/User/Search/SearchSelector";
 import { Link } from "pi-ui";
 
-const DEFAULT_INITIAL_VALUES = {
+const DefaultInitialValues = (isAdminPage) => ({
   date: getPreviousMonthsRange(2),
   users: [],
   filters: {
-    all: true,
-    unreviewed: false,
+    all: !isAdminPage,
+    unreviewed: isAdminPage,
     disputed: false,
     approved: false,
     rejected: false,
     paid: false
   }
-};
+});
 
-const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
+const InvoiceFilterForm = ({ onChange, children, disableUserFilter, isAdminPage }) => {
+  const filtersKey = isAdminPage ? "invoiceFiltersAdmin" : "invoiceFilters";
   return (
     <Formik
       initialValues={
-        JSON.parse(localStorage.getItem("invoiceFilters")) ||
-        DEFAULT_INITIAL_VALUES
+        JSON.parse(localStorage.getItem(filtersKey)) ||
+        DefaultInitialValues(isAdminPage)
       }>
       {(formikProps) => {
         const { values, setFieldValue } = formikProps;
         const handleChangeUserSelector = (options) => {
           setFieldValue("users", options);
         };
-
         const handleLastMonths = (length) => (e) => {
           e && e.preventDefault();
           setFieldValue("date", getPreviousMonthsRange(length));
         };
-
+        const filterOptions = [
+          { name: "all", label: "All" },
+          { name: "unreviewed", label: "Unreviewed" },
+          { name: "disputed", label: "Disputed" },
+          { name: "approved", label: "Approved" },
+          { name: "rejected", label: "Rejected" },
+          { name: "paid", label: "Paid" }
+        ];
+        const adminFilterOptions = [...filterOptions];
+        // Push 'all' options to last position of the array
+        adminFilterOptions.push(adminFilterOptions.shift());
         return (
           <>
             <form className={styles.form}>
@@ -56,14 +66,7 @@ const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
                 <div className={styles.checkboxesWrapper}>
                   <CheckboxGroupField
                     groupName="filters"
-                    options={[
-                      { name: "all", label: "All" },
-                      { name: "unreviewed", label: "Unreviewed" },
-                      { name: "disputed", label: "Disputed" },
-                      { name: "approved", label: "Approved" },
-                      { name: "rejected", label: "Rejected" },
-                      { name: "paid", label: "Paid" }
-                    ]}
+                    options={isAdminPage ? adminFilterOptions : filterOptions}
                   />
                 </div>
               </div>
@@ -87,7 +90,7 @@ const InvoiceFilterForm = ({ onChange, children, disableUserFilter }) => {
                 />
               )}
               <HookOnFormChange formikProps={formikProps} onChange={onChange} />
-              <OnChangeFiltersModifier formikProps={formikProps} />
+              <OnChangeFiltersModifier formikProps={formikProps} isAdminPage={isAdminPage} />
             </form>
             {children && children(values)}
           </>
@@ -104,7 +107,7 @@ const HookOnFormChange = ({ formikProps, onChange }) => {
   return null;
 };
 
-const OnChangeFiltersModifier = ({ formikProps }) => {
+const OnChangeFiltersModifier = ({ formikProps, isAdminPage = false }) => {
   const {
     values: { filters },
     setFieldValue
@@ -118,9 +121,9 @@ const OnChangeFiltersModifier = ({ formikProps }) => {
 
   useEffect(() => {
     if (all) {
-      setFieldValue("filters", DEFAULT_INITIAL_VALUES.filters);
+      setFieldValue("filters", DefaultInitialValues(isAdminPage).filters);
     }
-  }, [all, setFieldValue]);
+  }, [all, setFieldValue, isAdminPage]);
   return null;
 };
 
