@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/decred/politeiagui/workflows/Build%20and%20Test/badge.svg)](https://github.com/decred/politeiagui/actions)
 
-Politeiagui is the web frontend used for [Politiea](https://github.com/decred/politeia). Currently,
+Politeiagui is the web frontend used for [Politeia](https://github.com/decred/politeia). Currently,
 there are two different systems built on top of Politeia and both uses Politeiagui as the web client. They are:
 
 - Decred's [proposal system](https://proposals.decred.org/).
