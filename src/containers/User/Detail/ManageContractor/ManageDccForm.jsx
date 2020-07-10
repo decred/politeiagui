@@ -10,6 +10,7 @@ import {
 import { Formik } from "formik";
 import styles from "./ManageContractor.module.css";
 import useSupervisors from "src/hooks/api/useSupervisors";
+import useApprovedProposals from "src/hooks/api/useApprovedProposals";
 
 const selectStyles = {
   container: (provided) => ({
@@ -19,7 +20,7 @@ const selectStyles = {
   })
 };
 
-const selectSupervisorStyles = {
+const multipleSelectStyles = {
   container: (provided) => ({
     ...provided,
     width: "100%",
@@ -28,22 +29,51 @@ const selectSupervisorStyles = {
 };
 
 const ManageDccForm = ({ onUpdate, user }) => {
-  const { domain, contractortype, userid, supervisoruserids = [] } = user;
+  const {
+    domain,
+    contractortype,
+    userid,
+    supervisoruserids = [],
+    proposalsowned = []
+  } = user;
+
   const [updated, setUpdated] = useState(false);
 
   const { loading: loadingSupervisors, supervisors } = useSupervisors();
-
   const supervisorsOptions = useMemo(
     () => getSupervisorsOptions(supervisors, userid),
     [supervisors, userid]
   );
-
   const initialSupervisorOptions = useMemo(
     () =>
       supervisorsOptions.filter((option) =>
         supervisoruserids.some((supervisorid) => supervisorid === option.value)
       ),
     [supervisorsOptions, supervisoruserids]
+  );
+
+  const {
+    proposals,
+    isLoading: loadingOwnedProposals
+  } = useApprovedProposals();
+  const proposalsOptions = useMemo(
+    () =>
+      proposals
+        ? [
+            ...proposals.map(({ name, censorshiprecord }) => ({
+              label: name,
+              value: censorshiprecord.token
+            }))
+          ]
+        : [],
+    [proposals]
+  );
+  const initialOwnedProposals = useMemo(
+    () =>
+      proposalsOptions.filter((option) =>
+        proposalsowned.some((token) => token === option.value)
+      ),
+    [proposalsOptions, proposalsowned]
   );
 
   const handleSubmitForm = useCallback(
@@ -53,7 +83,8 @@ const ManageDccForm = ({ onUpdate, user }) => {
           userid,
           values.domain,
           values.type,
-          values.users.map((user) => user.value)
+          values.users.map((user) => user.value),
+          values.proposals.map((prop) => prop.value)
         );
         setSubmitting(false);
         setUpdated(true);
@@ -73,7 +104,8 @@ const ManageDccForm = ({ onUpdate, user }) => {
       initialValues={{
         domain,
         type: contractortype,
-        users: initialSupervisorOptions
+        users: initialSupervisorOptions,
+        proposals: initialOwnedProposals
       }}>
       {({
         values,
@@ -86,7 +118,11 @@ const ManageDccForm = ({ onUpdate, user }) => {
         const handleChangeUserSelector = (options) => {
           setFieldValue("users", options);
         };
-        const submitEnabled = dirty && !loadingSupervisors;
+        const handleChangeOwnedProposals = (options) => {
+          setFieldValue("proposals", options);
+        };
+        const submitEnabled =
+          dirty && !loadingSupervisors && !loadingOwnedProposals;
         return (
           <>
             <form onSubmit={handleSubmit}>
@@ -127,7 +163,20 @@ const ManageDccForm = ({ onUpdate, user }) => {
                       onChange={handleChangeUserSelector}
                       isMulti
                       options={supervisorsOptions}
-                      styles={selectSupervisorStyles}
+                      styles={multipleSelectStyles}
+                    />
+                  }
+                />
+                <InfoSection
+                  label="Owned Proposals"
+                  info={
+                    <Select
+                      placeholder="Select Proposals"
+                      value={values.proposals}
+                      onChange={handleChangeOwnedProposals}
+                      isMulti
+                      options={proposalsOptions}
+                      styles={multipleSelectStyles}
                     />
                   }
                 />

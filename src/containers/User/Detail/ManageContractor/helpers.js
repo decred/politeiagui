@@ -1,3 +1,5 @@
+import { get } from "lodash";
+
 export const typeOptions = [
   "No type defined",
   "Direct",
@@ -38,3 +40,6 @@ export const getSupervisorsOptions = (supervisors, currentUserID) =>
       label: username,
       value: id
     }));
+
+export const getOwnedProposals = (owned, proposalsByToken) =>
+  owned ? owned.map((token) => get(proposalsByToken, [token, "name"])) : [];

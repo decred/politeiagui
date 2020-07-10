@@ -521,11 +521,17 @@ export const onEditCmsUser = (cmsUserInfo) =>
       });
   });
 
-export const onManageCmsUser = (userID, domain, type, supervisorIDs) =>
+export const onManageCmsUser = (
+  userID,
+  domain,
+  type,
+  supervisorIDs,
+  proposalsOwned
+) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_MANAGE_CMS_USER());
     return api
-      .manageCmsUser(csrf, userID, domain, type, supervisorIDs)
+      .manageCmsUser(csrf, userID, domain, type, supervisorIDs, proposalsOwned)
       .then((response) =>
         dispatch(
           act.RECEIVE_MANAGE_CMS_USER({
@@ -533,7 +539,8 @@ export const onManageCmsUser = (userID, domain, type, supervisorIDs) =>
             userID,
             domain,
             type,
-            supervisorIDs
+            supervisorIDs,
+            proposalsOwned
           })
         )
       )

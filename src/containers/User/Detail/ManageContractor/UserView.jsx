@@ -1,35 +1,45 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { H2, Message, Button } from "pi-ui";
+import { H2, Message, Button, Spinner } from "pi-ui";
 import InfoSection from "../InfoSection.jsx";
-import { typeOptions, domainOptions } from "./helpers";
+import { typeOptions, domainOptions, getOwnedProposals } from "./helpers";
+import useApprovedProposals from "src/hooks/api/useApprovedProposals";
 
 const UserDccInfo = ({
   contractorType,
   domain,
   supervisorIds,
+  proposalsOwned,
+  isLoadingProposals,
   showEdit,
   onToggleDccEdit
-}) => (
-  <>
-    <H2>DCC Info</H2>
-    <div className="margin-top-s margin-bottom-s">
-      <InfoSection label="Contractor Type" info={contractorType} />
-      <InfoSection label="Domain" info={domain} />
-      <InfoSection
-        label="Supervisors IDs"
-        info={
-          supervisorIds.length ? supervisorIds.join(", ") : "No supervisors"
-        }
-      />
-    </div>
-    {showEdit && (
-      <Button className="margin-bottom-m" onClick={onToggleDccEdit}>
-        Edit
-      </Button>
-    )}
-  </>
-);
+}) => {
+  const supervisors = supervisorIds.length
+    ? supervisorIds.join(", ")
+    : "No supervisors";
+  const proposals = proposalsOwned.length
+    ? proposalsOwned.join(", ")
+    : "No owned proposals";
+  return (
+    <>
+      <H2>DCC Info</H2>
+      <div className="margin-top-s margin-bottom-s">
+        <InfoSection label="Contractor Type" info={contractorType} />
+        <InfoSection label="Domain" info={domain} />
+        <InfoSection label="Supervisors IDs" info={supervisors} />
+        <InfoSection
+          label="Owned Proposals"
+          info={isLoadingProposals ? <Spinner invert /> : proposals}
+        />
+      </div>
+      {showEdit && (
+        <Button className="margin-bottom-m" onClick={onToggleDccEdit}>
+          Edit
+        </Button>
+      )}
+    </>
+  );
+};
 
 const UserContractorInfo = ({
   githubname,
@@ -68,7 +78,11 @@ const ManageContractorUserView = ({
   onToggleContractorInfoEdit
 }) => {
   const { domain, contractortype, supervisoruserids = [] } = user;
-
+  const { proposalsByToken, isLoading } = useApprovedProposals();
+  const ownedProposals = getOwnedProposals(
+    user.proposalsowned,
+    proposalsByToken
+  );
   return (
     <>
       {requireGitHubName && (
@@ -81,6 +95,8 @@ const ManageContractorUserView = ({
           contractorType={typeOptions[contractortype]}
           domain={domainOptions[domain]}
           supervisorIds={supervisoruserids}
+          proposalsOwned={ownedProposals}
+          isLoadingProposals={isLoading}
           showEdit={showDccForm}
           onToggleDccEdit={onToggleDccEdit}
         />

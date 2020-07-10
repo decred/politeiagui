@@ -95,12 +95,19 @@ const users = (state = DEFAULT_STATE, action) =>
               verifiedkey: action.payload
             }))(state),
           [act.RECEIVE_MANAGE_CMS_USER]: () => {
-            const { domain, type, supervisorIDs, userID } = action.payload;
+            const {
+              domain,
+              type,
+              supervisorIDs,
+              proposalsOwned,
+              userID
+            } = action.payload;
             return update(["byID", userID], (user) => ({
               ...user,
               domain,
               contractortype: type,
-              supervisoruserids: supervisorIDs
+              supervisoruserids: supervisorIDs,
+              proposalsowned: proposalsOwned
             }))(state);
           },
           [act.RECEIVE_USER_SEARCH]: () => {

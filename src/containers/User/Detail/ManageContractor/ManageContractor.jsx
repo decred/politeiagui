@@ -4,7 +4,7 @@ import ManageDccForm from "./ManageDccForm";
 import UserView from "./UserView";
 import EditContractorForm from "./EditContractorForm";
 import useContractor from "../hooks/useContractor";
-import isEmpty from "lodash/isEmpty";
+import { isEmpty } from "lodash";
 
 const ManageContractor = ({ userID, isUserPageOwner }) => {
   const [showDccForm, setShowDccForm] = useState(true);
