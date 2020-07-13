@@ -7,7 +7,8 @@ import {
 import {
   selectWrapper,
   textAreaWrapper,
-  multilineTextWrapper
+  multilineTextWrapper,
+  singlelineTextWrapper
 } from "./wrappers";
 
 export const columnTypes = {
@@ -126,7 +127,8 @@ export const convertLineItemsToGrid = (
         {
           readOnly,
           value: line.subdomain,
-          error: rowErrors && rowErrors.subdomain
+          error: rowErrors && rowErrors.subdomain,
+          valueViewer: singlelineTextWrapper(policySupportedChars)
         },
         {
           readOnly,

@@ -18,12 +18,9 @@ export const textAreaWrapper = () => (props) => (
   </div>
 );
 
-export const multilineTextWrapper = (supportedChars) => ({ value }) => {
-  const re = buildSimpleMatchRegexFromSupportedChars(supportedChars);
-  const unmatched = value.replace(re, "");
-  const uniqueUnmatched = new Set(unmatched);
+const printHighlightingUnsupported = (uniqueUnmatched, value, isMultiline) => {
   return (
-    <div className={multilineCellValue}>
+    <div className={isMultiline ? multilineCellValue : ""}>
       {value.split("").map((v) => {
         return uniqueUnmatched.has(v) ? (
           <span className={highlightChar}>{v}</span>
@@ -33,4 +30,21 @@ export const multilineTextWrapper = (supportedChars) => ({ value }) => {
       })}
     </div>
   );
+};
+
+const getUnmatchedSet = (supportedChars, value) => {
+  const re = buildSimpleMatchRegexFromSupportedChars(supportedChars);
+  const unmatched = value.replace(re, "");
+  const uniqueUnmatched = new Set(unmatched);
+  return uniqueUnmatched;
+};
+
+export const multilineTextWrapper = (supportedChars) => ({ value }) => {
+  const uniqueUnmatched = getUnmatchedSet(supportedChars, value);
+  return printHighlightingUnsupported(uniqueUnmatched, value, true);
+};
+
+export const singlelineTextWrapper = (supportedChars) => ({ value }) => {
+  const uniqueUnmatched = getUnmatchedSet(supportedChars, value);
+  return printHighlightingUnsupported(uniqueUnmatched, value, false);
 };
