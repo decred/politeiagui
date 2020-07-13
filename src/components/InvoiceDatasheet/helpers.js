@@ -80,7 +80,8 @@ export const convertLineItemsToGrid = (
 ) => {
   const {
     supporteddomains: policyDomains,
-    supportedlineitemtypes: policyLineItemTypes
+    supportedlineitemtypes: policyLineItemTypes,
+    invoicefieldsupportedchars: policySupportedChars
   } = policy;
   const grid = [];
   const { grid: gridBody, expenseTotal, laborTotal, total } = lineItems.reduce(
@@ -134,7 +135,7 @@ export const convertLineItemsToGrid = (
           dataEditor: textAreaWrapper({
             error: rowErrors && rowErrors.description
           }),
-          valueViewer: multilineTextWrapper()
+          valueViewer: multilineTextWrapper(policySupportedChars)
         },
         {
           readOnly,

@@ -99,6 +99,10 @@ pre {
   overflow-x: auto;
 }
 
+.highlightChar {
+  color: red;
+}
+
 .textWrapper {
   display: flex;
   align-items: center;
