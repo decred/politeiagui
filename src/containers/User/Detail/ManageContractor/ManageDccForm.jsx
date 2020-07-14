@@ -1,11 +1,12 @@
 import { Button, Message, H2, Select } from "pi-ui";
 import SelectField from "src/components/Select/SelectField";
-import React, { useCallback, useState, useMemo } from "react";
+import React, { useCallback, useState } from "react";
 import InfoSection from "../InfoSection.jsx";
 import {
   selectTypeOptions,
   selectDomainOptions,
-  getSupervisorsOptions
+  getInitialAndOptionsProposals,
+  getInitialAndOptionsSupervisors
 } from "./helpers";
 import { Formik } from "formik";
 import styles from "./ManageContractor.module.css";
@@ -39,42 +40,22 @@ const ManageDccForm = ({ onUpdate, user }) => {
 
   const [updated, setUpdated] = useState(false);
 
+  // Parse supervisors initial values and options
   const { loading: loadingSupervisors, supervisors } = useSupervisors();
-  const supervisorsOptions = useMemo(
-    () => getSupervisorsOptions(supervisors, userid),
-    [supervisors, userid]
-  );
-  const initialSupervisorOptions = useMemo(
-    () =>
-      supervisorsOptions.filter((option) =>
-        supervisoruserids.some((supervisorid) => supervisorid === option.value)
-      ),
-    [supervisorsOptions, supervisoruserids]
-  );
+  const {
+    supervisorsOptions,
+    initialSupervisorOptions
+  } = getInitialAndOptionsSupervisors(supervisors, supervisoruserids);
 
+  // Parse owned proposals initial values and options
   const {
     proposals,
     isLoading: loadingOwnedProposals
   } = useApprovedProposals();
-  const proposalsOptions = useMemo(
-    () =>
-      proposals
-        ? [
-            ...proposals.map(({ name, censorshiprecord }) => ({
-              label: name,
-              value: censorshiprecord.token
-            }))
-          ]
-        : [],
-    [proposals]
-  );
-  const initialOwnedProposals = useMemo(
-    () =>
-      proposalsOptions.filter((option) =>
-        proposalsowned.some((token) => token === option.value)
-      ),
-    [proposalsOptions, proposalsowned]
-  );
+  const {
+    proposalsOptions,
+    initialOwnedProposals
+  } = getInitialAndOptionsProposals(proposals, proposalsowned);
 
   const handleSubmitForm = useCallback(
     async (values, { setSubmitting, setFieldError, resetForm }) => {
