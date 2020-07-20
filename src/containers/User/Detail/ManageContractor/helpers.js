@@ -1,5 +1,6 @@
 import get from "lodash/get";
 import includes from "lodash/includes";
+import find from "lodash/find";
 
 export const typeOptions = [
   "No type defined",
@@ -78,3 +79,9 @@ export const getInitialAndOptionsSupervisors = (
     initialSupervisorOptions
   };
 };
+
+export const getSupervisorsNames = (supervisors, userSupervisors) =>
+  userSupervisors.flatMap((id) => {
+    const user = find(supervisors, { id });
+    return user ? user.username : [];
+  });

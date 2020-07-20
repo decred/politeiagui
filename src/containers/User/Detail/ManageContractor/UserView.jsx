@@ -2,20 +2,21 @@ import React from "react";
 import PropTypes from "prop-types";
 import { H2, Message, Button, Spinner } from "pi-ui";
 import InfoSection from "../InfoSection.jsx";
-import { typeOptions, domainOptions, getOwnedProposals } from "./helpers";
+import { typeOptions, domainOptions, getOwnedProposals, getSupervisorsNames } from "./helpers";
 import useApprovedProposals from "src/hooks/api/useApprovedProposals";
+import useSupervisors from "src/hooks/api/useSupervisors";
 
 const UserDccInfo = ({
   contractorType,
   domain,
-  supervisorIds,
+  supervisors,
   proposalsOwned,
   isLoadingProposals,
   showEdit,
   onToggleDccEdit
 }) => {
-  const supervisors = supervisorIds.length
-    ? supervisorIds.join(", ")
+  const supervisors = supervisors.length
+    ? supervisors.join(", ")
     : "No supervisors";
   const proposals = proposalsOwned.length
     ? proposalsOwned.join(", ")
@@ -26,7 +27,7 @@ const UserDccInfo = ({
       <div className="margin-top-s margin-bottom-s">
         <InfoSection label="Contractor Type" info={contractorType} />
         <InfoSection label="Domain" info={domain} />
-        <InfoSection label="Supervisors IDs" info={supervisors} />
+        <InfoSection label="Supervisors" info={supervisors} />
         <InfoSection
           label="Owned Proposals"
           info={isLoadingProposals ? <Spinner invert /> : proposals}
@@ -83,6 +84,7 @@ const ManageContractorUserView = ({
     user.proposalsowned,
     proposalsByToken
   );
+  const { supervisors } = useSupervisors();
   return (
     <>
       {requireGitHubName && (
@@ -94,9 +96,9 @@ const ManageContractorUserView = ({
         <UserDccInfo
           contractorType={typeOptions[contractortype]}
           domain={domainOptions[domain]}
-          supervisorIds={supervisoruserids}
           proposalsOwned={ownedProposals}
           isLoadingProposals={isLoading}
+          supervisors={getSupervisorsNames(supervisors, supervisoruserids)}
           showEdit={showDccForm}
           onToggleDccEdit={onToggleDccEdit}
         />

@@ -10,6 +10,7 @@ import {
   CONTRACTOR_TYPE_NOMINEE,
   CONTRACTOR_TYPE_REVOKED,
   CONTRACTOR_TYPE_SUPERVISOR,
+  CONTRACTOR_TYPE_SUBCONTRACTOR,
   CONTRACTOR_TYPE_INVALID
 } from "./constants";
 import isEmpty from "lodash/isEmpty";
@@ -139,8 +140,9 @@ export const getDomainOptions = () =>
 
 /**
  * Returns contractor type options for selectors
+ * @param {Boolean} isSupervisor
  */
-export const getContractorTypeOptions = () =>
+export const getContractorTypeOptions = (isSupervisor) =>
   CMS_USER_TYPES.reduce(
     (acc, label, value) =>
       value === CONTRACTOR_TYPE_NOMINEE ||
@@ -149,6 +151,8 @@ export const getContractorTypeOptions = () =>
         ? [...acc]
         : [...acc, { label, value }],
     []
+  ).filter((type) =>
+    !isSupervisor ? type.value !== CONTRACTOR_TYPE_SUBCONTRACTOR : true
   );
 
 /**

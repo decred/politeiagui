@@ -13,6 +13,7 @@ import {
   proposalSelectWrapper
 } from "./wrappers";
 import _omit from "lodash/fp/omit";
+import find from "lodash/find";
 
 export const columnTypes = {
   TYPE_COL: 1,
@@ -97,6 +98,10 @@ export const convertLineItemsToGrid = (
       const isSubContractorReadonly = newLine.type !== 4 ? true : readOnly;
       const isExpenseReadonly =
         newLine.type === 1 || newLine.type === 4 ? true : readOnly;
+      const subUser = find(subContractors, { id: newLine.subuserid });
+      const subContractorValue = isSubContractorReadonly
+        ? subUser && subUser.username
+        : newLine.subuserid;
       const laborHours = +fromMinutesToHours(newLine.labor);
       const expenses = +fromUSDCentsToUSDUnits(newLine.expenses);
       const subRate = +fromUSDCentsToUSDUnits(newLine.subrate);
@@ -153,7 +158,7 @@ export const convertLineItemsToGrid = (
         },
         {
           readOnly: isSubContractorReadonly,
-          value: newLine.subuserid,
+          value: subContractorValue,
           error: rowErrors && rowErrors.subuserid,
           dataEditor: selectWrapper(getSubcontractorOptions(subContractors))
         },

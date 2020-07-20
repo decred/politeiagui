@@ -16,9 +16,11 @@ import {
   getNomineeOptions,
   DCC_TYPE_ISSUANCE,
   DCC_TYPE_REVOCATION,
-  CONTRACTOR_TYPE_REVOKED
+  CONTRACTOR_TYPE_REVOKED,
+  CONTRACTOR_TYPE_SUPERVISOR
 } from "src/containers/DCC";
 import usePolicy from "src/hooks/api/usePolicy";
+import useUserDetail from "src/hooks/api/useUserDetail";
 
 const Select = ({ error, ...props }) => (
   <div
@@ -40,7 +42,8 @@ const DccForm = React.memo(function DccForm({
   cmsUsers,
   setSessionStorageDcc,
   submitSuccess,
-  isUserValid
+  isUserValid,
+  isSupervisor
 }) {
   const [isIssuance, setIsIssuance] = useState();
   useScrollFormOnError(errors && errors.global);
@@ -154,7 +157,7 @@ const DccForm = React.memo(function DccForm({
           />
           <Select
             name="contractortype"
-            options={getContractorTypeOptions()}
+            options={getContractorTypeOptions(isSupervisor)}
             placeholder="Contractor Type"
             error={touched.contractortype && errors.contractortype}
             onChange={handleChangeSelector("contractortype")}
@@ -197,6 +200,7 @@ const DccFormWrapper = ({
 }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { policy } = usePolicy();
+  const { user } = useUserDetail();
   const dccFormValidation = useMemo(() => dccValidationSchema(policy), [
     policy
   ]);
@@ -220,6 +224,7 @@ const DccFormWrapper = ({
   }
 
   const isInitialValid = dccFormValidation.isValidSync(formInitialValues);
+  const isSupervisor = user.contractortype === CONTRACTOR_TYPE_SUPERVISOR;
 
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
@@ -253,7 +258,8 @@ const DccFormWrapper = ({
             submitSuccess,
             setSessionStorageDcc,
             cmsUsers,
-            isUserValid
+            isUserValid,
+            isSupervisor
           }}
         />
       )}
