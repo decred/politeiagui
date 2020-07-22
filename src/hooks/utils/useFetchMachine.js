@@ -1,55 +1,52 @@
 import { useReducer, useEffect, useCallback } from "react";
+import get from "lodash/get";
 import set from "lodash/fp/set";
 import compose from "lodash/fp/compose";
+import merge from "lodash/fp/merge";
 
 const DEFAULT_STATE = {
   status: "idle",
   loading: false
 };
 
-const states = {
+const actionsByState = {
   idle: {
-    entry: "initial",
-    on: {
-      FETCH: "loading",
-      RESOLVE: "verifying",
-      REJECT: "failure"
-    }
+    FETCH: "loading",
+    RESOLVE: "verifying",
+    REJECT: "failure"
   },
   loading: {
-    entry: "load",
-    on: {
-      VERIFY: "verifying",
-      REJECT: "failure",
-      FETCH: "loading"
-    }
+    VERIFY: "verifying",
+    REJECT: "failure",
+    FETCH: "loading"
   },
   verifying: {
-    on: {
-      FETCH: "loading",
-      RESOLVE: "success",
-      REJECT: "failure"
-    }
+    FETCH: "loading",
+    RESOLVE: "success",
+    REJECT: "failure"
   },
   success: {
-    on: {
-      REJECT: "failure"
-    }
+    FETCH: "loading"
   },
   failure: {
-    on: {
-      RETRY: "loading"
-    }
+    RETRY: "loading"
   }
 };
 
+const getNextState = (currentState, action) =>
+  get(actionsByState, [currentState, action.type]);
+
 const fetchReducer = (state, action) => {
-  const nextState = states[state.status].on[action.type];
+  const nextState = getNextState(state.status, action);
   switch (action.type) {
     case "FETCH":
       return compose(set("status", nextState), set("loading", true))(state);
     case "RESOLVE":
-      return { ...state, status: nextState, loading: false, ...action.payload };
+      return compose(
+        set("status", nextState),
+        set("verifying", false),
+        merge(action.payload)
+      )(state);
     case "VERIFY":
       return compose(
         set("loading", false),
@@ -85,6 +82,8 @@ export default function useFetchMachine(props) {
           return actions.done && actions.done();
         case "failure":
           return actions.error && actions.error();
+        default:
+          return;
       }
     },
     [currentState, actions, dispatch]

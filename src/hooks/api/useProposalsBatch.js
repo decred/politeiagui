@@ -46,20 +46,31 @@ export default function useProposalsBatch(tokens, fetchLinks, isRfp = false) {
     [proposals, isRfp]
   );
 
-  const remainingLinks = difference(merge(links, tokens), keys(proposals));
+  const remainingLinks = difference(
+    merge(fetchLinks && links ? links : [], tokens),
+    keys(proposals)
+  );
+
+  const missingProposals = !isEmpty(proposals);
+  const missingTokenInventory = !isEmpty(tokenInventory);
+  const hasRemainingLinks = !isEmpty(remainingLinks);
 
   const [state, send] = useFetchMachine({
     actions: {
       initial: () => {
         if (!tokenInventory && !tokens) {
-          onFetchTokenInventory();
           return send("FETCH");
         }
         return send("VERIFY");
       },
       load: () => {
-        if (isEmpty(proposals)) return;
-        if (fetchLinks && !isEmpty(remainingLinks)) {
+        if (!missingProposals && !missingTokenInventory) {
+          onFetchTokenInventory()
+            .then(() => send("VERIFY"))
+            .catch((e) => send("REJECT", e));
+          return;
+        }
+        if (hasRemainingLinks) {
           onFetchProposalsBatch(remainingLinks)
             .then(() => send("VERIFY"))
             .catch((e) => send("REJECT", e));
@@ -68,10 +79,15 @@ export default function useProposalsBatch(tokens, fetchLinks, isRfp = false) {
         return;
       },
       verify: () => {
-        if (fetchLinks && !isEmpty(remainingLinks)) {
+        if (hasRemainingLinks || !missingProposals) {
           return send("FETCH");
         }
-        return send("RESOLVE", { proposals });
+        return send("RESOLVE", { proposals, proposalsTokens: allByStatus });
+      },
+      done: () => {
+        if (hasRemainingLinks) {
+          return send("FETCH");
+        }
       }
     }
   });

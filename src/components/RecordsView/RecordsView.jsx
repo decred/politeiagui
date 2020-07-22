@@ -50,7 +50,6 @@ const getDefaultEmptyMessage = () => "No records available";
 
 const RecordsView = ({
   children,
-  onFetchRecords,
   records,
   tabLabels,
   recordTokensByTab,
@@ -59,7 +58,8 @@ const RecordsView = ({
   pageSize = DEFAULT_PAGE_SIZE,
   placeholder,
   getEmptyMessage = getDefaultEmptyMessage,
-  dropdownTabsForMobile
+  dropdownTabsForMobile,
+  setRemainingTokens
 }) => {
   const [hasMoreToLoad, setHasMore] = useState(true);
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -78,7 +78,7 @@ const RecordsView = ({
     [records, filteredTokens]
   );
 
-  const handleFetchMoreRecords = useCallback(async () => {
+  const handleFetchMoreRecords = useCallback(() => {
     // make sure tokens being requested are different from the ones
     // already requested or fetched
     const fetchedTokens = filteredRecords.map(getRecordToken);
@@ -100,7 +100,9 @@ const RecordsView = ({
     });
 
     try {
-      await onFetchRecords(recordTokensToBeFetched);
+      setRemainingTokens(recordTokensToBeFetched);
+      // await onFetchRecords(recordTokensToBeFetched);
+
       dispatch({ type: DECREMENT_LOADING_ITEMS, count: numOfItemsToBeFetched });
     } catch (e) {
       dispatch({
@@ -113,16 +115,20 @@ const RecordsView = ({
     filteredTokens,
     pageSize,
     setHasMore,
-    onFetchRecords,
+    // onFetchRecords,
     itemsOnLoad,
-    state.requestedTokens
+    state.requestedTokens,
+    setRemainingTokens
   ]);
 
   useEffect(() => {
     const hasMoreRecordsToLoad =
       filteredTokens && filteredRecords.length < filteredTokens.length;
     setHasMore(hasMoreRecordsToLoad);
-  }, [filteredTokens, filteredRecords.length]);
+    if (!hasMoreRecordsToLoad) {
+      setRemainingTokens();
+    }
+  }, [filteredTokens, filteredRecords.length, setRemainingTokens]);
 
   const getPropsCountByTab = useCallback(
     (tab) => {

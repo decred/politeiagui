@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Spinner } from "pi-ui";
 import styles from "./PublicProposals.module.css";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
@@ -21,12 +21,14 @@ const tabLabels = [
 ];
 
 const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
+  const [remainingTokens, setRemainingTokens] = useState();
+
   const {
     isLoadingTokenInventory,
     proposals,
     proposalsTokens,
     onFetchProposalsBatch
-  } = useProposalsBatch(null, true);
+  } = useProposalsBatch(remainingTokens, true);
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
@@ -77,6 +79,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       displayTabCount={!!proposalsTokens}
       placeholder={ProposalLoader}
       getEmptyMessage={getEmptyMessage}
+      setRemainingTokens={setRemainingTokens}
       dropdownTabsForMobile={true}>
       {content}
     </RecordsView>
