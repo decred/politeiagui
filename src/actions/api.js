@@ -223,9 +223,9 @@ export const onLogin = ({ email, password }) =>
       .then((response) => {
         dispatch(act.RECEIVE_LOGIN(response));
         const { userid, username } = response;
-        pki.needStorageKeyReplace(username).then((needReplace) => {
-          if (needReplace) {
-            pki.replaceStorageKey(username, userid);
+        pki.needStorageKeyReplace(email, username).then((keyNeedsReplace) => {
+          if (keyNeedsReplace) {
+            pki.replaceStorageKey(keyNeedsReplace, userid);
           }
           return response;
         });
