@@ -26,7 +26,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     proposals,
     proposalsTokens,
     onFetchProposalsBatch
-  } = useProposalsBatch();
+  } = useProposalsBatch(null, true);
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
