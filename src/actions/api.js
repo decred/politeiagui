@@ -331,15 +331,36 @@ export const onFetchInvoiceComments = (token) => (dispatch) => {
     });
 };
 
-export const onFetchAdminInvoices = () =>
+export const onFetchAdminInvoices = (start, end, userid) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_ADMIN_INVOICES());
     return api
-      .adminInvoices(csrf)
+      .adminInvoices(csrf, start, end, userid)
       .then((response) => dispatch(act.RECEIVE_ADMIN_INVOICES(response)))
       .catch((error) => {
         dispatch(act.RECEIVE_ADMIN_INVOICES(null, error));
       });
+  });
+
+export const onFetchUserCodeStats = (userid, start, end) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_CODE_STATS());
+    return api
+      .codeStats(csrf, userid, start, end)
+      .then((response) =>
+        dispatch(
+          act.RECEIVE_CODE_STATS({ userid, codestats: response.repostats })
+        )
+      )
+      .catch((error) => {
+        dispatch(act.RECEIVE_CODE_STATS(null, error));
+      });
+  });
+
+export const onFetchAdminInvoicesWithoutState = (start, end, userid) =>
+  withCsrf(async (_, __, csrf) => {
+    const res = await api.adminInvoices(csrf, start, end, userid);
+    return res.invoices;
   });
 
 export const onFetchProposalsBatchWithoutState = (

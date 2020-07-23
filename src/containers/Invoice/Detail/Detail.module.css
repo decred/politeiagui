@@ -1,0 +1,8 @@
+h2.statsTitle {
+  font-weight: var(--font-weight-regular);
+  margin-bottom: var(--spacing-1);
+}
+
+.invoiceLinkWrapper {
+  padding: var(--spacing-1);
+}

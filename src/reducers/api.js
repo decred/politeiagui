@@ -22,6 +22,7 @@ export const DEFAULT_STATE = {
   censorComment: DEFAULT_REQUEST_STATE,
   commentslikes: DEFAULT_REQUEST_STATE,
   editUser: DEFAULT_REQUEST_STATE,
+  codestats: DEFAULT_REQUEST_STATE,
   manageUser: DEFAULT_REQUEST_STATE,
   userSearch: DEFAULT_REQUEST_STATE,
   newProposal: DEFAULT_REQUEST_STATE,
@@ -104,6 +105,8 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.RECEIVE_PROPOSALS_BATCH]: () => receive("proposalsBatch", state),
       [act.REQUEST_PROPOSAL]: () => request("proposal", state, action),
       [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
+      [act.REQUEST_CODE_STATS]: () => request("codestats", state, action),
+      [act.RECEIVE_CODE_STATS]: () => receive("codestats", state, action),
       [act.REQUEST_RECORD_COMMENTS]: () =>
         request("proposalComments", state, action),
       [act.RECEIVE_RECORD_COMMENTS]: () =>

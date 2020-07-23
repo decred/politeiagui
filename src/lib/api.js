@@ -454,6 +454,11 @@ export const resendVerificationEmailRequest = (csrf, email, username) =>
 export const updateKeyRequest = (csrf, publickey) =>
   POST("/user/key", csrf, { publickey }).then(getResponse);
 
+export const codeStats = (csrf, userid, starttime, endtime) =>
+  POST("/user/codestats", csrf, { userid, starttime, endtime }).then(
+    getResponse
+  );
+
 export const verifyKeyRequest = (csrf, userid, verificationtoken) =>
   pki
     .signStringHex(userid, verificationtoken)
@@ -740,8 +745,8 @@ export const invoice = (token, version = null) =>
 
 export const userInvoices = () => GET("/v1/user/invoices").then(getResponse);
 
-export const adminInvoices = (csrf) =>
-  POST("/admin/invoices", csrf, {}).then(getResponse);
+export const adminInvoices = (csrf, start, end, userid) =>
+  POST("/admin/invoices", csrf, { start, end, userid }).then(getResponse);
 
 export const generatePayouts = (csrf) =>
   POST("/admin/generatepayouts", csrf, {}).then(getResponse);

@@ -13,12 +13,14 @@ import useApprovedProposals from "src/hooks/api/useApprovedProposals";
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
-  const { invoice, loading } = useInvoice(invoiceToken);
+  const { invoice, isAdmin, loading } = useInvoice(invoiceToken);
   const tokens = useMemo(() => getProposalsTokensFromInvoice(invoice), [
     invoice
   ]);
 
   const { proposals } = useApprovedProposals(tokens);
+
+  const shouldShowStats = isAdmin && invoice;
 
   return (
     <>
@@ -34,6 +36,7 @@ const InvoiceDetail = ({ Main, match }) => {
           ) : (
             <InvoiceLoader extended />
           )}
+          {shouldShowStats && <Stats invoice={invoice} />}
           <Comments
             recordAuthorID={invoice && invoice.userid}
             recordToken={invoiceToken}
