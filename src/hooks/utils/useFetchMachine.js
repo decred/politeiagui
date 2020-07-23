@@ -65,9 +65,11 @@ const fetchReducer = (state, action) => {
 };
 
 export default function useFetchMachine(props) {
-  const { actions } = props;
-  const [currentState, dispatch] = useReducer(fetchReducer, DEFAULT_STATE);
-
+  const { actions, initialState } = props;
+  const [currentState, dispatch] = useReducer(
+    fetchReducer,
+    initialState || DEFAULT_STATE
+  );
   useEffect(
     function onStateChanges() {
       const { status } = currentState;
@@ -90,9 +92,7 @@ export default function useFetchMachine(props) {
   );
 
   const send = useCallback(
-    (action, payload) => {
-      return dispatch({ type: action, payload });
-    },
+    (action, payload) => dispatch({ type: action, payload }),
     [dispatch]
   );
 

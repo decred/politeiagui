@@ -51,8 +51,8 @@ export default function useProposalsBatch(tokens, fetchLinks, isRfp = false) {
     keys(proposals)
   );
 
-  const missingProposals = !isEmpty(proposals);
-  const missingTokenInventory = !isEmpty(tokenInventory);
+  const missingProposals = isEmpty(proposals);
+  const missingTokenInventory = isEmpty(tokenInventory);
   const hasRemainingLinks = !isEmpty(remainingLinks);
 
   const [state, send] = useFetchMachine({
@@ -64,24 +64,27 @@ export default function useProposalsBatch(tokens, fetchLinks, isRfp = false) {
         return send("VERIFY");
       },
       load: () => {
-        if (!missingProposals && !missingTokenInventory) {
+        if (missingProposals && missingTokenInventory) {
           onFetchTokenInventory()
             .then(() => send("VERIFY"))
             .catch((e) => send("REJECT", e));
-          return;
         }
         if (hasRemainingLinks) {
           onFetchProposalsBatch(remainingLinks)
             .then(() => send("VERIFY"))
             .catch((e) => send("REJECT", e));
-          return;
+        }
+        if (!missingTokenInventory && missingProposals && !tokens) {
+          console.log("nao tinha token pra carregar, retorna o inventory");
+          return send("RESOLVE", { proposalsTokens: allByStatus });
         }
         return;
       },
       verify: () => {
-        if (hasRemainingLinks || !missingProposals) {
+        if (hasRemainingLinks || missingProposals) {
           return send("FETCH");
         }
+        console.log("agora é pra carregar as proposals");
         return send("RESOLVE", { proposals, proposalsTokens: allByStatus });
       },
       done: () => {
@@ -89,6 +92,13 @@ export default function useProposalsBatch(tokens, fetchLinks, isRfp = false) {
           return send("FETCH");
         }
       }
+    },
+    initialState: {
+      status: "idle",
+      loading: true,
+      proposals: {},
+      proposalsTokens: {},
+      verifying: true
     }
   });
 
@@ -96,10 +106,10 @@ export default function useProposalsBatch(tokens, fetchLinks, isRfp = false) {
 
   useThrowError(anyError);
   return {
-    proposals,
+    proposals: state.proposals,
     onFetchProposalsBatch,
     isLoadingTokenInventory: showLoadingIndicator,
-    proposalsTokens: allByStatus,
+    proposalsTokens: state.proposalsTokens,
     test: state
   };
 }

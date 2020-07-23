@@ -27,7 +27,8 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     isLoadingTokenInventory,
     proposals,
     proposalsTokens,
-    onFetchProposalsBatch
+    onFetchProposalsBatch,
+    test
   } = useProposalsBatch(remainingTokens, true);
 
   const getEmptyMessage = useCallback((tab) => {
