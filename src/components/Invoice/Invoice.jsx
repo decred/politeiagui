@@ -23,7 +23,7 @@ import ThumbnailGrid from "src/components/Files";
 import { useLoaderContext } from "src/containers/Loader";
 import VersionPicker from "src/components/VersionPicker";
 
-const Invoice = ({ invoice, extended, approvedProposalsTokens }) => {
+const Invoice = ({ invoice, extended, approvedProposals }) => {
   const {
     censorshiprecord,
     file,
@@ -113,6 +113,7 @@ const Invoice = ({ invoice, extended, approvedProposalsTokens }) => {
                       )}
                       version={version}
                       token={invoiceToken}
+                      proposals={approvedProposals}
                     />
                   )}
                 </Subtitle>
@@ -189,7 +190,7 @@ const Invoice = ({ invoice, extended, approvedProposalsTokens }) => {
                   value={invoice && invoice.input.lineitems}
                   readOnly
                   userRate={invContractorRate / 100}
-                  proposalsTokens={approvedProposalsTokens || []}
+                  proposals={approvedProposals || []}
                 />
               </>
             )}
@@ -203,7 +204,7 @@ const Invoice = ({ invoice, extended, approvedProposalsTokens }) => {
 
 Invoice.propTypes = {
   invoice: PropTypes.object.isRequired,
-  approvedProposalsTokens: PropTypes.array
+  approvedProposals: PropTypes.array
 };
 
 export default Invoice;

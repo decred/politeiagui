@@ -1,17 +1,16 @@
 import React from "react";
 import { Card } from "pi-ui";
 import InvoiceForm from "src/components/InvoiceForm";
-import { useNewInvoice, useApprovedProposalsTokens } from "./hooks";
+import { useNewInvoice } from "./hooks";
+import useApprovedProposals from "src/hooks/api/useApprovedProposals";
 
 const NewInvoice = () => {
   const { onSubmitInvoice } = useNewInvoice();
-  const approvedTokens = useApprovedProposalsTokens();
+  const { proposals } = useApprovedProposals();
+
   return (
     <Card className="container margin-bottom-l">
-      <InvoiceForm
-        onSubmit={onSubmitInvoice}
-        approvedProposalsTokens={approvedTokens}
-      />
+      <InvoiceForm onSubmit={onSubmitInvoice} approvedProposals={proposals} />
     </Card>
   );
 };

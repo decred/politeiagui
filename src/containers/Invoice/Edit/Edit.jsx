@@ -1,20 +1,20 @@
-import React from "react";
+import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import get from "lodash/fp/get";
 import { withRouter } from "react-router-dom";
 import { Card } from "pi-ui";
 import { useInvoice } from "../Detail/hooks";
-import { useApprovedProposalsTokens } from "../New/hooks";
+import useApprovedProposals from "src/hooks/api/useApprovedProposals";
 import { useEditInvoice } from "./hooks";
 import { fromUSDCentsToUSDUnits } from "src/helpers";
 import InvoiceLoader from "src/components/Invoice/InvoiceLoader";
 import InvoiceForm from "src/components/InvoiceForm";
+import { getProposalsTokensFromInvoice } from "../helpers";
 
 const EditInvoice = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
   const { onEditInvoice } = useEditInvoice();
   const { invoice, loading } = useInvoice(tokenFromUrl);
-  const approvedTokens = useApprovedProposalsTokens();
 
   const isInvoiceLoaded = !loading && !!invoice;
 
@@ -37,13 +37,20 @@ const EditInvoice = ({ match }) => {
       }
     : null;
 
+  const proposalsTokens = useMemo(
+    () => getProposalsTokensFromInvoice(invoice),
+    [invoice]
+  );
+
+  const { proposals } = useApprovedProposals(proposalsTokens);
+
   return (
     <Card className="container margin-bottom-l">
       {isInvoiceLoaded ? (
         <InvoiceForm
           initialValues={initialValues}
           onSubmit={onEditInvoice}
-          approvedProposalsTokens={approvedTokens}
+          approvedProposals={proposals}
           editMode
         />
       ) : (

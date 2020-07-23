@@ -1,10 +1,11 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback } from "react";
 import PropTypes from "prop-types";
 import { classNames, useTheme } from "pi-ui";
 import { fromUSDCentsToUSDUnits, fromMinutesToHours } from "src/helpers";
 import styles from "./Diff.module.css";
 import { TableRow } from "src/components/InvoiceDatasheet/InvoiceDatasheet";
 import { getTotalsLine } from "src/components/InvoiceDatasheet/helpers";
+import get from "lodash/get";
 
 const renderGrid = (lineItems) =>
   lineItems.reduce(
@@ -15,7 +16,7 @@ const renderGrid = (lineItems) =>
         domain,
         subdomain,
         description,
-        proposaltoken,
+        proposalname,
         subuserid,
         subrate,
         labor,
@@ -40,7 +41,7 @@ const renderGrid = (lineItems) =>
           value: description,
           multiline: true
         },
-        { value: proposaltoken },
+        { value: proposalname },
         { value: subuserid },
         { value: subRate },
         { value: laborHours },
@@ -57,14 +58,22 @@ const renderGrid = (lineItems) =>
     { grid: [], expenseTotal: 0, laborTotal: 0, total: 0 }
   );
 
-const DiffLineitems = ({ lineItems }) => {
+const DiffLineitems = ({ lineItems, proposals }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
 
-  const { grid, expenseTotal, laborTotal, total } = useMemo(
-    () => renderGrid(lineItems),
-    [lineItems]
+  const getProposalName = useCallback(
+    (token) => get(proposals, [token, "name"]),
+    [proposals]
   );
+
+  const { grid, expenseTotal, laborTotal, total } = useMemo(() => {
+    const newLineItems = lineItems.map((item) => ({
+      ...item,
+      proposalname: getProposalName(item.proposaltoken)
+    }));
+    return renderGrid(newLineItems);
+  }, [lineItems, getProposalName]);
 
   const numberOfCols = grid.length && grid[0] && grid[0].items.length;
 
