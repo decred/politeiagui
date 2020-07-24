@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { equals } from "lodash/fp";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { or } from "src/lib/fp";
@@ -20,7 +19,11 @@ const getRfpLinks = (proposals, isRfp) =>
 const getUnfetchedTokens = (proposals, tokens) =>
   difference(tokens, keys(proposals));
 
-export default function useProposalsBatch(tokens, fetchLinks, isRfp = false) {
+export default function useProposalsBatch(
+  tokens,
+  fetchRfpLinks,
+  isRfp = false
+) {
   const proposals = useSelector(sel.proposalsByToken);
   const allByStatus = useSelector(sel.allByStatus);
   const errorSelector = useMemo(
@@ -29,9 +32,6 @@ export default function useProposalsBatch(tokens, fetchLinks, isRfp = false) {
   );
   const error = useSelector(errorSelector);
   const tokenInventory = useSelector(sel.tokenInventory);
-
-  const showLoadingIndicator =
-    !tokenInventory || !equals(allByStatus, tokenInventory);
 
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
@@ -65,7 +65,7 @@ export default function useProposalsBatch(tokens, fetchLinks, isRfp = false) {
         if (
           hasRemainingTokens ||
           (missingTokenInventory && !tokens) ||
-          (fetchLinks && hasUnfetchedRfpLinks)
+          (fetchRfpLinks && hasUnfetchedRfpLinks)
         ) {
           return;
         }
@@ -78,7 +78,7 @@ export default function useProposalsBatch(tokens, fetchLinks, isRfp = false) {
             .catch((e) => send("REJECT", e));
           return send("FETCH");
         }
-        if (fetchLinks && hasUnfetchedRfpLinks) {
+        if (fetchRfpLinks && hasUnfetchedRfpLinks) {
           onFetchProposalsBatch(unfetchedRfpLinks)
             .then(() => send("VERIFY"))
             .catch((e) => send("REJECT", e));
@@ -101,14 +101,14 @@ export default function useProposalsBatch(tokens, fetchLinks, isRfp = false) {
     }
   });
 
-  const anyError = error;
+  const anyError = error || state.error;
 
   useThrowError(anyError);
   return {
     proposals: state.proposals,
     onFetchProposalsBatch,
-    isLoadingTokenInventory: showLoadingIndicator,
     proposalsTokens: state.proposalsTokens,
-    test: state
+    loading: state.loading,
+    verifying: state.verifying
   };
 }

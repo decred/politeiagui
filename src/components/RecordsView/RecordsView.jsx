@@ -28,19 +28,19 @@ const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
 
 const initialState = { itemsOnLoad: 0, requestedTokens: [] };
 
-const INCREMENT_LOADING_ITEMS = "increment";
-const DECREMENT_LOADING_ITEMS = "decrement";
+const SET_LOADING_ITEMS = "increment";
+const RESET_LOADING_ITEMS = "reset";
 
 function reducer(state, action) {
   switch (action.type) {
-    case INCREMENT_LOADING_ITEMS:
+    case SET_LOADING_ITEMS:
       return {
         ...state,
-        itemsOnLoad: state.itemsOnLoad + action.count,
+        itemsOnLoad: action.count,
         requestedTokens: state.requestedTokens.concat(action.tokens)
       };
-    case DECREMENT_LOADING_ITEMS:
-      return { ...state, itemsOnLoad: state.itemsOnLoad - action.count };
+    case RESET_LOADING_ITEMS:
+      return { ...state, itemsOnLoad: 0 };
     default:
       throw new Error();
   }
@@ -59,10 +59,12 @@ const RecordsView = ({
   placeholder,
   getEmptyMessage = getDefaultEmptyMessage,
   dropdownTabsForMobile,
-  setRemainingTokens
+  setRemainingTokens,
+  isLoading
 }) => {
   const [hasMoreToLoad, setHasMore] = useState(true);
   const [state, dispatch] = useReducer(reducer, initialState);
+
   const { itemsOnLoad } = state;
   const { javascriptEnabled } = useConfig();
 
@@ -91,22 +93,21 @@ const RecordsView = ({
     const numOfItemsToBeFetched = recordTokensToBeFetched.length;
 
     // only proceed if there is at least one token to be fetched
-    if (!numOfItemsToBeFetched) return;
+    if (!numOfItemsToBeFetched) {
+      dispatch({ type: RESET_LOADING_ITEMS });
+      return;
+    }
 
     dispatch({
-      type: INCREMENT_LOADING_ITEMS,
+      type: SET_LOADING_ITEMS,
       count: numOfItemsToBeFetched,
       tokens: recordTokensToBeFetched
     });
-
     try {
       setRemainingTokens(recordTokensToBeFetched);
-      // await onFetchRecords(recordTokensToBeFetched);
-
-      dispatch({ type: DECREMENT_LOADING_ITEMS, count: numOfItemsToBeFetched });
     } catch (e) {
       dispatch({
-        type: DECREMENT_LOADING_ITEMS,
+        type: SET_LOADING_ITEMS,
         count: itemsOnLoad + numOfItemsToBeFetched
       });
     }
@@ -115,7 +116,6 @@ const RecordsView = ({
     filteredTokens,
     pageSize,
     setHasMore,
-    // onFetchRecords,
     itemsOnLoad,
     state.requestedTokens,
     setRemainingTokens
@@ -126,7 +126,9 @@ const RecordsView = ({
       filteredTokens && filteredRecords.length < filteredTokens.length;
     setHasMore(hasMoreRecordsToLoad);
     if (!hasMoreRecordsToLoad) {
+      console.log("No more");
       setRemainingTokens();
+      dispatch({ type: RESET_LOADING_ITEMS });
     }
   }, [filteredTokens, filteredRecords.length, setRemainingTokens]);
 
@@ -178,6 +180,10 @@ const RecordsView = ({
 
   const useDropdownTabs = isMobileScreen && dropdownTabsForMobile;
 
+  useEffect(() => {
+    console.log(isLoading && "isLoading");
+  }, [isLoading]);
+
   return children({
     tabs: (
       <Tabs
@@ -197,7 +203,7 @@ const RecordsView = ({
         emptyListComponent={
           <HelpMessage>{getEmptyMessage(tabOption)}</HelpMessage>
         }
-        isLoading={itemsOnLoad > 0}
+        isLoading={isLoading}
         loadingPlaceholder={loadingPlaceholders}
       />
     )

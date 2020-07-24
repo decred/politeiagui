@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Spinner } from "pi-ui";
 import styles from "./PublicProposals.module.css";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
@@ -24,10 +23,11 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const [remainingTokens, setRemainingTokens] = useState();
 
   const {
-    isLoadingTokenInventory,
     proposals,
     proposalsTokens,
-    onFetchProposalsBatch
+    onFetchProposalsBatch,
+    loading,
+    verifying
   } = useProposalsBatch(remainingTokens, true);
 
   const getEmptyMessage = useCallback((tab) => {
@@ -55,18 +55,12 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
         <Sidebar />
         <Main className={styles.customMain}>
           <PublicActionsProvider>
-            {isLoadingTokenInventory ? (
-              <div className={styles.spinnerWrapper}>
-                <Spinner invert />
-              </div>
-            ) : (
-              proposalsTokens && content
-            )}
+            {proposalsTokens && content}
           </PublicActionsProvider>
         </Main>
       </>
     ),
-    [proposalsTokens, isLoadingTokenInventory]
+    [proposalsTokens]
   );
 
   return (
@@ -80,7 +74,8 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       placeholder={ProposalLoader}
       getEmptyMessage={getEmptyMessage}
       setRemainingTokens={setRemainingTokens}
-      dropdownTabsForMobile={true}>
+      dropdownTabsForMobile={true}
+      isLoading={loading || verifying}>
       {content}
     </RecordsView>
   );

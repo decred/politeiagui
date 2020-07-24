@@ -41,7 +41,7 @@ const getNextState = (currentState, action) =>
 const fetchReducer = (state, action) => {
   const nextState = getNextState(state.status, action);
   if (!nextState) {
-    throw new Error("unhanlded state machine state change");
+    return set("error", new Error("unhanlded state change"))(state);
   }
   switch (action.type) {
     case "FETCH":
@@ -65,7 +65,7 @@ const fetchReducer = (state, action) => {
         set("status", nextState)
       )(state);
     default:
-      throw new Error("unhanlded state machine action");
+      return set("error", new Error("unhanlded state machine action"))(state);
   }
 };
 
