@@ -126,7 +126,6 @@ const RecordsView = ({
       filteredTokens && filteredRecords.length < filteredTokens.length;
     setHasMore(hasMoreRecordsToLoad);
     if (!hasMoreRecordsToLoad) {
-      console.log("No more");
       setRemainingTokens();
       dispatch({ type: RESET_LOADING_ITEMS });
     }
@@ -179,10 +178,6 @@ const RecordsView = ({
   );
 
   const useDropdownTabs = isMobileScreen && dropdownTabsForMobile;
-
-  useEffect(() => {
-    console.log(isLoading && "isLoading");
-  }, [isLoading]);
 
   return children({
     tabs: (
