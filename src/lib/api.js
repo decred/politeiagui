@@ -385,13 +385,15 @@ export const manageCmsUser = (
   userid,
   domain,
   contractortype,
-  supervisoruserids
+  supervisoruserids,
+  proposalsowned
 ) =>
   POST("/admin/managecms", csrf, {
     userid,
     domain,
     contractortype,
-    supervisoruserids
+    supervisoruserids,
+    proposalsowned
   });
 
 export const verifyUserPayment = () =>
