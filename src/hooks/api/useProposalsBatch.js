@@ -6,16 +6,19 @@ import { or } from "src/lib/fp";
 import { useSelector, useAction } from "src/redux";
 import useThrowError from "src/hooks/utils/useThrowError";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
-import isEmpty from "lodash/isEmpty";
-import keys from "lodash/keys";
-import values from "lodash/fp/values";
-import map from "lodash/fp/map";
-import flatten from "lodash/fp/flatten";
-import compact from "lodash/fp/compact";
-import uniq from "lodash/fp/uniq";
-import flow from "lodash/fp/flow";
-import difference from "lodash/difference";
-import merge from "lodash/merge";
+import { isEmpty, keys, difference } from "lodash";
+import { values, reduce, compact, uniq, flow } from "lodash/fp";
+
+const getProposalLinks = (isRfp) => (links, p) => {
+  const lks = p && (isRfp ? p.linkedfrom : [p.linkto]);
+  return lks ? [...links, ...lks] : links;
+};
+
+const getRfpLinks = (proposals, isRfp) =>
+  flow(values, reduce(getProposalLinks(isRfp), []), uniq, compact)(proposals);
+
+const getUnfetchedTokens = (proposals, tokens) =>
+  difference(tokens, keys(proposals));
 
 export default function useProposalsBatch(tokens, fetchLinks, isRfp = false) {
   const proposals = useSelector(sel.proposalsByToken);
@@ -33,63 +36,59 @@ export default function useProposalsBatch(tokens, fetchLinks, isRfp = false) {
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
 
-  const links = useMemo(
-    () =>
-      !isEmpty(proposals) &&
-      flow(
-        values,
-        map((p) => p && (isRfp ? p.linkto || p.linkedfrom : p.linkto)),
-        flatten,
-        uniq,
-        compact
-      )(proposals),
-    [proposals, isRfp]
-  );
+  const remainingTokens = useMemo(() => {
+    return getUnfetchedTokens(proposals, tokens);
+  }, [proposals, tokens]);
 
-  const remainingLinks = difference(
-    merge(fetchLinks && links ? links : [], tokens),
-    keys(proposals)
-  );
+  const unfetchedRfpLinks = useMemo(() => {
+    const rfpLinks = getRfpLinks(proposals, isRfp);
+    return getUnfetchedTokens(proposals, rfpLinks);
+  }, [proposals, isRfp]);
 
-  const missingProposals = isEmpty(proposals);
   const missingTokenInventory = isEmpty(tokenInventory);
-  const hasRemainingLinks = !isEmpty(remainingLinks);
+  const hasRemainingTokens = !isEmpty(remainingTokens);
+  const hasUnfetchedRfpLinks = !isEmpty(unfetchedRfpLinks);
 
   const [state, send] = useFetchMachine({
     actions: {
       initial: () => {
         if (!tokenInventory && !tokens) {
+          onFetchTokenInventory();
           return send("FETCH");
         }
         return send("VERIFY");
       },
       load: () => {
-        if (missingProposals && missingTokenInventory) {
-          onFetchTokenInventory()
-            .then(() => send("VERIFY"))
-            .catch((e) => send("REJECT", e));
-        }
-        if (hasRemainingLinks) {
-          onFetchProposalsBatch(remainingLinks)
-            .then(() => send("VERIFY"))
-            .catch((e) => send("REJECT", e));
-        }
-        if (!missingTokenInventory && missingProposals && !tokens) {
-          console.log("nao tinha token pra carregar, retorna o inventory");
+        if (!missingTokenInventory && !tokens) {
           return send("RESOLVE", { proposalsTokens: allByStatus });
         }
-        return;
+        if (
+          hasRemainingTokens ||
+          (missingTokenInventory && !tokens) ||
+          (fetchLinks && hasUnfetchedRfpLinks)
+        ) {
+          return;
+        }
+        return send("VERIFY");
       },
       verify: () => {
-        if (hasRemainingLinks || missingProposals) {
+        if (hasRemainingTokens) {
+          onFetchProposalsBatch(remainingTokens)
+            .then(() => send("VERIFY"))
+            .catch((e) => send("REJECT", e));
           return send("FETCH");
         }
-        console.log("agora é pra carregar as proposals");
+        if (fetchLinks && hasUnfetchedRfpLinks) {
+          onFetchProposalsBatch(unfetchedRfpLinks)
+            .then(() => send("VERIFY"))
+            .catch((e) => send("REJECT", e));
+          return send("FETCH");
+        }
         return send("RESOLVE", { proposals, proposalsTokens: allByStatus });
       },
       done: () => {
-        if (hasRemainingLinks) {
-          return send("FETCH");
+        if (hasRemainingTokens) {
+          return send("VERIFY");
         }
       }
     },

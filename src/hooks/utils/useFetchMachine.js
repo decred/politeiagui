@@ -12,21 +12,23 @@ const DEFAULT_STATE = {
 const actionsByState = {
   idle: {
     FETCH: "loading",
-    RESOLVE: "verifying",
-    REJECT: "failure"
+    VERIFY: "verifying"
   },
   loading: {
     VERIFY: "verifying",
     REJECT: "failure",
-    FETCH: "loading"
+    FETCH: "loading",
+    RESOLVE: "success"
   },
   verifying: {
     FETCH: "loading",
+    VERIFY: "verifying",
     RESOLVE: "success",
     REJECT: "failure"
   },
   success: {
-    FETCH: "loading"
+    FETCH: "loading",
+    VERIFY: "verifying"
   },
   failure: {
     RETRY: "loading"
@@ -38,6 +40,9 @@ const getNextState = (currentState, action) =>
 
 const fetchReducer = (state, action) => {
   const nextState = getNextState(state.status, action);
+  if (!nextState) {
+    throw new Error("unhanlded state machine state change");
+  }
   switch (action.type) {
     case "FETCH":
       return compose(set("status", nextState), set("loading", true))(state);
@@ -60,12 +65,11 @@ const fetchReducer = (state, action) => {
         set("status", nextState)
       )(state);
     default:
-      throw new Error("unhanlded action");
+      throw new Error("unhanlded state machine action");
   }
 };
 
-export default function useFetchMachine(props) {
-  const { actions, initialState } = props;
+export default function useFetchMachine({ actions, initialState }) {
   const [currentState, dispatch] = useReducer(
     fetchReducer,
     initialState || DEFAULT_STATE
