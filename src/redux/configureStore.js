@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware, compose } from "redux";
+import socketMiddleware from "./socketMiddleware";
 import thunkMiddleware from "redux-thunk";
 import rootReducer from "../reducers";
 
@@ -18,7 +19,7 @@ const getComposer = () => {
 };
 
 const getMiddlewares = () => {
-  const middlewares = [thunkMiddleware];
+  const middlewares = [thunkMiddleware, socketMiddleware];
 
   return middlewares;
 };

@@ -54,6 +54,41 @@ export const onRequestMe = () => (dispatch) => {
     });
 };
 
+export const onWsConnect = (host) => (dispatch) =>
+  dispatch(
+    act.WS_CONNECT({
+      host
+    })
+  );
+
+export const onWsConnecting = (host) => (dispatch) =>
+  dispatch(
+    act.WS_CONNECTING({
+      host
+    })
+  );
+
+export const onWsConnected = (host) => (dispatch) =>
+  dispatch(
+    act.WS_CONNECTED({
+      host
+    })
+  );
+
+export const onWsDisconnect = (host) => (dispatch) =>
+  dispatch(
+    act.WS_DISCONNECT({
+      host
+    })
+  );
+
+export const onWsDisconnected = (host) => (dispatch) =>
+  dispatch(
+    act.WS_DISCONNECTED({
+      host
+    })
+  );
+
 let globalpollingpointer = null;
 
 export const clearPollingPointer = () => clearTimeout(globalpollingpointer);

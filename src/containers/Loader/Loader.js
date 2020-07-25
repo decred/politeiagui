@@ -19,7 +19,8 @@ const Loader = ({ children }) => {
     localLogout,
     onPollUserPayment,
     onUserProposalCredits,
-    onGetPolicy
+    onGetPolicy,
+    onWsConnect
   } = useLoader();
   const [
     userActiveOnLocalStorage,
@@ -52,6 +53,13 @@ const Loader = ({ children }) => {
       setUserActiveOnLocalStorage(hasUser);
     }
   }, [hasUser, initDone, setUserActiveOnLocalStorage]);
+
+  // connect to websocket when auth user found
+  useEffect(() => {
+    if (initDone && hasUser) {
+      onWsConnect("wss://127.0.0.1:4443/v1/aws");
+    }
+  }, [initDone, hasUser, onWsConnect]);
 
   // trigger logout if user isn't marked as active on local storage
   // this is usefull for reflecting logout across different tabs

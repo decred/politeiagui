@@ -11,6 +11,7 @@ export function useLoader() {
   const onPollUserPayment = useAction(act.onPollUserPayment);
   const onUserProposalCredits = useAction(act.onUserProposalCredits);
   const onGetPolicy = useAction(act.onGetPolicy);
+  const onWsConnect = useAction(act.onWsConnect);
   return {
     user,
     apiInfo,
@@ -19,6 +20,7 @@ export function useLoader() {
     localLogout,
     onPollUserPayment,
     onUserProposalCredits,
-    onGetPolicy
+    onGetPolicy,
+    onWsConnect
   };
 }
