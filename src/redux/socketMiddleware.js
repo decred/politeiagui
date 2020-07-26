@@ -6,25 +6,39 @@ const socketMiddleware = () => {
   const onOpen = (store) => (event) => {
     console.log("websocket open", event.target.url);
     store.dispatch(act.onWsConnected(event.target.url));
+    // subscribe to `quiesce` event
+    socket.send(
+      JSON.stringify({
+        command: "subscribe",
+        id: "1"
+      })
+    );
+    socket.send(
+      JSON.stringify({
+        rpcs: ["quiesce"]
+      })
+    );
   };
 
   const onClose = (store) => () => {
     store.dispatch(act.onWsDisconnected());
   };
 
+  let commandRecieved = "";
   const onMessage = () => (event) => {
     const payload = JSON.parse(event.data);
     console.log("receiving server message");
-    console.log(event);
-    console.log(payload);
-    // XXX on handle quiesce message
-    // switch (payload.type) {
-    //   case "update_game_players":
-    //     store.dispatch(updateGame(payload.game, payload.current_player));
-    //     break;
-    //   default:
-    //     break;
-    // }
+    // command message
+    if (payload.command && !commandRecieved) {
+      commandRecieved = payload.command;
+    } else {
+      // command body message
+      switch (commandRecieved) {
+        case "quiesce":
+          // XXX dispatch action
+          console.log("BE quiesce mode toggled, new value: ", payload.quiesce);
+      }
+    }
   };
 
   // the middleware part of this function
@@ -52,13 +66,13 @@ const socketMiddleware = () => {
         console.log("websocket closed");
         break;
       case "NEW_MESSAGE":
+        // xxx cleanup?
         console.log("sending a message", action.msg);
         socket.send(
           JSON.stringify({ command: "NEW_MESSAGE", message: action.msg })
         );
         break;
       default:
-        console.log("the next action:", action);
         return next(action);
     }
   };

@@ -57,6 +57,7 @@ const Loader = ({ children }) => {
   // connect to websocket when auth user found
   useEffect(() => {
     if (initDone && hasUser) {
+      // XXX dynamic domain
       onWsConnect("wss://127.0.0.1:4443/v1/aws");
     }
   }, [initDone, hasUser, onWsConnect]);
