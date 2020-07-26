@@ -37,7 +37,10 @@ const socketMiddleware = () => {
         case "quiesce":
           // XXX dispatch action
           console.log("BE quiesce mode toggled, new value: ", payload.quiesce);
+          break;
+        default:
       }
+      commandRecieved = "";
     }
   };
 
