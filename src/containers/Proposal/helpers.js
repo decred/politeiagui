@@ -12,6 +12,8 @@ import {
   NOJS_ROUTE_PREFIX
 } from "../../constants";
 import { getTextFromIndexMd } from "src/helpers";
+import pick from "lodash/pick";
+import set from "lodash/fp/set";
 
 /**
  * Returns the total amount of votes received by a given proposal voteSummary
@@ -255,3 +257,28 @@ export const getAuthorUrl = (userid, isJsEnabled) =>
 
 export const goToFullProposal = (history, proposalURL) => () =>
   history.push(proposalURL);
+
+/**
+ * Returns the proposal list with RFP Proposal linked to RFP submissions
+ * @param {object} proposals
+ */
+export const getRfpLinkedProposals = (proposalsByToken) =>
+  Object.values(proposalsByToken).reduce((acc, proposal) => {
+    const isRfp = !!proposal.linkby;
+    const isSubmission = !!proposal.linkto;
+    if (!isSubmission && !isRfp) return acc;
+
+    if (isSubmission) {
+      const linkedProposal = proposalsByToken[proposal.linkto];
+      return set(
+        [getProposalToken(proposal), "proposedFor"],
+        linkedProposal.name
+      )(acc);
+    }
+    if (isRfp) {
+      const linkedProposals = pick(proposalsByToken, proposal.linkedfrom);
+      console.log("linkedFrom", linkedProposals);
+      return acc;
+    }
+    return acc;
+  }, proposalsByToken);

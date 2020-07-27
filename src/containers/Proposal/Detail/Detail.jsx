@@ -36,6 +36,7 @@ const ProposalDetail = ({ Main, match }) => {
     tokenFromUrl,
     threadParentCommentID
   );
+
   const proposalToken = getProposalToken(proposal);
   const { voteSummary } = useProposalVote(proposalToken);
   const showCommentArea =

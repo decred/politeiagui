@@ -7,7 +7,7 @@ import {
   useTheme,
   Tooltip
 } from "pi-ui";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
@@ -50,7 +50,6 @@ const ProposalWrapper = (props) => {
     voteActive,
     voteEndTimestamp
   } = useProposalVote(getProposalToken(props.proposal));
-  const [proposedFor, setProposedFor] = useState(null);
   const { linkto, linkedfrom } = props.proposal;
   // if linkto provided => this is a submission => fetch RFP to display link
   // else if linkedFrom is provided this is an RFP => fetch submssions batch & vote summaries to display list
@@ -61,12 +60,14 @@ const ProposalWrapper = (props) => {
     data: [proposals, voteSummaries],
     resetData: resetRfpSubmissionsData
   } = useProposalBatchWithoutRedux(batchTokens, true, isRFP);
-  useEffect(() => {
-    if (isSubmission && proposals && proposals[0]) {
-      const rfpProposal = proposals[0];
-      setProposedFor(rfpProposal && rfpProposal.name);
-    }
-  }, [isSubmission, proposals]);
+
+  // const {
+  //   proposals: proposalsBatch,
+  //   voteSummaries: votesum
+  // } = useProposalsBatch(batchTokens);
+
+  // console.log("proposals and vote summary", proposalsBatch, votesum);
+
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (
@@ -79,7 +80,6 @@ const ProposalWrapper = (props) => {
         voteEndTimestamp,
         currentUser,
         history,
-        proposedFor,
         rfpSubmissions: isRFP && {
           proposals,
           voteSummaries
@@ -100,7 +100,6 @@ const Proposal = React.memo(function Proposal({
   voteBlocksLeft,
   currentUser,
   history,
-  proposedFor,
   rfpSubmissions,
   resetRfpSubmissionsData
 }) {
@@ -116,7 +115,8 @@ const Proposal = React.memo(function Proposal({
     username,
     version,
     linkby,
-    linkto
+    linkto,
+    proposedFor
   } = proposal;
   const isRfp = !!linkby;
   const isRfpSubmission = !!linkto;
