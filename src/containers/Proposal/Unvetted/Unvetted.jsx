@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
@@ -13,12 +13,13 @@ const renderProposal = (prop) => (
 const tabLabels = [tabValues.UNREVIEWED, tabValues.CENSORED];
 
 const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
+  const [remainingTokens, setRemainingTokens] = useState();
   const {
     proposals,
     proposalsTokens,
     isLoadingTokenInventory: loadingTokenInventory,
     onFetchProposalsBatch
-  } = useProposalsBatch();
+  } = useProposalsBatch(remainingTokens);
 
   const handleFetchRecords = (tokens) => onFetchProposalsBatch(tokens, false);
 
@@ -39,6 +40,7 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
       renderRecord={renderProposal}
       displayTabCount={!loadingTokenInventory}
       placeholder={ProposalLoader}
+      setRemainingTokens={setRemainingTokens}
       getEmptyMessage={getEmptyMessage}>
       {({ tabs, content }) => (
         <>

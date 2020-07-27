@@ -12,8 +12,8 @@ import {
   NOJS_ROUTE_PREFIX
 } from "../../constants";
 import { getTextFromIndexMd } from "src/helpers";
-import pick from "lodash/pick";
 import set from "lodash/fp/set";
+import values from "lodash/values";
 
 /**
  * Returns the total amount of votes received by a given proposal voteSummary
@@ -263,7 +263,7 @@ export const goToFullProposal = (history, proposalURL) => () =>
  * @param {object} proposals
  */
 export const getRfpLinkedProposals = (proposalsByToken) =>
-  Object.values(proposalsByToken).reduce((acc, proposal) => {
+  values(proposalsByToken).reduce((acc, proposal) => {
     const isRfp = !!proposal.linkby;
     const isSubmission = !!proposal.linkto;
     if (!isSubmission && !isRfp) return acc;
@@ -274,11 +274,6 @@ export const getRfpLinkedProposals = (proposalsByToken) =>
         [getProposalToken(proposal), "proposedFor"],
         linkedProposal.name
       )(acc);
-    }
-    if (isRfp) {
-      const linkedProposals = pick(proposalsByToken, proposal.linkedfrom);
-      console.log("linkedFrom", linkedProposals);
-      return acc;
     }
     return acc;
   }, proposalsByToken);

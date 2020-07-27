@@ -126,7 +126,7 @@ const RecordsView = ({
       filteredTokens && filteredRecords.length < filteredTokens.length;
     setHasMore(hasMoreRecordsToLoad);
     if (!hasMoreRecordsToLoad) {
-      setRemainingTokens();
+      setRemainingTokens && setRemainingTokens();
       dispatch({ type: RESET_LOADING_ITEMS });
     }
   }, [filteredTokens, filteredRecords.length, setRemainingTokens]);

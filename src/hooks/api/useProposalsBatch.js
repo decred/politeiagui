@@ -100,7 +100,6 @@ export default function useProposalsBatch(
       verifying: true
     }
   });
-
   const anyError = error || state.error;
 
   useThrowError(anyError);

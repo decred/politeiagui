@@ -45,11 +45,16 @@ const fetchReducer = (state, action) => {
   }
   switch (action.type) {
     case "FETCH":
-      return compose(set("status", nextState), set("loading", true))(state);
+      return compose(
+        set("status", nextState),
+        set("loading", true),
+        set("verifying", false)
+      )(state);
     case "RESOLVE":
       return compose(
         set("status", nextState),
         set("verifying", false),
+        set("loading", false),
         merge(action.payload)
       )(state);
     case "VERIFY":

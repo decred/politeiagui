@@ -13,7 +13,6 @@ import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
 import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
-import useProposalBatchWithoutRedux from "src/hooks/api/useProposalBatchWithoutRedux";
 import {
   getMarkdownContent,
   getVotesReceived,
@@ -50,23 +49,6 @@ const ProposalWrapper = (props) => {
     voteActive,
     voteEndTimestamp
   } = useProposalVote(getProposalToken(props.proposal));
-  const { linkto, linkedfrom } = props.proposal;
-  // if linkto provided => this is a submission => fetch RFP to display link
-  // else if linkedFrom is provided this is an RFP => fetch submssions batch & vote summaries to display list
-  const isSubmission = !!linkto;
-  const isRFP = !!linkedfrom;
-  const batchTokens = isSubmission ? [linkto] : isRFP ? linkedfrom : null;
-  const {
-    data: [proposals, voteSummaries],
-    resetData: resetRfpSubmissionsData
-  } = useProposalBatchWithoutRedux(batchTokens, true, isRFP);
-
-  // const {
-  //   proposals: proposalsBatch,
-  //   voteSummaries: votesum
-  // } = useProposalsBatch(batchTokens);
-
-  // console.log("proposals and vote summary", proposalsBatch, votesum);
 
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
@@ -79,12 +61,7 @@ const ProposalWrapper = (props) => {
         voteActive,
         voteEndTimestamp,
         currentUser,
-        history,
-        rfpSubmissions: isRFP && {
-          proposals,
-          voteSummaries
-        },
-        resetRfpSubmissionsData
+        history
       }}
     />
   );
@@ -99,9 +76,7 @@ const Proposal = React.memo(function Proposal({
   voteEndTimestamp,
   voteBlocksLeft,
   currentUser,
-  history,
-  rfpSubmissions,
-  resetRfpSubmissionsData
+  history
 }) {
   const {
     censorshiprecord,
@@ -116,8 +91,10 @@ const Proposal = React.memo(function Proposal({
     version,
     linkby,
     linkto,
-    proposedFor
+    proposedFor,
+    rfpSubmissions
   } = proposal;
+  console.log("rfp submissions", rfpSubmissions);
   const isRfp = !!linkby;
   const isRfpSubmission = !!linkto;
   const isRfpActive = isRfp && isActiveRfp(linkby);
@@ -380,7 +357,7 @@ const Proposal = React.memo(function Proposal({
               <ProposalActions
                 proposal={proposal}
                 voteSummary={voteSummary}
-                resetRfpSubmissionsData={resetRfpSubmissionsData}
+                // resetRfpSubmissionsData={resetRfpSubmissionsData}
                 rfpSubmissionsVoteSummaries={
                   isRfp && rfpSubmissions.voteSummaries
                 }
