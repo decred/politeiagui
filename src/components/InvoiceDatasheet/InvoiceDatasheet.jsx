@@ -105,14 +105,9 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
         errors,
         currentRate,
         policy,
-<<<<<<< HEAD
         proposalsOptions,
-        subContractors
-=======
-        proposalsTokens,
         subContractors,
         omit
->>>>>>> feat: add Details implementation
       );
       setGrid(grid);
     },
@@ -122,14 +117,9 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
       errors,
       currentRate,
       policy,
-<<<<<<< HEAD
       proposalsOptions,
-      subContractors
-=======
-      proposalsTokens,
       subContractors,
       omit
->>>>>>> feat: add Details implementation
     ]
   );
 
