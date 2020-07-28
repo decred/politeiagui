@@ -6,11 +6,11 @@
 }
 
 .actionsWrapper {
-  width: 39rem;
+  width: 50rem;
 }
 
 /* EXTRA SMALL SCREENS*/
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 768px) {
   .actionsWrapper {
     width: 9rem;
     justify-content: flex-end;
