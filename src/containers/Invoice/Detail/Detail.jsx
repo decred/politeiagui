@@ -9,6 +9,7 @@ import Comments from "src/containers/Comments";
 import { isUnreviewedInvoice, getProposalsTokensFromInvoice } from "../helpers";
 import { GoBackLink } from "src/components/Router";
 import useApprovedProposals from "src/hooks/api/useApprovedProposals";
+import Stats from "./Stats";
 
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
