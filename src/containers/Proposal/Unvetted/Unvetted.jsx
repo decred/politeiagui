@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { useProposalsBatch } from "../hooks";
+import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";

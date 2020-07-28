@@ -157,7 +157,7 @@ export const DiffText = ({ newText, oldText }) => {
   ));
 };
 
-export const DiffInvoices = ({ oldData, newData, className }) => {
+export const DiffInvoices = ({ oldData, newData, className, proposals }) => {
   const newLineitems = setLineitemParams(newData.lineitems, {
     rate: newData.contractorrate
   });
@@ -169,7 +169,7 @@ export const DiffInvoices = ({ oldData, newData, className }) => {
 
   return (
     <SheetRenderer headers={createTableHeaders()} className={className}>
-      <DiffLineitemsDatasheet lineItems={lineitemsDiff} />
+      <DiffLineitemsDatasheet lineItems={lineitemsDiff} proposals={proposals} />
     </SheetRenderer>
   );
 };

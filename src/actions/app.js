@@ -202,32 +202,18 @@ export const onLoadDraftProposals = (uuid) => (dispatch, getState) => {
 export const onDeleteDraftProposal = (draftId) =>
   act.DELETE_DRAFT_PROPOSAL(draftId);
 
-export const onSaveDraftInvoice = ({
-  date,
-  name,
-  location,
-  contact,
-  rate,
-  address,
-  lineitems,
-  files,
-  draftId
-}) => (dispatch, getState) => {
+export const onSaveDraftInvoice = ({ draftId, ...rest }) => (
+  dispatch,
+  getState
+) => {
   const policy = sel.policy(getState());
   resetNewInvoiceData(policy);
   const id = draftId || uniqueID("draft");
   dispatch(
     act.SAVE_DRAFT_INVOICE({
-      date,
-      name,
-      location,
-      contact,
-      rate,
-      address,
-      lineitems,
-      files,
       id,
-      timestamp: Date.now() / 1000
+      timestamp: Date.now() / 1000,
+      ...rest
     })
   );
   return id;

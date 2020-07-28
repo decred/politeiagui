@@ -16,12 +16,17 @@ import usePolicy from "src/hooks/api/usePolicy";
 import { isRfpReadyToVote } from "src/containers/Proposal/helpers";
 import { VOTE_TYPE_STANDARD, VOTE_TYPE_RUNOFF } from "src/constants";
 
-const possibleDurationValues = (isTesnet) =>
-  isTesnet ? [10, 1000, 2016] : [2016, 2880, 4032];
+const getRoundedAverage = (a, b) => Math.round((a + b) / 2);
 
-const getDurationOptions = (isTesnet) => {
+const getBlockDurationArray = (min, max) => [
+  min,
+  getRoundedAverage(min, max),
+  max
+];
+
+const getDurationOptions = (isTesnet, min, max) => {
   const blockDuration = isTesnet ? 2 : 5;
-  return possibleDurationValues(isTesnet).map((nb) => {
+  return getBlockDurationArray(min, max).map((nb) => {
     const durationInDays = Math.round((nb * blockDuration) / 60 / 24);
     return {
       value: nb,
@@ -46,7 +51,7 @@ const ModalStartVote = ({
   const { apiInfo } = useLoaderContext();
   const { theme } = useTheme();
   const {
-    policy: { minlinkbyperiod }
+    policy: { minlinkbyperiod, minvoteduration, maxvoteduration }
   } = usePolicy();
   const successIconBgColor = getThemeProperty(
     theme,
@@ -90,7 +95,7 @@ const ModalStartVote = ({
   );
 
   const initialValues = {
-    duration: possibleDurationValues(apiInfo.testnet)[0],
+    duration: getBlockDurationArray(minvoteduration, maxvoteduration)[0],
     quorumPercentage: 20,
     passPercentage: 60
   };
@@ -166,7 +171,11 @@ const ModalStartVote = ({
                   label="Duration"
                   name="duration"
                   vertical
-                  options={getDurationOptions(apiInfo.testnet)}
+                  options={getDurationOptions(
+                    apiInfo.testnet,
+                    minvoteduration,
+                    maxvoteduration
+                  )}
                   value={values.duration}
                   onChange={handleChangeDuration}
                 />

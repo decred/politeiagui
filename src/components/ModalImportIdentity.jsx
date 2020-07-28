@@ -219,7 +219,7 @@ const ModalImportIdentity = ({
                     loading={isSubmitting}
                     kind={canSubmit ? "primary" : "disabled"}
                     type="submit">
-                    Submit Identity
+                    Update Identity
                   </Button>
                 </Actions>
               </Form>

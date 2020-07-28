@@ -84,10 +84,19 @@ export const importKeys = (uuid, keys) =>
     loadKeys(uuid, decodedKeys)
   );
 
-export const needStorageKeyReplace = (username) =>
-  localforage
-    .keys()
-    .then((keys) => (keys.includes(STORAGE_PREFIX + username) ? true : false));
+// The key that we check for replacement are:
+// Email for older identities in pi.
+// Username for newly created accounts.
+export const needStorageKeyReplace = (email, username) =>
+  localforage.keys().then((keys) => {
+    if (keys.includes(STORAGE_PREFIX + email)) {
+      return email;
+    }
+    if (keys.includes(STORAGE_PREFIX + username)) {
+      return username;
+    }
+    return null;
+  });
 export const replaceStorageKey = (oldKey, newKey) =>
   myKeyPair(oldKey).then((keys) =>
     loadKeys(newKey, keys).then(() =>

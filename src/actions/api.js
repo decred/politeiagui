@@ -223,9 +223,9 @@ export const onLogin = ({ email, password }) =>
       .then((response) => {
         dispatch(act.RECEIVE_LOGIN(response));
         const { userid, username } = response;
-        pki.needStorageKeyReplace(username).then((needReplace) => {
-          if (needReplace) {
-            pki.replaceStorageKey(username, userid);
+        pki.needStorageKeyReplace(email, username).then((keyNeedsReplace) => {
+          if (keyNeedsReplace) {
+            pki.replaceStorageKey(keyNeedsReplace, userid);
           }
           return response;
         });
@@ -344,16 +344,16 @@ export const onFetchAdminInvoices = () =>
 
 export const onFetchProposalsBatchWithoutState = (
   tokens,
-  fetchPropsoals = true,
+  fetchProposals = true,
   fetchVoteSummary = true
 ) =>
   withCsrf(async (_, __, csrf) => {
     const res = await Promise.all([
-      fetchPropsoals && api.proposalsBatch(csrf, tokens),
+      fetchProposals && api.proposalsBatch(csrf, tokens),
       fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens)
     ]);
     const proposals =
-      fetchPropsoals && res.find((res) => res && res.proposals).proposals;
+      fetchProposals && res.find((res) => res && res.proposals).proposals;
     const summaries =
       fetchVoteSummary && res.find((res) => res && res.summaries).summaries;
     return [proposals, summaries];
@@ -521,11 +521,17 @@ export const onEditCmsUser = (cmsUserInfo) =>
       });
   });
 
-export const onManageCmsUser = (userID, domain, type, supervisorIDs) =>
+export const onManageCmsUser = (
+  userID,
+  domain,
+  type,
+  supervisorIDs,
+  proposalsOwned
+) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_MANAGE_CMS_USER());
     return api
-      .manageCmsUser(csrf, userID, domain, type, supervisorIDs)
+      .manageCmsUser(csrf, userID, domain, type, supervisorIDs, proposalsOwned)
       .then((response) =>
         dispatch(
           act.RECEIVE_MANAGE_CMS_USER({
@@ -533,7 +539,8 @@ export const onManageCmsUser = (userID, domain, type, supervisorIDs) =>
             userID,
             domain,
             type,
-            supervisorIDs
+            supervisorIDs,
+            proposalsOwned
           })
         )
       )

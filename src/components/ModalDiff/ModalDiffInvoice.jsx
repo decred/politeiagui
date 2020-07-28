@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Text, Modal, CopyableText } from "pi-ui";
 import PropTypes from "prop-types";
 import { DiffInvoices } from "src/components/Diff/Diff";
@@ -14,10 +14,23 @@ import Field from "src/components/Invoice/Field";
 import { Row } from "src/components/layout";
 import styles from "./ModalDiff.module.css";
 import { presentationalInvoiceName } from "src/containers/Invoice/helpers";
+import uniq from "lodash/uniq";
+import useApprovedProposals from "src/hooks/api/useApprovedProposals";
 
 const ModalDiffInvoice = ({ onClose, invoice, prevInvoice, ...props }) => {
-  const prevLineItems =
-    prevInvoice && prevInvoice.input ? prevInvoice.input : [];
+  const prevInput = prevInvoice && prevInvoice.input ? prevInvoice.input : [];
+
+  const proposalsTokens = useMemo(() => {
+    const prevTokens = prevInput.lineitems
+      ? prevInput.lineitems.map(({ proposaltoken }) => proposaltoken)
+      : [];
+    const tokens = invoice.input.lineitems.map(
+      ({ proposaltoken }) => proposaltoken
+    );
+    return uniq([...prevTokens, ...tokens]);
+  }, [invoice.input.lineitems, prevInput]);
+
+  const { proposalsByToken } = useApprovedProposals(proposalsTokens);
 
   return (
     <Modal
@@ -76,7 +89,8 @@ const ModalDiffInvoice = ({ onClose, invoice, prevInvoice, ...props }) => {
       <div className={styles.lineitemsWrapper}>
         <DiffInvoices
           newData={invoice.input}
-          oldData={prevLineItems}
+          oldData={prevInput}
+          proposals={proposalsByToken}
           className="margin-top-m"
         />
       </div>

@@ -46,7 +46,7 @@ const proposalVotes = (state = DEFAULT_STATE, action) =>
             update(["byToken", action.payload.token], (propVotes) => ({
               ...propVotes,
               ...action.payload
-            }))
+            }))(state)
         }[action.type] || (() => state)
       )();
 

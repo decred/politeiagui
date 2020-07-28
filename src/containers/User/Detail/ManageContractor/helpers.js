@@ -1,3 +1,6 @@
+import get from "lodash/get";
+import includes from "lodash/includes";
+
 export const typeOptions = [
   "No type defined",
   "Direct",
@@ -29,12 +32,49 @@ export const selectDomainOptions = domainOptions.map((op, idx) => ({
   label: op
 }));
 
-export const getSupervisorsOptions = (supervisors, currentUserID) =>
-  supervisors &&
-  Array.isArray(supervisors) &&
-  supervisors
-    .filter(({ id }) => id !== currentUserID)
-    .map(({ username, id }) => ({
-      label: username,
-      value: id
-    }));
+export const getOwnedProposals = (owned, proposalsByToken) =>
+  owned ? owned.map((token) => get(proposalsByToken, [token, "name"])) : [];
+
+export const getInitialAndOptionsProposals = (proposals, proposalsowned) => {
+  const proposalsOptions = [];
+  const initialOwnedProposals = [];
+
+  for (const {
+    name,
+    censorshiprecord: { token }
+  } of proposals) {
+    const value = { label: name, value: token };
+    if (includes(proposalsowned, token)) {
+      initialOwnedProposals.push(value);
+    } else {
+      proposalsOptions.push(value);
+    }
+  }
+
+  return {
+    proposalsOptions,
+    initialOwnedProposals
+  };
+};
+
+export const getInitialAndOptionsSupervisors = (
+  supervisors,
+  userSupervisors
+) => {
+  const supervisorsOptions = [];
+  const initialSupervisorOptions = [];
+
+  for (const { username, id } of supervisors) {
+    const value = { label: username, value: id };
+    if (includes(userSupervisors, id)) {
+      initialSupervisorOptions.push(value);
+    } else {
+      supervisorsOptions.push(value);
+    }
+  }
+
+  return {
+    supervisorsOptions,
+    initialSupervisorOptions
+  };
+};

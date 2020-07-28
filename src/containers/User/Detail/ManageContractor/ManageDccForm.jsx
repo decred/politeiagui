@@ -1,15 +1,17 @@
 import { Button, Message, H2, Select } from "pi-ui";
 import SelectField from "src/components/Select/SelectField";
-import React, { useCallback, useState, useMemo } from "react";
+import React, { useCallback, useState } from "react";
 import InfoSection from "../InfoSection.jsx";
 import {
   selectTypeOptions,
   selectDomainOptions,
-  getSupervisorsOptions
+  getInitialAndOptionsProposals,
+  getInitialAndOptionsSupervisors
 } from "./helpers";
 import { Formik } from "formik";
 import styles from "./ManageContractor.module.css";
 import useSupervisors from "src/hooks/api/useSupervisors";
+import useApprovedProposals from "src/hooks/api/useApprovedProposals";
 
 const selectStyles = {
   container: (provided) => ({
@@ -19,7 +21,7 @@ const selectStyles = {
   })
 };
 
-const selectSupervisorStyles = {
+const multipleSelectStyles = {
   container: (provided) => ({
     ...provided,
     width: "100%",
@@ -28,23 +30,32 @@ const selectSupervisorStyles = {
 };
 
 const ManageDccForm = ({ onUpdate, user }) => {
-  const { domain, contractortype, userid, supervisoruserids = [] } = user;
+  const {
+    domain,
+    contractortype,
+    userid,
+    supervisoruserids = [],
+    proposalsowned = []
+  } = user;
+
   const [updated, setUpdated] = useState(false);
 
+  // Parse supervisors initial values and options
   const { loading: loadingSupervisors, supervisors } = useSupervisors();
+  const {
+    supervisorsOptions,
+    initialSupervisorOptions
+  } = getInitialAndOptionsSupervisors(supervisors, supervisoruserids);
 
-  const supervisorsOptions = useMemo(
-    () => getSupervisorsOptions(supervisors, userid),
-    [supervisors, userid]
-  );
-
-  const initialSupervisorOptions = useMemo(
-    () =>
-      supervisorsOptions.filter((option) =>
-        supervisoruserids.some((supervisorid) => supervisorid === option.value)
-      ),
-    [supervisorsOptions, supervisoruserids]
-  );
+  // Parse owned proposals initial values and options
+  const {
+    proposals,
+    isLoading: loadingOwnedProposals
+  } = useApprovedProposals();
+  const {
+    proposalsOptions,
+    initialOwnedProposals
+  } = getInitialAndOptionsProposals(proposals, proposalsowned);
 
   const handleSubmitForm = useCallback(
     async (values, { setSubmitting, setFieldError, resetForm }) => {
@@ -53,7 +64,8 @@ const ManageDccForm = ({ onUpdate, user }) => {
           userid,
           values.domain,
           values.type,
-          values.users.map((user) => user.value)
+          values.users.map((user) => user.value),
+          values.proposals.map((prop) => prop.value)
         );
         setSubmitting(false);
         setUpdated(true);
@@ -73,7 +85,8 @@ const ManageDccForm = ({ onUpdate, user }) => {
       initialValues={{
         domain,
         type: contractortype,
-        users: initialSupervisorOptions
+        users: initialSupervisorOptions,
+        proposals: initialOwnedProposals
       }}>
       {({
         values,
@@ -86,7 +99,11 @@ const ManageDccForm = ({ onUpdate, user }) => {
         const handleChangeUserSelector = (options) => {
           setFieldValue("users", options);
         };
-        const submitEnabled = dirty && !loadingSupervisors;
+        const handleChangeOwnedProposals = (options) => {
+          setFieldValue("proposals", options);
+        };
+        const submitEnabled =
+          dirty && !loadingSupervisors && !loadingOwnedProposals;
         return (
           <>
             <form onSubmit={handleSubmit}>
@@ -127,7 +144,20 @@ const ManageDccForm = ({ onUpdate, user }) => {
                       onChange={handleChangeUserSelector}
                       isMulti
                       options={supervisorsOptions}
-                      styles={selectSupervisorStyles}
+                      styles={multipleSelectStyles}
+                    />
+                  }
+                />
+                <InfoSection
+                  label="Owned Proposals"
+                  info={
+                    <Select
+                      placeholder="Select Proposals"
+                      value={values.proposals}
+                      onChange={handleChangeOwnedProposals}
+                      isMulti
+                      options={proposalsOptions}
+                      styles={multipleSelectStyles}
                     />
                   }
                 />

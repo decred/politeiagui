@@ -8,7 +8,9 @@ import {
   selectWrapper,
   textAreaWrapper,
   multilineTextWrapper,
-  singlelineTextWrapper
+  singlelineTextWrapper,
+  proposalViewWrapper,
+  proposalSelectWrapper
 } from "./wrappers";
 
 export const columnTypes = {
@@ -76,7 +78,7 @@ export const convertLineItemsToGrid = (
   errors,
   userRate = 0,
   policy,
-  proposalsTokens,
+  proposalsOptions,
   subContractors
 ) => {
   const {
@@ -143,11 +145,8 @@ export const convertLineItemsToGrid = (
           readOnly,
           value: line.proposaltoken,
           error: rowErrors && rowErrors.proposaltoken,
-          dataEditor: selectWrapper(
-            proposalsTokens.map((token) => {
-              return { label: token, value: token };
-            })
-          )
+          dataEditor: proposalSelectWrapper(proposalsOptions),
+          valueViewer: proposalViewWrapper(proposalsOptions)
         },
         {
           readOnly: isSubContractorReadonly,
@@ -241,7 +240,7 @@ export const createTableHeaders = () => [
   { value: "Domain", readOnly: true, width: "12rem" },
   { value: "Subdomain", readOnly: true, width: "14rem" },
   { value: "Description", readOnly: true, width: "30rem" },
-  { value: "Proposal Token", readOnly: true, width: "10rem" },
+  { value: "Proposal", readOnly: true, width: "30rem" },
   { value: "Subcontr. ID", readOnly: true, width: "10rem" },
   { value: "Subcontr. Rate (USD)", readOnly: true, width: "8rem" },
   { value: "Labor (hours)", readOnly: true, width: "7rem" },
@@ -366,3 +365,6 @@ export const processCellsChange = (currentGrid, changes, userRate = 0) => {
     { grid: currentGrid }
   );
 };
+
+export const getProposalsOptions = (proposals = []) =>
+  proposals.map((p) => ({ label: p.name, value: p.censorshiprecord.token }));

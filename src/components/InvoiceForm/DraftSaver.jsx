@@ -3,6 +3,7 @@ import { Button } from "pi-ui";
 import { FormikConsumer } from "formik";
 import { useDraftInvoices } from "src/containers/Invoice/User/hooks";
 import { getQueryStringValue, setQueryStringValue } from "src/lib/queryString";
+import omit from "lodash/omit";
 
 const DraftSaver = ({ values, setValues, submitSuccess }) => {
   const [draftId, setDraftId] = useState(getQueryStringValue("draft"));
@@ -63,26 +64,8 @@ const DraftSaver = ({ values, setValues, submitSuccess }) => {
       const foundDraftInvoice =
         !!draftInvoices && draftId && draftInvoices[draftId];
       if (foundDraftInvoice) {
-        const {
-          date,
-          name,
-          location,
-          contact,
-          address,
-          rate,
-          files,
-          lineitems
-        } = foundDraftInvoice;
-        setValues({
-          date,
-          name,
-          location,
-          contact,
-          address,
-          rate,
-          files,
-          lineitems
-        });
+        const values = foundDraftInvoice;
+        setValues(omit(values, "timestamp"));
       }
     },
     [draftInvoices, draftId, setValues]
