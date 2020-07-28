@@ -1,7 +1,8 @@
 import { Message, Card, P } from "pi-ui";
 import React from "react";
 import ProposalForm from "src/components/ProposalForm/ProposalFormLazy";
-import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
+import IdentityMessageError from "src/components/IdentityErrorIndicators";
+import PoliteiaQuiescedMessage from "src/components/PoliteiaQuiescedMessage";
 import Or from "src/components/Or";
 import Link from "src/components/Link";
 import usePaywall from "src/hooks/api/usePaywall";
@@ -9,7 +10,7 @@ import useIdentity from "src/hooks/api/useIdentity";
 import { useNewProposal } from "./hooks";
 
 const NewProposal = () => {
-  const { onSubmitProposal, currentUser } = useNewProposal();
+  const { onSubmitProposal, currentUser, politeiaQuiesced } = useNewProposal();
   const { userid } = currentUser || {};
   const { isPaid } = usePaywall();
   const [, identityError] = useIdentity();
@@ -27,6 +28,7 @@ const NewProposal = () => {
           </Message>
         )}
         {!!identityError && <IdentityMessageError />}
+        {!!politeiaQuiesced && <PoliteiaQuiescedMessage />}
       </Or>
       <ProposalForm
         disableSubmit={!isPaid || !!identityError}

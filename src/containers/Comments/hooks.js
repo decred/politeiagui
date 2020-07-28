@@ -33,6 +33,7 @@ export function useComments(recordToken) {
   const lastVisitTimestamp = useSelector(lastVisitTimestampSelector);
   const loading = useSelector(sel.isApiRequestingComments);
   const loadingLikes = useSelector(sel.isApiRequestingCommentsLikes);
+  const politeiaQuiesced = useSelector(sel.politeiaQuiesced);
   const onSubmitComment = useAction(
     recordType === constants.RECORD_TYPE_DCC
       ? act.onSaveNewDccComment
@@ -117,6 +118,7 @@ export function useComments(recordToken) {
     loading,
     loadingLikes,
     loadingLikeAction,
-    onSubmitComment
+    onSubmitComment,
+    politeiaQuiesced
   };
 }

@@ -7,7 +7,8 @@ import { useEditProposal } from "./hooks";
 import usePaywall from "src/hooks/api/usePaywall";
 import useIdentity from "src/hooks/api/useIdentity";
 import Or from "src/components/Or";
-import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
+import IdentityMessageError from "src/components/IdentityErrorIndicators";
+import PoliteiaQuiescedMessage from "src/components/PoliteiaQuiescedMessage";
 import ProposalForm from "src/components/ProposalForm/ProposalFormLazy";
 import Link from "src/components/Link";
 import ProposalFormLoader from "src/components/ProposalForm/ProposalFormLoader";
@@ -23,7 +24,7 @@ const EditProposal = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
   const { proposal, loading } = useProposal(tokenFromUrl);
   const isPublic = isPublicProposal(proposal);
-  const { onEditProposal, currentUser } = useEditProposal();
+  const { onEditProposal, currentUser, politeiaQuiesced } = useEditProposal();
   const { userid } = currentUser || {};
   const { isPaid } = usePaywall();
   const [, identityError] = useIdentity();
@@ -61,6 +62,7 @@ const EditProposal = ({ match }) => {
           </Message>
         )}
         {!!identityError && <IdentityMessageError />}
+        {!!politeiaQuiesced && <PoliteiaQuiescedMessage />}
       </Or>
       {!loading && !!proposal ? (
         <ProposalForm

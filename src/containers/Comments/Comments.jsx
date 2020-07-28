@@ -27,7 +27,8 @@ import {
 } from "./helpers";
 import useIdentity from "src/hooks/api/useIdentity";
 import usePaywall from "src/hooks/api/usePaywall";
-import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
+import IdentityMessageError from "src/components/IdentityErrorIndicators";
+import PoliteiaQuiescedMessage from "src/components/PoliteiaQuiescedMessage";
 import ModalLogin from "src/components/ModalLogin";
 import useModalContext from "src/hooks/utils/useModalContext";
 import WhatAreYourThoughts from "src/components/WhatAreYourThoughts";
@@ -74,6 +75,7 @@ const Comments = ({
     recordType,
     lastVisitTimestamp,
     currentUser,
+    politeiaQuiesced,
     ...commentsCtx
   } = useComments(recordToken);
 
@@ -234,6 +236,7 @@ const Comments = ({
                 </Message>
               )}
               {!readOnly && !!identityError && <IdentityMessageError />}
+              {!!politeiaQuiesced && <PoliteiaQuiescedMessage />}
             </Or>
             {!isSingleThread && !readOnly && (
               <CommentForm
