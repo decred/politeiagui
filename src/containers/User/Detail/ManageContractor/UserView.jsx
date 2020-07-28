@@ -9,14 +9,14 @@ import useSupervisors from "src/hooks/api/useSupervisors";
 const UserDccInfo = ({
   contractorType,
   domain,
-  supervisors,
+  userSupervisors,
   proposalsOwned,
   isLoadingProposals,
   showEdit,
   onToggleDccEdit
 }) => {
-  const supervisors = supervisors.length
-    ? supervisors.join(", ")
+  const supervisors = userSupervisors.length
+    ? userSupervisors.join(", ")
     : "No supervisors";
   const proposals = proposalsOwned.length
     ? proposalsOwned.join(", ")
@@ -98,7 +98,7 @@ const ManageContractorUserView = ({
           domain={domainOptions[domain]}
           proposalsOwned={ownedProposals}
           isLoadingProposals={isLoading}
-          supervisors={getSupervisorsNames(supervisors, supervisoruserids)}
+          userSupervisors={getSupervisorsNames(supervisors, supervisoruserids)}
           showEdit={showDccForm}
           onToggleDccEdit={onToggleDccEdit}
         />
