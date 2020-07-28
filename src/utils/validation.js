@@ -16,6 +16,22 @@ export const buildRegexFromSupportedChars = (supportedChars) => {
 };
 
 /**
+ * Converts an array of chars into a Regex Expression
+ * @param {Array} supportedChars
+ * @return {RegExp} Simple regex expression from supported chars
+ */
+export const buildSimpleMatchRegexFromSupportedChars = (supportedChars) => {
+  const charNeedsEscaping = (c) => c === "/" || c === "." || c === "-";
+  const concatedChars = supportedChars.reduce(
+    (str, char) =>
+      charNeedsEscaping(char) ? `${str}\\${char}` : `${str}${char}`,
+    ""
+  );
+  const regex = `([${concatedChars}])`;
+  return new RegExp(regex, "gi");
+};
+
+/**
  * Creates a string from the concatenation of the supported chars
  * @param {Array} supportedChars
  * @returns {string} string of valid chars

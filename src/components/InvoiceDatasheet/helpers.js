@@ -8,6 +8,7 @@ import {
   selectWrapper,
   textAreaWrapper,
   multilineTextWrapper,
+  singlelineTextWrapper,
   proposalViewWrapper,
   proposalSelectWrapper
 } from "./wrappers";
@@ -84,7 +85,8 @@ export const convertLineItemsToGrid = (
 ) => {
   const {
     supporteddomains: policyDomains,
-    supportedlineitemtypes: policyLineItemTypes
+    supportedlineitemtypes: policyLineItemTypes,
+    invoicefieldsupportedchars: policySupportedChars
   } = policy;
   const grid = [];
   const { grid: gridBody, expenseTotal, laborTotal, total } = lineItems.reduce(
@@ -129,8 +131,9 @@ export const convertLineItemsToGrid = (
         },
         {
           readOnly,
-          value: newLine.subdomain,
-          error: rowErrors && rowErrors.subdomain
+          value: line.subdomain,
+          error: rowErrors && rowErrors.subdomain,
+          valueViewer: singlelineTextWrapper(policySupportedChars)
         },
         {
           readOnly,
@@ -139,7 +142,7 @@ export const convertLineItemsToGrid = (
           dataEditor: textAreaWrapper({
             error: rowErrors && rowErrors.description
           }),
-          valueViewer: multilineTextWrapper()
+          valueViewer: multilineTextWrapper(policySupportedChars)
         },
         newLine.proposaltoken && {
           readOnly,
