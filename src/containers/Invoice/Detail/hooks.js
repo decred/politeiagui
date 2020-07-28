@@ -30,7 +30,6 @@ export function useInvoicesSummary(currentInvoice, userid, start, end) {
   );
 
   const { user } = useUserDetail(userid);
-  console.log(user);
 
   const [
     loading,

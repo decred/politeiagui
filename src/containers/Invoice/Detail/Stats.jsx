@@ -27,11 +27,13 @@ const Stats = ({ invoice }) => {
   const end = new Date();
   const start = new Date();
   start.setMonth(start.getMonth() - 3);
+  const starttimestamp = Math.round(start.valueOf() / 1000);
+  const endtimestamp = Math.round(end.valueOf() / 1000);
   const { invoices, isUserDeveloper } = useInvoicesSummary(
     invoice.censorshiprecord.token,
     invoice.userid,
-    Math.round(start.valueOf() / 1000),
-    Math.round(end.valueOf() / 1000)
+    starttimestamp,
+    endtimestamp
   );
   const shouldPrintTable = invoices && invoices.length > 0;
   const shouldPrintEmptyMessage = invoices && invoices.length === 0;
@@ -42,11 +44,17 @@ const Stats = ({ invoice }) => {
       {shouldPrintTable ? (
         <Table headers={headers} data={invoices.map(printInvoiceInfo)} />
       ) : shouldPrintEmptyMessage ? (
-        <Text>No invoices for this period</Text>
+        <Text>No invoices for the past 3 months</Text>
       ) : (
         <Spinner />
       )}
-      {isUserDeveloper && <CodeStats userid={invoice.userid} />}
+      {isUserDeveloper && (
+        <CodeStats
+          userid={invoice.userid}
+          start={starttimestamp}
+          end={endtimestamp}
+        />
+      )}
     </Card>
   );
 };

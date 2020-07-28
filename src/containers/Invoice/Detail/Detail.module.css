@@ -3,6 +3,9 @@ h2.statsTitle {
   margin-bottom: var(--spacing-1);
 }
 
-.invoiceLinkWrapper {
-  padding: var(--spacing-1);
+@media screen and (max-width: 768px) {
+  .invoiceLinkWrapper,
+  .prs {
+    padding-left: var(--spacing-1);
+  }
 }
