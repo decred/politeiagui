@@ -1,5 +1,5 @@
-import React from "react";
-import { Card, Spinner, Text, H2, H4, Table } from "pi-ui";
+import React, { useState } from "react";
+import { Card, Spinner, Text, H2, H4, Table, Link as UiLink } from "pi-ui";
 
 import { useInvoicesSummary } from "./hooks";
 import CodeStats from "./CodeStats";
@@ -29,6 +29,8 @@ const Stats = ({ invoice }) => {
   start.setMonth(start.getMonth() - 3);
   const starttimestamp = Math.round(start.valueOf() / 1000);
   const endtimestamp = Math.round(end.valueOf() / 1000);
+  const [showStats, setShowStats] = useState(false);
+  const toggleShowStats = () => setShowStats(!showStats);
   const { invoices, isUserDeveloper } = useInvoicesSummary(
     invoice.censorshiprecord.token,
     invoice.userid,
@@ -40,8 +42,13 @@ const Stats = ({ invoice }) => {
   return (
     <Card paddingSize="small">
       <H2 className={styles.statsTitle}>Stats</H2>
-      <H4>Past 3 months invoices</H4>
-      {shouldPrintTable ? (
+      <div className={styles.titleLinkWrapper}>
+        <H4>Past 3 months invoices</H4>
+        <UiLink className={styles.uilink} onClick={toggleShowStats}>
+          {showStats ? "Hide" : "Show"}
+        </UiLink>
+      </div>
+      {showStats && shouldPrintTable ? (
         <Table headers={headers} data={invoices.map(printInvoiceInfo)} />
       ) : shouldPrintEmptyMessage ? (
         <Text>No invoices for the past 3 months</Text>

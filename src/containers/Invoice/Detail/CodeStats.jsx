@@ -1,5 +1,5 @@
-import React, { Fragment } from "react";
-import { H4, Text, Table, Spinner } from "pi-ui";
+import React, { Fragment, useState } from "react";
+import { H4, Text, Table, Spinner, Link as UiLink, classNames } from "pi-ui";
 
 import Link from "src/components/Link";
 import { useCodeStats } from "./hooks";
@@ -69,6 +69,8 @@ const printCodeStatsInfo = ({
 // TODO: code when the codestats endpoint is fixed
 const CodeStats = ({ userid, start, end }) => {
   const { loading, error, codestats } = useCodeStats(userid, start, end);
+  const [showStats, setShowStats] = useState(false);
+  const toggleShowStats = () => setShowStats(!showStats);
   const shouldPrintTable =
     !loading && !error && codestats && codestats.length > 0;
   const shouldPrintEmptyMessage =
@@ -76,8 +78,13 @@ const CodeStats = ({ userid, start, end }) => {
   const shouldPrintErrorMessage = !loading && error && !codestats;
   return (
     <>
-      <H4 className="margin-top-m">Past 3 months code stats</H4>
-      {shouldPrintTable ? (
+      <div className={classNames(styles.titleLinkWrapper, "margin-top-m")}>
+        <H4>Past 3 months code stats</H4>
+        <UiLink className={styles.uilink} onClick={toggleShowStats}>
+          {showStats ? "Hide" : "Show"}
+        </UiLink>
+      </div>
+      {showStats && shouldPrintTable ? (
         <Table headers={headers} data={codestats.map(printCodeStatsInfo)} />
       ) : shouldPrintEmptyMessage ? (
         <Text>No code stats for the past 3 months</Text>
