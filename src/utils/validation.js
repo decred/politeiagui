@@ -23,10 +23,11 @@ export const buildRegexFromSupportedChars = (supportedChars) => {
 export const buildSimpleMatchRegexFromSupportedChars = (supportedChars) => {
   const charNeedsEscaping = (c) => c === "/" || c === "." || c === "-";
   const concatedChars = supportedChars.reduce(
-    (str, char) => (charNeedsEscaping(char) ? str + `\\${char}` : str + char),
+    (str, char) =>
+      charNeedsEscaping(char) ? `${str}\\${char}` : `${str}${char}`,
     ""
   );
-  const regex = "([" + concatedChars + "])";
+  const regex = `([${concatedChars}])`;
   return new RegExp(regex, "gi");
 };
 

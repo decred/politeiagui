@@ -27,13 +27,15 @@ export const textAreaWrapper = () => (props) => (
 const printHighlightingUnsupported = (uniqueUnmatched, value, isMultiline) => {
   return (
     <div className={isMultiline ? multilineCellValue : ""}>
-      {value.split("").map((v) => {
-        return uniqueUnmatched.has(v) ? (
-          <span className={highlightChar}>{v}</span>
-        ) : (
-          v
-        );
-      })}
+      {value
+        .split("")
+        .map((v) =>
+          uniqueUnmatched.has(v) ? (
+            <span className={highlightChar}>{v}</span>
+          ) : (
+            v
+          )
+        )}
     </div>
   );
 };
