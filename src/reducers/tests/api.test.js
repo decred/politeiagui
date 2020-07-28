@@ -24,6 +24,7 @@ describe("test api reducer", () => {
       censorComment: DEFAULT_REQUEST_STATE,
       commentslikes: DEFAULT_REQUEST_STATE,
       editUser: DEFAULT_REQUEST_STATE,
+      codestats: DEFAULT_REQUEST_STATE,
       manageUser: DEFAULT_REQUEST_STATE,
       userSearch: DEFAULT_REQUEST_STATE,
       newProposal: DEFAULT_REQUEST_STATE,
