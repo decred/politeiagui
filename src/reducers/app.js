@@ -11,6 +11,7 @@ export const DEFAULT_STATE = {
   shouldVerifyKey: false,
   identityImportResult: { errorMsg: "", successMsg: "" },
   pollingCreditsPayment: false,
+  politeiaQuiesced: false,
   reachedCreditsPaymentPollingLimit: false,
   proposalPaymentReceived: false
 };
@@ -136,6 +137,10 @@ const app = (state = DEFAULT_STATE, action) =>
       [act.TOGGLE_CREDITS_PAYMENT_POLLING]: () => ({
         ...state,
         pollingCreditsPayment: action.payload
+      }),
+      [act.TOGGLE_QUIESCE_MODE]: () => ({
+        ...state,
+        politeiaQuiesced: action.payload
       }),
       [act.TOGGLE_CREDITS_PAYMENT_POLLING_REACHED_LIMIT]: () => ({
         ...state,

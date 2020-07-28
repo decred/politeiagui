@@ -246,6 +246,8 @@ export const keyMismatch = (payload) => (dispatch) =>
 export const toggleCreditsPaymentPolling = (bool) =>
   act.TOGGLE_CREDITS_PAYMENT_POLLING(bool);
 
+export const toggleQuiesceMode = (bool) => act.TOGGLE_QUIESCE_MODE(bool);
+
 export const toggleProposalPaymentReceived = (bool) =>
   act.TOGGLE_PROPOSAL_PAYMENT_RECEIVED(bool);
 

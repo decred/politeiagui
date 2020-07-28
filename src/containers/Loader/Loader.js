@@ -20,7 +20,8 @@ const Loader = ({ children }) => {
     onPollUserPayment,
     onUserProposalCredits,
     onGetPolicy,
-    onWsConnect
+    onWsConnect,
+    toggleQuiesceMode
   } = useLoader();
   const [
     userActiveOnLocalStorage,
@@ -37,13 +38,16 @@ const Loader = ({ children }) => {
         if (apiInfo.activeusersession) {
           await onRequestCurrentUser();
         }
+        if (apiInfo.quiesce) {
+          await toggleQuiesceMode(apiInfo.quiesce);
+        }
         setInitDone(true);
       } catch (e) {
         setError(e);
       }
     }
     onInit();
-  }, [onRequestApiInfo, onRequestCurrentUser, onGetPolicy]);
+  }, [onRequestApiInfo, onRequestCurrentUser, onGetPolicy, toggleQuiesceMode]);
 
   const hasUser = !!user;
 

@@ -312,7 +312,15 @@ export const apiInfo = () =>
   GET("/").then(
     ({
       csrfToken,
-      response: { version, route, pubkey, testnet, mode, activeusersession }
+      response: {
+        version,
+        route,
+        pubkey,
+        testnet,
+        mode,
+        activeusersession,
+        quiesce
+      }
     }) => ({
       csrfToken: csrfToken,
       version,
@@ -320,7 +328,8 @@ export const apiInfo = () =>
       pubkey,
       testnet,
       mode,
-      activeusersession
+      activeusersession,
+      quiesce
     })
   );
 

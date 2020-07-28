@@ -81,6 +81,8 @@ export const identityImportSuccess = (state) =>
 
 export const pollingCreditsPayment = (state) => state.app.pollingCreditsPayment;
 
+export const politeiaQuiesced = (state) => state.app.politeiaQuiesced;
+
 export const reachedCreditsPaymentPollingLimit = (state) =>
   state.app.reachedCreditsPaymentPollingLimit;
 

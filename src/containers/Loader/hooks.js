@@ -12,6 +12,7 @@ export function useLoader() {
   const onUserProposalCredits = useAction(act.onUserProposalCredits);
   const onGetPolicy = useAction(act.onGetPolicy);
   const onWsConnect = useAction(act.onWsConnect);
+  const toggleQuiesceMode = useAction(act.toggleQuiesceMode);
   return {
     user,
     apiInfo,
@@ -21,6 +22,7 @@ export function useLoader() {
     onPollUserPayment,
     onUserProposalCredits,
     onGetPolicy,
-    onWsConnect
+    onWsConnect,
+    toggleQuiesceMode
   };
 }

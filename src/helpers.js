@@ -152,6 +152,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     74: `Invalid proposal linkby. ${errorContext[0]}`,
     75: `Invalid runoff vote. ${errorContext[0]}`,
     76: `Wrong proposal type. ${errorContext[0]}`,
+    77: "Politeia is currently operating in readonly mode, please try again later",
 
     // CMS Errors
     1001: "Malformed name",
