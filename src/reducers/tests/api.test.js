@@ -27,6 +27,7 @@ describe("test api reducer", () => {
       manageUser: DEFAULT_REQUEST_STATE,
       userSearch: DEFAULT_REQUEST_STATE,
       newProposal: DEFAULT_REQUEST_STATE,
+      spendingSummary: DEFAULT_REQUEST_STATE,
       editProposal: DEFAULT_REQUEST_STATE,
       newComment: DEFAULT_REQUEST_STATE,
       proposalPaywallDetails: DEFAULT_REQUEST_STATE,

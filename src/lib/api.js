@@ -752,6 +752,12 @@ export const invoicePayouts = (csrf, starttime, endtime) =>
 export const payApprovedInvoices = () =>
   GET("/v1/admin/payinvoices").then(getResponse);
 
+export const getSpendingSummary = () =>
+  GET("/v1/proposals/spendingsummary").then(getResponse);
+
+export const getSpendingDetails = (csrf, token) =>
+  POST("/proposals/spendingdetails", csrf, { token }).then(getResponse);
+
 export const exchangeRate = (csrf, month, year) =>
   POST("/invoices/exchangerate", csrf, { month, year }).then(getResponse);
 

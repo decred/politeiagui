@@ -11,7 +11,8 @@ import {
   invoices,
   invoicePayouts,
   dccs,
-  paywall
+  paywall,
+  proposalBilling
 } from "./models";
 
 const rootReducer = combineReducers({
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
   invoices,
   invoicePayouts,
   dccs,
-  paywall
+  paywall,
+  proposalBilling
 });
 
 export default rootReducer;
