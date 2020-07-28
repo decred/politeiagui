@@ -121,7 +121,7 @@ const OnChangeFiltersModifier = ({ formikProps, isAdminPage = false }) => {
 
   useEffect(() => {
     if (all) {
-      setFieldValue("filters", DefaultInitialValues(isAdminPage).filters);
+      setFieldValue("filters", DefaultInitialValues(false).filters);
     }
   }, [all, setFieldValue, isAdminPage]);
   return null;
