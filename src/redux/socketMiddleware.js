@@ -25,7 +25,7 @@ const socketMiddleware = () => {
   };
 
   let commandRecieved = "";
-  const onMessage = () => (event) => {
+  const onMessage = (store) => (event) => {
     const payload = JSON.parse(event.data);
     console.log("receiving server message");
     // command message
@@ -35,8 +35,7 @@ const socketMiddleware = () => {
       // command body message
       switch (commandRecieved) {
         case "quiesce":
-          // XXX dispatch action
-          console.log("BE quiesce mode toggled, new value: ", payload.quiesce);
+          store.dispatch(act.toggleQuiesceMode(payload.quiesce));
           break;
         default:
       }
