@@ -270,6 +270,7 @@ export const getRfpLinkedProposals = (proposalsByToken) =>
 
     if (isSubmission) {
       const linkedProposal = proposalsByToken[proposal.linkto];
+      if (!linkedProposal) return acc;
       return set(
         [getProposalToken(proposal), "proposedFor"],
         linkedProposal.name

@@ -1,8 +1,9 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useMemo } from "react";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
+import { getRfpLinkedProposals } from "../helpers";
 import { UnvettedActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
 
@@ -20,9 +21,11 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
     onFetchProposalsBatch,
     loading,
     verifying
-  } = useProposalsBatch(remainingTokens);
+  } = useProposalsBatch(remainingTokens, true);
 
   const handleFetchRecords = (tokens) => onFetchProposalsBatch(tokens, false);
+
+  const records = useMemo(() => getRfpLinkedProposals(proposals), [proposals]);
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
@@ -35,7 +38,7 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
   return (
     <RecordsView
       onFetchRecords={handleFetchRecords}
-      records={proposals}
+      records={records}
       tabLabels={tabLabels}
       recordTokensByTab={mapProposalsTokensByTab(tabLabels, proposalsTokens)}
       renderRecord={renderProposal}
