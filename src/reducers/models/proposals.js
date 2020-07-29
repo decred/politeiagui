@@ -1,6 +1,7 @@
 import * as act from "src/actions/types";
 import compose from "lodash/fp/compose";
 import set from "lodash/fp/set";
+import get from "lodash/fp/get";
 import update from "lodash/fp/update";
 import {
   PROPOSAL_STATUS_ABANDONED,
@@ -72,6 +73,16 @@ const updateAllByStatus = (allByStatus, newStatus, token) =>
     return { ...inv, [key]: tokens };
   }, {});
 
+const updateProposalRfpLinks = (proposal) => (state) => {
+  if (!proposal.linkto) return state;
+  const linkedProposal = get(["byToken", proposal.linkto])(state);
+  if (!linkedProposal) return state;
+  return update(["byToken", proposal.linkto, "linkedfrom"], (links) => [
+    ...links,
+    proposalToken(proposal)
+  ])(state);
+};
+
 const proposals = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
@@ -132,6 +143,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
           },
           [act.RECEIVE_SETSTATUS_PROPOSAL]: () =>
             compose(
+              updateProposalRfpLinks(action.payload.proposal),
               set(
                 ["byToken", proposalToken(action.payload.proposal)],
                 action.payload.proposal
