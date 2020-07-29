@@ -48,6 +48,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   );
 
   const records = useMemo(() => getRfpLinkedProposals(proposals), [proposals]);
+
   const content = useCallback(
     ({ tabs, content }) => (
       <>

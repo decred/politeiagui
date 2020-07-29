@@ -6,24 +6,20 @@ import { useSelector, useAction } from "src/redux";
 import useThrowError from "src/hooks/utils/useThrowError";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
 import { isEmpty, keys, difference, isEqual } from "lodash";
-import { values, reduce, compact, uniq, flow } from "lodash/fp";
+import { values, compact, uniq, flow, map } from "lodash/fp";
 
-const getProposalLinks = (isRfp) => (links, p) => {
-  const lks = p && (isRfp ? p.linkedfrom : [p.linkto]);
-  return lks ? [...links, ...lks] : links;
-};
-
-const getRfpLinks = (proposals, isRfp) =>
-  flow(values, reduce(getProposalLinks(isRfp), []), uniq, compact)(proposals);
+const getRfpLinks = (proposals) =>
+  flow(
+    values,
+    map((p) => p.linkto),
+    uniq,
+    compact
+  )(proposals);
 
 const getUnfetchedTokens = (proposals, tokens) =>
   difference(tokens, keys(proposals));
 
-export default function useProposalsBatch(
-  tokens,
-  fetchRfpLinks,
-  isRfp = false
-) {
+export default function useProposalsBatch(tokens, fetchRfpLinks) {
   const proposals = useSelector(sel.proposalsByToken);
   const allByStatus = useSelector(sel.allByStatus);
   const errorSelector = useMemo(
@@ -41,9 +37,9 @@ export default function useProposalsBatch(
   }, [proposals, tokens]);
 
   const unfetchedRfpLinks = useMemo(() => {
-    const rfpLinks = getRfpLinks(proposals, isRfp);
+    const rfpLinks = getRfpLinks(proposals);
     return getUnfetchedTokens(proposals, rfpLinks);
-  }, [proposals, isRfp]);
+  }, [proposals]);
 
   const missingTokenInventory = isEmpty(tokenInventory);
   const hasRemainingTokens = !isEmpty(remainingTokens);
