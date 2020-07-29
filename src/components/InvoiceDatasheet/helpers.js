@@ -9,8 +9,7 @@ import {
   textAreaWrapper,
   multilineTextWrapper,
   singlelineTextWrapper,
-  proposalViewWrapper,
-  proposalSelectWrapper
+  proposalViewWrapper
 } from "./wrappers";
 
 export const columnTypes = {
@@ -146,7 +145,7 @@ export const convertLineItemsToGrid = (
           readOnly,
           value: newLine.proposaltoken,
           error: rowErrors && rowErrors.proposaltoken,
-          dataEditor: proposalSelectWrapper(proposalsOptions),
+          dataEditor: selectWrapper(proposalsOptions),
           valueViewer: proposalViewWrapper(proposalsOptions)
         },
         {

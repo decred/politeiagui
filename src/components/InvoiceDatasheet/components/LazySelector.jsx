@@ -50,6 +50,7 @@ const LazySelector = ({
     [options, error]
   );
 
+  console.log("loading");
   return loading ? (
     <div className="margin-top-s">
       <Spinner invert />

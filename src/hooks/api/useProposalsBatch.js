@@ -105,8 +105,6 @@ export default function useProposalsBatch(
     }
   });
 
-  console.log(error, state.error);
-
   const anyError = error || state.error;
 
   useThrowError(anyError);
