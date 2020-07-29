@@ -8,8 +8,6 @@ import styles from "./ProposalsOwned.module.css";
 const ProposalsOwned = ({ proposalsOwned }) => {
   const { proposalsByToken, isLoading } = useApprovedProposals();
 
-  console.log(proposalsOwned, proposalsByToken);
-
   return isLoading || isEmpty(proposalsByToken) ? (
     <div className={styles.spinnerWrapper}>
       <Spinner invert />

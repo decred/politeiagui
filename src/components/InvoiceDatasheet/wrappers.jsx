@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import SelectEditor from "./components/SelectEditor";
 import TextArea from "./components/TextArea";
 import {
@@ -11,9 +11,6 @@ import LazySelector from "./components/LazySelector";
 import { isEmpty } from "src/helpers";
 import { Spinner } from "pi-ui";
 import useApprovedProposals from "src/hooks/api/useApprovedProposals";
-import { getProposalsOptions } from "./helpers";
-import drop from "lodash/drop";
-import take from "lodash/take";
 
 const PROPOSAL_PAGE_SIZE = 20;
 
