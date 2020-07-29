@@ -77,10 +77,9 @@ const updateProposalRfpLinks = (proposal) => (state) => {
   if (!proposal.linkto) return state;
   const linkedProposal = get(["byToken", proposal.linkto])(state);
   if (!linkedProposal) return state;
-  return update(["byToken", proposal.linkto, "linkedfrom"], (links) => [
-    ...links,
-    proposalToken(proposal)
-  ])(state);
+  return update(["byToken", proposal.linkto, "linkedfrom"], (links) =>
+    links ? [...links, proposalToken(proposal)] : [proposalToken(proposal)]
+  )(state);
 };
 
 const proposals = (state = DEFAULT_STATE, action) =>

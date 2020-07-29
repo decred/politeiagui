@@ -85,7 +85,8 @@ export default function useProposalsBatch(tokens, fetchRfpLinks) {
       done: () => {
         if (
           hasRemainingTokens ||
-          !isEqual(allByStatus, state.proposalsTokens)
+          !isEqual(allByStatus, state.proposalsTokens) ||
+          !isEqual(state.proposals, proposals)
         ) {
           return send("VERIFY");
         }
@@ -99,6 +100,7 @@ export default function useProposalsBatch(tokens, fetchRfpLinks) {
       verifying: true
     }
   });
+
   const anyError = error || state.error;
 
   useThrowError(anyError);
