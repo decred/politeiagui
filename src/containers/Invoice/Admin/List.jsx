@@ -89,7 +89,7 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
   const handleFiltersChange = useCallback(
     (values) => {
       setFilters(values);
-      localStorage.setItem("invoiceFilters", JSON.stringify(values));
+      localStorage.setItem("invoiceFiltersAdmin", JSON.stringify(values));
     },
     [setFilters]
   );
@@ -122,7 +122,7 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
           actionsContent={
             <ActionsContent openInviteModal={handleOpenInviteContractorModal} />
           }>
-          <InvoiceFilterForm onChange={handleFiltersChange} />
+          <InvoiceFilterForm onChange={handleFiltersChange} isAdminPage />
         </PageDetails>
       </TopBanner>
       <Main fillScreen>
