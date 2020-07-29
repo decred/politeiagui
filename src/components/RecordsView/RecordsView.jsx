@@ -28,7 +28,7 @@ const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
 
 const initialState = { itemsOnLoad: 0, requestedTokens: [] };
 
-const SET_LOADING_ITEMS = "increment";
+const SET_LOADING_ITEMS = "set";
 const RESET_LOADING_ITEMS = "reset";
 
 function reducer(state, action) {

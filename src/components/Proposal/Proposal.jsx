@@ -361,7 +361,6 @@ const Proposal = React.memo(function Proposal({
               <ProposalActions
                 proposal={proposal}
                 voteSummary={voteSummary}
-                // resetRfpSubmissionsData={resetRfpSubmissionsData}
                 rfpSubmissionsVoteSummaries={
                   isRfp && showRfpSubmissions && rfpSubmissions.voteSummaries
                 }
