@@ -39,6 +39,11 @@ export const proposalIsRequesting = or(
 export const isApiRequestingRescanUserPayments = getIsApiRequesting(
   "rescanUserPayments"
 );
+
+export const isApiRequestingProposalOwnerBilling = getIsApiRequesting(
+  "proposalOwnerBilling"
+);
+
 export const isApiRequestingComments = or(
   getIsApiRequesting("proposalComments"),
   getIsApiRequesting("invoiceComments")

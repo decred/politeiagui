@@ -21,5 +21,5 @@ export default function useUserDetail(userID) {
 
   useThrowError(error);
 
-  return { user, isAdmin, loading, currentUserID };
+  return { user, isAdmin, loading, currentUserID, isCMS };
 }

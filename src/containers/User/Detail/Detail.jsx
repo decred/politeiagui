@@ -19,6 +19,7 @@ import useChangeUsername from "./hooks/useChangeUsername";
 import Identity from "./Identity";
 import Preferences from "./Preferences";
 import ManageContractor from "./ManageContractor";
+import ProposalsOwned from "./ProposalsOwned";
 import useModalContext from "src/hooks/utils/useModalContext";
 
 const getTabComponents = ({ user, ...rest }) => {
@@ -38,7 +39,10 @@ const getTabComponents = ({ user, ...rest }) => {
     ),
     [tabValues.INVOICES]: <AdminInvoices userID={user.userid} />,
     [tabValues.DRAFTS]: <Drafts key="tab-invoices" />,
-    [tabValues.MANAGE_DCC]: <ManageContractor userID={user.userid} {...rest} />
+    [tabValues.MANAGE_DCC]: <ManageContractor userID={user.userid} {...rest} />,
+    [tabValues.PROPOSALS_OWNED]: (
+      <ProposalsOwned proposalsOwned={user.proposalsowned} />
+    )
   };
   return mapTabValueToComponent;
 };
@@ -63,6 +67,8 @@ const UserDetail = ({
 
   const isUserPageOwner = user && currentUserID === user.userid;
   const isAdminOrTheUser = user && (isAdmin || currentUserID === user.userid);
+  const proposalsOwned = user && user.proposalsowned;
+  const ownsProposals = proposalsOwned && proposalsOwned.length > 0;
 
   const tabLabels = useMemo(() => {
     const isTabDisabled = (tabLabel) => {
@@ -70,6 +76,11 @@ const UserDetail = ({
       if (tabLabel === tabValues.CREDITS && !isAdminOrTheUser) return true;
       if (tabLabel === tabValues.MANAGE_DCC && !isAdminOrTheUser) return true;
       if (tabLabel === tabValues.INVOICES && !isAdmin) return true;
+      if (
+        tabLabel === tabValues.PROPOSALS_OWNED &&
+        (!isUserPageOwner || !ownsProposals)
+      )
+        return true;
 
       return false;
     };
@@ -85,7 +96,8 @@ const UserDetail = ({
         return (
           tabLabel !== tabValues.MANAGE_DCC &&
           tabLabel !== tabValues.DRAFTS &&
-          tabLabel !== tabValues.INVOICES
+          tabLabel !== tabValues.INVOICES &&
+          tabLabel !== tabValues.PROPOSALS_OWNED
         );
       }
       return true;
@@ -98,15 +110,17 @@ const UserDetail = ({
       tabValues.PROPOSALS,
       tabValues.INVOICES,
       tabValues.DRAFTS,
-      tabValues.MANAGE_DCC
+      tabValues.MANAGE_DCC,
+      tabValues.PROPOSALS_OWNED
     ].filter((tab) => !isTabDisabled(tab) && filterByRecordType(tab));
   }, [
     isUserPageOwner,
     isAdminOrTheUser,
     isAdmin,
+    ownsProposals,
+    recordType,
     RECORD_TYPE_INVOICE,
-    RECORD_TYPE_PROPOSAL,
-    recordType
+    RECORD_TYPE_PROPOSAL
   ]);
 
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);

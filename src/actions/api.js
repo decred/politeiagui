@@ -342,6 +342,19 @@ export const onFetchAdminInvoices = () =>
       });
   });
 
+export const onFetchProposalBilling = (token) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_PROPOSAL_BILLING());
+    return api
+      .proposalBilling(csrf, token)
+      .then((response) =>
+        dispatch(act.RECEIVE_PROPOSAL_BILLING({ token, response }))
+      )
+      .catch((error) => {
+        dispatch(act.RECEIVE_PROPOSAL_BILLING(null, error));
+      });
+  });
+
 export const onFetchProposalsBatchWithoutState = (
   tokens,
   fetchProposals = true,
