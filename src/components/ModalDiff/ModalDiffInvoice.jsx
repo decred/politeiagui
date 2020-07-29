@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useMemo } from "react";
-=======
-import React, { useMemo, useEffect } from "react";
->>>>>>> [cms] feat: change proposaltoken to proposalname on invoice lineitem
 import { Text, Modal, CopyableText } from "pi-ui";
 import PropTypes from "prop-types";
 import { DiffInvoices } from "src/components/Diff/Diff";
@@ -19,7 +15,6 @@ import { Row } from "src/components/layout";
 import styles from "./ModalDiff.module.css";
 import { presentationalInvoiceName } from "src/containers/Invoice/helpers";
 import uniq from "lodash/uniq";
-import isEmpty from "lodash/isEmpty";
 import useApprovedProposals from "src/hooks/api/useApprovedProposals";
 
 const ModalDiffInvoice = ({ onClose, invoice, prevInvoice, ...props }) => {
@@ -36,33 +31,6 @@ const ModalDiffInvoice = ({ onClose, invoice, prevInvoice, ...props }) => {
   }, [invoice.input.lineitems, prevInput]);
 
   const { proposalsByToken } = useApprovedProposals(proposalsTokens);
-
-  const propsByToken = useMemo(
-    () =>
-      uniq([
-        ...prevLineItems.lineitems.map(({ proposaltoken }) => proposaltoken),
-        ...invoice.input.lineitems.map(({ proposaltoken }) => proposaltoken)
-      ]),
-    [invoice.input.lineitems, prevLineItems]
-  );
-  const {
-    proposalByToken,
-    onFetchProposalsBatch,
-    isLoading
-  } = useApprovedProposals();
-
-  useEffect(() => {
-    if (!isLoading && !isEmpty(proposalByToken)) {
-      const remainingTokens = propsByToken
-        ? propsByToken.filter(
-            (t) => !Object.keys(proposalByToken).some((pt) => pt === t)
-          )
-        : [];
-      if (!isEmpty(remainingTokens)) {
-        onFetchProposalsBatch(remainingTokens, false);
-      }
-    }
-  }, [isLoading, proposalByToken, propsByToken, onFetchProposalsBatch]);
 
   return (
     <Modal

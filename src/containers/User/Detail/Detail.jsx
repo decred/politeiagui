@@ -69,6 +69,7 @@ const UserDetail = ({
   const isAdminOrTheUser = user && (isAdmin || currentUserID === user.userid);
   const proposalsOwned = user && user.proposalsowned;
   const ownsProposals = proposalsOwned && proposalsOwned.length > 0;
+  console.log(ownsProposals);
 
   const tabLabels = useMemo(() => {
     const isTabDisabled = (tabLabel) => {
@@ -78,8 +79,7 @@ const UserDetail = ({
       if (tabLabel === tabValues.INVOICES && !isAdmin) return true;
       if (
         tabLabel === tabValues.PROPOSALS_OWNED &&
-        !isUserPageOwner &&
-        !ownsProposals
+        (!isUserPageOwner || !ownsProposals)
       )
         return true;
 

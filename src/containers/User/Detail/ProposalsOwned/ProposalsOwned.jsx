@@ -1,38 +1,34 @@
 import React from "react";
 import ProposalBilling from "./ProposalBilling";
 import useApprovedProposals from "src/hooks/api/useApprovedProposals";
-import { useEffect } from "react";
-import { Spinner } from "pi-ui";
+import { Spinner, H3 } from "pi-ui";
 import isEmpty from "lodash/fp/isEmpty";
 import styles from "./ProposalsOwned.module.css";
 
 const ProposalsOwned = ({ proposalsOwned }) => {
-  const {
-    proposalByToken,
-    onFetchProposalsBatch,
-    isLoading
-  } = useApprovedProposals();
+  const { proposalsByToken, isLoading } = useApprovedProposals();
 
-  useEffect(() => {
-    onFetchProposalsBatch();
-  }, [onFetchProposalsBatch]);
+  console.log(proposalsOwned, proposalsByToken);
 
-  return isLoading || isEmpty(proposalByToken) ? (
+  return isLoading || isEmpty(proposalsByToken) ? (
     <div className={styles.spinnerWrapper}>
       <Spinner invert />
     </div>
   ) : (
     <>
-      {proposalsOwned &&
+      {proposalsOwned ? (
         proposalsOwned.map((p) => {
           return (
             <ProposalBilling
               key={p}
               token={p}
-              title={proposalByToken[p.trim()].name}
+              title={proposalsByToken[p.trim()].name}
             />
           );
-        })}
+        })
+      ) : (
+        <H3>No proposals owned</H3>
+      )}
     </>
   );
 };
