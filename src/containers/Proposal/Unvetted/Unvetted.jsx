@@ -17,8 +17,9 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
   const {
     proposals,
     proposalsTokens,
-    isLoadingTokenInventory: loadingTokenInventory,
-    onFetchProposalsBatch
+    onFetchProposalsBatch,
+    loading,
+    verifying
   } = useProposalsBatch(remainingTokens);
 
   const handleFetchRecords = (tokens) => onFetchProposalsBatch(tokens, false);
@@ -38,9 +39,10 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
       tabLabels={tabLabels}
       recordTokensByTab={mapProposalsTokensByTab(tabLabels, proposalsTokens)}
       renderRecord={renderProposal}
-      displayTabCount={!loadingTokenInventory}
+      displayTabCount={!!proposalsTokens}
       placeholder={ProposalLoader}
       setRemainingTokens={setRemainingTokens}
+      isLoading={loading || verifying}
       getEmptyMessage={getEmptyMessage}>
       {({ tabs, content }) => (
         <>

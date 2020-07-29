@@ -2,7 +2,6 @@ import { useReducer, useEffect, useCallback } from "react";
 import get from "lodash/get";
 import set from "lodash/fp/set";
 import compose from "lodash/fp/compose";
-import merge from "lodash/fp/merge";
 
 const DEFAULT_STATE = {
   status: "idle",
@@ -51,12 +50,13 @@ const fetchReducer = (state, action) => {
         set("verifying", false)
       )(state);
     case "RESOLVE":
-      return compose(
-        set("status", nextState),
-        set("verifying", false),
-        set("loading", false),
-        merge(action.payload)
-      )(state);
+      return {
+        ...state,
+        loading: false,
+        verifying: false,
+        status: nextState,
+        ...action.payload
+      };
     case "VERIFY":
       return compose(
         set("loading", false),

@@ -103,20 +103,12 @@ const RecordsView = ({
       count: numOfItemsToBeFetched,
       tokens: recordTokensToBeFetched
     });
-    try {
-      setRemainingTokens(recordTokensToBeFetched);
-    } catch (e) {
-      dispatch({
-        type: SET_LOADING_ITEMS,
-        count: itemsOnLoad + numOfItemsToBeFetched
-      });
-    }
+    setRemainingTokens(recordTokensToBeFetched);
   }, [
     filteredRecords,
     filteredTokens,
     pageSize,
     setHasMore,
-    itemsOnLoad,
     state.requestedTokens,
     setRemainingTokens
   ]);

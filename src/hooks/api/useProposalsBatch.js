@@ -5,7 +5,7 @@ import { or } from "src/lib/fp";
 import { useSelector, useAction } from "src/redux";
 import useThrowError from "src/hooks/utils/useThrowError";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
-import { isEmpty, keys, difference } from "lodash";
+import { isEmpty, keys, difference, isEqual } from "lodash";
 import { values, reduce, compact, uniq, flow } from "lodash/fp";
 
 const getProposalLinks = (isRfp) => (links, p) => {
@@ -87,7 +87,10 @@ export default function useProposalsBatch(
         return send("RESOLVE", { proposals, proposalsTokens: allByStatus });
       },
       done: () => {
-        if (hasRemainingTokens) {
+        if (
+          hasRemainingTokens ||
+          !isEqual(allByStatus, state.proposalsTokens)
+        ) {
           return send("VERIFY");
         }
       }

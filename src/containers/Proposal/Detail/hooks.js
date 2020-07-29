@@ -4,7 +4,11 @@ import { or } from "src/lib/fp";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
-import { isUnreviewedProposal, isCensoredProposal } from "../helpers";
+import {
+  isUnreviewedProposal,
+  isCensoredProposal,
+  getProposalRfpLinks
+} from "../helpers";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
 import { isEmpty, keys, difference, pick, values } from "lodash";
 
@@ -54,15 +58,6 @@ export function useProposal(token, threadParentID) {
 
   const [proposal, setProposal] = useState(getProposal());
 
-  // useEffect(
-  //   function fetchProposal() {
-  //     if (proposal) {
-  //       return;
-  //     }
-  //     onFetchProposal(token);
-  //   },
-  //   [proposal, token, onFetchProposal, onFetchProposalsVoteSummary]
-  // );
   useEffect(
     // fetch vote summary only when proposal details loaded => full token is avaliable in redux store
     // thus can be used to fetch vote summary
@@ -82,12 +77,17 @@ export function useProposal(token, threadParentID) {
       ? proposal.linkby
         ? proposal.linkedfrom
         : [proposal.linkto]
-      : [];
-  const unfetchedTokens = rfpLinks && difference(rfpLinks, keys(proposals));
-  const rfpSubmissions = {
-    proposals: values(pick(proposals, rfpLinks)),
-    voteSummaries: pick(voteSummaries, rfpLinks)
-  };
+      : null;
+
+  const unfetchedProposalTokens =
+    rfpLinks && difference(rfpLinks, keys(proposals));
+  const unfetchedSummariesTokens =
+    rfpLinks && difference(rfpLinks, keys(voteSummaries));
+  const rfpSubmissions = rfpLinks &&
+    proposal.linkby && {
+      proposals: values(pick(proposals, rfpLinks)),
+      voteSummaries: pick(voteSummaries, rfpLinks)
+    };
 
   const [state, send] = useFetchMachine({
     actions: {
@@ -107,21 +107,38 @@ export function useProposal(token, threadParentID) {
         }
         if (
           (token && !proposal) ||
-          (proposal && rfpLinks && !isEmpty(unfetchedTokens))
+          (proposal &&
+            rfpLinks &&
+            (!isEmpty(unfetchedProposalTokens) ||
+              !isEmpty(unfetchedSummariesTokens)))
         ) {
           return;
         }
         return send("VERIFY");
       },
       verify: () => {
-        if (!isEmpty(unfetchedTokens)) {
-          onFetchProposalsBatch(unfetchedTokens).then(() => send("VERIFY"));
+        if (!isEmpty(unfetchedProposalTokens)) {
+          onFetchProposalsBatch(unfetchedProposalTokens).then(() =>
+            send("VERIFY")
+          );
           return send("FETCH");
         }
-        if (rfpLinks && !isEmpty(rfpSubmissions)) {
-          return send("RESOLVE", { proposal: { ...proposal, rfpSubmissions } });
+        if (!isEmpty(unfetchedSummariesTokens)) {
+          onFetchProposalsVoteSummary(unfetchedSummariesTokens).then(() =>
+            send("VERIFY")
+          );
+          return send("FETCH");
+        }
+        if (rfpLinks && rfpSubmissions) {
+          return send("RESOLVE", { proposal, rfpSubmissions });
         }
         return send("RESOLVE", { proposal });
+      },
+      done: () => {
+        // verify proposal on proposal changes
+        if (!isEqual(state.proposal, proposal)) {
+          return send("VERIFY");
+        }
       }
     }
   });
@@ -140,5 +157,14 @@ export function useProposal(token, threadParentID) {
     throw error;
   }
 
-  return { proposal: state.proposal, loading, threadParentID };
+  const proposalWithLinks = useMemo(
+    () => getProposalRfpLinks(state.proposal, state.rfpSubmissions, proposals),
+    [proposals, state.proposal, state.rfpSubmissions]
+  );
+
+  return {
+    proposal: proposalWithLinks,
+    loading,
+    threadParentID
+  };
 }

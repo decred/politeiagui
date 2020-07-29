@@ -41,6 +41,7 @@ import ThumbnailGrid from "src/components/Files";
 import VersionPicker from "src/components/VersionPicker";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useRouter } from "src/components/Router";
+import { isEmpty } from "src/helpers";
 
 const ProposalWrapper = (props) => {
   const {
@@ -94,7 +95,6 @@ const Proposal = React.memo(function Proposal({
     proposedFor,
     rfpSubmissions
   } = proposal;
-  console.log("rfp submissions", rfpSubmissions);
   const isRfp = !!linkby;
   const isRfpSubmission = !!linkto;
   const isRfpActive = isRfp && isActiveRfp(linkby);
@@ -121,7 +121,11 @@ const Proposal = React.memo(function Proposal({
   const showExtendedVersionPicker = extended && version > 1;
   const showAbandonedDate = abandonedat && !mobile;
   const showVersionAsText = version > 1 && !extended && !mobile;
-  const showRfpSubmissions = extended && !!rfpSubmissions;
+  const showRfpSubmissions =
+    extended &&
+    !!rfpSubmissions &&
+    !isEmpty(rfpSubmissions.proposals) &&
+    !isEmpty(rfpSubmissions.voteSummaries);
   const showEditIcon =
     currentUser && isVotingAuthorized && !isVotingFinished && !isVoteActive;
 
@@ -359,7 +363,7 @@ const Proposal = React.memo(function Proposal({
                 voteSummary={voteSummary}
                 // resetRfpSubmissionsData={resetRfpSubmissionsData}
                 rfpSubmissionsVoteSummaries={
-                  isRfp && rfpSubmissions.voteSummaries
+                  isRfp && showRfpSubmissions && rfpSubmissions.voteSummaries
                 }
               />
             </LoggedInContent>

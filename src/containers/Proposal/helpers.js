@@ -11,7 +11,7 @@ import {
   PROPOSAL_STATUS_CENSORED,
   NOJS_ROUTE_PREFIX
 } from "../../constants";
-import { getTextFromIndexMd } from "src/helpers";
+import { getTextFromIndexMd, isEmpty } from "src/helpers";
 import set from "lodash/fp/set";
 import values from "lodash/values";
 
@@ -277,3 +277,24 @@ export const getRfpLinkedProposals = (proposalsByToken) =>
     }
     return acc;
   }, proposalsByToken);
+
+/**
+ * Returns a formatted proposal object including the rfp links for the given proposal
+ * @param {object} proposal
+ * @param {object} rfpSubmissions
+ * @param {object} proposals
+ */
+export const getProposalRfpLinks = (proposal, rfpSubmissions, proposals) => {
+  if (!proposal) return;
+  const isRfp = !!proposal.linkby;
+  const isSubmission = !!proposal.linkto;
+
+  if (!isRfp && !isSubmission) return proposal;
+  const ret =
+    isRfp && rfpSubmissions
+      ? { ...proposal, rfpSubmissions }
+      : isSubmission && !isEmpty(proposals)
+      ? { ...proposal, proposedFor: proposals[proposal.linkto].name }
+      : proposal;
+  return ret;
+};
