@@ -23,13 +23,11 @@ const tabLabels = [
 const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const [remainingTokens, setRemainingTokens] = useState();
 
-  const {
-    proposals,
-    proposalsTokens,
-    onFetchProposalsBatch,
-    loading,
-    verifying
-  } = useProposalsBatch(remainingTokens, true);
+  const { proposals, proposalsTokens, loading, verifying } = useProposalsBatch(
+    remainingTokens,
+    true,
+    true
+  );
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
@@ -68,7 +66,6 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
 
   return (
     <RecordsView
-      onFetchRecords={onFetchProposalsBatch}
       records={records}
       tabLabels={tabLabels}
       recordTokensByTab={recordTokensByTab}

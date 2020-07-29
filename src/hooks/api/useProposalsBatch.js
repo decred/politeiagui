@@ -19,7 +19,11 @@ const getRfpLinks = (proposals) =>
 const getUnfetchedTokens = (proposals, tokens) =>
   difference(tokens, keys(proposals));
 
-export default function useProposalsBatch(tokens, fetchRfpLinks) {
+export default function useProposalsBatch(
+  tokens,
+  fetchRfpLinks,
+  fetchVoteSummaries = false
+) {
   const proposals = useSelector(sel.proposalsByToken);
   const allByStatus = useSelector(sel.allByStatus);
   const errorSelector = useMemo(
@@ -69,13 +73,13 @@ export default function useProposalsBatch(tokens, fetchRfpLinks) {
       },
       verify: () => {
         if (hasRemainingTokens) {
-          onFetchProposalsBatch(remainingTokens)
+          onFetchProposalsBatch(remainingTokens, fetchVoteSummaries)
             .then(() => send("VERIFY"))
             .catch((e) => send("REJECT", e));
           return send("FETCH");
         }
         if (fetchRfpLinks && hasUnfetchedRfpLinks) {
-          onFetchProposalsBatch(unfetchedRfpLinks)
+          onFetchProposalsBatch(unfetchedRfpLinks, fetchVoteSummaries)
             .then(() => send("VERIFY"))
             .catch((e) => send("REJECT", e));
           return send("FETCH");
@@ -100,6 +104,8 @@ export default function useProposalsBatch(tokens, fetchRfpLinks) {
       verifying: true
     }
   });
+
+  console.log(error, state.error);
 
   const anyError = error || state.error;
 

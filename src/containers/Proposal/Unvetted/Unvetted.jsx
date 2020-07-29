@@ -15,15 +15,11 @@ const tabLabels = [tabValues.UNREVIEWED, tabValues.CENSORED];
 
 const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
   const [remainingTokens, setRemainingTokens] = useState();
-  const {
-    proposals,
-    proposalsTokens,
-    onFetchProposalsBatch,
-    loading,
-    verifying
-  } = useProposalsBatch(remainingTokens, true);
-
-  const handleFetchRecords = (tokens) => onFetchProposalsBatch(tokens, false);
+  const { proposals, proposalsTokens, loading, verifying } = useProposalsBatch(
+    remainingTokens,
+    true,
+    true
+  );
 
   const records = useMemo(() => getRfpLinkedProposals(proposals), [proposals]);
 
@@ -37,7 +33,6 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
 
   return (
     <RecordsView
-      onFetchRecords={handleFetchRecords}
       records={records}
       tabLabels={tabLabels}
       recordTokensByTab={mapProposalsTokensByTab(tabLabels, proposalsTokens)}
