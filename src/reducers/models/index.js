@@ -8,3 +8,4 @@ export { default as invoicePayouts } from "./invoicePayouts";
 export { default as dccs } from "./dccs";
 export { default as paywall } from "./paywall";
 export { default as proposalBilling } from "./proposalBilling";
+export { default as proposalOwnerBilling } from "./proposalOwnerBilling";

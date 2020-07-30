@@ -79,11 +79,9 @@ export const proposalSelectWrapper = (options) => (props) => {
     onFetchRemainingProposalsBatch,
     error
   } = useApprovedProposals();
-
   const onLoadMoreOptions = useCallback(() => {
     onFetchRemainingProposalsBatch(PROPOSAL_PAGE_SIZE);
   }, [onFetchRemainingProposalsBatch]);
-
   return (
     <LazySelector
       options={options}

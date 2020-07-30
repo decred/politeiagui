@@ -396,6 +396,11 @@ export const manageCmsUser = (
     proposalsowned
   });
 
+export const proposalBilling = (csrf, token) =>
+  POST("/proposals/billing", csrf, {
+    token
+  }).then(getResponse);
+
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);
 
