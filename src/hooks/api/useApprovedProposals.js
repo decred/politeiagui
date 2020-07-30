@@ -4,6 +4,8 @@ import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import { isEmpty } from "src/helpers";
 import keys from "lodash/keys";
 
+const PAGE_SIZE = 20;
+
 const remainingTokensFilter = (proposals) => (token) =>
   !keys(proposals).some((proposalToken) => proposalToken === token);
 
@@ -24,9 +26,15 @@ export default function useApprovedProposals(initialTokens = []) {
     getRemainingTokens(proposalsTokens.approved, proposalsByToken)
   );
 
-  const requestParams = useMemo(() => [proposalsTokens.approved, false], [
-    proposalsTokens
-  ]);
+  const requestParams = useMemo(
+    () => [
+      proposalsTokens.approved
+        ? proposalsTokens.approved.slice(0, PAGE_SIZE)
+        : [],
+      false
+    ],
+    [proposalsTokens]
+  );
 
   const needsFetch = useMemo(
     () =>
@@ -90,6 +98,7 @@ export default function useApprovedProposals(initialTokens = []) {
     isLoading: loading || isLoadingTokenInventory,
     error,
     remainingTokens,
-    onFetchRemainingProposalsBatch
+    onFetchRemainingProposalsBatch,
+    onFetchProposalsBatchByTokensRemaining
   };
 }

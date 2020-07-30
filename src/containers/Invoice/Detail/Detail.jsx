@@ -15,6 +15,8 @@ import map from "lodash/fp/map";
 import filter from "lodash/fp/filter";
 import uniq from "lodash/fp/uniq";
 
+const PAGE_SIZE = 20;
+
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
@@ -34,23 +36,28 @@ const InvoiceDetail = ({ Main, match }) => {
 
   const {
     proposals,
-    proposalByToken,
-    onFetchProposalsBatch,
+    proposalsByToken,
+    onFetchProposalsBatchByTokensRemaining,
     isLoading
   } = useApprovedProposals();
 
   useEffect(() => {
-    if (!isLoading && !isEmpty(proposalByToken)) {
+    if (!isLoading && !isEmpty(proposalsByToken)) {
       const remainingTokens = tokens
         ? tokens.filter(
-            (t) => !Object.keys(proposalByToken).some((pt) => pt === t)
+            (t) => !Object.keys(proposalsByToken).some((pt) => pt === t)
           )
         : [];
       if (!isEmpty(remainingTokens)) {
-        onFetchProposalsBatch(remainingTokens, false);
+        onFetchProposalsBatchByTokensRemaining(remainingTokens, PAGE_SIZE);
       }
     }
-  }, [isLoading, proposalByToken, tokens, onFetchProposalsBatch]);
+  }, [
+    isLoading,
+    proposalsByToken,
+    tokens,
+    onFetchProposalsBatchByTokensRemaining
+  ]);
 
   return (
     <>
