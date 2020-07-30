@@ -17,7 +17,7 @@ import {
   CONTRACTOR_TYPE_REVOKED,
   CONTRACTOR_TYPE_SUPERVISOR
 } from "src/containers/DCC";
-import { 
+import {
   usePolicy,
   useUserDetail,
   useSessionStorage,

@@ -2,7 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import { H2, Message, Button, Spinner } from "pi-ui";
 import InfoSection from "../InfoSection.jsx";
-import { typeOptions, domainOptions, getOwnedProposals, getSupervisorsNames } from "./helpers";
+import {
+  typeOptions,
+  domainOptions,
+  getOwnedProposals,
+  getSupervisorsNames
+} from "./helpers";
 import { useApprovedProposals, useSupervisors } from "src/hooks";
 
 const UserDccInfo = ({
