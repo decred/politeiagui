@@ -27,7 +27,12 @@ export default function useApprovedProposals(initialTokens = []) {
   );
 
   const requestParams = useMemo(
-    () => [proposalsTokens.approved.slice(0, PAGE_SIZE), false],
+    () => [
+      proposalsTokens.approved
+        ? proposalsTokens.approved.slice(0, PAGE_SIZE)
+        : [],
+      false
+    ],
     [proposalsTokens]
   );
 
