@@ -89,6 +89,8 @@ export function useProposal(token, threadParentID) {
       voteSummaries: pick(voteSummaries, rfpLinks)
     };
 
+  const isRfp = proposal && !!proposal.linkby;
+
   const [state, send] = useFetchMachine({
     actions: {
       initial: () => {
@@ -118,12 +120,12 @@ export function useProposal(token, threadParentID) {
       },
       verify: () => {
         if (!isEmpty(unfetchedProposalTokens)) {
-          onFetchProposalsBatch(unfetchedProposalTokens).then(() =>
+          onFetchProposalsBatch(unfetchedProposalTokens, isRfp).then(() =>
             send("VERIFY")
           );
           return send("FETCH");
         }
-        if (!isEmpty(unfetchedSummariesTokens)) {
+        if (!isEmpty(unfetchedSummariesTokens) && isRfp) {
           onFetchProposalsVoteSummary(unfetchedSummariesTokens).then(() =>
             send("VERIFY")
           );
