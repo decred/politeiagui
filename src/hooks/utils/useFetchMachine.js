@@ -8,7 +8,7 @@ const DEFAULT_STATE = {
   loading: false
 };
 
-const actionsByState = {
+const stateTransitionActions = {
   FETCH: "loading",
   VERIFY: "verifying",
   REJECT: "failure",
@@ -16,7 +16,7 @@ const actionsByState = {
   RETRY: "idle"
 };
 
-const getNextState = (action) => get(actionsByState, action.type);
+const getNextState = (action) => get(stateTransitionActions, action.type);
 
 const fetchReducer = (state, action) => {
   const nextState = getNextState(action);
