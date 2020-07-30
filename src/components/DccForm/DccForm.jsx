@@ -5,8 +5,6 @@ import { Formik, Field } from "formik";
 import SelectField from "src/components/Select/SelectField";
 import { withRouter } from "react-router-dom";
 import { dccValidationSchema } from "./validation";
-import useSessionStorage from "src/hooks/utils/useSessionStorage";
-import useScrollFormOnError from "src/hooks/utils/useScrollFormOnError";
 import DraftSaver from "./DraftSaver";
 import styles from "./DccForm.module.css";
 import {
@@ -19,8 +17,12 @@ import {
   CONTRACTOR_TYPE_REVOKED,
   CONTRACTOR_TYPE_SUPERVISOR
 } from "src/containers/DCC";
-import usePolicy from "src/hooks/api/usePolicy";
-import useUserDetail from "src/hooks/api/useUserDetail";
+import { 
+  usePolicy,
+  useUserDetail,
+  useSessionStorage,
+  useScrollFormOnError
+} from "src/hooks";
 
 const Select = ({ error, ...props }) => (
   <div
