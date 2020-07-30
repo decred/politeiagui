@@ -113,7 +113,8 @@ export function useUserProposals(userID) {
     actions: {
       initial: () => {
         if (isEmpty(proposals)) {
-          onFetchUserProposals(userID, "");
+          onFetchUserProposals(userID, "").then(() => send("VERIFY"));
+          return send("FETCH");
         }
         return send("VERIFY");
       },
@@ -133,9 +134,12 @@ export function useUserProposals(userID) {
           });
         }
         if (!isEmpty(rfpLinks) && !isEmpty(unfetchedLinks)) {
-          onFetchProposalsBatch(unfetchedLinks).then(() => send("VERIFY"));
+          onFetchProposalsBatch(unfetchedLinks, false).then(() =>
+            send("VERIFY")
+          );
           return send("FETCH");
         }
+        return send("RESOLVE", { proposals });
       },
       done: () => {
         if (isStateMissingProposals(state, proposals)) {

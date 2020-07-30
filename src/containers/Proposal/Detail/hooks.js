@@ -101,12 +101,6 @@ export function useProposal(token, threadParentID) {
         return send("VERIFY");
       },
       load: () => {
-        if (token && !proposal) {
-          return;
-        }
-        if (token && proposal && !rfpLinks) {
-          return send("RESOLVE", { proposal });
-        }
         if (
           (token && !proposal) ||
           (proposal &&
@@ -120,15 +114,15 @@ export function useProposal(token, threadParentID) {
       },
       verify: () => {
         if (!isEmpty(unfetchedProposalTokens)) {
-          onFetchProposalsBatch(unfetchedProposalTokens, isRfp).then(() =>
-            send("VERIFY")
-          );
+          onFetchProposalsBatch(unfetchedProposalTokens, isRfp)
+            .then(() => send("VERIFY"))
+            .catch((e) => send("REJECT", e));
           return send("FETCH");
         }
         if (!isEmpty(unfetchedSummariesTokens) && isRfp) {
-          onFetchProposalsVoteSummary(unfetchedSummariesTokens).then(() =>
-            send("VERIFY")
-          );
+          onFetchProposalsVoteSummary(unfetchedSummariesTokens)
+            .then(() => send("VERIFY"))
+            .catch((e) => send("REJECT", e));
           return send("FETCH");
         }
         if (rfpLinks && rfpSubmissions) {

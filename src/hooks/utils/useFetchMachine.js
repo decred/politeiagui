@@ -9,36 +9,17 @@ const DEFAULT_STATE = {
 };
 
 const actionsByState = {
-  idle: {
-    FETCH: "loading",
-    VERIFY: "verifying"
-  },
-  loading: {
-    VERIFY: "verifying",
-    REJECT: "failure",
-    FETCH: "loading",
-    RESOLVE: "success"
-  },
-  verifying: {
-    FETCH: "loading",
-    VERIFY: "verifying",
-    RESOLVE: "success",
-    REJECT: "failure"
-  },
-  success: {
-    FETCH: "loading",
-    VERIFY: "verifying"
-  },
-  failure: {
-    RETRY: "loading"
-  }
+  FETCH: "loading",
+  VERIFY: "verifying",
+  REJECT: "failure",
+  RESOLVE: "success",
+  RETRY: "idle"
 };
 
-const getNextState = (currentState, action) =>
-  get(actionsByState, [currentState, action.type]);
+const getNextState = (action) => get(actionsByState, action.type);
 
 const fetchReducer = (state, action) => {
-  const nextState = getNextState(state.status, action);
+  const nextState = getNextState(action);
   if (!nextState) {
     return set("error", new Error("unhanlded state change"))(state);
   }
