@@ -47,7 +47,6 @@ const ActionsContent = ({ openInviteModal }) => {
 
   return (
     <AdminContent>
-    <>
       {!mobile ? (
         <Row justify="space-between" className={styles.actionsWrapper}>
           {inviteContractorLink}
@@ -63,7 +62,7 @@ const ActionsContent = ({ openInviteModal }) => {
           <DropdownItem>{proposalBillingSummaryLink}</DropdownItem>
         </Dropdown>
       )}
-    </>
+    </AdminConent>
   );
 };
 
