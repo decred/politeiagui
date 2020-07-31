@@ -62,7 +62,7 @@ const ActionsContent = ({ openInviteModal }) => {
           <DropdownItem>{proposalBillingSummaryLink}</DropdownItem>
         </Dropdown>
       )}
-    </AdminConent>
+    </AdminContent>
   );
 };
 
