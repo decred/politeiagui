@@ -22,6 +22,8 @@ const ModalExternalLink = ({ show, onClose, link }) => {
           unintended consequences.
           <strong> DO NOT</strong> enter your Politeia credentials or reveal any
           other sensitive information.
+          <strong> DO NOT</strong> download or run any linked files on the 
+          computer storing your cryptocurrencies.
         </P>
       </Message>
       <div className="margin-top-s">
