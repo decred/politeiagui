@@ -11,3 +11,5 @@ export function useDocumentTitle(title) {
     setDocumentTitle(newTitle);
   }, [newTitle]);
 }
+
+export default useDocumentTitle;
