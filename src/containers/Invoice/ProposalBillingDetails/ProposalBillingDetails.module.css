@@ -7,3 +7,12 @@
 .totalText {
   text-align: right;
 }
+
+.reference {
+  display: block;
+  font-size: 0.7em;
+}
+
+.value {
+  cursor: pointer;
+}
