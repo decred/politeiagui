@@ -746,7 +746,7 @@ export const invoice = (token, version = null) =>
 export const userInvoices = () => GET("/v1/user/invoices").then(getResponse);
 
 export const adminInvoices = (csrf) =>
-  POST("/admin/invoices", csrf, {}).then(getResponse);
+  POST("/invoices", csrf, {}).then(getResponse);
 
 export const generatePayouts = (csrf) =>
   POST("/admin/generatepayouts", csrf, {}).then(getResponse);
