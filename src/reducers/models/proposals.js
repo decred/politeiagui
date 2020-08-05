@@ -168,13 +168,6 @@ const proposals = (state = DEFAULT_STATE, action) =>
             update("allByStatus", (allProps) =>
               updateAllByStatus(allProps, ACTIVE_VOTE, action.payload.token)
             )(state),
-          [act.RECEIVE_NEW_COMMENT]: () => {
-            const comment = action.payload;
-            return update(
-              ["byToken", comment.token, "numcomments"],
-              (numComments) => ++numComments
-            )(state);
-          },
           [act.RECEIVE_LOGOUT]: () => {
             const privateProps = [
               ...state.allByStatus[UNREVIEWED],
