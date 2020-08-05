@@ -17,8 +17,10 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
   const [remainingTokens, setRemainingTokens] = useState();
   const { proposals, proposalsTokens, loading, verifying } = useProposalsBatch(
     remainingTokens,
-    true,
-    true
+    {
+      fetchRfpLinks: true,
+      fetchVoteSummaries: true
+    }
   );
 
   const records = useMemo(() => getRfpLinkedProposals(proposals), [proposals]);

@@ -23,11 +23,15 @@ const tabLabels = [
 const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const [remainingTokens, setRemainingTokens] = useState();
 
-  const { proposals, proposalsTokens, loading, verifying } = useProposalsBatch(
-    remainingTokens,
-    true,
-    true
-  );
+  const {
+    proposals,
+    proposalsTokens,
+    loading,
+    verifying
+  } = useProposalsBatch(remainingTokens, {
+    fetchRfpLinks: true,
+    fetchVoteSummaries: true
+  });
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {

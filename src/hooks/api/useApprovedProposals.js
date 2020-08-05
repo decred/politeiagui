@@ -7,7 +7,10 @@ const PAGE_SIZE = 20;
 
 export default function useApprovedProposals(initialTokens) {
   const [remainingTokens, setRemainingTokens] = useState(initialTokens);
-  const { proposals, proposalsTokens } = useProposalsBatch(remainingTokens);
+  const { proposals, proposalsTokens } = useProposalsBatch(remainingTokens, {
+    fetchRfpLinks: false,
+    fetchVoteSummaries: false
+  });
 
   useEffect(() => {
     const tokens =

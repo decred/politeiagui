@@ -21,8 +21,7 @@ const getUnfetchedTokens = (proposals, tokens) =>
 
 export default function useProposalsBatch(
   tokens,
-  fetchRfpLinks,
-  fetchVoteSummaries = false
+  { fetchRfpLinks, fetchVoteSummaries = false }
 ) {
   const proposals = useSelector(sel.proposalsByToken);
   const allByStatus = useSelector(sel.allByStatus);
