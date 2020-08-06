@@ -5,8 +5,15 @@ import { or } from "src/lib/fp";
 import { useSelector, useAction } from "src/redux";
 import useThrowError from "src/hooks/utils/useThrowError";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
-import { isEmpty, keys, difference, isEqual } from "lodash";
-import { values, compact, uniq, flow, map } from "lodash/fp";
+import values from "lodash/fp/values";
+import compact from "lodash/fp/compact";
+import uniq from "lodash/fp/uniq";
+import map from "lodash/fp/map";
+import flow from "lodash/fp/flow";
+import isEmpty from "lodash/fp/isEmpty";
+import keys from "lodash/fp/keys";
+import difference from "lodash/fp/difference";
+import isEqual from "lodash/fp/isEqual";
 
 const getRfpLinks = (proposals) =>
   flow(
@@ -17,7 +24,7 @@ const getRfpLinks = (proposals) =>
   )(proposals);
 
 const getUnfetchedTokens = (proposals, tokens) =>
-  difference(tokens, keys(proposals));
+  difference(keys(proposals))(tokens);
 
 export default function useProposalsBatch(
   tokens,

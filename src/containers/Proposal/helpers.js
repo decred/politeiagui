@@ -11,9 +11,10 @@ import {
   PROPOSAL_STATUS_CENSORED,
   NOJS_ROUTE_PREFIX
 } from "../../constants";
-import { getTextFromIndexMd, isEmpty } from "src/helpers";
+import { getTextFromIndexMd } from "src/helpers";
 import set from "lodash/fp/set";
-import values from "lodash/values";
+import values from "lodash/fp/values";
+import isEmpty from "lodash/fp/isEmpty";
 
 /**
  * Returns the total amount of votes received by a given proposal voteSummary
@@ -291,11 +292,11 @@ export const getProposalRfpLinks = (proposal, rfpSubmissions, proposals) => {
   const isSubmission = !!proposal.linkto;
 
   if (!isRfp && !isSubmission) return proposal;
-  const ret =
-    isRfp && rfpSubmissions
-      ? { ...proposal, rfpSubmissions }
-      : isSubmission && !isEmpty(proposals)
-      ? { ...proposal, proposedFor: proposals[proposal.linkto].name }
-      : proposal;
-  return ret;
+  const hasRfpSubmissions = isRfp && rfpSubmissions;
+  const isSubmissionWithProposals = isSubmission && !isEmpty(proposals);
+  return hasRfpSubmissions
+    ? { ...proposal, rfpSubmissions }
+    : isSubmissionWithProposals
+    ? { ...proposal, proposedFor: proposals[proposal.linkto].name }
+    : proposal;
 };
