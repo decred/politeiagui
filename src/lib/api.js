@@ -750,8 +750,8 @@ export const invoice = (token, version = null) =>
 
 export const userInvoices = () => GET("/v1/user/invoices").then(getResponse);
 
-export const adminInvoices = (csrf, start, end, userid) =>
-  POST("/invoices", csrf, { start, end, userid }).then(getResponse);
+export const adminInvoices = (csrf, starttime, endtime, userid) =>
+  POST("/invoices", csrf, { starttime, endtime, userid }).then(getResponse);
 
 export const generatePayouts = (csrf) =>
   POST("/admin/generatepayouts", csrf, {}).then(getResponse);

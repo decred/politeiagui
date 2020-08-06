@@ -45,7 +45,7 @@ const Stats = ({ invoice }) => {
       <div className={styles.titleLinkWrapper}>
         <H4>Past 3 months invoices</H4>
         <UiLink className={styles.uilink} onClick={toggleShowStats}>
-          {showStats ? "Hide" : "Show"}
+          {shouldPrintEmptyMessage ? "" : showStats ? "Hide" : "Show"}
         </UiLink>
       </div>
       {showStats && shouldPrintTable ? (

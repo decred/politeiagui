@@ -81,7 +81,7 @@ const CodeStats = ({ userid, start, end }) => {
       <div className={classNames(styles.titleLinkWrapper, "margin-top-m")}>
         <H4>Past 3 months code stats</H4>
         <UiLink className={styles.uilink} onClick={toggleShowStats}>
-          {showStats ? "Hide" : "Show"}
+          {shouldPrintEmptyMessage ? "" : showStats ? "Hide" : "Show"}
         </UiLink>
       </div>
       {showStats && shouldPrintTable ? (
