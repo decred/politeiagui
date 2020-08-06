@@ -24,7 +24,7 @@ const getRfpLinks = (proposals) =>
   )(proposals);
 
 const getUnfetchedTokens = (proposals, tokens) =>
-  difference(keys(proposals))(tokens);
+  difference(tokens)(keys(proposals));
 
 export default function useProposalsBatch(
   tokens,
