@@ -4,7 +4,12 @@ import * as act from "src/actions";
 import { or } from "src/lib/fp";
 import { useSelector, useAction } from "src/redux";
 import useThrowError from "src/hooks/utils/useThrowError";
-import useFetchMachine from "src/hooks/utils/useFetchMachine";
+import useFetchMachine, {
+  VERIFY,
+  FETCH,
+  REJECT,
+  RESOLVE
+} from "src/hooks/utils/useFetchMachine";
 import values from "lodash/fp/values";
 import compact from "lodash/fp/compact";
 import uniq from "lodash/fp/uniq";
@@ -60,13 +65,13 @@ export default function useProposalsBatch(
       initial: () => {
         if (!tokenInventory && !tokens) {
           onFetchTokenInventory();
-          return send("FETCH");
+          return send(FETCH);
         }
-        return send("VERIFY");
+        return send(VERIFY);
       },
       load: () => {
         if (!missingTokenInventory && !tokens) {
-          return send("RESOLVE", { proposalsTokens: allByStatus });
+          return send(RESOLVE, { proposalsTokens: allByStatus });
         }
         if (
           hasRemainingTokens ||
@@ -75,22 +80,22 @@ export default function useProposalsBatch(
         ) {
           return;
         }
-        return send("VERIFY");
+        return send(VERIFY);
       },
       verify: () => {
         if (hasRemainingTokens) {
           onFetchProposalsBatch(remainingTokens, fetchVoteSummaries)
-            .then(() => send("VERIFY"))
-            .catch((e) => send("REJECT", e));
-          return send("FETCH");
+            .then(() => send(VERIFY))
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
         }
         if (fetchRfpLinks && hasUnfetchedRfpLinks) {
           onFetchProposalsBatch(unfetchedRfpLinks, fetchVoteSummaries)
-            .then(() => send("VERIFY"))
-            .catch((e) => send("REJECT", e));
-          return send("FETCH");
+            .then(() => send(VERIFY))
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
         }
-        return send("RESOLVE", { proposals, proposalsTokens: allByStatus });
+        return send(RESOLVE, { proposals, proposalsTokens: allByStatus });
       },
       done: () => {
         if (
@@ -98,7 +103,7 @@ export default function useProposalsBatch(
           !isEqual(allByStatus, state.proposalsTokens) ||
           !isEqual(state.proposals, proposals)
         ) {
-          return send("VERIFY");
+          return send(VERIFY);
         }
       }
     },

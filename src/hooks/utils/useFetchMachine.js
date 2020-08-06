@@ -3,20 +3,33 @@ import get from "lodash/get";
 import set from "lodash/fp/set";
 import compose from "lodash/fp/compose";
 
+// state transition actions
+export const FETCH = "FETCH";
+export const RESOLVE = "RESOLVE";
+export const VERIFY = "VERIFY";
+export const REJECT = "REJECT";
+export const RETRY = "RETRY";
+// machine states
+const LOADING = "loading";
+const IDLE = "idle";
+const FAILURE = "failure";
+const SUCCESS = "success";
+const VERIFYING = "verifying";
+
 const DEFAULT_STATE = {
-  status: "idle",
+  status: IDLE,
   loading: false
 };
 
-const stateTransitionActions = {
-  FETCH: "loading",
-  VERIFY: "verifying",
-  REJECT: "failure",
-  RESOLVE: "success",
-  RETRY: "idle"
+const mapStateTransitionActions = {
+  [FETCH]: LOADING,
+  [VERIFY]: VERIFYING,
+  [REJECT]: FAILURE,
+  [RESOLVE]: SUCCESS,
+  [RETRY]: IDLE
 };
 
-const getNextState = (action) => get(stateTransitionActions, action.type);
+const getNextState = (action) => get(mapStateTransitionActions, action.type);
 
 const fetchReducer = (state, action) => {
   const nextState = getNextState(action);
@@ -24,13 +37,13 @@ const fetchReducer = (state, action) => {
     return set("error", new Error("unhanlded state change"))(state);
   }
   switch (action.type) {
-    case "FETCH":
+    case FETCH:
       return compose(
         set("status", nextState),
         set("loading", true),
         set("verifying", false)
       )(state);
-    case "RESOLVE":
+    case RESOLVE:
       return {
         ...state,
         loading: false,
@@ -38,13 +51,13 @@ const fetchReducer = (state, action) => {
         status: nextState,
         ...action.payload
       };
-    case "VERIFY":
+    case VERIFY:
       return compose(
         set("loading", false),
         set("verifying", true),
         set("status", nextState)
       )(state);
-    case "REJECT":
+    case REJECT:
       return compose(
         set("loading", false),
         set("error", action.payload),
@@ -55,24 +68,24 @@ const fetchReducer = (state, action) => {
   }
 };
 
-export default function useFetchMachine({ actions, initialState }) {
+export default function useFetchMachine({ actions, initialValues }) {
   const [currentState, dispatch] = useReducer(
     fetchReducer,
-    initialState || DEFAULT_STATE
+    initialValues || DEFAULT_STATE
   );
   useEffect(
     function onStateChanges() {
       const { status } = currentState;
       switch (status) {
-        case "idle":
+        case IDLE:
           return actions.initial && actions.initial();
-        case "loading":
+        case LOADING:
           return actions.load && actions.load();
-        case "verifying":
+        case VERIFYING:
           return actions.verify && actions.verify();
-        case "success":
+        case SUCCESS:
           return actions.done && actions.done();
-        case "failure":
+        case FAILURE:
           return actions.error && actions.error();
         default:
           return;
@@ -86,5 +99,5 @@ export default function useFetchMachine({ actions, initialState }) {
     [dispatch]
   );
 
-  return [currentState, send];
+  return [currentState, send, { FETCH, RESOLVE, VERIFY, REJECT, RETRY }];
 }

@@ -47,8 +47,6 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     [proposalsTokens]
   );
 
-  const records = useMemo(() => getRfpLinkedProposals(proposals), [proposals]);
-
   const content = useCallback(
     ({ tabs, content }) => (
       <>
@@ -68,7 +66,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
 
   return (
     <RecordsView
-      records={records}
+      records={getRfpLinkedProposals(proposals)}
       tabLabels={tabLabels}
       recordTokensByTab={recordTokensByTab}
       renderRecord={renderProposal}

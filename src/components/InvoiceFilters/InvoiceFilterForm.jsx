@@ -23,7 +23,12 @@ const DefaultInitialValues = (isAdminPage) => ({
   }
 });
 
-const InvoiceFilterForm = ({ onChange, children, disableUserFilter, isAdminPage }) => {
+const InvoiceFilterForm = ({
+  onChange,
+  children,
+  disableUserFilter,
+  isAdminPage
+}) => {
   const filtersKey = isAdminPage ? "invoiceFiltersAdmin" : "invoiceFilters";
   return (
     <Formik
@@ -90,7 +95,10 @@ const InvoiceFilterForm = ({ onChange, children, disableUserFilter, isAdminPage 
                 />
               )}
               <HookOnFormChange formikProps={formikProps} onChange={onChange} />
-              <OnChangeFiltersModifier formikProps={formikProps} isAdminPage={isAdminPage} />
+              <OnChangeFiltersModifier
+                formikProps={formikProps}
+                isAdminPage={isAdminPage}
+              />
             </form>
             {children && children(values)}
           </>

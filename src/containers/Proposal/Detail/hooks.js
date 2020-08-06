@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
-import isEqual from "lodash/isEqual";
 import { or } from "src/lib/fp";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
@@ -9,13 +8,32 @@ import {
   isCensoredProposal,
   getProposalRfpLinks
 } from "../helpers";
-import useFetchMachine from "src/hooks/utils/useFetchMachine";
-import { isEmpty, keys, difference, pick, values } from "lodash";
+import useFetchMachine, {
+  FETCH,
+  RESOLVE,
+  VERIFY,
+  REJECT
+} from "src/hooks/utils/useFetchMachine";
+import isEmpty from "lodash/fp/isEmpty";
+import keys from "lodash/fp/keys";
+import difference from "lodash/fp/difference";
+import isEqual from "lodash/fp/isEqual";
+import values from "lodash/fp/values";
+import pick from "lodash/pick";
 
 const proposalWithFilesOrNothing = (proposal) => {
   return proposal && proposal.files && !!proposal.files.length
     ? proposal
     : null;
+};
+
+const getProposalRfpLinksTokens = (proposal) => {
+  if (!proposal) return null;
+  const isSubmission = !!proposal.linkto;
+  const isRfp = !!proposal.linkby;
+  const hasRfpLinks = isSubmission || isRfp;
+  if (!hasRfpLinks) return null;
+  return isSubmission ? [proposal.linkto] : proposal.linkedfrom;
 };
 
 export function useProposal(token, threadParentID) {
@@ -71,18 +89,12 @@ export function useProposal(token, threadParentID) {
     },
     [proposalFromState, onFetchProposalsVoteSummary]
   );
-
-  const rfpLinks =
-    proposal && (proposal.linkby || proposal.linkto)
-      ? proposal.linkby
-        ? proposal.linkedfrom
-        : [proposal.linkto]
-      : null;
+  const rfpLinks = getProposalRfpLinksTokens(proposal);
 
   const unfetchedProposalTokens =
-    rfpLinks && difference(rfpLinks, keys(proposals));
+    rfpLinks && difference(rfpLinks)(keys(proposals));
   const unfetchedSummariesTokens =
-    rfpLinks && difference(rfpLinks, keys(voteSummaries));
+    rfpLinks && difference(rfpLinks)(keys(voteSummaries));
   const rfpSubmissions = rfpLinks &&
     proposal.linkby && {
       proposals: values(pick(proposals, rfpLinks)),
@@ -95,10 +107,10 @@ export function useProposal(token, threadParentID) {
     actions: {
       initial: () => {
         if (token && !proposal) {
-          onFetchProposal(token).then(() => send("VERIFY"));
-          return send("FETCH");
+          onFetchProposal(token).then(() => send(VERIFY));
+          return send(FETCH);
         }
-        return send("VERIFY");
+        return send(VERIFY);
       },
       load: () => {
         if (
@@ -110,30 +122,30 @@ export function useProposal(token, threadParentID) {
         ) {
           return;
         }
-        return send("VERIFY");
+        return send(VERIFY);
       },
       verify: () => {
         if (!isEmpty(unfetchedProposalTokens)) {
           onFetchProposalsBatch(unfetchedProposalTokens, isRfp)
-            .then(() => send("VERIFY"))
-            .catch((e) => send("REJECT", e));
-          return send("FETCH");
+            .then(() => send(VERIFY))
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
         }
         if (!isEmpty(unfetchedSummariesTokens) && isRfp) {
           onFetchProposalsVoteSummary(unfetchedSummariesTokens)
-            .then(() => send("VERIFY"))
-            .catch((e) => send("REJECT", e));
-          return send("FETCH");
+            .then(send(VERIFY))
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
         }
         if (rfpLinks && rfpSubmissions) {
-          return send("RESOLVE", { proposal, rfpSubmissions });
+          return send(RESOLVE, { proposal, rfpSubmissions });
         }
-        return send("RESOLVE", { proposal });
+        return send(RESOLVE, { proposal });
       },
       done: () => {
         // verify proposal on proposal changes
         if (!isEqual(state.proposal, proposal)) {
-          return send("VERIFY");
+          return send(VERIFY);
         }
       }
     }
@@ -153,9 +165,10 @@ export function useProposal(token, threadParentID) {
     throw error;
   }
 
-  const proposalWithLinks = useMemo(
-    () => getProposalRfpLinks(state.proposal, state.rfpSubmissions, proposals),
-    [proposals, state.proposal, state.rfpSubmissions]
+  const proposalWithLinks = getProposalRfpLinks(
+    state.proposal,
+    state.rfpSubmissions,
+    proposals
   );
 
   return {

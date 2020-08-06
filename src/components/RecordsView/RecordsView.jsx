@@ -64,7 +64,6 @@ const RecordsView = ({
 }) => {
   const [hasMoreToLoad, setHasMore] = useState(true);
   const [state, dispatch] = useReducer(reducer, initialState);
-
   const { itemsOnLoad } = state;
   const { javascriptEnabled } = useConfig();
 

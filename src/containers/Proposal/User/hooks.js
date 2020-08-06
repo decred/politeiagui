@@ -5,7 +5,11 @@ import { or } from "src/lib/fp";
 import { useStoreSubscribe, useSelector, useAction } from "src/redux";
 import { handleSaveAppDraftProposals } from "src/lib/local_storage";
 import useThrowError from "src/hooks/utils/useThrowError";
-import useFetchMachine from "src/hooks/utils/useFetchMachine";
+import useFetchMachine, {
+  FETCH,
+  VERIFY,
+  RESOLVE
+} from "src/hooks/utils/useFetchMachine";
 import { getProposalToken } from "../helpers";
 import { isEmpty } from "src/helpers";
 import { flow, uniq, compact, map } from "lodash/fp";
@@ -113,10 +117,10 @@ export function useUserProposals(userID) {
     actions: {
       initial: () => {
         if (isEmpty(proposals)) {
-          onFetchUserProposals(userID, "").then(() => send("VERIFY"));
-          return send("FETCH");
+          onFetchUserProposals(userID, "").then(() => send(VERIFY));
+          return send(FETCH);
         }
-        return send("VERIFY");
+        return send(VERIFY);
       },
       load: () => {
         if (isEmpty(proposals)) {
@@ -125,25 +129,23 @@ export function useUserProposals(userID) {
         if (!isEmpty(rfpLinks) && !isEmpty(unfetchedLinks)) {
           return;
         }
-        return send("VERIFY");
+        return send(VERIFY);
       },
       verify: () => {
         if (!isEmpty(rfpLinks) && isEmpty(unfetchedLinks)) {
-          return send("RESOLVE", {
+          return send(RESOLVE, {
             proposals: getProposalsWithRfpLinks(proposals, generalProposals)
           });
         }
         if (!isEmpty(rfpLinks) && !isEmpty(unfetchedLinks)) {
-          onFetchProposalsBatch(unfetchedLinks, false).then(() =>
-            send("VERIFY")
-          );
-          return send("FETCH");
+          onFetchProposalsBatch(unfetchedLinks, false).then(() => send(VERIFY));
+          return send(FETCH);
         }
-        return send("RESOLVE", { proposals });
+        return send(RESOLVE, { proposals });
       },
       done: () => {
         if (isStateMissingProposals(state, proposals)) {
-          return send("VERIFY");
+          return send(VERIFY);
         }
       }
     },
@@ -157,7 +159,7 @@ export function useUserProposals(userID) {
 
   useThrowError(error);
   return {
-    proposals: state.proposals || [],
+    proposals: state.proposals,
     numOfUserProposals,
     loading,
     error,
