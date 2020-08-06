@@ -39,6 +39,11 @@ export const proposalIsRequesting = or(
 export const isApiRequestingRescanUserPayments = getIsApiRequesting(
   "rescanUserPayments"
 );
+
+export const isApiRequestingProposalOwnerBilling = getIsApiRequesting(
+  "proposalOwnerBilling"
+);
+
 export const isApiRequestingComments = or(
   getIsApiRequesting("proposalComments"),
   getIsApiRequesting("invoiceComments")
@@ -71,4 +76,12 @@ export const apiRescanUserPaymentsError = getApiError("rescanUserPayments");
 // CMS Selectors
 export const isApiRequestingInvoicePayouts = getIsApiRequesting(
   "invoicePayouts"
+);
+
+export const isApiRequestingProposalBillingSummary = getIsApiRequesting(
+  "spendingSummary"
+);
+
+export const isApiRequestingProposalBillingDetails = getIsApiRequesting(
+  "spendingDetails"
 );

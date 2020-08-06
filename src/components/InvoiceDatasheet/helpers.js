@@ -8,9 +8,11 @@ import {
   selectWrapper,
   textAreaWrapper,
   multilineTextWrapper,
+  singlelineTextWrapper,
   proposalViewWrapper,
   proposalSelectWrapper
 } from "./wrappers";
+import find from "lodash/find";
 
 export const columnTypes = {
   TYPE_COL: 1,
@@ -82,29 +84,35 @@ export const convertLineItemsToGrid = (
 ) => {
   const {
     supporteddomains: policyDomains,
-    supportedlineitemtypes: policyLineItemTypes
+    supportedlineitemtypes: policyLineItemTypes,
+    invoicefieldsupportedchars: policySupportedChars
   } = policy;
   const grid = [];
   const { grid: gridBody, expenseTotal, laborTotal, total } = lineItems.reduce(
     (acc, line, idx) => {
+      const newLine = line;
       const isLaborReadonly =
-        line.type === 2 ? true : line.type === 3 ? true : readOnly;
-      const isSubContractorReadonly = line.type !== 4 ? true : readOnly;
+        newLine.type === 2 ? true : newLine.type === 3 ? true : readOnly;
+      const isSubContractorReadonly = newLine.type !== 4 ? true : readOnly;
       const isExpenseReadonly =
-        line.type === 1 || line.type === 4 ? true : readOnly;
-      const laborHours = +fromMinutesToHours(line.labor);
-      const expenses = +fromUSDCentsToUSDUnits(line.expenses);
-      const subRate = +fromUSDCentsToUSDUnits(line.subrate);
+        newLine.type === 1 || newLine.type === 4 ? true : readOnly;
+      const subUser = find(subContractors, { id: newLine.subuserid });
+      const subContractorValue = isSubContractorReadonly
+        ? subUser && subUser.username
+        : newLine.subuserid;
+      const laborHours = +fromMinutesToHours(newLine.labor);
+      const expenses = +fromUSDCentsToUSDUnits(newLine.expenses);
+      const subRate = +fromUSDCentsToUSDUnits(newLine.subrate);
       const lineSubTotal =
-        line.type !== 4
+        newLine.type !== 4
           ? laborHours * userRate + expenses
           : laborHours * subRate;
       const rowErrors = (errors && errors[idx]) || {};
-      const newLine = [
+      const tableLine = [
         { readOnly: true, value: idx + 1 },
         {
           readOnly,
-          value: line.type,
+          value: newLine.type,
           error: rowErrors && rowErrors.type,
           dataEditor: selectWrapper(
             policyLineItemTypes.map((op) => ({
@@ -115,7 +123,7 @@ export const convertLineItemsToGrid = (
         },
         {
           readOnly,
-          value: line.domain,
+          value: newLine.domain,
           error: rowErrors && rowErrors.domain,
           dataEditor: selectWrapper(
             policyDomains.map((op) => ({
@@ -127,34 +135,35 @@ export const convertLineItemsToGrid = (
         {
           readOnly,
           value: line.subdomain,
-          error: rowErrors && rowErrors.subdomain
+          error: rowErrors && rowErrors.subdomain,
+          valueViewer: singlelineTextWrapper(policySupportedChars)
         },
         {
           readOnly,
-          value: line.description,
+          value: newLine.description,
           error: rowErrors && rowErrors.description,
           dataEditor: textAreaWrapper({
             error: rowErrors && rowErrors.description
           }),
-          valueViewer: multilineTextWrapper()
+          valueViewer: multilineTextWrapper(policySupportedChars)
         },
         {
           readOnly,
-          value: line.proposaltoken,
+          value: newLine.proposaltoken,
           error: rowErrors && rowErrors.proposaltoken,
           dataEditor: proposalSelectWrapper(proposalsOptions),
           valueViewer: proposalViewWrapper(proposalsOptions)
         },
         {
           readOnly: isSubContractorReadonly,
-          value: line.subuserid,
+          value: subContractorValue,
           error: rowErrors && rowErrors.subuserid,
           dataEditor: selectWrapper(getSubcontractorOptions(subContractors))
         },
         {
           readOnly: isSubContractorReadonly,
           error: rowErrors && rowErrors.subrate,
-          value: +fromUSDCentsToUSDUnits(line.subrate)
+          value: +fromUSDCentsToUSDUnits(newLine.subrate)
         },
         {
           readOnly: isLaborReadonly,
@@ -172,9 +181,9 @@ export const convertLineItemsToGrid = (
         }
       ];
       return {
-        grid: acc.grid.concat([newLine]),
-        expenseTotal: acc.expenseTotal + line.expenses,
-        laborTotal: acc.laborTotal + line.labor,
+        grid: acc.grid.concat([tableLine.filter(Boolean)]),
+        expenseTotal: acc.expenseTotal + newLine.expenses,
+        laborTotal: acc.laborTotal + newLine.labor,
         total: acc.total + lineSubTotal
       };
     },

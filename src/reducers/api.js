@@ -29,6 +29,7 @@ export const DEFAULT_STATE = {
   editProposal: DEFAULT_REQUEST_STATE,
   newComment: DEFAULT_REQUEST_STATE,
   proposalPaywallDetails: DEFAULT_REQUEST_STATE,
+  proposalOwnerBilling: DEFAULT_REQUEST_STATE,
   userProposalCredits: DEFAULT_REQUEST_STATE,
   resetPassword: DEFAULT_REQUEST_STATE,
   verifyResetPassword: DEFAULT_REQUEST_STATE,
@@ -45,6 +46,7 @@ export const DEFAULT_STATE = {
   payouts: DEFAULT_REQUEST_STATE,
   invoicePayouts: DEFAULT_REQUEST_STATE,
   payApproved: DEFAULT_REQUEST_STATE,
+  spendingSummary: DEFAULT_REQUEST_STATE,
   inviteUser: DEFAULT_REQUEST_STATE,
   newInvoice: DEFAULT_REQUEST_STATE,
   userInvoices: DEFAULT_REQUEST_STATE,
@@ -107,6 +109,10 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.RECEIVE_PROPOSAL]: () => receive("proposal", state, action),
       [act.REQUEST_CODE_STATS]: () => request("codestats", state, action),
       [act.RECEIVE_CODE_STATS]: () => receive("codestats", state, action),
+      [act.REQUEST_PROPOSAL_BILLING]: () =>
+        request("proposalOwnerBilling", state, action),
+      [act.RECEIVE_PROPOSAL_BILLING]: () =>
+        receive("proposalOwnerBilling", state, action),
       [act.REQUEST_RECORD_COMMENTS]: () =>
         request("proposalComments", state, action),
       [act.RECEIVE_RECORD_COMMENTS]: () =>
@@ -200,6 +206,14 @@ const api = (state = DEFAULT_STATE, action) =>
         receive("invoicePayouts", state, action),
       [act.REQUEST_PAY_APPROVED]: () => request("payApproved", state, action),
       [act.RECEIVE_PAY_APPROVED]: () => receive("payApproved", state, action),
+      [act.REQUEST_SPENDING_SUMMARY]: () =>
+        request("spendingSummary", state, action),
+      [act.RECEIVE_SPENDING_SUMMARY]: () =>
+        receive("spendingSummary", state, action),
+      [act.REQUEST_SPENDING_DETAILS]: () =>
+        request("spendingDetails", state, action),
+      [act.RECEIVE_SPENDING_DETAILS]: () =>
+        receive("spendingDetails", state, action),
       [act.REQUEST_INVITE_USER]: () => request("inviteUser", state, action),
       [act.RECEIVE_INVITE_USER]: () => receive("inviteUser", state, action),
       [act.REQUEST_NEW_INVOICE]: () => request("newInvoice", state, action),

@@ -396,6 +396,11 @@ export const manageCmsUser = (
     proposalsowned
   });
 
+export const proposalBilling = (csrf, token) =>
+  POST("/proposals/billing", csrf, {
+    token
+  }).then(getResponse);
+
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);
 
@@ -746,7 +751,7 @@ export const invoice = (token, version = null) =>
 export const userInvoices = () => GET("/v1/user/invoices").then(getResponse);
 
 export const adminInvoices = (csrf, start, end, userid) =>
-  POST("/admin/invoices", csrf, { start, end, userid }).then(getResponse);
+  POST("/invoices", csrf, { start, end, userid }).then(getResponse);
 
 export const generatePayouts = (csrf) =>
   POST("/admin/generatepayouts", csrf, {}).then(getResponse);
@@ -756,6 +761,12 @@ export const invoicePayouts = (csrf, starttime, endtime) =>
 
 export const payApprovedInvoices = () =>
   GET("/v1/admin/payinvoices").then(getResponse);
+
+export const getSpendingSummary = () =>
+  GET("/v1/proposals/spendingsummary").then(getResponse);
+
+export const getSpendingDetails = (csrf, token) =>
+  POST("/proposals/spendingdetails", csrf, { token }).then(getResponse);
 
 export const exchangeRate = (csrf, month, year) =>
   POST("/invoices/exchangerate", csrf, { month, year }).then(getResponse);

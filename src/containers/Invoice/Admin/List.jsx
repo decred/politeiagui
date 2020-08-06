@@ -21,7 +21,7 @@ import { Row } from "src/components/layout";
 import useModalContext from "src/hooks/utils/useModalContext";
 
 const ActionsContent = ({ openInviteModal }) => {
-  const mobile = useMediaQuery("(max-width: 560px)");
+  const mobile = useMediaQuery("(max-width: 768px)");
 
   const inviteContractorLink = (
     <UILink className="cursor-pointer" onClick={openInviteModal}>
@@ -38,23 +38,30 @@ const ActionsContent = ({ openInviteModal }) => {
       Payout summaries
     </Link>
   );
+  const proposalBillingSummaryLink = (
+    <Link className="cursor-pointer" to="/admin/proposalsbilling">
+      Proposal billing
+    </Link>
+  );
 
   return (
-    <div>
+    <>
       {!mobile ? (
         <Row justify="space-between" className={styles.actionsWrapper}>
           {inviteContractorLink}
           {generatePayoutsLink}
           {payoutSummariesLink}
+          {proposalBillingSummaryLink}
         </Row>
       ) : (
         <Dropdown title="Actions" className={styles.actionsWrapper}>
           <DropdownItem>{inviteContractorLink}</DropdownItem>
           <DropdownItem>{generatePayoutsLink}</DropdownItem>
           <DropdownItem>{payoutSummariesLink}</DropdownItem>
+          <DropdownItem>{proposalBillingSummaryLink}</DropdownItem>
         </Dropdown>
       )}
-    </div>
+    </>
   );
 };
 
@@ -82,7 +89,7 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
   const handleFiltersChange = useCallback(
     (values) => {
       setFilters(values);
-      localStorage.setItem("invoiceFilters", JSON.stringify(values));
+      localStorage.setItem("invoiceFiltersAdmin", JSON.stringify(values));
     },
     [setFilters]
   );
@@ -115,7 +122,7 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
           actionsContent={
             <ActionsContent openInviteModal={handleOpenInviteContractorModal} />
           }>
-          <InvoiceFilterForm onChange={handleFiltersChange} />
+          <InvoiceFilterForm onChange={handleFiltersChange} isAdminPage />
         </PageDetails>
       </TopBanner>
       <Main fillScreen>

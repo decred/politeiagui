@@ -11,6 +11,8 @@ export * from "./models/invoicePayouts";
 export * from "./models/dccs";
 export * from "./models/paywall";
 export * from "./models/codestats";
+export * from "./models/proposalBilling";
+export * from "./models/proposalOwnerBilling";
 
 export const selectorMap = (fns) => (...args) =>
   Object.keys(fns).reduce(

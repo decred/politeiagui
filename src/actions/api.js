@@ -363,6 +363,19 @@ export const onFetchAdminInvoicesWithoutState = (start, end, userid) =>
     return res.invoices;
   });
 
+export const onFetchProposalBilling = (token) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_PROPOSAL_BILLING());
+    return api
+      .proposalBilling(csrf, token)
+      .then((response) =>
+        dispatch(act.RECEIVE_PROPOSAL_BILLING({ token, response }))
+      )
+      .catch((error) => {
+        dispatch(act.RECEIVE_PROPOSAL_BILLING(null, error));
+      });
+  });
+
 export const onFetchProposalsBatchWithoutState = (
   tokens,
   fetchProposals = true,
@@ -1291,6 +1304,33 @@ export const onPayApprovedInvoices = () => (dispatch) => {
       dispatch(act.RECEIVE_PAY_APPROVED(null, error));
     });
 };
+
+export const onGetSpendingSummary = () => (dispatch) => {
+  dispatch(act.REQUEST_SPENDING_SUMMARY({}));
+  return api
+    .getSpendingSummary()
+    .then((response) => {
+      dispatch(act.RECEIVE_SPENDING_SUMMARY(response));
+    })
+    .catch((error) => {
+      dispatch(act.RECEIVE_SPENDING_SUMMARY(null, error));
+    });
+};
+
+export const onFetchSpendingDetails = (token) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_SPENDING_DETAILS({ token }));
+    return api
+      .getSpendingDetails(csrf, token)
+      .then((response) => {
+        dispatch(act.RECEIVE_SPENDING_DETAILS({ ...response }));
+        return response;
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_SPENDING_DETAILS(null, error));
+        throw error;
+      });
+  });
 
 export const onFetchExchangeRate = (month, year) =>
   withCsrf((dispatch, _, csrf) => {
