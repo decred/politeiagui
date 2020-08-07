@@ -10,7 +10,8 @@ export const typeOptions = [
   "Nominee",
   "Revoked",
   "Temp. Contractor",
-  "Revoked Temp."
+  "Revoked Temp.",
+  "Proposal Approved"
 ];
 
 export const domainOptions = [
