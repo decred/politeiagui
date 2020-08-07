@@ -38,8 +38,11 @@ const UserDccInfo = ({
         />
       </div>
       {showEdit && (
-        <Button className="margin-bottom-m" onClick={onToggleDccEdit}>
-          Edit
+        <Button
+          className="margin-bottom-m"
+          onClick={onToggleDccEdit}
+          kind={isLoadingProposals ? "disabled" : "primary"}>
+          {isLoadingProposals ? <Spinner invert /> : "Edit"}
         </Button>
       )}
     </>
