@@ -160,10 +160,11 @@ const CommentWrapper = ({
     />
   );
 
+  const shortRecord = recordToken.substring(0, 7);
   return (
     <>
       <Comment
-        permalink={`/${recordType}s/${recordToken}/comments/${commentid}`}
+        permalink={`/${recordType}s/${shortRecord}/comments/${commentid}`}
         seeInContextLink={contextLink}
         censorable={censorable}
         author={username}
