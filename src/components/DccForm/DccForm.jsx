@@ -8,7 +8,6 @@ import { dccValidationSchema } from "./validation";
 import DraftSaver from "./DraftSaver";
 import styles from "./DccForm.module.css";
 import {
-  getDomainOptions,
   getContractorTypeOptions,
   getDccTypeOptions,
   getNomineeOptions,
@@ -23,6 +22,7 @@ import {
   useSessionStorage,
   useScrollFormOnError
 } from "src/hooks";
+import { getContractorDomains } from "src/helpers";
 
 const Select = ({ error, ...props }) => (
   <div
@@ -47,6 +47,12 @@ const DccForm = React.memo(function DccForm({
   isUserValid,
   isSupervisor
 }) {
+  const {
+    policy: { supporteddomains }
+  } = usePolicy();
+
+  const contractorDomains = getContractorDomains(supporteddomains);
+
   const [isIssuance, setIsIssuance] = useState();
   useScrollFormOnError(errors && errors.global);
 
@@ -142,7 +148,7 @@ const DccForm = React.memo(function DccForm({
 
       <Select
         name="domain"
-        options={getDomainOptions()}
+        options={contractorDomains}
         placeholder="Domain"
         error={touched.domain && errors.domain}
         onChange={handleChangeSelector("domain")}

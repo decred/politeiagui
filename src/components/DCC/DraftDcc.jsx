@@ -4,13 +4,21 @@ import { Button, Text } from "pi-ui";
 import RecordWrapper from "../RecordWrapper";
 import {
   presentationalDraftDccName,
-  presentationalDccDomain,
   presentationalStatement
 } from "src/containers/DCC/helpers";
 import styles from "./DraftDcc.module.css";
+import { usePolicy } from "src/hooks";
+import { getContractorDomains, getDomainName } from "src/helpers";
 
 const DraftDcc = ({ draft, onDelete }) => {
+  const {
+    policy: { supporteddomains }
+  } = usePolicy();
+
+  const contractorDomains = getContractorDomains(supporteddomains);
   const { id, timestamp, statement, domain } = draft;
+  const domainName = getDomainName(contractorDomains, domain);
+
   function handleDeleteDraft() {
     onDelete(id);
   }
@@ -45,11 +53,7 @@ const DraftDcc = ({ draft, onDelete }) => {
               subtitle={
                 <Subtitle>
                   <Event keepOnMobile event="edited" timestamp={timestamp} />
-                  {domain && (
-                    <Text id="draft-domain">
-                      {presentationalDccDomain(domain)}
-                    </Text>
-                  )}
+                  {domain && <Text id="draft-domain">{domainName}</Text>}
                   {statement && (
                     <Text truncate={true} id="draft-statement">
                       {presentationalStatement(statement)}

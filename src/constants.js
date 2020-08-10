@@ -148,16 +148,6 @@ export const CMS_USER_TYPES = [
   "Revoked"
 ];
 
-export const CMS_DOMAINS = [
-  "No domain defined",
-  "Development",
-  "Marketing",
-  "Design",
-  "Research",
-  "Documentation",
-  "Community Management"
-];
-
 export const NOJS_ROUTE_PREFIX = "/nojavascript";
 
 export const MONTHS_LABELS = [

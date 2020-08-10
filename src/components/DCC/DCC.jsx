@@ -8,13 +8,15 @@ import {
   getDccStatusTagProps,
   presentationalDccType,
   presentationalDccContractorType,
-  presentationalDccDomain,
   presentationalStatement,
   isRevocationDcc,
   isDccActive,
   isDccApproved
 } from "src/containers/DCC/helpers";
 import { SupportOppose, DccActions } from "src/containers/DCC/Actions";
+import { usePolicy } from "src/hooks";
+
+import { getContractorDomains, getDomainName } from "src/helpers";
 
 const Dcc = ({ dcc, extended }) => {
   const {
@@ -28,12 +30,19 @@ const Dcc = ({ dcc, extended }) => {
     timereviewed
   } = dcc;
 
+  const {
+    policy: { supporteddomains }
+  } = usePolicy();
+
+  const contractorDomains = getContractorDomains(supporteddomains);
+
   const isActive = isDccActive(dcc);
   const dccToken = censorshiprecord && censorshiprecord.token;
   const dccURL = `/dccs/${dccToken}`;
   const dccDomain = dccpayload && dccpayload.domain;
   const dccContractorType = dccpayload && dccpayload.contractortype;
   const dccStatement = dccpayload && dccpayload.statement;
+  const domainName = getDomainName(contractorDomains, dccDomain);
 
   return (
     <RecordWrapper>
@@ -70,9 +79,7 @@ const Dcc = ({ dcc, extended }) => {
                       {presentationalDccContractorType(dccContractorType)}
                     </Text>
                   )}
-                  {!extended && (
-                    <Text>{presentationalDccDomain(dccDomain)}</Text>
-                  )}
+                  {!extended && <Text>{domainName}</Text>}
                   <Event event="submitted" timestamp={timesubmitted} />
                   {timereviewed && (
                     <Event
@@ -103,10 +110,7 @@ const Dcc = ({ dcc, extended }) => {
                   className={styles.topDetails}>
                   <Field label="Type" value={presentationalDccType(dcc)} />
                   <Field label="Nominee" value={nomineeusername} />
-                  <Field
-                    label="Domain"
-                    value={presentationalDccDomain(dccDomain)}
-                  />
+                  <Field label="Domain" value={domainName} />
                   {!isRevocationDcc(dcc) && (
                     <Field
                       label="Contractor Type"

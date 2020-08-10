@@ -17,7 +17,7 @@ import isEmpty from "lodash/isEmpty";
 import some from "lodash/fp/some";
 import isEqual from "lodash/fp/isEqual";
 import { or } from "src/lib/fp";
-import { CMS_USER_TYPES, CMS_DOMAINS } from "../../constants";
+import { CMS_USER_TYPES } from "../../constants";
 
 const dccTypes = {
   [DCC_TYPE_REVOCATION]: "Revocation",
@@ -94,12 +94,6 @@ export const presentationalDraftDccName = (draft) =>
 export const presentationalDccContractorType = (type) => CMS_USER_TYPES[type];
 
 /**
- * Returns a presentational Domain name
- * @param {Number} domain
- */
-export const presentationalDccDomain = (domain) => CMS_DOMAINS[domain];
-
-/**
  * Returns statement if it exists, otherwise returns a message indicating that
  * dcc is empty
  * @param {String} domain
@@ -131,12 +125,6 @@ export const isDccActive = (dcc) => dcc && dcc.status === DCC_STATUS_ACTIVE;
  * @param {Object} dcc
  */
 export const isDccApproved = (dcc) => dcc && dcc.status === DCC_STATUS_APPROVED;
-
-/**
- * Returns domain options for selectors
- */
-export const getDomainOptions = () =>
-  CMS_DOMAINS.map((label, value) => ({ label, value }));
 
 /**
  * Returns contractor type options for selectors

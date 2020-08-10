@@ -2,13 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { H2, Message, Button, Spinner } from "pi-ui";
 import InfoSection from "../InfoSection.jsx";
-import {
-  typeOptions,
-  domainOptions,
-  getOwnedProposals,
-  getSupervisorsNames
-} from "./helpers";
-import { useApprovedProposals, useSupervisors } from "src/hooks";
+import { typeOptions, getOwnedProposals, getSupervisorsNames } from "./helpers";
+import { useApprovedProposals, useSupervisors, usePolicy } from "src/hooks";
+import { getContractorDomains, getDomainName } from "src/helpers";
 
 const UserDccInfo = ({
   contractorType,
@@ -92,6 +88,12 @@ const ManageContractorUserView = ({
     proposalsByToken
   );
   const { supervisors } = useSupervisors();
+  const {
+    policy: { supporteddomains }
+  } = usePolicy();
+
+  const contractorDomains = getContractorDomains(supporteddomains);
+
   return (
     <>
       {requireGitHubName && (
@@ -102,7 +104,7 @@ const ManageContractorUserView = ({
       {!hideDccInfo && (
         <UserDccInfo
           contractorType={typeOptions[contractortype]}
-          domain={domainOptions[domain]}
+          domain={getDomainName(contractorDomains, domain)}
           proposalsOwned={ownedProposals}
           isLoadingProposals={isLoading}
           userSupervisors={getSupervisorsNames(supervisors, supervisoruserids)}
