@@ -11,9 +11,13 @@ import useFetchMachine, {
   RESOLVE
 } from "src/hooks/utils/useFetchMachine";
 import { getProposalToken } from "../helpers";
-import { isEmpty } from "src/helpers";
-import { flow, uniq, compact, map } from "lodash/fp";
-import { difference, keys } from "lodash";
+import isEmpty from "lodash/fp/isEmpty";
+import flow from "lodash/fp/flow";
+import uniq from "lodash/fp/uniq";
+import compact from "lodash/fp/compact";
+import map from "lodash/fp/map";
+import keys from "lodash/fp/keys";
+import difference from "lodash/fp/difference";
 
 const getProposalsWithRfpLinks = (proposals, generalProposals) =>
   proposals &&
@@ -24,7 +28,9 @@ const getProposalsWithRfpLinks = (proposals, generalProposals) =>
     return { ...proposal, proposedFor };
   });
 
-const isStateMissingProposals = (state, proposals) =>
+// checks if proposals list from the state machine is incomplete, e.g,
+// there are more user proposals on the redux store than the state machine.
+const isStateMachineMissingProposals = (state, proposals) =>
   state.proposals && proposals && state.proposals.length !== proposals.length;
 
 export function useDraftProposals() {
@@ -111,7 +117,7 @@ export function useUserProposals(userID) {
     return uniq([...userProposalsTokens, ...generalProposalsTokens]);
   }, [proposals, generalProposals]);
 
-  const unfetchedLinks = difference(rfpLinks, proposalsTokens);
+  const unfetchedLinks = difference(rfpLinks)(proposalsTokens);
 
   const [state, send] = useFetchMachine({
     actions: {
@@ -144,7 +150,8 @@ export function useUserProposals(userID) {
         return send(RESOLVE, { proposals });
       },
       done: () => {
-        if (isStateMissingProposals(state, proposals)) {
+        // if any proposal is added or removed from use proposals list, verify.
+        if (isStateMachineMissingProposals(state, proposals)) {
           return send(VERIFY);
         }
       }

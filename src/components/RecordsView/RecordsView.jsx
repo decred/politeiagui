@@ -74,10 +74,11 @@ const RecordsView = ({
 
   const isMobileScreen = useMediaQuery("(max-width:560px)");
 
-  const filteredRecords = useMemo(
-    () => getRecordsByTabOption(records, filteredTokens),
-    [records, filteredTokens]
-  );
+  const filteredRecords =
+    (records && getRecordsByTabOption(records, filteredTokens)) || [];
+
+  const hasMoreRecordsToLoad =
+    filteredTokens && filteredRecords.length < filteredTokens.length;
 
   const handleFetchMoreRecords = useCallback(() => {
     // make sure tokens being requested are different from the ones
@@ -113,14 +114,12 @@ const RecordsView = ({
   ]);
 
   useEffect(() => {
-    const hasMoreRecordsToLoad =
-      filteredTokens && filteredRecords.length < filteredTokens.length;
     setHasMore(hasMoreRecordsToLoad);
     if (!hasMoreRecordsToLoad) {
       setRemainingTokens && setRemainingTokens();
       dispatch({ type: RESET_LOADING_ITEMS });
     }
-  }, [filteredTokens, filteredRecords.length, setRemainingTokens]);
+  }, [hasMoreRecordsToLoad, setRemainingTokens]);
 
   const getPropsCountByTab = useCallback(
     (tab) => {

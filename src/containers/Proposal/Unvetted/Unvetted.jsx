@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from "react";
+import React, { useCallback, useState } from "react";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
@@ -23,8 +23,6 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
     }
   );
 
-  const records = useMemo(() => getRfpLinkedProposals(proposals), [proposals]);
-
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
       [tabValues.UNREVIEWED]: "No proposals unreviewed",
@@ -35,7 +33,7 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
 
   return (
     <RecordsView
-      records={records}
+      records={getRfpLinkedProposals(proposals)}
       tabLabels={tabLabels}
       recordTokensByTab={mapProposalsTokensByTab(tabLabels, proposalsTokens)}
       renderRecord={renderProposal}
