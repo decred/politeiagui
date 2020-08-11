@@ -507,8 +507,6 @@ export const getContractorDomains = (supporteddomains) => [
  * @param {number|string} op
  */
 export const getDomainName = (contractorDomains, op) => {
-  const { label: domainName } = contractorDomains.find(
-    (domain) => domain.value === op
-  );
-  return domainName;
+  const domain = contractorDomains.find((domain) => domain.value === op);
+  return domain ? domain.label : "";
 };
