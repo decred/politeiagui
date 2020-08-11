@@ -38,13 +38,10 @@ const ManageDccForm = ({ onUpdate, user }) => {
     supervisoruserids = [],
     proposalsowned = []
   } = user;
-
   const {
     policy: { supporteddomains }
   } = usePolicy();
-
   const contractorDomains = getContractorDomains(supporteddomains);
-
   const [updated, setUpdated] = useState(false);
 
   // Parse supervisors initial values and options

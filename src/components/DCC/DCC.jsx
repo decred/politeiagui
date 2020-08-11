@@ -15,7 +15,6 @@ import {
 } from "src/containers/DCC/helpers";
 import { SupportOppose, DccActions } from "src/containers/DCC/Actions";
 import { usePolicy } from "src/hooks";
-
 import { getContractorDomains, getDomainName } from "src/helpers";
 
 const Dcc = ({ dcc, extended }) => {
@@ -33,9 +32,7 @@ const Dcc = ({ dcc, extended }) => {
   const {
     policy: { supporteddomains }
   } = usePolicy();
-
   const contractorDomains = getContractorDomains(supporteddomains);
-
   const isActive = isDccActive(dcc);
   const dccToken = censorshiprecord && censorshiprecord.token;
   const dccURL = `/dccs/${dccToken}`;

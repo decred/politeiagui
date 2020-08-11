@@ -48,9 +48,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
   const {
     policy: { supporteddomains }
   } = usePolicy();
-
   const contractorDomains = getContractorDomains(supporteddomains);
-
   const searchOptions = useMemo(() => {
     if (isCMS) {
       return [

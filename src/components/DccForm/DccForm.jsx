@@ -50,9 +50,7 @@ const DccForm = React.memo(function DccForm({
   const {
     policy: { supporteddomains }
   } = usePolicy();
-
   const contractorDomains = getContractorDomains(supporteddomains);
-
   const [isIssuance, setIsIssuance] = useState();
   useScrollFormOnError(errors && errors.global);
 

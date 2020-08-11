@@ -14,7 +14,6 @@ const DraftDcc = ({ draft, onDelete }) => {
   const {
     policy: { supporteddomains }
   } = usePolicy();
-
   const contractorDomains = getContractorDomains(supporteddomains);
   const { id, timestamp, statement, domain } = draft;
   const domainName = getDomainName(contractorDomains, domain);

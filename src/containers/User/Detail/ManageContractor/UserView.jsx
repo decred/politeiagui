@@ -91,7 +91,6 @@ const ManageContractorUserView = ({
   const {
     policy: { supporteddomains }
   } = usePolicy();
-
   const contractorDomains = getContractorDomains(supporteddomains);
 
   return (
