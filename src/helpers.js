@@ -6,6 +6,7 @@ import gte from "lodash/fp/gt";
 import range from "lodash/fp/range";
 import * as pki from "./lib/pki";
 import { sha3_256 } from "js-sha3";
+import { capitalize } from "src/utils/strings";
 
 import { INVALID_FILE } from "./constants";
 import {
@@ -485,4 +486,29 @@ export const isAnchoring = (
     targetDate.getTime()
   );
   return timeDiffMinutes >= 0 && timeDiffMinutes < anchoringDuration;
+};
+/**
+ * Function to format supported domains in the format for Select/Dropdown
+ * components
+ * @param {array} supporteddomains
+ */
+export const getContractorDomains = (supporteddomains) => [
+  { label: "No domain defined", value: 0 },
+  ...supporteddomains.map((item) => ({
+    label: capitalize(item.description),
+    value: item.type
+  }))
+];
+
+/**
+ * Function to return the domain name given an array of contractor domains and
+ * a domain type
+ * @param {array} contractorDomains
+ * @param {number|string} op
+ */
+export const getDomainName = (contractorDomains, op) => {
+  const { label: domainName } = contractorDomains.find(
+    (domain) => domain.value === op
+  );
+  return domainName;
 };

@@ -12,8 +12,6 @@ import {
 import React, { useEffect, useState } from "react";
 import {
   selectTypeOptions,
-  selectDomainOptions,
-  domainOptions,
   typeOptions
 } from "src/containers/User/Detail/ManageContractor/helpers";
 import HelpMessage from "src/components/HelpMessage";
@@ -21,9 +19,11 @@ import SelectField from "src/components/Select/SelectField";
 import { useSearchUser } from "./hooks";
 import styles from "./Search.module.css";
 import Link from "src/components/Link";
+import { usePolicy } from "src/hooks";
 import { searchSchema } from "./validation";
+import { getContractorDomains, getDomainName } from "src/helpers";
 
-const getFormattedSearchResults = (users = [], isCMS) =>
+const getFormattedSearchResults = (users = [], isCMS, supporteddomains) =>
   users.map((u) =>
     !isCMS
       ? {
@@ -33,7 +33,10 @@ const getFormattedSearchResults = (users = [], isCMS) =>
         }
       : {
           Username: <Link to={`/user/${u.id}`}>{u.username}</Link>,
-          Domain: domainOptions[u.domain],
+          Domain: getDomainName(
+            getContractorDomains(supporteddomains),
+            u.domain
+          ),
           Type: typeOptions[u.contractortype]
         }
   );
@@ -42,7 +45,10 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
   const { onSearchUser, searchResult, isCMS } = useSearchUser();
   const [searchError, setSearchError] = useState(null);
   const [foundUsers, setFoundUsers] = useState([]);
-
+  const {
+    policy: { supporteddomains }
+  } = usePolicy();
+  const contractorDomains = getContractorDomains(supporteddomains);
   const searchOptions = useMemo(() => {
     if (isCMS) {
       return [
@@ -87,10 +93,12 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
   useEffect(
     function updateFoundUsers() {
       if (searchResult) {
-        setFoundUsers(getFormattedSearchResults(searchResult, isCMS));
+        setFoundUsers(
+          getFormattedSearchResults(searchResult, isCMS, supporteddomains)
+        );
       }
     },
-    [searchResult, isCMS]
+    [searchResult, isCMS, supporteddomains]
   );
   return (
     <>
@@ -156,7 +164,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                       <SelectField
                         name="domain"
                         className={styles.select}
-                        options={selectDomainOptions}
+                        options={contractorDomains}
                         value={values.domain}
                         onChange={handleChangeSelectField("domain")}
                         placeholder="Choose a domain"

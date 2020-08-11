@@ -4,7 +4,6 @@ import React, { useCallback, useState } from "react";
 import InfoSection from "../InfoSection.jsx";
 import {
   selectTypeOptions,
-  selectDomainOptions,
   getInitialAndOptionsProposals,
   getInitialAndOptionsSupervisors
 } from "./helpers";
@@ -12,6 +11,8 @@ import { Formik } from "formik";
 import styles from "./ManageContractor.module.css";
 import useSupervisors from "src/hooks/api/useSupervisors";
 import useApprovedProposals from "src/hooks/api/useApprovedProposals";
+import { usePolicy } from "src/hooks";
+import { getContractorDomains } from "src/helpers";
 
 const selectStyles = {
   container: (provided) => ({
@@ -37,7 +38,10 @@ const ManageDccForm = ({ onUpdate, user }) => {
     supervisoruserids = [],
     proposalsowned = []
   } = user;
-
+  const {
+    policy: { supporteddomains }
+  } = usePolicy();
+  const contractorDomains = getContractorDomains(supporteddomains);
   const [updated, setUpdated] = useState(false);
 
   // Parse supervisors initial values and options
@@ -130,7 +134,7 @@ const ManageDccForm = ({ onUpdate, user }) => {
                   info={
                     <SelectField
                       name="domain"
-                      options={selectDomainOptions}
+                      options={contractorDomains}
                       styles={selectStyles}
                     />
                   }
