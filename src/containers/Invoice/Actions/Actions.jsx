@@ -62,7 +62,7 @@ const InvoiceActions = ({ invoice, extended }) => {
             {approveButton}
           </>
         ) : (
-          <Dropdown title="Actions">
+          <Dropdown title="Actions" className="margin-right-l">
             <DropdownItem>{approveButton}</DropdownItem>
             <DropdownItem>{rejectButton}</DropdownItem>
             <DropdownItem>{disputeButton}</DropdownItem>
