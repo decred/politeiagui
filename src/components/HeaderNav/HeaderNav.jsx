@@ -19,7 +19,7 @@ import styles from "./HeaderNav.module.css";
 
 const HeaderNav = ({ history }) => {
   const { user, username } = useNavigation();
-  const { navMenuPaths, enableCredits } = useConfig();
+  const { navMenuPaths, enableCredits, enableAdminInvite } = useConfig();
   const { isadmin, userid } = user || {};
   const { themeName, setThemeName } = useTheme();
   const userIsAdmin = user && isadmin;
@@ -113,20 +113,24 @@ const HeaderNav = ({ history }) => {
           Dark Mode
         </div>
       </div>
-      <NavLink
-        className={styles.navLink}
-        activeClassName={styles.activeNavLink}
-        to="/user/login">
-        <Text className={`${styles.navLinkText} ${styles.rightGreyBorder}`}>
-          Log in
-        </Text>
-      </NavLink>
-      <NavLink
-        className={styles.navLink}
-        activeClassName={styles.activeNavLink}
-        to="/user/signup">
-        <Text className={styles.navLinkText}>Sign up</Text>
-      </NavLink>
+      {!enableAdminInvite && (
+        <>
+          <NavLink
+            className={styles.navLink}
+            activeClassName={styles.activeNavLink}
+            to="/user/login">
+            <Text className={`${styles.navLinkText} ${styles.rightGreyBorder}`}>
+              Log in
+            </Text>
+          </NavLink>
+          <NavLink
+            className={styles.navLink}
+            activeClassName={styles.activeNavLink}
+            to="/user/signup">
+            <Text className={styles.navLinkText}>Sign up</Text>
+          </NavLink>
+        </>
+      )}
     </nav>
   );
 };
