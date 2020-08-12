@@ -389,6 +389,7 @@ export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
       return [proposals, summaries];
     } catch (e) {
       dispatch(act.RECEIVE_PROPOSALS_BATCH(null, e));
+      throw e;
     }
   });
 

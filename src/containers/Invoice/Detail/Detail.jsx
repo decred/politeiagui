@@ -38,9 +38,11 @@ const InvoiceDetail = ({ Main, match }) => {
     proposals,
     proposalsByToken,
     onFetchProposalsBatchByTokensRemaining,
-    isLoading
+    isLoading,
+    error
   } = useApprovedProposals();
 
+  console.log("error", error);
   useEffect(() => {
     if (!isLoading && !isEmpty(proposalsByToken)) {
       const remainingTokens = tokens

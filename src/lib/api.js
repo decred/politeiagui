@@ -262,12 +262,16 @@ export const signCensorComment = (userid, comment) =>
 
 const parseResponseBody = (response) => {
   const contentType = response.headers.get("content-type");
+  if (STATUS_ERR[response.status]) {
+    const err = new Error(STATUS_ERR[response.status]);
+    err.internalError = true;
+    err.statusCode = response.status;
+    throw err;
+  }
   if (contentType && contentType.includes("application/json"))
     return response.json();
-  const err = new Error(STATUS_ERR[response.status] || "Internal server error");
-  err.internalError = true;
-  err.statusCode = response.status;
-  throw err;
+  // If content type is not json, or no errors are recognized, return an internal server error message by default
+  throw new Error("Internal server error");
 };
 
 export const parseResponse = (response) =>
@@ -281,7 +285,10 @@ export const parseResponse = (response) =>
       err.errorContext = json.errorcontext;
       throw err;
     }
-    return { response: json, csrfToken: response.headers.get("X-Csrf-Token") };
+    return {
+      response: json,
+      csrfToken: response.headers.get("X-Csrf-Token")
+    };
   });
 
 const GET = (path) =>
@@ -490,7 +497,7 @@ export const proposal = (token, version = null) =>
   );
 
 export const proposalsBatch = (csrf, tokens) =>
-  POST("/proposals/batch", csrf, { tokens }).then(getResponse);
+  POST("/proposals/batchd", csrf, { tokens }).then(getResponse);
 
 export const user = (userId) => GET(`/v1/user/${userId}`).then(getResponse);
 export const proposalComments = (token) =>
