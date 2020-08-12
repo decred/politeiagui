@@ -497,7 +497,7 @@ export const proposal = (token, version = null) =>
   );
 
 export const proposalsBatch = (csrf, tokens) =>
-  POST("/proposals/batchd", csrf, { tokens }).then(getResponse);
+  POST("/proposals/batch", csrf, { tokens }).then(getResponse);
 
 export const user = (userId) => GET(`/v1/user/${userId}`).then(getResponse);
 export const proposalComments = (token) =>
