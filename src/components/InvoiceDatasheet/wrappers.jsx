@@ -53,17 +53,22 @@ export const singlelineTextWrapper = (supportedChars) => ({ value }) => {
   return printHighlightingUnsupported(uniqueUnmatched, value, false);
 };
 
-export const proposalViewWrapper = (proposals) => ({ cell: { value } }) => {
+export const proposalViewWrapper = (proposals, proposalsError) => ({
+  cell: { value }
+}) => {
   const findProposal = useCallback(
     (v) => proposals && proposals.find((p) => p.value === v),
     []
   );
-
   const selectedProposal = findProposal(value);
+  const isLoading = !isEmpty(value) && !selectedProposal && !proposalsError;
   return (
     <>
-      {!isEmpty(value) && !selectedProposal && <Spinner invert />}
-      <span>{selectedProposal && selectedProposal.label}</span>
+      {isLoading && <Spinner invert />}
+      {proposalsError && (
+        <span className={highlightChar}>{proposalsError.toString()}</span>
+      )}
+      {selectedProposal && <span>{selectedProposal.label}</span>}
     </>
   );
 };

@@ -79,7 +79,8 @@ export const convertLineItemsToGrid = (
   userRate = 0,
   policy,
   proposalsOptions,
-  subContractors
+  subContractors,
+  proposalsError
 ) => {
   const {
     supporteddomains: policyDomains,
@@ -151,7 +152,7 @@ export const convertLineItemsToGrid = (
           value: newLine.proposaltoken,
           error: rowErrors && rowErrors.proposaltoken,
           dataEditor: selectWrapper(proposalsOptions),
-          valueViewer: proposalViewWrapper(proposalsOptions)
+          valueViewer: proposalViewWrapper(proposalsOptions, proposalsError)
         },
         {
           readOnly: isSubContractorReadonly,

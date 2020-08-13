@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from "react";
 import { withRouter } from "react-router-dom";
-import get from "lodash/fp/get";
 import { useInvoice } from "./hooks";
 import Invoice from "src/components/Invoice";
 import InvoiceLoader from "src/components/Invoice/InvoiceLoader";
@@ -9,6 +8,7 @@ import Comments from "src/containers/Comments";
 import { isUnreviewedInvoice } from "../helpers";
 import { GoBackLink } from "src/components/Router";
 import useApprovedProposals from "src/hooks/api/useApprovedProposals";
+import get from "lodash/fp/get";
 import isEmpty from "lodash/isEmpty";
 import flow from "lodash/fp/flow";
 import map from "lodash/fp/map";
@@ -42,7 +42,6 @@ const InvoiceDetail = ({ Main, match }) => {
     error
   } = useApprovedProposals();
 
-  console.log("error", error);
   useEffect(() => {
     if (!isLoading && !isEmpty(proposalsByToken)) {
       const remainingTokens = tokens
@@ -71,6 +70,7 @@ const InvoiceDetail = ({ Main, match }) => {
               invoice={invoice}
               extended
               approvedProposals={proposals || []}
+              approvedProposalsError={error}
             />
           ) : (
             <InvoiceLoader extended />

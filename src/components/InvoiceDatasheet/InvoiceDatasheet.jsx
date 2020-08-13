@@ -52,7 +52,8 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   readOnly,
   userRate,
   errors,
-  proposals
+  proposals,
+  proposalsError
 }) {
   const { policy } = usePolicy();
   const { subContractors } = useSubContractors();
@@ -106,7 +107,8 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
         currentRate,
         policy,
         proposalsOptions,
-        subContractors
+        subContractors,
+        proposalsError
       );
       setGrid(grid);
     },
@@ -117,7 +119,8 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
       currentRate,
       policy,
       proposalsOptions,
-      subContractors
+      subContractors,
+      proposalsError
     ]
   );
 
@@ -236,6 +239,12 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   };
   return (
     <div className={styles.wrapper}>
+      {proposalsError && (
+        <div className="margin-bottom-s margin-top-s">
+          <H2 className={styles.invoiceError}>{proposalsError.toString()}</H2>
+          <P className={styles.invoiceError}>Unable to fetch proposals</P>
+        </div>
+      )}
       {renderErrors()}
       {!readOnly && (
         <div className="justify-right margin-top-s margin-bottom-s">
