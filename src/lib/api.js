@@ -262,16 +262,12 @@ export const signCensorComment = (userid, comment) =>
 
 const parseResponseBody = (response) => {
   const contentType = response.headers.get("content-type");
-  if (STATUS_ERR[response.status]) {
-    const err = new Error(STATUS_ERR[response.status]);
-    err.internalError = true;
-    err.statusCode = response.status;
-    throw err;
-  }
   if (contentType && contentType.includes("application/json"))
     return response.json();
-  // If content type is not json, or no errors are recognized, return an internal server error message by default
-  throw new Error("Internal server error");
+  const err = new Error(STATUS_ERR[response.status] || "Internal server error");
+  err.internalError = true;
+  err.statusCode = response.status;
+  throw err;
 };
 
 export const parseResponse = (response) =>
@@ -284,6 +280,9 @@ export const parseResponse = (response) =>
       err.errorCode = json.errorcode;
       err.errorContext = json.errorcontext;
       throw err;
+    }
+    if (STATUS_ERR[response.status]) {
+      throw new Error(STATUS_ERR[response.status]);
     }
     return {
       response: json,

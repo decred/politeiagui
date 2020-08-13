@@ -42,8 +42,7 @@ const EditInvoice = ({ match }) => {
     [invoice]
   );
 
-  const { proposals } = useApprovedProposals(proposalsTokens);
-
+  const { proposals, error } = useApprovedProposals(proposalsTokens);
   return (
     <Card className="container margin-bottom-l">
       {isInvoiceLoaded ? (
@@ -51,6 +50,7 @@ const EditInvoice = ({ match }) => {
           initialValues={initialValues}
           onSubmit={onEditInvoice}
           approvedProposals={proposals}
+          approvedProposalsError={error}
           editMode
         />
       ) : (

@@ -54,7 +54,8 @@ const ManageDccForm = ({ onUpdate, user }) => {
   // Parse owned proposals initial values and options
   const {
     proposals,
-    isLoading: loadingOwnedProposals
+    isLoading: loadingOwnedProposals,
+    error: approvedProposalsError
   } = useApprovedProposals();
   const {
     proposalsOptions,
@@ -154,6 +155,7 @@ const ManageDccForm = ({ onUpdate, user }) => {
                 />
                 <InfoSection
                   label="Owned Proposals"
+                  error={approvedProposalsError}
                   info={
                     <Select
                       placeholder="Select Proposals"

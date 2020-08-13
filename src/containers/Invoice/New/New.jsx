@@ -6,11 +6,15 @@ import useApprovedProposals from "src/hooks/api/useApprovedProposals";
 
 const NewInvoice = () => {
   const { onSubmitInvoice } = useNewInvoice();
-  const { proposals } = useApprovedProposals();
+  const { proposals, error } = useApprovedProposals();
 
   return (
     <Card className="container margin-bottom-l">
-      <InvoiceForm onSubmit={onSubmitInvoice} approvedProposals={proposals} />
+      <InvoiceForm
+        onSubmit={onSubmitInvoice}
+        approvedProposals={proposals}
+        proposalsError={error}
+      />
     </Card>
   );
 };
