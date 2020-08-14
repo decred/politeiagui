@@ -202,6 +202,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     1046: "You must include a valid contractor type for a DCC.",
     1047: "You must be a Supervisor Contractor to submit a Sub Contractor line item",
     1048: "You must supply a UserID for a Sub Contractor line item",
+    1049: "Invalid SubContractor",
     1050: `Supervisor Error - ${errorContext[0]}`
   };
 
