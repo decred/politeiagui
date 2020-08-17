@@ -284,6 +284,9 @@ export const processTypeColChange = (grid, { row, col, value }) => {
       readOnly: false
     });
     grid = updateGridCell(grid, row, EXP_COL, { readOnly: true });
+  } else {
+    grid = updateGridCell(grid, row, SUBCONTRACTOR_COL, { value: "" });
+    grid = updateGridCell(grid, row, SUBRATE_COL, { value: 0 });
   }
 
   return updateGridCell(grid, row, col, { value });
