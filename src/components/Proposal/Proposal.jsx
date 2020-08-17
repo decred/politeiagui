@@ -13,6 +13,7 @@ import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
 import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
+import { PROPOSAL_TYPE_RFP, PROPOSAL_TYPE_RFP_SUBMISSION } from "src/constants";
 import {
   getMarkdownContent,
   getVotesReceived,
@@ -93,10 +94,11 @@ const Proposal = React.memo(function Proposal({
     linkby,
     linkto,
     proposedFor,
+    type,
     rfpSubmissions
   } = proposal;
-  const isRfp = !!linkby;
-  const isRfpSubmission = !!linkto;
+  const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
+  const isRfpSubmission = !!linkto || type === PROPOSAL_TYPE_RFP_SUBMISSION;
   const isRfpActive = isRfp && isActiveRfp(linkby);
   const isNotExtendedRfpOrSubmission = (isRfp || isRfpSubmission) && !extended;
   const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
@@ -203,7 +205,7 @@ const Proposal = React.memo(function Proposal({
               subtitle={
                 <Subtitle>
                   <Author username={username} url={authorURL} />
-                  {isRfp && (
+                  {isRfp && linkby && (
                     <Event
                       event={`${isRfpActive ? "expires" : "expired"}`}
                       timestamp={linkby}
