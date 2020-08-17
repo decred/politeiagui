@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo } from "react";
-import { Spinner } from "pi-ui";
+import React, { useCallback, useMemo, useState } from "react";
 import styles from "./PublicProposals.module.css";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
+import { getRfpLinkedProposals } from "../helpers";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
@@ -21,12 +21,15 @@ const tabLabels = [
 ];
 
 const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
-  const {
-    isLoadingTokenInventory,
-    proposals,
-    proposalsTokens,
-    onFetchProposalsBatch
-  } = useProposalsBatch();
+  const [remainingTokens, setRemainingTokens] = useState();
+
+  const { proposals, proposalsTokens, loading, verifying } = useProposalsBatch(
+    remainingTokens,
+    {
+      fetchRfpLinks: true,
+      fetchVoteSummaries: true
+    }
+  );
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
@@ -53,31 +56,26 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
         <Sidebar />
         <Main className={styles.customMain}>
           <PublicActionsProvider>
-            {isLoadingTokenInventory ? (
-              <div className={styles.spinnerWrapper}>
-                <Spinner invert />
-              </div>
-            ) : (
-              proposalsTokens && content
-            )}
+            {proposalsTokens && content}
           </PublicActionsProvider>
         </Main>
       </>
     ),
-    [proposalsTokens, isLoadingTokenInventory]
+    [proposalsTokens]
   );
 
   return (
     <RecordsView
-      onFetchRecords={onFetchProposalsBatch}
-      records={proposals}
+      records={getRfpLinkedProposals(proposals)}
       tabLabels={tabLabels}
       recordTokensByTab={recordTokensByTab}
       renderRecord={renderProposal}
       displayTabCount={!!proposalsTokens}
       placeholder={ProposalLoader}
       getEmptyMessage={getEmptyMessage}
-      dropdownTabsForMobile={true}>
+      setRemainingTokens={setRemainingTokens}
+      dropdownTabsForMobile={true}
+      isLoading={loading || verifying}>
       {content}
     </RecordsView>
   );

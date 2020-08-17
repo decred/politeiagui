@@ -12,6 +12,9 @@ import {
   NOJS_ROUTE_PREFIX
 } from "../../constants";
 import { getTextFromIndexMd } from "src/helpers";
+import set from "lodash/fp/set";
+import values from "lodash/fp/values";
+import isEmpty from "lodash/fp/isEmpty";
 
 /**
  * Returns the total amount of votes received by a given proposal voteSummary
@@ -255,3 +258,45 @@ export const getAuthorUrl = (userid, isJsEnabled) =>
 
 export const goToFullProposal = (history, proposalURL) => () =>
   history.push(proposalURL);
+
+/**
+ * Returns the proposal list with RFP Proposal linked to RFP submissions
+ * @param {object} proposals
+ */
+export const getRfpLinkedProposals = (proposalsByToken) =>
+  values(proposalsByToken).reduce((acc, proposal) => {
+    const isRfp = !!proposal.linkby;
+    const isSubmission = !!proposal.linkto;
+    if (!isSubmission && !isRfp) return acc;
+
+    if (isSubmission) {
+      const linkedProposal = proposalsByToken[proposal.linkto];
+      if (!linkedProposal) return acc;
+      return set(
+        [getProposalToken(proposal), "proposedFor"],
+        linkedProposal.name
+      )(acc);
+    }
+    return acc;
+  }, proposalsByToken);
+
+/**
+ * Returns a formatted proposal object including the rfp links for the given proposal
+ * @param {object} proposal
+ * @param {object} rfpSubmissions
+ * @param {object} proposals
+ */
+export const getProposalRfpLinks = (proposal, rfpSubmissions, proposals) => {
+  if (!proposal) return;
+  const isRfp = !!proposal.linkby;
+  const isSubmission = !!proposal.linkto;
+
+  if (!isRfp && !isSubmission) return proposal;
+  const hasRfpSubmissions = isRfp && rfpSubmissions;
+  const isSubmissionWithProposals = isSubmission && !isEmpty(proposals);
+  return hasRfpSubmissions
+    ? { ...proposal, rfpSubmissions }
+    : isSubmissionWithProposals
+    ? { ...proposal, proposedFor: proposals[proposal.linkto].name }
+    : proposal;
+};

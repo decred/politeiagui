@@ -1,104 +1,33 @@
-import { useMemo, useEffect, useCallback, useState } from "react";
-import useAPIAction from "src/hooks/utils/useAPIAction";
-import useProposalsBatch from "src/hooks/api/useProposalsBatch";
+import { useEffect, useState } from "react";
 import { isEmpty } from "src/helpers";
-import keys from "lodash/keys";
+import useProposalsBatch from "./useProposalsBatch";
+import { difference, keys } from "lodash";
 
 const PAGE_SIZE = 20;
 
-const remainingTokensFilter = (proposals) => (token) =>
-  !keys(proposals).some((proposalToken) => proposalToken === token);
+export default function useApprovedProposals(initialTokens) {
+  const [remainingTokens, setRemainingTokens] = useState(initialTokens);
+  const { proposals, proposalsTokens } = useProposalsBatch(remainingTokens, {
+    fetchRfpLinks: false,
+    fetchVoteSummaries: false
+  });
 
-const getRemainingTokens = (tokens = [], proposals = [], limit = 0) =>
-  !limit
-    ? tokens.filter(remainingTokensFilter(proposals))
-    : tokens.filter(remainingTokensFilter(proposals)).slice(0, limit);
-
-export default function useApprovedProposals(initialTokens = []) {
-  const {
-    isLoadingTokenInventory,
-    proposals: proposalsByToken,
-    proposalsTokens,
-    onFetchProposalsBatch
-  } = useProposalsBatch();
-
-  const [remainingTokens, setRemaining] = useState(
-    getRemainingTokens(proposalsTokens.approved, proposalsByToken)
-  );
-
-  const requestParams = useMemo(
-    () => [
-      proposalsTokens.approved
-        ? proposalsTokens.approved.slice(0, PAGE_SIZE)
-        : [],
-      false
-    ],
-    [proposalsTokens]
-  );
-
-  const needsFetch = useMemo(
-    () =>
-      isEmpty(proposalsByToken) &&
-      proposalsTokens &&
+  useEffect(() => {
+    const tokens =
       proposalsTokens.approved &&
-      proposalsTokens.approved.length,
-    [proposalsByToken, proposalsTokens]
-  );
-
-  const [loading, error] = useAPIAction(
-    onFetchProposalsBatch,
-    requestParams,
-    needsFetch
-  );
-
-  const isLoading = loading || isLoadingTokenInventory;
-
-  const onFetchProposalsBatchByTokensRemaining = useCallback(
-    (tokens, limit) => {
-      const newRemainingTokens = getRemainingTokens(
-        tokens,
-        proposalsByToken,
-        limit
+      difference(proposalsTokens.approved, keys(proposals)).splice(
+        0,
+        PAGE_SIZE
       );
+    setRemainingTokens(tokens);
+  }, [proposalsTokens, proposals]);
 
-      if (!isEmpty(newRemainingTokens)) {
-        onFetchProposalsBatch(newRemainingTokens, false);
-        setRemaining(newRemainingTokens);
-      }
-    },
-    [onFetchProposalsBatch, proposalsByToken, setRemaining]
-  );
-
-  useEffect(
-    function fetchProposalsByInitialTokens() {
-      if (!isEmpty(initialTokens) && !isLoading && !isEmpty(proposalsByToken)) {
-        onFetchProposalsBatchByTokensRemaining(initialTokens);
-      }
-    },
-    [
-      isLoading,
-      proposalsByToken,
-      initialTokens,
-      onFetchProposalsBatchByTokensRemaining
-    ]
-  );
-
-  const onFetchRemainingProposalsBatch = useCallback(
-    (limit) => {
-      onFetchProposalsBatchByTokensRemaining(remainingTokens, limit);
-    },
-    [remainingTokens, onFetchProposalsBatchByTokensRemaining]
-  );
+  const isLoading = isEmpty(proposals) || !proposalsTokens.approved;
 
   return {
-    proposals: !isEmpty(proposalsByToken)
-      ? Object.values(proposalsByToken)
-      : [],
-    proposalsByToken,
-    isLoading: loading || isLoadingTokenInventory,
-    error,
-    remainingTokens,
-    onFetchRemainingProposalsBatch,
-    onFetchProposalsBatchByTokensRemaining
+    proposals: Object.values(proposals),
+    proposalsByToken: proposals,
+    isLoading,
+    remainingTokens
   };
 }

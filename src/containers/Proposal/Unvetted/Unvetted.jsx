@@ -1,8 +1,9 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
+import { getRfpLinkedProposals } from "../helpers";
 import { UnvettedActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
 
@@ -13,14 +14,14 @@ const renderProposal = (prop) => (
 const tabLabels = [tabValues.UNREVIEWED, tabValues.CENSORED];
 
 const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
-  const {
-    proposals,
-    proposalsTokens,
-    isLoadingTokenInventory: loadingTokenInventory,
-    onFetchProposalsBatch
-  } = useProposalsBatch();
-
-  const handleFetchRecords = (tokens) => onFetchProposalsBatch(tokens, false);
+  const [remainingTokens, setRemainingTokens] = useState();
+  const { proposals, proposalsTokens, loading, verifying } = useProposalsBatch(
+    remainingTokens,
+    {
+      fetchRfpLinks: true,
+      fetchVoteSummaries: true
+    }
+  );
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
@@ -32,13 +33,14 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
 
   return (
     <RecordsView
-      onFetchRecords={handleFetchRecords}
-      records={proposals}
+      records={getRfpLinkedProposals(proposals)}
       tabLabels={tabLabels}
       recordTokensByTab={mapProposalsTokensByTab(tabLabels, proposalsTokens)}
       renderRecord={renderProposal}
-      displayTabCount={!loadingTokenInventory}
+      displayTabCount={!!proposalsTokens}
       placeholder={ProposalLoader}
+      setRemainingTokens={setRemainingTokens}
+      isLoading={loading || verifying}
       getEmptyMessage={getEmptyMessage}>
       {({ tabs, content }) => (
         <>

@@ -9,8 +9,7 @@ import {
   textAreaWrapper,
   multilineTextWrapper,
   singlelineTextWrapper,
-  proposalViewWrapper,
-  proposalSelectWrapper
+  proposalViewWrapper
 } from "./wrappers";
 import find from "lodash/find";
 
@@ -151,7 +150,7 @@ export const convertLineItemsToGrid = (
           readOnly,
           value: newLine.proposaltoken,
           error: rowErrors && rowErrors.proposaltoken,
-          dataEditor: proposalSelectWrapper(proposalsOptions),
+          dataEditor: selectWrapper(proposalsOptions),
           valueViewer: proposalViewWrapper(proposalsOptions)
         },
         {

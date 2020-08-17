@@ -7,13 +7,12 @@ import {
   useTheme,
   Tooltip
 } from "pi-ui";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
 import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
-import useProposalBatchWithoutRedux from "src/hooks/api/useProposalBatchWithoutRedux";
 import {
   getMarkdownContent,
   getVotesReceived,
@@ -42,6 +41,7 @@ import ThumbnailGrid from "src/components/Files";
 import VersionPicker from "src/components/VersionPicker";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useRouter } from "src/components/Router";
+import { isEmpty } from "src/helpers";
 
 const ProposalWrapper = (props) => {
   const {
@@ -50,23 +50,7 @@ const ProposalWrapper = (props) => {
     voteActive,
     voteEndTimestamp
   } = useProposalVote(getProposalToken(props.proposal));
-  const [proposedFor, setProposedFor] = useState(null);
-  const { linkto, linkedfrom } = props.proposal;
-  // if linkto provided => this is a submission => fetch RFP to display link
-  // else if linkedFrom is provided this is an RFP => fetch submssions batch & vote summaries to display list
-  const isSubmission = !!linkto;
-  const isRFP = !!linkedfrom;
-  const batchTokens = isSubmission ? [linkto] : isRFP ? linkedfrom : null;
-  const {
-    data: [proposals, voteSummaries],
-    resetData: resetRfpSubmissionsData
-  } = useProposalBatchWithoutRedux(batchTokens, true, isRFP);
-  useEffect(() => {
-    if (isSubmission && proposals && proposals[0]) {
-      const rfpProposal = proposals[0];
-      setProposedFor(rfpProposal && rfpProposal.name);
-    }
-  }, [isSubmission, proposals]);
+
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (
@@ -78,13 +62,7 @@ const ProposalWrapper = (props) => {
         voteActive,
         voteEndTimestamp,
         currentUser,
-        history,
-        proposedFor,
-        rfpSubmissions: isRFP && {
-          proposals,
-          voteSummaries
-        },
-        resetRfpSubmissionsData
+        history
       }}
     />
   );
@@ -99,10 +77,7 @@ const Proposal = React.memo(function Proposal({
   voteEndTimestamp,
   voteBlocksLeft,
   currentUser,
-  history,
-  proposedFor,
-  rfpSubmissions,
-  resetRfpSubmissionsData
+  history
 }) {
   const {
     censorshiprecord,
@@ -116,7 +91,9 @@ const Proposal = React.memo(function Proposal({
     username,
     version,
     linkby,
-    linkto
+    linkto,
+    proposedFor,
+    rfpSubmissions
   } = proposal;
   const isRfp = !!linkby;
   const isRfpSubmission = !!linkto;
@@ -144,7 +121,11 @@ const Proposal = React.memo(function Proposal({
   const showExtendedVersionPicker = extended && version > 1;
   const showAbandonedDate = abandonedat && !mobile;
   const showVersionAsText = version > 1 && !extended && !mobile;
-  const showRfpSubmissions = extended && !!rfpSubmissions;
+  const showRfpSubmissions =
+    extended &&
+    !!rfpSubmissions &&
+    !isEmpty(rfpSubmissions.proposals) &&
+    !isEmpty(rfpSubmissions.voteSummaries);
   const showEditIcon =
     currentUser && isVotingAuthorized && !isVotingFinished && !isVoteActive;
 
@@ -380,9 +361,8 @@ const Proposal = React.memo(function Proposal({
               <ProposalActions
                 proposal={proposal}
                 voteSummary={voteSummary}
-                resetRfpSubmissionsData={resetRfpSubmissionsData}
                 rfpSubmissionsVoteSummaries={
-                  isRfp && rfpSubmissions.voteSummaries
+                  isRfp && showRfpSubmissions && rfpSubmissions.voteSummaries
                 }
               />
             </LoggedInContent>
