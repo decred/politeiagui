@@ -1,11 +1,14 @@
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import unionBy from "lodash/unionBy";
 import * as act from "src/actions";
 import { useAction, useSelector } from "src/redux";
 import * as sel from "src/selectors";
 
+const ERROR_MESSAGE = "unable to fetch users";
+
 export function useReactiveSearchUser(email, username) {
   const onSearchUser = useAction(act.onSearchUser);
+  const [error, setError] = useState();
   const resultForEmailSelector = useMemo(
     () => sel.makeGetSearchResultsByEmail(email),
     [email]
@@ -19,17 +22,21 @@ export function useReactiveSearchUser(email, username) {
 
   useEffect(() => {
     if (!!email && !resultsForEmail) {
-      onSearchUser({ email });
+      onSearchUser({ email }).catch(() => {
+        setError(new Error(ERROR_MESSAGE));
+      });
     }
   }, [email, resultsForEmail, onSearchUser]);
 
   useEffect(() => {
     if (!!username && !resultsForUsername) {
-      onSearchUser({ username });
+      onSearchUser({ username }).catch(() => {
+        setError(new Error(ERROR_MESSAGE));
+      });
     }
   }, [username, resultsForUsername, onSearchUser]);
 
-  return unionBy(resultsForUsername, resultsForEmail, "id");
+  return { error, result: unionBy(resultsForUsername, resultsForEmail, "id") };
 }
 
 export function useSearchUser() {
