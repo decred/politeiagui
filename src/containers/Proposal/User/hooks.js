@@ -8,7 +8,8 @@ import useThrowError from "src/hooks/utils/useThrowError";
 import useFetchMachine, {
   FETCH,
   VERIFY,
-  RESOLVE
+  RESOLVE,
+  REJECT
 } from "src/hooks/utils/useFetchMachine";
 import { getProposalToken } from "../helpers";
 import isEmpty from "lodash/fp/isEmpty";
@@ -123,7 +124,9 @@ export function useUserProposals(userID) {
     actions: {
       initial: () => {
         if (isEmpty(proposals)) {
-          onFetchUserProposals(userID, "").then(() => send(VERIFY));
+          onFetchUserProposals(userID, "")
+            .then(() => send(VERIFY))
+            .catch((err) => send(REJECT, err));
           return send(FETCH);
         }
         return send(VERIFY);
@@ -144,7 +147,9 @@ export function useUserProposals(userID) {
           });
         }
         if (!isEmpty(rfpLinks) && !isEmpty(unfetchedLinks)) {
-          onFetchProposalsBatch(unfetchedLinks, false).then(() => send(VERIFY));
+          onFetchProposalsBatch(unfetchedLinks, false)
+            .then(() => send(VERIFY))
+            .catch((err) => send(REJECT, err));
           return send(FETCH);
         }
         return send(RESOLVE, { proposals });

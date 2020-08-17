@@ -21,30 +21,35 @@ export function useVersionPicker(version, token) {
   const [selectedVersion, setSelectedVersion] = useState(version);
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const { recordType, constants } = useConfig();
+  const [error, setError] = useState();
 
   const onChangeVersion = useCallback(
     async (v) => {
       setSelectedVersion(v);
-      if (recordType === constants.RECORD_TYPE_PROPOSAL) {
-        const proposalDiff = await fetchProposalsVersions(token, v);
-        handleOpenModal(ModalDiffProposal, {
-          proposalDetails: proposalDiff.details,
-          onClose: handleCloseModal,
-          oldText: proposalDiff.oldText,
-          oldFiles: proposalDiff.oldFiles,
-          newText: proposalDiff.newText,
-          newFiles: proposalDiff.newFiles,
-          oldTitle: proposalDiff.oldTitle,
-          newTitle: proposalDiff.newTitle
-        });
-      }
-      if (recordType === constants.RECORD_TYPE_INVOICE) {
-        const { invoice, prevInvoice } = await fetchInvoiceVersions(token, v);
-        handleOpenModal(ModalDiffInvoice, {
-          onClose: handleCloseModal,
-          invoice,
-          prevInvoice
-        });
+      try {
+        if (recordType === constants.RECORD_TYPE_PROPOSAL) {
+          const proposalDiff = await fetchProposalsVersions(token, v);
+          handleOpenModal(ModalDiffProposal, {
+            proposalDetails: proposalDiff.details,
+            onClose: handleCloseModal,
+            oldText: proposalDiff.oldText,
+            oldFiles: proposalDiff.oldFiles,
+            newText: proposalDiff.newText,
+            newFiles: proposalDiff.newFiles,
+            oldTitle: proposalDiff.oldTitle,
+            newTitle: proposalDiff.newTitle
+          });
+        }
+        if (recordType === constants.RECORD_TYPE_INVOICE) {
+          const { invoice, prevInvoice } = await fetchInvoiceVersions(token, v);
+          handleOpenModal(ModalDiffInvoice, {
+            onClose: handleCloseModal,
+            invoice,
+            prevInvoice
+          });
+        }
+      } catch (err) {
+        setError(err);
       }
     },
     [
@@ -96,6 +101,7 @@ export function useVersionPicker(version, token) {
   return {
     disablePicker,
     selectedVersion,
-    onChangeVersion
+    onChangeVersion,
+    error
   };
 }

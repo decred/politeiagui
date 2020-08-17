@@ -107,7 +107,9 @@ export function useProposal(token, threadParentID) {
     actions: {
       initial: () => {
         if (token && !proposal) {
-          onFetchProposal(token).then(() => send(VERIFY));
+          onFetchProposal(token)
+            .then(() => send(VERIFY))
+            .catch(() => send(REJECT));
           return send(FETCH);
         }
         return send(VERIFY);
