@@ -72,6 +72,10 @@ export const userProposalsError = or(apiInitError, apiUserProposalsError);
 export const apiProposalsBatchError = getApiError("proposalsBatch");
 export const proposalError = or(apiInitError, apiProposalError);
 export const apiRescanUserPaymentsError = getApiError("rescanUserPayments");
+export const apiProposalCommentsError = getApiError("proposalComments");
+export const apiInvoiceCommentsError = getApiError("invoiceComments");
+export const apiLikeCommentsError = getApiError("likeComment");
+export const apiCommentsLikesError = getApiError("commentslikes");
 
 // CMS Selectors
 export const isApiRequestingInvoicePayouts = getIsApiRequesting(
