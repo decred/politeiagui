@@ -22,6 +22,7 @@ import { makeGetProposalName } from "src/selectors";
 import { useSelector } from "src/redux";
 import { useDocumentTitle } from "src/hooks/utils/useDocumentTitle";
 import { GoBackLink } from "src/components/Router";
+import { Message } from "pi-ui";
 
 const ProposalDetail = ({ Main, match }) => {
   const tokenFromUrl = get("params.token", match);
@@ -32,7 +33,7 @@ const ProposalDetail = ({ Main, match }) => {
   const proposalName = useSelector(proposalNameSelector);
   useDocumentTitle(proposalName);
   const threadParentCommentID = get("params.commentid", match);
-  const { proposal, loading, threadParentID } = useProposal(
+  const { proposal, loading, threadParentID, error } = useProposal(
     tokenFromUrl,
     threadParentCommentID
   );
@@ -49,7 +50,9 @@ const ProposalDetail = ({ Main, match }) => {
         <GoBackLink />
         <UnvettedActionsProvider>
           <PublicActionsProvider>
-            {loading || !proposal ? (
+            {error ? (
+              <Message kind="error">{error.toString()}</Message>
+            ) : loading || !proposal ? (
               <ProposalLoader extended />
             ) : (
               <Proposal
