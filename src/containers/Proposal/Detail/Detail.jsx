@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { Message } from "pi-ui";
 import get from "lodash/fp/get";
 import { withRouter } from "react-router-dom";
 import Proposal from "src/components/Proposal";
@@ -22,7 +23,6 @@ import { makeGetProposalName } from "src/selectors";
 import { useSelector } from "src/redux";
 import { useDocumentTitle } from "src/hooks/utils/useDocumentTitle";
 import { GoBackLink } from "src/components/Router";
-import { Message } from "pi-ui";
 
 const ProposalDetail = ({ Main, match }) => {
   const tokenFromUrl = get("params.token", match);

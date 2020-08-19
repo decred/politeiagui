@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Spinner, Link, Table, CopyableText } from "pi-ui";
+import { Spinner, Link, Table, CopyableText, Message } from "pi-ui";
 import PropTypes from "prop-types";
 import ExportToCsv from "src/components/ExportToCsv";
 import { convertAtomsToDcr } from "src/utils";
@@ -10,6 +10,7 @@ import { useInvoicePayouts } from "./hooks";
 import styles from "./PayoutSummaries.module.css";
 
 const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
+  const [error, setError] = useState();
   const [dates, setDates] = useState({
     sDate: null,
     eDate: null
@@ -26,7 +27,7 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
     onInvoicePayouts(
       Math.round(start.valueOf() / 1000),
       Math.round(end.valueOf() / 1000)
-    );
+    ).catch((e) => setError(e));
   };
   useEffect(fetchInvoicePayouts, [dates]);
 
@@ -49,6 +50,7 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
             <Spinner invert />
           </div>
         )}
+        {error && <Message kind="error">{error.toString()}</Message>}
         {hasLineItemPayouts && (
           <>
             <Table
@@ -134,7 +136,7 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
             </Row>
           </>
         )}
-        {!hasLineItemPayouts && (
+        {!hasLineItemPayouts && !error && (
           <HelpMessage>{"No payouts in the given time range!"}</HelpMessage>
         )}
       </Main>

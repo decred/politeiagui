@@ -340,6 +340,7 @@ export const onFetchAdminInvoices = () =>
       .then((response) => dispatch(act.RECEIVE_ADMIN_INVOICES(response)))
       .catch((error) => {
         dispatch(act.RECEIVE_ADMIN_INVOICES(null, error));
+        throw error;
       });
   });
 
@@ -1258,6 +1259,7 @@ export const onGeneratePayouts = () =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_GENERATE_PAYOUTS(null, error));
+        throw error;
       });
   });
 
@@ -1271,6 +1273,7 @@ export const onInvoicePayouts = (start, end) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_INVOICE_PAYOUTS(null, error));
+        throw error;
       });
   });
 
