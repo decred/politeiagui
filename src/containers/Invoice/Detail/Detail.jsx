@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { withRouter } from "react-router-dom";
+import { Message } from "pi-ui";
 import { useInvoice } from "./hooks";
 import Invoice from "src/components/Invoice";
 import InvoiceLoader from "src/components/Invoice/InvoiceLoader";
@@ -20,7 +21,7 @@ const PAGE_SIZE = 20;
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
-  const { invoice, loading } = useInvoice(invoiceToken);
+  const { invoice, loading, error } = useInvoice(invoiceToken);
   const tokens = useMemo(
     () =>
       invoice &&
@@ -39,7 +40,7 @@ const InvoiceDetail = ({ Main, match }) => {
     proposalsByToken,
     onFetchProposalsBatchByTokensRemaining,
     isLoading,
-    error
+    error: proposalsError
   } = useApprovedProposals();
 
   useEffect(() => {
@@ -65,12 +66,14 @@ const InvoiceDetail = ({ Main, match }) => {
       <Main fillScreen>
         <GoBackLink />
         <AdminInvoiceActionsProvider>
-          {!!invoice && !loading ? (
+          {error ? (
+            <Message kind="error">{error.toString()}</Message>
+          ) : !!invoice && !loading ? (
             <Invoice
               invoice={invoice}
               extended
               approvedProposals={proposals || []}
-              approvedProposalsError={error}
+              approvedProposalsError={proposalsError}
             />
           ) : (
             <InvoiceLoader extended />

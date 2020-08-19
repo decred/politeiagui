@@ -36,7 +36,7 @@ export function useReactiveSearchUser(email, username) {
     }
   }, [username, resultsForUsername, onSearchUser]);
 
-  return { error, result: unionBy(resultsForUsername, resultsForEmail, "id") };
+  return { error, results: unionBy(resultsForUsername, resultsForEmail, "id") };
 }
 
 export function useSearchUser() {
