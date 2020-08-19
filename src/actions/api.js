@@ -276,6 +276,7 @@ export const onLogout = (isCMS, isPermanent) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_LOGOUT(null, error));
+        throw error;
       });
   });
 
