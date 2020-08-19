@@ -107,7 +107,7 @@ export default function useProposalsBatch(
         }
       }
     },
-    initialState: {
+    initialValues: {
       status: "idle",
       loading: true,
       proposals: {},
