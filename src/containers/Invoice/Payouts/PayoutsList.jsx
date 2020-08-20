@@ -115,7 +115,7 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
                       total: formatCentsToUSD(total),
                       exchangerate: formatCentsToUSD(exchangerate),
                       address: address,
-                      dcrtotal: convertAtomsToDcr(dcrtotal) + " DCR"
+                      dcrtotal: convertAtomsToDcr(dcrtotal)
                     };
                   }
                 )}
