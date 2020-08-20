@@ -204,7 +204,7 @@ describe("api integration modules (lib/api.js)", () => {
   });
 
   test("parses a response", async () => {
-    expect.assertions(7);
+    expect.assertions(4);
     const correctHeaders = new Headers({
       "content-type": "application/json; charset=utf-8",
       "X-Csrf-Token":
@@ -254,30 +254,6 @@ describe("api integration modules (lib/api.js)", () => {
       parsedResponse = await api.parseResponse(response);
     } catch (e) {
       expect(e).toEqual(new Error("Bad response from server"));
-    }
-    // 401 - Not Authorized
-    initResponse.status = "401";
-    response = makeApiResponse(initResponse, correctBody);
-    try {
-      parsedResponse = await api.parseResponse(response);
-    } catch (e) {
-      expect(e).toEqual(new Error("Not authorized"));
-    }
-    // 403 - Forbidden
-    initResponse.status = "403";
-    response = makeApiResponse(initResponse, correctBody);
-    try {
-      parsedResponse = await api.parseResponse(response);
-    } catch (e) {
-      expect(e).toEqual(new Error("Forbidden"));
-    }
-    // 404 - Not Found
-    initResponse.status = "404";
-    response = makeApiResponse(initResponse, correctBody);
-    try {
-      parsedResponse = await api.parseResponse(response);
-    } catch (e) {
-      expect(e).toEqual(new Error("Not found"));
     }
   });
 
