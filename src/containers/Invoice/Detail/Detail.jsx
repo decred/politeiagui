@@ -79,15 +79,17 @@ const InvoiceDetail = ({ Main, match }) => {
           ) : (
             <InvoiceLoader extended />
           )}
-        {showComments && <Comments
-            recordAuthorID={invoice && invoice.userid}
-            recordToken={invoiceToken}
-            threadParentID={threadParentCommentID}
-            readOnly={invoice && !isUnreviewedInvoice(invoice)}
-            readOnlyReason={
-              "This invoice can no longer receive comments due its current status."
-            }
-          />}
+          {showComments && (
+            <Comments
+              recordAuthorID={invoice && invoice.userid}
+              recordToken={invoiceToken}
+              threadParentID={threadParentCommentID}
+              readOnly={invoice && !isUnreviewedInvoice(invoice)}
+              readOnlyReason={
+                "This invoice can no longer receive comments due its current status."
+              }
+            />
+          )}
         </AdminInvoiceActionsProvider>
       </Main>
     </>
