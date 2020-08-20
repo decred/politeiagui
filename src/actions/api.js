@@ -1286,6 +1286,7 @@ export const onPayApprovedInvoices = () => (dispatch) => {
     })
     .catch((error) => {
       dispatch(act.RECEIVE_PAY_APPROVED(null, error));
+      throw error;
     });
 };
 
@@ -1298,6 +1299,7 @@ export const onGetSpendingSummary = () => (dispatch) => {
     })
     .catch((error) => {
       dispatch(act.RECEIVE_SPENDING_SUMMARY(null, error));
+      throw error;
     });
 };
 
