@@ -1356,6 +1356,7 @@ export const onFetchCmsUsers = () =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_CMS_USERS(null, error));
+        throw error;
       });
   });
 

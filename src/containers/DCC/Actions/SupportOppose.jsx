@@ -81,10 +81,14 @@ const SupportOpposeActions = ({ dcc, token, className, buttonsClassName }) => {
     </Button>
   );
 
-  return (
+  return error ? (
+    <Message kind="error">
+      Could not fetch user list. {error.toString()}
+    </Message>
+  ) : (
     !loading && (
       <>
-        {error && <Message kind="error">User not logged in</Message>}
+        {}
         <div className={className}>
           <StatusBar
             status={dccSupportOpposeStatus(supportuserids, againstuserids)}
