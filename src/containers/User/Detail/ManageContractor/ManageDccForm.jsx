@@ -45,7 +45,11 @@ const ManageDccForm = ({ onUpdate, user }) => {
   const [updated, setUpdated] = useState(false);
 
   // Parse supervisors initial values and options
-  const { loading: loadingSupervisors, supervisors } = useSupervisors();
+  const {
+    loading: loadingSupervisors,
+    supervisors,
+    error: supervisorsError
+  } = useSupervisors();
   const {
     supervisorsOptions,
     initialSupervisorOptions
@@ -152,6 +156,7 @@ const ManageDccForm = ({ onUpdate, user }) => {
                       styles={multipleSelectStyles}
                     />
                   }
+                  error={supervisorsError}
                 />
                 <InfoSection
                   label="Owned Proposals"
