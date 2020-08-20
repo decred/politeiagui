@@ -141,18 +141,20 @@ const Invoice = ({
                     <Text>{invContractorLocation}</Text>
                     <Text>{invContractorContact}</Text>
                   </div>
-                  <Field
-                    label={"Pay to Address:"}
-                    value={paymentAddress}
-                    renderValue={(addr) => (
-                      <CopyableText
-                        id="payment-address"
-                        truncate
-                        tooltipPlacement={"bottom"}>
-                        {addr}
-                      </CopyableText>
-                    )}
-                  />
+                  {!isPublicMode && (
+                    <Field
+                      label={"Pay to Address:"}
+                      value={paymentAddress}
+                      renderValue={(addr) => (
+                        <CopyableText
+                          id="payment-address"
+                          truncate
+                          tooltipPlacement={"bottom"}>
+                          {addr}
+                        </CopyableText>
+                      )}
+                    />
+                  )}
                 </Row>
                 {!isPublicMode && (
                   <Row justify="space-between" className={styles.topDetails}>
