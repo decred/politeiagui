@@ -14,6 +14,14 @@ export const selectWrapper = (options) => (props) => (
   <SelectEditor {...{ ...props, options }} />
 );
 
+export const textWithErrorWrapper = (error) => ({ value, ...props }) => {
+  return error ? (
+    <span className={highlightChar}>{error.toString()}</span>
+  ) : (
+    <span {...props}>{value}</span>
+  );
+};
+
 export const textAreaWrapper = () => (props) => (
   <div className={textWrapper}>
     <TextArea {...props} />

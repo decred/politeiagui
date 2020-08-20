@@ -56,7 +56,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   proposalsError
 }) {
   const { policy } = usePolicy();
-  const { subContractors } = useSubContractors();
+  const { subContractors, error: subContractorsError } = useSubContractors();
   const [grid, setGrid] = useState([]);
   const [currentRate, setCurrentRate] = useState(userRate || 0);
 
@@ -108,7 +108,8 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
         policy,
         proposalsOptions,
         subContractors,
-        proposalsError
+        proposalsError,
+        subContractorsError
       );
       setGrid(grid);
     },
@@ -120,7 +121,8 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
       policy,
       proposalsOptions,
       subContractors,
-      proposalsError
+      proposalsError,
+      subContractorsError
     ]
   );
 

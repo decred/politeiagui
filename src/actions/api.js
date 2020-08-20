@@ -1343,6 +1343,7 @@ export const onFetchUserSubcontractors = () =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_USER_SUBCONTRACTORS(null, error));
+        throw error;
       });
   });
 
