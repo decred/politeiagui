@@ -21,8 +21,11 @@ const PAGE_SIZE = 20;
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
-  const { invoice, loading, currentUser, error } = useInvoice(invoiceToken);
-  const showComments = invoice && currentUser && (invoice.userid === currentUser.userid || currentUser.isadmin);
+  const { invoice, loading, currentUser } = useInvoice(invoiceToken);
+  const isAuthor =
+    currentUser && invoice && invoice.userid === currentUser.userid;
+  const isAdmin = currentUser && currentUser.isadmin;
+  const isPublicMode = !isAdmin && !isAuthor;
   const tokens = useMemo(
     () =>
       invoice &&
@@ -72,6 +75,7 @@ const InvoiceDetail = ({ Main, match }) => {
           ) : !!invoice && !loading ? (
             <Invoice
               invoice={invoice}
+              isPublicMode={isPublicMode}
               extended
               approvedProposals={proposals || []}
               approvedProposalsError={proposalsError}
@@ -79,7 +83,7 @@ const InvoiceDetail = ({ Main, match }) => {
           ) : (
             <InvoiceLoader extended />
           )}
-          {showComments && (
+          {!isPublicMode && (
             <Comments
               recordAuthorID={invoice && invoice.userid}
               recordToken={invoiceToken}
