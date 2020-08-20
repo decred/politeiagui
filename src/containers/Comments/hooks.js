@@ -21,6 +21,7 @@ export function useComments(recordToken) {
   const errorSelector = or(
     sel.apiProposalCommentsError,
     sel.apiInvoiceCommentsError,
+    sel.apiDccCommentsError,
     sel.apiLikeCommentsError,
     sel.apiCommentsLikesError
   );

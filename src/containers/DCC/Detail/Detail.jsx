@@ -1,5 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import { Message } from "pi-ui";
 import get from "lodash/fp/get";
 import { useDcc } from "./hooks";
 import Dcc from "src/components/DCC";
@@ -12,14 +13,16 @@ import { GoBackLink } from "src/components/Router";
 const DccDetail = ({ Main, match }) => {
   const dccToken = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
-  const { dcc, loading } = useDcc(dccToken);
+  const { dcc, loading, error } = useDcc(dccToken);
 
   return (
     <>
       <Main fillScreen>
         <AdminDccActionsProvider>
           <GoBackLink />
-          {dcc && !loading ? (
+          {error ? (
+            <Message kind="error">{error.toString()}</Message>
+          ) : dcc && !loading ? (
             <Dcc dcc={dcc} extended />
           ) : (
             <DccLoader extended />

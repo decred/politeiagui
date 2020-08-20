@@ -327,8 +327,7 @@ export const onFetchInvoiceComments = (token) => (dispatch) => {
       dispatch(act.RECEIVE_RECORD_COMMENTS({ ...response, token }));
     })
     .catch((error) => {
-      dispatch(act.RECEIVE__RECORD_COMMENTS(null, error));
-      throw error;
+      dispatch(act.RECEIVE_RECORD_COMMENTS(null, error));
     });
 };
 
@@ -1405,6 +1404,7 @@ export const onFetchDccsByStatus = (status) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_DCCS(null, error));
+        throw error;
       });
   });
 
@@ -1418,6 +1418,7 @@ export const onFetchDcc = (token) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_DCC(null, error));
+        throw error;
       });
   });
 
@@ -1430,7 +1431,6 @@ export const onFetchDccComments = (token) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(act.RECEIVE_RECORD_COMMENTS(null, error));
-      throw error;
     });
 };
 
@@ -1454,6 +1454,7 @@ export const onSupportOpposeDcc = (token, vote) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_SUPPORT_OPPOSE_DCC(null, error));
+        throw error;
       });
   });
 
@@ -1473,6 +1474,7 @@ export const onSetDccStatus = (token, status, reason) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_SET_DCC_STATUS(null, error));
+        throw error;
       });
   });
 
