@@ -10,6 +10,7 @@ export function useInvoice(invoiceToken) {
     [invoiceToken]
   );
   const invoice = useSelector(invoiceSelector);
+  const currentUser = useSelector(sel.currentUser);
   const onFetchInvoice = useAction(act.onFetchInvoice);
   const requestParams = useMemo(() => [invoiceToken], [invoiceToken]);
   const [loading, error] = useAPIAction(
@@ -18,5 +19,5 @@ export function useInvoice(invoiceToken) {
     !invoice || !invoice.payout
   );
 
-  return { invoice, loading, error };
+  return { invoice, loading, error, currentUser };
 }

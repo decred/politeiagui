@@ -21,7 +21,8 @@ const PAGE_SIZE = 20;
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
-  const { invoice, loading, error } = useInvoice(invoiceToken);
+  const { invoice, loading, currentUser, error } = useInvoice(invoiceToken);
+  const showComments = invoice && currentUser && (invoice.userid === currentUser.userid || currentUser.isadmin);
   const tokens = useMemo(
     () =>
       invoice &&
@@ -78,7 +79,7 @@ const InvoiceDetail = ({ Main, match }) => {
           ) : (
             <InvoiceLoader extended />
           )}
-          <Comments
+        {showComments && <Comments
             recordAuthorID={invoice && invoice.userid}
             recordToken={invoiceToken}
             threadParentID={threadParentCommentID}
@@ -86,7 +87,7 @@ const InvoiceDetail = ({ Main, match }) => {
             readOnlyReason={
               "This invoice can no longer receive comments due its current status."
             }
-          />
+          />}
         </AdminInvoiceActionsProvider>
       </Main>
     </>
