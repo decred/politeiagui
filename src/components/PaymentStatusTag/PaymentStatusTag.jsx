@@ -19,7 +19,7 @@ const mapPaymentToStatusTag = {
   [PAYWALL_STATUS_LACKING_CONFIRMATIONS]: (
     <StatusTag
       className={styles.statusTag}
-      type="yellowTime"
+      type="bluePending"
       text="Waiting for confirmations"
     />
   ),

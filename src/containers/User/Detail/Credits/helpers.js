@@ -31,7 +31,7 @@ const getRowDataForCreditsPurchase = (purchase) => ({
       <DcrTransactionLink txID={purchase.txId} />
     ),
   Status: purchase.confirming ? (
-    <StatusTag type="bluePending" text="Pending" />
+    <StatusTag type="bluePending" text="Waiting for confirmations" />
   ) : (
     <StatusTag type="greenCheck" text="Confirmed" />
   ),

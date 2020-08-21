@@ -6,7 +6,6 @@ import { useSelector, useAction } from "src/redux";
 import useModalContext from "src/hooks/utils/useModalContext";
 import ModalBuyProposalCredits from "src/components/ModalBuyProposalCredits";
 import ModalPayPaywall from "src/components/ModalPayPaywall";
-import { getProposalCreditsPaymentStatus } from "./helpers.js";
 
 export function useCredits(userID) {
   const isApiRequestingProposalPaywall = useSelector(
@@ -228,9 +227,7 @@ export function useUserPaymentModals(user) {
   const {
     proposalCreditPrice,
     proposalPaywallAddress,
-    proposalPaywallPaymentConfirmations,
     proposalPaywallPaymentTxid,
-    pollingCreditsPayment,
     toggleCreditsPaymentPolling,
     onPollProposalPaywallPayment,
     toggleProposalPaymentReceived
@@ -261,16 +258,11 @@ export function useUserPaymentModals(user) {
       price: proposalCreditPrice,
       address: proposalPaywallAddress,
       startPollingPayment: onStartPollingPayment,
-      status: getProposalCreditsPaymentStatus(
-        proposalPaywallPaymentConfirmations,
-        proposalPaywallPaymentTxid
-      ),
       initialStep: proposalPaywallPaymentTxid ? 1 : 0,
-      isPollingCreditsPayment: pollingCreditsPayment,
-      onClose: customCloseProposalCreditsModal
+      onClose: customCloseProposalCreditsModal,
+      userID
     });
   };
-
   return {
     handleOpenPaywallModal,
     handleOpenBuyCreditsModal,
