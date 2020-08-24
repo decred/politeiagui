@@ -6,7 +6,7 @@ import styles from "./SearchSelector.module.css";
 
 const SearchSelector = ({ onChange, value, className, styles: extStyles }) => {
   const [inputValue, setInputValue] = useState("");
-  const results = useReactiveSearchUser(inputValue, inputValue);
+  const { results } = useReactiveSearchUser(inputValue, inputValue);
   const options = results.map((result) => ({
     value: result.id,
     label: `${result.username} | ${result.email}`

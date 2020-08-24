@@ -9,7 +9,8 @@ import {
   textAreaWrapper,
   multilineTextWrapper,
   singlelineTextWrapper,
-  proposalViewWrapper
+  proposalViewWrapper,
+  textWithErrorWrapper
 } from "./wrappers";
 import find from "lodash/find";
 
@@ -79,7 +80,9 @@ export const convertLineItemsToGrid = (
   userRate = 0,
   policy,
   proposalsOptions,
-  subContractors
+  subContractors,
+  proposalsError,
+  subContractorsError
 ) => {
   const {
     supporteddomains: policyDomains,
@@ -151,13 +154,14 @@ export const convertLineItemsToGrid = (
           value: newLine.proposaltoken,
           error: rowErrors && rowErrors.proposaltoken,
           dataEditor: selectWrapper(proposalsOptions),
-          valueViewer: proposalViewWrapper(proposalsOptions)
+          valueViewer: proposalViewWrapper(proposalsOptions, proposalsError)
         },
         {
           readOnly: isSubContractorReadonly,
           value: subContractorValue,
           error: rowErrors && rowErrors.subuserid,
-          dataEditor: selectWrapper(getSubcontractorOptions(subContractors))
+          dataEditor: selectWrapper(getSubcontractorOptions(subContractors)),
+          valueViewer: textWithErrorWrapper(subContractorsError)
         },
         {
           readOnly: isSubContractorReadonly,

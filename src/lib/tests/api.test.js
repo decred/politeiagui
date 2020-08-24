@@ -5,7 +5,8 @@ import * as pki from "../pki.js";
 import {
   assertGETOnRouteIsCalled,
   assertRouteIsCalledWithQueryParams,
-  assertPOSTOnRouteIsCalled
+  assertPOSTOnRouteIsCalled,
+  makeApiResponse
 } from "./support/helpers";
 import {
   PROPOSAL_STATUS_UNREVIEWED,
@@ -203,17 +204,18 @@ describe("api integration modules (lib/api.js)", () => {
   });
 
   test("parses a response", async () => {
-    expect.assertions(3);
-    let headers = new Headers({
+    expect.assertions(4);
+    const correctHeaders = new Headers({
       "content-type": "application/json; charset=utf-8",
       "X-Csrf-Token":
         "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca9"
     });
+    const correctBody = { foo: "bar" };
     let initResponse = {
       status: "200",
-      headers
+      headers: correctHeaders
     };
-    let response = new Response(JSON.stringify({ foo: "bar" }), initResponse);
+    let response = makeApiResponse(initResponse, correctBody);
 
     let parsedResponse = await api.parseResponse(response);
     expect(parsedResponse).toEqual({
@@ -221,7 +223,7 @@ describe("api integration modules (lib/api.js)", () => {
       csrfToken:
         "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca9"
     });
-    response = new Response(JSON.stringify({ errorcode: 1 }), initResponse);
+    response = makeApiResponse(initResponse, { errorcode: 1 });
     try {
       parsedResponse = await api.parseResponse(response);
     } catch (e) {
@@ -229,16 +231,29 @@ describe("api integration modules (lib/api.js)", () => {
     }
 
     // test with an unexpected headers object
-    headers = new Headers({});
+    const invalidHeaders = new Headers({});
     initResponse = {
       status: "200",
-      headers
+      headers: invalidHeaders
     };
-    response = new Response(JSON.stringify({ foo: "bar" }), initResponse);
+    response = makeApiResponse(initResponse, correctBody);
     try {
       parsedResponse = await api.parseResponse(response);
     } catch (e) {
       expect(e).toEqual(new Error("Internal server error"));
+    }
+
+    // test with error-status responses
+    // 400 - Bad Request
+    initResponse = {
+      status: "400",
+      headers: correctHeaders
+    };
+    response = makeApiResponse(initResponse, correctBody);
+    try {
+      parsedResponse = await api.parseResponse(response);
+    } catch (e) {
+      expect(e).toEqual(new Error("Bad response from server"));
     }
   });
 

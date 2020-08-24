@@ -27,6 +27,10 @@
   opacity: 50%;
 }
 
+.infoError {
+  color: var(--color-orange);
+}
+
 /* SMALL */
 @media screen and (max-width: 768px) {
   .label,

@@ -33,7 +33,7 @@ export function useNewDcc() {
 
   return {
     loading,
-    error,
+    usersError: error,
     onSubmitDcc,
     users,
     user,

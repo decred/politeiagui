@@ -281,7 +281,13 @@ export const parseResponse = (response) =>
       err.errorContext = json.errorcontext;
       throw err;
     }
-    return { response: json, csrfToken: response.headers.get("X-Csrf-Token") };
+    if (STATUS_ERR[response.status]) {
+      throw new Error(STATUS_ERR[response.status]);
+    }
+    return {
+      response: json,
+      csrfToken: response.headers.get("X-Csrf-Token")
+    };
   });
 
 const GET = (path) =>

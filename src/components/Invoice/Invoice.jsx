@@ -23,7 +23,12 @@ import ThumbnailGrid from "src/components/Files";
 import { useLoaderContext } from "src/containers/Loader";
 import VersionPicker from "src/components/VersionPicker";
 
-const Invoice = ({ invoice, extended, approvedProposals }) => {
+const Invoice = ({
+  invoice,
+  extended,
+  approvedProposals,
+  approvedProposalsError
+}) => {
   const {
     censorshiprecord,
     file,
@@ -191,6 +196,7 @@ const Invoice = ({ invoice, extended, approvedProposals }) => {
                   readOnly
                   userRate={invContractorRate / 100}
                   proposals={approvedProposals || []}
+                  proposalsError={approvedProposalsError}
                 />
               </>
             )}

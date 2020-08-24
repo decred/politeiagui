@@ -10,3 +10,7 @@
 .editContractor {
   margin-top: 2rem;
 }
+
+.fieldError {
+  color: var(--color-orange);
+}

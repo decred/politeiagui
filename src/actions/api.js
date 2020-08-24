@@ -276,6 +276,7 @@ export const onLogout = (isCMS, isPermanent) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_LOGOUT(null, error));
+        throw error;
       });
   });
 
@@ -326,8 +327,7 @@ export const onFetchInvoiceComments = (token) => (dispatch) => {
       dispatch(act.RECEIVE_RECORD_COMMENTS({ ...response, token }));
     })
     .catch((error) => {
-      dispatch(act.RECEIVE__RECORD_COMMENTS(null, error));
-      throw error;
+      dispatch(act.RECEIVE_RECORD_COMMENTS(null, error));
     });
 };
 
@@ -339,6 +339,7 @@ export const onFetchAdminInvoices = () =>
       .then((response) => dispatch(act.RECEIVE_ADMIN_INVOICES(response)))
       .catch((error) => {
         dispatch(act.RECEIVE_ADMIN_INVOICES(null, error));
+        throw error;
       });
   });
 
@@ -389,6 +390,7 @@ export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
       return [proposals, summaries];
     } catch (e) {
       dispatch(act.RECEIVE_PROPOSALS_BATCH(null, e));
+      throw e;
     }
   });
 
@@ -1256,6 +1258,7 @@ export const onGeneratePayouts = () =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_GENERATE_PAYOUTS(null, error));
+        throw error;
       });
   });
 
@@ -1269,6 +1272,7 @@ export const onInvoicePayouts = (start, end) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_INVOICE_PAYOUTS(null, error));
+        throw error;
       });
   });
 
@@ -1281,6 +1285,7 @@ export const onPayApprovedInvoices = () => (dispatch) => {
     })
     .catch((error) => {
       dispatch(act.RECEIVE_PAY_APPROVED(null, error));
+      throw error;
     });
 };
 
@@ -1293,6 +1298,7 @@ export const onGetSpendingSummary = () => (dispatch) => {
     })
     .catch((error) => {
       dispatch(act.RECEIVE_SPENDING_SUMMARY(null, error));
+      throw error;
     });
 };
 
@@ -1336,6 +1342,7 @@ export const onFetchUserSubcontractors = () =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_USER_SUBCONTRACTORS(null, error));
+        throw error;
       });
   });
 
@@ -1349,6 +1356,7 @@ export const onFetchCmsUsers = () =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_CMS_USERS(null, error));
+        throw error;
       });
   });
 
@@ -1397,6 +1405,7 @@ export const onFetchDccsByStatus = (status) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_DCCS(null, error));
+        throw error;
       });
   });
 
@@ -1410,6 +1419,7 @@ export const onFetchDcc = (token) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_DCC(null, error));
+        throw error;
       });
   });
 
@@ -1422,7 +1432,6 @@ export const onFetchDccComments = (token) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(act.RECEIVE_RECORD_COMMENTS(null, error));
-      throw error;
     });
 };
 
@@ -1446,6 +1455,7 @@ export const onSupportOpposeDcc = (token, vote) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_SUPPORT_OPPOSE_DCC(null, error));
+        throw error;
       });
   });
 
@@ -1465,6 +1475,7 @@ export const onSetDccStatus = (token, status, reason) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_SET_DCC_STATUS(null, error));
+        throw error;
       });
   });
 

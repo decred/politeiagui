@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
-import { Spinner, Card, Table, H3 } from "pi-ui";
+import { Spinner, Card, Table, H3, Message } from "pi-ui";
 import { useProposalBillingDetails } from "./hooks";
 import get from "lodash/fp/get";
 import Link from "src/components/Link";
@@ -40,6 +40,7 @@ const getDetailsData = (invoices) =>
   [];
 
 const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
+  const [error, setError] = useState();
   const tokenFromUrl = get("params.token", match);
   const {
     getSpendingDetails,
@@ -48,7 +49,7 @@ const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
   } = useProposalBillingDetails(tokenFromUrl);
 
   useEffect(() => {
-    getSpendingDetails(tokenFromUrl);
+    getSpendingDetails(tokenFromUrl).catch((e) => setError(e));
   }, [getSpendingDetails, tokenFromUrl]);
 
   const isDetailsLoaded = proposalBillingDetails && !loading;
@@ -65,7 +66,9 @@ const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
         />
       </TopBanner>
       <Main fillScreen>
-        {!isDetailsLoaded ? (
+        {error ? (
+          <Message kind="error">{error.toString()}</Message>
+        ) : !isDetailsLoaded ? (
           <div className={styles.spinnerWrapper}>
             <Spinner invert />
           </div>

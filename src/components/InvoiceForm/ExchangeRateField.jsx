@@ -6,7 +6,7 @@ import { usdFormatter } from "src/utils";
 import useExchangeRate from "src/hooks/api/useExchangeRate";
 
 export const ExchangeRateField = ({ month, year, onChange, name }) => {
-  const [rate, loading] = useExchangeRate(month, year);
+  const [rate, loading, error] = useExchangeRate(month, year);
   const handleChange = useCallback(
     (rate) => {
       onChange(name, rate);
@@ -19,7 +19,9 @@ export const ExchangeRateField = ({ month, year, onChange, name }) => {
   return (
     <div style={{ display: "grid" }}>
       <Text color="gray">Exchange rate</Text>
-      {loading ? (
+      {error ? (
+        <Text>{error.toString()}</Text>
+      ) : loading ? (
         <Spinner invert />
       ) : (
         <Text>{usdFormatter.format(rate / 100)}</Text>

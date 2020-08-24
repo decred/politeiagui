@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Text, Modal, CopyableText } from "pi-ui";
+import { Text, Modal, CopyableText, Message } from "pi-ui";
 import PropTypes from "prop-types";
 import { DiffInvoices } from "src/components/Diff/Diff";
 import {
@@ -30,13 +30,14 @@ const ModalDiffInvoice = ({ onClose, invoice, prevInvoice, ...props }) => {
     return uniq([...prevTokens, ...tokens]);
   }, [invoice.input.lineitems, prevInput]);
 
-  const { proposalsByToken } = useApprovedProposals(proposalsTokens);
+  const { proposalsByToken, error } = useApprovedProposals(proposalsTokens);
 
   return (
     <Modal
       onClose={onClose}
       {...props}
       contentStyle={{ width: "100%", minHeight: "40rem" }}>
+      {error && <Message kind="error">{error.toString()}</Message>}
       <Header
         title={
           <Title id={"proposal-title-gfsag"} truncate linesBeforeTruncate={2}>

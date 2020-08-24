@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { withRouter } from "react-router-dom";
-import get from "lodash/fp/get";
+import { Message } from "pi-ui";
 import { useInvoice } from "./hooks";
 import Invoice from "src/components/Invoice";
 import InvoiceLoader from "src/components/Invoice/InvoiceLoader";
@@ -9,6 +9,7 @@ import Comments from "src/containers/Comments";
 import { isUnreviewedInvoice } from "../helpers";
 import { GoBackLink } from "src/components/Router";
 import useApprovedProposals from "src/hooks/api/useApprovedProposals";
+import get from "lodash/fp/get";
 import isEmpty from "lodash/isEmpty";
 import flow from "lodash/fp/flow";
 import map from "lodash/fp/map";
@@ -20,7 +21,7 @@ const PAGE_SIZE = 20;
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
-  const { invoice, loading } = useInvoice(invoiceToken);
+  const { invoice, loading, error } = useInvoice(invoiceToken);
   const tokens = useMemo(
     () =>
       invoice &&
@@ -38,7 +39,8 @@ const InvoiceDetail = ({ Main, match }) => {
     proposals,
     proposalsByToken,
     onFetchProposalsBatchByTokensRemaining,
-    isLoading
+    isLoading,
+    error: proposalsError
   } = useApprovedProposals();
 
   useEffect(() => {
@@ -64,11 +66,14 @@ const InvoiceDetail = ({ Main, match }) => {
       <Main fillScreen>
         <GoBackLink />
         <AdminInvoiceActionsProvider>
-          {!!invoice && !loading ? (
+          {error ? (
+            <Message kind="error">{error.toString()}</Message>
+          ) : !!invoice && !loading ? (
             <Invoice
               invoice={invoice}
               extended
               approvedProposals={proposals || []}
+              approvedProposalsError={proposalsError}
             />
           ) : (
             <InvoiceLoader extended />

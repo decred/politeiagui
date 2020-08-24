@@ -11,9 +11,11 @@ const UserDccInfo = ({
   domain,
   userSupervisors,
   proposalsOwned,
+  proposalsError,
   isLoadingProposals,
   showEdit,
-  onToggleDccEdit
+  onToggleDccEdit,
+  supervisorsError
 }) => {
   const supervisors = userSupervisors.length
     ? userSupervisors.join(", ")
@@ -27,9 +29,14 @@ const UserDccInfo = ({
       <div className="margin-top-s margin-bottom-s">
         <InfoSection label="Contractor Type" info={contractorType} />
         <InfoSection label="Domain" info={domain} />
-        <InfoSection label="Supervisors" info={supervisors} />
+        <InfoSection
+          label="Supervisors"
+          info={supervisors}
+          error={supervisorsError}
+        />
         <InfoSection
           label="Owned Proposals"
+          error={proposalsError}
           info={isLoadingProposals ? <Spinner invert /> : proposals}
         />
       </div>
@@ -82,12 +89,12 @@ const ManageContractorUserView = ({
   onToggleContractorInfoEdit
 }) => {
   const { domain, contractortype, supervisoruserids = [] } = user;
-  const { proposalsByToken, isLoading } = useApprovedProposals();
+  const { proposalsByToken, isLoading, error } = useApprovedProposals();
   const ownedProposals = getOwnedProposals(
     user.proposalsowned,
     proposalsByToken
   );
-  const { supervisors } = useSupervisors();
+  const { supervisors, error: supervisorsError } = useSupervisors();
   const {
     policy: { supporteddomains }
   } = usePolicy();
@@ -105,8 +112,10 @@ const ManageContractorUserView = ({
           contractorType={typeOptions[contractortype]}
           domain={getDomainName(contractorDomains, domain)}
           proposalsOwned={ownedProposals}
+          proposalsError={error}
           isLoadingProposals={isLoading}
           userSupervisors={getSupervisorsNames(supervisors, supervisoruserids)}
+          supervisorsError={supervisorsError}
           showEdit={showDccForm}
           onToggleDccEdit={onToggleDccEdit}
         />

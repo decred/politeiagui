@@ -74,6 +74,7 @@ const Comments = ({
     recordType,
     lastVisitTimestamp,
     currentUser,
+    error,
     ...commentsCtx
   } = useComments(recordToken);
 
@@ -243,6 +244,11 @@ const Comments = ({
               />
             )}
           </LoggedInContent>
+          {error && (
+            <Message kind="error" className="margin-top-m">
+              {error.toString()}
+            </Message>
+          )}
           <div className={styles.commentsHeader}>
             {!isSingleThread && (
               <div className={styles.titleWrapper}>

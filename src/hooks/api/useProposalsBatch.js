@@ -64,7 +64,7 @@ export default function useProposalsBatch(
     actions: {
       initial: () => {
         if (!tokenInventory && !tokens) {
-          onFetchTokenInventory();
+          onFetchTokenInventory().catch((e) => send(REJECT, e));
           return send(FETCH);
         }
         return send(VERIFY);
