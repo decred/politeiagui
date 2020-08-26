@@ -72,7 +72,11 @@ const Routes = ({ location }) => {
           />
           <AuthenticatedRoute
             path="/invoices"
-            title="All invoices" // XXX: we could should show differnt title for admins maybe?
+            title={
+              loggedIn && currentUser && currentUser.isadmin
+                ? "All invoices"
+                : "Domain Invoices"
+            }
             exact
             component={PageListAdminInvoices}
           />
