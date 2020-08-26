@@ -21,7 +21,7 @@ const PAGE_SIZE = 20;
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
-  const { invoice, loading, currentUser } = useInvoice(invoiceToken);
+  const { invoice, loading, currentUser, error } = useInvoice(invoiceToken);
   const isAuthor =
     currentUser && invoice && invoice.userid === currentUser.userid;
   const isAdmin = currentUser && currentUser.isadmin;

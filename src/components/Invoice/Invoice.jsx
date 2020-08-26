@@ -27,6 +27,7 @@ const Invoice = ({
   isAuthor,
   isPublicMode,
   extended,
+  approvedProposalsError,
   approvedProposals
 }) => {
   const {
