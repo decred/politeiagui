@@ -1,13 +1,14 @@
 import { Button, Link, Message, P } from "pi-ui";
-import React from "react";
+import React, { useCallback } from "react";
 import useNavigation from "src/hooks/api/useNavigation";
 import useFaucet from "./hooks";
 import styles from "./PaymentFaucet.module.css";
 
+const noop = () => {};
 const FAUCET_BASE_URL = "https://testnet.decred.org/explorer/tx";
 const getFaucetUrl = (txid) => `${FAUCET_BASE_URL}/${txid}`;
 
-const PaymentFaucet = ({ address, amount }) => {
+const PaymentFaucet = ({ address, amount, onFail = noop }) => {
   const { user } = useNavigation();
   const {
     payWithFaucetError,
@@ -16,6 +17,11 @@ const PaymentFaucet = ({ address, amount }) => {
     isApiRequestingPayWithFaucet,
     isTestnet
   } = useFaucet();
+
+  const handlePayment = useCallback(
+    () => payWithFaucet(address, amount, user.userid).catch(onFail),
+    [address, amount, user.userid, payWithFaucet, onFail]
+  );
   return (
     isTestnet && (
       <div className="paywall-faucet">
@@ -27,16 +33,14 @@ const PaymentFaucet = ({ address, amount }) => {
           <Button
             className="margin-top-s"
             loading={isApiRequestingPayWithFaucet}
-            onClick={() => payWithFaucet(address, amount, user.userid)}>
+            onClick={handlePayment}>
             Pay with Faucet
           </Button>
         )}
         {payWithFaucetError ? (
-          <Message
-            type="error"
-            header="Faucet error"
-            body={payWithFaucetError}
-          />
+          <Message kind="error" className="margin-top-m">
+            {payWithFaucetError.toString()}
+          </Message>
         ) : null}
         {payWithFaucetTxId ? (
           <Message kind="info" className={styles.transactionIdMessage}>

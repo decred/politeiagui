@@ -13,6 +13,7 @@ import PaymentComponent from "../PaymentComponent";
 import PaymentStatusTag from "../PaymentStatusTag";
 import styles from "./ModalBuyProposalCredits.module.css";
 import { validationSchema } from "./validation";
+import useProposalCreditsPaymentInfo from "./hooks";
 
 const ModalBuyProposalCredits = ({
   show,
@@ -20,8 +21,7 @@ const ModalBuyProposalCredits = ({
   price,
   initialStep = 0,
   address,
-  status,
-  isPollingCreditsPayment,
+  userID,
   startPollingPayment
 }) => {
   const [creditsNumber, setNumber] = useState(1);
@@ -35,6 +35,12 @@ const ModalBuyProposalCredits = ({
     setModalType(1);
     setNumber(+values.creditsNumber);
   }
+
+  const {
+    isPollingCreditsPayment,
+    status,
+    amount
+  } = useProposalCreditsPaymentInfo(userID);
 
   useEffect(() => {
     setModalType(initialStep);
@@ -52,7 +58,7 @@ const ModalBuyProposalCredits = ({
       {extraSmall && <PaymentStatusTag status={status} />}
       <PaymentComponent
         address={address}
-        amount={+(creditsNumber * price).toFixed(1)}
+        amount={amount || +(creditsNumber * price).toFixed(1)}
         extraSmall={extraSmall}
         status={status}
       />

@@ -72,9 +72,15 @@ const Credits = ({ user }) => {
   useEffect(() => {
     if (proposalPaymentReceived) {
       toggleCreditsPaymentPolling(false);
+      toggleProposalPaymentReceived(false);
       handleCloseModal();
     }
-  }, [proposalPaymentReceived, toggleCreditsPaymentPolling, handleCloseModal]);
+  }, [
+    proposalPaymentReceived,
+    toggleCreditsPaymentPolling,
+    toggleProposalPaymentReceived,
+    handleCloseModal
+  ]);
 
   return isApiRequestingUserProposalCredits ? (
     <div className={styles.spinnerWrapper}>

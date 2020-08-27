@@ -6,10 +6,10 @@ export const payWithFaucet = (address, amount, userid) => (dispatch) => {
   return external_api
     .payWithFaucet(address, amount)
     .then((json) => {
-      if (json.Error) {
-        return dispatch(
-          act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(null, new Error(json.Error))
-        );
+      if (json.error) {
+        const error = new Error(json.error);
+        dispatch(act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET(null, error));
+        throw error;
       }
       return dispatch(
         act.RECEIVE_PAYWALL_PAYMENT_WITH_FAUCET({ ...json, userid })
