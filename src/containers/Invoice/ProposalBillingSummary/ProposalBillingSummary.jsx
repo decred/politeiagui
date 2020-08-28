@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Spinner, BoxTextInput, Message, Table } from "pi-ui";
+import { Spinner, BoxTextInput, Message, Table, Card } from "pi-ui";
 import { useProposalBillingSummary } from "./hooks";
 import styles from "./ProposalBillingSummary.module.css";
 import { formatCentsToUSD } from "src/utils";
@@ -62,20 +62,22 @@ const ProposalBillingSummary = ({ TopBanner, PageDetails, Main }) => {
             <Spinner invert />
           </div>
         ) : (
-          <Table
-            className={styles.table}
-            data={proposals.map(({ token, title, totalbilled }) => ({
-              Proposal: (
-                <Link
-                  to={`/admin/proposalsbilling/${token}`}
-                  className={styles.titleLink}>
-                  {title}
-                </Link>
-              ),
-              Amount: formatCentsToUSD(totalbilled)
-            }))}
-            headers={TABLE_HEADERS}
-          />
+          <Card paddingSize="small" className={styles.card}>
+            <Table
+              className={styles.table}
+              data={proposals.map(({ token, title, totalbilled }) => ({
+                Proposal: (
+                  <Link
+                    to={`/admin/proposalsbilling/${token}`}
+                    className={styles.titleLink}>
+                    {title}
+                  </Link>
+                ),
+                Amount: formatCentsToUSD(totalbilled)
+              }))}
+              headers={TABLE_HEADERS}
+            />
+          </Card>
         )}
       </Main>
     </>
