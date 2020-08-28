@@ -139,7 +139,9 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
           </>
         )}
         {!hasPayouts && (
-          <HelpMessage>{"There are no approved invoices!"}</HelpMessage>
+          <HelpMessage>
+            {"There are no payouts for approved invoices"}
+          </HelpMessage>
         )}
       </Main>
     </>
