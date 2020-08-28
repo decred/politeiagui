@@ -152,8 +152,9 @@ const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
             There are no billings for this proposal yet
           </Card>
         ) : (
-          <Card paddingSize="small">
+          <Card paddingSize="small" className={styles.tableWrapper}>
             <Table
+              className={styles.table}
               data={getDetailsData(
                 proposalBillingDetails.invoices,
                 subContractors
