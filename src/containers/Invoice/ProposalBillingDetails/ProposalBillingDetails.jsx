@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { Spinner, Card, Table, H3, Message } from "pi-ui";
 import { useProposalBillingDetails } from "./hooks";
+import { GoBackLink } from "src/components/Router";
 import get from "lodash/fp/get";
 import Link from "src/components/Link";
 import { usdFormatter, formatCentsToUSD } from "src/utils";
-
 import styles from "./ProposalBillingDetails.module.css";
 
 const HEADERS = [
@@ -53,7 +53,10 @@ const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
   }, [getSpendingDetails, tokenFromUrl]);
 
   const isDetailsLoaded = proposalBillingDetails && !loading;
-
+  const isTotalZero =
+    proposalBillingDetails &&
+    proposalBillingDetails.totalbilled === 0 &&
+    proposalBillingDetails.invoices.length === 0;
   return (
     <>
       <TopBanner>
@@ -66,12 +69,17 @@ const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
         />
       </TopBanner>
       <Main fillScreen>
+        <GoBackLink />
         {error ? (
           <Message kind="error">{error.toString()}</Message>
         ) : !isDetailsLoaded ? (
           <div className={styles.spinnerWrapper}>
             <Spinner invert />
           </div>
+        ) : isTotalZero ? (
+          <Card paddingSize="small">
+            There are no billings for this proposal yet
+          </Card>
         ) : (
           <Card paddingSize="small">
             <Table
