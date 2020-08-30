@@ -261,7 +261,9 @@ const Proposal = React.memo(function Proposal({
                             styles.blocksLeft
                           )}
                           size="small">
-                          {`${voteBlocksLeft} blocks left`}
+                          {`${voteBlocksLeft} block${
+                            voteBlocksLeft > 1 ? "s" : ""
+                          } left`}
                         </Text>
                       </>
                     )}
