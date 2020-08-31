@@ -328,6 +328,7 @@ export const onFetchInvoiceComments = (token) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(act.RECEIVE_RECORD_COMMENTS(null, error));
+      throw error;
     });
 };
 

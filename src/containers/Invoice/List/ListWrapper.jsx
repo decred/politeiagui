@@ -4,7 +4,7 @@ import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import Invoice from "src/components/Invoice";
 import { useAdminInvoices } from "./hooks";
 import HelpMessage from "src/components/HelpMessage";
-import styles from "./Admin.module.css";
+import styles from "./ListWrapper.module.css";
 
 const InvoicesAdmin = ({ userID }) => {
   const { loading, invoices } = useAdminInvoices();
@@ -25,6 +25,7 @@ const InvoicesAdmin = ({ userID }) => {
   const renderEmptyMessage = useCallback(
     (invoices) =>
       !invoices.length && (
+        // XXX: improve this message
         <HelpMessage>
           {"There are no invoices submitted by this user."}
         </HelpMessage>

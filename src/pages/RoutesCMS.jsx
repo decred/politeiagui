@@ -44,7 +44,7 @@ const Routes = ({ location }) => {
           <Route exact path="/">
             {loggedIn ? (
               currentUser.isadmin ? (
-                <Redirect to="/admin/invoices" />
+                <Redirect to="/invoices" />
               ) : (
                 <Redirect to="/invoices/me" />
               )
@@ -71,6 +71,16 @@ const Routes = ({ location }) => {
             component={PageInvoicesNew}
           />
           <AuthenticatedRoute
+            path="/invoices"
+            title={
+              loggedIn && currentUser && currentUser.isadmin
+                ? "All invoices"
+                : "Domain Invoices"
+            }
+            exact
+            component={PageListAdminInvoices}
+          />
+          <AuthenticatedRoute
             path="/invoices/:token"
             title="Invoice Detail"
             exact
@@ -89,12 +99,6 @@ const Routes = ({ location }) => {
             component={PageInvoiceEdit}
           />
           {/* Admin routes */}
-          <AdminAuthenticatedRoute
-            path="/admin/invoices"
-            title="Admin"
-            exact
-            component={PageListAdminInvoices}
-          />
           <AdminAuthenticatedRoute
             path="/admin/payouts"
             title="Payouts"

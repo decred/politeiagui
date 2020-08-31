@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/components/ModalChangeUsername";
 import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "src/constants";
 import UserProposals from "src/containers/Proposal/User";
-import AdminInvoices from "src/containers/Invoice/Admin";
+import AllInvoices from "src/containers/Invoice/List";
 import useUserIdentity from "src/hooks/api/useUserIdentity";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import useUserDetail from "src/hooks/api/useUserDetail";
@@ -37,7 +37,7 @@ const getTabComponents = ({ user, ...rest }) => {
         withDrafts={rest.isUserPageOwner}
       />
     ),
-    [tabValues.INVOICES]: <AdminInvoices userID={user.userid} />,
+    [tabValues.INVOICES]: <AllInvoices userID={user.userid} />,
     [tabValues.DRAFTS]: <Drafts key="tab-invoices" />,
     [tabValues.MANAGE_DCC]: <ManageContractor userID={user.userid} {...rest} />,
     [tabValues.PROPOSALS_OWNED]: (

@@ -20,14 +20,15 @@ import Field from "./Field";
 import InvoiceDatasheet from "../InvoiceDatasheet";
 import { convertAtomsToDcr, usdFormatter } from "src/utils";
 import ThumbnailGrid from "src/components/Files";
-import { useLoaderContext } from "src/containers/Loader";
 import VersionPicker from "src/components/VersionPicker";
 
 const Invoice = ({
   invoice,
+  isAuthor,
+  isPublicMode,
   extended,
-  approvedProposals,
-  approvedProposalsError
+  approvedProposalsError,
+  approvedProposals
 }) => {
   const {
     censorshiprecord,
@@ -40,12 +41,8 @@ const Invoice = ({
     version,
     payout
   } = invoice;
-
   const mobile = useMediaQuery("(max-width: 560px)");
-
-  const { currentUser } = useLoaderContext();
   const { themeName } = useTheme();
-  const isAuthor = currentUser && userid === currentUser.userid;
   const isEditable = isAuthor && isEditableInvoice(status);
   const invoiceToken = censorshiprecord && censorshiprecord.token;
   const invoiceURL = `/invoices/${invoiceToken}`;
@@ -61,7 +58,6 @@ const Invoice = ({
   const totalDcrAmount = payout && convertAtomsToDcr(payout.dcrtotal);
   const showExtendedVersionPicker = extended && version > 1;
   const showVersionAsText = version > 1 && !extended && !mobile;
-
   const isDarkTheme = themeName === "dark";
 
   // record attchments without the invoice file
@@ -146,39 +142,43 @@ const Invoice = ({
                     <Text>{invContractorLocation}</Text>
                     <Text>{invContractorContact}</Text>
                   </div>
-                  <Field
-                    label={"Pay to Address:"}
-                    value={paymentAddress}
-                    renderValue={(addr) => (
-                      <CopyableText
-                        id="payment-address"
-                        truncate
-                        tooltipPlacement={"bottom"}>
-                        {addr}
-                      </CopyableText>
-                    )}
-                  />
+                  {!isPublicMode && (
+                    <Field
+                      label={"Pay to Address:"}
+                      value={paymentAddress}
+                      renderValue={(addr) => (
+                        <CopyableText
+                          id="payment-address"
+                          truncate
+                          tooltipPlacement={"bottom"}>
+                          {addr}
+                        </CopyableText>
+                      )}
+                    />
+                  )}
                 </Row>
-                <Row justify="space-between" className={styles.topDetails}>
-                  <Field label="Total hours:" value={`${totalHours}h`} />
-                  <Field
-                    label="Contractor Rate:"
-                    value={usdFormatter.format(invContractorRate / 100)}
-                  />
-                  <Field
-                    label="Total expenses:"
-                    value={usdFormatter.format(totalExpenses)}
-                  />
-                  <Field
-                    label="Exchange rate:"
-                    value={usdFormatter.format(exchangeRate / 100)}
-                  />
-                  <Field
-                    label="Amount:"
-                    value={usdFormatter.format(totalAmount)}
-                  />
-                  <Field label="Amount (dcr):" value={totalDcrAmount} />
-                </Row>
+                {!isPublicMode && (
+                  <Row justify="space-between" className={styles.topDetails}>
+                    <Field label="Total hours:" value={`${totalHours}h`} />
+                    <Field
+                      label="Contractor Rate:"
+                      value={usdFormatter.format(invContractorRate / 100)}
+                    />
+                    <Field
+                      label="Total expenses:"
+                      value={usdFormatter.format(totalExpenses)}
+                    />
+                    <Field
+                      label="Exchange rate:"
+                      value={usdFormatter.format(exchangeRate / 100)}
+                    />
+                    <Field
+                      label="Amount:"
+                      value={usdFormatter.format(totalAmount)}
+                    />
+                    <Field label="Amount (dcr):" value={totalDcrAmount} />
+                  </Row>
+                )}
                 {extended && !!invoiceAttachments.length && (
                   <Row
                     className={styles.filesRow}

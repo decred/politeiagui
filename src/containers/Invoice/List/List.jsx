@@ -19,6 +19,7 @@ import { ModalInviteContractor } from "src/containers/User/Invite";
 import styles from "./List.module.css";
 import { Row } from "src/components/layout";
 import useModalContext from "src/hooks/utils/useModalContext";
+import AdminContent from "src/components/AdminContent";
 
 const ActionsContent = ({ openInviteModal }) => {
   const mobile = useMediaQuery("(max-width: 768px)");
@@ -45,7 +46,7 @@ const ActionsContent = ({ openInviteModal }) => {
   );
 
   return (
-    <>
+    <AdminContent>
       {!mobile ? (
         <Row justify="space-between" className={styles.actionsWrapper}>
           {inviteContractorLink}
@@ -61,7 +62,7 @@ const ActionsContent = ({ openInviteModal }) => {
           <DropdownItem>{proposalBillingSummaryLink}</DropdownItem>
         </Dropdown>
       )}
-    </>
+    </AdminContent>
   );
 };
 
@@ -118,7 +119,7 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
     <AdminInvoiceActionsProvider>
       <TopBanner>
         <PageDetails
-          title="Admin"
+          title="All Invoices"
           actionsContent={
             <ActionsContent openInviteModal={handleOpenInviteContractorModal} />
           }>
