@@ -1531,3 +1531,17 @@ export const onSubmitDccComment = (currentUserID, token, comment, parentid) =>
         throw error;
       });
   });
+
+export const onSetTotp = (type, code = "") =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_SET_TOTP({}));
+    return api
+      .setTotp(csrf, type, code)
+      .then((response) => {
+        dispatch(act.RECEIVE_SET_TOTP(response));
+      })
+      .catch((e) => {
+        dispatch(act.RECEIVE_SET_TOTP(null, e));
+        throw e;
+      });
+  });

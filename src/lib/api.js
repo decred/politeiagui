@@ -823,3 +823,6 @@ export const newDccComment = (csrf, dcc) =>
   POST("/dcc/newcomment", csrf, dcc).then(getResponse);
 
 export const cmsUsers = (csrf) => GET("/v1/cmsusers", csrf).then(getResponse);
+
+export const setTotp = (csrf, type, code) =>
+  POST("/user/totp", csrf, { type, code }).then(getResponse);

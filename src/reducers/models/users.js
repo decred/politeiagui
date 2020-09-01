@@ -173,7 +173,12 @@ const users = (state = DEFAULT_STATE, action) =>
             }))(state),
           [act.RECEIVE_NEW_USER]: () => set("newUser", action.payload)(state),
           [act.RESET_NEW_USER]: () =>
-            set("newUser", DEFAULT_STATE.newUser)(state)
+            set("newUser", DEFAULT_STATE.newUser)(state),
+          [act.RECEIVE_SET_TOTP]: () =>
+            update(["byID", state.currentUserID], (user) => ({
+              ...user,
+              totp: action.payload
+            }))(state)
         }[action.type] || (() => state)
       )();
 
