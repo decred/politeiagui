@@ -13,17 +13,16 @@
   display: flex;
 }
 
-.title {
-  flex-grow: 1;
-}
-
 .titleLink {
   color: var(--tab-text-active-color) !important;
 }
 
 .billed {
-  margin-left: 2rem;
   display: flex;
   align-self: flex-start;
   justify-content: flex-end;
+}
+
+.table {
+  width: 100%;
 }

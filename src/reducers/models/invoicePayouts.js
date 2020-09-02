@@ -1,5 +1,5 @@
 import * as act from "src/actions/types";
-import { set } from "lodash/fp";
+import set from "lodash/fp/set";
 
 const DEFAULT_STATE = {
   payouts: [],
@@ -15,6 +15,7 @@ const invoicePayouts = (state = DEFAULT_STATE, action) =>
             set("payouts", action.payload.payouts)(state),
           [act.RECEIVE_INVOICE_PAYOUTS]: () =>
             set("payoutSummaries", action.payload.invoices)(state),
+          [act.RECEIVE_PAY_APPROVED]: () => DEFAULT_STATE,
           [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();

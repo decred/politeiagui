@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Spinner, Card, H2, BoxTextInput, Message } from "pi-ui";
+import { Spinner, BoxTextInput, Message, Table, Card } from "pi-ui";
 import { useProposalBillingSummary } from "./hooks";
 import styles from "./ProposalBillingSummary.module.css";
 import { formatCentsToUSD } from "src/utils";
 import Link from "src/components/Link";
+
+const TABLE_HEADERS = ["Proposal", "Amount"];
 
 const ProposalBillingSummary = ({ TopBanner, PageDetails, Main }) => {
   const [error, setError] = useState();
@@ -60,22 +62,22 @@ const ProposalBillingSummary = ({ TopBanner, PageDetails, Main }) => {
             <Spinner invert />
           </div>
         ) : (
-          proposals.map(({ token, title, totalbilled }) => {
-            return (
-              <Card paddingSize="small" className={styles.card} key={token}>
-                <div className={styles.title}>
+          <Card paddingSize="small" className={styles.card}>
+            <Table
+              className={styles.table}
+              data={proposals.map(({ token, title, totalbilled }) => ({
+                Proposal: (
                   <Link
                     to={`/admin/proposalsbilling/${token}`}
                     className={styles.titleLink}>
-                    <H2>{title}</H2>
+                    {title}
                   </Link>
-                </div>
-                <div className={styles.billed}>
-                  <H2>{formatCentsToUSD(totalbilled)}</H2>
-                </div>
-              </Card>
-            );
-          })
+                ),
+                Amount: formatCentsToUSD(totalbilled)
+              }))}
+              headers={TABLE_HEADERS}
+            />
+          </Card>
         )}
       </Main>
     </>

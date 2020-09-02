@@ -7,3 +7,5 @@ export const INVOICE_STATUS_DISPUTED = 4; // Invoice has been disputed for some 
 export const INVOICE_STATUS_REJECTED = 5; // Invoice needs to be revised
 export const INVOICE_STATUS_APPROVED = 6; // Invoice has been approved
 export const INVOICE_STATUS_PAID = 7; // Invoice has been paid
+
+export const SUB_HOURS_LINE_ITEM = 4;
