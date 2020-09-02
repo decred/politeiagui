@@ -3,7 +3,7 @@ import * as sel from "src/selectors";
 import { useAction, useSelector } from "src/redux";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
 
-const ERROR_CODE_INVALID_PARAMS = 24;
+const ERROR_CODE_INVALID_PARAMS = 77;
 const DEFAULT_TOTP_TYPE = 1;
 
 const isInvalidParamsError = (error) =>
@@ -31,7 +31,6 @@ export default function useTotp() {
         return send(VERIFY);
       },
       verify: () => {
-        console.log("VERIFY", userTotp);
         if (userTotp.key && userTotp.image) {
           return send(RESOLVE, { totp: userTotp });
         }
@@ -39,20 +38,19 @@ export default function useTotp() {
       },
       error: (err) => {
         if (isInvalidParamsError(err) && !state.alreadySet) {
-          console.log("erro de parametro invalido, necessita verificar");
           return send(RESOLVE, { alreadySet: true, error: null });
         }
         return;
       },
       done: () => {
-        console.log("resolved state", state);
         return;
       }
     },
     initialValues: {
       status: "idle",
       loading: true,
-      alreadySet: false
+      alreadySet: false,
+      totp: {}
     }
   });
   return { ...state, onSetTotp };
