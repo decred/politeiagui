@@ -11,6 +11,7 @@ const isInvalidParamsError = (error) =>
 
 export default function useTotp() {
   const onSetTotp = useAction(act.onSetTotp);
+  const onVerifyTotp = useAction(act.onVerifyTotp);
   const userTotp = useSelector(sel.userTotp);
 
   const [state, send, { VERIFY, REJECT, RESOLVE, FETCH }] = useFetchMachine({
@@ -53,5 +54,5 @@ export default function useTotp() {
       totp: {}
     }
   });
-  return { ...state, onSetTotp };
+  return { ...state, onSetTotp, onVerifyTotp };
 }

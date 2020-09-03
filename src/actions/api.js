@@ -1545,3 +1545,17 @@ export const onSetTotp = (type, code = "") =>
         throw e;
       });
   });
+
+export const onVerifyTotp = (code) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_VERIFY_TOTP({}));
+    return api
+      .verifyTotp(csrf, code)
+      .then((response) => {
+        dispatch(act.RECEIVE_VERIFY_TOTP(response));
+      })
+      .catch((e) => {
+        dispatch(act.RECEIVE_VERIFY_TOTP(null, e));
+        throw e;
+      });
+  });

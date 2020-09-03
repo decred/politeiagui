@@ -826,3 +826,6 @@ export const cmsUsers = (csrf) => GET("/v1/cmsusers", csrf).then(getResponse);
 
 export const setTotp = (csrf, type, code) =>
   POST("/user/totp", csrf, { type, code }).then(getResponse);
+
+export const verifyTotp = (csrf, code) =>
+  POST("/user/verifytotp", csrf, { code }).then(getResponse);

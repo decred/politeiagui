@@ -1,0 +1,16 @@
+.setContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+.qrcode {
+  display: block;
+  min-width: 22rem;
+}
+.instructions {
+  flex-grow: 2;
+}
+
+.copyableKey {
+  margin-top: 1rem;
+}

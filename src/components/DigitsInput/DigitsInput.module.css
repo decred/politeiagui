@@ -1,0 +1,30 @@
+.digitsWrapper {
+  display: inline-block;
+  /* justify-content: space-between; */
+}
+
+.digitsWrapper :first-child {
+  margin-top: 2.2rem;
+}
+
+.digitsWrapper > div {
+  margin-right: 2rem;
+}
+
+/* Chrome, Safari, Edge, Opera */
+.digitsWrapper input::-webkit-outer-spin-button,
+.digitsWrapper input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.digitsWrapper input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.mainInput {
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
