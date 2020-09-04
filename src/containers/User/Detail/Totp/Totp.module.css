@@ -14,3 +14,7 @@
 .copyableKey {
   margin-top: 1rem;
 }
+
+.resetLink {
+  cursor: pointer;
+}

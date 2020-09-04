@@ -4,7 +4,6 @@ import { useAction, useSelector } from "src/redux";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
 
 const ERROR_CODE_INVALID_PARAMS = 77;
-const DEFAULT_TOTP_TYPE = 1;
 
 const isInvalidParamsError = (error) =>
   error && error.errorCode === ERROR_CODE_INVALID_PARAMS;
@@ -18,7 +17,7 @@ export default function useTotp() {
     actions: {
       initial: () => {
         if (!userTotp) {
-          onSetTotp(DEFAULT_TOTP_TYPE)
+          onSetTotp()
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
           return send(FETCH);
@@ -51,8 +50,15 @@ export default function useTotp() {
       status: "idle",
       loading: true,
       alreadySet: false,
+      verifying: true,
       totp: {}
     }
   });
-  return { ...state, onSetTotp, onVerifyTotp };
+
+  return {
+    ...state,
+    onSetTotp,
+    onVerifyTotp,
+    loading: state.loading || state.verifying
+  };
 }

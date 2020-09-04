@@ -1,11 +1,20 @@
-import React, { useState } from "react";
-import { Card, Spinner, H2, P, CopyableText, Button, Message } from "pi-ui";
+import React, { useState, useCallback, useEffect } from "react";
+import {
+  Card,
+  Spinner,
+  H2,
+  P,
+  CopyableText,
+  Button,
+  Message,
+  Link
+} from "pi-ui";
 import useTotp from "../hooks/useTotp";
 import styles from "./Totp.module.css";
 import DigitsInput from "src/components/DigitsInput";
 import { TOTP_CODE_LENGTH } from "src/constants";
 
-const VerifyTotp = ({ onVerify }) => {
+const VerifyTotp = ({ onVerify, label }) => {
   const [enableVerify, setEnableVerify] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -43,7 +52,7 @@ const VerifyTotp = ({ onVerify }) => {
       <Button
         kind={enableVerify ? "primary" : "disabled"}
         onClick={handleVerify}>
-        Verify
+        {label}
       </Button>
     </div>
   );
@@ -74,13 +83,50 @@ const SetTotp = ({ totp }) => {
 };
 
 const Totp = () => {
-  const { loading, alreadySet, totp, onVerifyTotp } = useTotp();
+  const { loading, alreadySet, totp, onVerifyTotp, onSetTotp } = useTotp();
+  const [verifyMode, setVerifyMode] = useState(true);
+  const [modeSet, setModeSet] = useState(alreadySet);
+
+  useEffect(() => {
+    if (alreadySet) {
+      setModeSet(alreadySet);
+    }
+  }, [alreadySet]);
+
+  const handleToggleVerifyMode = useCallback(() => {
+    setVerifyMode(!verifyMode);
+  }, [verifyMode]);
+
+  const handleResetTotp = (code) =>
+    onSetTotp(code).then(() => {
+      console.log(code, "mode set");
+      setModeSet(true);
+    });
+
+  const handleVerifyTotp = (code) =>
+    onVerifyTotp(code).then(() => {
+      setModeSet(false);
+    });
+
   return loading ? (
     <Spinner invert />
   ) : (
     <Card paddingSize="small">
-      {!alreadySet && <SetTotp totp={totp} />}
-      <VerifyTotp onVerify={onVerifyTotp} />
+      {!modeSet && <SetTotp totp={totp} />}
+      <VerifyTotp
+        onVerify={verifyMode ? handleVerifyTotp : handleResetTotp}
+        label={verifyMode ? "Verify" : "Reset TOTP Key"}
+      />
+      {modeSet && verifyMode && (
+        <Link className={styles.resetLink} onClick={handleToggleVerifyMode}>
+          Reset Totp Key
+        </Link>
+      )}
+      {modeSet && !verifyMode && (
+        <Link className={styles.resetLink} onClick={handleToggleVerifyMode}>
+          Verify Totp
+        </Link>
+      )}
     </Card>
   );
 };

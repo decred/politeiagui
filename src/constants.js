@@ -166,3 +166,4 @@ export const MONTHS_LABELS = [
 ];
 
 export const TOTP_CODE_LENGTH = 6;
+export const DEFAULT_TOTP_TYPE = 1;

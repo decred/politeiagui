@@ -10,7 +10,11 @@ import { clearStateLocalStorage } from "../lib/local_storage";
 import * as pki from "../lib/pki";
 import * as sel from "../selectors";
 import act from "./methods";
-import { PAYWALL_STATUS_PAID, DCC_SUPPORT_VOTE } from "../constants";
+import {
+  PAYWALL_STATUS_PAID,
+  DCC_SUPPORT_VOTE,
+  DEFAULT_TOTP_TYPE
+} from "../constants";
 
 export const onResetNewUser = act.RESET_NEW_USER;
 
@@ -1532,7 +1536,7 @@ export const onSubmitDccComment = (currentUserID, token, comment, parentid) =>
       });
   });
 
-export const onSetTotp = (type, code = "") =>
+export const onSetTotp = (code = "", type = DEFAULT_TOTP_TYPE) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_SET_TOTP({}));
     return api
