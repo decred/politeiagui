@@ -58,7 +58,7 @@ const VerifyTotp = ({ onVerify, label }) => {
   );
 };
 
-const SetTotp = ({ totp }) => {
+const SetTotp = ({ totp = {} }) => {
   return (
     <div className="margin-bottom-m">
       <H2>Set TOTP Authentication</H2>
@@ -85,12 +85,10 @@ const SetTotp = ({ totp }) => {
 const Totp = () => {
   const { loading, alreadySet, totp, onVerifyTotp, onSetTotp } = useTotp();
   const [verifyMode, setVerifyMode] = useState(true);
-  const [modeSet, setModeSet] = useState(alreadySet);
+  const [isTotpSet, setIsTotpSet] = useState(alreadySet);
 
   useEffect(() => {
-    if (alreadySet) {
-      setModeSet(alreadySet);
-    }
+    setIsTotpSet(alreadySet);
   }, [alreadySet]);
 
   const handleToggleVerifyMode = useCallback(() => {
@@ -99,29 +97,30 @@ const Totp = () => {
 
   const handleResetTotp = (code) =>
     onSetTotp(code).then(() => {
-      setModeSet(true);
+      setIsTotpSet(false);
+      setVerifyMode(true);
     });
 
   const handleVerifyTotp = (code) =>
     onVerifyTotp(code).then(() => {
-      setModeSet(false);
+      setIsTotpSet(true);
     });
 
   return loading ? (
     <Spinner invert />
   ) : (
     <Card paddingSize="small">
-      {!modeSet && <SetTotp totp={totp} />}
+      {!isTotpSet && <SetTotp totp={totp} />}
       <VerifyTotp
         onVerify={verifyMode ? handleVerifyTotp : handleResetTotp}
         label={verifyMode ? "Verify" : "Reset TOTP Key"}
       />
-      {modeSet && verifyMode && (
+      {isTotpSet && verifyMode && (
         <Link className={styles.resetLink} onClick={handleToggleVerifyMode}>
           Reset Totp Key
         </Link>
       )}
-      {modeSet && !verifyMode && (
+      {isTotpSet && !verifyMode && (
         <Link className={styles.resetLink} onClick={handleToggleVerifyMode}>
           Verify Totp
         </Link>

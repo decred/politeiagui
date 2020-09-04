@@ -2,6 +2,7 @@ import * as act from "src/actions";
 import * as sel from "src/selectors";
 import { useAction, useSelector } from "src/redux";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
+import isEqual from "lodash/isEqual";
 
 const ERROR_CODE_INVALID_PARAMS = 77;
 
@@ -22,19 +23,13 @@ export default function useTotp() {
             .catch((e) => send(REJECT, e));
           return send(FETCH);
         }
-        return send(VERIFY);
+        return send(RESOLVE, { totp: userTotp });
       },
       load: () => {
         if (!userTotp) {
           return;
         }
-        return send(VERIFY);
-      },
-      verify: () => {
-        if (userTotp.key && userTotp.image) {
-          return send(RESOLVE, { totp: userTotp });
-        }
-        return;
+        return send(RESOLVE, { totp: userTotp });
       },
       error: (err) => {
         if (isInvalidParamsError(err) && !state.alreadySet) {
@@ -43,6 +38,9 @@ export default function useTotp() {
         return;
       },
       done: () => {
+        if (!isEqual(userTotp, state.totp)) {
+          return send(RESOLVE, { totp: userTotp });
+        }
         return;
       }
     },
@@ -50,11 +48,11 @@ export default function useTotp() {
       status: "idle",
       loading: true,
       alreadySet: false,
-      verifying: true,
-      totp: {}
+      verifying: true
     }
   });
 
+  console.log(state);
   return {
     ...state,
     onSetTotp,
