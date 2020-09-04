@@ -99,7 +99,6 @@ const Totp = () => {
 
   const handleResetTotp = (code) =>
     onSetTotp(code).then(() => {
-      console.log(code, "mode set");
       setModeSet(true);
     });
 
