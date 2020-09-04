@@ -1,10 +1,11 @@
 import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
-import { NumberInput } from "pi-ui";
+import { NumberInput, classNames } from "pi-ui";
 import styles from "./DigitsInput.module.css";
 
 const DigitsInput = ({ length, onChange }) => {
   const [digits, setDigits] = useState(Array(length).fill(""));
+  const [focused, setFocused] = useState(false);
   const inputRef = useRef(null);
 
   const handleChangeDigit = (e) => {
@@ -17,6 +18,7 @@ const DigitsInput = ({ length, onChange }) => {
     setDigits(newDigits);
     onChange(newDigits.join(""));
   };
+
   return (
     <>
       <input
@@ -26,8 +28,15 @@ const DigitsInput = ({ length, onChange }) => {
         onChange={handleChangeDigit}
         value={digits.join("")}
         ref={inputRef}
+        onBlur={() => {
+          setFocused(false);
+        }}
       />
-      <div className={styles.digitsWrapper}>
+      <div
+        className={classNames(
+          styles.digitsWrapper,
+          focused && styles.focusedInput
+        )}>
         {digits.map((value, index) => {
           return (
             <NumberInput
@@ -36,6 +45,7 @@ const DigitsInput = ({ length, onChange }) => {
               defaultValue={value}
               onFocus={() => {
                 inputRef.current.focus();
+                setFocused(true);
               }}
             />
           );
