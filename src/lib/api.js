@@ -272,7 +272,7 @@ const parseResponseBody = (response) => {
 
 export const parseResponse = (response) =>
   parseResponseBody(response).then((json) => {
-    if (json.errorcode) {
+    if (json && json.errorcode) {
       const err = new Error(
         getHumanReadableError(json.errorcode, json.errorcontext)
       );

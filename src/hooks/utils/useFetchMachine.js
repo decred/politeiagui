@@ -89,7 +89,6 @@ export default function useFetchMachine({ actions, initialValues }) {
         case SUCCESS:
           return actions.done && actions.done();
         case FAILURE:
-          console.log("ËRROU", currentState);
           return actions.error && actions.error(currentState.error);
         default:
           return;

@@ -164,3 +164,5 @@ export const MONTHS_LABELS = [
   "Nov",
   "Dec"
 ];
+
+export const TOTP_CODE_LENGTH = 6;
