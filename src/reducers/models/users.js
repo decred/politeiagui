@@ -176,14 +176,8 @@ const users = (state = DEFAULT_STATE, action) =>
             set("newUser", DEFAULT_STATE.newUser)(state),
           [act.RECEIVE_SET_TOTP]: () =>
             set(["byID", state.currentUserID, "totp"], action.payload)(state),
-          [act.RECEIVE_VERIFY_TOTP]: () => {
-            const rt = set(
-              ["byID", state.currentUserID, "totp"],
-              action.payload
-            )(state);
-            console.log("RET", rt);
-            return rt;
-          }
+          [act.RECEIVE_VERIFY_TOTP]: () =>
+            set(["byID", state.currentUserID, "totp"], action.payload)(state)
         }[action.type] || (() => state)
       )();
 

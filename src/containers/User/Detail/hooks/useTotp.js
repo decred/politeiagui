@@ -52,7 +52,6 @@ export default function useTotp() {
     }
   });
 
-  console.log(state);
   return {
     ...state,
     onSetTotp,
