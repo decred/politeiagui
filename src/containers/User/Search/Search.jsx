@@ -41,6 +41,12 @@ const getFormattedSearchResults = (users = [], isCMS, supporteddomains) =>
         }
   );
 
+const filterUserResult = (result, filterValue) =>
+  !filterValue
+    ? result
+    : result &&
+      result.filter((u) => u && u.username && u.username.includes(filterValue));
+
 const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
   const { onSearchUser, searchResult, isCMS } = useSearchUser();
   const [searchError, setSearchError] = useState(null);
@@ -73,8 +79,10 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
       const isByUsername = values.searchBy === "username";
       const isCmsSearchByUsername = isCMS && isByUsername;
 
+      const hasFetched = filterValue && !isByDomain && !isByType;
+
       // cache requests
-      if (!filterValue) {
+      if (!hasFetched) {
         await onSearchUser(
           !isCmsSearchByUsername
             ? {
@@ -101,13 +109,10 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
 
   useEffect(
     function updateFoundUsers() {
-      let result = [...searchResult];
-      if (filterValue) {
-        result = searchResult.filter((u) => u.username.includes(filterValue));
-      }
-      if (result) {
+      const filteredResult = filterUserResult(searchResult, filterValue);
+      if (filteredResult) {
         setFoundUsers(
-          getFormattedSearchResults(result, isCMS, supporteddomains)
+          getFormattedSearchResults(filteredResult, isCMS, supporteddomains)
         );
       }
     },
