@@ -84,6 +84,7 @@ const HeaderNav = ({ history }) => {
           styles.dropdown,
           !enableCredits && styles.noCreditsDropdown
         )}
+        data-testid="user-dropdown"
         itemsListClassName={styles.dropdownList}
         closeOnItemClick={false}
         title={username}>
