@@ -185,6 +185,7 @@ const ProposalForm = React.memo(function ProposalForm({
       <BoxTextInput
         placeholder="Proposal name"
         name="name"
+        data-testid="proposal name"
         tabIndex={1}
         value={values.name}
         onChange={handleChangeWithTouched("name")}
@@ -193,6 +194,7 @@ const ProposalForm = React.memo(function ProposalForm({
       <MarkdownEditor
         name="description"
         className="margin-top-s"
+        data-testid="text-area"
         value={values.description}
         textAreaProps={textAreaProps}
         onChange={handleDescriptionChange}

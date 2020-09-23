@@ -36,12 +36,24 @@ Cypress.Commands.add("assertLoggedInAs", (user) => {
   cy.findByTestId("user-dropdown").should("have.text", user.username);
 });
 
+// TODO: improve this to use cy.request() so the tests will run faster
 Cypress.Commands.add("login", (user) => {
-  cy.request({
-    url: "https://localhost:3000/api/v1/login",
-    method: "POST",
-    body: user
-  }).then((response) => {
-    return { ...response.body.user };
-  });
+  cy.findByText(/log in/i, { timeout: 10000 }).click();
+  cy.findByLabelText(/email/i).type(user.email);
+  cy.findByLabelText(/password/i).type(user.password);
+  cy.findByRole("button", { text: /login/i }).click();
+  cy.assertHome();
+  cy.assertLoggedInAs(user);
+});
+
+// Should use after login
+// TODO: improve this to use cy.request() so the tests will run faster
+Cypress.Commands.add("identity", () => {
+  cy.findByTestId("user-dropdown").click();
+  cy.findByText(/account/i).click();
+  cy.findByText(/create new identity/i).click();
+  cy.findByText(/confirm/i).click();
+  cy.findByText(/ok/i, { timeout: 10000 }).click();
+  cy.findByText(/auto verify/i).click();
+  cy.findByText(/go to proposals/i, { timeout: 10000 }).click();
 });
