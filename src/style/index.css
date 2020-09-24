@@ -254,10 +254,6 @@
   display: none;
 }
 
-.react-mde .invisible {
-  display: none;
-}
-
 /* EXTRA SMALL */
 @media screen and (max-width: 560px) {
   .hide-on-mobile {

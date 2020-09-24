@@ -48,6 +48,10 @@ li.mde-header-item > button {
   display: none;
 }
 
+.react-mde .invisible {
+  display: none;
+}
+
 .mde-tabs button,
 .mde-header-group:not(:last-child) .mde-header-item button {
   background: none;
