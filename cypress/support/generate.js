@@ -6,4 +6,9 @@ const buildUser = build("User").fields({
   password: fake((f) => f.internet.password())
 });
 
-export { buildUser };
+const buildProposal = build("Proposal").fields({
+  name: fake((f) => f.lorem.sentence()),
+  description: fake((f) => f.lorem.paragraph())
+});
+
+export { buildUser, buildProposal };

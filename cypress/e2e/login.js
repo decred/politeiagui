@@ -6,6 +6,6 @@ describe("Login", () => {
       username: "admin",
       password: "password"
     };
-    cy.login(user);
+    cy.typeLogin(user);
   });
 });
