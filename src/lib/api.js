@@ -580,10 +580,10 @@ export const invoiceSetStatus = (
 
 export const newProposal = (csrf, proposal) =>
   POST("/proposal/new", csrf, proposal).then(
-    ({ response: { censorshiprecord } }) => ({
+    ({ response: { censorshiprecord, timestamp } }) => ({
       ...proposal,
       censorshiprecord,
-      timestamp: Date.now() / 1000,
+      timestamp: timestamp / 1000,
       status: PROPOSAL_STATUS_UNREVIEWED
     })
   );
