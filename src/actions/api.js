@@ -398,6 +398,7 @@ export const onFetchProposalsBatchWithoutState = (
 ) =>
   withCsrf(async (_, __, csrf) => {
     const batchPayload =
+      // XXX should proposal _state_ this be a parameter ?
       fetchProposals && api.makeProposalsBatch(tokens, PROPOSAL_STATE_VETTED);
     const res = await Promise.all([
       batchPayload && api.proposalsBatch(csrf, batchPayload),
@@ -414,7 +415,10 @@ export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
     try {
-      const batchPayload = api.makeProposalsBatch(tokens);
+      const batchPayload = api.makeProposalsBatch(
+        tokens,
+        PROPOSAL_STATE_VETTED // XXX should this be a parameter ?
+      );
       const promises = [api.proposalsBatch(csrf, batchPayload)];
       if (fetchVoteSummary) {
         promises.push(dispatch(onFetchProposalsBatchVoteSummary(tokens)));
@@ -526,10 +530,10 @@ export const onFetchProposalComments = (token) =>
       });
   });
 
-export const onFetchLikedComments = (token) => (dispatch) => {
+export const onFetchLikedComments = (token, userid, state) => (dispatch) => {
   dispatch(act.REQUEST_LIKED_COMMENTS(token));
   return api
-    .likedComments(token)
+    .likedComments(token, userid, state)
     .then((response) =>
       dispatch(act.RECEIVE_LIKED_COMMENTS({ ...response, token }))
     )
