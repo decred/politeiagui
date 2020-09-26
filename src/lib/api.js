@@ -370,16 +370,18 @@ export const verifyNewUser = (email, verificationToken, username) => {
     .signStringHex(username, verificationToken)
     .then((signature) =>
       GET(
-        "/v1/user/verify?" +
-          qs.stringify({ email, verificationToken, signature })
+        `/v1/user/verify?${qs.stringify({
+          email,
+          verificationToken,
+          signature
+        })}`
       )
     )
     .then(getResponse);
 };
 
-// XXX should be post and need userid
-export const likedComments = (token) =>
-  GET(`/v1/user/proposals/${token}/commentslikes`).then(getResponse);
+export const likedComments = (token, userid, state) =>
+  POST("/comments/votes", { token, userid, state }).then(getResponse);
 
 export const proposalPaywallDetails = () =>
   GET("/v1/proposals/paywall").then(getResponse);

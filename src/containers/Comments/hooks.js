@@ -87,10 +87,17 @@ export function useComments(recordToken) {
   useEffect(
     function handleFetchOfLikes() {
       if (needsToFetchCommentsLikes) {
-        onFetchLikes(recordToken);
+        // XXX proposal state should be dynamic here!
+        onFetchLikes(recordToken, userid, constants.PROPOSAL_STATE_VETTED);
       }
     },
-    [onFetchLikes, needsToFetchCommentsLikes, recordToken]
+    [
+      onFetchLikes,
+      needsToFetchCommentsLikes,
+      recordToken,
+      userid,
+      constants.PROPOSAL_STATE_VETTED
+    ]
   );
 
   const onLikeComment = useCallback(
