@@ -744,7 +744,8 @@ export const onSubmitEditedProposal = (
   type,
   rfpLink,
   files,
-  token
+  token,
+  state
 ) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(
@@ -761,7 +762,7 @@ export const onSubmitEditedProposal = (
       api.makeProposal(name, description, rfpDeadline, type, rfpLink, files)
     )
       .then((proposal) => api.signRegister(userid, proposal))
-      .then((proposal) => api.editProposal(csrf, { ...proposal, token }))
+      .then((proposal) => api.editProposal(csrf, { ...proposal, token, state }))
       .then((proposal) => {
         dispatch(act.RECEIVE_EDIT_PROPOSAL(proposal));
         resetNewProposalData();
