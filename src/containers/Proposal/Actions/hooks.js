@@ -20,21 +20,25 @@ export function useUnvettedActions() {
   const onSetProposalStatus = useAction(act.onSetProposalStatus);
 
   const onCensorProposal = useCallback(
-    (proposal) => (reason) =>
+    ({ censorshiprecord: { token }, version, state }) => (reason) =>
       onSetProposalStatus({
-        token: proposal.censorshiprecord.token,
+        token,
         status: PROPOSAL_STATUS_CENSORED,
-        censorMessage: reason
+        reason,
+        version,
+        state
       }),
     [onSetProposalStatus]
   );
 
   const onApproveProposal = useCallback(
-    (proposal) => () =>
+    ({ censorshiprecord: { token }, version, state, linkto }) => () =>
       onSetProposalStatus({
-        token: proposal.censorshiprecord.token,
+        token,
         status: PROPOSAL_STATUS_PUBLIC,
-        linkto: proposal.linkto
+        linkto,
+        version,
+        state
       }),
     [onSetProposalStatus]
   );
@@ -58,11 +62,13 @@ export function usePublicActions() {
   const currentUserID = useSelector(sel.currentUserID);
 
   const onAbandonProposal = useCallback(
-    (proposal) => (reason) =>
+    ({ censorshiprecord: { token }, version, state }) => (reason) =>
       onSetProposalStatus({
-        token: proposal.censorshiprecord.token,
+        token,
         status: PROPOSAL_STATUS_ABANDONED,
-        censorMessage: reason
+        reason,
+        version,
+        state
       }),
     [onSetProposalStatus]
   );
