@@ -562,7 +562,7 @@ export const invoiceSetStatus = (
     .then(getResponse);
 
 export const newProposal = (csrf, proposal) =>
-  POST("/proposals/new", csrf, proposal).then(
+  POST("/proposal/new", csrf, proposal).then(
     ({ response: { censorshiprecord } }) => ({
       ...proposal,
       censorshiprecord,
