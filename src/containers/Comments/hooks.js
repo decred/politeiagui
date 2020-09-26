@@ -67,8 +67,8 @@ export function useComments(recordToken) {
   const userLoggedIn = !!email;
 
   // comments are not public on cms. User needs to be logged in
-  const isPublic = recordType === constants.RECORD_TYPE_PROPOSAL;
-  const needsToFetchComments = isPublic
+  const isProposal = recordType === constants.RECORD_TYPE_PROPOSAL;
+  const needsToFetchComments = isProposal
     ? !!recordToken && !comments
     : !!recordToken && !comments && userLoggedIn;
 
@@ -78,10 +78,20 @@ export function useComments(recordToken) {
   useEffect(
     function handleFetchOfComments() {
       if (needsToFetchComments) {
-        onFetchComments(recordToken);
+        onFetchComments(
+          recordToken,
+          // state should dynamic aka proposal actual state
+          isProposal && constants.PROPOSAL_STATE_VETTED
+        );
       }
     },
-    [onFetchComments, needsToFetchComments, recordToken]
+    [
+      onFetchComments,
+      needsToFetchComments,
+      recordToken,
+      constants.PROPOSAL_STATE_VETTED,
+      isProposal
+    ]
   );
 
   useEffect(
