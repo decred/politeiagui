@@ -516,21 +516,31 @@ export const logout = (csrf) =>
     return {};
   });
 
-export const proposalSetStatus = (userid, csrf, token, status, censorMsg) =>
+export const proposalSetStatus = (
+  userid,
+  csrf,
+  token,
+  status,
+  version,
+  state,
+  reason
+) =>
   pki
     .myPubKeyHex(userid)
     .then((publickey) =>
       pki
-        .signStringHex(userid, token + status + censorMsg)
-        .then((signature) => {
-          return POST("/proposal/setstatus", csrf, {
-            proposalstatus: status,
+        .signStringHex(userid, token + version + status + reason)
+        .then((signature) =>
+          POST("/proposal/setstatus", csrf, {
+            status,
+            version,
+            state,
             token,
             signature,
             publickey,
-            statuschangemessage: censorMsg
-          });
-        })
+            reason
+          })
+        )
     )
     .then(getResponse);
 

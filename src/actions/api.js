@@ -946,13 +946,15 @@ export const onSetProposalStatus = ({
   token,
   status,
   linkto,
-  censorMessage = ""
+  version,
+  state,
+  reason = ""
 }) =>
   withCsrf((dispatch, getState, csrf) => {
     const userid = sel.currentUserID(getState());
     dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
     return api
-      .proposalSetStatus(userid, csrf, token, status, censorMessage)
+      .proposalSetStatus(userid, csrf, token, status, version, state, reason)
       .then(({ proposal }) => {
         dispatch(
           act.RECEIVE_SETSTATUS_PROPOSAL({
