@@ -845,10 +845,16 @@ export const onCensorComment = (userid, token, commentid, reason) => {
   });
 };
 
-export const onSubmitComment = (currentUserID, token, comment, parentid) =>
+export const onSubmitComment = (
+  currentUserID,
+  token,
+  comment,
+  parentid,
+  state
+) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
-    return Promise.resolve(api.makeComment(token, comment, parentid))
+    return Promise.resolve(api.makeComment(token, comment, parentid, state))
       .then((comment) => api.signComment(currentUserID, comment))
       .then((comment) => {
         // make sure this is not a duplicate comment by comparing to the existent

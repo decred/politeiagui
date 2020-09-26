@@ -65,7 +65,7 @@ export function handleCommentCensoringInfo(cb, ...args) {
   };
 }
 
-export function handleCommentSubmission(cb, token, parentID = 0) {
+export function handleCommentSubmission(cb, { token, parentID = 0, state }) {
   return (comment) => {
     if (isAnchoring()) {
       throw new Error(
@@ -75,7 +75,8 @@ export function handleCommentSubmission(cb, token, parentID = 0) {
     return cb({
       comment,
       token,
-      parentID
+      parentID,
+      state
     });
   };
 }
