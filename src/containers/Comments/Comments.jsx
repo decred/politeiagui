@@ -90,11 +90,11 @@ const Comments = ({
   const paywallMissing = paywallEnabled && !isPaid;
   const isSingleThread = !!threadParentID;
 
-  const handleSubmitComment = handleCommentSubmission(
-    onSubmitComment,
+  const handleSubmitComment = handleCommentSubmission(onSubmitComment, {
     recordToken,
-    0
-  );
+    parentID: 0
+    /* XXX need to pass state here */
+  });
 
   const handleSetSortOption = useCallback(
     (option) => {

@@ -123,7 +123,10 @@ const CommentWrapper = ({
   }, [showReplies]);
 
   const handleSubmitComment = useCallback(
-    handleCommentSubmission(onSubmitComment, token, commentid),
+    handleCommentSubmission(onSubmitComment, {
+      token,
+      parentID: commentid /* XXX pass record state here  */
+    }),
     [onSubmitComment, token, commentid]
   );
 
