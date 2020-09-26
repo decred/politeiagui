@@ -517,11 +517,11 @@ export const onFetchUser = (userId) => (dispatch, getState) => {
     });
 };
 
-export const onFetchProposalComments = (token) =>
+export const onFetchProposalComments = (token, state) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_RECORD_COMMENTS(token));
     return api
-      .proposalComments(token, csrf)
+      .proposalComments(csrf, token, state)
       .then((response) =>
         dispatch(act.RECEIVE_RECORD_COMMENTS({ ...response, token }))
       )

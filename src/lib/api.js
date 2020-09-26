@@ -426,8 +426,8 @@ export const login = (csrf, email, password, code) =>
     code
   }).then(getResponse);
 
-// XXXX: this route hasn't been merged into the master of the backend.
-// Pull request: https://github.com/decred/politeia/pull/940
+// XXX this route hasn't been merged into the master of the backend.
+// Pull request: https://github.com/decred/politeia/pull/940 ???
 export const loginWithUsername = (csrf, username, password) =>
   POST("/login", csrf, { username, password: digest(password) }).then(
     getResponse
@@ -508,21 +508,17 @@ export const searchUser = (obj) =>
 export const searchCmsUsers = (obj) =>
   GET(`/v1/cmsusers?${qs.stringify(obj)}`).then(getResponse);
 
-// XXX deprecated, we will need to use the batch route
-export const proposal = (token, version = null) =>
-  GET(`/v1/proposals/${token}` + (version ? `?version=${version}` : "")).then(
-    getResponse
-  );
-
 export const proposalsBatch = (csrf, payload) =>
   POST("/proposals", csrf, payload).then(getResponse);
 
 export const user = (userId) => GET(`/v1/user/${userId}`).then(getResponse);
-export const proposalComments = (token) =>
-  // XXX should be post!
-  GET(`/v1/proposals/${token}/comments`).then(getResponse);
+
+export const proposalComments = (csrf, token, state) =>
+  POST("/comments", csrf, { token, state }).then(getResponse);
+
 export const invoiceComments = (token) =>
   GET(`/v1/invoices/${token}/comments`).then(getResponse);
+
 export const logout = (csrf) =>
   POST("/logout", csrf, {}).then(() => {
     localStorage.removeItem("state");
