@@ -13,7 +13,8 @@ import act from "./methods";
 import {
   PAYWALL_STATUS_PAID,
   DCC_SUPPORT_VOTE,
-  TOTP_DEFAULT_TYPE
+  TOTP_DEFAULT_TYPE,
+  PROPOSAL_STATE_VETTED
 } from "../constants";
 
 export const onResetNewUser = act.RESET_NEW_USER;
@@ -396,8 +397,10 @@ export const onFetchProposalsBatchWithoutState = (
   fetchVoteSummary = true
 ) =>
   withCsrf(async (_, __, csrf) => {
+    const batchPayload =
+      fetchProposals && api.makeProposalsBatch(tokens, PROPOSAL_STATE_VETTED);
     const res = await Promise.all([
-      fetchProposals && api.proposalsBatch(csrf, tokens),
+      batchPayload && api.proposalsBatch(csrf, batchPayload),
       fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens)
     ]);
     const proposals =
@@ -411,7 +414,8 @@ export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
     try {
-      const promises = [api.proposalsBatch(csrf, tokens)];
+      const batchPayload = api.makeProposalsBatch(tokens);
+      const promises = [api.proposalsBatch(csrf, batchPayload)];
       if (fetchVoteSummary) {
         promises.push(dispatch(onFetchProposalsBatchVoteSummary(tokens)));
       }

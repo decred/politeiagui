@@ -48,6 +48,12 @@ export const convertJsonToFile = (json, name) => ({
   payload: utoa(JSON.stringify(json))
 });
 
+export const makeProposalsBatch = (tokens, state) => ({
+  state,
+  requests: tokens.map((token) => ({ token })),
+  includefiles: true
+});
+
 export const makeProposal = (
   name,
   markdown,
@@ -371,7 +377,7 @@ export const verifyNewUser = (email, verificationToken, username) => {
     .then(getResponse);
 };
 
-// XXX adjust route
+// XXX should be post and need userid
 export const likedComments = (token) =>
   GET(`/v1/user/proposals/${token}/commentslikes`).then(getResponse);
 
@@ -506,9 +512,8 @@ export const proposal = (token, version = null) =>
     getResponse
   );
 
-export const proposalsBatch = (csrf, tokens) =>
-  // XXX adjust payload
-  POST("/proposals", csrf, { tokens }).then(getResponse);
+export const proposalsBatch = (csrf, payload) =>
+  POST("/proposals", csrf, payload).then(getResponse);
 
 export const user = (userId) => GET(`/v1/user/${userId}`).then(getResponse);
 export const proposalComments = (token) =>
