@@ -371,6 +371,7 @@ export const verifyNewUser = (email, verificationToken, username) => {
     .then(getResponse);
 };
 
+// XXX adjust route
 export const likedComments = (token) =>
   GET(`/v1/user/proposals/${token}/commentslikes`).then(getResponse);
 
@@ -421,10 +422,10 @@ export const loginWithUsername = (csrf, username, password) =>
   );
 
 export const likeComment = (csrf, comment) =>
-  POST("/comments/like", csrf, comment).then(getResponse);
+  POST("/comment/vote", csrf, comment).then(getResponse);
 
 export const censorComment = (csrf, comment) =>
-  POST("/comments/censor", csrf, comment).then(getResponse);
+  POST("/comment/censor", csrf, comment).then(getResponse);
 
 export const changeUsername = (csrf, password, newusername) =>
   POST("/user/username/change", csrf, {
@@ -490,16 +491,19 @@ export const searchUser = (obj) =>
 export const searchCmsUsers = (obj) =>
   GET(`/v1/cmsusers?${qs.stringify(obj)}`).then(getResponse);
 
+// XXX deprecated, we will need to use the batch route
 export const proposal = (token, version = null) =>
   GET(`/v1/proposals/${token}` + (version ? `?version=${version}` : "")).then(
     getResponse
   );
 
 export const proposalsBatch = (csrf, tokens) =>
-  POST("/proposals/batch", csrf, { tokens }).then(getResponse);
+  // XXX adjust payload
+  POST("/proposals", csrf, { tokens }).then(getResponse);
 
 export const user = (userId) => GET(`/v1/user/${userId}`).then(getResponse);
 export const proposalComments = (token) =>
+  // XXX should be post!
   GET(`/v1/proposals/${token}/comments`).then(getResponse);
 export const invoiceComments = (token) =>
   GET(`/v1/invoices/${token}/comments`).then(getResponse);
@@ -516,7 +520,7 @@ export const proposalSetStatus = (userid, csrf, token, status, censorMsg) =>
       pki
         .signStringHex(userid, token + status + censorMsg)
         .then((signature) => {
-          return POST(`/proposals/${token}/status`, csrf, {
+          return POST("/proposal/setstatus", csrf, {
             proposalstatus: status,
             token,
             signature,
@@ -563,10 +567,10 @@ export const newProposal = (csrf, proposal) =>
   );
 
 export const editProposal = (csrf, proposal) =>
-  POST("/proposals/edit", csrf, proposal).then(getResponse);
+  POST("/proposal/edit", csrf, proposal).then(getResponse);
 
 export const newComment = (csrf, comment) =>
-  POST("/comments/new", csrf, comment).then(getResponse);
+  POST("/comment/new", csrf, comment).then(getResponse);
 
 const votePayloadWithType = ({
   type,
@@ -619,16 +623,11 @@ export const startVote = (
     .myPubKeyHex(userid)
     .then((publickey) =>
       pki.signStringHex(userid, hash).then((signature) =>
-        POST(
-          "/vote/start",
-          csrf,
-          {
-            vote,
-            signature,
-            publickey
-          },
-          "v2"
-        )
+        POST("/vote/start", csrf, {
+          vote,
+          signature,
+          publickey
+        })
       )
     )
     .then(getResponse);
@@ -665,35 +664,31 @@ export const startRunoffVote = (
           pki.signStringHex(userid, `${token}${version}authorize`)
         )
       );
-      return POST(
-        "/vote/startrunoff",
-        csrf,
-        {
-          startvotes: voteSignatures.map((signature, index) => ({
-            vote: submissionsVotes[index],
-            signature,
-            publickey
-          })),
-          authorizevotes: voteAuthSignatures.map((signature, index) => ({
-            action: "authorize",
-            token: votes[index].token,
-            signature,
-            publickey
-          })),
-          token
-        },
-        "v2"
-      );
+      return POST("/vote/startrunoff", csrf, {
+        startvotes: voteSignatures.map((signature, index) => ({
+          vote: submissionsVotes[index],
+          signature,
+          publickey
+        })),
+        authorizevotes: voteAuthSignatures.map((signature, index) => ({
+          action: "authorize",
+          token: votes[index].token,
+          signature,
+          publickey
+        })),
+        token
+      });
     })
     .then(getResponse);
 };
 
 export const proposalsBatchVoteSummary = (csrf, tokens) =>
-  POST("/proposals/batchvotesummary", csrf, {
+  POST("/votes/summaries", csrf, {
     tokens
   }).then(getResponse);
+
 export const proposalVoteResults = (token) =>
-  GET(`/v1/proposals/${token}/votes`).then(getResponse);
+  POST("/votes/results", { token }).then(getResponse);
 
 export const proposalAuthorizeOrRevokeVote = (
   csrf,
@@ -708,7 +703,7 @@ export const proposalAuthorizeOrRevokeVote = (
       pki
         .signStringHex(userid, `${token}${version}${action}`)
         .then((signature) =>
-          POST("/proposals/authorizevote", csrf, {
+          POST("/vote/authorize", csrf, {
             action,
             token,
             signature,
@@ -724,8 +719,7 @@ export const proposalPaywallPayment = () =>
 export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
 
-export const tokenInventory = () =>
-  GET("/v1/proposals/tokeninventory").then(getResponse);
+export const tokenInventory = () => GET("/vote/inventory").then(getResponse);
 
 // CMS
 export const inviteNewUser = (csrf, payload) =>
