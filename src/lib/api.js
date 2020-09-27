@@ -599,7 +599,7 @@ const votePayloadWithType = ({
   token
 }) => ({
   token,
-  proposalversion: +proposalversion,
+  version: +proposalversion,
   type,
   mask: 3,
   duration,
@@ -609,12 +609,12 @@ const votePayloadWithType = ({
     {
       id: "no",
       description: "Don't approve proposal",
-      bits: 1
+      bit: 1
     },
     {
       id: "yes",
       description: "Approve proposal",
-      bits: 2
+      bit: 2
     }
   ]
 });
@@ -628,7 +628,7 @@ export const startVote = (
   passpercentage,
   proposalversion
 ) => {
-  const vote = votePayloadWithType({
+  const params = votePayloadWithType({
     token,
     proposalversion,
     type: VOTE_TYPE_STANDARD,
@@ -636,13 +636,13 @@ export const startVote = (
     quorumpercentage,
     passpercentage
   });
-  const hash = objectToSHA256(vote);
+  const hash = objectToSHA256(params);
   return pki
     .myPubKeyHex(userid)
     .then((publickey) =>
       pki.signStringHex(userid, hash).then((signature) =>
         POST("/vote/start", csrf, {
-          vote,
+          params,
           signature,
           publickey
         })

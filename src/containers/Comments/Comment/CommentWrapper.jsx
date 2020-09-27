@@ -125,7 +125,8 @@ const CommentWrapper = ({
   const handleSubmitComment = useCallback(
     handleCommentSubmission(onSubmitComment, {
       token,
-      parentID: commentid /* XXX pass record state here  */
+      parentID: commentid
+      /* XXX pass record state here  */
     }),
     [onSubmitComment, token, commentid]
   );
