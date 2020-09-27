@@ -301,6 +301,8 @@ export const parseResponse = (response) =>
     };
   });
 
+// XXX add optional version param with default "v1" as we do in POST
+// to avoid passing paths with version
 const GET = (path) =>
   fetch(apiBase + path, { credentials: "include" }).then(parseResponse);
 
@@ -490,6 +492,8 @@ export const verifyKeyRequest = (csrf, userid, verificationtoken) =>
 
 export const policy = () => GET("/v1/policy").then(getResponse);
 
+// This route wasn't implemented yet with tlog and will be added in later
+// stage.
 export const userProposals = (userid, after) => {
   return !after
     ? GET(`/v1/user/proposals?${qs.stringify({ userid })}`).then(getResponse)
@@ -725,6 +729,7 @@ export const proposalAuthorizeOrRevokeVote = (
           POST("/vote/authorize", csrf, {
             action,
             token,
+            version,
             signature,
             publickey
           })
@@ -738,7 +743,7 @@ export const proposalPaywallPayment = () =>
 export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
 
-export const tokenInventory = () => GET("/vote/inventory").then(getResponse);
+export const tokenInventory = () => GET("/v1/vote/inventory").then(getResponse);
 
 // CMS
 export const inviteNewUser = (csrf, payload) =>
