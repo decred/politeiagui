@@ -692,14 +692,15 @@ export const startRunoffVote = (
         )
       );
       return POST("/vote/startrunoff", csrf, {
-        startvotes: voteSignatures.map((signature, index) => ({
-          vote: submissionsVotes[index],
+        starts: voteSignatures.map((signature, index) => ({
+          params: submissionsVotes[index],
           signature,
           publickey
         })),
-        authorizevotes: voteAuthSignatures.map((signature, index) => ({
+        authorizations: voteAuthSignatures.map((signature, index) => ({
           action: "authorize",
           token: votes[index].token,
+          version: votes[index].version,
           signature,
           publickey
         })),
