@@ -9,7 +9,6 @@ import {
   onSubmitNewDcc
 } from "./api";
 import {
-  onFetchProposal as onFetchProposalApi,
   onSubmitComment as onSubmitCommentApi,
   onSubmitDccComment as onSubmitDccCommentApi
 } from "./api";
@@ -124,7 +123,10 @@ export const onEditProposal = ({
       token,
       state
     )
-  ).then(() => dispatch(onFetchProposalApi(token)).then(() => token));
+    // XXX is the proposal details request still needed here? if yes,
+    // this should also call the onFetchProposalsBatch instead of
+    // deprecated proposal details request
+  ).then(/*() => dispatch(onFetchProposalApi(token)).then(*/ () => token);
 };
 
 export const onSaveNewComment = ({ comment, token, parentID, state }) => (

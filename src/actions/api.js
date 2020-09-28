@@ -13,8 +13,7 @@ import act from "./methods";
 import {
   PAYWALL_STATUS_PAID,
   DCC_SUPPORT_VOTE,
-  TOTP_DEFAULT_TYPE,
-  PROPOSAL_STATE_VETTED
+  TOTP_DEFAULT_TYPE
 } from "../constants";
 
 export const onResetNewUser = act.RESET_NEW_USER;
@@ -391,19 +390,34 @@ export const onFetchProposalBilling = (token) =>
       });
   });
 
+// requests param should be array of objects from the following form:
+// { token, version (optional) }
+//
+// state should be the state of requested proposals
+//
+// XXX update all function calls params!
 export const onFetchProposalsBatchWithoutState = (
-  tokens,
+  requests,
+  state,
   fetchProposals = true,
   fetchVoteSummary = true
 ) =>
   withCsrf(async (_, __, csrf) => {
-    const batchPayload =
-      // XXX should proposal _state_ this be a parameter ?
-      fetchProposals && api.makeProposalsBatch(tokens, PROPOSAL_STATE_VETTED);
     const res = await Promise.all([
-      batchPayload && api.proposalsBatch(csrf, batchPayload),
-      fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens)
+      fetchProposals &&
+        api.proposalsBatch(csrf, {
+          requests,
+          state,
+          includefiles: false // XXX is this always the case ?
+        }),
+      fetchVoteSummary &&
+        api.proposalsBatchVoteSummary(
+          csrf,
+          requests.map(({ token }) => ({ token }))
+        )
     ]);
+    // XXX the batch propsoals requests returns map instead of array,
+    // addjust accordingly
     const proposals =
       fetchProposals && res.find((res) => res && res.proposals).proposals;
     const summaries =
@@ -411,23 +425,44 @@ export const onFetchProposalsBatchWithoutState = (
     return [proposals, summaries];
   });
 
-export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
+// requests param should be array of objects from the following form:
+// { token, version (optional) }
+//
+// state should be the state of requested proposals
+//
+// XXX update all function calls params!
+export const onFetchProposalsBatch = (
+  requests,
+  state,
+  includefiles = true,
+  fetchVoteSummary = true
+) =>
   withCsrf(async (dispatch, _, csrf) => {
-    dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
+    dispatch(act.REQUEST_PROPOSALS_BATCH(requests));
     try {
-      const batchPayload = api.makeProposalsBatch(
-        tokens,
-        PROPOSAL_STATE_VETTED // XXX should this be a parameter ?
-      );
-      const promises = [api.proposalsBatch(csrf, batchPayload)];
+      const promises = [
+        api.proposalsBatch(csrf, {
+          state,
+          requests,
+          includefiles
+        })
+      ];
       if (fetchVoteSummary) {
-        promises.push(dispatch(onFetchProposalsBatchVoteSummary(tokens)));
+        promises.push(
+          dispatch(
+            onFetchProposalsBatchVoteSummary(
+              requests.map(({ token }) => ({ token }))
+            )
+          )
+        );
       }
       const response = await Promise.all(promises);
       const proposals = response.find((res) => res && res.proposals).proposals;
       const summaries =
         fetchVoteSummary &&
         response.find((res) => res && res.summaries).summaries;
+      // XXX batch propsoals request now returns map instead of array
+      // adjust accordingly!
       dispatch(act.RECEIVE_PROPOSALS_BATCH({ proposals }));
       return [proposals, summaries];
     } catch (e) {
@@ -446,25 +481,6 @@ export const onFetchTokenInventory = () => (dispatch) => {
     .catch((error) => {
       dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error));
       throw error;
-    });
-};
-
-export const onFetchProposal = (token, version = null) => (dispatch) => {
-  dispatch(act.REQUEST_PROPOSAL(token));
-  return api
-    .proposal(token, version)
-    .then((response) => {
-      response && response.proposal && Object.keys(response.proposal).length > 0
-        ? dispatch(act.RECEIVE_PROPOSAL(response))
-        : dispatch(
-            act.RECEIVE_PROPOSAL(
-              null,
-              new Error("The requested proposal does not exist.")
-            )
-          );
-    })
-    .catch((error) => {
-      dispatch(act.RECEIVE_PROPOSAL(null, error));
     });
 };
 

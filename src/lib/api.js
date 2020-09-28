@@ -48,12 +48,6 @@ export const convertJsonToFile = (json, name) => ({
   payload: utoa(JSON.stringify(json))
 });
 
-export const makeProposalsBatch = (tokens, state) => ({
-  state,
-  requests: tokens.map((token) => ({ token })),
-  includefiles: true
-});
-
 export const makeProposal = (
   name,
   markdown,

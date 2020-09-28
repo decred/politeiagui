@@ -1,6 +1,9 @@
 import { useState, useCallback } from "react";
+// XXX we CAN'T use the api requests directly here as we need to call proposals
+// batch now and it's a POST, for that we need to pass the csrf which isn't
+// avaliable here!
 import {
-  proposal as onFetchProposal,
+  proposalsBatch as onFetchProposalsBatch,
   invoice as onFetchInvoice
 } from "src/lib/api.js";
 import { getTextFromIndexMd } from "src/helpers";
@@ -62,15 +65,28 @@ export function useVersionPicker(version, token) {
     ]
   );
 
-  async function fetchProposalsVersions(token, version) {
+  // XXX update the all refs - provide added _state_ param
+  async function fetchProposalsVersions(token, version, state) {
     let prevProposal = null;
-    const { proposal } = await onFetchProposal(token, version);
-    if (proposal.version > 1) {
-      const prevProposalResponse = await onFetchProposal(token, version - 1);
-      prevProposal = prevProposalResponse.proposal;
+    // Reponse of batch request is a map
+    const { proposals } = await onFetchProposalsBatch(
+      [{ token, version }],
+      state,
+      false,
+      false
+    );
+    const proposal = proposals && proposals[token];
+    if (proposal && proposal.version > 1) {
+      const { prevProposals } = await onFetchProposalsBatch(
+        [{ token, version: version - 1 }],
+        state,
+        false,
+        false
+      );
+      prevProposal = prevProposals && prevProposals[token];
     }
     return {
-      details: proposal,
+      details: proposals[token],
       oldFiles: getProposalFilesWithoutIndexMd(prevProposal),
       newFiles: getProposalFilesWithoutIndexMd(proposal),
       newText: getProposalText(proposal),

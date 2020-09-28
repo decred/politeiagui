@@ -52,7 +52,6 @@ export function useProposal(token, threadParentID) {
     []
   );
   const loading = useSelector(loadingSelector);
-  const onFetchProposal = useAction(act.onFetchProposal);
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchProposalsVoteSummary = useAction(
     act.onFetchProposalsBatchVoteSummary
@@ -105,7 +104,12 @@ export function useProposal(token, threadParentID) {
     actions: {
       initial: () => {
         if (token && !proposal) {
-          onFetchProposal(token)
+          onFetchProposalsBatch(
+            [{ token }],
+            "",
+            /* XXX replace with actual proposal state here? */ true,
+            false
+          )
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
           return send(FETCH);
