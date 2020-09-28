@@ -390,12 +390,6 @@ export const verifyNewUser = (email, verificationToken, username) => {
 export const likedComments = (token, userid, state) =>
   POST("/comments/votes", { token, userid, state }).then(getResponse);
 
-export const proposalPaywallDetails = () =>
-  GET("/v1/proposals/paywall").then(getResponse);
-
-export const userProposalCredits = () =>
-  GET("/v1/user/proposals/credits").then(getResponse);
-
 export const editUser = (csrf, params) =>
   POST("/user/edit", csrf, params).then(getResponse);
 
@@ -422,9 +416,6 @@ export const proposalBilling = (csrf, token) =>
   POST("/proposals/billing", csrf, {
     token
   }).then(getResponse);
-
-export const verifyUserPayment = () =>
-  GET("/v1/user/verifypayment").then(getResponse);
 
 export const login = (csrf, email, password) =>
   POST("/login", csrf, { email, password: digest(password) }).then(getResponse);
@@ -737,8 +728,17 @@ export const proposalAuthorizeOrRevokeVote = (
     )
     .then(getResponse);
 
+export const verifyUserPayment = () =>
+  GET("/user/payments/registration").then(getResponse);
+
+export const proposalPaywallDetails = () =>
+  GET("/user/payments/paywall").then(getResponse);
+
 export const proposalPaywallPayment = () =>
-  GET("/v1/proposals/paywallpayment").then(getResponse);
+  GET("/user/payments/paywalltx").then(getResponse);
+
+export const userProposalCredits = () =>
+  GET("/user/payments/credits").then(getResponse);
 
 export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
