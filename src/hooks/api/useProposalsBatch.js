@@ -19,6 +19,7 @@ import isEmpty from "lodash/fp/isEmpty";
 import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
 import isEqual from "lodash/fp/isEqual";
+import { PROPOSAL_STATE_VETTED } from "src/contants";
 
 const getRfpLinks = (proposals) =>
   flow(
@@ -84,13 +85,23 @@ export default function useProposalsBatch(
       },
       verify: () => {
         if (hasRemainingTokens) {
-          onFetchProposalsBatch(remainingTokens, fetchVoteSummaries)
+          onFetchProposalsBatch(
+            remainingTokens.map((token) => ({ token })),
+            PROPOSAL_STATE_VETTED,
+            false,
+            fetchVoteSummaries
+          )
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
           return send(FETCH);
         }
         if (fetchRfpLinks && hasUnfetchedRfpLinks) {
-          onFetchProposalsBatch(unfetchedRfpLinks, fetchVoteSummaries)
+          onFetchProposalsBatch(
+            unfetchedRfpLinks.map((token) => ({ token })),
+            PROPOSAL_STATE_VETTED,
+            false,
+            fetchVoteSummaries
+          )
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
           return send(FETCH);
