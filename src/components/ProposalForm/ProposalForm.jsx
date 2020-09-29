@@ -33,7 +33,8 @@ import {
 import {
   PROPOSAL_TYPE_REGULAR,
   PROPOSAL_TYPE_RFP,
-  PROPOSAL_TYPE_RFP_SUBMISSION
+  PROPOSAL_TYPE_RFP_SUBMISSION,
+  PROPOSAL_STATE_VETTED
 } from "src/constants";
 import {
   getProposalTypeOptionsForSelect,
@@ -322,6 +323,7 @@ const ProposalFormWrapper = ({
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
+        // XXX THIS CAN GO AWAY, TLOG IS HERE!
         if (isAnchoring()) {
           throw new Error(
             "Submitting proposals is temporarily unavailable while a daily censorship resistance routine is in progress. Sorry for the inconvenience. This will be fixed soon. Check back in 10 minutes."
@@ -330,7 +332,8 @@ const ProposalFormWrapper = ({
         const { type, rfpLink, ...others } = values;
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
           const rfpWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
-            [rfpLink]
+            [{ token: rfpLink }],
+            PROPOSAL_STATE_VETTED
           )) || [[], null];
           const [[proposal], summaries] = rfpWithVoteSummaries;
           const voteSummary = summaries && summaries[rfpLink];

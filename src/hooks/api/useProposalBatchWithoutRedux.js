@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import * as act from "src/actions";
 import { useAction } from "src/redux";
+import { PROPOSAL_STATE_VETTED } from "src/constants";
 
 export default function useProposalBatchWithoutRedux(
   tokens,
@@ -18,7 +19,8 @@ export default function useProposalBatchWithoutRedux(
   useEffect(() => {
     const onFetchProposals = async () => {
       const [proposals, summaries] = await onFetchProposalsBatchWithoutState(
-        tokens,
+        tokens.map((token) => ({ token })),
+        PROPOSAL_STATE_VETTED,
         fetchProposals,
         fetchVoteSummary
       );
