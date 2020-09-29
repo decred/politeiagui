@@ -9,6 +9,7 @@ import {
   getProposalRfpLinks,
   getProposalToken
 } from "../helpers";
+import { PROPOSAL_STATE_VETTED } from "src/constants";
 import useFetchMachine, {
   FETCH,
   RESOLVE,
@@ -106,8 +107,8 @@ export function useProposal(token, threadParentID) {
         if (token && !proposal) {
           onFetchProposalsBatch(
             [{ token }],
-            "",
-            /* XXX replace with actual proposal state here? */ true,
+            "" /* XXX replace with actual proposal state here? */,
+            true,
             false
           )
             .then(() => send(VERIFY))
@@ -131,7 +132,12 @@ export function useProposal(token, threadParentID) {
       },
       verify: () => {
         if (!isEmpty(unfetchedProposalTokens)) {
-          onFetchProposalsBatch(unfetchedProposalTokens, isRfp)
+          onFetchProposalsBatch(
+            unfetchedProposalTokens.map((token) => ({ token })),
+            PROPOSAL_STATE_VETTED,
+            false,
+            isRfp
+          )
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
           return send(FETCH);

@@ -10,7 +10,11 @@ import { clearStateLocalStorage } from "../lib/local_storage";
 import * as pki from "../lib/pki";
 import * as sel from "../selectors";
 import act from "./methods";
-import { PAYWALL_STATUS_PAID, DCC_SUPPORT_VOTE } from "../constants";
+import {
+  PAYWALL_STATUS_PAID,
+  DCC_SUPPORT_VOTE,
+  PROPOSAL_STATE_VETTED
+} from "../constants";
 
 export const onResetNewUser = act.RESET_NEW_USER;
 
@@ -396,8 +400,6 @@ export const onFetchProposalsBatchWithoutState = (
 // { token, version (optional) }
 //
 // state should be the state of requested proposals
-//
-// XXX update all function calls params!
 export const onFetchProposalsBatch = (
   requests,
   state,
@@ -984,7 +986,14 @@ export const onSetProposalStatus = ({
         if (status === PROPOSAL_STATUS_PUBLIC) {
           dispatch(onFetchProposalsBatchVoteSummary([token]));
           if (linkto) {
-            dispatch(onFetchProposalsBatch([linkto]));
+            dispatch(
+              onFetchProposalsBatch(
+                [{ token: linkto }],
+                PROPOSAL_STATE_VETTED,
+                false,
+                false
+              )
+            );
           }
         }
       })
@@ -1080,7 +1089,14 @@ export const onStartRunoffVote = (
       )
       .then((response) => {
         const submissionsTokens = votes.map((vote) => vote.token);
-        dispatch(onFetchProposalsBatch([...submissionsTokens, token]));
+        dispatch(
+          onFetchProposalsBatch(
+            [...submissionsTokens, token].map((token) => ({ token })),
+            PROPOSAL_STATE_VETTED,
+            false,
+            true
+          )
+        );
         dispatch(
           act.RECEIVE_START_RUNOFF_VOTE({ ...response, token, success: true })
         );
