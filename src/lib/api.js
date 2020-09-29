@@ -737,6 +737,9 @@ export const userProposalCredits = () =>
 export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
 
+export const proposalsInventory = () =>
+  GET("/v1/proposals/invnetory").then(getResponse);
+
 export const tokenInventory = () => GET("/v1/vote/inventory").then(getResponse);
 
 // CMS

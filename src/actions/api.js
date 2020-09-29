@@ -438,17 +438,28 @@ export const onFetchProposalsBatch = (
     }
   });
 
-export const onFetchTokenInventory = () => (dispatch) => {
+export const onFetchTokenInventory = () => async (dispatch) => {
   dispatch(act.REQUEST_TOKEN_INVENTORY());
-  return api
-    .tokenInventory()
-    .then((tokenInventory) =>
-      dispatch(act.RECEIVE_TOKEN_INVENTORY(tokenInventory))
-    )
-    .catch((error) => {
-      dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error));
-      throw error;
-    });
+  try {
+    return await Promise.all([api.tokenInventory, api.proposalsInventory]).then(
+      ([vInventory, pInventory]) => {
+        return dispatch(
+          act.RECEIVE_TOKEN_INVENTORY({
+            pre: [...vInventory.unauthorized, ...vInventory.authorized],
+            active: [...vInventory.started],
+            approved: [...vInventory.approved],
+            rejected: [...vInventory.rejected],
+            abandoned: [...pInventory.abandoned],
+            unreviewed: [...pInventory.unvetted],
+            censored: [...pInventory.censored]
+          })
+        );
+      }
+    );
+  } catch (error) {
+    dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error));
+    throw error;
+  }
 };
 
 export const onFetchInvoice = (token, version = null) => (dispatch) => {
