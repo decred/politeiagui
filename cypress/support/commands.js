@@ -23,7 +23,6 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-import { buildProposal } from "../support/generate";
 
 Cypress.Commands.add("assertHome", () => {
   cy.url().should("eq", `${Cypress.config().baseUrl}/`);
@@ -53,7 +52,7 @@ Cypress.Commands.add("typeLogin", (user) => {
 Cypress.Commands.add("typeIdentity", () => {
   cy.findByTestId("user-dropdown").click();
   cy.findByText(/account/i).click();
-  cy.findByText(/create new identity/i).click();
+  cy.findByText(/create new identity/i, { timeout: 20000 }).click();
   cy.findByText(/confirm/i).click();
   cy.findByText(/ok/i, { timeout: 20000 }).click();
   cy.findByText(/auto verify/i).click();
@@ -61,8 +60,7 @@ Cypress.Commands.add("typeIdentity", () => {
 });
 
 // TODO: add createProposal using cy.request()
-Cypress.Commands.add("typeCreateProposal", () => {
-  const proposal = buildProposal();
+Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.findByText(/new proposal/i).click();
   cy.findByTestId("proposal name", { timeout: 10000 }).type(proposal.name);
   cy.findByTestId("text-area").type(proposal.description);
