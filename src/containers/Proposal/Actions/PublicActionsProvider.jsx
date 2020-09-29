@@ -7,7 +7,11 @@ import ModalConfirm from "src/components/ModalConfirm";
 import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import ModalStartVote from "src/components/ModalStartVote";
 import useModalContext from "src/hooks/utils/useModalContext";
-import { VOTE_TYPE_STANDARD, VOTE_TYPE_RUNOFF } from "src/constants";
+import {
+  VOTE_TYPE_STANDARD,
+  VOTE_TYPE_RUNOFF,
+  PROPOSAL_STATE_VETTED
+} from "src/constants";
 
 const PublicActionsProvider = ({ children }) => {
   const {
@@ -103,7 +107,8 @@ const PublicActionsProvider = ({ children }) => {
   const handleStartRunoffVoteModal = useCallback(
     async (proposal, cb) => {
       const [submissions] = await onFetchProposalsBatchWithoutState(
-        proposal.linkedfrom
+        proposal.linkedfrom.map((token) => ({ token })),
+        PROPOSAL_STATE_VETTED
       );
       // Filter abandoned submmsions out & maps to proposal tokens.
       const submissionVotes = submissions.flatMap((prop) =>

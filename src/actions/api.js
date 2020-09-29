@@ -365,8 +365,6 @@ export const onFetchProposalBilling = (token) =>
 // { token, version (optional) }
 //
 // state should be the state of requested proposals
-//
-// XXX update all function calls params!
 export const onFetchProposalsBatchWithoutState = (
   requests,
   state,
