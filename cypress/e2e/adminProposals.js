@@ -1,6 +1,6 @@
 import { buildProposal } from "../support/generate";
 
-describe("Admin", () => {
+describe("Admin proposals actions", () => {
   it("Can approve proposals", () => {
     cy.visit("/");
     // paid admin user with proposal credits
@@ -20,11 +20,11 @@ describe("Admin", () => {
     //   proposal.name
     // );
     cy.visit("/proposals/unvetted");
-    cy.findByText(proposal.name, { timeout: 10000 }).click();
+    cy.findByText(proposal.name, { timeout: 20000 }).click();
     cy.findByText(/approve/i).click();
     cy.findByText(/confirm/i).click();
     cy.findByText(/ok/i, { timeout: 10000 }).click();
-    cy.findByText(/Waiting to authorize voting/i).should("exist");
+    cy.findByText(/Waiting for author/i).should("exist");
   });
 
   it("Can report a proposal as a spam", () => {
@@ -42,7 +42,7 @@ describe("Admin", () => {
     // TODO: Remove
     cy.wait(2000);
     cy.visit("/proposals/unvetted");
-    cy.findByText(proposal.name, { timeout: 10000 }).click();
+    cy.findByText(proposal.name, { timeout: 20000 }).click();
     cy.findByText(/report/i).click();
     cy.findByLabelText(/censor reason/i).type("censor!");
     cy.findByText(/confirm/i).click();
@@ -53,7 +53,7 @@ describe("Admin", () => {
     cy.findByText(proposal.name, { timeout: 10000 }).should("exist");
   });
 
-  it.only("Can abandon a proposal", () => {
+  it("Can abandon a proposal", () => {
     cy.visit("/");
     // paid admin user with proposal credits
     const user = {
@@ -79,4 +79,41 @@ describe("Admin", () => {
     cy.findByText(/ok/i, { timeout: 20000 }).click();
     cy.findAllByText(/abandoned/).should("exist");
   });
+
+  it("Can authorize voting", () => {
+    cy.visit("/");
+    // paid admin user with proposal credits
+    const user = {
+      email: "admin@example.com",
+      username: "admin",
+      password: "password"
+    };
+    const proposal = buildProposal();
+    cy.typeLogin(user);
+    cy.typeIdentity();
+    cy.typeCreateProposal(proposal);
+    // TODO: Remove
+    cy.wait(2000);
+    cy.visit("/proposals/unvetted");
+    cy.findByText(proposal.name, { timeout: 20000 }).click();
+    cy.findByText(/approve/i).click();
+    cy.findByText(/confirm/i).click();
+    cy.findByText(/ok/i, { timeout: 10000 }).click();
+    cy.findByText(/Waiting for author/i).should("exist");
+    cy.findByRole("button", { name: /authorize voting/i }).click();
+    cy.findByText(/confirm/i).click();
+    cy.findByText(/ok/i, { timeout: 10000 }).click();
+  });
+
+  // it.only("Test XHR", () => {
+  //   cy.server();
+  //   // cy.route("GET", "/api").as("api");
+
+  //   cy.visit("/");
+
+  //   cy.route("GET", "https://localhost:3000/").as("api");
+
+  //   // cy.wait("@api").then(console.log);
+  //   cy.wait("@api");
+  // });
 });

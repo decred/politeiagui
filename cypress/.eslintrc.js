@@ -3,6 +3,7 @@ module.exports = {
   extends: ["plugin:cypress/recommended"],
   env: { "cypress/globals": true },
   rules: {
-    "cypress/no-unnecessary-waiting": 0
+    "cypress/no-unnecessary-waiting": 0,
+    "no-unused-vars": 0
   }
 };
