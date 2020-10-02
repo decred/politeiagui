@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import {
   StatusBar,
   StatusTag,
-  Text,
   classNames,
   Icon,
   useMediaQuery
@@ -27,6 +26,7 @@ import {
 } from "src/containers/Proposal/helpers";
 import styles from "./ProposalsList.module.css";
 import { Status, Event, CommentsLink } from "../RecordWrapper";
+import Link from "../Link";
 import { useProposalVoteTimeInfo } from "src/containers/Proposal/hooks";
 import { useProposalURLs } from "src/containers/Proposal/hooks";
 import { useRouter } from "src/components/Router";
@@ -64,7 +64,9 @@ const ProposalItem = ({
         onClick={goToFullProposal(history, proposalURL)}
         noMargin>
         <div className={classNames(styles.itemTitle, "flex-column")}>
-          <Text color="primaryDark">{name}</Text>
+          <Link dark to={proposalURL}>
+            {name}
+          </Link>
           <CommentsLink
             showIcon={false}
             numOfComments={numcomments}
