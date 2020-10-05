@@ -16,5 +16,5 @@ yalc.lock
 .env
 .vscode
 
-cypress/video
+cypress/videos
 cypress/screenshots

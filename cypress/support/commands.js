@@ -80,8 +80,8 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.findByText(/new proposal/i).click();
   cy.findByTestId("proposal name", { timeout: 10000 }).type(proposal.name);
   cy.findByTestId("text-area").type(proposal.description);
-  cy.findByText(/submit/i).click();
   cy.route("POST", "/api/v1/proposals/new").as("newProposal");
+  cy.findByText(/submit/i).click();
   cy.wait("@newProposal").should((xhr) => {
     expect(xhr.status).to.equal(200);
     expect(xhr.response.body)
