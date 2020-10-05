@@ -1,7 +1,7 @@
 import { buildUser } from "../support/generate";
 
 describe("Registration", () => {
-  it.only("Can register users", () => {
+  it("Can register users", () => {
     const user = buildUser();
     cy.visit("/");
     cy.findByText(/sign up/i).click();
