@@ -28,6 +28,14 @@ Cypress.Commands.add("assertHome", () => {
   cy.url().should("eq", `${Cypress.config().baseUrl}/`);
 });
 
+Cypress.Commands.add("assertProposalPage", (proposal) => {
+  cy.url().should(
+    "eq",
+    `${Cypress.config().baseUrl}/proposals/${proposal.token.substring(0, 7)}`
+  );
+  cy.findByText(proposal.name, { timeout: 10000 }).should("exist");
+});
+
 Cypress.Commands.add("assertLoggedInAs", (user) => {
   cy.getCookies()
     .should("have.length", 2)
@@ -69,16 +77,20 @@ Cypress.Commands.add("typeIdentity", () => {
 // TODO: add createProposal using cy.request()
 Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.server();
-  cy.route("POST", "/api/v1/proposals/new").as("newProposal");
   cy.findByText(/new proposal/i).click();
   cy.findByTestId("proposal name", { timeout: 10000 }).type(proposal.name);
   cy.findByTestId("text-area").type(proposal.description);
   cy.findByText(/submit/i).click();
+  cy.route("POST", "/api/v1/proposals/new").as("newProposal");
   cy.wait("@newProposal").should((xhr) => {
     expect(xhr.status).to.equal(200);
     expect(xhr.response.body)
       .to.have.property("censorshiprecord")
       .and.be.a("object")
       .and.have.all.keys("token", "signature", "merkle");
+    cy.assertProposalPage({
+      ...proposal,
+      token: xhr.response.body.censorshiprecord.token
+    });
   });
 });

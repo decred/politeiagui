@@ -1,32 +1,42 @@
 describe("Admin account actions", () => {
   it("Can search users", () => {
-    cy.visit("/");
     // paid admin user with proposal credits
     const user = {
       email: "admin@example.com",
       username: "admin",
       password: "password"
     };
+    cy.server();
+    cy.route("GET", "/api/v1/users?**").as("searchUser");
     cy.typeLogin(user);
     cy.visit("/user/search");
     cy.findByTestId("search-user").type("nonpaid");
     cy.findByRole("button", { name: /search/i }).click();
+    cy.wait("@searchUser");
     cy.findByText(/nonpaid@example.com/i).should("exist");
   });
 
   it("Can navigate to the user page", () => {
-    cy.visit("/");
     // paid admin user with proposal credits
     const user = {
       email: "admin@example.com",
       username: "admin",
       password: "password"
     };
+    cy.server();
+    cy.route("GET", "/api/v1/users?**").as("searchUser");
     cy.typeLogin(user);
     cy.visit("/user/search");
     cy.findByTestId("search-user").type("nonpaid");
     cy.findByRole("button", { name: /search/i }).click();
-    cy.wait(2000);
-    cy.findAllByRole("link").last().click();
+    cy.wait("@searchUser").then((xhr) => {
+      expect(xhr.status).to.eq(200);
+      expect(xhr.response.body.users).to.be.a("array", "found array of users");
+      expect(xhr.response.body.users).to.have.lengthOf(1);
+      cy.route("GET", "api/v1/user/*").as("getUser");
+      cy.visit(`/user/${xhr.response.body.users[0].id}`);
+      cy.wait("@getUser").its("status").should("eq", 200);
+      cy.findByText(xhr.response.body.users[0].id).should("exist");
+    });
   });
 });
