@@ -75,6 +75,7 @@ const InvoiceDetail = ({ Main, match }) => {
           ) : !!invoice && !loading ? (
             <Invoice
               invoice={invoice}
+              isAuthor={isAuthor}
               isPublicMode={isPublicMode}
               extended
               approvedProposals={proposals || []}
