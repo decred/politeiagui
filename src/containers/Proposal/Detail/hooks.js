@@ -1,15 +1,48 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
-import isEqual from "lodash/isEqual";
 import { or } from "src/lib/fp";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
-import { isUnreviewedProposal, isCensoredProposal } from "../helpers";
+import {
+  isUnreviewedProposal,
+  isCensoredProposal,
+  getProposalRfpLinks,
+  getProposalToken
+} from "../helpers";
+import useFetchMachine, {
+  FETCH,
+  RESOLVE,
+  VERIFY,
+  REJECT
+} from "src/hooks/utils/useFetchMachine";
+import isEmpty from "lodash/fp/isEmpty";
+import keys from "lodash/fp/keys";
+import difference from "lodash/fp/difference";
+import isEqual from "lodash/fp/isEqual";
+import values from "lodash/fp/values";
+import pick from "lodash/pick";
+import concat from "lodash/fp/concat";
 
 const proposalWithFilesOrNothing = (proposal) => {
   return proposal && proposal.files && !!proposal.files.length
     ? proposal
     : null;
+};
+
+const getUnfetchedVoteSummaries = (proposal, voteSummaries) => {
+  const rfpLinks = getProposalRfpLinksTokens(proposal);
+  const proposalToken = getProposalToken(proposal);
+  const tokens = concat(rfpLinks || [])(proposalToken);
+  return difference(tokens)(keys(voteSummaries));
+};
+
+const getProposalRfpLinksTokens = (proposal) => {
+  if (!proposal) return null;
+  const isSubmission = !!proposal.linkto;
+  const isRfp = !!proposal.linkby;
+  const hasRfpLinks = isSubmission || isRfp;
+  if (!hasRfpLinks) return null;
+  return isSubmission ? [proposal.linkto] : proposal.linkedfrom;
 };
 
 export function useProposal(token, threadParentID) {
@@ -20,6 +53,7 @@ export function useProposal(token, threadParentID) {
   );
   const loading = useSelector(loadingSelector);
   const onFetchProposal = useAction(act.onFetchProposal);
+  const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchProposalsVoteSummary = useAction(
     act.onFetchProposalsBatchVoteSummary
   );
@@ -28,6 +62,8 @@ export function useProposal(token, threadParentID) {
   ]);
   const proposalFromState = useSelector(proposalSelector);
   const currentUser = useSelector(sel.currentUser);
+  const proposals = useSelector(sel.proposalsByToken);
+  const voteSummaries = useSelector(sel.summaryByToken);
 
   const currentUserIsAdmin = currentUser && currentUser.isadmin;
   const currentUserId = currentUser && currentUser.userid;
@@ -49,28 +85,72 @@ export function useProposal(token, threadParentID) {
 
   const [proposal, setProposal] = useState(getProposal());
 
-  useEffect(
-    function fetchProposal() {
-      if (proposal) {
-        return;
-      }
-      onFetchProposal(token);
-    },
-    [proposal, token, onFetchProposal, onFetchProposalsVoteSummary]
+  const rfpLinks = getProposalRfpLinksTokens(proposal);
+
+  const unfetchedProposalTokens =
+    rfpLinks && difference(rfpLinks)(keys(proposals));
+  const unfetchedSummariesTokens = getUnfetchedVoteSummaries(
+    proposal,
+    voteSummaries
   );
-  useEffect(
-    // fetch vote summary only when proposal details loaded => full token is avaliable in redux store
-    // thus can be used to fetch vote summary
-    function fetchVoteSummary() {
-      if (proposalFromState) {
-        const {
-          censorshiprecord: { token }
-        } = proposalFromState;
-        onFetchProposalsVoteSummary([token]);
+  const rfpSubmissions = rfpLinks &&
+    proposal.linkby && {
+      proposals: values(pick(proposals, rfpLinks)),
+      voteSummaries: pick(voteSummaries, rfpLinks)
+    };
+
+  const isRfp = proposal && !!proposal.linkby;
+
+  const [state, send] = useFetchMachine({
+    actions: {
+      initial: () => {
+        if (token && !proposal) {
+          onFetchProposal(token)
+            .then(() => send(VERIFY))
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
+        }
+        return send(VERIFY);
+      },
+      load: () => {
+        if (
+          (token && !proposal) ||
+          !isEmpty(unfetchedSummariesTokens) ||
+          (proposal &&
+            rfpLinks &&
+            (!isEmpty(unfetchedProposalTokens) ||
+              !isEmpty(unfetchedSummariesTokens)))
+        ) {
+          return;
+        }
+        return send(VERIFY);
+      },
+      verify: () => {
+        if (!isEmpty(unfetchedProposalTokens)) {
+          onFetchProposalsBatch(unfetchedProposalTokens, isRfp)
+            .then(() => send(VERIFY))
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
+        }
+        if (!isEmpty(unfetchedSummariesTokens)) {
+          onFetchProposalsVoteSummary(unfetchedSummariesTokens)
+            .then(send(VERIFY))
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
+        }
+        if (rfpLinks && rfpSubmissions) {
+          return send(RESOLVE, { proposal, rfpSubmissions });
+        }
+        return send(RESOLVE, { proposal });
+      },
+      done: () => {
+        // verify proposal on proposal changes
+        if (!isEqual(state.proposal, proposal)) {
+          return send(VERIFY);
+        }
       }
-    },
-    [proposalFromState, onFetchProposalsVoteSummary]
-  );
+    }
+  });
 
   useEffect(
     function handleProposalChanged() {
@@ -86,5 +166,16 @@ export function useProposal(token, threadParentID) {
     throw error;
   }
 
-  return { proposal, loading, threadParentID };
+  const proposalWithLinks = getProposalRfpLinks(
+    state.proposal,
+    state.rfpSubmissions,
+    proposals
+  );
+
+  return {
+    proposal: proposalWithLinks,
+    error: state.error,
+    loading,
+    threadParentID
+  };
 }

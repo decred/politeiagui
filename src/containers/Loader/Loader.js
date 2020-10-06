@@ -65,7 +65,9 @@ const Loader = ({ children }) => {
   useEffect(() => {
     const userPaywallNotPaid = !!user && !!user.paywalladdress;
     if (enablePaywall && userPaywallNotPaid) {
-      onPollUserPayment();
+      onPollUserPayment().catch(() => {
+        setError(new Error("Unable to Poll User Payment"));
+      });
     }
   }, [user, enablePaywall, onPollUserPayment]);
 

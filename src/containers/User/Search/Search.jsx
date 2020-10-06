@@ -12,8 +12,6 @@ import {
 import React, { useEffect, useState } from "react";
 import {
   selectTypeOptions,
-  selectDomainOptions,
-  domainOptions,
   typeOptions
 } from "src/containers/User/Detail/ManageContractor/helpers";
 import HelpMessage from "src/components/HelpMessage";
@@ -21,9 +19,11 @@ import SelectField from "src/components/Select/SelectField";
 import { useSearchUser } from "./hooks";
 import styles from "./Search.module.css";
 import Link from "src/components/Link";
+import { usePolicy } from "src/hooks";
 import { searchSchema } from "./validation";
+import { getContractorDomains, getDomainName } from "src/helpers";
 
-const getFormattedSearchResults = (users = [], isCMS) =>
+const getFormattedSearchResults = (users = [], isCMS, supporteddomains) =>
   users.map((u) =>
     !isCMS
       ? {
@@ -33,21 +33,35 @@ const getFormattedSearchResults = (users = [], isCMS) =>
         }
       : {
           Username: <Link to={`/user/${u.id}`}>{u.username}</Link>,
-          Domain: domainOptions[u.domain],
+          Domain: getDomainName(
+            getContractorDomains(supporteddomains),
+            u.domain
+          ),
           Type: typeOptions[u.contractortype]
         }
   );
+
+const filterUserResult = (result, filterValue) =>
+  !filterValue
+    ? result
+    : result &&
+      result.filter((u) => u && u.username && u.username.includes(filterValue));
 
 const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
   const { onSearchUser, searchResult, isCMS } = useSearchUser();
   const [searchError, setSearchError] = useState(null);
   const [foundUsers, setFoundUsers] = useState([]);
-
+  const [filterValue, setFilterValue] = useState(); // filters on the client-side
+  const {
+    policy: { supporteddomains }
+  } = usePolicy();
+  const contractorDomains = isCMS ? getContractorDomains(supporteddomains) : [];
   const searchOptions = useMemo(() => {
     if (isCMS) {
       return [
         { value: "domain", label: "Domain" },
-        { value: "contractortype", label: "Contractor type" }
+        { value: "contractortype", label: "Contractor type" },
+        { value: "username", label: "Username" }
       ];
     }
     return [
@@ -63,20 +77,29 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
       const isByType = values.searchBy === "contractortype";
       const isByEmail = values.searchBy === "email";
       const isByUsername = values.searchBy === "username";
+      const isCmsSearchByUsername = isCMS && isByUsername;
 
-      await onSearchUser(
-        {
-          [values.searchBy]:
-            isByUsername || isByEmail
-              ? values.searchTerm
-              : isByType
-              ? values.contractortype.value
-              : isByDomain
-              ? values.domain.value
-              : ""
-        },
-        isCMS
-      );
+      const hasFetched = filterValue && !isByDomain && !isByType;
+
+      // cache requests
+      if (!hasFetched) {
+        await onSearchUser(
+          !isCmsSearchByUsername
+            ? {
+                [values.searchBy]:
+                  isByUsername || isByEmail
+                    ? values.searchTerm
+                    : isByType
+                    ? values.contractortype.value
+                    : isByDomain
+                    ? values.domain.value
+                    : ""
+              }
+            : {}, // no params are passed since we need to fetch all users
+          isCMS
+        );
+      }
+      setFilterValue(isCmsSearchByUsername ? values.searchTerm : null);
       setSubmitting(false);
     } catch (e) {
       setSubmitting(false);
@@ -86,12 +109,16 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
 
   useEffect(
     function updateFoundUsers() {
-      if (searchResult) {
-        setFoundUsers(getFormattedSearchResults(searchResult, isCMS));
+      const filteredResult = filterUserResult(searchResult, filterValue);
+      if (filteredResult) {
+        setFoundUsers(
+          getFormattedSearchResults(filteredResult, isCMS, supporteddomains)
+        );
       }
     },
-    [searchResult, isCMS]
+    [searchResult, isCMS, supporteddomains, filterValue]
   );
+
   return (
     <>
       <TopBanner>
@@ -133,7 +160,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                     onChange={handleChangeSearchBy}
                   />
                   <div className="justify-left margin-top-m">
-                    {!isCMS && (
+                    {!isByType && !isByDomain && (
                       <BoxTextInput
                         name="searchTerm"
                         className={styles.searchBox}
@@ -156,7 +183,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                       <SelectField
                         name="domain"
                         className={styles.select}
-                        options={selectDomainOptions}
+                        options={contractorDomains}
                         value={values.domain}
                         onChange={handleChangeSelectField("domain")}
                         placeholder="Choose a domain"

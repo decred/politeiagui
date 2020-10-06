@@ -63,7 +63,9 @@ export const getInvoiceMinMaxYearAndMonth = () => {
  */
 export const presentationalInvoiceName = (invoice) =>
   invoice && invoice.input
-    ? `Invoice from ${invoice.input.contractorname} - ${invoice.input.month}/${invoice.input.year}`
+    ? `Invoice from ${invoice.input.contractorname || invoice.username} - ${
+        invoice.input.month
+      }/${invoice.input.year}`
     : "";
 
 /**

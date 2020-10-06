@@ -115,7 +115,7 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
                       total: formatCentsToUSD(total),
                       exchangerate: formatCentsToUSD(exchangerate),
                       address: address,
-                      dcrtotal: convertAtomsToDcr(dcrtotal) + " DCR"
+                      dcrtotal: convertAtomsToDcr(dcrtotal)
                     };
                   }
                 )}
@@ -139,7 +139,9 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
           </>
         )}
         {!hasPayouts && (
-          <HelpMessage>{"There are no approved invoices!"}</HelpMessage>
+          <HelpMessage>
+            {"There are no payouts for approved invoices"}
+          </HelpMessage>
         )}
       </Main>
     </>

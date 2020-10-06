@@ -4,7 +4,6 @@ import React, { useCallback, useState } from "react";
 import InfoSection from "../InfoSection.jsx";
 import {
   selectTypeOptions,
-  selectDomainOptions,
   getInitialAndOptionsProposals,
   getInitialAndOptionsSupervisors
 } from "./helpers";
@@ -12,6 +11,8 @@ import { Formik } from "formik";
 import styles from "./ManageContractor.module.css";
 import useSupervisors from "src/hooks/api/useSupervisors";
 import useApprovedProposals from "src/hooks/api/useApprovedProposals";
+import { usePolicy } from "src/hooks";
+import { getContractorDomains } from "src/helpers";
 
 const selectStyles = {
   container: (provided) => ({
@@ -37,11 +38,18 @@ const ManageDccForm = ({ onUpdate, user }) => {
     supervisoruserids = [],
     proposalsowned = []
   } = user;
-
+  const {
+    policy: { supporteddomains }
+  } = usePolicy();
+  const contractorDomains = getContractorDomains(supporteddomains);
   const [updated, setUpdated] = useState(false);
 
   // Parse supervisors initial values and options
-  const { loading: loadingSupervisors, supervisors } = useSupervisors();
+  const {
+    loading: loadingSupervisors,
+    supervisors,
+    error: supervisorsError
+  } = useSupervisors();
   const {
     supervisorsOptions,
     initialSupervisorOptions
@@ -50,7 +58,8 @@ const ManageDccForm = ({ onUpdate, user }) => {
   // Parse owned proposals initial values and options
   const {
     proposals,
-    isLoading: loadingOwnedProposals
+    isLoading: loadingOwnedProposals,
+    error: approvedProposalsError
   } = useApprovedProposals();
   const {
     proposalsOptions,
@@ -130,7 +139,7 @@ const ManageDccForm = ({ onUpdate, user }) => {
                   info={
                     <SelectField
                       name="domain"
-                      options={selectDomainOptions}
+                      options={contractorDomains}
                       styles={selectStyles}
                     />
                   }
@@ -147,9 +156,11 @@ const ManageDccForm = ({ onUpdate, user }) => {
                       styles={multipleSelectStyles}
                     />
                   }
+                  error={supervisorsError}
                 />
                 <InfoSection
                   label="Owned Proposals"
+                  error={approvedProposalsError}
                   info={
                     <Select
                       placeholder="Select Proposals"

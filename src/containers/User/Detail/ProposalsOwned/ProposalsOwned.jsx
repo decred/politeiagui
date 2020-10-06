@@ -1,17 +1,20 @@
 import React from "react";
 import ProposalBilling from "./ProposalBilling";
 import useApprovedProposals from "src/hooks/api/useApprovedProposals";
-import { Spinner, H3 } from "pi-ui";
+import { Spinner, H3, Message } from "pi-ui";
 import isEmpty from "lodash/fp/isEmpty";
 import styles from "./ProposalsOwned.module.css";
 
 const ProposalsOwned = ({ proposalsOwned }) => {
-  const { proposalsByToken, isLoading } = useApprovedProposals();
+  const { proposalsByToken, isLoading, error } = useApprovedProposals();
+  const loading = (isLoading || isEmpty(proposalsByToken)) && !error;
 
-  return isLoading || isEmpty(proposalsByToken) ? (
+  return loading ? (
     <div className={styles.spinnerWrapper}>
       <Spinner invert />
     </div>
+  ) : error ? (
+    <Message kind="error">{error.toString()}</Message>
   ) : (
     <>
       {proposalsOwned ? (

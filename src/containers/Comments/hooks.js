@@ -10,12 +10,22 @@ import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
 import { useConfig } from "src/containers/Config";
 import { useLoaderContext } from "src/containers/Loader";
+import { or } from "src/lib/fp";
 
 export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
 
 export function useComments(recordToken) {
   const { enableCommentVote, recordType, constants } = useConfig();
+
+  const errorSelector = or(
+    sel.apiProposalCommentsError,
+    sel.apiInvoiceCommentsError,
+    sel.apiDccCommentsError,
+    sel.apiLikeCommentsError,
+    sel.apiCommentsLikesError
+  );
+  const error = useSelector(errorSelector);
   const commentsSelector = useMemo(
     () => sel.makeGetRecordComments(recordToken),
     [recordToken]
@@ -117,6 +127,7 @@ export function useComments(recordToken) {
     loading,
     loadingLikes,
     loadingLikeAction,
-    onSubmitComment
+    onSubmitComment,
+    error
   };
 }

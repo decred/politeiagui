@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { Message } from "pi-ui";
 import get from "lodash/fp/get";
 import { withRouter } from "react-router-dom";
 import Proposal from "src/components/Proposal";
@@ -32,7 +33,7 @@ const ProposalDetail = ({ Main, match }) => {
   const proposalName = useSelector(proposalNameSelector);
   useDocumentTitle(proposalName);
   const threadParentCommentID = get("params.commentid", match);
-  const { proposal, loading, threadParentID } = useProposal(
+  const { proposal, loading, threadParentID, error } = useProposal(
     tokenFromUrl,
     threadParentCommentID
   );
@@ -49,7 +50,9 @@ const ProposalDetail = ({ Main, match }) => {
         <GoBackLink />
         <UnvettedActionsProvider>
           <PublicActionsProvider>
-            {loading || !proposal ? (
+            {error ? (
+              <Message kind="error">{error.toString()}</Message>
+            ) : loading || !proposal ? (
               <ProposalLoader extended />
             ) : (
               <Proposal

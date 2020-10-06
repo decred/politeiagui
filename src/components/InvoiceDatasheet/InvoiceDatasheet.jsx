@@ -52,10 +52,11 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   readOnly,
   userRate,
   errors,
-  proposals
+  proposals,
+  proposalsError
 }) {
   const { policy } = usePolicy();
-  const { subContractors } = useSubContractors();
+  const { subContractors, error: subContractorsError } = useSubContractors();
   const [grid, setGrid] = useState([]);
   const [currentRate, setCurrentRate] = useState(userRate || 0);
 
@@ -106,7 +107,9 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
         currentRate,
         policy,
         proposalsOptions,
-        subContractors
+        subContractors,
+        proposalsError,
+        subContractorsError
       );
       setGrid(grid);
     },
@@ -117,41 +120,56 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
       currentRate,
       policy,
       proposalsOptions,
-      subContractors
+      subContractors,
+      proposalsError,
+      subContractorsError
     ]
   );
 
-  const handleCopy = (e) => {
-    const selection = document.getSelection();
+  const copyTextToClipboard = (e, text) => {
     if (window.clipboardData && window.clipboardData.setData) {
-      window.clipboardData.setData("Text", selection.toString());
+      window.clipboardData.setData("Text", text);
     } else {
-      e.clipboardData.setData("text/plain", selection.toString());
+      e.clipboardData.setData("text/plain", text);
     }
-    e.preventDefault();
-    /**
-     *  The next line is necessary to not run the callback for the event
-     * listener attached to the document by react-spreadsheet
-     */
-    e.stopPropagation();
   };
 
-  /**
-   * This hook adds a listener to a copy action in the document.body.
-   * Adding it to the document.body allow us to overwrite the one added by react-spreadsheet to the document.
-   */
-  useEffect(
-    function customCopy() {
-      if (readOnly) {
-        document.body.addEventListener("copy", handleCopy);
+  const handleCopy = ({
+    range,
+    start,
+    end,
+    event,
+    data,
+    dataRenderer,
+    valueRenderer
+  }) => {
+    const selection = document.getSelection();
+    const text = selection.toString();
+    if (start.i === end.i && start.j === end.j && text) {
+      copyTextToClipboard(event, text);
+    } else {
+      const text = range(start.i, end.i)
+        .map((i) =>
+          range(start.j, end.j)
+            .map((j) => {
+              const cell = data[i][j];
+              const value = dataRenderer ? dataRenderer(cell, i, j) : null;
+              if (
+                value === "" ||
+                value === null ||
+                typeof value === "undefined"
+              ) {
+                return valueRenderer(cell, i, j);
+              }
+              return value;
+            })
+            .join("\t")
+        )
+        .join("\n");
+      copyTextToClipboard(event, text);
+    }
+  };
 
-        return function removeCopyListener() {
-          document.body.removeEventListener("copy", handleCopy);
-        };
-      }
-    },
-    [readOnly]
-  );
   const handlePaste = (str) => {
     // Track number of lines pasted
     let rowCount = 0;
@@ -223,6 +241,12 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   };
   return (
     <div className={styles.wrapper}>
+      {proposalsError && (
+        <div className="margin-bottom-s margin-top-s">
+          <H2 className={styles.invoiceError}>{proposalsError.toString()}</H2>
+          <P className={styles.invoiceError}>Unable to fetch proposals</P>
+        </div>
+      )}
       {renderErrors()}
       {!readOnly && (
         <div className="justify-right margin-top-s margin-bottom-s">
@@ -237,6 +261,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
       <div className={styles.datasheetWrapper}>
         <ReactDataSheet
           data={grid}
+          handleCopy={handleCopy}
           parsePaste={handlePaste}
           valueRenderer={valueRenderer}
           onContextMenu={onContextMenu}

@@ -10,25 +10,11 @@ export const typeOptions = [
   "Nominee",
   "Revoked",
   "Temp. Contractor",
-  "Revoked Temp."
-];
-
-export const domainOptions = [
-  "No domain defined",
-  "Development",
-  "Marketing",
-  "Design",
-  "Research",
-  "Documentation",
-  "Community Management"
+  "Revoked Temp.",
+  "Proposal Approved"
 ];
 
 export const selectTypeOptions = typeOptions.map((op, idx) => ({
-  value: idx,
-  label: op
-}));
-
-export const selectDomainOptions = domainOptions.map((op, idx) => ({
   value: idx,
   label: op
 }));

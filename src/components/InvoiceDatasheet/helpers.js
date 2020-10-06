@@ -10,7 +10,7 @@ import {
   multilineTextWrapper,
   singlelineTextWrapper,
   proposalViewWrapper,
-  proposalSelectWrapper
+  textWithErrorWrapper
 } from "./wrappers";
 import find from "lodash/find";
 
@@ -80,7 +80,9 @@ export const convertLineItemsToGrid = (
   userRate = 0,
   policy,
   proposalsOptions,
-  subContractors
+  subContractors,
+  proposalsError,
+  subContractorsError
 ) => {
   const {
     supporteddomains: policyDomains,
@@ -151,14 +153,15 @@ export const convertLineItemsToGrid = (
           readOnly,
           value: newLine.proposaltoken,
           error: rowErrors && rowErrors.proposaltoken,
-          dataEditor: proposalSelectWrapper(proposalsOptions),
-          valueViewer: proposalViewWrapper(proposalsOptions)
+          dataEditor: selectWrapper(proposalsOptions),
+          valueViewer: proposalViewWrapper(proposalsOptions, proposalsError)
         },
         {
           readOnly: isSubContractorReadonly,
           value: subContractorValue,
           error: rowErrors && rowErrors.subuserid,
-          dataEditor: selectWrapper(getSubcontractorOptions(subContractors))
+          dataEditor: selectWrapper(getSubcontractorOptions(subContractors)),
+          valueViewer: textWithErrorWrapper(subContractorsError)
         },
         {
           readOnly: isSubContractorReadonly,
@@ -284,6 +287,9 @@ export const processTypeColChange = (grid, { row, col, value }) => {
       readOnly: false
     });
     grid = updateGridCell(grid, row, EXP_COL, { readOnly: true });
+  } else {
+    grid = updateGridCell(grid, row, SUBCONTRACTOR_COL, { value: "" });
+    grid = updateGridCell(grid, row, SUBRATE_COL, { value: 0 });
   }
 
   return updateGridCell(grid, row, col, { value });

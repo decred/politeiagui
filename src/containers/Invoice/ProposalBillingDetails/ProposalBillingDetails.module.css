@@ -7,3 +7,25 @@
 .totalText {
   text-align: right;
 }
+
+.reference {
+  display: block;
+  font-size: 0.7em;
+}
+
+.value {
+  cursor: pointer;
+}
+
+.tableWrapper > div > .table {
+  table-layout: fixed;
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 100rem;
+  background-color: transparent;
+}
+
+.tableWrapper > div {
+  overflow-x: auto;
+}

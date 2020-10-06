@@ -1,4 +1,4 @@
-import { classNames, useTheme } from "pi-ui";
+import { classNames, useTheme, P } from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
 import styles from "./InfoSection.module.css";
@@ -9,7 +9,8 @@ const InfoSection = ({
   info,
   alignLabelCenter,
   className,
-  noMargin
+  noMargin,
+  error
 }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
@@ -26,10 +27,12 @@ const InfoSection = ({
         style={alignLabelCenter && { alignSelf: "center" }}>
         {label}:
       </span>
-      {!isEmpty(info) ? (
+      {error ? (
+        <P className={styles.infoError}>{error.toString()}</P>
+      ) : !isEmpty(info) ? (
         <span className={styles.info}>{info}</span>
       ) : (
-        <span className={styles.noInfo}>No information provided</span>
+        !error && <span className={styles.noInfo}>No information provided</span>
       )}
     </div>
   );

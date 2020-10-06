@@ -41,3 +41,6 @@ export const assertGETOnRouteIsCalled = async (
 export const setMockUrl = ({ pathname, search }) => {
   window.history.pushState({}, "Test title", `${pathname}${search || ""}`);
 };
+
+export const makeApiResponse = (initialResponse = {}, body = {}) =>
+  new Response(JSON.stringify(body), initialResponse);

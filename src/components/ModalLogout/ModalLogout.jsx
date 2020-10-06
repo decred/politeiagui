@@ -1,13 +1,18 @@
-import React, { useCallback } from "react";
-import { Modal, Button, P, Icon } from "pi-ui";
+import React, { useCallback, useState } from "react";
+import { Modal, Button, P, Icon, Message } from "pi-ui";
 import useNavigation from "src/hooks/api/useNavigation";
 
 const ModalLogout = ({ show, onClose }) => {
   const { onLogout, isCMS } = useNavigation();
+  const [error, setError] = useState();
 
-  const onLogoutClick = useCallback(() => {
-    onLogout(isCMS, false);
-    onClose();
+  const onLogoutClick = useCallback(async () => {
+    try {
+      await onLogout(isCMS, false);
+      onClose();
+    } catch (err) {
+      setError(err);
+    }
   }, [onLogout, onClose, isCMS]);
 
   const onPermanentLogoutClick = useCallback(() => {
@@ -21,6 +26,11 @@ const ModalLogout = ({ show, onClose }) => {
       title="Logout"
       onClose={onClose}
       iconComponent={<Icon type={"info"} size={26} />}>
+      {error && (
+        <Message kind="error" className="margin-top-m margin-bottom-m">
+          {error.toString()}
+        </Message>
+      )}
       <P>
         A normal logout keeps your data saved in the browser. A permanent logout
         will clear all of your user data stored in the browser, including your

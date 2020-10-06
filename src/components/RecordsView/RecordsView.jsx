@@ -28,19 +28,19 @@ const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
 
 const initialState = { itemsOnLoad: 0, requestedTokens: [] };
 
-const INCREMENT_LOADING_ITEMS = "increment";
-const DECREMENT_LOADING_ITEMS = "decrement";
+const SET_LOADING_ITEMS = "set";
+const RESET_LOADING_ITEMS = "reset";
 
 function reducer(state, action) {
   switch (action.type) {
-    case INCREMENT_LOADING_ITEMS:
+    case SET_LOADING_ITEMS:
       return {
         ...state,
-        itemsOnLoad: state.itemsOnLoad + action.count,
+        itemsOnLoad: action.count,
         requestedTokens: state.requestedTokens.concat(action.tokens)
       };
-    case DECREMENT_LOADING_ITEMS:
-      return { ...state, itemsOnLoad: state.itemsOnLoad - action.count };
+    case RESET_LOADING_ITEMS:
+      return { ...state, itemsOnLoad: 0 };
     default:
       throw new Error();
   }
@@ -50,7 +50,6 @@ const getDefaultEmptyMessage = () => "No records available";
 
 const RecordsView = ({
   children,
-  onFetchRecords,
   records,
   tabLabels,
   recordTokensByTab,
@@ -59,7 +58,9 @@ const RecordsView = ({
   pageSize = DEFAULT_PAGE_SIZE,
   placeholder,
   getEmptyMessage = getDefaultEmptyMessage,
-  dropdownTabsForMobile
+  dropdownTabsForMobile,
+  setRemainingTokens,
+  isLoading
 }) => {
   const [hasMoreToLoad, setHasMore] = useState(true);
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -73,12 +74,13 @@ const RecordsView = ({
 
   const isMobileScreen = useMediaQuery("(max-width:560px)");
 
-  const filteredRecords = useMemo(
-    () => getRecordsByTabOption(records, filteredTokens),
-    [records, filteredTokens]
-  );
+  const filteredRecords =
+    (records && getRecordsByTabOption(records, filteredTokens)) || [];
 
-  const handleFetchMoreRecords = useCallback(async () => {
+  const hasMoreRecordsToLoad =
+    filteredTokens && filteredRecords.length < filteredTokens.length;
+
+  const handleFetchMoreRecords = useCallback(() => {
     // make sure tokens being requested are different from the ones
     // already requested or fetched
     const fetchedTokens = filteredRecords.map(getRecordToken);
@@ -91,38 +93,33 @@ const RecordsView = ({
     const numOfItemsToBeFetched = recordTokensToBeFetched.length;
 
     // only proceed if there is at least one token to be fetched
-    if (!numOfItemsToBeFetched) return;
+    if (!numOfItemsToBeFetched) {
+      dispatch({ type: RESET_LOADING_ITEMS });
+      return;
+    }
 
     dispatch({
-      type: INCREMENT_LOADING_ITEMS,
+      type: SET_LOADING_ITEMS,
       count: numOfItemsToBeFetched,
       tokens: recordTokensToBeFetched
     });
-
-    try {
-      await onFetchRecords(recordTokensToBeFetched);
-      dispatch({ type: DECREMENT_LOADING_ITEMS, count: numOfItemsToBeFetched });
-    } catch (e) {
-      dispatch({
-        type: DECREMENT_LOADING_ITEMS,
-        count: itemsOnLoad + numOfItemsToBeFetched
-      });
-    }
+    setRemainingTokens(recordTokensToBeFetched);
   }, [
     filteredRecords,
     filteredTokens,
     pageSize,
     setHasMore,
-    onFetchRecords,
-    itemsOnLoad,
-    state.requestedTokens
+    state.requestedTokens,
+    setRemainingTokens
   ]);
 
   useEffect(() => {
-    const hasMoreRecordsToLoad =
-      filteredTokens && filteredRecords.length < filteredTokens.length;
     setHasMore(hasMoreRecordsToLoad);
-  }, [filteredTokens, filteredRecords.length]);
+    if (!hasMoreRecordsToLoad) {
+      setRemainingTokens && setRemainingTokens();
+      dispatch({ type: RESET_LOADING_ITEMS });
+    }
+  }, [hasMoreRecordsToLoad, setRemainingTokens]);
 
   const getPropsCountByTab = useCallback(
     (tab) => {
@@ -191,7 +188,7 @@ const RecordsView = ({
         emptyListComponent={
           <HelpMessage>{getEmptyMessage(tabOption)}</HelpMessage>
         }
-        isLoading={itemsOnLoad > 0}
+        isLoading={isLoading}
         loadingPlaceholder={loadingPlaceholders}
       />
     )

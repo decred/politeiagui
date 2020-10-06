@@ -13,6 +13,7 @@ export function useInvoice(invoiceToken) {
   );
   const invoice = useSelector(invoiceSelector);
   const isAdmin = useSelector(sel.currentUserIsAdmin);
+  const currentUser = useSelector(sel.currentUser);
   const onFetchInvoice = useAction(act.onFetchInvoice);
   const requestParams = useMemo(() => [invoiceToken], [invoiceToken]);
   const [loading, error] = useAPIAction(
@@ -21,7 +22,7 @@ export function useInvoice(invoiceToken) {
     !invoice || !invoice.payout
   );
 
-  return { invoice, isAdmin, loading, error };
+  return { currentUser, invoice, isAdmin, loading, error };
 }
 
 export function useInvoicesSummary(currentInvoice, userid, start, end) {
@@ -64,9 +65,5 @@ export function useCodeStats(userid, start, end) {
     end
   ]);
 
-  return {
-    loading,
-    error,
-    codestats
-  };
+  return { loading, error, codestats };
 }

@@ -7,6 +7,7 @@ import ModalPrivacyPolicy from "src/components/ModalPrivacyPolicy";
 import styles from "./LoginForm.module.css";
 import { useLogin } from "./hooks";
 import useModalContext from "src/hooks/utils/useModalContext";
+import { useConfig } from "src/containers/Config";
 
 const LoginForm = ({
   hideTitle,
@@ -18,7 +19,7 @@ const LoginForm = ({
   renderPrivacyPolicyModal
 }) => {
   const { onLogin, validationSchema } = useLogin();
-
+  const { enableAdminInvite } = useConfig();
   const onSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
@@ -119,9 +120,12 @@ const LoginForm = ({
                 </Text>
               )}
             />
-            <Text className={styles.createAccounTxt}>
-              Don't have an account? <Link to="/user/signup">Create here!</Link>
-            </Text>
+            {!enableAdminInvite && (
+              <Text className={styles.createAccounTxt}>
+                Don't have an account?{" "}
+                <Link to="/user/signup">Create here!</Link>
+              </Text>
+            )}
           </Footer>
         </Form>
       )}
