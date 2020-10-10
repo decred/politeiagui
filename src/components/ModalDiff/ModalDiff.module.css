@@ -27,8 +27,15 @@
   overflow: scroll;
 }
 
+.loaderWrapper {
+  width: 920px;
+}
+
 @media screen and (max-width: 560px) {
   .diffTabContent {
     max-height: calc(70vh);
+  }
+  .loaderWrapper {
+    width: 100%;
   }
 }

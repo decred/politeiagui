@@ -1,12 +1,18 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import {
   proposal as onFetchProposal,
   invoice as onFetchInvoice
 } from "src/lib/api.js";
 import { getTextFromIndexMd } from "src/helpers";
-import { ModalDiffProposal, ModalDiffInvoice } from "src/components/ModalDiff";
+import {
+  ModalDiffProposal,
+  ModalDiffInvoice,
+  ModalDiffLoader
+} from "src/components/ModalDiff";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useConfig } from "src/containers/Config";
+import { useSelector } from "src/redux";
+import { proposalIsRequesting } from "src/selectors";
 
 const getProposalText = (proposal) => {
   const getMarkdowFile = (prop) =>
@@ -18,17 +24,26 @@ const getProposalFilesWithoutIndexMd = (proposal) =>
   proposal ? proposal.files.filter((file) => file.name !== "index.md") : [];
 
 export function useVersionPicker(version, token) {
+  const isLoadingProposal = useSelector(proposalIsRequesting);
   const [selectedVersion, setSelectedVersion] = useState(version);
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const { recordType, constants } = useConfig();
   const [error, setError] = useState();
 
-  const onChangeVersion = useCallback(
-    async (v) => {
-      setSelectedVersion(v);
-      try {
-        if (recordType === constants.RECORD_TYPE_PROPOSAL) {
-          const proposalDiff = await fetchProposalsVersions(token, v);
+  const openModalLoader = (isInvoice) =>
+    handleOpenModal(ModalDiffLoader, {
+      onClose: handleCloseModal,
+      isInvoice
+    });
+
+  const onChangeVersion = async (v) => {
+    setSelectedVersion(v);
+    try {
+      if (recordType === constants.RECORD_TYPE_PROPOSAL) {
+        openModalLoader();
+        const proposalDiff = await fetchProposalsVersions(token, v);
+        setTimeout(() => {
+          handleCloseModal();
           handleOpenModal(ModalDiffProposal, {
             proposalDetails: proposalDiff.details,
             onClose: handleCloseModal,
@@ -39,28 +54,24 @@ export function useVersionPicker(version, token) {
             oldTitle: proposalDiff.oldTitle,
             newTitle: proposalDiff.newTitle
           });
-        }
-        if (recordType === constants.RECORD_TYPE_INVOICE) {
-          const { invoice, prevInvoice } = await fetchInvoiceVersions(token, v);
+        }, 500);
+      }
+      if (recordType === constants.RECORD_TYPE_INVOICE) {
+        openModalLoader();
+        const { invoice, prevInvoice } = await fetchInvoiceVersions(token, v);
+        setTimeout(() => {
+          handleCloseModal();
           handleOpenModal(ModalDiffInvoice, {
             onClose: handleCloseModal,
             invoice,
             prevInvoice
           });
-        }
-      } catch (err) {
-        setError(err);
+        }, 500);
       }
-    },
-    [
-      setSelectedVersion,
-      handleCloseModal,
-      handleOpenModal,
-      constants,
-      recordType,
-      token
-    ]
-  );
+    } catch (err) {
+      setError(err);
+    }
+  };
 
   async function fetchProposalsVersions(token, version) {
     let prevProposal = null;
@@ -76,7 +87,7 @@ export function useVersionPicker(version, token) {
       newText: getProposalText(proposal),
       oldText: getProposalText(prevProposal),
       newTitle: proposal.name,
-      oldTitle: prevProposal.name
+      oldTitle: prevProposal ? prevProposal.name : ""
     };
   }
 
@@ -102,6 +113,7 @@ export function useVersionPicker(version, token) {
     disablePicker,
     selectedVersion,
     onChangeVersion,
-    error
+    error,
+    loading: isLoadingProposal
   };
 }
