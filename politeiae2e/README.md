@@ -2,9 +2,7 @@
 
 This can be used for e2e testing and also generalized testing of the full politeiagui -> politeiawww -> politeiad stack.
 
-Note: This does not currently support cms. 
-
-## How to setup politeiae2e
+## How to setup politeiae2e (piwww)
 
 
 Build the docker image using the commands `chmod +x build.sh` and `./build.sh`. 
@@ -25,6 +23,12 @@ It creates a file `dockerfiles/nginx.cert` that can be imported to your browser 
 
 `docker run --rm -it --entrypoint /bin/sh politeiae2e`
 
+
+## How to setup politeiae2ecms (cmswww)
+
+Build the docker image using the commands `chmod +x cmsbuild.sh` and `./cmsbuild.sh`. \
+
+Can use the same commands as above. Note that `politeiae2ecms` will be the name of the docker image.
 
 ### Default Useraccounts:
 
