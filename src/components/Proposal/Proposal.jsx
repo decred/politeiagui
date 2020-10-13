@@ -44,6 +44,23 @@ import useModalContext from "src/hooks/utils/useModalContext";
 import { useRouter } from "src/components/Router";
 import { isEmpty } from "src/helpers";
 
+const getKeyByValue = (obj, val) =>
+        Object.values(obj).find(value => value.digest === val);
+
+function replaceImgDigestWithPayload(text, files) {
+  const imageRegexParser = /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
+  const imgs = text.matchAll(imageRegexParser);
+  let newText = text;
+  for(const img of imgs) {
+    const { digest } = img.groups;
+    const obj = getKeyByValue(files, digest);
+    if (obj) {
+      newText = newText.replace(digest, `data:${obj.mime};base64,${obj.payload}`);
+    }
+  }
+  return newText;
+}
+
 const ProposalWrapper = (props) => {
   const {
     voteSummary,
@@ -304,7 +321,8 @@ const Proposal = React.memo(function Proposal({
                   isDarkTheme && "dark",
                   showRfpSubmissions && styles.rfpMarkdownContainer
                 )}
-                body={getMarkdownContent(files)}
+                files={files}
+                body={replaceImgDigestWithPayload(getMarkdownContent(files), files)}
               />
             )}
             {collapseBodyContent && (

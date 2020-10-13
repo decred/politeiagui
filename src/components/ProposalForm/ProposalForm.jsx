@@ -16,9 +16,9 @@ import DatePickerField from "../DatePickerField";
 import SelectField from "src/components/Select/SelectField";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/components/MarkdownEditor";
+import ModalMDGuide from "src/components/ModalMDGuide";
 import ThumbnailGrid from "src/components/Files";
 import AttachFileInput from "src/components/AttachFileInput";
-import ModalMDGuide from "src/components/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import usePolicy from "src/hooks/api/usePolicy";
@@ -37,6 +37,29 @@ import useModalContext from "src/hooks/utils/useModalContext";
 import FormatHelpButton from "./FormatHelpButton";
 import SubmitButton from "./SubmitButton";
 import ProposalGuidelinesButton from "./ProposalGuidelinesButton";
+
+const mapBlobToFile = new Map();
+
+/**
+ * replaceBlobsToDigestsAndGetFiles uses a regex to parse images
+ * @param {String} description the markdown description
+ * @param {Map} map the map of blob -> file
+ * @returns {object} { description, files }
+ */
+function replaceBlobsToDigestsAndGetFiles(description, map) {
+  const imageRegexParser = /!\[[^\]]*\]\((?<blob>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
+  const imgs = description.matchAll(imageRegexParser);
+  let newDescription = description;
+  const files = [];
+  for(const img of imgs) {
+    const { blob } = img.groups;
+    if (map.has(blob)) {
+      newDescription = newDescription.replace(blob, map.get(blob).digest);
+      files.push(map.get(blob));
+    }
+  }
+  return { description: newDescription, files };
+}
 
 const ProposalForm = React.memo(function ProposalForm({
   values,
@@ -196,9 +219,11 @@ const ProposalForm = React.memo(function ProposalForm({
         value={values.description}
         textAreaProps={textAreaProps}
         onChange={handleDescriptionChange}
+        onFileChange={handleFilesChange}
         placeholder={"Write your proposal"}
         error={touched.description && errors.description}
         filesInput={filesInput}
+        mapBlobToFile={mapBlobToFile}
       />
       <ThumbnailGrid
         value={values.files}
@@ -261,7 +286,10 @@ const ProposalFormWrapper = ({
     onFetchProposalsBatchWithoutState
   } = useProposalForm();
   const handleSubmit = useCallback(
-    async (values, { resetForm, setSubmitting, setFieldError }) => {
+    async (
+      values,
+      { resetForm, setSubmitting, setFieldError }
+    ) => {
       try {
         if (isAnchoring()) {
           throw new Error(
@@ -285,9 +313,11 @@ const ProposalFormWrapper = ({
             );
           }
         }
+        const { description, files } = replaceBlobsToDigestsAndGetFiles(others.description, mapBlobToFile);
         const proposalToken = await onSubmit({
           ...others,
-          type,
+          description,
+          files: [...others.files, ...files],
           rfpLink
         });
         setSubmitting(false);
@@ -302,6 +332,7 @@ const ProposalFormWrapper = ({
     },
     [history, onSubmit, onFetchProposalsBatchWithoutState, isPublic]
   );
+
   return (
     <>
       <Formik

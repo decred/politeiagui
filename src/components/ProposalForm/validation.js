@@ -3,10 +3,7 @@ import {
   minLengthMessage,
   maxLengthMessage,
   exactLengthMessage,
-  maxFileSizeMessage,
-  invalidMessage,
-  maxFilesExceededMessage,
-  validMimeTypesMessage
+  invalidMessage
 } from "src/utils/validation";
 
 import {
@@ -18,11 +15,7 @@ import {
 export const proposalValidation = ({
   proposalnamesupportedchars,
   maxproposalnamelength,
-  minproposalnamelength,
-  validmimetypes,
-  maximages,
-  maximagesize,
-  maxmdsize
+  minproposalnamelength
 }) => (values) => {
   const errors = {};
   if (!values) {
@@ -66,60 +59,7 @@ export const proposalValidation = ({
     errors.description = "Required";
   }
 
-  // files validation
-  const [validatedFiles, filesErrors] = validateProposalFiles(
-    values.files,
-    validmimetypes,
-    maximages,
-    maximagesize,
-    maxmdsize
-  );
-  if (filesErrors) errors.files = filesErrors;
-  values.files = validatedFiles;
   return errors;
-};
-
-/**
- * validates proposal files
- * currently pi policy only allows 1 md file to be attached to a proposal
- * it corresponds to the index file, so a proposal can only accept image
- * attachments until this policy changes
- * @param {Array} files provided files
- * @param {Array} validmimetypes valid mime types
- * @param {Number} maximages max number of images
- * @param {Number} maximagesize max image file size
- * @param {Number} maxmdsize max .md file size
- */
-const validateProposalFiles = (
-  files,
-  validmimetypes,
-  maximages,
-  maximagesize,
-  maxmdsize
-) => {
-  const validMimeTypes = validmimetypes.filter((m) => m.startsWith("image/"));
-  const validatedFiles = [];
-  let errors = [];
-  if (files && files.length > maximages) {
-    errors.push(maxFilesExceededMessage(maximages));
-    return [files, errors];
-  }
-  for (const file of files) {
-    if (!validMimeTypes.includes(file.mime)) {
-      errors.push(validMimeTypesMessage(validMimeTypes));
-    } else if (
-      (file.mime.startsWith("image/") && file.size > maximagesize) ||
-      (file.mime.startsWith("text/") && file.size > maxmdsize)
-    ) {
-      errors.push(maxFileSizeMessage());
-    } else {
-      validatedFiles.push(file);
-    }
-  }
-
-  if (errors.length === 0) errors = null;
-
-  return [validatedFiles, errors];
 };
 
 const validateRfpSubmissionToken = (rfpLink) => {

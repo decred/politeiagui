@@ -10373,10 +10373,10 @@ react-markdown@^4.2.2:
   resolved "https://registry.yarnpkg.com/react-mde/-/react-mde-8.2.0.tgz#4e5bc2f8365efd471b5bf69f544bd62860902cc1"
   integrity sha512-itcbS94iN+4R7uxHTyfB4sSXivDxKo+WocqoJ5RZ5qqLfMI93Dj9XzmL3yh4nIcUyH2lWhfQ7c4HpKoT9WDFHw==
 
-react-mde@8.0.2:
-  version "8.0.2"
-  resolved "https://registry.yarnpkg.com/react-mde/-/react-mde-8.0.2.tgz#900dca65f0dc0d45e75dce8a08ac6f648a09dc31"
-  integrity sha512-Uu1nq3L7kS//Ylp33g97WEeYMCT9CmR5OMIrd0HeeJU06geT2dWW/LN+EfEI0rf2B3Swj1iixZqzqMBNxKuqdw==
+react-mde@^10.3.0-alpha1:
+  version "10.3.0-alpha1"
+  resolved "https://registry.yarnpkg.com/react-mde/-/react-mde-10.3.0-alpha1.tgz#4369104632df582c6a15fba42a623d535564b9d4"
+  integrity sha512-Ap45BF18g3NLBRZQ3sp9RvTrsD1yK2FOFMTb1FtM8FGOsN2NcTBEwhIt0R3E7sQ0dlYVfAPEjbb7AA++0jBqHw==
 
 react-redux@^7.1.3:
   version "7.2.0"

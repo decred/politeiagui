@@ -1,5 +1,4 @@
 import React from "react";
-import xssFilters from "xss-filters";
 import htmlParser from "react-markdown/plugins/html-parser";
 import ModalExternalLink from "../ModalExternalLink";
 import useModalContext from "src/hooks/utils/useModalContext";
@@ -10,9 +9,9 @@ export const htmlParserRules = htmlParser({
   }
 });
 
-export const traverseChildren = (el, cb) => {
+export const traverseChildren = (el) => {
   const filterChildren = (c) =>
-    React.Children.map(c, (child) => traverseChildren(child, cb));
+    React.Children.map(c, (child) => traverseChildren(child));
   let newElement = null;
   if (el.children) {
     newElement = {
@@ -29,25 +28,7 @@ export const traverseChildren = (el, cb) => {
       }
     };
   }
-  return newElement ? cb(newElement) : cb(el);
-};
-
-export const handleFilterXss = (el) => {
-  if (typeof el === "string") return el;
-  const props = el.props;
-  if (!props) {
-    return el;
-  }
-  const newProps = {
-    ...props
-  };
-  if (newProps.src) {
-    newProps.src = xssFilters.uriInDoubleQuotedAttr(props.src);
-  }
-  return {
-    ...el,
-    props: newProps
-  };
+  return newElement ? newElement : el;
 };
 
 const isExternalLink = (link) => {
@@ -81,7 +62,7 @@ const LinkRenderer = ({ url, children }) => {
 };
 
 const imageHandler = ({ src, alt }) => {
-  return <LinkRenderer url={src}>{alt}</LinkRenderer>;
+  return <img src={src} alt={alt} />;
 };
 
 const linkHandler = ({ href, children }) => {
@@ -90,7 +71,7 @@ const linkHandler = ({ href, children }) => {
 
 const rootHandler = (filterXss) => (el) => {
   if (filterXss) {
-    el = traverseChildren(el, handleFilterXss);
+    el = traverseChildren(el);
   }
   const { children, ...props } = el;
   return <div {...props}>{children}</div>;

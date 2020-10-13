@@ -1,22 +1,48 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { classNames, useTheme } from "pi-ui";
-import { getCommandsList, getCommandIcon } from "./commands";
+import { toolbarCommands, getCommandIcon  } from "./commands";
 import Markdown from "../Markdown";
 import styles from "./MarkdownEditor.module.css";
 import "./styles.css";
-import ReactMde from "react-mde-newest";
+import { digestPayload } from "src/helpers";
+import ReactMde, { getDefaultCommandMap } from "react-mde";
+import customSaveImageCommand from "./customSaveImageCommand";
+
+/** displayBlobSolution receives a pair of [ArrayBuffer, File] and returns a blob URL to display the image on preview */
+const displayBlobSolution = (f) => {
+  const [result] = f;
+  const bytes = new Uint8Array(result);
+  const blob = new Blob([bytes], { type: "image/png" });
+  const urlCreator = window.URL || window.webkitURL;
+  const imageUrl = urlCreator.createObjectURL(blob);
+  return imageUrl;
+};
+
+/** getFormattedFile receives a pair of [ArrayBuffer, File] and returns an object in the exact format we need to submit to the backend */
+function getFormattedFile(f) {
+  const [result, file] = f;
+  const payload = btoa(result);
+  return ({
+      name: file.name,
+      mime: file.type,
+      size: file.size,
+      payload,
+      digest: digestPayload(payload)
+    })
+  ;
+}
 
 const MarkdownEditor = React.memo(function MarkdownEditor({
   onChange,
   value,
   placeholder,
   className,
+  textAreaProps,
   filesInput,
-  textAreaProps
+  mapBlobToFile
 }) {
   const [tab, setTab] = useState("write");
-
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
 
@@ -26,6 +52,12 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
       textarea.placeholder = placeholder;
     }
   }, [tab, placeholder]);
+
+  const attachFilesCommand = {
+    name: "attach-files",
+    icon: () => filesInput,
+    execute: () => null
+  };
 
   const generateMarkdownPreview = useCallback(
     (markdown) =>
@@ -43,12 +75,19 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
     [isDarkTheme]
   );
 
-  const getIcon = useMemo(() => getCommandIcon(filesInput), [filesInput]);
-
-  const hasFileInput = !!filesInput;
-  const commandList = useMemo(() => getCommandsList(hasFileInput), [
-    hasFileInput
-  ]);
+  const save = function ({ serverImage, displayImage }) {
+    try {
+      const fileToUpload = getFormattedFile(serverImage);
+      const urlToDisplay = displayBlobSolution(displayImage);
+      mapBlobToFile.set(urlToDisplay, fileToUpload);
+      return {
+        name: fileToUpload.name,
+        url: urlToDisplay
+      };
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <div className={classNames(styles.container, className)}>
@@ -57,10 +96,18 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
         onTabChange={setTab}
         textAreaProps={textAreaProps}
         generateMarkdownPreview={generateMarkdownPreview}
-        getIcon={getIcon}
-        commands={commandList}
+        getIcon={getCommandIcon}
+        commands={{
+          ...getDefaultCommandMap(),
+          "attach-files": attachFilesCommand,
+          "save-image": customSaveImageCommand
+        }}
+        toolbarCommands={toolbarCommands}
         onChange={onChange}
         value={value}
+        paste={{
+          saveImage: save
+        }}
       />
     </div>
   );
