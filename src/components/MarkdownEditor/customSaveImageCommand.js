@@ -54,7 +54,6 @@ function dataTransferToArray(items) {
       result.push(item.getAsFile());
     }
   }
-  console.log("res", result);
   return result;
 }
 
@@ -78,8 +77,6 @@ const customSaveImageCommand = {
     const pasteContext = context;
     const { event, saveImage } = pasteContext;
 
-    // console.log(event.clipboardData.items);
-    // console.log(event.dataTransfer.items);
     const items = isPasteEvent(context)
       ? dataTransferToArray(event.clipboardData.items)
       : isDragEvent(context)
@@ -102,10 +99,7 @@ const customSaveImageCommand = {
       const serverImage = await readFileAsync(blob, "binary");
       // this is the format we have can show a blob
       const displayImage = await readFileAsync(blob);
-      console.log("images", serverImage, displayImage);
       const image = await saveImage({ serverImage, displayImage });
-      console.log(image);
-
       const newState = textApi.getState();
 
       const uploadingText = newState.text.substr(

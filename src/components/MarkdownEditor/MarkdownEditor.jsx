@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { classNames, useTheme } from "pi-ui";
-import { toolbarCommands, getCommandIcon  } from "./commands";
+import { toolbarCommands, getCommandIcon } from "./commands";
 import Markdown from "../Markdown";
 import styles from "./MarkdownEditor.module.css";
 import "./styles.css";
@@ -23,14 +23,13 @@ const displayBlobSolution = (f) => {
 function getFormattedFile(f) {
   const [result, file] = f;
   const payload = btoa(result);
-  return ({
-      name: file.name,
-      mime: file.type,
-      size: file.size,
-      payload,
-      digest: digestPayload(payload)
-    })
-  ;
+  return {
+    name: file.name,
+    mime: file.type,
+    size: file.size,
+    payload,
+    digest: digestPayload(payload)
+  };
 }
 
 const MarkdownEditor = React.memo(function MarkdownEditor({

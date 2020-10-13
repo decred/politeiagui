@@ -1,12 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  StatusBar,
-  StatusTag,
-  classNames,
-  Icon,
-  useMediaQuery
-} from "pi-ui";
+import { StatusBar, StatusTag, classNames, Icon, useMediaQuery } from "pi-ui";
 import VotesCount from "../Proposal/VotesCount";
 import { Row } from "../layout";
 import {

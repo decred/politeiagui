@@ -51,7 +51,7 @@ function replaceBlobsToDigestsAndGetFiles(description, map) {
   const imgs = description.matchAll(imageRegexParser);
   let newDescription = description;
   const files = [];
-  for(const img of imgs) {
+  for (const img of imgs) {
     const { blob } = img.groups;
     if (map.has(blob)) {
       newDescription = newDescription.replace(blob, map.get(blob).digest);
@@ -286,10 +286,7 @@ const ProposalFormWrapper = ({
     onFetchProposalsBatchWithoutState
   } = useProposalForm();
   const handleSubmit = useCallback(
-    async (
-      values,
-      { resetForm, setSubmitting, setFieldError }
-    ) => {
+    async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
         if (isAnchoring()) {
           throw new Error(
@@ -313,7 +310,10 @@ const ProposalFormWrapper = ({
             );
           }
         }
-        const { description, files } = replaceBlobsToDigestsAndGetFiles(others.description, mapBlobToFile);
+        const { description, files } = replaceBlobsToDigestsAndGetFiles(
+          others.description,
+          mapBlobToFile
+        );
         const proposalToken = await onSubmit({
           ...others,
           description,

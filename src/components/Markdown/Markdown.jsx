@@ -11,16 +11,16 @@ const MarkdownRenderer = ({
   escapeHtml = true,
   ...props
 }) => (
-    <div className={className} {...props}>
-      <ReactMarkdown
-        className="markdown-body"
-        escapeHtml={escapeHtml}
-        astPlugins={[htmlParserRules]}
-        renderers={customRenderers(filterXss)}
-        source={body}
-      />
-    </div>
-  );
+  <div className={className} {...props}>
+    <ReactMarkdown
+      className="markdown-body"
+      escapeHtml={escapeHtml}
+      astPlugins={[htmlParserRules]}
+      renderers={customRenderers(filterXss)}
+      source={body}
+    />
+  </div>
+);
 
 MarkdownRenderer.prototype = {
   body: PropTypes.string,
