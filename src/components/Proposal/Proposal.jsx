@@ -51,19 +51,19 @@ function replaceImgDigestWithPayload(text, files) {
   const imageRegexParser = /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
   const imgs = text.matchAll(imageRegexParser);
   let newText = text;
-  const filesOnMd = [];
+  const markdownFiles = [];
   for (const img of imgs) {
     const { digest } = img.groups;
     const obj = getKeyByValue(files, digest);
     if (obj) {
-      filesOnMd.push(obj);
+      markdownFiles.push(obj);
       newText = newText.replace(
         digest,
         `data:${obj.mime};base64,${obj.payload}`
       );
     }
   }
-  return { text: newText, filesOnMd };
+  return { text: newText, markdownFiles };
 }
 
 const ProposalWrapper = (props) => {
@@ -165,7 +165,7 @@ const Proposal = React.memo(function Proposal({
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
 
-  const { text, filesOnMd } = replaceImgDigestWithPayload(
+  const { text, markdownFiles } = replaceImgDigestWithPayload(
     getMarkdownContent(files),
     files
   );
@@ -356,7 +356,7 @@ const Proposal = React.memo(function Proposal({
             {extended && files.length > 1 && (
               <Row className={styles.filesRow} justify="left" topMarginSize="s">
                 <ThumbnailGrid
-                  value={files.filter((file) => !filesOnMd.includes(file))}
+                  value={files.filter((file) => !markdownFiles.includes(file))}
                   viewOnly={true}
                 />
               </Row>
