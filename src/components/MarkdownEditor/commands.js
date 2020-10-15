@@ -36,11 +36,6 @@ const commandsIcons = {
 };
 
 /**
- * Curried function
- * @param {Object} filesInput
- * @returns {function} a function that accepts a command name parameter
- */
-/**
  * Returns the React node to be displayed for a given command name.
  * @param {string} commandName
  * @returns {Object} React node
