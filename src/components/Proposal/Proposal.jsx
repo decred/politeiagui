@@ -56,8 +56,6 @@ function replaceImgDigestWithPayload(text, files) {
     const { digest } = img.groups;
     const obj = getKeyByValue(files, digest);
     if (obj) {
-      console.log(obj);
-      filesOnMd.push(obj);
       newText = newText.replace(
         digest,
         `data:${obj.mime};base64,${obj.payload}`
