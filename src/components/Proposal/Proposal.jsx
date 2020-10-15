@@ -56,6 +56,7 @@ function replaceImgDigestWithPayload(text, files) {
     const { digest } = img.groups;
     const obj = getKeyByValue(files, digest);
     if (obj) {
+      filesOnMd.push(obj);
       newText = newText.replace(
         digest,
         `data:${obj.mime};base64,${obj.payload}`
@@ -354,7 +355,10 @@ const Proposal = React.memo(function Proposal({
             )}
             {extended && files.length > 1 && (
               <Row className={styles.filesRow} justify="left" topMarginSize="s">
-                <ThumbnailGrid value={files.filter(file => !filesOnMd.includes(file) )} viewOnly={true} />
+                <ThumbnailGrid
+                  value={files.filter((file) => !filesOnMd.includes(file))}
+                  viewOnly={true}
+                />
               </Row>
             )}
             {extended && (
