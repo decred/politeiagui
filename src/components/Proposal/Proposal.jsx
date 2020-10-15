@@ -51,17 +51,20 @@ function replaceImgDigestWithPayload(text, files) {
   const imageRegexParser = /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
   const imgs = text.matchAll(imageRegexParser);
   let newText = text;
+  const filesOnMd = [];
   for (const img of imgs) {
     const { digest } = img.groups;
     const obj = getKeyByValue(files, digest);
     if (obj) {
+      console.log(obj);
+      filesOnMd.push(obj);
       newText = newText.replace(
         digest,
         `data:${obj.mime};base64,${obj.payload}`
       );
     }
   }
-  return newText;
+  return { text: newText, filesOnMd };
 }
 
 const ProposalWrapper = (props) => {
@@ -162,6 +165,11 @@ const Proposal = React.memo(function Proposal({
 
   const { themeName } = useTheme();
   const isDarkTheme = themeName === "dark";
+
+  const { text, filesOnMd } = replaceImgDigestWithPayload(
+    getMarkdownContent(files),
+    files
+  );
 
   return (
     <>
@@ -324,11 +332,7 @@ const Proposal = React.memo(function Proposal({
                   isDarkTheme && "dark",
                   showRfpSubmissions && styles.rfpMarkdownContainer
                 )}
-                files={files}
-                body={replaceImgDigestWithPayload(
-                  getMarkdownContent(files),
-                  files
-                )}
+                body={text}
               />
             )}
             {collapseBodyContent && (
@@ -352,7 +356,7 @@ const Proposal = React.memo(function Proposal({
             )}
             {extended && files.length > 1 && (
               <Row className={styles.filesRow} justify="left" topMarginSize="s">
-                <ThumbnailGrid value={files} viewOnly={true} />
+                <ThumbnailGrid value={files.filter(file => !filesOnMd.includes(file) )} viewOnly={true} />
               </Row>
             )}
             {extended && (
