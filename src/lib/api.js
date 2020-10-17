@@ -295,10 +295,8 @@ export const parseResponse = (response) =>
     };
   });
 
-// XXX add optional version param with default "v1" as we do in POST
-// to avoid passing paths with version
-const GET = (path) =>
-  fetch(apiBase + path, { credentials: "include" }).then(parseResponse);
+const GET = (path, version = "v1") =>
+  fetch(getUrl(path, version), { credentials: "include" }).then(parseResponse);
 
 const getOptions = (csrf, json, method) => ({
   headers: {
@@ -319,10 +317,10 @@ const POST = (path, csrf, json, version = "v1") =>
 const PUT = (path, csrf, json) =>
   fetch(getUrl(path), getOptions(csrf, json, "PUT")).then(parseResponse);
 
-export const me = () => GET("/v1/user/me").then(getResponse);
+export const me = () => GET("/user/me").then(getResponse);
 
 export const apiInfo = () =>
-  GET("/").then(
+  GET("/", "").then(
     ({
       csrfToken,
       response: { version, route, pubkey, testnet, mode, activeusersession }
@@ -371,7 +369,7 @@ export const verifyNewUser = (email, verificationToken, username) => {
     .signStringHex(username, verificationToken)
     .then((signature) =>
       GET(
-        `/v1/user/verify?${qs.stringify({
+        `/user/verify?${qs.stringify({
           email,
           verificationToken,
           signature
@@ -475,34 +473,34 @@ export const verifyKeyRequest = (csrf, userid, verificationtoken) =>
       )
     );
 
-export const policy = () => GET("/v1/policy").then(getResponse);
+export const policy = () => GET("/policy").then(getResponse);
 
 // This route wasn't implemented yet with tlog and will be added in later
 // stage.
 export const userProposals = (userid, after) => {
   return !after
-    ? GET(`/v1/user/proposals?${qs.stringify({ userid })}`).then(getResponse)
-    : GET(`/v1/user/proposals?${qs.stringify({ userid, after })}`).then(
+    ? GET(`/user/proposals?${qs.stringify({ userid })}`).then(getResponse)
+    : GET(`/user/proposals?${qs.stringify({ userid, after })}`).then(
         getResponse
       );
 };
 
 export const searchUser = (obj) =>
-  GET(`/v1/users?${qs.stringify(obj)}`).then(getResponse);
+  GET(`/users?${qs.stringify(obj)}`).then(getResponse);
 
 export const searchCmsUsers = (obj) =>
-  GET(`/v1/cmsusers?${qs.stringify(obj)}`).then(getResponse);
+  GET(`/cmsusers?${qs.stringify(obj)}`).then(getResponse);
 
 export const proposalsBatch = (csrf, payload) =>
   POST("/proposals", csrf, payload).then(getResponse);
 
-export const user = (userId) => GET(`/v1/user/${userId}`).then(getResponse);
+export const user = (userId) => GET(`/user/${userId}`).then(getResponse);
 
 export const proposalComments = (csrf, token, state) =>
   POST("/comments", csrf, { token, state }).then(getResponse);
 
 export const invoiceComments = (token) =>
-  GET(`/v1/invoices/${token}/comments`).then(getResponse);
+  GET(`/invoices/${token}/comments`).then(getResponse);
 
 export const logout = (csrf) =>
   POST("/logout", csrf, {}).then(() => {
@@ -596,12 +594,12 @@ const votePayloadWithType = ({
   passpercentage,
   options: [
     {
-      id: "no",
+      id: "reject",
       description: "Don't approve proposal",
       bit: 1
     },
     {
-      id: "yes",
+      id: "approve",
       description: "Approve proposal",
       bit: 2
     }
@@ -714,7 +712,7 @@ export const proposalAuthorizeOrRevokeVote = (
           POST("/vote/authorize", csrf, {
             action,
             token,
-            version,
+            version: +version,
             signature,
             publickey
           })
@@ -737,10 +735,12 @@ export const userProposalCredits = () =>
 export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
 
-export const proposalsInventory = () =>
-  GET("/v1/proposals/invnetory").then(getResponse);
+export const proposalsInventory = (csrf) =>
+  POST("/proposals/inventory", csrf, {}).then(getResponse);
 
-export const tokenInventory = () => GET("/v1/vote/inventory").then(getResponse);
+// XXX change function name to votesInventory
+export const tokenInventory = (csrf) =>
+  POST("/votes/inventory", csrf, {}).then(getResponse);
 
 // CMS
 export const inviteNewUser = (csrf, payload) =>
@@ -760,11 +760,11 @@ export const editInvoice = (csrf, invoice) =>
   POST("/invoices/edit", csrf, invoice).then(getResponse);
 
 export const invoice = (token, version = null) =>
-  GET(`/v1/invoices/${token}` + (version ? `?version=${version}` : "")).then(
+  GET(`/invoices/${token}` + (version ? `?version=${version}` : "")).then(
     getResponse
   );
 
-export const userInvoices = () => GET("/v1/user/invoices").then(getResponse);
+export const userInvoices = () => GET("/user/invoices").then(getResponse);
 
 export const adminInvoices = (csrf) =>
   POST("/invoices", csrf, {}).then(getResponse);
@@ -776,10 +776,10 @@ export const invoicePayouts = (csrf, starttime, endtime) =>
   POST("/admin/invoicepayouts", csrf, { starttime, endtime }).then(getResponse);
 
 export const payApprovedInvoices = () =>
-  GET("/v1/admin/payinvoices").then(getResponse);
+  GET("/admin/payinvoices").then(getResponse);
 
 export const getSpendingSummary = () =>
-  GET("/v1/proposals/spendingsummary").then(getResponse);
+  GET("/proposals/spendingsummary").then(getResponse);
 
 export const getSpendingDetails = (csrf, token) =>
   POST("/proposals/spendingdetails", csrf, { token }).then(getResponse);
@@ -788,7 +788,7 @@ export const exchangeRate = (csrf, month, year) =>
   POST("/invoices/exchangerate", csrf, { month, year }).then(getResponse);
 
 export const userSubcontractors = (csrf) =>
-  GET("/v1/user/subcontractors", csrf).then(getResponse);
+  GET("/user/subcontractors", csrf).then(getResponse);
 
 export const newDcc = (csrf, dcc) =>
   POST("/dcc/new", csrf, dcc).then(({ response: { censorshiprecord } }) => ({
@@ -802,7 +802,7 @@ export const dccsByStatus = (csrf, status) =>
   POST("/dcc", csrf, status).then(getResponse);
 
 export const dccDetails = (csrf, token) =>
-  GET(`/v1/dcc/${token}`, csrf).then(getResponse);
+  GET(`/dcc/${token}`, csrf).then(getResponse);
 
 export const supportOpposeDCC = (csrf, vote) =>
   POST("/dcc/supportoppose", csrf, vote).then(getResponse);
@@ -824,9 +824,9 @@ export const setDCCStatus = (csrf, userid, token, status, reason) =>
     .then(getResponse);
 
 export const dccComments = (token) =>
-  GET(`/v1/dcc/${token}/comments`).then(getResponse);
+  GET(`/dcc/${token}/comments`).then(getResponse);
 
 export const newDccComment = (csrf, dcc) =>
   POST("/dcc/newcomment", csrf, dcc).then(getResponse);
 
-export const cmsUsers = (csrf) => GET("/v1/cmsusers", csrf).then(getResponse);
+export const cmsUsers = (csrf) => GET("/cmsusers", csrf).then(getResponse);

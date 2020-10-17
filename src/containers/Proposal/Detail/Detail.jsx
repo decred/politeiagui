@@ -24,7 +24,7 @@ import { useSelector } from "src/redux";
 import { useDocumentTitle } from "src/hooks/utils/useDocumentTitle";
 import { GoBackLink } from "src/components/Router";
 
-const ProposalDetail = ({ Main, match }) => {
+const ProposalDetail = ({ Main, match, state }) => {
   const tokenFromUrl = get("params.token", match);
   const proposalNameSelector = useMemo(
     () => makeGetProposalName(tokenFromUrl),
@@ -35,6 +35,7 @@ const ProposalDetail = ({ Main, match }) => {
   const threadParentCommentID = get("params.commentid", match);
   const { proposal, loading, threadParentID, error } = useProposal(
     tokenFromUrl,
+    state,
     threadParentCommentID
   );
   const proposalToken = getProposalToken(proposal);

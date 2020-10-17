@@ -382,7 +382,7 @@ export const onFetchProposalsBatchWithoutState = (
       fetchVoteSummary &&
         api.proposalsBatchVoteSummary(
           csrf,
-          requests.map(({ token }) => ({ token }))
+          requests.map(({ token }) => token)
         )
     ]);
     // XXX the batch propsoals requests returns map instead of array,
@@ -405,6 +405,7 @@ export const onFetchProposalsBatch = (
   fetchVoteSummary = true
 ) =>
   withCsrf(async (dispatch, _, csrf) => {
+    console.log({ state });
     dispatch(act.REQUEST_PROPOSALS_BATCH(requests));
     try {
       const promises = [
@@ -417,9 +418,7 @@ export const onFetchProposalsBatch = (
       if (fetchVoteSummary) {
         promises.push(
           dispatch(
-            onFetchProposalsBatchVoteSummary(
-              requests.map(({ token }) => ({ token }))
-            )
+            onFetchProposalsBatchVoteSummary(requests.map(({ token }) => token))
           )
         );
       }
@@ -428,8 +427,6 @@ export const onFetchProposalsBatch = (
       const summaries =
         fetchVoteSummary &&
         response.find((res) => res && res.summaries).summaries;
-      // XXX batch propsoals request now returns map instead of array
-      // adjust accordingly!
       dispatch(act.RECEIVE_PROPOSALS_BATCH({ proposals }));
       return [proposals, summaries];
     } catch (e) {
@@ -438,29 +435,38 @@ export const onFetchProposalsBatch = (
     }
   });
 
-export const onFetchTokenInventory = () => async (dispatch) => {
-  dispatch(act.REQUEST_TOKEN_INVENTORY());
-  try {
-    return await Promise.all([api.tokenInventory, api.proposalsInventory]).then(
-      ([vInventory, pInventory]) => {
+export const onFetchTokenInventory = () =>
+  withCsrf(async (dispatch, _, csrf) => {
+    dispatch(act.REQUEST_TOKEN_INVENTORY());
+    try {
+      return await Promise.all([
+        api.tokenInventory(csrf),
+        api.proposalsInventory(csrf)
+      ]).then(([vInventory, pInventory]) => {
+        console.log({
+          vInventory,
+          pInventory
+        });
         return dispatch(
           act.RECEIVE_TOKEN_INVENTORY({
-            pre: [...vInventory.unauthorized, ...vInventory.authorized],
-            active: [...vInventory.started],
+            pre: [
+              ...(vInventory.unauthorized || []),
+              ...(vInventory.authorized || [])
+            ],
+            active: [...(vInventory.started || [])],
             approved: [...vInventory.approved],
             rejected: [...vInventory.rejected],
             abandoned: [...pInventory.abandoned],
-            unreviewed: [...pInventory.unvetted],
+            unreviewed: [...(pInventory.unvetted || [])],
             censored: [...pInventory.censored]
           })
         );
-      }
-    );
-  } catch (error) {
-    dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error));
-    throw error;
-  }
-};
+      });
+    } catch (error) {
+      dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error));
+      throw error;
+    }
+  });
 
 export const onFetchInvoice = (token, version = null) => (dispatch) => {
   dispatch(act.REQUEST_INVOICE(token));

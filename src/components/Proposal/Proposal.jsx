@@ -109,6 +109,7 @@ const Proposal = React.memo(function Proposal({
   currentUser,
   history
 }) {
+  console.log({ proposal, voteSummary });
   const {
     censorshiprecord,
     files,

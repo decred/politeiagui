@@ -21,6 +21,7 @@ import { formatUnixTimestampToObj } from "src/utils";
 
 const EditProposal = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
+  // XXX what about propsoal state here ?
   const { proposal, loading } = useProposal(tokenFromUrl);
   const isPublic = isPublicProposal(proposal);
   const { onEditProposal, currentUser } = useEditProposal();
