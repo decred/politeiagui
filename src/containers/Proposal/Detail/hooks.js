@@ -89,10 +89,9 @@ export function useProposal(token, proposalState, threadParentID) {
 
   const unfetchedProposalTokens =
     rfpLinks && difference(rfpLinks)(keys(proposals));
-  const unfetchedSummariesTokens = getUnfetchedVoteSummaries(
-    proposal,
-    voteSummaries
-  );
+  const unfetchedSummariesTokens =
+    proposalState === PROPOSAL_STATE_VETTED &&
+    getUnfetchedVoteSummaries(proposal, voteSummaries);
   const rfpSubmissions = rfpLinks &&
     proposal.linkby && {
       proposals: values(pick(proposals, rfpLinks)),
@@ -104,10 +103,6 @@ export function useProposal(token, proposalState, threadParentID) {
   const [state, send] = useFetchMachine({
     actions: {
       initial: () => {
-        console.log({
-          token,
-          proposal
-        });
         if (token && !proposal) {
           onFetchProposalsBatch([{ token }], proposalState, true, false)
             .then(() => send(VERIFY))

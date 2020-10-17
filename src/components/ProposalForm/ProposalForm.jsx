@@ -303,7 +303,8 @@ const ProposalFormWrapper = ({
   onSubmit,
   disableSubmit,
   history,
-  isPublic
+  isPublic,
+  isCreate
 }) => {
   const { text, markdownFiles } = replaceImgDigestByBlob(
     initialValues,
@@ -360,15 +361,24 @@ const ProposalFormWrapper = ({
         });
         setSubmitting(false);
         setSubmitSuccess(true);
-        // use short prefix when navigating to propsoal page
-        history.push(`/proposals/${proposalToken.substring(0, 7)}`);
+        // If we are creating proposal then we should nvaigate to unvetted
+        // proposal detail page, in case of editing proposal we check the
+        // proposal's state to determine the proposal state.
+        // Also, we use short prefix when navigating to propsoal page
+        history.push(
+          `/proposals/${
+            isCreate
+              ? "unvetted"
+              : "vetted" /* XXX if edit we should check proposal's state */
+          }/${proposalToken.substring(0, 7)}`
+        );
         resetForm();
       } catch (e) {
         setSubmitting(false);
         setFieldError("global", e);
       }
     },
-    [history, onSubmit, onFetchProposalsBatchWithoutState, isPublic]
+    [history, onSubmit, onFetchProposalsBatchWithoutState, isPublic, isCreate]
   );
   const newInitialValues = initialValues
     ? {

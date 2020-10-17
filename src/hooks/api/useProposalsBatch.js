@@ -37,10 +37,6 @@ export default function useProposalsBatch(
   tokens,
   { fetchRfpLinks, fetchVoteSummaries = false, unvetted = false }
 ) {
-  console.log({
-    unvetted,
-    state: unvetted ? PROPOSAL_STATE_UNVETTED : PROPOSAL_STATE_VETTED
-  });
   const proposals = useSelector(sel.proposalsByToken);
   const allByStatus = useSelector(sel.allByStatus);
   const errorSelector = useMemo(
