@@ -48,14 +48,62 @@ const mapReviewStatusToTokenInventoryStatus = {
 
 const proposalToken = (proposal) => proposal.censorshiprecord.token;
 
-const proposalArrayToByTokenObject = (proposals) =>
+/*const proposalArrayToByTokenObject = (proposals) =>
   proposals.reduce(
     (proposalsByToken, proposal) => ({
       ...proposalsByToken,
       [proposalToken(proposal)]: proposal
     }),
     {}
-  );
+  );*/
+
+// parseProposalStatuses iterate over proposal's status changes array returned
+// from BE and returns proposal's timestamps accordingly
+const parseProposalStatuses = (sChanges) => {
+  let publishedat = 0,
+    censoredat = 0,
+    abandonedat = 0;
+
+  sChanges.forEach((sChange) => {
+    console.log(sChange);
+    if (sChange.status === PROPOSAL_STATUS_PUBLIC) {
+      publishedat = sChange.timestamp;
+    }
+    if (sChange.status === PROPOSAL_STATUS_CENSORED) {
+      censoredat = sChange.timestamp;
+    }
+    if (sChange.status === PROPOSAL_STATUS_ABANDONED) {
+      abandonedat = sChange.timestamp;
+    }
+  });
+  return { publishedat, censoredat, abandonedat };
+};
+
+// parseReceivedProposalsMap iterates over BE returned proposals map[token] => proposal, prases the
+// metadata file & the proposal statuses
+const parseReceivedProposalsMap = (proposals) => {
+  const parsedProps = {};
+  for (const [token, prop] of Object.entries(proposals)) {
+    // Parse statuses
+    const { publishedat, censoredat, abandonedat } = parseProposalStatuses(
+      prop.statuses
+    );
+    // Parse metdata
+    // XXX define metadata hint as constant
+    const metadata = prop.metadata.find((md) => md.hint === "proposalmetadata");
+    const { name, linkby, linkto } = JSON.parse(atob(metadata.payload));
+    parsedProps[token] = {
+      ...prop,
+      name,
+      linkby,
+      linkto,
+      publishedat,
+      censoredat,
+      abandonedat
+    };
+  }
+  return parsedProps;
+};
 
 const proposalIndexFile = (name = "", description = "") =>
   getIndexMdFromText([name, description].join("\n\n"));
@@ -90,7 +138,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_PROPOSALS_BATCH]: () =>
             update("byToken", (proposals) => ({
               ...proposals,
-              ...proposalArrayToByTokenObject(action.payload.proposals)
+              ...parseReceivedProposalsMap(action.payload.proposals)
             }))(state),
           [act.RECEIVE_TOKEN_INVENTORY]: () =>
             update("allByStatus", (allProps) => ({
@@ -161,7 +209,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
             compose(
               update("byToken", (proposals) => ({
                 ...proposals,
-                ...proposalArrayToByTokenObject(action.payload.proposals)
+                ...action.payload.proposals
               })),
               update(
                 ["allProposalsByUserId", action.payload.userid],

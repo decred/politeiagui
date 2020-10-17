@@ -19,7 +19,7 @@ import isEmpty from "lodash/fp/isEmpty";
 import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
 import isEqual from "lodash/fp/isEqual";
-import { PROPOSAL_STATE_VETTED } from "src/contants";
+import { PROPOSAL_STATE_VETTED, PROPOSAL_STATE_UNVETTED } from "src/constants";
 
 const getRfpLinks = (proposals) =>
   flow(
@@ -32,10 +32,15 @@ const getRfpLinks = (proposals) =>
 const getUnfetchedTokens = (proposals, tokens) =>
   difference(tokens)(keys(proposals));
 
+// XXX add includefiles options param ?
 export default function useProposalsBatch(
   tokens,
-  { fetchRfpLinks, fetchVoteSummaries = false }
+  { fetchRfpLinks, fetchVoteSummaries = false, unvetted = false }
 ) {
+  console.log({
+    unvetted,
+    state: unvetted ? PROPOSAL_STATE_UNVETTED : PROPOSAL_STATE_VETTED
+  });
   const proposals = useSelector(sel.proposalsByToken);
   const allByStatus = useSelector(sel.allByStatus);
   const errorSelector = useMemo(
@@ -87,7 +92,7 @@ export default function useProposalsBatch(
         if (hasRemainingTokens) {
           onFetchProposalsBatch(
             remainingTokens.map((token) => ({ token })),
-            PROPOSAL_STATE_VETTED,
+            unvetted ? PROPOSAL_STATE_UNVETTED : PROPOSAL_STATE_VETTED,
             false,
             fetchVoteSummaries
           )
@@ -98,7 +103,7 @@ export default function useProposalsBatch(
         if (fetchRfpLinks && hasUnfetchedRfpLinks) {
           onFetchProposalsBatch(
             unfetchedRfpLinks.map((token) => ({ token })),
-            PROPOSAL_STATE_VETTED,
+            unvetted ? PROPOSAL_STATE_UNVETTED : PROPOSAL_STATE_VETTED,
             false,
             fetchVoteSummaries
           )

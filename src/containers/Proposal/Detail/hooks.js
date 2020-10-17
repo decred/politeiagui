@@ -46,7 +46,7 @@ const getProposalRfpLinksTokens = (proposal) => {
   return isSubmission ? [proposal.linkto] : proposal.linkedfrom;
 };
 
-export function useProposal(token, threadParentID) {
+export function useProposal(token, proposalState, threadParentID) {
   const error = useSelector(sel.proposalError);
   const loadingSelector = useMemo(
     () => or(sel.isApiRequestingProposalsVoteSummary, sel.proposalIsRequesting),
@@ -104,13 +104,12 @@ export function useProposal(token, threadParentID) {
   const [state, send] = useFetchMachine({
     actions: {
       initial: () => {
+        console.log({
+          token,
+          proposal
+        });
         if (token && !proposal) {
-          onFetchProposalsBatch(
-            [{ token }],
-            "" /* XXX replace with actual proposal state here? */,
-            true,
-            false
-          )
+          onFetchProposalsBatch([{ token }], proposalState, true, false)
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
           return send(FETCH);

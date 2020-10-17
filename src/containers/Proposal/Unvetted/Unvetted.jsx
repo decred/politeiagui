@@ -6,6 +6,7 @@ import { tabValues, mapProposalsTokensByTab } from "./helpers";
 import { getRfpLinkedProposals } from "../helpers";
 import { UnvettedActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
+import { getQueryStringValues } from "src/lib/queryString";
 
 const renderProposal = (prop) => (
   <Proposal key={prop.censorshiprecord.token} proposal={prop} />
@@ -14,12 +15,17 @@ const renderProposal = (prop) => (
 const tabLabels = [tabValues.UNREVIEWED, tabValues.CENSORED];
 
 const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
+  // Ready tab name from url's query params
+  // to determine proposals list state
+  const { tab } = getQueryStringValues();
+  console.log({ tab });
   const [remainingTokens, setRemainingTokens] = useState();
   const { proposals, proposalsTokens, loading, verifying } = useProposalsBatch(
     remainingTokens,
     {
       fetchRfpLinks: true,
-      fetchVoteSummaries: true
+      fetchVoteSummaries: false,
+      unvetted: true
     }
   );
 

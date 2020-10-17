@@ -8,7 +8,8 @@ import {
 } from "src/containers/Routes";
 import commonRoutes from "./commonRoutes";
 import PageNotFound from "./NotFound";
-import PageProposalDetail from "./Proposals/Detail";
+import PageVettedProposalDetail from "./Proposals/VettedDetail";
+import PageUnvettedProposalDetail from "./Proposals/UnvettedDetail";
 import PageProposalsPublicList from "./Proposals/PublicList";
 import PageProposalsUnvetted from "./Proposals/UnvettedList";
 import PageProposalNew from "./Proposals/New";
@@ -51,16 +52,29 @@ const Routes = ({ location }) => {
             render={PageProposalNew}
           />
           <Route
-            path={"/proposals/:token"}
+            path={"/proposals/vetted/:token"}
             title={"Proposal Detail"}
             exact
-            component={PageProposalDetail}
+            component={PageVettedProposalDetail}
           />
           <Route
-            path={"/proposals/:token/comments/:commentid"}
+            path={"/proposals/unvetted/:token"}
             title={"Proposal Detail"}
             exact
-            component={PageProposalDetail}
+            component={PageUnvettedProposalDetail}
+          />
+          <Route
+            path={"/proposals/vetted/:token/comments/:commentid"}
+            title={"Proposal Detail"}
+            exact
+            component={PageVettedProposalDetail}
+          />
+          {/* XXX test comments urls for unvetted */}
+          <Route
+            path={"/proposals/unvetted/:token/comments/:commentid"}
+            title={"Proposal Detail"}
+            exact
+            component={PageUnvettedProposalDetail}
           />
           <AuthenticatedRoute
             path={"/proposals/:token/edit"}
