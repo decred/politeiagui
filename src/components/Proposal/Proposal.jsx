@@ -125,7 +125,8 @@ const Proposal = React.memo(function Proposal({
     linkto,
     proposedFor,
     type,
-    rfpSubmissions
+    rfpSubmissions,
+    state
   } = proposal;
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
   const isRfpSubmission = !!linkto || type === PROPOSAL_TYPE_RFP_SUBMISSION;
@@ -138,7 +139,7 @@ const Proposal = React.memo(function Proposal({
     authorURL,
     commentsURL,
     rfpProposalURL
-  } = useProposalURLs(proposalToken, userid, isRfpSubmission, linkto);
+  } = useProposalURLs(proposalToken, userid, isRfpSubmission, linkto, state);
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);

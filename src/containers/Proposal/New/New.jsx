@@ -31,6 +31,7 @@ const NewProposal = () => {
       <ProposalForm
         disableSubmit={!isPaid || !!identityError}
         onSubmit={onSubmitProposal}
+        isCreate={true}
       />
     </Card>
   );

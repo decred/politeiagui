@@ -405,7 +405,6 @@ export const onFetchProposalsBatch = (
   fetchVoteSummary = true
 ) =>
   withCsrf(async (dispatch, _, csrf) => {
-    console.log({ state });
     dispatch(act.REQUEST_PROPOSALS_BATCH(requests));
     try {
       const promises = [
@@ -442,12 +441,8 @@ export const onFetchTokenInventory = () =>
       return await Promise.all([
         api.tokenInventory(csrf),
         api.proposalsInventory(csrf)
-      ]).then(([vInventory, pInventory]) => {
-        console.log({
-          vInventory,
-          pInventory
-        });
-        return dispatch(
+      ]).then(([vInventory, pInventory]) =>
+        dispatch(
           act.RECEIVE_TOKEN_INVENTORY({
             pre: [
               ...(vInventory.unauthorized || []),
@@ -460,8 +455,8 @@ export const onFetchTokenInventory = () =>
             unreviewed: [...(pInventory.unvetted || [])],
             censored: [...pInventory.censored]
           })
-        );
-      });
+        )
+      );
     } catch (error) {
       dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error));
       throw error;
