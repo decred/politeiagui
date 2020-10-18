@@ -4,35 +4,39 @@ import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
 import { getRfpLinkedProposals } from "../helpers";
+// XXX change to AdminActionsProvider
 import { UnvettedActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
-import { getQueryStringValues } from "src/lib/queryString";
+import { LIST_HEADER_ADMIN } from "src/constants";
 
 const renderProposal = (prop) => (
   <Proposal key={prop.censorshiprecord.token} proposal={prop} />
 );
 
-const tabLabels = [tabValues.UNREVIEWED, tabValues.CENSORED];
+const tabLabels = [
+  tabValues.UNREVIEWED,
+  tabValues.VETTEDCENSORED,
+  tabValues.UNVETTEDCENSORED
+];
 
-const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
-  // Ready tab name from url's query params
-  // to determine proposals list state
-  const { tab } = getQueryStringValues();
-  console.log({ tab });
+const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
   const [remainingTokens, setRemainingTokens] = useState();
+  const [tabIndex, setTabIndex] = useState(0);
   const { proposals, proposalsTokens, loading, verifying } = useProposalsBatch(
     remainingTokens,
     {
       fetchRfpLinks: true,
       fetchVoteSummaries: false,
-      unvetted: true
+      unvetted: tabLabels[tabIndex] === tabValues.UNREVIEWED || tabLabels[tabIndex]
+       === tabValues.UNVETTEDCENSORED
     }
   );
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
       [tabValues.UNREVIEWED]: "No proposals unreviewed",
-      [tabValues.CENSORED]: "No proposals censored"
+      [tabValues.VETTEDCENSORED]: "No vetted proposals censored",
+      [tabValues.UNVETTEDCENSORED]: "No unvetted proposals censored"
     };
     return mapTabToMessage[tab];
   }, []);
@@ -46,12 +50,13 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
       displayTabCount={!!proposalsTokens}
       placeholder={ProposalLoader}
       setRemainingTokens={setRemainingTokens}
+      setTabIndex={setTabIndex}
       isLoading={loading || verifying}
       getEmptyMessage={getEmptyMessage}>
       {({ tabs, content }) => (
         <>
           <TopBanner>
-            <PageDetails title="Unvetted Proposals">{tabs}</PageDetails>
+            <PageDetails title={LIST_HEADER_ADMIN}>{tabs}</PageDetails>
           </TopBanner>
           <Main fillScreen>
             <UnvettedActionsProvider>
@@ -64,4 +69,4 @@ const UnvettedProposals = ({ TopBanner, PageDetails, Main }) => {
   );
 };
 
-export default UnvettedProposals;
+export default AdminProposals;
