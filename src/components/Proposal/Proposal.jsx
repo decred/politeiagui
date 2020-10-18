@@ -109,12 +109,11 @@ const Proposal = React.memo(function Proposal({
   currentUser,
   history
 }) {
-  console.log({ proposal, voteSummary });
   const {
     censorshiprecord,
     files,
     name,
-    numcomments,
+    comments,
     publishedat,
     abandonedat,
     timestamp,
@@ -356,7 +355,7 @@ const Proposal = React.memo(function Proposal({
             )}
             {isPublicAccessible && !extended && (
               <Row justify="space-between">
-                <CommentsLink numOfComments={numcomments} url={commentsURL} />
+                <CommentsLink numOfComments={comments} url={commentsURL} />
                 <div>
                   {(isVoteActive || isVotingFinished) && (
                     <ChartsLink token={proposalToken} />
@@ -382,7 +381,7 @@ const Proposal = React.memo(function Proposal({
                     className="margin-right-l"
                     label="Download Proposal Bundle"
                   />
-                  {isPublic && !!numcomments && (
+                  {isPublic && !!comments && (
                     <DownloadComments
                       recordToken={proposalToken}
                       className={styles.downloadCommentsLink}

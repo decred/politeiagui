@@ -83,7 +83,6 @@ const parseProposalStatuses = (sChanges) => {
 // metadata file & the proposal statuses
 const parseReceivedProposalsMap = (proposals) => {
   const parsedProps = {};
-  console.log(proposals);
   for (const [token, prop] of Object.entries(proposals)) {
     // Parse statuses
     const { publishedat, censoredat, abandonedat } = parseProposalStatuses(
