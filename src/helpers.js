@@ -304,17 +304,6 @@ export const multiplyFloatingNumbers = (num1, num2) => {
   return (num1 * num2) / Math.pow(10, cont1 + cont2);
 };
 
-export const isProposalApproved = (vs) => {
-  const hasReachedQuorom =
-    vs.totalvotes >= (vs.numofeligiblevotes * vs.quorumpercentage) / 100;
-  const yesOption = vs.optionsresult && vs.optionsresult[1];
-  const hasPassed =
-    yesOption &&
-    vs.totalvotes > 0 &&
-    yesOption.votesreceived >= (vs.totalvotes * vs.passpercentage) / 100;
-  return hasReachedQuorom && hasPassed;
-};
-
 export const countPublicProposals = (proposals) => {
   const defaultObj = {
     [PROPOSAL_VOTING_ACTIVE]: 0,
