@@ -26,7 +26,7 @@ export const getVotesReceived = (voteSummary) => {
     return 0;
   }
   return voteSummary.results.reduce(
-    (totalVotes, option) => (totalVotes += option.votesreceived),
+    (totalVotes, option) => (totalVotes += option.votes),
     0
   );
 };
@@ -186,8 +186,8 @@ export const isVoteActiveProposal = (voteSummary) =>
  */
 export const getVoteBlocksLeft = (voteSummary, chainHeight) => {
   if (!voteSummary) return null;
-  const { endheight } = voteSummary;
-  return +endheight - chainHeight;
+  const { endblockheight } = voteSummary;
+  return +endblockheight - chainHeight;
 };
 
 /**
