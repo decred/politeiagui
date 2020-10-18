@@ -33,7 +33,7 @@ export const INITIAL_YEAR = 2018;
 
 export const PROPOSAL_FILTER_ALL = 0;
 
-// XXX double check the mapping is correct ?unreviewed_changes? isn't
+// XXX double check the mapping is correct - ?unreviewed_changes? isn't
 // defined in BE!
 export const PROPOSAL_STATUS_UNREVIEWED = 1;
 export const PROPOSAL_STATUS_PUBLIC = 2;
@@ -53,6 +53,8 @@ export const VOTE_TYPE_RUNOFF = 2;
 
 export const PROPOSAL_USER_FILTER_SUBMITTED = 1;
 export const PROPOSAL_USER_FILTER_DRAFT_PROPOSALS = 2;
+
+export const PROPOSAL_METADATA_HINT = "proposalmetadata";
 
 export const PAYWALL_STATUS_WAITING = 0;
 export const PAYWALL_STATUS_LACKING_CONFIRMATIONS = 1;
