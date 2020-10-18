@@ -477,13 +477,18 @@ export const onFetchTokenInventory = () =>
             pre: [
               ...(vInventory.unauthorized || []),
               ...(vInventory.authorized || [])
-            ],
+            ].filter((t) => (pInventory.vetted.public || []).includes(t)),
             active: [...(vInventory.started || [])],
             approved: [...vInventory.approved],
             rejected: [...vInventory.rejected],
-            abandoned: [...pInventory.abandoned],
-            unreviewed: [...(pInventory.unvetted || [])],
-            censored: [...pInventory.censored]
+            abandoned: [...pInventory.vetted.abandoned],
+            unreviewed: pInventory.unvetted
+              ? [...(pInventory.unvetted.unreviewed || [])]
+              : [],
+            vettedcensored: [...pInventory.vetted.censored],
+            unvettedcensored: pInventory.unvetted
+              ? [...pInventory.unvetted.censored]
+              : []
           })
         )
       );

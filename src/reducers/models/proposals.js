@@ -8,7 +8,8 @@ import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_STATUS_UNREVIEWED_CHANGES
+  PROPOSAL_STATUS_UNREVIEWED_CHANGES,
+  PROPOSAL_METADATA_HINT
 } from "../../constants";
 import { getIndexMdFromText } from "src/helpers";
 
@@ -65,7 +66,6 @@ const parseProposalStatuses = (sChanges) => {
     abandonedat = 0;
 
   sChanges.forEach((sChange) => {
-    console.log(sChange);
     if (sChange.status === PROPOSAL_STATUS_PUBLIC) {
       publishedat = sChange.timestamp;
     }
@@ -83,15 +83,20 @@ const parseProposalStatuses = (sChanges) => {
 // metadata file & the proposal statuses
 const parseReceivedProposalsMap = (proposals) => {
   const parsedProps = {};
+  console.log(proposals);
   for (const [token, prop] of Object.entries(proposals)) {
     // Parse statuses
     const { publishedat, censoredat, abandonedat } = parseProposalStatuses(
       prop.statuses
     );
     // Parse metdata
-    // XXX define metadata hint as constant
-    const metadata = prop.metadata.find((md) => md.hint === "proposalmetadata");
-    const { name, linkby, linkto } = JSON.parse(atob(metadata.payload));
+    // Censored proposal's metadata isn't available
+    const metadata =
+      prop.metadata &&
+      prop.metadata.find((md) => md.hint === PROPOSAL_METADATA_HINT);
+    const { name, linkby, linkto } = metadata
+      ? JSON.parse(atob(metadata.payload))
+      : {};
     parsedProps[token] = {
       ...prop,
       name,
