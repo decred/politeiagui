@@ -1,13 +1,13 @@
 import React from "react";
 import MultipleContentPage from "src/components/layout/MultipleContentPage";
-import UnvettedProposals from "src/containers/Proposal/Unvetted";
+import AdminProposals from "src/containers/Proposal/Admin";
 
-const UnvettedList = () => {
+const AdminList = () => {
   return (
     <MultipleContentPage disableScrollToTop>
-      {(props) => <UnvettedProposals {...props} />}
+      {(props) => <AdminProposals {...props} />}
     </MultipleContentPage>
   );
 };
 
-export default UnvettedList;
+export default AdminList;

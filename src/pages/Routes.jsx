@@ -11,10 +11,11 @@ import PageNotFound from "./NotFound";
 import PageVettedProposalDetail from "./Proposals/VettedDetail";
 import PageUnvettedProposalDetail from "./Proposals/UnvettedDetail";
 import PageProposalsPublicList from "./Proposals/PublicList";
-import PageProposalsUnvetted from "./Proposals/UnvettedList";
+import PageProposalsAdmin from "./Proposals/AdminList";
 import PageProposalNew from "./Proposals/New";
 import PageProposalEdit from "./Proposals/Edit";
 import useOnboardModal from "src/hooks/utils/useOnboardModal";
+import { LIST_HEADER_ADMIN, LIST_HEADER_PUBLIC } from "src/constants";
 
 const Routes = ({ location }) => {
   useOnboardModal();
@@ -24,17 +25,17 @@ const Routes = ({ location }) => {
         <Switch location={location}>
           <Route
             path="/"
-            title="Public Proposals"
+            title={LIST_HEADER_PUBLIC}
             exact
             component={PageProposalsPublicList}
           />
           {commonRoutes}
           {/* Record routes */}
           <AdminAuthenticatedRoute
-            path={"/proposals/unvetted"}
-            title={"Unvetted Proposals"}
+            path={"/proposals/admin"}
+            title={LIST_HEADER_ADMIN}
             exact
-            component={PageProposalsUnvetted}
+            component={PageProposalsAdmin}
           />
           <AuthenticatedRoute
             path={"/proposals/new"}

@@ -14,7 +14,7 @@
   "mainnetGitRepository": "https://github.com/decred-proposals/mainnet/tree/master",
   "navMenuPaths": [
     { "label": "Proposals", "path": "/", "admin": false },
-    { "label": "Admin", "path": "/proposals/unvetted", "admin": true },
+    { "label": "Admin", "path": "/proposals/admin", "admin": true },
     { "label": "Search for users", "path": "/user/search", "admin": true }
   ]
 }

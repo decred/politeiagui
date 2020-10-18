@@ -7,6 +7,7 @@ import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { PublicActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
+import { LIST_HEADER_PUBLIC } from "src/constants";
 
 const renderProposal = (record) => (
   <Proposal key={record.censorshiprecord.token} proposal={record} />
@@ -50,7 +51,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     ({ tabs, content }) => (
       <>
         <TopBanner>
-          <PageDetails title="Public Proposals">{tabs}</PageDetails>
+          <PageDetails title={LIST_HEADER_PUBLIC}>{tabs}</PageDetails>
         </TopBanner>
         <Sidebar />
         <Main className={styles.customMain}>
