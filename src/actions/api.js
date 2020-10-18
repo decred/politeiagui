@@ -560,17 +560,18 @@ export const onFetchProposalComments = (token, state) =>
       });
   });
 
-export const onFetchLikedComments = (token, userid, state) => (dispatch) => {
-  dispatch(act.REQUEST_LIKED_COMMENTS(token));
-  return api
-    .likedComments(token, userid, state)
-    .then((response) =>
-      dispatch(act.RECEIVE_LIKED_COMMENTS({ ...response, token }))
-    )
-    .catch((error) => {
-      dispatch(act.RECEIVE_LIKED_COMMENTS(null, error));
-    });
-};
+export const onFetchLikedComments = (token, userid, state) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_LIKED_COMMENTS(token));
+    return api
+      .likedComments(csrf, token, userid, state)
+      .then((response) =>
+        dispatch(act.RECEIVE_LIKED_COMMENTS({ ...response, token }))
+      )
+      .catch((error) => {
+        dispatch(act.RECEIVE_LIKED_COMMENTS(null, error));
+      });
+  });
 
 export const onEditUser = (preferences) =>
   withCsrf((dispatch, _, csrf) => {

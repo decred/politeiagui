@@ -45,7 +45,8 @@ const Comments = ({
   readOnly,
   readOnlyReason,
   className,
-  history
+  history,
+  proposalstate
 }) => {
   const [, identityError] = useIdentity();
   const { isPaid, paywallEnabled } = usePaywall();
@@ -76,7 +77,7 @@ const Comments = ({
     currentUser,
     error,
     ...commentsCtx
-  } = useComments(recordToken);
+  } = useComments(recordToken, proposalstate);
 
   const commentsCount = comments ? comments.length : 0;
 

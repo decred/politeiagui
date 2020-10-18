@@ -15,7 +15,7 @@ import { or } from "src/lib/fp";
 export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
 
-export function useComments(recordToken) {
+export function useComments(recordToken, proposalstate) {
   const { enableCommentVote, recordType, constants } = useConfig();
 
   const errorSelector = or(
@@ -78,11 +78,7 @@ export function useComments(recordToken) {
   useEffect(
     function handleFetchOfComments() {
       if (needsToFetchComments) {
-        onFetchComments(
-          recordToken,
-          // state should dynamic aka proposal actual state
-          isProposal && constants.PROPOSAL_STATE_VETTED
-        );
+        onFetchComments(recordToken, isProposal && proposalstate);
       }
     },
     [
@@ -90,15 +86,15 @@ export function useComments(recordToken) {
       needsToFetchComments,
       recordToken,
       constants.PROPOSAL_STATE_VETTED,
-      isProposal
+      isProposal,
+      proposalstate
     ]
   );
 
   useEffect(
     function handleFetchOfLikes() {
       if (needsToFetchCommentsLikes) {
-        // XXX proposal state should be dynamic here!
-        onFetchLikes(recordToken, userid, constants.PROPOSAL_STATE_VETTED);
+        onFetchLikes(recordToken, userid, proposalstate);
       }
     },
     [
@@ -106,7 +102,7 @@ export function useComments(recordToken) {
       needsToFetchCommentsLikes,
       recordToken,
       userid,
-      constants.PROPOSAL_STATE_VETTED
+      proposalstate
     ]
   );
 
