@@ -23,7 +23,6 @@ const EditProposal = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
   // XXX what about propsoal state here ?
   const { proposal, loading } = useProposal(tokenFromUrl);
-  console.log({ proposal });
   const isPublic = isPublicProposal(proposal);
   const { onEditProposal, currentUser } = useEditProposal();
   const { userid } = currentUser || {};

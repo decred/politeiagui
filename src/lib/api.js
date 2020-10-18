@@ -603,12 +603,12 @@ const votePayloadWithType = ({
   passpercentage,
   options: [
     {
-      id: "reject",
+      id: "no",
       description: "Don't approve proposal",
       bit: 1
     },
     {
-      id: "approve",
+      id: "yes",
       description: "Approve proposal",
       bit: 2
     }
