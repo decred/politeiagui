@@ -66,10 +66,11 @@ const ProposalDetail = ({ Main, match, state }) => {
               <Comments
                 recordAuthorID={proposal.userid}
                 recordToken={proposalToken}
-                numOfComments={proposal.numcomments}
+                numOfComments={proposal.comments}
                 threadParentID={threadParentID}
                 readOnly={!canReceiveComments}
                 readOnlyReason={getCommentBlockedReason(proposal, voteSummary)}
+                proposalstate={state}
               />
             )}
           </PublicActionsProvider>

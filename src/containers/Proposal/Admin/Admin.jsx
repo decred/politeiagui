@@ -27,8 +27,9 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
     {
       fetchRfpLinks: true,
       fetchVoteSummaries: false,
-      unvetted: tabLabels[tabIndex] === tabValues.UNREVIEWED || tabLabels[tabIndex]
-       === tabValues.UNVETTEDCENSORED
+      unvetted:
+        tabLabels[tabIndex] === tabValues.UNREVIEWED ||
+        tabLabels[tabIndex] === tabValues.UNVETTEDCENSORED
     }
   );
 

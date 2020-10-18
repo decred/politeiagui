@@ -379,8 +379,8 @@ export const verifyNewUser = (email, verificationToken, username) => {
     .then(getResponse);
 };
 
-export const likedComments = (token, userid, state) =>
-  POST("/comments/votes", { token, userid, state }).then(getResponse);
+export const likedComments = (csrf, token, userid, state) =>
+  POST("/comments/votes", csrf, { token, userid, state }).then(getResponse);
 
 export const editUser = (csrf, params) =>
   POST("/user/edit", csrf, params).then(getResponse);
