@@ -123,7 +123,8 @@ const CommentWrapper = ({
   }, [showReplies]);
 
   const handleSubmitComment = useCallback(
-    (comment) => onSubmitComment({
+    (comment) =>
+      onSubmitComment({
         comment,
         token,
         parentID: commentid,

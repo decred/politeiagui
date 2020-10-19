@@ -8,10 +8,7 @@ import { useProposal } from "./hooks";
 import Comments from "src/containers/Comments";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { getCommentBlockedReason } from "./helpers";
-import {
-  isVotingFinishedProposal,
-  getProposalToken
-} from "../helpers";
+import { isVotingFinishedProposal, getProposalToken } from "../helpers";
 import {
   UnvettedActionsProvider,
   PublicActionsProvider
