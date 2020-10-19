@@ -1,6 +1,6 @@
 import * as act from "src/actions/types";
 import cloneDeep from "lodash/cloneDeep";
-import uniqBy from "lodash/uniqBy";
+import uniqWith from "lodash/uniqWith";
 import reverse from "lodash/reverse";
 import unionBy from "lodash/unionBy";
 import compose from "lodash/fp/compose";
@@ -21,7 +21,11 @@ const comments = (state = DEFAULT_STATE, action) =>
             const { token, comments, accesstime } = action.payload;
             // Filter duplicated comments by signature. The latest copy found
             // will be kept.
-            const filteredComments = uniqBy(reverse(comments), "signature");
+            const filteredComments = uniqWith(
+              reverse(comments),
+              (arrVal, othVal) =>
+                arrVal.signature && arrVal.signaure !== othVal.signaure
+            );
             return compose(
               set(["comments", "byToken", token], filteredComments),
               set(["comments", "accessTimeByToken", token], accesstime)

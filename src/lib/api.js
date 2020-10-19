@@ -155,7 +155,8 @@ export const makeLikeComment = (token, action, commentid) => ({
   action
 });
 
-export const makeCensoredComment = (token, reason, commentid) => ({
+export const makeCensoredComment = (state, token, reason, commentid) => ({
+  state,
   token,
   commentid,
   reason
@@ -270,7 +271,12 @@ export const signCensorComment = (userid, comment) =>
       pki
         .signStringHex(
           userid,
-          [comment.token, comment.commentid, comment.reason].join("")
+          [
+            comment.state,
+            comment.token,
+            comment.commentid,
+            comment.reason
+          ].join("")
         )
         .then((signature) => ({ ...comment, publickey, signature }))
     );

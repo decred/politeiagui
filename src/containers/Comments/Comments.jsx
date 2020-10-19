@@ -172,7 +172,8 @@ const Comments = ({
         onCensorComment,
         userid,
         recordToken,
-        id
+        id,
+        proposalState
       );
       handleOpenModal(ModalConfirmWithReason, {
         title: "Censor comment",
@@ -186,7 +187,14 @@ const Comments = ({
         onClose: () => handleCloseModal()
       });
     },
-    [handleCloseModal, handleOpenModal, onCensorComment, recordToken, userid]
+    [
+      handleCloseModal,
+      handleOpenModal,
+      onCensorComment,
+      recordToken,
+      userid,
+      proposalState
+    ]
   );
 
   const handleCommentsModeToggle = useCallback(() => {
