@@ -30,7 +30,7 @@ const headers = [
    * Pathname: repos/decred/politeiagui/commits/1688505e91dc86e5f2251cdd72fdcb53fa5bfd99
    * Split: ["", "repos", "decred", "politeiagui", "commits", "1688505e91dc86e5f2251cdd72fdcb53fa5bfd99"]
    */
-const getPRnumber = (lastIndex, numberPos = 4) => (prUrl, i) => {
+const getUrlEnd = (lastIndex, numberPos = 4) => (prUrl, i) => {
   const url = new URL(prUrl);
   const prNumber = url.pathname.split("/")[numberPos];
   return (
@@ -64,7 +64,7 @@ const printCodeStatsInfo = ({
   "Merge Deletions": mergeddeletions,
   PRs: (
     <Text className={styles.prs}>
-      {prs.length === 0 ? "none" : prs.map(getPRnumber(prs.length - 1, 4))}
+      {prs.length === 0 ? "none" : prs.map(getUrlEnd(prs.length - 1, 4))}
     </Text>
   ),
   "Review Additions": reviewadditions,
@@ -77,7 +77,7 @@ const printCodeStatsInfo = ({
     <Text className={styles.prs}>
       {reviews.length === 0
         ? "none"
-        : reviews.map(getPRnumber(reviews.length - 1))}
+        : reviews.map(getUrlEnd(reviews.length - 1))}
     </Text>
   )
 });
@@ -105,7 +105,7 @@ const CodeStats = ({ userid, start, end }) => {
           <Table headers={headers} data={codestats.map(printCodeStatsInfo)} />
           <H4 className="margin-bottom-s">Commits:</H4>
           {codestats.map(cs => <Text className={styles.prs}>
-            {cs.commits.length === 0 ? "none" : cs.commits.map(getPRnumber(cs.commits.length - 1, 5))}
+            {cs.commits.length === 0 ? "none" : cs.commits.map(getUrlEnd(cs.commits.length - 1, 5))}
           </Text>)}
         </>
       ) : shouldPrintEmptyMessage ? (
