@@ -52,7 +52,8 @@ const CommentsListWrapper = ({
   threadParentID,
   lastTimeAccessed,
   currentUserID,
-  isFlatMode
+  isFlatMode,
+  proposalState
 }) => {
   const [nestedComments, setNestedComments] = useState([]);
   useEffect(
@@ -87,7 +88,13 @@ const CommentsListWrapper = ({
     },
     [comments, threadParentID, currentUserID, isFlatMode, lastTimeAccessed]
   );
-  return <CommentsList comments={nestedComments} isFlatMode={isFlatMode} />;
+  return (
+    <CommentsList
+      comments={nestedComments}
+      isFlatMode={isFlatMode}
+      ProposalState={proposalState}
+    />
+  );
 };
 
 export default React.memo(CommentsListWrapper);

@@ -167,7 +167,7 @@ describe("api integration modules (lib/api.js)", () => {
     expect(comment).toEqual({
       token: COMMENT_TOKEN,
       comment: COMMENT,
-      parentid: api.TOP_LEVEL_COMMENT_PARENTID
+      parentid: 0
     });
   });
 

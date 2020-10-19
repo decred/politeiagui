@@ -51,7 +51,7 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
       displayTabCount={!!proposalsTokens}
       placeholder={ProposalLoader}
       setRemainingTokens={setRemainingTokens}
-      setTabIndex={setTabIndex}
+      onTabChange={setTabIndex}
       isLoading={loading || verifying}
       getEmptyMessage={getEmptyMessage}>
       {({ tabs, content }) => (

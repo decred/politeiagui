@@ -15,7 +15,7 @@ import { or } from "src/lib/fp";
 export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
 
-export function useComments(recordToken, proposalstate) {
+export function useComments(recordToken, proposalState) {
   const { enableCommentVote, recordType, constants } = useConfig();
 
   const errorSelector = or(
@@ -78,7 +78,7 @@ export function useComments(recordToken, proposalstate) {
   useEffect(
     function handleFetchOfComments() {
       if (needsToFetchComments) {
-        onFetchComments(recordToken, isProposal && proposalstate);
+        onFetchComments(recordToken, isProposal && proposalState);
       }
     },
     [
@@ -87,14 +87,14 @@ export function useComments(recordToken, proposalstate) {
       recordToken,
       constants.PROPOSAL_STATE_VETTED,
       isProposal,
-      proposalstate
+      proposalState
     ]
   );
 
   useEffect(
     function handleFetchOfLikes() {
       if (needsToFetchCommentsLikes) {
-        onFetchLikes(recordToken, userid, proposalstate);
+        onFetchLikes(recordToken, userid, proposalState);
       }
     },
     [
@@ -102,7 +102,7 @@ export function useComments(recordToken, proposalstate) {
       needsToFetchCommentsLikes,
       recordToken,
       userid,
-      proposalstate
+      proposalState
     ]
   );
 

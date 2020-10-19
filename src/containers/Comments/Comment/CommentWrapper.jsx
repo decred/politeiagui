@@ -4,7 +4,6 @@ import CommentForm from "src/components/CommentForm/CommentFormLazy";
 import Link from "src/components/Link";
 import { useComment } from "../hooks";
 import Comment from "./Comment";
-import { handleCommentSubmission } from "../helpers";
 
 const ContextLink = React.memo(({ parentid, recordToken, recordType }) => (
   <Link
@@ -62,6 +61,7 @@ const CommentWrapper = ({
   children,
   numOfReplies,
   isFlatMode,
+  proposalState,
   ...props
 }) => {
   const {
@@ -123,12 +123,14 @@ const CommentWrapper = ({
   }, [showReplies]);
 
   const handleSubmitComment = useCallback(
-    handleCommentSubmission(onSubmitComment, {
-      token,
-      parentID: commentid
-      /* XXX pass record state here  */
-    }),
-    [onSubmitComment, token, commentid]
+    (comment) =>
+      onSubmitComment({
+        comment,
+        token,
+        parentID: commentid,
+        state: proposalState
+      }),
+    [onSubmitComment, token, commentid, proposalState]
   );
 
   const handleCommentSubmitted = useCallback(() => {

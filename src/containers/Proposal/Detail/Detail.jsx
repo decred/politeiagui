@@ -68,7 +68,7 @@ const ProposalDetail = ({ Main, match, state }) => {
                 threadParentID={threadParentID}
                 readOnly={!canReceiveComments}
                 readOnlyReason={getCommentBlockedReason(proposal, voteSummary)}
-                proposalstate={state}
+                proposalState={state}
               />
             )}
           </PublicActionsProvider>

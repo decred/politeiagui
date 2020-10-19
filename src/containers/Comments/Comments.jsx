@@ -22,7 +22,6 @@ import {
   createSelectOptionFromSortOption,
   commentSortOptions,
   handleCommentCensoringInfo,
-  handleCommentSubmission,
   NUMBER_OF_LIST_PLACEHOLDERS
 } from "./helpers";
 import useIdentity from "src/hooks/api/useIdentity";
@@ -46,7 +45,7 @@ const Comments = ({
   readOnlyReason,
   className,
   history,
-  proposalstate
+  proposalState
 }) => {
   const [, identityError] = useIdentity();
   const { isPaid, paywallEnabled } = usePaywall();
@@ -77,7 +76,7 @@ const Comments = ({
     currentUser,
     error,
     ...commentsCtx
-  } = useComments(recordToken, proposalstate);
+  } = useComments(recordToken, proposalState);
 
   const commentsCount = comments ? comments.length : 0;
 
@@ -91,11 +90,15 @@ const Comments = ({
   const paywallMissing = paywallEnabled && !isPaid;
   const isSingleThread = !!threadParentID;
 
-  const handleSubmitComment = handleCommentSubmission(onSubmitComment, {
-    recordToken,
-    parentID: 0
-    /* XXX need to pass state here */
-  });
+  const handleSubmitComment = (comment) => {
+    console.log({ comment, proposalState });
+    return onSubmitComment({
+      comment,
+      token: recordToken,
+      parentID: 0,
+      state: proposalState
+    });
+  };
 
   const handleSetSortOption = useCallback(
     (option) => {
@@ -322,6 +325,7 @@ const Comments = ({
                 currentUserID={currentUser && currentUser.userid}
                 comments={state.comments}
                 isFlatMode={isFlatCommentsMode}
+                proposalState={proposalState}
               />
             </CommentContext.Provider>
           ) : null}

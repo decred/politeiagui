@@ -24,8 +24,6 @@ import {
   convertObjectToUnixTimestamp
 } from "../helpers";
 
-export const TOP_LEVEL_COMMENT_PARENTID = "0";
-
 const STATUS_ERR = {
   400: "Bad response from server",
   401: "Not authorized",
@@ -145,10 +143,10 @@ export const makeInvoice = (
   };
 };
 
-export const makeComment = (token, comment, parentid) => ({
+export const makeDccComment = (token, comment, parentid) => ({
   token,
-  parentid: parentid || TOP_LEVEL_COMMENT_PARENTID,
-  comment
+  comment,
+  parentid
 });
 
 export const makeLikeComment = (token, action, commentid) => ({
@@ -205,6 +203,18 @@ export const signRegister = (userid, record) => {
       .then((signature) => ({ ...record, publickey, signature }));
   });
 };
+
+export const signDccComment = (userid, comment) =>
+  pki
+    .myPubKeyHex(userid)
+    .then((publickey) =>
+      pki
+        .signStringHex(
+          userid,
+          [comment.token, comment.parentid, comment.comment].join("")
+        )
+        .then((signature) => ({ ...comment, publickey, signature }))
+    );
 
 export const signComment = (userid, comment) =>
   pki

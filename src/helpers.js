@@ -459,6 +459,7 @@ export const getTimeDiffInMinutes = (d1, d2) => {
   return (d1 - d2) / 60e3;
 };
 
+// XXX tlog is here this must go away
 /** This is a temporary fix to prevent comments and proposals submissions during anchoring time  */
 /**
  * @function isAnchoring
