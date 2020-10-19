@@ -339,7 +339,7 @@ const Proposal = React.memo(function Proposal({
                     fileName={proposalToken}
                     content={{
                       ...proposal,
-                      serverpublickey: apiInfo.pubkey,
+                      serverpublickey: apiInfo.pubkey
                     }}
                     className="margin-right-l"
                     label="Download Proposal Bundle"
