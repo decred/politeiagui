@@ -9,8 +9,6 @@ import Comments from "src/containers/Comments";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { getCommentBlockedReason } from "./helpers";
 import {
-  isPublicProposal,
-  isAbandonedProposal,
   isVotingFinishedProposal,
   getProposalToken
 } from "../helpers";
@@ -40,10 +38,7 @@ const ProposalDetail = ({ Main, match, state }) => {
   );
   const proposalToken = getProposalToken(proposal);
   const { voteSummary } = useProposalVote(proposalToken);
-  const showCommentArea =
-    proposal && (isPublicProposal(proposal) || isAbandonedProposal(proposal));
-  const canReceiveComments =
-    isPublicProposal(proposal) && !isVotingFinishedProposal(voteSummary);
+  const canReceiveComments = !isVotingFinishedProposal(voteSummary);
 
   return (
     <>
@@ -62,7 +57,7 @@ const ProposalDetail = ({ Main, match, state }) => {
                 collapseBodyContent={!!threadParentID}
               />
             )}
-            {showCommentArea && (
+            {proposal && (
               <Comments
                 recordAuthorID={proposal.userid}
                 recordToken={proposalToken}

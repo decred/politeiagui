@@ -11,6 +11,7 @@ import { useSelector, useAction } from "src/redux";
 import { useConfig } from "src/containers/Config";
 import { useLoaderContext } from "src/containers/Loader";
 import { or } from "src/lib/fp";
+import { PROPOSAL_STATE_VETTED } from "src/constants";
 
 export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
@@ -73,7 +74,11 @@ export function useComments(recordToken, proposalState) {
     : !!recordToken && !comments && userLoggedIn;
 
   const needsToFetchCommentsLikes =
-    !!recordToken && !commentsLikes && enableCommentVote && userLoggedIn;
+    !!recordToken &&
+    !commentsLikes &&
+    enableCommentVote &&
+    userLoggedIn &&
+    proposalState === PROPOSAL_STATE_VETTED;
 
   useEffect(
     function handleFetchOfComments() {

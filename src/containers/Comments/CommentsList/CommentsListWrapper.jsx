@@ -92,7 +92,7 @@ const CommentsListWrapper = ({
     <CommentsList
       comments={nestedComments}
       isFlatMode={isFlatMode}
-      ProposalState={proposalState}
+      proposalState={proposalState}
     />
   );
 };

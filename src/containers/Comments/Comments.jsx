@@ -90,15 +90,16 @@ const Comments = ({
   const paywallMissing = paywallEnabled && !isPaid;
   const isSingleThread = !!threadParentID;
 
-  const handleSubmitComment = (comment) => {
-    console.log({ comment, proposalState });
-    return onSubmitComment({
-      comment,
-      token: recordToken,
-      parentID: 0,
-      state: proposalState
-    });
-  };
+  const handleSubmitComment = useCallback(
+    (comment) =>
+      onSubmitComment({
+        comment,
+        token: recordToken,
+        parentID: 0,
+        state: proposalState
+      }),
+    [onSubmitComment, proposalState, recordToken]
+  );
 
   const handleSetSortOption = useCallback(
     (option) => {
@@ -182,9 +183,7 @@ const Comments = ({
           <Text>The comment has been successfully censored.</Text>
         ),
         onSubmit: handleCensorComment,
-        onClose() {
-          return handleCloseModal();
-        }
+        onClose: () => handleCloseModal()
       });
     },
     [handleCloseModal, handleOpenModal, onCensorComment, recordToken, userid]
