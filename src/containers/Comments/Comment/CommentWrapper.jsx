@@ -4,6 +4,7 @@ import CommentForm from "src/components/CommentForm/CommentFormLazy";
 import Link from "src/components/Link";
 import { useComment } from "../hooks";
 import Comment from "./Comment";
+import { PROPOSAL_STATE_UNVETTED } from "src/constants";
 
 const ContextLink = React.memo(({ parentid, recordToken, recordType }) => (
   <Link
@@ -166,11 +167,11 @@ const CommentWrapper = ({
     />
   );
 
-  const shortRecord = recordToken.substring(0, 7);
+  const shortToken = recordToken.substring(0, 7);
   return (
     <>
       <Comment
-        permalink={`/${recordType}s/${shortRecord}/comments/${commentid}`}
+        permalink={`/${recordType}s/${shortToken}/comments/${commentid}`}
         seeInContextLink={contextLink}
         censorable={censorable}
         author={username}
@@ -179,7 +180,9 @@ const CommentWrapper = ({
         censored={censored}
         highlightAuthor={isRecordAuthor}
         highlightAsNew={isNew}
-        disableLikes={!enableCommentVote}
+        disableLikes={
+          !enableCommentVote || proposalState === PROPOSAL_STATE_UNVETTED
+        }
         disableLikesClick={
           loadingLikes ||
           !!loadingLikeAction ||

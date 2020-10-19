@@ -324,12 +324,6 @@ const ProposalFormWrapper = ({
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
-        // XXX THIS CAN GO AWAY, TLOG IS HERE!
-        if (isAnchoring()) {
-          throw new Error(
-            "Submitting proposals is temporarily unavailable while a daily censorship resistance routine is in progress. Sorry for the inconvenience. This will be fixed soon. Check back in 10 minutes."
-          );
-        }
         const { type, rfpLink, ...others } = values;
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
           const rfpWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
