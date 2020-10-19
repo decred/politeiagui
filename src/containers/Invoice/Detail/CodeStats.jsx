@@ -60,8 +60,8 @@ const printCodeStatsInfo = ({
 }) => ({
   Date: `${month}/${year}`,
   Repo: repository,
-  "Merge Additions": `${mergedadditions}`,
-  "Merge Deletions": `${mergeddeletions}`,
+  "Merge Additions": mergedadditions,
+  "Merge Deletions": mergeddeletions,
   PRs: (
     <Text className={styles.prs}>
       {prs.length === 0 ? "none" : prs.map(getPRnumber(prs.length - 1, 4))}
