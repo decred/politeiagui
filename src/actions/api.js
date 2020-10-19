@@ -385,8 +385,6 @@ export const onFetchProposalsBatchWithoutState = (
           requests.map(({ token }) => token)
         )
     ]);
-    // XXX the batch propsoals requests returns map instead of array,
-    // addjust accordingly
     const proposals =
       fetchProposals && res.find((res) => res && res.proposals).proposals;
     const summaries =
@@ -884,9 +882,10 @@ export const onSubmitComment = (
   state
 ) =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
-    return Promise.resolve(api.makeComment(token, comment, parentid, state))
-      .then((comment) => api.signComment(currentUserID, comment))
+    dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid, state }));
+    return Promise.resolve(
+      api.signComment(currentUserID, { token, comment, parentid, state })
+    )
       .then((comment) => {
         // make sure this is not a duplicate comment by comparing to the existent
         // comments signatures
@@ -898,13 +897,10 @@ export const onSubmitComment = (
         }
         return comment;
       })
-      .then((comment) => {
-        return api.newComment(csrf, comment);
-      })
+      .then((comment) => api.newComment(csrf, comment))
       .then((response) => {
         const responsecomment = response.comment;
-        dispatch(act.RECEIVE_NEW_COMMENT(responsecomment));
-        return;
+        return dispatch(act.RECEIVE_NEW_COMMENT(responsecomment));
       })
       .catch((error) => {
         dispatch(act.RECEIVE_NEW_COMMENT(null, error));
@@ -1548,8 +1544,8 @@ export const onSetDccStatus = (token, status, reason) =>
 export const onSubmitDccComment = (currentUserID, token, comment, parentid) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
-    return Promise.resolve(api.makeComment(token, comment, parentid))
-      .then((comment) => api.signComment(currentUserID, comment))
+    return Promise.resolve(api.makeDccComment(token, comment, parentid))
+      .then((comment) => api.signDccComment(currentUserID, comment))
       .then((comment) => {
         // make sure this is not a duplicate comment by comparing to the existent
         // comments signatures

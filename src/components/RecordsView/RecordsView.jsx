@@ -43,7 +43,7 @@ const RecordsView = ({
   getEmptyMessage = getDefaultEmptyMessage,
   dropdownTabsForMobile,
   setRemainingTokens,
-  setTabIndex,
+  onTabChange,
   isLoading
 }) => {
   const [hasMoreToLoad, setHasMore] = useState(true);
@@ -53,9 +53,9 @@ const RecordsView = ({
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
   useEffect(
     function onTabIndexChange() {
-      setTabIndex && setTabIndex(index);
+      onTabChange && onTabChange(index);
     },
-    [index, setTabIndex]
+    [index, onTabChange]
   );
   const tabOption = tabLabels[index];
   const isMobileScreen = useMediaQuery("(max-width:560px)");
