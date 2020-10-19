@@ -887,14 +887,16 @@ export const onLikeComment = (currentUserID, token, commentid, action) =>
       });
   });
 
-export const onCensorComment = (userid, token, commentid, reason) => {
+export const onCensorComment = (userid, token, commentid, state, reason) => {
   return withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_CENSOR_COMMENT({ commentid, token }));
-    return Promise.resolve(api.makeCensoredComment(token, reason, commentid))
+    dispatch(act.REQUEST_CENSOR_COMMENT({ commentid, token, state }));
+    return Promise.resolve(
+      api.makeCensoredComment(state, token, reason, commentid)
+    )
       .then((comment) => api.signCensorComment(userid, comment))
       .then((comment) => api.censorComment(csrf, comment))
-      .then((response) => {
-        if (response.receipt) {
+      .then(({ comment: { receipt, commentid, token } }) => {
+        if (receipt) {
           dispatch(act.RECEIVE_CENSOR_COMMENT({ commentid, token }, null));
         }
       })
