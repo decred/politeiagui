@@ -94,9 +94,10 @@ export const getInvoiceTotalHours = (invoice) => {
 
 export const getInvoiceTotalExpenses = (invoice) => {
   if (!invoice) return 0;
-  return invoice.input.lineitems.reduce((total, item) => {
-    return (total += item.expenses / 100);
-  }, 0);
+  return invoice.input.lineitems.reduce(
+    (total, item) => (total += item.expenses / 100),
+    0
+  );
 };
 
 export const getInvoiceTotalAmount = (invoice) => {
