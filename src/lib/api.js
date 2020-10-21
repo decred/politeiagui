@@ -5,7 +5,6 @@ import qs from "query-string";
 import get from "lodash/fp/get";
 import MerkleTree from "./merkle";
 import {
-  PROPOSAL_STATUS_UNREVIEWED,
   INVOICE_STATUS_UNREVIEWED,
   DCC_STATUS_ACTIVE,
   PROPOSAL_TYPE_RFP,
@@ -588,12 +587,7 @@ export const invoiceSetStatus = (
 
 export const newProposal = (csrf, proposal) =>
   POST("/proposal/new", csrf, proposal).then(
-    ({ response: { censorshiprecord, timestamp } }) => ({
-      ...proposal,
-      censorshiprecord,
-      timestamp: timestamp / 1000,
-      status: PROPOSAL_STATUS_UNREVIEWED
-    })
+    ({ response: { proposal } }) => proposal
   );
 
 export const editProposal = (csrf, proposal) =>
