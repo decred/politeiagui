@@ -1,13 +1,6 @@
-import React, {
-  useState,
-  useEffect,
-  useReducer,
-  useMemo,
-  useCallback
-} from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { Tabs, Tab, useMediaQuery } from "pi-ui";
 import difference from "lodash/difference";
-import union from "lodash/union";
 import LazyList from "src/components/LazyList";
 import { getRecordsByTabOption, getRecordToken } from "./helpers";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
@@ -26,25 +19,15 @@ const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
   return <>{placeholders}</>;
 };
 
-const initialState = { itemsOnLoad: 0, requestedTokens: [] };
-
-const SET_LOADING_ITEMS = "set";
-const RESET_LOADING_ITEMS = "reset";
-
-function reducer(state, action) {
-  switch (action.type) {
-    case SET_LOADING_ITEMS:
-      return {
-        ...state,
-        itemsOnLoad: action.count,
-        requestedTokens: state.requestedTokens.concat(action.tokens)
-      };
-    case RESET_LOADING_ITEMS:
-      return { ...state, itemsOnLoad: 0 };
-    default:
-      throw new Error();
-  }
-}
+const getFilteredRecordsAndToken = (records, tokens, tab) => {
+  const filteredTokens = tokens[tab];
+  const filteredRecords =
+    (records &&
+      filteredTokens &&
+      getRecordsByTabOption(records, filteredTokens)) ||
+    [];
+  return [filteredRecords, filteredTokens];
+};
 
 const getDefaultEmptyMessage = () => "No records available";
 
@@ -63,63 +46,45 @@ const RecordsView = ({
   isLoading
 }) => {
   const [hasMoreToLoad, setHasMore] = useState(true);
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { itemsOnLoad } = state;
+  const [loadingItems, setLoadingItems] = useState(0);
   const { javascriptEnabled } = useConfig();
 
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
   const tabOption = tabLabels[index];
-
-  const filteredTokens = recordTokensByTab[tabOption] || [];
-
   const isMobileScreen = useMediaQuery("(max-width:560px)");
 
-  const filteredRecords =
-    (records && getRecordsByTabOption(records, filteredTokens)) || [];
+  const [filteredRecords, filteredTokens] = getFilteredRecordsAndToken(
+    records,
+    recordTokensByTab,
+    tabOption
+  );
 
   const hasMoreRecordsToLoad =
     filteredTokens && filteredRecords.length < filteredTokens.length;
 
-  const handleFetchMoreRecords = useCallback(() => {
+  const handleFetchMoreRecords = () => {
+    if (!filteredTokens || isLoading) {
+      return;
+    }
     // make sure tokens being requested are different from the ones
     // already requested or fetched
     const fetchedTokens = filteredRecords.map(getRecordToken);
     const recordTokensToBeFetched = difference(
       filteredTokens,
-      union(state.requestedTokens, fetchedTokens)
-    ).slice(0, pageSize);
+      fetchedTokens
+    ).slice(0, pageSize); // handle pagination
 
-    setHasMore(false);
-    const numOfItemsToBeFetched = recordTokensToBeFetched.length;
-
-    // only proceed if there is at least one token to be fetched
-    if (!numOfItemsToBeFetched) {
-      dispatch({ type: RESET_LOADING_ITEMS });
-      return;
-    }
-
-    dispatch({
-      type: SET_LOADING_ITEMS,
-      count: numOfItemsToBeFetched,
-      tokens: recordTokensToBeFetched
-    });
     setRemainingTokens(recordTokensToBeFetched);
-  }, [
-    filteredRecords,
-    filteredTokens,
-    pageSize,
-    setHasMore,
-    state.requestedTokens,
-    setRemainingTokens
-  ]);
-
-  useEffect(() => {
     setHasMore(hasMoreRecordsToLoad);
-    if (!hasMoreRecordsToLoad) {
-      setRemainingTokens && setRemainingTokens();
-      dispatch({ type: RESET_LOADING_ITEMS });
-    }
-  }, [hasMoreRecordsToLoad, setRemainingTokens]);
+    setLoadingItems(recordTokensToBeFetched.length);
+  };
+
+  useEffect(
+    function setHasMoreOnTabChange() {
+      setHasMore(true);
+    },
+    [index]
+  );
 
   const getPropsCountByTab = useCallback(
     (tab) => {
@@ -160,11 +125,11 @@ const RecordsView = ({
   const loadingPlaceholders = useMemo(
     () => (
       <LoadingPlaceholders
-        numberOfItems={itemsOnLoad}
+        numberOfItems={loadingItems}
         placeholder={placeholder}
       />
     ),
-    [itemsOnLoad, placeholder]
+    [loadingItems, placeholder]
   );
 
   const useDropdownTabs = isMobileScreen && dropdownTabsForMobile;
