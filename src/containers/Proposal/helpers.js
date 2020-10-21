@@ -4,6 +4,7 @@ import {
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_NOT_AUTHORIZED,
+  PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_STATUS_ABANDONED,
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_STATUS_UNREVIEWED,
@@ -115,6 +116,14 @@ export const isCensoredProposal = (proposal) =>
  */
 export const isVotingNotAuthorizedProposal = (voteSummary) =>
   !!voteSummary && voteSummary.status === PROPOSAL_VOTING_NOT_AUTHORIZED;
+
+/**
+ * Returns true if the given proposal is authorized for voting.
+ * @param {Object} voteSummary
+ * @returns {Boolean} isVotingAuthorized
+ */
+export const isVotingAuthorizedProposal = (voteSummary) =>
+  !!voteSummary && voteSummary.status === PROPOSAL_VOTING_AUTHORIZED;
 
 /**
  * Returns true if the given proposal is public, but voting

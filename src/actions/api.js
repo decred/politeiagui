@@ -449,13 +449,13 @@ export const onFetchTokenInventory = () =>
             active: [...(vInventory.started || [])],
             approved: [...vInventory.approved],
             rejected: [...vInventory.rejected],
-            abandoned: [...pInventory.vetted.abandoned],
+            abandoned: [...(pInventory.vetted.abandoned || [])],
             unreviewed: pInventory.unvetted
               ? [...(pInventory.unvetted.unreviewed || [])]
               : [],
-            vettedcensored: [...pInventory.vetted.censored],
+            vettedcensored: [...(pInventory.vetted.censored || [])],
             unvettedcensored: pInventory.unvetted
-              ? [...pInventory.unvetted.censored]
+              ? [...(pInventory.unvetted.censored || [])]
               : []
           })
         )
@@ -715,7 +715,7 @@ export const onSubmitProposal = (
         dispatch(
           act.RECEIVE_NEW_PROPOSAL({
             ...proposal,
-            numcomments: 0,
+            comments: 0,
             userid,
             username,
             name,
@@ -728,6 +728,7 @@ export const onSubmitProposal = (
         resetNewProposalData();
       })
       .catch((error) => {
+        console.log(error);
         dispatch(act.RECEIVE_NEW_PROPOSAL(null, error));
         resetNewProposalData();
         throw error;

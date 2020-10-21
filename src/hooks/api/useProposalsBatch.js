@@ -49,9 +49,10 @@ export default function useProposalsBatch(
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
 
-  const remainingTokens = useMemo(() => {
-    return getUnfetchedTokens(proposals, tokens);
-  }, [proposals, tokens]);
+  const remainingTokens = useMemo(() => getUnfetchedTokens(proposals, tokens), [
+    proposals,
+    tokens
+  ]);
 
   const unfetchedRfpLinks = useMemo(() => {
     const rfpLinks = getRfpLinks(proposals);

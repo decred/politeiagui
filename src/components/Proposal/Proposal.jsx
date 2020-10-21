@@ -25,7 +25,7 @@ import {
   getQuorumInVotes,
   isVotingFinishedProposal,
   getProposalToken,
-  isVotingNotAuthorizedProposal,
+  isVotingAuthorizedProposal,
   goToFullProposal
 } from "src/containers/Proposal/helpers";
 import {
@@ -144,7 +144,7 @@ const Proposal = React.memo(function Proposal({
   const isAbandoned = isAbandonedProposal(proposal);
   const isPublicAccessible = isPublic || isAbandoned;
   const isAuthor = currentUser && currentUser.userid === userid;
-  const isVotingAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
+  const isVotingAuthorized = isVotingAuthorizedProposal(voteSummary);
   const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
   const mobile = useMediaQuery("(max-width: 560px)");
   const showEditedDate =
@@ -335,7 +335,7 @@ const Proposal = React.memo(function Proposal({
               </Row>
             )}
             {showRfpSubmissions && <ProposalsList data={rfpSubmissions} />}
-            {extended && !!files.length && !collapseBodyContent && (
+            {extended && files && !!files.length && !collapseBodyContent && (
               <Markdown
                 className={classNames(
                   styles.markdownContainer,
