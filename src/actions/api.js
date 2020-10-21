@@ -793,11 +793,13 @@ export const onSubmitEditedProposal = (
     )
       .then((proposal) => api.signRegister(userid, proposal))
       .then((proposal) => api.editProposal(csrf, { ...proposal, token, state }))
-      .then((proposal) => {
-        dispatch(act.RECEIVE_EDIT_PROPOSAL(proposal));
+      .then(({ proposal }) => {
+        dispatch(act.RECEIVE_EDIT_PROPOSAL({ proposal }));
         resetNewProposalData();
+        return proposal.censorshiprecord.token;
       })
       .catch((error) => {
+        console.log(error);
         dispatch(act.RECEIVE_EDIT_PROPOSAL(null, error));
         resetNewProposalData();
         throw error;

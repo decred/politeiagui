@@ -79,32 +79,38 @@ const parseProposalStatuses = (sChanges) => {
   return { publishedat, censoredat, abandonedat };
 };
 
+// parseRawProposal accepts raw proposal object received from BE and parses
+// it's metadata & status changes
+const parseRawProposal = (proposal) => {
+  // Parse statuses
+  const { publishedat, censoredat, abandonedat } = parseProposalStatuses(
+    proposal.statuses
+  );
+  // Parse metdata
+  // Censored proposal's metadata isn't available
+  const metadata =
+    proposal.metadata &&
+    proposal.metadata.find((md) => md.hint === PROPOSAL_METADATA_HINT);
+  const { name, linkby, linkto } = metadata
+    ? JSON.parse(atob(metadata.payload))
+    : {};
+  return {
+    ...proposal,
+    name,
+    linkby,
+    linkto,
+    publishedat,
+    censoredat,
+    abandonedat
+  };
+};
+
 // parseReceivedProposalsMap iterates over BE returned proposals map[token] => proposal, prases the
 // metadata file & the proposal statuses
 const parseReceivedProposalsMap = (proposals) => {
   const parsedProps = {};
   for (const [token, prop] of Object.entries(proposals)) {
-    // Parse statuses
-    const { publishedat, censoredat, abandonedat } = parseProposalStatuses(
-      prop.statuses
-    );
-    // Parse metdata
-    // Censored proposal's metadata isn't available
-    const metadata =
-      prop.metadata &&
-      prop.metadata.find((md) => md.hint === PROPOSAL_METADATA_HINT);
-    const { name, linkby, linkto } = metadata
-      ? JSON.parse(atob(metadata.payload))
-      : {};
-    parsedProps[token] = {
-      ...prop,
-      name,
-      linkby,
-      linkto,
-      publishedat,
-      censoredat,
-      abandonedat
-    };
+    parsedProps[token] = parseRawProposal(prop);
   }
   return parsedProps;
 };
@@ -155,15 +161,10 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 {}
               )
             }))(state),
-          [act.RECEIVE_PROPOSAL]: () =>
-            set(
-              ["byToken", proposalToken(action.payload.proposal)],
-              action.payload.proposal
-            )(state),
           [act.RECEIVE_EDIT_PROPOSAL]: () =>
             set(
               ["byToken", proposalToken(action.payload.proposal)],
-              action.payload.proposal
+              parseRawProposal(action.payload.proposal)
             )(state),
           [act.RECEIVE_NEW_PROPOSAL]: () => {
             // creates the index.md file
@@ -197,7 +198,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
               updateProposalRfpLinks(action.payload.proposal),
               set(
                 ["byToken", proposalToken(action.payload.proposal)],
-                action.payload.proposal
+                parseRawProposal(action.payload.proposal)
               ),
               update(["allByStatus"], (allProps) =>
                 updateAllByStatus(

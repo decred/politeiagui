@@ -304,7 +304,8 @@ const ProposalFormWrapper = ({
   disableSubmit,
   history,
   isPublic,
-  isCreate
+  isCreate,
+  proposalState
 }) => {
   const { text, markdownFiles } = replaceImgDigestByBlob(
     initialValues,
@@ -348,6 +349,9 @@ const ProposalFormWrapper = ({
         );
         const proposalToken = await onSubmit({
           ...others,
+          type,
+          rfpLink,
+          state: proposalState
           description,
           type,
           files: [...others.files, ...files],
@@ -363,7 +367,9 @@ const ProposalFormWrapper = ({
           `/proposals/${
             isCreate
               ? "unvetted"
-              : "vetted" /* XXX if edit we should check proposal's state */
+              : proposalState === PROPOSAL_STATE_VETTED
+              ? "vetted"
+              : "unvetted"
           }/${proposalToken.substring(0, 7)}`
         );
         resetForm();
@@ -372,7 +378,14 @@ const ProposalFormWrapper = ({
         setFieldError("global", e);
       }
     },
-    [history, onSubmit, onFetchProposalsBatchWithoutState, isPublic, isCreate]
+    [
+      history,
+      onSubmit,
+      onFetchProposalsBatchWithoutState,
+      isPublic,
+      isCreate,
+      proposalState
+    ]
   );
   const newInitialValues = initialValues
     ? {
