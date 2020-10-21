@@ -123,10 +123,7 @@ export const onEditProposal = ({
       token,
       state
     )
-    // XXX is the proposal details request still needed here? if yes,
-    // this should also call the onFetchProposalsBatch instead of
-    // deprecated proposal details request
-  ).then(/*() => dispatch(onFetchProposalApi(token)).then(*/ () => token);
+  );
 };
 
 export const onSaveNewComment = ({ comment, token, parentID, state }) => (

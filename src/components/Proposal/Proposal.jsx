@@ -14,7 +14,11 @@ import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
 import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
-import { PROPOSAL_TYPE_RFP, PROPOSAL_TYPE_RFP_SUBMISSION } from "src/constants";
+import {
+  PROPOSAL_TYPE_RFP,
+  PROPOSAL_TYPE_RFP_SUBMISSION,
+  PROPOSAL_STATE_VETTED
+} from "src/constants";
 import {
   getMarkdownContent,
   getVotesReceived,
@@ -220,7 +224,11 @@ const Proposal = React.memo(function Proposal({
                * */
               edit={
                 isEditable ? (
-                  <Edit url={`/proposals/${proposalToken}/edit`} />
+                  <Edit
+                    url={`/proposals/${
+                      state === PROPOSAL_STATE_VETTED ? "vetted" : "unvetted"
+                    }/${proposalToken}/edit`}
+                  />
                 ) : showEditIcon ? (
                   <Tooltip
                     placement={mobile ? "left" : "right"}

@@ -256,7 +256,8 @@ const ProposalFormWrapper = ({
   disableSubmit,
   history,
   isPublic,
-  isCreate
+  isCreate,
+  proposalState
 }) => {
   const { text, markdownFiles } = replaceImgDigestByBlob(initialValues, mapBlobToFile);
   const [handleOpenModal, handleCloseModal] = useModalContext();
@@ -297,6 +298,9 @@ const ProposalFormWrapper = ({
         );
         const proposalToken = await onSubmit({
           ...others,
+          type,
+          rfpLink,
+          state: proposalState
           description,
           files: [...others.files, ...files],
           rfpLink
@@ -311,7 +315,9 @@ const ProposalFormWrapper = ({
           `/proposals/${
             isCreate
               ? "unvetted"
-              : "vetted" /* XXX if edit we should check proposal's state */
+              : proposalState === PROPOSAL_STATE_VETTED
+              ? "vetted"
+              : "unvetted"
           }/${proposalToken.substring(0, 7)}`
         );
         resetForm();
@@ -320,7 +326,14 @@ const ProposalFormWrapper = ({
         setFieldError("global", e);
       }
     },
-    [history, onSubmit, onFetchProposalsBatchWithoutState, isPublic, isCreate]
+    [
+      history,
+      onSubmit,
+      onFetchProposalsBatchWithoutState,
+      isPublic,
+      isCreate,
+      proposalState
+    ]
   );
   const newInitialValues = initialValues
     ? {

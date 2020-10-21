@@ -19,10 +19,9 @@ import {
 import { getMarkdownContent, isPublicProposal } from "../helpers";
 import { formatUnixTimestampToObj } from "src/utils";
 
-const EditProposal = ({ match }) => {
+const EditProposal = ({ match, state }) => {
   const tokenFromUrl = get("params.token", match);
-  // XXX what about propsoal state here ?
-  const { proposal, loading } = useProposal(tokenFromUrl);
+  const { proposal, loading } = useProposal(tokenFromUrl, state);
   const isPublic = isPublicProposal(proposal);
   const { onEditProposal, currentUser } = useEditProposal();
   const { userid } = currentUser || {};
@@ -30,7 +29,7 @@ const EditProposal = ({ match }) => {
   const [, identityError] = useIdentity();
   const initialValues = proposal
     ? {
-        token: match.params.token,
+        token: tokenFromUrl,
         name: proposal.name,
         type:
           proposal && proposal.linkby
@@ -68,6 +67,7 @@ const EditProposal = ({ match }) => {
           initialValues={initialValues}
           onSubmit={onEditProposal}
           isPublic={isPublic}
+          proposalState={state}
         />
       ) : (
         <ProposalFormLoader />
