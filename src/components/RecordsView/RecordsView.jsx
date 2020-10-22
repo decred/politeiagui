@@ -53,10 +53,9 @@ const RecordsView = ({
   const tabOption = tabLabels[index];
   const isMobileScreen = useMediaQuery("(max-width:560px)");
 
-  const [filteredRecords, filteredTokens] = getFilteredRecordsAndToken(
-    records,
-    recordTokensByTab,
-    tabOption
+  const [filteredRecords, filteredTokens] = useMemo(
+    () => getFilteredRecordsAndToken(records, recordTokensByTab, tabOption),
+    [recordTokensByTab, records, tabOption]
   );
 
   const hasMoreRecordsToLoad =
