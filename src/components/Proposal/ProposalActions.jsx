@@ -68,7 +68,8 @@ const PublicActions = ({
     onRevokeVote,
     onAbandon,
     onStartVote,
-    onStartRunoffVote
+    onStartRunoffVote,
+    onCensor
   } = usePublicProposalActions();
 
   const withProposal = (fn, cb) => () => {
@@ -104,10 +105,22 @@ const PublicActions = ({
     setSubmissionDidntVote,
     submssionsDidntVote
   ]);
+
+  const underDiscussion = isUnderDiscussionProposal(proposal, voteSummary);
+  const publicProp = isPublicProposal(proposal);
   return (
     <>
-      {isUnderDiscussionProposal(proposal, voteSummary) && (
+      {(underDiscussion || publicProp) && (
         <div className="justify-right margin-top-m">
+          {publicProp && (
+            <Button
+              onClick={withProposal(onCensor)}
+              className={classNames("margin-right-s", styles.reportButton)}
+              noBorder
+              kind="secondary">
+              Report as spam
+            </Button>
+          )}
           {isProposalOwner &&
             !isRfpSubmission &&
             (!isVotingStartAuthorized ? (
@@ -146,6 +159,7 @@ const PublicActions = ({
 };
 
 const ProposalActions = ({ proposal, ...props }) => {
+  console.log(isPublicProposal(proposal), isAbandonedProposal(proposal));
   return isPublicProposal(proposal) || isAbandonedProposal(proposal) ? (
     <PublicActions {...{ ...props, proposal }} />
   ) : (

@@ -61,6 +61,18 @@ export function usePublicActions() {
 
   const currentUserID = useSelector(sel.currentUserID);
 
+  const onCensorProposal = useCallback(
+    ({ censorshiprecord: { token }, version, state }) => (reason) =>
+      onSetProposalStatus({
+        token,
+        status: PROPOSAL_STATUS_CENSORED,
+        reason,
+        version,
+        state
+      }),
+    [onSetProposalStatus]
+  );
+
   const onAbandonProposal = useCallback(
     ({ censorshiprecord: { token }, version, state }) => (reason) =>
       onSetProposalStatus({
@@ -130,6 +142,7 @@ export function usePublicActions() {
   );
 
   return {
+    onCensorProposal,
     onAbandonProposal,
     onAuthorizeVote,
     onRevokeVote,
