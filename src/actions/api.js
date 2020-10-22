@@ -13,7 +13,15 @@ import act from "./methods";
 import {
   PAYWALL_STATUS_PAID,
   DCC_SUPPORT_VOTE,
-  PROPOSAL_STATE_VETTED
+  PROPOSAL_STATE_VETTED,
+  UNREVIEWED,
+  VETTEDCENSORED,
+  UNVETTEDCENSORED,
+  ABANDONED,
+  PRE_VOTE,
+  ACTIVE_VOTE,
+  APPROVED,
+  REJECTED
 } from "../constants";
 
 export const onResetNewUser = act.RESET_NEW_USER;
@@ -442,19 +450,21 @@ export const onFetchTokenInventory = () =>
       ]).then(([vInventory, pInventory]) =>
         dispatch(
           act.RECEIVE_TOKEN_INVENTORY({
-            pre: [
+            [PRE_VOTE]: [
               ...(vInventory.unauthorized || []),
               ...(vInventory.authorized || [])
             ].filter((t) => (pInventory.vetted.public || []).includes(t)),
-            active: [...(vInventory.started || [])],
-            approved: [...vInventory.approved],
-            rejected: [...vInventory.rejected],
-            abandoned: [...(pInventory.vetted.abandoned || [])],
-            unreviewed: pInventory.unvetted
+            [ACTIVE_VOTE]: [...(vInventory.started || [])],
+            [APPROVED]: [...vInventory.approved],
+            [REJECTED]: [...vInventory.rejected].filter((t) =>
+              (pInventory.vetted.public || []).includes(t)
+            ),
+            [ABANDONED]: [...(pInventory.vetted.abandoned || [])],
+            [UNREVIEWED]: pInventory.unvetted
               ? [...(pInventory.unvetted.unreviewed || [])]
               : [],
-            vettedcensored: [...(pInventory.vetted.censored || [])],
-            unvettedcensored: pInventory.unvetted
+            [VETTEDCENSORED]: [...(pInventory.vetted.censored || [])],
+            [UNVETTEDCENSORED]: pInventory.unvetted
               ? [...(pInventory.unvetted.censored || [])]
               : []
           })
@@ -768,7 +778,6 @@ export const onSubmitEditedProposal = (
         return proposal.censorshiprecord.token;
       })
       .catch((error) => {
-        console.log(error);
         dispatch(act.RECEIVE_EDIT_PROPOSAL(null, error));
         resetNewProposalData();
         throw error;

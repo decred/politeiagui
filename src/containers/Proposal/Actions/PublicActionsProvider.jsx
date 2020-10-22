@@ -15,6 +15,7 @@ import {
 
 const PublicActionsProvider = ({ children }) => {
   const {
+    onCensorProposal,
     onAbandonProposal,
     onAuthorizeVote,
     onRevokeVote,
@@ -149,6 +150,25 @@ const PublicActionsProvider = ({ children }) => {
     ]
   );
 
+  const handleOpenCensorModal = (proposal) => {
+    handleOpenModal(ModalConfirmWithReason, {
+      title: `Censor proposal - ${proposal.name}`,
+      reasonLabel: "Censor reason",
+      subject: "censorProposal",
+      onSubmit: onCensorProposal(proposal),
+      successTitle: "Proposal censored",
+      successMessage: (
+        <Text>
+          The proposal has been successfully censored! Now it will appear under
+          under{" "}
+          <Link to={"/proposals/admin?tab=unvetted censored"}>Censored</Link>{" "}
+          tab among Admin Proposals.
+        </Text>
+      ),
+      onClose: handleCloseModal
+    });
+  };
+
   return (
     <PublicProposalsActionsContext.Provider
       value={{
@@ -156,6 +176,7 @@ const PublicActionsProvider = ({ children }) => {
         onAuthorizeVote: handleOpenAuthorizeVoteModal,
         onRevokeVote: handleOpenRevokeVoteModal,
         onStartVote: handleStartVoteModal,
+        onCensor: handleOpenCensorModal,
         onStartRunoffVote: handleStartRunoffVoteModal
       }}>
       {children}

@@ -9,25 +9,25 @@ import {
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
-  PROPOSAL_METADATA_HINT
+  PROPOSAL_METADATA_HINT,
+  UNREVIEWED,
+  VETTEDCENSORED,
+  UNVETTEDCENSORED,
+  ABANDONED,
+  PRE_VOTE,
+  ACTIVE_VOTE,
+  APPROVED,
+  REJECTED,
+  PROPOSAL_STATE_UNVETTED
 } from "../../constants";
 import { getIndexMdFromText } from "src/helpers";
-
-// Proposals presentational status returned by the 'tokeninventory' endpoint
-// from the API.
-export const UNREVIEWED = "unreviewed";
-export const CENSORED = "censored";
-export const ABANDONED = "abandoned";
-export const PRE_VOTE = "pre";
-export const ACTIVE_VOTE = "active";
-export const APPROVED = "approved";
-export const REJECTED = "rejected";
 
 const DEFAULT_STATE = {
   byToken: {},
   allByStatus: {
     [UNREVIEWED]: [],
-    [CENSORED]: [],
+    [VETTEDCENSORED]: [],
+    [UNVETTEDCENSORED]: [],
     [ABANDONED]: [],
     [PRE_VOTE]: [],
     [ACTIVE_VOTE]: [],
@@ -39,24 +39,31 @@ const DEFAULT_STATE = {
   newProposalToken: null
 };
 
-const mapReviewStatusToTokenInventoryStatus = {
-  [PROPOSAL_STATUS_UNREVIEWED]: UNREVIEWED,
-  [PROPOSAL_STATUS_UNREVIEWED_CHANGES]: UNREVIEWED,
-  [PROPOSAL_STATUS_CENSORED]: CENSORED,
-  [PROPOSAL_STATUS_PUBLIC]: PRE_VOTE,
-  [PROPOSAL_STATUS_ABANDONED]: ABANDONED
+// mapReviewStatusToTokenInventoryStatus accepts proposal's status & state and
+// returns presentational string status
+const mapReviewStatusToTokenInventoryStatus = (status, state) => {
+  switch (status) {
+    case PROPOSAL_STATUS_UNREVIEWED:
+      return UNREVIEWED;
+    case PROPOSAL_STATUS_UNREVIEWED_CHANGES:
+      return UNREVIEWED;
+    case PROPOSAL_STATUS_CENSORED:
+      return state === PROPOSAL_STATE_UNVETTED
+        ? UNVETTEDCENSORED
+        : VETTEDCENSORED;
+    case PROPOSAL_STATUS_PUBLIC:
+      return PRE_VOTE;
+    case PROPOSAL_STATUS_ABANDONED:
+      return ABANDONED;
+    default:
+      throw Error(
+        `mapReviewStatusToTokenInventoryStatus: Invalid proposal status: 
+      ${status}`
+      );
+  }
 };
 
 const proposalToken = (proposal) => proposal.censorshiprecord.token;
-
-/*const proposalArrayToByTokenObject = (proposals) =>
-  proposals.reduce(
-    (proposalsByToken, proposal) => ({
-      ...proposalsByToken,
-      [proposalToken(proposal)]: proposal
-    }),
-    {}
-  );*/
 
 // parseProposalStatuses iterate over proposal's status changes array returned
 // from BE and returns proposal's timestamps accordingly
@@ -203,9 +210,10 @@ const proposals = (state = DEFAULT_STATE, action) =>
               update(["allByStatus"], (allProps) =>
                 updateAllByStatus(
                   allProps,
-                  mapReviewStatusToTokenInventoryStatus[
-                    action.payload.proposal.status
-                  ],
+                  mapReviewStatusToTokenInventoryStatus(
+                    action.payload.proposal.status,
+                    action.payload.proposal.state
+                  ),
                   proposalToken(action.payload.proposal)
                 )
               )
@@ -243,7 +251,8 @@ const proposals = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_LOGOUT]: () => {
             const privateProps = [
               ...state.allByStatus[UNREVIEWED],
-              ...state.allByStatus[CENSORED]
+              ...state.allByStatus[VETTEDCENSORED],
+              ...state.allByStatus[UNVETTEDCENSORED]
             ];
             const filterPrivateProps = update("byToken", (propsByToken) =>
               Object.keys(propsByToken)
@@ -256,7 +265,8 @@ const proposals = (state = DEFAULT_STATE, action) =>
             return compose(
               filterPrivateProps,
               set(["allByStatus", UNREVIEWED], []),
-              set(["allByStatus", CENSORED], [])
+              set(["allByStatus", VETTEDCENSORED], []),
+              set(["allByStatus", UNVETTEDCENSORED], [])
             )(state);
           }
         }[action.type] || (() => state)

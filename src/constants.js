@@ -73,6 +73,17 @@ export const PROPOSAL_VOTING_FINISHED = 4;
 export const PROPOSAL_REJECTED = 7;
 export const PROPOSAL_APPROVED = 8;
 
+// Proposals presentational statuses returned by the 'voteinv' &
+// 'proposalinv' endpoints from the API.
+export const UNREVIEWED = "unreviewed";
+export const VETTEDCENSORED = "vettedcensored";
+export const UNVETTEDCENSORED = "unvettedcensored";
+export const ABANDONED = "abandoned";
+export const PRE_VOTE = "pre";
+export const ACTIVE_VOTE = "active";
+export const APPROVED = "approved";
+export const REJECTED = "rejected";
+
 export const USER_DETAIL_TAB_GENERAL = 0;
 export const USER_DETAIL_TAB_PREFERENCES = 1;
 export const USER_DETAIL_TAB_PROPOSALS = 2;
