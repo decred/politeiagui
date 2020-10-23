@@ -648,9 +648,7 @@ export const startVote = (
     .then((publickey) =>
       pki.signStringHex(userid, hash).then((signature) =>
         POST("/vote/start", csrf, {
-          params,
-          signature,
-          publickey
+          starts: [{ params, signature, publickey }]
         })
       )
     )
