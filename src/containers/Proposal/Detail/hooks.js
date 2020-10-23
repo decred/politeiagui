@@ -73,10 +73,10 @@ export function useProposal(token, proposalState, threadParentID) {
     const userCannotViewFullProposal =
       !currentUserIsAdmin || currentUserId !== proposalAuthorID;
     const dontNeedToPresentProposalFiles =
-      !!proposalFromState &&
-      (isCensoredProposal(proposalFromState) ||
-        isUnreviewedProposal(proposalFromState)) &&
-      userCannotViewFullProposal;
+      (!!proposalFromState &&
+        isUnreviewedProposal(proposalFromState) &&
+        userCannotViewFullProposal) ||
+      (!!proposalFromState && isCensoredProposal(proposalFromState));
     if (dontNeedToPresentProposalFiles) {
       return proposalFromState;
     }

@@ -121,24 +121,30 @@ const PublicActions = ({
               Report as spam
             </Button>
           )}
-          {isProposalOwner &&
-            !isRfpSubmission &&
-            (!isVotingStartAuthorized ? (
-              <Button onClick={withProposal(onAuthorizeVote)}>
-                Authorize voting
-              </Button>
-            ) : (
-              <Button onClick={withProposal(onRevokeVote)}>
-                Revoke voting authorization
-              </Button>
-            ))}
-          <AdminContent>
-            {!isVotingStartAuthorized ? (
-              <Button onClick={withProposal(onAbandon)}>Abandon</Button>
-            ) : (
-              <Button onClick={withProposal(onStartVote)}>Start Vote</Button>
-            )}
-          </AdminContent>
+          {underDiscussion && (
+            <>
+              {isProposalOwner &&
+                !isRfpSubmission &&
+                (!isVotingStartAuthorized ? (
+                  <Button onClick={withProposal(onAuthorizeVote)}>
+                    Authorize voting
+                  </Button>
+                ) : (
+                  <Button onClick={withProposal(onRevokeVote)}>
+                    Revoke voting authorization
+                  </Button>
+                ))}
+              <AdminContent>
+                {!isVotingStartAuthorized ? (
+                  <Button onClick={withProposal(onAbandon)}>Abandon</Button>
+                ) : (
+                  <Button onClick={withProposal(onStartVote)}>
+                    Start Vote
+                  </Button>
+                )}
+              </AdminContent>
+            </>
+          )}
         </div>
       )}
       {isRfpReadyToRunoff(proposal, voteSummary) && submssionsDidntVote && (

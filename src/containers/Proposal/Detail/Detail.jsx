@@ -8,7 +8,12 @@ import { useProposal } from "./hooks";
 import Comments from "src/containers/Comments";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { getCommentBlockedReason } from "./helpers";
-import { isVotingFinishedProposal, getProposalToken } from "../helpers";
+import {
+  isVotingFinishedProposal,
+  getProposalToken,
+  isCensoredProposal,
+  isAbandonedProposal
+} from "../helpers";
 import {
   UnvettedActionsProvider,
   PublicActionsProvider
@@ -35,7 +40,8 @@ const ProposalDetail = ({ Main, match, state }) => {
   );
   const proposalToken = getProposalToken(proposal);
   const { voteSummary } = useProposalVote(proposalToken);
-  const canReceiveComments = !isVotingFinishedProposal(voteSummary);
+  const canReceiveComments =
+    !isVotingFinishedProposal(voteSummary) && !isAbandonedProposal(proposal);
 
   return (
     <>
@@ -54,7 +60,7 @@ const ProposalDetail = ({ Main, match, state }) => {
                 collapseBodyContent={!!threadParentID}
               />
             )}
-            {proposal && (
+            {proposal && !isCensoredProposal(proposal) && (
               <Comments
                 recordAuthorID={proposal.userid}
                 recordToken={proposalToken}

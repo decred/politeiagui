@@ -162,7 +162,7 @@ export const isUnderDiscussionProposal = (proposal, voteSummary) =>
  * @returns {Boolean} isAbandoned
  */
 export const isAbandonedProposal = (proposal) =>
-  proposal.status === PROPOSAL_STATUS_ABANDONED;
+  !!proposal && proposal.status === PROPOSAL_STATUS_ABANDONED;
 
 /**
  * Returns true if the given proposal is approved
