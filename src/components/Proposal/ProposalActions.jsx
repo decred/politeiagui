@@ -158,13 +158,11 @@ const PublicActions = ({
   );
 };
 
-const ProposalActions = ({ proposal, ...props }) => {
-  console.log(isPublicProposal(proposal), isAbandonedProposal(proposal));
-  return isPublicProposal(proposal) || isAbandonedProposal(proposal) ? (
+const ProposalActions = ({ proposal, ...props }) =>
+  isPublicProposal(proposal) || isAbandonedProposal(proposal) ? (
     <PublicActions {...{ ...props, proposal }} />
   ) : (
     <UnvettedActions proposal={proposal} />
   );
-};
 
 export default ProposalActions;

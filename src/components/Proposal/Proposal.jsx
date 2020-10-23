@@ -278,6 +278,7 @@ const Proposal = React.memo(function Proposal({
                       )}
                       version={version}
                       token={proposalToken}
+                      proposalState={state}
                     />
                   )}
                 </Subtitle>

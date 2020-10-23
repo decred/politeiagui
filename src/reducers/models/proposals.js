@@ -9,7 +9,6 @@ import {
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
-  PROPOSAL_METADATA_HINT,
   UNREVIEWED,
   VETTEDCENSORED,
   UNVETTEDCENSORED,
@@ -20,7 +19,7 @@ import {
   REJECTED,
   PROPOSAL_STATE_UNVETTED
 } from "../../constants";
-import { getIndexMdFromText } from "src/helpers";
+import { getIndexMdFromText, parseProposalMetadata } from "src/helpers";
 
 const DEFAULT_STATE = {
   byToken: {},
@@ -95,12 +94,7 @@ const parseRawProposal = (proposal) => {
   );
   // Parse metdata
   // Censored proposal's metadata isn't available
-  const metadata =
-    proposal.metadata &&
-    proposal.metadata.find((md) => md.hint === PROPOSAL_METADATA_HINT);
-  const { name, linkby, linkto } = metadata
-    ? JSON.parse(atob(metadata.payload))
-    : {};
+  const { name, linkby, linkto } = parseProposalMetadata(proposal);
   return {
     ...proposal,
     name,

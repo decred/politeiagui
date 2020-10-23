@@ -5,7 +5,6 @@ export { default as useIdentity } from "./api/useIdentity";
 export { default as useNavigation } from "./api/useNavigation";
 export { default as usePaywall } from "./api/usePaywall";
 export { default as usePolicy } from "./api/usePolicy";
-export { default as useProposalBatchWithoutRedux } from "./api/useProposalBatchWithoutRedux";
 export { default as useProposalsBatch } from "./api/useProposalsBatch";
 export { default as useSubContractors } from "./api/useSubContractors";
 export { default as useSupervisors } from "./api/useSupervisors";
