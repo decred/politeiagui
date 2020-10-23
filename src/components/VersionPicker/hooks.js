@@ -1,15 +1,16 @@
 import { useState, useCallback } from "react";
-// XXX we CAN'T use the api requests directly here as we need to call proposals
-// batch now and it's a POST, for that we need to pass the csrf which isn't
-// avaliable here!
-import {
-  proposalsBatch as onFetchProposalsBatch,
-  invoice as onFetchInvoice
-} from "src/lib/api.js";
-import { getTextFromIndexMd } from "src/helpers";
+import { invoice as onFetchInvoice } from "src/lib/api.js";
+import { getTextFromIndexMd, parseProposalMetadata } from "src/helpers";
 import { ModalDiffProposal, ModalDiffInvoice } from "src/components/ModalDiff";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useConfig } from "src/containers/Config";
+import { useAction } from "src/redux";
+import * as act from "src/actions";
+
+const getProposalTitle = (proposal) => {
+  const { name } = parseProposalMetadata(proposal);
+  return name;
+};
 
 const getProposalText = (proposal) => {
   const getMarkdowFile = (prop) =>
@@ -20,18 +21,79 @@ const getProposalText = (proposal) => {
 const getProposalFilesWithoutIndexMd = (proposal) =>
   proposal ? proposal.files.filter((file) => file.name !== "index.md") : [];
 
-export function useVersionPicker(version, token) {
+export function useVersionPicker(version, token, state) {
   const [selectedVersion, setSelectedVersion] = useState(version);
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const { recordType, constants } = useConfig();
   const [error, setError] = useState();
+  const onFetchProposalsBatchWithoutState = useAction(
+    act.onFetchProposalsBatchWithoutState
+  );
+
+  const fetchProposalVersions = useCallback(
+    async (onFetchProposalsBatchWithoutState, token, version, state) => {
+      if (!version || version < 2) {
+        return;
+      }
+      // Fetch provided version
+      const [proposals] = await onFetchProposalsBatchWithoutState(
+        [{ token, version: version.toString() }],
+        state,
+        true,
+        false
+      );
+      const proposal = proposals && proposals[token];
+
+      // Fetch prev version
+      const [prevProposals] = await onFetchProposalsBatchWithoutState(
+        [{ token, version: (version - 1).toString() }],
+        state,
+        true,
+        false
+      );
+      const prevProposal = prevProposals && prevProposals[token];
+
+      return {
+        details: proposals[token],
+        oldFiles: getProposalFilesWithoutIndexMd(prevProposal),
+        newFiles: getProposalFilesWithoutIndexMd(proposal),
+        newText: getProposalText(proposal),
+        oldText: getProposalText(prevProposal),
+        newTitle: getProposalTitle(proposal),
+        oldTitle: getProposalTitle(prevProposal)
+      };
+    },
+    []
+  );
+
+  async function fetchInvoiceVersions(token, version) {
+    let prevInvoice = null;
+    const { invoice } = await onFetchInvoice(token, version);
+    if (invoice.version > 1) {
+      const { invoice: prevInvoiceResponse } = await onFetchInvoice(
+        token,
+        version - 1
+      );
+      prevInvoice = prevInvoiceResponse;
+    }
+    return {
+      invoice,
+      prevInvoice
+    };
+  }
 
   const onChangeVersion = useCallback(
     async (v) => {
       setSelectedVersion(v);
       try {
         if (recordType === constants.RECORD_TYPE_PROPOSAL) {
-          const proposalDiff = await fetchProposalsVersions(token, v);
+          const proposalDiff = await fetchProposalVersions(
+            onFetchProposalsBatchWithoutState,
+            token,
+            v,
+            state
+          );
+          console.log(proposalDiff);
           handleOpenModal(ModalDiffProposal, {
             proposalDetails: proposalDiff.details,
             onClose: handleCloseModal,
@@ -56,61 +118,17 @@ export function useVersionPicker(version, token) {
       }
     },
     [
-      setSelectedVersion,
-      handleCloseModal,
-      handleOpenModal,
-      constants,
       recordType,
-      token
+      constants.RECORD_TYPE_PROPOSAL,
+      constants.RECORD_TYPE_INVOICE,
+      fetchProposalVersions,
+      onFetchProposalsBatchWithoutState,
+      token,
+      state,
+      handleOpenModal,
+      handleCloseModal
     ]
   );
-
-  // XXX update the all refs - provide added _state_ param
-  async function fetchProposalsVersions(token, version, state) {
-    let prevProposal = null;
-    // Reponse of batch request is a map
-    const { proposals } = await onFetchProposalsBatch(
-      [{ token, version }],
-      state,
-      false,
-      false
-    );
-    const proposal = proposals && proposals[token];
-    if (proposal && proposal.version > 1) {
-      const { prevProposals } = await onFetchProposalsBatch(
-        [{ token, version: version - 1 }],
-        state,
-        false,
-        false
-      );
-      prevProposal = prevProposals && prevProposals[token];
-    }
-    return {
-      details: proposals[token],
-      oldFiles: getProposalFilesWithoutIndexMd(prevProposal),
-      newFiles: getProposalFilesWithoutIndexMd(proposal),
-      newText: getProposalText(proposal),
-      oldText: getProposalText(prevProposal),
-      newTitle: proposal.name,
-      oldTitle: prevProposal.name
-    };
-  }
-
-  async function fetchInvoiceVersions(token, version) {
-    let prevInvoice = null;
-    const { invoice } = await onFetchInvoice(token, version);
-    if (invoice.version > 1) {
-      const { invoice: prevInvoiceResponse } = await onFetchInvoice(
-        token,
-        version - 1
-      );
-      prevInvoice = prevInvoiceResponse;
-    }
-    return {
-      invoice,
-      prevInvoice
-    };
-  }
 
   const disablePicker = version === "1";
 

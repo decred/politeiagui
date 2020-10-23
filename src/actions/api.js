@@ -373,6 +373,7 @@ export const onFetchProposalBilling = (token) =>
 // { token, version (optional) }
 //
 // state should be the state of requested proposals
+// XXX ensure all ref. call with state provided
 export const onFetchProposalsBatchWithoutState = (
   requests,
   state,
@@ -385,7 +386,7 @@ export const onFetchProposalsBatchWithoutState = (
         api.proposalsBatch(csrf, {
           requests,
           state,
-          includefiles: false // XXX is this always the case ?
+          includefiles: true // XXX is this always the case ?
         }),
       fetchVoteSummary &&
         api.proposalsBatchVoteSummary(

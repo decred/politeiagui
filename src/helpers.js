@@ -20,9 +20,11 @@ import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_FINISHED,
-  PROPOSAL_VOTING_NOT_AUTHORIZED
+  PROPOSAL_VOTING_NOT_AUTHORIZED,
+  PROPOSAL_METADATA_HINT
 } from "./constants.js";
 
+// XXX find usage and ensure this still works as expected
 export const getProposalStatus = (proposalStatus) =>
   get(proposalStatus, [
     "Invalid",
@@ -45,6 +47,18 @@ export const digest = (payload) => sha3_256(payload);
 
 export const utoa = (str) => window.btoa(unescape(encodeURIComponent(str)));
 export const atou = (str) => decodeURIComponent(escape(window.atob(str)));
+
+// parseProposalMetadata accepts a proposal object parses it's metadata
+// and returns it as object of the form { name, linkto, linkby }
+//
+// censored proposals won't have metadata, in this case this function will
+// return an empty object
+export const parseProposalMetadata = (proposal) => {
+  const metadata =
+    proposal.metadata &&
+    proposal.metadata.find((md) => md.hint === PROPOSAL_METADATA_HINT);
+  return metadata ? JSON.parse(atob(metadata.payload)) : {};
+};
 
 // This function extracts the content of index.md's payload. The payload is
 // formatted as:
