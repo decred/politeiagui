@@ -1,0 +1,10 @@
+{
+  "name": "teste2e",
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "@testing-library/cypress": "^7.0.1",
+    "eslint-plugin-cypress": "^2.11.2",
+    "test-data-bot": "^0.8.0"
+  }
+}

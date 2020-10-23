@@ -5,8 +5,8 @@ describe("Admin proposals actions", () => {
     // paid admin user with proposal credits
     cy.server();
     const user = {
-      email: "admin@example.com",
-      username: "admin",
+      email: "adminuser@example.com",
+      username: "adminuser",
       password: "password"
     };
     cy.typeLogin(user);
@@ -28,8 +28,8 @@ describe("Admin proposals actions", () => {
   it("Can report a proposal as a spam", () => {
     // paid admin user with proposal credits
     const user = {
-      email: "admin@example.com",
-      username: "admin",
+      email: "adminuser@example.com",
+      username: "adminuser",
       password: "password"
     };
     const proposal = buildProposal();
@@ -56,8 +56,8 @@ describe("Admin proposals actions", () => {
   it("Can abandon a proposal", () => {
     // paid admin user with proposal credits
     const user = {
-      email: "admin@example.com",
-      username: "admin",
+      email: "adminuser@example.com",
+      username: "adminuser",
       password: "password"
     };
     const proposal = buildProposal();
@@ -86,8 +86,8 @@ describe("Admin proposals actions", () => {
   it("Can authorize voting", () => {
     // paid admin user with proposal credits
     const user = {
-      email: "admin@example.com",
-      username: "admin",
+      email: "adminuser@example.com",
+      username: "adminuser",
       password: "password"
     };
     const proposal = buildProposal();

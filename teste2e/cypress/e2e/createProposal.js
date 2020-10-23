@@ -4,8 +4,8 @@ describe("Proposals", () => {
   it("Paid user can create proposals", () => {
     // paid user with proposal credits
     const user = {
-      email: "admin@example.com",
-      username: "admin",
+      email: "adminuser@example.com",
+      username: "adminuser",
       password: "password"
     };
     const proposal = buildProposal();

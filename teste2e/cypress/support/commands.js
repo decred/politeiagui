@@ -42,7 +42,7 @@ Cypress.Commands.add("assertLoggedInAs", (user) => {
     .then((cookies) => {
       expect(cookies[1]).to.have.property("name", "session");
     });
-  cy.findByTestId("user-dropdown").should("have.text", user.username);
+  cy.findByTestId("trigger").should("have.text", user.username);
 });
 
 // TODO: add login using cy.request()

@@ -1,7 +1,0 @@
-{
-  "baseUrl": "https://localhost:3000",
-  "integrationFolder": "cypress/e2e",
-  "viewportHeight": 660,
-  "viewportWidth": 1024,
-  "experimentalFetchPolyfill": true
-}

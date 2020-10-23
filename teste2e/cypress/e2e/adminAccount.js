@@ -2,8 +2,8 @@ describe("Admin account actions", () => {
   it("Can search users", () => {
     // paid admin user with proposal credits
     const user = {
-      email: "admin@example.com",
-      username: "admin",
+      email: "adminuser@example.com",
+      username: "adminuser",
       password: "password"
     };
     cy.server();
@@ -19,8 +19,8 @@ describe("Admin account actions", () => {
   it("Can navigate to the user page", () => {
     // paid admin user with proposal credits
     const user = {
-      email: "admin@example.com",
-      username: "admin",
+      email: "adminuser@example.com",
+      username: "adminuser",
       password: "password"
     };
     cy.server();
