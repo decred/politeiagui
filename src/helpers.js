@@ -21,7 +21,10 @@ import {
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_VOTING_NOT_AUTHORIZED,
-  PROPOSAL_METADATA_HINT
+  PROPOSAL_METADATA_HINT,
+  PROPOSAL_STATUS_PUBLIC,
+  PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_STATUS_ABANDONED
 } from "./constants.js";
 
 // XXX find usage and ensure this still works as expected
@@ -48,16 +51,68 @@ export const digest = (payload) => sha3_256(payload);
 export const utoa = (str) => window.btoa(unescape(encodeURIComponent(str)));
 export const atou = (str) => decodeURIComponent(escape(window.atob(str)));
 
+// parseReceivedProposalsMap iterates over BE returned proposals map[token] => proposal, prases the
+// metadata file & the proposal statuses
+export const parseReceivedProposalsMap = (proposals) => {
+  const parsedProps = {};
+  for (const [token, prop] of Object.entries(proposals)) {
+    parsedProps[token] = parseRawProposal(prop);
+  }
+  return parsedProps;
+};
+
+// parseProposalStatuses iterate over proposal's status changes array returned
+// from BE and returns proposal's timestamps accordingly
+const parseProposalStatuses = (sChanges) => {
+  let publishedat = 0,
+    censoredat = 0,
+    abandonedat = 0;
+
+  sChanges.forEach((sChange) => {
+    if (sChange.status === PROPOSAL_STATUS_PUBLIC) {
+      publishedat = sChange.timestamp;
+    }
+    if (sChange.status === PROPOSAL_STATUS_CENSORED) {
+      censoredat = sChange.timestamp;
+    }
+    if (sChange.status === PROPOSAL_STATUS_ABANDONED) {
+      abandonedat = sChange.timestamp;
+    }
+  });
+  return { publishedat, censoredat, abandonedat };
+};
+
 // parseProposalMetadata accepts a proposal object parses it's metadata
 // and returns it as object of the form { name, linkto, linkby }
 //
 // censored proposals won't have metadata, in this case this function will
 // return an empty object
-export const parseProposalMetadata = (proposal) => {
+const parseProposalMetadata = (proposal) => {
   const metadata =
     proposal.metadata &&
     proposal.metadata.find((md) => md.hint === PROPOSAL_METADATA_HINT);
   return metadata ? JSON.parse(atob(metadata.payload)) : {};
+};
+
+// parseRawProposal accepts raw proposal object received from BE and parses
+// it's metadata & status changes
+export const parseRawProposal = (proposal) => {
+  // Parse statuses
+  const { publishedat, censoredat, abandonedat } = parseProposalStatuses(
+    proposal.statuses
+  );
+  // Parse metdata
+  // Censored proposal's metadata isn't available
+  const { name, linkby, linkto } = parseProposalMetadata(proposal);
+  return {
+    ...proposal,
+    name,
+    linkby,
+    linkto,
+    publishedat,
+    censoredat,
+    abandonedat
+  };
 };
 
 // This function extracts the content of index.md's payload. The payload is

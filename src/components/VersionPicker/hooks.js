@@ -1,16 +1,11 @@
 import { useState, useCallback } from "react";
 import { invoice as onFetchInvoice } from "src/lib/api.js";
-import { getTextFromIndexMd, parseProposalMetadata } from "src/helpers";
+import { getTextFromIndexMd } from "src/helpers";
 import { ModalDiffProposal, ModalDiffInvoice } from "src/components/ModalDiff";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useConfig } from "src/containers/Config";
 import { useAction } from "src/redux";
 import * as act from "src/actions";
-
-const getProposalTitle = (proposal) => {
-  const { name } = parseProposalMetadata(proposal);
-  return name;
-};
 
 const getProposalText = (proposal) => {
   const getMarkdowFile = (prop) =>
@@ -59,8 +54,8 @@ export function useVersionPicker(version, token, state) {
         newFiles: getProposalFilesWithoutIndexMd(proposal),
         newText: getProposalText(proposal),
         oldText: getProposalText(prevProposal),
-        newTitle: getProposalTitle(proposal),
-        oldTitle: getProposalTitle(prevProposal)
+        newTitle: proposal.name,
+        oldTitle: prevProposal.name
       };
     },
     []
@@ -93,7 +88,6 @@ export function useVersionPicker(version, token, state) {
             v,
             state
           );
-          console.log(proposalDiff);
           handleOpenModal(ModalDiffProposal, {
             proposalDetails: proposalDiff.details,
             onClose: handleCloseModal,

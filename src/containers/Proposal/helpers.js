@@ -16,6 +16,7 @@ import {
 import { getTextFromIndexMd } from "src/helpers";
 import set from "lodash/fp/set";
 import values from "lodash/fp/values";
+import pick from "lodash/pick";
 import isEmpty from "lodash/fp/isEmpty";
 
 /**
@@ -86,11 +87,13 @@ export const isRfpReadyToVote = (proposalLinkBy, minlinkbyperiod) => {
  * @param {Object} voteSummary
  * @returns {Boolean} isActiveApproved
  */
+/// XXX revert me
 export const isRfpReadyToRunoff = (proposal, voteSummary) =>
   isApprovedProposal(proposal, voteSummary) &&
   isVotingFinishedProposal(voteSummary) &&
-  proposal.linkby &&
-  new Date().getTime() / 1000 > Number(proposal.linkby);
+  true;
+//proposal.linkby &&
+//new Date().getTime() / 1000 > Number(proposal.linkby);
 
 /**
  * Returns true if the given proposal is unreviewed
@@ -280,7 +283,7 @@ export const goToFullProposal = (history, proposalURL) => () =>
  * Returns the proposal list with RFP Proposal linked to RFP submissions
  * @param {object} proposals
  */
-export const getRfpLinkedProposals = (proposalsByToken) =>
+export const getRfpLinkedProposals = (proposalsByToken, voteSummaries) =>
   values(proposalsByToken).reduce((acc, proposal) => {
     const isRfp = !!proposal.linkby;
     const isSubmission = !!proposal.linkto;
@@ -293,6 +296,20 @@ export const getRfpLinkedProposals = (proposalsByToken) =>
         [getProposalToken(proposal), "proposedFor"],
         linkedProposal.name
       )(acc);
+    }
+    if (isRfp) {
+      const linkedFrom = proposal.linkedfrom;
+      const rfpSubmissions = linkedFrom && {
+        proposals: values(pick(proposalsByToken, linkedFrom)),
+        voteSummaries: pick(voteSummaries, linkedFrom)
+      };
+      return {
+        ...acc,
+        [getProposalToken(proposal)]: {
+          ...proposal,
+          rfpSubmissions
+        }
+      };
     }
     return acc;
   }, proposalsByToken);

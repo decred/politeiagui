@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import styles from "./PublicProposals.module.css";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
-import { getRfpLinkedProposals } from "../helpers";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
@@ -66,7 +65,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
 
   return (
     <RecordsView
-      records={getRfpLinkedProposals(proposals)}
+      records={proposals}
       tabLabels={tabLabels}
       recordTokensByTab={recordTokensByTab}
       renderRecord={renderProposal}

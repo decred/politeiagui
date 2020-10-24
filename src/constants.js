@@ -8,7 +8,7 @@ export const RECORD_TYPE_INVOICE = "invoices";
 
 export const EXPLORER = "dcrdata";
 
-export const CENSORSHIP_TOKEN_LENGTH = 64;
+export const CENSORSHIP_TOKEN_LENGTH = 20;
 
 // DCC
 export const DCC_STATUS_ACTIVE = 1;
