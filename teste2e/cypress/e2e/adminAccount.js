@@ -10,10 +10,10 @@ describe("Admin account actions", () => {
     cy.route("GET", "/api/v1/users?**").as("searchUser");
     cy.typeLogin(user);
     cy.visit("/user/search");
-    cy.findByTestId("search-user").type("nonpaid");
+    cy.findByTestId("search-user").type("user2");
     cy.findByRole("button", { name: /search/i }).click();
     cy.wait("@searchUser");
-    cy.findByText(/nonpaid@example.com/i).should("exist");
+    cy.findByText(/user2@example.com/i).should("exist");
   });
 
   it("Can navigate to the user page", () => {
@@ -27,7 +27,7 @@ describe("Admin account actions", () => {
     cy.route("GET", "/api/v1/users?**").as("searchUser");
     cy.typeLogin(user);
     cy.visit("/user/search");
-    cy.findByTestId("search-user").type("nonpaid");
+    cy.findByTestId("search-user").type("user2");
     cy.findByRole("button", { name: /search/i }).click();
     cy.wait("@searchUser").then((xhr) => {
       expect(xhr.status).to.eq(200);

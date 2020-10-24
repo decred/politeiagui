@@ -27,8 +27,10 @@ $HOME/pibins/politeiawww_dbutil -cockroachdb  -testnet -addcredits adminuser 100
 #User1 with one credit
 $HOME/pibins/piwww newuser user1@example.com user1 password --verify
 $HOME/pibins/politeiawww_dbutil -cockroachdb  -testnet -addcredits user1 1
-#User2 witn no credit
+#User2 with no credit
 $HOME/pibins/piwww newuser user2@example.com user2 password --verify
+#User3 paywall not paid
+$HOME/pibins/piwww newuser user3@example.com user3 password --verify
 #Paywall
 adminuser_uuid=`$HOME/pibins/piwww login adminuser@example.com password | \
   jq -r "select(.userid).userid"`

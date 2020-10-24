@@ -185,7 +185,7 @@ const ProposalForm = React.memo(function ProposalForm({
       <BoxTextInput
         placeholder="Proposal name"
         name="name"
-        data-testid="proposal name"
+        data-testid="proposal-name"
         tabIndex={1}
         value={values.name}
         onChange={handleChangeWithTouched("name")}

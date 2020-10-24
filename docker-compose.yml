@@ -20,6 +20,8 @@ services:
         "npx",
         "cypress",
         "run",
+        "--browser",
+        "chrome",
       ]
     volumes:
       - ./teste2e/cypress:/app/cypress

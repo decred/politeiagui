@@ -58,11 +58,10 @@
     "build:cms": "node -r dotenv/config ./node_modules/.bin/react-app-rewired build dotenv_config_path=./config/cms.env",
     "test": "react-app-rewired test --env=jsdom",
     "up": "docker-compose up --abort-on-container-exit --exit-code-from e2e",
-    "cy:run": "cd teste2e && cypress run --browser chrome",
+    "cy:run": "cd teste2e && cypress run",
     "cy:open": "cd teste2e && cypress open",
     "test:e2e:run": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start https-get://localhost:3000 cy:run",
     "test:e2e:dev": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start https-get://localhost:3000 cy:open",
-    "test:e2e": "is-ci \"test:e2e:run\" \"test:e2e:dev\"",
     "eject": "react-app-rewired eject",
     "prettify": "prettier --write 'src/**/*.{js,jsx,css,json}'",
     "lint": "./node_modules/.bin/eslint src --ext .js --ext .jsx"

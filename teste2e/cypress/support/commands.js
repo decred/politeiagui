@@ -62,23 +62,29 @@ Cypress.Commands.add("typeIdentity", () => {
   cy.route("GET", "api/v1/user/*").as("getUser");
   cy.route("POST", "api/v1/user/key").as("newKey");
   cy.route("POST", "api/v1/user/key/verify").as("keyVerify");
-  cy.findByTestId("user-dropdown").click();
+  cy.findByTestId("trigger").click();
   cy.findByText(/account/i).click();
   cy.wait("@getUser").its("status").should("eq", 200);
   cy.findByText(/create new identity/i).click();
   cy.findByText(/confirm/i).click();
-  cy.wait("@newKey").its("status").should("eq", 200);
-  cy.findByText(/ok/i).click();
-  cy.findByText(/auto verify/i).click();
-  cy.wait("@keyVerify").its("status").should("eq", 200);
-  cy.findByText(/go to proposals/i).click();
+  cy.wait("@newKey").should((xhr) => {
+    expect(xhr.status).to.equal(200);
+    expect(xhr.response.body)
+      .to.have.property("verificationtoken")
+      .and.be.a("string");
+    cy.visit(
+      `/user/key/verify?verificationtoken=${xhr.response.body.verificationtoken}`
+    );
+    cy.wait("@keyVerify").its("status").should("eq", 200);
+    cy.findByText(/go to proposals/i).click();
+  });
 });
 
 // TODO: add createProposal using cy.request()
 Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.server();
   cy.findByText(/new proposal/i).click();
-  cy.findByTestId("proposal name", { timeout: 10000 }).type(proposal.name);
+  cy.findByTestId("proposal-name", { timeout: 10000 }).type(proposal.name);
   cy.findByTestId("text-area").type(proposal.description);
   cy.route("POST", "/api/v1/proposals/new").as("newProposal");
   cy.findByText(/submit/i).click();
@@ -93,4 +99,10 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
       token: xhr.response.body.censorshiprecord.token
     });
   });
+});
+
+Cypress.on("window:before:load", (win) => {
+  // this lets React DevTools "see" components inside application's iframe
+  win.__REACT_DEVTOOLS_GLOBAL_HOOK__ =
+    window.top.__REACT_DEVTOOLS_GLOBAL_HOOK__;
 });
