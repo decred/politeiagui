@@ -23,6 +23,7 @@ import {
   APPROVED,
   REJECTED
 } from "../constants";
+import { parseReceivedProposalsMap } from "src/helpers";
 
 export const onResetNewUser = act.RESET_NEW_USER;
 
@@ -374,6 +375,7 @@ export const onFetchProposalBilling = (token) =>
 //
 // state should be the state of requested proposals
 // XXX ensure all ref. call with state provided
+// XXX and includefiles param
 export const onFetchProposalsBatchWithoutState = (
   requests,
   state,
@@ -386,7 +388,7 @@ export const onFetchProposalsBatchWithoutState = (
         api.proposalsBatch(csrf, {
           requests,
           state,
-          includefiles: true // XXX is this always the case ?
+          includefiles: true
         }),
       fetchVoteSummary &&
         api.proposalsBatchVoteSummary(
@@ -396,9 +398,10 @@ export const onFetchProposalsBatchWithoutState = (
     ]);
     const proposals =
       fetchProposals && res.find((res) => res && res.proposals).proposals;
+    const parsedProposals = proposals && parseReceivedProposalsMap(proposals);
     const summaries =
       fetchVoteSummary && res.find((res) => res && res.summaries).summaries;
-    return [proposals, summaries];
+    return [parsedProposals, summaries];
   });
 
 // requests param should be array of objects from the following form:
@@ -732,14 +735,12 @@ export const onSubmitProposal = (
             name,
             description,
             type,
-            rfpLink,
             files
           })
         );
         resetNewProposalData();
       })
       .catch((error) => {
-        console.log(error);
         dispatch(act.RECEIVE_NEW_PROPOSAL(null, error));
         resetNewProposalData();
         throw error;

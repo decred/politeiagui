@@ -82,13 +82,12 @@ const PublicActions = ({
   const isRfpSubmission = !!proposal.linkto;
 
   const isVotingStartAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
-
   const rfpLinkedSubmissions = proposal.linkedfrom;
-  const [submssionsDidntVote, setSubmissionDidntVote] = useState(false);
+  const [submissionsDidntVote, setSubmissionsDidntVote] = useState(false);
   useEffect(() => {
     // check if RFP submissions are already under vote => hide `start runoff vote` action
     if (rfpSubmissionsVoteSummaries) {
-      setSubmissionDidntVote(
+      setSubmissionsDidntVote(
         !isVoteActiveProposal(
           rfpSubmissionsVoteSummaries[rfpLinkedSubmissions[0]]
         ) &&
@@ -97,57 +96,47 @@ const PublicActions = ({
           )
       );
     } else {
-      setSubmissionDidntVote(false);
+      setSubmissionsDidntVote(false);
     }
   }, [
     rfpLinkedSubmissions,
     rfpSubmissionsVoteSummaries,
-    setSubmissionDidntVote,
-    submssionsDidntVote
+    setSubmissionsDidntVote
   ]);
 
   const underDiscussion = isUnderDiscussionProposal(proposal, voteSummary);
-  const publicProp = isPublicProposal(proposal);
   return (
     <>
-      {(underDiscussion || publicProp) && (
+      {underDiscussion && (
         <div className="justify-right margin-top-m">
-          {publicProp && (
-            <Button
-              onClick={withProposal(onCensor)}
-              className={classNames("margin-right-s", styles.reportButton)}
-              noBorder
-              kind="secondary">
-              Report as spam
-            </Button>
-          )}
-          {underDiscussion && (
-            <>
-              {isProposalOwner &&
-                !isRfpSubmission &&
-                (!isVotingStartAuthorized ? (
-                  <Button onClick={withProposal(onAuthorizeVote)}>
-                    Authorize voting
-                  </Button>
-                ) : (
-                  <Button onClick={withProposal(onRevokeVote)}>
-                    Revoke voting authorization
-                  </Button>
-                ))}
-              <AdminContent>
-                {!isVotingStartAuthorized ? (
-                  <Button onClick={withProposal(onAbandon)}>Abandon</Button>
-                ) : (
-                  <Button onClick={withProposal(onStartVote)}>
-                    Start Vote
-                  </Button>
-                )}
-              </AdminContent>
-            </>
-          )}
+          <Button
+            onClick={withProposal(onCensor)}
+            className={classNames("margin-right-s", styles.reportButton)}
+            noBorder
+            kind="secondary">
+            Report as spam
+          </Button>
+          {isProposalOwner &&
+            !isRfpSubmission &&
+            (!isVotingStartAuthorized ? (
+              <Button onClick={withProposal(onAuthorizeVote)}>
+                Authorize voting
+              </Button>
+            ) : (
+              <Button onClick={withProposal(onRevokeVote)}>
+                Revoke voting authorization
+              </Button>
+            ))}
+          <AdminContent>
+            {!isVotingStartAuthorized ? (
+              <Button onClick={withProposal(onAbandon)}>Abandon</Button>
+            ) : (
+              <Button onClick={withProposal(onStartVote)}>Start Vote</Button>
+            )}
+          </AdminContent>
         </div>
       )}
-      {isRfpReadyToRunoff(proposal, voteSummary) && submssionsDidntVote && (
+      {isRfpReadyToRunoff(proposal, voteSummary) && submissionsDidntVote && (
         <AdminContent>
           <div className="justify-right margin-top-m">
             <Button

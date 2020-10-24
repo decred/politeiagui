@@ -416,7 +416,7 @@ const Proposal = React.memo(function Proposal({
                 proposal={proposal}
                 voteSummary={voteSummary}
                 rfpSubmissionsVoteSummaries={
-                  isRfp && showRfpSubmissions && rfpSubmissions.voteSummaries
+                  isRfp && rfpSubmissions.voteSummaries
                 }
               />
             </LoggedInContent>

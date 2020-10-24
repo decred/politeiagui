@@ -14,17 +14,27 @@ import values from "lodash/fp/values";
 import compact from "lodash/fp/compact";
 import uniq from "lodash/fp/uniq";
 import map from "lodash/fp/map";
+import reduce from "lodash/fp/reduce";
 import flow from "lodash/fp/flow";
 import isEmpty from "lodash/fp/isEmpty";
 import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
 import isEqual from "lodash/fp/isEqual";
 import { PROPOSAL_STATE_VETTED, PROPOSAL_STATE_UNVETTED } from "src/constants";
+import { getRfpLinkedProposals } from "src/containers/Proposal/helpers";
 
 const getRfpLinks = (proposals) =>
   flow(
     values,
     map((p) => p.linkto),
+    uniq,
+    compact
+  )(proposals);
+
+const getRfpSubmissions = (proposals) =>
+  flow(
+    values,
+    reduce((acc, p) => [...acc, ...(p.linkedfrom || [])], []),
     uniq,
     compact
   )(proposals);
@@ -38,6 +48,7 @@ export default function useProposalsBatch(
   { fetchRfpLinks, fetchVoteSummaries = false, unvetted = false }
 ) {
   const proposals = useSelector(sel.proposalsByToken);
+  const voteSummaries = useSelector(sel.summaryByToken);
   const allByStatus = useSelector(sel.allByStatus);
   const errorSelector = useMemo(
     () => or(sel.apiProposalsBatchError, sel.apiPropsVoteSummaryError),
@@ -56,7 +67,8 @@ export default function useProposalsBatch(
 
   const unfetchedRfpLinks = useMemo(() => {
     const rfpLinks = getRfpLinks(proposals);
-    return getUnfetchedTokens(proposals, rfpLinks);
+    const rfpSubmissions = getRfpSubmissions(proposals);
+    return getUnfetchedTokens(proposals, [...rfpLinks, ...rfpSubmissions]);
   }, [proposals]);
 
   const missingTokenInventory = isEmpty(tokenInventory);
@@ -130,10 +142,10 @@ export default function useProposalsBatch(
   });
 
   const anyError = error || state.error;
-
   useThrowError(anyError);
+
   return {
-    proposals: state.proposals,
+    proposals: getRfpLinkedProposals(state.proposals, voteSummaries),
     onFetchProposalsBatch,
     proposalsTokens: state.proposalsTokens,
     loading: state.loading,

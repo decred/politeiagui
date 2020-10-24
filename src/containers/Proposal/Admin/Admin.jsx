@@ -3,7 +3,6 @@ import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { tabValues, mapProposalsTokensByTab } from "./helpers";
-import { getRfpLinkedProposals } from "../helpers";
 // XXX change to AdminActionsProvider
 import { UnvettedActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
@@ -44,7 +43,7 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
 
   return (
     <RecordsView
-      records={getRfpLinkedProposals(proposals)}
+      records={proposals}
       tabLabels={tabLabels}
       recordTokensByTab={mapProposalsTokensByTab(tabLabels, proposalsTokens)}
       renderRecord={renderProposal}
