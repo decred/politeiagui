@@ -7,6 +7,7 @@ import {
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useAction, useSelector } from "src/redux";
+import { fullVoteParamObject } from "./helpers";
 
 export const PublicProposalsActionsContext = createContext();
 export const UnvettedProposalsActionsContext = createContext();
@@ -52,7 +53,6 @@ export function useUnvettedActions() {
 export function usePublicActions() {
   const onSetProposalStatus = useAction(act.onSetProposalStatus);
   const onStart = useAction(act.onStartVote);
-  const onStartRunoff = useAction(act.onStartRunoffVote);
   const onAuthorize = useAction(act.onAuthorizeVote);
   const onRevoke = useAction(act.onRevokeVote);
   const onFetchProposalsBatchWithoutState = useAction(
@@ -105,40 +105,31 @@ export function usePublicActions() {
     [onRevoke, currentUserID]
   );
 
+  // votes param is an array of object : [{ token, version, parent }] - where
+  // parent is RFP propsoals in case of runoff vote
   const onStartVote = useCallback(
-    ({ censorshiprecord: { token } = { token: null }, version }) => ({
-      duration,
-      quorumPercentage,
-      passPercentage
-    }) =>
-      onStart(
-        currentUserID,
-        token,
-        duration,
-        quorumPercentage,
-        passPercentage,
-        version
-      ),
-    [onStart, currentUserID]
-  );
-
-  const onStartRunoffVote = useCallback(
-    (token, votes, cb) => async ({
+    (votes, type, cb) => async ({
       duration,
       quorumPercentage,
       passPercentage
     }) => {
-      await onStartRunoff(
+      await onStart(
         currentUserID,
-        token,
-        duration,
-        quorumPercentage,
-        passPercentage,
-        votes
+        votes.map(({ token, version, parent }) =>
+          fullVoteParamObject({
+            type,
+            version,
+            duration,
+            quorumpercentage: quorumPercentage,
+            passpercentage: passPercentage,
+            token,
+            parent
+          })
+        )
       );
       cb && cb();
     },
-    [onStartRunoff, currentUserID]
+    [onStart, currentUserID]
   );
 
   return {
@@ -147,7 +138,6 @@ export function usePublicActions() {
     onAuthorizeVote,
     onRevokeVote,
     onStartVote,
-    onStartRunoffVote,
     onFetchProposalsBatchWithoutState
   };
 }

@@ -8,9 +8,7 @@ import {
   INVOICE_STATUS_UNREVIEWED,
   DCC_STATUS_ACTIVE,
   PROPOSAL_TYPE_RFP,
-  PROPOSAL_TYPE_RFP_SUBMISSION,
-  VOTE_TYPE_STANDARD,
-  VOTE_TYPE_RUNOFF
+  PROPOSAL_TYPE_RFP_SUBMISSION
 } from "../constants";
 import {
   getHumanReadableError,
@@ -587,114 +585,26 @@ export const editProposal = (csrf, proposal) =>
 export const newComment = (csrf, comment) =>
   POST("/comment/new", csrf, comment).then(getResponse);
 
-const votePayloadWithType = ({
-  type,
-  proposalversion,
-  duration,
-  quorumpercentage,
-  passpercentage,
-  token
-}) => ({
-  token,
-  version: +proposalversion,
-  type,
-  mask: 3,
-  duration,
-  quorumpercentage,
-  passpercentage,
-  options: [
-    {
-      id: "no",
-      description: "Don't approve proposal",
-      bit: 1
-    },
-    {
-      id: "yes",
-      description: "Approve proposal",
-      bit: 2
-    }
-  ]
-});
-
-export const startVote = (
-  userid,
-  csrf,
-  token,
-  duration,
-  quorumpercentage,
-  passpercentage,
-  proposalversion
-) => {
-  const params = votePayloadWithType({
-    token,
-    proposalversion,
-    type: VOTE_TYPE_STANDARD,
-    duration,
-    quorumpercentage,
-    passpercentage
-  });
-  const hash = objectToSHA256(params);
-  return pki
+export const startVote = (csrf, userid, voteParams) =>
+  pki
     .myPubKeyHex(userid)
     .then((publickey) =>
-      pki.signStringHex(userid, hash).then((signature) =>
+      Promise.all(
+        voteParams.map((params) => {
+          console.log(params);
+          return pki.signStringHex(userid, objectToSHA256(params));
+        })
+      ).then((signatures) =>
         POST("/vote/start", csrf, {
-          starts: [{ params, signature, publickey }]
+          starts: signatures.map((signature, i) => ({
+            signature,
+            params: voteParams[i],
+            publickey
+          }))
         })
       )
     )
     .then(getResponse);
-};
-
-export const startRunoffVote = (
-  userid,
-  csrf,
-  token,
-  duration,
-  quorumpercentage,
-  passpercentage,
-  votes // [{ token, proposalVersion }, ...]
-) => {
-  const submissionsVotes = votes.map((vote) =>
-    votePayloadWithType({
-      ...vote,
-      type: VOTE_TYPE_RUNOFF,
-      duration,
-      quorumpercentage,
-      passpercentage
-    })
-  );
-  return pki
-    .myPubKeyHex(userid)
-    .then(async (publickey) => {
-      const voteSignatures = await Promise.all(
-        submissionsVotes.map((vote) =>
-          pki.signStringHex(userid, objectToSHA256(vote))
-        )
-      );
-      const voteAuthSignatures = await Promise.all(
-        submissionsVotes.map(({ token, proposalversion: version }) =>
-          pki.signStringHex(userid, `${token}${version}authorize`)
-        )
-      );
-      return POST("/vote/startrunoff", csrf, {
-        starts: voteSignatures.map((signature, index) => ({
-          params: submissionsVotes[index],
-          signature,
-          publickey
-        })),
-        authorizations: voteAuthSignatures.map((signature, index) => ({
-          action: "authorize",
-          token: votes[index].token,
-          version: votes[index].version,
-          signature,
-          publickey
-        })),
-        token
-      });
-    })
-    .then(getResponse);
-};
 
 export const proposalsBatchVoteSummary = (csrf, tokens) =>
   POST("/votes/summaries", csrf, {

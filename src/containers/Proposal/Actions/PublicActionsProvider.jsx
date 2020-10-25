@@ -2,11 +2,15 @@ import React, { useCallback } from "react";
 import { Text } from "pi-ui";
 import Link from "src/components/Link";
 import { PublicProposalsActionsContext, usePublicActions } from "./hooks";
-import { isAbandonedProposal } from "src/containers/Proposal/helpers";
+import {
+  isAbandonedProposal,
+  getProposalToken
+} from "src/containers/Proposal/helpers";
 import ModalConfirm from "src/components/ModalConfirm";
 import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import ModalStartVote from "src/components/ModalStartVote";
 import useModalContext from "src/hooks/utils/useModalContext";
+import values from "lodash/fp/values";
 import {
   VOTE_TYPE_STANDARD,
   VOTE_TYPE_RUNOFF,
@@ -20,7 +24,6 @@ const PublicActionsProvider = ({ children }) => {
     onAuthorizeVote,
     onRevokeVote,
     onStartVote,
-    onStartRunoffVote,
     onFetchProposalsBatchWithoutState
   } = usePublicActions();
 
@@ -87,10 +90,12 @@ const PublicActionsProvider = ({ children }) => {
 
   const handleStartVoteModal = useCallback(
     (proposal) => {
+      const token = getProposalToken(proposal);
+      const version = proposal && proposal.version;
       handleOpenModal(ModalStartVote, {
         title: `Start vote - ${proposal.name}`,
         voteType: VOTE_TYPE_STANDARD,
-        onSubmit: onStartVote(proposal),
+        onSubmit: onStartVote([{ token, version }], VOTE_TYPE_STANDARD),
         successTitle: "Proposal vote started",
         successMessage: (
           <Text>
@@ -112,24 +117,21 @@ const PublicActionsProvider = ({ children }) => {
         PROPOSAL_STATE_VETTED
       );
       // Filter abandoned submmsions out & maps to proposal tokens.
-      const submissionVotes = submissions.flatMap((prop) =>
+      const submissionVotes = values(submissions).flatMap((prop) =>
         isAbandonedProposal(prop)
           ? []
           : [
               {
-                token: prop.censorshiprecord.token,
-                proposalversion: prop.version
+                token: getProposalToken(prop),
+                version: prop.version,
+                parent: getProposalToken(proposal)
               }
             ]
       );
       handleOpenModal(ModalStartVote, {
         title: `Start runoff vote - ${proposal.name}`,
         voteType: VOTE_TYPE_RUNOFF,
-        onSubmit: onStartRunoffVote(
-          proposal.censorshiprecord.token,
-          submissionVotes,
-          cb
-        ),
+        onSubmit: onStartVote(submissionVotes, VOTE_TYPE_RUNOFF, cb),
         successTitle: "Proposal runoff vote started",
         message: "Are you sure you want to start runoff vote?",
         successMessage: (
@@ -143,9 +145,9 @@ const PublicActionsProvider = ({ children }) => {
       });
     },
     [
+      onStartVote,
       handleCloseModal,
       handleOpenModal,
-      onStartRunoffVote,
       onFetchProposalsBatchWithoutState
     ]
   );
