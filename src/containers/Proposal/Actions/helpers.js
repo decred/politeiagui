@@ -14,7 +14,6 @@ export const fullVoteParamObject = ({
   duration,
   quorumpercentage,
   passpercentage,
-  parent,
   options: [
     {
       id: "no",
@@ -26,5 +25,6 @@ export const fullVoteParamObject = ({
       description: "Approve proposal",
       bit: 2
     }
-  ]
+  ],
+  parent
 });
