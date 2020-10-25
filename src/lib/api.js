@@ -599,16 +599,15 @@ export const startVote = (csrf, userid, voteParams) =>
     .myPubKeyHex(userid)
     .then((publickey) =>
       Promise.all(
-        voteParams.map((params) => {
-          console.log(params);
-          return pki.signStringHex(userid, objectToSHA256(params));
-        })
+        voteParams.map((params) =>
+          pki.signStringHex(userid, objectToSHA256(params))
+        )
       ).then((signatures) =>
         POST("/vote/start", csrf, {
           starts: signatures.map((signature, i) => ({
-            signature,
             params: voteParams[i],
-            publickey
+            publickey,
+            signature
           }))
         })
       )
