@@ -22,7 +22,9 @@ import {
   PRE_VOTE,
   ACTIVE_VOTE,
   APPROVED,
-  REJECTED
+  REJECTED,
+  VOTE_TYPE_STANDARD,
+  VOTE_TYPE_RUNOFF
 } from "../constants";
 import { parseReceivedProposalsMap } from "src/helpers";
 
@@ -1111,57 +1113,34 @@ export const onResendVerificationEmailConfirm = ({ username, email }) =>
 export const resetResendVerificationEmail = () => (dispatch) =>
   dispatch(act.RESET_RESEND_VERIFICATION_EMAIL());
 
-export const onStartVote = (userid, token, duration, quorum, pass, version) =>
+export const onStartVote = (userid, voteParams) =>
   withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_START_VOTE({ token }));
+    if (!voteParams || voteParams.length < 1) {
+      throw Error("Invalid vote params");
+    }
+    const tokens = voteParams.map(({ token }) => token);
+    const type = voteParams[0].type;
+    dispatch(act.REQUEST_START_VOTE({ tokens, type }));
     return api
-      .startVote(userid, csrf, token, duration, quorum, pass, version)
+      .startVote(csrf, userid, voteParams)
       .then((response) => {
-        dispatch(onFetchProposalsBatchVoteSummary([token]));
-        dispatch(act.RECEIVE_START_VOTE({ ...response, token, success: true }));
+        if (type === VOTE_TYPE_STANDARD) {
+          dispatch(onFetchProposalsBatchVoteSummary(tokens));
+          dispatch(
+            act.RECEIVE_START_VOTE({ ...response, type, tokens, success: true })
+          );
+        } else if (type === VOTE_TYPE_RUNOFF) {
+          const parent = voteParams[0].parent;
+          dispatch(
+            onFetchProposalsBatch(
+              [...tokens, parent].map((token) => ({ token })),
+              PROPOSAL_STATE_VETTED
+            )
+          );
+        }
       })
       .catch((error) => {
         dispatch(act.RECEIVE_START_VOTE(null, error));
-        throw error;
-      });
-  });
-
-export const onStartRunoffVote = (
-  currentUserID,
-  token,
-  duration,
-  quorum,
-  pass,
-  votes
-) =>
-  withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_START_RUNOFF_VOTE({ token }));
-    return api
-      .startRunoffVote(
-        currentUserID,
-        csrf,
-        token,
-        duration,
-        quorum,
-        pass,
-        votes
-      )
-      .then((response) => {
-        const submissionsTokens = votes.map((vote) => vote.token);
-        dispatch(
-          onFetchProposalsBatch(
-            [...submissionsTokens, token].map((token) => ({ token })),
-            PROPOSAL_STATE_VETTED,
-            false,
-            true
-          )
-        );
-        dispatch(
-          act.RECEIVE_START_RUNOFF_VOTE({ ...response, token, success: true })
-        );
-      })
-      .catch((error) => {
-        dispatch(act.RECEIVE_START_RUNOFF_VOTE(null, error));
         throw error;
       });
   });
