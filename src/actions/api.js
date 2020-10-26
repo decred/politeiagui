@@ -22,9 +22,7 @@ import {
   PRE_VOTE,
   ACTIVE_VOTE,
   APPROVED,
-  REJECTED,
-  VOTE_TYPE_STANDARD,
-  VOTE_TYPE_RUNOFF
+  REJECTED
 } from "../constants";
 import { parseReceivedProposalsMap } from "src/helpers";
 
@@ -1124,20 +1122,10 @@ export const onStartVote = (userid, voteParams) =>
     return api
       .startVote(csrf, userid, voteParams)
       .then((response) => {
-        if (type === VOTE_TYPE_STANDARD) {
-          dispatch(onFetchProposalsBatchVoteSummary(tokens));
-          dispatch(
-            act.RECEIVE_START_VOTE({ ...response, type, tokens, success: true })
-          );
-        } else if (type === VOTE_TYPE_RUNOFF) {
-          const parent = voteParams[0].parent;
-          dispatch(
-            onFetchProposalsBatch(
-              [...tokens, parent].map((token) => ({ token })),
-              PROPOSAL_STATE_VETTED
-            )
-          );
-        }
+        dispatch(onFetchProposalsBatchVoteSummary(tokens));
+        dispatch(
+          act.RECEIVE_START_VOTE({ ...response, type, tokens, success: true })
+        );
       })
       .catch((error) => {
         dispatch(act.RECEIVE_START_VOTE(null, error));

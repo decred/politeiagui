@@ -112,8 +112,12 @@ const PublicActionsProvider = ({ children }) => {
 
   const handleStartRunoffVoteModal = useCallback(
     async (proposal, cb) => {
+      const submissionsTokens = proposal.linkedfrom;
+      if (!submissionsTokens || !submissionsTokens.length) {
+        throw Error("No RFP submissions available");
+      }
       const [submissions] = await onFetchProposalsBatchWithoutState(
-        proposal.linkedfrom.map((token) => ({ token })),
+        submissionsTokens.map((token) => ({ token })),
         PROPOSAL_STATE_VETTED
       );
       // Filter abandoned submmsions out & maps to proposal tokens.
