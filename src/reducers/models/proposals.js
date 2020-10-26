@@ -71,18 +71,27 @@ const proposalToken = (proposal) => proposal.censorshiprecord.token;
 const proposalIndexFile = (name = "", description = "") =>
   getIndexMdFromText([name, description].join("\n\n"));
 
-const updateAllByStatus = (allByStatus, newStatus, token) =>
-  Object.keys(allByStatus).reduce((inv, key) => {
-    const tokens = allByStatus[key] || [];
-    const foundToken = tokens.find((t) => t === token);
-    if (foundToken && key !== newStatus)
-      return { ...inv, [key]: tokens.filter((t) => t !== token) };
+const updateAllByStatus = (allByStatus, newStatus, tokens) => {
+  let res = {};
+  tokens.forEach((token) => {
+    const updatedByStatus = Object.keys(allByStatus).reduce((inv, key) => {
+      const tokens = res[key] || allByStatus[key] || [];
+      const foundToken = tokens.find((t) => t === token);
+      if (foundToken && key !== newStatus)
+        return { ...inv, [key]: tokens.filter((t) => t !== token) };
 
-    if (!foundToken && key === newStatus)
-      return { ...inv, [key]: [token].concat(tokens) };
+      if (!foundToken && key === newStatus)
+        return { ...inv, [key]: [token].concat(tokens) };
 
-    return { ...inv, [key]: tokens };
-  }, {});
+      return { ...inv, [key]: tokens };
+    }, res);
+    res = {
+      ...res,
+      ...updatedByStatus
+    };
+  });
+  return res;
+};
 
 const updateProposalRfpLinks = (proposal) => (state) => {
   if (!proposal.linkto) return state;
@@ -163,7 +172,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
                     action.payload.proposal.status,
                     action.payload.proposal.state
                   ),
-                  proposalToken(action.payload.proposal)
+                  [proposalToken(action.payload.proposal)]
                 )
               )
             )(state),
@@ -187,7 +196,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
             )(state),
           [act.RECEIVE_START_VOTE]: () =>
             update("allByStatus", (allProps) =>
-              updateAllByStatus(allProps, ACTIVE_VOTE, action.payload.token)
+              updateAllByStatus(allProps, ACTIVE_VOTE, action.payload.tokens)
             )(state),
           [act.RECEIVE_NEW_COMMENT]: () => {
             const comment = action.payload;
