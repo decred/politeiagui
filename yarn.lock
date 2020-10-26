@@ -6801,14 +6801,6 @@ is-callable@^1.1.4, is-callable@^1.1.5, is-callable@^1.2.0:
   resolved "https://registry.yarnpkg.com/is-callable/-/is-callable-1.2.0.tgz#83336560b54a38e35e3a2df7afd0454d691468bb"
   integrity sha512-pyVD9AaGLxtg6srb2Ng6ynWJqkHU9bEM087AKck0w8QwDarTfNcpIYoU8x8Hv2Icm8u6kFJM18Dag8lyqGkviw==
 
-is-ci-cli@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/is-ci-cli/-/is-ci-cli-2.1.2.tgz#52f233e3f6d7718642f2bb356a5b5110b29d9b02"
-  integrity sha512-dgGkNUs6ws6RfkjQYwkrFhwkdyNkWxyng1Tz7W7OnkGPhXV9z1ofnzmTmuXpvlCfolB8Z7BBL/Zi3LDB6b2hTg==
-  dependencies:
-    cross-spawn "^7.0.0"
-    is-ci "^2.0.0"
-
 is-ci@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/is-ci/-/is-ci-2.0.0.tgz#6bc6334181810e04b5c22b3d589fdca55026404c"
