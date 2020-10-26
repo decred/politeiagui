@@ -52,6 +52,9 @@ function replaceImgDigestWithPayload(text, files) {
   const imgs = text.matchAll(imageRegexParser);
   let newText = text;
   const markdownFiles = [];
+  /**
+   * This for loop will update the newText replacing images digest by their base64 payload and push the img object to an array of markdownFiles
+   * */
   for (const img of imgs) {
     const { digest } = img.groups;
     const obj = getKeyByValue(files, digest);

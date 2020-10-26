@@ -38,6 +38,7 @@ import FormatHelpButton from "./FormatHelpButton";
 import SubmitButton from "./SubmitButton";
 import ProposalGuidelinesButton from "./ProposalGuidelinesButton";
 
+/** The main goal of using a Map data structure instead of internal state here is to prevent unnecessary rerenders. We just want a way to map blobs to files objects. */
 const mapBlobToFile = new Map();
 
 /**
@@ -51,6 +52,9 @@ function replaceBlobsToDigestsAndGetFiles(description, map) {
   const imgs = description.matchAll(imageRegexParser);
   let newDescription = description;
   const files = [];
+  /**
+   * This for loop will update the newDescription replacing the image blobs by their digests and push the img object to an array of files
+   * */
   for (const img of imgs) {
     const { blob } = img.groups;
     if (map.has(blob)) {
