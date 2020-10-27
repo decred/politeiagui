@@ -58,7 +58,7 @@ export function useComments(recordToken, proposalState) {
   );
   const loadingLikeAction = useSelector(sel.isApiRequestingLikeComment);
   const onFetchLikes = useAction(act.onFetchLikedComments);
-  const onLikeCommentAction = useAction(act.onLikeComment);
+  const onCommentVoteAction = useAction(act.onCommentVote);
   const onCensorComment = useAction(act.onCensorComment);
 
   const { currentUser } = useLoaderContext();
@@ -111,11 +111,11 @@ export function useComments(recordToken, proposalState) {
     ]
   );
 
-  const onLikeComment = useCallback(
+  const onCommentVote = useCallback(
     (commentID, action) => {
-      onLikeCommentAction(userid, recordToken, commentID, action);
+      onCommentVoteAction(userid, recordToken, commentID, action);
     },
-    [recordToken, userid, onLikeCommentAction]
+    [onCommentVoteAction, recordToken, userid]
   );
 
   const getCommentLikeOption = useCallback(
@@ -133,7 +133,7 @@ export function useComments(recordToken, proposalState) {
 
   return {
     comments,
-    onLikeComment,
+    onCommentVote,
     onCensorComment,
     getCommentLikeOption,
     enableCommentVote,

@@ -8,7 +8,7 @@ import {
   assertPOSTOnRouteIsCalled,
   makeApiResponse
 } from "./support/helpers";
-import { PROPOSAL_TYPE_REGULAR } from "../../constants";
+import { PROPOSAL_TYPE_REGULAR, PROPOSAL_STATE_VETTED } from "../../constants";
 
 describe("api integration modules (lib/api.js)", () => {
   const MOCKS_PATH = "../../../mocks/api/";
@@ -172,11 +172,17 @@ describe("api integration modules (lib/api.js)", () => {
     expect.assertions(1);
     const COMMENT_ID = 3;
     // make a comment with a parent Id
-    const comment = api.makeLikeComment(COMMENT_TOKEN, 1, COMMENT_ID);
+    const comment = api.makeCommentVote(
+      COMMENT_TOKEN,
+      1,
+      COMMENT_ID,
+      PROPOSAL_STATE_VETTED
+    );
     expect(comment).toEqual({
       token: COMMENT_TOKEN,
-      action: 1,
-      commentid: COMMENT_ID
+      vote: 1,
+      commentid: COMMENT_ID,
+      state: PROPOSAL_STATE_VETTED
     });
   });
 

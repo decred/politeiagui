@@ -73,6 +73,9 @@ export const PROPOSAL_VOTING_FINISHED = 4;
 export const PROPOSAL_REJECTED = 7;
 export const PROPOSAL_APPROVED = 8;
 
+export const PROPOSAL_COMMENT_UPVOTE = 1;
+export const PROPOSAL_COMMENT_DOWNVOTE = -1;
+
 // Proposals presentational statuses returned by the 'voteinv' &
 // 'proposalinv' endpoints from the API.
 export const UNREVIEWED = "unreviewed";

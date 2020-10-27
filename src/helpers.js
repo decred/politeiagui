@@ -226,6 +226,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     78: "Invalid TOTP Type",
     79: "User has verified TOTP secret and login requires code.",
     80: "Must wait until next TOTP code window before another login attempt.",
+    88: "User cannot vote on his own comment",
 
     // CMS Errors
     1001: "Malformed name",

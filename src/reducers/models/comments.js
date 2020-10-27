@@ -46,23 +46,20 @@ const comments = (state = DEFAULT_STATE, action) =>
             )(state);
           },
           [act.RECEIVE_SYNC_LIKE_COMMENT]: () => {
-            const { token, action: cAction, commentid } = action.payload;
-            const newAction = parseInt(cAction, 10);
+            const { token, vote, commentid } = action.payload;
             const commentsLikes = state.commentsLikes.byToken[token];
             const backupForCommentLikes = cloneDeep(commentsLikes);
             const comments = state.comments.byToken[token];
             const isTargetCommentLike = (commentLike) =>
               commentLike.commentid === commentid &&
               commentLike.token === token;
-            const oldCommentLike =
+            const oldCommentVote =
               commentsLikes && commentsLikes.find(isTargetCommentLike);
-            const oldAction = oldCommentLike
-              ? parseInt(oldCommentLike.action, 10)
-              : 0;
+            const oldVote = oldCommentVote ? oldCommentVote.vote : 0;
             const newCommentLike = {
               token,
               commentid,
-              action: newAction === oldAction ? 0 : newAction
+              vote: vote === oldVote ? 0 : vote
             };
             const newCommentsLikes = unionBy(
               [newCommentLike],
@@ -72,21 +69,19 @@ const comments = (state = DEFAULT_STATE, action) =>
 
             const updateCommentResultAndTotalVotes = (comment) => {
               if (comment.commentid !== commentid) return comment;
-              const oldActionEqualsNewAction = oldAction === newAction;
+              const oldActionEqualsNewAction = oldVote === vote;
 
               const calcNewTotalVotes = (value) =>
-                value +
-                (oldActionEqualsNewAction ? -1 : oldAction === 0 ? 1 : 0);
+                value + (oldActionEqualsNewAction ? -1 : oldVote === 0 ? 1 : 0);
               const calcNewResultVotes = (value) =>
-                value +
-                (oldActionEqualsNewAction ? -oldAction : newAction - oldAction);
+                value + (oldActionEqualsNewAction ? -oldVote : vote - oldVote);
 
-              const calcPerActionVotes = (action) => (value = 0) => {
-                if (newAction === action) {
+              const calcPerActionVotes = (v) => (value = 0) => {
+                if (vote === v) {
                   if (oldActionEqualsNewAction) return --value;
                   return ++value;
                 }
-                if (oldAction === action) return --value;
+                if (oldVote === v) return --value;
                 return value;
               };
 
