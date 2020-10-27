@@ -851,20 +851,23 @@ export const onSubmitEditedInvoice = (
       });
   });
 
-export const onLikeComment = (currentUserID, token, commentid, action) =>
+export const onCommentVote = (currentUserID, token, commentid, vote) =>
   withCsrf((dispatch, _, csrf) => {
     if (!currentUserID) {
       return;
     }
     dispatch(act.REQUEST_LIKE_COMMENT({ commentid, token }));
-    return Promise.resolve(api.makeLikeComment(token, action, commentid))
-      .then((comment) => api.signLikeComment(currentUserID, comment))
-      .then((comment) => api.likeComment(csrf, comment))
+    return Promise.resolve(
+      api.makeCommentVote(token, vote, commentid, PROPOSAL_STATE_VETTED)
+    )
+      .then((comment) => api.signCommentVote(currentUserID, comment))
+      .then((comment) => api.commentVote(csrf, comment))
       .then(() => {
         dispatch(act.RECEIVE_LIKE_COMMENT({ token }));
-        dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({ token, commentid, action }));
+        dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({ token, commentid, vote }));
       })
       .catch((error) => {
+        console.log(error);
         dispatch(act.RESET_SYNC_LIKE_COMMENT({ token }));
         dispatch(act.RECEIVE_LIKE_COMMENT(null, error));
       });

@@ -67,7 +67,7 @@ const Comments = ({
 
   const {
     onSubmitComment,
-    onLikeComment,
+    onCommentVote,
     onCensorComment,
     comments,
     loading,
@@ -313,7 +313,7 @@ const Comments = ({
             <CommentContext.Provider
               value={{
                 onSubmitComment,
-                onLikeComment,
+                onCommentVote,
                 recordAuthorID,
                 recordToken,
                 threadParentID,

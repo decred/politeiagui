@@ -4,7 +4,11 @@ import CommentForm from "src/components/CommentForm/CommentFormLazy";
 import Link from "src/components/Link";
 import { useComment } from "../hooks";
 import Comment from "./Comment";
-import { PROPOSAL_STATE_UNVETTED } from "src/constants";
+import {
+  PROPOSAL_STATE_UNVETTED,
+  PROPOSAL_COMMENT_UPVOTE,
+  PROPOSAL_COMMENT_DOWNVOTE
+} from "src/constants";
 
 const ContextLink = React.memo(({ parentid, recordToken, recordType }) => (
   <Link
@@ -67,7 +71,7 @@ const CommentWrapper = ({
 }) => {
   const {
     onSubmitComment,
-    onLikeComment,
+    onCommentVote,
     getCommentLikeOption,
     enableCommentVote,
     recordAuthorID,
@@ -144,16 +148,16 @@ const CommentWrapper = ({
       openLoginModal();
       return;
     }
-    return onLikeComment(commentid, "1");
-  }, [openLoginModal, userLoggedIn, onLikeComment, commentid]);
+    return onCommentVote(commentid, PROPOSAL_COMMENT_UPVOTE);
+  }, [openLoginModal, userLoggedIn, onCommentVote, commentid]);
 
   const handleDislikeComment = useCallback(() => {
     if (!userLoggedIn) {
       openLoginModal();
       return;
     }
-    return onLikeComment(commentid, "-1");
-  }, [openLoginModal, onLikeComment, userLoggedIn, commentid]);
+    return onCommentVote(commentid, PROPOSAL_COMMENT_DOWNVOTE);
+  }, [openLoginModal, onCommentVote, userLoggedIn, commentid]);
 
   const handleClickCensor = useCallback(() => {
     return openCensorModal(commentid);

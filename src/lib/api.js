@@ -159,10 +159,11 @@ export const makeDccComment = (token, comment, parentid) => ({
   parentid
 });
 
-export const makeLikeComment = (token, action, commentid) => ({
+export const makeCommentVote = (token, vote, commentid, state) => ({
+  state,
   token,
   commentid,
-  action
+  vote
 });
 
 export const makeCensoredComment = (state, token, reason, commentid) => ({
@@ -262,14 +263,16 @@ export const signDccVote = (userid, dccvote) =>
         .then((signature) => ({ ...dccvote, publickey, signature }))
     );
 
-export const signLikeComment = (userid, comment) =>
+export const signCommentVote = (userid, comment) =>
   pki
     .myPubKeyHex(userid)
     .then((publickey) =>
       pki
         .signStringHex(
           userid,
-          [comment.token, comment.commentid, comment.action].join("")
+          [comment.state, comment.token, comment.commentid, comment.vote].join(
+            ""
+          )
         )
         .then((signature) => ({ ...comment, publickey, signature }))
     );
@@ -304,6 +307,7 @@ const parseResponseBody = (response) => {
 export const parseResponse = (response) =>
   parseResponseBody(response).then((json) => {
     if (json.errorcode) {
+      if (json.errorcontext === null) json.errorcontext = [];
       const err = new Error(
         getHumanReadableError(json.errorcode, json.errorcontext)
       );
@@ -449,7 +453,7 @@ export const loginWithUsername = (csrf, username, password) =>
     getResponse
   );
 
-export const likeComment = (csrf, comment) =>
+export const commentVote = (csrf, comment) =>
   POST("/comment/vote", csrf, comment).then(getResponse);
 
 export const censorComment = (csrf, comment) =>

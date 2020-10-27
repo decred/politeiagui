@@ -642,7 +642,7 @@ describe("test api actions (actions/api.js)", () => {
     // this needs a custom assertion for success response as the common one doesn't work for this case
     setPostSuccessResponse(path);
     const store = getMockedStore();
-    await store.dispatch(api.onLikeComment.apply(null, params));
+    await store.dispatch(api.onCommentVote.apply(null, params));
     const dispatchedActions = store.getActions();
     expect(dispatchedActions[0].type).toEqual(act.REQUEST_LIKE_COMMENT);
     expect(dispatchedActions[1].type).toEqual(act.RECEIVE_LIKE_COMMENT);
@@ -653,7 +653,7 @@ describe("test api actions (actions/api.js)", () => {
 
     await assertApiActionOnError(
       path,
-      api.onLikeComment,
+      api.onCommentVote,
       params,
       (e) => [
         {
