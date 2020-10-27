@@ -725,7 +725,7 @@ export const onSubmitProposal = (
     )
       .then((proposal) => api.signRegister(userid, proposal))
       .then((proposal) => api.newProposal(csrf, proposal))
-      .then((proposal) => {
+      .then(({ proposal }) => {
         dispatch(
           act.RECEIVE_NEW_PROPOSAL({
             ...proposal,
@@ -893,15 +893,14 @@ export const onCensorComment = (userid, token, commentid, state, reason) => {
 export const onSubmitComment = (
   currentUserID,
   token,
-  comment,
+  commentText,
   parentid,
   state
 ) =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid, state }));
-    return Promise.resolve(
-      api.signComment(currentUserID, { token, comment, parentid, state })
-    )
+    const comment = api.makeComment(token, commentText, parentid, state);
+    dispatch(act.REQUEST_NEW_COMMENT(comment));
+    return Promise.resolve(api.signComment(currentUserID, comment))
       .then((comment) => {
         // make sure this is not a duplicate comment by comparing to the existent
         // comments signatures

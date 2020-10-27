@@ -28,8 +28,14 @@ const STATUS_ERR = {
   404: "Not found"
 };
 
-const apiBase = "/api";
-const getUrl = (path, version = "v1") => `${apiBase}/${version}${path}`;
+export const TOP_LEVEL_COMMENT_PARENTID = 0;
+
+const apiBase = "/api/";
+const getUrl = (path, version) => {
+  if (!path && !version) return apiBase;
+  return `${apiBase}${version}${path}`;
+};
+
 const getResponse = get("response");
 
 export const convertMarkdownToFile = (markdown) => ({
@@ -139,6 +145,13 @@ export const makeInvoice = (
     }))
   };
 };
+
+export const makeComment = (token, comment, parentid, state) => ({
+  token,
+  parentid: parentid || TOP_LEVEL_COMMENT_PARENTID,
+  comment,
+  state
+});
 
 export const makeDccComment = (token, comment, parentid) => ({
   token,
@@ -308,8 +321,10 @@ export const parseResponse = (response) =>
     };
   });
 
-const GET = (path, version = "v1") =>
-  fetch(getUrl(path, version), { credentials: "include" }).then(parseResponse);
+const GET = (path, version = "v1", withoutVersion) =>
+  fetch(getUrl(path, !withoutVersion ? version : undefined), {
+    credentials: "include"
+  }).then(parseResponse);
 
 const getOptions = (csrf, json, method) => ({
   headers: {
@@ -327,13 +342,15 @@ const POST = (path, csrf, json, version = "v1") =>
     parseResponse
   );
 
-const PUT = (path, csrf, json) =>
-  fetch(getUrl(path), getOptions(csrf, json, "PUT")).then(parseResponse);
+const PUT = (path, csrf, json, version = "v1") =>
+  fetch(getUrl(path, version), getOptions(csrf, json, "PUT")).then(
+    parseResponse
+  );
 
 export const me = () => GET("/user/me").then(getResponse);
 
 export const apiInfo = () =>
-  GET("/", "").then(
+  GET("", "", true).then(
     ({
       csrfToken,
       response: { version, route, pubkey, testnet, mode, activeusersession }
@@ -575,9 +592,7 @@ export const invoiceSetStatus = (
     .then(getResponse);
 
 export const newProposal = (csrf, proposal) =>
-  POST("/proposal/new", csrf, proposal).then(
-    ({ response: { proposal } }) => proposal
-  );
+  POST("/proposal/new", csrf, proposal).then(getResponse);
 
 export const editProposal = (csrf, proposal) =>
   POST("/proposal/edit", csrf, proposal).then(getResponse);

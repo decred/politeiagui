@@ -8,10 +8,7 @@ import {
   assertPOSTOnRouteIsCalled,
   makeApiResponse
 } from "./support/helpers";
-import {
-  PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_TYPE_REGULAR
-} from "../../constants";
+import { PROPOSAL_TYPE_REGULAR } from "../../constants";
 
 describe("api integration modules (lib/api.js)", () => {
   const MOCKS_PATH = "../../../mocks/api/";
@@ -321,10 +318,10 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
-  test("verify user payment (api/v1/user/verifypayment)", async () => {
-    const PATH = "/api/v1/user/verifypayment";
+  test("verify user payment (api/v1/user/payments/registration)", async () => {
+    const PATH = "/api/v1/user/payments/registration";
     const MOCK_RESULT = await import(
-      `${MOCKS_PATH}/v1/user/verifypayment/GET.json`
+      `${MOCKS_PATH}/v1/user/payments/registration/GET.json`
     );
     await assertGETOnRouteIsCalled(
       PATH,
@@ -408,25 +405,17 @@ describe("api integration modules (lib/api.js)", () => {
     await assertGETOnRouteIsCalled("/api/v1/policy", api.policy, []);
   });
 
-  test("get proposal (api/v1/proposals/:token)", async () => {
-    await assertGETOnRouteIsCalled(
-      "express:/api/v1/proposals/:token",
-      api.proposal,
-      [PROPOSAL_TOKEN]
-    );
-  });
-
-  test("get comments votes (api/v1/user/proposals/:token/commentslikes)", async () => {
-    await assertGETOnRouteIsCalled(
-      "express:/api/v1/user/proposals/:token/commentslikes",
+  test("get comments votes (api/v1/comments/votes)", async () => {
+    await assertPOSTOnRouteIsCalled(
+      "express:/api/v1/comments/votes",
       api.likedComments,
       [PROPOSAL_TOKEN]
     );
   });
 
-  test("get proposal comments (api/v1/proposals/:token)", async () => {
-    await assertGETOnRouteIsCalled(
-      "express:/api/v1/proposals/:token/comments",
+  test("get proposal comments (api/v1/comments)", async () => {
+    await assertPOSTOnRouteIsCalled(
+      "express:/api/v1/comments",
       api.proposalComments,
       [PROPOSAL_TOKEN]
     );
@@ -439,58 +428,48 @@ describe("api integration modules (lib/api.js)", () => {
     expect(localStorage.getItem("state")).toBeFalsy();
   });
 
-  test("set proposal status (api/v1/proposals/:token/status)", async () => {
+  test("set proposal status (api/v1/proposal/setstatus)", async () => {
     await assertPOSTOnRouteIsCalled(
-      "express:/api/v1/proposals/:token/status",
+      "express:/api/v1/proposal/setstatus",
       api.proposalSetStatus,
       [USERID, FAKE_CSRF, PROPOSAL_TOKEN, 2]
     );
   });
 
-  test("create a new comment (api/v1/comments/new", async () => {
-    await assertPOSTOnRouteIsCalled("/api/v1/comments/new", api.newComment, [
+  test("create a new comment (api/v1/comment/new", async () => {
+    await assertPOSTOnRouteIsCalled("/api/v1/comment/new", api.newComment, [
       FAKE_CSRF,
       COMMENT
     ]);
   });
 
-  test("create new proposal (api/v1/proposals/new)", async () => {
+  test("create new proposal (api/v1/proposal/new)", async () => {
     const proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE]);
-    const CENSORSHIP_RECORD = "fake_censorship_record";
-    const result = await assertPOSTOnRouteIsCalled(
-      "/api/v1/proposals/new",
-      api.newProposal,
-      [FAKE_CSRF, proposal],
-      {
-        censorshiprecord: CENSORSHIP_RECORD
-      }
-    );
-    expect(result.censorshiprecord).toEqual(CENSORSHIP_RECORD);
-    expect(result.status).toEqual(PROPOSAL_STATUS_UNREVIEWED);
-    expect(result.name).toEqual(proposal.name);
-    expect(result.timestamp).toBeDefined();
-  });
-
-  test("start vote (api/v2/vote/start)", async () => {
-    await assertPOSTOnRouteIsCalled("/api/v2/vote/start", api.startVote, [
-      USERID,
+    await assertPOSTOnRouteIsCalled("/api/v1/proposal/new", api.newProposal, [
       FAKE_CSRF,
-      PROPOSAL_TOKEN,
-      2
+      proposal
     ]);
   });
 
-  test("fetch proposal paywall details (api/v1/proposals/paywall)", async () => {
+  test("start vote (api/v1/vote/start)", async () => {
+    await assertPOSTOnRouteIsCalled("/api/v1/vote/start", api.startVote, [
+      FAKE_CSRF,
+      USERID,
+      [{ token: PROPOSAL_TOKEN, duration: 2 }]
+    ]);
+  });
+
+  test("fetch proposal paywall details (api/v1/user/payments/paywall)", async () => {
     await assertGETOnRouteIsCalled(
-      "/api/v1/proposals/paywall",
+      "/api/v1/user/payments/paywall",
       api.proposalPaywallDetails,
       []
     );
   });
 
-  test("fetch user proposal credits (api/v1/user/proposals/credits)", async () => {
+  test("fetch user proposal credits (api/v1/user/payments/credits)", async () => {
     await assertGETOnRouteIsCalled(
-      "/api/v1/user/proposals/credits",
+      "/api/v1/user/payments/credits",
       api.userProposalCredits,
       []
     );
@@ -515,10 +494,10 @@ describe("api integration modules (lib/api.js)", () => {
     ]);
   });
 
-  test("edit a proposal (api/v1/proposals/edit)", async () => {
+  test("edit a proposal (api/v1/proposal/edit)", async () => {
     const proposal = api.makeProposal(PROPOSAL_NAME, MARKDOWN, [FILE]);
     await assertPOSTOnRouteIsCalled(
-      "/api/v1/proposals/edit",
+      "/api/v1/proposal/edit",
       api.editProposal,
       [FAKE_CSRF, proposal],
       {
@@ -527,9 +506,9 @@ describe("api integration modules (lib/api.js)", () => {
     );
   });
 
-  test("authorize vote to start (api/v1/proposals/authorizevote)", async () => {
+  test("authorize vote to start (api/v1/vote/authorize)", async () => {
     await assertPOSTOnRouteIsCalled(
-      "/api/v1/proposals/authorizevote",
+      "/api/v1/vote/authorize",
       api.proposalAuthorizeOrRevokeVote,
       [FAKE_CSRF, "authorize", PROPOSAL_TOKEN, USERID, PROPOSAL_VERSION]
     );
