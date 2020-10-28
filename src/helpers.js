@@ -184,7 +184,6 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     36: "The public key provided is already taken by another user.",
     37: "The proposal cannot be set to that voting status.",
     38: "Your account has been locked due to too many login attempts.",
-    39: "You do not have any proposal credits; you must purchase one before you can submit a proposal.",
     40: "That is an invalid user edit action.",
     41: "You are not authorized to perform this action.",
     42: "This proposal is in the wrong state for that action.",
@@ -223,6 +222,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     75: `Invalid runoff vote. ${errorContext[0]}`,
     76: `Wrong proposal type. ${errorContext[0]}`,
     88: "User cannot vote on his own comment",
+    101: "You do not have any proposal credits; you must purchase one before you can submit a proposal.",
 
     // CMS Errors
     1001: "Malformed name",
