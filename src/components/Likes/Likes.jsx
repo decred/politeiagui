@@ -63,6 +63,7 @@ const Likes = ({
   const renderCount = useCallback(
     (count) => (
       <Text
+        data-testid="score"
         size="small"
         className={classNames(styles.likesResult, "unselectable")}>
         {count}
@@ -83,6 +84,7 @@ const Likes = ({
             <button
               ref={likeRef}
               className={styles.likeBtn}
+              data-testid="like-btn"
               onClick={handleLike}>
               <Icon
                 iconColor={likeColor}
@@ -96,6 +98,7 @@ const Likes = ({
             <button
               ref={dislikeRef}
               className={styles.likeBtn}
+              data-testid="dislike-btn"
               onClick={handleDislike}>
               <Icon
                 iconColor={dislikeColor}

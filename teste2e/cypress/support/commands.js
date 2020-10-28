@@ -29,11 +29,11 @@ Cypress.Commands.add("assertHome", () => {
 });
 
 Cypress.Commands.add("assertProposalPage", (proposal) => {
+  cy.findByText(proposal.name, { timeout: 15000 }).should("exist");
   cy.url().should(
     "eq",
     `${Cypress.config().baseUrl}/proposals/${proposal.token.substring(0, 7)}`
   );
-  cy.findByText(proposal.name, { timeout: 10000 }).should("exist");
 });
 
 Cypress.Commands.add("assertLoggedInAs", (user) => {
@@ -55,6 +55,17 @@ Cypress.Commands.add("typeLogin", (user) => {
   cy.assertLoggedInAs(user);
 });
 
+Cypress.Commands.add("logout", (user) => {
+  cy.server();
+  cy.route("POST", "api/v1/logout").as("logout");
+  cy.assertLoggedInAs(user);
+  cy.findByTestId("trigger").should("have.text", user.username).click();
+  cy.findByText(/logout/i).click();
+  cy.findByTestId("logout-btn").click();
+  cy.wait("@logout").its("status").should("eq", 200);
+  cy.findByTestId("trigger").should("not.have.text", user.username);
+});
+
 // Should use after login
 // TODO: add identity using cy.request()
 Cypress.Commands.add("typeIdentity", () => {
@@ -65,7 +76,7 @@ Cypress.Commands.add("typeIdentity", () => {
   cy.findByTestId("trigger").click();
   cy.findByText(/account/i).click();
   cy.wait("@getUser").its("status").should("eq", 200);
-  cy.findByText(/create new identity/i).click();
+  cy.findByText(/create new identity/i, { timeout: 10000 }).click();
   cy.findByText(/confirm/i).click();
   cy.wait("@newKey").should((xhr) => {
     expect(xhr.status).to.equal(200);
@@ -84,11 +95,12 @@ Cypress.Commands.add("typeIdentity", () => {
 Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.server();
   cy.findByText(/new proposal/i).click();
-  cy.findByTestId("proposal-name", { timeout: 10000 }).type(proposal.name);
+  cy.findByTestId("proposal-name", { timeout: 15000 }).type(proposal.name);
   cy.findByTestId("text-area").type(proposal.description);
   cy.route("POST", "/api/v1/proposals/new").as("newProposal");
   cy.findByText(/submit/i).click();
-  cy.wait("@newProposal").should((xhr) => {
+  // needs more time in general to complete this request so we increase the responseTimeout
+  cy.wait("@newProposal", { timeout: 10000 }).should((xhr) => {
     expect(xhr.status).to.equal(200);
     expect(xhr.response.body)
       .to.have.property("censorshiprecord")

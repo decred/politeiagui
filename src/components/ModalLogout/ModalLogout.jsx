@@ -38,7 +38,7 @@ const ModalLogout = ({ show, onClose }) => {
         you are choosing to clear your data.
       </P>
       <div className="justify-right margin-top-m">
-        <Button onClick={onLogoutClick}>Logout</Button>
+        <Button onClick={onLogoutClick} data-testid="logout-btn">Logout</Button>
         <Button kind="secondary" onClick={onPermanentLogoutClick}>
           Logout permanently
         </Button>

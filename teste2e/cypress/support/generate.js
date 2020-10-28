@@ -7,8 +7,12 @@ const buildUser = build("User").fields({
 });
 
 const buildProposal = build("Proposal").fields({
-  name: fake((f) => f.lorem.sentence()),
+  name: fake((f) => f.lorem.words()),
   description: fake((f) => f.lorem.sentence())
 });
 
-export { buildUser, buildProposal };
+const buildComment = build("Comment").fields({
+  text: fake((f) => f.lorem.sentence())
+});
+
+export { buildUser, buildProposal, buildComment };
