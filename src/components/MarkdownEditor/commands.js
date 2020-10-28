@@ -8,21 +8,37 @@ import bulletListSVG from "./assets/bulletList.svg";
 import numberedListSVG from "./assets/numberedList.svg";
 import imageSVG from "./assets/image.svg";
 
-export const toolbarCommands = [
-  [],
-  [],
-  [
-    "bold",
-    "italic",
-    "link",
-    "quote",
-    "code",
-    "ordered-list",
-    "unordered-list",
-    "image",
-    "attach-files"
-  ]
-];
+export const toolbarCommands = (allowImgs) =>
+  allowImgs
+    ? [
+        [],
+        [],
+        [
+          "bold",
+          "italic",
+          "link",
+          "quote",
+          "code",
+          "ordered-list",
+          "unordered-list",
+          "image",
+          "attach-files"
+        ]
+      ]
+    : [
+        [],
+        [],
+        [
+          "bold",
+          "italic",
+          "link",
+          "quote",
+          "code",
+          "ordered-list",
+          "unordered-list",
+          "attach-files"
+        ]
+      ];
 
 const commandsIcons = {
   "ordered-list": numberedListSVG,

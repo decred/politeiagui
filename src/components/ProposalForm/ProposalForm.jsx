@@ -218,6 +218,7 @@ const ProposalForm = React.memo(function ProposalForm({
         error={touched.name && errors.name}
       />
       <MarkdownEditor
+        allowImgs={true}
         name="description"
         className="margin-top-s"
         value={values.description}

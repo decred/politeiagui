@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { classNames, useTheme } from "pi-ui";
 import { toolbarCommands, getCommandIcon } from "./commands";
@@ -39,7 +39,8 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
   className,
   textAreaProps,
   filesInput,
-  mapBlobToFile
+  mapBlobToFile,
+  allowImgs
 }) {
   const [tab, setTab] = useState("write");
   const { themeName } = useTheme();
@@ -58,10 +59,11 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
     execute: () => null
   };
 
-  const generateMarkdownPreview = useCallback(
+  const generateMarkdownPreview = (allowImgs) =>
     (markdown) =>
       Promise.resolve(
         <Markdown
+          renderImages={allowImgs}
           className={classNames(
             styles.previewContainer,
             !markdown && styles.nothingToPreview,
@@ -70,9 +72,7 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
           )}
           body={markdown || "Nothing to preview"}
         />
-      ),
-    [isDarkTheme]
-  );
+      );
 
   const save = function ({ serverImage, displayImage }) {
     try {
@@ -94,19 +94,19 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
         selectedTab={tab}
         onTabChange={setTab}
         textAreaProps={textAreaProps}
-        generateMarkdownPreview={generateMarkdownPreview}
+        generateMarkdownPreview={generateMarkdownPreview(allowImgs)}
         getIcon={getCommandIcon}
         commands={{
           ...getDefaultCommandMap(),
           "attach-files": attachFilesCommand,
           "save-image": customSaveImageCommand
         }}
-        toolbarCommands={toolbarCommands}
+        toolbarCommands={toolbarCommands(allowImgs)}
         onChange={onChange}
         value={value}
-        paste={{
+        paste={allowImgs ? {
           saveImage: save
-        }}
+        } : null}
       />
     </div>
   );

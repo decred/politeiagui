@@ -61,30 +61,31 @@ const LinkRenderer = ({ url, children }) => {
   );
 };
 
-const imageHandler = ({ src, alt }) => {
-  return <img src={src} alt={alt} />;
+// Use external link renderer when images are not allowed
+const imageHandler = (renderImages) => ({ src, alt }) => {
+  return renderImages ? (
+    <img src={src} alt={alt} />
+  ) : (
+    <LinkRenderer url={src}>{alt}</LinkRenderer>
+  );
 };
 
 const linkHandler = ({ href, children }) => {
   return <LinkRenderer url={href}>{children}</LinkRenderer>;
 };
 
-const rootHandler = (filterXss) => (el) => {
-  if (filterXss) {
-    el = traverseChildren(el);
-  }
-  const { children, ...props } = el;
+const rootHandler = (el) => {
+  const { children, ...props } = traverseChildren(el);
   return <div {...props}>{children}</div>;
 };
 
-export const customRenderers = (filterXss) => {
-  const rootRenderer = rootHandler(filterXss);
-
+export const customRenderers = (renderImages) => {
+  console.log(renderImages);
   return {
-    image: imageHandler,
-    imageReference: imageHandler,
+    image: imageHandler(renderImages),
+    imageReference: imageHandler(renderImages),
     link: linkHandler,
     linkReference: linkHandler,
-    root: rootRenderer
+    root: rootHandler
   };
 };
