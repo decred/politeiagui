@@ -41,13 +41,60 @@ import ProposalGuidelinesButton from "./ProposalGuidelinesButton";
 /** The main goal of using a Map data structure instead of internal state here is to prevent unnecessary rerenders. We just want a way to map blobs to files objects. */
 const mapBlobToFile = new Map();
 
+const getKeyByValue = (obj, val) =>
+  Object.values(obj).find((value) => value.digest === val);
+
+const b64toBlob = (b64Data, contentType="", sliceSize=512) => {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  const blob = new Blob(byteArrays, { type: contentType });
+  return blob;
+};
+
+function replaceImgDigestByBlob(text, files) {
+  const imageRegexParser = /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
+  const imgs = text.matchAll(imageRegexParser);
+  let newText = text;
+  const markdownFiles = [];
+  /**
+   * This for loop will update the newText replacing images digest by their base64 payload and push the img object to an array of markdownFiles
+   * */
+  for (const img of imgs) {
+    const { digest } = img.groups;
+    const obj = getKeyByValue(files, digest);
+    if (obj) {
+      const blobUrl = URL.createObjectURL(b64toBlob(obj.payload, obj.mime));
+      mapBlobToFile.set(blobUrl, obj);
+      markdownFiles.push(obj);
+      newText = newText.replace(
+        digest,
+        blobUrl
+      );
+    }
+  }
+  return { text: newText, markdownFiles };
+}
+
 /**
- * replaceBlobsToDigestsAndGetFiles uses a regex to parse images
+ * replaceBlobsByDigestsAndGetFiles uses a regex to parse images
  * @param {String} description the markdown description
  * @param {Map} map the map of blob -> file
  * @returns {object} { description, files }
  */
-function replaceBlobsToDigestsAndGetFiles(description, map) {
+function replaceBlobsByDigestsAndGetFiles(description, map) {
   const imageRegexParser = /!\[[^\]]*\]\((?<blob>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
   const imgs = description.matchAll(imageRegexParser);
   let newDescription = description;
@@ -279,6 +326,7 @@ const ProposalFormWrapper = ({
   history,
   isPublic
 }) => {
+  const { text, markdownFiles } = replaceImgDigestByBlob(initialValues.description, initialValues.files);
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const openMdModal = useCallback(() => {
     handleOpenModal(ModalMDGuide, {
@@ -315,7 +363,7 @@ const ProposalFormWrapper = ({
             );
           }
         }
-        const { description, files } = replaceBlobsToDigestsAndGetFiles(
+        const { description, files } = replaceBlobsByDigestsAndGetFiles(
           others.description,
           mapBlobToFile
         );
@@ -337,20 +385,22 @@ const ProposalFormWrapper = ({
     },
     [history, onSubmit, onFetchProposalsBatchWithoutState, isPublic]
   );
-
+  const newInitialValues = initialValues ? {
+    ...initialValues,
+    description: text,
+    files: initialValues.files.filter((file) => !markdownFiles.includes(file))
+  } : {
+    type: PROPOSAL_TYPE_REGULAR,
+    rfpDeadline: null,
+    rfpLink: "",
+    name: "",
+    description: "",
+    files: []
+  };
   return (
     <>
       <Formik
-        initialValues={
-          initialValues || {
-            type: PROPOSAL_TYPE_REGULAR,
-            rfpDeadline: null,
-            rfpLink: "",
-            name: "",
-            description: "",
-            files: []
-          }
-        }
+        initialValues={newInitialValues}
         loading={!proposalFormValidation}
         validate={proposalFormValidation}
         onSubmit={handleSubmit}>
@@ -361,7 +411,7 @@ const ProposalFormWrapper = ({
               submitSuccess,
               disableSubmit,
               openMDGuideModal: openMdModal,
-              initialValues,
+              newInitialValues,
               isPublic
             }}
           />

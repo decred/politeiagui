@@ -9,7 +9,7 @@ import { digestPayload } from "src/helpers";
 import ReactMde, { getDefaultCommandMap } from "react-mde";
 import customSaveImageCommand from "./customSaveImageCommand";
 
-/** displayBlobSolution receives a pair of [ArrayBuffer, File] and returns a blob URL to display the image on preview */
+/** displayBlobSolution receives a pair of [ArrayBuffer, File] and returns a blob URL to display the image on preview. */
 const displayBlobSolution = (f) => {
   const [result] = f;
   const bytes = new Uint8Array(result);
@@ -59,20 +59,19 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
     execute: () => null
   };
 
-  const generateMarkdownPreview = (allowImgs) =>
-    (markdown) =>
-      Promise.resolve(
-        <Markdown
-          renderImages={allowImgs}
-          className={classNames(
-            styles.previewContainer,
-            !markdown && styles.nothingToPreview,
-            isDarkTheme && !markdown && styles.darkNothingToPreview,
-            isDarkTheme && "dark"
-          )}
-          body={markdown || "Nothing to preview"}
-        />
-      );
+  const generateMarkdownPreview = (allowImgs) => (markdown) =>
+    Promise.resolve(
+      <Markdown
+        renderImages={allowImgs}
+        className={classNames(
+          styles.previewContainer,
+          !markdown && styles.nothingToPreview,
+          isDarkTheme && !markdown && styles.darkNothingToPreview,
+          isDarkTheme && "dark"
+        )}
+        body={markdown || "Nothing to preview"}
+      />
+    );
 
   const save = function ({ serverImage, displayImage }) {
     try {
@@ -104,9 +103,13 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
         toolbarCommands={toolbarCommands(allowImgs)}
         onChange={onChange}
         value={value}
-        paste={allowImgs ? {
-          saveImage: save
-        } : null}
+        paste={
+          allowImgs
+            ? {
+                saveImage: save
+              }
+            : null
+        }
       />
     </div>
   );

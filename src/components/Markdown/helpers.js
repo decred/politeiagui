@@ -80,7 +80,6 @@ const rootHandler = (el) => {
 };
 
 export const customRenderers = (renderImages) => {
-  console.log(renderImages);
   return {
     image: imageHandler(renderImages),
     imageReference: imageHandler(renderImages),
