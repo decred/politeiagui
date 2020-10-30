@@ -44,7 +44,7 @@ const mapBlobToFile = new Map();
 const getKeyByValue = (obj, val) =>
   Object.values(obj).find((value) => value.digest === val);
 
-const b64toBlob = (b64Data, contentType="", sliceSize=512) => {
+const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
   const byteCharacters = atob(b64Data);
   const byteArrays = [];
 
@@ -70,7 +70,7 @@ function replaceImgDigestByBlob(text, files) {
   let newText = text;
   const markdownFiles = [];
   /**
-   * This for loop will update the newText replacing images digest by their base64 payload and push the img object to an array of markdownFiles
+   * This for loop will update the newText replacing images digest by a blob and push the img object to an array of markdownFiles
    * */
   for (const img of imgs) {
     const { digest } = img.groups;
@@ -79,10 +79,7 @@ function replaceImgDigestByBlob(text, files) {
       const blobUrl = URL.createObjectURL(b64toBlob(obj.payload, obj.mime));
       mapBlobToFile.set(blobUrl, obj);
       markdownFiles.push(obj);
-      newText = newText.replace(
-        digest,
-        blobUrl
-      );
+      newText = newText.replace(digest, blobUrl);
     }
   }
   return { text: newText, markdownFiles };
@@ -326,7 +323,10 @@ const ProposalFormWrapper = ({
   history,
   isPublic
 }) => {
-  const { text, markdownFiles } = replaceImgDigestByBlob(initialValues.description, initialValues.files);
+  const { text, markdownFiles } = replaceImgDigestByBlob(
+    initialValues.description,
+    initialValues.files
+  );
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const openMdModal = useCallback(() => {
     handleOpenModal(ModalMDGuide, {
@@ -385,18 +385,22 @@ const ProposalFormWrapper = ({
     },
     [history, onSubmit, onFetchProposalsBatchWithoutState, isPublic]
   );
-  const newInitialValues = initialValues ? {
-    ...initialValues,
-    description: text,
-    files: initialValues.files.filter((file) => !markdownFiles.includes(file))
-  } : {
-    type: PROPOSAL_TYPE_REGULAR,
-    rfpDeadline: null,
-    rfpLink: "",
-    name: "",
-    description: "",
-    files: []
-  };
+  const newInitialValues = initialValues
+    ? {
+        ...initialValues,
+        description: text,
+        files: initialValues.files.filter(
+          (file) => !markdownFiles.includes(file)
+        )
+      }
+    : {
+        type: PROPOSAL_TYPE_REGULAR,
+        rfpDeadline: null,
+        rfpLink: "",
+        name: "",
+        description: "",
+        files: []
+      };
   return (
     <>
       <Formik
