@@ -114,7 +114,11 @@ const Comment = ({
           body={commentBody}
         />
       ) : (
-        <Markdown renderImages={false} className={styles.censored} body="Censored by moderators " />
+        <Markdown
+          renderImages={false}
+          className={styles.censored}
+          body="Censored by moderators "
+        />
       )}
       <div className="justify-space-between margin-top-s">
         <div className="justify-left">

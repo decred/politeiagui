@@ -388,9 +388,9 @@ const ProposalFormWrapper = ({
     ? {
         ...initialValues,
         description: text,
-        files: initialValues && initialValues.files.filter(
-          (file) => !markdownFiles.includes(file)
-        )
+        files:
+          initialValues &&
+          initialValues.files.filter((file) => !markdownFiles.includes(file))
       }
     : {
         type: PROPOSAL_TYPE_REGULAR,
