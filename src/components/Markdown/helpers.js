@@ -2,6 +2,7 @@ import React from "react";
 import htmlParser from "react-markdown/plugins/html-parser";
 import ModalExternalLink from "../ModalExternalLink";
 import useModalContext from "src/hooks/utils/useModalContext";
+import xssFilters from "xss-filters";
 
 export const htmlParserRules = htmlParser({
   isValidNode: (node) => {
@@ -9,9 +10,9 @@ export const htmlParserRules = htmlParser({
   }
 });
 
-export const traverseChildren = (el) => {
+export const traverseChildren = (el, cb) => {
   const filterChildren = (c) =>
-    React.Children.map(c, (child) => traverseChildren(child));
+    React.Children.map(c, (child) => traverseChildren(child, cb));
   let newElement = null;
   if (el.children) {
     newElement = {
@@ -28,7 +29,7 @@ export const traverseChildren = (el) => {
       }
     };
   }
-  return newElement ? newElement : el;
+  return newElement ? cb(newElement) : cb(el);
 };
 
 const isExternalLink = (link) => {
@@ -74,17 +75,38 @@ const linkHandler = ({ href, children }) => {
   return <LinkRenderer url={href}>{children}</LinkRenderer>;
 };
 
-const rootHandler = (el) => {
-  const { children, ...props } = traverseChildren(el);
+const handleFilterXss = (el) => {
+  if (typeof el === "string") return el;
+  const props = el.props;
+  if (!props) {
+    return el;
+  }
+  const newProps = {
+    ...props
+  };
+  if (newProps.src) {
+    newProps.src = xssFilters.uriInDoubleQuotedAttr(props.src);
+  }
+  return {
+    ...el,
+    props: newProps
+  };
+};
+
+const rootHandler = (filterUrl) => (el) => {
+  if (filterUrl) {
+    el = traverseChildren(el, handleFilterXss);
+  }
+  const { children, ...props } = el;
   return <div {...props}>{children}</div>;
 };
 
-export const customRenderers = (renderImages) => {
+export const customRenderers = (renderImages, filterUrl) => {
   return {
     image: imageHandler(renderImages),
     imageReference: imageHandler(renderImages),
     link: linkHandler,
     linkReference: linkHandler,
-    root: rootHandler
+    root: rootHandler(filterUrl)
   };
 };

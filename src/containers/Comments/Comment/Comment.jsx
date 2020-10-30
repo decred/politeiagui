@@ -108,6 +108,7 @@ const Comment = ({
       {extraSmall && seeInContextLink}
       {!censored ? (
         <Markdown
+          filterUrl={true}
           renderImages={false}
           className={classNames(isDarkTheme && "dark", "margin-top-s")}
           body={commentBody}

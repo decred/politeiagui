@@ -64,7 +64,9 @@ const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
   return blob;
 };
 
-function replaceImgDigestByBlob(text, files) {
+function replaceImgDigestByBlob(vals) {
+  if (!vals) return { text: "", markdownFiles: [] };
+  const { text, files } = vals;
   const imageRegexParser = /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
   const imgs = text.matchAll(imageRegexParser);
   let newText = text;
@@ -323,10 +325,7 @@ const ProposalFormWrapper = ({
   history,
   isPublic
 }) => {
-  const { text, markdownFiles } = replaceImgDigestByBlob(
-    initialValues.description,
-    initialValues.files
-  );
+  const { text, markdownFiles } = replaceImgDigestByBlob(initialValues);
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const openMdModal = useCallback(() => {
     handleOpenModal(ModalMDGuide, {
@@ -389,7 +388,7 @@ const ProposalFormWrapper = ({
     ? {
         ...initialValues,
         description: text,
-        files: initialValues.files.filter(
+        files: initialValues && initialValues.files.filter(
           (file) => !markdownFiles.includes(file)
         )
       }
