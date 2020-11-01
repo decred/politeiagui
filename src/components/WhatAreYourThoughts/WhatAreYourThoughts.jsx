@@ -1,10 +1,10 @@
 import React from "react";
-import { Text, Button, useTheme, classNames } from "pi-ui";
+import { Text, Button, useTheme, classNames, DEFAULT_DARK_THEME_NAME } from "pi-ui";
 import styles from "./WhatAreYourThoughts.module.css";
 
 const WhatAreYourThoughts = ({ onLoginClick, onSignupClick }) => {
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   return (
     <div className={styles.wrapper}>
       <Text className={classNames(styles.text, isDarkTheme && styles.darkText)}>

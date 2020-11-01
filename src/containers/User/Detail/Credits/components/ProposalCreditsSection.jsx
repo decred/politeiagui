@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "../Credits.module.css";
-import { Text, P, classNames, useTheme } from "pi-ui";
+import { Text, P, classNames, useTheme, DEFAULT_DARK_THEME_NAME } from "pi-ui";
 
 export default ({ proposalCredits, proposalCreditPrice }) => {
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   return (
     <div className={classNames(styles.block, "margin-top-l")}>
       <div className={styles.blockDetails}>

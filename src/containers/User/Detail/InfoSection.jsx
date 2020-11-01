@@ -1,4 +1,4 @@
-import { classNames, useTheme, P } from "pi-ui";
+import { classNames, useTheme, P, DEFAULT_DARK_THEME_NAME } from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
 import styles from "./InfoSection.module.css";
@@ -13,7 +13,7 @@ const InfoSection = ({
   error
 }) => {
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   return (
     <div
       className={classNames(

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import PropTypes from "prop-types";
-import { classNames, useTheme } from "pi-ui";
+import { classNames, useTheme, DEFAULT_DARK_THEME_NAME } from "pi-ui";
 import { getCommandsList, getCommandIcon } from "./commands";
 import Markdown from "../Markdown";
 import styles from "./MarkdownEditor.module.css";
@@ -18,7 +18,7 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
   const [tab, setTab] = useState("write");
 
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
   useEffect(() => {
     const textarea = document.getElementsByClassName("mde-text")[0];
