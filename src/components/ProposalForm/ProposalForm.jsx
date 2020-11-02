@@ -22,7 +22,7 @@ import AttachFileInput from "src/components/AttachFileInput";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import usePolicy from "src/hooks/api/usePolicy";
-import { isAnchoring } from "src/helpers";
+import { isAnchoring, getKeyByValue } from "src/helpers";
 import {
   PROPOSAL_TYPE_REGULAR,
   PROPOSAL_TYPE_RFP,
@@ -40,9 +40,6 @@ import ProposalGuidelinesButton from "./ProposalGuidelinesButton";
 
 /** The main goal of using a Map data structure instead of internal state here is to prevent unnecessary rerenders. We just want a way to map blobs to files objects. */
 const mapBlobToFile = new Map();
-
-const getKeyByValue = (obj, val) =>
-  Object.values(obj).find((value) => value.digest === val);
 
 const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
   const byteCharacters = atob(b64Data);

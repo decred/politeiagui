@@ -356,6 +356,9 @@ export const removeProposalsDuplicates = (arr1, arr2) => {
   return Object.keys(mergedObj).map((item) => mergedObj[item]);
 };
 
+export const getKeyByValue = (obj, val) =>
+  Object.values(obj).find((value) => value.digest === val);
+
 // CMS HELPERS
 export const renderInvoiceStatus = (status) => {
   return mapInvoiceStatusToMessage[status] || "Invalid Invoice Status";

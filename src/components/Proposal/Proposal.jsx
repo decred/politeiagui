@@ -42,11 +42,14 @@ import ThumbnailGrid from "src/components/Files";
 import VersionPicker from "src/components/VersionPicker";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useRouter } from "src/components/Router";
-import { isEmpty } from "src/helpers";
+import { isEmpty, getKeyByValue } from "src/helpers";
 
-const getKeyByValue = (obj, val) =>
-  Object.values(obj).find((value) => value.digest === val);
-
+/**
+ * replaceImgDigestWithPayload uses a regex to parse images
+ * @param {String} text the markdown description
+ * @param {Map} files a files array
+ * @returns {object} { text, markdownFiles }
+ */
 function replaceImgDigestWithPayload(text, files) {
   const imageRegexParser = /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
   const imgs = text.matchAll(imageRegexParser);
