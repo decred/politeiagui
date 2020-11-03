@@ -74,6 +74,11 @@
   max-width: calc(100% - 32rem);
 }
 
+.rfptag {
+  align-self: flex-start;
+  padding-top: 0.5rem;
+}
+
 .mobileRfpTag {
   height: 2.5rem;
   width: 4rem;
