@@ -15,7 +15,8 @@ import {
   getThemeProperty,
   Tooltip,
   CopyableText,
-  useMediaQuery
+  useMediaQuery,
+  DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
 import { Row } from "../layout";
 import Link from "../Link";
@@ -67,7 +68,7 @@ export const Title = ({ children, isAbandoned, url, ...props }) => {
   const SimpleWrapper = (props) => <div {...props} />;
   const Wrapper = url ? Link : SimpleWrapper;
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const titleClass = isAbandoned
     ? isDarkTheme
       ? styles.darkAbandonedTitle
@@ -176,7 +177,7 @@ export const ChartsLink = ({ token }) => {
     : "dcrdata.decred.org";
 
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
   return (
     <Tooltip
@@ -207,7 +208,7 @@ export const GithubLink = ({ token }) => {
   const iconColor = isHovered ? hoverColor : undefined;
 
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
   return (
     <Tooltip
@@ -235,7 +236,7 @@ export const CommentsLink = ({
   className
 }) => {
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   return (
     <Link
       to={url}
@@ -257,7 +258,7 @@ export const CommentsLink = ({
 
 export const RfpProposalLink = ({ url, rfpTitle }) => {
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   return (
     <div className={styles.rfpLink}>
       <span

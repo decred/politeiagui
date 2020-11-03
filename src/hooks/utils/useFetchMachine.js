@@ -63,6 +63,8 @@ const fetchReducer = (state, action) => {
         set("error", action.payload),
         set("status", nextState)
       )(state);
+    case RETRY:
+      return action.payload;
     default:
       return set("error", new Error("unhanlded state machine action"))(state);
   }

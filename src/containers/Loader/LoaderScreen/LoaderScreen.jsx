@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Message, useTheme, classNames } from "pi-ui";
+import {
+  Message,
+  useTheme,
+  classNames,
+  DEFAULT_LIGHT_THEME_NAME,
+  DEFAULT_DARK_THEME_NAME
+} from "pi-ui";
 import styles from "./LoaderScreen.module.css";
 import Logo from "src/components/Logo";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
@@ -27,8 +33,8 @@ const LoaderScreen = ({ error }) => {
   const [darkThemeOnLocalStorage] = useLocalStorage("darkTheme", false);
 
   useEffect(() => {
-    if (darkThemeOnLocalStorage && themeName === "light") {
-      setThemeName("dark");
+    if (darkThemeOnLocalStorage && themeName === DEFAULT_LIGHT_THEME_NAME) {
+      setThemeName(DEFAULT_DARK_THEME_NAME);
     }
   }, [darkThemeOnLocalStorage, setThemeName, themeName]);
 

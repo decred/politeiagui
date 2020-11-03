@@ -4,7 +4,9 @@ import {
   DropdownItem,
   Toggle,
   useTheme,
-  classNames
+  classNames,
+  DEFAULT_DARK_THEME_NAME,
+  DEFAULT_LIGHT_THEME_NAME
 } from "pi-ui";
 import React, { useEffect, useMemo, useCallback } from "react";
 import { NavLink, withRouter } from "react-router-dom";
@@ -55,17 +57,17 @@ const HeaderNav = ({ history }) => {
   }, [history, userid]);
 
   useEffect(() => {
-    if (darkThemeOnLocalStorage && themeName === "light") {
-      setThemeName("dark");
+    if (darkThemeOnLocalStorage && themeName === DEFAULT_LIGHT_THEME_NAME) {
+      setThemeName(DEFAULT_DARK_THEME_NAME);
     }
   }, [darkThemeOnLocalStorage, setThemeName, themeName]);
 
   const onThemeToggleHandler = () => {
-    if (themeName === "light") {
+    if (themeName === DEFAULT_LIGHT_THEME_NAME) {
       setDarkThemeOnLocalStorage(true);
-      setThemeName("dark");
+      setThemeName(DEFAULT_DARK_THEME_NAME);
     } else {
-      setThemeName("light");
+      setThemeName(DEFAULT_LIGHT_THEME_NAME);
       setDarkThemeOnLocalStorage(false);
     }
   };
@@ -93,7 +95,7 @@ const HeaderNav = ({ history }) => {
           <div className={styles.themeToggleWrapper}>
             <Toggle
               onToggle={onThemeToggleHandler}
-              toggled={themeName === "dark"}
+              toggled={themeName === DEFAULT_DARK_THEME_NAME}
             />
             <div className={styles.themeToggleLabel}>Dark Mode</div>
           </div>
@@ -107,7 +109,7 @@ const HeaderNav = ({ history }) => {
         className={classNames(styles.themeToggleWrapper, styles.publicWrapper)}>
         <Toggle
           onToggle={onThemeToggleHandler}
-          toggled={themeName === "dark"}
+          toggled={themeName === DEFAULT_DARK_THEME_NAME}
         />
         <div onClick={onThemeToggleHandler} className={styles.themeToggleLabel}>
           Dark Mode
