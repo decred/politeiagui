@@ -252,10 +252,8 @@ export const onLogin = ({ email, password }) =>
 
 // handleLogout calls the correct logout handler according to the user selected
 // option between a normal logout or a permanent logout.
-export const handleLogout = (isPermanent, userid) => (dispatch) =>
-  isPermanent
-    ? dispatch(handlePermanentLogout(userid))
-    : dispatch(handleNormalLogout);
+export const handleLogout = (isPermanent, userid) =>
+  isPermanent ? handlePermanentLogout(userid) : handleNormalLogout;
 
 // handleNormalLogout handles all the procedure to be done once the user is logged out.
 // It can be called either when the logout request has been successful or when the
@@ -268,12 +266,12 @@ export const handleNormalLogout = () => {
 
 // handlePermanentLogout handles the logout procedures while deleting all user related
 // information from the browser storage and cache.
-export const handlePermanentLogout = async (userid) => {
-  await pki.removeKeys(userid);
-  clearStateLocalStorage(userid);
-  clearPollingPointer();
-  clearProposalPaymentPollingPointer();
-};
+export const handlePermanentLogout = (userid) =>
+  pki.removeKeys(userid).then(() => {
+    clearStateLocalStorage(userid);
+    clearPollingPointer();
+    clearProposalPaymentPollingPointer();
+  });
 
 export const onLogout = (isCMS, isPermanent) =>
   withCsrf((dispatch, getState, csrf) => {
@@ -285,8 +283,8 @@ export const onLogout = (isCMS, isPermanent) =>
         isCMS
           ? dispatch(act.RECEIVE_CMS_LOGOUT(response))
           : dispatch(act.RECEIVE_LOGOUT(response));
-        dispatch(handleLogout(isPermanent, userid));
       })
+      .then(() => handleLogout(isPermanent, userid))
       .catch((error) => {
         dispatch(act.RECEIVE_LOGOUT(null, error));
         throw error;
