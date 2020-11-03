@@ -272,12 +272,12 @@ export const handleNormalLogout = () => {
 
 // handlePermanentLogout handles the logout procedures while deleting all user related
 // information from the browser storage and cache.
-export const handlePermanentLogout = async (userid) => {
-  await pki.removeKeys(userid);
-  clearStateLocalStorage(userid);
-  clearPollingPointer();
-  clearProposalPaymentPollingPointer();
-};
+export const handlePermanentLogout = (userid) =>
+  pki.removeKeys(userid).then(() => {
+    clearStateLocalStorage(userid);
+    clearPollingPointer();
+    clearProposalPaymentPollingPointer();
+  });
 
 export const onLogout = (isCMS, isPermanent) =>
   withCsrf((dispatch, getState, csrf) => {
@@ -289,8 +289,8 @@ export const onLogout = (isCMS, isPermanent) =>
         isCMS
           ? dispatch(act.RECEIVE_CMS_LOGOUT(response))
           : dispatch(act.RECEIVE_LOGOUT(response));
-        dispatch(handleLogout(isPermanent, userid));
       })
+      .then(() => handleLogout(isPermanent, userid))
       .catch((error) => {
         dispatch(act.RECEIVE_LOGOUT(null, error));
         throw error;
