@@ -64,18 +64,11 @@ export const RecordToken = ({ token, isCopyable }) => {
   );
 };
 
-export const Title = ({ children, isAbandoned, url, ...props }) => {
+export const Title = ({ children, url, ...props }) => {
   const SimpleWrapper = (props) => <div {...props} />;
   const Wrapper = url ? Link : SimpleWrapper;
-  const { themeName } = useTheme();
-  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-  const titleClass = isAbandoned
-    ? isDarkTheme
-      ? styles.darkAbandonedTitle
-      : styles.abandonedTitle
-    : styles.title;
   return (
-    <Wrapper to={url} className={titleClass}>
+    <Wrapper to={url} className={styles.title}>
       <H2 {...props}>{children}</H2>
     </Wrapper>
   );

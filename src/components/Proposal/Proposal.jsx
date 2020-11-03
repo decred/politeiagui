@@ -173,7 +173,6 @@ const Proposal = React.memo(function Proposal({
               title={
                 <Title
                   id={`proposal-title-${proposalToken}`}
-                  isAbandoned={isAbandoned}
                   truncate
                   linesBeforeTruncate={2}
                   url={extended ? "" : proposalURL}>

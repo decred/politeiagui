@@ -4,21 +4,6 @@
   max-width: 100%;
 }
 
-.abandonedTitle {
-  composes: title;
-}
-
-.abandonedTitle,
-.abandonedTitle > h2 {
-  color: var(--color-gray) !important;
-}
-
-.darkAbandonedTitle,
-.darkAbandonedTitle > h2 {
-  color: var(--tab-count-background) !important;
-  max-width: 100%;
-}
-
 .header {
   display: flex;
   flex-direction: column;
