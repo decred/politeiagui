@@ -1,6 +1,13 @@
 import React from "react";
 import styles from "../Credits.module.css";
-import { Text, P, Button, classNames, useTheme } from "pi-ui";
+import {
+  Text,
+  P,
+  Button,
+  classNames,
+  useTheme,
+  DEFAULT_DARK_THEME_NAME
+} from "pi-ui";
 
 export default ({
   isPaid,
@@ -11,7 +18,7 @@ export default ({
   openMarkAsPaidModal
 }) => {
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   return (
     <div className={styles.block}>
       <div className={styles.blockDetails}>

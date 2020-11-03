@@ -9,7 +9,8 @@ import {
   useTheme,
   Icon,
   classNames,
-  Tooltip
+  Tooltip,
+  DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
 import { Row } from "src/components/layout";
 import DatePickerField from "../DatePickerField";
@@ -58,7 +59,7 @@ const ProposalForm = React.memo(function ProposalForm({
   const {
     policy: { minlinkbyperiod, maxlinkbyperiod }
   } = usePolicy();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const isRfp = values.type === PROPOSAL_TYPE_RFP;
   const isRfpSubmission = values.type === PROPOSAL_TYPE_RFP_SUBMISSION;
 

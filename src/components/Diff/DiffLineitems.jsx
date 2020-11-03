@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from "react";
 import PropTypes from "prop-types";
-import { classNames, useTheme } from "pi-ui";
+import { classNames, useTheme, DEFAULT_DARK_THEME_NAME } from "pi-ui";
 import { fromUSDCentsToUSDUnits, fromMinutesToHours } from "src/helpers";
 import styles from "./Diff.module.css";
 import { TableRow } from "src/components/InvoiceDatasheet/InvoiceDatasheet";
@@ -60,7 +60,7 @@ const renderGrid = (lineItems) =>
 
 const DiffLineitems = ({ lineItems, proposals }) => {
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
   const getProposalName = useCallback(
     (token) => get(proposals, [token, "name"]),

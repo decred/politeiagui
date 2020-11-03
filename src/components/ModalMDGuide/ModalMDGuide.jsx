@@ -10,13 +10,14 @@ import {
   H5,
   H6,
   useTheme,
-  classNames
+  classNames,
+  DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
 import styles from "./ModalMDGuide.module.css";
 
 const MDGuideTable = () => {
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const buildRow = (label, content) => ({
     "You type": label,
     "You see": content

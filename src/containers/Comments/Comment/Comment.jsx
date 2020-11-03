@@ -1,6 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Text, classNames, useMediaQuery, useTheme } from "pi-ui";
+import {
+  Text,
+  classNames,
+  useMediaQuery,
+  useTheme,
+  DEFAULT_DARK_THEME_NAME
+} from "pi-ui";
 import styles from "./Comment.module.css";
 import DateTooltip from "src/components/DateTooltip";
 import Markdown from "src/components/Markdown";
@@ -52,7 +58,7 @@ const Comment = ({
   );
 
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const showNewReplies =
     numOfNewHiddenReplies > 0 && !showReplies && !isFlatMode;
   const isThread = numOfReplies > 0 && !isFlatMode;

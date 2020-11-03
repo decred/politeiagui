@@ -1,6 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Text, useMediaQuery, Tooltip, useTheme, classNames } from "pi-ui";
+import {
+  Text,
+  useMediaQuery,
+  Tooltip,
+  useTheme,
+  classNames,
+  DEFAULT_DARK_THEME_NAME
+} from "pi-ui";
 import iconSearchSmall from "src/assets/images/search-small.svg";
 import styles from "./Proposal.module.css";
 
@@ -13,7 +20,7 @@ const VotesCount = ({
   const isMobileScreen = useMediaQuery("(max-width:560px)");
   const votesLeft = quorumVotes - votesReceived;
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
   return (
     <div className={styles.voteCount}>

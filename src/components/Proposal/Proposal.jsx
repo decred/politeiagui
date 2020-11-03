@@ -5,7 +5,8 @@ import {
   Text,
   useMediaQuery,
   useTheme,
-  Tooltip
+  Tooltip,
+  DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
 import React from "react";
 import Markdown from "../Markdown";
@@ -141,7 +142,7 @@ const Proposal = React.memo(function Proposal({
   };
 
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
   return (
     <>
