@@ -9,6 +9,7 @@ import {
   H4,
   H5,
   H6,
+  Link,
   useTheme,
   classNames,
   DEFAULT_DARK_THEME_NAME
@@ -34,7 +35,7 @@ const MDGuideTable = () => {
     buildRow("~~strikethrough~~", <s>strikethrough</s>),
     buildRow(
       "[decred!](https://decred.org)",
-      <a href="https://decred.org">decred!</a>
+      <Link href="https://decred.org">decred!</Link>
     ),
     buildRow(
       <div>
