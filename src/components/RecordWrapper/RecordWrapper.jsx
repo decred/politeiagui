@@ -161,15 +161,15 @@ export const Header = React.memo(function Header({
 
 export const ChartsLink = ({ token }) => {
   const { apiInfo } = useLoader();
-  const { theme } = useTheme();
+  const { theme, themeName } = useTheme();
+  const bgColor = getThemeProperty(theme, "icon-color");
+  const color = getThemeProperty(theme, "icon-background-color");
   const hoverColor = getThemeProperty(theme, "icon-hover-color");
   const [ref, isHovered] = useHover();
-  const iconColor = isHovered ? hoverColor : undefined;
+  const iconColor = isHovered ? hoverColor : color;
   const hostName = apiInfo.testnet
     ? "testnet.decred.org"
     : "dcrdata.decred.org";
-
-  const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
   return (
@@ -185,7 +185,7 @@ export const ChartsLink = ({ token }) => {
         target="_blank"
         rel="nofollow noopener noreferrer"
         href={`https://${hostName}/proposal/${token}`}>
-        <Icon type="chart" iconColor={iconColor} />
+        <Icon type="chart" iconColor={iconColor} backgroundColor={bgColor} />
       </UILink>
     </Tooltip>
   );
@@ -195,14 +195,12 @@ export const GithubLink = ({ token }) => {
   const { testnetGitRepository, mainnetGitRepository } = useConfig();
   const { apiInfo } = useLoader();
   const repoURL = apiInfo.testnet ? testnetGitRepository : mainnetGitRepository;
-  const { theme } = useTheme();
+  const { theme, themeName } = useTheme();
   const hoverColor = getThemeProperty(theme, "icon-hover-color");
+  const textColor = getThemeProperty(theme, "text-color");
   const [ref, isHovered] = useHover();
-  const iconColor = isHovered ? hoverColor : undefined;
-
-  const { themeName } = useTheme();
+  const iconColor = isHovered ? hoverColor : textColor;
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-
   return (
     <Tooltip
       className={classNames(
