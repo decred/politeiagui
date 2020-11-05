@@ -6,7 +6,7 @@ import useApprovedProposals from "src/hooks/api/useApprovedProposals";
 
 const NewInvoice = () => {
   const { onSubmitInvoice } = useNewInvoice();
-  const { proposals, error } = useApprovedProposals();
+  const { nonRfpProposals: proposals, error } = useApprovedProposals();
 
   return (
     <Card className="container margin-bottom-l">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { isEmpty } from "src/helpers";
 import useProposalsBatch from "./useProposalsBatch";
 import { difference, keys } from "lodash";
@@ -24,9 +24,15 @@ export default function useApprovedProposals(initialTokens) {
 
   const isLoading = isEmpty(proposals) || !proposalsTokens.approved;
 
+  const nonRfpProposals = useMemo(
+    () => proposals && Object.values(proposals).filter((p) => !p.linkby),
+    [proposals]
+  );
+
   return {
     proposals: Object.values(proposals),
     proposalsByToken: proposals,
+    nonRfpProposals,
     isLoading,
     remainingTokens
   };
