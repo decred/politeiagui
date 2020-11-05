@@ -17,7 +17,7 @@
     "localforage": "^1.7.3",
     "lodash": "^4.17.19",
     "normalize.css": "^8.0.1",
-    "pi-ui": "https://github.com/amassarwi/pi-ui#reactspring",
+    "pi-ui": "https://github.com/decred/pi-ui",
     "prop-types": "^15.7.2",
     "qr-image": "^3.2.0",
     "query-string": "^6.10.1",
