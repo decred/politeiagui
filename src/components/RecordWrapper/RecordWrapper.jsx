@@ -197,7 +197,7 @@ export const GithubLink = ({ token }) => {
   const repoURL = apiInfo.testnet ? testnetGitRepository : mainnetGitRepository;
   const { theme, themeName } = useTheme();
   const hoverColor = getThemeProperty(theme, "icon-hover-color");
-  const textColor = getThemeProperty(theme, "text-color");
+  const textColor = getThemeProperty(theme, "icon-color");
   const [ref, isHovered] = useHover();
   const iconColor = isHovered ? hoverColor : textColor;
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;

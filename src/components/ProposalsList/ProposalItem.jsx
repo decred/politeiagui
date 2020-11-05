@@ -1,6 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { StatusBar, StatusTag, classNames, Icon, useMediaQuery, useTheme, DEFAULT_DARK_THEME_NAME } from "pi-ui";
+import {
+  StatusBar,
+  StatusTag,
+  classNames,
+  Icon,
+  useMediaQuery,
+  useTheme,
+  DEFAULT_DARK_THEME_NAME
+} from "pi-ui";
 import VotesCount from "../Proposal/VotesCount";
 import { Row } from "../layout";
 import {
@@ -115,7 +123,11 @@ const ProposalItem = ({
             <Status className={styles.status}>
               <StatusTag
                 className={styles.statusTag}
-                {...getProposalStatusTagProps(proposal, voteSummary, isDarkTheme)}
+                {...getProposalStatusTagProps(
+                  proposal,
+                  voteSummary,
+                  isDarkTheme
+                )}
               />
             </Status>
             <div className="margin-left-s">

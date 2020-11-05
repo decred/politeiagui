@@ -243,7 +243,11 @@ const Proposal = React.memo(function Proposal({
                   <Status>
                     <StatusTag
                       className={styles.statusTag}
-                      {...getProposalStatusTagProps(proposal, voteSummary, isDarkTheme)}
+                      {...getProposalStatusTagProps(
+                        proposal,
+                        voteSummary,
+                        isDarkTheme
+                      )}
                     />
                     {(isVoteActive || isVotingFinished) && (
                       <Event

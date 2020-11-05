@@ -30,8 +30,13 @@ const VotesCount = ({
       {!isMobileScreen ? (
         <>
           {onSearchVotes && votesReceived > 0 && (
-            <div >
-              <Icon type="search" iconColor={isDarkTheme ? darkColor : color} onClick={onSearchVotes} className={styles.voteCountSearch} />
+            <div>
+              <Icon
+                type="search"
+                iconColor={isDarkTheme ? darkColor : color}
+                onClick={onSearchVotes}
+                className={styles.voteCountSearch}
+              />
             </div>
           )}
           <Tooltip
