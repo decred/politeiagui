@@ -1,12 +1,12 @@
 import React from "react";
 import { commands as mdeCommands } from "react-mde-newest";
-import boldSVG from "./assets/bold.svg";
-import italicSVG from "./assets/italic.svg";
-import linkSVG from "./assets/link.svg";
-import quoteSVG from "./assets/quote.svg";
-import codeSVG from "./assets/code.svg";
-import bulletListSVG from "./assets/bulletList.svg";
-import numberedListSVG from "./assets/numberedList.svg";
+import { ReactComponent as BoldSVG } from "./assets/bold.svg";
+import { ReactComponent as ItalicSVG } from "./assets/italic.svg";
+import { ReactComponent as QuoteSVG } from "./assets/quote.svg";
+import { ReactComponent as LinkSVG } from "./assets/link.svg";
+import { ReactComponent as CodeSVG } from "./assets/code.svg";
+import { ReactComponent as BulletListSVG } from "./assets/bulletList.svg";
+import { ReactComponent as NumberedListSVG } from "./assets/numberedList.svg";
 
 const commandTypes = {
   numberedList: "ordered-list",
@@ -22,37 +22,37 @@ export const commands = [
   {
     command: commandTypes.bold,
     tooltipText: "Add bold text",
-    iconSrc: boldSVG
+    Icon: BoldSVG
   },
   {
     command: commandTypes.italic,
     tooltipText: "Add italic text",
-    iconSrc: italicSVG
+    Icon: ItalicSVG
   },
   {
     command: commandTypes.link,
     tooltipText: "Insert a link",
-    iconSrc: linkSVG
+    Icon: LinkSVG
   },
   {
     command: commandTypes.quote,
     tooltipText: "Insert a quote",
-    iconSrc: quoteSVG
+    Icon: QuoteSVG
   },
   {
     command: commandTypes.code,
     tooltipText: "Insert code",
-    iconSrc: codeSVG
+    Icon: CodeSVG
   },
   {
     command: commandTypes.bulletList,
     tooltipText: "Add a bullet list",
-    iconSrc: bulletListSVG
+    Icon: BulletListSVG
   },
   {
     command: commandTypes.numberedList,
     tooltipText: "Add a numbered list",
-    iconSrc: numberedListSVG
+    Icon: NumberedListSVG
   }
 ];
 
@@ -107,5 +107,6 @@ export const getCommandIcon = (filesInput) => (commandName) => {
     return <>{filesInput}</>;
   }
   const command = commands.find((c) => c.command === commandName);
-  return <img alt={commandName} src={command.iconSrc} />;
+  const { Icon } = command;
+  return <Icon />;
 };
