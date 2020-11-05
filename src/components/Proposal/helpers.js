@@ -26,13 +26,17 @@ export const getStatusBarData = (voteSummary) => {
     .sort((a) => (a.label === "yes" ? -1 : 1));
 };
 
-export const getProposalStatusTagProps = (proposal, voteSummary) => {
+export const getProposalStatusTagProps = (
+  proposal,
+  voteSummary,
+  isDarkTheme
+) => {
   const isRfpSubmission = !!proposal.linkto;
   if (isPublicProposal(proposal) && !!voteSummary) {
     switch (voteSummary.status) {
       case PROPOSAL_VOTING_NOT_AUTHORIZED:
         return {
-          type: "blackTime",
+          type: isDarkTheme ? "blueTime" : "blackTime",
           text: isRfpSubmission
             ? "Waiting for runoff vote to start"
             : "Waiting for author to authorize voting"
@@ -48,7 +52,10 @@ export const getProposalStatusTagProps = (proposal, voteSummary) => {
         if (isApprovedProposal(proposal, voteSummary)) {
           return { type: "greenCheck", text: "Finished" };
         } else {
-          return { type: "grayNegative", text: "Finished" };
+          return {
+            type: isDarkTheme ? "blueNegative" : "grayNegative",
+            text: "Finished"
+          };
         }
       default:
         break;

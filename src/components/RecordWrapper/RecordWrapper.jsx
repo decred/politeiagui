@@ -64,18 +64,11 @@ export const RecordToken = ({ token, isCopyable }) => {
   );
 };
 
-export const Title = ({ children, isAbandoned, url, ...props }) => {
+export const Title = ({ children, url, ...props }) => {
   const SimpleWrapper = (props) => <div {...props} />;
   const Wrapper = url ? Link : SimpleWrapper;
-  const { themeName } = useTheme();
-  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-  const titleClass = isAbandoned
-    ? isDarkTheme
-      ? styles.darkAbandonedTitle
-      : styles.abandonedTitle
-    : styles.title;
   return (
-    <Wrapper to={url} className={titleClass}>
+    <Wrapper to={url} className={styles.title}>
       <H2 {...props}>{children}</H2>
     </Wrapper>
   );
@@ -126,7 +119,7 @@ const MobileHeader = ({ title, status, edit, isRfp }) => (
 const RfpTag = React.memo(({ className }) => (
   <img
     alt="rfp"
-    className={classNames("margin-right-s", className)}
+    className={classNames("margin-right-s", styles.rfptag, className)}
     src={rfpTag}
   />
 ));
@@ -168,15 +161,15 @@ export const Header = React.memo(function Header({
 
 export const ChartsLink = ({ token }) => {
   const { apiInfo } = useLoader();
-  const { theme } = useTheme();
+  const { theme, themeName } = useTheme();
+  const bgColor = getThemeProperty(theme, "icon-color");
+  const color = getThemeProperty(theme, "icon-background-color");
   const hoverColor = getThemeProperty(theme, "icon-hover-color");
   const [ref, isHovered] = useHover();
-  const iconColor = isHovered ? hoverColor : undefined;
+  const iconColor = isHovered ? hoverColor : color;
   const hostName = apiInfo.testnet
     ? "testnet.decred.org"
     : "dcrdata.decred.org";
-
-  const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
   return (
@@ -192,7 +185,7 @@ export const ChartsLink = ({ token }) => {
         target="_blank"
         rel="nofollow noopener noreferrer"
         href={`https://${hostName}/proposal/${token}`}>
-        <Icon type="chart" iconColor={iconColor} />
+        <Icon type="chart" iconColor={iconColor} backgroundColor={bgColor} />
       </UILink>
     </Tooltip>
   );
@@ -202,14 +195,12 @@ export const GithubLink = ({ token }) => {
   const { testnetGitRepository, mainnetGitRepository } = useConfig();
   const { apiInfo } = useLoader();
   const repoURL = apiInfo.testnet ? testnetGitRepository : mainnetGitRepository;
-  const { theme } = useTheme();
+  const { theme, themeName } = useTheme();
   const hoverColor = getThemeProperty(theme, "icon-hover-color");
+  const textColor = getThemeProperty(theme, "icon-color");
   const [ref, isHovered] = useHover();
-  const iconColor = isHovered ? hoverColor : undefined;
-
-  const { themeName } = useTheme();
+  const iconColor = isHovered ? hoverColor : textColor;
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-
   return (
     <Tooltip
       className={classNames(

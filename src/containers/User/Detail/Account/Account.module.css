@@ -1,6 +1,6 @@
 .subtitle {
   display: block;
   margin-bottom: 0.5rem;
-  color: var(--tab-text-active-color) !important;
+  color: var(--text-heading3-color) !important;
   margin-top: 3rem;
 }

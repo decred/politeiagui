@@ -85,6 +85,18 @@ li.mde-header-item > button {
   cursor: pointer;
 }
 
+.mde-header-item button:hover > svg path {
+  fill: var(--color-gray);
+}
+
+.mde-header-item button:hover > .code path {
+  stroke: var(--color-gray);
+}
+
+.mde-header-item button:hover > svg ellipse {
+  fill: var(--color-gray);
+}
+
 .mde-tabs button {
   cursor: pointer;
   color: var(--tab-text-color);
