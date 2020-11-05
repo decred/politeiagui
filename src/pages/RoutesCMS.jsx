@@ -23,6 +23,7 @@ import PageProposalBillingDetails from "./Invoices/ProposalBillingDetails";
 import PageDccDetail from "./DCCs/Detail";
 import PageDccList from "./DCCs/List";
 import PageDccNew from "./DCCs/New";
+import PageUserDetail from "./User/Detail";
 
 const Redirect = withRouter(({ to, history, location }) => {
   useEffect(() => {
@@ -56,6 +57,15 @@ const Routes = ({ location }) => {
             <Redirect to="/user/signup" />
           </Route>
           {commonRoutes}
+
+          {/* User Route */}
+          <AuthenticatedRoute
+            path="/user/:userid"
+            title="User Detail"
+            exact
+            key="user-detail-route"
+            component={PageUserDetail}
+          />
 
           {/* Record routes */}
           <AuthenticatedRoute
