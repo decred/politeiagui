@@ -172,11 +172,10 @@ const Proposal = React.memo(function Proposal({
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
-  const { text, markdownFiles } = useMemo(() =>
-    replaceImgDigestWithPayload(
-      getMarkdownContent(files),
-      files
-    ), [files]);
+  const { text, markdownFiles } = useMemo(
+    () => replaceImgDigestWithPayload(getMarkdownContent(files), files),
+    [files]
+  );
 
   return (
     <>
