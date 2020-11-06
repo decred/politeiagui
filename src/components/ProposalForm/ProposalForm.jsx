@@ -17,13 +17,13 @@ import DatePickerField from "../DatePickerField";
 import SelectField from "src/components/Select/SelectField";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/components/MarkdownEditor";
+import ModalMDGuide from "src/components/ModalMDGuide";
 import ThumbnailGrid from "src/components/Files";
 import AttachFileInput from "src/components/AttachFileInput";
-import ModalMDGuide from "src/components/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import usePolicy from "src/hooks/api/usePolicy";
-import { isAnchoring } from "src/helpers";
+import { isAnchoring, getKeyByValue } from "src/helpers";
 import {
   PROPOSAL_TYPE_REGULAR,
   PROPOSAL_TYPE_RFP,
@@ -38,6 +38,76 @@ import useModalContext from "src/hooks/utils/useModalContext";
 import FormatHelpButton from "./FormatHelpButton";
 import SubmitButton from "./SubmitButton";
 import ProposalGuidelinesButton from "./ProposalGuidelinesButton";
+
+/** The main goal of using a Map data structure instead of internal state here is to prevent unnecessary rerenders. We just want a way to map blobs to files objects. */
+const mapBlobToFile = new Map();
+
+const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  const blob = new Blob(byteArrays, { type: contentType });
+  return blob;
+};
+
+function replaceImgDigestByBlob(vals) {
+  if (!vals) return { text: "", markdownFiles: [] };
+  const { description, files } = vals;
+  const imageRegexParser = /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
+  const imgs = description.matchAll(imageRegexParser);
+  let newText = description;
+  const markdownFiles = [];
+  /**
+   * This for loop will update the newText replacing images digest by a blob and push the img object to an array of markdownFiles
+   * */
+  for (const img of imgs) {
+    const { digest } = img.groups;
+    const obj = getKeyByValue(files, digest);
+    if (obj) {
+      const blobUrl = URL.createObjectURL(b64toBlob(obj.payload, obj.mime));
+      mapBlobToFile.set(blobUrl, obj);
+      markdownFiles.push(obj);
+      newText = newText.replace(digest, blobUrl);
+    }
+  }
+  return { text: newText, markdownFiles };
+}
+
+/**
+ * replaceBlobsByDigestsAndGetFiles uses a regex to parse images
+ * @param {String} description the markdown description
+ * @param {Map} map the map of blob -> file
+ * @returns {object} { description, files }
+ */
+function replaceBlobsByDigestsAndGetFiles(description, map) {
+  const imageRegexParser = /!\[[^\]]*\]\((?<blob>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
+  const imgs = description.matchAll(imageRegexParser);
+  let newDescription = description;
+  const files = [];
+  /**
+   * This for loop will update the newDescription replacing the image blobs by their digests and push the img object to an array of files
+   * */
+  for (const img of imgs) {
+    const { blob } = img.groups;
+    if (map.has(blob)) {
+      newDescription = newDescription.replace(blob, map.get(blob).digest);
+      files.push(map.get(blob));
+    }
+  }
+  return { description: newDescription, files };
+}
 
 const ProposalForm = React.memo(function ProposalForm({
   values,
@@ -192,14 +262,17 @@ const ProposalForm = React.memo(function ProposalForm({
         error={touched.name && errors.name}
       />
       <MarkdownEditor
+        allowImgs={true}
         name="description"
         className="margin-top-s"
         value={values.description}
         textAreaProps={textAreaProps}
         onChange={handleDescriptionChange}
+        onFileChange={handleFilesChange}
         placeholder={"Write your proposal"}
         error={touched.description && errors.description}
         filesInput={filesInput}
+        mapBlobToFile={mapBlobToFile}
       />
       <ThumbnailGrid
         value={values.files}
@@ -250,6 +323,7 @@ const ProposalFormWrapper = ({
   history,
   isPublic
 }) => {
+  const { text, markdownFiles } = replaceImgDigestByBlob(initialValues);
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const openMdModal = useCallback(() => {
     handleOpenModal(ModalMDGuide, {
@@ -286,9 +360,14 @@ const ProposalFormWrapper = ({
             );
           }
         }
+        const { description, files } = replaceBlobsByDigestsAndGetFiles(
+          others.description,
+          mapBlobToFile
+        );
         const proposalToken = await onSubmit({
           ...others,
-          type,
+          description,
+          files: [...others.files, ...files],
           rfpLink
         });
         setSubmitting(false);
@@ -303,19 +382,26 @@ const ProposalFormWrapper = ({
     },
     [history, onSubmit, onFetchProposalsBatchWithoutState, isPublic]
   );
+  const newInitialValues = initialValues
+    ? {
+        ...initialValues,
+        description: text,
+        files:
+          initialValues &&
+          initialValues.files.filter((file) => !markdownFiles.includes(file))
+      }
+    : {
+        type: PROPOSAL_TYPE_REGULAR,
+        rfpDeadline: null,
+        rfpLink: "",
+        name: "",
+        description: "",
+        files: []
+      };
   return (
     <>
       <Formik
-        initialValues={
-          initialValues || {
-            type: PROPOSAL_TYPE_REGULAR,
-            rfpDeadline: null,
-            rfpLink: "",
-            name: "",
-            description: "",
-            files: []
-          }
-        }
+        initialValues={newInitialValues}
         loading={!proposalFormValidation}
         validate={proposalFormValidation}
         onSubmit={handleSubmit}>
@@ -326,7 +412,7 @@ const ProposalFormWrapper = ({
               submitSuccess,
               disableSubmit,
               openMDGuideModal: openMdModal,
-              initialValues,
+              newInitialValues,
               isPublic
             }}
           />

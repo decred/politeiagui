@@ -92,7 +92,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     15: "The provided proposal name was invalid.",
     16: "The SHA256 checksum for one of the files was incorrect.",
     17: "The Base64 encoding for one of the files was incorrect.",
-    18: `The MIME type detected for ${errorContext[0]} did not match the provided MIME type. MIME type: ${errorContext[1]}`,
+    18: `The MIME type detected for ${errorContext[0]} is not supported.`,
     19: "The MIME type for one of the files is not supported.",
     20: "The proposal cannot be set to that status.",
     21: "The provided public key was invalid.",
@@ -355,6 +355,9 @@ export const removeProposalsDuplicates = (arr1, arr2) => {
   };
   return Object.keys(mergedObj).map((item) => mergedObj[item]);
 };
+
+export const getKeyByValue = (obj, val) =>
+  Object.values(obj).find((value) => value.digest === val);
 
 // CMS HELPERS
 export const renderInvoiceStatus = (status) => {

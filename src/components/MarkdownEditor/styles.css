@@ -124,3 +124,26 @@ li.mde-header-item > button {
 .mde-tabs > :last-child {
   padding-left: 1rem;
 }
+
+.image-tip {
+  user-select: none;
+  display: flex !important;
+  padding: 0.7rem 1rem;
+  margin: 0;
+  font-size: 1.3rem;
+  line-height: 1.6rem;
+  color: var(--text-color);
+  background-color: var(--header-color);
+  position: relative;
+}
+
+.image-input {
+  min-height: 0;
+  opacity: 0.01;
+  width: 100% !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px;
+  cursor: pointer;
+}
