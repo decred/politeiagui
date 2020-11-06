@@ -23,7 +23,7 @@ import AttachFileInput from "src/components/AttachFileInput";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import usePolicy from "src/hooks/api/usePolicy";
-import { isAnchoring, replaceBlobsByDigestsAndGetFiles, replaceImgDigestByBlob } from "src/helpers";
+import { replaceBlobsByDigestsAndGetFiles, replaceImgDigestByBlob } from "src/helpers";
 import {
   PROPOSAL_TYPE_REGULAR,
   PROPOSAL_TYPE_RFP,
@@ -299,10 +299,9 @@ const ProposalFormWrapper = ({
         );
         const proposalToken = await onSubmit({
           ...others,
-          type,
-          rfpLink,
-          state: proposalState
           description,
+          type,
+          state: proposalState,
           files: [...others.files, ...files],
           rfpLink
         });
