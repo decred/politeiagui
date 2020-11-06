@@ -63,13 +63,12 @@ const LinkRenderer = ({ url, children }) => {
 };
 
 // Use external link renderer when images are not allowed
-const imageHandler = (renderImages) => ({ src, alt }) => {
-  return renderImages ? (
+const imageHandler = (renderImages) => ({ src, alt }) =>
+  renderImages ? (
     <img src={src} alt={alt} />
   ) : (
     <LinkRenderer url={src}>{alt}</LinkRenderer>
   );
-};
 
 const linkHandler = ({ href, children }) => {
   return <LinkRenderer url={href}>{children}</LinkRenderer>;

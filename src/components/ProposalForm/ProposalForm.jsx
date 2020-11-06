@@ -64,10 +64,10 @@ const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
 
 function replaceImgDigestByBlob(vals) {
   if (!vals) return { text: "", markdownFiles: [] };
-  const { text, files } = vals;
+  const { description, files } = vals;
   const imageRegexParser = /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
-  const imgs = text.matchAll(imageRegexParser);
-  let newText = text;
+  const imgs = description.matchAll(imageRegexParser);
+  let newText = description;
   const markdownFiles = [];
   /**
    * This for loop will update the newText replacing images digest by a blob and push the img object to an array of markdownFiles

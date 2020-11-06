@@ -116,12 +116,12 @@ li.mde-header-item > button {
 .image-tip {
   user-select: none;
   display: flex !important;
-  padding: 7px 10px;
+  padding: 0.7rem 1rem;
   margin: 0;
-  font-size: 13px;
-  line-height: 16px;
-  color: gray;
-  background-color: #f9f9f9;
+  font-size: 1.3rem;
+  line-height: 1.6rem;
+  color: var(--text-color);
+  background-color: var(--header-color);
   position: relative;
 }
 

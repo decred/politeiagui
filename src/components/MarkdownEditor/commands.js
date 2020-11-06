@@ -56,6 +56,6 @@ const commandsIcons = {
  * @param {string} commandName
  * @returns {Object} React node
  */
-export const getCommandIcon = (commandName) => {
-  return <img alt={commandName} src={commandsIcons[commandName]} />;
-};
+export const getCommandIcon = (commandName) => (
+  <img alt={commandName} src={commandsIcons[commandName]} />
+);

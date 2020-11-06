@@ -8,7 +8,7 @@ import {
   Tooltip,
   DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
-import React from "react";
+import React, { useMemo } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
@@ -172,10 +172,11 @@ const Proposal = React.memo(function Proposal({
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
-  const { text, markdownFiles } = replaceImgDigestWithPayload(
-    getMarkdownContent(files),
-    files
-  );
+  const { text, markdownFiles } = useMemo(() =>
+    replaceImgDigestWithPayload(
+      getMarkdownContent(files),
+      files
+    ), [files]);
 
   return (
     <>
