@@ -26,7 +26,6 @@ import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import usePolicy from "src/hooks/api/usePolicy";
 import {
-  isAnchoring,
   replaceBlobsByDigestsAndGetFiles,
   replaceImgDigestByBlob
 } from "src/helpers";
@@ -350,11 +349,9 @@ const ProposalFormWrapper = ({
         );
         const proposalToken = await onSubmit({
           ...others,
-          type,
-          rfpLink,
-          state: proposalState
           description,
           type,
+          state: proposalState,
           files: [...others.files, ...files],
           rfpLink
         });
