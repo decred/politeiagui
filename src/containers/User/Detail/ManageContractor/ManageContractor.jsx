@@ -7,7 +7,6 @@ import useContractor from "../hooks/useContractor";
 import isEmpty from "lodash/isEmpty";
 
 const ManageContractor = ({ userID, isUserPageOwner }) => {
-  const [showDccForm, setShowDccForm] = useState(true);
   const [showContractorInfoForm, setShowContractorInfoForm] = useState(true);
 
   const {
@@ -16,10 +15,13 @@ const ManageContractor = ({ userID, isUserPageOwner }) => {
     onUpdateDccInfo,
     isDeveloper,
     onUpdateContractorInfo,
-    requireGitHubName
+    requireGitHubName,
+    loading
   } = useContractor(userID);
 
-  const onToggleDccEdit = () => setShowDccForm(!showDccForm);
+  const [showDccForm, setShowDccForm] = useState(isAdmin);
+
+  const onToggleDccEdit = () => setShowDccForm(isAdmin && !showDccForm);
   const onToggleContractorInfoEdit = () =>
     setShowContractorInfoForm(!showContractorInfoForm);
 
@@ -27,6 +29,7 @@ const ManageContractor = ({ userID, isUserPageOwner }) => {
   const canEditDccInfo = isAdmin && !showDccForm;
   const canEditContractorInfo = isUserPageOwner && !showContractorInfoForm;
 
+  console.log("user", user, !loading);
   return (
     <Card className={classNames("container", "margin-bottom-m")}>
       {canEditDccInfo && (
@@ -34,18 +37,20 @@ const ManageContractor = ({ userID, isUserPageOwner }) => {
           <ManageDccForm user={user} onUpdate={onUpdateDccInfo} />
         </div>
       )}
-      <UserView
-        user={user}
-        showGitHubName={isDeveloper || !isEmpty(user.githubname)}
-        requireGitHubName={requireGitHubName && isUserPageOwner}
-        hideDccInfo={canEditDccInfo}
-        hideContractorInfo={canEditContractorInfo}
-        enableEditMode={enableEditMode}
-        showDccForm={showDccForm}
-        showContractorInfoForm={showContractorInfoForm}
-        onToggleDccEdit={onToggleDccEdit}
-        onToggleContractorInfoEdit={onToggleContractorInfoEdit}
-      />
+      {!loading && (
+        <UserView
+          user={user}
+          showGitHubName={isDeveloper || !isEmpty(user.githubname)}
+          requireGitHubName={requireGitHubName && isUserPageOwner}
+          hideDccInfo={canEditDccInfo}
+          hideContractorInfo={canEditContractorInfo}
+          showDccForm={isAdmin}
+          showContractorInfoForm={showContractorInfoForm}
+          onToggleDccEdit={onToggleDccEdit}
+          onToggleContractorInfoEdit={onToggleContractorInfoEdit}
+          enableEditMode={enableEditMode}
+        />
+      )}
       {canEditContractorInfo && (
         <EditContractorForm
           onEdit={onUpdateContractorInfo}

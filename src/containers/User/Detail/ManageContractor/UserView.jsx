@@ -89,11 +89,14 @@ const ManageContractorUserView = ({
   onToggleContractorInfoEdit
 }) => {
   const { domain, contractortype, supervisoruserids = [] } = user;
-  const { proposalsByToken, isLoading, error } = useApprovedProposals();
+  const { proposalsByToken, isLoading, error } = useApprovedProposals(
+    user.proposalsowned
+  );
   const ownedProposals = getOwnedProposals(
     user.proposalsowned,
     proposalsByToken
   );
+
   const { supervisors, error: supervisorsError } = useSupervisors();
   const {
     policy: { supporteddomains }
