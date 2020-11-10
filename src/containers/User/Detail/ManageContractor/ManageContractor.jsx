@@ -29,7 +29,6 @@ const ManageContractor = ({ userID, isUserPageOwner }) => {
   const canEditDccInfo = isAdmin && !showDccForm;
   const canEditContractorInfo = isUserPageOwner && !showContractorInfoForm;
 
-  console.log("user", user, !loading);
   return (
     <Card className={classNames("container", "margin-bottom-m")}>
       {canEditDccInfo && (
@@ -37,7 +36,7 @@ const ManageContractor = ({ userID, isUserPageOwner }) => {
           <ManageDccForm user={user} onUpdate={onUpdateDccInfo} />
         </div>
       )}
-      {!loading && (
+      {!loading && user.cmsinfo && (
         <UserView
           user={user}
           showGitHubName={isDeveloper || !isEmpty(user.githubname)}
