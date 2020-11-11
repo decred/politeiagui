@@ -17,6 +17,7 @@
     { "label": "My invoices", "path": "/invoices/me", "admin": false },
     { "label": "All Invoices", "path": "/invoices", "admin": false },
     { "label": "DCCs", "path": "/dccs", "admin": false },
-    { "label": "Search for users", "path": "/user/search", "admin": true }
+    { "label": "Search for users", "path": "/user/search", "admin": true },
+    { "label": "Account", "path": "/user", "admin": false }
   ]
 }
