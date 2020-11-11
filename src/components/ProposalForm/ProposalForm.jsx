@@ -62,7 +62,7 @@ const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
   return blob;
 };
 
-function replaceImgDigestByBlob(vals) {
+function replaceImgDigestByBlob(vals, mapBlobToFile) {
   if (!vals) return { text: "", markdownFiles: [] };
   const { description, files } = vals;
   const imageRegexParser = /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
@@ -76,7 +76,8 @@ function replaceImgDigestByBlob(vals) {
     const { digest } = img.groups;
     const obj = getKeyByValue(files, digest);
     if (obj) {
-      const blobUrl = URL.createObjectURL(b64toBlob(obj.payload, obj.mime));
+      const urlCreator = window.URL || window.webkitURL;
+      const blobUrl = urlCreator.createObjectURL(b64toBlob(obj.payload, obj.mime));
       mapBlobToFile.set(blobUrl, obj);
       markdownFiles.push(obj);
       newText = newText.replace(digest, blobUrl);
@@ -286,7 +287,7 @@ const ProposalForm = React.memo(function ProposalForm({
             openMDGuideModal={openMDGuideModal}
           />
           <ProposalGuidelinesButton isDarkTheme={isDarkTheme} />
-          <DraftSaver submitSuccess={submitSuccess} />
+          <DraftSaver mapBlobToFile={mapBlobToFile} submitSuccess={submitSuccess} />
           <SubmitButton
             isSubmitting={isSubmitting}
             disableSubmit={disableSubmit}
@@ -296,7 +297,7 @@ const ProposalForm = React.memo(function ProposalForm({
       ) : (
         <>
           <Row topMarginSize="s" justify="right">
-            <DraftSaver submitSuccess={submitSuccess} />
+            <DraftSaver mapBlobToFile={mapBlobToFile} submitSuccess={submitSuccess} />
             <SubmitButton
               isSubmitting={isSubmitting}
               disableSubmit={disableSubmit}
@@ -323,7 +324,7 @@ const ProposalFormWrapper = ({
   history,
   isPublic
 }) => {
-  const { text, markdownFiles } = replaceImgDigestByBlob(initialValues);
+  const { text, markdownFiles } = replaceImgDigestByBlob(initialValues, mapBlobToFile);
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const openMdModal = useCallback(() => {
     handleOpenModal(ModalMDGuide, {
