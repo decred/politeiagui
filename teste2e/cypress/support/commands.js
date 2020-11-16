@@ -23,6 +23,11 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+import { sha3_256 } from "js-sha3";
+import { requestWithCsrfToken, setProposalStatus } from "../../utils";
+import * as pki from "../../../src/lib/pki";
+// TODO: consider moving general functions like makeProposal and signRegister to a more general lib file other than api
+import { makeProposal, signRegister } from "../../../src/lib/api";
 
 Cypress.Commands.add("assertHome", () => {
   cy.url().should("eq", `${Cypress.config().baseUrl}/`);
@@ -36,66 +41,70 @@ Cypress.Commands.add("assertProposalPage", (proposal) => {
   );
 });
 
-Cypress.Commands.add("assertLoggedInAs", (user) => {
+Cypress.Commands.add("assertLoggedInAs", () => {
   cy.getCookies()
     .should("have.length", 2)
     .then((cookies) => {
       expect(cookies[1]).to.have.property("name", "session");
     });
-  cy.findByTestId("trigger").should("have.text", user.username);
 });
 
-// TODO: add login using cy.request()
 Cypress.Commands.add("typeLogin", (user) => {
   cy.visit("/user/login");
   cy.findByLabelText(/email/i).type(user.email);
   cy.findByLabelText(/password/i).type(user.password);
   cy.findByRole("button", { text: /login/i }).click();
   cy.assertHome();
-  cy.assertLoggedInAs(user);
+  cy.assertLoggedInAs();
 });
 
-Cypress.Commands.add("logout", (user) => {
-  cy.server();
-  cy.route("POST", "api/v1/logout").as("logout");
-  cy.assertLoggedInAs(user);
-  cy.findByTestId("trigger").should("have.text", user.username).click();
-  cy.findByText(/logout/i).click();
-  cy.findByTestId("logout-btn").click();
-  cy.wait("@logout").its("status").should("eq", 200);
-  cy.findByTestId("trigger").should("not.have.text", user.username);
-});
-
-// Should use after login
-// TODO: add identity using cy.request()
-Cypress.Commands.add("typeIdentity", () => {
-  cy.server();
-  cy.route("GET", "api/v1/user/*").as("getUser");
-  cy.route("POST", "api/v1/user/key").as("newKey");
-  cy.route("POST", "api/v1/user/key/verify").as("keyVerify");
-  cy.findByTestId("trigger").click();
-  cy.findByText(/account/i).click();
-  cy.wait("@getUser").its("status").should("eq", 200);
-  cy.findByText(/create new identity/i, { timeout: 10000 }).click();
-  cy.findByText(/confirm/i).click();
-  cy.wait("@newKey").should((xhr) => {
-    expect(xhr.status).to.equal(200);
-    expect(xhr.response.body)
-      .to.have.property("verificationtoken")
-      .and.be.a("string");
-    cy.visit(
-      `/user/key/verify?verificationtoken=${xhr.response.body.verificationtoken}`
-    );
-    cy.wait("@keyVerify").its("status").should("eq", 200);
-    cy.findByText(/go to proposals/i).click();
+Cypress.Commands.add("login", (user) => {
+  requestWithCsrfToken("api/v1/login", {
+    email: user.email,
+    password: sha3_256(user.password)
   });
 });
 
-// TODO: add createProposal using cy.request()
+Cypress.Commands.add("logout", () => {
+  requestWithCsrfToken("api/v1/logout");
+});
+
+// Should use after login
+Cypress.Commands.add("identity", () => {
+  cy.server();
+  cy.route("POST", "api/v1/user/key/verify").as("verifyKey");
+  cy.request("api/v1/user/me").then((res) => {
+    return pki.generateKeys().then((keys) => {
+      return pki.loadKeys(res.body.userid, keys).then(() => {
+        requestWithCsrfToken("api/v1/user/key", {
+          publickey: pki.toHex(keys.publicKey)
+        }).then((res) => {
+          cy.visit(
+            `/user/key/verify?verificationtoken=${res.body.verificationtoken}`
+          );
+          cy.wait("@verifyKey").its("status").should("eq", 200);
+        });
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("createProposal", (proposal) => {
+  const createdProposal = makeProposal(proposal.name, proposal.description);
+  return cy.request("api/v1/user/me").then((res) => {
+    return signRegister(res.body.userid, createdProposal).then((res) =>
+      requestWithCsrfToken("api/v1/proposals/new", res)
+    );
+  });
+});
+
+Cypress.Commands.add("approveProposal", (proposal) => {
+  return setProposalStatus(proposal, 4);
+});
+
 Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.server();
-  cy.findByText(/new proposal/i).click();
-  cy.findByTestId("proposal-name", { timeout: 15000 }).type(proposal.name);
+  cy.findByTestId("proposal-name").type(proposal.name);
   cy.findByTestId("text-area").type(proposal.description);
   cy.route("POST", "/api/v1/proposals/new").as("newProposal");
   cy.findByText(/submit/i).click();

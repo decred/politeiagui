@@ -1,7 +1,7 @@
 import { buildProposal } from "../support/generate";
 
 describe("Proposals", () => {
-  it("Paid user can create proposals", () => {
+  it("Paid user can create proposals manually", () => {
     // paid user with proposal credits
     const user = {
       email: "adminuser@example.com",
@@ -9,18 +9,21 @@ describe("Proposals", () => {
       password: "password"
     };
     const proposal = buildProposal();
-    cy.typeLogin(user);
-    cy.typeIdentity();
+    cy.login(user);
+    cy.visit("/");
+    cy.identity();
+    cy.visit("/proposals/new");
     cy.typeCreateProposal(proposal);
   });
 
   it("Non-paid user can not create proposals", () => {
     const user = {
-      email: "user2@example.com",
-      username: "user2",
+      email: "user4@example.com",
+      username: "user4",
       password: "password"
     };
-    cy.typeLogin(user);
+    cy.login(user);
+    cy.visit("/");
     cy.findByText(/new proposal/i).should("be.disabled");
     cy.visit("/proposals/new");
     cy.findByText(

@@ -8,7 +8,7 @@ describe("Admin account actions", () => {
     };
     cy.server();
     cy.route("GET", "/api/v1/users?**").as("searchUser");
-    cy.typeLogin(user);
+    cy.login(user);
     cy.visit("/user/search");
     cy.findByTestId("search-user").type("user2");
     cy.findByRole("button", { name: /search/i }).click();
@@ -25,7 +25,7 @@ describe("Admin account actions", () => {
     };
     cy.server();
     cy.route("GET", "/api/v1/users?**").as("searchUser");
-    cy.typeLogin(user);
+    cy.login(user);
     cy.visit("/user/search");
     cy.findByTestId("search-user").type("user2");
     cy.findByRole("button", { name: /search/i }).click();

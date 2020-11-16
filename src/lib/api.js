@@ -20,9 +20,9 @@ import {
   objectToSHA256,
   utoa,
   objectToBuffer,
-  bufferToBase64String
+  bufferToBase64String,
+  convertObjectToUnixTimestamp
 } from "../helpers";
-import { convertObjectToUnixTimestamp } from "src/utils";
 
 export const TOP_LEVEL_COMMENT_PARENTID = "0";
 
