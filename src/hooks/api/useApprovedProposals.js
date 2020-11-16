@@ -28,7 +28,7 @@ export default function useApprovedProposals(initialTokens) {
     }
   }, [proposals, proposalsTokens.approved, isLoading]);
 
-  const nonRfpProposals = useMemo(
+  const proposalsNotRFP = useMemo(
     () => proposals && Object.values(proposals).filter((p) => !p.linkby),
     [proposals]
   );
@@ -36,7 +36,7 @@ export default function useApprovedProposals(initialTokens) {
   return {
     proposals: Object.values(proposals),
     proposalsByToken: proposals,
-    nonRfpProposals,
+    proposalsNotRFP,
     isLoading,
     remainingTokens
   };

@@ -465,9 +465,7 @@ export const onFetchUser = (userId) => (dispatch, getState) => {
           user: {
             ...response.user,
             userid: userId,
-            // cmsinfo is used to identify whether
-            // user details request is for cms or pi
-            cmsinfo: isCMS
+            isCMS // used to identify whether user details request is for cms or pi
           }
         })
       )

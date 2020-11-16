@@ -36,7 +36,7 @@ const ManageContractor = ({ userID, isUserPageOwner }) => {
           <ManageDccForm user={user} onUpdate={onUpdateDccInfo} />
         </div>
       )}
-      {!loading && user.cmsinfo && (
+      {!loading && user.isCMS && (
         <UserView
           user={user}
           showGitHubName={isDeveloper || !isEmpty(user.githubname)}

@@ -37,7 +37,7 @@ const EditInvoice = ({ match }) => {
     : null;
 
   const {
-    nonRfpProposals: proposals,
+    proposalsNotRFP: proposals,
     error: proposalsError
   } = useApprovedProposals();
   return (
