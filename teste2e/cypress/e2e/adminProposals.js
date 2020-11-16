@@ -21,7 +21,7 @@ describe("Admin proposals actions", () => {
       cy.findByText(/confirm/i).click();
       cy.wait("@confirm");
       cy.findByText(/ok/i).click();
-      cy.findByText(/Waiting for author/i).should("exist");
+      cy.findByText(/waiting for author/i, { timeout: 10000 }).should("exist");
     });
   });
 
@@ -52,7 +52,7 @@ describe("Admin proposals actions", () => {
       );
       cy.visit("/proposals/unvetted?tab=censored");
       cy.wait("@unvettedLoaded");
-      cy.findByText(proposal.name).should("exist");
+      cy.findByText(proposal.name, { timeout: 10000 }).should("exist");
     });
   });
 
@@ -78,7 +78,7 @@ describe("Admin proposals actions", () => {
       cy.findByText(/confirm/i).click();
       cy.wait("@confirm");
       cy.findByText(/ok/i).click();
-      cy.findAllByText(/abandoned/).should("exist");
+      cy.findAllByText(/abandoned/, { timeout: 10000 }).should("exist");
     });
   });
 
