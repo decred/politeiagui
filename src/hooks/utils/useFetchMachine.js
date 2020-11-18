@@ -60,6 +60,7 @@ const fetchReducer = (state, action) => {
     case REJECT:
       return compose(
         set("loading", false),
+        set("verifying", false),
         set("error", action.payload),
         set("status", nextState)
       )(state);
