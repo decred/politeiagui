@@ -26,8 +26,8 @@ describe("User comments", () => {
       cy.visit(`proposals/${res.body.censorshiprecord.token.substring(0, 7)}`);
       cy.findByRole("button", { name: /add comment/i }).should("be.disabled");
       cy.findByText(
-        /submit comments or proposals before paying the paywall/i
-      ).should("exist");
+        /you won't be able to submit comments or proposals before paying the paywall/i
+      ).should("be.visible");
     });
   });
 
@@ -59,10 +59,12 @@ describe("User comments", () => {
       cy.findByTestId(/text-area/i).type(text);
       cy.route("POST", "/api/v1/comments/new").as("newComment");
       cy.findByText(/add comment/i).click();
-      cy.wait("@newComment", { timeout: 10000 });
+      cy.wait("@newComment").its("status").should("eq", 200);
       cy.route("POST", "/api/v1/comments/like").as("likeComment");
       cy.findByTestId("like-btn").click();
-      cy.wait("@likeComment").its("status").should("eq", 200);
+      cy.wait("@likeComment", { timeout: 10000 })
+        .its("status")
+        .should("eq", 200);
       cy.findByText(/reply/i).click();
       cy.findAllByTestId(/text-area/i)
         .eq(1)
@@ -70,9 +72,7 @@ describe("User comments", () => {
       cy.findAllByText(/add comment/i)
         .eq(1)
         .click();
-      cy.wait("@newComment", { timeout: 10000 })
-        .its("status")
-        .should("eq", 200);
+      cy.wait("@newComment").its("status").should("eq", 200);
     });
   });
 });

@@ -21,7 +21,7 @@ describe("Admin proposals actions", () => {
       cy.findByText(/confirm/i).click();
       cy.wait("@confirm");
       cy.findByText(/ok/i).click();
-      cy.findByText(/waiting for author/i, { timeout: 10000 }).should("exist");
+      cy.findByText(/waiting for author/i).should("be.visible");
     });
   });
 
@@ -52,7 +52,7 @@ describe("Admin proposals actions", () => {
       );
       cy.visit("/proposals/unvetted?tab=censored");
       cy.wait("@unvettedLoaded");
-      cy.findByText(proposal.name, { timeout: 10000 }).should("exist");
+      cy.findByText(proposal.name).should("be.visible");
     });
   });
 
@@ -78,7 +78,7 @@ describe("Admin proposals actions", () => {
       cy.findByText(/confirm/i).click();
       cy.wait("@confirm");
       cy.findByText(/ok/i).click();
-      cy.findAllByText(/abandoned/, { timeout: 10000 }).should("exist");
+      cy.findAllByText(/abandoned/).should("be.visible");
     });
   });
 
@@ -102,9 +102,11 @@ describe("Admin proposals actions", () => {
       cy.route("POST", "/api/v1/proposals/authorizevote").as(
         "confirmAuthorizeVote"
       );
-      cy.findByText(/confirm/i).click();
+      cy.findByText(/confirm/i)
+        .should("be.visible")
+        .click();
       cy.wait("@confirmAuthorizeVote");
-      cy.findByTestId("close-confirm-msg").click();
+      cy.findByTestId("close-confirm-msg").should("be.visible").click();
     });
   });
 });

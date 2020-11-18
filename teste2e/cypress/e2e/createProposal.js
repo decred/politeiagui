@@ -30,7 +30,7 @@ describe("Proposals", () => {
       /you won't be able to submit comments or proposals before paying the paywall/i
     ).should("be.visible");
     const proposal = buildProposal();
-    cy.findByTestId("proposal-name", { timeout: 10000 }).type(proposal.name);
+    cy.findByTestId("proposal-name").should("be.visible").type(proposal.name);
     cy.findByTestId("text-area").type(proposal.description);
     cy.findByRole("button", { name: /submit/i }).should("be.disabled");
   });
