@@ -116,7 +116,7 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
                       contractorname,
                       contractorrate: contractorrate.toFixed(2),
                       labortotal: labortotal.toFixed(2),
-                      expensetotal: expensetotal .toFixed(2),
+                      expensetotal: expensetotal.toFixed(2),
                       total: total.toFixed(2),
                       exchangerate: exchangerate.toFixed(2),
                       address: address,
