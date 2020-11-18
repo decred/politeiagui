@@ -109,6 +109,7 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
                     labortotal = labortotal / 100;
                     expensetotal = expensetotal / 100;
                     total = total / 100;
+                    exchangerate = exchangerate / 100;
                     return {
                       approvedtime: formatShortUnixTimestamp(approvedtime),
                       month: `${month}/${year}`,
@@ -117,7 +118,7 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
                       labortotal: labortotal.toFixed(2),
                       expensetotal: expensetotal .toFixed(2),
                       total: total.toFixed(2),
-                      exchangerate: formatCentsToUSD(exchangerate),
+                      exchangerate: exchangerate.toFixed(2),
                       address: address,
                       dcrtotal: convertAtomsToDcr(dcrtotal)
                     };
