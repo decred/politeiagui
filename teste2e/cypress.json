@@ -6,5 +6,6 @@
   "experimentalFetchPolyfill": true,
   "fixturesFolder": false,
   "supportFile": "cypress/support/index.js",
-  "screenshotOnRunFailure": false
+  "screenshotOnRunFailure": false,
+  "video": false
 }

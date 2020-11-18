@@ -18,8 +18,8 @@ describe("Proposals", () => {
 
   it("Non-paid user can not create proposals", () => {
     const user = {
-      email: "user4@example.com",
-      username: "user4",
+      email: "user3@example.com",
+      username: "user3",
       password: "password"
     };
     cy.login(user);

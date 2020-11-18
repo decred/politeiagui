@@ -24,10 +24,10 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import { sha3_256 } from "js-sha3";
-import { requestWithCsrfToken, setProposalStatus } from "../../utils";
-import * as pki from "../../../src/lib/pki";
+import { requestWithCsrfToken, setProposalStatus } from "../utils";
+import * as pki from "../pki";
 // TODO: consider moving general functions like makeProposal and signRegister to a more general lib file other than api
-import { makeProposal, signRegister } from "../../../src/lib/api";
+import { makeProposal, signRegister } from "../utils";
 
 Cypress.Commands.add("assertHome", () => {
   cy.url().should("eq", `${Cypress.config().baseUrl}/`);

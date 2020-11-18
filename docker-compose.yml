@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   politeia:
-    build: ./politeiae2e
+    build: ./politeiae2e/build.sh
     ports:
       - "8443:443"
   e2e:
@@ -21,7 +21,7 @@ services:
         "cypress",
         "run",
         "--browser",
-        "chrome",
+        "electron",
       ]
     volumes:
       - ./teste2e/cypress:/app/cypress

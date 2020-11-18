@@ -17,12 +17,12 @@ describe("User comments", () => {
       // logout
       cy.logout(user);
       // login non-paid user
-      const user4 = {
-        email: "user4@example.com",
-        username: "user4",
+      const user3 = {
+        email: "user3@example.com",
+        username: "user3",
         password: "password"
       };
-      cy.login(user4);
+      cy.login(user3);
       cy.visit(`proposals/${res.body.censorshiprecord.token.substring(0, 7)}`);
       cy.findByRole("button", { name: /add comment/i }).should("be.disabled");
       cy.findByText(
@@ -46,20 +46,20 @@ describe("User comments", () => {
       cy.approveProposal(res.body.censorshiprecord);
       // logout
       cy.logout(user);
-      // login non-paid user
-      const user2 = {
-        email: "user2@example.com",
-        username: "user2",
+      // login paid user
+      const user1 = {
+        email: "user1@example.com",
+        username: "user1",
         password: "password"
       };
-      cy.login(user2);
+      cy.login(user1);
       cy.identity();
       cy.visit(`proposals/${res.body.censorshiprecord.token.substring(0, 7)}`);
       const { text } = buildComment();
       cy.findByTestId(/text-area/i).type(text);
       cy.route("POST", "/api/v1/comments/new").as("newComment");
       cy.findByText(/add comment/i).click();
-      cy.wait("@newComment");
+      cy.wait("@newComment", { timeout: 10000 });
       cy.route("POST", "/api/v1/comments/like").as("likeComment");
       cy.findByTestId("like-btn").click();
       cy.wait("@likeComment").its("status").should("eq", 200);
@@ -70,7 +70,9 @@ describe("User comments", () => {
       cy.findAllByText(/add comment/i)
         .eq(1)
         .click();
-      cy.wait("@newComment").its("status").should("eq", 200);
+      cy.wait("@newComment", { timeout: 10000 })
+        .its("status")
+        .should("eq", 200);
     });
   });
 });
