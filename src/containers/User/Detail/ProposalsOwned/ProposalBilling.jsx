@@ -29,6 +29,7 @@ const BillingInfo = ({ lineItems }) => {
       lineitem: { description, domain, subdomain, labor, expenses },
       contractorrate
     }) => {
+      expenses = expenses/ 100;
       labor = labor / 60 * contractorrate/100;
       total = total + expenses + labor;
       return {
