@@ -21,22 +21,25 @@ const headers = [
 ];
 
 /**
-   * PRs
-   * URL: https://github.com/decred/politeiagui/pull/2024
-   * Pathname: /decred/politeiagui/pull/2024
-   * Split: ["", "decred", "politeiagui", "pull", "2024"]
-   * Commits
-   * URL: https://api.github.com/repos/decred/politeiagui/commits/1688505e91dc86e5f2251cdd72fdcb53fa5bfd99
-   * Pathname: repos/decred/politeiagui/commits/1688505e91dc86e5f2251cdd72fdcb53fa5bfd99
-   * Split: ["", "repos", "decred", "politeiagui", "commits", "1688505e91dc86e5f2251cdd72fdcb53fa5bfd99"]
-   */
-const getUrlEnd = (lastIndex, numberPos = 4) => (prUrl, i) => {
+ * PRs
+ * URL: https://github.com/decred/politeiagui/pull/2024
+ * Pathname: /decred/politeiagui/pull/2024
+ * Split: ["", "decred", "politeiagui", "pull", "2024"]
+ * Commits
+ * URL: https://api.github.com/repos/decred/politeiagui/commits/1688505e91dc86e5f2251cdd72fdcb53fa5bfd99
+ * Pathname: repos/decred/politeiagui/commits/1688505e91dc86e5f2251cdd72fdcb53fa5bfd99
+ * Split: ["", "repos", "decred", "politeiagui", "commits", "1688505e91dc86e5f2251cdd72fdcb53fa5bfd99"]
+ */
+const getUrlEnd = (lastIndex, numberPos = 4, shortUrl = false) => (
+  prUrl,
+  i
+) => {
   const url = new URL(prUrl);
   const prNumber = url.pathname.split("/")[numberPos];
   return (
     <Fragment key={i}>
       <Link to={{ pathname: prUrl }} target="_blank">
-        {prNumber}
+        {shortUrl ? prNumber.substring(0, 7) : prNumber}
       </Link>
       {i === lastIndex ? "" : ", "}
     </Fragment>
@@ -104,9 +107,13 @@ const CodeStats = ({ userid, start, end }) => {
         <>
           <Table headers={headers} data={codestats.map(printCodeStatsInfo)} />
           <H4 className="margin-bottom-s">Commits:</H4>
-          {codestats.map(cs => <Text className={styles.prs}>
-            {cs.commits.length === 0 ? "none" : cs.commits.map(getUrlEnd(cs.commits.length - 1, 5))}
-          </Text>)}
+          {codestats.map((cs) => (
+            <Text className={styles.prs}>
+              {cs.commits.length === 0
+                ? "none"
+                : cs.commits.map(getUrlEnd(cs.commits.length - 1, 5, true))}
+            </Text>
+          ))}
         </>
       ) : shouldPrintEmptyMessage ? (
         <Text>No code stats for the past 3 months</Text>
