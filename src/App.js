@@ -1,7 +1,13 @@
 import React from "react";
 import { Router } from "src/components/Router";
 import Config from "src/containers/Config";
-import { defaultLightTheme, ThemeProvider, defaultDarkTheme } from "pi-ui";
+import {
+  defaultLightTheme,
+  ThemeProvider,
+  defaultDarkTheme,
+  DEFAULT_LIGHT_THEME_NAME,
+  DEFAULT_DARK_THEME_NAME
+} from "pi-ui";
 import { ReduxProvider } from "src/redux";
 import Loader from "src/containers/Loader";
 import Routes from "src/pages";
@@ -21,8 +27,8 @@ const themeCustomVariables = {
 };
 
 const themes = {
-  light: { ...defaultLightTheme, ...themeCustomVariables },
-  dark: { ...defaultDarkTheme, ...themeCustomVariables }
+  [DEFAULT_LIGHT_THEME_NAME]: { ...defaultLightTheme, ...themeCustomVariables },
+  [DEFAULT_DARK_THEME_NAME]: { ...defaultDarkTheme, ...themeCustomVariables }
 };
 
 const fonts = [
@@ -56,7 +62,10 @@ const App = () => {
   }
 
   return (
-    <ThemeProvider themes={themes} defaultThemeName="light" fonts={fonts}>
+    <ThemeProvider
+      themes={themes}
+      defaultThemeName={DEFAULT_LIGHT_THEME_NAME}
+      fonts={fonts}>
       <ReduxProvider>
         <Config>
           <Loader>

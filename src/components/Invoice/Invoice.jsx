@@ -4,7 +4,8 @@ import {
   Text,
   useMediaQuery,
   CopyableText,
-  useTheme
+  useTheme,
+  DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
@@ -58,7 +59,7 @@ const Invoice = ({
   const totalDcrAmount = payout && convertAtomsToDcr(payout.dcrtotal);
   const showExtendedVersionPicker = extended && version > 1;
   const showVersionAsText = version > 1 && !extended && !mobile;
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
   // record attchments without the invoice file
   const invoiceAttachments = useMemo(

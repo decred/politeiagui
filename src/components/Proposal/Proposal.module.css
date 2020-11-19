@@ -59,6 +59,8 @@
 .voteCountSearch {
   cursor: pointer;
   margin-right: var(--spacing-small);
+  width: 14px;
+  height: 21px;
 }
 
 .lastRow {

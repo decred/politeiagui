@@ -56,6 +56,7 @@ const CommentForm = ({
               <Message kind="error">{errors.global.toString()}</Message>
             )}
             <MarkdownEditor
+              allowImgs={false}
               name="comment"
               className="margin-top-s"
               value={values.comment}

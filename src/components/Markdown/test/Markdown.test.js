@@ -1,6 +1,10 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import { defaultLightTheme, ThemeProvider, defaultDarkTheme } from "pi-ui";
+import {
+  defaultLightTheme,
+  ThemeProvider,
+  DEFAULT_LIGHT_THEME_NAME
+} from "pi-ui";
 import { shallow } from "enzyme";
 import { customRenderers } from "../helpers";
 
@@ -10,8 +14,8 @@ const maliciousBodyText =
 it("filter potencial 'XSS' attackers", () => {
   const wrapper = shallow(
     <ThemeProvider
-      themes={{ light: defaultLightTheme, dark: defaultDarkTheme }}
-      defaultThemeName="light">
+      themes={{ [DEFAULT_LIGHT_THEME_NAME]: defaultLightTheme }}
+      defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
       <ReactMarkdown
         source={maliciousBodyText}
         renderers={customRenderers(true)}

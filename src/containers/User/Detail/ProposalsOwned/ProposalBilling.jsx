@@ -3,7 +3,7 @@ import { Card, Table, Text, Spinner, H3 } from "pi-ui";
 import Link from "src/components/Link";
 import { useProposalsOwnedBilling } from "./hooks";
 import styles from "./ProposalsOwned.module.css";
-import { usdFormatter, formatCentsToUSD } from "src/utils";
+import { usdFormatter } from "src/utils";
 
 const headers = [
   "Username",
@@ -11,7 +11,9 @@ const headers = [
   "Domain",
   "Subdomain",
   "Description",
-  "Labor"
+  "Labor",
+  "Expenses",
+  "Sub Total"
 ];
 
 const BillingInfo = ({ lineItems }) => {
@@ -24,23 +26,27 @@ const BillingInfo = ({ lineItems }) => {
       month,
       year,
       username,
-      lineitem: { description, domain, subdomain, labor }
+      lineitem: { description, domain, subdomain, labor, expenses },
+      contractorrate
     }) => {
-      total = total + labor;
+      labor = labor / 60 * contractorrate/100;
+      total = total + expenses + labor;
       return {
         Username: <Link to={`/user/${userid}`}>{username}</Link>,
         Date: `${month}/${year}`,
         Domain: domain,
         Subdomain: subdomain,
         Description: description,
-        Labor: usdFormatter.format(labor / 100)
+        Labor: usdFormatter.format(labor),
+        Expenses: usdFormatter.format(expenses),
+        Total: usdFormatter.format(labor+expenses)
       };
     }
   );
   return (
     <div className="margin-top-m">
       <Table headers={headers} data={data} />
-      <H3 className={styles.totalText}>Total: {formatCentsToUSD(total)}</H3>
+      <H3 className={styles.totalText}>Total: {usdFormatter.format(total)}</H3>
     </div>
   );
 };

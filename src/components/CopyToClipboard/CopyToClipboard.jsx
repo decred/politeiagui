@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Tooltip, useTheme, classNames } from "pi-ui";
+import { Tooltip, useTheme, classNames, DEFAULT_DARK_THEME_NAME } from "pi-ui";
 import styles from "./CopyToClipboard.module.css";
 
 const copyToClipboard = (str) => {
@@ -13,7 +13,7 @@ const copyToClipboard = (str) => {
 
 const CopyToClipboard = ({ children, value, tooltipText, className }) => {
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
   const [feedbackActive, setFeedbackActive] = useState(false);
   const onCopyToClipboard = () => {

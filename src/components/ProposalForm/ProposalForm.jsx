@@ -9,20 +9,21 @@ import {
   useTheme,
   Icon,
   classNames,
-  Tooltip
+  Tooltip,
+  DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
 import { Row } from "src/components/layout";
 import DatePickerField from "../DatePickerField";
 import SelectField from "src/components/Select/SelectField";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/components/MarkdownEditor";
+import ModalMDGuide from "src/components/ModalMDGuide";
 import ThumbnailGrid from "src/components/Files";
 import AttachFileInput from "src/components/AttachFileInput";
-import ModalMDGuide from "src/components/ModalMDGuide";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import usePolicy from "src/hooks/api/usePolicy";
-import { isAnchoring } from "src/helpers";
+import { isAnchoring, replaceBlobsByDigestsAndGetFiles, replaceImgDigestByBlob } from "src/helpers";
 import {
   PROPOSAL_TYPE_REGULAR,
   PROPOSAL_TYPE_RFP,
@@ -37,6 +38,9 @@ import useModalContext from "src/hooks/utils/useModalContext";
 import FormatHelpButton from "./FormatHelpButton";
 import SubmitButton from "./SubmitButton";
 import ProposalGuidelinesButton from "./ProposalGuidelinesButton";
+
+/** The main goal of using a Map data structure instead of internal state here is to prevent unnecessary rerenders. We just want a way to map blobs to files objects. */
+const mapBlobToFile = new Map();
 
 const ProposalForm = React.memo(function ProposalForm({
   values,
@@ -58,7 +62,7 @@ const ProposalForm = React.memo(function ProposalForm({
   const {
     policy: { minlinkbyperiod, maxlinkbyperiod }
   } = usePolicy();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const isRfp = values.type === PROPOSAL_TYPE_RFP;
   const isRfpSubmission = values.type === PROPOSAL_TYPE_RFP_SUBMISSION;
 
@@ -191,14 +195,17 @@ const ProposalForm = React.memo(function ProposalForm({
         error={touched.name && errors.name}
       />
       <MarkdownEditor
+        allowImgs={true}
         name="description"
         className="margin-top-s"
         value={values.description}
         textAreaProps={textAreaProps}
         onChange={handleDescriptionChange}
+        onFileChange={handleFilesChange}
         placeholder={"Write your proposal"}
         error={touched.description && errors.description}
         filesInput={filesInput}
+        mapBlobToFile={mapBlobToFile}
       />
       <ThumbnailGrid
         value={values.files}
@@ -212,7 +219,7 @@ const ProposalForm = React.memo(function ProposalForm({
             openMDGuideModal={openMDGuideModal}
           />
           <ProposalGuidelinesButton isDarkTheme={isDarkTheme} />
-          <DraftSaver submitSuccess={submitSuccess} />
+          <DraftSaver mapBlobToFile={mapBlobToFile} submitSuccess={submitSuccess} />
           <SubmitButton
             isSubmitting={isSubmitting}
             disableSubmit={disableSubmit}
@@ -222,7 +229,7 @@ const ProposalForm = React.memo(function ProposalForm({
       ) : (
         <>
           <Row topMarginSize="s" justify="right">
-            <DraftSaver submitSuccess={submitSuccess} />
+            <DraftSaver mapBlobToFile={mapBlobToFile} submitSuccess={submitSuccess} />
             <SubmitButton
               isSubmitting={isSubmitting}
               disableSubmit={disableSubmit}
@@ -249,6 +256,7 @@ const ProposalFormWrapper = ({
   history,
   isPublic
 }) => {
+  const { text, markdownFiles } = replaceImgDigestByBlob(initialValues, mapBlobToFile);
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const openMdModal = useCallback(() => {
     handleOpenModal(ModalMDGuide, {
@@ -285,9 +293,14 @@ const ProposalFormWrapper = ({
             );
           }
         }
+        const { description, files } = replaceBlobsByDigestsAndGetFiles(
+          others.description,
+          mapBlobToFile
+        );
         const proposalToken = await onSubmit({
           ...others,
-          type,
+          description,
+          files: [...others.files, ...files],
           rfpLink
         });
         setSubmitting(false);
@@ -302,19 +315,26 @@ const ProposalFormWrapper = ({
     },
     [history, onSubmit, onFetchProposalsBatchWithoutState, isPublic]
   );
+  const newInitialValues = initialValues
+    ? {
+        ...initialValues,
+        description: text,
+        files:
+          initialValues &&
+          initialValues.files.filter((file) => !markdownFiles.includes(file))
+      }
+    : {
+        type: PROPOSAL_TYPE_REGULAR,
+        rfpDeadline: null,
+        rfpLink: "",
+        name: "",
+        description: "",
+        files: []
+      };
   return (
     <>
       <Formik
-        initialValues={
-          initialValues || {
-            type: PROPOSAL_TYPE_REGULAR,
-            rfpDeadline: null,
-            rfpLink: "",
-            name: "",
-            description: "",
-            files: []
-          }
-        }
+        initialValues={newInitialValues}
         loading={!proposalFormValidation}
         validate={proposalFormValidation}
         onSubmit={handleSubmit}>
@@ -325,7 +345,7 @@ const ProposalFormWrapper = ({
               submitSuccess,
               disableSubmit,
               openMDGuideModal: openMdModal,
-              initialValues,
+              newInitialValues,
               isPublic
             }}
           />

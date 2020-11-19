@@ -61,6 +61,7 @@
   width: 125px;
   height: 90px;
   border-radius: 2px;
+  border: 1px solid var(--color-gray-lighter);
 }
 
 .imageThumbnail:hover {

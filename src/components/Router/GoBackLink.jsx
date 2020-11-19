@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Link, classNames, useTheme } from "pi-ui";
+import { Link, classNames, useTheme, DEFAULT_DARK_THEME_NAME } from "pi-ui";
 import { useRouter } from "src/components/Router";
 import styles from "./GoBackLink.module.css";
 
@@ -7,7 +7,7 @@ const backArrow = <>&#8592;</>;
 
 const GoBackLink = () => {
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const { pastLocations, history } = useRouter();
   const previousLocation = pastLocations[1];
 

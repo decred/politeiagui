@@ -1,12 +1,12 @@
 import React from "react";
-import { commands as mdeCommands } from "react-mde-newest";
-import boldSVG from "./assets/bold.svg";
-import italicSVG from "./assets/italic.svg";
-import linkSVG from "./assets/link.svg";
-import quoteSVG from "./assets/quote.svg";
-import codeSVG from "./assets/code.svg";
-import bulletListSVG from "./assets/bulletList.svg";
-import numberedListSVG from "./assets/numberedList.svg";
+import { ReactComponent as BoldSVG } from "./assets/bold.svg";
+import { ReactComponent as ItalicSVG } from "./assets/italic.svg";
+import { ReactComponent as QuoteSVG } from "./assets/quote.svg";
+import { ReactComponent as LinkSVG } from "./assets/link.svg";
+import { ReactComponent as CodeSVG } from "./assets/code.svg";
+import { ReactComponent as BulletListSVG } from "./assets/bulletList.svg";
+import { ReactComponent as ImageSVG } from "./assets/image.svg";
+import { ReactComponent as NumberedListSVG } from "./assets/numberedList.svg";
 
 const commandTypes = {
   numberedList: "ordered-list",
@@ -15,82 +15,84 @@ const commandTypes = {
   italic: "italic",
   link: "link",
   quote: "quote",
-  code: "code"
+  code: "code",
+  image: "image"
 };
 
-export const commands = [
-  {
-    command: commandTypes.bold,
-    tooltipText: "Add bold text",
-    iconSrc: boldSVG
-  },
-  {
-    command: commandTypes.italic,
-    tooltipText: "Add italic text",
-    iconSrc: italicSVG
-  },
-  {
-    command: commandTypes.link,
-    tooltipText: "Insert a link",
-    iconSrc: linkSVG
-  },
-  {
-    command: commandTypes.quote,
-    tooltipText: "Insert a quote",
-    iconSrc: quoteSVG
-  },
-  {
-    command: commandTypes.code,
-    tooltipText: "Insert code",
-    iconSrc: codeSVG
-  },
-  {
-    command: commandTypes.bulletList,
-    tooltipText: "Add a bullet list",
-    iconSrc: bulletListSVG
-  },
-  {
-    command: commandTypes.numberedList,
-    tooltipText: "Add a numbered list",
-    iconSrc: numberedListSVG
-  }
-];
-
-const attachCommand = {
-  name: "attach",
-  keyCommand: "attach",
-  execute: () => null
-};
-
-/**
- * Returns the commands list to be used in the react-mde toolbar
- * @returns {Array} array of commands list
- */
-export const getCommandsList = (withFileInput = false) => {
-  const list = [
-    {
-      commands: [
-        mdeCommands.boldCommand,
-        mdeCommands.italicCommand,
-        mdeCommands.linkCommand,
-        mdeCommands.quoteCommand,
-        mdeCommands.codeCommand,
-        mdeCommands.unorderedListCommand,
-        mdeCommands.orderedListCommand
+export const toolbarCommands = (allowImgs) =>
+  allowImgs
+    ? [
+        [],
+        [],
+        [
+          "bold",
+          "italic",
+          "link",
+          "quote",
+          "code",
+          "ordered-list",
+          "unordered-list",
+          "image",
+          "attach-files"
+        ]
       ]
-    }
-  ];
+    : [
+        [],
+        [],
+        [
+          "bold",
+          "italic",
+          "link",
+          "quote",
+          "code",
+          "ordered-list",
+          "unordered-list",
+          "attach-files"
+        ]
+      ];
 
-  if (withFileInput) {
-    return list.concat([
-      {
-        commands: [attachCommand]
-      }
-    ]);
-  }
-
-  return list;
-};
+      export const commands = [
+        {
+          command: commandTypes.bold,
+          tooltipText: "Add bold text",
+          Icon: BoldSVG
+        },
+        {
+          command: commandTypes.italic,
+          tooltipText: "Add italic text",
+          Icon: ItalicSVG
+        },
+        {
+          command: commandTypes.link,
+          tooltipText: "Insert a link",
+          Icon: LinkSVG
+        },
+        {
+          command: commandTypes.quote,
+          tooltipText: "Insert a quote",
+          Icon: QuoteSVG
+        },
+        {
+          command: commandTypes.code,
+          tooltipText: "Insert code",
+          Icon: CodeSVG
+        },
+        {
+          command: commandTypes.bulletList,
+          tooltipText: "Add a bullet list",
+          Icon: BulletListSVG
+        },
+        {
+          command: commandTypes.image,
+          tooltipText: "Add an image",
+          Icon: ImageSVG
+        },
+        {
+          command: commandTypes.numberedList,
+          tooltipText: "Add a numbered list",
+          Icon: NumberedListSVG
+        }
+      ];
 
 /**
  * Curried function
@@ -102,10 +104,8 @@ export const getCommandsList = (withFileInput = false) => {
  * @param {string} commandName
  * @returns {Object} React node
  */
-export const getCommandIcon = (filesInput) => (commandName) => {
-  if (commandName === "attach") {
-    return <>{filesInput}</>;
-  }
+export const getCommandIcon = (commandName) => {
   const command = commands.find((c) => c.command === commandName);
-  return <img alt={commandName} src={command.iconSrc} />;
+  const { Icon } = command;
+  return <Icon />;
 };
