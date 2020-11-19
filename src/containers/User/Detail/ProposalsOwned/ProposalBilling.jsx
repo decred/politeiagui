@@ -30,7 +30,7 @@ const BillingInfo = ({ lineItems }) => {
       contractorrate
     }) => {
       expenses = expenses / 100;
-      labor = labor / 60 * contractorrate / 100;
+      labor = ((labor / 60) * contractorrate) / 100;
       total = total + expenses + labor;
       return {
         Username: <Link to={`/user/${userid}`}>{username}</Link>,

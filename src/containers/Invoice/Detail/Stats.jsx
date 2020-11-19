@@ -17,7 +17,7 @@ const printInvoiceInfo = ({
   Date: `${month}/${year}`,
   Invoice: (
     <Link to={`/invoices/${token}`} className={styles.invoiceLinkWrapper}>
-      <Text color="primary">{token}</Text>
+      <Text color="primary">{token.substring(0, 7)}</Text>
     </Link>
   ),
   "Total (USD)": formatCentsToUSD(total)
