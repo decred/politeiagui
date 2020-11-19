@@ -10,6 +10,7 @@ export * from "./models/invoices";
 export * from "./models/invoicePayouts";
 export * from "./models/dccs";
 export * from "./models/paywall";
+export * from "./models/codestats";
 export * from "./models/proposalBilling";
 export * from "./models/proposalOwnerBilling";
 

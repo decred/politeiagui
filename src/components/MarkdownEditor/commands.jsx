@@ -51,48 +51,48 @@ export const toolbarCommands = (allowImgs) =>
         ]
       ];
 
-      export const commands = [
-        {
-          command: commandTypes.bold,
-          tooltipText: "Add bold text",
-          Icon: BoldSVG
-        },
-        {
-          command: commandTypes.italic,
-          tooltipText: "Add italic text",
-          Icon: ItalicSVG
-        },
-        {
-          command: commandTypes.link,
-          tooltipText: "Insert a link",
-          Icon: LinkSVG
-        },
-        {
-          command: commandTypes.quote,
-          tooltipText: "Insert a quote",
-          Icon: QuoteSVG
-        },
-        {
-          command: commandTypes.code,
-          tooltipText: "Insert code",
-          Icon: CodeSVG
-        },
-        {
-          command: commandTypes.bulletList,
-          tooltipText: "Add a bullet list",
-          Icon: BulletListSVG
-        },
-        {
-          command: commandTypes.image,
-          tooltipText: "Add an image",
-          Icon: ImageSVG
-        },
-        {
-          command: commandTypes.numberedList,
-          tooltipText: "Add a numbered list",
-          Icon: NumberedListSVG
-        }
-      ];
+export const commands = [
+  {
+    command: commandTypes.bold,
+    tooltipText: "Add bold text",
+    Icon: BoldSVG
+  },
+  {
+    command: commandTypes.italic,
+    tooltipText: "Add italic text",
+    Icon: ItalicSVG
+  },
+  {
+    command: commandTypes.link,
+    tooltipText: "Insert a link",
+    Icon: LinkSVG
+  },
+  {
+    command: commandTypes.quote,
+    tooltipText: "Insert a quote",
+    Icon: QuoteSVG
+  },
+  {
+    command: commandTypes.code,
+    tooltipText: "Insert code",
+    Icon: CodeSVG
+  },
+  {
+    command: commandTypes.bulletList,
+    tooltipText: "Add a bullet list",
+    Icon: BulletListSVG
+  },
+  {
+    command: commandTypes.image,
+    tooltipText: "Add an image",
+    Icon: ImageSVG
+  },
+  {
+    command: commandTypes.numberedList,
+    tooltipText: "Add a numbered list",
+    Icon: NumberedListSVG
+  }
+];
 
 /**
  * Curried function

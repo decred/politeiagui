@@ -23,7 +23,11 @@ import AttachFileInput from "src/components/AttachFileInput";
 import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import usePolicy from "src/hooks/api/usePolicy";
-import { isAnchoring, replaceBlobsByDigestsAndGetFiles, replaceImgDigestByBlob } from "src/helpers";
+import {
+  isAnchoring,
+  replaceBlobsByDigestsAndGetFiles,
+  replaceImgDigestByBlob
+} from "src/helpers";
 import {
   PROPOSAL_TYPE_REGULAR,
   PROPOSAL_TYPE_RFP,
@@ -219,7 +223,10 @@ const ProposalForm = React.memo(function ProposalForm({
             openMDGuideModal={openMDGuideModal}
           />
           <ProposalGuidelinesButton isDarkTheme={isDarkTheme} />
-          <DraftSaver mapBlobToFile={mapBlobToFile} submitSuccess={submitSuccess} />
+          <DraftSaver
+            mapBlobToFile={mapBlobToFile}
+            submitSuccess={submitSuccess}
+          />
           <SubmitButton
             isSubmitting={isSubmitting}
             disableSubmit={disableSubmit}
@@ -229,7 +236,10 @@ const ProposalForm = React.memo(function ProposalForm({
       ) : (
         <>
           <Row topMarginSize="s" justify="right">
-            <DraftSaver mapBlobToFile={mapBlobToFile} submitSuccess={submitSuccess} />
+            <DraftSaver
+              mapBlobToFile={mapBlobToFile}
+              submitSuccess={submitSuccess}
+            />
             <SubmitButton
               isSubmitting={isSubmitting}
               disableSubmit={disableSubmit}
@@ -256,7 +266,10 @@ const ProposalFormWrapper = ({
   history,
   isPublic
 }) => {
-  const { text, markdownFiles } = replaceImgDigestByBlob(initialValues, mapBlobToFile);
+  const { text, markdownFiles } = replaceImgDigestByBlob(
+    initialValues,
+    mapBlobToFile
+  );
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const openMdModal = useCallback(() => {
     handleOpenModal(ModalMDGuide, {

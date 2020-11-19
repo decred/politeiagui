@@ -29,8 +29,8 @@ const BillingInfo = ({ lineItems }) => {
       lineitem: { description, domain, subdomain, labor, expenses },
       contractorrate
     }) => {
-      expenses = expenses/ 100;
-      labor = labor / 60 * contractorrate/100;
+      expenses = expenses / 100;
+      labor = ((labor / 60) * contractorrate) / 100;
       total = total + expenses + labor;
       return {
         Username: <Link to={`/user/${userid}`}>{username}</Link>,
@@ -40,7 +40,7 @@ const BillingInfo = ({ lineItems }) => {
         Description: description,
         Labor: usdFormatter.format(labor),
         Expenses: usdFormatter.format(expenses),
-        Total: usdFormatter.format(labor+expenses)
+        Total: usdFormatter.format(labor + expenses)
       };
     }
   );

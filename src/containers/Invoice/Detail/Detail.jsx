@@ -8,6 +8,7 @@ import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import Comments from "src/containers/Comments";
 import { isUnreviewedInvoice } from "../helpers";
 import { GoBackLink } from "src/components/Router";
+import Stats from "./Stats";
 import get from "lodash/fp/get";
 
 const InvoiceDetail = ({ Main, match }) => {
@@ -25,6 +26,8 @@ const InvoiceDetail = ({ Main, match }) => {
     currentUser && invoice && invoice.userid === currentUser.userid;
   const isAdmin = currentUser && currentUser.isadmin;
   const isPublicMode = !isAdmin && !isAuthor;
+
+  const shouldShowStats = isAdmin && invoice;
 
   return (
     <>
@@ -45,6 +48,7 @@ const InvoiceDetail = ({ Main, match }) => {
           ) : (
             <InvoiceLoader extended />
           )}
+          {shouldShowStats && <Stats invoice={invoice} />}
           {!isPublicMode && (
             <Comments
               recordAuthorID={invoice && invoice.userid}
