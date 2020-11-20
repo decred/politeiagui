@@ -146,6 +146,7 @@ const ManageDccForm = ({ onUpdate, user }) => {
                 />
                 <InfoSection
                   label="Supervisors"
+                  isLoading={loadingSupervisors}
                   info={
                     <Select
                       placeholder="Select Supervisor"
@@ -161,6 +162,7 @@ const ManageDccForm = ({ onUpdate, user }) => {
                 <InfoSection
                   label="Owned Proposals"
                   error={approvedProposalsError}
+                  isLoading={loadingOwnedProposals}
                   info={
                     <Select
                       placeholder="Select Proposals"

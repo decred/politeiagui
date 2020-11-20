@@ -1,12 +1,10 @@
 import React from "react";
 import {
-  Route,
   AdminAuthenticatedRoute,
   AuthenticatedRoute,
   NotAuthenticatedRoute
 } from "src/containers/Routes";
 
-import PageUserDetail from "./User/Detail";
 import PageUserLogin from "./User/Login";
 import PageUserPrivacyPolicy from "./User/PrivacyPolicy";
 import PageUserRequestResendVerificationEmail from "./User/RequestResendVerificationEmail";
@@ -77,14 +75,9 @@ const commonRoutes = [
     exact
     key="search-user-route"
     component={PageUserSearch}
-  />,
-  <Route
-    path="/user/:userid"
-    title="User Detail"
-    exact
-    key="user-detail-route"
-    component={PageUserDetail}
   />
+  // user detail page was removed because cms requires
+  // authentication to fetch users info
 ];
 
 export default commonRoutes;
