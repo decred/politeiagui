@@ -161,10 +161,15 @@ const Invoice = ({
                 </Row>
                 {!isPublicMode && (
                   <Row justify="space-between" className={styles.topDetails}>
-                    <Field label="Total hours:" value={`${
-                      // verify if has decimal places
-                      hasDecimalPlases(totalHours) ? totalHours.toFixed(2) : totalHours
-                      }h`} />
+                    <Field
+                      label="Total hours:"
+                      value={`${
+                        // verify if has decimal places
+                        hasDecimalPlases(totalHours)
+                          ? totalHours.toFixed(2)
+                          : totalHours
+                      }h`}
+                    />
                     <Field
                       label="Contractor Rate:"
                       value={usdFormatter.format(invContractorRate / 100)}
