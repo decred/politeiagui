@@ -92,6 +92,8 @@ export const getInvoiceTotalHours = (invoice) => {
   }, 0);
 };
 
+export const hasDecimalPlases = (num) => num % 1 != 0;
+
 export const getInvoiceTotalExpenses = (invoice) => {
   if (!invoice) return 0;
   return invoice.input.lineitems.reduce(
