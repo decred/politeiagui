@@ -185,14 +185,14 @@ export const convertLineItemsToGrid = (
         },
         {
           readOnly: true,
-          value: lineSubTotal
+          value: parseFloat(lineSubTotal).toFixed(2)
         }
       ];
       return {
         grid: acc.grid.concat([tableLine.filter(Boolean)]),
         expenseTotal: acc.expenseTotal + newLine.expenses,
         laborTotal: acc.laborTotal + newLine.labor,
-        total: acc.total + lineSubTotal
+        total: parseFloat(acc.total + lineSubTotal).toFixed(2)
       };
     },
     { grid: [], expenseTotal: 0, laborTotal: 0, total: 0 }
