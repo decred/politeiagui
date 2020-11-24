@@ -10,6 +10,8 @@ import { isUnreviewedInvoice } from "../helpers";
 import { GoBackLink } from "src/components/Router";
 import Stats from "./Stats";
 import get from "lodash/fp/get";
+import { useDocumentTitle } from "src/hooks/utils/useDocumentTitle";
+import { presentationalInvoiceName } from "../helpers";
 
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
@@ -28,6 +30,9 @@ const InvoiceDetail = ({ Main, match }) => {
   const isPublicMode = !isAdmin && !isAuthor;
 
   const shouldShowStats = isAdmin && invoice;
+
+  // set tab title
+  useDocumentTitle(presentationalInvoiceName(invoice));
 
   return (
     <>
