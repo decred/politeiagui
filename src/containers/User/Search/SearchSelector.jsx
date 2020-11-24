@@ -22,6 +22,11 @@ const SearchSelector = ({ onChange, value, className, styles: extStyles }) => {
       options={options}
       styles={extStyles}
       isSearchable
+      noOptionsMessage={() =>
+        inputValue === ""
+          ? "Insert a username or email"
+          : "No options available"
+      }
       escapeClearsValue
     />
   );
