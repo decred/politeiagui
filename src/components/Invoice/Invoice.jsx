@@ -16,7 +16,7 @@ import { InvoiceActions } from "src/containers/Invoice/Actions";
 import {
   presentationalInvoiceName,
   getInvoiceTotalHours,
-  hasDecimalPlases
+  hasDecimalPlaces
 } from "src/containers/Invoice/helpers";
 import Field from "./Field";
 import InvoiceDatasheet from "../InvoiceDatasheet";
@@ -165,7 +165,7 @@ const Invoice = ({
                       label="Total hours:"
                       value={`${
                         // verify if has decimal places
-                        hasDecimalPlases(totalHours)
+                        hasDecimalPlaces(totalHours)
                           ? totalHours.toFixed(2)
                           : totalHours
                       }h`}
