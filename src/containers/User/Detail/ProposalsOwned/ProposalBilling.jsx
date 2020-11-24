@@ -60,18 +60,17 @@ const BillingInfo = ({ lineItems }) => {
           Labor,
           Expenses,
           Total
-        })  => {
-          return {
-            Username: Username.props.children,
-            Date,
-            Domain,
-            Subdomain,
-            Description,
-            Labor,
-            Expenses,
-            Total
-          };
-        })}
+        })  => ({
+          Username: Username.props.children,
+          Date,
+          Domain,
+          Subdomain,
+          Description,
+          Labor,
+          Expenses,
+          Total
+          })
+        )}
         fields={[
           "Username",
           "Date",

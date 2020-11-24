@@ -182,8 +182,7 @@ const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
                   totaldcr,
                   totalusd,
                   invoice
-                }) => {
-                  return {
+                }) => ({
                     month: `${month}/${year}`,
                     username: user.props.children,
                     contractorrate,
@@ -193,8 +192,7 @@ const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
                     totaldcr,
                     totalusd,
                     invoice: invoice.props.children
-                  };
-                }
+                })
               )}
               fields={[
                 "month",
