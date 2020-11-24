@@ -13,7 +13,7 @@ const SearchSelector = ({ onChange, value, className, styles: extStyles }) => {
   }));
   return (
     <Select
-      placeholder="Search User"
+      placeholder="Search by User"
       className={classNames(styles.select, className)}
       value={value}
       onInputChange={(newV) => setInputValue(newV)}
@@ -21,6 +21,8 @@ const SearchSelector = ({ onChange, value, className, styles: extStyles }) => {
       isMulti
       options={options}
       styles={extStyles}
+      isSearchable
+      escapeClearsValue
     />
   );
 };
