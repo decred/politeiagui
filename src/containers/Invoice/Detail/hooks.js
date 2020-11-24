@@ -61,7 +61,6 @@ export function useInvoice(invoiceToken) {
           onFetchProposalsBatch(unfetchedProposalsTokens, false)
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
-          return send(FETCH);
         }
         return send(RESOLVE, { invoice, proposals: values(proposalsByToken) });
       },
