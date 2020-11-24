@@ -32,6 +32,10 @@
   border-right: 0.1rem solid var(--separator-color);
 }
 
+.activeDropdownItem {
+  color: var(--dropdown-item-active-color) !important;
+}
+
 .activeNavLink {
   border-bottom: 0.4rem solid var(--active-nav-border-color);
 }

@@ -15,6 +15,7 @@
   "navMenuPaths": [
     { "label": "Proposals", "path": "/", "admin": false },
     { "label": "Admin", "path": "/proposals/unvetted", "admin": true },
-    { "label": "Search for users", "path": "/user/search", "admin": true }
+    { "label": "Search for users", "path": "/user/search", "admin": true },
+    { "label": "Account", "path": "/user", "admin": false }
   ]
 }

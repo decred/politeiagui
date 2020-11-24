@@ -8,7 +8,7 @@ import {
   DEFAULT_DARK_THEME_NAME,
   DEFAULT_LIGHT_THEME_NAME
 } from "pi-ui";
-import React, { useEffect, useMemo, useCallback } from "react";
+import React, { useEffect, useMemo } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import useNavigation from "src/hooks/api/useNavigation";
@@ -35,26 +35,29 @@ const HeaderNav = ({ history }) => {
   const menuItems = useMemo(
     () =>
       navMenuPaths.map(({ label, path, admin }, idx) => {
+        if (path === "/user") {
+          path += "/" + userid;
+        }
+        const isActive = window.location.pathname === path;
         const onMenuItemClick = (path) => () => history.push(path);
         return (
           ((admin && userIsAdmin) || !admin) && (
-            <DropdownItem key={`link-${idx}`} onClick={onMenuItemClick(path)}>
+            <DropdownItem
+              className={isActive ? styles.activeDropdownItem : null}
+              key={`link-${idx}`}
+              onClick={onMenuItemClick(path)}>
               {label}
             </DropdownItem>
           )
         );
       }),
-    [history, navMenuPaths, userIsAdmin]
+    [history, navMenuPaths, userIsAdmin, userid]
   );
 
   const [darkThemeOnLocalStorage, setDarkThemeOnLocalStorage] = useLocalStorage(
     "darkTheme",
     false
   );
-
-  const goToUserAccount = useCallback(() => {
-    history.push(`/user/${userid}`);
-  }, [history, userid]);
 
   useEffect(() => {
     if (darkThemeOnLocalStorage && themeName === DEFAULT_LIGHT_THEME_NAME) {
@@ -67,8 +70,8 @@ const HeaderNav = ({ history }) => {
       setDarkThemeOnLocalStorage(true);
       setThemeName(DEFAULT_DARK_THEME_NAME);
     } else {
-      setThemeName(DEFAULT_LIGHT_THEME_NAME);
       setDarkThemeOnLocalStorage(false);
+      setThemeName(DEFAULT_LIGHT_THEME_NAME);
     }
   };
 
@@ -90,7 +93,6 @@ const HeaderNav = ({ history }) => {
         closeOnItemClick={false}
         title={username}>
         {menuItems}
-        <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
         <DropdownItem onClick={onThemeToggleHandler}>
           <div className={styles.themeToggleWrapper}>
             <Toggle
