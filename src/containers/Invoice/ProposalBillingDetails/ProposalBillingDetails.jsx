@@ -132,10 +132,11 @@ const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
 
   const anyError = subContractorsError || error;
 
-  const proposalDetailsData = isDetailsLoaded && getDetailsData(
-    proposalBillingDetails.invoices,
-    subContractors
-  ).sort((a, b) => b.year - a.year || b.month - a.month);
+  const proposalDetailsData =
+    isDetailsLoaded &&
+    getDetailsData(proposalBillingDetails.invoices, subContractors).sort(
+      (a, b) => b.year - a.year || b.month - a.month
+    );
 
   return (
     <>
