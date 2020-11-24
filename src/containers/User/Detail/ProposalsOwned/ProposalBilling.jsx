@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Card, Table, Text, Spinner, H3 } from "pi-ui";
+import { Card, Table, Text, Spinner, H3, Link as PiLink } from "pi-ui";
 import Link from "src/components/Link";
+import ExportToCsv from "src/components/ExportToCsv";
 import { useProposalsOwnedBilling } from "./hooks";
 import styles from "./ProposalsOwned.module.css";
 import { usdFormatter } from "src/utils";
@@ -20,7 +21,8 @@ const BillingInfo = ({ lineItems }) => {
   let total = 0;
   if (lineItems.length === 0)
     return <H3 className="margin-top-m">No billings for this proposal yet</H3>;
-  const data = lineItems.map(
+  const sortedLineItems = lineItems.sort((a, b) => b.year - a.year || b.month - a.month);
+  const data = sortedLineItems.map(
     ({
       userid,
       month,
@@ -46,7 +48,43 @@ const BillingInfo = ({ lineItems }) => {
   );
   return (
     <div className="margin-top-m">
-      <Table headers={headers} data={data} />
+      <Table headers={headers} data={data} linesPerPage={50}/>
+      <ExportToCsv
+        data={data.map(
+          ({
+          Username,
+          Date,
+          Domain,
+          Subdomain,
+          Description,
+          Labor,
+          Expenses,
+          Total
+        })  => {
+          return {
+            Username: Username.props.children,
+            Date,
+            Domain,
+            Subdomain,
+            Description,
+            Labor,
+            Expenses,
+            Total
+          };
+        })}
+        fields={[
+          "Username",
+          "Date",
+          "Domain",
+          "Subdomain",
+          "Description",
+          "Labor",
+          "Expenses",
+          "Total"
+        ]}
+        filename="proposal_details.csv">
+        <PiLink className="cursor-pointer">Export To Csv</PiLink>
+      </ExportToCsv>
       <H3 className={styles.totalText}>Total: {usdFormatter.format(total)}</H3>
     </div>
   );
