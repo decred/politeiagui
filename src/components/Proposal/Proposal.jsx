@@ -33,6 +33,7 @@ import {
   useProposalURLs
 } from "src/containers/Proposal/hooks";
 import { useLoaderContext } from "src/containers/Loader";
+import { useLoader } from "src/containers/Loader";
 import styles from "./Proposal.module.css";
 import LoggedInContent from "src/components/LoggedInContent";
 import ProposalsList from "../ProposalsList/ProposalsList";
@@ -80,7 +81,6 @@ const ProposalWrapper = (props) => {
     voteActive,
     voteEndTimestamp
   } = useProposalVote(getProposalToken(props.proposal));
-
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (
@@ -145,6 +145,7 @@ const Proposal = React.memo(function Proposal({
   const isAuthor = currentUser && currentUser.userid === userid;
   const isVotingAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
   const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
+  const { apiInfo } = useLoader();
   const mobile = useMediaQuery("(max-width: 560px)");
   const showEditedDate =
     version > 1 && timestamp !== publishedat && !abandonedat && !mobile;
@@ -376,7 +377,10 @@ const Proposal = React.memo(function Proposal({
                 <Row className={styles.downloadLinksWrapper} noMargin>
                   <DownloadRecord
                     fileName={proposalToken}
-                    content={proposal}
+                    content={{
+                      ...proposal,
+                      serverpublickey: apiInfo.pubkey
+                    }}
                     className="margin-right-l"
                     label="Download Proposal Bundle"
                   />
