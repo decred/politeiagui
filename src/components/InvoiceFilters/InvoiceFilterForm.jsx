@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Formik } from "formik";
+import { Formik, Form } from "formik";
 import CheckboxGroupField from "src/components/CheckboxGroupField";
 import MonthPickerField from "src/components/MonthPickerField";
 import {
@@ -27,7 +27,8 @@ const InvoiceFilterForm = ({
   onChange,
   children,
   disableUserFilter,
-  isAdminPage
+  isAdminPage,
+  onSubmit = () => {}
 }) => {
   const filtersKey = isAdminPage ? "invoiceFiltersAdmin" : "invoiceFilters";
   return (
@@ -35,7 +36,8 @@ const InvoiceFilterForm = ({
       initialValues={
         JSON.parse(localStorage.getItem(filtersKey)) ||
         DefaultInitialValues(isAdminPage)
-      }>
+      }
+      onSubmit={onSubmit}>
       {(formikProps) => {
         const { values, setFieldValue } = formikProps;
         const handleChangeUserSelector = (options) => {
@@ -58,7 +60,7 @@ const InvoiceFilterForm = ({
         adminFilterOptions.push(adminFilterOptions.shift());
         return (
           <>
-            <form className={styles.form}>
+            <Form className={styles.form}>
               <div className={styles.topFilters}>
                 <MonthPickerField
                   years={getInvoiceMinMaxYearAndMonth()}
@@ -99,7 +101,7 @@ const InvoiceFilterForm = ({
                 formikProps={formikProps}
                 isAdminPage={isAdminPage}
               />
-            </form>
+            </Form>
             {children && children(values)}
           </>
         );
