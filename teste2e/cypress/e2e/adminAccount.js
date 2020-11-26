@@ -32,7 +32,6 @@ describe("Admin account actions", () => {
     cy.wait("@searchUser").then((xhr) => {
       expect(xhr.status).to.eq(200);
       expect(xhr.response.body.users).to.be.a("array", "found array of users");
-      expect(xhr.response.body.users).to.have.lengthOf(1);
       cy.route("GET", "api/v1/user/*").as("getUser");
       cy.visit(`/user/${xhr.response.body.users[0].id}`);
       cy.wait("@getUser").its("status").should("eq", 200);
