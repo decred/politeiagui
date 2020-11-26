@@ -43,15 +43,12 @@ const HeaderNav = ({ history }) => {
         }
         const isActive = window.location.pathname === path;
         const onMenuItemClick = (path) => () => history.push(path);
-        const showItem = (admin && userIsAdmin) || !admin;
         const isDisabled = !userIsAdmin && dccRequired && !isValidContractor;
+        const showItem = ((admin && userIsAdmin) || !admin) && !isDisabled;
         return (
           showItem && (
             <DropdownItem
-              className={classNames(
-                isActive && styles.activeDropdownItem,
-                isDisabled && styles.disabledDropdownItem
-              )}
+              className={classNames(isActive && styles.activeDropdownItem)}
               key={`link-${idx}`}
               onClick={onMenuItemClick(path)}>
               {label}

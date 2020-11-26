@@ -36,11 +36,6 @@
   color: var(--dropdown-item-active-color) !important;
 }
 
-.disabledDropdownItem {
-  color: var(--btn-disabled-text-color) !important;
-  pointer-events: none;
-}
-
 .activeNavLink {
   border-bottom: 0.4rem solid var(--active-nav-border-color);
 }
