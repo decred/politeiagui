@@ -17,12 +17,11 @@
 .navLink {
   composes: navContainer;
   text-decoration: none !important;
-  color: var(--tab-text-color) !important;
   border-bottom: 0.2rem solid transparent;
 }
 
-.navLink:hover {
-  color: var(--tab-hover-color) !important;
+.navLink > span {
+  color: var(--tab-text-color);
 }
 
 .navLinkText {
@@ -33,9 +32,16 @@
   border-right: 0.1rem solid var(--separator-color);
 }
 
+.activeDropdownItem {
+  color: var(--dropdown-item-active-color) !important;
+}
+
 .activeNavLink {
-  color: var(--color-primary-dark);
   border-bottom: 0.4rem solid var(--active-nav-border-color);
+}
+
+.activeNavLink > span {
+  color: var(--tab-text-active-color);
 }
 
 ul.dropdownList {

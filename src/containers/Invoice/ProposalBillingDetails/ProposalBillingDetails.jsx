@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
-import { Spinner, Card, Table, H3, Message } from "pi-ui";
+import { Spinner, Card, Table, H3, Message, Link as PiLink } from "pi-ui";
 import { useProposalBillingDetails } from "./hooks";
 import { GoBackLink } from "src/components/Router";
 import get from "lodash/fp/get";
 import Link from "src/components/Link";
+import ExportToCsv from "src/components/ExportToCsv";
 import { usdFormatter, formatCentsToUSD } from "src/utils";
 import { fromMinutesToHours } from "src/helpers";
 import {
@@ -48,14 +49,16 @@ const getDetailsData = (invoices, subContractors) =>
         input.lineitems
       );
       let detailsData = {
-        User: <Link to={`/user/${userid}`}>{username}</Link>,
-        "Contractor Rate": usdFormatter.format(input.contractorrate / 100),
-        "Exchange Rate": usdFormatter.format(input.exchangerate / 100),
-        "Labor (hours)": fromMinutesToHours(totalLabor),
-        "Expense (USD)": usdFormatter.format(totalExpenses),
-        "Total (DCR)": totalDcr.toFixed(8),
-        "Total (USD)": usdFormatter.format(totalUsd / 100),
-        Invoice: <Link to={`/invoices/${token}`}>{token}</Link>
+        month: input.month,
+        year: input.year,
+        user: <Link to={`/user/${userid}`}>{username}</Link>,
+        contractorrate: usdFormatter.format(input.contractorrate / 100),
+        exchangerate: usdFormatter.format(input.exchangerate / 100),
+        labor: fromMinutesToHours(totalLabor),
+        expensetotal: usdFormatter.format(totalExpenses),
+        totaldcr: totalDcr.toFixed(8),
+        totalusd: usdFormatter.format(totalUsd / 100),
+        invoice: <Link to={`/invoices/${token}`}>{token}</Link>
       };
       if (subContractorTotalLabor && !totalExpenses) {
         const subContractorTotal = getSubContractorTotal(input.lineitems);
@@ -67,28 +70,28 @@ const getDetailsData = (invoices, subContractors) =>
         );
         detailsData = {
           ...detailsData,
-          "Total (USD)": (
+          totalusd: (
             <SubContractorReference
               value={usdFormatter.format(subContractorTotal / 100)}
               username={username}
               userid={id}
             />
           ),
-          "Total (DCR)": (
+          totaldcr: (
             <SubContractorReference
               value={subContractorTotalDcr.toFixed(8)}
               username={username}
               userid={id}
             />
           ),
-          "Labor (hours)": (
+          labor: (
             <SubContractorReference
               value={fromMinutesToHours(subContractorTotalLabor)}
               username={username}
               userid={id}
             />
           ),
-          "Contractor Rate": (
+          contractorrate: (
             <SubContractorReference
               value={usdFormatter.format(subContractorRate / 100)}
               username={username}
@@ -128,6 +131,13 @@ const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
     proposalBillingDetails && !loading && !loadingSubContractors;
 
   const anyError = subContractorsError || error;
+
+  const proposalDetailsData =
+    isDetailsLoaded &&
+    getDetailsData(proposalBillingDetails.invoices, subContractors).sort(
+      (a, b) => b.year - a.year || b.month - a.month
+    );
+
   return (
     <>
       <TopBanner>
@@ -155,12 +165,49 @@ const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
           <Card paddingSize="small" className={styles.tableWrapper}>
             <Table
               className={styles.table}
-              data={getDetailsData(
-                proposalBillingDetails.invoices,
-                subContractors
-              )}
+              data={proposalDetailsData}
               headers={TABLE_HEADERS}
+              linesPerPage={50}
             />
+            <ExportToCsv
+              data={proposalDetailsData.map(
+                ({
+                  month,
+                  year,
+                  user,
+                  contractorrate,
+                  exchangerate,
+                  labor,
+                  expensetotal,
+                  totaldcr,
+                  totalusd,
+                  invoice
+                }) => ({
+                    month: `${month}/${year}`,
+                    username: user.props.children,
+                    contractorrate,
+                    exchangerate,
+                    labor,
+                    expensetotal,
+                    totaldcr,
+                    totalusd,
+                    invoice: invoice.props.children
+                })
+              )}
+              fields={[
+                "month",
+                "username",
+                "contractorrate",
+                "exchangerate",
+                "labor",
+                "expensetotal",
+                "totaldcr",
+                "totalusd",
+                "invoice"
+              ]}
+              filename="proposal_details.csv">
+              <PiLink className="cursor-pointer">Export To Csv</PiLink>
+            </ExportToCsv>
             <H3 className={styles.totalText}>
               Total: {formatCentsToUSD(proposalBillingDetails.totalbilled)}
             </H3>

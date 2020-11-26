@@ -11,17 +11,23 @@ const UserDccInfo = ({
   domain,
   userSupervisors,
   proposalsOwned,
-  proposalsError,
-  isLoadingProposals,
   showEdit,
   onToggleDccEdit,
   supervisorsError
 }) => {
+  const {
+    proposalsByToken,
+    isLoading,
+    error: proposalsError
+  } = useApprovedProposals(proposalsOwned);
+
+  const ownedProposals = getOwnedProposals(proposalsOwned, proposalsByToken);
+
   const supervisors = userSupervisors.length
     ? userSupervisors.join(", ")
     : "No supervisors";
-  const proposals = proposalsOwned.length
-    ? proposalsOwned.join(", ")
+  const proposals = ownedProposals.length
+    ? ownedProposals.join(", ")
     : "No owned proposals";
   return (
     <>
@@ -37,15 +43,16 @@ const UserDccInfo = ({
         <InfoSection
           label="Owned Proposals"
           error={proposalsError}
-          info={isLoadingProposals ? <Spinner invert /> : proposals}
+          isLoading={isLoading}
+          info={proposals}
         />
       </div>
       {showEdit && (
         <Button
           className="margin-bottom-m"
           onClick={onToggleDccEdit}
-          kind={isLoadingProposals ? "disabled" : "primary"}>
-          {isLoadingProposals ? <Spinner invert /> : "Edit"}
+          kind={isLoading ? "disabled" : "primary"}>
+          {isLoading ? <Spinner invert /> : "Edit"}
         </Button>
       )}
     </>
@@ -89,11 +96,7 @@ const ManageContractorUserView = ({
   onToggleContractorInfoEdit
 }) => {
   const { domain, contractortype, supervisoruserids = [] } = user;
-  const { proposalsByToken, isLoading, error } = useApprovedProposals();
-  const ownedProposals = getOwnedProposals(
-    user.proposalsowned,
-    proposalsByToken
-  );
+
   const { supervisors, error: supervisorsError } = useSupervisors();
   const {
     policy: { supporteddomains }
@@ -111,9 +114,7 @@ const ManageContractorUserView = ({
         <UserDccInfo
           contractorType={typeOptions[contractortype]}
           domain={getDomainName(contractorDomains, domain)}
-          proposalsOwned={ownedProposals}
-          proposalsError={error}
-          isLoadingProposals={isLoading}
+          proposalsOwned={user.proposalsowned}
           userSupervisors={getSupervisorsNames(supervisors, supervisoruserids)}
           supervisorsError={supervisorsError}
           showEdit={showDccForm}

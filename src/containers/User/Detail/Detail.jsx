@@ -76,6 +76,7 @@ const UserDetail = ({
       if (tabLabel === tabValues.CREDITS && !isAdminOrTheUser) return true;
       if (tabLabel === tabValues.MANAGE_DCC && !isAdminOrTheUser) return true;
       if (tabLabel === tabValues.INVOICES && !isAdmin) return true;
+      if (tabLabel === tabValues.DRAFTS && !isUserPageOwner) return true;
       if (
         tabLabel === tabValues.PROPOSALS_OWNED &&
         (!isUserPageOwner || !ownsProposals)

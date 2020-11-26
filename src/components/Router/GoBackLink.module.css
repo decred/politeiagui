@@ -1,7 +1,10 @@
 .returnLink {
   cursor: pointer;
-  font-size: var(--font-size-small);
+  font-size: var(--font-size-normal);
   color: var(--color-gray) !important;
+  padding: 1.2rem 3.4rem;
+  margin-left: -3.4rem;
+  text-decoration: none !important;
 }
 
 .darkReturnLink {

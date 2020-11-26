@@ -4,7 +4,8 @@ import {
   H4,
   Text,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
+  DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
 import PropTypes from "prop-types";
 import React from "react";
@@ -15,7 +16,7 @@ import styles from "./PaymentComponent.module.css";
 
 const PaymentComponent = ({ address, amount, extraSmall, status }) => {
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const shouldPlaceTooltipBottom = useMediaQuery("(max-width: 675px)");
   return (
     <>

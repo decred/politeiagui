@@ -9,14 +9,16 @@ import {
   H4,
   H5,
   H6,
+  Link,
   useTheme,
-  classNames
+  classNames,
+  DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
 import styles from "./ModalMDGuide.module.css";
 
 const MDGuideTable = () => {
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const buildRow = (label, content) => ({
     "You type": label,
     "You see": content
@@ -33,7 +35,7 @@ const MDGuideTable = () => {
     buildRow("~~strikethrough~~", <s>strikethrough</s>),
     buildRow(
       "[decred!](https://decred.org)",
-      <a href="https://decred.org">decred!</a>
+      <Link href="https://decred.org">decred!</Link>
     ),
     buildRow(
       <div>

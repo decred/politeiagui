@@ -8,6 +8,8 @@ import get from "lodash/fp/get";
 export { getInvoiceTotalExpenses } from "../helpers";
 
 export const TABLE_HEADERS = [
+  "Month",
+  "Year",
   "User",
   "Contractor Rate",
   "Exchange Rate",

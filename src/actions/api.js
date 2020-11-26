@@ -332,16 +332,37 @@ export const onFetchInvoiceComments = (token) => (dispatch) => {
     });
 };
 
-export const onFetchAdminInvoices = () =>
+export const onFetchAdminInvoices = (start, end, userid) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_ADMIN_INVOICES());
     return api
-      .adminInvoices(csrf)
+      .adminInvoices(csrf, start, end, userid)
       .then((response) => dispatch(act.RECEIVE_ADMIN_INVOICES(response)))
       .catch((error) => {
         dispatch(act.RECEIVE_ADMIN_INVOICES(null, error));
         throw error;
       });
+  });
+
+export const onFetchUserCodeStats = (userid, start, end) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_CODE_STATS());
+    return api
+      .codeStats(csrf, userid, start, end)
+      .then((response) =>
+        dispatch(
+          act.RECEIVE_CODE_STATS({ userid, codestats: response.repostats })
+        )
+      )
+      .catch((error) => {
+        dispatch(act.RECEIVE_CODE_STATS(null, error));
+      });
+  });
+
+export const onFetchAdminInvoicesWithoutState = (start, end, userid) =>
+  withCsrf(async (_, __, csrf) => {
+    const res = await api.adminInvoices(csrf, start, end, userid);
+    return res.invoices;
   });
 
 export const onFetchProposalBilling = (token) =>
@@ -447,7 +468,7 @@ export const onFetchInvoice = (token, version = null) => (dispatch) => {
     });
 };
 
-export const onFetchUser = (userId) => (dispatch) => {
+export const onFetchUser = (userId) => (dispatch, getState) => {
   dispatch(act.REQUEST_USER(userId));
   const regexp = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   const valid = regexp.test(userId);
@@ -456,7 +477,7 @@ export const onFetchUser = (userId) => (dispatch) => {
     dispatch(act.RECEIVE_USER(null, error));
     throw error;
   }
-
+  const isCMS = sel.isCMS(getState());
   return api
     .user(userId)
     .then((response) =>
@@ -464,7 +485,8 @@ export const onFetchUser = (userId) => (dispatch) => {
         act.RECEIVE_USER({
           user: {
             ...response.user,
-            userid: userId
+            userid: userId,
+            isCMS // used to identify whether user details request is for cms or pi
           }
         })
       )

@@ -5,9 +5,10 @@ import {
   Text,
   useMediaQuery,
   useTheme,
-  Tooltip
+  Tooltip,
+  DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
-import React from "react";
+import React, { useMemo } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
@@ -32,6 +33,7 @@ import {
   useProposalURLs
 } from "src/containers/Proposal/hooks";
 import { useLoaderContext } from "src/containers/Loader";
+import { useLoader } from "src/containers/Loader";
 import styles from "./Proposal.module.css";
 import LoggedInContent from "src/components/LoggedInContent";
 import ProposalsList from "../ProposalsList/ProposalsList";
@@ -42,7 +44,35 @@ import ThumbnailGrid from "src/components/Files";
 import VersionPicker from "src/components/VersionPicker";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useRouter } from "src/components/Router";
-import { isEmpty } from "src/helpers";
+import { isEmpty, getKeyByValue } from "src/helpers";
+
+/**
+ * replaceImgDigestWithPayload uses a regex to parse images
+ * @param {String} text the markdown description
+ * @param {Map} files a files array
+ * @returns {object} { text, markdownFiles }
+ */
+function replaceImgDigestWithPayload(text, files) {
+  const imageRegexParser = /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
+  const imgs = text.matchAll(imageRegexParser);
+  let newText = text;
+  const markdownFiles = [];
+  /**
+   * This for loop will update the newText replacing images digest by their base64 payload and push the img object to an array of markdownFiles
+   * */
+  for (const img of imgs) {
+    const { digest } = img.groups;
+    const obj = getKeyByValue(files, digest);
+    if (obj) {
+      markdownFiles.push(obj);
+      newText = newText.replace(
+        digest,
+        `data:${obj.mime};base64,${obj.payload}`
+      );
+    }
+  }
+  return { text: newText, markdownFiles };
+}
 
 const ProposalWrapper = (props) => {
   const {
@@ -51,7 +81,6 @@ const ProposalWrapper = (props) => {
     voteActive,
     voteEndTimestamp
   } = useProposalVote(getProposalToken(props.proposal));
-
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (
@@ -116,6 +145,7 @@ const Proposal = React.memo(function Proposal({
   const isAuthor = currentUser && currentUser.userid === userid;
   const isVotingAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
   const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
+  const { apiInfo } = useLoader();
   const mobile = useMediaQuery("(max-width: 560px)");
   const showEditedDate =
     version > 1 && timestamp !== publishedat && !abandonedat && !mobile;
@@ -129,7 +159,7 @@ const Proposal = React.memo(function Proposal({
     !isEmpty(rfpSubmissions.proposals) &&
     !isEmpty(rfpSubmissions.voteSummaries);
   const showEditIcon =
-    currentUser && isVotingAuthorized && !isVotingFinished && !isVoteActive;
+    isAuthor && isVotingAuthorized && !isVotingFinished && !isVoteActive;
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
 
@@ -141,7 +171,12 @@ const Proposal = React.memo(function Proposal({
   };
 
   const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
+
+  const { text, markdownFiles } = useMemo(
+    () => replaceImgDigestWithPayload(getMarkdownContent(files), files),
+    [files]
+  );
 
   return (
     <>
@@ -173,7 +208,6 @@ const Proposal = React.memo(function Proposal({
                 <Title
                   data-testid={"proposal-title"}
                   id={`proposal-title-${proposalToken}`}
-                  isAbandoned={isAbandoned}
                   truncate
                   linesBeforeTruncate={2}
                   url={extended ? "" : proposalURL}>
@@ -244,7 +278,11 @@ const Proposal = React.memo(function Proposal({
                   <Status>
                     <StatusTag
                       className={styles.statusTag}
-                      {...getProposalStatusTagProps(proposal, voteSummary)}
+                      {...getProposalStatusTagProps(
+                        proposal,
+                        voteSummary,
+                        isDarkTheme
+                      )}
                     />
                     {(isVoteActive || isVotingFinished) && (
                       <Event
@@ -305,7 +343,7 @@ const Proposal = React.memo(function Proposal({
                   isDarkTheme && "dark",
                   showRfpSubmissions && styles.rfpMarkdownContainer
                 )}
-                body={getMarkdownContent(files)}
+                body={text}
               />
             )}
             {collapseBodyContent && (
@@ -329,7 +367,10 @@ const Proposal = React.memo(function Proposal({
             )}
             {extended && files.length > 1 && (
               <Row className={styles.filesRow} justify="left" topMarginSize="s">
-                <ThumbnailGrid value={files} viewOnly={true} />
+                <ThumbnailGrid
+                  value={files.filter((file) => !markdownFiles.includes(file))}
+                  viewOnly={true}
+                />
               </Row>
             )}
             {extended && (
@@ -337,7 +378,10 @@ const Proposal = React.memo(function Proposal({
                 <Row className={styles.downloadLinksWrapper} noMargin>
                   <DownloadRecord
                     fileName={proposalToken}
-                    content={proposal}
+                    content={{
+                      ...proposal,
+                      serverpublickey: apiInfo.pubkey
+                    }}
                     className="margin-right-l"
                     label="Download Proposal Bundle"
                   />

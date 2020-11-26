@@ -1,12 +1,12 @@
 import React from "react";
-import { useTheme } from "pi-ui";
+import { useTheme, DEFAULT_DARK_THEME_NAME } from "pi-ui";
 import PropTypes from "prop-types";
 import { useConfig } from "src/containers/Config";
 
 const Logo = ({ style }) => {
   const { themeName } = useTheme();
   const { logoLight, logoDark } = useConfig();
-  const logoSrc = themeName === "dark" ? logoDark : logoLight;
+  const logoSrc = themeName === DEFAULT_DARK_THEME_NAME ? logoDark : logoLight;
   return (
     <img
       role="presentation"

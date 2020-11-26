@@ -2,6 +2,9 @@ import { useMemo } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
+import useAPIAction from "src/hooks/utils/useAPIAction";
+import useUserDetail from "src/hooks/api/useUserDetail";
+import { isUserDeveloper } from "src/containers/DCC/helpers";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
 import { getProposalsTokensFromInvoice } from "../helpers";
 import isEmpty from "lodash/fp/isEmpty";
@@ -78,4 +81,47 @@ export function useInvoice(invoiceToken) {
     proposalsError: state.error,
     currentUser
   };
+}
+
+export function useInvoicesSummary(currentInvoice, userid, start, end) {
+  const onFetchAdminInvoicesWithoutState = useAction(
+    act.onFetchAdminInvoicesWithoutState
+  );
+
+  const { user } = useUserDetail(userid);
+
+  const [
+    loading,
+    error,
+    invoices
+  ] = useAPIAction(onFetchAdminInvoicesWithoutState, [start, end, userid]);
+
+  return {
+    loading,
+    error,
+    // return if the user is developer
+    isUserDeveloper: isUserDeveloper(user),
+    // return invoices array but filter the current invoice out
+    invoices: invoices
+      ? invoices.filter((inv) => inv.censorshiprecord.token !== currentInvoice)
+      : null
+  };
+}
+
+export function useCodeStats(userid, start, end) {
+  const codeStatsSelector = useMemo(
+    () => sel.makeGetCodeStatsByUserID(userid),
+    [userid]
+  );
+  const codestats = useSelector(codeStatsSelector);
+
+  const onFetchUserCodeStats = useAction(act.onFetchUserCodeStats);
+
+  const [loading, error] = useAPIAction(onFetchUserCodeStats, [
+    userid,
+    start,
+    end
+  ]);
+
+  return { loading, error, codestats };
 }

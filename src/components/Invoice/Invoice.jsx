@@ -4,7 +4,8 @@ import {
   Text,
   useMediaQuery,
   CopyableText,
-  useTheme
+  useTheme,
+  DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
@@ -14,7 +15,8 @@ import styles from "./Invoice.module.css";
 import { InvoiceActions } from "src/containers/Invoice/Actions";
 import {
   presentationalInvoiceName,
-  getInvoiceTotalHours
+  getInvoiceTotalHours,
+  hasDecimalPlaces
 } from "src/containers/Invoice/helpers";
 import Field from "./Field";
 import InvoiceDatasheet from "../InvoiceDatasheet";
@@ -58,7 +60,7 @@ const Invoice = ({
   const totalDcrAmount = payout && convertAtomsToDcr(payout.dcrtotal);
   const showExtendedVersionPicker = extended && version > 1;
   const showVersionAsText = version > 1 && !extended && !mobile;
-  const isDarkTheme = themeName === "dark";
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
   // record attchments without the invoice file
   const invoiceAttachments = useMemo(
@@ -159,7 +161,15 @@ const Invoice = ({
                 </Row>
                 {!isPublicMode && (
                   <Row justify="space-between" className={styles.topDetails}>
-                    <Field label="Total hours:" value={`${totalHours}h`} />
+                    <Field
+                      label="Total hours:"
+                      value={`${
+                        // verify if has decimal places
+                        hasDecimalPlaces(totalHours)
+                          ? totalHours.toFixed(2)
+                          : totalHours
+                      }h`}
+                    />
                     <Field
                       label="Contractor Rate:"
                       value={usdFormatter.format(invContractorRate / 100)}

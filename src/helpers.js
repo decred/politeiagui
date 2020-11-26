@@ -92,7 +92,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     15: "The provided proposal name was invalid.",
     16: "The SHA256 checksum for one of the files was incorrect.",
     17: "The Base64 encoding for one of the files was incorrect.",
-    18: `The MIME type detected for ${errorContext[0]} did not match the provided MIME type. MIME type: ${errorContext[1]}`,
+    18: `The MIME type detected for ${errorContext[0]} is not supported.`,
     19: "The MIME type for one of the files is not supported.",
     20: "The proposal cannot be set to that status.",
     21: "The provided public key was invalid.",
@@ -356,6 +356,9 @@ export const removeProposalsDuplicates = (arr1, arr2) => {
   return Object.keys(mergedObj).map((item) => mergedObj[item]);
 };
 
+export const getKeyByValue = (obj, val) =>
+  Object.values(obj).find((value) => value.digest === val);
+
 // CMS HELPERS
 export const renderInvoiceStatus = (status) => {
   return mapInvoiceStatusToMessage[status] || "Invalid Invoice Status";
@@ -519,3 +522,79 @@ export const getDomainName = (contractorDomains, op) => {
  */
 export const convertObjectToUnixTimestamp = ({ day, month, year }) =>
   new Date(Date.UTC(year, month - 1, day, 23, 59)).getTime() / 1000;
+/** INLINE IMAGES HELPERS */
+/**
+ * replaceBlobsByDigestsAndGetFiles uses a regex to parse images and replace blobs by files digests
+ * @param {String} description the markdown description
+ * @param {Map} map the map of blob -> file
+ * @returns {object} { description, files }
+ */
+export function replaceBlobsByDigestsAndGetFiles(description, map) {
+  const imageRegexParser = /!\[[^\]]*\]\((?<blob>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
+  const imgs = description.matchAll(imageRegexParser);
+  let newDescription = description;
+  const files = [];
+  /**
+   * This for loop will update the newDescription replacing the image blobs by their digests and push the img object to an array of files
+   * */
+  for (const img of imgs) {
+    const { blob } = img.groups;
+    if (map.has(blob)) {
+      newDescription = newDescription.replace(blob, map.get(blob).digest);
+      files.push(map.get(blob));
+    }
+  }
+  return { description: newDescription, files };
+}
+
+const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  const blob = new Blob(byteArrays, { type: contentType });
+  return blob;
+};
+
+/**
+ * replaceBlobsByDigestsAndGetFiles uses a regex to parse images digests and create a new Blob
+ * @param {String} description the markdown description
+ * @param {Map} map the map of blob -> file
+ * @returns {object} { description, files }
+ */
+export function replaceImgDigestByBlob(vals, map) {
+  if (!vals) return { text: "", markdownFiles: [] };
+  const { description, files } = vals;
+  const imageRegexParser = /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
+  const imgs = description.matchAll(imageRegexParser);
+  let newText = description;
+  const markdownFiles = [];
+  /**
+   * This for loop will update the newText replacing images digest by a blob and push the img object to an array of markdownFiles
+   * */
+  for (const img of imgs) {
+    const { digest } = img.groups;
+    const obj = getKeyByValue(files, digest);
+    if (obj) {
+      const urlCreator = window.URL || window.webkitURL;
+      const blobUrl = urlCreator.createObjectURL(
+        b64toBlob(obj.payload, obj.mime)
+      );
+      map.set(blobUrl, obj);
+      markdownFiles.push(obj);
+      newText = newText.replace(digest, blobUrl);
+    }
+  }
+  return { text: newText, markdownFiles };
+}

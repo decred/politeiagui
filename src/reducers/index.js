@@ -12,6 +12,7 @@ import {
   invoicePayouts,
   dccs,
   paywall,
+  codestats,
   proposalBilling,
   proposalOwnerBilling
 } from "./models";
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   invoicePayouts,
   dccs,
   paywall,
+  codestats,
   proposalBilling,
   proposalOwnerBilling
 });

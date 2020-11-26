@@ -1,7 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Text, useMediaQuery, Tooltip, useTheme, classNames } from "pi-ui";
-import iconSearchSmall from "src/assets/images/search-small.svg";
+import {
+  Text,
+  Icon,
+  useMediaQuery,
+  Tooltip,
+  useTheme,
+  classNames,
+  getThemeProperty,
+  DEFAULT_DARK_THEME_NAME
+} from "pi-ui";
 import styles from "./Proposal.module.css";
 
 const VotesCount = ({
@@ -12,20 +20,24 @@ const VotesCount = ({
 }) => {
   const isMobileScreen = useMediaQuery("(max-width:560px)");
   const votesLeft = quorumVotes - votesReceived;
-  const { themeName } = useTheme();
-  const isDarkTheme = themeName === "dark";
+  const { theme, themeName } = useTheme();
+  const color = getThemeProperty(theme, "icon-color");
+  const darkColor = getThemeProperty(theme, "color-dark");
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
   return (
     <div className={styles.voteCount}>
       {!isMobileScreen ? (
         <>
           {onSearchVotes && votesReceived > 0 && (
-            <img
-              onClick={onSearchVotes}
-              alt="Search votes"
-              className={styles.voteCountSearch}
-              src={iconSearchSmall}
-            />
+            <div>
+              <Icon
+                type="search"
+                iconColor={isDarkTheme ? darkColor : color}
+                onClick={onSearchVotes}
+                className={styles.voteCountSearch}
+              />
+            </div>
           )}
           <Tooltip
             className={classNames(

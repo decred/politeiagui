@@ -7,8 +7,9 @@ import "./styles.css";
 const MarkdownRenderer = ({
   body,
   className,
-  filterXss = true,
+  renderImages = true,
   escapeHtml = true,
+  filterUrl = false,
   ...props
 }) => (
   <div className={className} {...props}>
@@ -16,7 +17,7 @@ const MarkdownRenderer = ({
       className="markdown-body"
       escapeHtml={escapeHtml}
       astPlugins={[htmlParserRules]}
-      renderers={customRenderers(filterXss)}
+      renderers={customRenderers(renderImages, filterUrl)}
       source={body}
     />
   </div>
@@ -26,7 +27,7 @@ MarkdownRenderer.prototype = {
   body: PropTypes.string,
   className: PropTypes.string,
   confirmWithModal: PropTypes.bool,
-  filterXss: PropTypes.bool,
+  renderImages: PropTypes.bool,
   displayExternalLikWarning: PropTypes.bool,
   escapeHtml: PropTypes.bool
 };

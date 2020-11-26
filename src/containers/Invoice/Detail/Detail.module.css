@@ -1,0 +1,20 @@
+h2.statsTitle {
+  font-weight: var(--font-weight-regular);
+  margin-bottom: var(--spacing-1);
+}
+
+.uilink {
+  cursor: pointer;
+  margin-left: var(--spacing-1);
+}
+
+.titleLinkWrapper {
+  display: flex;
+}
+
+@media screen and (max-width: 768px) {
+  .invoiceLinkWrapper,
+  .prs {
+    padding-left: var(--spacing-1);
+  }
+}

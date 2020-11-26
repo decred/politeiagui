@@ -4,9 +4,11 @@ import {
   DropdownItem,
   Toggle,
   useTheme,
-  classNames
+  classNames,
+  DEFAULT_DARK_THEME_NAME,
+  DEFAULT_LIGHT_THEME_NAME
 } from "pi-ui";
-import React, { useEffect, useMemo, useCallback } from "react";
+import React, { useEffect, useMemo } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import useNavigation from "src/hooks/api/useNavigation";
@@ -33,16 +35,23 @@ const HeaderNav = ({ history }) => {
   const menuItems = useMemo(
     () =>
       navMenuPaths.map(({ label, path, admin }, idx) => {
+        if (path === "/user") {
+          path += "/" + userid;
+        }
+        const isActive = window.location.pathname === path;
         const onMenuItemClick = (path) => () => history.push(path);
         return (
           ((admin && userIsAdmin) || !admin) && (
-            <DropdownItem key={`link-${idx}`} onClick={onMenuItemClick(path)}>
+            <DropdownItem
+              className={isActive ? styles.activeDropdownItem : null}
+              key={`link-${idx}`}
+              onClick={onMenuItemClick(path)}>
               {label}
             </DropdownItem>
           )
         );
       }),
-    [history, navMenuPaths, userIsAdmin]
+    [history, navMenuPaths, userIsAdmin, userid]
   );
 
   const [darkThemeOnLocalStorage, setDarkThemeOnLocalStorage] = useLocalStorage(
@@ -50,23 +59,19 @@ const HeaderNav = ({ history }) => {
     false
   );
 
-  const goToUserAccount = useCallback(() => {
-    history.push(`/user/${userid}`);
-  }, [history, userid]);
-
   useEffect(() => {
-    if (darkThemeOnLocalStorage && themeName === "light") {
-      setThemeName("dark");
+    if (darkThemeOnLocalStorage && themeName === DEFAULT_LIGHT_THEME_NAME) {
+      setThemeName(DEFAULT_DARK_THEME_NAME);
     }
   }, [darkThemeOnLocalStorage, setThemeName, themeName]);
 
   const onThemeToggleHandler = () => {
-    if (themeName === "light") {
+    if (themeName === DEFAULT_LIGHT_THEME_NAME) {
       setDarkThemeOnLocalStorage(true);
-      setThemeName("dark");
+      setThemeName(DEFAULT_DARK_THEME_NAME);
     } else {
-      setThemeName("light");
       setDarkThemeOnLocalStorage(false);
+      setThemeName(DEFAULT_LIGHT_THEME_NAME);
     }
   };
 
@@ -88,12 +93,11 @@ const HeaderNav = ({ history }) => {
         closeOnItemClick={false}
         title={username}>
         {menuItems}
-        <DropdownItem onClick={goToUserAccount}>Account</DropdownItem>
         <DropdownItem onClick={onThemeToggleHandler}>
           <div className={styles.themeToggleWrapper}>
             <Toggle
               onToggle={onThemeToggleHandler}
-              toggled={themeName === "dark"}
+              toggled={themeName === DEFAULT_DARK_THEME_NAME}
             />
             <div className={styles.themeToggleLabel}>Dark Mode</div>
           </div>
@@ -107,7 +111,7 @@ const HeaderNav = ({ history }) => {
         className={classNames(styles.themeToggleWrapper, styles.publicWrapper)}>
         <Toggle
           onToggle={onThemeToggleHandler}
-          toggled={themeName === "dark"}
+          toggled={themeName === DEFAULT_DARK_THEME_NAME}
         />
         <div onClick={onThemeToggleHandler} className={styles.themeToggleLabel}>
           Dark Mode

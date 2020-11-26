@@ -1,8 +1,8 @@
 import React from "react";
-import xssFilters from "xss-filters";
 import htmlParser from "react-markdown/plugins/html-parser";
 import ModalExternalLink from "../ModalExternalLink";
 import useModalContext from "src/hooks/utils/useModalContext";
+import xssFilters from "xss-filters";
 
 export const htmlParserRules = htmlParser({
   isValidNode: (node) => {
@@ -30,24 +30,6 @@ export const traverseChildren = (el, cb) => {
     };
   }
   return newElement ? cb(newElement) : cb(el);
-};
-
-export const handleFilterXss = (el) => {
-  if (typeof el === "string") return el;
-  const props = el.props;
-  if (!props) {
-    return el;
-  }
-  const newProps = {
-    ...props
-  };
-  if (newProps.src) {
-    newProps.src = xssFilters.uriInDoubleQuotedAttr(props.src);
-  }
-  return {
-    ...el,
-    props: newProps
-  };
 };
 
 const isExternalLink = (link) => {
@@ -80,30 +62,50 @@ const LinkRenderer = ({ url, children }) => {
   );
 };
 
-const imageHandler = ({ src, alt }) => {
-  return <LinkRenderer url={src}>{alt}</LinkRenderer>;
-};
+// Use external link renderer when images are not allowed
+const imageHandler = (renderImages) => ({ src, alt }) =>
+  renderImages ? (
+    <img src={src} alt={alt} />
+  ) : (
+    <LinkRenderer url={src}>{alt}</LinkRenderer>
+  );
 
 const linkHandler = ({ href, children }) => {
   return <LinkRenderer url={href}>{children}</LinkRenderer>;
 };
 
-const rootHandler = (filterXss) => (el) => {
-  if (filterXss) {
+const handleFilterXss = (el) => {
+  if (typeof el === "string") return el;
+  const props = el.props;
+  if (!props) {
+    return el;
+  }
+  const newProps = {
+    ...props
+  };
+  if (newProps.src) {
+    newProps.src = xssFilters.uriInDoubleQuotedAttr(props.src);
+  }
+  return {
+    ...el,
+    props: newProps
+  };
+};
+
+const rootHandler = (filterUrl) => (el) => {
+  if (filterUrl) {
     el = traverseChildren(el, handleFilterXss);
   }
   const { children, ...props } = el;
   return <div {...props}>{children}</div>;
 };
 
-export const customRenderers = (filterXss) => {
-  const rootRenderer = rootHandler(filterXss);
-
+export const customRenderers = (renderImages, filterUrl) => {
   return {
-    image: imageHandler,
-    imageReference: imageHandler,
+    image: imageHandler(renderImages),
+    imageReference: imageHandler(renderImages),
     link: linkHandler,
     linkReference: linkHandler,
-    root: rootRenderer
+    root: rootHandler(filterUrl)
   };
 };

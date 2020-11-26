@@ -11,14 +11,13 @@ const ModalAttachFiles = ({
   onClose
 }) => {
   const { policy } = usePolicy();
-  const accepted = policy.validmimetypes.join(",");
   return (
     <Modal title={title} show={show} onClose={onClose}>
       <div className={styles.wrapper}>
         <P>Please upload an image you want to attach to your proposal.</P>
         {policy && (
           <P>
-            Valid MIME types - {accepted} <br />
+            Valid MIME types - image/png <br />
             Max image size - 512kb <br />
             Max number of files - {policy.maximages}
           </P>
@@ -27,7 +26,7 @@ const ModalAttachFiles = ({
           If you have any problems with your upload, try using a smaller file.
         </P>
         <div className={styles.selectFileWrapper}>
-          <FilesInput onChange={onChange} acceptedFiles={accepted}>
+          <FilesInput onChange={onChange} acceptedFiles={"image/png"}>
             <Button
               className={styles.selectFileButton}
               type="submit"

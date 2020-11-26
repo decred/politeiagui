@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { H2, P } from "pi-ui";
+import { H2, P, Link } from "pi-ui";
 
 const EmailSentMessage = ({
   email = "example@gmail.com",
@@ -23,8 +23,8 @@ const EmailSentMessage = ({
     <P>
       If you're sure you should have received an email, join the
       #support:decred.org channel on{" "}
-      <a href="https://www.decred.org/matrix/">Matrix</a> to get assistance from
-      Politeia administrators.
+      <Link href="https://www.decred.org/matrix/">Matrix</Link> to get
+      assistance from Politeia administrators.
     </P>
   </>
 );

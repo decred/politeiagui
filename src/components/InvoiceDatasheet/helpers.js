@@ -102,6 +102,9 @@ export const convertLineItemsToGrid = (
       const subContractorValue = isSubContractorReadonly
         ? subUser && subUser.username
         : newLine.subuserid;
+      const typeValue = policyLineItemTypes.find(
+        (t) => t.type === newLine.type
+      );
       const laborHours = +fromMinutesToHours(newLine.labor);
       const expenses = +fromUSDCentsToUSDUnits(newLine.expenses);
       const subRate = +fromUSDCentsToUSDUnits(newLine.subrate);
@@ -116,6 +119,8 @@ export const convertLineItemsToGrid = (
           readOnly,
           value: newLine.type,
           error: rowErrors && rowErrors.type,
+          valueViewer: () =>
+            typeValue && capitalizeFirstLetter(typeValue.description),
           dataEditor: selectWrapper(
             policyLineItemTypes.map((op) => ({
               value: op.type,
@@ -180,14 +185,14 @@ export const convertLineItemsToGrid = (
         },
         {
           readOnly: true,
-          value: lineSubTotal
+          value: parseFloat(lineSubTotal).toFixed(2)
         }
       ];
       return {
         grid: acc.grid.concat([tableLine.filter(Boolean)]),
         expenseTotal: acc.expenseTotal + newLine.expenses,
         laborTotal: acc.laborTotal + newLine.labor,
-        total: acc.total + lineSubTotal
+        total: parseFloat(+acc.total + lineSubTotal).toFixed(2)
       };
     },
     { grid: [], expenseTotal: 0, laborTotal: 0, total: 0 }
@@ -245,7 +250,7 @@ export const convertGridToLineItems = (grid) => {
 
 export const createTableHeaders = () => [
   { readOnly: true, value: "", width: "2rem" },
-  { value: "Type", readOnly: true, width: "4rem" },
+  { value: "Type", readOnly: true, width: "10rem" },
   { value: "Domain", readOnly: true, width: "12rem" },
   { value: "Subdomain", readOnly: true, width: "14rem" },
   { value: "Description", readOnly: true, width: "30rem" },

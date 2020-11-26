@@ -3,8 +3,18 @@ import { Button } from "pi-ui";
 import { FormikConsumer } from "formik";
 import { useDraftProposals } from "src/containers/Proposal/User/hooks";
 import { getQueryStringValue, setQueryStringValue } from "src/lib/queryString";
+import {
+  replaceBlobsByDigestsAndGetFiles,
+  replaceImgDigestByBlob
+} from "src/helpers";
 
-const DraftSaver = ({ values, setValues, dirty, submitSuccess }) => {
+const DraftSaver = ({
+  values,
+  setValues,
+  dirty,
+  submitSuccess,
+  mapBlobToFile
+}) => {
   const [draftId, setDraftId] = useState(getQueryStringValue("draft"));
   const {
     draftProposals,
@@ -25,7 +35,13 @@ const DraftSaver = ({ values, setValues, dirty, submitSuccess }) => {
   };
 
   const handleSave = () => {
-    const id = onSave({ draftId, ...values });
+    const { description, files } = replaceBlobsByDigestsAndGetFiles(
+      values.description,
+      mapBlobToFile
+    );
+    const newFiles = [...values.files, ...files];
+
+    const id = onSave({ draftId, ...values, files: newFiles, description });
     // first time saving this draft
     if (!draftId) {
       setDraftId(id);
@@ -65,16 +81,27 @@ const DraftSaver = ({ values, setValues, dirty, submitSuccess }) => {
       if (foundDraftProposal && !dirty) {
         const {
           name,
-          description,
           files,
           type,
+          description,
           rfpDeadline,
           rfpLink
         } = foundDraftProposal;
-        setValues({ name, description, files, type, rfpDeadline, rfpLink });
+        const { text, markdownFiles } = replaceImgDigestByBlob(
+          { description, files },
+          mapBlobToFile
+        );
+        setValues({
+          name,
+          description: text,
+          files: files.filter((file) => !markdownFiles.includes(file)),
+          type,
+          rfpDeadline,
+          rfpLink
+        });
       }
     },
-    [draftProposals, dirty, draftId, setValues]
+    [draftProposals, dirty, draftId, setValues, mapBlobToFile]
   );
   return (
     <Button
