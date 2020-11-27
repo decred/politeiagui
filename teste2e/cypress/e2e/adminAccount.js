@@ -12,8 +12,10 @@ describe("Admin account actions", () => {
     cy.visit("/user/search");
     cy.findByTestId("search-user").type("user2");
     cy.findByRole("button", { name: /search/i }).click();
-    cy.wait("@searchUser");
-    cy.findByText(/user2@example.com/i).should("exist");
+    cy.wait("@searchUser").then((xhr) => {
+      expect(xhr.status).to.eq(200);
+      expect(xhr.response.body.users).to.be.a("array", "found array of users");
+    });
   });
 
   it("Can navigate to the user page", () => {
