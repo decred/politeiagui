@@ -20,16 +20,18 @@ const SidebarBlock = ({ children, className, ...props }) => (
 
 const SidebarContent = ({ wrapper }) => {
   const WrapperComponent = wrapper;
-  const { aboutContent } = useConfig();
+  const { aboutContent, enablePaywall } = useConfig();
 
   return useMemo(
     () => (
       <WrapperComponent>
-        <PaywallMessage
-          wrapper={SidebarBlock}
-          className={classNames(styles.sideBarBlockWrapper, "margin-bottom-s")}
-          marker
-        />
+        {enablePaywall &&
+          <PaywallMessage
+            wrapper={SidebarBlock}
+            className={classNames(styles.sideBarBlockWrapper, "margin-bottom-s")}
+            marker
+          />
+        }
         {!!aboutContent && (
           <SidebarBlock>
             <StaticMarkdown contentName={aboutContent} />
@@ -37,7 +39,7 @@ const SidebarContent = ({ wrapper }) => {
         )}
       </WrapperComponent>
     ),
-    [aboutContent]
+    [aboutContent, enablePaywall]
   );
 };
 
