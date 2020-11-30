@@ -27,7 +27,7 @@ const ModalDiffInvoice = ({ onClose, invoice, prevInvoice, ...props }) => {
     const tokens = invoice.input.lineitems.map(
       ({ proposaltoken }) => proposaltoken
     );
-    return uniq([...prevTokens, ...tokens]);
+    return uniq([...prevTokens, ...tokens]).filter((t) => t !== "");
   }, [invoice.input.lineitems, prevInput]);
 
   const { proposalsByToken, error } = useApprovedProposals(proposalsTokens);
