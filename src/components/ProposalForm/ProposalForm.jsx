@@ -138,6 +138,7 @@ const ProposalForm = React.memo(function ProposalForm({
           name="type"
           onChange={handleSelectFiledChange("type")}
           disabled={isPublic}
+          data-testid="proposal-type"
           options={selectOptions}
           className={classNames(styles.typeSelectWrapper)}
         />
