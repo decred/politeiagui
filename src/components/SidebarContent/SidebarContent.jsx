@@ -25,13 +25,16 @@ const SidebarContent = ({ wrapper }) => {
   return useMemo(
     () => (
       <WrapperComponent>
-        {enablePaywall &&
+        {enablePaywall && (
           <PaywallMessage
             wrapper={SidebarBlock}
-            className={classNames(styles.sideBarBlockWrapper, "margin-bottom-s")}
+            className={classNames(
+              styles.sideBarBlockWrapper,
+              "margin-bottom-s"
+            )}
             marker
           />
-        }
+        )}
         {!!aboutContent && (
           <SidebarBlock>
             <StaticMarkdown contentName={aboutContent} />
