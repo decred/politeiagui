@@ -14,8 +14,9 @@ export default function useUserDetail(userID) {
   const user = useSelector(userSelector);
   const isAdmin = useSelector(sel.currentUserIsAdmin);
   const onFetchUser = useAction(act.onFetchUser);
+  const isRequestingUser = useSelector(sel.isApiRequestingUser);
   const userMissingData = !user || (user && !user.identities);
-  const needsFetch = !!uid && userMissingData;
+  const needsFetch = !!uid && userMissingData && !isRequestingUser;
   const args = [uid];
   const [loading, error] = useAPIAction(onFetchUser, args, needsFetch);
 

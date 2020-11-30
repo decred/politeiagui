@@ -18,6 +18,7 @@ import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
 import { ConfigFilter } from "src/containers/Config";
 import ModalLogout from "src/components/ModalLogout";
 import styles from "./HeaderNav.module.css";
+import { isUserValidContractor } from "src/containers/DCC";
 
 const HeaderNav = ({ history }) => {
   const { user, username } = useNavigation();
@@ -32,18 +33,22 @@ const HeaderNav = ({ history }) => {
       onClose: handleCloseModal
     });
 
+  const isValidContractor = isUserValidContractor(user);
+
   const menuItems = useMemo(
     () =>
-      navMenuPaths.map(({ label, path, admin }, idx) => {
+      navMenuPaths.map(({ label, path, admin, dccRequired }, idx) => {
         if (path === "/user") {
           path += "/" + userid;
         }
         const isActive = window.location.pathname === path;
         const onMenuItemClick = (path) => () => history.push(path);
+        const isDisabled = !userIsAdmin && dccRequired && !isValidContractor;
+        const showItem = ((admin && userIsAdmin) || !admin) && !isDisabled;
         return (
-          ((admin && userIsAdmin) || !admin) && (
+          showItem && (
             <DropdownItem
-              className={isActive ? styles.activeDropdownItem : null}
+              className={classNames(isActive && styles.activeDropdownItem)}
               key={`link-${idx}`}
               onClick={onMenuItemClick(path)}>
               {label}
@@ -51,7 +56,7 @@ const HeaderNav = ({ history }) => {
           )
         );
       }),
-    [history, navMenuPaths, userIsAdmin, userid]
+    [history, navMenuPaths, userIsAdmin, userid, isValidContractor]
   );
 
   const [darkThemeOnLocalStorage, setDarkThemeOnLocalStorage] = useLocalStorage(

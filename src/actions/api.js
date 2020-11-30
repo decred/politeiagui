@@ -40,12 +40,15 @@ export const requestApiInfo = (fetchUser = true) => (dispatch) => {
     });
 };
 
-export const onRequestMe = () => (dispatch) => {
+export const onRequestMe = () => (dispatch, getState) => {
   dispatch(act.REQUEST_ME());
+  const isCMS = sel.isCMS(getState());
   return api
     .me()
     .then((response) => {
       dispatch(act.RECEIVE_ME(response));
+      // fetch CMS user details if needed
+      isCMS && response.userid && dispatch(onFetchUser(response.userid));
     })
     .catch((error) => {
       dispatch(act.RECEIVE_ME(null, error));
@@ -230,7 +233,9 @@ export const onLogin = ({ email, password }) =>
           return response;
         });
       })
-      .then(() => dispatch(onRequestMe()))
+      .then(() => {
+        dispatch(onRequestMe());
+      })
       .catch((error) => {
         dispatch(act.RECEIVE_LOGIN(null, error));
         throw error;

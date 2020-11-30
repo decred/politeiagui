@@ -5,13 +5,12 @@ import {
   DCC_STATUS_DRAFTS,
   DCC_TYPE_ISSUANCE,
   DCC_TYPE_REVOCATION,
-  DCC_DOMAIN_INVALID,
   DCC_DOMAIN_DEVELOPER,
+  DCC_FULL_USER_CONTRACTOR_TYPES,
   CONTRACTOR_TYPE_NOMINEE,
   CONTRACTOR_TYPE_REVOKED,
   CONTRACTOR_TYPE_SUPERVISOR,
-  CONTRACTOR_TYPE_SUBCONTRACTOR,
-  CONTRACTOR_TYPE_INVALID
+  CONTRACTOR_TYPE_SUBCONTRACTOR
 } from "./constants";
 import isEmpty from "lodash/isEmpty";
 import some from "lodash/fp/some";
@@ -223,11 +222,7 @@ export const isDccSupportOpposeAvailable = (userid, dcc) =>
  * @param {Number} domain
  */
 export const isUserValidContractor = (user) =>
-  user &&
-  user.domain !== DCC_DOMAIN_INVALID &&
-  user.contractortype !== CONTRACTOR_TYPE_REVOKED &&
-  user.contractortype !== CONTRACTOR_TYPE_NOMINEE &&
-  user.contractortype !== CONTRACTOR_TYPE_INVALID;
+  user && DCC_FULL_USER_CONTRACTOR_TYPES.includes(user.contractortype);
 
 /**
  * Returns if cms user is a developer
