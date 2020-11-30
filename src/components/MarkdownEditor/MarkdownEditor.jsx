@@ -40,7 +40,8 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
   textAreaProps,
   filesInput,
   mapBlobToFile,
-  allowImgs
+  allowImgs,
+  ...props
 }) {
   const [tab, setTab] = useState("write");
   const { themeName } = useTheme();
@@ -50,8 +51,9 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
     const textarea = document.getElementsByClassName("mde-text")[0];
     if (textarea) {
       textarea.placeholder = placeholder;
+      textarea["data-testid"] = props["data-testid"];
     }
-  }, [tab, placeholder]);
+  }, [tab, placeholder, props]);
 
   const attachFilesCommand = {
     name: "attach-files",

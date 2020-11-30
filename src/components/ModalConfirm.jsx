@@ -94,7 +94,9 @@ const ModalConfirm = ({
         <>
           {successMessage}
           <div className="justify-right margin-top-m">
-            <Button onClick={onClose}>Ok</Button>
+            <Button onClick={onClose} data-testid="close-confirm-msg">
+              Ok
+            </Button>
           </div>
         </>
       )}

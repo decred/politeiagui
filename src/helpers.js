@@ -6,7 +6,7 @@ import gte from "lodash/fp/gt";
 import range from "lodash/fp/range";
 import * as pki from "./lib/pki";
 import { sha3_256 } from "js-sha3";
-import { capitalize } from "src/utils/strings";
+import { capitalize } from "./utils/strings";
 
 import { INVALID_FILE } from "./constants";
 import {
@@ -515,6 +515,13 @@ export const getDomainName = (contractorDomains, op) => {
   return domain ? domain.label : "";
 };
 
+/**
+ * Converts { day, month, year } object to unix second timestamp
+ * uses 23:59 of that day as time.
+ * @param {object} date
+ */
+export const convertObjectToUnixTimestamp = ({ day, month, year }) =>
+  new Date(Date.UTC(year, month - 1, day, 23, 59)).getTime() / 1000;
 /** INLINE IMAGES HELPERS */
 /**
  * replaceBlobsByDigestsAndGetFiles uses a regex to parse images and replace blobs by files digests

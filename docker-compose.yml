@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  politeia:
+    build: ./politeiae2e/build.sh
+    ports:
+      - "8443:443"
+  e2e:
+    build: ./teste2e
+    depends_on:
+      - politeia
+    environment:
+      - CYPRESS_baseUrl=https://politeia
+    entrypoint:
+      [
+        "/app/wait-for-it.sh",
+        "-t",
+        "30",
+        "politeia:443",
+        --,
+        "npx",
+        "cypress",
+        "run",
+        "--browser",
+        "electron",
+      ]
+    volumes:
+      - ./teste2e/cypress:/app/cypress
+      - ./teste2e/cypress.json:/app/cypress.json
+      - ./teste2e/node_modules:/app/node_modules

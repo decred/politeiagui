@@ -162,6 +162,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                   <div className="justify-left margin-top-m">
                     {!isByType && !isByDomain && (
                       <BoxTextInput
+                        data-testid="search-user"
                         name="searchTerm"
                         className={styles.searchBox}
                         value={values.searchTerm}
@@ -210,6 +211,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
         ) : foundUsers && !!foundUsers.length ? (
           <Card className={classNames("container", "margin-bottom-m")}>
             <Table
+              data-testid="results-table"
               data={foundUsers}
               headers={
                 !isCMS

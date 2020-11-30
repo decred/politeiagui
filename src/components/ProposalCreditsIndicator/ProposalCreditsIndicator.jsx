@@ -14,7 +14,12 @@ const ProposalCreditsIndicator = ({ user, history }) => {
     history.push(`/user/${user.userid}?tab=credits`);
   return (
     <div className={styles.wrapper}>
-      <Text>proposal credits: {user && proposalCredits}</Text>
+      <Text>
+        proposal credits:{" "}
+        <span data-testid="proposal-credits-number">
+          {user && proposalCredits}
+        </span>
+      </Text>
       <img
         alt="purchase proposal credits"
         className={styles.proposalCreditsButton}

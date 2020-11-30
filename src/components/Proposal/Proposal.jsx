@@ -206,6 +206,7 @@ const Proposal = React.memo(function Proposal({
             <Header
               title={
                 <Title
+                  data-testid={"proposal-title"}
                   id={`proposal-title-${proposalToken}`}
                   truncate
                   linesBeforeTruncate={2}
