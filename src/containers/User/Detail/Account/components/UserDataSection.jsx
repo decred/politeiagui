@@ -1,11 +1,24 @@
 import React from "react";
 import { Button, Text } from "pi-ui";
-import InfoSection from "../../InfoSection.jsx";
 import useNavigation from "src/hooks/api/useNavigation";
+import ModalConfirm from "src/components/ModalConfirm";
+import InfoSection from "../../InfoSection.jsx";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 export default () => {
   const { onLogout, isCMS } = useNavigation();
   const handlePermanentLogoutClick = () => onLogout(isCMS, true);
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  const handleOpenModalConfirm =
+  () => {
+    handleOpenModal(ModalConfirm, {
+      onClose: handleCloseModal,
+      onSubmit: handlePermanentLogoutClick,
+      title: "Clear user data"
+    });
+  };
+
   return (
     <>
       <InfoSection
@@ -21,7 +34,7 @@ export default () => {
             <Button
               size="sm"
               className="margin-top-s margin-bottom-m"
-              onClick={handlePermanentLogoutClick}>
+              onClick={handleOpenModalConfirm}>
               Clear data
             </Button>
           </>
