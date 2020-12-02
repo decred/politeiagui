@@ -88,7 +88,7 @@ const RecordsView = ({
   const getPropsCountByTab = useCallback(
     (tab) => {
       if (!recordTokensByTab) return "";
-      return (recordTokensByTab[tab] || []).length;
+      return recordTokensByTab[tab] ? recordTokensByTab[tab].length : "";
     },
     [recordTokensByTab]
   );
