@@ -31,7 +31,6 @@
     "react-infinite-scroller": "^1.2.4",
     "react-markdown": "^4.2.2",
     "react-mde": "^10.3.0-alpha1",
-    "react-mde-newest": "npm:react-mde",
     "react-redux": "^7.2.2",
     "react-router-dom": "^4.2.2",
     "react-scripts": "^3.4.4",
