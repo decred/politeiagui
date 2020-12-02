@@ -70,19 +70,7 @@ describe("Proposal Edit", () => {
       );
     });
   });
-  it("Can't edit without making description changes", () => {
-    // create proposal
-    const proposal = buildProposal();
-    cy.createProposal(proposal).then((res) => {
-      cy.approveProposal(res.body.censorshiprecord);
-      cy.visit(`proposals/${res.body.censorshiprecord.token.substring(0, 7)}`);
-      cy.findByTestId(/record-edit-button/i).click();
-      cy.findByRole("button", { name: /submit/i }).should("be.disabled");
-      cy.findByTestId("text-area").type(`{selectAll}${proposal.description}`);
-      cy.findByRole("button", { name: /submit/i }).should("be.disabled");
-    });
-  });
-  it("Can't edit without making title changes", () => {
+  it("Can't edit without making any changes", () => {
     // create proposal
     const proposal = buildProposal();
     cy.createProposal(proposal).then((res) => {
@@ -91,6 +79,7 @@ describe("Proposal Edit", () => {
       cy.findByTestId(/record-edit-button/i).click();
       cy.findByRole("button", { name: /submit/i }).should("be.disabled");
       cy.findByTestId("proposal-name").type(`{selectAll}${proposal.name}`);
+      cy.findByTestId("text-area").type(`{selectAll}${proposal.description}`);
       cy.findByRole("button", { name: /submit/i }).should("be.disabled");
     });
   });
