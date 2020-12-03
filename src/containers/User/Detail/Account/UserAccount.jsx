@@ -7,6 +7,7 @@ import AddressSection from "./components/AddressSection";
 import EmailSection from "./components/EmailSection";
 import PasswordSection from "./components/PasswordSection";
 import PaywallSection from "./components/PaywallSection";
+import UserDataSection from "./components/UserDataSection";
 import { useConfig } from "src/containers/Config";
 import useModalContext from "src/hooks/utils/useModalContext";
 
@@ -39,6 +40,7 @@ const UserAccount = ({
       <AdminSection isadmin={isadmin} />
       <EmailSection token={newuserverificationtoken} />
       <PasswordSection onClick={handleChangePasswordModal} />
+      <UserDataSection />
       {enablePaywall && (
         <>
           <AddressSection address={newuserpaywalladdress} />

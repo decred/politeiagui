@@ -21,7 +21,9 @@ const BillingInfo = ({ lineItems }) => {
   let total = 0;
   if (lineItems.length === 0)
     return <H3 className="margin-top-m">No billings for this proposal yet</H3>;
-  const sortedLineItems = lineItems.sort((a, b) => b.year - a.year || b.month - a.month);
+  const sortedLineItems = lineItems.sort(
+    (a, b) => b.year - a.year || b.month - a.month
+  );
   const data = sortedLineItems.map(
     ({
       userid,
@@ -48,27 +50,27 @@ const BillingInfo = ({ lineItems }) => {
   );
   return (
     <div className="margin-top-m">
-      <Table headers={headers} data={data} linesPerPage={50}/>
+      <Table headers={headers} data={data} linesPerPage={50} />
       <ExportToCsv
         data={data.map(
           ({
-          Username,
-          Date,
-          Domain,
-          Subdomain,
-          Description,
-          Labor,
-          Expenses,
-          Total
-        })  => ({
-          Username: Username.props.children,
-          Date,
-          Domain,
-          Subdomain,
-          Description,
-          Labor,
-          Expenses,
-          Total
+            Username,
+            Date,
+            Domain,
+            Subdomain,
+            Description,
+            Labor,
+            Expenses,
+            Total
+          }) => ({
+            Username: Username.props.children,
+            Date,
+            Domain,
+            Subdomain,
+            Description,
+            Labor,
+            Expenses,
+            Total
           })
         )}
         fields={[

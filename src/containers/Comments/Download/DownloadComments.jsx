@@ -13,7 +13,7 @@ const DownloadComments = ({ recordToken, className }) => {
       <DownloadJSON
         label="Download Comments Bundle"
         fileName={`${recordToken}-comments`}
-        content={comments.map(c => ({
+        content={comments.map((c) => ({
           ...c,
           serverpublickey: apiInfo.pubkey
         }))}

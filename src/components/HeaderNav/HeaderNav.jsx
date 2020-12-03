@@ -12,28 +12,21 @@ import React, { useEffect, useMemo } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import useNavigation from "src/hooks/api/useNavigation";
-import useModalContext from "src/hooks/utils/useModalContext";
 import { useConfig } from "src/containers/Config";
 import ProposalCreditsIndicator from "../ProposalCreditsIndicator";
 import { ConfigFilter } from "src/containers/Config";
-import ModalLogout from "src/components/ModalLogout";
 import styles from "./HeaderNav.module.css";
 import { isUserValidContractor } from "src/containers/DCC";
 
 const HeaderNav = ({ history }) => {
-  const { user, username } = useNavigation();
+  const { user, username, onLogout, isCMS } = useNavigation();
   const { navMenuPaths, enableCredits, enableAdminInvite } = useConfig();
   const { isadmin, userid } = user || {};
   const { themeName, setThemeName } = useTheme();
   const userIsAdmin = user && isadmin;
-
-  const [handleOpenModal, handleCloseModal] = useModalContext();
-  const openModalLogout = () =>
-    handleOpenModal(ModalLogout, {
-      onClose: handleCloseModal
-    });
-
   const isValidContractor = isUserValidContractor(user);
+
+  const handleLogoutClick = () => onLogout(isCMS, false);
 
   const menuItems = useMemo(
     () =>
@@ -107,7 +100,7 @@ const HeaderNav = ({ history }) => {
             <div className={styles.themeToggleLabel}>Dark Mode</div>
           </div>
         </DropdownItem>
-        <DropdownItem onClick={openModalLogout}>Logout</DropdownItem>
+        <DropdownItem onClick={handleLogoutClick}>Logout</DropdownItem>
       </Dropdown>
     </div>
   ) : (

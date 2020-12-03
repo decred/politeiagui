@@ -244,10 +244,8 @@ export const onLogin = ({ email, password }) =>
 
 // handleLogout calls the correct logout handler according to the user selected
 // option between a normal logout or a permanent logout.
-export const handleLogout = (isPermanent, userid) => (dispatch) =>
-  isPermanent
-    ? dispatch(handlePermanentLogout(userid))
-    : dispatch(handleNormalLogout);
+export const handleLogout = (isPermanent, userid) => () =>
+  isPermanent ? handlePermanentLogout(userid) : handleNormalLogout;
 
 // handleNormalLogout handles all the procedure to be done once the user is logged out.
 // It can be called either when the logout request has been successful or when the
