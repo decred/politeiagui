@@ -120,7 +120,7 @@ export const convertLineItemsToGrid = (
           value: newLine.type,
           error: rowErrors && rowErrors.type,
           valueViewer: () =>
-            typeValue && capitalizeFirstLetter(typeValue.description),
+            typeValue ? capitalizeFirstLetter(typeValue.description) : "",
           dataEditor: selectWrapper(
             policyLineItemTypes.map((op) => ({
               value: op.type,

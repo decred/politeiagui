@@ -69,12 +69,16 @@ export const proposalViewWrapper = (proposals, proposalsError) => ({
     []
   );
   const selectedProposal = findProposal(value);
-  const isLoading = !isEmpty(value) && !selectedProposal && !proposalsError;
+  const isLoading = isEmpty(proposals);
+  const invalidProposal = !isEmpty(value) && !selectedProposal && !isLoading;
   return (
     <>
       {isLoading && <Spinner invert />}
       {proposalsError && (
         <span className={highlightChar}>{proposalsError.toString()}</span>
+      )}
+      {invalidProposal && (
+        <span className={highlightChar}>Invalid proposal token</span>
       )}
       {selectedProposal && <span>{selectedProposal.label}</span>}
     </>
