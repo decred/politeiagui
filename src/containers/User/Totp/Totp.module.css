@@ -8,13 +8,22 @@
   min-width: 22rem;
 }
 .instructions {
+  padding-top: 0.5rem;
   flex-grow: 2;
 }
 
 .copyableKey {
-  margin-top: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
 }
 
 .resetLink {
   cursor: pointer;
+}
+
+.inputLabel {
+  color: var(--text-input-color) !important;
+  top: -2rem;
+  font-size: var(--font-size-small) !important;
 }

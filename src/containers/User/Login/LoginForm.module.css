@@ -7,3 +7,11 @@ span.privacyPolicyTxt {
 span.createAccounTxt {
   line-height: var(--spacing-3);
 }
+
+.totp.hide {
+  display: none;
+}
+
+.totpInput {
+  margin-top: 0;
+}

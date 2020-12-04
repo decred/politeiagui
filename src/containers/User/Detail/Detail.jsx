@@ -20,7 +20,7 @@ import Identity from "./Identity";
 import Preferences from "./Preferences";
 import ManageContractor from "./ManageContractor";
 import ProposalsOwned from "./ProposalsOwned";
-import Totp from "./Totp";
+import Totp from "../Totp";
 import useModalContext from "src/hooks/utils/useModalContext";
 
 const getTabComponents = ({ user, ...rest }) => {

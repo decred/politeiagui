@@ -410,10 +410,11 @@ export const proposalBilling = (csrf, token) =>
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);
 
-export const login = (csrf, email, password) =>
+export const login = (csrf, email, password, code) =>
   POST("/login", csrf, {
     email: email.toLowerCase(),
-    password: digest(password)
+    password: digest(password),
+    code
   }).then(getResponse);
 
 // XXXX: this route hasn't been merged into the master of the backend.

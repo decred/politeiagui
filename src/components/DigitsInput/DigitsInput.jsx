@@ -1,23 +1,30 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { NumberInput, classNames } from "pi-ui";
 import styles from "./DigitsInput.module.css";
 
-const DigitsInput = ({ length, onChange }) => {
-  const [digits, setDigits] = useState(Array(length).fill(""));
+const getCodeArray = (code = "", length) => {
+  let newDigits = code.split("").splice(0, length);
+  if (newDigits.length < length) {
+    const fillArray = Array(length - newDigits.length).fill("");
+    newDigits = [...newDigits, ...fillArray];
+  }
+  return newDigits;
+};
+
+const DigitsInput = ({ length, onChange, className, code }) => {
+  const [digits, setDigits] = useState(getCodeArray(code, length));
   const [focused, setFocused] = useState(false);
   const inputRef = useRef(null);
 
   const handleChangeDigit = (e) => {
     e && e.preventDefault();
-    let newDigits = e.target.value.toString().split("").splice(0, length);
-    if (newDigits.length < length) {
-      const fillArray = Array(length - newDigits.length).fill("");
-      newDigits = [...newDigits, ...fillArray];
-    }
-    setDigits(newDigits);
-    onChange(newDigits.join(""));
+    onChange(e.target.value.toString());
   };
+
+  useEffect(() => {
+    setDigits(getCodeArray(code, length));
+  }, [code, length]);
 
   return (
     <>
@@ -34,6 +41,7 @@ const DigitsInput = ({ length, onChange }) => {
       />
       <div
         className={classNames(
+          className,
           styles.digitsWrapper,
           focused && styles.focusedInput
         )}>
