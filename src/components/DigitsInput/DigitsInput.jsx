@@ -19,7 +19,8 @@ const DigitsInput = ({ length, onChange, className, code }) => {
 
   const handleChangeDigit = (e) => {
     e && e.preventDefault();
-    onChange(e.target.value.toString());
+    const newCode = e.target.value.toString();
+    onChange(getCodeArray(newCode, length).join(""));
   };
 
   useEffect(() => {
