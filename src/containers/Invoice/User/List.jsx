@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { useUserInvoices } from "./hooks";
 import { Spinner, Message } from "pi-ui";
 import Invoice from "src/components/Invoice";
+import Link from "src/components/Link";
 import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import {
   InvoiceFilterForm,
@@ -13,7 +14,7 @@ import styles from "./List.module.css";
 
 const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
   const { loading, invoices } = useUserInvoices();
-  const { requireGitHubName } = useContractor();
+  const { requireGitHubName, user } = useContractor();
   const [filters, setFilters] = useState({});
 
   const renderInvoice = useCallback(
@@ -57,7 +58,16 @@ const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
   return (
     <AdminInvoiceActionsProvider>
       <TopBanner>
-        <PageDetails title="My invoices">
+        <PageDetails
+          title="My invoices"
+          actionsContent={
+          user.proposalsowned &&
+            <Link
+            className="cursor-pointer"
+            to={`/user/${user.userid}?tab=proposals owned`}>
+              Proposals owned
+            </Link>
+        }>
           <InvoiceFilterForm onChange={handleFiltersChange} disableUserFilter />
         </PageDetails>
       </TopBanner>
