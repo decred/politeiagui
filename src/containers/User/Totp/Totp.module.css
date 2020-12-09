@@ -1,6 +1,7 @@
 .setContainer {
   display: flex;
   justify-content: space-between;
+  flex-flow: row wrap;
   margin-top: 1rem;
 }
 .qrcode {
@@ -10,6 +11,7 @@
 .instructions {
   padding-top: 0.5rem;
   flex-grow: 2;
+  width: 400px;
 }
 
 .copyableKey {
