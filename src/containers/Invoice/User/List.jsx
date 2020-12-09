@@ -12,7 +12,12 @@ import HelpMessage from "src/components/HelpMessage";
 import useContractor from "src/containers/User/Detail/hooks/useContractor";
 import styles from "./List.module.css";
 
-const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
+const ListUserInvoices = ({
+  TopBanner,
+  PageDetails,
+  Main,
+  DefaultNewButton
+}) => {
   const { loading, invoices } = useUserInvoices();
   const { requireGitHubName, user } = useContractor();
   const [filters, setFilters] = useState({});
@@ -61,14 +66,16 @@ const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
         <PageDetails
           title="My invoices"
           actionsContent={
-            user &&
-              user.proposalsowned &&
-                user.proposalsowned.length > 0 &&
-                  <Link
+            <>
+              {user && user.proposalsowned && user.proposalsowned.length > 0 && (
+                <Link
                   className="cursor-pointer"
                   to={`/user/${user.userid}?tab=proposals owned`}>
-                    Proposals owned
-                  </Link>
+                  Proposals owned
+                </Link>
+              )}
+              <DefaultNewButton />
+            </>
           }>
           <InvoiceFilterForm onChange={handleFiltersChange} disableUserFilter />
         </PageDetails>
