@@ -62,13 +62,14 @@ const ListUserInvoices = ({ TopBanner, PageDetails, Main }) => {
           title="My invoices"
           actionsContent={
             user &&
-              user.proposalsowned &&
-                user.proposalsowned.length > 0 &&
-                  <Link
-                  className="cursor-pointer"
-                  to={`/user/${user.userid}?tab=proposals owned`}>
-                    Proposals owned
-                  </Link>
+            user.proposalsowned &&
+            user.proposalsowned.length > 0 && (
+              <Link
+                className="cursor-pointer"
+                to={`/user/${user.userid}?tab=proposals owned`}>
+                Proposals owned
+              </Link>
+            )
           }>
           <InvoiceFilterForm onChange={handleFiltersChange} disableUserFilter />
         </PageDetails>
