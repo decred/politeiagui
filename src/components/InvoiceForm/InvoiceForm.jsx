@@ -107,7 +107,9 @@ const InvoiceForm = React.memo(function InvoiceForm({
   return (
     <form onSubmit={handleSubmit}>
       {errors && errors.global && (
-        <Message kind="error" className="margin-bottom-m">{errors.global.toString()}</Message>
+        <Message kind="error" className="margin-bottom-m">
+          {errors.global.toString()}
+        </Message>
       )}
       {requireGitHubName && (
         <Message kind="warning" className="margin-bottom-m">
