@@ -1,6 +1,5 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, memo } from "react";
 import { H4, Text, Table, Spinner, Link as UiLink, classNames } from "pi-ui";
-
 import Link from "src/components/Link";
 import { useCodeStats } from "./hooks";
 import styles from "./Detail.module.css";
@@ -85,7 +84,6 @@ const printCodeStatsInfo = ({
   )
 });
 
-// TODO: code when the codestats endpoint is fixed
 const CodeStats = ({ userid, start, end }) => {
   const { loading, error, codestats } = useCodeStats(userid, start, end);
   const [showStats, setShowStats] = useState(false);
@@ -107,8 +105,8 @@ const CodeStats = ({ userid, start, end }) => {
         <>
           <Table headers={headers} data={codestats.map(printCodeStatsInfo)} />
           <H4 className="margin-bottom-s">Commits:</H4>
-          {codestats.map((cs) => (
-            <Text className={styles.prs}>
+          {codestats.map((cs, i) => (
+            <Text className={styles.prs} key={i}>
               {cs.commits.length === 0
                 ? "none"
                 : cs.commits.map(getUrlEnd(cs.commits.length - 1, 5, true))}
@@ -126,4 +124,4 @@ const CodeStats = ({ userid, start, end }) => {
   );
 };
 
-export default CodeStats;
+export default memo(CodeStats);
