@@ -11,6 +11,10 @@
   margin-right: 2rem;
 }
 
+.digitsWrapper > div > input:hover {
+  border-bottom: 0.1rem solid var(--color-primary-dark);
+}
+
 /* Chrome, Safari, Edge, Opera */
 .digitsWrapper input::-webkit-outer-spin-button,
 .digitsWrapper input::-webkit-inner-spin-button {

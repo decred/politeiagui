@@ -20,17 +20,26 @@ const DigitsInput = ({ length, onChange, className, code }) => {
   const handleChangeDigit = (e) => {
     e && e.preventDefault();
     const newCode = e.target.value.toString();
-    onChange(getCodeArray(newCode, length).join(""));
+    const numbersOnlyCode = newCode.replace(/^\D+/g, "");
+    onChange(getCodeArray(numbersOnlyCode, length).join(""));
   };
 
   useEffect(() => {
     setDigits(getCodeArray(code, length));
   }, [code, length]);
 
+  const onChangeDigit = (index) => {
+    const newDigits = [...digits];
+    newDigits[index] = "";
+    inputRef.current.selectionStart = index;
+    inputRef.current.selectionEnd = index + 1;
+    inputRef.current.focus();
+  };
+
   return (
     <>
       <input
-        type="number"
+        type="text"
         className={styles.mainInput}
         autoFocus
         onChange={handleChangeDigit}
@@ -52,8 +61,10 @@ const DigitsInput = ({ length, onChange, className, code }) => {
               id={`id-digit-${index}`}
               key={`digit-${index}`}
               defaultValue={value}
-              onFocus={() => {
-                inputRef.current.focus();
+              onFocus={(e) => {
+                e && e.target && e.target.value
+                  ? onChangeDigit(index)
+                  : inputRef.current.focus();
                 setFocused(true);
               }}
             />
