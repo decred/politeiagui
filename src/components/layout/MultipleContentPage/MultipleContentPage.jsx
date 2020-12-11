@@ -134,6 +134,7 @@ const MultipleContentpage = ({ children, disableScrollToTop, ...props }) => {
           Main,
           Subtitle,
           PageDetails,
+          DefaultNewButton,
           Title,
           Tabs,
           Tab
