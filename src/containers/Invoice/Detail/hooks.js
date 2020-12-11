@@ -88,24 +88,23 @@ export function useInvoice(invoiceToken) {
   };
 }
 
-export function useInvoicesSummary(currentInvoice, userid, start, end) {
-  const onFetchAdminInvoicesWithoutState = useAction(
-    act.onFetchAdminInvoicesWithoutState
-  );
-
-  const [
-    loading,
-    error,
-    invoices
-  ] = useAPIAction(onFetchAdminInvoicesWithoutState, [start, end, userid]);
-
+export function useInvoices(currentInvoice, userid, start, end) {
+  const invoices = useSelector(sel.allInvoices);
+  const filteredInvoices =
+    invoices && invoices.length > 0
+      ? invoices.filter((inv) => {
+          const invTimestamp =
+            new Date(inv.input.year, inv.input.month).getTime() / 1000;
+          return (
+            inv.censorshiprecord.token !== currentInvoice &&
+            inv.userid === userid &&
+            invTimestamp >= start &&
+            invTimestamp <= end
+          );
+        })
+      : null;
   return {
-    loading,
-    error,
-    // return invoices array but filter the current invoice out
-    invoices: invoices
-      ? invoices.filter((inv) => inv.censorshiprecord.token !== currentInvoice)
-      : null
+    invoices: filteredInvoices
   };
 }
 

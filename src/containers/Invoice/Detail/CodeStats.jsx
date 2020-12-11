@@ -89,7 +89,7 @@ const CodeStats = ({ userid, start, end }) => {
   const [showStats, setShowStats] = useState(false);
   const toggleShowStats = () => setShowStats(!showStats);
   const shouldPrintTable =
-  showStats && !loading && !error && codestats && codestats.length > 0;
+    showStats && !loading && !error && codestats && codestats.length > 0;
   const shouldPrintEmptyMessage =
     !loading && !error && codestats && codestats.length === 0;
   const shouldPrintLoading = showStats && loading;
@@ -118,8 +118,8 @@ const CodeStats = ({ userid, start, end }) => {
         <Text>No code stats for the past 3 months</Text>
       ) : shouldPrintErrorMessage ? (
         <Text>Error fetching codestats. Err: {error}</Text>
-      ) : shouldPrintLoading && (
-        <Spinner />
+      ) : (
+        shouldPrintLoading && <Spinner />
       )}
     </>
   );

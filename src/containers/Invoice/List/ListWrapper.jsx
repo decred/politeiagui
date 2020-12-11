@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { Spinner } from "pi-ui";
 import { AdminInvoiceActionsProvider } from "src/containers/Invoice/Actions";
 import Invoice from "src/components/Invoice";
-import { useAdminInvoices } from "./hooks";
+import useAdminInvoices from "src/hooks/api/useAdminInvoices";
 import HelpMessage from "src/components/HelpMessage";
 import styles from "./ListWrapper.module.css";
 
