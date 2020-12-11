@@ -65,7 +65,7 @@ export const presentationalInvoiceName = (invoice) =>
   invoice && invoice.input
     ? `${invoice.input.contractorname || invoice.username} - ${
         invoice.input.month
-      }/${invoice.input.year} invoice`
+      }/${invoice.input.year}`
     : "";
 
 /**
@@ -73,7 +73,7 @@ export const presentationalInvoiceName = (invoice) =>
  * @param {Object} invoice
  */
 export const presentationalDraftInvoiceName = (draft) =>
-  draft ? `${draft.name} - ${draft.date.month}/${draft.date.year} invoice` : "";
+  draft ? `${draft.name} - ${draft.date.month}/${draft.date.year}` : "";
 
 /**
  * Returns true if the given invoice wasn't reviewed by an admin yet
