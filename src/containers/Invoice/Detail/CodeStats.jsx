@@ -89,9 +89,10 @@ const CodeStats = ({ userid, start, end }) => {
   const [showStats, setShowStats] = useState(false);
   const toggleShowStats = () => setShowStats(!showStats);
   const shouldPrintTable =
-    !loading && !error && codestats && codestats.length > 0;
+  showStats && !loading && !error && codestats && codestats.length > 0;
   const shouldPrintEmptyMessage =
     !loading && !error && codestats && codestats.length === 0;
+  const shouldPrintLoading = showStats && loading;
   const shouldPrintErrorMessage = !loading && error && !codestats;
   return (
     <>
@@ -101,7 +102,7 @@ const CodeStats = ({ userid, start, end }) => {
           {shouldPrintEmptyMessage ? "" : showStats ? "Hide" : "Show"}
         </UiLink>
       </div>
-      {showStats && shouldPrintTable ? (
+      {shouldPrintTable ? (
         <>
           <Table headers={headers} data={codestats.map(printCodeStatsInfo)} />
           <H4 className="margin-bottom-s">Commits:</H4>
@@ -117,7 +118,7 @@ const CodeStats = ({ userid, start, end }) => {
         <Text>No code stats for the past 3 months</Text>
       ) : shouldPrintErrorMessage ? (
         <Text>Error fetching codestats. Err: {error}</Text>
-      ) : (
+      ) : shouldPrintLoading && (
         <Spinner />
       )}
     </>

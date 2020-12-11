@@ -10,8 +10,7 @@ export default () => {
   const handlePermanentLogoutClick = () => onLogout(isCMS, true);
   const [handleOpenModal, handleCloseModal] = useModalContext();
 
-  const handleOpenModalConfirm =
-  () => {
+  const handleOpenModalConfirm = () => {
     handleOpenModal(ModalConfirm, {
       onClose: handleCloseModal,
       onSubmit: handlePermanentLogoutClick,

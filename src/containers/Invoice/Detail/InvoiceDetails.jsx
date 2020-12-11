@@ -24,9 +24,11 @@ const printInvoiceInfo = ({
 const InvoiceDetails = ({ token, userid, start, end }) => {
   const [showStats, setShowStats] = useState(false);
   const toggleShowStats = () => setShowStats(!showStats);
-  const { invoices } = useInvoicesSummary(token, userid, start, end);
-  const shouldPrintTable = invoices && invoices.length > 0;
+  const { invoices, loading, error } = useInvoicesSummary(token, userid, start, end);
+  const shouldPrintTable = showStats && invoices && invoices.length > 0;
   const shouldPrintEmptyMessage = invoices && invoices.length === 0;
+  const shouldPrintLoading = showStats && loading;
+  const shouldPrintErrorMessage = !loading && !invoices && error;
   return (
     <>
       <div className={styles.titleLinkWrapper}>
@@ -35,11 +37,13 @@ const InvoiceDetails = ({ token, userid, start, end }) => {
           {shouldPrintEmptyMessage ? "" : showStats ? "Hide" : "Show"}
         </UiLink>
       </div>
-      {showStats && shouldPrintTable ? (
+      {shouldPrintTable ? (
         <Table headers={headers} data={invoices.map(printInvoiceInfo)} />
       ) : shouldPrintEmptyMessage ? (
         <Text>No invoices for the past 3 months</Text>
-      ) : (
+      ) : shouldPrintErrorMessage ? (
+        <Text>Error invoice summary. Err: {error}</Text>
+      ) : shouldPrintLoading && (
         <Spinner />
       )}
     </>
