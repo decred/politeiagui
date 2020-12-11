@@ -7,7 +7,6 @@ export default function useUserIdentity() {
   const currentUserID = useSelector(sel.currentUserID);
   const currentUserUsername = useSelector(sel.currentUserUsername);
   const currentUserEmail = useSelector(sel.currentUserEmail);
-  const identityImportError = useSelector(sel.identityImportError);
   const identityImportSuccess = useSelector(sel.identityImportSuccess);
   const keyMismatch = useSelector(sel.keyMismatch);
   const updateUserKeyToken = useSelector(sel.currentUserKeyVerificationToken);
@@ -23,7 +22,6 @@ export default function useUserIdentity() {
     currentUserID,
     currentUserUsername,
     currentUserEmail,
-    identityImportError,
     identityImportSuccess,
     keyMismatch,
     updateUserKeyToken,

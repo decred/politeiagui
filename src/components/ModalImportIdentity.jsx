@@ -49,30 +49,6 @@ const onSelectFiles = (setFileError, setFieldValue) => ({ base64 }) => {
   }
 };
 
-const onSubmitFiles = (
-  onIdentityImported,
-  userPubkey,
-  currentUserID,
-  json,
-  setFileError
-) => {
-  try {
-    auditIdentity(json, userPubkey, setFileError);
-    pki
-      .importKeys(currentUserID, json)
-      .then(() => {
-        onIdentityImported("Successfully imported identity");
-      })
-      .catch((e) => {
-        onIdentityImported(null, LOAD_KEY_FAILED);
-        throw e;
-      });
-  } catch (e) {
-    onIdentityImported(null, e);
-    throw e;
-  }
-};
-
 const ModalImportIdentity = ({
   show,
   onClose,
@@ -88,27 +64,27 @@ const ModalImportIdentity = ({
   } = useUserIdentity();
   const [fileError, setFileError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const onSubmitNewIdentity = (
+
+  const onSubmitNewIdentity = async (
     values,
     { resetForm, setSubmitting, setFieldError }
   ) => {
     try {
-      onSubmitFiles(
-        onIdentityImported,
-        userPubkey,
-        currentUserID,
-        values,
-        setFileError
-      );
+      await auditIdentity(values, userPubkey, setFileError);
+      await pki.importKeys(currentUserID, values).catch(() => {
+        throw new Error(LOAD_KEY_FAILED);
+      });
       resetForm();
       setSuccess(true);
       keyMismatchAction(false);
       setSubmitting(false);
+      onIdentityImported("Successfully imported identity");
     } catch (e) {
       setSubmitting(false);
       setFieldError("global", e);
     }
   };
+
   useEffect(
     function clearOnClose() {
       if (!show) {
