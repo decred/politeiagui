@@ -47,13 +47,13 @@ export const TableRow = ({ children, className }) => (
 
 const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   value,
-  omit,
   onChange,
   readOnly,
   userRate,
   errors,
   proposals,
-  proposalsError
+  proposalsError,
+  isMobile
 }) {
   const { policy } = usePolicy();
   const { subContractors, error: subContractorsError } = useSubContractors();
@@ -201,7 +201,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
     [onChange, value, grid.length]
   );
 
-  const headers = useMemo(() => createTableHeaders(omit), [omit]);
+  const headers = useMemo(() => createTableHeaders(isMobile), [isMobile]);
 
   const onContextMenu = useCallback(
     (e, cell) => (cell.readOnly ? e.preventDefault() : null),
@@ -277,10 +277,10 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
 
 InvoiceDatasheet.propTypes = {
   value: PropTypes.array.isRequired,
-  omit: PropTypes.array,
   readOnly: PropTypes.bool.isRequired,
   onChange: PropTypes.func,
-  proposals: PropTypes.array.isRequired
+  proposals: PropTypes.array.isRequired,
+  isMobile: PropTypes.bool
 };
 
 InvoiceDatasheet.defaultProps = {
