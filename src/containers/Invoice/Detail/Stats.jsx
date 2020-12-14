@@ -3,8 +3,11 @@ import { Card, H2 } from "pi-ui";
 import CodeStats from "./CodeStats";
 import InvoiceDetails from "./InvoiceDetails";
 import styles from "./Detail.module.css";
+import { isUserDeveloper } from "src/containers/DCC/helpers";
+import useUserDetail from "src/hooks/api/useUserDetail";
 
-const Stats = ({ invoiceToken, userid, isUserDeveloper }) => {
+const Stats = ({ invoiceToken, userid }) => {
+  const { user } = useUserDetail(userid);
   const end = new Date();
   const start = new Date();
   start.setMonth(start.getMonth() - 3);
@@ -19,7 +22,7 @@ const Stats = ({ invoiceToken, userid, isUserDeveloper }) => {
         token={invoiceToken}
         userid={userid}
       />
-      {isUserDeveloper && (
+      {isUserDeveloper(user) && (
         <CodeStats userid={userid} start={starttimestamp} end={endtimestamp} />
       )}
     </Card>

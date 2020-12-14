@@ -12,7 +12,6 @@ import Stats from "./Stats";
 import get from "lodash/fp/get";
 import { useDocumentTitle } from "src/hooks/utils/useDocumentTitle";
 import { presentationalInvoiceName } from "../helpers";
-import { isUserDeveloper } from "src/containers/DCC/helpers";
 
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
@@ -24,7 +23,6 @@ const InvoiceDetail = ({ Main, match }) => {
     currentUser,
     error,
     proposals,
-    user,
     proposalsError
   } = useInvoice(invoiceToken);
 
@@ -57,7 +55,6 @@ const InvoiceDetail = ({ Main, match }) => {
                 <Stats
                   invoiceToken={invoice.censorshiprecord.token}
                   userid={invoice.userid}
-                  isUserDeveloper={isUserDeveloper(user)}
                 />
               )}
             </>

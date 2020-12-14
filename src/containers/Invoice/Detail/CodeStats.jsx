@@ -95,7 +95,6 @@ export const FetchCodeStats = ({ userid, start, end }) => {
 
 const CodeStats = ({ userid, start, end }) => {
   const { codestats } = useCodeStats(userid, start, end);
-  console.log(codestats);
   const [showStats, setShowStats] = useState(false);
   const toggleShowStats = () => setShowStats(!showStats);
   const shouldPrintTable = showStats && codestats && codestats.length > 0;

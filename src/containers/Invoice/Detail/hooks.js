@@ -28,12 +28,6 @@ export function useInvoice(invoiceToken) {
 
   const hasUnfetchedProposalsTokens = !isEmpty(unfetchedProposalsTokens);
 
-  const userSelector = useMemo(
-    () => sel.makeGetUserByID(invoice && invoice.userid),
-    [invoice]
-  );
-  const user = useSelector(userSelector);
-
   const initialValues = {
     status: "idle",
     loading: true
@@ -83,8 +77,7 @@ export function useInvoice(invoiceToken) {
     loading: state.loading || state.verifying,
     proposals: state.proposals,
     proposalsError: state.error,
-    currentUser,
-    user
+    currentUser
   };
 }
 
