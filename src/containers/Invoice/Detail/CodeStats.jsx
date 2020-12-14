@@ -1,7 +1,7 @@
 import React, { Fragment, useState, memo } from "react";
 import { H4, Text, Table, Spinner, Link as UiLink, classNames } from "pi-ui";
 import Link from "src/components/Link";
-import { useCodeStats } from "./hooks";
+import { useCodeStats, useFetchCodeStats } from "./hooks";
 import styles from "./Detail.module.css";
 
 const headers = [
@@ -84,20 +84,29 @@ const printCodeStatsInfo = ({
   )
 });
 
+export const FetchCodeStats = ({ userid, start, end }) => {
+  const { loading, error } = useFetchCodeStats(userid, start, end);
+  return loading ? (
+    <Spinner />
+  ) : error ? (
+    <Text>Error fetching codestats. Err: {error}</Text>
+  ) : null;
+};
+
 const CodeStats = ({ userid, start, end }) => {
-  const { loading, error, codestats } = useCodeStats(userid, start, end);
+  const { codestats } = useCodeStats(userid, start, end);
+  console.log(codestats);
   const [showStats, setShowStats] = useState(false);
   const toggleShowStats = () => setShowStats(!showStats);
-  const shouldPrintTable =
-    showStats && !loading && !error && codestats && codestats.length > 0;
-  const shouldPrintEmptyMessage =
-    !loading && !error && codestats && codestats.length === 0;
-  const shouldPrintLoading = showStats && loading;
-  const shouldPrintErrorMessage = !loading && error && !codestats;
+  const shouldPrintTable = showStats && codestats && codestats.length > 0;
+  const shouldPrintEmptyMessage = codestats && codestats.length === 0;
   return (
     <>
       <div className={classNames(styles.titleLinkWrapper, "margin-top-m")}>
         <H4>Past 3 months code stats</H4>
+        {!codestats && (
+          <FetchCodeStats userid={userid} start={start} end={end} />
+        )}
         <UiLink className={styles.uilink} onClick={toggleShowStats}>
           {shouldPrintEmptyMessage ? "" : showStats ? "Hide" : "Show"}
         </UiLink>
@@ -114,12 +123,10 @@ const CodeStats = ({ userid, start, end }) => {
             </Text>
           ))}
         </>
-      ) : shouldPrintEmptyMessage ? (
-        <Text>No code stats for the past 3 months</Text>
-      ) : shouldPrintErrorMessage ? (
-        <Text>Error fetching codestats. Err: {error}</Text>
       ) : (
-        shouldPrintLoading && <Spinner />
+        shouldPrintEmptyMessage && (
+          <Text>No code stats for the past 3 months</Text>
+        )
       )}
     </>
   );

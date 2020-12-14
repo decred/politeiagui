@@ -108,13 +108,7 @@ export function useInvoices(currentInvoice, userid, start, end) {
   };
 }
 
-export function useCodeStats(userid, start, end) {
-  const codeStatsSelector = useMemo(
-    () => sel.makeGetCodeStatsByUserID(userid),
-    [userid]
-  );
-  const codestats = useSelector(codeStatsSelector);
-
+export function useFetchCodeStats(userid, start, end) {
   const onFetchUserCodeStats = useAction(act.onFetchUserCodeStats);
 
   const [loading, error] = useAPIAction(onFetchUserCodeStats, [
@@ -123,5 +117,15 @@ export function useCodeStats(userid, start, end) {
     end
   ]);
 
-  return { loading, error, codestats };
+  return { loading, error };
+}
+
+export function useCodeStats(userid) {
+  const codeStatsSelector = useMemo(
+    () => sel.makeGetCodeStatsByUserID(userid),
+    [userid]
+  );
+  const codestats = useSelector(codeStatsSelector);
+
+  return { codestats };
 }
