@@ -1,8 +1,7 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, memo } from "react";
 import { H4, Text, Table, Spinner, Link as UiLink, classNames } from "pi-ui";
-
 import Link from "src/components/Link";
-import { useCodeStats } from "./hooks";
+import { useCodeStats, useFetchCodeStats } from "./hooks";
 import styles from "./Detail.module.css";
 
 const headers = [
@@ -85,45 +84,51 @@ const printCodeStatsInfo = ({
   )
 });
 
-// TODO: code when the codestats endpoint is fixed
+export const FetchCodeStats = ({ userid, start, end }) => {
+  const { loading, error } = useFetchCodeStats(userid, start, end);
+  return loading ? (
+    <Spinner />
+  ) : error ? (
+    <Text>Error fetching codestats. Err: {error}</Text>
+  ) : null;
+};
+
 const CodeStats = ({ userid, start, end }) => {
-  const { loading, error, codestats } = useCodeStats(userid, start, end);
+  const { codestats } = useCodeStats(userid, start, end);
   const [showStats, setShowStats] = useState(false);
   const toggleShowStats = () => setShowStats(!showStats);
-  const shouldPrintTable =
-    !loading && !error && codestats && codestats.length > 0;
-  const shouldPrintEmptyMessage =
-    !loading && !error && codestats && codestats.length === 0;
-  const shouldPrintErrorMessage = !loading && error && !codestats;
+  const shouldPrintTable = showStats && codestats && codestats.length > 0;
+  const shouldPrintEmptyMessage = codestats && codestats.length === 0;
   return (
     <>
       <div className={classNames(styles.titleLinkWrapper, "margin-top-m")}>
         <H4>Past 3 months code stats</H4>
+        {!codestats && (
+          <FetchCodeStats userid={userid} start={start} end={end} />
+        )}
         <UiLink className={styles.uilink} onClick={toggleShowStats}>
           {shouldPrintEmptyMessage ? "" : showStats ? "Hide" : "Show"}
         </UiLink>
       </div>
-      {showStats && shouldPrintTable ? (
+      {shouldPrintTable ? (
         <>
           <Table headers={headers} data={codestats.map(printCodeStatsInfo)} />
           <H4 className="margin-bottom-s">Commits:</H4>
-          {codestats.map((cs) => (
-            <Text className={styles.prs}>
+          {codestats.map((cs, i) => (
+            <Text className={styles.prs} key={i}>
               {cs.commits.length === 0
                 ? "none"
                 : cs.commits.map(getUrlEnd(cs.commits.length - 1, 5, true))}
             </Text>
           ))}
         </>
-      ) : shouldPrintEmptyMessage ? (
-        <Text>No code stats for the past 3 months</Text>
-      ) : shouldPrintErrorMessage ? (
-        <Text>Error fetching codestats. Err: {error}</Text>
       ) : (
-        <Spinner />
+        shouldPrintEmptyMessage && (
+          <Text>No code stats for the past 3 months</Text>
+        )
       )}
     </>
   );
 };
 
-export default CodeStats;
+export default memo(CodeStats);

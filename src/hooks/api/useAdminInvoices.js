@@ -4,7 +4,7 @@ import { useAction, useSelector } from "src/redux";
 import useAPIAction from "src/hooks/utils/useAPIAction";
 import useThrowError from "src/hooks/utils/useThrowError";
 
-export function useAdminInvoices() {
+export default function useAdminInvoices() {
   const invoices = useSelector(sel.allInvoices);
   const onFetchAdminInvoices = useAction(act.onFetchAdminInvoices);
 

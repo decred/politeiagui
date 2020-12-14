@@ -5,9 +5,7 @@ import InvoiceDetail from "src/containers/Invoice/Detail";
 const InvoiceDetailPage = () => {
   return (
     <MultipleContentPage topBannerHeight={0}>
-      {(props) => {
-        return <InvoiceDetail {...props} />;
-      }}
+      {(props) => <InvoiceDetail {...props} />}
     </MultipleContentPage>
   );
 };

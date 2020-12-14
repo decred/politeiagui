@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useAdminInvoices } from "./hooks";
+import useAdminInvoices from "src/hooks/api/useAdminInvoices";
 import {
   Spinner,
   Link as UILink,

@@ -16,6 +16,7 @@ import { presentationalInvoiceName } from "../helpers";
 const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
+
   const {
     invoice,
     loading,
@@ -24,12 +25,11 @@ const InvoiceDetail = ({ Main, match }) => {
     proposals,
     proposalsError
   } = useInvoice(invoiceToken);
+
   const isAuthor =
     currentUser && invoice && invoice.userid === currentUser.userid;
   const isAdmin = currentUser && currentUser.isadmin;
   const isPublicMode = !isAdmin && !isAuthor;
-
-  const shouldShowStats = isAdmin && invoice;
 
   // set tab title
   useDocumentTitle(presentationalInvoiceName(invoice));
@@ -42,18 +42,25 @@ const InvoiceDetail = ({ Main, match }) => {
           {error ? (
             <Message kind="error">{error.toString()}</Message>
           ) : !!invoice && !loading ? (
-            <Invoice
-              invoice={invoice}
-              isAuthor={isAuthor}
-              isPublicMode={isPublicMode}
-              extended
-              approvedProposals={proposals || []}
-              approvedProposalsError={proposalsError}
-            />
+            <>
+              <Invoice
+                invoice={invoice}
+                isAuthor={isAuthor}
+                isPublicMode={isPublicMode}
+                extended
+                approvedProposals={proposals || []}
+                approvedProposalsError={proposalsError}
+              />
+              {isAdmin && (
+                <Stats
+                  invoiceToken={invoice.censorshiprecord.token}
+                  userid={invoice.userid}
+                />
+              )}
+            </>
           ) : (
             <InvoiceLoader extended />
           )}
-          {shouldShowStats && <Stats invoice={invoice} />}
           {!isPublicMode && (
             <Comments
               recordAuthorID={invoice && invoice.userid}

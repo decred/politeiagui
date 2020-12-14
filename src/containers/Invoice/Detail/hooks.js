@@ -3,8 +3,6 @@ import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
 import useAPIAction from "src/hooks/utils/useAPIAction";
-import useUserDetail from "src/hooks/api/useUserDetail";
-import { isUserDeveloper } from "src/containers/DCC/helpers";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
 import { getProposalsTokensFromInvoice } from "../helpers";
 import isEmpty from "lodash/fp/isEmpty";
@@ -83,38 +81,27 @@ export function useInvoice(invoiceToken) {
   };
 }
 
-export function useInvoicesSummary(currentInvoice, userid, start, end) {
-  const onFetchAdminInvoicesWithoutState = useAction(
-    act.onFetchAdminInvoicesWithoutState
-  );
-
-  const { user } = useUserDetail(userid);
-
-  const [
-    loading,
-    error,
-    invoices
-  ] = useAPIAction(onFetchAdminInvoicesWithoutState, [start, end, userid]);
-
+export function useInvoices(currentInvoice, userid, start, end) {
+  const invoices = useSelector(sel.allInvoices);
+  const filteredInvoices =
+    invoices && invoices.length > 0
+      ? invoices.filter((inv) => {
+          const invTimestamp =
+            new Date(inv.input.year, inv.input.month).getTime() / 1000;
+          return (
+            inv.censorshiprecord.token !== currentInvoice &&
+            inv.userid === userid &&
+            invTimestamp >= start &&
+            invTimestamp <= end
+          );
+        })
+      : null;
   return {
-    loading,
-    error,
-    // return if the user is developer
-    isUserDeveloper: isUserDeveloper(user),
-    // return invoices array but filter the current invoice out
-    invoices: invoices
-      ? invoices.filter((inv) => inv.censorshiprecord.token !== currentInvoice)
-      : null
+    invoices: filteredInvoices
   };
 }
 
-export function useCodeStats(userid, start, end) {
-  const codeStatsSelector = useMemo(
-    () => sel.makeGetCodeStatsByUserID(userid),
-    [userid]
-  );
-  const codestats = useSelector(codeStatsSelector);
-
+export function useFetchCodeStats(userid, start, end) {
   const onFetchUserCodeStats = useAction(act.onFetchUserCodeStats);
 
   const [loading, error] = useAPIAction(onFetchUserCodeStats, [
@@ -123,5 +110,15 @@ export function useCodeStats(userid, start, end) {
     end
   ]);
 
-  return { loading, error, codestats };
+  return { loading, error };
+}
+
+export function useCodeStats(userid) {
+  const codeStatsSelector = useMemo(
+    () => sel.makeGetCodeStatsByUserID(userid),
+    [userid]
+  );
+  const codestats = useSelector(codeStatsSelector);
+
+  return { codestats };
 }
