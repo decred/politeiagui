@@ -5,8 +5,16 @@ import { Tooltip, classNames, useTheme, DEFAULT_DARK_THEME_NAME } from "pi-ui";
 import styles from "./DateTooltip.module.css";
 import { formatUnixTimestamp } from "src/utils";
 
-const getTimeAgo = (timestamp) =>
-  distance(new Date(), new Date(timestamp * 1000), { addSuffix: true });
+const getTimeAgo = (timestamp) => {
+  const dateTimestamp = new Date(timestamp * 1000);
+  const now = new Date();
+  const opts = { addSuffix: true };
+  // this forces time to be in the past.
+  // Reported by: https://github.com/decred/politeiagui/issues/2246
+  return now > dateTimestamp
+    ? distance(now, dateTimestamp, opts)
+    : distance(now, now, opts);
+};
 
 const DateTooltip = ({ timestamp, placement, className, children }) => {
   const timeAgo = useMemo(() => getTimeAgo(timestamp), [timestamp]);
