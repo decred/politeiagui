@@ -10,12 +10,13 @@ RUN git clone https://github.com/GoogleChrome/rendertron.git --branch 3.0.0 --si
     # Uncomment below line to disable ssl check
     #&& sed -i "55s/.*/        puppeteerArgs: ['--no-sandbox','--ignore-certificate-errors']/" src/config.ts \
     && npm install \
-    && npm run build
+    && npm run build \
+    && tar -czvf /rendertron.tar.gz /rendertron
 
 
 FROM node:14.5.0-stretch-slim
 
-COPY --from=build /rendertron /rendertron
+COPY --from=build /rendertron.tar.gz /rendertron.tar.gz
 
 # Install chrome 
 RUN apt-get update -qq && apt-get install -qq --no-install-recommends \
@@ -30,11 +31,11 @@ RUN apt-get update -qq && apt-get install -qq --no-install-recommends \
     wget \
     gnupg2 \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* 
+    && rm -rf /var/lib/apt/lists/*  \ 
+    && echo "/bin/tar -xzvf /rendertron.tar.gz && /rendertron/bin/rendertron" > /run.sh \
+    && chmod +x /run.sh
 
 #Port that rendertron will run in locally
 ENV PORT=6060
 
-WORKDIR /rendertron/bin
-
-CMD ["rendertron"]
+CMD ["/run.sh"]
