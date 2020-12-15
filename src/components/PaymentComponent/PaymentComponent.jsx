@@ -4,7 +4,6 @@ import {
   H4,
   Text,
   useTheme,
-  useMediaQuery,
   DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
 import PropTypes from "prop-types";
@@ -17,7 +16,6 @@ import styles from "./PaymentComponent.module.css";
 const PaymentComponent = ({ address, amount, extraSmall, status }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-  const shouldPlaceTooltipBottom = useMediaQuery("(max-width: 675px)");
   return (
     <>
       <div
@@ -40,7 +38,7 @@ const PaymentComponent = ({ address, amount, extraSmall, status }) => {
           <CopyableText
             id="payment-address"
             truncate
-            tooltipPlacement={shouldPlaceTooltipBottom ? "bottom" : "right"}>
+            tooltipPlacement={"bottom"}>
             {address}
           </CopyableText>
           {!extraSmall && <PaymentStatusTag status={status} />}
