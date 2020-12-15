@@ -12,11 +12,7 @@ describe("test app selector", () => {
     expect(sel.getCsrfIsNeeded(MOCK_STATE)).toBeTruthy();
   });
 
-  it("test selectors identityImportError and identityImportSuccess", () => {
-    expect(sel.identityImportError(MOCK_STATE)).toEqual(
-      MOCK_STATE.app.identityImportResult.errorMsg
-    );
-
+  it("test selector identityImportSuccess", () => {
     expect(sel.identityImportSuccess(MOCK_STATE)).toEqual(
       MOCK_STATE.app.identityImportResult.successMsg
     );
