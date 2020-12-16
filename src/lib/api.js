@@ -411,7 +411,10 @@ export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);
 
 export const login = (csrf, email, password) =>
-  POST("/login", csrf, { email, password: digest(password) }).then(getResponse);
+  POST("/login", csrf, {
+    email: email.toLowerCase(),
+    password: digest(password)
+  }).then(getResponse);
 
 // XXXX: this route hasn't been merged into the master of the backend.
 // Pull request: https://github.com/decred/politeia/pull/940
