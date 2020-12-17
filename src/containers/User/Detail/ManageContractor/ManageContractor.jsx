@@ -27,7 +27,7 @@ const ManageContractor = ({ userID, isUserPageOwner }) => {
 
   const enableEditMode = isUserPageOwner || isAdmin;
   const canEditDccInfo = isAdmin && !showDccForm;
-  const canEditContractorInfo = isUserPageOwner && !showContractorInfoForm;
+  const canSeeContractorInfo = isUserPageOwner && !showContractorInfoForm;
 
   return (
     <Card className={classNames("container", "margin-bottom-m")}>
@@ -42,15 +42,15 @@ const ManageContractor = ({ userID, isUserPageOwner }) => {
           showGitHubName={isDeveloper || !isEmpty(user.githubname)}
           requireGitHubName={requireGitHubName && isUserPageOwner}
           hideDccInfo={canEditDccInfo}
-          hideContractorInfo={canEditContractorInfo}
+          hideContractorInfo={canSeeContractorInfo}
           showDccForm={isAdmin}
-          showContractorInfoForm={showContractorInfoForm}
+          showContractorInfoForm={isUserPageOwner && showContractorInfoForm}
           onToggleDccEdit={onToggleDccEdit}
           onToggleContractorInfoEdit={onToggleContractorInfoEdit}
           enableEditMode={enableEditMode}
         />
       )}
-      {canEditContractorInfo && (
+      {canSeeContractorInfo && (
         <EditContractorForm
           onEdit={onUpdateContractorInfo}
           user={user}
