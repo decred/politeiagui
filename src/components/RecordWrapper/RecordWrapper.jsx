@@ -69,7 +69,9 @@ export const Title = ({ children, url, ...props }) => {
   const Wrapper = url ? Link : SimpleWrapper;
   return (
     <Wrapper to={url} className={styles.title}>
-      <H2 {...props}>{children}</H2>
+      <H2 {...props} data-testid="record-title">
+        {children}
+      </H2>
     </Wrapper>
   );
 };
@@ -87,7 +89,7 @@ export const Subtitle = ({ children }) => (
 );
 
 export const Edit = ({ url, tabIndex }) => (
-  <Link to={url || ""} tabIndex={tabIndex}>
+  <Link to={url || ""} tabIndex={tabIndex} data-testid="record-edit-button">
     <Icon type="edit" className={styles.editButton} />
   </Link>
 );
@@ -136,7 +138,7 @@ export const Header = React.memo(function Header({
   rfpProposalLink
 }) {
   return (
-    <div className={styles.header}>
+    <div className={styles.header} data-testid="record-header">
       {!mobile || disableMobileView ? (
         <div className={styles.titleWrapper}>
           <div
