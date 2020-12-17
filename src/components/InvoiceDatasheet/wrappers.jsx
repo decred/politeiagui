@@ -69,7 +69,7 @@ export const proposalViewWrapper = (proposals, proposalsError) => ({
     []
   );
   const selectedProposal = findProposal(value);
-  const isLoading = isEmpty(proposals);
+  const isLoading = value && isEmpty(proposals);
   const invalidProposal = !isEmpty(value) && !selectedProposal && !isLoading;
   return (
     <>
