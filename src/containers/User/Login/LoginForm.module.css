@@ -15,3 +15,13 @@ span.createAccounTxt {
 .totpInput {
   margin-top: 0;
 }
+
+.totpToggleWrapper {
+  display: flex;
+  padding: 1rem 0 2rem;
+}
+
+.totpToggleLabel {
+  padding: 0.2rem 1rem 0;
+  color: var(--text-input-color) !important;
+}
