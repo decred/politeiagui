@@ -58,7 +58,7 @@ const VerifyTotp = ({
 };
 
 VerifyTotp.propTypes = {
-  onVerify: PropTypes.func,
+  onVerify: PropTypes.func.isRequired,
   onType: PropTypes.func,
   buttonLabel: PropTypes.string,
   title: PropTypes.string,
@@ -72,7 +72,6 @@ VerifyTotp.defaultProps = {
   buttonLabel: "Verify",
   extended: true,
   description: "",
-  onVerify: () => {},
   onType: () => {}
 };
 

@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import { NumberInput, classNames } from "pi-ui";
 import styles from "./DigitsInput.module.css";
 
-const getCodeArray = (code = "", length) => {
-  let newDigits = code.split("").splice(0, length);
+const getDigitsArrayFromCode = (code = "", length) => {
+  let newDigits = code.split("").slice(0, length);
   if (newDigits.length < length) {
     const fillArray = Array(length - newDigits.length).fill("");
     newDigits = [...newDigits, ...fillArray];
@@ -13,7 +13,7 @@ const getCodeArray = (code = "", length) => {
 };
 
 const DigitsInput = ({ length, onChange, className, code }) => {
-  const [digits, setDigits] = useState(getCodeArray(code, length));
+  const [digits, setDigits] = useState(getDigitsArrayFromCode(code, length));
   const [focused, setFocused] = useState(false);
   const inputRef = useRef(null);
 
@@ -21,11 +21,11 @@ const DigitsInput = ({ length, onChange, className, code }) => {
     e && e.preventDefault();
     const newCode = e.target.value.toString();
     const numbersOnlyCode = newCode.replace(/^\D+/g, "");
-    onChange(getCodeArray(numbersOnlyCode, length).join(""));
+    onChange(getDigitsArrayFromCode(numbersOnlyCode, length).join(""));
   };
 
   useEffect(() => {
-    setDigits(getCodeArray(code, length));
+    setDigits(getDigitsArrayFromCode(code, length));
   }, [code, length]);
 
   const onChangeDigit = (index) => {
@@ -78,7 +78,8 @@ const DigitsInput = ({ length, onChange, className, code }) => {
 DigitsInput.propTypes = {
   length: PropTypes.number,
   onChange: PropTypes.func,
-  onFill: PropTypes.func
+  className: PropTypes.string,
+  code: PropTypes.string
 };
 
 DigitsInput.defaultProps = {

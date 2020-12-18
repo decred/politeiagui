@@ -27,7 +27,10 @@ const Totp = () => {
       cb();
     });
 
-  const handleOpenTOTPModal = (isReset = true) => (code, cb) => {
+  const handleOpenTOTPModal = (shouldShowResetInstructions = true) => (
+    code,
+    cb
+  ) => {
     // if TOTP is NOT set on the account, show the instructions to SET
     const verifyProps = {
       title: "Verify TOTP",
@@ -64,7 +67,10 @@ const Totp = () => {
       onSubmit: handleResetTotp(code, cb)
     };
 
-    handleOpenModal(ModalConfirm, isReset ? resetProps : verifyProps);
+    handleOpenModal(
+      ModalConfirm,
+      shouldShowResetInstructions ? resetProps : verifyProps
+    );
   };
 
   return loading ? (

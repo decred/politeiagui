@@ -1,6 +1,5 @@
 .digitsWrapper {
   display: inline-block;
-  /* justify-content: space-between; */
 }
 
 .digitsWrapper :first-child {
