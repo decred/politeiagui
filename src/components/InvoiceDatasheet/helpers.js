@@ -248,19 +248,34 @@ export const convertGridToLineItems = (grid) => {
   }, []);
 };
 
-export const createTableHeaders = () => [
-  { readOnly: true, value: "", width: "2rem" },
-  { value: "Type", readOnly: true, width: "10rem" },
-  { value: "Domain", readOnly: true, width: "12rem" },
-  { value: "Subdomain", readOnly: true, width: "14rem" },
-  { value: "Description", readOnly: true, width: "30rem" },
-  { value: "Proposal", readOnly: true, width: "30rem" },
-  { value: "Subcontr. ID", readOnly: true, width: "10rem" },
-  { value: "Subcontr. Rate (USD)", readOnly: true, width: "8rem" },
-  { value: "Labor (hours)", readOnly: true, width: "7rem" },
-  { value: "Expense (USD)", readOnly: true, width: "7.5rem" },
-  { value: "Subtotal (USD)", readOnly: true, width: "7.5rem" }
-];
+export const createTableHeaders = (isMobileScreen) =>
+  !isMobileScreen
+    ? [
+        { value: "", readOnly: true, width: "2rem" },
+        { value: "Type", readOnly: true, width: "10rem" },
+        { value: "Domain", readOnly: true, width: "12rem" },
+        { value: "Subdomain", readOnly: true, width: "14rem" },
+        { value: "Description", readOnly: true, width: "30rem" },
+        { value: "Proposal", readOnly: true, width: "30rem" },
+        { value: "Subcontr. ID", readOnly: true, width: "10rem" },
+        { value: "Subcontr. Rate (USD)", readOnly: true, width: "8rem" },
+        { value: "Labor (hours)", readOnly: true, width: "7rem" },
+        { value: "Expense (USD)", readOnly: true, width: "7.5rem" },
+        { value: "Subtotal (USD)", readOnly: true, width: "7.5rem" }
+      ]
+    : [
+        { value: "", readOnly: true, width: "2rem" },
+        { value: "Type", readOnly: true, width: "7rem" },
+        { value: "Domain", readOnly: true, width: "9rem" },
+        { value: "Subdomain", readOnly: true, width: "10rem" },
+        { value: "Description", readOnly: true, width: "20rem" },
+        { value: "Proposal", readOnly: true, width: "20rem" },
+        { value: "Sub. ID", readOnly: true, width: "5rem" },
+        { value: "Sub. Rate (USD)", readOnly: true, width: "7.5rem" },
+        { value: "Labor (hours)", readOnly: true, width: "7rem" },
+        { value: "Expense (USD)", readOnly: true, width: "7.5rem" },
+        { value: "Subtotal (USD)", readOnly: true, width: "7.5rem" }
+      ];
 
 export const updateGridCell = (grid, row, col, values) => {
   grid[row][col] = { ...grid[row][col], ...values };
