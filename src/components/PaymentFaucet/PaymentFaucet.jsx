@@ -24,7 +24,7 @@ const PaymentFaucet = ({ address, amount, onFail = noop }) => {
   );
   return (
     isTestnet && (
-      <div className="paywall-faucet">
+      <div className={styles.paywallFaucet}>
         <P className="margin-top-m">
           This Politeia instance is running on Testnet, which means you can pay
           with the Decred faucet:
