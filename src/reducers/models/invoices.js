@@ -12,6 +12,9 @@ const DEFAULT_STATE = {
   newInvoiceToken: null
 };
 
+const onReceiveCMSLogout = () =>
+  compose(set("all", []), set("byToken", {}))(DEFAULT_STATE);
+
 const invoiceToken = (invoice) => invoice.censorshiprecord.token;
 
 const invoiceArrayToByTokenObject = (invoices) =>
@@ -75,7 +78,7 @@ const invoices = (state = DEFAULT_STATE, action) =>
               invoice.censorshiprecord.token
             )(state);
           },
-          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
+          [act.RECEIVE_CMS_LOGOUT]: () => onReceiveCMSLogout()
         }[action.type] || (() => state)
       )();
 
