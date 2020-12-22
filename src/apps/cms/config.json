@@ -15,7 +15,7 @@
   "mainnetGitRepository": "",
   "navMenuPaths": [
     {
-      "label": "My invoices",
+      "label": "My Invoices",
       "path": "/invoices/me",
       "admin": false,
       "dccRequired": false

@@ -64,7 +64,7 @@ const ListUserInvoices = ({
     <AdminInvoiceActionsProvider>
       <TopBanner>
         <PageDetails
-          title="My invoices"
+          title="My Invoices"
           actionsContent={
             <>
               {user && user.proposalsowned && user.proposalsowned.length > 0 && (
