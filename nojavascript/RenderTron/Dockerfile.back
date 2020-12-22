@@ -5,10 +5,12 @@ LABEL version="1.0"
 LABEL maintainer "jholdstock@decred.org"
 
 # Install rendertron
-RUN git clone https://github.com/GoogleChrome/rendertron.git --branch 3.0.0 --single-branch\
+RUN git clone https://github.com/GoogleChrome/rendertron.git --branch 3.1.0 --single-branch\
     && cd rendertron \
     # Uncomment below line to disable ssl check
-    #&& sed -i "55s/.*/        puppeteerArgs: ['--no-sandbox','--ignore-certificate-errors']/" src/config.ts \
+    #&& sed -i "59s/.*/        puppeteerArgs: ['--no-sandbox','--ignore-certificate-errors'],/" src/config.ts \
+    # Only allow certaindomain
+    && sed -i "60s/.*/        renderOnly: ['https:\/\/REPLACEWITHPIHOSTNAME'],/" src/config.ts \
     && npm install \
     && npm run build \
     && tar -czvf /rendertron.tar.gz /rendertron
@@ -23,6 +25,7 @@ RUN apt-get update -qq && apt-get install -qq --no-install-recommends \
     wget \
     gnupg2 \
     ca-certificates \
+    libxtst6 \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
     && apt-get update -qq && apt-get install -qq --no-install-recommends \
