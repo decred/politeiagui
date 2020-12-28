@@ -16,7 +16,7 @@ const proposalBilling = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_SPENDING_DETAILS]: () =>
             set("proposalDetails", action.payload.details)(state),
           [act.RECEIVE_PAY_APPROVED]: () => DEFAULT_STATE,
-          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
+          [act.RECEIVE_CMS_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();
 
