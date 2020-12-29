@@ -19,6 +19,8 @@ location /nojavascript/ {
 
 ### Build the docker images using the command `./build.sh`. 
 
+It will ask to input the hostname of politeia. Input only the hostname eg:172.0.0.1 or pi.example.com (no http/s). This will hardcode into the docker image and only allow rendertron to connect to that host.
+
 
 #### It is very important that the host is accessible from inside the docker images. This is usually example.com. If this is not possible start the docker images with the ["--add-host"](https://docs.docker.com/engine/reference/run/#managing-etchosts) command. You might also need to setup a docker [internal network](https://docs.docker.com/engine/reference/commandline/network_create/). When properly setup you should be able to `curl 'https://example.com'` from inside docker and it should return the contents of `https://example.com`.
 

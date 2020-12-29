@@ -204,6 +204,7 @@ const Invoice = ({
                 <InvoiceDatasheet
                   value={invoice && invoice.input.lineitems}
                   readOnly
+                  isMobile={mobile}
                   userRate={invContractorRate / 100}
                   proposals={approvedProposals || []}
                   proposalsError={approvedProposalsError}

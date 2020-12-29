@@ -14,7 +14,7 @@ const codestats = (state = DEFAULT_STATE, action) =>
             const { userid, codestats } = action.payload;
             return set(["byUserID", userid], codestats)(state);
           },
-          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
+          [act.RECEIVE_CMS_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();
 

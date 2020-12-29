@@ -14,7 +14,7 @@ const proposalOwnerBilling = (state = DEFAULT_STATE, action) =>
             const { token, response } = action.payload;
             return set(["byProposalToken", token], response)(state);
           },
-          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
+          [act.RECEIVE_CMS_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();
 
