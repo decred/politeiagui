@@ -131,7 +131,7 @@ const dccs = (state = DEFAULT_STATE, action) =>
             onReceiveSetDccStatus(state, action.payload),
           [act.SAVE_DRAFT_DCC]: () => onReceiveDraftDcc(state, action.payload),
           [act.LOAD_DRAFT_DCCS]: () => onReceiveDrafts(state, action.payload),
-          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
+          [act.RECEIVE_CMS_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();
 

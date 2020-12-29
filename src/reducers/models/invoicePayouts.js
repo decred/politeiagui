@@ -16,7 +16,7 @@ const invoicePayouts = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_INVOICE_PAYOUTS]: () =>
             set("payoutSummaries", action.payload.invoices)(state),
           [act.RECEIVE_PAY_APPROVED]: () => DEFAULT_STATE,
-          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
+          [act.RECEIVE_CMS_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();
 

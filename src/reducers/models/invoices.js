@@ -75,7 +75,7 @@ const invoices = (state = DEFAULT_STATE, action) =>
               invoice.censorshiprecord.token
             )(state);
           },
-          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
+          [act.RECEIVE_CMS_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();
 
