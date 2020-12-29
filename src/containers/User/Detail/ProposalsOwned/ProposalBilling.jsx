@@ -1,10 +1,20 @@
 import React, { useState } from "react";
-import { Card, Table, Text, Spinner, H3, Link as PiLink } from "pi-ui";
+import {
+  Card,
+  Table,
+  Text,
+  Spinner,
+  H3,
+  Link as PiLink,
+  classNames
+} from "pi-ui";
 import Link from "src/components/Link";
 import ExportToCsv from "src/components/ExportToCsv";
 import { useProposalsOwnedBilling } from "./hooks";
 import styles from "./ProposalsOwned.module.css";
 import { usdFormatter } from "src/utils";
+import { FULL_MONTHS } from "src/constants";
+import groupBy from "lodash/fp/groupBy";
 
 const headers = [
   "Username",
@@ -17,40 +27,78 @@ const headers = [
   "Sub Total"
 ];
 
+const totalReducer = (acc, { lineitem: { expenses, labor }, contractorrate }) =>
+  acc + expenses / 100 + ((labor / 60) * contractorrate) / 100;
+
+const formatData = ({
+  userid,
+  month,
+  year,
+  username,
+  lineitem: { description, domain, subdomain, labor, expenses },
+  contractorrate
+}) => {
+  expenses = expenses / 100;
+  labor = ((labor / 60) * contractorrate) / 100;
+  return {
+    Username: <Link to={`/user/${userid}`}>{username}</Link>,
+    Date: `${month}/${year}`,
+    Domain: domain,
+    Subdomain: subdomain,
+    Description: description,
+    Labor: usdFormatter.format(labor),
+    Expenses: usdFormatter.format(expenses),
+    Total: usdFormatter.format(labor + expenses)
+  };
+};
+
+const MonthItems = ({ monthItems }) => {
+  const data = monthItems.map(formatData);
+  const total = monthItems.reduce(totalReducer, 0);
+  return (
+    <>
+      <Table headers={headers} data={data} linesPerPage={50} />
+      <H3 className={styles.totalText}>Total: {usdFormatter.format(total)}</H3>
+    </>
+  );
+};
+
+const YearItems = ({ yearItems }) => {
+  const groupedByMonth = groupBy((el) => {
+    console.log(el);
+    return el.month;
+  }, yearItems);
+  const months = Object.keys(groupedByMonth);
+  return months.reverse().map((month) => (
+    <>
+      <H3>{FULL_MONTHS[month - 1]}</H3>
+      <MonthItems monthItems={groupedByMonth[month]} />
+    </>
+  ));
+};
+
+const AllItems = ({ groupedByYearItems }) => {
+  const years = Object.keys(groupedByYearItems);
+  return years.reverse().map((year) => (
+    <>
+      <H3>Billings for {year}</H3>
+      <YearItems yearItems={groupedByYearItems[year]} />
+    </>
+  ));
+};
+
 const BillingInfo = ({ lineItems }) => {
-  let total = 0;
   if (lineItems.length === 0)
     return <H3 className="margin-top-m">No billings for this proposal yet</H3>;
-  const sortedLineItems = lineItems.sort(
-    (a, b) => b.year - a.year || b.month - a.month
-  );
-  const data = sortedLineItems.map(
-    ({
-      userid,
-      month,
-      year,
-      username,
-      lineitem: { description, domain, subdomain, labor, expenses },
-      contractorrate
-    }) => {
-      expenses = expenses / 100;
-      labor = ((labor / 60) * contractorrate) / 100;
-      total = total + expenses + labor;
-      return {
-        Username: <Link to={`/user/${userid}`}>{username}</Link>,
-        Date: `${month}/${year}`,
-        Domain: domain,
-        Subdomain: subdomain,
-        Description: description,
-        Labor: usdFormatter.format(labor),
-        Expenses: usdFormatter.format(expenses),
-        Total: usdFormatter.format(labor + expenses)
-      };
-    }
-  );
+  const groupedByYear = groupBy((el) => {
+    console.log(el);
+    return el.year;
+  }, lineItems);
+  const data = lineItems.map(formatData);
+  const total = lineItems.reduce(totalReducer, 0);
   return (
     <div className="margin-top-m">
-      <Table headers={headers} data={data} linesPerPage={50} />
+      <AllItems groupedByYearItems={groupedByYear} />
       <ExportToCsv
         data={data.map(
           ({
@@ -84,9 +132,11 @@ const BillingInfo = ({ lineItems }) => {
           "Total"
         ]}
         filename="proposal_details.csv">
-        <PiLink className="cursor-pointer">Export To Csv</PiLink>
+        <PiLink className="cursor-pointer">Export All To Csv</PiLink>
       </ExportToCsv>
-      <H3 className={styles.totalText}>Total: {usdFormatter.format(total)}</H3>
+      <H3 className={classNames(styles.totalText, "margin-top-l")}>
+        Total for this proposal: {usdFormatter.format(total)}
+      </H3>
     </div>
   );
 };
