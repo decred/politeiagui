@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import useAdminInvoices from "src/hooks/api/useAdminInvoices";
+import useUserDetail from "src/hooks/api/useUserDetail";
 import {
   Spinner,
   Link as UILink,
@@ -68,6 +69,7 @@ const ActionsContent = ({ openInviteModal }) => {
 
 const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
   const { loading, invoices } = useAdminInvoices();
+  const { isAdmin } = useUserDetail();
   const [filters, setFilters] = useState({});
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
@@ -119,7 +121,7 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
     <AdminInvoiceActionsProvider>
       <TopBanner>
         <PageDetails
-          title="All Invoices"
+          title={isAdmin ? "All Invoices" : "Domain Invoices"}
           actionsContent={
             <ActionsContent openInviteModal={handleOpenInviteContractorModal} />
           }>

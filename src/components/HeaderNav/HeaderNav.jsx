@@ -34,6 +34,13 @@ const HeaderNav = ({ history }) => {
         if (path === "/user") {
           path += "/" + userid;
         }
+        if (path === "/invoices") {
+          if (userIsAdmin) {
+            label = "All Invoices";
+          } else {
+            label = "Domain Invoices";
+          }
+        }
         const isActive = window.location.pathname === path;
         const onMenuItemClick = (path) => () => history.push(path);
         const isDisabled = !userIsAdmin && dccRequired && !isValidContractor;

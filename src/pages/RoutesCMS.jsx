@@ -84,7 +84,7 @@ const Routes = ({ location }) => {
             path="/invoices"
             title={
               loggedIn && currentUser && currentUser.isadmin
-                ? "All invoices"
+                ? "All Invoices"
                 : "Domain Invoices"
             }
             exact
