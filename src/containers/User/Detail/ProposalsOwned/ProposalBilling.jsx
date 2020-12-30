@@ -13,7 +13,7 @@ import ExportToCsv from "src/components/ExportToCsv";
 import { useProposalsOwnedBilling } from "./hooks";
 import styles from "./ProposalsOwned.module.css";
 import { usdFormatter } from "src/utils";
-import { FULL_MONTHS } from "src/constants";
+import { MONTHS_LABELS } from "src/constants";
 import groupBy from "lodash/fp/groupBy";
 
 const headers = [
@@ -64,15 +64,12 @@ const MonthItems = ({ monthItems }) => {
 };
 
 const YearItems = ({ year, yearItems }) => {
-  const groupedByMonth = groupBy((el) => {
-    console.log(el);
-    return el.month;
-  }, yearItems);
+  const groupedByMonth = groupBy((el) => el.month, yearItems);
   const months = Object.keys(groupedByMonth);
   return months.reverse().map((month) => (
     <>
       <H3>
-        {FULL_MONTHS[month - 1]} {year}
+        {MONTHS_LABELS[month - 1]} {year}
       </H3>
       <MonthItems monthItems={groupedByMonth[month]} />
     </>
@@ -91,10 +88,7 @@ const AllItems = ({ groupedByYearItems }) => {
 const BillingInfo = ({ lineItems }) => {
   if (lineItems.length === 0)
     return <H3 className="margin-top-m">No billings for this proposal yet</H3>;
-  const groupedByYear = groupBy((el) => {
-    console.log(el);
-    return el.year;
-  }, lineItems);
+  const groupedByYear = groupBy((el) => el.year, lineItems);
   const data = lineItems.map(formatData);
   const total = lineItems.reduce(totalReducer, 0);
   return (
