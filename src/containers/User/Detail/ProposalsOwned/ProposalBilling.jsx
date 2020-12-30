@@ -63,7 +63,7 @@ const MonthItems = ({ monthItems }) => {
   );
 };
 
-const YearItems = ({ yearItems }) => {
+const YearItems = ({ year, yearItems }) => {
   const groupedByMonth = groupBy((el) => {
     console.log(el);
     return el.month;
@@ -71,7 +71,9 @@ const YearItems = ({ yearItems }) => {
   const months = Object.keys(groupedByMonth);
   return months.reverse().map((month) => (
     <>
-      <H3>{FULL_MONTHS[month - 1]}</H3>
+      <H3>
+        {FULL_MONTHS[month - 1]} {year}
+      </H3>
       <MonthItems monthItems={groupedByMonth[month]} />
     </>
   ));
@@ -79,12 +81,11 @@ const YearItems = ({ yearItems }) => {
 
 const AllItems = ({ groupedByYearItems }) => {
   const years = Object.keys(groupedByYearItems);
-  return years.reverse().map((year) => (
-    <>
-      <H3>Billings for {year}</H3>
-      <YearItems yearItems={groupedByYearItems[year]} />
-    </>
-  ));
+  return years
+    .reverse()
+    .map((year) => (
+      <YearItems year={year} yearItems={groupedByYearItems[year]} />
+    ));
 };
 
 const BillingInfo = ({ lineItems }) => {
