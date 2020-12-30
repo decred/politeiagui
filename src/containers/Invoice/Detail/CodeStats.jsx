@@ -10,12 +10,12 @@ const headers = [
   "Merge Additions",
   "Merge Deletions",
   "PRs",
-  "Review Additions",
-  "Review Deletions",
   "Commits Additions",
   "Commits Deletions",
   "Update Additions",
   "Update Deletions",
+  "Review Additions",
+  "Review Deletions",
   "Reviews"
 ];
 
@@ -69,12 +69,12 @@ const printCodeStatsInfo = ({
       {prs.length === 0 ? "none" : prs.map(getUrlEnd(prs.length - 1, 4))}
     </Text>
   ),
-  "Review Additions": reviewadditions,
-  "Review Deletions": reviewdeletions,
   "Commits Additions": commitadditions,
   "Commits Deletions": commitdeletions,
   "Update Additions": updatedadditions,
   "Update Deletions": updateddeletions,
+  "Review Additions": reviewadditions,
+  "Review Deletions": reviewdeletions,
   Reviews: (
     <Text className={styles.prs}>
       {reviews.length === 0
