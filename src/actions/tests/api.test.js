@@ -436,7 +436,7 @@ describe("test api actions (actions/api.js)", () => {
     const params = [FAKE_USER.id];
     await assertApiActionOnSuccess(
       path,
-      api.onFetchUserProposalsWithVoteSummary,
+      api.onFetchUserProposals,
       params,
       [
         {
@@ -458,7 +458,7 @@ describe("test api actions (actions/api.js)", () => {
     );
     await assertApiActionOnError(
       path,
-      api.onFetchUserProposalsWithVoteSummary,
+      api.onFetchUserProposals,
       params,
       (e) => [
         {

@@ -51,7 +51,7 @@ export const digest = (payload) => sha3_256(payload);
 export const utoa = (str) => window.btoa(unescape(encodeURIComponent(str)));
 export const atou = (str) => decodeURIComponent(escape(window.atob(str)));
 
-// parseReceivedProposalsMap iterates over BE returned proposals map[token] => proposal, prases the
+// parseReceivedProposalsMap iterates over BE returned proposals map[token] => proposal, parses the
 // metadata file & the proposal statuses
 export const parseReceivedProposalsMap = (proposals) => {
   const parsedProps = {};
