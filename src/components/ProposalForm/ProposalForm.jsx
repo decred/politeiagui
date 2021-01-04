@@ -262,6 +262,7 @@ const ProposalForm = React.memo(function ProposalForm({
             isDarkTheme={isDarkTheme}
             openMDGuideModal={openMDGuideModal}
           />
+          <ProposalGuidelinesButton isDarkTheme={isDarkTheme} />
           <DraftSaver
             mapBlobToFile={mapBlobToFile}
             submitSuccess={submitSuccess}
