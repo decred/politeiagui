@@ -7,20 +7,28 @@ function useApplyAction(action, args = DEFAULT_ARGS, enabled = true) {
   const [error, setError] = useState(false);
   const [response, setResponse] = useState(null);
   useEffect(() => {
+    let mounted = true;
     async function executeAction() {
-      setLoading(true);
+      if (mounted) setLoading(true);
       try {
         const res = await action.apply(null, args);
-        setLoading(false);
-        setResponse(res);
+        if (mounted) {
+          setLoading(false);
+          setResponse(res);
+        }
       } catch (e) {
-        setLoading(false);
-        setError(e);
+        if (mounted) {
+          setLoading(false);
+          setError(e);
+        }
       }
     }
     if (enabled) {
       executeAction();
     }
+    return function cleanup() {
+      mounted = false;
+    };
   }, [action, args, enabled]);
   return [loading, error, response];
 }

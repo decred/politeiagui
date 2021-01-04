@@ -354,7 +354,12 @@ export const onFetchUserCodeStats = (userid, start, end) =>
       .codeStats(csrf, userid, start, end)
       .then((response) =>
         dispatch(
-          act.RECEIVE_CODE_STATS({ userid, codestats: response.repostats })
+          act.RECEIVE_CODE_STATS({
+            userid,
+            codestats: response.repostats,
+            start,
+            end
+          })
         )
       )
       .catch((error) => {
