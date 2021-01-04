@@ -447,11 +447,6 @@ export const getCurrentDateValue = () => {
 export const getDateFromYearAndMonth = ({ year, month }) =>
   new Date(year, month);
 
-export const getCurrentDefaultMonthAndYear = () => ({
-  month: getCurrentMonth() - 1,
-  year: getCurrentYear()
-});
-
 export const getYearOptions = (initial, lastYear) => {
   const isYearValid = (y) => y < lastYear + getCurrentMonth() - 1;
   return flow(range(), filter(isYearValid))(initial, lastYear + 1);
