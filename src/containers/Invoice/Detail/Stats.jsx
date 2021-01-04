@@ -6,24 +6,19 @@ import styles from "./Detail.module.css";
 import { isUserDeveloper } from "src/containers/DCC/helpers";
 import useUserDetail from "src/hooks/api/useUserDetail";
 
-const Stats = ({ invoiceToken, userid }) => {
+const Stats = ({ invoiceToken, userid, start, end }) => {
   const { user } = useUserDetail(userid);
-  const end = new Date();
-  const start = new Date();
-  start.setMonth(start.getMonth() - 3);
-  const starttimestamp = Math.round(start.valueOf() / 1000);
-  const endtimestamp = Math.round(end.valueOf() / 1000);
   return (
     <Card paddingSize="small">
       <H2 className={styles.statsTitle}>Stats</H2>
       <InvoiceDetails
-        start={starttimestamp}
-        end={endtimestamp}
+        start={start}
+        end={end}
         token={invoiceToken}
         userid={userid}
       />
       {isUserDeveloper(user) && (
-        <CodeStats userid={userid} start={starttimestamp} end={endtimestamp} />
+        <CodeStats userid={userid} start={start} end={end} />
       )}
     </Card>
   );
