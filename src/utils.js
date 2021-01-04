@@ -1,17 +1,4 @@
-const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec"
-];
+import { MONTHS_LABELS } from "./constants";
 
 /**
  * Converts atoms to DCR
@@ -53,7 +40,7 @@ export const formatUnixTimestampToObj = (unixtimestamp) => {
 export const formatShortUnixTimestamp = (unixtimestamp) => {
   const currentdate = new Date(unixtimestamp * 1000);
   return `${currentdate.getUTCDate()} ${
-    months[currentdate.getUTCMonth()]
+    MONTHS_LABELS[currentdate.getUTCMonth()]
   } ${currentdate.getUTCFullYear()}`;
 };
 
