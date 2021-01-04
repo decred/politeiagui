@@ -1161,8 +1161,11 @@ export const onUserProposalCredits = () => (dispatch, getState) => {
 export const onFetchUserProposals = (userid) =>
   withCsrf(async (dispatch, getState, csrf) => {
     dispatch(act.REQUEST_USER_PROPOSALS({ userid }));
+    console.log("onFetchUserProposals");
     try {
       const response = await api.userProposals(csrf, userid);
+      console.log("response");
+      console.log(response);
       const cachedUserProposals = sel.makeGetUserProposals(userid)(getState());
       const unvettedTokens = Object.values(response.unvetted)
         .flat(1)
@@ -1174,7 +1177,7 @@ export const onFetchUserProposals = (userid) =>
 
       if (cachedUserProposals.length === tokensLength) {
         // props are already loaded on cache
-        return;
+        return dispatch(act.RECEIVE_USER_PROPOSALS());
       }
 
       let unvettedProposals, vettedProposals;
