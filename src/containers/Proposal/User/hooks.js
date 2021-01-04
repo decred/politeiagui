@@ -71,6 +71,10 @@ export function useUserProposals(userID) {
   const proposalsSelector = useMemo(() => sel.makeGetUserProposals(userID), [
     userID
   ]);
+  const numOfUserProposalsSelector = useMemo(
+    () => sel.makeGetNumOfProposalsByUserId(userID),
+    [userID]
+  );
   const loadingSelector = useMemo(
     () =>
       or(
@@ -84,7 +88,7 @@ export function useUserProposals(userID) {
     []
   );
   const proposals = useSelector(proposalsSelector);
-  const numOfUserProposals = proposals.length;
+  const numOfUserProposals = useSelector(numOfUserProposalsSelector);
   const generalProposals = useSelector(sel.proposalsByToken);
   const loading = useSelector(loadingSelector);
   const error = useSelector(errorSelector);
