@@ -1,8 +1,7 @@
 import {
   getCurrentMonth,
   getCurrentYear,
-  getCurrentDateValue,
-  getCurrentDefaultMonthAndYear
+  getCurrentDateValue
 } from "src/helpers";
 import { INVOICE_STATUS_NEW, INVOICE_STATUS_UPDATED } from "./constants";
 import flow from "lodash/fp/flow";
@@ -128,7 +127,7 @@ export const getPreviousMonthsRange = (range) => {
       month: minMonth,
       year: minYear
     },
-    getCurrentDefaultMonthAndYear()
+    getInitialDateValue()
   ];
 };
 
