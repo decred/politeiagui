@@ -34,6 +34,16 @@ const InvoiceDetail = ({ Main, match }) => {
   // set tab title
   useDocumentTitle(presentationalInvoiceName(invoice));
 
+  let start = 0;
+  let end = 0;
+  if (invoice) {
+    const endDate = new Date(invoice.input.year, invoice.input.month);
+    const startDate = new Date(invoice.input.year, invoice.input.month);
+    startDate.setMonth(startDate.getMonth() - 3);
+    end = endDate.getTime() / 1000;
+    start = startDate.getTime() / 1000;
+  }
+
   return (
     <>
       <Main fillScreen>
@@ -55,6 +65,8 @@ const InvoiceDetail = ({ Main, match }) => {
                 <Stats
                   invoiceToken={invoice.censorshiprecord.token}
                   userid={invoice.userid}
+                  start={start}
+                  end={end}
                 />
               )}
             </>

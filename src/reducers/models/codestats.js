@@ -11,8 +11,11 @@ const codestats = (state = DEFAULT_STATE, action) =>
     : (
         {
           [act.RECEIVE_CODE_STATS]: () => {
-            const { userid, codestats } = action.payload;
-            return set(["byUserID", userid], codestats)(state);
+            const { userid, codestats, start, end } = action.payload;
+            return set(
+              ["byUserID", userid, `${start}${end}`],
+              codestats
+            )(state);
           },
           [act.RECEIVE_CMS_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)

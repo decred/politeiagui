@@ -112,10 +112,10 @@ export function useFetchCodeStats(userid, start, end) {
   return { loading, error };
 }
 
-export function useCodeStats(userid) {
+export function useCodeStats(userid, start, end) {
   const codeStatsSelector = useMemo(
-    () => sel.makeGetCodeStatsByUserID(userid),
-    [userid]
+    () => sel.makeGetCodeStatsByUserID(userid, start, end),
+    [userid, start, end]
   );
   const codestats = useSelector(codeStatsSelector);
 
