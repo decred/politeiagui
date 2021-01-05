@@ -13,7 +13,7 @@ const codestats = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_CODE_STATS]: () => {
             const { userid, codestats, start, end } = action.payload;
             return set(
-              ["byUserID", userid, "" + start + end],
+              ["byUserID", userid, `${start}${end}`],
               codestats
             )(state);
           },

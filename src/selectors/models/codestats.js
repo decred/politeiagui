@@ -7,5 +7,5 @@ export const userCodeStats = (userID) =>
 
 export const makeGetCodeStatsByUserID = (userID, start, end) =>
   createSelector(userCodeStats(userID), (userCodeStats) =>
-    userCodeStats ? userCodeStats["" + start + end] : null
+    userCodeStats ? userCodeStats[`${start}${end}`] : null
   );
