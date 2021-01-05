@@ -33,7 +33,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
-      [tabValues.IN_DISCUSSION]: "No proposals under dicussion",
+      [tabValues.IN_DISCUSSION]: "No proposals under discussion",
       [tabValues.VOTING]: "No proposals voting",
       [tabValues.APPROVED]: "No proposals approved",
       [tabValues.REJECTED]: "No proposals rejected",
