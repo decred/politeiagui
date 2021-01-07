@@ -10,7 +10,7 @@ import styles from "./InvoiceFilterForm.module.css";
 import UserSearchSelect from "src/containers/User/Search/SearchSelector";
 import { Link } from "pi-ui";
 
-const DefaultInitialValues = (isAdminPage) => ({
+const defaultInitialValues = (isAdminPage) => ({
   date: getPreviousMonthsRange(2),
   users: [],
   filters: {
@@ -30,13 +30,9 @@ const InvoiceFilterForm = ({
   isAdminPage,
   onSubmit = () => {}
 }) => {
-  const filtersKey = isAdminPage ? "invoiceFiltersAdmin" : "invoiceFilters";
   return (
     <Formik
-      initialValues={
-        JSON.parse(localStorage.getItem(filtersKey)) ||
-        DefaultInitialValues(isAdminPage)
-      }
+      initialValues={defaultInitialValues(isAdminPage)}
       onSubmit={onSubmit}>
       {(formikProps) => {
         const { values, setFieldValue } = formikProps;
@@ -131,7 +127,7 @@ const OnChangeFiltersModifier = ({ formikProps, isAdminPage = false }) => {
 
   useEffect(() => {
     if (all) {
-      setFieldValue("filters", DefaultInitialValues(false).filters);
+      setFieldValue("filters", defaultInitialValues(false).filters);
     }
   }, [all, setFieldValue, isAdminPage]);
   return null;
