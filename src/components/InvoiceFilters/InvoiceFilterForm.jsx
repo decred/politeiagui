@@ -30,13 +30,9 @@ const InvoiceFilterForm = ({
   isAdminPage,
   onSubmit = () => {}
 }) => {
-  const filtersKey = isAdminPage ? "invoiceFiltersAdmin" : "invoiceFilters";
   return (
     <Formik
-      initialValues={
-        JSON.parse(localStorage.getItem(filtersKey)) ||
-        DefaultInitialValues(isAdminPage)
-      }
+      initialValues={DefaultInitialValues(isAdminPage)}
       onSubmit={onSubmit}>
       {(formikProps) => {
         const { values, setFieldValue } = formikProps;
