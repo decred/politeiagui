@@ -272,6 +272,8 @@ export const onLogout = (isCMS, isPermanent) =>
     return api
       .logout(csrf)
       .then((response) => {
+        localStorage.removeItem("invoiceFilters");
+        localStorage.removeItem("invoiceFiltersAdmin");
         isCMS
           ? dispatch(act.RECEIVE_CMS_LOGOUT(response))
           : dispatch(act.RECEIVE_LOGOUT(response));
