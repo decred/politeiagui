@@ -35,7 +35,6 @@ const ListUserInvoices = ({
   const handleFiltersChange = useCallback(
     (values) => {
       setFilters(values);
-      localStorage.setItem("invoiceFilters", JSON.stringify(values));
     },
     [setFilters]
   );
