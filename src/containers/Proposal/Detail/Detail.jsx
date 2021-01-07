@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Message } from "pi-ui";
 import get from "lodash/fp/get";
 import { withRouter } from "react-router-dom";
@@ -19,19 +19,16 @@ import {
   PublicActionsProvider
 } from "src/containers/Proposal/Actions";
 import { useProposalVote } from "../hooks";
-import { makeGetProposalName } from "src/selectors";
-import { useSelector } from "src/redux";
-import { useDocumentTitle } from "src/hooks/utils/useDocumentTitle";
+import useDocumentTitle from "src/hooks/utils/useDocumentTitle";
 import { GoBackLink } from "src/components/Router";
+
+const SetPageTitle = ({ title }) => {
+  useDocumentTitle(title);
+  return null;
+};
 
 const ProposalDetail = ({ Main, match }) => {
   const tokenFromUrl = get("params.token", match);
-  const proposalNameSelector = useMemo(
-    () => makeGetProposalName(tokenFromUrl),
-    [tokenFromUrl]
-  );
-  const proposalName = useSelector(proposalNameSelector);
-  useDocumentTitle(proposalName);
   const threadParentCommentID = get("params.commentid", match);
   const { proposal, loading, threadParentID, error } = useProposal(
     tokenFromUrl,
@@ -48,6 +45,7 @@ const ProposalDetail = ({ Main, match }) => {
     <>
       <Main className={styles.customMain} fillScreen>
         <GoBackLink />
+        {proposal && <SetPageTitle title={proposal.name} />}
         <UnvettedActionsProvider>
           <PublicActionsProvider>
             {error ? (
