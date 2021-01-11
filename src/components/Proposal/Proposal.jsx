@@ -397,7 +397,7 @@ const Proposal = React.memo(function Proposal({
                     label="Download Proposal Bundle"
                   />
                   <DownloadTimestamps
-                    label="Download Proposal Inclusion Proof"
+                    label="Download Proposal Timestamp"
                     token={proposalToken}
                     version={version}
                     state={state}

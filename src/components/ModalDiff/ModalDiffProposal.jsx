@@ -77,7 +77,7 @@ const ModalDiffProposal = ({
         </Tab>
       </Tabs>
       <DownloadTimestamps
-        label="Download the Inclusion Proof for this version"
+        label="Download the Timestamp for this version"
         version={proposalDetails.version}
         token={proposalDetails.censorshiprecord.token}
       />
