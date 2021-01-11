@@ -180,13 +180,13 @@ const proposals = (state = DEFAULT_STATE, action) =>
             compose(
               update("byToken", (proposals) => ({
                 ...proposals,
-                ...action.payload.proposals
+                ...parseReceivedProposalsMap(action.payload.proposals)
               })),
               update(
                 ["allProposalsByUserId", action.payload.userid],
                 (userProposals = []) => [
                   ...userProposals,
-                  ...action.payload.proposals.map(proposalToken)
+                  ...Object.keys(action.payload.proposals)
                 ]
               ),
               set(

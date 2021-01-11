@@ -31,10 +31,38 @@ const STATUS_ERR = {
 export const TOP_LEVEL_COMMENT_PARENTID = 0;
 
 const apiBase = "/api/";
-const getUrl = (path, version) => {
-  if (!path && !version) return apiBase;
-  return `${apiBase}${version}${path}`;
+const apiPi = "/api/pi/";
+
+const getUrl = (path, version, api = apiBase) => {
+  if (!path && !version) return api;
+  return `${api}${version}${path}`;
 };
+
+const GET = (path, version = "v1", withoutVersion, api = apiBase) =>
+  fetch(getUrl(path, !withoutVersion ? version : undefined, api), {
+    credentials: "include"
+  }).then(parseResponse);
+
+const getOptions = (csrf, json, method) => ({
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json; charset=utf-8",
+    "X-Csrf-Token": csrf
+  },
+  credentials: "include", // Include cookies
+  method,
+  body: JSON.stringify(json)
+});
+
+const POST = (path, csrf, json, api = apiBase, version = "v1") =>
+  fetch(getUrl(path, version, api), getOptions(csrf, json, "POST")).then(
+    parseResponse
+  );
+
+const PUT = (path, csrf, json, api = apiBase, version = "v1") =>
+  fetch(getUrl(path, version, api), getOptions(csrf, json, "PUT")).then(
+    parseResponse
+  );
 
 const getResponse = get("response");
 
@@ -325,32 +353,6 @@ export const parseResponse = (response) =>
     };
   });
 
-const GET = (path, version = "v1", withoutVersion) =>
-  fetch(getUrl(path, !withoutVersion ? version : undefined), {
-    credentials: "include"
-  }).then(parseResponse);
-
-const getOptions = (csrf, json, method) => ({
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json; charset=utf-8",
-    "X-Csrf-Token": csrf
-  },
-  credentials: "include", // Include cookies
-  method,
-  body: JSON.stringify(json)
-});
-
-const POST = (path, csrf, json, version = "v1") =>
-  fetch(getUrl(path, version), getOptions(csrf, json, "POST")).then(
-    parseResponse
-  );
-
-const PUT = (path, csrf, json, version = "v1") =>
-  fetch(getUrl(path, version), getOptions(csrf, json, "PUT")).then(
-    parseResponse
-  );
-
 export const me = () => GET("/user/me").then(getResponse);
 
 export const apiInfo = () =>
@@ -414,7 +416,9 @@ export const verifyNewUser = (email, verificationToken, username) => {
 };
 
 export const likedComments = (csrf, token, userid, state) =>
-  POST("/comments/votes", csrf, { token, userid, state }).then(getResponse);
+  POST("/comments/votes", csrf, { token, userid, state }, apiPi).then(
+    getResponse
+  );
 
 export const editUser = (csrf, params) =>
   POST("/user/edit", csrf, params).then(getResponse);
@@ -454,10 +458,10 @@ export const loginWithUsername = (csrf, username, password) =>
   );
 
 export const commentVote = (csrf, comment) =>
-  POST("/comment/vote", csrf, comment).then(getResponse);
+  POST("/comment/vote", csrf, comment, apiPi).then(getResponse);
 
 export const censorComment = (csrf, comment) =>
-  POST("/comment/censor", csrf, comment).then(getResponse);
+  POST("/comment/censor", csrf, comment, apiPi).then(getResponse);
 
 export const changeUsername = (csrf, password, newusername) =>
   POST("/user/username/change", csrf, {
@@ -509,29 +513,19 @@ export const verifyKeyRequest = (csrf, userid, verificationtoken) =>
 
 export const policy = () => GET("/policy").then(getResponse);
 
-// This route wasn't implemented yet with tlog and will be added in later
-// stage.
-export const userProposals = (userid, after) => {
-  return !after
-    ? GET(`/user/proposals?${qs.stringify({ userid })}`).then(getResponse)
-    : GET(`/user/proposals?${qs.stringify({ userid, after })}`).then(
-        getResponse
-      );
-};
+export const userProposals = (csrf, userid) =>
+  POST("/proposals/inventory", csrf, { userid }, apiPi).then(getResponse);
 
 export const searchUser = (obj) =>
   GET(`/users?${qs.stringify(obj)}`).then(getResponse);
 
-export const searchCmsUsers = (obj) =>
-  GET(`/cmsusers?${qs.stringify(obj)}`).then(getResponse);
-
 export const proposalsBatch = (csrf, payload) =>
-  POST("/proposals", csrf, payload).then(getResponse);
+  POST("/proposals", csrf, payload, apiPi).then(getResponse);
 
 export const user = (userId) => GET(`/user/${userId}`).then(getResponse);
 
 export const proposalComments = (csrf, token, state) =>
-  POST("/comments", csrf, { token, state }).then(getResponse);
+  POST("/comments", csrf, { token, state }, apiPi).then(getResponse);
 
 export const invoiceComments = (token) =>
   GET(`/invoices/${token}/comments`).then(getResponse);
@@ -557,18 +551,115 @@ export const proposalSetStatus = (
       pki
         .signStringHex(userid, token + version + status + reason)
         .then((signature) =>
-          POST("/proposal/setstatus", csrf, {
-            status,
-            version,
-            state,
-            token,
-            signature,
-            publickey,
-            reason
-          })
+          POST(
+            "/proposal/setstatus",
+            csrf,
+            {
+              status,
+              version,
+              state,
+              token,
+              signature,
+              publickey,
+              reason
+            },
+            apiPi
+          )
         )
     )
     .then(getResponse);
+
+export const newProposal = (csrf, proposal) =>
+  POST("/proposal/new", csrf, proposal, apiPi).then(getResponse);
+
+export const editProposal = (csrf, proposal) =>
+  POST("/proposal/edit", csrf, proposal, apiPi).then(getResponse);
+
+export const newComment = (csrf, comment) =>
+  POST("/comment/new", csrf, comment, apiPi).then(getResponse);
+
+export const startVote = (csrf, userid, voteParams) =>
+  pki
+    .myPubKeyHex(userid)
+    .then((publickey) =>
+      Promise.all(
+        voteParams.map((params) =>
+          pki.signStringHex(userid, objectToSHA256(params))
+        )
+      ).then((signatures) =>
+        POST(
+          "/vote/start",
+          csrf,
+          {
+            starts: signatures.map((signature, i) => ({
+              params: voteParams[i],
+              publickey,
+              signature
+            }))
+          },
+          apiPi
+        )
+      )
+    )
+    .then(getResponse);
+
+export const proposalsBatchVoteSummary = (csrf, tokens) =>
+  POST("/votes/summaries", csrf, { tokens }, apiPi).then(getResponse);
+
+export const proposalVoteResults = (csrf, token) =>
+  POST("/votes/results", csrf, { token }, apiPi).then(getResponse);
+
+export const proposalAuthorizeOrRevokeVote = (
+  csrf,
+  action,
+  token,
+  userid,
+  version
+) =>
+  pki
+    .myPubKeyHex(userid)
+    .then((publickey) =>
+      pki
+        .signStringHex(userid, `${token}${version}${action}`)
+        .then((signature) =>
+          POST(
+            "/vote/authorize",
+            csrf,
+            {
+              action,
+              token,
+              version: +version,
+              signature,
+              publickey
+            },
+            apiPi
+          )
+        )
+    )
+    .then(getResponse);
+
+export const verifyUserPayment = () =>
+  GET("/user/payments/registration").then(getResponse);
+
+export const proposalPaywallDetails = () =>
+  GET("/user/payments/paywall").then(getResponse);
+
+export const proposalPaywallPayment = () =>
+  GET("/user/payments/paywalltx").then(getResponse);
+
+export const userProposalCredits = () =>
+  GET("/user/payments/credits").then(getResponse);
+
+export const rescanUserPayments = (csrf, userid) =>
+  PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
+
+export const proposalsInventory = (csrf) =>
+  POST("/proposals/inventory", csrf, {}, apiPi).then(getResponse);
+
+export const votesInventory = (csrf) =>
+  POST("/votes/inventory", csrf, {}, apiPi).then(getResponse);
+
+// CMS
 
 export const invoiceSetStatus = (
   userid,
@@ -595,90 +686,9 @@ export const invoiceSetStatus = (
     )
     .then(getResponse);
 
-export const newProposal = (csrf, proposal) =>
-  POST("/proposal/new", csrf, proposal).then(getResponse);
+export const searchCmsUsers = (obj) =>
+  GET(`/cmsusers?${qs.stringify(obj)}`).then(getResponse);
 
-export const editProposal = (csrf, proposal) =>
-  POST("/proposal/edit", csrf, proposal).then(getResponse);
-
-export const newComment = (csrf, comment) =>
-  POST("/comment/new", csrf, comment).then(getResponse);
-
-export const startVote = (csrf, userid, voteParams) =>
-  pki
-    .myPubKeyHex(userid)
-    .then((publickey) =>
-      Promise.all(
-        voteParams.map((params) =>
-          pki.signStringHex(userid, objectToSHA256(params))
-        )
-      ).then((signatures) =>
-        POST("/vote/start", csrf, {
-          starts: signatures.map((signature, i) => ({
-            params: voteParams[i],
-            publickey,
-            signature
-          }))
-        })
-      )
-    )
-    .then(getResponse);
-
-export const proposalsBatchVoteSummary = (csrf, tokens) =>
-  POST("/votes/summaries", csrf, {
-    tokens
-  }).then(getResponse);
-
-export const proposalVoteResults = (token) =>
-  POST("/votes/results", { token }).then(getResponse);
-
-export const proposalAuthorizeOrRevokeVote = (
-  csrf,
-  action,
-  token,
-  userid,
-  version
-) =>
-  pki
-    .myPubKeyHex(userid)
-    .then((publickey) =>
-      pki
-        .signStringHex(userid, `${token}${version}${action}`)
-        .then((signature) =>
-          POST("/vote/authorize", csrf, {
-            action,
-            token,
-            version: +version,
-            signature,
-            publickey
-          })
-        )
-    )
-    .then(getResponse);
-
-export const verifyUserPayment = () =>
-  GET("/user/payments/registration").then(getResponse);
-
-export const proposalPaywallDetails = () =>
-  GET("/user/payments/paywall").then(getResponse);
-
-export const proposalPaywallPayment = () =>
-  GET("/user/payments/paywalltx").then(getResponse);
-
-export const userProposalCredits = () =>
-  GET("/user/payments/credits").then(getResponse);
-
-export const rescanUserPayments = (csrf, userid) =>
-  PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
-
-export const proposalsInventory = (csrf) =>
-  POST("/proposals/inventory", csrf, {}).then(getResponse);
-
-// XXX change function name to votesInventory
-export const tokenInventory = (csrf) =>
-  POST("/votes/inventory", csrf, {}).then(getResponse);
-
-// CMS
 export const inviteNewUser = (csrf, payload) =>
   POST("/invite", csrf, payload).then(getResponse);
 
