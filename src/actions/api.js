@@ -1648,3 +1648,10 @@ export const onVerifyTotp = (code) =>
         throw e;
       });
   });
+// Records Actions
+export const onFetchRecordTimestamps = (
+  token,
+  state = PROPOSAL_STATE_VETTED,
+  version
+) =>
+  withCsrf((__, _, csrf) => api.recordsTimestamp(csrf, token, state, version));

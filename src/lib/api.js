@@ -32,6 +32,7 @@ export const TOP_LEVEL_COMMENT_PARENTID = 0;
 
 const apiBase = "/api/";
 const apiPi = "/api/pi/";
+const apiRecords = "/api/records/";
 
 const getUrl = (path, version, api = apiBase) => {
   if (!path && !version) return api;
@@ -667,6 +668,11 @@ export const proposalsInventory = (csrf) =>
 
 export const votesInventory = (csrf) =>
   POST("/votes/inventory", csrf, {}, apiPi).then(getResponse);
+
+export const recordsTimestamp = (csrf, token, state, version) =>
+  POST("/timestamps", csrf, { token, state, version }, apiRecords).then(
+    getResponse
+  );
 
 // CMS
 

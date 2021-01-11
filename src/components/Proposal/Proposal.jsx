@@ -201,6 +201,7 @@ const Proposal = React.memo(function Proposal({
           ChartsLink,
           CopyLink,
           DownloadRecord,
+          DownloadTimestamps,
           Header,
           Subtitle,
           Edit,
@@ -394,6 +395,12 @@ const Proposal = React.memo(function Proposal({
                     }}
                     className="margin-right-l"
                     label="Download Proposal Bundle"
+                  />
+                  <DownloadTimestamps
+                    label="Download Proposal Inclusion Proof"
+                    token={proposalToken}
+                    version={version}
+                    state={state}
                   />
                   {isPublic && !!comments && (
                     <DownloadComments

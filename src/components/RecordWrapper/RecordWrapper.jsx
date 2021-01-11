@@ -25,6 +25,7 @@ import { useLoader } from "src/containers/Loader";
 import Join from "../Join";
 import CopyLink from "../CopyLink";
 import rfpTag from "src/assets/images/rfp-tag.svg";
+import useRecordTimestamps from "src/hooks/api/useRecordTimestamps";
 
 export const Author = ({ username, url }) => <Link to={url}>{username}</Link>;
 
@@ -268,6 +269,19 @@ export const RfpProposalLink = ({ url, rfpTitle }) => {
 
 export const DownloadRecord = DownloadJSON;
 
+export const DownloadTimestamps = ({ token, version, state, label }) => {
+  const { onFetchRecordTimestamps } = useRecordTimestamps();
+  return (
+    <DownloadJSON
+      label={label}
+      fileName={`timestamps-${token ? token.substring(0, 7) : ""}`}
+      isAsync={true}
+      content={[]}
+      beforeDownload={() => onFetchRecordTimestamps(token, state, version)}
+    />
+  );
+};
+
 const RecordWrapper = ({ children, className }) => (
   <Card className={classNames("container margin-bottom-m", className)}>
     {children({
@@ -282,6 +296,7 @@ const RecordWrapper = ({ children, className }) => (
       ChartsLink,
       CopyLink,
       DownloadRecord,
+      DownloadTimestamps,
       Header,
       Subtitle,
       Edit,
