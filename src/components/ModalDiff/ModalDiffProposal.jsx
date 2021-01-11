@@ -7,7 +7,8 @@ import {
   Title,
   Author,
   Event,
-  Subtitle
+  Subtitle,
+  DownloadTimestamps
 } from "src/components/RecordWrapper";
 import styles from "./ModalDiff.module.css";
 
@@ -75,6 +76,11 @@ const ModalDiffProposal = ({
           <FilesDiff oldFiles={oldFiles} newFiles={newFiles} />
         </Tab>
       </Tabs>
+      <DownloadTimestamps
+        label="Download the Inclusion Proof for this version"
+        version={proposalDetails.version}
+        token={proposalDetails.censorshiprecord.token}
+      />
     </Modal>
   );
 };

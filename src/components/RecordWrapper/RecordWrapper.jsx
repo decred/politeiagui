@@ -274,7 +274,7 @@ export const DownloadTimestamps = ({ token, version, state, label }) => {
   return (
     <DownloadJSON
       label={label}
-      fileName={`timestamps-${token ? token.substring(0, 7) : ""}`}
+      fileName={`timestamps-${token ? token.substring(0, 7) : ""}-v${version}`}
       isAsync={true}
       content={[]}
       beforeDownload={() => onFetchRecordTimestamps(token, state, version)}
