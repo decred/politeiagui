@@ -91,8 +91,9 @@ const DraftSaver = ({
           { description, files },
           mapBlobToFile
         );
-        const filteredFiles = files.filter((file) =>
-          !markdownFiles.includes(file));
+        const filteredFiles = files.filter(
+          (file) => !markdownFiles.includes(file)
+        );
         setValues({
           name,
           description: text,
