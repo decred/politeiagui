@@ -91,10 +91,12 @@ const DraftSaver = ({
           { description, files },
           mapBlobToFile
         );
+        const filteredFiles = files.filter((file) =>
+          !markdownFiles.includes(file));
         setValues({
           name,
           description: text,
-          files: files.filter((file) => !markdownFiles.includes(file)),
+          files: filteredFiles,
           type,
           rfpDeadline,
           rfpLink
