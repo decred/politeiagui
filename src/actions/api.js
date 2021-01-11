@@ -895,7 +895,6 @@ export const onCommentVote = (currentUserID, token, commentid, vote) =>
         dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({ token, commentid, vote }));
       })
       .catch((error) => {
-        console.log(error);
         dispatch(act.RESET_SYNC_LIKE_COMMENT({ token }));
         dispatch(act.RECEIVE_LIKE_COMMENT(null, error));
       });
@@ -1161,11 +1160,8 @@ export const onUserProposalCredits = () => (dispatch, getState) => {
 export const onFetchUserProposals = (userid) =>
   withCsrf(async (dispatch, getState, csrf) => {
     dispatch(act.REQUEST_USER_PROPOSALS({ userid }));
-    console.log("onFetchUserProposals");
     try {
       const response = await api.userProposals(csrf, userid);
-      console.log("response");
-      console.log(response);
       const cachedUserProposals = sel.makeGetUserProposals(userid)(getState());
       const unvettedTokens = Object.values(response.unvetted)
         .flat(1)
@@ -1180,7 +1176,8 @@ export const onFetchUserProposals = (userid) =>
         return dispatch(act.RECEIVE_USER_PROPOSALS());
       }
 
-      let unvettedProposals, vettedProposals;
+      let unvettedProposals = [];
+      let vettedProposals = [];
       if (unvettedTokens.length) {
         unvettedProposals = await dispatch(
           onFetchProposalsBatch(
@@ -1196,6 +1193,8 @@ export const onFetchUserProposals = (userid) =>
           onFetchProposalsBatch(vettedTokens, PROPOSAL_STATE_VETTED)
         );
       }
+      // we access the first array position, which contains the proposals.
+      // second array position refers to the vote summary results.
       const proposals = {
         ...unvettedProposals[0],
         ...vettedProposals[0]
