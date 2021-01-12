@@ -53,7 +53,8 @@ const CommentsListWrapper = ({
   lastTimeAccessed,
   currentUserID,
   isFlatMode,
-  proposalState
+  proposalState,
+  recordsBaseLink
 }) => {
   const [nestedComments, setNestedComments] = useState([]);
   useEffect(
@@ -93,6 +94,7 @@ const CommentsListWrapper = ({
       comments={nestedComments}
       isFlatMode={isFlatMode}
       proposalState={proposalState}
+      recordBaseLink={recordsBaseLink}
     />
   );
 };

@@ -33,6 +33,7 @@ export const TOP_LEVEL_COMMENT_PARENTID = 0;
 const apiBase = "/api/";
 const apiPi = "/api/pi/";
 const apiRecords = "/api/records/";
+const apiComments = "/api/comments/";
 
 const getUrl = (path, version, api = apiBase) => {
   if (!path && !version) return api;
@@ -536,6 +537,11 @@ export const user = (userId) => GET(`/user/${userId}`).then(getResponse);
 
 export const proposalComments = (csrf, token, state) =>
   POST("/comments", csrf, { token, state }, apiPi).then(getResponse);
+
+export const commentsTimestamp = (csrf, token, state, commentids) =>
+  POST("/timestamps", csrf, { token, state, commentids }, apiComments).then(
+    getResponse
+  );
 
 export const invoiceComments = (token) =>
   GET(`/invoices/${token}/comments`).then(getResponse);

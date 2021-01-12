@@ -6,7 +6,7 @@ export { default as useNavigation } from "./api/useNavigation";
 export { default as usePaywall } from "./api/usePaywall";
 export { default as usePolicy } from "./api/usePolicy";
 export { default as useProposalsBatch } from "./api/useProposalsBatch";
-export { default as useRecordTimestamps } from "./api/useRecordTimestamps";
+export { default as useTimestamps } from "./api/useTimestamps";
 export { default as useSubContractors } from "./api/useSubContractors";
 export { default as useSupervisors } from "./api/useSupervisors";
 export { default as useUserDetail } from "./api/useUserDetail";

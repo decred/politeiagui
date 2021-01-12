@@ -12,7 +12,8 @@ import {
   isVotingFinishedProposal,
   getProposalToken,
   isCensoredProposal,
-  isAbandonedProposal
+  isAbandonedProposal,
+  getProposalLink
 } from "../helpers";
 import {
   UnvettedActionsProvider,
@@ -39,7 +40,6 @@ const ProposalDetail = ({ Main, match, state }) => {
   const { voteSummary } = useProposalVote(proposalToken);
   const canReceiveComments =
     !isVotingFinishedProposal(voteSummary) && !isAbandonedProposal(proposal);
-
   return (
     <>
       <Main className={styles.customMain} fillScreen>
@@ -67,6 +67,7 @@ const ProposalDetail = ({ Main, match, state }) => {
                 readOnly={!canReceiveComments}
                 readOnlyReason={getCommentBlockedReason(proposal, voteSummary)}
                 proposalState={state}
+                recordBaseLink={getProposalLink(proposal)}
               />
             )}
           </PublicActionsProvider>

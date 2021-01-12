@@ -14,7 +14,7 @@ const DccDetail = ({ Main, match }) => {
   const dccToken = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
   const { dcc, loading, error } = useDcc(dccToken);
-
+  const dccLink = `/dccs/${dccToken}`;
   return (
     <>
       <Main fillScreen>
@@ -35,6 +35,7 @@ const DccDetail = ({ Main, match }) => {
             readOnlyReason={
               "This DCC can no longer receive comments due its current status."
             }
+            recordBaseLink={dccLink}
           />
         </AdminDccActionsProvider>
       </Main>

@@ -8,8 +8,8 @@ import * as pki from "./lib/pki";
 import { sha3_256 } from "js-sha3";
 import { capitalize } from "./utils/strings";
 
-import { INVALID_FILE } from "./constants";
 import {
+  INVALID_FILE,
   INVOICE_STATUS_APPROVED,
   INVOICE_STATUS_DISPUTED,
   INVOICE_STATUS_NEW,

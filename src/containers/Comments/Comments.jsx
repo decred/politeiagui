@@ -45,7 +45,8 @@ const Comments = ({
   readOnlyReason,
   className,
   history,
-  proposalState
+  proposalState,
+  recordBaseLink
 }) => {
   const [, identityError] = useIdentity();
   const { isPaid, paywallEnabled } = usePaywall();
@@ -213,7 +214,7 @@ const Comments = ({
 
   const singleThreadCommentCannotBeAccessed =
     isSingleThread &&
-    ((comments && !comments.find((c) => c.commentid === threadParentID)) ||
+    ((comments && !comments.find((c) => c.commentid === +threadParentID)) ||
       numOfComments === 0);
 
   return (
@@ -318,6 +319,7 @@ const Comments = ({
                 recordToken,
                 threadParentID,
                 recordType,
+                proposalState,
                 readOnly,
                 identityError,
                 paywallMissing,
@@ -333,6 +335,7 @@ const Comments = ({
                 comments={state.comments}
                 isFlatMode={isFlatCommentsMode}
                 proposalState={proposalState}
+                recordsBaseLink={recordBaseLink}
               />
             </CommentContext.Provider>
           ) : null}

@@ -3,11 +3,11 @@ import PropTypes from "prop-types";
 import fileDownload from "js-file-download";
 import { Link } from "pi-ui";
 
-const validateBeforeDownloadProp = function (props, propName) {
+const validateBeforeDownloadProp = function (props, beforeDownload) {
   if (
     props["isAsync"] === true &&
-    props[propName] === undefined &&
-    !(props[propName] instanceof Promise)
+    props[beforeDownload] === undefined &&
+    !(props[beforeDownload] instanceof Promise)
   ) {
     throw new Error("beforeDownload prop must be a Promise");
   }

@@ -202,6 +202,7 @@ const Proposal = React.memo(function Proposal({
           CopyLink,
           DownloadRecord,
           DownloadTimestamps,
+          LinkSection,
           Header,
           Subtitle,
           Edit,
@@ -386,7 +387,9 @@ const Proposal = React.memo(function Proposal({
             )}
             {extended && (
               <Row className={styles.lastRow} justify="space-between">
-                <Row className={styles.downloadLinksWrapper} noMargin>
+                <LinkSection
+                  className={styles.downloadLinksWrapper}
+                  title="Available Downloads">
                   <DownloadRecord
                     fileName={proposalToken}
                     content={{
@@ -397,18 +400,24 @@ const Proposal = React.memo(function Proposal({
                     label="Download Proposal Bundle"
                   />
                   <DownloadTimestamps
-                    label="Download Proposal Timestamp"
+                    label="Proposal Timestamps"
                     token={proposalToken}
                     version={version}
                     state={state}
                   />
-                  {isPublic && !!comments && (
+                  {isPublic && (
                     <DownloadComments
+                      label="Comments Bundle"
                       recordToken={proposalToken}
-                      className={styles.downloadCommentsLink}
                     />
                   )}
-                </Row>
+                  <DownloadComments
+                    label="Comments Timestamp"
+                    recordToken={proposalToken}
+                    isTimestamp={true}
+                    state={state}
+                  />
+                </LinkSection>
                 <Row className={styles.proposalActions}>
                   <CopyLink
                     className={classNames(

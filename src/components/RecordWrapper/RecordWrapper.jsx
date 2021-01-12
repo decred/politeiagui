@@ -16,7 +16,9 @@ import {
   Tooltip,
   CopyableText,
   useMediaQuery,
-  DEFAULT_DARK_THEME_NAME
+  DEFAULT_DARK_THEME_NAME,
+  Dropdown,
+  DropdownItem
 } from "pi-ui";
 import { Row } from "../layout";
 import Link from "../Link";
@@ -25,7 +27,7 @@ import { useLoader } from "src/containers/Loader";
 import Join from "../Join";
 import CopyLink from "../CopyLink";
 import rfpTag from "src/assets/images/rfp-tag.svg";
-import useRecordTimestamps from "src/hooks/api/useRecordTimestamps";
+import useTimestamps from "src/hooks/api/useTimestamps";
 
 export const Author = ({ username, url }) => <Link to={url}>{username}</Link>;
 
@@ -270,7 +272,7 @@ export const RfpProposalLink = ({ url, rfpTitle }) => {
 export const DownloadRecord = DownloadJSON;
 
 export const DownloadTimestamps = ({ token, version, state, label }) => {
-  const { onFetchRecordTimestamps } = useRecordTimestamps();
+  const { onFetchRecordTimestamps } = useTimestamps();
   return (
     <DownloadJSON
       label={label}
@@ -281,6 +283,14 @@ export const DownloadTimestamps = ({ token, version, state, label }) => {
     />
   );
 };
+
+export const LinkSection = ({ children, className, title }) => (
+  <Dropdown className={className} title={title}>
+    {React.Children.toArray(children).map((link, i) => (
+      <DropdownItem key={i}>{link}</DropdownItem>
+    ))}
+  </Dropdown>
+);
 
 const RecordWrapper = ({ children, className }) => (
   <Card className={classNames("container margin-bottom-m", className)}>
@@ -297,6 +307,7 @@ const RecordWrapper = ({ children, className }) => (
       CopyLink,
       DownloadRecord,
       DownloadTimestamps,
+      LinkSection,
       Header,
       Subtitle,
       Edit,

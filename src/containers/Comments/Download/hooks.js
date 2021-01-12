@@ -1,6 +1,7 @@
 import { createContext, useContext, useMemo } from "react";
 import * as sel from "src/selectors";
 import { useSelector } from "src/redux";
+import useTimestamps from "src/hooks/api/useTimestamps";
 
 export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
@@ -10,5 +11,7 @@ export function useDownloadComments(token) {
     token
   ]);
   const comments = useSelector(commentsSelector);
-  return { comments };
+  const { onFetchCommentsTimestamps } = useTimestamps();
+
+  return { comments, onFetchCommentsTimestamps };
 }

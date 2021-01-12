@@ -67,6 +67,7 @@ const CommentWrapper = ({
   numOfReplies,
   isFlatMode,
   proposalState,
+  recordBaseLink,
   ...props
 }) => {
   const {
@@ -171,11 +172,10 @@ const CommentWrapper = ({
     />
   );
 
-  const shortToken = recordToken.substring(0, 7);
   return (
     <>
       <Comment
-        permalink={`/${recordType}s/${shortToken}/comments/${commentid}`}
+        permalink={`${recordBaseLink}/comments/${commentid}`}
         seeInContextLink={contextLink}
         censorable={censorable}
         author={username}

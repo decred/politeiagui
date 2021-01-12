@@ -96,6 +96,7 @@ const InvoiceDetail = ({ Main, match }) => {
               readOnlyReason={
                 "This invoice can no longer receive comments due its current status."
               }
+              recordBaseLink={`/invoices/${invoiceToken}`}
             />
           )}
         </AdminInvoiceActionsProvider>

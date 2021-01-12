@@ -11,6 +11,7 @@ import {
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATE_VETTED,
+  PROPOSAL_STATE_UNVETTED,
   NOJS_ROUTE_PREFIX
 } from "../../constants";
 import { getTextFromIndexMd } from "src/helpers";
@@ -18,6 +19,7 @@ import set from "lodash/fp/set";
 import values from "lodash/fp/values";
 import pick from "lodash/pick";
 import isEmpty from "lodash/fp/isEmpty";
+import get from "lodash/fp/get";
 
 /**
  * Returns the total amount of votes received by a given proposal voteSummary
@@ -334,3 +336,16 @@ export const getProposalRfpLinks = (proposal, rfpSubmissions, proposals) => {
     ? { ...proposal, proposedFor: proposals[proposal.linkto].name }
     : proposal;
 };
+
+export const getProposalStateLabel = (proposalState) =>
+  get(proposalState)({
+    [PROPOSAL_STATE_VETTED]: "vetted",
+    [PROPOSAL_STATE_UNVETTED]: "unvetted"
+  });
+
+export const getProposalLink = (proposal) =>
+  proposal
+    ? `/proposals/${getProposalStateLabel(
+        proposal.state
+      )}/${proposal.censorshiprecord.token.substring(0, 7)}`
+    : "";
