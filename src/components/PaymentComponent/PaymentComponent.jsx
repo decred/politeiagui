@@ -36,7 +36,7 @@ const PaymentComponent = ({ address, amount, extraSmall, status }) => {
             To address
           </H4>
           <CopyableText
-            id="payment-address"
+            id="component-payment-address"
             truncate
             tooltipPlacement={"bottom"}>
             {address}

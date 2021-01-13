@@ -79,7 +79,7 @@ const ModalDiffInvoice = ({ onClose, invoice, prevInvoice, ...props }) => {
           value={invoice.input.paymentaddress}
           renderValue={(addr) => (
             <CopyableText
-              id="payment-address"
+              id="invoice-diff-payment-address"
               truncate
               tooltipPlacement={"bottom"}>
               {addr}
