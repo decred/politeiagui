@@ -150,7 +150,7 @@ const Invoice = ({
                       value={paymentAddress}
                       renderValue={(addr) => (
                         <CopyableText
-                          id="payment-address"
+                          id="invoice-payment-address"
                           truncate
                           tooltipPlacement={"bottom"}>
                           {addr}
