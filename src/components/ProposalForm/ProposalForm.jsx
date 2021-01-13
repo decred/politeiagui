@@ -177,7 +177,7 @@ const ProposalForm = React.memo(function ProposalForm({
           disabled={isPublic}
           data-testid="proposal-type"
           options={selectOptions}
-          className={classNames(styles.typeSelectWrapper)}
+          className={styles.typeSelectWrapper}
         />
         {isRfp && (
           <>

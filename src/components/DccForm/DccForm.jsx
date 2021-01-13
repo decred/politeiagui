@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Button, Message, RadioButtonGroup, classNames, TextArea } from "pi-ui";
+import { Button, Message, RadioButtonGroup, TextArea } from "pi-ui";
 import { Formik, Field } from "formik";
 import SelectField from "src/components/Select/SelectField";
 import { withRouter } from "react-router-dom";
@@ -23,14 +23,6 @@ import {
   useScrollFormOnError
 } from "src/hooks";
 import { getContractorDomains } from "src/helpers";
-
-const Select = ({ error, ...props }) => (
-  <div
-    className={classNames(styles.formSelect, error && styles.formSelectError)}>
-    <SelectField {...props} />
-    {error && <p className={styles.errorMsg}>{error}</p>}
-  </div>
-);
 
 const DccForm = React.memo(function DccForm({
   values,
@@ -144,39 +136,47 @@ const DccForm = React.memo(function DccForm({
         className={styles.radioButton}
       />
 
-      <Select
+      <SelectField
         name="domain"
         options={contractorDomains}
-        placeholder="Domain"
-        error={touched.domain && errors.domain}
+        label="Domain"
+        error={errors.domain}
+        isValid={touched.domain && !errors.domain}
         onChange={handleChangeSelector("domain")}
+        className={styles.formSelect}
       />
       {isIssuance ? (
         <>
-          <Select
+          <SelectField
             name="nomineeid"
             options={getNomineeOptions(cmsUsers.nominee)}
-            placeholder="Nominee"
-            error={touched.nomineeid && errors.nomineeid}
+            label="Nominee"
+            error={errors.nomineeid}
+            isValid={touched.nomineeid && !errors.nomineeid}
             onChange={handleChangeNomineeSelector}
-            isDisabled={!values.type}
+            disabled={!values.type}
+            className={styles.formSelect}
           />
-          <Select
+          <SelectField
             name="contractortype"
             options={getContractorTypeOptions(isSupervisor)}
-            placeholder="Contractor Type"
-            error={touched.contractortype && errors.contractortype}
+            label="Contractor Type"
+            error={errors.contractortype}
+            isValid={touched.contractortype && !errors.contractortype}
             onChange={handleChangeSelector("contractortype")}
+            className={styles.formSelect}
           />
         </>
       ) : (
-        <Select
+        <SelectField
           name="nomineeid"
           options={getNomineeOptions(cmsUsers.full)}
-          placeholder="Nominee"
-          error={touched.nomineeid && errors.nomineeid}
+          label="Nominee"
+          error={errors.nomineeid}
+          isValid={touched.nomineeid && !errors.nomineeid}
           onChange={handleChangeNomineeSelector}
-          isDisabled={!values.type}
+          disabled={!values.type}
+          className={styles.formSelect}
         />
       )}
       <Field
