@@ -1659,5 +1659,9 @@ export const onFetchRecordTimestamps = (
 // Comments Actions
 export const onFetchCommentsTimestamps = (token, state, commentsids) =>
   withCsrf((__, _, csrf) =>
-    api.commentsTimestamp(csrf, token, state, commentsids)
+    api.commentsTimestamps(csrf, token, state, commentsids)
   );
+
+// Ticket Vote actions
+export const onFetchTicketVoteTimestamps = (token) =>
+  withCsrf((__, _, csrf) => api.ticketVoteTimestamps(csrf, token));

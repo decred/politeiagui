@@ -34,6 +34,7 @@ const apiBase = "/api/";
 const apiPi = "/api/pi/";
 const apiRecords = "/api/records/";
 const apiComments = "/api/comments/";
+const apiTicketVote = "/api/ticketvote/";
 
 const getUrl = (path, version, api = apiBase) => {
   if (!path && !version) return api;
@@ -538,7 +539,7 @@ export const user = (userId) => GET(`/user/${userId}`).then(getResponse);
 export const proposalComments = (csrf, token, state) =>
   POST("/comments", csrf, { token, state }, apiPi).then(getResponse);
 
-export const commentsTimestamp = (csrf, token, state, commentids) =>
+export const commentsTimestamps = (csrf, token, state, commentids) =>
   POST("/timestamps", csrf, { token, state, commentids }, apiComments).then(
     getResponse
   );
@@ -624,6 +625,9 @@ export const proposalsBatchVoteSummary = (csrf, tokens) =>
 
 export const proposalVoteResults = (csrf, token) =>
   POST("/votes/results", csrf, { token }, apiPi).then(getResponse);
+
+export const ticketVoteTimestamps = (csrf, token) =>
+  POST("/timestamps", csrf, { token }, apiTicketVote).then(getResponse);
 
 export const proposalAuthorizeOrRevokeVote = (
   csrf,

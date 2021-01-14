@@ -4,10 +4,17 @@ import { Formik } from "formik";
 import { useSearchVotes } from "./hooks";
 import styles from "./ModalSearchVotes.module.css";
 import validationSchema from "./validation";
+import DownloadJSON from "src/components/DownloadJSON";
+import useTimestamps from "src/hooks/api/useTimestamps";
 
 function findTicket(ticketToken, votes) {
-  return votes[ticketToken];
+  return votes.find((v) => v && v.ticket === ticketToken);
 }
+const getTimestampsFileName = (proposalToken, ticketToken) =>
+  `timestamps-${proposalToken.substring(0, 7)}-ticket-${ticketToken.substring(
+    0,
+    7
+  )}`;
 
 const ModalSearchVotes = ({ show, onClose, proposal }) => {
   const [ticketFound, setTicketFound] = useState(null);
@@ -15,6 +22,7 @@ const ModalSearchVotes = ({ show, onClose, proposal }) => {
     proposal.censorshiprecord.token,
     show
   );
+  const { onFetchTicketVoteTimestamps } = useTimestamps();
   function updateFoundTicket(ticket) {
     setTicketFound({
       Ticket: ticket.ticket,
@@ -38,6 +46,7 @@ const ModalSearchVotes = ({ show, onClose, proposal }) => {
     },
     [show]
   );
+
   const resultsTableHeaders = ["Ticket", "Option"];
   return (
     <Modal
@@ -88,11 +97,25 @@ const ModalSearchVotes = ({ show, onClose, proposal }) => {
         }}
       </Formik>
       {ticketFound && (
-        <Table
-          data={[ticketFound]}
-          headers={resultsTableHeaders}
-          disablePagination
-        />
+        <>
+          <Table
+            data={[ticketFound]}
+            headers={resultsTableHeaders}
+            disablePagination
+          />
+          <DownloadJSON
+            label="Download Ticket Vote Timestamps"
+            fileName={getTimestampsFileName(
+              proposal.censorshiprecord.token,
+              ticketFound.Ticket
+            )}
+            isAsync={true}
+            content={[]}
+            beforeDownload={() =>
+              onFetchTicketVoteTimestamps(proposal.censorshiprecord.token)
+            }
+          />
+        </>
       )}
     </Modal>
   );

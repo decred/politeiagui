@@ -13,7 +13,7 @@ export const makeGetProposalVoteResults = (token) =>
     makeGetProposalVoteSummary(token),
     (summary) =>
       summary && {
-        castvotes: summary.castvotes,
+        castvotes: summary.votes,
         startvotereply: summary.startvotereply
       }
   );
