@@ -8,6 +8,8 @@ import {
   useMediaQuery,
   useTheme,
   Icon,
+  H3,
+  Link,
   classNames,
   Tooltip,
   DEFAULT_DARK_THEME_NAME
@@ -41,10 +43,13 @@ import { isActiveApprovedRfp } from "src/containers/Proposal/helpers";
 import useModalContext from "src/hooks/utils/useModalContext";
 import FormatHelpButton from "./FormatHelpButton";
 import SubmitButton from "./SubmitButton";
-import ProposalGuidelinesButton from "./ProposalGuidelinesButton";
 
 /** The main goal of using a Map data structure instead of internal state here is to prevent unnecessary rerenders. We just want a way to map blobs to files objects. */
 const mapBlobToFile = new Map();
+
+const ListItem = ({ children }) => (
+  <li className={styles.listItem}>{children}</li>
+);
 
 const ProposalForm = React.memo(function ProposalForm({
   values,
@@ -219,13 +224,38 @@ const ProposalForm = React.memo(function ProposalForm({
         onRemove={handleFileRemoval}
         errors={errors}
       />
+      <H3>Rules:</H3>
+      <ul className="margin-top-s margin-bottom-m">
+        <ListItem>
+          Expenses must be denominated in USD (but will be paid in DCR)
+        </ListItem>
+        <ListItem>
+          The work will be paid next month after the month it was done, as
+          explained{" "}
+          <Link
+            href="https://docs.decred.org/contributing/contributor-compensation/"
+            target="_blank"
+            rel="noopener noreferrer">
+            here
+          </Link>
+        </ListItem>
+        <ListItem>Proposal must include actionable plan</ListItem>
+        <ListItem>
+          Check{" "}
+          <Link
+            href="https://docs.decred.org/governance/politeia/proposal-guidelines/"
+            target="_blank"
+            rel="noopener noreferrer">
+            Proposal Guidelines
+          </Link>
+        </ListItem>
+      </ul>
       {!smallTablet ? (
         <Row topMarginSize="s" justify="right">
           <FormatHelpButton
             isDarkTheme={isDarkTheme}
             openMDGuideModal={openMDGuideModal}
           />
-          <ProposalGuidelinesButton isDarkTheme={isDarkTheme} />
           <DraftSaver
             mapBlobToFile={mapBlobToFile}
             submitSuccess={submitSuccess}
@@ -254,7 +284,6 @@ const ProposalForm = React.memo(function ProposalForm({
               isDarkTheme={isDarkTheme}
               openMDGuideModal={openMDGuideModal}
             />
-            <ProposalGuidelinesButton isDarkTheme={isDarkTheme} />
           </Row>
         </>
       )}
