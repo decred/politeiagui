@@ -90,6 +90,10 @@
   margin-top: 2rem;
 }
 
+.listItem {
+  margin-top: 1rem;
+}
+
 @media screen and (max-width: 685px) {
   .datePicker {
     margin-top: 2rem;
