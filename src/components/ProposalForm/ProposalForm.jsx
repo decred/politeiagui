@@ -51,6 +51,37 @@ const ListItem = ({ children }) => (
   <li className={styles.listItem}>{children}</li>
 );
 
+const Rules = () => (
+  <>
+    <H3>Rules:</H3>
+    <ul className="margin-top-s margin-bottom-m">
+      <ListItem>
+        Expenses must be denominated in USD (but will be paid in DCR)
+      </ListItem>
+      <ListItem>
+        The work will be paid next month after the month it was done, as
+        explained{" "}
+        <Link
+          href="https://docs.decred.org/contributing/contributor-compensation/"
+          target="_blank"
+          rel="noopener noreferrer">
+          here
+        </Link>
+      </ListItem>
+      <ListItem>Proposal must include actionable plan</ListItem>
+      <ListItem>
+        Check{" "}
+        <Link
+          href="https://docs.decred.org/governance/politeia/proposal-guidelines/"
+          target="_blank"
+          rel="noopener noreferrer">
+          Proposal Guidelines
+        </Link>
+      </ListItem>
+    </ul>
+  </>
+);
+
 const ProposalForm = React.memo(function ProposalForm({
   values,
   handleChange,
@@ -224,32 +255,7 @@ const ProposalForm = React.memo(function ProposalForm({
         onRemove={handleFileRemoval}
         errors={errors}
       />
-      <H3>Rules:</H3>
-      <ul className="margin-top-s margin-bottom-m">
-        <ListItem>
-          Expenses must be denominated in USD (but will be paid in DCR)
-        </ListItem>
-        <ListItem>
-          The work will be paid next month after the month it was done, as
-          explained{" "}
-          <Link
-            href="https://docs.decred.org/contributing/contributor-compensation/"
-            target="_blank"
-            rel="noopener noreferrer">
-            here
-          </Link>
-        </ListItem>
-        <ListItem>Proposal must include actionable plan</ListItem>
-        <ListItem>
-          Check{" "}
-          <Link
-            href="https://docs.decred.org/governance/politeia/proposal-guidelines/"
-            target="_blank"
-            rel="noopener noreferrer">
-            Proposal Guidelines
-          </Link>
-        </ListItem>
-      </ul>
+      <Rules />
       {!smallTablet ? (
         <Row topMarginSize="s" justify="right">
           <FormatHelpButton
