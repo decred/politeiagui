@@ -1,18 +1,18 @@
 import { buildProposal } from "../support/generate";
 
-const user = {
-  email: "adminuser@example.com",
-  username: "adminuser",
-  password: "password"
-};
-
-beforeEach(() => {
-  cy.server();
-  cy.login(user);
-  cy.identity();
-});
-
 describe("Proposal Edit", () => {
+  const user = {
+    email: "adminuser@example.com",
+    username: "adminuser",
+    password: "password"
+  };
+
+  beforeEach(() => {
+    cy.server();
+    cy.login(user);
+    cy.identity();
+  });
+
   it("Can edit a public proposal as a proposal owner", () => {
     // create proposal
     const proposal = buildProposal();

@@ -316,6 +316,7 @@ const ProposalFormWrapper = ({
         const proposalToken = await onSubmit({
           ...others,
           description,
+          type,
           files: [...others.files, ...files],
           rfpLink
         });
