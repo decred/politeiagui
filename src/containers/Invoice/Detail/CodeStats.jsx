@@ -1,23 +1,18 @@
 import React, { Fragment, useState, memo } from "react";
-import { H4, Text, Table, Spinner, Link as UiLink, classNames } from "pi-ui";
+import { H4, Text, Spinner, classNames } from "pi-ui";
 import Link from "src/components/Link";
 import { useCodeStats, useFetchCodeStats } from "./hooks";
 import styles from "./Detail.module.css";
 
-const headers = [
-  "Date",
-  "Repo",
-  "Merge Additions",
-  "Merge Deletions",
-  "PRs",
-  "Commits Additions",
-  "Commits Deletions",
-  "Update Additions",
-  "Update Deletions",
-  "Review Additions",
-  "Review Deletions",
-  "Reviews"
-];
+const headers = ["Date", "Repo", "Commits", "Merged", "Updates", "Reviews"];
+
+const Headers = () => (
+  <div className={classNames(styles.statsHeader, styles.collapse)}>
+    {headers.map((h, i) => (
+      <span key={i}>{h}</span>
+    ))}
+  </div>
+);
 
 /**
  * PRs
@@ -29,23 +24,38 @@ const headers = [
  * Pathname: repos/decred/politeiagui/commits/1688505e91dc86e5f2251cdd72fdcb53fa5bfd99
  * Split: ["", "repos", "decred", "politeiagui", "commits", "1688505e91dc86e5f2251cdd72fdcb53fa5bfd99"]
  */
-const getUrlEnd = (lastIndex, numberPos = 4, shortUrl = false) => (
-  prUrl,
-  i
-) => {
+const getUrlEnd = (lastIndex, numberPos = 4) => (prUrl, i) => {
   const url = new URL(prUrl);
   const prNumber = url.pathname.split("/")[numberPos];
   return (
     <Fragment key={i}>
       <Link to={{ pathname: prUrl }} target="_blank">
-        {shortUrl ? prNumber.substring(0, 7) : prNumber}
+        {prNumber.substring(0, 7)}
       </Link>
       {i === lastIndex ? "" : ", "}
     </Fragment>
   );
 };
 
-const printCodeStatsInfo = ({
+const Statistic = ({ add, del }) => (
+  <div className={styles.singleStat}>
+    <div className={styles.addition}>+ {add}</div>
+    <div className={styles.deletion}>- {del}</div>
+  </div>
+);
+
+const ContributionList = ({ links, label, pos = 4 }) => (
+  <div>
+    {label}:{" "}
+    <Text className={styles.prs}>
+      {links.length === 0
+        ? "none"
+        : links.map(getUrlEnd(links.length - 1, pos, true))}
+    </Text>
+  </div>
+);
+
+const CodeStatDetails = ({
   commitadditions,
   commitdeletions,
   updatedadditions,
@@ -57,32 +67,32 @@ const printCodeStatsInfo = ({
   reviewdeletions,
   prs,
   reviews,
+  commits,
   month,
   year
-}) => ({
-  Date: `${month}/${year}`,
-  Repo: repository,
-  "Merge Additions": mergedadditions,
-  "Merge Deletions": mergeddeletions,
-  PRs: (
-    <Text className={styles.prs}>
-      {prs.length === 0 ? "none" : prs.map(getUrlEnd(prs.length - 1, 4))}
-    </Text>
-  ),
-  "Commits Additions": commitadditions,
-  "Commits Deletions": commitdeletions,
-  "Update Additions": updatedadditions,
-  "Update Deletions": updateddeletions,
-  "Review Additions": reviewadditions,
-  "Review Deletions": reviewdeletions,
-  Reviews: (
-    <Text className={styles.prs}>
-      {reviews.length === 0
-        ? "none"
-        : reviews.map(getUrlEnd(reviews.length - 1))}
-    </Text>
-  )
-});
+}) => {
+  const [show, setShow] = useState(false);
+  const onToggleShow = () => setShow(!show);
+  return (
+    <>
+      <div className={styles.collapse} onClick={onToggleShow}>
+        <Text textAlign="center">{`${month}/${year}`}</Text>
+        <Text textAlign="center">{repository}</Text>
+        <Statistic add={commitadditions} del={commitdeletions} />
+        <Statistic add={mergedadditions} del={mergeddeletions} />
+        <Statistic add={updatedadditions} del={updateddeletions} />
+        <Statistic add={reviewadditions} del={reviewdeletions} />
+      </div>
+      {show && (
+        <div className={styles.contributionDetails}>
+          <ContributionList links={prs} label="Pull Requests" />
+          <ContributionList links={reviews} label="Reviews" />
+          <ContributionList links={commits} pos={5} label="Commits" />
+        </div>
+      )}
+    </>
+  );
+};
 
 export const FetchCodeStats = ({ userid, start, end }) => {
   const { loading, error } = useFetchCodeStats(userid, start, end);
@@ -95,9 +105,7 @@ export const FetchCodeStats = ({ userid, start, end }) => {
 
 const CodeStats = ({ userid, start, end }) => {
   const { codestats } = useCodeStats(userid, start, end);
-  const [showStats, setShowStats] = useState(false);
-  const toggleShowStats = () => setShowStats(!showStats);
-  const shouldPrintTable = showStats && codestats && codestats.length > 0;
+  const shouldPrintTable = codestats && codestats.length > 0;
   const shouldPrintEmptyMessage = codestats && codestats.length === 0;
   return (
     <>
@@ -106,22 +114,14 @@ const CodeStats = ({ userid, start, end }) => {
         {!codestats && (
           <FetchCodeStats userid={userid} start={start} end={end} />
         )}
-        <UiLink className={styles.uilink} onClick={toggleShowStats}>
-          {shouldPrintEmptyMessage ? "" : showStats ? "Hide" : "Show"}
-        </UiLink>
       </div>
       {shouldPrintTable ? (
-        <>
-          <Table headers={headers} data={codestats.map(printCodeStatsInfo)} />
-          <H4 className="margin-bottom-s">Commits:</H4>
+        <div className={styles.codeStats}>
+          <Headers />
           {codestats.map((cs, i) => (
-            <Text className={styles.prs} key={i}>
-              {cs.commits.length === 0
-                ? "none"
-                : cs.commits.map(getUrlEnd(cs.commits.length - 1, 5, true))}
-            </Text>
+            <CodeStatDetails {...cs} key={i} />
           ))}
-        </>
+        </div>
       ) : (
         shouldPrintEmptyMessage && (
           <Text>No code stats for the past 3 months</Text>
