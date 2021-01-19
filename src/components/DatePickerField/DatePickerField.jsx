@@ -7,7 +7,7 @@ import useBooleanState from "src/hooks/utils/useBooleanState";
 import { Row } from "../layout";
 import { MONTHS_LABELS } from "src/constants";
 
-const DatePickerField = ({ name, placeholder, years, className }) => {
+const DatePickerField = ({ name, placeholder, years, className, ...props }) => {
   const [isOpen, openPicker, closePicker] = useBooleanState(false);
   const togglePicker = () => {
     if (!isOpen) {
@@ -27,7 +27,7 @@ const DatePickerField = ({ name, placeholder, years, className }) => {
         };
         const value = values[name];
         return (
-          <div className={classNames("cursor-pointer", className)}>
+          <div className={classNames("cursor-pointer", className)} {...props}>
             <DatePicker
               show={isOpen}
               years={years}

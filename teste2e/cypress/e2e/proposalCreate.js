@@ -1,6 +1,23 @@
 import { buildProposal } from "../support/generate";
 
 describe("Proposals", () => {
+  it("Paid user can create RFP proposals", () => {
+    // paid user with proposal credits
+    const user = {
+      email: "adminuser@example.com",
+      username: "adminuser",
+      password: "password"
+    };
+    const proposal = buildProposal();
+    cy.login(user);
+    cy.identity();
+    // create a RFP proposal via API
+    cy.createRfpProposal(proposal).then((res) => {
+      cy.visit(`proposals/${res.body.censorshiprecord.token.substring(0, 7)}`);
+      cy.findByAltText(/rfp/).should("exist");
+    });
+  });
+
   it("Paid user can create proposals manually", () => {
     // paid user with proposal credits
     const user = {

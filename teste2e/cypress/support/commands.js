@@ -27,7 +27,7 @@ import { sha3_256 } from "js-sha3";
 import { requestWithCsrfToken, setProposalStatus } from "../utils";
 import * as pki from "../pki";
 // TODO: consider moving general functions like makeProposal and signRegister to a more general lib file other than api
-import { makeProposal, signRegister } from "../utils";
+import { makeProposal, signRegister, addDays } from "../utils";
 
 Cypress.Commands.add("assertHome", () => {
   cy.url().should("eq", `${Cypress.config().baseUrl}/`);
@@ -91,6 +91,28 @@ Cypress.Commands.add("identity", () => {
 
 Cypress.Commands.add("createProposal", (proposal) => {
   const createdProposal = makeProposal(proposal.name, proposal.description);
+  return cy.request("api/v1/user/me").then((res) => {
+    return signRegister(res.body.userid, createdProposal).then((res) =>
+      requestWithCsrfToken("api/v1/proposals/new", res)
+    );
+  });
+});
+
+Cypress.Commands.add("createRfpProposal", (proposal) => {
+  const currentDate = new Date();
+  const rfpDate = addDays(currentDate, 10);
+  const rfpDeadline = {
+    day: rfpDate.getDate(),
+    month: rfpDate.getMonth() + 1,
+    year: rfpDate.getFullYear()
+  };
+  const createdProposal = makeProposal(
+    proposal.name,
+    proposal.description,
+    rfpDeadline,
+    2,
+    ""
+  );
   return cy.request("api/v1/user/me").then((res) => {
     return signRegister(res.body.userid, createdProposal).then((res) =>
       requestWithCsrfToken("api/v1/proposals/new", res)
