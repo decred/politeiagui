@@ -11,23 +11,10 @@ const SearchSelector = ({ onChange, value, className, styles: extStyles }) => {
     value: result.id,
     label: `${result.username} | ${result.email}`
   }));
-  // const options = [
-  //   {
-  //     label: "AAA",
-  //     value: "AAA"
-  //   },
-  //   {
-  //     label: "BBB",
-  //     value: "BBB"
-  //   },
-  //   {
-  //     label: "CCC",
-  //     value: "CCC"
-  //   },
-  // ]
+
   return (
     <MultiSelect
-      placeholder="Search by User"
+      label="Search by User"
       className={classNames(styles.select, className)}
       value={value}
       inputValue={inputValue}
@@ -36,12 +23,12 @@ const SearchSelector = ({ onChange, value, className, styles: extStyles }) => {
       options={options}
       styles={extStyles}
       searchable
-      // noOptionsMessage={() =>
-      //   inputValue === ""
-      //     ? "Insert a username or email"
-      //     : "No options available"
-      // }
-      // escapeClearsValue
+      clearable
+      noOptionsMessage={
+        inputValue === ""
+          ? "Insert a username or email"
+          : "No options available"
+      }
     />
   );
 };
