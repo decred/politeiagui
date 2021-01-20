@@ -28,7 +28,7 @@ const VerifyTotp = ({
   };
 
   return (
-    <div className={className}>
+    <form className={className}>
       {extended ? (
         <>
           <H2>{title}</H2>
@@ -45,6 +45,7 @@ const VerifyTotp = ({
         />
         {extended && (
           <Button
+            type="submit"
             kind={
               enableVerify ? (extended ? "primary" : "secondary") : "disabled"
             }
@@ -53,7 +54,7 @@ const VerifyTotp = ({
           </Button>
         )}
       </div>
-    </div>
+    </form>
   );
 };
 

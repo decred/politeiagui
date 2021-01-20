@@ -74,7 +74,9 @@ const Totp = () => {
   };
 
   return loading ? (
-    <Spinner invert />
+    <div className="justify-center">
+      <Spinner invert />
+    </div>
   ) : (
     <Card paddingSize="small">
       <SetTotp totp={totp} isAlreadySet={isTotpSet} />
