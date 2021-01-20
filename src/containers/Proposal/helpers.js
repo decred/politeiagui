@@ -68,6 +68,7 @@ export const isActiveRfp = (linkby) =>
 
 /**
  * Returns true if RFP's linkby meets the minimum period
+ * @param {number} proposalLinkBy proposal linkBy as seconds unix
  * @param {number} minlinkbyperiod min possible linkby period as seconds unix
  * @returns {Boolean} isRfpReadyToVote
  */
