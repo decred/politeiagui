@@ -12,7 +12,7 @@ const getDigitsArrayFromCode = (code = "", length) => {
   return newDigits;
 };
 
-const DigitsInput = ({ length, onChange, className, code }) => {
+const DigitsInput = ({ length, onChange, className, code, tabIndex }) => {
   const [digits, setDigits] = useState(getDigitsArrayFromCode(code, length));
   const [focused, setFocused] = useState(false);
   const inputRef = useRef(null);
@@ -61,6 +61,7 @@ const DigitsInput = ({ length, onChange, className, code }) => {
               id={`id-digit-${index}`}
               key={`digit-${index}`}
               defaultValue={value}
+              tabIndex={tabIndex}
               onFocus={(e) => {
                 e && e.target && e.target.value
                   ? onChangeDigit(index)
@@ -79,10 +80,12 @@ DigitsInput.propTypes = {
   length: PropTypes.number,
   onChange: PropTypes.func,
   className: PropTypes.string,
-  code: PropTypes.string
+  code: PropTypes.string,
+  tabIndex: PropTypes.number
 };
 
 DigitsInput.defaultProps = {
+  tabIndex: 1,
   length: 6,
   onChange: () => {},
   onFill: () => {}

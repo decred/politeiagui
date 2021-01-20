@@ -5,6 +5,9 @@ import DigitsInput from "src/components/DigitsInput";
 import { TOTP_CODE_LENGTH } from "src/constants";
 import styles from "./Totp.module.css";
 
+const Wrapper = ({ isForm, ...props }) =>
+  isForm ? <form {...props} /> : <div {...props} />;
+
 const VerifyTotp = ({
   onVerify,
   buttonLabel,
@@ -13,7 +16,8 @@ const VerifyTotp = ({
   description,
   className,
   inputClassName,
-  onType
+  onType,
+  tabIndex
 }) => {
   const [enableVerify, setEnableVerify] = useState(false);
   const [code, setCode] = useState("");
@@ -26,9 +30,8 @@ const VerifyTotp = ({
     e && e.preventDefault();
     onVerify(code, () => onFillCode(""));
   };
-
   return (
-    <form className={className}>
+    <Wrapper isForm={extended} className={className}>
       {extended ? (
         <>
           <H2>{title}</H2>
@@ -41,6 +44,7 @@ const VerifyTotp = ({
         <DigitsInput
           onChange={onFillCode}
           className={inputClassName}
+          tabIndex={tabIndex}
           code={code}
         />
         {extended && (
@@ -54,12 +58,12 @@ const VerifyTotp = ({
           </Button>
         )}
       </div>
-    </form>
+    </Wrapper>
   );
 };
 
 VerifyTotp.propTypes = {
-  onVerify: PropTypes.func.isRequired,
+  onVerify: PropTypes.func,
   onType: PropTypes.func,
   buttonLabel: PropTypes.string,
   title: PropTypes.string,

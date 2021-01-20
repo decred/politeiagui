@@ -29,7 +29,7 @@ const LoginForm = ({
 }) => {
   const { onLogin, validationSchema } = useLogin();
   const { enableAdminInvite } = useConfig();
-  const [showTotp, setShowTotp] = useState();
+  const [showTotp, setShowTotp] = useState(false);
   const onSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
@@ -66,6 +66,10 @@ const LoginForm = ({
     } else if (renderPrivacyPolicyModal) {
       handleOpenPrivacyPolicyModal();
     }
+  }
+
+  function handleToggleWithSpace(e) {
+    e && e.key && e.key === " " && handleToggleTotp();
   }
 
   return (
@@ -107,6 +111,7 @@ const LoginForm = ({
               id={emailId}
               label="Email"
               name="email"
+              tabIndex={1}
               autoComplete="email"
               value={values.email}
               onChange={handleChange}
@@ -118,13 +123,17 @@ const LoginForm = ({
               label="Password"
               type="password"
               name="password"
+              tabIndex={2}
               autoComplete="current-password"
               value={values.password}
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.password && errors.password}
             />
-            <div className={styles.totpToggleWrapper}>
+            <div
+              onKeyDown={handleToggleWithSpace}
+              tabIndex={3}
+              className={styles.totpToggleWrapper}>
               <Toggle
                 id="totp-toggle"
                 onToggle={handleToggleTotp}
@@ -140,6 +149,7 @@ const LoginForm = ({
               onType={handleChangeTotp}
               inputClassName={styles.totpInput}
               extended={false}
+              tabIndex={4}
               title="Authenticator Code"
             />
             <Actions>
