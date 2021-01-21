@@ -14,3 +14,7 @@
 .fieldError {
   color: var(--color-orange);
 }
+
+.labelOnBottom {
+  align-items: flex-end;  
+}

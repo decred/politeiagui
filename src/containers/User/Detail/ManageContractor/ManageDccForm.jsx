@@ -1,4 +1,4 @@
-import { Button, Message, H2, Select } from "pi-ui";
+import { Button, Message, H2, MultiSelect, classNames } from "pi-ui";
 import SelectField from "src/components/Select/SelectField";
 import React, { useCallback, useState } from "react";
 import InfoSection from "../InfoSection.jsx";
@@ -15,19 +15,13 @@ import { usePolicy } from "src/hooks";
 import { getContractorDomains } from "src/helpers";
 
 const selectStyles = {
-  container: (provided) => ({
-    ...provided,
-    width: "200px",
-    minWidth: "200px"
-  })
+  width: "200px",
+  minWidth: "200px"
 };
 
 const multipleSelectStyles = {
-  container: (provided) => ({
-    ...provided,
-    width: "100%",
-    minWidth: "200px"
-  })
+  maxWidth: "100%",
+  minWidth: "200px"
 };
 
 const ManageDccForm = ({ onUpdate, user }) => {
@@ -120,53 +114,56 @@ const ManageDccForm = ({ onUpdate, user }) => {
               <H2>Edit DCC Info</H2>
               <div className="margin-bottom-m margin-top-m">
                 <InfoSection
-                  className="no-margin-top"
+                  className={classNames("no-margin-top", styles.labelOnBottom)}
                   label="Contractor Type"
                   info={
                     <SelectField
                       name="type"
                       options={selectTypeOptions}
-                      styles={selectStyles}
+                      style={selectStyles}
+                      maxMenuHeight={300}
                     />
                   }
                 />
                 <InfoSection
+                  className={styles.labelOnBottom}
                   label="Domain"
                   info={
                     <SelectField
                       name="domain"
                       options={contractorDomains}
-                      styles={selectStyles}
+                      style={selectStyles}
                     />
                   }
                 />
                 <InfoSection
+                  className={styles.labelOnBottom}
                   label="Supervisors"
                   isLoading={loadingSupervisors}
                   info={
-                    <Select
-                      placeholder="Select Supervisor"
+                    <MultiSelect
                       value={values.users}
                       onChange={handleChangeUserSelector}
-                      isMulti
                       options={supervisorsOptions}
-                      styles={multipleSelectStyles}
+                      style={multipleSelectStyles}
+                      clearable
+
                     />
                   }
                   error={supervisorsError}
                 />
                 <InfoSection
+                  className={styles.labelOnBottom}
                   label="Owned Proposals"
                   error={approvedProposalsError}
                   isLoading={loadingOwnedProposals}
                   info={
-                    <Select
-                      placeholder="Select Proposals"
+                    <MultiSelect
                       value={values.proposals}
                       onChange={handleChangeOwnedProposals}
-                      isMulti
                       options={proposalsOptions}
-                      styles={multipleSelectStyles}
+                      style={multipleSelectStyles}
+                      clearable
                     />
                   }
                 />
