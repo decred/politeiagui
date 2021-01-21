@@ -128,9 +128,7 @@ const ModalConfirmWithReason = ({
         <>
           {successMessage}
           <div className="justify-right margin-top-m">
-            <Button
-              data-testid="reason-confirm-success"
-              onClick={onClose}>
+            <Button data-testid="reason-confirm-success" onClick={onClose}>
               Ok
             </Button>
           </div>
