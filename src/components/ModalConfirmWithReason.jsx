@@ -102,6 +102,7 @@ const ModalConfirmWithReason = ({
                 <ErrorMessage>{errors.global.toString()}</ErrorMessage>
               )}
               <TextInput
+                data-testid="reason"
                 label={reasonLabel}
                 name="reason"
                 id={`reason-for-${subject}`}
@@ -112,7 +113,10 @@ const ModalConfirmWithReason = ({
                 error={touched.reason && errors.reason}
               />
               <Actions className="no-padding-bottom">
-                <Button loading={isSubmitting} type="submit">
+                <Button
+                  data-testid="reason-confirm"
+                  loading={isSubmitting}
+                  type="submit">
                   Confirm
                 </Button>
               </Actions>
@@ -124,7 +128,11 @@ const ModalConfirmWithReason = ({
         <>
           {successMessage}
           <div className="justify-right margin-top-m">
-            <Button onClick={onClose}>Ok</Button>
+            <Button
+              data-testid="reason-confirm-success"
+              onClick={onClose}>
+              Ok
+            </Button>
           </div>
         </>
       )}
