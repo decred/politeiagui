@@ -272,7 +272,7 @@ const parseResponseBody = (response) => {
 
 export const parseResponse = (response) =>
   parseResponseBody(response).then((json) => {
-    if (json.errorcode) {
+    if (json && json.errorcode) {
       const err = new Error(
         getHumanReadableError(json.errorcode, json.errorcontext)
       );
@@ -410,10 +410,11 @@ export const proposalBilling = (csrf, token) =>
 export const verifyUserPayment = () =>
   GET("/v1/user/verifypayment").then(getResponse);
 
-export const login = (csrf, email, password) =>
+export const login = (csrf, email, password, code) =>
   POST("/login", csrf, {
     email: email.toLowerCase(),
-    password: digest(password)
+    password: digest(password),
+    code
   }).then(getResponse);
 
 // XXXX: this route hasn't been merged into the master of the backend.
@@ -823,3 +824,9 @@ export const newDccComment = (csrf, dcc) =>
   POST("/dcc/newcomment", csrf, dcc).then(getResponse);
 
 export const cmsUsers = (csrf) => GET("/v1/cmsusers", csrf).then(getResponse);
+
+export const setTotp = (csrf, type, code) =>
+  POST("/user/totp", csrf, { type, code }).then(getResponse);
+
+export const verifyTotp = (csrf, code) =>
+  POST("/user/verifytotp", csrf, { code }).then(getResponse);

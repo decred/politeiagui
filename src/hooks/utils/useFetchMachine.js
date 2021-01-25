@@ -89,7 +89,7 @@ export default function useFetchMachine({ actions, initialValues }) {
         case SUCCESS:
           return actions.done && actions.done();
         case FAILURE:
-          return actions.error && actions.error();
+          return actions.error && actions.error(currentState.error);
         default:
           return;
       }

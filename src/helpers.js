@@ -153,6 +153,10 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     74: `Invalid proposal linkby. ${errorContext[0]}`,
     75: `Invalid runoff vote. ${errorContext[0]}`,
     76: `Wrong proposal type. ${errorContext[0]}`,
+    77: "The provided code does not match the saved key",
+    78: "Invalid TOTP Type",
+    79: "User has verified TOTP secret and login requires code.",
+    80: "Must wait until next TOTP code window before another login attempt.",
 
     // CMS Errors
     1001: "Malformed name",

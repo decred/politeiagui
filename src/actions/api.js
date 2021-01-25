@@ -10,7 +10,11 @@ import { clearStateLocalStorage } from "../lib/local_storage";
 import * as pki from "../lib/pki";
 import * as sel from "../selectors";
 import act from "./methods";
-import { PAYWALL_STATUS_PAID, DCC_SUPPORT_VOTE } from "../constants";
+import {
+  PAYWALL_STATUS_PAID,
+  DCC_SUPPORT_VOTE,
+  TOTP_DEFAULT_TYPE
+} from "../constants";
 
 export const onResetNewUser = act.RESET_NEW_USER;
 
@@ -218,11 +222,11 @@ export const onSearchUser = (query, isCMS) => (dispatch) => {
 // onLogin handles a user's login. If it is his first login on the app
 // after registering, his key will be saved under his email. If so, it
 // changes the storage key to his uuid.
-export const onLogin = ({ email, password }) =>
+export const onLogin = ({ email, password, code }) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_LOGIN({ email }));
     return api
-      .login(csrf, email, password)
+      .login(csrf, email, password, code)
       .then((response) => {
         dispatch(act.RECEIVE_LOGIN(response));
         const { userid, username } = response;
@@ -1534,5 +1538,33 @@ export const onSubmitDccComment = (currentUserID, token, comment, parentid) =>
       .catch((error) => {
         dispatch(act.RECEIVE_NEW_COMMENT(null, error));
         throw error;
+      });
+  });
+
+export const onSetTotp = (code = "", type = TOTP_DEFAULT_TYPE) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_SET_TOTP({}));
+    return api
+      .setTotp(csrf, type, code)
+      .then((response) => {
+        dispatch(act.RECEIVE_SET_TOTP(response));
+      })
+      .catch((e) => {
+        dispatch(act.RECEIVE_SET_TOTP(null, e));
+        throw e;
+      });
+  });
+
+export const onVerifyTotp = (code) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_VERIFY_TOTP({}));
+    return api
+      .verifyTotp(csrf, code)
+      .then((response) => {
+        dispatch(act.RECEIVE_VERIFY_TOTP(response));
+      })
+      .catch((e) => {
+        dispatch(act.RECEIVE_VERIFY_TOTP(null, e));
+        throw e;
       });
   });

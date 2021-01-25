@@ -20,6 +20,7 @@ import Identity from "./Identity";
 import Preferences from "./Preferences";
 import ManageContractor from "./ManageContractor";
 import ProposalsOwned from "./ProposalsOwned";
+import Totp from "../Totp";
 import useModalContext from "src/hooks/utils/useModalContext";
 
 const getTabComponents = ({ user, ...rest }) => {
@@ -42,7 +43,8 @@ const getTabComponents = ({ user, ...rest }) => {
     [tabValues.MANAGE_DCC]: <ManageContractor userID={user.userid} {...rest} />,
     [tabValues.PROPOSALS_OWNED]: (
       <ProposalsOwned proposalsOwned={user.proposalsowned} />
-    )
+    ),
+    [tabValues.TOTP]: <Totp />
   };
   return mapTabValueToComponent;
 };
@@ -82,7 +84,7 @@ const UserDetail = ({
         (!isUserPageOwner || !ownsProposals)
       )
         return true;
-
+      if (tabLabel === tabValues.TOTP && !isUserPageOwner) return true;
       return false;
     };
     const filterByRecordType = (tabLabel) => {
@@ -112,7 +114,8 @@ const UserDetail = ({
       tabValues.INVOICES,
       tabValues.DRAFTS,
       tabValues.MANAGE_DCC,
-      tabValues.PROPOSALS_OWNED
+      tabValues.PROPOSALS_OWNED,
+      tabValues.TOTP
     ].filter((tab) => !isTabDisabled(tab) && filterByRecordType(tab));
   }, [
     isUserPageOwner,

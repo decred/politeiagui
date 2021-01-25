@@ -7,3 +7,21 @@ span.privacyPolicyTxt {
 span.createAccounTxt {
   line-height: var(--spacing-3);
 }
+
+.totp.hide {
+  display: none;
+}
+
+.totpInput {
+  margin-top: 0;
+}
+
+.totpToggleWrapper {
+  display: flex;
+  padding: 1rem 0 2rem;
+}
+
+.totpToggleLabel {
+  padding: 0.2rem 1rem 0;
+  color: var(--text-input-color) !important;
+}

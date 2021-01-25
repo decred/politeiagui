@@ -1,0 +1,31 @@
+.setContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row wrap;
+  margin-top: 1rem;
+}
+.qrcode {
+  display: block;
+  min-width: 22rem;
+}
+.instructions {
+  padding-top: 0.5rem;
+  flex-grow: 2;
+  width: 400px;
+}
+
+.copyableKey {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.resetLink {
+  cursor: pointer;
+}
+
+.inputLabel {
+  color: var(--text-input-color) !important;
+  top: -2rem;
+  font-size: var(--font-size-small) !important;
+}

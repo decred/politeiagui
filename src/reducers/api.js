@@ -62,7 +62,9 @@ export const DEFAULT_STATE = {
   dccs: DEFAULT_REQUEST_STATE,
   dcc: DEFAULT_REQUEST_STATE,
   supportOpposeDCC: DEFAULT_REQUEST_STATE,
-  setDCCStatus: DEFAULT_REQUEST_STATE
+  setDCCStatus: DEFAULT_REQUEST_STATE,
+  setTotp: DEFAULT_REQUEST_STATE,
+  verifyTotp: DEFAULT_REQUEST_STATE
 };
 
 const api = (state = DEFAULT_STATE, action) =>
@@ -197,6 +199,12 @@ const api = (state = DEFAULT_STATE, action) =>
         receive("rescanUserPayments", state, {}),
       [act.RESET_RESCAN_USER_PAYMENTS]: () =>
         reset("rescanUserPayments", state, action),
+      [act.RESET_RESCAN_USER_PAYMENTS]: () =>
+        reset("rescanUserPayments", state, action),
+      [act.REQUEST_SET_TOTP]: () => request("setTotp", state, action),
+      [act.RECEIVE_SET_TOTP]: () => receive("setTotp", state, action),
+      [act.REQUEST_VERIFY_TOTP]: () => request("verifyTotp", state, action),
+      [act.RECEIVE_VERIFY_TOTP]: () => receive("verifyTotp", state, action),
       // == CMS START ==
       [act.REQUEST_GENERATE_PAYOUTS]: () => request("payouts", state, action),
       [act.RECEIVE_GENERATE_PAYOUTS]: () => receive("payouts", state, action),
