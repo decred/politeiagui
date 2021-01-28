@@ -17,7 +17,7 @@
     "localforage": "^1.9.0",
     "lodash": "^4.17.20",
     "normalize.css": "^8.0.1",
-    "pi-ui": "https://github.com/guilhermemntt/pi-ui#5e30d1afbd6d69eb997828fef2b4febab37833aa",
+    "pi-ui": "https://github.com/guilhermemntt/pi-ui#0aa2536733838714ec7df5c9a9a01c953f4bff90",
     "prop-types": "^15.7.2",
     "qr-image": "^3.2.0",
     "query-string": "^6.13.7",
