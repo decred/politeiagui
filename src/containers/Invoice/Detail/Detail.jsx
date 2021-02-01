@@ -29,6 +29,17 @@ const InvoiceDetail = ({ Main, match }) => {
 
   const { subContractors, error: subContractorsError } = useSubContractors();
 
+  let subContractorsInLineItems;
+
+  if (invoice && subContractors) {
+    const linesSubContractors = invoice.input.lineitems.map(
+      (lineitem) => lineitem.subuserid
+    );
+    subContractorsInLineItems = subContractors.filter((sc) => {
+      return linesSubContractors.includes(sc.id);
+    });
+  }
+
   const isAuthor =
     currentUser && invoice && invoice.userid === currentUser.userid;
   const isAdmin = currentUser && currentUser.isadmin;
@@ -66,7 +77,7 @@ const InvoiceDetail = ({ Main, match }) => {
               />
               {isAdmin && (
                 <Stats
-                  subContractors={subContractors}
+                  subContractors={subContractorsInLineItems}
                   subContractorsError={subContractorsError}
                   invoiceToken={invoice.censorshiprecord.token}
                   userid={invoice.userid}
