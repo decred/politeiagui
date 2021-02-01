@@ -1,5 +1,5 @@
 import React, { useState, memo } from "react";
-import { Spinner, Text, H4, Table, Link as UiLink } from "pi-ui";
+import { Spinner, Text, H4, Table, Link as UiLink, classNames } from "pi-ui";
 import Link from "src/components/Link";
 import { useInvoices } from "./hooks";
 import { formatCentsToUSD } from "src/utils";
@@ -35,7 +35,7 @@ const InvoiceDetails = ({ token, userid, start, end }) => {
   const shouldPrintEmptyMessage = invoices && invoices.length === 0;
   return (
     <>
-      <div className={styles.titleLinkWrapper}>
+      <div className={classNames(styles.titleLinkWrapper, "margin-bottom-s")}>
         <H4>Past 3 months invoices</H4>
         {!invoices && <FetchInvoices />}
         <UiLink className={styles.uilink} onClick={toggleShowStats}>

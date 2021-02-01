@@ -11,6 +11,7 @@ import { GoBackLink } from "src/components/Router";
 import Stats from "./Stats";
 import get from "lodash/fp/get";
 import { useDocumentTitle } from "src/hooks/utils/useDocumentTitle";
+import useSubContractors from "src/hooks/api/useSubContractors";
 import { presentationalInvoiceName } from "../helpers";
 
 const InvoiceDetail = ({ Main, match }) => {
@@ -25,6 +26,8 @@ const InvoiceDetail = ({ Main, match }) => {
     proposals,
     proposalsError
   } = useInvoice(invoiceToken);
+
+  const { subContractors, error: subContractorsError } = useSubContractors();
 
   const isAuthor =
     currentUser && invoice && invoice.userid === currentUser.userid;
@@ -63,6 +66,8 @@ const InvoiceDetail = ({ Main, match }) => {
               />
               {isAdmin && (
                 <Stats
+                  subContractors={subContractors}
+                  subContractorsError={subContractorsError}
                   invoiceToken={invoice.censorshiprecord.token}
                   userid={invoice.userid}
                   start={start}
