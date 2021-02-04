@@ -25,9 +25,9 @@ export const formatUnixTimestamp = (unixtimestamp) =>
 export const formatUnixTimestampToObj = (unixtimestamp) => {
   const date = new Date(unixtimestamp * 1000);
   return {
-    day: date.getUTCDate(),
-    month: date.getUTCMonth() + 1,
-    year: date.getUTCFullYear()
+    day: date.getDate(),
+    month: date.getMonth() + 1,
+    year: date.getFullYear()
   };
 };
 

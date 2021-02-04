@@ -117,7 +117,7 @@ const PublicActionsProvider = ({ children }) => {
         throw Error("No RFP submissions available");
       }
       const [submissions] = await onFetchProposalsBatchWithoutState(
-        submissionsTokens.map((token) => ({ token })),
+        submissionsTokens,
         PROPOSAL_STATE_VETTED
       );
       // Filter abandoned submmsions out & maps to proposal tokens.

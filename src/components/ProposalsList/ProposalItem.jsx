@@ -47,10 +47,12 @@ const ProposalItem = ({
   const proposalToken = censorshiprecord && censorshiprecord.token;
   const { commentsURL, proposalURL } = useProposalURLs(
     proposalToken,
-    null,
-    null,
-    null
+    proposal.userid,
+    !!proposal.linkto,
+    proposal.linkto,
+    proposal.state
   );
+
   const { voteEndTimestamp } = useProposalVoteTimeInfo(voteSummary);
 
   const mobile = useMediaQuery("(max-width: 760px)");

@@ -37,7 +37,8 @@ import {
 } from "src/constants";
 import {
   getProposalTypeOptionsForSelect,
-  getRfpMinMaxDates
+  getRfpMinMaxDates,
+  getRfpDeadlineTimestamp
 } from "./helpers.js";
 import { isActiveApprovedRfp } from "src/containers/Proposal/helpers";
 import useModalContext from "src/hooks/utils/useModalContext";
@@ -238,6 +239,7 @@ const ProposalForm = React.memo(function ProposalForm({
       />
       <MarkdownEditor
         allowImgs={true}
+        tabIndex={1}
         name="description"
         className="margin-top-s"
         data-testid="text-area"
@@ -325,10 +327,11 @@ const ProposalFormWrapper = ({
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
-        const { type, rfpLink, ...others } = values;
+        const { type, rfpLink, rfpDeadline, ...others } = values;
+        const deadline = getRfpDeadlineTimestamp(rfpDeadline);
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
           const rfpWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
-            [{ token: rfpLink }],
+            [rfpLink],
             PROPOSAL_STATE_VETTED
           )) || [[], null];
           const [proposals, summaries] = rfpWithVoteSummaries;
@@ -354,7 +357,8 @@ const ProposalFormWrapper = ({
           type,
           state: proposalState,
           files: [...others.files, ...files],
-          rfpLink
+          rfpLink,
+          rfpDeadline: deadline
         });
         setSubmitting(false);
         setSubmitSuccess(true);

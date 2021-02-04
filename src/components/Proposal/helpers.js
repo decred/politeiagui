@@ -2,10 +2,10 @@ import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_NOT_AUTHORIZED,
+  PROPOSAL_VOTING_APPROVED,
   PROPOSAL_VOTING_FINISHED
-} from "../../constants";
+} from "src/constants";
 import {
-  isApprovedProposal,
   isPublicProposal,
   isAbandonedProposal
 } from "src/containers/Proposal/helpers";
@@ -48,14 +48,12 @@ export const getProposalStatusTagProps = (
       case PROPOSAL_VOTING_ACTIVE:
         return { type: "bluePending", text: "Active" };
       case PROPOSAL_VOTING_FINISHED:
-        if (isApprovedProposal(proposal, voteSummary)) {
-          return { type: "greenCheck", text: "Finished" };
-        } else {
-          return {
-            type: isDarkTheme ? "blueNegative" : "grayNegative",
-            text: "Finished"
-          };
-        }
+        return {
+          type: isDarkTheme ? "blueNegative" : "grayNegative",
+          text: "Finished"
+        };
+      case PROPOSAL_VOTING_APPROVED:
+        return { type: "greenCheck", text: "Approved" };
       default:
         break;
     }

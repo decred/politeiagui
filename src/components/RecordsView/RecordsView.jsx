@@ -79,7 +79,6 @@ const RecordsView = ({
       filteredTokens,
       fetchedTokens
     ).slice(0, pageSize); // handle pagination
-
     setRemainingTokens(recordTokensToBeFetched);
     setHasMore(hasMoreRecordsToLoad);
     setLoadingItems(recordTokensToBeFetched.length);

@@ -65,16 +65,6 @@ describe("api integration modules (lib/api.js)", () => {
     expect(proposal).toEqual({
       files: [
         {
-          ...fileFromMarkdown,
-          digest: help.digestPayload(fileFromMarkdown.payload)
-        },
-        {
-          ...FILE,
-          digest: FILE_DIGESTED_PAYLOAD
-        }
-      ],
-      metadata: [
-        {
           hint: "proposalmetadata",
           payload: help.bufferToBase64String(
             help.objectToBuffer({
@@ -84,6 +74,14 @@ describe("api integration modules (lib/api.js)", () => {
           digest: help.objectToSHA256({
             name: PROPOSAL_NAME
           })
+        },
+        {
+          ...fileFromMarkdown,
+          digest: help.digestPayload(fileFromMarkdown.payload)
+        },
+        {
+          ...FILE,
+          digest: FILE_DIGESTED_PAYLOAD
         }
       ]
     });

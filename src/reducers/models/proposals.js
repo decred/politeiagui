@@ -4,7 +4,7 @@ import set from "lodash/fp/set";
 import get from "lodash/fp/get";
 import update from "lodash/fp/update";
 import {
-  PROPOSAL_STATUS_ABANDONED,
+  PROPOSAL_STATUS_ARCHIVED,
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_UNREVIEWED,
@@ -56,7 +56,7 @@ const mapReviewStatusToTokenInventoryStatus = (status, state) => {
         : VETTEDCENSORED;
     case PROPOSAL_STATUS_PUBLIC:
       return PRE_VOTE;
-    case PROPOSAL_STATUS_ABANDONED:
+    case PROPOSAL_STATUS_ARCHIVED:
       return ABANDONED;
     default:
       throw Error(

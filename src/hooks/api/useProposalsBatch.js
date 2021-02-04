@@ -100,9 +100,8 @@ export default function useProposalsBatch(
       verify: () => {
         if (hasRemainingTokens) {
           onFetchProposalsBatch(
-            remainingTokens.map((token) => ({ token })),
+            remainingTokens,
             unvetted ? PROPOSAL_STATE_UNVETTED : PROPOSAL_STATE_VETTED,
-            false,
             fetchVoteSummaries
           )
             .then(() => send(VERIFY))
@@ -111,9 +110,8 @@ export default function useProposalsBatch(
         }
         if (fetchRfpLinks && hasUnfetchedRfpLinks) {
           onFetchProposalsBatch(
-            unfetchedRfpLinks.map((token) => ({ token })),
-            unvetted ? PROPOSAL_STATE_UNVETTED : PROPOSAL_STATE_VETTED,
-            false,
+            unfetchedRfpLinks,
+            PROPOSAL_STATE_VETTED, // RFP linked proposals will always be vetted
             fetchVoteSummaries
           )
             .then(() => send(VERIFY))

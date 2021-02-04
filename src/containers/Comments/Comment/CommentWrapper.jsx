@@ -76,6 +76,7 @@ const CommentWrapper = ({
     getCommentLikeOption,
     enableCommentVote,
     recordAuthorID,
+    recordAuthorUsername,
     loadingLikes,
     loadingLikeAction,
     userLoggedIn,
@@ -92,7 +93,7 @@ const CommentWrapper = ({
     comment: commentText,
     token,
     commentid,
-    censored,
+    deleted: censored,
     timestamp,
     username,
     userid,
@@ -103,7 +104,8 @@ const CommentWrapper = ({
     parentid
   } = comment;
 
-  const isRecordAuthor = recordAuthorID === userid;
+  const isRecordAuthor =
+    recordAuthorID === userid || recordAuthorUsername === username;
   const censorable = isAdmin && !readOnly;
 
   const [showReplyForm, setShowReplyForm] = useState(false);

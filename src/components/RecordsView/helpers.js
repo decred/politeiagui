@@ -5,10 +5,7 @@
  * @returns {Array} records
  */
 export const getRecordsByTabOption = (records, tokens) =>
-  tokens
-    .map((token) => records[token])
-    .filter(Boolean)
-    .sort((a, b) => b.timestamp - a.timestamp);
+  tokens.map((token) => records[token]).filter(Boolean);
 
 /**
  * Returns the censorsihp token of a given record

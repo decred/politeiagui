@@ -3,8 +3,8 @@ import { useSelector } from "src/redux";
 import { getVoteBlocksLeft, getVoteEndTimestamp } from "../helpers";
 
 export default function useProposalVoteTimeInfo(voteSummary) {
-  const bestBlock = useSelector(sel.bestBlock);
   const apiInfo = useSelector(sel.init);
+  const bestBlock = voteSummary ? voteSummary.bestblock : 0;
   const voteEndTimestamp = getVoteEndTimestamp(
     voteSummary,
     bestBlock,

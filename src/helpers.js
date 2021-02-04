@@ -21,10 +21,11 @@ import {
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_FINISHED,
   PROPOSAL_VOTING_NOT_AUTHORIZED,
-  PROPOSAL_METADATA_HINT,
+  PROPOSAL_METADATA_FILENAME,
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_CENSORED,
-  PROPOSAL_STATUS_ABANDONED
+  PROPOSAL_STATUS_ARCHIVED,
+  VOTE_METADATA_FILENAME
 } from "./constants.js";
 
 // XXX find usage and ensure this still works as expected
@@ -75,7 +76,7 @@ const parseProposalStatuses = (sChanges) => {
     if (sChange.status === PROPOSAL_STATUS_CENSORED) {
       censoredat = sChange.timestamp;
     }
-    if (sChange.status === PROPOSAL_STATUS_ABANDONED) {
+    if (sChange.status === PROPOSAL_STATUS_ARCHIVED) {
       abandonedat = sChange.timestamp;
     }
   });
@@ -83,14 +84,26 @@ const parseProposalStatuses = (sChanges) => {
 };
 
 // parseProposalMetadata accepts a proposal object parses it's metadata
-// and returns it as object of the form { name, linkto, linkby }
+// and returns it as object of the form { name }
 //
 // censored proposals won't have metadata, in this case this function will
 // return an empty object
-const parseProposalMetadata = (proposal) => {
+const parseProposalMetadata = (proposal = {}) => {
   const metadata =
-    proposal.metadata &&
-    proposal.metadata.find((md) => md.hint === PROPOSAL_METADATA_HINT);
+    proposal.files &&
+    proposal.files.find((f) => f.name === PROPOSAL_METADATA_FILENAME);
+  return metadata ? JSON.parse(atob(metadata.payload)) : {};
+};
+
+// parseVoteMetadata accepts a proposal object parses it's metadata
+// and returns it as object of the form { linkto, linkby }
+//
+// censored proposals won't have metadata, in this case this function will
+// return an empty object
+const parseVoteMetadata = (proposal = {}) => {
+  const metadata =
+    proposal.files &&
+    proposal.files.find((f) => f.name === VOTE_METADATA_FILENAME);
   return metadata ? JSON.parse(atob(metadata.payload)) : {};
 };
 
@@ -99,14 +112,15 @@ const parseProposalMetadata = (proposal) => {
 export const parseRawProposal = (proposal) => {
   // Parse statuses
   const { publishedat, censoredat, abandonedat } = parseProposalStatuses(
-    proposal.statuses
+    proposal.statuses || []
   );
   // Parse metdata
   // Censored proposal's metadata isn't available
-  const { name, linkby, linkto } = parseProposalMetadata(proposal);
+  const { name } = parseProposalMetadata(proposal);
+  const { linkby, linkto } = parseVoteMetadata(proposal);
   return {
     ...proposal,
-    name,
+    name: name || proposal.name,
     linkby,
     linkto,
     publishedat,
@@ -146,11 +160,9 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     2: "The provided email address is invalid.",
     3: "The provided verification token is invalid. Please ensure you click the link or copy and paste it exactly as it appears in the verification email.",
     4: "The provided verification token is expired. Please register again to receive another email with a new verification token.",
-    5: `The provided proposal is missing the following file(s): ${errorContext.join(
-      ", "
-    )}`,
+    5: `The provided proposal is missing the following file(s): ${errorContext}`,
     6: "The requested proposal does not exist.",
-    7: `The provided proposal has duplicate files: ${errorContext.join(", ")}`,
+    7: `The provided proposal has duplicate files: ${errorContext}`,
     8: "The provided proposal does not have a valid title.",
     9: "The submitted proposal has too many markdown files.",
     10: "The submitted proposal has too many images.",
@@ -161,7 +173,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     15: "The provided proposal name was invalid.",
     16: "The SHA256 checksum for one of the files was incorrect.",
     17: "The Base64 encoding for one of the files was incorrect.",
-    18: `The MIME type detected for ${errorContext[0]} is not supported.`,
+    18: `The MIME type detected for ${errorContext} is not supported.`,
     19: "The MIME type for one of the files is not supported.",
     20: "The proposal cannot be set to that status.",
     21: "The provided public key was invalid.",
@@ -178,7 +190,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     32: "The username you provided is invalid; it's either too short, too long, or has unsupported characters.",
     33: "Another user already has that username, please choose another.",
     34: `A verification email has already been sent recently. Please check your email, or wait until it expires and send another one.\n\nYour verification email is set to expire on ${new Date(
-      parseInt(errorContext[0] + "000", 10)
+      parseInt(errorContext + "000", 10)
     )}. If you did not receive an email, please contact Politeia administrators.`,
     35: "The server cannot verify the payment at this time, please try again later or contact Politeia administrators.",
     36: "The public key provided is already taken by another user.",
@@ -217,10 +229,10 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     70: "Invalid vote option",
     71: "Linkby not met yet",
     72: "No linked proposals",
-    73: `Invalid propsoal linkto. ${errorContext[0]}`,
-    74: `Invalid proposal linkby. ${errorContext[0]}`,
-    75: `Invalid runoff vote. ${errorContext[0]}`,
-    76: `Wrong proposal type. ${errorContext[0]}`,
+    73: `Invalid propsoal linkto. ${errorContext}`,
+    74: `Invalid proposal linkby. ${errorContext}`,
+    75: `Invalid runoff vote. ${errorContext}`,
+    76: `Wrong proposal type. ${errorContext}`,
     77: "The provided code does not match the saved key",
     78: "Invalid TOTP Type",
     79: "User has verified TOTP secret and login requires code.",
@@ -277,7 +289,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     1047: "You must be a Supervisor Contractor to submit a Sub Contractor line item",
     1048: "You must supply a UserID for a Sub Contractor line item",
     1049: "Invalid SubContractor",
-    1050: `Supervisor Error - ${errorContext[0]}`
+    1050: `Supervisor Error - ${errorContext}`
   };
 
   const error = errorMessages[errorCode];
@@ -635,4 +647,21 @@ export function replaceImgDigestByBlob(vals, map) {
     }
   }
   return { text: newText, markdownFiles };
+}
+
+/**
+ * getAttachmentsFiles removes the metadata and index files
+ * @param {Array} files
+ * @returns {Array} [attachments]
+ */
+export function getAttachmentsFiles(files) {
+  return files.filter(
+    (f) =>
+      ![
+        "index.md",
+        "data.json",
+        PROPOSAL_METADATA_FILENAME,
+        VOTE_METADATA_FILENAME
+      ].includes(f.name)
+  );
 }

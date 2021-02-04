@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button, classNames } from "pi-ui";
 import {
   isPublicProposal,
@@ -6,9 +6,7 @@ import {
   isAbandonedProposal,
   isVotingNotAuthorizedProposal,
   isUnderDiscussionProposal,
-  isRfpReadyToRunoff,
-  isVoteActiveProposal,
-  isVotingFinishedProposal
+  isRfpReadyToRunoff
 } from "src/containers/Proposal/helpers";
 import {
   useUnvettedProposalActions,
@@ -77,32 +75,17 @@ const PublicActions = ({
   };
 
   const isProposalOwner =
-    currentUser && proposal && currentUser.userid === proposal.userid;
+    currentUser && proposal && currentUser.username === proposal.username;
 
   const isRfpSubmission = !!proposal.linkto;
 
   const isVotingStartAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
-  const rfpLinkedSubmissions = proposal.linkedfrom;
-  const [submissionsDidntVote, setSubmissionsDidntVote] = useState(false);
-  useEffect(() => {
-    // check if RFP submissions are already under vote => hide `start runoff vote` action
-    if (rfpSubmissionsVoteSummaries) {
-      setSubmissionsDidntVote(
-        !isVoteActiveProposal(
-          rfpSubmissionsVoteSummaries[rfpLinkedSubmissions[0]]
-        ) &&
-          !isVotingFinishedProposal(
-            rfpSubmissionsVoteSummaries[rfpLinkedSubmissions[0]]
-          )
-      );
-    } else {
-      setSubmissionsDidntVote(false);
-    }
-  }, [
-    rfpLinkedSubmissions,
-    rfpSubmissionsVoteSummaries,
-    setSubmissionsDidntVote
-  ]);
+
+  const isReadyToRunoff = isRfpReadyToRunoff(
+    proposal,
+    voteSummary,
+    rfpSubmissionsVoteSummaries
+  );
 
   const underDiscussion = isUnderDiscussionProposal(proposal, voteSummary);
   return (
@@ -136,7 +119,7 @@ const PublicActions = ({
           </AdminContent>
         </div>
       )}
-      {isRfpReadyToRunoff(proposal, voteSummary) && submissionsDidntVote && (
+      {isReadyToRunoff && (
         <AdminContent>
           <div className="justify-right margin-top-m">
             <Button

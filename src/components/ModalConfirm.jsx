@@ -10,7 +10,8 @@ const ModalConfirm = ({
   title,
   message,
   successTitle,
-  successMessage
+  successMessage,
+  onCloseSuccess
 }) => {
   const [success, setSuccess] = useState(false);
 
@@ -51,7 +52,7 @@ const ModalConfirm = ({
       style={{ width: "600px" }}
       title={(success && successTitle) || title}
       show={show}
-      onClose={onClose}
+      onClose={success ? onCloseSuccess || onClose : onClose}
       iconComponent={
         !success ? (
           <Icon type={"info"} size={26} />
@@ -94,7 +95,9 @@ const ModalConfirm = ({
         <>
           {successMessage}
           <div className="justify-right margin-top-m">
-            <Button onClick={onClose} data-testid="close-confirm-msg">
+            <Button
+              onClick={onCloseSuccess || onClose}
+              data-testid="close-confirm-msg">
               Ok
             </Button>
           </div>
@@ -109,6 +112,7 @@ ModalConfirm.propTypes = {
   message: PropTypes.node,
   show: PropTypes.bool,
   onClose: PropTypes.func,
+  onCloseSuccess: PropTypes.func,
   onSubmit: PropTypes.func,
   successTitle: PropTypes.string,
   successMessage: PropTypes.node

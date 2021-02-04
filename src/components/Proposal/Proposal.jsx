@@ -147,7 +147,7 @@ const Proposal = React.memo(function Proposal({
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
   const isPublicAccessible = isPublic || isAbandoned;
-  const isAuthor = currentUser && currentUser.userid === userid;
+  const isAuthor = currentUser && currentUser.username === username;
   const isVotingAuthorized = isVotingAuthorizedProposal(voteSummary);
   const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
   const { apiInfo } = useLoader();
@@ -437,7 +437,7 @@ const Proposal = React.memo(function Proposal({
                 proposal={proposal}
                 voteSummary={voteSummary}
                 rfpSubmissionsVoteSummaries={
-                  isRfp && rfpSubmissions.voteSummaries
+                  isRfp && rfpSubmissions && rfpSubmissions.voteSummaries
                 }
               />
             </LoggedInContent>

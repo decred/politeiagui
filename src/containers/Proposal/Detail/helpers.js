@@ -11,3 +11,6 @@ export const getCommentBlockedReason = (proposal, voteSummary) => {
 
   return "";
 };
+
+export const getDetailsFile = (files = []) =>
+  files.find((f) => f.name === "index.md");

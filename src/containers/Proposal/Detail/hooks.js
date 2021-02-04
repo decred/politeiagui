@@ -1,21 +1,11 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
-import { or } from "src/lib/fp";
+import { useMemo } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
-import {
-  isUnreviewedProposal,
-  isCensoredProposal,
-  getProposalRfpLinks,
-  getProposalToken
-} from "../helpers";
+import { getProposalRfpLinks, getProposalToken } from "../helpers";
+import { getDetailsFile } from "./helpers";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
-import useFetchMachine, {
-  FETCH,
-  RESOLVE,
-  VERIFY,
-  REJECT
-} from "src/hooks/utils/useFetchMachine";
+import useFetchMachine from "src/hooks/utils/useFetchMachine";
 import isEmpty from "lodash/fp/isEmpty";
 import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
@@ -23,12 +13,6 @@ import isEqual from "lodash/fp/isEqual";
 import values from "lodash/fp/values";
 import pick from "lodash/pick";
 import concat from "lodash/fp/concat";
-
-const proposalWithFilesOrNothing = (proposal) => {
-  return proposal && proposal.files && !!proposal.files.length
-    ? proposal
-    : null;
-};
 
 const getUnfetchedVoteSummaries = (proposal, voteSummaries) => {
   const rfpLinks = getProposalRfpLinksTokens(proposal);
@@ -47,12 +31,7 @@ const getProposalRfpLinksTokens = (proposal) => {
 };
 
 export function useProposal(token, proposalState, threadParentID) {
-  const error = useSelector(sel.proposalError);
-  const loadingSelector = useMemo(
-    () => or(sel.isApiRequestingProposalsVoteSummary, sel.proposalIsRequesting),
-    []
-  );
-  const loading = useSelector(loadingSelector);
+  const onFetchProposalDetails = useAction(act.onFetchProposalDetails);
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchProposalsVoteSummary = useAction(
     act.onFetchProposalsBatchVoteSummary
@@ -60,30 +39,9 @@ export function useProposal(token, proposalState, threadParentID) {
   const proposalSelector = useMemo(() => sel.makeGetProposalByToken(token), [
     token
   ]);
-  const proposalFromState = useSelector(proposalSelector);
-  const currentUser = useSelector(sel.currentUser);
+  const proposal = useSelector(proposalSelector);
   const proposals = useSelector(sel.proposalsByToken);
   const voteSummaries = useSelector(sel.summaryByToken);
-
-  const currentUserIsAdmin = currentUser && currentUser.isadmin;
-  const currentUserId = currentUser && currentUser.userid;
-
-  const getProposal = useCallback(() => {
-    const proposalAuthorID = proposalFromState && proposalFromState.userid;
-    const userCannotViewFullProposal =
-      !currentUserIsAdmin || currentUserId !== proposalAuthorID;
-    const dontNeedToPresentProposalFiles =
-      (!!proposalFromState &&
-        isUnreviewedProposal(proposalFromState) &&
-        userCannotViewFullProposal) ||
-      (!!proposalFromState && isCensoredProposal(proposalFromState));
-    if (dontNeedToPresentProposalFiles) {
-      return proposalFromState;
-    }
-    return proposalWithFilesOrNothing(proposalFromState);
-  }, [proposalFromState, currentUserId, currentUserIsAdmin]);
-
-  const [proposal, setProposal] = useState(getProposal());
 
   const rfpLinks = getProposalRfpLinksTokens(proposal);
 
@@ -100,11 +58,13 @@ export function useProposal(token, proposalState, threadParentID) {
 
   const isRfp = proposal && !!proposal.linkby;
 
-  const [state, send] = useFetchMachine({
+  const isMissingDetails = !(proposal && getDetailsFile(proposal.files));
+
+  const [state, send, { FETCH, RESOLVE, VERIFY, REJECT }] = useFetchMachine({
     actions: {
       initial: () => {
-        if (token && !proposal) {
-          onFetchProposalsBatch([{ token }], proposalState, true, false)
+        if (token && isMissingDetails) {
+          onFetchProposalDetails(token, proposalState)
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
           return send(FETCH);
@@ -127,9 +87,8 @@ export function useProposal(token, proposalState, threadParentID) {
       verify: () => {
         if (!isEmpty(unfetchedProposalTokens)) {
           onFetchProposalsBatch(
-            unfetchedProposalTokens.map((token) => ({ token })),
+            unfetchedProposalTokens,
             PROPOSAL_STATE_VETTED,
-            false,
             isRfp
           )
             .then(() => send(VERIFY))
@@ -156,20 +115,6 @@ export function useProposal(token, proposalState, threadParentID) {
     }
   });
 
-  useEffect(
-    function handleProposalChanged() {
-      const prop = getProposal();
-      if (!!prop && !isEqual(prop, proposal)) {
-        setProposal(prop);
-      }
-    },
-    [proposal, getProposal]
-  );
-
-  if (error) {
-    throw error;
-  }
-
   const proposalWithLinks = getProposalRfpLinks(
     state.proposal,
     state.rfpSubmissions,
@@ -179,7 +124,7 @@ export function useProposal(token, proposalState, threadParentID) {
   return {
     proposal: proposalWithLinks,
     error: state.error,
-    loading,
+    loading: state.loading,
     threadParentID
   };
 }

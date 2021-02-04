@@ -19,8 +19,8 @@ import { VOTE_TYPE_STANDARD, VOTE_TYPE_RUNOFF } from "src/constants";
 const getRoundedAverage = (a, b) => Math.round((a + b) / 2);
 
 const getBlockDurationArray = (min, max) => [
-  min,
-  getRoundedAverage(min, max),
+  !min ? 100 : min,
+  getRoundedAverage(!min ? 1 : min, max),
   max
 ];
 

@@ -7,6 +7,7 @@ import TextThumbnail from "./TextThumbnail";
 import ThumbnailGridErrors from "./ThumbnailGridErrors";
 import ModalFullImage from "src/components/ModalFullImage";
 import useModalContext from "src/hooks/utils/useModalContext";
+import { getAttachmentsFiles } from "src/helpers";
 
 export const ThumbnailGrid = ({
   value = [],
@@ -14,12 +15,8 @@ export const ThumbnailGrid = ({
   errors = [],
   viewOnly = false
 }) => {
-  const files = value.filter(
-    (f) => f.name !== "index.md" && f.name !== "data.json"
-  );
-
+  const files = getAttachmentsFiles(value);
   const [handleOpenModal, handleCloseModal] = useModalContext();
-
   const openFullImageModal = (idx) => () => {
     handleOpenModal(ModalFullImage, {
       images: files,

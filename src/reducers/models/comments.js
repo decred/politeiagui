@@ -125,7 +125,7 @@ const comments = (state = DEFAULT_STATE, action) =>
               if (comment.commentid !== commentid) return comment;
               return {
                 ...comment,
-                censored: true,
+                deleted: true,
                 comment: ""
               };
             };

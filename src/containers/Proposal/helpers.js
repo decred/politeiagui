@@ -5,14 +5,16 @@ import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_NOT_AUTHORIZED,
   PROPOSAL_VOTING_AUTHORIZED,
-  PROPOSAL_STATUS_ABANDONED,
   PROPOSAL_VOTING_FINISHED,
+  PROPOSAL_VOTING_APPROVED,
+  PROPOSAL_STATUS_ARCHIVED,
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATE_VETTED,
   PROPOSAL_STATE_UNVETTED,
-  NOJS_ROUTE_PREFIX
+  NOJS_ROUTE_PREFIX,
+  PROPOSAL_VOTING_REJECTED
 } from "../../constants";
 import { getTextFromIndexMd } from "src/helpers";
 import set from "lodash/fp/set";
@@ -90,13 +92,30 @@ export const isRfpReadyToVote = (proposalLinkBy, minlinkbyperiod) => {
  * @returns {Boolean} isActiveApproved
  */
 /// XXX revert me
-export const isRfpReadyToRunoff = (proposal, voteSummary) =>
-  isApprovedProposal(proposal, voteSummary) &&
-  isVotingFinishedProposal(voteSummary) &&
-  true;
-//proposal.linkby &&
-//new Date().getTime() / 1000 > Number(proposal.linkby);
-
+export const isRfpReadyToRunoff = (
+  proposal,
+  voteSummary,
+  rfpSubmissionsVoteSummaries
+) => {
+  const isSubmissionsPreVote =
+    rfpSubmissionsVoteSummaries &&
+    !isEmpty(rfpSubmissionsVoteSummaries) &&
+    !Object.values(rfpSubmissionsVoteSummaries).some((vs) =>
+      [
+        PROPOSAL_VOTING_FINISHED,
+        PROPOSAL_VOTING_APPROVED,
+        PROPOSAL_VOTING_REJECTED,
+        PROPOSAL_VOTING_ACTIVE
+      ].includes(vs.status)
+    );
+  return (
+    isApprovedProposal(proposal, voteSummary) &&
+    isVotingFinishedProposal(voteSummary) &&
+    proposal.linkby &&
+    new Date().getTime() / 1000 > Number(proposal.linkby) &&
+    isSubmissionsPreVote
+  );
+};
 /**
  * Returns true if the given proposal is unreviewed
  * @param {Object} proposal
@@ -138,7 +157,9 @@ export const isVotingAuthorizedProposal = (voteSummary) =>
  * @returns {Boolean} isVotingFinished
  */
 export const isVotingFinishedProposal = (voteSummary) =>
-  !!voteSummary && voteSummary.status === PROPOSAL_VOTING_FINISHED;
+  !!voteSummary &&
+  (voteSummary.status === PROPOSAL_VOTING_FINISHED ||
+    voteSummary.status === PROPOSAL_VOTING_APPROVED);
 
 /**
  * Returns true if the given proposal is editable
@@ -168,7 +189,7 @@ export const isUnderDiscussionProposal = (proposal, voteSummary) =>
  * @returns {Boolean} isAbandoned
  */
 export const isAbandonedProposal = (proposal) =>
-  !!proposal && proposal.status === PROPOSAL_STATUS_ABANDONED;
+  !!proposal && proposal.status === PROPOSAL_STATUS_ARCHIVED;
 
 /**
  * Returns true if the given proposal is approved
@@ -180,8 +201,7 @@ export const isApprovedProposal = (proposal, voteSummary) => {
   if (!proposal || !voteSummary || !isPublicProposal(proposal)) {
     return false;
   }
-  const { approved } = voteSummary;
-  return approved;
+  return voteSummary.status === PROPOSAL_VOTING_APPROVED;
 };
 
 /**
@@ -252,7 +272,7 @@ export const getProposalToken = (proposal) =>
 export const getProposalUrl = (token, isJsEnabled, state) => {
   const stateStr = state === PROPOSAL_STATE_VETTED ? "vetted" : "unvetted";
   return isJsEnabled
-    ? `/proposals/${stateStr}/${token.substring(0, 7)}`
+    ? `/proposals/${state}/${token.substring(0, 7)}`
     : `${NOJS_ROUTE_PREFIX}/proposals/${stateStr}/${token}`;
 };
 

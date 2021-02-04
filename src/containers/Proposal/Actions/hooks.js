@@ -2,7 +2,7 @@ import { createContext, useContext, useCallback } from "react";
 import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
-  PROPOSAL_STATUS_ABANDONED
+  PROPOSAL_STATUS_ARCHIVED
 } from "src/constants";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
@@ -33,7 +33,7 @@ export function useUnvettedActions() {
   );
 
   const onApproveProposal = useCallback(
-    ({ censorshiprecord: { token }, version, state, linkto }) => () =>
+    ({ censorshiprecord: { token }, version, linkto, state }) => () =>
       onSetProposalStatus({
         token,
         status: PROPOSAL_STATUS_PUBLIC,
@@ -77,7 +77,7 @@ export function usePublicActions() {
     ({ censorshiprecord: { token }, version, state }) => (reason) =>
       onSetProposalStatus({
         token,
-        status: PROPOSAL_STATUS_ABANDONED,
+        status: PROPOSAL_STATUS_ARCHIVED,
         reason,
         version,
         state

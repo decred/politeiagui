@@ -24,12 +24,13 @@ export default function useProposalURLs(
     userid,
     javascriptEnabled
   ]);
-  const rfpProposalURL = useMemo(
-    () =>
+  const rfpProposalURL = useMemo(() => {
+    return (
       isRfpSubmission &&
-      getProposalUrl(linkto, javascriptEnabled, PROPOSAL_STATE_VETTED),
-    [isRfpSubmission, javascriptEnabled, linkto]
-  );
+      linkto &&
+      getProposalUrl(linkto, javascriptEnabled, PROPOSAL_STATE_VETTED)
+    );
+  }, [isRfpSubmission, javascriptEnabled, linkto]);
 
   return { proposalURL, authorURL, commentsURL, rfpProposalURL };
 }

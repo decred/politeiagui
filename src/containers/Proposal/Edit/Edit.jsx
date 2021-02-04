@@ -18,6 +18,7 @@ import {
 } from "src/constants";
 import { getMarkdownContent, isPublicProposal } from "../helpers";
 import { formatUnixTimestampToObj } from "src/utils";
+import { getAttachmentsFiles } from "src/helpers";
 
 const EditProposal = ({ match, state }) => {
   const tokenFromUrl = get("params.token", match);
@@ -41,9 +42,7 @@ const EditProposal = ({ match, state }) => {
           proposal.linkby && formatUnixTimestampToObj(proposal.linkby),
         rfpLink: proposal.linkto,
         description: getMarkdownContent(proposal.files),
-        files: proposal.files.filter(
-          (p) => p.name !== "index.md" && p.name !== "data.json"
-        )
+        files: getAttachmentsFiles(proposal.files)
       }
     : null;
 

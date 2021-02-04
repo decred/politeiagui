@@ -60,7 +60,8 @@ const ProposalDetail = ({ Main, match, state }) => {
             )}
             {proposal && !isCensoredProposal(proposal) && (
               <Comments
-                recordAuthorID={proposal.userid}
+                recordAuthorID={proposal.userid} // this will be deprecated after tlog
+                recordAuthorUsername={proposal.username}
                 recordToken={proposalToken}
                 numOfComments={proposal.comments}
                 threadParentID={threadParentID}
