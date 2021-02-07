@@ -65,6 +65,15 @@ Cypress.Commands.add("login", (user) => {
   });
 });
 
+Cypress.Commands.add("register", (user) => {
+  requestWithCsrfToken("api/v1/user/new", {
+    email: user.email,
+    password: sha3_256(user.password),
+    username: user.username,
+    publickey: user.publickey
+  });
+});
+
 Cypress.Commands.add("logout", () => {
   requestWithCsrfToken("api/v1/logout");
 });

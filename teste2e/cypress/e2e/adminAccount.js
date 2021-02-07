@@ -1,4 +1,5 @@
 import { buildUser } from "../support/generate";
+import * as pki from "../pki";
 
 describe("Admin account actions", () => {
   it("Can search users", () => {
@@ -109,42 +110,41 @@ describe("Admin account actions", () => {
     cy.route("POST", "/api/v1/user/manage").as("manageUser");
 
     // register random unpaid user
-    const unpaidUser = buildUser();
-    cy.visit("/");
-    cy.findByText(/sign up/i).click();
-    cy.findByLabelText(/email/i).type(unpaidUser.email);
-    cy.findByLabelText(/username/i).type(unpaidUser.username);
-    cy.findAllByLabelText(/password/i)
-      .first()
-      .type(unpaidUser.password);
-    cy.findAllByLabelText(/password/i)
-      .last()
-      .type(unpaidUser.password);
-    cy.findByRole("button", { text: /sign up/i }).click();
-    cy.findByText(/i understand/i).click();
-    cy.wait("@registerUser").its("status").should("eq", 200);
+    let unpaidUser = buildUser();
 
-    // search and select user
-    cy.login(user);
-    cy.visit("/user/search");
-    cy.findByTestId("search-user").type(unpaidUser.email);
-    cy.findByRole("button", { name: /search/i }).click();
-    cy.wait("@searchUser").then((xhr) => {
-      expect(xhr.status).to.eq(200);
-      expect(xhr.response.body.users).to.be.a("array", "found array of users");
-      cy.visit(`/user/${xhr.response.body.users[0].id}`);
-      cy.wait("@getUser").its("status").should("eq", 200);
-    });
+    pki.generateKeys().then((keys) =>
+      pki.loadKeys(unpaidUser.username, keys).then(() =>
+        pki.myPubKeyHex(unpaidUser.username).then((publickey) => {
+          unpaidUser.publickey = publickey;
+          cy.register(unpaidUser);
 
-    // go to credits tab
-    cy.findByTestId("tab-2").click();
-    cy.findByTestId("mark-paid").click();
-    cy.findByTestId("reason").type("paid");
-    cy.findByTestId("reason-confirm").click();
-    cy.wait("@manageUser").its("status").should("eq", 200);
-    cy.wait("@getUser").its("status").should("eq", 200);
-    cy.findByTestId("reason-confirm-success").click();
-    cy.findByText(/paid/i).should("exist");
+          // search and select user
+          cy.login(user);
+          cy.visit("/user/search");
+          cy.findByTestId("search-user").type(unpaidUser.email);
+          cy.findByRole("button", { name: /search/i }).click();
+          cy.wait("@searchUser").then((xhr) => {
+            expect(xhr.status).to.eq(200);
+            expect(xhr.response.body.users).to.be.a(
+              "array",
+              "found array of users"
+            );
+            cy.visit(`/user/${xhr.response.body.users[0].id}`);
+            cy.wait("@getUser").its("status").should("eq", 200);
+          });
+
+          // go to credits tab
+          cy.findByTestId("tab-2").click();
+          cy.findByTestId("mark-paid").click();
+          cy.findByTestId("reason").type("paid");
+          cy.findByTestId("reason-confirm").click();
+          cy.wait("@manageUser").its("status").should("eq", 200);
+          cy.wait("@getUser").its("status").should("eq", 200);
+          cy.findByTestId("reason-confirm-success").click();
+          cy.findByText(/paid/i).should("exist");
+        })
+      )
+    );
   });
 
   it("Can rescan user credits", () => {
