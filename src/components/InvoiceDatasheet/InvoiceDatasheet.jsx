@@ -103,7 +103,17 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
       );
       setGrid(grid);
     },
-    [value, readOnly, errors, currentRate, policy, subContractors, proposalsError, subContractorsError, proposals]
+    [
+      value,
+      readOnly,
+      errors,
+      currentRate,
+      policy,
+      subContractors,
+      proposalsError,
+      subContractorsError,
+      proposals
+    ]
   );
 
   const copyTextToClipboard = (e, text) => {

@@ -202,13 +202,19 @@ const Invoice = ({
                   </Row>
                 )}
                 <InvoiceDatasheet
-                  value={invoice && invoice.input.lineitems && invoice.input.lineitems.map(li => {
-                    const proposal = approvedProposals.find(el => el.censorshiprecord.token === li.proposaltoken);
-                    return {
-                      ...li,
-                      proposaltoken: proposal ? proposal.name : ""
-                    };
-                  })}
+                  value={
+                    invoice &&
+                    invoice.input.lineitems &&
+                    invoice.input.lineitems.map((li) => {
+                      const proposal = approvedProposals.find(
+                        (el) => el.censorshiprecord.token === li.proposaltoken
+                      );
+                      return {
+                        ...li,
+                        proposaltoken: proposal ? proposal.name : ""
+                      };
+                    })
+                  }
                   readOnly
                   isMobile={mobile}
                   userRate={invContractorRate / 100}

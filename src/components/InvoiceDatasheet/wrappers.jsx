@@ -14,10 +14,18 @@ export const selectWrapper = (options) => (props) => (
   <SelectEditor {...{ ...props, options }} />
 );
 
-export const textWithErrorWrapper = (error, valuesOptions) => ({ value, ...props }) => error ? (
+export const textWithErrorWrapper = (error, valuesOptions) => ({
+  value,
+  ...props
+}) =>
+  error ? (
     <span className={highlightChar}>{error.toString()}</span>
-  ) : valuesOptions && value && !valuesOptions.includes(value) && !props.cell.readOnly ? (
-    <span className={classNames(highlightChar, "value-viewer")}>{value}</span> ) : (
+  ) : valuesOptions &&
+    value &&
+    !valuesOptions.includes(value) &&
+    !props.cell.readOnly ? (
+    <span className={classNames(highlightChar, "value-viewer")}>{value}</span>
+  ) : (
     <span className="value-viewer">{value}</span>
   );
 
