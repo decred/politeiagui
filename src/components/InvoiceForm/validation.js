@@ -6,19 +6,22 @@ import {
   validMimeTypesMessage
 } from "src/utils/validation";
 
-export const invoiceValidationSchema = ({
-  cmscontactsupportedchars,
-  cmsnamelocationsupportedchars,
-  maxlocationlength,
-  minlocationlength,
-  mincontactlength,
-  maxcontactlength,
-  minnamelength,
-  maxnamelength,
-  minlineitemcollength,
-  maxlineitemcollength,
-  invoicefieldsupportedchars
-}) =>
+export const invoiceValidationSchema = (
+  {
+    cmscontactsupportedchars,
+    cmsnamelocationsupportedchars,
+    maxlocationlength,
+    minlocationlength,
+    mincontactlength,
+    maxcontactlength,
+    minnamelength,
+    maxnamelength,
+    minlineitemcollength,
+    maxlineitemcollength,
+    invoicefieldsupportedchars
+  },
+  approvedProposals
+) =>
   Yup.object().shape({
     name: Yup.string()
       .required("required")
@@ -62,6 +65,9 @@ export const invoiceValidationSchema = ({
             .matches(
               ...yupFieldMatcher("Description", invoicefieldsupportedchars)
             ),
+          proposaltoken: Yup.string()
+            .optional()
+            .oneOf(approvedProposals, "Proposal token invalid"),
           labor: Yup.number().min(0),
           subuserid: Yup.string().when("type", (type, schema) =>
             type === 4 ? schema.required("required") : schema

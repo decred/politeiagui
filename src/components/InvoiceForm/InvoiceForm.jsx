@@ -210,8 +210,8 @@ const InvoiceFormWrapper = ({
     onUpdateContractorInfo
   } = useContractor();
 
-  const invoiceFormValidation = useMemo(() => invoiceValidationSchema(policy), [
-    policy
+  const invoiceFormValidation = useMemo(() => invoiceValidationSchema(policy, [...approvedProposals.map(prop => prop.censorshiprecord.token), ""]), [
+    policy, approvedProposals
   ]);
   const validateFiles = useMemo(() => generateFilesValidatorByPolicy(policy), [
     policy

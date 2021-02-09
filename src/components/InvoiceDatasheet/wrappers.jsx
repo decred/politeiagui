@@ -8,19 +8,18 @@ import {
 } from "./InvoiceDatasheet.module.css";
 import { buildSimpleMatchRegexFromSupportedChars } from "src/utils/validation";
 import { isEmpty } from "src/helpers";
-import { Spinner } from "pi-ui";
+import { Spinner, classNames } from "pi-ui";
 
 export const selectWrapper = (options) => (props) => (
   <SelectEditor {...{ ...props, options }} />
 );
 
-export const textWithErrorWrapper = (error) => ({ value, ...props }) => {
-  return error ? (
+export const textWithErrorWrapper = (error, valuesOptions) => ({ value, ...props }) => error ? (
     <span className={highlightChar}>{error.toString()}</span>
-  ) : (
-    <span {...props}>{value}</span>
+  ) : valuesOptions && value && !valuesOptions.includes(value) && !props.cell.readOnly ? (
+    <span className={classNames(highlightChar, "value-viewer")}>{value}</span> ) : (
+    <span className="value-viewer">{value}</span>
   );
-};
 
 export const textAreaWrapper = () => (props) => (
   <div className={textWrapper}>
