@@ -1,6 +1,7 @@
 import React, { Fragment, useState, memo } from "react";
-import { H4, Text, Spinner, classNames } from "pi-ui";
+import { H4, H5, Text, Spinner, classNames } from "pi-ui";
 import Link from "src/components/Link";
+import useUserDetail from "src/hooks/api/useUserDetail";
 import { useCodeStats, useFetchCodeStats } from "./hooks";
 import styles from "./Detail.module.css";
 
@@ -94,8 +95,8 @@ const CodeStatDetails = ({
   );
 };
 
-export const FetchCodeStats = ({ userid, start, end }) => {
-  const { loading, error } = useFetchCodeStats(userid, start, end);
+export const FetchCodeStats = ({ id, start, end }) => {
+  const { loading, error } = useFetchCodeStats(id, start, end);
   return loading ? (
     <Spinner />
   ) : error ? (
@@ -103,18 +104,15 @@ export const FetchCodeStats = ({ userid, start, end }) => {
   ) : null;
 };
 
-const CodeStats = ({ userid, start, end }) => {
-  const { codestats } = useCodeStats(userid, start, end);
+const IndividualCodeStats = ({ id, start, end }) => {
+  const { user } = useUserDetail(id);
+  const { codestats } = useCodeStats(id, start, end);
   const shouldPrintTable = codestats && codestats.length > 0;
   const shouldPrintEmptyMessage = codestats && codestats.length === 0;
   return (
     <>
-      <div className={classNames(styles.titleLinkWrapper, "margin-top-m")}>
-        <H4>Past 3 months code stats</H4>
-        {!codestats && (
-          <FetchCodeStats userid={userid} start={start} end={end} />
-        )}
-      </div>
+      {!codestats && <FetchCodeStats id={id} start={start} end={end} />}
+      <H5 className="margin-top-s">{user && user.username}</H5>
       {shouldPrintTable ? (
         <div className={styles.codeStats}>
           <Headers />
@@ -124,9 +122,27 @@ const CodeStats = ({ userid, start, end }) => {
         </div>
       ) : (
         shouldPrintEmptyMessage && (
-          <Text>No code stats for the past 3 months</Text>
+          <Text>No code stats for this user in the past 3 months</Text>
         )
       )}
+    </>
+  );
+};
+
+const CodeStats = ({ ids, start, end }) => {
+  return (
+    <>
+      <div
+        className={classNames(
+          styles.titleLinkWrapper,
+          "margin-top-m",
+          "margin-bottom-s"
+        )}>
+        <H4>Past 3 months code stats</H4>
+      </div>
+      {ids.map((id) => (
+        <IndividualCodeStats key={id} id={id} start={start} end={end} />
+      ))}
     </>
   );
 };

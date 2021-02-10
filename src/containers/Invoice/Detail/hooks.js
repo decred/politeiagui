@@ -100,22 +100,18 @@ export function useInvoices(currentInvoice, userid, start, end) {
   };
 }
 
-export function useFetchCodeStats(userid, start, end) {
+export function useFetchCodeStats(id, start, end) {
   const onFetchUserCodeStats = useAction(act.onFetchUserCodeStats);
 
-  const [loading, error] = useAPIAction(onFetchUserCodeStats, [
-    userid,
-    start,
-    end
-  ]);
+  const [loading, error] = useAPIAction(onFetchUserCodeStats, [id, start, end]);
 
   return { loading, error };
 }
 
-export function useCodeStats(userid, start, end) {
+export function useCodeStats(id, start, end) {
   const codeStatsSelector = useMemo(
-    () => sel.makeGetCodeStatsByUserID(userid, start, end),
-    [userid, start, end]
+    () => sel.makeGetCodeStatsByUserID(id, start, end),
+    [id, start, end]
   );
   const codestats = useSelector(codeStatsSelector);
 
