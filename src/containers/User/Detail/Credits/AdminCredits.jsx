@@ -52,6 +52,7 @@ const Credits = ({ user }) => {
         proposalCreditPrice={proposalCreditPrice}
       />
       <Button
+        data-testid="rescan-credits"
         onClick={onRescanUserCredits}
         loading={isLoadingRescan}
         className="margin-top-s"
