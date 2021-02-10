@@ -28,9 +28,7 @@ const InvoiceDetail = ({ Main, match }) => {
   } = useInvoice(invoiceToken);
 
   const { subContractors, error: subContractorsError } = useSubContractors();
-
   let subContractorsInLineItems;
-
   if (invoice && subContractors) {
     const linesSubContractors = invoice.input.lineitems.map(
       (lineitem) => lineitem.subuserid
