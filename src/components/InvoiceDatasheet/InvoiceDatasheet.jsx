@@ -60,16 +60,6 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
   const [grid, setGrid] = useState([]);
   const [currentRate, setCurrentRate] = useState(userRate || 0);
 
-  const proposalsOptions = useMemo(
-    () =>
-      proposals &&
-      proposals.map((p) => ({
-        label: p.name,
-        value: p.censorshiprecord.token
-      })),
-    [proposals]
-  );
-
   const handleCellsChange = useCallback(
     (changes) => {
       const { grid: newGrid } = processCellsChange(grid, changes, userRate);
@@ -106,7 +96,7 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
         errors,
         currentRate,
         policy,
-        proposalsOptions,
+        proposals,
         subContractors,
         proposalsError,
         subContractorsError
@@ -119,10 +109,10 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
       errors,
       currentRate,
       policy,
-      proposalsOptions,
       subContractors,
       proposalsError,
-      subContractorsError
+      subContractorsError,
+      proposals
     ]
   );
 
