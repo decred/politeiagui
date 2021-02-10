@@ -10,12 +10,12 @@ import styles from "./InvoiceFilterForm.module.css";
 import UserSearchSelect from "src/containers/User/Search/SearchSelector";
 import { Link } from "pi-ui";
 
-const defaultInitialValues = (isAdminPage) => ({
-  date: getPreviousMonthsRange(2),
+const defaultInitialValues = () => ({
+  date: getPreviousMonthsRange(6),
   users: [],
   filters: {
-    all: !isAdminPage,
-    unreviewed: isAdminPage,
+    all: true,
+    unreviewed: false,
     disputed: false,
     approved: false,
     rejected: false,
@@ -32,7 +32,7 @@ const InvoiceFilterForm = ({
 }) => {
   return (
     <Formik
-      initialValues={defaultInitialValues(isAdminPage)}
+      initialValues={defaultInitialValues()}
       onSubmit={onSubmit}>
       {(formikProps) => {
         const { values, setFieldValue } = formikProps;
@@ -95,7 +95,6 @@ const InvoiceFilterForm = ({
               <HookOnFormChange formikProps={formikProps} onChange={onChange} />
               <OnChangeFiltersModifier
                 formikProps={formikProps}
-                isAdminPage={isAdminPage}
               />
             </Form>
             {children && children(values)}
@@ -113,7 +112,7 @@ const HookOnFormChange = ({ formikProps, onChange }) => {
   return null;
 };
 
-const OnChangeFiltersModifier = ({ formikProps, isAdminPage = false }) => {
+const OnChangeFiltersModifier = ({ formikProps }) => {
   const {
     values: { filters },
     setFieldValue
@@ -127,9 +126,9 @@ const OnChangeFiltersModifier = ({ formikProps, isAdminPage = false }) => {
 
   useEffect(() => {
     if (all) {
-      setFieldValue("filters", defaultInitialValues(false).filters);
+      setFieldValue("filters", defaultInitialValues().filters);
     }
-  }, [all, setFieldValue, isAdminPage]);
+  }, [all, setFieldValue]);
   return null;
 };
 
