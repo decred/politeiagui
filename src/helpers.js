@@ -107,6 +107,17 @@ const parseVoteMetadata = (proposal = {}) => {
   return metadata ? JSON.parse(atob(metadata.payload)) : {};
 };
 
+// parseProposalIndexFile accepts a proposal object parses it's metadata
+// and returns it as object of the form { description }
+//
+// censored proposals won't have metadata, in this case this function will
+// return an empty object
+const parseProposalIndexFile = (proposal = {}) => {
+  const index =
+    proposal.files && proposal.files.find((f) => f.name === "index.md");
+  return index ? { description: getTextFromIndexMd(index) } : {};
+};
+
 // parseRawProposal accepts raw proposal object received from BE and parses
 // it's metadata & status changes
 export const parseRawProposal = (proposal) => {
@@ -118,8 +129,10 @@ export const parseRawProposal = (proposal) => {
   // Censored proposal's metadata isn't available
   const { name } = parseProposalMetadata(proposal);
   const { linkby, linkto } = parseVoteMetadata(proposal);
+  const { description } = parseProposalIndexFile(proposal);
   return {
     ...proposal,
+    description: description || proposal.description,
     name: name || proposal.name,
     linkby,
     linkto,
