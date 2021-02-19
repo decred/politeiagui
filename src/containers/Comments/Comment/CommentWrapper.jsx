@@ -87,7 +87,8 @@ const CommentWrapper = ({
     paywallMissing,
     openCensorModal,
     openLoginModal,
-    isAdmin
+    isAdmin,
+    currentUser
   } = useComment();
   const {
     comment: commentText,
@@ -174,6 +175,13 @@ const CommentWrapper = ({
     />
   );
 
+  const isLikeCommentDisabled =
+    loadingLikes ||
+    !!loadingLikeAction ||
+    readOnly ||
+    (userLoggedIn &&
+      (identityError || paywallMissing || currentUser.username === username));
+
   return (
     <>
       <Comment
@@ -189,12 +197,7 @@ const CommentWrapper = ({
         disableLikes={
           !enableCommentVote || proposalState === PROPOSAL_STATE_UNVETTED
         }
-        disableLikesClick={
-          loadingLikes ||
-          !!loadingLikeAction ||
-          readOnly ||
-          (userLoggedIn && (identityError || paywallMissing))
-        }
+        disableLikesClick={isLikeCommentDisabled}
         disableReply={readOnly || !!identityError || paywallMissing}
         likesUpCount={upvotes}
         likesDownCount={downvotes}

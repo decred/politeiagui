@@ -33,6 +33,10 @@
   color: var(--color-gray) !important;
 }
 
+.likeDisabled .likeBtn {
+  cursor: not-allowed;
+}
+
 .likeBtn:hover > svg {
   fill: black;
 }

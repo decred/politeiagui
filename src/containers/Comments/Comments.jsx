@@ -332,6 +332,7 @@ const Comments = ({
                 identityError,
                 paywallMissing,
                 isAdmin: currentUser && currentUser.isadmin,
+                currentUser,
                 openCensorModal: handleCensorCommentModal,
                 openLoginModal: handleOpenLoginModal,
                 ...commentsCtx
