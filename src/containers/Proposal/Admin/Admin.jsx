@@ -21,14 +21,15 @@ const tabLabels = [
 const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
   const [remainingTokens, setRemainingTokens] = useState();
   const [tabIndex, setTabIndex] = useState(0);
+  const isUnvetted =
+    tabLabels[tabIndex] === tabValues.UNREVIEWED ||
+    tabLabels[tabIndex] === tabValues.UNVETTEDCENSORED;
   const { proposals, proposalsTokens, loading, verifying } = useProposalsBatch(
     remainingTokens,
     {
       fetchRfpLinks: true,
-      fetchVoteSummaries: true,
-      unvetted:
-        tabLabels[tabIndex] === tabValues.UNREVIEWED ||
-        tabLabels[tabIndex] === tabValues.UNVETTEDCENSORED
+      fetchVoteSummaries: !isUnvetted,
+      unvetted: isUnvetted
     }
   );
 
