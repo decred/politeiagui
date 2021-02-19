@@ -509,7 +509,7 @@ export const onFetchTokenInventory = () => async (dispatch) => {
           [REJECTED]: [...((votes && votes.finished) || [])].filter((t) =>
             (proposals.vetted.public || []).includes(t)
           ),
-          [ABANDONED]: [...(proposals.vetted.abandoned || [])],
+          [ABANDONED]: [...(proposals.vetted.archived || [])],
           [UNREVIEWED]: proposals.unvetted
             ? [...(proposals.unvetted.unreviewed || [])]
             : [],
