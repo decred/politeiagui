@@ -303,7 +303,13 @@ const Comments = ({
             {isSingleThread && (
               <div className="justify-right">
                 <Text className="margin-right-xs">Single comment thread. </Text>
-                <Link to={`/${recordType}s/${recordToken}`}> View all.</Link>
+                {proposalState ? (
+                  <Link to={`/${recordType}s/${proposalState}/${recordToken}`}>
+                    {" View All"}
+                  </Link>
+                ) : (
+                  <Link to={`/${recordType}s/${recordToken}`}> View all.</Link>
+                )}
               </div>
             )}
           </div>

@@ -401,9 +401,6 @@ export const onFetchProposalBilling = (token) =>
       });
   });
 
-// requests param should be array of objects from the following form:
-// { token, version (optional) }
-//
 // state should be the state of requested proposals
 // XXX ensure all ref. call with state provided
 // XXX and includefiles param
@@ -431,9 +428,15 @@ export const onFetchProposalsBatchWithoutState = (
     return [parsedProposals, summaries];
   });
 
-// requests param should be array of objects from the following form:
-// { token, version (optional) }
-//
+export const onFetchProposalDetailsWithoutState = (
+  token,
+  state,
+  version
+) => async () => {
+  const res = await api.proposalDetails({ token, state, version });
+  return res.record;
+};
+
 // state should be the state of requested proposals
 export const onFetchProposalsBatch = (tokens, state, fetchVoteSummary = true) =>
   withCsrf(async (dispatch, _, csrf) => {

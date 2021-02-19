@@ -1,61 +1,55 @@
 import { useState, useCallback } from "react";
 import { invoice as onFetchInvoice } from "src/lib/api.js";
-import { getTextFromIndexMd } from "src/helpers";
+import { getAttachmentsFiles, parseRawProposal } from "src/helpers";
 import { ModalDiffProposal, ModalDiffInvoice } from "src/components/ModalDiff";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useConfig } from "src/containers/Config";
 import { useAction } from "src/redux";
 import * as act from "src/actions";
 
-const getProposalText = (proposal) => {
-  const getMarkdowFile = (prop) =>
-    prop.files.filter((file) => file.name === "index.md")[0];
-  return proposal ? getTextFromIndexMd(getMarkdowFile(proposal)) : "";
-};
-
-const getProposalFilesWithoutIndexMd = (proposal) =>
-  proposal ? proposal.files.filter((file) => file.name !== "index.md") : [];
-
 export function useVersionPicker(version, token, state) {
   const [selectedVersion, setSelectedVersion] = useState(version);
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const { recordType, constants } = useConfig();
   const [error, setError] = useState();
-  const onFetchProposalsBatchWithoutState = useAction(
-    act.onFetchProposalsBatchWithoutState
+  const onFetchProposalDetailsWithoutState = useAction(
+    act.onFetchProposalDetailsWithoutState
   );
 
   const fetchProposalVersions = useCallback(
-    async (onFetchProposalsBatchWithoutState, token, version, state) => {
-      if (!version || version < 2) {
+    async (onFetchProposalDetailsWithoutState, token, version, state) => {
+      if (!version) {
         return;
       }
+
       // Fetch provided version
-      const [proposals] = await onFetchProposalsBatchWithoutState(
-        [{ token, version: version.toString() }],
+      const proposal = await onFetchProposalDetailsWithoutState(
+        token,
         state,
-        true,
-        false
+        version.toString()
       );
-      const proposal = proposals && proposals[token];
 
       // Fetch prev version
-      const [prevProposals] = await onFetchProposalsBatchWithoutState(
-        [{ token, version: (version - 1).toString() }],
+      const prevProposal = await onFetchProposalDetailsWithoutState(
+        token,
         state,
-        true,
-        false
+        (version - 1).toString()
       );
-      const prevProposal = prevProposals && prevProposals[token];
+
+      // parse proposal to get its formatted data
+      const { description: oldDescription, name: oldName } = parseRawProposal(
+        prevProposal
+      );
+      const { description, name } = parseRawProposal(proposal);
 
       return {
-        details: proposals[token],
-        oldFiles: getProposalFilesWithoutIndexMd(prevProposal),
-        newFiles: getProposalFilesWithoutIndexMd(proposal),
-        newText: getProposalText(proposal),
-        oldText: getProposalText(prevProposal),
-        newTitle: proposal.name,
-        oldTitle: prevProposal.name
+        details: proposal,
+        oldFiles: getAttachmentsFiles(prevProposal.files),
+        newFiles: getAttachmentsFiles(proposal.files),
+        newText: description,
+        oldText: oldDescription,
+        newTitle: name,
+        oldTitle: oldName
       };
     },
     []
@@ -83,11 +77,12 @@ export function useVersionPicker(version, token, state) {
       try {
         if (recordType === constants.RECORD_TYPE_PROPOSAL) {
           const proposalDiff = await fetchProposalVersions(
-            onFetchProposalsBatchWithoutState,
+            onFetchProposalDetailsWithoutState,
             token,
             v,
             state
           );
+          console.log(proposalDiff);
           handleOpenModal(ModalDiffProposal, {
             proposalDetails: proposalDiff.details,
             onClose: handleCloseModal,
@@ -116,7 +111,7 @@ export function useVersionPicker(version, token, state) {
       constants.RECORD_TYPE_PROPOSAL,
       constants.RECORD_TYPE_INVOICE,
       fetchProposalVersions,
-      onFetchProposalsBatchWithoutState,
+      onFetchProposalDetailsWithoutState,
       token,
       state,
       handleOpenModal,
