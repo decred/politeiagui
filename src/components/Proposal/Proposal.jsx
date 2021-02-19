@@ -197,7 +197,6 @@ const Proposal = React.memo(function Proposal({
           Title,
           RfpProposalLink,
           CommentsLink,
-          GithubLink,
           ChartsLink,
           CopyLink,
           DownloadRecord,
@@ -373,7 +372,6 @@ const Proposal = React.memo(function Proposal({
                   {(isVoteActive || isVotingFinished) && (
                     <ChartsLink token={proposalToken} />
                   )}
-                  <GithubLink token={proposalToken} />
                 </div>
               </Row>
             )}
@@ -428,7 +426,6 @@ const Proposal = React.memo(function Proposal({
                   {(isVoteActive || isVotingFinished) && (
                     <ChartsLink token={proposalToken} />
                   )}
-                  {isPublicAccessible && <GithubLink token={proposalToken} />}
                 </Row>
               </Row>
             )}

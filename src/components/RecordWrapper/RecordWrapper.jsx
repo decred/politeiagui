@@ -22,7 +22,6 @@ import {
 } from "pi-ui";
 import { Row } from "../layout";
 import Link from "../Link";
-import { useConfig } from "src/containers/Config";
 import { useLoader } from "src/containers/Loader";
 import Join from "../Join";
 import CopyLink from "../CopyLink";
@@ -196,35 +195,6 @@ export const ChartsLink = ({ token }) => {
   );
 };
 
-export const GithubLink = ({ token }) => {
-  const { testnetGitRepository, mainnetGitRepository } = useConfig();
-  const { apiInfo } = useLoader();
-  const repoURL = apiInfo.testnet ? testnetGitRepository : mainnetGitRepository;
-  const { theme, themeName } = useTheme();
-  const hoverColor = getThemeProperty(theme, "icon-hover-color");
-  const textColor = getThemeProperty(theme, "icon-color");
-  const [ref, isHovered] = useHover();
-  const iconColor = isHovered ? hoverColor : textColor;
-  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-  return (
-    <Tooltip
-      className={classNames(
-        styles.seeOnGithubTooltip,
-        isDarkTheme && styles.darkSeeOnGithubTooltip
-      )}
-      placement="bottom"
-      content="See on GitHub">
-      <UILink
-        ref={ref}
-        rel="nofollow noopener noreferrer"
-        target="_blank"
-        href={`${repoURL}/${token}`}>
-        <Icon type="github" iconColor={iconColor} />
-      </UILink>
-    </Tooltip>
-  );
-};
-
 export const CommentsLink = ({
   numOfComments,
   url,
@@ -302,7 +272,6 @@ const RecordWrapper = ({ children, className }) => (
       RfpProposalLink,
       CommentsLink,
       Link,
-      GithubLink,
       ChartsLink,
       CopyLink,
       DownloadRecord,

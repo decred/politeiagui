@@ -1,6 +1,6 @@
 .label {
   color: var(--color-gray-blueish);
-  min-width: 150px;
+  min-width: 20rem;
 }
 
 .darkLabel {
@@ -23,6 +23,10 @@
 }
 
 .noInfo {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   color: var(--var-text-color-light);
   opacity: 50%;
 }
