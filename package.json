@@ -66,7 +66,6 @@
     "lint": "./node_modules/.bin/eslint src --ext .js --ext .jsx",
     "postinstall": "yarn husky install"
   },
-  "private": true,
   "jest": {
     "collectCoverageFrom": [
       "src/actions/*.{js,jsx}",
