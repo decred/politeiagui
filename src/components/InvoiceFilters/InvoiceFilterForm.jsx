@@ -31,9 +31,7 @@ const InvoiceFilterForm = ({
   onSubmit = () => {}
 }) => {
   return (
-    <Formik
-      initialValues={defaultInitialValues()}
-      onSubmit={onSubmit}>
+    <Formik initialValues={defaultInitialValues()} onSubmit={onSubmit}>
       {(formikProps) => {
         const { values, setFieldValue } = formikProps;
         const handleChangeUserSelector = (options) => {
@@ -93,9 +91,7 @@ const InvoiceFilterForm = ({
                 />
               )}
               <HookOnFormChange formikProps={formikProps} onChange={onChange} />
-              <OnChangeFiltersModifier
-                formikProps={formikProps}
-              />
+              <OnChangeFiltersModifier formikProps={formikProps} />
             </Form>
             {children && children(values)}
           </>
