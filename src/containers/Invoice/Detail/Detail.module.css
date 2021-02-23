@@ -12,6 +12,62 @@ h2.statsTitle {
   display: flex;
 }
 
+.collapse {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--separator-color);
+  text-align: center;
+  min-width: 600px;
+}
+
+.collapse:hover {
+  cursor: pointer;
+  background-color: var(--table-header-background);
+}
+
+.statsHeader {
+  background-color: var(--table-header-background);
+  margin-top: 1rem;
+}
+
+.codeStats {
+  overflow-x: auto;
+}
+
+.codeStats > .collapse:last-child {
+  border: none !important;
+}
+
+.singleStat {
+  display: flex;
+  justify-content: center;
+}
+
+.singleStat > * {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.addition {
+  color: var(--color-green);
+}
+
+.deletion {
+  color: var(--color-orange);
+}
+
+.contributionDetails {
+  padding: 2rem;
+  box-shadow: inset 0px 10px 13px -19px #000000;
+  border-bottom: 1px solid var(--separator-color);
+  display: block;
+}
+
+.contributionDetails > div {
+  padding: 1rem 0rem;
+}
+
 @media screen and (max-width: 768px) {
   .invoiceLinkWrapper,
   .prs {

@@ -73,8 +73,9 @@ const ModalStartVote = ({
         voteType === VOTE_TYPE_STANDARD &&
         !isRfpReadyToVote(linkby, minlinkbyperiod)
       ) {
+        const days = minlinkbyperiod / (24 * 3600);
         throw Error(
-          "RFP deadline should meet the minimum period to start voting"
+          `RFP deadline should meet the minimum period to start voting which is about ${days} days from when the vote starts`
         );
       }
       await onSubmit(values);

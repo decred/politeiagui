@@ -125,11 +125,11 @@ const AdminAccount = ({
       onSubmit: isdeactivated ? reactivateUser : deactivateUser,
       validationSchema: reasonValidationSchema,
       onClose: handleCloseModal,
-      successTitle: isdeactivated ? "User deactivated" : "User activated",
+      successTitle: isdeactivated ? "User activated" : "User deactivated",
       successMessage: (
         <Text>
           The user has been successfully{" "}
-          {isdeactivated ? "deactivated" : "activated"}.
+          {isdeactivated ? "activated" : "deactivated"}.
         </Text>
       )
     });
@@ -173,6 +173,7 @@ const AdminAccount = ({
       />
       {!isUserDeactivated(isdeactivated) ? (
         <Button
+          data-testid="user-deactivate"
           className="margin-top-s"
           loading={isActivationLoading}
           size="sm"
@@ -181,6 +182,7 @@ const AdminAccount = ({
         </Button>
       ) : (
         <Button
+          data-testid="user-activate"
           className="margin-top-s"
           loading={isActivationLoading}
           size="sm"

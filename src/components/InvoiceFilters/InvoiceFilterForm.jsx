@@ -10,12 +10,12 @@ import styles from "./InvoiceFilterForm.module.css";
 import UserSearchSelect from "src/containers/User/Search/SearchSelector";
 import { Link } from "pi-ui";
 
-const defaultInitialValues = (isAdminPage) => ({
-  date: getPreviousMonthsRange(2),
+const defaultInitialValues = () => ({
+  date: getPreviousMonthsRange(6),
   users: [],
   filters: {
-    all: !isAdminPage,
-    unreviewed: isAdminPage,
+    all: true,
+    unreviewed: false,
     disputed: false,
     approved: false,
     rejected: false,
@@ -29,82 +29,75 @@ const InvoiceFilterForm = ({
   disableUserFilter,
   isAdminPage,
   onSubmit = () => {}
-}) => {
-  return (
-    <Formik
-      initialValues={defaultInitialValues(isAdminPage)}
-      onSubmit={onSubmit}>
-      {(formikProps) => {
-        const { values, setFieldValue } = formikProps;
-        const handleChangeUserSelector = (options) => {
-          setFieldValue("users", options);
-        };
-        const handleLastMonths = (length) => (e) => {
-          e && e.preventDefault();
-          setFieldValue("date", getPreviousMonthsRange(length));
-        };
-        const filterOptions = [
-          { name: "all", label: "All" },
-          { name: "unreviewed", label: "Unreviewed" },
-          { name: "disputed", label: "Disputed" },
-          { name: "approved", label: "Approved" },
-          { name: "rejected", label: "Rejected" },
-          { name: "paid", label: "Paid" }
-        ];
-        const adminFilterOptions = [...filterOptions];
-        // Push 'all' options to last position of the array
-        adminFilterOptions.push(adminFilterOptions.shift());
-        return (
-          <>
-            <Form className={styles.form}>
-              <div className={styles.topFilters}>
-                <MonthPickerField
-                  years={getInvoiceMinMaxYearAndMonth()}
-                  name="date"
-                  label="By Date"
-                  toggleable
-                  multiChoice
-                  className={styles.monthPicker}
-                />
-                <div className={styles.checkboxesWrapper}>
-                  <CheckboxGroupField
-                    groupName="filters"
-                    options={isAdminPage ? adminFilterOptions : filterOptions}
-                  />
-                </div>
-              </div>
-              <div className={styles.presetDates}>
-                Last:
-                <Link onClick={handleLastMonths(3)} href="">
-                  3 months
-                </Link>
-                <Link onClick={handleLastMonths(6)} href="">
-                  6 months
-                </Link>
-                <Link onClick={handleLastMonths(12)} href="">
-                  12 months
-                </Link>
-              </div>
-              {!disableUserFilter && (
-                <UserSearchSelect
-                  onChange={handleChangeUserSelector}
-                  className={styles.selector}
-                  value={values.users}
-                />
-              )}
-              <HookOnFormChange formikProps={formikProps} onChange={onChange} />
-              <OnChangeFiltersModifier
-                formikProps={formikProps}
-                isAdminPage={isAdminPage}
+}) => (
+  <Formik initialValues={defaultInitialValues()} onSubmit={onSubmit}>
+    {(formikProps) => {
+      const { values, setFieldValue } = formikProps;
+      const handleChangeUserSelector = (options) => {
+        setFieldValue("users", options);
+      };
+      const handleLastMonths = (length) => (e) => {
+        e && e.preventDefault();
+        setFieldValue("date", getPreviousMonthsRange(length));
+      };
+      const filterOptions = [
+        { name: "all", label: "All" },
+        { name: "unreviewed", label: "Unreviewed" },
+        { name: "disputed", label: "Disputed" },
+        { name: "approved", label: "Approved" },
+        { name: "rejected", label: "Rejected" },
+        { name: "paid", label: "Paid" }
+      ];
+      const adminFilterOptions = [...filterOptions];
+      // Push 'all' options to last position of the array
+      adminFilterOptions.push(adminFilterOptions.shift());
+      return (
+        <>
+          <Form className={styles.form}>
+            <div className={styles.topFilters}>
+              <MonthPickerField
+                years={getInvoiceMinMaxYearAndMonth()}
+                name="date"
+                label="By Date"
+                toggleable
+                multiChoice
+                className={styles.monthPicker}
               />
-            </Form>
-            {children && children(values)}
-          </>
-        );
-      }}
-    </Formik>
-  );
-};
+              <div className={styles.checkboxesWrapper}>
+                <CheckboxGroupField
+                  groupName="filters"
+                  options={isAdminPage ? adminFilterOptions : filterOptions}
+                />
+              </div>
+            </div>
+            <div className={styles.presetDates}>
+              Last:
+              <Link onClick={handleLastMonths(3)} href="">
+                3 months
+              </Link>
+              <Link onClick={handleLastMonths(6)} href="">
+                6 months
+              </Link>
+              <Link onClick={handleLastMonths(12)} href="">
+                12 months
+              </Link>
+            </div>
+            {!disableUserFilter && (
+              <UserSearchSelect
+                onChange={handleChangeUserSelector}
+                className={styles.selector}
+                value={values.users}
+              />
+            )}
+            <HookOnFormChange formikProps={formikProps} onChange={onChange} />
+            <OnChangeFiltersModifier formikProps={formikProps} />
+          </Form>
+          {children && children(values)}
+        </>
+      );
+    }}
+  </Formik>
+);
 
 const HookOnFormChange = ({ formikProps, onChange }) => {
   useEffect(() => {
@@ -113,7 +106,7 @@ const HookOnFormChange = ({ formikProps, onChange }) => {
   return null;
 };
 
-const OnChangeFiltersModifier = ({ formikProps, isAdminPage = false }) => {
+const OnChangeFiltersModifier = ({ formikProps }) => {
   const {
     values: { filters },
     setFieldValue
@@ -127,9 +120,9 @@ const OnChangeFiltersModifier = ({ formikProps, isAdminPage = false }) => {
 
   useEffect(() => {
     if (all) {
-      setFieldValue("filters", defaultInitialValues(false).filters);
+      setFieldValue("filters", defaultInitialValues().filters);
     }
-  }, [all, setFieldValue, isAdminPage]);
+  }, [all, setFieldValue]);
   return null;
 };
 

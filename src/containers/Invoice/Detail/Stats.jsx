@@ -6,8 +6,19 @@ import styles from "./Detail.module.css";
 import { isUserDeveloper } from "src/containers/DCC/helpers";
 import useUserDetail from "src/hooks/api/useUserDetail";
 
-const Stats = ({ invoiceToken, userid, start, end }) => {
+const Stats = ({
+  subContractors,
+  subContractorsError,
+  invoiceToken,
+  userid,
+  start,
+  end
+}) => {
   const { user } = useUserDetail(userid);
+  const subcontractorsids = subContractors
+    ? subContractors.map((sc) => sc.id)
+    : [];
+
   return (
     <Card paddingSize="small">
       <H2 className={styles.statsTitle}>Stats</H2>
@@ -17,9 +28,14 @@ const Stats = ({ invoiceToken, userid, start, end }) => {
         token={invoiceToken}
         userid={userid}
       />
-      {isUserDeveloper(user) && (
-        <CodeStats userid={userid} start={start} end={end} />
+      {isUserDeveloper(user) && !subContractorsError && (
+        <CodeStats
+          ids={[...subcontractorsids, userid]}
+          start={start}
+          end={end}
+        />
       )}
+      {subContractorsError && { subContractorsError }}
     </Card>
   );
 };

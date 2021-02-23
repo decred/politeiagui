@@ -41,6 +41,7 @@ export default ({
         )}
         {!isPaid && isAdmin && (
           <Button
+            data-testid="mark-paid"
             className="margin-top-s"
             loading={isApiRequestingMarkAsPaid}
             size="sm"

@@ -135,3 +135,8 @@ export const usersByCurrentDomain = createSelector(
     return get(domain)(usersByDomain);
   }
 );
+
+export const userTotp = createSelector(
+  currentUser,
+  (user) => user && user.totp
+);

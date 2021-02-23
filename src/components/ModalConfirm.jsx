@@ -106,7 +106,7 @@ const ModalConfirm = ({
 
 ModalConfirm.propTypes = {
   title: PropTypes.string,
-  message: PropTypes.string,
+  message: PropTypes.node,
   show: PropTypes.bool,
   onClose: PropTypes.func,
   onSubmit: PropTypes.func,

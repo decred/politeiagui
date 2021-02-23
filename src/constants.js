@@ -164,3 +164,7 @@ export const MONTHS_LABELS = [
   "Nov",
   "Dec"
 ];
+
+export const TOTP_CODE_LENGTH = 6;
+export const TOTP_DEFAULT_TYPE = 1;
+export const TOTP_MISSING_LOGIN_ERROR = 79;

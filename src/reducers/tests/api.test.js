@@ -64,7 +64,9 @@ describe("test api reducer", () => {
       dccs: DEFAULT_REQUEST_STATE,
       dcc: DEFAULT_REQUEST_STATE,
       supportOpposeDCC: DEFAULT_REQUEST_STATE,
-      setDCCStatus: DEFAULT_REQUEST_STATE
+      setDCCStatus: DEFAULT_REQUEST_STATE,
+      setTotp: DEFAULT_REQUEST_STATE,
+      verifyTotp: DEFAULT_REQUEST_STATE
     });
 
     expect(api.default(undefined, { type: "" })).toEqual(api.DEFAULT_STATE);
