@@ -27,7 +27,12 @@ import { sha3_256 } from "js-sha3";
 import { requestWithCsrfToken, setProposalStatus } from "../utils";
 import * as pki from "../pki";
 // TODO: consider moving general functions like makeProposal and signRegister to a more general lib file other than api
-import { makeProposal, signRegister, addDays } from "../utils";
+import {
+  makeProposal,
+  signRegister,
+  addDays,
+  PROPOSAL_TYPE_RFP
+} from "../utils";
 
 Cypress.Commands.add("assertHome", () => {
   cy.url().should("eq", `${Cypress.config().baseUrl}/`);
@@ -100,11 +105,13 @@ Cypress.Commands.add("identity", () => {
 
 Cypress.Commands.add("createProposal", (proposal) => {
   const createdProposal = makeProposal(proposal.name, proposal.description);
-  return cy.request("api/v1/user/me").then((res) => {
-    return signRegister(res.body.userid, createdProposal).then((res) =>
-      requestWithCsrfToken("api/v1/proposals/new", res)
+  return cy
+    .request("api/v1/user/me")
+    .then((res) =>
+      signRegister(res.body.userid, createdProposal).then((res) =>
+        requestWithCsrfToken("api/v1/proposals/new", res)
+      )
     );
-  });
 });
 
 Cypress.Commands.add("createRfpProposal", (proposal) => {
@@ -119,14 +126,16 @@ Cypress.Commands.add("createRfpProposal", (proposal) => {
     proposal.name,
     proposal.description,
     rfpDeadline,
-    2,
+    PROPOSAL_TYPE_RFP,
     ""
   );
-  return cy.request("api/v1/user/me").then((res) => {
-    return signRegister(res.body.userid, createdProposal).then((res) =>
-      requestWithCsrfToken("api/v1/proposals/new", res)
+  return cy
+    .request("api/v1/user/me")
+    .then((res) =>
+      signRegister(res.body.userid, createdProposal).then((res) =>
+        requestWithCsrfToken("api/v1/proposals/new", res)
+      )
     );
-  });
 });
 
 Cypress.Commands.add("approveProposal", (proposal) => {
