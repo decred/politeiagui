@@ -9,11 +9,9 @@ import {
   DCC_STATUS_ACTIVE,
   PROPOSAL_METADATA_FILENAME,
   VOTE_METADATA_FILENAME
-  // PROPOSAL_TYPE_RFP,
-  // PROPOSAL_TYPE_RFP_SUBMISSION
 } from "../constants";
+import { APIUserError, APIPluginError, isAPIWww } from "./errors.js";
 import {
-  getHumanReadableError,
   digestPayload,
   digest,
   objectToSHA256,
@@ -323,19 +321,26 @@ const parseResponseBody = (response) => {
 
 export const parseResponse = (response) =>
   parseResponseBody(response).then((json) => {
-    if (json.errorcode) {
-      if (json.errorcontext === null) json.errorcontext = [];
-      const err = new Error(
-        getHumanReadableError(json.errorcode, json.errorcontext)
-      );
-      err.internalError = false;
-      err.errorCode = json.errorcode;
-      err.errorContext = json.errorcontext;
-      throw err;
+    let errorcode = json.errorcode;
+    let errorcontext = json.errorcontext;
+
+    if (isAPIWww(response.url)) {
+      errorcode = json.ErrorCode;
+      errorcontext = json.ErrorContext;
     }
+
+    if (json.pluginid) {
+      throw new APIPluginError(json.pluginid, errorcode, errorcontext);
+    }
+
+    if (errorcode) {
+      throw new APIUserError(response, errorcode, errorcontext);
+    }
+
     if (STATUS_ERR[response.status]) {
       throw new Error(STATUS_ERR[response.status]);
     }
+
     return {
       response: json,
       csrfToken: response.headers.get("X-Csrf-Token")
