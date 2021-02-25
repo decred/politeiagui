@@ -49,7 +49,6 @@ import VersionPicker from "src/components/VersionPicker";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useRouter } from "src/components/Router";
 import { isEmpty, getKeyByValue } from "src/helpers";
-import { useComments } from 'src/containers/Comments/hooks';
 
 /**
  * replaceImgDigestWithPayload uses a regex to parse images
@@ -129,10 +128,9 @@ const Proposal = React.memo(function Proposal({
     proposedFor,
     type,
     rfpSubmissions,
-    state
+    state,
+    commentsCount
   } = proposal;
-  console.log("in proposal")
-  console.log(proposal)
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
   const isRfpSubmission = !!linkto || type === PROPOSAL_TYPE_RFP_SUBMISSION;
   const isRfpActive = isRfp && isActiveRfp(linkby);
@@ -145,9 +143,6 @@ const Proposal = React.memo(function Proposal({
     commentsURL,
     rfpProposalURL
   } = useProposalURLs(proposalToken, userid, isRfpSubmission, linkto, state);
-  const { comments } = useComments(proposalToken, state);
-  console.log("comments fetcehd from hook")
-  console.log(comments)
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
@@ -370,9 +365,9 @@ const Proposal = React.memo(function Proposal({
                 onClick={goToFullProposal(history, proposalURL)}
               />
             )}
-            {isPublicAccessible && !extended && comments && (
+            {isPublicAccessible && !extended && (
               <Row justify="space-between">
-                <CommentsLink numOfComments={comments.length} url={commentsURL} />
+                <CommentsLink numOfComments={commentsCount} url={commentsURL} />
                 <div>
                   {(isVoteActive || isVotingFinished) && (
                     <ChartsLink token={proposalToken} />

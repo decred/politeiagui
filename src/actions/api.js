@@ -448,13 +448,26 @@ export const onFetchProposalsBatch = (tokens, state, fetchVoteSummary = true) =>
           tokens,
           state
         }),
-        fetchVoteSummary && dispatch(onFetchProposalsBatchVoteSummary(tokens))
+        fetchVoteSummary && dispatch(onFetchProposalsBatchVoteSummary(tokens)),
+        api.commentsCount(tokens, state)
       ]);
       const proposals = response.find((res) => res && res.proposals).proposals;
       const summaries =
         fetchVoteSummary &&
         response.find((res) => res && res.summaries).summaries;
-      dispatch(act.RECEIVE_PROPOSALS_BATCH({ proposals }));
+      const commentsCount = response.find((res) => res && res.counts).counts;
+      const proposalsWithCommentsCount = Object.keys(proposals).reduce(
+        (acc, curr) => {
+          return {
+            ...acc,
+            [curr]: { ...proposals[curr], commentsCount: commentsCount[curr] }
+          };
+        },
+        {}
+      );
+      dispatch(
+        act.RECEIVE_PROPOSALS_BATCH({ proposals: proposalsWithCommentsCount })
+      );
       return [proposals, summaries];
     } catch (e) {
       dispatch(act.RECEIVE_PROPOSALS_BATCH(null, e));

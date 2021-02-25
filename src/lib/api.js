@@ -531,6 +531,9 @@ export const user = (userId) => GET(`/user/${userId}`).then(getResponse);
 export const proposalComments = (csrf, token, state) =>
   POST("/comments", csrf, { token, state }, apiComments).then(getResponse);
 
+export const commentsCount = (tokens, state) =>
+  POST("/count", "", { tokens, state }, apiComments).then(getResponse);
+
 export const commentsTimestamps = (csrf, token, state, commentids) =>
   POST("/timestamps", csrf, { token, state, commentids }, apiComments).then(
     getResponse
