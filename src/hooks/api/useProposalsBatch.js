@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { or } from "src/lib/fp";
@@ -8,7 +8,8 @@ import useFetchMachine, {
   VERIFY,
   FETCH,
   REJECT,
-  RESOLVE
+  RESOLVE,
+  START
 } from "src/hooks/utils/useFetchMachine";
 import values from "lodash/fp/values";
 import compact from "lodash/fp/compact";
@@ -16,12 +17,21 @@ import uniq from "lodash/fp/uniq";
 import map from "lodash/fp/map";
 import reduce from "lodash/fp/reduce";
 import flow from "lodash/fp/flow";
+import take from "lodash/fp/take";
+import takeRight from "lodash/fp/takeRight";
 import isEmpty from "lodash/fp/isEmpty";
 import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
-import isEqual from "lodash/fp/isEqual";
-import { PROPOSAL_STATE_VETTED, PROPOSAL_STATE_UNVETTED } from "src/constants";
-import { getRfpLinkedProposals } from "src/containers/Proposal/helpers";
+import {
+  PROPOSAL_STATE_VETTED,
+  PROPOSAL_STATE_UNVETTED,
+  INVENTORY_PAGE_SIZE,
+  PROPOSAL_PAGE_SIZE
+} from "src/constants";
+import {
+  getRfpLinkedProposals,
+  getProposalStatusLabel
+} from "src/containers/Proposal/helpers";
 
 const getRfpLinks = (proposals) =>
   flow(
@@ -42,14 +52,39 @@ const getRfpSubmissions = (proposals) =>
 const getUnfetchedTokens = (proposals, tokens) =>
   difference(tokens)(keys(proposals));
 
+const getTokensForProposalsPagination = (tokens) => [
+  take(PROPOSAL_PAGE_SIZE)(tokens),
+  takeRight(tokens.length - PROPOSAL_PAGE_SIZE)(tokens)
+];
+
+const getCurrentPage = (tokens) => {
+  return tokens ? Math.floor(+tokens.length / INVENTORY_PAGE_SIZE) : 0;
+};
 // XXX add includefiles options param ?
-export default function useProposalsBatch(
-  tokens,
-  { fetchRfpLinks, fetchVoteSummaries = false, unvetted = false }
-) {
+export default function useProposalsBatch({
+  fetchRfpLinks,
+  fetchVoteSummaries = false,
+  unvetted = false,
+  proposalStatus
+}) {
+  const recordState = useMemo(
+    () => (unvetted ? PROPOSAL_STATE_UNVETTED : PROPOSAL_STATE_VETTED),
+    [unvetted]
+  );
+  const [remainingTokens, setRemainingTokens] = useState([]);
+  const [{ isVoteStatus, value: status }, setStatus] = useState({});
   const proposals = useSelector(sel.proposalsByToken);
   const voteSummaries = useSelector(sel.summaryByToken);
-  const allByStatus = useSelector(sel.allByStatus);
+  const allByStatus = useSelector(
+    unvetted ? sel.allByStatusUnvetted : sel.allByStatus
+  );
+  const page = useMemo(() => {
+    const tokens = allByStatus[getProposalStatusLabel(status, isVoteStatus)];
+    return getCurrentPage(tokens);
+  }, [status, isVoteStatus, allByStatus]);
+
+  const [previousPage, setPreviousPage] = useState(0);
+
   const errorSelector = useMemo(
     () => or(sel.apiProposalsBatchError, sel.apiPropsVoteSummaryError),
     []
@@ -60,75 +95,71 @@ export default function useProposalsBatch(
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
 
-  const remainingTokens = useMemo(() => getUnfetchedTokens(proposals, tokens), [
-    proposals,
-    tokens
-  ]);
-
-  const unfetchedRfpLinks = useMemo(() => {
-    const rfpLinks = getRfpLinks(proposals);
-    const rfpSubmissions = getRfpSubmissions(proposals);
-    return getUnfetchedTokens(proposals, [...rfpLinks, ...rfpSubmissions]);
-  }, [proposals]);
-
-  const missingTokenInventory = isEmpty(tokenInventory);
   const hasRemainingTokens = !isEmpty(remainingTokens);
-  const hasUnfetchedRfpLinks = !isEmpty(unfetchedRfpLinks);
 
   const [state, send] = useFetchMachine({
     actions: {
       initial: () => {
-        if (!tokenInventory && !tokens) {
-          onFetchTokenInventory().catch((e) => send(REJECT, e));
-          return send(FETCH);
+        if (!tokenInventory) {
+          return send(START);
         }
         return send(VERIFY);
       },
-      load: () => {
-        if (!missingTokenInventory && !tokens) {
-          return send(RESOLVE, { proposalsTokens: allByStatus });
-        }
-        if (
-          hasRemainingTokens ||
-          (missingTokenInventory && !tokens) ||
-          (fetchRfpLinks && hasUnfetchedRfpLinks)
-        ) {
-          return;
-        }
-        return send(VERIFY);
+      start: () => {
+        if (hasRemainingTokens) return send(VERIFY);
+        if (page && page === previousPage) return send(RESOLVE);
+        onFetchTokenInventory(recordState, status, page + 1)
+          .catch((e) => send(REJECT, e))
+          .then(([proposals, votes]) => {
+            // prepare token batch to fetch proposal for given status
+            const proposalStatusLabel = getProposalStatusLabel(
+              proposalStatus ? proposalStatus.value : 1,
+              proposalStatus && proposalStatus.isVoteStatus
+            );
+            setPreviousPage(page);
+            const tokens = (proposalStatus && proposalStatus.isVoteStatus
+              ? votes
+              : proposals)[recordState][proposalStatusLabel];
+            if (!tokens) return send(RESOLVE);
+            setRemainingTokens(tokens);
+            return send(VERIFY);
+          });
+        return send(FETCH);
       },
       verify: () => {
         if (hasRemainingTokens) {
-          onFetchProposalsBatch(
-            remainingTokens,
-            unvetted ? PROPOSAL_STATE_UNVETTED : PROPOSAL_STATE_VETTED,
-            fetchVoteSummaries
-          )
-            .then(() => send(VERIFY))
+          const [fetch, next] = getTokensForProposalsPagination(
+            remainingTokens
+          );
+          onFetchProposalsBatch(fetch, recordState, fetchVoteSummaries)
+            .then(([proposals]) => {
+              if (fetchRfpLinks) {
+                const rfpLinks = getRfpLinks(proposals);
+                const rfpSubmissions = getRfpSubmissions(proposals);
+                const unfetchedRfpLinks = getUnfetchedTokens(proposals, [
+                  ...rfpLinks,
+                  ...rfpSubmissions
+                ]);
+                if (!isEmpty(unfetchedRfpLinks)) {
+                  onFetchProposalsBatch(
+                    unfetchedRfpLinks,
+                    PROPOSAL_STATE_VETTED, // RFP linked proposals will always be vetted
+                    fetchVoteSummaries
+                  )
+                    .then(() => send(RESOLVE))
+                    .catch((e) => send(REJECT, e));
+                  return send(FETCH);
+                }
+              }
+              setRemainingTokens(next);
+              return send(RESOLVE);
+            })
             .catch((e) => send(REJECT, e));
           return send(FETCH);
         }
-        if (fetchRfpLinks && hasUnfetchedRfpLinks) {
-          onFetchProposalsBatch(
-            unfetchedRfpLinks,
-            PROPOSAL_STATE_VETTED, // RFP linked proposals will always be vetted
-            fetchVoteSummaries
-          )
-            .then(() => send(VERIFY))
-            .catch((e) => send(REJECT, e));
-          return send(FETCH);
-        }
-        return send(RESOLVE, { proposals, proposalsTokens: allByStatus });
+        return send(RESOLVE, { proposals });
       },
-      done: () => {
-        if (
-          hasRemainingTokens ||
-          !isEqual(allByStatus, state.proposalsTokens) ||
-          !isEqual(state.proposals, proposals)
-        ) {
-          return send(VERIFY);
-        }
-      }
+      done: () => {}
     },
     initialValues: {
       status: "idle",
@@ -139,14 +170,38 @@ export default function useProposalsBatch(
     }
   });
 
+  const onRestartMachine = (newStatus) => {
+    const newStatusLabel = getProposalStatusLabel(
+      !newStatus ? status : newStatus.value,
+      !newStatus ? isVoteStatus : newStatus.isVoteStatus
+    );
+    const unfetchedTokens = getUnfetchedTokens(
+      proposals,
+      uniq([...(allByStatus[newStatusLabel] || []), ...(remainingTokens || [])])
+    );
+    if (isEmpty(remainingTokens) && isEmpty(unfetchedTokens) && !page) {
+      // stop condition
+      return send(RESOLVE);
+    }
+    setRemainingTokens(unfetchedTokens);
+    setStatus(newStatus);
+    return send(START);
+  };
+
+  const onFetchMoreProposals = useCallback(() => send(VERIFY), [send]);
+
   const anyError = error || state.error;
   useThrowError(anyError);
 
   return {
-    proposals: getRfpLinkedProposals(state.proposals, voteSummaries),
+    proposals: getRfpLinkedProposals(proposals, voteSummaries),
     onFetchProposalsBatch,
-    proposalsTokens: state.proposalsTokens,
+    proposalsTokens: allByStatus,
     loading: state.loading,
-    verifying: state.verifying
+    verifying: state.verifying,
+    onRestartMachine,
+    onFetchMoreProposals,
+    hasMoreProposals: !!remainingTokens.length,
+    machineCurrentState: state.status
   };
 }

@@ -17,13 +17,14 @@ import {
   PROPOSAL_STATE_VETTED,
   PROPOSAL_STATE_UNVETTED,
   UNREVIEWED,
-  VETTEDCENSORED,
-  UNVETTEDCENSORED,
-  ABANDONED,
+  CENSORED,
+  AUTHORIZED,
   PRE_VOTE,
   ACTIVE_VOTE,
   APPROVED,
-  REJECTED
+  REJECTED,
+  PUBLIC,
+  ARCHIVED
 } from "../constants";
 import { parseReceivedProposalsMap, parseRawProposal } from "src/helpers";
 
@@ -489,36 +490,54 @@ export const onFetchProposalDetails = (token, state, version) => async (
   }
 };
 
-export const onFetchTokenInventory = () => async (dispatch) => {
+export const onFetchTokenInventory = (
+  state,
+  status,
+  page = 0,
+  isVoteStatus = true,
+  isProposalStatus = true
+) => async (dispatch) => {
   dispatch(act.REQUEST_TOKEN_INVENTORY());
   try {
     return await Promise.all([
-      api.proposalsInventory(),
-      api.votesInventory()
-    ]).then(([proposals, { vetted: votes }]) => {
+      isProposalStatus && api.proposalsInventory(state, status, page),
+      isVoteStatus &&
+        state !== PROPOSAL_STATE_UNVETTED &&
+        api.votesInventory(status, page)
+    ]).then(([proposals, votes]) => {
       dispatch(
-        act.RECEIVE_TOKEN_INVENTORY({
-          [PRE_VOTE]: (proposals.vetted.public || []).filter((t) =>
-            [
-              ...((votes && votes.authorized) || []),
-              ...((votes && votes.unauthorized) || [])
-            ].includes(t)
-          ),
-          [ACTIVE_VOTE]: [...((votes && votes.started) || [])],
-          [APPROVED]: [...((votes && votes.approved) || [])],
-          [REJECTED]: [...((votes && votes.finished) || [])].filter((t) =>
-            (proposals.vetted.public || []).includes(t)
-          ),
-          [ABANDONED]: [...(proposals.vetted.archived || [])],
-          [UNREVIEWED]: proposals.unvetted
-            ? [...(proposals.unvetted.unreviewed || [])]
-            : [],
-          [VETTEDCENSORED]: [...(proposals.vetted.censored || [])],
-          [UNVETTEDCENSORED]: proposals.unvetted
-            ? [...(proposals.unvetted.censored || [])]
-            : []
+        act.RECEIVE_UNVETTED_TOKEN_INVENTORY({
+          [UNREVIEWED]:
+            (proposals &&
+              proposals.unvetted &&
+              proposals.unvetted.unreviewed) ||
+            [],
+          [CENSORED]:
+            (proposals && proposals.unvetted && proposals.unvetted.censored) ||
+            [],
+          [ARCHIVED]:
+            (proposals && proposals.unvetted && proposals.unvetted.archived) ||
+            []
         })
       );
+      dispatch(
+        act.RECEIVE_TOKEN_INVENTORY({
+          [PRE_VOTE]:
+            (votes && votes.vetted && votes.vetted.unauthorized) || [],
+          [AUTHORIZED]:
+            (votes && votes.vetted && votes.vetted.authorized) || [],
+          [PUBLIC]:
+            (proposals && proposals.vetted && proposals.vetted.public) || [],
+          [ARCHIVED]:
+            (proposals && proposals.vetted && proposals.vetted.archived) || [],
+          [ACTIVE_VOTE]: (votes && votes.vetted && votes.vetted.started) || [],
+          [APPROVED]: (votes && votes.vetted && votes.vetted.approved) || [],
+          [REJECTED]: (votes && votes.vetted && votes.vetted.rejected) || [],
+          [CENSORED]:
+            (proposals && proposals.vetted && proposals.vetted.censored) || []
+        })
+      );
+      return [proposals, votes];
     });
   } catch (error) {
     dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error));

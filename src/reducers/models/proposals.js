@@ -17,6 +17,10 @@ import {
   ACTIVE_VOTE,
   APPROVED,
   REJECTED,
+  PUBLIC,
+  CENSORED,
+  ARCHIVED,
+  AUTHORIZED,
   PROPOSAL_STATE_UNVETTED
 } from "../../constants";
 import {
@@ -28,14 +32,19 @@ import {
 const DEFAULT_STATE = {
   byToken: {},
   allByStatus: {
-    [UNREVIEWED]: [],
-    [VETTEDCENSORED]: [],
-    [UNVETTEDCENSORED]: [],
-    [ABANDONED]: [],
     [PRE_VOTE]: [],
     [ACTIVE_VOTE]: [],
+    [AUTHORIZED]: [],
     [APPROVED]: [],
-    [REJECTED]: []
+    [REJECTED]: [],
+    [PUBLIC]: [],
+    [ARCHIVED]: [],
+    [CENSORED]: []
+  },
+  allByStatusUnvetted: {
+    [ARCHIVED]: [],
+    [CENSORED]: [],
+    [UNREVIEWED]: []
   },
   allProposalsByUserId: {},
   numOfProposalsByUserId: {},
@@ -102,6 +111,17 @@ const updateProposalRfpLinks = (proposal) => (state) => {
   )(state);
 };
 
+const updateInventory = (payload) => (allProps) => ({
+  ...allProps,
+  ...Object.keys(payload).reduce(
+    (res, status) => ({
+      ...res,
+      [status]: [...allProps[status], ...(payload[status] || [])]
+    }),
+    {}
+  )
+});
+
 const proposals = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
@@ -113,16 +133,12 @@ const proposals = (state = DEFAULT_STATE, action) =>
               ...parseReceivedProposalsMap(action.payload.proposals)
             }))(state),
           [act.RECEIVE_TOKEN_INVENTORY]: () =>
-            update("allByStatus", (allProps) => ({
-              ...allProps,
-              ...Object.keys(action.payload).reduce(
-                (res, status) => ({
-                  ...res,
-                  [status]: action.payload[status] || []
-                }),
-                {}
-              )
-            }))(state),
+            update("allByStatus", updateInventory(action.payload))(state),
+          [act.RECEIVE_UNVETTED_TOKEN_INVENTORY]: () =>
+            update(
+              "allByStatusUnvetted",
+              updateInventory(action.payload)
+            )(state),
           [act.RECEIVE_EDIT_PROPOSAL]: () =>
             set(
               ["byToken", proposalToken(action.payload.proposal)],

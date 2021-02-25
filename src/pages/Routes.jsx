@@ -10,7 +10,7 @@ import commonRoutes from "./commonRoutes";
 import PageNotFound from "./NotFound";
 import PageProposalVettedDetail from "./Proposals/DetailVetted";
 import PageProposalUnvettedDetail from "./Proposals/DetailUnvetted";
-import PageProposalsPublicList from "./Proposals/PublicList";
+import PageProposalsVettedList from "./Proposals/VettedList";
 import PageProposalsAdmin from "./Proposals/AdminList";
 import PageProposalNew from "./Proposals/New";
 import PageVettedProposalEdit from "./Proposals/EditVetted";
@@ -18,7 +18,7 @@ import PageUnvettedProposalEdit from "./Proposals/EditUnvetted";
 
 import useOnboardModal from "src/hooks/utils/useOnboardModal";
 import PageUserDetail from "./User/Detail";
-import { LIST_HEADER_ADMIN, LIST_HEADER_PUBLIC } from "src/constants";
+import { LIST_HEADER_ADMIN, LIST_HEADER_VETTED } from "src/constants";
 
 const Routes = ({ location }) => {
   useOnboardModal();
@@ -28,9 +28,9 @@ const Routes = ({ location }) => {
         <Switch location={location}>
           <Route
             path="/"
-            title={LIST_HEADER_PUBLIC}
+            title={LIST_HEADER_VETTED}
             exact
-            component={PageProposalsPublicList}
+            component={PageProposalsVettedList}
           />
           {commonRoutes}
           {/* User Route */}

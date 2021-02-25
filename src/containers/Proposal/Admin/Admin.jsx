@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
-import { tabValues, mapProposalsTokensByTab } from "./helpers";
+import { tabValues, mapProposalsTokensByTab, statusByTab } from "./helpers";
 // XXX change to AdminActionsProvider
 import { UnvettedActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
@@ -14,33 +14,39 @@ const renderProposal = (prop) => (
 
 const tabLabels = [
   tabValues.UNREVIEWED,
-  tabValues.VETTEDCENSORED,
-  tabValues.UNVETTEDCENSORED
+  tabValues.CENSORED,
+  tabValues.ARCHIVED
 ];
 
 const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
-  const [remainingTokens, setRemainingTokens] = useState();
   const [tabIndex, setTabIndex] = useState(0);
-  const isUnvetted =
-    tabLabels[tabIndex] === tabValues.UNREVIEWED ||
-    tabLabels[tabIndex] === tabValues.UNVETTEDCENSORED;
-  const { proposals, proposalsTokens, loading, verifying } = useProposalsBatch(
-    remainingTokens,
-    {
-      fetchRfpLinks: true,
-      fetchVoteSummaries: !isUnvetted,
-      unvetted: isUnvetted
-    }
-  );
+  const {
+    proposals,
+    proposalsTokens,
+    loading,
+    verifying,
+    onRestartMachine,
+    hasMoreProposals
+  } = useProposalsBatch({
+    fetchRfpLinks: true,
+    fetchVoteSummaries: false,
+    unvetted: true,
+    status: statusByTab[tabLabels[tabIndex]]
+  });
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
       [tabValues.UNREVIEWED]: "No proposals unreviewed",
-      [tabValues.VETTEDCENSORED]: "No vetted proposals censored",
-      [tabValues.UNVETTEDCENSORED]: "No unvetted proposals censored"
+      [tabValues.CENSORED]: "No unvetted proposals censored",
+      [tabValues.ARCHIVED]: "No unvetted proposals archived"
     };
     return mapTabToMessage[tab];
   }, []);
+
+  const handleSetIndex = (newIndex) => {
+    setTabIndex(newIndex);
+    onRestartMachine(statusByTab[tabLabels[newIndex]]);
+  };
 
   return (
     <RecordsView
@@ -50,8 +56,12 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
       renderRecord={renderProposal}
       displayTabCount={!!proposalsTokens}
       placeholder={ProposalLoader}
-      setRemainingTokens={setRemainingTokens}
-      onTabChange={setTabIndex}
+      statusByTab={statusByTab}
+      index={tabIndex}
+      onSetIndex={handleSetIndex}
+      onFetchMoreProposals={onRestartMachine}
+      dropdownTabsForMobile={true}
+      hasMore={hasMoreProposals}
       isLoading={loading || verifying}
       getEmptyMessage={getEmptyMessage}>
       {({ tabs, content }) => (

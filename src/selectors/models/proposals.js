@@ -13,6 +13,12 @@ export const allByStatus = createDeepEqualSelector(
   get(["proposals"]),
   ({ allByStatus }) => allByStatus
 );
+
+export const allByStatusUnvetted = createDeepEqualSelector(
+  get(["proposals"]),
+  ({ allByStatusUnvetted }) => allByStatusUnvetted
+);
+
 export const tokenInventory = createDeepEqualSelector(
   get(["api"]),
   ({ tokenInventory }) => tokenInventory.payload

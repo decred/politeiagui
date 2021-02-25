@@ -78,16 +78,23 @@ export const PROPOSAL_APPROVED = 8;
 export const PROPOSAL_COMMENT_UPVOTE = 1;
 export const PROPOSAL_COMMENT_DOWNVOTE = -1;
 
+export const PROPOSAL_PAGE_SIZE = 10;
+export const INVENTORY_PAGE_SIZE = 20;
+
 // Proposals presentational statuses returned by the 'voteinv' &
 // 'proposalinv' endpoints from the API.
 export const UNREVIEWED = "unreviewed";
 export const VETTEDCENSORED = "vettedcensored";
 export const UNVETTEDCENSORED = "unvettedcensored";
 export const ABANDONED = "abandoned";
-export const PRE_VOTE = "pre";
-export const ACTIVE_VOTE = "active";
+export const PRE_VOTE = "unauthorized";
+export const ACTIVE_VOTE = "started";
 export const APPROVED = "approved";
+export const AUTHORIZED = "authorized";
 export const REJECTED = "rejected";
+export const ARCHIVED = "archived";
+export const PUBLIC = "public";
+export const CENSORED = "censored";
 
 export const USER_DETAIL_TAB_GENERAL = 0;
 export const USER_DETAIL_TAB_PREFERENCES = 1;
@@ -103,8 +110,8 @@ export const MANAGE_USER_CLEAR_USER_PAYWALL = 4;
 export const MANAGE_USER_UNLOCK = 5;
 export const MANAGE_USER_DEACTIVATE = 6;
 export const MANAGE_USER_REACTIVATE = 7;
-export const LIST_HEADER_PUBLIC = "Public Proposals";
-export const LIST_HEADER_ADMIN = "Admin";
+export const LIST_HEADER_VETTED = "Proposals";
+export const LIST_HEADER_ADMIN = "Unvetted Proposals";
 export const LIST_HEADER_USER = "Your Proposals";
 export const SORT_BY_OLD = "OLD";
 export const SORT_BY_NEW = "NEW";

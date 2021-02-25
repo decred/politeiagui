@@ -1,14 +1,10 @@
-import React, { useState, useMemo, useEffect, useCallback } from "react";
-import { Tabs, Tab, useMediaQuery } from "pi-ui";
-import difference from "lodash/difference";
+import React, { useState, useMemo, useEffect } from "react";
+import { Tabs, Tab } from "pi-ui";
 import LazyList from "src/components/LazyList";
-import { getRecordsByTabOption, getRecordToken } from "./helpers";
-import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
+import { getRecordsByTabOption } from "./helpers";
 import HelpMessage from "src/components/HelpMessage";
 import { useConfig } from "src/containers/Config";
 import { NOJS_ROUTE_PREFIX } from "src/constants";
-
-const DEFAULT_PAGE_SIZE = 4;
 
 const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
   const Item = placeholder;
@@ -37,20 +33,19 @@ const RecordsView = ({
   tabLabels,
   recordTokensByTab,
   renderRecord,
-  displayTabCount,
-  pageSize = DEFAULT_PAGE_SIZE,
   placeholder,
   getEmptyMessage = getDefaultEmptyMessage,
-  dropdownTabsForMobile,
-  setRemainingTokens,
+  onFetchMoreProposals,
   onTabChange,
-  isLoading
+  isLoading,
+  index,
+  onSetIndex,
+  hasMore,
+  statusByTab
 }) => {
-  const [hasMoreToLoad, setHasMore] = useState(true);
   const [loadingItems, setLoadingItems] = useState(0);
   const { javascriptEnabled } = useConfig();
 
-  const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
   useEffect(
     function onTabIndexChange() {
       onTabChange && onTabChange(index);
@@ -58,57 +53,20 @@ const RecordsView = ({
     [index, onTabChange]
   );
   const tabOption = tabLabels[index];
-  const isMobileScreen = useMediaQuery("(max-width:560px)");
-
   const [filteredRecords, filteredTokens] = useMemo(
     () => getFilteredRecordsAndToken(records, recordTokensByTab, tabOption),
     [recordTokensByTab, records, tabOption]
   );
 
-  const hasMoreRecordsToLoad =
-    filteredTokens && filteredRecords.length < filteredTokens.length;
-
   const handleFetchMoreRecords = () => {
-    if (!filteredTokens || isLoading) {
-      return;
-    }
-    // make sure tokens being requested are different from the ones
-    // already requested or fetched
-    const fetchedTokens = filteredRecords.map(getRecordToken);
-    const recordTokensToBeFetched = difference(
-      filteredTokens,
-      fetchedTokens
-    ).slice(0, pageSize); // handle pagination
-    setRemainingTokens(recordTokensToBeFetched);
-    setHasMore(hasMoreRecordsToLoad);
-    setLoadingItems(recordTokensToBeFetched.length);
+    if (!filteredTokens || isLoading) return;
+    onFetchMoreProposals && onFetchMoreProposals(statusByTab[tabLabels[index]]);
+    setLoadingItems(4);
   };
 
-  useEffect(
-    function setHasMoreOnTabChange() {
-      setHasMore(true);
-    },
-    [index]
-  );
-
-  const getPropsCountByTab = useCallback(
-    (tab) => {
-      if (!recordTokensByTab) return "";
-      return recordTokensByTab[tab] ? recordTokensByTab[tab].length : "";
-    },
-    [recordTokensByTab]
-  );
-
   const tabs = useMemo(
-    () =>
-      tabLabels.map((label) => (
-        <Tab
-          key={`tab-${label}`}
-          count={displayTabCount ? getPropsCountByTab(label) : ""}
-          label={label}
-        />
-      )),
-    [tabLabels, displayTabCount, getPropsCountByTab]
+    () => tabLabels.map((label) => <Tab key={`tab-${label}`} label={label} />),
+    [tabLabels]
   );
 
   const nojsTabs = useMemo(
@@ -116,7 +74,6 @@ const RecordsView = ({
       tabLabels.map((label) => (
         <Tab
           key={`tab2-${label}`}
-          count={displayTabCount ? getPropsCountByTab(label) : ""}
           label={
             <a href={`${NOJS_ROUTE_PREFIX}/?tab=${label.toLowerCase()}`}>
               {label}
@@ -124,7 +81,7 @@ const RecordsView = ({
           }
         />
       )),
-    [tabLabels, displayTabCount, getPropsCountByTab]
+    [tabLabels]
   );
 
   const loadingPlaceholders = useMemo(
@@ -137,15 +94,13 @@ const RecordsView = ({
     [loadingItems, placeholder]
   );
 
-  const useDropdownTabs = isMobileScreen && dropdownTabsForMobile;
-
   return children({
     tabs: (
       <Tabs
         onSelectTab={onSetIndex}
         activeTabIndex={index}
-        className={useDropdownTabs ? "padding-bottom-s" : ""}
-        mode={useDropdownTabs ? "dropdown" : "horizontal"}>
+        className="padding-bottom-s"
+        mode={tabLabels.length < 4 ? "horizontal" : "dropdown"}>
         {javascriptEnabled ? tabs : nojsTabs}
       </Tabs>
     ),
@@ -154,7 +109,7 @@ const RecordsView = ({
         items={filteredRecords}
         renderItem={renderRecord}
         onFetchMore={handleFetchMoreRecords}
-        hasMore={hasMoreToLoad}
+        hasMore={hasMore}
         emptyListComponent={
           <HelpMessage>{getEmptyMessage(tabOption)}</HelpMessage>
         }

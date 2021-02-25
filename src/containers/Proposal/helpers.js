@@ -13,6 +13,15 @@ import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATE_VETTED,
   PROPOSAL_STATE_UNVETTED,
+  PRE_VOTE,
+  AUTHORIZED,
+  ACTIVE_VOTE,
+  APPROVED,
+  REJECTED,
+  ARCHIVED,
+  UNREVIEWED,
+  PUBLIC,
+  CENSORED,
   NOJS_ROUTE_PREFIX,
   PROPOSAL_VOTING_REJECTED
 } from "../../constants";
@@ -362,6 +371,24 @@ export const getProposalStateLabel = (proposalState) =>
     [PROPOSAL_STATE_VETTED]: "vetted",
     [PROPOSAL_STATE_UNVETTED]: "unvetted"
   });
+
+export const getProposalStatusLabel = (proposalStatus, isVotingStatus) =>
+  get(proposalStatus)(
+    isVotingStatus
+      ? {
+          [PROPOSAL_VOTING_NOT_AUTHORIZED]: PRE_VOTE,
+          [PROPOSAL_VOTING_AUTHORIZED]: AUTHORIZED,
+          [PROPOSAL_VOTING_ACTIVE]: ACTIVE_VOTE,
+          [PROPOSAL_VOTING_APPROVED]: APPROVED,
+          [PROPOSAL_VOTING_REJECTED]: REJECTED
+        }
+      : {
+          [PROPOSAL_STATUS_UNREVIEWED]: UNREVIEWED,
+          [PROPOSAL_STATUS_ARCHIVED]: ARCHIVED,
+          [PROPOSAL_STATUS_CENSORED]: CENSORED,
+          [PROPOSAL_STATUS_PUBLIC]: PUBLIC
+        }
+  );
 
 export const getProposalLink = (proposal) =>
   proposal

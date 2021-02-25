@@ -1,6 +1,7 @@
 import {
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_STATUS_ARCHIVED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   PROPOSAL_STATE_VETTED,
   PROPOSAL_STATE_UNVETTED
@@ -8,8 +9,8 @@ import {
 
 export const tabValues = {
   UNREVIEWED: "Unreviewed",
-  VETTEDCENSORED: "Vetted Censored",
-  UNVETTEDCENSORED: "Unvetted Censored"
+  CENSORED: "Censored",
+  ARCHIVED: "Archived"
 };
 
 /**
@@ -53,14 +54,14 @@ export const getProposalsByTabOption = (tabOption, proposals) => {
  */
 export const getProposalTokensByTabOption = (tabOption, proposalsTokens) => {
   if (!proposalsTokens) return [];
-  const { unreviewed, vettedcensored, unvettedcensored } = proposalsTokens;
+  const { unreviewed, censored, archived } = proposalsTokens;
   switch (tabOption) {
     case tabValues.UNREVIEWED:
       return unreviewed;
-    case tabValues.VETTEDCENSORED:
-      return vettedcensored;
-    case tabValues.UNVETTEDCENSORED:
-      return unvettedcensored;
+    case tabValues.CENSORED:
+      return censored;
+    case tabValues.ARCHIVED:
+      return archived;
     default:
       return [];
   }
@@ -80,22 +81,8 @@ export const mapProposalsTokensByTab = (tabLabels, proposalsTokens) =>
     {}
   );
 
-/**
- * Return the total amount of proposals by each tab
- * @param {object} proposalsAmountByReviewStatus
- * @return {object} proposalsAmountByTabOption
- */
-export const getTotalAmountOfProposalsByTab = (
-  proposalsAmountByReviewStatus
-) => {
-  if (!proposalsAmountByReviewStatus) {
-    return null;
-  }
-  const { numofunvetted, numofunvettedchanges, numofcensored } =
-    proposalsAmountByReviewStatus || {};
-  return {
-    [tabValues.UNREVIEWED]: numofunvetted + numofunvettedchanges,
-    [tabValues.CENSORED]: numofcensored,
-    [tabValues.ALL]: numofunvetted + numofunvettedchanges + numofcensored
-  };
+export const statusByTab = {
+  [tabValues.ARCHIVED]: { value: PROPOSAL_STATUS_ARCHIVED },
+  [tabValues.CENSORED]: { value: PROPOSAL_STATUS_CENSORED },
+  [tabValues.UNREVIEWED]: { value: PROPOSAL_STATUS_UNREVIEWED }
 };

@@ -668,11 +668,11 @@ export const userProposalCredits = () =>
 export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
 
-export const proposalsInventory = () =>
-  POST("/inventory", "", {}, apiRecords).then(getResponse);
+export const proposalsInventory = (state, status, page) =>
+  POST("/inventory", "", { state, status, page }, apiRecords).then(getResponse);
 
-export const votesInventory = (csrf) =>
-  POST("/inventory", csrf, {}, apiTicketVote).then(getResponse);
+export const votesInventory = (status, page) =>
+  POST("/inventory", "", { status, page }, apiTicketVote).then(getResponse);
 
 export const recordsTimestamp = (csrf, token, state, version) =>
   POST("/timestamps", csrf, { token, state, version }, apiRecords).then(

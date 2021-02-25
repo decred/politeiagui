@@ -1,13 +1,13 @@
 import React from "react";
 import MultipleContentPage from "src/components/layout/MultipleContentPage";
-import PublicProposals from "src/containers/Proposal/Public";
+import VettedProposals from "src/containers/Proposal/Vetted";
 
-const PublicList = () => {
+const VettedList = () => {
   return (
     <MultipleContentPage disableScrollToTop>
-      {(props) => <PublicProposals {...props} />}
+      {(props) => <VettedProposals {...props} />}
     </MultipleContentPage>
   );
 };
 
-export default PublicList;
+export default VettedList;

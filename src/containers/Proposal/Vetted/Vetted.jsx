@@ -1,12 +1,13 @@
-import React, { useCallback, useMemo, useState } from "react";
-import styles from "./PublicProposals.module.css";
-import { tabValues, mapProposalsTokensByTab } from "./helpers";
+import React, { useCallback, useMemo } from "react";
+import styles from "./VettedProposals.module.css";
+import { tabValues, mapProposalsTokensByTab, statusByTab } from "./helpers";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { PublicActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
-import { LIST_HEADER_PUBLIC } from "src/constants";
+import { LIST_HEADER_VETTED } from "src/constants";
+import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 
 const renderProposal = (record) => (
   <Proposal key={record.censorshiprecord.token} proposal={record} />
@@ -14,21 +15,29 @@ const renderProposal = (record) => (
 
 const tabLabels = [
   tabValues.IN_DISCUSSION,
+  tabValues.AUTHORIZED,
   tabValues.VOTING,
   tabValues.APPROVED,
   tabValues.REJECTED,
-  tabValues.ABANDONED
+  tabValues.PUBLIC,
+  tabValues.ARCHIVED,
+  tabValues.CENSORED
 ];
 
-const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
-  const [remainingTokens, setRemainingTokens] = useState();
-  const { proposals, proposalsTokens, loading, verifying } = useProposalsBatch(
-    remainingTokens,
-    {
-      fetchRfpLinks: true,
-      fetchVoteSummaries: true
-    }
-  );
+const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
+  const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
+  const {
+    proposals,
+    proposalsTokens,
+    loading,
+    verifying,
+    onRestartMachine,
+    hasMoreProposals
+  } = useProposalsBatch({
+    fetchRfpLinks: true,
+    fetchVoteSummaries: true,
+    proposalStatus: statusByTab[tabLabels[index]]
+  });
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
@@ -36,7 +45,10 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       [tabValues.VOTING]: "No proposals voting",
       [tabValues.APPROVED]: "No proposals approved",
       [tabValues.REJECTED]: "No proposals rejected",
-      [tabValues.ABANDONED]: "No proposals abandoned"
+      [tabValues.PUBLIC]: "No public proposals",
+      [tabValues.ARCHIVED]: "No archived proposals",
+      [tabValues.CENSORED]: "No censored proposals",
+      [tabValues.AUTHORIZED]: "No proposals authorized for voting"
     };
     return mapTabToMessage[tab];
   }, []);
@@ -50,7 +62,7 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     ({ tabs, content }) => (
       <>
         <TopBanner>
-          <PageDetails title={LIST_HEADER_PUBLIC}>{tabs}</PageDetails>
+          <PageDetails title={LIST_HEADER_VETTED}>{tabs}</PageDetails>
         </TopBanner>
         <Sidebar />
         <Main className={styles.customMain}>
@@ -63,6 +75,11 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     [proposalsTokens]
   );
 
+  const handleSetIndex = (newIndex) => {
+    onSetIndex(newIndex);
+    onRestartMachine(statusByTab[tabLabels[newIndex]]);
+  };
+
   return (
     <RecordsView
       records={proposals}
@@ -72,12 +89,16 @@ const PublicProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       displayTabCount={!!proposalsTokens}
       placeholder={ProposalLoader}
       getEmptyMessage={getEmptyMessage}
-      setRemainingTokens={setRemainingTokens}
+      statusByTab={statusByTab}
+      index={index}
+      onSetIndex={handleSetIndex}
+      onFetchMoreProposals={onRestartMachine}
       dropdownTabsForMobile={true}
+      hasMore={hasMoreProposals}
       isLoading={loading || verifying}>
       {content}
     </RecordsView>
   );
 };
 
-export default PublicProposals;
+export default VettedProposals;
