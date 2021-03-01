@@ -76,7 +76,7 @@ export default function useProposalsBatch({
   const proposals = useSelector(sel.proposalsByToken);
   const voteSummaries = useSelector(sel.summaryByToken);
   const allByStatus = useSelector(
-    unvetted ? sel.allByStatusUnvetted : sel.allByStatus
+    unvetted ? sel.allByRecordStatus : sel.allByVoteStatus
   );
   const page = useMemo(() => {
     const tokens = allByStatus[getProposalStatusLabel(status, !unvetted)];

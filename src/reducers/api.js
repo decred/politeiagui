@@ -102,7 +102,7 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.RECEIVE_USER_PROPOSALS]: () => receive("userProposals", state),
       [act.REQUEST_TOKEN_INVENTORY]: () =>
         request("tokenInventory", state, action),
-      [act.RECEIVE_TOKEN_INVENTORY]: () =>
+      [act.RECEIVE_VOTES_INVENTORY]: () =>
         receive("tokenInventory", state, action),
       [act.REQUEST_PROPOSALS_BATCH]: () =>
         request("proposalsBatch", state, action),

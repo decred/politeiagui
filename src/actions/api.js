@@ -536,12 +536,12 @@ export const onFetchTokenInventory = (
         [REJECTED]: (votes && votes.vetted && votes.vetted.rejected) || [],
         [INELIGIBLE]: (votes && votes.vetted && votes.vetted.ineligible) || []
       };
-      dispatch(act.RECEIVE_UNVETTED_TOKEN_INVENTORY(unvetted));
-      dispatch(act.RECEIVE_TOKEN_INVENTORY(vetted));
+      dispatch(act.RECEIVE_RECORDS_INVENTORY(unvetted));
+      dispatch(act.RECEIVE_VOTES_INVENTORY(vetted));
       return { unvetted, vetted };
     });
   } catch (error) {
-    dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error));
+    dispatch(act.RECEIVE_VOTES_INVENTORY(null, error));
     throw error;
   }
 };

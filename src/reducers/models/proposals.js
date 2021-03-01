@@ -27,14 +27,14 @@ import {
 
 const DEFAULT_STATE = {
   byToken: {},
-  allByStatus: {
+  allByVoteStatus: {
     [PRE_VOTE]: [],
     [ACTIVE_VOTE]: [],
     [APPROVED]: [],
     [REJECTED]: [],
     [INELIGIBLE]: []
   },
-  allByStatusUnvetted: {
+  allByRecordStatus: {
     [ARCHIVED]: [],
     [CENSORED]: [],
     [UNREVIEWED]: []
@@ -71,11 +71,11 @@ const proposalToken = (proposal) => proposal.censorshiprecord.token;
 const proposalIndexFile = (name = "", description = "") =>
   getIndexMdFromText([name, description].join("\n\n"));
 
-const updateAllByStatus = (allByStatus, newStatus, tokens) => {
+const updateAllByVoteStatus = (allByVoteStatus, newStatus, tokens) => {
   let res = {};
   tokens.forEach((token) => {
-    const updatedByStatus = Object.keys(allByStatus).reduce((inv, key) => {
-      const tokens = res[key] || allByStatus[key] || [];
+    const updatedByStatus = Object.keys(allByVoteStatus).reduce((inv, key) => {
+      const tokens = res[key] || allByVoteStatus[key] || [];
       const foundToken = tokens.find((t) => t === token);
       if (foundToken && key !== newStatus)
         return { ...inv, [key]: tokens.filter((t) => t !== token) };
@@ -125,13 +125,10 @@ const proposals = (state = DEFAULT_STATE, action) =>
               ...proposals,
               ...parseReceivedProposalsMap(action.payload.proposals)
             }))(state),
-          [act.RECEIVE_TOKEN_INVENTORY]: () =>
-            update("allByStatus", updateInventory(action.payload))(state),
-          [act.RECEIVE_UNVETTED_TOKEN_INVENTORY]: () =>
-            update(
-              "allByStatusUnvetted",
-              updateInventory(action.payload)
-            )(state),
+          [act.RECEIVE_VOTES_INVENTORY]: () =>
+            update("allByVoteStatus", updateInventory(action.payload))(state),
+          [act.RECEIVE_RECORDS_INVENTORY]: () =>
+            update("allByRecordStatus", updateInventory(action.payload))(state),
           [act.RECEIVE_EDIT_PROPOSAL]: () =>
             set(
               ["byToken", proposalToken(action.payload.proposal)],
@@ -153,7 +150,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 })
               ),
               update(
-                ["allByStatusUnvetted", UNREVIEWED],
+                ["allByRecordStatus", UNREVIEWED],
                 (unreviewdProps = []) => [
                   proposalToken(action.payload),
                   ...unreviewdProps
@@ -180,8 +177,8 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 ["byToken", proposalToken(action.payload.proposal)],
                 parseRawProposal(action.payload.proposal)
               ),
-              update(["allByStatus"], (allProps) =>
-                updateAllByStatus(
+              update(["allByVoteStatus"], (allProps) =>
+                updateAllByVoteStatus(
                   allProps,
                   mapReviewStatusToTokenInventoryStatus(
                     action.payload.proposal.status,
@@ -190,7 +187,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
                   [proposalToken(action.payload.proposal)]
                 )
               ),
-              update(["allByStatusUnvetted"], (props) =>
+              update(["allByRecordStatus"], (props) =>
                 props[UNREVIEWED].filter(
                   (p) => p !== action.payload.proposal.censorshiprecord.token
                 )
@@ -215,8 +212,12 @@ const proposals = (state = DEFAULT_STATE, action) =>
               )
             )(state),
           [act.RECEIVE_START_VOTE]: () =>
-            update("allByStatus", (allProps) =>
-              updateAllByStatus(allProps, ACTIVE_VOTE, action.payload.tokens)
+            update("allByVoteStatus", (allProps) =>
+              updateAllByVoteStatus(
+                allProps,
+                ACTIVE_VOTE,
+                action.payload.tokens
+              )
             )(state),
           [act.RECEIVE_NEW_COMMENT]: () => {
             const comment = action.payload;
@@ -228,9 +229,9 @@ const proposals = (state = DEFAULT_STATE, action) =>
           },
           [act.RECEIVE_LOGOUT]: () => {
             const privateProps = [
-              ...state.allByStatusUnvetted[UNREVIEWED],
-              ...state.allByStatusUnvetted[ARCHIVED],
-              ...state.allByStatusUnvetted[CENSORED]
+              ...state.allByRecordStatus[UNREVIEWED],
+              ...state.allByRecordStatus[ARCHIVED],
+              ...state.allByRecordStatus[CENSORED]
             ];
             const filterPrivateProps = update("byToken", (propsByToken) =>
               Object.keys(propsByToken)
@@ -242,7 +243,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
             );
             return compose(
               filterPrivateProps,
-              set("allByStatusUnvetted", DEFAULT_STATE.allByStatusUnvetted)
+              set("allByRecordStatus", DEFAULT_STATE.allByRecordStatus)
             )(state);
           }
         }[action.type] || (() => state)

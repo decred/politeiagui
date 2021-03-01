@@ -9,14 +9,14 @@ export const numOfProposalsByUserId = get([
   "proposals",
   "numOfProposalsByUserId"
 ]);
-export const allByStatus = createDeepEqualSelector(
+export const allByVoteStatus = createDeepEqualSelector(
   get(["proposals"]),
-  ({ allByStatus }) => allByStatus
+  ({ allByVoteStatus }) => allByVoteStatus
 );
 
-export const allByStatusUnvetted = createDeepEqualSelector(
+export const allByRecordStatus = createDeepEqualSelector(
   get(["proposals"]),
-  ({ allByStatusUnvetted }) => allByStatusUnvetted
+  ({ allByRecordStatus }) => allByRecordStatus
 );
 
 export const tokenInventory = createDeepEqualSelector(
