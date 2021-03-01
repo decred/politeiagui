@@ -190,6 +190,11 @@ const proposals = (state = DEFAULT_STATE, action) =>
                   ),
                   [proposalToken(action.payload.proposal)]
                 )
+              ),
+              update(["allByStatusUnvetted"], (props) =>
+                props[UNREVIEWED].filter(
+                  (p) => p !== action.payload.proposal.censorshiprecord.token
+                )
               )
             )(state),
           [act.RECEIVE_USER_PROPOSALS]: () =>
