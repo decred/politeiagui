@@ -10,9 +10,6 @@ import {
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   UNREVIEWED,
-  VETTEDCENSORED,
-  UNVETTEDCENSORED,
-  ABANDONED,
   PRE_VOTE,
   ACTIVE_VOTE,
   APPROVED,
@@ -56,13 +53,11 @@ const mapReviewStatusToTokenInventoryStatus = (status, state) => {
     case PROPOSAL_STATUS_UNREVIEWED_CHANGES:
       return UNREVIEWED;
     case PROPOSAL_STATUS_CENSORED:
-      return state === PROPOSAL_STATE_UNVETTED
-        ? UNVETTEDCENSORED
-        : VETTEDCENSORED;
+      return state !== PROPOSAL_STATE_UNVETTED ? INELIGIBLE : CENSORED;
     case PROPOSAL_STATUS_PUBLIC:
       return PRE_VOTE;
     case PROPOSAL_STATUS_ARCHIVED:
-      return ABANDONED;
+      return state !== PROPOSAL_STATE_UNVETTED ? INELIGIBLE : ARCHIVED;
     default:
       throw Error(
         `mapReviewStatusToTokenInventoryStatus: Invalid proposal status: 
