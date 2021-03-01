@@ -90,17 +90,16 @@ export default function useProposalsBatch({
     []
   );
   const error = useSelector(errorSelector);
-  const tokenInventory = useSelector(sel.tokenInventory);
 
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
-
+  const isInventoryEmpty = !Object.values(allByStatus).some((st) => st.length);
   const hasRemainingTokens = !isEmpty(remainingTokens);
 
   const [state, send] = useFetchMachine({
     actions: {
       initial: () => {
-        if (!tokenInventory) {
+        if (isInventoryEmpty) {
           return send(START);
         }
         return send(VERIFY);
@@ -108,7 +107,7 @@ export default function useProposalsBatch({
       start: () => {
         if (hasRemainingTokens) return send(VERIFY);
         if (page && page === previousPage) return send(RESOLVE);
-        onFetchTokenInventory(recordState, status, page + 1)
+        onFetchTokenInventory(recordState, status, page + 1, !unvetted)
           .catch((e) => send(REJECT, e))
           .then(({ vetted, unvetted: unvettedProposals }) => {
             // prepare token batch to fetch proposal for given status

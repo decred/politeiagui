@@ -157,13 +157,19 @@ const proposals = (state = DEFAULT_STATE, action) =>
                   files: [...action.payload.files, indexFile]
                 })
               ),
-              update(["allByStatus", UNREVIEWED], (unreviewdProps = []) =>
-                unreviewdProps.concat([proposalToken(action.payload)])
+              update(
+                ["allByStatusUnvetted", UNREVIEWED],
+                (unreviewdProps = []) => [
+                  proposalToken(action.payload),
+                  ...unreviewdProps
+                ]
               ),
               update(
                 ["allProposalsByUserId", action.payload.userid],
-                (userProposals = []) =>
-                  userProposals.concat([proposalToken(action.payload)])
+                (userProposals = []) => [
+                  proposalToken(action.payload),
+                  ...userProposals
+                ]
               ),
               update(
                 ["numOfProposalsByUserId", action.payload.userid],

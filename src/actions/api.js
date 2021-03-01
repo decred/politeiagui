@@ -506,13 +506,12 @@ export const onFetchTokenInventory = (
   state,
   status,
   page = 0,
-  isVoteStatus = true,
-  isProposalStatus = true
+  isVoteStatus
 ) => async (dispatch) => {
   dispatch(act.REQUEST_TOKEN_INVENTORY());
   try {
     return await Promise.all([
-      isProposalStatus && api.proposalsInventory(state, status, page),
+      !isVoteStatus && api.proposalsInventory(state, status, page),
       isVoteStatus &&
         state !== PROPOSAL_STATE_UNVETTED &&
         api.votesInventory(status, page)
