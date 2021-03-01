@@ -224,9 +224,9 @@ const proposals = (state = DEFAULT_STATE, action) =>
           },
           [act.RECEIVE_LOGOUT]: () => {
             const privateProps = [
-              ...state.allByStatus[UNREVIEWED],
-              ...state.allByStatus[VETTEDCENSORED],
-              ...state.allByStatus[UNVETTEDCENSORED]
+              ...state.allByStatusUnvetted[UNREVIEWED],
+              ...state.allByStatusUnvetted[ARCHIVED],
+              ...state.allByStatusUnvetted[CENSORED]
             ];
             const filterPrivateProps = update("byToken", (propsByToken) =>
               Object.keys(propsByToken)
@@ -238,9 +238,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
             );
             return compose(
               filterPrivateProps,
-              set(["allByStatus", UNREVIEWED], []),
-              set(["allByStatus", VETTEDCENSORED], []),
-              set(["allByStatus", UNVETTEDCENSORED], [])
+              set("allByStatusUnvetted", DEFAULT_STATE.allByStatusUnvetted)
             )(state);
           }
         }[action.type] || (() => state)

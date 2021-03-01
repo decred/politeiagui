@@ -192,7 +192,6 @@ export default function useProposalsBatch({
 
   const anyError = error || state.error;
   useThrowError(anyError);
-
   return {
     proposals: getRfpLinkedProposals(proposals, voteSummaries),
     onFetchProposalsBatch,
