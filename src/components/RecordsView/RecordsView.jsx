@@ -96,11 +96,7 @@ const RecordsView = ({
 
   return children({
     tabs: (
-      <Tabs
-        onSelectTab={onSetIndex}
-        activeTabIndex={index}
-        className="padding-bottom-s"
-        mode={tabLabels.length < 4 ? "horizontal" : "dropdown"}>
+      <Tabs onSelectTab={onSetIndex} activeTabIndex={index} mode="horizontal">
         {javascriptEnabled ? tabs : nojsTabs}
       </Tabs>
     ),

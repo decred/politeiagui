@@ -17,10 +17,9 @@ import {
   ACTIVE_VOTE,
   APPROVED,
   REJECTED,
-  PUBLIC,
   CENSORED,
   ARCHIVED,
-  AUTHORIZED,
+  INELIGIBLE,
   PROPOSAL_STATE_UNVETTED
 } from "../../constants";
 import {
@@ -34,12 +33,9 @@ const DEFAULT_STATE = {
   allByStatus: {
     [PRE_VOTE]: [],
     [ACTIVE_VOTE]: [],
-    [AUTHORIZED]: [],
     [APPROVED]: [],
     [REJECTED]: [],
-    [PUBLIC]: [],
-    [ARCHIVED]: [],
-    [CENSORED]: []
+    [INELIGIBLE]: []
   },
   allByStatusUnvetted: {
     [ARCHIVED]: [],
@@ -111,16 +107,18 @@ const updateProposalRfpLinks = (proposal) => (state) => {
   )(state);
 };
 
-const updateInventory = (payload) => (allProps) => ({
-  ...allProps,
-  ...Object.keys(payload).reduce(
-    (res, status) => ({
-      ...res,
-      [status]: [...allProps[status], ...(payload[status] || [])]
-    }),
-    {}
-  )
-});
+const updateInventory = (payload) => (allProps) => {
+  return {
+    ...allProps,
+    ...Object.keys(payload).reduce(
+      (res, status) => ({
+        ...res,
+        [status]: [...allProps[status], ...(payload[status] || [])]
+      }),
+      {}
+    )
+  };
+};
 
 const proposals = (state = DEFAULT_STATE, action) =>
   action.error

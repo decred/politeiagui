@@ -23,7 +23,9 @@ import {
   PUBLIC,
   CENSORED,
   NOJS_ROUTE_PREFIX,
-  PROPOSAL_VOTING_REJECTED
+  PROPOSAL_VOTING_REJECTED,
+  PROPOSAL_VOTING_INELIGIBLE,
+  INELIGIBLE
 } from "../../constants";
 import { getTextFromIndexMd } from "src/helpers";
 import set from "lodash/fp/set";
@@ -380,7 +382,8 @@ export const getProposalStatusLabel = (proposalStatus, isVotingStatus) =>
           [PROPOSAL_VOTING_AUTHORIZED]: AUTHORIZED,
           [PROPOSAL_VOTING_ACTIVE]: ACTIVE_VOTE,
           [PROPOSAL_VOTING_APPROVED]: APPROVED,
-          [PROPOSAL_VOTING_REJECTED]: REJECTED
+          [PROPOSAL_VOTING_REJECTED]: REJECTED,
+          [PROPOSAL_VOTING_INELIGIBLE]: INELIGIBLE
         }
       : {
           [PROPOSAL_STATUS_UNREVIEWED]: UNREVIEWED,

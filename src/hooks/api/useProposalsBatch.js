@@ -72,16 +72,16 @@ export default function useProposalsBatch({
     [unvetted]
   );
   const [remainingTokens, setRemainingTokens] = useState([]);
-  const [{ isVoteStatus, value: status }, setStatus] = useState({});
+  const [status, setStatus] = useState();
   const proposals = useSelector(sel.proposalsByToken);
   const voteSummaries = useSelector(sel.summaryByToken);
   const allByStatus = useSelector(
     unvetted ? sel.allByStatusUnvetted : sel.allByStatus
   );
   const page = useMemo(() => {
-    const tokens = allByStatus[getProposalStatusLabel(status, isVoteStatus)];
+    const tokens = allByStatus[getProposalStatusLabel(status, !unvetted)];
     return getCurrentPage(tokens);
-  }, [status, isVoteStatus, allByStatus]);
+  }, [status, unvetted, allByStatus]);
 
   const [previousPage, setPreviousPage] = useState(0);
 
@@ -110,16 +110,16 @@ export default function useProposalsBatch({
         if (page && page === previousPage) return send(RESOLVE);
         onFetchTokenInventory(recordState, status, page + 1)
           .catch((e) => send(REJECT, e))
-          .then(([proposals, votes]) => {
+          .then(({ vetted, unvetted: unvettedProposals }) => {
             // prepare token batch to fetch proposal for given status
             const proposalStatusLabel = getProposalStatusLabel(
-              proposalStatus ? proposalStatus.value : 1,
-              proposalStatus && proposalStatus.isVoteStatus
+              proposalStatus || 1,
+              !unvetted
             );
             setPreviousPage(page);
-            const tokens = (proposalStatus && proposalStatus.isVoteStatus
-              ? votes
-              : proposals)[recordState][proposalStatusLabel];
+            const tokens = (!unvetted ? vetted : unvettedProposals)[
+              proposalStatusLabel
+            ];
             if (!tokens) return send(RESOLVE);
             setRemainingTokens(tokens);
             return send(VERIFY);
@@ -172,8 +172,8 @@ export default function useProposalsBatch({
 
   const onRestartMachine = (newStatus) => {
     const newStatusLabel = getProposalStatusLabel(
-      !newStatus ? status : newStatus.value,
-      !newStatus ? isVoteStatus : newStatus.isVoteStatus
+      !newStatus ? status : newStatus,
+      !unvetted
     );
     const unfetchedTokens = getUnfetchedTokens(
       proposals,

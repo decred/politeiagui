@@ -15,13 +15,10 @@ const renderProposal = (record) => (
 
 const tabLabels = [
   tabValues.IN_DISCUSSION,
-  tabValues.AUTHORIZED,
   tabValues.VOTING,
   tabValues.APPROVED,
   tabValues.REJECTED,
-  tabValues.PUBLIC,
-  tabValues.ARCHIVED,
-  tabValues.CENSORED
+  tabValues.INELIGIBLE
 ];
 
 const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
@@ -45,10 +42,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       [tabValues.VOTING]: "No proposals voting",
       [tabValues.APPROVED]: "No proposals approved",
       [tabValues.REJECTED]: "No proposals rejected",
-      [tabValues.PUBLIC]: "No public proposals",
-      [tabValues.ARCHIVED]: "No archived proposals",
-      [tabValues.CENSORED]: "No censored proposals",
-      [tabValues.AUTHORIZED]: "No proposals authorized for voting"
+      [tabValues.INELIGIBLE]: "No proposals archived or censored"
     };
     return mapTabToMessage[tab];
   }, []);
