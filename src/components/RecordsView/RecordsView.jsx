@@ -4,7 +4,7 @@ import LazyList from "src/components/LazyList";
 import { getRecordsByTabOption } from "./helpers";
 import HelpMessage from "src/components/HelpMessage";
 import { useConfig } from "src/containers/Config";
-import { NOJS_ROUTE_PREFIX } from "src/constants";
+import { NOJS_ROUTE_PREFIX, PROPOSAL_STATUS_CENSORED } from "src/constants";
 
 const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
   const Item = placeholder;
@@ -15,13 +15,18 @@ const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
   return <>{placeholders}</>;
 };
 
-const getFilteredRecordsAndToken = (records, tokens, tab) => {
+const getFilteredRecordsAndToken = (records, tokens, tab, filterCensored) => {
   const filteredTokens = tokens[tab];
-  const filteredRecords =
+  let filteredRecords =
     (records &&
       filteredTokens &&
       getRecordsByTabOption(records, filteredTokens)) ||
     [];
+  if (filterCensored) {
+    filteredRecords = filteredRecords.filter(
+      ({ status }) => status !== PROPOSAL_STATUS_CENSORED
+    );
+  }
   return [filteredRecords, filteredTokens];
 };
 
@@ -41,7 +46,8 @@ const RecordsView = ({
   index,
   onSetIndex,
   hasMore,
-  statusByTab
+  statusByTab,
+  filterCensored
 }) => {
   const [loadingItems, setLoadingItems] = useState(0);
   const { javascriptEnabled } = useConfig();
@@ -54,8 +60,14 @@ const RecordsView = ({
   );
   const tabOption = tabLabels[index];
   const [filteredRecords, filteredTokens] = useMemo(
-    () => getFilteredRecordsAndToken(records, recordTokensByTab, tabOption),
-    [recordTokensByTab, records, tabOption]
+    () =>
+      getFilteredRecordsAndToken(
+        records,
+        recordTokensByTab,
+        tabOption,
+        filterCensored
+      ),
+    [recordTokensByTab, records, tabOption, filterCensored]
   );
 
   const handleFetchMoreRecords = () => {

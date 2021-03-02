@@ -37,8 +37,8 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
       [tabValues.UNREVIEWED]: "No proposals unreviewed",
-      [tabValues.CENSORED]: "No unvetted proposals censored",
-      [tabValues.ARCHIVED]: "No unvetted proposals archived"
+      [tabValues.CENSORED]: "No proposals censored",
+      [tabValues.ARCHIVED]: "No proposals archived"
     };
     return mapTabToMessage[tab];
   }, []);

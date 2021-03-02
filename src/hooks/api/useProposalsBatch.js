@@ -109,16 +109,14 @@ export default function useProposalsBatch({
         if (page && page === previousPage) return send(RESOLVE);
         onFetchTokenInventory(recordState, status, page + 1, !unvetted)
           .catch((e) => send(REJECT, e))
-          .then(({ vetted, unvetted: unvettedProposals }) => {
+          .then(({ votes, records }) => {
             // prepare token batch to fetch proposal for given status
             const proposalStatusLabel = getProposalStatusLabel(
               proposalStatus || 1,
               !unvetted
             );
             setPreviousPage(page);
-            const tokens = (!unvetted ? vetted : unvettedProposals)[
-              proposalStatusLabel
-            ];
+            const tokens = (!unvetted ? votes : records)[proposalStatusLabel];
             if (!tokens) return send(RESOLVE);
             setRemainingTokens(tokens);
             return send(VERIFY);

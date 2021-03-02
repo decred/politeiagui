@@ -135,11 +135,12 @@ const PublicActions = ({
   );
 };
 
-const ProposalActions = ({ proposal, ...props }) =>
-  proposal.state === PROPOSAL_STATE_UNVETTED ? (
+const ProposalActions = ({ proposal, ...props }) => {
+  return proposal.state === PROPOSAL_STATE_UNVETTED ? (
     <UnvettedActions proposal={proposal} />
   ) : (
     <PublicActions {...{ ...props, proposal }} />
   );
+};
 
 export default ProposalActions;

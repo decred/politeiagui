@@ -516,17 +516,28 @@ export const onFetchTokenInventory = (
         state !== PROPOSAL_STATE_UNVETTED &&
         api.votesInventory(status, page)
     ]).then(([proposals, votes]) => {
-      const unvetted = {
+      const byRecords = {
         [UNREVIEWED]:
           (proposals && proposals.unvetted && proposals.unvetted.unreviewed) ||
           [],
-        [CENSORED]:
-          (proposals && proposals.unvetted && proposals.unvetted.censored) ||
-          [],
-        [ARCHIVED]:
-          (proposals && proposals.unvetted && proposals.unvetted.archived) || []
+        [CENSORED]: [
+          ...((proposals && proposals.vetted && proposals.vetted.censored) ||
+            []),
+          ...((proposals &&
+            proposals.unvetted &&
+            proposals.unvetted.censored) ||
+            [])
+        ],
+        [ARCHIVED]: [
+          ...((proposals && proposals.vetted && proposals.vetted.archived) ||
+            []),
+          ...((proposals &&
+            proposals.unvetted &&
+            proposals.unvetted.archived) ||
+            [])
+        ]
       };
-      const vetted = {
+      const byVotes = {
         [PRE_VOTE]: [
           ...((votes && votes.vetted && votes.vetted.authorized) || []),
           ...((votes && votes.vetted && votes.vetted.unauthorized) || [])
@@ -536,9 +547,9 @@ export const onFetchTokenInventory = (
         [REJECTED]: (votes && votes.vetted && votes.vetted.rejected) || [],
         [INELIGIBLE]: (votes && votes.vetted && votes.vetted.ineligible) || []
       };
-      dispatch(act.RECEIVE_RECORDS_INVENTORY(unvetted));
-      dispatch(act.RECEIVE_VOTES_INVENTORY(vetted));
-      return { unvetted, vetted };
+      dispatch(act.RECEIVE_RECORDS_INVENTORY(byRecords));
+      dispatch(act.RECEIVE_VOTES_INVENTORY(byVotes));
+      return { records: byRecords, votes: byVotes };
     });
   } catch (error) {
     dispatch(act.RECEIVE_VOTES_INVENTORY(null, error));

@@ -11,7 +11,7 @@ export const tabValues = {
   VOTING: "Voting",
   APPROVED: "Approved",
   REJECTED: "Rejected",
-  INELIGIBLE: "Ineligible"
+  INELIGIBLE: "Abandoned"
 };
 
 export const noProposalMessage = "No proposals available";
