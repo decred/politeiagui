@@ -170,7 +170,8 @@ export const isVotingAuthorizedProposal = (voteSummary) =>
 export const isVotingFinishedProposal = (voteSummary) =>
   !!voteSummary &&
   (voteSummary.status === PROPOSAL_VOTING_FINISHED ||
-    voteSummary.status === PROPOSAL_VOTING_APPROVED);
+    voteSummary.status === PROPOSAL_VOTING_APPROVED ||
+    voteSummary.status === PROPOSAL_VOTING_REJECTED);
 
 /**
  * Returns true if the given proposal is editable

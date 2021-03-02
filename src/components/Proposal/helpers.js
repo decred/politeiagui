@@ -3,6 +3,7 @@ import {
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_NOT_AUTHORIZED,
   PROPOSAL_VOTING_APPROVED,
+  PROPOSAL_VOTING_REJECTED,
   PROPOSAL_VOTING_FINISHED
 } from "src/constants";
 import {
@@ -52,6 +53,11 @@ export const getProposalStatusTagProps = (
           type: isDarkTheme ? "blueNegative" : "grayNegative",
           text: "Finished"
         };
+      case PROPOSAL_VOTING_REJECTED:
+        return {
+          type: "orangeNegativeCircled",
+          text: "Rejected"
+        };
       case PROPOSAL_VOTING_APPROVED:
         return { type: "greenCheck", text: "Approved" };
       default:
@@ -60,7 +66,10 @@ export const getProposalStatusTagProps = (
   }
 
   if (isAbandonedProposal(proposal)) {
-    return { type: "orangeNegativeCircled", text: "Abandoned" };
+    return {
+      type: isDarkTheme ? "blueNegative" : "grayNegative",
+      text: "Abandoned"
+    };
   }
 
   return { type: "grayNegative", text: "missing" };

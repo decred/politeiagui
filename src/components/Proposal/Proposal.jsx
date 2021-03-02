@@ -135,7 +135,7 @@ const Proposal = React.memo(function Proposal({
   const isRfpSubmission = !!linkto || type === PROPOSAL_TYPE_RFP_SUBMISSION;
   const isRfpActive = isRfp && isActiveRfp(linkby);
   const isNotExtendedRfpOrSubmission = (isRfp || isRfpSubmission) && !extended;
-  const hasvoteSummary = !!voteSummary && !!voteSummary.endblockheight;
+  const hasVoteSummary = !!voteSummary && !!voteSummary.endblockheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
   const {
     proposalURL,
@@ -327,7 +327,7 @@ const Proposal = React.memo(function Proposal({
                 <RecordToken token={proposalToken} isCopyable />
               </Row>
             )}
-            {hasvoteSummary && (
+            {hasVoteSummary && (
               <Row>
                 <StatusBar
                   max={getQuorumInVotes(voteSummary)}
