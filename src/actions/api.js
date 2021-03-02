@@ -521,11 +521,11 @@ export const onFetchTokenInventory = (
           (proposals && proposals.unvetted && proposals.unvetted.unreviewed) ||
           [],
         [CENSORED]: [
-          ...((proposals && proposals.vetted && proposals.vetted.censored) ||
-            []),
           ...((proposals &&
             proposals.unvetted &&
             proposals.unvetted.censored) ||
+            []),
+          ...((proposals && proposals.vetted && proposals.vetted.censored) ||
             [])
         ],
         [ARCHIVED]: [

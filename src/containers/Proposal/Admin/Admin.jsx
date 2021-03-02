@@ -4,7 +4,10 @@ import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { tabValues, mapProposalsTokensByTab, statusByTab } from "./helpers";
 // XXX change to AdminActionsProvider
-import { UnvettedActionsProvider } from "src/containers/Proposal/Actions";
+import {
+  UnvettedActionsProvider,
+  PublicActionsProvider
+} from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
 import { LIST_HEADER_ADMIN } from "src/constants";
 
@@ -31,6 +34,7 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
     fetchRfpLinks: true,
     fetchVoteSummaries: false,
     unvetted: true,
+    isByRecordStatus: true,
     status: statusByTab[tabLabels[tabIndex]]
   });
 
@@ -70,9 +74,11 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
             <PageDetails title={LIST_HEADER_ADMIN}>{tabs}</PageDetails>
           </TopBanner>
           <Main fillScreen>
-            <UnvettedActionsProvider>
-              {proposalsTokens && content}
-            </UnvettedActionsProvider>
+            <PublicActionsProvider>
+              <UnvettedActionsProvider>
+                {proposalsTokens && content}
+              </UnvettedActionsProvider>
+            </PublicActionsProvider>
           </Main>
         </>
       )}

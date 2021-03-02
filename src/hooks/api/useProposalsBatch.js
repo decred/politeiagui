@@ -65,18 +65,19 @@ export default function useProposalsBatch({
   fetchRfpLinks,
   fetchVoteSummaries = false,
   unvetted = false,
+  isByRecordStatus = false,
   proposalStatus
 }) {
-  const recordState = useMemo(
-    () => (unvetted ? PROPOSAL_STATE_UNVETTED : PROPOSAL_STATE_VETTED),
-    [unvetted]
+  const [recordState, setRecordState] = useState(
+    unvetted ? PROPOSAL_STATE_UNVETTED : PROPOSAL_STATE_VETTED
   );
+
   const [remainingTokens, setRemainingTokens] = useState([]);
   const [status, setStatus] = useState();
   const proposals = useSelector(sel.proposalsByToken);
   const voteSummaries = useSelector(sel.summaryByToken);
   const allByStatus = useSelector(
-    unvetted ? sel.allByRecordStatus : sel.allByVoteStatus
+    isByRecordStatus ? sel.allByRecordStatus : sel.allByVoteStatus
   );
   const page = useMemo(() => {
     const tokens = allByStatus[getProposalStatusLabel(status, !unvetted)];
@@ -113,10 +114,12 @@ export default function useProposalsBatch({
             // prepare token batch to fetch proposal for given status
             const proposalStatusLabel = getProposalStatusLabel(
               proposalStatus || 1,
-              !unvetted
+              !isByRecordStatus
             );
             setPreviousPage(page);
-            const tokens = (!unvetted ? votes : records)[proposalStatusLabel];
+            const tokens = (!isByRecordStatus ? votes : records)[
+              proposalStatusLabel
+            ];
             if (!tokens) return send(RESOLVE);
             setRemainingTokens(tokens);
             return send(VERIFY);
@@ -148,7 +151,15 @@ export default function useProposalsBatch({
                   return send(FETCH);
                 }
               }
-              setRemainingTokens(next);
+              const unfetchedTokens = getUnfetchedTokens(proposals, fetch);
+              if (!isEmpty(unfetchedTokens)) {
+                setRecordState(
+                  recordState === PROPOSAL_STATE_UNVETTED
+                    ? PROPOSAL_STATE_VETTED
+                    : PROPOSAL_STATE_UNVETTED
+                );
+              }
+              setRemainingTokens([...unfetchedTokens, ...next]);
               return send(RESOLVE);
             })
             .catch((e) => send(REJECT, e));
