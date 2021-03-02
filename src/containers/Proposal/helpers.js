@@ -284,8 +284,8 @@ export const getProposalToken = (proposal) =>
 export const getProposalUrl = (token, isJsEnabled, state) => {
   const stateStr = state === PROPOSAL_STATE_VETTED ? "vetted" : "unvetted";
   return isJsEnabled
-    ? `/proposals/${state}/${token.substring(0, 7)}`
-    : `${NOJS_ROUTE_PREFIX}/proposals/${stateStr}/${token}`;
+    ? `/records/${state}/${token.substring(0, 7)}`
+    : `${NOJS_ROUTE_PREFIX}/records/${stateStr}/${token}`;
 };
 
 /**
@@ -298,8 +298,8 @@ export const getProposalUrl = (token, isJsEnabled, state) => {
 export const getCommentsUrl = (token, isJsEnabled, state) => {
   const stateStr = state === PROPOSAL_STATE_VETTED ? "vetted" : "unvetted";
   return isJsEnabled
-    ? `/proposals/${stateStr}/${token.substring(0, 7)}?scrollToComments=true`
-    : `${NOJS_ROUTE_PREFIX}/proposals/${stateStr}/${token}?scrollToComments=true`;
+    ? `/records/${stateStr}/${token.substring(0, 7)}?scrollToComments=true`
+    : `${NOJS_ROUTE_PREFIX}/records/${stateStr}/${token}?scrollToComments=true`;
 };
 
 /**
@@ -396,7 +396,7 @@ export const getProposalStatusLabel = (proposalStatus, isVotingStatus) =>
 
 export const getProposalLink = (proposal) =>
   proposal
-    ? `/proposals/${getProposalStateLabel(
+    ? `/records/${getProposalStateLabel(
         proposal.state
       )}/${proposal.censorshiprecord.token.substring(0, 7)}`
     : "";

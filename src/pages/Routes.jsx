@@ -43,49 +43,49 @@ const Routes = ({ location }) => {
           />
           {/* Record routes */}
           <AdminAuthenticatedRoute
-            path={"/proposals/admin"}
+            path={"/records/admin"}
             title={LIST_HEADER_ADMIN}
             exact
             component={PageProposalsAdmin}
           />
           <AuthenticatedRoute
-            path={"/proposals/new"}
+            path={"/records/new"}
             title={"New Proposal"}
             exact
             render={PageProposalNew}
           />
           <Route
-            path={"/proposals/vetted/:token"}
+            path={"/records/vetted/:token"}
             title={"Proposal Detail"}
             exact
             component={PageProposalVettedDetail}
           />
           <Route
-            path={"/proposals/unvetted/:token"}
+            path={"/records/unvetted/:token"}
             title={"Proposal Detail"}
             exact
             component={PageProposalUnvettedDetail}
           />
           <Route
-            path={"/proposals/vetted/:token/comments/:commentid"}
+            path={"/records/vetted/:token/comments/:commentid"}
             title={"Proposal Detail"}
             exact
             component={PageProposalVettedDetail}
           />
           <Route
-            path={"/proposals/unvetted/:token/comments/:commentid"}
+            path={"/records/unvetted/:token/comments/:commentid"}
             title={"Proposal Detail"}
             exact
             component={PageProposalUnvettedDetail}
           />
           <AuthenticatedRoute
-            path={"/proposals/vetted/:token/edit"}
+            path={"/records/vetted/:token/edit"}
             title={"Edit Proposal"}
             exact
             render={PageVettedProposalEdit}
           />
           <AuthenticatedRoute
-            path={"/proposals/unvetted/:token/edit"}
+            path={"/records/unvetted/:token/edit"}
             title={"Edit Proposal"}
             exact
             render={PageUnvettedProposalEdit}

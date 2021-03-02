@@ -37,7 +37,7 @@ Cypress.Commands.add("assertProposalPage", (proposal) => {
   cy.findByText(proposal.name, { timeout: 20000 }).should("be.visible");
   cy.url().should(
     "eq",
-    `${Cypress.config().baseUrl}/proposals/${proposal.token.substring(0, 7)}`
+    `${Cypress.config().baseUrl}/records/${proposal.token.substring(0, 7)}`
   );
 });
 

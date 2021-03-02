@@ -228,7 +228,7 @@ const Proposal = React.memo(function Proposal({
               edit={
                 isEditable ? (
                   <Edit
-                    url={`/proposals/${
+                    url={`/records/${
                       state === PROPOSAL_STATE_VETTED ? "vetted" : "unvetted"
                     }/${proposalToken}/edit`}
                   />

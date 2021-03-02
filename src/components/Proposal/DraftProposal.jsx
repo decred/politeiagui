@@ -19,7 +19,7 @@ const DraftProposal = ({ draft, onDelete }) => {
                   id={`proposal-title-${draftId}`}
                   truncate
                   linesBeforeTruncate={2}
-                  url={`/proposals/new?draft=${draftId}`}>
+                  url={`/records/new?draft=${draftId}`}>
                   {name}
                 </Title>
               }
@@ -32,7 +32,7 @@ const DraftProposal = ({ draft, onDelete }) => {
                   </button>
                 </Status>
               }
-              edit={<Edit url={`/proposals/new?draft=${draftId}`} />}
+              edit={<Edit url={`/records/new?draft=${draftId}`} />}
               subtitle={
                 <Subtitle>
                   <Event keepOnMobile event="edited" timestamp={timestamp} />
