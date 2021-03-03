@@ -95,9 +95,12 @@ export function useProposal(token, proposalState, threadParentID) {
             .catch((e) => send(REJECT, e));
           return send(FETCH);
         }
-        if (!isEmpty(unfetchedSummariesTokens)) {
+        if (
+          !isEmpty(unfetchedSummariesTokens) &&
+          proposal?.state === PROPOSAL_STATE_VETTED
+        ) {
           onFetchProposalsVoteSummary(unfetchedSummariesTokens)
-            .then(send(VERIFY))
+            .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
           return send(FETCH);
         }
