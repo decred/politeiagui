@@ -108,7 +108,7 @@ const updateInventory = (payload) => (allProps) => {
     ...Object.keys(payload).reduce(
       (res, status) => ({
         ...res,
-        [status]: [...allProps[status], ...(payload[status] || [])]
+        [status]: [...(allProps[status] || []), ...(payload[status] || [])]
       }),
       {}
     )
@@ -146,7 +146,8 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 ["byToken", proposalToken(action.payload)],
                 parseRawProposal({
                   ...action.payload,
-                  files: [...action.payload.files, indexFile]
+                  files: [...action.payload.files, indexFile],
+                  commentsCount: 0
                 })
               ),
               update(

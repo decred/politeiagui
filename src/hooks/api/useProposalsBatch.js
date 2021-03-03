@@ -52,10 +52,10 @@ const getRfpSubmissions = (proposals) =>
 const getUnfetchedTokens = (proposals, tokens) =>
   difference(tokens)(keys(proposals));
 
-const getTokensForProposalsPagination = (tokens) => [
-  take(PROPOSAL_PAGE_SIZE)(tokens),
-  takeRight(tokens.length - PROPOSAL_PAGE_SIZE)(tokens)
-];
+const getTokensForProposalsPagination = (
+  tokens,
+  pageSize = PROPOSAL_PAGE_SIZE
+) => [take(pageSize)(tokens), takeRight(tokens.length - pageSize)(tokens)];
 
 const getCurrentPage = (tokens) => {
   return tokens ? Math.floor(+tokens.length / INVENTORY_PAGE_SIZE) : 0;
@@ -66,7 +66,8 @@ export default function useProposalsBatch({
   fetchVoteSummaries = false,
   unvetted = false,
   isByRecordStatus = false,
-  proposalStatus
+  proposalStatus,
+  proposalPageSize = PROPOSAL_PAGE_SIZE
 }) {
   const [recordState, setRecordState] = useState(
     unvetted ? PROPOSAL_STATE_UNVETTED : PROPOSAL_STATE_VETTED
@@ -129,7 +130,8 @@ export default function useProposalsBatch({
       verify: () => {
         if (hasRemainingTokens) {
           const [fetch, next] = getTokensForProposalsPagination(
-            remainingTokens
+            remainingTokens,
+            proposalPageSize
           );
           onFetchProposalsBatch(fetch, recordState, fetchVoteSummaries)
             .then(([proposals]) => {

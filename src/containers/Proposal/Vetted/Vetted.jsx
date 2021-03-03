@@ -33,7 +33,8 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummaries: true,
-    proposalStatus: statusByTab[tabLabels[index]]
+    proposalStatus: statusByTab[tabLabels[index]],
+    proposalPageSize: 4
   });
 
   const getEmptyMessage = useCallback((tab) => {
