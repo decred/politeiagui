@@ -23,7 +23,9 @@ import {
   APPROVED,
   REJECTED,
   INELIGIBLE,
-  ARCHIVED
+  ARCHIVED,
+  PROPOSAL_METADATA_FILENAME,
+  VOTE_METADATA_FILENAME
 } from "../constants";
 import { parseReceivedProposalsMap, parseRawProposal } from "src/helpers";
 
@@ -421,7 +423,7 @@ export const onFetchProposalsBatchWithoutState = (
       fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens)
     ]);
     const proposals =
-      fetchProposals && res.find((res) => res && res.proposals).proposals;
+      fetchProposals && res.find((res) => res && res.records).records;
     const parsedProposals = proposals && parseReceivedProposalsMap(proposals);
     const summaries =
       fetchVoteSummary && res.find((res) => res && res.summaries).summaries;
@@ -441,16 +443,20 @@ export const onFetchProposalDetailsWithoutState = (
 export const onFetchProposalsBatch = (tokens, state, fetchVoteSummary = true) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
+    const requests = tokens?.map((token) => ({
+      token,
+      filenames: [PROPOSAL_METADATA_FILENAME, VOTE_METADATA_FILENAME]
+    }));
     try {
       const response = await Promise.all([
         api.proposalsBatch(csrf, {
-          tokens,
+          requests,
           state
         }),
         fetchVoteSummary && dispatch(onFetchProposalsBatchVoteSummary(tokens)),
         api.commentsCount(tokens, state)
       ]);
-      const proposals = response.find((res) => res && res.proposals).proposals;
+      const proposals = response.find((res) => res && res.records).records;
       const summaries =
         fetchVoteSummary &&
         response.find((res) => res && res.summaries).summaries;

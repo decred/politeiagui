@@ -30,7 +30,6 @@ const STATUS_ERR = {
 export const TOP_LEVEL_COMMENT_PARENTID = 0;
 
 const apiBase = "/api/";
-const apiPi = `${apiBase}pi/`;
 const apiRecords = `${apiBase}records/`;
 const apiTicketVote = `${apiBase}ticketvote/`;
 const apiComments = `${apiBase}comments/`;
@@ -521,7 +520,7 @@ export const searchUser = (obj) =>
   GET(`/users?${qs.stringify(obj)}`).then(getResponse);
 
 export const proposalsBatch = (csrf, payload) =>
-  POST("/proposals", csrf, payload, apiPi).then(getResponse);
+  POST("/records", csrf, payload, apiRecords).then(getResponse);
 
 export const proposalDetails = (payload) =>
   POST("/details", "", payload, apiRecords).then(getResponse);
