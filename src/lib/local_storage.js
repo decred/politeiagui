@@ -41,6 +41,12 @@ export const clearStateLocalStorage = (uuid) => {
   localStorage.removeItem(key);
 };
 
+export const handleSaveVotesTimetamps = (token, timestamps) =>
+  saveStateLocalStorage(timestamps, `${token}-votes-timestamps`);
+
+export const loadVotesTimestamps = (token) =>
+  loadStateLocalStorage(`${token}-votes-timestamps`);
+
 export const handleSaveAppDraftProposals = (state) => {
   const uuid = currentUserID(state);
   if (!uuid) {

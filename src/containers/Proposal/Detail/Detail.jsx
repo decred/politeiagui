@@ -40,6 +40,7 @@ const ProposalDetail = ({ Main, match, state }) => {
   const { voteSummary } = useProposalVote(proposalToken);
   const canReceiveComments =
     !isVotingFinishedProposal(voteSummary) && !isAbandonedProposal(proposal);
+
   return (
     <>
       <Main className={styles.customMain} fillScreen>

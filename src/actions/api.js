@@ -479,20 +479,36 @@ export const onFetchProposalDetails = (token, state, version) => async (
 ) => {
   dispatch(act.REQUEST_PROPOSALS_BATCH(token));
   try {
-    const response = await api.proposalDetails({ token, state, version });
-    const { linkby } = parseRawProposal(response.record);
+    const response = await Promise.all([
+      api.proposalDetails({ token, state, version }),
+      api.commentsCount([token], state)
+    ]);
+    const record = response.find((res) => res && res.record).record;
+    const commentsCount = response.find((res) => res && res.counts).counts;
+    const { linkby } = parseRawProposal(record);
     if (linkby) {
       const { submissions } = await api.proposalSubmissions(token);
       dispatch(
         act.RECEIVE_PROPOSALS_BATCH({
           proposals: {
-            [token]: { ...response.record, linkedfrom: submissions }
+            [token]: {
+              ...record,
+              linkedfrom: submissions,
+              commentsCount: commentsCount[token]
+            }
           }
         })
       );
     } else {
       dispatch(
-        act.RECEIVE_PROPOSALS_BATCH({ proposals: { [token]: response.record } })
+        act.RECEIVE_PROPOSALS_BATCH({
+          proposals: {
+            [token]: {
+              ...record,
+              commentsCount: commentsCount[token]
+            }
+          }
+        })
       );
     }
     return response.record;
@@ -1698,5 +1714,5 @@ export const onFetchCommentsTimestamps = (token, state, commentsids) =>
   );
 
 // Ticket Vote actions
-export const onFetchTicketVoteTimestamps = (token) =>
-  withCsrf((__, _, csrf) => api.ticketVoteTimestamps(csrf, token));
+export const onFetchTicketVoteTimestamps = (token, votespage) =>
+  withCsrf((__, _, csrf) => api.ticketVoteTimestamps(csrf, token, votespage));

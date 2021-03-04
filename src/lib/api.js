@@ -624,8 +624,10 @@ export const proposalVoteResults = (csrf, token) =>
 export const proposalSubmissions = (token) =>
   POST("/submissions", "", { token }, apiTicketVote).then(getResponse);
 
-export const ticketVoteTimestamps = (csrf, token) =>
-  POST("/timestamps", csrf, { token }, apiTicketVote).then(getResponse);
+export const ticketVoteTimestamps = (csrf, token, votespage) =>
+  POST("/timestamps", csrf, { token, votespage }, apiTicketVote).then(
+    getResponse
+  );
 
 export const proposalAuthorizeOrRevokeVote = (
   csrf,

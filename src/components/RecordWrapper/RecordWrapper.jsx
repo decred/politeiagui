@@ -274,7 +274,7 @@ export const DownloadTimestamps = ({ token, version, state, label }) => {
 };
 
 export const LinkSection = ({ children, className, title }) => (
-  <Dropdown className={className} title={title}>
+  <Dropdown className={className} title={title} closeOnItemClick={false}>
     {React.Children.toArray(children).map((link, i) => (
       <DropdownItem key={i}>{link}</DropdownItem>
     ))}
