@@ -106,9 +106,16 @@ CommentsUserError.prototype = new Error();
 
 function TicketvoteUserError(code) {
   const errorMap = {
-    1: "Invalid inputs for request",
-    2: "The provided user public key is not active",
-    3: "Unauthorized operation"
+    0: "Invalid vote error.",
+    1: "Internal server error.",
+    2: "Invalid record token.",
+    3: "Record not found.",
+    4: "You cannot cast votes for multiple records. A ballot can only contain votes for a single record at a time.",
+    5: "Invalid vote status. You can only cast votes on records with an active voting",
+    6: "The provided vote bit is invalid",
+    7: "The provided vote signature is invalid",
+    8: "Ticket not eligible",
+    9: "The provided ticket has already voted"
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, APITicketvote);
