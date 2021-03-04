@@ -29,7 +29,8 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
     loading,
     verifying,
     onRestartMachine,
-    hasMoreProposals
+    hasMoreProposals,
+    onFetchMoreProposals
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummaries: false,
@@ -60,10 +61,9 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
       renderRecord={renderProposal}
       displayTabCount={!!proposalsTokens}
       placeholder={ProposalLoader}
-      statusByTab={statusByTab}
       index={tabIndex}
       onSetIndex={handleSetIndex}
-      onFetchMoreProposals={onRestartMachine}
+      onFetchMoreProposals={onFetchMoreProposals}
       dropdownTabsForMobile={true}
       hasMore={hasMoreProposals}
       isLoading={loading || verifying}

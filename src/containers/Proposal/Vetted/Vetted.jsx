@@ -29,7 +29,8 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     loading,
     verifying,
     onRestartMachine,
-    hasMoreProposals
+    hasMoreProposals,
+    onFetchMoreProposals
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummaries: true,
@@ -84,10 +85,9 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       displayTabCount={!!proposalsTokens}
       placeholder={ProposalLoader}
       getEmptyMessage={getEmptyMessage}
-      statusByTab={statusByTab}
       index={index}
       onSetIndex={handleSetIndex}
-      onFetchMoreProposals={onRestartMachine}
+      onFetchMoreProposals={onFetchMoreProposals}
       dropdownTabsForMobile={true}
       filterCensored={true}
       hasMore={hasMoreProposals}

@@ -46,7 +46,6 @@ const RecordsView = ({
   index,
   onSetIndex,
   hasMore,
-  statusByTab,
   filterCensored
 }) => {
   const [loadingItems, setLoadingItems] = useState(0);
@@ -72,7 +71,7 @@ const RecordsView = ({
 
   const handleFetchMoreRecords = () => {
     if (!filteredTokens || isLoading) return;
-    onFetchMoreProposals && onFetchMoreProposals(statusByTab[tabLabels[index]]);
+    onFetchMoreProposals && onFetchMoreProposals();
     setLoadingItems(4);
   };
 

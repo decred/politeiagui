@@ -187,7 +187,7 @@ export default function useProposalsBatch({
     );
     const unfetchedTokens = getUnfetchedTokens(
       proposals,
-      uniq([...(allByStatus[newStatusLabel] || []), ...(remainingTokens || [])])
+      uniq(allByStatus[newStatusLabel] || [])
     );
     if (isEmpty(remainingTokens) && isEmpty(unfetchedTokens) && !page) {
       // stop condition
