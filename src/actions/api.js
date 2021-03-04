@@ -413,10 +413,14 @@ export const onFetchProposalsBatchWithoutState = (
   fetchVoteSummary = true
 ) =>
   withCsrf(async (_, __, csrf) => {
+    const requests = tokens?.map((token) => ({
+      token,
+      filenames: [PROPOSAL_METADATA_FILENAME, VOTE_METADATA_FILENAME]
+    }));
     const res = await Promise.all([
       fetchProposals &&
         api.proposalsBatch(csrf, {
-          tokens,
+          requests,
           state,
           includefiles: true
         }),
