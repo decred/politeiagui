@@ -146,8 +146,7 @@ const ManageDccForm = ({ onUpdate, user }) => {
                       onChange={handleChangeUserSelector}
                       options={supervisorsOptions}
                       style={multipleSelectStyles}
-                      clearable
-
+                      clearable={false}
                     />
                   }
                   error={supervisorsError}
@@ -163,7 +162,7 @@ const ManageDccForm = ({ onUpdate, user }) => {
                       onChange={handleChangeOwnedProposals}
                       options={proposalsOptions}
                       style={multipleSelectStyles}
-                      clearable
+                      clearable={false}
                     />
                   }
                 />

@@ -23,7 +23,7 @@ const SearchSelector = ({ onChange, value, className, styles: extStyles }) => {
       options={options}
       styles={extStyles}
       searchable
-      clearable
+      clearable={false}
       noOptionsMessage={
         inputValue === ""
           ? "Insert a username or email"
