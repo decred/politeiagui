@@ -227,7 +227,7 @@
 //   //     headers: correctHeaders
 //   //   };
 //   //   let response = makeApiResponse(initResponse, correctBody);
-//   //   response.url = "/api/records/v1/";
+//   //   response.url = "/api/record/v1/";
 
 //   //   let parsedResponse = await api.parseResponse(response);
 //   //   expect(parsedResponse).toEqual({
@@ -236,7 +236,7 @@
 //   //       "6284c5f8fba5665373b8e6651ebc8747b289fed242d2f880f64a284496bb4ca9"
 //   //   });
 //   //   response = makeApiResponse(initResponse, { errorcode: 1 });
-//   //   response.url = "/api/records/v1/";
+//   //   response.url = "/api/record/v1/";
 
 //   //   try {
 //   //     parsedResponse = await api.parseResponse(response);
@@ -251,7 +251,7 @@
 //   //     headers: invalidHeaders
 //   //   };
 //   //   response = makeApiResponse(initResponse, correctBody);
-//   //   response.url = "/api/records/v1/";
+//   //   response.url = "/api/record/v1/";
 
 //   //   try {
 //   //     parsedResponse = await api.parseResponse(response);
@@ -266,7 +266,7 @@
 //   //     headers: correctHeaders
 //   //   };
 //   //   response = makeApiResponse(initResponse, correctBody);
-//   //   response.url = "/api/records/v1/";
+//   //   response.url = "/api/record/v1/";
 
 //   //   try {
 //   //     parsedResponse = await api.parseResponse(response);

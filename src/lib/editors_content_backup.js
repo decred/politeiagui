@@ -5,7 +5,7 @@ import qs from "query-string";
 import { getCurrentMonth, getCurrentYear } from "../helpers";
 import { generateBlankLineItem } from "../components/InvoiceDatasheet/helpers";
 
-export const NEW_PROPOSAL_PATH = "/records/new";
+export const NEW_PROPOSAL_PATH = "/record/new";
 
 export const getProposalPath = (location) => {
   const { pathname, search } = location;

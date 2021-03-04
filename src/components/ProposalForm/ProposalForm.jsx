@@ -366,12 +366,12 @@ const ProposalFormWrapper = ({
         // proposal's state to determine the proposal state.
         // Also, we use short prefix when navigating to propsoal page
         history.push(
-          `/records/${
+          `/record${
             isCreate
-              ? "unvetted"
+              ? "/unvetted"
               : proposalState === PROPOSAL_STATE_VETTED
-              ? "vetted"
-              : "unvetted"
+              ? ""
+              : "/unvetted"
           }/${proposalToken.substring(0, 7)}`
         );
         resetForm();

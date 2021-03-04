@@ -166,9 +166,8 @@ const PublicActionsProvider = ({ children }) => {
       successMessage: (
         <Text>
           The proposal has been successfully censored! Now it will appear under
-          under{" "}
-          <Link to={"/records/admin?tab=unvetted censored"}>Censored</Link> tab
-          among Admin Proposals.
+          under <Link to={"/record/admin?tab=unvetted censored"}>Censored</Link>{" "}
+          tab among Admin Proposals.
         </Text>
       ),
       onClose: handleCloseModal

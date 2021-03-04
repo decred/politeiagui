@@ -13,7 +13,7 @@ const PageProposalEdit = ({ history, match }) => {
       type="button"
       kind="secondary"
       size={mobile ? "sm" : "md"}
-      onClick={() => history.push(`/records/unvetted/${match.params.token}`)}>
+      onClick={() => history.push(`/record/unvetted/${match.params.token}`)}>
       Cancel
     </Button>
   );

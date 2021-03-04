@@ -4,6 +4,9 @@ import flow from "lodash/fp/flow";
 import filter from "lodash/fp/filter";
 import gte from "lodash/fp/gt";
 import range from "lodash/fp/range";
+import map from "lodash/fp/map";
+import reduce from "lodash/fp/reduce";
+import compose from "lodash/fp/compose";
 import * as pki from "./lib/pki";
 import { sha3_256 } from "js-sha3";
 import { capitalize } from "./utils/strings";
@@ -25,7 +28,8 @@ import {
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_ARCHIVED,
-  VOTE_METADATA_FILENAME
+  VOTE_METADATA_FILENAME,
+  USER_METADATA_PLUGIN
 } from "./constants.js";
 
 // XXX find usage and ensure this still works as expected
@@ -106,6 +110,18 @@ const parseVoteMetadata = (proposal = {}) => {
     proposal.files.find((f) => f.name === VOTE_METADATA_FILENAME);
   return metadata ? JSON.parse(atob(metadata.payload)) : {};
 };
+// parseUserMetadata accepts a proposal object parses it's metadata
+// and returns it as object of the form { userid, token }
+//
+// censored proposals won't have metadata, in this case this function will
+// return an empty object
+const parseUserPluginMetadata = (proposal = {}) =>
+  compose(
+    reduce((acc, curr) => ({ ...acc, ...curr }), {}),
+    map(({ payload }) => JSON.parse(payload)),
+    filter(({ pluginid }) => pluginid === USER_METADATA_PLUGIN),
+    get("metadata")
+  )(proposal);
 
 // parseProposalIndexFile accepts a proposal object parses it's metadata
 // and returns it as object of the form { description }
@@ -130,11 +146,13 @@ export const parseRawProposal = (proposal) => {
   const { name } = parseProposalMetadata(proposal);
   const { linkby, linkto } = parseVoteMetadata(proposal);
   const { description } = parseProposalIndexFile(proposal);
+  const { userid } = parseUserPluginMetadata(proposal);
   return {
     ...proposal,
     description: description || proposal.description,
     name: name || proposal.name,
     linkby,
+    userid: userid || proposal.userid,
     linkto,
     publishedat,
     censoredat,

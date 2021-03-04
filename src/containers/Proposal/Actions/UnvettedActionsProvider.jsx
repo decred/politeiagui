@@ -25,9 +25,8 @@ const UnvettedActionsProvider = ({ children, history }) => {
       successMessage: (
         <Text>
           The proposal has been successfully censored! Now it will appear under
-          under{" "}
-          <Link to={"/records/admin?tab=unvetted censored"}>Censored</Link> tab
-          among Admin Proposals.
+          under <Link to={"/record/admin?tab=unvetted censored"}>Censored</Link>{" "}
+          tab among Admin Proposals.
         </Text>
       ),
       onClose: handleClose
@@ -40,7 +39,7 @@ const UnvettedActionsProvider = ({ children, history }) => {
     };
     const handleCloseSuccess = () => {
       handleCloseModal();
-      history.push(`/records/vetted/${proposal.censorshiprecord.token}`);
+      history.push(`/record/${proposal.censorshiprecord.token}`);
     };
     handleOpenModal(ModalConfirm, {
       title: `Approve proposal - ${proposal.name}`,

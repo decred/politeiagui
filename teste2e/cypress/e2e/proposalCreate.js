@@ -12,7 +12,7 @@ describe("Proposals", () => {
     cy.login(user);
     cy.visit("/");
     cy.identity();
-    cy.visit("/records/new");
+    cy.visit("/record/new");
     cy.typeCreateProposal(proposal);
   });
 
@@ -25,7 +25,7 @@ describe("Proposals", () => {
     cy.login(user);
     cy.visit("/");
     cy.findByText(/new proposal/i).should("be.disabled");
-    cy.visit("/records/new");
+    cy.visit("/record/new");
     cy.findByText(
       /you won't be able to submit comments or proposals before paying the paywall/i
     ).should("be.visible");
