@@ -239,14 +239,33 @@ export const RfpProposalLink = ({ url, rfpTitle }) => {
   );
 };
 
-export const DownloadRecord = DownloadJSON;
+export const DownloadRecord = ({ content, fileName, label, serverpubkey }) => {
+  // Build proposal data to match record type on backend.
+  const proposal = {
+    state: content.state,
+    status: content.status,
+    version: content.version,
+    timestamp: content.timestamp,
+    username: content.username,
+    metadata: content.metadata,
+    files: content.files,
+    censorshiprecord: content.censorshiprecord,
+    serverpubkey
+  };
+  return (
+  <DownloadJSON
+    fileName={fileName}
+    label={label}
+    content={proposal}
+  />);
+};
 
 export const DownloadTimestamps = ({ token, version, state, label }) => {
   const { onFetchRecordTimestamps } = useTimestamps();
   return (
     <DownloadJSON
       label={label}
-      fileName={`timestamps-${token ? token.substring(0, 7) : ""}-v${version}`}
+      fileName={`${token}-v${version}-timestamps`}
       isAsync={true}
       content={[]}
       beforeDownload={() => onFetchRecordTimestamps(token, state, version)}

@@ -30,9 +30,7 @@ const DownloadComments = ({
       <DownloadJSON
         label={label}
         isAsync={true}
-        fileName={`timestamp-${
-          recordToken ? recordToken.substring(0, 7) : ""
-        }-comments`}
+        fileName={`${recordToken}-comments-timestamps`}
         beforeDownload={() => onFetchCommentsTimestamps(recordToken, state)}
         content={[]}
       />
