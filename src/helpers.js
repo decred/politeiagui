@@ -155,6 +155,7 @@ export const parseRawProposal = (proposal) => {
     userid: userid || proposal.userid,
     linkto,
     publishedat,
+    commentsCount: proposal.commentsCount || 0,
     censoredat,
     abandonedat
   };
