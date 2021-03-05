@@ -110,15 +110,26 @@ const parseVoteMetadata = (proposal = {}) => {
     proposal.files.find((f) => f.name === VOTE_METADATA_FILENAME);
   return metadata ? JSON.parse(atob(metadata.payload)) : {};
 };
+
 // parseUserMetadata accepts a proposal object parses it's metadata
 // and returns it as object of the form { userid, token }
 //
-// censored proposals won't have metadata, in this case this function will
-// return an empty object
+// proposals without any user metadata will return an empty object
 const parseUserPluginMetadata = (proposal = {}) =>
   compose(
     reduce((acc, curr) => ({ ...acc, ...curr }), {}),
-    map(({ payload }) => JSON.parse(payload)),
+    map(({ payload }) => {
+      try {
+        const parsedPayload = JSON.parse(payload);
+        return parsedPayload;
+      } catch (e) {
+        // parses metadata payload manually
+        return compose(
+          map((parsed) => JSON.parse(`{${parsed}}`)),
+          split(/\{(.*?)\}/)
+        )(payload);
+      }
+    }),
     filter(({ pluginid }) => pluginid === USER_METADATA_PLUGIN),
     get("metadata")
   )(proposal);
