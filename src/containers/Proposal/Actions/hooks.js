@@ -21,10 +21,11 @@ export function useUnvettedActions() {
   const onSetProposalStatus = useAction(act.onSetProposalStatus);
 
   const onCensorProposal = useCallback(
-    ({ censorshiprecord: { token }, version, state }) => (reason) =>
+    ({ censorshiprecord: { token }, version, state, status }) => (reason) =>
       onSetProposalStatus({
         token,
         status: PROPOSAL_STATUS_CENSORED,
+        oldStatus: status,
         reason,
         version,
         state
@@ -33,10 +34,11 @@ export function useUnvettedActions() {
   );
 
   const onApproveProposal = useCallback(
-    ({ censorshiprecord: { token }, version, linkto, state }) => () =>
+    ({ censorshiprecord: { token }, version, linkto, state, status }) => () =>
       onSetProposalStatus({
         token,
         status: PROPOSAL_STATUS_PUBLIC,
+        oldStatus: status,
         linkto,
         version,
         state
@@ -62,10 +64,11 @@ export function usePublicActions() {
   const currentUserID = useSelector(sel.currentUserID);
 
   const onCensorProposal = useCallback(
-    ({ censorshiprecord: { token }, version, state }) => (reason) =>
+    ({ censorshiprecord: { token }, version, state, status }) => (reason) =>
       onSetProposalStatus({
         token,
         status: PROPOSAL_STATUS_CENSORED,
+        oldStatus: status,
         reason,
         version,
         state
@@ -74,10 +77,11 @@ export function usePublicActions() {
   );
 
   const onAbandonProposal = useCallback(
-    ({ censorshiprecord: { token }, version, state }) => (reason) =>
+    ({ censorshiprecord: { token }, version, state, status }) => (reason) =>
       onSetProposalStatus({
         token,
         status: PROPOSAL_STATUS_ARCHIVED,
+        oldStatus: status,
         reason,
         version,
         state

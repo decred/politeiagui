@@ -6,6 +6,10 @@ import unionBy from "lodash/unionBy";
 import compose from "lodash/fp/compose";
 import set from "lodash/fp/set";
 import update from "lodash/fp/update";
+import {
+  PROPOSAL_STATUS_PUBLIC,
+  PROPOSAL_STATUS_UNREVIEWED
+} from "../../constants";
 
 const DEFAULT_STATE = {
   comments: { byToken: {}, accessTimeByToken: {}, backup: null },
@@ -134,6 +138,16 @@ const comments = (state = DEFAULT_STATE, action) =>
                 comments.map(censorTargetComment)
               )
             )(state);
+          },
+          [act.RECEIVE_SETSTATUS_PROPOSAL]: () => {
+            const { proposal, oldStatus } = action.payload;
+            if (
+              proposal.status === PROPOSAL_STATUS_PUBLIC &&
+              oldStatus === PROPOSAL_STATUS_UNREVIEWED
+            ) {
+              delete state.comments.byToken[proposal.censorshiprecord.token];
+            }
+            return state;
           },
           [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE,
           [act.RECEIVE_CMS_LOGOUT]: () => DEFAULT_STATE

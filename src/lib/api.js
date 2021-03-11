@@ -259,7 +259,12 @@ export const signComment = (userid, comment) =>
       pki
         .signStringHex(
           userid,
-          [comment.token, comment.parentid, comment.comment].join("")
+          [
+            comment.state,
+            comment.token,
+            comment.parentid,
+            comment.comment
+          ].join("")
         )
         .then((signature) => ({ ...comment, publickey, signature }))
     );

@@ -1101,7 +1101,8 @@ export const onSetProposalStatus = ({
   linkto,
   version,
   state,
-  reason = ""
+  reason = "",
+  oldStatus
 }) =>
   withCsrf((dispatch, getState, csrf) => {
     const userid = sel.currentUserID(getState());
@@ -1111,7 +1112,8 @@ export const onSetProposalStatus = ({
       .then(({ record: proposal }) => {
         dispatch(
           act.RECEIVE_SETSTATUS_PROPOSAL({
-            proposal
+            proposal,
+            oldStatus
           })
         );
         if (status === PROPOSAL_STATUS_PUBLIC) {
