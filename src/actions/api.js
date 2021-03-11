@@ -1099,7 +1099,6 @@ export const onSetProposalStatus = ({
   status,
   linkto,
   version,
-  state,
   reason = "",
   oldStatus
 }) =>
@@ -1107,7 +1106,7 @@ export const onSetProposalStatus = ({
     const userid = sel.currentUserID(getState());
     dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
     return api
-      .proposalSetStatus(userid, csrf, token, status, version, state, reason)
+      .proposalSetStatus(userid, csrf, token, status, version, reason)
       .then(({ record: proposal }) => {
         dispatch(
           act.RECEIVE_SETSTATUS_PROPOSAL({

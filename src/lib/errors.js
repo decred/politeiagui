@@ -76,9 +76,11 @@ function RecordsUserError(code, context) {
     13: "The record was not found",
     14: "The record is locked for changes",
     15: "The record has no changes and therefore cannot be updated",
-    16: "The record status is empty or is attempting an invalid transition",
-    17: "The status reason was not found",
-    18: "The number of requested record tokens exceeds the page size policy"
+    16: "The record state is invalid",
+    17: "The record status is invalid",
+    18: `The status transition is invalid: ${context}`,
+    19: "The status reason was not found",
+    20: "The number of requested record tokens exceeds the page size policy."
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, APIRecords);

@@ -558,7 +558,6 @@ export const proposalSetStatus = (
   token,
   status,
   version,
-  state,
   reason
 ) =>
   pki
@@ -573,7 +572,6 @@ export const proposalSetStatus = (
             {
               status,
               version,
-              state,
               token,
               signature,
               publickey,

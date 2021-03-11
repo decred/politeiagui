@@ -5,6 +5,7 @@ import filter from "lodash/fp/filter";
 import gte from "lodash/fp/gt";
 import range from "lodash/fp/range";
 import map from "lodash/fp/map";
+import splitFp from "lodash/fp/split";
 import reduce from "lodash/fp/reduce";
 import compose from "lodash/fp/compose";
 import * as pki from "./lib/pki";
@@ -126,7 +127,7 @@ const parseUserPluginMetadata = (proposal = {}) =>
         // parses metadata payload manually
         return compose(
           map((parsed) => JSON.parse(`{${parsed}}`)),
-          split(/\{(.*?)\}/)
+          splitFp(/\{(.*?)\}/)
         )(payload);
       }
     }),
