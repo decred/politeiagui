@@ -107,8 +107,7 @@ export const onEditProposal = ({
   files,
   rfpDeadline,
   type,
-  rfpLink,
-  state
+  rfpLink
 }) => (dispatch, getState) => {
   const userid = sel.currentUserID(getState());
   return dispatch(
@@ -120,8 +119,7 @@ export const onEditProposal = ({
       type,
       rfpLink,
       files,
-      token,
-      state
+      token
     )
   );
 };
