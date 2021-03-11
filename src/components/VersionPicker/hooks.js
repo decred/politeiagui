@@ -23,15 +23,12 @@ export function useVersionPicker(version, token) {
       }
 
       // Fetch provided version
-      const proposal = await onFetchProposalDetailsWithoutState(
-        token,
-        version.toString()
-      );
+      const proposal = await onFetchProposalDetailsWithoutState(token, version);
 
       // Fetch prev version
       const prevProposal = await onFetchProposalDetailsWithoutState(
         token,
-        (version - 1).toString()
+        version - 1
       );
 
       // parse proposal to get its formatted data
