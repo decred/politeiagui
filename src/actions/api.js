@@ -436,10 +436,9 @@ export const onFetchProposalsBatchWithoutState = (
 
 export const onFetchProposalDetailsWithoutState = (
   token,
-  state,
   version
 ) => async () => {
-  const res = await api.proposalDetails({ token, state, version });
+  const res = await api.proposalDetails({ token, version });
   return res.record;
 };
 
@@ -490,7 +489,7 @@ export const onFetchProposalDetails = (token, state, version) => async (
   dispatch(act.REQUEST_PROPOSALS_BATCH(token));
   try {
     const response = await Promise.all([
-      api.proposalDetails({ token, state, version }),
+      api.proposalDetails({ token, version }),
       api.commentsCount([token], state)
     ]);
     const record = response.find((res) => res && res.record).record;

@@ -133,7 +133,7 @@ export default function useProposalsBatch({
             remainingTokens,
             proposalPageSize
           );
-          onFetchProposalsBatch(fetch, recordState, fetchVoteSummaries)
+          onFetchProposalsBatch(fetch, fetchVoteSummaries)
             .then(([proposals]) => {
               if (fetchRfpLinks) {
                 const rfpLinks = getRfpLinks(proposals);
@@ -145,7 +145,7 @@ export default function useProposalsBatch({
                 if (!isEmpty(unfetchedRfpLinks)) {
                   onFetchProposalsBatch(
                     unfetchedRfpLinks,
-                    PROPOSAL_STATE_VETTED, // RFP linked proposals will always be vetted
+                    // PROPOSAL_STATE_VETTED, // RFP linked proposals will always be vetted
                     fetchVoteSummaries
                   )
                     .then(() => send(RESOLVE))

@@ -7,7 +7,7 @@ import { useConfig } from "src/containers/Config";
 import { useAction } from "src/redux";
 import * as act from "src/actions";
 
-export function useVersionPicker(version, token, state) {
+export function useVersionPicker(version, token) {
   const [selectedVersion, setSelectedVersion] = useState(version);
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const { recordType, constants } = useConfig();
@@ -17,7 +17,7 @@ export function useVersionPicker(version, token, state) {
   );
 
   const fetchProposalVersions = useCallback(
-    async (onFetchProposalDetailsWithoutState, token, version, state) => {
+    async (onFetchProposalDetailsWithoutState, token, version) => {
       if (!version) {
         return;
       }
@@ -25,14 +25,12 @@ export function useVersionPicker(version, token, state) {
       // Fetch provided version
       const proposal = await onFetchProposalDetailsWithoutState(
         token,
-        state,
         version.toString()
       );
 
       // Fetch prev version
       const prevProposal = await onFetchProposalDetailsWithoutState(
         token,
-        state,
         (version - 1).toString()
       );
 
@@ -79,10 +77,8 @@ export function useVersionPicker(version, token, state) {
           const proposalDiff = await fetchProposalVersions(
             onFetchProposalDetailsWithoutState,
             token,
-            v,
-            state
+            v
           );
-          console.log(proposalDiff);
           handleOpenModal(ModalDiffProposal, {
             proposalDetails: proposalDiff.details,
             onClose: handleCloseModal,
@@ -113,7 +109,6 @@ export function useVersionPicker(version, token, state) {
       fetchProposalVersions,
       onFetchProposalDetailsWithoutState,
       token,
-      state,
       handleOpenModal,
       handleCloseModal
     ]

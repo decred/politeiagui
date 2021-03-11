@@ -41,8 +41,8 @@ export const PROPOSAL_STATUS_CENSORED = 3;
 export const PROPOSAL_STATUS_UNREVIEWED_CHANGES = 4;
 export const PROPOSAL_STATUS_ARCHIVED = 5;
 
-export const PROPOSAL_STATE_UNVETTED = "unvetted";
-export const PROPOSAL_STATE_VETTED = "vetted";
+export const PROPOSAL_STATE_UNVETTED = 1;
+export const PROPOSAL_STATE_VETTED = 2;
 
 export const PROPOSAL_TYPE_REGULAR = 1;
 export const PROPOSAL_TYPE_RFP = 2;
@@ -81,7 +81,7 @@ export const PROPOSAL_APPROVED = 8;
 export const PROPOSAL_COMMENT_UPVOTE = 1;
 export const PROPOSAL_COMMENT_DOWNVOTE = -1;
 
-export const PROPOSAL_PAGE_SIZE = 10;
+export const PROPOSAL_PAGE_SIZE = 5;
 export const INVENTORY_PAGE_SIZE = 20;
 
 // Proposals presentational statuses returned by the 'voteinv' &
