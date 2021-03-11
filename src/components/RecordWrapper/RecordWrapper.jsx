@@ -252,15 +252,10 @@ export const DownloadRecord = ({ content, fileName, label, serverpubkey }) => {
     censorshiprecord: content.censorshiprecord,
     serverpubkey
   };
-  return (
-  <DownloadJSON
-    fileName={fileName}
-    label={label}
-    content={proposal}
-  />);
+  return <DownloadJSON fileName={fileName} label={label} content={proposal} />;
 };
 
-export const DownloadTimestamps = ({ token, version, state, label }) => {
+export const DownloadTimestamps = ({ token, version, label }) => {
   const { onFetchRecordTimestamps } = useTimestamps();
   return (
     <DownloadJSON
@@ -268,7 +263,7 @@ export const DownloadTimestamps = ({ token, version, state, label }) => {
       fileName={`${token}-v${version}-timestamps`}
       isAsync={true}
       content={[]}
-      beforeDownload={() => onFetchRecordTimestamps(token, state, version)}
+      beforeDownload={() => onFetchRecordTimestamps(token, version)}
     />
   );
 };

@@ -1709,12 +1709,8 @@ export const onVerifyTotp = (code) =>
       });
   });
 // Records Actions
-export const onFetchRecordTimestamps = (
-  token,
-  state = PROPOSAL_STATE_VETTED,
-  version
-) =>
-  withCsrf((__, _, csrf) => api.recordsTimestamp(csrf, token, state, version));
+export const onFetchRecordTimestamps = (token, version) =>
+  withCsrf((__, _, csrf) => api.recordsTimestamp(csrf, token, version));
 
 // Comments Actions
 export const onFetchCommentsTimestamps = (token, state, commentsids) =>

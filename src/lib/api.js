@@ -681,10 +681,8 @@ export const proposalsInventory = (state, status, page) =>
 export const votesInventory = (status, page) =>
   POST("/inventory", "", { status, page }, apiTicketVote).then(getResponse);
 
-export const recordsTimestamp = (csrf, token, state, version) =>
-  POST("/timestamps", csrf, { token, state, version }, apiRecords).then(
-    getResponse
-  );
+export const recordsTimestamp = (csrf, token, version) =>
+  POST("/timestamps", csrf, { token, version }, apiRecords).then(getResponse);
 
 // CMS
 
